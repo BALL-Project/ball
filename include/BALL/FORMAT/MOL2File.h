@@ -1,4 +1,4 @@
-// $Id: MOL2File.h,v 1.2 2000/02/17 09:47:40 oliver Exp $
+// $Id: MOL2File.h,v 1.3 2000/05/15 19:14:43 oliver Exp $
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H
@@ -19,7 +19,7 @@ namespace BALL
 {
 
 	/**	SYBYL MOL2 file class.
-			This class enables BALL to read and write SYBYL MOL2 files (Tripos).
+			This class is used to read and write SYBYL MOL2 files (Tripos).
 			\\
 			{\bf Definition:} \URL{BALL/FORMAT/MOL2File.h}
 			\\
@@ -46,8 +46,9 @@ namespace BALL
 		*/
 		MOL2File();
 
-		/// Filename constructor
-		MOL2File(const String& filename);
+		/** Detailed constructor
+		*/
+		MOL2File(const String& filename, File::OpenMode open_mode = std::ios::in);
 
 		/// Destructor
 		virtual ~MOL2File();
@@ -159,7 +160,7 @@ namespace BALL
 
 		Size	number_of_lines_;
 		static const Size MAX_LENGTH_;
-		static char buffer_[4096];
+		char buffer_[4096];
 	
 	};
 
