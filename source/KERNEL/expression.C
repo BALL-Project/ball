@@ -1,3 +1,5 @@
+// $Id: expression.C,v 1.21 2001/07/12 11:54:23 anker Exp $
+
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -63,6 +65,7 @@ namespace BALL
 		registerStandardPredicates_();
 
 		delete expression_tree_;
+		expression_tree_ = 0;
 		expression_string_.clear();
 	}
 
@@ -88,9 +91,29 @@ namespace BALL
 	bool Expression::operator == (const Expression& expression) const 
 		throw()
 	{
-		return ((create_methods_ == expression.create_methods_)
-			&& (*expression_tree_ == *expression.expression_tree_)
-			&& (expression_string_ == expression.expression_string_));
+		if (((int)expression_tree_ & (int)expression.expression_tree_) == 0)
+		{
+			// at least one of the pointers is a null pointer, so check if both
+			// are.
+			if (((int)expression_tree_ | (int)expression.expression_tree_) == 0)
+			{
+				// both pointers are null pointers. Expressions should have null
+				// pointers only if they are default constructed, so a consistency
+				// check might be useful (the string should be empty; maybe later)
+				return ((create_methods_ == expression.create_methods_)
+						&& (expression_string_ == expression.expression_string_));
+			}
+			else
+			{
+				return false;
+			}
+		}
+		else
+		{
+			return ((create_methods_ == expression.create_methods_)
+					&& (*expression_tree_ == *expression.expression_tree_)
+					&& (expression_string_ == expression.expression_string_));
+		}
 	}
 
 
@@ -376,15 +399,31 @@ namespace BALL
 	bool ExpressionTree::operator == (const ExpressionTree& tree) const
 		throw(Exception::NullPointer)
 	{
-		if ((predicate_ == 0) || (tree.predicate_ == 0))
+		if (((int)predicate_ & (int)tree.predicate_) == 0)
 		{
-			throw Exception::NullPointer(__FILE__, __LINE__);
+			// at least one of the pointers is a null pointer, so check if both
+			// are.
+			if (((int)predicate_ | (int)tree.predicate_) == 0)
+			{
+				// both pointers are null pointers. Expressions should have null
+				// pointers only if they are default constructed, so a consistency
+				// check might be useful 
+				return ((type_ == tree.type_)
+						&& (negate_ == tree.negate_)
+						&& (children_ == tree.children_));
+			}
+			else
+			{
+				return false;
+			}
 		}
-
-		return ((type_ == tree.type_)
-			&& (negate_ == tree.negate_)
-			&& (*predicate_ == *tree.predicate_)
-			&& (children_ == tree.children_));
+		else
+		{
+			return ((type_ == tree.type_)
+					&& (negate_ == tree.negate_)
+					&& (*predicate_ == *tree.predicate_)
+					&& (children_ == tree.children_));
+		}
 	}
 
 
@@ -586,10 +625,9 @@ namespace BALL
     if ((expression == "AND" || expression == "OR") && children.size() == 0)
     {
 			// BAUSTELLE
-			// Let the exception print the WHOLE expression.
-
-			throw Exception::ParseError(__FILE__, __LINE__, expression.c_str(),
-					"conjunction without children");
+			// Why is it correct, if we arrive here?
+			// throw Exception::ParseError(__FILE__, __LINE__, expression.c_str(),
+			//		"conjunction without children");
 			return;
 		}
 
