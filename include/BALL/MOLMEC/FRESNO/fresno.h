@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.5 2002/04/03 16:44:21 anker Exp $
+// $Id: fresno.h,v 1.1.2.6 2002/04/07 17:37:26 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -199,6 +199,19 @@ namespace BALL
 			*/
 			static const Size ROT_ALGORITHM;
 
+		};
+
+		/**
+		*/
+		enum TypeAssignment
+		{
+			/**
+			*/
+			ASSIGNMENT__ELDRIDGE,
+
+			/**
+			 */
+			ASSIGNMENT__FRESNO
 		};
 
 		/**

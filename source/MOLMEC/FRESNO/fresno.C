@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.7 2002/04/06 20:01:28 anker Exp $
+// $Id: fresno.C,v 1.1.2.8 2002/04/07 17:40:38 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -164,7 +164,8 @@ namespace BALL
 		}
  
 		// we have to assign those atom types defined in 
-		// Eldrigde et al. JCAMD 11:425-445, 1997, p 431.
+		// Eldrigde et al. JCAMD 11:425-445, 1997, p 431
+		// or the changed version of Rognan et al.
 
 		AtomIterator atom_it = getSystem()->beginAtom();
 		for (; +atom_it; ++atom_it)
@@ -188,6 +189,8 @@ namespace BALL
 		// ======
 		// first assign those types that do not depend on others
 
+		Size assignment_type = FresnoFF::ASSIGNMENT__ELDRIDGE;
+
 		for (; +it; ++it)
 		{
 			atom = it->first;
@@ -198,22 +201,25 @@ namespace BALL
 				connectedTo.setArgument("(H)");
 				if (connectedTo(*atom))
 				{
-					connectedTo.setArgument("(=C)");
-					if (connectedTo(*atom))
+					if (assignment_type == FresnoFF::ASSIGNMENT__ELDRIDGE)
 					{
-						it->second = FresnoFF::HBOND_ACCEPTOR_DONOR;
-						++acc_don_counter;
-						// DEBUG
-						cout << it->first->getFullName() << ": ACC_DON" << endl;
-						// /DEBUG
-					}
-					else
-					{
-						it->second = FresnoFF::HBOND_DONOR;
-						++donor_counter;
-						// DEBUG
-						cout << it->first->getFullName() << ": DON" << endl;
-						// /DEBUG
+						connectedTo.setArgument("(=C)");
+						if (connectedTo(*atom))
+						{
+							it->second = FresnoFF::HBOND_ACCEPTOR_DONOR;
+							++acc_don_counter;
+							// DEBUG
+							cout << it->first->getFullName() << ": ACC_DON" << endl;
+							// /DEBUG
+						}
+						else
+						{
+							it->second = FresnoFF::HBOND_DONOR;
+							++donor_counter;
+							// DEBUG
+							cout << it->first->getFullName() << ": DON" << endl;
+							// /DEBUG
+						}
 					}
 				}
 				else
@@ -266,11 +272,14 @@ namespace BALL
 						connectedTo.setArgument("(H)");
 						if (connectedTo(*atom))
 						{
-							it->second = FresnoFF::HBOND_ACCEPTOR_DONOR;
-							++acc_don_counter;
-							// DEBUG
-							cout << it->first->getFullName() << ": DON" << endl;
-							// /DEBUG
+							if (assignment_type == FresnoFF::ASSIGNMENT__ELDRIDGE)
+							{
+								it->second = FresnoFF::HBOND_ACCEPTOR_DONOR;
+								++acc_don_counter;
+								// DEBUG
+								cout << it->first->getFullName() << ": DON" << endl;
+								// /DEBUG
+							}
 						}
 						else
 						{
@@ -334,8 +343,8 @@ namespace BALL
 								else
 								{
 									if ((symbol == "Cl")
-										|| (symbol == "Br")
-										|| (symbol == "I"))
+											|| (symbol == "Br")
+											|| (symbol == "I"))
 									{
 										if (atom->getCharge() == 0.0)
 										{
@@ -403,6 +412,7 @@ namespace BALL
 										|| (fresno_types_[partner] == FresnoFF::HBOND_ACCEPTOR)
 										|| (fresno_types_[partner] == FresnoFF::HBOND_ACCEPTOR_DONOR)
 										|| (fresno_types_[partner] == FresnoFF::HBOND_DONOR)
+										|| (fresno_types_[partner] == FresnoFF::HBOND_HYDROGEN)
 									) && (
 										!((partner->getElement().getSymbol() == "C") 
 											&& (fresno_types_[partner] == FresnoFF::POLAR))
@@ -456,6 +466,7 @@ namespace BALL
 											|| (fresno_types_[partner] == FresnoFF::HBOND_ACCEPTOR)
 											|| (fresno_types_[partner] == FresnoFF::HBOND_ACCEPTOR_DONOR)
 											|| (fresno_types_[partner] == FresnoFF::HBOND_DONOR)
+											|| (fresno_types_[partner] == FresnoFF::HBOND_HYDROGEN)
 										) && (
 											!((partner->getElement().getSymbol() == "C") 
 												&& (fresno_types_[partner] == FresnoFF::POLAR))
