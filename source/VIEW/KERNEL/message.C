@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.20 2004/04/01 12:13:23 amoll Exp $
+// $Id: message.C,v 1.21 2004/06/10 16:32:33 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -233,10 +233,42 @@ NewTrajectoryMessage::NewTrajectoryMessage()
 		Log.error() << "new NewTrajectoryMessage" << std::endl;		
 	#endif
 }
-	
-RegularData3DMessage::RegularData3DMessage(RegularData3DMessageType type) 
+
+// ================ Regular Data Messages ===========================
+RegularDataMessage::RegularDataMessage()
 	throw()
-	: CompositeMessage(),
+	: CompositeMessage()
+{
+	setType((CompositeMessageType)UNDEFINED);
+}
+
+
+RegularData1DMessage::RegularData1DMessage(RegularDataMessageType type) 
+	throw()
+	: RegularDataMessage(),
+		data_(0)
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new RegularData1DMessage" << std::endl;		
+	#endif
+	setType((CompositeMessageType)type);
+}
+
+RegularData2DMessage::RegularData2DMessage(RegularDataMessageType type) 
+	throw()
+	: RegularDataMessage(),
+		data_(0)
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.error() << "new RegularData2DMessage" << std::endl;		
+	#endif
+	setType((CompositeMessageType)type);
+}
+
+
+RegularData3DMessage::RegularData3DMessage(RegularDataMessageType type) 
+	throw()
+	: RegularDataMessage(),
 		data_(0)
 {
 	#ifdef BALL_VIEW_DEBUG

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.48 2004/04/17 20:05:10 amoll Exp $
+// $Id: message.h,v 1.49 2004/06/10 16:32:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -11,12 +11,20 @@
 #	include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
-#ifndef BALL_DATATYPE_REGULARDATA3D_H
-# include <BALL/DATATYPE/regularData3D.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
+#endif
+
+#ifndef BALL_DATATYPE_REGULARDATA1D
+# include <BALL/DATATYPE/regularData1D.h>
+#endif
+
+#ifndef BALL_DATATYPE_REGULARDATA2D
+# include <BALL/DATATYPE/regularData2D.h>
+#endif
+
+#ifndef BALL_DATATYPE_REGULARDATA3D
+# include <BALL/DATATYPE/regularData3D.h>
 #endif
 
 namespace BALL
@@ -656,14 +664,14 @@ class BALL_EXPORT NewTrajectoryMessage
 		TrajectoryFile* file_;
 };
 
-/// Message concerning RegularData3D
-class BALL_EXPORT RegularData3DMessage
+/// Message concerning RegularDatas
+class BALL_EXPORT RegularDataMessage
 	:public CompositeMessage
 {
 	public:
 
 		///
-		enum RegularData3DMessageType
+		enum RegularDataMessageType
 		{
 			///
 			UNDEFINED = -1,
@@ -676,21 +684,71 @@ class BALL_EXPORT RegularData3DMessage
 			///
 			SELECTED
 		};
-		
-		///
-		RegularData3DMessage(RegularData3DMessageType type = UNDEFINED)
+
+		RegularDataMessage()
 			throw();
+};
 
-		///
-		void setRegularData3D(RegularData3D& data)
-			throw() { data_ = &data;}
+/// Message concerning RegularData1D
+class BALL_EXPORT RegularData1DMessage
+:public RegularDataMessage
+{
+	///
+	RegularData1DMessage(RegularDataMessageType type = UNDEFINED)
+		throw();
 
-		///
-		RegularData3D* getRegularData3D()
-			throw() { return data_;}
+	///
+	void setRegularData1D(RegularData1D& data)
+		throw() { data_ = &data;}
 
-	protected:
-		RegularData3D* data_;
+	///
+	RegularData1D* getRegularData1D()
+		throw() { return data_;}
+
+protected:
+	RegularData1D* data_;
+};
+
+
+/// Message concerning RegularData2D
+class BALL_EXPORT RegularData2DMessage
+:public RegularDataMessage
+{
+	///
+	RegularData2DMessage(RegularDataMessageType type = UNDEFINED)
+		throw();
+
+	///
+	void setRegularData2D(RegularData2D& data)
+		throw() { data_ = &data;}
+
+	///
+	RegularData2D* getRegularData2D()
+		throw() { return data_;}
+
+protected:
+	RegularData2D* data_;
+};
+
+
+/// Message concerning RegularData3D
+class BALL_EXPORT RegularData3DMessage
+:public RegularDataMessage
+{
+	///
+	RegularData3DMessage(RegularDataMessageType type = UNDEFINED)
+		throw();
+
+	///
+	void setRegularData3D(RegularData3D& data)
+		throw() { data_ = &data;}
+
+	///
+	RegularData3D* getRegularData3D()
+		throw() { return data_;}
+
+protected:
+	RegularData3D* data_;
 };
 
 /** Message send by one GenericControl to notify all other GenericControl instances to
