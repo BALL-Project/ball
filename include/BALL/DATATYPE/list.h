@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: list.h,v 1.20 2003/03/26 13:56:18 anhi Exp $
+// $Id: list.h,v 1.21 2003/05/08 08:58:09 sneumann Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -77,14 +77,14 @@ namespace BALL
 		*/
  		void destroy() throw()
 		{
-			clear();
+			std::list<Value>::clear();
 		}
 	
 		/** Destructor
 		*/
 		virtual ~List() throw()
 		{
-			clear();
+			std::list<Value>::clear();
 		}
 
 		//@}
@@ -97,12 +97,12 @@ namespace BALL
 		*/
     void set(const List& list, bool /* deep */ = true) throw()
 		{
-			clear();
+			std::list<Value>::clear();
 
 			ConstIterator it = list.begin();
 			for ( ; it != list.end(); ++it)
 			{
-				push_back(const_cast<Value&>(*it));
+				std::list<Value>::push_back(const_cast<Value&>(*it));
 			}
 		}
 
@@ -137,7 +137,7 @@ namespace BALL
 		*/
 		Size getSize() const throw()
 		{
-			return (Size)size();
+			return (Size)std::list<Value>::size();
 		}
 
 		/** Remove an item from the list. The first item that matches <tt>item</tt> will be removed.
@@ -146,12 +146,12 @@ namespace BALL
 		 */
 		bool remove(const Value& item) throw()
 		{
-			Iterator it = begin();
-			for (; it != end(); ++it)
+			Iterator it = std::list<Value>::begin();
+			for (; it != std::list<Value>::end(); ++it)
 			{
 				if (*it == item)
 				{
-					erase(it);
+					std::list<Value>::erase(it);
 					return true;
 				}
 			}
@@ -167,7 +167,7 @@ namespace BALL
 		*/
 		bool isEmpty() const throw()
 		{
-			return (size() == 0);
+			return (std::list<Value>::size() == 0);
 		}
 
 		//@}
@@ -193,7 +193,7 @@ namespace BALL
 		{
 			if (!processor.start()) return false;
 
-			for (Iterator it = begin(); it != end(); ++it)
+			for (Iterator it = std::list<Value>::begin(); it != std::list<Value>::end(); ++it)
 			{
 				Processor::Result result = processor(*it);
 				if (result <= Processor::BREAK)
@@ -212,15 +212,15 @@ namespace BALL
 		*/
 		bool operator == (const List<Value>& list) const throw()
 		{
-			if (size() != list.size())
+			if (std::list<Value>::size() != list.size())
 			{
 				return false;
 			}
 
-			List<Value>::ConstIterator this_it = begin();
+			List<Value>::ConstIterator this_it = std::list<Value>::begin();
 			List<Value>::ConstIterator list_it = list.begin();
 
-			for (; this_it != end(); ++this_it)
+			for (; this_it != std::list<Value>::end(); ++this_it)
 			{
 				if (!(*this_it == *list_it))
 				{
