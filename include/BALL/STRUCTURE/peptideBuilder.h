@@ -1,27 +1,20 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideBuilder.h,v 1.3 2003/08/26 08:04:52 oliver Exp $
+// $Id: peptideBuilder.h,v 1.3.2.1 2004/05/10 11:33:47 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_PEPTIDEBUILDER_H
 #define BALL_STRUCTURE_PEPTIDEBUILDER_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_STRUCTURE_PEPTIDES_H
 #	include <BALL/STRUCTURE/peptides.h>
 #endif
 
-#ifndef BALL_KERNEL_PROTEIN_H
-#	include <BALL/KERNEL/protein.h>
-#endif
-
-
 namespace BALL
 {
+	class FragmentDB;
+
 	namespace Peptides
 	{
 		/** This class represents one amino acid in the sequence.
@@ -93,11 +86,13 @@ namespace BALL
 	   Angle omega_;
 	 };
        
-      /**
-      */
-       class PeptideBuilder
+   /** Build a Peptide from a sequence and the corresponing angles.
+			 Dont forget to call setFragmentDB() before using this class.
+   */
+   class PeptideBuilder
 	 {
-	 public:
+		 public:
+
 	   /** Default constructor.
 	    */
 	   PeptideBuilder();
@@ -145,6 +140,14 @@ namespace BALL
 	   /** Constructs the peptide and returns it.
 	    */
 	   Protein* construct();
+
+		 ///
+		 void setFragmentDB(const FragmentDB* db)
+			 throw();
+
+		 ///
+		 const FragmentDB* getFragmentDB() const
+			 throw();
 	   
 	 protected:
 	   std::vector<AminoAcidDescriptor> sequence_;
@@ -153,6 +156,7 @@ namespace BALL
 	   
 		 /// The proline flag
 		 bool is_proline_;
+		 FragmentDB* fragment_db_;
 
 	   /** some helper functions for the construction of the residue; for internal use only
 	    * omega is not yet implemented
