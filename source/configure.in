@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.3 2001/09/04 01:12:32 oliver Exp $
+dnl    $Id: configure.in,v 1.4 2001/10/03 14:37:02 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2795,17 +2795,25 @@ if test "${PYTHON_SUPPORT}" = true ; then
 	if test "${USE_BALLVIEW}" = false ; then
 		AC_MSG_RESULT()
 		AC_MSG_RESULT(BALL Python support requires the visualization component)
-		AC_MSG_RESULT(BALLVIEW. Please reconfigure without --without-BALLVIEW.")
+		AC_MSG_RESULT(BALLVIEW. Please reconfigure without --without-BALLVIEW.)
 		AC_MSG_RESULT()
 		AC_MSG_ERROR(Aborted)
 	fi
 	AC_DEFINE(BALL_PYTHON_SUPPORT)
 
 	dnl 
-	dnl Find the python executable (specified via --with-python
+	dnl Find the python executable (specified via --with-python)
 	dnl 
  
-	AC_PATH_PROG(PYTHON_EXECUTABLE, python)
+	dnl
+	dnl  If a complete path is specified, assume it is correct.
+  dnl  Otherwise, search in the current PATH for a suitable executable.
+	dnl
+	if test "`basename ${PYTHON_EXE}`" = "${PYTHON_EXE}" ; then 
+		AC_PATH_PROG(PYTHON_EXECUTABLE, ${PYTHON_EXE})
+	else
+		PYTHON_EXECUTABLE=${PYTHON_EXE}
+	fi
  
 	if test "${PYTHON_EXECUTABLE}" = "" ; then
 		AC_MSG_RESULT()
@@ -2834,9 +2842,9 @@ if test "${PYTHON_SUPPORT}" = true ; then
 	dnl
 	if test "${PYTHON_VERSION_NUMBER_1}" -le 1 ; then
 		AC_MSG_RESULT()
-		AC_MSG_RESULT(Python verison 2.0 or above required!)
-		AC_MSG_RESULT(Please donwload and install Python from)
-		AC_MSG_RESULT(  http://www.python.org)
+		AC_MSG_RESULT([Python verison 2.0 or above required!])
+		AC_MSG_RESULT([Please donwload and install Python from])
+		AC_MSG_RESULT([  http://www.python.org])
 		AC_MSG_ERROR(Aborted)
 	fi
 	
