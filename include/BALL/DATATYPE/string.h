@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.24 2000/09/16 08:30:16 oliver Exp $
+// $Id: string.h,v 1.25 2000/09/19 15:42:25 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -412,6 +412,10 @@ namespace BALL
 				\end{itemize}
 		*/
 		static const char* CHARACTER_CLASS__WHITESPACE;
+
+		/**	Character class containing single and double quotes.
+		*/
+		static const char* CHARACTER_CLASS__QUOTES;
 		//@}
 
 		/** @name	Constructors and Destructors */
@@ -705,15 +709,26 @@ namespace BALL
 		/**	@name	AWK style field operations */
 		//@{
 
-		/// count the fields that are separated by a defined set of delimiters
+		/// Count the fields that are separated by a defined set of delimiters
 		Size countFields(const char* delimiters = CHARACTER_CLASS__WHITESPACE) const
 			throw(Exception::NullPointer);
 
-		/// Returns a given field as a substring
+		/// Count the fields and respect quote characters.
+		Size countFieldsQuoted(const char* delimiters = CHARACTER_CLASS__WHITESPACE, 
+													 const char* quotes = CHARACTER_CLASS__QUOTES) const
+			throw(Exception::NullPointer);
+
+		/// Return a given field as a substring
 		String getField(Index index, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index* from = 0) const
 			throw(Exception::IndexUnderflow, Exception::NullPointer);
 
-		/// Split the string into fields and assign these field to an array of strings
+		/// Return a given field and respect quote characters.
+		String getFieldQuoted(Index index, const char* delimiters = CHARACTER_CLASS__WHITESPACE, 
+													const char* quotes = CHARACTER_CLASS__QUOTES, Index* from = 0) const
+			throw(Exception::IndexUnderflow, Exception::NullPointer);
+
+		/** Split the string into fields and assign these field to an array of strings
+		*/
 		Size split(String string_array[], Size array_size, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index from = 0) const
 			throw(Exception::IndexUnderflow, Exception::NullPointer);
 
@@ -723,6 +738,17 @@ namespace BALL
 				@exception NullPointer if {\tt delimiters == 0}
 		*/
 		Size split(std::vector<String>& strings, const char* delimiters = CHARACTER_CLASS__WHITESPACE, Index from = 0) const
+			throw(Exception::IndexUnderflow, Exception::NullPointer);
+
+		/** Split the string into fields and respect quote characters.
+				Similar to \Ref{split}, but delimiters that are inside quote characters (default is \Ref{CHARACTER_CLASS__QUOTES})
+				are not considered to split the string.
+				The vector of strings is cleared in any case. Its final size is returned.
+				@exception IndexOverflow if {\tt from < 0}
+				@exception NullPointer if {\tt delimiters == 0}
+		*/
+		Size splitQuoted(std::vector<String>& strings, const char* delimiters = CHARACTER_CLASS__WHITESPACE, 
+							 const char* quotes = CHARACTER_CLASS__QUOTES, Index from = 0) const
 			throw(Exception::IndexUnderflow, Exception::NullPointer);
 
 		//@}

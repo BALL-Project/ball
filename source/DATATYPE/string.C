@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.28 2000/09/16 10:33:04 oliver Exp $
+// $Id: string.C,v 1.29 2000/09/19 15:42:27 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -45,6 +45,7 @@ namespace BALL
 	const char* String::CHARACTER_CLASS__ASCII_NUMERIC = "0123456789";
 	const char* String::CHARACTER_CLASS__ASCII_UPPER = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 	const char* String::CHARACTER_CLASS__WHITESPACE = " \n\t\r\f\v";
+	const char* String::CHARACTER_CLASS__QUOTES = "\"'`";
 
 	String::CompareMode String::compare_mode_ = String::CASE_SENSITIVE;
 
@@ -600,7 +601,9 @@ namespace BALL
 		throw(Exception::NullPointer)
 	{
 		if (delimiters == 0)
+		{
 			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
 
 		Size number_of_fields = 0;
 
@@ -615,18 +618,117 @@ namespace BALL
 				current_delimiter = (char*)strchr(delimiters, *current_char);
 				
 				if (current_delimiter == 0)
+				{
 					break;
+				}
 			}
 
 			if (current_char < end_char)
+			{
 				++number_of_fields;
+				++current_char;
+			}
 
 			for (; current_char < end_char; ++current_char)
 			{
 				current_delimiter = (char*)strchr(delimiters, *current_char);
 				
 				if (current_delimiter != 0)
+				{
 					break;
+				}
+			}
+		}
+
+		return number_of_fields;
+	}
+
+	Size String::countFieldsQuoted(const char* delimiters, const char* quotes) const
+		throw(Exception::NullPointer)
+	{
+		if ((delimiters == 0) || (quotes == 0))
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+
+		Size number_of_fields = 0;
+
+		const char* end_char = &c_str()[size()];
+		const char* current_delimiter = 0;
+		const char* current_char = c_str();
+		const char* current_quote = 0;
+		const char* last_quote = 0;
+
+		while (current_char < end_char)
+		{
+			for (; current_char < end_char; ++current_char)
+			{	
+				current_quote = (char*)strchr(quotes, *current_char);
+				
+				if (current_quote != 0)
+				{
+					if (last_quote == 0)
+					{
+						last_quote = current_char;
+					}
+					else
+					{
+						// if the same quote character is used again,
+						// it is a closing quote
+						if (*last_quote == *current_quote)
+						{
+							last_quote = 0;
+						}
+					}
+				}
+				
+				if ((last_quote == 0) && (current_quote != current_char))
+				{
+					current_delimiter = (char*)strchr(delimiters, *current_char);
+				
+					if (current_delimiter == 0)
+					{
+						break;
+					}
+				}
+			}
+
+			if (current_char < end_char)
+			{
+				++number_of_fields;
+				++current_char;
+			}
+
+			for (; current_char < end_char; ++current_char)
+			{
+				current_quote = (char*)strchr(quotes, *current_char);
+				
+				if (current_quote != 0)
+				{
+					if (last_quote == 0)
+					{
+						last_quote = current_char;
+					}
+					else
+					{
+						// if the same quote character is used again,
+						// it is a closing quote
+						if (*last_quote == *current_quote)
+						{
+							last_quote = 0;
+						}
+					}
+				}
+				
+				if (last_quote == 0)
+				{
+					current_delimiter = (char*)strchr(delimiters, *current_char);
+					
+					if (current_delimiter != 0)
+					{
+						break;
+					}
+				}
 			}
 		}
 
@@ -725,6 +827,123 @@ namespace BALL
 		return String();
 	}
 
+	const char* eatDelimiters_(const char* start, const char* end, const char* delimiters)
+	{
+		const char* current_delimiter = (char*)strchr(delimiters, *start);
+		while ((current_delimiter != 0) && (start < end))
+		{
+			start++;
+			current_delimiter = (char*)strchr(delimiters, *start);
+		}
+		
+		return start;
+	}
+
+	String String::getFieldQuoted(Index index, const char* delimiters, 
+																const char* quotes, Index* from_and_next_field) const
+		throw(Exception::IndexUnderflow, Exception::NullPointer)
+	{
+		if ((from_and_next_field != 0) && (*from_and_next_field < 0))
+		{
+			throw Exception::IndexUnderflow(__FILE__, __LINE__, *from_and_next_field, 0);
+		}
+		
+		if ((delimiters == 0) || (quotes == 0))
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+
+		// allow also negative indices (last field == -1)
+		if (index < 0)
+		{
+			index = (Index)countFieldsQuoted(delimiters) + index;
+			if (index < 0)
+			{
+				throw Exception::IndexUnderflow(__FILE__, __LINE__, index);
+			}
+		}
+
+		String field;
+		const char* end = &c_str()[size()];
+		Index current_index = -1;
+		const char* current_delimiter = 0;
+		const char* current_quote = 0;
+		const char* last_quote = 0;
+		const char* current_char = &c_str()[from_and_next_field == 0 ? 0 : *from_and_next_field];
+
+		do
+		{
+			current_char = eatDelimiters_(current_char, end, delimiters);
+			current_index++;
+			
+			// we are at the start of a new field
+			while (current_char < end)
+			{
+				current_quote = (char*)strchr(quotes, *current_char);
+				if (current_quote != 0)
+				{
+					if (last_quote != 0)
+					{
+						// reached the terminating quote
+						if (*last_quote == *current_quote)
+						{
+							last_quote = 0;
+						}
+						else
+						{
+							// just another quote character which doesn't matter
+							if (index == current_index)
+							{
+								field += *current_char;
+							}
+						}
+					}
+					else
+					{
+						// this is a new quote
+						last_quote = current_quote;
+					}
+				} 
+				else
+				{
+					if (last_quote == 0)
+					{
+						current_delimiter = (char*)strchr(delimiters, *current_char);
+						if (current_delimiter != 0)
+						{
+							// we found a delimiter
+							// continue with the outer loop -> eat these delimiters!
+							break;
+						}	
+					}
+					if (current_index == index)
+					{
+						field += *current_char;
+					}
+				}
+
+				current_char++;
+			}
+
+			if (current_index == index)
+			{
+				break;
+			}
+		}
+		while ((current_char < end) && (current_index < index));
+
+		if (from_and_next_field != 0)
+		{
+			*from_and_next_field = (current_char - &(c_str()[0]));
+			if (current_char >= end)
+			{
+				*from_and_next_field = (Index)npos;
+			}
+		}
+
+		return field;
+	}
+
 	Size String::split(String string_array[], Size array_size, const char* delimiters, Index from) const
 		throw(Exception::IndexUnderflow, Exception::NullPointer)
 	{
@@ -762,6 +981,25 @@ namespace BALL
 		while(from != (Index)npos)
 		{
 			String field = getField(0, delimiters, &from);
+			
+			if (field != "")
+			{
+				strings.push_back(field);
+			}
+		}
+
+		return strings.size(); 
+	}
+
+	Size String::splitQuoted(vector<String>& strings, const char* delimiters, const char* quotes, Index from) const
+		throw(Exception::IndexUnderflow, Exception::NullPointer)
+	{
+		// clear the vector anyway
+		strings.clear();
+
+		while (from != (Index)npos)
+		{
+			String field = getFieldQuoted(0, delimiters, quotes, &from);
 			
 			if (field != "")
 			{
