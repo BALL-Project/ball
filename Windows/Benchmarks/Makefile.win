@@ -3,8 +3,11 @@
 # by Andreas Crauser 
 #---------------------------------------------------------------
 
-CC = cl -c -nologo -MTd -Zm1200 -TP -EHsc -GR
-LD = cl -nologo -MTd 
+#CC = cl -c -nologo -MTd -Zm1200 -TP -EHsc -GR
+#LD = cl -nologo -MTd 
+
+CC = cl /Ox /Og /Ob2 /Oi /Op /Ot /Oy /GL /G6 /GA /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /D "NO_DEBUG" /D "_MCBS" /FD /EHsc /MT /GR /W0 /nologo /c /Wp64 /TP 
+LD = cl /NOLOGO /TSAWARE:NO /LTCG 
 
 
 
