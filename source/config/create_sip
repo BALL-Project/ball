@@ -6,7 +6,8 @@ check_test $1 \
  | sed -e "s/  '/  /" \
  | sed -e "s/'//" > $FILE
 
-CLASS=$(cat $FILE | sed -n -e '1p' | sed -e "s/(.*//" | sed -e "s/ //g")
+CLASS=$(cat $FILE | sed -n '/  [A-Za-z0-9]*() [t\n]/p' | sed -e "s/(.*//" | sed -e "s/ //g")
+FILENAME=$(echo $1 | sed -e "s/\.h//")
 
 grep "ostream" $FILE | sed -e "s/^/\/\//" > $FILE2
 grep "operator = (" $FILE | sed -e "s/^/\/\//" >> $FILE2
@@ -21,7 +22,30 @@ sed -e "s/ [a-z_0-9]*)/)/g" | \
 sed -e "s/ [a-z_0-9]*,/,/g" \
 >> $FILE2
 
-cat $BALL_PATH/source/PYTHON/EXTENSIONS/skeleton.sip | sed -n -e '1,14p' | sed -e "s/^class/class "$CLASS/ | sed -e "s/BALL\/.h/"$INCLUDE"/"
-cat $FILE2
-echo "};"
+cat $BALL_PATH/source/PYTHON/EXTENSIONS/skeleton.sip |\
+ sed -n -e '1,7p' | sed "s/class/class "$CLASS/ >$FILE
 
+cat $1 |\
+sed -n -e "/public.*[$^.]*/p" |\
+sed -e "s/public://" \
+	  -e "s/public slots://" \
+		-e "s/^/  /" \
+		-e "s/[ \t]//g" \
+		-e "s/:public/  : /g" \
+		-e "s/public/    /" \
+		-e "/^$/d" >>$FILE
+
+cat $BALL_PATH/source/PYTHON/EXTENSIONS/skeleton.sip |\
+ sed -n -e '8,14p' | sed "s/BALL\/.h/"$INCLUDE"/" >>$FILE
+
+cat $FILE2 >> $FILE
+echo "};" >> $FILE
+
+cat $FILE
+
+if [ -e $BALL_PATH/source/PYTHON/EXTENSIONS/$FILENAME.sip ]
+then
+ echo File $BALL_PATH/source/PYTHON/EXTENSIONS/$FILENAME.sip exists
+ exit
+fi
+#cp $FILE $BALL_PATH/source/PYTHON/EXTENSIONS/$FILENAME.sip
