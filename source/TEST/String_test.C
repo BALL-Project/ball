@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.4 1999/12/16 17:24:58 oliver Exp $
+// $Id: String_test.C,v 1.5 1999/12/17 12:42:13 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,7 +7,7 @@
 #include <string.h>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.4 1999/12/16 17:24:58 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.5 1999/12/17 12:42:13 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -1744,16 +1744,18 @@ RESULT
 
 CHECK(String::dump(ostream&, unsigned long))
 String tmp_filename;
-NEW_TMP_FILE(tmp_filename);
+NEW_TMP_FILE(tmp_filename)
 std::ofstream dump_stream(tmp_filename.c_str(), std::ios::out);
 s2 = new String("abcdefghijklm");
 s2->dump(dump_stream, 0);
+dump_stream.clear();
 dump_stream.close();
 TEST_FILE(tmp_filename.c_str(), "data/string_test_dump0.txt", true)
 
-dump_stream.open(tmp_filename.c_str(), std::ios::out);
-s2->dump(dump_stream, 4);
-dump_stream.close();
+NEW_TMP_FILE(tmp_filename)
+std::ofstream dump_stream2(tmp_filename.c_str(), std::ios::out);
+s2->dump(dump_stream2, 4);
+dump_stream2.close();
 TEST_FILE(tmp_filename.c_str(), "data/string_test_dump4.txt", true)
 RESULT
 
