@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.h,v 1.37 2004/02/23 16:27:16 oliver Exp $
+// $Id: secondaryStructure.h,v 1.38 2004/02/23 17:58:28 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -39,20 +39,22 @@ namespace BALL
 		*/
 		//@{
 
-		/**	
+		/**	Secondary structure type
 		*/
-		enum Property
+		enum Type
 		{
 			///
-			PROPERTY__HELIX       = Residue::NUMBER_OF_PROPERTIES + 1,
+			HELIX,
 			///
-			PROPERTY__COIL				=	Residue::NUMBER_OF_PROPERTIES + 2,
+			COIL,
 			///
-			PROPERTY__STRAND      = Residue::NUMBER_OF_PROPERTIES + 3,
+			STRAND,
 			///
-			PROPERTY__TURN        = Residue::NUMBER_OF_PROPERTIES + 4,
-
-			NUMBER_OF_PROPERTIES
+			TURN,
+			///
+			UNKNOWN,
+			///
+			NUMBER_OF_TYPES
 		};
 
 		//@}
@@ -144,6 +146,12 @@ namespace BALL
 		*/	
 		//@{
 
+		/// Return the type of secondary structure
+		Type getType() const throw() { return type_; }
+
+		/// Set the type of secondary structure
+		void setType(Type type) throw() { type_ = type; }
+			
 		/** Get a pointer to the parent protein.
 				The pointer is 0 if this instance does not have a parent protein.
 				@return  Protein* - mutable pointer to the parent protein
@@ -309,6 +317,10 @@ namespace BALL
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Residue)
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(PDBAtom)
 
+		protected:
+		
+		/// The secondary structure type (helix, strand, coil, turn)
+		Type type_;
 
 		private:
 
