@@ -1,4 +1,4 @@
-// $Id: smilesParser.C,v 1.2 2002/01/08 03:14:37 oliver Exp $
+// $Id: smilesParser.C,v 1.3 2002/01/17 17:33:10 oliver Exp $
 
 #include <BALL/STRUCTURE/smilesParser.h>
 #include <BALL/KERNEL/PTE.h>
@@ -24,6 +24,10 @@ namespace BALL
 		String s(symbol);
 		s.toUpper(0, 1);
 		setElement(PTE[s]);
+	}
+	
+	SmilesParser::SPAtom::~SPAtom() throw()
+	{
 	}
 
 	Size SmilesParser::SPAtom::getDefaultValence() const
