@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.9.4.6 2002/11/30 09:57:24 oliver Exp $
+// $Id: global.h,v 1.9.4.7 2002/11/30 14:07:33 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -14,18 +14,18 @@
 #	include <BALL/COMMON/memory.h>
 #endif
 
-#ifdef BALL_INCLUDE_BASETSD_H
+#ifdef BALL_HAS_BASETSD_H
 #	include <basetsd.h>
 #endif
 
 // If possible use the ISO C99-compliant header stdint.h
 // to define the portable integer types.
-#ifdef BALL_INCLUDE_STDINT
+#ifdef BALL_HAS_STDINT_H
 #	include <stdint.h>
 #endif
 
 // Added to avoid warnings with MS Visual Studio .NET
-#ifdef __win32__
+#ifdef __win32
 #pragma warning( disable : 4290 )
 #endif
 

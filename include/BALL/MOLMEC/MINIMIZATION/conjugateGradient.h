@@ -1,4 +1,4 @@
-// $Id: conjugateGradient.h,v 1.10 2001/07/11 23:59:32 amoll Exp $ 
+// $Id: conjugateGradient.h,v 1.10.4.1 2002/11/30 14:07:34 oliver Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -7,7 +7,7 @@
 #	include <BALL/common.h>
 #endif
 
-#ifdef BALL_INCLUDE_IEEEFP
+#ifdef BALL_HAS_IEEEFP_H
 #	include <ieeefp.h> 
 #endif
 

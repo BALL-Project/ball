@@ -1,4 +1,4 @@
-// $Id: config.h.in,v 1.29.2.6 2002/11/30 12:49:20 oliver Exp $ 
+// $Id: config.h.in,v 1.29.2.7 2002/11/30 14:07:34 oliver Exp $ 
 
 #ifndef BALL_CONFIG_CONFIG_H
 #define BALL_CONFIG_CONFIG_H
@@ -97,11 +97,11 @@
 
 // on some systems (e.g. Solaris) we need to include /usr/include/ieeefp.h
 // for some floating point functions
-#undef BALL_INCLUDE_IEEEFP
+#undef BALL_HAS_IEEEFP_H
 
 // on some systems (e.g. Solaris) we need to include /usr/include/values.h
 // for some floating point functions
-#undef BALL_INCLUDE_VALUES
+#undef BALL_HAS_VALUES_H
 
 // the signature of the function arguments used in xdrrec_create differs
 // from platform to platform, so we define some symbols describing the
@@ -132,7 +132,7 @@
 #undef BALL_HAS_NUMERIC_LIMITS
 
 // Define whether float.h has to be included along with limits.h
-#undef BALL_INCLUDE_FLOAT_H 
+#undef BALL_HAS_FLOAT_H 
 
 // Define an unsigned integer type of 64 bit to hold (portable) pointers
 #define BALL_64BIT_UINT_TYPE long

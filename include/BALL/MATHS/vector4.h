@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.38 2001/07/16 02:19:58 oliver Exp $
+// $Id: vector4.h,v 1.38.4.1 2002/11/30 14:07:34 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -11,7 +11,7 @@
 #	include <BALL/COMMON/exception.h>
 #endif
 
-#ifdef BALL_INCLUDE_IEEEFP
+#ifdef BALL_HAS_IEEEFP_H
 #	include <ieeefp.h>
 #endif 
 

@@ -1,4 +1,4 @@
-// $Id: fileSystem.h,v 1.5.4.1 2002/11/30 09:48:44 oliver Exp $
+// $Id: fileSystem.h,v 1.5.4.2 2002/11/30 14:07:34 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILESYSTEM_H
 #define BALL_SYSTEM_FILESYSTEM_H
@@ -8,7 +8,7 @@
 #endif
 
 #include <limits.h>
-#ifdef BALL_INCLUDE_SYS_PARAM_H
+#ifdef BALL_HAS_SYS_PARAM_H
 #	include <sys/param.h>
 #endif
 
