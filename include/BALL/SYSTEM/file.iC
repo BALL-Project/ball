@@ -1,4 +1,4 @@
-// $Id: file.iC,v 1.14 2001/04/03 14:06:33 amoll Exp $
+// $Id: file.iC,v 1.15 2001/07/16 10:36:49 anker Exp $
 
 BALL_INLINE 
 void File::clear()
@@ -148,7 +148,7 @@ bool File::truncate(String path, Size size)
 
 BALL_INLINE 
 bool File::truncate(Size size)
-	const	throw (Exception::FileNotFound)
+	throw (Exception::FileNotFound)
 {
   return File::truncate(name_, size);
 }

@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.28 2001/06/21 08:58:57 amoll Exp $
+// $Id: file.h,v 1.29 2001/07/16 10:36:49 anker Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -308,7 +308,7 @@ namespace BALL
 				@return bool true if the file could be truncated
 		*/
 		bool truncate(Size size = 0)
-			const throw (Exception::FileNotFound);
+			throw (Exception::FileNotFound);
 			
 		/**	Create a temporary filename.
 				This method creates strings, starting at _AAAAAAA.TMP and tries if a 
