@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.18.2.6 2005/01/01 12:50:44 amoll Exp $
+// $Id: POVRenderer.C,v 1.18.2.7 2005/01/04 14:20:51 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -100,7 +100,7 @@ namespace BALL
 		String POVRenderer::POVColorRGBA(const ColorRGBA& input)
 			throw()
 		{
-			String output = "rgbft <";
+			String output = "<";
  			output += trimFloatValue_(input.getRed()) + ", ";
  			output += trimFloatValue_(input.getGreen()) + ", ";
  			output += trimFloatValue_(input.getBlue()) + ", ";
@@ -266,6 +266,22 @@ namespace BALL
 			out << "#declare BALLFinishTubeTransp       = BALLFinish" << endl;
 			out << "#declare BALLFinishMesh             = BALLFinish" << endl;
 			
+			out << "#macro Sphere(Position, Radius, Color)" << endl;
+			out << "sphere { Position, Radius pigment { Color } finish { BALLFinishSphereSolid } }" << endl;
+			out << "#end" << endl << endl;
+
+			out << "#macro SphereT(Position, Radius, Color)" << endl;
+			out << "sphere { Position, Radius pigment { Color } finish { BALLFinishSphereTransp} }" << endl;
+			out << "#end" << endl << endl;
+
+			out << "#macro Tube(Position1, Position2, Radius, Color)" << endl;
+			out << "cylinder { Position1, Position2, Radius pigment { Color } finish { BALLFinishTubeSolid } }" << endl;
+			out << "#end" << endl << endl;
+
+			out << "#macro TubeT(Position1, Position2, Radius, Color)" << endl;
+			out << "cylinder { Position1, Position2, Radius pigment { Color } finish { BALLFinishTubeTransp } }" << endl;
+			out << "#end" << endl << endl;
+
 			// now begin the CSG union containing all the geometric objects
 			out << "union {" << endl;
 
@@ -317,20 +333,12 @@ namespace BALL
 				color = sphere.getColor();
 			}
 
-			// then, find out its radius
-			float radius = sphere.getRadius();
+			if ((Size) color.getAlpha() == 255) out << "Sphere(";
+			else 																out << "SphereT(";
 
-			// and finally, its position
-			Vector3 position = sphere.getPosition();
-
-			// now write the information into the out
-			out << "\tsphere { ";
-			out << POVVector3(position) << ", ";
-			out << radius;
-			//out <<"\t\ttexture {" << endl;
-			out << " pigment { " << POVColorRGBA(color) << " } ";
-			out << POVFinish("Sphere", color);
-			out << " }" << endl << endl;
+		  out << POVVector3(sphere.getPosition()) << ", "
+					<< sphere.getRadius() << ", "
+					<< POVColorRGBA(color) << ")" << endl;
 		}
 
 		void POVRenderer::renderDisc_(const Disc& disc)
@@ -357,13 +365,13 @@ namespace BALL
 			normal -= origin_;
 
 			// now write the information into the out
-			out << "\tdisc { ";
+			out << "disc { ";
 			out << POVVector3(position) << ", ";
 			out << POVVector3(normal) << ", ";
 			out << radius;
 			out << " pigment { " << POVColorRGBA(color) << " } ";
 			out << POVFinish("Tube", color); // We use the same finish as for tubes -> helices
-			out << "} " << endl << endl;
+			out << "} " << endl;
 		}
 
 		void POVRenderer::renderTube_(const Tube& tube)
@@ -382,21 +390,13 @@ namespace BALL
 				color = tube.getColor();
 			}
 
-			// then, find out its radius
-			float radius = tube.getRadius();
+			if ((Size) color.getAlpha() == 255) out << "Tube(";
+			else 																out << "TubeT(";
 
-			// and finally, the base and the cap
-			Vector3 base_point = tube.getVertex1();
-			Vector3  cap_point = tube.getVertex2();
-
-			// now write the information into the out
-			out << "\tcylinder {";
-			out << "\t" << POVVector3(base_point) << ", ";
-			out << POVVector3( cap_point) << ", ";
-			out << radius;
-			out << " pigment { " << POVColorRGBA(color) << " } ";
-			out << POVFinish("Tube", color);
-			out << "} " << endl;
+		  out << POVVector3(tube.getVertex1()) << ", "
+		      << POVVector3(tube.getVertex2()) << ", "
+					<< tube.getRadius() << ", "
+					<< POVColorRGBA(color) << ")" << endl;
 		}	
 
 		void POVRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
@@ -419,30 +419,21 @@ namespace BALL
 				color2 = tube.getColor2();
 			}
 
-			// then, find out its radius
-			float radius = tube.getRadius();
-
-			// and finally, the base and the cap
-			Vector3 base_point = tube.getVertex1();
-			Vector3  cap_point = tube.getVertex2();
-			Vector3  mid_point = tube.getMiddleVertex();
-
-			// now write the information into the out
-			out << "\tcylinder { ";
-			out << POVVector3(base_point) << ", ";
-			out << POVVector3( mid_point) << ", ";
-			out << radius;
-			out << " pigment { " << POVColorRGBA(color1) << " } ";
-			out << POVFinish("Tube", color1);
-			out << "}" << endl;
+  		if ((Size) color1.getAlpha() == 255) out << "Tube(";
+			else 																 out << "TubeT(";
 			
-			out << "\tcylinder {";
-			out << POVVector3(mid_point) << ", ";
-			out << POVVector3(cap_point) << ", ";
-			out << radius;
-			out << " pigment { " << POVColorRGBA(color2) << " } ";
-			out << POVFinish("Tube", color2);
-			out << "}" << endl << endl;
+		  out << POVVector3(tube.getVertex1()) << ", "
+		      << POVVector3(tube.getMiddleVertex()) << ", "
+					<< tube.getRadius() << ", "
+					<< POVColorRGBA(color1) << ")" << endl;
+
+  		if ((Size) color1.getAlpha() == 255) out << "Tube(";
+			else 																 out << "TubeT(";
+			
+		  out << POVVector3(tube.getMiddleVertex()) << ", "
+		      << POVVector3(tube.getVertex2()) << ", "
+					<< tube.getRadius() << ", "
+					<< POVColorRGBA(color2) << ")" << endl;
 		}
 
 		void POVRenderer::renderMesh_(const Mesh& mesh)
