@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.9 2001/03/08 11:26:44 amoll Exp $
+// $Id: regularData2D.h,v 1.10 2001/03/11 23:59:26 amoll Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
 #define BALL_DATATYPE_REGULARDATA2D_H
@@ -120,7 +120,7 @@ namespace BALL
 		/** Return the value at coordinates x, y. If there's no data point at that location, 
 				it will be interpolated.
 		*/
-		const T& getValue(T valx, T valy)
+		T getValue(T valx, T valy)
 			throw();
 
 		/** Sample 10% of the data, calculate their mean (should be close to the "ground state") 
@@ -463,7 +463,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	const T& TRegularData2D<T>::getValue(T valx, T valy)
+	T TRegularData2D<T>::getValue(T valx, T valy)
 		throw()
 	{
 	  double stepx, stepy;
