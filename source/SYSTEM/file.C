@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.15 2000/10/30 00:20:06 amoll Exp $
+// $Id: file.C,v 1.16 2000/12/19 13:23:37 anker Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <math.h>
@@ -90,6 +90,13 @@ namespace BALL
 	{
 		close();
 		return open(name_, open_mode_);
+	}
+
+	bool File::reopen(File::OpenMode open_mode)
+		throw (Exception::FileNotFound)
+	{
+		close();
+		return open(name_, open_mode);
 	}
 
 	bool File::copy(String source_name, String destination_name, Size buffer_size)
