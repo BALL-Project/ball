@@ -1,4 +1,4 @@
-// $Id: geometricCollector.h,v 1.1 2000/06/04 17:54:49 hekl Exp $
+// $Id: geometricCollector.h,v 1.2 2000/06/15 17:22:09 oliver Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_GEOMETRICCOLLECTOR_H
 #define BALL_VIEW_FUNCTOR_GEOMETRICCOLLECTOR_H
@@ -55,9 +55,9 @@ namespace BALL
 
 			// --- ACCESSORS: INSPECTORS and MUTATORS
 
-			List<Composite *>& GeometricCollector::getCollection();
+			List<Composite *>& getCollection();
 			
-			const List<Composite *>& GeometricCollector::getCollection() const;
+			const List<Composite *>& getCollection() const;
 
 			void collectSelectedGeometricObjects(bool selected);
 
