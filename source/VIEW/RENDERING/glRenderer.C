@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.23 2004/02/17 15:27:56 amoll Exp $
+// $Id: glRenderer.C,v 1.24 2004/03/14 13:25:04 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -252,7 +252,7 @@ namespace BALL
 			display_list->useCompileMode();
 
 			display_list->startDefinition();
-			render_(rep);
+			render(rep);
 			display_list->endDefinition();
 		}
 
@@ -274,7 +274,7 @@ namespace BALL
 			display_list->useCompileMode();
 
 			display_list->startDefinition();
-			render_(rep);
+			render(rep);
 			display_list->endDefinition();
 		}
 
@@ -296,7 +296,7 @@ namespace BALL
 		}
 
 
-		bool GLRenderer::render_(const Representation& representation)
+		bool GLRenderer::render(const Representation& representation)
 			throw()
 		{
 			if (representation.hasProperty(Representation::PROPERTY__HIDDEN))

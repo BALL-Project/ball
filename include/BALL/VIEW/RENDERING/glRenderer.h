@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.13 2004/02/26 08:41:45 anhi Exp $
+// $Id: glRenderer.h,v 1.14 2004/03/14 13:25:08 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
 #define BALL_VIEW_RENDERING_GLRENDERER_H
@@ -177,7 +177,7 @@ namespace BALL
 				throw() { return stereo_;}
 			
 			///
-			virtual bool render_(const Representation& representation)
+			virtual bool render(const Representation& representation)
 				throw();
 
 			//@}

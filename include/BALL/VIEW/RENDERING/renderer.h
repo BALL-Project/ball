@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.h,v 1.5 2004/02/26 08:41:45 anhi Exp $
+// $Id: renderer.h,v 1.6 2004/03/14 13:25:08 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_RENDERER_H
 #define BALL_VIEW_RENDERING_RENDERER_H
@@ -82,10 +82,10 @@ namespace BALL
 			*/
 			//@{
 			
-			/** Update the display of a Representation.
+			/** Render a Representation.
 			*/
-			virtual void update(Representation& /*representation*/)
-				throw() {}
+			virtual bool render(const Representation& representation)
+				throw();
 
 			/** Get the stage for the renderer (const)
 			 */
@@ -122,12 +122,12 @@ namespace BALL
 			bool operator == (const Renderer& /*renderer*/) const
 				throw() { return true; }
 
+			////
+			protected:
+
 			/// Wrapper for the renderering of special GeometricObjects
 			virtual void render_(const GeometricObject* object)
 				throw();
-
-			////
-			protected:
 
 			// Render a text label
 			virtual void renderLabel_(const Label& /*label*/)

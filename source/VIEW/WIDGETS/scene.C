@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.42 2004/02/20 11:04:06 amoll Exp $
+// $Id: scene.C,v 1.43 2004/03/14 13:26:09 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -430,7 +430,7 @@ void Scene::render_(const Representation& rep, RenderMode mode)
 	switch (mode)
 	{
 		case DIRECT_RENDERING:
-			gl_renderer_.render_(rep);
+			gl_renderer_.render(rep);
 			break;
 
 		case DISPLAY_LISTS_RENDERING:
@@ -758,12 +758,10 @@ bool Scene::exportScene(Renderer &er) const
 		it = main_control->getPrimitiveManager().getRepresentations().begin();
 		for (; it != main_control->getPrimitiveManager().getRepresentations().end(); it++)
 		{
-			List<GeometricObject*>::ConstIterator it2;
-			for (it2 =  (*it)->getGeometricObjects().begin();
-					 it2 != (*it)->getGeometricObjects().end();
-					 it2++)
+			if (!er.render(**it))
 			{
-				er.render_(*it2);
+				getMainControl()->setStatusbarText("Error rendering representation...");
+				return false;
 			}
 		}
 
