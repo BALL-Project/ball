@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.10 2004/12/22 13:24:37 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.11 2004/12/22 14:10:43 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -44,7 +44,8 @@ namespace BALL
 		bool AddBackboneModel::SplinePoint::operator < (const SplinePoint::SplinePoint& point) const
 			throw()
 		{
-			return atom_ < point.atom_;
+			return ((Residue*)       atom_->getParent())->getID() <
+						 ((Residue*) point.atom_->getParent())->getID();
 		}
 
 
@@ -52,15 +53,17 @@ namespace BALL
 			throw()
 			: ModelProcessor(),
 				last_parent_(0),
-				tube_radius_((float)0.4)
+				tube_radius_((float)0.4),
+				interpolation_steps_(9)
 		{
 		}
 
-		AddBackboneModel::AddBackboneModel(const AddBackboneModel& add_Backbone)
+		AddBackboneModel::AddBackboneModel(const AddBackboneModel& bm)
 			throw()
-			:	ModelProcessor(add_Backbone),
+			:	ModelProcessor(bm),
 				last_parent_(0),
-				tube_radius_(add_Backbone.tube_radius_)
+				tube_radius_(bm.tube_radius_),
+				interpolation_steps_(bm.interpolation_steps_)
 		{
 		}
 
@@ -76,6 +79,8 @@ namespace BALL
 			throw()
 		{
 			ModelProcessor::clear();
+			interpolation_steps_ = 9;
+			tube_radius_ = 0.4;
 			clear_();
 		}
 
@@ -102,13 +107,12 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void AddBackboneModel::collectAtoms_(const AtomContainer& ai)
+		void AddBackboneModel::collectAtoms_(Residue& residue)
 			throw()
 		{
 			AtomIterator it;
-			BALL_FOREACH_ATOM(*const_cast<AtomContainer*>(&ai), it)
+			BALL_FOREACH_ATOM(residue, it)
 			{
-				const Residue& residue = *dynamic_cast<Residue*> (it->getParent());
 				// collect only CA-Atoms and CH3 atoms in ACE and NME
 				if (((it->getName().hasSubstring("CA")) ||
 				    (it->getName().hasSubstring("CH3") &&
@@ -152,7 +156,8 @@ namespace BALL
 			throw()
 		{
 			have_start_point_ = false;
-			sort(spline_vector_.begin(), spline_vector_.end());
+//   			sort(spline_vector_.begin(), spline_vector_.end());
+
 			calculateTangentialVectors_();
 			createSplinePath_();
 			buildGraphicalRepresentation_();
@@ -197,11 +202,10 @@ namespace BALL
 		// create a spline segment between two spline points a and b
 		void AddBackboneModel::createSplineSegment_(const SplinePoint &a, const SplinePoint &b)
 		{
-			Size max_step = 9;
 			double time = 0.0;
-			double step = (double)1 / (double)max_step;
+			double step = (double)1 / (double)interpolation_steps_;
 
-			for (Size index = 0; index < max_step; ++index, time += step)
+			for (Size index = 0; index < interpolation_steps_; ++index, time += step)
 			{
 				double t_2 = time * time;
 				double t_3 = t_2 * time;
@@ -234,7 +238,7 @@ namespace BALL
 											 (h4 * b.getTangentialVector().z));
 
 				spline_points_.push_back(new_vector);
-				atoms_of_spline_points_.push_back((index <= max_step/2) ? a.getAtom() : b.getAtom());
+				atoms_of_spline_points_.push_back((index <= interpolation_steps_/2) ? a.getAtom() : b.getAtom());
 			}
 		}
 
@@ -262,7 +266,17 @@ have_start_point_ = false;
 			{
 			}
 
+			// create sphere for the point
+			Sphere* sphere = new Sphere;
+			if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
+			sphere->setRadius(tube_radius_);
+			sphere->setPosition(last_point_);
+ 			sphere->setComposite(atoms_of_spline_points_[start]);
+			geometric_objects_.push_back(sphere);
+
+
  			float slides = 8.0 + drawing_precision_ * 8.0;
+			Angle slides_angle = Angle(360.0 / slides, false);
 			vector<Vector3> points;
 			Vector3 dir = spline_points_[start + 1] - last_point_;
 			Vector3 n = Vector3(1,0,0);
@@ -284,7 +298,7 @@ have_start_point_ = false;
 			Vector3 x = r;
 			
 			Matrix4x4 m;
-			m.setRotation(Angle(360.0 / (slides), false), n % r);
+			m.setRotation(slides_angle, n % r);
 			points.push_back(x);
 			// initialise a first set of points in a circle around the start position
 			for (Position p = 0; p < slides; p++)
@@ -295,14 +309,12 @@ have_start_point_ = false;
 			// add also a dummy for closing of ring
 			points.push_back(points[0]);
 
-			Mesh* mesh = new Mesh();
 			Mesh::Triangle t;
 			vector<Vector3> new_points;
 			new_points.resize(points.size());
-			Matrix4x4 m2;
 				
 			// iterate over all spline_points_
-			for (Position p = start + 1; p < end; p++)
+			for (Position p = start + 1; p < end -1; p++)
 			{
 				Vector3 point 	= spline_points_[p];
 				Vector3 dir_new = spline_points_[p + 1] - spline_points_[p];
@@ -318,27 +330,21 @@ have_start_point_ = false;
 				r_new.normalize();
 				r_new *= tube_radius_;
 
-				/*
-				Angle angle;
-				GetAngle(r, r_new, angle);
-				Matrix4x4 m;
-				m.setRotation(-angle, dir_new % r_new); 
-				*/
-
-				m2.setRotation(Angle(360.0 / (slides), false), dir_new);
+				m.setRotation(slides_angle, dir_new);
 				x = r_new;
 				new_points[0] = x;
-				for (Position p = 0; p < slides; p++)
+				for (Position i = 0; i < slides; i++)
 				{
-					x = m2 * x;
-					new_points[p+1] = x;
+					x = m * x;
+					new_points[i + 1] = x;
 				}
 				// add also a dummy for closing of ring
 				new_points[new_points.size() - 1] = new_points[0];
 
+				Mesh* mesh = new Mesh();
+			
 				for (Position point_pos = 0; point_pos < points.size() - 2; point_pos++)
 				{
-
 					mesh->vertex.push_back(last_point_ + 		 points[point_pos]);
 					mesh->vertex.push_back(			point  + new_points[point_pos]);
 					mesh->vertex.push_back(last_point_ + 		 points[point_pos + 1]);
@@ -361,6 +367,9 @@ have_start_point_ = false;
 					mesh->triangle.push_back(t);
 				}
 
+				mesh->setComposite(atoms_of_spline_points_[p]);
+				geometric_objects_.push_back(mesh);
+
 				r = r_new;
 				last_point_ = point;
 
@@ -370,8 +379,15 @@ have_start_point_ = false;
 				}
 			}
 
-			geometric_objects_.push_back(mesh);
 			have_start_point_ = true;
+			
+			// create sphere for the point
+			sphere = new Sphere;
+			if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
+			sphere->setRadius(tube_radius_);
+			sphere->setPosition(last_point_);
+ 			sphere->setComposite(atoms_of_spline_points_[end - 1]);
+			geometric_objects_.push_back(sphere);
 		}
 
 		void AddBackboneModel::clear_()
