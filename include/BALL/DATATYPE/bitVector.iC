@@ -1,4 +1,10 @@
-// $Id: bitVector.iC,v 1.4 1999/12/17 11:16:20 oliver Exp $
+// $Id: bitVector.iC,v 1.5 1999/12/19 17:32:45 oliver Exp $
+
+BALL_INLINE
+BitVector::BlockType BitVector::mask_(Index index) const
+{
+	return (1 << (index & BALL_BLOCK_MASK));
+}
 
 BALL_INLINE 
 void BitVector::clear()
@@ -137,6 +143,22 @@ Bit BitVector::operator [] (Index index)
 }
 
 BALL_INLINE
+bool BitVector::getBit(Index index)
+{
+	return (bool)((bitset_[block_(index)] & mask_(index)) != 0);
+}
+
+BALL_INLINE
+bool BitVector::getBit(Index index) const
+{
+	validateIndex_(index);
+
+	BitVector* const  const_this = const_cast<BitVector *>(this);
+
+	return const_this->getBit(index);
+}
+
+BALL_INLINE
 bool BitVector::operator [] (Index index) const
 {
 	validateIndex_(index);
@@ -158,22 +180,6 @@ void BitVector::setBit(Index index, bool value)
 }
 
 BALL_INLINE
-bool BitVector::getBit(Index index) const
-{
-	validateIndex_(index);
-
-	BitVector* const  const_this = const_cast<BitVector *>(this);
-
-	return const_this->getBit(index);
-}
-
-BALL_INLINE
-bool BitVector::getBit(Index index)
-{
-	return (bool)((bitset_[block_(index)] & mask_(index)) != 0);
-}
-
-BALL_INLINE
 void BitVector::toggleBit(Index index)
 {
 	validateIndex_(index);
@@ -181,9 +187,4 @@ void BitVector::toggleBit(Index index)
 	bitset_[block_(index)] ^= mask_(index);
 }
 
-BALL_INLINE
-BitVector::BlockType BitVector::mask_(Index index) const
-{
-	return (1 << (index & BALL_BLOCK_MASK));
-}
  
