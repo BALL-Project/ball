@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.3 2000/05/05 12:33:36 oliver Exp $
+# $Id: Makefile,v 1.4 2000/05/05 17:53:54 oliver Exp $
 # Makefile for Finite Difference Poisson-Boltzmann Application
 #
 
@@ -10,7 +10,7 @@ all:	$(EXECUTABLE)
 
 clean:	default_clean
 
-include ../../Solaris-5.7-sparc-g++_2.95.2/common.mak
+include ../../common.mak
 include .Dependencies
 
 SOURCES=\
