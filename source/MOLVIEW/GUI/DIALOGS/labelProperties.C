@@ -120,19 +120,15 @@ namespace BALL
 		{
 			main_control.initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 
-			id_ = main_control.insertMenuEntry
-							(MainControl::DISPLAY, "&Label Properties", this,
-							 SLOT(openDialog()), 
-							 CTRL+Key_L);   
+			id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "&Label Properties", this,
+																				 SLOT(openDialog()), CTRL+Key_L);   
 		}
 
 		void LabelProperties::finalizeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.removeMenuEntry
-				(MainControl::DISPLAY, "&Label Properties", this,
-				 SLOT(openDialog()), 
-				 CTRL+Key_L);   
+			main_control.removeMenuEntry(MainControl::DISPLAY, "&Label Properties", this,
+																	 SLOT(openDialog()), CTRL+Key_L);   
 		}
 
 		void LabelProperties::checkMenu(MainControl& main_control)
