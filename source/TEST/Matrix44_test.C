@@ -1,4 +1,4 @@
-// $Id: Matrix44_test.C,v 1.3 2000/03/11 16:57:38 amoll Exp $
+// $Id: Matrix44_test.C,v 1.4 2000/03/13 18:07:19 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,10 +6,11 @@
 #include <BALL/MATHS/vector3.h>
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/angle.h>
+#include <BALL/common.h>
 #include <math.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Matrix44_test.C,v 1.3 2000/03/11 16:57:38 amoll Exp $")
+START_TEST(class_name, "$Id: Matrix44_test.C,v 1.4 2000/03/13 18:07:19 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -388,8 +389,10 @@ RESULT
 
 //line 292: method TMatrix4x4::T& operator ()(Index row, Index col)
 CHECK(TMatrix4x4::T& operator ()(Index row, Index col))
-	m1(3,3) = 1.1;
-	TEST_REAL_EQUAL(m1.m44, 1.1);
+	m1(1,1) = 1.1;
+	TEST_REAL_EQUAL(m1.m22, 1.1);
+	m1(3,3) = 11.1;
+	TEST_REAL_EQUAL(m1.m44, 11.1);
 	TEST_EXCEPTION(Exception::IndexUnderflow, m1(-1, 1) = 1.0)
 	TEST_EXCEPTION(Exception::IndexOverflow, m1(4, 1) = 1.0)
 	TEST_EXCEPTION(Exception::IndexUnderflow, m1(1, -1) = 1.0)
@@ -399,7 +402,10 @@ RESULT
 
 //line 301: method TMatrix4x4::T& operator ()(Index row, Index col) const 
 CHECK(TMatrix4x4::T& operator ()(Index row, Index col) const )
-	TEST_REAL_EQUAL(m(3,3) , 16)
+	m1(3,3) = 13.3;
+	TEST_REAL_EQUAL(m1(3,3) , 13.3)
+	m1(1,1) = 3.3;
+	TEST_REAL_EQUAL(m1(1,1) , 3.3)
 	TEST_EXCEPTION(Exception::IndexUnderflow, m1(-1, 1))
 	TEST_EXCEPTION(Exception::IndexOverflow, m1(4, 1))
 	TEST_EXCEPTION(Exception::IndexUnderflow, m1(1, -1))
@@ -538,24 +544,28 @@ RESULT
 //line 381: method TMatrix4x4::invert(TMatrix4x4& inverse) const 
 CHECK(TMatrix4x4::invert(TMatrix4x4& inverse) const )
 	bool bool1;
+	Matrix4x4 e;
+	e.setIdentity();
 	m1 = Matrix4x4(1.0, 2.1, 3.1, 0.2, 5.0, 6.0 ,0.0, 
 				8.0 ,9.0 ,0.1 ,11.0 ,12.2 ,13.0 ,14.0 ,15.0 ,16.0 );
 	bool1 = m1.invert(m2);
 	TEST_EQUAL(bool1 , true)
 	m3 = m1 * m2;
-	TEST_EQUAL(m3.isIdentity(), true)
+	TEST_EQUAL(m3.isEqual(e, 0.00001), true)
 RESULT
 
 
 //line 388: method TMatrix4x4::invert()
 CHECK(TMatrix4x4::invert())
 	bool bool1;
+	Matrix4x4 e;
+	e.setIdentity();
 	m1 = Matrix4x4(1.0, 2.1, 3.1, 0.2, 5.0, 6.0 ,0.0, 
 				8.0 ,9.0 ,0.1 ,11.0 ,12.2 ,13.0 ,14.0 ,15.0 ,16.0 );
 	m2 = Matrix4x4(m1);
 	bool1 = m1.invert();
 	m3 = m1 * m2;
-	TEST_EQUAL(m3.isIdentity(), true)
+	TEST_EQUAL(m3.isEqual(e, 0.00001), true)
 	TEST_EQUAL(bool1 , true)
 RESULT
 
@@ -577,7 +587,7 @@ CHECK(TMatrix4x4::getDeterminant() const )
 	m2.setColumn(2, v3);
 	m2.setColumn(3, v4);
 	d2 = m2.getDeterminant();
-	TEST_REAL_EQUAL(d2, d1)
+	TEST_EQUAL(Maths::isNear(d1, d2, d2 / 100), true)
 
 	m2 = Matrix4x4(m1);
 	v1 = m2.getRow(1);
@@ -602,14 +612,13 @@ CHECK(TMatrix4x4::getDeterminant() const )
 	v1 *= 5;
 	m2.setRow(1, v1);
 	d2 = m2.getDeterminant();
-	TEST_REAL_EQUAL(d2, d1 * 5)
+	TEST_EQUAL(Maths::isNear(d1 * 5, d2, d2 / 100), true)
 
 	m2 = Matrix4x4(m1);
 	d2 = m2.getDeterminant();
 	m3 = m1 * m2;
 	d3 = m3.getDeterminant();
-	TEST_REAL_EQUAL(d3, d1 * d2)
-
+	TEST_EQUAL(Maths::isNear(d1 * d2, d3, d3 / 100), true)
 RESULT
 
 
@@ -952,6 +961,13 @@ CHECK(TMatrix4x4::isDiagonal() const )
 	TEST_EQUAL(m1.isDiagonal(), false)
 RESULT
 
+
+CHECK(TMatrix4x4::isEqual(TMatrix4x4<T>& m, T maxDiff) const )
+	m1 = Matrix4x4(m);
+	TEST_EQUAL(m1.isEqual(m, 0.0001), true)
+		m1.m41 = 12.12;
+	TEST_EQUAL(m1.isEqual(m, 0.0001), false)
+RESULT
 
 //line 566: method TMatrix4x4::isValid() const 
 CHECK(TMatrix4x4::isValid() const )
