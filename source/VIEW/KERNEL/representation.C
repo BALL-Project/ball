@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.39 2004/06/25 14:37:08 amoll Exp $
+// $Id: representation.C,v 1.40 2004/07/04 16:32:40 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -483,6 +483,56 @@ namespace BALL
 			}
 
 			return false;
+		}
+
+		String Representation::toString() const
+			throw()
+		{
+			String result;
+			result += String(drawing_mode_) + " ";
+			result += String(drawing_precision_) + " ";
+			result += String(surface_drawing_precision_) + " ";
+			result += String(model_type_) + " ";
+			result += String(coloring_method_) + " ";
+			result += String(transparency_) + " ";
+			result += String(coloring_method_) + " ";
+
+			if (composites_.size() == 0)
+			{
+				result += "[]";
+				return result;
+			}
+
+			result += "[";
+
+			const Composite& root = (*composites_.begin())->getRoot();
+			HashMap<const Composite*, Position> composite_to_index;
+			collectRecursive_(root, composite_to_index);
+
+			CompositesConstIterator it = begin();
+			for (; it != end(); it++)
+			{
+				if (composite_to_index.has(*it))
+				{
+					result += String(composite_to_index[*it]) + ",";
+				}
+			}
+
+			result.trimRight(",");
+			result += "]";
+			return result;
+		}
+
+
+		void Representation::collectRecursive_(const Composite& c, 
+									HashMap<const Composite*, Position>& hashmap) const
+			throw()
+		{
+			hashmap.insert(HashMap<const Composite*, Position>::ValueType(&c, hashmap.size()));
+			for (Position p = 0; p < c.getDegree(); p++)
+			{
+				collectRecursive_(*c.getChild(p), hashmap);
+			}
 		}
 
 	} // namespace VIEW

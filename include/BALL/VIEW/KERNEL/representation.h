@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.21 2004/05/27 19:49:49 oliver Exp $
+// $Id: representation.h,v 1.22 2004/07/04 16:33:01 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -267,6 +267,10 @@ namespace BALL
 			///
 			void dump(std::ostream& s, Size depth) const
 				throw();
+			
+			///
+			String toString() const
+				throw();
 
 			///
 			CompositesIterator begin() 
@@ -290,6 +294,9 @@ namespace BALL
 
 			/// Can be called by rebuild directly, or by UpdateRepresentationThread
 			void update_(bool rebuild)
+				throw();
+
+			void collectRecursive_(const Composite& c, HashMap<const Composite*, Position>& hashmap) const
 				throw();
 
 			//_
