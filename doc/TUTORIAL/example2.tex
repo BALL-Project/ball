@@ -82,8 +82,9 @@ sequence of our protein reads as follows:
 			 res_it != S.endResidue();
 			 ++res_it)
 	{
-		cout << res_it->getName() << endl;
+		cout << res_it->getName() << " ";
 	}
+	cout << endl;
 \end{lstlisting}
 
 \noindent
@@ -92,3 +93,4 @@ Residue::}\method{getName()} to access the residues name. All proteins and
 residues are traversed in the order in which they appear in the PDB file.
 Since the PDB format requires the residues to start with the N-terminus,
 the sequence is printed  in the correct order (N-terminus to C-terminus).
+
