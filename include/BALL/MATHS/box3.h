@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.5 2000/01/16 17:28:40 oliver Exp $
+// $Id: box3.h,v 1.6 2000/02/16 17:06:11 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -324,21 +324,21 @@ namespace BALL
 	BALL_INLINE 
 	bool TBox3<T>::operator == (const TBox3<T>& box) const
 	{
-		return (bool)(a == box.a && b == box.b);
+		return (a == box.a && b == box.b);
 	}
 
 	template <class T>
 	BALL_INLINE 
 	bool TBox3<T>::operator != (const TBox3<T> &box) const
 	{
-		return (bool)!(*this == box);
+		return !(*this == box);
 	}
 
 	template <class T>
 	BALL_INLINE 
 	bool TBox3<T>::isValid() const
 	{
-		return (bool)(a.isValid() && b.isValid());
+		return (a.isValid() && b.isValid());
 	}
 
 	template <class T>
