@@ -1,10 +1,9 @@
-// $Id: path.C,v 1.2.4.1 2002/12/01 21:45:23 oliver Exp $
+// $Id: path.C,v 1.2.4.2 2002/12/03 21:43:32 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/file.h>
 #include <fstream>
-#include <stdlib.h>
 
 using std::ifstream;
 

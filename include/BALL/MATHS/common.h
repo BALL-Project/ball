@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.14.4.1 2002/12/01 13:49:10 oliver Exp $
+// $Id: common.h,v 1.14.4.2 2002/12/03 21:43:32 oliver Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -66,6 +66,7 @@ namespace BALL
 			return (t - (T)tmp);
 		}
 
+#ifndef max 
 		/**	Return the greater of two numbers.
 				@param	a the first number
 				@param	b the second number
@@ -92,7 +93,9 @@ namespace BALL
 		{ 
 			return BALL_MAX3(a, b, ct);
 		}
+#endif
 
+#ifndef min
 		/**	Return the smallest of two numbers.
 				@param	a the first number
 				@param	b the second number
@@ -119,6 +122,7 @@ namespace BALL
 		{ 
 			return BALL_MIN3(a, b, ct);
 		}
+#endif
 
 		/**	Round a number and return the result.
 				@param	t the number

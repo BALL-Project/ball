@@ -47,7 +47,7 @@ void ColorMeshDialog::apply_clicked()
 		File infile;
 		try
 		{
-			infile = File(fileName, File::IN);
+			infile = File(fileName, std::ios::in);
 		}
 		catch(Exception::FileNotFound)
 		{

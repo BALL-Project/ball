@@ -1,4 +1,4 @@
- // $Id: peakList.h,v 1.7.4.4 2002/12/03 10:08:48 oliver Exp $
+ // $Id: peakList.h,v 1.7.4.5 2002/12/03 21:43:32 oliver Exp $
 
 #ifndef BALL_NMR_PEAKLIST_H
 #define BALL_NMR_PEAKLIST_H
@@ -53,16 +53,22 @@ namespace BALL
 
 		/**	Default Constructor
 		*/
-		PeakList();
+		PeakList() 
+		{
+		}
 		
 		/**	Copy constructor
 		*/
-		PeakList(const PeakList& peak_list);
-		
+		PeakList(const PeakList& peak_list)
+			:	List<PT>(peak_list)
+		{
+		}		
+
 		/**	Destructor
 		*/
-		virtual ~PeakList()
-			throw();
+		virtual ~PeakList() throw()
+		{
+		}
 		
 		//@}
 
@@ -72,25 +78,71 @@ namespace BALL
 			
 		/**	Scale all peak intensities with a factor.
 		*/
-		void scale(float x);
+		void scale(float x)
+		{
+			Iterator it = begin();
+			for (; it != end(); ++it)
+			{
+				it->setIntensity(it->getIntensity() * x);
+			}
+		}
 
 		/**	Determine the maximum intensity of all peaks.
 				@return maximum intensity, Limits<float>::min() for an empty peak list
 		*/
-		float getMaxIntensity() const;
+		float getMaxIntensity() const
+		{
+			ConstIterator it = begin();
+			float max = -Limits<float>::max();
+			for (; it != end(); ++it)
+			{
+				max = std::max(max, it->getIntensity());
+			}
+		
+			return max;
+		}
 
 		/**	Determine the minimum intensity of all peaks.
 				@return minimum intensity, Limits<float>::max() for an empty peak list
 		*/
-		float getMinIntensity() const;
+		float getMinIntensity() const
+		{
+			ConstIterator it = begin();
+			float min = Limits<float>::max();
+			for (; it != end(); ++it)
+			{
+				min = std::min(min, it->getIntensity());
+			}
+		
+			return min;
+		}
 
 		/**	Determine the minimum position of the spectrum (all dimensions)
 		*/
-		Position getMinPosition() const;
+		Position getMinPosition() const
+		{
+			ConstIterator it = begin();
+			PeakList<PT>::Position min = Limits<PeakList<PT>::Position>::max();
+			for (; it != end(); ++it)
+			{
+				min = std::min(min, it->getPosition());
+			}
+			return min;
+		}
 
 		/**	Determine the maximum position of the spectrum (all dimensions)
 		*/
-		Position getMaxPosition() const;
+		Position getMaxPosition() const
+		{
+			ConstIterator it = begin();
+			PeakList<PT>::Position max = -Limits<PeakList<PT>::Position>::max();
+			for (; it != end(); ++it)
+			{
+				max = std::max(max, it->getPosition());
+			}
+
+			return max;
+		}
 		//@}
 	};
 
@@ -108,85 +160,6 @@ namespace BALL
 	typedef PeakList<Peak<Vector3> >		PeakList3D;
 	
 	//@}
-
-	template <typename PT>
-	PeakList<PT>::PeakList()
-		:	List<PT>()
-	{
-	}
-
-	template <typename PT>
-	PeakList<PT>::PeakList(const PeakList<PT>& peak_list)
-		:	List<PT>(peak_list)
-	{
-	}
-
-	template <typename PT>
-	PeakList<PT>::~PeakList()
-		throw()
-	{
-	}
-
-	template <typename PT>
-	void PeakList<PT>::scale(float x)
-	{
-		Iterator it = begin();
-		for (; it != end(); ++it)
-		{
-			it->setIntensity(it->getIntensity() * x);
-		}
-	}
-
-	template <typename PT>
-	float PeakList<PT>::getMaxIntensity() const
-	{
-		ConstIterator it = begin();
-		float max = -Limits<float>::max();
-		for (; it != end(); ++it)
-		{
-			max = std::max(max, it->getIntensity());
-		}
-		
-		return max;
-	}
-
-	template <typename PT>
-	float PeakList<PT>::getMinIntensity() const
-	{
-		ConstIterator it = begin();
-		float min = Limits<float>::max();
-		for (; it != end(); ++it)
-		{
-			min = std::min(min, it->getIntensity());
-		}
-		
-		return min;
-	}
-
-	template <typename PT>
-	typename PeakList<PT>::Position PeakList<PT>::getMinPosition() const
-	{
-		ConstIterator it = begin();
-		PeakList<PT>::Position min = Limits<PeakList<PT>::Position>::max();
-		for (; it != end(); ++it)
-		{
-			min = std::min(min, it->getPosition());
-		}
-		return min;
-	}
-
-	template <typename PT>
-	typename PeakList<PT>::Position PeakList<PT>::getMaxPosition() const
-	{
-		ConstIterator it = begin();
-		PeakList<PT>::Position max = -Limits<PeakList<PT>::Position>::max();
-		for (; it != end(); ++it)
-		{
-			max = std::max(max, it->getPosition());
-		}
-
-		return max;
-	}
 
 } // namespace BALL
 

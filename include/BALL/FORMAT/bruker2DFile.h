@@ -1,5 +1,5 @@
 
-// $Id: bruker2DFile.h,v 1.13 2001/12/30 13:28:37 sturm Exp $
+// $Id: bruker2DFile.h,v 1.13.4.1 2002/12/03 21:43:32 oliver Exp $
 
 #ifndef BALL_FORMAT_BRUKER2DFILE_H
 #define BALL_FORMAT_BRUKER2DFILE_H
@@ -52,7 +52,7 @@ class Bruker2D
   /**	Constructor.
 			@param name important: name of the Bruker-*directory*
   */
-  Bruker2D(const String& name, OpenMode open_mode = IN|BINARY)
+	Bruker2D(const String& name, OpenMode open_mode = std::ios::in | std::ios::binary)
 		throw(Exception::FileNotFound);
 
   /**	Copy-Constructor.

@@ -1,4 +1,4 @@
-// $Id: JCAMPFile.h,v 1.7 2001/08/01 01:06:27 oliver Exp $
+// $Id: JCAMPFile.h,v 1.7.4.1 2002/12/03 21:43:32 oliver Exp $
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
 #define BALL_FORMAT_JCAMPFILE_H
@@ -33,7 +33,7 @@ namespace BALL
 
 		/** Detailed constructor.
 		*/
-		JCAMPFile(const String& name, OpenMode open_mode = IN)
+			JCAMPFile(const String& name, OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
 		/** Copy constructor.

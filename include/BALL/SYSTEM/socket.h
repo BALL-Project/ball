@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.24.4.2 2002/11/30 10:31:59 oliver Exp $
+// $Id: socket.h,v 1.24.4.3 2002/12/03 21:43:32 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -38,7 +38,7 @@
 #	include <netinet/in.h>
 #endif
 #ifdef BALL_USE_WINSOCK
-#	include <winsock2.h>
+#	include <winsock.h>
 #endif
 
 

@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.h,v 1.19 2002/01/11 13:26:11 amoll Exp $
+// $Id: lineBasedFile.h,v 1.19.4.1 2002/12/03 21:43:32 oliver Exp $
 
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
@@ -38,7 +38,7 @@ namespace BALL
 		/** Detailed constuctor.
 				Open the given file.
 		*/
-		LineBasedFile(const String& filename, File::OpenMode open_mode = File::IN)
+		LineBasedFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
 		/** Copy constructor

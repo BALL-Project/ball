@@ -1,4 +1,4 @@
-// $Id: bruker1DFile.h,v 1.13 2001/12/30 13:28:37 sturm Exp $
+// $Id: bruker1DFile.h,v 1.13.4.1 2002/12/03 21:43:32 oliver Exp $
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
 #define BALL_FORMAT_BRUKER1DFILE_H
@@ -48,7 +48,7 @@ namespace BALL
 		/**	Constructor.
 				@param name important: name of the Bruker-*directory*
 		*/
-		Bruker1D(const String& name, OpenMode open_mode = File::IN|File::BINARY)
+		Bruker1D(const String& name, OpenMode open_mode = std::ios::in | std::ios::binary)
 			throw(Exception::FileNotFound);
 
 		/// Copy constructor
