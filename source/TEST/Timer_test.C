@@ -1,4 +1,4 @@
-// $Id: Timer_test.C,v 1.12.4.3 2002/12/09 12:55:56 crauser Exp $
+// $Id: Timer_test.C,v 1.12.4.4 2002/12/09 12:59:02 crauser Exp $
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
 ///////////////////////////
@@ -10,7 +10,7 @@
 #endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.12.4.3 2002/12/09 12:55:56 crauser Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.12.4.4 2002/12/09 12:59:02 crauser Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -102,7 +102,6 @@ CHECK(Timer::getClockTime() const )
 	sleep(2);
 #endif
 	t1.stop();
-	std::cout << "t1.getClockTime():"<<t1.getClockTime()<<std::endl;
 	TEST_EQUAL(t1.getClockTime() > 1, true)
 	TEST_EQUAL(t1.getClockTime() < 3, true)	
 RESULT
