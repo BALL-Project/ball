@@ -1,5 +1,5 @@
-// $Id: analyticalSES.C,v 1.4 1999/12/30 18:05:40 oliver Exp $
-// $Id: analyticalSES.C,v 1.4 1999/12/30 18:05:40 oliver Exp $
+// $Id: analyticalSES.C,v 1.5 2000/03/26 12:36:24 oliver Exp $
+// $Id: analyticalSES.C,v 1.5 2000/03/26 12:36:24 oliver Exp $
 
 #include <BALL/STRUCTURE/analyticalSES.h>
 #include <BALL/KERNEL/atom.h>
@@ -39,9 +39,9 @@ namespace BALL
 		{
 			float tmp[3];
 			atoms[i]->getPosition().get(tmp);
-			coordinates[i * 3]			= (double)tmp[0];
-			coordinates[i * 3 + 1]	= (double)tmp[1];
-			coordinates[i * 3 + 2]	= (double)tmp[2];
+			coordinates[i * 3]			= tmp[0];
+			coordinates[i * 3 + 1]	= tmp[1];
+			coordinates[i * 3 + 2]	= tmp[2];
 			radii[i] = atoms[i]->getRadius();
 		}
 
