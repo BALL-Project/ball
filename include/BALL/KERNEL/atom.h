@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.11 2000/03/03 08:09:04 oliver Exp $
+// $Id: atom.h,v 1.12 2000/03/03 08:51:59 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -83,8 +83,8 @@ namespace BALL
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.11 $
-			@date    $Date: 2000/03/03 08:09:04 $
+			@version $Revision: 1.12 $
+			@date    $Date: 2000/03/03 08:51:59 $
 	*/
 	class Atom
 		: public Composite,
@@ -500,10 +500,7 @@ namespace BALL
 					@param       position the new position vector of {\em *this} atom
 					@see         Atom::getPosition
 			*/
-			void setPosition(const Vector3& position)
-			{
-				position_ = position;
-			}
+			void setPosition(const Vector3& position);
 
 			/** Mutable inspection of the atom's position vector.
 					Access a mutable reference to the position vector of {\em *this} atom.
@@ -511,10 +508,7 @@ namespace BALL
 					@return      Vector3& - mutable reference to the position vector of {\em *this} atom
 					@see         Atom::setPosition
 			*/
-			Vector3& getPosition()
-			{
-				return position_;
-			}
+			Vector3& getPosition();
 
 			/** Constant inspection of the atom's position vector.
 					Access a constant reference to the position vector of {\em *this} atom.
@@ -522,10 +516,7 @@ namespace BALL
 					@return      Vector3& - constant reference to the position vector of {\em *this} atom
 					@see         Atom::setPosition
 			*/
-			const Vector3& getPosition() const
-			{
-				return position_;
-			}
+			const Vector3& getPosition() const;
 
 			/** Change of the atom's radius.
 					Change the radius of {\em *this} atom to {\em radius}.
