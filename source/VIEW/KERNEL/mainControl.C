@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.158.2.7 2005/01/28 15:08:11 amoll Exp $
+// $Id: mainControl.C,v 1.158.2.8 2005/02/01 13:33:04 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1339,6 +1339,8 @@ namespace BALL
 				primitive_manager_.removedComposite(composite);
 				return false;
 			}
+
+			control_selection_.clear();
 
 			CompositeMessage* cm = new CompositeMessage(composite, 
 					CompositeMessage::REMOVED_COMPOSITE);
