@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.21 2001/07/15 18:57:35 amoll Exp $
+// $Id: reducedSurface.h,v 1.22 2001/07/15 19:49:51 oliver Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -109,26 +109,26 @@ namespace BALL
 				All components are initialized to {\tt (T)0} or {\tt NULL}, respectivly.
 		*/
 		TReducedSurface()
-			throw();
+			;
 
 		/**	Copy constructor.
 				@param reduced_surface the ReducedSurface object to be copied
 				@param bool ignored - just for interface consistency
 		*/
 		TReducedSurface(const TReducedSurface<T>& reduced_surface)
-			throw();
+			;
 
 		/**	Detailed constructor.
 				Create a new ReducedSurface object from a list of spheres.
 		*/
 		TReducedSurface(const ::std::vector< TSphere3<T> >& spheres,
 				const T& probe_radius)
-			throw();
+			;
 
 		/**	Destructor.
 		*/
 		virtual ~TReducedSurface()
-			throw();
+			;
 
 		//@}
 		/** @name Assignment
@@ -138,12 +138,12 @@ namespace BALL
 		/** Delete all vertices, edges and faces
 		*/
 		void clear()
-			throw();
+			;
 
 		/** Remove all NULL-pointers
 		*/
 		void clean()
-			throw();
+			;
 
 		//@}
 		/**	@name	Accessors
@@ -154,37 +154,37 @@ namespace BALL
 				@return Size the number of atoms
 		*/
 		Size numberOfAtoms()
-			throw();
+			;
 
 		/** Return the number of rsvertices.
 				@return Size the number of rsvertices
 		*/
 		Size numberOfVertices()
-			throw();
+			;
 
 		/** Return the number of rsedges.
 				@return Size the number of rsedges
 		*/
 		Size numberOfEdges()
-			throw();
+			;
 
 		/** Return the number of rsfaces.
 				@return Size the number of rsfaces
 		*/
 		Size numberOfFaces()
-			throw();
+			;
 		
 		/** Return the probe radius
 				@return T the radius of the used probe sphere
 		*/
 		T getProbeRadius()
-			throw();
+			;
 
 		/** Return the maximal radius of all spheres
 				@return T the maximal radius
 		*/
     T getMaximalRadius()
-			throw();
+			;
 
 		/** Return the i'th sphere.
 				@param	i	the index of the sphere that should be given back
@@ -197,7 +197,7 @@ namespace BALL
 				@return vector< TRSVertex<T>* > all vertices
 		*/
 		::std::vector< TRSVertex<T>* > getVertices()
-			throw();
+			;
 
 		/** Return the i'th rsvertex.
 				@param	i	the index of the rsvertex that should be given back
@@ -210,7 +210,7 @@ namespace BALL
 				@return vector< TRSEdge<T>* > all edges
 		*/
 		::std::vector< TRSEdge<T>* > getEdges()
-			throw();
+			;
 
 		/** Return the i'th rsedge.
 				@param	i	the index of the rsedge that should be given back
@@ -223,7 +223,7 @@ namespace BALL
 				@return vector< TRSFace<T>* > all faces
 		*/
 		::std::vector< TRSFace<T>* > getFaces()
-			throw();
+			;
 
 		/** Return the i'th rsface.
 				@param	i	the index of the rsface that should be given back
@@ -237,12 +237,12 @@ namespace BALL
 				@param	face2	a pointer to the second face
 		*/
 		void deleteSimilarFaces(TRSFace<T>* face1, TRSFace<T>* face2)
-			throw();
+			;
 
 		/** Compute the reduced surface
 		*/
 		void compute()
-			throw();
+			;
 
 		//@}
 
@@ -264,8 +264,7 @@ namespace BALL
 			 (TRSFace<T>*																	 face,
 				HashSet<Index>&															 indices,
 				HashSet<TRSVertex<T>*>&											 new_vertices,
-				::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
-			throw();
+				::std::vector< ::std::list<TRSVertex<T>*> >& vertices);
 
 		/*_ treat all edges of a face
 				@param	face					the RSFace to be treated
@@ -278,8 +277,7 @@ namespace BALL
 			 (TRSFace<T>*																	 face,
 				HashSet<Index>&															 indices,
 				HashSet<TRSVertex<T>*>&											 new_vertices,
-				::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
-			throw();
+				::std::vector< ::std::list<TRSVertex<T>*> >& vertices);
 
 		/*_ roll over an edge that belongs to onlyone face and find the other one
 				@param	edge					the RSEdge to be treated
@@ -305,7 +303,7 @@ namespace BALL
 			 (HashSet<Index>&															 indices,
 				HashSet<TRSVertex<T>*>&											 new_vertices,
 				::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
-			throw();
+			;
 
 
 		/*_ Find a third atom rolling over two vertices starting on a face
@@ -351,7 +349,7 @@ namespace BALL
 				TRSEdge<T>*&															 edge,
 				TRSFace<T>*&															 face,
 				std::vector< std::list< TRSVertex<T>* > >& vertices)
-			throw();
+			;
 
 		//@}
 		/*_ @name Finding a first face
@@ -365,7 +363,7 @@ namespace BALL
 														NULL otherwise
 		*/
 		TRSFace<T>* findFirstFace(HashSet<Index>& indices)
-			throw();
+			;
 
 		/*_ Try to find a starting face in a given direction
 				@param	indices			a HashSet of the indices of all atoms wich are not
@@ -382,7 +380,7 @@ namespace BALL
 			 (HashSet<Index>& indices,
 				Byte						direction,
 				Byte						extrem)
-			throw();
+			;
 
 		//@}
 		/*_ @name Finding a first edge
@@ -396,7 +394,7 @@ namespace BALL
 														NULL otherwise
 		*/
 		TRSEdge<T>* findFirstEdge(HashSet<Index>& indices)
-			throw();
+			;
 
 		/*_ Try to find a starting edge in a given direction
 				@param	indices			a HashSet of the indices of all atoms that are not
@@ -410,7 +408,7 @@ namespace BALL
 														NULL otherwise
 		*/
 		TRSEdge<T>* findEdge(HashSet<Index>& indices, Byte direction, Byte extrem)
-			throw();
+			;
 
 		//@}
 		/*_ @name Finding a first vertex
@@ -424,7 +422,7 @@ namespace BALL
 															found, NULL otherwise
 		*/
 		TRSVertex<T>* findFirstVertex(HashSet<Index>& indices)
-			throw();
+			;
 
 		/*_ Find a single atom in a given direction
 				@param	indices		a HashSet of the indices of all atoms that are not
@@ -437,7 +435,7 @@ namespace BALL
 				@return	Index			the index of the found atom
 		*/
 		Index findFirstAtom(const HashSet<Index>& indices, Byte direction, Byte extrem)
-			throw();
+			;
 
 		/*_ Find a second atom close enougth to the first atom in a given direction
 				@param	atom1			the index of the first atom
@@ -451,7 +449,7 @@ namespace BALL
 		*/
 		Index findSecondAtom (Index atom1, HashSet<Index> atom_list,
 													Byte	direction, Byte	extrem)
-			throw();
+			;
 
 		/*_ Find a second atom close enougth to the first two atoms
 				@param	atom1			the index of the first atom
@@ -478,7 +476,7 @@ namespace BALL
 			 (Index									atom0,
 				const HashSet<Index>& input_set,
 				HashSet<Index>&				output_set)
-			throw();
+			;
 
 		/*_ Find all atoms close enougth to two given atoms
 				@param	atom1				the index of the first given atom
@@ -488,7 +486,7 @@ namespace BALL
 		*/
 		void neighboursOfTwoAtoms (Index atom1, Index	atom2,
 					const HashSet<Index>& input_set, HashSet<Index>& output_set)
-			throw();
+			;
 
 
     /*_ Get the extrem coordinate of a circle in a given direction
@@ -504,7 +502,7 @@ namespace BALL
 			 (const TCircle3<T>& circle,
 				Position					 direction,
 				Position					 extrem)
-			throw();
+			;
 
 		//@}
 		/*_ @name Creating / updating edges / faces
@@ -523,7 +521,7 @@ namespace BALL
 				 (TRSVertex<T>*					vertex1,
 					TRSVertex<T>*					vertex2,
 					const HashSet<Index>& neighbours)
-			throw();
+			;
 
 		/*_ Get the circle described by the center of the probe sphere and the two
 				contact circles with the atoms when the probe sphere rolls over two
@@ -542,7 +540,7 @@ namespace BALL
 				TCircle3<T>& circle1,
 				TCircle3<T>& circle2,
 				TCircle3<T>& circle3)
-			throw();
+			;
 
 		/*_ Get the normal vector of the face described by three atoms and a probe
 				@param	atom1				the index of the first atom
@@ -556,7 +554,7 @@ namespace BALL
 				const TSphere3<T>& atom2,
 				const TSphere3<T>& atom3,
 				const TSphere3<T>& probe)
-			throw();
+			;
 
 		/*_ Update a face and it's edges
 				@param	v1		the first vertex of the face
@@ -579,7 +577,7 @@ namespace BALL
 				TRSEdge<T>* e1,
 				TRSEdge<T>* e2,
 				TRSEdge<T>* e3)
-			throw();
+			;
 
 		/*_ Test, weather a face exists or not
 				@param	face				a pointer to the face to be testeD
@@ -589,7 +587,7 @@ namespace BALL
 		TRSFace<T>* faceExists
 			 (TRSFace<T>* face,
 				const ::std::list< TRSVertex<T>* >& vertices)
-			throw();
+			;
 
 		//@}
 		/*_ @name Finding a probe sphere
@@ -610,7 +608,7 @@ namespace BALL
 				Index				 a3,
 				TVector3<T>& c1,
 				TVector3<T>& c2)
-			throw();
+			;
 
 		/*_ Check,weather a probe sphere is inside an atom
 				@param	probe	the probe sphere to be tested
@@ -618,7 +616,7 @@ namespace BALL
 											false, otherwise
 		*/
 		bool checkProbe(const TSphere3<T>& probe)
-			throw();
+			;
 
 		//@}
 
@@ -742,7 +740,7 @@ namespace BALL
 
 	template <typename T>
 	TReducedSurface<T>::TReducedSurface()
-		throw()
+		
 		:	atom_(),
 			probe_radius_((T)0),
 			tree_(),
@@ -759,7 +757,7 @@ namespace BALL
 
 	template <typename T>
 	TReducedSurface<T>::TReducedSurface(const TReducedSurface<T>& reduced_surface)
-		throw()
+		
 		: atom_(reduced_surface.atom_),
 			probe_radius_(reduced_surface.probe_radius_),
 			tree_(reduced_surface.tree_),
@@ -778,7 +776,7 @@ namespace BALL
 	TReducedSurface<T>::TReducedSurface
 		 (const ::std::vector< TSphere3<T> >& spheres,
 			const T& probe_radius)
-		throw()
+		
 		:	atom_(),
 			probe_radius_(probe_radius),
 			tree_(),
@@ -804,7 +802,7 @@ namespace BALL
 
 	template <typename T>
 	TReducedSurface<T>::~TReducedSurface()
-		throw()
+		
 	{
 		clear();
 		delete tree_;
@@ -813,7 +811,7 @@ namespace BALL
 
 	template <typename T>
 	void TReducedSurface<T>::clear()
-		throw()
+		
 	{
 		for (Position i = 0; i < number_of_vertices_; i++)
 		{
@@ -841,7 +839,7 @@ namespace BALL
 
 	template <typename T>
 	void TReducedSurface<T>::clean()
-		throw()
+		
 	{
 		std::vector<TRSVertex<T>*> v;
 		Size end = number_of_vertices_;
@@ -887,7 +885,7 @@ namespace BALL
 
 	template <typename T>
 	Size TReducedSurface<T>::numberOfAtoms()
-		throw()
+		
 	{
 		return atom_.size();
 	}
@@ -895,7 +893,7 @@ namespace BALL
 
 	template <typename T>
 	Size TReducedSurface<T>::numberOfVertices()
-		throw()
+		
 	{
 		return number_of_vertices_;
 	}
@@ -903,7 +901,7 @@ namespace BALL
 
 	template <typename T>
 	Size TReducedSurface<T>::numberOfEdges()
-		throw()
+		
 	{
 		return number_of_edges_;
 	}
@@ -911,7 +909,7 @@ namespace BALL
 
 	template <typename T>
 	Size TReducedSurface<T>::numberOfFaces()
-		throw()
+		
 	{
 		return number_of_faces_;
 	}
@@ -919,7 +917,7 @@ namespace BALL
 
 	template <typename T>
 	T TReducedSurface<T>::getProbeRadius()
-		throw()
+		
 	{
 		return probe_radius_;
 	}
@@ -927,7 +925,7 @@ namespace BALL
 
 	template <typename T>
 	T TReducedSurface<T>::getMaximalRadius()
-		throw()
+		
 	{
 		return r_max_;
 	}
@@ -950,7 +948,7 @@ namespace BALL
 
 	template <typename T>
 	std::vector< TRSVertex<T>* > TReducedSurface<T>::getVertices()
-		throw()
+		
 	{
 		return vertices_;
 	}
@@ -973,7 +971,7 @@ namespace BALL
 
 	template <typename T>
 	std::vector< TRSEdge<T>* > TReducedSurface<T>::getEdges()
-		throw()
+		
 	{
 		return edges_;
 	}
@@ -996,7 +994,7 @@ namespace BALL
 
 	template <typename T>
 	std::vector< TRSFace<T>* > TReducedSurface<T>::getFaces()
-		throw()
+		
 	{
 		return faces_;
 	}
@@ -1021,7 +1019,7 @@ namespace BALL
 	void TReducedSurface<T>::deleteSimilarFaces
 		 (TRSFace<T>* face1,
 			TRSFace<T>* face2)
-		throw()
+		
 	{
 		if (face1->similar(*face2))
 		{
@@ -1114,7 +1112,6 @@ namespace BALL
 
 	template <typename T>
 	void TReducedSurface<T>::compute()
-		throw()
 	{
 		// indices of the atoms that do not belong to reduced surface
 		HashSet<Index> indices;
@@ -1175,7 +1172,6 @@ namespace BALL
 			HashSet<Index>&															 indices,
 			HashSet<TRSVertex<T>*>&											 new_vertices,
 			::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
-		throw()
 	{
 		treatFace(face,indices,new_vertices,vertices);
 		//extendComponent(indices,new_vertices,vertices);
@@ -1188,7 +1184,6 @@ namespace BALL
 			HashSet<Index>&															 indices,
 			HashSet<TRSVertex<T>*>&											 new_vertices,
 			::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
-	  throw()
 	{
 		TRSEdge<T>* edge;
 		for (Position i = 0; i < 3; i++)
@@ -1353,7 +1348,6 @@ namespace BALL
 		 (HashSet<Index>&															 indices,
 			HashSet<TRSVertex<T>*>&											 new_vertices,
 			::std::vector< ::std::list<TRSVertex<T>*> >& vertices)
-	  throw()
 	{
 		while (new_vertices.size() > 0)
 		{
@@ -1551,7 +1545,7 @@ namespace BALL
 			TRSEdge<T>*&															 edge,
 			TRSFace<T>*&															 face,
 			std::vector< std::list< TRSVertex<T>* > >& vertices)
-		throw()
+		
 	{
 		face = findFirstFace(indices);
 		if (face != NULL)
@@ -1591,7 +1585,7 @@ namespace BALL
 
 	template <typename T>
 	TRSFace<T>* TReducedSurface<T>::findFirstFace(HashSet<Index>& indices)
-		throw()
+		
 	{
 		for (Byte direction = 0; direction < 3; direction++)
 		{
@@ -1613,7 +1607,7 @@ namespace BALL
 		 (HashSet<Index>& indices,
 			Byte						direction,
 			Byte						extrem)
-		throw()
+		
 	{
 		if (indices.size() == 0)
 		{
@@ -1690,7 +1684,7 @@ namespace BALL
 
 	template <typename T>
 	TRSEdge<T>* TReducedSurface<T>::findFirstEdge(HashSet<Index>& indices)
-		throw()
+		
 	{
 		for (Byte direction = 0; direction < 3; direction++)
 		{
@@ -1712,7 +1706,7 @@ namespace BALL
 		 (HashSet<Index>& indices,
 			Byte						direction,
 			Byte						extrem)
-		throw()
+		
 	{
 		if (indices.size() == 0)
 		{
@@ -1758,7 +1752,7 @@ namespace BALL
 
 	template <typename T>
 	TRSVertex<T>* TReducedSurface<T>::findFirstVertex(HashSet<Index>& indices)
-		throw()
+		
 	{
 		if (indices.size() == 0)
 		{
@@ -1789,7 +1783,7 @@ namespace BALL
 		 (const HashSet<Index>& indices,
 			Byte									direction,
 			Byte									extrem)
-		throw()
+		
 	{
 		TSphere3<T> next_atom(atom_[*indices.begin()]);
 		T dir_ex = ((extrem == 0) ? next_atom.p[direction]-next_atom.radius
@@ -1818,7 +1812,7 @@ namespace BALL
 			HashSet<Index> atom_list,
 			Byte					 direction,
 			Byte					 extrem)
-		throw()
+		
 	{
 		HashSet<Index> neighbour;
 		neighboursOfOneAtom(atom1,atom_list,neighbour);
@@ -1892,7 +1886,7 @@ namespace BALL
 		 (Index									atom0,
 			const HashSet<Index>& input_set,
 			HashSet<Index>&				output_set)
-		throw()
+		
 	{
 		TSphere3<T> first_atom(atom_[atom0]);
 		TSphere3<T> next_atom;
@@ -1920,7 +1914,7 @@ namespace BALL
 			Index									atom2,
 			const HashSet<Index>& input_set,
 			HashSet<Index>&				output_set)
-		throw()
+		
 	{
 		TSphere3<T> first_atom(atom_[atom1]);
 		first_atom.radius += probe_radius_;
@@ -1950,7 +1944,7 @@ namespace BALL
 		 (const TCircle3<T>& circle,
 			Position					 direction,
 			Position					 extrem)
-		throw()
+		
 	{
 		T min, max;
 		TVector3<T> norm2(circle.n.x * circle.n.x,
@@ -2017,7 +2011,7 @@ namespace BALL
 			 (TRSVertex<T>*					vertex1,
 				TRSVertex<T>*					vertex2,
 				const HashSet<Index>& neighbours)
-		throw()
+		
 	{
 		TCircle3<T> circle1;
 		TCircle3<T> circle2;
@@ -2062,7 +2056,7 @@ namespace BALL
 			TCircle3<T>& circle1,
 			TCircle3<T>& circle2,
 			TCircle3<T>& circle3)
-		throw()
+		
 	{
 		TSphere3<T> sphere1(atom_[atom1]);
 		TSphere3<T> sphere2(atom_[atom2]);
@@ -2088,7 +2082,7 @@ namespace BALL
 			const TSphere3<T>& atom2,
 			const TSphere3<T>& atom3,
 			const TSphere3<T>& probe)
-		throw()
+		
 	{
 		TPlane3<T> plane(atom1.p,atom2.p,atom3.p);
 		TVector3<T> norm(plane.n);
@@ -2112,7 +2106,7 @@ namespace BALL
 			TRSEdge<T>* e1,
 			TRSEdge<T>* e2,
 			TRSEdge<T>* e3)
-		throw()
+		
 	{
 		TVector3<T> vector(0,0,0);
 		TAngle<T> angle(0,true);
@@ -2152,7 +2146,7 @@ namespace BALL
 	TRSFace<T>* TReducedSurface<T>::faceExists
 		 (TRSFace<T>* face,
 			const std::list< TRSVertex<T>* >& vertices)
-		throw()
+		
 	{
 		typename std::list< TRSVertex<T>* >::const_iterator v;
 		for (v = vertices.begin(); v != vertices.end(); v++)
@@ -2173,7 +2167,7 @@ namespace BALL
 			Index				 a3,
 			TVector3<T>& c1,
 			TVector3<T>& c2)
-		throw()
+		
 	{
 		//TSphere3<T> s1(atom_[a1].p,atom_[a1].radius+probe_radius_);
 		//TSphere3<T> s2(atom_[a2].p,atom_[a2].radius+probe_radius_);
@@ -2207,7 +2201,6 @@ namespace BALL
 
 	template <typename T>
 	bool TReducedSurface<T>::checkProbe(const TSphere3<T>& probe)
-		throw()
 	{
 		HashSet<Index> atom_list;
 		tree_->get(probe.p,probe.radius+r_max_,atom_list);
