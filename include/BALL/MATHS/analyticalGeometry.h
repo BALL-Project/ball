@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.41 2000/12/19 00:42:24 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.42 2000/12/22 20:25:07 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -1291,7 +1291,7 @@ namespace BALL
   template <typename T>
 	BALL_INLINE 
   TAngle<T>getOrientedAngle(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& normal)
-		throw()
+		throw(Exception::DivisionByZero)
   {
     return getOrientedAngle(a.x, a.y, a.z, b.x, b.y, b.z, normal.x, normal.y, normal.z);
 	}
