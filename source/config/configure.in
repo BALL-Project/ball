@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.109 2000/09/27 07:50:19 oliver Exp $
+dnl    $Id: configure.in,v 1.110 2000/10/18 19:45:36 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -476,7 +476,11 @@ if test "${OS}" = OSF1 ; then
 	fi
 fi
 
-if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX -a  "$OS" != OSF1 -a "$OS" != FreeBSD ; then
+if test "`echo $OS | ${CUT} -d_ -f1`" = "CYGWIN" ; then
+	OS="CYGWIN"
+fi
+
+if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX -a  "$OS" != OSF1 -a "$OS" != FreeBSD -a "$OS" != "CYGWIN" ; then
 	AC_MSG_RESULT(Sorry - your OS is currently not supported...)
 	AC_MSG_ERROR(aborted)
 fi
@@ -1758,6 +1762,21 @@ dnl
 if test "$INCLUDE_IEEEFP" = true ; then
 	AC_CHECK_HEADERS(ieeefp.h)
 	AC_DEFINE(INCLUDE_IEEEFP,)
+fi
+
+dnl
+dnl		check whether the <regex.h> header exists
+dnl
+AC_CHECK_HEADER(regex.h, HAS_REGEX_H=true, HAS_REGEX_H=false)
+if test "${HAS_REGEX_H}" = "false" ; then
+	AC_MSG_RESULT()
+	AC_MSG_RESULT([Regular expression headers regex.h not found!])
+	AC_MSG_RESULT([If you do not have this header on your system,])
+	AC_MSG_RESULT([please install the GNU regexp package from])
+	AC_MSG_RESULT()
+	AC_MSG_RESULT([  ftp://ftp.gnu.org/gnu/regex/regex-0.12.tar.gz])
+	AC_MSG_RESULT()
+	AC_MSG_ERROR(Aborted.)
 fi
 
 dnl
