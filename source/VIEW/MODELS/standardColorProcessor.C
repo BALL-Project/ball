@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.27 2004/03/23 15:30:49 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.28 2004/07/09 23:55:38 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -636,6 +636,38 @@ namespace BALL
 			{
 				return interpolateColor(atom->getOccupancy());
 			}
+		}
+		
+		////////////////////////////////////////////////////////////////////
+		ForceColorProcessor::ForceColorProcessor()
+			: InterpolateColorProcessor()
+		{
+			default_color_ = ColorRGBA(1.0, 1.0, 1.0);
+			min_color_.set(0, 0, 1.0),
+			max_color_.set(1.0, 0, 0),
+			min_value_ = 0;
+			max_value_ = 10;
+		}
+
+		ColorRGBA ForceColorProcessor::getColor(const Composite* composite)
+		{
+			if (composite == 0) return default_color_;
+			if (composite->isSelected()) return ColorProcessor::getColor(composite);
+
+			if (!RTTI::isKindOf<Atom>(*composite)) return default_color_;
+
+			Vector3 force = (dynamic_cast<const Atom*>(composite))->getForce();
+			if (force.getSquareLength() == 0) return min_color_;
+			force.normalize();
+			force *= 10000000000.0;
+
+			float forcev = std::log(force.getLength());
+			if (forcev < 0) return min_color_;
+			if (forcev > 10)
+			{
+				forcev = 10;
+			}	
+			return interpolateColor(forcev);
 		}
 
 		////////////////////////////////////////////////////////////////////
