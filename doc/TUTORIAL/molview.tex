@@ -1,0 +1,279 @@
+\section{Building a bounding box processor}
+\label{section:bounding_box_processor}
+
+The processor we create should compute a bounding box for the molecular structure
+it is started from. Then a GLSimpleBox will be created with the calculated
+boundaries and appended to the root of the processed structure if that root is
+of kind System. Otherwise no bounding box will be created. The color of this
+bounding box can be set in the preferences tab widget discussed in the VIEW section 
+\ref{section:view_construction_of_a_dialog} tutorial.
+To create a bounding box of a molecular structure we must calculate the lower left 
+and the upper right corner of the box enclosing all Atom objects in the molecular
+structure the processor is started from. To achieve this goal we iterate over all atoms
+and create a Box3 containing only the processed atom then we join the new box
+with the previously constructed box.
+The implementation follows (includes are omitted):
+
+\begin{verbatim}
+class GLBoundingBoxModel: public BaseModelProcessor
+{
+public:
+	GLBoundingBoxModel() {}
+	virtual ~GLBoundingBoxModel() {}
+
+	void setColor(const ColorRGBA &color) { color_ = color; }
+
+	virtual bool start();
+	virtual bool finish();
+	virtual Processor::Result operator() 
+	  (Composite& composite);
+
+private:
+	ColorRGBA color_;
+	bool new_start_;
+	Composite* start_composite_;
+	Box3 bbox_;
+};
+\end{verbatim}
+
+The processor is derived from BaseModelProcessor because
+it should iterate over all atoms in the molecular structure it is started from.
+There are three important methods that must be overridden for the processor
+to function correctly.\\
+First we implement the method {\em start}. This method performs any initialization
+needed by the processor. If the processor is started we keep the Composite object
+it is started from because later in the finish method we use this composite to get
+any information about the molecular structure the bounding box was created for.
+
+\begin{verbatim}
+bool GLBoundingBoxModel::start()
+{
+	new_start_ = true;
+	start_composite_ = 0;
+
+	return BaseModelProcessor::start();
+}
+\end{verbatim}
+
+Next we override the method {\em finish} that can do some cleaning. In this case
+however we have no need of such a thing. But if the method finish is called
+all atoms of the molecular structure are processed thus the bounding box is computed.
+
+\begin{verbatim}
+bool GLBoundingBoxModel::finish()
+{
+	Composite *root = &(start_composite_->getRoot());
+
+	if (bbox_.a == bbox_.b ||
+			!RTTI::isKindOf<System>(*root))
+		return false;
+}
+\end{verbatim}
+
+If the calculated box is degenerated or if the root of our start composite is
+not of kind System we do not create a bounding box.
+
+\begin{verbatim}
+	MolecularInformation molecular_information;
+	start_composite_->host(molecular_information);                        
+\end{verbatim}
+
+Next we use the MolecularInformation visitor to get some information about the
+molecular structure of the start composite.
+
+\begin{verbatim}
+	GLSimpleBox *pbox = new GLSimpleBox();
+	pbox->setVertex1(bbox_.a);
+	pbox->setVertex2(bbox_.b);
+	pbox->PropertyManager::set(*this);
+	pbox->setColor(color_);
+	pbox->setName(String("BoundingBox of ")
+								+ molecular_information.getTypeName()
+								+ String(" (")
+								+ molecular_information.getName()
+								+ String(")"));
+\end{verbatim}
+
+Now we create a GLSimpleBox with the boundaries of the calculated box, set the
+color and properties of our dialog into the GLSimpleBox and set name with the help
+of the {\em molecular\_information}.
+																										 
+\begin{verbatim}
+	root->appendChild(*pbox);
+
+	return true;
+}
+\end{verbatim}
+
+The last command will append the created bounding box to the root composite.\\ \\
+
+The last method we must implement is the method {\em operator()}. This method
+will be called from the processor mechanism for every Composite object
+in the molecular structure thus iterating over it.
+The implementation is straight forward.
+
+\begin{verbatim}
+Processor::Result GLBoundingBoxModel::operator() 
+	(Composite &composite)
+{
+	if (start_composite_ == 0)
+		start_composite_ = &composite;
+
+	if (!RTTI::isKindOf<Atom>(composite))
+		return Processor::CONTINUE;
+\end{verbatim}
+
+In this part of the code we store the start Composite so that later in the finish
+method we can append the created bounding box to it.
+We only want to process Atom objects, so we test with the runtime type
+identification if the processed {\em composite} is not of kind Atom. If this
+is the case we tell the processor to continue.
+
+\begin{verbatim}
+	Atom *atom = RTTI::castTo<Atom>(composite);
+
+	Box3 bbox(atom->getPosition(), 
+						atom->getPosition());
+
+	if (new_start_)
+	{
+		bbox_ = bbox;
+		new_start_ = false;
+	}
+
+	bbox_.join(bbox);
+
+	return Processor::CONTINUE;
+}
+\end{verbatim}
+
+We create a box with the atom object and use it as start box if we do not have already
+one. Next we join the created box with previously calculated one. This mechanism
+extends the computed box so that if all atoms are processed we have a correctly calculated
+bounding box.\\
+
+This concludes the implementation of the bounding box processor. In the next
+section we use this processor in a dialog the applies it to molecular structures.
+
+
+
+\section{Constructing a dialog for the example application}
+\label{section:construction_of_a_dialog}
+
+In the section \ref{section:bounding_box_processor} we have constructed a processor that creates bounding boxes
+for molecular structures. In this section we create a dialog that allows us to
+create bounding boxes in different colors for molecular structures. We use the dialog
+created in the VIEW tutorial (section \ref{section:view_construction_of_a_dialog}) and extend and 
+reimplement certain methods to achieve the intended functionality.
+There are only two methods we must change, the method {\em onNotify} and the method
+{\em applyButtonClicked}.
+
+\begin{verbatim}
+void TestDialog::onNotify(Message *message)
+{
+	...
+
+	if (RTTI::isKindOf<MolecularSelectionMessage>(*message))
+		selection_ = (RTTI::castTo<MolecularSelectionMessage>(*message))
+									 ->getSelection();
+	...		
+}
+\end{verbatim}
+
+In the old dialog the method {\em onNotify} catches only {\em SelectionMessage} objects.
+Now we want it to catch {\em MolecularSelectionMessage} objects that contain the 
+molecular structure selected in the {\em MolecularControl}.\\ \\
+The next method that must be changed is the {\em applyButtonClicked}.
+
+\begin{verbatim}
+void TestDialog::applyButtonClicked()
+{
+	if (selection_.empty())
+		return;
+\end{verbatim}
+
+If no selection is available we do nothing.
+
+\begin{verbatim}
+	List<Composite*> update_list;
+
+	GLBoundingBoxModel bboxModel;
+	bboxModel.setColor(color_);
+
+	List<Composite*>::ConstIterator list_it = selection_.begin();
+	for (; list_it != selection_.end(); ++list_it)
+	{
+		if (RTTI::isKindOf<Atom>(**list_it))
+			continue;
+		
+		(*list_it)->apply(bboxModel);
+		
+		update_list.push_back(*list_it);
+	}
+\end{verbatim}
+
+We iterate over the structures in the selection list and start for each
+structure (except atoms) the previously created bounding box processor. Before we
+do this we transfer the color of the preferences tab widget of {\em *this} dialog
+into the processor so that created bounding box has the needed color.
+All processed composite objects are stored in an update list so that those objects
+can be updated later. \\
+{\em Note: } That updating process can not be done in this loop because
+the message sent for the update can change the selection list thus invalidating
+the loop which can lead to segmentation faults. 
+	
+\begin{verbatim}
+	list_it = update_list.begin();
+	for (; list_it != update_list.end(); ++list_it)
+	{
+		ChangedCompositeMessage change_message;
+		change_message.setComposite((*list_it));
+		notify_(change_message);
+	}
+\end{verbatim}
+
+For each processed object we sent the message {\em ChangedCompositeMessage} so
+that the graphical representation of that {\em Composite} object will be regenerated
+when the {\em Scene} object is updated next.			
+
+\begin{verbatim}
+	SceneMessage scene_message;
+	scene_message.updateOnly();
+	notify_(scene_message);
+}
+\end{verbatim}
+
+To initialize this update we also sent the message {\em SceneMessage} with 
+update flag set to redraw all changed objects.\\ \\
+
+That is all we must do to use our previously defined processor. In the next section
+we will see how to include this dialog into an existing application.
+
+
+
+\section{Adding the dialog to the example application}
+\label{section:adding_the_dialog}
+
+Now that we have a dialog for creating bounding boxes for molecular structures
+the only thing to be done is to include this dialog into an existing application.
+We use the example application created in the {\em MOLVIEW.} document.
+To add the dialog to the application we just create it with {\em MainControl}
+as parent. Add this line to the example application.
+
+\begin{verbatim}
+	new TestDialog(&main);
+\end{verbatim}
+
+Now we have successfull added this dialog into our application. If we start the
+application now a new menu entry ({\em DISPLAY-TestDialog}) is available. If pressed our dialog opens and
+any selection done in the {\em MolecularControl} will be catched by our dialog. If we press
+the {\em apply} button for each molecular structure (except atoms) a bounding box
+will be created in the color displayed in the preferences tab widget. In the {\em MolecularControl}
+we can see each bounding box as an entry below the {\em System} with the name of
+the molecular structure the bounding box was created for.
+If we want to delete such a bounding box just press the right mouse button on it and
+choose {\em remove bounding box}, it will be deleted.\\ \\
+
+That concludes the tutorial for MOLVIEW. Now you are able to build your own
+processors and dialogs and thus extend or rewrite any functionality the actual
+example application lacks.
