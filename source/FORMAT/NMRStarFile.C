@@ -158,8 +158,8 @@ namespace BALL
 	}
 
 	NMRStarFile::NMRStarFile(const NMRStarFile& f)
-		throw ()
-		:	LineBasedFile(f),
+		throw ():
+		//:	LineBasedFile(f),
 			number_of_shifts_		(f.number_of_shifts_),
 			atom_data_sets_			(f.atom_data_sets_),
 			sample_conditions_  (f.sample_conditions_),
@@ -222,7 +222,7 @@ namespace BALL
 		{
 			rewind();
 			test(__FILE__, __LINE__, 
-				search("       assigned_chemical_shifts", true),
+				search("       assigned_chemical_shifts", "#  Molecular system description  #", true),
 				"Number of assigned chemical shifts could not be found");
 
 			number_of_shifts_ = getField(1).toUnsignedInt();
@@ -244,17 +244,18 @@ namespace BALL
 		try
 		{
 			test(__FILE__, __LINE__, 
-						search("#  Molecular system description  #", true),
+						search("#  Molecular system description  #", 
+									 "#  Sample contents and methodology  #", true),
 						"Molecular system description could not be found");
 
-			skipLines();
+			skipLines(2);
 
 			test(__FILE__, __LINE__,
 						search("   _Mol_system_name", "#", true),
 						"Molecular system description could not be found");
 
-			// systemname can be enclosed with ' '
-			system_name_ = getField(1, "'");
+			// systemname can be enclosed with '' or ""
+				system_name_ = getField(1, "'\"");
 
 			if (system_name_ == "")
 			{
@@ -273,15 +274,16 @@ namespace BALL
 		try
 		{
 			test(__FILE__, __LINE__, 
-						search("#  Sample conditions  #", true),
+						search("#  Sample conditions  #",
+									 "#  NMR parameters  #", true),
 						"sample conditions could not be found");
 
-			skipLines();
+			skipLines(2);
 
 			String word;
 			float value;
 
-			while (search("save_", "#"))
+			while (search("save_", "#", false))
 			{
 				if (line_ == "save_")
 				{
@@ -310,7 +312,8 @@ namespace BALL
 											 << word << endl;
 						value = 0;
 					}
-					
+
+					word = getField(0);		
 					if (word == "pH")
 					{
 						condition->pH = value;
@@ -332,8 +335,9 @@ namespace BALL
 
 					readLine();
 				}
-
 				sample_conditions_.push_back(condition);
+				skipLines(3);  // skip save_
+
 			}
 		}
 		catch (LineBasedFile::LineBasedFileError e)
@@ -370,15 +374,16 @@ namespace BALL
 			NMRStarFile::initializeReferenceOptions_();
 
 			test(__FILE__, __LINE__, 
-						search("	#  Chemical shift referencing  #", true),
+						search("	#  Chemical shift referencing  #",
+									 "	#  Assigned chemical shift lists  #", true),
 						"Chemical shift referencing could not be found.");
 
-			skipLines();
+			skipLines(2);
 
 			String word;
 			std::vector<int> reference_positions;
 
-			while (search("save_", "#"))
+			while (search("save_", "#", false))
 			{
 				if (line_ == "save_")
 				{
@@ -387,7 +392,8 @@ namespace BALL
 
 				ShiftReferenceSet* shift_reference = new ShiftReferenceSet();
 				shift_reference->name.set(getLine(), 5);
-				if (!search("   loop_", "#"))
+
+				if (!search("   loop_", "#", false))
 				{
 					break;
 				}
@@ -399,8 +405,7 @@ namespace BALL
 					readLine();
 				}
 
-				skipLines();
-				Position pos_field = 0;
+				skipLines(0);
 
 				// read references set until empty line occurs
 				while (line_.size() > 0)
@@ -409,8 +414,7 @@ namespace BALL
 					for (Position pos = 0; pos < reference_positions.size(); pos++)
 					{
 						// _Atom_group may be quoted
-						word = getField(pos_field, "'");
-						pos_field++;
+						word = getField(pos, "'\"");
 						
 						if (reference_positions[pos] == -1)
 						{
@@ -512,7 +516,6 @@ namespace BALL
 				test(__FILE__, __LINE__, 
 							shift_reference->elements.size() > 0,
 							"no data for shift references found");
-
 				shift_references_.push_back(shift_reference);
 				skipLines(4); // skip save_
 			}
@@ -527,19 +530,18 @@ namespace BALL
 		throw (LineBasedFileError)
 	{
 		NMRAtomData* ad = new NMRAtomData();
-		Position pos = 0;
 
 		try
 		{
-			ad->atom_ID = getField(pos).toUnsignedInt();
-			ad->residue_seq_code = getField(pos).toUnsignedInt();
-			ad->residue_label = getField(pos);
-			ad->atom_name = getField(pos);
-			ad->atom_type = (getField(pos))[0];
-			ad->shift_value = getField(pos).toFloat();
+			ad->atom_ID = getField(0).toUnsignedInt();
+			ad->residue_seq_code = getField(1).toUnsignedInt();
+			ad->residue_label = getField(2);
+			ad->atom_name = getField(3);
+			ad->atom_type = (getField(4))[0];
+			ad->shift_value = getField(5).toFloat();
 			try
 			{
-				ad->error_value = getField(pos).toFloat();			
+				ad->error_value = getField(6).toFloat();			
 			}
 			catch (Exception::InvalidFormat)
 			{
@@ -547,7 +549,7 @@ namespace BALL
 			}
 			try
 			{
-				ad->ambiguity_code = getField(pos).toUnsignedInt();
+				ad->ambiguity_code = getField(7).toUnsignedInt();
 			}
 			catch (Exception::InvalidFormat)
 			{
@@ -567,16 +569,15 @@ namespace BALL
 	void NMRStarFile::readShifts_()
 		throw (LineBasedFileError)
 	{
-		rewind();
 		test(__FILE__, __LINE__, 
-				search("#      9             Ambiguous, specific ambiguity not defined    #"),
+				search("#      9             Ambiguous, specific ambiguity not defined    #", false),
 				"Assigned chemical shift lists could not be found");
 
-		skipLines(2);
+		skipLines(3);
 
 		String word;
 
-		while (search("save_", "#"))
+		while (search("save_", "#", false))
 		{
 			if (line_ == "save_")
 			{
@@ -584,11 +585,10 @@ namespace BALL
 			}
 			NMRAtomDataSet* atom_data_sets = new NMRAtomDataSet();
 			atom_data_sets->name.set(getLine(), 5);
-			
 			try
 			{
 				test(__FILE__, __LINE__,
-							search("   _Sample_conditions_label", "#"),
+							search("   _Sample_conditions_label", "#", false),
 							"chemical shift does not contain Sample_conditions_label");
 
 				word = getField(1);
@@ -613,7 +613,7 @@ namespace BALL
 			try
 			{
 				test(__FILE__, __LINE__,
-							search("   _Chem_shift_reference_set_label"),
+							search("   _Chem_shift_reference_set_label", false),
 							"chemical shift does not contain _Chem_shift_reference_set_label");
 
 				word = getField(1);
@@ -636,10 +636,10 @@ namespace BALL
 			}
 
 			test(__FILE__, __LINE__, 
-						search("      _Chem_shift_ambiguity_code"),
+						search("      _Chem_shift_ambiguity_code", false),
 						"chemical shift does not contain _Chem_shift_ambiguity_code");
 
-			skipLines(1);
+			skipLines();
 			while (line_.size() > 0)
 			{
 				atom_data_sets->atom_data.push_back(processShiftLine_());
