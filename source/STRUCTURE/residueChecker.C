@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.C,v 1.26 2004/04/01 12:55:23 amoll Exp $
+// $Id: residueChecker.C,v 1.27 2004/04/01 13:21:21 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/residueChecker.h>
@@ -77,7 +77,7 @@ namespace BALL
 	
 	bool ResidueChecker::start()
 	{
-		status_ = true;
+	 	status_ = true;
 		return true;
 	}
 	
@@ -94,9 +94,6 @@ namespace BALL
 			res_name = residue.getChain()->getName() + ":";
 		}
 		res_name += residue.getName() + ":" + residue.getID();
-
-		// We win, by default.
-		status_ = true;
 
 		// Check charges.
 		status_ &= checkCharge(residue, res_name);

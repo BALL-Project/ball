@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.36 2004/03/13 12:49:31 amoll Exp $
+// $Id: molecularStructure.C,v 1.37 2004/04/01 13:21:57 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -131,10 +131,6 @@ namespace BALL
 		calculate_hbonds_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate H-Bonds", this, SLOT(calculateHBonds()),
 										CTRL+Key_9, -1, hint);
 
-		hint = "Check for a System if some of its atoms are too near to each other, which could produce strange energies";
-		check_overlap_ = insertMenuEntry(MainControl::TOOLS, "Check overlapping atoms", this, SLOT(checkOverlap()),
-										0, -1, hint);
-
 		getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 
 		hint = "Create a grid with the distance to the geometric center of a structure.";
@@ -229,27 +225,51 @@ namespace BALL
 
 	bool MolecularStructure::checkResidue()
 	{
-		List<Composite*>& selection = getMainControl()->getMolecularControlSelection();
+		// selection can change
+		List<Composite*> selection = getMainControl()->getMolecularControlSelection();
 		if (selection.size() == 0) return false;
 
 		setStatusbarText("checking " + String(selection.size()) + " objects...");
 
 		ResidueChecker res_check(getFragmentDB());
+		res_check.disable(ResidueChecker::OVERLAPPING_ATOMS);
+		res_check.enableSelection();
 
 		bool okay = true;
-
+		
+		HashSet<Composite*> changed_roots;
 		List<Composite*>::ConstIterator it = selection.begin();	
 		for (; it != selection.end(); ++it)
 		{	
-			if (RTTI::isKindOf<AtomContainer>(**it))
+			if (!RTTI::isKindOf<AtomContainer>(**it))
 			{
-				(*it)->apply(res_check);
-				okay = okay && res_check.getStatus();	
+				Log.error() << "ResidueChecker: cannot apply to a " << typeid(**it).name() << " object" << std::endl;
+				continue;
 			}
-			else
+
+			(*it)->apply(res_check);
+			okay &= res_check.getStatus();	
+			if (!res_check.getStatus())
 			{
-				Log.error() << "ResidueChecker: cannot apply to a " << typeid(**it).name() 
-										<< " object" << std::endl;
+				changed_roots.insert(&(**it).getRoot());
+				if ((**it).isSelected())
+				{
+					CompositeMessage* msg = new CompositeMessage(**it, CompositeMessage::SELECTED_COMPOSITE);
+					msg->setUpdateRepresentations(false);
+					notify_(msg);
+				}
+				else
+				{
+					AtomIterator ait = (*(AtomContainer*)*it).beginAtom();
+					for (; +ait; ait++)
+					{
+						if (!(*ait).isSelected()) continue;
+
+						CompositeMessage* msg = new CompositeMessage(*ait, CompositeMessage::SELECTED_COMPOSITE);
+						msg->setUpdateRepresentations(false);
+						notify_(msg);
+					}
+				}
 			}
 		}
 
@@ -260,7 +280,13 @@ namespace BALL
 		} 
 		else 
 		{
-			setStatusbarText("errors found!");
+			setStatusbarText("errors found, the problematic atoms are now selected and colored yellow! See also logs");
+			HashSet<Composite*>::Iterator it = changed_roots.begin();
+			for (; it != changed_roots.end(); it++)
+			{
+				CompositeMessage* msg = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE);
+				notify_(msg);
+			}
 		}
 
 		return okay;
@@ -413,8 +439,6 @@ namespace BALL
 																								 composites_muteable);
 		menuBar()->setItemEnabled(calculate_RMSD_id_, (number_of_selected_objects == 2) &&
 																									composites_muteable); 
-
-		menuBar()->setItemEnabled(check_overlap_, one_system && composites_muteable);
 	}
 
 
@@ -1138,98 +1162,6 @@ namespace BALL
 		else
 		{
 			showCharmmForceFieldOptions();
-		}
-	}
-
-	void MolecularStructure::checkOverlap()
-	{
-		System* system = getMainControl()->getSelectedSystem();
-		if (system == 0) 
-		{
-			return;
-		}
-
-		AtomIterator atit = system->beginAtom();
-
-		vector<Atom*> atoms;
-		for (; +atit; ++atit)
-		{
-			atoms.push_back(&*atit);
-		}
-
-		MolecularInformation 	information;
-		bool found = false;
-		vector<Atom*>::iterator it1 = atoms.begin();
-		for (; it1 != atoms.end(); it1++)
-		{
-			vector<Atom*>::iterator it2 = it1;
-			it2++;
-			for (;it2 != atoms.end(); it2++)
-			{
-				if ((**it1).isBoundTo(**it2)) continue;
-
-				float square_distance = Vector3((**it1).getPosition() - (**it2).getPosition()).getSquareLength();
-
-				float radius1 = ((**it1).getElement().getVanDerWaalsRadius());
-				if (radius1 == 0) radius1 = ((**it1).getElement().getAtomicRadius());
-
-				float radius2 = ((**it2).getElement().getVanDerWaalsRadius());
-				if (radius2 == 0) radius2 = ((**it2).getElement().getAtomicRadius());
-
-				float radius_sum = (radius1 + radius2) * 0.4;
-				if (square_distance >= radius_sum * radius_sum) continue;
-
-				// ok, now we found 2 atoms which are too near
-				// print a header if not done so already
-				if (!found)
-				{
-					Log.error() << "Following atom pairs are too close to each other: " << std::endl;
-				}
-
-				String info1, info2;
-				// get information about the composites parent
-				(**it1).getParent()->host(information);
-				info1 += information.getName();
-				info1 += "->";
-				// get information about the composite
-				(**it1).host(information);
-				info1 += information.getName();
-
-				// get information about the composites parent
-				(**it2).getParent()->host(information);
-				info2 += information.getName();
-				info2 += "->";
-				// get information about the composite
-				(**it2).host(information);
-				info2 += information.getName();
-
-				Log.error() << info1 << "  " << info2 << " : " << sqrt(square_distance) << " A      < " 
-					          << "(" << radius1 << " A + " << radius2 << " A)* 0.4" << std::endl;
-				(**it1).select();
-				(**it2).select();
-
-				CompositeMessage* msg = new CompositeMessage(**it1, CompositeMessage::SELECTED_COMPOSITE);
-				msg->setUpdateRepresentations(false);
- 				notify_(msg);
- 
- 				CompositeMessage* msg2 = new CompositeMessage(**it2, CompositeMessage::SELECTED_COMPOSITE);
-				msg->setUpdateRepresentations(false);
- 				notify_(msg2);
-
-				if (!found) centerCamera(*it1);
-				found = true;
-			}
-		}
-
-		if (found) 
-		{
-			setStatusbarText("Found some overlapping atoms. See Logs...");
-		 	CompositeMessage* msg = new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE);
- 			notify_(msg);
-		}
-		else 
-		{ 
-			setStatusbarText("No overlapping atoms found.");
 		}
 	}
 
