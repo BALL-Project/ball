@@ -1,4 +1,4 @@
-// $Id: scene.h,v 1.8.4.6 2002/11/04 18:10:41 amoll Exp $
+// $Id: scene.h,v 1.8.4.7 2002/11/27 17:19:16 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -45,6 +45,10 @@
 #ifndef BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
 #	include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 #endif
+
+#ifndef BALL_VIEW_COMMON_GLOBAL_H
+# include <BALL/VIEW/COMMON/global.h>
+#endif 
 
 namespace BALL
 {
@@ -191,23 +195,6 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-
-			//@}
-			/**	@name Exceptions
-			*/
-			//@{
-
-			/** MainControlMissing exception class.
-					This exception is thrown if {\em *this} scene is not inserted into a
-					\Ref{MainControl} object.
-					@see GeneralException
-			*/
- 			class MainControlMissing: public Exception::GeneralException
-			{
-  			public:
-	   			MainControlMissing(const char* file, int line, const string& data)
-					throw();
-			};
 
 			//@}
 			/**	@name	Assignment
