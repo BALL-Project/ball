@@ -11,12 +11,10 @@
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
-		LabelProperties::LabelProperties
-			(QWidget* parent, const char* name)
+		LabelProperties::LabelProperties(QWidget* parent, const char* name)
 			throw()
 			:	Inherited( parent, name ),
 				ModularWidget(name),
@@ -208,14 +206,12 @@ namespace BALL
 			notify_(scene_message);
 			
 			// clear status bar
-			WindowMessage window_message;
-			notify_(window_message);
+			setStatusbarText("");
 		}
 
 		void LabelProperties::editColor()
 		{
-			color_sample_
-				->setBackgroundColor(QColorDialog::getColor(color_sample_->backgroundColor()));
+			color_sample_->setBackgroundColor(QColorDialog::getColor(color_sample_->backgroundColor()));
 
 			ColorRGBA color;
 			QColor qcolor = color_sample_->backgroundColor();
