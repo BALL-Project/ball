@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.sip,v 1.2 2004/07/26 21:16:58 amoll Exp $
+// $Id: molecularControl.sip,v 1.3 2004/07/26 21:54:01 amoll Exp $
 //
 
 class MolecularControl
@@ -16,6 +16,8 @@ class MolecularControl
 
 	static Size countInstances();
 	static MolecularControl* getInstance(Position /index/);
+
+	MolecularControl() throw();
 	
   //List<Composite*> & getSelection() throw();
   PyCompositeList getSelection() throw();

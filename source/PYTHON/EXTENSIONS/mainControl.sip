@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.12 2004/07/25 17:50:24 amoll Exp $
+// $Id: mainControl.sip,v 1.13 2004/07/26 21:54:01 amoll Exp $
 //
 
 class MainControl
@@ -93,6 +93,7 @@ class MainControl
 	bool update(Representation& /composite/) throw();
 	bool insert(Representation& /composite/) throw();
 	bool remove(Representation& /composite/) throw();
+	void clearSelection() throw();
 
 	void sendMessage(Message&) throw();
 };

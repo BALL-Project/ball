@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.59 2004/07/26 21:17:19 amoll Exp $
+// $Id: molecularControl.C,v 1.60 2004/07/26 21:57:17 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1265,6 +1265,13 @@ void MolecularControl::deselect()
 	{
 		selectedComposite_(*it, false);
 	}	
+}
+
+void MolecularControl::applySelector(const String& expression)
+	throw()
+{
+	selector_edit_->setText(expression.c_str());
+	applySelector();
 }
 
 
