@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.32 2004/03/04 14:00:28 amoll Exp $
+// $Id: molecularStructure.C,v 1.33 2004/03/06 15:14:17 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1232,7 +1232,7 @@ namespace BALL
 				// print a header if not done so already
 				if (!found)
 				{
-					Log.error() << "Following atom pairs are too near to each other: " << std::endl;
+					Log.error() << "Following atom pairs are too close to each other: " << std::endl;
 				}
 
 				String info1, info2;
