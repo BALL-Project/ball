@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileSystem.C,v 1.16 2003/05/08 11:30:03 oliver Exp $
+// $Id: fileSystem.C,v 1.17 2003/05/08 13:52:02 anhi Exp $
 //
 
 #include <BALL/SYSTEM/fileSystem.h>
@@ -197,6 +197,15 @@ namespace BALL
 	String FileSystem::baseName(const String& filename)
 	{
 		Position idx = (Position)filename.find_last_of(PATH_SEPARATOR);
+#		ifdef BALL_PLATFORM_WINDOWS
+		// this is an ugly hack to force similar behaviour of the
+		// TransformationManager for Windows and Unix
+		// this means that "/" and "\" are treated the same
+		Position idx2 = (Position)filename.find_last_of('/');
+		idx  = (idx  == String::EndPos) ? idx2 : idx;
+		idx2 = (idx2 == String::EndPos) ?  idx : idx2;
+		idx  = std::max(idx, idx2);
+#		endif
 		if (idx != String::EndPos)
 		{
 			if ((idx + 1)< filename.size())
