@@ -1,4 +1,4 @@
-// $Id: fresnoLipophilic.C,v 1.1.2.4 2002/04/03 16:44:51 anker Exp $
+// $Id: fresnoLipophilic.C,v 1.1.2.5 2002/04/03 18:52:13 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -87,6 +87,9 @@ namespace BALL
 		FresnoFF* fff = dynamic_cast<FresnoFF*>(force_field);
     Options& options = force_field->options;
 
+		factor_
+			= options.setDefaultReal(FresnoFF::Option::LIPO,
+					FresnoFF::Default::LIPO);
 		r1_offset_
 			= options.setDefaultReal(FresnoFF::Option::LIPO_R1_OFFSET,
 					FresnoFF::Default::LIPO_R1_OFFSET);
