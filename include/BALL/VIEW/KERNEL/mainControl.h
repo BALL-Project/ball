@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.23 2003/12/09 16:38:27 amoll Exp $
+// $Id: mainControl.h,v 1.24 2003/12/10 15:27:24 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -326,6 +326,17 @@ namespace BALL
 					\see   Message
 			*/
 			virtual void onNotify(Message *message)
+				throw();
+
+
+			/** Send a Message from Python.
+			 		This Method should only be used from the Python Interface. 
+					Otherwise, you should prefer to use ModularWidget::notify_.
+					The MainControl itself also reacts to a Message, send with this method.
+					The Message has to be created on the heap, because it will be deleted, after
+					it was send to all ModularWidget's.
+			*/
+			void sendMessage(Message& message)
 				throw();
 
 			public slots:
