@@ -1,4 +1,4 @@
-// $Id: timeStamp.h,v 1.9 2000/12/09 21:28:00 amoll Exp $
+// $Id: timeStamp.h,v 1.10 2000/12/10 22:02:33 amoll Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -15,12 +15,16 @@
 #	include <BALL/COMMON/debug.h>
 #endif
 
+#ifndef BALL_CONCEPT_PERSISTENCE_H
+# include <BALL/CONCEPT/persistenceManager.h>
+#endif
+
 #include <iostream>
 
 namespace BALL 
 {
 
-	class PersistenceManager;
+//	class PersistenceManager;
 
 	/**	Time class.
 			Used to store a point of time.

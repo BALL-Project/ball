@@ -1,6 +1,4 @@
-// $Id: timeStamp.iC,v 1.4 2000/12/10 21:19:38 amoll Exp $
-
-#include <BALL/CONCEPT/persistenceManager.h>
+// $Id: timeStamp.iC,v 1.5 2000/12/10 22:02:33 amoll Exp $
 
 BALL_INLINE
 PreciseTime::PreciseTime()
