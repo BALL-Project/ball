@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.C,v 1.31 2002/02/27 12:21:35 sturm Exp $
+// $Id: support.C,v 1.32 2002/03/14 10:21:09 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -388,10 +388,15 @@ namespace BALL
 						last_it--;
 					}
 				}
+				if (last_it->first->isSelected() || last_it->second->isSelected())
+				{
+					number_of_pairs_with_selection++;
+				}
 			}
 
 			// return the number of pairs where any atom is selected
 			// these pairs appear at the beginning of the list
+
 			return number_of_pairs_with_selection;
 		}
  
