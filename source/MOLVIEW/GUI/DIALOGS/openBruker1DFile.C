@@ -1,4 +1,4 @@
-// $Id: openBruker1DFile.C,v 1.1 2001/01/29 17:07:30 anhi Exp $
+// $Id: openBruker1DFile.C,v 1.2 2001/05/13 16:28:12 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker1DFile.h>
 
@@ -28,6 +28,7 @@ namespace BALL
     }
 
     void OpenBruker1DFile::initializeWidget(MainControl& main_control)
+	throw()
     {
       main_control.insertMenuEntry(MainControl::FILE_IMPORT, "Bruker&1D File", this,
 				   SLOT(exec()),
@@ -35,6 +36,7 @@ namespace BALL
     }
 
     void OpenBruker1DFile::finalizeWidget(MainControl& main_control)
+	throw()
     {
       main_control.removeMenuEntry
 	(MainControl::FILE_IMPORT, "Bruker&1D File", this,
@@ -43,6 +45,7 @@ namespace BALL
     }
 
     void OpenBruker1DFile::openFile_()
+	throw()
     {
       // notify the main window
       WindowMessage window_message;

@@ -1,4 +1,4 @@
-// $Id: openHINFile.C,v 1.4 2001/05/13 15:02:40 hekl Exp $
+// $Id: openHINFile.C,v 1.5 2001/05/13 16:28:12 hekl Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h>
 
@@ -9,6 +9,8 @@
 
 using std::istream;
 using std::ostream;
+using std::endl;
+using std::cerr;
 
 namespace BALL
 {
