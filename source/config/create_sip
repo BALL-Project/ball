@@ -4,7 +4,7 @@ INCLUDE=$(echo `pwd` | sed -e "s/.*include\///" | sed -e "s/\//\\\\\//g")\\/$1
 
 check_test $1 \
  | sed -e "s/  '/  /" \
- | sed -e "s/'//" > $FILE
+ | sed -e "s/'/;/" > $FILE
 
 CLASS=$(cat $FILE | sed -n '/  [A-Za-z0-9]*() [t\n]/p' | sed -e "s/(.*//" | sed -e "s/ //g")
 FILENAME=$(echo $1 | sed -e "s/\.h//")
