@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.19 2000/12/11 21:16:00 oliver Exp $
+// $Id: resourceFile.C,v 1.20 2001/01/26 00:54:45 amoll Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -428,7 +428,7 @@ namespace BALL
 			key = sep + 1;
 		}
 		
-		return (bool)entry->removeChild(key);
+		return entry->removeChild(key);
 	}
 
 	void ResourceEntry::clear()
@@ -613,7 +613,7 @@ namespace BALL
 		
 		found = lower_index;
 
-		return (bool)((lower_index == upper_index) && (child_[lower_index]->key_ == key));
+		return ((lower_index == upper_index) && (child_[lower_index]->key_ == key));
 	}      
 
 
