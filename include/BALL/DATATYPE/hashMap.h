@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.18 2000/10/18 16:50:56 oliver Exp $ 
+// $Id: hashMap.h,v 1.19 2000/11/03 08:12:50 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -79,7 +79,7 @@ namespace BALL
 		//@{
 		/**
 		*/
-		typedef std::pair<Key, T> ValueType;
+		typedef ::std::pair<Key, T> ValueType;
 			
 		/**
 		*/
@@ -87,7 +87,7 @@ namespace BALL
 
 		/**
 		*/
-		typedef std::pair<Key, T>* PointerType;
+		typedef ::std::pair<Key, T>* PointerType;
 			
 		/**
 		*/
@@ -209,7 +209,7 @@ namespace BALL
 
 		/**	Insert a new entry into the hash map.
 		*/
-		std::pair<Iterator, bool> insert(const ValueType& entry);
+		::std::pair<Iterator, bool> insert(const ValueType& entry);
 
 		/**	Erase element with key {\tt key}.
 				@return Size the number of elements erased (0 or 1)
@@ -269,7 +269,7 @@ namespace BALL
 
 		/** Dump the constent of this instance to an ostream.
 		*/
-		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump(::std::ostream& s = ::std::cout, Size depth = 0) const;
 		//@}
 
 		/**	@name	Iternal iterators
@@ -624,9 +624,9 @@ namespace BALL
 	BALL_INLINE 
 	void HashMap<Key, T>::swap(HashMap& hash_map)
 	{
-		std::swap(size_, hash_map.size_);
-		std::swap(capacity_, hash_map.capacity_);
-		std::swap(bucket_, hash_map.bucket_);
+		::std::swap(size_, hash_map.size_);
+		::std::swap(capacity_, hash_map.capacity_);
+		::std::swap(bucket_, hash_map.bucket_);
 	}
 
 	template <class Key, class T>
@@ -693,7 +693,7 @@ namespace BALL
 		if (it == end())
 		{
 			T value;
-			std::pair<Iterator, bool> result = insert(ValueType(key, value));
+			::std::pair<Iterator, bool> result = insert(ValueType(key, value));
 			it = result.first;
 		} 
 		
@@ -716,7 +716,7 @@ namespace BALL
 	}
 
 	template <class Key, class T>
-	std::pair<typename HashMap<Key, T>::Iterator, bool> HashMap<Key, T>::insert
+	::std::pair<typename HashMap<Key, T>::Iterator, bool> HashMap<Key, T>::insert
 		(const ValueType& item)
 	{
 		Iterator it = find(item.first);
@@ -737,14 +737,14 @@ namespace BALL
 			it.getTraits().position_ = bucket_[bucket];
 			it.getTraits().bucket_ = bucket;
 
-			return std::pair<Iterator, bool>(it, true);
+			return ::std::pair<Iterator, bool>(it, true);
 		} 
 		else 
 		{
 			// replace the existing value
 			it->second = item.second;
 
-			return std::pair<Iterator, bool>(it, false);
+			return ::std::pair<Iterator, bool>(it, false);
 		}
 	}
 
@@ -1027,7 +1027,7 @@ namespace BALL
 	}      
 
 	template <class Key, class T>
-	void HashMap<Key, T>::dump(std::ostream& s, Size depth) const
+	void HashMap<Key, T>::dump(::std::ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
