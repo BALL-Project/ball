@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.44 2004/12/14 16:36:03 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.45 2005/02/06 20:57:07 oliver Exp $
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -234,7 +234,7 @@ void ColorMeshDialog::gridSelected()
 	{
 		for(Position p = 0; p < mesh_->vertex.size(); p++)
 		{
-			float value = grid_->getInterpolatedValue(mesh_->vertex[p]);
+			const float& value = grid_->getInterpolatedValue(mesh_->vertex[p]);
 
 			mid_value_ += value;
 			if (value < min_value_) min_value_ = value;
@@ -358,16 +358,17 @@ bool ColorMeshDialog::colorByGrid_()
 
 	try 
 	{
-		for (Position i=0; i<mesh_->colorList.size(); i++)
+		const float mid_value = String(mid_box->text().ascii()).toFloat();
+		for (Position i = 0; i < mesh_->colorList.size(); i++)
 		{
-			float grid_value = grid_->getInterpolatedValue(mesh_->vertex[i]);
-			if (grid_value <= String(mid_box->text().ascii()).toFloat())
+			const float grid_value = grid_->getInterpolatedValue(mesh_->vertex[i]);
+			if (grid_value <= mid_value)
 			{
-				mesh_->colorList[i] = lower_table.map(grid_value);
+				mesh_->colorList[i].set(lower_table.map(grid_value));
 			}
 			else
 			{
-				mesh_->colorList[i] = upper_table.map(grid_value);
+				mesh_->colorList[i].set(upper_table.map(grid_value));
 			}
 		}
 	}	
@@ -605,7 +606,6 @@ void ColorMeshDialog::customColorTransparencyChanged()
 {
 	alpha_box->setEnabled(alpha_button_custom->isChecked());
 }
-
 
 
 } } // namespaces

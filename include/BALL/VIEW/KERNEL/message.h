@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.62 2004/12/19 13:34:14 amoll Exp $
+// $Id: message.h,v 1.63 2005/02/06 20:57:05 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -548,7 +548,10 @@ class BALL_EXPORT RepresentationMessage: public Message
 		STARTED_UPDATE,
 
 		/// Finished the update of a Representation
-		FINISHED_UPDATE
+		FINISHED_UPDATE,
+
+		/// Add a Representation to GeometricControl, but dont update in Scene
+		ADD_TO_GEOMETRIC_CONTROL
 	};
 
 	///

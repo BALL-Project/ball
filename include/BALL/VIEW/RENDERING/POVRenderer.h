@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.7 2004/07/16 14:03:10 amoll Exp $
+// $Id: POVRenderer.h,v 1.8 2005/02/06 20:57:06 oliver Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -88,7 +88,6 @@ namespace BALL
 			/// Set a stream as output device
 			void setOstream(std::ostream& out_stream);
 
-
 			/// 
 			void setHumanReadable(bool state)
 				throw() { human_readable_ = state;}
@@ -110,6 +109,9 @@ namespace BALL
 			/** Converts a Vector3 into a String in POVRay format.
 			 */
 			String POVVector3(Vector3 input)
+				throw();
+
+			virtual bool render(const Representation& representation)
 				throw();
 
 			//@}
@@ -147,16 +149,36 @@ namespace BALL
 
 			void renderMesh_(const Mesh& mesh)
 				throw();
+
+			void renderTwoColoredLine_(const TwoColoredLine& line)
+				throw();
+
+			void renderLine_(const Line& line)
+				throw();
+
+			void renderPoint_(const Point& point)
+				throw();
+
 			//@}
 
 			protected:
 
 				std::ostream* outfile_;
+				String trimFloatValue_(float value);
+				const ColorRGBA& getColor_(const GeometricObject& object);
+				void storeColor_(const GeometricObject& object);
+				String getColorIndex_(const ColorRGBA& color);
 
 				Vector3   origin_;
 				Matrix4x4 rotation_;
 				vector<POVRendererClippingPlane> clipping_planes_;
 				bool human_readable_;
+
+				typedef HashMap<String, Position> ColorMap;
+				ColorMap color_map_;
+				vector<const ColorRGBA*> color_vector_;
+				vector<const Representation*> representations_;
+				HashSet<const Mesh*> wireframes_;
 		};
   
 	} // namespace BALL

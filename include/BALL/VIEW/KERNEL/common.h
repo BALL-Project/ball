@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.32 2004/12/10 18:07:39 amoll Exp $
+// $Id: common.h,v 1.33 2005/02/06 20:57:04 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -15,6 +15,11 @@
  #include <BALL/MATHS/vector3.h>
 #endif
 
+#ifndef BALL_CONCEPT_COMPOSITE_H
+ #include <BALL/CONCEPT/composite.h>
+#endif
+
+#include <qevent.h>
 
 namespace BALL
 {
@@ -91,7 +96,7 @@ namespace BALL
 			SIMULATION_THREAD_FINISHED_EVENT,
 
 			/// see SimulationOutput
-			SIMULATION_OUTPUT_EVENT,
+			LOG_EVENT,
 
 			/// see UpdateCompositeEvent
 			UPDATE_COMPOSITE_EVENT,
@@ -247,6 +252,13 @@ namespace BALL
 			COLORING_UNKNOWN
 		};
 
+		/** A special Composite, which is ignored by all ColoringProcessors,
+		 		the GeometricObjects, which have this Composite set, will be colored
+				by the default color.
+		*/
+		extern Composite composite_to_be_ignored_for_colorprocessors_;
+
+
 		/// Enumeration of GeometricObject Types
 		enum GeometricObjectType
 		{
@@ -331,6 +343,46 @@ namespace BALL
 		/// Create a temporary filename in the users home dir
 		String createTemporaryFilename()
 			throw();
+
+		///
+		Vector3 getNormal(const Vector3& v)
+			throw();
+
+		/// Event class used for thread safe output to logview
+		class BALL_EXPORT LogEvent
+			: public QCustomEvent
+		{
+			public:
+
+				///
+				LogEvent();
+
+				///
+				void setMessage(const String& msg) {message_ = msg;}
+
+				///
+				String getMessage() {return message_;}
+
+				/// will allways be shown in Statusbar or just when no other message shown?
+				bool isImportant() { return important_;}
+
+				///
+				void setImportant(bool state) { important_ = state;}
+
+				/// only show in logview, no change to status bar
+				bool showOnlyInLogView() const { return only_log_;}
+
+				///
+				void setShowOnlyInLogView(bool state) { only_log_ = state;}
+
+			protected:
+				String message_;
+				bool   important_;
+				bool   only_log_;
+		};
+
+		/// thread safe output to logview
+		void logString(const String& data);
 		
 		//@}
 

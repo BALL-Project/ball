@@ -1,0 +1,151 @@
+BALL_INLINE
+void GLRenderer::initTransparent()
+	throw()
+{
+	if (render_mode_ == RENDER_MODE_TRANSPARENT) return;
+	render_mode_ = RENDER_MODE_TRANSPARENT;
+	glEnable(GL_DEPTH_TEST);
+	glEnable(GL_BLEND);
+	glDepthMask(GL_FALSE);
+}
+
+BALL_INLINE
+void GLRenderer::initSolid()
+	throw()
+{
+	if (render_mode_ == RENDER_MODE_SOLID) return;
+	render_mode_ = RENDER_MODE_SOLID;
+	glEnable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+	glDepthMask(GL_TRUE);
+}
+
+BALL_INLINE
+void GLRenderer::initAlwaysFront()
+	throw()
+{
+	if (render_mode_ == RENDER_MODE_ALWAYS_FRONT) return;
+	render_mode_ = RENDER_MODE_ALWAYS_FRONT;
+	glDisable(GL_DEPTH_TEST);
+	glDisable(GL_BLEND);
+	glDepthMask(GL_TRUE);
+}
+
+
+
+// ############################ NAMING ###################################
+BALL_INLINE
+GLRenderer::Name GLRenderer::getName(const GeometricObject& object)
+	throw()
+{
+	const NameHashMap::Iterator name_iterator = object_to_name_.find(&object);
+
+	if (name_iterator != object_to_name_.end())
+	{
+		return name_iterator->second;
+	}
+
+	const Name name = ++all_names_;
+
+	object_to_name_.insert(NameHashMap::ValueType(&object, name));
+	name_to_object_.insert(GeometricObjectHashMap::ValueType(name, &object));
+
+	return name;
+}
+
+BALL_INLINE
+GeometricObject* GLRenderer::getObject(GLRenderer::Name name) const
+	throw()
+{
+ 	const GeometricObjectHashMap::ConstIterator it = name_to_object_.find(name);
+	if (it == name_to_object_.end()) return 0;
+
+	return (GeometricObject*) it->second;
+}
+
+
+BALL_INLINE
+void GLRenderer::clearNames_()
+	throw()
+{
+	name_to_object_.clear();
+	object_to_name_.clear();
+
+	all_names_ = 0;
+}
+//////////////////////////////////////////////////////////
+
+
+BALL_INLINE
+void GLRenderer::setStereoMode(StereoMode state)
+	throw()
+{
+	if (state == stereo_) return;
+	stereo_ = state;
+}
+
+
+BALL_INLINE
+float GLRenderer::getXScale() const
+	throw() { return x_scale_;}
+
+BALL_INLINE
+float GLRenderer::getYScale() const
+	throw() { return y_scale_;}
+
+BALL_INLINE
+GLRenderer::StereoMode GLRenderer::getStereoMode() const
+	throw() { return stereo_;}
+
+BALL_INLINE
+GLRenderer::RenderMode GLRenderer::getRenderMode() const
+	throw() { return render_mode_;}
+
+BALL_INLINE
+void GLRenderer::setColor4ub_(const GeometricObject& object)
+	throw(){ setColorRGBA_(object.getColor()); }
+
+BALL_INLINE
+void GLRenderer::normalVector3_(const Vector3& v) 
+	throw() { glNormal3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);}
+
+BALL_INLINE
+void GLRenderer::vertexVector3_(const Vector3& v)
+	throw() { glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z); }
+
+BALL_INLINE
+void GLRenderer::translateVector3_(const Vector3& v)
+	throw() { glTranslatef((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z); }
+
+BALL_INLINE
+void GLRenderer::scaleVector3_(const Vector3& v)
+	throw() { glScalef((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z); }
+
+BALL_INLINE
+void GLRenderer::rotateVector3Angle_(const Vector3& v, Real angle)
+	throw() { glRotatef(angle, v.x, v.y, v.z); }
+
+BALL_INLINE
+void GLRenderer::scale_(float f)
+	throw() { glScalef(f, f, f);}
+
+BALL_INLINE
+void GLRenderer::setColorRGBA_(const ColorRGBA& color)
+	throw() 
+{ 
+	if (color == *last_color_) return;
+	glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
+	last_color_  = &color;
+}
+
+BALL_INLINE
+bool GLRenderer::vertexBuffersEnabled() const
+{
+	return use_vertex_buffer_;
+}
+
+BALL_INLINE
+DrawingMode GLRenderer::getDrawingMode() const { return drawing_mode_;}
+
+BALL_INLINE
+bool GLRenderer::isBusy() const { return busy_;}

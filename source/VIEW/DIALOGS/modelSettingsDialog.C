@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.33 2004/10/18 14:58:21 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.34 2005/02/06 20:57:08 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
@@ -57,6 +57,8 @@ namespace BALL
 			registerObject_(cartoon_dna_ladder_radius_slider);
 			registerObject_(cartoon_dna_base_radius_slider);
 			registerObject_(dna_cartoon_model_type);
+			registerObject_(ribbons_enabled);
+			registerObject_(two_colored_ribbons);
 			
 			registerObject_(force_scaling_slider);
 			registerObject_(force_max_length_slider);
@@ -189,14 +191,17 @@ namespace BALL
 					
 			if (RTTI::isKindOf<AddCartoonModel>(mp))
 			{
-				((AddCartoonModel*) &mp)->setTubeRadius(getCartoonTubeRadius());
-				((AddCartoonModel*) &mp)->setHelixRadius(getCartoonHelixRadius());
-				((AddCartoonModel*) &mp)->setArrowWidth(getCartoonArrowWidth());
-				((AddCartoonModel*) &mp)->setArrowHeight(getCartoonArrowHeight());
-				((AddCartoonModel*) &mp)->setDrawDNAAsLadderModel(cartoon_dna_ladder->isChecked());
-				((AddCartoonModel*) &mp)->setDNALadderRadius(getDNALadderRadius());
-				((AddCartoonModel*) &mp)->setDNABaseRadius(getDNABaseRadius());
-				((AddCartoonModel*) &mp)->setDNAHelixRadius(getDNAHelixRadius());
+				AddCartoonModel& cm = *dynamic_cast<AddCartoonModel*>(&mp);
+				cm.setTubeRadius(getCartoonTubeRadius());
+				cm.setHelixRadius(getCartoonHelixRadius());
+				cm.setArrowWidth(getCartoonArrowWidth());
+				cm.setArrowHeight(getCartoonArrowHeight());
+				cm.setDrawDNAAsLadderModel(cartoon_dna_ladder->isChecked());
+				cm.setDNALadderRadius(getDNALadderRadius());
+				cm.setDNABaseRadius(getDNABaseRadius());
+				cm.setDNAHelixRadius(getDNAHelixRadius());
+				cm.enableRibbons(ribbons_enabled->isChecked());
+				cm.enableTwoColors(two_colored_ribbons->isChecked());
 				return;
 			}
 					
@@ -309,15 +314,18 @@ namespace BALL
 					
 			if (RTTI::isKindOf<AddCartoonModel>(mp))
 			{
-				setCartoonTubeRadius(((AddCartoonModel*) &mp)->getTubeRadius());
-				setCartoonHelixRadius(((AddCartoonModel*) &mp)->getHelixRadius());
-				setCartoonArrowWidth(((AddCartoonModel*) &mp)->getArrowWidth());
-				setCartoonArrowHeight(((AddCartoonModel*) &mp)->getArrowHeight());
-				setCartoonDNAHelixRadius(((AddCartoonModel*) &mp)->getDNAHelixRadius());
-				setCartoonDNALadderRadius(((AddCartoonModel*) &mp)->getDNALadderRadius());
-				setCartoonDNABaseRadius(((AddCartoonModel*) &mp)->getDNABaseRadius());
-				cartoon_dna_ladder->setChecked(((AddCartoonModel*) &mp)->drawDNAAsLadderModel());
-				cartoon_dna_wac->setChecked(!((AddCartoonModel*) &mp)->drawDNAAsLadderModel());
+				AddCartoonModel& cm = *(AddCartoonModel*)(&mp);
+				setCartoonTubeRadius(cm.getTubeRadius());
+				setCartoonHelixRadius(cm.getHelixRadius());
+				setCartoonArrowWidth(cm.getArrowWidth());
+				setCartoonArrowHeight(cm.getArrowHeight());
+				setCartoonDNAHelixRadius(cm.getDNAHelixRadius());
+				setCartoonDNALadderRadius(cm.getDNALadderRadius());
+				setCartoonDNABaseRadius(cm.getDNABaseRadius());
+				cartoon_dna_ladder->setChecked(cm.drawDNAAsLadderModel());
+				cartoon_dna_wac->setChecked(!cm.drawDNAAsLadderModel());
+				two_colored_ribbons->setChecked(cm.twoColorsEnabled());
+				ribbons_enabled->setChecked(cm.ribbonsEnabled());
 				return;
 			}
 

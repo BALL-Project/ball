@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.27 2004/12/07 15:46:14 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.28 2005/02/06 20:57:09 oliver Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -152,8 +152,7 @@ namespace BALL
 
 		bool MolecularFileDialog::writeFile()
 		{
-			List<Composite*>& selection = 
-				getMainControl()->getMolecularControlSelection();
+			List<Composite*>& selection = getMainControl()->getMolecularControlSelection();
 
 			if (selection.size() != 1 || !RTTI::isKindOf<System> (**selection.begin()))
 			{
@@ -179,6 +178,8 @@ namespace BALL
 			{
 				filter = filter.after(FileSystem::PATH_SEPARATOR);
 			}
+
+			String filename_without_path = filter;
 
 			while (filter.has('.'))
 			{
@@ -208,8 +209,16 @@ namespace BALL
 			}
 			else
 			{
-				setStatusbarText("Unknown file format, please set the file extension accordingly to type, aborting...", true);
-				return false;
+				if (filter == filename_without_path)
+				{
+					filename += ".pdb";
+					result = writePDBFile(filename, system);
+				}
+				else
+				{
+					setStatusbarText("Unknown file format, please set the file extension accordingly to type, aborting...", true);
+					return false;
+				}
 			}
 
 			if (!result) 
@@ -314,11 +323,11 @@ namespace BALL
 			{
 				setStatusbarText("Reading of PDB file failed!", true);
 				delete system;
-				return false;
+				return 0;
 			}
 
  			if (!finish_(filename, system_name, system)) return 0;
-			else return system;
+			return system;
 		}
 
 
@@ -347,8 +356,7 @@ namespace BALL
 			{
 				setStatusbarText("Reading of HIN file failed!", true);
 				delete system;
-
-				return false;
+				return 0;
 			}
 
 			// generating bounding box if exists
@@ -371,7 +379,7 @@ namespace BALL
 			}
 
  			if (!finish_(filename, system_name, system)) return 0;
-			else return system;
+			return system;
 		}
 
 
@@ -392,11 +400,11 @@ namespace BALL
 			{
 				setStatusbarText("Reading of MOL file failed!", true);
 				delete system;
-				return false;
+				return 0;
 			}
 
  			if (!finish_(filename, system_name, system)) return 0;
-			else return system;
+			return system;
 		}
 
 
@@ -417,11 +425,11 @@ namespace BALL
 			{
 				setStatusbarText("Reading of MOL2 file failed!", true);
 				delete system;
-				return false;
+				return 0;
 			}
 
  			if (!finish_(filename, system_name, system)) return 0;
-			else return system;
+			return system;
 		}
 		
 
@@ -436,7 +444,7 @@ namespace BALL
 				system->setName(system_name);
 			}
 
-			if (!filename[0] == FileSystem::PATH_SEPARATOR)
+			if (filename[0] != FileSystem::PATH_SEPARATOR)
 			{
 				system->setProperty("FROM_FILE", getWorkingDir() + FileSystem::PATH_SEPARATOR + filename);
 			}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.156 2004/12/16 13:18:41 amoll Exp $
+// $Id: scene.C,v 1.157 2005/02/06 20:57:12 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -34,7 +34,8 @@
 #include <qdragobject.h>
 #include <qdir.h>
 
-// #define BALL_BENCHMARKING
+
+//    #define BALL_BENCHMARKING
 
 using std::endl;
 using std::istream;
@@ -43,6 +44,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+		Position Scene::screenshot_nr_ = 100000;
+		Position Scene::pov_nr_ = 100000;
 
 		// ###############CONSTRUCTORS,DESTRUCTORS,CLEAR###################
 
@@ -80,10 +84,9 @@ namespace BALL
 				stage_(new Stage),
 				light_settings_(0),
 				stage_settings_(0),
-				screenshot_nr_(10000),
-				pov_nr_(10000),
 				animation_thread_(0),
-				stop_animation_(false)
+				stop_animation_(false),
+				content_changed_(true)
 		{
 			gl_renderer_.setSize(600, 600);
 			setAcceptDrops(true);
@@ -115,10 +118,9 @@ namespace BALL
 				stage_(new Stage),
 				light_settings_(0),
 				stage_settings_(0),
-				screenshot_nr_(10000),
-				pov_nr_(10000),
 				animation_thread_(0),
-				stop_animation_(false)
+				stop_animation_(false),
+				content_changed_(true)
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
@@ -152,10 +154,9 @@ namespace BALL
 				light_settings_(new LightSettings(this)),
 				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
-				screenshot_nr_(10000),
-				pov_nr_(10000),
 				animation_thread_(0),
-				stop_animation_(false)
+				stop_animation_(false),
+				content_changed_(true)
 		{
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (3) " << this << std::endl;
@@ -257,18 +258,24 @@ namespace BALL
 				Representation* rep = rm->getRepresentation();
 				switch (rm->getType())
 				{
+ 					case RepresentationMessage::ADD:
+						if (gl_renderer_.hasDisplayListFor(*rep)) return;
+						gl_renderer_.bufferRepresentation(*rep);
+						break;
+
 					case RepresentationMessage::UPDATE:
-					case RepresentationMessage::ADD:
-						gl_renderer_.rebuildDisplayListFor(*rep);
+						gl_renderer_.bufferRepresentation(*rep);
 						break;
 
 					case RepresentationMessage::REMOVE:
-						gl_renderer_.removeDisplayListFor(*rep);
+						gl_renderer_.removeRepresentation(*rep);
 						break;
 
 					default:
 						break;
 				}
+
+				content_changed_ = true;
 
 				update(false);
 				return;
@@ -282,20 +289,25 @@ namespace BALL
 			switch (scene_message->getType())
 			{
 				case SceneMessage::REDRAW:
+					content_changed_ = true;
 					update(false);
 					return;
 
 				case SceneMessage::REBUILD_DISPLAY_LISTS:
+					content_changed_ = true;
 					update(true);
 					return;
 
 				case SceneMessage::UPDATE_CAMERA:
+					content_changed_ = true;
 					stage_->moveCameraTo(scene_message->getStage().getCamera());
 					system_origin_ = scene_message->getStage().getCamera().getLookAtPosition();
 					updateCamera_();
+					light_settings_->updateFromStage();
 					return;
 
 				case SceneMessage::REMOVE_COORDINATE_SYSTEM:
+					content_changed_ = true;
 					stage_->showCoordinateSystem(false);
 					stage_settings_->updateFromStage();
 					return;
@@ -335,18 +347,29 @@ namespace BALL
 			gl_renderer_.initSolid();
 			if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
 			gl_renderer_.updateCamera();
+			stage_settings_->getGLSettings();
 		}
 
 		void Scene::paintGL()
 		{
+//    			if (!content_changed_) return;
+#ifdef BALL_BENCHMARKING
+	Timer t;
+	t.start();
+#endif
 			// cannot call update here, because it calls updateGL
 			renderView_(DISPLAY_LISTS_RENDERING);
+#ifdef BALL_BENCHMARKING
+	t.stop();
+	logString("Scene painting time: " + String(t.getClockTime()));
+#endif
 		}
 
 		void Scene::resizeGL(int width, int height)
 		{
 			gl_renderer_.setSize(width, height);
 			gl_renderer_.updateCamera();
+			content_changed_ = true;
 			updateGL();
 		}
 
@@ -357,13 +380,17 @@ namespace BALL
 			makeCurrent();
 
 			glDepthMask(GL_TRUE);
-			glDrawBuffer(GL_BACK_LEFT);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO)
 			{
+				glDrawBuffer(GL_BACK);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 				renderRepresentations_(mode);
+				content_changed_ = false;
 				return;
 			}
+
+			glDrawBuffer(GL_BACK_LEFT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			// ok, this is going the stereo way...
 			stereo_camera_ = stage_->getCamera();
@@ -465,6 +492,7 @@ namespace BALL
  			light_settings_->updateFromStage();
 			renderRepresentations_(DISPLAY_LISTS_RENDERING);
 			glPopMatrix();
+			content_changed_ = false;
 		}
 
 
@@ -523,10 +551,6 @@ namespace BALL
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
-#ifdef BALL_BENCHMARKING
-	Timer t;
-	t.start();
-#endif
 			gl_renderer_.initSolid();
 
 			PrimitiveManager::RepresentationList::ConstIterator it;
@@ -602,31 +626,34 @@ namespace BALL
 					render_(**it, mode);
 				}
 			}
-
-
-#ifdef BALL_BENCHMARKING
-	Log.info() << "Rendering time: " << t.getCPUTime() << std::endl;
-	t.stop();
-#endif
 		}
 
 
 		void Scene::render_(const Representation& rep, RenderMode mode)
 			throw()
 		{
+			if (rep.getGeometricObjects().size() == 0) return;
+
 			switch (mode)
 			{
 				case DISPLAY_LISTS_RENDERING:
-					gl_renderer_.drawFromDisplayList(rep);
+					gl_renderer_.drawBuffered(rep);
 					break;
 
 				case REBUILD_DISPLAY_LISTS:
-					gl_renderer_.rebuildDisplayListFor(rep);
+					gl_renderer_.bufferRepresentation(rep);
 					break;
 
 				case DIRECT_RENDERING:
 					gl_renderer_.render(rep);
 					break;
+			}
+
+			// no benchmark output for vertex buffer usage
+			if (gl_renderer_.vertexBuffersEnabled()&& 
+					VIEW::isSurfaceModel(rep.getModelType()))
+			{
+				return;
 			}
 		}
 
@@ -635,10 +662,11 @@ namespace BALL
 			if (current_mode_ != ROTATE__MODE ||
 					x_window_pos_old_ == x_window_pos_new_) return;
 
-			float angle = (x_window_pos_new_ - x_window_pos_old_) * (mouse_sensitivity_ / (ROTATE_FACTOR * -30));
+			const float angle = (x_window_pos_new_ - x_window_pos_old_) * 
+													(mouse_sensitivity_ / (ROTATE_FACTOR * -30));
 				
-			Matrix4x4 m;
 			Camera& camera = stage_->getCamera();
+			Matrix4x4 m;
 			m.setRotation(Angle(angle), camera.getViewVector());
 			camera.setLookUpVector(m * camera.getLookUpVector());
 			updateCamera_();
@@ -648,11 +676,7 @@ namespace BALL
 		void Scene::rotateSystem_(Scene* scene)
 		{
 			scene->calculateQuaternion_(quaternion_);
-
-			// ??? We have to put that into the stage_'s Camera somehow...
-			stage_->translate((float)(-1.)*system_origin_);
-			stage_->rotate(quaternion_);
-			stage_->translate(system_origin_);
+			stage_->rotate(quaternion_, system_origin_);
 			updateCamera_();
 		}
 
@@ -803,7 +827,7 @@ namespace BALL
 			int height = BALL_ABS((int)y_window_pick_pos_second_ - (int)y_window_pick_pos_first_);
 			if (width == 0)	width = 1;
 			if (height == 0) height = 1;
-			gl_renderer_.pickObjects2(objects, width, height);
+ 			gl_renderer_.pickObjects2(objects, width, height);
 			glFlush();
 
 			GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
@@ -854,6 +878,7 @@ namespace BALL
 			Camera camera;
 			stage_->moveCameraTo(camera);
 			updateCamera_();
+ 			light_settings_->updateFromStage();
 		}
 
 		
@@ -864,7 +889,6 @@ namespace BALL
 			{
 				gl_renderer_.updateCamera();
  				gl_renderer_.setLights();
- 				light_settings_->updateFromStage();
 			}
 
 			updateGL();
@@ -878,13 +902,13 @@ namespace BALL
 		{
 			LightSource light;
 			light.setType(LightSource::POSITIONAL);
-			light.setPosition(stage_->getCamera().getViewPoint() - 
-												stage_->getCamera().getViewVector() * 4);
+			light.setPosition((stage_->getCamera().getViewPoint() - 
+												stage_->getCamera().getViewVector() * 4) 
+												+ stage_->getCamera().getLookUpVector() * 20);
 			light.setDirection(stage_->getCamera().getLookAtPosition());
 
-			List<LightSource>& lights = stage_->getLightSources();
-			lights.clear();
-			lights.push_back(light);
+			stage_->clearLightSources();
+			stage_->addLightSource(light);
 			gl_renderer_.setLights(true);
 			light_settings_->updateFromStage();
 
@@ -949,7 +973,7 @@ namespace BALL
 
 			// we have to add the representation in the GLRenderer manualy,
 			// because the message wont arrive in Scene::onNotify
-			gl_renderer_.rebuildDisplayListFor(*rp);
+			gl_renderer_.bufferRepresentation(*rp);
 
 			// notify GeometricControl
 			RepresentationMessage* message = new RepresentationMessage(*rp, RepresentationMessage::ADD);
@@ -1010,13 +1034,21 @@ namespace BALL
 			inifile.insertValue("STAGE", "ShowCoordinateSystem", String(stage_->coordinateSystemEnabled()));
 			inifile.insertValue("STAGE", "Fulcrum", vector3ToString(system_origin_));
 			inifile.insertValue("STAGE", "AnimationSmoothness", String(animation_smoothness_));
+
+			inifile.appendSection("EXPORT");
+			inifile.insertValue("EXPORT", "POVNR", String(pov_nr_));
+			inifile.insertValue("EXPORT", "PNGNR", String(screenshot_nr_));
 			writeLights_(inifile);
+
+			inifile.appendSection("OPENGL");
+			inifile.insertValue("OPENGL", "UseVertexBuffers", String(gl_renderer_.vertexBuffersEnabled()));
 		}
 
 
 		void Scene::fetchPreferences(INIFile& inifile)
 			throw()
 		{
+logString(String("#~~#   2 ") + String( )                        + "             " + __FILE__ + "  " + String(__LINE__));
 			ModularWidget::fetchPreferences(inifile);
 			if (inifile.hasEntry("WINDOWS", "Main::mouseSensitivity"))
 			{
@@ -1052,6 +1084,16 @@ namespace BALL
 				setAnimationSmoothness(inifile.getValue("STAGE", "AnimationSmoothness").toFloat());
 			}
 
+			if (inifile.hasEntry("EXPORT", "POVNR"))
+			{
+				pov_nr_ = inifile.getValue("EXPORT", "POVNR").toUnsignedInt();
+			}
+
+			if (inifile.hasEntry("EXPORT", "PNGNR"))
+			{
+				screenshot_nr_ = inifile.getValue("EXPORT", "PNGNR").toUnsignedInt();
+			}
+
 
 			if (inifile.hasEntry("STAGE", "BackgroundColor"))
 			{
@@ -1074,6 +1116,11 @@ namespace BALL
 			readLights_(inifile);
 			light_settings_->updateFromStage();
 			stage_settings_->updateFromStage();
+
+			if (inifile.hasEntry("OPENGL", "UseVertexBuffers"))
+			{
+				gl_renderer_.enableVertexBuffers((inifile.getValue("OPENGL", "UseVertexBuffers")).toBool());
+			}
 
 			applyPreferences();
 		}
@@ -1141,7 +1188,8 @@ namespace BALL
 				if (coordinate_rep != 0)
 				{
 					pm.remove(*coordinate_rep);
-					RepresentationMessage* message = new RepresentationMessage(*coordinate_rep, RepresentationMessage::REMOVE);
+					RepresentationMessage* message = new 
+						RepresentationMessage(*coordinate_rep, RepresentationMessage::REMOVE);
 					notify_(message);
 				}
 			}
@@ -1164,7 +1212,7 @@ namespace BALL
 				GLfloat color[4] = {0.0, 0.0, 0.0, 0.4};
 				glFogfv(GL_FOG_COLOR, color);
 				glFogf(GL_FOG_START, 2.0);
-				glFogf(GL_FOG_END, 401 - stage_->getFogIntensity());
+				glFogf(GL_FOG_END, 420 - stage_->getFogIntensity());
 				glFogi(GL_FOG_MODE, GL_LINEAR);
 			}
 
@@ -1236,7 +1284,7 @@ namespace BALL
 		void Scene::readLights_(const INIFile& inifile)
 			throw()
 			{
-				stage_->getLightSources().clear();
+				stage_->clearLightSources();
 				String data;
 				vector<String> strings;
 				try
@@ -1407,7 +1455,8 @@ namespace BALL
 																!getMainControl()->compositesAreLocked() &&
 																!animation_running);
 			
-			menuBar()->setItemEnabled(clear_animation_id_, animation_points_.size() > 0 && !animation_running);
+			menuBar()->setItemEnabled(clear_animation_id_, 
+					animation_points_.size() > 0 && !animation_running);
 		}
 
 		//##########################EVENTS#################################
@@ -1470,7 +1519,15 @@ namespace BALL
 
 		void Scene::processRotateModeMouseEvents_(QMouseEvent* e)
 		{
+			if (x_window_pos_old_ == e->x() &&
+					y_window_pos_old_ == e->y())
+			{
+				return;
+			}
+
 			if(current_mode_ != ROTATE__MODE) return;
+			
+			content_changed_ = true;
 
 			switch (e->state())
 			{
@@ -1594,15 +1651,12 @@ namespace BALL
 				switch (e->state())
 				{
 					case (Qt::LeftButton | Qt::ShiftButton):
+					case Qt::RightButton:
 						deselectionReleased_();
 						break;
 
 					case Qt::LeftButton:
 						selectionReleased_();
-						break;
-
-					case Qt::RightButton:
-						deselectionReleased_();
 						break;
 
 					default:
@@ -1612,6 +1666,7 @@ namespace BALL
 			else if (current_mode_ == ROTATE__MODE)
 			{
 				processRotateModeMouseEvents_(e);
+ 				light_settings_->updateFromStage();
 			}
 			else if (current_mode_ == MOVE__MODE)
 			{
@@ -1734,10 +1789,19 @@ namespace BALL
 			}
 		}
 
+		void Scene::setMode(ModeType mode)
+			throw()
+		{
+			if 			(mode == ROTATE__MODE) 	rotateMode_();
+			else if (mode == PICKING__MODE) pickingMode_();
+			else if (mode == MOVE__MODE) 		moveMode_();
+		}
+
 		void Scene::rotateMode_()
 		{
 			if (current_mode_ == ROTATE__MODE) return;
 			
+			gl_renderer_.exitPickingMode();
 			last_mode_ = current_mode_;
 			current_mode_ = ROTATE__MODE;		
 			setCursor(QCursor(Qt::SizeAllCursor));
@@ -1750,6 +1814,7 @@ namespace BALL
 		{
 			if (current_mode_ == PICKING__MODE) return;
 			
+			gl_renderer_.enterPickingMode();
 			last_mode_ = current_mode_;
 			current_mode_ = PICKING__MODE;
 			setCursor(QCursor(Qt::CrossCursor));
@@ -1762,6 +1827,7 @@ namespace BALL
 		{
 			if (current_mode_ == MOVE__MODE) return;
 			
+			gl_renderer_.exitPickingMode();
 			last_mode_ = current_mode_;
 			current_mode_ = MOVE__MODE;
 			setCursor(QCursor(Qt::PointingHandCursor));
@@ -1968,6 +2034,7 @@ namespace BALL
 		{
 			stage_->moveCameraTo(camera);
 			updateCamera_();
+ 			light_settings_->updateFromStage();
 		}
 
 		void Scene::clearRecordedAnimation()
@@ -2010,7 +2077,8 @@ namespace BALL
 		void Scene::recordAnimationClicked()
 			throw()
 		{
-			menuBar()->setItemChecked(record_animation_id_, !menuBar()->isItemChecked(record_animation_id_));
+			menuBar()->setItemChecked(record_animation_id_, 
+					!menuBar()->isItemChecked(record_animation_id_));
 		}
 
 		void Scene::animate_()
@@ -2093,19 +2161,22 @@ namespace BALL
 		void Scene::animationRepeatClicked()
 			throw()
 		{
-			menuBar()->setItemChecked(animation_repeat_id_, !menuBar()->isItemChecked(animation_repeat_id_));
+			menuBar()->setItemChecked(animation_repeat_id_, 
+					!menuBar()->isItemChecked(animation_repeat_id_));
 		}
 
 		void Scene::animationExportPOVClicked()
 			throw()
 		{
-			menuBar()->setItemChecked(animation_export_POV_id_, !menuBar()->isItemChecked(animation_export_POV_id_));
+			menuBar()->setItemChecked(animation_export_POV_id_, 
+					!menuBar()->isItemChecked(animation_export_POV_id_));
 		}
 
 		void Scene::animationExportPNGClicked()
 			throw()
 		{
-			menuBar()->setItemChecked(animation_export_PNG_id_, !menuBar()->isItemChecked(animation_export_PNG_id_));
+			menuBar()->setItemChecked(animation_export_PNG_id_, 
+					!menuBar()->isItemChecked(animation_export_PNG_id_));
 		}
 
 		void Scene::switchToLastMode()

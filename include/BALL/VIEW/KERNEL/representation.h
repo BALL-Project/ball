@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.29 2004/12/14 16:12:33 amoll Exp $
+// $Id: representation.h,v 1.30 2005/02/06 20:57:05 oliver Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -352,6 +352,9 @@ namespace BALL
 
 			//_ true means the ModelProcessor will be applied in the next update
 			bool 								rebuild_;
+
+			//_ true means the ColorProcessor was changed since the last update call, so apply it!
+			bool 								changed_color_processor_;
 
 			//_
 			bool 								hidden_;

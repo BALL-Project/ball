@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.14 2004/07/04 13:29:16 amoll Exp $
+// $Id: stage.h,v 1.15 2005/02/06 20:57:05 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -161,10 +161,6 @@ namespace BALL
 			void translate(const Vector3& v3)
 				throw() { position_+=v3; direction_+=v3;}
 
-			///
-			void rotate(const Quaternion& q)
-				throw();
-
 			//@}
 			/**	@name Predicates
 			*/
@@ -192,6 +188,12 @@ namespace BALL
 
 			//_ Direction of the light cone
 			Vector3 		direction_;
+
+			//_
+			Vector3     r_position_;
+
+			//_
+			Vector3  		r_direction_;
 
 			//_ Angle of the light cone
 			Angle 			angle_;
@@ -378,20 +380,20 @@ namespace BALL
 			*/
 			//@{
 			
-			/// Get the light sources
-			virtual List<LightSource>& getLightSources()
-				throw() { return light_sources_;}
-
 			/// Get the light sources (const)
 			virtual const List<LightSource>& getLightSources() const
 				throw() { return light_sources_;}
 
 			/// Add a light source
 			virtual void addLightSource(const LightSource& light_source)
-				throw() { light_sources_.push_back(light_source);}
+				throw();
 
 			/// Remove a light source
 			virtual void removeLightSource(const LightSource& light_source) 
+				throw();
+
+			///
+			void clearLightSources()
 				throw();
 			
 			/// Get the camera
@@ -428,7 +430,7 @@ namespace BALL
 				throw();
 
 			/// Rotate camera and lightsources
-			virtual void rotate(const Quaternion& q)
+			virtual void rotate(const Quaternion& q, const Vector3& origin)
 				throw();
 
 			/// Move camera and lightsources, if these are set relative to camera
@@ -466,6 +468,38 @@ namespace BALL
 			///
 			void setFogIntensity(float value)
 				throw() { fog_intensity_ = value;}
+				
+			///
+			float getSpecularIntensity() const
+				throw() { return specular_;}
+
+			///
+			void setSpecularIntensity(float value)
+				throw() { specular_ = value;}
+					
+			///
+			float getDiffuseIntensity() const
+				throw() { return diffuse_;}
+
+			///
+			void setDiffuseIntensity(float value)
+				throw() { diffuse_ = value;}
+					
+			///
+			float getAmbientIntensity() const
+				throw() { return ambient_;}
+
+			///
+			void setAmbientIntensity(float value)
+				throw() { ambient_ = value;}
+					
+			///
+			float getShininess() const
+				throw() { return shininess_;}
+
+			///
+			void setShininess(float value)
+				throw() { shininess_ = value;}
 			
 			//@}
 			/**	@name Predicates
@@ -488,7 +522,7 @@ namespace BALL
 				throw();
 
 			protected:
-			
+
 			//_
 			ColorRGBA 					background_color_;
 
@@ -512,8 +546,12 @@ namespace BALL
 
 			//_
 			bool 								swap_side_by_side_stereo_;
-		};
 
+			float 							specular_;
+			float 							diffuse_;
+			float 							ambient_;
+			float 							shininess_;
+		};
 
 	} // namespace VIEW
 } // namespace BALL

@@ -1,12 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorRGBA.C,v 1.8 2003/12/04 09:51:36 amoll Exp $
+// $Id: colorRGBA.C,v 1.9 2005/02/06 20:57:07 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
-#include <BALL/COMMON/rtti.h>
-
 #include <qcolor.h>
 
 using namespace std;
@@ -75,8 +73,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-			cout << "Destructing object " << (void *)this << " of class " 
-					 << RTTI::getName<ColorRGBA>() << endl;
+			Log.error() << "Destructing object " << this << " of class ColorRGBA" << endl;
 			#endif 
 		}
 
@@ -151,13 +148,19 @@ namespace BALL
 		void ColorRGBA::get(char *char_ptr) const
 			throw()
 		{
-			sprintf(char_ptr, "%x%x%x%x",
+			sprintf(char_ptr, "%2X%2X%2X%2X",
 				(unsigned char)red_, (unsigned char)green_,
 				(unsigned char)blue_, (unsigned char)alpha_);
+
+			for (Position i = 0; i < 7; i++)
+			{
+				if (char_ptr[i] == ' ') char_ptr[i] = '0';
+			}
+
+			char_ptr[8] = '\0';
 		}
 
-		void ColorRGBA::set
-			(const String& s)
+		void ColorRGBA::set(const String& s)
 			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToRGBA_(s);
@@ -173,11 +176,18 @@ namespace BALL
 		void ColorRGBA::get(String& s) const
 			throw()
 		{
-			char temp[10];
+			char temp[9];
 
-			sprintf(&temp[0], "%x%x%x%x",
+			sprintf(temp, "%2X%2X%2X%2X",
 				(unsigned char)red_, (unsigned char)green_,
 				(unsigned char)blue_, (unsigned char)alpha_);
+
+			for (Position i = 0; i < 7; i++)
+			{
+				if (temp[i] == ' ') temp[i] = '0';
+			}
+
+			temp[8] = '\0';
 
 			s.set(&temp[0]);
 		}

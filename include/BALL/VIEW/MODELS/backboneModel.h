@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.16 2004/12/20 21:23:52 amoll Exp $
+// $Id: backboneModel.h,v 1.17 2005/02/06 20:57:05 oliver Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -19,6 +19,7 @@ namespace BALL
 {
 	class Atom;
 	class Composite;
+	class Residue;
 
 	namespace VIEW
 	{
@@ -51,12 +52,21 @@ namespace BALL
 				void setAtom(const Atom* atom) {atom_ = atom;}
 				const Atom* getAtom() const { return atom_;}
 
+				/** Needed for sort, sorting is needed for creation of backbone for
+				 		a selection of Residues, because the Processor can get the Residues
+						in wrong order from the Representation.
+				*/
+				bool operator < (const SplinePoint& point) const 
+					throw();
+
 			  private:
 
 				Vector3 point_;
 				Vector3 tangent_;
 				const Atom* atom_;
 			};
+
+			friend class SplinePoint;
 
 			public:
 
@@ -99,16 +109,6 @@ namespace BALL
 			*/
 			virtual Processor::Result operator() (Composite& composite);
 
-			/** Finish method.
-					This method will be internally called from the processor mechanism when the processor
-					has finished processing the Composite tree.
-					All previously inserted Atom objects 
-					(inserted in the method operator()) will be used to create a backbone.
-					\return bool true if the finish was successful, false otherwise
-					@exception OutOfMemory thrown if the memory allocation failed
-			*/
-			virtual bool finish();
-			
 			//@} 
 			/**	@name	debuggers and diagnostics 
 			*/ 
@@ -132,6 +132,10 @@ namespace BALL
 			float getTubeRadius() const
 				throw() { return tube_radius_;}
 
+			///
+			virtual bool createGeometricObjects()
+				throw();
+
 			//@}
 
 			protected:
@@ -147,25 +151,41 @@ namespace BALL
 			//_ create a spline segment between two spline points a and b
 			void createSplineSegment_(const SplinePoint &a, const SplinePoint &b);
 			//_ builds a graphical representation to this point 
-			void buildGraphicalRepresentation_(const Vector3 &point, const Atom* atom)
+			void buildGraphicalRepresentation_(Size start = 0, Size end = 0)
 				throw(Exception::OutOfMemory);
+
+			//_ collect the atoms, for which the spline points will be calculated
+			virtual void collectAtoms_(const Residue& residue)
+				throw();
 
 			//_
 			void createBackbone_()
 				throw();
 
+			virtual void clear_()
+				throw();
+
+			bool checkBuildBackboneNow_(const Residue& residue);
+
 			//_
 			vector<SplinePoint> spline_vector_;
-			std::vector<Vector3> spline_;
-
 			//_
-			bool have_start_point_;
+			vector<Vector3> 		spline_points_;
 			//_
-			Vector3 last_point_;
+			vector<const Atom*> atoms_of_spline_points_;
 			//_ Pointer to the parent of the last processed composite
-			Composite* last_parent_;
-
+			const Composite* last_parent_;
+			//_
 			float tube_radius_;
+
+			//_
+			Size 	interpolation_steps_;
+
+			//_
+			Index last_spline_point_;
+
+			//_
+			static HashMap<const Residue*, Position> residue_map_;
 		};
 
 	} // namespace VIEW

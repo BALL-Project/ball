@@ -1,5 +1,6 @@
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/KERNEL/system.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/FORMAT/trajectoryFile.h>
 
@@ -272,9 +273,9 @@ void SnapshotVisualisationDialog::update_()
 {
   currentSnapshot->setText(tmp_);
 	update();
-	SceneMessage* new_message = new SceneMessage;
-	new_message->setType(SceneMessage::REBUILD_DISPLAY_LISTS);
-	notify_(new_message);
+	const Composite* const composite = snap_shot_manager_ ->getSystem();
+	CompositeMessage* msg = new CompositeMessage(*composite, CompositeMessage::CHANGED_COMPOSITE);
+	notify_(msg);
 }
 
 void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_manager)  

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TextPersistenceManager_test.C,v 1.17 2005/02/06 09:45:01 oliver Exp $
+// $Id: TextPersistenceManager_test.C,v 1.18 2005/02/06 20:57:07 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.17 2005/02/06 09:45:01 oliver Exp $")
+START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.18 2005/02/06 20:57:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -73,8 +73,8 @@ CHECK(TextPersistenceManager::writeHeader(const char* type_name, const char* nam
 	ofstream os(filename.c_str(), ios::out);
 	TextPersistenceManager pm;
 	pm.setOstream(os);
-	pm.writeHeader("TYPENAME1", "NAME", (PointerSizeUInt)12345678);
-	pm.writeHeader("TYPENAME2", (const char*)0, (PointerSizeUInt)34567890);
+	pm.writeHeader("TYPENAME1", "NAME", (LongSize)12345678);
+	pm.writeHeader("TYPENAME2", (const char*)0, (LongSize)34567890);
 	os.close();
 	TEST_FILE(filename.c_str(), "data/TextPersistenceManager_test.writeHeader.txt")
 RESULT
@@ -505,15 +505,15 @@ CHECK(TextPersistenceManager::put(const string& s))
 RESULT
 
 
-PointerSizeUInt psi1 = 0x01234567;
+LongSize psi1 = 0x01234567;
 psi1 <<= 32;
 psi1 += 0xFEDCBA98;
-PointerSizeUInt psi2 = 0xFEDCBA98;
+LongSize psi2 = 0xFEDCBA98;
 psi2 <<= 32;
 psi2 += 0x01234567;
 
-CHECK(TextPersistenceManager::put(const PointerSizeUInt p))
-	pm.put((PointerSizeUInt)0);
+CHECK(TextPersistenceManager::put(const LongSize p))
+	pm.put((LongSize)0);
 	pm.put(psi1);
 	pm.put(psi2);
 RESULT

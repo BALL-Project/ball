@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.31 2004/09/27 15:29:15 oliver Exp $
+// $Id: colorProcessor.C,v 1.32 2005/02/06 20:57:10 oliver Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -14,6 +14,7 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/DATATYPE/list.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
+#include <BALL/SYSTEM/sysinfo.h>
 
 using namespace std;
 
@@ -24,7 +25,8 @@ namespace BALL
 
 		ColorProcessor::ColorProcessor()
 			throw()
-			:	UnaryProcessor<GeometricObject*>()
+			:	UnaryProcessor<GeometricObject*>(),
+				update_always_needed_(false)
 		{
 			clear();
 		}
@@ -33,6 +35,7 @@ namespace BALL
 			throw()
 			:	UnaryProcessor<GeometricObject*>(cp),
 				default_color_(cp.default_color_),
+				selection_color_(cp.selection_color_),
 				transparency_(0)
 		{
 		}
@@ -52,6 +55,9 @@ namespace BALL
 			transparency_ = 0;
 			composites_ = 0;
 			clearAtomGrid();
+			selection_color_ = BALL_SELECTED_COLOR;
+			last_composite_of_grid_ = 0;
+			additional_grid_distance_ = 5.0;
 		}
 
 		void ColorProcessor::set(const ColorProcessor& cp)
@@ -60,6 +66,7 @@ namespace BALL
 			default_color_ = cp.default_color_;
 			composites_ = cp.composites_;
 			transparency_ = cp.transparency_;
+			selection_color_ = cp.selection_color_;
 		}
 
 
@@ -87,58 +94,93 @@ namespace BALL
 
 		Processor::Result ColorProcessor::operator() (GeometricObject*& object)
 		{
-			if (RTTI::isKindOf<Mesh> (*object))
+			const Composite* composite = object->getComposite();
+
+			Mesh* const mesh = dynamic_cast<Mesh*>(object);
+			if (mesh != 0)
 			{
-				Mesh* mesh = dynamic_cast<Mesh*>(object);
 				mesh->colorList.clear();
-				if (composites_ == 0)
+				if (composite == &composite_to_be_ignored_for_colorprocessors_ ||
+						composites_ == 0)
 				{
 					mesh->colorList.push_back(default_color_);
 					return Processor::CONTINUE;
 				}
 
-				if (!atom_grid_created_ || mesh->getComposite() != 0)
+				if (composite == 0 ||
+						composite != last_composite_of_grid_)
 				{
-					const Composite* c = mesh->getComposite();
-					createAtomGrid_(c);
+					createAtomGrid_(composite);
 				}
 
 				colorMeshFromGrid_(*mesh);
-
 				return Processor::CONTINUE;
 			}
-			
-			if (object->getComposite() == 0)
+
+			ColorExtension2* const two_colored = dynamic_cast<ColorExtension2*>(object);
+
+			if (composite == 0 ||
+					composite == &composite_to_be_ignored_for_colorprocessors_)
 			{
 				object->setColor(default_color_); 
-				if (RTTI::isKindOf<ColorExtension2>(*object))
+				if (two_colored != 0)
 				{
-					ColorExtension2* two_colored = dynamic_cast<ColorExtension2*>(object);
 					two_colored->setColor2(default_color_);
 				}
 				return Processor::CONTINUE;
 			}
-			
-			if (!RTTI::isKindOf<ColorExtension2>(*object))
+
+			if (two_colored == 0)
 			{
-				object->setColor(getColor(object->getComposite())); 
+				if (composite->isSelected())
+				{
+					object->setColor(selection_color_);
+				}
+				else
+				{
+					getColor(*composite, object->getColor()); 
+				}
 				return Processor::CONTINUE;
 			}
 
 			// ok, we have a two colored object
-			ColorExtension2* two_colored = dynamic_cast<ColorExtension2*>(object);
-			if (RTTI::isKindOf<Bond>(*object->getComposite()))
+			const Bond* const bond = dynamic_cast<const Bond*>(composite);
+			if (bond != 0)
 			{
-				Bond* bond = (Bond*) object->getComposite();
-				object->setColor(getColor(bond->getFirstAtom()));
-				two_colored->setColor2(getColor(bond->getSecondAtom()));
+				const Atom* atom = bond->getFirstAtom();
+				if (!atom->isSelected())
+				{
+					getColor(*atom, object->getColor());
+				}
+				else
+				{
+					object->setColor(selection_color_);
+				}
+
+				const Atom* atom2 = bond->getSecondAtom();
+				if (!atom2->isSelected())
+				{
+					getColor(*atom2, two_colored->getColor2());
+				}
+				else
+				{
+					two_colored->setColor2(selection_color_);
+				}
 			}
 			else
 			{
-				ColorRGBA color = getColor(object->getComposite());
-				object->setColor(color); 
-				two_colored->setColor2(color);
+				if (composite->isSelected())
+				{
+					object->setColor(selection_color_);
+					two_colored->setColor2(selection_color_);
+				}
+				else
+				{
+ 					getColor(*composite, object->getColor());
+ 					two_colored->setColor2(object->getColor());
+				}
 			}
+
 			return Processor::CONTINUE;
 		}
 
@@ -160,8 +202,8 @@ namespace BALL
 				{
 					if (RTTI::isKindOf<AtomContainer>(**it))
 					{
-						AtomIterator ait;
-						AtomContainer* acont = (AtomContainer*)(*it);
+						AtomConstIterator ait;
+						const AtomContainer* const acont = dynamic_cast<const AtomContainer*>(*it);
 						BALL_FOREACH_ATOM(*acont, ait)
 						{
 							atoms.push_back(&*ait);
@@ -179,8 +221,8 @@ namespace BALL
 				// composite from mesh
 				if (RTTI::isKindOf<AtomContainer>(*from_mesh))
 				{
-					AtomIterator ait;
-					AtomContainer* acont = (AtomContainer*)(from_mesh);
+					AtomConstIterator ait;
+					const AtomContainer* const acont = dynamic_cast<const AtomContainer*>(from_mesh);
 					BALL_FOREACH_ATOM(*acont, ait)
 					{
 						atoms.push_back(&*ait);
@@ -203,40 +245,62 @@ namespace BALL
 			}
 			boxp.finish();
 
-			Vector3 diagonal = boxp.getUpper() - boxp.getLower();
-			atom_grid_ = AtomGrid(boxp.getLower() - Vector3(5, 5, 5), 
-														diagonal + Vector3(10, 10,10),
-														5.0); // spacing, increase this, it the grid consumes too much memory
+			const Vector3 diagonal = boxp.getUpper() - boxp.getLower();
+			
+			// grid spacing, tradeoff between speed and memory consumption
+			float grid_spacing = 4.0;
+			if (diagonal.getSquareLength() < 5000)
+			{
+				grid_spacing = 3.5;
+			} 
+			else 
+			{
+				float memory = SysInfo::getAvailableMemory();
+				// if we can not calculate available memory, use around 90 MB for the grid
+				if (memory == -1) memory = 100000000;
+				memory *= 0.9;	
+				float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing((LongIndex)memory, diagonal + Vector3(2 * additional_grid_distance_));
+				if (min_spacing > grid_spacing) grid_spacing = min_spacing;
+			}
+			
+			atom_grid_ = AtomGrid(boxp.getLower() - Vector3(additional_grid_distance_),
+														diagonal + Vector3(2 * additional_grid_distance_),
+														grid_spacing); 
 		 
 			for (lit = atoms.begin(); lit != atoms.end(); lit++)
 			{
 				atom_grid_.insert((*lit)->getPosition(), *lit);
 			}
 
-			atom_grid_created_ = true;
+			last_composite_of_grid_ = from_mesh;
 		}
 
 		void ColorProcessor::colorMeshFromGrid_(Mesh& mesh)
 			throw()
 		{
-			if (!atom_grid_created_ || atom_grid_.isEmpty())
-			{
-				return;
-			}
-			mesh.colorList.clear();
-			std::vector<Vector3>::iterator sit = mesh.vertex.begin();
-			for(; sit != mesh.vertex.end(); sit++)
+			if (atom_grid_.isEmpty()) return;
+			
+			mesh.colorList.resize(mesh.vertex.size());
+			
+			for (Position p = 0; p < mesh.vertex.size(); p++)
 			{
 				// make sure we found an atom
-				const Atom* atom = getClosestItem_(*sit);
+				const Atom* atom = getClosestItem_(mesh.vertex[p]);
 
 				if (atom == 0)
 				{
-					mesh.colorList.push_back(default_color_);
+ 					mesh.colorList[p] = default_color_;
 				}
 				else
 				{
-					mesh.colorList.push_back(getColor(atom));
+					if (atom->isSelected())
+					{
+						mesh.colorList[p] = selection_color_;
+					}
+					else
+					{
+ 						getColor(*atom, mesh.colorList[p]);
+					}
 				}
 			}
 		}
@@ -252,7 +316,6 @@ namespace BALL
 			throw()
 		{
 			atom_grid_.clear();
-			atom_grid_created_ = false;
 		}
 
 		void ColorProcessor::setDefaultColor(const ColorRGBA& color)
@@ -267,21 +330,18 @@ namespace BALL
 		{ 
 			transparency_ = value;
 			default_color_.setAlpha(255 - value);
+			selection_color_.setAlpha(255 - value);
 		}
 
-		ColorRGBA ColorProcessor::getColor(const Composite* composite)
+		void ColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
 		{
-			if (composite == 0) return default_color_;
-
-			if (composite->isSelected())
+			if (composite.isSelected())
 			{
-				ColorRGBA color(BALL_SELECTED_COLOR);
-				color.setAlpha(255 - transparency_);
-				return color;
+				color_to_be_set = selection_color_;
 			}
 			else
 			{
-				return default_color_;
+				color_to_be_set = default_color_;
 			}
 		}
 
@@ -355,10 +415,30 @@ namespace BALL
 			default_color_ = ColorRGBA(1.0,1.0,1.0);
 		}
 
-		ColorRGBA InterpolateColorProcessor::interpolateColor(float value)
+		void InterpolateColorProcessor::setTransparency(Size value)
+			throw() 
+		{ 
+			ColorProcessor::setTransparency(value);
+			min_color_.setAlpha(255 - value);
+			max_color_.setAlpha(255 - value);
+			min_min_color_.setAlpha(255 - value);
+			max_max_color_.setAlpha(255 - value);
+		}
+
+		void InterpolateColorProcessor::interpolateColor(float value, ColorRGBA& color_to_be_set)
+			throw()
 		{
-			if (value < min_value_) return min_min_color_;
-			if (value > max_value_) return max_max_color_;
+			if (value < min_value_)
+			{
+				color_to_be_set.set(min_min_color_);
+				return;
+			}
+			
+			if (value > max_value_) 
+			{
+				max_max_color_.set(max_max_color_);
+				return;
+			}
 
 			float red1   = min_color_.getRed();
 			float green1 = min_color_.getGreen();
@@ -370,10 +450,10 @@ namespace BALL
 
 			value -= min_value_;
 
-			return ColorRGBA(red1 + (value * (red2 - red1)) 			/ max_value_,
-											 green1 + (value * (green2 - green1))	/ max_value_,
-											 blue1 + (value * (blue2 - blue1)) 		/ max_value_,
-											 255 - transparency_);
+			color_to_be_set.set(red1 + (value * (red2 - red1)) 			/ max_value_,
+													 green1 + (value * (green2 - green1))	/ max_value_,
+													 blue1 + (value * (blue2 - blue1)) 		/ max_value_,
+													 255 - transparency_);
 		}
 
 		void InterpolateColorProcessor::setMinColor(const ColorRGBA& color)
@@ -460,5 +540,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
  } // namespace BALL

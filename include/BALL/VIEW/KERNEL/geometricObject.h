@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.37 2004/07/14 16:54:20 amoll Exp $
+// $Id: geometricObject.h,v 1.38 2005/02/06 20:57:04 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -141,6 +141,10 @@ namespace BALL
 			/**
 			*/
 			const ColorRGBA& getColor() const
+				throw() { return color_; }
+
+			///
+			ColorRGBA& getColor() 
 				throw() { return color_; }
 
 			/**

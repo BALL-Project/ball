@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.12 2004/06/07 10:17:17 amoll Exp $
+// $Id: surfaceModel.h,v 1.13 2005/02/06 20:57:06 oliver Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_SURFACEMODEL_H

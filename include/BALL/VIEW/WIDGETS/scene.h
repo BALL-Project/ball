@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.58 2004/10/15 10:53:32 amoll Exp $
+// $Id: scene.h,v 1.59 2005/02/06 20:57:07 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -417,7 +417,7 @@ namespace BALL
 				throw() { return show_light_sources_;}
 
 			/// 
-			GLRenderer& getGLRenderer_()
+			GLRenderer& getGLRenderer()
 				throw() { return gl_renderer_;}
 			
 			protected:
@@ -543,6 +543,20 @@ namespace BALL
 			///
 			void switchToLastMode()
 				throw();
+
+			///
+			ModeType getMode() const
+				throw() { return current_mode_;}
+
+			///
+			virtual void setMode(ModeType mode)
+				throw();
+
+			///
+			static void setScreenShotNumber(Position pos) { screenshot_nr_ = pos;}
+
+			///
+			static void setPOVNumber(Position pos) { pov_nr_ = pos;}
 
 			protected slots:
 
@@ -693,8 +707,10 @@ namespace BALL
 
 			MaterialSettings* material_settings_;
 
-			Position screenshot_nr_,
-							 pov_nr_;
+			// nr of last png file export
+			static Position screenshot_nr_;
+			// nr of last pov file export
+			static Position pov_nr_;
 
 			QPoint last_pos_;
 
@@ -703,6 +719,7 @@ namespace BALL
 			List<Camera> animation_points_;
 			AnimationThread* animation_thread_;
 			bool stop_animation_;
+			bool content_changed_;
 		};
 
 

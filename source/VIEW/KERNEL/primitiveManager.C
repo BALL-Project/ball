@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.34 2004/12/09 12:58:49 amoll Exp $
+// $Id: primitiveManager.C,v 1.35 2005/02/06 20:57:09 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -203,6 +203,13 @@ List<Representation*> PrimitiveManager::removedComposite(const Composite& compos
 			if (&composite == *composite_it ||
 					composite.isAncestorOf(**composite_it))
 			{
+				if ((*rep_it)->getComposites().size() > 1)
+				{
+					(*rep_it)->getComposites().erase(*composite_it);
+					update_(**rep_it);
+					break;
+				}
+
 				removed_representations.push_back(*rep_it);
 				break;
 			}
@@ -309,12 +316,16 @@ void PrimitiveManager::startUpdateThread_()
 	// no statusbar changes while beeing otherwise busy
 	if (main_control_->compositesAreLocked()) return;
 
+	thread_.wait(500);
+	if (!thread_.running()) return;
+	
 	// keep the user informed: we are still building the Representation -> Statusbar text
 	Position pos = 3;
 	String dots;
+
 	while (thread_.running())
 	{
-		main_control_->setStatusbarText("Creating Model " + dots);
+		main_control_->setStatusbarText("Creating Model ..." + dots);
 		qApp->wakeUpGuiThread();
 		qApp->processEvents();
 		if (pos < 40) 
@@ -370,6 +381,7 @@ void PrimitiveManager::finishedUpdate_()
 		update_running_ = false;
 		update_pending_ = false;
 		update_finished_.wakeAll();
+		main_control_->setPreferencesEnabled_(true);
 		return;
 	}
 

@@ -18,3 +18,5 @@ CPP_SOURCES=\
 
 include ../../common.mak
 include .Dependencies
+
+BALL_INCLUDES=$(VIEW_INCLUDES)

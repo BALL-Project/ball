@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.C,v 1.12 2004/10/08 14:49:15 amoll Exp $
+// $Id: lightSettings.C,v 1.13 2005/02/06 20:57:08 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -39,7 +39,7 @@ void LightSettings::updateFromStage()
 	throw()
 {
 	lights_.clear();
-	List<LightSource>::Iterator it = stage_->getLightSources().begin();
+	List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
 	for (; it != stage_->getLightSources().end(); it++)
 	{
 		lights_.push_back(LightSource(*it));
@@ -328,10 +328,10 @@ void LightSettings::apply()
 	throw()
 {
 	saveSettingsToLight_();
-	stage_->getLightSources().clear();
+	stage_->clearLightSources();
 	for (Position p = 0; p < lights_.size(); p++)
 	{
-		stage_->getLightSources().push_back(lights_[p]);
+		stage_->addLightSource(lights_[p]);
 	}
 }
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.159 2005/02/06 09:45:01 oliver Exp $
+// $Id: mainControl.C,v 1.160 2005/02/06 20:57:09 oliver Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -451,12 +451,18 @@ namespace BALL
 		{
 			// apply on own preferences tab
 			applyPreferences();
+			setPreferencesEnabled_(false);
 
 			// checks all modular widgets 
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
 			for (; it != modular_widgets_.end(); ++it)
 			{
 				(*it)->applyPreferences();
+			}
+
+			if (!updateOfRepresentationRunning())
+			{
+				setPreferencesEnabled_(true);
 			}
 		}
 
@@ -550,7 +556,6 @@ namespace BALL
 			throw()
 		{
 			if (!composite_manager_.has(composite)) return false;
-			
 			// delete all representations containing the composite
 			primitive_manager_.removedComposite(composite);
 
@@ -650,14 +655,14 @@ namespace BALL
 					case CompositeMessage::CHANGED_COMPOSITE:
 						if (cmessage->updateRepresentations())
 						{
-							updateRepresentationsOf(cmessage->getComposite()->getRoot(), true, true);
+							const bool force = cmessage->getType() == CompositeMessage::CHANGED_COMPOSITE_HIERARCHY;
+							updateRepresentationsOf(cmessage->getComposite()->getRoot(), true, force);
 						}
 						return;
 					case CompositeMessage::SELECTED_COMPOSITE:
 					case CompositeMessage::DESELECTED_COMPOSITE:
 					{
 						bool selected = (cmessage->getType() == CompositeMessage::SELECTED_COMPOSITE);
-						if (selected == selection_.has(cmessage->getComposite())) return;
 						if (selected)
 						{
 							selectCompositeRecursive(cmessage->getComposite(), true);
@@ -666,10 +671,12 @@ namespace BALL
 						{
 							deselectCompositeRecursive(cmessage->getComposite(), true);
 						}
+						/*
 						if (cmessage->showSelectionInfos())
 						{
 							printSelectionInfos();
 						}
+						*/
 
 						if (cmessage->updateRepresentations())
 						{
@@ -961,33 +968,53 @@ namespace BALL
 		void MainControl::selectComposites_(GeometricObjectSelectionMessage& message)
 			throw()
 		{
-			List<GeometricObject*>& objects = const_cast<List<GeometricObject*>&>(message.getSelection());
-			List<GeometricObject*>::Iterator it_objects = objects.begin();
 			HashSet<Composite*> roots;
 
 			Size nr = 0;
-			for (; it_objects != objects.end(); it_objects++)
+			List<GeometricObject*>& objects = const_cast<List<GeometricObject*>&>(message.getSelection());
+			List<GeometricObject*>::Iterator it_objects = objects.begin();
+
+			if (message.isSelected())
 			{
-				Composite* composite = const_cast<Composite*>((**it_objects).getComposite());
+				for (; it_objects != objects.end(); it_objects++)
+				{
+					Composite* composite = const_cast<Composite*>((**it_objects).getComposite());
 
-				if (composite != 0  && (selection_.has(composite) != message.isSelected()))
-				{	
-					if (message.isSelected())
-					{
-						selectCompositeRecursive(composite , true);
-					}
-					else
-					{
-						deselectCompositeRecursive(composite, true);
-					}
-					nr++;
-
-					if (!roots.has(&composite->getRoot()))
-					{
+					if (composite != 0  && !composite->isSelected())
+					{	
+						nr++;
 						roots.insert(&composite->getRoot());
+						if (RTTI::isKindOf<Bond>(*composite))
+						{
+							composite->select();
+						}
+						else
+						{
+							selectCompositeRecursive(composite , true);
+						}
 					}
-				}				
-				
+				}
+			}
+			else
+			{
+				for (; it_objects != objects.end(); it_objects++)
+				{
+					Composite* composite = const_cast<Composite*>((**it_objects).getComposite());
+
+					if (composite != 0  && composite->isSelected())
+					{	
+						nr++;
+						roots.insert(&composite->getRoot());
+						if (RTTI::isKindOf<Bond>(*composite))
+						{
+							composite->deselect();
+						}
+						else
+						{
+							deselectCompositeRecursive(composite , true);
+						}
+					}
+				}
 			}
 
 			printSelectionInfos();
@@ -1127,12 +1154,11 @@ namespace BALL
 			throw()
 		{
 			composite->select();
-			if (RTTI::isKindOf<Bond>(*composite)) return;
 			selection_.insert(composite);
 
-			if (RTTI::isKindOf<Atom> (*composite))
+			Atom* const atom = dynamic_cast<Atom*>(composite);
+			if (atom != 0)
 			{
-				Atom *atom = dynamic_cast<Atom*>(composite);
 				AtomBondIterator bi;		
 				BALL_FOREACH_ATOM_BOND(*atom, bi)
 				{
@@ -1142,31 +1168,51 @@ namespace BALL
 					}				
 				}				
 			}		
-			else if (RTTI::isKindOf<AtomContainer> (*composite))
+			else 
 			{
-				for (Size i=0; i< composite->getDegree();i++)
+				Composite* child = composite->getFirstChild();
+				while (child != 0)
 				{
-					selectCompositeRecursive(composite->getChild(i), false);
+					selectCompositeRecursive(child, false);
+					child = child->getSibling(1);
 				}
 			}		
 
 			if (first_call)
 			{
+				Composite* uppest = composite;
 				Composite* parent = composite->getParent();
 				while (parent != 0 && !selection_.has(parent))
 				{
-					for (Size i=0; i < parent->getDegree();i++)
+					Composite* child = parent->getFirstChild();
+					while (child != 0)
 					{
-						if (!selection_.has(parent->getChild(i)))
+						if (!child->isSelected())
 						{
+							reduceSelection_(uppest);
 							return;
 						}
+						child = child->getSibling(1);
 					}
 					
 					selection_.insert(parent);
 					parent->select();
+					uppest = parent;
 					parent = parent->getParent();
 				}
+
+				reduceSelection_(uppest);
+			}
+		}
+
+		void MainControl::reduceSelection_(Composite* const composite)
+		{
+			Composite* child = composite->getFirstChild();
+			while (child != 0)
+			{
+				selection_.erase(child);
+				reduceSelection_(child);
+				child = child->getSibling(1);
 			}
 		}
 
@@ -1175,22 +1221,24 @@ namespace BALL
 			throw()
 		{
 			composite->deselect();
-			if (RTTI::isKindOf<Bond>(*composite)) return;
 			selection_.erase(composite);
 
-			if (RTTI::isKindOf<Atom> (*composite))
+			Atom* const atom = dynamic_cast<Atom*>(composite);
+			if (atom != 0)
 			{
 				AtomBondIterator bi;		
-				BALL_FOREACH_ATOM_BOND(*dynamic_cast<Atom*>(composite), bi)
+				BALL_FOREACH_ATOM_BOND(*atom, bi)
 				{
 					bi->deselect();			
 				}				
 			}		
-			else if (RTTI::isKindOf<AtomContainer> (*composite))
+			else
 			{
-				for (Size i=0; i< composite->getDegree();i++)
+				Composite* child = composite->getFirstChild();
+				while (child != 0)
 				{
-					deselectCompositeRecursive(composite->getChild(i), false);
+					deselectCompositeRecursive(child, false);
+					child = child->getSibling(1);
 				}
 			}		
 
@@ -1212,6 +1260,7 @@ namespace BALL
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << text << std::endl;
 #endif
+			if (message_label_->text().ascii() == text.c_str()) return;
 
 			if (beep) 
 			{
@@ -1289,15 +1338,17 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);     
 		}
 
-		bool MainControl::update(Composite& composite)
+		bool MainControl::update(Composite& composite, bool changed_hierarchy)
 			throw()
 		{
 			if (!composite_manager_.has(composite)) return false;
 
 			CompositeMessage* cm = new CompositeMessage(composite, 
 					CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
+			if (!changed_hierarchy) cm->setType(CompositeMessage::CHANGED_COMPOSITE);
+
 			notify_(cm);
-			updateRepresentationsOf(composite.getRoot(), true, true);
+			updateRepresentationsOf(composite.getRoot(), true, changed_hierarchy);
 
 			return true;
 		}
@@ -1328,7 +1379,13 @@ namespace BALL
 		bool MainControl::remove(Composite& composite, bool to_delete)
 			throw()
 		{
-			if (!composite_manager_.has(composite)) return false;
+			if (!composite_manager_.has(composite)) 
+			{
+				primitive_manager_.removedComposite(composite);
+				return false;
+			}
+
+			control_selection_.clear();
 
 			CompositeMessage* cm = new CompositeMessage(composite, 
 					CompositeMessage::REMOVED_COMPOSITE);
@@ -1509,12 +1566,13 @@ namespace BALL
 				return;
 			}
 			
-			if (e->type() == (QEvent::Type)SIMULATION_OUTPUT_EVENT)
+			if (e->type() == (QEvent::Type)LOG_EVENT)
 			{
-				SimulationOutput* so = dynamic_cast<SimulationOutput*>(e);
-				if (!so->isImportant())
+				LogEvent* so = dynamic_cast<LogEvent*>(e);
+				if (so->showOnlyInLogView())
 				{
 					Log.info() << so->getMessage() << std::endl;
+					return;
 				}
  				setStatusbarText(so->getMessage(), so->isImportant());
 				return;
@@ -1706,7 +1764,7 @@ namespace BALL
 			HashSet<Composite*>::Iterator rit = roots.begin();
 			for(; rit != roots.end(); rit++)
 			{
-				update(**rit);
+				updateRepresentationsOf(**rit, true, false);
 			}
 		}
 
@@ -2048,6 +2106,11 @@ namespace BALL
 		{
 			setSelection_(c->getChild(p), hash_set, current);
 		}
+	}
+
+	void MainControl::setPreferencesEnabled_(bool state)
+	{
+		preferences_dialog_->ok_button->setEnabled(state);
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

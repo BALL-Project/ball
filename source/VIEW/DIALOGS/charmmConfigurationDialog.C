@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.C,v 1.8 2004/12/22 16:19:49 amoll Exp $
+// $Id: charmmConfigurationDialog.C,v 1.9 2005/02/06 20:57:07 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>

@@ -23,6 +23,8 @@ namespace BALL
 
 bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = true;
 
+Composite composite_to_be_ignored_for_colorprocessors_;
+
 String getModelName(ModelType type) 
 	throw()
 {
@@ -116,7 +118,7 @@ bool modelMustBeRebuild(ModelType type)
 					type == MODEL_SA_SURFACE ||
 					type == MODEL_BACKBONE 	||
 					type == MODEL_FORCES    ||
-					type == MODEL_BALL_AND_STICK||
+ 					type == MODEL_BALL_AND_STICK||
 					type == MODEL_CARTOON);
 }
 
@@ -249,4 +251,40 @@ String createTemporaryFilename()
 	return filename;
 }
 	
+
+Vector3 getNormal(const Vector3& v)
+	throw()
+{
+	Vector3 n = v % Vector3(1,0,0);
+	if (Maths::isZero(n.getSquareLength())) 
+	{ 
+		n = v % Vector3(0,1,0);
+		if (Maths::isZero(n.getSquareLength())) 
+		{
+			n = v % Vector3(0,0,1);
+		}
+	}
+	n.normalize();
+
+	return n;
+}
+
+void logString(const String& data)
+{
+	if (MainControl::getInstance(0) == 0) return;
+	LogEvent* su = new LogEvent;
+	su->setMessage(data);
+	su->setShowOnlyInLogView(true);
+	qApp->postEvent(MainControl::getInstance(0), su);  // Qt will delete it when done
+}
+
+
+LogEvent::LogEvent()
+	: QCustomEvent(LOG_EVENT),
+		important_(false),
+		only_log_(false)
+{
+}
+
+
 } } //namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondModel.h,v 1.4 2004/06/07 10:17:16 amoll Exp $
+// $Id: HBondModel.h,v 1.5 2005/02/06 20:57:05 oliver Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_HBONDMODELPROCESSOR_H
@@ -66,13 +66,7 @@ namespace BALL
 			*/
 			const HBondModelProcessor& operator = (const HBondModelProcessor& model)
 				throw();
-
-			/** Swapping of HBondModelProcessor's.
-					Calls AtomBondModelBaseProcessor::swap
-			*/
-			void swap(HBondModelProcessor& model)
-				throw();
-
+			
 			//@}
 			/**	@name Processor specific methods 
 			*/ 

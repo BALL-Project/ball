@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.28 2004/12/20 21:23:52 amoll Exp $
+// $Id: cartoonModel.h,v 1.29 2005/02/06 20:57:05 oliver Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -16,6 +16,7 @@ namespace BALL
 	class SecondaryStructure;
 	class AtomContainer;
 	class Residue;
+	class Chain;
 
 	namespace VIEW
 	{
@@ -57,15 +58,10 @@ namespace BALL
 			*/ 
 			//@{
 		
-			/** Finish method.
-					This method will be internally called from the processor mechanism when the processor
-					has finished processing the Composite tree.
-					All previously inserted Atom objects 
-					(inserted in the method operator()) will be used to create a Cartoon.
-					\return bool true if the finish was successful, false otherwise
-					@exception OutOfMemory thrown if the memory allocation failed
+			/** 
 			*/
-			virtual bool finish();
+			virtual bool createGeometricObjects()
+				throw();
 			
 			/**	Operator method.
 					This method iterates over each Composite object reachable in the 
@@ -147,6 +143,22 @@ namespace BALL
 			bool drawDNAAsLadderModel()
 				throw() { return draw_DNA_as_ladder_;}
 
+			///
+			void enableRibbons(bool state)
+				throw() { draw_ribbon_ = state;}
+
+			///
+			bool ribbonsEnabled() const
+				throw() {return draw_ribbon_;}
+			
+			///
+			void enableTwoColors(bool state)
+				throw() { use_two_colors_ = state;}
+
+			///
+			bool twoColorsEnabled() const
+				throw() {return use_two_colors_;}
+
 			//@}
 
 			protected:
@@ -155,11 +167,19 @@ namespace BALL
 			virtual void clear_()
 				throw();
 
+			//_ collect the atoms, for which the spline points will be calculated
+			virtual void collectAtoms_(SecondaryStructure& ss)
+				throw();
+
+			//_ wrapper for collectAtoms_(SecondaryStructure)
+			virtual void collectAtoms_(Chain& chain)
+				throw();
+
 			void drawHelix_(SecondaryStructure& ss)
-				throw(Exception::OutOfMemory);
+				throw();
 
 			void drawStrand_(SecondaryStructure& ss)
-				throw(Exception::OutOfMemory);
+				throw();
 
 			void drawTube_(SecondaryStructure& ss)
 				throw();
@@ -170,10 +190,10 @@ namespace BALL
 			void drawWatsonCrickModel_(const SecondaryStructure& ss)
 				throw();
 
-			//_ create a spline segment between two spline points a and b
-			void createSplineSegment2_(const SplinePoint &a, const SplinePoint &b);
+			void drawRibbon_(Size start, Size end)
+				throw();
 
-			void computeSpline_(AtomContainer& ac);
+			void computeSpline_();
 
 			void insertTriangle_(Position v1, Position v2, Position v3, Mesh& mesh);
 			void drawStrand_(const Vector3& start,
@@ -194,21 +214,24 @@ namespace BALL
 
 			Composite* last_chain_;
 
-			SplinePoint last_spline_point_;
-
-			// used to speed up drawTube_
-			Index spline_vector_position_;
-
 			float helix_radius_;
 			float arrow_width_;
 			float arrow_height_;
 			float DNA_helix_radius_;
 			float DNA_ladder_radius_;
 			float DNA_base_radius_;
+			float ribbon_width_;
+			float ribbon_radius_;
 
 			bool  draw_DNA_as_ladder_;
+			bool  draw_ribbon_;
+			bool  use_two_colors_;
 
 			HashMap<Residue*, Residue*> complementary_bases_;
+			HashMap<SecondaryStructure*, Position> ss_to_spline_start_;
+			HashMap<SecondaryStructure*, Position> ss_nr_splines_;
+
+			bool no_ss_;
 	};
 
 	} // namespace VIEW

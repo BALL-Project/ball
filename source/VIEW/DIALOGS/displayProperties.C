@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.95 2004/12/15 16:34:48 amoll Exp $
+// $Id: displayProperties.C,v 1.96 2005/02/06 20:57:08 oliver Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -431,6 +431,18 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 		rep->setSurfaceDrawingPrecision(-1);
 		rep->setDrawingPrecision((DrawingPrecision) precision_combobox->currentItem());
 	}
+
+	// set the minimum necessary distance for the coloring grid according to model type
+	if (rep->getModelType() == MODEL_SE_SURFACE)
+	{
+		rep->getColorProcessor()->setAdditionalGridDistance(2.0);
+	}
+	else if (rep->getModelType() == MODEL_SA_SURFACE ||
+					 rep->getModelType() == MODEL_CARTOON ||
+					 rep->getModelType() == MODEL_BACKBONE)
+	{
+		rep->getColorProcessor()->setAdditionalGridDistance(4.0);
+	}
 	
 	if (new_representation)
 	{	
@@ -440,7 +452,9 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 			rep->getComposites().insert(*it);
 		}
 
-		getMainControl()->insert(*rep);
+		// this is not straight forward, but we have to prevent a second rendering run in the Scene...
+		// the insertion into the PrimitiveManager is needed to allow the Representation::update
+		getMainControl()->getPrimitiveManager().insert(*rep, false);
 	}
 
 	apply_button->setEnabled(false);
@@ -449,6 +463,10 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 
 	if (new_representation)
 	{
+		// now we can add the Representation to the GeometricControl
+		RepresentationMessage* rm = new RepresentationMessage(*rep, RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL);
+		notify_(rm);
+
 		// no refocus, if a this is not the only Representation
 		if ((getMainControl()->getPrimitiveManager().getRepresentations().size() < 2) && 
 				composites.size() > 0)

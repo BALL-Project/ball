@@ -43,7 +43,7 @@ namespace BALL
 
 			if (main_control_->stopedSimulation()) return;
 
-			SimulationOutput* su = new SimulationOutput;
+			LogEvent* su = new LogEvent;
 			su->setMessage(string);
 			su->setImportant(important);
 			qApp->postEvent(main_control_, su);  // Qt will delete it when done
@@ -193,12 +193,14 @@ namespace BALL
 				}
 
 				ForceField& ff = *minimizer_->getForceField();
-
+				bool ok = true;
 				// iterate until done and refresh the screen every "steps" iterations
 				while (!main_control_->stopedSimulation() &&
 								minimizer_->getNumberOfIterations() < minimizer_->getMaxNumberOfIterations() &&
-							 !minimizer_->minimize(steps_between_updates_, true))
+								ok)
 				{
+					minimizer_->minimize(steps_between_updates_, true);
+			
 					updateScene_();
 
 					waitForUpdateOfRepresentations_();
@@ -208,7 +210,7 @@ namespace BALL
 													minimizer_->getNumberOfIterations(), 
 													ff.getEnergy(), ff.getRMSGradient());
 					output_(message.ascii());
-
+					ok = !minimizer_->wasAborted();
 				}
 
 				updateScene_();
@@ -218,6 +220,12 @@ namespace BALL
 								+ String(minimizer_->getNumberOfIterations()) + " iterations\n",
 								true);
 				finish_();
+
+				if (!ok)
+				{
+					output_("Aborted EnergyMinimizer because of strange energy values.", true);
+					return;
+				}
 			}
 			catch(Exception::GeneralException e)
 			{
@@ -268,12 +276,14 @@ namespace BALL
 
 				SnapShotManager manager(ff.getSystem(), &ff, dcd_file_);
 				manager.setFlushToDiskFrequency(10);
+				bool ok = true;
 
 				// iterate until done and refresh the screen every "steps" iterations
-				while (md_->getNumberOfIterations() < steps_ &&
+				while (ok &&
+							 md_->getNumberOfIterations() < steps_ &&
 							 !main_control_->stopedSimulation())
 				{
-					md_->simulateIterations(steps_between_updates_, true);
+					ok = md_->simulateIterations(steps_between_updates_, true);
 					updateScene_();
 
 					waitForUpdateOfRepresentations_();
@@ -295,6 +305,12 @@ namespace BALL
 				output_("final RMS gadient    : " + String(ff.getRMSGradient()) + " kJ/(mol A)   after " 
 								+ String(md_->getNumberOfIterations()) + " iterations\n", 
 								true);
+
+				if (!ok)
+				{
+					output_("Aborted MDSimulation because of strange energy values.", true);
+				}
+
 				finish_();
 			}
 			catch(Exception::GeneralException e)
@@ -333,12 +349,6 @@ namespace BALL
 			md_ = md;
 		}
 
-		SimulationOutput::SimulationOutput()
-			: QCustomEvent(SIMULATION_OUTPUT_EVENT),
-			  important_(false)
-		{
-		}
-		
 		// =================================================0
 		
 		CalculateFDPBThread::CalculateFDPBThread()

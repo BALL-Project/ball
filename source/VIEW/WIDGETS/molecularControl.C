@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.91 2004/12/19 13:33:58 amoll Exp $
+// $Id: molecularControl.C,v 1.92 2005/02/06 20:57:11 oliver Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
@@ -28,9 +29,11 @@ MolecularControl::SelectableListViewItem::SelectableListViewItem(QListViewItem* 
 	: QCheckListItem(parent, text, QCheckListItem::CheckBox),
 		composite_(composite),
 		control_reference_(control),
-		ignore_change_(false)
+		ignore_change_(true)
 {
 	setText(1, type);
+	setOn(composite->isSelected());
+	ignore_change_ = false;
 }
 
 
@@ -39,14 +42,17 @@ MolecularControl::SelectableListViewItem::SelectableListViewItem(QListView* pare
 	: QCheckListItem(parent, text, QCheckListItem::CheckBox),
 		composite_(composite),
 		control_reference_(control),
-		ignore_change_(false)
+		ignore_change_(true)
 {
 	setText(1, type);
+	setOn(composite->isSelected());
+	ignore_change_ = false;
 }
 
 void MolecularControl::SelectableListViewItem::setSelected(bool state)
 {
 	QCheckListItem::setSelected(state);
+	
 	if (!state)
 	{
 		QListViewItem* child = firstChild();
@@ -67,8 +73,11 @@ void MolecularControl::SelectableListViewItem::stateChange(bool state)
 		return;
 	}
 
-	if (control_reference_.getMainControl()->compositesAreLocked())
+	if (control_reference_.getMainControl()->compositesAreLocked() ||
+			control_reference_.getMainControl()->updateOfRepresentationRunning())
 	{
+		if (composite_->isSelected() == state) return;
+
 		ignore_change_ = true;
 		setOn(!state);
 		return;
@@ -181,6 +190,9 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	throw()
 {
 	String hint;
+	bool busy = main_control.compositesAreLocked() ||
+							main_control.updateOfRepresentationRunning();
+
 	// prevent changes to composites while simulations are running
 	
 	// check for paste-slot: enable only if one selected item &&
@@ -188,8 +200,8 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	// 																			no simulation running &&
 	// 																			it makes sense
 	bool allow_paste = getSelection().size() <= 1 &&
-										 copy_list_.size() > 0 &&
-										 !main_control.compositesAreLocked();
+										 copy_list_.size() && 
+										 !busy;
 	if (allow_paste)
 	{
 		hint = "Paste a copied or cuted object into current selected object.";
@@ -211,7 +223,9 @@ void MolecularControl::checkMenu(MainControl& main_control)
 		else if (copy_list_.size() == 0)
 			hint = "No copied/cuted object.";
 		else if (main_control.compositesAreLocked())
-			hint = "Simulation running, cant copy meanwhile";
+			hint = "Simulation running, cant paste meanwhile";
+		else
+			hint = "Update of Representation running, cant paste meanwhile";
 	}
 	menuBar()->setItemEnabled(paste_id_, allow_paste);	
  	getMainControl()->setMenuHint(paste_id_, hint);
@@ -234,7 +248,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
 
 	// ------------------------------------------------------------------
 	// cut / delete  +  select / deselect
-	bool list_filled = (selected_.size() != 0 && !main_control.compositesAreLocked());
+	bool list_filled = selected_.size() && !busy;
 	
 	if (list_filled) hint = "";
 	else hint = "No item selected or simulation running";
@@ -253,7 +267,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	if (selected_.size() > 0)
 	{
 		// enable global delete entry for all GenericControls, if this Control has the selection
-		getMainControl()->setDeleteEntryEnabled(!main_control.compositesAreLocked());
+		getMainControl()->setDeleteEntryEnabled(!busy);
 	}
 }
 
@@ -294,11 +308,13 @@ bool MolecularControl::reactToMessages_(Message* message)
  				addComposite(composite_message->getComposite()->getRoot());
 
 				List<Composite*>::Iterator lit = open_items.begin();
+				HashMap<Composite*, SelectableListViewItem*>::Iterator to_find;
 				for (; lit != open_items.end(); lit++)
 				{
-					if (!composite_to_item_.has(*lit)) continue;
+					to_find = composite_to_item_.find(*lit);
+					if (to_find == composite_to_item_.end()) continue;
 
-					composite_to_item_[*lit]->setOpen(true);
+					to_find->second->setOpen(true);
 				}
 
 				return true;
@@ -316,7 +332,7 @@ bool MolecularControl::reactToMessages_(Message* message)
 	{
 		NewSelectionMessage* nsm = (NewSelectionMessage*) message;
 		setSelection_(true, nsm->openItems());
-		updateSelection();
+		return true;
 	}
 
 	return false;
@@ -389,12 +405,13 @@ void MolecularControl::compositeProperties()
 
 void MolecularControl::bondProperties()
 {
-	if (((Atom*) context_composite_)->countBonds() == 0) 
+	Atom* const atom = dynamic_cast<Atom*>(context_composite_);
+	if (atom->countBonds() == 0) 
 	{
 		setStatusbarText("Atom has no bonds!");
 		return;
 	}
-	BondProperties bs((Atom*) context_composite_, this);
+	BondProperties bs(atom, this);
 	bs.exec();
 }
 	
@@ -420,12 +437,12 @@ void MolecularControl::showFilename()
 {
 	if (context_composite_ == 0) return;
 
-	Composite* c_ptr = &context_composite_->getRoot();
+	const AtomContainer* const ac = dynamic_cast<AtomContainer*>(&context_composite_->getRoot());
 	
-	if (RTTI::isKindOf<AtomContainer>(*c_ptr))
+	if (ac != 0)
 	{
 		setStatusbarText("Composite is from file  " +
-											((const AtomContainer*)c_ptr)->getProperty("FROM_FILE").getString());
+											ac->getProperty("FROM_FILE").getString());
 	}
 	else
 	{
@@ -449,7 +466,7 @@ void MolecularControl::updateSelection()
 		if (item->isSelected())
 		{
 			// always add systems
-			Composite* composite = item->getComposite();
+			Composite* const composite = item->getComposite();
 			if (composite->getParent() == 0)
 			{
 				selected_.push_back(composite);
@@ -470,11 +487,16 @@ void MolecularControl::updateSelection()
 		}
 	}
 
-	
+
 	if (selected_.size() == 1 && RTTI::isKindOf<System>(**selected_.begin()))
 	{
 		context_composite_ = *selected_.begin();
-		showFilename();
+
+		bool is_in_move_mode = 
+			(Scene::getInstance(0) != 0) &&
+			(Scene::getInstance(0)->getMode() == Scene::MOVE__MODE);
+	
+		if (!is_in_move_mode) showFilename();
 	}
 
 	// sent new selection through tree
@@ -514,31 +536,12 @@ void MolecularControl::onContextMenu_(QListViewItem* item,  const QPoint& point,
 
 void MolecularControl::selectedComposite_(Composite* composite, bool state)
 {
-	const HashSet<Composite*>& selection = getMainControl()->getSelection();
-	if (selection.has(composite) == state)
-	{
-		return;
-	}
+	if (composite->isSelected() == state) return;
 	
-	SelectableListViewItem* item = composite_to_item_[composite];
-	item->setOn(state);
-	item->setSelected(true);
-	if (selection.size() < 10)
-	{
-		QListViewItem* parent = item->parent();
-		while (parent != 0)
-		{
-			parent->setOpen(true);
-			parent = parent->parent();
-		}
-	}
-
 	CompositeMessage::CompositeMessageType id = CompositeMessage::DESELECTED_COMPOSITE;
 	if (state) id = CompositeMessage::SELECTED_COMPOSITE;
 	CompositeMessage* message = new CompositeMessage(*composite, id);
 	notify_(message);
-	
-	setSelection_(false);
 }
 
 
@@ -626,14 +629,18 @@ void MolecularControl::addComposite(Composite& composite, QString* own_name)
 Size MolecularControl::removeComposite(Composite& composite)
 	throw()
 {
-	if (!composite_to_item_.has(&composite)) 
+	HashMap<Composite*, SelectableListViewItem*>::Iterator to_find = 
+		composite_to_item_.find(&composite);
+
+	if (to_find == composite_to_item_.end())
 	{
-		setStatusbarText(String("Tried to remove an invalid Composite in ") + __FILE__ + __LINE__, true);
+		setStatusbarText(String("Tried to remove an invalid Composite in ") 
+														 + __FILE__ + " " + __LINE__, true);
 		return 0;
 	}
 
 	nr_items_removed_ = 1;
-	removeRecursive_(composite_to_item_[&composite]);
+	removeRecursive_(to_find->second);
 	return nr_items_removed_;
 }
 
@@ -661,6 +668,8 @@ void MolecularControl::onNotify(Message *message)
 	Log.error() << "MolecularControl " << this << " onNotify " << message << std::endl;
 #endif
 
+	listview->setUpdatesEnabled(false);
+
  	GenericControl::onNotify(message);
 
 	// react accordingly to the given message
@@ -669,18 +678,24 @@ void MolecularControl::onNotify(Message *message)
 		// if message makes an update of the control necessary
 		// sends new selection through tree
 		updateSelection();
+		listview->setUpdatesEnabled(true);
+		listview->triggerUpdate();
+		return;
 	}
+	listview->setUpdatesEnabled(true);
 }
 
 
 void MolecularControl::invalidateSelection()
 {
+	listview->setUpdatesEnabled(false);
 	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)
 	{
-		it.current()->setSelected(FALSE);
+		it.current()->setSelected(false);
 	}
 
+	listview->setUpdatesEnabled(true);
 	listview->triggerUpdate();
 }
 
@@ -690,47 +705,49 @@ void MolecularControl::setSelection_(bool open, bool force)
 	throw()
 {	
 	const HashSet<Composite*>& selection = getMainControl()->getSelection();
-	
-	if (selection.size() == 0)
+	if (!selection.size())
 	{
+		listview->clearSelection();
+
 		QListViewItemIterator it(listview);
 		for (; it.current(); ++it)
 		{
-			((QCheckListItem*) it.current())->setOn(false);
+			SelectableListViewItem* item = dynamic_cast<SelectableListViewItem*>(it.current());
+			item->setOn(false);
+			item->setSelected(false);
 		}
 		return;
 	}
 
-	if (selection.size() > 5 && !force) open = false;
+	if (!force) open = false;
 
+	Size nr = 0;
 	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)
 	{
-		SelectableListViewItem* item = (SelectableListViewItem*) it.current();
-		if (selection.has(item->getComposite()))
-		{
-			item->setOn(true);
-			if (open)
-			{
-				item->setSelected(true);
-				QListViewItem* parent = item->parent();
-				while (parent != 0)
-				{
-					parent->setOpen(true);
-					parent = (QListViewItem*)parent->parent();
-				}
-			}
-		}
-		else
+		SelectableListViewItem* item = dynamic_cast<SelectableListViewItem*>(it.current());
+		if (!item->getComposite()->isSelected()) 
 		{
 			item->setOn(false);
-			if (open)
+			item->setSelected(false);
+			continue;
+		}
+		
+		nr++;
+		item->setOn(true);
+		item->setSelected(true);
+		if (open)
+		{
+			QListViewItem* parent = item->parent();
+			while (parent != 0 && !parent->isOpen())
 			{
-				item->setSelected(false);
-				item->setOpen(false);
+				parent->setOpen(true);
+				parent = parent->parent();
 			}
 		}
 	}
+
+	setStatusbarText(String(nr) + " objects selected.");
 }
 
 
@@ -760,10 +777,8 @@ void MolecularControl::cut()
 			(**it).getParent()->removeChild(**it);
  			if (was_delete_) delete *it;
 		}
-		else
-		{
-			getMainControl()->remove(**it, was_delete_);
-		}
+
+		getMainControl()->remove(**it, was_delete_);
 
 		if (!was_delete_) 
 		{
@@ -774,13 +789,15 @@ void MolecularControl::cut()
 	setStatusbarText("Deleted " + String(nr_of_items) + " items.");
 
 	selected_.clear();
+	listview->setUpdatesEnabled(true);
+	listview->triggerUpdate();
 	ControlSelectionMessage* message = new ControlSelectionMessage;
 	notify_(message);
 
 	HashSet<Composite*>::Iterator roots_it = roots.begin();
 	for (roots_it = roots.begin(); roots_it != roots.end(); roots_it++)
 	{
-		CompositeMessage* ccmessage = new CompositeMessage(**roots_it, CompositeMessage::CHANGED_COMPOSITE);
+		CompositeMessage* ccmessage = new CompositeMessage(**roots_it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 		notify_(ccmessage);
 	}
 }
@@ -840,11 +857,22 @@ void MolecularControl::paste()
 		changed_roots.insert(&parent->getRoot());
 	}
 
+	listview->setUpdatesEnabled(false);
+
+	// update of molecular control first
 	HashSet<Composite*>::Iterator it = changed_roots.begin();
 	for (; it != changed_roots.end(); it++)
 	{
 		updateListViewItem_(0, **it);
-		CompositeMessage *new_message = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE);
+		listview->setUpdatesEnabled(true);
+	}
+
+	listview->triggerUpdate();
+
+	// update of representations, etc.
+	for (it = changed_roots.begin(); it != changed_roots.end(); it++)
+	{
+		CompositeMessage *new_message = new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 		notify_(*new_message);
 	}
 }
@@ -923,10 +951,8 @@ MolecularControl::SelectableListViewItem*
 		// no, insert into the current item
 		new_item = new SelectableListViewItem(parent, name, type, &composite, *this);
 	}
-	CHECK_PTR(new_item);
 
 	composite_to_item_[&composite] = new_item;
-
 	recurseGeneration_(new_item, composite);
 
 	return new_item;
@@ -936,14 +962,17 @@ MolecularControl::SelectableListViewItem*
 void MolecularControl::updateListViewItem_(SelectableListViewItem* parent, Composite& composite)
 	throw()
 {
+	HashMap<Composite*, SelectableListViewItem*>::Iterator to_find = 
+		composite_to_item_.find(&composite);
+
 	// an item does not exist => create a new SelectableListViewItem 
-	if (!composite_to_item_.has(&composite))
+	if (to_find == composite_to_item_.end())
 	{
 		generateListViewItem_(parent, composite);
 		return;
 	}
 
-	recurseUpdate_(composite_to_item_[&composite], composite);
+	recurseUpdate_(to_find->second, composite);
 }
 
 
@@ -1216,14 +1245,7 @@ Size MolecularControl::applySelector(const String& expression)
 void MolecularControl::highlightSelection()
 	throw()
 {
-	QListViewItemIterator it1(listview);
-	for (; it1.current(); ++it1)
-	{
-		SelectableListViewItem* item = (SelectableListViewItem*) it1.current();
-		item->setOpen(false);
-		listview->setSelected(item, false);
-	}
-
+	listview->setUpdatesEnabled(false);
 	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)
 	{
@@ -1239,7 +1261,15 @@ void MolecularControl::highlightSelection()
 				parent = parent->parent();
 			}
 		}
+		else
+		{
+			item->setOpen(false);
+			listview->setSelected(item, false);
+		}
+			
 	}
+	listview->setUpdatesEnabled(true);
+	listview->triggerUpdate();
 }
 
 } } // namespaces

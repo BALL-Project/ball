@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.72 2004/12/16 18:53:59 amoll Exp $
+// $Id: geometricControl.C,v 1.73 2005/02/06 20:57:11 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -19,10 +19,6 @@
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/disc.h>
-#include <BALL/VIEW/PRIMITIVES/point.h>
-#include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
-#include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
-#include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/MATHS/simpleBox3.h>
@@ -135,11 +131,15 @@ namespace BALL
 		void GeometricControl::updateRepresentation(Representation& rep)
 			throw()
 		{
-			if (!representation_to_item_.has(&rep)) return;
+			const HashMap<Representation*, SelectableListViewItem*>::Iterator to_find = 
+				representation_to_item_.find(&rep);
 
-			SelectableListViewItem* item = (SelectableListViewItem*) representation_to_item_[&rep]; 
+			if (to_find == representation_to_item_.end()) return;
+
+			SelectableListViewItem* const item = to_find->second;
 
 			// prevent flickering in GeometricControl, e.g. while a simulation is running
+			// so only update if something changed
 			String new_text = getRepresentationName_(rep);
 			bool changed_content = item->text(0).ascii() != new_text;
 			if (changed_content) item->setText(0, new_text.c_str());
@@ -160,6 +160,7 @@ namespace BALL
 
 			if (changed_content) listview->triggerUpdate();
 		}
+
 
 		void GeometricControl::onNotify(Message *message)
 			throw()
@@ -195,6 +196,7 @@ namespace BALL
 					return;
 
 				case RepresentationMessage::ADD:
+				case RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL:
 					addRepresentation(*rep);
 					return;
 			
@@ -386,7 +388,7 @@ namespace BALL
 			context_menu_.clear();
 
 			// get Representation address
-			Representation* rep = getRepresentation(*item);
+			Representation* const rep = getRepresentation(*item);
 			if (rep == 0) return;
 			// create the context menu
 			context_representation_ = rep;
@@ -459,9 +461,10 @@ namespace BALL
 					c_ptr = c_ptr->getParent();
 				}
 
-				if (RTTI::isKindOf<AtomContainer>(*c_ptr))
+				const AtomContainer* const ac = dynamic_cast<const AtomContainer*>(c_ptr);
+				if (ac != 0)
 				{
-					name = ((const AtomContainer*)c_ptr)->getProperty("FROM_FILE").getString() + "->" + name;
+					name = ac->getProperty("FROM_FILE").getString() + "->" + name;
 				}
 				
 				name.trimRight("->");
@@ -478,6 +481,7 @@ namespace BALL
 				colorMeshDlg_->setMesh((Mesh*)*(rep->getGeometricObjects().begin()), rep);
 			}
 		}
+
 
 		List<Representation*> GeometricControl::getSelection() const
 			throw()
@@ -508,53 +512,38 @@ namespace BALL
 		void GeometricControl::focusRepresentation()
 		{
 			if (getSelectedItems().size() != 1) return;
-			Representation* rep = *getSelection().begin();
+			Representation* const rep = *getSelection().begin();
 			
 			GeometricCenterProcessor centerp;
 			BoundingBoxProcessor bbox;
 			centerp.start();
 			bbox.start();
 
+			Vector3 center;
 			List<GeometricObject*>::Iterator it = rep->getGeometricObjects().begin();
 			for (; it != rep->getGeometricObjects().end(); it++)
 			{
-				GeometricObject& go = **it;
-				Vector3 center;
+				const GeometricObject& go = **it;
 
 				// cant use Vertex or Vertex2 here, no idea why
-				if (RTTI::isKindOf<TwoColoredLine>(go))
+				if (RTTI::isKindOf<Vertex2>(go))
 				{
-					TwoColoredLine& v = reinterpret_cast<TwoColoredLine&>(go);
+					const Vertex2& v = *dynamic_cast<const Vertex2*>(&go);
 					center = (v.getVertex1() + (v.getVertex2() - v.getVertex1()) / 2.0);
 
 					bbox.operator()(v.getVertex1());
 					bbox.operator()(v.getVertex2());
 				}
-				else if (RTTI::isKindOf<TwoColoredTube>(go))
+				else if (RTTI::isKindOf<Vertex>(go))
 				{
-					TwoColoredTube& v = reinterpret_cast<TwoColoredTube&>(go);
-					center = (v.getVertex1() + (v.getVertex2() - v.getVertex1()) / 2.0);
-
-					bbox.operator()(v.getVertex1());
-					bbox.operator()(v.getVertex2());
-				}
-				else if (RTTI::isKindOf<Tube>(go))
-				{
-					Tube& v = reinterpret_cast<Tube&>(go);
-					center = (v.getVertex1() + (v.getVertex2() - v.getVertex1()) / 2.0);
-
-					bbox.operator()(v.getVertex1());
-					bbox.operator()(v.getVertex2());
-				}
-				else if (RTTI::isKindOf<Point> (go))
-				{
-					Point& v = reinterpret_cast<Point&>(go);
+					const Vertex& v = *dynamic_cast<const Vertex*>(&go);
 					center = v.getVertex();
+
 					bbox.operator()(v.getVertex());
 				}
 				else if (RTTI::isKindOf<SimpleBox3>(go))
 				{
-					SimpleBox3& b = reinterpret_cast<SimpleBox3&>(go);
+					const SimpleBox3& b = reinterpret_cast<const SimpleBox3&>(go);
 					center = b.a + (b.b - b.a) /2;
 
 					bbox.operator()(b.a);
@@ -562,21 +551,21 @@ namespace BALL
 				}
 				else if (RTTI::isKindOf<Sphere>(go))
 				{
-					Sphere& s = reinterpret_cast<Sphere&>(go);
+					const Sphere& s = reinterpret_cast<const Sphere&>(go);
 					center = s.getPosition();
 
 					bbox.operator()(s.getPosition());
 				}
 				else if (RTTI::isKindOf<Disc>(go))
 				{
-					Disc& d = reinterpret_cast<Disc&>(go);
+					const Disc& d = reinterpret_cast<const Disc&>(go);
 					center = d.getCircle().p;
 
 					bbox.operator()(d.getCircle().p);
 				}
 				else if (RTTI::isKindOf<Mesh>(go))
 				{
-					Mesh& mesh = reinterpret_cast<Mesh&>(go);
+					const Mesh& mesh = reinterpret_cast<const Mesh&>(go);
 
 					for (Size index = 0; index < mesh.vertex.size(); ++index)
 					{
@@ -587,7 +576,7 @@ namespace BALL
 				}
 				else if (RTTI::isKindOf<BALL::VIEW::Box>(go))
 				{
-					BALL::VIEW::Box& box = reinterpret_cast<BALL::VIEW::Box&>(go);
+					const BALL::VIEW::Box& box = reinterpret_cast<const BALL::VIEW::Box&>(go);
  					centerp.operator()(box.getPoint() + box.getHeightVector() * 0.5 + box.getRightVector() * 0.5);
 					bbox.operator()(box.getPoint());
 					bbox.operator()(box.getPoint() + box.getHeightVector());
@@ -612,10 +601,10 @@ namespace BALL
 			bbox.finish();
 			
 			Vector3 vwp = centerp.getCenter();
-			float view_distance = (bbox.getUpper() - bbox.getLower()).getLength() - vwp.z + 3;
+			const float view_distance = (bbox.getUpper() - bbox.getLower()).getLength() - vwp.z + 3;
 
 			// update scene
-			SceneMessage *scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
+			SceneMessage * const scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
 			scene_message->getStage().getCamera().setLookAtPosition(vwp);
 			vwp.z += view_distance;
 			scene_message->getStage().getCamera().setViewPoint(vwp);

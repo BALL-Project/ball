@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.h,v 1.13 2004/10/08 14:49:20 amoll Exp $
+// $Id: stageSettings.h,v 1.14 2005/02/06 20:57:04 oliver Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_STAGESETTINGS_H
@@ -54,6 +54,10 @@ namespace BALL
 			void setDefaultValues(bool /*all*/ = false)
 				throw();
 
+			///
+			void getGLSettings()
+				throw();
+
 			public slots:
 
 			/// Show a QColorDialog to select a new background color for the Scene
@@ -76,7 +80,7 @@ namespace BALL
 
 			Scene* scene_;
 
-			Stage* stage_;
+			VIEW::Stage* stage_;
 		};
 
 } }

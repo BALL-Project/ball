@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.79 2004/12/23 00:13:09 amoll Exp $
+// $Id: molecularStructure.C,v 1.80 2005/02/06 20:57:12 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -115,7 +115,6 @@ namespace BALL
 			hint = "Configure the force field";
 			setup_ff_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Options", this, 
 												SLOT(setupForceField()),0,-1, hint);
-			getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 
 			// Tools Menu -------------------------------------------------------------------
 			getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
@@ -685,19 +684,60 @@ namespace BALL
 				return;
 			}
 
+			a1->deselect();
+			a2->deselect();
+
 			StructureMapper sm(*a1, *a2);
 			double	rmsd = sm.calculateRMSD();
 
-			String rmsd_text("Calcuted RMSD: " + String(rmsd));
-			if (sm.getBijection().size() != a1->countAtoms())
+			String rmsd_text("Calcuted RMSD: " + String(rmsd) + " A.");
+			if (sm.getBijection().size() == a1->countAtoms() &&
+			    sm.getBijection().size() == a2->countAtoms())
 			{
-				Index not_matched = max(a1->countAtoms() - sm.getBijection().size(), 
-																a2->countAtoms() - sm.getBijection().size());
-				String warning("WARNING: " + String(not_matched) + " atoms were not mapped.");
-				rmsd_text += "  WARNING: not all atoms were mapped.";
+				setStatusbarText(rmsd_text + ". All atom could be matched.", true);
+				return;
 			}
 
+			Index not_matched = max(a1->countAtoms() - sm.getBijection().size(), 
+															a2->countAtoms() - sm.getBijection().size());
+			rmsd_text += "  WARNING: " + String(not_matched) + " atoms were not mapped and are now selected";
 			setStatusbarText(rmsd_text, true);
+
+			HashSet<Atom*> atom_set;
+			AtomIterator ait = a1->beginAtom();
+			for (; +ait; ++ait)
+			{
+				atom_set.insert(&*ait);
+			}
+
+			ait = a2->beginAtom();
+			for (; +ait; ++ait)
+			{
+				atom_set.insert(&*ait);
+			}
+
+			StructureMapper::AtomBijection& ab = 
+				(StructureMapper::AtomBijection&) sm.getBijection();
+
+			StructureMapper::AtomBijection::iterator ab_it= ab.begin();
+			for (; ab_it != ab.end(); ++ab_it)
+			{
+				atom_set.erase(ab_it->first);
+				atom_set.erase(ab_it->second);
+			}
+
+			HashSet<Atom*>::Iterator hit = atom_set.begin();
+			for (; +hit; ++hit)
+			{
+				(*hit)->select();
+				getMainControl()->getSelection().insert(*hit);
+			}
+
+			getMainControl()->updateRepresentationsOf(*a1, true);
+			getMainControl()->updateRepresentationsOf(*a2, true);
+
+			NewSelectionMessage* new_message = new NewSelectionMessage;
+			notify_(new_message);
 		}
 
 		void MolecularStructure::mapProteins()
@@ -903,10 +943,6 @@ namespace BALL
 			}
 			catch(...)
 			{
-			}
-
-			if (!ok)
-			{
 				setStatusbarText("Force field setup failed.", true);
 				selectUnassignedForceFieldAtoms_();
 				return;
@@ -920,6 +956,14 @@ namespace BALL
 					new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 				notify_(change_message);
 			}
+
+			if (!ok)
+			{
+				setStatusbarText("Force field setup failed.", true);
+				selectUnassignedForceFieldAtoms_();
+				return;
+			}
+
 
 			// Compute the single point energy and print the result to Log and the status bar.
 			ff.updateEnergy();
@@ -980,10 +1024,6 @@ namespace BALL
 			}
 			catch(...)
 			{
-			}
-
-			if (!ok)
-			{
 				setStatusbarText("Force field setup failed.", true);
 				selectUnassignedForceFieldAtoms_();
 				return;
@@ -998,6 +1038,14 @@ namespace BALL
 				notify_(change_message);
 			}
 
+
+			if (!ok)
+			{
+				setStatusbarText("Force field setup failed.", true);
+				selectUnassignedForceFieldAtoms_();
+				return;
+			}
+			
 			// Print some stats on the force field
 			Log.info() << "Set up the force field for " << ff.getAtoms().size() << " atoms with parameters from " 
 								 << ff.getParameters().getFilename() << "." << std::endl;
@@ -1057,17 +1105,25 @@ namespace BALL
 					thread->start();
 			#endif
 				
-		#else
+   		#else
 				// ============================= WITHOUT MULTITHREADING =================================
 				// iterate until done and refresh the screen every "steps" iterations
-				while (!minimizer->minimize(minimization_dialog_.getRefresh(), true) &&
-								minimizer->getNumberOfIterations() < minimizer->getMaxNumberOfIterations())
+				bool ok = true;
+				while (ok && minimizer->getNumberOfIterations() < minimizer->getMaxNumberOfIterations())
 				{
+					minimizer->minimize(minimization_dialog_.getRefresh(), true);
 					getMainControl()->update(*system);
 
 					setStatusbarText(String("Iteration ") + String(minimizer->getNumberOfIterations())
 													 + ": E = " + String(ff.getEnergy()) + " kJ/mol, RMS grad = "
 													 + String(ff.getRMSGradient()) + " kJ/(mol A)", true);
+					ok = !minimizer->wasAborted();
+				}
+
+				if (!ok)
+				{
+					setStatusbarText("Aborted EnergyMinimizer because of strange energy values.", true);
+					return;
 				}
 
 				// Print the final results.
@@ -1140,13 +1196,6 @@ namespace BALL
 			catch(...)
 			{
 			}
-
-			if (!ok)
-			{
-				setStatusbarText("Force field setup failed.", true);
-				selectUnassignedForceFieldAtoms_();
-				return;
-			}
 			
 			ff.updateEnergy();
 
@@ -1158,6 +1207,15 @@ namespace BALL
 					new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 				notify_(change_message);
 			}
+
+			if (!ok)
+			{
+				setStatusbarText("Force field setup failed.", true);
+				selectUnassignedForceFieldAtoms_();
+				return;
+			}
+			
+			ff.updateEnergy();
 
 			
 			// Create an instance of the molecular dynamics simulation.
@@ -1228,9 +1286,10 @@ namespace BALL
 				SnapShotManager manager(system, &getForceField(), dcd);
 				manager.setFlushToDiskFrequency(10);
 				
-				while (mds->getNumberOfIterations() < md_dialog_.getNumberOfSteps())
+				bool ok = true;
+				while (mds->getNumberOfIterations() < md_dialog_.getNumberOfSteps() && ok)
 				{
-					mds->simulateIterations(steps, true);
+					ok = mds->simulateIterations(steps, true);
 					getMainControl()->update(*system);
 					if (md_dialog_.saveImages()) 
 					{
@@ -1250,6 +1309,12 @@ namespace BALL
 				}
 
 				if (dcd) manager.flushToDisk();
+
+				if (!ok)
+				{
+					setStatusbarText("Aborted MDSimulation because of strange energy values.", true);
+					return;
+				}
 
 				Log.info() << std::endl << "simulation terminated." << std::endl << endl;
 				Log.info() << ff.getResults();
@@ -1414,7 +1479,7 @@ namespace BALL
 			}
 
 			HashSet<const Atom*>::ConstIterator ait = getForceField().getUnassignedAtoms().begin();
-			for (; ait != getForceField().getUnassignedAtoms().end(); ait++)
+			for (; +ait; ait++)
 			{
 				(const_cast<Atom*>(*ait))->select();
 	

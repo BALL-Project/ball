@@ -11,6 +11,7 @@
 #include <qcheckbox.h>
 #include <qslider.h>
 #include <qwidgetstack.h>
+#include <qlistview.h>
 
 namespace BALL
 {
@@ -26,7 +27,7 @@ StageSettings::StageSettings( QWidget* parent,  const char* name, WFlags fl )
 	scene_ = (Scene*) parent;
 	updateFromStage();
 
-	insertEntry(this, "OpenGL");
+	insertEntry(this, "Display");
 	setWidgetStack(widget_stack);
 }
 
@@ -55,6 +56,7 @@ void StageSettings::updateFromStage()
 	animation_smoothness->setValue((int) (Scene::getAnimationSmoothness() * 10.0));
 	eyeDistanceChanged();
 	focalDistanceChanged();
+	getGLSettings();
 }
 
 
@@ -85,6 +87,7 @@ void StageSettings::apply()
 	Scene::setShowLightSources(show_lights_->isChecked());
 
 	Scene::setAnimationSmoothness(((float)animation_smoothness->value()) / 10.0);
+	((Scene*)Scene::getInstance(0))->getGLRenderer().enableVertexBuffers(use_vertex_buffers->isChecked());
 }
 
 
@@ -114,6 +117,11 @@ void StageSettings::setDefaultValues(bool all)
 		eye_distance_slider->setValue(20);
 		focal_distance_slider->setValue(40);
 		swap_sss_button->setChecked(false);
+	}
+
+	if (use_vertex_buffers->isEnabled())
+	{
+		use_vertex_buffers->setChecked(true);
 	}
 }
 
@@ -152,6 +160,31 @@ void StageSettings::focalDistanceChanged()
 void StageSettings::fogStateChanged()
 {
 	fog_slider->setEnabled(enable_fog->isChecked());
+}
+
+void StageSettings::getGLSettings()
+	throw()
+{
+	GLRenderer& renderer = ((Scene*)Scene::getInstance(0))->getGLRenderer();
+	if (renderer.getVendor() == "") return;
+	vendor_label->setText(renderer.getVendor().c_str());
+	version_label->setText(renderer.getOpenGLVersion().c_str());
+	renderer_label->setText(renderer.getRenderer().c_str());
+	extensions_list->clear();
+	vector<String> extensions = renderer.getExtensions();
+	
+	for (Position p = 0; p < extensions.size(); p++)
+	{
+		QListViewItem* item = new QListViewItem(extensions_list, extensions[p].c_str());
+		extensions_list->insertItem(item);
+	}
+
+	if (!renderer.vertexBuffersSupported())
+	{
+		use_vertex_buffers->setEnabled(false);
+	}
+
+	use_vertex_buffers->setChecked(renderer.vertexBuffersEnabled());
 }
 
 

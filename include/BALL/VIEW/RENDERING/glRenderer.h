@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.28 2005/02/06 09:44:54 oliver Exp $
+// $Id: glRenderer.h,v 1.29 2005/02/06 20:57:06 oliver Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -27,12 +27,17 @@
 # include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
-
 #ifndef BALL_VIEW_RENDERING_GLQUADRICOBJECT_H
 # include <BALL/VIEW/RENDERING/glQuadricObject.h>
 #endif
 
-#include <qgl.h>
+#ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
+# include <BALL/VIEW/RENDERING/glDisplayList.h>
+#endif
+
+#ifndef BALL_VIEW_RENDERING_VERTEXBUFFER_H
+# include <BALL/VIEW/RENDERING/vertexBuffer.h>
+#endif
 
 namespace BALL
 {
@@ -42,13 +47,16 @@ namespace BALL
 	namespace VIEW
 	{
 		class GLDisplayList;
+		class Scene;
 
 		/** GLRenderer
 		 		Renderer which provides hardware accelerated OPENGL rendering.
 				\ingroup ViewRendering
 		*/
-		class BALL_EXPORT GLRenderer: public Renderer
+		class BALL_EXPORT GLRenderer
+			: public Renderer
 		{
+			friend class Scene;
 			public:
 
 			///
@@ -161,6 +169,12 @@ namespace BALL
 			void pickObjects2(List<GeometricObject*>& objects, int width, int height)
 				throw();
 
+			///
+			void enterPickingMode();
+
+			///
+			void exitPickingMode();
+
 			/**
 			 */
 			void setSize(float width, float height)
@@ -168,11 +182,11 @@ namespace BALL
 
 			///
 			float getXScale() const
-				throw() { return x_scale_;}
+				throw();
 
 			///
 			float getYScale() const
-				throw() { return y_scale_;}
+				throw();
 
 			/** Update the camera position with gluLookAt,
 			 		either from a given Camera, or from the default
@@ -197,16 +211,20 @@ namespace BALL
 			void initAlwaysFront()
 				throw();
 			
-			///
-			void removeDisplayListFor(const Representation& rep)
+			/// Remove all VertexBuffer and DisplayLists for the given Representation
+			void removeRepresentation(const Representation& rep)
 				throw();
 
-			///
-			void rebuildDisplayListFor(const Representation& rep)
+			/// Buffer the visualisation for the given Representation into OpenGL VertexBuffer Objects and DisplayLists.
+			void bufferRepresentation(const Representation& rep)
 				throw();
 
-			///
-			void drawFromDisplayList(const Representation& rep)
+			/// Draw the visualisation of the given Representation from the VertexBuffers and a DisplayList.
+			void drawBuffered(const Representation& rep)
+				throw();
+
+			/// Test if a Representation has a DisplayList.
+			bool hasDisplayListFor(const Representation& rep) const
 				throw();
 			
 			///
@@ -215,22 +233,59 @@ namespace BALL
 
 			///
 			StereoMode getStereoMode() const
-				throw() { return stereo_;}
+				throw();
 
 			///
 			RenderMode getRenderMode() const
-				throw() { return render_mode_;}
+				throw();
 			
 			///
-			virtual bool render(const Representation& representation)
+			virtual bool render(const Representation& representation, bool for_display_list = false)
 				throw();
 
-			//@}
-			// protected:
+			/** Test if a given opengl extension is supported by the current driver.
+			 		Call this only after Scene::initializeGL();
+			*/
+			bool isExtensionSupported(const String& extension) const
+				throw();
+
+			/// 
+			void clearVertexBuffersFor(Representation& rep)
+				throw();
 
 			///
-			virtual void render_(const GeometricObject* object)
+			bool vertexBuffersSupported() const
 				throw();
+
+			///
+			String getVendor();
+
+			///
+			String getRenderer();
+
+			///
+			String getOpenGLVersion();
+
+			///
+			vector<String> getExtensions();
+
+			///
+			bool enableVertexBuffers(bool state)
+				throw();
+
+			///
+			bool vertexBuffersEnabled() const;
+
+			///
+			DrawingMode getDrawingMode() const;
+
+			/** Check if Renderer is currently rendering.
+			 		Added for usage with multithreading.
+			*/
+			bool isBusy() const;
+
+			//@}
+			protected:
 
 			///
 			virtual void renderLabel_(const Label& /*label*/)
@@ -243,6 +298,12 @@ namespace BALL
 			///
 			virtual void renderMesh_(const Mesh& /*mesh*/)
 				throw();
+
+			///
+			void initDrawingMeshes_();
+
+			///
+			void finishDrawingMeshes_();
 
 			///
 			virtual void renderPoint_(const Point& /*point*/)
@@ -278,7 +339,7 @@ namespace BALL
 
 			//_
 			void setColor4ub_(const GeometricObject& object)
-				throw(){ setColorRGBA_(object.getColor()); }
+				throw();
 
 			//_
 			GLubyte* generateBitmapFromText_(const String& text, int& width, int& height) const
@@ -322,33 +383,42 @@ namespace BALL
 
 			//_
 			void normalVector3_(const Vector3& v) 
-				throw() { glNormal3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z);}
+				throw();
 
 			//_
 			void vertexVector3_(const Vector3& v)
-				throw() { glVertex3f((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z); }
+				throw();
 
 			//_
 			void translateVector3_(const Vector3& v)
-				throw() { glTranslatef((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z); }
+				throw();
 
 			//_
 			void scaleVector3_(const Vector3& v)
-				throw() { glScalef((GLfloat)v.x, (GLfloat)v.y, (GLfloat)v.z); }
+				throw();
 
 			//_
 			void rotateVector3Angle_(const Vector3& v, Real angle)
-				throw() { glRotatef(angle, v.x, v.y, v.z); }
+				throw();
 
 			//_
 			void scale_(float f)
-				throw() { glScalef(f, f, f);}
+				throw();
 
 			//_
 			void setColorRGBA_(const ColorRGBA& color)
-				throw() { glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());}
+				throw();
+
+			//_
+			void renderMeshWithVertexArray_(const Mesh& mesh)
+				throw();
+
+			//_ Wait until Renderer is not busy anymore
+			void checkBusy_()
+				throw();
+
 			///
-			Index 								drawing_mode_;
+			DrawingMode 					drawing_mode_;
 
 			///
 			Index 								drawing_precision_;
@@ -363,6 +433,7 @@ namespace BALL
 			GLDisplayList* 				GL_spheres_list_;
 			GLDisplayList* 				GL_tubes_list_;
 			GLDisplayList* 				GL_boxes_list_;
+			GLDisplayList* 				sphere_list_;
 
 			/* static array of vertices for sphere dots */
 			static const float sphere_vertices_[12][3];
@@ -372,19 +443,34 @@ namespace BALL
 			typedef HashMap<const GeometricObject*, Name> NameHashMap;
 			typedef HashMap<Name, const GeometricObject*> GeometricObjectHashMap;
 			typedef HashMap<const Representation*, GLDisplayList*> DisplayListHashMap;
+			typedef HashMap<const Mesh*, MeshBuffer*> MeshBufferHashMap;
 
 			GeometricObjectHashMap	name_to_object_;
 			NameHashMap							object_to_name_;
 			DisplayListHashMap 			display_lists_;
+			MeshBufferHashMap 			mesh_to_buffer_;
 			Name 										all_names_;
 			GLuint 									object_buffer_[BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS];
 			Vector3 								normal_vector_;
+			ColorRGBA 							dummy_color_;
+			const ColorRGBA* 				last_color_;
 
-			StereoMode stereo_;
-			RenderMode render_mode_;
+			StereoMode 							stereo_;
+			RenderMode 							render_mode_;
+
+			bool 										use_vertex_buffer_;
+			bool 										picking_mode_;
+			ModelType 							model_type_;
+			Position 								display_lists_index_;
+			bool 										busy_;
 		};
 
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/VIEW/RENDERING/glRenderer.iC>
+#	endif
+
 	} // namespace VIEW
+
 } // namespace BALL
 
 #endif // BALL_VIEW_RENDERING_GLRENDERER_H

@@ -1,15 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.9 2004/10/22 20:33:41 amoll Exp $
+// $Id: materialSettings.C,v 1.10 2005/02/06 20:57:08 oliver Exp $
 // 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 
 #include <qlabel.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
 #include <qslider.h>
 
 namespace BALL
@@ -17,7 +15,7 @@ namespace BALL
 	namespace VIEW
 	{
 
-		MaterialSettings::MaterialSettings( QWidget* parent,  const char* name, WFlags fl )
+		MaterialSettings::MaterialSettings(QWidget* parent, const char* name, WFlags fl)
 			: MaterialSettingsData( parent, name, fl ),
 				PreferencesEntry()
 		{
@@ -34,55 +32,49 @@ namespace BALL
 		void MaterialSettings::apply()
 			throw()
 		{
-			apply_(GL_SPECULAR, material_values_[0]);
-			apply_(GL_DIFFUSE,  material_values_[1]);
-			apply_(GL_AMBIENT,  material_values_[2]);
-			glMaterialf(GL_FRONT, GL_SHININESS, material_values_[3]);
-		}
+			Stage& stage = *Scene::getInstance(0)->getStage();
+			stage.setSpecularIntensity(	((float)specular_slider->value())  / 10.0);
+			stage.setDiffuseIntensity(	((float)diffuse_slider->value())   / 10.0);
+			stage.setAmbientIntensity(	((float)ambient_slider->value())   / 10.0);
+			stage.setShininess(					((float)shininess_slider->value()) / 10.0);
+			glMaterialf(GL_FRONT, GL_SHININESS, stage.getShininess());
+			glMaterialf(GL_FRONT, GL_SPECULAR,  stage.getSpecularIntensity());
+			glMaterialf(GL_FRONT, GL_DIFFUSE,   stage.getDiffuseIntensity());
+			glMaterialf(GL_FRONT, GL_AMBIENT,   stage.getAmbientIntensity());
 
-		void MaterialSettings::apply_(Index e, float value)
-			throw()
-		{
-			float f[4];
-			f[0] = f[1] = f[2] = value;
-			f[3] = 1.0;
-			glMaterialfv(GL_FRONT, e, f);
 		}
-
 
 		void MaterialSettings::setDefaultValues(bool /*all*/)
 			throw()
 		{
-			material_values_[0] = (float) 0.774;// specular
-			material_values_[1] = (float) 0.4; 	// diffuse
-			material_values_[2] = (float) 0.25; // ambient
-			material_values_[3] = (float) 76.8; // shininess
-
-			setValues_();
+			specular_slider->setValue((Index)(0.774 * 10.0));
+			diffuse_slider->setValue((Index)(0.4   	* 10.0));
+			ambient_slider->setValue((Index)(0.25 	* 10.0));
+			shininess_slider->setValue((Index)(76.8 * 10.0));
 		}
 
 
 		void MaterialSettings::ambientChanged()
 		{
-			setValues_(*ambient_slider, *ambient_label, 0);
+			setValues_(*ambient_slider, *ambient_label);
 		}
 
 		void MaterialSettings::specularChanged()
 		{
-			setValues_(*specular_slider, *specular_label, 1);
+			setValues_(*specular_slider, *specular_label);
 		}
 
 		void MaterialSettings::diffuseChanged()
 		{
-			setValues_(*diffuse_slider, *diffuse_label, 2);
+			setValues_(*diffuse_slider, *diffuse_label);
 		}
 
 		void MaterialSettings::shininessChanged()
 		{
-			setValues_(*shininess_slider, *shininess_label, 3);
+			setValues_(*shininess_slider, *shininess_label);
 		}
 
-		void MaterialSettings::setValues_(const QSlider& slider, QLabel& label, Position pos)
+		void MaterialSettings::setValues_(const QSlider& slider, QLabel& label)
 		{
 			String text = String(((float)slider.value()) / 10.0);
 			
@@ -94,19 +86,6 @@ namespace BALL
 			if (text.hasSuffix(".")) text += "0";
 				
 			label.setText(text.c_str());
-			material_values_[pos] = ((float)slider.value()) / 10.0;
-		}
-
-		void MaterialSettings::setValues_()
-		{
-			ambient_slider->setValue((Index)(material_values_[0] * 10.0));
-			specular_slider->setValue((Index)(material_values_[1] * 10.0));
-			diffuse_slider->setValue((Index)(material_values_[2] * 10.0));
-			shininess_slider->setValue((Index)(material_values_[3] * 10.0));
-			shininessChanged();
-			ambientChanged();
-			diffuseChanged();
-			specularChanged();
 		}
 
 	} // namespace VIEW
