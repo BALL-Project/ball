@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: files.C,v 1.7 2002/02/27 12:20:21 sturm Exp $
+// $Id: files.C,v 1.8 2003/11/29 14:47:11 oliver Exp $
+//
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>
@@ -133,7 +134,7 @@ AmberFF amber;
 void setup()
 {
 	// fragment DB
-	if (frag_db != 0)
+	if (frag_db == 0)
 	{
 		frag_db = new FragmentDB;
 	}
@@ -157,17 +158,45 @@ void setup()
 void checkStructures()
 {
 	// fragment DB
-	if (frag_db != 0)
+	if (frag_db == 0)
 	{
 		frag_db = new FragmentDB;
 	}
+
+	Log.info() << "system contains " << S.countAtoms() << " atoms." << endl;
+
+	// building bonds
+	S.apply(frag_db->build_bonds);
 
 	// checking residues
 	Log.info() << "checking system" << endl;
 	ResidueChecker check(*frag_db);
 	S.apply(check);
 
-	Log.info() << "system contains " << S.countAtoms() << " atoms." << endl;
+	// Check residue energies
+	S.deselect();
+	amber.setup(S);
+	ResidueIterator it = S.beginResidue();
+	for (; +it; ++it)
+	{
+		it->select();
+		amber.updateEnergy();
+		double residue_energy = amber.getStretchEnergy() + amber.getBendEnergy()
+													+ amber.getVdWEnergy();
+		
+		if (residue_energy > 100.0)
+		{
+			Log.info() << "suspicious energies in residue " << it->getFullName() << ":" << it->getID() << " " << residue_energy 
+								 << " kJ/mol (bend: " << amber.getBendEnergy() << " kJ/mol, stretch: " << amber.getStretchEnergy() 
+								 << " kJ/mol, vdW: " << amber.getVdWEnergy() << " kJ/mol)" << endl;
+		}
+		it->deselect();
+		double quality = std::max(0.0, std::min(1.0, (100.0 - residue_energy) / 100.0));
+		for (PDBAtomIterator ai = it->beginPDBAtom(); +ai; ++ai)
+		{
+			ai->setOccupancy(quality);
+		}
+	}
 }
 
 void singlePoint()
@@ -190,10 +219,10 @@ void optimize()
 		S.apply(selector);
 		// count selected vs. unselected atoms
 		Size selected = 0;
-		AtomIterator ai = S.beginAtom();
+		AtomConstIterator ai = S.beginAtom();
 		for (; +ai; ++ai)
 		{
-			if (ai->isSelected()) selected++;
+			selected += (ai->isSelected() ? 1 : 0);
 		}
 		Log.info() << "selected " << selected << " out of " << S.countAtoms() << " atoms." << endl;
 	}
@@ -212,14 +241,10 @@ void optimize()
 	minimizer.setEnergyDifferenceBound(1e-9);
 	minimizer.setMaxSameEnergy(20);
 	minimizer.setMaxGradient(max_gradient);
+	minimizer.setMaxNumberOfIterations(max_iterations);
 
-	Size max_restart = 15;
-	while ((amber.getRMSGradient() > minimizer.getMaxGradient())
-				 && (max_restart > 0))
-	{
-		minimizer.minimize();
-		max_restart--;
-	}
+	minimizer.minimize();
+
 	Log.info() << "minimization complete" << endl;
 	Log.info() << "final gradient: " << amber.getRMSGradient() << " kJ/mol A" << endl;
 	
@@ -227,6 +252,17 @@ void optimize()
 	amber.updateEnergy();
 	Log.info() << "final energy: " << amber.getEnergy() << " kJ/mol" << endl;
 
+	// dump the minimizer and force field options
+	// for documentation purposes
+	amber.options.dump(Log);
+	minimizer.options.dump(Log);
+
+	Log.info() << "done." << endl;
+}
+
+
+void writeSystem()
+{
 	// dissolve the system again
 	Log.info() << "writing PDB files" << endl;
 	for (Size i = 0; i < PDB_files.size(); i++)
@@ -234,13 +270,6 @@ void optimize()
 		PDB_files[i].moveBack();
 		PDB_files[i].write();
 	}
-
-	// dump the minimizer and force field options
-	// for documentation purposes
-	amber.options.dump(Log);
-	minimizer.options.dump(Log);
-
-	Log.info() << "done." << endl;
 }
 
 void addToSystem(System& system)

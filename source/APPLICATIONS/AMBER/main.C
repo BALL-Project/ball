@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.2 2002/02/27 12:20:22 sturm Exp $
+// $Id: main.C,v 1.3 2003/11/29 14:47:11 oliver Exp $
 
 #include <iomanip>
 
@@ -23,6 +23,7 @@ void usage()
 	            << "     -E                   perform an energy calculation" << endl
 	            << "     -O                   perform an energy minimization" << endl
 	            << "     -C                   check the input structures" << endl
+							<< endl
 	            << endl
 	            << "and <options> one or more of" << endl
 	            << "     -p <FILE>            read <FILE> as a PDB file" << endl
@@ -32,8 +33,30 @@ void usage()
 	            << "     -b                   try to build the bonds (e.g. for PDB files)" << endl
 	            << "     -v                   verbose output" << endl
 							<< "     -g <GRAD>            gradient criterion for optimization (in units of kJ/(mol A))" << endl
-							<< "     -s <STRING>          select only the atoms that match <STRING>" << endl
-							<< "     -f <FILE>            force field file (default: Amber/amber91.ini)" << endl
+							<< "     -i <GRAD>            maximum number of iterations (default: " << max_iterations  << endl
+							<< "     -s <STRING>          select only the atoms that match <STRING> for optimization." << endl
+							<< "                          STRING can contain any of the BALL expression predicates, e.g."<< endl
+							<< "                          'resname(ARG)' would select all arginines, to select their CA and CB only," << endl
+							<< "                          'resname(ARG) AND (name(CA) OR name(CB))' should do." << endl
+							<< "                          Supported predicates are:" << endl
+							<< "                            - name(<atomname>)" << endl
+							<< "                            - type(<atomtype>)" << endl
+							<< "                            - element(<element>)" << endl
+							<< "                            - residue(<residuename>)" << endl
+							<< "                            - residueID(<PDB ID>)" << endl
+							<< "                            - protein()" << endl
+							<< "                            - secondaryStruct()" << endl
+							<< "                            - solvent()" << endl
+							<< "                            - backbone()" << endl
+							<< "                            - chain(<chain ID>)" << endl
+							<< "                            - nucleotide()" << endl
+							<< "                            - connectedTo(<neighbors>) -- special syntax!" << endl
+							<< "                          All predicates can be combined using 'AND', 'OR', brackets," << endl
+							<< "                          and '!' (in front of a predicate) for negation." <<endl
+							<< "                          In order to avoid shell argument trouble, please enclose any" << endl
+							<< "                          expression string with single quotes (e.g. -s 'residueID(17)')." << endl
+							<< endl
+							<< "     -f <FILE>            force field file (default: "<< FF_filename << ")" << endl
 	            << endl;
 }
 
@@ -63,7 +86,7 @@ int main(int argc, char** argv)
 
 		// check for another argument for those 
 		// options requiring a filename (-p -h -H -g -s -f)
-		if (String("phHgsf").has(option[1]) && (i == (argc - 1)))
+		if (String("phHgisf").has(option[1]) && (i == (argc - 1)))
 		{
 			// pring usage hints, an error message, exit
 			usage();
@@ -129,6 +152,10 @@ int main(int argc, char** argv)
 				max_gradient = atof(argv[++i]);
 				break;
 
+			case 'i':		// maximum iterations
+				max_iterations = atoi(argv[++i]);
+				break;
+
 			case 'f':		// selection
 				FF_filename = argv[++i];
 				break;
@@ -165,6 +192,7 @@ int main(int argc, char** argv)
 	if (check_structures)
 	{
 		checkStructures();
+		writeSystem();
 	}
 	if (energy_calculation || energy_minimization)
 	{
@@ -175,6 +203,7 @@ int main(int argc, char** argv)
 	{
 		optimize();
 		singlePoint();
+		writeSystem();
 	}
 
 	// done

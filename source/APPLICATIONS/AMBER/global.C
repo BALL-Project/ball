@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.C,v 1.3 2002/02/27 12:20:22 sturm Exp $
+// $Id: global.C,v 1.4 2003/11/29 14:47:11 oliver Exp $
+//
+
 #include "global.h"
 
 FragmentDB*           frag_db = 0;
@@ -34,5 +36,6 @@ bool build_bonds = false;
 bool use_selection = false;
 String selection;
 double max_gradient = 0.1; // kJ/(mol A)
+Size max_iterations = 400;
 
-String FF_filename = "Amber/amber91.ini";
+String FF_filename = "Amber/amber96.ini";

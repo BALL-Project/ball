@@ -1,9 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: addHydrogens.C,v 1.12 2003/11/29 14:47:12 oliver Exp $
+//
+
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
-#include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
+#include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 #include <BALL/MOLMEC/COMMON/assignTypes.h>
 #include <BALL/KERNEL/selector.h>
 #include <BALL/STRUCTURE/defaultProcessors.h>
@@ -53,11 +56,6 @@ int main(int argc, char** argv)
 	Log << "normalizing names..." << endl;
 	S.apply(fragment_db.normalize_names);
 
-	// now we create the bonds between the atoms (PDB files hardly
-  // ever contain a complete set of CONECT records)																							
-	Log << "building bonds..." << endl;
-	S.apply(fragment_db.build_bonds);
-
 	// now we add any missing hydrogens to the residues
 	// the data on the hydrogen positions stems from the
 	// fragment database. However the hydrogen positions 
@@ -66,6 +64,11 @@ int main(int argc, char** argv)
 	S.apply(fragment_db.add_hydrogens);	
 	Log << "added " << fragment_db.add_hydrogens.getNumberOfInsertedAtoms() 
 			<< " atoms" << endl;
+
+	// now we create the bonds between the atoms (PDB files hardly
+  // ever contain a complete set of CONECT records)																							
+	Log << "building bonds..." << endl;
+	S.apply(fragment_db.build_bonds);
 
 	// now we check whether the model we built is consistent
 	// The ResidueChecker checks for charges, bond lengths,
@@ -91,7 +94,7 @@ int main(int argc, char** argv)
 	
 	// now we create a minimizer object that uses a conjugate 
 	// gradient algorithm to optimize the atom positions
-	SteepestDescentMinimizer minimizer;
+	ConjugateGradientMinimizer minimizer;
 
 	// calculate the total energy of the system
 	float initial_energy = FF.updateEnergy();
@@ -101,7 +104,7 @@ int main(int argc, char** argv)
 	// 1000 optimization steps
 	minimizer.setup(FF);
 	minimizer.setEnergyOutputFrequency(1);
-	minimizer.minimize(1000);
+	minimizer.minimize(50);
 
 	// calculate the terminal energy and print it
 	float terminal_energy = FF.getEnergy();

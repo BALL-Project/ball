@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.18 2003/09/19 18:43:50 amoll Exp $
+// $Id: main.C,v 1.19 2003/11/29 14:47:12 oliver Exp $
 //
 
 // order of includes is important:
@@ -10,23 +10,15 @@
 
 int main(int argc, char **argv)
 {
-	#ifdef Q_WS_X11
-		// doesnt work on some X11 servers
-		//XInitThreads();
-		//BALL::Log.error() << "Enabling multi threads in Xlib" << std::endl;
-	#endif
-		
   QApplication application(argc, argv);
 
 	// Create the mainframe.
 	BALL::Mainframe mainframe;
 	application.setMainWidget(&mainframe);
 
-	#ifdef BALL_PYTHON_SUPPORT
-		// initialize the Python interface
-		mainframe.setIdentifier("MAIN");
-		mainframe.registerThis();
-	#endif
+	// Register the mainfram (required for Python support).
+	mainframe.setIdentifier("MAIN");
+	mainframe.registerThis();
 
 	// Show the main window.
 	mainframe.show();
