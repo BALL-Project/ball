@@ -1,4 +1,4 @@
-// $Id: residueChecker.C,v 1.13 2000/10/30 00:19:59 amoll Exp $
+// $Id: residueChecker.C,v 1.14 2000/11/14 12:38:31 oliver Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
@@ -132,7 +132,7 @@ namespace BALL
 					{
 						Log.warn() << *set_it << " ";
 					}
-					Log.warn() << endl;
+					Log.warn() << " (template was " << reference->getName() << ")" << endl;
 					status_ = false;
 				}
 
