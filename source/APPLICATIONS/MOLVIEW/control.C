@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.2 2000/01/08 20:34:07 hekl Exp $
+// $Id: control.C,v 1.3 2000/01/09 17:43:39 hekl Exp $
 
 #include "control.h"
 
@@ -12,7 +12,8 @@ Control::Control
 			selected_root_name__mQString_("unkown"),
 			selected_type__mQString_("unkown"),
 			selected_root_type__mQString_("unkown"),
-			copied__mpComposite_(0)
+			copied__mpComposite_(0),
+			__mDisplayProperties_(0)
 {
 	setRootIsDecorated(TRUE);
 	//	setMultiSelection(TRUE);
@@ -24,6 +25,11 @@ Control::Control
 	connect(this,
 					SIGNAL(selectionChanged(QListViewItem *)),
 					SLOT(objectSelected(QListViewItem *)));
+
+	connect(&__mDisplayProperties_,
+					SIGNAL(apply()),
+					this,
+					SLOT(applyDisplayProperties()));
 }
 
 Control::~Control
@@ -59,7 +65,7 @@ Control::addComposite
 	}
 
 	// status text
-	outputStatus(QString("checking scene integrity ..."), true, false);
+	Log.info() << "> checking scene integrity ... ";
 
 	// test, if composite is already inserted into scene
 	CompositeManager *__pCompositeManager 
@@ -100,10 +106,10 @@ Control::addComposite
 	}
 
 	// status text
-	outputStatus(QString(" done.\n"), false);
+	Log.info() << "done." << endl;
 
 	// status text
-	outputStatus(QString("generating new scene object ..."), true, false);
+	Log.info() << "> generating new scene object ... ";
 
 	// insert the composite into scene
 	// create a tempory CompositeDescriptor
@@ -127,10 +133,10 @@ Control::addComposite
 	Composite *new__pComposite = new__pCompositeDescriptor->getComposite();
 
 	// status text
-	outputStatus(QString(" done.\n"), false);
+	Log.info() << "done." << endl;
 
 	// status text
-	outputStatus(QString("generating graphical representation ..."), true, false);
+	Log.info() << "> generating graphical representation ... ";
 
 	// use specified object processor for building the visible object
 	// and setting the properties
@@ -140,19 +146,19 @@ Control::addComposite
 	new__pCompositeDescriptor->setCenter(__mpMoleculeObjectProcessor_->getViewCenter());
 
 	// status text
-	outputStatus(QString(" done.\n"), false);
+	Log.info() << "done." << endl;
 
 	// status text
-	outputStatus(QString("generating tree representation ..."), true, false);
+	Log.info() << "> generating tree representation ... ";
 
 	// generate ListViewItem
 	_genListViewItem(0, new__pComposite, &name__QString);
 
 	// status text
-	outputStatus(QString(" done.\n"), false);
+	Log.info() << "done." << endl;
 
 	// status text
-	outputStatus(QString("setting up scene ..."), true, false);
+	Log.info() << "> setting up scene ... ";
 
 	// set the camera on the the new composite
 	__mpScene_->camera.
@@ -164,7 +170,7 @@ Control::addComposite
 	__mpScene_->update();
 
 	// status text
-	outputStatus(QString(" done.\n"), false);
+	Log.info() << "done." << endl;
 
 	return true;
 }
@@ -351,34 +357,6 @@ Control::getName
 	}
 
 	return __QString;
-}
-
-void 
-Control::outputStatus(QString message__QString, bool prefix__bool, bool composed_prefix__bool)
-{
-	QString composed_message__QString = "> ";
-
-	if (selected_root_name__mQString_ != "unkown")
-	{
-		if (composed_prefix__bool == true)
-		{
-			composed_message__QString = selected_root_type__mQString_;
-			composed_message__QString += " ´";
-			composed_message__QString += selected_root_name__mQString_;
-			composed_message__QString += "´> ";
-		}
-	}
-
-	composed_message__QString += message__QString;
-
-	if (prefix__bool == true)
-	{
-		writeText(composed_message__QString);
-	}
-	else
-	{
-		writeText(message__QString);
-	}
 }
 
 /*
@@ -716,8 +694,6 @@ Control::ContextMenu
 	
 				__QPopupMenu.insertSeparator();
 				__QPopupMenu.insertItem("center Camera", CAMERA__CENTER);
-				__QPopupMenu.insertSeparator();
-				__QPopupMenu.insertItem("change Display", DISPLAY__CHANGE);
 			}
 			break;
 
@@ -766,10 +742,6 @@ Control::ContextMenu
 
 	  case CAMERA__CENTER:
 			centerCamera();
-			break;
-
-	  case DISPLAY__CHANGE:
-			changeDisplay();
 			break;
 
 	  default:
@@ -861,10 +833,14 @@ Control::select()
 	}
 
 	// status text
-	QString __QString;
-	__QString.sprintf("selecting %s ´%s´ ...", CONTROL__TYPE_AND_NAME);
-
-	outputStatus(__QString);
+	Log.info() << selected_root_type__mQString_.ascii()
+						 << " ´"
+						 << selected_root_name__mQString_.ascii() 
+						 << "´> selecting " 
+						 << selected_type__mQString_.ascii()
+						 << " ´"
+						 << selected_name__mQString_.ascii()
+						 << "´ ... ";
 
 	// save old values
 	int value_static__i = __mpMoleculeObjectProcessor_->getValue(ADDRESS__STATIC_MODEL);
@@ -883,7 +859,7 @@ Control::select()
 	__mpScene_->update();
 
 	// status text
-	outputStatus(QString(" done.\n"), false);
+	Log.info() << "done." << endl;
 }
 
 void
@@ -895,10 +871,14 @@ Control::deselect()
 	}
 
 	// status text
-	QString __QString;
-	__QString.sprintf("deselecting %s ´%s´ ...", CONTROL__TYPE_AND_NAME);
-
-	outputStatus(__QString);
+	Log.info() << selected_root_type__mQString_.ascii()
+						 << " ´"
+						 << selected_root_name__mQString_.ascii() 
+						 << "´> deselecting " 
+						 << selected_type__mQString_.ascii()
+						 << " ´"
+						 << selected_name__mQString_.ascii()
+						 << "´ ... ";
 
 	// save old values
 	int value_static__i = __mpMoleculeObjectProcessor_->getValue(ADDRESS__STATIC_MODEL);
@@ -917,7 +897,7 @@ Control::deselect()
 	__mpScene_->update();
 
 	// status text
-	outputStatus(QString(" done.\n"), false);
+	Log.info() << "done." << endl;
 }
 
 void 
@@ -928,14 +908,7 @@ Control::checkResidue()
 		return;
 	}
 
-	FragmentDB __FragmentDB;
-
-	ResidueChecker __ResidueChecker(__FragmentDB);
-
-	if (RTTI::isKindOf<BaseFragment>(*selected__mpComposite_))
-	{
-		(RTTI::castTo<BaseFragment>(*selected__mpComposite_))->apply(__ResidueChecker);
-	}
+	__mpMoleculeObjectProcessor_->checkResidue(*selected__mpComposite_);
 }
 
 void 
@@ -947,16 +920,20 @@ Control::removeObject()
 	}
 
 	// status text
-	QString __QString;
-	__QString.sprintf("removing %s ´%s´ ...", CONTROL__TYPE_AND_NAME);
-
-	outputStatus(__QString);
+	Log.info() << selected_root_type__mQString_.ascii()
+						 << " ´"
+						 << selected_root_name__mQString_.ascii() 
+						 << "´> removing " 
+						 << selected_type__mQString_.ascii()
+						 << " ´"
+						 << selected_name__mQString_.ascii()
+						 << "´ ... " << endl;
 
 	if (RTTI::isKindOf<System>(*selected__mpComposite_))
 	{
 			QString remove__QString;
 			remove__QString.sprintf("Do you really want to remove %s '%s'.\n\n", 
-															CONTROL__TYPE_AND_NAME);
+															selected_type__mQString_.ascii(), selected_name__mQString_.ascii());
 
 			int button__i	= QMessageBox::information
 				(this, "Remove information", remove__QString, "Yes", "No");
@@ -969,6 +946,7 @@ Control::removeObject()
 
 				// removes the subtree belonging to the composite
 				delete selected__mpQListViewItem_;
+
 			}
 
 			selected__mpComposite_ = 0;
@@ -983,7 +961,7 @@ Control::removeObject()
 	}
 
 	// status text
-	outputStatus(QString(" done.\n"), false);
+	Log.info() << "done." << endl;
 }
 
 void 
@@ -995,10 +973,14 @@ Control::centerCamera()
 	}
 
 	// status text
-	QString __QString;
-	__QString.sprintf("set camera at %s ´%s´ ...", CONTROL__TYPE_AND_NAME);
-
-	outputStatus(__QString);
+	Log.info() << selected_root_type__mQString_.ascii()
+						 << " ´"
+						 << selected_root_name__mQString_.ascii() 
+						 << "´> set camera at " 
+						 << selected_type__mQString_.ascii()
+						 << " ´"
+						 << selected_name__mQString_.ascii()
+						 << "´ ... ";
 
 	// use specified object processor for calculating the center
 	__mpMoleculeObjectProcessor_->calculateCenter(*selected__mpComposite_);
@@ -1012,13 +994,13 @@ Control::centerCamera()
 	__mpScene_->update();
 
 	// status text
-	outputStatus(QString(" done.\n"), false);
+	Log.info() << "done." << endl;
 }
 
 void 
-Control::changeDisplay()
+Control::openDisplay()
 {
-	QMessageBox::about(this, "DISPLAY-DEMO", "change display choosen.");
+	__mDisplayProperties_.show();
 }
 
 void 
@@ -1027,6 +1009,30 @@ Control::clearClipboard()
 	QMessageBox::about(this, "CLIPBOARD-DEMO", "clear clipboard choosen.");
 
 	emit itemCutOrCopied(false);	
+}
+
+void 
+Control::applyDisplayProperties()
+{
+	if (selected__mpComposite_ == 0)
+	{
+		return;
+	}
+
+	Log.info() << selected_root_type__mQString_.ascii()
+						 << " ´"
+						 << selected_root_name__mQString_.ascii() 
+						 << "´> applying display properties on " 
+						 << selected_type__mQString_.ascii()
+						 << " ´"
+						 << selected_name__mQString_.ascii()
+						 << "´: ";
+
+	__mpMoleculeObjectProcessor_->applyOn(*selected__mpComposite_);
+	
+	__mpScene_->getCompositeManager()->update(selected__mpComposite_->getRoot());
+
+	__mpScene_->update();
 }
 
 QListViewItem *

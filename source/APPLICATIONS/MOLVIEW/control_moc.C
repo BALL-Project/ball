@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Control meta object code from reading C++ file 'control.h'
 **
-** Created: Thu Dec 30 18:22:22 1999
-**      by: The Qt Meta Object Compiler ($Revision: 1.2 $)
+** Created: Sun Jan 9 17:50:08 2000
+**      by: The Qt Meta Object Compiler ($Revision: 1.3 $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -78,6 +78,7 @@ void Control::staticMetaObject()
     typedef void(Control::*m1_t11)();
     typedef void(Control::*m1_t12)();
     typedef void(Control::*m1_t13)();
+    typedef void(Control::*m1_t14)();
     m1_t0 v1_0 = Q_AMPERSAND Control::ContextMenu;
     m1_t1 v1_1 = Q_AMPERSAND Control::objectSelected;
     m1_t2 v1_2 = Q_AMPERSAND Control::cut;
@@ -90,9 +91,10 @@ void Control::staticMetaObject()
     m1_t9 v1_9 = Q_AMPERSAND Control::checkResidue;
     m1_t10 v1_10 = Q_AMPERSAND Control::removeObject;
     m1_t11 v1_11 = Q_AMPERSAND Control::centerCamera;
-    m1_t12 v1_12 = Q_AMPERSAND Control::changeDisplay;
+    m1_t12 v1_12 = Q_AMPERSAND Control::openDisplay;
     m1_t13 v1_13 = Q_AMPERSAND Control::clearClipboard;
-    QMetaData *slot_tbl = QMetaObject::new_metadata(14);
+    m1_t14 v1_14 = Q_AMPERSAND Control::applyDisplayProperties;
+    QMetaData *slot_tbl = QMetaObject::new_metadata(15);
     slot_tbl[0].name = "ContextMenu(QListViewItem*,const QPoint&,int)";
     slot_tbl[1].name = "objectSelected(QListViewItem*)";
     slot_tbl[2].name = "cut()";
@@ -105,8 +107,9 @@ void Control::staticMetaObject()
     slot_tbl[9].name = "checkResidue()";
     slot_tbl[10].name = "removeObject()";
     slot_tbl[11].name = "centerCamera()";
-    slot_tbl[12].name = "changeDisplay()";
+    slot_tbl[12].name = "openDisplay()";
     slot_tbl[13].name = "clearClipboard()";
+    slot_tbl[14].name = "applyDisplayProperties()";
     slot_tbl[0].ptr = *((QMember*)&v1_0);
     slot_tbl[1].ptr = *((QMember*)&v1_1);
     slot_tbl[2].ptr = *((QMember*)&v1_2);
@@ -121,29 +124,20 @@ void Control::staticMetaObject()
     slot_tbl[11].ptr = *((QMember*)&v1_11);
     slot_tbl[12].ptr = *((QMember*)&v1_12);
     slot_tbl[13].ptr = *((QMember*)&v1_13);
-    typedef void(Control::*m2_t0)(QString);
-    typedef void(Control::*m2_t1)(bool,bool);
-    typedef void(Control::*m2_t2)(bool);
-    m2_t0 v2_0 = Q_AMPERSAND Control::writeText;
-    m2_t1 v2_1 = Q_AMPERSAND Control::itemSelected;
-    m2_t2 v2_2 = Q_AMPERSAND Control::itemCutOrCopied;
-    QMetaData *signal_tbl = QMetaObject::new_metadata(3);
-    signal_tbl[0].name = "writeText(QString)";
-    signal_tbl[1].name = "itemSelected(bool,bool)";
-    signal_tbl[2].name = "itemCutOrCopied(bool)";
+    slot_tbl[14].ptr = *((QMember*)&v1_14);
+    typedef void(Control::*m2_t0)(bool,bool);
+    typedef void(Control::*m2_t1)(bool);
+    m2_t0 v2_0 = Q_AMPERSAND Control::itemSelected;
+    m2_t1 v2_1 = Q_AMPERSAND Control::itemCutOrCopied;
+    QMetaData *signal_tbl = QMetaObject::new_metadata(2);
+    signal_tbl[0].name = "itemSelected(bool,bool)";
+    signal_tbl[1].name = "itemCutOrCopied(bool)";
     signal_tbl[0].ptr = *((QMember*)&v2_0);
     signal_tbl[1].ptr = *((QMember*)&v2_1);
-    signal_tbl[2].ptr = *((QMember*)&v2_2);
     metaObj = QMetaObject::new_metaobject(
 	"Control", "QListView",
-	slot_tbl, 14,
-	signal_tbl, 3 );
-}
-
-// SIGNAL writeText
-void Control::writeText( QString t0 )
-{
-    activate_signal_string( "writeText(QString)", t0 );
+	slot_tbl, 15,
+	signal_tbl, 2 );
 }
 
 #include <qobjectdefs.h>

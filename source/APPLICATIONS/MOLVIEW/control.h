@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.2 2000/01/08 20:34:07 hekl Exp $
+// $Id: control.h,v 1.3 2000/01/09 17:43:40 hekl Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_CONTROL_H
 #define BALL_APPLICATIONS_MOLVIEW_CONTROL_H
@@ -47,10 +47,6 @@
 # include <BALL/KERNEL/system.h>
 #endif
         
-#ifndef BALL_STRUCTURE_RESIDUECHECKER_H
-# include <BALL/STRUCTURE/residueChecker.h>
-#endif
-
 #ifndef BALL_VIEW_OPENGL_KERNEL_SCENE_H
 #	include <BALL/VIEW/OPENGL/KERNEL/scene.h>
 #endif
@@ -63,13 +59,12 @@
 # include <BALL/MOLVIEW/OPENGL/FUNCTOR/moleculeObjectProcessor.h>
 #endif
 
+#include "displayProperties.h"
+
+
 using namespace BALL;
 using namespace BALL::VIEW;
 using namespace BALL::MOLVIEW;
-
-
-#define CONTROL__TYPE_AND_NAME \
-selected_type__mQString_.ascii(), selected_name__mQString_.ascii()
 
 
 /**
@@ -163,12 +158,6 @@ class Control
 	  static QString getName
 			(Composite *__pComposite);
 
-
-		void outputStatus
-			(QString message__QString, 
-			 bool prefix__bool = true, 
-			 bool composed_prefix__bool = true);
-
 		// --- DEBUGGERS and DIAGNOSTICS
 
 		// --- STORERS
@@ -202,13 +191,13 @@ class Control
 
 		void centerCamera();
 
-		void changeDisplay();
+		void openDisplay();
 
 		void clearClipboard();
 
-  signals:
+		void applyDisplayProperties();
 
-	  void writeText(QString __QString);
+  signals:
 
 		void itemSelected(bool selected__bool, bool residue__bool);
 		void itemCutOrCopied(bool copied__bool);
@@ -244,6 +233,8 @@ class Control
 		QString selected_root_type__mQString_;
 
 		Composite *copied__mpComposite_;
+
+		DisplayProperties __mDisplayProperties_;
 };
 
 
