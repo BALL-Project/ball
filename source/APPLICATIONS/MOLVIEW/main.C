@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.22 2004/04/07 16:18:04 amoll Exp $
+// $Id: main.C,v 1.23 2004/04/14 13:43:23 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -23,15 +23,17 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 	char*	molview_data_path = getenv("MOLVIEW_DATA_PATH");
 	if (molview_data_path == 0)
 	{
+#ifdef BALL_PLATFORM_WINDOWS
 		char*	ball_data_path = getenv("BALL_DATA_PATH");
 		if (ball_data_path == 0)
 		{
 			std::cerr << "Warning: Neither BALL_DATA_PATH nor MOLVIEW_DATA_PATH environment variable are set." << std::endl;
 		}
+#endif
 	}
 	else
 	{
-		putenv((BALL::String("BALL_DATA_PATH=") + BALL::String(molview_data_path)).c_str());
+ 		putenv((char*)((BALL::String("BALL_DATA_PATH=") + BALL::String(molview_data_path)).c_str()));
 	}
 
 	QApplication application(argc, argv);
