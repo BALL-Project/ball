@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.2.2 2005/03/28 12:26:50 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.2.3 2005/03/28 12:38:00 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -165,9 +165,9 @@ namespace BALL
 																				const Atom& a1, const Atom& a2, const Atom& a3)
 	{
 		getForceField()->error() << "MMFF94 StretchBend: Could not find " << string << " data! "
-														 << a1.getName() << " "
-														 << a2.getName() << " "
-														 << a3.getName() << std::endl;
+														 << a1.getName() << " " << a2.getName() << " " << a3.getName() << "   "
+														 << a1.getType() << " " << a2.getType() << " " << a3.getType() 
+														 << std::endl;
 
 		getForceField()->getUnassignedAtoms().insert(&a1);
 		getForceField()->getUnassignedAtoms().insert(&a2);
@@ -252,7 +252,7 @@ namespace BALL
 			else 						return 10;
 		}
 
-		Log.error() << "Could not calculate sbtijk " << angle_type << " " 
+		Log.error() << "MMFF94 StretchBend: Could not calculate sbtijk " << angle_type << " " 
 								<< bond_type1 << " " << bond_type2 << std::endl;
 
 		return -1;
