@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.17 2001/02/23 00:59:48 amoll Exp $
+// $Id: bond.C,v 1.18 2001/03/06 13:58:17 balltest Exp $
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
@@ -59,7 +59,7 @@ namespace BALL
 	}
 
 	Bond* Bond::createBond(Bond& bond, Atom& first, Atom& second)
-		throw(TooManyBonds)
+		throw(Bond::TooManyBonds)
 	{
 		if ((Size)first.number_of_bonds_ >= (Size)Atom::MAX_NUMBER_OF_BONDS)
 		{
@@ -310,7 +310,7 @@ namespace BALL
 	}
 		
 	Real Bond::getLength() const
-		throw(NotBounded)
+		throw(Bond::NotBounded)
 	{
 		if (first_ == 0 || second_ == 0)
 		{
