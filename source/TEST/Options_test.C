@@ -1,9 +1,9 @@
-// $Id: Options_test.C,v 1.2 2000/07/26 14:37:15 amoll Exp $
+// $Id: Options_test.C,v 1.3 2000/07/26 15:06:24 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/DATATYPE/options.h>
 
-START_TEST(Options, "$Id: Options_test.C,v 1.2 2000/07/26 14:37:15 amoll Exp $")
+START_TEST(Options, "$Id: Options_test.C,v 1.3 2000/07/26 15:06:24 amoll Exp $")
 
 using BALL::Options;
 using BALL::Vector3;
@@ -41,22 +41,27 @@ CHECK(setBool/getBool)
 	TEST_EQUAL(options->getBool("BOOL"), true)
 	options->setBool("BOOL", false);
 	TEST_EQUAL(options->getBool("BOOL"), false)
+	TEST_EQUAL(options->getBool("UNDEFINED"), false)
 RESULT
 
 CHECK(setReal(String&, float)/getReal(String&))
 	options->setReal("REAL", 1.23456);
 	TEST_REAL_EQUAL(1.23456, options->getReal("REAL"))
+	TEST_REAL_EQUAL(options->getReal("UNDEFINED"), 0.0)
 RESULT
 
 Vector3	vector(1.0, 2.0, 3.0);
 CHECK(setVector/getVector)
 	options->setVector("VECTOR", vector);
 	TEST_EQUAL(vector, options->getVector("VECTOR"))
+	Vector3 v(0.0, 0.0, 0.0);
+	TEST_EQUAL(options->getVector("UNDEFINED"), v)
 RESULT
 
 CHECK(setInteger/getInteger)
 	options->setInteger("INT", 1234567890);
 	TEST_EQUAL(1234567890, options->getInteger("INT"))
+	TEST_EQUAL(options->getInteger("UNDEFINED"), 0)
 RESULT
 
 CHECK(has)
@@ -92,7 +97,7 @@ CHECK(isVector)
 	TEST_EQUAL(options->isVector("INT"), false)
 	TEST_EQUAL(options->isVector("REAL"), false)
 	TEST_EQUAL(options->isVector("BOOL"), false)
-	TEST_EQUAL(options->isVector("undefined"), false)
+	TEST_EQUAL(options->isVector("UNDEFINED"), false)
 	TEST_EQUAL(options->isVector("VECTOR"), true)
 	options->set("SVECTOR", "(0.0 1.0 2.0) ");
 	TEST_EQUAL(options->isVector("SVECTOR"), true)
@@ -106,6 +111,7 @@ RESULT
 CHECK(set(String&, String&)/get(String&))
 	options->set("ABC", "DEF");	
 	TEST_EQUAL("DEF", options->get("ABC"))
+	TEST_EQUAL(options->get("UNDEFINED"), "")
 RESULT
 
 CHECK(setDefault)
