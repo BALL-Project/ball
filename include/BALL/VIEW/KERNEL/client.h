@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.h,v 1.19 2003/08/26 08:05:05 oliver Exp $
+// $Id: client.h,v 1.20 2003/08/26 13:44:04 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_CLIENT_H
@@ -27,8 +27,8 @@
 # include <BALL/CONCEPT/textPersistenceManager.h>
 #endif
 
-#ifndef BALL_VIEW_COMMON_GLOBAL_H
-#	include <BALL/VIEW/COMMON/global.h>
+#ifndef BALL_VIEW_KERNEL_COMMON_H
+#	include <BALL/VIEW/KERNEL/common.h>
 #endif
 
 namespace BALL

@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: clientScene.C,v 1.10 2003/08/26 09:18:47 oliver Exp $
+// $Id: clientScene.C,v 1.11 2003/08/26 13:44:05 oliver Exp $
+//
 
 #include <BALL/VIEW/KERNEL/clientScene.h>
 
-#include <BALL/VIEW/COMMON/global.h>
+#include <BALL/VIEW/KERNEL/common.h>
 
 using namespace std;
 

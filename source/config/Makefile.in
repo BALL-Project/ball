@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile.in,v 1.32 2003/08/26 13:14:50 oliver Exp $
+# $Id: Makefile.in,v 1.33 2003/08/26 13:44:05 oliver Exp $
 #
 
 include config.mak
@@ -13,7 +13,7 @@ LIB_VERSION	= 0
 LIBNAME		= libBALL
 
 # 	names of the static libraries
-STATIC_LIBS	= libBALL.a @LIBBALLVIEW@
+STATIC_LIBS	= libBALL.a @LIBVIEW@
 
 #	names of the shared libraries
 SHARED_LIBS	= $(STATIC_LIBS:.a=.@SHARED_LIB_SUFFIX@)

@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# $Id: config.mak.in,v 1.28 2003/08/26 09:18:51 oliver Exp $
+# $Id: config.mak.in,v 1.29 2003/08/26 13:44:05 oliver Exp $
 #
 
 # First, some basic unix commands, including the C++ compiler
@@ -57,13 +57,13 @@ BALL_PATH		    = @BALL_PATH@
 BALL_INCLUDES		= @BALL_INCLUDES@
 BALL_LIBS       = @BALL_LIBS@
 
-# USE_BALLVIEW contains true if BALLVIEW support is to be built, false otherwise
-# BALLVIEW_PLATFORM either contains Mesa or OpenGL (so far)
+# USE_VIEW contains true if VIEW support is to be built, false otherwise
+# VIEW_PLATFORM either contains Mesa or OpenGL (so far)
 #
-USE_BALLVIEW		    = @USE_BALLVIEW@
-BALLVIEW_PLATFORM 	= @BALLVIEW_PLATFORM@
-BALLVIEW_INCLUDES	  = @BALLVIEW_INCLUDES@
-BALLVIEW_LIBS		    = @BALLVIEW_LIBS@
+USE_VIEW		    = @USE_VIEW@
+VIEW_PLATFORM 	= @VIEW_PLATFORM@
+VIEW_INCLUDES	  = @VIEW_INCLUDES@
+VIEW_LIBS		    = @VIEW_LIBS@
 BALL_HAS_XDR				= @BALL_HAS_XDR@
 BALL_HAS_VIEW				= @BALL_HAS_VIEW@
 BALL_HAS_FFTW       = @BALL_HAS_FFTW@

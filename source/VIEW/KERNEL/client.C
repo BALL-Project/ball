@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.C,v 1.14 2003/08/26 09:18:47 oliver Exp $
+// $Id: client.C,v 1.15 2003/08/26 13:44:05 oliver Exp $
+//
 
 #include <BALL/VIEW/KERNEL/client.h>
 
