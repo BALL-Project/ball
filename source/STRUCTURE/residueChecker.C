@@ -1,4 +1,4 @@
-// $Id: residueChecker.C,v 1.3 1999/09/17 14:49:52 len Exp $
+// $Id: residueChecker.C,v 1.4 1999/09/17 17:18:13 oliver Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
@@ -54,7 +54,6 @@ namespace BALL
 		{
 			total_charge += atom_it->getCharge();
 		}
-		Log.info() << "ResidueChecker: charge of " << res_name << " is " << total_charge << endl;
 
 		// check for very large absolute charges
 		if (total_charge < -2.0)
