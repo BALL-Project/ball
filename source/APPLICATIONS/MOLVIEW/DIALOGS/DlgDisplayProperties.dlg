@@ -219,6 +219,7 @@ ComboBox {
 		Item {line}
 		Item {stick}
 		Item {ball and stick}
+		Item {surface}
 		Item {van der Waals}
 		MaxCount {2147483647}
 		AutoCompletion {FALSE}

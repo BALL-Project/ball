@@ -239,6 +239,13 @@ void DlgDisplayProperties::selectModel(const QString& string)
 		object_processor_
 			->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
 	}
+	else if (string == "surface")
+	{
+		object_processor_
+			->setValue(ADDRESS__STATIC_MODEL, VALUE__MODEL_SURFACE);
+		object_processor_
+			->setValue(ADDRESS__DYNAMIC_MODEL, VALUE__MODEL_LINES);
+	}
 	else if (string == "van der Waals")
 	{
 		object_processor_
@@ -297,7 +304,7 @@ void DlgDisplayProperties::applyButtonClicked()
 
 			// mark composite for update
 			ChangedCompositeMessage change_message;
-			change_message.setComposite((*list_it)->getRoot());
+			change_message.setComposite((*list_it));
 			notify_(change_message);
 		}
 
