@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.16 2001/07/16 19:38:42 anker Exp $
+// $Id: expression.h,v 1.17 2001/07/17 09:40:59 amoll Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -28,19 +28,16 @@ namespace BALL
 
 	/** Expression class. 
 			This class provides a frontend to ExpressionTree.	\\
-			Expressions may be built from the following modules:
-			\begin{tabular}
-				AND & a conjunction \\
-				OR & a disjunction \\
-				predicate(argument) & a predicate class that is derived from
-				\Ref{ExpressionPredicate) and provides {\tt operator () (const
-				Atom\& atom) const}.
-			\end{tabular}
+			Expressions may be built from the following modules: \\
+			AND & a conjunction \\
+			OR & a disjunction \\
+			predicate(argument) & a predicate class that is derived from
+			\Ref{ExpressionPredicate) and provides {\tt operator () (const Atom& atom) const}. \\
+			\\
 			Additionally brackets can be used for grouping. At least one bracket
-			pair must exist which encloses the argument of a predicate. Empty
-			arguments are allowed.
-			@see ExpressionTree
+			pair must exist which encloses the argument of a predicate. Empty arguments are allowed.
 			{\bf Definition:} \URL{BALL/KERNEL/expression.h}
+			@see ExpressionTree
 	*/
 	class Expression
 	{
