@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.13 1999/12/18 12:48:15 oliver Exp $
+dnl    $Id: configure.in,v 1.14 1999/12/18 12:52:18 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1404,21 +1404,21 @@ if test "${USE_BALLVIEW}" = true ; then
 		BALLVIEW_LIBS="${BALLVIEW_LIBS} -lqgl -lqt"
 	fi	
 	if test "${BALLVIEW_PLATFORM}" = Mesa ; then
-		if test "${MESA_LIBS} != "/usr/lib" ; then
+		if test "${MESA_LIBS}" != "/usr/lib" ; then
 			BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${MESA_LIBS} -lMesaGLU -lMesaGL"
 		else
 			BALLVIEW_LIBS="${BALLVIEW_LIBS} -lMesaGLU -lMesaGL"
 		fi
 	fi
 	if test "${BALLVIEW_PLATFORM}" = OpenGL ; then
-		if test "${OPENGL_LIBS} != "/usr/lib" ; then
+		if test "${OPENGL_LIBS}" != "/usr/lib" ; then
 			BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${OPENGL_LIBS} -lGLU -lGL"
 		else
 			BALLVIEW_LIBS="${BALLVIEW_LIBS} -lGLU -lGL"
 		fi
 	fi
 	
-	if test "${x_libraries} != "/usr/lib" ; then
+	if test "${x_libraries}" != "/usr/lib" ; then
 		BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${x_libraries} -lXmu -lXt -lX11"
 	else
 		BALLVIEW_LIBS="${BALLVIEW_LIBS} -lXmu -lXt -lX11"
