@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.47 2004/04/01 12:13:39 amoll Exp $
+// $Id: message.h,v 1.48 2004/04/17 20:05:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -507,7 +507,13 @@ class BALL_EXPORT RepresentationMessage: public Message
 		UPDATE,
 
 		/// Representation was selected in GeometriControl
-		SELECTED
+		SELECTED,
+
+		/// Started the update of a Representation, no changes allowed in GeometricControl
+		STARTED_UPDATE,
+
+		/// Finished the update of a Representation
+		FINISHED_UPDATE
 	};
 
 	///

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.16 2004/02/26 08:41:47 anhi Exp $
+// $Id: geometricControl.h,v 1.17 2004/04/17 20:05:28 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -248,6 +248,8 @@ namespace BALL
 			ColorMeshDialog* 	colorMeshDlg_;
 
 			MolecularInformation information_;
+
+			bool  creating_representations_;
 		};
 		
 } } // namespaces

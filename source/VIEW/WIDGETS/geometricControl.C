@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.35 2004/03/13 12:13:03 amoll Exp $
+// $Id: geometricControl.C,v 1.36 2004/04/17 20:05:05 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -56,10 +56,11 @@ void GeometricControl::SelectableListViewItem::stateChange(bool)
 
 GeometricControl::GeometricControl(QWidget* parent, const char* name)
 	throw()
-		:	GenericControl(parent, name),
-			context_menu_(),
-			context_representation_(0),
-			colorMeshDlg_(new ColorMeshDialog(this, "ColorMeshDialog"))
+	:	GenericControl(parent, name),
+		context_menu_(),
+		context_representation_(0),
+		colorMeshDlg_(new ColorMeshDialog(this, "ColorMeshDialog")),
+		creating_representations_(false)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new GeometricControl " << this << std::endl;
@@ -167,6 +168,14 @@ void GeometricControl::onNotify(Message *message)
 
 	switch ((RTTI::castTo<RepresentationMessage> (*message))->getType())
 	{
+		case RepresentationMessage::STARTED_UPDATE:
+			creating_representations_ = true;
+			return;
+
+		case RepresentationMessage::FINISHED_UPDATE:
+			creating_representations_ = false;
+			return;
+
 		case RepresentationMessage::ADD:
 			addRepresentation(*rep);
 			return;
@@ -292,7 +301,12 @@ void GeometricControl::generateListViewItem_(Representation& rep)
 
 void GeometricControl::deleteRepresentation_()
 {
-// 	if (context_representation_ == 0)  return; 
+	if (creating_representations_) 
+	{
+		setStatusbarText("Can not modify representations, while creating a new one!");
+		return;
+	}
+
  	ItemList selected = getSelectedItems();
 	for (ItemList::Iterator it = selected.begin(); it != selected.end(); ++it)
 	{
@@ -338,6 +352,13 @@ void GeometricControl::selectedRepresentation(Representation& representation, bo
 void GeometricControl::onContextMenu_(QListViewItem* item,  const QPoint& point, int /* column */)
 {
 	if (item == 0) return;
+
+	if (!getMainControl()->compositesAreMuteable() ||
+			creating_representations_)
+	{
+		setStatusbarText("No changes to representations allowed, while simulation is running or creating new representations!");
+		return;
+	}
 
 	// clear the context menu
 	context_menu_.clear();
