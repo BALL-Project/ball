@@ -355,7 +355,6 @@ namespace BALL
     sy++;
     Index bracket_count = 1;
     Size i;
-		bool are_there_brackets = false;
     for (i = sy; i < s.size() && bracket_count > 0; ++i)
     {
       switch (s[i])
@@ -602,6 +601,11 @@ namespace BALL
 
 
 	ExpressionPredicate::ExpressionPredicate()
+	{
+	}
+
+	ExpressionPredicate::ExpressionPredicate(const String& argument)
+		:	argument_(argument)
 	{
 	}
 
