@@ -73,10 +73,14 @@
 #include "sipBALLCharmmStretch.h"
 #include "sipBALLCharmmTorsion.h"
 #include "sipBALLAtomVector.h"
+#include "sipBALLChargeRuleProcessor.h"
 #include "sipBALLForceField.h"
 #include "sipBALLForceFieldComponent.h"
 #include "sipBALLGradient.h"
 #include "sipBALLPeriodicBoundary.h"
+#include "sipBALLRadiusRuleProcessor.h"
+#include "sipBALLRuleEvaluator.h"
+#include "sipBALLRuleProcessor.h"
 #include "sipBALLSnapShotManager.h"
 #include "sipBALLCanonicalMD.h"
 #include "sipBALLMicroCanonicalMD.h"
@@ -239,8 +243,6 @@ char sipName_BALL_PyBondList[] = "PyBondList";
 char sipName_BALL_PyCompositeDescriptorList[] = "PyCompositeDescriptorList";
 char sipName_BALL_ResidueProcessor[] = "ResidueProcessor";
 char sipName_BALL_FragmentProcessor[] = "FragmentProcessor";
-char sipName_BALL_finish[] = "finish";
-char sipName_BALL_AtomProcessor[] = "AtomProcessor";
 char sipName_BALL_PyAtomList[] = "PyAtomList";
 char sipName_BALL_PyAtomDict[] = "PyAtomDict";
 char sipName_BALL_nucleicAcids[] = "nucleicAcids";
@@ -309,6 +311,15 @@ char sipName_BALL_takeSnapShot[] = "takeSnapShot";
 char sipName_BALL_getFlushToDiskFrequency[] = "getFlushToDiskFrequency";
 char sipName_BALL_setFlushToDiskFrequency[] = "setFlushToDiskFrequency";
 char sipName_BALL_SnapShotManager[] = "SnapShotManager";
+char sipName_BALL_evaluate[] = "evaluate";
+char sipName_BALL_finish[] = "finish";
+char sipName_BALL_AtomProcessor[] = "AtomProcessor";
+char sipName_BALL_setPrefix[] = "setPrefix";
+char sipName_BALL_getPrefix[] = "getPrefix";
+char sipName_BALL_initialize[] = "initialize";
+char sipName_BALL_RuleEvaluator[] = "RuleEvaluator";
+char sipName_BALL_RadiusRules[] = "RadiusRules";
+char sipName_BALL_RadiusRuleProcessor[] = "RadiusRuleProcessor";
 char sipName_BALL_updateMolecules[] = "updateMolecules";
 char sipName_BALL_isEnabled[] = "isEnabled";
 char sipName_BALL_removeSolvent[] = "removeSolvent";
@@ -341,6 +352,9 @@ char sipName_BALL_getUseSelection[] = "getUseSelection";
 char sipName_BALL_getAtoms[] = "getAtoms";
 char sipName_BALL_getNumberOfMovableAtoms[] = "getNumberOfMovableAtoms";
 char sipName_BALL_getNumberOfAtoms[] = "getNumberOfAtoms";
+char sipName_BALL_ChargeRules[] = "ChargeRules";
+char sipName_BALL_RuleProcessor[] = "RuleProcessor";
+char sipName_BALL_ChargeRuleProcessor[] = "ChargeRuleProcessor";
 char sipName_BALL_resize[] = "resize";
 char sipName_BALL_push_back[] = "push_back";
 char sipName_BALL_moveTo[] = "moveTo";
@@ -976,7 +990,7 @@ static PyObject *sipDo_calculateSASPoints(PyObject *,PyObject *sipArgs)
 
 		return sipMapCppToSelf(res,sipClass_Surface);
 	}
-#line 984 "../CPP/BALLcmodule.cpp"
+#line 998 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -1015,7 +1029,7 @@ static PyObject *sipDo_calculateSASAtomAreas(PyObject *,PyObject *sipArgs)
 
 		return resobj;
 	}
-#line 1023 "../CPP/BALLcmodule.cpp"
+#line 1037 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -3063,7 +3077,6 @@ static sipClassDef classesTable[] = {
 	{NULL, NULL, NULL, NULL, NULL},
 	{sipName_BALL_ResidueProcessor, sipNew_ResidueProcessor, &sipClass_ResidueProcessor, sipClassAttrTab_ResidueProcessor, NULL},
 	{sipName_BALL_FragmentProcessor, sipNew_FragmentProcessor, &sipClass_FragmentProcessor, sipClassAttrTab_FragmentProcessor, NULL},
-	{sipName_BALL_AtomProcessor, sipNew_AtomProcessor, &sipClass_AtomProcessor, sipClassAttrTab_AtomProcessor, NULL},
 	{NULL, NULL, NULL, NULL, NULL},
 	{NULL, NULL, NULL, NULL, NULL},
 	{sipName_BALL_EnergyMinimizer, sipNew_EnergyMinimizer, &sipClass_EnergyMinimizer, sipClassAttrTab_EnergyMinimizer, sipClassVarHierTab_EnergyMinimizer},
@@ -3072,8 +3085,13 @@ static sipClassDef classesTable[] = {
 	{sipName_BALL_MolecularDynamics, sipNew_MolecularDynamics, &sipClass_MolecularDynamics, sipClassAttrTab_MolecularDynamics, sipClassVarHierTab_MolecularDynamics},
 	{sipName_BALL_CanonicalMD, sipNew_CanonicalMD, &sipClass_CanonicalMD, sipClassAttrTab_CanonicalMD, NULL},
 	{sipName_BALL_SnapShotManager, sipNew_SnapShotManager, &sipClass_SnapShotManager, sipClassAttrTab_SnapShotManager, sipClassVarHierTab_SnapShotManager},
+	{sipName_BALL_AtomProcessor, sipNew_AtomProcessor, &sipClass_AtomProcessor, sipClassAttrTab_AtomProcessor, NULL},
+	{sipName_BALL_RuleEvaluator, sipNew_RuleEvaluator, &sipClass_RuleEvaluator, sipClassAttrTab_RuleEvaluator, NULL},
+	{sipName_BALL_RadiusRuleProcessor, sipNew_RadiusRuleProcessor, &sipClass_RadiusRuleProcessor, sipClassAttrTab_RadiusRuleProcessor, NULL},
 	{sipName_BALL_PeriodicBoundary, sipNew_PeriodicBoundary, &sipClass_PeriodicBoundary, sipClassAttrTab_PeriodicBoundary, sipClassVarHierTab_PeriodicBoundary},
 	{sipName_BALL_Gradient, sipNew_Gradient, &sipClass_Gradient, sipClassAttrTab_Gradient, sipClassVarHierTab_Gradient},
+	{sipName_BALL_RuleProcessor, sipNew_RuleProcessor, &sipClass_RuleProcessor, sipClassAttrTab_RuleProcessor, NULL},
+	{sipName_BALL_ChargeRuleProcessor, sipNew_ChargeRuleProcessor, &sipClass_ChargeRuleProcessor, sipClassAttrTab_ChargeRuleProcessor, NULL},
 	{sipName_BALL_AtomVector, sipNew_AtomVector, &sipClass_AtomVector, sipClassAttrTab_AtomVector, NULL},
 	{sipName_BALL_CharmmTorsion, sipNew_CharmmTorsion, &sipClass_CharmmTorsion, sipClassAttrTab_CharmmTorsion, NULL},
 	{sipName_BALL_CharmmStretch, sipNew_CharmmStretch, &sipClass_CharmmStretch, sipClassAttrTab_CharmmStretch, NULL},
@@ -3155,7 +3173,7 @@ static sipClassDef classesTable[] = {
 
 static sipModuleDef sipModule = {
 	sipName_BALL_BALL,
-	121,
+	125,
 	classesTable
 };
 

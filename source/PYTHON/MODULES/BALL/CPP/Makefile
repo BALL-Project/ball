@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.7 2000/10/24 20:28:48 oliver Exp $
+# $Id: Makefile,v 1.8 2000/11/15 14:20:09 oliver Exp $
 #
 
 all: libBALLc.so
@@ -110,12 +110,16 @@ SIP_SOURCES_MOLMEC_MINIMIZATION=\
 
 SIP_SOURCES_MOLMEC_COMMON=\
 	sipBALLAtomVector.C\
+	sipBALLChargeRuleProcessor.C\
 	sipBALLConstant.C\
 	sipBALLForceField.C\
 	sipBALLForceFieldComponent.C\
+	sipBALLGradient.C\
 	sipBALLPeriodicBoundary.C\
-	sipBALLSnapShotManager.C\
-	sipBALLGradient.C
+	sipBALLRadiusRuleProcessor.C\
+	sipBALLRuleEvaluator.C\
+	sipBALLRuleProcessor.C\
+	sipBALLSnapShotManager.C
 
 SIP_SOURCES_NMR=
 

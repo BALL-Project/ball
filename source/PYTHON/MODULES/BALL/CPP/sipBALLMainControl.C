@@ -21,11 +21,6 @@ static PyTypeObject sipType_MainControl = {
 	0,
 };
 
-sipMainControl::sipMainControl(): MainControl()
-{
-	sipCommonCtor(sipPyMethods,5);
-}
-
 sipMainControl::sipMainControl(const MainControl& a0): MainControl(a0)
 {
 	sipCommonCtor(sipPyMethods,5);
@@ -1058,14 +1053,6 @@ PyObject *sipNew_MainControl(PyObject *sipSelf,PyObject *sipArgs)
 	// See if there is something pending.
 
 	sipNew = sipGetPending(&sipFlags);
-
-	if (sipNew == NULL)
-	{
-		if (sipParseArgs(sipArgs,"-"))
-		{
-			sipNew = new sipMainControl();
-	}
-	}
 
 	if (sipNew == NULL)
 	{
