@@ -1,14 +1,18 @@
-// $Id: charmmNonBonded.C,v 1.6 2000/02/22 12:33:26 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.7 2000/03/26 12:55:03 oliver Exp $
 
+#include <BALL/COMMON/limits.h>
+#include <BALL/KERNEL/PSE.h>
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/MOLMEC/COMMON/support.h>
-#include <BALL/KERNEL/PSE.h>
 
+
+// define square function
+#define SQR(a) ((a)*(a))
 
 using namespace std;
-
+using namespace BALL::Constants;
 namespace BALL 
 {
 
@@ -48,8 +52,14 @@ namespace BALL
 
 		cut_off_ = component.cut_off_;
 		cut_off_electrostatic_ = component.cut_off_electrostatic_;
+		cut_on_electrostatic_ = component.cut_on_electrostatic_;
+		cut_off_solvation_ = component.cut_off_solvation_;
+		cut_on_solvation_ = component.cut_on_solvation_;
 		cut_off_vdw_ = component.cut_off_vdw_;
 		cut_on_vdw_ = component.cut_on_vdw_;
+		inverse_difference_off_on_vdw_3_ = component.inverse_difference_off_on_vdw_3_;
+		inverse_difference_off_on_solvation_3_ = component.inverse_difference_off_on_solvation_3_;
+		inverse_difference_off_on_electrostatic_3_ = component.inverse_difference_off_on_electrostatic_3_;
 		scaling_vdw_1_4_ = component.scaling_vdw_1_4_;
 		scaling_electrostatic_1_4_ = component.scaling_electrostatic_1_4_;
 		use_solvation_component_ = component.use_solvation_component_;
@@ -87,44 +97,11 @@ namespace BALL
 			return false;
 		}
 
-
 		// clear vector of non-bonded atom pairs
 		non_bonded_.clear();
  
-		// Set the options for the non-bonded atom pairs
-
-		getForceField()->options.setDefaultReal(CharmmFF::Option::NONBONDED_CUTOFF, CharmmFF::Default::NONBONDED_CUTOFF);
-		cut_off_ = getForceField()->options.getReal(CharmmFF::Option::NONBONDED_CUTOFF);
-
-		getForceField()->options.setDefaultReal(CharmmFF::Option::ELECTROSTATIC_CUTOFF, CharmmFF::Default::ELECTROSTATIC_CUTOFF);
-		cut_off_electrostatic_ = getForceField()->options.getReal(CharmmFF::Option::ELECTROSTATIC_CUTOFF);
-
-		getForceField()->options.setDefaultReal(CharmmFF::Option::VDW_CUTOFF, CharmmFF::Default::VDW_CUTOFF);
-		cut_off_vdw_ = getForceField()->options.getReal(CharmmFF::Option::VDW_CUTOFF);
-
-		getForceField()->options.setDefaultReal(CharmmFF::Option::VDW_CUTON, CharmmFF::Default::VDW_CUTON);
-		cut_on_vdw_ = getForceField()->options.getReal(CharmmFF::Option::VDW_CUTON);
-
-		getForceField()->options.setDefaultReal(CharmmFF::Option::SCALING_ELECTROSTATIC_1_4, CharmmFF::Default::SCALING_ELECTROSTATIC_1_4);
-		scaling_electrostatic_1_4_ = 1 / getForceField()->options.getReal(CharmmFF::Option::SCALING_ELECTROSTATIC_1_4);
-
-		getForceField()->options.setDefaultReal(CharmmFF::Option::SCALING_VDW_1_4,CharmmFF::Default::SCALING_VDW_1_4);
-		scaling_vdw_1_4_ = 1 / getForceField()->options.getReal(CharmmFF::Option::SCALING_VDW_1_4);
-
-		// set the option for using a constant dielectric constant (default) or
-		// or distance dependent one 
-		getForceField()->options.setDefaultBool
-			(CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC,
-       CharmmFF::Default::DISTANCE_DEPENDENT_DIELECTRIC);
-
-		use_dist_depend_dielectric_ = getForceField()->options.getBool
-			(CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC);
-
-		// set the option for using solvation energy or not
-		getForceField()->options.setDefaultBool
-			(CharmmFF::Option::USE_EEF1, CharmmFF::Default::USE_EEF1);
-		use_solvation_component_ = getForceField()->options.getBool
-			(CharmmFF::Option::USE_EEF1);
+		// create a shorthand for the options
+		Options& options = getForceField()->options;
 
 		// extract the Lennard-Jones parameters
 		CharmmFF* charmm_force_field = dynamic_cast<CharmmFF*>(force_field_);
@@ -153,36 +130,46 @@ namespace BALL
 				return false;
 			}
 
-			// check for options defined in the nonbonded section
-			
+			// check for options defined in the nonbonded section			
 			// the cut off for the pair lists
 			if (van_der_waals_parameters_.options.has("CUTNB"))
 			{    
 				cut_off_ = van_der_waals_parameters_.options.getReal("CUTNB");
-				getForceField()->options[CharmmFF::Option::NONBONDED_CUTOFF] = cut_off_;
+				cut_off_ = options.setDefaultReal(CharmmFF::Option::NONBONDED_CUTOFF, cut_off_);
 			}
 
-			// the cut on for the switch fct.
+			// the cut on for the switching fct.
 			if (van_der_waals_parameters_.options.has("CTONNB"))
 			{
 				cut_on_vdw_ = van_der_waals_parameters_.options.getReal("CTONNB");
-				getForceField()->options[CharmmFF::Option::VDW_CUTOFF] = cut_off_;
+				cut_on_electrostatic_ = cut_on_vdw_;
+				cut_on_solvation_ = cut_on_vdw_;
+
+				// user defined values override the parameters from the file
+				cut_on_vdw_ = options.setDefaultReal(CharmmFF::Option::VDW_CUTON, cut_on_vdw_);
+				cut_on_solvation_ = options.setDefaultReal(CharmmFF::Option::SOLVATION_CUTON, cut_on_solvation_);
+				cut_on_electrostatic_ = options.setDefaultReal(CharmmFF::Option::ELECTROSTATIC_CUTON, cut_on_electrostatic_);
 			}
 			
-			// the cut off for the switch fct.
+			// the cut off for the switching fct.
 			if (van_der_waals_parameters_.options.has("CTOFNB"))
 			{
 				cut_off_electrostatic_ = van_der_waals_parameters_.options.getReal("CTOFNB");
 				cut_off_vdw_ = cut_off_electrostatic_;
-				getForceField()->options[CharmmFF::Option::ELECTROSTATIC_CUTOFF] = cut_off_electrostatic_;
-				getForceField()->options[CharmmFF::Option::VDW_CUTOFF] = cut_off_vdw_;
+				cut_off_solvation_ = cut_off_electrostatic_;
+				
+				// user defined values override the parameters from the file
+				cut_off_vdw_ = options.setDefaultReal(CharmmFF::Option::VDW_CUTOFF, cut_off_vdw_);
+				cut_off_solvation_ = options.setDefaultReal(CharmmFF::Option::SOLVATION_CUTOFF, cut_off_solvation_);
+				cut_off_electrostatic_ = options.setDefaultReal(CharmmFF::Option::ELECTROSTATIC_CUTOFF, cut_off_electrostatic_);
 			}
 
 			// electrostatic 1-4 scaling factor
 			if (van_der_waals_parameters_.options.has("E14FAC"))
 			{
+				// user defined options override the options from the file
 				scaling_electrostatic_1_4_ = van_der_waals_parameters_.options.getReal("E14FAC");
-				getForceField()->options[CharmmFF::Option::SCALING_ELECTROSTATIC_1_4] = scaling_electrostatic_1_4_;
+				scaling_electrostatic_1_4_ = options.setDefaultReal(CharmmFF::Option::SCALING_ELECTROSTATIC_1_4, scaling_electrostatic_1_4_);
 			}
 
 			// electrostatic 1-4 scaling factor
@@ -200,19 +187,25 @@ namespace BALL
 				if (value == "CDIEL")
 				{
 					use_dist_depend_dielectric_ = false;
-				} else {
+				} 
+				else 
+				{
 					use_dist_depend_dielectric_ = true;
 				}
 
-				// store the value back in the options
-				getForceField()->options[CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = use_dist_depend_dielectric_;
+				// user defined options ovverride the options read from the file
+				use_dist_depend_dielectric_ = options.setDefaultBool
+					(CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC, 
+					 use_dist_depend_dielectric_);
 			}
 		}
 
-		// extract the solvation parameters if use_solvation_component_ true
-		if (!has_initialized_parameters && use_solvation_component_)
+		// extract the solvation parameters if possible
+		// (not every CHARMM parameter file contains solvation parameters)
+		if (!has_initialized_parameters)
 		{
 			use_solvation_component_ =  getForceField()->getParameters().getParameterFile().hasSection("EEF1Solvation");
+
 			if (use_solvation_component_)
 			{
 				bool result = solvation_parameters_.extractSection(getForceField()->getParameters(), "EEF1Solvation");
@@ -224,6 +217,95 @@ namespace BALL
 				}
 			}
 		}
+
+		// Set the options for the non-bonded atom pairs
+		cut_off_ = options.setDefaultReal(CharmmFF::Option::NONBONDED_CUTOFF, CharmmFF::Default::NONBONDED_CUTOFF);
+
+		cut_off_electrostatic_ = options.setDefaultReal(CharmmFF::Option::ELECTROSTATIC_CUTOFF, CharmmFF::Default::ELECTROSTATIC_CUTOFF);
+		cut_on_electrostatic_ = options.setDefaultReal(CharmmFF::Option::ELECTROSTATIC_CUTON, CharmmFF::Default::ELECTROSTATIC_CUTON);
+
+		cut_off_vdw_ = options.setDefaultReal(CharmmFF::Option::VDW_CUTOFF, CharmmFF::Default::VDW_CUTOFF);
+		cut_on_vdw_ = options.setDefaultReal(CharmmFF::Option::VDW_CUTON, CharmmFF::Default::VDW_CUTON);
+
+		cut_off_solvation_ = options.setDefaultReal(CharmmFF::Option::SOLVATION_CUTOFF, CharmmFF::Default::SOLVATION_CUTOFF);
+		cut_on_solvation_ = options.setDefaultReal(CharmmFF::Option::SOLVATION_CUTON, CharmmFF::Default::SOLVATION_CUTON);
+
+		scaling_electrostatic_1_4_ = options.setDefaultReal(CharmmFF::Option::SCALING_ELECTROSTATIC_1_4, CharmmFF::Default::SCALING_ELECTROSTATIC_1_4);
+		scaling_vdw_1_4_ = options.setDefaultReal(CharmmFF::Option::SCALING_VDW_1_4,CharmmFF::Default::SCALING_VDW_1_4);
+
+		// set the option for using a constant dielectric constant (default) or
+		// or distance dependent one 
+		use_dist_depend_dielectric_ = options.setDefaultBool(CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC, CharmmFF::Default::DISTANCE_DEPENDENT_DIELECTRIC);
+
+		// set the option for using the solvation energy
+		options.setDefaultBool(CharmmFF::Option::USE_EEF1, CharmmFF::Default::USE_EEF1);
+		if (use_solvation_component_
+				&& options[CharmmFF::Option::USE_EEF1] == "false")
+		{
+			// solvation component should be switched off (requested via options)
+			use_solvation_component_ = false;
+		}
+
+		// consistency check for the cuton/cutoff values
+		// and calculation of the inverse cube of their difference 
+		// (needed for force update)
+		if (cut_off_vdw_ < 0.0)
+		{
+			Log.warn() << "CharmmNonBonded::setup: vdW cutoff value cannot be negative: " << cut_off_vdw_ 
+								 << " (is set to infinite now, switching function disabled)"<< endl;
+			cut_off_vdw_ = Limits<float>::max() - 2.0;
+			cut_on_vdw_ = cut_off_vdw_ - 1.0;
+		}
+		if (cut_off_solvation_ < 0.0)
+		{
+			Log.warn() << "CharmmNonBonded::setup: solvation cutoff value cannot be negative: " << cut_off_solvation_ 
+								 << " (is set to infinite now, switching function disabled)"<< endl;
+			cut_off_solvation_ = Limits<float>::max() - 2.0;
+			cut_on_solvation_ = cut_off_solvation_ - 1.0;
+		}
+		if (cut_off_electrostatic_ < 0.0)
+		{
+			Log.warn() << "CharmmNonBonded::setup: electrostatic cutoff value cannot be negative: " << cut_off_electrostatic_ 
+								 << " (is set to infinite now, switching function disabled)"<< endl;
+			cut_off_electrostatic_ = Limits<float>::max() - 2.0;
+			cut_on_electrostatic_ = cut_off_electrostatic_ - 1.0;
+		}
+
+		inverse_difference_off_on_vdw_3_ = SQR(cut_off_vdw_) - SQR(cut_on_vdw_);
+		inverse_difference_off_on_solvation_3_ = SQR(cut_off_solvation_) - SQR(cut_on_solvation_);
+		inverse_difference_off_on_electrostatic_3_ = SQR(cut_off_electrostatic_) - SQR(cut_on_electrostatic_);
+
+		inverse_difference_off_on_vdw_3_ *= SQR(inverse_difference_off_on_vdw_3_);
+		inverse_difference_off_on_solvation_3_ *= SQR(inverse_difference_off_on_solvation_3_);
+		inverse_difference_off_on_electrostatic_3_ *= SQR(inverse_difference_off_on_electrostatic_3_);
+
+		if (inverse_difference_off_on_vdw_3_ <= 0.0)
+		{
+			Log.warn() << "CharmmNonBonded::setup: vdW cuton value should be smaller than cutoff. Switching function disabled." << endl;
+			cut_on_vdw_ = cut_off_vdw_ + 1.0;
+		}
+		else
+		{
+			inverse_difference_off_on_vdw_3_ = 1.0 / inverse_difference_off_on_vdw_3_;
+		}
+		if (inverse_difference_off_on_electrostatic_3_ <= 0.0)
+		{
+			Log.warn() << "CharmmNonBonded::setup: electrostatic cuton value should be smaller than cutoff. Switching function disabled." << endl;
+			cut_on_electrostatic_ = cut_off_electrostatic_ + 1.0;
+		}
+		else
+		{
+			inverse_difference_off_on_electrostatic_3_ = 1.0 / inverse_difference_off_on_electrostatic_3_;
+		}
+		if (inverse_difference_off_on_solvation_3_ <= 0.0)
+		{
+			Log.warn() << "CharmmNonBonded::setup: solvation cuton value should be smaller than cutoff. Switching function disabled." << endl;
+			cut_on_solvation_ = cut_off_solvation_ + 1.0;
+		}
+		else
+		{
+			inverse_difference_off_on_solvation_3_ = 1.0 / inverse_difference_off_on_solvation_3_;
+		}		
 
 		// Determine the most efficient way to calculate all non bonded atom pairs
 		algorithm_type_ = determineMethodOfAtomPairGeneration();
@@ -331,7 +413,6 @@ namespace BALL
 					tmp.values.B = 0;
 				}
 				
-
 				non_bonded_.push_back(tmp);
 			}
 		}
@@ -412,108 +493,133 @@ namespace BALL
 	void CHARMMcalculateVdWAndElectrostaticEnergy
 		(vector<LennardJones::Data>::const_iterator it,
 		 Vector3& period, Vector3& half_period,
-		 float& cut_off_vdw_2, float& cut_off_electrostatic_2,
-		 float& vdw_energy, float& electrostatic_energy, 
-		 float& cut_on_vdw_2, float& inverse_difference_on_off_3,
-		 bool use_periodic_boundary, 
-		 bool use_dist_depend, 
+		 const double& cut_off_electrostatic_2, const double& cut_on_electrostatic_2, 
+		 const double& inverse_difference_off_on_electrostatic_3,
+		 const double& cut_off_vdw_2, const double& cut_on_vdw_2, 
+		 const double& inverse_difference_off_on_vdw_3,
+		 const double& cut_off_solvation_2, const double& cut_on_solvation_2, 
+		 const double& inverse_difference_off_on_solvation_3,
 		 bool use_solvation, 
 		 vector<CharmmEEF1::Values>& solvation,
-		 float& solvation_energy)
+		 bool use_periodic_boundary, 
+		 bool use_dist_depend, 
+		 double& electrostatic_energy,
+		 double& vdw_energy,
+		 double& solvation_energy)
 	{
 		Vector3 difference = it->atom1->getPosition() - it->atom2->getPosition();      
 
 		if (use_periodic_boundary == true)
 		{
-			// calculate the minimum image 
-			CHARMMcalculateMinimumImage(difference,period,half_period); 
+			// calculate the minimum image if a periodic boundary is used
+			CHARMMcalculateMinimumImage(difference, period, half_period); 
 		}
 	 
 		// the squared distance between the two atoms 
-		float distance_2 = difference.getSquareLength();
+		double distance_2 = difference.getSquareLength();
 
-		if (distance_2 > 0 && distance_2 <= cut_off_electrostatic_2) 
+		if (distance_2 > 0.0)
 		{
-			float inverse_distance_2 = 1 / distance_2;
-
-			// differentiate between constant dielectric and distance dependent
-			float tmp_energy; 
-
-			if (use_dist_depend)
+			double inverse_distance_2 = 1.0 / distance_2;
+			if (distance_2 <= cut_off_electrostatic_2) 
 			{
-				// use distance dependent  dielectric 
-				tmp_energy = (it->atom1->getCharge() * it->atom2->getCharge()) * inverse_distance_2; 
-			} else {
-				// use constant dielectric constant  
-				tmp_energy = (it->atom1->getCharge() * it->atom2->getCharge()) * sqrt(inverse_distance_2);
+				// differentiate between constant dielectric and distance dependent
+				double tmp_energy = it->atom1->getCharge() * it->atom2->getCharge();
+				if (use_dist_depend)
+				{
+					// use distance dependent  dielectric 
+					tmp_energy *= inverse_distance_2; 
+				} 
+				else 
+				{
+					// use constant dielectric constant  
+					tmp_energy *= sqrt(inverse_distance_2);
+				}
+
+				// check for the switching function	
+				if (distance_2 > cut_on_electrostatic_2)
+				{
+					double difference_off_2 = SQR(cut_off_electrostatic_2 - distance_2);
+					tmp_energy *= difference_off_2 * (cut_off_electrostatic_2 + 2 * distance_2 - 3 * cut_on_electrostatic_2) 
+												* inverse_difference_off_on_electrostatic_3;
+				}
+
+				// add the electrostatic contribution of this pair
+				electrostatic_energy += tmp_energy;
 			}
-
-			electrostatic_energy += tmp_energy;
-
 
 			// calculate vdw energy
 			if (distance_2 <= cut_off_vdw_2) 
 			{
-				float inverse_distance_6 = inverse_distance_2 * inverse_distance_2 * inverse_distance_2;
-				tmp_energy = inverse_distance_6 * (it->values.A * inverse_distance_6 - it->values.B );          
+				double inverse_distance_6 = inverse_distance_2 * inverse_distance_2 * inverse_distance_2;
+				double tmp_energy = inverse_distance_6 * (it->values.A * inverse_distance_6 - it->values.B); 
 
-				// the switch function must be used
+				// check for the switching function	
 				if (distance_2 > cut_on_vdw_2)
 				{
-					float difference_off_2 = (cut_off_vdw_2 - distance_2);
-					difference_off_2 *= difference_off_2;
-					tmp_energy *= difference_off_2 * (cut_off_vdw_2 + 2 * distance_2 - 3 * cut_on_vdw_2) *
-												inverse_difference_on_off_3;
+					double difference_off_2 = SQR(cut_off_vdw_2 - distance_2);
+					tmp_energy *= difference_off_2 * (cut_off_vdw_2 + 2.0 * distance_2 - 3.0 * cut_on_vdw_2) *
+													 inverse_difference_off_on_vdw_3;
 				}
-					 
 				vdw_energy += tmp_energy;
-					
+			} 
+
+			// Calculate the solvation energy contribution
+			if (use_solvation		
+					&& (distance_2 <= cut_off_solvation_2)
+					&& it->atom1->getElement() !=  PSE[Element::H] 
+					&& it->atom2->getElement() !=  PSE[Element::H])
+			{
+				CharmmEEF1::Values a1 = solvation[it->atom1->getType()];
+				CharmmEEF1::Values a2 = solvation[it->atom2->getType()];
+
+				double factor = PI * sqrt(PI) * distance_2;
+				double distance = sqrt(distance_2);
+
+				// contribution of atom1
+				float factor_exp = (distance - a1.r_min) / a1.sig_w; 
+				factor_exp *= factor_exp;
+
+				double tmp_energy =  - 0.5 * a2.V * a1.dG_free * exp(-factor_exp) / (a1.sig_w * factor);
+
+				// contribution of atom2
+				factor_exp = (distance - a2.r_min) / a2.sig_w;
+				factor_exp *= factor_exp;
+				
+				tmp_energy -= 0.5 * a1.V * a2.dG_free * exp(-factor_exp) / (a2.sig_w * factor);
+
+				// check for the switching function	
+				if (distance_2 > cut_on_solvation_2)
+				{
+					double difference_off_2 = SQR(cut_off_solvation_2 - distance_2);
+					tmp_energy *= difference_off_2 * (cut_off_solvation_2 + 2 * distance_2 - 3 * cut_on_solvation_2) 
+												* inverse_difference_off_on_solvation_3;
+				}
+				
+				solvation_energy += tmp_energy;
 			}
-		} 
-
-		// Calculate the solvation energy contribution
-		if (use_solvation && it->atom1->getElement() !=  PSE[Element::H] && it->atom2->getElement() !=  PSE[Element::H])
-		{
-			CharmmEEF1::Values a1 = solvation[it->atom1->getType()];
-			CharmmEEF1::Values a2 = solvation[it->atom2->getType()];
-
-			float factor = BALL::Constants::PI * sqrt(BALL::Constants::PI) * distance_2;
-			float distance = sqrt(distance_2);
-
-			// contribution of atom1
-			float factor_exp = (distance - a1.r_min) / a1.sig_w; 
-			factor_exp *= factor_exp;
-
-			solvation_energy -= 0.5 * a2.V * a1.dG_free * exp(-factor_exp) / (a1.sig_w * factor);
-
-			// contribution of atom2
-			factor_exp = (distance - a2.r_min) / a2.sig_w;
-			factor_exp *= factor_exp;
-			
-			solvation_energy -= 0.5 * a1.V * a2.dG_free * exp(-factor_exp) / (a2.sig_w * factor);
 		}
 	} // end  of function calculateVdWAndElectrostaticEnergy() 
-
 
 	// This  function calculates the  force vector
 	// resulting from non-bonded interactions between two atoms 
 	BALL_INLINE 
 	void CHARMMcalculateVdWAndElectrostaticForce
 		(vector<LennardJones::Data>::iterator it, 
+		 const double& e_scaling_factor, const double& vdw_scaling_factor, 
 		 Vector3& period, Vector3& half_period, 
+		 const double& cut_off_electrostatic_2, const double& cut_on_electrostatic_2, 
+		 const double& inverse_difference_off_on_electrostatic_3,
+		 const double& cut_off_vdw_2, const double& cut_on_vdw_2, 
+		 const double& inverse_difference_off_on_vdw_3,
+		 const double& cut_off_solvation_2, const double& cut_on_solvation_2, 
+		 const double& inverse_difference_off_on_solvation_3,
+		 bool use_solvation, 
+		 vector<CharmmEEF1::Values>& solvation,
 		 bool use_selection,		
-		 const float& e_scaling_factor, const float& vdw_scaling_factor, 
-		 const float& cut_off_electrostatic_2, const float& cut_off_vdw_2, 
-		 const float& cut_on_vdw_2, const float& inverse_difference_on_off_3,
 		 bool use_periodic_boundary, 
-		 bool use_dist_depend, 
-		 bool use_solvation, vector<CharmmEEF1::Values>& solvation)
+		 bool use_dist_depend)
 	{
-		float factor = 0;
-		float distance;
-		float inverse_distance;
-		float inverse_distance_2;
-
 		// calculate the difference vector between the two atoms
 		Vector3 direction = it->atom1->getPosition() - it->atom2->getPosition(); 
 
@@ -523,133 +629,270 @@ namespace BALL
 			CHARMMcalculateMinimumImage(direction,period,half_period); 
 		}
 
-		float distance_2 = direction.getSquareLength(); 
+		double distance_2 = direction.getSquareLength(); 
+		if (distance_2 > 0.0)
+		{
+			// calculate the distance, its inverse,
+			// and the square thereof
+			double distance = sqrt(distance_2);
+			double inverse_distance(1.0 / distance);
+			double inverse_distance_2 = SQR(inverse_distance);
 
-		if (distance_2 > 0 && distance_2 <= cut_off_electrostatic_2) 
-		{ 
-			inverse_distance_2 = 1 / distance_2;
-			inverse_distance = sqrt(inverse_distance_2);
-
-			// distinguish between constant and distance dependent dielectric 
-			if (use_dist_depend)	
-			{
+			// We multiply the normalized direction of the 
+			// forces with this factor
+			double factor = 0.0;
+			
+			// calculate the electrostatic energy
+			// if the distance is within the ctoff distance
+			//
+			if (distance_2 <= cut_off_electrostatic_2) 
+			{ 
+				// distinguish between constant and distance dependent dielectric 
 				// distance dependent dielectric:  epsilon = 4 * epsilon_0 * r_ij
 				// factor 4 reduces to 2 because of derivative 
-				factor = it->atom1->getCharge() * it->atom2->getCharge() * inverse_distance_2 * inverse_distance_2 * e_scaling_factor * 2.0 ;
-			} else {
-				// constant dielectric 
-				factor = it->atom1->getCharge() * it->atom2->getCharge() * inverse_distance_2 * inverse_distance * e_scaling_factor;
-			}
 
+				// the following obscure construction
+				// saves one if/then:
+				// factor evaluates to 1.0 if the distance dependent electrostatics
+				// are used and to 0.0 otherwise
+				double dist_depend_factor = (double)(use_dist_depend == true);
+
+				// This expression evaluates to either 
+				//     inverse_distance * 2.0  (for distance dependent ES)
+				//  or 1.0 (for constant ES)
+				factor = dist_depend_factor * inverse_distance * 2.0 + (1.0 - dist_depend_factor);
+
+				// now we multiply with the right constants and we are done.
+				factor *=  it->atom1->getCharge() * it->atom2->getCharge() * inverse_distance * inverse_distance_2 * e_scaling_factor;
+				
+				// we have to use the switching function (cuton <= distance <= cutoff)
+				if (distance_2 > cut_on_electrostatic_2)
+				{
+					// the switching function is defined as follows:
+					//         (r_{on}^2 - R^2)^2 (r_{off}^2 + 2 R^2 - 3r_{on}^2)
+					// sw(R) = --------------------------------------------------
+					//                    (r_{off}^2 - r_{on}^2)^3
+					// [Brooks et al., J. Comput. Chem., 4:191 (1983)]
+					//
+					// the derivative has the following form:
+					//                      (r_{off}^2 - R^2)(r_{on}^2 - R^2)
+					//   d/dR sw(R) = 12 R -----------------------------------
+					//                           (r_{off}^2 - r_{on}^2)^3
+					// 
+					double difference_to_off = cut_off_electrostatic_2 - distance_2;
+					double difference_to_on = cut_on_electrostatic_2 - distance_2;
+
+					// First, multiply the current force with the switching function
+					factor *= SQR(difference_to_off) 
+										* (cut_off_electrostatic_2 + 2.0 * distance_2 - 3.0 * cut_on_electrostatic_2)
+										* inverse_difference_off_on_electrostatic_3; 
+
+
+					// Second, we add the product of the energy and the derivative 
+					// of the switching function (the total force is the derivative of 
+					// a product of functions)
+					// we divide the derivative of the switching function 
+					// by distance to save the normalization of the direction vector
+					double derivative_of_switch = 12.0 
+																				* difference_to_off * difference_to_on
+																				* inverse_difference_off_on_electrostatic_3;
+
+					// calculate the electrostatic energy
+					// energy has to be negative since we do not calculate the 
+					// force, but the derivative of the energy (negative force) above
+					dist_depend_factor = inverse_distance * dist_depend_factor + (1.0 - dist_depend_factor);
+					double electrostatic_energy = - e_scaling_factor
+																				* dist_depend_factor
+																				* inverse_distance * it->atom1->getCharge() * it->atom2->getCharge();
+					factor += derivative_of_switch * electrostatic_energy;
+				}
+			}
+			
 			// calculate the forces caused by the vdw interactions
+			// if we are within the VdW cutoff
 			if (distance_2 <= cut_off_vdw_2) 
 			{
-				float inverse_distance_4 = inverse_distance_2 * inverse_distance_2;
-				float inverse_distance_8 = inverse_distance_4 * inverse_distance_4;
+				double inverse_distance_4 = SQR(inverse_distance_2);
+				double inverse_distance_8 = SQR(inverse_distance_4);
+
+				// We divide by the distance for efficiency.
+				// This saves the normalization of the direction vector
 				// conversion from kJ/(mol*A) -> J/m
 				//    1e3 (kJ -> J)
 				//    1e10 (A -> m)
 				//    1/NA (J/mol -> J)
-				factor += 1e13 / Constants::AVOGADRO * inverse_distance_8 * 
-											 (12 * it->values.A * inverse_distance_2 * inverse_distance_4 - 6 * it->values.B); 
+				double tmp = 1e13 / AVOGADRO * inverse_distance_8 * vdw_scaling_factor
+											*  (12 * it->values.A * inverse_distance_2 * inverse_distance_4 - 6 * it->values.B); 
 
-				// the switch function must be used
+				// we have to use the switching function (cuton <= distance <= cutoff)
 				if (distance_2 > cut_on_vdw_2)
 				{
-					float difference_to_off = (cut_off_vdw_2 - distance_2);
-					float difference_to_off_2 = difference_to_off * difference_to_off;
-					float triple = cut_off_vdw_2 - 2 * distance_2 - 3 * cut_on_vdw_2;
-					factor *= difference_to_off_2 * triple * inverse_difference_on_off_3; 
+					// the switching function is the same function as for
+					// electrostatics (see above)
+					double difference_to_off = cut_off_vdw_2 - distance_2;
+					double difference_to_on = cut_on_vdw_2 - distance_2;
 
-					float derivative_of_switch = inverse_difference_on_off_3 * 2.0 * 
-																				(difference_to_off * triple - difference_to_off_2);	
+					// First, multiply the current force with the switching function
+					tmp *= SQR(difference_to_off)
+										* (cut_off_vdw_2 + 2.0 * distance_2 - 3.0 * cut_on_vdw_2)
+										* inverse_difference_off_on_vdw_3; 
 
-					float inverse_distance_6 = inverse_distance_2 * inverse_distance_4;
-					factor += inverse_distance * derivative_of_switch * (1e13 / Constants::AVOGADRO) * inverse_distance_6 *
-										(inverse_distance_6 * it->values.A - it->values.B);
+					// Second, we add the product of the energy and the derivative 
+					// of the switching function (the total force is the derivative of 
+					// a product of functions)
+					// we multiply the derivative by a factor of distance
+					// to save the normalization of the direction vector
+					double derivative_of_switch = 12.0
+																				* difference_to_off * difference_to_on
+																				* inverse_difference_off_on_vdw_3;
+					// calculate the vdW energy
+					// and convert it to units of N
+					// (values.A and values.B are in units of kJ/mol, distances in units of Angstrom)
+					double inverse_distance_6 = inverse_distance_4 * inverse_distance_2;
+					double vdw_energy = - 1e13 / NA * vdw_scaling_factor * inverse_distance_6 * (inverse_distance_6 * it->values.A - it->values.B);
+					tmp += derivative_of_switch * vdw_energy;
+
 				}
+
+				// add the vdW contributions to the force factor
+				factor += tmp;
 			}
 
 			// Calculate the forces that are caused by the solvation component
-
-			if (use_solvation && it->atom1->getElement() !=  PSE[Element::H] && it->atom2->getElement() !=  PSE[Element::H])
+			// ignore all hydrogen atoms (they are not considered in EEF1)
+			if (use_solvation 
+					&& (distance_2 <= cut_off_solvation_2) 
+					&& it->atom1->getElement() !=  PSE[Element::H] 
+					&& it->atom2->getElement() !=  PSE[Element::H])
 			{
 				CharmmEEF1::Values a1 = solvation[it->atom1->getType()];
 				CharmmEEF1::Values a2 = solvation[it->atom2->getType()];
 
-				distance = sqrt(distance_2);
-				inverse_distance = 1/distance;
-
 				// contribution of atom1
 				float factor_exp = (distance - a1.r_min) / a1.sig_w; 
-				float factor_exp_2 = factor_exp * factor_exp;
+				float factor_exp_2 = SQR(factor_exp);
 
-				float tmp =  a2.V * a1.dG_free * exp(-factor_exp_2) * ((factor_exp/a1.sig_w) + inverse_distance) / a1.sig_w;
+				double tmp =  - a2.V * a1.dG_free * exp(-factor_exp_2) * ((factor_exp/a1.sig_w) + inverse_distance) / a1.sig_w;
 
 				// contribution of atom2
 				factor_exp = (distance - a2.r_min) / a2.sig_w;
-				factor_exp_2 = factor_exp * factor_exp;
+				factor_exp_2 = SQR(factor_exp);
 		
-				tmp +=  a1.V * a2.dG_free * exp(-factor_exp_2) * ((factor_exp/a2.sig_w) + inverse_distance) / a2.sig_w;
+				tmp +=  - a1.V * a2.dG_free * exp(-factor_exp_2) * ((factor_exp/a2.sig_w) + inverse_distance) / a2.sig_w;
+
 
 				// units:  conversion from kJ/mol/A -> J/m (N)
 				//   AVOGADRO: J/mol -> J
 				//   1e3:      kJ -> J
-        //   1e10:     Angstrom -> m
-				tmp *= (1e13 / Constants::AVOGADRO);
+				//   1e10:     Angstrom -> m
+				// 
+				tmp *= (1e13 / AVOGADRO) / (PI * sqrt(PI) * distance_2 * distance);
 				
-				factor -= tmp / (Constants::PI * sqrt(Constants::PI) * distance_2 * distance);
+				// we have to use the switching function (cuton <= distance <= cutoff)
+				if (distance_2 > cut_on_solvation_2)
+				{
+					// the switching function is the same function as for
+					// electrostatics (see above)
+					double difference_to_off = cut_off_solvation_2 - distance_2;
+					double difference_to_on = cut_on_solvation_2 - distance_2;
 
-			}
-		} 
+					// First, multiply the current force with the switching function
+					tmp *= difference_to_off * difference_to_off 
+										* (cut_off_solvation_2 + 2.0 * distance_2 - 3.0 * cut_on_solvation_2)
+										* inverse_difference_off_on_solvation_3; 
 
-		// now apply the force to the atoms
-		Vector3 force = factor * direction; 
+					// Second, we add the product of the energy and the derivative 
+					// of the switching function (the total force is the derivative of 
+					// a product of functions)
+					// we divide the derivative of switch by distance
+					// to save the normalization of the direction vector
+					double derivative_of_switch = 12.0 
+																				* difference_to_off * difference_to_on
+																				* inverse_difference_off_on_solvation_3;
 
-		if (use_selection == false)
-		{
-			it->atom1->setForce(it->atom1->getForce() + force);
-			it->atom2->setForce(it->atom2->getForce() - force);
-		} else {
-			if (it->atom1->isSelected()) 
+					// calculate the solvation energy
+					double tmp2 = PI * sqrt(PI) * distance_2;
+					
+					// contribution of atom1
+					float factor_exp = (distance - a1.r_min) / a1.sig_w; 
+					factor_exp *= factor_exp;
+					double solvation_energy = - 0.5 * a2.V * a1.dG_free * exp(-factor_exp) / (a1.sig_w * tmp2);
+
+					// contribution of atom2
+					factor_exp = (distance - a2.r_min) / a2.sig_w;
+					factor_exp *= factor_exp;
+					solvation_energy += - 0.5 * a1.V * a2.dG_free * exp(-factor_exp) / (a2.sig_w * tmp2);
+
+					// convert to units of N (was: kJ/(mol A))
+					// derivative of switch has units of 1/Angstrom
+					solvation_energy *= - 1e13 / NA;
+
+					tmp += derivative_of_switch * solvation_energy;
+				}
+
+				factor += tmp;
+			} 
+
+			// now apply the force to the atoms
+			Vector3 force = (float)factor * direction; 
+
+			if (!use_selection)
 			{
 				it->atom1->setForce(it->atom1->getForce() + force);
-			}
-
-			if (it->atom2->isSelected()) 
-			{
 				it->atom2->setForce(it->atom2->getForce() - force);
+			} 
+			else 
+			{
+				if (it->atom1->isSelected()) 
+				{
+					it->atom1->setForce(it->atom1->getForce() + force);
+				}
+
+				if (it->atom2->isSelected()) 
+				{
+					it->atom2->setForce(it->atom2->getForce() - force);
+				}
 			}
 		}
 	} // end of function 	calculateVdWAndElectrostaticForce()
 
 
 
+	// define a conventient shorthand for
+	// the rather lenghty collection of parameters
+	// used in the inline function	
+	#define ENERGY_PARAMETERS\
+		period,\
+		half_period,\
+		cut_off_electrostatic_2,\
+		cut_on_electrostatic_2,\
+		inverse_difference_off_on_electrostatic_3_,\
+		cut_off_vdw_2,\
+		cut_on_vdw_2,\
+		inverse_difference_off_on_vdw_3_,\
+		cut_off_solvation_2,\
+		cut_on_solvation_2,\
+		inverse_difference_off_on_solvation_3_,\
+		use_solvation_component_,\
+		solvation_
+	
 
 	// This method calculates the current energy resulting from non-bonded interactions 
-	float CharmmNonBonded::updateEnergy()
+	double CharmmNonBonded::updateEnergy()
 	{
 		// Calculate squared cut_off values
-		float	cut_off_electrostatic_2 = cut_off_electrostatic_ * cut_off_electrostatic_;
-		float	cut_off_vdw_2 = cut_off_vdw_ * cut_off_vdw_;
-		float cut_on_vdw_2 = cut_on_vdw_ * cut_on_vdw_;
-		float inverse_difference_on_off_3 = ( cut_off_vdw_2 - cut_on_vdw_2);
-		inverse_difference_on_off_3 *= ( cut_off_vdw_2 - cut_on_vdw_2) * ( cut_off_vdw_2 - cut_on_vdw_2);
-		if (inverse_difference_on_off_3 == 0)
-		{
-			// BAUSTELLE: cut_off_vdw_ and cut_on_vdw_ are equal
-		}
-		else
-		{
-			inverse_difference_on_off_3 = 1/ inverse_difference_on_off_3;
-		}
-
-
+		double	cut_off_vdw_2 = SQR(cut_off_vdw_);
+		double	cut_on_vdw_2 = SQR(cut_on_vdw_);
+		double	cut_off_electrostatic_2 = SQR(cut_off_electrostatic_);
+		double	cut_on_electrostatic_2 = SQR(cut_on_electrostatic_);
+		double	cut_off_solvation_2 = SQR(cut_off_solvation_);
+		double	cut_on_solvation_2 = SQR(cut_on_solvation_);
+		
 		// Define the different components of the non-bonded energy
-		float vdw_energy = 0;
-		float vdw_energy_1_4 = 0;
-		float electrostatic_energy = 0;
-		float electrostatic_energy_1_4 = 0;
+		double vdw_energy = 0;
+		double vdw_energy_1_4 = 0;
+		double electrostatic_energy = 0;
+		double electrostatic_energy_1_4 = 0;
 		solvation_energy_ = 0;
 
 		Vector3 difference,period,half_period;
@@ -688,28 +931,22 @@ namespace BALL
 			// first evaluate 1-4 non-bonded pairs 
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
 			{                                                                                            
-				if(use_selection == false
-					 || (use_selection == true && (it->atom1->isSelected() || it->atom2->isSelected()))) 
+				if (use_selection == false || (use_selection == true && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
-						(it, period, half_period, cut_off_vdw_2, 
-						 cut_off_electrostatic_2, vdw_energy_1_4,                                
-						 electrostatic_energy_1_4, cut_on_vdw_2, 
-						 inverse_difference_on_off_3, true, true, 
-						 use_solvation_component_, solvation_, solvation_energy_);
+						(it, ENERGY_PARAMETERS, true, true, 
+						 electrostatic_energy_1_4, vdw_energy_1_4, solvation_energy_);
 				}                                                                                          
 			}  
 
 			// evaluate remaining non-bonded pairs (also in the same vector) 
 			for (i = 0; it != non_bonded_.end(); ++it, i++)  
 			{                                                                                            
-				if(use_selection == false || (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
+				if (use_selection == false || (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
-						(it, period, half_period, cut_off_vdw_2, 
-						 cut_off_electrostatic_2,vdw_energy, electrostatic_energy,cut_on_vdw_2,
-						 inverse_difference_on_off_3, true, true, 
-						 use_solvation_component_, solvation_, solvation_energy_);
+						(it, ENERGY_PARAMETERS, true, true, 
+						 electrostatic_energy, vdw_energy, solvation_energy_);
 				}                                                                                          
 			}
 		} 
@@ -724,29 +961,22 @@ namespace BALL
 			// first evaluate 1-4 non-bonded pairs 
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
 			{                                                                                            
-				if (use_selection == false 
-						|| (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
+				if (use_selection == false || (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
-						(it, period,half_period, cut_off_vdw_2, cut_off_electrostatic_2,vdw_energy_1_4,                                
-						 electrostatic_energy_1_4, cut_on_vdw_2,
-						 inverse_difference_on_off_3, true, false, 
-						 use_solvation_component_, solvation_, solvation_energy_);            
+						(it, ENERGY_PARAMETERS, true, false, 
+						 electrostatic_energy_1_4, vdw_energy_1_4, solvation_energy_);
 				}                                                                                   
 			}                                                                                    
 
 			// evaluate remaining non-bonded pairs (also in the same vector) 
 			for (i = 0; it != non_bonded_.end(); ++it, i++)  
 			{                                                                                    
-				if (use_selection == false 
-						|| (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
+				if (use_selection == false || (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                 
 					CHARMMcalculateVdWAndElectrostaticEnergy
-						(it, period,half_period,   
-						 cut_off_vdw_2, cut_off_electrostatic_2,vdw_energy,                        
-						 electrostatic_energy,cut_on_vdw_2,
-						 inverse_difference_on_off_3, true, false, 
-						 use_solvation_component_, solvation_, solvation_energy_);
+						(it, ENERGY_PARAMETERS, true, false, 
+						 electrostatic_energy, vdw_energy, solvation_energy_);
 				}                                                                                   
 			}
 		}
@@ -756,14 +986,11 @@ namespace BALL
 			// first evaluate 1-4 non-bonded pairs 
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
 			{                                                                                            
-				if (use_selection == false 
-						|| (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected())))
+				if (use_selection == false || (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected())))
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
-						(it, period,half_period, cut_off_vdw_2, cut_off_electrostatic_2,vdw_energy_1_4,                                
-						 electrostatic_energy_1_4, cut_on_vdw_2, 
-						 inverse_difference_on_off_3, false, true, 
-						 use_solvation_component_, solvation_, solvation_energy_);
+						(it, ENERGY_PARAMETERS, false, true, 
+						 electrostatic_energy_1_4, vdw_energy_1_4, solvation_energy_);
 				}                                                                                          
 			}                                                                                          
 
@@ -774,11 +1001,8 @@ namespace BALL
 						|| (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
-						(it, period,half_period,   
-						 cut_off_vdw_2, cut_off_electrostatic_2,vdw_energy,                                
-						 electrostatic_energy,cut_on_vdw_2,
-						 inverse_difference_on_off_3, false, true, 
-						 use_solvation_component_, solvation_, solvation_energy_);
+						(it, ENERGY_PARAMETERS, false, true, 
+						 electrostatic_energy, vdw_energy, solvation_energy_);
 				}                                                                                          
 			}                                                                                          
 		}
@@ -792,11 +1016,8 @@ namespace BALL
 				if (use_selection == false || (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
-						(it,period,half_period,   
-						 cut_off_vdw_2, cut_off_electrostatic_2,vdw_energy_1_4,                                
-						 electrostatic_energy_1_4, cut_on_vdw_2,
-						 inverse_difference_on_off_3, false, false, 
-						 use_solvation_component_, solvation_, solvation_energy_);
+						(it, ENERGY_PARAMETERS, false, false, 
+						 electrostatic_energy_1_4, vdw_energy_1_4, solvation_energy_);
 				}                                                                                          
 			}                                                                                          
 
@@ -807,39 +1028,28 @@ namespace BALL
 						|| (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected()))) 
 				{                                                                                          
 					CHARMMcalculateVdWAndElectrostaticEnergy
-						(it,period,half_period,   
-						 cut_off_vdw_2, cut_off_electrostatic_2,vdw_energy,                                
-						 electrostatic_energy, cut_on_vdw_2, 
-						 inverse_difference_on_off_3, false, false, 
-						 use_solvation_component_, solvation_, solvation_energy_);
+						(it, ENERGY_PARAMETERS, false, false, 
+						 electrostatic_energy, vdw_energy, solvation_energy_);
 				}                                                                                          
 			}                                                                                          
 		}
 																																																	 
-		// Finally, calculate the factors to get the right units (kJ/mol)
-		using namespace Constants;
-		const float vdw_factor = 1.0;
+    // calculate the total energy and its contributions
 
-		// differentiate between constant dielectric and distance dependent
-		float electrostatic_factor;
+    // vdw energy already has the right units -
+    // just scale the 1-4-energy
+    vdw_energy_ = vdw_energy + scaling_vdw_1_4_ * vdw_energy_1_4;
 
-		if (use_dist_depend_dielectric_)
-		{
-			// distance dependent dielectric: epsilon = 4 * epsilon_0 * r_ij
-			// r_ij is already incorporated in electrostatic_energy and electrostatic_energy_1_4
-			electrostatic_factor = NA * e0 * e0 / (PI * 4 * VACUUM_PERMITTIVITY * 1000 * 1e-10);
-		} else {
-			// constant dielectric 
-			electrostatic_factor = NA * e0 * e0 / (4 * PI * VACUUM_PERMITTIVITY * 1000 * 1e-10);
-		}
+    // we have to scale the electrostatic energy:
+    // we omitted 1/(4 PI epsilon) up to now and we have to
+    // convert to kJ/mol
+    const double electrostatic_factor = NA * e0 * e0 / (4 * PI * VACUUM_PERMITTIVITY * 1000 * 1e-10);
+    electrostatic_energy_
+        = electrostatic_factor * (electrostatic_energy + scaling_electrostatic_1_4_ * electrostatic_energy_1_4);
 
-		// calculate the total energy and its contributions
-		vdw_energy_ = vdw_factor * (vdw_energy + scaling_vdw_1_4_ * vdw_energy_1_4);
-
-		electrostatic_energy_ = electrostatic_factor 
-							* (electrostatic_energy + scaling_electrostatic_1_4_ * electrostatic_energy_1_4);
-		energy_ =  vdw_energy_ + electrostatic_energy_ + solvation_energy_;
-
+    // add up all contributions
+    energy_ =  vdw_energy_ + electrostatic_energy_ + solvation_energy_;
+ 
 		return energy_; 
 	} // end of CharmmNonBonded::updateEnergy 
 
@@ -847,21 +1057,34 @@ namespace BALL
 
 	// This method calculates the current forces resulting from Van-der-Waals
 	// and electrostatic interactions 
+
+	// define a conventient shorthand for
+	// the rather lenghty collection of parameters
+	// used in the inline function
+	#define FORCE_PARAMETERS\
+		period,\
+		half_period,\
+		cut_off_electrostatic_2,\
+		cut_on_electrostatic_2,\
+		inverse_difference_off_on_electrostatic_3_,\
+		cut_off_vdw_2,\
+		cut_on_vdw_2,\
+		inverse_difference_off_on_vdw_3_,\
+		cut_off_solvation_2,\
+		cut_on_solvation_2,\
+		inverse_difference_off_on_solvation_3_,\
+		use_solvation_component_,\
+		solvation_
+
 	void CharmmNonBonded::updateForces()
 	{
 		// Define variables for the squared cut_offs, the unit factors and so on
-		float	cut_off_electrostatic_2 = cut_off_electrostatic_ *cut_off_electrostatic_;
-		float	cut_off_vdw_2 = cut_off_vdw_ * cut_off_vdw_;
-		float cut_on_vdw_2 = cut_on_vdw_ * cut_on_vdw_;
-		float inverse_difference_on_off_3 = (cut_off_vdw_2 - cut_on_vdw_2) * (cut_off_vdw_2 - cut_on_vdw_2);
-		inverse_difference_on_off_3 *= (cut_off_vdw_2 - cut_on_vdw_2);
-		
-		if (inverse_difference_on_off_3 == 0)
-		{
-			// BAUSTELLE: Division durch 0
-		} else{
-			inverse_difference_on_off_3 = 1/ inverse_difference_on_off_3;
-		}
+		double cut_off_electrostatic_2 = SQR(cut_off_electrostatic_);
+		double cut_on_electrostatic_2 = SQR(cut_on_electrostatic_);
+		double cut_off_vdw_2 = SQR(cut_off_vdw_);
+		double cut_on_vdw_2 = SQR(cut_on_vdw_);
+		double cut_off_solvation_2 = SQR(cut_off_solvation_);
+		double cut_on_solvation_2 = SQR(cut_on_solvation_);
 		
 		// e_scaling_factor contains the unit conversions und the constants appearing in
 		// Coulomb's law:
@@ -869,14 +1092,14 @@ namespace BALL
 		//     F = ------------- ------------------
 		//         4 PI epsilon0       r * r
 		// Conversion factors are 1e-10 for Angstrom -> m
-		// and Constants::e0 for the proton charge
+		// and e0 for the proton charge
 
-		const float	e_scaling_factor = Constants::e0 * Constants::e0 / 
-									(4 * Constants::PI * Constants::VACUUM_PERMITTIVITY * 1e-20); 
+		const double	e_scaling_factor = e0 * e0 / 
+									(4 * PI * VACUUM_PERMITTIVITY * 1e-20); 
 
-		const float e_scaling_factor_1_4 = e_scaling_factor * scaling_electrostatic_1_4_;
-		const float vdw_scaling_factor = 1.0;
-		float vdw_scaling_factor_1_4 = vdw_scaling_factor * scaling_vdw_1_4_;
+		const double e_scaling_factor_1_4 = e_scaling_factor * scaling_electrostatic_1_4_;
+		const double vdw_scaling_factor = 1.0;
+		double vdw_scaling_factor_1_4 = vdw_scaling_factor * scaling_vdw_1_4_;
 
 		Size i;
 		vector<LennardJones::Data>::iterator it;  
@@ -888,7 +1111,7 @@ namespace BALL
 
 		// calculate forces arising from 1-4 interaction pairs
 		// and remaining non-bonded interaction pairs
-		if(use_periodic_boundary == true && use_dist_depend_dielectric_ == true)
+		if (use_periodic_boundary == true && use_dist_depend_dielectric_ == true)
 		{
 			// periodic boundary is enabled; use a distance dependent dielectric constant 
 			// Calculate periods and half periods
@@ -904,10 +1127,8 @@ namespace BALL
 						|| ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
-						(it, period, half_period, use_selection,
-						 e_scaling_factor_1_4, vdw_scaling_factor_1_4, cut_off_electrostatic_2, 
-						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
-						 true, true, use_solvation_component_, solvation_);
+						(it, e_scaling_factor_1_4, vdw_scaling_factor_1_4,
+						 FORCE_PARAMETERS, use_selection, true, true);
 				}
 			}
 
@@ -918,10 +1139,8 @@ namespace BALL
 						|| ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
-						(it, period, half_period, use_selection,
-						 e_scaling_factor, vdw_scaling_factor, cut_off_electrostatic_2, 
-						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
-						 true,true , use_solvation_component_, solvation_);
+						(it, e_scaling_factor, vdw_scaling_factor,
+						 FORCE_PARAMETERS, use_selection, true, true);
 				}
 			}
 		}
@@ -936,28 +1155,22 @@ namespace BALL
 			// first deal with 1-4 non-bonded pairs
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; i++, ++it) 
 			{
-				if (use_selection == false 
-						|| ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
+				if (use_selection == false || ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
-						(it, period, half_period, use_selection, 
-						 e_scaling_factor_1_4, vdw_scaling_factor_1_4, cut_off_electrostatic_2, 
-						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
-						 true, false, use_solvation_component_, solvation_);
+						(it, e_scaling_factor_1_4, vdw_scaling_factor_1_4,
+						 FORCE_PARAMETERS, use_selection, true, false);
 				}
 			}
 
 			// now deal with 'real' non-bonded pairs (in the same vector non_bonded_) 
 			for (i = 0; it != non_bonded_.end(); i++, ++it) 
 			{
-				if (use_selection == false 
-						|| (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected())))
+				if (use_selection == false || (use_selection == true  && (it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
-						(it, period,half_period, use_selection, 
-						 e_scaling_factor, vdw_scaling_factor, cut_off_electrostatic_2, 
-						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
-						 true, false, use_solvation_component_, solvation_);
+						(it, e_scaling_factor, vdw_scaling_factor,
+						 FORCE_PARAMETERS, use_selection, true, false);
 				}
 			}
 		}
@@ -968,27 +1181,22 @@ namespace BALL
 			// first deal with 1-4 non-bonded pairs
 			for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; i++, ++it) 
 			{
-				if (use_selection == false 
-						|| ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
+				if (use_selection == false || ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
-						(it, period,half_period, use_selection, 
-						 e_scaling_factor_1_4, vdw_scaling_factor_1_4, cut_off_electrostatic_2, 
-						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
-						 false, true, use_solvation_component_, solvation_);
+						(it, e_scaling_factor_1_4, vdw_scaling_factor_1_4,
+						 FORCE_PARAMETERS, use_selection, false, true);
 				}
 			}
 		 
 			// now deal with 'real' non-bonded pairs (in the same vector non_bonded_)
 			for (i = 0; it != non_bonded_.end(); i++, ++it) 
 			{
-				if (use_selection == false || ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
+				if (use_selection == false || (use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
-						(it, period,half_period, use_selection, 
-						 e_scaling_factor, vdw_scaling_factor, cut_off_electrostatic_2, 
-						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
-						 false, true, use_solvation_component_, solvation_);
+						(it, e_scaling_factor, vdw_scaling_factor,
+						 FORCE_PARAMETERS, use_selection, false, true);
 				}
 			}
 		}
@@ -1002,24 +1210,19 @@ namespace BALL
 				if (use_selection == false || ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
-						(it, period,half_period, use_selection, 
-						 e_scaling_factor_1_4, vdw_scaling_factor_1_4, cut_off_electrostatic_2, 
-						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
-						 false, false, use_solvation_component_, solvation_);
+						(it, e_scaling_factor_1_4, vdw_scaling_factor_1_4,
+						 FORCE_PARAMETERS, use_selection, false, false);
 				}
 			}
 
 			// now deal with 'real' non-bonded pairs (in the same vector non_bonded_)
 			for (i = 0; it != non_bonded_.end(); i++, ++it) 
 			{
-				if (use_selection == false 
-						|| ( use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
+				if (use_selection == false || (use_selection == true  && ( it->atom1->isSelected() || it->atom2->isSelected())))
 				{
 					CHARMMcalculateVdWAndElectrostaticForce
-						(it, period,half_period, use_selection, 
-						 e_scaling_factor, vdw_scaling_factor, cut_off_electrostatic_2, 
-						 cut_off_vdw_2, cut_on_vdw_2, inverse_difference_on_off_3,
-						 false, false, use_solvation_component_, solvation_);
+						(it, e_scaling_factor, vdw_scaling_factor,
+						 FORCE_PARAMETERS, use_selection, false, false);
 				}
 			}
 		}
@@ -1027,17 +1230,17 @@ namespace BALL
 	} // end of method CharmmNonBonded::updateForces()
 
 
-	float CharmmNonBonded::getElectrostaticEnergy() const
+	double CharmmNonBonded::getElectrostaticEnergy() const
 	{
 		return electrostatic_energy_;
 	}
 
-	float CharmmNonBonded::getVdwEnergy() const
+	double CharmmNonBonded::getVdwEnergy() const
 	{
 		return vdw_energy_;
 	}
  
-	float CharmmNonBonded::getSolvationEnergy() const
+	double CharmmNonBonded::getSolvationEnergy() const
 	{
 		return solvation_energy_;
 	}
