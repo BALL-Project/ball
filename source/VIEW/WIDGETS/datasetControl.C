@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.32 2004/10/21 13:37:07 amoll Exp $
+// $Id: datasetControl.C,v 1.33 2004/11/15 17:33:29 anhi Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -455,10 +455,8 @@ void DatasetControl::add3DGrid()
 	String filename = chooseGridFileForOpen_();
 	if (filename == "") return;
 
-	File infile(filename, std::ios::in);
 	RegularData3D* dat = new RegularData3D;
-	infile >> *dat;
-	infile.close();
+	(*dat).binaryRead(filename);
 	insertGrid_(dat, 0, filename);
 	RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
 	msg->setData(*dat);
@@ -567,9 +565,7 @@ void DatasetControl::save3DGrid_()
 	String filename = chooseGridFileForSave_();
 	if (filename == "") return;
 
-	File outfile(filename, std::ios::out);
-	outfile << * item_to_grid3_[context_item_];
-	outfile.close();
+	item_to_grid3_[context_item_]->binaryWrite(filename);
 	setStatusbarText("Grid successfully written...");
 }
 
