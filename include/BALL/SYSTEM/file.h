@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.15 2000/10/23 17:37:39 amoll Exp $
+// $Id: file.h,v 1.16 2000/12/14 16:54:14 anker Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -30,6 +30,9 @@ namespace BALL
 {
 	
 	/**	File Class.
+			\\
+			{\bf Definition:} \URL{BALL/SYSTEM/file.h}
+			\\
 	*/
 	class File
 		: public std::fstream
