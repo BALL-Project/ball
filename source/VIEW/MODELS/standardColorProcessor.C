@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.24 2004/02/23 17:58:42 oliver Exp $
+// $Id: standardColorProcessor.C,v 1.25 2004/02/24 13:44:59 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -160,7 +160,7 @@ namespace BALL
 
 		ColorRGBA ElementColorProcessor::getColor(const Composite* composite)
 		{
-			if (composite->isSelected()) return BALL_SELECTED_COLOR;
+			if (composite->isSelected()) return ColorProcessor::getColor(composite);
 
 			if (!RTTI::isKindOf<Atom>(*composite))
 			{
@@ -228,7 +228,7 @@ namespace BALL
 
 		ColorRGBA ResidueNameColorProcessor::getColor(const Composite* composite)
 		{
-			if (composite->isSelected()) return BALL_SELECTED_COLOR;
+			if (composite->isSelected()) return ColorProcessor::getColor(composite);
 
 			Residue residue;
 			if (!RTTI::isKindOf<Residue>(*composite) &&
@@ -273,7 +273,7 @@ namespace BALL
 
 		ColorRGBA ResidueNumberColorProcessor::getColor(const Composite* composite)
 		{
-			if (composite->isSelected()) return BALL_SELECTED_COLOR;
+			if (composite->isSelected()) return ColorProcessor::getColor(composite);
 
 			Residue residue;
 			if (!RTTI::isKindOf<Residue>(*composite) &&
@@ -368,7 +368,7 @@ namespace BALL
 
 		ColorRGBA AtomChargeColorProcessor::getColor(const Composite* composite)
 		{
-			if (composite->isSelected()) return BALL_SELECTED_COLOR;
+			if (composite->isSelected()) return ColorProcessor::getColor(composite);
 
 			if (!RTTI::isKindOf<Atom>(*composite))
 			{
@@ -475,7 +475,7 @@ namespace BALL
 
 		ColorRGBA AtomDistanceColorProcessor::getColor(const Composite* composite)
 		{
-			if (composite->isSelected()) return BALL_SELECTED_COLOR;
+			if (composite->isSelected()) return ColorProcessor::getColor(composite);
 
 			if (!RTTI::isKindOf<Atom>(*composite))
 			{
@@ -580,7 +580,7 @@ namespace BALL
 
 		ColorRGBA TemperatureFactorColorProcessor::getColor(const Composite* composite)
 		{
-			if (composite->isSelected()) return BALL_SELECTED_COLOR;
+			if (composite->isSelected()) return ColorProcessor::getColor(composite);
 
 			if (!RTTI::isKindOf<PDBAtom>(*composite))
 			{
@@ -603,7 +603,7 @@ namespace BALL
 
 		ColorRGBA OccupancyColorProcessor::getColor(const Composite* composite)
 		{
-			if (composite->isSelected()) return BALL_SELECTED_COLOR;
+			if (composite->isSelected()) return ColorProcessor::getColor(composite);
 
 			const PDBAtom* atom = dynamic_cast<const PDBAtom*>(composite);
 			if (atom == 0)			
@@ -628,6 +628,8 @@ namespace BALL
 
 		ColorRGBA SecondaryStructureColorProcessor::getColor(const Composite* composite)
 		{
+			if (composite->isSelected()) return ColorProcessor::getColor(composite);
+
 			const SecondaryStructure* ss = 0;
 			if (RTTI::isKindOf<SecondaryStructure>(*composite))
 			{
