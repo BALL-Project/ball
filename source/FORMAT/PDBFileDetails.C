@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileDetails.C,v 1.7 2005/02/16 14:09:40 oliver Exp $
+// $Id: PDBFileDetails.C,v 1.8 2005/02/18 12:08:12 oliver Exp $
 //
 
 // This file contains the more or less implementation specific portion of PDBFile.
@@ -1381,6 +1381,7 @@ namespace BALL
 		PDB::RecordSEQRES sr;
 		Index chain_counter = -1;
 		Position res_counter = 0;  // number of residues in sr;
+		sr.serial_number = 1;
 		if (chain_size.size() > 0)
 		{
 			sr.number_of_residues_in_chain = chain_size[0];
@@ -1390,7 +1391,6 @@ namespace BALL
 			sr.number_of_residues_in_chain = 0;
 		}
 
-		
 		for (Position i = 0; i < chain_residues.size(); ++i)
 		{
 			// Just some shorthands...

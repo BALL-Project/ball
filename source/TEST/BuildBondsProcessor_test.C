@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BuildBondsProcessor_test.C,v 1.1 2005/02/17 02:54:56 bertsch Exp $
+// $Id: BuildBondsProcessor_test.C,v 1.2 2005/02/18 12:08:12 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -15,7 +16,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: BuildBondsProcessor_test.C,v 1.1 2005/02/17 02:54:56 bertsch Exp $")
+START_TEST(Fragment, "$Id: BuildBondsProcessor_test.C,v 1.2 2005/02/18 12:08:12 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -25,18 +26,17 @@ using namespace std;
 // TODO testing of all methods and constructors, and operators
 
 
-CHECK( Fragment() )
-BuildBondsProcessor * bbp;
-bbp = new BuildBondsProcessor();
-TEST_NOT_EQUAL(bbp, 0);
+BuildBondsProcessor* bbp = 0;
+CHECK(BuildBondsProcessor() )
+	bbp = new BuildBondsProcessor();
+	TEST_NOT_EQUAL(bbp, 0);
 RESULT
 
 CHECK( ~BuildBondsProcessor() )
-BuildBondsProcessor * bbp;
-delete bbp;
+	delete bbp;
 RESULT
 
-CHECK( operator() (AtomContainer& ac) )
+CHECK(operator() (AtomContainer& ac))
 	BuildBondsProcessor bbp;
 	PDBFile infileA("data/ACE_test_A.pdb");
 	System sysA;
@@ -55,7 +55,7 @@ CHECK( operator() (AtomContainer& ac) )
 	infileC >> sysC;
 	Size results[] = {9, 9, 9, 11, 9, 8, 9, 20, 6, 18, 12, 24, 21, 22};
 	Size i(0);
-	for (MoleculeIterator mit=sysC.beginMolecule(); +mit; ++mit, i++)
+	for (MoleculeIterator mit = sysC.beginMolecule(); +mit; ++mit, i++)
 	{
 		mit->apply(bbp);
 		TEST_EQUAL(mit->countBonds(), results[i]);

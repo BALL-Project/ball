@@ -10,7 +10,6 @@ SHEET    2  S1 2 GLY    28  GLY    36  0             0              0
 SSBOND   1 CYS      5    CYS     55                             0      0
 SSBOND   2 CYS     14    CYS     38                             0      0
 SSBOND   3 CYS     30    CYS     51                             0      0
-MODEL        1
 ATOM      1  N   ARG     1      11.936 104.294  10.149  1.00 25.18           N  
 ATOM      2  CA  ARG     1      11.996 102.892  10.543  1.00 17.63           C  
 ATOM      3  C   ARG     1      12.733 102.737  11.837  1.00 17.26           C  
@@ -904,10 +903,9 @@ ATOM    890 3HB  ALA    58      10.595 108.391   6.109  1.00  0.00           H
 ATOM    891  H   ALA    58      10.761 105.932   6.558  1.00  0.00           H  
 ATOM    892  HA  ALA    58       8.082 106.659   5.797  1.00  0.00           H  
 TER     893      ALA    58 
-ENDMDL
-CONECT   78   77    0    0    0    0    0    0    0    0    0
-CONECT  206  205    0    0    0    0    0    0    0    0    0
-CONECT  478  477    0    0    0    0    0    0    0    0    0
+CONECT   78   77  863    0    0    0    0    0    0    0    0
+CONECT  206  205  590    0    0    0    0    0    0    0    0
+CONECT  478  477  798    0    0    0    0    0    0    0    0
 CONECT  590  206  589    0    0    0    0    0    0    0    0
 CONECT  798  478  797    0    0    0    0    0    0    0    0
 CONECT  863   78  862    0    0    0    0    0    0    0    0

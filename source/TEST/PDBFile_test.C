@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.27 2005/02/16 14:09:40 oliver Exp $
+// $Id: PDBFile_test.C,v 1.28 2005/02/18 12:08:13 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -33,13 +33,13 @@ namespace BALL
 
 }
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.27 2005/02/16 14:09:40 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.28 2005/02/18 12:08:13 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
-/*
+
 PDBFile* pdb_file;
 CHECK(PDBFile())
 	pdb_file = new PDBFile;
@@ -457,19 +457,7 @@ RESULT
 CHECK(void selectModel(Index index))
 	empty.selectModel(2);
 RESULT
-*/
 
-CHECK(all)
-	PDBFile infile("4PTI.pdb");
-	System S;
-	infile.read(S);
-	infile.close();
-	
-	PDBInfo info(infile.info);
-	PDBFile outfile("test.pdb", File::OUT);
-	outfile.write(S, info);
-	outfile.close();
-RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
