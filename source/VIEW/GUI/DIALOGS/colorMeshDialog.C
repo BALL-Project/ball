@@ -87,6 +87,15 @@ void ColorMeshDialog::apply_clicked()
 	{
 		ColorRGBA col(red_box->value(), green_box->value(), blue_box->value(), alpha_box->value());
 
+		if (alpha_box->value() != 255)
+		{
+			mesh->setProperty(GeometricObject::PROPERTY__OBJECT_TRANSPARENT);
+		}
+		else
+		{
+			mesh->clearProperty(GeometricObject::PROPERTY__OBJECT_TRANSPARENT);
+		}			
+
 		mesh->colorList.resize(1);
 
 		mesh->colorList[0] = col;
