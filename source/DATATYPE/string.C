@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.9 1999/12/19 18:58:35 oliver Exp $
+// $Id: string.C,v 1.10 1999/12/19 19:19:22 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -283,8 +283,6 @@ namespace BALL
 
 		char* char_ptr = s.str();
 		assign(char_ptr);
-
-		delete [] char_ptr;
 	}
 
 	void String::set(char c, Size len)
