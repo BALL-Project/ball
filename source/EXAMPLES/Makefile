@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.12 2000/03/27 20:00:12 oliver Exp $
+# $Id: Makefile,v 1.13 2000/09/06 19:36:15 oliver Exp $
 #========================
 # BALL/EXAMPLES Makefile
 #========================
@@ -14,7 +14,7 @@ include ../common.mak
 BALL_CXXFLAGS=
 
 clean:	default_clean
-	@$(RM) $(EXECUTABLES)
+	@-$(RM) $(EXECUTABLES) *.o 2>/dev/null
 
 proteinMapper:	proteinMapper.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
