@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.132 2004/09/14 15:20:14 amoll Exp $
+// $Id: scene.C,v 1.133 2004/09/14 15:25:05 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1314,7 +1314,7 @@ namespace BALL
 					MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P, -1, hint);
 
 			hint = "Move selected items";
-			picking_id_ = main_control.insertMenuEntry(
+			move_id_ = main_control.insertMenuEntry(
 					MainControl::DISPLAY, "Move Mode", this, SLOT(moveMode_()), 0, -1, hint);
 
 

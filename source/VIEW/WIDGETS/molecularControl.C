@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.63 2004/09/14 15:01:13 amoll Exp $
+// $Id: molecularControl.C,v 1.64 2004/09/14 15:25:56 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -101,8 +101,7 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 			model_menu_(this),
 			context_composite_(0),
 			transformation_dialog_(0),
-			was_delete_(false),
-			react_to_move_items_(false)
+			was_delete_(false)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new MolecularControl " << this << std::endl;
@@ -314,14 +313,6 @@ bool MolecularControl::reactToMessages_(Message* message)
 	else if (RTTI::isKindOf<TransformationMessage> (*message))
 	{
 		moveItems(((TransformationMessage*)message)->getMatrix());
-	}
-	else if (RTTI::isKindOf<SceneMessage> (*message))
-	{
-		// if an other widget told the Scene to enter move mode, we wont react on TransformationMessages
-		if (((SceneMessage*)message)->getType() == SceneMessage::ENTER_MOVE_MODE)
-		{
-			react_to_move_items_ = false;
-		}
 	}
 
 	return false;
@@ -929,20 +920,6 @@ void MolecularControl::clearClipboard()
 
 void MolecularControl::move()
 {
-	if (selected_.size() == 0) return;
-
-	/*
-	if (transformation_dialog_) 
-	{
-		transformation_dialog_->hide();
-		delete transformation_dialog_;
-	}
-	
-	transformation_dialog_ = new TransformationDialog(this);
-	transformation_dialog_->show();
-	transformation_dialog_->setComposite(*selected_.begin());
-	*/
-	react_to_move_items_ = true;
 	SceneMessage* msg = new SceneMessage(SceneMessage::ENTER_MOVE_MODE);
 	notify_(msg);
 }

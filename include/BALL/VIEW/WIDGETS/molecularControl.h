@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.34 2004/09/14 15:01:17 amoll Exp $
+// $Id: molecularControl.h,v 1.35 2004/09/14 15:26:01 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -523,7 +523,6 @@ namespace BALL
 			ColoringMethod  selected_coloring_method_;
 			// let cut know to delete the entries, set by deleteCurrentItems()
 			bool 						was_delete_;
-			bool 						react_to_move_items_;
 		};
 
 }} // namespaces
