@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.8 2005/03/25 21:38:35 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.9 2005/03/27 14:12:35 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -334,9 +334,14 @@ namespace BALL
 			atom_type3 = temp;
 		}
 
-		return atom_type1 * (bend_type + 1) * MMFF94_number_atom_types * MMFF94_number_atom_types + 
-					 atom_type2	* MMFF94_number_atom_types +
-					 atom_type3;
+		// The canonical-order index, CXA, is computed as:
+		// CXA = MC*(J*MA**2 + I*MA + K) + ATIJK
+		// where MA is again the maximum permissible atom type +1, and MC is at least 
+		// one greater than the maximum permissible angle-type index.
+		return 10 * (atom_type2 * MMFF94_number_atom_types * MMFF94_number_atom_types +
+								 atom_type1 * MMFF94_number_atom_types +
+								 atom_type3) +
+					 bend_type;
 	}
 
 

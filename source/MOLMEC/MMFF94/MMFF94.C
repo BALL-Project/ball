@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.6 2005/03/27 13:45:00 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.7 2005/03/27 14:12:35 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -36,8 +36,8 @@ namespace BALL
 		setName("MMFF94");
 
 		// create the component list
-   		insertComponent(new MMFF94Stretch(*this));
-//      		insertComponent(new MMFF94Bend(*this));
+//      		insertComponent(new MMFF94Stretch(*this));
+      		insertComponent(new MMFF94Bend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 	}
@@ -49,8 +49,8 @@ namespace BALL
 			parameters_initialized_(false)
   {
 		// create the component list
-   		insertComponent(new MMFF94Stretch(*this));
-//      		insertComponent(new MMFF94Bend(*this));
+//      		insertComponent(new MMFF94Stretch(*this));
+      		insertComponent(new MMFF94Bend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 
@@ -73,8 +73,8 @@ namespace BALL
 			parameters_initialized_(false)
   {
 		// create the component list
-   		insertComponent(new MMFF94Stretch(*this));
-//   		insertComponent(new MMFF94Bend(*this));
+//      		insertComponent(new MMFF94Stretch(*this));
+   		insertComponent(new MMFF94Bend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 

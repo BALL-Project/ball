@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.5 2005/03/26 00:25:30 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.6 2005/03/27 14:12:35 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -207,8 +207,11 @@ namespace BALL
 #ifdef BALL_DEBUG_MMFF
 Log.info() << "Bend " << bend_it->atom1->ptr->getName() << " " 
 											<< bend_it->atom2->ptr->getName() << " " 
-											<< bend_it->atom3->ptr->getName() << "  ATIJK: " 
-											<< bend_it->ATIJK << "  T: "
+											<< bend_it->atom3->ptr->getName() << " " 
+											<< bend_it->atom1->type << " "
+											<< bend_it->atom2->type << " "
+											<< bend_it->atom3->type << " "
+											<< "ATIJK: " << bend_it->ATIJK << "  T: "
 											<< theta << "  T0: " << theta0 << " ka " << ka;
 #endif
 
