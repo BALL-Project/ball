@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.19.4.5 2002/08/09 11:10:02 oliver Exp $
+dnl    $Id: configure.in,v 1.19.4.6 2002/08/19 16:42:12 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -200,9 +200,9 @@ SIP=$with_sip
 if test "$with_fftw" != "" -a "$with_fftw" != "no" -o "$enable_fftw" = yes ; then
 	FFTW_SUPPORT=true
 	if test "${with_fftw_lib}" != "" ; then
-		FFTW_LIB=${with_fftw_lib}
+		FFTW_LIBPATH=${with_fftw_lib}
 	else
-		FFTW_LIB="libfftw.a"
+		FFTW_LIBPATH=""
 	fi
 	FFTW_INCL=${with_fftw_incl}
 else
@@ -2406,6 +2406,28 @@ if test "${FFTW_SUPPORT}" = true ; then
 		AC_MSG_RESULT((${FFTW_INCL_PATH}))	
 	fi
 
+	AC_MSG_CHECKING(for FFT library)
+	AC_FIND_LIB(FFTW_LIB,libfftw, ${FFTW_LIBPATH})
+
+	if test "${FFTW_LIB}" = "" ; then
+		AC_MSG_RESULT((not found!))
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(FFT library FFTW not found!)
+		AC_MSG_RESULT(Please install it in a standard location or specify the path)
+		AC_MSG_RESULT(with --with-fftw-lib=DIR on the command line.)
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(Aborted.)
+	else
+		AC_MSG_RESULT((${FFTW_LIB}))
+		LIBS="${LIBS} -L${FFTW_LIB} -lfftw"
+	fi
+
+	dnl prevent the use of -L/usr/lib - this may lead to problems with different
+	dnl binary formats (e.g. SGI O32/N32 format)
+	if test "${FFTW_INCL_PATH}" != /usr/include -a "${FFTW_INCL_PATH}" != "" ; then
+		BALL_INCLUDES="${BALL_INCLUDES} -I${FFTW_INCL_PATH}"
+	fi
+
 	AC_MSG_CHECKING(for FFTW precision)
 	FFTW_PRECISION_TEST=false
 	SAVE_LDFLAGS=${LDFLAGS}
@@ -2415,22 +2437,27 @@ if test "${FFTW_SUPPORT}" = true ; then
 			#include <fftw.h>
 			int main(int, char**)
 			{
-				#ifdef FFTW_ENABLE_FLOAT
-					return 0;
-				#else
+#ifdef FFTW_ENABLE_FLOAT
 					return -1;
-				#endif
+#else
+					return -2;
+#endif
 			}
 		],
 		FFTW_PRECISION_TEST=true,
 		DUMMY=0,
 		DUMMY=0
 	)
-	if test $? = 0 -a "${FFTW_PRECISION_TEST}" = "true" ; then
+	EXIT_CODE=$?
+	if test ${EXIT_CODE} = -1 -a "${FFTW_PRECISION_TEST}" = "true" ; then
 		FFTW_PRECISION=float
-	elif test $? = -1 -a "${FFTW_PRECISION_TEST}" = "true" ; then 
+	elif test ${EXIT_CODE} = -2 -a "${FFTW_PRECISION_TEST}" = "true" ; then 
 		FFTW_PRECISION=double
 	else
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(FFTW_PRECISION_TEST=${FFTW_PRECISION_TEST})
+		AC_MSG_RESULT(exit code = ${EXIT_CODE})
+		AC_MSG_RESULT()
 		AC_MSG_RESULT(Unable to determine precision.)
 		AC_MSG_ERROR(Aborted.)
 	fi
@@ -2454,6 +2481,19 @@ if test "${FFTW_SUPPORT}" = true ; then
 	AC_DEFINE(BALL_HAS_FFTW, true)
 	BALL_HAS_FFTW=true
 	AC_SUBST(BALL_HAS_FFTW)
+
+
+	AC_MSG_CHECKING()
+	if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXext -lXt -lX11 -lm"
+		SAVE_LIBS=${LIBS}
+		SAVE_LDFLAGS=${LDFLAGS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		LDFLAGS=
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+
 fi
 AC_DEFINE_UNQUOTED(BALL_COMPLEX_TYPE, ${BALL_COMPLEX_TYPE})
 
@@ -2492,8 +2532,7 @@ if test "${USE_BALLVIEW}" = true ; then
 				AC_MSG_RESULT(No Mesa headers found! Please specify the path to the directory)
 				AC_MSG_RESULT(containing the Mesa headers using --with-opengl-incl=DIR.)
 				AC_MSG_RESULT(Mesa can be obtained from www.mesa3d.org.)
-				AC_MSG_RESULT(Disabling support for visualization component BALLVIEW)
-				USE_BALLVIEW=false
+				AC_MSG_ERROR(Aborted.)
 			else
 				AC_MSG_RESULT(${MESA_INCLUDES})
 			fi
@@ -2510,8 +2549,7 @@ if test "${USE_BALLVIEW}" = true ; then
 					AC_MSG_RESULT(No Mesa library libMesaGL or libGL found! Please specify the path)
 					AC_MSG_RESULT(to the directory containing the library using the --with-opengl-libs=DIR.)
 					AC_MSG_RESULT(Mesa can be obtained from www.mesa3d.org.)
-					AC_MSG_RESULT(Disabling support for visualization component BALLVIEW)
-					USE_BALLVIEW=false
+					AC_MSG_RESULT(Aborted.)
 				else
 					AC_MSG_RESULT((${MESA_LIBS}))
 				fi

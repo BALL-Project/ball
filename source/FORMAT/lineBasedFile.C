@@ -1,10 +1,8 @@
-// $Id: lineBasedFile.C,v 1.23 2002/02/23 13:37:19 oliver Exp $
+// $Id: lineBasedFile.C,v 1.23.2.1 2002/08/19 16:42:16 oliver Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
 #include <stdio.h>
-
-#define BALL_MAX_LINE_LENGTH 65536
 
 using namespace std;
 
