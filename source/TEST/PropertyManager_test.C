@@ -1,4 +1,4 @@
-// $Id: PropertyManager_test.C,v 1.9 2000/08/25 20:09:58 amoll Exp $
+// $Id: PropertyManager_test.C,v 1.10 2000/08/29 13:19:32 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,15 +6,17 @@
 #include <BALL/CONCEPT/persistenceManager.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/KERNEL/protein.h>
+#include <fstream>
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.9 2000/08/25 20:09:58 amoll Exp $")
+START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.10 2000/08/29 13:19:32 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 NamedProperty* np;
 
@@ -146,7 +148,7 @@ CHECK(NamedProperty::persistentWrite(PersistenceManager& pm, const char* name = 
 RESULT
 
 CHECK(NamedProperty::persistentRead(PersistenceManager& pm))
-	NamedProperty* np;
+	NamedProperty* np = new NamedProperty;
 	ifstream  ifile("data/NamedProperty_test.txt");
 	pm.setIstream(ifile);
 	np->persistentRead(pm);
