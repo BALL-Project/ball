@@ -35,6 +35,8 @@ EXECUTABLES = \
 	Gradient_test\
 	HashMap_test\
 	HashSet_test\
+	HINFile_test\
+	INIFile_test\
 	KernelPredicate_test\
 	Limits_test\
 	Line3_test\
@@ -149,6 +151,12 @@ HashMap_test:	HashMap_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 HashSet_test:	HashSet_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+HINFile_test:	HINFile_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+INIFile_test:	INIFile_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 KernelPredicate_test:	KernelPredicate_test.o
