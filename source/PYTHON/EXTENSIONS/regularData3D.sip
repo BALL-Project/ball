@@ -1,13 +1,13 @@
-// $Id: regularData3D.sip,v 1.5 2003/06/19 10:01:27 anker Exp $
+// $Id: regularData3D.sip,v 1.6 2003/06/19 15:24:36 oliver Exp $
 class RegularData3D 
 {
 %HeaderCode
 	#include <BALL/DATATYPE/regularData3D.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
-	// typedef TVector3<float> Vector3;
-	// typedef typename std::vector<float>::iterator Iterator;
-	// typedef typename std::vector<float>::const_iterator ConstIterator;
+  // typedef TVector3<float> Vector3;
+  // typedef typename std::vector<float>::iterator Iterator;
+  // typedef typename std::vector<float>::const_iterator ConstIterator;
 %End
 	class IndexType
 	{
@@ -45,14 +45,14 @@ class RegularData3D
 	bool empty() const throw();
 	bool isInside(const Vector3& /r/) const throw();
 	// virtual void dump(std::ostream& /stream/) const throw(); 
-	// ConstIterator begin() const throw();
-	// ConstIterator end() const throw();
-	// Iterator begin() throw();
-	// Iterator end() throw();
-	// size_type size() const throw();
-	// size_type max_size() const throw();
-	void swap(RegularData3D& /grid/);
-	float getData(const IndexType& /index/) const
+  // ConstIterator begin() const throw();
+  // ConstIterator end() const throw();
+  // Iterator begin() throw();
+  // Iterator end() throw();
+  // size_type size() const throw();
+  // size_type max_size() const throw();
+  void swap(RegularData3D& /grid/);
+  float getData(const IndexType& /index/) const
 	 	throw(OutOfGrid);
 	float getData(const IndexType& /index/)
 		throw(OutOfGrid);
@@ -63,14 +63,14 @@ class RegularData3D
 	//	/local/anker/BALL/include/BALL/DATATYPE/regularData3D.h: In member function 
 	//		 `ValueType& BALL::TRegularData3D<ValueType>::getClosestValue(const 
 	//		 BALL::TVector3<float>&) [with ValueType = float]':
-	//	sipBALLRegularData3D.C:512:	 instantiated from here
+	//	sipBALLRegularData3D.C:512:   instantiated from here
 	//	/local/anker/BALL/include/BALL/DATATYPE/regularData3D.h:963: no match for `
 	//		 std::vector<float, std::allocator<float> >& [
 	//		 BALL::TRegularData3D<float>::IndexType&]' operator
 	//	/opt/gnu/gcc/3.2.1/include/c++/3.2.1/bits/stl_vector.h:289: candidates are: 
 	//		 _Tp& std::vector<_Tp, _Alloc>::operator[](unsigned int) [with _Tp = float, 
 	//		 _Alloc = std::allocator<float>]
-	//	/opt/gnu/gcc/3.2.1/include/c++/3.2.1/bits/stl_vector.h:300:								 
+	//	/opt/gnu/gcc/3.2.1/include/c++/3.2.1/bits/stl_vector.h:300:                 
 	//		 const _Tp& std::vector<_Tp, _Alloc>::operator[](unsigned int) const [with 
 	//		 _Tp = float, _Alloc = std::allocator<float>]
 	// float operator [] (const IndexType& /index/) const throw();
@@ -80,10 +80,10 @@ class RegularData3D
 	float operator () (const Vector3& /x/) const throw();
 	float getInterpolatedValue(const Vector3& /x/) const
 		throw(OutOfGrid);
-	// float getClosestValue(const Vector3& /x/) const
-	// 	throw(OutOfGrid);
-	// float getClosestValue(const Vector3& /x/) 
-	// 	throw(OutOfGrid);
+	float getClosestValue(const Vector3& /x/) const
+		throw(OutOfGrid);
+	float getClosestValue(const Vector3& /x/) 
+		throw(OutOfGrid);
 	IndexType getClosestIndex(const Vector3& /v/) const
 		throw(OutOfGrid);
 	IndexType getLowerIndex(const Vector3& /v/) const

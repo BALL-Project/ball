@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.sip,v 1.7 2003/04/22 21:16:59 oliver Exp $
+// $Id: lineBasedFile.sip,v 1.8 2003/06/19 15:24:35 oliver Exp $
 
 
 class LineBasedFile
@@ -13,7 +13,7 @@ class LineBasedFile
 
 				LineBasedFile()
 								throw();
-				LineBasedFile(const String& /filename/, File::OpenMode /open_mode/ = File::IN)
+				LineBasedFile(const String& /filename/, File::OpenMode /open_mode/ = std::ios::in)
 								throw(FileNotFound);
 				LineBasedFile(const LineBasedFile& /f/)
 								throw(FileNotFound);

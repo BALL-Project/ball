@@ -1,4 +1,4 @@
-// $Id: composite.sip,v 1.1 2001/09/03 16:53:06 oliver Exp $
+// $Id: composite.sip,v 1.2 2003/06/19 15:24:34 oliver Exp $
 
 class Composite
   :  PersistentObject,
@@ -56,8 +56,6 @@ class Composite
   const Composite* getLastChild() const;
   const PreciseTime& getModificationTime() const throw();
   const PreciseTime& getSelectionTime() const throw();
-  void expand();
-  void collapse();
   void prependChild(Composite& /composite/);
   void appendChild(Composite& /composite/);
   static bool insertParent
@@ -73,8 +71,6 @@ class Composite
   void swap(Composite& /composite/);
   virtual void select() throw();
   virtual void deselect() throw();
-  bool isExpanded() const;
-  bool isCollapsed() const;
   bool isEmpty() const;
   bool isRoot() const;
   bool isRootOf(const Composite& /composite/) const;

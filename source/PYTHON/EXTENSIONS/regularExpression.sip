@@ -1,9 +1,9 @@
-// $Id: regExp.sip,v 1.5 2003/04/22 21:58:11 oliver Exp $
+// $Id: regularExpression.sip,v 1.1 2003/06/19 15:24:36 oliver Exp $
 
 class RegularExpression
 {
 %HeaderCode
-	#include <BALL/DATATYPE/regExp.h>
+	#include <BALL/DATATYPE/regularExpression.h>
 	using namespace BALL;
 %End
   public:
@@ -22,14 +22,14 @@ class RegularExpression
   static const String UPPERCASE;
   static const String WHITESPACE;
   RegularExpression();
-  RegularExpression(const RegularExpression& /regular_expression/, bool /deep/ = true);
+  RegularExpression(const RegularExpression& /regular_expression/);
   RegularExpression(const String& /pattern/, bool /wildcard_pattern/ = false);
   ~RegularExpression() throw();
   virtual void clear() throw();
   void destroy();
-  void set(const RegularExpression& /regular_expression/, bool /deep/ = true);
+  void set(const RegularExpression& /regular_expression/);
   void set(const String& /pattern/, bool /wildcard_pattern/ = false);
-  void get(RegularExpression& /regular_expression/, bool /deep/ = true) const;
+  void get(RegularExpression& /regular_expression/) const;
   const String& getPattern() const;
   Size countSubexpressions() const;
   bool match(const char* /text/, const char* /pattern/, int /compile_flags/ = 0, int /execute_flags/ = 0 );

@@ -1,4 +1,4 @@
-// $Id: file.sip,v 1.10 2003/04/28 15:41:12 oliver Exp $
+// $Id: file.sip,v 1.11 2003/06/19 15:24:35 oliver Exp $
 
 class std__openmode
 {
@@ -15,23 +15,31 @@ class File
 %HeaderCode
 	#include <BALL/SYSTEM/file.h>
 	using namespace BALL;
+	const File::OpenMode BALL_File__IN = File::IN;
+	const File::OpenMode BALL_File__OUT = File::OUT;
+	const File::OpenMode BALL_File__APP = File::APP;
+	const File::OpenMode BALL_File__BINARY = File::BINARY;
+	const File::OpenMode BALL_File__ATE = File::ATE;
+	const File::OpenMode BALL_File__TRUNC = File::TRUNC;
 %End
   public:
 	typedef std__openmode OpenMode;
-	static const OpenMode IN;
-	static const OpenMode OUT;
-	static const OpenMode APP;
-	static const OpenMode BINARY;
-	static const OpenMode ATE;
-	static const OpenMode TRUNC;
+	enum {
+		IN = BALL_File__IN,
+		OUT = BALL_File__OUT,
+		APP = BALL_File__APP,
+		BINARY = BALL_File__BINARY,
+		ATE = BALL_File__ATE,
+		TRUNC = BALL_File__TRUNC
+	};
 
   File();
 	// default open mode: IN
-  File(const String&, File::OpenMode /openmode/ = File::IN);
+  File(const String&, File::OpenMode /openmode/ = std::ios::in);
   File(const File& /filename/);
   ~File();
 	// default open mode: IN
-  bool open(const String&, File::OpenMode /openmode/ = File::IN);
+  bool open(const String&, File::OpenMode /openmode/ = std::ios::in);
 
   bool reopen();
   void close();

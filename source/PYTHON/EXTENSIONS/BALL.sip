@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.9 2003/03/25 17:08:52 anhi Exp $
+// $Id: BALL.sip,v 1.10 2003/06/19 15:24:33 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -65,7 +65,7 @@
 %Include regularData3D.sip
 // triple.h -- generic, no way...
 // quadruple.h -- generic, no way...
-%Include regExp.sip
+%Include regularExpression.sip
 %Include string.sip
 // stringHashMap.h // ??
 // stringHashSet.h // ??

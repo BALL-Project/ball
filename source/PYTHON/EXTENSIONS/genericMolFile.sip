@@ -1,4 +1,4 @@
-// $Id: genericMolFile.sip,v 1.4 2003/04/22 21:16:58 oliver Exp $
+// $Id: genericMolFile.sip,v 1.5 2003/06/19 15:24:35 oliver Exp $
 
 class GenericMolFile
 	: LineBasedFile
@@ -14,7 +14,7 @@ class GenericMolFile
 	GenericMolFile()
 					throw();
 
-	GenericMolFile(String& /filename/, File::OpenMode /open_mode/ = File::IN)
+	GenericMolFile(String& /filename/, File::OpenMode /open_mode/ = std::ios::in)
 					throw(FileNotFound);
 
 	GenericMolFile(const GenericMolFile& /file/);

@@ -16,9 +16,10 @@ class RegularData1D
 	float operator [] (Position /index/) const throw(IndexOverflow);
 	// float& operator [] (Position /index/) throw(IndexOverflow);
 	Size getSize() const throw();
-	double getLowerBound() const throw();
-	double getUpperBound() const throw();
-	void setBoundaries(double /upper/, double /lower/) throw();
+	double getOrigin() const throw();
+	double getDimension() const throw();
+	void setOrigin(double /upper/) throw();
+	void setDimension(double /upper/) throw();
 	void resize(Size /new_size/) throw();
 };
 

@@ -1,4 +1,4 @@
-// $Id: trajectoryFile.sip,v 1.3 2003/04/22 21:17:00 oliver Exp $
+// $Id: trajectoryFile.sip,v 1.4 2003/06/19 15:24:36 oliver Exp $
 class TrajectoryFile
 				:  File
 {
@@ -12,7 +12,7 @@ class TrajectoryFile
 				TrajectoryFile(const TrajectoryFile& /file/)
 								throw();
 				TrajectoryFile(const String& /filename/,
-												File::OpenMode /open_mode/ = File::IN)
+												File::OpenMode /open_mode/ = std::ios::in)
 								throw();
 				~TrajectoryFile()
 								throw();

@@ -1,4 +1,4 @@
-// $Id: DCDFile.sip,v 1.3 2003/04/22 21:16:56 oliver Exp $
+// $Id: DCDFile.sip,v 1.4 2003/06/19 15:24:33 oliver Exp $
 
 class DCDFile
 	: TrajectoryFile
@@ -15,7 +15,7 @@ class DCDFile
 								throw();
 				DCDFile(const DCDFile& /file/)
 								throw(FileNotFound);
-				DCDFile(const String& /name/, File::OpenMode /open_mode/ = File::IN)
+				DCDFile(const String& /name/, File::OpenMode /open_mode/ = std::ios::in)
 								throw();
 				~DCDFile()
 								throw();
