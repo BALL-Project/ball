@@ -10,7 +10,7 @@ CPP_SOURCES=\
 	clearShiftProcessor.C\
 	createSpectrumProcessor.C\
 	EFShiftProcessor.C\
-	#HBondShiftProcessor.C\
+	HBondShiftProcessor.C\
 	haighMallionShiftProcessor.C\
 	makeSpectrumProcessor.C\
 	peak.C\
