@@ -1,4 +1,4 @@
-// $Id: tube.C,v 1.8.4.1 2002/12/07 02:20:03 amoll Exp $
+// $Id: tube.C,v 1.8.4.2 2002/12/07 02:48:16 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIV/tube.h>
 
@@ -6,7 +6,6 @@ using namespace std;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
