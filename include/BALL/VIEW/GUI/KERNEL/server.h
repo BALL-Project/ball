@@ -1,4 +1,4 @@
-// $Id: server.h,v 1.3 2000/09/23 14:15:05 hekl Exp $
+// $Id: server.h,v 1.4 2000/11/12 15:31:11 hekl Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
 #define BALL_VIEW_GUI_KERNEL_SERVER_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #	include <BALL/DATATYPE/hashMap.h>
+#endif
+
+#ifndef BALL_FORMAT_INIFILE_H
+# include <BALL/FORMAT/INIFile.h>
 #endif
 
 #ifndef BALL_SYSTEM_SOCKET_H
@@ -31,10 +35,19 @@
 #	include <BALL/VIEW/GUI/KERNEL/objectCreator.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
-#	include <BALL/VIEW/KERNEL/connectionObject.h>
+#ifndef BALL_VIEW_GUI_DIALOGS_PREFERENCES_H
+ #include <BALL/VIEW/GUI/DIALOGS/preferences.h>
 #endif
 
+#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
+#	include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#endif
+
+#ifndef BALL_VIEW_GUI_WIDGETS_SERVERPREFERENCES_H
+ #include <BALL/VIEW/GUI/WIDGETS/serverPreferences.h>
+#endif
+
+#include <qlabel.h>
 
 namespace BALL
 {
@@ -44,7 +57,7 @@ namespace BALL
 
 		class Server
 			: public QTTimer,
-			  public ConnectionObject
+   			public ModularWidget
 		{
 			public:
 
@@ -54,11 +67,7 @@ namespace BALL
 
 			/** default constructor. creates an instance of server.
 			*/
-			Server();
-
-			/**	Copy constructor
-			*/
-			Server(const Server& server, bool deep = true);
+			Server(QWidget* parent = 0, const char* name = 0);
 
 			/** default destructor. destroys an instance of server.
 			*/
@@ -121,6 +130,67 @@ namespace BALL
 			/** handels notification requests
 			*/
 			//			virtual void onNotify(Message *message);
+
+			/**	Initialize the server widget.
+					This method is called automatically
+					immediately before the main application 
+					is started. It adds the widget's 
+					menu entries, connections and icons.
+			*/
+			virtual void initializeWidget(MainControl& main_control);
+			
+			/**	Remove the server widget.
+					This method is called before the widget's destructor is called.
+					It reverses all actions performed in 
+					initializeWidget (remove menu entries and connections and icons).
+			*/
+			virtual void finalizeWidget(MainControl& main_control);
+			
+			/**	Update all menu entry states.
+					This method is called just before a popup menu
+					is shown (via the QT signal aboutToShow()).
+					It should be used to update the state of 
+					menu entries (e.g. disable or enable entries).
+			*/
+			virtual void checkMenu(MainControl& main_control);
+			
+			/** Initialize a preferences tab for the server.
+					This method is called automatically
+					immediately before the main application 
+					is started. It adds the widget's preferences tabs.
+			*/
+			virtual void initializePreferencesTab(Preferences &preferences);
+			
+			/**	Remove the preferences tab.
+					This method is called before the widget's destructor is called.
+					It reverses all actions performed in 
+					initializePreferencesTab (remove tabs).
+			*/
+			virtual void finalizePreferencesTab(Preferences &preferences);
+			
+			/** Apply the preferences of the specific tab.
+					In this method the widget can extract any changed values from
+					its preferences tab (if required).
+					This method is called automatically if the apply button in the
+					preferences dialog is pressed.
+			*/
+			virtual void applyPreferences(Preferences &preferences);
+			
+			/** Fetch the server preferences from the inifile.
+					This method extracts the default values from the given
+					inifile.
+					This method is called automatically
+					immediately before the main application 
+					is started. It fetches the widget's initial values from the inifile. 
+			*/
+			virtual void fetchPreferences(INIFile &inifile);
+			
+			/** Writes the server preferences to the inifile.
+					This method is called before the widget's destructor is called.
+					It writes all needed values to the given inifile (as read from
+					the inifile in the fetchPreferences method).
+			*/
+			virtual void writePreferences(INIFile &inifile);
 			//@}
 
 			/**	@name	Debugging and Diagnostics
@@ -183,6 +253,10 @@ namespace BALL
 				
 			// the port to bind to
 			int							port_; 
+
+			ServerPreferences  *server_preferences_;
+			QLabel 					   *server_icon_;
+			static const char  *mini_ray_xpm_[];
 		};
 
 
