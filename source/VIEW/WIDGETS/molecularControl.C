@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.27 2003/12/23 17:59:28 amoll Exp $
+// $Id: molecularControl.C,v 1.28 2004/01/13 00:44:47 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -309,6 +309,8 @@ void MolecularControl::showFilename()
 
 void MolecularControl::updateSelection()
 {
+	GenericControl::updateSelection();
+
 	selected_.clear();
 
 	// we have to prevent, to insert child items of already selected parents,
@@ -529,6 +531,9 @@ void MolecularControl::onNotify(Message *message)
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "MolecularControl " << this << " onNotify " << message << std::endl;
 #endif
+
+	GenericControl::onNotify(message);
+
 	// react accordingly to the given message
 	if (reactToMessages_(message))
 	{

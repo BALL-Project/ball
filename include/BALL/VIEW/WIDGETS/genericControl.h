@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.6 2003/12/09 13:48:05 amoll Exp $
+// $Id: genericControl.h,v 1.7 2004/01/13 00:42:55 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
 #define BALL_VIEW_WIDGETS_GENERICCONTROL_H
@@ -75,13 +75,30 @@ namespace BALL
 			ItemList getSelectedItems()
 				throw();
 
+			/** React to a DeselectControlsMessage.
+			 		If such a message is send from other GenericControls, this GenericControl 
+					deselects all its items, so that only one GenericControl has a Selection 
+					at any time.
+			 		Call this Method in the derived Classes in their onNotify().
+			*/
+			virtual void onNotify(Message *message)
+				throw();
+
 			//@}
 			
 		  protected slots:
 			
 			virtual void onContextMenu_(QListViewItem* item, const QPoint& point, int column);
 
+			virtual void deselectOtherControls_();
+
+			/*_ Call deselectOtherControls_ if a selection exists.
+			 		Call this Method in the derived Classes in their updateSelection()
+			*/
+			virtual void updateSelection();
+			
 		  protected:
+
 			QListViewItem* 								context_item_;
 			QListView* 										listview;
 		};

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.40 2003/12/23 13:09:20 amoll Exp $
+// $Id: message.h,v 1.41 2004/01/13 00:46:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -678,6 +678,17 @@ class RegularData3DMessage
 
 	protected:
 		RegularData3D* data_;
+};
+
+/** Message send by one GenericControl to notify all other GenericControl instances to
+ 		deselect their QListView.
+*/
+class DeselectControlsMessage
+	: public Message
+{
+	public:
+		DeselectControlsMessage()
+			: Message() {};
 };
 
 //@}

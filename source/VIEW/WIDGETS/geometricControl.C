@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.23 2003/12/18 12:07:09 amoll Exp $
+// $Id: geometricControl.C,v 1.24 2004/01/13 00:44:47 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -120,6 +120,9 @@ void GeometricControl::onNotify(Message *message)
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "GeometricControl " << this << " onNotify " << message << std::endl;
 #endif
+
+	GenericControl::onNotify(message);
+
 	if (!RTTI::isKindOf<RepresentationMessage> (*message))
 	{
 		return;
@@ -325,6 +328,8 @@ void GeometricControl::modifyRepresentation_()
 
 void GeometricControl::updateSelection()
 {
+	GenericControl::updateSelection();
+
 	QListViewItem* item = 0;
 	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)

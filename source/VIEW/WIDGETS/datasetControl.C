@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.17 2004/01/12 08:45:27 bender Exp $
+// $Id: datasetControl.C,v 1.18 2004/01/13 00:44:46 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -153,6 +153,9 @@ void DatasetControl::onNotify(Message *message)
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "DatasetControl "<<this<<  " onNotify " << message << std::endl;
 #endif
+
+	GenericControl::onNotify(message);
+
 	if (RTTI::isKindOf<RegularData3DMessage>(*message))
 	{
 		RegularData3DMessage* ntm = RTTI::castTo<RegularData3DMessage>(*message);
@@ -361,6 +364,8 @@ void DatasetControl::save3DGrid_()
 void DatasetControl::updateSelection()
 	throw()
 {
+	GenericControl::updateSelection();
+
 	RegularData3DMessage* message = new RegularData3DMessage(RegularData3DMessage::SELECTED);
 	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)

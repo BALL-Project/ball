@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.7 2003/12/01 18:03:26 amoll Exp $
+// $Id: genericControl.C,v 1.8 2004/01/13 00:44:47 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
 #include <qlistview.h>
 
 using std::endl;
@@ -58,6 +59,37 @@ GenericControl::ItemList GenericControl::getSelectedItems()
 	}
 
 	return selected;
+}
+
+void GenericControl::deselectOtherControls_()
+{
+	DeselectControlsMessage* dcm = new DeselectControlsMessage;
+	notify_(dcm);
+}
+
+void GenericControl::updateSelection() 
+{
+	QListViewItemIterator it(listview);
+	for (; it.current(); ++it)
+	{
+		QListViewItem* item = it.current();
+		if (item->isSelected())
+		{
+			deselectOtherControls_();
+			return;
+		}
+	}
+}
+
+void GenericControl::onNotify(Message *message)
+	throw()
+{
+	if (!RTTI::isKindOf<DeselectControlsMessage>(*message))
+	{
+		return;
+	}
+
+	listview->selectAll(false);
 }
 
 } } // namespaces
