@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.14 2003/09/20 15:36:35 amoll Exp $
+// $Id: geometricControl.C,v 1.15 2003/10/05 15:36:41 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -151,7 +151,9 @@ void GeometricControl::buildContextMenu(Representation& rep)
 	insertContextMenuEntry("Properties", this, SLOT(modifyRepresentation_()));	
 
 	// This is used to provide the coloring for meshes...
-	if ((rep.getModelType() == MODEL_SE_SURFACE || rep.getModelType() == MODEL_SA_SURFACE)	
+	if ((rep.getModelType() == MODEL_SE_SURFACE || 
+			 rep.getModelType() == MODEL_SA_SURFACE ||
+			 rep.getModelType() == MODEL_CONTOUR_SURFACE)
 			&& rep.getGeometricObjects().size() > 0)
 	{
 		colorMeshDlg_->setMesh((Mesh*)*(rep.getGeometricObjects().begin()), &rep);
