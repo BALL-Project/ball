@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.50.2.2 2004/05/11 20:18:44 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.50.2.3 2004/05/12 07:55:11 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -1026,8 +1026,8 @@ AC_DEFUN(CF_MIPSPRO_OPTIONS, [
       DEF_BOOL=false
       CXXFLAGS="$CXXFLAGS -64 -LANG:std"
       DYNAROPTS="-64 ${DYNAROPTS}"
-      CXXFLAGS_O="${CXXFLAGS_O} -O3 -OPT:Olimit=60000 -multigot -G 5 -DEBUG:woff=3333"
-      CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,3333,1110,1209"
+      CXXFLAGS_O="${CXXFLAGS_O} -O3 -OPT:Olimit=60000 -multigot -G 5 -DEBUG:woff=3333,1681"
+      CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,3333,1110,1209,1681"
       CXXFLAGS_DI="${CXXFLAGS_DI} -g"
       LDFLAGS="$LDFLAGS -64 -LANG:std"
       AC_DEFINE(IRIX64,)
@@ -1036,8 +1036,8 @@ AC_DEFUN(CF_MIPSPRO_OPTIONS, [
       DEF_BOOL=false
       CXXFLAGS="$CXXFLAGS -n32 -LANG:std"
       DYNAROPTS="-n32 ${DYNAROPTS}"
-      CXXFLAGS_O="${CXXFLAGS_O} -O3 -OPT:Olimit=60000 -multigot -G 5 -DEBUG:woff=3333"
-      CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,3333,1110,1209"
+      CXXFLAGS_O="${CXXFLAGS_O} -O3 -OPT:Olimit=60000 -multigot -G 5 -DEBUG:woff=3333,1681"
+      CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,3333,1110,1209,1681"
       CXXFLAGS_DI="${CXXFLAGS_DI} -g"
       LDFLAGS="$LDFLAGS -n32 -LANG:std"
       AC_DEFINE(IRIX32,)
