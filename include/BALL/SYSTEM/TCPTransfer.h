@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.h,v 1.3 2001/09/11 17:09:42 amoll Exp $
+// $Id: TCPTransfer.h,v 1.4 2001/09/11 21:52:14 amoll Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -24,6 +24,7 @@ namespace BALL
 	 * 	Support for login, password and port is build in for
 	 * 	FTP and HTTP. FTP transports are done by passive FTP, so
 	 * 	no problems with local firewalls are encountered.
+	 * 	NOTE: Authentification doesnt yet works for HTTP.
 	 */
 	class TCPTransfer
 	{
@@ -52,6 +53,7 @@ namespace BALL
 				SEND_ERROR							= 11,
 				PORT_ERROR							= 12,
 				UNKNOWN_PROTOCOL_ERROR 	= 13,
+				LOGON_ERROR							= 14,
 				FILENOTFOUND_ERROR 			= 404
 			};
 
@@ -69,15 +71,13 @@ namespace BALL
 				FTP_PROTOCOL			= 2
 			};
 			
+			
 			/** Default constructor.
 					The instance is set to UNINITIALIZED_ERROR.
 			*/
 			TCPTransfer()
-				throw()
-			{	
-				clear();
-			}
-
+				throw();
+				
 			/** Detailled constructor.
 			 *	The file from the given address is downloaded and
 			 *	stored in the ofstream instance.
@@ -85,9 +85,13 @@ namespace BALL
 			 *	the syntax: \\
 			 *	http[ftp]://login:pass@server.com:port/fileaddress
 			 */
-			TCPTransfer(::std::ofstream& file, const String& address)
+			TCPTransfer(::std::ofstream& file, const String& address, bool debug = false)
 				throw();
 			
+			/// Destructor.
+			~TCPTransfer()
+				throw();
+		
 			/** Clear method.
 			 *  All attributes are set to default values and the status is set
 			 *  to UNINITIALIZED_ERROR.
@@ -99,7 +103,7 @@ namespace BALL
 			 * 	You can set a new file and address, but the transfer is not
 			 * 	yet done. To do that, use transfer() afterwards.
 			 */
-			bool set(::std::ofstream& file, const String& address)
+			bool set(::std::ofstream& file, const String& address, bool debug = false)
 				throw();
 			
 			/** Detailled set method.
@@ -111,18 +115,9 @@ namespace BALL
 							 const String& file_address,
 							 const String& login,
 							 const String& password,
-							 Position port = 80)
-				throw()
-			{
-				clear();
-				protocol_ 		= protocol;
-				host_address_ = host_address;
-				file_address_ = file_address;
-				login_ 				= login;
-				password_			= password;
-				port_ 				= port;
-				fstream_ 			= &file;
-			}
+							 Position 		 port = 80,
+							 bool					 debug = false)
+				throw();
 
 			/** Return the host address.
 			*/
@@ -203,6 +198,22 @@ namespace BALL
 				return buffer_;
 			}
 
+			/** Set debug output mode.
+			 *  If set to true, all networktraffic is stored in the ofstream.
+			 */
+			void setDebugOutput(bool debug)
+				throw()
+			{
+				debug_ = debug;
+			}
+			
+			/// Test if instance is in debug output mode.
+			bool isInDebugMode() const
+				throw()
+			{
+				return debug_;
+			}
+			
 			/** Transfer method.
 					If the address is specified, the file can be transfered
 					with this method.
@@ -224,30 +235,31 @@ namespace BALL
 				Protocol 		protocol_;
 				char* 			buffer_;
 				Socket			socket_;
-				::std::ofstream*		fstream_;
+				bool				debug_;
+				::std::ofstream*  fstream_;
 				
-				//_ Specified method for transfering per FTP-protocol
-				Status	 		getFTP_();
-				
-				//_ Specified method for transfering per HTTP-protocol
-				Status	 		getHTTP_();
-
 				/*_ Logon to a server.
 				 *  @param query string to send to the server as first contact
 				 */
-				Status 			logon_(const String& query);
+				Status	logon_(const String& query);
 				
+				//_ Specified method for transfering per FTP-protocol
+				Status	getFTP_();
+				
+				//_ Specified method for transfering per HTTP-protocol
+				Status	getHTTP_();
+
 				//_ Compute the status of a ftp server from its response
-				Status			getFTPStatus_();
+				Status	getFTPStatus_();
 
 				//_ Set a socket to blocking or nonblocking mode.
-				Status			setBlock_(Socket socket, bool block = true);
+				Status	setBlock_(Socket socket, bool block = true);
 
 				//_ Wait a given time for output from the Socket.
-				bool				waitForOutput_(const String& key, Size seconds);
+				bool 		waitForOutput_(const String& key, Size seconds);
 				
 				//_ Debug method
-				void				output_();
+				void 		output_();
 	};
 
 }

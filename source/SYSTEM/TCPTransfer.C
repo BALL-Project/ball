@@ -1,40 +1,92 @@
-// $Id: TCPTransfer.C,v 1.3 2001/09/11 17:09:03 amoll Exp $
+// $Id: TCPTransfer.C,v 1.4 2001/09/11 21:53:13 amoll Exp $
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
 
-#include <sys/socket.h>
-#include <netdb.h>
-#include <netinet/in.h> 
-#include <unistd.h>
-
-//#include <sys/ioctl.h>
-#include <fstream>
-#include <stdio.h>
+#include <sys/socket.h>		// socket
+#include <netdb.h>				// gethostbyname
+#include <netinet/in.h> 	// sockaddr_in
+#include <unistd.h>  			// close
+#include <fstream>				// ofstream
+#include <iostream.h> 		// cout, endl
 
 #if defined(__hpux__) || defined(__linux__)
-# include <sys/ioctl.h>
+# include <sys/ioctl.h>		//ioctl, FIONBIO
 #else
-# include <sys/filio.h>
+# include <sys/filio.h>		//ioctl, FIONBIO
 #endif
-
-//#include <sys/filio.h>
-//using namespace std;
 
 namespace BALL
 {
 
-// no support for passworts yet
-TCPTransfer::TCPTransfer(::std::ofstream& file, const String& address)
+TCPTransfer::TCPTransfer(::std::ofstream& file, const String& address, bool debug)
 	throw() 
 {
 	buffer_ = new char[BUFFER_SIZE];
-	if (!set(file, address))
+	if (!set(file, address, debug))
 	{
 		return; 
 	}
 
 	status_ = transfer();
+}
+
+TCPTransfer::~TCPTransfer()
+	throw()
+{
+	if (socket_ != 0)
+	{
+		close(socket_);
+		socket_ = 0;
+	}
+
+	delete[] buffer_;
+}
+			
+TCPTransfer::TCPTransfer()
+	throw()
+:	host_address_(""),
+	file_address_(""),
+	port_(0),
+	login_(""),
+	password_(""),
+	status_(UNINITIALIZED_ERROR),
+	received_bytes_(0),
+	protocol_(UNKNOWN_PROTOCOL),
+	buffer_(0),
+	socket_(0),
+	debug_(false),
+	fstream_(0)
+{	
+	buffer_ = new char[BUFFER_SIZE];
+}
+
+void TCPTransfer::set(::std::ofstream&  file, 
+												 Protocol 			protocol, 
+												 const String& 	host_address, 
+												 const String& 	file_address,
+												 const String& 	login,
+												 const String& 	password,
+												 Position 			port,
+												 bool						debug)
+	throw()
+{
+	protocol_ 			= protocol;
+	host_address_ 	= host_address;
+	file_address_ 	= file_address;
+	login_ 					= login;
+	password_				= password;
+	port_ 					= port;
+	fstream_ 				= &file;
+	status_					= NO_ERROR;
+	received_bytes_ = 0;
+	debug_					= debug;
+
+	if (socket_ != 0)
+	{
+		close(socket_);
+		socket_ = 0;
+	}
 }
 
 TCPTransfer::Status TCPTransfer::transfer()
@@ -54,10 +106,17 @@ TCPTransfer::Status TCPTransfer::transfer()
 	return UNKNOWN_PROTOCOL_ERROR;
 }
 
-bool TCPTransfer::set(::std::ofstream& file, const String& address)
+bool TCPTransfer::set(::std::ofstream& file, const String& address, bool debug)
 	throw()
 {
-	clear();
+	if (socket_ != 0)
+	{
+		close(socket_);
+		socket_ = 0;
+	}
+
+	debug_ = debug;
+	
 	status_ = ADDRESS_ERROR;
 
 	fstream_ = &file;
@@ -82,6 +141,7 @@ bool TCPTransfer::set(::std::ofstream& file, const String& address)
 			return false;
 		}
 	}
+
 	// ========================================================= resolve address
 	// example:   ftp://anonymous:nobody@asd.de@ftp.gwdg.de:21/pub/newfiles.gz		
 	
@@ -139,8 +199,13 @@ void TCPTransfer::clear()
 	received_bytes_ = 0;
 	status_				  = UNINITIALIZED_ERROR;
 	protocol_ 			= UNKNOWN_PROTOCOL;
+	debug_			 		= false;
 	
-	close(socket_);
+	if (socket_ != 0)
+	{
+		close(socket_);
+		socket_ = 0;
+	}
 }
 
 TCPTransfer::Status TCPTransfer::getHTTP_()
@@ -229,7 +294,6 @@ TCPTransfer::Status TCPTransfer::setBlock_(Socket socket, bool block)
 {
 	int temp = !block;
 	if (ioctl(socket, FIONBIO, &temp) == -1)
-	//if (ioctl(socket, 0x00005421, &temp) == -1)
 	{
 		return CONNECT_ERROR;
 	}
@@ -248,9 +312,14 @@ TCPTransfer::Status TCPTransfer::logon_(const String& query)
 		return status_;
 	}  
 
+	if (socket_ != 0)
+	{
+		close(socket_);
+	}
 	socket_ = socket(AF_INET, SOCK_STREAM, 0); 
 	if (socket_ == -1)
 	{
+		socket_ = 0;
 		status_ = SOCKET_ERROR;
 		return status_;
 	}  
@@ -268,6 +337,11 @@ TCPTransfer::Status TCPTransfer::logon_(const String& query)
 	
 	if (!query.isEmpty())
 	{
+		if (debug_)
+		{
+			(*fstream_) << ">>" << query << endl;
+		}
+
 		if (send(socket_, query.c_str(), query.size(), 0) != (int) query.size())
 		{
 			status_ = SEND_ERROR;
@@ -282,6 +356,11 @@ TCPTransfer::Status TCPTransfer::logon_(const String& query)
 		return status_;
 	}
 	buffer_[received_bytes_] = '\0';
+	
+	if (debug_)
+	{
+		(*fstream_) << "<<" << buffer_ << endl;
+	}
 	
 	status_ = NO_ERROR;
 	return status_;
@@ -321,23 +400,24 @@ bool TCPTransfer::waitForOutput_(const String& key, Size seconds)
 	timer.start();
 	while (timer.getClockTime() < seconds)
 	{
-		String temp(buffer_);
-		if (key.size() > 0 && temp.hasSubstring(key))
+		received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
+		if (received_bytes_ > 0)
 		{
-			setBlock_(socket_, true);
-			return true;
-		}
-	
-		for (Position pos = 0; pos < 5; pos ++)
-		{
-			received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
-			sleep(1);
-			if (received_bytes_ > 0)
+			buffer_[received_bytes_] = '\0';
+			String temp(buffer_);
+			
+			if (debug_)
 			{
-				buffer_[received_bytes_] = '\0';
-				break;
+				(*fstream_) << "<<" << buffer_ << endl;
 			}
-		}	
+			
+			if (key.size() == 0 || temp.hasSubstring(key))
+			{
+				setBlock_(socket_, true);
+				return true;
+			}
+		}
+		sleep(1);
 	}
 
 	setBlock_(socket_, true);
@@ -357,12 +437,12 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		return status_;
 	}
 
-	if (!waitForOutput_("ready.", 20))
+	String temp(buffer_);
+	if (!temp.hasSubstring("ready.") && !waitForOutput_("ready.", 20))
 	{
-		status_ = BODY_ERROR;
+		status_ = LOGON_ERROR;
 		return status_;
 	}
-
 	//================================================== login
 	String query;
 	if (login_.isEmpty())
@@ -374,6 +454,11 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		query = "USER "+ login_ + "\n";
 	}
 	
+	if (debug_)
+	{
+		(*fstream_) << ">>" << query << endl;
+	}
+
 	if (send(socket_, query.c_str(), query.size(), 0) != (int) query.size())
 	{
 		return SEND_ERROR;
@@ -383,6 +468,13 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	if (received_bytes_ < 0)
 	{
 		return RECV_ERROR;
+	}
+	
+	buffer_[received_bytes_] = '\0';
+	
+	if (debug_)
+	{
+		(*fstream_) << "<<" << buffer_ << endl;
 	}
 	
 	if (getFTPStatus_() != 331)
@@ -400,6 +492,11 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	 query = "PASS " + password_ + "\n";
 	}
 	
+	if (debug_)
+	{
+		(*fstream_) << ">>" << query << endl;
+	}
+
 	if (send(socket_, query.c_str(), query.size(), 0) != (int) query.size())
 	{
 		return SEND_ERROR;
@@ -411,25 +508,62 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		return RECV_ERROR;
 	}
 
+	buffer_[received_bytes_] = '\0';
+
+	if (debug_)
+	{
+		(*fstream_) << "<<" << buffer_ << endl;
+	}
+
 	if (getFTPStatus_() != 230)
 	{
 		return status_;
 	}
 
 	//================================================ opening passive connection
-	waitForOutput_("", 5);
+		
+	setBlock_(socket_, false);
+	Timer timer;
+	timer.start();
+	do
+	{
+		received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
+		if (received_bytes_ > 0)
+		{
+			buffer_[received_bytes_] = '\0';
+			if (debug_)
+			{
+				(*fstream_) << "<<" << buffer_ << endl;
+			}
+		}
+	}
+	while (timer.getClockTime() < 5);
+	
 	query = "PASV\n";
+	
+	if (debug_)
+	{
+		(*fstream_) << ">>" << query << endl;
+	}
+	
 	if (send(socket_, query.c_str(), query.size(), 0) != (int) query.size())
 	{
 		return SEND_ERROR;
 	}
 
+	setBlock_(socket_, true);
 	received_bytes_ = read(socket_, buffer_, BUFFER_SIZE);
 	if (received_bytes_ < 0)
 	{
 		return RECV_ERROR;
 	}
 	buffer_[received_bytes_] = '\0';
+	
+	if (debug_)
+	{
+		(*fstream_) << "<<" << buffer_ << endl;
+	}
+	
 	if (getFTPStatus_() != 227)
 	{
 		return status_;
@@ -487,6 +621,10 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	setBlock_(socket2, false);
 	
 	query = "RETR " + file_address_ + '\n';
+	if (debug_)
+	{
+		(*fstream_) << ">>" << query << endl;
+	}
 	if (send(socket_, query.c_str(), query.size(), 0) != (int) query.size())
 	{
 		close(socket2);
@@ -505,7 +643,11 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 	}
 
 	buffer_[received_bytes_] = '\0';
-	String temp(buffer_);
+	if (debug_)
+	{
+		(*fstream_) << "<<" << buffer_ << endl;
+	}
+	temp = buffer_;
 	temp = temp.getSubstring(0, 3);
 	if (temp != "150")
 	{ 
