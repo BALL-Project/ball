@@ -1,4 +1,4 @@
-// $Id: expressionTree.C,v 1.3 2001/07/17 09:33:53 anker Exp $
+// $Id: expressionTree.C,v 1.4 2001/12/11 16:05:29 amoll Exp $
 
 #include <BALL/KERNEL/expressionTree.h>
 
@@ -25,7 +25,7 @@ namespace BALL
 		BALL_DUMP_DEPTH(os, depth);
 		os << "[type = " << type_ 
 			<< "  negate = " << negate_ 
-			<< "  arg = " << (predicate_ == 0 ? "<NULL>" : predicate_->getArgument()) 
+			<< "  arg = " << (predicate_ == 0 ? "<NULL>" : predicate_->getArgument().c_str()) 
 			<< "]" << endl;
 		list<const ExpressionTree*>::const_iterator it = children_.begin();
 		for (; it != children_.end(); ++it)
