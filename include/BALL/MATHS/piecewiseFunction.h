@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.h,v 1.7 2000/10/29 21:27:04 anker Exp $
+// $Id: piecewiseFunction.h,v 1.8 2001/02/16 02:00:28 amoll Exp $
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
@@ -76,7 +76,7 @@ namespace BALL
 		//@{
 
 		/** Set the intervals for the piecewise definition.
-			Note that this method does {\bg not} check the definition of the
+			Note that this method does {\em not} check the definition of the
 			intervals for sanity.
 		 */
 		void setIntervals(const std::vector<Interval>& intervals) throw();
