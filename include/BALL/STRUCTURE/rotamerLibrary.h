@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.h,v 1.27 2003/04/28 19:21:27 oliver Exp $
+// $Id: rotamerLibrary.h,v 1.28 2003/05/06 20:16:14 oliver Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -226,8 +226,6 @@ namespace BALL
 			}
 			return rotamers_[index];
 		}
- 
-
 		//@}
 
 		/**	@name	Rotamer Assignment
