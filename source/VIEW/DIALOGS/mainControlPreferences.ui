@@ -7,29 +7,29 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>1</y>
-            <width>380</width>
-            <height>210</height>
+            <y>0</y>
+            <width>433</width>
+            <height>258</height>
         </rect>
     </property>
     <property name="sizePolicy">
         <sizepolicy>
-            <hsizetype>0</hsizetype>
-            <vsizetype>0</vsizetype>
+            <hsizetype>5</hsizetype>
+            <vsizetype>5</vsizetype>
             <horstretch>0</horstretch>
             <verstretch>0</verstretch>
         </sizepolicy>
     </property>
     <property name="minimumSize">
         <size>
-            <width>380</width>
-            <height>210</height>
+            <width>0</width>
+            <height>0</height>
         </size>
     </property>
     <property name="maximumSize">
         <size>
-            <width>380</width>
-            <height>210</height>
+            <width>32000</width>
+            <height>32000</height>
         </size>
     </property>
     <property name="caption">
@@ -42,7 +42,7 @@
         <property name="geometry">
             <rect>
                 <x>7</x>
-                <y>-1</y>
+                <y>6</y>
                 <width>112</width>
                 <height>185</height>
             </rect>
