@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.h,v 1.4 2005/02/08 17:32:37 oliver Exp $
+// $Id: HBondProcessor.h,v 1.5 2005/03/02 15:18:40 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_HBONDPROCESSOR_H
@@ -16,7 +16,7 @@
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H
-#include <BALL/MATHS/vector3.h>  //TVector3
+#include <BALL/MATHS/vector3.h> 
 #endif
 
 #include <vector>
@@ -41,10 +41,8 @@ namespace BALL
 		const float BOND_LENGTH_N_H;
 		const float BOND_LENGTH_C_O;
 
-
-
-
-		struct POS
+    ///
+		struct ResidueData
 		{
 			Vector3 pos_C;
 			Vector3 pos_N;
@@ -52,48 +50,55 @@ namespace BALL
 			Vector3 pos_O;
 			Size		number;
 			Residue*	res; 
-			bool is_complete; // sometimes there are defect residues around...
+			/// sometimes there are defect residues around...
+			bool is_complete; 
 		};
   
 		
 		/**	Constructors and Descructor */
 		//@{
+		
     ///
     HBondProcessor();
+		
     ///
 		virtual ~HBondProcessor();
+		
     ///
 		HBondProcessor(const HBondProcessor& hbp);
+		
 		//@}
-
 		/**	Processor-related methods */
 		//@{
-    /** Finish computes all hbonds of the composite.
-     */
+		
+    /// Finish computes all hbonds of the composite.
     virtual bool finish();
+		
     ///
     virtual Processor::Result operator() (Composite &composite);
+		
 		//@}
 
-		// ????
-    const std::vector< std::vector<int> >& getHBondPairs() const;
-		// ????
-    const std::vector<POS>& getPosVec() const;
+		///
+    const std::vector< std::vector<Position> >& getHBondPairs() const;
 
-    
+		/// 
+    const std::vector<ResidueData>& getResidueData() const;
 
 		protected:  
+
     void preComputeBonds_(ResidueIterator& data);
 
+		//_ lower point of the grid
     Vector3 upper_;
+		//_ upper point of the grid
     Vector3 lower_;
     
-    // vec_ includes the atom positions per residue 
-    vector<POS> vec_; // ???? !!!!!!!!!!!!!posvec_ would be more understandable -OK
-											// the name vec_ is an extremely ppor choice! // -OK
+    /// the atom positions per residue 
+    vector<ResidueData> residue_data_;
 
-    // HBondPairs_ : vector to store HBondpartners. Why ints? If anything then Position or Index ????
-    std::vector<std::vector<int> > h_bond_pairs_;
+    /// vector to store HBondpartners
+    std::vector<std::vector<Position> > h_bond_pairs_;
 
   }; //class HBondProcessor
 

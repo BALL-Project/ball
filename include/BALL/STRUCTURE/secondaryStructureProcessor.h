@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.h,v 1.7 2005/02/14 17:24:21 amoll Exp $
+// $Id: secondaryStructureProcessor.h,v 1.8 2005/03/02 15:18:40 amoll Exp $
 //
 
 #ifndef BALL_SECONDARY_STRUCTURE_PROCESSOR_H
@@ -50,7 +50,7 @@ namespace BALL
 		void compute_();
 			
 		// matrix to save the possible HBondPairs
-		std::vector<std::vector<int> > HBonds_;
+		std::vector<std::vector<Position> > HBonds_;
 		//vector to save the bridges
 		std::vector<std::vector<int> > posbridges_; 
 		void insertTurn_(int turn, int position);

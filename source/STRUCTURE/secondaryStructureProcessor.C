@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.C,v 1.10 2005/02/21 21:36:52 oliver Exp $
+// $Id: secondaryStructureProcessor.C,v 1.11 2005/03/02 15:18:56 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
@@ -58,7 +58,7 @@ namespace BALL
 				for(Size k=0; k<HBonds_[i].size(); k++)
 				{	
 					//---------- 4 turns
-					if (HBonds_[i][k]==(int)(i+4))
+					if (HBonds_[i][k] == i + 4)
 					{
 						//first sign
 						if( (fourturn_[i]  == '<') || (fourturn_[i] == 'X'))
@@ -82,7 +82,7 @@ namespace BALL
 					}
 
 					//---------- 3 turns
-					else if (HBonds_[i][k]==(int)(i+3))
+					else if (HBonds_[i][k] == i + 3)
 					{
 						//first sign
 						if( (threeturn_[i]  == '<') || (threeturn_[i] == 'X'))
@@ -106,7 +106,7 @@ namespace BALL
 					} 
 
 					//---------- 5 turns
-					else if (HBonds_[i][k]==(int)(i+5))
+					else if (HBonds_[i][k] == i + 5)
 					{
 						//first sign
 						if( (fiveturn_[i]  == '<') || (fiveturn_[i] == 'X'))
@@ -159,7 +159,7 @@ namespace BALL
 					// do we have HBP(k, i+2) ? => parallel bridge(i+1,k) 			
 					for (Size s = 0; (s < HBonds_[partner].size()); s++)
 					{
-						if(HBonds_[partner][s]== (int)(current_res+2)) 
+						if(HBonds_[partner][s]== current_res + 2) 
 						{
 							//insert
 							//NOTE: there might be  more than two bridges for this
@@ -178,7 +178,7 @@ namespace BALL
 					// do we have HBP(k, i) ? => antiparallel bridge(i,k)
 					for (Size s = 0; (s < HBonds_[partner].size()); s++)
 					{
-						if(HBonds_[partner][s]== (int)current_res) 
+						if(HBonds_[partner][s] == current_res) 
 						{
 		    		  // we aren't allowed to overwrite antiparallel bridges found before!
 							// remember: we have two equal cases: 
@@ -203,7 +203,7 @@ namespace BALL
 						for (Size s = 0;(s < HBonds_[partner-2].size()); s++)
 						{
 
-							if (    (HBonds_[partner-2][s] == (int)(current_res+2))
+							if (    (HBonds_[partner-2][s] == current_res + 2)
 									&& ((int)(current_res+1) != (partner-1)))
 							{
 								//insert
