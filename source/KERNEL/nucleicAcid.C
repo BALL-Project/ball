@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.C,v 1.3 2000/05/10 19:03:57 amoll Exp $
+// $Id: nucleicAcid.C,v 1.4 2000/05/11 16:16:06 amoll Exp $
 
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/global.h>
@@ -109,26 +109,22 @@ namespace BALL
 
 	Nucleotide* NucleicAcid::get3Prime()
 	{
-		//BAUSTELLE
-		return 0;
+		return getNucleotide(0);
 	}
 		
 	const Nucleotide* NucleicAcid::get3Prime() const
 	{
-		//BAUSTELLE
-		return 0;
+		return getNucleotide(0);
 	}
 
 	Nucleotide* NucleicAcid::get5Prime()
 	{
-		//BAUSTELLE
-		return 0;
+		return getNucleotide(countNucleotides()-1);
 	}
 		
 	const Nucleotide* NucleicAcid::get5Prime() const
 	{
-		//BAUSTELLE
-		return 0;
+		return getNucleotide(countNucleotides()-1);
 	}
 
 	void NucleicAcid::setID(const String& id)
