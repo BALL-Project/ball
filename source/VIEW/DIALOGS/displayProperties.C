@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.39 2003/11/14 13:54:49 amoll Exp $
+// $Id: displayProperties.C,v 1.40 2003/11/18 16:59:12 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -236,14 +236,25 @@ void DisplayProperties::createRepresentationMode()
 void DisplayProperties::modifyRepresentationMode()
 {
 	setCaption("modify Representation");
-	coloring_method_combobox->setCurrentItem(rep_->getColoringType());
+	if (rep_->getColoringType() != COLORING_UNKNOWN)
+	{
+		coloring_method_combobox->setCurrentItem(rep_->getColoringType());
+	}
+	
 	precision_combobox->setCurrentItem(rep_->getDrawingPrecision());
-	model_type_combobox->setCurrentItem(rep_->getModelType());
+	
+	if (rep_->getModelType() != MODEL_UNKNOWN)
+	{
+		model_type_combobox->setCurrentItem(rep_->getModelType());
+	}
 	mode_combobox->setCurrentItem(rep_->getDrawingMode());
 
-	custom_color_ = rep_->getColorProcessor()->getDefaultColor();
-	QColor qcolor(custom_color_.getRed(), custom_color_.getGreen(), custom_color_.getBlue());
-	color_sample->setBackgroundColor(qcolor);
+	if (rep_->getColorProcessor() != 0)
+	{
+		custom_color_ = rep_->getColorProcessor()->getDefaultColor();
+		QColor qcolor(custom_color_.getRed(), custom_color_.getGreen(), custom_color_.getBlue());
+		color_sample->setBackgroundColor(qcolor);
+	}
 
 	transparency_slider->setValue((Size)(rep_->getTransparency() / 2.55));
 

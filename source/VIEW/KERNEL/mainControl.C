@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.20 2003/11/18 14:46:10 amoll Exp $
+// $Id: mainControl.C,v 1.21 2003/11/18 16:58:45 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1036,7 +1036,7 @@ bool MainControl::remove(Composite& composite)
 bool MainControl::insert(Representation& rep)
 	throw()
 {
-	if (!primitive_manager_.has(rep)) return false;
+	if (primitive_manager_.has(rep)) return false;
 	primitive_manager_.insert(rep);
 
 	RepresentationMessage* rm = new RepresentationMessage(&rep, RepresentationMessage::ADD);
@@ -1052,6 +1052,9 @@ bool MainControl::update(Representation& rep)
 
 	RepresentationMessage* rm = new RepresentationMessage(&rep, RepresentationMessage::UPDATE);
 	notify_(rm);
+
+	SceneMessage *scene_message = new SceneMessage(SceneMessage::REDRAW);
+	notify_(scene_message);
 
 	return true;
 }
