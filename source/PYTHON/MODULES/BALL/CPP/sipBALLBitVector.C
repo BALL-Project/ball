@@ -278,7 +278,7 @@ static PyObject *sipDo_BitVector_countValue(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_BitVector_getMaxIndex(PyObject *sipThisObj,PyObject *sipArgs)
+static PyObject *sipDo_BitVector_Operator__getitem__(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 
@@ -286,23 +286,64 @@ static PyObject *sipDo_BitVector_getMaxIndex(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		if (sipParseArgs(sipArgs,""))
+		Index *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Index,&a0obj))
 		{
-			Index *res;
+			Bit *res;
 			BitVector *ptr;
 
 			if ((ptr = (BitVector *)sipGetCppPtr(sipThis,sipClass_BitVector)) == NULL)
 				return NULL;
 
-			res = new Index(ptr -> BitVector::getMaxIndex());
+			int iserr = 0;
 
-			return sipNewCppToSelf(res,sipClass_Index,SIP_SIMPLE | SIP_PY_OWNED);
+			int istemp0 = sipConvertTo_Index(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = new Bit(ptr -> BitVector::operator[](* a0));
+
+			if (istemp0)
+				delete a0;
+
+			return sipNewCppToSelf(res,sipClass_Bit,SIP_SIMPLE | SIP_PY_OWNED);
+		}
+	}
+
+	{
+		Index *a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Index,&a0obj))
+		{
+			bool res;
+			BitVector *ptr;
+
+			if ((ptr = (BitVector *)sipGetCppPtr(sipThis,sipClass_BitVector)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Index(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> BitVector::operator[](* a0);
+
+			if (istemp0)
+				delete a0;
+
+			return sipConvertFromBool((int)res);
 		}
 	}
 
 	// Report an error if the arguments couldn't be parsed.
 
-	sipNoMethod(sipName_BALL_BitVector,sipName_BALL_getMaxIndex);
+	sipNoMethod(sipName_BALL_BitVector,sipName_BALL_Operator__getitem__);
 
 	return NULL;
 }
@@ -931,7 +972,7 @@ PyMethodDef sipClassAttrTab_BitVector[] = {
 	{sipName_BALL_setSize, sipDo_BitVector_setSize, METH_VARARGS, NULL},
 	{sipName_BALL_getSize, sipDo_BitVector_getSize, METH_VARARGS, NULL},
 	{sipName_BALL_countValue, sipDo_BitVector_countValue, METH_VARARGS, NULL},
-	{sipName_BALL_getMaxIndex, sipDo_BitVector_getMaxIndex, METH_VARARGS, NULL},
+	{sipName_BALL_Operator__getitem__, sipDo_BitVector_Operator__getitem__, METH_VARARGS, NULL},
 	{sipName_BALL_setBit, sipDo_BitVector_setBit, METH_VARARGS, NULL},
 	{sipName_BALL_getBit, sipDo_BitVector_getBit, METH_VARARGS, NULL},
 	{sipName_BALL_toggleBit, sipDo_BitVector_toggleBit, METH_VARARGS, NULL},

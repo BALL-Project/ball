@@ -716,7 +716,6 @@ char sipName_BALL_setOrigin[] = "setOrigin";
 char sipName_BALL_getOrigin[] = "getOrigin";
 char sipName_BALL_getBoxIndices[] = "getBoxIndices";
 char sipName_BALL_getGridCoordinates[] = "getGridCoordinates";
-char sipName_BALL_Operator__getitem__[] = "Operator__getitem__";
 char sipName_BALL_getIndex[] = "getIndex";
 char sipName_BALL_getZSpacing[] = "getZSpacing";
 char sipName_BALL_getYSpacing[] = "getYSpacing";
@@ -765,7 +764,7 @@ char sipName_BALL_fill[] = "fill";
 char sipName_BALL_toggleBit[] = "toggleBit";
 char sipName_BALL_getBit[] = "getBit";
 char sipName_BALL_setBit[] = "setBit";
-char sipName_BALL_getMaxIndex[] = "getMaxIndex";
+char sipName_BALL_Operator__getitem__[] = "Operator__getitem__";
 char sipName_BALL_countValue[] = "countValue";
 char sipName_BALL_getSize[] = "getSize";
 char sipName_BALL_setSize[] = "setSize";
@@ -935,7 +934,7 @@ static PyObject *sipDo_calculateSASPoints(PyObject *,PyObject *sipArgs)
 
 		return sipMapCppToSelf(res,sipClass_Surface);
 	}
-#line 943 "../CPP/BALLcmodule.cpp"
+#line 942 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -974,7 +973,7 @@ static PyObject *sipDo_calculateSASAtomAreas(PyObject *,PyObject *sipArgs)
 
 		return resobj;
 	}
-#line 982 "../CPP/BALLcmodule.cpp"
+#line 981 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
