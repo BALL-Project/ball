@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.C,v 1.1.2.1 2002/02/14 17:02:55 anker Exp $
+// $Id: fresnoDesolvation.C,v 1.1.2.2 2002/03/07 21:03:08 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -90,9 +90,11 @@ namespace BALL
 		// ?????
 		// the following should be done with some proper parameter parsing
 
-		System ligand_system;
-		ligand_system.insert(*ligand);
-		if (fdpb_.setup(ligand_system))
+		System ligand_system_;
+		Molecule temp(*ligand, true);
+		ligand_system_.insert(temp);
+
+		if (fdpb_.setup(ligand_system_))
 		{
 			return true;
 		}

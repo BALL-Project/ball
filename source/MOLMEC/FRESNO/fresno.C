@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.3 2002/03/05 22:43:40 anker Exp $
+// $Id: fresno.C,v 1.1.2.4 2002/03/07 21:03:07 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -44,7 +44,7 @@ namespace BALL
 		insertComponent(new FresnoBuriedPolar(*this));
 		insertComponent(new FresnoLipophilic(*this));
 		insertComponent(new FresnoRotation(*this));
-		// insertComponent(new FresnoDesolvation(*this));
+		insertComponent(new FresnoDesolvation(*this));
 	}
 
 
