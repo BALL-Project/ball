@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.141 2001/06/28 14:15:08 oliver Exp $
+dnl    $Id: configure.in,v 1.142 2001/07/05 17:47:01 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1889,7 +1889,8 @@ if test "${BALL_NO_XDR}" = "true" ; then
 
 	AC_MSG_RESULT([No XDR headers available - building of XDR persistence support disabled])
 	AC_DEFINE(BALL_HAS_XDR, )
-
+	BALL_HAS_XDR=false
+	AC_SUBST(BALL_HAS_XDR)
 else
 
 	AC_CHECK_HEADER(rpc/types.h, HAS_RPC_TYPES_H=true, HAS_RPC_TYPES_H=false)
@@ -2163,8 +2164,9 @@ else
 		AC_MSG_RESULT(yes)
 	fi
 	AC_DEFINE(BALL_HAS_XDR, true)
+	BALL_HAS_XDR=true
+	AC_SUBST(BALL_HAS_XDR)
 fi
-AC_SUBST(BALL_HAS_XDR)
 
 
 dnl
