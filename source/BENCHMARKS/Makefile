@@ -1,6 +1,8 @@
 DIRECTORY=BENCHMARKS
 
 EXECUTABLES = \
+	CompositeClone_bench\
+	KernelClone_bench\
 	KernelIteration_bench\
 	AmberFF_bench\
 	CharmmFF_bench\
@@ -33,8 +35,3 @@ bench:	$(EXECUTABLES)
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
  
-AmberFF_bench:	AmberFF_bench.o ../MOLMEC/AMBER/amberNonBonded.o ../MOLMEC/AMBER/amberBend.o
-	$(CXX) $(CXXFLAGS) AmberFF_bench.o ../MOLMEC/AMBER/amberNonBonded.o ../MOLMEC/AMBER/amberBend.o $(LDFLAGS) -o $@ $(LIBS)
-
-hin2mol:	hin2mol.o
-	$(CXX) $(CXXFLAGS) hin2mol.o $(LDFLAGS) -o $@ $(LIBS)
