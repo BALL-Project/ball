@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.12 2003/10/05 16:07:55 amoll Exp $
+// $Id: mainControl.h,v 1.13 2003/10/15 14:22:25 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -39,6 +39,10 @@
  #include <BALL/STRUCTURE/fragmentDB.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_QTTIMER_H
+ #include <BALL/VIEW/KERNEL/QTTimer.h>
+#endif
+
 #include <qmainwindow.h>
 
 class QLabel;
@@ -54,6 +58,29 @@ namespace BALL
 		class Preferences;
 		class MainControlPreferences;
 		class GeometricObjectSelectionMessage;
+
+		/** Timer class to clear the statusbar of the MainControl after a given time
+		*/
+		class StatusbarTimer
+			: public QTTimer
+		{
+			public:
+
+				///
+				StatusbarTimer(QObject* parent=0)
+					throw();
+				
+				///
+				void setLabel(QLabel* label)
+					throw();
+
+			protected:
+				virtual void timer()
+					throw();
+
+			private:
+				QLabel* label_;
+		};
 
 /**	MainControl is the main adminstration unit for a program and must be
 		used by all	applications.
@@ -477,20 +504,6 @@ class MainControl
 		throw();
 
 	//@}
-	/**	@name	Debugging and Diagnostics
-	*/
-	//@{
-
-	/** Internal state dump.
-			Dump the current internal state of this mainControl to 
-			the output ostream <b>s</b> with dumping depth <b>depth</b>.
-			\param   s output stream where to output the internal state 
-			\param   depth the dumping depth
-	*/
-	virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-		throw();
-					
-	//@}
 	/**	@name	Accessors and Settings
 	*/
 	//@{
@@ -553,7 +566,21 @@ class MainControl
 
 	///
 	bool compositesAreMuteable() {return composites_muteable_;}
+			
+	//@}
+	/**	@name	Debugging and Diagnostics
+	*/
+	//@{
 
+	/** Internal state dump.
+			Dump the current internal state of this mainControl to 
+			the output ostream <b>s</b> with dumping depth <b>depth</b>.
+			\param   s output stream where to output the internal state 
+			\param   depth the dumping depth
+	*/
+	virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+		throw();
+			
 	//@}
 	
 	protected:
@@ -623,6 +650,8 @@ class MainControl
 	List<ModularWidget*>				modular_widgets_;
 
 	HashMap<Index, String>      menu_entries_hints_;
+
+	StatusbarTimer* 						timer_;
 };
 
 #ifndef BALL_NO_INLINE_FUNCTIONS
