@@ -1,4 +1,4 @@
-// $Id: FFT3D.C,v 1.1.2.2 2002/08/27 11:58:24 oliver Exp $
+// $Id: FFT3D.C,v 1.1.2.3 2002/09/02 09:28:53 anhi Exp $
 
 #include <BALL/MATHS/FFT3D.h>
 
@@ -347,6 +347,66 @@ namespace BALL
 	{
 		return maxFourier_.z;
 	}
+
+	Vector3 FFT3D::getGridCoordinates(Position position) const
+		throw()
+	{
+		if (!inFourierSpace_)
+		{
+			if (position > number_of_grid_points_)
+			{
+				throw Exception::OutOfGrid(__FILE__, __LINE__);
+			}
+		
+			Vector3 r;
+			Position  x, y, z;
+
+			z = position % lengthZ_;
+			y = (position % (lengthY_ * lengthZ_)) / lengthZ_;
+			x =  position / (lengthY_ * lengthZ_);
+
+			r.set(-origin_.x + (float)x * stepPhysX_,
+						-origin_.y + (float)y * stepPhysY_,
+						-origin_.z + (float)z * stepPhysZ_);
+
+			return r;
+		}
+		else
+		{
+			if (position > number_of_grid_points_)
+			{
+				throw Exception::OutOfGrid(__FILE__, __LINE__);
+			}
+		
+			Vector3 r;
+			Index x, y, z;
+	
+			z = position % lengthZ_;
+			y = (position % (lengthY_ * lengthZ_)) / lengthZ_;
+			x =  position / (lengthY_ * lengthZ_);
+
+			if (x>lengthX_/2.)
+			{
+				x-=lengthX_;
+			}
+			
+			if (y>lengthY_/2.)
+			{
+				y-=lengthY_;
+			}
+
+			if (z>lengthZ_/2.)
+			{
+				z-=lengthZ_;
+			}
+
+			r.set((float)x * stepFourierX_,
+						(float)y * stepFourierY_,
+						(float)z * stepFourierZ_);
+
+			return r;
+		}
+	}
 	
 	Complex FFT3D::getData(const Vector3& pos) const
 		throw(Exception::OutOfGrid)
@@ -397,12 +457,12 @@ namespace BALL
 			return getData(pos);
 		}
 
-		double beforeX = floor(h.x/stepX)*stepX+ min.x;
-		double beforeY = floor(h.y/stepY)*stepY+ min.y;
-		double beforeZ = floor(h.z/stepZ)*stepZ+ min.z;
-		double afterX  =  ceil(h.x/stepX)*stepX+ min.x;
-		double afterY  =  ceil(h.y/stepY)*stepY+ min.y;
-		double afterZ  =  ceil(h.z/stepZ)*stepZ+ min.z;
+		double beforeX = floor(h.x/stepX)*stepX+min.x;
+		double beforeY = floor(h.y/stepY)*stepY+min.y;
+		double beforeZ = floor(h.z/stepZ)*stepZ+min.z;
+		double afterX  =  ceil(h.x/stepX)*stepX+min.x;
+		double afterY  =  ceil(h.y/stepY)*stepY+min.y;
+		double afterZ  =  ceil(h.z/stepZ)*stepZ+min.z;
 			
 		double tx = (pos.x - beforeX)/stepX;
 		double ty = (pos.y - beforeY)/stepY;
