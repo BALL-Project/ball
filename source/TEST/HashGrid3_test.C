@@ -1,13 +1,14 @@
-// $Id: HashGrid3_test.C,v 1.3 2001/12/30 13:28:58 sturm Exp $
+// $Id: HashGrid3_test.C,v 1.4 2002/01/14 22:30:14 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 // insert includes here
+#include <BALL/DATATYPE/hashGrid.h>
 
 ///////////////////////////
 
-START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.3 2001/12/30 13:28:58 sturm Exp $")
+START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.4 2002/01/14 22:30:14 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -19,23 +20,27 @@ using namespace BALL;
 	
 // tests for class HashGridBox3::
 
+HashGridBox3<int>* hbox3;
+
 CHECK(HashGridBox3::HashGridBox3() throw())
-  //?????
+	hbox3 = new HashGridBox3<int>;
+	TEST_NOT_EQUAL(hbox3, 0)
 RESULT
 
 
 CHECK(HashGridBox3::HashGridBox3(const HashGridBox3& grid_box, bool deep = true) throw())
-  //?????
+  // ?????
+	// uses set(), which isn't implemented
 RESULT
 
 
 CHECK(HashGridBox3::~HashGridBox3() throw())
-  //?????
+	delete hbox3;
 RESULT
 
 
 CHECK(HashGridBox3::clear() throw())
-  //?????
+	// ?????
 RESULT
 
 
@@ -70,22 +75,49 @@ RESULT
 
 
 CHECK(HashGridBox3::getSize() const  throw())
-  //?????
+	HashGridBox3<int> hbox;
+	int size = hbox.getSize();
+	TEST_EQUAL(size, 0)
+	int test_int = 5;
+	hbox.insert(test_int);
+	size = hbox.getSize();
+	TEST_EQUAL(size, 1)
 RESULT
 
 
 CHECK(HashGridBox3::insert(const Item& item) throw())
-  //?????
+	// ?????
 RESULT
 
 
 CHECK(HashGridBox3::remove(const Item& item) throw())
-  //?????
+	HashGridBox3<int> hbox;
+	for (int i = 0; i < 5; i++)
+	{
+		hbox.insert(i);
+	}
+	hbox.remove(3);
+	int size = hbox.getSize();
+	TEST_EQUAL(size, 4)
+	// TODO:
+	// check if really the item "3" was removed.
 RESULT
 
 
 CHECK(HashGridBox3::removeAll(const Item& item) throw())
-  //?????
+	HashGridBox3<int> hbox;
+	for (int i = 0; i < 5; i++)
+	{
+		hbox.insert(i);
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		hbox.insert(i);
+	}
+	int size = hbox.getSize();
+	hbox.removeAll(3);
+	int new_size = hbox.getSize();
+	TEST_EQUAL(size - new_size, 2)
 RESULT
 
 
@@ -95,27 +127,79 @@ RESULT
 
 
 CHECK(HashGridBox3::bool operator == (const HashGridBox3& box) const  throw())
-  //?????
+	HashGridBox3<int> hbox1;
+	for (int i = 0; i < 5; i++)
+	{
+		hbox1.insert(i);
+	}
+	HashGridBox3<int> hbox2;
+	bool test = (hbox1 == hbox2);
+	TEST_NOT_EQUAL(test, true);
+	for (int i = 0; i < 5; i++)
+	{
+		hbox2.insert(i);
+	}
+	test = (hbox1 == hbox2);
+	TEST_EQUAL(test, true);
 RESULT
 
 
 CHECK(HashGridBox3::bool operator != (const HashGridBox3& box) const  throw())
-  //?????
+	HashGridBox3<int> hbox1;
+	for (int i = 0; i < 5; i++)
+	{
+		hbox1.insert(i);
+	}
+	HashGridBox3<int> hbox2;
+	bool test = (hbox1 != hbox2);
+	TEST_EQUAL(test, true);
+	for (int i = 0; i < 5; i++)
+	{
+		hbox2.insert(i);
+	}
+	test = (hbox1 != hbox2);
+	TEST_NOT_EQUAL(test, true);
 RESULT
 
 
 CHECK(HashGridBox3::has(const Item& item) const  throw())
-  //?????
+	HashGridBox3<int> hbox;
+	for (int i = 0; i < 5; i++)
+	{
+		hbox.insert(i);
+	}
+	bool test = hbox.has(8);
+	TEST_NOT_EQUAL(test, true)
+	test = hbox.has(0);
+	TEST_EQUAL(test, true)
+	test = hbox.has(4);
+	TEST_EQUAL(test, true)
+	test = hbox.has(3);
+	TEST_EQUAL(test, true)
 RESULT
 
 
 CHECK(HashGridBox3::isEmpty() const  throw())
-  //?????
+	HashGridBox3<int> hbox;
+	bool test = hbox.isEmpty();
+	TEST_EQUAL(test, true)
+	for (int i = 0; i < 5; i++)
+	{
+		hbox.insert(i);
+	}
+	test = hbox.isEmpty();
+	TEST_EQUAL(test, false)
 RESULT
 
 
 CHECK(HashGridBox3::isValid() const  throw())
-  //?????
+	HashGridBox3<int> hbox;
+	for (int i = 0; i < 5; i++)
+	{
+		hbox.insert(i);
+	}
+	bool test = hbox.isValid();
+	TEST_EQUAL(test, true)
 RESULT
 
 
@@ -239,7 +323,6 @@ RESULT
 
 
 CHECK(DataIteratorTraits_::toBegin() throw())
-  //?????
 RESULT
 
 

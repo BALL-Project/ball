@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.22 2001/12/30 13:28:36 sturm Exp $
+// $Id: hashGrid.h,v 1.23 2002/01/14 22:30:14 anker Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -81,15 +81,15 @@ namespace BALL
 
 		///
 		void set(const HashGridBox3& box,bool /* deep */ = true)
-			throw();
+			throw(Exception::NotImplemented);
 
 		///
 		const HashGridBox3& operator = (const HashGridBox3& box)
-			throw();
+			throw(Exception::NotImplemented);
 
 		///
 		void get(HashGridBox3& box, bool deep = true) const
-			throw();
+			throw(Exception::NotImplemented);
 
 		//@}
 		/**	@name	Accessors 
@@ -203,6 +203,7 @@ namespace BALL
 		*/
 		//@{
 
+		/// ?????
 		struct DataItem_
 		{
 			public:
@@ -229,6 +230,7 @@ namespace BALL
 			DataItem_* next_;
 		};
 			
+		/// ?????
 		struct NeighbourBoxItem_
 		{
 			public:
@@ -704,15 +706,16 @@ namespace BALL
 
 	template<typename Item>  
 	void HashGridBox3<Item>::set(const HashGridBox3<Item>& box,  bool deep)
-		throw()
-  { // ????? - not implemented
+		throw(Exception::NotImplemented)
+  { 
+		// ????? - not implemented
     throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
  
 	template<typename Item>  
 	BALL_INLINE 
 	const HashGridBox3<Item>& HashGridBox3<Item>::operator = (const HashGridBox3<Item>& box)
-		throw()
+		throw(Exception::NotImplemented)
 	{
 		set(box);
 		
@@ -722,20 +725,21 @@ namespace BALL
 	template<typename Item>  
 	BALL_INLINE 
 	void HashGridBox3<Item>::get(HashGridBox3<Item>& box, bool deep) const
-		throw()
+		throw(Exception::NotImplemented)
 	{
-		box.set(*this, deep);
+		// ????? - not implemented
+    throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	template<typename Item>  
 	Item* HashGridBox3<Item>::find(const Item& item)
 		throw()
 	{
-		for (DataItem_* item_ = first_item_; item != 0; item = item->next_)
+		for (DataItem_* item_ptr= first_item_; item_ptr != 0; item_ptr = item_ptr->next_)
 		{
-			if (item->item_ == item)
+			if (item_ptr->item_ == item)
 			{
-				return &(item->item_);
+				return &(item_ptr->item_);
 			}
 		}
 
@@ -774,7 +778,7 @@ namespace BALL
 	bool HashGridBox3<Item>::remove(const Item& item)
 		throw()
 	{
-		for (DataItem_* item_ptr = first_item_; item_ptr != 0; item_ptr = item->next_)
+		for (DataItem_* item_ptr = first_item_; item_ptr != 0; item_ptr = item_ptr->next_)
 		{
 			if (item_ptr->item_ == item)
 			{
@@ -812,7 +816,7 @@ namespace BALL
 		
 		while(item_ptr != 0)
 		{
-			next_item = item->next_;
+			next_item = item_ptr->next_;
 
 			if (item_ptr->item_ == item)
 			{
