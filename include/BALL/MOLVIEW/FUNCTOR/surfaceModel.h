@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.9 2003/02/19 13:16:03 amoll Exp $
+// $Id: surfaceModel.h,v 1.10 2003/02/19 16:14:32 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
@@ -184,7 +184,7 @@ namespace BALL
 
 			Composite* 				start_composite_;
 
-			List<Composite*> 	composites_;
+			HashSet<Atom*> 		atoms_;
 		};
 
 	} // namespace MOLVIEW
