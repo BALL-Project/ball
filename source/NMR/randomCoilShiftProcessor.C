@@ -1,8 +1,7 @@
-// $Id: randomCoilShiftProcessor.C,v 1.3 2000/09/21 13:49:04 oliver Exp $
+// $Id: randomCoilShiftProcessor.C,v 1.4 2000/09/21 22:31:14 amoll Exp $
 
 #include<BALL/NMR/randomCoilShiftProcessor.h>
-
-using namespace std;
+#include<BALL/FORMAT/parameterSection.h>
 
 namespace BALL
 {
@@ -31,7 +30,6 @@ namespace BALL
 	{
 		// we assume the worst case: init fails -> valid_ = false
 		valid_ = false;
-
 
 		// make sure we have correct parameters
 		if (parameters_ == 0)
@@ -67,42 +65,43 @@ namespace BALL
 		throw()
 	{
 		Atom* atom_ptr = dynamic_cast<Atom*>(&composite);
-		if (atom_ptr != 0)
+		if (atom_ptr == 0)
 		{
-			String full_name = atom_ptr->getFullName();
+			Log.error() << "NULL-Pointer in RandomCoilShiftProcessor::operator ()";
+			return Processor::CONTINUE;
+		}
+
+		String full_name = atom_ptr->getFullName();
+		full_name.substitute(":", " ");
+		if (!shift_map_.has(full_name))
+		{
+			full_name = atom_ptr->getFullName(Atom::NO_VARIANT_EXTENSIONS);	
 			full_name.substitute(":", " ");
 			if (!shift_map_.has(full_name))
 			{
-				full_name = atom_ptr->getFullName(Atom::NO_VARIANT_EXTENSIONS);	
-				full_name.substitute(":", " ");
+				full_name = "* " + atom_ptr->getName();
 				if (!shift_map_.has(full_name))
 				{
-					full_name = "* " + atom_ptr->getName();
-					if (!shift_map_.has(full_name))
-					{
-						full_name = "";
-					}
+					full_name = "";
 				}
 			}
+		}
 
-			if (full_name != "")
-			{
-				// retrieve the random coil shift from the hash map
-				float delta_RC = shift_map_[full_name];
+		if (full_name != "")
+		{
+			// retrieve the random coil shift from the hash map
+			const float& delta_RC = shift_map_[full_name];
 
-				// add the random coil shift to the total shift value
-				float delta = atom_ptr->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
-				delta += delta_RC;
-				atom_ptr->setProperty(ShiftModule::PROPERTY__SHIFT, delta);
-				
-				// store the random coil shift in the random coil shift property
-				atom_ptr->setProperty(RandomCoilShiftProcessor::PROPERTY__RANDOMCOIL_SHIFT, delta_RC);
-			}
+			// add the random coil shift to the total shift value
+			float delta = atom_ptr->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+			delta += delta_RC;
+			atom_ptr->setProperty(ShiftModule::PROPERTY__SHIFT, delta);
+			
+			// store the random coil shift in the random coil shift property
+			atom_ptr->setProperty(RandomCoilShiftProcessor::PROPERTY__RANDOMCOIL_SHIFT, delta_RC);
 		}
 		
 		return Processor::CONTINUE;
 	}
-		
 
 }//namespace BALL
-

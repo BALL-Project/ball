@@ -1,27 +1,17 @@
-// $Id: randomCoilShiftProcessor.h,v 1.2 2000/09/21 13:49:31 oliver Exp $
+// $Id: randomCoilShiftProcessor.h,v 1.3 2000/09/21 22:31:30 amoll Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #	include<BALL/NMR/shiftModule.h>
 #endif
 
 #ifndef BALL_DATAYTPE_STRINGHASHMAP_H
-#	include<BALL/NMR/shiftModule.h>
+#	include<BALL/DATATYPE/stringHashMap.h>
 #endif
-
+/*
 #ifndef BALL_KERNEL_EXPRESSION_H
 #	include<BALL/KERNEL/expression.h>
 #endif
-
-#ifndef BALL_FORMAT_PARAMETERS_H
-#	include<BALL/FORMAT/parameters.h>
-#endif
-
-#ifndef BALL_FORMAT_PARAMETERSECTION_H
-#	include<BALL/FORMAT/parameterSection.h>
-#endif
-
-#include <list>
-
+*/
 namespace BALL 
 {
 		
@@ -86,17 +76,16 @@ namespace BALL
 		//@{
 		
 		/**	Application method
-			if current object is a PDBAtom of kind Hydrogen its random coil shift has to be looked up
-			in {\tt rc\_table}.
-			Get Hydrogens residue name append ":" and its name, the lookup entry is reconstruced.
-			If this entry is found within the table the randomcoil shift is added to the Hydrogens
-			chemical shift.
-			If this entry is not found the random coil shift is set to 1000 and added as well to the
-			Hydrogens chemical shift,to mark that Hydrogen not to have a random coil shift table entry.
+				If current object is a PDBAtom of kind Hydrogen its random coil shift has to be looked up
+				in {\tt rc\_table}.
+				Get Hydrogens residue name append ":" and its name, the lookup entry is reconstruced.
+				If this entry is found within the table the randomcoil shift is added to the Hydrogens
+				chemical shift.
+				If this entry is not found the random coil shift is set to 1000 and added as well to the
+				Hydrogens chemical shift, to mark that Hydrogen not to have a random coil shift table entry.
 		*/
 		virtual Processor::Result operator () (Composite& composite) throw();
 		//@}
-		
 
 		protected:
 
