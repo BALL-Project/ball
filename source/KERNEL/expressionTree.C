@@ -1,4 +1,4 @@
-// $Id: expressionTree.C,v 1.2 2001/07/16 20:37:21 amoll Exp $
+// $Id: expressionTree.C,v 1.3 2001/07/17 09:33:53 anker Exp $
 
 #include <BALL/KERNEL/expressionTree.h>
 
@@ -106,22 +106,13 @@ namespace BALL
 	bool ExpressionTree::operator () (const Atom& atom) const 
 		throw()
 	{
-		// BAUSTELLE:
-		// enabling the code below breaks the code. I don't know why. I would
-		// expect that the INVALID nodes aren't AND nodes...
-		/*
-		if (type_ == INVALID)
-		{
-			Log.warn() << "ExpressionTree::operator (): "
-				<< "encountered INVALID node, returning false."
-				<< endl;
-			return false;
-		}
-		*/
 
     bool result;
     if (type_ == LEAF)
     {
+
+			// if there is a predicate associated with this leaf, return its
+			// value, else return false
 
       if (predicate_ != 0)
       {
@@ -131,10 +122,12 @@ namespace BALL
 			{
         result = false;
 			}
-
 		} 
 		else 
 		{
+
+			// this is either a conjunction or a disjunction or a node that
+			// represents a bracket pair (which is marked as INVALID)
 
       // the empty clause is always true
       if (children_.size() == 0)
