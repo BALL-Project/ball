@@ -1,4 +1,11 @@
-// $Id: PTE.iC,v 1.4 2000/12/16 21:29:02 amoll Exp $
+// $Id: PTE.iC,v 1.5 2001/01/21 20:39:17 amoll Exp $
+
+BALL_INLINE 
+void Element::clear()
+	throw()
+{
+  *this = UNKNOWN;
+}
 
 BALL_INLINE 
 void Element::setName(const String& name)
@@ -190,6 +197,20 @@ bool Element::isUnknown() const
 }
 
 
+BALL_INLINE 
+void PTE_::clear()
+	throw()
+{
+  PropertyManager::clear();
+}
+
+BALL_INLINE 
+const PTE_& PTE_::operator = (const PTE_& pte)
+	throw()
+{
+  *this = PTE_(pte);
+	return *this;
+}
 
 BALL_INLINE 
 Element& PTE_::operator [](const String& symbol)
