@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.22 2004/02/19 11:35:36 oliver Exp $
+// $Id: molecularStructure.C,v 1.23 2004/02/19 15:00:07 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -978,7 +978,7 @@ namespace BALL
 			printResults();			
 			Log.info() << "final RMS gradient    : " << ff.getRMSGradient() << " kJ/(mol A)   after "
 									 << minimizer->getNumberOfIterations() << " iterations" << endl << endl;
-			setStatusbarText("Final energy: " + String(amber.getEnergy()) + " kJ/mol.");
+			setStatusbarText("Final energy: " + String(ff.getEnergy()) + " kJ/mol.");
 
 			// clean up
 			delete minimizer;
@@ -1119,7 +1119,7 @@ namespace BALL
 				}
 
 
-				setStatusbarText(String("Iteration ") + String(minimizer->getNumberOfIterations())
+				setStatusbarText(String("Iteration ") + String(mds->getNumberOfIterations())
 												 + ": E = " + String(ff.getEnergy()) + " kJ/mol, RMS grad = "
 												 + String(ff.getRMSGradient()) + " kJ/(mol A)");
 			}
