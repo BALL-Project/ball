@@ -1,9 +1,9 @@
-// $Id: INIFile.C,v 1.19 2001/04/17 14:04:37 amoll Exp $
+// $Id: INIFile.C,v 1.20 2001/04/21 20:29:40 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
 
-//#include <iostream>
+#include <iostream>
 
 using namespace std;
 
@@ -363,7 +363,7 @@ namespace BALL
 	{
 		if (!section_index_.has(section_name)) 
 		{
-			return Section_iterator();
+			return Section_iterator(sections_.end());
 		}
 		return section_index_[section_name];
 	}
@@ -373,7 +373,7 @@ namespace BALL
 	{
 		if (pos >= sections_.size())
 		{
-			return Section_iterator();
+			return Section_iterator(sections_.end());
 		}
 
 		Section_iterator it = sections_.begin();
@@ -558,6 +558,11 @@ namespace BALL
 	bool INIFile::operator == (const INIFile& inifile) const
 	{
 		return (sections_ == inifile.sections_);
+	}
+
+	bool INIFile::isValid(const Section_iterator& it) const
+	{
+		return ((List<Section>::ConstIterator)it != sections_.end());
 	}
 
 } // namespace BALL
