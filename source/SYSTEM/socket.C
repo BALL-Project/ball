@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.25.4.4 2002/12/08 17:01:31 oliver Exp $
+// $Id: socket.C,v 1.25.4.5 2002/12/10 16:41:49 crauser Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -152,6 +152,13 @@ namespace BALL
 			stmo(-1), 
 			rtmo(-1)
 	{
+#ifdef BALL_COMPILER_MSVC
+		WORD    wsa_vers = 0x0101;
+    WSADATA wsa_data;
+   
+    WSAStartup(wsa_vers, &wsa_data);
+      
+#endif
 		int soc = ::socket(domain, socket_type, proto);
 		rep = new sockcnt(soc, 1);
 #	ifdef BALL_HAS_ANSI_IOSTREAM

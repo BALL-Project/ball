@@ -1,4 +1,4 @@
-// $Id: Socket_test.C,v 1.5.4.3 2002/12/06 13:25:38 oliver Exp $
+// $Id: Socket_test.C,v 1.5.4.4 2002/12/10 16:41:49 crauser Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -22,12 +22,14 @@ void socket_listener(void*)
 		s.get(c);
 }
 
-START_TEST(Socket, "$Id: Socket_test.C,v 1.5.4.3 2002/12/06 13:25:38 oliver Exp $")
+START_TEST(Socket, "$Id: Socket_test.C,v 1.5.4.4 2002/12/10 16:41:49 crauser Exp $")
 
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
-	
+	  
+    
+
 CHECK(simple socket transmission)
 	
 	sock_inet_buf.bind();

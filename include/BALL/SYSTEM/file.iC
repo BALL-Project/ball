@@ -1,4 +1,4 @@
-// $Id: file.iC,v 1.16.4.1 2002/12/01 13:49:10 oliver Exp $
+// $Id: file.iC,v 1.16.4.2 2002/12/10 16:41:49 crauser Exp $
 
 BALL_INLINE 
 void File::clear()
@@ -51,14 +51,20 @@ bool File::remove(String name)
 	throw()
 {
   FileSystem::canonizePath(name);
-  
+#ifdef BALL_COMPILER_MSVC
+  return (::_unlink(name.c_str()) == 0);
+#else
   return (::unlink(name.c_str()) == 0);
+#endif
 }
 
 BALL_INLINE 
 bool File::remove() 
 	throw()
 {
+#ifdef BALL_COMPILER_MSVC
+  File::close();
+#endif
   return File::remove(name_);
 }
 
@@ -77,9 +83,13 @@ BALL_INLINE
 bool File::moveTo(const String& destination_name)
 	throw (Exception::FileNotFound)
 {
+#ifdef BALL_COMPILER_MSVC
+  File::close();
+ #endif
   if (File::move(name_, destination_name))
   {
      name_ = destination_name;
+     File::reopen();
      return true;
   }
   return false;
@@ -92,8 +102,11 @@ bool File::isAccessible(String name)
 	throw (Exception::FileNotFound)
 {
   FileSystem::canonizePath(name);
-  
+#ifdef BALL_COMPILER_MSVC
+  return (::_access(name.c_str(),F_OK) == 0);
+#else
   return (::access(name.c_str(), F_OK) == 0);
+#endif
 }
 
 BALL_INLINE 
@@ -110,25 +123,39 @@ bool File::rename(String old_path, String new_path)
 {
   FileSystem::canonizePath(old_path);
   FileSystem::canonizePath(new_path);
-  
+
 	if (!isAccessible(old_path))
 	{
 		throw (Exception::FileNotFound(__FILE__, __LINE__, old_path));
 	}
+#ifdef BALL_COMPILER_MSVC
+  if(old_path==new_path) return true;
+#endif
+
 
   return (::rename(old_path.c_str(), new_path.c_str()) == 0);
+
 }
 
 BALL_INLINE 
 bool File::renameTo(const String& new_path)
 	throw (Exception::FileNotFound)
 {
+#ifdef BALL_COMPILER_MSVC
+  File::close();
+#endif
   if (!File::rename(name_, new_path))
   {
+#ifdef BALL_COMPILER_MSVC
+        File::reopen();
+#endif
 		return false;
-	}
+  }
 
-	name_ = new_path;
+    name_ = new_path;
+#ifdef BALL_COMPILER_MSVC
+    File::reopen();
+#endif
 	return true;
 }
 
