@@ -9,7 +9,6 @@ SMILES_SOURCES= \
 CPP_SOURCES= \
 	molecularGraph.C\
 	analyticalSES.C\
-	BSDTree.C\
 	connolly.C\
 	defaultProcessors.C\
 	fragmentDB.C\
