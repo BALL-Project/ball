@@ -1,4 +1,4 @@
-// $Id: glEntityDescriptor.h,v 1.6 2001/05/27 10:26:36 hekl Exp $
+// $Id: glEntityDescriptor.h,v 1.7 2001/06/28 20:21:47 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
@@ -27,7 +27,7 @@ namespace BALL
 				visualizations (e.g. a solid part, a transparent part, a wireframe part, etc.).
 				If a graphical object should be drawn correctly (with OpenGL) it must be
 				divided into these parts. Later if the object is drawn these parts will
-				be drawn in a very strict order (e.g. first the solid part and than the
+				be drawn in a very strict order (e.g. first the solid part and then the
 				transparent part). If this order is not maintained the visualization of
 				the object will look incorrect.
 				The class GLEntityDescriptor handles the necessary different visualizations
@@ -47,9 +47,9 @@ namespace BALL
 				\end{itemize}
 				This class is used internally by the \Ref{CompositeDescriptor} class.
 				@memo    GLEntityDescriptor class (BALL VIEW gui kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/27 10:26:36 $
+				@author  $Author: sturm $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/06/28 20:21:47 $
 		*/
 		class GLEntityDescriptor
 		{
