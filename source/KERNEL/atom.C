@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.24 2000/06/27 07:47:18 oliver Exp $
+// $Id: atom.C,v 1.25 2000/07/25 21:12:41 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -387,12 +387,12 @@ namespace BALL
 		return false;
 	}
 
-	bool 	Atom::isBondedTo(const Atom& atom) const
+	bool 	Atom::isBoundTo(const Atom& atom) const
 	{
 		return (bool)(getBond(atom) != 0);
 	}
 
-	bool Atom::isBonded() const
+	bool Atom::isBound() const
 	{
 		return (bool)(number_of_bonds_ > 0);
 	}
@@ -401,7 +401,7 @@ namespace BALL
 	{
 		// an atom is geminal to another, if it 
 		// is not directly bonded to it
-		bool is_geminal = !isBondedTo(atom);
+		bool is_geminal = !isBoundTo(atom);
 
 		// second, it has to be bonded to an atom
 		// that is bonded to *this atom, too
@@ -413,7 +413,7 @@ namespace BALL
 				Atom* partner_a = getBond(i)->getPartner(*this);
 				if (partner_a != 0)
 				{
-					if (partner_a->isBondedTo(atom))
+					if (partner_a->isBoundTo(atom))
 					{
 						is_geminal = true;
 						break;
@@ -429,7 +429,7 @@ namespace BALL
 	{ 
 		// an atom is vicinal to another, if it 
 		// is not directly bonded to it
-		bool is_vicinal = !isBondedTo(atom);
+		bool is_vicinal = !isBoundTo(atom);
 
 		// second, it has to be bonded to an atom
 		// that is bonded to and atom that is bonded 
@@ -445,7 +445,7 @@ namespace BALL
 					for (Size j = 0; (j < partner_a->countBonds()) && !is_vicinal; j++)
 					{
 						Atom* partner_b = partner_a->getBond(j)->getPartner(*partner_a);
-						if ((partner_b) != 0 && (partner_b->isBondedTo(atom)))
+						if ((partner_b) != 0 && (partner_b->isBoundTo(atom)))
 						{
 							is_vicinal = true;
 							break;

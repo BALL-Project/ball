@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.13 2000/06/03 00:12:02 amoll Exp $
+// $Id: bond.h,v 1.14 2000/07/25 21:12:36 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -61,9 +61,9 @@ namespace BALL
 			\end{itemize}
 			
 			@memo    Bond class (BALL kernel framework)
-			@author  $Author: amoll $
-			@version $Revision: 1.13 $
-			@date    $Date: 2000/06/03 00:12:02 $
+			@author  $Author: oliver $
+			@version $Revision: 1.14 $
+			@date    $Date: 2000/07/25 21:12:36 $
 	*/
 	class Bond
 		: public Composite,
@@ -480,30 +480,30 @@ namespace BALL
 			*/
 			static Bond* getBond(Atom& first, Atom& second);
 
-			/** Mutable inspection of the bonded atom
+			/** Mutable inspection of the bound atom
 					It is tested, if {\em *this} bond connects the two atoms.
-					if this is true a pointer to the bonded atom is returned.
+					if this is true a pointer to the bound atom is returned.
 					@param			 atom , its partner is looked for
-					@return      mutable reference to the bonded atom
-											 0 if the atom has no bonded atom
+					@return      mutable reference to the bound atom
+											 0 if the atom has no bound atom
 			*/
-			Atom* getBondedAtomOf(const Atom& atom);
+			Atom* getBoundAtom(const Atom& atom);
 
-			/** Constant inspection of the bonded atom
+			/** Constant inspection of the bound atom
 					It is tested, if {\em *this} bond connects the two atoms.
-					if this is true a pointer to the bonded atom is returned.
+					if this is true a pointer to the bound atom is returned.
 					@param			 atom , its partner is looked for
-					@return      constant reference to the bonded atom
-											 0 if the atom has no bonded atom
+					@return      constant reference to the bound atom
+											 0 if the atom has no bound atom
 			*/
-			const Atom* getBondedAtomOf(const Atom& atom) const;
+			const Atom* getBoundAtom(const Atom& atom) const;
 
 			//@}
 
 			/** @name Predicates */
 			//@{ 
 
-			/** Request for the bonding of an atom with an atom.
+			/** Determine whether the bond belongs to an atom.
 					Query, if {\em *this} bond connects the atom {\em atom} with another atom.
 					If such a bond exists {\tt true} is returned, {\tt false} otherwise.
 					Calls \Ref{Atom::hasBond}.
@@ -515,7 +515,7 @@ namespace BALL
 			*/
 			bool isBondOf(const Atom& atom) const;
 
-			/** Request for the bonding with an atom.
+			/** Determine whether this bond contains any atom.
 					Query, if {\em *this} bond connects an atom.
 					If such a bond exists {\tt true} is returned, {\tt false} otherwise.
 					@return      bool -
@@ -523,9 +523,9 @@ namespace BALL
 											 {\tt false} otherwise
 					@see         Atom::hasBond
 			*/
-			bool isBonded() const;
+			bool isBound() const;
 
-			/** Request for the intermolecular bonding of {\em *this} bond.
+			/** Determine whether the bond connects two fragments.
 					Query, if {\em *this} bond connects its two atoms within a common parent \Ref{Composite} instance.
 					If {\em *this} bond is intermolecular {\tt true} is returned, {\tt false} otherwise.
 					Calls \Ref{Composite::getRoot}.

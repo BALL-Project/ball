@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.7 2000/05/29 08:18:17 oliver Exp $
+// $Id: bond.C,v 1.8 2000/07/25 21:12:41 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 
@@ -65,7 +65,7 @@ namespace BALL
 
 		// if the bond is already bonded, delete it and create 
 		// it anew
-		if (bond.isBonded()) 
+		if (bond.isBound()) 
 		{
 			bond.clear();
 		}
@@ -302,7 +302,7 @@ namespace BALL
 		return first.getBond(second);
 	}
 
-	Atom* Bond::getBondedAtomOf(const Atom& atom)
+	Atom* Bond::getBoundAtom(const Atom& atom)
 	{
 		if (first_ == &atom)
 		{
@@ -314,9 +314,9 @@ namespace BALL
 		}
 	}
 
-	const Atom* Bond::getBondedAtomOf(const Atom& atom) const
+	const Atom* Bond::getBoundAtom(const Atom& atom) const
 	{
-		return ((Bond *)this)->getBondedAtomOf(atom);
+		return ((Bond *)this)->getBoundAtom(atom);
 	}
 
 	bool Bond::isBondOf(const Atom& atom) const
@@ -324,20 +324,20 @@ namespace BALL
 		return atom.hasBond(*this);
 	}
 
-	bool Bond::isBonded() const
+	bool Bond::isBound() const
 	{
 		return (bool)(first_ != 0);
 	}
 
 	bool Bond::isInterBond() const
 	{
-		return (bool)(isBonded() == true
+		return (bool)(isBound() == true
 			&& (first_->Composite::getRoot() != second_->Composite::getRoot()));
 	}
 
 	bool Bond::isInterBondOf(const BaseFragment& base_fragment) const
 	{
-		if (isBonded() == true)
+		if (isBound() == true)
 		{
   		bool first_atom_is_descendant = first_->Composite::isDescendantOf(base_fragment);
 			bool second_atom_is_descendant = second_->Composite::isDescendantOf(base_fragment);
@@ -351,7 +351,7 @@ namespace BALL
 
 	bool Bond::isInterBondOf(const System &system) const
 	{
-		if (isBonded() == true)
+		if (isBound() == true)
 		{
 			bool first_atom_is_descendant = first_->Composite::isDescendantOf(system);
 			bool second_atom_is_descendant = second_->Composite::isDescendantOf(system);
@@ -367,20 +367,20 @@ namespace BALL
 
 	bool Bond::isIntraBond() const
 	{
-		return (bool)(isBonded() == true
+		return (bool)(isBound() == true
 									&& (first_->Composite::getRoot() == second_->Composite::getRoot()));
 	}
 
 	bool Bond::isIntraBondOf(const BaseFragment &base_fragment) const
 	{
-		return (bool)(isBonded() == true
+		return (bool)(isBound() == true
 									&& first_->Composite::isDescendantOf(base_fragment) == true
 									&& second_->Composite::isDescendantOf(base_fragment) == true);
 	}
 
 	bool Bond::isIntraBondOf(const System &system) const
 	{
-		return (bool)(isBonded() == true
+		return (bool)(isBound() == true
 									&& first_->Composite::isDescendantOf(system) == true
 									&& second_->Composite::isDescendantOf(system) == true);
 	}

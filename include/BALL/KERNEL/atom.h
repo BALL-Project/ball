@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.23 2000/06/03 00:09:23 amoll Exp $
+// $Id: atom.h,v 1.24 2000/07/25 21:12:35 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -82,9 +82,9 @@ namespace BALL
 			\end{itemize}
 			
 			@memo    Atom class (BALL kernel framework)
-			@author  $Author: amoll $
-			@version $Revision: 1.23 $
-			@date    $Date: 2000/06/03 00:09:23 $
+			@author  $Author: oliver $
+			@version $Revision: 1.24 $
+			@date    $Date: 2000/07/25 21:12:35 $
 	*/
 	class Atom
 		: public Composite,
@@ -624,9 +624,9 @@ namespace BALL
 			/** Mutable inspection of an atom's bond with another atom.
 					Access a mutable reference to the bond that connects the atom {\em atom} with {\em *this} atom.
 					The reference is 0 if {\em *this} atom does not have a bond with the atom {\em atom}.
-					@param       bonded_to the atom that is considered to have a bond with {\em *this} atom
+					@param       atom the atom that is considered to have a bond with {\em *this} atom
 					@return      Bond* -
-											 mutable reference to the bond that connects the atom {\em bonded_to} with {\em *this} atom,
+											 mutable reference to the bond that connects {\tt atom}  with {\em *this} atom,
 											 0 if {\em *this} atom does not have a bond with the atom {\em atom}
 					@see         Atom::createBond	     
 			*/
@@ -704,38 +704,36 @@ namespace BALL
 			/** @name Predicates */
 			//@{ 
 
-			/** Request for the bonding with an atom.
-					Query, if {\em *this} atom is bonded to another atom.
+			/** Determine whether the atom takes part in a certain bond.
 					If such a bond exists {\tt true} is returned, {\tt false} otherwise. 
-					@param       bond the bond that is queried to connect {\em *this} atom with another atom
-					@return      bool -
+					@param       bond the bond in question
+					@return      bool 
 											 {\tt true} if the bond {\em bond} connects {\em *this} atom with another atom,
 											 {\tt false} otherwise
 					@see         Atom::hasBond
 			*/
 			bool hasBond(const Bond& bond) const;
 
-			/** Request for the bonding with an atom.
-					Query, if {\em *this} atom is bonded to the atom {\em atom}.
-					If such a bond exists {\tt true} is returned, {\tt false} otherwise.
+			/** Determine whether the atom is bound to another.
+					Query, if {\em *this} atom is bound to {\tt atom}.
+					If such a bond exists {\tt true} is returned, {\tt false} otherwise.\\
 					Calls \Ref{Atom::getBond}.
-					@param       atom the atom that is queried to be bonded to {\em *this} atom
+					@param       atom the atom in question
 					@return      bool -
 											 {\tt true} if bond connects the atom {\em atom} with {\em *this atom},
 											 {\tt false} otherwise
 					@see         Atom::getBond
 			*/
-			bool isBondedTo(const Atom& atom) const;
+			bool isBoundTo(const Atom& atom) const;
 
-			/** Request for the bonding with an atom.
-					Query, if {\em *this} atom has any atom that it is connected to.
-					If such an atom exists {\tt true} is returned, {\tt false} otherwise. 
+			/** Determine whether the atom has any bond.
+					If the atoms shares a bond with any other atom {\tt true} is returned, {\tt false} otherwise. 
 					@return      bool -
-											 {\tt true} if an atom is bonded to {\em *this} atom,
+											 {\tt true} if an atom is bound to {\em *this} atom,
 											 {\tt false} otherwise
 					@see         Atom::hasBond
 			*/
-			bool isBonded() const;
+			bool isBound() const;
 
 			/**	True if the two atoms are geminal.
 					Two atoms are geminal if they do not share a common bond but
