@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.51 2003/05/06 19:40:11 oliver Exp $
+// $Id: HINFile.C,v 1.52 2003/05/08 10:11:50 oliver Exp $
+//
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -156,7 +157,7 @@ namespace BALL
 	{
 		// the atom_vector contains the atoms in the order of
 		// the atom iterator
-		vector<const Atom*>		atom_vector;
+		vector<const Atom*> atom_vector;
 
 		// create a vector containing pointers to the atoms
 		AtomConstIterator	atom_it;		
@@ -436,11 +437,10 @@ namespace BALL
 		Chain*    chain = 0;
 
 		// initial size: 100 atoms, all set to NULL pointer, 100 bonds
-		vector<Atom*>	atom_vector;
-		vector<struct HINFileBondStruct> bond_vector(100);
-
-		Size	number_of_bonds = 0;
-
+		static std::vector<Atom*>	atom_vector;
+		static std::vector<struct HINFileBondStruct> bond_vector;
+		atom_vector.clear();
+		bond_vector.clear();
 
 		String tag;
 
@@ -470,7 +470,7 @@ namespace BALL
 						Atom*	atom;
 						if (state == IN_RESIDUE) 
 						{
-							PDBAtom*	prot_atom = new PDBAtom;
+							PDBAtom* prot_atom = new PDBAtom;
 							atom = RTTI::castTo<Atom>(*prot_atom);
 							residue->insert(*prot_atom);
 
@@ -565,13 +565,14 @@ namespace BALL
 							ERROR(String("illegal atom number: ") + getLine().getField(1))
 						}
 
-						// store the atom pointer in the atom_vector - we need it later to create the bonds!
-						// if the atom_vector is to small, grow it!
-						if (atom_number >= atom_vector.size())
+						// Store the atom pointer in the atom_vector - we need it later to create the bonds!
+						atom_vector.push_back(atom);
+
+						// Verify that the atom indices are correct
+						if (atom_number != atom_vector.size())
 						{
-							atom_vector.resize(atom_number * 2);
+							ERROR(String("unordered atoms indices: ") + getLine().getField(1))
 						}
-						atom_vector[atom_number] = atom;
 
 						// now iterate over all bonds and insert them into the bond_vector 
 						// this table will be processed afterwards to create the bonds, as most of
@@ -596,15 +597,11 @@ namespace BALL
 							{
 								for (Position i = 0 ; i < number_of_atom_bonds; i++) 
 								{ 
-									if (number_of_bonds >= bond_vector.capacity())
-									{
-										bond_vector.resize(number_of_bonds * 2);
-									}
-
-									bond_vector[number_of_bonds].atom1 = atom_number;
+									struct HINFileBondStruct bond;
+									bond.atom1 = atom_number - 1;
 									try 
 									{
-										bond_vector[number_of_bonds].atom2 = (Index)getLine().getField(11 + 2 * (Index)i).toInt();
+										bond.atom2 = (Index)getLine().getField(11 + 2 * (Index)i).toInt() - 1;
 									}
 									catch (Exception::InvalidFormat)
 									{
@@ -623,8 +620,8 @@ namespace BALL
 											case 'a': order = Bond::ORDER__AROMATIC;	break;
 										}
 									}
-												
-									bond_vector[number_of_bonds++].order = order;
+									bond.order = order;
+									bond_vector.push_back(bond);
 								}
 							}
 						}
@@ -663,7 +660,7 @@ namespace BALL
 					Position atom_number;
 					try
 					{
-						atom_number = (Position)getLine().getField(1).toInt();
+						atom_number = (Position)getLine().getField(1).toInt() - 1;
 					}
 					catch (Exception::InvalidFormat)
 					{
@@ -843,16 +840,16 @@ namespace BALL
 					chain = 0;
 
 
-					// now build all bonds
-					for (Size i = 0; i < number_of_bonds; i++)
+					// Now, build all bonds
+					for (Size i = 0; i < bond_vector.size(); i++)
 					{
 						// check whether both atoms exist
 						if (bond_vector[i].atom1 >= atom_vector.size() || 
 								bond_vector[i].atom2 >= atom_vector.size())
 						{
 							// complain if one of the atoms does not exist
-							ERROR(String("HINFile: cannot create bond from atom ") + String(bond_vector[i].atom1)
-										+ " to atom " + String(bond_vector[i].atom2) + " of molecule " 
+							ERROR(String("HINFile: cannot create bond from atom ") + String(bond_vector[i].atom1 + 1)
+										+ " to atom " + String(bond_vector[i].atom2 + 1) + " of molecule " 
 										+ getLine().getField(1) + " - non-existing atom!")
 
 						} 
@@ -865,7 +862,7 @@ namespace BALL
 						}
 					}
 
-					number_of_bonds = 0;
+					bond_vector.clear();
 
 					throw(Exception::IndexOverflow(__FILE__, __LINE__));
 				}
@@ -961,13 +958,13 @@ namespace BALL
 			protein = 0;
 		}
 
-		// if desired, try to remove the lone pairs from old AMBER HC-Files 
-		if (molecule != 0 && true) // ?????
+		// Remove the lone pairs from old AMBER HC-Files 
+		if (molecule != 0)
 		{
 			// a list to hold the lone pairs (for deletion)
 			list<Atom*> del_list;
 			
-			// iterate over all atoms
+			// Iterate over all atoms
 			AtomIterator it = molecule->beginAtom();
 			for (; +it; ++it)
 			{
