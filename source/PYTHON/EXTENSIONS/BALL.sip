@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.22 2003/12/07 22:34:38 oliver Exp $
+// $Id: BALL.sip,v 1.23 2003/12/10 15:59:11 amoll Exp $
 //
 //
 //
@@ -276,6 +276,8 @@
 // %Include timer.sip
 
 // VIEW/KERNEL
+%Include message.sip
+//%Include compositeMessage.sip
 %Include mainControl.sip
 %Include compositeManager.sip
 %Include primitiveManager.sip
