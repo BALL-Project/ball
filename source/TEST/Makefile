@@ -65,6 +65,7 @@ EXECUTABLES_CONCEPTS =$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 EXECUTABLES_KERNEL = \
 	PTE_test\
 	Atom_test\
+	AtomIterator_test\
 	Bond_test\
 	AtomContainer_test\
 	Fragment_test\
