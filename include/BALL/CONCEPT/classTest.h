@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.15 2000/09/05 20:25:37 oliver Exp $
+// $Id: classTest.h,v 1.16 2000/09/19 15:58:05 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -363,20 +363,22 @@ int main(int argc, char **argv)\
 		@param	b expected value
 */
 #define TEST_EQUAL(a,b)  \
-	TEST::this_test = ((a) == (b));\
-	TEST::test = TEST::test && TEST::this_test;\
-	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
 	{\
-		if (!TEST::newline)\
+		TEST::this_test = ((a) == (b));\
+		TEST::test = TEST::test && TEST::this_test;\
+		if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
 		{\
-			TEST::newline = true;\
-			std::cout << std::endl;\
+			if (!TEST::newline)\
+			{\
+				TEST::newline = true;\
+				std::cout << std::endl;\
+			}\
+			std::cout << "    (line " << __LINE__ << " TEST_EQUAL(" << #a << ", " << #b << "): got " << (a) << ", expected " << (b) << ") ";\
+			if (TEST::this_test)\
+				std::cout << " + " << std::endl;\
+			else \
+				std::cout << " - " << std::endl;\
 		}\
-		std::cout << "    (line " << __LINE__ << " TEST_EQUAL(" << #a << ", " << #b << "): got " << (a) << ", expected " << (b) << ") ";\
-		if (TEST::this_test)\
-			std::cout << " + " << std::endl;\
-		else \
-			std::cout << " - " << std::endl;\
 	}\
 
 /**	Generic inequality macro.
@@ -387,66 +389,69 @@ int main(int argc, char **argv)\
 		@param	b forbidden value
 */
 #define TEST_NOT_EQUAL(a,b)  \
-	TEST::this_test = !((a) == (b));\
-	TEST::test = TEST::test && TEST::this_test;\
-	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
-  {\
-		if (!TEST::newline)\
+	{\
+		TEST::this_test = !((a) == (b));\
+		TEST::test = TEST::test && TEST::this_test;\
+		if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
 		{\
-			TEST::newline = true;\
-			std::cout << std::endl;\
+			if (!TEST::newline)\
+			{\
+				TEST::newline = true;\
+				std::cout << std::endl;\
+			}\
+			std::cout << "    (line " << __LINE__ << " TEST_NOT_EQUAL(" << #a << ", " << #b << "): got " << (a) << ", forbidden is " << (b) << ") ";\
+			if (TEST::this_test)\
+				std::cout << " + " << std::endl;\
+			else \
+				std::cout << " - " << std::endl;\
 		}\
-		std::cout << "    (line " << __LINE__ << " TEST_NOT_EQUAL(" << #a << ", " << #b << "): got " << (a) << ", forbidden is " << (b) << ") ";\
-		if (TEST::this_test)\
-			std::cout << " + " << std::endl;\
-		else \
-			std::cout << " - " << std::endl;\
-	}
-
+	}\
 
 /**	Exception test macro.
 */
 #define TEST_EXCEPTION(exception_type, command) \
-	TEST::exception = 0;\
-	try\
 	{\
-		command;\
-	}\
-	catch (exception_type)\
-	{\
-		TEST::exception = 1;\
-	}\
-	catch (::BALL::Exception::GeneralException e)\
-	{\
-		TEST::exception = 2;\
-		TEST::exception_name = e.getName();\
-	}\
-	catch (...)\
-	{ \
-		TEST::exception = 3;\
-	}\
-	TEST::this_test = (TEST::exception == 1);\
-	TEST::test = TEST::test && TEST::this_test;\
-	\
-	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
-	{\
-		if (!TEST::newline)\
+		TEST::exception = 0;\
+		try\
 		{\
-			TEST::newline = true;\
-			std::cout << std::endl;\
+			command;\
 		}\
-		std::cout << "    (line " << __LINE__ << " TEST_EXCEPTION(" << #exception_type << ", " << #command << "): ";\
-		switch (TEST::exception)\
+		catch (exception_type)\
 		{\
-			case 0:	std::cout << " ERROR: no exception!) "; break;\
-			case 1:	std::cout << " OK) "; break;\
-			case 2:	std::cout << " ERROR: wrong exception: " << TEST::exception_name << ") "; break;\
-			case 3:	std::cout << " ERROR: wrong exception!) "; break;\
+			TEST::exception = 1;\
 		}\
-		if (TEST::this_test)\
-			std::cout << " + " << std::endl;\
-		else \
-			std::cout << " - " << std::endl;\
+		catch (::BALL::Exception::GeneralException e)\
+		{\
+			TEST::exception = 2;\
+			TEST::exception_name = e.getName();\
+		}\
+		catch (...)\
+		{ \
+			TEST::exception = 3;\
+		}\
+		TEST::this_test = (TEST::exception == 1);\
+		TEST::test = TEST::test && TEST::this_test;\
+		\
+		if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+		{\
+			if (!TEST::newline)\
+			{\
+				TEST::newline = true;\
+				std::cout << std::endl;\
+			}\
+			std::cout << "    (line " << __LINE__ << " TEST_EXCEPTION(" << #exception_type << ", " << #command << "): ";\
+			switch (TEST::exception)\
+			{\
+				case 0:	std::cout << " ERROR: no exception!) "; break;\
+				case 1:	std::cout << " OK) "; break;\
+				case 2:	std::cout << " ERROR: wrong exception: " << TEST::exception_name << ") "; break;\
+				case 3:	std::cout << " ERROR: wrong exception!) "; break;\
+			}\
+			if (TEST::this_test)\
+				std::cout << " + " << std::endl;\
+			else \
+				std::cout << " - " << std::endl;\
+		}\
 	}\
 
 /**	File comparison macro.
@@ -456,119 +461,121 @@ int main(int argc, char **argv)\
 		expression. 
 */
 #define TEST_FILE(filename, templatename, use_regexps) \
-	TEST::equal_files = true;\
-	TEST::infile.open(filename, std::ios::in);\
-	TEST::templatefile.open(templatename, std::ios::in);\
-	\
-	if (TEST::infile.good() && TEST::templatefile.good())\
 	{\
-		String TEST_FILE__template_line;\
-		String TEST_FILE__line;\
+		TEST::equal_files = true;\
+		TEST::infile.open(filename, std::ios::in);\
+		TEST::templatefile.open(templatename, std::ios::in);\
 		\
-		while (TEST::infile.good() && TEST::templatefile.good())\
+		if (TEST::infile.good() && TEST::templatefile.good())\
 		{\
-			TEST_FILE__template_line.getline(TEST::templatefile);\
-			TEST_FILE__line.getline(TEST::infile);\
+			String TEST_FILE__template_line;\
+			String TEST_FILE__line;\
 			\
-			if ((use_regexps) && (TEST_FILE__template_line.size() > 0) && (TEST_FILE__template_line[0] == '/') && (TEST_FILE__template_line[1] != '/'))\
+			while (TEST::infile.good() && TEST::templatefile.good())\
 			{\
-				RegularExpression expression(TEST_FILE__template_line(1));\
-				bool match = expression.match(TEST_FILE__line);\
-				TEST::equal_files &= match;\
-				if (!match)\
+				TEST_FILE__template_line.getline(TEST::templatefile);\
+				TEST_FILE__line.getline(TEST::infile);\
+				\
+				if ((use_regexps) && (TEST_FILE__template_line.size() > 0) && (TEST_FILE__template_line[0] == '/') && (TEST_FILE__template_line[1] != '/'))\
 				{\
-					if (TEST::verbose > 0)\
+					RegularExpression expression(TEST_FILE__template_line(1));\
+					bool match = expression.match(TEST_FILE__line);\
+					TEST::equal_files &= match;\
+					if (!match)\
 					{\
-						if (!TEST::newline)\
+						if (TEST::verbose > 0)\
 						{\
-							TEST::newline = true;\
-							std::cout << std::endl;\
+							if (!TEST::newline)\
+							{\
+								TEST::newline = true;\
+								std::cout << std::endl;\
+							}\
+							\
+							std::cout << "   TEST_FILE: regexp mismatch: " << TEST_FILE__line << " did not match " << TEST_FILE__template_line(1) << "." << std::endl;\
 						}\
-						\
-						std::cout << "   TEST_FILE: regexp mismatch: " << TEST_FILE__line << " did not match " << TEST_FILE__template_line(1) << "." << std::endl;\
 					}\
-				}\
-			} else {\
-				TEST::equal_files &= (TEST_FILE__template_line == TEST_FILE__line);\
-				if (TEST_FILE__template_line != TEST_FILE__line)\
-				{\
-					if (TEST::verbose > 0)\
+				} else {\
+					TEST::equal_files &= (TEST_FILE__template_line == TEST_FILE__line);\
+					if (TEST_FILE__template_line != TEST_FILE__line)\
 					{\
-						if (!TEST::newline)\
+						if (TEST::verbose > 0)\
 						{\
-							TEST::newline = true;\
-							std::cout << std::endl;\
+							if (!TEST::newline)\
+							{\
+								TEST::newline = true;\
+								std::cout << std::endl;\
+							}\
+							\
+							std::cout << "   TEST_FILE: line mismatch: " << TEST_FILE__line << " differs from " << TEST_FILE__template_line << "." << std::endl;\
 						}\
-						\
-						std::cout << "   TEST_FILE: line mismatch: " << TEST_FILE__line << " differs from " << TEST_FILE__template_line << "." << std::endl;\
 					}\
 				}\
 			}\
+		} else {\
+			TEST::equal_files = false;\
+			\
+			if (TEST::verbose > 0)\
+			{\
+				if (!TEST::newline)\
+				{\
+					TEST::newline = true;\
+					std::cout << std::endl;\
+				}\
+				\
+				std::cout << "    (line " << __LINE__ << ": TEST_FILE(" << #filename << ", " << #templatename << ", ";\
+				if (use_regexps)\
+				{\
+					std::cout << "true";\
+				} else {\
+					std::cout << "false";\
+				}\
+				std::cout << ") : " << " cannot open file: ";\
+				if (!TEST::infile.good())\
+				{\
+					std::cout << #filename << " (input file) ";\
+				}\
+				if (!TEST::templatefile.good())\
+				{\
+					std::cout << #templatename << " (template file) ";\
+				}\
+				std::cout << std::endl;\
+				\
+			}\
 		}\
-	} else {\
-		TEST::equal_files = false;\
+		TEST::infile.close();\
+		TEST::templatefile.close();\
+		TEST::infile.clear();\
+		TEST::templatefile.clear();\
 		\
-		if (TEST::verbose > 0)\
+		TEST::this_test = TEST::equal_files;\
+		TEST::test = TEST::test && TEST::this_test;\
+		if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
 		{\
 			if (!TEST::newline)\
 			{\
 				TEST::newline = true;\
 				std::cout << std::endl;\
 			}\
-			\
-			std::cout << "    (line " << __LINE__ << ": TEST_FILE(" << #filename << ", " << #templatename << ", ";\
+			std::cout << "    (line " << __LINE__ << ": TEST_FILE("<< #filename << ", " << #templatename << ", ";\
 			if (use_regexps)\
+			{\
+				std::cout << "true): ";\
+			} else {\
+				std::cout << "false): ";\
+			}\
+			if (TEST::this_test)\
 			{\
 				std::cout << "true";\
 			} else {\
 				std::cout << "false";\
 			}\
-			std::cout << ") : " << " cannot open file: ";\
-			if (!TEST::infile.good())\
-			{\
-				std::cout << #filename << " (input file) ";\
-			}\
-			if (!TEST::templatefile.good())\
-			{\
-				std::cout << #templatename << " (template file) ";\
-			}\
-			std::cout << std::endl;\
 			\
-		}\
-	}\
-	TEST::infile.close();\
-	TEST::templatefile.close();\
-	TEST::infile.clear();\
-	TEST::templatefile.clear();\
-	\
-	TEST::this_test = TEST::equal_files;\
-	TEST::test = TEST::test && TEST::this_test;\
-	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
-	{\
-		if (!TEST::newline)\
-		{\
-			TEST::newline = true;\
-			std::cout << std::endl;\
-		}\
- 		std::cout << "    (line " << __LINE__ << ": TEST_FILE("<< #filename << ", " << #templatename << ", ";\
-		if (use_regexps)\
-		{\
-			std::cout << "true): ";\
-		} else {\
-			std::cout << "false): ";\
-		}\
-		if (TEST::this_test)\
-		{\
-			std::cout << "true";\
-		} else {\
-			std::cout << "false";\
-		}\
-		\
-		if (TEST::this_test)\
-		{\
-			std::cout << " + " << std::endl;\
-		} else {\
-			std::cout << " - " << std::endl;\
+			if (TEST::this_test)\
+			{\
+				std::cout << " + " << std::endl;\
+			} else {\
+				std::cout << " - " << std::endl;\
+			}\
 		}\
 	}
 
