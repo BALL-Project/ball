@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.8 2000/06/28 20:30:51 oliver Exp $
+// $Id: BALL.sip,v 1.9 2000/06/30 05:58:42 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -73,14 +73,14 @@
 
 // FORMAT
 %Include HINFile.sip
-// %Include INIFile.sip
+%Include INIFile.sip
 %Include MOL2File.sip
 %Include PDBFile.sip
 %Include XYZFile.sip
 // genericPDBFile.h // not supported
 // %Include parameterSection.sip
 // %Include parameters.sip
-// %Include resourceFile.h
+%Include resourceFile.sip
 
 
 // KERNEL
@@ -119,34 +119,34 @@
 // universe.h  // not supported
 
 // MATHS
-// analyticalGeometry.h // ?? standard types only?
+%Include analyticalGeometry.sip
 %Include angle.sip
 %Include box3.sip
-// %Include circle3.sip
-// common.h // ??
-// %Include line3.sip
-// %Include matrix44.sip
-// %Include plane3.sip
-// %Include quaternion.sip
-// %Include sphere3.sip
-// %Include surface.sip
+%Include circle3.sip
+//%Include common.sip
+%Include line3.sip
+%Include matrix44.sip
+%Include plane3.sip
+%Include quaternion.sip
+%Include sphere3.sip
+%Include surface.sip
 %Include vector3.sip
-// %Include vector4.sip
+%Include vector4.sip
 
 // MOLMEC/AMBER
 %Include amber.sip
-// %Include amberBend.sip
-// %Include amberNonBonded.sip
-// %Include amberStretch.sip
-// %Include amberTorsion.sip
+%Include amberBend.sip
+%Include amberNonBonded.sip
+%Include amberStretch.sip
+%Include amberTorsion.sip
 
 // MOLMEC/CHARMM
-// %Include charmm.sip
-// %Include charmmBend.sip
-// %Include charmmImproperTorsion.h
-// %Include charmmNonBonded.sip
-// %Include charmmStretch.sip
-// %Include charmmTorsion.sip
+%Include charmm.sip
+%Include charmmBend.sip
+%Include charmmImproperTorsion.sip
+%Include charmmNonBonded.sip
+%Include charmmStretch.sip
+%Include charmmTorsion.sip
 
 // MOLMEC/COMMON
 // assignTypes.h // ??
@@ -200,6 +200,7 @@
 
 // PYTHON
 %Include extractors.sip
+// %Include pyAtomDict.sip
 %Include pyAtomList.sip
 %Include pyFragmentList.sip
 %Include pyMoleculeList.sip
@@ -224,7 +225,7 @@
 // %Include geometricProperties.sip // ??
 // %Include geometricTransformations.sip // ??
 // %Include numericalSAS.sip 
-// %Include residueCehcker.sip // ??
+// %Include residueChecker.sip // ??
 // %Include rotamerLibrary.sip
 // %Include rules.sip
 // %Include structureMapper.sip

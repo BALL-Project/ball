@@ -1,4 +1,5 @@
-// $Id: version.sip,v 1.1 2000/06/28 20:31:47 oliver Exp $
+// $Id: version.sip,v 1.2 2000/06/30 05:59:50 oliver Exp $
+
 class VersionInfo
 {
 %HeaderCode

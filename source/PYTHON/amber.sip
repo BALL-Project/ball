@@ -1,6 +1,8 @@
- class AmberFF 
-  : ForceField
- {
+// $Id: amber.sip,v 1.2 2000/06/30 05:58:43 oliver Exp $
+
+class AmberFF 
+ : ForceField
+{
 %HeaderCode
 #include <BALL/MOLMEC/AMBER/amber.h>
 using namespace BALL;
@@ -11,7 +13,7 @@ using namespace BALL;
   AmberFF(System&, Options&);
   AmberFF(AmberFF&, bool);
 
-  virtual bool specificSetup();
+  bool specificSetup();
   double getStretchEnergy() const;
   double getBendEnergy() const;
   double getTorsionEnergy() const;
@@ -19,4 +21,4 @@ using namespace BALL;
   double getESEnergy() const;
   double getVdWEnergy() const;
   bool hasInitializedParameters() const;
- };
+};

@@ -1,6 +1,14 @@
 class Index
 {
 	public:
+	operator const char* ();
+%MemberCode
+	Index* ptr;
+  if ((ptr = (Index*)sipGetCppPtr(sipThis,sipClass_Index)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(*ptr).c_str());
+%End
 %CanConvertToClassCode
 	// automatic conversion of Py integers to Position 
 	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_Index));
@@ -22,6 +30,14 @@ class Index
 class Position
 {
 	public:
+	operator const char* ();
+%MemberCode
+	Position* ptr;
+  if ((ptr = (Position*)sipGetCppPtr(sipThis,sipClass_Position)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(*ptr).c_str());
+%End
 %CanConvertToClassCode
 	// automatic conversion of Py integers to Position 
 	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_Position));
@@ -44,6 +60,14 @@ class Position
 class Size
 {
 	public:
+	operator const char* ();
+%MemberCode
+	Size* ptr;
+  if ((ptr = (Size*)sipGetCppPtr(sipThis,sipClass_Size)) == NULL)
+    return NULL;
+
+  return PyString_FromString(String(*ptr).c_str());
+%End
 %CanConvertToClassCode
 	// automatic conversion of Py integers to Size 
 	return (PyInt_Check(sipPy) || sipIsSubClassInstance(sipPy, sipClass_Size));

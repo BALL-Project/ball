@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.11 2000/06/28 20:30:51 oliver Exp $
+# $Id: Makefile,v 1.12 2000/06/30 05:58:43 oliver Exp $
 #
 
 all: libBALLc.so
@@ -30,8 +30,11 @@ SIP_SOURCES_ENERGY=
 
 SIP_SOURCES_FORMAT=\
 	sipBALLHINFile.C\
+	sipBALLINIFile.C\
 	sipBALLMOL2File.C\
 	sipBALLPDBFile.C\
+	sipBALLResourceEntry.C\
+	sipBALLResourceFile.C\
 	sipBALLXYZFile.C
 
 SIP_SOURCES_KERNEL=\
@@ -54,10 +57,30 @@ SIP_SOURCES_KERNEL=\
 SIP_SOURCES_MATHS=\
 	sipBALLAngle.C\
 	sipBALLBox3.C\
-	sipBALLVector3.C
+	sipBALLCircle3.C\
+	sipBALLLine3.C\
+	sipBALLMatrix4x4.C\
+	sipBALLPlane3.C\
+	sipBALLQuaternion.C\
+	sipBALLSphere3.C\
+	sipBALLSurface.C\
+	sipBALLVector3.C\
+	sipBALLVector4.C
 
 SIP_SOURCES_MOLMEC_AMBER=\
-	sipBALLAmberFF.C
+	sipBALLAmberFF.C\
+	sipBALLAmberBend.C\
+	sipBALLAmberNonBonded.C\
+	sipBALLAmberStretch.C\
+	sipBALLAmberTorsion.C
+
+SIP_SOURCES_MOLMEC_CHARMM=\
+	sipBALLCharmmFF.C\
+	sipBALLCharmmBend.C\
+	sipBALLCharmmImproperTorsion.C\
+	sipBALLCharmmNonBonded.C\
+	sipBALLCharmmStretch.C\
+	sipBALLCharmmTorsion.C
 
 SIP_SOURCES_MOLMEC_MINIMIZATION=\
 	sipBALLConjugateGradientMinimizer.C\
@@ -101,6 +124,7 @@ SIP_SOURCES=\
 	$(SIP_SOURCES_KERNEL)\
 	$(SIP_SOURCES_MATHS)\
 	$(SIP_SOURCES_MOLMEC_AMBER)\
+	$(SIP_SOURCES_MOLMEC_CHARMM)\
 	$(SIP_SOURCES_MOLMEC_COMMON)\
 	$(SIP_SOURCES_MOLMEC_MINIMIZATION)\
 	$(SIP_SOURCES_NMR)\
@@ -131,9 +155,13 @@ CXXFLAGS += $(SIPFLAGS)
 
 
 sip:
-	$(SIP) -c . BALL.sip
-	for i in `ls ./sip*cpp`; do mv $$i ./`basename $$i .cpp`.C ; done
-	mv ./BALLcmodule.cpp ./BALLcmodule.C
+	@echo "running SIP..."
+	@$(SIP) -c . BALL.sip
+	@echo "removing SIP header..."
+	@for i in `ls ./sip*cpp`; do cat $$i | sed 1,4d > $$i.tmp ; rm $$i ; done
+	@echo "replacing new files..."
+	@for i in `ls ./sip*cpp.tmp`; do if cmp $$i `basename $$i .cpp.tmp`.C 2>/dev/null >/dev/null ; then true ;  else mv $$i `basename $$i .cpp.tmp`.C ; echo "replacing file: `basename $$i .cpp.tmp`" ; fi ; done
+	@mv ./BALLcmodule.cpp ./BALLcmodule.C
 			 	
 SIP_OBJECTS			=	$(SIP_SOURCES:.C=.o)
 PYBALL_OBJECTS 	= $(PYBALL_SOURCES:.C=.o)

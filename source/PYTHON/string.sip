@@ -24,14 +24,12 @@ using namespace BALL;
 	int size() const;
 
 	operator const char* () const;
+
+
 	PyMethods:
 	__cmp__(self,other):
 %PythonMemberCode
 return cmp(str(self),str(other))
-%End
-  __repr__(self):
-%PythonMemberCode
-return repr(self.sipThis)
 %End
  
 %CanConvertToClassCode
