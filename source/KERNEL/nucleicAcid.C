@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.C,v 1.1 2000/01/10 23:12:33 oliver Exp $
+// $Id: nucleicAcid.C,v 1.2 2000/01/11 20:17:33 oliver Exp $
 
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/global.h>
@@ -115,11 +115,6 @@ namespace BALL
 	void NucleicAcid::setID(const String& id)
 	{
 		id_ = id;
-	}
-
-	String&  NucleicAcid::getID()
-	{
-		return id_;
 	}
 
 	const String& NucleicAcid::getID() const
