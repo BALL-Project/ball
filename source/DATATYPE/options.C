@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.6 2000/02/06 19:54:07 oliver Exp $ 
+// $Id: options.C,v 1.7 2000/03/17 11:23:26 oliver Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -55,13 +55,19 @@ namespace BALL
 
 	bool Options::isVector(const String& key) const 
 	{
-		float	dummy;
-		
+		// if the key does not exist - then the nonexistent value	
+		// cannot contain a vector
 		if (!has(key))
+		{
 			return false;
+		}
 
-		if (sscanf(get(key).c_str(), "(%f %f %f)", &dummy, &dummy, &dummy) == 3)
+		// try to interpret the string as three double values
+		double dummy;
+		if (sscanf(get(key).c_str(), "(%lf %lf %lf)", &dummy, &dummy, &dummy) == 3)
+		{
 			return true;
+		}
 		
 		return false;
 	}
@@ -127,9 +133,18 @@ namespace BALL
 		{
 			return h;
 		}
-
-		sscanf(get(key).c_str(), "(%f %f %f)", &(h.x), &(h.y), &(h.z));
 		
+		// use temporary variables of double precision
+		// this avoids trouble if the definition of 
+		// Vector3 is changed between TVector3<float> and TVector3<double>
+		double x, y, z;
+		
+		// try to interpret the option as a vector
+		sscanf(get(key).c_str(), "(%lf %lf %lf)", &(h.x), &(h.y), &(h.z));
+		h.x = x; 
+		h.y = y;
+		h.z = z;
+
 		return h;
 	}
 
