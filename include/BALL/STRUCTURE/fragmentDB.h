@@ -1,22 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.h,v 1.27 2004/02/16 16:11:25 oliver Exp $
+// $Id: fragmentDB.h,v 1.27.2.1 2004/05/06 12:55:36 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #	include <BALL/DATATYPE/stringHashMap.h>
-#endif
-
-#ifndef BALL_CONCEPT_PROCESSOR_H
-#	include <BALL/CONCEPT/processor.h>
 #endif
 
 #ifndef BALL_KERNEL_RESIDUE_H
@@ -108,20 +100,23 @@ namespace BALL
 		*/
 		//@{
 	
-		/**	Default constructor.
-				Creates a FragmentDB object and tries to read the fragment data
-				from the file <tt>fragments/Fragments.db</tt> in the  \link BALL_DATA_PATH BALL_DATA_PATH \endlink .
-				@exception Exception::FileNotFound if <tt>fragments/Fragments.db</tt> is not found in the BALL_DATA_PATH
+		/**	Creates a default but invalid FragmentDB instance.
 		*/
 		FragmentDB();
 
 		/**	Creates a FragmentDB object and reads the contents of <tt>filename</tt>.
+				@exception Exception::FileNotFound if the file is not found in the BALL_DATA_PATH
 		*/
-		FragmentDB(const String& filename);
+		FragmentDB(const String& filename)
+			throw(Exception::FileNotFound);
 
 		/**	Copy constructor.
 		*/
 		FragmentDB(const FragmentDB& db, bool deep = true);	
+
+		/// Assignment  operator 
+		FragmentDB& operator = (const FragmentDB& db)
+			throw();
 
 		/**	Destructor.
 		*/
@@ -138,7 +133,8 @@ namespace BALL
 
 		/**	Initialization of the database. 
 		*/
-		void init();
+		void init()
+			throw(Exception::FileNotFound, NoFragmentNode);
 		
 		//@}
 		/**@name	Inspectors and mutators
@@ -147,7 +143,8 @@ namespace BALL
 
 		/**	Assigns a filename.
 		*/	
-		void setFilename(const String& filename);
+		void setFilename(const String& filename)
+			throw(Exception::FileNotFound);
 		
 		/**	Get the filename.
 		*/	
@@ -511,7 +508,8 @@ namespace BALL
 		/*_	Expands the first occuring include directive.
 				If no include directive is found, {\bf false} is returned, otherwise {\bf true}.
 		*/
-		bool expandFirst_(ResourceEntry& root_entry);
+		bool expandFirst_(ResourceEntry& root_entry)
+			throw(Exception::FileNotFound);
 
 		bool						valid_;
 
@@ -533,4 +531,4 @@ namespace BALL
 } // namespace BALL 
 
 
-#endif // BALL_STRUCTURE_FRAGMENTDB_H_
+#endif // BALL_STRUCTURE_FRAGMENTDB_H
