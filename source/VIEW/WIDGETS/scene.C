@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.149 2004/10/21 13:45:37 amoll Exp $
+// $Id: scene.C,v 1.151 2004/11/09 14:07:36 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2010,6 +2010,13 @@ namespace BALL
 		void Scene::animate_()
 			throw()
 		{
+			menuBar()->setItemChecked(record_animation_id_, false);
+			menuBar()->setItemEnabled(record_animation_id_, false);
+
+			bool export_PNG = menuBar()->isItemChecked(animation_export_PNG_id_);
+			bool export_POV = menuBar()->isItemChecked(animation_export_POV_id_);
+			bool repeat     = menuBar()->isItemChecked(animation_repeat_id_);
+
 			do
 			{
 				List<Camera>::Iterator it = getAnimationPoints().begin();
@@ -2021,9 +2028,9 @@ namespace BALL
 					if (*it == last_camera) continue;
 			 
 					Camera camera = last_camera;
-					Vector3 diff_viewpoint = (camera.getViewPoint() - (*it).getViewPoint());
-					Vector3 diff_up = (camera.getLookUpVector() - (*it).getLookUpVector());
-					Vector3 diff_look_at = (camera.getLookAtPosition() - (*it).getLookAtPosition());
+					Vector3 diff_viewpoint 	= (camera.getViewPoint() 			- (*it).getViewPoint());
+					Vector3 diff_up 				= (camera.getLookUpVector() 	- (*it).getLookUpVector());
+					Vector3 diff_look_at 		= (camera.getLookAtPosition() - (*it).getLookAtPosition());
 
 					Vector3 max = diff_viewpoint;
 					if (diff_look_at.getLength() > max.getLength()) max = diff_look_at;
@@ -2031,9 +2038,9 @@ namespace BALL
 					Size steps = (Size) (max.getLength() * animation_smoothness_);
 					if (steps == 0) steps = 1;
 					
-					diff_viewpoint /= steps;
-					diff_up /= steps;
-					diff_look_at /= steps;
+					diff_viewpoint 	/= steps;
+					diff_up 				/= steps;
+					diff_look_at 		/= steps;
 
 					for (Size i = 0; i < steps && !stop_animation_; i++)
 					{
@@ -2052,13 +2059,13 @@ namespace BALL
 						e->camera = camera;
 						qApp->postEvent(this, e);
 
-						if (menuBar()->isItemChecked(animation_export_PNG_id_))
+						if (export_PNG)
 						{
 							Scene::SceneExportPNGEvent* e = new Scene::SceneExportPNGEvent();
 							qApp->postEvent(this, e);
 						}
 
-						if (menuBar()->isItemChecked(animation_export_POV_id_))
+						if (export_POV)
 						{
 							Scene::SceneExportPOVEvent* e = new Scene::SceneExportPOVEvent();
 							qApp->postEvent(this, e);
@@ -2066,13 +2073,15 @@ namespace BALL
 					}
 					
 					last_camera = *it;
+					if (stop_animation_) break;
 				}
 			}
-			while(menuBar()->isItemChecked(animation_repeat_id_));
+			while((!stop_animation_) && repeat);
 
 			stop_animation_ = false;
 			menuBar()->setItemEnabled(start_animation_id_, true);
 			menuBar()->setItemEnabled(cancel_animation_id_, false);
+			menuBar()->setItemEnabled(record_animation_id_, true);
 
 			menuBar()->setItemEnabled(animation_repeat_id_, true);
 			menuBar()->setItemEnabled(animation_export_POV_id_, true);
