@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.h,v 1.3 2003/09/04 22:17:44 amoll Exp $
+// $Id: colorMeshDialog.h,v 1.4 2003/09/18 19:07:48 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORMESHDIALOG_H
@@ -21,6 +21,10 @@
 # include <BALL/VIEW/KERNEL/representation.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+# include <BALL/VIEW/KERNEL/modularWidget.h>
+#endif
+
 #ifndef BALL_DATATYPE_REGULARDATA3D
 # include <BALL/DATATYPE/regularData3D.h>
 #endif 
@@ -29,16 +33,18 @@ namespace BALL
 {
 	namespace VIEW
 	{
-
 		/** Dialog for coloring of surfaces
 				\ingroup ViewDialogs
 		*/
 		class ColorMeshDialog 
-			: public ColorMeshDialogData
+			: public ColorMeshDialogData,
+				public ModularWidget
 		{ 
 				Q_OBJECT
 
 			public:
+
+				BALL_EMBEDDABLE(ColorMeshDialog)
 
 				///
 				class ColoringConfig
@@ -53,32 +59,36 @@ namespace BALL
 					String selected_grid;
 				};
 
-				enum ColoringMethods
-				{
-					GRID_FROM_DISTANCE = 0,
-					GRID_FROM_FDPD
-				};
+				///
+				ColorMeshDialog(QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0);
 
-				ColorMeshDialog( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
+				///
 				~ColorMeshDialog()
 					throw();
 						
+				///
+				virtual void onNotify(Message *message)
+					throw();
+
+				///
 				void setRepresentation(Representation& rep)
 					throw();
 
+				///
 				Representation* getRepresentation()
 					throw() { return rep_;}
 
+				///
 				void setMesh(Mesh& mesh)
 					throw() {mesh_ = &mesh;}
 
+				///
 				Mesh* getMesh()
 					throw() { return mesh_;}
 				
 		public slots:
 				void applyPressed();
 				void cancelPressed();
-				void loadPressed();
 				void colorBoxesChanged();
 				void maxPressed();
 				void midPressed();
@@ -86,32 +96,25 @@ namespace BALL
 				void minMinPressed();
 				void maxMaxPressed();
 				void tabChanged();		
-				void choosePressed();
-				void computePressed();
-				void deletePressed();
-				void gridSelected();
-				void gridChoosen();
-				void savePressed();
 				void autoScalePressed();
+				void choosePressed();
 
 		protected:
 				QColor setColor(QPushButton* button);
-				void loadGrid_(const String& filename);
-				void saveGrid_(const String& filename);
 				void colorByCustomColor_();
 				void colorByGrid_();
 				bool insertGrid_(RegularData3D& grid, const String& name);
 				void setColor_(ColorRGBA& color, const QPushButton* button, const QSpinBox* box);
 				void getColor_(const ColorRGBA& color, QPushButton* button, QSpinBox* box);
-				RegularData3D* createGridFromDistance_();
-				RegularData3D* createGridFromFPDB_();
 				void saveSettings_();
 				void loadSettings_();
+				void invalidateGrid_()
+					throw();
 
-				vector<RegularData3D*> grids_;
-				vector<float> min_values_;
-				vector<float> mid_values_;
-				vector<float> max_values_;
+				RegularData3D* grid_;
+				float min_value_;
+				float mid_value_;
+				float max_value_;
 
 				ColorRGBA	 	selected_color, min_min_color, min_color, mid_color, max_color, max_max_color;	
 
