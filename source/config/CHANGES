@@ -80,3 +80,4 @@ Code Changes:
 - improved the code for the BALLView termination process
 - fixed core dump in RingPerception Processesor
 - removed the old Move-Dialog
+- Contour Surfaces had sometimes strange normals
