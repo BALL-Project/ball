@@ -1,20 +1,32 @@
-// $Id: directory.iC,v 1.9.4.1 2002/11/30 12:49:15 oliver Exp $
+// $Id: directory.iC,v 1.9.4.2 2002/12/06 07:45:20 crauser Exp $
 
 BALL_INLINE
 void Directory::synchronize_()
 {
+#ifdef BALL_COMPILER_MSVC
+  if (::_getcwd(NULL, MAX_PATH_LENGTH) != directory_path_)
+  {
+    backup_path_ = ::_getcwd(NULL, MAX_PATH_LENGTH);
+    ::_chdir(directory_path_.data());
+  }
+#else
   if (::getcwd(NULL, MAX_PATH_LENGTH) != directory_path_)
   {
     backup_path_ = ::getcwd(NULL, MAX_PATH_LENGTH);
     ::chdir(directory_path_.data());
   }
+#endif
 }
 
 BALL_INLINE
 bool Directory::desynchronize_(bool result1)
 {
   if (backup_path_ == "") return result1;
+#ifdef BALL_COMPILER_MSVC
+  bool result2 = (::_chdir(backup_path_.data()) == 0);
+#else
   bool result2 = (::chdir(backup_path_.data()) == 0);
+#endif
   backup_path_ = "";
   return (result1 && result2);
 }
@@ -74,7 +86,11 @@ BALL_INLINE
 bool Directory::setCurrent(String directory_path)
 {
   FileSystem::canonizePath(directory_path);
+#ifdef BALL_COMPILER_MSVC
+  return (::_chdir(directory_path.data()) == 0);
+#else
   return (::chdir(directory_path.data()) == 0);
+#endif
 }
 
 BALL_INLINE 
@@ -86,6 +102,15 @@ bool Directory::setCurrent()
 BALL_INLINE 
 bool Directory::create(String directory_path, const mode_t& mode)
 {
+#ifdef BALL_COMPILER_MSVC
+  FileSystem::canonizePath(directory_path);
+	if (directory_path[0] == FileSystem::PATH_SEPARATOR)
+	{
+		return (::_mkdir(directory_path.data()) == 0);
+	}
+	synchronize_();	
+	return desynchronize_((::_mkdir(directory_path.data()) == 0));
+#else
   FileSystem::canonizePath(directory_path);
 	if (directory_path[0] == FileSystem::PATH_SEPARATOR)
 	{
@@ -93,6 +118,7 @@ bool Directory::create(String directory_path, const mode_t& mode)
 	}
 	synchronize_();	
 	return desynchronize_((::mkdir(directory_path.data(), mode) == 0));
+#endif
 }
 
 BALL_INLINE 
@@ -100,7 +126,11 @@ bool Directory::remove(String directory_path)
 {
 	synchronize_();	
   FileSystem::canonizePath(directory_path);
+#ifdef BALL_COMPILER_MSVC
+	return desynchronize_((::_rmdir(directory_path.data()) == 0));
+#else
 	return desynchronize_((::rmdir(directory_path.data()) == 0));
+#endif
 }
 
 BALL_INLINE 
@@ -124,7 +154,21 @@ bool Directory::operator != (const Directory& directory) const
 BALL_INLINE 
 bool Directory::isValid() const
 {
+#ifdef BALL_COMPILER_MSVC
+	HANDLE dir = CreateFile(directory_path_.data(),
+					FILE_LIST_DIRECTORY,                
+					FILE_SHARE_READ|FILE_SHARE_DELETE,  
+					NULL,                               
+					OPEN_EXISTING,                     
+					FILE_FLAG_BACKUP_SEMANTICS,        
+					NULL                                
+					);
+	if(dir==INVALID_HANDLE_VALUE)
+	return false;
+	else return true;
+#else
 	return (::opendir(directory_path_.data()) != NULL && directory_path_ != "");
+#endif
 }
 
 

@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.14.4.2 2002/12/03 21:43:32 oliver Exp $
+// $Id: common.h,v 1.14.4.3 2002/12/06 07:45:20 crauser Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -157,7 +157,11 @@ namespace BALL
 		bool isFinite(const T& t)
 			throw()
 		{
+#ifdef BALL_COMPILER_MSVC
+			return _finite(t);
+#else
 			return finite(t);
+#endif
 		}
 
 		/**	Test whether a number is infinite.

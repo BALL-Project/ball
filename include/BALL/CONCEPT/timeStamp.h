@@ -1,4 +1,4 @@
-// $Id: timeStamp.h,v 1.13 2001/07/14 13:12:32 amoll Exp $
+// $Id: timeStamp.h,v 1.13.4.1 2002/12/06 07:45:20 crauser Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -20,6 +20,10 @@
 #endif
 
 #include <iostream>
+#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+#	include <windows.h>
+#	include <sys/timeb.h>
+#endif
 
 namespace BALL 
 {
@@ -35,7 +39,10 @@ namespace BALL
 	*/
 	class PreciseTime
 	{
-		
+
+#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+		static long ticks;
+#endif
 		public:
 
 		BALL_CREATE(PreciseTime)

@@ -1,4 +1,4 @@
-// $Id: directory.h,v 1.13.4.4 2002/11/30 13:09:43 oliver Exp $
+// $Id: directory.h,v 1.13.4.5 2002/12/06 07:45:20 crauser Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -32,6 +32,9 @@
 #	include <direct.h>
 #endif
 #include <stdio.h>
+#ifdef BALL_COMPILER_MSVC
+#include <windows.h>
+#endif
 
 namespace BALL 
 {
@@ -277,9 +280,13 @@ namespace BALL
 
 		//_switch back to the working directory
 		bool desynchronize_(bool result = true);
-
+#ifdef BALL_COMPILER_MSVC
+		HANDLE					dirent_;
+		HANDLE					dir_;
+#else
 		DIR*						dir_;
 		dirent*					dirent_;
+#endif
 		String					directory_path_;
 		String					backup_path_;
 	};

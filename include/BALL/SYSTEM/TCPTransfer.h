@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.h,v 1.8.4.1 2002/10/15 11:55:07 amoll Exp $
+// $Id: TCPTransfer.h,v 1.8.4.2 2002/12/06 07:45:20 crauser Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -38,7 +38,7 @@ namespace BALL
 			*/
 			enum Status
 			{
-				NO_ERROR 								= 0,
+				NO_ERROR  							= 0,
 				GETHOSTBYNAME_ERROR 		= 1,
 				SOCKET_ERROR 						= 2,
 				CONNECT_ERROR 					= 3,
