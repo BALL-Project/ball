@@ -1,4 +1,4 @@
-// $Id: simpleDescriptors.h,v 1.4 2001/12/18 01:18:44 oliver Exp $
+// $Id: simpleDescriptors.h,v 1.5 2002/01/26 21:51:22 oliver Exp $
 
 #ifndef BALL_QSAR_SIMPLEDESCRIPTORS_H
 #define BALL_QSAR_SIMPLEDESCRIPTORS_H
@@ -31,9 +31,20 @@ namespace BALL
 		virtual double compute(const Molecule& molecule);
 	};
 
-
-
-
+	/** Descriptor computing the polar surface area of a molecule.
+			The polar surface area computation is based on the numerical 
+			solvent-accessible surface computation implemented in BALL 
+			(\Ref{NumericalSAS). It is the sum of all surface elements
+			that are either caused by a nitrogen, an oxygen, or a hydrogen
+			bound to them. Value is in $\AA^2$.
+	*/
+	class PolarSurfaceArea
+		:	public Descriptor
+	{
+		public:
+		PolarSurfaceArea();
+		virtual double compute(const Molecule& molecule);
+	};
 
 } // namespace BALL
 
