@@ -2450,7 +2450,7 @@
 			Name="WIN"
 			Filter="">
 			<File
-				RelativePath="$(ProjectDir)..\..\Contrib\regex-0.12\regex.c">
+				RelativePath="$(ProjectDir)\..\..\Contrib\regex-0.12\regex.c">
 				<FileConfiguration
 					Name="Debug|Win32">
 					<Tool
