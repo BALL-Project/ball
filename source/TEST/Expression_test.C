@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.22 2002/01/10 14:44:38 anker Exp $
+// $Id: Expression_test.C,v 1.23 2002/01/11 03:29:07 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.22 2002/01/10 14:44:38 anker Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.23 2002/01/11 03:29:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -480,7 +480,7 @@ CHECK(SyntaxTree::end() throw())
 	// ?????
 	// Dunno what's happening here: test_it seems to be glued to child2.
 	st.children = children;
-	test_it = st.end()--;
+	test_it = --st.end();
 	bool test = (*test_it == child3);
 	TEST_EQUAL(test, true)
 RESULT
@@ -520,7 +520,7 @@ CHECK(SyntaxTree::end() const  throw())
 	SyntaxTree::ConstIterator test_it = st.end();
 
 	st.children = children;
-	test_it = st.end()--;
+	test_it = --st.end();
 	bool test = (*test_it == child3);
 	TEST_EQUAL(test, true)
 RESULT
