@@ -1,4 +1,4 @@
-// $Id: canonicalMD.h,v 1.2 1999/12/30 18:22:39 pmueller Exp $
+// $Id: canonicalMD.h,v 1.3 2000/03/26 12:48:54 oliver Exp $
 // Canonical MD: A class for doing molecular dynamics simulations      
 // according to the principle of a canonical ensemble (NVT), i.e., 
 // the temperature is kept constant. 
@@ -68,7 +68,7 @@ namespace BALL
     */
     struct Aux_Factors
       {
-      float factor1,factor2; 
+      double factor1,factor2; 
       }; 
     
     /** @name Constructors and Destructors
@@ -153,7 +153,7 @@ namespace BALL
     /**  This method does the actual simulation stuff
          It runs for the indicated time in picoseconds  
     */
-    virtual void simulateTime(float simulation_time,bool restart = false); 
+    virtual void simulateTime(double simulation_time,bool restart = false); 
 
     //@}
 
@@ -174,7 +174,7 @@ namespace BALL
     //@{
     /*_  The coupling parameter to the heat  bath
     */
-    float bath_relaxation_time_; 
+    double bath_relaxation_time_; 
 
     /*_  This vector contains special precomputed factors 
     */
