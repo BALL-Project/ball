@@ -1,4 +1,4 @@
-// $Id: pyPDBAtomList.h,v 1.1 2000/06/27 07:44:11 oliver Exp $
+// $Id: pyPDBAtomList.h,v 1.2 2000/07/06 14:04:29 oliver Exp $
 
 #ifndef BALL_PYTHON_PYPDBATOMLIST_H
 #define BALL_PYTHON_PYPDBATOMLIST_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_DATAYPE_LIST_H
 #	include <BALL/DATATYPE/list.h>
+#endif
+
+#ifndef BALL_DATAYPE_STRING_H
+# include <BALL/DATATYPE/string.h>
 #endif
 
 namespace BALL 
@@ -66,7 +70,7 @@ namespace BALL
 				This constructor creates an PyPDBAtomList object from
 				all atoms of a \Ref{BaseFragment} object.
 		*/
-		PyPDBAtomList(const BaseFragment& fragment, bool selected_only = false);
+		PyPDBAtomList(const BaseFragment& fragment, const String& expression = "");
 
 		/**	Destructor
 		*/
@@ -78,7 +82,7 @@ namespace BALL
 		//@{
 		/**
 		*/
-		void set(const BaseFragment& fragment, bool selected_only = false);
+		void set(const BaseFragment& fragment, const String& expression = "" );
 		//@}
 	};
 
