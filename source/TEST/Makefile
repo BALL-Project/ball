@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.194 2003/06/12 18:03:18 oliver Exp $
+# $Id: Makefile,v 1.195 2003/06/16 15:40:15 anker Exp $
 #
 
 DIRECTORY=TEST
@@ -183,6 +183,7 @@ EXECUTABLES_ENERGY = \
 
 EXECUTABLES_STRUCTURE = \
 	Enumerator_test\
+	EnumeratorIndex_test\
 	AnalyticalSES_test\
 	MolecularGraph_test\
 	NumericalSAS_test\
