@@ -23,6 +23,7 @@
 	<node>#include:NME<value>fragments/NME.db:/NME</value></node>
 	<node>#include:CA<value>fragments/CA.db:/CA</value></node>
 	<node>#include:MG<value>fragments/MG.db:/MG</value></node>
+	<node>#include:ZN<value>fragments/ZN.db:/ZN</value></node>
 	<node>#include:HOH<value>fragments/HOH.db:/HOH</value></node>
 </node>
 <node>Names
