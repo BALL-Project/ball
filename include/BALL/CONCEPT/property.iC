@@ -1,4 +1,4 @@
-// $Id: property.iC,v 1.8 2000/10/19 20:10:15 oliver Exp $
+// $Id: property.iC,v 1.9 2000/10/25 19:23:33 oliver Exp $
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name)	
@@ -101,7 +101,7 @@ double NamedProperty::getDouble() const
 BALL_INLINE 
 string NamedProperty::getString() const
 {
-	return (((type_ == STRING) && (data_.s != 0)) ? *data_.s : "");
+	return (((type_ == STRING) && (data_.s != 0)) ? (*data_.s) : string(""));
 }
 
 BALL_INLINE 
