@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.23.4.2 2002/08/22 18:04:17 oliver Exp $
+// $Id: regularData1D.h,v 1.23.4.3 2002/12/11 11:30:42 anker Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -76,11 +76,6 @@ namespace BALL
 		/**	Clear the contents
 		*/
 		virtual void clear()
-			throw();
-
-		/**	Clear the contents and reset the object dimensions
-		*/
-		virtual void destroy()
 			throw();
 
 		//@}
@@ -284,16 +279,6 @@ namespace BALL
 		{
 			*it = default_value;
 		}
-	}
-
-	template <typename T>
-	void TRegularData1D<T>::destroy()
-		throw()
-	{
-		// clear the vector and the boundaries
-		data_.clear();
-		lower_ = 0.0;
-		upper_ = 0.0;
 	}
 
 	template <typename T>
