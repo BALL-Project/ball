@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.82 2004/12/08 01:31:13 amoll Exp $
+// $Id: molecularControl.C,v 1.83 2004/12/08 01:56:12 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -879,14 +879,15 @@ void MolecularControl::paste()
 			continue;
 		}
 
-		Composite* parent = *selected_.begin();
 		Composite *new_child = (Composite*)(*list_it)->create();
 
-#ifdef BALL_PLATFORM_WINDOWS
-		//  prevent a strange problem with paste under windows
+		// prevent a strange problem with paste under windows
+		// the new_child pointer is then already in composite_to_item_
+		// this shouldnt happen , but it does, no idea why
+		// maybe its removeRecursiveComposite_ in cut()
 		composite_to_item_.erase(new_child);
-#endif
 
+		Composite* parent = *selected_.begin();
 		parent->appendChild(*new_child);
 		changed_roots.insert(&parent->getRoot());
 	}
