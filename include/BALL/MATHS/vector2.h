@@ -1,4 +1,4 @@
-// $Id: vector2.h,v 1.1 2001/05/31 21:58:00 amoll Exp $
+// $Id: vector2.h,v 1.2 2001/06/26 10:00:41 amoll Exp $
 
 #ifndef BALL_MATHS_Vector2_H
 #define BALL_MATHS_Vector2_H
@@ -181,6 +181,13 @@ namespace BALL
 				@param v the vector to assign from
 		**/
 		const TVector2& operator = (const TVector2& v)
+			throw();
+
+		/** Assignment operator.
+				Assign a constant value to the two vector components.
+				@param value the constant to assign to x, y
+		**/
+		const TVector2& operator = (T value)
 			throw();
 
 		/**	Array assignment operator.
@@ -515,6 +522,17 @@ namespace BALL
 	{
 		vector.x = x;
 		vector.y = y;
+	}
+
+	template <typename T>
+	BALL_INLINE
+	const TVector2<T>& TVector2<T>::operator = (T value)
+		throw()
+	{
+		x = value;
+		y = value;
+
+		return *this;
 	}
 
 	template <typename T>

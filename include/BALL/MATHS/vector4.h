@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.35 2001/02/14 01:59:59 amoll Exp $
+// $Id: vector4.h,v 1.36 2001/06/26 10:00:41 amoll Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -162,6 +162,13 @@ namespace BALL
 		**/
 		const TVector4& operator = (const TVector4& vector)
       throw();
+
+		/** Assignment operator.
+		    Assign a constant value to all four vector components.
+			  @param value the constant to assign to x, y, z, h
+		*/
+		const TVector4& operator = (T value)
+			throw();
 
 		/**	Assign to an array.
 				Sets the first four array elements pointed of array {\tt ptr} 
@@ -523,6 +530,19 @@ namespace BALL
 		y = v.y;
 		z = v.z;
 		h = v.h;
+
+		return *this;
+	}
+
+	template <typename T>
+	BALL_INLINE 
+	const TVector4<T>& TVector4<T>::operator = (T value)
+		throw()
+	{
+		x = value;
+		y = value;
+		z = value;
+		h = value;
 
 		return *this;
 	}
