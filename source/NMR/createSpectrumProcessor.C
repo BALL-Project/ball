@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.C,v 1.3 2000/09/07 19:38:30 oliver Exp $
+// $Id: createSpectrumProcessor.C,v 1.4 2000/09/07 21:03:40 oliver Exp $
 
 #include<BALL/NMR/createSpectrumProcessor.h>
 
@@ -7,12 +7,12 @@ using namespace std;
 namespace BALL
 {
 
-	CreateSpectrumProcessor::CreateSpectrumProcessor ()
+	CreateSpectrumProcessor::CreateSpectrumProcessor()
 	{
 		raster_ = 0.01e-6;
 	}
 
-	bool CreateSpectrumProcessor::start ()
+	bool CreateSpectrumProcessor::start()
 	{
 		// clear the contents of the old peak list
 		peaklist_.clear();
