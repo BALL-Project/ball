@@ -1,4 +1,4 @@
-// $Id: NMRStarFile.h,v 1.14 2001/06/21 22:07:50 amoll Exp $
+// $Id: NMRStarFile.h,v 1.15 2001/07/17 00:29:33 oliver Exp $
 
 #ifndef BALL_NMR_READ_STAR_H
 #define BALL_NMR_READ_STAR_H
@@ -134,22 +134,26 @@ namespace BALL
 			NMRStarFile(const NMRStarFile& f)
 				throw();
 
-			/** Detailled constuctor.
+			/** Detailed constuctor.
 					Opens the given file and extracts all usefull data.
 			*/
 			NMRStarFile(const String& file_name)
-				throw(Exception::FileNotFound);
+				throw(Exception::FileNotFound, Exception::ParseError);
 
 			/** Assignment operator.
 					@see NMRStarFile(const NMRStarFile& f)
 			*/
-			const NMRStarFile& operator = (const NMRStarFile& f)  throw();
+			const NMRStarFile& operator = (const NMRStarFile& f)  
+				throw();
 
 			/** Clear the object.
 			*/
-			void clear() throw();
+			void clear() 
+				throw();
 
 			//@}
+
+
 			/**	@name	Access methods
 			*/
 			//@{
