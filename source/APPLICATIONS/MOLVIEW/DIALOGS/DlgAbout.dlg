@@ -20,7 +20,7 @@ Grid {10}
 TextTranslated {FALSE}
 
 Label {
-		Text {MOLVIEW V 0.95 alpha}
+		Text {MolView V1.0}
 		Alignment {AlignHCenter|AlignVCenter|ExpandTabs}
 		AutoResize {FALSE}
 		Margin {0}
