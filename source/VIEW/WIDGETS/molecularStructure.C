@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.69 2004/11/25 19:42:14 amoll Exp $
+// $Id: molecularStructure.C,v 1.70 2004/11/26 11:30:51 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -296,12 +296,11 @@ namespace BALL
 
 			if (okay)
 			{
-				Log.info() << "ResidueChecker: no errors found." << endl;
-				setStatusbarText("no errors.");
+				setStatusbarText("ResidueChecker: no errors found.", true);
 			} 
 			else 
 			{
-				setStatusbarText("errors found, the problematic atoms are now selected and colored yellow! See also logs");
+				setStatusbarText("errors found, the problematic atoms are now selected and colored yellow! See also logs", true);
 				HashSet<Composite*>::Iterator it = changed_roots.begin();
 				for (; it != changed_roots.end(); it++)
 				{
@@ -343,9 +342,8 @@ namespace BALL
 				notify_(change_message);
 			}
 
-			String result = "added " +  String(number_of_hydrogens) + " hydrogen atoms."; 
-			Log.info() << result << std::endl;   
-			setStatusbarText(result);
+			setStatusbarText(String("added ") +  String(number_of_hydrogens) + 
+											 " hydrogen atoms.", true);
 		}
 
 
@@ -392,8 +390,7 @@ namespace BALL
 
 			String result = "added " + String(new_number_of_bonds - old_number_of_bonds) + 
 										  " bonds (total " + String(new_number_of_bonds) + ").";
-			setStatusbarText(result);
-			Log.info() << result << std::endl;
+			setStatusbarText(result, true);
 		}
 
 
@@ -620,7 +617,7 @@ namespace BALL
 			message->setData(*regdat);
 			notify_(message);
 
-			setStatusbarText("done");
+			setStatusbarText("Calculated grid", true);
 		}
 
 		void MolecularStructure::calculateSecondaryStructure()
@@ -633,7 +630,7 @@ namespace BALL
 			CompositeMessage *change_message = 
 				new CompositeMessage(s, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
 			notify_(change_message);
-			setStatusbarText("Calculated Secondary Structure");
+			setStatusbarText("Calculated Secondary Structure", true);
 		}
 
 
@@ -651,7 +648,7 @@ namespace BALL
 			
 			if (!RTTI::isKindOf<AtomContainer>(**it)) 
 			{
-				setStatusbarText("Exact two AtomContainers have to be selected");
+				setStatusbarText("Exact two AtomContainers have to be selected", true);
 				return;
 			}
 
@@ -659,7 +656,7 @@ namespace BALL
 			it++;
 			if (!RTTI::isKindOf<AtomContainer>(**it)) 
 			{
-				setStatusbarText("Exact two AtomContainers have to be selected");
+				setStatusbarText("Exact two AtomContainers have to be selected", true);
 				return;
 			}
 			
@@ -667,7 +664,8 @@ namespace BALL
 
 			if (a1->isRelatedWith(*a2))
 			{
-				setStatusbarText("The two Proteins must not be descendet/ancestor of eachother.");
+				setStatusbarText("The two Proteins must not be descendet/ancestor of eachother.", 
+												true);
 				return;
 			}
 

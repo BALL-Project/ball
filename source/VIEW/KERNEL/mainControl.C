@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.141 2004/11/24 14:25:06 amoll Exp $
+// $Id: mainControl.C,v 1.142 2004/11/26 11:30:51 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1192,6 +1192,7 @@ namespace BALL
 			if (important)
 			{
 				message_label_->setPaletteForegroundColor( QColor(255,0,0) );
+				Log.info() << text << std::endl;
 			}
 			else
 			{
