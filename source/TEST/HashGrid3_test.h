@@ -13,4 +13,16 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 	};
+
+	class TestProcessor2
+		:	public UnaryProcessor< HashGridBox3<int> >
+	{
+		virtual Processor::Result operator () (HashGridBox3<int> arg)
+			throw()
+		{
+			TestProcessor proc;
+			arg.apply(proc);
+			return Processor::CONTINUE;
+		}
+	};
 }
