@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.11 2004/02/12 10:59:30 amoll Exp $
+// $Id: genericControl.C,v 1.12 2004/08/31 14:33:07 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -53,8 +53,7 @@ GenericControl::~GenericControl()
 	throw()
 {
   #ifdef BALL_VIEW_DEBUG
-	  Log.error() << "Destructing object " << (void *)this << " of class " 
-								<< RTTI::getName<GenericControl>() << endl;
+	  Log.error() << "Destructing object " << this << " of class GenericControl" << endl;
   #endif 
 }
 

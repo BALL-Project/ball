@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.123 2004/08/27 09:46:11 amoll Exp $
+// $Id: scene.C,v 1.124 2004/08/31 14:33:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -139,7 +139,7 @@ namespace BALL
 			throw()
 			{
 #ifdef BALL_VIEW_DEBUG
-				Log.info() << "Destructing object Scene " << this << " of class Scene>" << std::endl;
+				Log.info() << "Destructing object Scene " << this << " of class Scene" << std::endl;
 #endif 
 
 				delete stage_;

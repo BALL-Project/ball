@@ -45,7 +45,7 @@ LogView::~LogView()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "Destructing object " << (void *)this 
-								<< " of class " << RTTI::getName<LogView>() << endl;
+								<< " of class LogView" << endl;
 	#endif 
 }
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.54 2004/08/27 11:23:35 amoll Exp $
+// $Id: molecularStructure.C,v 1.55 2004/08/31 14:33:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -52,9 +52,13 @@ namespace BALL
 		{
 			registerWidget(this);
 			hide();
+		}
 
+
+		void MolecularStructure::initializeWidget(MainControl& main_control)
+			throw()
+		{
 			// cant use ModularWidget::getMainControl() here, no idea why
-			MainControl& main_control = *MainControl::getMainControl(this);
 			String hint;
 			
 			hint = "Focus the camera on one or multiple objects."; 
@@ -156,7 +160,12 @@ namespace BALL
 		MolecularStructure::~MolecularStructure()
 			throw()
 		{
-			MainControl& main_control = *getMainControl();
+		}
+
+
+		void MolecularStructure::finalizeWidget(MainControl& main_control)
+			throw()
+		{
 			main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
 																											SLOT(centerCamera()), CTRL+Key_F);
 			main_control.removeMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
@@ -173,7 +182,6 @@ namespace BALL
 																											SLOT(calculateSecondaryStructure()));
 			main_control.removeMenuEntry(MainControl::BUILD, "Ramachandran Plot", this,
 																											SLOT(calculateRamachandranPlot()));
-
 
 //			main_control.removeMenuEntry(MainControl::BUILD, " Map two Proteins", this,
 // 																											SLOT(mapProteins()));

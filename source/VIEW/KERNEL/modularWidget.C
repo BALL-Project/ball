@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.14 2004/08/30 15:36:04 amoll Exp $
+// $Id: modularWidget.C,v 1.15 2004/08/31 14:34:03 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -41,7 +41,7 @@ ModularWidget::~ModularWidget()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.info() << "Destructing object " << (void *)this 
-							 << " of class " << RTTI::getName<ModularWidget>() << endl;
+							 << " of class ModularWidget" << endl;
 	#endif 
 
 	if (getMainControl() != 0)
@@ -151,7 +151,13 @@ void ModularWidget::setStatusbarText(String text)
 MainControl* ModularWidget::getMainControl() const
 	throw()
 { 
-	return (MainControl*) ((ConnectionObject*)this)->getRoot();
+	if (((ConnectionObject*) this)->getParent() == 0) return 0;
+	
+	ConnectionObject* root = ((ConnectionObject*)this)->getRoot();
+	
+	if (!RTTI::isKindOf<MainControl>(*root)) return 0;
+
+	return (MainControl*) root;
 }
 
 FragmentDB& ModularWidget::getFragmentDB() const

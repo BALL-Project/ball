@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.102 2004/08/31 11:20:10 amoll Exp $
+// $Id: mainControl.C,v 1.103 2004/08/31 14:34:03 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -479,6 +479,11 @@ namespace BALL
 				(*it)->finalizeWidget(*this);
 			}
 
+			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+			{
+				unregisterConnectionObject(**it);
+			}
+
 			modular_widgets_.clear();
 
 			//
@@ -903,6 +908,7 @@ namespace BALL
 				Log.info() << "MainControl::removeModularWidget(" << widget << ")" << endl;
 			#endif
 			modular_widgets_.remove(widget);
+			unregisterConnectionObject(*widget);
 		}
 
 

@@ -26,7 +26,7 @@ ConnectionObject::~ConnectionObject()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.info() << "Destructing object " << (void *)this 
-							 << " of class " << RTTI::getName<ConnectionObject>() << std::endl;
+							 << " of class ConnectionObject" << std::endl;
 	#endif 
 
 	destroy();
