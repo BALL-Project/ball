@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.C,v 1.21 2004/05/06 19:59:50 oliver Exp $
+// $Id: MOLFile.C,v 1.22 2004/05/07 08:12:58 oliver Exp $
 //
 
 
@@ -322,6 +322,13 @@ namespace BALL
 																			String("Referencing undefined atom number: ") + String(bond_struct.second_atom));
 				}
 				
+				// If the bond should join the atom with itself, we safely ignore this.
+				// There are some SD files out there showing this specific problem...
+				if (bond_struct.first_atom == bond_struct.second_atom)
+				{
+					continue;
+				}
+
 				// create the bond
 				Bond* bond = atom_map[bond_struct.first_atom - 1]->createBond(*(atom_map[bond_struct.second_atom - 1]));
 				if (bond == 0)
