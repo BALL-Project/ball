@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.33 2001/06/24 14:22:53 oliver Exp $
+// $Id: fragmentDB.C,v 1.34 2001/07/13 13:37:44 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -1835,7 +1835,7 @@ namespace BALL
 	// returning numbers of inserted hydrogens
 	Size FragmentDB::AddHydrogensProcessor::getNumberOfInsertedHydrogens()
 	{
-		return 0;
+		return number_of_inserted_h_;
 	}
 	//	BuildBondsProcessor
 
