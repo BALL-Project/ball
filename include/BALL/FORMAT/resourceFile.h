@@ -1,4 +1,4 @@
-// $Id: resourceFile.h,v 1.9 2000/10/24 00:04:07 amoll Exp $
+// $Id: resourceFile.h,v 1.10 2000/10/25 09:43:59 amoll Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -730,11 +730,11 @@ namespace BALL
 
 		/** Equality operator
 		*/
-		bool ResourceFile::operator == (const ResourceFile& entry) const;
+		bool operator == (const ResourceFile& entry) const;
 
 		/** Inequality operator
 		*/
-		bool ResourceFile::operator != (const ResourceFile& entry) const;
+		bool operator != (const ResourceFile& entry) const;
 
 		/*	Return true if the key exists somewhere in the tree.
 		*/
