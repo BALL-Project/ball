@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.26 2000/03/17 13:47:24 amoll Exp $
+// $Id: vector3.h,v 1.27 2000/03/20 01:38:18 amoll Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -877,7 +877,7 @@ namespace BALL
 			throw Exception::DivisionByZero(__FILE__, __LINE__);
 		}
 		
-		return (Angle)(T)acos(((*this) * vector) / sqrt(length_product));
+		return (TAngle<T>)acos(((*this) * vector) / sqrt(length_product));
 	}
 
 	template <typename T>
