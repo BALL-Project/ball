@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.44 2004/07/22 16:22:06 amoll Exp $
+// $Id: representation.C,v 1.45 2004/07/22 16:28:35 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -551,7 +551,7 @@ namespace BALL
 				result += "|";
 			}
 
-			if (hasProperty("PROPERTY__HIDDEN"))
+			if (hasProperty(PROPERTY__HIDDEN))
 			{
 				result += "H";
 			}

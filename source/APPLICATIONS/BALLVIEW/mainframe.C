@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.20 2004/07/22 16:22:11 amoll Exp $
+// $Id: mainframe.C,v 1.21 2004/07/22 16:32:35 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -525,7 +525,7 @@ namespace BALL
 			
 				display_properties_->applyButtonClicked();
 
-				if (split_size == 3 && string_vector[2].has('H'))
+				if (string_vector2.size() == 3 && string_vector[2].has('H'))
 				{
 					Representation* rep = 0;
 					PrimitiveManager::RepresentationsIterator pit = getPrimitiveManager().begin();
@@ -534,7 +534,10 @@ namespace BALL
 						rep = *pit;
 					}
 
+Log.error() << "#~~#   6 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 					rep->setProperty(Representation::PROPERTY__HIDDEN);
+					RepresentationMessage* msg = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
+					notify_(msg);
 				}
 			}
 		}
