@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.20 2003/06/22 10:21:47 oliver Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.21 2004/05/10 11:53:22 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.20 2003/06/22 10:21:47 oliver Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.21 2004/05/10 11:53:22 amoll Exp $")
 
 using namespace BALL;
 
@@ -219,7 +219,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES) AlaAla)
 	f >> S;
 	S.deselect();
 	
-	FragmentDB fd;
+	FragmentDB fd("");
 	S.apply(fd.normalize_names);
 	ResidueChecker checker(fd);
 	S.apply(checker);
@@ -271,7 +271,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE) AlaAla)
 	f >> S;
 	S.deselect();
 	
-	FragmentDB fd;
+	FragmentDB fd("");
 	S.apply(fd.normalize_names);
 	ResidueChecker checker(fd);
 	S.apply(checker);
@@ -321,7 +321,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) AlaAla)
 	f >> S;
 	S.deselect();
 	
-	FragmentDB fd;
+	FragmentDB fd("");
 	S.apply(fd.normalize_names);
 	ResidueChecker checker(fd);
 	S.apply(checker);

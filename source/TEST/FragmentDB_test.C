@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FragmentDB_test.C,v 1.13 2004/05/07 13:10:06 amoll Exp $
+// $Id: FragmentDB_test.C,v 1.14 2004/05/10 11:54:24 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -21,7 +21,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.13 2004/05/07 13:10:06 amoll Exp $")
+START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.14 2004/05/10 11:54:24 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -231,7 +231,7 @@ CHECK([EXTRA]DNA bond contruction)
 	TEST_EQUAL(S.countAtoms(), 34)
 	ABORT_IF(S.countAtoms() != 34)
 	
-	FragmentDB db;
+	FragmentDB db("");
 	STATUS("number of atoms: " << S.countAtoms())
 	STATUS("number of bonds: " << S.countBonds())
 	S.apply(db.build_bonds);
