@@ -1,4 +1,4 @@
-// $Id: system.sip,v 1.4 2003/03/28 10:49:27 oliver Exp $
+// $Id: system.sip,v 1.5 2003/03/29 12:43:39 oliver Exp $
 
 class System
   : AtomContainer,
@@ -44,20 +44,15 @@ class System
 	//  template <typename T>
 	//  bool apply(UnaryProcessor<T>& processor)
 
-	char* __repr__() /NoLazy/;
+	char* __str__() /NonLazy/;
 %MemberCode
-  System* ptr;
+    System *ptr;
 
-	if (sipParseArgs(&sipArgsParsed,sipArgs,"n",sipClass_System,&ptr))
-	{
-  return PyString_FromString(String(String("System ") + ptr->getName() 
-					+ " { " + String(ptr->countMolecules()) + " molecules,  " 
-					+ String(ptr->countAtoms()) + " atoms }").c_str());
-	}
-	else
-	{
-		return NULL;
-	}
+    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Atom,&ptr))
+    {
+		  return PyString_FromString(String(String("System ") + ptr->getName() 
+							+ " { " + String(ptr->countMolecules()) + " molecules,  " 
+							+ String(ptr->countAtoms()) + " atoms }").c_str());
+    }
 %End
-
 };
