@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.56 2003/11/15 12:53:57 oliver Exp $
+// $Id: mainframe.h,v 1.57 2003/11/22 17:57:44 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -154,6 +154,7 @@ namespace BALL
 			MENU__HELP_ABOUT
 		};
 
+		BALL_EMBEDDABLE(MainControl)
 
 		Mainframe(QWidget* parent = 0, const char* name = 0);
 
