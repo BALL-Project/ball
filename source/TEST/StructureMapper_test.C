@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StructureMapper_test.C,v 1.8 2004/01/14 16:17:34 amoll Exp $
+// $Id: StructureMapper_test.C,v 1.9 2004/01/18 17:22:53 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 #include <BALL/FORMAT/PDBFile.h>
 #include <vector>
 
-START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.8 2004/01/14 16:17:34 amoll Exp $")
+START_TEST(StructureMapper, "$Id: StructureMapper_test.C,v 1.9 2004/01/18 17:22:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -403,7 +403,9 @@ CHECK(RSMD for two bptis)
 	PDBFile pf("../APPLICATIONS/MOLVIEW/bpti.pdb");
 	pf >> s1;
 	pf >> s2;
-	StructureMapper sm(s1,s2);
+	StructureMapper sm(s1, s2);	
+	STATUS("Number of atoms in s1: " << s1.countAtoms())
+	STATUS("Number of atoms in s2: " << s2.countAtoms())
 	TEST_REAL_EQUAL(sm.calculateRMSD(), 0.0)
 RESULT
 

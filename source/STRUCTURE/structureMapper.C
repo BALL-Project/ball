@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.C,v 1.27 2003/09/02 12:46:07 oliver Exp $
+// $Id: structureMapper.C,v 1.28 2004/01/18 17:22:52 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/structureMapper.h>
@@ -219,7 +219,7 @@ namespace BALL
 		StringHashMap<Atom*> A_names;
 		for (AtomIterator ai = A_->beginAtom(); +ai; ++ai)
 		{
-			A_names.insert(std::pair<String, Atom*>(ai->getFullName(), &*ai));
+			A_names.insert(std::pair<String, Atom*>(ai->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID), &*ai));
 		}
 		
 		// Iterate over all atoms of B and try to find an 
@@ -227,18 +227,14 @@ namespace BALL
 		bijection_.clear();
 		for (AtomIterator ai = B_->beginAtom(); +ai; ++ai)
 		{
-			if (A_names.has(ai->getFullName()))
+			if (A_names.has(ai->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID)))
 			{
 				// We found two matching atoms. Remember them.
-				bijection_.push_back(AtomPairType(A_names[ai->getFullName()], &*ai));
+				bijection_.push_back(AtomPairType(A_names[ai->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID)], &*ai));
+
 				// Throw away the hash map entry in order to avoid
 				// 1:n mappings.
-				A_names.erase(ai->getFullName());
-				std::cerr << "found " << ai->getFullName() << std::endl;
-			}
-			else
-			{
-				std::cerr << "did not find " << ai->getFullName() << std::endl;
+				A_names.erase(ai->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID));
 			}
 		}
 
