@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.C,v 1.11 2000/09/24 13:36:20 oliver Exp $
+// $Id: assignShiftProcessor.C,v 1.12 2000/09/25 13:30:55 oliver Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
 #include<BALL/KERNEL/PDBAtom.h>
@@ -32,9 +32,9 @@ namespace BALL
 		// BAUSTELLE: this could be done in a more general manner
 		FragmentDB frag_db;
 		StringHashMap<String>* map = 0;
-		if (frag_db.getNamingStandards().has("Amber"))
+		if (frag_db.getNamingStandards().has("Amber-PDB"))
 		{
-			map = frag_db.getNamingStandards()["Amber"];
+			map = frag_db.getNamingStandards()["Amber-PDB"];
 		}
 
 		StringHashMap<String> transformTable;
@@ -61,7 +61,15 @@ cout << endl << endl;
 			String atom_name    = atom_data_[atompos]->atomName;
 			if (map != 0)
 			{
-				frag_db.normalize_names.matchName(residue_name, atom_name, map);
+				if (!frag_db.normalize_names.matchName(residue_name, atom_name, map))
+				{
+					Log.warn() << "AssignShiftProcessor::start: could not convert atom name " 
+										 << residue_name << ":" << atom_name << endl;
+				}
+			}
+			else 
+			{
+				Log.warn() << "AssignShiftProcessor::start:  no appropriate map found for name conversion" << endl;
 			}
 			const String entry(residue_name + ":" + atom_name);
 
