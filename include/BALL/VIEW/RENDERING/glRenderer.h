@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.4 2003/09/16 15:18:32 amoll Exp $
+// $Id: glRenderer.h,v 1.5 2003/10/24 22:35:19 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
 #define BALL_VIEW_RENDERING_GLRENDERER_H
@@ -146,10 +146,6 @@ namespace BALL
 			void initSolid()
 				throw();
 			
-			///
-			void setTranslationAndRotation(const Vector3& origin, const Quaternion& quaternion)
-				throw();
-
 			///
 			void addRepresentation(const Representation& rep)
 				throw();
