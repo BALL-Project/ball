@@ -1,7 +1,8 @@
-// $Id: regExp.iC,v 1.3 2000/07/29 18:02:57 amoll Exp $
+// $Id: regExp.iC,v 1.4 2000/12/04 18:19:13 amoll Exp $
 
 BALL_INLINE 
 void RegularExpression::set(const RegularExpression& regular_expression, bool /* deep */)
+ throw()
 {
   pattern_.set(regular_expression.pattern_);
 	regfree(&regex_);
@@ -9,7 +10,7 @@ void RegularExpression::set(const RegularExpression& regular_expression, bool /*
 }
 
 BALL_INLINE 
-void RegularExpression::set(const String& pattern, bool wildcard_pattern)
+void RegularExpression::set(const String& pattern, bool wildcard_pattern) throw()
 {
   pattern_.set(pattern);
 
@@ -21,20 +22,28 @@ void RegularExpression::set(const String& pattern, bool wildcard_pattern)
 	compilePattern_();
 }
 
+const RegularExpression& RegularExpression::operator = (const RegularExpression& expression) 
+	throw()
+{
+	this->set(expression);
+	return (*this);
+}
+
+
 BALL_INLINE 
-void RegularExpression::get(RegularExpression& regular_expression, bool deep) const
+void RegularExpression::get(RegularExpression& regular_expression, bool deep) const throw()
 {
   regular_expression.set(*this, deep);
 }
 
 BALL_INLINE 
-const String& RegularExpression::getPattern() const
+const String& RegularExpression::getPattern() const throw()
 {
   return pattern_;
 }
 
 BALL_INLINE 
-Size RegularExpression::countSubexpressions() const
+Size RegularExpression::countSubexpressions() const throw()
 {
   if (valid_pattern_ == true)
   {
@@ -45,61 +54,61 @@ Size RegularExpression::countSubexpressions() const
 }
 
 BALL_INLINE 
-void RegularExpression::clear()
+void RegularExpression::clear() throw()
 {
   set(BALL_REGULAR_EXPRESSION_DEFAULT_PATTERN);
 }
 
 BALL_INLINE 
-void RegularExpression::destroy()
+void RegularExpression::destroy() throw()
 {
   clear();
 }
 
 BALL_INLINE
-bool RegularExpression::isEmpty() const
+bool RegularExpression::isEmpty() const throw()
 {
   return pattern_.isEmpty();
 }
 
 BALL_INLINE 
-bool RegularExpression::operator == (const RegularExpression& regular_expression) const
+bool RegularExpression::operator == (const RegularExpression& regular_expression) const throw()
 {
   return (pattern_ == regular_expression.pattern_);
 }
 
 BALL_INLINE 
-bool RegularExpression::operator != (const RegularExpression& regular_expression) const
+bool RegularExpression::operator != (const RegularExpression& regular_expression) const throw()
 {
   return (pattern_ != regular_expression.pattern_);
 }
 
 BALL_INLINE 
-bool RegularExpression::operator < (const RegularExpression& regular_expression) const
+bool RegularExpression::operator < (const RegularExpression& regular_expression) const throw()
 {
   return (pattern_ < regular_expression.pattern_);
 }
 
 BALL_INLINE 
-bool RegularExpression::operator <= (const RegularExpression& regular_expression) const
+bool RegularExpression::operator <= (const RegularExpression& regular_expression) const throw()
 {
   return (pattern_ <= regular_expression.pattern_);
 }
 
 BALL_INLINE 
-bool RegularExpression::operator >= (const RegularExpression& regular_expression) const
+bool RegularExpression::operator >= (const RegularExpression& regular_expression) const throw()
 {
   return (pattern_ >= regular_expression.pattern_);
 }
 
 BALL_INLINE 
-bool RegularExpression::operator > (const RegularExpression& regular_expression) const
+bool RegularExpression::operator > (const RegularExpression& regular_expression) const throw()
 {
   return (pattern_ > regular_expression.pattern_);
 }
 
 BALL_INLINE 
-bool RegularExpression::isValid() const
+bool RegularExpression::isValid() const throw()
 {
-  return (bool)(valid_pattern_ == true && pattern_.isValid());
+  return (valid_pattern_ == true && pattern_.isValid());
 }
