@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.20 2000/09/05 13:12:23 oliver Exp $ 
+// $Id: hashSet.h,v 1.21 2000/10/05 08:26:31 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -51,9 +51,9 @@ namespace BALL
 
 		enum
 		{
-			///
+			/// Initial capacity of the hash set
 			INITIAL_CAPACITY          = 4,
-			///
+			/// Initial number of buckets
 			INITIAL_NUMBER_OF_BUCKETS = 3
 		};
 		//@}
