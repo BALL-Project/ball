@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.19 2001/06/21 21:25:10 amoll Exp $
+// $Id: hashGrid.h,v 1.20 2001/07/11 00:05:23 oliver Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -1724,7 +1724,8 @@ namespace BALL
 		dimension_x_ = dimension_x;
 		dimension_y_ = dimension_y;
 		dimension_z_ = dimension_z;
-		box_ = new HashGridBox3<Item>[getSize()];
+		Size n = getSize();
+		box_ = new HashGridBox3<Item> [n];
 	}
 
 	template <typename Item>
