@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.16 2003/12/17 11:25:58 amoll Exp $
+// $Id: glRenderer.C,v 1.17 2003/12/17 13:31:12 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -27,12 +27,6 @@
 #include <qpainter.h>
 #include <qbitmap.h>
 #include <qimage.h>
-
-
-
-
-//testing
-#include <BALL/KERNEL/bond.h>
 
 using namespace std;
 
