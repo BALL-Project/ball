@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.27 2000/01/04 23:43:00 oliver Exp $
+dnl    $Id: configure.in,v 1.28 2000/01/06 09:48:29 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -387,29 +387,29 @@ dnl
 dnl 	create OS defines in config.h:
 dnl
 if test "$OS" = Linux ; then
-	AC_DEFINE(LINUX,LINUX)
+	AC_DEFINE(BALL_OS_LINUX,LINUX)
 fi
 if test "$OS" = Solaris ; then
-	AC_DEFINE(SOLARIS,SOLARIS)
+	AC_DEFINE(BALL_OS_SOLARIS,SOLARIS)
 fi
 if test "$OS" = IRIX ; then
-	AC_DEFINE(IRIX,IRIX)
+	AC_DEFINE(BALL_OS_IRIX,IRIX)
 fi
 
 dnl
 dnl		create ARCHITECTURE defines
 dnl
 if test "$ARCHITECTURE" = sparc ; then
-	AC_DEFINE(SPARC,SPARC)
+	AC_DEFINE(BALL_ARCH_SPARC,SPARC)
 fi
 if test "$ARCHITECTURE" = i386 ; then
-	AC_DEFINE(I386,I386)
+	AC_DEFINE(BALL_ARCH_I386,I386)
 fi
 if test "$ARCHITECTURE" = mips ; then
-	AC_DEFINE(MIPS,MIPS)
+	AC_DEFINE(BALL_ARCH_MIPS,MIPS)
 fi
 if test "$ARCHITECTURE" = alpha ; then
-	AC_DEFINE(ALPHA,ALPHA)
+	AC_DEFINE(BALL_ARCH_ALPHA,ALPHA)
 fi
 
 AC_MSG_RESULT($OS $OSREV (BINFMT=$BINFMT))
@@ -1541,32 +1541,100 @@ fi
 
 
 dnl
-dnl   create includes and libs for BALLView
-dnl
+dnl   verify libraries needed for BALLVIEW
+dnl   (X, QT, Mesa/OpenGL)
 dnl
 
 if test "${USE_BALLVIEW}" = true ; then
-	if test "${QT_LIBS}" != "/usr/lib" ; then
-		BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${QT_LIBS} -lqgl -lqt"
-		QT_PATH="-L${QT_LIBS}"
-		QT_LIBS="-L${QT_LIBS} -lqgl -lqt}"
-	else 
-		BALLVIEW_LIBS="${BALLVIEW_LIBS} -lqgl -lqt"
-		QT_PATH=""
-		QT_LIBS="-lqgl -lqt"
-	fi	
+	if test "${x_libraries}" != "/usr/lib" -a "${x_libraries}" != ""; then
+		BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${x_libraries} ${X_LIBS}"
+		X11_PATH="-L${x_libraries}"
+	else
+		BALLVIEW_LIBS="${BALLVIEW_LIBS} ${X_LIBS}"
+		X11_PATH=""
+	fi
+fi
+
+if test "${USE_BALLVIEW}" = true ; then		
+	dnl
+	dnl  Linux seems to require two libraries more: SM and ICE
+	dnl
+	AC_MSG_CHECKING(linking against X11 libraries)
+	if test "${OS}" = Linux ; then
+		ADD_X_LIBS="-lSM -lICE"
+	fi
+
+	dnl 
+	dnl   this is our defualt guess for reasonable X11 libraries
+	dnl
+	if test "${X_LIBS}" = "" ; then
+		X_LIBS="-lXmu -lXext -lXt -lX11"
+	fi
+
+	dnl
+	dnl   now, try to link a dummy programm with these libraries
+	dnl		crashes, if unresolved symbols occur
+	dnl   libraries may then be specified externally via the
+	dnl   env variable X_LIBS...
+	dnl
+	SAVE_LDFLAGS=${LDFLAGS}
+	LDFLAGS="${LDFLAGS} ${X11_PATH} ${X_LIBS} ${ADD_X_LIBS}"
+	AC_TRY_LINK([],[],X_LINKING_OK=1)
+	LDFLAGS=${SAVE_LDFLAGS}
+	if test "${X_LINKING_OK+set}" = set ; then
+		AC_MSG_RESULT(yes)	
+	else
+		AC_MSG_RESULT(no)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Don't know how to link with X11 libraries.)
+		AC_MSG_RESULT(Please specify the correct libraries (e.g. -lXmu -lXt -lX11) in the)
+		AC_MSG_RESULT(environment variable X_LIBS)
+		AC_MSG_RESULT(Built of visualization component BALLVIEW disabled.)
+		AC_MSG_RESULT()
+	fi
+
+	dnl		
+	dnl  join the additional X libraries (SM/ICE)
+	dnl
+	X_LIBS="${X_LIBS} ${ADD_X_LIBS}"
+fi
+
+if test "${USE_BALLVIEW}" = true ; then
 	if test "${BALLVIEW_PLATFORM}" = Mesa ; then
-		if test "${MESA_LIBS}" != "/usr/lib" ; then
+		dnl
+		dnl  strip default path
+		dnl
+		if test "${MESA_LIBS}" != "/usr/lib" -a "${MESA_LIBS}" != "" ; then
 			BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${MESA_LIBS} -lMesaGLU -lMesaGL"
 			OPENGL_PATH="-L${MESA_LIBS}"
-			OPENGL_LIBS="-L${MESA_LIBS} -lMesaGLU -lMesaGL"
-			
+			OPENGL_LIBS="-L${MESA_LIBS} -lMesaGLU -lMesaGL"			
 		else
 			BALLVIEW_LIBS="${BALLVIEW_LIBS} -lMesaGLU -lMesaGL"
 			OPENGL_PATH=""
 			OPENGL_LIBS="-lMesaGLU -lMesaGL"
 		fi
+		
+		dnl
+		dnl  try to link against mesa libraries
+		dnl
+		AC_MSG_CHECKING(linking against Mesa libs)
+		SAVE_LDFLAGS=${LDFLAGS}
+		LDFLAGS="${LDFLAGS} ${OPENGL_LIBS} ${X11_PATH} ${X_LIBS}"
+		AC_TRY_LINK([],[], HAVE_MESALIBS=1)
+		LDFLAGS=${SAVE_LDFLAGS}
+		if test "${HAVE_MESALIBS+set}" != set ; then
+			AC_MSG_RESULT(no)
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Cannot link against libMesaGL/GLU - disabling visualization support!)
+			AC_MSG_RESULT(Please specify the path to libMesaGL using --with-opengl-libs=DIR)
+			AC_MSG_RESULT()
+			USE_BALLVIEW=false
+		else
+			AC_MSG_RESULT(yes)
+		fi
 	fi
+fi
+if test "${USE_BALLVIEW}" = true ; then
 	if test "${BALLVIEW_PLATFORM}" = OpenGL ; then
 		if test "${OPENGL_LIBS}" != "/usr/lib" ; then
 			BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${OPENGL_LIBS} -lGLU -lGL"
@@ -1577,17 +1645,53 @@ if test "${USE_BALLVIEW}" = true ; then
 			OPENGL_PATH=""
 			OPENGL_LIBS="-lGLU -lGL"
 		fi
-	fi
-	
-	if test "${x_libraries}" != "/usr/lib" ; then
-		BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${x_libraries} -lXmu -lXt -lX11"
-		X11_PATH="-L${x_libraries}"
-	else
-		BALLVIEW_LIBS="${BALLVIEW_LIBS} -lXmu -lXt -lX11"
-		X11_PATH=""
+		AC_MSG_CHECKING(linking against OpenGL libraries)
+		SAVE_LDFLAGS=${LDFLAGS}
+		LDFLAGS="${LDFLAGS} ${OPENGL_LIBS}"
+		AC_TRY_LINK([],[],OPENGL_LINKING_OK=1)
+		LDFLAGS=${SAVE_LDFLAGS}
+		if test "${OPENGL_LINKING_OK+set}" != set ; then
+			AC_MSG_RESULT(no)
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Cannot link against libGL/GLU - disabling visualization support!)
+			AC_MSG_RESULT(Please specify the path to OpenGL libraries using --with-opengl-libs=DIR)
+			AC_MSG_RESULT()
+			USE_BALLVIEW=false
+		else
+			AC_MSG_RESULT(yes)
+		fi
 	fi
 fi
-
+	
+if test "${USE_BALLVIEW}" = true ; then
+	if test "${QT_LIBS}" != "/usr/lib" ; then
+		BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${QT_LIBS} -lqgl -lqt"
+		QT_PATH="-L${QT_LIBS}"
+		QT_LIBS="-L${QT_LIBS} -lqgl -lqt}"
+	else 
+		BALLVIEW_LIBS="${BALLVIEW_LIBS} -lqgl -lqt"
+		QT_PATH=""
+		QT_LIBS="-lqgl -lqt"
+	fi
+fi
+if test "${USE_BALLVIEW}" = true ; then
+	AC_MSG_CHECKING(linking against QT libraries)
+	SAVE_LIBS=${LIBS}
+	LIBS="${LIBS} ${QT_PATH} -lqgl -lqt ${OPENGL_PATH} ${OPENGL_LIBS} ${X11_PATH} ${X_LIBS}"
+	AC_TRY_LINK([const char* qGLVersion();], [qGLVersion();], QT_LINKING_OK=1)
+	LDFLAGS=${SAVE_LDFLAGS}
+	if test "${QT_LINKING_OK+set}" != set; then
+		AC_MSG_RESULT(no)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Cannot link agains libqgl/qt - disabling support for visualization!)
+		AC_MSG_RESULT(If qt is installed, please specify the path to the library)
+		AC_MSG_RESULT(using the option --with-qt-libs=DIR)
+		AC_MSG_RESULT()
+		USE_BALLVIEW=false
+	else
+		AC_MSG_RESULT(yes)
+	fi
+fi
 
 BALL_INCLUDES="-I$BALL_PATH/include"
 
@@ -1644,9 +1748,6 @@ fi
 LIBS="${LIBS} -lm"
 BALLVIEW_LIBS="${BALLVIEW_LIBS} -lm"
 
-AC_MSG_RESULT(Use the following additional libraries for linking: ${LIBS})
-
-
 BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL"
 if test "${USE_BALLVIEW}" = true ; then
 	BALLVIEW_INCLUDES="${BALL_INCLUDES} ${BALLVIEW_INCLUDES}"
@@ -1673,7 +1774,7 @@ dnl    Don't try to find out how this bad hack works...
 dnl
 
 AC_PATH_PROG(DIRNAME,dirname,no)
-AC_MSG_CHECKING(for ${CXX} header files...)
+AC_MSG_CHECKING(for standard include path...)
 echo "#include <iostream.h>" >/tmp/$$.test.C
 LINES=`${CXX} -E /tmp/$$.test.C | egrep /iostream.h\"`
 ${RM} /tmp/$$.test.C
@@ -1695,7 +1796,7 @@ if test "${DIRNAME}" = no ; then
 else
 	STD_CPP_INCLUDES=`dirname $TEST`
 fi
-AC_MSG_RESULT((${STD_CPP_INCLUDES}))
+AC_MSG_RESULT(done)
 STD_CPP_INCLUDES="-I${STD_CPP_INCLUDES} -I/usr/include"
 
 

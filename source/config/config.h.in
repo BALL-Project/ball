@@ -44,18 +44,18 @@
 #define BALL_SUPPORT_OBJECT_MANAGER
 
 // define architecture
-#undef SPARC
-#undef MIPS
-#undef I386
-#undef ALPHA
+#undef BALL_ARCH_SPARC
+#undef BALL_ARCH_MIPS
+#undef BALL_ARCH_I386
+#undef BALL_ARCH_ALPHA
 
 //define OS
-#undef LINUX
-#undef SOLARIS
-#undef SUNOS
-#undef IRIX
-#undef IRIX32
-#undef IRIX64
+#undef BALL_OS_LINUX
+#undef BALL_OS_SOLARIS
+#undef BALL_OS_SUNOS
+#undef BALL_OS_IRIX
+#undef BALL_OS_IRIX32
+#undef BALL_OS_IRIX64
 
 
 // Define if you have the inet_aton function.  
