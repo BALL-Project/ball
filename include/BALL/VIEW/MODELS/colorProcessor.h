@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.3 2003/08/29 15:36:49 amoll Exp $
+// $Id: colorProcessor.h,v 1.4 2003/10/15 14:23:58 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
 #define BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -32,13 +32,10 @@ namespace BALL
 	{
 				
 		/** ColorProcessor class.
-				The class ColorProcessor is used for calculating
-				a ColorRGBA for each given Atom object. A ColorMap is used
-				to store the colors with a given name. That name will be calculated by the method
+				The class ColorProcessor is used for calculating a ColorRGBA for each given GeometricObject. 
+				A ColorMap is used to map colors to names. These names will be calculated by the method
 				calculateKey from the given object. If a name is not inserted into the 
 				color map a default color	will be returned. 
-				This class and their derived classes will be used by the model processors to
-				calculate a color for each Atom object they process. \par
 		*/
 		class ColorProcessor
 			: public UnaryProcessor<GeometricObject*>
@@ -50,14 +47,16 @@ namespace BALL
 			//@{
 				
 			/**	ColorMap type.
-					Define the type of a colorMap. A colorMap is a string hash map from strings
-					to ColorRGBA objects.
+					Define the type of a ColorMap as a StringHashMap to ColorRGBA objects.
 					\see   StringHashMap
 					\see   ColorRGBA
 			*/
 			typedef StringHashMap<ColorRGBA>	ColorMap;
 
-			//@} /**	@name	Constructors */	//@{
+			//@} 
+			/**	@name	Constructors 
+			*/	
+			//@{
 
 			/** Default Constructor.
 			*/
@@ -69,7 +68,10 @@ namespace BALL
 			ColorProcessor(const ColorProcessor& color_calculator)
 				throw();
 
-			//@} /** @name Destructors */ //@{
+			//@} 
+			/** @name Destructors 
+			*/ 
+			//@{
 
 			/** Destructor.
 			*/
@@ -89,31 +91,17 @@ namespace BALL
 			//@} /**	@name	Asignment */ //@{
 
 			/** Assignment.
-					The colors and the colorMap of this are initialized to the colors and 
-					the colorMap of the	ColorProcessor <b> color_calculator</b>.
-					\param       color_calculator the ColorProcessor to be copied 
-					\see         color_
-					\see         default_color_
-					\see         color_map_
 			*/
 			void set(const ColorProcessor& color_calculator)
 				throw();
 
 			/** Assignment operator.
 					Calls set.
-					The colors and the colorMap of this are initialized to the colors and 
-					the colorMap of the ColorProcessor <b> color_calculator</b>. 
-					\param       color_calculator the ColorProcessor to be copied
-					\return      ColorProcessor& constant reference of this ColorProcessor
-					\see         set
 			*/
 			const ColorProcessor&  operator = (const ColorProcessor& color_calculator)
 				throw();
 
 			/** Swapping of ColorProcessor's.
-					Calls ColorRGBA::swap.
-					Calls StringHashMap::swap.
-					\param       color_calculator the ColorProcessor being swapped with this ColorProcessor 
 			*/
 			void swap(ColorProcessor&  color_calculator)
 				throw();
@@ -123,9 +111,7 @@ namespace BALL
 			/** Change the default color.
 					If the object given to the visit method has a name that is not inserted
 					into the color_map_ the default color will be written into the variable
-					color_. So the method getColor always returns a valid color.
-					\param color the new default color.
-					\see   getDefaultColor
+					color_. 
 			*/
 			void setDefaultColor(const ColorRGBA& color)
 				throw() {default_color_ = color;}
@@ -165,26 +151,18 @@ namespace BALL
 					\see    calculateKey
 					\see    getColor
 			*/
-			virtual Processor::Result operator() (GeometricObject*& object)
-			{ object->setColor(color_); return Processor::CONTINUE;}
+			virtual Processor::Result operator() (GeometricObject*& object);
 
 			///
 			virtual Processor::Result operator() (const Composite* composite);
 
-			/** Calculate a key to an atom.
-					This method can be overridden to calculate a string key of the Atom object.
-					In this implementation the key of <b> atom</b> is the symbol of the element of the
-					Atom object.
-					This calculated key will be used to access the ColorMap to store a
-					ColorRGBA for the given Atom object.
-					\param  atom the Atom object for which a string key should be calculated
-					\return String& a constant reference to a string key
-					\see    visit
-			*/
-			virtual const String& calculateKey(const Atom& atom) const
-				throw() {return atom.getElement().getSymbol();}
+			///
+			void getColor(const String& key); 
 
-			//@} /**	@name	debuggers and diagnostics */ //@{
+			//@} 
+			/**	@name	debuggers and diagnostics 
+			*/ 
+			//@{
 
 			/** Internal value dump.
 					Dump the current state of this ColorProcessor to 
@@ -197,7 +175,10 @@ namespace BALL
 
 			protected:
 			
-			//@} /** @name Protected member variables */ //@{
+			//@} 
+			/** @name Protected member variables 
+			*/ 
+			//@{
 
 			/** Access to the colorMap.
 					This variable contains all ColorRGBA object that are inserted with a certain name.
@@ -222,7 +203,6 @@ namespace BALL
 			//@}
 		};
 
-	} // namespace VIEW
-} // namespace BALL
+} } // namespaces
 
 #endif // BALL_VIEW_MODELS_COLORPROCESSOR_H
