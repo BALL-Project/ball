@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.27 2000/09/16 08:32:23 oliver Exp $
+// $Id: string.C,v 1.28 2000/09/16 10:33:04 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -14,6 +14,7 @@ using std::istream;
 using std::strstream;
 using std::endl;
 using std::ends;
+using std::vector;
 
 namespace BALL 
 {
