@@ -1,4 +1,4 @@
-// $Id: SESFace.h,v 1.8 2001/02/23 02:40:45 amoll Exp $
+// $Id: SESFace.h,v 1.9 2001/02/27 21:32:07 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -308,7 +308,7 @@ namespace BALL
 				TSESVertex<T>* p3;
 				TSESVertex<T>* p4;
 				TSESVertex<T>* p5;
-				Index i = 0;
+				Position i = 0;
 				while (edge[i]->type != 0)
 				{
 					i++;
@@ -324,7 +324,7 @@ namespace BALL
 				edge3 = edge[i];								// edge3 = second convex edge
 				p3 = edge3->vertex1;
 				p5 = edge3->vertex2;
-				for (Position i = 0; i < edge.size(); i++)
+				for (i = 0; i < edge.size(); i++)
 				{
 					if ((edge[i]->vertex1 == p0) && (edge[i] != edge0))
 					{
@@ -340,7 +340,7 @@ namespace BALL
 						}
 					}
 				}
-				for (Position i = 0; i < edge.size(); i++)
+				for (i = 0; i < edge.size(); i++)
 				{
 					if (((edge[i]->vertex1 == p1) && (edge[i]->vertex2 == p2)) ||
 							((edge[i]->vertex2 == p1) && (edge[i]->vertex1 == p2))		)
@@ -348,7 +348,7 @@ namespace BALL
 						edge2 = edge[i];
 					}
 				}
-				for (Position i = 0; i < edge.size(); i++)
+				for (i = 0; i < edge.size(); i++)
 				{
 					if ((edge[i]->vertex1 == p3) && (edge[i] != edge3))
 					{
@@ -364,7 +364,7 @@ namespace BALL
 						}
 					}
 				}
-				for (Position i = 0; i < edge.size(); i++)
+				for (i = 0; i < edge.size(); i++)
 				{
 					if (((edge[i]->vertex1 == p5) && (edge[i]->vertex2 == p4)) ||
 							((edge[i]->vertex2 == p5) && (edge[i]->vertex1 == p4))		)
@@ -394,7 +394,6 @@ namespace BALL
 				vertex[4] = p4;
 				vertex[5] = p5;
 			}
-					//cout << *this << "\n";
 		}
 
 		//@}
