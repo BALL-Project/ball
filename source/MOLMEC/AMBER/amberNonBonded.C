@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.8 2002/05/14 23:27:44 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.9 2002/05/22 22:56:50 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -6,8 +6,6 @@
 #include <BALL/MOLMEC/COMMON/support.h>
 
 using namespace std;
-
-#define NEW_STYLE
 
 // define a macro for the square function
 #define SQR(x) ((x) * (x))
@@ -24,6 +22,7 @@ namespace BALL
 			non_bonded_(),
 			is_hydrogen_bond_(),
 			number_of_1_4_(0),
+			number_of_h_bonds_(0),
 			cut_off_(0.0),
 			cut_off_vdw_(0.0),
 			cut_on_vdw_(0.0),
@@ -52,6 +51,7 @@ namespace BALL
 			non_bonded_(),
 			is_hydrogen_bond_(),
 			number_of_1_4_(0),
+			number_of_h_bonds_(0),
 			cut_off_(0.0),
 			cut_off_vdw_(0.0),
 			cut_on_vdw_(0.0),
@@ -80,6 +80,7 @@ namespace BALL
 			non_bonded_(component.non_bonded_),
 			is_hydrogen_bond_(component.is_hydrogen_bond_),
 			number_of_1_4_(component.number_of_1_4_),
+			number_of_h_bonds_(component.number_of_h_bonds_),
 			cut_off_(component.cut_off_),
 			cut_off_vdw_(component.cut_off_vdw_),
 			cut_on_vdw_(component.cut_on_vdw_),
@@ -122,6 +123,7 @@ namespace BALL
 		non_bonded_ = anb.non_bonded_;
 		is_hydrogen_bond_ = anb.is_hydrogen_bond_;
 		number_of_1_4_ = anb.number_of_1_4_;
+		number_of_h_bonds_ = anb.number_of_h_bonds_;
 		cut_off_ = anb.cut_off_;
 		cut_off_vdw_ = anb.cut_off_vdw_;
 		cut_on_vdw_ = anb.cut_on_vdw_;
@@ -147,6 +149,7 @@ namespace BALL
 		non_bonded_.clear();
 		is_hydrogen_bond_.clear();
 		number_of_1_4_ = 0;
+		number_of_h_bonds_ = 0;
 		cut_off_ = 0.0;
 		cut_off_vdw_ = 0.0;
 		cut_on_vdw_ = 0.0;
@@ -160,9 +163,6 @@ namespace BALL
 		algorithm_type_ = MolmecSupport::HASH_GRID;
 		van_der_waals_.clear();
 		hydrogen_bond_.clear();
-
-		// ?????: missing OCI
-		// ForceFieldComponent::clear();
 	}
 
 
@@ -256,7 +256,7 @@ namespace BALL
 					AmberFF::Default::VDW_CUTON);
 
 		// when using periodic boundary conditions, all
-		// cutoffs must be smaller than the smalles linear extension of
+		// cutoffs must be smaller than the smallest linear extension of
 		// the box - we use the minimum image convention!
 		if (getForceField()->periodic_boundary.isEnabled())
 		{
@@ -451,9 +451,9 @@ namespace BALL
 					if (!hydrogen_bond.hasParameters(type_atom1, type_atom2))
 					{
 						Log.error() << "AmberNonBonded::setup(): "
-							<< "cannot find vdw parameters for types "
-							<< atom1->getTypeName() << "-" << atom2->getTypeName() 
-							<< " (" << atom1->getFullName() << "-" << atom2->getFullName() << ")" << endl;
+												<< "cannot find vdw parameters for types "
+												<< atom1->getTypeName() << "-" << atom2->getTypeName() 
+												<< " (" << atom1->getFullName() << "-" << atom2->getFullName() << ")" << endl;
 						tmp.values.A = 0;
 						tmp.values.B = 0;
 					}
@@ -500,171 +500,87 @@ namespace BALL
 
 		// now check for hydrogen bonds
 		// parameters for hydrogen bonds are used, if they exist
-		// and the two atoms are not vicinal (1-4)
-		Size count = 0;
+		// and the two atoms are not vicinal (1-4).
+		// We make sure that the H-bond parameters are all at the
+		// end of the pair list.
 		Potential1210::Values values;
-		for (Size i = number_of_1_4_; i < non_bonded_.size(); ++i)
+		number_of_h_bonds_ = 0;
+		Position first_h_bond = non_bonded_.size(); 
+		for (Position i = number_of_1_4_; i < first_h_bond; )
 		{
+			// Retrieve the two atom types...
 			type_atom1 = non_bonded_[i].atom1->type;
 			type_atom2 = non_bonded_[i].atom2->type;
-			is_hydrogen_bond_.push_back((char)hydrogen_bond.hasParameters(type_atom1,	type_atom2));
-			if (is_hydrogen_bond_.back() == (char)true)
+
+			// and figure out whether we have suitable H-bond parameters.
+			bool is_hydrogen_bond = hydrogen_bond.hasParameters(type_atom1,	type_atom2);	
+			if (is_hydrogen_bond)
 			{
+				// OK, it's an H-bond pair. Retrieve its parameters and assign them.
 				hydrogen_bond.assignParameters(values, type_atom1, type_atom2);
 				non_bonded_[i].values.A = values.A;
 				non_bonded_[i].values.B = values.B;
-				count++;
+
+				// Note this as an H-bond.
+				number_of_h_bonds_++;
+
+				// ...and swap it to the end of the pair list.
+				first_h_bond--;
+				swap(non_bonded_[i], non_bonded_[first_h_bond]);				
+			}	
+			else
+			{
+				// No H-bond, get the next pair.
+				is_hydrogen_bond_.push_back(false);
+				i++;
 			}
 		}		
+		// Fill the is_hydrogen_bond_ vector with the reamining pairs
+		// (H-bonds only)
+		for (Position i = first_h_bond; i < non_bonded_.size(); i++)
+		{
+			is_hydrogen_bond_.push_back(true);
+		}
 	}
 
-
-	BALL_INLINE
+	// Determine the closest pair of images under cubic periodic 
+	// boundary conditions.
+	inline
 	void AMBERcalculateMinimumImage(Vector3& difference, const Vector3& period)
 		throw()
 	{
-		Vector3 half_period(period * 0.5);
+		// half the period of the cell
+		float half_period_x = period.x * 0.5;
+		float half_period_y = period.y * 0.5;
+		float half_period_z = period.z * 0.5;
 
-		if (difference.x <= -half_period.x)
+		if (difference.x <= -half_period_x)
 		{
 			difference.x += period.x;
 		}
-		else 
+		else if (difference.x > half_period_x)
 		{
-			if (difference.x > half_period.x)
-			{
-				difference.x -= period.x;
-			}
+			difference.x -= period.x;
 		}
 
-		if (difference.y <= -half_period.y)
+		if (difference.y <= -half_period_y)
 		{
 			difference.y += period.y;
 		}
-		else 
+		else if (difference.y > half_period_y)
 		{
-			if (difference.y > half_period.y)
-			{
-				difference.y -= period.y;
-			}
+			difference.y -= period.y;
 		}
 
-		if (difference.z <= -half_period.z)
+		if (difference.z <= -half_period_z)
 		{
 			difference.z += period.z;
 		}
-		else 
+		else if (difference.z > half_period_z)
 		{
-			if (difference.z > half_period.z)
-			{
-				difference.z -= period.z;
-			}
+			difference.z -= period.z;
 		}
 	}
-
-	// This function AMBERcalculates the energies resulting from Van-der-
-	// Waals and electrostatic interactions between a pair of non-bonded
-	// atoms.
-
-	BALL_INLINE
-	void AMBERcalculateNBEnergy
-		(LennardJones::Data& LJ_data,
-		 const Vector3& period, 
-		 const double cut_off_vdw_2, 
-		 const double cut_on_vdw_2, 
-		 const double inverse_distance_off_on_vdw_3,
-		 const double cut_off_electrostatic_2,
-		 const double cut_on_electrostatic_2, 
-		 const double inverse_distance_off_on_electrostatic_3,
-		 double& vdw_energy, 
-		 double& electrostatic_energy, 
-	   bool is_hydrogen_bond, 
-		 bool use_periodic_boundary, 
-		 bool use_dist_depend)
-  {
-		// useful aliases
-		Atom::StaticAtomAttributes& atom1(*LJ_data.atom1);
-		Atom::StaticAtomAttributes& atom2(*LJ_data.atom2);
-
-    if (is_hydrogen_bond) std::cout << "ISHBOND: " << atom1.position << " - " << atom2.position << std::endl;
-
-		Vector3 difference(atom1.position - atom2.position);
-
-		if (use_periodic_boundary == true)
-		{
-			// calculate the minimum image 
-			AMBERcalculateMinimumImage(difference, period); 
-		}
-
-		// the squared distance between the two atoms 
-		double distance_2 = difference.getSquareLength();
-
-		if (distance_2 != 0.0)
-		{
-			double inverse_distance_2 = 1.0 / distance_2;
-			double tmp_energy; 
-
-			if (distance_2 <= cut_off_electrostatic_2) 
-			{
-
-				tmp_energy = atom1.charge * atom2.charge;
-
-				// differentiate between constant dielectric and distance dependent
-				if (use_dist_depend)
-				{
-					tmp_energy *= inverse_distance_2 * 0.25;
-				}
-				else
-				{
-					// use constant dielectric constant  
-					tmp_energy *= sqrt(inverse_distance_2);
-				}
-
-				if (distance_2 >= cut_on_electrostatic_2)
-				{
-					// we use the following switch fuction:
-					// 
-          //         (r_{off}^2 - R^2)^2 (r_{off}^2 + 2 R^2 - 3r_{on}^2)
-          // sw(R) = ---------------------------------------------------
-          //                    (r_{off}^2 - r_{on}^2)^3
- 
-          tmp_energy *= SQR(cut_off_electrostatic_2 - distance_2) 
-													* (cut_off_electrostatic_2 + 2.0 * distance_2 - 3.0 * cut_on_electrostatic_2)
-													* inverse_distance_off_on_electrostatic_3;
-				}
-
-				electrostatic_energy += tmp_energy;
-			}
-
-			if (distance_2 <= cut_off_vdw_2) 
-			{
-				if (!is_hydrogen_bond)
-				{
-					double inverse_distance_6 = inverse_distance_2 * inverse_distance_2 
-																				* inverse_distance_2;
-
-					tmp_energy = inverse_distance_6 * (inverse_distance_6 * LJ_data.values.A - LJ_data.values.B); 
-				} 
-				else 
-				{
-					double inverse_distance_10 = inverse_distance_2 * inverse_distance_2 
-																* inverse_distance_2 * inverse_distance_2 * inverse_distance_2;
-
-					tmp_energy = inverse_distance_10 * (LJ_data.values.A * inverse_distance_2 - LJ_data.values.B );          
-				}
-
-				// employ the switch funtion between cut_on_vdw and cut_off_vdw
-				if (distance_2 >= cut_on_vdw_2)
-				{
-					tmp_energy *= SQR(cut_off_vdw_2 - distance_2) 
-													* (cut_off_vdw_2 + 2.0 * distance_2 - 3.0 * cut_on_vdw_2)
-													* inverse_distance_off_on_vdw_3;
-				}
-				vdw_energy += tmp_energy;
-			}
-		}
-	}	// end  of function AMBERcalculateNBEnergy() 
-
 
 	struct SwitchingCutOnOff
 	{
@@ -698,6 +614,13 @@ namespace BALL
 		return (inv_dist_6 * (inv_dist_6 * A - B)); 
 	}
 
+	inline float vdwTenTwelve(float inverse_square_distance, float A, float B)
+	{
+		register float inv_dist_10 = inverse_square_distance * inverse_square_distance;
+		inv_dist_10 *= inv_dist_10 * inverse_square_distance;
+		return (inv_dist_10 * (inverse_square_distance * A - B)); 
+	}
+
 	typedef float (*ESEnergyFunction) (float square_dist, float q1_q2);
 	typedef float (*VdWEnergyFunction) (float square_dist, float A, float B);
 	typedef float (*SwitchingFct) (double square_distance, const SwitchingCutOnOff& cutoffs);
@@ -705,8 +628,7 @@ namespace BALL
 	template <ESEnergyFunction ESEnergy, 
 						VdWEnergyFunction VdwEnergy,
 						SwitchingFct Switch>
-	inline
-	void AmberNBEnergy
+	inline void AmberNBEnergy
 		(LennardJones::Data* ptr, LennardJones::Data* end_ptr, 
 		 double& es_energy, double& vdw_energy, 
 		 const SwitchingCutOnOff& switching_es, const SwitchingCutOnOff& switching_vdw)
@@ -733,8 +655,8 @@ namespace BALL
 	inline float switchMultiplier(double square_distance, const SwitchingCutOnOff& cutoffs)
 	{
 		float below_off = ((square_distance < cutoffs.cutoff_2) ? 1.0 : 0.0);
-		float below_on = ((square_distance >= cutoffs.cuton_2) ? 1.0 : 0.0);
-		return 1.0; // ???below_off * (below_on + (1.0 - below_on) * Switch(square_distance, cutoffs));
+		float below_on = ((square_distance < cutoffs.cuton_2) ? 1.0 : 0.0);
+		return below_off * (below_on + (1.0 - below_on) * Switch(square_distance, cutoffs));
 	}
 
 	inline float cutoffSwitch(double square_distance, const SwitchingCutOnOff& cutoffs)
@@ -745,17 +667,17 @@ namespace BALL
 	template <ESEnergyFunction ESEnergyFct, 
 						VdWEnergyFunction VdwEnergyFct,
 						SwitchingFct Switch>
-	inline 
-	void AmberNBEnergyPeriodic
+	inline void AmberNBEnergyPeriodic
 		(LennardJones::Data* ptr, LennardJones::Data* end_ptr, 
 		 double& es_energy, double& vdw_energy, 
 		 const SwitchingCutOnOff& es_switching, const SwitchingCutOnOff& vdw_switching,
 		 const Vector3& period)
 	{
 		// iterate over all pairs
+		Vector3 difference;
 		for (; ptr != end_ptr; ++ptr)
 		{
-			Vector3 difference(ptr->atom1->position - ptr->atom2->position);
+			difference = ptr->atom1->position - ptr->atom2->position;
 			AMBERcalculateMinimumImage(difference, period);
 
 			// compute the square distance and correct for periodic boundary if necessary
@@ -766,6 +688,9 @@ namespace BALL
 			vdw_energy += VdwEnergyFct(inverse_square_distance, ptr->values.A, ptr->values.B) * Switch(square_distance, vdw_switching);
 		}
 	}
+
+	
+	
 
 	// This  function AMBERcalculates the force vector
 	// resulting from non-bonded interactions between two atoms 
@@ -831,7 +756,7 @@ namespace BALL
 				if (distance_2 > cut_on_electrostatic_2)
 				{
 
-					// the switch function is defined as follows:
+					// the switching function is defined as follows:
 					//         (r_{off}^2 - R^2)^2 (r_{off}^2 + 2 R^2 - 3r_{on}^2)
 					// sw(R) = ---------------------------------------------------
 					//                    (r_{off}^2 - r_{on}^2)^3
@@ -850,10 +775,10 @@ namespace BALL
 
 					// First, multiply the current force with the switching function
 					factor *= SQR(difference_to_off) 
-						* (cut_off_electrostatic_2 
-								+ 2.0 * distance_2 
-								- 3.0 * cut_on_electrostatic_2)
-						* inverse_distance_off_on_electrostatic_3;
+									* (cut_off_electrostatic_2 
+										 + 2.0 * distance_2 
+										 - 3.0 * cut_on_electrostatic_2)
+									* inverse_distance_off_on_electrostatic_3;
 
 					// Second, we add the product of the energy and the derivative
 					// of the switching function (the total force is the derivative of
@@ -865,9 +790,9 @@ namespace BALL
 
 					double derivative_of_switch 
 						= 12.0
-						* difference_to_off 
-						* difference_to_on
-						* inverse_distance_off_on_electrostatic_3;
+							* difference_to_off 
+							* difference_to_on
+							* inverse_distance_off_on_electrostatic_3;
 
 					// calculate the electrostatic energy
 
@@ -959,20 +884,7 @@ namespace BALL
 	} // end of function 	AMBERcalculateNBForce()
 
 
-	// define a convenient shorthand for the constant
-	// parameters to AMBERcalculateNBEnergy
-	#define ENERGY_PARAMETERS\
-		period,\
-		cut_off_vdw_2,\
-		cut_on_vdw_2,\
-		inverse_distance_off_on_vdw_3_,\
-		cut_off_electrostatic_2,\
-		cut_on_electrostatic_2,\
-		inverse_distance_off_on_electrostatic_3_
-
-
-	// This method AMBERcalculates the current energy resulting from
-	// non-bonded interactions 
+	// Compute the non-bonded energy (i.e. electrostatic, vdW, and H-bonds)
 	double AmberNonBonded::updateEnergy()
 		throw()
 	{
@@ -982,187 +894,113 @@ namespace BALL
 		double cut_on_electrostatic_2 = SQR(cut_on_electrostatic_);
 		double cut_on_vdw_2 = SQR(cut_on_vdw_);
 
-		#ifdef NEW_STYLE
-			SwitchingCutOnOff cutoffs_es 
-				= { cut_off_electrostatic_2, cut_on_electrostatic_2, inverse_distance_off_on_electrostatic_3_};
-			SwitchingCutOnOff cutoffs_vdw 
-				= { cut_off_vdw_2, cut_on_vdw_2, inverse_distance_off_on_vdw_3_};
-		#endif
+		SwitchingCutOnOff cutoffs_es 
+			= { cut_off_electrostatic_2, cut_on_electrostatic_2, inverse_distance_off_on_electrostatic_3_ };
+		SwitchingCutOnOff cutoffs_vdw 
+			= { cut_off_vdw_2, cut_on_vdw_2, inverse_distance_off_on_vdw_3_ };
 
 		// Define the different components of the non-bonded energy
-		double vdw_energy = 0;
-		double vdw_energy_1_4 = 0;
-		double electrostatic_energy = 0;
-		double electrostatic_energy_1_4 = 0;
+		double vdw_energy = 0.0;
+		double vdw_energy_1_4 = 0.0;
+		double hbond_energy = 0.0;
+		double electrostatic_energy = 0.0;
+		double electrostatic_energy_1_4 = 0.0;
 
-		Vector3 period;
-		vector<LennardJones::Data>::iterator it; 
-		Size i;                                                                                       
-
+		static Vector3 period;
 		bool use_periodic_boundary = force_field_->periodic_boundary.isEnabled(); 
-
-		// calculate energies arising from 1-4 interaction pairs 
-		// and remaining non-bonded interaction pairs 
-		if (use_periodic_boundary && use_dist_depend_dielectric_)
+		if (use_periodic_boundary)
 		{
-			// Periodic boundary is enabled and use distance dependent dielectric 
-
 			// calculate the box period (half of the box period)
-			Box3 box = force_field_->periodic_boundary.getBox();
+			const Box3& box = force_field_->periodic_boundary.getBox();
 			period = box.b - box.a;
-
-			#ifdef NEW_STYLE
-				AmberNBEnergyPeriodic<distanceDependentCoulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
-					(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4,
-					 cutoffs_es, cutoffs_vdw, period);
-				AmberNBEnergyPeriodic<distanceDependentCoulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
-					(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy, 
-					 cutoffs_es, cutoffs_vdw, period);
-			#else
-				// first evaluate 1-4 non-bonded pairs 
-				for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
-				{
-					AMBERcalculateNBEnergy		
-						(*it, ENERGY_PARAMETERS, 
-						 vdw_energy_1_4, electrostatic_energy_1_4, 
-						 false, true, true);
-				}
-
-				// evaluate remaining non-bonded pairs (also in the same vector) 
-				for (i = 0; it != non_bonded_.end(); ++it, i++)  
-				{                                                                                            
-					AMBERcalculateNBEnergy
-						(*it, ENERGY_PARAMETERS, 
-						 vdw_energy, electrostatic_energy, 
-						 (bool)is_hydrogen_bond_[i], true, true);
-				}
-			#endif
 		}
-		else	
+
+		// Compute the individual contributions to the non-bonded energy
+		// (in that order):
+		//  - all 1-4 interactions (vdW + electrostatics)
+		//  - all 1-4 vdW pairs + electrostatics
+		//  - all H-bonds and electrostatics
+		//
+		// The non-bonded pairs are stored in that order in the non-bonded vector.
+		// We only have to call the templatized energy functions.
+		// For the functional form, we have to consider four major cases,
+		// depending on the presence of periodic boundary conditions
+		// and the use of a distance-dependent dielectric constant.
+		// The first results in the use of AmberNBEnergyPeriodic
+		// instead of AmberNBEnergy, the latter in the use of distanceDependentCoulomb
+		// instead of coulomb for the electrostatic energy.
+		if (!use_periodic_boundary && !use_dist_depend_dielectric_)
 		{
-			if (use_periodic_boundary && !use_dist_depend_dielectric_)
-			{
-				// Periodic boundary is enabled and use a constant dielectric 
-				// calculate the box period (half of the box period)
-				Box3 box = force_field_->periodic_boundary.getBox();
-				period = box.b - box.a;
-
-				#ifdef NEW_STYLE
-					AmberNBEnergyPeriodic<coulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
-						(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4, 
-						 cutoffs_es, cutoffs_vdw, period);
-					AmberNBEnergyPeriodic<coulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
-						(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy, 
-						 cutoffs_es, cutoffs_vdw, period);
-				#else
-					// first evaluate 1-4 non-bonded pairs 
-					for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
-					{
-						AMBERcalculateNBEnergy
-							(*it, ENERGY_PARAMETERS,
-							 vdw_energy_1_4, electrostatic_energy_1_4, 
-							 false, true, false);
-					}                                                                                    
-
-					// evaluate remaining non-bonded pairs (also in the same vector) 
-					for (i = 0; it != non_bonded_.end(); ++it, i++)  
-					{                                                                                    
-						AMBERcalculateNBEnergy
-							(*it, ENERGY_PARAMETERS,
-							 vdw_energy, electrostatic_energy, 
-							 (bool)is_hydrogen_bond_[i], true, false);            
-					}
-				#endif
-			}
-			else
-			{
-				if (!use_periodic_boundary && use_dist_depend_dielectric_)
-				{
-					// no periodic boundary enabled but use distance dependent
-					// dielectric  
-
-					// first evaluate 1-4 non-bonded pairs 
-					#ifdef NEW_STYLE
-						AmberNBEnergy<distanceDependentCoulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
-							(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4,
-							 cutoffs_es, cutoffs_vdw);
-
-						AmberNBEnergy<distanceDependentCoulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >	
-							(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy,
-							 cutoffs_es, cutoffs_vdw);
-					#else
-						for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
-						{
-							AMBERcalculateNBEnergy
-								(*it, ENERGY_PARAMETERS, 
-								 vdw_energy_1_4, electrostatic_energy_1_4, 
-								 false, false, true);
-						}
-
-						// evaluate remaining non-bonded pairs (also in the same vector) 
-						for (i = 0; it != non_bonded_.end(); ++it, i++)  
-						{                                                                                            
-							AMBERcalculateNBEnergy
-								(*it, ENERGY_PARAMETERS,
-								 vdw_energy, electrostatic_energy, 
-								 (bool)is_hydrogen_bond_[i], false, true);
-						}
-					#endif
-
-				}
-				else
-				{
-					// no periodic boundary enabled and use a constant dielectric 
-
-					#ifdef NEW_STYLE
-						AmberNBEnergy<coulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
-							(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4,
-							 cutoffs_es, cutoffs_vdw);
-						AmberNBEnergy<coulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
-							(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size()], electrostatic_energy, vdw_energy,
-							 cutoffs_es, cutoffs_vdw);
-					#else
-						// first evaluate 1-4 non-bonded pairs 
-						for (i = 0, it = non_bonded_.begin(); i < number_of_1_4_; ++it, i++)  
-						{
-							AMBERcalculateNBEnergy
-								(*it, ENERGY_PARAMETERS, 
-								 vdw_energy_1_4, electrostatic_energy_1_4, 
-								 false, false, false);
-						}
-
-						// evaluate remaining non-bonded pairs (also in the same vector) 
-						for (i = 0; it != non_bonded_.end(); ++it, i++)  
-						{
-							AMBERcalculateNBEnergy
-								(*it, ENERGY_PARAMETERS, 
-								 vdw_energy, electrostatic_energy, 
-								 (bool)is_hydrogen_bond_[i], false, false);
-						}
-					#endif
-				}				
-			}
-
-			// calculate the total energy and its contributions
-			using namespace Constants;
-			const double vdw_factor = 1.0;
-			vdw_energy_ 
-				= vdw_factor * (vdw_energy + scaling_vdw_1_4_ * vdw_energy_1_4);
-
-			double electrostatic_factor 
-				= NA * e0 * e0 * 1e7 / (4.0 * PI * VACUUM_PERMITTIVITY);
-			#ifdef NEW_STYLE
-				if (use_dist_depend_dielectric_)
-				{
-					// correct for the additional factor of four in the distance dependent case
-					electrostatic_factor *= 0.25;
-				}
-			#endif
-			electrostatic_energy_ = electrostatic_factor * 
-				(electrostatic_energy 
-				 + scaling_electrostatic_1_4_ * electrostatic_energy_1_4);
-			energy_ =  vdw_energy_ + electrostatic_energy_;
+			// no periodic boundary, constant dielectric
+			AmberNBEnergy<coulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
+				(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4,
+				 cutoffs_es, cutoffs_vdw);
+			AmberNBEnergy<coulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
+				(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size() - number_of_h_bonds_], electrostatic_energy, vdw_energy, 
+				 cutoffs_es, cutoffs_vdw);
+			AmberNBEnergy<coulomb, vdwTenTwelve, switchMultiplier<cubicSwitch> >
+				(&non_bonded_[non_bonded_.size() - number_of_h_bonds_], &non_bonded_[non_bonded_.size()], electrostatic_energy, hbond_energy, 
+				 cutoffs_es, cutoffs_vdw);
 		}
+		else if (!use_periodic_boundary && use_dist_depend_dielectric_)
+		{
+			// no periodic boundary, distance-dependent dielectric constant
+			AmberNBEnergy<distanceDependentCoulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
+				(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4,
+				 cutoffs_es, cutoffs_vdw);
+			AmberNBEnergy<distanceDependentCoulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
+				(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size() - number_of_h_bonds_], electrostatic_energy, vdw_energy, 
+				 cutoffs_es, cutoffs_vdw);
+			AmberNBEnergy<distanceDependentCoulomb, vdwTenTwelve, switchMultiplier<cubicSwitch> >
+				(&non_bonded_[non_bonded_.size() - number_of_h_bonds_], &non_bonded_[non_bonded_.size()], electrostatic_energy, hbond_energy, 
+				 cutoffs_es, cutoffs_vdw);
+		}
+		else if (use_periodic_boundary && !use_dist_depend_dielectric_)
+		{
+			// periodic boundary, constant dielectric
+			AmberNBEnergyPeriodic<coulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
+				(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4, 
+				 cutoffs_es, cutoffs_vdw, period);
+			AmberNBEnergyPeriodic<coulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
+				(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size() - number_of_h_bonds_], electrostatic_energy, vdw_energy, 
+				 cutoffs_es, cutoffs_vdw, period);
+			AmberNBEnergyPeriodic<coulomb, vdwTenTwelve, switchMultiplier<cubicSwitch> >
+				(&non_bonded_[non_bonded_.size() - number_of_h_bonds_], &non_bonded_[non_bonded_.size()], electrostatic_energy, hbond_energy, 
+				 cutoffs_es, cutoffs_vdw, period);
+		}
+		else
+		{
+			// periodic boundary, distance-dependent dielectric constant
+			AmberNBEnergyPeriodic<distanceDependentCoulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
+				(&non_bonded_[0], &non_bonded_[number_of_1_4_], electrostatic_energy_1_4, vdw_energy_1_4, 
+				 cutoffs_es, cutoffs_vdw, period);
+			AmberNBEnergyPeriodic<distanceDependentCoulomb, vdwSixTwelve, switchMultiplier<cubicSwitch> >
+				(&non_bonded_[number_of_1_4_], &non_bonded_[non_bonded_.size() - number_of_h_bonds_], electrostatic_energy, vdw_energy, 
+				 cutoffs_es, cutoffs_vdw, period);
+			AmberNBEnergyPeriodic<distanceDependentCoulomb, vdwTenTwelve, switchMultiplier<cubicSwitch> >
+				(&non_bonded_[non_bonded_.size() - number_of_h_bonds_], &non_bonded_[non_bonded_.size()], electrostatic_energy, hbond_energy, 
+				 cutoffs_es, cutoffs_vdw, period);
+		}
+
+		// calculate the total energy and its contributions
+		vdw_energy_ = ((vdw_energy + hbond_energy) + scaling_vdw_1_4_ * vdw_energy_1_4);
+
+		using namespace Constants;
+		double electrostatic_factor 
+						= NA * e0 * e0 * 1e7 / (4.0 * PI * VACUUM_PERMITTIVITY);
+
+		if (use_dist_depend_dielectric_)
+		{
+			// correct for the additional factor 1/4 in the distance dependent case
+			electrostatic_factor *= 0.25;
+		}
+
+		electrostatic_energy_ = electrostatic_factor * 
+			(electrostatic_energy + scaling_electrostatic_1_4_ * electrostatic_energy_1_4);
+
+		// sum up all energies
+		energy_ =  vdw_energy_ + electrostatic_energy_;
+
 		return energy_; 
   } // end of AmberNonBonded::updateEnergy 
 	
@@ -1201,7 +1039,7 @@ namespace BALL
 		// Conversion factors are 1e-10 for Angstrom -> m
 		// and Constants::e0 for the proton charge
 
-		const double	e_scaling_factor = Constants::e0 * Constants::e0 
+		const double e_scaling_factor = Constants::e0 * Constants::e0 
 																		/ (4 * Constants::PI * Constants::VACUUM_PERMITTIVITY * 1e-20); 
 		const double e_scaling_factor_1_4 = e_scaling_factor * scaling_electrostatic_1_4_;
 		const double vdw_scaling_factor = 1.0;
