@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.11 2003/08/27 14:09:39 amoll Exp $
+# $Id: Makefile,v 1.12 2003/08/27 14:35:37 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -14,11 +14,11 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	amberMinimizationDialog.C\
+	amberMinimizationDialogData.C\
 	atomProperties.C\
+	atomPropertiesData.C\
 	colorMeshDialog.C\
 	colorMeshDialogData.C\
-	contourSurfaceDialog.C\
-	contourSurfaceDialogData.C\
 	displayProperties.C\
 	displayPropertiesData.C\
 	FDPBDialog.C\
@@ -52,8 +52,9 @@ CPP_SOURCES=\
 
 MOC_SOURCES=\
 	amberMinimizationDialog_moc.C\
+	amberMinimizationDialogData_moc.C\
 	atomProperties_moc.C\
-	contourSurfaceDialog_moc.C\
+	atomPropertiesData_moc.C\
 	colorMeshDialog_moc.C\
 	colorMeshDialogData_moc.C\
 	displayProperties_moc.C\
@@ -91,7 +92,6 @@ UIC_SOURCES=\
 	amberMinimizationDialogData.C\
 	atomPropertiesData.C\
 	colorMeshDialogData.C\
-	contourSurfaceDialogData.C\
 	displayPropertiesData.C\
 	FDPBDialogData.C\
 	labelDialogData.C\
@@ -122,9 +122,6 @@ amberMinimizationDialog_moc.C:	$(HEADER_DIR)/amberMinimizationDialog.h
 
 atomProperties_moc.C:	$(HEADER_DIR)/atomProperties.h
 	$(MOC) $(HEADER_DIR)/atomProperties.h -o $@
-
-contourSurfaceDialog_moc.C:	$(HEADER_DIR)/contourSurfaceDialog.h
-	$(MOC) $(HEADER_DIR)/contourSurfaceDialog.h -o $@
 
 displayProperties_moc.C:	$(HEADER_DIR)/displayProperties.h
 	$(MOC) $(HEADER_DIR)/displayProperties.h -o $@

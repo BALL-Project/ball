@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.61 2003/08/27 14:09:35 amoll Exp $
+// $Id: mainframe.C,v 1.62 2003/08/27 14:35:37 amoll Exp $
 
 
 #include "mainframe.h"
@@ -120,9 +120,10 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 	md_dialog_ = new MolecularDynamicsDialog(this);
 	CHECK_PTR(md_dialog_);
 
+	/*
 	surface_dialog_ = new ContourSurfaceDialog(this);
 	CHECK_PTR(surface_dialog_);
-
+*/
 	label_dialog_ = new LabelDialog(this);
 	CHECK_PTR(label_dialog_);
 	
@@ -321,6 +322,7 @@ void Mainframe::calculateAmberEnergy()
 
 void Mainframe::computeSurface()
 {
+	/*
 	// execute the surface dialog
 	// and abort if cancel is clicked
 	if (surface_dialog_->exec() == 0)
@@ -345,6 +347,7 @@ void Mainframe::computeSurface()
 	message->setRepresentation(rep);
 	message->setType(RepresentationMessage::ADD);
 	notify_(message);
+	*/
 }
 
 void Mainframe::amberMinimization()

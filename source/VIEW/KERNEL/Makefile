@@ -6,6 +6,7 @@ CPP_SOURCES=\
   client.C\
   compositeManager.C\
   connectionObject.C\
+	events.C\
   geometricObject.C\
   information.C\
   mainControl.C\
