@@ -160,6 +160,7 @@ EXECUTABLES_SOLVATION = \
 	ClaverieParameter_test\
 	ReissCavFreeEnergyProcessor_test\
         UhligCavFreeEnergyProcessor_test\
+        PCMCavFreeEnergyProcessor_test\
 	Pair6_12RDFIntegrator_test\
 	Pair6_12InteractionEnergyProcessor_test\
 	PairExpInteractionEnergyProcessor_test\
