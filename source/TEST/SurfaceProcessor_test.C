@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SurfaceProcessor_test.C,v 1.1 2002/12/17 16:02:17 anker Exp $
+// $Id: SurfaceProcessor_test.C,v 1.2 2003/02/20 13:08:29 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,10 +10,11 @@
 #include <BALL/STRUCTURE/surfaceProcessor.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/HINFile.h>
+#include <BALL/DATATYPE/list.h>
 
 ///////////////////////////
 
-START_TEST(SurfaceProcessor, "$Id: SurfaceProcessor_test.C,v 1.1 2002/12/17 16:02:17 anker Exp $")
+START_TEST(SurfaceProcessor, "$Id: SurfaceProcessor_test.C,v 1.2 2003/02/20 13:08:29 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -49,7 +50,7 @@ CHECK(SurfaceProcessor / single atom)
 	infile.close();
 	TEST_EQUAL(system.countAtoms(), 1)
 	SurfaceProcessor proc;
-	system.apply(proc);
+	system.apply(*(UnaryProcessor<Atom>*)&proc);
 	Surface surface = proc.getSurface();
 	TEST_EQUAL(surface.getNumberOfTriangles(), 320)
 	TEST_EQUAL(surface.getNumberOfVertices(), 162)
@@ -62,12 +63,26 @@ CHECK(SurfaceProcessor / methane)
 	infile.close();
 	TEST_EQUAL(system.countAtoms(), 5)
 	SurfaceProcessor proc;
-	system.apply(proc);
+	system.apply(*(UnaryProcessor<Atom>*)&proc);
 	Surface surface = proc.getSurface();
 	TEST_EQUAL(surface.getNumberOfTriangles(), 422)
 	TEST_EQUAL(surface.getNumberOfVertices(), 213)
 RESULT
 
+CHECK(SurfaceProcessor / List)
+	SurfaceProcessor sp;
+	List<Atom*> composites;
+	Atom a, b;
+	b.setPosition(Vector3(2, 2, 2));
+	composites.apply(*(UnaryProcessor<Atom*>*)&sp);
+	TEST_EQUAL(sp.getSurface().getNumberOfTriangles(), 0)
+	TEST_EQUAL(sp.getSurface().getNumberOfVertices(), 0)
+	composites.push_back(&a);
+	composites.push_back(&b);
+	composites.apply(*(UnaryProcessor<Atom*>*)&sp);
+	TEST_EQUAL(sp.getSurface().getNumberOfTriangles(), 256)
+	TEST_EQUAL(sp.getSurface().getNumberOfVertices(), 130)
+RESULT
 
 /////////////////////////////////////////////////////////////
 END_TEST
