@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.30 2004/03/20 15:22:32 amoll Exp $
+// $Id: DCDFile.C,v 1.31 2004/03/25 10:38:29 amoll Exp $
 //
 
 #include <BALL/FORMAT/DCDFile.h>
@@ -62,9 +62,10 @@ namespace BALL
 			time_step_length_(0.0),
 			number_of_comments_(0)
 	{
-		if (!(open_mode & std::ios::binary))
+		if ((open_mode & std::ios::binary) == 0)
 		{
-			reopen(open_mode | std::ios::binary);
+			open_mode_ = (open_mode | std::ios::binary); 
+			reopen();
 		}
 		init();
 
