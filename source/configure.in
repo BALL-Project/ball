@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.19.4.2 2002/05/28 00:09:00 oliver Exp $
+dnl    $Id: configure.in,v 1.19.4.3 2002/05/29 18:08:25 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -806,7 +806,7 @@ dnl		operating systems and differentiate between gcc/egcs
 dnl
 if test "${IS_GXX}" = "true" ; then
 	AC_MSG_CHECKING(compiler version)
-	CXX_VERSION=`${CXX} --version | ${SED} -n 1p | ${SED} s/^[[^0-9]]*//`
+	CXX_VERSION=`${CXX} --version | ${SED} -n 1p | ${SED} ["]s/^[[^0-9]]*//["]`
 	if test `echo ${CXX_VERSION}|${CUT} -c1-4` = "egcs" ; then
 		IS_EGXX=true
 		CXX_NAME="egcs"
