@@ -1,7 +1,6 @@
-// $Id: glLineModel.C,v 1.4.4.1 2002/10/18 14:48:26 amoll Exp $
+// $Id: glLineModel.C,v 1.4.4.2 2002/10/19 14:21:40 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/FUNCTOR/glLineModel.h>
-
 
 namespace BALL
 {
@@ -27,8 +26,7 @@ namespace BALL
       throw()
  		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<AddGLLineModel>() << endl;
+				cout << "Destructing object " << (void*)this << " of class " << RTTI::getName<AddGLLineModel>() << endl;
 			#endif 
 
 			AddLineModel::destroy();
