@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.3 2000/08/28 08:10:26 oliver Exp $
+// $Id: parameterSection.C,v 1.4 2000/08/28 19:32:13 oliver Exp $
 //
 
 #include <BALL/FORMAT/parameterSection.h>
@@ -102,6 +102,10 @@ namespace BALL
 				}
 			}
 		}
+
+
+		// clear the old contents of variable_names_
+		variable_names_.clear();
 
 		//
 		// interpret the format line
