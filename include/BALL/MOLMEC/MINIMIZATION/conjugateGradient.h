@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.24 2003/03/26 13:56:42 anhi Exp $ 
+// $Id: conjugateGradient.h,v 1.25 2003/04/22 21:39:46 oliver Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -210,8 +210,10 @@ namespace BALL
 		*/
 		virtual void updateDirection();
 
+		// ???? What's the meaning of "result"?
 		/** Update the step size.
-		 */
+	
+		*/
 		virtual void updateStepSize(bool result);
 
     /**	Minimize the energy of the system.
