@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.6 2003/08/27 08:59:36 amoll Exp $
+# $Id: Makefile,v 1.7 2003/08/27 11:04:16 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -15,7 +15,6 @@ THISLIB=$(LIBNAME)
 CPP_SOURCES=\
 	amberMinimizationDialog.C\
 	atomProperties.C\
-	fileDialog.C\
 	preferences.C\
 	colorMeshDialog.C\
 	colorMeshDialogData.C\
@@ -25,8 +24,8 @@ CPP_SOURCES=\
 	displayPropertiesData.C\
 	dlgMoveOverlay.C\
 	dlgMoveOverlayData.C\
-	labelProperties.C\
-	labelPropertiesData.C\
+	labelDialog.C\
+	labelDialogData.C\
 	molecularDynamicsDialog.C\
 	molecularDynamicsDialogData.C\
 	snapShotVisualisation.C\
@@ -53,7 +52,6 @@ MOC_SOURCES=\
 	amberMinimizationDialog_moc.C\
 	atomProperties_moc.C\
 	contourSurfaceDialog_moc.C\
-	fileDialog_moc.C\
 	preferences_moc.C\
 	colorMeshDialog_moc.C\
 	colorMeshDialogData_moc.C\
@@ -61,8 +59,8 @@ MOC_SOURCES=\
 	displayPropertiesData_moc.C\
 	dlgMoveOverlay_moc.C\
 	dlgMoveOverlayData_moc.C\
-	labelProperties_moc.C\
-	labelPropertiesData_moc.C\
+	labelDialog_moc.C\
+	labelDialogData_moc.C\
 	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
 	molecularDynamicsDialogData_moc.C\
@@ -91,16 +89,17 @@ UIC_SOURCES=\
 	colorMeshDialogData.C\
 	contourSurfaceDialogData.C\
 	displayPropertiesData.C\
-	molecularDynamicsDialogData.C\
-	snapShotVisualisationData.C\
-	mouseSensitivityData.C\
-	setCameraData.C\
-	lightSettingsData.C\
-	stageSettingsData.C\
-	pythonSettingsData.C\
 	FDPBDialogData.C\
-	transformationDialogData.C\
-	parsedFunctionDialogData.C
+	labelDialog.C\
+	lightSettingsData.C\
+	molecularDynamicsDialogData.C\
+	mouseSensitivityData.C\
+	parsedFunctionDialogData.C\
+	pythonSettingsData.C\
+	setCameraData.C\
+	snapShotVisualisationData.C\
+	stageSettingsData.C\
+	transformationDialogData.C
 
 UIC_HDR=$(UIC_SOURCES:Data.C=.dh)
 
@@ -125,23 +124,23 @@ contourSurfaceDialog_moc.C:	$(HEADER_DIR)/contourSurfaceDialog.h
 displayProperties_moc.C:	$(HEADER_DIR)/displayProperties.h
 	$(MOC) $(HEADER_DIR)/displayProperties.h -o $@
 
-fileDialog_moc.C:	$(HEADER_DIR)/fileDialog.h
-	$(MOC) $(HEADER_DIR)/fileDialog.h -o $@
-
-labelProperties_moc.C:	$(HEADER_DIR)/labelProperties.h
-	$(MOC) $(HEADER_DIR)/labelProperties.h -o $@
-
-preferences_moc.C:	$(HEADER_DIR)/preferences.h
-	$(MOC) $(HEADER_DIR)/preferences.h -o $@
-
 dlgMoveOverlay_moc.C:	$(HEADER_DIR)/dlgMoveOverlay.h
 	$(MOC) $(HEADER_DIR)/dlgMoveOverlay.h -o $@
 
 dlgMoveOverlayData_moc.C:	$(HEADER_DIR)/dlgMoveOverlayData.h
 	$(MOC) $(HEADER_DIR)/dlgMoveOverlayData.h -o $@
 
+labelDialog_moc.C:	$(HEADER_DIR)/labelDialog.h
+	$(MOC) $(HEADER_DIR)/labelDialog.h -o $@
+
+preferences_moc.C:	$(HEADER_DIR)/preferences.h
+	$(MOC) $(HEADER_DIR)/preferences.h -o $@
+
 molecularDynamicsDialog_moc.C:	$(HEADER_DIR)/molecularDynamicsDialog.h
 	$(MOC) $(HEADER_DIR)/molecularDynamicsDialog.h -o $@
+
+molecularFileDialog_moc.C:	$(HEADER_DIR)/molecularFileDialog.h
+	$(MOC) $(HEADER_DIR)/molecularFileDialog.h -o $@
 
 snapShotVisualisation_moc.C:	$(HEADER_DIR)/snapShotVisualisation.h
 	$(MOC) $(HEADER_DIR)/snapShotVisualisation.h -o $@

@@ -3,7 +3,7 @@
 //
 // $Id:
 
-#include <BALL/STRUCTURE/geometricDialog.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 #include <qcolordialog.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
@@ -11,6 +11,10 @@
 #include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/FORMAT/INIFile.h>
+
+#include <qlabel.h>
+#include <qpushbutton.h>
+#include <qlineedit.h>
 
 namespace BALL
 {

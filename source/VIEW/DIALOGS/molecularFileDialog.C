@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.2 2003/08/26 15:01:10 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.3 2003/08/27 11:04:17 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
-#include <BALL/VIEWKERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
 #include <BALL/FORMAT/INIFile.h>
@@ -14,8 +14,6 @@
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/MATHS/simpleBox3.h>
 #include <BALL/KERNEL/system.h>
-
-using namespace BALL::VIEW;
 
 namespace BALL
 {
@@ -526,5 +524,5 @@ namespace BALL
 				working_dir_ = inifile.getValue("WINDOWS", "File::working_dir");
 			}
 		}
-	}
-}
+
+} } //namespaces
