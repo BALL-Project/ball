@@ -1,7 +1,8 @@
-// $Id: NMRSpectrum.C,v 1.4 2000/09/19 12:07:22 oliver Exp $
+// $Id: NMRSpectrum.C,v 1.5 2000/09/21 07:43:42 oliver Exp $
 
 #include<BALL/NMR/NMRSpectrum.h>
 #include<BALL/FORMAT/PDBFile.h>
+#include<BALL/KERNEL/PTE.h>
 #include<BALL/COMMON/limits.h>
 
 ///////////////////////////////////////////////////////////////////////////
