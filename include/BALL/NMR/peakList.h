@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peakList.h,v 1.14 2003/03/26 13:08:18 sturm Exp $
+// $Id: peakList.h,v 1.15 2003/05/08 09:02:46 sneumann Exp $
 
 #ifndef BALL_NMR_PEAKLIST_H
 #define BALL_NMR_PEAKLIST_H
@@ -83,8 +83,8 @@ namespace BALL
 		*/
 		void scale(float x)
 		{
-			Iterator it = begin();
-			for (; it != end(); ++it)
+			Iterator it = List<PT>::begin();
+			for (; it != List<PT>::end(); ++it)
 			{
 				it->setIntensity(it->getIntensity() * x);
 			}
@@ -95,9 +95,9 @@ namespace BALL
 		*/
 		float getMaxIntensity() const
 		{
-			ConstIterator it = begin();
+			ConstIterator it = List<PT>::begin();
 			float max = -Limits<float>::max();
-			for (; it != end(); ++it)
+			for (; it != List<PT>::end(); ++it)
 			{
 				max = std::max(max, it->getIntensity());
 			}
@@ -110,9 +110,9 @@ namespace BALL
 		*/
 		float getMinIntensity() const
 		{
-			ConstIterator it = begin();
+			ConstIterator it = List<PT>::begin();
 			float min = Limits<float>::max();
-			for (; it != end(); ++it)
+			for (; it != List<PT>::end(); ++it)
 			{
 				min = std::min(min, it->getIntensity());
 			}
@@ -124,9 +124,9 @@ namespace BALL
 		*/
 		Position getMinPosition() const
 		{
-			ConstIterator it = begin();
+			ConstIterator it = List<PT>::begin();
 			PeakList<PT>::Position min = Limits<PeakList<PT>::Position>::max();
-			for (; it != end(); ++it)
+			for (; it != List<PT>::end(); ++it)
 			{
 				min = std::min(min, it->getPosition());
 			}
@@ -137,9 +137,9 @@ namespace BALL
 		*/
 		Position getMaxPosition() const
 		{
-			ConstIterator it = begin();
+			ConstIterator it = List<PT>::begin();
 			PeakList<PT>::Position max = -Limits<PeakList<PT>::Position>::max();
-			for (; it != end(); ++it)
+			for (; it != List<PT>::end(); ++it)
 			{
 				max = std::max(max, it->getPosition());
 			}
