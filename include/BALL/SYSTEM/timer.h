@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timer.h,v 1.15 2005/02/06 09:44:54 oliver Exp $
+// $Id: timer.h,v 1.16 2005/02/14 17:25:03 amoll Exp $
 //
 
 #ifndef BALL_SYSTEM_TIMER_H
@@ -205,7 +205,7 @@ namespace BALL
 		static LongSize cpu_speed_;
 
 		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
-			static PointerSizeInt clock_speed_;
+			static PointerSizeUInt clock_speed_;
 		#endif
 
 		// state of timer, either true(on) or false(off) 
