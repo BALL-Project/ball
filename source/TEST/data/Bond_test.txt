@@ -1,0 +1,21 @@
+/Object: [0-9a-fx]+ is instance of class: Q24BALL4Bond
+/Object: [0-9a-fx]+ is instance of class: Q24BALL4Bond
+/  handle: [0-9]
+  auto-deletable: 0
+/Object: [0-9a-fx]+ is instance of class: Q24BALL4Bond
+  selected: 0
+/  parent: [0-9]+
+/  first: [0-9]+
+/  last: [0-9]+
+/  previous: [0-9]+
+/  next: [0-9]+
+  number of children:0
+  contains_selection_:0
+  number of selected children:0
+  number of children containing selection:0
+  children:
+  name: bond
+  order: 1
+  type: 1
+/  first atom: [0-9a-fx]+
+/  second atom: [0-9a-fx]+
