@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.6 2000/01/15 18:54:17 oliver Exp $
+// $Id: atom.h,v 1.7 2000/02/06 19:42:54 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -57,7 +57,6 @@ namespace BALL
 			\\
 			{\bf Category:} \Ref{Bond} container\\
 			{\bf Concept:} composite design pattern\\
-			{\bf Errors:} see \Ref{Bond::ErrorCode}\\
 			
 			An instance of Atom represents an instance of a chemical element ("atom").
 			During each runtime instance of a program an atom is unique and identified by a \Ref{Object::Handle}.
@@ -85,8 +84,8 @@ namespace BALL
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.6 $
-			@date    $Date: 2000/01/15 18:54:17 $
+			@version $Revision: 1.7 $
+			@date    $Date: 2000/02/06 19:42:54 $
 	*/
 	class Atom
 		: public Composite,
@@ -461,6 +460,32 @@ namespace BALL
 					@see         Atom::setName
 			*/
 			const String& getName() const;
+
+			/** Assemble a fully specified atom name.
+					This method returns at fully specified atom name as used for charge and type assignments.
+					The name consists of the name of the residue the atom is conatined in, a colon, and the atom name.
+					Blanks are removed from both names. For example, for the alpha carbon atom of isoleucine {\tt getFullName} 
+					will return the name {\tt ILE:CA}. 
+					For N terminal residues, {\tt -N} is appended to the residue name, for C terminal residues {\tt -C}.
+					If the residue is a CYS an involved in a disulphide bridge, an additional {\tt -S} or {\tt S} (for terminal residue)
+					is appended.
+					If the atom is not contained in a residue, the name if the parent fragment 
+					is taken instead of	the residue name. If there is no parent fragment, name of the parent molecule ist taken.
+					If the atom is not contained in any superstructure, getFullname returns getName.
+
+					@return      {\bf const String\&}
+							\begin{itemize}
+								\item <residue>:<atom>  -- if contained in a residue
+								\item <residue>-C:<atom>	-- for C terminal residues
+								\item <residue>-N:<atom>	-- for N terminal residues
+								\item CYS-S:<atom> -- for CYS residues involved in a SS bond
+								\item CYS-NS:<atom> -- for N terminal CYS residues involved in a SS bond
+								\item CYS-CS:<atom> -- for C terminal CYS residues involved in a SS bond
+								\item <fragment>:atom -- for atoms contained in a fragment, but not in a residue
+								\item <molecule>:atom -- for atoms contained in a molecule, but not in a fragment
+							\end{itemize}
+			*/
+			String getFullName() const;
 
 			/** Change of the atom's position vector.
 					Change the position vector of {\em *this} atom to {\em position}.
