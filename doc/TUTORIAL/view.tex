@@ -27,7 +27,7 @@ geometric shape must have and {\em GLObject} which is needed because of the draw
 methods that must be overridden.\\
 The implementation of the class GLCross follows (includes are omitted):
 
-\begin{verbatim}
+\begin{lstlisting}{}
 class GLCross: 
 	public GeometricObject,
 	public ColorExtension,
@@ -44,24 +44,24 @@ protected:
 
 	virtual bool draw(bool with_names = false);
 };
-\end{verbatim}
+\end{lstlisting}
 
 The copy constructor and the copy assignment methods have been omitted because
 they are not crucial to the implementation of a primitive. 
 We have a closer look to the implementation of the drawing method.
 We use OpenGL code in this method to create the cross.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 bool GLCross::draw(bool with_names)
 {
-	if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN) == true)
+	if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN))
 		return true;
-\end{verbatim}
+\end{lstlisting}
 
 If the property of the primitive is set to {\em PROPERTY\_\_OBJECT\_HIDDEN} than
 do not draw it. 
 
-\begin{verbatim}
+\begin{lstlisting}{}
 	if (isSelected() == false)
 		glColor4ub((unsigned char)getColor().getRed(),
 							 (unsigned char)getColor().getGreen(),
@@ -72,15 +72,15 @@ do not draw it.
 							 (unsigned char)getSelectedColor().getGreen(),
 							 (unsigned char)getSelectedColor().getBlue(),
 							 (unsigned char)getSelectedColor().getAlpha());
-\end{verbatim}
+\end{lstlisting}
 
 If the primitive is selected than use the selected color. Otherwise
 we use the color set with the method {\em setColor}.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 	if (with_names)
 		glLoadName(getGLPrimitiveManager()->getName(*this));
-\end{verbatim}
+\end{lstlisting}
 
 If we want to allow our primitive to be picked than we have to add this code
 to the draw method. The method {\em glLoadName} is a method from the OpenGL
@@ -88,7 +88,7 @@ library. This method sets the name of the primitive so that it can be identified
 later. To assure that the names are unique we use the name generating facility the class
 {\em GLPrimitiveManager} provides.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 	glBegin(GL_LINES);
 	glVertex3f((GLfloat)(getVertex().x - getRadius()),
 						 (GLfloat)(getVertex().y),
@@ -114,7 +114,7 @@ later. To assure that the names are unique we use the name generating facility t
 
 	return true;
 }
-\end{verbatim}
+\end{lstlisting}
 
 The last part of the method contains the OpenGL code for rendering the cross.
 We use three lines to create the cross. All have the vertex as the middle point
@@ -146,7 +146,7 @@ To accomlish all these things we have to override certain methods and create a p
 widget.\\ \\
 First we have a look to the header file of our dialog (includes are omitted):
 
-\begin{verbatim}
+\begin{lstlisting}{}
 class TestDialog: public QDialog, public ModularWidget
 {
 	Q_OBJECT
@@ -179,7 +179,7 @@ private:
 	List<Composite*> selection_;
 	ColorRGBA color_;
 };
-\end{verbatim}
+\end{lstlisting}
 
 See {\em ModularWidget} for information about the various methods that must be
 overridden.
@@ -188,7 +188,7 @@ Now we discuss the implementation of these methods:\\
 Before we handle the initialization, update and the removal of the menu entries lets
 have a look to the implementation of the constructor.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 TestDialog::TestDialog(QWidget* parent, const char* name)
 	: QDialog(parent, name, FALSE, 2768)
 {
@@ -198,11 +198,12 @@ TestDialog::TestDialog(QWidget* parent, const char* name)
 	apply_button_ = new QPushButton(this, "apply_button");
 	apply_button_->setGeometry(10, 25, 110, 30);
 	apply_button_->setText( tr( "&Apply" ) );
-	connect(apply_button_, SIGNAL(clicked()), SLOT(applyButtonClicked()));
+	connect(apply_button_, SIGNAL(clicked()), 
+					SLOT(applyButtonClicked()));
 
 	color_.set("FF0000FF");
 }
-\end{verbatim}
+\end{lstlisting}
 
 First we set the caption of this dialog than we register this dialog as a modular
 widget. This action is very important because it creates the internal mechanism
@@ -215,45 +216,46 @@ library documentation.\\
 In this method we create the menu entry for our dialog and connect it to a slot
 that will open our dialog.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 void TestDialog::initializeWidget(MainControl& main_control)
 {
-	(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
-\end{verbatim}
+	(main_control.initPopupMenu(MainControl::DISPLAY))
+		->setCheckable(true);
+\end{lstlisting}
 
 First we create the menu {\em DISPLAY} if it is not already created and set
 the flag {\em checkable} to assure that all entries can have a check flag.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 	id_ = main_control.insertMenuEntry
 					 (MainControl::DISPLAY, "&Test Dialog", this,
 						SLOT(openDialog()), CTRL+Key_T);   
 }
-\end{verbatim}
+\end{lstlisting}
 
 Then we create the menu entry {\em Test Dialog} in the menu {\em DISPLAY}
 and connect it with the slot {\em openDialog}. The id we get from this method is
 stored in the variable {\em id\_}. We need this id to check the menu entry if
 this dialog is open.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 void TestDialog::checkMenu(MainControl& main_control)
 {
 	(main_control.menuBar())->setItemChecked(id_, isVisible());
 }
-\end{verbatim}
+\end{lstlisting}
 
 The method checkMenu is used to check or uncheck the menu entry according to the
 visibility of our dialog.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 void TestDialog::finalizeWidget(MainControl& main_control)
 {
 	main_control.removeMenuEntry
 		(MainControl::DISPLAY, "&Test Dialog", this,
 		 SLOT(openDialog()), CTRL+Key_T);   
 }
-\end{verbatim}
+\end{lstlisting}
 
 And last if the dialog is to be destroyed the menu entry will be removed from
 the main application (derived from {\em MainControl}).\\
@@ -266,14 +268,15 @@ For information about signal/slot mechanism see the QT-library documentation.\\
 After the widget stuff we have a close look to the insertion of the preferences tab widget.
 First we need a preferences tab widget.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 class TestPreferences : public QWidget
 {
 	Q_OBJECT
 		
 public:
 
-	TestPreferences(QWidget *parent = NULL, const char *name = NULL );
+	TestPreferences(QWidget *parent = NULL, 
+									const char *name = NULL );
 	virtual ~TestPreferences() {}
 	
 	void fetchPreferences(INIFile& inifile);
@@ -290,7 +293,7 @@ private:
 	QLabel *color_sample_;
 	ColorRGBA custom_color_;
 };
-\end{verbatim}
+\end{lstlisting}
 
 In this tab widget only the contents of the color label can be changed.
 This contents will be written to and read from the inifile of the main application.
@@ -299,26 +302,28 @@ actually only a rectangle with a background color. The edit button opens a dialo
 in which the color can be changed. This dialog is predefined in QT.
 In the constructor we create these widgets.
 
-\begin{verbatim}
-TestPreferences::TestPreferences(QWidget* parent, const char* name)
+\begin{lstlisting}{}
+TestPreferences::TestPreferencesi
+	(QWidget* parent, const char* name)
 	: QWidget(parent, name, 0)
 {
-	QPushButton *edit_button = new QPushButton(this, "edit_button");
+	QPushButton* edit_button 
+		= new QPushButton(this, "edit_button");
 	edit_button->setGeometry(110, 30, 80, 30);
 	edit_button->setText( tr( "&Edit" ) );
 	connect(edit_button, SIGNAL(clicked()), SLOT(editColor()));
-\end{verbatim}
+\end{lstlisting}
 
 This creates the edit button and connects it to the slot {\em editColor}.
 	
-\begin{verbatim}
+\begin{lstlisting}{}
 	color_sample_ = new QLabel(this, "color_sample__label");
 	color_sample_->setGeometry(20, 30, 70, 30);
 	color_sample_->setFrameStyle( 50 );
 	
 	resize(380,210);
 }
-\end{verbatim}
+\end{lstlisting}
 
 The last initialization we perform in the constructor is the creation of the
 label. Then we resize the widget to the needed size. This size is related to the
@@ -328,7 +333,7 @@ writing the contents of this widget into the inifile.\\
 
 This method reads the preferences from the inifile.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 void TestPreferences::fetchPreferences(INIFile& inifile)
 {
 	if (inifile.hasEntry("WINDOWS", "Test::color"))
@@ -339,7 +344,7 @@ void TestPreferences::fetchPreferences(INIFile& inifile)
 																						 custom_color_.getBlue()));
 	}
 }
-\end{verbatim}
+\end{lstlisting}
 
 If the inifile has the section {\tt WINDOWS} and the key {\tt Test::color} then
 we read the contents of this key and convert it to a color which we store in the
@@ -348,12 +353,12 @@ in the widget.\\
 
 To write the preferences to the inifile we override this method.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 void TestPreferences::writePreferences(INIFile& inifile)
 {
 	inifile.setValue("WINDOWS", "Test::color", custom_color_);
 }
-\end{verbatim}
+\end{lstlisting}
 
 {\em Note:} It is important that the section {\tt WINDOWS} and the key {\tt Test::color} are
 already inserted into the inifile else the inifile will not insert the color
@@ -362,17 +367,17 @@ into it. See {\em INIFile} for further information.\\
 The last method of the preferences tab widget is the method {\em editColor} that
 is called if the edit button is pressed.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 void BoundingBoxPreferences::editColor()
 {
-	color_sample_
-		->setBackgroundColor(QColorDialog::getColor(color_sample_->backgroundColor()));
-\end{verbatim}
+	color_sample_->setBackgroundColor(
+			QColorDialog::getColor(color_sample_->backgroundColor()));
+\end{lstlisting}
 
 Here we call the dialog {\em QColorDialog} where we can change the color. If this
 dialog was exited by pressing the ok button we transfer the color into the color label.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 	ColorRGBA color;
 	QColor qcolor = color_sample_->backgroundColor();
 	color.set((float)qcolor.red() / 255.0,
@@ -381,7 +386,7 @@ dialog was exited by pressing the ok button we transfer the color into the color
 	
 	custom_color_ = color;
 }
-\end{verbatim}
+\end{lstlisting}
 
 Now we convert the {\em QColor} into a {\em ColorRGBA} which we store in the
 variable {\em custom\_color\_} so that we can access this color with the method
@@ -393,24 +398,24 @@ are needed in our dialog to install this preferences tab widget.\\
 In this method the preferences tab widget will be initialized and inserted into the
 {\em MainControl}
 
-\begin{verbatim}
+\begin{lstlisting}{}
 void TestDialog::initializePreferencesTab(Preferences &preferences)
 {
 	test_preferences_ = new TestPreferences();
 	preferences.insertTab(test_preferences_, "TestPreferences");
 }
-\end{verbatim}
+\end{lstlisting}
 
 We create a new {\em TestPreferences} and insert as a tab widget it into the 
 {\em Preferences} dialog with name {\tt TestPreferences}.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 void TestDialog::applyPreferences(Preferences &)
 {
 	if test_preferences_ != 0)
 		color_ = test_preferences_->getColor();
 }
-\end{verbatim}
+\end{lstlisting}
 
 This method is called from {\em MainControl} if the apply button in the {\em Preferences} dialog
 is pressed.
@@ -420,7 +425,7 @@ variable {\em color\_} for later usage.\\
 Removal of the preferences tab widget from the {\em MainControl} and freeing of used
 memory.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 void TestDialog::finalizePreferencesTab(Preferences &preferences)
 {
 	if (test_preferences_ != 0)
@@ -429,7 +434,7 @@ void TestDialog::finalizePreferencesTab(Preferences &preferences)
 		delete test_preferences_;
 	}
 }
-\end{verbatim}
+\end{lstlisting}
 
 This method will be called by the {\em MainControl} if the application is closed. We
 remove our preferences tab widget from the preferences dialog and delete it afterwards.\\
@@ -439,7 +444,7 @@ the same methods in the dialog.\\
 This method reads the preferences of our dialog from the inifile and calls
 the same method of the preferences tab widget.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 void TestDialog::fetchPreferences(INIFile& inifile)
 {
 	int x_pos = x();
@@ -452,21 +457,21 @@ void TestDialog::fetchPreferences(INIFile& inifile)
 		y_pos = inifile.getValue("WINDOWS", "Test::y").toInt();
 
 	move(x_pos, y_pos);
-\end{verbatim}
+\end{lstlisting}
 
 Here we read the position of our dialog from the inifile and convert it into
 integer. If the needed keys do not exist in the inifile we use the position
 of our dialog (see QT-library documentation for further informations). If
 we have a valid position we move our dialog to this position.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 	if (test_preferences_ != 0)
 	{
 		test_preferences_->fetchPreferences(inifile);
 		color_ = test_preferences_->getColor();
 	}
 }
-\end{verbatim}
+\end{lstlisting}
 
 If a preferences tab widget exists we fetch its preferences from the inifile and
 retrieve the color from it.\\
@@ -475,22 +480,22 @@ To write the preferences to the inifile we override this method. In this method 
 write all preferences this dialog has to the inifile and call the same method
 for our preferences tab widget.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 void TestDialog::writePreferences(INIFile& inifile)
 {
 	inifile.setValue("WINDOWS", "Test::x", String(x()));
 	inifile.setValue("WINDOWS", "Test::y", String(y()));
-\end{verbatim}
+\end{lstlisting}
 
 With the method {\em setValue} we set the position of our dialog into the inifile.\\
 {\em Note:} this method only works if the section {\tt WINDOWS} and the keys
 {\tt Test::x} and {\tt Test::y} are already inserted into the inifile.
 
-\begin{verbatim}
+\begin{lstlisting}{}
 	if (test_preferences_ != 0)
 		test_preferences_->writePreferences(inifile);
 }
-\end{verbatim}
+\end{lstlisting}
 
 If our preferences tab widget exists we write its preferences into the inifile as well.\\
 
@@ -498,25 +503,26 @@ The only thing that must be implemented yet is the mechanism that handles any
 messages received from our dialog.
 This is done in the method {\em onNotify}. 
 
-\begin{verbatim}
+\begin{lstlisting}{}
 void TestDialog::onNotify(Message *message)
 {
 	selection_.clear();
 
 	if (RTTI::isKindOf<SelectionMessage>(*message))
-		selection_ = (RTTI::castTo<SelectionMessage>(*message))->getSelection();
-\end{verbatim}
+		selection_ = (RTTI::castTo<SelectionMessage>(*message))
+										->getSelection();
+\end{lstlisting}
 
 First we clear our previously stored selection then we perform a runtime type identification
 of the received message and react only if the message is of kind {\em SelectionMessage}.
 	
-\begin{verbatim}
+\begin{lstlisting}{}
 	if (selection_.empty())
 		apply_button_->setEnabled(false);
 	else
 		apply_button_->setEnabled(true);
 }
-\end{verbatim}
+\end{lstlisting}
 
 We enable the apply button in our dialog if the selection list contains any elements.
 Otherwise we disable it.\\
