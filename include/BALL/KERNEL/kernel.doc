@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.11 2001/07/12 10:39:33 amoll Exp $
+// $Id: kernel.doc,v 1.12 2001/12/30 15:40:45 oliver Exp $
 
 /**@name	Kernel
 		This chapter contains all relevant information on BALL kernel datastructures. 
@@ -52,11 +52,16 @@
 	  //@Include: atomContainer.h
 	  //@Include: atomContainerIterator.h
 		//@Include: PDBAtomIterator.h
-		//@Include: expression.h
-  	//@Include: predicate.h
 	  //@Include: global.h
 	  //@Include: forEach.h
 	  //@Include: PTE.h
+	//@}
+	/** @name Kernel Predicates
+	*/
+	//@{
+		//@Include: expression.h
+  	//@Include: predicate.h
+		//@Include: expressionPredicate.h
 		//@Include:	selector.h
 		//@Include:	standardPredicates.h
 	//@}
