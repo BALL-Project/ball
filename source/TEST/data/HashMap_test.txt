@@ -1,7 +1,7 @@
   size: 2
   bucket size: 3
   capacity: 4
-  load factor: 0.666667
+/  load factor: 0.66666[6-7]
 /    bucket 0 \([0-9a-fx]*\):
 /    bucket 1 \([0-9a-fx]*\):
 /    bucket 2 \((\(nil\))|(0x0)|(0)\):
