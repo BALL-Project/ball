@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum.h,v 1.8 2000/09/26 19:28:51 oliver Exp $
+// $Id: NMRSpectrum.h,v 1.9 2000/09/30 16:36:12 oliver Exp $
 
 #ifndef BALL_NMR_NMRSPECTRUM_H
 #define BALL_NMR_NMRSPECTRUM_H
@@ -116,6 +116,9 @@ namespace BALL
 		/**	Return the current shift model.
 		*/
 		const ShiftModel& getShiftModel() const;
+
+		CreateSpectrumProcessor& getCreateSpectrumProcessor() 
+			throw();
 			
 		//@}
 
