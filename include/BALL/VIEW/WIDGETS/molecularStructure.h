@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.8 2004/02/19 10:17:05 oliver Exp $
+// $Id: molecularStructure.h,v 1.9 2004/02/19 20:28:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -44,8 +44,6 @@
 namespace BALL
 {
 	class Composite;
-	class AmberFF;
-	class CharmmFF;
 
 	namespace VIEW
 	{
@@ -151,13 +149,6 @@ namespace BALL
 			/// Get an instance of an dialog to setup the CHARMM forcefield
 			CharmmConfigurationDialog& getCharmmConfigurationDialog()	throw();
 
-			/** Print detailed results of the energies.
-					This method prints
-					the detailed energies of the individual force field contributions and the total energy
-					to Log.info().
-			*/
-			void printResults() throw();
-				
 			/** Fetch the widgets preferences from the INIfile.
 					\param  inifile the INIFile that contains the required values
 			*/

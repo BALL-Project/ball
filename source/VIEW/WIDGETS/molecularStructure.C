@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.23 2004/02/19 15:00:07 oliver Exp $
+// $Id: molecularStructure.C,v 1.24 2004/02/19 20:28:56 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -18,9 +18,6 @@
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/KERNEL/system.h>
-
-#include <BALL/MOLMEC/CHARMM/charmm.h>
-#include <BALL/MOLMEC/AMBER/amber.h>
 
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
@@ -159,6 +156,7 @@ namespace BALL
 		charmm_dialog_.accept();
 
 
+amber_.getResults();
 		use_amber_= true; // use amber force field by default
 	}
 
@@ -757,37 +755,6 @@ namespace BALL
 		return ((use_amber_) ? reinterpret_cast<ForceField&>(amber_) : reinterpret_cast<ForceField&>(charmm_));
 	}
 
-	void MolecularStructure::printResults() 
-		throw()
-	{
-		if (use_amber_)
-		{
-			Log.info() << endl;
-			Log.info() << "AMBER Energy:" << endl;
-			Log.info() << " - electrostatic     : " << amber_.getESEnergy() << " kJ/mol" << endl;
-			Log.info() << " - van der Waals     : " << amber_.getVdWEnergy() << " kJ/mol" << endl;
-			Log.info() << " - bond stretch      : " << amber_.getStretchEnergy() << " kJ/mol" << endl;
-			Log.info() << " - angle bend        : " << amber_.getBendEnergy() << " kJ/mol" << endl;
-			Log.info() << " - torsion           : " << amber_.getTorsionEnergy() << " kJ/mol" << endl;
-			Log.info() << "---------------------------------------" << endl;
-			Log.info() << "  total energy       : " << amber_.getEnergy() << " kJ/mol" << endl;
-		}
-		else
-		{
-			Log.info() << endl;
-			Log.info() << "CHARMM Energy	:" << endl;
-			Log.info() << " - electrostatic	: " << charmm_.getESEnergy() << " kJ/mol" << endl;
-			Log.info() << " - van der Waals	: " << charmm_.getVdWEnergy() << " kJ/mol" << endl;
-			Log.info() << " - solvation	: " << charmm_.getSolvationEnergy() << "kJ/mol" << endl;
-			Log.info() << " - nonbonded		: " << charmm_.getNonbondedEnergy() << "kJ/mol" << endl;
-			Log.info() << " - bond stretch      : " << charmm_.getStretchEnergy() << " kJ/mol" << endl;
-			Log.info() << " - angle bend		: " << charmm_.getBendEnergy() << " kJ/mol" << endl;
-			Log.info() << " - torsion	: " << charmm_.getTorsionEnergy() << " kJ/mol" << endl;
-			Log.info() << "---------------------------------------" << endl;
-			Log.info() << "  total energy		: " << charmm_.getEnergy() << " kJ/mol" << endl;
-		}
-	}
-
 	void MolecularStructure::fetchPreferences(INIFile& inifile)
 		throw()
 	{
@@ -857,7 +824,7 @@ namespace BALL
 
 		// Compute the single point energy and print the result to Log and the status bar.
 		ff.updateEnergy();
-		printResults();
+		Log.info() << ff.getResults();
 		setStatusbarText("Total energy: " + String(ff.getEnergy()) + " kJ/mol.");
 	}
 
@@ -975,9 +942,9 @@ namespace BALL
 
 			// Print the final results.
 			Log.info() << endl << "minimization terminated." << endl << endl;
-			printResults();			
+			Log.info() << ff.getResults();
 			Log.info() << "final RMS gradient    : " << ff.getRMSGradient() << " kJ/(mol A)   after "
-									 << minimizer->getNumberOfIterations() << " iterations" << endl << endl;
+								 << minimizer->getNumberOfIterations() << " iterations" << endl << endl;
 			setStatusbarText("Final energy: " + String(ff.getEnergy()) + " kJ/mol.");
 
 			// clean up
@@ -1127,8 +1094,7 @@ namespace BALL
 			if (dcd) manager.flushToDisk();
 
 			Log.info() << std::endl << "simulation terminated." << std::endl << endl;
-
-			printResults();
+			Log.info() << ff.getResults();
 			Log.info() << "final RMS gadient    : " << ff.getRMSGradient() << " kJ/(mol A)   after " 
 								 << mds->getNumberOfIterations() << " iterations" << endl << endl;
 			setStatusbarText("Final energy: " + String(ff.getEnergy()) + " kJ/mol.");
