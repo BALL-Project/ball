@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.47 2004/03/31 12:27:25 amoll Exp $
+// $Id: scene.C,v 1.48 2004/03/31 12:31:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -125,27 +125,27 @@ namespace BALL
 
 		void Scene::clear()
 			throw()
-			{
-				system_origin_.set(0.0, 0.0, 0.0);
-				quaternion_.setIdentity();
+		{
+			system_origin_.set(0.0, 0.0, 0.0);
+			quaternion_.setIdentity();
 
-				stage_->clear();
-			}
+			stage_->clear();
+		}
 
 		void Scene::set(const Scene& scene)
 			throw()
-			{
-				stage_ = scene.stage_;
-				system_origin_.set(scene.system_origin_);
-				quaternion_.set(scene.quaternion_);
-			}
+		{
+			stage_ = scene.stage_;
+			system_origin_.set(scene.system_origin_);
+			quaternion_.set(scene.quaternion_);
+		}
 
 		const Scene& Scene::operator = (const Scene& scene)
 			throw()
-			{
-				set(scene);
-				return *this;
-			}
+		{
+			set(scene);
+			return *this;
+		}
 
 		bool Scene::isValid() const
 			throw()
@@ -155,114 +155,114 @@ namespace BALL
 
 		void Scene::dump(std::ostream& s, Size depth) const
 			throw()
-			{
-				BALL_DUMP_STREAM_PREFIX(s);
+		{
+			BALL_DUMP_STREAM_PREFIX(s);
 
-				BALL_DUMP_DEPTH(s, depth);
-				BALL_DUMP_HEADER(s, this, this);
+			BALL_DUMP_DEPTH(s, depth);
+			BALL_DUMP_HEADER(s, this, this);
 
-				stage_->dump(s, depth);
+			stage_->dump(s, depth);
 
-				quaternion_.dump(s, depth + 1);
+			quaternion_.dump(s, depth + 1);
 
-				BALL_DUMP_STREAM_SUFFIX(s);     
-			}
+			BALL_DUMP_STREAM_SUFFIX(s);     
+		}
 
 		// ####################GL, CAMERA############################################
 
 		void Scene::update(bool rebuild_displaylists)
 			throw()
+		{
+			if (update_running_) return;
+			update_running_ = true;
+			if (rebuild_displaylists)
 			{
-				if (update_running_) return;
-				update_running_ = true;
-				if (rebuild_displaylists)
-				{
-					renderView_(REBUILD_DISPLAY_LISTS);
-				}
-				else
-				{
-					renderView_(DISPLAY_LISTS_RENDERING);
-				}
-
-				updateGL();
-				update_running_ = false;
+				renderView_(REBUILD_DISPLAY_LISTS);
 			}
+			else
+			{
+				renderView_(DISPLAY_LISTS_RENDERING);
+			}
+
+			updateGL();
+			update_running_ = false;
+		}
 
 
 		void Scene::onNotify(Message *message)
 			throw()
-			{
+		{
 #ifdef BALL_VIEW_DEBUG
-				Log.error() << "Scene " << this  << "onNotify " << message << std::endl;
+			Log.error() << "Scene " << this  << "onNotify " << message << std::endl;
 #endif
-				if (RTTI::isKindOf<RepresentationMessage>(*message)) 
+			if (RTTI::isKindOf<RepresentationMessage>(*message)) 
+			{
+				makeCurrent();
+				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
+				Representation* rep = rm->getRepresentation();
+				switch (rm->getType())
 				{
-					makeCurrent();
-					RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
-					Representation* rep = rm->getRepresentation();
-					switch (rm->getType())
-					{
-						case RepresentationMessage::ADD:
-							gl_renderer_.buildDisplayListFor(*rep);
-							break;
+					case RepresentationMessage::ADD:
+						gl_renderer_.buildDisplayListFor(*rep);
+						break;
 
-						case RepresentationMessage::REMOVE:
-							gl_renderer_.removeDisplayListFor(*rep);
-							break;
+					case RepresentationMessage::REMOVE:
+						gl_renderer_.removeDisplayListFor(*rep);
+						break;
 
-						case RepresentationMessage::UPDATE:
-							gl_renderer_.rebuildDisplayListFor(*rep);
-							break;
+					case RepresentationMessage::UPDATE:
+						gl_renderer_.rebuildDisplayListFor(*rep);
+						break;
 
-						case RepresentationMessage::UNDEFINED:
-						case RepresentationMessage::SELECTED:
-							break;
-					}
+					case RepresentationMessage::UNDEFINED:
+					case RepresentationMessage::SELECTED:
+						break;
+				}
 
+				update(false);
+				return;
+			}
+
+			// react now only to SceneMessage
+			if (!RTTI::isKindOf<SceneMessage>(*message)) return;
+
+			makeCurrent();
+
+			SceneMessage *scene_message = RTTI::castTo<SceneMessage>(*message);
+
+			switch (scene_message->getType())
+			{
+				case SceneMessage::REDRAW:
 					update(false);
 					return;
-				}
 
-				// react now only to SceneMessage
-				if (!RTTI::isKindOf<SceneMessage>(*message)) return;
+				case SceneMessage::REBUILD_DISPLAY_LISTS:
+					update(true);
+					return;
 
-				makeCurrent();
+				case SceneMessage::UPDATE_CAMERA:
+					stage_->moveCameraTo(scene_message->getCamera());
+					system_origin_ = scene_message->getCamera().getLookAtPosition();
+					updateCamera_();
+					return;
 
-				SceneMessage *scene_message = RTTI::castTo<SceneMessage>(*message);
+				case SceneMessage::REMOVE_COORDINATE_SYSTEM:
+					stage_->showCoordinateSystem(false);
+					stage_settings_->updateFromStage();
+					return;
 
-				switch (scene_message->getType())
-				{
-					case SceneMessage::REDRAW:
-						update(false);
-						return;
+				case SceneMessage::EXPORT_PNG:
+					exportPNG();
+					return;
 
-					case SceneMessage::REBUILD_DISPLAY_LISTS:
-						update(true);
-						return;
+				case SceneMessage::EXPORT_POVRAY:
+					exportPOVRay();
+					return;
 
-					case SceneMessage::UPDATE_CAMERA:
-						stage_->moveCameraTo(scene_message->getCamera());
-						system_origin_ = scene_message->getCamera().getLookAtPosition();
-						updateCamera_();
-						return;
-
-					case SceneMessage::REMOVE_COORDINATE_SYSTEM:
-						stage_->showCoordinateSystem(false);
-						stage_settings_->updateFromStage();
-						return;
-
-					case SceneMessage::EXPORT_PNG:
-						exportPNG();
-						return;
-
-					case SceneMessage::EXPORT_POVRAY:
-						exportPOVRay();
-						return;
-
-					case SceneMessage::UNDEFINED:
-						Log.error() << "Unknown type of SceneMessage in " << __FILE__ << __LINE__ << std::endl;
-				}
+				case SceneMessage::UNDEFINED:
+					Log.error() << "Unknown type of SceneMessage in " << __FILE__ << __LINE__ << std::endl;
 			}
+		}
 
 
 		void Scene::initializeGL()
@@ -295,109 +295,109 @@ namespace BALL
 
 		void Scene::renderView_(RenderMode mode)
 			throw()
+		{
+			//abort if GL was not yet initialised
+			if (!gl_renderer_.hasStage()) return;
+
+			if (gl_renderer_.isInStereoMode())
 			{
-				//abort if GL was not yet initialised
-				if (!gl_renderer_.hasStage()) return;
-
-				if (gl_renderer_.isInStereoMode())
-				{
-					glDrawBuffer(GL_BACK_LEFT);
-				}
-
-				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-				glPushMatrix();
-
-				Vector3 view_point, diff;
-				if (gl_renderer_.isInStereoMode())
-				{
-					view_point = stage_->getCamera().getViewPoint();
-					diff = stage_->getCamera().getRightVector();
-					diff.normalize();
-					diff *= 2;  // half the distance between the eyepoints
-					stage_->getCamera().setViewPoint(view_point - diff);
-					gl_renderer_.updateCamera();
-				}
-
-				renderRepresentations_(mode);
-				glPopMatrix();
-
-				if (!gl_renderer_.isInStereoMode())
-				{
-					return;
-				}
-
-				glDrawBuffer(GL_BACK_RIGHT);
-				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-				glPushMatrix();
-				stage_->getCamera().setViewPoint(view_point + (diff * 2));
-				gl_renderer_.updateCamera();
-				renderRepresentations_(DISPLAY_LISTS_RENDERING);
-				glPopMatrix();
-				stage_->getCamera().setViewPoint(view_point);
+				glDrawBuffer(GL_BACK_LEFT);
 			}
+
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glPushMatrix();
+
+			Vector3 view_point, diff;
+			if (gl_renderer_.isInStereoMode())
+			{
+				view_point = stage_->getCamera().getViewPoint();
+				diff = stage_->getCamera().getRightVector();
+				diff.normalize();
+				diff *= 2;  // half the distance between the eyepoints
+				stage_->getCamera().setViewPoint(view_point - diff);
+				gl_renderer_.updateCamera();
+			}
+
+			renderRepresentations_(mode);
+			glPopMatrix();
+
+			if (!gl_renderer_.isInStereoMode())
+			{
+				return;
+			}
+
+			glDrawBuffer(GL_BACK_RIGHT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+			glPushMatrix();
+			stage_->getCamera().setViewPoint(view_point + (diff * 2));
+			gl_renderer_.updateCamera();
+			renderRepresentations_(DISPLAY_LISTS_RENDERING);
+			glPopMatrix();
+			stage_->getCamera().setViewPoint(view_point);
+		}
 
 
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
+		{
+			PrimitiveManager::RepresentationList::ConstIterator it;
+
+			// render all "normal" (non always front and non transparent models)
+			gl_renderer_.initSolid();
+			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
+			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
 			{
-				PrimitiveManager::RepresentationList::ConstIterator it;
-
-				// render all "normal" (non always front and non transparent models)
-				gl_renderer_.initSolid();
-				it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
-				for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
+				if ((*it)->getTransparency() == 0 &&
+						!(*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
 				{
-					if ((*it)->getTransparency() == 0 &&
-							!(*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
-					{
-						render_(**it, mode);
-					}
+					render_(**it, mode);
 				}
-
-				// render all transparent models
-				gl_renderer_.initTransparent();
-				it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
-				for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
-				{
-					if ((*it)->getTransparency() != 0)
-					{
-						render_(**it, mode);
-					}
-				}
-
-				// render all always front models
-				gl_renderer_.initSolid();
-				glDisable(GL_DEPTH_TEST);
-				it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
-				for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
-				{
-					if ((*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
-					{
-						render_(**it, mode);
-					}
-				}
-				glEnable(GL_DEPTH_TEST);
 			}
+
+			// render all transparent models
+			gl_renderer_.initTransparent();
+			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
+			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
+			{
+				if ((*it)->getTransparency() != 0)
+				{
+					render_(**it, mode);
+				}
+			}
+
+			// render all always front models
+			gl_renderer_.initSolid();
+			glDisable(GL_DEPTH_TEST);
+			it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
+			for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
+			{
+				if ((*it)->hasProperty(Representation::PROPERTY__ALWAYS_FRONT))
+				{
+					render_(**it, mode);
+				}
+			}
+			glEnable(GL_DEPTH_TEST);
+		}
 
 
 		void Scene::render_(const Representation& rep, RenderMode mode)
 			throw()
+		{
+			switch (mode)
 			{
-				switch (mode)
-				{
-					case DIRECT_RENDERING:
-						gl_renderer_.render(rep);
-						break;
+				case DIRECT_RENDERING:
+					gl_renderer_.render(rep);
+					break;
 
-					case DISPLAY_LISTS_RENDERING:
-						gl_renderer_.drawFromDisplayList(rep);
-						break;
+				case DISPLAY_LISTS_RENDERING:
+					gl_renderer_.drawFromDisplayList(rep);
+					break;
 
-					case REBUILD_DISPLAY_LISTS:
-						gl_renderer_.rebuildDisplayListFor(rep);
-						break;
-				}
+				case REBUILD_DISPLAY_LISTS:
+					gl_renderer_.rebuildDisplayListFor(rep);
+					break;
 			}
+		}
 
 
 		void Scene::rotateSystem_(Scene* scene)
@@ -571,358 +571,359 @@ namespace BALL
 
 		void Scene::setViewPoint_()
 			throw()
-			{
-				SetCamera set_camera(this);
-				set_camera.exec();
-				gl_renderer_.updateCamera();
-				updateGL();
-			}
+		{
+			SetCamera set_camera(this);
+			set_camera.exec();
+			gl_renderer_.updateCamera();
+			updateGL();
+		}
 
 
 		void Scene::showViewPoint_()
 			throw()
-			{
-				const Camera& camera = stage_->getCamera();
+		{
+			const Camera& camera = stage_->getCamera();
 
-				String text("ViewPoint: (" 
-						+ String(camera.getViewPoint().x) + "|" 
-						+ String(camera.getViewPoint().y) + "|" 
-						+ String(camera.getViewPoint().z) 
-						+ ")   LookAt: (" 
-						+ String(camera.getLookAtPosition().x) + "|" 
-						+ String(camera.getLookAtPosition().y) + "|" 
-						+ String(camera.getLookAtPosition().z) 
-						+ ")   LookUp: (" 
-						+ String(camera.getLookUpVector().x) + "|" 
-						+ String(camera.getLookUpVector().y) + "|" 
-						+ String(camera.getLookUpVector().z) + ")");
+			String text("ViewPoint: (" 
+					+ String(camera.getViewPoint().x) + "|" 
+					+ String(camera.getViewPoint().y) + "|" 
+					+ String(camera.getViewPoint().z) 
+					+ ")   LookAt: (" 
+					+ String(camera.getLookAtPosition().x) + "|" 
+					+ String(camera.getLookAtPosition().y) + "|" 
+					+ String(camera.getLookAtPosition().z) 
+					+ ")   LookUp: (" 
+					+ String(camera.getLookUpVector().x) + "|" 
+					+ String(camera.getLookUpVector().y) + "|" 
+					+ String(camera.getLookUpVector().z) + ")");
 
-				setStatusbarText(text);
-			}
+			setStatusbarText(text);
+		}
 
 		void Scene::resetCamera_()
 			throw()
-			{
-				// new instance for default values
-				Camera camera;
-				stage_->moveCameraTo(camera);
-				updateCamera_();
-			}
+		{
+			// new instance for default values
+			Camera camera;
+			stage_->moveCameraTo(camera);
+			updateCamera_();
+		}
 
 		void Scene::updateCamera_()
 			throw()
-			{
-				gl_renderer_.updateCamera();
-				gl_renderer_.setLights();
-				light_settings_->updateFromStage();
-				updateGL();
-			}
+		{
+			gl_renderer_.updateCamera();
+			gl_renderer_.setLights();
+			light_settings_->updateFromStage();
+			updateGL();
+		}
 
 
 		// ##################MISC############################
 
 		void Scene::setDefaultLighting(bool update_GL)
 			throw()
-			{
-				List<LightSource>& lights = stage_->getLightSources();
-				lights.clear();
-				LightSource light;
-				light.setPosition(Vector3(0, 0, 1110));
-				light.setIntensity(0.6);
-				light.setType(LightSource::POSITIONAL);
-				stage_->addLightSource(light);
-				gl_renderer_.setLights();
-				if (update_GL) updateGL();
-				light_settings_->update();
-				light_settings_->getDefaultLights();
-				light_settings_->updateFromStage();
-			}
+		{
+			List<LightSource>& lights = stage_->getLightSources();
+			lights.clear();
+			LightSource light;
+			light.setPosition(Vector3(0, 0, 1110));
+			light.setIntensity(0.6);
+			light.setType(LightSource::POSITIONAL);
+			stage_->addLightSource(light);
+			gl_renderer_.setLights();
+			if (update_GL) updateGL();
+			light_settings_->update();
+			light_settings_->getDefaultLights();
+			light_settings_->updateFromStage();
+		}
+
 
 		void Scene::createCoordinateSystem_()
 			throw()
+		{
+			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+
+			Representation* rp = pm.createRepresentation();
+			ColorRGBA red(255,0,0,120);
+			ColorRGBA yellow(255,255,0,120);
+			ColorRGBA color = red;
+
+			for (Position p = 0; p <= 990; p+=10)
 			{
-				PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+				if (color == red) color = yellow;
+				else 							color = red;
 
-				Representation* rp = pm.createRepresentation();
-				ColorRGBA red(255,0,0,120);
-				ColorRGBA yellow(255,255,0,120);
-				ColorRGBA color = red;
+				SimpleBox* box = new SimpleBox;
+				box->a.set(p,0,0);
+				box->b.set((p+10),2,2);
+				box->setColor(color);
+				rp->insert(*box);
 
-				for (Position p = 0; p <= 990; p+=10)
-				{
-					if (color == red) color = yellow;
-					else 							color = red;
+				box = new SimpleBox;
+				box->a.set(0,p,0);
+				box->b.set(2,p+10,2);
+				box->setColor(color);
+				rp->insert(*box);
 
-					SimpleBox* box = new SimpleBox;
-					box->a.set(p,0,0);
-					box->b.set((p+10),2,2);
-					box->setColor(color);
-					rp->insert(*box);
-
-					box = new SimpleBox;
-					box->a.set(0,p,0);
-					box->b.set(2,p+10,2);
-					box->setColor(color);
-					rp->insert(*box);
-
-					box = new SimpleBox;
-					box->a.set(0,0,p);
-					box->b.set(2,2,p+10);
-					box->setColor(color);
-					rp->insert(*box);
-				}
-
-				Label* labelx = new Label;
-				labelx->setText("x-axis");
-				labelx->setColor(ColorRGBA(0,0,1.0,0));
-				labelx->setVertex(10,0,-2);
-				rp->insert(*labelx);
-
-				Label* labely = new Label;
-				labely->setText("y-axis");
-				labely->setColor(ColorRGBA(0,0,1.0,0));
-				labely->setVertex(-2,10,0);
-				rp->insert(*labely);
-
-
-				Label* labelz = new Label;
-				labelz->setText("z-axis");
-				labelz->setColor(ColorRGBA(0,0,1.0,0));
-				labelz->setVertex(0,-2,10);
-				rp->insert(*labelz);
-
-				rp->setProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM);
-
-				// we have to add the representation in the GLRenderer manualy,
-				// because the message wont arrive in Scene::onNotify
-				gl_renderer_.buildDisplayListFor(*rp);
-
-				// notify GeometricControl
-				RepresentationMessage* message = new RepresentationMessage(*rp, RepresentationMessage::ADD);
-				notify_(message);
+				box = new SimpleBox;
+				box->a.set(0,0,p);
+				box->b.set(2,2,p+10);
+				box->setColor(color);
+				rp->insert(*box);
 			}
+
+			Label* labelx = new Label;
+			labelx->setText("x-axis");
+			labelx->setColor(ColorRGBA(0,0,1.0,0));
+			labelx->setVertex(10,0,-2);
+			rp->insert(*labelx);
+
+			Label* labely = new Label;
+			labely->setText("y-axis");
+			labely->setColor(ColorRGBA(0,0,1.0,0));
+			labely->setVertex(-2,10,0);
+			rp->insert(*labely);
+
+
+			Label* labelz = new Label;
+			labelz->setText("z-axis");
+			labelz->setColor(ColorRGBA(0,0,1.0,0));
+			labelz->setVertex(0,-2,10);
+			rp->insert(*labelz);
+
+			rp->setProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM);
+
+			// we have to add the representation in the GLRenderer manualy,
+			// because the message wont arrive in Scene::onNotify
+			gl_renderer_.buildDisplayListFor(*rp);
+
+			// notify GeometricControl
+			RepresentationMessage* message = new RepresentationMessage(*rp, RepresentationMessage::ADD);
+			notify_(message);
+		}
 
 
 		bool Scene::exportScene(Renderer &er) const
 			throw()
+		{
+			if (er.init(*stage_, (float) width(), (float) height()))
 			{
-				if (er.init(*stage_, (float) width(), (float) height()))
+				PrimitiveManager::RepresentationList::ConstIterator it;
+				MainControl *main_control = MainControl::getMainControl(this);
+
+				it = main_control->getPrimitiveManager().getRepresentations().begin();
+				for (; it != main_control->getPrimitiveManager().getRepresentations().end(); it++)
 				{
-					PrimitiveManager::RepresentationList::ConstIterator it;
-					MainControl *main_control = MainControl::getMainControl(this);
-
-					it = main_control->getPrimitiveManager().getRepresentations().begin();
-					for (; it != main_control->getPrimitiveManager().getRepresentations().end(); it++)
+					if (!er.render(**it))
 					{
-						if (!er.render(**it))
-						{
-							getMainControl()->setStatusbarText("Error rendering representation...");
-							return false;
-						}
-					}
-
-					if (er.finish())
-					{
-						// cant call Scene::setStatusbarText(..), no idea why!!!
-						getMainControl()->setStatusbarText("Successfully exported Scene...");
-						return true;
+						getMainControl()->setStatusbarText("Error rendering representation...");
+						return false;
 					}
 				}
 
-				getMainControl()->setStatusbarText("Error while exporting Scene...");
-				return false;
+				if (er.finish())
+				{
+					// cant call Scene::setStatusbarText(..), no idea why!!!
+					getMainControl()->setStatusbarText("Successfully exported Scene...");
+					return true;
+				}
 			}
+
+			getMainControl()->setStatusbarText("Error while exporting Scene...");
+			return false;
+		}
 
 		//##########################PREFERENCES#################################
 
 		void Scene::writePreferences(INIFile& inifile)
 			throw()
-			{
-				ModularWidget::writePreferences(inifile);
-				// write mouse sensitivity
-				inifile.insertValue("WINDOWS", "Main::mouseSensitivity", String(mouse_sensitivity_));
-				inifile.appendSection("STAGE");
+		{
+			ModularWidget::writePreferences(inifile);
+			// write mouse sensitivity
+			inifile.insertValue("WINDOWS", "Main::mouseSensitivity", String(mouse_sensitivity_));
+			inifile.appendSection("STAGE");
 
-				String data = "(" + String((Index)stage_->getBackgroundColor().getRed()) +
-					"," + String((Index)stage_->getBackgroundColor().getGreen()) +
-					"," + String((Index)stage_->getBackgroundColor().getBlue()) +
-					"," + String((Index)stage_->getBackgroundColor().getAlpha()) + ")";
+			String data = "(" + String((Index)stage_->getBackgroundColor().getRed()) +
+				"," + String((Index)stage_->getBackgroundColor().getGreen()) +
+				"," + String((Index)stage_->getBackgroundColor().getBlue()) +
+				"," + String((Index)stage_->getBackgroundColor().getAlpha()) + ")";
 
-				inifile.insertValue("STAGE", "BackgroundColor", String(data));
-				inifile.insertValue("STAGE", "ShowCoordinateSystem", String(stage_->coordinateSystemEnabled()));
-				writeLights_(inifile);
-			}
+			inifile.insertValue("STAGE", "BackgroundColor", String(data));
+			inifile.insertValue("STAGE", "ShowCoordinateSystem", String(stage_->coordinateSystemEnabled()));
+			writeLights_(inifile);
+		}
 
 
 		void Scene::fetchPreferences(INIFile& inifile)
 			throw()
+		{
+			ModularWidget::fetchPreferences(inifile);
+			if (inifile.hasEntry("WINDOWS", "Main::mouseSensitivity"))
 			{
-				ModularWidget::fetchPreferences(inifile);
-				if (inifile.hasEntry("WINDOWS", "Main::mouseSensitivity"))
-				{
-					mouse_sensitivity_= inifile.getValue("WINDOWS", "Main::mouseSensitivity").toFloat();
-				}
-
-				if (inifile.hasEntry("STAGE", "BackgroundColor"))
-				{
-					String data = inifile.getValue("STAGE", "BackgroundColor");
-					vector<String> strings;
-					data.split(strings, "(,)");
-					ColorRGBA color(strings[0].toUnsignedInt(),
-							strings[1].toUnsignedInt(),
-							strings[2].toUnsignedInt(),
-							strings[3].toUnsignedInt());
-					stage_->setBackgroundColor(color);
-				}
-
-				if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on") &&
-						!inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt())
-				{
-					switchShowWidget();
-				}
-
-				readLights_(inifile);
-				light_settings_->updateFromStage();
-				stage_settings_->updateFromStage();
+				mouse_sensitivity_= inifile.getValue("WINDOWS", "Main::mouseSensitivity").toFloat();
 			}
+
+			if (inifile.hasEntry("STAGE", "BackgroundColor"))
+			{
+				String data = inifile.getValue("STAGE", "BackgroundColor");
+				vector<String> strings;
+				data.split(strings, "(,)");
+				ColorRGBA color(strings[0].toUnsignedInt(),
+						strings[1].toUnsignedInt(),
+						strings[2].toUnsignedInt(),
+						strings[3].toUnsignedInt());
+				stage_->setBackgroundColor(color);
+			}
+
+			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on") &&
+					!inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt())
+			{
+				switchShowWidget();
+			}
+
+			readLights_(inifile);
+			light_settings_->updateFromStage();
+			stage_settings_->updateFromStage();
+		}
 
 
 		void Scene::initializePreferencesTab(Preferences &preferences)
 			throw()
-			{
-				light_settings_ = new LightSettings(this);
-				preferences.insertPage(light_settings_, "Lighting");
-				stage_settings_= new StageSettings(this);
-				preferences.insertPage(stage_settings_, "3D View");
-			}
+		{
+			light_settings_ = new LightSettings(this);
+			preferences.insertPage(light_settings_, "Lighting");
+			stage_settings_= new StageSettings(this);
+			preferences.insertPage(stage_settings_, "3D View");
+		}
 
 
 		void Scene::finalizePreferencesTab(Preferences &preferences)
 			throw()
+		{
+			if (light_settings_) 
 			{
-				if (light_settings_) 
-				{
-					preferences.removePage(light_settings_);
-					delete light_settings_;
-					light_settings_ = 0;
-				}
-				if (stage_settings_) 
-				{
-					preferences.removePage(stage_settings_);
-					delete stage_settings_;
-					stage_settings_= 0;
-				}
+				preferences.removePage(light_settings_);
+				delete light_settings_;
+				light_settings_ = 0;
 			}
+			if (stage_settings_) 
+			{
+				preferences.removePage(stage_settings_);
+				delete stage_settings_;
+				stage_settings_= 0;
+			}
+		}
 
 		void Scene::defaultPreferences(Preferences&)
 			throw()
-			{
-				if (light_settings_ == 0) return;
-				stage_settings_->setDefaultValues();
-				light_settings_->setDefaultValues();
-			}
+		{
+			if (light_settings_ == 0) return;
+			stage_settings_->setDefaultValues();
+			light_settings_->setDefaultValues();
+		}
 
 
 		void Scene::applyPreferences(Preferences & /* preferences */)
 			throw()
+		{
+			if (light_settings_ == 0) return;
+
+			light_settings_->apply();
+			gl_renderer_.setLights();
+
+			bool showed_coordinate = stage_->coordinateSystemEnabled();
+			stage_settings_->apply();
+			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+
+			if (showed_coordinate && !stage_->coordinateSystemEnabled())
 			{
-				if (light_settings_ == 0) return;
-
-				light_settings_->apply();
-				gl_renderer_.setLights();
-
-				bool showed_coordinate = stage_->coordinateSystemEnabled();
-				stage_settings_->apply();
-				PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
-
-				if (showed_coordinate && !stage_->coordinateSystemEnabled())
+				PrimitiveManager::RepresentationsIterator it = pm.begin();
+				List<Representation*> reps;
+				for (; it != pm.end(); ++it)
 				{
-					PrimitiveManager::RepresentationsIterator it = pm.begin();
-					List<Representation*> reps;
-					for (; it != pm.end(); ++it)
+					if ((*it)->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 					{
-						if ((*it)->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
-						{
-							reps.push_back(*it);
-						}
-					}
-
-					it = reps.begin();
-					for (; it != reps.end(); it++)
-					{
-						pm.remove(**it);
-						RepresentationMessage* message = new RepresentationMessage(**it, RepresentationMessage::REMOVE);
-						notify_(message);
+						reps.push_back(*it);
 					}
 				}
-				else if (!showed_coordinate && stage_->coordinateSystemEnabled()) 
+
+				it = reps.begin();
+				for (; it != reps.end(); it++)
 				{
-					createCoordinateSystem_();
+					pm.remove(**it);
+					RepresentationMessage* message = new RepresentationMessage(**it, RepresentationMessage::REMOVE);
+					notify_(message);
 				}
-				gl_renderer_.updateBackgroundColor(); 
-				renderView_(DISPLAY_LISTS_RENDERING);
-				updateGL();
 			}
+			else if (!showed_coordinate && stage_->coordinateSystemEnabled()) 
+			{
+				createCoordinateSystem_();
+			}
+			gl_renderer_.updateBackgroundColor(); 
+			renderView_(DISPLAY_LISTS_RENDERING);
+			updateGL();
+		}
 
 
 		void Scene::cancelPreferences(Preferences&)
 			throw()
+		{
+			if (light_settings_ != 0)
 			{
-				if (light_settings_ != 0)
-				{
-					light_settings_->updateFromStage();
-				}
-
-				if (stage_settings_ != 0)
-				{
-					stage_settings_->updateFromStage();
-				}
+				light_settings_->updateFromStage();
 			}
+
+			if (stage_settings_ != 0)
+			{
+				stage_settings_->updateFromStage();
+			}
+		}
 
 
 		void Scene::writeLights_(INIFile& inifile) const
 			throw()
+		{
+			String data;
+			inifile.appendSection("LIGHTING");
+
+			Position nr = 0;
+			List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
+			for (; it != stage_->getLightSources().end(); it++)
 			{
-				String data;
-				inifile.appendSection("LIGHTING");
+				const LightSource& light = *it;
 
-				Position nr = 0;
-				List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
-				for (; it != stage_->getLightSources().end(); it++)
-				{
-					const LightSource& light = *it;
+				data = "(" + String(light.getPosition().x) +
+					"," + String(light.getPosition().y) +
+					"," + String(light.getPosition().z) + ")";
+				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Position", data);
 
-					data = "(" + String(light.getPosition().x) +
-						"," + String(light.getPosition().y) +
-						"," + String(light.getPosition().z) + ")";
-					inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Position", data);
+				data = "(" + String(light.getDirection().x) +
+					"," + String(light.getDirection().y) +
+					"," + String(light.getDirection().z) + ")";
+				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Direction", data);
 
-					data = "(" + String(light.getDirection().x) +
-						"," + String(light.getDirection().y) +
-						"," + String(light.getDirection().z) + ")";
-					inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Direction", data);
+				data = String(light.getAngle().toRadian());
+				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Angle", data);
 
-					data = String(light.getAngle().toRadian());
-					inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Angle", data);
+				data = String(light.getIntensity());
+				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Intensity", data);
 
-					data = String(light.getIntensity());
-					inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Intensity", data);
+				data = "(" + String((Index)light.getColor().getRed()) +
+					"," + String((Index)light.getColor().getGreen()) +
+					"," + String((Index)light.getColor().getBlue()) +
+					"," + String((Index)light.getColor().getAlpha()) + ")";
+				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Color", data);
 
-					data = "(" + String((Index)light.getColor().getRed()) +
-						"," + String((Index)light.getColor().getGreen()) +
-						"," + String((Index)light.getColor().getBlue()) +
-						"," + String((Index)light.getColor().getAlpha()) + ")";
-					inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Color", data);
+				data = String(light.getType());
+				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Type", data);
 
-					data = String(light.getType());
-					inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Type", data);
+				data = String(light.isRelativeToCamera());
+				inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Relative", data);
 
-					data = String(light.isRelativeToCamera());
-					inifile.insertValue("LIGHTING", "Light_" + String(nr) + "_Relative", data);
-
-					nr++;
-				}
+				nr++;
 			}
+		}
 
 
 		void Scene::readLights_(const INIFile& inifile)
@@ -988,70 +989,70 @@ namespace BALL
 
 		void Scene::initializeWidget(MainControl& main_control)
 			throw()
-			{
-				(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
+		{
+			(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
-				String hint;
-				main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
-				hint = "Switch to rotate/zoom mode";
-				rotate_id_ =	main_control.insertMenuEntry(
-						MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R, -1, hint);
+			String hint;
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
+			hint = "Switch to rotate/zoom mode";
+			rotate_id_ =	main_control.insertMenuEntry(
+					MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R, -1, hint);
 
-				hint = "Switch to picking mode, e.g. to identify singe atoms or groups";
-				picking_id_ = main_control.insertMenuEntry(
-						MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P, -1, hint);
+			hint = "Switch to picking mode, e.g. to identify singe atoms or groups";
+			picking_id_ = main_control.insertMenuEntry(
+					MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P, -1, hint);
 
-				main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
+			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
-				// 	stereo_id_ = main_control.insertMenuEntry(
-				// 		MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()));
+			// 	stereo_id_ = main_control.insertMenuEntry(
+			// 		MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()));
 
-				hint = "Print the coordinates of the current viewpoint";
-				main_control.insertMenuEntry(
-						MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), CTRL+Key_W, -1, hint);
+			hint = "Print the coordinates of the current viewpoint";
+			main_control.insertMenuEntry(
+					MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), CTRL+Key_W, -1, hint);
 
-				hint = "Move the viewpoint to the given coordinates";
-				main_control.insertMenuEntry(
-						MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), CTRL+Key_N, -1, hint);
+			hint = "Move the viewpoint to the given coordinates";
+			main_control.insertMenuEntry(
+					MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, SLOT(setViewPoint_()), CTRL+Key_N, -1, hint);
 
-				hint = "Reset the camera to the orgin (0,0,0)";
-				main_control.insertMenuEntry(
-						MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()), CTRL+Key_T, -1, hint);
+			hint = "Reset the camera to the orgin (0,0,0)";
+			main_control.insertMenuEntry(
+					MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, SLOT(resetCamera_()), CTRL+Key_T, -1, hint);
 
-				hint = "Export a PNG image file from the Scene";
-				main_control.insertMenuEntry(
-						MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P, -1, hint);
+			hint = "Export a PNG image file from the Scene";
+			main_control.insertMenuEntry(
+					MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P, -1, hint);
 
-				window_menu_entry_id_ = 
-					main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
-				menuBar()->setItemChecked(window_menu_entry_id_, true);
-				//	menuBar()->setItemChecked(stereo_id_, false) ;
+			window_menu_entry_id_ = 
+				main_control.insertMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
+			menuBar()->setItemChecked(window_menu_entry_id_, true);
+			//	menuBar()->setItemChecked(stereo_id_, false) ;
 
-				setCursor(QCursor(Qt::SizeAllCursor));
-			}
+			setCursor(QCursor(Qt::SizeAllCursor));
+		}
 
 		void Scene::finalizeWidget(MainControl& main_control)
 			throw()
-			{
-				main_control.removeMenuEntry(MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
-				main_control.removeMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P);		
-				main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
-						SLOT(showViewPoint_()), CTRL+Key_W);		
-				main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, 
-						SLOT(setViewPoint_()), CTRL+Key_N);		
-				main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, 
-						SLOT(resetCamera_()), CTRL+Key_T);		
-				//	main_control.removeMenuEntry(MainControl::DISPLAY, "& Stereo Mode", this, SLOT(switchStereo()), CTRL+Key_T);		
-				main_control.removeMenuEntry(MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P);		
-				main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
-			}
+		{
+			main_control.removeMenuEntry(MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
+			main_control.removeMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P);		
+			main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
+					SLOT(showViewPoint_()), CTRL+Key_W);		
+			main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, 
+					SLOT(setViewPoint_()), CTRL+Key_N);		
+			main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Rese&t Camera", this, 
+					SLOT(resetCamera_()), CTRL+Key_T);		
+			//	main_control.removeMenuEntry(MainControl::DISPLAY, "& Stereo Mode", this, SLOT(switchStereo()), CTRL+Key_T);		
+			main_control.removeMenuEntry(MainControl::FILE_EXPORT, "PNG", this, SLOT(exportPNG()), ALT+Key_P);		
+			main_control.removeMenuEntry(MainControl::WINDOWS, "Scene", this, SLOT(switchShowWidget()));
+		}
 
 		void Scene::checkMenu(MainControl& /*main_control*/)
 			throw()
-			{
-				menuBar()->setItemChecked(rotate_id_, 	(current_mode_ == ROTATE__MODE));
-				menuBar()->setItemChecked(picking_id_,  (current_mode_ == PICKING__MODE));		
-			}
+		{
+			menuBar()->setItemChecked(rotate_id_, 	(current_mode_ == ROTATE__MODE));
+			menuBar()->setItemChecked(picking_id_,  (current_mode_ == PICKING__MODE));		
+		}
 
 		//##########################EVENTS#################################
 
