@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.8 2004/03/04 17:14:18 amoll Exp $
+// $Id: datasetControl.h,v 1.9 2004/06/10 19:37:08 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -18,6 +18,14 @@
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
 # include <BALL/VIEW/WIDGETS/genericControl.h>
 #endif
+
+#ifndef BALL_DATATYPE_REGULARDATA1D_H
+# include <BALL/DATATYPE/regularData1D.h>
+#endif 
+
+#ifndef BALL_DATATYPE_REGULARDATA2D_H
+# include <BALL/DATATYPE/regularData2D.h>
+#endif 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 # include <BALL/DATATYPE/regularData3D.h>
@@ -36,7 +44,7 @@ namespace BALL
 	{
 		class SnapshotVisualisationDialog;
 
-		/**	DatasetControl is a widget to manipulate Trajectories and RegularData3D instances.
+		/**	DatasetControl is a widget to manipulate Trajectories and RegularData instances.
 		 		It is derived from GenricControl.
 				There are two columns. The <b>Name</b> column and the
 				<b>Type</b> column. In the Name column the item tree will be shown and in 
@@ -111,20 +119,27 @@ namespace BALL
 				throw();
 
 			///
-			void add3DGrid()
-				throw();
+			void add1DGrid() throw();
+
+
+			///
+			void add2DGrid() throw();
+
+
+			///
+			void add3DGrid() throw();
 
 			///
 			void updateSelection()
 				throw();
 
 			///
-			List<std::pair<RegularData3D*, String> > getGrids()
+			List<std::pair<RegularData3D*, String> > get3DGrids()
 				throw();
 
 			///
-			Size countGrids() const
-				throw() { return item_to_grid_.size();}
+			Size count3DGrids() const
+				throw() { return item_to_grid3_.size();}
 
 			/// Overloaded from GenericControl, calls cut
 			virtual void deleteCurrentItems()
@@ -140,8 +155,12 @@ namespace BALL
 			void deleteItems_();
 			void visualiseTrajectory_();
 			void saveTrajectory_();
-			void save3DGrid_()
-				throw();
+			void visualiseGrid_();
+			void save1DGrid_() throw();
+			void save2DGrid_() throw();
+			void save3DGrid_() throw();
+			String chooseGridFileForSave_() throw();
+			String chooseGridFileForOpen_() throw();
 	
 			void onContextMenu_(QListViewItem* item, const QPoint& point, int column);
 
@@ -151,7 +170,13 @@ namespace BALL
 
 			void insertTrajectory_(TrajectoryFile* file, System& system)
 				throw();
-			
+
+			void insertGrid_(RegularData1D* file, System* system, const String& name)
+				throw();
+
+			void insertGrid_(RegularData2D* file, System* system, const String& name)
+				throw();
+		
 			void insertGrid_(RegularData3D* file, System* system, const String& name)
 				throw();
 			
@@ -163,10 +188,11 @@ namespace BALL
 
 			SnapshotVisualisationDialog* 	dialog_;
 			Index 												open_trajectory_id_;
-			Index 												open_grid_id_;
 
 			HashMap<QListViewItem*	, SnapShotManager*> 					item_to_trajectory_;
-			HashMap<QListViewItem*	, RegularData3D*>   					item_to_grid_;
+			HashMap<QListViewItem*	, RegularData1D*>   					item_to_grid1_;
+			HashMap<QListViewItem*	, RegularData2D*>   					item_to_grid2_;
+			HashMap<QListViewItem*	, RegularData3D*>   					item_to_grid3_;
 			HashMap<Composite*      , HashSet<QListViewItem*> > 	composite_to_items_;
 			HashMap<QListViewItem*  , Composite*>  								item_to_composite_;
 		};

@@ -1,12 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.14 2004/06/10 17:06:09 amoll Exp $
+// $Id: regularData1DWidget.C,v 1.15 2004/06/10 19:37:19 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/limits.h>
+
+#include <qpopupmenu.h>
+#include <qapplication.h>
 
 namespace BALL
 {
@@ -146,5 +149,66 @@ void RegularData1DWidget::onNotify(Message *message)
 	}
 }
 
+// ==========================================
+
+DockableRegularData1DWidget::DockableRegularData1DWidget(const RegularData1D* data, QWidget *parent)
+	: DockWidget(parent,"Dockable RegularData1D Widget"),
+		canWidget_(data, this)
+{
+	QSizePolicy sizePolicy (QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding);		
+	setSizePolicy(sizePolicy);
+	setMinimumSize(sizeHint());
+	setGuest(canWidget_);  
+	canWidget_.createPlot();
+	canWidget_.resize(size()); 
+}
+
+
+DockableRegularData1DWidget::~DockableRegularData1DWidget()
+	throw()
+{
+}
+
+void DockableRegularData1DWidget::plot()
+	throw()
+{
+	canWidget_.showObjects();
+	show();
+	canWidget_.zoomToFit();
+}
+
+void DockableRegularData1DWidget::contextMenuEvent(QContextMenuEvent* e)
+{
+	QPopupMenu context_menu;
+	context_menu.insertItem("ZoomToFit", this, SLOT(zoomToFit()));
+	context_menu.insertItem("ZoomIn", this, SLOT(zoomIn()));
+	context_menu.insertItem("ZoomOut", this, SLOT(zoomOut()));
+	QPoint pos = e->reason() == QContextMenuEvent::Mouse ? e->globalPos() :
+		mapToGlobal( QPoint(e->pos().x(), 0) ) + QPoint( width() / 2, height() / 2 );
+ 	context_menu.exec(pos);
+	e->accept();
+}
+
+void DockableRegularData1DWidget::zoomToFit()
+{
+	canWidget_.zoomToFit();
+}
+
+void DockableRegularData1DWidget::zoomIn()
+{
+	canWidget_.zoomIn();
+}
+
+void DockableRegularData1DWidget::zoomOut()
+{
+	canWidget_.zoomOut();
+}
+
+//we need this for SizePolicy
+QSize DockableRegularData1DWidget::sizeHint() const
+{
+	return QSize((int)(qApp->mainWidget()->width()/3.)+55, (int)(qApp->mainWidget()->height()/3.)+55);
+}
+		
 	}//end of namespace VIEW
 }//end of namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.25 2004/06/10 16:49:38 amoll Exp $
+// $Id: datasetControl.C,v 1.26 2004/06/10 19:37:19 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -9,6 +9,9 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
+#include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
+#include <BALL/VIEW/WIDGETS/regularData2DWidget.h>
+
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 #include <qfiledialog.h>
@@ -59,8 +62,11 @@ void DatasetControl::initializeWidget(MainControl& main_control)
 	open_trajectory_id_ = 
 		main_control.insertMenuEntry(MainControl::FILE_OPEN, "Trajectory", this, SLOT(addTrajectory()), 0, -1,
 		String("Open a trajectory file (1 System has to be selected)"));
-	open_grid_id_ = 
-		main_control.insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()), 0, -1,
+	main_control.insertMenuEntry(MainControl::FILE_OPEN, "1D Grid", this, SLOT(add1DGrid()), 0, -1,
+		String("Open a 1D data grid"));
+	main_control.insertMenuEntry(MainControl::FILE_OPEN, "2D Grid", this, SLOT(add2DGrid()), 0, -1,
+		String("Open a 2D data grid"));
+	main_control.insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()), 0, -1,
 		String("Open a 3D data grid"));
 	GenericControl::initializeWidget(main_control);
 }
@@ -70,6 +76,8 @@ void DatasetControl::finalizeWidget(MainControl& main_control)
 	throw()
 {
 	main_control.removeMenuEntry(MainControl::FILE_OPEN, "Trajectory", this, SLOT(addTrajectory()));
+	main_control.removeMenuEntry(MainControl::FILE_OPEN, "1D Grid", this, SLOT(add1DGrid()));
+	main_control.removeMenuEntry(MainControl::FILE_OPEN, "2D Grid", this, SLOT(add2DGrid()));
 	main_control.removeMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()));
 	GenericControl::finalizeWidget(main_control);
 }
@@ -202,7 +210,9 @@ void DatasetControl::deleteItems_()
 void DatasetControl::deleteItem_(QListViewItem& item)
 {
 	if (!item_to_trajectory_.has(&item) &&
-			!item_to_grid_.has(&item))
+			!item_to_grid1_.has(&item) &&
+			!item_to_grid2_.has(&item) &&
+			!item_to_grid3_.has(&item))
 	{
 		return;
 	}
@@ -214,15 +224,39 @@ void DatasetControl::deleteItem_(QListViewItem& item)
 		delete ssm;
 		setStatusbarText("deleted trajectory");
 	}
+	else if (item_to_grid1_.has(&item))
+	{
+		RegularData1D* ssm = item_to_grid1_[&item];
+
+		RegularData1DMessage* msg = new RegularData1DMessage(RegularData1DMessage::REMOVE);
+		msg->setData(*ssm);
+		notify_(msg);
+
+		item_to_grid3_.erase(&item);
+		delete ssm;
+		setStatusbarText("deleted 1D grid");
+	}
+	else if (item_to_grid2_.has(&item))
+	{
+		RegularData2D* ssm = item_to_grid2_[&item];
+
+		RegularData2DMessage* msg = new RegularData2DMessage(RegularData2DMessage::REMOVE);
+		msg->setData(*ssm);
+		notify_(msg);
+
+		item_to_grid2_.erase(&item);
+		delete ssm;
+		setStatusbarText("deleted 2D grid");
+	}
 	else
 	{
-		RegularData3D* ssm = item_to_grid_[&item];
+		RegularData3D* ssm = item_to_grid3_[&item];
 
 		RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::REMOVE);
 		msg->setData(*ssm);
 		notify_(msg);
 
-		item_to_grid_.erase(&item);
+		item_to_grid3_.erase(&item);
 		delete ssm;
 		setStatusbarText("deleted 3D grid");
 	}
@@ -250,7 +284,21 @@ void DatasetControl::onContextMenu_(QListViewItem* item,  const QPoint& point, i
 		menu_entry_pos = context_menu.insertItem("Visualise/Export", this, SLOT(visualiseTrajectory_()));
 		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
 	}
-	else if (item_to_grid_.has(item))
+	else if (item_to_grid1_.has(item))
+	{
+		menu_entry_pos = context_menu.insertItem("Save", this, SLOT(save1DGrid_()));
+		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
+		menu_entry_pos = context_menu.insertItem("Visualise", this, SLOT(visualiseGrid_()));
+		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
+	}
+	else if (item_to_grid2_.has(item))
+	{
+		menu_entry_pos = context_menu.insertItem("Save", this, SLOT(save2DGrid_()));
+		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
+		menu_entry_pos = context_menu.insertItem("Visualise", this, SLOT(visualiseGrid_()));
+		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
+	}
+	else if (item_to_grid3_.has(item))
 	{
 		menu_entry_pos = context_menu.insertItem("Save", this, SLOT(save3DGrid_()));
 		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
@@ -277,6 +325,23 @@ void DatasetControl::visualiseTrajectory_()
 	dialog_->show();
 }
 
+void DatasetControl::visualiseGrid_()
+{
+	if (item_to_grid1_.has(context_item_))
+	{
+		RegularData1D* grid = item_to_grid1_[context_item_];
+		DockableRegularData1DWidget* widget = new DockableRegularData1DWidget(grid, getMainControl());
+		widget->show();
+	}
+	else if (item_to_grid2_.has(context_item_))
+	{
+		RegularData2D* grid = item_to_grid2_[context_item_];
+		DockableRegularData2DWidget* widget = new DockableRegularData2DWidget(grid, getMainControl());
+		widget->show();
+	}
+}
+
+
 void DatasetControl::saveTrajectory_()
 {
 	SnapShotManager* ssm = item_to_trajectory_[context_item_];
@@ -296,14 +361,13 @@ void DatasetControl::saveTrajectory_()
 	setStatusbarText("Writen DCDFile");
 }
 
-void DatasetControl::add3DGrid()
+String DatasetControl::chooseGridFileForOpen_()
 	throw()
 {
 	QString result = QFileDialog::getOpenFileName("", "*", 0, "Select a RegularData file");
-	if (result == QString::null) return;
+	if (result == QString::null) return "";
 	setWorkingDirFromFilename_(result.ascii());
 
-	RegularData3D* dat = new RegularData3D;
 	File infile;
 	
 	try
@@ -313,17 +377,93 @@ void DatasetControl::add3DGrid()
 	catch(Exception::FileNotFound)
 	{
 		Log.error() << "File could not be found!" << std::endl;
-		return;
+		return "";
 	}
 
-	infile >> *dat;
-	infile.close();
-	insertGrid_(dat, 0, String(result.ascii()));
-	RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
+	return result.ascii();
+}
+
+
+void DatasetControl::add1DGrid()
+	throw()
+{
+	String filename = chooseGridFileForOpen_();
+	if (filename == "") return;
+
+	RegularData1D* dat = new RegularData1D;
+	(*dat).binaryRead(filename);
+	insertGrid_(dat, 0, filename);
+	RegularData1DMessage* msg = new RegularData1DMessage(RegularData1DMessage::NEW);
 	msg->setData(*dat);
-	msg->setCompositeName(result.ascii());
+	msg->setCompositeName(filename);
 	notify_(msg);
 }
+
+void DatasetControl::add2DGrid()
+	throw()
+{
+	String filename = chooseGridFileForOpen_();
+	if (filename == "") return;
+
+	RegularData2D* dat = new RegularData2D;
+	(*dat).binaryRead(filename);
+	insertGrid_(dat, 0, filename);
+	RegularData2DMessage* msg = new RegularData2DMessage(RegularData2DMessage::NEW);
+	msg->setData(*dat);
+	msg->setCompositeName(filename);
+	notify_(msg);
+}
+
+
+void DatasetControl::add3DGrid()
+	throw()
+{
+	String filename = chooseGridFileForOpen_();
+	if (filename == "") return;
+
+	File infile(filename, std::ios::in);
+	RegularData3D* dat = new RegularData3D;
+	infile >> *dat;
+	infile.close();
+	insertGrid_(dat, 0, filename);
+	RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
+	msg->setData(*dat);
+	msg->setCompositeName(filename);
+	notify_(msg);
+}
+
+void DatasetControl::insertGrid_(RegularData1D* data, System* system, const String& name)
+	throw()
+{
+	QListViewItem* item;
+	if (system != 0) 
+	{
+		item = new QListViewItem(listview, name.c_str(), system->getName().c_str(), "1D Grid");
+	}
+	else
+	{ 	
+		item = new QListViewItem(listview, name.c_str(), "", "1D Grid");
+	}
+	item_to_grid1_[item] = data;
+	insertComposite_(system, item);
+}
+
+void DatasetControl::insertGrid_(RegularData2D* data, System* system, const String& name)
+	throw()
+{
+	QListViewItem* item;
+	if (system != 0) 
+	{
+		item = new QListViewItem(listview, name.c_str(), system->getName().c_str(), "2D Grid");
+	}
+	else
+	{ 	
+		item = new QListViewItem(listview, name.c_str(), "", "2D Grid");
+	}
+	item_to_grid2_[item] = data;
+	insertComposite_(system, item);
+}
+
 
 void DatasetControl::insertGrid_(RegularData3D* data, System* system, const String& name)
 	throw()
@@ -337,35 +477,66 @@ void DatasetControl::insertGrid_(RegularData3D* data, System* system, const Stri
 	{ 	
 		item = new QListViewItem(listview, name.c_str(), "", "3D Grid");
 	}
-	item_to_grid_[item] = data;
+	item_to_grid3_[item] = data;
 	insertComposite_(system, item);
+}
+
+
+String DatasetControl::chooseGridFileForSave_()
+	throw()
+{
+	QString qs = QFileDialog::getSaveFileName("", "*", 0, "Select a RegularData file");
+	if (qs == QString::null) return "";
+	setWorkingDirFromFilename_(qs.ascii());
+
+	String result = qs.ascii();
+	if (result.isEmpty()) return 0;
+
+	File test;
+	
+	try
+	{
+		test.open(result, std::ios::out);
+	}
+	catch(Exception::GeneralException)
+	{
+		Log.error() << "File could not be written!" << std::endl;
+		return "";
+	}
+
+	return result;
+}
+
+void DatasetControl::save1DGrid_()
+	throw()
+{ 
+	String filename = chooseGridFileForSave_();
+	if (filename == "") return;
+
+	item_to_grid1_[context_item_]->binaryWrite(filename);
+	setStatusbarText("Grid successfully written...");
+}
+
+void DatasetControl::save2DGrid_()
+	throw()
+{
+	String filename = chooseGridFileForSave_();
+	if (filename == "") return;
+
+	item_to_grid2_[context_item_]->binaryWrite(filename);
+	setStatusbarText("Grid successfully written...");
 }
 
 void DatasetControl::save3DGrid_()
 	throw()
 {
-	QString qs = QFileDialog::getSaveFileName("", "*", 0, "Select a RegularData file");
-	if (qs == QString::null) return;
-	setWorkingDirFromFilename_(qs.ascii());
+	String filename = chooseGridFileForSave_();
+	if (filename == "") return;
 
-	String result = qs.ascii();
-	if (result.isEmpty()) return;
-
-	File outfile;
-	
-	try
-	{
-		outfile.open(result, std::ios::out);
-	}
-	catch(Exception::GeneralException)
-	{
-		Log.error() << "File could not be written!" << std::endl;
-		return;
-	}
-
-	outfile << * item_to_grid_[context_item_];
+	File outfile(filename, std::ios::out);
+	outfile << * item_to_grid3_[context_item_];
 	outfile.close();
-	setStatusbarText("3D Grid successfully written...");
+	setStatusbarText("Grid successfully written...");
 }
 
 void DatasetControl::updateSelection()
@@ -373,28 +544,47 @@ void DatasetControl::updateSelection()
 {
 	GenericControl::updateSelection();
 
-	RegularData3DMessage* message = new RegularData3DMessage(RegularData3DMessage::SELECTED);
 	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)
 	{
 		QListViewItem* item = it.current();
-		if (item->isSelected() &&
-				item_to_grid_.has(item))
+		if (!item->isSelected()) continue;
+
+		if (item_to_grid1_.has(item))
 		{
-			message->setData(*item_to_grid_[item]);
+			RegularData1DMessage* message = new RegularData1DMessage(RegularData1DMessage::SELECTED);
+			message->setData(*item_to_grid1_[item]);
 			message->setCompositeName(item->text(0).ascii());
+			notify_(message);
+			break;
+		}
+
+		if (item_to_grid2_.has(item))
+		{
+			RegularData2DMessage* message = new RegularData2DMessage(RegularData2DMessage::SELECTED);
+			message->setData(*item_to_grid2_[item]);
+			message->setCompositeName(item->text(0).ascii());
+			notify_(message);
+			break;
+		}
+
+		if (item_to_grid3_.has(item))
+		{
+			RegularData3DMessage* message = new RegularData3DMessage(RegularData3DMessage::SELECTED);
+			message->setData(*item_to_grid3_[item]);
+			message->setCompositeName(item->text(0).ascii());
+			notify_(message);
 			break;
 		}
 	}
-	notify_(message);
 }
 
-List<std::pair<RegularData3D*, String> > DatasetControl::getGrids()
+List<std::pair<RegularData3D*, String> > DatasetControl::get3DGrids()
 	throw()
 {
 	List<std::pair<RegularData3D*,String> > grids;
-	HashMap<QListViewItem*, RegularData3D*>::Iterator it = item_to_grid_.begin();
-	for (; it != item_to_grid_.end(); it++)
+	HashMap<QListViewItem*, RegularData3D*>::Iterator it = item_to_grid3_.begin();
+	for (; it != item_to_grid3_.end(); it++)
 	{
 		std::pair<RegularData3D*, String> p((*it).second, (*it).first->text(0).ascii());
 		grids.push_back(p);
