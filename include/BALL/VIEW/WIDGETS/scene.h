@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.58.2.3 2005/01/20 23:44:21 amoll Exp $
+// $Id: scene.h,v 1.58.2.4 2005/01/23 14:38:15 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -708,9 +708,9 @@ namespace BALL
 			MaterialSettings* material_settings_;
 
 			// nr of last png file export
-			static Position screenshot_nr_,
+			static Position screenshot_nr_;
 			// nr of last pov file export
-							 pov_nr_;
+			static Position pov_nr_;
 
 			QPoint last_pos_;
 
