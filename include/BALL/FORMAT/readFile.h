@@ -1,5 +1,3 @@
-// $Id: readFile.h,v 1.4 2000/09/24 13:16:07 oliver Exp $
-
 #ifndef BALL_FORMAT_READFILE_H
 #define BALL_FORMAT_READFILE_H
 
@@ -11,21 +9,25 @@
 #	include <BALL/common.h>
 #endif
 
+#ifndef BALL_COMMON_EXCEPTION_H
+#	include <BALL/COMMON/exception.h>
+#endif
+
 #include <vector>
 #include <fstream>
 
 namespace BALL 
 {
+
 	class ReadFile
 	{
 		public:
 
-			/** Exception thrown if file could not be processed right.
-			*/
-			class ReadFileError{};
+		protected:
 
-			protected:
-			/*_	@name	Help-Methods for File Access
+			ReadFile(const String& file_name);
+
+			/*_	@name	Help-Methods for File Acces
 			*/
 			//_@{
 
@@ -77,13 +79,24 @@ namespace BALL
 			*/
 			//_@{
 
-			/// filestream for reading
-			std::ifstream in;
+			/// filestream to read
+			ifstream in;
 
 			/// buffer for the line in use
 			String line_;
 
+			/// line number in the file
+			Position line_number_;
+
+			/// filename
+			String file_name_;
+
 			//_@}
+
+			private:
+
+			ReadFile();
+
 	};
 
 } // namespace BALL

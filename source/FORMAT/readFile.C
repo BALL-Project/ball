@@ -1,4 +1,4 @@
-// $Id: readFile.C,v 1.5 2000/09/24 13:25:17 oliver Exp $
+// $Id: readFile.C,v 1.6 2000/10/03 02:04:06 amoll Exp $
 
 #include<BALL/FORMAT/readFile.h>
 
@@ -7,13 +7,20 @@ using namespace std;
 namespace BALL
 {
 
+	ReadFile::ReadFile(const String& file_name)
+		: line_number_(0),
+			file_name_(file_name)
+	{
+		in.open(file_name_.c_str()); 
+		if (!in)
+		{
+			throw Exception::FileNotFound(__FILE__, __LINE__, file_name);
+		}
+	}
+
 	String ReadFile::getToken_(Position& pos, char delimiter) const
 	{
-		if (pos >= line_.size())
-		{
-			Log.error() << "in getToken_ : pos too large" << endl;
-			throw ReadFileError();
-		}
+		test_(pos < line_.size(), "in getToken_ : pos too large");
 
 		while (pos < line_.size() && line_[pos] != delimiter)
 		{
@@ -21,44 +28,26 @@ namespace BALL
 		}
 		++pos;
 
-		if (pos >= line_.size())
-		{
-			Log.error() << "open token" << endl;
-			throw ReadFileError();
-		}
+		test_(pos < line_.size(), "open token");
 
 		String token;
 
 		while (line_[pos] != delimiter)
 		{
-			if (pos >= line_.size())
-			{
-				Log.error() << "open token" << endl;
-				throw ReadFileError();
-			}
+			test_(pos < line_.size(), "open token");
 
 			token += line_[pos];
 			++pos;
 		}
 
 		++pos;
-
-		if(token.size() == 0) 
-		{
-			Log.error() << "token could not be read" << endl;
-			throw ReadFileError();
-		}
-
+		test_(token.size() > 0, "token could not be read");
 		return token;
 	}
 
 	String ReadFile::getToken_(Position& pos) const
 	{
-		if (pos >= line_.size())
-		{
-			Log.error() << "in getToken_ : pos too large" << endl;
-			throw ReadFileError();
-		}
+		test_(pos < line_.size(), "in getToken_ : pos too large");
 
 		while (pos < line_.size() && isspace(line_[pos]))
 		{
@@ -72,14 +61,9 @@ namespace BALL
 			token += line_[pos];
 			++pos;
 		}
-		++pos;
-	
-		if(token.size() == 0) 
-		{
-			Log.error() << "token could not be read" << endl;
-			throw ReadFileError();
-		}
 
+		++pos;
+		test_(token.size() > 0, "token could not be read");
 		return token;
 	}
 
@@ -100,12 +84,7 @@ namespace BALL
 			++pos;
 		}
 		
-		if(token.size() == 0) 
-		{
-			Log.error() << "token could not be read" << endl;
-			throw ReadFileError();
-		}
-
+		test_(token.size() > 0, "token could not be read");
 		return token;
 	}
 
@@ -116,16 +95,14 @@ namespace BALL
 			end = line_.size() - 1;
 		}
 
-		if (end >= line_.size())
-		{
-			Log.error() << "error in copyString_";
-			throw ReadFileError();
-		}
+		test_(end < line_.size(), "error in copyString_");
 		String dest;
+
 		for (; start <= end ; ++start)
 		{
 			dest += line_[start];
 		}
+
 		return dest;
 	}
 
@@ -180,10 +157,9 @@ namespace BALL
 
 	void ReadFile::test_(bool condition, const String& msg) const
 	{
-		if (condition == false)
+		if (!condition)
 		{
-			Log.warn() << msg << endl;
-			throw ReadFileError();
+			throw Exception::ReadFileError(msg, line_, line_number_);
 		}
 	}
 
@@ -192,7 +168,7 @@ namespace BALL
 		char* c = new char[200];
 		in.getline(c, 200);
 		line_ = c;
-		//in.getline(const_cast<char*>(line_.c_str()), 200);
+		++line_number_;
 	}
 
 	void ReadFile::skipLines_(Size number)
@@ -210,7 +186,8 @@ namespace BALL
 
 	void ReadFile::rewind_()
 	{
-		in.seekg(0);
+		in.close();
+		in.open(file_name_.c_str());
 	}
 
 } //namespace
