@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TextPersistenceManager_test.C,v 1.12 2004/11/02 14:03:04 amoll Exp $
+// $Id: TextPersistenceManager_test.C,v 1.13 2004/11/02 14:04:22 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -11,10 +11,11 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/FORMAT/HINFile.h>
 
 ///////////////////////////
 
-START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.12 2004/11/02 14:03:04 amoll Exp $")
+START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.13 2004/11/02 14:04:22 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -656,6 +657,27 @@ CHECK([EXTRA] full_test)
 	delete s2;
 RESULT
 
+
+CHECK([Extra] full_test2)
+	String filename;
+	HINFile hin("data/AlaGlySer.hin");
+	System s;
+	hin >> s;
+
+	NEW_TMP_FILE(filename);
+	ofstream os(filename.c_str(), std::ios::out | std::ios::binary);
+	TextPersistenceManager pm(os);
+	s >> pm;
+	os.close();
+
+	ifstream is(filename.c_str(), std::ios::in);
+	TextPersistenceManager pm2(is);
+	System* s2 = (System*) pm2.readObject();
+	is.close();
+
+	TEST_EQUAL(s.countAtoms(), s2->countAtoms())
+	TEST_EQUAL(s.countBonds(), s2->countBonds())
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
