@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.8 2000/01/11 20:15:39 oliver Exp $
+// $Id: selector.C,v 1.9 2000/01/13 22:29:04 oliver Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -618,7 +618,7 @@ namespace BALL
     const Atom* atom = dynamic_cast<const Atom*>(&composite);
     if (atom != 0)
     {
-			const Residue*	res = atom->getAncestor<Residue>();
+			const Residue*	res = atom->getAncestor(RTTI::getDefault<Residue>());
 			if (res != 0)
 			{
 				return (res->getName() == argument_);
@@ -635,7 +635,7 @@ namespace BALL
     const Atom* atom = dynamic_cast<const Atom*>(&composite);
     if (atom != 0)
     {
-			const Residue*	res = atom->getAncestor<Residue>();
+			const Residue*	res = atom->getAncestor(RTTI::getDefault<Residue>());
 			if (res != 0)
 			{
 				return (res->getID() == argument_);
@@ -683,7 +683,7 @@ namespace BALL
 	{
 		if (RTTI::isKindOf<Atom>(composite))
 		{
-			if (composite.hasAncestor<Residue>())
+			if (composite.hasAncestor(RTTI::getDefault<Residue>()))
 			{
 				String name = RTTI::castTo<Atom>(composite)->getName();
 				if ((name == "C") || (name == "N") || (name == "CA") || (name == "O"))

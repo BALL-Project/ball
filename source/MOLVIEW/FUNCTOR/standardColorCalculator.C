@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.C,v 1.2 2000/01/11 23:36:21 oliver Exp $
+// $Id: standardColorCalculator.C,v 1.3 2000/01/13 22:30:32 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h>
 
@@ -209,7 +209,7 @@ namespace BALL
 	{
 		static String empty_key;
 		// BAUSTELLE ---------
-		const Residue* residue = atom.getAncestor<Residue>();
+		const Residue* residue = atom.getAncestor(RTTI::getDefault<Residue>());
 		if (residue == 0)
 		{
 			return empty_key;
