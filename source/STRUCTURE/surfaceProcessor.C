@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.C,v 1.3 2002/12/17 14:13:21 anker Exp $
+// $Id: surfaceProcessor.C,v 1.4 2002/12/17 15:54:07 anker Exp $
 
 #include <BALL/STRUCTURE/surfaceProcessor.h>
 
@@ -13,10 +13,10 @@ namespace BALL
 			surface_(),
 			spheres_(),
 			density_(4.5),
-			probe_radius_(1.5)
+			probe_radius_(1.5),
+			radius_offset_(0.0),
+			vdw_factor_(1.0)
 	{
-		radius_offset_ = 0.0;
-		vdw_factor_ = 1.0;
 	}
 
 
@@ -29,47 +29,29 @@ namespace BALL
 
 	Processor::Result SurfaceProcessor::operator () (Atom& atom)
 	{
-		Vector3 pos_(atom.getPosition());
-		TVector3<double> pos((double)pos_.x,(double)pos_.y,(double)pos_.z);
-		/*if (Maths::isNotZero(atom.getRadius()))
-		{
-			spheres_.push_back(Sphere3(atom.getPosition(),atom.getRadius()));
-		}
-		else
-		{
-			if (atom.getElement() != Element::UNKNOWN)
-			{
-				if (atom.getElement().getVanDerWaalsRadius() > 0.0)
-				{
-					spheres_.push_back(Sphere3(atom.getPosition(),
-																		 atom.getElement().getVanDerWaalsRadius()));
-				}
-				else
-				{
-					spheres_.push_back(Sphere3(atom.getPosition(), 1.0));
-				}
-			}
-			else
-			{
-				spheres_.push_back(Sphere3(atom.getPosition(), 1.0));
-			}
-		}
-		return Processor::CONTINUE;*/
+		Vector3 float_position(atom.getPosition());
+		TVector3<double> position((double)float_position.x,
+				                      (double)float_position.y,
+				                      (double)float_position.z);
+		
 		if (atom.getElement() != Element::UNKNOWN)
 		{
 			if (atom.getElement().getVanDerWaalsRadius() > 0.0)
 			{
-				spheres_.push_back(TSphere3<double>(pos,
-													 vdw_factor_*atom.getElement().getVanDerWaalsRadius()+radius_offset_));
+				spheres_.push_back(TSphere3<double>(position,
+													 vdw_factor_*atom.getElement().getVanDerWaalsRadius()
+													 + radius_offset_));
 			}
 			else
 			{
-				spheres_.push_back(TSphere3<double>(pos,radius_offset_+vdw_factor_));
+				spheres_.push_back(TSphere3<double>(position,
+							radius_offset_+vdw_factor_));
 			}
 		}
 		else
 		{
-			spheres_.push_back(TSphere3<double>(pos,radius_offset_+vdw_factor_));
+			spheres_.push_back(TSphere3<double>(position, 
+						radius_offset_+vdw_factor_));
 		}
 		return Processor::CONTINUE;
 	}
@@ -77,30 +59,31 @@ namespace BALL
 
 	bool SurfaceProcessor::finish()
 	{
-		ReducedSurface* rs = new ReducedSurface(spheres_,probe_radius_);
-		rs->compute();
-		if (ses_)
+		ReducedSurface* reduced_surface = new ReducedSurface(spheres_,probe_radius_);
+		reduced_surface->compute();
+
+		if (ses_ == true)
 		{
-			SolventExcludedSurface* ses = new SolventExcludedSurface(rs);
+			SolventExcludedSurface* ses = new SolventExcludedSurface(reduced_surface);
 			ses->compute();
-				double diff = (probe_radius_ < 1.5 ? 0.1 : -0.1);
-				int i = 0;
-				bool ok = false;
-				while (!ok && (i < 10))
+			double diff = (probe_radius_ < 1.5 ? 0.1 : -0.1);
+			int i = 0;
+			bool ok = false;
+			while (!ok && (i < 10))
+			{
+				i++;
+				ok = ses->check();
+				if (!ok)
 				{
-					i++;
-					ok = ses->check();
-					if (!ok)
-					{
-						delete ses;
-						delete rs;
-						probe_radius_ += diff;
-						rs = new ReducedSurface(spheres_,probe_radius_);
-						rs->compute();
-						ses = new SolventExcludedSurface(rs);
-						ses->compute();
-					}
+					delete ses;
+					delete reduced_surface;
+					probe_radius_ += diff;
+					reduced_surface = new ReducedSurface(spheres_,probe_radius_);
+					reduced_surface->compute();
+					ses = new SolventExcludedSurface(reduced_surface);
+					ses->compute();
 				}
+			}
 			if (ok)
 			{
 				TriangulatedSES* surface = new TriangulatedSES(ses,density_);
@@ -109,12 +92,12 @@ namespace BALL
 				delete surface;
 			}
 			delete ses;
-				std::cout << "    ProbeRadius: " << probe_radius_
-									<< "    Durchläufe: " << i;
+			std::cout << "    ProbeRadius: " << probe_radius_
+				<< "    Durchläufe: " << i;
 		}
 		else
 		{
-			SolventAccessibleSurface* sas = new SolventAccessibleSurface(rs);
+			SolventAccessibleSurface* sas = new SolventAccessibleSurface(reduced_surface);
 			sas->compute();
 			TriangulatedSAS* surface = new TriangulatedSAS(sas,density_);
 			surface->compute();
@@ -122,7 +105,7 @@ namespace BALL
 			delete surface;
 			delete sas;
 		}
-		delete rs;
+		delete reduced_surface;
 		return true;
 	}
 
