@@ -1,4 +1,4 @@
-// $Id: limits.h,v 1.8 2001/07/18 08:24:51 sturm Exp $
+// $Id: limits.h,v 1.9 2001/07/18 20:44:27 amoll Exp $
 
 #ifndef BALL_COMMON_LIMITS_H
 #define BALL_COMMON_LIMITS_H
@@ -35,7 +35,7 @@ namespace BALL
 	{
 		public:
 
-#	ifdef BALL_HAVE_NUMERIC_LIMITS
+#ifdef BALL_HAVE_NUMERIC_LIMITS
 
 
 		/**	Return the minimum value.
@@ -53,7 +53,7 @@ namespace BALL
 		{ 
 			return std::numeric_limits<T>::max(); 
 		}
-#	else
+#else
 		static T min() throw() 
 		{ 
 			return (T)0; 
@@ -62,7 +62,7 @@ namespace BALL
 		{ 
 			return (T)0; 
 		}
-#	endif
+#endif
 	};
 
 #ifndef BALL_HAVE_NUMERIC_LIMITS
