@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.14 2000/08/02 18:14:07 oliver Exp $
+// $Id: bitVector.C,v 1.15 2000/08/03 12:39:38 amoll Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -291,7 +291,6 @@ namespace BALL
 		// problems with differing byte orders (big endian/little endian)
 		for (Index i = (Index)Maths::min((Size)BALL_CHAR_BITS, getSize()) - 1; i >= 0; i--)
 		{
-			// shift the bits successively into the char
 			c = c << 1;
 			if (getBit((Position)i) == true)
 			{
@@ -305,34 +304,85 @@ namespace BALL
 	void BitVector::setUnsignedShort(unsigned short bit_pattern)
 	{
 		setSize(sizeof(unsigned short) * BALL_CHAR_BITS, false);
-		*((unsigned short *)bitset_) = bit_pattern;
+		unsigned short c = bit_pattern;
+
+		for (Position i = 0; i < sizeof(unsigned short) * BALL_CHAR_BITS; i++)
+		{
+			setBit(i, (((int)c & (int)0x1) == 1));
+			c = c >> 1;
+		}
 	}
 
 	unsigned short BitVector::getUnsignedShort() const
 	{
-		return *((unsigned short *)bitset_);
+		unsigned short c = 0;
+
+		for (Index i = (Index)Maths::min((Size)(sizeof(unsigned short) * BALL_CHAR_BITS), getSize()) - 1; i >= 0; i--)
+		{
+			c = c << 1;
+			if (getBit((Position)i) == true)
+			{
+				c |= 1;
+			}
+		}
+
+		return c;
 	}
 
 	void BitVector::setUnsignedInt (unsigned int bit_pattern)
 	{
 		setSize(sizeof(unsigned int) * BALL_CHAR_BITS, false);
-		*((unsigned int *)bitset_) = bit_pattern;
+		unsigned int c = bit_pattern;
+
+		for (Position i = 0; i < sizeof(unsigned int) * BALL_CHAR_BITS; i++)
+		{
+			setBit(i, (((int)c & (int)0x1) == 1));
+			c = c >> 1;
+		}
 	}
 
 	unsigned int BitVector::getUnsignedInt() const
 	{
-		return *((unsigned int *)bitset_);
+		unsigned int c = 0;
+
+		for (Index i = (Index)Maths::min((Size)(sizeof(unsigned int) * BALL_CHAR_BITS), getSize()) - 1; i >= 0; i--)
+		{
+			c = c << 1;
+			if (getBit((Position)i) == true)
+			{
+				c |= 1;
+			}
+		}
+
+		return c;
 	}
 
 	void BitVector::setUnsignedLong(unsigned long bit_pattern)
 	{
 		setSize(sizeof(unsigned long) * BALL_CHAR_BITS, false);
-		*((unsigned long *)bitset_) = bit_pattern;
+		unsigned long c = bit_pattern;
+
+		for (Position i = 0; i < sizeof(unsigned long) * BALL_CHAR_BITS; i++)
+		{
+			setBit(i, (((int)c & (int)0x1) == 1));
+			c = c >> 1;
+		}
 	}
 
 	unsigned long BitVector::getUnsignedLong() const
 	{
-		return *((unsigned long *)bitset_);
+		unsigned long c = 0;
+
+		for (Index i = (Index)Maths::min((Size)(sizeof(unsigned long) * BALL_CHAR_BITS), getSize()) - 1; i >= 0; i--)
+		{
+			c = c << 1;
+			if (getBit((Position)i) == true)
+			{
+				c |= 1;
+			}
+		}
+
+		return c;
 	}
 
 	void BitVector::bitwiseXor(const BitVector& bit_vector)
