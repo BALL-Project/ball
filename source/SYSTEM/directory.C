@@ -1,4 +1,4 @@
-// $Id: directory.C,v 1.6 2000/06/16 21:37:31 amoll Exp $
+// $Id: directory.C,v 1.7 2000/06/17 10:54:32 oliver Exp $
 
 #include <dirent.h>
 #include <stdio.h>
@@ -21,7 +21,7 @@ namespace BALL
 		else directory_path_ = "";
 	}
 
-	Directory::Directory(const String& directory_path, bool set_current = false)
+	Directory::Directory(const String& directory_path, bool set_current)
 		:	dir_(0),
 			dirent_(0),
 			directory_depth_(0),
@@ -154,7 +154,7 @@ namespace BALL
 		return (size - 2); // ignore current (.) and parent directory entry (..)
 	}
 
-	bool Directory::find(const String &filename, String &filepath, bool recursive = false)
+	bool Directory::find(const String &filename, String &filepath, bool recursive)
 	{/*
 		if (!recursive)
 		{
@@ -180,33 +180,7 @@ namespace BALL
 		}*/
 	}
 
-/*
-	bool Directory::apply(DirectoryApplicator &directoryApplicator)
-	{
-		Directory directory;
-	  BALLApplicator::Result result = BALLApplicator::ABORT;
-		String path;
-		bool result = directory.getFirstEntry(path);
-		
-		for (; result == true; result = directory.getNextEntry(path))
-		{
-			result = directoryApplicator(path);
-			
-			if (result <= BALLApplicator::BREAK) break;}
-		}
-		
-		return (bool)(result >= BALLApplicator::BREAK);
-	}
-
-	bool Directory::apply(DirectoryRecursiveApplicator &directoryRecursiveApplicator)
-	{
-		directory_depth_ = 0L;
-		String path(directory_path_);
-		return (bool)(apply_(directoryRecursiveApplicator,
-						 path) >= BALLApplicator::BREAK);
-	}
-*/
-	bool Directory::has(const String& filename, bool recursive = false) const
+	bool Directory::has(const String& filename, bool recursive) const
 	{
 		if (!recursive)
 		{
