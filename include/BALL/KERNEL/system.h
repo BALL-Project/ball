@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.18 2001/01/14 21:57:15 amoll Exp $
+// $Id: system.h,v 1.19 2001/01/21 20:40:27 amoll Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -132,8 +132,7 @@ namespace BALL
 		//@}
 
 		/**	Equality operator.
-				Two Systems are equal if they have the same attributes and properties and are homomorph.
-				@see AtomContainer::operator ==
+				@see Object::operator ==
 		*/
 		bool operator == (const System& system) const
 			throw();

@@ -1,4 +1,4 @@
-// $Id: atomContainer.h,v 1.4 2001/01/14 21:57:14 amoll Exp $
+// $Id: atomContainer.h,v 1.5 2001/01/21 20:40:27 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -133,7 +133,7 @@ namespace BALL
 
 		/** Assignment operator.
 				Assign {\em atom_container} to {\em *this} instance.
-				The assignment is either deep or shallow (default).
+				The assignment is deep.
 				@param   atom_container the AtomContainer to be copied (cloned)
 				@return  AtomContainer& - {\em *this} AtomContainer
 				@see     AtomContainer::set
@@ -160,10 +160,7 @@ namespace BALL
 		//@}
 	
 		/**	Equality operator.
-				Two AtomContainers are equal if they have the same attributes and properties and are homomorph.
-				This method uses PropertyManager::operator == and Composite::operator	== .
-				@see PropertyManager::operator ==
-				@see Composite::operator ==
+				@see Object::operator ==
 		*/
 		bool operator == (const AtomContainer& atom_container) const
 			throw();
@@ -173,7 +170,6 @@ namespace BALL
 		*/
 		bool operator != (const AtomContainer& atom_container) const
 			throw();
-
 
 		/**	@name	Accessors */
 		//@{
