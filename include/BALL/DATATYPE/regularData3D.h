@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.32 2004/05/02 20:59:48 oliver Exp $ 
+// $Id: regularData3D.h,v 1.33 2004/05/14 11:48:19 amoll Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -177,25 +177,25 @@ namespace BALL
 
 
     /** Return a nonmutable reference to a specific data element.
-        This is the range chacking version of <tt>operator []</tt>.
+        This is the range checking version of <tt>operator []</tt>.
      */
     const ValueType& getData(const IndexType& index) const
       throw(Exception::OutOfGrid);
 
     /** Return a mutable reference to a specific data element.
-        This is the range chacking version of <tt>operator []</tt>.
+        This is the range checking version of <tt>operator []</tt>.
      */
     ValueType& getData(const IndexType& index)
       throw(Exception::OutOfGrid);
 
     /** Return a nonmutable reference to a specific data element.
-        This is the range chacking version of <tt>operator []</tt>.
+        This is the range checking version of <tt>operator []</tt>.
      */
     const ValueType& getData(Position index) const
       throw(Exception::OutOfGrid);
 
     /** Return a mutable reference to a specific data element.
-        This is the range chacking version of <tt>operator []</tt>.
+        This is the range checking version of <tt>operator []</tt>.
      */
     ValueType& getData(Position index)
       throw(Exception::OutOfGrid);
