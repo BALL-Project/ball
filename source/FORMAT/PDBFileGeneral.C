@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileGeneral.C,v 1.5 2005/02/16 14:09:40 oliver Exp $
+// $Id: PDBFileGeneral.C,v 1.6 2005/02/28 12:43:27 oliver Exp $
 //
 
 // This file contains the more or less "general" portion of PDBFile.
@@ -527,32 +527,33 @@ namespace BALL
 
 	bool PDBFile::readLine(char* line, Size size, bool extract_values)
 	{
-		static PDB::RecordTypeFormat* record_type_format = 0;
-
-		if ((record_type_format == 0)
-				|| memcmp(record_type_format->string, line, 6) != 0)
-		{
-			memcpy(const_cast<char*>(compare_record_type_format_.string), line, 6);
-			record_type_format = (PDB::RecordTypeFormat*)::bsearch 
-				((const void*)&compare_record_type_format_, 
-				 (const void*)PDB::RECORD_TYPE_FORMAT, 
-				 (Size)PDB::NUMBER_OF_REGISTERED_RECORD_TYPES, 
-				 (Size)sizeof(PDB::RecordTypeFormat), 
-				 PDBFileRecordNameComparator_);
+		// Look up the type of record by comparing the first six letters.
+		PDB::RecordTypeFormat* record_type_format = 0;
+		memcpy(const_cast<char*>(compare_record_type_format_.string), line, 6);
+		record_type_format = (PDB::RecordTypeFormat*)::bsearch 
+			((const void*)&compare_record_type_format_, 
+			 (const void*)PDB::RECORD_TYPE_FORMAT, 
+			 (Size)PDB::NUMBER_OF_REGISTERED_RECORD_TYPES, 
+			 (Size)sizeof(PDB::RecordTypeFormat), 
+			 PDBFileRecordNameComparator_);
 			
-			if (record_type_format == 0)
-			{
-				return readUnknownRecord(line);
-			}
+		// If nothing appropriate was found, this record is unknown!
+		if (record_type_format == 0)
+		{
+			return readUnknownRecord(line);
 		}
-
 		current_record_type_ = record_type_format->record_type;
 
+		// If we do not want to extract the values, it is sufficient
+		// to know that the record type is something we know how to
+		// handle, so we are done now.
 		if (extract_values == false)
 		{
 			return true;
 		}
 
+		// Otherwise, we parse the record with the appropriate method
+		// for the format identified.
 		switch(current_record_type_)
 		{
 			case PDB::RECORD_TYPE__ANISOU:
