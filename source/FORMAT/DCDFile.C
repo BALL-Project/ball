@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.26 2003/08/26 09:17:46 oliver Exp $
+// $Id: DCDFile.C,v 1.27 2004/03/17 13:37:25 amoll Exp $
 //
 
 #include <BALL/FORMAT/DCDFile.h>
@@ -150,20 +150,16 @@ namespace BALL
 	bool DCDFile::readHeader()
 		throw()
 	{
-		BinaryFileAdaptor<char> adapt_char;
-		BinaryFileAdaptor<Size> adapt_Size;
-		BinaryFileAdaptor<double> adapt_double;
-
 		// read the "header" of the 84 byte block. This must contain the number
 		// 84 to indicate the size of this block
-		*this >> adapt_Size; 
-		if (adapt_Size.getData() != 84)
+		*this >> adapt_size_; 
+		if (adapt_size_.getData() != 84)
 		{
-			swapBytes(adapt_Size.getData());
-			if (adapt_Size.getData() != 84)
+			swapBytes(adapt_size_.getData());
+			if (adapt_size_.getData() != 84)
 			{
 				Log.error() << "DCDFile::readHeader(): wrong header; expected 84, got " 
-										<< adapt_Size.getData() << endl;
+										<< adapt_size_.getData() << endl;
 				return false;
 			}
 			else
@@ -179,6 +175,7 @@ namespace BALL
 		// read the distinct components of the block
 
 		// first the CORD characters (don't need to be swapped...)
+		BinaryFileAdaptor<char> adapt_char;
 		for (Size i = 0; i < 4; ++i)
 		{
 			*this >> adapt_char;
@@ -192,9 +189,7 @@ namespace BALL
 		}
 
 		// read the number of coordinate sets contained in this file
-		*this >> adapt_Size;
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		number_of_snapshots_ = adapt_Size.getData();
+		number_of_snapshots_ = readSize_();
 		if (verbosity_ > 0)
 		{
 			Log.info() << "DCDFile::readHeader(): number of snapshots: " 
@@ -212,21 +207,15 @@ namespace BALL
 		}
 
 		// read the number of the first step
-		*this >> adapt_Size;
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		step_number_of_starting_time_ = adapt_Size.getData();
+		step_number_of_starting_time_ = readSize_();
 
 		// read the number of steps between saves
-		*this >> adapt_Size;
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		steps_between_saves_ = adapt_Size.getData();
+		steps_between_saves_ = readSize_();
 
 		// is this really DCD or is it DC2?
-		*this >> adapt_Size;
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		if (adapt_Size.getData() != 0)
+		if (readSize_() != 0)
 		{
-			if (adapt_Size.getData() == 1)
+			if (adapt_size_.getData() == 1)
 			{
 				if (verbosity_ > 0)
 				{
@@ -243,13 +232,14 @@ namespace BALL
 		// skip unused fields
 		for (Size i = 0; i < 5; ++i)
 		{
-			*this >> adapt_Size;
+			*this >> adapt_size_;
 		}
 
 		// save position in case we are reading a CHARMm file
 		Position ts_pos = tellg();
 
 		// read the length of a time step
+		BinaryFileAdaptor<double> adapt_double;
 		*this >> adapt_double;
 		if (swap_bytes_) swapBytes(adapt_double.getData());
 		time_step_length_ = adapt_double.getData();
@@ -262,16 +252,14 @@ namespace BALL
 		// skip unused fields
 		for (Size i = 0; i < 8; ++i)
 		{
-			*this >> adapt_Size;
+			*this >> adapt_size_;
 		}
 
 		// read the CHARMm version info, if any
-		*this >> adapt_Size;
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		if (adapt_Size.getData() != 0)
+		if (readSize_() != 0)
 		{
 			Log.info() << "DCDFile::readHeader(): "
-				<< "encountered CHARMm version number " << adapt_Size.getData()
+				<< "encountered CHARMm version number " << adapt_size_.getData()
 				<< ", rereading several fields" << endl;
 
 			Position here = tellg();
@@ -288,8 +276,8 @@ namespace BALL
 									 << time_step_length_ << endl;
 			}
 
-			*this >> adapt_Size;
-			if (adapt_Size.getData() == 1)
+			*this >> adapt_size_;
+			if (adapt_size_.getData() == 1)
 			{
 				charmm_extra_block_A_ = true;
 				if (verbosity_ > 0)
@@ -299,8 +287,8 @@ namespace BALL
 			}
 
 
-			*this >> adapt_Size;
-			if (adapt_Size.getData() == 1)
+			*this >> adapt_size_;
+			if (adapt_size_.getData() == 1)
 			{
 				charmm_extra_block_B_ = true;
 				if (verbosity_ > 0)
@@ -314,12 +302,10 @@ namespace BALL
 
 		// read the "footer" of the 84 byte block. This also must contain the
 		// number 84 to indicate the size of this block
-		*this >> adapt_Size; 
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		if (adapt_Size.getData() != 84)
+		if (readSize_() != 84)
 		{
 			Log.error() << "DCDFile::readHeader(): "
-				<< "wrong header; expected 84, got " << adapt_Size.getData() << endl;
+				<< "wrong header; expected 84, got " << adapt_size_.getData() << endl;
 			return false;
 		}
 
@@ -327,9 +313,7 @@ namespace BALL
 		// read the block "header" again. The comment block consist of an
 		// integer indicating the number of 80 bytes comment blocks within this
 		// block, so the block size minus 4 must be dividable by 80
-		*this >> adapt_Size; 
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		Size comment_size = adapt_Size.getData();
+		Size comment_size = readSize_();
 		if ((comment_size - 4) % 80 != 0)
 		{
 			Log.error() << "DCDFile::readHeader(): "
@@ -339,12 +323,10 @@ namespace BALL
 		}
 		Size number_of_comments = (comment_size - 4) / 80;
 		
-		*this >> adapt_Size; 
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		if (adapt_Size.getData() != number_of_comments)
+		if (readSize_() != number_of_comments)
 		{
 			Log.warn() << "DCDFile::readHeader(): "
-				<< "comments block size (" << adapt_Size.getData()
+				<< "comments block size (" << adapt_size_.getData()
 				<< ") does not match number of" << endl
 				<< "comments (" << number_of_comments << ")" << endl;
 		}
@@ -361,41 +343,33 @@ namespace BALL
 		}
 
 		// read the "footer" and compare it with the "header"
-		*this >> adapt_Size;
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		if (adapt_Size.getData() != comment_size)
+		if (readSize_() != comment_size)
 		{
 			Log.error() << "DCDFile::readHeader(): "
-				<< "comment block footer (" << adapt_Size.getData()
+				<< "comment block footer (" << adapt_size_.getData()
 				<< ") does not match header ("
 				<< comment_size << ")" << endl;
 			return false;
 		}
 
 		// read the block containing the number of atoms
-		*this >> adapt_Size;
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		if (adapt_Size.getData() != 4)
+		if (readSize_() != 4)
 		{
 			Log.error() << "DCDFile::readHeader(): "
 				<< "atomnumber-block header contains wrong size " 
-				<< adapt_Size.getData() << endl;
+				<< adapt_size_.getData() << endl;
 			return false;
 		}
 
 		// now read the actual number of atoms
-		*this >> adapt_Size;
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		number_of_atoms_ = adapt_Size.getData();
+		number_of_atoms_ = readSize_();
 
 		// and check the footer
-		*this >> adapt_Size;
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		if (adapt_Size.getData() != 4)
+		if (readSize_() != 4)
 		{
 			Log.error() << "DCDFile::readHeader(): "
 				<< "atomnumber-block footer contains wrong size " 
-				<< adapt_Size.getData() << endl;
+				<< adapt_size_.getData() << endl;
 			return false;
 		}
 
@@ -431,9 +405,6 @@ namespace BALL
 	bool DCDFile::writeHeader()
 		throw()
 	{
-		// DEBUG
-		// Log.info() << good() << " " << bad() << endl;
-		// /DEBUG
 		Size i;
 		if (!isAccessible() || !isOpen()) return false;
 
@@ -443,9 +414,7 @@ namespace BALL
 		{
 			*this << BinaryFileAdaptor<char>(CORD_[i]);
 		}
-		// DEBUG
-		// Log.info() << "wH: number_of_snapshots_ " << number_of_snapshots_ << endl;
-		// /DEBUG
+
 		*this << BinaryFileAdaptor<Size>(number_of_snapshots_);
 		*this << BinaryFileAdaptor<Size>(step_number_of_starting_time_);
 		*this << BinaryFileAdaptor<Size>(steps_between_saves_);
@@ -472,9 +441,6 @@ namespace BALL
 
 		// write the atom number block
 		*this << BinaryFileAdaptor<Size>(4);
-		// DEBUG
-		// Log.info() << "wH: number_of_atoms_ " << number_of_atoms_ << endl;
-		// /DEBUG
 		*this << BinaryFileAdaptor<Size>(number_of_atoms_);
 		*this << BinaryFileAdaptor<Size>(4);
 
@@ -485,10 +451,6 @@ namespace BALL
 	bool DCDFile::append(const SnapShot& snapshot)
 		throw()
 	{
-		// DEBUG
-		// Log.info() << good() << " " << bad() << endl;
-		// /DEBUG
-
 		if (number_of_atoms_ != snapshot.getNumberOfAtoms())
 		{
 			if (number_of_atoms_ != 0)
@@ -498,10 +460,6 @@ namespace BALL
 			}
 			number_of_atoms_ = snapshot.getNumberOfAtoms();
 		}
-		
-		// DEBUG
-		// Log.info() << "append: number_of_atoms_ " << number_of_atoms_ << endl;
-		// /DEBUG
 		
 		// increase the snapshot counter for a correct header
 		number_of_snapshots_++;
@@ -569,15 +527,12 @@ namespace BALL
 	bool DCDFile::read(SnapShot& snapshot)
 		throw()
 	{
-		// DEBUG
-		// Log.info() << "file position at beginning of read(): " << tellg() << endl;
-		// /DEBUG
-
-		Size tmp;
+		#ifdef BALL_DEBUG
+			Log.info() << "file position at beginning of read(): " << tellg() << endl;
+		#endif
 
 		// the number of atoms has to be read from the file header before ever
 		// thinking of reading correct information
-
 		Size expected_noa = getNumberOfAtoms();
 		if (expected_noa == 0)
 		{
@@ -586,247 +541,127 @@ namespace BALL
 			return false;
 		}
 		snapshot.setNumberOfAtoms(expected_noa);
-		Size expected_size = 4 * expected_noa;
 
-		vector<Vector3> positions(expected_noa);
-		BinaryFileAdaptor<Size> adapt_Size;
-		BinaryFileAdaptor<float> adapt_float;
 
-		// ignore the CHARMm extra block A if present
+		// ignore the CHARMM extra block A if present
 		if (charmm_extra_block_A_)
 		{
-			*this >> adapt_Size;
-			Size count = adapt_Size.getData();
+			*this >> adapt_size_;
+			Size count = adapt_size_.getData();
 			// ?????
 			// maybe we should check whether count is dividable by 4...
-			for (Size i = 0; i < (count / 4); ++i) *this >> adapt_Size;
-			*this >> adapt_Size;
-			if (adapt_Size.getData() != count)
+			for (Size i = 0; i < (count / 4); ++i) *this >> adapt_size_;
+			*this >> adapt_size_;
+			if (adapt_size_.getData() != count)
 			{
 				Log.error() << "DCDFile::read(): CHARMm extra block A corrupt." << endl;
 				return false;
 			}
 		}
 
-		// first read the x coordinates
-
-		// read the block "header"...
-		*this >> adapt_Size; 
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		tmp = adapt_Size.getData();
-		// ...and compare it to what we would expect. This value stems from the
-		// information of the file header.
-		if (tmp != expected_size)
+		// read the atoms positions
+		vector<Vector3> positions(expected_noa);
+		if (!readVector_(positions))
 		{
-			Log.error() << "DCDFile::read(): "
-				<< "X block header: expected " << expected_size << " but got " << tmp << endl;
-			return false;
+			Log.error() << "Error while reading the atom positions." << std::endl;
+			return false; 
 		}
-
-		// now read the x positions
-		for (Size atom = 0; atom < expected_noa; ++atom)
-		{
-			*this >> adapt_float; 
-			if (swap_bytes_) swapBytes(adapt_float.getData());
-			positions[atom].x = adapt_float.getData();
-		}
-		// and the block "footer"
-		*this >> adapt_Size; 
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		tmp = adapt_Size.getData();
-		if (tmp != expected_size)
-		{
-			Log.error() << "DCDFile::read(): X block footer: expected " 
-									<< expected_size << " but got " << tmp << endl;
-			return false;
-		}
-
-		// the same proceedure for y coordinates
-
-		// header
-		*this >> adapt_Size; 
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		tmp = adapt_Size.getData();
-		// sanity check
-		if (tmp != expected_size)
-		{
-			Log.error() << "DCDFile::read(): Y block header: expected " 
-									<< expected_size << " but got " << tmp << endl;
-			return false;
-		}
-		// data
-		for (Size atom = 0; atom < expected_noa; ++atom)
-		{
-			*this >> adapt_float; 
-			if (swap_bytes_) swapBytes(adapt_float.getData());
-			positions[atom].y = adapt_float.getData();
-		}
-		// footer
-		*this >> adapt_Size; 
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		tmp = adapt_Size.getData();
-		// sanity check
-		if (tmp != expected_size)
-		{
-			Log.error() << "DCDFile::read(): " << "Y block footer: expected " 
-									<< expected_size << " but got " << tmp << endl;
-			return false;
-		}
-
-		// and z coordinates
-
-		// header
-		*this >> adapt_Size; 
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		tmp = adapt_Size.getData();
-		// sanity check
-		if (tmp != expected_size)
-		{
-			Log.error() << "DCDFile::read(): Z block header: expected " 
-									<< expected_size << " but got " << tmp << endl;
-			return false;
-		}
-		// data
-		for (Size atom = 0; atom < expected_noa; ++atom)
-		{
-			*this >> adapt_float; 
-			if (swap_bytes_) swapBytes(adapt_float.getData());
-			positions[atom].z = adapt_float.getData();
-		}
-		// footer
-		*this >> adapt_Size; 
-		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		tmp = adapt_Size.getData();
-		// sanity check
-		if (tmp != expected_size)
-		{
-			Log.error() << "DCDFile::read(): Z block footer: expected " 
-									<< expected_size << " but got " << tmp << endl;
-			return false;
-		}
-
 		snapshot.setAtomPositions(positions);
 
-		if (charmm_extra_block_B_ == true)
+
+		if (charmm_extra_block_B_)
 		{
-			*this >> adapt_Size;
-			Size count = adapt_Size.getData();
-			for (Size i = 0; i < count; ++i) *this >> adapt_Size;
-			*this >> adapt_Size;
-			if (adapt_Size.getData() != count)
+			*this >> adapt_size_;
+			Size count = adapt_size_.getData();
+			for (Size i = 0; i < count; ++i) *this >> adapt_size_;
+			*this >> adapt_size_;
+			if (adapt_size_.getData() != count)
 			{
 				Log.error() << "DCDFile::read(): " << "CHARMm extra block B corrupt." << endl;
 				return false;
 			}
 		}
 
+
 		if (has_velocities_)
 		{
+			// read the atoms velocities
 			vector<Vector3> velocities(expected_noa);
 
-			// first read the x coordinates
-
-			// read the block "header"...
-
-			// ?????
-			// *this >> BinaryFileAdaptor<Size>(tmp);
-
-			*this >> adapt_Size; 
-			if (swap_bytes_) swapBytes(adapt_Size.getData());
-			tmp = adapt_Size.getData();
-			// ...and compare it to what we would expect. This value stems from the
-			// information of the file header.
-			if (tmp != expected_size)
+			if (!readVector_(velocities))
 			{
-				Log.error() << "DC2File::read(): X block header: expected " 
-										<< expected_size << " but got " << tmp << endl;
-				return false;
-			}
-
-			// now read the x velocities
-			for (Size atom = 0; atom < expected_noa; ++atom)
-			{
-				*this >> adapt_float; 
-				if (swap_bytes_) swapBytes(adapt_float.getData());
-				velocities[atom].x = adapt_float.getData();
-			}
-			// and the block "footer"
-			*this >> adapt_Size; 
-			if (swap_bytes_) swapBytes(adapt_Size.getData());
-			tmp = adapt_Size.getData();
-			if (tmp != expected_size)
-			{
-				Log.error() << "DC2File::read(): X block footer: expected " 
-										<< expected_size << " but got " << tmp << endl;
-				return false;
-			}
-
-			// the same proceedure for y coordinates
-
-			// header
-			*this >> adapt_Size; 
-			if (swap_bytes_) swapBytes(adapt_Size.getData());
-			tmp = adapt_Size.getData();
-			// sanity check
-			if (tmp != expected_size)
-			{
-				Log.error() << "DC2File::read(): Y block header: expected " 
-										<< expected_size << " but got " << tmp << endl;
-				return false;
-			}
-			// data
-			for (Size atom = 0; atom < expected_noa; ++atom)
-			{
-				*this >> adapt_float; 
-				if (swap_bytes_) swapBytes(adapt_float.getData());
-				velocities[atom].y = adapt_float.getData();
-			}
-			// footer
-			*this >> adapt_Size; 
-			if (swap_bytes_) swapBytes(adapt_Size.getData());
-			tmp = adapt_Size.getData();
-			// sanity check
-			if (tmp != expected_size)
-			{
-				Log.error() << "DC2File::read(): Y block footer: expected " 
-										<< expected_size << " but got " << tmp << endl;
-				return false;
-			}
-
-			// and z coordinates
-
-			// header
-			*this >> adapt_Size; 
-			if (swap_bytes_) swapBytes(adapt_Size.getData());
-			tmp = adapt_Size.getData();
-			// sanity check
-			if (tmp != expected_size)
-			{
-				Log.error() << "DC2File::read(): Z block header: expected " 
-										<< expected_size << " but got " << tmp << endl;
-				return false;
-			}
-			// data
-			for (Size atom = 0; atom < expected_noa; ++atom)
-			{
-				*this >> adapt_float; 
-				if (swap_bytes_) swapBytes(adapt_float.getData());
-				velocities[atom].z = adapt_float.getData();
-			}
-			// footer
-			*this >> adapt_Size; 
-			if (swap_bytes_) swapBytes(adapt_Size.getData());
-			tmp = adapt_Size.getData();
-			// sanity check
-			if (tmp != expected_size)
-			{
-				Log.error() << "DC2File::read(): Z block footer: expected " 
-										<< expected_size << " but got " << tmp << endl;
-				return false;
+				Log.error() << "Error while reading the atom velocities." << std::endl;
+				return false; 
 			}
 
 			snapshot.setAtomVelocities(velocities);
 		}
+		return true;
+	}
+
+	Size DCDFile::readSize_()
+		throw()
+	{
+		*this >> adapt_size_; 
+		if (swap_bytes_) swapBytes(adapt_size_.getData());
+		return adapt_size_.getData();
+	}
+
+	bool DCDFile::readSize_(Size expected_size, const String& what)
+		throw()
+	{
+		*this >> adapt_size_; 
+		if (swap_bytes_) swapBytes(adapt_size_.getData());
+		Size tmp = adapt_size_.getData();
+		// sanity check
+		if (tmp != expected_size)
+		{
+			Log.error() << "DC2File::read(): " << what << " block footer: expected " 
+									<< expected_size << " but got " << tmp << endl;
+			return false;
+		}
+
+		return true;
+	}
+
+	void DCDFile::readFloat_(float& to)
+		throw()
+	{
+		*this >> adapt_float_; 
+		if (swap_bytes_) swapBytes(adapt_float_.getData());
+		to = adapt_float_.getData();
+	}
+
+	bool DCDFile::readVector_(vector<Vector3>& v)
+		throw()
+	{
+		Size expected_noa = getNumberOfAtoms();
+		Size expected_size = expected_noa * 4;
+
+		// x part
+		if (!readSize_(expected_size, "X")) return false;
+		for (Size atom = 0; atom < expected_noa; ++atom)
+		{
+			readFloat_(v[atom].x); 
+		}
+		if (!readSize_(expected_size, "X")) return false;
+
+		// now the y part
+		if (!readSize_(expected_size, "Y")) return false;
+		for (Size atom = 0; atom < expected_noa; ++atom)
+		{
+			readFloat_(v[atom].y); 
+		}
+		if (!readSize_(expected_size, "Y")) return false;
+
+		// now the z part
+		if (!readSize_(expected_size, "Z")) return false;
+		for (Size atom = 0; atom < expected_noa; ++atom)
+		{
+			readFloat_(v[atom].z); 
+		}
+		if (!readSize_(expected_size, "Z")) return false;
+
 		return true;
 	}
 

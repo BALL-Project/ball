@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.h,v 1.27 2003/08/26 08:04:13 oliver Exp $
+// $Id: DCDFile.h,v 1.28 2004/03/17 13:37:05 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_DCDFILE_H
@@ -162,6 +162,22 @@ namespace BALL
 		protected:
 
 		//_
+ 		void readFloat_(float& to)
+			throw(); 
+
+		//_
+		Size readSize_()
+			throw();
+
+		//_
+		bool readSize_(Size expected_size, const String& what)
+			throw();
+
+		//_
+		bool readVector_(vector<Vector3>& v)
+			throw();
+
+		//_
 		Size verbosity_;
 
 		// a flag indicating that we have to swap bytes when reading data
@@ -191,6 +207,8 @@ namespace BALL
 		//_
 		Size number_of_comments_;
 
+		BinaryFileAdaptor<Size> adapt_size_;
+		BinaryFileAdaptor<float> adapt_float_;
 	};
 } // namespace BALL
 
