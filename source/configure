@@ -17351,6 +17351,27 @@ echo "${ECHO_T}PATH environment variable or specify the path to moc" >&6
 echo "${ECHO_T}using the option --with-moc=PATH to rerun configure." >&6
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+      { { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+		fi
+                if test ! -x "${MOC} ; then
+			echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+			echo "$as_me:$LINENO: result: The QT Meta Object Compiler (moc) found in " >&5
+echo "${ECHO_T}The QT Meta Object Compiler (moc) found in " >&6
+      echo "$as_me:$LINENO: result:   ${MOC}" >&5
+echo "${ECHO_T}  ${MOC}" >&6
+      echo "$as_me:$LINENO: result: seems not to be an executable!" >&5
+echo "${ECHO_T}seems not to be an executable!" >&6
+			echo "$as_me:$LINENO: result: Please include the correct path to moc into your" >&5
+echo "${ECHO_T}Please include the correct path to moc into your" >&6
+			echo "$as_me:$LINENO: result: PATH environment variable or specify the path to uic" >&5
+echo "${ECHO_T}PATH environment variable or specify the path to uic" >&6
+			echo "$as_me:$LINENO: result: using the option --with-moc=PATH to rerun configure." >&5
+echo "${ECHO_T}using the option --with-moc=PATH to rerun configure." >&6
+			echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
 		fi
 	fi
 
@@ -17416,8 +17437,31 @@ echo "${ECHO_T}PATH environment variable or specify the path to uic" >&6
 echo "${ECHO_T}using the option --with-uic=PATH to rerun configure." >&6
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+      { { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
+		fi
+
+                if test ! -x "${UIC} ; then
+			echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+			echo "$as_me:$LINENO: result: The QT User Interface Compiler (uic) found in " >&5
+echo "${ECHO_T}The QT User Interface Compiler (uic) found in " >&6
+      echo "$as_me:$LINENO: result:   ${UIC}" >&5
+echo "${ECHO_T}  ${UIC}" >&6
+      echo "$as_me:$LINENO: result: seems not to be an executable!" >&5
+echo "${ECHO_T}seems not to be an executable!" >&6
+			echo "$as_me:$LINENO: result: Please include the correct path to uic into your" >&5
+echo "${ECHO_T}Please include the correct path to uic into your" >&6
+			echo "$as_me:$LINENO: result: PATH environment variable or specify the path to uic" >&5
+echo "${ECHO_T}PATH environment variable or specify the path to uic" >&6
+			echo "$as_me:$LINENO: result: using the option --with-uic=PATH to rerun configure." >&5
+echo "${ECHO_T}using the option --with-uic=PATH to rerun configure." >&6
+			echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
 		fi
 	fi
+
 
 	if test "${USE_BALLVIEW}" = "true" ; then
 		LIBBALLVIEW="libVIEW.a libMOLVIEW.a"

@@ -1,4 +1,4 @@
-dnl		$Id: aclocal.m4,v 1.30 2003/06/11 08:08:56 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.31 2003/08/19 10:17:26 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -3083,6 +3083,20 @@ AC_DEFUN(CF_BALLVIEW, [
 			AC_MSG_RESULT([PATH environment variable or specify the path to moc])
 			AC_MSG_RESULT([using the option --with-moc=PATH to rerun configure.])
 			AC_MSG_RESULT()
+      AC_MSG_ERROR(Aborted.)
+		fi
+    dnl
+    dnl  Make sure the MOC we found is actually executable
+    dnl
+    if test ! -x "${MOC} ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([The QT Meta Object Compiler (moc) found in ])
+      AC_MSG_RESULT([  ]${MOC})
+      AC_MSG_RESULT([seems not to be an executable!])
+			AC_MSG_RESULT([Please include the correct path to moc into your])
+			AC_MSG_RESULT([PATH environment variable or specify the path to uic])
+			AC_MSG_RESULT([using the option --with-moc=PATH to rerun configure.])
+			AC_MSG_RESULT()
 		fi
 	fi
 
@@ -3109,8 +3123,24 @@ AC_DEFUN(CF_BALLVIEW, [
 			AC_MSG_RESULT([PATH environment variable or specify the path to uic])
 			AC_MSG_RESULT([using the option --with-uic=PATH to rerun configure.])
 			AC_MSG_RESULT()
+      AC_MSG_ERROR(Aborted.)
+		fi
+    
+    dnl
+    dnl  Make sure the UIC we found is actually executable
+    dnl
+    if test ! -x "${UIC} ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([The QT User Interface Compiler (uic) found in ])
+      AC_MSG_RESULT([  ]${UIC})
+      AC_MSG_RESULT([seems not to be an executable!])
+			AC_MSG_RESULT([Please include the correct path to uic into your])
+			AC_MSG_RESULT([PATH environment variable or specify the path to uic])
+			AC_MSG_RESULT([using the option --with-uic=PATH to rerun configure.])
+			AC_MSG_RESULT()
 		fi
 	fi
+    
 
 	if test "${USE_BALLVIEW}" = "true" ; then
 		LIBBALLVIEW="libVIEW.a libMOLVIEW.a"
