@@ -1,4 +1,4 @@
-// $Id: molecule.C,v 1.9 2001/01/14 21:57:16 amoll Exp $
+// $Id: molecule.C,v 1.10 2001/01/21 21:06:25 amoll Exp $
 
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
@@ -212,7 +212,7 @@ namespace BALL
 	bool Molecule::operator == (const Molecule& molecule) const
 		throw()
 	{
-		return(AtomContainer::operator == (molecule));
+		return(Object::operator == (molecule));
 	}
 
 	bool Molecule::operator != (const Molecule& molecule) const

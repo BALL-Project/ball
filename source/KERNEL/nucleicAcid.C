@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.C,v 1.7 2001/01/14 21:57:16 amoll Exp $
+// $Id: nucleicAcid.C,v 1.8 2001/01/21 21:06:41 amoll Exp $
 
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/global.h>
@@ -198,8 +198,7 @@ namespace BALL
 	bool NucleicAcid::operator == (const NucleicAcid& nucleic_acid) const
 		throw()
 	{
-		return(Molecule::operator == (nucleic_acid) &&
-					 id_ == nucleic_acid.id_);
+		return(Object::operator == (nucleic_acid));
 	}
 
 	bool NucleicAcid::operator != (const NucleicAcid& nucleic_acid) const

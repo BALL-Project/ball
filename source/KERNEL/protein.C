@@ -1,4 +1,4 @@
-// $Id: protein.C,v 1.9 2001/01/14 21:57:16 amoll Exp $
+// $Id: protein.C,v 1.10 2001/01/21 21:07:22 amoll Exp $
 
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/global.h>
@@ -299,8 +299,7 @@ namespace BALL
 	bool Protein::operator == (const Protein& protein) const
 		throw()
 	{
-		return(Molecule::operator == (protein) &&
-					 id_ == protein.id_ );
+		return(Object::operator == (protein));
 	}
 
 	bool Protein::operator != (const Protein& protein) const

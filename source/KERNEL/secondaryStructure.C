@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.C,v 1.9 2001/01/14 21:57:16 amoll Exp $
+// $Id: secondaryStructure.C,v 1.10 2001/01/21 21:07:43 amoll Exp $
 
 #include <BALL/KERNEL/secondaryStructure.h>
 
@@ -308,7 +308,7 @@ namespace BALL
 	bool SecondaryStructure::operator == (const SecondaryStructure& secondary_structure) const
 		throw()
 	{
-		return(AtomContainer::operator == (secondary_structure));
+		return(Object::operator == (secondary_structure));
 	}
 
 	bool SecondaryStructure::operator != (const SecondaryStructure& secondary_structure) const

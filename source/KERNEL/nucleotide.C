@@ -1,4 +1,4 @@
-// $Id: nucleotide.C,v 1.8 2001/01/14 21:57:16 amoll Exp $
+// $Id: nucleotide.C,v 1.9 2001/01/21 21:07:02 amoll Exp $
 
 #include <BALL/KERNEL/nucleotide.h>
 
@@ -289,9 +289,7 @@ namespace BALL
 	bool Nucleotide::operator == (const Nucleotide& nucleotide) const
 		throw()
 	{
-		return(Fragment::operator == (nucleotide) &&
-					 id_ == nucleotide.id_ &&
-					 insertion_code_ == nucleotide.insertion_code_);
+		return(Object::operator == (nucleotide));
 	}
 
 	bool Nucleotide::operator != (const Nucleotide& nucleotide) const

@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.18 2001/01/14 21:57:16 amoll Exp $
+// $Id: system.C,v 1.19 2001/01/21 21:07:55 amoll Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -278,7 +278,7 @@ namespace BALL
 	bool System::operator == (const System& system) const
 		throw()
 	{
-		return(AtomContainer::operator == (system));
+		return(Object::operator == (system));
 	}
 
 	bool System::operator != (const System& system) const

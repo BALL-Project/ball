@@ -1,4 +1,4 @@
-// $Id: atomContainer.C,v 1.4 2001/01/14 21:57:15 amoll Exp $
+// $Id: atomContainer.C,v 1.5 2001/01/21 21:04:49 amoll Exp $
 
 #include <BALL/KERNEL/atomContainer.h>
 
@@ -516,9 +516,7 @@ namespace BALL
 	bool AtomContainer::operator == (const AtomContainer& atom_container) const
 		throw()
 	{
-		return(name_	== name_													&&
-			PropertyManager::operator == (atom_container) &&
-						Composite::operator	== (atom_container) );
+		return(Object::operator == (atom_container));
 	}
 
 	bool AtomContainer::operator != (const AtomContainer& atom_container) const
