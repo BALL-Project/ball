@@ -20,6 +20,7 @@ EXECUTABLES_MATHS = \
 	Vector4_test\
 	Quaternion_test\
 	Matrix44_test\
+	NumericalIntegrator_test\
 	Line3_test\
 	Circle3_test\
 	Box3_test\
@@ -32,9 +33,9 @@ EXECUTABLES_MATHS = \
 EXECUTABLES_SYSTEM = \
 	Directory_test\
 	File_test\
-	Socket_test\
 	Path_test\
 	PreciseTime_test\
+	Socket_test\
 	Timer_test\
 	TimeStamp_test
 
@@ -46,6 +47,7 @@ EXECUTABLES_DATATYPES = \
 	HashMap_test\
 	StringHashMap_test\
 	HashSet_test\
+	HashGrid3_test\
 	Options_test\
 	Quadruple_test\
 	RegularData1D_test\
@@ -54,7 +56,7 @@ EXECUTABLES_DATATYPES = \
 
 EXECUTABLES_CONCEPTS =$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	LogStream_test\
-	AutoDeleteable_test\
+	AutoDeletable_test\
 	Object_test\
 	PersistentObject_test\
 	PersistenceManager_test\
@@ -102,6 +104,7 @@ EXECUTABLES_MOLMEC = \
 	SnapShotManager_test
 
 EXECUTABLES_NMR = \
+	AssignShiftProcessor_test\
 	RandomCoilShiftProcessor_test\
 	AnisotropyShiftProcessor_test\
 	ClearShiftProcessor_test\
@@ -111,6 +114,7 @@ EXECUTABLES_NMR = \
 	JohnsonBoveyShiftProcessor_test\
 	ShiftModel_test\
 	ShiftModule_test\
+	Spectrum_test\
 	Peak_test\
 	PeakList_test
 
