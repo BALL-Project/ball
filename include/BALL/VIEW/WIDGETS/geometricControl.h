@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.23 2004/11/14 22:42:02 amoll Exp $
+// $Id: geometricControl.h,v 1.23.2.1 2005/01/14 00:08:30 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -265,7 +265,7 @@ namespace BALL
 			Representation* 	context_representation_;
 			QListViewItem*  	context_item_;
 
-			HashMap<Representation*, QListViewItem*> representation_to_item_;
+			HashMap<Representation*, SelectableListViewItem*> representation_to_item_;
 
 			ColorMeshDialog* 	colorMeshDlg_;
 
