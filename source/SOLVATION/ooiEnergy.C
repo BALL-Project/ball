@@ -1,6 +1,6 @@
-// $Id: OOIEnergy.C,v 1.1 2000/02/07 10:19:59 len Exp $
+// $Id: ooiEnergy.C,v 1.1 2000/02/12 11:17:06 oliver Exp $
 
-#include <BALL/SOLVATION/OOIEnergy.h>
+#include <BALL/SOLVATION/ooiEnergy.h>
 
 
 #include <strstream>
@@ -16,8 +16,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
 
-#define OOI_ENERGIES_FILENAME "solvation/OOIEnergies.dat"
-#define OOI_TYPES_FILENAME "solvation/OOITypes.dat"
+#define OOI_PARAMETER_FILENAME "solvation/Ooi.ini"
 
 // #define BALL_DEBUG_OOI
 
@@ -64,25 +63,15 @@ namespace BALL
 	}
 
 
-/*
-	typedef struct 
-	{
-		int					type;
-		Vector3			v;
-		unsigned		index;
-		String			name;
-		Atom*				atom;
-	} ACEFastAtomType_;
-*/
-
-
 	/**	Calculate the solvation energy after
-			OOI et al. (Proc. of the National US Academy of Sciences)
+			Ooi et al. (Proc. Natl. Acad. Sci. USA)
 			The energy is returned in units of kJ/mol
 			Unparametrized Atoms are simply ignored, this leads to
 			unreasonable values.\\
 
-			{\bf Files:}\\
+			{\bf Definition:} \URL{BALL/SOLVATION/ooiEnergy.h>
+			\\
+			{\bf Files:} solvation/Ooi.ini\\
 			Types are taken from data/solvation/OOITypes.dat\\
 			Energies are taken from data/solvation/OOIEnergies.dat\\
 			values for contact energies are in data/energy/AtomicContactEnergy.dat
