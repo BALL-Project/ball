@@ -7,7 +7,7 @@ Z lacks
 
 name                                class,     test,              notes
 ------------------------COMMON----------------------------------------------
-(exceptions)                        EI,         Z
+(exceptions)                        I,          Z
 GeneralException
 IndexUnderflow
 SizeUnderflow
@@ -386,7 +386,7 @@ ClearRadiusProcessor                EI          Z
 (connolly)                          DEIX        /           der code ist furchtbar!
 BoundingBoxProcessor                EI          Z
 FragmentDistanceCollector           EI          Z
-GeometricCenterProcessor            IX          Z	    angle-calculation should be done somewhere else, exception
+GeometricCenterProcessor            IX          Z	    angle-calculation should be done somewhere else
 
 FragmentDB                          EI          X               
             NoFragmentNode          EI          Z
