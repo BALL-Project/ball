@@ -1,4 +1,4 @@
-// $Id: HashSet_test.C,v 1.4 2000/09/04 16:13:50 amoll Exp $
+// $Id: HashSet_test.C,v 1.5 2000/09/04 17:00:59 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.4 2000/09/04 16:13:50 amoll Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.5 2000/09/04 17:00:59 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -219,7 +219,7 @@ CHECK(HashSet::erase(const ValueType& entry))
 	TEST_EQUAL(hs.getSize(), 0)
 RESULT
 
-CHECK(HashSet::erase(Iterator first, Iterator last))/*
+CHECK(HashSet::erase(Iterator first, Iterator last))
 	HashSet<int> hs;
 	hs.insert(0);
 	hs.insert(1);
@@ -228,8 +228,9 @@ CHECK(HashSet::erase(Iterator first, Iterator last))/*
 
 
 	HashSet<int>::Iterator it1 = hs.begin();
-	HashSet<int>::Iterator it2 = hs.end();
-	--it2;
+	HashSet<int>::Iterator it2 = hs.begin();
+	++it2;
+	++it2;
 	++it1;
 
 	hs.erase(it1, it2);
@@ -237,7 +238,7 @@ CHECK(HashSet::erase(Iterator first, Iterator last))/*
 	TEST_EQUAL(hs.has(3), true)
 	TEST_EQUAL(hs.has(1), false)
 	TEST_EQUAL(hs.has(2), false)
-	TEST_EQUAL(hs.getSize(), 2)*/
+	TEST_EQUAL(hs.getSize(), 2)
 RESULT
 
 CHECK(HashSet::erase(Iterator pos))/*
