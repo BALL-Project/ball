@@ -1,4 +1,4 @@
-// $Id: randomAccessIterator.h,v 1.6 2001/06/12 16:25:35 amoll Exp $ 
+// $Id: randomAccessIterator.h,v 1.7 2001/06/22 10:46:40 oliver Exp $ 
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
 #define BALL_CONCEPT_RANDOMACCESSITERATOR_H
@@ -163,10 +163,10 @@ namespace BALL
 		/** Return an iterator.
 		 *  It points to the element with the given distance from the element 
 		 *  of the given iterator.
-		 */
-		friend RandomAccessIterator operator + 
-			(Distance distance, const RandomAccessIterator& iterator) 
-			throw(Exception::InvalidIterator);
+		 *///BAUSTELLE
+		//friend RandomAccessIterator operator + 
+		//	(Distance distance, const RandomAccessIterator& iterator) 
+		//	throw(Exception::InvalidIterator);
 		
 		/** Return an iterator.
 		 * 	It points to the element with the given distance in reverse direction 
@@ -178,10 +178,10 @@ namespace BALL
 		/** Return an iterator.
 		 *  It points to the element with the given distance in reverse direction 
 		 *  of the given iterator.
-		 */
-		 friend Distance operator -
-			(const RandomAccessIterator& a, const RandomAccessIterator& b)
-			throw(Exception::InvalidIterator, Exception::IncompatibleIterators);
+		 *///BAUSTELLE
+		 //friend Distance operator -
+		//	(const RandomAccessIterator& a, const RandomAccessIterator& b)
+		//	throw(Exception::InvalidIterator, Exception::IncompatibleIterators);
 
 		/** Lesser operator.
 		 * 	Returns true if the element is in the same element as the element of the given iterator
@@ -931,48 +931,12 @@ namespace BALL
 		ConstRandomAccessIterator operator + (Distance distance) const
 			throw(Exception::InvalidIterator);
 
-    /** Return an iterator.
-		 *  It points to the element with the given distance from the element 
-		 *  of the given iterator.
-		 */
-		
-		friend ConstRandomAccessIterator operator + 
-			(Distance distance, const ConstRandomAccessIterator& iterator) 
-			throw(Exception::InvalidIterator)
-		{
-			ConstRandomAccessIterator tmp_iterator(iterator);
-			return (tmp_iterator += distance);
-		}
-
 		/** Return an iterator.
 		 *  It points to the element with the given distance in reverse direction
 		 *  from the element of this iterator.
 		 */
 		ConstRandomAccessIterator operator - (Distance distance) const
 			throw(Exception::InvalidIterator);
-
-		/** Return an iterator.
-		 *  It points to the element with the given distance in reverse direction
-		 *  of the given iterator.
-		 */
-		friend Distance operator -
-			(const ConstRandomAccessIterator& a, const ConstRandomAccessIterator& b)
-			throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
-		{
-			if (!a.traits_ptr_->isValid())
-			{
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-			}
-			if (!b.traits_ptr_->isValid())
-			{
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-			}
-			if (a.traits_ptr_->getContainer() != b.traits_ptr_->getContainer())
-			{
-				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
-			}
-			return a.traits_ptr_->getDistance(*(b.traits_ptr_));
-		}
 
     /** Lesser operator.
 		 *  Returns true if the element is in the same element as the element of the given iterator
@@ -1073,6 +1037,44 @@ namespace BALL
 			throw();
 
 	};
+
+	/** Return an incremented iterator.
+	 *  It points to the element with the given distance from the element 
+	 *  of the given iterator.
+	 */
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	ConstRandomAccessIterator<Container, DataType, Position, Traits> operator + 
+		(Distance distance, const ConstRandomAccessIterator<Container, DataType, Position, Traits>& iterator) 
+		throw(Exception::InvalidIterator)
+	{
+		ConstRandomAccessIterator<Container, DataType, Position, Traits> tmp_iterator(iterator);
+		return (tmp_iterator += distance);
+	}
+
+	/** Return the distance between two iterators.
+	 *  It points to the element with the given distance in reverse direction
+	 *  of the given iterator.
+	 */
+	template <typename Container, typename DataType, typename Position, typename Traits>
+	Distance operator -
+		(const ConstRandomAccessIterator<Container, DataType, Position, Traits>& a, 
+		 const ConstRandomAccessIterator<Container, DataType, Position, Traits>& b)
+		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
+	{
+		if (!a.getTraits()->isValid())
+		{
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+		}
+		if (!b.getTraits()->isValid())
+		{
+			throw Exception::InvalidIterator(__FILE__, __LINE__);
+		}
+		if (a.getTratis()->getContainer() != b.getTraits->getContainer())
+		{
+			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
+		}
+		return a.getTraits()->getDistance(*(b.getTraits()));
+	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstRandomAccessIterator<Container, DataType, Position, Traits>::ConstRandomAccessIterator()
