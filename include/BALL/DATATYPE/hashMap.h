@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.27.4.1 2002/05/23 23:55:10 oliver Exp $ 
+// $Id: hashMap.h,v 1.27.4.2 2002/05/31 22:48:40 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -130,6 +130,7 @@ namespace BALL
 
 		/**	Destructor.
 		*/
+		BALL_INLINE
 		virtual ~HashMap() throw()
 		{
 			destroy();
@@ -217,7 +218,7 @@ namespace BALL
 
 		/**	Insert a new entry into the hash map.
 		*/
-		::std::pair<Iterator, bool> insert(const ValueType& entry) throw();
+		std::pair<Iterator, bool> insert(const ValueType& entry) throw();
 
 		/**	Erase element with key {\tt key}.
 				@return Size the number of elements erased (0 or 1)
@@ -235,6 +236,8 @@ namespace BALL
 		void erase(Iterator first, Iterator last) throw(Exception::IncompatibleIterators);
 
 		//@}
+
+
 		/**	@name Miscellaneous
 		*/
 		//@{
@@ -312,6 +315,7 @@ namespace BALL
 			friend class HashMap<Key, T>;
 			public:
 
+			inline
 			IteratorTraits_()
 				throw()
 				:	bound_(0),
@@ -320,6 +324,7 @@ namespace BALL
 			{
 			}
 			
+			inline
 			IteratorTraits_(const HashMap& hash_map)
 				throw()
 				:	bound_(const_cast<HashMap*>(&hash_map)),
@@ -328,6 +333,7 @@ namespace BALL
 			{
 			}
 			
+			inline
 			IteratorTraits_(const IteratorTraits_& traits)
 				throw()
 				:	bound_(traits.bound_),
@@ -336,6 +342,7 @@ namespace BALL
 			{
 			}
 			
+			inline
 			const IteratorTraits_& operator = (const IteratorTraits_& traits)
 				throw()
 			{
@@ -346,54 +353,63 @@ namespace BALL
 				return *this;
 			}
 
+			inline
 			HashMap* getContainer()
 				throw()
 			{
 				return bound_;
 			}
 			
+			inline
 			const HashMap* getContainer() const
 				throw()
 			{
 				return bound_;
 			}
 			
+			inline
 			bool isSingular() const
 				throw()
 			{
 				return (bound_ == 0);
 			}
 			
+			inline
 			IteratorPosition& getPosition()
 				throw()
 			{
 				return position_;
 			}
 
+			inline
 			const IteratorPosition& getPosition() const
 				throw()
 			{
 				return position_;
 			}
 
+			inline
 			bool operator == (const IteratorTraits_& traits) const
 				throw()
 			{
 				return (position_ == traits.position_);
 			}
 
+			inline
 			bool operator != (const IteratorTraits_& traits) const
 				throw()
 			{
 				return (position_ != traits.position_);
 			}
 			
+			inline
 			bool isValid() const
 				throw()
 			{
 				return ((bound_ != 0) && (position_ != 0) && (bucket_ < (Position)bound_->bucket_.size()));
 			}
-
+			
+			inline
 			void invalidate()
 				throw()
 			{
@@ -402,6 +418,7 @@ namespace BALL
 				bucket_ = INVALID_INDEX;
 			}
 			
+			inline
 			void toBegin()
 				throw()
 			{
@@ -416,6 +433,7 @@ namespace BALL
 				}
 			}
 
+			inline
 			bool isBegin() const
 				throw()
 			{
@@ -437,30 +455,35 @@ namespace BALL
 				return false;
 			}
 
+			inline
 			void toEnd()
 				throw()
 			{
 				position_ = 0;
 			}
 			
+			inline
 			bool isEnd() const
 				throw()
 			{
 				return (position_ == 0);
 			}
 			
+			inline
 			ValueType& getData()
 				throw()
 			{
 				return position_->value;
 			}
 
+			inline
 			const ValueType& getData() const
 				throw()
 			{
 				return position_->value;
 			}
 
+			inline
 			void forward()
 				throw()
 			{
@@ -491,24 +514,28 @@ namespace BALL
 
 		friend class IteratorTraits_;
 
+		BALL_INLINE
 		Iterator begin()
 			throw()
 		{
 			return Iterator::begin(*this);
 		}
 
+		BALL_INLINE
 		Iterator end()
 			throw()
 		{
 			return Iterator::end(*this);
 		}
 
+		BALL_INLINE
 		ConstIterator begin() const
 			throw()
 		{
 			return ConstIterator::begin(*this);
 		}
 
+		BALL_INLINE
 		ConstIterator end() const
 			throw()
 		{
@@ -557,6 +584,7 @@ namespace BALL
 	};
 
 	template <class Key, class T>
+	BALL_INLINE
 	HashMap<Key, T>::HashMap(Size initial_capacity, Size number_of_buckets)
 		throw()
 		:	size_(0),
@@ -570,6 +598,7 @@ namespace BALL
 	}
 
 	template <class Key, class T>
+	BALL_INLINE
 	HashMap<Key, T>::HashMap(const HashMap& hash_map)
 		throw()
 		:	size_(hash_map.size_),
@@ -609,6 +638,7 @@ namespace BALL
 
 		size_ = 0;
 	}
+
 	template <class Key, class T>
 	BALL_INLINE 
 	void HashMap<Key, T>::destroy()
@@ -744,7 +774,7 @@ namespace BALL
 		if (it == end())
 		{
 			T value;
-			::std::pair<Iterator, bool> result = insert(ValueType(key, value));
+			std::pair<Iterator, bool> result = insert(ValueType(key, value));
 			it = result.first;
 		} 
 		
@@ -768,7 +798,7 @@ namespace BALL
 	}
 
 	template <class Key, class T>
-	::std::pair<typename HashMap<Key, T>::Iterator, bool> HashMap<Key, T>::insert
+	std::pair<typename HashMap<Key, T>::Iterator, bool> HashMap<Key, T>::insert
 		(const ValueType& item)	throw()
 	{
 		Iterator it = find(item.first);
@@ -789,14 +819,14 @@ namespace BALL
 			it.getTraits().position_	= bucket_[bucket];
 			it.getTraits().bucket_		= bucket;
 
-			return ::std::pair<Iterator, bool>(it, true);
+			return std::pair<Iterator, bool>(it, true);
 		} 
 		else 
 		{
 			// replace the existing value
 			it->second = item.second;
 
-			return ::std::pair<Iterator, bool>(it, false);
+			return std::pair<Iterator, bool>(it, false);
 		}
 	}
 
