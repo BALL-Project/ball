@@ -1,4 +1,4 @@
-// $Id: steepestDescent.C,v 1.6 1999/12/17 18:39:14 pmueller Exp $
+// $Id: steepestDescent.C,v 1.7 1999/12/27 13:01:51 pmueller Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/COMMON/limits.h>
@@ -37,10 +37,25 @@ namespace BALL
 
     if (!valid_)
     {
-      Log.level(LogStream::ERROR) << " line search minimizer setup failed! " << endl;
+      Log.level(LogStream::ERROR) << " steepest descent minimizer setup failed! " << endl;
 		}
 
 	}
+
+	// Constructor initialized with a force field and a snapshot  manager 
+	SteepestDescentMinimizer::SteepestDescentMinimizer(ForceField& force_field,
+                                          SnapShotManager *ssm)
+		:	EnergyMinimizer()
+	  {
+    valid_ = setup(force_field, ssm);
+
+
+    if (!valid_)
+      {
+      Log.level(LogStream::ERROR) << " steepest descent minimizer setup failed! " << endl;
+		  }
+
+	  }
 	
 	// Constructor initialized with a force field and a set of options
 	SteepestDescentMinimizer::SteepestDescentMinimizer(ForceField& force_field, const Options& new_options)
@@ -50,9 +65,25 @@ namespace BALL
 
     if (!valid_)
     {
-      Log.level(LogStream::ERROR) << " Line search minimizer setup failed! " << endl;
+      Log.level(LogStream::ERROR) << " steepest descent minimizer setup failed! " << endl;
 		}
 	}
+
+	// Constructor initialized with a force field, a snapshot manager, and a set of options
+	SteepestDescentMinimizer::SteepestDescentMinimizer(ForceField& force_field, 
+                SnapShotManager *ssm, const Options& new_options)
+		:	EnergyMinimizer()
+	{
+    valid_ = setup(force_field, ssm, new_options);
+
+    if (!valid_)
+    {
+      Log.level(LogStream::ERROR) << " steepest descent minimizer setup failed! " << endl;
+		}
+	}
+
+
+
 
 	// destructor
 	SteepestDescentMinimizer::~SteepestDescentMinimizer()
@@ -204,6 +235,17 @@ namespace BALL
 				force_field_->updateForces();
         force_update_counter_++; 
 
+        // If the simulation runs with periodic boundary conditions, update the
+        // list and position of molecules
+        if(force_field_->periodic_boundary.isEnabled() == true)
+                     force_field_->periodic_boundary.updateMolecules();
+
+        // Update the force field pair lists in regular intervals
+        if(number_of_iteration_ % force_field_->getUpdateFrequency() == 0)
+                     force_field_->update();
+
+
+
 				gradient_norm = 0;
 				it = force_field_->getAtoms().begin();
 				for ( ; it != force_field_->getAtoms().end() ; ++it)
@@ -251,9 +293,7 @@ namespace BALL
 				(*it)->setPosition((*it)->getPosition() + factor * (*it)->getForce());
 			}
 
-			// BAUSTELLE: Trajectory and non-bonded vector
-			// Test if the trajectory has to be updated
-
+			// Test if the non-bonded list must be updated
 			if ((number_of_iteration_ % force_field_->getUpdateFrequency()) == 0)
 			{
 				force_field_->update();
@@ -267,6 +307,12 @@ namespace BALL
 									 << " grad  : " << gradient_norm  << " kJ/(mol A)"
 									 << endl;
 			}
+
+      // Check if a snapshot of the system shall be made
+      if(snapShot_ptr_ != 0 && number_of_iteration_ % snapshot_frequency_ == 0)
+        {
+        snapShot_ptr_->takeSnapShot();
+        }
 
 			// count iterations
 			iteration++;
