@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.12 2003/11/12 12:17:21 amoll Exp $
+// $Id: pyWidget.C,v 1.13 2003/11/12 12:31:49 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -25,6 +25,7 @@ namespace BALL
 		PyWidgetData::PyWidgetData(QWidget* parent, const char* name)
 			: QTextEdit(parent, name)
 		{
+			setWrapPolicy(QTextEdit::Anywhere);
 		}
 
 		PyWidgetData::PyWidgetData(const PyWidgetData& /*widget*/)
