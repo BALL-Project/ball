@@ -1,4 +1,4 @@
-// $Id: geometricObject.h,v 1.4 2000/01/08 20:32:19 hekl Exp $
+// $Id: geometricObject.h,v 1.5 2000/04/25 15:24:08 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -158,6 +158,8 @@ namespace BALL
 			String& getName();
 
 			const String& getName() const;
+
+			bool hasName() const;
 			//@}
 		
 			/**	@name	Debugging and Diagnostics
