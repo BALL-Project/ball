@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.51 2003/12/10 15:10:14 amoll Exp $
+// $Id: displayProperties.C,v 1.52 2003/12/17 15:10:38 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -768,8 +768,12 @@ void DisplayProperties::precisionBoxChanged(int index)
 void DisplayProperties::checkDrawingPrecision_()
 	throw()
 {
-	if (model_type_combobox->currentItem() != MODEL_SE_SURFACE && 
-			model_type_combobox->currentItem() != MODEL_SA_SURFACE)
+	if (!modelMuteableByDisplayProperties((ModelType)model_type_combobox->currentItem()))
+	{
+		return;
+	}
+
+	if (isSurfaceModel((ModelType)model_type_combobox->currentItem()))
 	{
 		presets_precision_button->setChecked(true);
 		custom_precision_button->setEnabled(false);

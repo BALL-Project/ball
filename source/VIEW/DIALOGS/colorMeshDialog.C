@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.18 2003/12/10 17:18:35 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.19 2003/12/17 15:10:37 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -283,11 +283,11 @@ void ColorMeshDialog::colorByCustomColor_()
 	mesh_->colorList.resize(1);
 	mesh_->colorList[0] = col;
 
-	if (transparency_group_custom->selected() == (QButton*) none_button_custom)
+	if (transparency_group_custom->selected() == none_button_custom)
 	{
 		rep_->setTransparency(0);
 	}
-	else if (transparency_group_custom->selected() == (QButton*) alpha_button_custom)
+	else if (transparency_group_custom->selected() == alpha_button_custom)
 	{
 		rep_->setTransparency(min_min_color.getAlpha());
 	}
@@ -331,11 +331,11 @@ void ColorMeshDialog::colorByGrid_()
 		return;
 	}
 
-	if (transparency_group_grid->selected() == (QButton*) none_button_grid)
+	if (transparency_group_grid->selected() == none_button_grid)
 	{
 		rep_->setTransparency(0);
 	}
-	else if (transparency_group_grid->selected() == (QButton*) alpha_button_grid)
+	else if (transparency_group_grid->selected() == alpha_button_grid)
 	{
 		rep_->setTransparency(min_min_color.getAlpha());
 	}
@@ -366,7 +366,7 @@ void ColorMeshDialog::saveSettings_()
 	if (surface_tab->currentPage() == by_grid)
 	{
 		config.tab = 0;
-		if (transparency_group_grid->selected() == (QButton*) none_button_grid)
+		if (transparency_group_grid->selected() == none_button_grid)
 		{
 			config.transparency = 0;
 		}
@@ -379,7 +379,7 @@ void ColorMeshDialog::saveSettings_()
 	{
 		config.tab = 1;
 
-		if (transparency_group_custom->selected() == (QButton*) none_button_custom)
+		if (transparency_group_custom->selected() == none_button_custom)
 		{
 			config.transparency = 0;
 		}
@@ -457,9 +457,8 @@ void ColorMeshDialog::onNotify(Message *message)
 		if (rm->getType() == RepresentationMessage::UPDATE && rep == rep_)
 		{
 			// if current Representation changed from Surface to something else, invalidate
-			if ((rep->getModelType() != MODEL_SE_SURFACE && 
-					 rep->getModelType() != MODEL_SA_SURFACE) ||
-					!rep->getGeometricObjects().size())
+			if (!isSurfaceModel(rep->getModelType()) ||
+					rep->getGeometricObjects().size() == 0)
 			{
 				apply_button->setEnabled(false);
 				mesh_ = 0;
