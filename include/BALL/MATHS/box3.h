@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.21 2000/08/30 19:58:12 oliver Exp $
+// $Id: box3.h,v 1.22 2000/09/05 09:40:47 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -184,6 +184,69 @@ namespace BALL
 				@return bool, {\bf true} if the two boxes differ in at least one component, {\bf false} otherwise
 		*/
 		bool operator != (const TBox3& box) const;
+
+		/**	Test if a given point is a member of the box.
+				Optional it can be testet, if it is a member of the surface.
+				@param point the point to be tested
+				@param on_surface true to test the surface (default = false)
+				@return bool, {\bf true} or {\bf false}
+		*/
+		bool has(const TVector3<T>& point, bool on_surface = false) const
+		{
+			if (Maths::isLess(b[0],a[0]) || Maths::isLess(b[1],a[1]) || Maths::isLess(b[2],a[2]))
+				{
+					a.swap(b);
+				}
+			if (on_surface == false)
+			{
+				for (int i = 0; i < 3; i++)
+					{
+						if (Maths::isLess(point[i],a[i]) || Maths::isLess(b[i],point[i]))
+							{
+								return false;
+							}						
+					}
+				return true;
+			}
+			else
+			{
+				bool temp = false;
+				for (int i = 0; i < 3; i++)
+					{
+						if (Maths::isEqual(point[i],a[i]) || Maths::isEqual(point[i],b[i]))
+							{
+								temp = true;
+							}
+					}
+				return (temp && has(point,false));
+			}
+		}
+
+		/**	isIntersecting.
+				@param box the box to be tested
+				@return bool, {\bf true} if the two boxes are intersecting, {\bf false} otherwise
+		*/
+		bool isIntersecting(const TBox3& box) const
+		{
+			if (Maths::isLess(b[0],a[0]) || Maths::isLess(b[1],a[1]) || Maths::isLess(b[2],a[2]))
+				{
+//					a.swap(b);
+				}
+			if (Maths::isLess(box.b[0],box.a[0]) ||
+					Maths::isLess(box.b[1],box.a[1]) ||
+					Maths::isLess(box.b[2],box.a[2])		)
+				{
+//					(box.a).swap(box.b);
+				}
+			for (int i = 0; i < 3; i++)
+				{
+					if (Maths::isLess(box.b[i],a[i]) || Maths::isLess(b[i],box.a[i]))
+						{
+							return false;
+						}
+				}
+			return true;
+		}
 		//@}
 
 		/**	@name	Debugging and Diagnostics
