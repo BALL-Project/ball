@@ -1,8 +1,8 @@
 #ifndef BALL_NMR_READ_STAR_H
 #define BALL_NMR_READ_STAR_H
 
-#ifndef BALL_FORMAT_READFILE_H
-# include<BALL/FORMAT/readFile.h>
+#ifndef BALL_FORMAT_LineBasedFile_H
+# include<BALL/FORMAT/lineBasedFile.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -42,7 +42,7 @@ namespace BALL
 	*/
 	struct SampleCondition
 	{
-		SampleCondition();
+		SampleCondition() throw();
 
 		String	name;
 		float		temperature;
@@ -58,7 +58,7 @@ namespace BALL
 	*/
 	struct ShiftReferenceElement
 	{
-		ShiftReferenceElement();
+		ShiftReferenceElement() throw();
 
 		String		mol_common_name;
 		char			atom_type;
@@ -85,7 +85,7 @@ namespace BALL
 
 	struct NMRAtomDataSet
 	{
-		NMRAtomDataSet();
+		NMRAtomDataSet() throw();
 
 		String										name;
 		std::vector<NMRAtomData*> atom_data;
@@ -93,11 +93,11 @@ namespace BALL
 		ShiftReferenceSet*				reference;
 	};
 
-	std::ostream& operator << (std::ostream& s, const NMRAtomData& ad);
-	std::ostream& operator << (std::ostream& s, const SampleCondition& sc);
-	std::ostream& operator << (std::ostream& s, const ShiftReferenceElement& sre);
-	std::ostream& operator << (std::ostream& s, const ShiftReferenceSet& sr);
-	std::ostream& operator << (std::ostream& s, const NMRAtomDataSet& set);
+	std::ostream& operator << (std::ostream& s, const NMRAtomData&						ad)	throw();
+	std::ostream& operator << (std::ostream& s, const SampleCondition&				sc)	throw();
+	std::ostream& operator << (std::ostream& s, const ShiftReferenceElement& sre) throw();
+	std::ostream& operator << (std::ostream& s, const ShiftReferenceSet&			sr)	throw();
+	std::ostream& operator << (std::ostream& s, const NMRAtomDataSet&				 set)	throw();
 	
 	//@}
 
@@ -110,32 +110,38 @@ namespace BALL
 	*/
 	//@{
 	class NMRStarFile
-		: public ReadFile
+		: public LineBasedFile
 	{
 		public:
 
 			/** Standard constructor
 			*/
-			NMRStarFile();
+			NMRStarFile()
+				throw();
 			
 			/** Copy constructor
 			*/
-			NMRStarFile(const NMRStarFile& f);
+			NMRStarFile(const NMRStarFile& f)
+				throw();
 
 			/** Detailled constuctor.
 					Opens the given file and extracts all usefull data.
 			*/
-			NMRStarFile(const String& file_name);
+			NMRStarFile(const String& file_name)
+				throw(Exception::FileNotFound);
+
 
 			/** Get the maiximum number of atoms in all shift sets
 			*/
-			Size getNumberOfAtoms() const;
+			Size getNumberOfAtoms() 
+				const throw();
 
 			/** Get the extracted data for the atoms.
 			*/
-			const std::vector<NMRAtomDataSet*>& getData() const;
+			const std::vector<NMRAtomDataSet*>& getData()
+				const throw();
 
-			NMRStarFile& operator = (const NMRStarFile& f);
+			NMRStarFile& operator = (const NMRStarFile& f)  throw();
 
 			enum ReferenceMethod
 			{
@@ -160,25 +166,32 @@ namespace BALL
 			//_@{
 
 			/// function to extract the data from a chemical shift line
-			NMRAtomData* processShiftLine_();
+			NMRAtomData* processShiftLine_()
+				throw(LineBasedFileError);
 
 			/// reads the number of chemical shifts
-			void readEntryInformation_();
+			void readEntryInformation_()
+				throw(LineBasedFileError, Exception::InvalidFormat);
 
 			/// reads the molecular system name
-			void readMolSystem_();
+			void readMolSystem_()
+				throw();
 
 			/// reads the sample conditions
-			void readSampleConditions_();
+			void readSampleConditions_()
+				throw();
 
 			/// reads the shift references
-			void readShiftReferences_();
+			void readShiftReferences_()
+				throw();
 
 			/// reads the shift datas
-			void readShifts_();
+			void readShifts_()
+				throw (LineBasedFileError);
 
 			/// initialize the referenceOptions
-			static void initializeReferenceOptions_();
+			static void initializeReferenceOptions_()
+				throw ();
 			//_@}
 
 			/*_	@name	NMR-Star specific attributes
