@@ -1,9 +1,11 @@
-SIP						 = /BALL/bin/sip
-SIP_LIB	 			 = -L/BALL/lib
-SIP_INCL			 = -I/BALL/contrib/sip/siplib
-PYTHON_INCL    = -I/BALL/contrib/Python-1.5.2c1/Include -I/BALL/contrib/Python-1.5.2c1
+#
+# BALL Python support Makefile
+#
+# $Id: Makefile,v 1.6 2000/06/21 08:50:04 oliver Exp $
+#
 
 all: libBALLc.so
+
 
 sip:
 	$(SIP) -c . BALL.sip
@@ -52,6 +54,10 @@ SIPSOURCES=\
 	sipBALLVector3.C\
 	sipBALLXYZFile.C
 
+SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
+CXXFLAGS += $(SIPFLAGS)
+
+include ../${BALL_BINFMT}/config.mak
 
 	
 sipBALLAtom.C:	atom.sip
@@ -63,16 +69,13 @@ SIPOBJECTS=$(SIPSOURCES:.C=.o)
 .sip.C:
 	sip
 
-include ../config.mak
-
-SIPFLAGS= $(PYTHON_INCL) $(SIP_INCL)
-
-clean:	default_clean
-	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	core a.out $(EXECUTABLES)
+clean:	
+	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	core a.out $(EXECUTABLES) $(SIBOBJECTS) libBALLc.so
 
 libBALLc.so:	$(SIPOBJECTS)
-	$(CXX) -shared -o libBALLc.so $(SIPOBJECTS) -lsip -L/BALL/lib/Linux-i386-g++_2.95.2 -lBALL
+	$(DYNAR) $(DYNAROPTS) libBALLc.so $(SIPOBJECTS) $(SIP_LIB) -L$(BALL_PATH)/lib/$(BINFMT) -lBALL
 
-.C.o:
-	$(CXX) $(SIPFLAGS) $(CPPFLAGS) $(ADD_CPPFLAGS) $(CPP_MODE_FLAGS_NO_OPTIMIZATION) $(BALL_CPPFLAGS) $(BALL_INCLUDES) -c $*.C -o $@
- 
+test:
+	@echo "CXXFLAGS = "$(CXXFLAGS)
+	@echo "SIPFLAGS = "$(SIPFLAGS)
+	@echo "PY_INCLUDES = "$(PYTHON_INCLUDES)
