@@ -124,6 +124,8 @@ void ColoringSettingsDialog::writePreferences(INIFile& file)
 	writePreference_(file, "coil_color", coil_color_);
 	writePreference_(file, "strand_color", strand_color_);
 	writePreference_(file, "turn_color", turn_color_);
+	writePreference_(file, "force_min_color", force_min_color_);
+	writePreference_(file, "force_max_color", force_max_color_);
 
 	for (Position p = 0; p < element_table_->getColors().size(); p ++)
 	{
@@ -140,6 +142,8 @@ void ColoringSettingsDialog::writePreferences(INIFile& file)
 			String((float)max_distance_slider->value() / 10.0).c_str() );
 	file.insertValue("COLORING_OPTIONS", "max_tf", 
 			String((float)max_tf_slider->value() / 10.0).c_str());
+	file.insertValue("COLORING_OPTIONS", "force_max_value", 
+			String((float)force_max_value_slider->value() / 10.0).c_str());
 }
 
 void ColoringSettingsDialog::fetchPreferences(const INIFile& file)
@@ -169,6 +173,8 @@ void ColoringSettingsDialog::fetchPreferences(const INIFile& file)
 	fetchPreference_(file, "coil_color", coil_color_);
 	fetchPreference_(file, "strand_color", strand_color_);
 	fetchPreference_(file, "turn_color", turn_color_);
+	fetchPreference_(file, "force_max_color", force_max_color_);
+	fetchPreference_(file, "force_min_color", force_min_color_);
 
 	vector<ColorRGBA> colors;
 	for (Position p = 0; p < 112; p ++)
@@ -203,6 +209,11 @@ void ColoringSettingsDialog::fetchPreferences(const INIFile& file)
 	if (file.hasEntry("COLORING_OPTIONS", "max_tf")) 
 	{
 		max_tf_slider->setValue((Size)(file.getValue("COLORING_OPTIONS", "max_tf").toFloat() * 10.0));
+	}
+
+	if (file.hasEntry("COLORING_OPTIONS", "force_max_value")) 
+	{
+		force_max_value_slider->setValue((Size)(file.getValue("COLORING_OPTIONS", "force_max_value").toFloat() * 10.0));
 	}
 
 	setLabelColorsFromValues_();
@@ -307,6 +318,15 @@ void ColoringSettingsDialog::setDefaults(bool all)
 		strand_color_.set(255,0,0);
 		turn_color_.set(255,255,0);
 	}
+	// =============================================================
+	// setting force colors
+	if (all || widget_stack->id(widget_stack->visibleWidget()) == 8)
+	{
+		force_min_color_.set(0,0,255);
+		force_max_color_.set(0,0,255);
+		force_max_value_slider->setValue(10 * 10);
+	}
+
 
 	// =============================================================
 	setLabelColorsFromValues_();
@@ -423,6 +443,15 @@ void ColoringSettingsDialog::applySettingsTo(ColorProcessor& cp) const
 		dp.setMaxValue(((float)max_tf_slider->value()) / 10.0);
 		return;
 	}
+
+	if (RTTI::isKindOf<ForceColorProcessor>(cp))
+	{
+		ForceColorProcessor& dp = (*(ForceColorProcessor*)&cp);
+		dp.setMinColor(force_min_color_);
+		dp.setMaxColor(force_max_color_);
+		dp.setMaxValue(((float)force_max_value_slider->value()) / 10.0);
+		return;
+	}
 }
 	
 
@@ -527,6 +556,15 @@ void ColoringSettingsDialog::coilColorPressed()
 	setNewColor_(coil_color_label, coil_color_);
 }
 
+void ColoringSettingsDialog::forceMaxColorPressed()
+{
+	setNewColor_(force_max_color_label, force_max_color_);
+}
+
+void ColoringSettingsDialog::forceMinColorPressed()
+{
+	setNewColor_(force_min_color_label, force_min_color_);
+}
 
 void ColoringSettingsDialog::maxDistanceChanged()
 {
@@ -542,6 +580,14 @@ void ColoringSettingsDialog::maxTFChanged()
 	text = text.trimRight("0");
 	if (text.hasSuffix(".")) text += "0";
 	max_tf_label->setText(text.c_str());
+}
+
+void ColoringSettingsDialog::forceMaxValueChanged()
+{
+	String text = String(((float)force_max_value_slider->value()) / 10.0);
+	text = text.trimRight("0");
+	if (text.hasSuffix(".")) text += "0";
+	force_max_value_label->setText(text.c_str());
 }
 
 void ColoringSettingsDialog::setColorToLabel_(QLabel* label, const ColorRGBA& color)
@@ -571,6 +617,8 @@ void ColoringSettingsDialog::setLabelColorsFromValues_()
 	setColorToLabel_(coil_color_label, coil_color_);
 	setColorToLabel_(strand_color_label, strand_color_);
 	setColorToLabel_(turn_color_label, turn_color_);
+	setColorToLabel_(force_max_color_label, force_max_color_);
+	setColorToLabel_(force_min_color_label, force_min_color_);
 }
 	
 

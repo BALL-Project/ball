@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.11 2004/02/26 08:41:32 anhi Exp $
+// $Id: coloringSettingsDialog.h,v 1.12 2004/07/09 23:11:01 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -147,9 +147,12 @@ namespace BALL
 			virtual void turnColorPressed();
 			virtual void strandColorPressed();
 			virtual void coilColorPressed();
+			virtual void forceMinColorPressed();
+			virtual void forceMaxColorPressed();
 
 			virtual void maxDistanceChanged();
 			virtual void maxTFChanged();
+			virtual void forceMaxValueChanged();
 
 			protected:
 
@@ -189,7 +192,9 @@ namespace BALL
 								helix_color_,
 								coil_color_,
 								strand_color_,
-								turn_color_;
+								turn_color_,
+								force_min_color_,
+								force_max_color_;
 		};
 
 } }
