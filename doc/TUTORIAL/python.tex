@@ -1,7 +1,7 @@
 \section{Overview}
 Python is an object-oriented scripting language\cite{Python} that is well
 suited both as a language for embedding scripts into BALL application and as a
-rapid prototyping language using the undelying BALL objects.
+rapid prototyping language using the underlying BALL objects.
 BALL provides Python bindings for most of its classes in order to allow Rapid
 Methodology Development (RMD). Some of the functionality BALL provides (\eg
 template classes, iterators) are unavailable due to the fundamental differences 
@@ -40,7 +40,7 @@ translates to the Python code
 In this example, the main difference lies in the way \CPP and Python handle
 constructors. Another important difference concerns iterators. The STL-like
 kernel iterators of BALL map to a set of functions (called extractors). An
-extractors traverses the whole container and creates a Python sequence object
+extractor traverses the whole container and creates a Python sequence object
 from it. Instead of havin an \class{AtomIterator} iterating over all atoms of
 a residue
 
@@ -67,7 +67,7 @@ The molview application contains an interactive interpreter window
 if BALL was compiled with Python support. You can even access the
 data structures of the viewer from there. Assuming that you are
 currently displaying a structure in the viewer, you can retrieve a
-refernce to the first system displayed through the somewhat cryptic
+reference to the first system displayed through the somewhat cryptic
 command {\tt system =
 MainControl::getInstance(0).getDescriptorList()[0].getComposite()}.
 This is pretty useful for extracting properties from the stuff you are
@@ -129,7 +129,8 @@ bindings through
 
 \begin{lstlisting}{}
 	from BALL import *
-\end{lstlisting}.
+\end{lstlisting}
+
 \noindent
 Note, that you have to add the directory where the bindings are installed to
 Python's module search path ({\tt sys.path}).
