@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.C,v 1.18 2000/09/27 16:51:57 amoll Exp $
+// $Id: assignShiftProcessor.C,v 1.19 2000/09/30 16:44:07 oliver Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
 #include<BALL/KERNEL/atom.h>
@@ -62,7 +62,7 @@ namespace BALL
 			// normalize the atom name to reflect the PDB standard
 			String residue_name = atom_data_[atompos]->residueLabel;
 			String atom_name    = atom_data_[atompos]->atomName;
-			bool normalized;
+			bool normalized = false;
 			if (map != 0)
 			{
 				normalized = frag_db.normalize_names.matchName(residue_name, atom_name, map);
@@ -85,7 +85,7 @@ namespace BALL
 				String fullName(prefix);
 				fullName += atom_name;
 				shift_table_[fullName] = atom_data_[atompos]->shiftValue;
-//cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
+cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 				continue;
 			}
 
@@ -95,7 +95,7 @@ namespace BALL
 				String fullName(residue_name);
 				fullName += transformTable[entry];
 				shift_table_[fullName] = atom_data_[atompos]->shiftValue;
-//cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
+cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 				continue;
 			}
 
@@ -148,7 +148,15 @@ cout << "molekuel gesetzt" << endl;
 		Atom* patom_;
 		patom_= RTTI::castTo<Atom>(object);
 		
-		String fullName(number_of_fragment_);
+		String fullName;
+		if (patom_->getResidue() != 0)
+		{
+			fullName = patom_->getResidue()->getID();
+		}
+		else 
+		{
+			fullName = String(number_of_fragment_);
+		}
 		fullName += patom_->getFragment()->getName();
 		fullName += ":";
 		fullName += patom_->getName();
