@@ -1,0 +1,161 @@
+#!/usr/local/bin/bash
+# $Id: makedoc,v 1.1 2001/07/13 18:00:48 amoll Exp $
+
+# This script is used to build the BALL-documentation.
+# It can receive "complete", "html", and "tex" as first parameter to
+# build the corresponding version(s) of the documentation.
+# If no parameter is given, both versions of the docu are build.
+# 
+# DOCPP_PATH and BALL_PATH should be set as environment variables to
+# specify the directories.
+# 
+# DOCPP_HTML_OPTIONS and DOCPP_TEX_OPTIONS can be set to give doc++
+# specific options, if no value is set, the default values are used.
+# 
+# If have the patched version of docpp, which ignores namespaces, use
+# also the option "-N".
+
+makedoc_init ()
+{
+	DOCPP_HTML_OPTIONS_DEFAULT="-u -m -v -ep amsmath -ep graphicx -w -W -G -eo 11pt -d"
+	 DOCPP_TEX_OPTIONS_DEFAULT="-u -m -v -ep amsmath -ng -X -D 3 -ei -t -o"
+
+	#=================== Path to BALL ==================================
+	if [ -z $BALL_PATH ]
+	then
+		echo BALL_PATH is not definded, testing ~/BALL .
+		BALL_PATH="$HOME/BALL"
+	fi
+	if [ ! -d $BALL_PATH ]
+	then
+		echo "Can not find the BALL-directory at $BALL_PATH ."
+		exit
+	fi
+
+	#=================== Path to docpp =================================
+	if [ -z $DOCPP_PATH ]
+	then
+		echo "DOCPP_PATH is not definded, trying $BALL_PATH/doc/tools/doc++"
+		DOCPP_PATH="$BALL_PATH/doc/tools/doc++"
+	fi
+
+	if [ ! -e $DOCPP_PATH ]
+	then
+		echo "docpp can not be found at $BALL_PATH."
+		exit
+	fi
+
+	echo using `$DOCPP_PATH -V`
+
+	#=================== Commandline options ============================
+	if [ -z $DOCPP_HTML_OPTIONS ]
+	then
+		echo "DOCPP_HTML_OPTIONS is not definded, using default [ $DOCPP_HTML_OPTIONS_DEFAULT ]."
+		DOCPP_HTML_OPTIONS="$DOCPP_HTML_OPTIONS_DEFAULT"
+	fi
+
+	if [ -z $DOCPP_TEX_OPTIONS ]
+	then
+		echo "DOCPP_TEX_OPTIONS is not definded, using default [ $DOCPP_TEX_OPTIONS_DEFAULT ]."
+		DOCPP_TEX_OPTIONS="$DOCPP_TEX_OPTIONS_DEFAULT"
+	fi
+}
+
+#============================== HTML  =================================
+build_html_docu ()
+{
+	# extract the date for replacing in all html pages
+	USERNAME=`finger ${USER} |grep Login|grep ": ${USER}" | head -1|sed "s/^.*life: //"|sed "s/&/${USER}/"`
+	DATE=`date +"%a %b %e %Y"`
+	RELEASE="`grep BALL_RELEASE_STRING $BALL_PATH/include/BALL/COMMON/version.h | awk '{print $3}' | tr -d \\ `"
+	YEAR=`date +%Y`
+
+	cd $BALL_PATH;
+
+	mkdir doc 2>/dev/null
+	mkdir doc/html 2>/dev/null
+	mkdir doc/html/BALL 2>/dev/null
+
+	cd doc/html
+	rm -rf $BALL_PATH/doc/html/*
+
+	if test "$1" != "-f" -a "$2" != "-f" ; then
+		echo "collecting header files..."
+
+		HEADER_NAMES=`cd ../../include ; find BALL -name \*.h -print`
+
+		echo "creating directories"
+
+		HEADER_DIRECTORIES=`for i in ${HEADER_NAMES} ; do dirname $i ; done | sort -u`
+		for i in ${HEADER_DIRECTORIES} ; do 
+			mkdirhier $i 2>/dev/null
+		done
+		
+		echo "copying headers..."
+
+		for i in ${HEADER_NAMES} ; do 
+			cat $BALL_PATH/include/$i | expand -t 2 | /opt/gnu/bin/gawk -f $BALL_PATH/doc/tools/remove_comments.awk  > $i
+		done
+
+	fi
+
+	cp $BALL_PATH/doc/images/*.gif .
+
+	echo "creating start page and html include files..."
+
+	for i in $BALL_PATH/doc/tools/*.inc $BALL_PATH/doc/tools/*.html ; do
+		cat $i |\
+			sed "s/@USER@/${USERNAME}/" |\
+			sed "s/@RELEASE@/${RELEASE}/" |\
+			sed "s/@YEAR@/${YEAR}/" |\
+			sed "s/@DATE@/${DATE}/" > `basename $i`
+	done
+	
+	$DOCPP_PATH $DOCPP_HTML_OPTIONS . $BALL_PATH/include/BALL/BALL.doc
+}
+
+#=============================== TEX =================================
+build_tex_docu ()
+{
+	rm -f $BALL_PATH/doc/tex/*.*
+	mkdir $BALL_PATH/doc 2> /dev/null 
+	mkdir $BALL_PATH/doc/tex 2> /dev/null
+	cp $BALL_PATH/source/config/docxx.sty $BALL_PATH/doc/tex
+	
+	$DOCPP_PATH $DOCPP_TEX_OPTIONS $BALL_PATH/doc/tex/BALL.tex $BALL_PATH/include/BALL/BALL.doc\
+	&& cd $BALL_PATH/doc/tex/\
+	&& latex BALL\
+	&& latex BALL\
+	&& dvipdf BALL.dvi\
+	&& mv BALL.pdf ..
+}
+
+#====================== main programm ===============================
+if [ $1 ]; then 
+	case $1 in
+		complete)
+			makedoc_init
+			build_tex_docu
+			build_html_docu
+			exit
+			;;
+		html)
+			makedoc_init
+			build_html_docu
+			exit
+			;;
+		tex)
+			makedoc_init
+			build_tex_docu
+			exit
+			;;
+	esac
+	echo Invalid option $1 , Use "html", "tex" or "complete".
+	exit
+fi
+
+echo No option given, building HTML and TEX documentation.
+makedoc_init
+build_tex_docu
+build_html_docu
+
