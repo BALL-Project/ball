@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.27 2004/01/13 12:41:00 anhi Exp $
+# $Id: Makefile,v 1.28 2004/01/16 16:51:22 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -29,8 +29,6 @@ CPP_SOURCES=\
 	contourSurfaceDialogData.C\
 	displayProperties.C\
 	displayPropertiesData.C\
-	moveOverlayDialog.C\
-	moveOverlayDialogData.C\
 	FDPBDialog.C\
 	FDPBDialogData.C\
 	labelDialog.C\
@@ -83,8 +81,6 @@ MOC_SOURCES=\
 	contourSurfaceDialogData_moc.C\
 	displayProperties_moc.C\
 	displayPropertiesData_moc.C\
-	moveOverlayDialog_moc.C\
-	moveOverlayDialogData_moc.C\
 	FDPBDialog_moc.C\
 	FDPBDialogData_moc.C\
 	labelDialog_moc.C\
@@ -135,7 +131,6 @@ UIC_SOURCES=\
 	mainControlPreferencesData.C\
 	modelSettingsDialogData.C\
 	molecularDynamicsDialogData.C\
-	moveOverlayDialogData.C\
 	mouseSensitivityData.C\
 	parsedFunctionDialogData.C\
 	peptideDialogData.C\

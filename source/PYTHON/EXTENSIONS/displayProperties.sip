@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.sip,v 1.1 2004/01/16 16:14:58 amoll Exp $
+// $Id: displayProperties.sip,v 1.2 2004/01/16 16:47:25 amoll Exp $
 //
 
 class DisplayProperties
@@ -14,6 +14,11 @@ class DisplayProperties
 %End
   public:
 //  BALL_EMBEDDABLE(DisplayProperties);
+
+// methods implemented by the BALL_EMBEDDED macro
+static Size countInstances();
+static DisplayProperties* getInstance(Position /index/);
+
 //  DisplayProperties(QWidget *parent, const char*);
   void selectModel(int);
 //  void show();
