@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.10 2004/06/10 15:45:02 amoll Exp $
+// $Id: regularData1DWidget.C,v 1.11 2004/06/10 15:49:02 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
@@ -97,7 +97,7 @@ void RegularData1DWidget::createPolygon()
 		y_new = height_+5 - (int)((((*data_)[i]-min)/dif_min)*5);
 		
 		ql = new QCanvasLine(&canvas_);
-		ql->setBrush(QColor(black));
+		ql->setPen(QColor(black));
 		ql->setPoints(x_old, y_old, x_new, y_new);
 		objects_.push_back(dynamic_cast<QCanvasItem*> (ql));
 		ql->show();
@@ -108,11 +108,11 @@ void RegularData1DWidget::createPolygon()
 
 	//add the x-axis
 	ql = new QCanvasLine(&canvas_);
-	int startx = 5;
+	int startx = 1;
 	int starty = height_+5 - (int)round(((startx-min)/dif_min)*5);
 	int endx   = data_->size()*5;
 	ql->setPoints(startx, starty, endx, starty);
-	ql->setBrush(QColor(red));
+	ql->setPen(QColor(red));
 	ql->show();
 	objects_.push_back(dynamic_cast<QCanvasItem*> (ql));
 		
@@ -122,7 +122,7 @@ void RegularData1DWidget::createPolygon()
 	starty = 0;
 	int endy   = height_+5 - (int)round((((*data_)[endx]-min)/dif_min)*5);
 	ql->setPoints(startx, starty, startx, endy);
-	ql->setBrush(QColor(red));
+	ql->setPen(QColor(red));
 	ql->show();
 	objects_.push_back(dynamic_cast<QCanvasItem*> (ql));
 }
