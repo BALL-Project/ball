@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.24 2003/10/23 12:59:38 amoll Exp $
+// $Id: displayProperties.C,v 1.25 2003/10/26 23:21:42 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -24,7 +24,8 @@
 #include <qlabel.h>
 #include <qpushbutton.h>
 #include <qcombobox.h>
-#include <qspinbox.h>
+#include <qslider.h>
+#include <qradiobutton.h>
 
 namespace BALL
 {
@@ -126,7 +127,7 @@ void DisplayProperties::writePreferences(INIFile& inifile)
 	custom_color_.set(qcolor.red(),
 										qcolor.green(),
 										qcolor.blue(),
-										255 - transparency->value());
+										255 - transparency_slider->value());
 
 	// the combobox values
 	inifile.insertValue("WINDOWS", "Display::model", model_type_);
@@ -221,7 +222,7 @@ void DisplayProperties::selectMode(int index)
 		throw(InvalidOption(__FILE__, __LINE__, index));
 	}
 
-	transparency->setEnabled(index == VIEW::DRAWING_MODE_SOLID);
+	transparency_slider->setEnabled(index == VIEW::DRAWING_MODE_SOLID);
 
 	mode_ = index;
 }
@@ -437,7 +438,7 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 	custom_color_.set(qcolor.red(),
 										qcolor.green(),
 										qcolor.blue(),
-										255 - transparency->value());
+										255 - transparency_slider->value());
 	color_processor->setDefaultColor(custom_color_);
 
 	bool rebuild_representation = false;
@@ -464,10 +465,15 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 
 	rep->setColorProcessor(color_processor);
 	rep->setModelProcessor(model_processor);
-	if (transparency->value() != 0)
+	if (transparency_slider->value() != 0)
 	{
 		rep->setProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
 	}
+	else
+	{
+		rep->clearProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
+	}
+
 	
 	if (rep_ == 0) 
 	{	
@@ -519,6 +525,30 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 		ccmessage->setType(CompositeMessage::CENTER_CAMERA);
 		notify_(ccmessage);
 	}
+}
+
+
+void DisplayProperties::transparencySliderChanged()
+{
+	transparency_label->setText(String(transparency_slider->value()).c_str());
+}
+void DisplayProperties::precisionSliderChanged()
+{
+	precision_label->setText(String(precision_slider->value() / 10).c_str());
+	custom_precision_button->setChecked(true);
+}
+
+void DisplayProperties::coloringOptionsPressed()
+{
+}
+
+void DisplayProperties::modelOptionsPressed()
+{
+}
+
+void DisplayProperties::precisionBoxChanged()
+{
+	presets_precision_button->setChecked(true);
 }
 
 } } // namespaces

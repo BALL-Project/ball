@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.11 2003/10/16 09:33:01 amoll Exp $
+// $Id: displayProperties.h,v 1.12 2003/10/26 23:22:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -219,6 +219,21 @@ namespace BALL
 					\see BALL_SELECTED_COLOR
 			*/
 			virtual void editSelectionColor();
+
+			///
+			virtual void coloringOptionsPressed();
+
+			///
+			virtual void modelOptionsPressed();
+
+			///
+			virtual void precisionBoxChanged();
+
+			///
+			virtual void transparencySliderChanged();
+
+			///
+			virtual void precisionSliderChanged();
 
 			//@}
 				
