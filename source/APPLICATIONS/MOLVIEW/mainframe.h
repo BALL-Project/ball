@@ -1,18 +1,10 @@
-// $Id: mainframe.h,v 1.30.4.2 2002/10/16 17:24:44 amoll Exp $
+// $Id: mainframe.h,v 1.30.4.3 2002/10/22 18:16:17 amoll Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_LOGVIEW_H
 #	include <BALL/VIEW/KERNEL/logView.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
-#	include <BALL/VIEW/KERNEL/connectionObject.h>
 #endif
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
