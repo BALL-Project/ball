@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.11 2000/09/01 23:01:30 amoll Exp $ 
+// $Id: hashSet.h,v 1.12 2000/09/04 00:11:04 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -30,6 +30,9 @@
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #	include <BALL/CONCEPT/processor.h>
 #endif
+
+#include <algorithm>
+
 
 namespace BALL
 {
@@ -537,15 +540,46 @@ namespace BALL
 			capacity_(hash_set.capacity_),
 			bucket_(hash_set.bucket_.size())
 	{
-		Node* node = 0;
+		Node* item = 0;
 		
 		for (Position bucket = 0; bucket < (Position)bucket_.size(); ++bucket)
 		{
 			bucket_[bucket] = 0;
 
-			for (node = hash_set.bucket_[bucket]; node != 0; node = node->next)
+			for (item = hash_set.bucket_[bucket]; item != 0; item = item->next)
 			{
-				bucket_[bucket] = newNode_(node->value, bucket_[bucket]);
+				bucket_[bucket]	= newNode_(item->value, bucket_[bucket]);
+			}
+		}
+
+	}
+
+	template <class Key>
+	BALL_INLINE 
+	void HashSet<Key>::set(const HashSet& hash_set)
+	{
+		if (&hash_set == this)
+		{
+			return;
+		}
+
+		destroy();
+		
+		deleteBuckets_();
+
+		size_ = hash_set.size_;
+		capacity_ = hash_set.capacity_;
+		bucket_.resize(hash_set.bucket_.size());
+
+		Node* item = 0;
+		
+		for (Position bucket = 0; bucket < (Position)bucket_.size(); ++bucket)
+		{
+			bucket_[bucket] = 0;
+
+			for (item = hash_set.bucket_[bucket]; item != 0; item = item->next)
+			{
+				bucket_[bucket]	= newNode_(item->value, bucket_[bucket]);
 			}
 		}
 	}
@@ -579,37 +613,6 @@ namespace BALL
 
 	template <class Key>
 	BALL_INLINE 
-	void HashSet<Key>::set(const HashSet& hash_set)
-	{
-		if (&hash_set == this)
-		{
-			return;
-		}
-
-		destroy();
-		
-		deleteBuckets_();
-
-		size_ = hash_set.size_;
-		capacity_ = hash_set.capacity_;
-		bucket_.resize(hash_set.bucket_.size());
-
-//		PointerType item = 0;
-		Node* item = 0;
-		
-		for (Position bucket = 0; bucket < (Position)bucket_.size(); ++bucket)
-		{
-			bucket_[bucket] = 0;
-
-			for (item = hash_set.bucket_[bucket]; item != 0; item = item->next)
-			{
-				bucket_[bucket]	= newNode_(item->value, bucket_[bucket]);
-			}
-		}
-	}
-
-	template <class Key>
-	BALL_INLINE 
 	HashSet<Key>& HashSet<Key>::operator = (const HashSet& hash_set)
 	{
 		set(hash_set);
@@ -626,9 +629,9 @@ namespace BALL
 	template <class Key>
 	void HashSet<Key>::swap(HashSet& hash_set)
 	{
-		swap(size_, hash_set.size_);
-		swap(capacity_, hash_set.capacity_);
-		swap(bucket_, hash_set.bucket_);
+		std::swap(size_, hash_set.size_);
+		std::swap(capacity_, hash_set.capacity_);
+		std::swap(bucket_, hash_set.bucket_);
 	}
 
 	template <class Key>
@@ -751,7 +754,11 @@ namespace BALL
 	BALL_INLINE 
 	void HashSet<Key>::host(Visitor<ValueType>& visitor)
 	{
-		visitor.visit(*this);
+		Iterator it = begin();
+		for (; it != end(); ++it)
+		{
+			visitor.visit(*it);
+		}
 	}
 		
 	template <class Key>
@@ -772,7 +779,23 @@ namespace BALL
 	BALL_INLINE 
 	bool HashSet<Key>::operator == (const HashSet& hash_set) const
 	{
-		return (size_ == hash_set.size_ && isSubsetOf(hash_set));
+		if (size_ != hash_set.size_)
+		{
+			return false;
+		}
+
+		Iterator it1 = begin();
+		Iterator it2 = hash_set.begin();
+		while (it1 != end())
+		{
+			if (*it1 != *it2)
+			{
+				return false;
+			}
+			it1++;
+			it2++;
+		}
+		return true;
 	}
 
 	template <class Key>
