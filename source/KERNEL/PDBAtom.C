@@ -1,4 +1,4 @@
-// $Id: PDBAtom.C,v 1.5 2000/04/17 13:32:29 amoll Exp $
+// $Id: PDBAtom.C,v 1.6 2000/05/09 16:13:15 amoll Exp $
 
 #include <BALL/KERNEL/PDBAtom.h>
 
@@ -56,6 +56,17 @@ namespace BALL
 	{
 	}
 		
+	PDBAtom::PDBAtom(const String& name)
+		:	Atom(),
+			branch_designator_(BALL_PDBATOM_DEFAULT_BRANCH_DESIGNATOR),
+			remoteness_indicator_(BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR),
+			alternate_location_indicator_(BALL_PDBATOM_DEFAULT_ALTERNATE_LOCATION_INDICATOR),
+			occupancy_(BALL_PDBATOM_DEFAULT_OCCUPANCY),
+			temperature_factor_(BALL_PDBATOM_DEFAULT_TEMPERATURE_FACTOR)
+	{
+		Atom::setName(name);
+	}
+
 	PDBAtom::~PDBAtom()
 	{
 		destroy();

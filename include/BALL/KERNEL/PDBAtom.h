@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.8 2000/05/02 14:03:48 amoll Exp $
+// $Id: PDBAtom.h,v 1.9 2000/05/09 16:12:31 amoll Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -86,6 +86,9 @@ namespace BALL
 		/// Copy constructor
 		PDBAtom(const PDBAtom& pdb_atom, bool deep = true);
 	
+		/// Constructor
+		PDBAtom(const String& name);
+
 		/// Detailled constructor
 		PDBAtom
 			(Element& element,
