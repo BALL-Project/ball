@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.C,v 1.17 2000/09/27 07:20:39 oliver Exp $
+// $Id: assignShiftProcessor.C,v 1.18 2000/09/27 16:51:57 amoll Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
 #include<BALL/KERNEL/atom.h>
@@ -80,13 +80,12 @@ namespace BALL
 			prefix += residue_name;
 			prefix += ":";
 
-			// non H-atoms need no name transforming
-			if (atom_data_[atompos]->atomType != 'H' || !transformTable.has(entry))
+			if (!transformTable.has(entry))
 			{
 				String fullName(prefix);
 				fullName += atom_name;
 				shift_table_[fullName] = atom_data_[atompos]->shiftValue;
-cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
+//cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 				continue;
 			}
 
@@ -96,7 +95,7 @@ cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 				String fullName(residue_name);
 				fullName += transformTable[entry];
 				shift_table_[fullName] = atom_data_[atompos]->shiftValue;
-cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
+//cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 				continue;
 			}
 
