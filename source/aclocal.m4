@@ -599,7 +599,7 @@ AC_DEFUN(CF_GXX_OPTIONS, [
   MAKEDEP_CXX_OPTS="-M"
   CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
   CXXFLAGS_DI="${CXXFLAGS_DI} -g"
-  CXXFLAGS_O="${CXXFLAGS_O} -O2 -Wall -W -pedantic -Wno-long-long"
+  CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
   MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
   dnl  We do not need the -fPIC flag for CYGWIN,
