@@ -10,6 +10,8 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
+#include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
+#include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
 #include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h>
 #include <BALL/MOLVIEW/GUI/DIALOGS/openMOL2File.h>
 #include <BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h>
@@ -111,12 +113,6 @@ Mainframe::Mainframe
 	scene_->registerGLObjectCollector(GL_object_collector_);
 
 	// ---------------------
-	// Dialogs setup ---------
-	// ---------------------
-
-	//	minimization_dialog_->getPreferences(preferences_);
-
-	// ---------------------
 	// LogView setup ------
 	// ---------------------
 	
@@ -135,11 +131,9 @@ Mainframe::Mainframe
 	
 
 	// ---------------------
-	// Menu ----------------
+	// Menus ---------------
 	// ---------------------
-	// File-Menu -------------------------------------------------------------------
 
-	// Edit-Menu -------------------------------------------------------------------
 	// Build Menu -------------------------------------------------------------------
 	insertMenuEntry(MainControl::BUILD, "Check St&ructure", this, SLOT(checkResidue()), CTRL+Key_R, MENU__BUILD_CHECK_RESIDUE);
 
@@ -147,6 +141,7 @@ Mainframe::Mainframe
 	insertMenuEntry(MainControl::BUILD, "Assign &Charges", this, SLOT(assignCharges()), CTRL+Key_H, MENU__BUILD_ASSIGN_CHARGES);
 	insertMenuEntry(MainControl::BUILD, "Calculate AMBER &Energy", this, SLOT(calculateAmberEnergy()), CTRL+Key_U, MENU__BUILD_AMBER_ENERGY);
 	insertMenuEntry(MainControl::BUILD, "Perform Energy &Minimization", this, SLOT(amberMinimization()), CTRL+Key_W, MENU__BUILD_AMBER_MINIMIZATION);
+	insertMenuEntry(MainControl::BUILD, "Perform MD &Simulation", this, SLOT(amberMDSimulation()), CTRL+Key_S, MENU__BUILD_AMBER_MDSIMULATION);
 			
 	// Help-Menu -------------------------------------------------------------------
 
@@ -181,21 +176,15 @@ Mainframe::~Mainframe()
 	throw()
 {
 	//
-	// extract preferences 
-	// from the current settings
-	//
-	//minimization_dialog_->setPreferences(preferences_);
-
-	//
 	// clean up
 	//
-	List<QPopupMenu *>::Iterator iterator__List;
+	List<QPopupMenu *>::Iterator list_it;
 
-	for (iterator__List = popup_menus_.begin();
-			 iterator__List != popup_menus_.end();
-			 ++iterator__List)
+	for (list_it = popup_menus_.begin();
+			 list_it != popup_menus_.end();
+			 ++list_it)
 	{
-		delete *iterator__List;
+		delete *list_it;
 	}
 
 	popup_menus_.clear();
@@ -245,6 +234,9 @@ void Mainframe::checkMenuEntries()
 														(all_systems && (number_of_selected_objects == 1)));
 
 	menuBar()->setItemEnabled(MENU__BUILD_AMBER_MINIMIZATION, 
+														(all_systems && (number_of_selected_objects == 1)));
+
+	menuBar()->setItemEnabled(MENU__BUILD_AMBER_MDSIMULATION, 
 														(all_systems && (number_of_selected_objects == 1)));
 }
 
@@ -310,7 +302,14 @@ void Mainframe::calculateAmberEnergy()
 	amber.options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
 	amber.options[AmberFF::Option::OVERWRITE_CHARGES] = "true";
 	amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
-	amber.setup(system);
+  amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = String(minimization_dialog_->getUseDistanceDependentDC());
+  amber.options[AmberFF::Option::FILENAME] = String(minimization_dialog_->getFilename());
+
+	if (!amber.setup(system))
+	{
+		Log.error() << "Force field setup failed." << std::endl;
+		return;
+	}
 
 	// calculate the energy
 	statusBar()->message("calculating energy...");
@@ -365,6 +364,7 @@ void Mainframe::amberMinimization()
   amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
 	amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = String(minimization_dialog_->getUseDistanceDependentDC());
 	amber.options[AmberFF::Option::FILENAME] = String(minimization_dialog_->getFilename());
+
  	if (!amber.setup(system))
 	{
 		Log.error() << "Setup of AMBER force field failed." << endl;
@@ -438,6 +438,118 @@ void Mainframe::amberMinimization()
 	Log.info() << endl;
 	Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after " 
 		<< minimizer->getNumberOfIteration() << " iterations" << endl;
+	
+	// clean up
+	delete minimizer;
+
+	QString message;
+	message.sprintf("Total AMBER energy: %f kJ/mol.", amber.getEnergy());
+	statusBar()->message(message, 5000);
+}
+
+void Mainframe::amberMDSimulation()
+{
+	if (selection_.size() == 0)
+	{
+		return;
+	}
+
+	// retrieve the system from the selection
+	System& system = *RTTI::castTo<System>(*selection_.front());
+
+
+	// execute the MD simulation dialog
+	// and abort if cancel is clicked
+	//int result = minimization_dialog_->exec();
+	//if (result == 0)
+	//{
+	//	return;
+	//}
+	
+	// set up the AMBER force field
+	statusBar()->message("setting up force field...");
+	statusBar()->update();
+	QWidget::update();
+	AmberFF amber;
+  amber.options[AmberFF::Option::ASSIGN_TYPES] = "true";
+  amber.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
+  amber.options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
+  amber.options[AmberFF::Option::OVERWRITE_CHARGES] = "false";
+  amber.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
+	// amber.options[AmberFF::Option::DISTANCE_DEPENDENT_DIELECTRIC] = String(minimization_dialog_->getUseDistanceDependentDC());
+	// amber.options[AmberFF::Option::FILENAME] = String(minimization_dialog_->getFilename());
+
+ 	if (!amber.setup(system))
+	{
+		Log.error() << "Setup of AMBER force field failed." << endl;
+		return;
+	}
+
+	// calculate the energy
+	statusBar()->message("starting simulation...");
+	statusBar()->update();
+	amber.updateEnergy();
+
+
+	MolecularDynamics* mds = new CanonicalMD;
+	
+	// set the options for the MDS	
+	Options options;
+	options[MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY] = 100;
+	options[MolecularDynamics::Option::TIME_STEP] = 0.001;
+
+	// setup the simulation
+	mds->setup(amber, 0, options);
+	if (!mds->isValid())
+	{
+		Log.error() << "Setup for MD simulation failed!" << std::endl;
+		return;
+	}
+	
+	// perform an initial step (no restart step)
+	mds->simulateIterations(1, false);
+
+	// we update everything every so and so steps
+	Size steps = 2;
+
+	//
+	// iterate until done and refresh the screen every "steps" iterations
+	// 
+	while (mds->getNumberOfIteration() < 500)
+	{
+		mds->simulateIterations(steps, true);
+    MainControl::update(system.getRoot());
+
+		QString message;
+		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
+										mds->getNumberOfIteration(),
+										amber.getEnergy(),
+										amber.getRMSGradient());
+		// update scene
+		SceneMessage scene_message;
+		scene_message.updateOnly();
+		notify_(scene_message);
+		QWidget::update();
+		statusBar()->message(message);
+		statusBar()->update();
+ 	}
+	Log.info() << std::endl << "simulation terminated." << std::endl << endl;
+
+	// print the result
+	Log.info() << "AMBER Energy:" << endl;
+	Log.info() << " - electrostatic     : " << amber.getESEnergy() << " kJ/mol" << endl;
+	Log.info() << " - van der Waals     : " << amber.getVdWEnergy() << " kJ/mol" << endl;
+	Log.info() << " - bond stretch      : " << amber.getStretchEnergy() << " kJ/mol" << endl;
+	Log.info() << " - angle bend        : " << amber.getBendEnergy() << " kJ/mol" << endl;
+	Log.info() << " - torsion           : " << amber.getTorsionEnergy() << " kJ/mol" << endl;
+	Log.info() << "---------------------------------------" << endl;
+	Log.info() << "  total energy       : " << amber.getEnergy() << " kJ/mol" << endl;
+	Log.info() << endl;
+	Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after " 
+		<< mds->getNumberOfIteration() << " iterations" << endl;
+
+	// clean up
+	delete mds;
 
 	QString message;
 	message.sprintf("Total AMBER energy: %f kJ/mol.", amber.getEnergy());
@@ -448,7 +560,7 @@ void Mainframe::about()
 {
 	DlgAbout about_box;
 	about_box.exec();
-	statusBar()->message("MolVIEW V 0.96a", 1500);
+	statusBar()->message("MolVIEW V1.0", 1500);
 }
 
 void Mainframe::fetchPreferences(INIFile& inifile)

@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.29 2001/08/16 00:54:38 oliver Exp $
+// $Id: mainframe.h,v 1.30 2001/10/11 00:47:26 oliver Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -105,6 +105,7 @@ class Mainframe
 		MENU__BUILD_ASSIGN_CHARGES,
 		MENU__BUILD_AMBER_ENERGY,
 		MENU__BUILD_AMBER_MINIMIZATION,
+		MENU__BUILD_AMBER_MDSIMULATION,
 
 		MENU__DISPLAY_OPEN_DISPLAY_PROPERTIES_DIALOG,
 		MENU__DISPLAY_OPEN_PREFERENCES_DIALOG,
@@ -144,6 +145,7 @@ class Mainframe
 	void assignCharges();
 	void calculateAmberEnergy();
 	void amberMinimization();
+	void amberMDSimulation();
 
 	// Help menu
 	void about();
