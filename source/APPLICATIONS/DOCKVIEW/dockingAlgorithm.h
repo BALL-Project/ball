@@ -32,7 +32,7 @@ namespace BALL
 
 				/** Operations
 				*/
-				void setup()
+				void setup(System &system1,System &system2 ,Options &options)
 					throw();
 
 				/**
