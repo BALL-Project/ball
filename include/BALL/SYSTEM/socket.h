@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.7 2000/01/06 09:46:06 oliver Exp $
+// $Id: socket.h,v 1.8 2000/01/08 12:18:35 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -241,7 +241,7 @@ namespace BALL
 		};
 
 		//@}
-			
+
 		protected:
 
 		struct sockcnt 
@@ -341,7 +341,7 @@ namespace BALL
 
 		virtual _G_ssize_t sys_write (const void* buf, long len);
 
-		virtual int xsputn(const char* s, int n);
+		virtual std::streamsize xsputn(const char* s, std::streamsize n);
 
 		int is_open() const 
 		{ 

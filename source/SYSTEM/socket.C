@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.9 2000/01/06 09:45:53 oliver Exp $
+// $Id: socket.C,v 1.10 2000/01/08 12:18:31 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -277,7 +277,7 @@ namespace BALL
 		return c;
 	}
 
-	int SocketBuf::xsputn(const char* s, int n)
+	std::streamsize SocketBuf::xsputn(const char* s, std::streamsize n)
 	{
 		if (n <= 0) 
 		{
@@ -1128,7 +1128,7 @@ namespace BALL
 #	ifndef BALL_OS_LINUX
 
 	extern "C" int h_errno;
-	static	char* errmsg[] = 
+	static const char* errmsg[] = 
 	{
 		": No error\n",
 		": Host not found\n",
