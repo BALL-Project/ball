@@ -16,8 +16,10 @@ EXECUTABLES = \
 	BitVector_test\
 	Bond_test\
 	BaseFragment_test\
+	CharmmFF_test\
 	ClassTest_test\
 	Composite_test\
+	DefaultProcessors_test\
 	EnergyMinimizer_test\
 	Fragment_test\
 	FragmentDB_test\
@@ -38,7 +40,8 @@ EXECUTABLES = \
 	String_test\
 	StructureMapper_test\
 	TransformationApplicator_test\
-	TranslationApplicator_test
+	TranslationApplicator_test\
+	Vector3_test
 
 CPP_SOURCES=$(EXECUTABLES:=.C)
 
@@ -68,10 +71,16 @@ Bond_test:	Bond_test.o
 BitVector_test:	BitVector_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
+CharmmFF_test:	CharmmFF_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
 ClassTest_test:	ClassTest_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Composite_test:	Composite_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+DefaultProcessors_test:	DefaultProcessors_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 EnergyMinimizer_test:	EnergyMinimizer_test.o
@@ -141,6 +150,9 @@ TranslationApplicator_test:	TranslationApplicator_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 TransformationApplicator_test:	TransformationApplicator_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+Vector3_test:	Vector3_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 
