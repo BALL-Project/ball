@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.30.4.3 2002/10/22 18:16:17 amoll Exp $
+// $Id: mainframe.h,v 1.30.4.4 2002/10/29 16:06:46 anhi Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -39,6 +39,10 @@
 # include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h>
 #endif  
 
+#ifndef BALL_VIEW_GUI_FUNCTOR_POVRENDERER_H
+# include <BALL/VIEW/GUI/FUNCTOR/POVRenderer.h>
+#endif
+
 #include "DIALOGS/DlgAmberMinimization.h"
 
 class QWidget;
@@ -64,8 +68,7 @@ class Mainframe
 		MENU__OPEN_FILE_PDB,
 		MENU__OPEN_FILE_HIN,
 		MENU__OPEN_FILE_MOL2,
-
-		MENU__EXPORT_POVRAY,
+		MENU__FILE_EXPORT_POVRAYFILE,
 		
 		MENU__EDIT_CUT,
 		MENU__EDIT_COPY,
@@ -117,6 +120,8 @@ class Mainframe
 	// active the menu entries
 	// (connected to aboutToShow())
 	void checkMenuEntries();
+
+	void exportPOVRay();
 
 	// Build menu
 	void checkResidue();

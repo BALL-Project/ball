@@ -9,7 +9,6 @@
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
 #include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h>
 #include <BALL/MOLVIEW/GUI/DIALOGS/openMOL2File.h>
-#include <BALL/MOLVIEW/GUI/DIALOGS/openMOLFile.h>
 #include <BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h>
 
 #include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h>
@@ -89,7 +88,7 @@ Mainframe::Mainframe
 
 	CHECK_PTR(new OpenPDBFile(this));
 	CHECK_PTR(new OpenMOL2File(this));
-	CHECK_PTR(new OpenMOLFile(this));
+	//CHECK_PTR(new OpenMOLFile(this));
 	CHECK_PTR(new OpenHINFile(this));
 
 	molecular_properties_ = new MolecularProperties(this);
@@ -120,9 +119,11 @@ Mainframe::Mainframe
 	// Menus ---------------
 	// ---------------------
 
+	// File Menu
+	insertMenuEntry(MainControl::FILE, "Export POVRay &file", this, SLOT(exportPOVRay()), CTRL+Key_F, MENU__FILE_EXPORT_POVRAYFILE);
+
 	// Build Menu -------------------------------------------------------------------
 	insertMenuEntry(MainControl::BUILD, "Check St&ructure", this, SLOT(checkResidue()), CTRL+Key_R, MENU__BUILD_CHECK_RESIDUE);
-
 
 	insertMenuEntry(MainControl::BUILD, "Assign &Charges", this, SLOT(assignCharges()), CTRL+Key_H, MENU__BUILD_ASSIGN_CHARGES);
 	insertMenuEntry(MainControl::BUILD, "Calculate AMBER &Energy", this, SLOT(calculateAmberEnergy()), CTRL+Key_U, MENU__BUILD_AMBER_ENERGY);
@@ -225,6 +226,16 @@ void Mainframe::checkMenuEntries()
 	menuBar()->setItemEnabled(MENU__BUILD_AMBER_MDSIMULATION, 
 														(all_systems && (number_of_selected_objects == 1)));
 }
+
+void Mainframe::exportPOVRay()
+{
+	FileDialog pov("Export POVRay File", QFileDialog::AnyFile, this);
+	pov.exec();
+	
+	POVRenderer pr(pov.getFileName());
+	scene_->exportScene(pr);
+}
+	
 
 void Mainframe::checkResidue()
 {
