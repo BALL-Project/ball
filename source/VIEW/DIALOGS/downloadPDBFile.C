@@ -237,7 +237,7 @@ void DownloadPDBFile::slotDownload()
 		pdb_file.close();
 
 #ifdef BALL_QT_HAS_THREADS
-//   		removeFile_(temp_filename);
+ 		removeFile_(temp_filename);
 #endif
 
 		if (system->countAtoms() == 0)
