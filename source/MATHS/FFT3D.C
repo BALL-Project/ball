@@ -1,4 +1,4 @@
-// $Id: FFT3D.C,v 1.1.2.3 2002/09/02 09:28:53 anhi Exp $
+// $Id: FFT3D.C,v 1.1.2.4 2002/11/07 19:03:40 anhi Exp $
 
 #include <BALL/MATHS/FFT3D.h>
 
@@ -33,8 +33,10 @@ namespace BALL
 			stepFourierZ_(data.stepFourierZ_),
       minPhys_(Vector3(-origin_.x,-origin_.y,-origin_.z)),
       maxPhys_(Vector3(((lengthX_-1)*stepPhysX_)-origin_.x,((lengthY_-1)*stepPhysY_)-origin_.y,((lengthZ_-1)*stepPhysZ_)-origin_.z)),
-      minFourier_(Vector3(-(lengthX_/2.-1)*stepFourierX_,-(lengthY_/2.-1)*stepFourierY_,-(lengthZ_/2.-1)*stepFourierZ_)),
-      maxFourier_(Vector3((lengthX_/2.)*stepFourierX_,(lengthY_/2.)*stepFourierY_,(lengthZ_/2.)*stepFourierZ_))
+//      minFourier_(Vector3(-(lengthX_/2.-1)*stepFourierX_,-(lengthY_/2.-1)*stepFourierY_,-(lengthZ_/2.-1)*stepFourierZ_)),
+      minFourier_(Vector3(-(lengthX_/2.)*stepFourierX_,-(lengthY_/2.)*stepFourierY_,-(lengthZ_/2.)*stepFourierZ_)),
+//      maxFourier_(Vector3((lengthX_/2.)*stepFourierX_,(lengthY_/2.)*stepFourierY_,(lengthZ_/2.)*stepFourierZ_))
+      maxFourier_(Vector3((lengthX_/2.-1)*stepFourierX_,(lengthY_/2.-1)*stepFourierY_,(lengthZ_/2.-1)*stepFourierZ_))
 	{
 		 planForward_  = fftw3d_create_plan(lengthX_, lengthY_, lengthZ_, FFTW_FORWARD,  FFTW_ESTIMATE | FFTW_IN_PLACE);
 		 planBackward_ = fftw3d_create_plan(lengthX_, lengthY_, lengthZ_, FFTW_BACKWARD, FFTW_ESTIMATE | FFTW_IN_PLACE);								
@@ -58,8 +60,10 @@ namespace BALL
 			stepFourierZ_(2.*M_PI/(stepPhysZ_*lengthZ_)),
       minPhys_(Vector3(-origin_.x,-origin_.y,-origin_.z)),
       maxPhys_(Vector3(((lengthX_-1)*stepPhysX_)-origin_.x,((lengthY_-1)*stepPhysY_)-origin_.y,((lengthZ_-1)*stepPhysZ_)-origin_.z)),
-      minFourier_(Vector3(-(lengthX_/2.-1)*stepFourierX_,-(lengthY_/2.-1)*stepFourierY_,-(lengthZ_/2.-1)*stepFourierZ_)),
-      maxFourier_(Vector3((lengthX_/2.)*stepFourierX_,(lengthY_/2.)*stepFourierY_,(lengthZ_/2.)*stepFourierZ_))
+      //minFourier_(Vector3(-(lengthX_/2.-1)*stepFourierX_,-(lengthY_/2.-1)*stepFourierY_,-(lengthZ_/2.-1)*stepFourierZ_)),
+      minFourier_(Vector3(-(lengthX_/2.)*stepFourierX_,-(lengthY_/2.)*stepFourierY_,-(lengthZ_/2.)*stepFourierZ_)),
+      maxFourier_(Vector3((lengthX_/2.-1)*stepFourierX_,(lengthY_/2.-1)*stepFourierY_,(lengthZ_/2.-1)*stepFourierZ_))
+      //maxFourier_(Vector3((lengthX_/2.)*stepFourierX_,(lengthY_/2.)*stepFourierY_,(lengthZ_/2.)*stepFourierZ_))
 	{
 		planForward_  = fftw3d_create_plan(lengthX_, lengthY_, lengthZ_, FFTW_FORWARD,  FFTW_ESTIMATE | FFTW_IN_PLACE);
 	  planBackward_ = fftw3d_create_plan(lengthX_, lengthY_, lengthZ_, FFTW_BACKWARD, FFTW_ESTIMATE | FFTW_IN_PLACE);								
@@ -348,6 +352,30 @@ namespace BALL
 		return maxFourier_.z;
 	}
 
+	Size FFT3D::getMaxXIndex() const
+		throw()
+	{
+		return (lengthX_ - 1);
+	}
+	
+	Size FFT3D::getMaxYIndex() const
+		throw()
+	{
+		return (lengthY_ - 1);
+	}
+	
+	Size FFT3D::getMaxZIndex() const
+		throw()
+	{
+		return (lengthZ_ - 1);
+	}
+	
+	Size FFT3D::getNumberOfInverseTransforms() const
+		throw()
+	{
+		return numFourierToPhys_;
+	}
+
 	Vector3 FFT3D::getGridCoordinates(Position position) const
 		throw()
 	{
@@ -385,17 +413,17 @@ namespace BALL
 			y = (position % (lengthY_ * lengthZ_)) / lengthZ_;
 			x =  position / (lengthY_ * lengthZ_);
 
-			if (x>lengthX_/2.)
+			if (x>=lengthX_/2.)
 			{
 				x-=lengthX_;
 			}
 			
-			if (y>lengthY_/2.)
+			if (y>=lengthY_/2.)
 			{
 				y-=lengthY_;
 			}
 
-			if (z>lengthZ_/2.)
+			if (z>=lengthZ_/2.)
 			{
 				z-=lengthZ_;
 			}
@@ -614,19 +642,297 @@ namespace BALL
 		return data[internalPos];
 	}
 
+	FFTW_COMPLEX& FFT3D::operator[](const Position& pos)
+		throw(Exception::OutOfGrid)
+	{
+		return data[pos];
+	}
+
+	const FFTW_COMPLEX& FFT3D::operator[](const Position& pos) const
+		throw(Exception::OutOfGrid)
+	{
+		return data[pos];
+	}
+
 	Complex FFT3D::phase(const Vector3& pos) const
 		throw()
 	{
-	  double phase = 2.*M_PI*(  rint(pos.x/stepFourierX_)*rint(origin_.x/stepPhysX_)
+	  double phase = -2.*M_PI*(  (rint(pos.x/stepFourierX_))*(rint(origin_.x/stepPhysX_))
 															/lengthX_
-														+ rint(pos.y/stepFourierY_)*rint(origin_.y/stepPhysY_)
+														+ (rint(pos.y/stepFourierY_))*(rint(origin_.y/stepPhysY_))
 															/lengthY_
-														+ rint(pos.z/stepFourierZ_)*rint(origin_.z/stepPhysZ_)
+														+ (rint(pos.z/stepFourierZ_))*(rint(origin_.z/stepPhysZ_))
 															/lengthZ_ );
-		
+	
+
 		Complex result = Complex(cos(phase), sin(phase));
 						
 		return result;
 	}
-}
+
+	bool FFT3D::isInFourierSpace() const
+		throw()
+	{
+		return inFourierSpace_;
+	}
 	
+	const TRegularData3D<Complex>& operator << (TRegularData3D<Complex>& to, const FFT3D& from)
+		throw()
+	{
+		// first decide if the FFT3D data is in Fourier space.
+		if (!from.isInFourierSpace())
+		{
+			// create a new grid
+			Size lengthX = from.getMaxXIndex()+1;
+			Size lengthY = from.getMaxYIndex()+1;
+			Size lengthZ = from.getMaxZIndex()+1;
+			
+			TRegularData3D<Complex> newGrid(from.getPhysSpaceMinX(), 
+																			from.getPhysSpaceMinY(),
+																			from.getPhysSpaceMinZ(),
+																			from.getPhysSpaceMaxX(),
+																			from.getPhysSpaceMaxY(),
+																			from.getPhysSpaceMaxZ(),
+																			lengthX, lengthY, lengthZ);
+
+			// and fill it
+			double normalization=1./(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+			FFTW_COMPLEX dataIn;
+			Complex      dataOut;
+			
+			for (Position i=0; i<from.getSize(); i++)
+			{
+				Position x, y, z;
+
+				z =  i % lengthZ;
+				y = (i % (lengthY * lengthZ)) / lengthZ;
+				x =  i / (lengthY * lengthZ);
+
+				dataIn     = from[i];
+				dataOut.re = dataIn.re;
+				dataOut.im = dataIn.im;
+				
+				newGrid[x + (y + z*lengthY)*lengthZ] = dataOut*normalization;
+			}
+
+			to.set(newGrid);
+
+			return to;
+		}
+		else
+		{
+			// we are in Fourier space
+			
+			// create a new grid
+			Size lengthX = from.getMaxXIndex()+1;
+			Size lengthY = from.getMaxYIndex()+1;
+			Size lengthZ = from.getMaxZIndex()+1;
+			float stepPhysX = from.getPhysStepWidthX();
+			float stepPhysY = from.getPhysStepWidthY();
+			float stepPhysZ = from.getPhysStepWidthZ();
+			float stepFourierX = from.getFourierStepWidthX();
+			float stepFourierY = from.getFourierStepWidthY();
+			float stepFourierZ = from.getFourierStepWidthZ();
+
+
+			
+			TRegularData3D<Complex> newGrid(from.getFourierSpaceMinX(), 
+																			from.getFourierSpaceMinY(),
+																			from.getFourierSpaceMinZ(),
+																			from.getFourierSpaceMaxX(),
+																			from.getFourierSpaceMaxY(),
+																			from.getFourierSpaceMaxZ(),
+																			lengthX, lengthY, lengthZ);
+
+			// and fill it
+			double normalization=1./(sqrt(2.*M_PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+
+			Index x, y, z;
+			Vector3 r;
+			FFTW_COMPLEX dataIn;
+			Complex      dataOut;
+	
+			for (Position i=0; i<from.getSize(); i++)
+			{
+				z =  i % lengthZ;
+				y = (i % (lengthY * lengthZ)) / lengthZ;
+				x =  i / (lengthY * lengthZ);
+
+				if (x>lengthX/2.)
+				{
+					x-=lengthX;
+				}
+
+				if (y>lengthY/2.)
+				{
+					y-=lengthY;
+				}
+
+				if (z>lengthZ/2.)
+				{
+					z-=lengthZ;
+				}
+
+				r.set((float)x * stepFourierX,
+							(float)y * stepFourierY,
+							(float)z * stepFourierZ);
+
+				dataIn = from[i];
+				dataOut.re = dataIn.re;
+				dataOut.im = dataIn.im;
+				
+				newGrid[x + (y + z*lengthY)*lengthZ] = dataOut*normalization*from.phase(r);
+			}
+
+			to.set(newGrid);
+
+			return to;
+		}
+	}
+	
+	const RegularData3D& operator << (RegularData3D& to, const FFT3D& from)
+		throw()
+	{
+		// first decide if the FFT3D data is in Fourier space.
+		if (!from.isInFourierSpace())
+		{
+			// create a new grid
+			Size lengthX = from.getMaxXIndex()+1;
+			Size lengthY = from.getMaxYIndex()+1;
+			Size lengthZ = from.getMaxZIndex()+1;
+			
+			RegularData3D newGrid(from.getPhysSpaceMinX(), 
+														from.getPhysSpaceMinY(),
+														from.getPhysSpaceMinZ(),
+														from.getPhysSpaceMaxX(),
+														from.getPhysSpaceMaxY(),
+														from.getPhysSpaceMaxZ(),
+														lengthX, lengthY, lengthZ);
+
+			// and fill it
+			double normalization=1./(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+			FFTW_COMPLEX dataIn;
+			Complex      dataOut;
+			
+			for (Position i=0; i<from.getSize(); i++)
+			{
+				Position x, y, z;
+
+				z =  i % lengthZ;
+				y = (i % (lengthY * lengthZ)) / lengthZ;
+				x =  i / (lengthY * lengthZ);
+
+				dataIn     = from[i];
+				dataOut.re = dataIn.re;
+				dataOut.im = dataIn.im;
+				
+				newGrid[x + (y + z*lengthY)*lengthZ] = dataOut.re*normalization;
+			}
+
+			to.set(newGrid);
+
+			return to;
+		}
+		else
+		{
+			// we are in Fourier space
+			
+			// create a new grid
+			Size lengthX = from.getMaxXIndex()+1;
+			Size lengthY = from.getMaxYIndex()+1;
+			Size lengthZ = from.getMaxZIndex()+1;
+			float stepPhysX = from.getPhysStepWidthX();
+			float stepPhysY = from.getPhysStepWidthY();
+			float stepPhysZ = from.getPhysStepWidthZ();
+			float stepFourierX = from.getFourierStepWidthX();
+			float stepFourierY = from.getFourierStepWidthY();
+			float stepFourierZ = from.getFourierStepWidthZ();
+
+
+			
+			RegularData3D newGrid(from.getFourierSpaceMinX(), 
+														from.getFourierSpaceMinY(),
+														from.getFourierSpaceMinZ(),
+														from.getFourierSpaceMaxX(),
+														from.getFourierSpaceMaxY(),
+														from.getFourierSpaceMaxZ(),
+														lengthX, lengthY, lengthZ);
+
+			// and fill it
+			double normalization=1./(sqrt(2.*M_PI))*(stepPhysX*stepPhysY*stepPhysZ)/(pow((float)(lengthX*lengthY*lengthZ),from.getNumberOfInverseTransforms()));
+
+			Index x, y, z;
+			signed int xp, yp, zp;
+			Vector3 r;
+			FFTW_COMPLEX dataIn;
+			Complex      dataOut;
+	
+			for (Position i=0; i<from.getSize(); i++)
+			{
+				z =  i % lengthZ;
+				y = (i % (lengthY * lengthZ)) / lengthZ;
+				x =  i / (lengthY * lengthZ);
+				
+				xp = x;
+				yp = y;
+				zp = z;
+
+				if (xp>=lengthX/2.)
+				{
+					xp-=(int)lengthX;
+				}
+				if (yp>=lengthY/2.)
+				{
+					yp-=(int)lengthY;
+				}
+				if (zp>=lengthZ/2.)
+				{
+					zp-=(int)lengthZ;
+				}
+
+				if (x>=lengthX/2.)
+				{
+					x-=(int)(lengthX/2.);
+				}
+				else
+				{
+					x+=(int)(lengthX/2.);
+				}
+
+				if (y>=lengthY/2.)
+				{
+					y-=(int)(lengthY/2.);
+				}
+				else
+				{
+					y+=(int)(lengthY/2.);
+				}
+
+				if (z>=lengthZ/2.)
+				{
+					z-=(int)(lengthZ/2.);
+				}
+				else
+				{
+					z+=(int)(lengthZ/2.);
+				}
+
+				r.set((float)xp * stepFourierX,
+							(float)yp * stepFourierY,
+							(float)zp * stepFourierZ);
+
+				dataIn = from[i];
+	
+				dataOut.re = dataIn.re;
+				dataOut.im = dataIn.im;
+
+				newGrid[x + (y + z*lengthY)*lengthZ] = (dataOut*normalization*from.phase(r)).re;
+			}
+
+			to.set(newGrid);
+
+			return to;
+		}
+	}
+
+}
