@@ -1,4 +1,4 @@
-// $Id: vector2.h,v 1.3 2001/07/10 16:31:38 anker Exp $
+// $Id: vector2.h,v 1.4 2001/07/13 19:40:59 oliver Exp $
 
 #ifndef BALL_MATHS_Vector2_H
 #define BALL_MATHS_Vector2_H
@@ -535,7 +535,7 @@ namespace BALL
 	T TVector2<T>::getLength() const
 		throw()
 	{
-		return (const T&) sqrt(x * x + y * y);
+		return (T) sqrt(x * x + y * y);
 	}
 
 	template <typename T>
@@ -543,7 +543,7 @@ namespace BALL
 	T TVector2<T>::getSquareLength() const
 		throw()
 	{
-		return (const T&)(x * x + y * y);
+		return (T)(x * x + y * y);
 	}
 
 	template <typename T>
