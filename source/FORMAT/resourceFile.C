@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.7 2000/03/01 00:08:22 oliver Exp $
+// $Id: resourceFile.C,v 1.8 2000/03/07 13:29:41 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -687,7 +687,6 @@ namespace BALL
 		String last_node_tag;
 		String key;
 		String value;
-		bool key_set = false;
 		bool value_set = false;
 		
 
@@ -751,7 +750,6 @@ namespace BALL
 							}
 							entry = entry->insertChild(key, value);
 							entry = entry->getParent();
-							key_set = false;
 							value_set = false;
 						}
 						if (last_node_tag == "/node")
@@ -780,7 +778,6 @@ namespace BALL
 								value = "";
 							}
 							entry = entry->insertChild(key, value);
-							key_set = false;
 							value_set = false;
 						}
 						last_node_tag = "node";
@@ -788,8 +785,8 @@ namespace BALL
 					else if (tag == "value")
 					{
 						key = last_string;
-						key_set = true;
-					} else
+					} 
+					else
 					{
 						Log.error() << "ResourceFile: unknown tag " << tag << endl;
 					}
