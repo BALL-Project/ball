@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.6 2000/02/16 17:06:11 oliver Exp $
+// $Id: box3.h,v 1.7 2000/02/23 01:51:51 amoll Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -32,21 +32,43 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Default constructor.
+				This method creates a new TBox3 object. The three components
+				of the two TVector3 are initialized to {\tt (T)0}.
+		*/
 		TBox3();
 
-		///
+		/**	Copy constructor.
+				Create a new TBox3 object from another.
+				@param vector the TBox3 object to be copied
+				@param bool ignored - just for interface consistency
+		*/	
 		TBox3(const TBox3& box, bool deep = true);
 
-		///
+		/**	Detailled constructor.
+				Create a new TBox3 object from two TVector3.
+				@param	a assigned to {\tt a}
+				@param	b assigned to {\tt b}
+		*/
 		TBox3(const TVector3<T>& a, const TVector3<T>& b);
 
-		///
+		/**	Detailled constructor.
+				Create a new TBox3 object from six {\tt T} variables.
+				@param	ax assigned to {\tt a.x}
+				@param	ay assigned to {\tt a.y}
+				@param	az assigned to {\tt a.z}
+				@param	bx assigned to {\tt b.x}
+  			@param	by assigned to {\tt b.y}
+				@param	bz assigned to {\tt b.z}
+		*/
 		TBox3
 			(const T& ax, const T& ay, const T& az,
 			 const T& bx, const T& by, const T& bz);
 
-		///
+		/**	Destructor.	
+				Destructs the TBox3 object. As there are no dynamic
+				data structures, nothing happens.
+		*/	
 		virtual ~TBox3()
 		{
 		}
@@ -56,30 +78,62 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Assign from another TBox3.
+				@param vector	the TBox3 object to assign from
+				@param deep ignored
+		*/
 		void set(const TBox3& box, bool deep = true);
 
-		///
+		/**	Assign from two TVector3.
+				@param a	the TVector3 a
+				@param b	the TVector3 b
+		*/
 		void set(const TVector3<T>& a, const TVector3<T>& b);
 
-		///
+		/**	Assign from six {\tt T} values.
+				@param	ax assigned to {\tt a.x}
+				@param	ay assigned to {\tt a.y}
+				@param	az assigned to {\tt a.z}
+				@param	bx assigned to {\tt b.x}
+  			@param	by assigned to {\tt b.y}
+				@param	bz assigned to {\tt b.z}
+		*/
 		void set
 			(const T& ax, const T& ay, const T& az,
 			 const T& bx, const T& by, const T& bz);
 
-		///
+		/**	Assignment operator.
+				Assign the box components from another TBox3.
+				@param box the TBox3 to assign from
+		**/
 		TBox3& operator = (const TBox3& box);
 
-		///
+		/**	Assign to another TBox3.
+				Assigns the box components to another box.
+				@param box	the box to be asigned to
+				@param deep ignored
+		*/
 		void get(TBox3& box, bool deep = true) const;
 
-		///
+		/**	Assign to two variables of type {\tt TVector3}.
+				@param	a the first vector
+				@param	b the second vector
+		*/
 		void get(TVector3<T>& a, TVector3<T>& b) const;
 
-		///
+		/**	Assign to six variables of type {\tt T}.
+				@param	ax is assigned {\tt a.x}
+				@param	ay is assigned {\tt a.y}
+				@param	az is assigned {\tt a.z}
+				@param	bx is assigned {\tt b.x}
+				@param	by is assigned {\tt b.y}
+				@param	bz is assigned {\tt b.z}
+		*/
 		void get(T& ax, T& ay, T& az, T& bx, T& by, T& bz) const;
 
-		///
+		/**	Swap the contents of two boxes.
+				@param	box the box to swap contents with
+		*/
 		void swap(TBox3& box);
 		//@}
 
@@ -87,22 +141,36 @@ namespace BALL
 		/**	@name	Accessors
 		*/
 		//@{
-		///
+		/**	Return the surface of the box.
+				@return {\tt T} the surface
+		*/
 		T getSurface() const;
 
-		///
+		/**	Return the volume of the box.
+				@return {\tt T} the volume
+		*/
 		T getVolume() const;
 
-		///
+		/**	Return the width of the box.
+				@return {\tt T} the width
+		*/
 		T getWidth() const;
 	
-		///
+		/**	Return the geight of the box.
+				@return {\tt T} the height
+		*/
 		T getHeight() const;
 	
-		///
+		/**	Return the depth of the box.
+				@return {\tt T} the depth
+		*/
 		T getDepth() const;
 	
-		///
+		/**	Join the box with an other.
+				Instance is set to to the box containing
+				both, the box and a given box 
+				@param	box the box to contain
+		*/
 		void join(const TBox3& box);
 		//@}
 
@@ -110,17 +178,25 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Equality operator.
+				@return bool, {\bf true} if all two box components are equal, {\bf false} otherwise
+		*/
 		bool operator == (const TBox3& box) const;
 
-		///
+		/**	Inequality operator.
+				@return bool, {\bf true} if the two boxes differ in at least on component, {\bf false} otherwise
+		*/
 		bool operator != (const TBox3& box) const;
 		//@}
 
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
-		///
+
+		/**	Test if instance is valid.
+				always retruns true
+				@return bool {\bf true}
+		*/
 		bool isValid() const;
 
 		///
@@ -131,10 +207,13 @@ namespace BALL
 		/**	@name	Public members
 		*/
 		//@{
-		///
+
+		/**	first point of the box
+		*/
 		TVector3<T> a;
 
-		///
+		/**	second point of the box
+		*/
 		TVector3<T> b;
 		//@}
 	};
@@ -358,7 +437,8 @@ namespace BALL
 	}
 
 
-	///
+	/**	Default three-dimensional box class of type {\bf float}
+	*/
 	typedef TBox3<float> Box3;
 
 } // namespace BALL
