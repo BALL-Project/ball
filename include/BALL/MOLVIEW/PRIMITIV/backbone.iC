@@ -1,0 +1,50 @@
+// $Id: backbone.iC,v 1.1 2001/01/07 15:46:36 hekl Exp $
+
+BALL_INLINE	
+void Backbone::setAtomList(const List<Atom*> &atoms)
+{
+	atoms_ = atoms;
+}
+
+BALL_INLINE	
+void Backbone::setAtomColorList(const List<ColorRGBA> &atom_colors)
+{
+	atom_colors_ = atom_colors;
+}
+
+
+BALL_INLINE	
+void Backbone::SplinePoint::setVector(const Vector3 &point)
+{
+	point_ = point;
+}
+
+BALL_INLINE	
+const Vector3 &Backbone::SplinePoint::getVector() const
+{
+	return point_;
+}
+
+BALL_INLINE	
+void Backbone::SplinePoint::setTangentialVector(const Vector3 &tangent)
+{
+	tangent_ = tangent;
+}
+
+BALL_INLINE	
+const Vector3 &Backbone::SplinePoint::getTangentialVector() const
+{
+	return tangent_;
+}
+				
+BALL_INLINE	
+void Backbone::SplinePoint::setColor(const ColorRGBA &color)
+{
+	color_ = color;
+}
+
+BALL_INLINE	
+const ColorRGBA &Backbone::SplinePoint::getColor() const
+{
+	return color_;
+}
