@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.15 2000/03/26 21:36:19 oliver Exp $
+// $Id: line3.h,v 1.16 2000/03/30 09:34:49 oliver Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -309,6 +309,9 @@ namespace BALL
 	*/
 	typedef TLine3<float> Line3;
 
+	/**	Stream operators of Line3
+	*/
+	//@{
 	/**	Input- Operator
 			reads two {\bf TVector3} obejcts from an {\tt istream} and
 			assigns them to {\tt d} and {\tt p}

@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.17 2000/03/29 17:26:57 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.18 2000/03/30 09:34:48 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -1222,7 +1222,7 @@ namespace BALL
 		
 		return TAngle<T>(acosbel);
 	}
-
+	//@}
 
 } // namespace BALL
 

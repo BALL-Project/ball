@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.12 2000/03/26 21:44:43 oliver Exp $
+// $Id: circle3.h,v 1.13 2000/03/30 09:34:49 oliver Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -306,6 +306,7 @@ namespace BALL
 								<< " " << circle.n
 								<< " " << circle.radius << ")");
 	}
+	//@}
 	//@}
 
 } // namespace BALL
