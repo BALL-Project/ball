@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.27 2001/07/25 11:23:51 oliver Exp $
+// $Id: exception.h,v 1.28 2001/07/29 17:24:00 oliver Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -11,16 +11,17 @@
 #	include <BALL/COMMON/global.h>
 #endif
 
-#include <string>
 #include <new>
+#include <string>
 
 namespace BALL 
 {
 
+	class String;
+
 	namespace Exception 
 	{
 
-		using std::string;
 
 		/**	@name	Exception Handling
 		*/
@@ -67,10 +68,13 @@ namespace BALL
 				throw();
 			
 			/// Constructor
+			GeneralException(const char* file, int line)
+				throw();
+
+			/// Constructor
 			GeneralException
-				(const char* file, int line, 
-				 const string& name = "GeneralException",
-				 const string& message = "unspecified error")
+				(const char* file, int line,
+				 const String& name , const String& message)
 				throw();
 
 			/// Copy constructor
@@ -86,11 +90,11 @@ namespace BALL
 			//@{
 	
 			///	Returns the name of the exception 
-			string getName() const
+			const char* getName() const
 				throw();
 
 			///	Returns the error message of the exception
-			string getMessage() const
+			const char* getMessage() const
 				throw();
 
 			/// Returns the line number where it occured
@@ -98,16 +102,16 @@ namespace BALL
 				throw();
 	
 			/// Returns the file where it occured
-			string getFile() const
+			const char* getFile() const
 				throw();
 			//@}
 
 			protected:
-			string	file_;
-			int			line_;
+			const char*	file_;
+			int					line_;
 
-			string 	name_;
-			string 	message_;
+			std::string name_;
+			std::string message_;
 		};		
 
 		/**	Index underflow.
@@ -206,7 +210,7 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			InvalidFormat(const char* file, int line, const string& s = "")
+			InvalidFormat(const char* file, int line, const String& s)
 				throw();
 			
 			~InvalidFormat()
@@ -214,7 +218,7 @@ namespace BALL
 
 			protected:
 
-			string format_;
+			std::string format_;
 		};
 
 		/**	Illegal self operation.	
@@ -348,16 +352,16 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			FileNotFound(const char* file, int line, const string& filename)
+			FileNotFound(const char* file, int line, const String& filename)
 				throw();
 
 			~FileNotFound()
 				throw();
-			string getFilename() const
+			String getFilename() const
 				throw();
 
 			protected:
-			string filename_;
+			std::string filename_;
 		};
 
 		/**	File not found.
@@ -378,8 +382,8 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			ParseError(const char* file, int line, const char* expression,
-					const char* message)
+			ParseError(const char* file, int line, const String& expression,
+					const String& message)
 				throw();
 		};
 
@@ -418,12 +422,12 @@ namespace BALL
 				
 			/**
 			*/
-			static void setName(const string& name)
+			static void setName(const String& name)
 				throw();
 				
 			/**
 			*/
-			static void setMessage(const string& message)
+			static void setMessage(const String& message)
 				throw();
 
 			/**
@@ -433,14 +437,14 @@ namespace BALL
 
 			/**
 			*/
-			static void setFile(const string& file)
+			static void setFile(const String& file)
 				throw();
 
 			/**
 			*/
 			static void set
-				(const string& file, int line, 
-				 const string& name, const string& message)
+				(const String& file, int line, 
+				 const String& name, const String& message)
 				throw();
 			//@}	
 			
@@ -454,10 +458,10 @@ namespace BALL
 			static void newHandler()
 				throw();
 
-			static string file_;
-			static int		line_;
-			static string name_;
-			static string message_;
+			static std::string file_;
+			static int				 line_;
+			static std::string name_;
+			static std::string message_;
 		};
 
 		/**	Global static instance of GlobalExceptionHandler
