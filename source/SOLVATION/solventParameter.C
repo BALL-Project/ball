@@ -1,0 +1,149 @@
+// $Id: solventParameter.C,v 1.1 2000/08/31 17:33:32 anker Exp $
+
+#include <BALL/SOLVATION/solventParameter.h>
+
+namespace BALL
+{
+
+	SolventParameter::SolventParameter()
+		: ParameterSection(),
+			name_(),
+			number_density_(0.0),
+			solvent_atoms_(),
+			solvent_descriptor_()
+	{
+	}
+
+
+	SolventParameter::SolventParameter(const SolventParameter& param)
+		: ParameterSection(param),
+			name_(param.name_),
+			number_density_(param.number_density_),
+			solvent_atoms_(param.solvent_atoms_),
+			solvent_descriptor_(param.solvent_descriptor_)
+	{
+	}
+
+
+	SolventParameter::~SolventParameter()
+	{
+		destroy();
+	}
+
+
+	void SolventParameter::destroy()
+	{
+		clear();
+	}
+
+
+	void SolventParameter::clear()
+	{
+		name_ = "";
+		number_density_ = 0.0;
+		solvent_descriptor_.clear();
+		solvent_atoms_.clear();
+	}
+
+	
+	void SolventParameter::set(const SolventParameter& param)
+	{
+			// ParameterSection::set(param);
+			name_ = param.name_;
+			number_density_ = param.number_density_;
+			solvent_atoms_ = param.solvent_atoms_;
+			solvent_descriptor_ = param.solvent_descriptor_;
+	}
+
+
+	const SolventParameter& SolventParameter::operator = 
+		(const SolventParameter& param)
+	{
+		set(param);
+		return *this;
+	}
+
+
+	SolventDescriptor SolventParameter::getSolventDescriptor() const
+	{
+		return solvent_descriptor_;
+	}
+
+	bool SolventParameter::extractSection(ForceFieldParameters& parameters,
+			const String& section_name)
+	{
+		// BAUSTELLE
+		if (!parameters.isValid())
+		{
+			return false;
+		}
+
+		// extract the basis information
+		ParameterSection::extractSection(parameters, section_name);
+
+		// check whether all variables we need are defined, terminate otherwi
+		if (!hasVariable("radius") || !hasVariable("number_of_atoms") || !hasVariable("element_symbol"))
+		{
+			Log.error() << "SolventParameter::extractSection(): Variable missing." 
+				<< endl;
+			return false;
+		}
+		else
+		{
+			if (options.has("name"))
+			{
+				name_ = options.get("name");
+			}
+			else
+			{
+				Log.warn() << "SolventParameter::extractSection(): no name given." 
+					<< endl;
+			}
+			if (options.has("number_density"))
+			{
+				number_density_ = options.getReal("number_density");
+			}
+			else
+			{
+				Log.warn() << "SolventParameter::extractSection(): "
+					<< "no number density given." << endl;
+			}
+
+			AtomTypes& atom_types = parameters.getAtomTypes();         
+
+			Size number_of_keys = getNumberOfKeys();
+			solvent_atoms_.resize(number_of_keys);
+
+			Size index_element_symbol = getColumnIndex("element_symbol");
+			Size index_radius = getColumnIndex("radius");
+			Size index_number_of_atoms = getColumnIndex("number_of_atoms");
+		
+			for (Size i = 0; i < number_of_keys; ++i)
+			{
+				String type_name = getKey(i);
+				if (atom_types.has(type_name))
+				{
+					solvent_atoms_[i].type = atom_types.getType(type_name);
+					solvent_atoms_[i].element_symbol = getValue(i, index_element_symbol);
+					solvent_atoms_[i].radius = getValue(i, index_radius).toFloat();
+					solvent_atoms_[i].number_of_atoms = getValue(i, index_number_of_atoms).toInt();
+				}
+				else
+				{
+					Log.error() << "SolventParameter::extractSection(): "
+						<< "Cannot assign atom type." << endl;
+				}
+			}
+			// build descriptor 
+			solvent_descriptor_ = SolventDescriptor(name_, number_density_,
+					solvent_atoms_);
+			return true;
+		}
+		// control flow should not reach this point
+		Log.error() << "SolventParameter::extractSection(): "
+			<< "reached unreachable part of program" << endl;
+		return false;
+
+	}
+
+}
