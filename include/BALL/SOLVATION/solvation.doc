@@ -1,4 +1,4 @@
-/* $Id: solvation.doc,v 1.3 2000/10/27 12:25:26 anker Exp $ */
+// $Id: solvation.doc,v 1.4 2001/01/24 11:59:36 amoll Exp $ */
 
 /**@name	Solvation methods
 		This chapter contains all relevant information on 
