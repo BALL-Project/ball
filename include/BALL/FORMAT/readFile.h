@@ -9,10 +9,6 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_COMMON_EXCEPTION_H
-#	include <BALL/COMMON/exception.h>
-#endif
-
 #include <vector>
 #include <fstream>
 
@@ -22,6 +18,21 @@ namespace BALL
 	class ReadFile
 	{
 		public:
+
+			/** Exception thrown if a file could not be processed right.
+			*/
+			class ReadFileError
+				: public Exception::GeneralException
+			{
+				public:
+				ReadFileError(const char* file, int line, const ReadFile& rf, const String& message = "");
+			};
+
+			/// Get the last line number in the file.
+			Position getLineNumber() const;
+
+			/// Get the contens in the current line in the open file.
+			const String& getLineContens() const;
 
 		protected:
 

@@ -2,10 +2,6 @@
 #include <iostream> 
 #include <fstream>
 
-#ifndef BALL_COMMON_EXCEPTION_H
-#include <BALL/COMMON/exception.h>
-#endif
-
 using namespace std;
 
 namespace BALL

@@ -1,11 +1,39 @@
-// $Id: readFile.C,v 1.7 2000/10/03 18:57:50 amoll Exp $
+// $Id: readFile.C,v 1.8 2000/10/08 23:26:13 amoll Exp $
 
-#include<BALL/FORMAT/readFile.h>
+#include <BALL/FORMAT/readFile.h>
+#include <BALL/COMMON/exception.h>
+#include <stdio.h>
 
 using namespace std;
 
 namespace BALL
 {
+
+	ReadFile::ReadFileError::ReadFileError(const char* file, int line,  const ReadFile& rf, const String& message)
+		: Exception::GeneralException(file, line, "ReadFileError", "")
+	{
+		message_ = message;
+		message_ += "; last read line number = ";
+		char buf[40];
+		sprintf(buf, "%i", rf.getLineNumber());
+		message_ += buf;
+		message_ += "\n contents of line: \n";
+		message_ += rf.getLineContens();
+
+		Exception::GlobalExceptionHandler globalHandler;
+		globalHandler.setMessage(message_);
+	}
+
+
+	Position ReadFile::getLineNumber() const
+	{
+		return line_number_;
+	}
+
+	const String& ReadFile::getLineContens() const
+	{
+		return line_;
+	}
 
 	ReadFile::ReadFile(const String& file_name)
 		: line_number_(0),
@@ -181,7 +209,7 @@ namespace BALL
 	{
 		if (!condition)
 		{
-			throw Exception::ReadFileError(file, line, msg, line_, line_number_);
+			throw ReadFileError(file, line, *this, msg);
 		}
 	}
 
