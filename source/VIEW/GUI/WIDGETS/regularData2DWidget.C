@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.3 2000/12/01 17:34:35 anhi Exp $
+// $Id: regularData2DWidget.C,v 1.4 2000/12/04 16:57:20 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -117,7 +117,6 @@ RegularData2DWidget::RegularData2DWidget(int lx_, int ly_, double min, double ma
 
   // register the widget with the MainControl
   ModularWidget::registerWidget(this);
-  snumpoints_ = lengthx * lengthy;
 
   // create the context menu
   men_ = new QPopupMenu(this);
