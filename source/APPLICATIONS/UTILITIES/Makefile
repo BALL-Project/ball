@@ -1,11 +1,13 @@
 #
-# $Id: Makefile,v 1.9.2.1 2005/02/14 16:24:44 anhi Exp $
+# $Id: Makefile,v 1.9.2.2 2005/03/10 18:00:06 anhi Exp $
 # Makefile for BALL utilities
 #
 
 DIRECTORY=APPLICATIONS/UTILITIES
 
-EXECUTABLES = \
+FFT_SOURCES=$(BALL_HAS_FFTW:true=rigid_docking)
+
+EXECUTABLES = $(FFT_SOURCES)\
 	add_hydrogens\
 	assign_typenames_from_rules\
 	clip_protein_around_ligand\
@@ -14,8 +16,7 @@ EXECUTABLES = \
 	pdb2amber_naming\
 	pdb2dcd\
 	reconstruct_fragment\
-	solvent_accessibility\
-	rigid_docking
+	solvent_accessibility
 
 # default target
 all:	$(EXECUTABLES)
