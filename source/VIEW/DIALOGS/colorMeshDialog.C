@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.8 2003/09/22 11:26:10 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.9 2003/10/04 12:23:01 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -25,6 +25,7 @@
 #include <qbuttongroup.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
+#include <qcombobox.h>
 
 namespace BALL
 {
@@ -140,7 +141,7 @@ void ColorMeshDialog::tabChanged()
 
 	if (surface_tab->currentPage() == by_grid)
 	{
-		if (grid_label->text() == "")
+		if (!grid_)
 		{
 			apply_button->setEnabled(false);
 		}
@@ -172,10 +173,51 @@ void ColorMeshDialog::autoScalePressed()
 //--------------------- Helper functions ----------------------------------
 bool ColorMeshDialog::insertGrid_(RegularData3D& grid, const String& name)
 {
+	grid_list_.push_back(&grid);
+	grids->insertItem(name.c_str());
+	if (!grid_) grid_ = &grid;
 	if (!mesh_ || !mesh_->vertex.size()) return false;
-	autoscale->setEnabled(true);
-	grid_ = &grid;
-	grid_label->setText(name.c_str());
+	gridSelected();
+	return true;
+}
+
+void ColorMeshDialog::removeGrid_(RegularData3D& grid)
+{
+	list<RegularData3D*>::iterator it = grid_list_.begin();
+	Position pos = 0;
+	for (; it != grid_list_.end(); it++)
+	{
+		if (*it == &grid)
+		{
+			if ((Index)pos == grids->currentItem()) 
+			{
+				grids->setCurrentItem(-1);
+				invalidateGrid_();
+			}
+			grid_list_.erase(it);
+			grids->removeItem(pos);
+			return;
+		}
+		pos++;
+	}
+}
+
+
+void ColorMeshDialog::gridSelected()
+{
+	Index pos = grids->currentItem();
+	if (pos == -1) 
+	{
+		invalidateGrid_();
+		return;
+	}
+
+	list<RegularData3D*>::iterator it = grid_list_.begin();
+	for (Position p = 0; p < (Position)pos; p++)
+	{
+		it++;
+	}
+	grid_ = *it;
 
 	min_value_  = Limits<float>::max();
 	max_value_  = Limits<float>::min(); 
@@ -186,7 +228,8 @@ bool ColorMeshDialog::insertGrid_(RegularData3D& grid, const String& name)
 		for(Position p = 0; p < mesh_->vertex.size(); p++)
 		{
 			mesh_->vertex[p];
-			float value = grid(mesh_->vertex[p]);
+			float value = (*grid_)(mesh_->vertex[p]);
+
 			mid_value_ += value;
 			if (value < min_value_) min_value_ = value;
 			if (value > max_value_) max_value_ = value;
@@ -194,16 +237,17 @@ bool ColorMeshDialog::insertGrid_(RegularData3D& grid, const String& name)
 	}
 	catch(Exception::OutOfGrid)
 	{
-		return false;
+		return;
 	}
 
 	mid_value_ /= mesh_->vertex.size();
 
 	apply_button->setEnabled(true);
+	autoscale->setEnabled(true);
 	min_box->setText(String(min_value_).c_str());
 	mid_box->setText(String(mid_value_).c_str());
 	max_box->setText(String(max_value_).c_str());
-	return true;
+	return;
 }
 
 
@@ -379,10 +423,12 @@ void ColorMeshDialog::saveSettings_()
 		config.tab = 2;
 	}
 
+	/*
 	if (grid_label->text() != "")
 	{
 		config.selected_grid = grid_label->text().ascii();
 	}
+	*/
 }
 
 
@@ -478,32 +524,12 @@ void ColorMeshDialog::onNotify(Message *message)
 	RegularData3DMessage *rm = RTTI::castTo<RegularData3DMessage>(*message);
 	switch (rm->getType())
 	{
-		case RegularData3DMessage::SELECTED:
-			// No Mesh selected
-			if (!rm->getRegularData3D())
-			{
-				invalidateGrid_();
-				return;
-			}
-
-			// grid but no mesh
-			if (!mesh_) 
-			{
-				grid_ = rm->getRegularData3D();
-				grid_label->setText(rm->getCompositeName().c_str());
-				return;
-			}
-			
-			// we have got everything, enable 
+		case RegularData3DMessage::NEW:
 			insertGrid_(*rm->getRegularData3D(), rm->getCompositeName());
 			return;
 
-		// if current grid is removed
 		case RegularData3DMessage::REMOVE:
-			if (rm->getRegularData3D() == grid_)
-			{
-				invalidateGrid_();
-			}
+			removeGrid_(*rm->getRegularData3D());
 			return;
 	}
 }
@@ -512,7 +538,7 @@ void ColorMeshDialog::invalidateGrid_()
 	throw()
 {
 	grid_ = 0;
-	grid_label->setText("");
+	grids->setCurrentItem(-1);
 	autoscale->setEnabled(false);
 	if (surface_tab->currentPage() == by_grid)
 	{
