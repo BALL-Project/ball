@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.5 2000/03/21 12:46:57 amoll Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.6 2000/03/21 15:57:37 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.5 2000/03/21 12:46:57 amoll Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.6 2000/03/21 15:57:37 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -237,7 +237,7 @@ CHECK(isIntersecting(const TLine3<T>& a, const TLine3<T>& b))
 	l1 = Line3(v1, v2);
 	l2 = Line3(v1, v3);
 	TEST_EQUAL(isIntersecting(l1, l2), true)
-	v3.set(110.0, 4.0, 3.0);
+	v1.set(110.0, 4.0, 3.0);
 	l2 = Line3(v1, v3);
 	TEST_EQUAL(isIntersecting(l1, l2), false)
 RESULT
@@ -306,7 +306,7 @@ CHECK(isParallel(const TPlane3<T>& plane, const TLine3<T>& line))
 	v2.set(10.0, 0.0, 0.0);
 	v3.set(0.0, 10.0, 0.0);  
 	p1 = Plane3(v1, v2, v3);
-	v1.set(-1.0, -2.0, -3.0);
+	v1.set(1.0, 2.0, 3.0);
 	v2.set(10.0, 0.0, 0.0);
 	l1.set(v1, v2);
 	TEST_EQUAL(isParallel(p1, l1), true)
@@ -316,12 +316,12 @@ CHECK(isParallel(const TPlane3<T>& plane, const TLine3<T>& line))
 RESULT
 
 CHECK(isParallel(const TLine3<T>& line, const TPlane3<T>& plane))
-	v1.set(1.0, 2.0, 3.0);
+	v1.set(0.0, 0.0, 0.0);
 	v2.set(10.0, 0.0, 0.0);
 	v3.set(0.0, 10.0, 0.0);  
 	p1 = Plane3(v1, v2, v3);
-	v1.set(-1.0, -2.0, -3.0);
-	v2.set(10.0, 10.0, 0.0);
+	v1.set(0.0, 0.0, 0.0);
+	v2.set(10.0, 0.0, 0.0);
 	l1.set(v1, v2);
 	TEST_EQUAL(isParallel(l1, p1), true)
 	v2.set(103.1, 113.1, 204.1);  
