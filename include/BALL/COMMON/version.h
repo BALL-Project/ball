@@ -1,4 +1,4 @@
-// $Id: version.h,v 1.4 2000/06/27 23:11:18 oliver Exp $
+// $Id: version.h,v 1.5 2000/06/28 20:27:09 oliver Exp $
 
 #ifndef BALL_COMMON_VERSION_H
 #define BALL_COMMON_VERSION_H
@@ -54,8 +54,8 @@ namespace BALL
 		static Type getType();
 		
 		protected:
-		static const char* VersionInfo::RELEASE_DATE_AND_TIME;
-	  static const char* VersionInfo::RELEASE_WHAT_STRING;
+		static const char* RELEASE_DATE_AND_TIME;
+	  static const char* RELEASE_WHAT_STRING;
 	};
 }
 
