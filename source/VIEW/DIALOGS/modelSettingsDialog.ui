@@ -588,7 +588,7 @@
                             </spacer>
                             <widget class="QLineEdit">
                                 <property name="name">
-                                    <cstring>cartoon_sphere_radius</cstring>
+                                    <cstring>cartoon_helix_radius</cstring>
                                 </property>
                                 <property name="minimumSize">
                                     <size>
