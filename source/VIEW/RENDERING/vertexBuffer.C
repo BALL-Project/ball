@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.1.2.5 2005/01/16 22:51:30 amoll Exp $
+// $Id: vertexBuffer.C,v 1.1.2.6 2005/01/18 00:02:43 amoll Exp $
 //
 #include <BALL/VIEW/RENDERING/vertexBuffer.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
@@ -117,6 +117,10 @@ bool MeshBuffer::initialize()
 									indices, GL_STATIC_DRAW_ARB);
 	delete[] indices;
 
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
+
 	filled_ = true;
 #endif
 	return true;
@@ -142,6 +146,10 @@ bool MeshBuffer::draw()
 {
 	if (!filled_) return false;
 #ifdef GL_ARB_vertex_buffer_object
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_NORMAL_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffers_[0]);
 	glVertexPointer(3, GL_FLOAT, 0, 0); 
 
@@ -171,6 +179,10 @@ bool MeshBuffer::draw()
 	}
 
 	glDrawElements(GL_TRIANGLES, mesh_->triangle.size() * 3, GL_UNSIGNED_INT, 0);
+
+	glDisableClientState(GL_VERTEX_ARRAY);
+	glDisableClientState(GL_NORMAL_ARRAY);
+	glDisableClientState(GL_COLOR_ARRAY);
 #endif
 	return true;
 }

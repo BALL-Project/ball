@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.156.2.7 2005/01/17 17:20:50 amoll Exp $
+// $Id: scene.C,v 1.156.2.8 2005/01/18 00:06:51 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -22,7 +22,6 @@
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
-#include <BALL/VIEW/PRIMITIVES/mesh.h>
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -265,15 +264,15 @@ namespace BALL
 				{
  					case RepresentationMessage::ADD:
 						if (gl_renderer_.hasDisplayListFor(*rep)) return;
-						gl_renderer_.rebuildDisplayListFor(*rep);
+						gl_renderer_.bufferRepresentation(*rep);
 						break;
 
 					case RepresentationMessage::UPDATE:
-						gl_renderer_.rebuildDisplayListFor(*rep);
+						gl_renderer_.bufferRepresentation(*rep);
 						break;
 
 					case RepresentationMessage::REMOVE:
-						gl_renderer_.removeDisplayListFor(*rep);
+						gl_renderer_.removeRepresentation(*rep);
 						break;
 
 					default:
@@ -349,29 +348,15 @@ namespace BALL
 			gl_renderer_.initSolid();
 			if (stage_->getLightSources().size() == 0) setDefaultLighting(false);
 			gl_renderer_.updateCamera();
-			
-String exts = (char*)glGetString(GL_EXTENSIONS);
-
-logString(String("#~~#   1 ") + String(exts )                        + "             " + __FILE__ + "  " + String(__LINE__));
 		}
 
 		void Scene::paintGL()
 		{
+ 			if (!content_changed_) return;
 #ifdef BALL_BENCHMARKING
 	Timer t;
 	t.start();
 #endif
-logString(String("#~~#   3 ") + String(content_changed_ )                        + "             " + __FILE__ + "  " + String(__LINE__));
-			if (!content_changed_ && gl_renderer_.pixelBuffersEnabled())
-			{
-Log.error() << "from pixel buffer" << std::endl;
-				if (gl_renderer_.restoreScreenFromBuffer()) 
-				{
-					content_changed_ = false;
-					return;
-				}
-			}
-				
 			// cannot call update here, because it calls updateGL
 			renderView_(DISPLAY_LISTS_RENDERING);
 #ifdef BALL_BENCHMARKING
@@ -384,6 +369,7 @@ Log.error() << "from pixel buffer" << std::endl;
 		{
 			gl_renderer_.setSize(width, height);
 			gl_renderer_.updateCamera();
+			content_changed_ = true;
 			updateGL();
 		}
 
@@ -394,16 +380,17 @@ Log.error() << "from pixel buffer" << std::endl;
 			makeCurrent();
 
 			glDepthMask(GL_TRUE);
-			glDrawBuffer(GL_BACK_LEFT);
-			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			if (gl_renderer_.getStereoMode() == GLRenderer::NO_STEREO)
 			{
+				glDrawBuffer(GL_BACK);
+				glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 				renderRepresentations_(mode);
 				content_changed_ = false;
-	Log.error() << "to pixel buffer" << std::endl;
-				gl_renderer_.storeScreenToBuffer();
 				return;
 			}
+
+			glDrawBuffer(GL_BACK_LEFT);
+			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			// ok, this is going the stereo way...
 			stereo_camera_ = stage_->getCamera();
@@ -506,8 +493,6 @@ Log.error() << "from pixel buffer" << std::endl;
 			renderRepresentations_(DISPLAY_LISTS_RENDERING);
 			glPopMatrix();
 			content_changed_ = false;
-Log.error() << "to pixel buffer" << std::endl;
-			gl_renderer_.storeScreenToBuffer();
 		}
 
 
@@ -652,11 +637,11 @@ Log.error() << "to pixel buffer" << std::endl;
 			switch (mode)
 			{
 				case DISPLAY_LISTS_RENDERING:
-					gl_renderer_.drawFromDisplayList(rep);
+					gl_renderer_.drawBuffered(rep);
 					break;
 
 				case REBUILD_DISPLAY_LISTS:
-					gl_renderer_.rebuildDisplayListFor(rep);
+					gl_renderer_.bufferRepresentation(rep);
 					break;
 
 				case DIRECT_RENDERING:
@@ -991,7 +976,7 @@ Log.error() << "to pixel buffer" << std::endl;
 
 			// we have to add the representation in the GLRenderer manualy,
 			// because the message wont arrive in Scene::onNotify
-			gl_renderer_.rebuildDisplayListFor(*rp);
+			gl_renderer_.bufferRepresentation(*rp);
 
 			// notify GeometricControl
 			RepresentationMessage* message = new RepresentationMessage(*rp, RepresentationMessage::ADD);
@@ -1519,6 +1504,8 @@ Log.error() << "to pixel buffer" << std::endl;
 			}
 
 			if(current_mode_ != ROTATE__MODE) return;
+			
+			content_changed_ = true;
 
 			switch (e->state())
 			{
