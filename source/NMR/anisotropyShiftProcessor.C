@@ -1,4 +1,4 @@
-// $Id: anisotropyShiftProcessor.C,v 1.6 2000/09/24 13:24:31 oliver Exp $
+// $Id: anisotropyShiftProcessor.C,v 1.7 2000/09/25 19:11:40 oliver Exp $
 
 #include<BALL/NMR/anisotropyShiftProcessor.h>
 
@@ -26,14 +26,12 @@ namespace BALL
 	void AnisotropyShiftProcessor::init()
 		throw()
 	{
-		Log.info() << "ASP::init()" << endl;
 		valid_ = true;
 	}
 
 	bool AnisotropyShiftProcessor::finish()
 		throw()
 	{
-		Log.info() << "ASP::finish()" << endl;
 		if (!isValid())
 		{
 			return false;
@@ -42,6 +40,7 @@ namespace BALL
 		{
 			return true;
 		}
+
 
 		const float dX1   = -13.0;
 		const float dX2   =  -4.0;
@@ -53,7 +52,7 @@ namespace BALL
 		const float ndXN2 =   1.0;
 
 	  list<const Atom*>::iterator proton_iter;
-	  list<const Bond*   >::iterator eff_iter;
+	  list<const Bond*>::iterator eff_iter;
 
 		// Iteriere über alle Protonen in proton_list_
 		for (proton_iter = proton_list_.begin(); proton_iter != proton_list_.end(); ++proton_iter)
@@ -140,15 +139,21 @@ namespace BALL
 				const Bond* bond = *eff_iter;
 				const Atom* c_atom = bond->getFirstAtom();
 				const Atom* n_atom = bond->getSecondAtom();
+				
+				if (c_atom->getElement() != PTE[Element::C])
+				{
+					n_atom = bond->getFirstAtom();
+					c_atom = bond->getSecondAtom();
+				}
 				const Atom* o_atom = 0;
 
-				if ((*proton_iter)->getName() == "H" ||
-						(*proton_iter)->getFragment() == n_atom->getFragment())
+				// skip the H atom of this residue
+				if ((*proton_iter)->getName() == "H" && (*proton_iter)->getFragment() == n_atom->getFragment())
 				{
 					continue;
 				}
 
-				for (Position pos = 0; pos < patom->countBonds(); pos++)
+				for (Position pos = 0; pos < c_atom->countBonds(); pos++)
 				{
 					const Bond& hbond = *c_atom->getBond(pos);
 					if (hbond.getBoundAtom(*c_atom)->getName() == "O")
@@ -194,12 +199,15 @@ namespace BALL
 
 					gs += (calc1 + calc2) / (3.0 * distance * distance * distance);
 				}
+				else 
+				{
+					Log.error() << "O atom not found for " << c_atom->getFullName() << "-" << n_atom->getFullName() << endl;
+				}
 			}
 			float shift = (*proton_iter)->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
 			shift -= gs;
 			(const_cast<Atom*>(*proton_iter))->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
 			(const_cast<Atom*>(*proton_iter))->setProperty(PROPERTY__ANISOTROPY_SHIFT, -gs);
-			Log.info() << "Shift: " << (*proton_iter)->getFullName() << " = " << -gs << endl;
 		}
 
 		return true;
@@ -216,7 +224,6 @@ namespace BALL
 		}
 
 		const Atom* patom = RTTI::castTo<Atom>(composite);
-		Log.info() << "ASP::op()(" << patom->getFullName() << ")" << endl;
 
 		if (patom->getElement() == PTE[Element::H])
 		{
