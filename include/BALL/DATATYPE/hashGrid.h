@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.11 2000/12/08 15:22:27 amoll Exp $
+// $Id: hashGrid.h,v 1.12 2001/01/26 14:57:13 anker Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -34,7 +34,13 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Grid Box Class 
+	/**	Grid Box Class.
+			These boxes represent the buckets of a threedimensional hash grid.
+			Every such box contains a linear list of the objects that are
+			contained in this box. This list is accessible through @see
+			DataIterator obejcts.
+			\\
+			{\bf Definition:} \URL{BALL/DATATYPE/hashGrid.h}
 	*/
 	template <class Item>
 	class HashGridBox3
@@ -59,8 +65,7 @@ namespace BALL
 		virtual ~HashGridBox3()
 			throw();
 
-		/** Clears the grid box
-		*/
+		/// Clears the grid box
 		virtual void clear()
 			throw();
 
@@ -93,27 +98,45 @@ namespace BALL
 		/**	@name	Accessors */
 		//@{
 
-		///
+		/** Find an item in the item list of this grid box.
+				@param item the item to be searched for
+				@return a pointer to the desired item or a NULL pointer, if the
+				item could not be found.
+		*/
 		Item* find(const Item &item)
 			throw();
 
-		///
+		/// The const verision of find()
 		const Item* find(const Item& item) const
 			throw();
 
-		///
+		/** Counts all items in the data item list.
+				@return the size of the data item list.
+		*/
 		Size getSize() const
 			throw();
 
-		///
+		/** Insert an item into the data item list of a grid box.
+				@param item the item to  be inserted
+		*/
 		void insert(const Item& item)
 			throw();
 
-		///
+		/** Remove the first occurrence of a certain item from the data item
+				list of a grid box.
+				@param item the item to be removed
+				@return {\tt true}, if the item could be removed, {\tt false}
+				otherwise.
+		*/
 		bool remove(const Item& item)
 			throw();
 
-		///
+		/** Remove all occurences of a certain item from the data item list of
+				a grid box.
+				@param item the item to be removed
+				@return {\tt true}, if the item could be removed, {\tt false}
+				otherwise.
+		*/
 		bool removeAll(const Item& item)
 			throw();
 			
@@ -131,21 +154,29 @@ namespace BALL
 		/**	@name	Predicates */
 		//@{
 
-		///
+		/// Equality operator
 		bool operator == (const HashGridBox3& box) const
 			throw();
 
-		///
+		/// Inequality operator
 		bool operator != (const HashGridBox3& box) const
 			throw();
 
-		///
+		/** Test whether an item is in the data item list
+				@param item
+				@return {\tt true} if {\tt this} has item {\tt item}, {\tt false}
+				otherwise.
+		*/
 		bool has(const Item& item) const
 			throw();
 
-		///
+		/** Test, whether this box is empty, i. e. the data item list contains
+				nothing
+				@return {\tt true}, if {\tt this} is empty. {\tt false} otherwise.
+		*/
 		bool isEmpty() const
 			throw();
+
 		//@}
 
 		/**	@name	Debugging and Diagnostics */
@@ -172,60 +203,61 @@ namespace BALL
 			throw();
 		//@}
 
-		/**@name	External Iterators */
+		/** @name	External Iterators 
+		*/
 		//@{
 
 		struct DataItem_
 		{
 			public:
 		
-				DataItem_(const Item& item, DataItem_* next)
-					throw()
-					:	item_(item),
-						previous_(0),
-						next_(next)
-				{
-					if (next_ != 0)
-					{
-						next_->previous_ = this;
-					}
-				}
-
-				~DataItem_()
-					throw()
-				{
-				}
-
-				Item 			item_;
-				DataItem_* previous_;
-				DataItem_* next_;
-			};
-			
-			struct NeighbourBoxItem_
+			DataItem_(const Item& item, DataItem_* next)
+				throw()
+			:	item_(item),
+				previous_(0),
+				next_(next)
 			{
-				public:
+				if (next_ != 0)
+				{
+					next_->previous_ = this;
+				}
+			}
+
+			~DataItem_()
+				throw()
+			{
+			}
+
+			Item 			item_;
+			DataItem_* previous_;
+			DataItem_* next_;
+		};
+			
+		struct NeighbourBoxItem_
+		{
+			public:
 		
-				NeighbourBoxItem_(HashGridBox3* box, NeighbourBoxItem_* next)
-					throw()
-					: box_(box),
-						previous_(0),
-						next_(next)
+			NeighbourBoxItem_(HashGridBox3* box, NeighbourBoxItem_* next)
+				throw()
+				: box_(box),
+					previous_(0),
+					next_(next)
+			{
+				if (next_ != 0)
 				{
-					if (next_ != 0)
-					{
-						next_->previous_ = this;
-					}
+					next_->previous_ = this;
 				}
+			}
 
-				~NeighbourBoxItem_()
-					throw()
-				{
-				}
+			~NeighbourBoxItem_()
+				throw()
+			{
+			}
 
-				HashGridBox3<Item>* 	box_;
-				NeighbourBoxItem_* 		previous_;
-				NeighbourBoxItem_* 		next_;
-			};
+			HashGridBox3<Item>* 	box_;
+			NeighbourBoxItem_* 		previous_;
+			NeighbourBoxItem_* 		next_;
+		};
 
 
 		typedef NeighbourBoxItem_* BoxIteratorPosition;
@@ -366,244 +398,261 @@ namespace BALL
 
 			HashGridBox3<Item> *bound_;
 			BoxIteratorPosition position_;
-			};
+		};
 
-			friend class BoxIteratorTraits_;
+		friend class BoxIteratorTraits_;
 
-			///
-			typedef ForwardIterator
-				<HashGridBox3<Item>, HashGridBox3<Item>,
-				 BoxIteratorPosition, BoxIteratorTraits_>
+		/** BoxIterators iterate over all non-empty boxes that lie in the
+				direct neighbourhood to a box. Such an iterator traverses at most
+				26 boxes.
+		*/
+		typedef ForwardIterator
+			<HashGridBox3<Item>, HashGridBox3<Item>,
+			BoxIteratorPosition, BoxIteratorTraits_>
 				BoxIterator;
 
-			BoxIterator beginBox()
-				throw()
-			{
-				return BoxIterator::begin(*this);
-			}
+		/// get the first non-empty box 
+		BoxIterator beginBox()
+			throw()
+		{
+			return BoxIterator::begin(*this);
+		}
 
-			BoxIterator endBox()
-				throw()
-			{
-				return BoxIterator::end(*this);
-			}
+		/// get the last non-empty box
+		BoxIterator endBox()
+			throw()
+		{
+			return BoxIterator::end(*this);
+		}
 
 
-			///
-			typedef ConstForwardIterator
-				<HashGridBox3<Item>, HashGridBox3<Item>,
-				 BoxIteratorPosition, BoxIteratorTraits_>
+		/// This is the const version of @see BoxIterator
+		typedef ConstForwardIterator
+			<HashGridBox3<Item>, HashGridBox3<Item>,
+			BoxIteratorPosition, BoxIteratorTraits_>
 				ConstBoxIterator;
 
-			ConstBoxIterator beginBox() const
-				throw()
-			{
-				return ConstBoxIterator::begin(*this);
-			}
+		/// get the first non-empty box 
+		ConstBoxIterator beginBox() const
+			throw()
+		{
+			return ConstBoxIterator::begin(*this);
+		}
 
-			ConstBoxIterator endBox() const
-				throw()
-			{
-				return ConstBoxIterator::end(*this);
-			}
+		/// get the last non-empty box
+		ConstBoxIterator endBox() const
+			throw()
+		{
+			return ConstBoxIterator::end(*this);
+		}
 
 
-			typedef DataItem_* DataIteratorPosition;
+		typedef DataItem_* DataIteratorPosition;
 		
-			class DataIteratorTraits_
+		class DataIteratorTraits_
+		{
+			public:
+
+			BALL_CREATE_DEEP(DataIteratorTraits_)
+
+			DataIteratorTraits_()
+				throw()
+			:	bound_(0),
+				position_(0)
 			{
-				public:
-
-				BALL_CREATE_DEEP(DataIteratorTraits_)
-
-				DataIteratorTraits_()
-					throw()
-					:	bound_(0),
-					position_(0)
-				{
-				}
+			}
 				
-				DataIteratorTraits_(const HashGridBox3& box)
-					throw()
-					:	bound_((HashGridBox3 *)&box),
-						position_(0)
-				{
-				}
+			DataIteratorTraits_(const HashGridBox3& box)
+				throw()
+			:	bound_((HashGridBox3 *)&box),
+				position_(0)
+			{
+			}
 				
-				DataIteratorTraits_(const DataIteratorTraits_& traits, bool /* deep */ = true)
-					throw()
-					:	bound_(traits.bound_),
-						position_(traits.position_)
-				{
-				}
+			DataIteratorTraits_(const DataIteratorTraits_& traits, bool /* deep */ = true)
+				throw()
+			:	bound_(traits.bound_),
+				position_(traits.position_)
+			{
+			}
 				
-				const DataIteratorTraits_& operator = (const DataIteratorTraits_ &traits)
-					throw()
-				{
-					bound_ = traits.bound_;
-					position_ = traits.position_;
-					return *this;
-				}
-
-				HashGridBox3* getContainer()
-					throw()
-				{
-					return bound_;
-				}
-
-				const HashGridBox3* getContainer() const
-					throw()
-				{
-					return bound_;
-				}
-
-				bool isSingular() const
-					throw()
-				{
-					return (bound_ == 0);
-				}
-				
-				DataIteratorPosition& getPosition()
-					throw()
-				{
-					return position_;
-				}
-
-				const DataIteratorPosition& getPosition() const
-					throw()
-				{
-					return position_;
-				}
-
-				bool operator == (const DataIteratorTraits_ &traits) const
-					throw()
-				{
-					return (position_ == traits.position_);
-				}
-
-				bool operator != (const DataIteratorTraits_ &traits) const
-					throw()
-				{
-					return (position_ != traits.position_);
-				}
-				
-				bool isValid() const
-					throw()
-				{
-					return (bound_ != 0 && position_ != 0);
-				}
-
-				void invalidate()
-					throw()
-				{
-					bound_ = 0;
-					position_ = 0;
-				}
-
-				void toBegin()
-					throw()
-				{
-					position_ = bound_->first_item_;
-				}
-
-				bool isBegin() const
-					throw()
-				{
-					return (position_ == bound_->first_item_);
-				}
-
-				void toEnd()
-					throw()
-				{
-					position_ = 0;
-				}
-
-				bool isEnd() const
-					throw()
-				{
-					return (position_ == 0);
-				}
-
-				Item& getData()
-					throw()
-				{
-					return position_->item_;
-				}
-
-				const Item& getData() const
-					throw()
-				{
-					return position_->item_;
-				}
-
-				void forward()
-					throw()
-				{
-					position_ = position_->next_;
-				}
-		
-				private:
-
-				HashGridBox3<Item>* 	bound_;
-				DataIteratorPosition 	position_;
-			};
-
-			friend class DataIteratorTraits_;
-
-			///
-			typedef ForwardIterator
-				<HashGridBox3<Item>, Item,
-				 DataIteratorPosition, DataIteratorTraits_>
-				DataIterator;
-
-			DataIterator beginData()
+			const DataIteratorTraits_& operator = (const DataIteratorTraits_ &traits)
 				throw()
 			{
-				return DataIterator::begin(*this);
+				bound_ = traits.bound_;
+				position_ = traits.position_;
+				return *this;
 			}
 
-			DataIterator endData()
+			HashGridBox3* getContainer()
 				throw()
 			{
-				return DataIterator::end(*this);
+				return bound_;
 			}
 
-
-			///
-			typedef ConstForwardIterator
-				<HashGridBox3<Item>, Item,
-				 DataIteratorPosition, DataIteratorTraits_>
-				ConstDataIterator;
-
-			ConstDataIterator beginData() const
+			const HashGridBox3* getContainer() const
 				throw()
 			{
-				return ConstDataIterator::begin(*this);
+				return bound_;
 			}
 
-			ConstDataIterator endData() const
+			bool isSingular() const
 				throw()
 			{
-				return ConstDataIterator::end(*this);
+				return (bound_ == 0);
+			}
+				
+			DataIteratorPosition& getPosition()
+				throw()
+			{
+				return position_;
 			}
 
-			//@}
+			const DataIteratorPosition& getPosition() const
+				throw()
+			{
+				return position_;
+			}
+
+			bool operator == (const DataIteratorTraits_ &traits) const
+				throw()
+			{
+				return (position_ == traits.position_);
+			}
+
+			bool operator != (const DataIteratorTraits_ &traits) const
+				throw()
+			{
+				return (position_ != traits.position_);
+			}
+
+			bool isValid() const
+				throw()
+			{
+				return (bound_ != 0 && position_ != 0);
+			}
+
+			void invalidate()
+				throw()
+			{
+				bound_ = 0;
+				position_ = 0;
+			}
+
+			void toBegin()
+				throw()
+			{
+				position_ = bound_->first_item_;
+			}
+
+			bool isBegin() const
+				throw()
+			{
+				return (position_ == bound_->first_item_);
+			}
+
+			void toEnd()
+				throw()
+			{
+				position_ = 0;
+			}
+
+			bool isEnd() const
+				throw()
+			{
+				return (position_ == 0);
+			}
+
+			Item& getData()
+				throw()
+			{
+				return position_->item_;
+			}
+
+			const Item& getData() const
+				throw()
+			{
+				return position_->item_;
+			}
+
+			void forward()
+				throw()
+			{
+				position_ = position_->next_;
+			}
+	
+			private:
+
+			HashGridBox3<Item>* 	bound_;
+			DataIteratorPosition 	position_;
+		};
+
+		friend class DataIteratorTraits_;
+
+		/** Data iterator for grid boxes.
+				This iterator traverses the list of data items store in a @see
+				HashGridBox3.
+		*/
+		typedef ForwardIterator
+			<HashGridBox3<Item>, Item,
+			 DataIteratorPosition, DataIteratorTraits_>
+			DataIterator;
+
+		///
+		DataIterator beginData()
+			throw()
+		{
+			return DataIterator::begin(*this);
+		}
+
+		///
+		DataIterator endData()
+			throw()
+		{
+			return DataIterator::end(*this);
+		}
+
+
+		/** Const data iterator for grid boxes.
+				This is the const version of @see DataIterator
+		*/
+		typedef ConstForwardIterator
+			<HashGridBox3<Item>, Item,
+			 DataIteratorPosition, DataIteratorTraits_>
+			ConstDataIterator;
+
+		///
+		ConstDataIterator beginData() const
+			throw()
+		{
+			return ConstDataIterator::begin(*this);
+		}
+
+		///
+		ConstDataIterator endData() const
+			throw()
+		{
+			return ConstDataIterator::end(*this);
+		}
+
+		//@}
 			
 
-			HashGridBox3 *previous_;
-			HashGridBox3 *next_;
+		//_
+		HashGridBox3 *previous_;
+		//_
+		HashGridBox3 *next_;
 
-			//  private:
+		//  private:
+	
+		void insert_(HashGridBox3 *box)
+			throw();
 
-		
-			void insert_(HashGridBox3 *box)
-				throw();
+		bool remove_(HashGridBox3 *box)
+			throw();
 
-			bool remove_(HashGridBox3 *box)
-				throw();
-
-			NeighbourBoxItem_* 	first_neighbour_;
-			DataItem_* 					first_item_;
+		NeighbourBoxItem_* 	first_neighbour_;
+		DataItem_* 					first_item_;
 	};
 
 	template<class Item>  
@@ -1012,31 +1061,58 @@ namespace BALL
 	}
 
 
-	/**	Three-dimensional Hash Grid Class 
+	/**	Three-dimensional Hash Grid Class.
+			\\
+			BAUTELLE
+			\\
+			{\bf Definition:} \URL{BALL/DATATYPE/hashGrid.h}
 	*/
 	template <class Item>
 	class HashGrid3
 	{
 		public:
 
-		/**	@name	Constructors and Destructors */
+		BALL_CREATE(HashGrid3)
+
+		/**	@name	Constructors and destructor 
+		*/
 		//@{
 
 		/// Default constructor
 		HashGrid3()
 			throw();
 			
-		/// Constructor using origin, dimensions, and spacings of the grid.
-		HashGrid3(const Vector3& origin, Size dimension_x, Size dimension_y, Size dimension_z, 
-						  float spacing_x, float spacing_y, float spacing_z)
-				throw();
+		/** Constructor using origin, dimensions, and spacings of the grid.
+				It creates a hashgrid at {\tt origin} with axis-dependant spacings. 
+				@param origin
+				@param dimension_x
+				@param dimension_y
+				@param dimension_z
+				@param spacing_x
+				@param spacing_y
+				@param spacing_z
+		*/
+		HashGrid3(const Vector3& origin, Size dimension_x, Size dimension_y,
+				Size dimension_z, float spacing_x, float spacing_y, float spacing_z)
+			throw();
 
-		/// Constructor using origin, dimensions, and a single spacing (only cubic grids)
+		/** Constructor using origin, dimensions, and a single spacing (only
+				cubic grids)
+		*/ 
 		HashGrid3(const Vector3& origin, Size dimension_x, Size dimension_y, 
-							Size dimension_z, float spacing)
-			 	throw();
+				Size dimension_z, float spacing)
+			throw();
 
-		/// Constructor using two vectors
+		/** Constructor using two vectors and a single spacing.
+				This constructor creates a hash grid at {\tt origin} with spacing
+				{\spacing}. The vector {\tt size} has to be relative to {\tt
+				origin} and defines the opposite corner of the grid, thereby
+				setting the size of the grid.
+				@param origin a vector defining the origin of our cubic hash grid
+				@param size a vector defining the opposite corner of the cubic grid
+				@param spacing this float will be used as spacing in all three
+				dimensions
+		*/
 		HashGrid3(const Vector3& origin, const Vector3& size, float spacing)
 			throw();
 
@@ -1052,23 +1128,23 @@ namespace BALL
 		virtual void clear()
 			throw();
 
-		///
+		/// Clears the HashGridBox3 at position (x, y, z)
 		void clear(Position x, Position y, Position z)
 			throw();
 
-		///
+		/// Clears the HashGridBox3 at position {\tt vector}
 		void clear(const Vector3 &vector)
 			throw();
 
-		///
+		/// Destroys the grid (obsolete, only calls clear())
 		void destroy()
 			throw();
 
-		///
+		/// Destroys a box of the grid (obsolete, only calls clear())
 		void destroy(Position x, Position y, Position z)
 			throw();
 
-		///
+		/// Destroys a box of the grid (obsolete, only calls clear())
 		void destroy(const Vector3& vector)
 			throw();
 
@@ -1078,20 +1154,20 @@ namespace BALL
 		/**	@name	Assignment */
 		//@{
 
-		///
+		/// assigns the content of a hash grid (obsolete)
 		void set(const Vector3& origin, const Vector3& unit, 
-						 Size	dimension_x, Size	dimension_y, Size	dimension_z)
-		 	throw();
+				Size	dimension_x, Size	dimension_y, Size	dimension_z)
+			throw();
 
-		///
+		/// assigns the content of a hash grid (obsolete)
 		void set(const Vector3& origin, float unit, Size size)
 			throw();
 
-		///
+		/// assigns the content of a hash grid (obsolete)
 		void set(const HashGrid3& grid, bool deep = true)
 			throw();
 
-		///
+		/// Assignment operator
 		const HashGrid3& operator = (const HashGrid3& grid)
 			throw();
 
@@ -1109,76 +1185,76 @@ namespace BALL
 		/**	@name	Accessors */
 		//@{
 
-		///
+		/// Counts the non-empty boxes of a grid.
 		Size countNonEmptyBoxes() const
 			throw();
 		
-		///
+		/// Returns the size of a grid, i. e. BAUSTELLE
 		Size getSize() const
 			throw();
 
-		///
+		/// Returns the origin of the grid
 		Vector3& getOrigin()
 			throw();
 
-		///
+		/// Returns a const reference of the grid origin
 		const Vector3& getOrigin() const
 			throw();
 
-		///
+		/// Returns the unit of the grid
 		Vector3& getUnit()
 			throw();
 
-		///
+		/// Returns the unit of the grid (const version)
 		const Vector3& getUnit() const
 			throw();
 
-		///
+		/// Get the x dimension of the grid
 		Size getSizeX() const
 			throw();
 
-		///
+		/// Get the y dimension of the grid
 		Size getSizeY() const
 			throw();
 
-		///
+		/// Get the z dimension of the grid
 		Size getSizeZ() const
 			throw();
 
-		///
+		/// Return the HashGridBox3 at position (x, y, z)
 		HashGridBox3<Item>* getBox(Position x, Position y, Position z)
 			throw();
 
-		///
+		/// Return the HashGridBox3 at position (x, y, z) (const version)
 		const HashGridBox3<Item>* getBox(Position x, Position y, Position z) const
 			throw();
 
-		///
+		/// Return the HashGridBox3 at position vector 
 		HashGridBox3<Item>* getBox(const Vector3& vector)
 			throw();
 
-		///
+		/// Return the HashGridBox3 at position vector (const version)
 		const HashGridBox3<Item>* getBox(const Vector3 &vector) const
 			throw();
 
-		///
+		/// Get the position indices of a HashGridBox3
 		bool getIndices(const HashGridBox3<Item>& box, 
-										Position& x, Position& y, Position& z) const
+				Position& x, Position& y, Position& z) const
 			throw();
 
-		///
+		/// Insert an item at position (x, y, z)
 		void insert(Position x, Position y, Position z, const Item& item)
 			throw();
 		
-		///
+		/// Insert an item at position {\tt vector}
 		void insert(const Vector3& vector, const Item& item)
 			throw();
 
-		///
+		/// Remove an item from position (x, y ,z)
 		bool remove(Position x, Position y, Position z, const Item& item)
 			throw();
 
-		///
+		/// Remova an item from position {\tt vector}
 		bool remove(const Vector3& vector, const Item& item)
 			throw();
 		//@}
@@ -1194,15 +1270,15 @@ namespace BALL
 		/**	@name	Predicates */
 		//@{
 
-		///
+		/// Equality operator
 		bool operator == (const HashGrid3& grid) const
 			throw();
 
-		///
+		/// Inequality operator
 		bool operator != (const HashGrid3& grid) const
 			throw();
 
-		///
+		/// Tests, whether {\tt this} is empty
 		bool isEmpty() const
 			throw();
 		//@}
@@ -1210,11 +1286,11 @@ namespace BALL
 		/**	@name	Debugging and Diagnostics */
 		//@{
 
-		///
+		/// Validity check
 		virtual bool isValid() const
 			throw();
 
-		///
+		/// Dump the contents of a HashGrid3 to a stream
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
 		//@}
@@ -1382,18 +1458,19 @@ namespace BALL
 			 BoxIteratorPosition, BoxIteratorTraits_>
 			BoxIterator;
 
+		/// 
 		BoxIterator beginBox()
 			throw()
 		{
 			return BoxIterator::begin(*this);
 		}
 
+		///
 		BoxIterator endBox()
 			throw()
 		{
 			return BoxIterator::end(*this);
 		}
-
 
 
 		///
@@ -1402,12 +1479,14 @@ namespace BALL
 			 BoxIteratorPosition, BoxIteratorTraits_>
 			ConstBoxIterator;
 
+		/// 
 		ConstBoxIterator beginBox() const
 			throw()
 		{
 			return ConstBoxIterator::begin(*this);
 		}
 
+		/// 
 		ConstBoxIterator endBox() const
 			throw()
 		{
@@ -1418,21 +1497,31 @@ namespace BALL
 
 		private:
 
+		//_
 		Index getIndex_(const HashGridBox3<Item>& box) const
 			throw();
 
+		//_
 		void insert_(HashGridBox3<Item>* box, const Item& item)
 			throw();
 
+		//_
 		bool remove_(HashGridBox3<Item>* box, const Item& item)
 			throw();
 
+		//_
 		HashGridBox3<Item>* box_;
+		//_
 		HashGridBox3<Item>* first_nonempty_;
+		//_
 		Vector3 origin_;
+		//_
 		Vector3 unit_;
+		//_
 		Size	dimension_x_;
+		//_
 		Size	dimension_y_;
+		//_
 		Size	dimension_z_;
 	};
 
@@ -1486,8 +1575,10 @@ namespace BALL
 		box_ = new HashGridBox3<Item>[dimension_x * dimension_y * dimension_z];
 	}
 
+	// this constructor creates a linear array of HashGridBox3 objects.
 	template <class Item>
-	HashGrid3<Item>::HashGrid3(const Vector3& origin, const Vector3& size, float spacing)
+	HashGrid3<Item>::HashGrid3(const Vector3& origin, const Vector3& size,
+			float spacing)
 		throw()
 		:	box_(0),
 			first_nonempty_(0),
@@ -1660,7 +1751,7 @@ namespace BALL
 	}
 
 	template <class Item>
-	void HashGrid3<Item>::set(const HashGrid3<Item>& grid, bool deep)
+	void HashGrid3<Item>::set(const HashGrid3<Item>& grid, bool /* deep */)
 		throw()
 	{
 		set(grid.origin_, grid.unit_, grid.dimension_x_, grid.dimension_y_, grid.dimension_z_);
@@ -1862,7 +1953,8 @@ namespace BALL
 
 	template <class Item>
 	BALL_INLINE 
-	void HashGrid3<Item>::insert(Position x, Position y, Position z, const Item& item)
+	void HashGrid3<Item>::insert(Position x, Position y, Position z,
+			const Item& item)
 		throw()
 	{
 		HashGridBox3<Item>* box = getBox(x, y, z);
