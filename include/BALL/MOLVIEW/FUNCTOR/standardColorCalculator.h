@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.h,v 1.1 2000/01/11 20:19:51 hekl Exp $
+// $Id: standardColorCalculator.h,v 1.2 2000/01/18 12:59:33 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
@@ -93,6 +93,8 @@ namespace BALL
 			const ColorRGBA& getNegativeColor() const;
 
 			virtual void visit(Atom& atom);
+
+			virtual void visit(Composite& composite){};
 			//@}
 
 			protected:
