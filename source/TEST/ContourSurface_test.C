@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ContourSurface_test.C,v 1.4 2003/05/06 20:27:44 oliver Exp $
+// $Id: ContourSurface_test.C,v 1.5 2003/05/06 21:02:19 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(ContourSurface, "$Id: ContourSurface_test.C,v 1.4 2003/05/06 20:27:44 oliver Exp $")
+START_TEST(ContourSurface, "$Id: ContourSurface_test.C,v 1.5 2003/05/06 21:02:19 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -75,7 +75,7 @@ CHECK(TContourSurface<T>::operator << (TRegularData3D<T>& data))
 	}
 
 	ABORT_IF(cs.triangle.size() != 8)
-	Position t[8][3] = {{0, 1, 2}, {0, 2, 3}, {4, 2, 1}, {4, 3, 2}, {0, 5, 1}, {0, 3, 5}, {4, 1, 5}, {4, 5, 3}};
+	Index t[8][3] = {{0, 1, 2}, {0, 2, 3}, {4, 2, 1}, {4, 3, 2}, {0, 5, 1}, {0, 3, 5}, {4, 1, 5}, {4, 5, 3}};
 	for (Position i = 0; i < cs.triangle.size(); i++)
 	{
 		TEST_EQUAL(cs.triangle[i].v1, t[i][0])
