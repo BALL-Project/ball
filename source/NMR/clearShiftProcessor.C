@@ -1,4 +1,4 @@
-// $Id: clearShiftProcessor.C,v 1.2 2000/09/16 07:44:12 oliver Exp $
+// $Id: clearShiftProcessor.C,v 1.3 2000/09/18 16:26:27 oliver Exp $
 
 #include<BALL/NMR/clearShiftProcessor.h>
 
@@ -9,17 +9,20 @@ namespace BALL
 
 	// default ctor
 	ClearShiftProcessor::ClearShiftProcessor()
+		throw()
 	{
 	}
 
 		
 	// destructor
 	ClearShiftProcessor::~ClearShiftProcessor()
+		throw()
 	{
 	}
 
 
 	Processor::Result ClearShiftProcessor::operator () (Composite& composite)
+		thow()
 	{
 		// clear the "chemical_shift" property of the atom
 		// (if defined)

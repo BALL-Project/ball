@@ -1,4 +1,4 @@
-// $Id: clearShiftProcessor.h,v 1.1 2000/09/16 07:43:16 oliver Exp $
+// $Id: clearShiftProcessor.h,v 1.2 2000/09/18 16:26:29 oliver Exp $
 
 #ifndef BALL_NMR_CLEARSHIFTPROCESSOR_H
 #define BALL_NMR_CLEARSHIFTPROCESSOR_H
@@ -23,11 +23,13 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		ClearShiftProcessor();
+		ClearShiftProcessor()	
+			throw();
 		
 		/**	Destructor
 		*/
-		virtual ~ClearShiftProcessor();
+		virtual ~ClearShiftProcessor()
+			throw();
 		
 		//@}
 
@@ -38,12 +40,13 @@ namespace BALL
 
 		/**	Application method
 		*/
-		virtual Processor::Result operator () (Composite&);
+		virtual Processor::Result operator () (Composite& composite)
+			throw();
 		//@}
 		
 	};
 
-} // namespace Ball
+} // namespace BALL
 
 
 #endif // BALL_NMR_CLEARSHIFTPROCESSOR_H
