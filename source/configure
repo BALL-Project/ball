@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.93 2000/03/31 06:23:45 oliver Exp $
+#  $Id: configure,v 1.94 2000/04/21 12:46:16 oliver Exp $
 
 
 ##################################################
@@ -661,7 +661,7 @@ cross_compiling=$ac_cv_prog_cxx_cross
 if test ! -f config.lic ; then
 	more LICENSE
 	echo " "
-	echo "Do you accept this license (y/n)?"
+	echo "Do you accept this license terms (y/n)?"
 	answer=""
 	while test "$answer" != "y" -a "$answer" != "n" ; do
 		read answer 
@@ -6124,6 +6124,7 @@ if test "${MULTI_BUILD}" = "true" ; then
 		i=`expr $i + 1`
 	done
 	${CAT} config/config.h.footer | ${SED} 1,2d >> config.h
+	${MKDIR} ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
 	if test -f ${BALL_PATH}/include/BALL/CONFIG/config.h ; then
 		if test "`${DIFF} ${BALL_PATH}/include/BALL/CONFIG/config.h config.h`" != "" ; then
 			${RM} ${BALL_PATH}/include/BALL/CONFIG/config.h
@@ -6636,7 +6637,9 @@ fi
 if test "${MULTI_BUILD}" = "true" ; then
 	${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h.${BINFMT}
 else
-	${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
+					if test "`diff config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then
+		${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
+	fi
 fi
 	
 

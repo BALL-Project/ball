@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.83 2000/03/31 06:23:25 oliver Exp $
+dnl    $Id: configure.in,v 1.84 2000/04/21 12:46:08 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -26,7 +26,7 @@ dnl
 if test ! -f config.lic ; then
 	more LICENSE
 	echo " "
-	echo "Do you accept this license (y/n)?"
+	echo "Do you accept this license terms (y/n)?"
 	answer=""
 	while test "$answer" != "y" -a "$answer" != "n" ; do
 		read answer 
@@ -2271,6 +2271,7 @@ if test "${MULTI_BUILD}" = "true" ; then
 		i=`expr $i + 1`
 	done
 	${CAT} config/config.h.footer | ${SED} 1,2d >> config.h
+	${MKDIR} ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
 	if test -f ${BALL_PATH}/include/BALL/CONFIG/config.h ; then
 		if test "`${DIFF} ${BALL_PATH}/include/BALL/CONFIG/config.h config.h`" != "" ; then
 			${RM} ${BALL_PATH}/include/BALL/CONFIG/config.h
@@ -2496,7 +2497,13 @@ dnl
 if test "${MULTI_BUILD}" = "true" ; then
 	${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h.${BINFMT}
 else
-	${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
+	dnl	
+	dnl move that damned file only if it differs from the previous
+	dnl version. Otherwise we have to rebuild _everything_ after each configure
+	dnl
+	if test "`diff config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then
+		${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
+	fi
 fi
 	
 
