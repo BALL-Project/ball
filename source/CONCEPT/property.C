@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.5 2000/03/14 19:35:42 oliver Exp $
+// $Id: property.C,v 1.6 2000/03/16 11:57:03 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -38,6 +38,13 @@ namespace BALL
 
 	NamedProperty::NamedProperty(const string& name, float value)
 		:	type_(FLOAT),
+			name_(name)
+	{
+		data_.f = value;
+	}
+
+	NamedProperty::NamedProperty(const string& name, double value)
+		:	type_(DOUBLE),
 			name_(name)
 	{
 		data_.f = value;
@@ -148,6 +155,11 @@ namespace BALL
 	float NamedProperty::getFloat() const
 	{
 		return (type_ == FLOAT ? data_.f : 0.0);
+	}
+
+	double NamedProperty::getDouble() const
+	{
+		return (type_ == DOUBLE ? data_.d : 0.0);
 	}
 
 	string NamedProperty::getString() const
@@ -304,6 +316,11 @@ namespace BALL
 		setProperty(NamedProperty(name, value));
 	}
 
+	void PropertyManager::setProperty(const string& name, double value)
+	{
+		setProperty(NamedProperty(name, value));
+	}
+
 	void PropertyManager::setProperty(const string& name, unsigned int value)
 	{
 		setProperty(NamedProperty(name, value));
@@ -378,6 +395,9 @@ namespace BALL
 					break;
 				case NamedProperty::FLOAT:
 					s << "FLOAT: " << named_properties_[i].getFloat();
+					break;
+				case NamedProperty::DOUBLE:
+					s << "DOUBLE: " << named_properties_[i].getDouble();
 					break;
 				case NamedProperty::STRING:
 					s << "STRING: " << (char)34 << named_properties_[i].getString().c_str() << (char)34;
