@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.45 2004/11/29 12:16:13 amoll Exp $
+// $Id: mainframe.C,v 1.46 2004/11/29 12:22:40 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -214,7 +214,7 @@ namespace BALL
 		{
 			showNormal();
  			#ifdef BALL_PLATFORM_WINDOWS
-				setGeometry(rect());
+				setGeometry(last_size_);
  			#endif
 		}
 		fullscreen_ = !fullscreen_;
