@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.1 2004/12/27 15:46:30 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.2 2004/12/27 16:13:30 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -269,7 +269,7 @@ namespace BALL
 				}
 				else
 				{
-					angle = 90;
+					angle = 180;
 				}
 				glLightfv(light_nr, GL_SPOT_CUTOFF, &angle);
 				// ---------------------------------------------------------------
