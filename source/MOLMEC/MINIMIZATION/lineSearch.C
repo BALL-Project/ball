@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.14 2003/04/03 17:22:35 anhi Exp $
+// $Id: lineSearch.C,v 1.15 2003/04/12 09:58:29 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
@@ -18,8 +18,8 @@
 // maximum number of interpolation steps for a line search
 #define LINESEARCH__DEFAULT_MAX_STEPS			10
 
-#define BALL_DEBUG
-//#undef BALL_DEBUG
+// #define BALL_DEBUG
+#undef BALL_DEBUG
 
 namespace BALL 
 {
@@ -261,10 +261,10 @@ namespace BALL
 		 double grad_0, double grad_1) const
 	{
 		#ifdef BALL_DEBUG
-		Log.info() << "LS:interpolate(" 
-								<< lambda_0 << ", " << lambda_1 << ", "
-								<< energy_0 << ", " << energy_1 << ", "
-								<< grad_0 << ", " << grad_1 << ")";
+			Log.info() << "LS:interpolate(" 
+									<< lambda_0 << ", " << lambda_1 << ", "
+									<< energy_0 << ", " << energy_1 << ", "
+									<< grad_0 << ", " << grad_1 << ")";
 		#endif
 
     // Do a cubic interpolation based on (0, energy_0), (1, energy__1), (0, grad_0), (1, grad_1)
