@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.19 2000/07/12 19:36:44 oliver Exp $
+// $Id: BaseFragment_test.C,v 1.20 2000/07/27 18:48:53 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.19 2000/07/12 19:36:44 oliver Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.20 2000/07/27 18:48:53 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -125,7 +125,6 @@ CHECK(getBaseFragment(Position))
 	}
 	bf3 = bf1.getBaseFragment(1);
 	TEST_EQUAL(bf3, 0)
-	TEST_EQUAL(bf1.getBaseFragment(-1), 0)
 RESULT
 
 CHECK(getBaseFragment(Position) const)
@@ -398,7 +397,6 @@ CHECK(getAtom(Position))
 	TEST_EQUAL(ptr, 0)
 	ptr = bf1.getAtom(25);
 	TEST_EQUAL(ptr, 0)
-	TEST_EQUAL(bf1.getAtom(-1), 0)
 RESULT
 
 CHECK(getAtom(Position) const)
@@ -410,7 +408,6 @@ CHECK(getAtom(Position) const)
 	bf1.remove(a);
 	TEST_EQUAL(bf1.getAtom(0), 0)
 	TEST_EQUAL(bf1.getAtom(24), 0)
-	TEST_EQUAL(bf1.getAtom(-1), 0)
 RESULT
 
 CHECK(countAtoms())
