@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum_test.C,v 1.2 2000/09/22 14:11:30 amoll Exp $
+// $Id: NMRSpectrum_test.C,v 1.3 2000/09/22 14:13:58 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(NMRSpectrum, "$Id: NMRSpectrum_test.C,v 1.2 2000/09/22 14:11:30 amoll Exp $")
+START_TEST(NMRSpectrum, "$Id: NMRSpectrum_test.C,v 1.3 2000/09/22 14:13:58 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -27,7 +27,7 @@ CHECK(NMRSpectrum::~NMRSpectrum())
 RESULT
 
 NMRSpectrum spectrum;
-HINFile f("data/NMRSpectrum_test.hin");
+HINFile f("data/NMRSpectrum_test/NMRSpectrum_test.hin");
 System system;
 f >> system;
 
@@ -85,19 +85,19 @@ CHECK(NMRSpectrum::plotSpectrum(const String& filename) const )
 /*
 	NEW_TMP_FILE(filename)
 	spectrum.plotSpectrum(filename);
-	TEST_FILE(filename.c_str(), "data/NMRSpectrum/plotSpectrum.txt", false)*/
+	TEST_FILE(filename.c_str(), "data/NMRSpectrum_test/plotSpectrum.txt", false)*/
 RESULT
 
 CHECK(NMRSpectrum::plotPeaks(const String& filename) const )
 	NEW_TMP_FILE(filename)
-	spectrum.plotPeaks(filename);
-	TEST_FILE(filename.c_str(), "data/NMRSpectrum/plotPeaks.txt", false)
+	spectrum.plotPeaks(filename); // ???
+	TEST_FILE(filename.c_str(), "data/NMRSpectrum_test/plotPeaks.txt", false)
 RESULT
 
 CHECK(NMRSpectrum::writePeaks(const String& filename) const )
 	NEW_TMP_FILE(filename)
-	spectrum.writePeaks(filename);
-	TEST_FILE(filename.c_str(), "data/NMRSpectrum/writePeaks.txt", false)
+	spectrum.writePeaks(filename); // ???
+	TEST_FILE(filename.c_str(), "data/NMRSpectrum_test/writePeaks.txt", false)
 RESULT
 
 CHECK(NMRSpectrum::makeDifference(const float&, const String&, const String&, const String&))
