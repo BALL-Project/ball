@@ -95,8 +95,6 @@ namespace BALL
 			/** Fetches the preferences.
 					Fetches the preferences (the position and the selected color of {\em *this}
 					labelDialog) from the	 \link INIFile INIFile \endlink  {\em inifile}.
-					This method will be called inside the method  \link show show \endlink  from the class
-					 \link MainControl MainControl \endlink .
 					@param  inifile the  \link INIFile INIFile \endlink  that contains the needed information for {\em *this} labelDialog
 					@see    writePreferences
 			*/
@@ -119,13 +117,10 @@ namespace BALL
 					{\em Label Dialog} and connects it to the method  \link openDialog openDialog \endlink .
 					This method is called automatically	immediately before the main application 
 					is started. 
-					This method will be called by  \link show show \endlink  from the  \link MainControl MainControl \endlink  object.
 					@param main_control the  \link MainControl MainControl \endlink  object to be initialized with {\em *this} labelDialog
 					@see   openDialog
 					@see   finalizeWidget
 					@see   insertMenuEntry
-					@see   checkMenu
-					@see   show
 			*/
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
@@ -137,28 +132,12 @@ namespace BALL
 					object.
 					@param main_control the  \link MainControl MainControl \endlink  object to be finalized with {\em *this} labelDialog
 					@see   initializeWidget
-					@see   checkMenu
 					@see   removeMenuEntry
 					@see   aboutToExit
 			*/
 			virtual void finalizeWidget(MainControl& main_control)
 				throw();
 			
-			/**	Menu checking method.
-					This method is called by the method  \link checkMenus checkMenus \endlink  from the
-					 \link MainControl MainControl \endlink  object before a popup menu is shown.
-					The menus {\em Label Dialog} will be checked
-					if {\em *this} labelDialog is visible. It will be enabled if a selection of
-					objects to be labeled is available, disabled otherwise.
-					@param main_control the  \link MainControl MainControl \endlink  object whose menus should be checked
-					@see   initializeWidget
-					@see   finalizeWidget
-					@see   checkMenus
-					@see   show
-			*/
-			virtual void checkMenu(MainControl& main_control)
-				throw();
-							
 			//@}
 			
 			public slots:
@@ -167,12 +146,9 @@ namespace BALL
 	  	*/
 			//@{
 				
-			/** Starts the labelDialog dialog.
-					Opens {\em *this} labelDialog dialog.
-					Calls  \link show show \endlink  and  \link raise raise \endlink  from  \link QDialog QDialog \endlink  class.
-					See documentation of QT-library for information concerning QDialog widgets.
+			/** Show and raise the dialog
 			*/
-			void openDialog();
+			void show();
 						
 			//@}
 			/** @name Protected slots
@@ -215,7 +191,6 @@ namespace BALL
 			List<Composite*> selection_;
 		};
 
-	} // namespace VIEW
-} // namespace BALL
+} } // namespaces
 
 #endif // BALL_VIEW_DIALOGS_LABELDIALOG_H
