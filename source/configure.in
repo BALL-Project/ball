@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.12 2002/01/15 03:22:58 oliver Exp $
+dnl    $Id: configure.in,v 1.13 2002/01/16 00:24:13 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1691,6 +1691,7 @@ else
 	dnl and delete the file
 	dnl
 	ENDIAN_TYPE=`${CAT} config.endian.log`
+	${RM} config.endian.log 2>/dev/null
 	if test "${ENDIAN_TYPE}" = "LITTLE" ; then
 		BALL_LITTLE_ENDIAN=true
 		AC_DEFINE(BALL_LITTLE_ENDIAN, true)
