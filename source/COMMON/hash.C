@@ -1,4 +1,4 @@
-// $Id: hash.C,v 1.4 2000/03/16 12:17:51 oliver Exp $
+// $Id: hash.C,v 1.5 2000/06/06 17:46:22 amoll Exp $
 
 #include <BALL/COMMON/hash.h>
 
@@ -59,8 +59,8 @@ namespace BALL
 	{
 		register Index index = 0;
 
-		for (register char c = *s++; c != '\0'; index += (index << 3) + c);
-		
+//		for (register char c = *s++; c != '\0'; index += (index << 3) + c);
+		for (; *s != '\0'; index += (index << 3) + *s++);
 		return index;
 	}
 
