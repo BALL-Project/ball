@@ -1,4 +1,4 @@
-// $Id: HINFile_test.C,v 1.8 2001/05/06 21:11:13 oliver Exp $
+// $Id: HINFile_test.C,v 1.9 2001/05/10 22:16:47 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.8 2001/05/06 21:11:13 oliver Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.9 2001/05/10 22:16:47 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -47,8 +47,10 @@ CHECK(HINFile::read(System& system))
   TEST_EQUAL(system.getAtom(0)->getElement(), PTE["O"])
 	TEST_REAL_EQUAL(system.getAtom(0)->getCharge(), -0.834)
   TEST_EQUAL(system.getAtom(0)->getPosition(), position)
-  TEST_NOT_EQUAL(system.getAtom(0)->getRadius(), 0.0)
+  TEST_REAL_EQUAL(system.getAtom(0)->getRadius(), 1.4)
   TEST_EQUAL(system.getAtom(0)->countBonds(), 2) 
+
+  TEST_NOT_EQUAL(system.getAtom(1)->getRadius(), 0)
 RESULT
 
 CHECK(HINFile::write(const System& system))
