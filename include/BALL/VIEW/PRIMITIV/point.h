@@ -1,4 +1,4 @@
-// $Id: point.h,v 1.8 2001/02/08 16:04:10 amoll Exp $
+// $Id: point.h,v 1.9 2001/05/13 13:40:38 hekl Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_POINT_H
 #define BALL_VIEW_PRIMITIV_POINT_H
@@ -32,7 +32,7 @@ namespace BALL
 
 		/** Point class.
 				{\bf Framework:} BALL/VIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/point.h}\\
+				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/point.h}\\ \\
 				An instance of Point represents an instance of the geometric representation "point".
 				A point has the following properties. 
 				\begin{itemize}
@@ -43,9 +43,9 @@ namespace BALL
 				and \Ref{Vertex}. See these classes for further information concerning
 				interface and additional methods.
 				@memo    Point class (BALL VIEW primitiv framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/02/08 16:04:10 $
+				@author  $Author: hekl $
+				@version $Revision: 1.9 $
+				@date    $Date: 2001/05/13 13:40:38 $
 		*/
 		class Point
 			: public GeometricObject,
@@ -65,10 +65,10 @@ namespace BALL
   				  \item color - to the color black
 		  			\item vertex - to the vector (0,0,0)
 					\end{itemize}
-					@return      Point - new constructed point
-					@see         GeometricObject::GeometricObject
-					@see         ColorExtension::ColorExtension
-					@see         Vertex::Vertex
+					@return      Point new constructed point
+					@see         GeometricObject
+					@see         ColorExtension
+					@see         Vertex
 			*/
 			Point()
 				throw();
@@ -78,10 +78,10 @@ namespace BALL
 					The copy is either deep (default) or shallow.
 					@param       point the point to be copied (cloned)
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
-					@return      Point - new constructed point copied from {\em point}
-					@see         GeometricObject::GeometricObject
-					@see         ColorExtension::ColorExtension
-					@see         Vertex::Vertex
+					@return      Point new constructed point copied from {\em point}
+					@see         GeometricObject
+					@see         ColorExtension
+					@see         Vertex
 			*/
 			Point(const Point& point, bool deep = true)
 				throw();
@@ -90,10 +90,10 @@ namespace BALL
 					Construct new point by copying the internal values from geometricObject 
 					{\em geometric_object}.
 					@param       geometric_object the geometricObject which internal value should be copied
-					@return      Point - new constructed point initialized from {\em geometric_object}
-					@see         GeometricObject::GeometricObject
-					@see         ColorExtension::ColorExtension
-					@see         Vertex::Vertex
+					@return      Point new constructed point initialized from {\em geometric_object}
+					@see         GeometricObject
+					@see         ColorExtension
+					@see         Vertex
 			*/
 			Point(const GeometricObject& geometric_object)
 				throw();
@@ -104,8 +104,8 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} point.
-					Calls \Ref{Point::destroy}.
-					@see         Point::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
 			virtual ~Point()
 				throw();
@@ -144,7 +144,7 @@ namespace BALL
 					the point {\em point}.\\
 					@param       point the point to be copied
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em point}
-					@see         Point::Point
+					@see         Point
 			*/
 			void set(const Point& point, bool deep = true)
 				throw();
@@ -152,12 +152,12 @@ namespace BALL
 			/** Assignment operator.
 					Assign the point {\em point} to {\em *this} point.
 					The copy is deep.
-					Calls \Ref{Point::set}.
+					Calls \Ref{set}.
 					The value of {\em *this} point is initialized to the value 
 					of the point {\em point}.\\
 					@param       point the point to be copied
-					@return      Point& - {\em *this} point
-					@see         Point::set
+					@return      Point& {\em *this} point
+					@see         set
 			*/
 			const Point& operator = (const Point& point)
 				throw();
@@ -165,12 +165,12 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} point to the point {\em point}.
 					The copy is either deep (default) or shallow.
-					Calls \Ref{Point::set}.
+					Calls \Ref{set}.
 					The value of the point {\em point} is initialized to the
 					value of {\em *this} point.\\
 					@param       point the point to be assigned to
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em point}
-					@see         Point::set
+					@see         set
 			*/
 			void get(Point& point, bool deep = true) const
 				throw();
@@ -178,7 +178,6 @@ namespace BALL
 			/** Swapping of point's.
 					Swap the value of {\em *this} point with the point {\em point}.
 					@param       point the point being swapped with {\em *this} point 
-					@see         Point::Point
 			*/
 			void swap(Point& point)
 				throw();
@@ -193,11 +192,9 @@ namespace BALL
 					of {\em *this} point.
 					If the internal state of {\em *this} point is correct (self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
-					Calls {GeometricObject::isValid}.
-					Calls {Vertex::isValid}.
-					@return			bool -
-											{\tt true} if the internal state of {\em *this} point is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					Calls \Ref{GeometricObject::isValid}.
+					Calls \Ref{Vertex::isValid}.
+					@return			bool {\tt true} if the internal state of {\em *this} point is correct (self-validated) and consistent, {\tt false} otherwise
 					@see        GeometricObject::isValid
 					@see        Vertex::isValid
 			*/
@@ -229,7 +226,6 @@ namespace BALL
 				  restore the state of {\em *this}. \\
 				  {\bf Note:} Not yet implemented. 
 				  @param       s input stream from where to restore the internal state of {\em *this} point
-					@exception   NotImplemented - always
 			*/
 			virtual void read(std::istream& s)
 				throw();
@@ -239,7 +235,6 @@ namespace BALL
 				  store the state of {\em *this}.\\
 				  {\bf Note:} Not yet implemented.
 				  @param       s output stream to where to store the internal state of {\em *this} point
-					@exception   NotImplemented - always
 			*/
 			virtual void write(std::ostream& s) const
 				throw();
@@ -252,7 +247,7 @@ namespace BALL
 					This method handles the export of {\em *this} point into another
 					format (eg. POVRAY, VRML) \\
 				  {\bf Note:} Not yet implemented.
-					@return    bool - {\tt true} if successful,	{\tt false} otherwise
+					@return    bool {\tt true} if successful,	{\tt false} otherwise
 			*/
 			virtual bool extract()
 				throw();

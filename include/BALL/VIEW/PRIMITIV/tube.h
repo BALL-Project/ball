@@ -1,4 +1,4 @@
-// $Id: tube.h,v 1.8 2001/02/08 16:04:10 amoll Exp $
+// $Id: tube.h,v 1.9 2001/05/13 13:40:38 hekl Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
 #define BALL_VIEW_PRIMITIV_TUBE_H
@@ -31,7 +31,7 @@ namespace BALL
 
 		/** Tube class.				
 				{\bf Framework:} BALL/VIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/tube.h}\\
+				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/tube.h}\\ \\
 				An instance of Tube represents an instance of the geometric representation "tube".
 				A tube has the following properties. 
 				\begin{itemize}
@@ -45,9 +45,9 @@ namespace BALL
 				See these classes for further information concerning
 				interface and additional methods.
 				@memo    Tube class (BALL VIEW primitiv framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/02/08 16:04:10 $
+				@author  $Author: hekl $
+				@version $Revision: 1.9 $
+				@date    $Date: 2001/05/13 13:40:38 $
 		*/
 		class Tube
 			: public GeometricObject,
@@ -70,11 +70,11 @@ namespace BALL
 		  			\item vertex1 - to the vector (0,0,0)
 		  			\item vertex2 - to the vector (0,0,0)
 					\end{itemize}
-					@return      Tube - new constructed tube
-					@see         GeometricObject::GeometricObject
-					@see         ColorExtension::ColorExtension
-					@see         Radius::Radius
-					@see         Vertex2::Vertex2
+					@return      Tube new constructed tube
+					@see         GeometricObject
+					@see         ColorExtension
+					@see         Radius
+					@see         Vertex2
 			*/
 			Tube()
 				throw();
@@ -84,11 +84,11 @@ namespace BALL
 					The copy is either deep (default) or shallow.
 					@param       tube the tube to be copied (cloned)
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
-					@return      Tube - new constructed tube copied from {\em tube}
-					@see         GeometricObject::GeometricObject
-					@see         ColorExtension::ColorExtension
-					@see         Radius::Radius
-					@see         Vertex2::Vertex2
+					@return      Tube new constructed tube copied from {\em tube}
+					@see         GeometricObject
+					@see         ColorExtension
+					@see         Radius
+					@see         Vertex2
 			*/
 			Tube(const Tube& tube, bool deep = true)
 				throw();
@@ -97,11 +97,11 @@ namespace BALL
 					Construct new tube by copying the internal values from geometricObject 
 					{\em geometric\_object}.
 					@param       geometric_object the geometricObject which internal value should be copied
-					@return      Tube - new constructed tube initialized from {\em geometric\_object}
-					@see         GeometricObject::GeometricObject
-					@see         ColorExtension::ColorExtension
-					@see         Radius::Radius
-					@see         Vertex2::Vertex2
+					@return      Tube new constructed tube initialized from {\em geometric\_object}
+					@see         GeometricObject
+					@see         ColorExtension
+					@see         Radius
+					@see         Vertex2
 			*/
 			Tube(const GeometricObject& geometric_object)
 				throw();
@@ -112,8 +112,8 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} tube.
-					Calls \Ref{Tube::destroy}.
-					@see         Tube::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
 			virtual ~Tube()
 				throw();
@@ -156,7 +156,7 @@ namespace BALL
 					the tube {\em tube}.\\
 					@param       tube the tube to be copied
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em tube}
-					@see         Tube::Tube
+					@see         Tube
 			*/
 			void set(const Tube& tube, bool deep = true)
 				throw();
@@ -164,12 +164,12 @@ namespace BALL
 			/** Assignment operator.
 					Assign the tube {\em tube} to {\em *this} tube.
 					The copy is deep.
-					Calls \Ref{Tube::set}.
+					Calls \Ref{set}.
 					The value of {\em *this} tube is initialized to the value 
 					of the tube {\em tube}.\\
 					@param       tube the tube to be copied
-					@return      Tube& - {\em *this} tube
-					@see         Tube::set
+					@return      Tube& {\em *this} tube
+					@see         set
 			*/
 			const Tube& operator = (const Tube& tube)
 				throw();
@@ -177,12 +177,12 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} tube to the tube {\em tube}.
 					The copy is either deep (default) or shallow.
-					Calls \Ref{Tube::set}.
+					Calls \Ref{set}.
 					The value of the tube {\em tube} is initialized to the
 					value of {\em *this} tube.\\
 					@param       tube the tube to be assigned to
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em tube}
-					@see         Tube::set
+					@see         set
 			*/
 			void get(Tube& tube, bool deep = true) const
 				throw();
@@ -190,7 +190,6 @@ namespace BALL
 			/** Swapping of tube's.
 					Swap the value of {\em *this} tube with the tube {\em tube}.
 					@param       tube the tube being swapped with {\em *this} tube 
-					@see         Tube::Tube
 			*/
 			void swap(Tube& tube)
 				throw();
@@ -202,14 +201,14 @@ namespace BALL
 
 			/** Inspection of the length of the tube.
 					Access the length of {\em *this} tube.
-					@return  Real - the length of {\em *this} tube
+					@return  Real the length of {\em *this} tube
 			*/
 			Real getLength() const
 				throw();
 
 			/** Inspection of the square length of the tube.
 					Access the square length of {\em *this} tube.
-					@return  Real - the square length of {\em *this} tube
+					@return  Real the square length of {\em *this} tube
 			*/
 			Real getSquareLength() const
 				throw();
@@ -224,11 +223,9 @@ namespace BALL
 					of {\em *this} tube.
 					If the internal state of {\em *this} tube is correct (self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
-					Calls {GeometricObject::isValid}.
-					Calls {Vertex2::isValid}.
-					@return			bool -
-											{\tt true} if the internal state of {\em *this} tube is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					Calls \Ref{GeometricObject::isValid}.
+					Calls \Ref{Vertex2::isValid}.
+					@return			bool {\tt true} if the internal state of {\em *this} tube is correct (self-validated) and consistent, {\tt false} otherwise
 					@see        GeometricObject::isValid
 					@see        Vertex2::isValid
 			*/
@@ -283,7 +280,7 @@ namespace BALL
 					This method handles the export of {\em *this} tube into another
 					format (eg. POVRAY, VRML). \\
 				  {\bf Note:} Not yet implemented.
-					@return    bool - {\tt true} if successful,	{\tt false} otherwise
+					@return    bool {\tt true} if successful,	{\tt false} otherwise
 			*/
 			virtual bool extract()
 				throw();

@@ -1,4 +1,4 @@
-// $Id: simpleBox.h,v 1.6 2001/02/08 16:04:10 amoll Exp $
+// $Id: simpleBox.h,v 1.7 2001/05/13 13:40:38 hekl Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
 #define BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -32,7 +32,7 @@ namespace BALL
 
 		/** SimpleBox class.	
 				{\bf Framework:} BALL/VIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/simpleBox.h}\\
+				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/simpleBox.h}\\ \\
 				An instance of SimpleBox represents an instance of the geometric representation "Box".
 				A simpleBox is a box whose sides are parallel to the coordinate axes. Therefore only
 				two vertices are needed. The first vertex is the lower left corner and the second
@@ -47,9 +47,9 @@ namespace BALL
 				and \Ref{Vertex2}. See these classes for further information concerning
 				interface and additional methods.
 				@memo    SimpleBox class (BALL VIEW primitiv framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/02/08 16:04:10 $
+				@author  $Author: hekl $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/05/13 13:40:38 $
 		*/
 		class SimpleBox
 			: public GeometricObject,
@@ -70,10 +70,10 @@ namespace BALL
 		  			\item vertex1 - to the vector (0,0,0)
 		  			\item vertex2 - to the vector (0,0,0)
 					\end{itemize}
-					@return      SimpleBox - new constructed simpleBox
-					@see         GeometricObject::GeometricObject
-					@see         ColorExtension::ColorExtension
-					@see         Vertex2::Vertex2
+					@return      SimpleBox new constructed simpleBox
+					@see         GeometricObject
+					@see         ColorExtension
+					@see         Vertex2
 			*/
 			SimpleBox()
 				throw();
@@ -83,10 +83,10 @@ namespace BALL
 					The copy is either deep (default) or shallow.
 					@param       simpleBox the simpleBox to be copied (cloned)
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
-					@return      SimpleBox - new constructed simpleBox copied from {\em simpleBox}
-					@see         GeometricObject::GeometricObject
-					@see         ColorExtension::ColorExtension
-					@see         Vertex2::Vertex2
+					@return      SimpleBox new constructed simpleBox copied from {\em simpleBox}
+					@see         GeometricObject
+					@see         ColorExtension
+					@see         Vertex2
 			*/
 			SimpleBox(const SimpleBox& simpleBox, bool deep = true)
 				throw();
@@ -95,10 +95,10 @@ namespace BALL
 					Construct new simpleBox by copying the internal values from geometricObject 
 					{\em geometric\_object}.
 					@param       geometric_object the geometricObject which internal value should be copied
-					@return      SimpleBox - new constructed simpleBox initialized from {\em geometric\_object}
-					@see         GeometricObject::GeometricObject
-					@see         ColorExtension::ColorExtension
-					@see         Vertex2::Vertex2
+					@return      SimpleBox new constructed simpleBox initialized from {\em geometric\_object}
+					@see         GeometricObject
+					@see         ColorExtension
+					@see         Vertex2
 			*/
 			SimpleBox(const GeometricObject& geometric_object)
 				throw();
@@ -109,8 +109,8 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} simpleBox.
-					Calls \Ref{SimpleBox::destroy}.
-					@see         SimpleBox::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
 			virtual ~SimpleBox()
 				throw();
@@ -149,7 +149,7 @@ namespace BALL
 					the simpleBox {\em simpleBox}.\\
 					@param       simpleBox the simpleBox to be copied
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em simpleBox}
-					@see         SimpleBox::SimpleBox
+					@see         SimpleBox
 			*/
 			void set(const SimpleBox& simpleBox, bool deep = true)
 				throw();
@@ -157,12 +157,12 @@ namespace BALL
 			/** Assignment operator.
 					Assign the simpleBox {\em simpleBox} to {\em *this} simpleBox.
 					The copy is deep.
-					Calls \Ref{SimpleBox::set}.
+					Calls \Ref{set}.
 					The value of {\em *this} simpleBox is initialized to the value 
 					of the simpleBox {\em simpleBox}.\\
 					@param       simpleBox the simpleBox to be copied
-					@return      SimpleBox& - {\em *this} simpleBox
-					@see         SimpleBox::set
+					@return      SimpleBox& {\em *this} simpleBox
+					@see         set
 			*/
 			const SimpleBox& operator = (const SimpleBox& simpleBox)
 				throw();
@@ -170,12 +170,12 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} simpleBox to the simpleBox {\em simpleBox}.
 					The copy is either deep (default) or shallow.
-					Calls \Ref{SimpleBox::set}.
+					Calls \Ref{set}.
 					The value of the simpleBox {\em simpleBox} is initialized to the
 					value of {\em *this} simpleBox.\\
 					@param       simpleBox the simpleBox to be assigned to
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em simpleBox}
-					@see         SimpleBox::set
+					@see         set
 			*/
 			void get(SimpleBox& simpleBox, bool deep = true) const
 				throw();
@@ -183,7 +183,7 @@ namespace BALL
 			/** Swapping of simpleBox's.
 					Swap the value of {\em *this} simpleBox with the simpleBox {\em simpleBox}.
 					@param       simpleBox the simpleBox being swapped with {\em *this} simpleBox 
-					@see         SimpleBox::SimpleBox
+					@see         SimpleBox
 			*/
 			void swap(SimpleBox& simpleBox)
 				throw();
@@ -198,11 +198,9 @@ namespace BALL
 					of {\em *this} simpleBox.
 					If the internal state of {\em *this} simpleBox is correct (self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
-					Calls {GeometricObject::isValid}.
-					Calls {Vertex2::isValid}.
-					@return			bool -
-											{\tt true} if the internal state of {\em *this} simpleBox is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					Calls \Ref{GeometricObject::isValid}.
+					Calls \Ref{Vertex2::isValid}.
+					@return			bool {\tt true} if the internal state of {\em *this} simpleBox is correct (self-validated) and consistent, {\tt false} otherwise
 					@see        GeometricObject::isValid
 					@see        Vertex2::isValid
 			*/
@@ -254,7 +252,7 @@ namespace BALL
 					This method handles the export of {\em *this} simpleBox into another
 					format (eg. POVRAY, VRML) \\
 				  {\bf Note:} Not yet implemented.
-					@return    bool - {\tt true} if successful,	{\tt false} otherwise
+					@return    bool {\tt true} if successful,	{\tt false} otherwise
 			*/
 			virtual bool extract()
 				throw();

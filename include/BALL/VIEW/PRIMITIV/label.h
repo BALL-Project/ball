@@ -1,4 +1,4 @@
-// $Id: label.h,v 1.6 2001/02/06 21:28:41 amoll Exp $
+// $Id: label.h,v 1.7 2001/05/13 13:40:37 hekl Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
 #define BALL_VIEW_PRIMITIV_LABEL_H
@@ -30,7 +30,7 @@ namespace BALL
 
 		/** Label class.
 				{\bf Framework:} BALL/VIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/label.h}\\
+				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/label.h}\\ \\
 				An instance of Label represents an instance of the geometric representation "label".
 				A label is an information text that can be pinned to another \Ref{Composite} or
 				\Ref{GeometricObject}. A label is both visible in the dynamic and static render
@@ -45,9 +45,9 @@ namespace BALL
 				and \Ref{Vertex}. See these classes for further information concerning
 				interface and additional methods.
 				@memo    Label class (BALL VIEW primitiv framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/02/06 21:28:41 $
+				@author  $Author: hekl $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/05/13 13:40:37 $
 		*/
 		class Label
 			: public GeometricObject,
@@ -68,10 +68,10 @@ namespace BALL
 						\item text   - to the text "unkown"
 		  			\item vertex - to the vector (0,0,0)
 					\end{itemize}
-					@return      Label - new constructed label
-					@see         GeometricObject::GeometricObject
-					@see         ColorExtension::ColorExtension
-					@see         Vertex::Vertex
+					@return      Label new constructed label
+					@see         GeometricObject
+					@see         ColorExtension
+					@see         Vertex
 			*/
 			Label()
 				throw();
@@ -81,10 +81,10 @@ namespace BALL
 					The copy is either deep (default) or shallow.
 					@param       label the label to be copied (cloned)
 					@param       deep make a deep (= {\tt true}) or shallow (= {\tt false})
-					@return      Label - new constructed label copied from {\em label}
-					@see         GeometricObject::GeometricObject
-					@see         ColorExtension::ColorExtension
-					@see         Vertex::Vertex
+					@return      Label new constructed label copied from {\em label}
+					@see         GeometricObject
+					@see         ColorExtension
+					@see         Vertex
 			*/
 			Label(const Label& label, bool deep = true)
 				throw();
@@ -93,10 +93,10 @@ namespace BALL
 					Construct new label by copying the internal values from geometricObject 
 					{\em geometric_object}.
 					@param       geometric_object the geometricObject which internal value should be copied
-					@return      Label - new constructed label initialized from {\em geometric_object}
-					@see         GeometricObject::GeometricObject
-					@see         ColorExtension::ColorExtension
-					@see         Vertex::Vertex
+					@return      Label new constructed label initialized from {\em geometric_object}
+					@see         GeometricObject
+					@see         ColorExtension
+					@see         Vertex
 			*/
 			Label(const GeometricObject& geometric_object)
 				throw();
@@ -108,8 +108,8 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} label.
-					Calls \Ref{Label::destroy}.
-					@see  Label::destroy
+					Calls \Ref{destroy}.
+					@see  destroy
 			*/
 			virtual ~Label()
 				throw();
@@ -148,7 +148,6 @@ namespace BALL
 					the label {\em label}.\\
 					@param       label the label to be copied
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em label}
-					@see         Label::Label
 			*/
 			void set(const Label& label, bool deep = true)
 				throw();
@@ -156,12 +155,12 @@ namespace BALL
 			/** Assignment operator.
 					Assign the label {\em label} to {\em *this} label.
 					The copy is deep.
-					Calls \Ref{Label::set}.
+					Calls \Ref{set}.
 					The value of {\em *this} label is initialized to the value 
 					of the label {\em label}.\\
 					@param       label the label to be copied
-					@return      Label& - {\em *this} label
-					@see         Label::set
+					@return      Label& {\em *this} label
+					@see         set
 			*/
 			const Label& operator = (const Label& label)
 				throw();
@@ -169,12 +168,12 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} label to the label {\em label}.
 					The copy is either deep (default) or shallow.
-					Calls \Ref{Label::set}.
+					Calls \Ref{set}.
 					The value of the label {\em label} is initialized to the
 					value of {\em *this} label.\\
 					@param       label the label to be assigned to
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em label}
-					@see         Label::set
+					@see         set
 			*/
 			void get(Label& label, bool deep = true) const
 				throw();
@@ -182,7 +181,7 @@ namespace BALL
 			/** Swapping of label's.
 					Swap the value of {\em *this} label with the label {\em label}.
 					@param       label the label being swapped with {\em *this} label 
-					@see         Label::Label
+					@see         Label
 			*/
 			void swap(Label& label)
 				throw();
@@ -204,7 +203,7 @@ namespace BALL
 			/** Inspection of the name of the label.
 					Access the name of {\em *this} label.
 					Calls \Ref{GeometricObject::getName}
-					@return   String - the name of {\em *this} label
+					@return   String the name of {\em *this} label
 					@see      GeometricObject::getName
 			*/
 			String getText() const
@@ -213,7 +212,7 @@ namespace BALL
 			/** Return the type name of {\em *this} label.
 					Virtually overridden method for specifying the type name of {\em *this} label.
 					Important for identifying the type of the label by other objects.
-					@return  String - the type name of {\em *this} label ("Label")
+					@return  String the type name of {\em *this} label ("Label")
 					@see     GeometricObject::getTypeName
 			*/
 				virtual String getTypeName() const
@@ -229,11 +228,9 @@ namespace BALL
 					of {\em *this} label.
 					If the internal state of {\em *this} label is correct (self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
-					Calls {GeometricObject::isValid}.
-					Calls {Vertex::isValid}.
-					@return			bool -
-											{\tt true} if the internal state of {\em *this} label is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					Calls \Ref{GeometricObject::isValid}.
+					Calls \Ref{Vertex::isValid}.
+					@return			bool {\tt true} if the internal state of {\em *this} label is correct (self-validated) and consistent, {\tt false} otherwise
 					@see        GeometricObject::isValid
 					@see        Vertex::isValid
 			*/
@@ -265,7 +262,6 @@ namespace BALL
 				  restore the state of {\em *this}. \\
 				  {\bf Note:} Not yet implemented.	 
 				  @param       s input stream from where to restore the internal state of {\em *this} label
-					@exception   NotImplemented - always
 			*/
 			virtual void read(std::istream&  s)
 				throw();
@@ -275,7 +271,6 @@ namespace BALL
 				  store the state of {\em *this}. \\
 				  {\bf Note:} Not yet implemented.
 				  @param       s output stream to where to store the internal state of {\em *this} label
-					@exception   NotImplemented - always
 			*/
 			virtual void write(std::ostream& s) const
 				throw();
@@ -288,7 +283,7 @@ namespace BALL
 					This method handles the export of {\em *this} label into another
 					format (eg. POVRAY, VRML)  \\
 				  {\bf Note:} Not yet implemented.
-					@return    bool - {\tt true} if successful,	{\tt false} otherwise
+					@return    bool {\tt true} if successful,	{\tt false} otherwise
 			*/
 			virtual bool extract()
 				throw();

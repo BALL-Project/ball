@@ -1,4 +1,4 @@
-// $Id: sphere.h,v 1.8 2001/02/08 16:04:10 amoll Exp $
+// $Id: sphere.h,v 1.9 2001/05/13 13:40:38 hekl Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #define BALL_VIEW_PRIMITIV_SPHERE_H
@@ -40,7 +40,7 @@ namespace BALL
 
 		/** Sphere class.			
 				{\bf Framework:} BALL/VIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/sphere.h}	\\
+				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/sphere.h}	\\ \\
 				An instance of Sphere represents an instance of the geometric representation "sphere".
 				A sphere has the following properties. 
 				\begin{itemize}
@@ -52,9 +52,9 @@ namespace BALL
 				\Ref{Vertex} and \Ref{Radius}. See these classes for further information concerning
 				interface and additional methods.
 				@memo    Sphere class (BALL VIEW primitiv framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/02/08 16:04:10 $
+				@author  $Author: hekl $
+				@version $Revision: 1.9 $
+				@date    $Date: 2001/05/13 13:40:38 $
 		*/
 		class Sphere
 			: public GeometricObject,
@@ -76,11 +76,11 @@ namespace BALL
 	  				\item radius - to the value 1
 		  			\item vertex - to the vector (0,0,0)
 					\end{itemize}
-					@return      Sphere - new constructed sphere
-					@see         GeometricObject::GeometricObject
-					@see         ColorExtension::ColorExtension
-					@see         Vertex::Vertex
-					@see         Radius::Radius
+					@return      Sphere new constructed sphere
+					@see         GeometricObject
+					@see         ColorExtension
+					@see         Vertex
+					@see         Radius
 			*/
 			Sphere()
 				throw();
@@ -90,11 +90,11 @@ namespace BALL
 					The copy is either deep (default) or shallow.
 					@param       sphere the sphere to be copied (cloned)
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false})
-					@return      Sphere - new constructed sphere copied from {\em sphere}
-					@see         GeometricObject::GeometricObject
-					@see         ColorExtension::ColorExtension
-					@see         Vertex::Vertex
-					@see         Radius::Radius
+					@return      Sphere new constructed sphere copied from {\em sphere}
+					@see         GeometricObject
+					@see         ColorExtension
+					@see         Vertex
+					@see         Radius
 			*/
 			Sphere(const Sphere& sphere, bool deep = true)
 				throw();
@@ -103,11 +103,11 @@ namespace BALL
 					Construct new sphere by copying the internal values from geometricObject 
 					{\em geometric\_object}.
 					@param       geometric_object the geometricObject which internal value should be copied
-					@return      Sphere - new constructed sphere initialized from {\em geometric\_object}
-					@see         GeometricObject::GeometricObject
-					@see         ColorExtension::ColorExtension
-					@see         Vertex::Vertex
-					@see         Radius::Radius
+					@return      Sphere new constructed sphere initialized from {\em geometric\_object}
+					@see         GeometricObject
+					@see         ColorExtension
+					@see         Vertex
+					@see         Radius
 			*/
 			Sphere(const GeometricObject& geometric_object)
 				throw();
@@ -118,8 +118,8 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} sphere.
-					Calls \Ref{Sphere::destroy}.
-					@see         Sphere::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
 			virtual ~Sphere()
 				throw();
@@ -162,7 +162,7 @@ namespace BALL
 					the sphere {\em sphere}.\\
 					@param       sphere the sphere to be copied
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em sphere}
-					@see         Sphere::Sphere
+					@see         Sphere
 			*/
 			void set(const Sphere& sphere, bool deep = true)
 				throw();
@@ -170,12 +170,12 @@ namespace BALL
 			/** Assignment operator.
 					Assign the sphere {\em sphere} to {\em *this} sphere.
 					The copy is deep.
-					Calls \Ref{Sphere::set}.
+					Calls \Ref{set}.
 					The value of {\em *this} sphere is initialized to the value 
 					of the sphere {\em sphere}.\\
 					@param       sphere the sphere to be copied
-					@return      Sphere& - {\em *this} sphere
-					@see         Sphere::set
+					@return      Sphere& {\em *this} sphere
+					@see         set
 			*/
 			const Sphere& operator = (const Sphere& sphere)
 				throw();
@@ -183,12 +183,12 @@ namespace BALL
 			/** Copying with cloning facility.
 					Copy {\em *this} sphere to the sphere {\em sphere}.
 					The copy is either deep (default) or shallow.
-					Calls \Ref{Sphere::set}.
+					Calls \Ref{set}.
 					The value of the sphere {\em sphere} is initialized to the
 					value of {\em *this} sphere.\\
 					@param       sphere the sphere to be assigned to
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em sphere}
-					@see         Sphere::set
+					@see         set
 			*/
 			void get(Sphere& sphere, bool deep = true) const
 				throw();
@@ -196,7 +196,6 @@ namespace BALL
 			/** Swapping of sphere's.
 					Swap the value of {\em *this} sphere with the sphere {\em sphere}.
 					@param       sphere the sphere being swapped with {\em *this} sphere 
-					@see         Sphere::Sphere
 			*/
 			void swap(Sphere& sphere)
 				throw();
@@ -211,11 +210,9 @@ namespace BALL
 					of {\em *this} sphere.
 					If the internal state of {\em *this} sphere is correct (self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
-					Calls {GeometricObject::isValid}.
-					Calls {Vertex::isValid}.
-					@return			bool -
-											{\tt true} if the internal state of {\em *this} sphere is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					Calls \Ref{GeometricObject::isValid}.
+					Calls \Ref{Vertex::isValid}.
+					@return			bool {\tt true} if the internal state of {\em *this} sphere is correct (self-validated) and consistent, {\tt false} otherwise
 					@see        GeometricObject::isValid
 					@see        Vertex::isValid
 			*/
@@ -269,7 +266,7 @@ namespace BALL
 					This method handles the export of {\em *this} sphere into another
 					format (eg. POVRAY, VRML)\\
 				  {\bf Note:} Not yet implemented.
-					@return    bool - {\tt true} if successful,	{\tt false} otherwise
+					@return    bool {\tt true} if successful,	{\tt false} otherwise
 			*/
 			virtual bool extract()
 				throw();
