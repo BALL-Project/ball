@@ -1,4 +1,4 @@
-// $Id: charmmImproperTorsion.C,v 1.2 2000/02/08 21:25:43 oliver Exp $
+// $Id: charmmImproperTorsion.C,v 1.3 2000/02/10 10:46:40 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -85,9 +85,6 @@ namespace BALL
 		}
 	
 
-		// Improper torsions will be added to the torsion array
-		vector<Atom*>::const_iterator atom_it = getForceField()->getAtoms().begin();
-
 		// find all improper torsion atoms: their names are stored in 
 		// the section ResidueImproperTorsions
 		if (!has_initialized_parameters)
@@ -99,88 +96,189 @@ namespace BALL
 				return false;
 			}
 		}
-		
-		// check for each potential improper torsion atom (every atom having three bonds)
-		// whether it is contained in the list of impropers
-		for ( ; atom_it != getForceField()->getAtoms().end(); ++atom_it) 
-		{
-			if ((*atom_it)->countBonds() == 3)
-			{
-				String res_name;
-				Residue* res = (*atom_it)->getAncestor(RTTI::getDefault<Residue>());
-				if (res == 0)
-				{
-					if ((*atom_it)->getFragment() != 0)
-					{
-						res_name = (*atom_it)->getFragment()->getName();
-						res_name.trim();
-					}
-				} else {
-					res_name = res->getName();
-					res_name.trim();
 
-					String suffix = "-";
-					if (res->isNTerminal())
+		// iterate over all residues and try to assign the impropers
+		Residue* last_residue = 0;
+		ResidueIterator res_it = getForceField()->getSystem()->beginResidue();
+		ResidueIterator next_it = res_it;
+
+		for (; +res_it; last_residue = &*res_it, ++res_it)
+		{
+			// we keep an iterator that precedes res_it by one
+			// this usually points to the next residue
+			if (+next_it)
+			{
+				++next_it;
+			}
+
+			// retrieve the residue name
+			String res_name = res_it->getFullName();
+
+			// if we have impropers for this residue, iterate over all
+			FFPSResidueTorsions::ResidueTorsion torsion;
+			for (Size i = 0; i < improper_atoms_.getNumberOfResidueTorsions(res_name); i++)
+			{
+				// retrieve the names for the four atoms
+				improper_atoms_.assignTorsion(res_name, i, torsion);
+				
+				// create pointers to the atoms
+				Atom* a1 = 0;
+				Atom* a2 = 0;
+				Atom* a3 = 0;
+				Atom* a4 = 0;
+				
+				// iterate over all atoms of this residue and try
+				// to identify the atoms we're looking for
+				AtomIterator atom_it = res_it->beginAtom();
+				for (; +atom_it; ++atom_it)
+				{
+					if ((a1 == 0) && (torsion.atom_name_A == atom_it->getName()))
 					{
-						suffix = "-N";
+						a1 = &*atom_it;
 					}
-					if (res->isCTerminal())
+					if ((a2 == 0) && (torsion.atom_name_B == atom_it->getName()))
 					{
-						suffix = "-C";
+						a2 = &*atom_it;
 					}
-					if (res->hasProperty(Residue::PROPERTY__HAS_SSBOND))
+					if ((a3 == 0) && (torsion.atom_name_C == atom_it->getName()))
 					{
-						suffix += "S";
+						a3 = &*atom_it;
 					}
-					if (suffix != "-")
+					if ((a4 == 0) && (torsion.atom_name_D == atom_it->getName()))
 					{
-						res_name += suffix;
+						a4 = &*atom_it;
 					}
 				}
-				
-				String key = res_name + ":" + (*atom_it)->getName();
 
-				if (improper_atoms_.has(key))
+				// if some of the atom pointers are 0, we have to look in the
+				// neighbouring residues for their names 
+				// FIRST: next residue, if next_it is a valid iterator
+				// and both iterators are on the same chain
+				if (((a1 == 0) || (a2 == 0) || (a3 == 0) || (a4 == 0)) 
+						&& +next_it
+						&& (next_it->getChain() == res_it->getChain()))
 				{
-					Atom* a1 = *atom_it;
-					Atom* a2 = 0;
-					Atom* a3 = 0;
-					Atom* a4 = 0;
-
-					// identify the three remaining atoms 
-					Atom::BondIterator bond_it = a1->beginBond();
-					for (; +bond_it; ++bond_it)
+					for (atom_it = next_it->beginAtom(); +atom_it; ++atom_it)
 					{
-						if (a2 == 0)
+						if ((a1 == 0) && (torsion.atom_name_A == "+" + atom_it->getName()))
 						{
-							a2 = bond_it->getPartner(*a1);
+							a1 = &*atom_it;
 						}
-						else if (a3 == 0)
+						if ((a2 == 0) && (torsion.atom_name_B == "+" + atom_it->getName()))
 						{
-							a3 = bond_it->getPartner(*a1);
-						} 
-						else if (a4 == 0)
-						{
-							a4 = bond_it->getPartner(*a1);
+							a2 = &*atom_it;
 						}
-					}		
-					
-					// sanity check
-					if ((a1 == 0) || (a2 == 0) || (a3 == 0) || (a4 ==0))
-					{
-						Log.error() << "CharmmImproperTorsion::setup: #bonds: " << a1->countBonds() << "   a1 = " << a1 << "  a2 = " << a2 << "  a3 = " << a3 << "  a4 = " << a4 << endl;
-						return false;
+						if ((a3 == 0) && (torsion.atom_name_C == "+" + atom_it->getName()))
+						{
+							a3 = &*atom_it;
+						}
+						if ((a4 == 0) && (torsion.atom_name_D == "+" + atom_it->getName()))
+						{
+							a4 = &*atom_it;
+						}
 					}
-					Log.info() << "Improper: " << a1->getFullName() << "/" << a2->getFullName() << "/" << a3->getFullName() << "/" << a4->getFullName()
-										 << "   types: " << a1->getTypeName() << "/" << a2->getTypeName() << "/" << a3->getTypeName() << "/" << a4->getTypeName() << endl;
+				}
 
-					// store the atom pointers for the improper
-					FFPSQuadraticImproperTorsion::Torsion values;
-					values.atom1 = a1;
-					values.atom2 = a2;
-					values.atom3 = a3;
-					values.atom4 = a4;
+				// if some of the atom pointers are 0, we have to look in the
+				// neighbouring residues for their names 
+				// SECOND: last residue, if the last residue is not a null pointer
+				//         and the two residues have to be on the same chain
+				if (((a1 == 0) || (a2 == 0) || (a3 == 0) || (a4 == 0)) 
+						&& (last_residue != 0)
+						&& (last_residue->getChain() == res_it->getChain()))
+				{
+					for (atom_it = last_residue->beginAtom(); +atom_it; ++atom_it)
+					{
+						if ((a1 == 0) && (torsion.atom_name_A == "-" + atom_it->getName()))
+						{
+							a1 = &*atom_it;
+						}
+						if ((a2 == 0) && (torsion.atom_name_B == "-" + atom_it->getName()))
+						{
+							a2 = &*atom_it;
+						}
+						if ((a3 == 0) && (torsion.atom_name_C == "-" + atom_it->getName()))
+						{
+							a3 = &*atom_it;
+						}
+						if ((a4 == 0) && (torsion.atom_name_D == "-" + atom_it->getName()))
+						{
+							a4 = &*atom_it;
+						}
+					}
+				}
+	
+				// now we might have to look for CYS disulphide bridges
+				if (((a1 == 0) || (a2 == 0) || (a3 == 0) || (a4 == 0))
+						&& res_it->hasProperty(Residue::PROPERTY__HAS_SSBOND))
+				{
+					// identify the residue the disulphide bridge goes to
+					Residue* cys_res = 0;
+					for (atom_it = res_it->beginAtom(); (cys_res != 0) && +atom_it; ++atom_it)
+					{
+						if (atom_it->getName() == "SG")
+						{
+							Atom::BondIterator bond_it = atom_it->beginBond();
+							for (; +bond_it; ++bond_it)
+							{
+								if (bond_it->getPartner(*atom_it)->getName() == "SG")
+								{
+									cys_res = bond_it->getPartner(*atom_it)->getAncestor(RTTI::getDefault<Residue>());
+									break;
+								}
+							}
+						}
+					}
+					
+					// if we found anothe CYS, look for atoms there
+					// do this only once for each pair (use the residue handles to decide)
+					if (cys_res != 0) 
+					{
+						// if we had this CYS already, we continue...
+						//
+						if ((cys_res->getHandle() < res_it->getHandle()))
+						{
+							continue;
+						}
 
+						// look for names
+						for (atom_it = last_residue->beginAtom(); +atom_it; ++atom_it)
+						{
+							if ((a1 == 0) && (torsion.atom_name_A == "=" + atom_it->getName()))
+							{
+								a1 = &*atom_it;
+							}
+							if ((a2 == 0) && (torsion.atom_name_B == "=" + atom_it->getName()))
+							{
+								a2 = &*atom_it;
+							}
+							if ((a3 == 0) && (torsion.atom_name_C == "=" + atom_it->getName()))
+							{
+								a3 = &*atom_it;
+							}
+							if ((a4 == 0) && (torsion.atom_name_D == "=" + atom_it->getName()))
+							{
+								a4 = &*atom_it;
+							}
+						}
+					}
+				}
+
+				// warn the user 
+				if ((a1 == 0) || (a2 == 0) || (a3 == 0) || (a4 == 0))
+				{
+					Log.warn() << "CharmmImproperTorsion::setup: could not find improper torsion for " << torsion.residue_name 
+										 << ":" << torsion.atom_name_A << "-" << torsion.atom_name_B << "-" << torsion.atom_name_C
+										 << "-" << torsion.atom_name_D << endl;
+					Log.warn() << "  Atoms found: ";
+
+					if (a1 != 0) Log.warn() << " a1 = " << a1->getFullName();
+					if (a2 != 0) Log.warn() << " a2 = " << a2->getFullName();
+					if (a3 != 0) Log.warn() << " a3 = " << a3->getFullName();
+					if (a4 != 0) Log.warn() << " a4 = " << a4->getFullName();
+					Log.warn() << endl;
+
+				} else {
 					// if we use selection and the atoms are selected,
 					// add the torsion the the impropers_ vector
 					if	(getForceField()->getUseSelection() == false ||
@@ -192,60 +290,50 @@ namespace BALL
 						Atom::Type type_a3 = a3->getType();
 						Atom::Type type_a4 = a4->getType();
 
+						FFPSQuadraticImproperTorsion::Torsion values;
+						values.atom1 = a1;
+						values.atom2 = a2;
+						values.atom3 = a3;
+						values.atom4 = a4;
+
+						// retrieve the parameters
+						// permute the three atoms B, C, and D (atom1 is fixed)
+						// and try wildcards for atoms C and D (permuting atom4)
 						bool found = false;
-
-						if (improper_parameters_.hasParameters(type_a1, type_a2, type_a3, type_a4)) 
+						if (improper_parameters_.assignParameters(values.values, type_a1, type_a2, type_a3, type_a4)) 
 						{
-							improper_parameters_.assignParameters(values.values, type_a1, type_a2, type_a3, type_a4);
-
 							found = true;
 						}
-						else if (improper_parameters_.hasParameters(type_a1, type_a2, type_a4, type_a3)) 
+						else if (improper_parameters_.assignParameters(values.values, type_a1, type_a2, type_a4, type_a3)) 
 						{
-							improper_parameters_.assignParameters(values.values, type_a1, type_a2, type_a4, type_a4);
-
 							found = true;
 						} 
-						if (improper_parameters_.hasParameters(type_a1, type_a3, type_a2, type_a4)) 
+						if (improper_parameters_.assignParameters(values.values, type_a1, type_a3, type_a2, type_a4)) 
 						{
-							improper_parameters_.assignParameters(values.values, type_a1, type_a3, type_a2, type_a4);
-
 							found = true;
 						}
-						else if (improper_parameters_.hasParameters(type_a1, type_a3, type_a4, type_a2)) 
+						else if (improper_parameters_.assignParameters(values.values, type_a1, type_a3, type_a4, type_a2)) 
 						{
-							improper_parameters_.assignParameters(values.values, type_a1, type_a3, type_a4, type_a2);
-
 							found = true;
 						} 
-						if (improper_parameters_.hasParameters(type_a1, type_a4, type_a2, type_a3)) 
+						if (improper_parameters_.assignParameters(values.values, type_a1, type_a4, type_a2, type_a3)) 
 						{
-							improper_parameters_.assignParameters(values.values, type_a1, type_a4, type_a2, type_a3);
-
 							found = true;
 						}
-						else if (improper_parameters_.hasParameters(type_a1, type_a4, type_a3, type_a2)) 
+						else if (improper_parameters_.assignParameters(values.values, type_a1, type_a4, type_a3, type_a2)) 
 						{
-							improper_parameters_.assignParameters(values.values, type_a1, type_a4, type_a3, type_a2);
-
 							found = true;
 						} 
-						else if (improper_parameters_.hasParameters(type_a1, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a2))
+						else if (improper_parameters_.assignParameters(values.values, type_a1, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a2))
 						{
-							improper_parameters_.assignParameters(values.values, type_a1, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a2);
-
 							found = true;
 						} 
-						else if (improper_parameters_.hasParameters(type_a1, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3))
+						else if (improper_parameters_.assignParameters(values.values, type_a1, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3))
 						{
-							improper_parameters_.assignParameters(values.values, type_a1, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a3);
-
 							found = true;
 						} 
-						else if (improper_parameters_.hasParameters(type_a1, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a4))
+						else if (improper_parameters_.assignParameters(values.values, type_a1, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a4))
 						{
-							improper_parameters_.assignParameters(values.values, type_a1, Atom::ANY_TYPE, Atom::ANY_TYPE, type_a4);
-
 							found = true;
 						} 
 
@@ -253,17 +341,19 @@ namespace BALL
 						{
 							impropers_.push_back(values);
 						} else {
-							Log.info() << "no parameters for improper " << key << endl;
+							Log.warn() << "CharmmImproperTorsion::setup: no parameters for improper " 
+												 << torsion.residue_name << "/" << torsion.atom_name_A << "/" 
+												 << torsion.atom_name_B << "/" << torsion.atom_name_C << "/" 
+												 << torsion.atom_name_D << " (types are " 
+												 << a1->getTypeName() << "/" << a2->getTypeName() << "/"
+												 << a3->getTypeName() << "/" << a4->getTypeName()												
+												 << ")" << endl;
 						}
 					}
-				} else {
-					Log.info() << "no entry for improper: " << key << endl;
 				}
 			}
 		}
 
-    Log.info() << "CharmmImproperTorsion::setup: number of torsions: " << impropers_.size() << endl;
- 
 		return true;
 	}
 
@@ -384,7 +474,11 @@ namespace BALL
 
 					if (tmp > 0)
 					{
-						float factor = -2.0 * it->values.k * (acos(cosphi) - it->values.phase) /tmp;
+						// conversion from kJ/mol -> J (forces are returned in units of 1N = 1 J/m)
+						//   1e10			: Angstrom->m
+						//   1e3			: kJ -> j
+						//   AVOGADRO : mol -> 1
+						float factor = -2.0 * (1e13 / Constants::AVOGADRO) * it->values.k * (acos(cosphi) - it->values.phase) /tmp;
 
 						float ilength_bcxba_2 = ilength_bcxba * ilength_bcxba;
 						float ilength_bcxbd_2 = ilength_bcxbd * ilength_bcxbd;

@@ -1,4 +1,4 @@
-// $Id: charmmBend.C,v 1.1 2000/02/06 19:57:52 oliver Exp $
+// $Id: charmmBend.C,v 1.2 2000/02/10 10:46:40 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmBend.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -53,7 +53,7 @@ namespace BALL
 
 		if (getForceField() == 0) 
 		{
-			Log.level(LogStream::ERROR) << "CharmmBend::setup: component not bound to force field" << endl;
+			Log.error() << "CharmmBend::setup: component not bound to force field" << endl;
 			return false;
 		}
 
@@ -66,7 +66,7 @@ namespace BALL
 
 			if (result == false) 
 			{
-				Log.level(LogStream::ERROR) << "cannot find section QuadraticAngleBend" << endl;
+				Log.error() << "cannot find section QuadraticAngleBend" << endl;
 				return false;
 			}
 		}
@@ -96,23 +96,21 @@ namespace BALL
 						Atom::Type atom_type_a2 = this_bend.atom2->getType();
 						Atom::Type atom_type_a3 = this_bend.atom3->getType();
 
-						FFPSQuadraticAngleBend::Values values;
 
-						if (bend_parameters_.hasParameters(atom_type_a1, atom_type_a2, atom_type_a3))
+						// retrieve the parameters. FFPSQuadraticAngleBend assumes
+						// that the second atom is the central atom, the order
+						// of the other two atoms doesn't matter
+						FFPSQuadraticAngleBend::Values values;
+						if (!bend_parameters_.assignParameters(values, atom_type_a1, atom_type_a2, atom_type_a3))
 						{
-							bend_parameters_.assignParameters(values, atom_type_a1, atom_type_a2, atom_type_a3);
-						}
-						else if (bend_parameters_.hasParameters(atom_type_a3, atom_type_a2, atom_type_a1))
-						{
-							bend_parameters_.assignParameters(values, atom_type_a3, atom_type_a2, atom_type_a1);
-						}
-						else 
-						{
-							Log.level(LogStream::ERROR) << "cannot find bend parameters for atom types:"
+							Log.warn() << "cannot find bend parameters for atoms "
+								<< this_bend.atom1->getFullName() << ", " << this_bend.atom2->getFullName() 
+								<< ", and " << this_bend.atom3->getFullName() << " (types are " 
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
-								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) << endl;
+								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) << ")" << endl;
 
+							// this stretch will not cause energies or forces
 							values.k = 0.0;
 							values.theta0 = 0.0;
 						}

@@ -1,4 +1,4 @@
-// $Id: charmmTorsion.C,v 1.1 2000/02/06 19:57:54 oliver Exp $
+// $Id: charmmTorsion.C,v 1.2 2000/02/10 10:46:41 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -97,9 +97,6 @@ namespace BALL
 				}
 				
 				use_residue_torsion_list_ = true;
-				Log.info() << "CharmmTorsion::setup: reading torsion (ResidueTorsions)" << endl;
-			}	else {
-				Log.info() << "CharmmTorsion::setup: calculating torsions (all)" << endl;
 			}
 		}
 
@@ -154,7 +151,6 @@ namespace BALL
 										(getForceField()->getUseSelection() == true &&
 										(a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
 									{
-										cout << "TORSION!" << endl;
 										// if we use ResidueTorsions (i.e. a list of torsions for each
 										// residue is specified in the parameter file), we have to check
 										// if to consider this torsion
@@ -217,17 +213,39 @@ namespace BALL
 												}
 											}
 
+											// if we are in a CYS-S residue, all atoms that are in another CYS-S
+											// are prefixed by "="
+											if ((res != 0) && res->hasProperty(Residue::PROPERTY__HAS_SSBOND))
+											{	
+												Residue* other_res = a1->getAncestor(RTTI::getDefault<Residue>());
+												if ((other_res != 0) && (other_res != res) 
+														&& other_res->hasProperty(Residue::PROPERTY__HAS_SSBOND))
+												{
+													atom_name_A = "=" + atom_name_A;
+												}
+												other_res = a3->getAncestor(RTTI::getDefault<Residue>());
+												if ((other_res != 0) && (other_res != res)
+														&& other_res->hasProperty(Residue::PROPERTY__HAS_SSBOND))
+												{
+													atom_name_C = "=" + atom_name_C;
+												}
+												other_res = a4->getAncestor(RTTI::getDefault<Residue>());
+												if ((other_res != 0) && (other_res != res)
+														&& other_res->hasProperty(Residue::PROPERTY__HAS_SSBOND))
+												{
+													atom_name_D = "=" + atom_name_D;
+												}
+											}
+													
 											// check whether the names are known in ResidueTorsions
 											if (res != 0)
 											{
-												if (!residue_torsions_.hasTorsion(res->getName(), atom_name_A, atom_name_B, atom_name_C, atom_name_D))
+												if (!residue_torsions_.hasTorsion(res->getFullName(), atom_name_A, atom_name_B, atom_name_C, atom_name_D))
 												{
-													Log.info() << "No torsion considered for " << res->getName() << " " << atom_name_A 
-														<< "/" << atom_name_B << "/" << atom_name_C << "/" << atom_name_D << endl;
 													continue;
 												}
 											} else {
-												Log.info() << "Cannot identify torsion for " << res->getName() << " " << atom_name_A 
+												Log.warn() << "Cannot identify torsion for (UNKNOWN)" << " " << atom_name_A 
 													<< "/" << atom_name_B << "/" << atom_name_C << "/" << atom_name_D << endl;
 
 												continue;
@@ -246,17 +264,19 @@ namespace BALL
 										tmp.atom3 = a3;
 										tmp.atom4 = a4;
 
+										// retrieve parameters for the torsion
 										bool found = false;
-										if (torsion_parameters_.hasParameters(type_a1, type_a2, type_a3, type_a4)) 
+										if (torsion_parameters_.assignParameters(values, type_a1, type_a2, type_a3, type_a4)) 
 										{
-											torsion_parameters_.assignParameters(values, type_a1, type_a2, type_a3, type_a4);
 											found = true;
-										} else if (torsion_parameters_.hasParameters(Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
+										} 
+										else if (torsion_parameters_.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE)) 
 										{
-											torsion_parameters_.assignParameters(values, Atom::ANY_TYPE, type_a2, type_a3, Atom::ANY_TYPE);
 											found = true;
 										}
-										// decide whether this parameter is 
+
+										// complain about mising parameters or store this torsion
+										// in the torsion_ array
 										if (found) 
 										{
 											for (unsigned char j = 0; j < values.n; j++) 
@@ -264,13 +284,8 @@ namespace BALL
 												tmp.values = values.values[j];
 												torsion_.push_back(tmp);
 											}
-											Log.info() << "created torsion for " 
-												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a1) << "-"
-												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a2) << "-"
-												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a3) << "-"
-												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a4) << endl;
 										} else {
-											Log.level(LogStream::ERROR) << "cannot find torsion parameter for:"
+											Log.warn() << "CharmmTorsion::setup: cannot find torsion parameters for:"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a1) << "-"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a2) << "-"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a3) << "-"

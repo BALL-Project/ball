@@ -1,4 +1,4 @@
-// $Id: charmm.C,v 1.1 2000/02/06 19:57:51 oliver Exp $
+// $Id: charmm.C,v 1.2 2000/02/10 10:46:40 oliver Exp $
 // Molecular Mechanics: Charmm force field class
 
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -38,7 +38,7 @@ namespace BALL
 	const float CharmmFF::Default::VDW_CUTON = 5.0;
 	const float CharmmFF::Default::ELECTROSTATIC_CUTOFF = 15.0;
 	const float CharmmFF::Default::SCALING_ELECTROSTATIC_1_4 = 2.0;
-	const float CharmmFF::Default::SCALING_VDW_1_4 = 2.0;
+	const float CharmmFF::Default::SCALING_VDW_1_4 = 1.0;
   const bool  CharmmFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = false;   
 	const bool	CharmmFF::Default::ASSIGN_CHARGES = true;
 	const bool	CharmmFF::Default::ASSIGN_TYPENAMES = true;
@@ -282,6 +282,28 @@ namespace BALL
 		}
 	}
 
+	float CharmmFF::getImproperTorsionEnergy() const
+	{
+		ForceFieldComponent* component = getComponent("CHARMM ImproperTorsion");
+		if (component != 0)
+		{
+			return component->getEnergy();
+		} else {
+			return 0;
+		}
+	}
+
+	float CharmmFF::getProperTorsionEnergy() const
+	{
+		ForceFieldComponent* component = getComponent("CHARMM Torsion");
+		if (component != 0)
+		{
+			return component->getEnergy();
+		} else {
+			return 0;
+		}
+	}
+
 	float CharmmFF::getTorsionEnergy() const
 	{
 		float energy = 0;
@@ -292,7 +314,7 @@ namespace BALL
 		{
 			energy += component->getEnergy();
 		} 
-		// adn add the energy of the improper torsions
+		// and add the energy of the improper torsions
 		component = getComponent("CHARMM ImproperTorsion");
 		if (component != 0)
 		{

@@ -1,10 +1,11 @@
-// $Id: charmmNonBonded.C,v 1.1 2000/02/06 19:57:53 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.2 2000/02/10 10:46:40 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/PSE.h>
+
 
 using namespace std;
 
@@ -64,13 +65,15 @@ namespace BALL
 	// The function return value 0 if the number of atoms is so small that the brute force all against
 	// all comparison is the most efficient way. Otherwise it returns 1. 
 
-	int	CharmmNonBonded::determineMethodOfAtomPairGeneration()
+	MolmecSupport::PairListAlgorithmType	
+		CharmmNonBonded::determineMethodOfAtomPairGeneration()
 	{
-		int algorithm_type = 1;
+		MolmecSupport::PairListAlgorithmType algorithm_type = MolmecSupport::HASH_GRID;
 		if (force_field_->getAtoms().size() < 200) 
 		{ 
-			algorithm_type = 0;
+			algorithm_type = MolmecSupport::BRUTE_FORCE;
 		} 
+
 		return algorithm_type;
 	}
 
@@ -108,20 +111,20 @@ namespace BALL
 		getForceField()->options.setDefaultReal(CharmmFF::Option::SCALING_VDW_1_4,CharmmFF::Default::SCALING_VDW_1_4);
 		scaling_vdw_1_4_ = 1 / getForceField()->options.getReal(CharmmFF::Option::SCALING_VDW_1_4);
 
-  		// set the option for using a constant dielectric constant (default) or
+		// set the option for using a constant dielectric constant (default) or
 		// or distance dependent one 
-		getForceField()->options.setDefaultBool( CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC,
-                                               CharmmFF::Default::DISTANCE_DEPENDENT_DIELECTRIC);
+		getForceField()->options.setDefaultBool
+			(CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC,
+       CharmmFF::Default::DISTANCE_DEPENDENT_DIELECTRIC);
 
-		use_dist_depend_dielectric_ = getForceField()->options.getBool(
-                                                   CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC);
+		use_dist_depend_dielectric_ = getForceField()->options.getBool
+			(CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC);
 
 		// set the option for using solvation energy or not
 		getForceField()->options.setDefaultBool
 			(CharmmFF::Option::USE_EEF1, CharmmFF::Default::USE_EEF1);
 		use_solvation_component_ = getForceField()->options.getBool
 			(CharmmFF::Option::USE_EEF1);
-		Log.info() << "use_solvation_component = " << use_solvation_component_ << endl;
 
 		// extract the Lennard-Jones parameters
 		CharmmFF* charmm_force_field = dynamic_cast<CharmmFF*>(force_field_);
@@ -137,21 +140,60 @@ namespace BALL
 
 			if (result == false) 
 			{	
-				Log.error() << "cannot find section LennardJones" << endl;
+				Log.error() << "CharmmNonBonded::setup: cannot find section LennardJones" << endl;
 				return false;
+			}
+
+			// read 1-4 lennard jones parameters
+			result = van_der_waals_parameters_14_.extractSection(getForceField()->getParameters(), "LennardJones14");
+
+			if (result == false) 
+			{	
+				Log.error() << "CharmmNonBonded::setup: cannot find section LennardJones14" << endl;
+				return false;
+			}
+
+			// check for options defined in the nonbonded section
+			
+			// the cut off for the pair lists
+			if (van_der_waals_parameters_.options.has("CUTNB"))
+			{    
+				cut_off_ = van_der_waals_parameters_.options.getReal("CUTNB");
+			}
+
+			// the cut on for the switch fct.
+			if (van_der_waals_parameters_.options.has("CTONNB"))
+			{
+				cut_on_vdw_ = van_der_waals_parameters_.options.getReal("CTONNB");
+			}
+			
+			// the cut off for the switch fct.
+			if (van_der_waals_parameters_.options.has("CTOFNB"))
+			{
+				cut_off_electrostatic_ = van_der_waals_parameters_.options.getReal("CTOFNB");
+				cut_off_vdw_ = cut_off_electrostatic_;
+			}
+
+			// electrostatic 1-4 scaling factor
+			if (van_der_waals_parameters_.options.has("E14FAC"))
+			{
+				scaling_electrostatic_1_4_ = van_der_waals_parameters_.options.getReal("E14FAC");
 			}
 		}
 
-		Log.info() << "setup: use_solvation_component_ = " << use_solvation_component_ << endl;
 		// extract the solvation parameters if use_solvation_component_ true
 		if (!has_initialized_parameters && use_solvation_component_)
 		{
-			bool result = solvation_parameters_.extractSection(getForceField()->getParameters(), "EEF1Solvation");
-
-			if (result == false)
+			use_solvation_component_ =  getForceField()->getParameters().getParameterFile().hasSection("EEF1Solvation");
+			if (use_solvation_component_)
 			{
-				Log.error() << "cannot find section Solvation" << endl;
-				return false;
+				bool result = solvation_parameters_.extractSection(getForceField()->getParameters(), "EEF1Solvation");
+
+				if (result == false)
+				{
+					Log.error() << "CHarmmNonBonded::setup: cannot setup EEF1 solvation component." << endl;
+					return false;
+				}
 			}
 		}
 
@@ -163,13 +205,14 @@ namespace BALL
 		Size number_of_non_bonded_interactions = MolmecSupport::calculateNonBondedAtomPairs
 																								(atom_pair_vector, getForceField()->getAtoms(), 
 																								 getForceField()->periodic_boundary.getBox(),
-																								 cut_off_, force_field_->periodic_boundary.isEnabled(), algorithm_type_); 
+																								 cut_off_, force_field_->periodic_boundary.isEnabled(), 
+																								 algorithm_type_); 
 
 		// Reserve space for non-bonded vector
 		non_bonded_.reserve(number_of_non_bonded_interactions + (Size)(number_of_non_bonded_interactions / 5));
 
 		// Build the vector "non_bonded_" with the atom pairs and parameters
-		buildVectorOfNonBondedAtomPairs(atom_pair_vector, van_der_waals_parameters_);
+		buildVectorOfNonBondedAtomPairs(atom_pair_vector);
 
 		// initialize vector of parameter structures
 
@@ -177,11 +220,12 @@ namespace BALL
 		{
 			solvation_.resize(getForceField()->getParameters().getAtomTypes().getNumberOfTypes());
 
-			for (Atom::Type i = 0; i < (Atom::Type)getForceField()->getParameters().getAtomTypes().getNumberOfTypes();i++)
+			for (Atom::Type i = 1; i < (Atom::Type)getForceField()->getParameters().getAtomTypes().getNumberOfTypes(); i++)
 			{
-				if (solvation_parameters_.hasParameters(i)) 
+				if (!solvation_parameters_.assignParameters(solvation_[i], i)) 
 				{
-					solvation_parameters_.assignParameters(solvation_[i], i);				
+					Log.warn() << "CharmmNonBonded::setup: no solvation parameters for atom type "
+											<< i << " (" << getForceField()->getParameters().getAtomTypes().getTypeName(i) << ")" << endl;
 				}
 			} 
 		}
@@ -193,8 +237,7 @@ namespace BALL
 	// Build a vector of non-bonded atom pairs with the vdw parameters 
 	// The vector starts with 1-4 interactions
 	void CharmmNonBonded::buildVectorOfNonBondedAtomPairs
-		(const vector< pair<Atom*, Atom*> >& atom_vector,
-		 const FFPSLennardJones& lennard_jones)
+		(const vector< pair<Atom*, Atom*> >& atom_vector)
 	{
 		// bool vector for storing torsion information
 		vector<bool> is_torsion;
@@ -228,15 +271,38 @@ namespace BALL
 				tmp.atom1 = atom1;
 				tmp.atom2 = atom2;
 
-				if (lennard_jones.hasParameters(type_atom1, type_atom2)) 
+				if (!van_der_waals_parameters_14_.assignParameters(tmp.values, type_atom1, type_atom2))
 				{
-					lennard_jones.assignParameters(tmp.values, type_atom1, type_atom2);				
-				} else {
-					Log.error() << "cannot find vdw parameters for:"
-						<< atom1->getTypeName() << "-" << atom2->getTypeName() << endl;
+					Log.info() << "cannot find 1-4 parameter for " << atom1->getTypeName() << "/" << atom2->getTypeName() << endl;
+					if (!van_der_waals_parameters_.assignParameters(tmp.values, type_atom1, type_atom2))
+					{
+						Log.error() << "cannot find vdw parameters for:"
+												<< atom1->getTypeName() << "-" << atom2->getTypeName() << endl;
+						tmp.values.A = 0;
+						tmp.values.B = 0;
+					}
+				}
+				
+				// nasty: check for diagonal 1-4 interactions in sex membered rings
+				// (PHE/TYR) - here the interaction is omitted
+				Residue* res1 = atom1->getAncestor(RTTI::getDefault<Residue>());
+				Residue* res2 = atom2->getAncestor(RTTI::getDefault<Residue>());
+				if (res1 == res2 && res1 != 0 && res2 != 0
+						&& (res1->getName() == "TYR" || res1->getName() == "PHE")
+						&& (res2->getName() == "TYR" || res2->getName() == "PHE")
+						&& ((atom1->getName() == "CG" && atom2->getName() == "CZ")
+								|| (atom1->getName() == "CZ" && atom2->getName() == "CG")
+								|| (atom1->getName() == "CD1" && atom2->getName() == "CE2")
+								|| (atom1->getName() == "CE2" && atom2->getName() == "CD1")
+								|| (atom1->getName() == "CD2" && atom2->getName() == "CE1")
+								|| (atom1->getName() == "CE1" && atom2->getName() == "CD2")))
+				{
+					// OK - we found a PHE/TYR ring diagonal interaction. 
+					// set its parameters to zero
 					tmp.values.A = 0;
 					tmp.values.B = 0;
 				}
+				
 
 				non_bonded_.push_back(tmp);
 			}
@@ -260,15 +326,13 @@ namespace BALL
 				tmp.atom1 = atom1;
 				tmp.atom2 = atom2;
 
-				if (lennard_jones.hasParameters(type_atom1,type_atom2)) 
+				if (!van_der_waals_parameters_.assignParameters(tmp.values, type_atom1,type_atom2)) 
 				{
-					lennard_jones.assignParameters(tmp.values, type_atom1, type_atom2);
-				} else {
-					Log.error() << "cannot find Lennard Jones parameters for:"
+					Log.error() << "CharmmNonBonded::setup: cannot find Lennard Jones parameters for:"
 						<< getForceField()->getParameters().getAtomTypes().getTypeName(type_atom1) << "-"
-						<< getForceField()->getParameters().getAtomTypes().getTypeName(type_atom2) << endl;
-					tmp.atom1 = atom1;
-					tmp.atom2 = atom2;
+						<< getForceField()->getParameters().getAtomTypes().getTypeName(type_atom2) 
+						<< " (" << atom1->getFullName() << "-" << atom2->getFullName() << ")" << endl;
+
 					tmp.values.A = 0;
 					tmp.values.B = 0;
 				}
@@ -276,7 +340,6 @@ namespace BALL
 				non_bonded_.push_back(tmp);
 			}
 		}
-
 	}
 
 
@@ -358,7 +421,8 @@ namespace BALL
 			}
 
 			electrostatic_energy += tmp_energy;
-				
+
+
 			// calculate vdw energy
 			if (distance_2 <= cut_off_vdw_2) 
 			{
@@ -375,19 +439,15 @@ namespace BALL
 				}
 					 
 				vdw_energy += tmp_energy;
+					
 			}
 		} 
 
-		Log.info() << "solvation: " << use_solvation << endl;
 		// Calculate the solvation energy contribution
 		if (use_solvation && it->atom1->getElement() !=  PSE[Element::H] && it->atom2->getElement() !=  PSE[Element::H])
 		{
-			Log.info() << "Atoms: " << it->atom1->getName() << "/" << it->atom2->getName() << endl;
 			FFPSCharmmEEF1::Values a1 = solvation[it->atom1->getType()];
 			FFPSCharmmEEF1::Values a2 = solvation[it->atom2->getType()];
-
-			Log.info() << "  parm a1: r_min = " << a1.r_min << "   sig_w = " << a1.sig_w << "  V = " << a1.V << "  dG_ref = " << a1.dG_ref << "   dG_free = " << a1.dG_free << endl;
-			Log.info() << "  parm a2: r_min = " << a2.r_min << "   sig_w = " << a2.sig_w << "  V = " << a2.V << "  dG_ref = " << a2.dG_ref << "   dG_free = " << a2.dG_free << endl;
 
 			float factor = BALL::Constants::PI * sqrt(BALL::Constants::PI) * distance_2;
 			float distance = sqrt(distance_2);
@@ -397,14 +457,12 @@ namespace BALL
 			factor_exp *= factor_exp;
 
 			solvation_energy -= 0.5 * a2.V * a1.dG_free * exp(-factor_exp) / (a1.sig_w * factor);
-			Log.info() << "  solvation A->B: " << -0.5 * a2.V * a1.dG_free * exp(-factor_exp) / (a1.sig_w * factor) << endl;
 
 			// contribution of atom2
 			factor_exp = (distance - a2.r_min) / a2.sig_w;
 			factor_exp *= factor_exp;
 			
 			solvation_energy -= 0.5 * a1.V * a2.dG_free * exp(-factor_exp) / (a2.sig_w * factor);
-			Log.info() << "  solvation B->A: " << -0.5 * a1.V * a2.dG_free * exp(-factor_exp) / (a2.sig_w * factor) << endl;
 		}
 	} // end  of function calculateVdWAndElectrostaticEnergy() 
 
@@ -432,7 +490,7 @@ namespace BALL
 		Vector3 direction = it->atom1->getPosition() - it->atom2->getPosition(); 
 
 		// choose the nearest image if period boundary is enabled 
-		if(use_periodic_boundary == true)
+		if (use_periodic_boundary == true)
 		{
 			calculateMinimumImage(direction,period,half_period); 
 		}
@@ -441,22 +499,22 @@ namespace BALL
 
 		if (distance_2 > 0 && distance_2 <= cut_off_electrostatic_2) 
 		{ 
-			inverse_distance_2 = 1/distance_2;
+			inverse_distance_2 = 1 / distance_2;
 			inverse_distance = sqrt(inverse_distance_2);
 
 			// distinguish between constant and distance dependent dielectric 
-			if(use_dist_depend)
+			if (use_dist_depend)	
 			{
 				// distance dependent dielectric:  epsilon = 4 * epsilon_0 * r_ij
 				// factor 4 reduces to 2 because of derivative 
-				factor = it->atom1->getCharge() * it->atom2->getCharge() * inverse_distance_2 * e_scaling_factor * 2.0 ;
+				factor = it->atom1->getCharge() * it->atom2->getCharge() * inverse_distance_2 * inverse_distance_2 * e_scaling_factor * 2.0 ;
 			} else {
 				// constant dielectric 
-				factor = it->atom1->getCharge() * it->atom2->getCharge() * inverse_distance * e_scaling_factor;
+				factor = it->atom1->getCharge() * it->atom2->getCharge() * inverse_distance_2 * inverse_distance * e_scaling_factor;
 			}
 
 			// calculate the forces caused by the vdw interactions
-			if ( distance_2 <= cut_off_vdw_2) 
+			if (distance_2 <= cut_off_vdw_2) 
 			{
 				float inverse_distance_4 = inverse_distance_2 * inverse_distance_2;
 				float inverse_distance_8 = inverse_distance_4 * inverse_distance_4;
@@ -506,7 +564,13 @@ namespace BALL
 		
 				tmp +=  a1.V * a2.dG_free * exp(-factor_exp_2) * ((factor_exp/a2.sig_w) + inverse_distance) / a2.sig_w;
 
-				factor -= tmp / (BALL::Constants::PI * sqrt(BALL::Constants::PI) * distance_2 * distance);
+				// units:  conversion from kJ/mol/A -> J/m (N)
+				//   AVOGADRO: J/mol -> J
+				//   1e3:      kJ -> J
+        //   1e10:     Angstrom -> m
+				tmp *= (1e13 / Constants::AVOGADRO);
+				
+				factor -= tmp / (Constants::PI * sqrt(Constants::PI) * distance_2 * distance);
 
 			}
 		} 

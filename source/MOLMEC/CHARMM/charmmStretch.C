@@ -1,4 +1,4 @@
-// $Id: charmmStretch.C,v 1.1 2000/02/06 19:57:53 oliver Exp $
+// $Id: charmmStretch.C,v 1.2 2000/02/10 10:46:41 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmStretch.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -64,7 +64,7 @@ namespace BALL
 	{
 		if (getForceField() == 0) 
 		{
-			Log.level(LogStream::ERROR) << "CharmmStretch::setup(): component not bound to force field" << endl;
+			Log.error() << "CharmmStretch::setup(): component not bound to force field" << endl;
 			return false;
 		}
 
@@ -109,7 +109,7 @@ namespace BALL
 
 			if (result == false) 
 			{
-				Log.level(LogStream::ERROR) << "cannot find section QuadraticBondStretch" << endl;
+				Log.error() << "cannot find section QuadraticBondStretch" << endl;
 				return false;
 			}
 		}
@@ -139,25 +139,31 @@ namespace BALL
 						stretch_[i].atom1 = bond.getFirstAtom();
 						stretch_[i].atom2 = bond.getSecondAtom();
 			
-						// Pay attention to the symmetric database input
-						if ( stretch_parameters_.hasParameters(atom_type_A, atom_type_B)) {
-							stretch_parameters_.assignParameters(values, atom_type_A, atom_type_B);
-						} else if (stretch_parameters_.hasParameters(atom_type_A, Atom::ANY_TYPE)) {
-							stretch_parameters_.assignParameters(values, atom_type_A, Atom::ANY_TYPE);
-						} else if (stretch_parameters_.hasParameters(Atom::ANY_TYPE, atom_type_B)) {
-							stretch_parameters_.assignParameters(values, Atom::ANY_TYPE, atom_type_B); 
-						} else if (stretch_parameters_.hasParameters(Atom::ANY_TYPE, Atom::ANY_TYPE)) {
-							stretch_parameters_.assignParameters(values,Atom::ANY_TYPE, Atom::ANY_TYPE);
-						} else {
-							Log.level(LogStream::ERROR) << "cannot find stretch parameters for atom types " 
-								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_A) << "-" 
-								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_B) << endl;
-
-							// we don't want to get any force or energy component
-							// from this stretch
-							values.k = 0.0;
-							values.r0 = 1.0;	
+						// when retrieving the parameters, order does not matter
+						// first, we try an exact match, than we try wildcards
+						if (!stretch_parameters_.assignParameters(values, atom_type_A, atom_type_B)) 
+						{
+							if (!stretch_parameters_.assignParameters(values, atom_type_A, Atom::ANY_TYPE)) 
+							{
+								if (!stretch_parameters_.assignParameters(values, Atom::ANY_TYPE, atom_type_B))
+								{
+									if (!stretch_parameters_.assignParameters(values, Atom::ANY_TYPE, Atom::ANY_TYPE))
+									{
+										Log.warn() << "cannot find stretch parameters for atoms " 
+															 << stretch_[i].atom1->getFullName() << " and " 
+															 << stretch_[i].atom2->getFullName() << " (types are "
+															 << force_field_->getParameters().getAtomTypes().getTypeName(atom_type_A) << "-" 
+															 << force_field_->getParameters().getAtomTypes().getTypeName(atom_type_B) << ")" << endl;
+										// we don`t want to get any force or energy component
+										// from this stretch
+										values.k = 0.0;
+										values.r0 = 1.0;	
+									}
+								}
+							}
 						}
+
+						// store the stretch parameters
 						stretch_[i].values = values;
 						i++;
 					}
