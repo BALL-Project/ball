@@ -1,11 +1,12 @@
-// $Id: genericPDBFile.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: genericPDBFile.C,v 1.2 1999/10/30 12:53:35 oliver Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
 #include <ctype.h>
 #include <stdarg.h>
 
-namespace BALL {
+namespace BALL 
+{
 
 	const PDB::RecordTypeFormat
 	GenericPDBFile::record_type_format_[] =
@@ -132,9 +133,7 @@ namespace BALL {
 			readFirstRecord(false);
 		}
 		
-		for (;
-				 good();
-				 readNextRecord(false))
+		for (;good(); readNextRecord(false))
 		{
 			if (current_record_type_ == record_type)
 			{
@@ -142,7 +141,7 @@ namespace BALL {
 			}
 		}
 
-		seekg(old_pos, ios::beg);
+		seekg(old_pos);
 
 		return size;
 	}
@@ -166,14 +165,12 @@ namespace BALL {
 			readFirstRecord(false);
 		}
 		
-		for (;
-				 good();
-				 readNextRecord(false))
+		for (; good(); readNextRecord(false))
 		{
 			++size;
 		}
 
-		seekg(old_pos, ios::beg);
+		seekg(old_pos);
 
 		return size;
 	}
@@ -737,11 +734,10 @@ namespace BALL {
 		bool has_format;
 		streampos old_pos = tellg();
 
-		has_format
-			= (bool)(readFirstRecord(false) == true
-				 && current_record_type_ != PDB::RECORD_TYPE__UNKNOWN);
+		has_format= (bool)(readFirstRecord(false) == true
+											 && current_record_type_ != PDB::RECORD_TYPE__UNKNOWN);
 
-		seekg(old_pos, ios::beg);
+		seekg(old_pos);
 
 		return has_format;
 	}

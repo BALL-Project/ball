@@ -1,52 +1,60 @@
-// $Id: file.C,v 1.2 1999/08/31 22:01:19 oliver Exp $
+// $Id: file.C,v 1.3 1999/10/30 12:53:37 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 
 
 #include <math.h>
 
-namespace BALL {
+using std::ios;
+using std::fstream;
+using std::ifstream;
+using std::ofstream;
+using std::streampos;
+using std::endl;
+
+namespace BALL 
+{
 
 	File::ActionManager File::action_manager_;
-	unsigned char File::protocol_ability_ =   BALL_BIT(File::PROTOCOL__FILE)
-																										 | BALL_BIT(File::PROTOCOL__EXEC)
-																										 | BALL_BIT(File::PROTOCOL__ACTION);
+	unsigned char File::protocol_ability_ = BALL_BIT(File::PROTOCOL__FILE)
+																									 | BALL_BIT(File::PROTOCOL__EXEC)
+																									 | BALL_BIT(File::PROTOCOL__ACTION);
 
 
 
-	File::File(void)
+	File::File()
 		:	fstream(),
 			name_(),
 			original_name_(),
-			open_mode_(File::OPEN_MODE__INVALID),
+			open_mode_(ios::in),
 			is_open_(false),
 			is_temporary_(false)
 	{
 	}
 
-	File::File(const String& name, int open_mode)
+	File::File(const String& name, File::OpenMode open_mode)
 		:	fstream(),
 			name_(),
 			original_name_(),
-			open_mode_(File::OPEN_MODE__INVALID),
+			open_mode_(ios::in),
 			is_open_(false),
 			is_temporary_(false)
 	{
 		open(name, open_mode);
 	}
 
-	File::~File(void)
+	File::~File()
 	{
 		close();
 	}
 
-	bool File::open(const String& name, int open_mode)
+	bool File::open(const String& name, File::OpenMode open_mode)
 	{
 		close();
 		
 		original_name_ = name_ = name;
 		
-		if (open_mode == ios::in && name_.hasPrefix("exec:") == true)
+		if ((open_mode == ios::in) && (name_.hasPrefix("exec:") == true))
 		{
 			if (BALL_BIT_IS_CLEARED(protocol_ability_, File::PROTOCOL__EXEC))
 			{
@@ -107,12 +115,12 @@ namespace BALL {
 		fstream::open(name_.c_str(), open_mode);
 
 		open_mode_ = open_mode;
-		is_open_ = true;
+		is_open_ = is_open();
 
-		return (bool)fstream::good();
+		return good();
 	}
 
-	bool File::reopen(void)
+	bool File::reopen()
 	{
 		close();
 
@@ -159,7 +167,7 @@ namespace BALL {
 		}
 	}
 
-	void File::close(void)
+	void File::close()
 	{
 		if (is_open_ == true)
 		{
@@ -176,12 +184,12 @@ namespace BALL {
 		}
 	}
 
-	Size File::getSize(void) const
+	Size File::getSize() const
 	{
-		streampos old_position = ((fstream *)this)->tellg();
-		((fstream *)this)->seekg(0, ios::end);
-		Size size = (Size)(((fstream *)this)->tellg() - old_position);
-		((fstream *)this)->seekg(old_position, ios::beg);
+		streampos old_position = ((fstream*)this)->tellg();
+		((fstream*)this)->seekg(0, ios::end);
+		Size size = (Size)(((fstream*)this)->tellg() - old_position);
+		((fstream*)this)->seekg(old_position);
 		
 		return size;
 	}

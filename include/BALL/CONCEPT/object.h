@@ -1,4 +1,4 @@
-// $Id: object.h,v 1.1 1999/08/26 07:53:16 oliver Exp $ 
+// $Id: object.h,v 1.2 1999/10/30 12:53:21 oliver Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
@@ -15,7 +15,8 @@
 #	include <BALL/CONCEPT/reverseBidirectionalIterator.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**
 	*/
@@ -40,7 +41,7 @@ namespace BALL {
 		Object();
  
 		/// Copy constructor
-		Object(const Object &object, bool deep = true);
+		Object(const Object& object, bool deep = true);
  
 		/// Destructor
 		virtual ~Object();
@@ -71,41 +72,41 @@ namespace BALL {
 		/**	@name Comparison operators */
 		//@{
 		///
-		virtual bool operator == (const Object &object) const;
+		virtual bool operator == (const Object& object) const;
 
 		///
-		bool operator != (const Object &object) const;
+		bool operator != (const Object& object) const;
 
 		///
-		virtual bool operator < (const Object &object) const;
+		virtual bool operator < (const Object& object) const;
 
 		///
-		bool operator <= (const Object &object) const;
+		bool operator <= (const Object& object) const;
 
 		///
-		bool operator >= (const Object &object) const;
+		bool operator >= (const Object& object) const;
 
 		///
-		bool operator > (const Object &object) const;
+		bool operator > (const Object& object) const;
 
 		///
-		int compare(const Object &object) const;
+		int compare(const Object& object) const;
 		//@}
 
 		/**	@name	I/O operations */
 		//@{
 
 		///
-		virtual void read(istream &s);
+		virtual void read(::std::istream& s);
 
 		///
-		virtual void write(ostream &s) const;
+		virtual void write(::std::ostream& s) const;
 
 		///
-		friend istream &operator >> (istream &s, Object &object);
+		friend ::std::istream& operator >> (::std::istream& s, Object& object);
 
 		///
-		friend ostream &operator << (ostream &s, const Object &object);
+		friend ::std::ostream& operator << (::std::ostream& s, const Object& object);
 		//@}
 	
 		
@@ -115,18 +116,18 @@ namespace BALL {
 		virtual bool isValid() const;
 
 		///
-		virtual void dump(ostream &s = cout, unsigned long depth = 0) const;
+		virtual void dump(::std::ostream& s = std::cout, unsigned long depth = 0) const;
 		//@}
 
 #		ifdef BALL_SUPPORT_OBJECT_MANAGER
 
-		Object *getPrevious();
+		Object* getPrevious();
 		
-		const Object *getPrevious() const;
+		const Object* getPrevious() const;
 		
-		Object *getNext();
+		Object* getNext();
 		
-		const Object *getNext() const;
+		const Object* getNext() const;
 
 #		endif // BALL_SUPPORT_OBJECT_MANAGER
 		
@@ -157,10 +158,10 @@ namespace BALL {
 			//@{
 
 			///
-			static void insert(Object &object);
+			static void insert(Object& object);
 		
 			///
-			static void remove(Object &object);
+			static void remove(Object& object);
 			//@}
 		
 			/**	@name	Obejct Statistics */
@@ -198,7 +199,7 @@ namespace BALL {
 			static bool isValid();
 
 			///
-			static void dump(ostream &s = cout, unsigned long depth = 0);
+			static void dump(::std::ostream& s = std::cout, unsigned long depth = 0);
 			//@}
 
 			typedef Object* IteratorPosition;
@@ -215,7 +216,7 @@ namespace BALL {
 				{
 				}
 			
-				IteratorTraits_(const ObjectManager &objectManager)
+				IteratorTraits_(const ObjectManager& objectManager)
 					:	bound_((ObjectManager *)&objectManager),
 						position_(0)
 				{
@@ -227,7 +228,7 @@ namespace BALL {
 				{
 				}
 			
-				IteratorTraits_ &operator = (const IteratorTraits_ &traits)
+				IteratorTraits_& operator = (const IteratorTraits_& traits)
 				{
 					bound_ = traits.bound_;
 					position_ = traits.position_;
@@ -249,22 +250,22 @@ namespace BALL {
 					return (bool)(bound_ == 0);
 				}
 			
-				IteratorPosition &getPosition()
+				IteratorPosition& getPosition()
 				{	
 					return position_;
 				}
 
-				const IteratorPosition &getPosition() const
+				const IteratorPosition& getPosition() const
 				{
 					return position_;
 				}
 
-				bool operator == (const IteratorTraits_ &traits) const
+				bool operator == (const IteratorTraits_& traits) const
 				{
 					return (bool)(position_ == traits.position_);
 				}
 
-				bool operator !=(const IteratorTraits_ &traits) const
+				bool operator !=(const IteratorTraits_& traits) const
 				{
 					return (bool)(position_ != traits.position_);
 				}
@@ -300,12 +301,12 @@ namespace BALL {
 					return (bool)(position_ == 0);
 				}
 
-				Object &getData()
+				Object& getData()
 				{
 					return *position_;
 				}
 
-				const Object &getData() const
+				const Object& getData() const
 				{
 					return *position_;
 				}

@@ -1,4 +1,4 @@
-// $Id: bidirectionalManipulator.h,v 1.1 1999/08/26 07:53:16 oliver Exp $
+// $Id: bidirectionalManipulator.h,v 1.2 1999/10/30 12:53:20 oliver Exp $
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALMANIPULATOR_H
 #define BALL_CONCEPT_BIDIRECTIONALMANIPULATOR_H
@@ -61,7 +61,7 @@ namespace BALL {
 		*/
 		static void setIterators
 			(const Traits& traits,
-			 const BaseIterator<Container, DataType, Position, Traits>::Manipulation manipulation)
+			 const typename BaseIterator<Container, DataType, Position, Traits>::Manipulation manipulation)
 		{
 			const Container* container = traits.getContainer();
 
@@ -124,7 +124,7 @@ namespace BALL {
 		*/
 		static void remove
 			(Traits traits,
-			 const BaseIterator<Container, DataType, Position, Traits>::Manipulation manipulation 
+			 const typename BaseIterator<Container, DataType, Position, Traits>::Manipulation manipulation 
 						= (BaseIterator<Container, DataType, Position, Traits>::INVALIDATE))
 		{
 			if (manipulation != BaseIterator<Container, DataType, Position, Traits>::STAY)
@@ -136,7 +136,7 @@ namespace BALL {
 		/**
 		*/
 		void remove
-			(const BaseIterator<Container, DataType, Position, Traits>::Manipulation manipulation 
+			(const typename BaseIterator<Container, DataType, Position, Traits>::Manipulation manipulation 
 						= (BaseIterator<Container, DataType, Position, Traits>::INVALIDATE))
 		{
 			remove(*traits_, manipulation);

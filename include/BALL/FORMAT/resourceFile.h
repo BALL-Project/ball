@@ -1,7 +1,7 @@
-// $Id: resourceFile.h,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: resourceFile.h,v 1.2 1999/10/30 12:53:25 oliver Exp $
 
-#ifndef BALL_FORMAT_RESFILE_H
-#define BALL_FORMAT_RESFILE_H
+#ifndef BALL_FORMAT_RESOURCEFILE_H
+#define BALL_FORMAT_RESOURCEFILE_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -13,6 +13,10 @@
 
 #ifndef BALL_CONCEPT_VISITOR_H
 #	include <BALL/CONCEPT/visitor.h>
+#endif
+
+#ifndef BALL_CONCEPT_AUTODELETABLE_H
+#	include <BALL/CONCEPT/autoDeletable.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -41,6 +45,7 @@ namespace BALL
 	/**	Resource entry class
 	*/	
 	class ResourceEntry
+		:	public AutoDeletable
 	{
 		public:
 		
@@ -61,13 +66,29 @@ namespace BALL
 		*/
 		ResourceEntry(const ResourceEntry& entry, bool deep = true);
 
-		/**	
+		/**	Create a new resource entry.
+				An entry with {\tt key} and {\tt value} is created. If {\tt parent} is given,
+				the new entries parent pointer is set to this value. Take care: the parents
+				child array is {\em not} updated - so use this option only if you really know 
+				what you are doing. To keep this data consistent, use \Ref{insertChild}.
+				@param	key the key of the new entry
+				@param	value the value of the new entry
+				@param	parent the content of the new entry's parent pointer
 		*/
 		ResourceEntry(const String& key, const String& value, ResourceEntry* parent = 0);
 
 		/**	
 		*/
-		virtual ~ResourceEntry(void);
+		virtual ~ResourceEntry();
+
+		/**	
+		*/
+		void clear();
+
+		/**	
+		*/
+		void destroy();
+
 		//@}
 
 		/**	@name	Assignment
@@ -99,27 +120,27 @@ namespace BALL
 
 		/**	
 		*/
-		ResourceEntry& getRoot(void);
+		ResourceEntry& getRoot();
 
 		/**	
 		*/
-		const ResourceEntry& getRoot(void) const;
+		const ResourceEntry& getRoot() const;
 
 		/**	
 		*/
-		ResourceEntry* getParent(void);
+		ResourceEntry* getParent();
 
 		/**	
 		*/
-		const ResourceEntry* getParent(void) const;
+		const ResourceEntry* getParent() const;
 
 		/**	
 		*/
-		ResourceEntry* getChild(Index index);
+		ResourceEntry* getChild(Position index);
 
 		/**	
 		*/
-		const ResourceEntry* getChild(Index index) const;
+		const ResourceEntry* getChild(Position index) const;
 
 		/**	
 		*/
@@ -131,7 +152,7 @@ namespace BALL
 
 		/**	
 		*/
-		const String& getKey(void) const;
+		const String& getKey() const;
 
 		/**	
 		*/
@@ -139,31 +160,31 @@ namespace BALL
 
 		/**	
 		*/
-		String& getValue(void);
+		String& getValue();
 
 		/**	
 		*/
-		const String& getValue(void) const;
+		const String& getValue() const;
 
 		/**	
 		*/
-		String getPath(void) const;
+		String getPath() const;
 
 		/**	
 		*/
-		Size countChildren(void) const;
+		Size countChildren() const;
 
 		/**	
 		*/
-		Size countDescendants(void) const;
+		Size countDescendants() const;
 
 		/**	
 		*/
-		Size getSize(void) const;
+		Size getSize() const;
 	
 		/**	
 		*/
-		Size getDepth(void) const;
+		Size getDepth() const;
 	
 		/**	
 		*/
@@ -187,19 +208,11 @@ namespace BALL
 
 		/**	
 		*/
-		bool removeChild(const String& key, ResourceEntry **removed = 0);
+		bool removeChild(const String& key, ResourceEntry** removed = 0);
 
 		/**	
 		*/
 		bool removeKey(const String& key_path);
-
-		/**	
-		*/
-		void clear(void);
-
-		/**	
-		*/
-		void destroy(void);
 
 		/**	
 		*/
@@ -225,9 +238,9 @@ namespace BALL
 		*/
 		const ResourceEntry* findEntry(const String& key) const;
 
-		/**	
+		/**	@name	Attributes
 		*/
-		void host(Visitor<ResourceEntry>& visitor);
+		//@{
 
 		/**	
 		*/
@@ -235,7 +248,7 @@ namespace BALL
 
 		/**	
 		*/
-		bool isEmpty(void) const;
+		bool isEmpty() const;
 
 		/**	
 		*/
@@ -259,15 +272,29 @@ namespace BALL
 	
 		/**	
 		*/
-		bool isRoot(void) const;
+		bool isRoot() const;
+
+		//@}
+
+		/**	@name	Debugging and Diagnostics
+		*/
+		//@{
+		/**	
+		*/
+		bool isValid() const;
+		/**	
+		*/
+		void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
+		//@}
+
+
+		/**	@name	Processor and Visitor related methods
+		*/
+		//@{
 
 		/**	
 		*/
-		bool isValid(void) const;
-
-		/**	
-		*/
-		void dump(ostream& s = cout, unsigned long depth = 0) const;
+		void host(Visitor<ResourceEntry>& visitor);
 
 		/**	
 		*/
@@ -286,7 +313,7 @@ namespace BALL
 
 			BALL_CREATE(IteratorTraits_)
 
-			IteratorTraits_(void)
+			IteratorTraits_()
 				:	bound_(0),
 					position_(0),
 					stack_index_(new Index[1]),
@@ -315,7 +342,7 @@ namespace BALL
 					stack_index_[index] = traits.stack_index_[index];
 			}
 
-			virtual ~IteratorTraits_(void)
+			virtual ~IteratorTraits_()
 			{
 				delete [] stack_index_;
 			}
@@ -337,89 +364,88 @@ namespace BALL
 				return *this;
 			}
 
-			ResourceEntry* getContainer(void)
+			ResourceEntry* getContainer()
 			{
 				return bound_;
 			}
 			
-			const ResourceEntry* getContainer(void) const
+			const ResourceEntry* getContainer() const
 			{
 				return bound_;
 			}
 			
-			bool isSingular(void) const
+			bool isSingular() const
 			{
 				return (bool)(bound_ == 0);
 			}
 			
-			IteratorPosition &getPosition(void)
+			IteratorPosition& getPosition()
 			{
 				return position_;
 			}
 
-			const IteratorPosition &getPosition(void) const
+			const IteratorPosition& getPosition() const
 			{
 				return position_;
 			}
 
-			bool operator == (const IteratorTraits_ &traits) const
+			bool operator == (const IteratorTraits_& traits) const
 			{
 				return (bool)(position_ == traits.position_);
 			}
 
-			bool operator != (const IteratorTraits_ &traits) const
+			bool operator != (const IteratorTraits_& traits) const
 			{
 				return (bool)(position_ != traits.position_);
 			}
 			
-			bool isValid(void) const
+			bool isValid() const
 			{
-				return (bool)(bound_ != 0
-					&& position_ != 0
-					&& stack_index_ != 0
-					&& stack_size_ <= stack_capacity_
-					&& stack_capacity_ > 0);
+				return (bool)(bound_ != 0 && position_ != 0
+											&& stack_index_ != 0 
+											&& stack_size_ <= stack_capacity_
+											&& stack_capacity_ > 0);
 			}
 
-			void invalidate(void)
+			void invalidate()
 			{
 				bound_ = 0;
 				position_ = 0;
 				stack_size_ = 0;
 			}
 			
-			void toBegin(void)
+			void toBegin()
 			{
 				stack_size_ = 0;
 				position_ = bound_;
 			}
 
-			bool isBegin(void) const
+			bool isBegin() const
 			{
 				return (bool)(position_ == bound_);
 			}
 
-			void toEnd(void)
+			void toEnd()
 			{
 				position_ = 0;
 			}
 			
-			bool isEnd(void) const
+			bool isEnd() const
 			{
 				return (bool)(position_ == 0);
 			}
 
-			ResourceEntry &getData(void)
+			ResourceEntry& getData()
 			{
 				return *position_;
 			}
 			
-			const ResourceEntry& getData(void) const
+			const ResourceEntry& getData() const
 			{
 				return *position_;
 			}
 			
-			void forward(void)
+			void forward()
 			{
 				if (position_->number_children_ > 0)
 				{
@@ -454,7 +480,7 @@ namespace BALL
 			}
 
 			// traits-specific:
-			Size getDepth(void) const
+			Size getDepth() const
 			{
 				return stack_size_;
 			}
@@ -468,7 +494,9 @@ namespace BALL
 					Index *new_stack_index = new Index[stack_capacity_ << 1];
 
 					for (register Index index = 0; index < (Index)stack_capacity_; ++index)
+					{
 						new_stack_index[index] = stack_index_[index];
+					}
 
 					delete [] stack_index_;
 					stack_index_ = new_stack_index;
@@ -480,7 +508,7 @@ namespace BALL
 
 			}
 
-			Index pop(void)
+			Index pop()
 			{
 				if (stack_size_ == 0)
 				{
@@ -490,23 +518,23 @@ namespace BALL
 				}
 			}
 
-			ResourceEntry *bound_;
-			IteratorPosition position_;
-			Index *stack_index_;
-			Size stack_capacity_;
-			Size stack_size_ ;
+			ResourceEntry*			bound_;
+			IteratorPosition		position_;
+			Index*							stack_index_;
+			Size								stack_capacity_;
+			Size								stack_size_ ;
 		};
 
 		friend class IteratorTraits_;
 
-		typedef ForwardIterator<ResourceEntry, ResourceEntry, ResourceEntry* , IteratorTraits_> Iterator;
+		typedef ForwardIterator<ResourceEntry, ResourceEntry, ResourceEntry*, IteratorTraits_> Iterator;
 
-		Iterator begin(void)
+		Iterator begin()
 		{
 			return Iterator::begin(*this);
 		}
 
-		Iterator end(void)
+		Iterator end()
 		{
 			return Iterator::end(*this);
 		}
@@ -515,12 +543,12 @@ namespace BALL
 
 		typedef ConstForwardIterator<ResourceEntry, ResourceEntry, ResourceEntry*, IteratorTraits_> ConstIterator;
 
-		ConstIterator begin(void) const
+		ConstIterator begin() const
 		{
 			return ConstIterator::begin(*this);
 		}
 
-		ConstIterator end(void) const
+		ConstIterator end() const
 		{
 			return ConstIterator::end(*this);
 		}
@@ -544,8 +572,7 @@ namespace BALL
 
 		private:
 
-		ResourceEntry *clone_(ResourceEntry* parent) const;
-
+		ResourceEntry* clone_(ResourceEntry* parent) const;
 		bool findGreaterOrEqual_(const String& key, Index& found) const;
 
 		String 						key_;
@@ -563,160 +590,220 @@ namespace BALL
 	{
 		public:
 		
-			/**	@name	Constants
-			*/	
-			//@{
-				
-			/**	
-			*/
-			static char ENTRY_BEGIN;
-
-			/**	
-			*/
-			static char ENTRY_END;
-
-			/**	
-			*/
-			static char SEPARATOR;
-			//@}
-
-			/**	@name	Type Definition
-			*/
-			//@{
-				
-			/**
-			*/
-			typedef ResourceEntry Entry;
-			//@}
-
-			/**	@name	Constructors and Destructors
-			*/
-			//@{
-
-			/**	Default constructor
-			*/
-			ResourceFile(void);
-
-			/**	
-			*/
-			ResourceFile(const String& name);
-
-			/**	Destructor
-			*/
-			virtual ~ResourceFile(void);
-			//@}
+		/**	@name	Constants
+		*/	
+		//@{
 			
-			bool open(const String& name);
+		/**	
+		*/
+		static char ENTRY_BEGIN;
 
-			void close(void);
+		/**	
+		*/
+		static char ENTRY_END;
 
-			static void saveAs(const Entry& entry, const String& name);
+		/**	
+		*/
+		static char SEPARATOR;
+		//@}
 
-			void saveAs(const String& name);
-
-			void save(const Entry& entry);
-
-			void save(void);
-
-			Size getSize(void) const;
-		
-			Entry& getRoot(void);
-
-			const Entry& getRoot(void) const;
-
-			Entry* getEntry(const String& key_path);
-
-			const Entry* getEntry(const String& key_path) const;
-
-			String* getValue(const String& key_path);
-
-			const String* getValue(const String& key_path) const;
-
-			Entry* insert(const String& key_path, const String& name);
-
-			bool removeKey(const String& key_path);
-
-			void destroy(void);
-
-			void host(Visitor<ResourceFile>& visitor);
-		
-			bool hasKey(const String& key_path) const;
-
-			bool isEmpty(void) const;
-		
-
-			/**	@name	Debugging and Diagnostics
-			*/
-			//@{
+		/**	@name	Type Definition
+		*/
+		//@{
 			
-			/**	
-			*/
-			bool isValid(void) const;
+		/**
+		*/
+		typedef ResourceEntry Entry;
+		//@}
 
-			/**	
-			*/
-			void dump(ostream& s = cout, unsigned long depth = 0) const;
-			//@}
+		/**	@name	Constructors and Destructors
+		*/
+		//@{
 
+		/**	Default constructor
+		*/
+		ResourceFile();
 
-			/**	@name	Storers
-			*/	
-			//@{
-			
-			/**
-			*/
-			friend istream& operator >> (istream& s, ResourceFile& resource_file);
-			//@}
+		/**	
+		*/
+		ResourceFile(const String& name);
 
-			bool apply(UnaryProcessor<Entry>& processor);
+		/**	Destructor
+		*/
+		virtual ~ResourceFile();
 
-			static bool applyChildren(Entry& entry, UnaryProcessor<Entry>& processor);
+		/*	Destroy method
+		*/
+		void destroy();
 
-			typedef Entry::Iterator Iterator;
+		//@}
 
-			Iterator begin(void)
-			{
-				return Iterator::begin(root_);
-			}
-
-			Iterator end(void)
-			{
-				return Iterator::end(root_);
-			}
-
-
-			typedef Entry::ConstIterator ConstIterator;
 		
-			ConstIterator begin(void) const
-			{
-				return ConstIterator::begin(root_);
-			}
+		/**	@name	File-related methods.
+		*/
+		//@{
+			
+		/*
+		*/
+		bool open(const String& name);
 
-			ConstIterator end(void) const
-			{
-				return ConstIterator::end(root_);
-			}
+		/*
+		*/
+		void close();
+
+		/*
+		*/
+		static void saveAs(const Entry& entry, const String& name);
+
+		/*
+		*/
+		void saveAs(const String& name);
+
+		/*
+		*/
+		void save(const Entry& entry);
+
+		/*
+		*/
+		void save();
+		//@}
+
+
+		/**	@name	Accessors
+		*/
+		//@{
+		/*
+		*/
+		Size getSize() const;
+	
+		/*
+		*/
+		Entry& getRoot();
+
+		/*
+		*/
+		const Entry& getRoot() const;
+
+		/*
+		*/
+		Entry* getEntry(const String& key_path);
+
+		/*
+		*/
+		const Entry* getEntry(const String& key_path) const;
+
+		/*
+		*/
+		String* getValue(const String& key_path);
+
+		/*
+		*/
+		const String* getValue(const String& key_path) const;
+
+		/*
+		*/
+		Entry* insert(const String& key_path, const String& name);
+
+		/*
+		*/
+		bool removeKey(const String& key_path);
+
+		//@}
+	
+		/**	@name	Attributes
+		*/
+		//@{
+
+		/*	Return true if the key exists somewhere in the tree.
+		*/
+		bool hasKey(const String& key_path) const;
+
+		/*	Return true if the entry has no children.
+		*/
+		bool isEmpty() const;
+		//@}
+	
+
+		/**	@name	Debugging and Diagnostics
+		*/
+		//@{
+		
+		/**	
+		*/
+		bool isValid() const;
+
+		/**	
+		*/
+		void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
+		//@}
+
+
+		/**	@name	Storers
+		*/	
+		//@{
+		
+		/**
+		*/
+		friend std::istream& operator >> (std::istream& s, ResourceFile& resource_file);
+		//@}
+
+		/**	@name Processor	and Visitor related methods
+		*/
+		//@{
+	
+		/**
+		*/
+		void host(Visitor<ResourceFile>& visitor);
+
+		/**
+		*/
+		bool apply(UnaryProcessor<Entry>& processor);
+
+		/**
+		*/
+		static bool applyChildren(Entry& entry, UnaryProcessor<Entry>& processor);
+		//@}
+
+		typedef Entry::Iterator Iterator;
+
+		Iterator begin()
+		{
+			return Iterator::begin(root_);
+		}
+
+		Iterator end()
+		{
+			return Iterator::end(root_);
+		}
+
+
+		typedef Entry::ConstIterator ConstIterator;
+	
+		ConstIterator begin() const
+		{
+			return ConstIterator::begin(root_);
+		}
+
+		ConstIterator end() const
+		{
+			return ConstIterator::end(root_);
+		}
+
+
 
 		private:
 
-			ResourceFile(const ResourceFile& file);
+		ResourceFile(const ResourceFile& file);
 
-			ResourceFile& operator = (const ResourceFile& file);
+		ResourceFile& operator = (const ResourceFile& file);
 
-			static void save_(File& file, const Entry* entry, unsigned long& depth);
+		static void save_(File& file, const Entry* entry, unsigned long& depth);
 
-			bool validateSyntax_(void);
+		bool validateSyntax_();
 
-			void skipWhitespaces_(void)
-			{
-				char c = 0;
+		void skipWhitespaces_();
 
-				while(get(c) && isspace(c));
-
-				putback(c);
-			}
-
-			Entry root_;
+		Entry root_;
 	};
 
 	//@}
@@ -727,4 +814,4 @@ namespace BALL
 
 } // namespace BALL
 
-#endif // BALL_FORMAT_RESFILE_H
+#endif // BALL_FORMAT_RESOURCEFILE_H

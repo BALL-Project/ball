@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: hashMap.h,v 1.2 1999/10/30 12:53:23 oliver Exp $
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -42,15 +42,15 @@ namespace BALL
 
 		/**	Iterator type
 		*/
-		typedef hash_map<Key, Value, Hasher, EqualKey>::iterator Iterator;
+		typedef typename hash_map<Key, Value, Hasher, EqualKey>::iterator Iterator;
 
 		/**	Const iterator type
 		*/
-		typedef hash_map<Key, Value, Hasher, EqualKey>::const_iterator ConstIterator;	
+		typedef typename hash_map<Key, Value, Hasher, EqualKey>::const_iterator ConstIterator;	
 
 		/**	Value type
 		*/
-		typedef hash_map<Key, Value, Hasher, EqualKey>::value_type ValueType;	
+		typedef typename hash_map<Key, Value, Hasher, EqualKey>::value_type ValueType;	
 		//@}
 
 		/**	@name	Constructors and Destructors */

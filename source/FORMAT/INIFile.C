@@ -1,10 +1,11 @@
-// $Id: INIFile.C,v 1.1 1999/08/26 08:02:35 oliver Exp $
+// $Id: INIFile.C,v 1.2 1999/10/30 12:53:35 oliver Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 
-#include <fstream.h>
+#include <fstream>
 
-namespace BALL {
+namespace BALL 
+{
 
 	// Default constructor
 	INIFile::INIFile(void)
@@ -37,7 +38,8 @@ namespace BALL {
 	}
 
 
-	bool INIFile::isValid(void) const {
+	bool INIFile::isValid(void) const 
+	{
 		return valid_;
 	}
 

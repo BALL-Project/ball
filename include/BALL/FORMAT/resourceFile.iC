@@ -1,4 +1,4 @@
-// $Id: resourceFile.iC,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: resourceFile.iC,v 1.2 1999/10/30 12:53:25 oliver Exp $
 
 BALL_INLINE 
 void ResourceEntry::set(const ResourceEntry& entry, bool deep)
@@ -49,9 +49,10 @@ const ResourceEntry* ResourceEntry::getParent(void) const
 }
 
 BALL_INLINE 
-ResourceEntry* ResourceEntry::getChild(BALL::Index index)
+ResourceEntry* ResourceEntry::getChild(Position index)
 {
-  if (index < (BALL::Index)number_children_) {
+  if (index < (Position)number_children_) 
+	{
     return child_[index];
   } else {
     return 0;
@@ -59,7 +60,7 @@ ResourceEntry* ResourceEntry::getChild(BALL::Index index)
 }
 
 BALL_INLINE 
-const ResourceEntry* ResourceEntry::getChild(BALL::Index index) const
+const ResourceEntry* ResourceEntry::getChild(Position index) const
 {
   return ((ResourceEntry *)this)->getChild(index);
 }
@@ -95,13 +96,13 @@ const String& ResourceEntry::getValue(void) const
 }
 
 BALL_INLINE 
-BALL::Size ResourceEntry::countChildren(void) const
+Size ResourceEntry::countChildren(void) const
 {
   return number_children_;
 }
 
 BALL_INLINE 
-BALL::Size ResourceEntry::getSize(void) const
+Size ResourceEntry::getSize(void) const
 {
   return (countDescendants() + 1);
 }
@@ -126,9 +127,10 @@ void ResourceEntry::destroy(void)
 BALL_INLINE 
 ResourceEntry* ResourceEntry::findChild(const String& key)
 {
-  BALL::Index found = 0;
+  Index found = 0;
   
-  if (number_children_ == 0 || findGreaterOrEqual_(key, found) == false) {
+  if (number_children_ == 0 || findGreaterOrEqual_(key, found) == false) 
+	{
     return 0;
   } else {
     return child_[found];
@@ -222,7 +224,7 @@ ResourceEntry* ResourceEntry::newEntry
 }
 
 BALL_INLINE 
-ResourceEntry** ResourceEntry::newEntryArray(BALL::Size size) const
+ResourceEntry** ResourceEntry::newEntryArray(Size size) const
 {
   return (new ResourceEntry *[size]);
 }
@@ -230,7 +232,14 @@ ResourceEntry** ResourceEntry::newEntryArray(BALL::Size size) const
 BALL_INLINE 
 void ResourceEntry::deleteEntry(ResourceEntry* entry) const
 {
-  delete entry;
+	// if the entry is deletable, delete it
+	// otherwise call clear()
+	if ((entry != 0) && (!entry->isAutoDeletable()))
+	{
+		entry->clear();
+	} else {
+		delete entry;
+	}
 }
   
 BALL_INLINE 
@@ -268,7 +277,7 @@ void ResourceFile::save(void)
 }
 
 BALL_INLINE 
-BALL::Size ResourceFile::getSize(void) const
+Size ResourceFile::getSize(void) const
 {
   return root_.getSize();
 }
@@ -362,3 +371,18 @@ bool ResourceFile::applyChildren(Entry& entry, UnaryProcessor<Entry>& processor)
 {
   return entry.applyChildren(processor);
 }
+
+BALL_INLINE
+void ResourceFile::skipWhitespaces_()
+{
+	char c;
+	get(c);
+
+	while(good() && isspace(c))
+	{
+		get(c);
+	}
+
+	putback(c);
+}
+ 

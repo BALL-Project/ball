@@ -1,4 +1,4 @@
-// $Id: debug.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: debug.h,v 1.2 1999/10/30 12:53:14 oliver Exp $
 
 #ifndef BALL_COMMON_DEBUG_H
 #define BALL_COMMON_DEBUG_H
@@ -14,8 +14,9 @@
 #endif
 
 #define BALL_PRECONDITION(a,b)\
-  if (!(a)) {\
-    cerr << "Failed: " << #a << "/" << #b << endl << "(" << __FILE__ << ":" << __LINE__ << ")" << endl;\
+  if (!(a))\
+	{\
+    ::std::cerr << "Failed: " << #a << "/" << #b << ::std::endl << "(" << __FILE__ << ":" << __LINE__ << ")" << ::std::endl;\
     throw Exception::GeneralException(__FILE__, __LINE__);\
   }\
 

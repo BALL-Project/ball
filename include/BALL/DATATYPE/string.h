@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.2 1999/09/18 19:08:04 oliver Exp $
+// $Id: string.h,v 1.3 1999/10/30 12:53:24 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -28,13 +28,14 @@
 #endif
 
 #include <string>
-using std::string;
-
 #include <ctype.h>
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strstream.h>
+#include <strstream>
+#include <iostream>
+
+using ::std::string;
 
 namespace BALL 
 {
@@ -262,7 +263,7 @@ namespace BALL
 		//@{
 
 		/// Writes the substring to a stream
-		friend ostream& operator << (ostream& s, const Substring& substring);
+		friend ::std::ostream& operator << (::std::ostream& s, const Substring& substring);
 		//@}
 	
 		/**	@name	Debugging and Diagnostics */
@@ -275,7 +276,7 @@ namespace BALL
 		bool isValid() const;
 
 		///	Dumps the substring object (including the values of its private memebers)
-		void dump(ostream& s = cout, unsigned long depth = 0) const;
+		void dump(::std::ostream& s = ::std::cout, unsigned long depth = 0) const;
 		//@}
 		
 		protected:
@@ -412,7 +413,7 @@ namespace BALL
 		String(Size buffer_size, const char* format, ... );
 
 		///	Creates a new string by reading from a {\bf strstream}
-		String(strstream& s);
+		String(::std::strstream& s);
 
 		/** Creates a new string from len copies of c.
 		*/
@@ -474,7 +475,7 @@ namespace BALL
 		void set(Size buffer_size, const char *format, ...);
 
 		/// Assigns a String from a {\bf strstream}
-		void set(strstream& s);
+		void set(::std::strstream& s);
 
 		/// Assigns a String from the result of repeating {\bf c} {\bf len} times
 		void set(char c, Size len = 1);
@@ -516,7 +517,7 @@ namespace BALL
 		String& operator = (const char* pc);
 
 		/// Assigns a string from a {\bf strstream}
-		String& operator = (strstream& s);
+		String& operator = (::std::strstream& s);
 
 		/// Assigns a String from a single char
 		String& operator = (char c);
@@ -912,7 +913,7 @@ namespace BALL
 		bool isValid() const;
 
 		///
-		void dump(ostream& s = cout, unsigned long depth = 0) const;
+		void dump(::std::ostream& s = ::std::cout, unsigned long depth = 0) const;
 
 		//@}			
 
@@ -923,10 +924,10 @@ namespace BALL
 		//@{
 
 		///
-		istream& getline(istream& s = cin, char delimiter = '\n');
+		::std::istream& getline(::std::istream& s = ::std::cin, char delimiter = '\n');
 
 		///
-		friend istream& getline(istream& s,  String& string,  char delimiter = '\n');
+		friend ::std::istream& getline(::std::istream& s,  String& string,  char delimiter = '\n');
 		//@}
 
 

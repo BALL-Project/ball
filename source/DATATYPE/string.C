@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.5 1999/09/29 09:02:05 oliver Exp $
+// $Id: string.C,v 1.6 1999/10/30 12:53:33 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -6,6 +6,13 @@
 #include <stdio.h>
 
 #include <algorithm>
+
+
+using std::ostream;
+using std::istream;
+using std::strstream;
+using std::endl;
+using std::ends;
 
 namespace BALL 
 {

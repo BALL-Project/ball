@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: socket.h,v 1.2 1999/10/30 12:53:29 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -20,7 +20,7 @@
 #	include <BALL/common.h>
 #endif
 
-#include <iostream.h>
+#include <iostream>
 #include <stddef.h>
 #include <stdio.h>
 #include <sys/types.h>
@@ -130,7 +130,7 @@ namespace BALL
 	/**	
 	*/
 	class SocketBuf
-		: public streambuf 
+		: public std::streambuf 
 	{
 		public:
 
@@ -138,7 +138,8 @@ namespace BALL
 		//@{
 			
 		///
-		enum type {
+		enum type 
+		{
 			///
 			sock_stream	= SOCK_STREAM,
 			///
@@ -285,6 +286,11 @@ namespace BALL
 			pbump (1); 
 		}
 
+		int unbuffered() const
+		{
+			return x_flags & _S_UNBUFFERED;
+		}
+
 		int linebuffered() const 
 		{ 
 			return x_flags & _S_LINE_BUF; 
@@ -396,19 +402,19 @@ namespace BALL
 	/**	
 	*/
 	class ISockStream
-		: public istream 
+		: public std::istream 
 	{
 		protected:
 
 		ISockStream()
-			: ios (0) 
+			: std::istream(0)
 		{
 		}
 
 		public:
 						
 		ISockStream(SocketBuf& sb)
-			: ios (new SocketBuf(sb)) 
+			: std::istream(new SocketBuf(sb)) 
 		{
 		}
 
@@ -417,7 +423,7 @@ namespace BALL
 
 		SocketBuf* rdbuf() 
 		{ 
-			return (SocketBuf*)ios::rdbuf(); 
+			return (SocketBuf*)std::ios::rdbuf(); 
 		}
 
 		SocketBuf* operator -> () 
@@ -431,12 +437,12 @@ namespace BALL
 	/**	
 	*/
 	class OSockStream
-		: public ostream 
+		: public std::ostream 
 	{
 		protected:
 
 		OSockStream()
-			: ios(0) 
+			: std::ostream(0) 
 		{
 		}
 
@@ -447,7 +453,7 @@ namespace BALL
 
 		///
 		OSockStream(SocketBuf& sb)
-			: ios (new SocketBuf(sb)) 
+			: std::ostream(new SocketBuf(sb)) 
 		{
 		}
 
@@ -461,7 +467,7 @@ namespace BALL
 		///
 		SocketBuf* rdbuf() 
 		{ 
-			return(SocketBuf*)ios::rdbuf(); 
+			return(SocketBuf*)std::ios::rdbuf(); 
 		}
 
 		///
@@ -478,12 +484,12 @@ namespace BALL
 	/**	
 	*/
 	class IOSockStream
-		: public iostream 
+		: public std::iostream 
 	{
 		protected:
 
 		IOSockStream ()
-			: ios (0) 
+			: std::iostream(0) 
 		{
 		}
 
@@ -494,8 +500,8 @@ namespace BALL
 		//@{
 
 		/// Constructor
-		IOSockStream(SocketBuf& sb)
-			: ios (new SocketBuf(sb)) 
+		IOSockStream(const SocketBuf& sb)
+			: std::iostream(new SocketBuf(sb)) 
 		{
 		}
 		
@@ -509,7 +515,7 @@ namespace BALL
 		///
 		SocketBuf* rdbuf () 
 		{ 
-			return (SocketBuf*)ios::rdbuf(); 
+			return (SocketBuf*)std::ios::rdbuf(); 
 		}
 		
 		///
@@ -732,16 +738,16 @@ namespace BALL
 		IOStreamSocket(SocketBuf::type ty=SocketBuf::sock_stream, int proto = 0);
 		
 		/// Destructor 
-		virtual ~IOStreamSocket(void);
+		virtual ~IOStreamSocket();
 		//@}
 
 		/**	@name	Miscellaneous */
 		//@{
 
 		///
-		SockInetBuf *rdbuf() 
+		SockInetBuf* rdbuf() 
 		{ 
-				return (SockInetBuf*)ios::rdbuf (); 
+				return (SockInetBuf*)std::ios::rdbuf (); 
 		}
 
 		///

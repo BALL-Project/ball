@@ -1,4 +1,4 @@
-// $Id: internal_hashtable.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: internal_hashtable.h,v 1.2 1999/10/30 12:53:24 oliver Exp $
 
 /*
  * Copyright (c) 1996,1997
@@ -166,8 +166,10 @@ inline unsigned long __stl_next_prime(unsigned long n)
 template <class Value, class Key, class HashFcn,
           class ExtractKey, class EqualKey,
           class Alloc>
-class hashtable {
-public:
+class hashtable 
+	{
+		
+	public:
   typedef Key key_type;
   typedef Value value_type;
   typedef HashFcn hasher;
@@ -183,7 +185,7 @@ public:
   hasher hash_funct() const { return hash; }
   key_equal key_eq() const { return equals; }
 
-private:
+	private:
   hasher hash;
   key_equal equals;
   ExtractKey get_key;
@@ -279,10 +281,11 @@ public:
 
   const_iterator end() const { return const_iterator(0, this); }
 
-  friend bool
-  operator== __STL_NULL_TMPL_ARGS (const hashtable&, const hashtable&);
+	friend bool operator == BALL_NULL_TEMPLATE_ARGS (const hashtable&, const hashtable&);
 
-public:
+	
+
+	public:
 
   size_type bucket_count() const { return buckets.size(); }
 

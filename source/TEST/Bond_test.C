@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: Bond_test.C,v 1.2 1999/10/30 12:53:38 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/CONCEPT/persistenceManager.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.2 1999/10/30 12:53:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -132,13 +132,13 @@ Atom a2;
 a1.setPosition(Vector3(1.0, 1.0, 1.0));
 a2.setPosition(Vector3(2.0, 2.0, 2.0));
 Bond b1("bond", a1, a2);
-TEST_REAL_EQUAL(b1.getLength(), sqrt(3))
+TEST_REAL_EQUAL(b1.getLength(), ::sqrt(3.0))
 Bond b2;
 TEST_EXCEPTION(Exception::NullPointer, b2.getLength())
 b2.setFirstAtom(&a1);
 TEST_EXCEPTION(Exception::NullPointer, b2.getLength())
 b2.setSecondAtom(&a2);
-TEST_REAL_EQUAL(b2.getLength(), sqrt(3))
+TEST_REAL_EQUAL(b2.getLength(), ::sqrt(3.0))
 RESULT
 
 CHECK(createBond(Bond&, Atom&, Atom&))

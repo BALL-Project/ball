@@ -1,4 +1,4 @@
-// $Id: timer.h,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: timer.h,v 1.2 1999/10/30 12:53:29 oliver Exp $
 
 #ifndef BALL_SYSTEM_TIMER_H
 #define BALL_SYSTEM_TIMER_H
@@ -8,9 +8,10 @@
 #endif
 
 #include <sys/time.h>
-#include <iostream.h>
+#include <iostream>
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	Timer Class
 	*/
@@ -178,7 +179,7 @@ namespace BALL {
 		
 		/**	Dump the timer's contents.
 		*/
-		void dump(ostream& s = cout, unsigned long depth = 0L) const;
+		void dump(::std::ostream& s = ::std::cout, unsigned long depth = 0L) const;
 		//@}
 
 		protected:

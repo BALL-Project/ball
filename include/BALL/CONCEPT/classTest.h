@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.1 1999/08/26 07:53:16 oliver Exp $
+// $Id: classTest.h,v 1.2 1999/10/30 12:53:20 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -93,19 +93,19 @@ int main(int argc, char **argv)\
 	};\
 \
 	if ((argc > 2) || ((argc == 2) && (TEST::verbose == 0))) {\
-		cerr << "Checks " #class_name " class" << endl;\
+		std::cerr << "Checks " #class_name " class" << std::endl;\
 \
-		cerr << "On successful operation it simply returns OK," << endl;\
-		cerr << "otherwise FAILURE is printed." << endl;\
-		cerr << "If called with an argument of -v, " << argv[0] << " prints detailed" << endl;\
-		cerr << "information about individual tests." << endl;\
-		cerr << "Option -V provides verbose information on" << endl;\
-		cerr << "every subtest." << endl;\
+		std::cerr << "On successful operation it simply returns OK," << std::endl;\
+		std::cerr << "otherwise FAILURE is printed." << std::endl;\
+		std::cerr << "If called with an argument of -v, " << argv[0] << " prints detailed" << std::endl;\
+		std::cerr << "information about individual tests." << std::endl;\
+		std::cerr << "Option -V provides verbose information on" << std::endl;\
+		std::cerr << "every subtest." << std::endl;\
 		return 1;\
 	}\
 \
 	if (TEST::verbose > 0)\
-		cout << "Version: " << TEST::version_string << endl;\
+		std::cout << "Version: " << TEST::version_string << std::endl;\
 \
 	try {\
 
@@ -122,6 +122,24 @@ int main(int argc, char **argv)\
 #define END_TEST \
 	/* global try block */\
 	}\
+	/* catch FileNotFound exceptions to print out the file name */\
+	catch (BALL::Exception::FileNotFound e)\
+	{\
+		TEST::this_test = false;\
+		TEST::test = false;\
+		TEST::all_tests = false;\
+  	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+		{\
+			if (TEST::exception == 1) /* dummy to avoid compiler warnings */\
+				TEST::exception++;\
+    	std::cout << std::endl << "    (caught exception of type ";\
+			std::cout << e.getName();\
+			if ((e.getLine() > 0) && (!(e.getFile() == "")))\
+				std::cout << " outside a subtest, which was thrown in line " << e.getLine() << " of file " << e.getFile();\
+			std::cout << " while looking for file " << e.getFilename();\
+			std::cout << " - unexpected!) " << std::endl;\
+		}\
+  }\
 	/* catch BALL exceptions to retrieve additional information */\
 	catch (BALL::Exception::GeneralException e)\
 	{\
@@ -132,11 +150,11 @@ int main(int argc, char **argv)\
 		{\
 			if (TEST::exception == 1) /* dummy to avoid compiler warnings */\
 				TEST::exception++;\
-    	cout << endl << "    (caught exception of type ";\
-			cout << e.getName();\
+    	std::cout << std::endl << "    (caught exception of type ";\
+			std::cout << e.getName();\
 			if ((e.getLine() > 0) && (!(e.getFile() == "")))\
-				cout << " outside a subtest, which was thrown in line " << e.getLine() << " of file " << e.getFile();\
-			cout << " - unexpected!) " << endl;\
+				std::cout << " outside a subtest, which was thrown in line " << e.getLine() << " of file " << e.getFile();\
+			std::cout << " - unexpected!) " << std::endl;\
 		}\
   }\
 	/* catch all non-BALL exceptions */\
@@ -147,7 +165,7 @@ int main(int argc, char **argv)\
 		TEST::all_tests = false;\
   	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
 		{\
-    	cout << endl << "    (caught unidentified and unexpected exception outside a subtest!) " << endl;\
+    	std::cout << std::endl << "    (caught unidentified and unexpected exception outside a subtest!) " << std::endl;\
 		}\
 	}\
 \
@@ -160,10 +178,10 @@ int main(int argc, char **argv)\
 	/* check for exit code */\
 	if (!TEST::all_tests)\
 	{\
-		cout << "FAILED" << endl;\
+		std::cout << "FAILED" << std::endl;\
 		return 1;\
 	} else {\
-		cout << "PASSED" << endl;\
+		std::cout << "PASSED" << std::endl;\
 		return 0;\
 	}\
 }\
@@ -185,7 +203,7 @@ int main(int argc, char **argv)\
 	TEST::test = true;\
 	TEST::newline = false;\
 	if (TEST::verbose > 0)\
-		cout << "checking " << #test_name << "... " << flush;\
+		std::cout << "checking " << #test_name << "... " << std::flush;\
 	try\
 	{\
 
@@ -207,6 +225,24 @@ int main(int argc, char **argv)\
 */
 #define RESULT \
   }\
+	/* catch FileNotFound exceptions to print out the file name */\
+	catch (BALL::Exception::FileNotFound e)\
+	{\
+		TEST::this_test = false;\
+		TEST::test = false;\
+		TEST::all_tests = false;\
+  	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+		{\
+			if (TEST::exception == 1) /* dummy to avoid compiler warnings */\
+				TEST::exception++;\
+    	std::cout << std::endl << "    (caught exception of type ";\
+			std::cout << e.getName();\
+			if ((e.getLine() > 0) && (!(e.getFile() == "")))\
+				std::cout << " outside a subtest, which was thrown in line " << e.getLine() << " of file " << e.getFile();\
+			std::cout << " while looking for file " << e.getFilename();\
+			std::cout << " - unexpected!) " << std::endl;\
+		}\
+  }\
   catch (::BALL::Exception::GeneralException e)\
   {\
     TEST::this_test = false;\
@@ -217,13 +253,13 @@ int main(int argc, char **argv)\
 			if (!TEST::newline) \
 			{\
 				TEST::newline = true;\
-				cout << endl;\
+				std::cout << std::endl;\
 			}\
-      cout << "    (caught exception of type ";\
-      cout << e.getName();\
+      std::cout << "    (caught exception of type ";\
+      std::cout << e.getName();\
       if ((e.getLine() > 0) && (!(e.getFile() == "")))\
-        cout << ", which was thrown in line " << e.getLine() << " of file " << e.getFile();\
-      cout << " - unexpected!) " << endl;\
+        std::cout << ", which was thrown in line " << e.getLine() << " of file " << e.getFile();\
+      std::cout << " - unexpected!) " << std::endl;\
     }\
   }\
   catch (...)\
@@ -236,20 +272,20 @@ int main(int argc, char **argv)\
 			if (!TEST::newline) \
 			{\
 				TEST::newline = true;\
-				cout << endl;\
+				std::cout << std::endl;\
 			}\
-      cout << "    (caught unidentified and unexpected exception!)" << endl;\
+      std::cout << "    (caught unidentified and unexpected exception!)" << std::endl;\
     }\
   }\
 \
 	TEST::all_tests = TEST::all_tests && TEST::test;\
 	if (TEST::verbose > 0){\
 		if (TEST::newline)\
-			cout << "    ";\
+			std::cout << "    ";\
 		if (TEST::test){\
-			cout << "passed" << endl;\
+			std::cout << "passed" << std::endl;\
 		} else {\
-			cout << "FAILED" << endl;\
+			std::cout << "FAILED" << std::endl;\
 		}\
 	}\
 
@@ -278,13 +314,13 @@ int main(int argc, char **argv)\
 		if (!TEST::newline)\
 		{\
 			TEST::newline = true;\
-			cout << endl;\
+			std::cout << std::endl;\
 		}\
- 		cout << "    (line " << __LINE__ << ": TEST_REAL_EQUAL("<< #a << ", " << #b << "): got " << (a) << ", expected " << (b) << ") ";\
+ 		std::cout << "    (line " << __LINE__ << ": TEST_REAL_EQUAL("<< #a << ", " << #b << "): got " << (a) << ", expected " << (b) << ") ";\
 		if (TEST::this_test)\
-			cout << " + " << endl;\
+			std::cout << " + " << std::endl;\
 		else \
-			cout << " - " << endl;\
+			std::cout << " - " << std::endl;\
 	}\
 
 /**	Generic equality macro.
@@ -304,13 +340,13 @@ int main(int argc, char **argv)\
 		if (!TEST::newline)\
 		{\
 			TEST::newline = true;\
-			cout << endl;\
+			std::cout << std::endl;\
 		}\
-		cout << "    (line " << __LINE__ << " TEST_EQUAL(" << #a << ", " << #b << "): got " << (a) << ", expected " << (b) << ") ";\
+		std::cout << "    (line " << __LINE__ << " TEST_EQUAL(" << #a << ", " << #b << "): got " << (a) << ", expected " << (b) << ") ";\
 		if (TEST::this_test)\
-			cout << " + " << endl;\
+			std::cout << " + " << std::endl;\
 		else \
-			cout << " - " << endl;\
+			std::cout << " - " << std::endl;\
 	}\
 
 /**	Generic inequality macro.
@@ -328,13 +364,13 @@ int main(int argc, char **argv)\
 		if (!TEST::newline)\
 		{\
 			TEST::newline = true;\
-			cout << endl;\
+			std::cout << std::endl;\
 		}\
-		cout << "    (line " << __LINE__ << " TEST_NOT_EQUAL(" << #a << ", " << #b << "): got " << (a) << ", forbidden is " << (b) << ") ";\
+		std::cout << "    (line " << __LINE__ << " TEST_NOT_EQUAL(" << #a << ", " << #b << "): got " << (a) << ", forbidden is " << (b) << ") ";\
 		if (TEST::this_test)\
-			cout << " + " << endl;\
+			std::cout << " + " << std::endl;\
 		else \
-			cout << " - " << endl;\
+			std::cout << " - " << std::endl;\
 	}
 
 
@@ -367,20 +403,20 @@ int main(int argc, char **argv)\
 		if (!TEST::newline)\
 		{\
 			TEST::newline = true;\
-			cout << endl;\
+			std::cout << std::endl;\
 		}\
-		cout << "    (line " << __LINE__ << " TEST_EXCEPTION(" << #exception_type << ", " << #command << "): ";\
+		std::cout << "    (line " << __LINE__ << " TEST_EXCEPTION(" << #exception_type << ", " << #command << "): ";\
 		switch (TEST::exception)\
 		{\
-			case 0:	cout << " ERROR: no exception!) "; break;\
-			case 1:	cout << " OK) "; break;\
-			case 2:	cout << " ERROR: wrong exception: " << TEST::exception_name << ") "; break;\
-			case 3:	cout << " ERROR: wrong exception!) "; break;\
+			case 0:	std::cout << " ERROR: no exception!) "; break;\
+			case 1:	std::cout << " OK) "; break;\
+			case 2:	std::cout << " ERROR: wrong exception: " << TEST::exception_name << ") "; break;\
+			case 3:	std::cout << " ERROR: wrong exception!) "; break;\
 		}\
 		if (TEST::this_test)\
-			cout << " + " << endl;\
+			std::cout << " + " << std::endl;\
 		else \
-			cout << " - " << endl;\
+			std::cout << " - " << std::endl;\
 	}\
 
 //@}

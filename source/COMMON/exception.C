@@ -1,9 +1,9 @@
-// $Id: exception.C,v 1.4 1999/09/22 17:44:17 oliver Exp $
+// $Id: exception.C,v 1.5 1999/10/30 12:53:30 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
 
-#include <iostream.h>
+#include <iostream>
 #include <typeinfo>
 #include <exception>
 #include <stdio.h>
@@ -16,6 +16,9 @@
 	}\
 \
 	
+
+using std::string;
+using std::endl;
 
 namespace BALL 
 {
@@ -146,6 +149,12 @@ namespace BALL
 				globalHandler.setMessage(message_);
 			}
 
+			string FileNotFound::getFilename() const
+			{
+				return filename_;
+			}
+		
+
 			DEF_EXCEPTION(DivisionByZero, "a division by zero was requested")
 
 			DEF_EXCEPTION(InvalidRange, "the range of the operation was invalid")
@@ -178,15 +187,15 @@ namespace BALL
 				// the exception to the log stream (potentially with an assigned file!)
 				// and cerr
 
-				Log.insert(cerr);
+				Log.insert(std::cerr);
 				Log.error() << endl;
 				Log.error() << "---------------------------------------------------" << endl;
 				Log.error() << "FATAL: terminate called!" << endl;
 				Log.error() << "---------------------------------------------------" << endl;
 				Log.error() << "last entry in the exception handler: " << endl;
-				Log.error() << "exception of type " << name_ << " occured in line " 
-					<< line_ << " of " << file_ << endl;
-				Log.error() << "error message: " << message_ << endl;
+				Log.error() << "exception of type " << name_.c_str() << " occured in line " 
+					<< line_ << " of " << file_.c_str() << endl;
+				Log.error() << "error message: " << message_.c_str() << endl;
 				Log.error() << "---------------------------------------------------" << endl;
 				exit(1);
 			}

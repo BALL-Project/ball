@@ -1,4 +1,4 @@
-// $Id: forwardManipulator.h,v 1.1 1999/08/26 07:53:16 oliver Exp $
+// $Id: forwardManipulator.h,v 1.2 1999/10/30 12:53:20 oliver Exp $
 
 #ifndef BALL_CONCEPT_FORWARDMANIPULATOR_H
 #define BALL_CONCEPT_FORWARDMANIPULATOR_H
@@ -56,8 +56,8 @@ namespace BALL {
 		}
 
 		static void setIterators
-			(const Traits& traits, const BaseIterator<Container, DataType, 
-			 Position, Traits>::Manipulation manipulation)
+			(const Traits& traits, 
+			 const typename BaseIterator<Container, DataType, Position, Traits>::Manipulation manipulation)
 		{
 			const Container* container = traits.getContainer();
 
@@ -95,7 +95,7 @@ namespace BALL {
 
 		static void erase
 			(Traits traits,
-			 const BaseIterator<Container, DataType, Position, Traits>::Manipulation manipulation 
+			 const typename BaseIterator<Container, DataType, Position, Traits>::Manipulation manipulation 
 				= (BaseIterator<Container, DataType, Position, Traits>::INVALIDATE))
 		{
 			if (manipulation != BaseIterator<Container, DataType, Position, Traits>::STAY)
@@ -107,7 +107,7 @@ namespace BALL {
 		}
 	
 		void erase
-			(const BaseIterator<Container, DataType, Position, Traits>::Manipulation manipulation 
+			(const typename BaseIterator<Container, DataType, Position, Traits>::Manipulation manipulation 
 				= (BaseIterator<Container, DataType, Position, Traits>::INVALIDATE))
 		{
 			erase(*traits_, manipulation);

@@ -1,4 +1,4 @@
-// $Id: FragmentDB_test.C,v 1.2 1999/09/17 11:18:07 oliver Exp $
+// $Id: FragmentDB_test.C,v 1.3 1999/10/30 12:53:39 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 using namespace BALL;
 ///////////////////////////
 
-START_TEST(class_name, "$Id: FragmentDB_test.C,v 1.2 1999/09/17 11:18:07 oliver Exp $")
+START_TEST(class_name, "$Id: FragmentDB_test.C,v 1.3 1999/10/30 12:53:39 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -20,11 +20,6 @@ if (res != 0)
 {
 	TEST_EQUAL(res->isNTerminal(), false)
 	TEST_EQUAL(res->isCTerminal(), false)
-	AtomIterator it;
-	for (it = res->beginAtom(); +it; ++it)
-	{
-		cout << it->getName() << endl;
-	}
 }
 
 RESULT

@@ -1,17 +1,19 @@
-// $Id: directory.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: directory.C,v 1.2 1999/10/30 12:53:37 oliver Exp $
 
 #include <assert.h>
 #include <dirent.h>
-#include <iostream.h>
 #include <stdio.h>
 #include <string.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
 
+#include <iostream>
+
 #define BALL_DIRECTORY_STAT   ::lstat
 
-namespace BALL {
+namespace BALL 
+{
 
 	Directory::Directory(void)
 		:	dir_(0),

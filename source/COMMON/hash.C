@@ -1,8 +1,9 @@
-// $Id: hash.C,v 1.1 1999/08/26 08:02:33 oliver Exp $
+// $Id: hash.C,v 1.2 1999/10/30 12:53:30 oliver Exp $
 
 #include <BALL/COMMON/hash.h>
 
-namespace BALL {
+namespace BALL 
+{
 
 	/* Summary: Algorithm to do fast hashing of a pointer
 	 * The result of the hash function is a number in the range 

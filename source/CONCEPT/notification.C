@@ -1,8 +1,12 @@
-// $Id: notification.C,v 1.1 1999/08/26 08:02:35 oliver Exp $
+// $Id: notification.C,v 1.2 1999/10/30 12:53:32 oliver Exp $
 
 #include <BALL/CONCEPT/notification.h>
 
-namespace BALL {
+namespace BALL 
+{
+
+	using std::ostream;
+	using std::endl;
 
 	NotificationTarget_* NotificationTarget_::getNextTarget(void)
 	{

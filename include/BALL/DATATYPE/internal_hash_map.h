@@ -1,4 +1,4 @@
-// $Id: internal_hash_map.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: internal_hash_map.h,v 1.2 1999/10/30 12:53:23 oliver Exp $
 
 /*
  * Copyright (c) 1996
@@ -37,10 +37,11 @@
 #	include <BALL/DATATYPE/internal_hashtable.h>
 #endif
  
-namespace BALL {
+namespace BALL 
+{
 
 #if defined(__sgi) && !defined(__GNUC__) && (_MIPS_SIM != _MIPS_SIM_ABI32)
-#pragma set woff 1174
+#	pragma set woff 1174
 #endif
 
 template <class Key, class T, class HashFcn = hash<Key>,
@@ -48,12 +49,13 @@ template <class Key, class T, class HashFcn = hash<Key>,
           class Alloc = alloc>
 class hash_map
 {
-private:
+	private:
+
   typedef hashtable<pair<const Key, T>, Key, HashFcn,
                     select1st<pair<const Key, T> >, EqualKey, Alloc> ht;
   ht rep;
 
-public:
+	public:
   typedef typename ht::key_type key_type;
   typedef T data_type;
   typedef T mapped_type;
@@ -74,7 +76,8 @@ public:
   hasher hash_funct() const { return rep.hash_funct(); }
   key_equal key_eq() const { return rep.key_eq(); }
 
-public:
+
+	public:
   hash_map() : rep(100, hasher(), key_equal()) {}
   explicit hash_map(size_type n) : rep(n, hasher(), key_equal()) {}
   hash_map(size_type n, const hasher& hf) : rep(n, hf, key_equal()) {}
@@ -98,20 +101,21 @@ public:
     : rep(n, hf, eql) { rep.insert_unique(f, l); }
 
 
-public:
+	public:
   size_type size() const { return rep.size(); }
   size_type max_size() const { return rep.max_size(); }
   bool empty() const { return rep.empty(); }
   void swap(hash_map& hs) { rep.swap(hs.rep); }
   friend bool
-  operator== __STL_NULL_TMPL_ARGS (const hash_map&, const hash_map&);
+  operator == BALL_NULL_TEMPLATE_ARGS (const hash_map&, const hash_map&);
 
   iterator begin() { return rep.begin(); }
   iterator end() { return rep.end(); }
   const_iterator begin() const { return rep.begin(); }
   const_iterator end() const { return rep.end(); }
 
-public:
+
+	public:
   pair<iterator, bool> insert(const value_type& obj)
     { return rep.insert_unique(obj); }
 
@@ -143,7 +147,7 @@ public:
   void erase(iterator f, iterator l) { rep.erase(f, l); }
   void clear() { rep.clear(); }
 
-public:
+	public:
   void resize(size_type hint) { rep.resize(hint); }
   size_type bucket_count() const { return rep.bucket_count(); }
   size_type max_bucket_count() const { return rep.max_bucket_count(); }
@@ -171,12 +175,12 @@ template <class Key, class T, class HashFcn = hash<Key>,
           class Alloc = alloc>
 class hash_multimap
 {
-private:
+	private:
   typedef hashtable<pair<const Key, T>, Key, HashFcn,
                     select1st<pair<const Key, T> >, EqualKey, Alloc> ht;
   ht rep;
 
-public:
+	public:
   typedef typename ht::key_type key_type;
   typedef T data_type;
   typedef T mapped_type;
@@ -197,7 +201,7 @@ public:
   hasher hash_funct() const { return rep.hash_funct(); }
   key_equal key_eq() const { return rep.key_eq(); }
 
-public:
+	public:
   hash_multimap() : rep(100, hasher(), key_equal()) {}
   explicit hash_multimap(size_type n) : rep(n, hasher(), key_equal()) {}
   hash_multimap(size_type n, const hasher& hf) : rep(n, hf, key_equal()) {}
@@ -226,7 +230,7 @@ public:
   bool empty() const { return rep.empty(); }
   void swap(hash_multimap& hs) { rep.swap(hs.rep); }
   friend bool
-  operator== __STL_NULL_TMPL_ARGS (const hash_multimap&, const hash_multimap&);
+  operator== BALL_NULL_TEMPLATE_ARGS (const hash_multimap&, const hash_multimap&);
 
   iterator begin() { return rep.begin(); }
   iterator end() { return rep.end(); }
@@ -279,7 +283,7 @@ inline void swap(hash_multimap<Key, T, HashFcn, EqualKey, Alloc>& hm1,
 }
 
 #if defined(__sgi) && !defined(__GNUC__) && (_MIPS_SIM != _MIPS_SIM_ABI32)
-#pragma reset woff 1174
+#	pragma reset woff 1174
 #endif
 
 } // namespace BALL

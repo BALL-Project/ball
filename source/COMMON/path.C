@@ -1,9 +1,11 @@
-// $Id: path.C,v 1.3 1999/09/17 11:17:05 oliver Exp $
+// $Id: path.C,v 1.4 1999/10/30 12:53:31 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/COMMON/path.h>
-#include <fstream.h>
+#include <fstream>
 #include <stdlib.h>
+
+using std::ifstream;
 
 namespace BALL 
 {
@@ -109,7 +111,7 @@ namespace BALL
 
 		// first, try the path itself
 		ifstream file(name.c_str());
-		if (file)
+		if (file.is_open())
 		{
 			file.close();
 			return name;
@@ -124,7 +126,7 @@ namespace BALL
 			file.open(filename.c_str());
 			
 			// if the file could be opened, we return its name
-			if (file)	
+			if (file.is_open())	
 			{
 				file.close();
 				return filename;

@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.1 1999/08/26 07:53:18 oliver Exp $
+// $Id: matrix44.h,v 1.2 1999/10/30 12:53:26 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -8,7 +8,7 @@
 #endif
 
 #include <math.h>
-#include <iostream.h>
+#include <iostream>
 
 #ifndef BALL_MATHS_ANGLE_H
 #	include <BALL/MATHS/angle.h>

@@ -1,30 +1,30 @@
-// $Id: object.iC,v 1.1 1999/08/26 07:53:16 oliver Exp $
+// $Id: object.iC,v 1.2 1999/10/30 12:53:21 oliver Exp $
 
 BALL_INLINE 
-Handle Object::getHandle (void) const
+Handle Object::getHandle () const
 {
   return handle_;
 }
   
 BALL_INLINE 
-Handle Object::getNextHandle(void)
+Handle Object::getNextHandle()
 {
   return (Object::global_handle_ + 1);
 }
   
 BALL_INLINE 
-Handle Object::getNewHandle(void)
+Handle Object::getNewHandle()
 {
   return Object::global_handle_++;
 }
   
 BALL_INLINE 
-void Object::clear(void)
+void Object::clear()
 {
 }
 
 BALL_INLINE 
-void Object::destroy(void)
+void Object::destroy()
 {
 }
   
@@ -79,19 +79,19 @@ int Object::compare(const Object & object) const
 }
 
 BALL_INLINE
-bool Object::isValid(void) const
+bool Object::isValid() const
 {
   return true;
 }
 
 BALL_INLINE 
-void Object::read(istream& /* s */)
+void Object::read(::std::istream& /* s */)
 {
 	throw Exception::NotImplemented(__FILE__, __LINE__);
 }
 
 BALL_INLINE 
-void Object::write(ostream& /* s */) const
+void Object::write(::std::ostream& /* s */) const
 {
   throw Exception::NotImplemented(__FILE__, __LINE__);
 }
@@ -101,26 +101,26 @@ void Object::write(ostream& /* s */) const
 #ifdef BALL_SUPPORT_OBJECT_MANAGER
 
 BALL_INLINE 
-Size ObjectManager::countInsertions(void)
+Size ObjectManager::countInsertions()
 {
   return number_of_insertions_;
 }
 
 BALL_INLINE 
-Size ObjectManager::countRemovals(void)
+Size ObjectManager::countRemovals()
 {
   return number_of_removals_;
 }
 
 BALL_INLINE 
-Size ObjectManager::countUpdates(void)
+Size ObjectManager::countUpdates()
 {
   return (number_of_insertions_
 	  + number_of_removals_);
 }
 
 BALL_INLINE 
-Size ObjectManager::countObjects(void)
+Size ObjectManager::countObjects()
 {
   return number_of_objects_;
 }

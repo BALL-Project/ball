@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.5 1999/09/22 17:46:26 oliver Exp $
+// $Id: exception.h,v 1.6 1999/10/30 12:53:14 oliver Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -261,6 +261,8 @@ namespace BALL
 		{
 			public:
 			FileNotFound(const char* file, int line, const string& filename);
+
+			string getFilename() const;
 
 			protected:
 			string filename_;

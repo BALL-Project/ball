@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.4 1999/09/07 19:35:50 oliver Exp $
+// $Id: HINFile.C,v 1.5 1999/10/30 12:53:34 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/KERNEL/residue.h>
@@ -718,6 +718,11 @@ namespace BALL {
 				}
 
 				if (tag == "view")
+				{
+					continue;
+				}
+
+				if (tag == "seed")
 				{
 					continue;
 				}

@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.5 1999/09/25 14:26:24 oliver Exp $
+// $Id: composite.h,v 1.6 1999/10/30 12:53:20 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -549,7 +549,7 @@ namespace BALL
 		virtual bool isValid() const;
 
 		///
-		virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
+		virtual void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
 		//@}
 
 

@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.2 1999/09/21 06:45:34 oliver Exp $
+// $Id: persistenceManager.h,v 1.3 1999/10/30 12:53:22 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -19,8 +19,8 @@
 #	include <BALL/CONCEPT/persistentObject.h>
 #endif
 
-#include <fstream.h>
-#include <iomanip.h>
+#include <fstream>
+#include <iomanip>
 
 using std::pair;
 
@@ -130,12 +130,12 @@ namespace BALL
 		/**	Set the output stream for persistent objects.
 				@param	s the output stream
 		*/
-		virtual void setOstream(ostream& s);
+		virtual void setOstream(std::ostream& s);
 
 		/**	Set the input stream for persistent objects.
 				@param	s the input stream
 		*/
-		virtual void setIstream(istream& s);
+		virtual void setIstream(std::istream& s);
 
 		/**	Start the output to a persistent stream.	
 				This method write a start marker to the output stream and
@@ -693,8 +693,8 @@ namespace BALL
 		PointerList	pointer_list_;
 		ObjectList	object_in_;
 
-		ostream*	os;
-		istream*	is;
+		std::ostream*	os;
+		std::istream*	is;
 	};
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.C,v 1.1 1999/08/26 08:02:35 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.2 1999/10/30 12:53:31 oliver Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
@@ -296,32 +296,33 @@ namespace BALL
 
 	void XDRPersistenceManager::get(char& c)
 	{
-		unsigned char tmp;
+		char tmp;
 		is->get(tmp);
-		c = (char)tmp;
+		c = tmp;
 	}
 
 	void XDRPersistenceManager::get(unsigned char& c)
 	{
-		is->get(c);
+		char& c_ref = (char&)c;
+		is->get(c_ref);
 	}
 
 	void XDRPersistenceManager::get(bool& b)
 	{
-		unsigned char c;
+		char c;
 		is->get(c);
-		b = (c == (unsigned char)1);
+		b = (c == (char)1);
 	}
 
 	void XDRPersistenceManager::get(string& s)
 	{
-		static unsigned char buf[1024];
-		unsigned char* ptr =&(buf[0]);
+		static char buf[1024];
+		char* ptr = &(buf[0]);
 		
 		do
 		{
 			is->get(*ptr);
-		} while (*ptr++ != (unsigned char)0);
+		} while (*ptr++ != (char)0);
 
 		s.assign((char*)&buf[0]);
 	}
@@ -329,7 +330,7 @@ namespace BALL
 #define BALL_DEFINE_NUMBER_GET(type)\
 	void XDRPersistenceManager::get(type& i)\
 	{\
-		unsigned char* ptr = (unsigned char*)&i;\
+		char* ptr = (char*)&i;\
 		for (unsigned short j = 0; j < sizeof(i); ++j)\
 		{\
 			is->get(*ptr++);\

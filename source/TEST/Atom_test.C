@@ -1,4 +1,4 @@
-// $Id: Atom_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: Atom_test.C,v 1.2 1999/10/30 12:53:38 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/KERNEL/atom.h>
@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.2 1999/10/30 12:53:38 oliver Exp $")
 
 using BALL::Atom;
 using BALL::Fragment;
@@ -341,7 +341,6 @@ using BALL::Composite;
 using BALL::RTTI;
 using BALL::Log;
 
-Log.insert(cout);
 
 TextPersistenceManager	pm;
 atom->setForce(Vector3(1.0, 2.0, 3.0));
@@ -351,6 +350,8 @@ atom->setName("TESTNAME");
 atom->setCharge(1.23456);
 atom->setRadius(2.34567);
 String filename;
+using std::ofstream;
+using std::ios;
 CHECK(persistentWrite(TextPersistenceManager&, String&, bool))
 NEW_TMP_FILE(filename)
 ofstream	ofile(filename.c_str(), ios::out);
@@ -363,6 +364,8 @@ fragment->remove(*atom);
 ofile.close();
 RESULT
 
+using std::ifstream;
+using std::cout;
 CHECK(persistentRead(TextPersistenceManager()))
 ifstream	ifile(filename.c_str());
 pm.setIstream(ifile);

@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.1 1999/08/26 07:53:18 oliver Exp $
+// $Id: quaternion.h,v 1.2 1999/10/30 12:53:27 oliver Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -7,7 +7,7 @@
 #	include <BALL/common.h>
 #endif
 
-#include <iostream.h>
+#include <iostream>
 
 #ifndef BALL_MATHS_MATRIX44_H
 #	include <BALL/MATHS/matrix44.h>

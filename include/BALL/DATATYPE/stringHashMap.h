@@ -1,4 +1,4 @@
-// $Id: stringHashMap.h,v 1.3 1999/09/21 06:40:43 oliver Exp $
+// $Id: stringHashMap.h,v 1.4 1999/10/30 12:53:25 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #define BALL_DATATYPE_STRINGHASHMAP_H
@@ -39,15 +39,15 @@ namespace BALL
 
 		/**	Iterator type
 		*/
-		typedef hash_map<String, Value, HashFunction<string>, std::equal_to<string> >::iterator Iterator;
+		typedef typename hash_map<String, Value, HashFunction<string>, std::equal_to<string> >::iterator Iterator;
 
 		/**	Const iterator type
 		*/
-		typedef hash_map<String, Value, HashFunction<string>, std::equal_to<string> >::const_iterator ConstIterator;	
+		typedef typename hash_map<String, Value, HashFunction<string>, std::equal_to<string> >::const_iterator ConstIterator;	
 
 		/**	Value type
 		*/
-		typedef hash_map<String, Value, HashFunction<string>, std::equal_to<string> >::value_type ValueType;	
+		typedef typename hash_map<String, Value, HashFunction<string>, std::equal_to<string> >::value_type ValueType;	
 		//@}
 
 		/**	@name	Constructors and Destructors */

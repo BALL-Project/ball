@@ -18,6 +18,7 @@ EXECUTABLES = \
 	PointGrid_test\
 	PoissonBoltzmann_test\
 	PropertyManager_test\
+	ResourceFile_test\
 	String_test\
 	StructureMapper_test\
 	TransformationApplicator_test\
@@ -71,6 +72,9 @@ PoissonBoltzmann_test:	PoissonBoltzmann_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 PropertyManager_test:	PropertyManager_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+ResourceFile_test:	ResourceFile_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Skeleton_test:	Skeleton_test.o

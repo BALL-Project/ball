@@ -1,6 +1,10 @@
-// $Id: regExp.C,v 1.2 1999/08/31 22:01:16 oliver Exp $ 
+// $Id: regExp.C,v 1.3 1999/10/30 12:53:33 oliver Exp $ 
 
 #include <BALL/DATATYPE/regExp.h>
+
+using std::endl;
+using std::istream;
+using std::ostream;
 
 namespace BALL 
 {

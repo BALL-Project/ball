@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.8 1999/09/14 17:45:55 oliver Exp $
+dnl    $Id: configure.in,v 1.9 1999/10/30 12:53:41 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -770,7 +770,7 @@ else
 				AR=${CXX}
 				AROPTS="-ar -o"
 				DYNAR=${CXX}
-				DYNAROPTS="-shared -quickstart_info -no_unresolved -o"
+				DYNAROPTS="-LANG:std -shared -quickstart_info -no_unresolved -o"
 
 				if test "${CXX_VERSION_1}" -gt 7  -o "${CXX_VERSION_1}" -eq 7 \
 								-a "${CXX_VERSION_2}" != 10 -a "${CXX_VERSION_2}" != 1; then
@@ -790,21 +790,21 @@ else
 
 				if test "${IRIX_BINFMT}" = 64 ; then
 					DEF_BOOL=false
-					CPPFLAGS="$CPPFLAGS -64"
+					CPPFLAGS="$CPPFLAGS -64 -LANG:std"
 					DYNAROPTS="-64 ${DYNAROPTS}"
 					CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit=16000 -multigot -G 6"
-					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn"
-					LDFLAGS="$LDFLAGS -64"
+					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn -DEBUG:woff=3201,1424,1110,1209"
+					LDFLAGS="$LDFLAGS -64 -LANG:std"
 					AC_DEFINE(IRIX64,)
 					ADDITIONAL_COMMENTS="Please remember to use LD_LIBRARY64_PATH instead of\n LD_LIBRARY_PATH - you are using 64 bit objects!"
 				fi
 				if test "${IRIX_BINFMT}" = N32 ; then
 					DEF_BOOL=false
-					CPPFLAGS="$CPPFLAGS -n32"
+					CPPFLAGS="$CPPFLAGS -n32 -LANG:std"
 					DYNAROPTS="-n32 ${DYNAROPTS}"
 					CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit=16000 -multigot -G 6"
-					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn"
-					LDFLAGS="$LDFLAGS -n32"
+					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn -DEBUG:woff=3201,1424,1110,1209"
+					LDFLAGS="$LDFLAGS -n32 -LANG:std"
 					AC_DEFINE(IRIX32,)
 					ADDITIONAL_COMMENTS="Please remember to use LD_LIBRARYN32_PATH instead of\n LD_LIBRARY_PATH - you are using new style 32 bit objects."
 				fi
@@ -940,6 +940,45 @@ fi
 rm /tmp/$$.conftest.c a.out 2>/dev/null
 
 dnl
+dnl		check for template arguments needed for friends of template
+dnl 	classses. Some compilers require "<>" after the method name,
+dnl		others don't - so let's find it out!
+dnl
+AC_MSG_CHECKING(for null template arguments)
+BALL_NULL_TEMPLATE_ARGS="NULL"
+AC_TRY_COMPILE(
+	[
+		template <typename T>
+		class A
+		{
+			public:
+			friend bool operator == <> (const A&, const A&);
+		};
+	],
+	[	
+ 	],
+	BALL_NULL_TEMPLATE_ARGS="<>")	
+if test "${BALL_NULL_TEMPLATE_ARGS}" = "NULL" ; then
+	AC_TRY_COMPILE(
+		[
+			template <typename T>
+			class A
+			{
+				public:
+				friend bool operator == (const A&, const A&);
+			};
+		],
+		[
+		],
+		BALL_NULL_TEMPLATE_ARGS="")	
+fi
+AC_MSG_RESULT(\"$BALL_NULL_TEMPLATE_ARGS\")
+if test "${BALL_NULL_TEMPLATE_ARGS}" = "NULL" ; then
+	AC_MSG_RESULT(could not find a suitable argument for null templates)
+	AC_ERROR(aborted)
+fi
+
+dnl
 dnl		Checks for typedefs, structures, and compiler characteristics.
 dnl
 
@@ -1069,7 +1108,7 @@ if test "${HAVE_INET_ATON+set}" = set ; then
 fi
 
 dnl
-dnl		Now for somthing related: check whether size arguments
+dnl		Now for something related: check whether size arguments
 dnl 	in function calls like getsockname getpeername or accept
 dnl		require a specialized typename or int
 dnl		We simply compile a short example with all known types
@@ -1589,6 +1628,8 @@ dnl    	define the standard installation path
 AC_DEFINE_UNQUOTED(BALL_PATH, "${BALL_PATH}")
 
 
+dnl			define BALL_NULL_TEMPLATE_ARGS
+AC_DEFINE_UNQUOTED(BALL_NULL_TEMPLATE_ARGS, ${BALL_NULL_TEMPLATE_ARGS})
 
 dnl			Some compilers (SUN CC/4.2) don't like
 dnl			the way we use the arrow operator (->)

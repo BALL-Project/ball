@@ -1,16 +1,16 @@
-// $Id: logStream.iC,v 1.1 1999/08/26 07:53:14 oliver Exp $
+// $Id: logStream.iC,v 1.2 1999/10/30 12:53:15 oliver Exp $
 
 BALL_INLINE
 int LogStreamBuf::overflow(int c)
 {
 	sync();
-	return streambuf::overflow(c);
+	return ::std::streambuf::overflow(c);
 }
 		
 BALL_INLINE
 LogStreamBuf* LogStream::rdbuf() 
 {
-	return (LogStreamBuf*)ios::rdbuf();
+	return (LogStreamBuf*)std::ios::rdbuf();
 }
 
 BALL_INLINE

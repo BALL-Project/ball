@@ -1,6 +1,12 @@
-// $Id: resourceFile.C,v 1.2 1999/08/31 22:01:16 oliver Exp $
+// $Id: resourceFile.C,v 1.3 1999/10/30 12:53:35 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
+
+using std::istream;
+using std::ostream;
+using std::endl;
+using std::ios;
+using std::streampos;
 
 namespace BALL 
 {
@@ -9,8 +15,9 @@ namespace BALL
 	char ResourceFile::ENTRY_END = ')';
 	char ResourceFile::SEPARATOR = '/';
 
-	ResourceEntry::ResourceEntry(void)
-		:	key_(""),
+	ResourceEntry::ResourceEntry()
+		:	AutoDeletable(),
+			key_(""),
 			value_(""),
 			parent_(0),
 			child_(0),
@@ -19,7 +26,8 @@ namespace BALL
 	}
 
 	ResourceEntry::ResourceEntry(const ResourceEntry& entry, bool deep)
-		:	key_(entry.key_),
+		:	AutoDeletable(),
+			key_(entry.key_),
 			value_(entry.value_),
 			parent_(0),
 			child_(0),
@@ -36,7 +44,8 @@ namespace BALL
 	}
 
 	ResourceEntry::ResourceEntry(const String& key, const String& value, ResourceEntry* parent)
-		:	key_(key),
+		:	AutoDeletable(),
+			key_(key),
 			value_(value),
 			parent_(parent),
 			child_(0),
@@ -44,7 +53,7 @@ namespace BALL
 	{
 	}
 
-	ResourceEntry::~ResourceEntry(void)
+	ResourceEntry::~ResourceEntry()
 	{
 		clear();
 	}
@@ -68,7 +77,7 @@ namespace BALL
 		return cloned;
 	}
 
-	ResourceEntry& ResourceEntry::getRoot(void)
+	ResourceEntry& ResourceEntry::getRoot()
 	{
 		register ResourceEntry* entry = this;
 		
@@ -84,7 +93,9 @@ namespace BALL
 		register ResourceEntry* entry = this;
 
 		if (*key == ResourceFile::SEPARATOR)
+		{
 			++key;
+		}
 
 		for (char* sep = strchr(key, ResourceFile::SEPARATOR);
 				 sep != 0; sep = strchr(key, ResourceFile::SEPARATOR))
@@ -95,7 +106,9 @@ namespace BALL
 			entry = entry->findChild(key);
 			
 			if (entry == 0)
+			{
 				return 0;
+			}
 		
 			*sep = old;
 			key = sep + 1;
@@ -109,7 +122,7 @@ namespace BALL
 		}
 	}
 
-	String ResourceEntry::getPath(void) const
+	String ResourceEntry::getPath() const
 	{
 		String path(key_);
 
@@ -125,20 +138,22 @@ namespace BALL
 		return path;
 	}
 
-	Size ResourceEntry::countDescendants(void) const
+	Size ResourceEntry::countDescendants() const
 	{
 		Size size = number_children_;
 		
 		for (register Index index = 0; index < (Index)number_children_; ++index)
 		{
 			if (child_[index]->number_children_ > 0)
+			{
 				size += child_[index]->countDescendants();
+			}
 		}
 		
 		return size;
 	}
 
-	Size ResourceEntry::getDepth(void) const
+	Size ResourceEntry::getDepth() const
 	{
 		Size depth = 0;
 
@@ -159,7 +174,9 @@ namespace BALL
 		if (entry != 0)
 		{
 			if (replace_value == true)
+			{
 				entry->value_ = value;
+			}
 
 			return entry;
 		}
@@ -210,7 +227,9 @@ namespace BALL
 	ResourceEntry* ResourceEntry::insertChild(ResourceEntry& entry, bool replace_value)
 	{
 		if (&entry == this || entry.isAncestorOf(*this) == true)
+		{
 			return 0;
+		}
 
 		ResourceEntry* entry_ptr = 0;
 		String& key = entry.key_;
@@ -345,9 +364,8 @@ namespace BALL
 			if (removed == 0)
 			{
 				deleteEntry(child_[found]);
-			}
-			else
-			{
+				child_[found] = 0;
+			} else {
 				*removed = child_[found];
 			}
 			
@@ -402,7 +420,7 @@ namespace BALL
 		return (bool)entry->removeChild(key);
 	}
 
-	void ResourceEntry::clear(void)
+	void ResourceEntry::clear()
 	{
 		for (register Index index = 0; index < (Index)number_children_; ++index)
 		{
@@ -456,7 +474,7 @@ namespace BALL
 		return false;
 	}
 
-	bool ResourceEntry::isValid(void) const
+	bool ResourceEntry::isValid() const
 	{
 		if (number_children_ == 0)
 		{
@@ -532,7 +550,9 @@ namespace BALL
 			}
 			
 			if (entry->number_children_ > 0 && entry->applyNostart_(processor) == false)
+			{
 				return false;
+			}
 		}
 		
 		return true;
@@ -541,7 +561,9 @@ namespace BALL
 	bool ResourceEntry::applyChildren(UnaryProcessor<ResourceEntry>& processor)
 	{
 		if (processor.start() == false)
+		{
 			return false;
+		}
 
 		register Processor::Result result = Processor::ABORT;
 		
@@ -550,7 +572,9 @@ namespace BALL
 			result = processor(*child_[index]);
 			
 			if (result <= Processor::BREAK)
+			{
 				return (result == Processor::BREAK) ? true : false;
+			}
 		}
 		
 		return processor.finish();
@@ -569,9 +593,7 @@ namespace BALL
 			if (child_[median_index]->key_ < key)
 			{
 				lower_index = median_index + 1;
-			}
-			else
-			{
+			} else {
 				upper_index = median_index;
 			}
 		}
@@ -583,7 +605,7 @@ namespace BALL
 
 
 
-	ResourceFile::ResourceFile(void)
+	ResourceFile::ResourceFile()
 		:	File(),
 			root_()
 	{
@@ -596,19 +618,33 @@ namespace BALL
 		open(name);
 	}
 
-	ResourceFile::~ResourceFile(void)
+	ResourceFile::~ResourceFile()
 	{
 		close();
 	}
 
 	bool ResourceFile::open(const String& name)
 	{
-		if (File::open(name.c_str(), ios::in) && validateSyntax_() == true && good())
+		// close the file after validateSyntax again
+		// since some iostream implementations do not 
+		// allow a seek to the beginning after EOF
+		File::open(name.c_str(), ios::in);
+		bool valid_syntax = validateSyntax_();
+		File::close();
+
+		if (!valid_syntax)
+		{
+			return false;
+		}
+	
+		if (File::open(name.c_str(), ios::in) && good())
 		{
 			*this >> *this;
 			
 			if (eof())
-				clear(0);
+			{
+				clear();
+			}
 
 		} else {
 			clear(rdstate() | ios::failbit);
@@ -629,7 +665,7 @@ namespace BALL
 		file.close();
 	}
 
-	void ResourceFile::destroy(void)
+	void ResourceFile::destroy()
 	{
 		root_.destroy();
 	}
@@ -653,29 +689,32 @@ namespace BALL
 		char value[1000];
 		char c = 0;
 		Index index = 0;
-		register ResourceFile::Entry *entry = &(resource_file.root_);
+		ResourceFile::Entry* entry = &(resource_file.root_);
 
-		while (s.get(c))
+		while (s.good())
 		{
 			resource_file.skipWhitespaces_();
+
+			s.get(c);
 
 			if (c == ResourceFile::ENTRY_BEGIN)
 			{
 				resource_file.skipWhitespaces_();
 
-				c = s.peek();
 				if (c == ResourceFile::ENTRY_END)
 				{
 					continue;
 				}
 
-				if (!s.get(c))
+				if (!s.good())
 				{
 					return s;
 				}
-				
-				for (index = 0; c != ResourceFile::ENTRY_END  && !isspace(c) 
-						 && c != ResourceFile::ENTRY_BEGIN && c != ResourceFile::ENTRY_END;
+
+				s.get(c);
+				for (index = 0; 
+						 (c != ResourceFile::ENTRY_END) && !isspace(c) && s.good()
+								&& c != ResourceFile::ENTRY_BEGIN && c != ResourceFile::ENTRY_END;
 						 ++index, s.get(c))
 				{
 					key[index] = c;
@@ -689,13 +728,16 @@ namespace BALL
 
 				resource_file.skipWhitespaces_();
 				
-				if (!s.get(c))
+				if (!s.good())
 				{
 					return s;
-				}
+				} 
+				
+				s.get(c);
 
-				for (index = 0; c != ResourceFile::ENTRY_END  && c != '\v' 
-						 && c != '\n'  && c != '\r'  && c != ResourceFile::ENTRY_BEGIN;
+				for (index = 0; 
+						 c != ResourceFile::ENTRY_END  && c != '\v' && s.good()
+							 && c != '\n'  && c != '\r'  && c != ResourceFile::ENTRY_BEGIN;
 						 ++index, s.get(c))
 				{
 					value[index] = c;
@@ -708,8 +750,9 @@ namespace BALL
 				}
 				
 				entry = entry->insertChild(key, value);
+
 			}
-			else if (c == ResourceFile::ENTRY_END)
+			else if (c == ResourceFile::ENTRY_END) 
 			{
 				entry = entry->getParent();
 			}
@@ -751,7 +794,7 @@ namespace BALL
 		--depth;
 	}
 
-	bool ResourceFile::validateSyntax_(void)
+	bool ResourceFile::validateSyntax_()
 	{
 		if (!good())
 		{
@@ -762,8 +805,9 @@ namespace BALL
 		unsigned long count_open_par = 0;
 		streampos old_pos = tellg();
 
-		while (get(c))
+		while (good())
 		{
+			get(c);
 			if (c == ENTRY_BEGIN)
 			{
 				++count_open_par;
@@ -789,9 +833,9 @@ namespace BALL
 
 		if (!bad())
 		{
-			clear(0);
+			clear();
 			
-			seekg(old_pos, ios::beg);
+			seekg(old_pos);
 
 			return true;
 		}

@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.1 1999/08/26 07:53:18 oliver Exp $
+// $Id: plane3.h,v 1.2 1999/10/30 12:53:27 oliver Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -12,7 +12,7 @@
 #endif
 
 #include <math.h>
-#include <iostream.h>
+#include <iostream>
 
 #ifndef BALL_MATHS_LINE3_H
 #	include <BALL/MATHS/line3.h>

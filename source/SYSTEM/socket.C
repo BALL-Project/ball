@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.4 1999/09/08 13:36:33 oliver Exp $
+// $Id: socket.C,v 1.5 1999/10/30 12:53:38 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -31,12 +31,19 @@
 #endif
 #define FD_ZERO(p) (memset ((p), 0, sizeof *(p)))
 
-namespace BALL {
+using std::cerr;
+using std::ios;
+using std::endl;
+
+namespace BALL 
+{
 
 	void sock_error(const char* classname, const char* msg)
 	{
 		if (errno)
+		{
 			perror (msg);
+		}
 
 		cerr << classname << ' ' << msg << endl;
 		errno = 0;
@@ -116,7 +123,7 @@ namespace BALL {
 			close ();
 		}
 
-		delete [] base();
+		delete [] pbase();
 			
 		if (--rep->cnt == 0) 
 		{
@@ -191,11 +198,10 @@ namespace BALL {
 	// return 1 on allocation and 0 if there is no need
 	int SocketBuf::doallocate()
 	{
-		if (!base()) 
+		if (!pbase()) 
 		{
-			char*	buf = new char[2*BUFSIZ];
-			setb(buf, buf + BUFSIZ, 0);
-			setg(buf, buf, buf);
+			char*	buf = new char[2 * BUFSIZ];
+			setg(buf, buf, buf + BUFSIZ);
 			
 			buf += BUFSIZ;
 			setp(buf, buf + BUFSIZ);
@@ -217,13 +223,13 @@ namespace BALL {
 			return *(unsigned char*)gptr();
 		}
 		
-		if (base() == 0 && doallocate() == 0)
+		if (pbase() == 0 && doallocate() == 0)
 		{
 			return EOF;
 		}
 		
 		int bufsz = unbuffered () ? 1: BUFSIZ;
-		int rval = (int)sys_read(base (), bufsz);
+		int rval = (int)sys_read(pbase(), bufsz);
 
 		if (rval == EOF) 
 		{
@@ -232,7 +238,7 @@ namespace BALL {
 		} else if (rval == 0) {
 			return EOF;
 		}
-		setg(eback(), base(), base() + rval);
+		setg(eback(), pbase(), pbase() + rval);
 
 		return *(unsigned char*)gptr();
 	}
@@ -274,7 +280,10 @@ namespace BALL {
 
 	int SocketBuf::xsputn(const char* s, int n)
 	{
-		if (n <= 0) return 0;
+		if (n <= 0) 
+		{
+			return 0;
+		}
 		const unsigned char* p = (const unsigned char*)s;
 		
 		for (int i=0; i<n; i++, p++) 

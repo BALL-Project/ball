@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.2 1999/09/01 09:42:08 oliver Exp $ 
+// $Id: options.C,v 1.3 1999/10/30 12:53:32 oliver Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -7,9 +7,7 @@
 #include <stdio.h>
 #include <math.h>
 
-#include <fstream.h>
-#include <iostream.h>
-
+#include <fstream>
 #include <list>
 #include <algorithm>
 
@@ -40,7 +38,7 @@ namespace BALL
 		char*	endptr;
 		String value(get(key));
 
-		// an empty Stringg is no real number
+		// an empty String is no real number
 		if (value =="")
 		{
 			return false;

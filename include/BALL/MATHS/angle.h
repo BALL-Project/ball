@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.2 1999/08/31 22:14:06 oliver Exp $
+// $Id: angle.h,v 1.3 1999/10/30 12:53:26 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -520,7 +520,7 @@ namespace BALL {
 		//@{
 
 		///
-		void dump(ostream& s = cout, unsigned long depth = 0) const 
+		void dump(std::ostream& s = std::cout, unsigned long depth = 0) const 
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 

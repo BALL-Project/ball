@@ -1,4 +1,4 @@
-// $Id: internal_hash_set.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: internal_hash_set.h,v 1.2 1999/10/30 12:53:23 oliver Exp $
 
 /*
  * Copyright (c) 1996
@@ -96,7 +96,7 @@ namespace BALL {
 		size_type max_size() const { return rep.max_size(); }
 		bool empty() const { return rep.empty(); }
 		void swap(hash_set& hs) { rep.swap(hs.rep); }
-		friend bool operator== __STL_NULL_TMPL_ARGS (const hash_set&,
+		friend bool operator== BALL_NULL_TEMPLATE_ARGS (const hash_set&,
 																								 const hash_set&);
 
 		iterator begin() const { return rep.begin(); }
@@ -206,7 +206,7 @@ namespace BALL {
 		size_type max_size() const { return rep.max_size(); }
 		bool empty() const { return rep.empty(); }
 		void swap(hash_multiset& hs) { rep.swap(hs.rep); }
-		friend bool operator== __STL_NULL_TMPL_ARGS (const hash_multiset&,
+		friend bool operator== BALL_NULL_TEMPLATE_ARGS (const hash_multiset&,
 																								 const hash_multiset&);
 
 		iterator begin() const { return rep.begin(); }

@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: regExp.h,v 1.2 1999/10/30 12:53:24 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -24,7 +24,8 @@
 
 #define BALL_REGULAR_EXPRESSION_DEFAULT_PATTERN   ""
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	Regular expression class
 	*/
@@ -257,7 +258,7 @@ namespace BALL {
 
 		/**	
 		*/
-		virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
+		virtual void dump(::std::ostream& s = ::std::cout, unsigned long depth = 0) const;
 		//@}
 
 		/**	@name Storeres
@@ -265,11 +266,11 @@ namespace BALL {
 		//@{
 		/**	
 		*/
-		friend ostream& operator << (ostream& s, const RegularExpression& regular_expression);
+		friend ::std::ostream& operator << (::std::ostream& s, const RegularExpression& regular_expression);
 
 		/**	
 		*/
-		friend istream& operator >> (istream& s, RegularExpression& regular_expression);
+		friend ::std::istream& operator >> (::std::istream& s, RegularExpression& regular_expression);
 		//@}
 
 

@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.1 1999/08/26 07:53:18 oliver Exp $
+// $Id: vector4.h,v 1.2 1999/10/30 12:53:28 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -12,7 +12,7 @@
 #endif 
 
 #include <math.h>
-#include <iostream.h>
+#include <iostream>
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #	include <BALL/CONCEPT/processor.h>
@@ -223,7 +223,7 @@ namespace BALL
 		bool isValid(void) const;
 
 		///
-		void dump(ostream& s = cout, unsigned long depth = 0) const;
+		void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
 		//@}
 
 		/**	@name	Storers
@@ -232,11 +232,11 @@ namespace BALL
 
 		///
 		template <typename C>
-		friend istream& operator >> (istream& s, TVector4<C>& vector);
+		friend std::istream& operator >> (std::istream& s, TVector4<C>& vector);
 
 		///
 		template <typename C>
-		friend ostream &operator << (ostream& s, const TVector4<C>& vector);
+		friend std::ostream& operator << (std::ostream& s, const TVector4<C>& vector);
 		//@}
 
 		/**	@name	Attributes
@@ -719,7 +719,7 @@ namespace BALL
 	}
 
 	template <class T>
-	void TVector4<T>::dump(ostream& s, unsigned long depth) const
+	void TVector4<T>::dump(std::ostream& s, unsigned long depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -735,7 +735,7 @@ namespace BALL
 	}
 
 	template <class T>
-	istream& operator >> (istream& s, TVector4<T>& v)
+	std::istream& operator >> (std::istream& s, TVector4<T>& v)
 	{
 		s >> v.x >> v.y >> v.z >> v.h;
 
@@ -743,7 +743,7 @@ namespace BALL
 	}
 
 	template <class T>
-	ostream& operator << (ostream& s, const TVector4<T>& v)
+	std::ostream& operator << (std::ostream& s, const TVector4<T>& v)
 	{
 		s << '(' <<v.x << ' ' << v.y << ' ' << v.z << ' ' << v.h << ')';
 		

@@ -172,3 +172,8 @@
 
 // Defines a signed type that has the same length as size_t
 #define BALL_INDEX_TYPE int
+
+// Define the template argument for friends of template classes:
+// either "" or "<>"
+#define BALL_NULL_TEMPLATE_ARGS ""
+

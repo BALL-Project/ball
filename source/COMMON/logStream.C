@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.5 1999/09/18 19:09:46 oliver Exp $
+// $Id: logStream.C,v 1.6 1999/10/30 12:53:30 oliver Exp $
 
 #include <BALL/COMMON/logStream.h>
 
@@ -6,6 +6,12 @@
 #include <stdio.h>
 
 #define BUFFER_LENGTH 32768
+
+using std::endl;
+using std::ostream;
+using std::streambuf;
+using std::cout;
+using std::cerr;
 
 namespace BALL 
 {
@@ -35,7 +41,7 @@ namespace BALL
 		{
 			strftime(&(buf[0]), BUFFER_LENGTH - 1, "%d.%m.%Y %T ", localtime(&(loglines_[line - 1].time)));
 			stream << buf << "[" << loglines_[line - 1].level
-						 << "]:" << loglines_[line - 1].text << endl;
+						 << "]:" << loglines_[line - 1].text.c_str() << endl;
 		}
 	}
  
@@ -84,8 +90,8 @@ namespace BALL
 						// if the stream is open for that level, write to it...
 						if ((list_it->min_level <= tmp_level_) && (list_it->max_level >= tmp_level_))
 						{
-							*(list_it->stream) << expandPrefix_(list_it->prefix, tmp_level_, time(0))
-																 << outstring << endl;
+							*(list_it->stream) << expandPrefix_(list_it->prefix, tmp_level_, time(0)).c_str()
+																 << outstring.c_str() << endl;
 						}
 					}
 			
@@ -229,8 +235,8 @@ namespace BALL
 		{
 			// associate cout to informations and warnings,
 			// cerr to errors by default
-			insert(cout, INFORMATION, ERROR - 1);
-			insert(cerr, ERROR);
+			insert(std::cout, INFORMATION, ERROR - 1);
+			insert(std::cerr, ERROR);
 		}
 	}
 
@@ -238,7 +244,9 @@ namespace BALL
 	LogStream::~LogStream(void)
 	{
 		if (delete_buffer_)
+		{
 			delete rdbuf();
+		}
 	}
 		
 	void LogStream::insert(ostream& stream, int min_level, int max_level) 

@@ -1,4 +1,4 @@
-// $Id: PSE.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: PSE.C,v 1.2 1999/10/30 12:53:36 oliver Exp $
 
 #	include <BALL/KERNEL/PSE.h>
 
@@ -6,7 +6,7 @@
 #include <stdlib.h>			// bsearch
 #include <string.h>
 
-#include <iostream.h>
+#include <iostream>
 
 namespace BALL 
 {

@@ -1,4 +1,4 @@
-// $Id: logStream.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: logStream.h,v 1.2 1999/10/30 12:53:15 oliver Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -15,7 +15,7 @@
 #	include <BALL/COMMON/debug.h>
 #endif
 
-#include <iostream.h>
+#include <iostream>
 #include <sys/time.h>
 
 #include <list>
@@ -76,7 +76,7 @@ namespace BALL
 			flushed, too.
 	*/
 	class LogStreamBuf
-		: public streambuf
+		: public ::std::streambuf
 	{
 
 		friend class LogStream;
@@ -108,7 +108,7 @@ namespace BALL
 					Dumps the contents of the whole message buffer 
 					including time and log level.
 			*/
-			virtual void dump(ostream& s);
+			virtual void dump(::std::ostream& s);
 
 			//@}
 
@@ -137,10 +137,10 @@ namespace BALL
 
 			struct Stream 
 			{
-				ostream*	stream;
-				string		prefix;
-				int				min_level;
-				int				max_level;
+				::std::ostream*	stream;
+				string					prefix;
+				int							min_level;
+				int							max_level;
 			
 				Stream()
 					:	stream(0),
@@ -194,7 +194,7 @@ namespace BALL
 			\\
 	*/
 	class LogStream
-		: public ostream
+		: public ::std::ostream
 	{
 		public:
 
@@ -338,7 +338,7 @@ namespace BALL
 				@param	min_level the minimum level of messages copied to this stream
 				@param	max_level the maximum level of messages copied to this stream
 		*/
-		void insert(ostream& s, int min_level = INT_MIN, int max_level = INT_MAX);
+		void insert(::std::ostream& s, int min_level = INT_MIN, int max_level = INT_MAX);
 
 		/**	Remove an association with a stream.
 				Remove a stream from the stream list and avoid the copying of new messages to
@@ -347,7 +347,7 @@ namespace BALL
 				happen.
 				@param	s the stream to be removed
 		*/
-		void remove(ostream& s);
+		void remove(::std::ostream& s);
 
 		/**	Set the maximum log level of an associated stream.
 				This method changes the minimum log level of an already
@@ -356,7 +356,7 @@ namespace BALL
 				@param	s the associated stream
 				@param	min_level the new minimum level
 		*/
-		void setMinLevel(const ostream& s, int min_level);
+		void setMinLevel(const ::std::ostream& s, int min_level);
 		
 		/**	Set the maximum log level of an associated stream.
 				This method changes the maximum log level of an already
@@ -365,7 +365,7 @@ namespace BALL
 				@param	s the associated stream
 				@param	min_level the new minimum level
 		*/
-		void setMaxLevel(const ostream& s, int max_level);
+		void setMaxLevel(const ::std::ostream& s, int max_level);
 
 		/**	Set prefix for output to this stream.
 				Each line written to the stream will be prefixed by
@@ -385,7 +385,7 @@ namespace BALL
 					\item {\bf \%\%}	percent sign (escape sequence)
 				\end{itemize}
 		*/
-		void setPrefix(const ostream& s, const string& prefix);
+		void setPrefix(const ::std::ostream& s, const string& prefix);
 		//@}		
 		
 		/**	@name	Message Buffer Management */

@@ -1,9 +1,13 @@
-// $Id: connolly.C,v 1.1 1999/08/26 08:02:38 oliver Exp $
+// $Id: connolly.C,v 1.2 1999/10/30 12:53:36 oliver Exp $
 
 #include <math.h>
 #include <algorithm>
+#include <iostream>
+
 using std::min;
 using std::max;
+using std::cerr;
+using std::endl;
 
 namespace BALL
 {

@@ -1,4 +1,4 @@
-// $Id: selectable.h,v 1.2 1999/09/06 22:20:43 oliver Exp $
+// $Id: selectable.h,v 1.3 1999/10/30 12:53:22 oliver Exp $
 
 #ifndef BALL_CONCEPT_SELECTABLE_H
 #define BALL_CONCEPT_SELECTABLE_H
@@ -121,10 +121,10 @@ namespace BALL
 		//@{
 
 		///
-		friend ostream&	operator << (ostream& s, const Selectable& selectable);
+		friend ::std::ostream&	operator << (::std::ostream& s, const Selectable& selectable);
 
 		///
-		friend istream&	operator >> (istream& s, Selectable& selectable);
+		friend ::std::istream&	operator >> (::std::istream& s, Selectable& selectable);
 
 		//@}
 
@@ -156,7 +156,7 @@ namespace BALL
 		//@{
 		
 		///
-		virtual void dump(ostream& s = cout, unsigned long depth = 0L) const;
+		virtual void dump(::std::ostream& s = std::cout, unsigned long depth = 0L) const;
 		//@}
 	
 		protected:

@@ -1,8 +1,15 @@
-// $Id: object.C,v 1.1 1999/08/26 08:02:35 oliver Exp $
+// $Id: object.C,v 1.2 1999/10/30 12:53:32 oliver Exp $
 
 #include <BALL/CONCEPT/object.h>
 
-namespace BALL {
+
+using std::endl;
+using std::cout;
+using std::istream;
+using std::ostream;
+
+namespace BALL 
+{
 
 	Handle Object::global_handle_ = (Handle)0;
 
@@ -20,27 +27,27 @@ namespace BALL {
 	// may not be inlined - they are called
 	// in object.h
 
-	Object* Object::getPrevious(void)
+	Object* Object::getPrevious()
 	{
 		return previous_;
 	}
 			
-	const Object* Object::getPrevious(void) const
+	const Object* Object::getPrevious() const
 	{
 		return previous_;
 	}
 			
-	Object* Object::getNext(void)
+	Object* Object::getNext()
 	{
 		return next_;
 	}
 			
-	const Object* Object::getNext(void) const
+	const Object* Object::getNext() const
 	{
 		return next_;
 	}
 
-	Object::Object(void)
+	Object::Object()
 		:	AutoDeletable(),
 			handle_(Object::global_handle_++)
 	{
@@ -66,7 +73,7 @@ namespace BALL {
 #		endif // BALL_SUPPORT_OBJECT_MANAGER
 	}
 
-	Object::~Object(void)
+	Object::~Object()
 	{
 #		ifdef BALL_SUPPORT_OBJECT_MANAGER
 
@@ -152,7 +159,7 @@ namespace BALL {
 		++number_of_removals_;
 	}
 
-	bool ObjectManager::isValid(void)
+	bool ObjectManager::isValid()
 	{
 		Size size = 0;
 		ObjectIterator object_it;

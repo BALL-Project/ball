@@ -1,4 +1,4 @@
-// $Id: macros.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: macros.h,v 1.2 1999/10/30 12:53:15 oliver Exp $
 
 #ifndef BALL_COMMON_MACROS_H
 #define BALL_COMMON_MACROS_H
@@ -12,7 +12,7 @@
 #endif
 
 #include <math.h>     // needed for fabs
-#include <iostream.h> // needed for ipfx, isfx, opfx, osfx
+//#include <iostream>		// needed for ipfx, isfx, opfx, osfx
 #include <limits.h>   // needed for CHAR_BIT
 #include <typeinfo>		// needed for typeid
 
@@ -77,10 +77,10 @@
 #define BALL_OFFSET_OF(struct_name, struct_var_name)   ((long)&(((struct_name*)0)->struct_var_name))
   
 #define BALL_DUMP_DEPTH(os, depth)               for (dump_indent_depth_ = 0; dump_indent_depth_ < depth; ++dump_indent_depth_) { os << "    "; }
-#define BALL_DUMP_STREAM_PREFIX(os)              if (!(os).opfx()) { return; } unsigned long dump_indent_depth_ = 0;
+#define BALL_DUMP_STREAM_PREFIX(os)              unsigned long dump_indent_depth_ = 0;
 
-#define BALL_DUMP_HEADER(os,cl,ob)               os << "Object: " << (void *)ob << " is instance of class: " << typeid(*ob).name() << endl;
-#define BALL_DUMP_CLASS_HEADER(os,cl,ob)         os << "Object: " << (void *)ob << " is instance of class: " << #cl << endl;
-#define BALL_DUMP_STREAM_SUFFIX(os)              (os).osfx();
+#define BALL_DUMP_HEADER(os,cl,ob)               os << "Object: " << (void *)ob << " is instance of class: " << typeid(*ob).name() << std::endl;
+#define BALL_DUMP_CLASS_HEADER(os,cl,ob)         os << "Object: " << (void *)ob << " is instance of class: " << #cl << ::std::endl;
+#define BALL_DUMP_STREAM_SUFFIX(os)              
 
 #endif // BALL_COMMON_MACROS_H
