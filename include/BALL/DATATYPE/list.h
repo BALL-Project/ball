@@ -1,4 +1,4 @@
-// $Id: list.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: list.h,v 1.2 1999/12/18 12:32:11 oliver Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -22,7 +22,7 @@ namespace BALL
 {
 	
 	using std::list;
-
+	
 	template <typename Value>
 	class List
 		:	public list<Value>
@@ -35,11 +35,11 @@ namespace BALL
 
 		/**	Iterator type.
 		*/
-		typedef list<Value>::iterator Iterator;
+		typedef typename list<Value>::iterator Iterator;
 
 		/**	Constant iterator type.
 		*/
-		typedef list<Value>::const_iterator ConstIterator;
+		typedef typename list<Value>::const_iterator ConstIterator;
 
 		//@}
 
