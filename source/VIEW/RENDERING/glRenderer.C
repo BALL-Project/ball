@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.27 2005/01/23 17:24:50 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.28 2005/01/23 23:19:59 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -50,7 +50,7 @@ namespace BALL
 				last_color_(&dummy_color_),
 				stereo_(NO_STEREO),
 				render_mode_(RENDER_MODE_UNDEFINED),
- 				use_vertex_buffer_(false),
+ 				use_vertex_buffer_(true),
 				picking_mode_(false),
 				model_type_(MODEL_LINES)
 		{
@@ -157,7 +157,12 @@ namespace BALL
 			createTubes_();
 			createBoxes_();
 
-			use_vertex_buffer_ = isExtensionSupported("GL_ARB_vertex_buffer_object");
+			// if vertex buffers were not disabled manualy, check if we can use them
+			if (!vertexBuffersSupported())
+			{
+				use_vertex_buffer_ = false;
+			}
+
 			if (use_vertex_buffer_)
 			{
 				Log.error() << "Using Vertex Buffer Object Extension" << std::endl;
@@ -1479,7 +1484,8 @@ namespace BALL
 			return display_lists_.has(&rep);
 		}
 
-		bool GLRenderer::isExtensionSupported(const String& extension)
+		bool GLRenderer::isExtensionSupported(const String& extension) const
+			throw()
 		{
 			// Extension names should not have spaces
 			if (extension == "" || extension.hasSubstring(" ")) return false;
@@ -1498,34 +1504,42 @@ namespace BALL
 
 		String GLRenderer::getVendor()
 		{
+			if (glGetString(GL_VENDOR) == 0) return "";
 			return (char*)glGetString(GL_VENDOR);
 		}
 
 		String GLRenderer::getRenderer()
 		{
-			return (char*)glGetString(GL_RENDER);
+			if (glGetString(GL_RENDERER) == 0) return "";
+			return (char*)glGetString(GL_RENDERER);
 		}
 
 		String GLRenderer::getOpenGLVersion() 
 		{
+			if (glGetString(GL_VERSION) == 0) return "";
 			return (char*)glGetString(GL_VERSION);
 		}
 
 		vector<String> GLRenderer::getExtensions()
 		{
-			String exts = (char*)glGetString(GL_EXTENSIONS);
 			vector<String> string_vector;
+			if (glGetString(GL_EXTENSIONS) == 0) return string_vector;
+			String exts = (char*)glGetString(GL_EXTENSIONS);
 			exts.split(string_vector);
 			return string_vector;
 		}
 		
 		bool GLRenderer::enableVertexBuffers(bool state)
+			throw()
 		{
 			if (!isExtensionSupported("GL_ARB_vertex_buffer_object")) 
 			{
 				use_vertex_buffer_ = false;
 				return false;
 			}
+
+			if (state) Log.info() << "Enabling Vertex Buffer" << std::endl;
+			else       Log.info() << "Disabling Vertex Buffer" << std::endl;
 
 			use_vertex_buffer_ = state;
 			return true;
@@ -1599,6 +1613,12 @@ namespace BALL
 			all_names_ = 1;
 		}
 
+
+		bool GLRenderer::vertexBuffersSupported() const
+			throw()
+		{
+			return isExtensionSupported("GL_ARB_vertex_buffer_object");
+		}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/RENDERING/glRenderer.iC>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.27.2.14 2005/01/19 22:48:10 amoll Exp $
+// $Id: glRenderer.h,v 1.27.2.15 2005/01/23 23:20:09 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -243,10 +243,16 @@ namespace BALL
 			/** Test if a given opengl extension is supported by the current driver.
 			 		Call this only after Scene::initializeGL();
 			*/
-			bool isExtensionSupported(const String& extension);
+			bool isExtensionSupported(const String& extension) const
+				throw();
 
 			/// 
-			void clearVertexBuffersFor(Representation& rep);
+			void clearVertexBuffersFor(Representation& rep)
+				throw();
+
+			///
+			bool vertexBuffersSupported() const
+				throw();
 
 			///
 			String getVendor();
