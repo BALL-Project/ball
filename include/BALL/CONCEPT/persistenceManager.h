@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.h,v 1.41 2003/04/17 16:32:58 oliver Exp $
+// $Id: persistenceManager.h,v 1.42 2003/05/08 10:30:50 oliver Exp $
+//
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
 #define BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -963,12 +964,14 @@ namespace BALL
 			Size size)
 		throw()
 	{
-		writeObjectArrayHeader(RTTI::getStreamName<T>(), name, size);
+		writeObjectPointerArrayHeader(RTTI::getStreamName<T>(), name, size);
 
 		for (Position i = 0; i < size; i++)
-			(*this).writeObject(array[i], "-");
+		{
+			(*this) << array[i];
+		}
 
-		writeObjectArrayTrailer();
+		writeObjectPointerArrayTrailer();
 	}
 
 
@@ -977,7 +980,7 @@ namespace BALL
 		(const T* array, const char* name, Size& size)
 		throw()
 	{
-		if (!checkObjectArrayHeader(RTTI::getStreamName<T>(), name, size))
+		if (!checkObjectPointerArrayHeader(RTTI::getStreamName<T>(), name, size))
 		{
 			return false;
 		}
@@ -988,7 +991,7 @@ namespace BALL
 			(*this).readObject(ptr[i], "");
 		}
 
-		bool result = checkObjectArrayTrailer();
+		bool result = checkPointerObjectArrayTrailer();
 		return result;
 	} 
 
