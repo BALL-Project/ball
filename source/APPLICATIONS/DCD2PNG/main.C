@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.10 2004/07/21 13:21:16 amoll Exp $
+// $Id: main.C,v 1.11 2004/07/21 13:58:14 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -24,8 +24,8 @@ using namespace BALL::VIEW;
 void showUsage()
 {
  	Log.insert(std::cerr);
-	Log.error() << "DCD2PNG <PDBFILE.pdb | HINFILE.hin> <DCDFILE.dcd> [<BALLViewProject.bvp>] [<DIRECTORY>]" << std::endl;
-	Log.error() << "Read a molecular file, and create PNG images from them in the given directory." << std::endl;
+	Log.error() << "DCD2PNG <PDBFILE.pdb | HINFILE.hin> <DCDFILE.dcd> <BALLViewProject.bvp>" << std::endl;
+	Log.error() << "Read a molecular file, and create PNG images from them by using POVRay." << std::endl;
  	Log.remove(std::cerr);
 }
 
@@ -152,15 +152,6 @@ int main(int argc, char **argv)
 			continue;
 		}
 			
-	
-		Directory d(argument);
-		if (d.isValid())
-		{
-			mainframe.setWorkingDir(argument);
-			working_dir = argument;
-			continue;
-		}
-
 		error = true;
 	}
 
@@ -179,12 +170,60 @@ int main(int argc, char **argv)
  		DisplayProperties::getInstance(0)->applyButtonClicked();
 	}
 
-	Size width = 1000;
-	Size height = 750;
+	Size width = 720;
+	Size height = 480;
+	String povray_options = "-V +FN +QR +A0.3 -UV -D +I- ";
+	String povray_exec;
+	INIFile inifile("DCD2PNG.ini");
+	if (inifile.read())
+	{
+		if (inifile.hasEntry("DCD2PNG", "WORKINGDIR"))
+		{
+			String argument = inifile.getValue("DCD2PNG", "WORKINGDIR");
+			Directory d(argument);
+			if (d.isValid())
+			{
+				working_dir = argument;
+			}
+			else
+			{
+				std::cerr << "Could not read directory for images from INIFile!" << std::endl;
+			}
+		}
+
+		try
+		{
+			if (inifile.hasEntry("DCD2PNG", "WIDTH"))
+			{
+				String argument = inifile.getValue("DCD2PNG", "WIDTH");
+				width = argument.toUnsignedInt();
+			}
+			if (inifile.hasEntry("DCD2PNG", "HEIGHT"))
+			{
+				String argument = inifile.getValue("DCD2PNG", "HEIGHT");
+				height = argument.toUnsignedInt();
+			}
+		}
+		catch(...)
+		{
+			std::cerr << "Could not read values for width and height from INIFile!" << std::endl;
+		}
+
+		if (inifile.hasEntry("DCD2PNG", "POVRAY_OPTIONS"))
+		{
+			povray_options = inifile.getValue("DCD2PNG", "POVRAY_OPTIONS") + " +I- ";
+		}
+
+		if (inifile.hasEntry("DCD2PNG", "POVRAY"))
+		{
+			povray_exec = inifile.getValue("DCD2PNG", "POVRAY");
+		}
+	}
+
+
 	Scene::getInstance(0)->resize(width, height);
 
-	String povray_options;
-	povray_options = "-V +FN +QR +A0.3 -UV -D +I- +W" + String(width) + " +H" + String(height) + " +O" + working_dir + "/";
+	povray_options +=	"+W" + String(width) + " +H" + String(height) + " +O" + working_dir + FileSystem::PATH_SEPARATOR;
 	POVRenderer pov;
 	pov.setHumanReadable(false);
 
@@ -194,8 +233,14 @@ int main(int argc, char **argv)
 	SnapShotManager sm(system, 0, &dcdfile, false);
 	sm.applyFirstSnapShot();
 
+	vector<String> strings;
+	Size s = povray_exec.split(strings, String(FileSystem::PATH_SEPARATOR).c_str());
+	String pov_exec2 = strings[s - 1];
+
 	while(sm.applyNextSnapShot())
 	{
+		String pov_arg = povray_options + String(nr) + ".png" ;
+
 		std::stringstream pov_renderer_output;
 		pov.setOstream(pov_renderer_output);
  		Scene::getInstance(0)->exportScene(pov);
@@ -264,10 +309,9 @@ int main(int argc, char **argv)
  				close(writepipe[0]);
 			}
 
-			String pov_arg = povray_options + String(nr) + ".png" ;
- 	   	execl ("/home/student/amoll/bin/povray", "povray", pov_arg.c_str(), 0);
- 			std::cout << std::endl;
- 	  	execl ("/bin/cat", "cat", 0);
+ 	   	execl (povray_exec.c_str(), pov_exec2.c_str(), pov_arg.c_str(), 0);
+// 			std::cout << std::endl ;
+//  	  	execl ("/bin/cat", "cat", 0);
 		}
 
 		nr++;
