@@ -1,4 +1,4 @@
-// $Id: surface.C,v 1.4 2000/03/27 09:08:24 oliver Exp $
+// $Id: surface.C,v 1.5 2000/05/15 19:19:50 oliver Exp $
 
 #include <BALL/MATHS/surface.h>
 
@@ -74,7 +74,7 @@ namespace BALL
 		vertices_.clear();
 		triangles_.clear();
 
-		ifstream	file(vert_filename.c_str());
+		ifstream file(vert_filename.c_str());
 		if (!file)
 		{
 			throw Exception::FileNotFound(__FILE__, __LINE__, vert_filename);
@@ -100,6 +100,8 @@ namespace BALL
 			line.getline(file);
 		}
 		file.close();
+		// workaround for trouble in File
+		file.clear();
 
 		// now read the faces file:
 		file.open(face_filename.c_str());
@@ -119,7 +121,6 @@ namespace BALL
 		Size number_of_vertices = vertices_.size();
 		while (file && (line.countFields() == 5))
 		{
-			Log.info() << "reading line " << line << endl;
 			// read the vertex indices
 			line.split(s, 5);
 			t.v1 = (Index)s[0].toInt() - 1;
