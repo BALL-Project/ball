@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.18.2.14 2005/01/31 14:17:10 amoll Exp $
+// $Id: POVRenderer.C,v 1.18.2.15 2005/01/31 14:53:45 oliver Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -198,10 +198,22 @@ namespace BALL
 
 				if (outfile_ != 0 && RTTI::isKindOf<File>(*outfile_))
 				{
-					String filename = FileSystem::baseName((*(File*)outfile_).getName());
-					out << "// povray +I" << filename 
-							<< " +FN +O" << filename << ".png +QR +W" << width_ 
-							<< " +H" << height_ << " -UV\n//" << endl;
+					// Add a command line with the correct options to call POVRay to the header
+					// so we can just copy&paste this to render this file.
+					String infilename = FileSystem::baseName((*(File*)outfile_).getName());
+					String outfilename(infilename);
+					if (outfilename.hasSuffix(".pov"))
+					{
+						outfilename.getSubstring(-4) = ".png";
+					}
+					// +QR: highest quiality
+					// +A0.3 : antialiasing
+					// -UV: due to problems with the orthogonality of the camera vectors
+					// +FN: PNG format as the default
+					// +W/+H: width and height, taken from the widget.
+					out << "// povray +I" << infilename 
+							<< " +FN +O" << outfilename << " +Q9 +W" << width_ 
+							<< " +H" << height_ << " -UV +A0.3\n//" << endl;
 				}
 			}
 			out << "camera {" << std::setprecision(12) << endl
