@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Bond_test.C,v 1.27 2002/12/12 11:34:39 oliver Exp $
+// $Id: Bond_test.C,v 1.28 2003/02/10 11:10:20 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -15,7 +15,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.27 2002/12/12 11:34:39 oliver Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.28 2003/02/10 11:10:20 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -64,13 +64,6 @@ CHECK(createBond(Bond&, Atom&, Atom&))
 	Atom a1;
 	Atom a2;
 	Atom a3;
-	Atom a4;
-	Atom a5;
-	Atom a6;
-	Atom a7;
-	Atom a8;
-	Atom a9;
-	Atom a10;
 	Bond b1;
 	Bond b2;
 
@@ -93,17 +86,22 @@ CHECK(createBond(Bond&, Atom&, Atom&))
 	TEST_EQUAL(a1.countBonds(), 2);
 	TEST_EQUAL(a3.countBonds(), 1);
 
-	Bond b3("bond", a1, a4);		
-	Bond b4("bond", a1, a5);
-	Bond b5("bond", a1, a6);
-	Bond b6("bond", a1, a7);
-	Bond b7("bond", a1, a8);
-	Bond b8("bond", a1, a9);
-	Bond b9;
-	TEST_EQUAL(b9.createBond(b9, a3, a3), 0);
-	TEST_EXCEPTION(Bond::TooManyBonds, Bond::createBond(b9, a1, a10))
-	TEST_EQUAL(a1.countBonds(), 8);
-	TEST_EXCEPTION(Bond::TooManyBonds, Bond::createBond(b9, a10, a1))
+	std::vector<Bond> bonds(Atom::MAX_NUMBER_OF_BONDS + 10);
+	std::vector<Atom> atoms(Atom::MAX_NUMBER_OF_BONDS + 11);
+	for (Position i = 1; i < (Atom::MAX_NUMBER_OF_BONDS + 10); ++i)
+	{
+		STATUS("# bonds: " << i)
+		if (i <= Atom::MAX_NUMBER_OF_BONDS)
+		{
+			TEST_EQUAL(bonds[i].createBond(bonds[i], atoms[0], atoms[i + 1]), &(bonds[i]));
+			TEST_EQUAL(atoms[0].countBonds(), i);
+		}
+		else
+		{
+			TEST_EXCEPTION(Bond::TooManyBonds, Bond::createBond(bonds[i], atoms[0], atoms[i + 1]))
+			TEST_EQUAL(atoms[0].countBonds(), Atom::MAX_NUMBER_OF_BONDS);
+		}
+	}		
 RESULT
 
 CHECK(clear())
