@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.14 2001/04/04 09:50:44 anker Exp $
+// $Id: DCDFile.C,v 1.15 2001/05/07 09:29:08 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -20,7 +20,7 @@ namespace BALL
 
 
 	DCDFile::DCDFile(const DCDFile& file)
-		throw()
+		throw(Exception::FileNotFound)
 		:	TrajectoryFile(file),
 			header_(file.header_),
 			swap_bytes_(file.swap_bytes_),
