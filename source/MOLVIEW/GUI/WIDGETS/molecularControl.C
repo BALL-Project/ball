@@ -1,7 +1,8 @@
-// $Id: molecularControl.C,v 1.6.4.4 2002/10/27 20:28:45 amoll Exp $
+// $Id: molecularControl.C,v 1.6.4.5 2002/11/28 21:19:10 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
+#include <BALL/MOLVIEW/GUI/DIALOGS/atomSettings.h>
 #include <BALL/KERNEL/system.h>
 
 #include <qpopupmenu.h>
@@ -51,6 +52,7 @@ void MolecularControl::checkMenu(MainControl& main_control)
 			if (!RTTI::isKindOf<System>(**list_it))
 			{
 				list_filled = false;
+				break;
 			}
 		}
 	}
@@ -143,7 +145,12 @@ bool MolecularControl::reactToMessages_(Message* message)
 
 		update = updateComposite(&(composite_message->getComposite()->getRoot()));
 	}
-
+	/*
+	else if (RTTI::isKindOf<NewSelectionMessage> (*message))
+	{
+		setSelection_();
+	}
+*/
 	return update;
 }
 
@@ -164,7 +171,8 @@ void MolecularControl::buildContextMenu(Composite* composite, QListViewItem* ite
 		SELECT                       = 30,
 		DESELECT                     = 31,
 		RESIDUE__CHECK               = 40,
-		DISPLAY__CHANGE              = 50
+		DISPLAY__CHANGE              = 50,
+		ATOM__PROPERTIES						 = 60
 	};
 
 	// build the context menu
@@ -196,8 +204,20 @@ void MolecularControl::buildContextMenu(Composite* composite, QListViewItem* ite
 		context_menu_.insertSeparator();
 		insertContextMenuEntry("center Camera", this, SLOT(centerCamera()), CAMERA__CENTER);
 	}
+
+	if (RTTI::isKindOf<Atom>(*composite))
+	{
+		insertContextMenuEntry("atom properties", this, SLOT(atomProperties((Atom*) composite)), ATOM__PROPERTIES);
+	}
 }
 
+void MolecularControl::atomProperties_(Atom* atom)
+	throw()
+{
+	AtomSettings as(atom, this);
+	as.exec();
+}
+	
 
 	} // namespace MOLVIEW
 
