@@ -1,9 +1,8 @@
-// $Id: Expression_test.C,v 1.27 2002/01/26 22:01:27 oliver Exp $
+// $Id: Expression_test.C,v 1.28 2002/01/28 00:43:55 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-// insert includes here
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/expression.h>
@@ -18,13 +17,11 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.27 2002/01/26 22:01:27 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.28 2002/01/28 00:43:55 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-///  insert tests for each member function here         
-///
 // Predicate for testing
 
 class MickeyPredicate
@@ -568,7 +565,7 @@ CHECK(Expression::setExpression(const String& expression) throw())
 	String test_expression("connectedTo((-H))");
 	Expression e;
 	e.setExpression(test_expression);
-	TEST_EQUAL(e.getExpressionString(), "(connectedTo((-H)))")
+	TEST_EQUAL(e.getExpressionString(), "connectedTo((-H))")
 RESULT
 
 

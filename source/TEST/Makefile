@@ -265,8 +265,3 @@ solvation_test:	$(EXECUTABLES_SOLVATION)
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
 
-
-#???
-SimpleDescriptors_test:	SimpleDescriptors_test.o ../QSAR/simpleDescriptors.o
-	$(CXX) $(CXXFLAGS) SimpleDescriptors_test.o ../QSAR/simpleDescriptors.o $(LDFLAGS) -o SimpleDescriptors_test $(LIBS)
-	

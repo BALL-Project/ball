@@ -1,4 +1,4 @@
-// $Id: ExpressionParser_test.C,v 1.3 2002/01/27 05:56:40 oliver Exp $
+// $Id: ExpressionParser_test.C,v 1.4 2002/01/28 00:43:55 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(ExpressionParser, "$Id: ExpressionParser_test.C,v 1.3 2002/01/27 05:56:40 oliver Exp $")
+START_TEST(ExpressionParser, "$Id: ExpressionParser_test.C,v 1.4 2002/01/28 00:43:55 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -51,24 +51,6 @@ RESULT
 CHECK(SyntaxTree::~SyntaxTree() throw())
 	delete st_ptr;
 RESULT
-
-
-/*
-CHECK(SyntaxTree::SyntaxTree(const String& expression) throw())
-	String teststring("BALL teststring");
-	st_ptr = new SyntaxTree(teststring);
-	TEST_NOT_EQUAL(st_ptr, 0)
-	TEST_EQUAL(st_ptr->expression, teststring)
-	TEST_EQUAL(st_ptr->argument, "")
-	TEST_EQUAL(st_ptr->evaluated, false)
-	TEST_EQUAL(st_ptr->negate, false)
-	TEST_EQUAL(st_ptr->type, ExpressionTree::INVALID)
-	list<SyntaxTree*> children;
-	bool test = (st_ptr->children == children);
-	TEST_EQUAL(test, true)
-RESULT
-*/
-
 
 CHECK(SyntaxTree::begin() throw())
 	SyntaxTree* child1 = new SyntaxTree;
@@ -151,57 +133,6 @@ CHECK(SyntaxTree::end() const  throw())
 	TEST_EQUAL(test, true)
 RESULT
 
-
-/*
-CHECK(SyntaxTree::mergeLeft(SyntaxTree* tree) throw())
-	SyntaxTree* tree = new SyntaxTree;
-	list<SyntaxTree*> test_list;
-	test_list.push_front(tree);
-
-	SyntaxTree st;
-	st.mergeLeft(tree);
-	bool test = (st.children == test_list);
-	TEST_EQUAL(test, true);
-
-	st.clear();
-	test_list.clear();
-
-	SyntaxTree* subtree1 = new SyntaxTree;
-	SyntaxTree* subtree2 = new SyntaxTree;
-	tree->children.push_front(subtree1);
-	tree->children.push_front(subtree2);
-	st.mergeLeft(tree);
-	test_list.push_front(subtree1);
-	test_list.push_front(subtree2);
-	test = (st.children == test_list);
-	TEST_EQUAL(test, true);
-RESULT
-
-
-CHECK(SyntaxTree::mergeRight(SyntaxTree* tree) throw())
-	SyntaxTree* tree = new SyntaxTree;
-	list<SyntaxTree*> test_list;
-	test_list.push_front(tree);
-
-	SyntaxTree st;
-	st.mergeLeft(tree);
-	bool test = (st.children == test_list);
-	TEST_EQUAL(test, true);
-
-	st.clear();
-	test_list.clear();
-
-	SyntaxTree* subtree1 = new SyntaxTree;
-	SyntaxTree* subtree2 = new SyntaxTree;
-	tree->children.push_front(subtree1);
-	tree->children.push_front(subtree2);
-	st.mergeLeft(tree);
-	test_list.push_front(subtree1);
-	test_list.push_front(subtree2);
-	test = (st.children == test_list);
-	TEST_EQUAL(test, true);
-RESULT
-*/
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
