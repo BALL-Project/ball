@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.14 2002/02/27 12:21:56 sturm Exp $
+// $Id: displayProperties.C,v 1.15 2002/05/12 14:07:22 oliver Exp $
 
 
 #include <BALL/KERNEL/molecule.h>
@@ -516,7 +516,7 @@ namespace BALL
 			for (; list_it != temp_selection_.end(); ++list_it)
 			{	
 				(*list_it)->apply(fragmentdb_.add_hydrogens);
-				number_of_hydrogens += fragmentdb_.add_hydrogens.getNumberOfInsertedHydrogens();
+				number_of_hydrogens += fragmentdb_.add_hydrogens.getNumberOfInsertedAtoms();
 				(*list_it)->apply(fragmentdb_.build_bonds);
 				applyOn_(**list_it);	
 
