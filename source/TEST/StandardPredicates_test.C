@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StandardPredicates_test.C,v 1.24 2003/01/25 13:15:09 oliver Exp $
+// $Id: StandardPredicates_test.C,v 1.25 2003/03/31 17:56:38 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.24 2003/01/25 13:15:09 oliver Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.25 2003/03/31 17:56:38 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -295,10 +295,9 @@ RESULT
 
 // tests for InRingPredicate
 
-CHECK(InRingPredicate::dfs () (const Atom& first_atom, const Size limit, HashSet<const Bond*>& visited) const)
-RESULT
 
 CHECK(InRingPredicate::operator () (const Atom& atom) const )
+	InRingPredicate inRing;
 	InRingPredicate in0Ring;
 	in0Ring.setArgument("0");
 	InRingPredicate in1Ring;
@@ -334,9 +333,11 @@ CHECK(InRingPredicate::operator () (const Atom& atom) const )
 			case 14:
 			case 16:
 				TEST_EQUAL(in5Ring(*it), true)
+				TEST_EQUAL(in5Ring.getRingAtoms().size(), 5);
 				break;
 			default:
 				TEST_EQUAL(in5Ring(*it), false)
+				TEST_NOT_EQUAL(in5Ring.getRingAtoms().size(), 5);
 		}
 		switch (i) 
 		{
@@ -347,9 +348,11 @@ CHECK(InRingPredicate::operator () (const Atom& atom) const )
 			case 21:
 			case 23:
 				TEST_EQUAL(in6Ring(*it), true)
+				TEST_EQUAL(in6Ring.getRingAtoms().size(), 6);
 				break;
 			default:
 				TEST_EQUAL(in6Ring(*it), false)
+				TEST_NOT_EQUAL(in6Ring.getRingAtoms().size(), 6);
 		}
 		switch (i) 
 		{
@@ -362,10 +365,14 @@ CHECK(InRingPredicate::operator () (const Atom& atom) const )
 			case 19:
 			case 21:
 			case 23:
+				TEST_EQUAL(inRing(*it), true)
 				TEST_EQUAL(in9Ring(*it), true)
+				TEST_EQUAL(in9Ring.getRingAtoms().size(), 9);
 				break;
 			default:
+				TEST_EQUAL(inRing(*it), false)
 				TEST_EQUAL(in9Ring(*it), false)
+				TEST_NOT_EQUAL(in9Ring.getRingAtoms().size(), 9);
 		}
 	}
 RESULT
@@ -964,8 +971,33 @@ CHECK(Sp3HybridizedPredicate::operator () (const Atom& atom) const )
 	}
 RESULT
 
+
 CHECK(ChargePredicate::operator ())
   // ???
+RESULT
+
+S.clear();
+f.open("data/LacNAc.hin");
+f >> S;
+f.close();
+
+CHECK(AxialPredicate::operator () (const Atom& atom) )
+	AxialPredicate isAxial;
+
+	AtomIterator it = S.beginAtom();
+	for (Size i=1; +it; ++it, ++i)
+	{
+		STATUS(i)
+		STATUS(it->getFullName())
+		switch (i) 
+		{
+			case 27:
+				TEST_EQUAL(isAxial(*it), true)
+				break;
+			default:
+				TEST_EQUAL(isAxial(*it), false)
+		}
+	}
 RESULT
 
 /////////////////////////////////////////////////////////////

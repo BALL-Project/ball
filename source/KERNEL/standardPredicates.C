@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.42 2003/03/28 19:19:08 anker Exp $
+// $Id: standardPredicates.C,v 1.43 2003/03/31 17:56:36 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -196,12 +196,37 @@ namespace BALL
 
 	// in ring predicate
 
-	bool InRingPredicate::dfs_(const Atom& atom, const Atom& first_atom,
-			const Size limit, const bool exact, HashSet<const Bond*>& visited) const
+	InRingPredicate::InRingPredicate()
+		throw()
+		: ExpressionPredicate()
+	{
+	}
+
+	InRingPredicate::InRingPredicate(Size n)
+		throw()
+		: ExpressionPredicate()
+	{
+		String argument(n);
+		setArgument(argument);
+	}
+
+	InRingPredicate::~InRingPredicate()
+		throw()
+	{
+		ring_atoms_.clear();
+	}
+
+	bool InRingPredicate::dfs(const Atom& atom, const Atom& first_atom,
+			const Size limit, const bool exact, HashSet<const Bond*>& visited,
+			vector<const Atom*>& atoms) const
 		throw()
 	{
 		// the following recursive function performs an ad-hoc dfs and returns
 		// true, if a ring was found and false otherwise.
+
+		// DEBUG
+		// cout << "visited.size() " << visited.size() << endl;
+		// /DEBUG
 
 		if (exact == true)
 		{
@@ -234,20 +259,27 @@ namespace BALL
 		Size i;
 		const Bond* bond;
 		Atom* descend;
-		HashSet<const Bond*> my_visited(visited);
 
 		// Now iterate over all Bonds an store the visited bonds.
 
 		for (i = 0; i < atom.countBonds(); ++i)
 		{
 			bond = atom.getBond(i);
-			if (!my_visited.has(bond))
+			if (!visited.has(bond))
 			{
 				descend = bond->getPartner(atom);
-				my_visited.insert(bond);
-				if (dfs_(*descend, first_atom, limit-1, exact, my_visited))
+				visited.insert(bond);
+				if (dfs(*descend, first_atom, limit-1, exact, visited, atoms) == true)
 				{
+					// DEBUG
+					// cout << "Pushing back " << atom.getFullName() << endl;
+					// /DEBUG
+					atoms.push_back(&atom);
 					return true;
+				}
+				else
+				{
+					visited.erase(bond);
 				}
 			}
 		}
@@ -256,7 +288,7 @@ namespace BALL
 	}
 
 
-	bool InRingPredicate::operator () (const Atom& atom) const
+	bool InRingPredicate::operator () (const Atom& atom)
 		throw()
 	{
 		// the size of the ring to be found
@@ -300,8 +332,9 @@ namespace BALL
 		// if the atom does not have bonds, we cannot find any rings.
 		if (atom.countBonds() > 0)
 		{
-			HashSet<const Bond*> visited;
-			if (dfs_(atom, atom, n, exact, visited) == true)
+			visited_bonds_.clear();
+			ring_atoms_.clear();
+			if (dfs(atom, atom, n, exact, visited_bonds_, ring_atoms_) == true)
 			{
 				return true;
 			}
@@ -315,6 +348,18 @@ namespace BALL
 			return(false);
 		}
 
+	}
+
+	const HashSet<const Bond*>& InRingPredicate::getVisitedBonds() const
+		throw()
+	{
+		return visited_bonds_;
+	}
+
+	const vector<const Atom*>& InRingPredicate::getRingAtoms() const
+		throw()
+	{
+		return ring_atoms_;
 	}
 
 
@@ -1447,6 +1492,164 @@ namespace BALL
 		}
 
 		return result;
+	}
+
+
+	bool AxialPredicate::operator () (const Atom& atom) const
+		throw()
+	{
+
+		// if it's not a carbon, go home.
+		if (atom.getElement() != PTE[Element::C]) 
+		{
+			// DEBUG
+			// cout << "No carbon." << endl;
+			// /DEBUG
+			return(false);
+		}
+
+		// if atom's not sp3, go away.
+		Sp3HybridizedPredicate isSp3;
+		if (!isSp3(atom)) 
+		{
+			// DEBUG
+			// cout << "Not sp3." << endl;
+			// /DEBUG
+			return(false);
+		}
+
+		// make sure we are in a 5 or 6 memebered ring.
+		InRingPredicate inRing;
+		if (!inRing(atom) == true)
+		{
+			// DEBUG
+			// cout << "Not in a ring." << endl;
+			// /DEBUG
+			return(false);
+		}
+
+		const vector<const Atom*>& ring_atoms = inRing.getRingAtoms();
+		const HashSet<const Bond*>& visited_bonds = inRing.getVisitedBonds();
+
+		if ((ring_atoms.size() < 5) || (ring_atoms.size() > 6))
+		{
+			// DEBUG
+			// cout << "Wrong ring size " << ring_atoms.size() << "." << endl;
+			// /DEBUG
+			return(false);
+		}
+
+		// find all the atoms we need.
+
+		// the variable name C5 suggests that this routine can only handle
+		// six-membered rings. that's not true, five-membered rings are also
+		// possible. it is questionable, on the other hand, whether 5-rings
+		// make sense at all...
+
+		const Atom* C1 = &atom;
+		Vector3 c1 = C1->getPosition();
+		const Atom* C3;
+		Vector3 c3;
+		const Atom* C5;
+		Vector3 c5;
+		const Atom* H = 0;
+		Vector3 h;
+		const Atom* R = 0;
+		Vector3 r;
+
+		// it is actually not really necessary to know which one is C3 and
+		// which one C5 but it makes sign determination easier.
+		
+		C3 = ring_atoms[ring_atoms.size() - 3];
+		c3 = C3->getPosition();
+		C5 = ring_atoms[1];
+		c5 = C5->getPosition();
+		// DEBUG
+		// cout << "C3: " << C3->getFullName() << endl;
+		// cout << "C5: " << C5->getFullName() << endl;
+		// /DEBUG
+		
+		// This code takes the hydrogen as means of measuring the angle. This
+		// is NOT applicable for every sugar.
+
+		// NOTE that this loop doesn't check whether this H is the *only* H of
+		// this carbon.
+		AtomBondConstIterator bond_it = atom.beginBond();
+		for (; +bond_it; ++bond_it)
+		{
+			if (!visited_bonds.has(&*bond_it))
+			{
+				if ((H == 0)
+						&& (bond_it->getPartner(atom)->getElement() == PTE[Element::H]))
+				{
+					H = bond_it->getPartner(atom);
+					h = H->getPosition();
+					// DEBUG
+					// cout << "H: " << H->getFullName() << endl;
+					// /DEBUG
+				}
+				else
+				{
+					R = bond_it->getPartner(atom);
+					r = R->getPosition();
+					// DEBUG
+					// cout << "R: " << R->getFullName() << endl;
+					// /DEBUG
+				}
+			}
+		}
+
+		// if we didn't find a hydrogen, we don't know how to find out its
+		// position... ;)
+		if (H == 0)
+		{
+			// DEBUG
+			// cout << "No hydrogen neighbour." << endl;
+			// /DEBUG
+			return(false);
+		}
+
+		// compute the angle between the normal vector of the plane and the
+		// vector pointing from C1 to H.
+		Vector3 n = (c1 - c3) % (c1 - c5);
+		float angle_C1_H = n.getAngle(h - c1).toDegree();
+		float angle_C1_R = n.getAngle(r - c1).toDegree();
+
+		if (angle_C1_H > 90)
+		{
+			angle_C1_H -= 180;
+			angle_C1_R -= 180;
+		}
+
+		// DEBUG
+		// cout << "c1: " << c1 << endl;
+		// cout << "c3: " << c3 << endl;
+		// cout << "c5: " << c5 << endl;
+		// cout << "c1 - c3: " << c1 - c3 << endl;
+		// cout << "c1 - c5: " << c1 - c5 << endl;
+		// cout << "h: " << h << endl;
+		// cout << "h - c1: " << h - c1 << endl;
+		// DEBUG
+
+		// DEBUG
+		// Log.info() << "Angle(C1, H): " << angle_C1_H << " " 
+			// << angle_C1_H << endl;
+		// Log.info() << "Angle(C1, R): " << angle_C1_R << " "
+			// << angle_C1_R - 109.5 << endl;
+		// /DEBUG
+
+		if ((fabs(angle_C1_H) < 10.0) 
+				&& ((fabs(angle_C1_R) - 109.5) < 10))
+		{
+			// if the hydrogen stands in axial position and the substituent in
+			// equatorial position the carbon is equatorially substituted
+			return(false);
+		}
+		else
+		{
+			return(true);
+		}
+
 	}
 
 

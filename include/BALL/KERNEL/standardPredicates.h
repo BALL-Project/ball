@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.32 2003/03/28 19:17:10 anker Exp $
+// $Id: standardPredicates.h,v 1.33 2003/03/31 17:56:33 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -336,18 +336,51 @@ namespace BALL
 
 			BALL_CREATE(InRingPredicate)
 
+			/// Default constructor;
+			InRingPredicate()
+				throw();
+
+			/// Detailed constructor;
+			InRingPredicate(Size n)
+				throw();
+
+			/// Destructor;
+			~InRingPredicate()
+				throw();
+
 			/** Evaluate the predicate for the atom <tt>atom</tt>.
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom) const
+			virtual bool operator () (const Atom& atom)
+				throw();
+
+			/** Depth first search for finding rings.
+			*/
+			bool dfs(const Atom& atom, const Atom& first_atom, 
+					const Size limit, const bool exact, 
+					HashSet<const Bond*>& visited, std::vector<const Atom*>& atoms) const
+				throw();
+
+			/** Return the vector of ring atoms
+			*/
+			const HashSet<const Bond*>& getVisitedBonds() const
+				throw();
+
+			/** Return the vector of ring atoms
+			*/
+			const std::vector<const Atom*>& getRingAtoms() const
 				throw();
 
 		private:
-			bool dfs_(const Atom& atom, const Atom& first_atom, 
-					const Size limit, const bool exact, 
-					HashSet<const Bond*>& visited) const
-				throw();
+
+			/*_
+			*/
+			HashSet<const Bond*> visited_bonds_;
+
+			/*_
+			*/
+			std::vector<const Atom*> ring_atoms_;
 				
 	};
 
@@ -822,6 +855,29 @@ namespace BALL
 				that number (down to the specified accuracy for floating 
 				point comparisons,  \link EPSILON EPSILON \endlink ), or an operator followed	
 				by a number. Possible operators are: <tt><</tt>, <tt>></tt>, <tt>>=</tt>, {\tt <=}, {\tt =}.
+				@param atom the atom to test
+				@return true, if the predicate is true, false otherwise
+		*/
+		virtual bool operator () (const Atom& atom) const
+			throw();
+	};
+
+	/** Axial predicate.
+			This predicate tries to tell whether a C1 of a sugar is in axial
+			position. 
+	 */
+	class AxialPredicate
+		:	public	ExpressionPredicate
+	{
+		public:
+		BALL_CREATE(AxialPredicate)
+
+		/** Axial predicate needed for the determination of Glycam parameters.
+				This is no generally applicable predicate.
+				Return true if the atom is a C in a 6 membered ring containing
+				and is connected to an H which is standing perpendicular
+				on the plane containing the atom itself and those two Cs of the
+				ring which are each one atom away.
 				@param atom the atom to test
 				@return true, if the predicate is true, false otherwise
 		*/
