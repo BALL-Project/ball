@@ -5,7 +5,7 @@ DIRECTORY=TEST
 XDR_DEPENDENT_EXECUTABLES=\
 	XDRPersistenceManager_test
 
-EXECUTABLES = \
+EXECUTABLES = $(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	AmberFF_test\
 	AnalyticalGeometry_test\
 	AnalyticalSES_test\
@@ -124,8 +124,7 @@ EXECUTABLES = \
 	Vector3_test\
 	Vector4_test\
 	VersionInfo_test\
-	XYZFile_test\
-	$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))
+	XYZFile_test
 
 # default target
 all:	$(EXECUTABLES)
