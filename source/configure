@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.108 2000/07/16 20:53:08 oliver Exp $
+#  $Id: configure,v 1.109 2000/07/16 22:00:15 oliver Exp $
 
 
 ##################################################
@@ -6165,15 +6165,24 @@ fi
 
 
 
+if test "${PYTHON_SUPPORT}" = true ; then
+	
+	cat >> confdefs.h <<\EOF
+#define BALL_PYTHON_SUPPORT 1
+EOF
+
+else
+	
+fi
 
 
 if test "${PYTHON_SUPPORT}" = true ; then
 	echo $ac_n "checking stuff required for Python extensions""... $ac_c" 1>&6
-echo "configure:6072: checking stuff required for Python extensions" >&5
+echo "configure:6081: checking stuff required for Python extensions" >&5
 	echo "$ac_t""." 1>&6
 	
 				echo $ac_n "checking Python.h""... $ac_c" 1>&6
-echo "configure:6076: checking Python.h" >&5
+echo "configure:6085: checking Python.h" >&5
 	
 	_INCLUDES=
 
@@ -6262,11 +6271,11 @@ echo "configure:6076: checking Python.h" >&5
 
 
 				echo $ac_n "checking sip executable""... $ac_c" 1>&6
-echo "configure:6165: checking sip executable" >&5
+echo "configure:6174: checking sip executable" >&5
 	echo "$ac_t""${SIP}" 1>&6
 
 				echo $ac_n "checking libsip.a""... $ac_c" 1>&6
-echo "configure:6169: checking libsip.a" >&5
+echo "configure:6178: checking libsip.a" >&5
 	if test -r "${SIP_LIBPATH}/libsip.a" ; then
 		SIP_LIB=${SIP_LIBPATH}/libsip.a
 		echo "$ac_t""${SIP_LIB}" 1>&6
@@ -6275,13 +6284,14 @@ echo "configure:6169: checking libsip.a" >&5
 		echo "$ac_t""" 1>&6
 		echo "$ac_t""Please specify the path to the directory that contains" 1>&6
 		echo "$ac_t""libsip.a using the option --with-sip-lib=DIR." 1>&6
-		echo "$ac_t""If you do not have that file" 1>&6
-		echo "$ac_t""from www.thekompany.com/projects/pykde" 1>&6
+		echo "$ac_t"""If you do not have that file" 1>&6
+		echo "$ac_t""from" 1>&6
+		echo "$ac_t""www.thekompany.com/projects/pykde" 1>&6
 		{ echo "configure: error: Aborted." 1>&2; exit 1; }
 	fi
 	
 				echo $ac_n "checking sip headers (sip.h)""... $ac_c" 1>&6
-echo "configure:6184: checking sip headers (sip.h)" >&5
+echo "configure:6194: checking sip headers (sip.h)" >&5
 	
 	_INCLUDES=
 
@@ -6362,7 +6372,7 @@ echo "configure:6184: checking sip headers (sip.h)" >&5
 		echo "$ac_t""" 1>&6
 		echo "$ac_t""Please specify the path to the directory that contains" 1>&6
 		echo "$ac_t""sip.h using the option --with-sip-incl=DIR." 1>&6
-		echo "$ac_t""If you do not have that file" 1>&6
+		echo "$ac_t"""If you do not have that file" 1>&6
 		echo "$ac_t""from" 1>&6
 		echo "$ac_t""www.thekompany.com/projects/pykde" 1>&6
 		{ echo "configure: error: Aborted." 1>&2; exit 1; }
@@ -6650,6 +6660,7 @@ s%@MOC@%$MOC%g
 s%@SIP@%$SIP%g
 s%@SIP_LIB@%$SIP_LIB%g
 s%@PYTHON_INCLUDES@%$PYTHON_INCLUDES%g
+s%@PYTHON_SUPPORT@%$PYTHON_SUPPORT%g
 s%@SIP_INCLUDES@%$SIP_INCLUDES%g
 s%@BALL_PATH@%$BALL_PATH%g
 s%@BALL_INCLUDES@%$BALL_INCLUDES%g
