@@ -1,26 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.4 2004/09/07 13:17:36 amoll Exp $
+// $Id: ringPerceptionProcessor.C,v 1.5 2004/10/29 13:41:42 amoll Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
 
 #include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/fragment.h>
-#include <BALL/KERNEL/bondIterator.h>
-#include <BALL/KERNEL/atomIterator.h>
 #include <BALL/KERNEL/forEach.h>
-#include <BALL/KERNEL/PTE.h>
 #include <BALL/COMMON/limits.h>
 
-#include <iostream>
-using std::endl;
 #include <vector>
-using std::vector;
-#include <utility>
 #include <queue>
-using std::priority_queue;
+
 using std::deque;
 using std::pair;
 
@@ -54,55 +46,56 @@ namespace BALL
 
 	Size RingPerceptionProcessor::calculateSSSR(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 	{
-		//cerr << "RingPerceptionProcessr::calculateSSSR(...)";
-		AtomContainer AtomContainer;
-		AtomContainer = ac; // the algorithm runs on a copy, bc bonds and maybe atoms are destroyed!
+		// the algorithm runs on a copy, bc bonds and maybe atoms are destroyed!
+		AtomContainer ac_copy(ac);
 
 		// mapping is needed because this algorithms works on a copy
-		HashMap<Atom*, Atom*> copy_to_orig;
+		HashMap<Atom*,Atom*> copy_to_orig;
 		AtomIterator orig = ac.beginAtom();
-		AtomIterator copy = AtomContainer.beginAtom();
-		for (;orig!=ac.endAtom();++orig,++copy)
+		AtomIterator copy = ac_copy.beginAtom();
+		for (; +orig; ++orig, ++copy)
 		{
 			copy_to_orig.insert(std::make_pair(&(*copy),&(*orig)));
 		}
 		
-		HashSet<Atom*> full_set; // herein are all nodes (atoms)
-		HashSet<Atom*> trim_set; // herein are all the zero edge nodes
-		vector<HashSet<Atom*> > SSSR; // stores the rings 
-		
-		AtomIterator atom_it = AtomContainer.beginAtom();
-		for (;atom_it!=AtomContainer.endAtom();++atom_it)
+		// herein are all nodes (atoms)
+		HashSet<Atom*> full_set; 			
+		AtomIterator atom_it = ac_copy.beginAtom();
+		for (; +atom_it; ++atom_it)
 		{
 			full_set.insert(&(*atom_it));
 		}
 
+		HashSet<Atom*> trim_set; 			// herein are all the zero edge nodes
+		vector<HashSet<Atom*> > SSSR; // stores the rings 
+
 		while (full_set.size() != trim_set.size())
 		{
-			HashSet<Atom*>::Iterator it = full_set.begin();
-			unsigned int min_deg = Limits<int>::max();
-			Atom * init;
+			Size min_deg = Limits<int>::max();
+			Atom* init = 0;
 			HashSet<Atom*> nodes_n2_set;
-			for (;it!=full_set.end();++it)
+
+			HashSet<Atom*>::Iterator it = full_set.begin();
+			for (; +it ;++it)
 			{
 				//add all nodes with degree 0 to trim_set
 				if ((*it)->countBonds() == 0)
 				{
 					trim_set.insert(*it);
+					continue;
 				}
-				else 
+
+				// find beginning node init in full_set-trim_set with minimal degree
+				if ((*it)->countBonds() < min_deg)
 				{
-					// find beginning node init in full_set-trim_set with minimal degree
-					if ((*it)->countBonds() < min_deg)
-					{
-						min_deg = (*it)->countBonds();
-						init = *it;
-					}
-					// add n2-nodes from full_set - trim_set to nodes_n2
-					if ((*it)->countBonds() == 2)
-					{
-						nodes_n2_set.insert(*it);
-					}
+					min_deg = (*it)->countBonds();
+					init = *it;
+				}
+
+				// add n2-nodes from full_set - trim_set to nodes_n2
+				if ((*it)->countBonds() == 2)
+				{
+					nodes_n2_set.insert(*it);
 				}
 			}
 
@@ -110,52 +103,46 @@ namespace BALL
 			{
 				init->destroyBond(*(init->beginBond()->getPartner(*init)));
 				trim_set.insert(init);
+				continue;
 			}
-			else 
+
+			HashSet<Atom*> ring_set;
+			if (min_deg == 2)
 			{
-				HashSet<Atom*> ring_set;
-				if (min_deg == 2)
+				for (it = nodes_n2_set.begin(); +it; ++it) 
 				{
-					for (it=nodes_n2_set.begin();it!=nodes_n2_set.end();++it) 
+					Size ring_size = getRing_(*it, ring_set);
+					if (ring_size > 2)
 					{
-						Size ring_size = getRing_(*it, ring_set);
-						if (ring_size > 2)
-						{
-							// add ring_set to SSSR
-							SSSR.push_back(ring_set);
-						}
-					}
-					// for every chain of n2 nodes, isolate one and delete the chain it belongs
-					HashSet<Atom*>::Iterator it2;
-					for (it2=nodes_n2_set.begin();it2!=nodes_n2_set.end();++it2)
-					{
-						if ((*it2)->countBonds() != 0)
-						{
-							if (!(*it2)->destroyBond(*((*it2)->beginBond()->getPartner(**it2))))
-							{
-								// should really not occur!
-							}
-						}
+						// add ring_set to SSSR
+						SSSR.push_back(ring_set);
 					}
 				}
-				else 
+
+				// for every chain of n2 nodes, isolate one and delete the chain it belongs
+				HashSet<Atom*>::Iterator it2 = nodes_n2_set.begin();
+				for (; +it2; ++it2)
 				{
-					if (min_deg >= 3)
+					Atom& a = **it2;
+					if (a.countBonds() != 0)
 					{
-						Size ring_size = getRing_(init, ring_set);
-						if (ring_size > 0)
-						{
-							// add ring_set ro sssr
-							SSSR.push_back(ring_set);
-							checkEdges_(ring_set, AtomContainer);
-						}
+						a.destroyBond(* a.beginBond()->getPartner(a));
 					}
 				}
+
+				continue;
+			}
+
+			if (min_deg >= 3 && getRing_(init, ring_set) != 0)
+			{
+				// add ring_set ro sssr
+				SSSR.push_back(ring_set);
+				checkEdges_(ring_set, ac_copy);
 			}
 		}
 	
 		// now put the computet rings in the referenced structure
-		for (vector<HashSet<Atom*> >::iterator i=SSSR.begin();i!=SSSR.end();++i)
+		for (vector<HashSet<Atom*> >::iterator i=SSSR.begin(); i!=SSSR.end(); ++i)
 		{
 			vector<Atom*> ring;
 			for (HashSet<Atom*>::Iterator j=i->begin();j!=i->end();++j)
@@ -192,7 +179,7 @@ namespace BALL
 		}
 		
 		// the atoms that are not participating a ring
-   	for (AtomIterator i=AtomContainer.beginAtom();i!=AtomContainer.endAtom();++i)
+   	for (AtomIterator i = ac_copy.beginAtom(); +i; ++i)
 		{
 		  if (!i->hasProperty("InRing"))
 		  {
@@ -200,17 +187,15 @@ namespace BALL
 			}
 		}
 
-		AtomIterator a_it = AtomContainer.beginAtom();
+		AtomIterator a_it = ac_copy.beginAtom();
 		Atom::BondIterator b_it = a_it->beginBond();
-		BALL_FOREACH_BOND (AtomContainer, a_it, b_it)
+		BALL_FOREACH_BOND (ac_copy, a_it, b_it)
 		{
 			if (!b_it->hasProperty("InRing"))
 			{
 				b_it->setProperty("InRing", false);
 			}
 		}
-
-		//cerr << "..ended!" << endl;
 		
 		return sssr_orig.size();
 	}
@@ -219,59 +204,52 @@ namespace BALL
 
 	Size RingPerceptionProcessor::getRing_(Atom* n, HashSet<Atom*>& ring_set)
 	{
+		if (n == 0) return 0;
 		deque<std::pair<Atom*, Atom*> > the_q; // double ended queue with node and its ancestor
 		the_q.push_back(std::make_pair(n,n));
 		
-		Atom::BondIterator bond_it;
-		HashMap<Atom*, HashSet<Atom*> > paths;
 		HashSet<Atom*> tmp;
 		tmp.insert(n);
+
+		HashMap<Atom*, HashSet<Atom*> > paths;
 		paths.insert(std::make_pair(n, tmp));
 
 		while (!the_q.empty())
 		{
 			pair<Atom*, Atom*> atom_anc = the_q.front();
-			Atom* atom = atom_anc.first;
+			Atom* atom 		 = atom_anc.first;
 			Atom* ancestor = atom_anc.second;
 			the_q.pop_front();
-			for (bond_it=atom->beginBond();bond_it!=atom->endBond();++bond_it)
+
+			Atom::BondIterator bond_it;
+			for (bond_it=atom->beginBond(); +bond_it; ++bond_it)
 			{
 				Atom* bound_atom =  bond_it->getPartner(*atom);
-				if (bound_atom != 0 &&
-						bound_atom != ancestor)
+				if (bound_atom == 0 ||
+						bound_atom == ancestor)
 				{
-					if (!paths.has(bound_atom))
-					{
-						HashSet<Atom*> path_atom = paths[atom];
-						path_atom.insert(bound_atom);
-						paths.insert(std::make_pair(bound_atom, path_atom));
-					}
-					else 
-					{
-						HashSet<Atom*> merge, atom1, atom2;
-						atom1 = paths[bound_atom];
-						atom2 = paths[atom];
-						merge.set(atom1);
-
-						// workaround, don't know how to merge to hashsets, the sets are small, 
-						// doesn't touch the performance that much
-						HashSet<Atom*>::Iterator set_it;
-						for (set_it=atom2.begin();set_it!=atom2.end();++set_it)
-						{
-							if (!merge.has(*set_it))
-							{
-								merge.insert(*set_it);
-							}
-						}
-
-						if (atom1.size()+atom2.size()-merge.size() == 1)
-						{
-							ring_set = merge;
-							return merge.size();
-						}
-					}
-					the_q.push_back(std::make_pair(bound_atom, atom));
+					continue;
 				}
+
+				if (!paths.has(bound_atom))
+				{
+					HashSet<Atom*> path_atom = paths[atom];
+					path_atom.insert(bound_atom);
+					paths.insert(std::make_pair(bound_atom, path_atom));
+				}
+				else 
+				{
+					const HashSet<Atom*>& path1 = paths[bound_atom];
+					const HashSet<Atom*>& path2 = paths[atom];
+					HashSet<Atom*> merge(path1 + path2);
+
+					if (path1.size() + path2.size() - merge.size() == 1)
+					{
+						ring_set = merge;
+						return merge.size();
+					}
+				}
+				the_q.push_back(std::make_pair(bound_atom, atom));
 			}
 		}
 		return 0;
@@ -284,31 +262,16 @@ namespace BALL
 		// Every node with degree 3 (which is a memeber of ring_set) is deleted testwise.
 		// Finally the node which produces the smalles ring is deleted.
 
-		HashSet<Atom*>::Iterator iter=ring_set.begin();
-		Atom * min_atom = *iter; // set as default to avoid compiler warning
 		Size min_ring_size = Limits<int>::max();
+		HashSet<Atom*>::Iterator iter = ring_set.begin();
+		Atom * min_atom = 0; 
 		
-		for (;iter!=ring_set.end();++iter)
+		for (; +iter; ++iter)
 		{
 			if ((*iter)->countBonds() == 3)
 			{
-				AtomContainer AtomContainer = ac;
-				
-				// mapping to switch between copy and orig AtomContainer
-				HashMap<Atom*, Atom*> copy_to_orig;
-				HashMap<Atom*, Atom*> orig_to_copy;
-				AtomIterator copy = AtomContainer.beginAtom();
-				AtomIterator orig = ac.beginAtom();
-				for (;orig!=ac.endAtom();++copy, ++orig)
-				{
-					copy_to_orig.insert(std::make_pair(&(*copy),&(*orig)));
-					orig_to_copy.insert(std::make_pair(&(*orig),&(*copy)));
-				}
-				
-				orig_to_copy[*iter]->destroy();
-				
 				Atom::BondIterator bond_it=(*iter)->beginBond();
-				for (;bond_it!=(*iter)->endBond();++bond_it)
+				for (; +bond_it; ++bond_it)
 				{
 					Atom* atom = bond_it->getPartner(**iter);
 					HashSet<Atom*> rs;
@@ -322,8 +285,9 @@ namespace BALL
 				}
 			}
 		}
+		
 		// now delete min_atom
-		min_atom->destroy();
+		if (min_atom != 0) min_atom->destroy();
 	}
 
 } // namespace BALL
