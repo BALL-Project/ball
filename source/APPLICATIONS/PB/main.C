@@ -1,4 +1,4 @@
-// $Id: main.C,v 1.9.4.1 2002/12/03 17:52:35 anker Exp $
+// $Id: main.C,v 1.9.4.2 2002/12/05 17:32:51 anker Exp $
 
 #include <iomanip>
 
@@ -48,6 +48,13 @@ void usage()
 	            << "     -x <RADIUS>          the probe sphere radius for solvent accessible and" << endl
 	            << "                            solvent excluded surface calculations" << endl
 							<< "                            [default = 1.4 A]" << endl
+	            << "     -e <DIEL_CONST>      the dielectric constant of the surrounding medium" << endl
+							<< "                            [default = 78.0]" << endl
+	            << "     -f <DIEL_CONST>      the dielectric constant of interior of the solute" << endl
+							<< "                            [default = 2.0]" << endl
+	            << "     -i <IONIC_STRENGTH>  the ionic strength which will be used for the" << endl
+	            << "                            Boltzmann part of the Poisson-Boltzmann equation" << endl
+							<< "                            [default = 0.0 mol/l, i. e.  switched off]" << endl
 	            << endl
 	            << "  By default, charges and radii are taken from data/charges/PARSE.crg" << endl
 	            << "  and data/radii/PARSE.siz." << endl 
@@ -83,13 +90,18 @@ int main(int argc, char** argv)
 
 		// check for another argument for those 
 		// options requiring a filename (-p -h -c -r -o -u -t -w -d -x)
-		if (String("phcroutwdx").has(option[1]) && (i == (argc - 1)))
+		if (String("phcroutwdxefi").has(option[1]) && (i == (argc - 1)))
 		{
 			// pring usage hints, an error message, exit
 			usage();
 			Log.error() << "Option " << option << " requires an additional argument." << endl;
 			return 3;
 		}		
+
+		// two temporary variables
+		float ionic_strength;
+		float dielectric_medium;
+		float dielectric_solute;
 
 		// interpret all command line options
 		switch (option[1])
@@ -182,6 +194,36 @@ int main(int argc, char** argv)
 				{
 					Log.info() << "probe sphere radius for surface calculations is set to " 
 										 << probe_radius << " Angstrom" << endl;
+				}
+				break;
+
+			case 'e':		// set the dielectric constant of the medium
+				dielectric_medium = atof(argv[++i]);
+				options[FDPB::Option::SOLVENT_DC] = dielectric_medium;
+				if (verbose)
+				{
+					Log.info() << "dielectric constant of the medium is set to"
+										 << dielectric_medium << endl;
+				}
+				break;
+
+			case 'f':		// set the dielectric constant of the solute
+				dielectric_solute = atof(argv[++i]);
+				options[FDPB::Option::SOLUTE_DC] = dielectric_solute;
+				if (verbose)
+				{
+					Log.info() << "dielectric constant of the solute is set to"
+										 << dielectric_solute << endl;
+				}
+				break;
+
+			case 'i':		// set the ionic strength of the medium
+				ionic_strength = atof(argv[++i]);
+				options[FDPB::Option::IONIC_STRENGTH] = ionic_strength;
+				if (verbose)
+				{
+					Log.info() << "ionic strength for Boltzmann calculations is set to" 
+										 << ionic_strength << " mol/l" << endl;
 				}
 				break;
 
