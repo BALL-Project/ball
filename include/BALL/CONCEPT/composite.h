@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.2 1999/09/06 22:20:43 oliver Exp $
+// $Id: composite.h,v 1.3 1999/09/07 14:28:11 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -227,10 +227,6 @@ namespace BALL
 
 		/**
 		*/
-		static Size getHeight(const Composite& composite);
-
-		/**
-		*/
 		Size getHeight() const;
 
 		/**
@@ -436,13 +432,14 @@ namespace BALL
 		///
 		bool isCollapsed() const;
 	
-		///
+		/**	Return true if the node does not contain children.
+				@return {\bf true} if {\tt number\_of\_children\_ == 0}
+		*/
 		bool isEmpty() const;
 
-		///
-		bool isFree() const;
-
-		///
+		/**	Return true if the node has no parent.
+				@return {\bf true} if {\tt parent_ == 0}
+		*/
 		bool isRoot() const;
 	
 		///

@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.3 1999/09/06 22:21:49 oliver Exp $
+// $Id: composite.C,v 1.4 1999/09/07 14:28:19 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -1442,7 +1442,9 @@ namespace BALL
 			Processor::Result result = processor(*this);
 
 			if (result <= Processor::BREAK)
+			{
 				return (result == Processor::BREAK) ? true : false;
+			}
 		}
 		else if (--level == 0)
 		{
@@ -1450,27 +1452,33 @@ namespace BALL
 		}
 		else if (level > 0)
 		{
-			for (Composite *composite_ptr = first_child_;
+			for (Composite* composite_ptr = first_child_;
 					 composite_ptr != 0; composite_ptr = composite_ptr->next_)
 			{
 				if (composite_ptr->first_child_ != 0 && composite_ptr->applyLevelNostart_(processor, level) == false)
+				{
 					return false;
+				}
 			}
 		}
 		
 		return true;
 	}
 					
-	Size Composite::getHeight_(Size size, Size &max_height) const
+	Size Composite::getHeight_(Size size, Size& max_height) const
 	{
 		if (++size > max_height)
+		{
 			max_height = size;
+		}
 		
-		for (Composite *composite_ptr = first_child_;
+		for (Composite* composite_ptr = first_child_;
 				 composite_ptr != 0; composite_ptr = composite_ptr->next_)
 		{
 			if (composite_ptr->first_child_ != 0)
+			{
 				composite_ptr->getHeight_(size, max_height);
+			}
 		}
 		
 		return max_height;
