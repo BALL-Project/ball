@@ -1,4 +1,4 @@
-// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.3 2000/10/06 15:24:06 anker Exp $
+// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.4 2000/10/17 17:22:12 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.3 2000/10/06 15:24:06 anker Exp $")
+START_TEST(class_name, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.4 2000/10/17 17:22:12 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -51,25 +51,34 @@ CHECK(Pair6_12InteractionEnergyProcessor::operator = (const Pair6_12InteractionE
 RESULT
 
 CHECK(Pair6_12InteractionEnergyProcessor::finish())
+	PRECISION(0.0001)
 	System S;
-	HINFile f("6_12-test.hin");
+	HINFile f("data/6_12-test.hin");
 	f >> S;
 	f.close();
-	INIFile ini("6_12-test.rul");
+	INIFile ini("data/6_12-test.rul");
 	ini.read();
 	RadiusRuleProcessor radius_rules;
 	radius_rules.initialize(ini, "RadiusRules");
 	S.apply(radius_rules);
 
 	Pair6_12InteractionEnergyProcessor proc;
-	proc.options.readOptionFile("6_12-test.options");
-	Log.info() << "use_rdf = " 
-		<< proc.options[Pair6_12InteractionEnergyProcessor::Option::USE_RDF] 
-		<< endl;
+	proc.options.readOptionFile("data/6_12-test.options");
 
 	S.apply(proc);
 	double val = proc.getEnergy();
-	Log.info() << "val = " << val << endl;
+	TEST_REAL_EQUAL(val, -6.027207050)
+
+	proc.options.setBool(Pair6_12InteractionEnergyProcessor::Option::USE_RDF,
+			true);
+	S.apply(proc);
+	val = proc.getEnergy();
+	TEST_REAL_EQUAL(val, -6.027207050)
+
+	proc.options.set(Pair6_12InteractionEnergyProcessor::Option::RDF_FILENAME,
+	"data/6_12-test.rdf.ini");
+	S.apply(proc);
+	val = proc.getEnergy();
 	TEST_REAL_EQUAL(val, -6.027207050)
 RESULT
 

@@ -62,6 +62,7 @@ EXECUTABLES = \
 	OoiEnergy_test\
 	Options_test\
 	Pair6_12RDFIntegrator_test\
+	Pair6_12InteractionEnergyProcessor_test\
 	PairExpInteractionEnergyProcessor_test\
 	PairExpRDFIntegrator_test\
 	Parameters_test\
