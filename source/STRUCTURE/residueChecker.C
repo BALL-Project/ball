@@ -1,4 +1,4 @@
-// $Id: residueChecker.C,v 1.11 2000/09/27 07:44:50 oliver Exp $
+// $Id: residueChecker.C,v 1.12 2000/10/02 19:06:48 amoll Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
@@ -122,7 +122,7 @@ namespace BALL
 				}
 				if (reference_names.size() > 0)
 				{
-					Log.warn() << "ResidueChecker: did not find the following atoms in " << res_name << ": ";
+					Log.warn() << "ResidueChecker: did not find the following atoms in " << res_name << " : ";
 					HashSet<String>::Iterator set_it = reference_names.begin();
 					for (; set_it != reference_names.end(); ++set_it)
 					{
