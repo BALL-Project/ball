@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include <BALL/NMR/assignShiftProcessor.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
+#include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/NMRStarFile.h>
 
@@ -16,6 +17,14 @@ int main()
 	f >> system;
 	FragmentDB frag_db;
 	system.apply(frag_db.normalize_names);
+	system.apply(frag_db.build_bonds);
+	ResidueChecker rc(frag_db);
+	system.apply(rc);
+	
+	PDBFile out("parvulin_out.pdb", File::OUT);
+	out << system;
+	out.close();
+	return 0;
 
 	//NMRStarFile rs("data/parvulin.str");
 	NMRStarFile rs("data/bmr4789.str");
@@ -28,15 +37,22 @@ int main()
 	}
 	*/
 	
+
+	Log.info() << "System: #atoms = " << system.countAtoms() << endl;
 	AssignShiftProcessor asp(rs.getData()[0]->atomData);
 	system.apply(asp);
 
 	int numberOfShiftAtoms = 0;
-	for (int i = 0; i < system.countAtoms(); i++)
+	AtomIterator atom_it = system.beginAtom();
+	for (; +atom_it; ++atom_it)
 	{
-		if (system.getAtom(i)->hasProperty(ShiftModule::PROPERTY__SHIFT))
+		if (atom_it->hasProperty(ShiftModule::PROPERTY__SHIFT))
 		{
 			numberOfShiftAtoms++;
+		}
+		else
+		{
+			Log.info() << atom_it->getFullName() << " " << atom_it->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat() << endl;
 		}
 	}
  	cout << "numberOfShiftAtoms " << numberOfShiftAtoms << endl;
