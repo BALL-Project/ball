@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.h,v 1.11 2000/10/29 22:29:10 oliver Exp $
+// $Id: XDRPersistenceManager.h,v 1.12 2000/10/30 21:50:14 oliver Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -183,6 +183,29 @@ namespace BALL
 		/**	Check for trailer for an array of pointers to PersistentObjects.
 		*/
 		virtual bool checkObjectPointerArrayTrailer();
+
+		/**	Prepare the stream for output.
+				This method creates an XDR output stream (using xdrrec_create) and
+				prepares it for output.
+		*/
+		virtual void initializeOutputStream();
+
+		/**	Prepare the stream for closing.
+				This method destroys the XDR output stream (using xdr_destroy).
+		*/
+		virtual void finalizeOutputStream();
+
+		/**	Prepare the stream for output.
+				This method creates an XDR output stream (using xdrrec_create) and
+				prepares it for output.
+		*/
+		virtual void initializeInputStream();
+
+		/**	Prepare the stream for closing.
+				This method destroys the XDR output stream (using xdr_destroy).
+		*/
+		virtual void finalizeInputStream();
+
 		//@}
 
 		/**	@name	Put methods for primitive data types.

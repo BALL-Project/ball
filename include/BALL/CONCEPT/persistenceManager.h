@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.18 2000/09/18 14:34:37 oliver Exp $
+// $Id: persistenceManager.h,v 1.19 2000/10/30 21:50:14 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -497,7 +497,6 @@ namespace BALL
 		virtual bool checkTrailer(const char* name = 0) = 0;
 
 
-
 		/**	Write a start marker to the output stream.
 		*/
 		virtual void writeStreamHeader() = 0;
@@ -519,8 +518,6 @@ namespace BALL
 				and the address of the object is read but not inserted into the table.
 		*/
 		virtual bool getObjectHeader(String& type_name, LongPointerType& ptr) = 0;
-
-
 
 		/**	Write a variable/member name.
 		*/
@@ -546,8 +543,6 @@ namespace BALL
 		*/
 		virtual bool checkStorableTrailer() = 0;
 
-
-
 		/**	Write type header and name for a primitive type.
 		*/
 		virtual void writePrimitiveHeader(const char* type_name, const char* name) = 0;
@@ -563,8 +558,6 @@ namespace BALL
 		/**	Check for the trailer of a primitive type.
 		*/
 		virtual bool checkPrimitiveTrailer() = 0;
-
-
 
 		/**	Write header for a pointer to a PersistentObject.
 		*/
@@ -597,6 +590,24 @@ namespace BALL
 		/**	Check for trailer for an array of pointers to PersistentObjects.
 		*/
 		virtual bool checkObjectPointerArrayTrailer() = 0;
+
+
+		/**	Prepare the output stream for output
+		*/
+		virtual void initializeOutputStream();
+
+		/**	Prepare the output stream for closing
+		*/
+		virtual void finalizeOutputStream();
+
+		/**	Prepare the input stream for reading
+		*/
+		virtual void initializeInputStream();
+
+		/**	Prepare the input stream for closing
+		*/
+		virtual void finalizeInputStream();
+
 		//@}
 
 		/**	@name	Put methods for primitive data types.
