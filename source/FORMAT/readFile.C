@@ -1,4 +1,4 @@
-// $Id: readFile.C,v 1.8 2000/10/08 23:26:13 amoll Exp $
+// $Id: readFile.C,v 1.9 2000/10/09 11:46:09 amoll Exp $
 
 #include <BALL/FORMAT/readFile.h>
 #include <BALL/COMMON/exception.h>
@@ -9,7 +9,7 @@ using namespace std;
 namespace BALL
 {
 
-	ReadFile::ReadFileError::ReadFileError(const char* file, int line,  const ReadFile& rf, const String& message)
+	ReadFile::ReadFileError::ReadFileError(const char* file, int line, const ReadFile& rf, const String& message)
 		: Exception::GeneralException(file, line, "ReadFileError", "")
 	{
 		message_ = message;
@@ -20,8 +20,7 @@ namespace BALL
 		message_ += "\n contents of line: \n";
 		message_ += rf.getLineContens();
 
-		Exception::GlobalExceptionHandler globalHandler;
-		globalHandler.setMessage(message_);
+		Exception::globalHandler.setMessage(message_);
 	}
 
 
