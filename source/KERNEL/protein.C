@@ -1,10 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: protein.C,v 1.16 2003/07/01 16:45:12 amoll Exp $
+// $Id: protein.C,v 1.17 2003/07/01 18:20:03 amoll Exp $
 //
 
 #include <BALL/KERNEL/protein.h>
+
+using namespace::std;
 
 namespace BALL 
 {

@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.C,v 1.32 2003/07/01 16:45:11 amoll Exp $
+// $Id: bond.C,v 1.33 2003/07/01 18:20:02 amoll Exp $
 
 #include <BALL/KERNEL/bond.h>
 
+using namespace::std;
 namespace BALL 
 {
 

@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.C,v 1.42 2003/07/01 16:45:11 amoll Exp $
+// $Id: expression.C,v 1.43 2003/07/01 18:20:02 amoll Exp $
 //
 
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/standardPredicates.h>
 #include <BALL/CONCEPT/factory.h>
 
+using namespace::std;
 namespace BALL 
 {
 	// Expression class, frontend to ExpressionTree

@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.C,v 1.19 2003/07/01 16:45:11 amoll Exp $
+// $Id: chain.C,v 1.20 2003/07/01 18:20:02 amoll Exp $
 
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/protein.h>
 
+using namespace::std;
 namespace BALL 
 {
 

@@ -1,13 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.C,v 1.16 2003/07/01 16:45:10 amoll Exp $
+// $Id: PDBAtom.C,v 1.17 2003/07/01 18:20:02 amoll Exp $
 //
 
 #include <BALL/KERNEL/PDBAtom.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/residue.h>
+
+using namespace::std;
 
 namespace BALL 
 {

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.44 2003/07/01 16:45:10 amoll Exp $
+// $Id: atom.C,v 1.45 2003/07/01 18:20:02 amoll Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -13,6 +13,8 @@
 
 #include <algorithm>
 //#include <functional>
+
+using namespace::std;
 
 namespace BALL 
 {

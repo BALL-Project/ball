@@ -1,13 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.C,v 1.26 2003/07/01 16:45:12 amoll Exp $
+// $Id: residue.C,v 1.27 2003/07/01 18:20:03 amoll Exp $
 //
 
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
+
+using namespace::std;
 
 namespace BALL 
 {

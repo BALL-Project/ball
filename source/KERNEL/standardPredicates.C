@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.50 2003/07/01 16:45:12 amoll Exp $
+// $Id: standardPredicates.C,v 1.51 2003/07/01 18:20:03 amoll Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -16,6 +16,8 @@
 #include <BALL/KERNEL/bond.h>
 
 // #define DEBUG
+
+using namespace::std;
 
 namespace BALL 
 {
