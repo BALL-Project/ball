@@ -1,4 +1,4 @@
-// $Id: conjugateGradient.C,v 1.6 2000/01/10 15:51:13 oliver Exp $
+// $Id: conjugateGradient.C,v 1.7 2000/01/15 18:59:16 oliver Exp $
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
@@ -6,7 +6,7 @@
 #include <BALL/COMMON/limits.h>
 
 namespace BALL 
-  {
+{
   using namespace std; 
 
   // Set the default values for options of this class 
@@ -1018,16 +1018,16 @@ namespace BALL
 
   // The minimiser optimises the energy of the system 
   // by using a conjugate gradient method. 
-  // Return value is true when convergence is achieved 
+  // Return value is true when no further steps can be taken!
   bool ConjugateGradientMinimizer::minimize(Size iterations, bool restart)
-    {
+  {
     // local variables
-    Size max_iteration,i; 
+    Size max_iteration;
+		Size i; 
     double rms_gradient_norm; 
 
     // The atoms of the system 
-    vector<Atom *> &atom_vector = 
-                      const_cast<vector<Atom*>&>(force_field_->getAtoms());   
+    vector<Atom *>& atom_vector = const_cast<vector<Atom*>&>(force_field_->getAtoms());   
 
     bool result = false; 
 
@@ -1036,166 +1036,152 @@ namespace BALL
 
     // Check the minimizer  and the force field connected to it 
     if (isValid() == false || force_field_->isValid() == false)
-      {
-      Log.level(LogStream::ERROR) << "The ConjugateGradientMinimizer is not valid or " 
-                                  << endl
-                                  << " the force field is not valid!. " << endl; 
+    {
+      Log.error() << "The ConjugateGradientMinimizer is not valid or " << endl
+                  << " the force field is not valid!. " << endl; 
 
-      return false;
-      }
+      return true;
+    }
 
     // If there are no atoms  in the system, minimisation is easy!
     if(no_of_atoms_ == 0)
-      {
+    {
       return true;
+    }
+
+    // the first direction vector is the current negative gradient,
+    // i.e. the vector of all force vectors 
+    force_field_->updateEnergy();
+    force_field_->updateForces();
+    new_energy = force_field_->getEnergy() ; 
+     
+    energy_update_counter_++;
+    force_update_counter_++; 
+
+    new_gradient_norm_ = 0;
+
+		int not_selected = 0; 
+    for(i = 0; i < no_of_atoms_; i++)
+    {
+			if(atom_vector[i]->isSelected() == false)
+      {
+				not_selected++;
       }
 
-     // the first direction vector is the current negative gradient,
-     // i.e. the vector of all force vectors 
-     force_field_->updateEnergy();
-     force_field_->updateForces();
-     new_energy = force_field_->getEnergy() ; 
-     
-     energy_update_counter_++;
-     force_update_counter_++; 
+      new_gradient_[i]     = atom_vector[i]->getForce() * Constants::AVOGADRO * 1e-13; 
+      old_gradient_[i]     = new_gradient_[i];
 
-     new_gradient_norm_ = 0;
-
-int not_selected = 0; 
-     for(i = 0; i < no_of_atoms_; i++)
-       {
-       if(atom_vector[i]->isSelected() == false)
-         {
-         not_selected++;
-         }
-
-       new_gradient_[i]     = atom_vector[i]->getForce() * Constants::AVOGADRO * 1e-13; 
-       old_gradient_[i]     = new_gradient_[i];
-
-       new_gradient_norm_ += (new_gradient_[i] * new_gradient_[i]);
-       }
+      new_gradient_norm_ += (new_gradient_[i] * new_gradient_[i]);
+    }
 
 
-     new_gradient_norm_ = sqrt(new_gradient_norm_);
+    new_gradient_norm_ = sqrt(new_gradient_norm_);
 
-     if(new_gradient_norm_ == 0)
-       {
-       // the optimum is already reached!
-       Log.info() << " Start conformation is already optimal!" << endl; 
-       return true;
-       }
+    if (new_gradient_norm_ == 0)
+    {
+      // the optimum is already reached!
+      Log.info() << " Start conformation is already optimal!" << endl; 
+      return true;
+    }
 
-     // The first search direction is the negative gradient       
-     determineNewSearchDirection(true); 
+    // The first search direction is the negative gradient       
+    determineNewSearchDirection(true); 
 
     
-     // Calculate the real step length which is in multiples of the initial gradient length 
-     // If this is a restart, use the old step length 
-     if(restart == false)
-       {
-       step_length_ =  ConjugateGradientMinimizer::Default::STEP_LENGTH ; 
+    // Calculate the real step length which is in multiples of the initial gradient length 
+    // If this is a restart, use the old step length 
+    if(restart == false)
+    {
+      step_length_ =  ConjugateGradientMinimizer::Default::STEP_LENGTH ; 
 
-       force_update_counter_ = 0;
-       energy_update_counter_ = 0;
-       }
+      force_update_counter_ = 0;
+      energy_update_counter_ = 0;
+    }
 
 
 
-     // If no upper bound for the number of iterations is given, the value stored in 
-     // the options will be the limit
-     if(iterations == 0)
-       {
-       max_iteration = number_of_iteration_ + maximal_number_of_iterations_;
-       }
-     else
-       {
-       max_iteration = number_of_iteration_ + iterations;
-       }
+    // If no upper bound for the number of iterations is given, the value stored in 
+    // the options will be the limit
+    if(iterations == 0)
+    {
+			max_iteration = number_of_iteration_ + maximal_number_of_iterations_;
+    }
+    else
+    {
+      max_iteration = number_of_iteration_ + iterations;
+    }
 
        
-     lambda_opt_ = 1.0;   // this variable contains the optimal value for the line 
-                          // search from the previous iteration 
+    lambda_opt_ = 1.0;   // this variable contains the optimal value for the line 
+                         // search from the previous iteration 
  
-     // The main loop starts  here
+    // The main loop starts  here
 
-     while(number_of_iteration_++ < max_iteration)
-       {
-       // check if the current conformation fulfills the convergence condition 
-       rms_gradient_norm = calculateRMSGradientNorm(new_gradient_); 
+    while(number_of_iteration_++ < max_iteration)
+    {
+      // check if the current conformation fulfills the convergence condition 
+      rms_gradient_norm = calculateRMSGradientNorm(new_gradient_); 
 
-       if(number_of_iteration_ % energy_output_frequency_ == 0)
-         {
-         Log.info() << "ConjugateGradient Minimizer iteration: " << 
-                                                      number_of_iteration_ - 1 << endl;
-         Log.info() << "   current RMS-Gradient  kJ/(mol A)  : " << rms_gradient_norm << endl; 
-         Log.info() << "   current potential energy kJ/mol   : " << new_energy << endl; 
-         }
+      if(number_of_iteration_ % energy_output_frequency_ == 0)
+      {
+        Log.info() << "ConjugateGradientMinimizer: iteration " << number_of_iteration_ - 1
+									 << "  RMS gradient " << rms_gradient_norm 
+									 << " kJ/(mol A)      total energy " << new_energy << " kJ/mol" << endl; 
+      }
  
-       if(rms_gradient_norm <= max_gradient_ || same_energy_counter >= max_same_energy_)
-         {
-         // convergence! 
-         result = true; 
-         break; 
-         }
+      if(rms_gradient_norm <= max_gradient_ || same_energy_counter >= max_same_energy_)
+      {
+        // convergence! 
+        result = true; 
+        break; 
+      }
  
-       if(number_of_iteration_ % force_field_->getUpdateFrequency() == 0)
-         {
-         // Update the force field pair lists in regular intervals
-         force_field_->update();
-         }
+      if(number_of_iteration_ % force_field_->getUpdateFrequency() == 0)
+      {
+        // Update the force field pair lists in regular intervals
+        force_field_->update();
+      }
 
-       if(snapShot_ptr_ != 0 && number_of_iteration_ % snapshot_frequency_ == 0)
-         {
-         // Take a snapshot of the current conformation 
-         snapShot_ptr_->takeSnapShot(); 
-         }
+      if(snapShot_ptr_ != 0 && number_of_iteration_ % snapshot_frequency_ == 0)
+      {
+        // Take a snapshot of the current conformation 
+        snapShot_ptr_->takeSnapShot(); 
+      }
 
-       old_energy = force_field_->getEnergy(); 
+      old_energy = force_field_->getEnergy(); 
 
-       result = determineNewSolution();
+			// abort if no new solution could be found
+      result = (determineNewSolution() == false);
 
-       if(result == false)
-         {
-         break; 
-         }
+      if (result == true)
+      {
+        break;
+      }
 
-       new_energy = force_field_->getEnergy();
+      new_energy = force_field_->getEnergy();
 
-       // check if there is much difference between the previous solution and the
-       // new one
-       if(fabs(new_energy - old_energy) < energy_difference_bound_)
-         {
-         // count if there is the same energy between last iteration and
-         // this iteration 
-         same_energy_counter++; 
-         }
-       else
-         {
-         same_energy_counter = (same_energy_counter > 0) ?  same_energy_counter - 1 : 0;
-         }
+      // check if there is much difference between the previous solution and the
+      // new one
+      if (fabs(new_energy - old_energy) < energy_difference_bound_)
+      {
+        // count if there is the same energy between last iteration and
+        // this iteration 
+        same_energy_counter++; 
+      }
+      else
+      {
+        same_energy_counter = (same_energy_counter > 0) ?  same_energy_counter - 1 : 0;
+      }
 
        // Find a new search direction for the next iteration 
        determineNewSearchDirection(); 
 
-       } // end of while-loop
+     } // end of while-loop
 
     number_of_iteration_--; // one augmentation too much ...
 
-    Log.info() << endl << "Minimization stopped after " << number_of_iteration_ 
-               << " of " << max_iteration 
-               << " iterations  " << endl; 
-    Log.info() << " RMS gradient kJ/(mol A) : " << calculateRMSGradientNorm(new_gradient_) << endl ; 
-    Log.info() << " energy       kJ/ol      : " << new_energy << endl; 
-
-    Log.info() << endl ;
-    Log.info() << "No. of force updates     : " << force_update_counter_ << endl;
-    Log.info() << "No. of energy updates    : " << energy_update_counter_ << endl;
-    Log.info() << endl;
-
-
-
     return result; 
 
-    } // end of method 'minimize' 
+  } // end of method 'minimize' 
 	
-  } // end of namespace BALL
+} // end of namespace BALL
