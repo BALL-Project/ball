@@ -1,4 +1,4 @@
-// $Id: System_test.C,v 1.7 2000/07/12 19:36:49 oliver Exp $
+// $Id: System_test.C,v 1.8 2001/01/21 21:26:10 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(System, "$Id: System_test.C,v 1.7 2000/07/12 19:36:49 oliver Exp $")
+START_TEST(System, "$Id: System_test.C,v 1.8 2001/01/21 21:26:10 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -485,6 +485,26 @@ CHECK(persistentRead(PersistenceManager&))
 	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
+RESULT
+
+CHECK(operator ==)
+	System c1, c2;
+	TEST_EQUAL(c1 == c2, false)
+
+	c1 = c2;
+	TEST_EQUAL(c1 == c2, false)
+
+	TEST_EQUAL(c2 == c2, true)
+RESULT
+
+CHECK(operator !=)
+	System c1, c2;
+	TEST_EQUAL(c1 != c2, true)
+
+	c1 = c2;
+	TEST_EQUAL(c1 != c2, true)
+
+	TEST_EQUAL(c2 != c2, false)
 RESULT
 
 CHECK(read(istream&)) 

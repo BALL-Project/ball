@@ -1,4 +1,4 @@
-// $Id: Chain_test.C,v 1.8 2000/12/19 23:59:21 amoll Exp $
+// $Id: Chain_test.C,v 1.9 2001/01/21 21:26:20 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.8 2000/12/19 23:59:21 amoll Exp $")
+START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.9 2001/01/21 21:26:20 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -552,11 +552,23 @@ CHECK(persistentRead(PersistenceManager&))
 RESULT
 
 CHECK(operator ==)
-	Chain b1;
-	Chain b2;
-	TEST_EQUAL(b1 == b2, false)
-	b1 = b2;
-	TEST_EQUAL(b1 == b1, true)
+	Chain c1, c2;
+	TEST_EQUAL(c1 == c2, false)
+
+	c1 = c2;
+	TEST_EQUAL(c1 == c2, false)
+
+	TEST_EQUAL(c2 == c2, true)
+RESULT
+
+CHECK(operator !=)
+	Chain c1, c2;
+	TEST_EQUAL(c1 != c2, true)
+
+	c1 = c2;
+	TEST_EQUAL(c1 != c2, true)
+
+	TEST_EQUAL(c2 != c2, false)
 RESULT
 
 /////////////////////////////////////////////////////////////

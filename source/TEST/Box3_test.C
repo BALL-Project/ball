@@ -1,4 +1,4 @@
-// $Id: Box3_test.C,v 1.13 2000/09/06 00:09:08 amoll Exp $
+// $Id: Box3_test.C,v 1.14 2001/01/21 21:26:58 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Box3_test.C,v 1.13 2000/09/06 00:09:08 amoll Exp $")
+START_TEST(class_name, "$Id: Box3_test.C,v 1.14 2001/01/21 21:26:58 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -82,6 +82,18 @@ CHECK(TBox3::TBox3(const TVector3<T>& a, const TVector3<T>& b))
 	TEST_REAL_EQUAL(d, d1)
 	TEST_REAL_EQUAL(e, e1)
 	TEST_REAL_EQUAL(f, f1)
+RESULT
+
+CHECK(clear())
+	box = Box3(v1, v2);
+	box.clear();
+	box.get(a1, b1, c1, d1, e1, f1);
+	TEST_REAL_EQUAL(a, 0)
+	TEST_REAL_EQUAL(b, 0)
+	TEST_REAL_EQUAL(c, 0)
+	TEST_REAL_EQUAL(d, 0)
+	TEST_REAL_EQUAL(e, 0)
+	TEST_REAL_EQUAL(f, 0)
 RESULT
 
 CHECK(TBox3::getSurface() const )

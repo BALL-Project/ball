@@ -1,4 +1,4 @@
-// $Id: Atom_test.C,v 1.9 2000/12/19 23:59:21 amoll Exp $
+// $Id: Atom_test.C,v 1.10 2001/01/21 21:27:33 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.9 2000/12/19 23:59:21 amoll Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.10 2001/01/21 21:27:33 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -385,7 +385,19 @@ CHECK(operator ==)
 	Atom a2;
 	TEST_EQUAL(a1 == a2, false)
 	a1 = a2;
-	TEST_EQUAL(a1 == a1, true)
+	TEST_EQUAL(a1 == a2, false)
+
+	TEST_EQUAL(a2 == a2, true)
+RESULT
+
+CHECK(operator !=)
+	Atom a1;
+	Atom a2;
+	TEST_EQUAL(a1 != a2, true)
+	a1 = a2;
+	TEST_EQUAL(a1 != a2, true)
+
+	TEST_EQUAL(a2 != a2, false)
 RESULT
 
 /////////////////////////////////////////////////////////////

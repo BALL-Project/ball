@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.19 2000/12/19 23:59:01 amoll Exp $
+// $Id: Bond_test.C,v 1.20 2001/01/21 21:27:09 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.19 2000/12/19 23:59:01 amoll Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.20 2001/01/21 21:27:09 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -350,8 +350,10 @@ CHECK(isInterBond())
 	f.append(a2);
 	Bond b1("bond1", a1, a2);
 	TEST_EQUAL(b1.isInterBond(), false)
+	
 	Bond b2("bond2", a3, a4);
-	TEST_EQUAL(b2.isInterBond(), true)
+	TEST_EQUAL(b2.isInterBond(), false)
+	
 	Bond b3("bond3", a1, a3);
 	TEST_EQUAL(b3.isInterBond(), true)
 
@@ -406,8 +408,10 @@ CHECK(isIntraBond())
 	f.append(a2);
 	Bond b1("bond1", a1, a2);
 	TEST_EQUAL(b1.isIntraBond(), true)
+	
 	Bond b2("bond2", a3, a4);
-	TEST_EQUAL(b2.isIntraBond(), false)
+	TEST_EQUAL(b2.isIntraBond(), true)
+	
 	Bond b3("bond3", a1, a3);
 	TEST_EQUAL(b3.isIntraBond(), false)
 RESULT
@@ -529,13 +533,42 @@ CHECK(persistentRead(PersistenceManager&))
 RESULT
 
 CHECK(operator ==)
-	Bond b1;
-	Bond b2;
+	Atom a1, a2, a3;
+	Bond b1("test", a1, a2);
+	Bond b2("test", a1, a2);
+	TEST_EQUAL(b1 == b2, true)
+
+	b1.setName("b1");
 	TEST_EQUAL(b1 == b2, false)
+	b1.setName("test");
+
+	b1.setFirstAtom(&a3);
+	TEST_EQUAL(b1 == b2, true)
+	a3.setName("XX");
+	TEST_EQUAL(b1 == b2, false)
+
 	b1 = b2;
 	TEST_EQUAL(b1 == b1, true)
 RESULT
 
+CHECK(operator !=)
+	Atom a1, a2, a3;
+	Bond b1("test", a1, a2);
+	Bond b2("test", a1, a2);
+	TEST_EQUAL(b1 != b2, false)
+
+	b1.setName("b1");
+	TEST_EQUAL(b1 != b2, true)
+	b1.setName("test");
+
+	b1.setFirstAtom(&a3);
+	TEST_EQUAL(b1 != b2, false)
+	a3.setName("XX");
+	TEST_EQUAL(b1 != b2, true)
+
+	b1 = b2;
+	TEST_EQUAL(b1 != b1, false)
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

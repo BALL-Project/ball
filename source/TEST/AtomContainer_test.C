@@ -1,4 +1,4 @@
-// $Id: AtomContainer_test.C,v 1.1 2000/08/30 19:59:14 oliver Exp $
+// $Id: AtomContainer_test.C,v 1.2 2001/01/21 21:27:33 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.1 2000/08/30 19:59:14 oliver Exp $")
+START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.2 2001/01/21 21:27:33 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -724,6 +724,26 @@ CHECK(dump(ostream&, Size))
 	bf1.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/AtomContainer_test.txt", true)
+RESULT
+
+CHECK(operator ==)
+	AtomContainer c1, c2;
+	TEST_EQUAL(c1 == c2, false)
+
+	c1 = c2;
+	TEST_EQUAL(c1 == c2, false)
+
+	TEST_EQUAL(c2 == c2, true)
+RESULT
+
+CHECK(operator !=)
+	AtomContainer c1, c2;
+	TEST_EQUAL(c1 != c2, true)
+
+	c1 = c2;
+	TEST_EQUAL(c1 != c2, true)
+
+	TEST_EQUAL(c2 != c2, false)
 RESULT
 
 CHECK(read(istream&)) 
