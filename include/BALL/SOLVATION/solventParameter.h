@@ -1,4 +1,4 @@
-// $Id: solventParameter.h,v 1.2 2000/09/02 14:35:06 oliver Exp $
+// $Id: solventParameter.h,v 1.3 2000/10/17 17:14:35 anker Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTPARAMETER_H
 #define BALL_SOLVATION_SOLVENTPARAMETER_H
@@ -24,6 +24,7 @@ namespace BALL
 	/** Parameter section for the solvent description.
 		This class provides parameter file interface for the SolventDescriptor
 		class (@see SolventDescriptor). 
+		\\
 		{\bf Definition:} \URL{BALL/.../SolventParameter.h}
 	 */
 
@@ -33,28 +34,22 @@ namespace BALL
 
 		public:
 
-		// BALL_CREATE(SolventParameter)
+		BALL_CREATE(SolventParameter)
 
 		/** @name Constructors and destructors. */
 		//@{
 
 		/** Default constructor */
-		SolventParameter();
+		SolventParameter() throw();
 
 		/** Detailed constructor */
-		SolventParameter(Parameters& parameters);
+		SolventParameter(Parameters& parameters) throw();
 
-		/** */
-		SolventParameter(const SolventParameter& param);
+		/** Copy constructor */
+		SolventParameter(const SolventParameter& param) throw();
 
 		/** Destructor */
-		virtual ~SolventParameter();
-
-		/** */
-		virtual void destroy();
-
-		/** */
-		virtual void clear();
+		virtual ~SolventParameter() throw();
 
 		//@}
 
@@ -62,11 +57,12 @@ namespace BALL
 		/** @name Assignment */
 		//@{
 
-		/** */
-		void set(const SolventParameter& param);
+		/** Assignment operator */
+		const SolventParameter& operator = (const SolventParameter& param)
+		throw();
 
-		/** */
-		const SolventParameter& operator = (const SolventParameter& param);
+		/** Clear method */
+		virtual void clear() throw();
 
 		//@}
 
@@ -75,19 +71,33 @@ namespace BALL
 		//@{
 
 		/** Return a SolventDescriptor with the values from the parameter file */
-		SolventDescriptor getSolventDescriptor() const;
+		SolventDescriptor getSolventDescriptor() const throw();
 
 		//@}
 
+
+		/** @name Predicates */
+		//@{
+
+		/** Equality operator */
+		bool operator == (const SolventParameter& param) const throw();
+		//@}
+
+
 		/** */
 		virtual bool extractSection(ForceFieldParameters& parameters, const String&
-				section_name);
+				section_name) throw();
+
 
 		protected:
 
+		/*_ The name of the solvent description freom the INI file */
 		String name_;
+		/*_ The density of the solvent description freom the INI file */
 		float number_density_;
+		/*_ The atoms of the solvent description freom the INI file */
 		std::vector<SolventAtomDescriptor> solvent_atoms_;
+		/*_ The solvent descriptor to be created */
 		SolventDescriptor solvent_descriptor_;
 
 	};

@@ -1,4 +1,4 @@
-// $Id: claverieParameter.h,v 1.2 2000/09/28 13:37:17 anker Exp $
+// $Id: claverieParameter.h,v 1.3 2000/10/17 17:14:34 anker Exp $
 
 #ifndef BALL_SOLVATION_CLAVERIEPARAMETER_H
 #define BALL_SOLVATION_CLAVERIEPARAMETER_H
@@ -18,7 +18,13 @@
 namespace BALL
 {
 
-	/** 
+	/** ClaverieParameter class. 
+		This class provides the parameters needed for the computation of
+		van-der-Waals interaction energies according to the scheme by Huron and
+		Claverie. [missing: units, reference].
+
+		{\bf Note:} Dispersion and repulsion terms are {\bf not} distinguished.
+
 		{\bf Definition:} \URL{BALL/.../claverieParameter.h}
 	 */
 
@@ -34,22 +40,16 @@ namespace BALL
 		//@{
 
 		/** Default constructor */
-		ClaverieParameter();
+		ClaverieParameter() throw();
 
-		/** Detailes constructor */
-		ClaverieParameter(Parameters& parameters);
+		/** Detailed constructor */
+		ClaverieParameter(Parameters& parameters) throw();
 
-		/** */
-		ClaverieParameter(const ClaverieParameter& param);
+		/** Copy constructor */
+		ClaverieParameter(const ClaverieParameter& param) throw();
 
 		/** Destructor */
-		virtual ~ClaverieParameter();
-
-		/** */
-		virtual void destroy();
-
-		/** */
-		virtual void clear();
+		virtual ~ClaverieParameter() throw();
 
 		//@}
 
@@ -57,11 +57,12 @@ namespace BALL
 		/** @name Assignment */
 		//@{
 
-		/** */
-		void set(const ClaverieParameter& param);
+		/** Assignment operator */
+		const ClaverieParameter& operator = (const ClaverieParameter& param)
+			throw();
 
-		/** */
-		const ClaverieParameter& operator = (const ClaverieParameter& param);
+		/** Clear method */
+		virtual void clear() throw();
 
 		//@}
 
@@ -70,26 +71,39 @@ namespace BALL
 		//@{
 
 		/** */
-		bool hasParameters(Atom::Type solvent_type, Atom::Type solute_type) const;
+		bool hasParameters(Atom::Type solvent_type, Atom::Type solute_type)
+			const throw();
 
 		/** */
 		std::pair<float, float> getParameters(Atom::Type solvent_type,
-				Atom::Type solute_type) const;
+				Atom::Type solute_type) const throw();
 
 		/** */
-		std::pair<float, float> getParameters(Atom::Type type) const;
+		std::pair<float, float> getParameters(Atom::Type type) const throw();
 
 		//@}
 
+		
+		/** @name Predicates */
+		//@{
+
+		/** Equality operator */
+		bool operator == (const ClaverieParameter& param) const throw();
+
+		//@}
 
 		/** */
 		virtual bool extractSection(ForceFieldParameters& parameters,
-				const String& section_name);
+				const String& section_name) throw();
 
 
 		protected:
 
+		/*_ This vector contains the paramaters that were read from the
+		  parameter file */
 		std::vector< std::pair<float, float> > parameters_;
+
+		/*_ Here the atom types are mapped to the indices of the vector */
 		HashMap<Atom::Type, Index> indices_;
 
 

@@ -1,4 +1,4 @@
-// $Id: PCMCavFreeEnergyProcessor.h,v 1.4 2000/10/06 11:51:48 anker Exp $
+// $Id: PCMCavFreeEnergyProcessor.h,v 1.5 2000/10/17 17:14:34 anker Exp $
 
 #ifndef BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PCMCAVFREEENERGYPROCESSOR_H
@@ -22,6 +22,9 @@ namespace BALL
 		model. It is based on Pierotti, Chem. Rev. 76(6):717--726, 1976 and the
 		modification for non-spherical solutes by Huron/Claverie, J. Phys.
 		Chem. 76(15):2123-2133, 1972.
+		\\
+		The energy value is returned in units of kJ/mol.
+		\\
 		{\bf Definition:} \URL{BALL/.../PCMCavFreeEnergyProcessor.h}
 	 */
 

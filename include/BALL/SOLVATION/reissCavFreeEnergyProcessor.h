@@ -1,4 +1,4 @@
-// $Id: reissCavFreeEnergyProcessor.h,v 1.5 2000/10/06 15:22:31 anker Exp $
+// $Id: reissCavFreeEnergyProcessor.h,v 1.6 2000/10/17 17:14:35 anker Exp $
 
 #ifndef BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_REISSCAVFREEENERGYPROCESSOR_H
@@ -22,6 +22,9 @@ namespace BALL
 		J. Chem. Phys. 37(1):119-124, 1960 with the modification for
 		non-spherical solutes by Huron/Claverie, J. Phys. Chem.
 		76(15):2123-2133, 1972.
+		\\ 
+		Energies are returned in units of kJ/mol.
+		\\
 		{\bf Definition:} \URL{BALL/.../ReissCavFreeEnergyProcessor.h}
 	 */
 

@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.3 2000/10/06 11:51:49 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.4 2000/10/17 17:14:35 anker Exp $
 
 // BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -37,10 +37,14 @@
 namespace BALL
 {
 
-	/** Processor for the computation of the interaction energy of a molecule.
+	/** Processor for the computation of the van-der-Waals interaction energy
+	  of a molecule with its surrounding.
 		This processor uses a 6_12 pair potential for the calculation of
 		dispersion and repulsion energies.
-		{\bf Definition:} \URL{BALL/.../pair6_12InteractionEnergyProcessor.h}
+	  \\
+		Energies are computed in units of kJ/mol.
+		\\
+		{\bf Definition:} \URL{BALL/SOLVATION/pair6_12InteractionEnergyProcessor.h}
 	 */
 	
 	class Pair6_12InteractionEnergyProcessor
@@ -232,9 +236,15 @@ namespace BALL
 
 		protected:
 
+		/*_ solvent description, to be read from an INIFile */
 		SolventDescriptor solvent_;
-		// RDFParameter rdf_parameter_;
-		// Pair6_12RDFIntegrator rdf_integrator_;
+
+		/*_ the rdf description, also from an INIFile */
+		RDFParameter rdf_parameter_;
+
+		/*_ This is the tool to perform integrations with embedded RDf
+		 * information */
+		Pair6_12RDFIntegrator rdf_integrator_;
 
 
 		private:

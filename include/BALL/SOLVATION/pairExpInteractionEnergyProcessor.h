@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.h,v 1.4 2000/10/06 11:51:49 anker Exp $
+// $Id: pairExpInteractionEnergyProcessor.h,v 1.5 2000/10/17 17:14:35 anker Exp $
 
 // BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
@@ -42,9 +42,11 @@
 namespace BALL
 {
 
-	/** Processor for the computation of the interaction energy of a molecule.
-		This processor uses a Exp pair potential for the calculation of
+	/** Processor for the computation of the van-derWaals interaction energy
+	  of a molecule.
+		This processor uses a 6-exp pair potential for the calculation of
 		dispersion and repulsion energies.
+		\\
 		{\bf Definition:} \URL{BALL/.../pairExpInteractionEnergyProcessor.h}
 	 */
 	

@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.h,v 1.8 2000/09/28 17:32:56 anker Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.9 2000/10/17 17:14:35 anker Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
@@ -21,7 +21,15 @@
 
 namespace BALL
 {
-	/** */
+	/** 6-exp pair potential integrator.
+		This class provides a tool for calculating the integral part of the
+		van-der-Waals interaction energies. The difference to the values
+		calculated with the standard interaction energy processor is the
+		inclusion of a radial distribution function (@see
+		RadialDistributionFunction) into the computaion.
+		\\
+		{\bf Definition:} \URL{BALL/SOLVATION/pairExpRDFIntegrator}
+	 */
 
 	class PairExpRDFIntegrator
 		:	public RDFIntegrator

@@ -1,6 +1,5 @@
-// $Id: pierottiCavFreeEnergyProcessor.h,v 1.5 2000/10/06 15:22:31 anker Exp $
+// $Id: pierottiCavFreeEnergyProcessor.h,v 1.6 2000/10/17 17:14:35 anker Exp $
 
-// BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
 
@@ -23,7 +22,10 @@ namespace BALL
 		Chem. Rev. 76(6):717--726, 1976 with the modification for
 		non-spherical solutes by Huron/Claverie, J. Phys. Chem.
 		76(15):2123-2133, 1972.
-		{\bf Definition:} \URL{BALL/.../pierottiCavFreeEnergyProcessor.h}
+		\\
+		Energy returned in units of kJ/mol.
+		\\
+		{\bf Definition:} \URL{BALL/SOLVATION/pierottiCavFreeEnergyProcessor.h}
 	 */
 
 	class PierottiCavFreeEnergyProcessor
