@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.18.2.4 2004/12/30 19:55:35 amoll Exp $
+// $Id: POVRenderer.C,v 1.18.2.5 2004/12/30 20:20:15 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -59,8 +59,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.info() << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<POVRenderer>() << std::endl;
+				Log.info() << "Destructing object " << this << " of class POVRenderer" << endl;
 			#endif
 
 			if (outfile_ != 0 &&
@@ -173,7 +172,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.info() << "Start the POVRender output..." << std::endl;
+				Log.info() << "Start the POVRender output..." << endl;
 			#endif
 
 			if (!Renderer::init(stage, width, height)) return false;
@@ -181,49 +180,49 @@ namespace BALL
 			if (human_readable_)
 			{
 				(*outfile_)	<< "// POVRay file created by the BALL POVRenderer" 
-									<< std::endl << std::endl;
+									<< endl << endl;
 
-				(*outfile_) << "// Width of the original scene: " << width_ << std::endl;
-				(*outfile_) << "// Height of the original scene: " << height_ << std::endl;
-				(*outfile_) << "// To render this scene, call povray (available from www.povray.org) like this:\n//" << std::endl;
+				(*outfile_) << "// Width of the original scene: " << width_ << endl;
+				(*outfile_) << "// Height of the original scene: " << height_ << endl;
+				(*outfile_) << "// To render this scene, call povray (available from www.povray.org) like this:\n//" << endl;
 
 				if (outfile_ != 0 &&
 						RTTI::isKindOf<File>(*outfile_))
 				{
 					String filename = FileSystem::baseName((*(File*)outfile_).getName());
 					(*outfile_) << "// povray +I" << filename 
-											 << " +FN +O" << filename << ".png +QR +W" << width_ << " +H" << height_ << " -UV\n//" << std::endl;
+											 << " +FN +O" << filename << ".png +QR +W" << width_ << " +H" << height_ << " -UV\n//" << endl;
 				}
 			}
-			(*outfile_) << "camera {" << std::setprecision(12) << std::endl;
-			(*outfile_) << "\tperspective" << std::endl;
-			(*outfile_) << "\tdirection <0.0, 0.0, -1.0>" << std::endl;
-			(*outfile_) << "\tright " << (double)width_ / (double)height_ << " * x" << std::endl;
-			(*outfile_) << "\tangle 83.0" << std::endl;
-			(*outfile_) << "\ttransform {" << std::endl;
-			(*outfile_) << "\t\tmatrix <" << std::endl;
+			(*outfile_) << "camera {" << std::setprecision(12) << endl;
+			(*outfile_) << "\tperspective" << endl;
+			(*outfile_) << "\tdirection <0.0, 0.0, -1.0>" << endl;
+			(*outfile_) << "\tright " << (double)width_ / (double)height_ << " * x" << endl;
+			(*outfile_) << "\tangle 83.0" << endl;
+			(*outfile_) << "\ttransform {" << endl;
+			(*outfile_) << "\t\tmatrix <" << endl;
 
 			GLdouble m[16];	
 			glGetDoublev(GL_MODELVIEW_MATRIX, m);
 			
 			double norm = sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
 			(*outfile_) << "\t\t" 
-							 << m[0] / norm << ",  " << m[1] / norm << ", " << m[2] / norm << "," << std::endl;
+							 << m[0] / norm << ",  " << m[1] / norm << ", " << m[2] / norm << "," << endl;
 			norm = sqrt(m[4] * m[4] + m[5] * m[5] + m[6] * m[6]);
-			(*outfile_) << "\t\t" << m[4] / norm << ",  " << m[5] / norm << ", " << m[6] / norm << "," << std::endl;
+			(*outfile_) << "\t\t" << m[4] / norm << ",  " << m[5] / norm << ", " << m[6] / norm << "," << endl;
 			norm = sqrt(m[8] * m[8] + m[9] * m[9] + m[10] * m[10]);
-			(*outfile_) << "\t\t" << m[8] / norm << ",  " << m[9] / norm << ", " << m[10] / norm << "," << std::endl;
-			(*outfile_) << "\t\t" << m[12] << ",  " << m[13] << ", " << m[14] << std::endl;
-		  (*outfile_) << "\t\t>" << std::endl;
-			(*outfile_) << "\tinverse }" << std::endl;
-			(*outfile_) << "}" << std::setprecision(6) << std::endl << std::endl;
+			(*outfile_) << "\t\t" << m[8] / norm << ",  " << m[9] / norm << ", " << m[10] / norm << "," << endl;
+			(*outfile_) << "\t\t" << m[12] << ",  " << m[13] << ", " << m[14] << endl;
+		  (*outfile_) << "\t\t>" << endl;
+			(*outfile_) << "\tinverse }" << endl;
+			(*outfile_) << "}" << std::setprecision(6) << endl << endl;
 				
 			//
 			if (human_readable_)
 			{
-				(*outfile_) << "// look up: " << stage.getCamera().getLookUpVector() << std::endl;
-				(*outfile_) << "// look at: " << stage.getCamera().getLookAtPosition() << std::endl;
-				(*outfile_) << "// view point: " << stage.getCamera().getViewPoint() << std::endl;
+				(*outfile_) << "// look up: " << stage.getCamera().getLookUpVector() << endl;
+				(*outfile_) << "// look at: " << stage.getCamera().getLookAtPosition() << endl;
+				(*outfile_) << "// view point: " << stage.getCamera().getViewPoint() << endl;
 			}
 
 			// Set the light sources
@@ -254,9 +253,9 @@ namespace BALL
 			}
 			
 			// Add some global blurb for radiosity support
-			(*outfile_) << "global_settings { radiosity { brightness 0.6 } }" << std::endl;
+			(*outfile_) << "global_settings { radiosity { brightness 0.6 } }" << endl;
 			// Set the background color
-			(*outfile_) << "background { " << POVColorRGBA(stage_->getBackgroundColor()) << " }" << std::endl << std::endl;
+			(*outfile_) << "background { " << POVColorRGBA(stage_->getBackgroundColor()) << " }" << endl << endl;
 
 			// Define the finish we will use for our molecular objects (defining the molecular
 			// "material properties"
@@ -364,7 +363,7 @@ namespace BALL
 			(*outfile_) << radius;
 			(*outfile_) << " pigment { " << POVColorRGBA(color) << " } ";
 			(*outfile_) << POVFinish("Tube", color); // We use the same finish as for tubes -> helices
-			(*outfile_) << "} " << std::endl << std::endl;
+			(*outfile_) << "} " << endl << endl;
 		}
 
 		void POVRenderer::renderTube_(const Tube& tube)
@@ -395,7 +394,7 @@ namespace BALL
 			(*outfile_)           <<                 radius;
 			(*outfile_) << " pigment { " << POVColorRGBA(color) << " } ";
 			(*outfile_) << POVFinish("Tube", color);
-			(*outfile_) << "} " << std::endl;
+			(*outfile_) << "} " << endl;
 		}	
 
 		void POVRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
@@ -503,9 +502,12 @@ namespace BALL
 			for (Position p = 0; p < color_vector.size(); p++)
 			{
 				temp_color.set(color_vector[p]);
-				out << "texture { pigment { " << POVColorRGBA(temp_color) << " } }," << endl;
+				out << "texture { pigment { " << POVColorRGBA(temp_color) << " }"
+						<< " finish { BALLFinishMesh } }," << endl;
 			}
-			out << "texture { pigment { " << POVColorRGBA(temp_color) << " } }" << endl; // dummy
+
+			out << "texture { pigment { " << POVColorRGBA(temp_color) << " }"
+					<< " finish { BALLFinishMesh } }" << endl;
 			out << "\t\t}" << endl;
 			
 			// write vertex indices ---->
@@ -547,105 +549,6 @@ namespace BALL
 			out << "\t}" << endl;
 		}
 				
-
-		/* old way of rendering meshes, to be removed, if new one works (30.12.2004)
-		void POVRenderer::renderMesh2_(const Mesh& mesh)
-			throw()
-		{
-			// so we should let POVRay know...
-			(*outfile_) << "\tmesh {" << endl;
-
-			ColorRGBA c1, c2, c3;
-			Surface::Triangle t;
-			Vector3 v1, v2, v3;
-			Vector3 n1, n2, n3;
-
-			// first, find out if we have a different color for each
-			// point
-			if (mesh.colorList.size() < mesh.vertex.size())
-			{
-				// nope. we don't...
-				if (mesh.colorList.empty())
-				{
-					c1 = ColorRGBA(255, 255, 255, 255);
-				}
-				else
-				{
-					c1 = mesh.colorList[0];
-				}
-
-				for (Position i = 0; i < mesh.triangle.size(); i++)
-				{
-					t = mesh.triangle[i];
-
-					v1 = mesh.vertex[t.v1];
-					n1 = mesh.normal[t.v1] - origin_;
-					v2 = mesh.vertex[t.v2];
-					n2 = mesh.normal[t.v2] - origin_;
-					v3 = mesh.vertex[t.v3];
-					n3 = mesh.normal[t.v3] - origin_;
-
-					(*outfile_) << "\t\tsmooth_triangle {" << endl;
-					(*outfile_) << "\t\t\t#local color = texture { pigment { " << POVColorRGBA(c1) << " } }" << endl;
-
-
-					(*outfile_) << "\t\t\t" << POVVector3(v1) << ", ";
-					(*outfile_)             << POVVector3(n1) << ", " << std::endl;
-					(*outfile_) << "\t\t\t" << POVVector3(v2) << ", ";
-					(*outfile_)             << POVVector3(n2) << ", " << std::endl;
-					(*outfile_) << "\t\t\t" << POVVector3(v3) << ", ";
-					(*outfile_)             << POVVector3(n3) << std::endl << std::endl;
-					
-
-					// And now the color. This is easy here, because we
-					// only have one color.
-					(*outfile_) <<"\t\t\ttexture { color } }" << endl;
-				}
-			}
-			else
-			{
-				// we have a color for each of the vertices
-				for (Position i = 0; i < mesh.triangle.size(); i++)
-				{
-					t = mesh.triangle[i];
-
-					v1 = mesh.vertex[t.v1];
-					n1 = mesh.normal[t.v1] - origin_;
-					c1 = mesh.colorList[t.v1];
-					v2 = mesh.vertex[t.v2];
-					n2 = mesh.normal[t.v2] - origin_;
-					c2 = mesh.colorList[t.v2];
-					v3 = mesh.vertex[t.v3];
-					n3 = mesh.normal[t.v3] - origin_;
-					c3 = mesh.colorList[t.v3];
-
-					(*outfile_) << "\t\tsmooth_triangle {" << std::endl;
-					(*outfile_) << "\t\t\t#local color1 = texture { pigment { " 
-									 << POVColorRGBA(c1) << " } finish { BALLFinishMesh } }" << std::endl;
-					(*outfile_) << "\t\t\t#local color2 = texture { pigment { " 
-									 << POVColorRGBA(c2) << " } finish { BALLFinishMesh } }" << std::endl;
-					(*outfile_) << "\t\t\t#local color3 = texture { pigment { " 
-									 << POVColorRGBA(c3) << " } finish { BALLFinishMesh } }" << std::endl << std::endl;
-
-					(*outfile_) << "\t\t\t" << POVVector3(v1) << ", ";
-					(*outfile_)             << POVVector3(n1) << ", " << std::endl;
-					(*outfile_) << "\t\t\t" << POVVector3(v2) << ", ";
-					(*outfile_)             << POVVector3(n2) << ", " << std::endl;
-					(*outfile_) << "\t\t\t" << POVVector3(v3) << ", ";
-					(*outfile_)             << POVVector3(n3) << std::endl << std::endl;
-
-					// And now the colors.
-					(*outfile_) <<"\t\t\ttexture_list { color1 color2 color3 }" << std::endl;
-					(*outfile_) << "\t\t}" << std::endl << std::endl;
-				}
-			}
-
-			// now close the mesh
-			(*outfile_) << "\t\t finish { BALLFinishMesh }" << std::endl;
-			(*outfile_) << "\t}" << std::endl << std::endl;
-		}
-	*/
-
 		void POVRenderer::renderClippingPlane_(const Representation& rep)
 			throw()
 		{
