@@ -1,13 +1,14 @@
 class Element
   : PropertyManager
- {
+{
 %HeaderCode
-#include <BALL/KERNEL/PTE.h>
-using namespace BALL;
+	#include <BALL/KERNEL/PTE.h>
+	using namespace BALL;
 %End
    public:
    Element();
-   Element(const Element&, bool = true);
+   Element(const Element& /element/);
+//   Element(const Element&, bool = true); this is nonsense
 //   Element
 //    (const String& name,
 //     const String& symbol,
@@ -55,7 +56,8 @@ using namespace BALL;
  {
   public:
    PTE_();
-   PTE_(const PTE_&, bool);
+   PTE_(const PTE_&);
+//   PTE_(const PTE_&, bool);
 //   virtual ~PTE_();
    static Element& getElement(int);
    static Element& getElement(const String&);
@@ -68,6 +70,5 @@ using namespace BALL;
 //   Element &operator [](Index index);
 // const Element &operator [](Index index) const;
 //   static bool apply(UnaryProcessor<Element>& applicator);
- };
+};
 // extern PTE_ PTE;
-  
