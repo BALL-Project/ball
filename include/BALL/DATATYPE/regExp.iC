@@ -1,12 +1,8 @@
-// $Id: regExp.iC,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: regExp.iC,v 1.2 2000/06/27 15:07:54 oliver Exp $
 
 BALL_INLINE 
-void RegularExpression::set(const RegularExpression& regular_expression, bool deep)
+void RegularExpression::set(const RegularExpression& regular_expression, bool /* deep */)
 {
-  BALL_PRECONDITION
-    (deep == true, 
-     BALL_REGULAR_EXPRESSION_ERROR_HANDLER(RegularExpression::ERROR__NOT_IMPLEMENTED));
-
   pattern_.set(regular_expression.pattern_);
 
   freeCompiledPattern_();
