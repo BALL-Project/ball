@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.48 2003/05/22 21:58:21 oliver Exp $
+// $Id: standardPredicates.C,v 1.49 2003/06/04 15:32:14 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -1171,6 +1171,7 @@ namespace BALL
 		Size verbosity = 0;
 
 		AxialPredicate isAxial;
+		InRingPredicate inRing;
 
 		if (current == 0)
 		{
@@ -1179,10 +1180,13 @@ namespace BALL
 			return(false);
 		}
 
+		// Iterate over all children in order to find a matching one.
 		CTPNode::ConstIterator child_it = current->begin();
 		for (; child_it != current->end(); ++child_it)
 		{
 
+			// This variable contains the "local" result which will be merged
+			// with those from deeper tree levels
 			bool this_result = false;
 
 			for (Size j = 0; j < atom.countBonds(); ++j)
@@ -1199,7 +1203,9 @@ namespace BALL
 										&& (partner->getElement().getElectronegativity()
 											> atom.getElement().getElectronegativity()))
 								|| (((*child_it)->getSymbol() == "A") 
-										&& (isAxial(*partner))))
+										&& (isAxial(*partner)))
+								|| (((*child_it)->getSymbol() == "R") 
+										&& (inRing(*partner))))
 						{
 							visited.insert(bond);
 							this_result = find_(*partner, *child_it, visited);
@@ -1220,11 +1226,15 @@ namespace BALL
 					}
 				}
 			}
+
 			if (this_result == false)
 			{
 				return(false);
 			}
+
 		}
+
+		// Everything went OK, so return true.
 		return(true);
 	}
 
@@ -1754,9 +1764,9 @@ namespace BALL
 				visited_bonds_.insert(bond);
 				if (dfs(*descend, limit-1) == true)
 				{
-#ifdef DEBUG
-					cout << "Pushing back " << atom.getFullName() << endl;
-#endif
+// #ifdef DEBUG
+// 					cout << "Pushing back " << atom.getFullName() << endl;
+// #endif
 					ring_atoms_.push_back(&atom);
 					return true;
 				}
