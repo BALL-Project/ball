@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.22 2001/06/25 12:48:18 anker Exp $
+// $Id: property.h,v 1.23 2001/07/14 18:46:05 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -65,7 +65,7 @@ namespace BALL
 			DOUBLE,
 
 			/** @doc String-type properties contain a pointer to a string.
-					When destructing the property, the string is destructed, too. ???
+					When destructing the property, the string is destructed, too.
 			*/
 			STRING,
 
@@ -154,7 +154,7 @@ namespace BALL
 				@param	name the property's name
 				@param	str the string stored in the property
 		*/
-		NamedProperty(const string& name, string& str)
+		NamedProperty(const string& name, const string& str)
 			throw();
 
 		/**	Constructor for object-type properties.

@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.24 2001/07/14 12:56:44 amoll Exp $
+// $Id: classTest.h,v 1.25 2001/07/14 18:46:05 oliver Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -240,7 +240,7 @@ int main(int argc, char **argv)\
 			TEST::newline = true;\
 			std::cout << std::endl;\
 		}\
-		std::cout << "  status (line" << __LINE__ << "): " << message << std::endl;\
+		std::cout << "  status (line " << __LINE__ << "): " << message << std::endl;\
 	}\
 
 /**	Check subtest result.

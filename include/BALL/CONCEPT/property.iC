@@ -1,4 +1,4 @@
-// $Id: property.iC,v 1.20 2001/06/25 12:48:45 anker Exp $
+// $Id: property.iC,v 1.21 2001/07/14 18:46:06 oliver Exp $
 
 using namespace std;
 
@@ -62,7 +62,7 @@ NamedProperty::NamedProperty(const string& name, double value)
 }
 
 BALL_INLINE 
-NamedProperty::NamedProperty(const string& name, string& str)
+NamedProperty::NamedProperty(const string& name, const string& str)
 	throw()
 	:	PersistentObject(),
 		type_(STRING),
@@ -85,16 +85,18 @@ BALL_INLINE
 NamedProperty::~NamedProperty()
 	throw()
 {
-	if ((type_ == STRING) && (data_.s != 0))
-	{
-		delete data_.s;
-	}
+	clear();
 }
 
 BALL_INLINE 
 void NamedProperty::clear()
 	throw()
 {
+	// free allocated space for strings
+	if ((type_ == STRING) && (data_.s != 0))
+	{
+		delete data_.s;
+	}
 	type_ = NONE;
 	name_ = "";
 }
