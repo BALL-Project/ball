@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.32 2003/03/26 13:56:18 anhi Exp $
+// $Id: hashGrid.h,v 1.33 2003/06/17 12:26:10 amoll Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -16,10 +16,6 @@
 
 #ifndef BALL_CONCEPT_VISITOR_H
 #	include <BALL/CONCEPT/visitor.h>
-#endif
-
-#ifndef BALL_DATATYPE_FOREACH_H
-#	include <BALL/DATATYPE/forEach.h>
 #endif
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
@@ -77,7 +73,6 @@ namespace BALL
 			throw();
 	
 		//@}
-
 		/**	@name	Assignment 
 		*/
 		//@{
@@ -90,12 +85,7 @@ namespace BALL
 		const HashGridBox3& operator = (const HashGridBox3& box)
 			throw(Exception::NotImplemented);
 
-		///
-		void get(HashGridBox3& box, bool deep = true) const
-			throw(Exception::NotImplemented);
-
 		//@}
-
 		/**	@name	Accessors 
 		*/
 		//@{
@@ -141,15 +131,14 @@ namespace BALL
 			throw();
 			
 		//@}			
-
 		/**	@name	Miscellaneous 
 		*/
 		//@{
+		
 		/// Host method
 		void host(Visitor<HashGridBox3> &visitor)
 			throw();
 		//@}
-
 		/**	@name	Predicates 
 		*/
 		//@{
@@ -169,25 +158,25 @@ namespace BALL
 		bool has(const Item& item) const
 			throw();
 
-		/** Test, whether this box is empty, i. e. the data item list contains
-				nothing
+		/** Test, whether this box is empty, i. e. the data item list contains nothing
 				@return bool - <tt>true</tt>, if <tt>this</tt> is empty. <tt>false</tt> otherwise. 
 		*/
 		bool isEmpty() const
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Debugging and Diagnostics 
 		*/
 		//@{
+		
 		///
 		bool isValid() const
 			throw();
 		///
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Internal Iterators 
 		*/
 		//@{
@@ -199,8 +188,8 @@ namespace BALL
 		///
 		bool apply(UnaryProcessor< HashGridBox3<Item> >& processor)
 			throw();
-		//@}
 
+		//@}
 		/** @name	External Iterators 
 		*/
 		//@{
@@ -712,15 +701,6 @@ namespace BALL
 		set(box);
 		
 		return *this;
-	}
-
-	template<typename Item>  
-	BALL_INLINE 
-	void HashGridBox3<Item>::get(HashGridBox3<Item>& box, bool deep) const
-		throw(Exception::NotImplemented)
-	{
-		// ????? - not implemented
-    throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	template<typename Item>  
