@@ -3,7 +3,9 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/NMRStarFile.h>
+
 using namespace BALL;
+using namespace std;
 
 int main()
 {
