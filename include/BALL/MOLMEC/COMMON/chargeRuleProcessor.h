@@ -1,0 +1,57 @@
+// $Id: chargeRuleProcessor.h,v 1.1 2000/05/19 11:12:24 oliver Exp $
+// Molecular Mechanics: rule-based assignment of charges 
+
+#ifndef BALL_MOLMEC_COMMON_CHARGERULEPROCESSOR_H
+#define BALL_MOLMEC_COMMON_CHARGERULEPROCESSOR_H
+
+#ifndef BALL_MOLMEC_COMMON_RULEPROCESSOR_H
+#	include <BALL/MOLMEC/COMMON/ruleProcessor.h>
+#endif
+
+namespace BALL 
+{
+
+	/**	
+	*/
+	class ChargeRuleProcessor
+		:	public RuleProcessor
+	{
+		public:
+
+		BALL_CREATE_NODEEP(ChargeRuleProcessor)
+
+		/**	Constructors and Destructors
+		*/
+		//@{
+		/**	Default constructor
+		*/
+		ChargeRuleProcessor();
+			
+		/**	Detailed constructor
+		*/
+		ChargeRuleProcessor(INIFile& file, const String& prefix);
+			
+		/**	Copy constructor
+		*/
+		ChargeRuleProcessor(const ChargeRuleProcessor& rule_processor);
+
+		/**	Destructor
+		*/
+		~ChargeRuleProcessor();
+
+		//@}
+		
+		/**	@name Processor related methods
+		*/
+		//@{
+		/**
+		*/
+		virtual Processor::Result operator () (Atom& atom);
+		//@}
+
+	};
+
+} // namespace BALL
+
+
+#endif // BALL_MOLMEC_COMMON_CHARGERULEPROCESSOR_H
