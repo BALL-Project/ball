@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.10 2000/07/24 09:07:34 oliver Exp $
+// $Id: bitVector.h,v 1.11 2000/07/24 20:11:43 oliver Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -316,7 +316,7 @@ namespace BALL
 		void setUnsignedLong(unsigned long bit_pattern);
 
 		/// ???/
-		unsigned long getUnsignedLong() const;*/
+		unsigned long getUnsignedLong() const;
 
 		// ??? kann man auch private setzen, da operator existiert
 		///
