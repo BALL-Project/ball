@@ -1,4 +1,4 @@
-// $Id: snapShot.h,v 1.10 2000/12/15 17:19:25 anker Exp $
+// $Id: snapShot.h,v 1.11 2000/12/19 13:22:50 anker Exp $
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
 // They can be used to obtain snapshots from an MD simulation or an energy 
@@ -304,7 +304,7 @@ namespace BALL
     */
     SnapShotManager
 			(const System* my_system, const ForceField* my_force_field,
-			 const String& my_snapshot_file, bool overwrite)
+			 TrajectoryFile* my_snapshot_file, bool overwrite = true)
 			throw();
 
     /** This constructor expects a valid system and a valid force field
@@ -321,7 +321,7 @@ namespace BALL
     */
     SnapShotManager	
 			(const System* my_system, const ForceField* my_force_field,
-			 const Options& my_options, const String& filename, bool overwrite = true)
+			 const Options& my_options, TrajectoryFile* file, bool overwrite = true)
 			throw();
 
     /// Copy constructor.
@@ -340,11 +340,9 @@ namespace BALL
 
 		/** The setup method does all preparations necessary for using the
 				SnapshotManager.
-				@param my_options
-				@param filename
 				@return true, if setup was succesful
     */
-    virtual bool setup(const String& my_snapshot_file)
+    virtual bool setup()
 			throw();
 
     //@}
@@ -375,7 +373,8 @@ namespace BALL
 		// BAUSTELLE: nach .C 
     /** Is the SnapshotManager ready for use?
     */
-    virtual bool isValid() const { return valid_; } ;
+    virtual bool isValid() const
+			throw();
 
     //@}
 
@@ -415,21 +414,9 @@ namespace BALL
     /** This method returns the total number of snapshots (sum of
         snapshots in memory and on disk).
     */ 
-		// BAUSTELLE 
-    virtual Size getNumberOfSnapShots() const {return snapshot_counter_;} 
-
-    /** This method returns the snapshot object of the given index 
-				If it does not find the item, an invalid and empty snapshot object
-				is returned. 
-    */ 
-    virtual SnapShot getSnapShot(Size); 
-
-    /** This method returns the snapshot object of the given index 
-        transformed into a System object. This is useful for displaying
-        the snapshot via BALLVIEW. 
-        If it does not find the item, an empty System object is returned
-    */ 
-    virtual System getSnapShotAsSystem(Size); 
+		// BAUSTELLE (Warum virtual?)
+    Size getNumberOfSnapShots() const 
+			throw();
 
     //@}
 
@@ -475,7 +462,7 @@ namespace BALL
 
 		/*_ The trajectory file where the data is saved in
 		*/
-		TrajectoryFile trajectory_file_;
+		TrajectoryFile* trajectory_file_;
 
     /*_ The frequency of saving snapshots in memory to disk.
         After flush_to_disk_frequency_ iterations, a save is done. 
@@ -485,6 +472,10 @@ namespace BALL
 		// gespeichert oder nur der letzte, also damit eine Art Zeitraffer
 		// generiert?
     Size flush_to_disk_frequency_; 
+
+		/*_
+		*/
+		Size buffer_counter_;
 
     /*_  This status flag indicates if the class is ready for use
     */
