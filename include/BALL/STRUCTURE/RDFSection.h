@@ -1,4 +1,4 @@
-// $Id: RDFSection.h,v 1.2 2000/08/31 21:15:46 oliver Exp $
+// $Id: RDFSection.h,v 1.3 2000/10/18 12:38:35 oliver Exp $
 
 #ifndef BALL_STRUCTURE_RDFSECTION_H
 #define BALL_STRUCTURE_RDFSECTION_H
@@ -44,13 +44,15 @@ namespace BALL
 		RDFSection(const RDFSection& rdf_section);
 
 		/** Destructor */
-		virtual ~RDFSection();
+		virtual ~RDFSection()
+			throw();
 
 		/** Destroy method */
 		virtual void destroy();
 
 		/** Clear method */
-		virtual void clear();
+		virtual void clear()
+			throw();
 
 		//@}
 
