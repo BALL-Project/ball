@@ -1,4 +1,4 @@
-// $Id: AmberFF_test.C,v 1.5 1999/12/28 18:14:26 oliver Exp $
+// $Id: AmberFF_test.C,v 1.6 2000/01/28 15:46:30 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #include <BALL/FORMAT/HINFile.h>
 ///////////////////////////
 
-START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.5 1999/12/28 18:14:26 oliver Exp $")
+START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.6 2000/01/28 15:46:30 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -94,6 +94,49 @@ TEST_REAL_EQUAL(amber94.getBendEnergy(), 9.1094048)
 TEST_REAL_EQUAL(amber94.getTorsionEnergy(), 14.3574)
 TEST_REAL_EQUAL(amber94.getVdWEnergy(), 45.4436)
 TEST_REAL_EQUAL(amber94.getESEnergy(), -163.8814224)
+RESULT
+
+CHECK(torsion test 1 (HNCO) [AMBER94])
+HINFile f("data/AMBER_test_1.hin");	
+System s;
+f >> s;
+f.close();
+TEST_EQUAL(s.countAtoms(), 4)
+Options options;
+options[AmberFF::Option::FILENAME] = "Amber/amber94.ini";
+options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
+options[AmberFF::Option::ASSIGN_CHARGES] = "true";
+options[AmberFF::Option::ASSIGN_TYPES] = "true";
+options[AmberFF::Option::OVERWRITE_CHARGES] = "true";
+options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
+AmberFF amber94(s, options);
+amber94.removeComponent("Amber NonBonded");
+amber94.removeComponent("Amber Bend");
+amber94.removeComponent("Amber Stretch");
+amber94.updateEnergy();
+amber94.updateForces();
+#undef PRECISION
+#define PRECISION 1e-12
+AtomIterator it = s.beginAtom();
+for (; +it; ++it)
+{
+	if (it->getName() == "C")
+	{
+		TEST_REAL_EQUAL(it->getForce().getDistance(Vector3(5.65872e-10,7.01203e-13,-3.2631e-10)), 0)
+	}
+	if (it->getName() == "O")
+	{
+		TEST_REAL_EQUAL(it->getForce().getDistance(Vector3(-3.76732e-10,2.77556e-17,2.17502e-10)), 0)
+	}
+	if (it->getName() == "N")
+	{
+		TEST_REAL_EQUAL(it->getForce().getDistance(Vector3(9.69443e-11,2.64282e-10,9.07063e-11)), 0)
+	}
+	if (it->getName() == "H")
+	{
+		TEST_REAL_EQUAL(it->getForce().getDistance(Vector3(-2.86084e-10,-2.64983e-10,1.81024e-11)), 0)
+	}
+}
 RESULT
 
 /////////////////////////////////////////////////////////////
