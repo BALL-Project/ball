@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.1 1999/09/17 11:17:49 oliver Exp $
+// $Id: fragmentDB.C,v 1.2 1999/09/17 16:35:48 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -120,8 +120,6 @@ namespace BALL
 		normalizeNames = new NormalizeNamesProcessor(*this);
 		addHydrogens = new AddHydrogensProcessor(*this);
 		buildBonds = new BuildBondsProcessor(*this);
-
-		tree = 0;
 	}
 
 
