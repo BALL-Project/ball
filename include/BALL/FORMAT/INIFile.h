@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.39 2004/02/18 23:24:03 oliver Exp $
+// $Id: INIFile.h,v 1.40 2004/12/07 13:34:59 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_INIFILE_H
@@ -251,6 +251,9 @@ namespace BALL
 		*/
 		bool appendLine(const String& section_name, const String& line);
 
+		/// Append a line to the last section
+		bool appendLine(const String& line);
+
 		/**	Return number of lines.
 		*/	
 		Size getNumberOfLines() const;
@@ -400,6 +403,13 @@ namespace BALL
 		*/
 		bool duplicateKeyCheckEnabled() const;
 
+		///
+		List<String> getContent() const
+			throw();
+
+		///
+		bool setContent(const List<String>& lines)
+			throw();
 
 		protected:
 
