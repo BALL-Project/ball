@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.43 2003/04/22 21:15:04 oliver Exp $
+// $Id: classTest.h,v 1.44 2003/06/19 13:06:55 oliver Exp $
+//
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -472,6 +473,70 @@ int main(int argc, char **argv)\
 				std::cout << " - " << std::endl;\
 		}\
 	}\
+
+#ifdef BALL_DEBUG
+/**	Precondition exception test macro.
+		This macro checks if a the command specified correctly throws
+		an exception of type Precondition because one of its preconditions
+		is violated. If BALL is not compile din DEBUG mode, this macro
+		won't do anything, as the BALL_EXCEPTION_PRECONDITION macro is
+		expanded to nothing in that case.
+		\ingroup ClassTest
+*/
+#define TEST_PRECONDITION_EXCEPTION(command) \
+	{\
+		TEST::exception = 0;\
+		try\
+		{\
+			command;\
+		}\
+		catch (Exception::Precondition)\
+		{\
+			TEST::exception = 1;\
+		}\
+		catch (::BALL::Exception::GeneralException e)\
+		{\
+			TEST::exception = 2;\
+			TEST::exception_name = e.getName();\
+		}\
+		catch (...)\
+		{ \
+			TEST::exception = 3;\
+		}\
+		TEST::this_test = (TEST::exception == 1);\
+		TEST::test = TEST::test && TEST::this_test;\
+		\
+		if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
+		{\
+			if (!TEST::newline)\
+			{\
+				TEST::newline = true;\
+				std::cout << std::endl;\
+			}\
+			std::cout << "    (line " << __LINE__ << " TEST_EXCEPTION(" << #exception_type << ", " << #command << "): ";\
+			switch (TEST::exception)\
+			{\
+				case 0:	std::cout << " ERROR: no exception!) "; break;\
+				case 1:	std::cout << " OK) "; break;\
+				case 2:	std::cout << " ERROR: wrong exception: " << TEST::exception_name << ") "; break;\
+				case 3:	std::cout << " ERROR: wrong exception!) "; break;\
+			}\
+			if (TEST::this_test)\
+				std::cout << " + " << std::endl;\
+			else \
+				std::cout << " - " << std::endl;\
+		}\
+	}\
+
+#else
+
+# define TEST_PRECONDITION_EXCEPTION(command)\
+	if (TEST::verbose > 1)\
+	{\
+		std::cout << "  TEST_EXCEPTION_PRECONDITION(" #command ") : (DEBUG mode disabled!)" << std::endl;\
+	}\
+
+#endif // BALL_DEBUG
 
 /** Skip remainder of subtest.
     If the condition is not fulfilled, the remainder of the test is skipped.
