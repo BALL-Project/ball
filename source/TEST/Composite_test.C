@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.14 2000/08/24 20:26:08 amoll Exp $
+// $Id: Composite_test.C,v 1.15 2000/08/28 16:09:52 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@
 using namespace BALL;
 using namespace std;
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.14 2000/08/24 20:26:08 amoll Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.15 2000/08/28 16:09:52 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -433,15 +433,6 @@ CHECK(hasChild() const)
 	TEST_EQUAL(f.hasChild(), false)
 RESULT
 
-CHECK(isChild() const)
-	TEST_EQUAL(a.isChild(), false)
-	TEST_EQUAL(b.isChild(), true)
-	TEST_EQUAL(c.isChild(), true)
-	TEST_EQUAL(d.isChild(), true)
-	TEST_EQUAL(e.isChild(), true)
-	TEST_EQUAL(f.isChild(), false)
-RESULT
-
 CHECK(isChildOf() const)
 	TEST_EQUAL(a.isChildOf(a), false)
 	TEST_EQUAL(b.isChildOf(a), true)
@@ -527,15 +518,6 @@ CHECK(isParentOf() const)
 	TEST_EQUAL(a.isParentOf(d), false)
 	TEST_EQUAL(a.isParentOf(e), false)
 	TEST_EQUAL(a.isParentOf(f), false)
-RESULT
-
-CHECK(isParent() const)
-	TEST_EQUAL(a.isParent(), true)
-	TEST_EQUAL(b.isParent(), true)
-	TEST_EQUAL(c.isParent(), true)
-	TEST_EQUAL(d.isParent(), false)
-	TEST_EQUAL(e.isParent(), false)
-	TEST_EQUAL(f.isParent(), false)
 RESULT
 
 CHECK(hasSibling() const)
@@ -644,24 +626,6 @@ CHECK(isNextSiblingOf() const)
 	TEST_EQUAL(d.isNextSiblingOf(d), false)
 	TEST_EQUAL(e.isNextSiblingOf(d), false)
 	TEST_EQUAL(f.isNextSiblingOf(d), false)
-RESULT
-
-CHECK(hasDescendant() const)
-	TEST_EQUAL(a.hasDescendant(), true)
-	TEST_EQUAL(b.hasDescendant(), true)
-	TEST_EQUAL(c.hasDescendant(), true)
-	TEST_EQUAL(d.hasDescendant(), false)
-	TEST_EQUAL(e.hasDescendant(), false)
-	TEST_EQUAL(f.hasDescendant(), false)
-RESULT
-
-CHECK(isDescendant() const)
-	TEST_EQUAL(a.isDescendant(), false)
-	TEST_EQUAL(b.isDescendant(), true)
-	TEST_EQUAL(c.isDescendant(), true)
-	TEST_EQUAL(d.isDescendant(), true)
-	TEST_EQUAL(e.isDescendant(), true)
-	TEST_EQUAL(f.isDescendant(), false)
 RESULT
 
 CHECK(isDescendantOf() const)
@@ -995,12 +959,6 @@ CHECK(bool isCollapsed() const)
 	a.expand();
 RESULT
 
-CHECK(bool hasAnyAncestor() const)
-	TEST_EQUAL(a.hasAnyAncestor(), false)
-	TEST_EQUAL(b.hasAnyAncestor(), true)
-	TEST_EQUAL(f.hasAnyAncestor(), false)
-RESULT
-
 CHECK(bool hasAncestor(const T& t) const)
 	TEST_EQUAL(a.hasAncestor(b), false)
 	TEST_EQUAL(b.hasAncestor(c), true)
@@ -1018,14 +976,6 @@ CHECK(bool hasAncestor(const T& t) const)
 	TEST_EQUAL(chain.hasAncestor(system2), true)
 	TEST_EQUAL(protein.hasAncestor(protein2), false)
 	TEST_EQUAL(protein.hasAncestor(system2), true)
-RESULT
-
-CHECK(isAncestor())
-	TEST_EQUAL(a.isAncestor(), true)
-	TEST_EQUAL(b.isAncestor(), true)
-	TEST_EQUAL(e.isAncestor(), false)
-	TEST_EQUAL(e.getChild(0), 0)
-	TEST_EQUAL(e.getFirstChild(), 0)
 RESULT
 
 CHECK(isAncestorOf(const Composite& composite) const)
