@@ -146,15 +146,6 @@ namespace BALL
 				}
 
 				system->setProperty("FROM_FILE", filename);
-				
-				/*
-				// notify tree of a new composite
-				CompositeMessage* new_message = new CompositeMessage;
-				new_message->setComposite(*system);
-				new_message->setCompositeName(pdbId->text().latin1());
-				new_message->setType(CompositeMessage::NEW_COMPOSITE);
-				notify_(new_message);
-				*/
 				getMainControl()->insert(*system, pdbId->text().latin1());
 			}
 			catch(...)

@@ -7,21 +7,21 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>0</y>
+            <y>3</y>
             <width>520</width>
-            <height>354</height>
+            <height>350</height>
         </rect>
     </property>
     <property name="minimumSize">
         <size>
             <width>520</width>
-            <height>0</height>
+            <height>350</height>
         </size>
     </property>
     <property name="maximumSize">
         <size>
             <width>520</width>
-            <height>32767</height>
+            <height>350</height>
         </size>
     </property>
     <property name="caption">
@@ -319,22 +319,6 @@
             <string>PDBFile Details</string>
         </property>
     </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>pdbId</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>332</x>
-                <y>268</y>
-                <width>182</width>
-                <height>22</height>
-            </rect>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>You can also enter a PDB id directly.</string>
-        </property>
-    </widget>
     <widget class="QPushButton">
         <property name="name">
             <cstring>download</cstring>
@@ -355,6 +339,22 @@
         </property>
         <property name="default">
             <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>pdbId</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>332</x>
+                <y>268</y>
+                <width>182</width>
+                <height>22</height>
+            </rect>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>You can also enter a PDB id directly.</string>
         </property>
     </widget>
 </widget>
