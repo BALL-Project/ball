@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.7 2000/02/15 18:02:13 oliver Exp $
+// $Id: vector4.h,v 1.8 2000/02/15 18:17:58 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -21,11 +21,6 @@
 #ifndef BALL_MATHS_ANGLE_H
 #	include <BALL/MATHS/angle.h>
 #endif
-
-#ifndef BALL_MATHS_VECTOR_H
-#	include <BALL/MATHS/vector.h>
-#endif
-
 
 namespace BALL 
 {
@@ -78,9 +73,6 @@ namespace BALL
 		TVector4(const T* ptr);
 
 		///	
-		TVector4(const TVector_<T>& vector);
-
-		///	
 		TVector4(const T& x, const T& y, const T& z, const T& h = (T)1);
 
 		///	
@@ -90,23 +82,12 @@ namespace BALL
 		virtual ~TVector4();
 		//@}
 
-		/**	@name	Converters
-		*/
-		//@{
-
-		///	
-		operator TVector_<T>() const;
-		//@}
-
 		/**	@name	Assignment
 		*/
 		//@{
 	
 		///	
 		void set(const T* ptr);
-
-		///	
-		void set(const TVector_<T>& vector);
 
 		///	
 		void set(const T& x, const T& y, const T& z, const T& h = (T)1);
@@ -118,16 +99,10 @@ namespace BALL
 		TVector4& operator = (const T* ptr);
 
 		///	
-		TVector4& operator = (const TVector_<T>& vector);
-
-		///	
 		TVector4& operator = (const TVector4& vector);
 
 		///	
 		void get(T* ptr) const;
-
-		///	
-		void get(TVector_<T>& vector) const;
 
 		///	
 		void get(T& x, T& y, T& z, T& h) const;
@@ -278,15 +253,6 @@ namespace BALL
 	}
 
 	template <class T>
-	TVector4<T>::TVector4(const TVector_<T>& v)
-		:	x(v.x),
-			y(v.y),
-			z(v.z),
-			h(v.h)
-	{
-	}
-
-	template <class T>
 	TVector4<T>::TVector4(const T& x,const T& y, const T& z, const T& h)
 		: x(x),
 			y(y),
@@ -310,13 +276,6 @@ namespace BALL
 	}
 
 	template <class T>
-	BALL_INLINE
-	TVector4<T>::operator TVector_<T>() const
-	{
-		return TVector_<T>(x, y, z, h);
-	}
-
-	template <class T>
 	BALL_INLINE 
 	void TVector4<T>::set(const T* ptr)
 	{
@@ -327,16 +286,6 @@ namespace BALL
 		y = *ptr++;
 		z = *ptr++;
 		h = *ptr;
-	}
-
-	template <class T>
-	BALL_INLINE 
-	void TVector4<T>::set(const TVector_<T>& v)
-	{
-		x = v.x;
-		y = v.y;
-		z = v.z;
-		h = v.h;
 	}
 
 	template <class T>
@@ -376,18 +325,6 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	TVector4<T>& TVector4<T>::operator = (const TVector_<T>& v)
-	{
-		x = v.x;
-		y = v.y;
-		z = v.z;
-		h = v.h;
-
-		return *this;
-	}
-
-	template <class T>
-	BALL_INLINE 
 	TVector4<T>& TVector4<T>::operator = (const TVector4<T>& v)
 	{
 		x = v.x;
@@ -409,16 +346,6 @@ namespace BALL
 		*ptr++ = y;
 		*ptr++ = z;
 		*ptr   = h;
-	}
-
-	template <class T>
-	BALL_INLINE 
-	void TVector4<T>::get(TVector_<T>& v) const
-	{
-		v.x = x;
-		v.y = y;
-		v.z = z;
-		v.h = h;
 	}
 
 	template <class T>

@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.11 2000/01/26 16:20:04 amoll Exp $
+// $Id: vector3.h,v 1.12 2000/02/15 18:17:58 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -20,10 +20,6 @@
 
 #ifndef BALL_MATHS_ANGLE_H
 #	include <BALL/MATHS/angle.h>
-#endif
-
-#ifndef BALL_MATHS_VECTOR_H
-#	include <BALL/MATHS/vector.h>
 #endif
 
 #ifndef BALL_MATHS_COMMON_H
@@ -95,20 +91,6 @@ namespace BALL
 			x = *ptr++;
 			y = *ptr++;
 			z = *ptr;
-		}
-
-		/**	TVector\_ constructor.
-				This constructor creates a TVector3 object and initializes
-				{\tt x}, {\tt y}, and {\tt z} to {\tt vector.x}, {\tt vector.y},
-				and {\tt vector.z}.
-				@param	vector the vector to construct from
-		*/
-		TVector3(const TVector_<T>& vector)
-			:	PersistentObject(),
-				x(vector.x),
-				y(vector.y),
-				z(vector.z)
-		{
 		}
 
 		/**	Scalar constructor.
@@ -214,12 +196,6 @@ namespace BALL
 		*/
 		void set(const T& value);
 
-		/**	Assign from a TVector\_.
-				Assign {\tt x = vector.x}, {\tt y = vector.y}, and {\tt z = vector.z}.
-				@param	vector the TVector\_ to assign from
-		*/
-		void set(const TVector_<T>& vector);
-
 		/**	Assign the vector components.
 				@param vx the new x component
 				@param vy the new y component
@@ -263,13 +239,6 @@ namespace BALL
 		*/
 		TVector3& operator = (const T* ptr);
 
-		/**	TVector\_ assignment operator.
-				Assigns {\tt x = vector.x}, {\tt y = vector.y}, and
-				{\tt z = vector.z}.
-				@param	vector the TVector\_ to assign from
-		*/
-		TVector3& operator = (const TVector_<T>& vector);
-
 		/**	Assign to an array.
 				Sets the first three array elements pointed to by {\tt ptr} 
 				to the values of the three vector components.
@@ -277,13 +246,6 @@ namespace BALL
 				@exception	NullPointer if {\tt ptr == 0}
 		*/
 		void get(T* ptr) const;
-
-		/**	Assign to a TVector\_ obejct.
-				Assigns {\tt x}, {\tt y}, and {\tt z} the {\tt vector}.
-				{\tt vector.h} is set to {\tt (T)0}.
-				@param	vector the TVector\_ to assign to
-		*/
-		void get(TVector_<T>& vector) const;
 
 		/**	Assign to three variables of type {\tt T}.
 				@param	x the x component
@@ -356,16 +318,6 @@ namespace BALL
 		const T& operator [] (Index index) const;
 		//@}
 		
-		/**	@name	Converters
-		*/
-		//@{
-			
-		/** Converter to TVector\_.
-		*/
-		operator TVector_<T> () const;
-		//@}
-
-	
 		/**	@name	Arithmetic operators
 		*/
 		//@{
@@ -569,13 +521,6 @@ namespace BALL
 	}
  
 	template <class T>
-	BALL_INLINE
-	TVector3<T>::operator TVector_<T>() const
-	{
-		return TVector_<T>(x, y, z);
-	}
-
-	template <class T>
 	BALL_INLINE 
 	void TVector3<T>::set(const T* ptr)
 	{
@@ -585,15 +530,6 @@ namespace BALL
 		x = *ptr++;
 		y = *ptr++;
 		z = *ptr;
-	}
-
-	template <class T>
-	BALL_INLINE 
-	void TVector3<T>::set(const TVector_<T>& vector)
-	{
-		x = vector.x;
-		y = vector.y;
-		z = vector.z;
 	}
 
 	template <class T>
@@ -646,17 +582,6 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	TVector3<T>& TVector3<T>::operator = (const TVector_<T>& vector)
-	{
-		x = vector.x;
-		y = vector.y;
-		z = vector.z;
-
-		return *this;
-	}
-
-	template <class T>
-	BALL_INLINE 
 	TVector3<T>& TVector3<T>::operator = (const TVector3<T>& vector)
 	{
 		x = vector.x;
@@ -676,16 +601,6 @@ namespace BALL
 		*ptr++ = x;
 		*ptr++ = y;
 		*ptr   = z;
-	}
-
-	template <class T>
-	BALL_INLINE 
-	void TVector3<T>::get(TVector_<T>& vector) const
-	{
-		vector.x = x;
-		vector.y = y;
-		vector.z = z;
-		vector.h = (T)0;
 	}
 
 	template <class T>
