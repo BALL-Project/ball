@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.17 2001/03/01 11:21:27 amoll Exp $
+// $Id: File_test.C,v 1.18 2001/04/03 14:08:59 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: File_test.C,v 1.17 2001/03/01 11:21:27 amoll Exp $")
+START_TEST(class_name, "$Id: File_test.C,v 1.18 2001/04/03 14:08:59 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -340,11 +340,17 @@ CHECK(isExecutable())
 RESULT
 
 CHECK(isValid())
-	TEST_EQUAL(f.isValid(), true)	
+	File f;
+	TEST_EQUAL(f.isValid(), false)	
 
 	File f1;
 	TEST_EXCEPTION(Exception::FileNotFound, f1 = File("XXX"))
-	TEST_EQUAL(f1.isValid(), true)	
+	TEST_EQUAL(f1.isValid(), false)	
+
+	File f2("File_test.C");
+	TEST_EQUAL(f2.isValid(), true)	
+	f2.close();
+	TEST_EQUAL(f2.isValid(), true)	
 RESULT
 
 CHECK(isOpen())
