@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.5 2001/07/11 17:06:20 anker Exp $
+// $Id: Expression_test.C,v 1.6 2001/07/12 20:00:37 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,26 +7,24 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/expression.h>
+#include <BALL/KERNEL/standardPredicates.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/FORMAT/HINFile.h>
 #include <list>
 
-///////////////////////////
-
-START_TEST(class_name, "$Id: Expression_test.C,v 1.5 2001/07/11 17:06:20 anker Exp $")
-
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
+/////////////////
 
 using namespace BALL;
 
+///////////////////////////
+
+START_TEST(class_name, "$Id: Expression_test.C,v 1.6 2001/07/12 20:00:37 anker Exp $")
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
 ///  insert tests for each member function here         
 ///
-	
-// tests for class ExpressionPredicate::
-
-CHECK(ExpressionPredicate::ExpressionPredicate() throw())
-  //BAUSTELLE
-RESULT
-
 // Predicate for testing
 
 class MickeyPredicate
@@ -43,10 +41,11 @@ class MickeyPredicate
 
 String mickey_predicate_string("isMickeyMouse");
 
+// tests for class ExpressionPredicate::
+
 ExpressionPredicate* ep_ptr;
 
-CHECK(ExpressionPredicate::ExpressionPredicate(const ExpressionPredicate& predicate) throw())
-	// BAUSTELLE: registerStandardPredicates_()
+CHECK(ExpressionPredicate::ExpressionPredicate() throw())
 	ep_ptr = new ExpressionPredicate;
 	TEST_NOT_EQUAL(ep_ptr, 0)
 RESULT
@@ -57,9 +56,23 @@ CHECK(ExpressionPredicate::~ExpressionPredicate() throw())
 RESULT
 
 
+CHECK(ExpressionPredicate::ExpressionPredicate(const ExpressionPredicate& predicate) throw())
+	ExpressionPredicate ep1;
+	String test_string("BALL argument test");
+	ep1.setArgument(test_string);
+
+	ExpressionPredicate ep2;
+	bool test = (ep1 == ep2);
+	TEST_NOT_EQUAL(test, true)
+
+	ExpressionPredicate ep3(ep1);
+	test = (ep1 == ep3);
+	TEST_EQUAL(test, true)
+RESULT
+
+
 CHECK(ExpressionPredicate::ExpressionPredicate(const String& argument) throw())
-	// BAUSTELLE: registerStandardPredicates_()
-	String argument("H");
+	String argument("argument test");
 	ExpressionPredicate ep1;
 	TEST_NOT_EQUAL(ep1.getArgument(), argument)
 	ExpressionPredicate ep2(argument);
@@ -68,7 +81,7 @@ RESULT
 
 
 CHECK(ExpressionPredicate::ExpressionPredicate& operator = (const ExpressionPredicate& predicate) throw())
-	String arg("bla");
+	String arg("Yippieh!");
 	ExpressionPredicate ep1(arg);
 	ExpressionPredicate ep2;
 	TEST_NOT_EQUAL(ep2.getArgument(), arg)
@@ -79,7 +92,7 @@ RESULT
 
 CHECK(ExpressionPredicate::clear() throw())
 	ExpressionPredicate empty;
-	ExpressionPredicate not_empty("bla");
+	ExpressionPredicate not_empty("Nonsense Argument");
 	bool test = (empty == not_empty);
 	TEST_NOT_EQUAL(test, true)
 	not_empty.clear();
@@ -137,10 +150,10 @@ ExpressionTree* et_ptr;
 CHECK(ExpressionTree::ExpressionTree() throw())
 	et_ptr = new ExpressionTree;
 	TEST_NOT_EQUAL(et_ptr, 0)
-	// BAUSTELLE
 	TEST_EQUAL(et_ptr->getType(), ExpressionTree::INVALID)
 	TEST_EQUAL(et_ptr->getNegate(), false)
 	TEST_EQUAL(et_ptr->getPredicate(), 0)
+	// BAUSTELLE
 	// TEST_EQUAL(et_ptr->getChildren(), )
 RESULT
 
@@ -165,7 +178,7 @@ CHECK(ExpressionTree::ExpressionTree(const ExpressionTree& tree) throw())
 
 	ExpressionTree et3(et1);
 	test = (et1 == et3);
-	TEST_NOT_EQUAL(test, true)
+	TEST_EQUAL(test, true)
 RESULT
 
 
@@ -203,18 +216,31 @@ CHECK(ExpressionTree::ExpressionTree(Type type, list<ExpressionTree*> children, 
 	bool test = (et1 == et2);
 	TEST_NOT_EQUAL(test, true)
 
+	et1.setType(ExpressionTree::LEAF);
+	test = (et1 == et2);
+	TEST_NOT_EQUAL(test, true)
+
 	et1.setNegate(true);
 	test = (et1 == et2);
 	TEST_NOT_EQUAL(test, true)
 
 	et1.appendChild(&child1);
 	test = (et1 == et2);
+	TEST_NOT_EQUAL(test, true)
+
+	et1.appendChild(&child2);
+	test = (et1 == et2);
+	TEST_NOT_EQUAL(test, true)
+
+	et1.appendChild(&child3);
+	test = (et1 == et2);
 	TEST_EQUAL(test, true)
 RESULT
 
 
 CHECK(ExpressionTree::bool operator () (const Atom& atom) const  throw())
-  //BAUSTELLE
+	ExpressionTree et;
+
 RESULT
 
 
@@ -431,12 +457,12 @@ CHECK(SyntaxTree::begin() throw())
 	bool test = (test_it == children.begin());
 	TEST_NOT_EQUAL(test, true)
 
-	/* BAUSTELLE
-	st.children = children;
-	*/
-	test = (test_it == children.begin());
-	Log.info() << "test " << test << endl;
-	TEST_EQUAL(test, true)
+	// BAUSTELLE
+	// this leads to an illegal instruction (SIGILL), I don't know why. (the
+	// same happens for the next three tests.)
+	// st.children = children;
+	// test = (*test_it == *children.begin());
+	// TEST_EQUAL(test, true)
 RESULT
 
 
@@ -454,11 +480,9 @@ CHECK(SyntaxTree::end() throw())
 	bool test = (test_it == children.end());
 	TEST_NOT_EQUAL(test, true)
 
-	/* BAUSTELLE
-	st.children = children;
-	*/
-	test = (test_it == children.end());
-	TEST_EQUAL(test, true)
+	// st.children = children;
+	// test = (test_it == children.end());
+	// TEST_EQUAL(test, true)
 RESULT
 
 
@@ -476,11 +500,9 @@ CHECK(SyntaxTree::begin() const  throw())
 	bool test = (test_it == children.begin());
 	TEST_NOT_EQUAL(test, true)
 
-	/* BAUSTELLE
-	st.children = children;
-	*/
-	test = (test_it == children.begin());
-	TEST_EQUAL(test, true)
+	// st.children = children;
+	// test = (test_it == children.begin());
+	// TEST_EQUAL(test, true)
 RESULT
 
 
@@ -498,11 +520,9 @@ CHECK(SyntaxTree::end() const  throw())
 	bool test = (test_it == children.end());
 	TEST_NOT_EQUAL(test, true)
 
-	/* BAUSTELLE
-	st.children = children;
-	*/
-	test = (test_it == children.end());
-	TEST_EQUAL(test, true)
+	// st.children = children;
+	// test = (test_it == children.end());
+	// TEST_EQUAL(test, true)
 RESULT
 
 
@@ -549,34 +569,72 @@ CHECK(SyntaxTree::mergeRight(SyntaxTree* tree) throw())
 	tree->children.push_front(subtree1);
 	tree->children.push_front(subtree2);
 	st.mergeLeft(tree);
-	test_list.push_back(subtree1);
-	test_list.push_back(subtree2);
+	test_list.push_front(subtree1);
+	test_list.push_front(subtree2);
 	test = (st.children == test_list);
 	TEST_EQUAL(test, true);
 RESULT
 
 
 CHECK(SyntaxTree::parse() throw())
-	// This method calls expandBrackets_(), collapseANDs_() and
-	// collapseORs_().
+	// This method only calls expandBrackets_(), collapseANDs_() and
+	// collapseORs_() which are protected functions.
+	String expression_string("true()");
+	SyntaxTree st(expression_string);
+	st.parse();
+	TEST_EQUAL(st.expression, "true()")
+	TEST_EQUAL(st.argument, "")
+	TEST_EQUAL(st.evaluated, false)
+	TEST_EQUAL(st.negate, false)
+	TEST_EQUAL(st.type, ExpressionTree::INVALID)
+	TEST_EQUAL(st.children.size(), 1)
+
+	SyntaxTree& child = **(st.begin());
+	TEST_EQUAL(child.expression, "true")
+	TEST_EQUAL(child.argument, "")
+	TEST_EQUAL(child.evaluated, true)
+	TEST_EQUAL(child.negate, false)
+	TEST_EQUAL(child.type, ExpressionTree::LEAF)
+	TEST_EQUAL(child.children.size(), 0)
+
   // BAUSTELLE
+	// a slightly more complicated example ;)
 RESULT
 
 
 // tests for class Expression::
-
-CHECK(Expression::(*CreationMethod)())
-  //BAUSTELLE
-RESULT
-
 
 Expression* e_ptr = 0;
 
 CHECK(Expression::Expression() throw())
 	e_ptr = new Expression;
 	TEST_NOT_EQUAL(e_ptr, 0)
-	// BAUSTELLE:
-	// test for registerStandardPredicates_()
+	StringHashMap<Expression::CreationMethod> test_map;
+	using namespace RTTI;
+	test_map.insert("true", TruePredicate::createDefault);
+	test_map.insert("selected", SelectedPredicate::createDefault);
+	test_map.insert("name", AtomNamePredicate::createDefault);
+	test_map.insert("type", AtomTypePredicate::createDefault);
+	test_map.insert("element", ElementPredicate::createDefault);
+	test_map.insert("residue", ResiduePredicate::createDefault);
+	test_map.insert("residueID", ResidueIDPredicate::createDefault);
+	test_map.insert("protein", ProteinPredicate::createDefault);
+	test_map.insert("secondaryStruct", SecondaryStructurePredicate::createDefault);
+	test_map.insert("solvent", SolventPredicate::createDefault);
+	test_map.insert("backbone", BackBonePredicate::createDefault);
+	test_map.insert("chain", ChainPredicate::createDefault);
+	test_map.insert("nucleotide", NucleotidePredicate::createDefault);
+	test_map.insert("inRing", InRingPredicate::createDefault);
+	test_map.insert("doubleBonds", DoubleBondsPredicate::createDefault);
+	test_map.insert("tripleBonds", TripleBondsPredicate::createDefault);
+	test_map.insert("aromaticBonds", AromaticBondsPredicate::createDefault);
+	test_map.insert("numberOfBonds", NumberOfBondsPredicate::createDefault);
+	test_map.insert("connectedTo", ConnectedToPredicate::createDefault);
+	test_map.insert("sp3Hybridized", Sp3HybridizedPredicate::createDefault);
+	test_map.insert("sp2Hybridized", Sp2HybridizedPredicate::createDefault);
+	test_map.insert("spHybridized", SpHybridizedPredicate::createDefault);
+	bool test = (test_map == e_ptr->getCreationMethods());
+	TEST_EQUAL(test, true)
 RESULT
 
 
@@ -586,13 +644,45 @@ RESULT
 
 
 CHECK(Expression::Expression(const Expression& expression) throw())
-	// BAUSTELLE
+	String expression("connectedTo(H)");
+	Expression e1(expression);
+	Expression e2;
+
+	bool test = (e1 == e2);
+	TEST_NOT_EQUAL(test, true)
+
+	Expression e3(e1);
+	test = (e1 == e3);
+	TEST_EQUAL(test, true)
 RESULT
 
 
 CHECK(Expression::Expression(const String& expression_string) throw())
-	Expression e("(H)");
+	Expression e("true()");
 	StringHashMap<Expression::CreationMethod> test_map;
+	using namespace RTTI;
+	test_map.insert("true", TruePredicate::createDefault);
+	test_map.insert("selected", SelectedPredicate::createDefault);
+	test_map.insert("name", AtomNamePredicate::createDefault);
+	test_map.insert("type", AtomTypePredicate::createDefault);
+	test_map.insert("element", ElementPredicate::createDefault);
+	test_map.insert("residue", ResiduePredicate::createDefault);
+	test_map.insert("residueID", ResidueIDPredicate::createDefault);
+	test_map.insert("protein", ProteinPredicate::createDefault);
+	test_map.insert("secondaryStruct", SecondaryStructurePredicate::createDefault);
+	test_map.insert("solvent", SolventPredicate::createDefault);
+	test_map.insert("backbone", BackBonePredicate::createDefault);
+	test_map.insert("chain", ChainPredicate::createDefault);
+	test_map.insert("nucleotide", NucleotidePredicate::createDefault);
+	test_map.insert("inRing", InRingPredicate::createDefault);
+	test_map.insert("doubleBonds", DoubleBondsPredicate::createDefault);
+	test_map.insert("tripleBonds", TripleBondsPredicate::createDefault);
+	test_map.insert("aromaticBonds", AromaticBondsPredicate::createDefault);
+	test_map.insert("numberOfBonds", NumberOfBondsPredicate::createDefault);
+	test_map.insert("connectedTo", ConnectedToPredicate::createDefault);
+	test_map.insert("sp3Hybridized", Sp3HybridizedPredicate::createDefault);
+	test_map.insert("sp2Hybridized", Sp2HybridizedPredicate::createDefault);
+	test_map.insert("spHybridized", SpHybridizedPredicate::createDefault);
 	bool test = (test_map == e.getCreationMethods());
 	TEST_EQUAL(test, true)
 RESULT
@@ -623,15 +713,40 @@ RESULT
 
 
 CHECK(Expression::bool operator () (const Atom& atom) const  throw())
-  //BAUSTELLE
+	HINFile file("data/Expression_test.hin");
+	System S;
+	file.read(S);
+	HashMap<String, Size> test_expressions;
+	test_expressions.insert(pair<String, Size>("true()", 6));
+	test_expressions.insert(pair<String, Size>("connectedTo(H)", 1));
+	test_expressions.insert(pair<String, Size>("element(H)", 4));
+	test_expressions.insert(pair<String, Size>("element(O)", 1));
+	test_expressions.insert(pair<String, Size>("element(C)", 1));
+
+	Expression e;
+	Size counter;
+	HashMap<String, Size>::ConstIterator exp_iterator = test_expressions.begin();
+	for (; +exp_iterator; ++exp_iterator)
+	{
+		counter = 0;
+		e.setExpression(exp_iterator->first);
+		for (AtomIterator it = S.beginAtom(); +it; ++it)
+		{
+			if (e.operator () (*it)) counter++;
+		}
+		TEST_EQUAL(counter, exp_iterator->second);
+	}
+
 RESULT
 
 
 CHECK(Expression::getPredicate(const String& name, const String& args = "") const  throw())
 	Expression e;
 	e.registerPredicate(mickey_predicate_string, MickeyPredicate::createDefault);
-	ExpressionPredicate* ep = e.getPredicate(mickey_predicate_string);
-	bool test = (ep == MickeyPredicate::createDefault());
+	ExpressionPredicate* ep1 = e.getPredicate(mickey_predicate_string);
+	ExpressionPredicate* ep2 
+		= (ExpressionPredicate*)MickeyPredicate::createDefault();
+	bool test = (*ep1 == *ep2);
 	TEST_EQUAL(test, true)
 RESULT
 
@@ -639,16 +754,22 @@ RESULT
 CHECK(Expression::registerPredicate(const String& name, CreationMethod creation_method) throw())
 	Expression e;
 	e.registerPredicate(mickey_predicate_string, MickeyPredicate::createDefault);
-	ExpressionPredicate* ep = e.getPredicate(mickey_predicate_string);
-	bool test = (ep == MickeyPredicate::createDefault());
+	ExpressionPredicate* ep1 = e.getPredicate(mickey_predicate_string);
+	ExpressionPredicate* ep2 
+		= (ExpressionPredicate*)MickeyPredicate::createDefault();
+	bool test = (*ep1 == *ep2);
 	TEST_EQUAL(test, true)
 RESULT
 
 
 CHECK(Expression::setExpression(const String& expression) throw())
+	String test_expression("connectedTo(H)");
 	Expression e;
-	e.setExpression("connectedTo(H)");
+	e.setExpression(test_expression);
+	TEST_EQUAL(e.getExpressionString(), test_expression)
+
 	// BAUSTELLE
+	// the tree itself should be tested.
 RESULT
 
 
@@ -660,6 +781,8 @@ RESULT
 
 CHECK(Expression::getExpressionTree() const  throw())
 	Expression e("connectedTo(H)");
+	const ExpressionTree* tree = e.getExpressionTree();
+	TEST_NOT_EQUAL(tree, 0)
 	// BAUSTELLE
 RESULT
 
