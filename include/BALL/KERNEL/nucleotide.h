@@ -1,4 +1,4 @@
-// $Id: nucleotide.h,v 1.4 2000/01/11 20:12:18 oliver Exp $
+// $Id: nucleotide.h,v 1.5 2000/04/16 21:12:55 amoll Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -92,16 +92,35 @@ namespace BALL
 		/**	@name	Assignment */
 		//@{
 
-		///	
+		/** Assignment with cloning facility.
+				Assign the nucleotide {\em nucleotide} to {\em *this} nucleotide.
+				The assignment is either deep or shallow (default).
+				@param  nucleotide the nucleotide to be copied (cloned)
+				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em nucleotide}
+		*/
 		void set(const Nucleotide& nucleotide, bool deep = true);
 
-		///	
+		/** Assignment operator.
+				Assign the nucleotide {\em nucleotide} to {\em *this} nucleotide.
+				The assignment is either deep or shallow (default).
+				@param   nucleotide the nucleotide to be copied (cloned)
+				@return  nucleotide& - {\em *this} nucleotide
+				@see     nucleotide::set
+		*/
 		Nucleotide& operator = (const Nucleotide& nucleotide);
 
-		///	
+		/** Copying with cloning facility.
+				Copy {\em *this} nucleotide to the nucleotide {\em nucleotide}.
+				The assignment is either deep or shallow (default).
+				@param  nucleotide the nucleotide to be assigned to
+				@see    nucleotide::set
+		*/
 		void get(Nucleotide& nucleotide, bool deep = true) const;
 
-		///	
+		/** Swapping of nucleotide.
+				Swap the states of {\em *this} nucleotide with the nucleotide {\em nucleotide}.
+				@param  nucleotide the nucleotide {\em *this} nucleotide is being swapped with
+		*/
 		void swap(Nucleotide& nucleotide);
 	
 		//@}
@@ -109,58 +128,92 @@ namespace BALL
 		/**	@name	Accessors */
 		//@{
 
-		///
-		Protein* getProtein();
-
-		///
-		const Protein* getProtein() const;
-
-		///
+		/** Get a pointer to the parent protein.
+				The reference is 0 if {\em *this} nucleotide does not have a parent protein.
+				@return  Protein* -
+								 mutable reference to the parent protein of {\em *this} nucleotide,
+		*/
 		NucleicAcid* getNucleicAcid();
 		
-		///
+		/** Get a pointer to the parent protein.
+				The reference is 0 if {\em *this} nucleotide does not have a parent protein.
+				@return  Protein* -
+								 constant reference to the parent protein of {\em *this} nucleotide,
+		*/
 		const NucleicAcid* getNucleicAcid() const;
 
-		///
+		/**	Set the ID of the nucleotide.
+				@param id the new ID
+		*/
 		void setID(const String& id);
 
-		///
+		/**	Retrieve the ID of the nucleotide.
+				@return String the ID
+		*/
 		String& getID();
 
-		///
+		/**	Retrieve the ID of the nucleotide.
+				@return String the ID (constant)
+		*/
 		const String& getID() const;
 
-		///
+		/**	Set the insertion code of the nucleotide.
+				@param id the new ID
+		*/
 		void setInsertionCode(char insertion_code);
 
-		///
+		/**	Retrieve the insertion code of the nucleotide.
+				@return String the ID
+		*/
 		char getInsertionCode() const;
 
-		///
+		/** Prepend an atom at position 0.
+				@param atom, the atom to prepend
+		*/
 		void prepend(Atom& atom);
 
-		///
+		/** Append an atom after the last position.
+				@param atom, the atom to append
+		*/
 		void append(Atom& atom);
 
-		///
+		/** Insert an atom after the last position.
+				@param atom, the atom to insert
+		*/
 		void insert(Atom& atom);
 
-		///
+		/** Insert an atom before a given {\em Comosite} object.
+				@param atom, the atom to insert
+				@param before, the {\em Comosite} object to insert before
+		*/
 		void insertBefore(Atom& atom, Composite& before);
 
-		///
+		/** Insert an atom after a given {\em Comosite} object.
+				@param atom, the atom to insert
+				@param after, the {\em Comosite} object to insert before
+		*/
 		void insertAfter(Atom& atom, Composite& after);
 
-		///
+		/** Remove an atom
+				@param atom the atom to remove
+		*/
 		bool remove(Atom& atom);
 
-		///
+		/**	Cut all children of {\tt nucleotide} and prepend them before the children of this nucleotide.
+				@param nucleotide the nucleotide to access
+		*/
 		void spliceBefore(Nucleotide& nucleotide);
 
-		///
+		/**	Cut all children of {\tt nucleotide} and append them after the children of this nucleotide.
+				@param nucleotide the nucleotide to access
+		*/
 		void spliceAfter(Nucleotide& nucleotide);
 
-		///
+		/**	Move the children of {\tt nucleotide} into this nucleotide.
+				The children of {\tt nucleotide} are inserted at the position of 
+				{\tt nucleotide} if {\tt nucleotide} is a child of {\tt this}.
+				Otherwise the children are inserted using \Ref{spliceBefore}.
+		*/
 		void splice(Nucleotide& nucleotide);
 
 		//@}
@@ -169,13 +222,22 @@ namespace BALL
 		/**	@name	Predicates */
 		//@{
 
-		///
+		/**	Test if {\em *this} nucleotide is terminal.
+				@return bool true if {\em *this} nucleotide is terminal
+				{\bf Note:} Not yet implemented.	
+		*/
 		bool isTerminal() const;
 	
-		///
+		/**	Test if {\em *this} nucleotide is 3-prime.
+				@return bool true if {\em *this} nucleotide is 3-prime
+				{\bf Note:} Not yet implemented.	
+		*/
 		bool is3Prime() const;
-	
-		///
+
+		/**	Test if {\em *this} nucleotide is 5-prime.
+				@return bool true if {\em *this} nucleotide is 5-prime
+				{\bf Note:} Not yet implemented.	
+		*/
 		bool is5Prime() const;
 		//@}
 
@@ -183,10 +245,22 @@ namespace BALL
 		/**	@name	Debugging and Diagnostics */
 		//@{
 
-		///
+		/** Internal state and consistency self-validation.
+				Initiate self-validation of the internal state and data structure consistencies of {\em *this} nucleotide.
+				If the internal state of {\em *this} nucleotide is correct (self-validated) and consistent {\tt true} is returned,
+				{\tt false} otherwise. 
+				@return			bool -
+										{\tt true} if the internal state of {\em *this} nucleotide is correct (self-validated) and consistent,
+										{\tt false} otherwise
+		*/
 		virtual bool isValid() const;
 
-		///
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} nucleotide to the output ostream {\em s} with dumping depth {\em depth}.
+	
+				@param	s output stream where to output the internal state of {\em *this} nucleotide
+				@param  depth the dumping depth
+		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
@@ -194,8 +268,20 @@ namespace BALL
 		*/
 		//@{
 
+		/* Persistent stream input and state restorage.
+				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this} nucleotide.
+				\\
+				{\bf Note:} Not yet implemented.
+				@param  s input stream from where to restore the internal state of {\em *this} nucleotide
+		*/
 		virtual void read(std::istream& s);
 
+		/* Persistent stream output and state storage.
+				Write persistent bond data to the output stream {\em s} and store the state of {\em *this} nucleotide.
+				\\
+				{\bf Note:} Not yet implemented.	
+				@param  s input stream from where to restore the internal state of {\em *this} nucleotide
+		*/
 		virtual void write(std::ostream& s) const;
 		//@}
 
