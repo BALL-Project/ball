@@ -66,7 +66,7 @@ StringHashMap                       /           /
 TContour                            DE          Z
 TContourLine                        E            Z
 ------------------------CONCEPT---------------------------------------------
-BaseIterator                        I,          Z       clear fehlt, BALL_CREATE_DEEP
+BaseIterator                        DI          Z       clear fehlt, BALL_CREATE_DEEP
 ConstBaseIterator                   I,          Z
 BidirectionalIterator               I           Z
 ConstBidirectionalIterator          I           Z
@@ -100,7 +100,7 @@ NotificationTarget1                 DI          Z
 NotificationTarget2                 DI          Z
 
 Object                              (/)         (/)       read/write fehlen
-PersistenceManager                  I           Z
+PersistenceManager                  DI          Z
 PersistentObject                    I           /
 RandomAccessIterator                DI          Z
 ConstRandomAccessIterator           DI          Z
