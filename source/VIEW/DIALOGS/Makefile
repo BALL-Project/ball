@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.25 2003/12/20 15:27:43 amoll Exp $
+# $Id: Makefile,v 1.26 2003/12/29 12:14:37 oliver Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -154,8 +154,6 @@ include ../../common.mak
 include .Dependencies
 
 BALL_INCLUDES=$(VIEW_INCLUDES)
-
-$(UIC_SOURCES):	$(UIC_HDR)
 
 molecularFileDialog_moc.C: $(HEADER_DIR)/molecularFileDialog.h
 	$(MOC) $(HEADER_DIR)/molecularFileDialog.h -o $@
