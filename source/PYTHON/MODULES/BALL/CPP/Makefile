@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.6 2000/10/05 22:33:20 oliver Exp $
+# $Id: Makefile,v 1.7 2000/10/24 20:28:48 oliver Exp $
 #
 
 all: libBALLc.so
@@ -21,10 +21,10 @@ SIP_SOURCES_CONCEPT=\
 	sipBALLNamedProperty.C\
 	sipBALLObject.C\
 	sipBALLPersistentObject.C\
+	sipBALLPreciseTime.C\
 	sipBALLProcessor.C\
 	sipBALLPropertyManager.C\
 	sipBALLSelectable.C\
-	sipBALLTime.C\
 	sipBALLTimeStamp.C\
 	sipBALLUnaryAtomPredicate.C\
 	sipBALLUnaryCompositePredicate.C

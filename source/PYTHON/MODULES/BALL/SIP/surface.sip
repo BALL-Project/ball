@@ -1,4 +1,4 @@
-// $Id: surface.sip,v 1.1 2000/07/18 21:28:31 oliver Exp $
+// $Id: surface.sip,v 1.2 2000/10/24 20:29:17 oliver Exp $
 
 class Surface
 {
@@ -18,7 +18,6 @@ class Surface
   Surface(const Surface& /surface/);
   ~Surface();
   void clear();
-  void destroy();
   void set(const Surface& /box/);
 	//  const Surface& operator = (const Surface& box);
   void get(Surface& /box/) const;

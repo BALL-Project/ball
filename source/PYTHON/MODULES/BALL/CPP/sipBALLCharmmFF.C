@@ -36,11 +36,6 @@ sipCharmmFF::sipCharmmFF(System& a0,const Options& a1): CharmmFF(a0,a1)
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipCharmmFF::sipCharmmFF(const CharmmFF& a0,bool a1): CharmmFF(a0,a1)
-{
-	sipCommonCtor(sipPyMethods,1);
-}
-
 sipCharmmFF::sipCharmmFF(const CharmmFF& a0): CharmmFF(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
@@ -468,25 +463,6 @@ PyObject *sipNew_CharmmFF(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipCharmmFF(* a0,* a1);
-	}
-	}
-
-	if (sipNew == NULL)
-	{
-		const CharmmFF *a0;
-		PyObject *a0obj;
-		long a1 = true;
-
-		if (sipParseArgs(sipArgs,"-I|l",sipCanConvertTo_CharmmFF,&a0obj,&a1))
-		{
-			int iserr = 0;
-
-			sipConvertTo_CharmmFF(a0obj,(CharmmFF **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			sipNew = new sipCharmmFF(* a0, (bool)a1);
 	}
 	}
 

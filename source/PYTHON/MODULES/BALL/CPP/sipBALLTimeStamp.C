@@ -36,7 +36,7 @@ sipTimeStamp::~sipTimeStamp()
 {
 	sipCommonDtor(sipPyThis);
 }
-void sipTimeStamp::stamp(const Time& a0)
+void sipTimeStamp::stamp(const PreciseTime& a0)
 {
 	int relLock;
 
@@ -49,13 +49,13 @@ void sipTimeStamp::stamp(const Time& a0)
 // The common handler for all classes that inherit this virtual member
 // function.
 
-void sipTimeStamp::sipVH_stamp(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,const Time& a0)
+void sipTimeStamp::sipVH_stamp(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,const PreciseTime& a0)
 {
 	PyObject *resobj;
 	PyObject *sipArgs;
 	PyObject *a0obj;
 
-	a0obj = sipMapCppToSelf(&a0,sipClass_Time);
+	a0obj = sipMapCppToSelf(&a0,sipClass_PreciseTime);
 
 	sipArgs = Py_BuildValue("(OO)",sipThis -> sipSelf,a0obj);
 
@@ -93,10 +93,10 @@ static PyObject *sipDo_TimeStamp_isNewerThan(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const Time *a0;
+		const PreciseTime *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Time,&a0obj))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_PreciseTime,&a0obj))
 		{
 			bool res;
 			TimeStamp *ptr;
@@ -106,7 +106,7 @@ static PyObject *sipDo_TimeStamp_isNewerThan(PyObject *sipThisObj,PyObject *sipA
 
 			int iserr = 0;
 
-			sipConvertTo_Time(a0obj,(Time **)&a0,1,&iserr);
+			sipConvertTo_PreciseTime(a0obj,(PreciseTime **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -157,10 +157,10 @@ static PyObject *sipDo_TimeStamp_isOlderThan(PyObject *sipThisObj,PyObject *sipA
 		return NULL;
 
 	{
-		const Time *a0;
+		const PreciseTime *a0;
 		PyObject *a0obj;
 
-		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_Time,&a0obj))
+		if (sipParseArgs(sipArgs,"I",sipCanConvertTo_PreciseTime,&a0obj))
 		{
 			bool res;
 			TimeStamp *ptr;
@@ -170,7 +170,7 @@ static PyObject *sipDo_TimeStamp_isOlderThan(PyObject *sipThisObj,PyObject *sipA
 
 			int iserr = 0;
 
-			sipConvertTo_Time(a0obj,(Time **)&a0,1,&iserr);
+			sipConvertTo_PreciseTime(a0obj,(PreciseTime **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -221,10 +221,10 @@ static PyObject *sipDo_TimeStamp_stamp(PyObject *sipThisObj,PyObject *sipArgs)
 		return NULL;
 
 	{
-		const Time *a0 = &Time::ZERO;
+		const PreciseTime *a0 = &PreciseTime::ZERO;
 		PyObject *a0obj = NULL;
 
-		if (sipParseArgs(sipArgs,"|I",sipCanConvertTo_Time,&a0obj))
+		if (sipParseArgs(sipArgs,"|I",sipCanConvertTo_PreciseTime,&a0obj))
 		{
 			TimeStamp *ptr;
 
@@ -233,7 +233,7 @@ static PyObject *sipDo_TimeStamp_stamp(PyObject *sipThisObj,PyObject *sipArgs)
 
 			int iserr = 0;
 
-			sipConvertTo_Time(a0obj,(Time **)&a0,1,&iserr);
+			sipConvertTo_PreciseTime(a0obj,(PreciseTime **)&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -262,7 +262,7 @@ static PyObject *sipDo_TimeStamp_getTime(PyObject *sipThisObj,PyObject *sipArgs)
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			const Time *res;
+			const PreciseTime *res;
 			TimeStamp *ptr;
 
 			if ((ptr = (TimeStamp *)sipGetCppPtr(sipThis,sipClass_TimeStamp)) == NULL)
@@ -270,7 +270,7 @@ static PyObject *sipDo_TimeStamp_getTime(PyObject *sipThisObj,PyObject *sipArgs)
 
 			res = &ptr -> TimeStamp::getTime();
 
-			return sipMapCppToSelf(res,sipClass_Time);
+			return sipMapCppToSelf(res,sipClass_PreciseTime);
 		}
 	}
 

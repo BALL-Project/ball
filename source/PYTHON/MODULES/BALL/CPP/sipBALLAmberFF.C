@@ -36,12 +36,7 @@ sipAmberFF::sipAmberFF(System& a0,Options& a1): AmberFF(a0,a1)
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipAmberFF::sipAmberFF(AmberFF& a0,bool a1): AmberFF(a0,a1)
-{
-	sipCommonCtor(sipPyMethods,1);
-}
-
-sipAmberFF::sipAmberFF(const AmberFF& a0): AmberFF(a0)
+sipAmberFF::sipAmberFF(AmberFF& a0): AmberFF(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
 }
@@ -388,31 +383,12 @@ PyObject *sipNew_AmberFF(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		AmberFF *a0;
 		PyObject *a0obj;
-		long a1;
-
-		if (sipParseArgs(sipArgs,"-Il",sipCanConvertTo_AmberFF,&a0obj,&a1))
-		{
-			int iserr = 0;
-
-			sipConvertTo_AmberFF(a0obj,&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			sipNew = new sipAmberFF(* a0, (bool)a1);
-	}
-	}
-
-	if (sipNew == NULL)
-	{
-		const AmberFF *a0;
-		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_AmberFF,&a0obj))
 		{
 			int iserr = 0;
 
-			sipConvertTo_AmberFF(a0obj,(AmberFF **)&a0,1,&iserr);
+			sipConvertTo_AmberFF(a0obj,&a0,1,&iserr);
 
 			if (iserr)
 				return NULL;

@@ -14,7 +14,7 @@
 #include "sipBALLNamedProperty.h"
 #include "sipBALLPropertyManager.h"
 #include "sipBALLSelectable.h"
-#include "sipBALLTime.h"
+#include "sipBALLPreciseTime.h"
 #include "sipBALLTimeStamp.h"
 #include "sipBALLBit.h"
 #include "sipBALLBitVector.h"
@@ -816,7 +816,7 @@ char sipName_BALL_now[] = "now";
 char sipName_BALL_getMicroSeconds[] = "getMicroSeconds";
 char sipName_BALL_getSeconds[] = "getSeconds";
 char sipName_BALL_ZERO[] = "ZERO";
-char sipName_BALL_Time[] = "Time";
+char sipName_BALL_PreciseTime[] = "PreciseTime";
 char sipName_BALL_isSelected[] = "isSelected";
 char sipName_BALL_hasProperty[] = "hasProperty";
 char sipName_BALL_countNamedProperties[] = "countNamedProperties";
@@ -3136,7 +3136,7 @@ static sipClassDef classesTable[] = {
 	{sipName_BALL_BitVector, sipNew_BitVector, &sipClass_BitVector, sipClassAttrTab_BitVector, NULL},
 	{sipName_BALL_Bit, sipNew_Bit, &sipClass_Bit, sipClassAttrTab_Bit, NULL},
 	{sipName_BALL_TimeStamp, sipNew_TimeStamp, &sipClass_TimeStamp, sipClassAttrTab_TimeStamp, NULL},
-	{sipName_BALL_Time, sipNew_Time, &sipClass_Time, sipClassAttrTab_Time, NULL},
+	{sipName_BALL_PreciseTime, sipNew_PreciseTime, &sipClass_PreciseTime, sipClassAttrTab_PreciseTime, NULL},
 	{sipName_BALL_PropertyManager, sipNew_PropertyManager, &sipClass_PropertyManager, sipClassAttrTab_PropertyManager, NULL},
 	{sipName_BALL_NamedProperty, sipNew_NamedProperty, &sipClass_NamedProperty, sipClassAttrTab_NamedProperty, NULL},
 	{sipName_BALL_Processor, sipNew_Processor, &sipClass_Processor, sipClassAttrTab_Processor, NULL},
@@ -3308,12 +3308,12 @@ static PyObject *registerClasses(PyObject *,PyObject *)
 
 	// Add the class instances to the dictionary.
 
-	static sipClassInstanceDef TimeclassInstances[] = {
-		{sipName_BALL_ZERO, &Time::ZERO, sipClass_Time, SIP_SIMPLE},
+	static sipClassInstanceDef PreciseTimeclassInstances[] = {
+		{sipName_BALL_ZERO, &PreciseTime::ZERO, sipClass_PreciseTime, SIP_SIMPLE},
 		NULL
 	};
 
-	if (sipAddClassInstances(((PyClassObject *)sipClass_Time) -> cl_dict,TimeclassInstances) < 0)
+	if (sipAddClassInstances(((PyClassObject *)sipClass_PreciseTime) -> cl_dict,PreciseTimeclassInstances) < 0)
 		return NULL;
 
 	// Add the doubles to the dictionary.

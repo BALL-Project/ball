@@ -1,4 +1,4 @@
-// $Id: composite.sip,v 1.3 2000/08/30 19:59:09 oliver Exp $
+// $Id: composite.sip,v 1.4 2000/10/24 20:29:17 oliver Exp $
 
 class Composite
   :  PersistentObject,
@@ -54,8 +54,8 @@ class Composite
   const Composite* getFirstChild() const;
   Composite* getLastChild();
   const Composite* getLastChild() const;
-  const Time& getModificationTime() const throw();
-  const Time& getSelectionTime() const throw();
+  const PreciseTime& getModificationTime() const throw();
+  const PreciseTime& getSelectionTime() const throw();
   void expand();
   void collapse();
   void prependChild(Composite& /composite/);

@@ -36,11 +36,6 @@ sipForceField::sipForceField(System& a0,Options& a1): ForceField(a0,a1)
 	sipCommonCtor(sipPyMethods,1);
 }
 
-sipForceField::sipForceField(const ForceField& a0,bool a1): ForceField(a0,a1)
-{
-	sipCommonCtor(sipPyMethods,1);
-}
-
 sipForceField::sipForceField(const ForceField& a0): ForceField(a0)
 {
 	sipCommonCtor(sipPyMethods,1);
@@ -941,25 +936,6 @@ PyObject *sipNew_ForceField(PyObject *sipSelf,PyObject *sipArgs)
 				return NULL;
 
 			sipNew = new sipForceField(* a0,* a1);
-	}
-	}
-
-	if (sipNew == NULL)
-	{
-		const ForceField *a0;
-		PyObject *a0obj;
-		long a1;
-
-		if (sipParseArgs(sipArgs,"-Il",sipCanConvertTo_ForceField,&a0obj,&a1))
-		{
-			int iserr = 0;
-
-			sipConvertTo_ForceField(a0obj,(ForceField **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			sipNew = new sipForceField(* a0, (bool)a1);
 	}
 	}
 

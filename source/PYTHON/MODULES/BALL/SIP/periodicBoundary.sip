@@ -7,7 +7,7 @@ using namespace BALL;
  public:
   PeriodicBoundary();
   PeriodicBoundary(const ForceField&);
-  PeriodicBoundary(const PeriodicBoundary&, bool);
+  PeriodicBoundary(const PeriodicBoundary&);
 
   // PeriodicBoundary& operator = (const PeriodicBoundary&);
   bool setup();

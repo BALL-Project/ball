@@ -1,4 +1,4 @@
-// $Id: mainControl.sip,v 1.2 2000/10/05 22:33:36 oliver Exp $
+// $Id: mainControl.sip,v 1.3 2000/10/24 20:29:17 oliver Exp $
 
 class MainControl
 //   :  QMainWindow,
@@ -24,6 +24,7 @@ class MainControl
 		USER
 	};
 	//MainControl(QWidget* /parent/ = 0, const char* /name/ = 0 , String /option_filename/ = ".BALL.options");
+	MainControl(const MainControl&);
 	~MainControl();
 	virtual void clear();
 	virtual void destroy();

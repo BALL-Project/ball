@@ -1,6 +1,6 @@
-// $Id: timeStamp.sip,v 1.1 2000/08/30 19:59:12 oliver Exp $
+// $Id: timeStamp.sip,v 1.2 2000/10/24 20:29:18 oliver Exp $
 
-class Time
+class PreciseTime
 {
 %HeaderCode
 	#include <time.h>
@@ -8,26 +8,26 @@ class Time
 	using namespace BALL;
 %End
   public:
-  // BALL_CREATE_NODEEP(Time)
-  Time();
-  Time(const Time& /time/);
-  ~Time();
-  static const Time ZERO;
+  // BALL_CREATE_NODEEP(PreciseTime)
+  PreciseTime();
+  PreciseTime(const PreciseTime& /time/);
+  ~PreciseTime();
+  static const PreciseTime ZERO;
   void set(long /secs/, long /usecs/) throw();
-  void set(const Time& /time/) throw();
-  // const Time& operator = (const Time& /time/) throw();
-	//  bool operator < (const Time& /time/) const throw();
-	//  bool operator > (const Time& /time/) const throw();
- 	// bool operator == (const Time& /time/) const throw();
+  void set(const PreciseTime& /time/) throw();
+  // const PreciseTime& operator = (const PreciseTime& /time/) throw();
+	//  bool operator < (const PreciseTime& /time/) const throw();
+	//  bool operator > (const PreciseTime& /time/) const throw();
+ 	// bool operator == (const PreciseTime& /time/) const throw();
   long getSeconds() const throw();
   long getMicroSeconds() const throw();
-  static const Time& now() throw();
+  static const PreciseTime& now() throw();
   //  void write(PersistenceManager& pm)const;
   //  bool read(PersistenceManager& pm);
   operator const char* ();
 %MemberCode
-  Time* ptr;
-  if ((ptr = (Time*)sipGetCppPtr(sipThis,sipClass_Time)) == NULL)
+  PreciseTime* ptr;
+  if ((ptr = (PreciseTime*)sipGetCppPtr(sipThis,sipClass_PreciseTime)) == NULL)
     return NULL;
 
 	char buf[128];
@@ -52,12 +52,12 @@ class TimeStamp
   // BALL_CREATE_NODEEP(TimeStamp)
   TimeStamp();
   ~TimeStamp();
-  bool isNewerThan(const Time& /time/) const throw ();
-  bool isOlderThan(const Time& /time/) const throw ();
+  bool isNewerThan(const PreciseTime& /time/) const throw ();
+  bool isOlderThan(const PreciseTime& /time/) const throw ();
   bool isNewerThan(const TimeStamp& /stamp/) const throw ();
   bool isOlderThan(const TimeStamp& /stamp/) const throw ();
-  virtual void stamp(const Time& /time/ = Time::ZERO) throw ();
-  const Time& getTime() const throw ();
+  virtual void stamp(const PreciseTime& /time/ = PreciseTime::ZERO) throw ();
+  const PreciseTime& getTime() const throw ();
   //  void write(PersistenceManager& pm) const;
   //  bool read(PersistenceManager& pm);
 
@@ -79,5 +79,5 @@ class TimeStamp
 %End
 };
 
- // std::ostream& operator << (std::ostream& os, const Time& time);
+ // std::ostream& operator << (std::ostream& os, const PreciseTime& time);
  // std::ostream& operator << (std::ostream& os, const TimeStamp& stamp);

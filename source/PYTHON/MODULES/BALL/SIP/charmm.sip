@@ -1,4 +1,4 @@
-// $Id: charmm.sip,v 1.2 2000/08/07 15:21:03 oliver Exp $
+// $Id: charmm.sip,v 1.3 2000/10/24 20:29:16 oliver Exp $
 
 class CharmmFF 
   : ForceField
@@ -52,7 +52,7 @@ class CharmmFF
   CharmmFF();
   CharmmFF(System& /system/);
   CharmmFF(System& /system/, const Options& /options/);
-  CharmmFF(const CharmmFF& /force_field/, bool /clone_deep/ = true);
+  CharmmFF(const CharmmFF& /force_field/);
   ~CharmmFF();
   virtual bool specificSetup();
   double getStretchEnergy() const;

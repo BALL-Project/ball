@@ -399,25 +399,6 @@ PyObject *sipNew_PeriodicBoundary(PyObject *sipSelf,PyObject *sipArgs)
 	{
 		const PeriodicBoundary *a0;
 		PyObject *a0obj;
-		long a1;
-
-		if (sipParseArgs(sipArgs,"-Il",sipCanConvertTo_PeriodicBoundary,&a0obj,&a1))
-		{
-			int iserr = 0;
-
-			sipConvertTo_PeriodicBoundary(a0obj,(PeriodicBoundary **)&a0,1,&iserr);
-
-			if (iserr)
-				return NULL;
-
-			sipNew = new PeriodicBoundary(* a0, (bool)a1);
-	}
-	}
-
-	if (sipNew == NULL)
-	{
-		const PeriodicBoundary *a0;
-		PyObject *a0obj;
 
 		if (sipParseArgs(sipArgs,"-I",sipCanConvertTo_PeriodicBoundary,&a0obj))
 		{

@@ -785,7 +785,7 @@ static PyObject *sipDo_Composite_getModificationTime(PyObject *sipThisObj,PyObje
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			const Time *res;
+			const PreciseTime *res;
 			Composite *ptr;
 
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
@@ -793,7 +793,7 @@ static PyObject *sipDo_Composite_getModificationTime(PyObject *sipThisObj,PyObje
 
 			res = &ptr -> Composite::getModificationTime();
 
-			return sipMapCppToSelf(res,sipClass_Time);
+			return sipMapCppToSelf(res,sipClass_PreciseTime);
 		}
 	}
 
@@ -814,7 +814,7 @@ static PyObject *sipDo_Composite_getSelectionTime(PyObject *sipThisObj,PyObject 
 	{
 		if (sipParseArgs(sipArgs,""))
 		{
-			const Time *res;
+			const PreciseTime *res;
 			Composite *ptr;
 
 			if ((ptr = (Composite *)sipGetCppPtr(sipThis,sipClass_Composite)) == NULL)
@@ -822,7 +822,7 @@ static PyObject *sipDo_Composite_getSelectionTime(PyObject *sipThisObj,PyObject 
 
 			res = &ptr -> Composite::getSelectionTime();
 
-			return sipMapCppToSelf(res,sipClass_Time);
+			return sipMapCppToSelf(res,sipClass_PreciseTime);
 		}
 	}
 

@@ -1,4 +1,4 @@
-// $Id: amber.sip,v 1.1 2000/07/18 21:27:00 oliver Exp $
+// $Id: amber.sip,v 1.2 2000/10/24 20:29:16 oliver Exp $
 
 class AmberFF 
  : ForceField
@@ -11,7 +11,7 @@ using namespace BALL;
   AmberFF();
   AmberFF(System&);
   AmberFF(System&, Options&);
-  AmberFF(AmberFF&, bool);
+  AmberFF(AmberFF&);
 
   bool specificSetup();
   double getStretchEnergy() const;

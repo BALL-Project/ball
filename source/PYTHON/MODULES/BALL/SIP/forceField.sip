@@ -10,7 +10,7 @@ class ForceField
 	ForceField();
 	ForceField(System&);
 	ForceField(System&, Options&);
-	ForceField(const ForceField&, bool);
+	ForceField(const ForceField&);
 
 	// ForceField& operator = (const ForceField& force_field);
 	bool isValid();

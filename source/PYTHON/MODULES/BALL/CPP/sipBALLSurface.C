@@ -50,35 +50,6 @@ static PyObject *sipDo_Surface_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Surface_destroy(PyObject *sipThisObj,PyObject *sipArgs)
-{
-	sipThisType *sipThis;
-
-	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Surface)) == NULL)
-		return NULL;
-
-	{
-		if (sipParseArgs(sipArgs,""))
-		{
-			Surface *ptr;
-
-			if ((ptr = (Surface *)sipGetCppPtr(sipThis,sipClass_Surface)) == NULL)
-				return NULL;
-
-			ptr -> Surface::destroy();
-
-			Py_INCREF(Py_None);
-			return Py_None;
-		}
-	}
-
-	// Report an error if the arguments couldn't be parsed.
-
-	sipNoMethod(sipName_BALL_Surface,sipName_BALL_destroy);
-
-	return NULL;
-}
-
 static PyObject *sipDo_Surface_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
@@ -346,7 +317,6 @@ PyObject *sipNew_Surface(PyObject *sipSelf,PyObject *sipArgs)
 
 PyMethodDef sipClassAttrTab_Surface[] = {
 	{sipName_BALL_clear, sipDo_Surface_clear, METH_VARARGS, NULL},
-	{sipName_BALL_destroy, sipDo_Surface_destroy, METH_VARARGS, NULL},
 	{sipName_BALL_set, sipDo_Surface_set, METH_VARARGS, NULL},
 	{sipName_BALL_get, sipDo_Surface_get, METH_VARARGS, NULL},
 	{sipName_BALL_readMSMSFile, sipDo_Surface_readMSMSFile, METH_VARARGS, NULL},
