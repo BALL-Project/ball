@@ -7,7 +7,7 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>4</y>
+            <y>0</y>
             <width>525</width>
             <height>310</height>
         </rect>
@@ -32,37 +32,6 @@
     </property>
     <widget class="QPushButton">
         <property name="name">
-            <cstring>button_abort</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>179</x>
-                <y>271</y>
-                <width>166</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>30</width>
-                <height>0</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>&amp;Abort</string>
-        </property>
-        <property name="accel">
-            <string>Alt+A</string>
-        </property>
-        <property name="autoDefault">
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
             <cstring>download</cstring>
         </property>
         <property name="enabled">
@@ -84,38 +53,6 @@
         </property>
         <property name="default">
             <bool>true</bool>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>pdbId</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>236</x>
-                <y>236</y>
-                <width>147</width>
-                <height>22</height>
-            </rect>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>You can also enter a PDB id directly.</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>showDetails</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>388</x>
-                <y>232</y>
-                <width>120</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>PDBFile Details</string>
         </property>
     </widget>
     <widget class="QPushButton">
@@ -161,7 +98,7 @@
     </widget>
     <widget class="QGroupBox">
         <property name="name">
-            <cstring>groupBox1</cstring>
+            <cstring>search_box</cstring>
         </property>
         <property name="geometry">
             <rect>
@@ -341,6 +278,69 @@
             </property>
         </widget>
     </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>showDetails</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>388</x>
+                <y>232</y>
+                <width>120</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>PDBFile Details</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>button_abort</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>179</x>
+                <y>271</y>
+                <width>166</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>30</width>
+                <height>0</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>&amp;Abort</string>
+        </property>
+        <property name="accel">
+            <string>Alt+A</string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>pdbId</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>236</x>
+                <y>236</y>
+                <width>147</width>
+                <height>22</height>
+            </rect>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>You can also enter a PDB id directly.</string>
+        </property>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -361,11 +361,25 @@
         <receiver>downloadPDBFile</receiver>
         <slot>abort()</slot>
     </connection>
+    <connection>
+        <sender>pdbId</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>downloadPDBFile</receiver>
+        <slot>idChanged()</slot>
+    </connection>
 </connections>
 <tabstops>
+    <tabstop>pdbId</tabstop>
     <tabstop>download</tabstop>
     <tabstop>button_abort</tabstop>
     <tabstop>buttonClose</tabstop>
+    <tabstop>searchField</tabstop>
+    <tabstop>fullText</tabstop>
+    <tabstop>exactMatch</tabstop>
+    <tabstop>searchbutton</tabstop>
+    <tabstop>removeSimilar</tabstop>
+    <tabstop>results</tabstop>
+    <tabstop>showDetails</tabstop>
 </tabstops>
 <includes>
     <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.5 2004/04/28 15:33:02 amoll Exp $
+// $Id: downloadPDBFile.h,v 1.6 2004/04/30 11:15:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -82,7 +82,16 @@ namespace BALL
 				virtual void checkMenuEntries()
 					throw();
 
-			protected:
+				protected:
+
+				//_
+				void downloadStarted_()
+					throw();
+
+				//_  
+				void downloadEnded_()
+					throw();
+
 
 				void threadedDownload_(const String& url);
 				

@@ -19,6 +19,7 @@
 #include <qcheckbox.h>
 #include <qimage.h>
 #include <qpushbutton.h>
+#include <qgroupbox.h>
 #include <qapplication.h>
 
 namespace BALL
@@ -107,6 +108,7 @@ namespace BALL
 #ifndef BALL_QT_HAS_THREADS
 				search_result = LineBasedFile(filename.latin1());
 #else   // =============================
+				downloadStarted_();
 				thread_->setURL(filename.latin1());
 				thread_->start();
 				while (thread_->running())
@@ -141,17 +143,15 @@ namespace BALL
 					pdbId->setText(result[0].c_str());
 
 			}
-			catch (...)
-			{ }
+			catch (...) { }
+
+			downloadEnded_();
 		}
 
 		void DownloadPDBFile::threadedDownload_(const String& url)
 		{
 #ifdef BALL_QT_HAS_THREADS
-			aborted_ = false;
-			setStatusbarText("Started download, please wait...");
-			button_abort->setEnabled(true);
-			download->setEnabled(false);
+			downloadStarted_();
 			thread_->setURL(url);
 			thread_->start();
 			while (thread_->running())
@@ -166,8 +166,6 @@ namespace BALL
 				thread_->wait(10);
 			}
 
-			button_abort->setEnabled(false);
-			download->setEnabled(true);
 #endif
 		}
 
@@ -186,17 +184,16 @@ namespace BALL
 #ifndef BALL_QT_HAS_THREADS
 				pdb_file = new PDBFile(filename);
 #else   // =============================
+				downloadStarted_();
 				threadedDownload_(filename);
+				downloadEnded_();
 
 				if (aborted_) 
 				{
-					File::remove(thread_->getFilename());
 					delete system;
 					return;
 				}
 
-				setStatusbarText("Finished downloading, please wait...");
-				download->setEnabled(true);
 				pdb_file = new PDBFile(thread_->getFilename());
 #endif
 
@@ -270,12 +267,7 @@ namespace BALL
 				threadedDownload_(filename.ascii());
 				if (aborted_)
 				{
-					try
-					{
-						File::remove(thread_->getFilename());
-						return;
-					}
-					catch(...){}
+					return;
 				}
 
 				search_result = LineBasedFile(thread_->getFilename());
@@ -367,11 +359,47 @@ namespace BALL
 			{
 				thread_->terminate();
 			}
+			aborted_ = true;
+
+			try
+			{
+				File::remove(thread_->getFilename());
+			}
+			catch(...){}
+#endif
+		}
+
+		void DownloadPDBFile::downloadStarted_()
+			throw()
+		{
+			aborted_ = false;
+			setStatusbarText("Started download, please wait...");
+			button_abort->setEnabled(true);
+			download->setEnabled(false);
+			pdbId->setEnabled(false);
+			search_box->setEnabled(false);			
+			showDetails->setEnabled(false);
+			buttonClose->setEnabled(false);
+		}
+
+		void DownloadPDBFile::downloadEnded_()
+			throw()
+		{
+			if (!aborted_)
+			{
+				setStatusbarText("Finished downloading, please wait...");
+			}
+			else
+			{
+				setStatusbarText("Aborted download");
+			}
 			button_abort->setEnabled(false);
 			download->setEnabled(true);
-			setStatusbarText("Aborted download");
-			aborted_ = true;
-#endif
+			pdbId->setEnabled(true);
+			search_box->setEnabled(true);			
+			showDetails->setEnabled(true);
+			buttonClose->setEnabled(true);
+			idChanged();
 		}
 
 	}
