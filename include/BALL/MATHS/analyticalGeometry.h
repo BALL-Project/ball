@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.7 2000/03/16 08:03:21 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.8 2000/03/20 02:18:17 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -318,9 +318,10 @@ namespace BALL
 		 const T& r, const T& s)
 	{
 		T sum = r + s;
-		
-		assert(Maths::isNotZero(sum));
-		
+		if (sum == (T)0)
+		{
+			throw Exception::DivisionByZero(__FILE__, __LINE__);
+		}		
 		return TVector3<T>
 			((s * a.x + r * b.x) / sum,
 			 (s * a.y + r * b.y) / sum,
@@ -387,7 +388,7 @@ namespace BALL
 			if (Maths::isNotZero(spat_product))
 			{ // invariant: windschiefe lines
 				
-				return (Abs(spat_product) / cross_product_length);
+				return (Maths::abs(spat_product) / cross_product_length);
 			} else { // invariant: intersecting lines
 
 				return 0;
@@ -406,9 +407,11 @@ namespace BALL
 	{
 		T length = plane.n.getLength();
 
-		assert(Maths::isNotZero(length));
-
-		return (Abs(plane.n * (Point3 - plane.p)) / length);
+		if (length == (T)0)
+		{
+			throw Exception::DivisionByZero(__FILE__, __LINE__);
+		}
+		return (Maths::abs(plane.n * (point - plane.p)) / length);
 	}
 
 	/**	Get the distance between a plane and a point.
@@ -434,10 +437,11 @@ namespace BALL
 	T GetDistance(const TLine3<T>& line, const TPlane3<T>& plane)
 	{
 		T length = plane.n.getLength();
-
-		assert(Maths::isNotZero(length));
-
-		return (Abs(plane.n * (line.p - plane.p)) / length);
+		if (length == (T)0)
+		{
+			throw Exception::DivisionByZero(__FILE__, __LINE__);
+		}
+		return (Maths::abs(plane.n * (line.p - plane.p)) / length);
 	}
 
 	/**	Get the distance between a plane and a line.
@@ -462,10 +466,11 @@ namespace BALL
 	T GetDistance(const TPlane3<T>& a, const TPlane3<T>& b)
 	{
 		T length = a.n.getLength();
-
-		assert(Maths::isNotZero(length));
-		
-		return (Abs(a.n * (a.p - b.p)) / length);
+		if (length == (T)0)
+		{
+			throw Exception::DivisionByZero(__FILE__, __LINE__);
+		}		
+		return (Maths::abs(a.n * (a.p - b.p)) / length);
 	}
 
 	/**	Get the angle between two Vector3.
@@ -499,7 +504,7 @@ namespace BALL
 		if(Maths::isZero(length_product))
 			return false;
 		
-		intersection_angle = acos(Abs(a.d * b.d) / sqrt(length_product));
+		intersection_angle = acos(Maths::abs(a.d * b.d) / sqrt(length_product));
 
 		return true;
 	}
@@ -521,7 +526,7 @@ namespace BALL
 		{
 			return false;
 		} else {
-			intersection_angle = asin(Abs(plane.n * Vector3) / sqrt(length_product));
+			intersection_angle = asin(Maths::abs(plane.n * Vector3) / sqrt(length_product));
 			
 			return true;
 		}
@@ -560,7 +565,7 @@ namespace BALL
 		{
 			return false;
 		} else {
-			intersection_angle = asin(Abs(plane.n * line.d) / sqrt(length_product));
+			intersection_angle = asin(Maths::abs(plane.n * line.d) / sqrt(length_product));
 			
 			return true;
 		}
@@ -599,7 +604,7 @@ namespace BALL
 		if(Maths::isZero(length_product))
 			return false;
 		
-		intersection_angle = acos(Abs(a.n * b.n) / sqrt(length_product));
+		intersection_angle = acos(Maths::abs(a.n * b.n) / sqrt(length_product));
 
 		return true;
 	}
@@ -945,7 +950,7 @@ namespace BALL
 	BALL_INLINE 
 	bool isOrthogonal(const TVector3<T>& vector, const TLine3<T>& line)
 	{
-		return isZero(vector * line.d);
+		return Maths::isZero(vector * line.d);
 	}
 
 	/**	Test if a line and a vector3 are orthogonal
@@ -969,7 +974,7 @@ namespace BALL
 	BALL_INLINE 
 	bool isOrthogonal(const TLine3<T>& a, const TLine3<T>& b)
 	{
-		return isZero(a.d * b.d);
+		return Maths::isZero(a.d * b.d);
 	}
 
 	/**	Test if a vector3 and a plane are orthogonal.
@@ -1005,7 +1010,7 @@ namespace BALL
 	BALL_INLINE 
 	bool isOrthogonal(const TPlane3<T>& a, const TPlane3<T>& b)
 	{
-		return isZero(a.n * b.n);
+		return Maths::isZero(a.n * b.n);
 	}
 
 	/**	Test if a line is intersecting a point.
@@ -1017,7 +1022,7 @@ namespace BALL
 	BALL_INLINE 
 	bool isIntersecting(const TVector3<T>& point, const TLine3<T>& line)
 	{
-		return isZero(GetDistance(point, line));
+		return Maths::isZero(GetDistance(point, line));
 	}
 
 	/**	Test if a line is intersecting a point.
@@ -1053,7 +1058,7 @@ namespace BALL
 	BALL_INLINE 
 	bool isIntersecting(const TVector3<T>& point, const TPlane3<T>& plane)
 	{
-		return isZero(GetDistance(point, plane));
+		return Maths::isZero(GetDistance(point, plane));
 	}
 
 	/**	Test if a point is intersecting a plane.
@@ -1077,7 +1082,7 @@ namespace BALL
 	BALL_INLINE 
 	bool isIntersecting(const TLine3<T>& line, const TPlane3<T>& plane)
 	{
-		return isZero(GetDistance(line, plane));
+		return Maths::isZero(GetDistance(line, plane));
 	}
 
 	/**	Test if a plane is intersecting a line.
@@ -1101,7 +1106,7 @@ namespace BALL
 	BALL_INLINE 
 	bool isIntersecting(const TPlane3<T>& a, const TPlane3<T>& b)
 	{
-		return isZero(GetDistance(a, b));
+		return Maths::isZero(GetDistance(a, b));
 	}
 
 	/**	Test if a line and a plane are parallel.
@@ -1139,6 +1144,98 @@ namespace BALL
 	{
 		return isCollinear(a.n, b.n);
 	}
+
+	/**	Return the torsion angle of four points to eachother.
+			@param TVector3& ax 1. vector x component
+			@param TVector3& ay 1. vector y component
+			@param TVector3& az 1. vector z component
+			@param TVector3& bx 2. vector x component
+			@param TVector3& by 2. vector y component
+			@param TVector3& bz 2. vector z component
+			@param TVector3& cx 3. vector x component
+			@param TVector3& cy 3. vector y component
+			@param TVector3& cz 3. vector z component
+			@param TVector3& dx 4. vector x component
+			@param TVector3& dy 4. vector y component
+			@param TVector3& dz 4. vector z component
+			@return TAngle the torsion angle
+	*/
+	template <typename T>
+	TAngle<T> getTorsionAngle
+		(const T& ax, const T& ay, const T& az,
+		 const T& bx, const T& by, const T& bz,
+		 const T& cx, const T& cy, const T& cz, 
+		 const T& dx, const T& dy, const T& dz)
+	{
+		T abx = ax - bx;
+		T aby = ay - by;
+		T abz = az - bz;
+
+		T cbx = cx - bx;
+		T cby = cy - by;
+		T cbz = cz - bz;
+
+		T cdx = cx - dx;
+		T cdy = cy - dy;
+		T cdz = cz - dz;
+
+		// Calculate the normals to the two planes n1 and n2
+		// this is given as the cross products:
+		//		 AB x BC
+		//		--------- = n1
+		//		|AB x BC|
+		//
+		//		 BC x CD
+		// 	  --------- = n2
+		// 	  |BC x CD|
+
+		// Normal to plane 1 
+		T ndax = aby * cbz - abz * cby; 
+		T nday = abz * cbx - abx * cbz;
+		T ndaz = abx * cby - aby * cbx;
+
+		// Normal to plane 2 
+		T neax = cbz * cdy - cby * cdz; 
+		T neay = cbx * cdz - cbz * cdx;
+		T neaz = cby * cdx - cbx * cdy;
+
+		// Calculate the length of the two normals 
+		T bl = sqrt((double)ndax * ndax + nday * nday + ndaz * ndaz);
+		T el = sqrt((double)neax * neax + neay * neay + neaz * neaz);
+		T bel = ndax * neax + nday * neay + ndaz * neaz;
+		
+		// if one or both planes are degenerated
+		if (bl * el == 0)
+		{
+			throw Exception::DivisionByZero(__FILE__, __LINE__);
+		}
+		bel /= (bl * el);
+		if (bel > 1.0) 
+		{
+			bel = 1;
+		} 
+		else if (bel < -1.0) 
+		{
+			bel = -1;
+		}
+
+		T acosbel = acos(bel);
+
+		if ((cbx * (ndaz * neay - nday * neaz) 
+				 + cby * (ndax * neaz - ndaz * neax) 
+				 + cbz * (nday * neax - ndax * neay))
+				< 0)
+		{
+			acosbel = -acosbel;
+		}
+		
+		acosbel = (acosbel > 0.0) 
+			? Constants::PI - acosbel 
+			: -(Constants::PI + acosbel);
+		
+		return TAngle<T>(acosbel);
+	}
+
 
 } // namespace BALL
 
