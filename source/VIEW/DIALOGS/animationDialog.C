@@ -88,7 +88,6 @@ void AnimationDialog::addPressed()
 	entries->update();
 	cameras_.push_back(camera);
 
-Log.error() << "#~~#   1 "    << __FILE__ << "  " << __LINE__<< std::endl;
 	animate_button->setEnabled(true);
 }
 

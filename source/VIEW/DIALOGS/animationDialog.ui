@@ -33,44 +33,6 @@
     </widget>
     <widget class="QPushButton">
         <property name="name">
-            <cstring>goto_button</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>149</x>
-                <y>32</y>
-                <width>114</width>
-                <height>27</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Go to</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>delete_button</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>149</x>
-                <y>62</y>
-                <width>114</width>
-                <height>27</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Delete</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
             <cstring>animate_button</cstring>
         </property>
         <property name="enabled">
@@ -127,19 +89,6 @@
         </property>
         <property name="default">
             <bool>false</bool>
-        </property>
-    </widget>
-    <widget class="QListBox">
-        <property name="name">
-            <cstring>entries</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>8</x>
-                <y>8</y>
-                <width>134</width>
-                <height>174</height>
-            </rect>
         </property>
     </widget>
     <widget class="QCheckBox">
@@ -226,6 +175,57 @@
             <string>Export one PNG image for each Snapshot.</string>
         </property>
     </widget>
+    <widget class="QListBox">
+        <property name="name">
+            <cstring>entries</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>8</x>
+                <y>8</y>
+                <width>134</width>
+                <height>174</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>delete_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>149</x>
+                <y>62</y>
+                <width>114</width>
+                <height>27</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Delete</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>goto_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>149</x>
+                <y>32</y>
+                <width>114</width>
+                <height>27</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Go to</string>
+        </property>
+    </widget>
 </widget>
 <connections>
     <connection>
@@ -263,6 +263,12 @@
         <signal>pressed()</signal>
         <receiver>AnimationDialogData</receiver>
         <slot>gotoPressed()</slot>
+    </connection>
+    <connection>
+        <sender>add_button</sender>
+        <signal>pressed()</signal>
+        <receiver>AnimationDialogData</receiver>
+        <slot>addPressed()</slot>
     </connection>
 </connections>
 <slots>
