@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor_test.C,v 1.1 2000/09/21 07:44:28 oliver Exp $
+// $Id: EFShiftProcessor_test.C,v 1.2 2000/09/21 09:29:26 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(EFShiftProcessor, "$Id: EFShiftProcessor_test.C,v 1.1 2000/09/21 07:44:28 oliver Exp $")
+START_TEST(EFShiftProcessor, "$Id: EFShiftProcessor_test.C,v 1.2 2000/09/21 09:29:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -136,6 +136,7 @@ CHECK(charge assignment)
 RESULT
 
 CHECK(chemical shifts)
+	PRECISION(0.0001)
 	EFShiftProcessor sp;
 	sp.setParameters(parameters);
 	sp.init();
@@ -153,19 +154,21 @@ CHECK(chemical shifts)
 			if (atom_it->hasProperty(EFShiftProcessor::PROPERTY__EF_SHIFT))
 			{
 				float shift = atom_it->getProperty(EFShiftProcessor::PROPERTY__EF_SHIFT).getFloat();
-				STATUS("shift of " << atom_it->getFullName() << shift)
+				STATUS("shift of " << atom_it->getFullName() << ": " << shift)
 				switch (i++)
 				{
 					case  0: TEST_REAL_EQUAL(shift, -0.02835) break;
 					case  1: TEST_REAL_EQUAL(shift, -0.01370) break;
 					case  2: TEST_REAL_EQUAL(shift, -0.01314) break;
 					case  3: TEST_REAL_EQUAL(shift, -0.04398) break;
-					case  4: TEST_REAL_EQUAL(shift, -0.01453) break;
-					case  5: TEST_REAL_EQUAL(shift,  0.03139) break;
-					case  6: TEST_REAL_EQUAL(shift, -0.03043) break;
-					case  7: TEST_REAL_EQUAL(shift,  0.01749) break;
-					case  8: TEST_REAL_EQUAL(shift, -0.03506) break;
-					case  9: TEST_REAL_EQUAL(shift,  0.11131) break;
+					case  4: TEST_REAL_EQUAL(shift,  0.03422) break;
+					case  5: TEST_REAL_EQUAL(shift, -0.04594) break;
+					case  6: TEST_REAL_EQUAL(shift, -0.03188) break;
+					case  7: TEST_REAL_EQUAL(shift, -0.03139) break;
+					case  8: TEST_REAL_EQUAL(shift, -0.03043) break;
+					case  9: TEST_REAL_EQUAL(shift,  0.01749) break;
+					case 10: TEST_REAL_EQUAL(shift, -0.03506) break;
+					case 11: TEST_REAL_EQUAL(shift,  0.11131) break;
 				}
 			}
 		}
