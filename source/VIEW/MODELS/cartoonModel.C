@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.25 2004/06/08 11:21:15 amoll Exp $
+// $Id: cartoonModel.C,v 1.26 2004/07/03 10:19:28 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -263,7 +263,6 @@ namespace BALL
 
 			Vector3 perpendic = normal % right; // perpendicular to spline
 			Vector3 last_points[4];
-			Vector3 current_points[4];
 
 			Position last_vertices=0;
 
@@ -352,49 +351,7 @@ namespace BALL
 					normal =   peptide_normals[i  ] *(1-j * 0.9/8.) 
 						       + peptide_normals[i+1] *   j * 0.9/8.;
 
-					// maybe this cases should not happen, but they do...
-					if (!Maths::isZero(normal.getSquareLength())) normal.normalize();
-					if (!Maths::isZero(right.getSquareLength())) right.normalize();
-
-					perpendic = normal % right; // perpendicular to spline
-					if (!Maths::isZero(perpendic.getSquareLength())) perpendic.normalize();
-
-					current_points[0] = spline_[i*9+j] - (perpendic * arrow_width_/2.) - normal * arrow_height_/2.;
-					current_points[1] = current_points[0] + normal * arrow_height_;
-					current_points[2] = current_points[1] + perpendic * arrow_width_;
-					current_points[3] = current_points[2] - normal * arrow_height_;
-
-					// put the next 4 points and 8 triangles into the mesh
-					vertices->push_back(current_points[0]);
-					normals->push_back(perpendic*-1.);
-					vertices->push_back(current_points[0]);
-					normals->push_back(normal*-1.);
-
-					vertices->push_back(current_points[1]);
-					normals->push_back(perpendic*-1.);
-					vertices->push_back(current_points[1]);
-					normals->push_back(normal);
-
-					vertices->push_back(current_points[2]);
-					normals->push_back(perpendic);
-					vertices->push_back(current_points[2]);
-					normals->push_back(normal);
-
-					vertices->push_back(current_points[3]);
-					normals->push_back(perpendic);
-					vertices->push_back(current_points[3]);
-					normals->push_back(normal*-1.);
-
-					insertTriangle_(last_vertices    , last_vertices +  2, last_vertices + 10, *mesh);
-					insertTriangle_(last_vertices    , last_vertices + 10, last_vertices +  8, *mesh);
-					insertTriangle_(last_vertices + 4, last_vertices + 12, last_vertices + 14, *mesh);
-					insertTriangle_(last_vertices + 4, last_vertices +  6, last_vertices + 14, *mesh);
-					insertTriangle_(last_vertices + 3, last_vertices +  5, last_vertices + 13, *mesh);
-					insertTriangle_(last_vertices + 3, last_vertices + 11, last_vertices + 13, *mesh);
-					insertTriangle_(last_vertices + 1, last_vertices +  7, last_vertices + 15, *mesh);
-					insertTriangle_(last_vertices + 1, last_vertices +  9, last_vertices + 15, *mesh);
-
-					last_vertices+=8;
+					drawStrand_(spline_[i*9+j], normal, right, arrow_width_, last_vertices, *mesh);
 				}
 
 				last_mesh = mesh;
@@ -409,48 +366,7 @@ namespace BALL
 				
 				right  = spline_[i*9+j+1] - spline_[i*9+j];
 
-				if (!Maths::isZero(normal.getSquareLength())) normal.normalize();
-				if (!Maths::isZero(right.getSquareLength())) right.normalize();
-
-				perpendic = normal % right; // perpendicular to spline
-				if (!Maths::isZero(perpendic.getSquareLength())) perpendic.normalize();
-
-				current_points[0] = spline_[i*9+j] - (perpendic * new_arrow_width/2.) - normal * arrow_height_/2.;
-				current_points[1] = current_points[0] + normal * arrow_height_;
-				current_points[2] = current_points[1] + perpendic * new_arrow_width;
-				current_points[3] = current_points[2] - normal * arrow_height_;
-
-				// put the next 4 points and 8 triangles into the mesh
-				vertices->push_back(current_points[0]);
-				normals->push_back(perpendic*-1.);
-				vertices->push_back(current_points[0]);
-				normals->push_back(normal*-1.);
-
-				vertices->push_back(current_points[1]);
-				normals->push_back(perpendic*-1.);
-				vertices->push_back(current_points[1]);
-				normals->push_back(normal);
-
-				vertices->push_back(current_points[2]);
-				normals->push_back(perpendic);
-				vertices->push_back(current_points[2]);
-				normals->push_back(normal);
-
-				vertices->push_back(current_points[3]);
-				normals->push_back(perpendic);
-				vertices->push_back(current_points[3]);
-				normals->push_back(normal*-1.);
-
-				insertTriangle_(last_vertices    , last_vertices +  2, last_vertices + 10, *mesh);
-				insertTriangle_(last_vertices    , last_vertices + 10, last_vertices +  8, *mesh);
-				insertTriangle_(last_vertices + 4, last_vertices + 12, last_vertices + 14, *mesh);
-				insertTriangle_(last_vertices + 4, last_vertices +  6, last_vertices + 14, *mesh);
-				insertTriangle_(last_vertices + 3, last_vertices +  5, last_vertices + 13, *mesh);
-				insertTriangle_(last_vertices + 3, last_vertices + 11, last_vertices + 13, *mesh);
-				insertTriangle_(last_vertices + 1, last_vertices +  7, last_vertices + 15, *mesh);
-				insertTriangle_(last_vertices + 1, last_vertices +  9, last_vertices + 15, *mesh);
-
-				last_vertices+=8;
+				drawStrand_(spline_[i*9+j], normal, right, new_arrow_width, last_vertices, *mesh);
 			}
 
 			last_spline_point_ = spline_vector_[spline_vector_.size()-1];
@@ -748,6 +664,69 @@ namespace BALL
 			t.v2 = v2;
 			t.v3 = v3;
 			mesh.triangle.push_back(t);
+		}
+
+		void AddCartoonModel::drawStrand_(const Vector3& start,
+																			Vector3& normal,
+																			Vector3& right,
+																			float arrow_width,
+																			Position& last_vertices,
+																			Mesh& mesh)
+		{
+			vector<Vector3>* vertices = &mesh.vertex;
+			vector<Vector3>* normals  = &mesh.normal;
+
+			// maybe this cases should not happen, but they do...
+			if (!Maths::isZero(normal.getSquareLength())) normal.normalize();
+			if (!Maths::isZero(right.getSquareLength())) right.normalize();
+
+			Vector3 perpendic = normal % right; // perpendicular to spline
+			if (!Maths::isZero(perpendic.getSquareLength())) perpendic.normalize();
+
+			Vector3 current_points[4];
+			current_points[0] = start - (perpendic * arrow_width/2.) - normal * arrow_height_/2.;
+			current_points[1] = current_points[0] + normal * arrow_height_;
+			current_points[2] = current_points[1] + perpendic * arrow_width;
+			current_points[3] = current_points[2] - normal * arrow_height_;
+
+			// put the next 4 points and 8 triangles into the mesh
+			vertices->push_back(current_points[0]);
+			vertices->push_back(current_points[0]);
+			normals->push_back(perpendic);
+			normals->push_back(normal* -1.);
+
+			vertices->push_back(current_points[1]);
+			vertices->push_back(current_points[1]);
+			normals->push_back(perpendic);
+			normals->push_back(normal* -1.);
+
+			vertices->push_back(current_points[2]);
+			vertices->push_back(current_points[2]);
+			normals->push_back(perpendic *  1);
+			normals->push_back(normal*  -1.);
+
+			vertices->push_back(current_points[3]);
+			vertices->push_back(current_points[3]);
+			normals->push_back(perpendic *  1);
+			normals->push_back(normal*  -1.);
+
+			// one side band
+			insertTriangle_(last_vertices    , last_vertices +  2, last_vertices + 10, mesh);
+			insertTriangle_(last_vertices    , last_vertices + 10, last_vertices +  8, mesh);
+			
+			// other side band
+			insertTriangle_(last_vertices + 4, last_vertices + 12, last_vertices + 14, mesh);
+			insertTriangle_(last_vertices + 4, last_vertices + 14, last_vertices +  6, mesh);
+
+			// "upper" band
+			insertTriangle_(last_vertices + 3, last_vertices +  5, last_vertices + 13, mesh);
+			insertTriangle_(last_vertices + 3, last_vertices + 13, last_vertices + 11, mesh);
+			
+			// "lower" band
+			insertTriangle_(last_vertices + 1, last_vertices +  7, last_vertices + 15, mesh);
+			insertTriangle_(last_vertices + 1, last_vertices +  15, last_vertices + 9, mesh);
+
+			last_vertices+=8;
 		}
 
 	} // namespace VIEW

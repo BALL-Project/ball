@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.14 2004/02/26 17:44:51 amoll Exp $
+// $Id: cartoonModel.h,v 1.15 2004/07/03 10:19:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -137,6 +137,12 @@ namespace BALL
 			void computeSpline_(AtomContainer& ac);
 
 			void insertTriangle_(Position v1, Position v2, Position v3, Mesh& mesh);
+			void drawStrand_(const Vector3& start,
+											 Vector3& normal,
+											 Vector3& right,
+											 float arrow_width,
+											 Position& last_vertices,
+											Mesh& mesh);
 
 			std::vector<Vector3> spline_;
 
