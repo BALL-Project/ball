@@ -1,4 +1,4 @@
-// $Id: charmm.C,v 1.8 2000/06/21 14:16:00 amoll Exp $
+// $Id: charmm.C,v 1.9 2000/06/30 05:56:14 oliver Exp $
 // Molecular Mechanics: Charmm force field class
 
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -63,11 +63,11 @@ namespace BALL
 		setName("CHARMM [" + filename_ + "]");
 
 		// create the component list
-		insertComponent(new CharmmStretch(this));
-		insertComponent(new CharmmBend(this));
-		insertComponent(new CharmmTorsion(this));
-		insertComponent(new CharmmImproperTorsion(this));
-		insertComponent(new CharmmNonBonded(this));
+		insertComponent(new CharmmStretch(*this));
+		insertComponent(new CharmmBend(*this));
+		insertComponent(new CharmmTorsion(*this));
+		insertComponent(new CharmmImproperTorsion(*this));
+		insertComponent(new CharmmNonBonded(*this));
 	}
 
   // Constructor initialized with a system
@@ -76,11 +76,11 @@ namespace BALL
 			filename_(Default::FILENAME)
   {
 		// create the component list
-		insertComponent(new CharmmStretch(this));
-		insertComponent(new CharmmBend(this));
-		insertComponent(new CharmmTorsion(this));
-		insertComponent(new CharmmImproperTorsion(this));
-		insertComponent(new CharmmNonBonded(this));
+		insertComponent(new CharmmStretch(*this));
+		insertComponent(new CharmmBend(*this));
+		insertComponent(new CharmmTorsion(*this));
+		insertComponent(new CharmmImproperTorsion(*this));
+		insertComponent(new CharmmNonBonded(*this));
 
     bool result = setup(system);
 
@@ -100,11 +100,11 @@ namespace BALL
 			filename_(Default::FILENAME)
   {
 		// create the component list
-		insertComponent(new CharmmStretch(this));
-		insertComponent(new CharmmBend(this));
-		insertComponent(new CharmmTorsion(this));
-		insertComponent(new CharmmImproperTorsion(this));
-		insertComponent(new CharmmNonBonded(this));
+		insertComponent(new CharmmStretch(*this));
+		insertComponent(new CharmmBend(*this));
+		insertComponent(new CharmmTorsion(*this));
+		insertComponent(new CharmmImproperTorsion(*this));
+		insertComponent(new CharmmNonBonded(*this));
 
     bool result = setup(system, new_options);
 

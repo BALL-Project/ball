@@ -1,4 +1,4 @@
-// $Id: amberStretch.C,v 1.9 2000/05/18 17:50:28 oliver Exp $
+// $Id: amberStretch.C,v 1.10 2000/06/30 05:56:10 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -18,21 +18,17 @@ namespace BALL
 	{	
 		// set component name
 		setName( "Amber Stretch" );
-
-		setForceField(0);
 	}
 
 
 	// constructor
-	AmberStretch::AmberStretch(ForceField* force_field)
-		 : 	ForceFieldComponent(),
+	AmberStretch::AmberStretch(ForceField& force_field)
+		 : 	ForceFieldComponent(force_field),
 				stretch_(0),
 				number_of_stretches_(0)
 	{
 		// set component name
 		setName( "Amber Stretch" );
-
-		setForceField(force_field);
 	}
 
 

@@ -1,4 +1,4 @@
-// $Id: charmmBend.C,v 1.4 2000/03/26 12:54:11 oliver Exp $
+// $Id: charmmBend.C,v 1.5 2000/06/30 05:56:14 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmBend.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -16,19 +16,15 @@ namespace BALL
 	{	
 		// set component name
 		setName("CHARMM Bend");
-
-		setForceField(0);
 	}
 
 
 	// constructor
-	CharmmBend::CharmmBend(ForceField* force_field)
+	CharmmBend::CharmmBend(ForceField& force_field)
 		:	ForceFieldComponent(force_field)
 	{
 		// set component name
 		setName( "CHARMM Bend" );
-
-		setForceField(force_field);
 	}
 
 

@@ -1,4 +1,4 @@
-// $Id: charmmStretch.C,v 1.4 2000/03/26 12:54:11 oliver Exp $
+// $Id: charmmStretch.C,v 1.5 2000/06/30 05:56:15 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmStretch.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -18,21 +18,17 @@ namespace BALL
 	{	
 		// set component name
 		setName("CHARMM Stretch");
-
-		setForceField(0);
 	}
 
 
 	// constructor
-	CharmmStretch::CharmmStretch(ForceField* force_field)
-		 : 	ForceFieldComponent(),
+	CharmmStretch::CharmmStretch(ForceField& force_field)
+		 : 	ForceFieldComponent(force_field),
 				stretch_(0),
 				number_of_stretches_(0)
 	{
 		// set component name
 		setName("CHARMM Stretch");
-
-		setForceField(force_field);
 	}
 
 

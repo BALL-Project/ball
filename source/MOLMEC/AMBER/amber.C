@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.16 2000/06/21 14:15:57 amoll Exp $
+// $Id: amber.C,v 1.17 2000/06/30 05:56:08 oliver Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -54,10 +54,10 @@ namespace BALL
 		setName("Amber [" + filename_ + "]");
 
 		// create the component list
-		insertComponent(new AmberStretch(this));
-		insertComponent(new AmberBend(this));
-		insertComponent(new AmberTorsion(this));
-		insertComponent(new AmberNonBonded(this));
+		insertComponent(new AmberStretch(*this));
+		insertComponent(new AmberBend(*this));
+		insertComponent(new AmberTorsion(*this));
+		insertComponent(new AmberNonBonded(*this));
 	}
 
   // Constructor initialized with a system
@@ -67,10 +67,10 @@ namespace BALL
 			parameters_initialized_(false)
   {
 		// create the component list
-		insertComponent(new AmberStretch(this));
-		insertComponent(new AmberBend(this));
-		insertComponent(new AmberTorsion(this));
-		insertComponent(new AmberNonBonded(this));
+		insertComponent(new AmberStretch(*this));
+		insertComponent(new AmberBend(*this));
+		insertComponent(new AmberTorsion(*this));
+		insertComponent(new AmberNonBonded(*this));
 
     bool result = setup(system);
 
@@ -91,10 +91,10 @@ namespace BALL
 			parameters_initialized_(false)
   {
 		// create the component list
-		insertComponent(new AmberStretch(this));
-		insertComponent(new AmberBend(this));
-		insertComponent(new AmberTorsion(this));
-		insertComponent(new AmberNonBonded(this));
+		insertComponent(new AmberStretch(*this));
+		insertComponent(new AmberBend(*this));
+		insertComponent(new AmberTorsion(*this));
+		insertComponent(new AmberNonBonded(*this));
 
     bool result = setup(system, new_options);
 

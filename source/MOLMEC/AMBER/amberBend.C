@@ -1,4 +1,4 @@
-// $Id: amberBend.C,v 1.11 2000/05/18 17:50:27 oliver Exp $
+// $Id: amberBend.C,v 1.12 2000/06/30 05:56:09 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -16,19 +16,15 @@ namespace BALL
 	{	
 		// set component name
 		setName("Amber Bend");
-
-		setForceField(0);
 	}
 
 
 	// constructor
-	AmberBend::AmberBend(ForceField* force_field)
+	AmberBend::AmberBend(ForceField& force_field)
 		:	ForceFieldComponent(force_field)
 	{
 		// set component name
 		setName( "Amber Bend" );
-
-		setForceField(force_field);
 	}
 
 

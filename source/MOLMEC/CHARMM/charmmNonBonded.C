@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.C,v 1.9 2000/03/28 15:34:16 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.10 2000/06/30 05:56:14 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -22,14 +22,11 @@ namespace BALL
 	{	
 		// set component name
 		setName("CHARMM NonBonded");
-
-		setForceField(0);	
-
 	}
 
 
 	// constructor
-	CharmmNonBonded::CharmmNonBonded(ForceField* force_field)
+	CharmmNonBonded::CharmmNonBonded(ForceField& force_field)
 		:	ForceFieldComponent(force_field)
 	{
 		// set component name

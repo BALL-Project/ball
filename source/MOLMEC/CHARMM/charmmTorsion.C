@@ -1,4 +1,4 @@
-// $Id: charmmTorsion.C,v 1.5 2000/03/26 12:54:11 oliver Exp $
+// $Id: charmmTorsion.C,v 1.6 2000/06/30 05:56:15 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmTorsion.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -20,19 +20,15 @@ namespace BALL
 	{	
 		// set component name
 		setName("CHARMM Torsion");
-
-		setForceField(0);
 	}
 
 
 	// constructor
-	CharmmTorsion::CharmmTorsion(ForceField* force_field)
-		:	ForceFieldComponent()
+	CharmmTorsion::CharmmTorsion(ForceField& force_field)
+		:	ForceFieldComponent(force_field)
 	{
 		// set component name
 		setName( "CHARMM Torsion" );
-
-		setForceField(force_field);
 	}
 
 

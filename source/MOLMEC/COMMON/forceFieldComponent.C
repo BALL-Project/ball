@@ -1,4 +1,4 @@
-// $Id: forceFieldComponent.C,v 1.5 2000/03/25 22:51:56 oliver Exp $
+// $Id: forceFieldComponent.C,v 1.6 2000/06/30 05:56:15 oliver Exp $
 
 
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
@@ -17,9 +17,9 @@ namespace BALL
 	}
 
 	// constructor 
-	ForceFieldComponent::ForceFieldComponent(ForceField* force_field)
+	ForceFieldComponent::ForceFieldComponent(ForceField& force_field)
 	{
-		force_field_ = force_field;
+		force_field_ = &force_field;
 		name_ = "GenericForceFieldComponent";
 		energy_ = 0;	
 	}
@@ -63,9 +63,9 @@ namespace BALL
 	}
 
 	// Set the force field to force_field 
-	void ForceFieldComponent::setForceField(ForceField* force_field)
+	void ForceFieldComponent::setForceField(ForceField& force_field)
 	{
-		force_field_ = force_field;
+		force_field_ = &force_field;
 	}
 
 	double ForceFieldComponent::getEnergy() const

@@ -1,4 +1,4 @@
-// $Id: amberTorsion.C,v 1.19 2000/05/18 18:31:17 oliver Exp $
+// $Id: amberTorsion.C,v 1.20 2000/06/30 05:56:10 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -20,19 +20,15 @@ namespace BALL
 	{	
 		// set component name
 		setName("Amber Torsion");
-
-		setForceField(0);
 	}
 
 
 	// constructor
-	AmberTorsion::AmberTorsion(ForceField* force_field)
-		:	ForceFieldComponent()
+	AmberTorsion::AmberTorsion(ForceField& force_field)
+		:	ForceFieldComponent(force_field)
 	{
 		// set component name
 		setName( "Amber Torsion" );
-
-		setForceField(force_field);
 	}
 
 
