@@ -1,4 +1,8 @@
-
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: transformationDialog.C
+//
 
 #include <BALL/VIEW/UIC/transformationDialogData.h>
 
@@ -96,11 +100,11 @@ namespace BALL
 			///This function moves the selected molecule in the analogous direction
 			virtual void zTranslationClicked();
 			
-			/** This function catches the MaxRotation in the dialogfield */
-			float getMaxRotation() const;
+			/// This function catches the amount of rotation from the QLineEdit
+			float getRotation() const;
 
-			/** This function catches the MaxTrans in the dialogfield */
-			float getMaxTrans() const;
+			/// This function catches the amount of translation from the QLineEdit
+			float getTranslation() const;
 			
 			protected:
 

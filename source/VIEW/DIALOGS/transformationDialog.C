@@ -1,7 +1,11 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: transformationDialog.C
+//
+
 #include <BALL/VIEW/DIALOGS/transformationDialog.h>
-#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/VIEW/WIDGETS/scene.h>
 #include <qlineedit.h>
 
 namespace BALL
@@ -106,66 +110,66 @@ bool TransformationDialog::rotateZ(float angle, bool radian)
 
 void TransformationDialog::zNegRotationClicked()
 {
-	if (rotateZ(-(getMaxRotation()),false)) update_();
+	if (rotateZ(-(getRotation()),false)) update_();
 }
 
 void TransformationDialog::xNegRotationClicked()
 {
-	if (rotateX(-(getMaxRotation()),false)) update_();
+	if (rotateX(-(getRotation()),false)) update_();
 }
 
 void TransformationDialog::xNegTranslationClicked()
 {
-	if (translate(-(getMaxTrans()),0,0)) update_();
+	if (translate(-(getTranslation()),0,0)) update_();
 }
 
 void TransformationDialog::xRotationClicked()
 {
-	if (rotateX(getMaxRotation(),false)) update_();
+	if (rotateX(getRotation(),false)) update_();
 }
 
 void TransformationDialog::xTranslationClicked()
 {
-	if (translate(getMaxTrans(),0,0)) update_();
+	if (translate(getTranslation(),0,0)) update_();
 }
 
 void TransformationDialog::yNegRotationClicked()
 {
-	if (rotateY(-(getMaxRotation()),false)) update_();
+	if (rotateY(-(getRotation()),false)) update_();
 }
 
 void TransformationDialog::yNegTranslationClicked()
 {
-	if (translate(0,-(getMaxTrans()),0)) update_();
+	if (translate(0,-(getTranslation()),0)) update_();
 }
 
 void TransformationDialog::yRotationClicked()
 {
-	if (rotateY(getMaxRotation(),false)) update_();
+	if (rotateY(getRotation(),false)) update_();
 }
 
 void TransformationDialog::yTranslationClicked()
 {
-	if (translate(0,getMaxTrans(),0)) update_();
+	if (translate(0,getTranslation(),0)) update_();
 }
 
 void TransformationDialog::zNegTranslationClicked()
 {
-	if (translate(0,0,-(getMaxTrans()))) update_();
+	if (translate(0,0,-(getTranslation()))) update_();
 }
 
 void TransformationDialog::zRotationClicked()
 {
-	if (rotateZ(getMaxRotation(),false)) update_();
+	if (rotateZ(getRotation(),false)) update_();
 }
 
 void TransformationDialog::zTranslationClicked()
 {
-	if (translate(0,0,getMaxTrans())) update_();
+	if (translate(0,0,getTranslation())) update_();
 }
 
 
-float TransformationDialog::getMaxTrans() const
+float TransformationDialog::getTranslation() const
 {
 	try
 	{
@@ -188,7 +192,7 @@ float TransformationDialog::getMaxTrans() const
 }
 	
 
-float TransformationDialog::getMaxRotation() const
+float TransformationDialog::getRotation() const
 {	
 	try
 	{
