@@ -1,4 +1,4 @@
-// $Id: simpleDescriptors.h,v 1.3 2001/12/17 03:17:52 oliver Exp $
+// $Id: simpleDescriptors.h,v 1.4 2001/12/18 01:18:44 oliver Exp $
 
 #ifndef BALL_QSAR_SIMPLEDESCRIPTORS_H
 #define BALL_QSAR_SIMPLEDESCRIPTORS_H
@@ -11,7 +11,7 @@ namespace BALL
 {
 
 	
-	/**	
+	/**	Descriptor returning the molecular mass of a molecule
 	*/
 	class MolecularMass
 		:	public Descriptor
@@ -20,6 +20,18 @@ namespace BALL
 		MolecularMass();
 		virtual double compute(const Molecule& molecule);
 	};
+
+	/**	Descriptor returning the number of bonds of a molecule.
+	*/
+	class NumberOfBonds
+		:	public Descriptor
+	{
+		public:
+		NumberOfBonds();
+		virtual double compute(const Molecule& molecule);
+	};
+
+
 
 
 
