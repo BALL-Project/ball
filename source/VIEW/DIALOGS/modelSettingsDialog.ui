@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>441</width>
-            <height>286</height>
+            <height>292</height>
         </rect>
     </property>
     <property name="caption">
@@ -22,9 +22,9 @@
         <property name="geometry">
             <rect>
                 <x>0</x>
-                <y>0</y>
-                <width>450</width>
-                <height>280</height>
+                <y>1</y>
+                <width>441</width>
+                <height>290</height>
             </rect>
         </property>
         <property name="minimumSize">
@@ -49,71 +49,142 @@
             <attribute name="title">
                 <string>Stick</string>
             </attribute>
-            <widget class="QLabel">
+            <widget class="QFrame">
                 <property name="name">
-                    <cstring>textLabel1_2_2_2</cstring>
+                    <cstring>frame3</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>11</x>
-                        <y>11</y>
-                        <width>86</width>
-                        <height>22</height>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>277</width>
+                        <height>41</height>
                     </rect>
                 </property>
-                <property name="text">
-                    <string>cylinder radius:</string>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
                 </property>
-            </widget>
-            <spacer>
-                <property name="name">
-                    <cstring>spacer1_2_2</cstring>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
                 </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>40</width>
-                        <height>16</height>
-                    </size>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>103</x>
-                        <y>18</y>
-                        <width>40</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-            </spacer>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>stick_radius</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>149</x>
-                        <y>11</y>
-                        <width>50</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>50</width>
-                        <height>22</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>30</width>
-                        <height>32767</height>
-                    </size>
-                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>14</y>
+                            <width>120</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>cylinder radius:</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>stick_radius_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>138</x>
+                            <y>11</y>
+                            <width>84</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>15</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Above</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>5</number>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>stick_radius_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>228</x>
+                            <y>9</y>
+                            <width>35</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
             </widget>
         </widget>
         <widget class="QWidget">
@@ -123,137 +194,279 @@
             <attribute name="title">
                 <string>Ball &amp;&amp; Stick</string>
             </attribute>
-            <widget class="QLabel">
+            <widget class="QFrame">
                 <property name="name">
-                    <cstring>textLabel1_2_2</cstring>
+                    <cstring>frame3_2_2</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>11</x>
-                        <y>11</y>
-                        <width>86</width>
-                        <height>22</height>
+                        <x>10</x>
+                        <y>51</y>
+                        <width>277</width>
+                        <height>41</height>
                     </rect>
                 </property>
-                <property name="text">
-                    <string>cylinder radius:</string>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
                 </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>14</y>
+                            <width>120</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>sphere radius:</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>ball_stick_sphere_radius_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>138</x>
+                            <y>11</y>
+                            <width>84</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>15</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Above</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>5</number>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>ball_stick_sphere_radius_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>228</x>
+                            <y>9</y>
+                            <width>35</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
             </widget>
-            <spacer>
+            <widget class="QFrame">
                 <property name="name">
-                    <cstring>spacer1_2</cstring>
-                </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>40</width>
-                        <height>16</height>
-                    </size>
+                    <cstring>frame3_2</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>103</x>
-                        <y>18</y>
-                        <width>40</width>
-                        <height>16</height>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>277</width>
+                        <height>41</height>
                     </rect>
                 </property>
-            </spacer>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>textLabel1_2</cstring>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
                 </property>
-                <property name="geometry">
-                    <rect>
-                        <x>11</x>
-                        <y>41</y>
-                        <width>79</width>
-                        <height>22</height>
-                    </rect>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
                 </property>
-                <property name="text">
-                    <string>sphere radius:</string>
-                </property>
-            </widget>
-            <spacer>
-                <property name="name">
-                    <cstring>spacer1</cstring>
-                </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>47</width>
-                        <height>16</height>
-                    </size>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>96</x>
-                        <y>48</y>
-                        <width>47</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-            </spacer>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>ball_stick_cylinder_radius</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>149</x>
-                        <y>11</y>
-                        <width>50</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>50</width>
-                        <height>22</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>30</width>
-                        <height>32767</height>
-                    </size>
-                </property>
-            </widget>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>ball_stick_sphere_radius</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>149</x>
-                        <y>41</y>
-                        <width>50</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>50</width>
-                        <height>22</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>30</width>
-                        <height>32767</height>
-                    </size>
-                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>14</y>
+                            <width>120</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>cylinder radius:</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>ball_stick_cylinder_radius_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>138</x>
+                            <y>11</y>
+                            <width>84</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>15</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Above</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>5</number>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>ball_stick_cylinder_radius_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>228</x>
+                            <y>9</y>
+                            <width>35</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
             </widget>
         </widget>
         <widget class="QWidget">
@@ -263,71 +476,139 @@
             <attribute name="title">
                 <string>VDW</string>
             </attribute>
-            <widget class="QLabel">
+            <widget class="QFrame">
                 <property name="name">
-                    <cstring>textLabel1_2_5</cstring>
+                    <cstring>frame3_2_3</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>11</x>
-                        <y>11</y>
-                        <width>72</width>
-                        <height>22</height>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>277</width>
+                        <height>41</height>
                     </rect>
                 </property>
-                <property name="text">
-                    <string>radius factor:</string>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
                 </property>
-            </widget>
-            <spacer>
-                <property name="name">
-                    <cstring>spacer1_5</cstring>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
                 </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>54</width>
-                        <height>16</height>
-                    </size>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>89</x>
-                        <y>18</y>
-                        <width>54</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-            </spacer>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>vdw_radius_factor</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>149</x>
-                        <y>11</y>
-                        <width>50</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>50</width>
-                        <height>22</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>30</width>
-                        <height>32767</height>
-                    </size>
-                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2_2_3</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>14</y>
+                            <width>120</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>radius factor:</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>vdw_radius_factor_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>138</x>
+                            <y>11</y>
+                            <width>84</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>20</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Above</enum>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>vdw_radius_factor_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>228</x>
+                            <y>9</y>
+                            <width>35</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
             </widget>
         </widget>
         <widget class="QWidget">
@@ -337,71 +618,142 @@
             <attribute name="title">
                 <string>Surface</string>
             </attribute>
-            <widget class="QLabel">
+            <widget class="QFrame">
                 <property name="name">
-                    <cstring>textLabel1_2_3</cstring>
+                    <cstring>frame3_2_3_2</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>11</x>
-                        <y>9</y>
-                        <width>73</width>
-                        <height>22</height>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>277</width>
+                        <height>41</height>
                     </rect>
                 </property>
-                <property name="text">
-                    <string>probe radius:</string>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
                 </property>
-            </widget>
-            <spacer>
-                <property name="name">
-                    <cstring>spacer1_3</cstring>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
                 </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>53</width>
-                        <height>16</height>
-                    </size>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>90</x>
-                        <y>16</y>
-                        <width>53</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-            </spacer>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>surface_probe_radius</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>149</x>
-                        <y>9</y>
-                        <width>50</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>50</width>
-                        <height>22</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>30</width>
-                        <height>32767</height>
-                    </size>
-                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2_2_3_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>14</y>
+                            <width>120</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>probe radius:</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>surface_probe_radius_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>138</x>
+                            <y>11</y>
+                            <width>84</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="minValue">
+                        <number>5</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>25</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Above</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>5</number>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>surface_probe_radius_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>228</x>
+                            <y>9</y>
+                            <width>35</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
             </widget>
         </widget>
         <widget class="QWidget">
@@ -411,71 +763,142 @@
             <attribute name="title">
                 <string>Tube</string>
             </attribute>
-            <widget class="QLabel">
+            <widget class="QFrame">
                 <property name="name">
-                    <cstring>textLabel1_2_4</cstring>
+                    <cstring>frame3_2_3_2_2</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>11</x>
-                        <y>9</y>
-                        <width>37</width>
-                        <height>22</height>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>277</width>
+                        <height>41</height>
                     </rect>
                 </property>
-                <property name="text">
-                    <string>radius:</string>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
                 </property>
-            </widget>
-            <spacer>
-                <property name="name">
-                    <cstring>spacer1_4</cstring>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
                 </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>89</width>
-                        <height>16</height>
-                    </size>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>54</x>
-                        <y>16</y>
-                        <width>89</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-            </spacer>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>tube_radius</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>149</x>
-                        <y>9</y>
-                        <width>50</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>50</width>
-                        <height>22</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>30</width>
-                        <height>32767</height>
-                    </size>
-                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2_2_3_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>14</y>
+                            <width>120</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>radius:</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>tube_radius_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>138</x>
+                            <y>11</y>
+                            <width>84</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>25</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Above</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>5</number>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>tube_radius_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>228</x>
+                            <y>9</y>
+                            <width>35</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
             </widget>
         </widget>
         <widget class="QWidget">
@@ -485,231 +908,550 @@
             <attribute name="title">
                 <string>Cartoon</string>
             </attribute>
-            <widget class="QLayoutWidget">
+            <widget class="QFrame">
                 <property name="name">
-                    <cstring>layout13</cstring>
+                    <cstring>frame3_2_3_2_2_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>51</y>
+                        <width>277</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2_2_3_2_2_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>14</y>
+                            <width>120</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>helix radius:</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>cartoon_helix_radius_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>138</x>
+                            <y>11</y>
+                            <width>84</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>50</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Above</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>10</number>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>cartoon_helix_radius_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>228</x>
+                            <y>9</y>
+                            <width>35</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
+            </widget>
+            <widget class="QFrame">
+                <property name="name">
+                    <cstring>frame3_2_3_2_2_2_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>92</y>
+                        <width>277</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>14</y>
+                            <width>120</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>arrow width:</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>cartoon_arrow_width_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>138</x>
+                            <y>11</y>
+                            <width>84</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>25</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Above</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>5</number>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>cartoon_arrow_width_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>228</x>
+                            <y>9</y>
+                            <width>35</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
+            </widget>
+            <widget class="QFrame">
+                <property name="name">
+                    <cstring>frame3_2_3_2_2_2_2_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>133</y>
+                        <width>277</width>
+                        <height>41</height>
+                    </rect>
+                </property>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>14</y>
+                            <width>120</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>arrow height:</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>cartoon_arrow_height_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>138</x>
+                            <y>11</y>
+                            <width>84</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>25</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Above</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>5</number>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>cartoon_arrow_height_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>228</x>
+                            <y>9</y>
+                            <width>35</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
+            </widget>
+            <widget class="QFrame">
+                <property name="name">
+                    <cstring>frame3_2_3_2_2_2</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
                         <x>10</x>
                         <y>10</y>
-                        <width>194</width>
-                        <height>124</height>
+                        <width>277</width>
+                        <height>41</height>
                     </rect>
                 </property>
-                <vbox>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
+                </property>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
+                </property>
+                <widget class="QLabel">
                     <property name="name">
-                        <cstring>unnamed</cstring>
+                        <cstring>textLabel1_2_2_2_2_3_2_2_2</cstring>
                     </property>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>layout6_3_2</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>textLabel1_2_4_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>tube radius:</string>
-                                </property>
-                            </widget>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>spacer1_4_2</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>45</width>
-                                        <height>7</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QLineEdit">
-                                <property name="name">
-                                    <cstring>cartoon_tube_radius</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>50</width>
-                                        <height>22</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>30</width>
-                                        <height>32767</height>
-                                    </size>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>layout6_3_2_2</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>textLabel1_2_4_2_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>helix radius:</string>
-                                </property>
-                            </widget>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>spacer1_4_2_2</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>45</width>
-                                        <height>7</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QLineEdit">
-                                <property name="name">
-                                    <cstring>cartoon_helix_radius</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>50</width>
-                                        <height>22</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>30</width>
-                                        <height>32767</height>
-                                    </size>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>layout6_3_2_2_2</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>textLabel1_2_4_2_2_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>arrow width</string>
-                                </property>
-                            </widget>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>spacer1_4_2_2_2</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>45</width>
-                                        <height>7</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QLineEdit">
-                                <property name="name">
-                                    <cstring>cartoon_arrow_width</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>50</width>
-                                        <height>22</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>30</width>
-                                        <height>32767</height>
-                                    </size>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                    <widget class="QLayoutWidget">
-                        <property name="name">
-                            <cstring>layout6_3_2_2_2_2</cstring>
-                        </property>
-                        <hbox>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel">
-                                <property name="name">
-                                    <cstring>textLabel1_2_4_2_2_2_2</cstring>
-                                </property>
-                                <property name="text">
-                                    <string>arrow height</string>
-                                </property>
-                            </widget>
-                            <spacer>
-                                <property name="name">
-                                    <cstring>spacer1_4_2_2_2_2</cstring>
-                                </property>
-                                <property name="orientation">
-                                    <enum>Horizontal</enum>
-                                </property>
-                                <property name="sizeType">
-                                    <enum>Expanding</enum>
-                                </property>
-                                <property name="sizeHint">
-                                    <size>
-                                        <width>45</width>
-                                        <height>7</height>
-                                    </size>
-                                </property>
-                            </spacer>
-                            <widget class="QLineEdit">
-                                <property name="name">
-                                    <cstring>cartoon_arrow_height</cstring>
-                                </property>
-                                <property name="minimumSize">
-                                    <size>
-                                        <width>50</width>
-                                        <height>22</height>
-                                    </size>
-                                </property>
-                                <property name="maximumSize">
-                                    <size>
-                                        <width>30</width>
-                                        <height>32767</height>
-                                    </size>
-                                </property>
-                            </widget>
-                        </hbox>
-                    </widget>
-                </vbox>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>14</y>
+                            <width>120</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>tube radius:</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>cartoon_tube_radius_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>138</x>
+                            <y>11</y>
+                            <width>84</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>25</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Above</enum>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>cartoon_tube_radius_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>228</x>
+                            <y>9</y>
+                            <width>35</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
             </widget>
         </widget>
         <widget class="QWidget">
@@ -719,74 +1461,226 @@
             <attribute name="title">
                 <string>H-Bonds</string>
             </attribute>
-            <widget class="QLabel">
+            <widget class="QFrame">
                 <property name="name">
-                    <cstring>textLabel1_2_2_3</cstring>
+                    <cstring>frame3_2_3_2_2_2_3</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
-                        <x>11</x>
-                        <y>11</y>
-                        <width>86</width>
-                        <height>24</height>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>277</width>
+                        <height>41</height>
                     </rect>
                 </property>
-                <property name="text">
-                    <string>cylinder radius:</string>
+                <property name="frameShape">
+                    <enum>StyledPanel</enum>
                 </property>
-            </widget>
-            <spacer>
-                <property name="name">
-                    <cstring>spacer1_2_3</cstring>
+                <property name="frameShadow">
+                    <enum>Raised</enum>
                 </property>
-                <property name="orientation">
-                    <enum>Horizontal</enum>
-                </property>
-                <property name="sizeType">
-                    <enum>Expanding</enum>
-                </property>
-                <property name="sizeHint">
-                    <size>
-                        <width>40</width>
-                        <height>16</height>
-                    </size>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>103</x>
-                        <y>19</y>
-                        <width>40</width>
-                        <height>16</height>
-                    </rect>
-                </property>
-            </spacer>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>hbonds_radius</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>149</x>
-                        <y>12</y>
-                        <width>50</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>50</width>
-                        <height>22</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>30</width>
-                        <height>32767</height>
-                    </size>
-                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1_2_2_2_2_3_2_2_2_3</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>12</x>
+                            <y>14</y>
+                            <width>120</width>
+                            <height>16</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>120</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>120</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>cylinder radius:</string>
+                    </property>
+                </widget>
+                <widget class="QSlider">
+                    <property name="name">
+                        <cstring>hbonds_radius_slider</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>138</x>
+                            <y>11</y>
+                            <width>84</width>
+                            <height>21</height>
+                        </rect>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>84</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                    <property name="minValue">
+                        <number>1</number>
+                    </property>
+                    <property name="maxValue">
+                        <number>25</number>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="tickmarks">
+                        <enum>Above</enum>
+                    </property>
+                    <property name="tickInterval">
+                        <number>5</number>
+                    </property>
+                </widget>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>hbonds_radius_label</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>228</x>
+                            <y>9</y>
+                            <width>35</width>
+                            <height>25</height>
+                        </rect>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>0</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>35</width>
+                            <height>25</height>
+                        </size>
+                    </property>
+                    <property name="frameShape">
+                        <enum>TabWidgetPanel</enum>
+                    </property>
+                    <property name="text">
+                        <string>99.9</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignCenter</set>
+                    </property>
+                </widget>
             </widget>
         </widget>
     </widget>
 </widget>
+<connections>
+    <connection>
+        <sender>ball_stick_cylinder_radius_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>ballStickCylinderRadiusChanged()</slot>
+    </connection>
+    <connection>
+        <sender>ball_stick_sphere_radius_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>ballStickSphereRadiusChanged()</slot>
+    </connection>
+    <connection>
+        <sender>cartoon_arrow_height_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>cartoonArrowHeightChanged()</slot>
+    </connection>
+    <connection>
+        <sender>cartoon_arrow_width_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>cartoonArrowWidthChanged()</slot>
+    </connection>
+    <connection>
+        <sender>cartoon_helix_radius_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>cartoonHelixRadiusChanged()</slot>
+    </connection>
+    <connection>
+        <sender>cartoon_tube_radius_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>cartoonTubeRadiusChanged()</slot>
+    </connection>
+    <connection>
+        <sender>hbonds_radius_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>hbondsRadiusChanged()</slot>
+    </connection>
+    <connection>
+        <sender>stick_radius_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>stickRadiusChanged()</slot>
+    </connection>
+    <connection>
+        <sender>surface_probe_radius_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>probeRadiusChanged()</slot>
+    </connection>
+    <connection>
+        <sender>tube_radius_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>tubeRadiusChanged()</slot>
+    </connection>
+    <connection>
+        <sender>vdw_radius_factor_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>VDWfactorChanged()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>stickRadiusChanged()</slot>
+    <slot>VDWfactorChanged()</slot>
+    <slot>ballStickSphereRadiusChanged()</slot>
+    <slot>ballStickCylinderRadiusChanged()</slot>
+    <slot>probeRadiusChanged()</slot>
+    <slot>tubeRadiusChanged()</slot>
+    <slot>cartoonTubeRadiusChanged()</slot>
+    <slot>cartoonHelixRadiusChanged()</slot>
+    <slot>cartoonArrowWidthChanged()</slot>
+    <slot>cartoonArrowHeightChanged()</slot>
+    <slot>hbondsRadiusChanged()</slot>
+</slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

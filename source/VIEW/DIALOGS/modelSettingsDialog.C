@@ -1,14 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.C,v 1.9 2003/11/19 02:07:05 amoll Exp $
+// $Id: modelSettingsDialog.C,v 1.10 2003/11/20 18:51:34 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/modelSettingsDialog.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/FORMAT/INIFile.h>
 
-#include <qlineedit.h>
+#include <qslider.h>
+#include <qlabel.h>
 
 namespace BALL
 {
@@ -25,55 +26,51 @@ namespace BALL
 		void ModelSettingsDialog::setDefaults()
 			throw()
 		{
-			stick_radius->setText("0.2");
-			ball_stick_cylinder_radius->setText("0.2");
-			ball_stick_sphere_radius->setText("0.4");
-			vdw_radius_factor->setText("1.0");
-			surface_probe_radius->setText("1.5");
-			tube_radius->setText("0.4");
-			cartoon_tube_radius->setText("0.4");
-			cartoon_helix_radius->setText("2.0");
-			cartoon_arrow_width->setText("0.4");
-			cartoon_arrow_height->setText("0.8");
-			hbonds_radius->setText("0.3");
+			stick_radius_slider->setValue(2);
+			ball_stick_cylinder_radius_slider->setValue(2);
+			ball_stick_sphere_radius_slider->setValue(4);
+			vdw_radius_factor_slider->setValue(10);
+			surface_probe_radius_slider->setValue(15);
+			tube_radius_slider->setValue(4);
+			cartoon_tube_radius_slider->setValue(4);
+			cartoon_helix_radius_slider->setValue(20);
+			cartoon_arrow_width_slider->setValue(4);
+			cartoon_arrow_height_slider->setValue(8);
+			hbonds_radius_slider->setValue(3);
 		}
 
-		float ModelSettingsDialog::getFloatValue_(const QLineEdit* const& te) const
+		float ModelSettingsDialog::getFloatValue_(const QSlider* const& slider) const
 			throw()
 		{
-			try
-			{
-				return String(te->text().ascii()).toFloat();
-			}
-			catch(...)
-			{
-				Log.error() << "Invalid value: " << te->text() << std::endl;
-			}
-			return 1;
+			return (float(slider->value())) / 10.0;
 		}
 
-		void ModelSettingsDialog::setValue_(QLineEdit* le, float value)
+		void ModelSettingsDialog::setValue_(QSlider* le, float value)
 			throw()
 		{
-			String s(value);
+			le->setValue((Size)(value * 10.0));
+		}
+
+		void ModelSettingsDialog::setLabelText_(QLabel* label, const QSlider* const from)
+			throw()
+		{
+			String s((float)from->value() / 10.0);
 			s.trimRight("0");
 			if (s.hasSuffix(".")) s+= "0";
-			le->setText(s.c_str());
+			label->setText(s.c_str());
 		}
 
-		void ModelSettingsDialog::fetchPreference_(const INIFile& inifile, const String& entry, 
-																							 QLineEdit& lineedit)
+		void ModelSettingsDialog::fetchPreference_(const INIFile& inifile, const String& entry, QSlider& slider)
 			throw()
 		{
 			if (!inifile.hasEntry("MODEL_OPTIONS", entry)) return;
-			lineedit.setText(inifile.getValue("MODEL_OPTIONS", entry).c_str());
+			setValue_(&slider, inifile.getValue("MODEL_OPTIONS", entry).toFloat());
 		}
 
-		void ModelSettingsDialog::writePreference_(INIFile& inifile, const String& entry, 
-																			const QLineEdit& lineedit) const
+		void ModelSettingsDialog::writePreference_(INIFile& inifile, const String& entry, const QSlider& slider) const
 			throw()
 		{
-			inifile.insertValue("MODEL_OPTIONS", entry, lineedit.text().ascii());
+			inifile.insertValue("MODEL_OPTIONS", entry, getFloatValue_(&slider));
 		}
 
 
@@ -81,31 +78,35 @@ namespace BALL
 			throw()
 		{
 			file.appendSection("MODEL_OPTIONS");
-			writePreference_(file, "stick_radius", *stick_radius);
-			writePreference_(file, "ball_stick_cylinder_radius", *ball_stick_cylinder_radius);
-			writePreference_(file, "ball_stick_sphere_radius", *ball_stick_sphere_radius);
-			writePreference_(file, "vdw_radius_factor", *vdw_radius_factor);
-			writePreference_(file, "surface_probe_radius", *surface_probe_radius);
-			writePreference_(file, "tube_radius", *tube_radius);
-			writePreference_(file, "cartoon_tube_radius", *cartoon_tube_radius);
-			writePreference_(file, "cartoon_helix_radius", *cartoon_helix_radius);
-			writePreference_(file, "cartoon_arrow_height", *cartoon_arrow_height);
-			writePreference_(file, "cartoon_arrow_width", *cartoon_arrow_width);
+			writePreference_(file, "stick_radius", *stick_radius_slider);
+			writePreference_(file, "ball_stick_cylinder_radius", *ball_stick_cylinder_radius_slider);
+			writePreference_(file, "ball_stick_sphere_radius", *ball_stick_sphere_radius_slider);
+			writePreference_(file, "vdw_radius_factor", *vdw_radius_factor_slider);
+			writePreference_(file, "surface_probe_radius", *surface_probe_radius_slider);
+			writePreference_(file, "tube_radius", *tube_radius_slider);
+			writePreference_(file, "cartoon_tube_radius", *cartoon_tube_radius_slider);
+			writePreference_(file, "cartoon_helix_radius", *cartoon_helix_radius_slider);
+			writePreference_(file, "cartoon_arrow_height", *cartoon_arrow_height_slider);
+			writePreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
+			writePreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
+			writePreference_(file, "hbonds_radius_", *hbonds_radius_slider);
 		}
 
 		void ModelSettingsDialog::fetchPreferences(const INIFile& file)
 			throw()
 		{
-			fetchPreference_(file, "stick_radius", *stick_radius);
-			fetchPreference_(file, "ball_stick_cylinder_radius", *ball_stick_cylinder_radius);
-			fetchPreference_(file, "ball_stick_sphere_radius", *ball_stick_sphere_radius);
-			fetchPreference_(file, "vdw_radius_factor", *vdw_radius_factor);
-			fetchPreference_(file, "surface_probe_radius", *surface_probe_radius);
-			fetchPreference_(file, "tube_radius", *tube_radius);
-			fetchPreference_(file, "cartoon_tube_radius", *cartoon_tube_radius);
-			fetchPreference_(file, "cartoon_helix_radius", *cartoon_helix_radius);
-			fetchPreference_(file, "cartoon_arrow_height", *cartoon_arrow_height);
-			fetchPreference_(file, "cartoon_arrow_width", *cartoon_arrow_width);
+Log.error() << "#~~#   1 " << std::endl;
+			fetchPreference_(file, "stick_radius", *stick_radius_slider);
+			fetchPreference_(file, "ball_stick_cylinder_radius", *ball_stick_cylinder_radius_slider);
+			fetchPreference_(file, "ball_stick_sphere_radius", *ball_stick_sphere_radius_slider);
+			fetchPreference_(file, "vdw_radius_factor", *vdw_radius_factor_slider);
+			fetchPreference_(file, "surface_probe_radius", *surface_probe_radius_slider);
+			fetchPreference_(file, "tube_radius", *tube_radius_slider);
+			fetchPreference_(file, "cartoon_tube_radius", *cartoon_tube_radius_slider);
+			fetchPreference_(file, "cartoon_helix_radius", *cartoon_helix_radius_slider);
+			fetchPreference_(file, "cartoon_arrow_height", *cartoon_arrow_height_slider);
+			fetchPreference_(file, "cartoon_arrow_width", *cartoon_arrow_width_slider);
+			fetchPreference_(file, "hbonds_radius_slider", *hbonds_radius_slider);
 		}
 	
 	} // namespace VIEW
