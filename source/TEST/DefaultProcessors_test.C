@@ -1,4 +1,4 @@
-// $Id: DefaultProcessors_test.C,v 1.3 2001/07/15 16:56:17 amoll Exp $
+// $Id: DefaultProcessors_test.C,v 1.4 2001/07/15 17:37:54 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: DefaultProcessors_test.C,v 1.3 2001/07/15 16:56:17 amoll Exp $")
+START_TEST(DefaultProcessors, "$Id: DefaultProcessors_test.C,v 1.4 2001/07/15 17:37:54 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -82,7 +82,11 @@ CHECK(AssignRadiusProcessor::Processor::Result operator()(Atom& atom))
 	}
 
 	TEST_EQUAL(S.countAtoms(), 33)
-	S.apply(arp);
+
+	CAPTURE_OUTPUT(2000)
+		S.apply(arp);
+	COMPARE_OUTPUT("Cannot assign radius for :a1\nCannot assign radius for :a2\n")
+	
 	AtomIterator atom_it = S.beginAtom();
 	Position i = 1;
 	for (; +atom_it; ++atom_it)
@@ -96,36 +100,25 @@ CHECK(AssignRadiusProcessor::Processor::Result operator()(Atom& atom))
 	TEST_EQUAL(i - 1, 31)         
 	TEST_EQUAL(arp.getNumberOfErrors(), 2)
 	TEST_EQUAL(arp.getNumberOfAssignments(), 31)
-	TEST_EQUAL(a1.getName(), "a1")
 RESULT
 
-// BAUSTELLE
-//hier ist der name von a1 geloescht!
-bool ttt = true;
-if (a1.getName() != "a1")
-{
-	ttt= false;
-}
+a1.setName("a1");
+a2.setName("a2");
 
 CHECK(AssignRadiusProcessor::setFilename(const String& filename))
-	TEST_EQUAL(ttt, true)
-	TEST_EQUAL(a1.getName(), "a1")
 	TEST_EXCEPTION(Exception::FileNotFound, arp.setFilename("XXX"));
 	arp.setFilename("DefaultProcessors_test.C");
-	TEST_EQUAL(a1.getName(), "a1")
 RESULT
 
 
 CHECK(AssignRadiusProcessor::getFilename())
 	TEST_EQUAL(arp.getFilename(), "DefaultProcessors_test.C");
-	TEST_EQUAL(a1.getName(), "a1")
 RESULT
 
 AssignRadiusProcessor arp2;
 CHECK(AssignRadiusProcessor::getNumberOfAssignments())
   TEST_EQUAL(arp.getNumberOfAssignments(), 31)
 	TEST_EQUAL(arp2.getNumberOfAssignments(), 0)
-	TEST_EQUAL(a1.getName(), "a1")
 RESULT
 
 
@@ -184,7 +177,11 @@ CHECK(AssignChargeProcessor::Processor::Result operator()(Atom& atom))
 	}
 
 	TEST_EQUAL(S.countAtoms(), 33)
-	S.apply(acp);
+	
+	CAPTURE_OUTPUT(2000)
+		S.apply(acp);
+	COMPARE_OUTPUT("Cannot assign charge for :a1\nCannot assign charge for :a2\n")
+	
 	AtomIterator atom_it = S.beginAtom();
 	Position i = 1;
 	for (; +atom_it; ++atom_it)
@@ -224,23 +221,13 @@ CHECK(AssignRadiusProcessor::getNumberOfErrors())
 RESULT
 
 
-CHECK(AssignChargeProcessor::AssignChargeProcessor(const String& filename))
-  //BAUSTELLE
-RESULT
-
-
-CHECK(AssignChargeProcessor::start())
-  //BAUSTELLE
-RESULT
-
-
-CHECK(AssignChargeProcessor::Processor::Result operator () (Atom& atom))
-  //BAUSTELLE
-RESULT
-
-
 CHECK(AssignChargeProcessor::getTotalCharge())
-  //BAUSTELLE
+	float total(0);
+	for (Size s = 1; s < 32; s++)
+	{
+		total += s;
+	}
+	TEST_REAL_EQUAL( acp.getTotalCharge(), total)
 RESULT
 
 /////////////////////////////////////////////////////////////
