@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.8 2003/09/19 18:18:00 amoll Exp $
+// $Id: pyWidget.C,v 1.9 2003/10/05 15:40:06 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/pyWidget.h>
@@ -408,9 +408,9 @@ PyWidget::PyWidget(QWidget *parent, const char *name)
 void PyWidget::initializeWidget(MainControl& main_control)
 	throw()
 {
-	main_control.insertMenuEntry(MainControl::TOOLS, "Restart Python", text_edit_, SLOT(startInterpreter()));
-	main_control.insertMenuEntry(MainControl::TOOLS, "Run Python Script", text_edit_, SLOT(scriptDialog()));
-	main_control.insertMenuEntry(MainControl::TOOLS, "Export History", text_edit_, SLOT(exportHistory()));
+	main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
+	main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
+	main_control.insertMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
 
 	DockWidget::initializeWidget(main_control);
 }
@@ -419,9 +419,9 @@ void PyWidget::initializeWidget(MainControl& main_control)
 void PyWidget::finalizeWidget(MainControl& main_control)
 	throw()
 {
-	main_control.removeMenuEntry(MainControl::TOOLS, "Restart Python", text_edit_, SLOT(startInterpreter()));
-	main_control.removeMenuEntry(MainControl::TOOLS, "Run Python Script", text_edit_, SLOT(scriptDialog()));
-	main_control.removeMenuEntry(MainControl::TOOLS, "Export History", text_edit_, SLOT(exportHistory()));
+	main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Restart Python", text_edit_, SLOT(startInterpreter()));
+	main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Run Python Script", text_edit_, SLOT(scriptDialog()));
+	main_control.removeMenuEntry(MainControl::TOOLS_PYTHON, "Export History", text_edit_, SLOT(exportHistory()));
 
 	DockWidget::finalizeWidget(main_control);
 }
