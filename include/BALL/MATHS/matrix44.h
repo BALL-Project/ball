@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.5 2000/01/07 21:50:47 oliver Exp $
+// $Id: matrix44.h,v 1.6 2000/01/16 17:28:42 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -2044,7 +2044,7 @@ namespace BALL
 	TVector3<T> operator * (const TMatrix4x4<T>& matrix, const TVector3<T>& vector);
 
 	///
-	typedef TMatrix4x4<Real> Matrix4x4;
+	typedef TMatrix4x4<float> Matrix4x4;
 
 } // namespace BALL
 

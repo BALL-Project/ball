@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.4 2000/01/07 21:50:47 oliver Exp $
+// $Id: box3.h,v 1.5 2000/01/16 17:28:40 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -359,7 +359,7 @@ namespace BALL
 
 
 	///
-	typedef TBox3<Real> Box3;
+	typedef TBox3<float> Box3;
 
 } // namespace BALL
 

@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.5 2000/01/10 15:51:02 oliver Exp $
+// $Id: circle3.h,v 1.6 2000/01/16 17:28:40 oliver Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -239,7 +239,7 @@ namespace BALL
 	};
 
 	///
-	typedef TCircle3<Real> Circle3;
+	typedef TCircle3<float> Circle3;
 
 } // namespace BALL
 

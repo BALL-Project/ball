@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.8 2000/01/10 15:51:02 oliver Exp $
+// $Id: vector3.h,v 1.9 2000/01/16 17:28:43 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -1096,7 +1096,7 @@ namespace BALL
 	}
 
 	///
-	typedef TVector3<Real> Vector3;
+	typedef TVector3<float> Vector3;
 
 } // namespace BALL
 

@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.4 1999/12/28 18:49:19 oliver Exp $
+// $Id: quaternion.h,v 1.5 2000/01/16 17:28:42 oliver Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -469,7 +469,7 @@ namespace BALL
 	}
 
 	///
-	typedef TQuaternion<Real> Quaternion;
+	typedef TQuaternion<float> Quaternion;
 
 } // namespace BALL
 

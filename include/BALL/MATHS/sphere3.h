@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.4 1999/12/28 18:49:46 oliver Exp $
+// $Id: sphere3.h,v 1.5 2000/01/16 17:28:43 oliver Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -218,7 +218,7 @@ namespace BALL
 
 
 	///
-	typedef TSphere3<Real> Sphere3;
+	typedef TSphere3<float> Sphere3;
 
 } // namespace BALL
 

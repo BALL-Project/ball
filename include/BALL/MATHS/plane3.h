@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.4 1999/12/28 18:49:46 oliver Exp $
+// $Id: plane3.h,v 1.5 2000/01/16 17:28:42 oliver Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -251,7 +251,7 @@ namespace BALL
 	};
 
 	///
-	typedef TPlane3<Real> Plane3;
+	typedef TPlane3<float> Plane3;
 
 } // namespace BALL
 

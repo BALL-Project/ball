@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.5 2000/01/10 15:51:02 oliver Exp $
+// $Id: line3.h,v 1.6 2000/01/16 17:28:42 oliver Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -262,7 +262,7 @@ namespace BALL
 	};
 
 	///
-	typedef TLine3<Real> Line3;
+	typedef TLine3<float> Line3;
 
 } // namespace BALL
 
