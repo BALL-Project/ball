@@ -67,6 +67,7 @@ EXECUTABLES = \
 	TranslationApplicator_test\
 	Vector3_test\
 	Vector4_test\
+	VersionInfo_test\
 	XYZFile_test
 
 # default target
