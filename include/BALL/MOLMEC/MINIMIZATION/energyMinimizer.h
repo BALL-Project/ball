@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.18 2000/11/08 15:33:48 amoll Exp $
+// $Id: energyMinimizer.h,v 1.19 2001/01/25 23:31:39 amoll Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -371,7 +371,7 @@ namespace BALL
 
 		/** Get the maximal shift value
 		*/
-		float getMaximalShift( void ) const;
+		float getMaximalShift() const;
 
 		/**	Set the snapshot frequency
 		*/
