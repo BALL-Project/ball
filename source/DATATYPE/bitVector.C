@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.9 2000/07/20 23:43:33 amoll Exp $
+// $Id: bitVector.C,v 1.10 2000/07/23 14:09:06 amoll Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 
@@ -77,7 +77,6 @@ namespace BALL
 		bitset_ = 0;
 	}
 
-
 	void BitVector::set(const BitVector& bit_vector, bool /* deep */)
 	{
 		Size block_size = bit_vector.block_size_;
@@ -119,13 +118,10 @@ namespace BALL
 		// indices may be given as negative arguments: start from the end
 		// -1 therefore means the last bit.
 		if (last < 0)
-		{
-			last = (Index)(size_ - last - 1);
-		}
+			last += size_;
+
 		if (first < 0)
-		{
-			first = (Index)(size_ - first - 1);
-		}
+			first += size_;
 		
 		// if the values are out of bounds - throw an exception
 		// and leave it...
@@ -133,12 +129,13 @@ namespace BALL
 			throw Exception::IndexUnderflow(__FILE__, __LINE__, last, size_);
 		if (first < 0)
 			throw Exception::IndexUnderflow(__FILE__, __LINE__, first, size_);
-		if ((Size)last > size_)
+		if ((Size)last >= size_)
 			throw Exception::IndexOverflow(__FILE__, __LINE__, last, size_);
-		if ((Size)first > size_)
+		if ((Size)first >= size_)
 			throw Exception::IndexOverflow(__FILE__, __LINE__, first, size_);
 		
 		// now swap, if last < first
+		if (last >= first) return;
 		Index tmp = last;
 		last = first;
 		first = tmp;
@@ -149,21 +146,15 @@ namespace BALL
 		// indices may be given as negative arguments: start from the end
 		// -1 therefore means the last bit.
 		if (index < 0)
-		{
-			index = (Index)(size_ - index - 1);
-		}
+			index += size_;
 
 		// if the values are out of bounds - throw an exception
 		// leave it...
 		if (index < 0)
-		{
 			throw Exception::IndexUnderflow(__FILE__, __LINE__);
-		}
 
-		if ((Size)index > size_)
-		{
+		if ((Size)index >= size_)
 			const_cast<BitVector*>(this)->setSize(index);
-		}
 	}
 
 	BitVector BitVector::operator ()(Index first, Index last) const
@@ -173,8 +164,8 @@ namespace BALL
 		validateRange_(first, last);
 
 		BitVector temp(last - first + 1);
-		register Index source = first;
-		register Index target = 0;
+		Index source = first;
+		Index target = 0;
 		Position end = min((Position)last, size_ - 1);
 		
 		for (; (Position)source <= end; source++, target++)
@@ -185,17 +176,14 @@ namespace BALL
 		return temp;
 	}
 
-
 	BALL::Size BitVector::countValue(bool value) const
 	{
-		register Size size = 0;
+		Size size = 0;
 
-		for (register Position index = 0; index < size_; index++)
+		for (Position index = 0; index < size_; index++)
 		{
 			if (getBit((Index)index) == value)
-			{
 				size++;
-			}
 		}
 
 		return size;
@@ -206,26 +194,19 @@ namespace BALL
 		if (bit_string == 0)
 			return;
 
-		register const char *tmp = 0;
-		register BALL::Size size;
-
-		for (tmp = bit_string; *tmp != 0; tmp++);
-
-		size = (BALL::Size)(tmp - bit_string);
-		for (tmp--, size--; tmp >= bit_string; tmp--)
+		const char *tmp = bit_string;
+		setSize(strlen(bit_string));
+		for (Size i = 0; i < size_ ; i++)
 		{
-			if (*tmp != '0')
-			{
-				setBit((Index)(size - (tmp - bit_string)));
-			}
+			setBit(i, (bool)(*tmp != '0'));
+			tmp++;
 		}
 	}
 
 	void BitVector::fill(bool bit, Index first, Index last)
 	{
 		validateRange_(first, last);
-
-		for (register Index i = first; i <= last; i++) 
+		for (Index i = first; i <= last; i++) 
 		{
 			setBit(i, bit);
 		}
@@ -234,17 +215,16 @@ namespace BALL
 	void BitVector::toggle(Index first, Index last)
 	{
 		validateRange_(first, last);
-
-		for (register Index i = first; i <= last; i++)
+		for (Index i = first; i <= last; i++)
 		{
 			toggleBit(i);
 		}
 	}
 
+/*
 	void BitVector::setUnsignedChar(unsigned char bit_pattern)
 	{
 		setSize(BALL_CHAR_BITS, false);
-
 		*((unsigned char *)bitset_) = bit_pattern;
 	}
 
@@ -256,7 +236,6 @@ namespace BALL
 	void BitVector::setUnsignedShort(unsigned short bit_pattern)
 	{
 		setSize(sizeof(unsigned short) * BALL_CHAR_BITS, false);
-
 		*((unsigned short *)bitset_) = bit_pattern;
 	}
 
@@ -268,7 +247,6 @@ namespace BALL
 	void BitVector::setUnsignedInt (unsigned int bit_pattern)
 	{
 		setSize(sizeof(unsigned int) * BALL_CHAR_BITS, false);
-
 		*((unsigned int *)bitset_) = bit_pattern;
 	}
 
@@ -280,7 +258,6 @@ namespace BALL
 	void BitVector::setUnsignedLong(unsigned long bit_pattern)
 	{
 		setSize(sizeof(unsigned long) * BALL_CHAR_BITS, false);
-
 		*((unsigned long *)bitset_) = bit_pattern;
 	}
 
@@ -288,10 +265,11 @@ namespace BALL
 	{
 		return *((unsigned long *)bitset_);
 	}
+*/
 
 	void BitVector::bitwiseXor(const BitVector& bit_vector)
 	{
-		register BALL::Size block_size = block_size_;
+		BALL::Size block_size = block_size_;
 
 		if (block_size_ < bit_vector.block_size_)
 		{
@@ -304,8 +282,8 @@ namespace BALL
 			block_size = bit_vector.block_size_;
 		}
 
-		register BlockType *source = bit_vector.bitset_;
-		register BlockType *target = bitset_;
+		BlockType *source = bit_vector.bitset_;
+		BlockType *target = bitset_;
 
 		for (; block_size >= 1; block_size--, target++, source++)
 		{
@@ -319,10 +297,9 @@ namespace BALL
 		}
 	}
 
-
 	void BitVector::bitwiseOr(const BitVector& bit_vector)
 	{
-		register BALL::Size block_size = block_size_;
+		BALL::Size block_size = block_size_;
 
 		if (block_size_ < bit_vector.block_size_)
 		{
@@ -335,8 +312,8 @@ namespace BALL
 			block_size = bit_vector.block_size_;
 		}
 
-		register BlockType *source = bit_vector.bitset_;
-		register BlockType *target = bitset_;
+		BlockType *source = bit_vector.bitset_;
+		BlockType *target = bitset_;
 
 		for (; block_size >= 1; block_size--, target++, source++)
 		{
@@ -350,10 +327,9 @@ namespace BALL
 		}
 	}
 
-
 	void BitVector::bitwiseAnd(const BitVector& bit_vector)
 	{
-		register BALL::Size block_size = block_size_;
+		BALL::Size block_size = block_size_;
 
 		if (block_size_ < bit_vector.block_size_)
 		{
@@ -366,8 +342,8 @@ namespace BALL
 			block_size = bit_vector.block_size_;
 		}
 
-		register BlockType *source = bit_vector.bitset_;
-		register BlockType *target = bitset_;
+		BlockType *source = bit_vector.bitset_;
+		BlockType *target = bitset_;
 
 		for (; block_size >= 1; block_size--, target++, source++)
 		{
@@ -381,21 +357,16 @@ namespace BALL
 		}
 	}
 
-
 	bool BitVector::operator == (const BitVector& bit_vector) const
 	{
 		if (size_ != bit_vector.size_)
-		{
 			return false;
-		}
 
 		Index	i;
 		for (i = 0; i < (Index)size_; i++) 
 		{
 			if ((*this)[i] != bit_vector[i])
-			{
 				return false;
-			}
 		}
 	 
 		return true;
@@ -428,27 +399,21 @@ namespace BALL
 	istream& operator >> (istream& s, BitVector& bit_vector)
 	{
 		bit_vector.read(s);
-
 		return s;
 	}
 
 	ostream& operator << (ostream& s, const BitVector& bit_vector)
 	{
 		bit_vector.write(s);
-
 		return s;
 	}
 
 	void BitVector::read(istream& s)
 	{
 		Size size = 0;
-		
 		s >> size;
-
 		setSize(size, false);
-
 		size--;
-
 
 		char c;
 		s.get(c); // read leading blank
@@ -457,9 +422,7 @@ namespace BALL
 			s.get(c);
 
 			if (c != '0') 
-			{
 				setBit(i);
-			}
 		}
 	}
 
@@ -484,14 +447,10 @@ namespace BALL
 		Size size = 0;
 		
 		if (!pm.readPrimitive(size, "size"))
-		{
 			return false;
-		}
 			
 		setSize(size, false);
-
 		size--;
-
 		bool bit;
 		for (Index i = (Index)size; i >= 0 && pm.readPrimitive(bit, ""); i--) 
 		{
@@ -516,14 +475,10 @@ namespace BALL
 	Index BitVector::block_(Index index)
 	{
 		if (index < 0)
-		{
 			index = (Index)size_ - index + 1;
-		}
 
 		if (index < 0)
-		{
 			throw Exception::IndexUnderflow(__FILE__, __LINE__);
-		}
 		
 		if ((Size)index >= size_)
 		{
@@ -586,7 +541,6 @@ namespace BALL
 
 		block_size_ = block_size;
 		size_ = size;
-
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
