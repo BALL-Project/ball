@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.6 2000/01/08 12:52:50 oliver Exp $
+// $Id: vector3.h,v 1.7 2000/01/09 10:16:38 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -62,7 +62,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(TVector3)
+		BALL_CREATE(TVector3<T>)
 
 		/**	@name	Constructors and Destructors
 		*/
@@ -72,7 +72,13 @@ namespace BALL
 				This method creates a new TVector3 object. The three components
 				are initialized to {\tt (T)0}.
 		*/
-		TVector3();
+		TVector3()
+			:	PersistentObject(),
+				x(0),
+				y(0),
+				z(0)
+		{
+		}
 
 		/**	Array constructor.
 				This constructor creates a TVector3 object from the first
@@ -80,7 +86,16 @@ namespace BALL
 				@param ptr the array to construct from
 				@exception NullPointer if {\tt ptr == 0}
 		*/
-		TVector3(const T* ptr);
+		TVector3(const T* ptr)
+			:	PersistentObject()
+		{
+			if (ptr == 0) 
+				throw Exception::NullPointer(__FILE__, __LINE__);
+			
+			x = *ptr++;
+			y = *ptr++;
+			z = *ptr;
+		}
 
 		/**	TVector\_ constructor.
 				This constructor creates a TVector3 object and initializes
@@ -88,14 +103,26 @@ namespace BALL
 				and {\tt vector.z}.
 				@param	vector the vector to construct from
 		*/
-		TVector3(const TVector_<T>& vector);
+		TVector3(const TVector_<T>& vector)
+			:	PersistentObject(),
+				x(vector.x),
+				y(vector.y),
+				z(vector.z)
+		{
+		}
 
 		/**	Scalar constructor.
 				Create a new vector with all components set
 				to the same {\tt value}.
 				@param	value the value of all components
 		*/
-		TVector3(const T& value);
+		TVector3(const T& value)
+			:	PersistentObject(),	
+				x(value),
+				y(value),
+				z(value)
+		{
+		}
 
 		/**	Detailled constructor.
 				Create a new TVector3 object from three {\tt T} variables.
@@ -103,14 +130,26 @@ namespace BALL
 				@param	vy assigned to {\tt y}
 				@param	vz assigned to {\tt z}
 		*/
-		TVector3(const T& vx, const T& vy, const T& vz);
+		TVector3(const T& vx, const T& vy, const T& vz)
+			:	PersistentObject(),
+				x(vx),
+				y(vy),
+				z(vz)
+		{
+		}
 
 		/**	Copy constructor.
 				Create a new TVector3 object from another.
 				@param vector the TVector3 object to be copied
 				@param bool ignored - jjust for interface consistency
 		*/	
-		TVector3(const TVector3& vector, bool deep = true);
+		TVector3(const TVector3& vector, bool deep = true)
+			:	PersistentObject(),
+				x(vector.x),
+				y(vector.y),
+				z(vector.z)
+		{
+		}
 
 		/**	Spherical polar coordinate constructor.
 				Create a TVector3 object and set its coordinates to 
@@ -121,13 +160,21 @@ namespace BALL
 				@param phi the azimuth 
 				@param theta the co-latitude
 		*/
-		TVector3(const T& r, const TAngle<T>& phi, const TAngle<T>& theta);
+		TVector3(const T& r, const TAngle<T>& phi, const TAngle<T>& theta)
+			:	PersistentObject(),
+				x(r * cos(phi) * sin(theta)),
+				y(r * sin(phi) * sin(theta)),
+				z(r * cos(theta))
+		{
+		}
 
 		/**	Destructor.	
 				Destructs the TVector3 object. As there are no dynamic
 				data structures, nothing happens.
 		*/	
-		virtual ~TVector3();
+		virtual ~TVector3()
+		{
+		}
 
 		//@}
 
@@ -502,71 +549,6 @@ namespace BALL
 		}
 	};
 
-	template <typename T>
-	TVector3<T>::TVector3()
-		:	x(0),
-			y(0),
-			z(0)
-	{
-	}
-
-	template <typename T>
-	TVector3<T>::TVector3(const T* ptr)
-	{
-		if (ptr == 0) 
-			throw Exception::NullPointer(__FILE__, __LINE__);
-		
-		x = *ptr++;
-		y = *ptr++;
-		z = *ptr;
-	}
-
-	template <typename T>
-	TVector3<T>::TVector3(const TVector_<T>& vector)
-		:	x(vector.x),
-			y(vector.y),
-			z(vector.z)
-	{
-	}
-
-	template <typename T>
-	TVector3<T>::TVector3(const T& value)
-		:	x(value),
-			y(value),
-			z(value)
-	{
-	}
-
-	template <typename T>
-	TVector3<T>::TVector3(const T& vx, const T& vy, const T& vz)
-		:	x(vx),
-			y(vy),
-			z(vz)
-	{
-	}
-
-	template <typename T>
-	TVector3<T>::TVector3
-		(const TVector3<T>& vector,
-		 bool /* deep */)
-			:	x(vector.x),
-				y(vector.y),
-				z(vector.z)
-	{
-	}
-
-	template <class T>
-	TVector3<T>::TVector3(const T& r, const TAngle<T>& phi, const TAngle<T>& theta)
-			:	x(r * cos(phi) * sin(theta)),
-				y(r * sin(phi) * sin(theta)),
-				z(r * cos(theta))
-	{
-	}
-
-	template <class T>
-	TVector3<T>::~TVector3()
-	{
-	}
 
 	template <class T>
   void TVector3<T>::persistentWrite(PersistenceManager& pm, const char* name) const
@@ -578,7 +560,7 @@ namespace BALL
 		pm.writeObjectTrailer(name);
 	}
 
-	template <typename T>
+	template <class T>
 	void TVector3<T>::persistentRead(PersistenceManager& pm)
 	{
 		pm.readPrimitive(x, "x");
@@ -586,14 +568,14 @@ namespace BALL
 		pm.readPrimitive(z, "z");
 	}
  
-	template <typename T>
+	template <class T>
 	BALL_INLINE
 	TVector3<T>::operator TVector_<T>() const
 	{
 		return TVector_<T>(x, y, z);
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	void TVector3<T>::set(const T* ptr)
 	{
@@ -605,7 +587,7 @@ namespace BALL
 		z = *ptr;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	void TVector3<T>::set(const TVector_<T>& vector)
 	{
@@ -614,7 +596,7 @@ namespace BALL
 		z = vector.z;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	void TVector3<T>::set(const T& value)
 	{
@@ -623,7 +605,7 @@ namespace BALL
 		z = value;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	void TVector3<T>::set(const T& vx, const T& vy, const T& vz)
 	{
@@ -632,7 +614,7 @@ namespace BALL
 		z = vz;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	void TVector3<T>::set(const TVector3<T>& vector, bool /* deep */)
 	{
@@ -641,7 +623,7 @@ namespace BALL
 		z = vector.z;
 	}
 
-	template <typename T>
+	template <class T>
 	void TVector3<T>::set(const T& r, const TAngle<T> &phi, const TAngle<T> &theta)
 	{
 		x = r * cos(phi) * sin(theta);
@@ -649,7 +631,7 @@ namespace BALL
 		z = r * cos(theta);
 	}
 
-	template <typename T>
+	template <class T>
 	TVector3<T>& TVector3<T>::operator = (const T* ptr)
 	{
 		if (ptr == 0)
@@ -662,7 +644,7 @@ namespace BALL
 		return *this;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	TVector3<T>& TVector3<T>::operator = (const TVector_<T>& vector)
 	{
@@ -673,7 +655,7 @@ namespace BALL
 		return *this;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	TVector3<T>& TVector3<T>::operator = (const TVector3<T>& vector)
 	{
@@ -684,7 +666,7 @@ namespace BALL
 		return *this;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	void TVector3<T>::get(T* ptr) const
 	{
@@ -696,7 +678,7 @@ namespace BALL
 		*ptr   = z;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	void TVector3<T>::get(TVector_<T>& vector) const
 	{
@@ -706,7 +688,7 @@ namespace BALL
 		vector.h = (T)0;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	void TVector3<T>::get(T& new_x, T& new_y, T& new_z) const
 	{
@@ -715,7 +697,7 @@ namespace BALL
 		new_z = z;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	void TVector3<T>::get(TVector3<T>& vector, bool /* deep */) const
 	{
@@ -724,7 +706,7 @@ namespace BALL
 		vector.z = z;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	void TVector3<T>::get(T& r, TAngle<T>& phi, TAngle<T>& theta) const
 	{
@@ -733,7 +715,7 @@ namespace BALL
 		theta = getAngle_(z, sqrt(x * x + y * y));
 	}
 
-	template <typename T>
+	template <class T>
 	void TVector3<T>::swap(TVector3<T>& vector)
 	{
 		T temp = x;
@@ -749,21 +731,21 @@ namespace BALL
 		vector.z = temp;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	T TVector3<T>::getLength() const
 	{
 		return (T)sqrt(x * x + y * y + z * z);
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	T TVector3<T>::getSquareLength() const
 	{
 		return (x * x + y * y + z * z);
 	}
 
-	template <typename T>
+	template <class T>
 	TVector3<T>& TVector3<T>::normalize()
 	{
 		T len = sqrt(x * x + y * y + z * z);
@@ -780,7 +762,7 @@ namespace BALL
 		return *this;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	const TVector3<T>& TVector3<T>::getZero()
 	{
@@ -789,7 +771,7 @@ namespace BALL
 		return null_vector;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	const TVector3<T>& TVector3<T>::getUnit()
 	{
@@ -798,7 +780,7 @@ namespace BALL
 		return unit_vector;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	T& TVector3<T>::operator [] (Index index)
 	{
@@ -817,7 +799,7 @@ namespace BALL
 		}
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	const T& TVector3<T>::operator [] (Index index) const
 	{
@@ -850,21 +832,21 @@ namespace BALL
 		return TVector3<T>(a.x - b.x, a.y - b.y, a.z - b.z);
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE
 	TVector3<T> TVector3<T>::operator + () const	
 	{
 		return TVector3<T>(x, y, z);
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE
 	TVector3<T> TVector3<T>::operator - () const	
 	{
 		return TVector3<T>(-x, -y, -z);
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	TVector3<T>& TVector3<T>::operator += (const TVector3<T>& vector)
 	{
@@ -875,7 +857,7 @@ namespace BALL
 		return *this;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	TVector3<T>& TVector3<T>::operator -= (const TVector3<T>& vector)
 	{
@@ -886,21 +868,21 @@ namespace BALL
 		return *this;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	TVector3<T> TVector3<T>::operator * (const T& scalar)
 	{
 		return TVector3<T>(x * scalar, y * scalar, z * scalar);
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	TVector3<T> operator * (const T& scalar, const TVector3<T>& vector)
 	{
 		return TVector3<T>(scalar * vector.x, scalar * vector.y, scalar * vector.z);
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	TVector3<T>& TVector3<T>::operator *= (const T &scalar)
 	{
@@ -911,7 +893,7 @@ namespace BALL
 		return *this;
 	}
 
-	template <typename T>
+	template <class T>
 	TVector3<T> TVector3<T>::operator / (const T& lambda)
 	{
 		if (lambda == (T)0)
@@ -920,7 +902,7 @@ namespace BALL
 		return TVector3<T>(x / lambda, y / lambda, z / lambda);
 	}
 
-	template <typename T>
+	template <class T>
 	TVector3<T>& TVector3<T>::operator /= (const T& lambda)
 	{
 		if (lambda == (T)0)
@@ -933,20 +915,20 @@ namespace BALL
 		return *this;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	T TVector3<T>::operator * (const TVector3<T>& vector) const
 	{
 		return (x * vector.x + y * vector.y + z * vector.z);
 	}
 
-	template <typename T>
+	template <class T>
 	TVector3<T> TVector3<T>::operator % (const TVector3<T>& v) const
 	{
 		return TVector3(y * v.z - z * v.y, z * v.x - x * v.z, x * v.y - y * v.x);
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	TVector3<T>& TVector3<T>::operator %= (const TVector3<T>& v)
 	{
@@ -955,7 +937,7 @@ namespace BALL
 		return *this;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	T TVector3<T>::getDistance(const TVector3<T>& v) const
 	{
@@ -966,7 +948,7 @@ namespace BALL
 		return (T)sqrt(dx * dx + dy * dy + dz * dz); 
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE T
 	TVector3<T>::getSquareDistance(const TVector3<T>& v) const
 	{
@@ -977,7 +959,7 @@ namespace BALL
 		return (dx * dx + dy * dy + dz * dz); 
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	TAngle<T> TVector3<T>::getAngle(const TVector3<T>& vector) const
 	{
@@ -989,14 +971,14 @@ namespace BALL
 		return acos(((*this) * vector) / sqrt(length_product));
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	TVector3<T> TVector3<T>::getOrthogonalProjection(const TVector3<T>& direction) const
 	{
 		return ((direction * (*this)) / (direction * direction) * direction);
 	}
 
-	template <typename T>
+	template <class T>
 	TVector3<T> TVector3<T>::getPerpendicularNormalization
 		(const TVector3<T> &a, const TVector3<T> &b, const TVector3<T> &c)
 	{
@@ -1009,7 +991,7 @@ namespace BALL
 			 diff1.x * diff2.y - diff1.y * diff2.x);
 	}
 
-	template <typename T>
+	template <class T>
 	TAngle<T> TVector3<T>::getTorsionTAngle
 		(const TVector3<T> &a, const TVector3<T> &b, 
 		 const TVector3<T> &c, const TVector3<T> &d)
@@ -1040,42 +1022,42 @@ namespace BALL
 		}
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	bool TVector3<T>::operator == (const TVector3<T>& v) const
 	{
 		return (bool)(Maths::isEqual(x, v.x) && Maths::isEqual(y, v.y) && Maths::isEqual(z, v.z));
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	bool TVector3<T>::operator != (const TVector3<T>& v) const
 	{
 		return (bool)(Maths::isNotEqual(x, v.x) || Maths::isNotEqual(y, v.y) || Maths::isNotEqual(z, v.z));
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	bool TVector3<T>::isOrthogonalTo(TVector3<T>& v) const
 	{
 		return Maths::isZero((*this) * v);
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	bool TVector3<T>::isValid() const
 	{
 		return true;
 	}
 
-	template <typename T>
+	template <class T>
 	BALL_INLINE 
 	bool TVector3<T>::isZero() const
 	{
 		return (Maths::isZero(x) && Maths::isZero(y) && Maths::isZero(z));
 	}
 
-	template <typename T>
+	template <class T>
 	void TVector3<T>::dump(std::ostream& s, unsigned long depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
