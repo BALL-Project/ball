@@ -1,4 +1,4 @@
-// $Id: glsphere.C,v 1.4 2001/02/04 16:14:26 hekl Exp $
+// $Id: glsphere.C,v 1.5 2001/02/12 12:02:28 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glsphere.h>
 #include <GL/gl.h>
@@ -29,6 +29,7 @@ namespace BALL
 		}
 
 		GLSphere::~GLSphere()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -39,12 +40,14 @@ namespace BALL
 		}
 
 		void GLSphere::clear()
+			throw()
 		{
 			Sphere::clear();
 			GLObject::clear();
 		}
 
 		void GLSphere::destroy()
+			throw()
 		{
 			Sphere::destroy();
 			GLObject::destroy();
@@ -105,6 +108,7 @@ namespace BALL
 		}
 
 		bool GLSphere::extract()
+			throw()
 		{
 			return Sphere::extract();
 		}

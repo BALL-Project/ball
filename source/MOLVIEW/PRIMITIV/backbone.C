@@ -1,4 +1,4 @@
-// $Id: backbone.C,v 1.4 2001/01/26 02:27:06 amoll Exp $
+// $Id: backbone.C,v 1.5 2001/02/12 12:01:50 amoll Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/backbone.h>
 
@@ -109,6 +109,7 @@ namespace BALL
 		}
 
 		String Backbone::getTypeName() const
+			throw()
 		{
 			return String("Backbone");
 		}

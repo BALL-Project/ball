@@ -1,4 +1,4 @@
-// $Id: backbone.h,v 1.2 2001/01/08 17:29:39 anker Exp $
+// $Id: backbone.h,v 1.3 2001/02/12 12:00:53 amoll Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_BACKBONE_H
 #define BALL_MOLVIEW_PRIMITIV_BACKBONE_H
@@ -108,7 +108,8 @@ namespace BALL
 			void createBackbone();
 
 			///
-			virtual String getTypeName() const;
+			virtual String getTypeName() const
+				throw();
 
 			//@}
 
