@@ -1,4 +1,4 @@
-// $Id: property.iC,v 1.10 2000/12/10 00:24:34 amoll Exp $
+// $Id: property.iC,v 1.11 2000/12/13 01:22:28 amoll Exp $
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name)
@@ -305,7 +305,7 @@ BALL_INLINE
 bool PropertyManager::hasProperty(Property property) const
 	throw()
 {
-	if ((signed) (bitvector_.getSize() - 1) < property)
+	if (bitvector_.getSize() <= property)
 	{
 		return false;
 	}
