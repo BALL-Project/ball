@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.C,v 1.1.2.3 2002/02/14 19:52:58 anker Exp $
+// $Id: fresnoHydrogenBond.C,v 1.1.2.4 2002/03/05 22:55:30 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -17,7 +17,8 @@ namespace BALL
 	FresnoHydrogenBond::FresnoHydrogenBond()
 		throw()
 		:	ForceFieldComponent(),
-			possible_hydrogen_bonds_()
+			possible_hydrogen_bonds_(),
+			already_used_()
 	{
 		// set component name
 		setName("Fresno Hydrogen Bond");
@@ -26,7 +27,9 @@ namespace BALL
 
 	FresnoHydrogenBond::FresnoHydrogenBond(ForceField& force_field)
 		throw()
-		:	ForceFieldComponent(force_field)
+		:	ForceFieldComponent(force_field),
+			possible_hydrogen_bonds_(),
+			already_used_()
 	{
 		// set component name
 		setName("Fresno Hydrogen Bond");
@@ -37,6 +40,7 @@ namespace BALL
 		throw()
 		:	ForceFieldComponent(fhb, deep),
 			possible_hydrogen_bonds_(fhb.possible_hydrogen_bonds_),
+			already_used_(fhb.already_used_),
 			h_bond_distance_lower_(fhb.h_bond_distance_lower_),
 			h_bond_distance_upper_(fhb.h_bond_distance_upper_),
 			h_bond_angle_lower_(fhb.h_bond_angle_lower_),
@@ -56,6 +60,7 @@ namespace BALL
 		throw()
 	{
 		possible_hydrogen_bonds_.clear();
+		already_used_.clear();
 		h_bond_distance_lower_ = 0.0;
 		h_bond_distance_upper_ = 0.0;
 		h_bond_angle_lower_ = 0.0;
@@ -113,6 +118,7 @@ namespace BALL
 			{
 				if (fresno_types[&*A_it] == FresnoFF::HBOND_HYDROGEN)
 				{
+					already_used_.insert(pair<const Atom*, bool>(&*A_it, false));
 					for (B_it = B->beginAtom(); +B_it; ++B_it)
 					{
 						if (fresno_types.has(&*B_it))
@@ -143,6 +149,7 @@ namespace BALL
 			{
 				if (fresno_types[&*B_it] == FresnoFF::HBOND_HYDROGEN)
 				{
+					already_used_.insert(pair<const Atom*, bool>(&*B_it, false));
 					for (A_it = B->beginAtom(); +A_it; ++A_it)
 					{
 						if (fresno_types.has(&*A_it))
@@ -182,9 +189,15 @@ namespace BALL
 		throw()
 	{
 
+		// clear the already-used-flags
+		HashMap<const Atom*, bool>::Iterator au_it = already_used_.begin();
+		for (; +au_it; ++au_it)
+		{
+			au_it->second = false;
+		}
+
 		double E = 0.0;
 		double val = 0.0;
-		double tmp;
 		double distance;
 		double angle;
 		const Atom* hydrogen;
@@ -199,64 +212,83 @@ namespace BALL
 			++it)
 		{
 			hydrogen = it->first;
-			acceptor = it->second;
-
-			// h_bond is the vector of the hbond
-
-			h_bond = acceptor->getPosition() - hydrogen->getPosition();
-			distance = fabs(ideal_hbond_length_ - h_bond.getLength());
-
-			// if the distance is too large, the product of g1 and g2 is zero, so
-			// we can skip the rest
-
-			if (distance <= h_bond_distance_upper_)
+			// we could check for multiple scoring here, but it would cost a lot
+			// of performance. 
+			if (already_used_.has(hydrogen))
 			{
-				// calculate g1
-
-				tmp = MolmecSupport::calculateFresnoHelperFunction(distance,
-						h_bond_distance_lower_, h_bond_distance_upper_);
-
-				// calculate the angle of the hbond. It is necessary to find out
-				// which one of the atoms is the actual hydrogen in order to
-				// calculate the vector of the connection (in contrast to h bond)
-				// of the hydrogen to the molecule it is attached to
-
-				if (hydrogen->getElement().getSymbol() == "H")
+				if (already_used_[hydrogen] == false)
 				{
-					h_connection = hydrogen->getBond(0)->getPartner(*hydrogen)->getPosition()
-						- hydrogen->getPosition();
-				}
-				// PARANOIA
-				else
-				{
-					cerr << "FresnoHydrogenBond::updateEnergy(): "
-						<< "black magic: hydrogen bond without hydrogens:" << endl
-						<< hydrogen->getFullName() << ":" << acceptor->getFullName()
-						<< endl;
-					continue;
-				}
-				// /PARANOIA
+					acceptor = it->second;
 
-				// angle is the angle of the h bond
-				angle = ideal_hbond_angle_ - h_bond.getAngle(h_connection).toDegree();
+					// h_bond is the vector of the hbond
 
-				// if angle is too large, skip the rest
-				if (angle <= h_bond_angle_upper_)
-				{
-					tmp *= MolmecSupport::calculateFresnoHelperFunction(angle,
-						h_bond_angle_lower_, h_bond_angle_upper_);
-					// DEBUG
-					cout << "HB: adding score of " << tmp 
-						<< "(distance " << distance
-						<< ", angle " << angle << ")"
-						<< endl;
-					// /DEBUG
-					val += tmp;
+					h_bond = acceptor->getPosition() - hydrogen->getPosition();
+					distance = fabs(ideal_hbond_length_ - h_bond.getLength());
+
+					// if the distance is too large, the product of g1 and g2 is zero, so
+					// we can skip the rest
+
+					if (distance <= h_bond_distance_upper_)
+					{
+						// calculate g1
+
+						val = MolmecSupport::calculateFresnoHelperFunction(distance,
+								h_bond_distance_lower_, h_bond_distance_upper_);
+
+						// calculate the angle of the hbond. It is necessary to find out
+						// which one of the atoms is the actual hydrogen in order to
+						// calculate the vector of the connection (in contrast to h bond)
+						// of the hydrogen to the molecule it is attached to
+
+						if (hydrogen->getElement().getSymbol() == "H")
+						{
+							h_connection = 
+								hydrogen->getBond(0)->getPartner(*hydrogen)->getPosition()
+								- hydrogen->getPosition();
+						}
+						// PARANOIA
+						else
+						{
+							cerr << "FresnoHydrogenBond::updateEnergy(): "
+								<< "black magic: hydrogen bond without hydrogens:" << endl
+								<< hydrogen->getFullName() << ":" << acceptor->getFullName()
+								<< endl;
+							continue;
+						}
+						// /PARANOIA
+
+						// angle is the angle of the h bond
+						angle = ideal_hbond_angle_ - h_bond.getAngle(h_connection).toDegree();
+
+						// if angle is too large, skip the rest
+						if (angle <= h_bond_angle_upper_)
+						{
+							val *= MolmecSupport::calculateFresnoHelperFunction(angle,
+									h_bond_angle_lower_, h_bond_angle_upper_);
+							if (already_used_.has(hydrogen))
+							{
+								already_used_[hydrogen] = true;
+							}
+							// PARANOIA
+							else
+							{
+								cerr << "FresnoHydrogenBond::setup(): "
+									<< "already_used_ doesn't know this hydrogen." << endl;
+							}
+							// /PARANOIA
+
+							// DEBUG
+							cout << "HB: adding score of " << val 
+								<< "(distance " << distance
+								<< ", angle " << angle << ")"
+								<< endl;
+							// /DEBUG
+							E += val;
+						}
+					}
 				}
 			}
 		}
-
-		E = val;
 		return E;
 	}
 
