@@ -36,13 +36,13 @@ class BitVector
 	public:
 	BitVector() throw();
 	BitVector(Size /size/) throw(OutOfMemory);
-	BitVector(const BitVector& /bit_vector/, bool /deep/ = true) 
+	BitVector(const BitVector& /bit_vector/) 
 		throw(OutOfMemory);
 	BitVector(const char* /bit_string/)
 		throw(OutOfMemory);
 	~BitVector() throw();
 	void clear() throw();
-	void set(const BitVector& /bit_vector/, bool /deep/ = true)
+	void set(const BitVector& /bit_vector/)
 		throw(OutOfMemory);
 	void set(const char* /bit_string/)
 		throw(OutOfMemory);
@@ -50,9 +50,8 @@ class BitVector
 	//	throw(OutOfMemory);
 	// const BitVector& operator = (const char *bit_string)
 	// 	throw(OutOfMemory);
-	void get(BitVector& /bitvector/, bool /deep/ = true) const
+	void get(BitVector& /bitvector/) const
 		throw(OutOfMemory);
-	void swap(BitVector& /bitvector/) throw();
 	BitVector operator () (Index /first/, Index /last/) const
 		throw(IndexUnderflow, IndexOverflow);
 	void setSize(Size /size/, bool /keep/ = true)
