@@ -77,45 +77,6 @@
             </rect>
         </property>
     </spacer>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>apply_button</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>82</x>
-                <y>306</y>
-                <width>130</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>1</hsizetype>
-                <vsizetype>7</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>130</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Apply</string>
-        </property>
-        <property name="default">
-            <bool>true</bool>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>One grid and one Surface must be selected in the controls to color by grid.</string>
-        </property>
-    </widget>
     <spacer>
         <property name="name">
             <cstring>spacer21</cstring>
@@ -141,42 +102,6 @@
             </rect>
         </property>
     </spacer>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>cancel_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>298</x>
-                <y>306</y>
-                <width>130</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>1</hsizetype>
-                <vsizetype>7</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>130</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Cancel</string>
-        </property>
-        <property name="on">
-            <bool>false</bool>
-        </property>
-        <property name="default">
-            <bool>false</bool>
-        </property>
-    </widget>
     <spacer>
         <property name="name">
             <cstring>spacer23</cstring>
@@ -202,6 +127,81 @@
             </rect>
         </property>
     </spacer>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>apply_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>82</x>
+                <y>306</y>
+                <width>130</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>1</hsizetype>
+                <vsizetype>3</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>130</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Apply</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>One grid and one Surface must be selected in the controls to color by grid.</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cancel_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>298</x>
+                <y>306</y>
+                <width>130</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>1</hsizetype>
+                <vsizetype>3</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>130</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Cancel</string>
+        </property>
+        <property name="on">
+            <bool>false</bool>
+        </property>
+        <property name="default">
+            <bool>false</bool>
+        </property>
+    </widget>
     <widget class="QTabWidget">
         <property name="name">
             <cstring>surface_tab</cstring>

@@ -138,47 +138,6 @@
     </widget>
     <widget class="QLabel">
         <property name="name">
-            <cstring>intensity_label</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>367</x>
-                <y>169</y>
-                <width>70</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>5</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>70</width>
-                <height>0</height>
-            </size>
-        </property>
-        <property name="font">
-            <font>
-                <bold>1</bold>
-            </font>
-        </property>
-        <property name="frameShape">
-            <enum>ToolBarPanel</enum>
-        </property>
-        <property name="text">
-            <string>0</string>
-        </property>
-        <property name="alignment">
-            <set>AlignCenter</set>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
             <cstring>textLabel1_2</cstring>
         </property>
         <property name="geometry">
@@ -226,37 +185,6 @@
         </property>
         <property name="toolTip" stdset="0">
             <string>color of the light</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>color_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>367</x>
-                <y>209</y>
-                <width>70</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>50</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>70</width>
-                <height>32767</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Edit</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>open a color dialog</string>
         </property>
     </widget>
     <widget class="QGroupBox">
@@ -366,62 +294,6 @@
         </property>
         <property name="tickInterval">
             <number>50</number>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>remove_lights_button</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>315</x>
-                <y>249</y>
-                <width>160</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Remove</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>remove a light</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>add_lights_button</cstring>
-        </property>
-        <property name="enabled">
-            <bool>true</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>150</x>
-                <y>249</y>
-                <width>159</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Add Light</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>create a new light</string>
         </property>
     </widget>
     <widget class="QButtonGroup">
@@ -597,6 +469,134 @@
                 <string>position x</string>
             </property>
         </widget>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>add_lights_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>true</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>150</x>
+                <y>249</y>
+                <width>159</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Add Light</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>create a new light</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>remove_lights_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>315</x>
+                <y>249</y>
+                <width>160</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Remove</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>remove a light</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>color_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>367</x>
+                <y>209</y>
+                <width>70</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>70</width>
+                <height>32767</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Edit</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>open a color dialog</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>intensity_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>367</x>
+                <y>169</y>
+                <width>70</width>
+                <height>26</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>5</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>70</width>
+                <height>26</height>
+            </size>
+        </property>
+        <property name="font">
+            <font>
+                <bold>1</bold>
+            </font>
+        </property>
+        <property name="frameShape">
+            <enum>ToolBarPanel</enum>
+        </property>
+        <property name="text">
+            <string>0</string>
+        </property>
+        <property name="alignment">
+            <set>AlignCenter</set>
+        </property>
     </widget>
 </widget>
 <connections>

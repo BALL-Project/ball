@@ -35,326 +35,6 @@
     <property name="caption">
         <string>PeptideBuilder</string>
     </property>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>ala</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>9</x>
-                <y>50</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Ala</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>gln</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>69</x>
-                <y>80</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Gln</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>val</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>189</x>
-                <y>170</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Val</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>his</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>9</x>
-                <y>110</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>His</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>asp</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>189</x>
-                <y>50</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Asp</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>cys</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>9</x>
-                <y>80</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Cys</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>lys</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>189</x>
-                <y>110</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Lys</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>pro</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>129</x>
-                <y>140</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Pro</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>met</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>9</x>
-                <y>140</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Met</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>asn</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>129</x>
-                <y>50</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Asn</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>phe</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>69</x>
-                <y>140</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Phe</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>ser</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>189</x>
-                <y>140</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Ser</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>arg</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>70</x>
-                <y>50</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Arg</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>leu</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>129</x>
-                <y>110</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Leu</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>ile</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>69</x>
-                <y>110</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Ile</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>glu</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>129</x>
-                <y>80</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Glu</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>gly</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>189</x>
-                <y>80</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Gly</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>thr</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>9</x>
-                <y>170</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Thr</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>trp</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>69</x>
-                <y>170</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Trp</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>tyr</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>129</x>
-                <y>170</y>
-                <width>50</width>
-                <height>25</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Tyr</string>
-        </property>
-    </widget>
     <widget class="QButtonGroup">
         <property name="name">
             <cstring>angles_group</cstring>
@@ -854,6 +534,446 @@
         </property>
         <property name="default">
             <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>ala</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>9</x>
+                <y>50</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Ala</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>asn</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>129</x>
+                <y>50</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Asn</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>arg</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>70</x>
+                <y>50</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Arg</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>asp</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>189</x>
+                <y>50</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Asp</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cys</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>9</x>
+                <y>80</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Cys</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>gln</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>69</x>
+                <y>80</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Gln</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>glu</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>129</x>
+                <y>80</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Glu</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>gly</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>189</x>
+                <y>80</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Gly</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>lys</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>189</x>
+                <y>110</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Lys</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>ser</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>189</x>
+                <y>140</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Ser</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>val</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>189</x>
+                <y>170</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Val</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>ile</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>69</x>
+                <y>110</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Ile</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>phe</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>69</x>
+                <y>140</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Phe</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>trp</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>69</x>
+                <y>170</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Trp</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>thr</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>9</x>
+                <y>170</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Thr</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>met</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>9</x>
+                <y>140</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Met</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>his</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>9</x>
+                <y>110</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>His</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>leu</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>129</x>
+                <y>110</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Leu</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>pro</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>129</x>
+                <y>140</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Pro</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>tyr</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>129</x>
+                <y>170</y>
+                <width>50</width>
+                <height>25</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>50</width>
+                <height>25</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Tyr</string>
         </property>
     </widget>
 </widget>

@@ -128,22 +128,6 @@
                 <string>Match exact word</string>
             </property>
         </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>searchbutton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>315</x>
-                    <y>162</y>
-                    <width>194</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Search www.rcsb.org</string>
-            </property>
-        </widget>
         <widget class="QLabel">
             <property name="name">
                 <cstring>textLabel3</cstring>
@@ -246,28 +230,28 @@
                 </property>
             </widget>
         </widget>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>showDetails</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>370</x>
-                <y>273</y>
-                <width>141</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>PDBFile Details</string>
-        </property>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>searchbutton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>315</x>
+                    <y>162</y>
+                    <width>194</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>0</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>Search www.rcsb.org</string>
+            </property>
+        </widget>
     </widget>
     <widget class="QLayoutWidget">
         <property name="name">
@@ -355,6 +339,28 @@
                 </property>
             </widget>
         </hbox>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>showDetails</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>370</x>
+                <y>273</y>
+                <width>141</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>PDBFile Details</string>
+        </property>
     </widget>
 </widget>
 <connections>

@@ -53,25 +53,6 @@
         <property name="alignment">
             <set>AlignHCenter</set>
         </property>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>advanced_button</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>149</x>
-                    <y>51</y>
-                    <width>170</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&amp;Force field options</string>
-            </property>
-            <property name="accel">
-                <string>Alt+F</string>
-            </property>
-        </widget>
         <widget class="QLayoutWidget">
             <property name="name">
                 <cstring>layout2</cstring>
@@ -126,6 +107,31 @@
                     </property>
                 </widget>
             </hbox>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>advanced_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>149</x>
+                    <y>51</y>
+                    <width>170</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>170</width>
+                    <height>30</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>&amp;Force field options</string>
+            </property>
+            <property name="accel">
+                <string>Alt+F</string>
+            </property>
         </widget>
     </widget>
     <widget class="QButtonGroup">

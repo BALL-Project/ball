@@ -657,6 +657,12 @@
                 <height>30</height>
             </rect>
         </property>
+        <property name="minimumSize">
+            <size>
+                <width>186</width>
+                <height>30</height>
+            </size>
+        </property>
         <property name="maximumSize">
             <size>
                 <width>32767</width>
@@ -678,9 +684,15 @@
             <rect>
                 <x>204</x>
                 <y>383</y>
-                <width>185</width>
+                <width>186</width>
                 <height>30</height>
             </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>186</width>
+                <height>30</height>
+            </size>
         </property>
         <property name="maximumSize">
             <size>

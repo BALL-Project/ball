@@ -64,22 +64,6 @@
     </widget>
     <widget class="QPushButton">
         <property name="name">
-            <cstring>clear_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>394</x>
-                <y>56</y>
-                <width>80</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Clear</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
             <cstring>choose_button</cstring>
         </property>
         <property name="geometry">
@@ -90,8 +74,36 @@
                 <height>30</height>
             </rect>
         </property>
+        <property name="minimumSize">
+            <size>
+                <width>80</width>
+                <height>30</height>
+            </size>
+        </property>
         <property name="text">
             <string>Browse</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>clear_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>394</x>
+                <y>56</y>
+                <width>80</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>80</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Clear</string>
         </property>
     </widget>
 </widget>
