@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.118 2004/02/05 17:02:56 amoll Exp $
+// $Id: mainframe.C,v 1.119 2004/02/09 14:01:25 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -138,7 +138,7 @@ namespace BALL
 		insertPopupMenuSeparator(MainControl::TOOLS);
 
 		hint = "Calculate the Electrostatics with FDPB, if one System selected.";
-		insertMenuEntry(MainControl::TOOLS_CREATE_GRID, "Electrostatics", FDPB_dialog_, SLOT(show()), 0,
+		insertMenuEntry(MainControl::TOOLS_CREATE_GRID, "FDPB Electrostatics", FDPB_dialog_, SLOT(show()), 0,
 				MENU_FDPB, hint);
 				
 		hint = "Calculate an isocontour surface from a 3D grid. The grid has to be loaded in the DatasetControl.";
