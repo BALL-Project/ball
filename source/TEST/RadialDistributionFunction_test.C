@@ -1,4 +1,4 @@
-// $Id: RadialDistributionFunction_test.C,v 1.1 2000/08/31 13:04:21 anker Exp $
+// $Id: RadialDistributionFunction_test.C,v 1.2 2000/09/02 16:19:24 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: RadialDistributionFunction_test.C,v 1.1 2000/08/31 13:04:21 anker Exp $")
+START_TEST(class_name, "$Id: RadialDistributionFunction_test.C,v 1.2 2000/09/02 16:19:24 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -59,13 +59,10 @@ RESULT
 CHECK(RadialDistributionFunction::RadialDistributionFunction(const RadialDistributionFunction& rdf))
 	RadialDistributionFunction RDF2(poly);
 	RadialDistributionFunction RDF(RDF2);
-	TEST_EQUAL(RDF.getRepresentation().getDegree(),
-			RDF2.getRepresentation().getDegree())
-	bool test = (RDF.getRepresentation().getIntervals() ==
-			RDF2.getRepresentation().getIntervals());
+	TEST_EQUAL(RDF.getRepresentation().getDegree(), 4);
+	bool test = (RDF.getRepresentation().getIntervals() == intervals);
 	TEST_EQUAL(test, true)
-	test = (RDF.getRepresentation().getCoefficients() ==
-			RDF2.getRepresentation().getCoefficients());
+	test = (RDF.getRepresentation().getCoefficients() == coefs);
 	TEST_EQUAL(test, true)
 RESULT
 
@@ -73,10 +70,9 @@ RESULT
 CHECK(RadialDistributionFunction::RadialDistributionFunction(const PiecewisePolynomial& polynomial))
 	RadialDistributionFunction RDF(poly);
 	TEST_EQUAL(RDF.getRepresentation().getDegree(), 4)
-	bool test = (RDF.getRepresentation().getIntervals() == poly.getIntervals());
+	bool test = (RDF.getRepresentation().getIntervals() == intervals);
 	TEST_EQUAL(test, true)
-	test = (RDF.getRepresentation().getCoefficients() == 
-			poly.getCoefficients());
+	test = (RDF.getRepresentation().getCoefficients() == coefs);
 	TEST_EQUAL(test, true)
 RESULT
 
