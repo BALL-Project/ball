@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.5 2000/01/16 17:28:42 oliver Exp $
+// $Id: plane3.h,v 1.6 2000/02/16 17:07:48 oliver Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -44,22 +44,6 @@ namespace BALL
 
 		BALL_CREATE(TPlane3<T>)
 
-
-		/**	@name	Enums
-		*/
-		//@{
-
-		///
-		enum Form
-		{
-			FORM__PARAMETER    = 0,
-			FORM__THREE_POINTS = 1,
-			FORM__NORMAL       = 2,
-			FORM__COORDINATE   = 3 
-		};
-		//@}
-
-
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -79,14 +63,14 @@ namespace BALL
 		}
 
 		///
-		TPlane3(const TPoint3<T>& point, const TVector3<T>& normal)
+		TPlane3(const TVector3<T>& point, const TVector3<T>& normal)
 			:	p(point),
 				n(normal)
 		{
 		}
 
 		///
-		TPlane3(const TPoint3<T>& a, const TPoint3<T>& b, const TPoint3<T>& c)
+		TPlane3(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c)
 			:	p(a),
 				n((a - b) % (b - c))
 		{
@@ -105,7 +89,7 @@ namespace BALL
 		///
 		void swap(TPlane3 &plane)
 		{
-			TPoint3<T> temp_point(p);
+			TVector3<T> temp_point(p);
 			p = plane.p;
 			plane.p = temp_point;
 
@@ -122,7 +106,7 @@ namespace BALL
 		}
 
 		///
-		void set(const TPoint3<T>& point, const TVector3<T>& normal)
+		void set(const TVector3<T>& point, const TVector3<T>& normal)
 		{
 			p = point;
 			n = normal;
@@ -145,7 +129,7 @@ namespace BALL
 		}
 
 		///
-		void get(TPoint3<T>& point, TVector3<T>& normal) const
+		void get(TVector3<T>& point, TVector3<T>& normal) const
 		{
 			point = p;
 			normal = n;
@@ -160,10 +144,26 @@ namespace BALL
 		void normalize()
 		{
 			T length = n.getLength();
+			// throw an exception on zero length normal
+			if (length == 0.0)
+			{
+				throw Exception::DivisionByZero(__FILE__, __LINE__);
+			}
 
-			p /= length;
 			n /= length;
 		}
+
+		/**
+		*/
+		void hessify()
+		{
+			normalize();
+      if (Maths::isLess(n * p, 0))
+      {
+        n.negate();
+			}
+		}
+
 		//@}
 
 		/**	@name	Predicates
@@ -183,7 +183,7 @@ namespace BALL
 		}
 
 		///
-		bool has(const TPoint3<T>& point) const
+		bool has(const TVector3<T>& point) const
 		{
 			return Maths::isZero(n * (point - p));
 		}
@@ -242,10 +242,10 @@ namespace BALL
 		/**	@name	Attributes
 		*/
 		//@{
-		///
-		TPoint3<T> p;
+		/// point
+		TVector3<T> p;
 
-		///
+		/// normal
 		TVector3<T> n;
 		//@}
 	};
