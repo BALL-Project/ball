@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.22 2000/09/05 09:40:47 oliver Exp $
+// $Id: box3.h,v 1.23 2000/09/06 00:10:17 amoll Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -60,9 +60,8 @@ namespace BALL
   			@param	by assigned to {\tt b.y}
 				@param	bz assigned to {\tt b.z}
 		*/
-		TBox3
-			(const T& ax, const T& ay, const T& az,
-			 const T& bx, const T& by, const T& bz);
+		TBox3(const T& ax, const T& ay, const T& az,
+					const T& bx, const T& by, const T& bz);
 
 		/**	Destructor.	
 				Destructs the TBox3 object. As there are no dynamic
@@ -96,9 +95,8 @@ namespace BALL
   			@param	by assigned to {\tt b.y}
 				@param	bz assigned to {\tt b.z}
 		*/
-		void set
-			(const T& ax, const T& ay, const T& az,
-			 const T& bx, const T& by, const T& bz);
+		void set(const T& ax, const T& ay, const T& az,
+						 const T& bx, const T& by, const T& bz);
 
 		/**	Assignment operator.
 				Assign the box components from another instance of TBox3.
@@ -191,62 +189,13 @@ namespace BALL
 				@param on_surface true to test the surface (default = false)
 				@return bool, {\bf true} or {\bf false}
 		*/
-		bool has(const TVector3<T>& point, bool on_surface = false) const
-		{
-			if (Maths::isLess(b[0],a[0]) || Maths::isLess(b[1],a[1]) || Maths::isLess(b[2],a[2]))
-				{
-					a.swap(b);
-				}
-			if (on_surface == false)
-			{
-				for (int i = 0; i < 3; i++)
-					{
-						if (Maths::isLess(point[i],a[i]) || Maths::isLess(b[i],point[i]))
-							{
-								return false;
-							}						
-					}
-				return true;
-			}
-			else
-			{
-				bool temp = false;
-				for (int i = 0; i < 3; i++)
-					{
-						if (Maths::isEqual(point[i],a[i]) || Maths::isEqual(point[i],b[i]))
-							{
-								temp = true;
-							}
-					}
-				return (temp && has(point,false));
-			}
-		}
+		bool has(const TVector3<T>& point, bool on_surface = false) const;
 
-		/**	isIntersecting.
+		/**	Test if two boxes intersect.
 				@param box the box to be tested
 				@return bool, {\bf true} if the two boxes are intersecting, {\bf false} otherwise
 		*/
-		bool isIntersecting(const TBox3& box) const
-		{
-			if (Maths::isLess(b[0],a[0]) || Maths::isLess(b[1],a[1]) || Maths::isLess(b[2],a[2]))
-				{
-//					a.swap(b);
-				}
-			if (Maths::isLess(box.b[0],box.a[0]) ||
-					Maths::isLess(box.b[1],box.a[1]) ||
-					Maths::isLess(box.b[2],box.a[2])		)
-				{
-//					(box.a).swap(box.b);
-				}
-			for (int i = 0; i < 3; i++)
-				{
-					if (Maths::isLess(box.b[i],a[i]) || Maths::isLess(b[i],box.a[i]))
-						{
-							return false;
-						}
-				}
-			return true;
-		}
+		bool isIntersecting(const TBox3& box) const;
 		//@}
 
 		/**	@name	Debugging and Diagnostics
@@ -305,9 +254,8 @@ namespace BALL
 	}
 
 	template <typename T>
-	TBox3<T>::TBox3
-		(const T& ax, const T& ay, const T& az,
-		 const T& bx, const T& by, const T& bz)
+	TBox3<T>::TBox3(const T& ax, const T& ay, const T& az,
+						 		  const T& bx, const T& by, const T& bz)
 		:	a(ax, ay, az),
 			b(bx, by, bz)
 	{
@@ -331,9 +279,8 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	void TBox3<T>::set
-		(const T& ax, const T& ay, const T& az,
-		 const T& bx, const T& by, const T& bz)
+	void TBox3<T>::set(const T& ax, const T& ay, const T& az,
+										 const T& bx, const T& by, const T& bz)
 	{
 		a.set(ax, ay, az);
 		b.set(bx, by, bz);
@@ -344,7 +291,6 @@ namespace BALL
 	TBox3<T>& TBox3<T>::operator = (const TBox3<T> &box)
 	{
 		set(box);
-		
 		return *this;
 	}
 
@@ -409,14 +355,15 @@ namespace BALL
 	}
 
 	template <typename T>
-	BALL_INLINE T 
-	TBox3<T>::getHeight() const
+	BALL_INLINE
+	T TBox3<T>::getHeight() const
 	{
 		return Maths::abs(b.y - a.y);
 	}
 
 	template <typename T>
-	BALL_INLINE T TBox3<T>::getDepth() const
+	BALL_INLINE
+	T TBox3<T>::getDepth() const
 	{
 		return Maths::abs(b.z - a.z);
 	}
@@ -483,6 +430,92 @@ namespace BALL
 	bool TBox3<T>::isValid() const
 	{
 		return (a.isValid() && b.isValid());
+	}
+
+	template <typename T>
+	bool TBox3<T>::has(const TVector3<T>& point, bool on_surface = false) const
+	{
+		const TVector3<T>* lower;
+		const TVector3<T>* higher;
+
+		if (Maths::isLess(b[0],a[0]) || Maths::isLess(b[1],a[1]) || Maths::isLess(b[2],a[2]))
+		{
+			lower  = &b;
+			higher = &a;
+		}
+		else
+		{
+			lower  = &a;
+			higher = &b;
+		}
+
+		if (!on_surface)
+		{
+			for (int i = 0; i < 3; i++)
+			{
+				if (Maths::isLess(point[i],(*lower)[i]) || Maths::isLess((*higher)[i],point[i]))
+				{
+					return false;
+				}						
+			}
+			return true;
+		}
+
+		bool temp = false;
+    for (int i = 0; i < 3; i++)
+		{
+			if (Maths::isEqual(point[i],a[i]) || Maths::isEqual(point[i],b[i]))
+			{
+				temp = true;
+				break;
+			}
+		}
+		return (temp && has(point, false));
+	}
+
+	template <typename T>
+	bool TBox3<T>::isIntersecting(const TBox3& box) const
+	{
+		const TVector3<T>* lower;
+		const TVector3<T>* higher;
+		const TVector3<T>* box_lower;
+		const TVector3<T>* box_higher;
+
+		if (Maths::isLess(b[0],a[0]) || 
+				Maths::isLess(b[1],a[1]) || 
+				Maths::isLess(b[2],a[2]))
+		{
+			lower  = &b;
+			higher = &a;
+		}
+		else
+		{
+			lower  = &a; 
+			higher = &b;
+		}
+
+		if (Maths::isLess(box.b[0],box.a[0]) || 
+				Maths::isLess(box.b[1],box.a[1]) ||
+        Maths::isLess(box.b[2],box.a[2]))
+		{
+			box_lower  = &box.b;
+			box_higher = &box.a;
+		}
+		else
+		{
+			box_lower  = &box.a;
+			box_higher = &box.b;;
+		}
+
+    for (int i = 0; i < 3; i++)
+    {
+      if (Maths::isLess((*box_higher)[i],(*lower)[i]) || Maths::isLess((*higher)[i],(*box_lower)[i]))
+      {
+        return false;
+      }
+    }
+		
+		return true;
 	}
 
 	template <typename T>
