@@ -1,4 +1,4 @@
-// $Id: list.h,v 1.8 2000/11/29 19:13:57 amoll Exp $
+// $Id: list.h,v 1.9 2000/12/01 14:58:02 amoll Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -197,7 +197,7 @@ namespace BALL
 				Applies the processor to each entry of the list.
 				@param processor the processor to be applied
 		*/
-		bool apply(UnaryProcessor<List<Value> >& processor) throw()
+		bool apply(UnaryProcessor<Value>& processor) throw()
 		{
 			if (processor.start() == false)
 			{
@@ -205,13 +205,13 @@ namespace BALL
 			}
 
 			Processor::Result result;
-			Iterator it(begin());
+			Iterator it = begin();
 			for (; it != end(); ++it)
 			{
-				result = processor.operator () (*it);
-				if (result != Processor::CONTINUE)
+				result = processor(*it);
+				if (result <= Processor::BREAK)
 				{
-					break;
+					return (result == Processor::BREAK);
 				}
 			}
 			if (result == Processor::ABORT)
