@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Box3_test.C,v 1.21 2003/06/09 22:40:51 oliver Exp $
+// $Id: Box3_test.C,v 1.22 2003/06/10 21:47:43 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -11,7 +11,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(Box3, "$Id: Box3_test.C,v 1.21 2003/06/09 22:40:51 oliver Exp $")
+START_TEST(Box3, "$Id: Box3_test.C,v 1.22 2003/06/10 21:47:43 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -286,23 +286,41 @@ CHECK(std::ostream& operator << (std::ostream& s, const TBox3<T>& Box3))
 RESULT
 
 CHECK(TBox3& operator = (const TBox3& box) throw())
-  // ???
+	Box3 v(1, 2, 3, 4, 5, 6);
+	Box3 v2 = v;
+	TEST_EQUAL(v2, v)
 RESULT
 
 CHECK(void get(TVector3<T>& lower, TVector3<T>& upper) const throw())
-  // ???
+	Box3 v(1, 2, 3, 4, 5, 6);
+	Vector3 a, b;
+	v.get(a, b);
+	TEST_EQUAL(a, Vector3(1,2,3))
+	TEST_EQUAL(b, Vector3(4,5,6))
 RESULT
 
 CHECK(void set(const TBox3& box) throw())
-  // ???
+	Box3 v(1, 2, 3, 4, 5, 6);
+	Box3 v2;
+	v2.set(v);
+	TEST_EQUAL(v2, v)
 RESULT
 
 CHECK(void set(const TVector3<T>& lower, const TVector3<T>& upper) throw())
-  // ???
+	Box3 v2;
+	v2.set(Vector3(1,2,3), Vector3(4,5,6));
+	Box3 v(1, 2, 3, 4, 5, 6);
+	TEST_EQUAL(v2, v)	
 RESULT
 
 CHECK(void swap(TBox3& box) throw())
-  // ???
+	Box3 v(1, 2, 3, 4, 5, 6);
+	Box3 v2(v);
+	Box3 y(10, 20, 30, 40, 50, 60);
+	Box3 y2(y);
+	y2.swap(v2);
+	TEST_EQUAL(v, y2)
+	TEST_EQUAL(y, v2)
 RESULT
 
 /////////////////////////////////////////////////////////////
