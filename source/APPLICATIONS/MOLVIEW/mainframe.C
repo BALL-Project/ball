@@ -40,7 +40,7 @@ Mainframe::Mainframe
 		logview_(0),
 		vboxlayout_(0),
 		popup_menus_(),
-		selection_(0),
+		selection_(),
 		copy_list_(),
 		server_icon_(0),
 		tool_box_(0)
@@ -348,7 +348,7 @@ void Mainframe::onNotify(Message *message)
 	{
 		SelectionMessage *selection = RTTI::castTo<SelectionMessage>(*message);
 
-		selection_ = const_cast<List<Composite*>*>(selection->getSelection());
+		selection_ = selection->getSelection();
 	}
  
 	MainControl::onNotify(message);
@@ -359,13 +359,13 @@ void Mainframe::checkMenuEntries()
 	bool selected;
 	int number_of_selected_objects = 0;
 
-	if (selection_ == 0)
+	if (selection_.empty())
 	{
 		selected = false;
 	}
 	else
 	{
-		number_of_selected_objects = selection_->size();
+		number_of_selected_objects = selection_.size();
 		selected = (number_of_selected_objects > 0);
 	}
 
@@ -400,10 +400,10 @@ void Mainframe::checkMenuEntries()
 	// are systems
 	bool all_systems = (number_of_selected_objects > 0);
 
-	if (selection_ != 0)
+	if (!selection_.empty())
 	{
-		List<Composite*>::ConstIterator list_it = selection_->begin();	
-		for (; list_it != selection_->end(); ++list_it)
+		List<Composite*>::ConstIterator list_it = selection_.begin();	
+		for (; list_it != selection_.end(); ++list_it)
 		{
 			if (!RTTI::isKindOf<System>(**list_it))
 			{
@@ -437,13 +437,13 @@ void Mainframe::importPDB()
 
 void Mainframe::cut()
 {
-	if (selection_ == 0 || selection_->size() == 0)
+	if (selection_.size() == 0)
 	{
 		return;
 	}
 
 	QString message;
-	message.sprintf("cutting %d systems...", selection_->size());
+	message.sprintf("cutting %d systems...", selection_.size());
 	statusBar()->message(message);
 	QWidget::update();
 
@@ -463,8 +463,8 @@ void Mainframe::cut()
 
 	// remove all system composites from the tree and from the scene
 	// but do not delete them from memory
-	List<Composite*>::ConstIterator list_it = selection_->begin();	
-	for (; list_it != selection_->end(); ++list_it)
+	List<Composite*>::ConstIterator list_it = selection_.begin();	
+	for (; list_it != selection_.end(); ++list_it)
 	{
 		// insert deep clone of the composite into the cut list
 		copy_list_.push_back((Composite*)(*list_it)->create());
@@ -493,14 +493,13 @@ void Mainframe::cut()
 
 void Mainframe::copy()
 {
-	if (selection_ == 0
-			|| selection_->size() == 0)
+	if (selection_.size() == 0)
 	{
 		return;
 	}
 
 	QString message;
-	message.sprintf("copying %d systems...", selection_->size());
+	message.sprintf("copying %d systems...", selection_.size());
 	statusBar()->message(message);
 	QWidget::update();
 
@@ -517,8 +516,8 @@ void Mainframe::copy()
 	}
 
 	// copy the selected composites into the copy_list_
-	List<Composite*>::ConstIterator list_it = selection_->begin();	
-	for (; list_it != selection_->end(); ++list_it)
+	List<Composite*>::ConstIterator list_it = selection_.begin();	
+	for (; list_it != selection_.end(); ++list_it)
 	{
 		// insert deep clone of the composite into the cut list
 		copy_list_.push_back((Composite*)(*list_it)->create());
@@ -584,15 +583,14 @@ void Mainframe::clearClipboard()
 
 void Mainframe::select()
 {
-	if (selection_ == 0
-			|| selection_->size() == 0)
+	if (selection_.size() == 0)
 	{
 		return;
 	}
 
 	QString message;
 	message.sprintf("selecting %d objects...", 
-													selection_->size());
+													selection_.size());
 	statusBar()->message(message);
 	QWidget::update();
 
@@ -602,8 +600,8 @@ void Mainframe::select()
 	object_processor_.setValue(ADDRESS__STATIC_MODEL, VALUE__SELECT);
 	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, VALUE__SELECT);
         
-	List<Composite*>::ConstIterator list_it = selection_->begin();	
-	for (; list_it != selection_->end(); ++list_it)
+	List<Composite*>::ConstIterator list_it = selection_.begin();	
+	for (; list_it != selection_.end(); ++list_it)
 	{
 		object_processor_.applyOn(**list_it);
 		
@@ -626,14 +624,13 @@ void Mainframe::select()
 
 void Mainframe::deselect()
 {
-	if (selection_ == 0
-			|| selection_->size() == 0)
+	if (selection_.size() == 0)
 	{
 		return;
 	}
 
 	QString message;
-	message.sprintf("selecting %d objects...", selection_->size());
+	message.sprintf("selecting %d objects...", selection_.size());
 	statusBar()->message(message);
 	QWidget::update();
 
@@ -643,8 +640,8 @@ void Mainframe::deselect()
 	object_processor_.setValue(ADDRESS__STATIC_MODEL, VALUE__DESELECT);
 	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, VALUE__DESELECT);
         
-	List<Composite*>::ConstIterator list_it = selection_->begin();	
-	for (; list_it != selection_->end(); ++list_it)
+	List<Composite*>::ConstIterator list_it = selection_.begin();	
+	for (; list_it != selection_.end(); ++list_it)
 	{
 		object_processor_.applyOn(**list_it);
 		MainControl::update((**list_it).getRoot());
@@ -665,21 +662,20 @@ void Mainframe::deselect()
 
 void Mainframe::checkResidue()
 {
-	if (selection_ == 0
-			|| selection_->size() == 0)
+	if (selection_.size() == 0)
 	{
 		return;
 	}
 
 	QString message;
-	message.sprintf("selecting %d objects...", selection_->size());
+	message.sprintf("selecting %d objects...", selection_.size());
 	statusBar()->message(message);
 	QWidget::update();
 
 	ResidueChecker res_check(fragment_db_);
 	bool okay = true;
-	List<Composite*>::ConstIterator list_it = selection_->begin();	
-	for (; list_it != selection_->end(); ++list_it)
+	List<Composite*>::ConstIterator list_it = selection_.begin();	
+	for (; list_it != selection_.end(); ++list_it)
 	{	
 		(*list_it)->apply(res_check);
 		okay = okay && res_check.getStatus();	
@@ -698,14 +694,13 @@ void Mainframe::checkResidue()
 
 void Mainframe::centerCamera()
 {
-	if (selection_ == 0
-			|| selection_->size() != 1)
+	if (selection_.size() != 1)
 	{
 		return;
 	}
 
   // use specified object processor for calculating the center
-  object_processor_.calculateCenter(*selection_->front());
+  object_processor_.calculateCenter(*selection_.front());
 
 	Vector3 view_point = object_processor_.getViewCenter();
 
@@ -722,8 +717,7 @@ void Mainframe::centerCamera()
 
 void Mainframe::buildBonds()
 {
-	if (selection_ == 0
-			|| selection_->size() == 0)
+	if (selection_.size() == 0)
 	{
 		return;
 	}
@@ -733,8 +727,8 @@ void Mainframe::buildBonds()
 	statusBar()->message("building bonds...");
 	QWidget::update();
 
-	List<Composite*>::ConstIterator list_it = selection_->begin();	
-	for (; list_it != selection_->end(); ++list_it)
+	List<Composite*>::ConstIterator list_it = selection_.begin();	
+	for (; list_it != selection_.end(); ++list_it)
 	{	
 		(*list_it)->apply(fragment_db_.build_bonds);
 		number_of_bonds += fragment_db_.build_bonds.getNumberOfBondsBuilt();
@@ -756,8 +750,7 @@ void Mainframe::buildBonds()
 
 void Mainframe::addHydrogens()
 {
-	if (selection_ == 0
-			|| selection_->size() == 0)
+	if (selection_.size() == 0)
 	{
 		return;
 	}
@@ -767,8 +760,8 @@ void Mainframe::addHydrogens()
 	statusBar()->message("adding hydrogens...");
 	QWidget::update();
 
-	List<Composite*>::ConstIterator list_it = selection_->begin();	
-	for (; list_it != selection_->end(); ++list_it)
+	List<Composite*>::ConstIterator list_it = selection_.begin();	
+	for (; list_it != selection_.end(); ++list_it)
 	{	
 		(*list_it)->apply(fragment_db_.add_hydrogens);
 		number_of_hydrogens += fragment_db_.add_hydrogens.getNumberOfInsertedH();
@@ -795,19 +788,18 @@ void Mainframe::assignCharges()
 
 void Mainframe::calculateAmberEnergy()
 {
-	if (selection_ == 0
-			|| selection_->size() != 1)
+	if (selection_.size() != 1)
 	{
 		return;
 	}
 
-	if (!RTTI::isKindOf<System>(*selection_->front()))
+	if (!RTTI::isKindOf<System>(*selection_.front()))
 	{
 		return;
 	}
 
 	// retrieve the system from the selection
-	System& system = *RTTI::castTo<System>(*selection_->front());
+	System& system = *RTTI::castTo<System>(*selection_.front());
 
 	// set up the AMBER force field
 	statusBar()->message("setting up force field...");
@@ -845,14 +837,13 @@ void Mainframe::calculateAmberEnergy()
 
 void Mainframe::amberMinimization()
 {
-	if (selection_ == 0
-			|| selection_->size() == 0)
+	if (selection_.size() == 0)
 	{
 		return;
 	}
 
 	// retrieve the system from the selection
-	System& system = *RTTI::castTo<System>(*selection_->front());
+	System& system = *RTTI::castTo<System>(*selection_.front());
 
 
 	// execute the minimization dialog

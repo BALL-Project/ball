@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.13 2000/05/14 15:20:33 hekl Exp $
+// $Id: mainframe.h,v 1.14 2000/05/16 15:41:46 hekl Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -204,7 +204,7 @@ class Mainframe
 	QVBoxLayout*	vboxlayout_;
 	
 	List<QPopupMenu*> popup_menus_;
-	List<Composite*>* selection_;
+	List<Composite*>  selection_;
 	List<Composite*>  copy_list_;
 
 	QLabel*						server_icon_;
