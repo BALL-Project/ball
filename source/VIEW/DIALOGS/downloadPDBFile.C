@@ -180,7 +180,7 @@ bool DownloadPDBFile::threadedDownload_(const String& url)
 			setStatusbarText("Downloaded: " + String(bytes) + " bytes", true);
 			last_bytes = bytes;
 		}
-		thread_->wait(100);
+		thread_->wait(200);
 	}
 
 	if (thread_->getTCPTransfer().getReceivedBytes() == 0 ||

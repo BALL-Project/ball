@@ -241,15 +241,12 @@ String createTemporaryFilename()
 	throw()
 {
 	Directory org;
-	Directory d;
-	d.changeToUserHomeDir();
+	Directory::changeToUserHomeDir();
 	String filename;
 	File::createTemporaryFilename(filename);
-	filename = d.getPath() + FileSystem::PATH_SEPARATOR + filename;
+	filename = Directory::getUserHomeDir() + FileSystem::PATH_SEPARATOR + filename;
 	org.setCurrent();
 	return filename;
 }
-
-
 	
 } } //namespaces
