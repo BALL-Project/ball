@@ -1,4 +1,4 @@
-// $Id: CharmmFF_test.C,v 1.3 2000/03/25 22:40:56 oliver Exp $
+// $Id: CharmmFF_test.C,v 1.4 2000/05/23 10:23:45 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.3 2000/03/25 22:40:56 oliver Exp $")
+START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.4 2000/05/23 10:23:45 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -60,8 +60,7 @@ FragmentDB frag_db;
 		TEST_EQUAL(s.countAtoms(), 8)
 
 		eef1.updateEnergy();
-		#undef PRECISION
-		#define PRECISION 5e-3
+		PRECISION(5e-3)
 		TEST_REAL_EQUAL(eef1.getEnergy(), 157.4572251)
 		TEST_REAL_EQUAL(eef1.getStretchEnergy(), 30.83411352)
 		TEST_REAL_EQUAL(eef1.getBendEnergy(), 307.4544619)
@@ -74,8 +73,7 @@ FragmentDB frag_db;
 
 	CHECK(gradient test 1 (GLY) [EEF1])
 		eef1.updateForces();
-		#undef PRECISION
-		#define PRECISION 5e-3
+		PRECISION(5e-3)
 		TEST_REAL_EQUAL(eef1.getRMSGradient(), 219.2263702)
 	RESULT
 

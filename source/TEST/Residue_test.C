@@ -1,4 +1,4 @@
-// $Id: Residue_test.C,v 1.10 2000/05/23 07:16:19 oliver Exp $
+// $Id: Residue_test.C,v 1.11 2000/05/23 10:23:47 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.10 2000/05/23 07:16:19 oliver Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.11 2000/05/23 10:23:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -21,9 +21,7 @@ START_TEST(Residue, "$Id: Residue_test.C,v 1.10 2000/05/23 07:16:19 oliver Exp $
 using namespace BALL;
 using namespace std;
 
-#undef PRECISION
-#define PRECISION 1E-5
-
+PRECISION(1E-5)
 
 String filename;
 NEW_TMP_FILE(filename)

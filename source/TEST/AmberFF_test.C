@@ -1,4 +1,4 @@
-// $Id: AmberFF_test.C,v 1.9 2000/03/25 22:40:44 oliver Exp $
+// $Id: AmberFF_test.C,v 1.10 2000/05/23 10:23:44 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #include <BALL/FORMAT/HINFile.h>
 ///////////////////////////
 
-START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.9 2000/03/25 22:40:44 oliver Exp $")
+START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.10 2000/05/23 10:23:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -52,8 +52,7 @@ CHECK(energy test 1 (Single Stretch) [AMBER91])
 	amber91.updateEnergy();
 	amber91.updateForces();
 
-	#undef PRECISION
-	#define PRECISION 5e-2
+	PRECISION(5e-2)
 	TEST_REAL_EQUAL(amber91.getEnergy(), 25.552734)
 	TEST_REAL_EQUAL(amber91.getRMSGradient(), 228.7267908)
 	TEST_REAL_EQUAL(amber91.getStretchEnergy(), 25.552734)
@@ -74,8 +73,7 @@ CHECK(energy test 2 (Bend) [AMBER91])
 	amber91.updateEnergy();
 	amber91.updateForces();
 
-	#undef PRECISION
-	#define PRECISION 5e-2
+	PRECISION(5e-2)
 	TEST_REAL_EQUAL(amber91.getEnergy(), 7.895902544)
 	TEST_REAL_EQUAL(amber91.getRMSGradient(), 51.16447077)
 	TEST_REAL_EQUAL(amber91.getStretchEnergy(), 0.0)
@@ -141,8 +139,7 @@ CHECK(energy test 5 (AlaGlySer) [AMBER91])
 	amber91.updateEnergy();
 	amber91.updateForces();
 
-	#undef PRECISION
-	#define PRECISION 5e-2
+	PRECISION(5e-2)
 	TEST_REAL_EQUAL(amber91.getEnergy(), -314.12)
 	TEST_REAL_EQUAL(amber91.getRMSGradient(), 35.0358)
 	TEST_REAL_EQUAL(amber91.getStretchEnergy(), 3.00453)
@@ -171,8 +168,7 @@ CHECK(energy test 6 (AlaGlySer) [AMBER94])
 	amber94.updateEnergy();
 	amber94.updateForces();
 
-	#undef PRECISION
-	#define PRECISION 5e-2
+	PRECISION(5e-2)
 	TEST_REAL_EQUAL(amber94.getEnergy(), -91.2239)
 	TEST_REAL_EQUAL(amber94.getRMSGradient(), 41.7585)
 	TEST_REAL_EQUAL(amber94.getStretchEnergy(), 3.754722)
@@ -196,8 +192,7 @@ CHECK(force test 1 (Torsion) [AMBER94])
 	amber94.updateEnergy();
 	amber94.updateForces();
 
-	#undef PRECISION
-	#define PRECISION 1e-12
+	PRECISION(1e-12)
 	AtomIterator it = s.beginAtom();
 	for (; +it; ++it)
 	{
@@ -248,8 +243,7 @@ CHECK(force test 2: ES switching function [AMBER91/CDIEL])
 
 	// calculate the differential quotient of
 	// the energy and compare it to the force
-	#undef PRECISION
-	#define PRECISION 10
+	PRECISION(10)
 	for (double d = 1.5; d <= 4.5; d += 0.01)
 	{
 		// move the atom to the new position
@@ -296,8 +290,7 @@ CHECK(force test 3: ES switching function [AMBER91/RDIEL])
 
 	// calculate the differential quotient of
 	// the energy and compare it to the force
-	#undef PRECISION
-	#define PRECISION 3
+	PRECISION(3)
 	for (double d = 1.5; d <= 4.5; d += 0.01)
 	{
 		// move the atom to the new position
@@ -343,8 +336,7 @@ CHECK(force test 4: VdW switching function [AMBER91])
 
 	// calculate the differential quotient of
 	// the energy and compare it to the force
-	#undef PRECISION
-	#define PRECISION 0.01
+	PRECISION(0.01)
 	for (double d = 3.5; d <= 6.5; d += 0.01)
 	{
 		// move the atom to the new position

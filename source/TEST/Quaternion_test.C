@@ -1,4 +1,4 @@
-// $Id: Quaternion_test.C,v 1.4 2000/03/17 10:46:50 oliver Exp $
+// $Id: Quaternion_test.C,v 1.5 2000/05/23 10:23:47 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/quaternion.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Quaternion_test.C,v 1.4 2000/03/17 10:46:50 oliver Exp $")
+START_TEST(class_name, "$Id: Quaternion_test.C,v 1.5 2000/05/23 10:23:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -18,8 +18,7 @@ Vector3 const v = Vector3(1.0, 2.0, 3.0);
 String filename;
 using std::ofstream;
 using std::ios;
-#undef PRECISION
-#define PRECISION 1E-4
+PRECISION(1E-4)
 
 //line43: method TQuaternion::BALL_CREATE(TQuaternion<T>)
 CHECK(TQuaternion::BALL_CREATE(TQuaternion<T>))

@@ -1,4 +1,4 @@
-// $Id: AnalyticalSES_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: AnalyticalSES_test.C,v 1.2 2000/05/23 10:23:45 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #include <BALL/KERNEL/fragment.h>
 ///////////////////////////
 
-START_TEST(AnalyticalSES, "$Id: AnalyticalSES_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $")
+START_TEST(AnalyticalSES, "$Id: AnalyticalSES_test.C,v 1.2 2000/05/23 10:23:45 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -25,9 +25,7 @@ f.insert(a2);
 
 float area = calculateSESArea(f, 1.5);
 
-#undef PRECISION
-#define PRECISION 0.001
-
+PRECISION(0.001)
 TEST_REAL_EQUAL(area, 25.13274)
 
 a2.setPosition(Vector3(1.0, 0.0, 0.0));

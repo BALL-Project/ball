@@ -1,4 +1,4 @@
-// $Id: Angle_test.C,v 1.10 2000/03/17 14:23:58 amoll Exp $
+// $Id: Angle_test.C,v 1.11 2000/05/23 10:23:45 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Angle_test.C,v 1.10 2000/03/17 14:23:58 amoll Exp $")
+START_TEST(class_name, "$Id: Angle_test.C,v 1.11 2000/05/23 10:23:45 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -17,8 +17,7 @@ using namespace BALL;
 String filename;
 using std::ofstream;
 using std::ios;
-#undef PRECISION
-#define PRECISION 1E-5
+PRECISION(1E-5)
 
 //line
 CHECK(TAngle::TAngle())

@@ -1,4 +1,4 @@
-// $Id: NumericalSAS_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: NumericalSAS_test.C,v 1.2 2000/05/23 10:23:46 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #include <BALL/KERNEL/fragment.h>
 ///////////////////////////
 
-START_TEST(NumericalSAS, "$Id: NumericalSAS_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $")
+START_TEST(NumericalSAS, "$Id: NumericalSAS_test.C,v 1.2 2000/05/23 10:23:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -25,9 +25,7 @@ f.insert(a2);
 
 float area = calculateNumericalSASArea(f, 1.5, 624);
 
-#undef PRECISION
-#define PRECISION 0.001
-
+PRECISION(0.001)
 TEST_REAL_EQUAL(area, 157.07963)
 RESULT
 

@@ -1,4 +1,4 @@
-// $Id: Matrix44_test.C,v 1.10 2000/05/06 00:47:48 amoll Exp $
+// $Id: Matrix44_test.C,v 1.11 2000/05/23 10:23:46 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <math.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Matrix44_test.C,v 1.10 2000/05/06 00:47:48 amoll Exp $")
+START_TEST(class_name, "$Id: Matrix44_test.C,v 1.11 2000/05/23 10:23:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -21,9 +21,8 @@ using namespace BALL;
 String filename;
 using std::ofstream;
 using std::ios;
-#undef PRECISION
-#define PRECISION 1E-5
-Constants::EPSILON = PRECISION;
+PRECISION(1E-5)
+Constants::EPSILON = TEST::precision;
 
 //line 60: method TMatrix4x4::BALL_CREATE(TMatrix4x4)
 CHECK(TMatrix4x4::BALL_CREATE(TMatrix4x4))

@@ -166,8 +166,8 @@ MathsCommon_test:	MathsCommon_test.o
 Matrix44_test:	Matrix44_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
-MOL2File_test:	MOL2File_test.o
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+MOL2File_test:	MOL2File_test.o ../FORMAT/MOL2File.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o ../FORMAT/MOL2File.o $(LIBS)
 
 Molecule_test:	Molecule_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
