@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.16 2000/05/05 12:12:17 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.17 2000/05/20 13:33:33 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -430,6 +430,20 @@ namespace BALL
 		// the dielectric constants
 		float solvent_dielectric_constant = options.getReal(Option::SOLVENT_DC);
 		float solute_dielectric_constant = options.getReal(Option::SOLUTE_DC);
+		
+		// check for validity (DC >= 1.0)
+		if (solvent_dielectric_constant < 1.0)
+		{
+			Log.error() << "FDPB::setupEpsGrid: error: solvent dielectric constant cannot be lower than 1.0 (" 
+									<< solvent_dielectric_constant << " was given)" << endl;
+			return false;
+		}
+		if (solute_dielectric_constant < 1.0)
+		{
+			Log.error() << "FDPB::setupEpsGrid: error: solute dielectric constant cannot be lower than 1.0 (" 
+									<< solute_dielectric_constant << " was given)" << endl;
+			return false;
+		}
 		
 
 		// now, create a new grid containing the dielectric constant of each grid point
