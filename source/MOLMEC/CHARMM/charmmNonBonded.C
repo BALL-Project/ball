@@ -1,11 +1,11 @@
-// $Id: charmmNonBonded.C,v 1.7 2000/03/26 12:55:03 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.8 2000/03/28 07:53:14 oliver Exp $
 
-#include <BALL/COMMON/limits.h>
-#include <BALL/KERNEL/PSE.h>
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/MOLMEC/COMMON/support.h>
+#include <BALL/COMMON/limits.h>
+#include <BALL/KERNEL/PSE.h>
 
 
 // define square function
