@@ -1,11 +1,12 @@
-// $Id: NucleicAcid_test.C,v 1.3 2000/05/11 13:34:51 amoll Exp $
+// $Id: NucleicAcid_test.C,v 1.4 2000/05/11 23:10:25 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/KERNEL/nucleicAcid.h>
+#include <BALL/KERNEL/nucleotide.h>
 ///////////////////////////
 
-START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.3 2000/05/11 13:34:51 amoll Exp $")
+START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.4 2000/05/11 23:10:25 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -212,7 +213,15 @@ CHECK(NucleicAcid::isValid())
 RESULT
 
 CHECK(NucleicAcid::dump(ostream&, Size))
-//BAUSTELLE
+	NucleicAcid na1("NA1");
+	Nucleotide n1("N1");
+	na1.insert(n1);
+	String filename;
+	NEW_TMP_FILE(filename)
+	std::ofstream outfile(filename.c_str(), ios::out);
+	na1.dump(outfile);
+	outfile.close();
+	TEST_FILE(filename.c_str(), "data/NucleicAcid_test.txt", true)
 RESULT
 
 CHECK(NucleicAcid::read(istream&))
