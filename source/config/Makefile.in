@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.26 2002/01/26 22:04:05 oliver Exp $
+# $Id: Makefile.in,v 1.27 2003/01/29 11:34:07 anker Exp $
 #
 
 include config.mak
@@ -130,7 +130,7 @@ delete.shared:
 depend:
 	@$(ECHO) "creating dependencies..."
 	@$(ECHO) "" >.Dependencies
-	@for i in $(DIRS) TEST BENCHMARKS APPLICATIONS/MOLVIEW APPLICATIONS/PB APPLICATIONS/AMBER APPLICATIONS/NMRVIEW; do ( cd $$i; echo "" >.Dependencies; cd .. ) ; done
+	@for i in $(DIRS) TEST BENCHMARKS APPLICATIONS/MOLVIEW APPLICATIONS/PB APPLICATIONS/AMBER APPLICATIONS/NMRVIEW APPLICATIONS/UTILITIES; do ( cd $$i; echo "" >.Dependencies; cd .. ) ; done
 	@set -e; for i in $(DIRS) TEST BENCHMARKS ; do ( cd $$i; $(MAKE) depend; cd .. ) ; done
 
 
