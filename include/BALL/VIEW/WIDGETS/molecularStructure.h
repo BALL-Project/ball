@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.3 2004/02/18 11:47:30 bender Exp $
+// $Id: molecularStructure.h,v 1.4 2004/02/18 17:14:13 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
 #define BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -240,6 +240,15 @@ class MolecularStructure
 	///
 	void showCharmmForceFieldOptions();
 	
+	///
+	void chooseAmberFF();
+
+	///
+	void chooseCharmmFF();
+		
+	///
+	void setupForceField();
+		
 	//@}
 	
 private:
@@ -264,7 +273,9 @@ private:
 				amber_minimization_id_,
 				amber_mdsimulation_id_,
 				build_peptide_id_,
-				calculate_hbonds_id_;
+				calculate_hbonds_id_,
+				amber_ff_id_,
+				charmm_ff_id_;
 	
 	bool use_amber_;
 	Vector3 										view_center_vector_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.13 2004/02/18 16:38:19 amoll Exp $
+// $Id: molecularStructure.C,v 1.14 2004/02/18 17:13:59 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -103,6 +103,21 @@ namespace BALL
 		hint = "To perform a MD simulation , first select the molecular structures.";
 		amber_mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", this, 
 															SLOT(amberMDSimulation()), CTRL+Key_D, MainControl::MOLECULARMECHANICS + 11, hint);
+
+		// Molecular Mechanics Menu
+		(main_control.initPopupMenu(MainControl::CHOOSE_FF))->setCheckable(true);
+		hint = "Use Amber Force Field";
+		amber_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Amber", this, SLOT(chooseAmberFF()),0,-1,hint);
+		menuBar()->setItemChecked(amber_ff_id_, true);
+		menuBar()->setItemChecked(charmm_ff_id_, true);
+		
+		hint = "Use Charmm Force Field";
+		charmm_ff_id_ = insertMenuEntry(MainControl::CHOOSE_FF, "Charmm", this, 
+											SLOT(chooseCharmmFF()),0,-1, hint);
+
+		hint = "Setup Force Field";
+		insertMenuEntry(MainControl::MOLECULARMECHANICS, "Setup Force Field", this, 
+											SLOT(setupForceField()),0,-1, hint);
 
 		// Tools Menu -------------------------------------------------------------------
 		getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
@@ -1237,6 +1252,32 @@ namespace BALL
 			use_amber_ = false;
 			md_dialog_.setForceField(false);
 			minimization_dialog_.setForceField(false);
+		}
+	}
+
+	void MolecularStructure::chooseAmberFF()
+	{
+		use_amber_ = true;
+		menuBar()->setItemChecked(charmm_ff_id_, false);
+		menuBar()->setItemChecked(amber_ff_id_, true);
+	}
+	
+	void MolecularStructure::chooseCharmmFF()
+	{
+		use_amber_ = false;
+		menuBar()->setItemChecked(amber_ff_id_, false);
+		menuBar()->setItemChecked(charmm_ff_id_, true);
+	}
+
+	void MolecularStructure::setupForceField()
+	{
+		if (use_amber_)
+		{
+			showAmberForceFieldOptions();
+		}
+		else
+		{
+			showCharmmForceFieldOptions();
 		}
 	}
 

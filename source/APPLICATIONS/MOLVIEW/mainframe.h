@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.64 2004/02/18 11:45:11 bender Exp $
+// $Id: mainframe.h,v 1.65 2004/02/18 17:14:24 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -90,9 +90,6 @@ namespace BALL
 			MENU_FULLSCREEN,
 			MENU_CONTOUR_SURFACE,
 
-			MENU_CHOOSEAMBERFF,
-			MENU_CHOOSECHARMMFF,
-
 			MENU__HELP_ABOUT
 		};
 
@@ -121,10 +118,6 @@ namespace BALL
 		void computeIsoContourSurface();
 		void toggleFullScreen();
 
-		// MolecularMechanics Menu
-		void choose_AmberFF();
-		void choose_CharmmFF();
-		
 		// Help menu
 		void about();
 
