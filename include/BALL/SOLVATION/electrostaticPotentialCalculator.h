@@ -1,4 +1,4 @@
-// $Id: electrostaticPotentialCalculator.h,v 1.2 2002/12/12 09:48:54 oliver Exp $
+// $Id: electrostaticPotentialCalculator.h,v 1.3 2002/12/18 14:01:43 amoll Exp $
 
 #ifndef BALL_SOLVATION_ELECTROSTATICPOTENTIALCALCULATOR_H
 #define BALL_SOLVATION_ELECTROSTATICPOTENTIALCALCULATOR_H
@@ -78,7 +78,7 @@ namespace BALL
 
 		/** Destructor.
 		 */
-		~ElectrostaticPotentialCalculator()
+		virtual ~ElectrostaticPotentialCalculator()
 			throw();
 		//@}
 		
