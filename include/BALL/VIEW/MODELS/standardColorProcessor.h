@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.3 2003/08/29 10:36:42 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -16,9 +16,6 @@
 
 namespace BALL
 {
-	using VIEW::ColorProcessor;
-	using VIEW::ColorRGBA;
-
 	namespace VIEW
 	{
 		/** ElementColorProcessor class.
@@ -28,7 +25,7 @@ namespace BALL
 				corresponding to the element symbols of atoms, is initialised.
 				The ColorProcessor can be set in the class DisplayProperties
 				to color an entire molecular object in its element colors. 
-				\ingroup  MolviewModels
+				\ingroup  ViewModels
 		*/
 		class ElementColorProcessor
 			: public ColorProcessor
@@ -55,7 +52,7 @@ namespace BALL
 				(A residue color of a given atom is the color of the residue the atom is contained in).
 				In the constructor a ColorMap is initialized that contains all colors
 				corresponding to the names of the residues.
-				\ingroup  MolviewModels
+				\ingroup  ViewModels
 		*/
 		class ResidueNameColorProcessor
 			: public ColorProcessor
@@ -104,7 +101,7 @@ namespace BALL
 				is greater than +1 or lower than -1 it will be set to +1 or -1.
 				The ColorProcessor can be set in the class DisplayProperties
 				to color an entire object in its atom charge colors. 
-				\ingroup  MolviewModels
+				\ingroup  ViewModels
 		*/
 		class AtomChargeColorProcessor
 			: public ColorProcessor
@@ -243,7 +240,7 @@ namespace BALL
 				If a distance of an Atom object to another atom object (stored in different
 				atom containers) lies between the null and the max distance, the resulting 
 				color will be interpolated according to the distance.
-				\ingroup  MolviewModels
+				\ingroup  ViewModels
 		*/
 		class AtomDistanceColorProcessor
 			:  public ColorProcessor
@@ -427,7 +424,7 @@ namespace BALL
 				ColorProcessor::getColor. 
 				The ColorProcessor can be set in the class DisplayProperties to color 
 				an entire object in one color.
-				\ingroup  MolviewModels
+				\ingroup  ViewModels
 		*/
 		typedef ColorProcessor CustomColorProcessor;
 

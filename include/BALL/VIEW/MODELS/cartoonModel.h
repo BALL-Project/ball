@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.2 2003/08/26 18:35:33 amoll Exp $
+// $Id: cartoonModel.h,v 1.3 2003/08/29 10:36:41 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
 #define BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -19,8 +19,6 @@ namespace BALL
 	class SecondaryStructure;
 	class Chain;
 
-	using VIEW::Mesh;
-	
 	namespace VIEW
 	{
 		/** AddCartoonModel class.
@@ -28,7 +26,7 @@ namespace BALL
 				through the <b>CA</b>-atoms of the processed Composite object.
 				For information about the processor concept see Processor in the BALL
 				documentation.
-				\ingroup  MolviewModels
+				\ingroup  ViewModels
 		*/
 		class AddCartoonModel: public AddBackboneModel
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.2 2003/08/26 18:35:33 amoll Exp $
+// $Id: backboneModel.h,v 1.3 2003/08/29 10:36:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -24,18 +24,14 @@ namespace BALL
 	class Atom;
 	class Composite;
 
-	using VIEW::ColorRGBA;
-	
 	namespace VIEW
 	{
-		class Backbone;
-
 		/** AddBackboneModel class.
 				The class AddBackboneModel is a model processor that creates a backbone model
 				through the <b>CA</b>-atoms of the processed Composite object.
 				For information about the processor concept see Processor in the BALL
 				documentation.
-				\ingroup  MolviewModels
+				\ingroup  ViewModels
 		*/
 		class AddBackboneModel: public MolecularModelProcessor
 		{
@@ -179,7 +175,6 @@ namespace BALL
 		};
 
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_MODELS_BACKBONEMODEL_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
+// $Id: vanDerWaalsModel.h,v 1.3 2003/08/29 10:36:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_VANDERWAALSMODEL_H
@@ -19,13 +19,11 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		using VIEW::Sphere;
-
 		/** AddVanDerWaalsModel class.
 				AddVanDerWaalsModel is a model processor that is responsible
 				for creating a <b>Van der Waals</b> model.
 				For information about the processor concept see Processor.
-				\ingroup  MolviewModels
+				\ingroup  ViewModels
 		*/
 		class AddVanDerWaalsModel: public AtomBondModelBaseProcessor
 		{

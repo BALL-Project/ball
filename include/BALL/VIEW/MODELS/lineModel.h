@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.h,v 1.2 2003/08/26 18:35:33 amoll Exp $
+// $Id: lineModel.h,v 1.3 2003/08/29 10:36:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_LINEMODEL_H
@@ -20,7 +20,7 @@ namespace BALL
 				The class AddLineModel is a model processor that is responsible
 				for creating a line model.
 				For information about the processor concept see Processor.
-				\ingroup  MolviewModels
+				\ingroup  ViewModels
 		*/
 		class AddLineModel: public AtomBondModelBaseProcessor
 		{

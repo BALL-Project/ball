@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: objectSelector.h,v 1.2 2003/08/26 15:26:42 amoll Exp $
+// $Id: objectSelector.h,v 1.3 2003/08/29 10:36:40 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_OBJECTSELECTOR_H
 #define BALL_VIEW_KERNEL_OBJECTSELECTOR_H
@@ -25,7 +25,7 @@ namespace BALL
 				
 				@see  Selectable
     		
-				\ingroup  MolviewFunctorsModels
+				\ingroup  ViewFunctorsModels
 		*/
 		class ObjectSelector: public UnaryProcessor<Composite>
 		{

@@ -32,7 +32,7 @@ namespace BALL
 				The class LabelDialogData contains the definition of the layout of
 				this dialog and is therefore not necessary for understanding.  \par
 				
-    		\ingroup  MolviewDialogs
+    		\ingroup  ViewDialogs
 		*/
 		class LabelDialog : 
 			public LabelDialogData,

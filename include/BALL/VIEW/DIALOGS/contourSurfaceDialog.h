@@ -14,7 +14,7 @@ namespace BALL
    {
 
 /** ContourSurfaceDialog
-    \ingroup  MolviewDialogs
+    \ingroup  ViewDialogs
  */
 class ContourSurfaceDialog 
 	: public ContourSurfaceDialogData

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.2 2003/08/26 18:35:33 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.3 2003/08/29 10:36:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
@@ -29,10 +29,6 @@ namespace BALL
 
 	namespace VIEW
 	{
-		using VIEW::Sphere;
-		using VIEW::Tube;
-		using VIEW::TwoColoredTube;
-
 		/** AddBallAndStickModel class.
 				The class AddBallAndStickModel is a model processor that is responsible
 				for creating either a <b>ball and stick</b> model or a <b>stick</b> model.
@@ -42,7 +38,7 @@ namespace BALL
 				the radi of the ball and the stick components are equal.
 				For information about the processor concept see Processor in the BALL
 				documentation. 
-				\ingroup  MolviewModels
+				\ingroup  ViewModels
 		*/
 		class AddBallAndStickModel: public AtomBondModelBaseProcessor
 		{

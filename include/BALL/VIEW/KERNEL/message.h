@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.22 2003/08/26 15:26:42 amoll Exp $
+// $Id: message.h,v 1.23 2003/08/29 10:36:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -626,7 +626,7 @@ namespace BALL
 				accepting  \link NewCompositeMessage NewCompositeMessage \endlink  object would also accept 
 				 \link NewMolecularMessage NewMolecularMessage \endlink  objects and that is not allowed.  \par
 				
-    		\ingroup  MolviewKernel
+    		\ingroup  ViewKernel
 		*/
 		class NewMolecularMessage: public CompositeMessage
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseModelConnector.h,v 1.2 2003/08/26 18:35:33 amoll Exp $
+// $Id: baseModelConnector.h,v 1.3 2003/08/29 10:36:41 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BASEMODELCONNECTOR_H
@@ -32,12 +32,6 @@ namespace BALL
 	namespace VIEW
 	{
 		class ColorProcessor;
-	}
-
-	namespace VIEW
-	{
-		using VIEW::GeometricObject;
-		using VIEW::ColorProcessor;
 
 		/** BaseModelConnector class.
 				The class BaseModelConnector is derived from Visitor and
@@ -48,7 +42,7 @@ namespace BALL
 				between different types of models.
 				If a new model is introduced the model connector class must be extended to deal with this
 				new model and its connections to the other models.
-				\ingroup  MolviewModels
+				\ingroup  ViewModels
 		*/
 		class BaseModelConnector
 			: public Visitor<Composite>,

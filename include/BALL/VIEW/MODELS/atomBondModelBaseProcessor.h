@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.2 2003/08/26 18:35:32 amoll Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.3 2003/08/29 10:36:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
@@ -47,7 +47,7 @@ namespace BALL
 				that all Bond objects can get their connecting models. This is
 				achieved by the class BaseModelConnector and its derived
 				classes. 
-				\ingroup  MolviewModels
+				\ingroup  ViewModels
 		*/
 		class AtomBondModelBaseProcessor
 			:	public MolecularModelProcessor

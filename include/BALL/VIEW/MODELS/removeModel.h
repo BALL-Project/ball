@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: removeModel.h,v 1.2 2003/08/26 18:35:34 amoll Exp $
+// $Id: removeModel.h,v 1.3 2003/08/29 10:36:42 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_REMOVEMODEL_H
 #define BALL_VIEW_MODELS_REMOVEMODEL_H
@@ -22,7 +22,7 @@ namespace BALL
 				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL
 				documentation.  \par
 				
-    		\ingroup  MolviewModels
+    		\ingroup  ViewModels
 		*/
 		class RemoveModel: 
 			public AtomBondModelBaseProcessor,

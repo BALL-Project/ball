@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelConnector.h,v 1.2 2003/08/26 18:35:33 amoll Exp $
+// $Id: atomBondModelConnector.h,v 1.3 2003/08/29 10:36:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELCONNECTOR_H
@@ -27,11 +27,6 @@
 #	include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #endif
 
-using BALL::VIEW::Line;
-using BALL::VIEW::Tube;
-using BALL::VIEW::TwoColoredLine;
-using BALL::VIEW::TwoColoredTube;
-
 namespace BALL
 {
 	class Atom;
@@ -44,7 +39,7 @@ namespace BALL
 				This class connects different models with each other.
 				The connector model is used for the Bond objects between the various models
 				of the adjacent Atom objects.
-				\ingroup  MolviewModels
+				\ingroup  ViewModels
 		*/
 		class AtomBondModelConnector
 			: public BaseModelConnector

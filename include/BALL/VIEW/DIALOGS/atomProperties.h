@@ -16,7 +16,7 @@ namespace BALL
 	{
 
 /** AtomProperties
-    \ingroup  MolviewDialogs
+    \ingroup  ViewDialogs
 */
 class AtomProperties : public AtomPropertiesData
 { 
