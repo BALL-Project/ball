@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.C,v 1.7 2004/03/24 19:57:32 anne Exp $
+// $Id: secondaryStructureProcessor.C,v 1.8 2004/11/19 14:53:44 anne Exp $
 //
 
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
@@ -39,8 +39,6 @@ namespace BALL
 		{
 			sheet[i]='-';
 		}
-		//bridge1   = sheet;
-		//bridge2  	= sheet;
 		Fiveturn  = sheet;
 		Fourturn  = sheet;
 		Threeturn = sheet;
@@ -361,20 +359,6 @@ namespace BALL
 			}//if(sheet[residue]!='-'
 		}//for(Size residue = 0 ....		
 			
-		String s1(&(summary[0]), 0, summary.size());
-		String s2(&(Threeturn[0]), 0, Threeturn.size());
-		String s3(&(Fourturn[0]), 0, Fourturn.size());
-		String s4(&(Fiveturn[0]), 0, Fiveturn.size());
-		String s5(&(sheet[0]), 0, sheet.size());
-		
-/**		std::cout << "-----------turns and Bridges and ladders --------------------------------------" << std::endl;
-		std::cout << "summary   "<< s1 << std::endl;
-		std::cout << "Threeturn " << s2 << std::endl;
-		std::cout << "Fourturn  "<< s3 << std::endl;
-		std::cout << "Fiveturn  " << s4 << std::endl;
-		std::cout << "sheet     " << s5 << std::endl;
-	*/
-
 		
 		//
 		// now we are looking for sheets
@@ -400,21 +384,6 @@ namespace BALL
 			}
 		}
 		
-		s1.set(&(summary[0]), 0, summary.size());
-		s2.set(&(Threeturn[0]), 0, Threeturn.size());
-		s3.set(&(Fourturn[0]), 0, Fourturn.size());
-		s4.set(&(Fiveturn[0]), 0, Fiveturn.size());
-		s5.set(&(sheet[0]), 0, sheet.size());
-		
-
-	/**
-		std::cout << "----------- all ----------------------------------------" << std::endl;
-		std::cout << "summary   "<< s1 << std::endl;
-		std::cout << "Threeturn " << s2 << std::endl;
-		std::cout << "Fourturn  "<< s3 << std::endl;
-		std::cout << "Fiveturn  " << s4 << std::endl;
-		std::cout << "sheet     " << s5 << std::endl;
-		*/
 	
 		// /***********************************
 		//  * now we repair the irregularities
@@ -433,15 +402,15 @@ namespace BALL
 			int length = 5;
 			int turn = 3;
 			if((   (i+2+length) < size)  
-				  && (   hasPrefix(">>", i, Threeturn)
-				 			|| hasPrefix("XX", i, Threeturn)
-				 			|| hasPrefix(">X", i, Threeturn)
-				 			|| hasPrefix("X>", i, Threeturn) 
+				  && (   Threeturn.getSubstring(i).toString().hasPrefix(">>")
+				 			|| Threeturn.getSubstring(i).toString().hasPrefix("XX")
+				 			|| Threeturn.getSubstring(i).toString().hasPrefix(">X")
+				 			|| Threeturn.getSubstring(i).toString().hasPrefix("X>") 
 						 )
-					&& (   hasPrefix(">>", i+3, Threeturn)
-				 			|| hasPrefix("XX", i+3, Threeturn)
-				 			|| hasPrefix(">X", i+3, Threeturn)
-				 			|| hasPrefix("X>", i+3, Threeturn) 
+					&& (   Threeturn.getSubstring(i+3).toString().hasPrefix(">>")
+				 			|| Threeturn.getSubstring(i+3).toString().hasPrefix("XX")
+				 			|| Threeturn.getSubstring(i+3).toString().hasPrefix(">X")
+				 			|| Threeturn.getSubstring(i+3).toString().hasPrefix("X>") 
 						 )	
 					&& ((Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
 				)
@@ -451,15 +420,15 @@ namespace BALL
 			
 			// offset three turns	
 			if((   (i+3+length) < size)  
-				  && (   hasPrefix(">>", i, Threeturn)
-				 			|| hasPrefix("XX", i, Threeturn)
-				 			|| hasPrefix(">X", i, Threeturn)
-				 			|| hasPrefix("X>", i, Threeturn) 
+				  && (   Threeturn.getSubstring(i).toString().hasPrefix(">>")
+				 			|| Threeturn.getSubstring(i).toString().hasPrefix("XX")
+				 			|| Threeturn.getSubstring(i).toString().hasPrefix(">X")
+				 			|| Threeturn.getSubstring(i).toString().hasPrefix("X>") 
 						 )
-					&& (   hasPrefix(">>", i+4, Threeturn)
-				 			|| hasPrefix("XX", i+4, Threeturn)
-				 			|| hasPrefix(">X", i+4, Threeturn)
-				 			|| hasPrefix("X>", i+4, Threeturn) 
+					&& (   Threeturn.getSubstring(i+4).toString().hasPrefix(">>")
+				 			|| Threeturn.getSubstring(i+4).toString().hasPrefix("XX")
+				 			|| Threeturn.getSubstring(i+4).toString().hasPrefix(">X")
+				 			|| Threeturn.getSubstring(i+4).toString().hasPrefix("X>") 
 						 )
 					&& ( (Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
 					&& ( (Fourturn[i+3]!= '>') && (Fourturn[i+3]!='X')  )
@@ -480,15 +449,15 @@ namespace BALL
 			int length = 6;
 			int turn = 4;			
 			if((   (i+2+length) < size)  
-				  && (   hasPrefix(">>", i, Fourturn)
-				 			|| hasPrefix("XX", i, Fourturn)
-				 			|| hasPrefix(">X", i, Fourturn)
-				 			|| hasPrefix("X>", i, Fourturn) 
+				  && (   Fourturn.getSubstring(i).toString().hasPrefix(">>")
+				 			|| Fourturn.getSubstring(i).toString().hasPrefix("XX")
+				 			|| Fourturn.getSubstring(i).toString().hasPrefix(">X")
+				 			|| Fourturn.getSubstring(i).toString().hasPrefix("X>") 
 						 )
-					&& (   hasPrefix(">>", i+3, Fourturn)
-				 			|| hasPrefix("XX", i+3, Fourturn)
-				 			|| hasPrefix(">X", i+3, Fourturn)
-				 			|| hasPrefix("X>", i+3, Fourturn) 
+					&& (   Fourturn.getSubstring(i+3).toString().hasPrefix(">>")
+				 			|| Fourturn.getSubstring(i+3).toString().hasPrefix("XX")
+				 			|| Fourturn.getSubstring(i+3).toString().hasPrefix(">X")
+				 			|| Fourturn.getSubstring(i+3).toString().hasPrefix("X>") 
 						 )
 					&& ((Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
 				)
@@ -497,15 +466,15 @@ namespace BALL
 			}		
 			// offset three turns	
 			if((   (i+3+length) < size)  
-				  && (   hasPrefix(">>", i, Fourturn)
-				 			|| hasPrefix("XX", i, Fourturn)
-				 			|| hasPrefix(">X", i, Fourturn)
-				 			|| hasPrefix("X>", i, Fourturn) 
+				  && (   Fourturn.getSubstring(i).toString().hasPrefix(">>")
+				 			|| Fourturn.getSubstring(i).toString().hasPrefix("XX")
+				 			|| Fourturn.getSubstring(i).toString().hasPrefix(">X")
+				 			|| Fourturn.getSubstring(i).toString().hasPrefix("X>") 
 						 )
-					&& (   hasPrefix(">>", i+4, Fourturn)
-				 			|| hasPrefix("XX", i+4, Fourturn)
-				 			|| hasPrefix(">X", i+4, Fourturn)
-				 			|| hasPrefix("X>", i+4, Fourturn) 
+					&& (   Fourturn.getSubstring(i+4).toString().hasPrefix(">>")
+				 			|| Fourturn.getSubstring(i+4).toString().hasPrefix("XX")
+				 			|| Fourturn.getSubstring(i+4).toString().hasPrefix(">X")
+				 			|| Fourturn.getSubstring(i+4).toString().hasPrefix("X>") 
 						 )
 					&& ( (Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
 					&& ( (Fourturn[i+3]!= '>') && (Fourturn[i+3]!='X')  )
@@ -527,15 +496,15 @@ namespace BALL
 			int length = 7;
 			int turn = 5;			
 			if((   (i+2+length) < size)  
-				  && (   hasPrefix(">>", i, Fiveturn)
-				 			|| hasPrefix("XX", i, Fiveturn)
-				 			|| hasPrefix(">X", i, Fiveturn)
-				 			|| hasPrefix("X>", i, Fiveturn) 
+				  && (   Fiveturn.getSubstring(i).toString().hasPrefix(">>")
+				 			|| Fiveturn.getSubstring(i).toString().hasPrefix("XX")
+				 			|| Fiveturn.getSubstring(i).toString().hasPrefix(">X")
+				 			|| Fiveturn.getSubstring(i).toString().hasPrefix("X>") 
 						 )
-					&& (   hasPrefix(">>", i+3, Fiveturn)
-				 			|| hasPrefix("XX", i+3, Fiveturn)
-				 			|| hasPrefix(">X", i+3, Fiveturn)
-				 			|| hasPrefix("X>", i+3, Fiveturn) 
+					&& (   Fiveturn.getSubstring(i+3).toString().hasPrefix(">>")
+				 			|| Fiveturn.getSubstring(i+3).toString().hasPrefix("XX")
+				 			|| Fiveturn.getSubstring(i+3).toString().hasPrefix(">X")
+				 			|| Fiveturn.getSubstring(i+3).toString().hasPrefix("X>") 
 						 )
 					&& ( (Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
 				)
@@ -544,15 +513,15 @@ namespace BALL
 			}		
 			// offset three turns	
 			if((   (i+3+length) < size)  
-				  && (   hasPrefix(">>", i, Fiveturn)
-				 			|| hasPrefix("XX", i, Fiveturn)
-				 			|| hasPrefix(">X", i, Fiveturn)
-				 			|| hasPrefix("X>", i, Fiveturn) 
+				  && (   Fiveturn.getSubstring(i).toString().hasPrefix(">>")
+				 			|| Fiveturn.getSubstring(i).toString().hasPrefix("XX")
+				 			|| Fiveturn.getSubstring(i).toString().hasPrefix(">X")
+				 			|| Fiveturn.getSubstring(i).toString().hasPrefix("X>") 
 						 )
-					&& (   hasPrefix(">>", i+4, Fiveturn)
-				 			|| hasPrefix("XX", i+4, Fiveturn)
-				 			|| hasPrefix(">X", i+4, Fiveturn)
-				 			|| hasPrefix("X>", i+4, Fiveturn) 
+					&& (   Fiveturn.getSubstring(i+4).toString().hasPrefix(">>")
+				 			|| Fiveturn.getSubstring(i+4).toString().hasPrefix("XX")
+				 			|| Fiveturn.getSubstring(i+4).toString().hasPrefix(">X")
+				 			|| Fiveturn.getSubstring(i+4).toString().hasPrefix("X>") 
 						 )
 					&& ( (Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
 					&& ( (Fourturn[i+3]!= '>') && (Fourturn[i+3]!='X')  )
@@ -563,19 +532,6 @@ namespace BALL
 			}			
 		}	
    
-    s1.set(&(summary[0]), 0, summary.size());
-		s2.set(&(Threeturn[0]), 0, Threeturn.size());
-		s3.set(&(Fourturn[0]), 0, Fourturn.size());
-		s4.set(&(Fiveturn[0]), 0, Fiveturn.size());
-		s5.set(&(sheet[0]), 0, sheet.size());
-		
-/**		std::cout << "---------------------repaired turns----------------------------------" << std::endl;
-		std::cout << "summary   "<< s1 << std::endl;
-		std::cout << "Threeturn " << s2 << std::endl;
-		std::cout << "Fourturn  "<< s3 << std::endl;
-		std::cout << "Fiveturn  " << s4 << std::endl;
-		std::cout << "Sheet     " << s5 << std::endl;
-*/
 		
 		// /*****************************************************
 		// *
@@ -601,10 +557,10 @@ namespace BALL
 			{
 				summary[i]= '-';
 			}
-			else if(   (hasPrefix(">>", i, Fiveturn))		 
-	    	      || (hasPrefix(">X", i, Fiveturn))
-				      || (hasPrefix("X>", i, Fiveturn))
-				      || (hasPrefix("XX", i, Fiveturn))
+			else if(   (Fiveturn.getSubstring(i).toString().hasPrefix(">>"))		 
+	    	      || (Fiveturn.getSubstring(i).toString().hasPrefix(">X"))
+				      || (Fiveturn.getSubstring(i).toString().hasPrefix("X>"))
+				      || (Fiveturn.getSubstring(i).toString().hasPrefix("XX"))
 			     	 )  
 							
 			{
@@ -618,20 +574,15 @@ namespace BALL
 				}	
 			}// do we have a helix reduced to less than minimal size?
 			else if( //  ( ! hasPrefix("II", i, summary)) &&
-							   (  (hasPrefix(">5", i, Fiveturn))
-									||(hasPrefix("X5", i, Fiveturn)
-									||(hasPrefix("><", i, Fiveturn))
-									||(hasPrefix("X<", i, Fiveturn))				
+							   (  (Fiveturn.getSubstring(i).toString().hasPrefix(">5"))
+									||(Fiveturn.getSubstring(i).toString().hasPrefix("X5")
+									||(Fiveturn.getSubstring(i).toString().hasPrefix("><"))
+									||(Fiveturn.getSubstring(i).toString().hasPrefix("X<"))				
 								 ) 
 							)  ) 
 			{
 				for(int j=1; (j<5) && ((i+j)<summary.size()) && ((i+j)<Fiveturn.size()) ;j++)
 				{			
-					//if( (i+5) < size){				
-					//summary[i+1]= 'T';
-					//summary[i+2]= 'T';
-					//summary[i+3]= 'T';
-					//summary[i+4]= 'T';}
 					if(Fiveturn[i+j]!='I')
 					{
 						summary[i+j]= 'T';
@@ -643,10 +594,10 @@ namespace BALL
 		// -------------------3 helices ------------------------
 		for(Size i= 0; i<size; i++)
 		{
-			if(   (hasPrefix(">>", i, Threeturn))		 
-	    	 || (hasPrefix(">X", i, Threeturn))
-				 || (hasPrefix("X>", i, Threeturn))
-				 || (hasPrefix("XX", i, Threeturn))
+			if(   (Threeturn.getSubstring(i).toString().hasPrefix(">>"))		 
+	    	 || (Threeturn.getSubstring(i).toString().hasPrefix(">X"))
+				 || (Threeturn.getSubstring(i).toString().hasPrefix("X>"))
+				 || (Threeturn.getSubstring(i).toString().hasPrefix("XX"))
 				)  
 			{
 				if( (i+3) < size)
@@ -657,10 +608,10 @@ namespace BALL
 				}	
 			}// do we have a helix reduced to less than minimal size?
 			 // we have to consider, that we do not overwrite 
-			else if(   (hasPrefix(">3", i, Threeturn) )
-							|| (hasPrefix("X3", i, Threeturn) )
-							|| (hasPrefix("><", i, Threeturn))
-							|| (hasPrefix("X<", i, Threeturn))
+			else if(   (Threeturn.getSubstring(i).toString().hasPrefix(">3") )
+							|| (Threeturn.getSubstring(i).toString().hasPrefix("X3") )
+							|| (Threeturn.getSubstring(i).toString().hasPrefix("><"))
+							|| (Threeturn.getSubstring(i).toString().hasPrefix("X<"))
 						 )
 			{
 				if( (i+3) < summary.size())
@@ -715,10 +666,10 @@ namespace BALL
 		// ---------------- 4 helices ---------------------
 		for(Size i= 0; i<size; i++)
 		{
-			if(   (hasPrefix(">>", i, Fourturn))		 
-	    	 || (hasPrefix(">X", i, Fourturn))
-				 || (hasPrefix("X>", i, Fourturn))
-				 || (hasPrefix("XX", i, Fourturn))
+			if(   (Fourturn.getSubstring(i).toString().hasPrefix(">>"))		 
+	    	 || (Fourturn.getSubstring(i).toString().hasPrefix(">X"))
+				 || (Fourturn.getSubstring(i).toString().hasPrefix("X>"))
+				 || (Fourturn.getSubstring(i).toString().hasPrefix("XX"))
 				)  
 							
 			{
@@ -731,8 +682,8 @@ namespace BALL
 				}	
 			}// do we have a helix reduced to less than minimal size?
 			 // we have to consider, that we do not overwrite 
-			else if(   (hasPrefix(">4", i, Fourturn))
-						  || (hasPrefix("X4", i, Fourturn))
+			else if(   (Fourturn.getSubstring(i).toString().hasPrefix(">4"))
+						  || (Fourturn.getSubstring(i).toString().hasPrefix("X4"))
 						 )  
 			{
 							
@@ -805,26 +756,13 @@ namespace BALL
 				summary[i+3]='T';
 			}	
 		}
-	  s1.set(&(summary[0]), 0, summary.size());
-		s2.set(&(Threeturn[0]), 0, Threeturn.size());
-		s3.set(&(Fourturn[0]), 0, Fourturn.size());
-		s4.set(&(Fiveturn[0]), 0, Fiveturn.size());
-		s5.set(&(sheet[0]), 0, sheet.size());
-		
-/**		std::cout << "----------------------------------summary string-----" << std::endl;
-		std::cout << "summary   "<< s1 << std::endl;   std::cout << "1" << std::endl;
-		std::cout << "Threeturn " << s2 << std::endl;  std::cout << "2" << std::endl;
-		std::cout << "Fourturn  "<< s3 << std::endl;	 std::cout << "3" << std::endl;
-		std::cout << "Fiveturn  " << s4 << std::endl;	 std::cout << "4" << std::endl;
-		std::cout << "Sheet     " << s5 << std::endl;	 std::cout << "5" << std::endl;
-*/
 		
 	}
 	
 	void SecondaryStructureProcessor::insert_turn(int turn, int position)
 	{
 		bool correct = true;			
-		vector<char>* n_turn=0;			
+		String *n_turn;	
 		if(turn == 3)
 		{ 
 			n_turn = &Threeturn;
@@ -836,7 +774,7 @@ namespace BALL
 			n_turn = &Fiveturn;
 		}else 
 		{
-			correct = false;//TODO: Gute Fehlermeldung!! return;
+			correct = false;//TODO: Error message & return
 		}				
 		
 		if(correct)
@@ -871,7 +809,7 @@ namespace BALL
 	}
 
 	
-	void SecondaryStructureProcessor::change_all_X_to_Y(char X, char Y, vector<char>& target)
+	void SecondaryStructureProcessor::change_all_X_to_Y(char X, char Y, String& target)
 	{
 		for(Size i=0; i<target.size(); i++)
 		{
@@ -883,14 +821,6 @@ namespace BALL
 	}
 	
 	
-	bool SecondaryStructureProcessor::hasPrefix(const String& pattern, Size i, const vector<char>& target)
-	{
-		bool ret = false;			
-		String temp(&(target[0]), i, target.size()-i-1);
-		ret = temp.hasPrefix(pattern);
-		return ret;
-	}
-				
 /**********************************************
  *   determine the new Secondary Structure and
  *   replace the old one with the new one
@@ -999,118 +929,3 @@ namespace BALL
 	}
 
 } // namespace BALL
-
-
-/************************************
-   komplizierte, aber laufzeitfreundlichere Version evtl. nicht korrekt, 
-	 da sich Konstellationen nicht reproduzieren lassen! 
-
- 	// first we edit the 5 helices 
-		for(Size i= 0; i<size;i++)
-		{
-			// we initialize the summary string with '-'			
-			if(Fiveturn[i] == '-') 
-			{
-				summary[i]= '-';
-			}
-			if(   (hasPrefix("->>", i, Fiveturn)) 
-	    	 || (hasPrefix("<>>", i, Fiveturn)) )
-			{
-				if( (i+5) < size)
-				{
-					summary[i+1]= 'I';
-					summary[i+2]= 'I';
-					summary[i+3]= 'I';
-					summary[i+4]= 'I';
-					summary[i+5]= 'I';
-					i=i+2;
-				}	
-			}// do we have a helix reduced to less than minimal size?
-			else if( (hasPrefix("-<5", i, Fiveturn)) || (hasPrefix("X>", i, Fiveturn)) ) 
-			{
-				if( (i+5) < size)
-				{				
-					summary[i]= '-';
-					summary[i+1]= 'T';
-					summary[i+2]= 'T';
-					summary[i+3]= 'T';
-					summary[i+4]= 'T';
-					summary[i+5]= 'T';
-				  i=i+2;
-				}	
-			}	//do we have overlapping minimal helices?
-			else if(hasPrefix(" ", i, Fiveturn)) 
-			{
-			}
-
-						
-		} 
-
-		// now we edit the 3 Helices	
-		
-		// now we edit the single Bridges and the extended bridges
-		
-		// finally we edit the 4 helices
-		// we have to ensure that we didn't overwrite symbols 
-		// with 'T' in summary string 
-		for(Size i=0; i<size; i++)
-		{
-			if(   (hasPrefix("->>", i, Fourturn)) 
-	       || (hasPrefix("<>>", i, Fourturn)) )
-			{
-				if( (i+4) < size)
-				{
-					summary[i+1]= 'H';
-					summary[i+2]= 'H';
-					summary[i+3]= 'H';
-					summary[i+4]= 'H';
-					i=i+2;
-				}
-			}// do we have a helix reduced to less than minimal size?
-			else if( (hasPrefix("-<4", i, Fourturn)) || (hasPrefix("X>", i, Fourturn)) ) 
-			{
-				if( ((i+4) < size))
-				{				
-					for(int j=1; j<5; j++)
-					{
-						if(summary[i+j]=='-')
-							summary[i+j]= 'T';
-					}				
-				  i=i+2;
-				}	
-			}
-				//do we have overlapping minimal helices?
-			else	if( helix_before_ && (hasPrefix("XX", i, Fourturn)) || hasPrefix(">X", i, Fourturn))
-			{
-				if(i+4 < size)
-				{
-					summary[i+1]= 'H';
-					summary[i+2]= 'H';
-					summary[i+3]= 'H';
-					summary[i+4]= 'H';
-					i=i+2;
-				} 
-			}	
-			//other symbols are 4 and <, which belong to a startsymbol ->> or <>> and
-			//therefor have not to be considered
-		}// end o for
-		
-		String s1, s2, s3, s4, s5, s6;
-		for (Size i=0; i<size; i++)
-		{
-			s1+=summary[i];
-			s2+=Threeturn[i];
-			s3+=Fourturn[i];
-			s4+=Fiveturn[i];
-			s5+=bridge1[i];
-			s6+=bridge2[i];
-		}
-		std::cout << "summary"<< s1 << std::endl;
-		std::cout << "Threeturn" << s2 << std::endl;
-		std::cout << "Fourturn"<< s3 << std::endl;
-		std::cout << "Fiveturn" << s4 << std::endl;
-		std::cout << "Bridge1" << s5 << std::endl;
-		std::cout << "Bridge2" << s6 << std::endl;
-	************************************************/
-
-
