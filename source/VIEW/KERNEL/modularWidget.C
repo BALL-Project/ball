@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.6 2003/09/14 17:19:07 amoll Exp $
+// $Id: modularWidget.C,v 1.7 2003/10/15 13:40:09 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -18,154 +18,152 @@ namespace BALL
   namespace VIEW
 	{
 
-		ModularWidget::ModularWidget(const char* name)
-			throw()
-			: Embeddable(),
-				ConnectionObject(),
-				window_menu_entry_id_(-1),
-				show_window_enty_(false),
-				default_visible_(true)
-		{
-			if (name != 0)
-			{
-				setIdentifier(name);
-			}
-		}
-		
-		ModularWidget::ModularWidget(const ModularWidget& widget)
-			throw()
-			: Embeddable(widget),
-				ConnectionObject(widget)
-		{
-		}
-		
-		ModularWidget::~ModularWidget()
-			throw()
-		{
-      #ifdef BALL_VIEW_DEBUG
-			  Log.info() << "Destructing object " << (void *)this 
-									 << " of class " << RTTI::getName<ModularWidget>() << endl;
-      #endif 
-		}
+ModularWidget::ModularWidget(const char* name)
+	throw()
+	: Embeddable(),
+		ConnectionObject(),
+		window_menu_entry_id_(-1),
+		show_window_enty_(false),
+		default_visible_(true)
+{
+	if (name) setIdentifier(name);
+}
 
-		void ModularWidget::clear()
-			throw()
-		{
-		}
+ModularWidget::ModularWidget(const ModularWidget& widget)
+	throw()
+	: Embeddable(widget),
+		ConnectionObject(widget)
+{
+}
 
-		void ModularWidget::registerWidget(ModularWidget* mwidget)
-			throw()
-		{
-      #ifdef BALL_VIEW_DEBUG
-  			Log.info() << "registering ModularWidget at " << mwidget << endl;
-			#endif
+ModularWidget::~ModularWidget()
+	throw()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.info() << "Destructing object " << (void *)this 
+							 << " of class " << RTTI::getName<ModularWidget>() << endl;
+	#endif 
+}
 
-			if (!mwidget) throw(Exception::NullPointer(__FILE__, __LINE__));
+void ModularWidget::clear()
+	throw()
+{
+}
 
-			if (!RTTI::isKindOf<QObject>(*mwidget)) 
-			{
-				Log.error() << "ModularWidget::ModularWidget: widget is not " 
-										<< "in a MainControl object!" << endl;
-				return;
-			}
+void ModularWidget::registerWidget(ModularWidget* mwidget)
+	throw()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.info() << "registering ModularWidget at " << mwidget << endl;
+	#endif
 
-			QObject* object = dynamic_cast<QObject*>(mwidget);
-			if (object != 0)
-			{
-				MainControl* mc = MainControl::getMainControl(object);
-				if (mc != 0)
-				{
-					mc->addModularWidget(mwidget);
+	if (!mwidget) throw(Exception::NullPointer(__FILE__, __LINE__));
 
-          #ifdef BALL_VIEW_DEBUG
-						Log.info() << "ModularWidget::registered: " << mwidget << endl;
-					#endif
-				}
-				else 
-				{
-					Log.error() << "ModularWidget::ModularWidget: widget is not in a MainControl object!" << endl;
-				}
-			}
-		}
+	if (!RTTI::isKindOf<QObject>(*mwidget)) 
+	{
+		Log.error() << "ModularWidget::ModularWidget: widget is not " 
+								<< "in a MainControl object!" << endl;
+		return;
+	}
 
-		void ModularWidget::initializeWidget(MainControl& /*main_control*/)
-		{
-		}
-		
-		void ModularWidget::finalizeWidget(MainControl& /* main_control */)
-		//	throw()
-		{
-		}
-		
-		void ModularWidget::checkMenu(MainControl& /* main_control */)
-			throw()
-		{
-		}
-		
-		void ModularWidget::initializePreferencesTab(Preferences & /* preferences */)
-			throw()
-		{
-		}
-		
-		void ModularWidget::finalizePreferencesTab(Preferences & /* preferences */)
-			throw()
-		{
-		}
-		
-		void ModularWidget::applyPreferences(Preferences & /* preferences */)
-			throw()
-		{
-		}
-		
-		void ModularWidget::fetchPreferences(INIFile& inifile)
-			throw()
-		{
-			QWidget* widget= dynamic_cast<QWidget*>(this);
-			if (!widget) return;
+	MainControl* mc = MainControl::getMainControl(dynamic_cast<QObject*>(mwidget));
+	if (!mc)
+	{
+		Log.error() << "ModularWidget::ModularWidget(): widget is not in a MainControl object!" << endl;
+		return;
+	}
 
-			if (inifile.hasEntry("WINDOWS", getIdentifier() + "::x"))
-			{
-				widget->move(inifile.getValue("WINDOWS", getIdentifier() + "::x").toUnsignedInt(),
-										 inifile.getValue("WINDOWS", getIdentifier() + "::y").toUnsignedInt());
-				widget->resize(inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt(),
-											 inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt());
-			} 
-		}
-		
-		void ModularWidget::writePreferences(INIFile& inifile)
-			throw()
-		{
-			QWidget* widget= dynamic_cast<QWidget*>(this);
-			if (!widget) return;
+	mc->addModularWidget(mwidget);
 
-			if (window_menu_entry_id_ != -1)
-			{
-				inifile.insertValue("WINDOWS", getIdentifier() + "::on", 
-					String(getMainControl()->menuBar()->isItemChecked(window_menu_entry_id_)));
-			}
+	#ifdef BALL_VIEW_DEBUG
+		Log.info() << "ModularWidget::registered: " << mwidget << endl;
+	#endif
+}
 
-			inifile.insertValue("WINDOWS", getIdentifier() + "::x", String(widget->x()));
-			inifile.insertValue("WINDOWS", getIdentifier() + "::y", String(widget->y()));
-			inifile.insertValue("WINDOWS", getIdentifier() + "::width", String(widget->width()));
-			inifile.insertValue("WINDOWS", getIdentifier() + "::height", String(widget->height()));
-		}
+void ModularWidget::initializeWidget(MainControl& /*main_control*/)
+{
+}
 
-		void ModularWidget::setStatusbarText(String text)
-			throw()
-		{
-			getMainControl()->setStatusbarText(text);
-		}
+void ModularWidget::finalizeWidget(MainControl& /* main_control */)
+//	throw()
+{
+}
 
-		MainControl* ModularWidget::getMainControl() const
-			throw()
-		{ 
-			return (MainControl*) ((ConnectionObject*)this)->getRoot();
-		}
+void ModularWidget::checkMenu(MainControl& /* main_control */)
+	throw()
+{
+}
 
-		FragmentDB& ModularWidget::getFragmentDB() const
-			throw()
-		{
-			return *((FragmentDB*)&getMainControl()->getFragmentDB());
-		}
+void ModularWidget::initializePreferencesTab(Preferences & /* preferences */)
+	throw()
+{
+}
+
+void ModularWidget::finalizePreferencesTab(Preferences & /* preferences */)
+	throw()
+{
+}
+
+void ModularWidget::applyPreferences(Preferences & /* preferences */)
+	throw()
+{
+}
+
+void ModularWidget::fetchPreferences(INIFile& inifile)
+	throw()
+{
+	QWidget* widget= dynamic_cast<QWidget*>(this);
+	if (!widget) return;
+
+	if (inifile.hasEntry("WINDOWS", getIdentifier() + "::x"))
+	{
+		widget->move(inifile.getValue("WINDOWS", getIdentifier() + "::x").toUnsignedInt(),
+								 inifile.getValue("WINDOWS", getIdentifier() + "::y").toUnsignedInt());
+		widget->resize(inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt(),
+									 inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt());
+	} 
+}
+
+void ModularWidget::writePreferences(INIFile& inifile)
+	throw()
+{
+	QWidget* widget= dynamic_cast<QWidget*>(this);
+	if (!widget) return;
+
+	if (window_menu_entry_id_ != -1)
+	{
+		inifile.insertValue("WINDOWS", getIdentifier() + "::on", 
+			String(getMainControl()->menuBar()->isItemChecked(window_menu_entry_id_)));
+	}
+
+	inifile.insertValue("WINDOWS", getIdentifier() + "::x", String(widget->x()));
+	inifile.insertValue("WINDOWS", getIdentifier() + "::y", String(widget->y()));
+	inifile.insertValue("WINDOWS", getIdentifier() + "::width", String(widget->width()));
+	inifile.insertValue("WINDOWS", getIdentifier() + "::height", String(widget->height()));
+}
+
+void ModularWidget::setStatusbarText(String text)
+	throw()
+{
+	getMainControl()->setStatusbarText(text);
+}
+
+MainControl* ModularWidget::getMainControl() const
+	throw()
+{ 
+	return (MainControl*) ((ConnectionObject*)this)->getRoot();
+}
+
+FragmentDB& ModularWidget::getFragmentDB() const
+	throw()
+{
+	return *((FragmentDB*)&getMainControl()->getFragmentDB());
+}
+
+void ModularWidget::dump(ostream& s, Size depth) const
+	throw()
+{
+	ConnectionObject::dump(s, depth);
+}
 
 } } // namespaces
