@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.2 1999/08/31 22:01:16 oliver Exp $
+// $Id: string.C,v 1.3 1999/09/18 19:10:14 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -82,13 +82,17 @@ namespace BALL
 	ostream& operator << (ostream &s, const Substring& substring)
 	{
 		if (substring.isBound() == false)
+		{
 			return s;
+		}
 
 		const char* char_ptr = substring.bound_->c_str() + substring.from_;
 		const char* end_of_string = substring.bound_->c_str() + substring.to_;
 
 		while (char_ptr <= end_of_string)
+		{
 			s.put(*char_ptr++);
+		}
 
 		return s;
 	}
@@ -103,37 +107,52 @@ namespace BALL
 		return (substring == s);
 	}
 
+	// hand-coded create method
+	void* String::create(bool /* deep */, bool empty) const
+	{
+		void* ptr;
+		if (empty == true)
+		{
+			ptr = (void*)new String;
+		} else {
+			ptr = (void*)new String(*this);
+		}
 
+		return ptr;
+	}
+ 
 	String::String()
-		:	string("")
+		: string()
 	{
 	}
 
 	String::String(const String& s)
-		:	string(s.c_str())
+		: string(s.c_str())
 	{
 	}
-	
+
 	String::String(const char* char_ptr, Index from, Size len)
-		: string("")
+		: string()
 	{
 		validateCharPtrRange_(from, len, char_ptr);
 		if (len > 0)
+		{
 			assign(char_ptr + from, len);
+		}
 	}
-
+	 
 	String::String(const unsigned char c)
-		:	string(1, (char)c)
+		: string(1, (char)c)
 	{
 	}
 
 	String::String(const char c, Size len)
-		:	string(len, c)
+		: string(len, c)
 	{
 	}
 
 	String::String(const string& s)
-		:	string(s)
+		: string(s)
 	{
 	}
 
@@ -142,17 +161,23 @@ namespace BALL
 	{
 		s.validateRange_(from, len);
 		if (len > 0)
+		{
 			assign(s.c_str() + from, len);
+		}
 	}
 
 	String::String(Size buffer_size, const char* format, ... )
 		: string()
 	{
 		if (buffer_size <= 0)
-		  throw Exception::IndexUnderflow(__FILE__, __LINE__);
+		{
+			throw Exception::IndexUnderflow(__FILE__, __LINE__);
+		}
 
 		if (format == 0)
+		{
        throw Exception::NullPointer(__FILE__, __LINE__);
+		}
  
 		char* buffer = new char[buffer_size];
 
@@ -205,9 +230,11 @@ namespace BALL
 		s.validateRange_(from, len);
 
 		if (len == 0)
+		{
 			erase();
-		else
+		} else {
 			assign(s.c_str() + from, len);
+		}
 	}
 
 	void String::set(const char* s, Index from, Size len)
@@ -215,18 +242,24 @@ namespace BALL
 		validateCharPtrRange_(from, len, s);
 
 		if (len == 0)
+		{
 			erase();
-		else
+		} else {
 			assign(s + from, len);
+		}
 	}
 
 	void String::set(Size buffer_size, const char *format, ... )
 	{
 		if (buffer_size <= 0)
+		{
 		  throw Exception::IndexUnderflow(__FILE__, __LINE__);
+		}
 
 		if (format == 0)
-       throw Exception::NullPointer(__FILE__, __LINE__);
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
  
 		char* buffer = new char[buffer_size];
 
@@ -286,7 +319,9 @@ namespace BALL
 		validateIndex_(from);
 
 		if (max_len == 0)
+		{
 			return;
+		}
 
 		Size len = std::min(max_len, size() - from);
 
@@ -738,11 +773,31 @@ namespace BALL
 	int String::compare(const char* char_ptr, Index from) const
 	{
 		if (char_ptr == 0)
+		{
 			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
 
-		validateIndex_(from);
+		// indices may be given as negative arguments: start from the end
+		// -1 therefore means the last bit.
+		Size string_size = size();
+		if (from < 0)
+		{
+			from = (Index)string_size + from;
+
+			// if the value is out of bounds - throw an exception
+			// and leave it...
+			if (from < 0)
+			{
+				throw Exception::IndexUnderflow(__FILE__, __LINE__, from, string_size);
+			}
+		}
+
+		if ((Size)from > string_size)
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__, from, string_size);
+		}
 		
-		Size len = size() - from;
+		Size len = string_size - from;
 
 		if ((c_str() + from) == char_ptr)
 		{
@@ -771,13 +826,12 @@ namespace BALL
 			}
 			
 		} else {
-
 			result = strncmp(c_str() + from, char_ptr, newlen);
 		}
 
 		if ((result == 0) && (len == newlen))
 		{
-			return (int)size() - (int)from - (int)strlen(char_ptr);
+			return (int)string_size - (int)from - (int)strlen(char_ptr);
 		}
 
 		return result;
@@ -906,53 +960,58 @@ namespace BALL
 
 	void String::validateIndex_(Index& index) const
 	{
-    // indices may be given as negative arguments: start from the end
-    // -1 therefore means the last bit.
+		// indices may be given as negative arguments: start from the end
+		// -1 therefore means the last bit.
+		Size string_size = size();
 		if (index < 0)
 		{
-			index = (Index)size() + index;
+			index = (Index)string_size + index;
+
+			// if the value is out of bounds - throw an exception
+			// and leave it...
+			if (index < 0)
+			{
+				throw Exception::IndexUnderflow(__FILE__, __LINE__, index, string_size);
+			}
 		}
 
-    // if the value is out of bounds - throw an exception
-    // and leave it...
-    if (index < 0)
+		if ((Size)index > string_size)
 		{
-      throw Exception::IndexUnderflow(__FILE__, __LINE__, index, size());
-		}
-    if ((Size)index > size())
-		{
-      throw Exception::IndexOverflow(__FILE__, __LINE__, index, size());
+			throw Exception::IndexOverflow(__FILE__, __LINE__, index, string_size);
 		}
 	}
 
 	void String::validateRange_(Index& from, Size& len) const
 	{
+		Size string_size =size();
+		
     // indices may be given as negative arguments: start from the end
     // -1 therefore means the last character of the string.
     if (from < 0)
 		{
-      from = (Index)size() + from;
+      from = (Index)string_size + from;
+
+			// if the values are out of bounds - throw an exception
+			// and leave it...
+			if (from < 0)
+			{
+				throw Exception::IndexUnderflow(__FILE__, __LINE__, from, string_size);
+			}
 		}
 
-    // if the values are out of bounds - throw an exception
-    // and leave it...
-    if (from < 0)
+    if (((Size)from > string_size) || ((string_size > 0) && ((Size)from == string_size)))
 		{
-      throw Exception::IndexUnderflow(__FILE__, __LINE__, from, size());
-		}
-    if (((Size)from > size()) || ((size() > 0) && ((Size)from == size())))
-		{
-      throw Exception::IndexOverflow(__FILE__, __LINE__, from, size());
+      throw Exception::IndexOverflow(__FILE__, __LINE__, from, string_size);
 		}
 
 		if (len == npos)
 		{
-			len = size() - from;
+			len = string_size - from;
 		}
 		
-		if (len > (size() - from))
+		if (len > (string_size - from))
 		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__, (Index)len, size());
+			throw Exception::IndexOverflow(__FILE__, __LINE__, (Index)len, string_size);
 		}
  	}
 
@@ -965,14 +1024,15 @@ namespace BALL
     if (from < 0)
 		{
       from = (Index)size + from;
+
+			// if the values are out of bounds - throw an exception
+			// and leave it...
+			if (from < 0)
+			{
+				throw Exception::IndexUnderflow(__FILE__, __LINE__, from, size);
+			}
 		}
 
-    // if the values are out of bounds - throw an exception
-    // and leave it...
-    if (from < 0)
-		{
-      throw Exception::IndexUnderflow(__FILE__, __LINE__, from, size);
-		}
     if (((Size)from > size) || ((size > 0) && ((Size)from == size)))
 		{
       throw Exception::IndexOverflow(__FILE__, __LINE__, from, size);
@@ -992,7 +1052,9 @@ namespace BALL
 	void String::validateCharPtrRange_(Index& from, Size& len, const char* char_ptr)
 	{
 		if (char_ptr == 0)
+		{
 			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
 
 		Size total_len = strlen(char_ptr);
 
@@ -1001,14 +1063,19 @@ namespace BALL
     if (from < 0)
 		{
       from = (Index)total_len + from;
+
+			// if the values are out of bounds - throw an exception
+			// and leave it...
+			if (from < 0)	
+			{
+				throw Exception::IndexUnderflow(__FILE__, __LINE__, from, len);
+			}
 		}
 
-    // if the values are out of bounds - throw an exception
-    // and leave it...
-    if (from < 0)
-      throw Exception::IndexUnderflow(__FILE__, __LINE__, from, len);
     if (((Size)from > total_len) || ((total_len > 0) && ((Size)from == total_len)))
+		{
       throw Exception::IndexOverflow(__FILE__, __LINE__, from, len);
+		}
 
 		if (len == npos)
 		{
