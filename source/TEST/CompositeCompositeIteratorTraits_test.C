@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CompositeCompositeIteratorTraits_test.C,v 1.1 2003/06/19 10:45:51 oliver Exp $
+// $Id: CompositeCompositeIteratorTraits_test.C,v 1.2 2003/06/26 14:53:01 anker Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,233 +12,264 @@
 
 ///////////////////////////
 
+START_TEST(class_name, "$Id: CompositeCompositeIteratorTraits_test.C,v 1.2 2003/06/26 14:53:01 anker Exp $")
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
 using namespace BALL;
 
-START_TEST(Composite::CompositeIteratorTraits, "$Id: CompositeCompositeIteratorTraits_test.C,v 1.1 2003/06/19 10:45:51 oliver Exp $")
+///  insert tests for each member function here         
+///
+	
+Composite::CompositeIteratorTraits* ccitp = 0;
 
-/////////////////////////////////////////////////////////////
-/////////////////////////////////////////////////////////////
-
-Composite::CompositeIteratorTraits* cit_ptr = 0;
 CHECK(CompositeIteratorTraits() throw())
-	cit_ptr = new Composite::CompositeIteratorTraits;
-	TEST_NOT_EQUAL(cit_ptr, 0)
+	ccitp = new Composite::CompositeIteratorTraits;
+	TEST_NOT_EQUAL(ccitp, 0)
 RESULT
 
 CHECK(~CompositeIteratorTraits() throw())
-	delete cit_ptr;
+	delete ccitp;
 RESULT
 
-CHECK(Composite* getContainer() throw())
-	Composite::CompositeIteratorTraits t;
-	TEST_EQUAL(t.getContainer(), 0)
-RESULT
-
-Composite a;
-Composite b;
-Composite c;
-Composite d;
-Composite e;
-Composite f;
-a.appendChild(b);
-a.appendChild(c);
-a.appendChild(d);
-c.appendChild(e);
-c.appendChild(f);
+bool test;
 
 CHECK(CompositeIteratorTraits(const Composite& composite) throw())
-	Composite::CompositeIteratorTraits t(a);
-	TEST_EQUAL(t.getContainer(), &a)
-	STATUS(" &a = " << (void*)&a)
-	STATUS(" &b = " << (void*)&b)
-	STATUS(" &c = " << (void*)&c)
-	STATUS(" &d = " << (void*)&d)
-	STATUS(" &e = " << (void*)&e)
-	STATUS(" &f = " << (void*)&f)
-	
-	t.toBegin();
-	TEST_EQUAL(t.isValid(), true)
-	TEST_EQUAL(&t.getData(), &a)
-	t.forward();
-	TEST_EQUAL(t.isValid(), true)
-	TEST_EQUAL(&t.getData(), &b)
-	t.forward();
-	TEST_EQUAL(t.isValid(), true)
-	TEST_EQUAL(&t.getData(), &c)
-	t.forward();
-	TEST_EQUAL(t.isValid(), true)
-	TEST_EQUAL(&t.getData(), &e)
-	t.forward();
-	TEST_EQUAL(t.isValid(), true)
-	TEST_EQUAL(&t.getData(), &f)
-	t.forward();
-	TEST_EQUAL(t.isValid(), true)
-	TEST_EQUAL(&t.getData(), &d)
-	t.forward();
-	TEST_EQUAL(t.isValid(), false)
-	TEST_EQUAL(t.isEnd(), true)
-RESULT
-
-CHECK(Composite& getData() throw())
-	Composite::CompositeIteratorTraits t(a);
-	TEST_EQUAL(t.getContainer(), &a)
-	TEST_EQUAL(a.isSelected(), false)
-	t.toBegin();
-	t.getData().select();
-	TEST_EQUAL(a.isSelected(), true)
-	a.deselect();
-RESULT
-
-CHECK(CompositeIteratorPosition& getPosition() throw())
-  // ???
-RESULT
-
-CHECK(CompositeIteratorTraits& operator = (const CompositeIteratorTraits& traits) throw())
-  // ???
+	Composite composite;
+	Composite::CompositeIteratorTraits traits(composite);
+	test = (traits.getContainer() == &composite);
+	TEST_EQUAL(test, true)
 RESULT
 
 CHECK(CompositeIteratorTraits(const CompositeIteratorTraits& traits) throw())
-	Composite::CompositeIteratorTraits t(a);
-	TEST_EQUAL(t.getContainer(), &a)
-	STATUS(" &a = " << (void*)&a)
-	STATUS(" &b = " << (void*)&b)
-	STATUS(" &c = " << (void*)&c)
-	STATUS(" &d = " << (void*)&d)
-	STATUS(" &e = " << (void*)&e)
-	STATUS(" &f = " << (void*)&f)
-	
-	t.toBegin();
-	TEST_EQUAL(t.isValid(), true)
-	TEST_EQUAL(&t.getData(), &a)
-	t.forward();
-	TEST_EQUAL(t.isValid(), true)
-	TEST_EQUAL(&t.getData(), &b)
-	t.forward();
-	TEST_EQUAL(t.isValid(), true)
-	TEST_EQUAL(&t.getData(), &c)
-
-	Composite::CompositeIteratorTraits t2(t);
-	TEST_EQUAL(t2.isValid(), true)
-	TEST_EQUAL(&t2.getData(), &c)
-	t2.forward();
-	TEST_EQUAL(t2.isValid(), true)
-	TEST_EQUAL(&t2.getData(), &e)
-	t2.forward();
-	TEST_EQUAL(t2.isValid(), true)
-	TEST_EQUAL(&t2.getData(), &f)
-	t2.forward();
-	TEST_EQUAL(t2.isValid(), true)
-	TEST_EQUAL(&t2.getData(), &d)
-	t2.forward();
-	TEST_EQUAL(t2.isValid(), false)
-	TEST_EQUAL(t2.isEnd(), true)
-
-	// make sure the two traits are still
-	// independent
-	TEST_EQUAL(t.isValid(), true)
-	TEST_EQUAL(&t.getData(), &c)
-RESULT
-
-CHECK(void toBegin() throw())
-  // ???
-RESULT
-
-CHECK(void toEnd() throw())
-  // ???
-RESULT
-
-CHECK(bool isBegin() const throw())
-	Composite::CompositeIteratorTraits t(a);
-	TEST_EQUAL(t.getContainer(), &a)
-
-	t.toBegin();
-	TEST_EQUAL(t.isBegin(), true)
-	t.forward();
-	TEST_EQUAL(t.isBegin(), false)
-	t.backward();
-	TEST_EQUAL(t.isBegin(), true)
-	t.toEnd();
-	TEST_EQUAL(t.isBegin(), false)
-RESULT
-
-CHECK(bool isEnd() const throw())
-	Composite::CompositeIteratorTraits t(a);
-	TEST_EQUAL(t.getContainer(), &a)
-
-	t.toBegin();
-	TEST_EQUAL(t.isEnd(), false)
-	t.forward();
-	TEST_EQUAL(t.isEnd(), false)
-	t.toEnd();
-	TEST_EQUAL(t.isEnd(), true)
-	t.backward();
-	TEST_EQUAL(t.isEnd(), false)
-RESULT
-
-CHECK(bool isRBegin() const throw())
-  // ???
-RESULT
-
-CHECK(bool isREnd() const throw())
-  // ???
-RESULT
-
-CHECK(bool isSingular() const throw())
-	Composite::CompositeIteratorTraits t1(a);
-	TEST_EQUAL(t1.isSingular(), false);
-	Composite::CompositeIteratorTraits t2;
-	TEST_EQUAL(t2.isSingular(), true);
-	t2 = t1;
-	TEST_EQUAL(t2.isSingular(), false);
+	Composite composite;
+	Composite::CompositeIteratorTraits traits1(composite);
+	Composite::CompositeIteratorTraits traits2(traits1);
+	test = (traits1.getContainer() == traits2.getContainer());
+	TEST_EQUAL(test, true)
 RESULT
 
 CHECK(bool isValid() const throw())
-	Composite::CompositeIteratorTraits t1;
-	TEST_EQUAL(t1.isValid(), false)
-	// ???
+	Composite::CompositeIteratorTraits traits;
+	test = traits.isValid();
+	TEST_EQUAL(test, false)
 RESULT
 
-CHECK(bool operator != (const CompositeIteratorTraits& traits) const throw())
-  // ???
+CHECK(CompositeIteratorTraits& operator = (const CompositeIteratorTraits& traits) throw())
+	Composite composite;
+	Composite::CompositeIteratorTraits traits1(composite);
+	Composite::CompositeIteratorTraits traits2 = traits1;
+	test = (traits1.getContainer() == traits2.getContainer());
+	TEST_EQUAL(test, true)
 RESULT
 
-CHECK(bool operator == (const CompositeIteratorTraits& traits) const throw())
-  // ???
-RESULT
-
-CHECK(const Composite& getData() const throw())
-  // ???
+CHECK(Composite* getContainer() throw())
+	// Partially tested above.
+	Composite::CompositeIteratorTraits traits;
+	test = (traits.getContainer() == 0);
+	TEST_EQUAL(test, true)
 RESULT
 
 CHECK(const Composite* getContainer() const throw())
-  // ???
+	// Same implementation as the non-const version.
 RESULT
 
-CHECK(const CompositeIteratorPosition& getPosition() const throw())
-  // ???
+CHECK(bool isSingular() const throw())
+	Composite::CompositeIteratorTraits traits;
+	test = traits.isSingular();
+	TEST_EQUAL(test, true)
 RESULT
 
-CHECK(void backward() throw())
-  // ???
+CHECK(Composite* getPosition() throw())
+	Composite composite;
+	Composite::CompositeIteratorTraits traits(composite);
+	test = (traits.getPosition() == 0);
+	TEST_EQUAL(test, true)
+	traits.toBegin();
+	test = (traits.getPosition() == &composite);
+	TEST_EQUAL(test, true)
 RESULT
 
-CHECK(void forward() throw())
-  // ???
+CHECK(const Composite* getPosition() const throw())
+	// Same implementation as non-const version.
+RESULT
+
+CHECK(void setPosition(Composite* position) throw())
+	Composite composite;
+	Composite::CompositeIteratorTraits traits(composite);
+	traits.setPosition(&composite);
+	test = (traits.getPosition() == &composite);
+	TEST_EQUAL(test, true)
+RESULT
+
+CHECK(Composite& getData() throw())
+	Composite composite;
+	Composite::CompositeIteratorTraits traits(composite);
+	traits.toBegin();
+	test = (&traits.getData() == &composite);
+	TEST_EQUAL(test, true)
+RESULT
+
+CHECK(const Composite& getData() const throw())
+	// Same implementation as non-const version.
+RESULT
+
+CHECK(bool operator == (const CompositeIteratorTraits& traits) const throw())
+	Composite composite;
+	Composite::CompositeIteratorTraits traits1(composite);
+	Composite::CompositeIteratorTraits traits2(composite);
+	test = (traits1 == traits2);
+	TEST_EQUAL(test, true)
+	traits1.toBegin();
+	test = (traits1 == traits2);
+	TEST_NOT_EQUAL(test, true)
+RESULT
+
+CHECK(bool operator != (const CompositeIteratorTraits& traits) const throw())
+	Composite composite;
+	Composite::CompositeIteratorTraits traits1(composite);
+	Composite::CompositeIteratorTraits traits2(composite);
+	test = (traits1 != traits2);
+	TEST_NOT_EQUAL(test, true)
+	traits1.toBegin();
+	test = (traits1 != traits2);
+	TEST_EQUAL(test, true)
 RESULT
 
 CHECK(void invalidate() throw())
-  // ???
+	Composite composite;
+	Composite::CompositeIteratorTraits traits(composite);
+	traits.toBegin();
+	traits.invalidate();
+	test = traits.isValid();
+	TEST_EQUAL(test, false)
+RESULT
+
+// Build a composite tree for testing purposes.
+/*
+
+            0
+            |
+            |
+            |
+            1
+           /|\
+          / | \
+         /  |  \
+        2   4   5
+       /        |\
+      /         | \
+     /          |  \
+    3           6   7
+*/
+
+
+std::vector<Composite*> tree;
+
+for (Size i = 0; i <= 7; ++i) 
+{
+	Composite* composite = new Composite;
+	tree.push_back(composite);
+}
+
+tree[0]->appendChild(*tree[1]);
+tree[1]->appendChild(*tree[2]);
+tree[1]->appendChild(*tree[4]);
+tree[1]->appendChild(*tree[5]);
+tree[2]->appendChild(*tree[3]);
+tree[5]->appendChild(*tree[6]);
+tree[5]->appendChild(*tree[7]);
+
+CHECK(void toBegin() throw())
+	Composite::CompositeIteratorTraits traits(*tree[1]);
+	traits.toBegin();
+	test = (traits.getPosition() == tree[1]);
+	TEST_EQUAL(test, true)
+RESULT
+
+CHECK(bool isBegin() const throw())
+	Composite::CompositeIteratorTraits traits(*tree[1]);
+	traits.toBegin();
+	test = traits.isBegin();
+	TEST_EQUAL(test, true)
+RESULT
+
+CHECK(void toEnd() throw())
+	Composite::CompositeIteratorTraits traits(*tree[1]);
+	traits.toBegin();
+	traits.toEnd();
+	test = (traits.getPosition() == 0);
+	TEST_EQUAL(test, true)
+RESULT
+
+CHECK(bool isEnd() const throw())
+	Composite::CompositeIteratorTraits traits(*tree[1]);
+	traits.toBegin();
+	traits.toEnd();
+	test = traits.isEnd();
+	TEST_EQUAL(test, true)
 RESULT
 
 CHECK(void toRBegin() throw())
-  // ???
+	Composite::CompositeIteratorTraits traits(*tree[1]);
+	traits.toRBegin();
+	test = (traits.getPosition() == tree[7]);
+	TEST_EQUAL(test, true)
+RESULT
+
+CHECK(bool isRBegin() const throw())
+	Composite::CompositeIteratorTraits traits(*tree[1]);
+	traits.toRBegin();
+	test = traits.isRBegin();
+	TEST_EQUAL(test, true)
 RESULT
 
 CHECK(void toREnd() throw())
-  // ???
+	Composite::CompositeIteratorTraits traits(*tree[1]);
+	traits.toREnd();
+	test = (traits.getPosition() == tree[1]);
+	TEST_EQUAL(test, true)
 RESULT
+
+CHECK(bool isREnd() const throw())
+	Composite::CompositeIteratorTraits traits(*tree[1]);
+	traits.toREnd();
+	test = traits.isREnd();
+	TEST_EQUAL(test, true)
+RESULT
+
+CHECK(void forward() throw())
+	Composite::CompositeIteratorTraits traits(*tree[1]);
+	traits.toBegin();
+	
+	for (Size i = 1; i < 7; ++i)
+	{
+		test = (traits.getPosition() == tree[i]);
+		TEST_EQUAL(test, true)
+		traits.forward();
+		test = (traits.getPosition() == tree[i+1]);
+		TEST_EQUAL(test, true)
+	}
+RESULT
+
+CHECK(void backward() throw())
+	Composite::CompositeIteratorTraits traits(*tree[1]);
+	traits.toEnd();
+	traits.backward();
+	
+	for (Size i = 7; i > 1; --i)
+	{
+		test = (traits.getPosition() == tree[i]);
+		TEST_EQUAL(test, true)
+		traits.backward();
+		test = (traits.getPosition() == tree[i-1]);
+		TEST_EQUAL(test, true)
+	}
+RESULT
+
+delete tree[0];
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
-
