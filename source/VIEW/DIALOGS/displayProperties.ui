@@ -803,52 +803,26 @@
                 <bool>true</bool>
             </property>
         </widget>
+        <widget class="QSpinBox">
+            <property name="name">
+                <cstring>transparency</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>230</x>
+                    <y>110</y>
+                    <width>54</width>
+                    <height>24</height>
+                </rect>
+            </property>
+            <property name="maxValue">
+                <number>255</number>
+            </property>
+            <property name="value">
+                <number>0</number>
+            </property>
+        </widget>
         <widget class="QComboBox">
-            <item>
-                <property name="text">
-                    <string>line</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>stick</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>ball and stick</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>van der Waals</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>solvent-excluded surface</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>solvent-accesible surface</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>backbone</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>cartoon</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>H-bonds</string>
-                </property>
-            </item>
             <property name="name">
                 <cstring>model_type_combobox</cstring>
             </property>
@@ -892,25 +866,6 @@
             </property>
             <property name="duplicatesEnabled">
                 <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QSpinBox">
-            <property name="name">
-                <cstring>transparency</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>230</x>
-                    <y>110</y>
-                    <width>54</width>
-                    <height>24</height>
-                </rect>
-            </property>
-            <property name="maxValue">
-                <number>255</number>
-            </property>
-            <property name="value">
-                <number>0</number>
             </property>
         </widget>
     </widget>
@@ -1228,7 +1183,7 @@
                 <number>1</number>
             </property>
             <property name="title">
-                <string>custom color</string>
+                <string>custom / default color</string>
             </property>
             <property name="alignment">
                 <set>AlignHCenter</set>
@@ -1564,36 +1519,6 @@
             </widget>
         </widget>
         <widget class="QComboBox">
-            <item>
-                <property name="text">
-                    <string>by element</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>by residue number</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>by residue name</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>by atom charge</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>by atom distance</string>
-                </property>
-            </item>
-            <item>
-                <property name="text">
-                    <string>custom</string>
-                </property>
-            </item>
             <property name="name">
                 <cstring>coloring_method_combobox</cstring>
             </property>
