@@ -1,11 +1,11 @@
-// $Id: Path_test.C,v 1.4 2001/07/15 17:32:40 amoll Exp $
+// $Id: Path_test.C,v 1.4.4.1 2002/05/28 16:34:31 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/path.h>
 ///////////////////////////
 
-START_TEST(Path, "$Id: Path_test.C,v 1.4 2001/07/15 17:32:40 amoll Exp $")
+START_TEST(Path, "$Id: Path_test.C,v 1.4.4.1 2002/05/28 16:34:31 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -20,7 +20,7 @@ RESULT
 Path p = Path();
 
 CHECK(getDataPath())
-	TEST_EQUAL(String(p.getDataPath()).hasSuffix("/BALL/data/"), true)
+	TEST_EQUAL(String(p.getDataPath()).hasSuffix("/data/"), true)
 RESULT
 
 CHECK(setDataPath(const string& path))
@@ -35,7 +35,7 @@ CHECK(addDataPath(const string& path))
 RESULT
 
 CHECK(getDefaultDataPath())
-	TEST_EQUAL(String(p.getDefaultDataPath()).hasSuffix("/BALL/data/"), true)
+	TEST_EQUAL(String(p.getDefaultDataPath()).hasSuffix("/data/"), true)
 RESULT
 
 CHECK(find(const string& name))
