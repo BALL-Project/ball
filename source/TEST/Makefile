@@ -49,6 +49,7 @@ EXECUTABLES_DATATYPES = \
 	HashSet_test\
 	HashGrid3_test\
 	Options_test\
+	Triple_test\
 	Quadruple_test\
 	RegularData1D_test\
 	RegularData2D_test\
