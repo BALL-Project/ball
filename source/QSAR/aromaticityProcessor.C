@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: aromaticityProcessor.C,v 1.2 2004/07/12 19:49:45 amoll Exp $
+// $Id: aromaticityProcessor.C,v 1.3 2005/03/23 16:30:01 bertsch Exp $
 //
 
 #include <BALL/QSAR/aromaticityProcessor.h>
@@ -439,15 +439,18 @@ namespace BALL
 		}
 		else
 		{
-			// ring has no further intersection with other rings -> set aromaticity
-			for (HashSet<Atom*>::iterator it=ring.begin();it!=ring.end();++it)
+			// ring has no further intersection with other rings -> check aromaticity
+			if ((countPiElectrons_(ring)-2)%4 == 0)
 			{
-				(*it)->setProperty("IsAromatic", true);
-				for (Atom::BondIterator b_it=(*it)->beginBond();b_it!=(*it)->endBond();++b_it)
+				for (HashSet<Atom*>::iterator it=ring.begin();it!=ring.end();++it)
 				{
-					if (ring.has(b_it->getPartner(**it)))
+					(*it)->setProperty("IsAromatic", true);
+					for (Atom::BondIterator b_it=(*it)->beginBond();b_it!=(*it)->endBond();++b_it)
 					{
-						b_it->setOrder(Bond::ORDER__AROMATIC);
+						if (ring.has(b_it->getPartner(**it)))
+						{
+							b_it->setOrder(Bond::ORDER__AROMATIC);
+						}
 					}
 				}
 			}
