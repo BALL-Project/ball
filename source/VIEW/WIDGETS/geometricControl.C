@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.6 2003/09/08 00:14:12 amoll Exp $
+// $Id: geometricControl.C,v 1.7 2003/09/08 02:06:55 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -278,7 +278,7 @@ void GeometricControl::selectedRepresentation(Representation& representation, bo
 }
 
 
-void GeometricControl::onContextMenu(QListViewItem* item,  const QPoint& point, int /* column */)
+void GeometricControl::onContextMenu_(QListViewItem* item,  const QPoint& point, int /* column */)
 {
 	if (item == 0) return;
 

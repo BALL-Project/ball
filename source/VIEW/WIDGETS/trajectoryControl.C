@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryControl.C,v 1.6 2003/09/08 00:14:29 amoll Exp $
+// $Id: trajectoryControl.C,v 1.7 2003/09/08 02:06:55 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/trajectoryControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -52,17 +52,15 @@ void TrajectoryControl::initializeWidget(MainControl& main_control)
 {
 	visualise_id_ = 
 		main_control.insertMenuEntry(MainControl::FILE, "Load Trajectory", this, SLOT(addTrajectory()));
-	window_menu_entry_id_ = 
-		main_control.insertMenuEntry(MainControl::WINDOWS, "TrajectoryControl", this, SLOT(switchShowWidget()));
-	getMainControl()->menuBar()->setItemChecked(window_menu_entry_id_, true);
+	GenericControl::initializeWidget(main_control);
 }
 
 
 void TrajectoryControl::finalizeWidget(MainControl& main_control)
 	throw()
 {
-	main_control.removeMenuEntry(MainControl::FILE, "Load Trajectory", this, SLOT(addTrajectory()));
 	main_control.removeMenuEntry(MainControl::WINDOWS, "TrajectoryControl", this, SLOT(switchShowWidget()));
+	GenericControl::finalizeWidget(main_control);
 }
 
 

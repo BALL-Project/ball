@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.5 2003/09/08 00:15:25 amoll Exp $
+// $Id: geometricControl.h,v 1.6 2003/09/08 02:07:38 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -179,18 +179,6 @@ namespace BALL
 				
 			//@}			/** @name Public slots */ //@{
 
-
-			/** Controlling method for context menus.
-					Clear the previously created context menu.
-					Calls buildContextMenu for the Representation object belonging
-					to the <b> item</b> and executes the context menu if menu entries are available.
-					\param  item the QListViewItem for which a context menu should be created
-					\param  point the position to which the context menu should be drawn
-					\param  column not used at the moment
-					\see    buildContextMenu
-			*/
-			virtual void onContextMenu(QListViewItem* item, const QPoint& point, int column);
-			
 			/// 
 			virtual void selectedRepresentation(Representation& representation, bool state);
 
@@ -200,6 +188,16 @@ namespace BALL
 		  protected slots:
 			
 			//@} /** @name Protected members */ //@{
+
+			/*_ Controlling method for context menus.
+					Calls buildContextMenu for the Representation object belonging
+					to the <b> item</b> and executes the context menu if menu entries are available.
+					\param  item the QListViewItem for which a context menu should be created
+					\param  point the position to which the context menu should be drawn
+					\param  column not used at the moment
+					\see    buildContextMenu
+			*/
+			virtual void onContextMenu_(QListViewItem* item, const QPoint& point, int column);
 			
 			virtual void modifyRepresentation_()
 				throw();

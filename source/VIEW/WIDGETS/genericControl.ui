@@ -66,14 +66,6 @@
                     <bool>true</bool>
                 </property>
             </column>
-        <item>
-            <property name="text">
-                <string>New Item</string>
-            </property>
-            <property name="pixmap">
-                <pixmap></pixmap>
-            </property>
-        </item>
             <property name="name">
                 <cstring>listview</cstring>
             </property>
