@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.11 2000/10/17 17:17:24 anker Exp $
+// $Id: parameterSection.C,v 1.12 2000/10/23 23:31:10 amoll Exp $
 //
 
 #include <BALL/FORMAT/parameterSection.h>
@@ -22,7 +22,6 @@ namespace BALL
 	{
 	}
 
-
 	ParameterSection::ParameterSection(const ParameterSection& parameter_section) 
 		throw()
 		:	section_name_(parameter_section.section_name_),
@@ -37,12 +36,10 @@ namespace BALL
 	{
 	}
 
-
 	ParameterSection::~ParameterSection() throw()
 	{
 		clear();
 	}
-
 
 	void ParameterSection::clear() throw()
 	{
@@ -70,13 +67,11 @@ namespace BALL
 		valid_ = false;
 	}
 
-
 	const String& ParameterSection::getSectionName() const
 		throw()
 	{
 		return section_name_;
 	}
-
 
 	bool ParameterSection::extractSection(Parameters& parameters, 
 			const String& section_name) throw()
@@ -150,7 +145,8 @@ namespace BALL
 		if (number_of_fields == 0)
 		{
 			Log.error() << "ParameterSection::extractSection: error reading section " << section_name 
-				<< " of file " << ini_file.getFilename() << ": wrong number of fields in the format line: " << number_of_fields << endl;
+				<< " of file " << ini_file.getFilename() << ": wrong number of fields in the format line: " 
+				<< number_of_fields << endl;
 			Log.error() << "FORMAT: " << format_line_ << endl;
 
 			return false;
@@ -222,7 +218,8 @@ namespace BALL
 		// now extract all non-comment lines
 		bool ignore_entry;
 		number_of_lines = -1; // skip format line
-		for (i = ini_file.getSectionFirstLine(section_name); i <= ini_file.getSectionLastLine(section_name); i++) 
+		for (i = ini_file.getSectionFirstLine(section_name); 
+				 i <= ini_file.getSectionLastLine(section_name); i++) 
 		{
 			line = *ini_file.getLine(i);
 			line.trimLeft();
@@ -271,8 +268,8 @@ namespace BALL
 								{
 									if (old_version == new_version)
 									{
-										Log.warn() << "ParameterSection: repeated entry with same version number in line " << number_of_lines 
-															 << " of section [" << section_name << "] " << endl;
+										Log.warn() << "ParameterSection: repeated entry with same version number in line " 
+															 << number_of_lines << " of section [" << section_name << "] " << endl;
 										Log.warn() << "  in file " << ini_file.getFilename() << ":" << endl;
 										Log.warn() << " > " << line << endl;
 										ignore_entry = true;
@@ -304,18 +301,21 @@ namespace BALL
 						} 
 					}
 				} 
-				else if (line[0] == '@') 
+				else 
 				{
-					// we found an option. 
-					// options are of the form "@option=value"
-					
-					// remove the leading '@'
-					line.erase(0, 1);
-					
-					// insert the option
-					String option_key		= line.before("=");
-					String option_value = line.after("=");
-					options.set(option_key, option_value);
+					if (line[0] == '@') 
+					{
+						// we found an option. 
+						// options are of the form "@option=value"
+						
+						// remove the leading '@'
+						line.erase(0, 1);
+						
+						// insert the option
+						String option_key		= line.before("=");
+						String option_value = line.after("=");
+						options.set(option_key, option_value);
+					}
 				}
 			}
 		}
@@ -416,7 +416,6 @@ namespace BALL
 		}
 	}
 
-
 	const ParameterSection& ParameterSection::operator = 
 		(const ParameterSection& section) throw()
 	{
@@ -434,12 +433,10 @@ namespace BALL
 		return *this;
 	}
 
-
 	bool ParameterSection::isValid() const throw()
 	{
 		return valid_;
 	}
-
 
 	bool ParameterSection::operator == (const ParameterSection& parameter_section)
 		const throw()

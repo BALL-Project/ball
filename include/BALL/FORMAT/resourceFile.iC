@@ -1,4 +1,4 @@
-// $Id: resourceFile.iC,v 1.4 1999/12/04 18:34:16 oliver Exp $
+// $Id: resourceFile.iC,v 1.5 2000/10/23 23:31:03 amoll Exp $
 
 BALL_INLINE 
 void ResourceEntry::set(const ResourceEntry& entry, bool deep)
@@ -22,7 +22,7 @@ void ResourceEntry::set(const ResourceEntry& entry, bool deep)
 }
 
 BALL_INLINE 
-ResourceEntry& ResourceEntry::operator = (const ResourceEntry &entry)
+const ResourceEntry& ResourceEntry::operator = (const ResourceEntry &entry)
 {
   set(entry);
   

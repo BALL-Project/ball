@@ -1,4 +1,4 @@
-// $Id: parameterSection.h,v 1.9 2000/10/18 12:40:17 oliver Exp $
+// $Id: parameterSection.h,v 1.10 2000/10/23 23:31:02 amoll Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -115,7 +115,6 @@ namespace BALL
 		*/
 		Size getNumberOfKeys() const throw();
 
-
 		/**	Fast access to the value array 
 		*/
 		const String& getValue(Position key_index, Position variable_index)
@@ -127,7 +126,6 @@ namespace BALL
 		const String& getKey(Position key_index) const throw();
 
 		//@}
-
 
 		/** @name Assignment */
 		//@{
@@ -141,7 +139,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 
 		/**	@name	Predicates
 		*/

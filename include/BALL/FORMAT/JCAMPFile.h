@@ -1,4 +1,4 @@
-// $Id: JCAMPFile.h,v 1.1 2000/09/14 12:23:23 oliver Exp $
+// $Id: JCAMPFile.h,v 1.2 2000/10/23 23:31:01 amoll Exp $
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
 #define BALL_FORMAT_JCAMPFILE_H
@@ -49,25 +49,23 @@ namespace BALL
 		 */
 		String title();
 
-		/**
-		 * Rückgabe des Parameters name
-		 */
-		double parameter( const String& name );
+		/**	Return parameter name
+		*/
+		double parameter(const String& name) const;
 
-		/**
-		 * Existiert Parameter "name"?
-		 */
-		bool has( const String& name );
+		/**	Exists Parameter "name"?
+		*/
+		bool has(const String& name) const;
 
 		protected:
 		bool nextLine_();
 
-		String line_;
-		String title_;
+		String								line_;
+		String								title_;
 		StringHashMap<double> parameters_;
+		char*									buffer_;
 
-		static const Size		MAX_LENGTH_;
-		char*								buffer_;
+		static const Size			MAX_LENGTH_;
 	};
 }
 

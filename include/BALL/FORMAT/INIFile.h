@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.7 2000/10/05 17:28:09 anker Exp $
+// $Id: INIFile.h,v 1.8 2000/10/23 23:31:01 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -111,8 +111,6 @@ namespace BALL
 
 		//@}
 
-
-
 		/**@name	Debugging and Diagnostics
 		*/
 		//@{
@@ -122,7 +120,6 @@ namespace BALL
 		bool isValid() const;
 
 		//@}
-
 
 		/**@name	Methods for line-wise access.
 				
@@ -249,23 +246,14 @@ namespace BALL
 		private:	
 
 		bool									valid_;
-
-		String								filename_;
-		
+		String								filename_;	
 		std::vector<String>		section_names_;
-
 		std::vector<String>		lines_;
-
 		std::vector<Index>		line_section_index_;
-
 		std::vector<Size>			section_start_;
-
 		std::vector<Size>			section_end_;
-
 		StringHashMap<Size>		section_index_;
-
 		StringHashMap<Size>		section_key_map_;
-
 		Size									original_number_of_lines_;
 
 	};

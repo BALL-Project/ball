@@ -1,4 +1,4 @@
-// $Id: genericMolFile.h,v 1.1 2000/07/16 19:32:28 oliver Exp $
+// $Id: genericMolFile.h,v 1.2 2000/10/23 23:31:01 amoll Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -13,10 +13,8 @@
 
 namespace BALL 
 {
-
-
-	class System;
 	class Atom;
+	class System;
 
 	/**	Base class for all molecule file format classes.
 			\\
@@ -97,7 +95,6 @@ namespace BALL
 		protected:
 		
 		Box3		box_;
-
 		float		temperature_;
 	};
 

@@ -1,4 +1,4 @@
-// $Id: bruker1DFile.h,v 1.2 2000/10/05 22:26:58 oliver Exp $
+// $Id: bruker1DFile.h,v 1.3 2000/10/23 23:31:01 amoll Exp $
 
 #include <vector>
 #include <glib.h>
@@ -32,9 +32,10 @@ namespace BALL
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
-		/**
-		 * Konstruktor. Wichtig: name ist hier der Name des Bruker-*Verzeichnisses*
-		 */
+
+		/**	Constructor.
+				@param name important: name of the Bruker-*directory*
+		*/
 		Bruker1D(const String& name, OpenMode open_mode = File::IN|File::BINARY);
 
 		/// Copy constructor
@@ -47,10 +48,10 @@ namespace BALL
 		/**	@name Accessors
 		*/
 		//@{
-		/**
-		 * Einlesen eines 1D-Spektrums nach dat.
-		 */
-		void read(std::vector<double>& dat );
+
+		/**	Read a 1D-spectrum to dat.
+		*/
+		void read(std::vector<double>& dat);
 
 		/**
 		*/
@@ -59,14 +60,12 @@ namespace BALL
 
 		protected:
 
-		/**
-		 * This class gives access to the parameters used in
-		 * acquiring this spectrum.
-		 */
+		/**	This class gives access to the parameters 
+				used in acquiring this spectrum.
+		*/
 		BrukerParameter* pars_;
 		
 		Size min_;
-
 		Size max_;
 	};
 }

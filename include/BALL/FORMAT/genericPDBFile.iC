@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.iC,v 1.2 1999/12/28 18:46:30 oliver Exp $
+// $Id: genericPDBFile.iC,v 1.3 2000/10/23 23:31:02 amoll Exp $
 
 BALL_INLINE 
 void GenericPDBFile::clear(int state)
@@ -98,7 +98,6 @@ BALL_INLINE
 bool GenericPDBFile::hasFormat(const String& s) const
 {
   String str(s);
-
   str.toLower();
   
   return (str.compare("pdb") == 0 && hasFormat() == true);

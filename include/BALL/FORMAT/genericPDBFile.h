@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.h,v 1.5 2000/10/20 18:08:50 oliver Exp $
+// $Id: genericPDBFile.h,v 1.6 2000/10/23 23:31:01 amoll Exp $
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
 #define BALL_FORMAT_GENERICPDBFILE_H
@@ -717,10 +717,10 @@ namespace BALL
 				Character     alternate_location_indicator;
 				struct Residue
 				{
-		ResidueName residue_name;
-		Character   chain_ID;
-		Integer     sequence_number;
-		AChar       insertion_code;
+					ResidueName residue_name;
+					Character   chain_ID;
+					Integer     sequence_number;
+					AChar       insertion_code;
 				} residue;
 			} partner_atom[2];
 			SymmetryOperator first_atom;
@@ -1198,11 +1198,9 @@ namespace BALL
 		virtual bool hasFormat(const String& s) const;
 
 
-
 		protected:
 		
 		void clear_();
-
 
 
 		private:

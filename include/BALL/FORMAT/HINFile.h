@@ -1,4 +1,4 @@
-// $Id: HINFile.h,v 1.8 2000/07/12 19:30:55 oliver Exp $
+// $Id: HINFile.h,v 1.9 2000/10/23 23:31:00 amoll Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -21,8 +21,6 @@
 
 namespace BALL 
 {
-
-
 	class System;
 	class Atom;
 
@@ -106,7 +104,6 @@ namespace BALL
 		protected:
 		
 		Box3		box_;
-
 		float		temperature_;
 	
 		void writeAtom_(const Atom& atom, Size number, Size atom_offset);

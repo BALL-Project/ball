@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.24 2000/10/17 10:14:53 oliver Exp $
+// $Id: HINFile.C,v 1.25 2000/10/23 23:31:08 amoll Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -109,16 +109,13 @@ namespace BALL
 								 << atom.getVelocity().x << " " 
 								 << atom.getVelocity().y << " "
 								 << atom.getVelocity().z << endl;
-
 	}
-
 	
 	void HINFile::write(const System& system)
 	{
 		// the atom_vector contains the atoms in the order of
 		// the atom iterator
 		vector<Atom*>		atom_vector;
-		
 
 		// create a vector containing pointers to the atoms
 		AtomIterator	atom_it;		
@@ -134,8 +131,6 @@ namespace BALL
 
 		typedef list<Size> Component;
 		typedef	vector<Component>	ComponentVector;
-
-		
 
 		// now calculate all connected components in the graph
 		// formed by atoms and bonds of the system
@@ -182,7 +177,8 @@ namespace BALL
 						// add the atom if it is not marked yet
 						// ignore all bonds to atoms outside the system 
 						// (these atoms have not been marked, so getProperty will return 0)
-						Size atom_index = bond_it->getPartner(current_atom)->getProperty("__HINFILE_INDEX").getUnsignedInt();
+						Size atom_index = bond_it->getPartner(current_atom)
+																->getProperty("__HINFILE_INDEX").getUnsignedInt();
 						if ((atom_index != 0) && (index_vector[atom_index - 1] == -1))
 						{
 							// remember this atom in the stack
@@ -212,9 +208,9 @@ namespace BALL
 			
 			// and set the atom's HINFILE_INDEX properly
 			// (i.e. to the index in the right connected component
-			atom_vector[i]->setProperty("__HINFILE_INDEX", (unsigned int)components[index_vector[i]].size());
+			atom_vector[i]->setProperty("__HINFILE_INDEX", 
+																	(unsigned int)components[index_vector[i]].size());
 		}
-		
 
 		// write some default header
 		*(File*)this << "; HyperChem file created by BALL" << endl;
@@ -326,7 +322,6 @@ namespace BALL
 				*(File*)this << "endres " << res_count << endl;
 			}
 
-						
 			// write endmol keyword
 			*(File*)this << "endmol " << j + 1 << endl;
 		}
@@ -388,7 +383,6 @@ namespace BALL
 				error = true;\
 			}\
 			Log.error() << "Line " << number_of_lines << ": "
-		
 		
 
 		const	Size	MAX_LENGTH = 512;	
@@ -673,7 +667,6 @@ namespace BALL
 						chain->setName(line.getField(5));
 					}
 					
-
 					// create a fragment to insert the "loose" atoms into
 					if (fragment == 0)
 					{

@@ -3,39 +3,37 @@
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/DATATYPE/string.h>
-
 #include <BALL/FORMAT/JCAMPFile.h>
 
 using namespace BALL;
 
-class Bruker2D : public BALL::File
+class Bruker2D
+	: public File
 {
  public:
-  /**
-   * Konstruktor. Wichtig: name ist hier der Name des Bruker-*Verzeichnisses*
-   */
-  Bruker2D( const String& name, OpenMode open_mode = IN|BINARY );
 
-  /**
-   * Copy-Konstruktor.
-   */
-  Bruker2D( const Bruker2D& file );
+  /**	Constructor.
+			@param name important: name of the Bruker-*directory*
+  */
+  Bruker2D(const String& name, OpenMode open_mode = IN|BINARY);
 
-  /**
-   * Destruktor.
-   */
+  /**	Copy-Constructor.
+  */
+  Bruker2D(const Bruker2D& file);
+
+  /**	Destructor.
+  */
   ~Bruker2D();
 
-  /**
-   * Read a spectrum.
-   */
-  void read( vector<double>& dat );
+  /** Read a spectrum.
+  */
+  void read(vector<double>& dat);
 
-  /**
-   * These classes give access to the parameters used in aqcuiring the
-   * spectrum.
-   */
-  BrukerParameter *parsf1_, *parsf2_;
+  /**	These classes give access to the parameters used in processing the
+			spectrum.
+  */
+  BrukerParameter* parsf1_;
+	BrukerParameter* parsf2_;
 
  protected:
   int minx_, maxx_, miny_, maxy_;

@@ -1,4 +1,4 @@
-// $Id: resourceFile.h,v 1.7 2000/10/23 17:37:29 amoll Exp $
+// $Id: resourceFile.h,v 1.8 2000/10/23 23:31:02 amoll Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -104,7 +104,7 @@ namespace BALL
 		/**	Assignment operator.
 				@param entry the ResourceEntry object to be copied
 		*/
-		ResourceEntry& operator = (const ResourceEntry &entry);
+		const ResourceEntry& operator = (const ResourceEntry &entry);
 	
 		/**	Assign the contents of a resource enytry to another one.
 				@param entry the ResourceEntry object to be copied
@@ -117,6 +117,14 @@ namespace BALL
 		/**	@name	Miscellaneous
 		*/
 		//@{
+
+		/** Equality operator
+		*/
+		bool operator == (const ResourceEntry& entry) const;
+
+		/** Inequality operator
+		*/
+		bool operator != (const ResourceEntry& entry) const;
 
 		/**	
 		*/
@@ -348,7 +356,7 @@ namespace BALL
 				delete[] stack_index_;
 			}
 			
-			IteratorTraits_ &operator = (const IteratorTraits_ &traits)
+			const IteratorTraits_& operator = (const IteratorTraits_ &traits)
 			{
 				bound_ = traits.bound_;
 				position_ = traits.position_;
@@ -720,6 +728,14 @@ namespace BALL
 		*/
 		//@{
 
+		/** Equality operator
+		*/
+		bool ResourceFile::operator == (const ResourceFile& entry) const;
+
+		/** Inequality operator
+		*/
+		bool ResourceFile::operator != (const ResourceFile& entry) const;
+
 		/*	Return true if the key exists somewhere in the tree.
 		*/
 		bool hasKey(const String& key_path) const;
@@ -798,7 +814,7 @@ namespace BALL
 
 		private:
 
-		ResourceFile& operator = (const ResourceFile& file);
+		const ResourceFile& operator = (const ResourceFile& file);
 
 		static void save_(File& file, const Entry* entry, Size& depth);
 
@@ -810,6 +826,28 @@ namespace BALL
 	};
 
 	//@}
+
+	bool ResourceEntry::operator == (const ResourceEntry& entry) const
+	{
+		return (key_ == entry.key_ && value_ == entry.value_ && 
+						number_children_ == entry.number_children_);
+	}
+
+	bool ResourceEntry::operator != (const ResourceEntry& entry) const
+	{
+		return !(*this == entry);
+	}
+
+	bool ResourceFile::operator == (const ResourceFile& rf) const
+	{
+		return (File::operator == (rf));
+	}
+
+	bool ResourceFile::operator != (const ResourceFile& rf) const
+	{
+		return !(*this == rf);
+	}
+
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/FORMAT/resourceFile.iC>

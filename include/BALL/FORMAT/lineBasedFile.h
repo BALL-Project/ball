@@ -26,7 +26,7 @@ namespace BALL
 	{
 		public:
 
-		//BALL_CREATE(LineBasedFile)
+		BALL_CREATE(LineBasedFile)
 
 		/**	@name Exceptions
 		*/

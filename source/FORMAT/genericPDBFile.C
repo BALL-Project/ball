@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.C,v 1.7 2000/10/20 12:07:26 oliver Exp $
+// $Id: genericPDBFile.C,v 1.8 2000/10/23 23:31:09 amoll Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -75,7 +75,6 @@ namespace BALL
 		{ PDB::RECORD_TYPE__TURN,   "TURN  ", "%.6s %3ld %3.3s %3.3s %c%4ld%c %3.3s %c%4ld%c    %-30.30s" },
 		{ PDB::RECORD_TYPE__TVECT,  "TVECT ", "%.6s %3ld%10f%10f%10f%30.30s" }
 	};
-
 
 
 	GenericPDBFile::GenericPDBFile()
@@ -155,7 +154,7 @@ namespace BALL
 		}
 
 		streampos old_pos = tellg();
-		register Size size = 0;
+		Size size = 0;
 
 		if (from_begin_of_file == true)
 		{
@@ -187,7 +186,7 @@ namespace BALL
 		}
 
 		streampos old_pos = tellg();
-		register Size size = 0;
+		Size size = 0;
 
 		if (from_begin_of_file == true)
 		{
@@ -763,8 +762,8 @@ namespace BALL
 		bool has_format;
 		streampos old_pos = tellg();
 
-		has_format= (bool)(readFirstRecord(false) == true
-											 && current_record_type_ != PDB::RECORD_TYPE__UNKNOWN);
+		has_format= (readFirstRecord(false) == true
+								 && current_record_type_ != PDB::RECORD_TYPE__UNKNOWN);
 
 		seekg(old_pos);
 
@@ -1915,9 +1914,9 @@ namespace BALL
 			case PDB::RECORD_TYPE__SIGATM:
 
 				if (selected_model_ != 0
-			&& selected_model_ != current_model_)
+						&& selected_model_ != current_model_)
 				{
-		return true;
+					return true;
 				}
 
 				parseLine
@@ -1961,7 +1960,7 @@ namespace BALL
 			case PDB::RECORD_TYPE__SIGUIJ:
 
 				if (selected_model_ != 0
-			&& selected_model_ != current_model_)
+						&& selected_model_ != current_model_)
 				{
 		return true;
 				}
@@ -2116,9 +2115,9 @@ namespace BALL
 			case PDB::RECORD_TYPE__TER:
 
 				if (selected_model_ != 0
-			&& selected_model_ != current_model_)
+						&& selected_model_ != current_model_)
 				{
-		return true;
+					return true;
 				}
 
 				parseLine
@@ -2204,7 +2203,7 @@ namespace BALL
 		 record_TVECT.comment);
 
 
-				
+
 			default:
 				
 				return readUnknownRecord(line);

@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.9 2000/10/05 17:28:11 anker Exp $
+// $Id: INIFile.C,v 1.10 2000/10/23 23:31:08 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 
@@ -96,7 +96,6 @@ namespace BALL
 			// check for comment lines
 			if ((buffer[0] != '!') && (buffer[0] != ';') && (buffer[0] != '#'))
 			{
-
 				// check for start of section
 				if (buffer[0] == '[')
 				{	
@@ -105,9 +104,12 @@ namespace BALL
 
 					// check for a closing "]"
 					Size index;
-					if (line.size() > 0){
+					if (line.size() > 0)
+					{
 						index = line.find_first_of("]");
-					} else {
+					}
+					else 
+					{
 						index = string::npos;
 					}
 
@@ -126,13 +128,17 @@ namespace BALL
 						{
 							// if this is the first section, there is no end to remember
 							section_end_.push_back(lines_.size() - 2);
-						} else {
+						}
+						else 
+						{
 							// if the first line of the first section is the first line
 							// of the file, then there is no empty section 0
 							if (lines_.size() == 1)
 							{
 								section_names_.push_back(section_name);
-							} else {
+							}
+							else
+							{
 								// insert a dummy name for the first section
 								section_names_.push_back("");
 								section_names_.push_back(section_name);
@@ -142,7 +148,9 @@ namespace BALL
 						section_index_[line] = section_start_.size();
 						section_start_.push_back(lines_.size());
 					}
-				} else {
+				}
+				else
+				{
 					// check for lines matching ".*=". These are key/value pairs
 					if ((line.size() > 0) && (line.find_first_of("=") > 0))
 					{
@@ -183,7 +191,6 @@ namespace BALL
 			return false;
 		}
 
-
 		// write all the original lines of the file
 		Index current_section_index = 0;
 		Size i;
@@ -196,34 +203,37 @@ namespace BALL
 			} 
 			// skip the line if it was marked for removal 
 			// (negative sign of the index)
-			else if (line_section_index_[i] == -current_section_index)
-			{
-				continue;
-			}
 			else 
 			{
-				// we entered a new section: we have to check for added lines
-				// which are inserted at the end of lines_ (index above
-				// original_number_of_lines_)
-				for (Size j = original_number_of_lines_; j < lines_.size(); j++)
+				if (line_section_index_[i] == -current_section_index)
 				{
-					// if any of the added lines belongs to our current
-					// section, write it to the file
-					if (line_section_index_[j] == current_section_index)
+					continue;
+				}
+				else 
+				{
+					// we entered a new section: we have to check for added lines
+					// which are inserted at the end of lines_ (index above
+					// original_number_of_lines_)
+					for (Size j = original_number_of_lines_; j < lines_.size(); j++)
 					{
-						out << lines_[j] << endl;
+						// if any of the added lines belongs to our current
+						// section, write it to the file
+						if (line_section_index_[j] == current_section_index)
+						{
+							out << lines_[j] << endl;
+						}
 					}
+					
+					// now write the first line of the new section 
+					// if it was not marked for removal
+					if (line_section_index_[i] >= 0)
+					{
+						out << lines_[i] << endl;
+					}
+					
+					// and increment the section index
+					current_section_index++;
 				}
-				
-				// now write the first line of the new section 
-				// if it was not marked for removal
-				if (line_section_index_[i] >= 0)
-				{
-					out << lines_[i] << endl;
-				}
-				
-				// and increment the section index
-				current_section_index++;
 			}
 		}
 
@@ -250,7 +260,9 @@ namespace BALL
 	String* INIFile::getLine(Size line_number)
 	{
 		if (line_number < lines_.size())
+		{
 			return &(lines_[line_number]);
+		}
 
 		return 0;
 	}
@@ -258,7 +270,9 @@ namespace BALL
 	bool INIFile::setLine(Size line_number, const String& line)
 	{
 		if (line_number >= lines_.size())
+		{
 			return false;
+		}
 		
 		lines_[line_number] = line;
 		
@@ -394,7 +408,9 @@ namespace BALL
 
 		// check whether we know the key - return false in case of failure
 		if (!section_key_map_.has(match_name))
+		{
 			return "";
+		}
 
 		// get the part of the line behind the "="
 		StringHashMap<Size>&	map = const_cast<StringHashMap<Size>&>(section_key_map_);
