@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.C,v 1.6 2000/01/17 13:08:48 oliver Exp $
+// $Id: genericPDBFile.C,v 1.7 2000/10/20 12:07:26 oliver Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -99,29 +99,46 @@ namespace BALL
 	}
 
 	const char* GenericPDBFile::getAtomElementSymbol
-		(const PDB::Atom atom_name,
-		 PDB::Atom element_symbol)
+		(const PDB::Atom atom_name, PDB::Atom element_symbol)
 	{
-		if (atom_name[0] == ' ' || isdigit(atom_name[0]))
+		// If the element_symbol entry is valid, it has precedence
+		if (((element_symbol[0] == ' ') && (element_symbol[1] == ' '))
+				|| (element_symbol[0] == '\0') || (element_symbol[0] == '\0'))
 		{
-			if (atom_name[1] == ' ')
+			// Otherwise, we try to reconstruct the element
+			// from the atom name (which is dangerous if non-PDB names are
+		  // present, e.g. names like HE12 which is read as He!)
+			if (atom_name[0] == ' ' || isdigit(atom_name[0]))
 			{
-				element_symbol[0] = '\0';
+				if (atom_name[1] == ' ')
+				{
+					element_symbol[0] = '\0';
+				}
+				else
+				{
+					element_symbol[0] = atom_name[1];
+					element_symbol[1] = '\0';
+				}
 			}
 			else
 			{
-				element_symbol[0] = atom_name[1];
-				element_symbol[1] = '\0';
+				element_symbol[0] = atom_name[0];
+				element_symbol[1] = atom_name[1];
+				element_symbol[2] = '\0';
 			}
 		}
 		else
 		{
-			element_symbol[0] = atom_name[0];
-			element_symbol[1] = atom_name[1];
-			element_symbol[2] = '\0';
+			// if the element symbol starts with a blank,
+			// drop the blank
+			if (element_symbol[0] == ' ')
+			{
+				element_symbol[0] = element_symbol[1];
+				element_symbol[1] = '\0';
+			}
 		}
 
-		return (const char *)element_symbol;
+		return (const char*)element_symbol;
 	}
 
 	Size GenericPDBFile::countRecord
