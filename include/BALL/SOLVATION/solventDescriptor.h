@@ -1,4 +1,4 @@
-// $Id: solventDescriptor.h,v 1.4 2000/10/17 17:14:35 anker Exp $
+// $Id: solventDescriptor.h,v 1.5 2001/02/03 15:25:59 amoll Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTDESCRIPTOR_H
 #define BALL_SOLVATION_SOLVENTDESCRIPTOR_H
@@ -89,7 +89,7 @@ namespace BALL
 		/** Set the number density */
 		void setNumberDensity(float number_density) throw();
 		
-		/** Get the number density of this solvent (in $\A^{-3}$) */
+		/** Get the number density of this solvent (in $ A^{-3}$) */
 		float getNumberDensity() const throw();
 
 		/** Set the list of solvent atom descriptors */

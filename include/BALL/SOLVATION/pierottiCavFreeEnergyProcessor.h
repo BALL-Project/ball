@@ -1,4 +1,4 @@
-// $Id: pierottiCavFreeEnergyProcessor.h,v 1.6 2000/10/17 17:14:35 anker Exp $
+// $Id: pierottiCavFreeEnergyProcessor.h,v 1.7 2001/02/03 15:25:59 amoll Exp $
 
 #ifndef BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_PIEROTTICAVFREEENERGYPROCESSOR_H
@@ -49,7 +49,7 @@ namespace BALL
 
 			/** The number density of the solvent.
 				This option defines the number density of the surrounding solvent. Use
-				float values of unit $\A^{-3}$ with this option.
+				float values of unit $ A^{-3} $ with this option.
 				@see Default::SOLVENT_NUMBER_DENSITY
 				@param solvent_number_density float
 			 */
@@ -75,7 +75,7 @@ namespace BALL
 			/** The probe radius.
 				This option defines the hard sphere solvent radius needed for the
 				calculation of the cavitation free energy according to the scaled
-				particle theory. Use float values of unit $\A$ with this option.
+				particle theory. Use float values of unit $ A $ with this option.
 				@see Default::PROBE_RADIUS
 				@param probe_radius float;
 			 */
@@ -95,7 +95,7 @@ namespace BALL
 
 			/** Default number density.
 				This default value is the number density of water at 300 K and
-				standard pressure (3.33253e-2 $\A^{-3}$).
+				standard pressure (3.33253e-2 $ A^{-3} $).
 				@see Option::SOLVENT_NUMBER_DENSITY;
 			 */
 			static const float SOLVENT_NUMBER_DENSITY;
@@ -114,7 +114,7 @@ namespace BALL
 
 			/** Default probe radius.
 				This probe radius is the one suggested by Pierotti et al. in their
-				paper (1.385 $\A$).
+				paper (1.385 $ A $).
 				@see Option::PROBE_RADIUS
 			 */
 			static const float PROBE_RADIUS;

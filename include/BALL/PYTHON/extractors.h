@@ -1,4 +1,4 @@
-// $Id: extractors.h,v 1.6 2000/08/30 19:58:22 oliver Exp $
+// $Id: extractors.h,v 1.7 2001/02/03 15:30:30 amoll Exp $
 
 #ifndef BALL_PYTHON_EXTRACTORS_H
 #define BALL_PYTHON_EXTRACTORS_H
@@ -28,29 +28,27 @@ namespace BALL
 			The following set of functions can by used from python to
 			compile lists of objects from BALL kernel data structures.
 			using the python {\tt for} loop, it is then possible to
-			iterate over the objects of the list.
-			\\
+			iterate over the objects of the list.	\\
 			For example, the BALL code
 			\begin{verbatim}
-			System S = ..;
-			AtomIterator it;
-			for (it = S.begin(); +it; ++it)
-			{
-				cout << it->getFullName();
-			}
+				System S = ..;
+				AtomIterator it;
+				for (it = S.begin(); +it; ++it)
+				{
+					cout << it->getFullName();
+				}
 			\end{verbatim}
-			can be rewritten using the se extractor functions in Python as:
+			can be rewritten using the extractor functions in Python as:
 			\begin{verbatim}
-			S = System(...);
-			for atom in atoms(S):
-				print atom.getFullName()
+				S = System(...);
+				for atom in atoms(S):
+					print atom.getFullName()
 			\end{verbatim}
-			\\
 			{\bf Definition:} \URL{BALL/PYTHON/extractors.h}
-			\\
 			{\bf Framework:} PYTHON scripting
 	*/
 	//@{
+
 	/**	Extract atoms matching an expression.
 			This method extracts all atoms of a kernel data structure into
 			a list that match the \Ref{Expression} {\tt expression}.
@@ -60,8 +58,7 @@ namespace BALL
 	PyAtomList* atoms(const AtomContainer& fragment, const String& expression);
 			
 	/**	Extract all atoms.
-			This method extracts all atoms of a kernel data structure into
-			a list. 
+			This method extracts all atoms of a kernel data structure into a list. 
 			@param fragment the AtomContainer containing the atoms
 	*/
 	PyAtomList* atoms(const AtomContainer& fragment);
@@ -92,7 +89,6 @@ namespace BALL
 			This function returns all bonds of an atom.
 	*/
 	PyBondList* bonds(const Atom& atom);
-			
 
 	/**	Extract all base fragments from a kernel data structure.
 	*/
@@ -131,6 +127,7 @@ namespace BALL
 	PyNucleotideList* nucleotides(const AtomContainer& fragment, bool selected_only = false);
 
 	//@}
+
 } // namespace BALL
 
 #endif // BALL_PYTHON_EXTRACTORS_H

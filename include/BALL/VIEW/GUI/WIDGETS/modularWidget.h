@@ -1,4 +1,4 @@
-// $Id: modularWidget.h,v 1.5 2000/12/21 17:03:39 amoll Exp $
+// $Id: modularWidget.h,v 1.6 2001/02/03 15:26:54 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -44,7 +44,7 @@ using namespace BALL;
 		Python interpreter (if desired).\\
 		When implementing classes derived from ModularWidget and you
 		want to give access to the class (from Python), please remember
-		to include the \REF{BALL_EMBEDDABLE} macro in the public section
+		to include the \Ref{BALL_EMBEDDABLE} macro in the public section
 		of your class declaration. Also make sure that the QT class you
 		derive from (e.g. QWidget) is the {\em first} base class and
 		ModularWidget second.

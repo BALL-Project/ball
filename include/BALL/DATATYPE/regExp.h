@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.11 2000/12/04 18:18:40 amoll Exp $
+// $Id: regExp.h,v 1.12 2001/02/03 15:31:16 amoll Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -38,8 +38,7 @@ namespace BALL
 		*/
 		//@{
 			
-		/**	alphabetic letters
-				([A-Za-z])
+		/**	alphabetic letters.
 		*/
 		static const String ALPHA;
 
@@ -48,57 +47,46 @@ namespace BALL
 		static const String ALPHANUMERIC;
 
 		/**	real numbers
-				("^-?(([0-9]+\\.[0-9]*)|([0-9]+)|(\\.[0-9]+))([eE][---+]?[0-9]+)?$")
 		*/
 		static const String REAL;
 
 		/** identifier characters
-				("^[A-Za-z_][A-Za-z0-9_]*$")
 		*/
 		static const String IDENTIFIER;
 
 		/** integer characters
-				(-?[a-z])
 		*/
 		static const String INTEGER;
 
 		/** hexadecimal and integer characters
-				("^-?(0x|0X|)[:xdigit:]$")
 		*/
 		static const String HEXADECIMAL_INTEGER;
 
 		/** lowercase letters
-				([a-z])
 		*/
 		static const String LOWERCASE;
 
 		/** non alphabetic characters
-				(all whitout [A-Za-z])
 		*/
 		static const String NON_ALPHA;
 
 		/** non alphanumeric characters
-				(all whithout [0-9A-Za-z])
 		*/
 		static const String NON_ALPHANUMERIC;
 
 		/** non numeric characters
-				(all whithout [0-9])
 		*/
 		static const String NON_NUMERIC;
 
 		/** non whitespace charcters
-				(all whithout \n\t\r\f\v)
 		*/
 		static const String NON_WHITESPACE;
 
 		/**	uppercase letters.
-				([A-Z])
 		*/
 		static const String UPPERCASE;
 
 		/** whitespace characters.
-				(\n\t\r\f\v)
 		*/
 		static const String WHITESPACE;
 		//@}

@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.6 2000/11/28 17:31:21 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.7 2001/02/03 15:25:59 amoll Exp $
 
 // BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -102,7 +102,7 @@ namespace BALL
 
 			/** The number density of the solvent.
 				This option defines the number density of the surrounding solvent. Use
-				float values of unit $\A^{-3}$ with this option.
+				float values of unit $ A^{-3} $ with this option.
 				@see Default::SOLVENT_NUMBER_DENSITY
 				@param solvent_number_density float
 			 */
@@ -144,7 +144,7 @@ namespace BALL
 
 			/** Default number density.
 				This default value is the number density of water at 300 K and
-				standard pressure (3.33253e-2 $\A^{-3}$).
+				standard pressure (3.33253e-2 $ A^{-3}$).
 				@see Option::SOLVENT_NUMBER_DENSITY;
 			 */
 			static const float SOLVENT_NUMBER_DENSITY;
