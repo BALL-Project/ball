@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.86 2003/10/05 21:07:42 amoll Exp $
+// $Id: mainframe.C,v 1.87 2003/10/05 21:18:00 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -153,7 +153,7 @@ Log.error() << "new Mainframe " << this << std::endl;
 	String hint;
 
 	// File Menu
-	insertMenuEntry(MainControl::FILE_EXPORT, "Export POVRa&y file", this, SLOT(exportPOVRay()), 
+	insertMenuEntry(MainControl::FILE_EXPORT, "POVRa&y scene", this, SLOT(exportPOVRay()), 
 									CTRL+Key_Y, MENU_EXPORT_POVRAYFILE);
 
 	// Display Menu
