@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.33 2001/02/24 01:20:11 amoll Exp $
+// $Id: atom.h,v 1.34 2001/02/24 23:18:48 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -161,7 +161,6 @@ namespace BALL
 		
 			/** Copy constructor.
 					The copy is either deep or shallow (default).
-					The state of this bond is initialized to the state of {\em atom}.\\
 					{\bf Note:} Deep copying of atoms does not include bond cloning.
 					@param   atom the atom to be copied (cloned)
 					@param   deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em atom}
@@ -212,7 +211,6 @@ namespace BALL
 				throw();
 
 			/** Explicit default initialization.
-					Set the state of this instance to the default values.
 					Calls {Composite::clear}.
 					@see	Composite::clear
 					@see	Atom
@@ -235,15 +233,13 @@ namespace BALL
 			*/
 			//@{
 	
-			/**	Persistent writing.
-					Writes a Atom object to a persistent stream.
+			/**	Writes a Atom object to a persistent stream.
 					@param pm the persistence manager
 			*/
 			virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const
 				throw();
 
-			/**	Persistent reading.
-					Reads a Atom object from a persistent stream.
+			/**	Reads a Atom object from a persistent stream.
 					@param pm the persistence manager
 			*/
 			virtual void persistentRead(PersistenceManager& pm)
@@ -256,7 +252,6 @@ namespace BALL
 
       /** Assignment with cloning facility.
           The assignment is either deep or shallow (default).
-          The state of this instance is initialized to the state of {\em atom}.\\
           {\bf Note:} Deep copying of bonds is not supported.
           @param   atom the atom to be copied (cloned)
           @param   deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em atom}
@@ -266,7 +261,6 @@ namespace BALL
 
       /** Copying with cloning facility.
           The assignment is either deep or shallow (default). Calls \Ref{Atom::set}.
-          The state of {\em atom} is initialized to the state of this instance.\\
           {\bf Note:} Deep copying of bonds is not supported.
           @param  atom the atom to be assigned to
           @see    Atom::set
@@ -276,7 +270,6 @@ namespace BALL
 
 			/** Assignment operator.
 					The assignment is deep.	Calls \Ref{Atom::set}.
-					The state of this instance is initialized to the state of {\em atom}.\\
 					{\bf Note:} Deep copying of bonds is not supported.
 					@param   atom the atom to be copied (cloned)
 					@return  Atom& - this instance
@@ -286,7 +279,6 @@ namespace BALL
 				throw();
 
 			/** Swapping of atoms.
-					Swap the states of this instance with {\em atom}.
 					@param   atom the atom being swapped with this instance 
 					@see     Atom::Atom
 			*/
@@ -296,7 +288,7 @@ namespace BALL
 			//@}
 
 			/**	Equality operator.
-					Two atoms are equal if they have the same attributes and the same properties.
+					Two atoms are equal if they have the same handle.
 					@see Object::operator ==
 			*/
 			bool operator == (const Atom& atom) const
@@ -313,28 +305,28 @@ namespace BALL
 			//@{ 
 
 			/** Change the atom element type.
-					@param   element the new element type of this instance
+					@param   element the new element type
 					@see     Atom::getElement
 			*/
 			void setElement(const Element& element)
 				throw();
 				
 			/** Constant inspection of the atom element type.
-					@return  Element& - constant reference to the element type of this instance
+					@return  Element& - constant reference to the element type
 					@see     Atom::setElement
 			*/
 			const Element& getElement() const
 				throw();
 
 			/** Change the atom's charge.
-					@param   charge the new charge of this instance
+					@param   charge the new charge
 					@see     Atom::getCharge
 			*/
 			void setCharge(float charge)
 				throw();
 
 			/** Constant inspection of the atom's charge.
-					@return  float - copy of the charge of this instance
+					@return  float - copy of the charge
 					@see     Atom::setCharge
 			*/
 			float getCharge() const
@@ -345,8 +337,7 @@ namespace BALL
 					{\bf Note:} No corresponding mutator Atom::setMolecule exists to
 					consider design of contract - an atom may not insert into a molecule,
 					it must be inserted via the molecule.
-					@return  Molecule* - mutable pointer to the parent molecule of this instance,
-									 0 if no parent molecule exists
+					@return  Molecule* - mutable pointer to the parent molecule
 			*/
 			Molecule *getMolecule()
 				throw();
@@ -356,8 +347,7 @@ namespace BALL
 					{\bf Note:} No corresponding mutator Atom::setMolecule exists to
 					consider design of contract - an atom may not insert into a molecule,
 					it must be inserted via the molecule.
-					@return  Molecule* - constant pointer to the parent molecule of this instance,
-									 0 if this instance does not have a parent molecule
+					@return  Molecule* - constant pointer to the parent molecule
 			*/
 			const Molecule* getMolecule() const
 				throw();
@@ -367,8 +357,7 @@ namespace BALL
 					{\bf Note:} No corresponding mutator Atom::setFragment exists to
 					consider design of contract - an atom may not insert into a fragment,
 					it must be inserted via the fragment.
-					@return   Fragment* - mutable pointer to the parent fragment of this instance,
-										0 if this instance does not have a parent fragment
+					@return   Fragment* - mutable pointer to the parent fragment
 			*/
 			Fragment* getFragment()
 				throw();
@@ -378,36 +367,34 @@ namespace BALL
 					{\bf Note:} No corresponding mutator Atom::setFragment exists to
 					consider design of contract - an atom may not insert into a fragment,
 					it must be inserted via the fragment.
-					@return   Fragment* -	constant pointer to the parent fragment of this instance,
-										0 if this instance does not have a parent fragment
+					@return   Fragment* -	constant pointer to the parent fragment
 			*/
 			const Fragment* getFragment() const
 				throw();
 
 			/** Constant inspection of the atom's parent residue.
 					The reference is 0 if this instance does does not have a parent residue.\\
-					@return  Residue* - constant pointer to the parent residue of this instance,
-									 0 if this instance does not have a parent residue
+					@return  Residue* - constant pointer to the parent residue
 			*/
 			const Residue* getResidue() const
 				throw();
 
 			/** Change the atom's name.
-					@param   name the new name of this instance
+					@param   name the new name
 					@see     Atom::getName
 			*/
 			void setName(const String& name)
 				throw();
 
 			/** Mutable inspection of the atom's name.
-					@return  String& - mutable reference to the name of this instance
+					@return  String& - mutable reference to the name
 					@see     Atom::setName
 			*/
 			String& getName()
 				throw();
 
 			/** Constant inspection of the atom's name.
-					@return  String& - constant reference to the name of this instance
+					@return  String& - constant reference to the name
 					@see     Atom::setName
 			*/
 			const String& getName() const
@@ -446,49 +433,49 @@ namespace BALL
 				throw();
 
 			/** Change the atom's position vector.
-					@param   position the new position vector of this instance
+					@param   position the new position vector
 					@see     Atom::getPosition
 			*/
 			void setPosition(const Vector3& position)
 				throw();
 
 			/** Mutable inspection of the atom's position vector.
-					@return  Vector3& - muteable reference to the position vector of this instance
+					@return  Vector3& - muteable reference to the position vector
 					@see     Atom::setPosition
 			*/
 			Vector3& getPosition()
 				throw();
 
 			/** Constant inspection of the atom's position vector.
-					@return  Vector3& - constant reference to the position vector of this instance
+					@return  Vector3& - constant reference to the position vector
 					@see     Atom::setPosition
 			*/
 			const Vector3& getPosition() const
 				throw();
 
 			/** Change the atom's radius.
-					@param   radius the new radius of this instance
+					@param   radius the new radius
 					@see     Atom::getRadius
 			*/
 			void setRadius(float radius)
 				throw();
 				
 			/** Constant inspection of the atom's radius.
-					@return  float - copy of the radius of this instance
+					@return  float - copy of the radius
 					@see     Atom::setRadius
 			*/
 			float getRadius() const
 				throw();
 
 			/** Change the atom's type.
-					@param   atom_type the new type of this instance
+					@param   atom_type the new type
 					@see     Atom::getType
 			*/
 			void setType(Type atom_type)
 				throw();
 		
 			/** Constant inspection of the atom's type.
-					@return  Type - copy of the type of this instance
+					@return  Type - copy of the type
 					@see     Atom::setType
 			*/
 			Type getType() const
@@ -505,7 +492,7 @@ namespace BALL
 				throw();
 
 			/** Change the atom's velocity vector.
-					@param   velocity the new velocity vector of this instance
+					@param   velocity the new velocity vector
 					@see     Atom::getVelocity
 			*/
 			void setVelocity(const Vector3& velocity)
@@ -513,7 +500,7 @@ namespace BALL
 
 			/** Constant inspection of the atom's velocity vector.
 					BALL uses units of \TeX{\AA}/ps for the velocity.
-					@return  Vector3& - constant reference to the velocity vector of this instance
+					@return  Vector3& - constant reference to the velocity vector
 					@see     Atom::setVelocity
 			*/
 			const Vector3& getVelocity() const
@@ -521,7 +508,7 @@ namespace BALL
 
 			/** Change the atom's force vector.
 					BALL uses units of {\em Newton} (1 N = 1 J/m) as the unit of force.
-					@param   force the new force vector of this instance
+					@param   force the new force vector
 					@see     Atom::getForce
 			*/
 			void setForce(const Vector3& force)
@@ -529,7 +516,7 @@ namespace BALL
 
 			/** Mutable inspection of the atom's force vector.
 					BALL uses units of {\em Newton} (1 N = 1 J/m) as the unit of force.
-					@return  Vector3& - mutable reference to the force vector of this instance
+					@return  Vector3& - mutable reference to the force vector
 					@see     Atom::setForce
 			*/
 			Vector3& getForce()
@@ -537,14 +524,14 @@ namespace BALL
 
 			/** Constant inspection of the atom's force vector.
 					BALL uses units of {\em Newton} (1 N = 1 J/m) as the unit of force.
-					@return  Vector3& - constant reference to the force vector of this instance
+					@return  Vector3& - constant reference to the force vector
 					@see     Atom::setForce
 			*/
 			const Vector3& getForce() const
 				throw();
 
 			/** Constant inspection of the atom's number of bonds.
-					@return	Size - copy of number of bonds of this instance
+					@return	Size - copy of number of bonds
 			*/
 			Size countBonds() const
 				throw();
@@ -626,7 +613,7 @@ namespace BALL
 			Bond* createBond(Bond& bond, Atom& atom)
 				throw();
 
-			// UNDOCUMENTED, yet
+			// BAUSTELLE
 			Bond* cloneBond(Bond& bond, Atom& atom)
 				throw();
 
@@ -722,7 +709,7 @@ namespace BALL
 			/** Internal state dump.
 					Dump the current internal state of this instance to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-					@param   s - output stream where to output the internal state of this instance
+					@param   s - output stream where to output the internal state
 					@param   depth - the dumping depth
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
@@ -737,7 +724,7 @@ namespace BALL
 				 Read persistent bond data from the input stream {\em s} and restore the state of this instance.
 				 Virtually called by \Ref{Object::operator >>}.\\
 				 {\bf Note:} Not yet implemented.
-				 @param  s input stream from where to restore the internal state of this instance
+				 @param  s input stream from where to restore the internal state
 				 @see    Object::operator >>
 			*/
 			virtual void read(std::istream& s)
@@ -747,7 +734,7 @@ namespace BALL
   			 Write persistent bond data to the output stream {\em s} and store the state of this instance.
 				 Virtually called by \Ref{Object::operator <<}.\\
 				 {\bf Note:} Not yet implemented.
-				 @param  s input stream from where to restore the internal state of this instance
+				 @param  s input stream from where to restore the internal state
 				 @see    Object::operator <<
 			*/
 			virtual void write(std::ostream& s) const
@@ -1002,8 +989,8 @@ namespace BALL
 					this instance and iterating over its bonds.
 					The built instance is positioned at this 
 					atom's first bond.
-					@return   Atom::BondIterator - a copy of a Atom::BondIterator instance 
-										of this instance positioned at its first bond
+					@return   Atom::BondIterator - a copy of a Atom::BondIterator 
+										positioned at its first bond
 			*/
 			BondIterator beginBond()
 				throw()
@@ -1017,7 +1004,7 @@ namespace BALL
 					{\bf Note:} A past-the-end BondIterator instance is used as a sentinel for the
 					finish of a forward iteration over this instance.
 					@return   Atom::BondIterator - a copy of a past-the-end Atom::BondIterator
-										instance of this instance positioned past its last forward reachable bond
+										positioned past its last forward reachable bond
 			*/
 			BondIterator endBond()
 				throw()
@@ -1049,7 +1036,7 @@ namespace BALL
 					{\bf Note:} A past-the-end BondConstIterator instance is used as a
 					sentinel for the finish of a forward iteration over this constant atom.
 					@return   Atom::BondConstIterator - a copy of a past-the-end Atom::BondIterator
-										instance of this instance positioned past its last forward reachable constant bond
+										positioned past its last forward reachable constant bond
 			*/
 			BondConstIterator endBond() const
 				throw()
