@@ -1,4 +1,7 @@
-// $Id: complex.h,v 1.5 2002/09/03 14:29:59 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: complex.h,v 1.6 2002/09/05 11:41:31 oliver Exp $
 
 #ifndef BALL_MATHS_COMPLEX_H
 #define BALL_MATHS_COMPLEX_H
