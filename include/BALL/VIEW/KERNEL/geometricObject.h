@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.22 2002/12/16 12:22:54 sturm Exp $
+// $Id: geometricObject.h,v 1.23 2002/12/16 15:35:41 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -133,9 +133,6 @@ namespace BALL
 				/// the object is drawn with high resolution (Default). This property turns off the other resolution properties. (*)
 				PROPERTY__DRAWING_PRECISION_HIGH,  // Default
 
-				/// the object is drawn with ultra resolution. This property turns off the other resolution properties. (*)
-				PROPERTY__DRAWING_PRECISION_ULTRA,
-				
 				NUMBER_OF_PROPERTIES
 			};
 		

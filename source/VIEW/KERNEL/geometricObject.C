@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.C,v 1.15 2002/12/16 12:23:13 sturm Exp $
+// $Id: geometricObject.C,v 1.16 2002/12/16 15:35:16 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -111,12 +111,11 @@ namespace BALL
 				clearProperty(GeometricObject::PROPERTY__OBJECT_CLOSED);
 			}
 			else if (property >= GeometricObject::PROPERTY__DRAWING_PRECISION_LOW
-							 && property <= GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA)
+							 && property <= GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH)
 			{
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_LOW);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_MEDIUM);
 				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH);
-				clearProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA);
 			}
 			else if (property >= GeometricObject::PROPERTY__DRAWING_MODE_DOTS 
 							 && property <= GeometricObject::PROPERTY__DRAWING_MODE_SOLID)
@@ -221,11 +220,6 @@ namespace BALL
 					 << endl;
 
 			BALL_DUMP_DEPTH(s, depth);
-			s << "  dprecision ultra: " 
-					 << BALL_VIEW_PRINT_PROPERTY(GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA) 
-					 << endl;
-
-			BALL_DUMP_DEPTH(s, depth);
 			s << "          selected: " 
 					 << (isSelected() ? "yes" : "no") << endl;
 
@@ -252,10 +246,6 @@ namespace BALL
 			else if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH) == true)
 			{
 				precision = (unsigned int)GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH;
-			} 
-			else if (hasProperty(GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA) == true)
-			{
-				precision = (unsigned int)GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA;
 			} 
 			else // default
 			{
