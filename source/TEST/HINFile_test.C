@@ -1,4 +1,4 @@
-// $Id: HINFile_test.C,v 1.4 2001/03/11 23:19:32 amoll Exp $
+// $Id: HINFile_test.C,v 1.5 2001/03/12 01:10:14 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.4 2001/03/11 23:19:32 amoll Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.5 2001/03/12 01:10:14 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -54,13 +54,13 @@ RESULT
 
 
 CHECK(HINFile::hasPeriodicBoundary() const )
-  HINFile box("data/water.hin");
+  HINFile box("data/HINFile_test.hin");
 	TEST_EQUAL(box.hasPeriodicBoundary(), true)
 RESULT
 
 
 CHECK(HINFile::getPeriodicBoundary() const )
-  HINFile box("data/water.hin");
+  HINFile box("data/HINFile_test.hin");
 RESULT
 
 
