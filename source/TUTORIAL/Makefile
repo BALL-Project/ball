@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.7 2002/01/15 00:41:21 oliver Exp $
+# $Id: Makefile,v 1.8 2002/01/16 10:47:44 anker Exp $
 #========================
 # BALL/TUTORIAL Makefile
 #========================
@@ -29,4 +29,7 @@ tutorial3:	tutorial3.o
 
 bounding_box:	bounding_box.o glBoundingBoxModel.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o glBoundingBoxModel.o $(LIBS) $(BALLVIEW_LIBS)
+
+string_tutorial:	string_tutorial.o 
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS) 
 
