@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryControl.C,v 1.10 2003/09/17 22:16:41 amoll Exp $
+// $Id: trajectoryControl.C,v 1.11 2003/09/17 23:40:46 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/trajectoryControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -52,9 +52,8 @@ void TrajectoryControl::initializeWidget(MainControl& main_control)
 	throw()
 {
 	open_trajectory_id_ = 
-		main_control.insertMenuEntry(MainControl::FILE, "Open Trajectory", this, SLOT(addTrajectory()));
-	main_control.menuBar()->
-		setWhatsThis(open_trajectory_id_, "To open a trajectory file, one System has to be selected.");
+		main_control.insertMenuEntry(MainControl::FILE, "Open Trajectory", this, SLOT(addTrajectory()), 0, -1,
+		String("To open a trajectory file, one System has to be selected."));
 	GenericControl::initializeWidget(main_control);
 }
 

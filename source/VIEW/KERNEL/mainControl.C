@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.7 2003/09/17 22:16:40 amoll Exp $
+// $Id: mainControl.C,v 1.8 2003/09/17 23:40:46 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -61,6 +61,7 @@ MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 	statusBar()->addWidget(message_label_, 20);
 
 	connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
+	connect(menuBar(),	SIGNAL(highlighted(int)), this, SLOT(menuItemHighlighted(int)));
 }
 
 MainControl::MainControl(const MainControl& main_control)
@@ -479,7 +480,7 @@ MainControl* MainControl::getMainControl(const QObject* object)
 int MainControl::current_id_ = 15000;
 
 int MainControl::insertMenuEntry(int ID, const String& name, const QObject* receiver, const char* slot, 
-																 int accel, int entry_ID)
+																 int accel, int entry_ID, String hint)
 	throw()
 {
 	QMenuBar* menu_bar = menuBar();
@@ -493,17 +494,13 @@ int MainControl::insertMenuEntry(int ID, const String& name, const QObject* rece
 		Log.error() << "MainControl::insertMenuEntry: cannot find popup menu for ID " << ID << endl;
 		return -1;
 	}
-		
-	// insert the menu entry
-	if (entry_ID == -1)
-	{
-		entry_ID = getNextID_();
-	}
 
+	if (entry_ID == -1) entry_ID = getNextID_();
 	popup->insertItem(name.c_str(), receiver, slot, accel, entry_ID);
-	return entry_ID;
 
-	return -1;
+	setMenuHint(entry_ID, hint);
+
+	return entry_ID;
 }
 
 
@@ -924,6 +921,24 @@ void MainControl::restoreWindows()
 	stream >> *this;
 }
 
+void MainControl::setMenuHint(Index id, const String& string)
+	throw()
+{
+	menu_entries_hints_[id] = string;
+	menuBar()->setWhatsThis(id, string.c_str());
+}
+
+const String& MainControl::getMenuHint(Index id) const
+	throw() 
+{
+	return menu_entries_hints_[id];
+}
+
+void MainControl::menuItemHighlighted(int id)
+	throw()
+{
+	if (menu_entries_hints_.has(id)) setStatusbarText(menu_entries_hints_[id]);
+}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/KERNEL/mainControl.iC>

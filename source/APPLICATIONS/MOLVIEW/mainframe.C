@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.77 2003/09/14 17:48:38 amoll Exp $
+// $Id: mainframe.C,v 1.78 2003/09/17 23:40:45 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -92,7 +92,7 @@ namespace BALL
 		trajectory_control_ = new TrajectoryControl(this, "Datasets");
 		CHECK_PTR(trajectory_control_);
 
-		scene_ = new Scene(this, "Scene");
+		scene_ = new Scene(this, "3D View");
 		CHECK_PTR(scene_);
 		scene_->setMinimumSize(10, 10);
 		setCentralWidget(scene_);
@@ -137,6 +137,7 @@ namespace BALL
 		// ---------------------
 		// Menus ---------------
 		// ---------------------
+		String hint;
 
 		// File Menu
 		insertMenuEntry(MainControl::FILE, "Export POVRa&y file", this, SLOT(exportPOVRay()), 
@@ -149,21 +150,30 @@ namespace BALL
 										CTRL+Key_U,MENU__DISPLAY_OPEN_SURFACE_DIALOG);
 
 		// Build Menu -------------------------------------------------------------------
+		hint = "To assign charges, one System has to be selected.";
 		insertMenuEntry(MainControl::BUILD, "Assign Char&ges", this, SLOT(assignCharges()), 
-										CTRL+Key_G, MENU__BUILD_ASSIGN_CHARGES);
-		insertMenuEntry(MainControl::BUILD, "Calculate &AMBER Energy", this, SLOT(calculateAmberEnergy()), 
-										CTRL+Key_A, MENU__BUILD_AMBER_ENERGY);
-		insertMenuEntry(MainControl::BUILD, "Perform &Energy Minimization", this, SLOT(amberMinimization()), 
-										CTRL+Key_E, MENU__BUILD_AMBER_MINIMIZATION);
-		insertMenuEntry(MainControl::BUILD, "Perform M&D Simulation", this, SLOT(amberMDSimulation()), 
-										CTRL+Key_D, MENU__BUILD_AMBER_MDSIMULATION);
+										CTRL+Key_G, MENU__BUILD_ASSIGN_CHARGES, hint);
+		hint = "To assign H-bonds, one System has to be selected.";
 		insertMenuEntry(MainControl::BUILD, "Calculate H-Bonds", this, SLOT(calculateHBonds()), 
-										CTRL+Key_9, MENU__BUILD_CALCULATE_HBONDS);
-	#ifdef QT_THREAD_SUPPORT
-		insertMenuEntry(MainControl::BUILD, "Stop simulation", this, SLOT(stopSimulation()),ALT+Key_C, MENU__BUILD_STOPSIMULATION);
-	#endif
+										CTRL+Key_9, MENU__BUILD_CALCULATE_HBONDS, hint);
 		insertMenuEntry(MainControl::BUILD, "Build Peptide", this, SLOT(buildPeptide()), ALT+Key_P, MENU__BUILD_PEPTIDE);
-		insertMenuEntry(MainControl::BUILD, "Calculate FDPB", FDPB_dialog_, SLOT(show()));
+
+		// Tools Menu -------------------------------------------------------------------
+		hint = "Calculate the energy of a System with the AMBER force field.";
+		insertMenuEntry(MainControl::TOOLS, "Single Point Energy", this, SLOT(calculateAmberEnergy()), 
+										CTRL+Key_A, MENU__BUILD_AMBER_ENERGY, hint);
+		hint = "To perform an Energy Minimization, first select the molecular structures.";
+		insertMenuEntry(MainControl::TOOLS, "&Energy Minimization", this, SLOT(amberMinimization()), 
+										CTRL+Key_E, MENU__BUILD_AMBER_MINIMIZATION, hint);
+		hint = "To perform a MD simulation , first select the molecular structures.";
+		insertMenuEntry(MainControl::TOOLS, "Molecular &Dynamics", this, SLOT(amberMDSimulation()), 
+										CTRL+Key_D, MENU__BUILD_AMBER_MDSIMULATION, hint);
+	#ifdef QT_THREAD_SUPPORT
+		hint = "Abort a running simulation thread";
+		insertMenuEntry(MainControl::TOOLS, "Abort Calculation", this, SLOT(stopSimulation()),
+				ALT+Key_C, MENU__BUILD_STOPSIMULATION, hint);
+	#endif
+		insertMenuEntry(MainControl::TOOLS, "Electrostatics", FDPB_dialog_, SLOT(show()));
 				
 		// Help-Menu -------------------------------------------------------------------
 		insertMenuEntry(MainControl::HELP, "About", this, SLOT(about()), CTRL+Key_9, MENU__HELP_ABOUT);
@@ -177,6 +187,7 @@ namespace BALL
 
 		connect(initPopupMenu(MainControl::BUILD), SIGNAL(aboutToShow()), this, SLOT(checkMenuEntries()));
 		connect(initPopupMenu(MainControl::FILE), SIGNAL(aboutToShow()), this, SLOT(checkMenuEntries()));
+		connect(initPopupMenu(MainControl::TOOLS), SIGNAL(aboutToShow()), this, SLOT(checkMenuEntries()));
 
 		// check the active menu entries
 		checkMenuEntries();

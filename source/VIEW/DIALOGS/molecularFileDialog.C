@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.6 2003/09/17 22:16:40 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.7 2003/09/17 23:40:46 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -14,6 +14,8 @@
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/MATHS/simpleBox3.h>
 #include <BALL/KERNEL/system.h>
+
+#include <qmenubar.h>
 
 namespace BALL
 {
@@ -46,10 +48,14 @@ namespace BALL
 		void MolecularFileDialog::initializeWidget(MainControl& main_control)
 			throw()
 		{
+			String hint("Open a PDB, HIN, MOL or MOL2 file");
 			main_control.insertMenuEntry(MainControl::FILE, "&Open Structure", (QObject *)this, 
-																	 SLOT(readFile()), CTRL+Key_O);
-			main_control.insertMenuEntry(MainControl::FILE, "&Save Structure", (QObject *)this, 
-																	 SLOT(writeFile()), CTRL+Key_S);
+																	 SLOT(readFile()), CTRL+Key_O, -1, hint);
+			hint = "One System has to be selected to save it as PDB, HIN, MOL or MOL2 file";
+			save_id_ = main_control.insertMenuEntry(MainControl::FILE, "&Save Structure", (QObject *)this, 
+																	 SLOT(writeFile()), CTRL+Key_S, -1, hint);
+
+			connect(main_control.initPopupMenu(MainControl::FILE), SIGNAL(aboutToShow()), this, SLOT(checkMenuEntries()));
 		}
 		
 		void MolecularFileDialog::finalizeWidget(MainControl& main_control)
@@ -521,6 +527,13 @@ namespace BALL
 			{
 				working_dir_ = inifile.getValue("WINDOWS", "File::working_dir");
 			}
+		}
+
+
+		void MolecularFileDialog::checkMenuEntries()
+			throw()
+		{
+			getMainControl()->menuBar()->setItemEnabled(save_id_, getMainControl()->getSelectedSystem());
 		}
 
 } } //namespaces
