@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.12 2004/02/23 17:26:11 anhi Exp $
+// $Id: pyWidget.h,v 1.13 2004/02/26 08:41:47 anhi Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -32,7 +32,7 @@ namespace BALL
 				Use the derived PyWidget class for your application!
 				\ingroup ViewWidgets
 		*/
-		class PyWidgetData
+		class BALL_EXPORT PyWidgetData
 			: public QTextEdit
 		{
 			friend class PyWidget;
@@ -165,7 +165,7 @@ namespace BALL
 				So it is possible to access all data in the running application in realtime with the script language.
 				PyWidget also has the capablities to run a Python script from a file at startup, or on demand from the user.
 		*/
-		class PyWidget
+		class BALL_EXPORT PyWidget
 			: public DockWidget
 		{
 			Q_OBJECT

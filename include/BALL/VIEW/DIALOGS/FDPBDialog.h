@@ -40,9 +40,9 @@ namespace BALL
 		/** Dialog for performing Finite Distance Poisson Bolzmann calculations
 				\ingroup ViewDialogs
 		*/
-		class FDPBDialog 
-			: public FDPBDialogData,
-				public ModularWidget
+		class BALL_EXPORT FDPBDialog 
+		  : public FDPBDialogData,
+		    public ModularWidget
 		{ 
 				Q_OBJECT
 

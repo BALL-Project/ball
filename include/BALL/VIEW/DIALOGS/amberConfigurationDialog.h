@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.h,v 1.3 2004/02/02 17:12:47 amoll Exp $
+// $Id: amberConfigurationDialog.h,v 1.4 2004/02/26 08:41:31 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_AMBERCONFIGURATIONDIALOG_H
@@ -23,7 +23,7 @@ namespace BALL
 		/** Dialog for changing the options of the AMBER forcefield
 				\ingroup ViewDialogs
 		*/
-		class AmberConfigurationDialog
+		class BALL_EXPORT AmberConfigurationDialog
 			: public AmberConfigurationDialogData
 		{
 			friend class MolecularStructure;

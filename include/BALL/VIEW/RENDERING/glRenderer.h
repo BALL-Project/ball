@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.12 2004/02/23 17:26:11 anhi Exp $
+// $Id: glRenderer.h,v 1.13 2004/02/26 08:41:45 anhi Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
 #define BALL_VIEW_RENDERING_GLRENDERER_H
@@ -37,7 +37,7 @@ namespace BALL
 		 		Renderer which provides hardware accelerated OPENGL rendering.
 				\ingroup ViewRendering
 		*/
-		class GLRenderer: public Renderer
+		class BALL_EXPORT GLRenderer: public Renderer
 		{
 			public:
 

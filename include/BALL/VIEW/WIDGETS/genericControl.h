@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.11 2004/02/11 12:52:52 amoll Exp $
+// $Id: genericControl.h,v 1.12 2004/02/26 08:41:46 anhi Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GENERICCONTROL_H
 #define BALL_VIEW_WIDGETS_GENERICCONTROL_H
@@ -19,7 +19,7 @@ namespace BALL
 		/** Overloaded QListView, which notifies it parent GenericControl,
 		 		that a entry has to be deleted, after "del" was pressed.
 		*/
-		class MyListView
+		class BALL_EXPORT MyListView
 			: public QListView
 		{
 			public:
@@ -47,7 +47,7 @@ namespace BALL
 				parent.
 				\ingroup ViewWidgets
 		*/
-		class GenericControl
+		class BALL_EXPORT GenericControl
 			: public DockWidget
 		{
 			Q_OBJECT

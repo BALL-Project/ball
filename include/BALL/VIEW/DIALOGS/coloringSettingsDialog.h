@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.10 2004/02/18 23:20:15 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.11 2004/02/26 08:41:32 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -29,7 +29,7 @@ namespace BALL
 	{
 		class ColorProcessor;
 
-		class QColorTableItem : public QTableItem
+		class BALL_EXPORT QColorTableItem : public QTableItem
 		{
 			public:
 				QColorTableItem(QTable* t, EditType et, const ColorRGBA& color);

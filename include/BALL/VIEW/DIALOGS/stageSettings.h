@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stageSettings.h,v 1.4 2003/11/21 01:22:22 amoll Exp $
+// $Id: stageSettings.h,v 1.5 2004/02/26 08:41:36 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_STAGESETTINGS_H
@@ -23,7 +23,7 @@ namespace BALL
 		/** Dialog for the Stage setup.
 				\ingroup ViewDialogs
 		*/
-		class StageSettings 
+		class BALL_EXPORT StageSettings 
 			: public StageSettingsData
 		{ 
 			Q_OBJECT

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.25 2004/02/24 14:29:53 amoll Exp $
+// $Id: molecularControl.h,v 1.26 2004/02/26 08:41:47 anhi Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -38,7 +38,7 @@ namespace BALL
 				For further informations on this topic have a look at the class Selector.
 				\ingroup ViewWidgets
 		*/
-		class MolecularControl
+		class BALL_EXPORT MolecularControl
 			: public GenericControl
 		{			
 			///

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.10 2004/02/23 17:26:11 anhi Exp $
+// $Id: logView.h,v 1.11 2004/02/26 08:41:47 anhi Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -52,7 +52,7 @@ namespace BALL
 				record and show all messages sent to the \link BALL::LogStream Log \endlink object.
 				\ingroup ViewWidgets
 		*/
-		class LogView
+		class BALL_EXPORT LogView
 			: public DockWidget,
 			  public NotificationTarget<LogStreamNotifier>
 		{

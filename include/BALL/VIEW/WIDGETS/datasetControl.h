@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.6 2004/02/06 16:44:17 amoll Exp $
+// $Id: datasetControl.h,v 1.7 2004/02/26 08:41:46 anhi Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -44,7 +44,7 @@ namespace BALL
 				The method buildContextMenu() can create a customizable context menu.
 				\ingroup ViewWidgets
 		*/
-		class DatasetControl
+		class BALL_EXPORT DatasetControl
 			: public GenericControl
 		{
 			Q_OBJECT

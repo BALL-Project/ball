@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.h,v 1.21 2003/09/04 23:14:10 amoll Exp $
+// $Id: client.h,v 1.22 2004/02/26 08:41:37 anhi Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_CLIENT_H
@@ -50,7 +50,7 @@ namespace BALL
 				\see     Server
 				\ingroup ViewKernelClient
 		*/
-		class Client
+		class BALL_EXPORT Client
 		{
 			public:
 
@@ -63,7 +63,7 @@ namespace BALL
 					an open working connection.
 					\see         Exception::GeneralException			
 			*/
-			class InvalidClient: public Exception::GeneralException
+			class BALL_EXPORT InvalidClient: public Exception::GeneralException
 			{
 				public:
 
@@ -77,7 +77,7 @@ namespace BALL
 					Only PersistentObject's can be sent through this client.
 					\see         Exception::GeneralException			
 			*/
-			class NoPersistentObject:	public Exception::GeneralException
+			class BALL_EXPORT NoPersistentObject:	public Exception::GeneralException
 			{
 				public:
 

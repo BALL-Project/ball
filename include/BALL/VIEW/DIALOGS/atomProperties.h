@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomProperties.h,v 1.6 2004/01/18 20:33:32 oliver Exp $
+// $Id: atomProperties.h,v 1.7 2004/02/26 08:41:31 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_ATOMPROPERTIES_H
@@ -21,7 +21,7 @@ namespace BALL
 		/** Dialog for showing and changing the properties of an atom
 				\ingroup  ViewDialogs
 		*/
-		class AtomProperties : public AtomPropertiesData
+		class BALL_EXPORT AtomProperties : public AtomPropertiesData
 		{ 
 			Q_OBJECT
 

@@ -17,7 +17,7 @@ namespace BALL
 		/** Dialog for setting the Python preferences.
 				\ingroup ViewDialogs
 		*/
-		class PythonSettings 
+		class BALL_EXPORT PythonSettings 
 			: public PythonSettingsData
 		{ 
 			Q_OBJECT

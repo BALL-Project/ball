@@ -1,11 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.11 2004/02/18 23:43:51 amoll Exp $
+// $Id: modelSettingsDialog.h,v 1.12 2004/02/26 08:41:34 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
 #define BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
+
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
 
 #include <BALL/VIEW/UIC/modelSettingsDialogData.h>
 
@@ -22,7 +26,7 @@ namespace BALL
 		/** Dialog for the molecular model settings, it is inserted into the Preferences.
 				\ingroup ViewDialogs
 		*/
-		class ModelSettingsDialog 
+		class BALL_EXPORT ModelSettingsDialog 
 			: public ModelSettingsDialogData
 		{ 
 			Q_OBJECT

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.19 2004/02/20 11:43:33 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.20 2004/02/26 08:41:42 anhi Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -30,7 +30,7 @@ namespace BALL
 				to color an entire molecular object in its element colors. 
 				\ingroup  ViewModels
 		*/
-		class ElementColorProcessor
+		class BALL_EXPORT ElementColorProcessor
 			: public ColorProcessor
 		{
 			public:

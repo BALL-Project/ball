@@ -1,6 +1,10 @@
 #ifndef BALL_VIEW_WIDGETS_CANVASWIDGET_H
 #define BALL_VIEW_WIDGETS_CANVASWIDGET_H
 
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
+
 #include <qcanvas.h>
 #include <qpixmap.h>
 #include <qpainter.h>
@@ -10,13 +14,13 @@ namespace BALL
 {
   namespace VIEW
   {      
-    class CanvasWidget
+    class BALL_EXPORT CanvasWidget
       : public QCanvasView
     {
       Q_OBJECT                        //macro for QT messages
        public:
       
-      class PixmapItem
+      class BALL_EXPORT PixmapItem
 	: public QCanvasRectangle
       {
       public:

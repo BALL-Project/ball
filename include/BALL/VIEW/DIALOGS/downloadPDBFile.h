@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: downloadPDBFile.h,v 1.3 2004/02/18 23:28:30 amoll Exp $
+// $Id: downloadPDBFile.h,v 1.4 2004/02/26 08:41:33 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DOWNLOADPDBFILE_H
@@ -22,7 +22,7 @@ namespace BALL
 		/** Dialog to search for and download structure files from the PDB data bank
 				\ingroup ViewDialogs
 		*/
-		class DownloadPDBFile 
+		class BALL_EXPORT DownloadPDBFile 
 			: public DownloadPDBFileData,
 				public ModularWidget
 		{ 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: information.h,v 1.5 2004/02/18 23:24:06 oliver Exp $
+// $Id: information.h,v 1.6 2004/02/26 08:41:38 anhi Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_INFORMATION_H
@@ -28,7 +28,7 @@ namespace BALL
 				The result is written in the member variables name_ and type_name_.
 				\ingroup ViewKernelGeometricPrimitives
 		*/
-		class Information: public Visitor<GeometricObject>
+		class BALL_EXPORT Information: public Visitor<GeometricObject>
 		{
 			public:
 			

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.27 2004/02/18 23:27:33 amoll Exp $
+// $Id: displayProperties.h,v 1.28 2004/02/26 08:41:32 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -43,7 +43,7 @@ namespace BALL
 				VIEW/KERNEL/common.h.
 				\ingroup ViewDialogs
 		*/
-		class DisplayProperties 
+		class BALL_EXPORT DisplayProperties 
 			: public DisplayPropertiesData,
 				public ModularWidget
 		{

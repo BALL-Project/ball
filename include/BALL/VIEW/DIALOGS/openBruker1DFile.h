@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker1DFile.h,v 1.6 2004/01/18 21:55:32 oliver Exp $
+// $Id: openBruker1DFile.h,v 1.7 2004/02/26 08:41:35 anhi Exp $
 
 #ifndef BALL_VIEW_DIALOGS_OPENBRUKER1DFILE_H
 #define BALL_VIEW_DIALOGS_OPENBRUKER1DFILE_H
@@ -27,7 +27,7 @@ namespace BALL
 		/** Interface to select and open spectra stored in the bruker file format.
     		\ingroup  ViewDialogs
 		*/
-		class OpenBruker1DFile
+		class BALL_EXPORT OpenBruker1DFile
 			: public QWidget,
 				public ModularWidget
 		{

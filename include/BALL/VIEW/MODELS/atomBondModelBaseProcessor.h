@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.9 2004/01/27 16:26:07 amoll Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.10 2004/02/26 08:41:40 anhi Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
@@ -32,7 +32,7 @@ namespace BALL
 				and Bond structure (e.g. the model <b>Ball And Stick</b>)
 				\ingroup  ViewModels
 		*/
-		class AtomBondModelBaseProcessor
+		class BALL_EXPORT AtomBondModelBaseProcessor
 			:	public ModelProcessor
 		{
 			public:

@@ -33,7 +33,7 @@ namespace BALL
 				this dialog and is therefore not necessary for understanding.  \par
     		\ingroup  ViewDialogs
 		*/
-		class LabelDialog : 
+		class BALL_EXPORT LabelDialog : 
 			public LabelDialogData,
 			public ModularWidget
 		{

@@ -13,7 +13,7 @@ namespace BALL
 {
   namespace VIEW
   {      
-    class DockableRegularData1DWidget
+    class BALL_EXPORT DockableRegularData1DWidget
       : public DockWidget
     {
  	     Q_OBJECT                        //macro for QT messages

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glDisplayList.h,v 1.3 2003/09/04 23:14:14 amoll Exp $
+// $Id: glDisplayList.h,v 1.4 2004/02/26 08:41:44 anhi Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLDISPLAYLIST_H
 #define BALL_VIEW_RENDERING_GLDISPLAYLIST_H
@@ -28,7 +28,7 @@ namespace BALL
 		defintion of display lists for further information concerning display lists.\par
 		\ingroup ViewRendering
 */
-class GLDisplayList
+class BALL_EXPORT GLDisplayList
 {
 	public:
 

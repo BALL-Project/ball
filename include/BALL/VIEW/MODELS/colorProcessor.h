@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.23 2004/02/24 18:48:14 amoll Exp $
+// $Id: colorProcessor.h,v 1.24 2004/02/26 08:41:41 anhi Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -48,7 +48,7 @@ namespace BALL
 				For this a pointer to the HashSet with the used Composite instances exists, which is set by the 
 				Representation.
 		*/
-		class ColorProcessor
+		class BALL_EXPORT ColorProcessor
 			: public UnaryProcessor<GeometricObject*>
 		{
 			public:

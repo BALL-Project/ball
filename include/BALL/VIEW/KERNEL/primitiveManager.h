@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.5 2003/12/15 01:26:25 amoll Exp $
+// $Id: primitiveManager.h,v 1.6 2004/02/26 08:41:39 anhi Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -21,7 +21,7 @@ namespace BALL
 				When the PrimitiveManager is destroyed, all inserted Representation are deleted.
 				\ingroup ViewKernelGeometricPrimitives
 		*/
-		class PrimitiveManager
+		class BALL_EXPORT PrimitiveManager
 			:	public Object
 		{
 			public:

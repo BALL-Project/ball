@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeObjectCreator.h,v 1.3 2004/02/23 17:26:09 anhi Exp $
+// $Id: moleculeObjectCreator.h,v 1.4 2004/02/26 08:41:39 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_MOLECULEOBJECTCREATOR_H
 #define BALL_VIEW_KERNEL_MOLECULEOBJECTCREATOR_H
@@ -24,7 +24,7 @@ namespace BALL
 				This class is used by the class Server to convert incoming
 				PersistentObject objects to Composite objects. \par
 		*/
-		class MoleculeObjectCreator: public ObjectCreator
+		class BALL_EXPORT MoleculeObjectCreator: public ObjectCreator
 		{
 			public:
 

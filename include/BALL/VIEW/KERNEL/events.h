@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.h,v 1.6 2004/02/18 09:56:40 oliver Exp $
+// $Id: events.h,v 1.7 2004/02/26 08:41:37 anhi Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_EVENTS_H
@@ -924,7 +924,7 @@ namespace BALL
 				event names and will used and created automatically for the Scene object.
 				\ingroup ViewKernelOther
 		*/
-		class Events
+		class BALL_EXPORT Events
 		{
 			public:
 
@@ -937,7 +937,7 @@ namespace BALL
 					\see GeneralException
 					\see Scene
 			*/
- 			class EventCombinationNotAllowed
+ 			class BALL_EXPORT EventCombinationNotAllowed
 				:	public Exception::GeneralException
 			{
   			public:

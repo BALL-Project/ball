@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.h,v 1.7 2004/02/23 17:26:10 anhi Exp $
+// $Id: vanDerWaalsModel.h,v 1.8 2004/02/26 08:41:42 anhi Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_VANDERWAALSMODEL_H
@@ -21,7 +21,7 @@ namespace BALL
 				For information about the processor concept see Processor.
 				\ingroup  ViewModels
 		*/
-		class AddVanDerWaalsModel: public AtomBondModelBaseProcessor
+		class BALL_EXPORT AddVanDerWaalsModel: public AtomBondModelBaseProcessor
 		{
 			public:
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorTable.h,v 1.11 2003/12/01 15:36:03 amoll Exp $
+// $Id: colorTable.h,v 1.12 2004/02/26 08:41:30 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DATATYPE_COLORTABLE_H
@@ -21,7 +21,7 @@ namespace BALL
 		 *  map a floating point value into a color.
 		\ingroup ViewDatatypeFormat
 		*/
-		class ColorTable
+		class BALL_EXPORT ColorTable
 			: public vector<ColorRGBA>
 		{
 			public:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.40 2004/02/23 17:26:09 anhi Exp $
+// $Id: mainControl.h,v 1.41 2004/02/26 08:41:38 anhi Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -62,7 +62,7 @@ namespace BALL
 
 		/** Timer class to clear the statusbar of the MainControl after a given time
 		*/
-		class StatusbarTimer
+		class BALL_EXPORT StatusbarTimer
 			: public QTTimer
 		{
 			public:
@@ -110,7 +110,7 @@ namespace BALL
 				<tt> class foo : public BALL::VIEW::MainControl </tt> instead. 
 		\ingroup ViewKernelConnectivity
 		*/
-		class MainControl
+		class BALL_EXPORT MainControl
 			: public QMainWindow,
 				public ConnectionObject,
 				public Embeddable

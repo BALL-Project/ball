@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.7 2004/02/23 17:26:08 anhi Exp $
+// $Id: preferences.h,v 1.8 2004/02/26 08:41:35 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
@@ -24,7 +24,7 @@ namespace BALL
 				All ModularWidget classes can add their own prefrences tabs.
 				\ingroup ViewDialogs
 		*/
-		class Preferences 
+		class BALL_EXPORT Preferences 
 			: public PreferencesData
 		{
 			Q_OBJECT

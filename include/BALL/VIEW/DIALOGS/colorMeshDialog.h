@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.h,v 1.10 2004/02/18 23:18:49 amoll Exp $
+// $Id: colorMeshDialog.h,v 1.11 2004/02/26 08:41:32 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORMESHDIALOG_H
@@ -38,7 +38,7 @@ namespace BALL
 				in a RegularData3D grid. You can also set the transparency of the surface.
 				\ingroup ViewDialogs
 		*/
-		class ColorMeshDialog 
+		class BALL_EXPORT ColorMeshDialog 
 			: public ColorMeshDialogData,
 				public ModularWidget
 		{ 

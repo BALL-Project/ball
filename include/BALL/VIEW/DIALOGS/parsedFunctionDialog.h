@@ -1,11 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parsedFunctionDialog.h,v 1.3 2003/09/04 22:17:47 amoll Exp $
+// $Id: parsedFunctionDialog.h,v 1.4 2004/02/26 08:41:35 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PARSEDFUNCTIONDIALOG_H
 #define BALL_VIEW_DIALOGS_PARSEDFUNCTIONDIALOG_H
+
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
 
 #include <BALL/VIEW/UIC/parsedFunctionDialogData.h>
 
@@ -16,7 +20,7 @@ namespace BALL
 		/** Dialog to visualise a parsed function
 				\ingroup ViewDialogs
 		*/
-		class ParsedFunctionDialog 
+		class BALL_EXPORT ParsedFunctionDialog 
 			: public ParsedFunctionDialogData
 		{ 
 				Q_OBJECT

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.4 2004/02/12 16:17:39 amoll Exp $
+// $Id: POVRenderer.h,v 1.5 2004/02/26 08:41:45 anhi Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -35,7 +35,7 @@ namespace BALL
 				be used to render the same scene externally.
 				\ingroup ViewRendering
 		*/
-		class POVRenderer : public Renderer
+		class BALL_EXPORT POVRenderer : public Renderer
 		{
 			public:
 

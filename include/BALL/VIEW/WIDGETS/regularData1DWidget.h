@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.h,v 1.6 2003/12/19 19:47:09 oliver Exp $
+// $Id: regularData1DWidget.h,v 1.7 2004/02/26 08:41:47 anhi Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -36,7 +36,7 @@ namespace BALL
 		/**  New RegularData1D Message Classic.
 				\ingroup ViewWidgets
 		 */
-		class UpdateRegularData1DMessage 
+		class BALL_EXPORT UpdateRegularData1DMessage 
 			: public Message
 		{
 		 public:
@@ -74,7 +74,7 @@ namespace BALL
 		/** Widget used to display one-dimensional data.
 		 \ingroup ViewWidgets
 		 */
-		class RegularData1DWidget
+		class BALL_EXPORT RegularData1DWidget
 			:public CanvasWidget 
 		{
 			Q_OBJECT  //macro for QT messages

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.15 2004/02/24 13:31:26 amoll Exp $
+// $Id: geometricControl.h,v 1.16 2004/02/26 08:41:47 anhi Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -42,12 +42,12 @@ namespace BALL
 				up in the GeometricControl.
 				\ingroup ViewWidgets
 		*/
-		class GeometricControl
+		class BALL_EXPORT GeometricControl
 			: public GenericControl
 		{
 			Q_OBJECT
 
-			class SelectableListViewItem
+			class BALL_EXPORT SelectableListViewItem
 				: public QCheckListItem
 			{
 				public:

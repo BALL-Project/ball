@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.6 2004/02/18 18:19:07 anhi Exp $
+// $Id: stage.h,v 1.7 2004/02/26 08:41:40 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -37,7 +37,7 @@ namespace BALL
 		/** Light source
 				\ingroup  ViewKernelStage
 		 */
-		class LightSource
+		class BALL_EXPORT LightSource
 		{
 			public:
 
@@ -209,7 +209,7 @@ namespace BALL
 		/** Camera with viewpoint, a look at point and an up-vector.
 				\ingroup ViewKernelStage
 		 */
-		class Camera
+		class BALL_EXPORT Camera
 		{
 			public:
 
@@ -336,7 +336,7 @@ namespace BALL
 		 		Also a flag can be set, so that a coordinate system will be shown.
 				\ingroup ViewKernelStage
 		*/
-		class Stage
+		class BALL_EXPORT Stage
 		{
 			public:
 

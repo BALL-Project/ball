@@ -74,7 +74,7 @@ namespace VIEW
 			or crashes!
 			This class already has a mutex as member, so use it.
 	*/
-	class SimulationThread
+	class BALL_EXPORT SimulationThread
 		: public QThread
 	{
 		public:
@@ -128,7 +128,7 @@ namespace VIEW
 
 
 	/// Thread for EnergyMinimization
-	class EnergyMinimizerThread
+	class BALL_EXPORT EnergyMinimizerThread
 		: public SimulationThread
 	{
 		public:
@@ -151,7 +151,7 @@ namespace VIEW
 
 
 	/// Thread for MDSimulation
-	class MDSimulationThread
+	class BALL_EXPORT MDSimulationThread
 		: public SimulationThread
 	{
 		public:
@@ -186,7 +186,7 @@ namespace VIEW
 			It notifies the MainControl, that the thread for simulations has finished and can be deleted.
 			This should only be used internaly.
 	*/
-	class SimulationThreadFinished
+	class BALL_EXPORT SimulationThreadFinished
 		: public QCustomEvent
 	{
 		public:
@@ -195,7 +195,7 @@ namespace VIEW
 	};
 
 	///
-	class SimulationOutput
+	class BALL_EXPORT SimulationOutput
 		: public QCustomEvent
 	{
 		public:
@@ -214,7 +214,7 @@ namespace VIEW
 	};
 
 	///
-	class UpdateCompositeEvent
+	class BALL_EXPORT UpdateCompositeEvent
 		: public QCustomEvent
 	{
 		public:

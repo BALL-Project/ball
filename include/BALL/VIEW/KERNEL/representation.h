@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.17 2004/01/18 20:32:05 oliver Exp $
+// $Id: representation.h,v 1.18 2004/02/26 08:41:39 anhi Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -45,7 +45,7 @@ namespace BALL
 				It stores the drawing precision and mode.
 				\ingroup ViewKernelGeometricPrimitives
 		*/
-		class Representation
+		class BALL_EXPORT Representation
 			: public PropertyManager
 		{
 			friend class UpdateRepresentationThread;

@@ -19,7 +19,7 @@ namespace BALL
 /** Dialog for performing MD simulations
 		\ingroup ViewDialogs
 */
-class MolecularDynamicsDialog 
+class BALL_EXPORT MolecularDynamicsDialog 
 	: public MolecularDynamicsDialogData
 {
     Q_OBJECT

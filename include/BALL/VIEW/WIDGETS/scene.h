@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.21 2004/02/23 17:26:12 anhi Exp $
+// $Id: scene.h,v 1.22 2004/02/26 08:41:48 anhi Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -54,7 +54,7 @@ namespace BALL
 				be assigned to a Scene.
 				\ingroup ViewWidgets
 		*/
-		class Scene
+		class BALL_EXPORT Scene
 			: public QGLWidget, public ModularWidget
 		{
 			Q_OBJECT
@@ -67,7 +67,7 @@ namespace BALL
 			 		It induces a rebuild of the display lists and an update of the Scene and
 					should only be used internaly.
 			*/
-			class SceneUpdateEvent : public QCustomEvent
+			class BALL_EXPORT SceneUpdateEvent : public QCustomEvent
 			{
 				public:
 					SceneUpdateEvent()

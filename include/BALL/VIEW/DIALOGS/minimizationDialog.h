@@ -20,7 +20,7 @@ namespace BALL
 		/** Dialog for performing energy minimisations
 				\ingroup ViewDialogs
 		*/
-		class MinimizationDialog 
+		class BALL_EXPORT MinimizationDialog 
 			: public MinimizationDialogData
 		{
 				Q_OBJECT

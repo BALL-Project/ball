@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.45 2004/02/23 15:20:03 anhi Exp $
+// $Id: message.h,v 1.46 2004/02/26 08:41:38 anhi Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -50,7 +50,7 @@ namespace BALL
 		See ConnectionObject for further information concerning message handling
 		and message posting. \par
 */
-class Message
+class BALL_EXPORT Message
 {
 	public:
 
@@ -128,7 +128,7 @@ class Message
 /** CompositeMessage is the base class of all messages concerning the change of one Composite.
 		With it ConnectionObject can notify and react to Composite changes.
 */
-class CompositeMessage: public Message
+class BALL_EXPORT CompositeMessage: public Message
 {
 	public:
 
@@ -240,7 +240,7 @@ class CompositeMessage: public Message
 		Send by MainControl, GeometricControl and several dialogs. \par
 		Received by Scene
 */
-class SceneMessage: public Message
+class BALL_EXPORT SceneMessage: public Message
 {
 	public:
 
@@ -347,7 +347,7 @@ class SceneMessage: public Message
 		It will be sent by existing ConnectionObject objects that collect
 		Composites objects for a certain purpose.
 */
-class GenericSelectionMessage: public Message
+class BALL_EXPORT GenericSelectionMessage: public Message
 {
 	public:
 
@@ -396,7 +396,7 @@ class GenericSelectionMessage: public Message
 };
 
 ///
-class SelectionMessage: public GenericSelectionMessage
+class BALL_EXPORT SelectionMessage: public GenericSelectionMessage
 {
 	public:
 		SelectionMessage()
@@ -407,7 +407,7 @@ class SelectionMessage: public GenericSelectionMessage
 		Send by MolecularControl.\par
 		Caught by MainControl.
  */
-class ControlSelectionMessage: public GenericSelectionMessage
+class BALL_EXPORT ControlSelectionMessage: public GenericSelectionMessage
 {
 	public:
 	ControlSelectionMessage()
@@ -416,7 +416,7 @@ class ControlSelectionMessage: public GenericSelectionMessage
 
 /** Send by MainControl to Control objects to sync selection
  */
-class NewSelectionMessage: public Message
+class BALL_EXPORT NewSelectionMessage: public Message
 {
 	public:
 	NewSelectionMessage()
@@ -438,7 +438,7 @@ class NewSelectionMessage: public Message
 		Send by Scene after picking GeometricObject. \par
 		Caught by MainControl.
 */
-class GeometricObjectSelectionMessage: public Message
+class BALL_EXPORT GeometricObjectSelectionMessage: public Message
 {
 	public:
 
@@ -493,7 +493,7 @@ class GeometricObjectSelectionMessage: public Message
 class Representation;
 
 /// Base class for all messages concerning a Representation
-class RepresentationMessage: public Message
+class BALL_EXPORT RepresentationMessage: public Message
 {
 	public:
 
@@ -549,7 +549,7 @@ class RepresentationMessage: public Message
 /** Message to perform specific tasks for molecular items.\par
 		Send by MolecularControl to MolecularProperties.
  */
-class MolecularTaskMessage
+class BALL_EXPORT MolecularTaskMessage
 	: public Message
 {
 	public:
@@ -590,7 +590,7 @@ class MolecularTaskMessage
 /** Notify the DisplayProperties dialog to show itself.\par
  		Send by the GeometriControl and MolecularControl.
 */
-class ShowDisplayPropertiesMessage
+class BALL_EXPORT ShowDisplayPropertiesMessage
 	:public Message
 {
 	public:
@@ -602,7 +602,7 @@ class ShowDisplayPropertiesMessage
 /** Notify the DisplayProperties dialog so that it creates a new Representation. \par
  		Send by the MolecularControl.
 */
-class CreateRepresentationMessage
+class BALL_EXPORT CreateRepresentationMessage
 	:public Message
 {
 	public:
@@ -636,7 +636,7 @@ class CreateRepresentationMessage
 	
 
 /// Message to notify about a new Trajectory
-class NewTrajectoryMessage
+class BALL_EXPORT NewTrajectoryMessage
 	:public CompositeMessage
 {
 	public:
@@ -657,7 +657,7 @@ class NewTrajectoryMessage
 };
 
 /// Message concerning RegularData3D
-class RegularData3DMessage
+class BALL_EXPORT RegularData3DMessage
 	:public CompositeMessage
 {
 	public:
@@ -696,7 +696,7 @@ class RegularData3DMessage
 /** Message send by one GenericControl to notify all other GenericControl instances to
  		deselect their QListView.
 */
-class DeselectControlsMessage
+class BALL_EXPORT DeselectControlsMessage
 	: public Message
 {
 	public:

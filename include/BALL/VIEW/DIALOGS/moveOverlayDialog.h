@@ -1,17 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moveOverlayDialog.h,v 1.2 2003/09/04 22:17:46 amoll Exp $
+// $Id: moveOverlayDialog.h,v 1.3 2004/02/26 08:41:34 anhi Exp $
 
 #ifndef BALL_VIEW_DIALOGS_MOVEOVERLAYDIALOG_H
 #define BALL_VIEW_DIALOGS_MOVEOVERLAYDIALOG_H 
+
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
 
 #include <BALL/VIEW/UIC/moveOverlayDialogData.h>
 
 /** MoveOverlayDialog
 		\ingroup ViewDialogs
 */
-class MoveOverlayDialog 
+class BALL_EXPORT MoveOverlayDialog 
 	: public MoveOverlayDialogData
 {
   Q_OBJECT

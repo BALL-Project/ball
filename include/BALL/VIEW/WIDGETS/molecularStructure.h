@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.10 2004/02/24 10:47:32 amoll Exp $
+// $Id: molecularStructure.h,v 1.11 2004/02/26 08:41:47 anhi Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -68,7 +68,7 @@ namespace BALL
 				See onNotify for information concerning the conversion mechanism. \par
 				\ingroup ViewWidgets
 		*/
-		class MolecularStructure
+		class BALL_EXPORT MolecularStructure
 			: public QWidget, 
 				public ModularWidget
 		{

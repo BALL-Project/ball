@@ -22,7 +22,7 @@ namespace BALL
 		/** Dialog for moving molecular objects.
 				\ingroup ViewDialogs
 		*/
-		class TransformationDialog 
+		class BALL_EXPORT TransformationDialog 
 			:	public TransformationDialogData,
 				public ModularWidget
 		{

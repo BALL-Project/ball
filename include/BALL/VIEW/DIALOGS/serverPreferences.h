@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.h,v 1.5 2003/11/21 01:22:22 amoll Exp $
+// $Id: serverPreferences.h,v 1.6 2004/02/26 08:41:36 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_SERVERPREFERENCES_H
@@ -10,6 +10,10 @@
 #include <qwidget.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
+
+#ifndef BALL_COMMON_GLOBAL_H
+# include <BALL/COMMON/global.h>
+#endif
 
 namespace BALL
 {
@@ -23,7 +27,7 @@ namespace BALL
 				into the Preferences dialog by the MainControl.
 				\ingroup ViewDialogs
 		*/
-		class ServerPreferences : public QWidget
+		class BALL_EXPORT ServerPreferences : public QWidget
 		{
 			Q_OBJECT
 				

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.h,v 1.8 2004/02/18 23:30:54 amoll Exp $
+// $Id: mainControlPreferences.h,v 1.9 2004/02/26 08:41:33 anhi Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MAINCONTROLPREFERENCES_H
@@ -23,7 +23,7 @@ namespace BALL
 		of the MainControl.
 		\ingroup ViewDialogs
 */
-class MainControlPreferences 
+class BALL_EXPORT MainControlPreferences 
 	: public MainControlPreferencesData
 {
 	Q_OBJECT

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.12 2004/02/24 17:16:20 amoll Exp $
+// $Id: cartoonModel.h,v 1.13 2004/02/26 08:41:41 anhi Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -27,7 +27,7 @@ namespace BALL
 				documentation.
 				\ingroup  ViewModels
 		*/
-		class AddCartoonModel
+		class BALL_EXPORT AddCartoonModel
 			: public AddBackboneModel
 		{
 			public:

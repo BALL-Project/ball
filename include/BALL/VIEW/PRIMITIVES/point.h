@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: point.h,v 1.6 2003/11/29 15:57:44 amoll Exp $
+// $Id: point.h,v 1.7 2004/02/26 08:41:43 anhi Exp $
 //
 
 #ifndef BALL_VIEW_PRIMITIVES_POINT_H
@@ -31,7 +31,7 @@ namespace BALL
 				interface and additional methods. \par
 				\ingroup ViewPrimitives
 		*/
-		class Point
+		class BALL_EXPORT Point
 			: public GeometricObject,
 				public Vertex
 		{
