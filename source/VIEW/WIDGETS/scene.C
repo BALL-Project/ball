@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.22 2003/11/21 01:22:53 amoll Exp $
+// $Id: scene.C,v 1.23 2003/11/23 15:35:41 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -35,6 +35,11 @@ namespace BALL
 // ###############CONSTRUCTORS,DESTRUCTORS,CLEAR###################
 
 float Scene::mouse_sensitivity_ = 5;
+
+// values for mouse-sensitivity 
+#define  ZOOM_FACTOR 			7 //5
+#define  ROTATE_FACTOR    11 //8
+#define  TRANSLATE_FACTOR 6 // 4
 
 Scene::Scene()
 	throw()
@@ -456,14 +461,14 @@ void Scene::translateSystem_(Scene* scene)
 														* (delta_x / scene->gl_renderer_.getWidth()) 
 														* 1.4 * camera.getDistance()   // take distance from this scene
 														* 2.0 * scene->gl_renderer_.getXScale()
-														* mouse_sensitivity_ / 4;
+														* mouse_sensitivity_ / TRANSLATE_FACTOR;
 
 	// calculate translation in y-axis direction
 	Vector3 up_translate 		= camera_scene.getLookUpVector() 
 														* (delta_y / scene->gl_renderer_.getHeight()) 
 														* 1.4 * camera.getDistance() // take distance from this scene
 														* 2.0 * scene->gl_renderer_.getYScale()
-														* mouse_sensitivity_ / 4;
+														* mouse_sensitivity_ / TRANSLATE_FACTOR;
 
 	Vector3 v(right_translate + up_translate);
 
@@ -485,7 +490,7 @@ void Scene::zoomSystem_(Scene *scene)
 	Vector3 v((delta_y / 
 						 scene->gl_renderer_.getHeight() * camera.getDistance()) // take distance from this scene
 						* scene->stage_->getCamera().getViewVector()
-						* mouse_sensitivity_ / 5);  
+						* mouse_sensitivity_ / ZOOM_FACTOR);  
 
 	stage_->translate(v);
 	updateCamera_();
@@ -503,13 +508,13 @@ void Scene::calculateQuaternion_(Quaternion& q, const Quaternion* rotate)
 	Quaternion tmp;
 
 	Real right1 = (gl_renderer_.getWidth()  - x_window_pos_old_ * 2.0) / 
-								 gl_renderer_.getWidth() * mouse_sensitivity_ / -8;
+								 gl_renderer_.getWidth() * mouse_sensitivity_ / -ROTATE_FACTOR;
 	Real up1 = 		(gl_renderer_.getHeight() - y_window_pos_old_ * 2.0) / 
-								 gl_renderer_.getHeight() * mouse_sensitivity_ / -8;
+								 gl_renderer_.getHeight() * mouse_sensitivity_ / -ROTATE_FACTOR;
 	Real right2 = (gl_renderer_.getWidth()  - x_window_pos_new_ * 2.0) / 
-								 gl_renderer_.getWidth() * mouse_sensitivity_ / -8;
+								 gl_renderer_.getWidth() * mouse_sensitivity_ / -ROTATE_FACTOR;
 	Real up2 = 		(gl_renderer_.getHeight() - y_window_pos_new_ * 2.0) / 
-								 gl_renderer_.getHeight() * mouse_sensitivity_ / -8;
+								 gl_renderer_.getHeight() * mouse_sensitivity_ / -ROTATE_FACTOR;
 
 	Camera& camera = stage_->getCamera();
 
