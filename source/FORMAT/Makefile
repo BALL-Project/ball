@@ -10,6 +10,7 @@ CPP_SOURCES=\
 	HINFile.C\
 	INIFile.C\
 	JCAMPFile.C\
+	KCFFile.C\
 	lineBasedFile.C\
 	MOLFile.C\
 	SDFile.C\

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.21 2005/03/04 15:33:52 oliver Exp $
+# $Id: Makefile.lst,v 1.22 2005/03/10 19:38:30 oliver Exp $
 #
 
 XDR_DEPENDENT_EXECUTABLES=\
@@ -178,6 +178,7 @@ EXECUTABLES_FORMATS =\
 	Bruker2DFile_test$(EXEEXT)\
 	INIFile_test$(EXEEXT)\
 	JCAMPFile_test$(EXEEXT)\
+	KCFFile_test$(EXEEXT)\
 	Parameters_test$(EXEEXT)\
 	ParameterSection_test$(EXEEXT)\
 	ResourceFile_test$(EXEEXT)\

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.16 2005/03/10 19:10:14 oliver Exp $
+// $Id: sysinfo.C,v 1.17 2005/03/10 19:38:30 oliver Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>
@@ -290,6 +290,11 @@ namespace BALL
 		}
 
 		Index getNumberOfProcessors()
+		{
+			return -1;
+		}
+	
+		LongIndex getFreeSwapSpace()
 		{
 			return -1;
 		}
