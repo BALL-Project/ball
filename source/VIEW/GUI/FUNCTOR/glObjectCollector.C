@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glObjectCollector.C,v 1.4 2002/12/12 11:43:23 oliver Exp $
+// $Id: glObjectCollector.C,v 1.5 2002/12/18 18:34:43 anhi Exp $
 
 #include <BALL/VIEW/GUI/FUNCTOR/glObjectCollector.h>
 
@@ -119,10 +119,20 @@ namespace BALL
 				GL_object->dump(cout);
 			#endif
 
+			/// ????? This should never happen... Unfortunately, it does...
+			if (   (geometric_object->hasProperty(GeometricObject::PROPERTY__OBJECT_STATIC))
+					&& (geometric_object->hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC)) )
+			{
+//				Log.error() << "Property mismatch" << endl;
+				geometric_object->clearProperty(GeometricObject::PROPERTY__OBJECT_STATIC);
+			}
+
 			// static objects 
 			// (choice: static, static wireframe, transparent, static always front, transparent always front)
 			if (geometric_object->hasProperty(GeometricObject::PROPERTY__OBJECT_STATIC))
 			{
+//				Log.info() << "static" << endl;
+//				Log.info() << geometric_object->hasProperty(GeometricObject::PROPERTY__OBJECT_DYNAMIC) << endl;
 				if (geometric_object->hasProperty(GeometricObject::PROPERTY__OBJECT_ALWAYS_FRONT)) // always front
 				{
 					// object transparent
