@@ -1,4 +1,4 @@
-// $Id: extendedProperty.C,v 1.7 2001/06/18 17:28:48 oliver Exp $
+// $Id: extendedProperty.C,v 1.8 2001/07/15 19:28:44 oliver Exp $
 
 #include <BALL/MOLVIEW/KERNEL/extendedProperty.h>
 
@@ -19,7 +19,7 @@ namespace BALL
 
 		ExtendedPropertyManager::ExtendedPropertyManager
 			(const ExtendedPropertyManager &__rExtendedPropertyManager,
-			 bool deep)
+			 bool /* deep */)
 			throw()
 				:
 				PropertyManager(__rExtendedPropertyManager)
