@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.31 2004/02/02 18:57:51 anhi Exp $
+# $Id: Makefile,v 1.32 2004/02/09 13:54:18 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -44,8 +44,6 @@ CPP_SOURCES=\
 	molecularDynamicsDialog.C\
 	molecularDynamicsDialogData.C\
 	molecularFileDialog.C\
-	mouseSensitivity.C\
-	mouseSensitivityData.C\
 	openBruker1DFile.C\
 	parsedFunctionDialog.C\
 	parsedFunctionDialogData.C\
@@ -99,8 +97,6 @@ MOC_SOURCES=\
 	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
 	molecularDynamicsDialogData_moc.C\
-	mouseSensitivity_moc.C\
-	mouseSensitivityData_moc.C\
 	openBruker1DFile_moc.C\
 	parsedFunctionDialog_moc.C\
 	parsedFunctionDialogData_moc.C\
@@ -138,7 +134,6 @@ UIC_SOURCES=\
 	mainControlPreferencesData.C\
 	modelSettingsDialogData.C\
 	molecularDynamicsDialogData.C\
-	mouseSensitivityData.C\
 	parsedFunctionDialogData.C\
 	peptideDialogData.C\
 	preferencesData.C\
