@@ -159,6 +159,60 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 		</Configuration>
+		<Configuration
+			Name="Python Multithreaded|Win32"
+			OutputDirectory="Python Multithreaded"
+			IntermediateDirectory="Python Multithreaded"
+			ConfigurationType="4"
+			CharacterSet="2"
+			WholeProgramOptimization="TRUE">
+			<Tool
+				Name="VCCLCompilerTool"
+				AdditionalOptions="/Zm800 /D &quot;BALL_QT_HAS_THREADS&quot;"
+				Optimization="3"
+				GlobalOptimizations="TRUE"
+				InlineFunctionExpansion="2"
+				EnableIntrinsicFunctions="TRUE"
+				ImproveFloatingPointConsistency="TRUE"
+				FavorSizeOrSpeed="1"
+				OmitFramePointers="TRUE"
+				OptimizeForProcessor="2"
+				OptimizeForWindowsApplication="TRUE"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;,&quot;C:\Programme\Qt\3.3.0b1\include&quot;,&quot;C:\Programme\Qt\3.3.0b1\mkspecs\win32-msvc.net&quot;"
+				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;LIBBALL_EXPORTS;YY_NEVER_INTERACTIVE"
+				StringPooling="TRUE"
+				MinimalRebuild="FALSE"
+				BasicRuntimeChecks="0"
+				RuntimeLibrary="0"
+				BufferSecurityCheck="FALSE"
+				RuntimeTypeInfo="TRUE"
+				UsePrecompiledHeader="0"
+				ObjectFile="$(IntDir)/"
+				WarningLevel="0"
+				Detect64BitPortabilityProblems="FALSE"
+				DebugInformationFormat="0"
+				CompileAs="2"
+				UndefinePreprocessorDefinitions="ERROR;IN;OUT"/>
+			<Tool
+				Name="VCCustomBuildTool"/>
+			<Tool
+				Name="VCLibrarianTool"
+				OutputFile="$(ProjectDir)..\..\..\lib\$(ProjectName).lib"
+				AdditionalLibraryDirectories=""
+				SuppressStartupBanner="FALSE"/>
+			<Tool
+				Name="VCMIDLTool"/>
+			<Tool
+				Name="VCPostBuildEventTool"/>
+			<Tool
+				Name="VCPreBuildEventTool"/>
+			<Tool
+				Name="VCPreLinkEventTool"/>
+			<Tool
+				Name="VCResourceCompilerTool"/>
+			<Tool
+				Name="VCWebServiceProxyGeneratorTool"/>
+		</Configuration>
 	</Configurations>
 	<Files>
 		<Filter
@@ -174,6 +228,12 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Python|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32"
 					ExcludedFromBuild="TRUE">
 					<Tool
 						Name="VCCLCompilerTool"/>
@@ -195,6 +255,12 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Python|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						UsePrecompiledHeader="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						UsePrecompiledHeader="1"/>
@@ -223,6 +289,12 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\COMMON\exception.C">
@@ -240,6 +312,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -265,6 +343,12 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\COMMON\logStream.C">
@@ -282,6 +366,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -307,6 +397,12 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\COMMON\version.C">
@@ -324,6 +420,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -353,6 +455,12 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\autoDeletable.C">
@@ -370,6 +478,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -395,6 +509,12 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\embeddable.C">
@@ -412,6 +532,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -437,6 +563,12 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\notification.C">
@@ -454,6 +586,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -479,6 +617,12 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\persistenceManager.C">
@@ -496,6 +640,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -521,6 +671,12 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\property.C">
@@ -538,6 +694,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -563,6 +725,12 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\textPersistenceManager.C">
@@ -580,6 +748,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -605,6 +779,12 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\visitor.C">
@@ -622,6 +802,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -651,6 +837,12 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\DATATYPE\contourSurface.C">
@@ -671,6 +863,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -696,6 +894,12 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\DATATYPE\regularData1D.C">
@@ -713,6 +917,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -738,6 +948,12 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\DATATYPE\regularData3D.C">
@@ -755,6 +971,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -779,6 +1001,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
@@ -921,6 +1149,12 @@
 							Name="VCCLCompilerTool"
 							AdditionalIncludeDirectories="$(ProjectDir)"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories="$(ProjectDir)"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\KERNEL\expressionParserLexer.l">
@@ -944,6 +1178,15 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="running flex on $(InputFileName)"
+							CommandLine="&quot;$(ProjectDir)..\..\Contrib\bin\flex&quot; -PExpressionParser -o&quot;$(InputDir)expressionParserLexer.C&quot; &quot;$(InputPath)&quot;
+"
+							Outputs="$(InputDir)expressionParserLexer.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running flex on $(InputFileName)"
@@ -977,6 +1220,15 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="running bison on $(InputFileName)"
+							CommandLine="$(SolutionDir)\Contrib\bin\bison -y -p ExpressionParser -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)expressionParserParser.C&quot;
+"
+							Outputs="$(InputDir)expressionParserParser.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running bison on $(InputFileName)"
@@ -1051,6 +1303,12 @@
 						<Tool
 							Name="VCCLCompilerTool"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\MATHS\FFT2D.C">
@@ -1072,6 +1330,12 @@
 						<Tool
 							Name="VCCLCompilerTool"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\MATHS\FFT3D.C">
@@ -1089,6 +1353,12 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32"
 						ExcludedFromBuild="TRUE">
 						<Tool
 							Name="VCCLCompilerTool"/>
@@ -1126,6 +1396,12 @@
 						<Tool
 							Name="VCCLCompilerTool"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\MATHS\function.C">
@@ -1159,6 +1435,12 @@
 							Name="VCCLCompilerTool"
 							AdditionalIncludeDirectories="$(ProjectDir)"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories="$(ProjectDir)"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\MATHS\parsedFunctionLexer.l">
@@ -1182,6 +1464,15 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="running flex on $(InputFileName)"
+							CommandLine="&quot;$(ProjectDir)..\..\Contrib\bin\flex&quot; -PparsedFunction -o&quot;$(InputDir)parsedFunctionLexer.C&quot; &quot;$(InputPath)&quot;
+"
+							Outputs="$(InputDir)parsedFunctionLexer.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running flex on $(InputFileName)"
@@ -1221,6 +1512,15 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="running bison on $(InputFileName)"
+							CommandLine="$(SolutionDir)\Contrib\bin\bison -y -p parsedFunction -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)parsedFunctionParser.C&quot;
+"
+							Outputs="$(InputDir)parsedFunctionParser.C;$(InputDir)parsedFunctionParser.h"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running bison on $(InputFileName)"
@@ -1309,6 +1609,19 @@
 						</FileConfiguration>
 						<FileConfiguration
 							Name="Python|Win32">
+							<Tool
+								Name="VCCLCompilerTool"
+								Optimization="3"
+								GlobalOptimizations="TRUE"
+								InlineFunctionExpansion="2"
+								OmitFramePointers="TRUE"
+								OptimizeForProcessor="2"
+								MinimalRebuild="FALSE"
+								BasicRuntimeChecks="0"
+								DebugInformationFormat="0"/>
+						</FileConfiguration>
+						<FileConfiguration
+							Name="Python Multithreaded|Win32">
 							<Tool
 								Name="VCCLCompilerTool"
 								Optimization="3"
@@ -1579,6 +1892,14 @@
 							GlobalOptimizations="FALSE"
 							InlineFunctionExpansion="1"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="0"
+							GlobalOptimizations="FALSE"
+							InlineFunctionExpansion="1"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\SOLVATION\pairExpInteractionEnergyProcessor.C">
@@ -1740,6 +2061,12 @@
 							Name="VCCLCompilerTool"
 							AdditionalIncludeDirectories="$(ProjectDir)"/>
 					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories="$(ProjectDir)"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\smilesParserLexer.l">
@@ -1763,6 +2090,15 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="running flex on $(InputFileName)"
+							CommandLine="&quot;$(ProjectDir)..\..\Contrib\bin\flex&quot; -PSmilesParser -o&quot;$(InputDir)smilesParserLexer.C&quot; &quot;$(InputPath)&quot;
+"
+							Outputs="$(InputDir)smilesParserLexer.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running flex on $(InputFileName)"
@@ -1802,6 +2138,15 @@
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="running bison on $(InputFileName)"
+							CommandLine="$(SolutionDir)\Contrib\bin\bison -y -p SmilesParser -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)smilesParserParser.C&quot;
+"
+							Outputs="$(InputDir)smilesParserParser.C;$(InputDir)smilesParserParser.h"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running bison on $(InputFileName)"
@@ -1889,6 +2234,31 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\SYSTEM\timer.C">
+				</File>
+			</Filter>
+			<Filter
+				Name="PYTHON"
+				Filter="">
+				<File
+					RelativePath="..\..\..\source\PYTHON\pyInterpreter.C">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories="&quot;$(SIPDIR)\include&quot;"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							AdditionalIncludeDirectories="&quot;$(SIPDIR)\include&quot;"/>
+					</FileConfiguration>
 				</File>
 			</Filter>
 		</Filter>
@@ -2826,6 +3196,13 @@
 					RelativePath="..\..\..\include\BALL\SYSTEM\timer.h">
 				</File>
 			</Filter>
+			<Filter
+				Name="PYTHON"
+				Filter="">
+				<File
+					RelativePath="..\..\..\include\BALL\PYTHON\pyInterpreter.h">
+				</File>
+			</Filter>
 		</Filter>
 		<Filter
 			Name="WIN"
@@ -2849,6 +3226,13 @@
 				</FileConfiguration>
 				<FileConfiguration
 					Name="Python|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						PreprocessorDefinitions="HAVE_STRING_H;__STDC__;REGEX_MALLOC"
+						CompileAs="1"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
 						PreprocessorDefinitions="HAVE_STRING_H;__STDC__;REGEX_MALLOC"

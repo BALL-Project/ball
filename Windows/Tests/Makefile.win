@@ -3,7 +3,7 @@
 # by Andreas Crauser 
 #---------------------------------------------------------------
 
-CC = cl -c -nologo -MTd -Zm1200 -TP -EHsc -GR -ZI
+CC = cl -c -nologo -MTd -Zm1200 -TP -EHsc -GR -Zi
 LD = cl -nologo -MTd 
 LDOPTS = /link /OPT:NOREF /DEBUG
 
