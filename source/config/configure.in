@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.49 2000/01/27 08:18:51 oliver Exp $
+dnl    $Id: configure.in,v 1.50 2000/01/28 10:56:38 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -625,7 +625,7 @@ fi
 
 dnl
 dnl 	Try to find out the exact compiler release on different
-dnl		operating systems and differntiate between gcc/egcs
+dnl		operating systems and differentiate between gcc/egcs
 dnl
 if test "${IS_GXX}" = "true" ; then
 	AC_MSG_CHECKING(compiler version)
@@ -677,7 +677,36 @@ if test "${IS_GXX}" = "true" ; then
 		AC_MSG_RESULT()
 		AC_MSG_ERROR(aborted)
 	fi
-else
+fi
+
+dnl
+dnl identify the KAI version
+dnl
+if "${IS_KCC}" = true ; then
+	AC_MSG_CHECKING(compiler version)
+	echo "int main(){}" > conftest.C
+	CXX_VERSION=`${CXX} -v --version conftest.C 2>&1| ${GREP} "KAI C++ " | ${CUT} -d" " -f3`
+	CXX_NAME="KCC"
+	VERSION_OUTPUT="KAI C++ ${CXX_VERSION}"
+	CXX_COMPILER_NAME="KCC"
+	
+	AC_MSG_RESULT(${VERSION_OUTPUT})
+
+	CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
+	CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
+	if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
+		CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
+	fi
+	if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
+		CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+	fi
+	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
+		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
+	fi
+fi
+
+
+if "${IS_GXX}" != true -a "${IS_KCC}" != true; then
 	dnl
 	dnl		Now we got a problem: we have to identify the compiler
 	dnl		This is nearly impossible, but we give our best...
@@ -821,190 +850,198 @@ if test "${HAS_GPLUSPLUS}" = "true" ; then
 			BALL_TYPENAME=typename
 		fi
 	fi
-else
-	dnl
-	dnl		KAI C++ specific options
-	dnl
-	if test "${IS_KCC}" = true ; then
-		dnl		KAI C++ stores a list of instantiated templates
-		dnl		in directories called ti_files
-		dnl		make clean should remove these
-		TEMPLATE_DIR="ti_files"
-		AR="${CXX}"
-		DYNAR="${CXX}"
-		AROPTS="-o"
-		DYNAROPTS="-o"
+	COMPILER_DONE=true
+fi
+
+dnl
+dnl		KAI C++ specific options
+dnl
+if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
+	dnl		KAI C++ stores a list of instantiated templates
+	dnl		in directories called ti_files
+	dnl		make clean should remove these
+	TEMPLATE_DIR="ti_files"
+	AR="${CXX}"
+	DYNAR="${CXX}"
+	AROPTS="-o"
+	DYNAROPTS="-o"
+	CXX_MAKEDEPEND="${CXX}"
+	MAKEDEP_CXX_OPTS="-M"
+	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
+
+	dnl	
+	dnl		Someone at KAI seems to have the need
+	dnl		to torture developpers by introducing 
+	dnl		a new flag for position independent code 
+	dnl		on EVERY platform...
+	dnl		
+	if test "${OS}" = Linux ; then
+		CPPFLAGS="${CPPFLAGS} -fPIC"
+	fi
+	if test "${OS}" = Solaris ; then
+		CPPFLAGS="${CPPFLAGS} -KPIC"
+	fi
+	if test "${OS}" = IRIX ; then
+		CPPFLAGS="${CPPFLAGS} --pic"
+	fi
+	
+	dnl		optimze as on highest level: this compiler 
+	dnl		does a good job optimizing!
+	CPPFLAGS_O="${CPPFLAGS_O} -O3 +K3"
+	
+	dnl		avoid high level optimization to
+	dnl		get debuggable code...
+	CPPFLAGS_D="${CPPFLAGS_D} +K0"
+	CPPFLAGS_DI="${CPPFLAGS_DI} -g"
+	COMPILER_DONE=true
+fi
+
+dnl
+dnl try to identify the compiler for each OS
+dnl
+dnl
+if test "${COMPILER_DONE}" != true ; then
+	if test "${OS}" = IRIX ; then
+		dnl  set the name for the template repository
+		dnl
+		TEMPLATE_DIR="ii_files"
+
+		dnl	 set the default binary format (if none selected)
+		dnl
+		if test "${BINFMT_64_BIT}" = true ; then
+			IRIX_BINFMT=64
+			CXX_NAME="${CXX_NAME}_64"
+		else
+			IRIX_BINFMT=N32
+			CXX_NAME="${CXX_NAME}_N32"
+		fi
+		
+		BALL_TYPENAME=typename
+
+		dnl 
+		dnl			a version above 7.2 is required
+		dnl
+		if test "${CXX_VERSION_1}" -lt 7\
+						-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" = 10\
+						-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" = 20\
+						-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" -lt 2; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(MipsPro CC version 7.30 or above is required. Please update your compiler.)
+			AC_ERROR(Aborted)
+		fi
+
+
+		AR=${CXX}
+		AROPTS="-ar -o"
+		DYNAR=${CXX}
+		DYNAROPTS="-LANG:std -shared -quickstart_info -no_unresolved -o"
+
+		dnl  issue a warning about an old compiler with a broken ostream implementation: reopening a fstream
+		dnl  and writing to it will omit the first 16k written to the stream. Nasty, but confirmed with SGI
+		dnl  and fixed in 7.3.1.1m
+		if test "${CXX_VERSION_1}" = 7 -a "${CXX_VERSION_2}" = 3 \
+						-a "${CXX_VERSION_3}" = 1m -a "${CXX_VERSION_4}" = ""\
+						-o "${CXX_VERSION_1}" = 7 -a "{CXX_VERSION_2}" = 30 ; then
+			COMMENTS="${COMMENTS}\nPlease take care - this version of SGI CC (7.3.1m) contains serious bugs\n"
+			COMMENTS="${COMMENTS}in its implementaion of fstream/iostream. This may lead to strange behaviour\n"
+			COMMENTS="${COMMENTS}and causes PDBFile_test to fail. Please update your compiler.\n\n"
+			AC_MSG_RESULT(${COMMENTS})
+			ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}${COMMENTS}"
+			COMMENTS=""
+		fi
+
 		CXX_MAKEDEPEND="${CXX}"
-		MAKEDEP_CXX_OPTS="-M"
+		MAKEDEP_CXX_OPTS="-M 2>/dev/null"
 		MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-		dnl	
-		dnl		Someone at KAI seems to have the need
-		dnl		to torture developpers by introducing 
-		dnl		a new flag for position independent code 
-		dnl		on EVERY platform...
-		dnl		
-		if test "${OS}" = Linux ; then
-			CPPFLAGS="${CPPFLAGS} -fPIC"
-		fi
-		if test "${OS}" = Solaris ; then
-			CPPFLAGS="${CPPFLAGS} -KPIC"
-		fi
-		if test "${OS}" = IRIX ; then
-			CPPFLAGS="${CPPFLAGS} --pic"
-		fi
-		
-		dnl		optimze as on highest level: this compiler 
-		dnl		does a good job optimizing!
-		CPPFLAGS_O="${CPPFLAGS_O} -O3 +K3"
-		
-		dnl		avoid high level optimization to
-		dnl		get debuggable code...
-		CPPFLAGS_D="${CPPFLAGS_D} +K0"
-		CPPFLAGS_DI="${CPPFLAGS_DI} -g"
-	else
-		if test "${OS}" = IRIX ; then
-			dnl  set the name for the template repository
-			dnl
-			TEMPLATE_DIR="ii_files"
-
-			dnl	 set the default binary format (if none selected)
-			dnl
-			if test "${BINFMT_64_BIT}" = true ; then
-				IRIX_BINFMT=64
-				CXX_NAME="${CXX_NAME}_64"
-			else
-				IRIX_BINFMT=N32
-				CXX_NAME="${CXX_NAME}_N32"
-			fi
-			
-			BALL_TYPENAME=typename
-
-			dnl 
-			dnl			a version above 7.2 is required
-			dnl
-			if test "${CXX_VERSION_1}" -lt 7\
-							-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" = 10\
-							-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" = 20\
-							-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" -lt 2; then
-				AC_MSG_RESULT()
-				AC_MSG_RESULT(MipsPro CC version 7.30 or above is required. Please update your compiler.)
-				AC_ERROR(Aborted)
-			fi
-
-
-			AR=${CXX}
-			AROPTS="-ar -o"
-			DYNAR=${CXX}
-			DYNAROPTS="-LANG:std -shared -quickstart_info -no_unresolved -o"
-
-			dnl  issue a warning about an old compiler with a broken ostream implementation: reopening a fstream
-			dnl  and writing to it will omit the first 16k written to the stream. Nasty, but confirmed with SGI
-			dnl  and fixed in 7.3.1.1m
-			if test "${CXX_VERSION_1}" = 7 -a "${CXX_VERSION_2}" = 3 \
-							-a "${CXX_VERSION_3}" = 1m -a "${CXX_VERSION_4}" = ""\
-							-o "${CXX_VERSION_1}" = 7 -a "{CXX_VERSION_2}" = 30 ; then
-				COMMENTS="${COMMENTS}\nPlease take care - this version of SGI CC (7.3.1m) contains serious bugs\n"
-				COMMENTS="${COMMENTS}in its implementaion of fstream/iostream. This may lead to strange behaviour\n"
-				COMMENTS="${COMMENTS}and causes PDBFile_test to fail. Please update your compiler.\n\n"
-				AC_MSG_RESULT(${COMMENTS})
-				ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}${COMMENTS}"
-				COMMENTS=""
-			fi
-
-			CXX_MAKEDEPEND="${CXX}"
-			MAKEDEP_CXX_OPTS="-M 2>/dev/null"
-			MAKEDEP_CXX_SUFFIX=" >.Dependencies"
-
-			if test "${IRIX_BINFMT}" = 64 ; then
-				DEF_BOOL=false
-				CPPFLAGS="$CPPFLAGS -64 -LANG:std"
-				DYNAROPTS="-64 ${DYNAROPTS}"
-				CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 5"
-				CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,1110,1209"
-				CPPFLAGS_DI="${CPPFLAGS_DI} -g"
-				LDFLAGS="$LDFLAGS -64 -LANG:std"
-				AC_DEFINE(IRIX64,)
-				ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}Please remember to use LD_LIBRARY64_PATH instead of\n LD_LIBRARY_PATH - you are using 64 bit objects!"
-			fi
-			if test "${IRIX_BINFMT}" = N32 ; then
-				DEF_BOOL=false
-				CPPFLAGS="$CPPFLAGS -n32 -LANG:std"
-				DYNAROPTS="-n32 ${DYNAROPTS}"
-				CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 5"
-				CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,1110,1209"
-				CPPFLAGS_DI="${CPPFLAGS_DI} -g"
-				LDFLAGS="$LDFLAGS -n32 -LANG:std"
-				AC_DEFINE(IRIX32,)
-				ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}Please remember to use LD_LIBRARYN32_PATH instead of\n LD_LIBRARY_PATH - you are using new style 32 bit objects."
-			fi
-
-			AC_DEFINE(MIPS,)	
-			AC_DEFINE(IRIX,)
-		fi
-
-		dnl
-		dnl  old SunOS 4.x - only for completeness
-		dnl
-		if test $OS = SunOS ; then
-			CPPFLAGS_D="$CPPFLAGS_D}"
-			CPPFLAGS_DI="$CPPFLAGS_DI} -g"
-			CPPFLAGS_O="${CPPFLAGS_O} -O2"
-			AC_DEFINE(SPARC,)
-			AC_DEFINE(SUNOS,)
-			AC_ERROR(SunOS not supported - please use Solaris)
-		fi
-
-		dnl
-		dnl  SUN Solaris (2.x)
-		dnl
-		if test $OS = Solaris ; then
-			dnl
-			dnl		Make sure we use at least Workshop 6.0
-			dnl		(SUNPro < 6 is a mess - hasn't even heard of ANSI C++!)
-			dnl
-			if test "${CXX_VERSION_1}" -lt 6 ; then
-				AC_MSG_RESULT()
-				AC_MSG_RESULT(BALL requires an ANSI C++ compliant compiler)
-				AC_MSG_RESULT(SUNPro compilers are ANSI compliant for version 6.0 and above)
-				AC_MSG_RESULT(Please upgrade your compiler!)
-				AC_MSG_RESULT()
-				AC_ERROR(Abort)
-			fi
-
-			AC_DEFINE(SOLARIS,)
-
-			TEMPLATE_DIR="SunWS_cache"
-
-			dnl	 set the default binary format (if none selected)
-			dnl
-			if test "${BINFMT_64_BIT}" = true ; then
-				SUN_BINFMT=V9
-				CXX_NAME="${CXX_NAME}_V9"
-				LDFLAGS="${LDFLAGS} -xarch=v9"
-				CPPFLAGS="${CPPLAGS} -xarch=v9"
-				AROPTS="${AROPTS} -xarch=v9"
-				DYNAROPTS="${DYNAROPTS} -xarch=v9"
-			else
-				SUN_BINFMT=V8
-				CXX_NAME="${CXX_NAME}_V8"
-			fi
-
-			DEF_BOOL=true
-			AR="${CXX}"
-			DYNAR="${CXX}"
-			AROPTS="${AROPTS} -xar -KPIC -pto -o"
-			DYNAROPTS="${DYNAROPTS} -G -KPIC -pto -o"
-			CXX_MAKEDEPEND="${CXX}"
-			MAKEDEP_CXX_OPTS="-xM1"
-			MAKEDEP_CXX_SUFFIX=" >.Dependencies"
-
-			AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
-			CPPFLAGS="${CPPFLAGS} -pto -KPIC"
-			CPPFLAGS_O="${CPPFLAGS_O} -xO3 -xtarget=native"
-			CPPFLAGS_D="${CPPFLAGS_D}"
+		if test "${IRIX_BINFMT}" = 64 ; then
+			DEF_BOOL=false
+			CPPFLAGS="$CPPFLAGS -64 -LANG:std"
+			DYNAROPTS="-64 ${DYNAROPTS}"
+			CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 5"
+			CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,1110,1209"
 			CPPFLAGS_DI="${CPPFLAGS_DI} -g"
+			LDFLAGS="$LDFLAGS -64 -LANG:std"
+			AC_DEFINE(IRIX64,)
+			ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}Please remember to use LD_LIBRARY64_PATH instead of\n LD_LIBRARY_PATH - you are using 64 bit objects!"
 		fi
+		if test "${IRIX_BINFMT}" = N32 ; then
+			DEF_BOOL=false
+			CPPFLAGS="$CPPFLAGS -n32 -LANG:std"
+			DYNAROPTS="-n32 ${DYNAROPTS}"
+			CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 5"
+			CPPFLAGS_D="${CPPFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,1110,1209"
+			CPPFLAGS_DI="${CPPFLAGS_DI} -g"
+			LDFLAGS="$LDFLAGS -n32 -LANG:std"
+			AC_DEFINE(IRIX32,)
+			ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}Please remember to use LD_LIBRARYN32_PATH instead of\n LD_LIBRARY_PATH - you are using new style 32 bit objects."
+		fi
+
+		AC_DEFINE(MIPS,)	
+		AC_DEFINE(IRIX,)
+	fi
+
+	dnl
+	dnl  old SunOS 4.x - only for completeness
+	dnl
+	if test $OS = SunOS ; then
+		CPPFLAGS_D="$CPPFLAGS_D}"
+		CPPFLAGS_DI="$CPPFLAGS_DI} -g"
+		CPPFLAGS_O="${CPPFLAGS_O} -O2"
+		AC_DEFINE(SPARC,)
+		AC_DEFINE(SUNOS,)
+		AC_ERROR(SunOS not supported - please use Solaris)
+	fi
+
+	dnl
+	dnl  SUN Solaris (2.x)
+	dnl
+	if test $OS = Solaris ; then
+		dnl
+		dnl		Make sure we use at least Workshop 6.0
+		dnl		(SUNPro < 6 is a mess - hasn't even heard of ANSI C++!)
+		dnl
+		if test "${CXX_VERSION_1}" -lt 6 ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(BALL requires an ANSI C++ compliant compiler)
+			AC_MSG_RESULT(SUNPro compilers are ANSI compliant for version 6.0 and above)
+			AC_MSG_RESULT(Please upgrade your compiler!)
+			AC_MSG_RESULT()
+			AC_ERROR(Abort)
+		fi
+
+		AC_DEFINE(SOLARIS,)
+
+		TEMPLATE_DIR="SunWS_cache"
+
+		dnl	 set the default binary format (if none selected)
+		dnl
+		if test "${BINFMT_64_BIT}" = true ; then
+			SUN_BINFMT=V9
+			CXX_NAME="${CXX_NAME}_V9"
+			LDFLAGS="${LDFLAGS} -xarch=v9"
+			CPPFLAGS="${CPPLAGS} -xarch=v9"
+			AROPTS="${AROPTS} -xarch=v9"
+			DYNAROPTS="${DYNAROPTS} -xarch=v9"
+		else
+			SUN_BINFMT=V8
+			CXX_NAME="${CXX_NAME}_V8"
+		fi
+
+		DEF_BOOL=true
+		AR="${CXX}"
+		DYNAR="${CXX}"
+		AROPTS="${AROPTS} -xar -KPIC -pto -o"
+		DYNAROPTS="${DYNAROPTS} -G -KPIC -pto -o"
+		CXX_MAKEDEPEND="${CXX}"
+		MAKEDEP_CXX_OPTS="-xM1"
+		MAKEDEP_CXX_SUFFIX=" >.Dependencies"
+
+		AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
+		CPPFLAGS="${CPPFLAGS} -pto -KPIC"
+		CPPFLAGS_O="${CPPFLAGS_O} -xO3 -xtarget=native"
+		CPPFLAGS_D="${CPPFLAGS_D}"
+		CPPFLAGS_DI="${CPPFLAGS_DI} -g"
 	fi
 fi
 
@@ -1079,7 +1116,7 @@ int main()
 EOF
 if ${CXX} /tmp/$$.conftest.c 2>/dev/null >/dev/null; then
 	AC_MSG_RESULT(available)
-	AC_DEFINE(HAVE_NUMERIC_LIMITS)
+	AC_DEFINE(BALL_HAVE_NUMERIC_LIMITS)
 else
 	AC_MSG_RESULT(not available)
 
