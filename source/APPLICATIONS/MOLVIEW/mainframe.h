@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.42 2003/08/27 14:35:37 amoll Exp $
+// $Id: mainframe.h,v 1.43 2003/08/28 13:38:51 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -51,11 +51,9 @@
 # include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 #endif
 
-/*
 #ifndef BALL_VIEW_DIALOGS_CONTOURSURFACEDIALOG_H
 # include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
 #endif
-*/
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
 # include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
@@ -187,7 +185,7 @@ class Mainframe
 	DisplayProperties*    		display_properties_;
 	AmberMinimizationDialog*	minimization_dialog_;
 	MolecularDynamicsDialog*	md_dialog_;
-//  ContourSurfaceDialog* 		surface_dialog_;
+  ContourSurfaceDialog* 		surface_dialog_;
 	LabelDialog*	    				label_dialog_;
 	MolecularProperties*  		molecular_properties_;
 	MolecularFileDialog*  		file_dialog_;

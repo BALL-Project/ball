@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.64 2003/08/28 12:40:21 amoll Exp $
+// $Id: mainframe.C,v 1.65 2003/08/28 13:38:51 amoll Exp $
 
 #include "mainframe.h"
 #include "icons.h"
@@ -121,10 +121,9 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 	md_dialog_ = new MolecularDynamicsDialog(this);
 	CHECK_PTR(md_dialog_);
 
-	/*
 	surface_dialog_ = new ContourSurfaceDialog(this);
 	CHECK_PTR(surface_dialog_);
-*/
+
 	label_dialog_ = new LabelDialog(this);
 	CHECK_PTR(label_dialog_);
 	
@@ -323,20 +322,15 @@ void Mainframe::calculateAmberEnergy()
 
 void Mainframe::computeSurface()
 {
-	/*
-	// execute the surface dialog
-	// and abort if cancel is clicked
+	// execute the surface dialog and abort if cancel is clicked
 	if (surface_dialog_->exec() == 0)
 	{
 		return;
 	}
 	RegularData3D rd;
-	File f(surface_dialog_->getLoadName());
+	File f(surface_dialog_->getFileName());
 	f>>rd;
-  Log.info()<<surface_dialog_->threshold_->text().toFloat()<<endl;
-	ContourSurface cs(surface_dialog_->threshold_->text().toFloat());
-  Log.info()<<surface_dialog_->threshold_->text().toFloat()<<endl;
-	//cs.createContourSurface(rd);   ????
+	ContourSurface cs(rd, surface_dialog_->getThreshold());
 	Mesh* mesh = new Mesh();
 	*static_cast<Surface*>(mesh) = (Surface) cs;
 
@@ -348,7 +342,6 @@ void Mainframe::computeSurface()
 	message->setRepresentation(rep);
 	message->setType(RepresentationMessage::ADD);
 	notify_(message);
-	*/
 }
 
 void Mainframe::amberMinimization()
