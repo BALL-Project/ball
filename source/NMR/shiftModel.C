@@ -1,4 +1,4 @@
-// $Id: shiftModel.C,v 1.8 2000/09/19 13:34:28 oliver Exp $
+// $Id: shiftModel.C,v 1.9 2000/09/19 20:32:14 oliver Exp $
 
 #include <BALL/NMR/shiftModel.h>
 #include <BALL/FORMAT/parameterSection.h>
@@ -144,11 +144,12 @@ namespace BALL
 	}
 
 	bool ShiftModel::init_()
-		throw()
+		throw(Exception::FileNotFound)
 	{
 		// inivalidate object
 		valid_ = false;
 
+		parameters_.init();
 		if (parameters_.isValid() && parameters_.getParameterFile().hasSection(MODULE_LIST_SECTION))
 		{
 			ParameterSection module_section;
