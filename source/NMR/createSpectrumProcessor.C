@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.C,v 1.9 2000/09/30 16:44:24 oliver Exp $
+// $Id: createSpectrumProcessor.C,v 1.10 2000/12/08 09:25:43 oliver Exp $
 
 #include <BALL/NMR/createSpectrumProcessor.h>
 #include <BALL/NMR/shiftModule.h>
@@ -154,7 +154,7 @@ namespace BALL
 						}
 						if (atoms.size() != 0)
 						{
-							shift /= atoms.size();
+							shift /= (float)atoms.size();
 							list<Atom*>::const_iterator list_it = atoms.begin();
 							for (; list_it != atoms.end(); ++list_it)
 							{
