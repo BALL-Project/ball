@@ -1,4 +1,4 @@
-// $Id: atomicContactEnergy.h,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: atomicContactEnergy.h,v 1.2 1999/10/28 14:06:12 oliver Exp $
 
 #ifndef BALL_ENERGY_ATOMICCONTACTENERGY_H
 #define BALL_ENERGY_ATOMICCONTACTENERGY_H
@@ -11,7 +11,8 @@
 #	include <BALL/KERNEL/system.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/** Calculate the atomic contact energy.
 			Calculates the atomic contact energy (ACE) after
@@ -26,7 +27,7 @@ namespace BALL {
 			{\bf Definition:} \URL{BALL/ENERGY/atomicContactEnergy.h}
 			\\
 	*/ 
-	double calculateACE(const System& system);
+	double calculateACE(System& system);
 
 		
 } // namespace BALL
