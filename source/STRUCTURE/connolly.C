@@ -1,4 +1,4 @@
-// $Id: connolly.C,v 1.5 2000/06/27 08:27:22 oliver Exp $
+// $Id: connolly.C,v 1.6 2000/06/27 09:11:09 oliver Exp $
 
 #include <math.h>
 #include <algorithm>
@@ -141,7 +141,11 @@ namespace	BALL
 	static double c_b158 = 1.0;
 
 
-	double dist2_ (double *x, double *y);
+	inline double dist2_ (double* x, double* y)
+	{
+		return ((x[0] - y[0]) * (x[0] - y[0]) + (x[1] - y[1]) * (x[1] - y[1]) + (x[2] - y[2]) * (x[2] - y[2]));
+	}
+
 	int vcross_ (double *x, double *y, double *z__);
 	int vnorm_ (double *x, double *xn);
 	double anorm_ (double *x);
@@ -162,8 +166,8 @@ namespace	BALL
 	int ipedge_ (int *iep, int *ia);
 	int measpm_ (int *ifn, double *prism);
 	int measfp_ (int *ifp, double *areap, double *volp);
-	int measfs_ (int *ifs, double *areas, double *vols, double *areasp, double *volsp);
-	int measfn_ (int *ifn, double *arean, double *voln);
+	int measfs_ (int *ifs, double *areas, double *vols, double *areasp, double *volsp, int* a1, int* a2);
+	int measfn_ (int *ifn, double *arean, double *voln, int* a1, int* a2, int* a3);
 	int projct_ (double *pnt, double *unvect, int *icy, int *ia, double *spv, int *nedge, bool * fail);
 	int epuclc_ (double *spv, int *nedge, double *epu);
 	int cirpln_ (double *circen, double *cirrad, double *cirvec,
@@ -216,12 +220,6 @@ namespace	BALL
 
 		return 0;
 	}	/* connolly_ */
-
-
-	inline double dist2_ (double* x, double* y)
-	{
-		return ((x[0] - y[0]) * (x[0] - y[0]) + (x[1] - y[1]) * (x[1] - y[1]) + (x[2] - y[2]) * (x[2] - y[2]));
-	}
 
 
 	/*     ################################################################## */
@@ -1348,7 +1346,7 @@ namespace	BALL
 					goto L80;
 				L100:
 
-/*     we have a new probe position */
+					/*     we have a new probe position */
 
 					++face06_1.np;
 					if (face06_1.np > 10000)
@@ -1356,20 +1354,20 @@ namespace	BALL
 						cerr << "Too many Probe Positions" << endl;
 					}
 
-/*     mark three tori not buried */
+					/*     mark three tori not buried */
 
 					face04_1.ttbur[itt - 1] = false;
 					face04_1.ttbur[ik - 1] = false;
 					face04_1.ttbur[jk - 1] = false;
 
-/*     store probe center */
+					/*     store probe center */
 
 					for (k = 1; k <= 3; ++k)
 					{
 						face06_1.p[k + face06_1.np * 3 - 4] = pijk[k - 1];
 					}
 
-/*     calculate vectors from probe to atom centers */
+					/*     calculate vectors from probe to atom centers */
 
 					if (face07_1.nv + 3 > 25000)
 					{
@@ -1425,7 +1423,7 @@ namespace	BALL
 					if (det > 0.0)
 					{
 
-/*     swap second and third vertices */
+						/*     swap second and third vertices */
 
 						for (k = 1; k <= 3; ++k)
 						{
@@ -1434,20 +1432,19 @@ namespace	BALL
 							face07_1.v[k + (face07_1.nv + 3) * 3 - 4] = tempv[k - 1];
 						}
 
-/*     set up pointers from probe to atoms */
+						/*     set up pointers from probe to atoms */
 
 						face06_1.pa[face06_1.np * 3 - 3] = ia;
 						face06_1.pa[face06_1.np * 3 - 2] = ka;
 						face06_1.pa[face06_1.np * 3 - 1] = ja;
 
-/*     set up pointers from vertices to atoms */
+						/*     set up pointers from vertices to atoms */
 
 						face07_1.va[face07_1.nv] = ia;
 						face07_1.va[face07_1.nv + 1] = ka;
 						face07_1.va[face07_1.nv + 2] = ja;
 
-/*     insert concave edges into linked lists for appropri
-   ate tori */
+						/*     insert concave edges into linked lists for appropriate tori */
 
 						i__3 = face08_1.nen + 1;
 						inedge_ (&i__3, &ik);
@@ -1620,7 +1617,7 @@ namespace	BALL
 
 
 
-/*     initialize the number of nonburied tori */
+		/*     initialize the number of nonburied tori */
 
 		face05_1.nt = 0;
 		if (face04_1.ntt <= 0)
@@ -1628,9 +1625,8 @@ namespace	BALL
 			return 0;
 		}
 
-/*     if torus is free, then it is not buried; */
-
-/*     skip to end of loop if buried torus */
+		/*     if torus is free, then it is not buried; */
+		/*     skip to end of loop if buried torus */
 
 		i__1 = face04_1.ntt;
 		for (itt = 1; itt <= i__1; ++itt)
@@ -1642,7 +1638,7 @@ namespace	BALL
 			if (!face04_1.ttbur[itt - 1])
 			{
 
-/*     first, transfer information */
+				/*     first, transfer information */
 
 				++face05_1.nt;
 				if (face05_1.nt > 15000)
@@ -1658,7 +1654,7 @@ namespace	BALL
 				face05_1.tfree[face05_1.nt - 1] = face04_1.ttfree[itt - 1];
 				face05_1.tfe[face05_1.nt - 1] = face04_1.ttfe[itt - 1];
 
-/*     special check for inconsistent probes */
+				/*     special check for inconsistent probes */
 
 				iptr = face05_1.tfe[face05_1.nt - 1];
 				ned = 0;
@@ -1952,9 +1948,9 @@ namespace	BALL
 			for (ient = 2; ient <= i__2; ++ient)
 			{
 
-/*     we have an entry to put into linked list */
+				/*     we have an entry to put into linked list */
 
-/*     search for place to put it */
+				/*     search for place to put it */
 
 				l1 = 0;
 				l2 = 1;
@@ -1964,7 +1960,7 @@ namespace	BALL
 					goto L40;
 				}
 
-/*     not yet, move along */
+				/*     not yet, move along */
 
 				l1 = l2;
 				l2 = nxtang[l2 - 1];
@@ -1974,9 +1970,9 @@ namespace	BALL
 				}
 			L40:
 
-/*     we are at end of linked list or between l1 and l2; */
+				/*     we are at end of linked list or between l1 and l2; */
 
-/*     insert edge */
+				/*     insert edge */
 
 				if (l1 <= 0)
 				{
@@ -1986,9 +1982,9 @@ namespace	BALL
 				nxtang[ient - 1] = l2;
 			}
 
-/*     collect pairs of concave edges into saddles */
+			/*     collect pairs of concave edges into saddles */
 
-/*     create convex edges while you're at it */
+			/*     create convex edges while you're at it */
 
 			l1 = 1;
 		L50:
@@ -1997,12 +1993,12 @@ namespace	BALL
 				goto L60;
 			}
 
-/*     check for start of saddle */
+			/*     check for start of saddle */
 
 			if (sdstrt[l1 - 1])
 			{
 
-/*     one more saddle face */
+				/*     one more saddle face */
 
 				++face11_1.nfs;
 				if (face11_1.nfs > 15000)
@@ -2010,15 +2006,15 @@ namespace	BALL
 					cerr << "Too many Saddle Faces" << endl;
 				}
 
-/*     get edge number */
+				/*     get edge number */
 
 				ien = ten[l1 - 1];
 
-/*     first concave edge of saddle */
+				/*     first concave edge of saddle */
 
 				face11_1.fsen[(face11_1.nfs << 1) - 2] = ien;
 
-/*     one more convex edge */
+				/*     one more convex edge */
 
 				++face10_1.nep;
 				if (face10_1.nep > 25000)
@@ -2026,28 +2022,27 @@ namespace	BALL
 					cerr << "Too many Convex Edges" << endl;
 				}
 
-/*     first convex edge points to second circle */
+				/*     first convex edge points to second circle */
 
 				face10_1.epc[face10_1.nep - 1] = face09_1.nc;
 
-/*     atom circle lies on */
+				/*     atom circle lies on */
 
 				ia = face09_1.ca[face09_1.nc - 1];
 
-/*     insert convex edge into linked list for atom */
+				/*     insert convex edge into linked list for atom */
 
 				ipedge_ (&face10_1.nep, &ia);
 
-/*     first vertex of convex edge is second vertex of concave edg
-   e */
+				/*     first vertex of convex edge is second vertex of concave edge */
 
 				face10_1.epv[(face10_1.nep << 1) - 2] = face08_1.env[(ien << 1) - 1];
 
-/*     first convex edge of saddle */
+				/*     first convex edge of saddle */
 
 				face11_1.fsep[(face11_1.nfs << 1) - 2] = face10_1.nep;
 
-/*     one more convex edge */
+				/*     one more convex edge */
 
 				++face10_1.nep;
 				if (face10_1.nep > 25000)
@@ -2055,23 +2050,23 @@ namespace	BALL
 					cerr << "Too many Convex Edges" << endl;
 				}
 
-/*     second convex edge points to first circle */
+				/*     second convex edge points to first circle */
 
 				face10_1.epc[face10_1.nep - 1] = face09_1.nc - 1;
 				ia = face09_1.ca[face09_1.nc - 2];
 
-/*     insert convex edge into linked list for atom */
+				/*     insert convex edge into linked list for atom */
 
 				ipedge_ (&face10_1.nep, &ia);
 
-/*     second vertex of second convex edge */
+				/*     second vertex of second convex edge */
 
-/*     is first vertex of first concave edge */
+				/*     is first vertex of first concave edge */
 
 				face10_1.epv[(face10_1.nep << 1) - 1] = face08_1.env[(ien << 1) - 2];
 				l1 = nxtang[l1 - 1];
 
-/*     wrap around */
+				/*     wrap around */
 
 				if (l1 <= 0)
 				{
@@ -2090,7 +2085,7 @@ namespace	BALL
 					}
 					n1 = nxtang[m1 - 1];
 
-/*     the old switcheroo */
+					/*     the old switcheroo */
 
 					nxtang[l1 - 1] = n1;
 					nxtang[m1 - 1] = l1;
@@ -2098,19 +2093,19 @@ namespace	BALL
 				}
 				ien = ten[l1 - 1];
 
-/*     second concave edge for saddle face */
+				/*     second concave edge for saddle face */
 
 				face11_1.fsen[(face11_1.nfs << 1) - 1] = ien;
 
-/*     second vertex of first convex edge is */
+				/*     second vertex of first convex edge is */
 
-/*     first vertex of second concave edge */
+				/*     first vertex of second concave edge */
 
 				face10_1.epv[(face10_1.nep - 1 << 1) - 1] = face08_1.env[(ien << 1) - 2];
 
-/*     first vertex of second convex edge is */
+				/*     first vertex of second convex edge is */
 
-/*     second vertex of second concave edge */
+				/*     second vertex of second concave edge */
 
 				face10_1.epv[(face10_1.nep << 1) - 2] = face08_1.env[(ien << 1) - 1];
 				face11_1.fsep[(face11_1.nfs << 1) - 1] = face10_1.nep;
@@ -2172,29 +2167,29 @@ namespace	BALL
 
 			face11_1.fsep[(face11_1.nfs << 1) - 2] = face10_1.nep;
 
-/*     one more convex edge */
+			/*     one more convex edge */
 
 			++face10_1.nep;
 			ia = face09_1.ca[face09_1.nc - 2];
 
-/*     insert second convex edge into linked list */
+			/*     insert second convex edge into linked list */
 
 			ipedge_ (&face10_1.nep, &ia);
 
-/*     no vertices for convex edge */
+			/*     no vertices for convex edge */
 
 			face10_1.epv[(face10_1.nep << 1) - 2] = 0;
 			face10_1.epv[(face10_1.nep << 1) - 1] = 0;
 
-/*     convex edge points to first circle */
+			/*     convex edge points to first circle */
 
 			face10_1.epc[face10_1.nep - 1] = face09_1.nc - 1;
 
-/*     second convex edge for saddle face */
+			/*     second convex edge for saddle face */
 
 			face11_1.fsep[(face11_1.nfs << 1) - 1] = face10_1.nep;
 
-/*     buried torus; do nothing with it */
+			/*     buried torus; do nothing with it */
 
 		L80:
 			;
@@ -2208,22 +2203,15 @@ namespace	BALL
 
 
 
-/*     ################################################################# */
-
-/*     ##                                                             ## */
-
-/*     ##  subroutine ipedge  --  manage linked list of convex edges  ## */
-
-/*     ##                                                             ## */
-
-/*     ################################################################# */
+	/*     ################################################################# */
+	/*     ##                                                             ## */
+	/*     ##  subroutine ipedge  --  manage linked list of convex edges  ## */
+	/*     ##                                                             ## */
+	/*     ################################################################# */
+	/*     "ipedge" inserts convex edge into linked list for atom */
 
 
-/*     "ipedge" inserts convex edge into linked list for atom */
-
-
-	int
-	ipedge_ (int *iep, int *ia)
+	int ipedge_ (int *iep, int *ia)
 	{
 		static int
 			iepen;
@@ -2260,22 +2248,15 @@ namespace	BALL
 
 
 
-/*     ############################################################### */
-
-/*     ##                                                           ## */
-
-/*     ##  subroutine contact  --  builds exposed contact surfaces  ## */
-
-/*     ##                                                           ## */
-
-/*     ############################################################### */
+	/*     ############################################################### */
+	/*     ##                                                           ## */
+	/*     ##  subroutine contact  --  builds exposed contact surfaces  ## */
+	/*     ##                                                           ## */
+	/*     ############################################################### */
+	/*     "contact" constructs the contact surface, cycles and convex faces */
 
 
-/*     "contact" constructs the contact surface, cycles and convex faces */
-
-
-	int
-	contact_ ()
+	int contact_ ()
 	{
 		/* System generated locals */
 		int
@@ -2963,11 +2944,15 @@ namespace	BALL
 					enfs[ien - 1] = ifs;
 				}
 			}
-			measfs_ (&ifs, &areas, &vols, &areasp, &volsp);
+			// atom indices of the saddle face
+			int a1, a2;
+			measfs_ (&ifs, &areas, &vols, &areasp, &volsp, &a1, &a2);
 			totas += areas;
 			totvs += vols;
 			totasp += areasp;
 			totvsp += volsp;
+			atom_areas[a1] += (areas + areasp) / 2.0;
+			atom_areas[a2] += (areas + areasp) / 2.0;
 			if (areas - areasp < 0.0)
 			{
 				cerr << "Negative Area for Saddle Face" << endl;
@@ -2980,7 +2965,12 @@ namespace	BALL
 		i__1 = face08_1.nfn;
 		for (ifn = 1; ifn <= i__1; ++ifn)
 		{
-			measfn_ (&ifn, &arean, &voln);
+			// the indices of the three atoms
+			int a1, a2, a3;
+			measfn_ (&ifn, &arean, &voln, &a1, &a2, &a3);
+			atom_areas[a1] += arean / 3.0;
+			atom_areas[a2] += arean / 3.0;
+			atom_areas[a3] += arean / 3.0;
 			totan += arean;
 			totvn += voln;
 		}
@@ -3071,11 +3061,11 @@ namespace	BALL
 					goto L90;
 				}
 
-/*     these two probes may have intersecting surfaces */
+				/*     these two probes may have intersecting surfaces */
 
 				dpp = sqrt (dist2_ (&fncen[ifn * 3 - 3], &fncen[jfn * 3 - 3]));
 
-/*     compute the midpoint */
+				/*     compute the midpoint */
 
 				for (k = 1; k <= 3; ++k)
 				{
@@ -3103,7 +3093,7 @@ namespace	BALL
 				}
 				rho = asin (rat);
 
-/*     use circle-plane intersection routine */
+				/*     use circle-plane intersection routine */
 
 				alli = true;
 				anyi = false;
@@ -3907,56 +3897,39 @@ namespace	BALL
 
 
 
-/*     ######################### */
-
-/*     ##                     ## */
-
-/*     ##  subroutine measfs  ## */
-
-/*     ##                     ## */
-
-/*     ######################### */
+	/*     ######################### */
+	/*     ##                     ## */
+	/*     ##  subroutine measfs  ## */
+	/*     ##                     ## */
+	/*	   ######################### */
 
 
-	int
-	measfs_ (int *ifs, double *areas, double *vols, double *areasp, double *volsp)
+	int measfs_ (int *ifs, double *areas, double *vols, double *areasp, double *volsp, int* a1, int* a2)
 	{
 		/* System generated locals */
-		double
-			d__1, d__2;
+		double d__1, d__2;
 
 
 		/* Local variables */
-		static double
-			spin;
-		static bool
-			cusp;
-		static double
-			volt, cone1, cone2, vect1[3], vect2[3], term1, term2, term3;
-		static int
-			k;
-		static double
-			d1, d2;
-		static double
-			w1, w2, theta1, theta2;
-		static int
-			ic, it;
-		static double
-			aavect[3], thetaq;
-		static int
-			ia1, ia2, ic1, ic2, iv1, iv2, iep;
-		static double
-			phi;
-		static double
-			rat;
+		static double spin;
+		static bool cusp;
+		static double volt, cone1, cone2, vect1[3], vect2[3], term1, term2, term3;
+		static int k;
+		static double d1, d2;
+		static double w1, w2, theta1, theta2;
+		static int ic, it;
+		static double aavect[3], thetaq;
+		static int ia1, ia2, ic1, ic2, iv1, iv2, iep;
+		static double phi;
+		static double rat;
 
 
 
 		iep = face11_1.fsep[(*ifs << 1) - 2];
 		ic = face10_1.epc[iep - 1];
 		it = face09_1.ct[ic - 1];
-		ia1 = face05_1.ta[(it << 1) - 2];
-		ia2 = face05_1.ta[(it << 1) - 1];
+		*a1 = ia1 = face05_1.ta[(it << 1) - 2];
+		*a2 = ia2 = face05_1.ta[(it << 1) - 1];
 		for (k = 1; k <= 3; ++k)
 		{
 			aavect[k - 1] = face01_1.a[k + ia2 * 3 - 4] - face01_1.a[k + ia1 * 3 - 4];
@@ -4075,7 +4048,6 @@ namespace	BALL
 			d__1 = cos (thetaq);
 			term3 = sin (thetaq) * (d__1 * d__1) + sin (thetaq) * 2.;
 
-/* Computing 3rd power */
 			d__1 = face01_1.pr, d__2 = d__1;
 			term3 = d__2 * (d__1 * d__1) / 3. * term3;
 			*volsp = phi * (term1 - term2 + term3);
@@ -4085,52 +4057,41 @@ namespace	BALL
 
 
 
-/*     ######################### */
+	/*     ######################### */
+	/*     ##                     ## */
+	/*     ##  subroutine measfn  ## */
+	/*     ##                     ## */
+	/*     ######################### */
 
-/*     ##                     ## */
-
-/*     ##  subroutine measfn  ## */
-
-/*     ##                     ## */
-
-/*     ######################### */
-
-
-	int
-	measfn_ (int *ifn, double *arean, double *voln)
+	// calculate concave surface area/volume
+	int measfn_ (int *ifn, double *arean, double *voln, int* a1, int* a2, int* a3)
 	{
 		/* System generated locals */
-		double
-			d__1;
+		double d__1;
 
 		/* Local variables */
-		static int
-			k;
-		static double
-			angle[3];
-		static int
-			ia, ke, je, ip;
-		static double
-			defect;
-		static int
-			iv;
-		static double
-			planev[9] /* was [3][3] */ ;
-		static double
-			simplx;
-		static int
-			ien;
-		static double
-			pav[9] /* was [3][3] */ , pvv[9]	/* was [3][3] 
-																				 */ ;
-
-
+		static int k;
+		static double angle[3];
+		static int ia, ke, je, ip;
+		static double defect;
+		static int iv;
+		static double planev[9] /* was [3][3] */ ;
+		static double simplx;
+		static int ien;
+		static double pav[9] /* was [3][3] */ , pvv[9]	/* was [3][3] */ ;
 
 		for (ke = 1; ke <= 3; ++ke)
 		{
 			ien = face08_1.fnen[ke + *ifn * 3 - 4];
 			iv = face08_1.env[(ien << 1) - 2];
 			ia = face07_1.va[iv - 1];
+			// store the atom indices
+			switch (ke)
+			{	
+				case 1: *a1 = ia ; break;
+				case 2: *a2 = ia ; break;
+				case 3: *a3 = ia ; break;
+			}
 			ip = face07_1.vp[iv - 1];
 			for (k = 1; k <= 3; ++k)
 			{
@@ -4707,45 +4668,18 @@ namespace	BALL
 
 
 
-/*     ############################################################### */
-
-/*     ##                                                           ## */
-
-/*     ##  function dist2  --  distance squared between two points  ## */
-
-/*     ##                                                           ## */
-
-/*     ############################################################### */
-
-
-/*     "dist2" finds the distance squared between two points; used */
-
-/*     as a service routine by the Connolly surface area and volume */
-
-/*     computation */
-
-
-
 /*     ################################################################# */
-
 /*     ##                                                             ## */
-
 /*     ##  function triple  --  form triple product of three vectors  ## */
-
 /*     ##                                                             ## */
-
 /*     ################################################################# */
-
 
 /*     "triple" finds the triple product of three vectors; used as */
-
 /*     a service routine by the Connolly surface area and volume */
-
 /*     computation */
 
 
-	double
-	triple_ (double *x, double *y, double *z__)
+	double triple_ (double *x, double *y, double *z__)
 	{
 		/* System generated locals */
 		double
@@ -4770,24 +4704,16 @@ namespace	BALL
 
 
 
-/*     ################################################################ */
-
-/*     ##                                                            ## */
-
-/*     ##  function vecang  --  finds the angle between two vectors  ## */
-
-/*     ##                                                            ## */
-
-/*     ################################################################ */
+	/*     ################################################################ */
+	/*     ##                                                            ## */
+	/*     ##  function vecang  --  finds the angle between two vectors  ## */
+	/*     ##                                                            ## */
+	/*     ################################################################ */
+	/*     "vecang" finds the angle between two vectors handed with respect */
+	/*     to a coordinate axis; returns an angle in the range [0,2#pi] */
 
 
-/*     "vecang" finds the angle between two vectors handed with respect */
-
-/*     to a coordinate axis; returns an angle in the range [0,2#pi] */
-
-
-	double
-	vecang_ (double *v1, double *v2, double *axis, double *hand)
+	double vecang_ (double *v1, double *v2, double *axis, double *hand)
 	{
 		/* System generated locals */
 		double
@@ -4837,20 +4763,15 @@ namespace	BALL
 
 
 
-/*     ######################### */
-
-/*     ##                     ## */
-
-/*     ##  subroutine cirpln  ## */
-
-/*     ##                     ## */
-
-/*     ######################### */
+	/*     ######################### */
+	/*     ##                     ## */
+	/*     ##  subroutine cirpln  ## */
+	/*     ##                     ## */
+	/*     ######################### */
 
 
-	int
-	cirpln_ (double *circen, double *cirrad, double *cirvec,
-					 double *plncen, double *plnvec, bool * cinsp, bool * cintp, double *xpnt1, double *xpnt2)
+	int cirpln_ (double *circen, double *cirrad, double *cirvec,
+							 double *plncen, double *plnvec, bool * cinsp, bool * cintp, double *xpnt1, double *xpnt2)
 	{
 		/* System generated locals */
 		double
@@ -4933,28 +4854,20 @@ namespace	BALL
 
 
 
-/*     ################################################################# */
+	/*     ################################################################# */
+	/*     ##                                                             ## */
+	/*     ##  subroutine gendot  --  find surface points on unit sphere  ## */
+	/*     ##                                                             ## */
+	/*     ################################################################# */
 
-/*     ##                                                             ## */
-
-/*     ##  subroutine gendot  --  find surface points on unit sphere  ## */
-
-/*     ##                                                             ## */
-
-/*     ################################################################# */
-
-
-/*     "gendot" finds the coordinates of a specified number of surface */
-
-/*     points for a sphere with the input radius and coordinate center */
+	/*     "gendot" finds the coordinates of a specified number of surface */
+	/*     points for a sphere with the input radius and coordinate center */
 
 
-	int
-	gendot_ (int *ndots, double *dots, double *radius, double *xcenter, double *ycenter, double *zcenter)
+	int gendot_ (int *ndots, double *dots, double *radius, double *xcenter, double *ycenter, double *zcenter)
 	{
 		/* System generated locals */
-		int
-			i__1, i__2;
+		int i__1, i__2;
 
 		/* Local variables */
 		static int
