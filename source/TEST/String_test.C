@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.20 2000/07/14 14:40:33 amoll Exp $
+// $Id: String_test.C,v 1.21 2000/07/15 17:12:42 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.20 2000/07/14 14:40:33 amoll Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.21 2000/07/15 17:12:42 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -613,7 +613,7 @@ CHECK(String::toInt())
 	s4.set("abc");
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toInt())
 	s4.set("");
-	//TEST_EQUAL(s4.toInt(), (int)0)
+	TEST_EQUAL(s4.toInt(), (int)0)
 	s4.set("12.34");
 	TEST_EQUAL(s4.toInt(), (int)12)
 	s4.set("999999999999999999999999");
@@ -626,7 +626,7 @@ CHECK(String::toUnsignedInt())
 	s4.set("abc");
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedInt())
 	s4.set("");
-	//TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)0)
+	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)0)
 	s4.set("12.34");
 	TEST_EQUAL(s4.toUnsignedInt(), (unsigned int)12.34)
 	s4.set("999999999999999999999999");
@@ -639,7 +639,7 @@ CHECK(String::toLong())
 	s4.set("abc");
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toLong())
 	s4.set("");
-	//TEST_EQUAL(s4.toLong(), (long)0)
+	TEST_EQUAL(s4.toLong(), (long)0)
 	s4.set("-12.34");
 	TEST_EQUAL(s4.toLong(), (long)-12.34)
 	s4.set("999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
@@ -652,7 +652,7 @@ CHECK(String::toUnsignedLong())
 	s4.set("abc");
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedLong())
 	s4.set("");
-	//TEST_EQUAL(s4.toUnsignedLong(), (unsigned long)0)
+	TEST_EQUAL(s4.toUnsignedLong(), (unsigned long)0)
 	s4.set("999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999");
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedLong())
 RESULT
@@ -663,7 +663,7 @@ CHECK(String::toFloat())
 	s4.set("abc");
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toFloat())
 	s4.set("");
-	//TEST_EQUAL(s4.toFloat(), (float)0)
+	TEST_EQUAL(s4.toFloat(), (float)0)
 	s4.set("-12.34");
 	TEST_REAL_EQUAL(s4.toFloat(), (float)-12.34)
 	s4 = "";
@@ -680,7 +680,7 @@ CHECK(String::toDouble())
 	s4.set("abc");
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toDouble())
 	s4.set("");
-	//TEST_EQUAL(s4.toDouble(), (double)0)
+	TEST_EQUAL(s4.toDouble(), (double)0)
 	s4.set("-12.34");
 	TEST_REAL_EQUAL(s4.toDouble(), (double)-12.34)
 	s4 = "";
@@ -1263,9 +1263,11 @@ CHECK(String::isFloat())
 	TEST_EQUAL(s4.isFloat(), true)
 	s4 = "99999999999999999999999999999999999999999999999999999999";
 	TEST_EQUAL(s4.isFloat(), true)
+	s4 ="-1.244e8";
+	TEST_EQUAL(s4.isFloat(), true)
+	s4 ="-1.244e890";
+	TEST_EQUAL(s4.isFloat(), false)
 RESULT
-
-
 
 CHECK(String::isAlpha(char))
 	String char_class = String::CHARACTER_CLASS__ASCII_ALPHA;
