@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.9 2000/02/17 00:30:37 oliver Exp $
+// $Id: classTest.h,v 1.10 2000/03/16 11:58:32 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -464,18 +464,18 @@ int main(int argc, char **argv)\
 	\
 	if (TEST::infile.good() && TEST::templatefile.good())\
 	{\
-		String template_line;\
-		String line;\
+		String TEST_FILE__template_line;\
+		String TEST_FILE__line;\
 		\
 		while (TEST::infile.good() && TEST::templatefile.good())\
 		{\
-			template_line.getline(TEST::templatefile);\
-			line.getline(TEST::infile);\
+			TEST_FILE__template_line.getline(TEST::templatefile);\
+			TEST_FILE__line.getline(TEST::infile);\
 			\
-			if ((use_regexps) && (template_line[0] == '/') && (template_line[1] != '/'))\
+			if ((use_regexps) && (TEST_FILE__template_line[0] == '/') && (TEST_FILE__template_line[1] != '/'))\
 			{\
-				RegularExpression expression(template_line(1));\
-				bool match = expression.match(line);\
+				RegularExpression expression(TEST_FILE__template_line(1));\
+				bool match = expression.match(TEST_FILE__line);\
 				TEST::equal_files &= match;\
 				if (!match)\
 				{\
@@ -487,12 +487,12 @@ int main(int argc, char **argv)\
 							std::cout << std::endl;\
 						}\
 						\
-						std::cout << "   TEST_FILE: regexp mismatch: " << line << " did not match " << template_line << "." << std::endl;\
+						std::cout << "   TEST_FILE: regexp mismatch: " << TEST_FILE__line << " did not match " << TEST_FILE__template_line << "." << std::endl;\
 					}\
 				}\
 			} else {\
-				TEST::equal_files &= (template_line == line);\
-				if (template_line != line)\
+				TEST::equal_files &= (TEST_FILE__template_line == TEST_FILE__line);\
+				if (TEST_FILE__template_line != TEST_FILE__line)\
 				{\
 					if (TEST::verbose > 0)\
 					{\
@@ -502,7 +502,7 @@ int main(int argc, char **argv)\
 							std::cout << std::endl;\
 						}\
 						\
-						std::cout << "   TEST_FILE: line mismatch: " << line << " differs from " << template_line << "." << std::endl;\
+						std::cout << "   TEST_FILE: line mismatch: " << TEST_FILE__line << " differs from " << TEST_FILE__template_line << "." << std::endl;\
 					}\
 				}\
 			}\
