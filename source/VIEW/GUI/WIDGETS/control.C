@@ -1,12 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.C,v 1.19 2003/06/06 10:41:40 amoll Exp $
+// $Id: control.C,v 1.20 2003/06/30 19:14:45 oliver Exp $
+//
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
+#include <BALL/VIEW/GUI/DIALOGS/colorMeshDialog.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
+
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 
@@ -58,7 +61,7 @@ Control::Control(QWidget* parent, const char* name)
 			context_menu_(),
 			context_composite_(0),
 			context_item_(0),
-			colorMeshDlg_(new ColorMeshDialog(this))
+			color_mesh_dialog_(new ColorMeshDialog(this))
 {
 	// appearance
 	setRootIsDecorated(TRUE);
@@ -233,9 +236,9 @@ void Control::buildContextMenu(Composite* composite, QListViewItem* /* item */)
 	// This is used to provide the coloring for meshes...
 	if (RTTI::isKindOf<Mesh>(*composite))
 	{	
-		colorMeshDlg_->setMesh(*(Mesh*)RTTI::castTo<Mesh>(*composite));
-		colorMeshDlg_->setComposite(*composite->getParent());
-		insertContextMenuEntry("Properties", colorMeshDlg_, SLOT(show()));	
+		color_mesh_dialog_->setMesh(*(Mesh*)RTTI::castTo<Mesh>(*composite));
+		color_mesh_dialog_->setComposite(*composite->getParent());
+		insertContextMenuEntry("Properties", color_mesh_dialog_, SLOT(show()));	
 	}
 }
 

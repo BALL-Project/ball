@@ -250,21 +250,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\CONCEPT\callback.C">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\..\..\source\CONCEPT\composite.C">
 					<FileConfiguration
 						Name="Debug|Win32">
@@ -497,21 +482,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\DATATYPE\regExp.C">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\..\..\source\DATATYPE\regularData1D.C">
 					<FileConfiguration
 						Name="Debug|Win32">
@@ -555,6 +525,9 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\DATATYPE\regularExpression.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\DATATYPE\string.C">

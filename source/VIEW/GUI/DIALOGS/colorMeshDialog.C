@@ -1,6 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+// $Id: colorMeshDialog.C,v 1.18 2003/06/30 19:14:44 oliver Exp $
+//
+
 #include <BALL/VIEW/GUI/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/GUI/DIALOGS/FDPBDialog.h>
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
@@ -9,6 +12,8 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/file.h>
 #include <BALL/VIEW/DATATYPE/colorTable.h>
+#include <BALL/DATATYPE/regularData3D.h>
+
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 #include <BALL/COMMON/limits.h>
 
@@ -25,13 +30,14 @@
 #include <qlistbox.h>
 #include <qcombobox.h>
 #include <qradiobutton.h>
+#include <vector>
+
 
 namespace BALL
 {
-	using MOLVIEW::MolecularInformation;
-
-	namespace VIEW
-	{
+	 namespace VIEW
+	 {
+			using BALL::MOLVIEW::MolecularInformation;
 
 ColorMeshDialog::ColorMeshDialog( QWidget* parent,  const char* name, bool modal, WFlags fl )
 	throw()
@@ -53,8 +59,8 @@ ColorMeshDialog::~ColorMeshDialog()
 	throw()
 {
 	// no need to delete child widgets, Qt does it all for us
-	vector<RegularData3D*>::iterator it = grids_.begin();
-	for(;it != grids_.end();++it)
+	std::vector<BALL::RegularData3D*>::iterator it(grids_.begin());
+	for (; it != grids_.end(); ++it)
 	{
 		delete *it;
 	}
@@ -569,6 +575,6 @@ void ColorMeshDialog::setMesh(Mesh& mesh)
 	mesh_ = &mesh;
 	loadSettings_();
 }
-	
 
-} } // NAMESPACE
+}  // namespace VIEW
+} // namespace BALL
