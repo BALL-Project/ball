@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.7 2000/02/16 17:25:31 oliver Exp $
+// $Id: sphere3.h,v 1.8 2000/03/03 02:09:57 amoll Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -40,28 +40,42 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Default constructor.
+				This method creates a new TSphere3 object. The three components
+				are initialized to {\tt (T)0}.
+		*/
 		TSphere3()
 			: p(),
 				radius(0)
 		{
 		}
 
-		///
+		/**	Copy constructor.
+				Create a new Sphere3 object from another.
+				@param sphere3 the Sphere3 object to be copied
+				@param bool ignored - just for interface consistency
+		*/	
 		TSphere3(const TSphere3& sphere3,bool /* deep */ = true)
 			: p(sphere3.p),
 				radius(sphere3.radius)
 		{
 		}
 
-		///
+		/**	Detailled constructor.
+				Create a new Sphere3 object from a point and a radius.
+				@param	point assigned to the point
+				@param	radius assigned to the radius
+		*/
 		TSphere3(const TVector3<T>& point, const T& radius)
 			: p(point),
 				radius(radius)
 		{
 		}
 
-		///
+		/**	Destructor.	
+				Destructs the Sphere3 object. As there are no dynamic
+				data structures, nothing happens.
+		*/
 		virtual ~TSphere3()
 		{
 		}
@@ -71,7 +85,9 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Swap the contents of two sphere3.
+				@param	sphere3 the sphere3 to swap contents with
+		*/
 		void swap(TSphere3& sphere3)
 		{
 			TVector3<T> temp_point(p);
@@ -83,21 +99,31 @@ namespace BALL
 			sphere3.radius = temp;
 		}
 
-		///
+		/**	Assign from another Sphere3.
+				@param sphere3	the Sphere3 object to assign from
+				@param deep ignored
+		*/
 		void set(const TSphere3& sphere3, bool /* deep */ = true)
 		{
 			p = sphere3.p;
 			radius = sphere3.radius;
 		}
 
-		///
-		void set(const TVector3<T>& point, const T& radius)
+		/**	Assign to a TVector3 and a variable of type {\tt T}.
+				@param point the point to assign from
+				@param rhs the radius to assign from
+
+		*/
+		void set(const TVector3<T>& point, const T& rhs)
 		{
 			p = point;
-			radius = radius;
+			radius = rhs;
 		}
 
-		///
+		/**	Assignment operator.
+				Assign the components from another Sphere.
+				@param sphere3 the spehere to assign from
+		**/
 		TSphere3 &operator =
 			(const TSphere3& sphere3)
 		{
@@ -107,18 +133,25 @@ namespace BALL
 			return *this;
 		}
 
-		///
+		/**	Assign to another Sphere.
+				Assigns the components to another Sphere.
+				@param sphere	the vector to be asigned to
+				@param deep ignored
+		*/
 		void get(TSphere3& sphere3, bool /* deep */ = true) const
 		{
 			sphere3.p = p;
 			sphere3.radius = radius;
 		}
 
-		///
-		void get(TVector3<T>& point, T& radius) const
+		/**	Assign to a Vector3 and a {\tt T} variable.
+				@param	point the point component
+				@param	rhs the radius component
+		*/
+		void get(TVector3<T>& point, T& rhs) const
 		{
 			point = p;
-			radius = radius;
+			rhs = radius;
 		}
 		//@}
 
@@ -126,19 +159,28 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Equality operator.
+				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
+		*/
 		bool operator == (const TSphere3& sphere3) const
 		{
 			return (bool)(p == sphere3.p && Maths::isEqual(radius, sphere3.radius));
 		}
 
-		///
+		/**	Inequality operator.
+				@return bool, {\bf true} if the two sphere3 differ in at least on component, {\bf false} otherwise
+		*/
 		bool operator != (const TSphere3& sphere3) const
 		{
 			return (bool)(p != sphere3.p || Maths::isNotEqual(radius, sphere3.radius));
 		}
 
-		///
+		/**	Test if a given point is a member of the Sphere.
+				Optional it can be testet, if it is a member of the surface.
+				@param point the point to be tested
+				@param on_surface = true, to test the surface (default = false)
+				@return bool, {\bf true} or {\bf false}
+		*/
 		bool has(const TVector3<T>& point, bool on_surface = false) const
 		{
 			if (on_surface == true)
@@ -149,7 +191,9 @@ namespace BALL
 			}
 		}
 
-		///
+		/**	Test if the Sphere is empty (radius = 0).
+				@return bool, {\bf true} or {\bf false}
+		*/
 		bool isEmpty() const
 		{
 			return Maths::isZero(radius);
@@ -160,7 +204,10 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Test if instance is valid.
+				always retruns true
+				@return bool {\bf true}
+		*/
 		bool isValid() const
 		{
 			return true;
@@ -183,37 +230,58 @@ namespace BALL
 		}
 		//@}
 
-		/**	@name	Storers
-		*/
-		//@{
 
-		///
-		friend std::istream& operator >> (std::istream& s, TSphere3& sphere3)
-		{
-			return (s >> sphere3.p >> sphere3.radius);
-		}
-
-		///
-		friend std::ostream& operator << (std::ostream& s, const TSphere3& sphere3)
-		{
-			return (s << "SPHERE(" << sphere3.p << ", " << sphere3.radius << ")");
-		}
-		//@}
 
 		/**	@name	Attributes
 		*/
 		//@{
 
-		///
+		/**	p.
+				The midpoint of the sphere.
+		*/
 		TVector3<T> p;
 
-		///
+		/**	Radius.
+				The radius of the sphere.
+		*/
 		T radius;
 		//@}
 	};
 
+	/**	@name	Storers
+	*/
+	//@{
 
-	///
+	/**	Input- Operator
+			reads in a TVector3 and a {\bf T} value : p, radius
+	*/
+	template <typename T>
+	std::istream& operator >> (std::istream& s, TSphere3<T>& sphere3)
+	{
+		char c;
+		for (int i=0; i<7 ; i++)
+		{
+			s >> c;
+		}
+		s >> sphere3.p >> sphere3.radius >> c;
+		return s;
+	}
+
+	/**	Output- Operator
+			prints out a TVector3 and a {\bf T} value : p, radius
+	*/
+	template <typename T>
+	std::ostream& operator << (std::ostream& s, const TSphere3<T>& sphere3)
+	{
+		return (s << "SPHERE(" << sphere3.p << ' ' << sphere3.radius << ")");
+	}
+	//@}
+
+
+	/**	The Default TSphere3 Type.
+			If double precision is not needed, {\tt TSphere3<float>} should
+			be used. It is predefined as {\tt Sphere3} for convenience.
+	*/
 	typedef TSphere3<float> Sphere3;
 
 } // namespace BALL
