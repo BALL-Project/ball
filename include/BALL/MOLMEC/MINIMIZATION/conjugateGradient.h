@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.13 2003/02/02 21:53:58 oliver Exp $ 
+// $Id: conjugateGradient.h,v 1.14 2003/02/04 14:26:57 oliver Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -192,7 +192,7 @@ namespace BALL
 				@return	bool {\bf true} if the line search found an acceptable solution
 				@see	EnergyMinimizer::findStep
 		*/
-		virtual bool findStep();
+		virtual double findStep();
 			
 		/**	Update the search direction.
 				This method updates the search direction.

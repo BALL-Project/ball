@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.h,v 1.10 2003/02/03 21:38:18 oliver Exp $
+// $Id: steepestDescent.h,v 1.11 2003/02/04 14:26:57 oliver Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
@@ -21,6 +21,10 @@
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
 # include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
+#endif
+
+#ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
+# include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
@@ -122,8 +126,31 @@ namespace BALL
 
 		/**	Minimize the energy of the system using a greedy steepest descent.
 		*/
-		virtual bool	minimize(Size steps = 0, bool restart = false);
+		virtual bool minimize(Size steps = 0, bool restart = false);
 
+		/** Find the next step using a line search.
+		*/
+		virtual double findStep();
+
+		/**	Update the search direction.
+				Steepest descent searches along the current gradient only.
+				Therefore, updateDirection only assigns direction to the last gradient
+				computed (current_gradient_).
+		*/
+		virtual void updateDirection();
+
+		
+		protected:
+		/**	The line search minimizer.
+				This member is used to perform the line search in findStep
+		*/
+		LineSearch line_search_;
+
+		/**	The current step size.
+				This is used in findStep as an argument to the line search.
+				The step size is chosen and adjusted in the \Ref{minimize}.
+		*/
+		double step_;
 	};
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.30 2003/02/03 21:38:17 oliver Exp $
+// $Id: energyMinimizer.h,v 1.31 2003/02/04 14:26:57 oliver Exp $
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
@@ -45,7 +45,7 @@ namespace BALL
 		*/
 		struct Option
 		{
-			/** Maximal number of iterations
+			/** Max number of iterations
 			*/
 			static const char* MAXIMAL_NUMBER_OF_ITERATIONS;
 
@@ -75,7 +75,7 @@ namespace BALL
       */
       static const char* MAX_GRADIENT;
 
-			/**	Maximal shift of an atom per iteration 
+			/**	Max shift of an atom per iteration 
 			*/
 			static const char* MAXIMUM_DISPLACEMENT;
 
@@ -83,7 +83,7 @@ namespace BALL
 
 		struct Default
 		{
-			/** Maximal number of iterations
+			/** Max number of iterations
 			*/
 			static Size MAXIMAL_NUMBER_OF_ITERATIONS;
 
@@ -116,7 +116,7 @@ namespace BALL
       static float MAX_GRADIENT;
 
 
-			/**	Maximal shift
+			/**	Max shift
 			*/
 			static float MAXIMUM_DISPLACEMENT;
 		};
@@ -128,7 +128,7 @@ namespace BALL
 		*/
 		//@{
 		
-		BALL_CREATE_DEEP(EnergyMinimizer)
+		BALL_CREATE(EnergyMinimizer)
 
 		/**	Default constructor.
 		*/
@@ -144,7 +144,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		EnergyMinimizer(const EnergyMinimizer& energy_minimizer, bool deep = true);
+		EnergyMinimizer(const EnergyMinimizer& energy_minimizer);
 
 		/**	Destructor.
 		*/
@@ -159,7 +159,7 @@ namespace BALL
 
 		/**	Assignment operator
 		*/
-		EnergyMinimizer&	operator = (const EnergyMinimizer& energy_minimizer);
+		const EnergyMinimizer&	operator = (const EnergyMinimizer& energy_minimizer);
 
 		//@}
 
@@ -227,9 +227,11 @@ namespace BALL
 				This method is implemented in each minimizer class and 
 				tries to determine the next step to be taken.
 				It typically performs a line search.
-        @return bool {\bf true} if an acceptable solution was found
+				The value returned is usually the step length with respect to the
+				current direction and step size (e.g. the lambda value of a line search).
+        @return -1 to indicate failure
     */
-    virtual bool findStep();
+    virtual double findStep();
 
 
     /** Update the search direction.
@@ -249,6 +251,13 @@ namespace BALL
 				\Ref{current_grad_}.
     */
     virtual void updateForces();
+
+		/**	Store the current energy and gradient.
+				The current gradient and current energy is copied into
+				initial energy and initial gradient. This is usually done at
+				the start of an iteration.
+		*/
+		void storeGradientEnergy();
 
     /** Print the energy.
         This method is called by \Ref{finishIteration} after every
@@ -273,7 +282,7 @@ namespace BALL
 				This method should be called at the end of the main iteration 
 				loop implemented in \Ref{minimize}. It takes over some administrative stuff:
 				\begin{itemize}
-					\item increment the iteration counter \Ref{number_of_iteration_}
+					\item increment the iteration counter \Ref{number_of_iterations_}
 					\item call \Ref{takeSnapShot} if necessary
 					\item call \Ref{printEnergy} if necessary
 					\item call \Ref{ForceField::update} if necessary (to rebuild the pair lists!)
@@ -289,9 +298,9 @@ namespace BALL
 		*/
 		virtual void finishIteration();
 		
-		/**	Get the current iteration number
+		/**	Return the number of iterations performed.
 		*/
-		Size	getNumberOfIteration() const;
+		Size getNumberOfIterations() const;
 
 		/**	Return a reference to the current search direction
 		*/
@@ -309,21 +318,29 @@ namespace BALL
 		*/
 		double getEnergy() const;
 
+		/**	Return a reference to the current energy
+		*/
+		double& getEnergy();
+
 		/**	Return the initial energy
 		*/
 		double getInitialEnergy() const;
 
-		/**	Set the iteration number
+		/**	Return a mutable reference to the initial energy
 		*/
-		void	setNumberOfIteration(Size number_of_iteration);
+		double& getInitialEnergy();
+
+		/**	Set the number of iterations performed so far.
+		*/
+		void	setNumberOfIterations(Size number_of_iterations);
 
 		/**	Get the maximum number of iterations
 		*/
-		Size	getMaximalNumberOfIterations() const;
+		Size	getMaxNumberOfIterations() const;
 
 		/**	Set the maximum number of iterations
 		*/
-		void	setMaximalNumberOfIterations(Size number_of_iterations);
+		void	setMaxNumberOfIterations(Size number_of_iterations);
 
     /** Set the maximum number of iterations allowed with equal energy
         (second convergence criterion)
@@ -466,7 +483,7 @@ namespace BALL
 
 		/**	The current iteration number
 		*/
-		Size	number_of_iteration_;
+		Size	number_of_iterations_;
 
 		/**	Maximum number of iterations 
 		*/
