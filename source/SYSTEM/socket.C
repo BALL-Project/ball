@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: socket.C,v 1.28 2002/12/23 08:26:14 oliver Exp $
+// $Id: socket.C,v 1.29 2002/12/23 09:16:36 oliver Exp $
 
 // stupid workaround for Intel C++ 7.0/Linux w/ optimization enabled
 #ifdef __OPTIMIZE__
@@ -893,7 +893,7 @@ namespace BALL
 		throw()
 	{
 		sin_family = SockInetBuf::af_inet;
-		sin_addr.s_addr = ::htonl(INADDR_ANY);
+		sin_addr.s_addr = htonl(INADDR_ANY);
 		sin_port = 0;
 	}
 
