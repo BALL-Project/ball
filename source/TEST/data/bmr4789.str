@@ -287,8 +287,7 @@ save_shift_set_1
      176   55  MET  HG    H      2.05  .  1
      177   55  MET  N     N     116.6  .  1
      178   55  MET  CA    C      57.8  .  1
-     179   55  MET  CB2   C      31.9  .  1
-     180   55  MET  CB3   C      32.0  .  1
+     179   55  MET  CB    C     31.95  .  1
      181   55  MET  CG    C      27.0  .  1
      182   56  GLU  H     H      7.79  .  1
      183   56  GLU  HA    H       3.9  .  1
@@ -481,8 +480,7 @@ save_shift_set_1
      370   78  GLN  HE22  H      6.82  .  1
      371   78  GLN  N     N     119.8  .  1
      372   78  GLN  CB    C      27.7  .  1
-     373   78  GLN  CG2   C        33  .  1
-     374   78  GLN  CG3   C         4  .  1
+     373   78  GLN  CG   C        33.4  .  1
      375   78  GLN  NE2   N     111.7  .  1
      376   79  GLY  H     H      8.87  .  1
      377   79  GLY  HA    H      3.88  .  1
@@ -553,7 +551,7 @@ save_shift_set_1
      442   87  ARG  CA    C      59.3  .  1
      443   87  ARG  CB    C      29.7  .  1
      444   87  ARG  CG    C      32.9  .  1
-     445   87  ARG  CE    C      38.6  .  1
+     445   87  ARG  CD    C      38.6  .  1
      446   88  GLY  H     H      9.47  .  1
      447   88  GLY  HA2   H      4.37  .  1
      448   88  GLY  HA3   H      3.99  .  1
@@ -752,8 +750,7 @@ save_shift_set_1
      641  114  PRO  HB    H      2.62  .  1
      642  114  PRO  HG    H      2.32  .  1
      643  114  PRO  HD2   H      3.82  .  1
-     644  114  PRO  HD3   H         3  .  1
-     645  114  PRO  HD33  H        71  .  1
+     644  114  PRO  HD3   H      3.71  .  1
      646  115  PRO  HA    H      4.46  .  1
      647  115  PRO  HB2   H      1.88  .  1
      648  115  PRO  HB3   H      2.19  .  1
@@ -768,8 +765,8 @@ save_shift_set_1
      657  116  VAL  N     N     122.5  .  1
      658  116  VAL  CA    C      61.7  .  1
      659  116  VAL  CB    C      32.2  .  1
-     660  116  VAL  CD2   C      21.4  .  1
-     661  116  VAL  CD3   C      18.9  .  1
+     660  116  VAL  CG1   C      21.4  .  1
+     661  116  VAL  CG2   C      18.9  .  1
      662  117  LYS  H     H      8.85  .  1
      663  117  LYS  HA    H      5.04  .  1
      664  117  LYS  HB2   H      1.91  .  1
