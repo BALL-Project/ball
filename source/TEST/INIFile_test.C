@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile_test.C,v 1.24 2003/07/11 00:04:37 amoll Exp $
+// $Id: INIFile_test.C,v 1.25 2003/07/11 09:28:02 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -29,7 +29,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.24 2003/07/11 00:04:37 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.25 2003/07/11 09:28:02 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -518,10 +518,7 @@ RESULT
 INIFile inix("data/INIFile_test.ini");
 inix.read();
 INIFile::LineIterator it(ini.getLine(0));
-
-CHECK(IteratorTraits_(List<Section>& list, SectionIterator section, List<String>::Iterator line))
-  // ???
-RESULT
+INIFile::LineIterator unbound;
 
 CHECK(BALL_CREATE(IteratorTraits_))
 	INIFile::LineIterator* it2 = 0;
@@ -529,6 +526,7 @@ CHECK(BALL_CREATE(IteratorTraits_))
 	TEST_NOT_EQUAL(it2, 0)
 	TEST_EQUAL(+*it2, true)
 	TEST_EQUAL(**it2, "[Section1]")
+	it2 = (INIFile::LineIterator*) unbound.create();
 RESULT
 
 CHECK(IteratorTraits_& getSectionNextLine())
@@ -540,6 +538,7 @@ CHECK(IteratorTraits_& getSectionNextLine())
 	TEST_EQUAL(+it2.getSectionNextLine(), true)
 	TEST_EQUAL(*it2, "test3 = c")
 	TEST_EQUAL(+it2.getSectionNextLine(), false)
+	unbound.getSectionNextLine();
 RESULT
 
 it = ini.getLine(1);
@@ -548,9 +547,8 @@ CHECK(IteratorTraits_(const IteratorTraits_& traits))
 	TEST_EQUAL(+it2, true)
 	TEST_EQUAL(*it2, "[Section2]")
 
-	INIFile::LineIterator it3;
-	INIFile::LineIterator it4(it3);
-	TEST_EQUAL(+it3, false)
+	INIFile::LineIterator it4(unbound);
+	TEST_EQUAL(+it4, false)
 RESULT
 
 CHECK(IteratorTraits_& operator ++ ())
@@ -562,6 +560,7 @@ CHECK(IteratorTraits_& operator ++ ())
 	TEST_EQUAL(+it, true)
 	++it;
 	TEST_EQUAL(+it, false)
+	++unbound;
 RESULT
 
 CHECK(IteratorTraits_& operator -- ())
@@ -572,15 +571,18 @@ CHECK(IteratorTraits_& operator -- ())
 	TEST_EQUAL(*it, "[Section2]")
 	--it;
 	TEST_EQUAL(*it, "[Section1]")
+	--unbound;
 RESULT
 
 CHECK(List<String> ::Iterator getPosition())
 	it = ini.getLine(0);
 	TEST_EQUAL(*(it.getPosition()), "[Section1]")
+	unbound.getPosition();
 RESULT
 
 CHECK(SectionIterator getSection())
 	TEST_EQUAL(it.getSection()->getName(), "Section1")
+	unbound.getSection();
 RESULT
 
 CHECK(bool operator != (const IteratorTraits_& traits) const)
@@ -612,6 +614,8 @@ RESULT
 CHECK(const IteratorTraits_& operator = (const IteratorTraits_ &traits))
 	it3 = ini.getLine(1);
 	TEST_EQUAL(*it3, "[Section2]")
+	INIFile::LineIterator it4;
+	it4 = unbound;
 RESULT
 
 CHECK(const String& operator * () const)
@@ -626,6 +630,7 @@ CHECK(bool isSectionEnd() const)
 	TEST_EQUAL(it3.isSectionEnd(), false)
 	++it3;
 	TEST_EQUAL(it3.isSectionEnd(), false)
+	TEST_EQUAL(unbound.isSectionEnd(), false)
 RESULT
 
 CHECK(bool isSectionFirstLine() const)
@@ -633,6 +638,7 @@ CHECK(bool isSectionFirstLine() const)
 	TEST_EQUAL(it.isSectionFirstLine(), true)
 	it = ini.getLine(2);
 	TEST_EQUAL(it.isSectionFirstLine(), false)
+	TEST_EQUAL(unbound.isSectionFirstLine(), false)
 RESULT
 
 CHECK(bool isSectionLastLine() const)
@@ -641,6 +647,7 @@ CHECK(bool isSectionLastLine() const)
 	it = ini.getLine(3);
 	TEST_EQUAL(it.isSectionLastLine(), true)
 	TEST_EQUAL(+it, true)
+	TEST_EQUAL(unbound.isSectionLastLine(), false)
 RESULT
 
 CHECK(void toEnd())
@@ -650,9 +657,9 @@ CHECK(void toEnd())
 	TEST_EQUAL(+it, true)
 	TEST_EQUAL(it.getSection()->getName(), "Section4")
 	TEST_EQUAL(*it, "[Section4]")
+	unbound.toEnd();
 RESULT
 
-INIFile::LineIterator unbound;
 CHECK(void toFirstLine())
 	it = ini.getLine(3);
 	TEST_EQUAL(+it, true)
