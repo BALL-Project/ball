@@ -1,6 +1,8 @@
-// $Id: structureMapper.C,v 1.10 2000/10/30 00:20:00 amoll Exp $
+// $Id: structureMapper.C,v 1.11 2001/04/30 13:36:26 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
+
+#include <BALL/COMMON/limits.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/DATATYPE/hashGrid.h>
@@ -161,7 +163,7 @@ namespace BALL
 		// calculate all triangles from the bijection
 		Size i, j, k;
 		double square_distance;
-		double min_rmsd = FLT_MAX;
+		double min_rmsd = Limits<double>::max();
 		double rmsd;
 
 		for(k = 0; k < size; k++)
