@@ -1,4 +1,4 @@
-// $Id: assignTypes.C,v 1.2 1999/09/03 14:10:52 oliver Exp $
+// $Id: assignTypes.C,v 1.3 1999/09/07 13:49:01 len Exp $
 
 #include <BALL/MOLMEC/COMMON/assignTypes.h>
 #include <iostream.h>
@@ -35,23 +35,41 @@ namespace BALL
 		{
 			
 			String name;
+			String base_name;
 			Fragment* frag = atom.getFragment();
 			if (frag != 0)
 			{
 				name = frag->getName().trim();
+				base_name = name;
+				if (RTTI<Residue>::isKindOf(*frag))
+				{
+					Residue*	res = RTTI<Residue>::castTo(*frag);
+					if (res->isNTerminal())
+					{
+						name += "-N";
+					} else if (res->isCTerminal())
+					{
+						name += "-C";
+					}
+				}
 			}
 
 			name += ":";
+			base_name += ":";
 			name += atom.getName().trim();
+			base_name += atom.getName().trim();
 			
-			if (!type_map_.has(name))
+			if (type_map_.has(name))
 			{
+				atom.setTypeName(type_map_[name]);
+			} else if (type_map_.has(base_name)) {
+				atom.setTypeName(type_map_[base_name]);				
+			} else {
 				if (atom.getTypeName() == BALL_ATOM_DEFAULT_TYPE_NAME)
 				{
-					Log.level(LogStream::WARNING) << "Could not assign atom type name for " << name << endl;
+					Log.warn() << "Could not assign atom type name for " << name << " (could not match "
+										 << name << " or " << base_name << ")" << endl;
 				}
-			} else {
-				atom.setTypeName(type_map_[name]);
 			}
 		}
 
