@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData2D_test.C,v 1.11 2003/05/03 17:29:34 oliver Exp $
+// $Id: RegularData2D_test.C,v 1.12 2003/05/04 20:15:49 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData2D.h>
 
-START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.11 2003/05/03 17:29:34 oliver Exp $")
+START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.12 2003/05/04 20:15:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -215,7 +215,7 @@ CHECK(setOrigin())
 	v = g.getOrigin();
 	TEST_REAL_EQUAL(v.x, 3.0)
 	TEST_REAL_EQUAL(v.y, 3.0)
-	pp = g.getIndex(Vector2(3.0, 3.0));
+	pp = g.getClosestIndex(Vector2(3.0, 3.0));
 	TEST_EQUAL(pp.x, 0)
 	TEST_EQUAL(pp.y, 0)
 RESULT

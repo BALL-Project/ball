@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ContourSurface_test.C,v 1.2 2003/05/03 17:29:33 oliver Exp $
+// $Id: ContourSurface_test.C,v 1.3 2003/05/04 20:15:48 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(ContourSurface, "$Id: ContourSurface_test.C,v 1.2 2003/05/03 17:29:33 oliver Exp $")
+START_TEST(ContourSurface, "$Id: ContourSurface_test.C,v 1.3 2003/05/04 20:15:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -31,7 +31,7 @@ RESULT
 CHECK(TContourSurface<T>::operator << (TRegularData3D<T>& data))
 	// Create a grid with just the middle point at 1.0 and the
 	// remainder at -1.0.
-	RegularData3D data(-2.0, -2.0, -2.0, 2.0, 2.0, 2.0, 5, 5, 5);
+	RegularData3D data(RegularData3D::IndexType(5, 5, 5), Vector3(-2.0), Vector3(4.0));
 	STATUS("grid size: " << data.getSize())
 	for (Position i = 0; i < data.size(); i++)
 	{
