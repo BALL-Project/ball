@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>PeptideDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -7,7 +7,7 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>1</y>
+            <y>0</y>
             <width>385</width>
             <height>240</height>
         </rect>
@@ -1035,6 +1035,8 @@
 </connections>
 <tabstops>
     <tabstop>sequence</tabstop>
+    <tabstop>back_button</tabstop>
+    <tabstop>close_button</tabstop>
     <tabstop>ala</tabstop>
     <tabstop>arg</tabstop>
     <tabstop>asn</tabstop>
@@ -1059,9 +1061,10 @@
     <tabstop>phi</tabstop>
     <tabstop>psi</tabstop>
     <tabstop>omega</tabstop>
-    <tabstop>back_button</tabstop>
-    <tabstop>close_button</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
+</includes>
 <slots>
     <slot>insert_seq()</slot>
     <slot>arg_pressed()</slot>
@@ -1088,9 +1091,6 @@
     <slot>angle_changed()</slot>
     <slot>ala_pressed()</slot>
 </slots>
-<includes>
-	<include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
-</includes>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

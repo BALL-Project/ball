@@ -21,7 +21,7 @@ namespace BALL
 		*/
 		class BALL_EXPORT PeptideDialog
 			: public PeptideDialogData,
-				protected Peptides::PeptideBuilder
+				public Peptides::PeptideBuilder
 		{ 
 			Q_OBJECT
 
@@ -115,14 +115,6 @@ namespace BALL
 			///
 			void insert_seq();
 
-			///
-			void setFragmentDB(const FragmentDB* db)
-				throw();
-
-			///
-			const FragmentDB* getFragmentDB() const
-				throw();
-
 			protected:
  
       bool islower_(char ch)
@@ -135,7 +127,6 @@ namespace BALL
 				throw();
 
 			Protein* protein_;
-			FragmentDB* fragment_db_;
 		};
 
 } } // namespaces
