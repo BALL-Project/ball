@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.6 2004/02/13 12:11:50 anhi Exp $
+// $Id: POVRenderer.C,v 1.7 2004/02/13 13:55:48 anhi Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -151,16 +151,19 @@ namespace BALL
 			outfile_ << "camera {" << std::endl;
 			outfile_ << "\tperspective" << std::endl;
 			outfile_ << "\tdirection <0,0,-1>" << std::endl;
-			outfile_ << "\tangle 45.000000" << std::endl;
+			outfile_ << "\tangle 90.000000" << std::endl;
 			outfile_ << "\ttransform {" << std::endl;
 			outfile_ << "\t\tmatrix <" << std::endl;
 
 			GLdouble m[16];	
 			glGetDoublev(GL_MODELVIEW_MATRIX,m);
 			
-			outfile_ << "\t\t" << m[0] << ",  " << m[1] << ", " << m[2] << "," << std::endl;
-			outfile_ << "\t\t" << m[4] << ",  " << m[5] << ", " << m[6] << "," << std::endl;
-			outfile_ << "\t\t" << m[8] << ",  " << m[9] << ", " << m[10] << "," << std::endl;
+			double norm = sqrt(m[0]*m[0] + m[1]*m[1] + m[2]*m[2]);
+			outfile_ << "\t\t" << m[0]/norm << ",  " << m[1]/norm << ", " << m[2]/norm << "," << std::endl;
+			norm = sqrt(m[4]*m[4] + m[5]*m[5] + m[6]*m[6]);
+			outfile_ << "\t\t" << m[4]/norm << ",  " << m[5]/norm << ", " << m[6]/norm << "," << std::endl;
+			norm = sqrt(m[8]*m[8] + m[9]*m[9] + m[10]*m[10]);
+			outfile_ << "\t\t" << m[8]/norm << ",  " << m[9]/norm << ", " << m[10]/norm << "," << std::endl;
 			outfile_ << "\t\t" << m[12] << ",  " << m[13] << ", " << m[14] << std::endl;
 		  outfile_ << "\t\t>" << std::endl;
 			outfile_ << "\tinverse }" << std::endl;
