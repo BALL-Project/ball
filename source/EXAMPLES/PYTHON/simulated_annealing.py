@@ -2,12 +2,12 @@ mc = MainControl.getInstance(0)
 ms = MolecularStructure.getInstance(0)
 ff = ms.getForceField()
 cm = mc.getCompositeManager()
-c = cm.getComposites()
-system = c[0]
-mds = CanonicalMD()
-ssm = SnapShotManager()
+system = mc.getCompositeManager().getComposites()[0]
 ff.setup(system)
-mds.setup(ff, ssm)
+ssm = SnapShotManager()
+#ssm.setSystem(system)
+#ssm.setForceField(ff)
+mds = CanonicalMD(ff, ssm)
 mds.setTimeStep(0.001)
 time = 0
 starttemperature = 0
