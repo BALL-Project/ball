@@ -1,6 +1,7 @@
 #!/bin/sh
 
-REF_TIME="2.0"
+# the total time of the (imaginary) reference system
+REF_TIME=4.0
 
 # try to figure out which syntax we need
 # to prevent a linefeed at the end of echo
@@ -24,47 +25,64 @@ fi
 
 
 echo " "
-echo "Now running all benchmarks."
-echo "This may take a while...."
+echo "Now running all BALL benchmarks."
 echo " "
+echo "This will take some time...."
+echo " "
+
+# remember any failed benchmarks by setting OK=false
+OK=true
 
 # remove any core in the directory and all backtrace files
 rm core *.backtrace 2>/dev/null
 
-# loop over all tests
+# loop over all single benchmarks
 COUNT=1
 TOTAL_TIME=0.0
-OK=true
 for i in $* ; do
-	# print the name of the test running
+	# print the name of the benchmark running
 	$ECHO " (${COUNT}) $i: $SUFFIX"
 	
 	# remove potential log files
 	rm $i.log 2>/dev/null
 
 	# run it and examine its return value
-	TIME=`./$i 2>&1` 
-	TOTAL_TIME=`echo "${TOTAL_TIME} ${TIME}"|tr -d "()"|awk '{print $1+$2}'`
-	if test `echo ${TIME}|tr -d "()"` != "${TIME}" ; then
+	TIME=`./$i 2>/dev/null`
+	if test $? -eq 0 ; then
+		# test passed - OK
+		echo "${TIME} s"
+		TOTAL_TIME=`echo ${TOTAL_TIME} ${TIME}|awk '{print 1.0 * $1 + 1.0 * $2}'`
+	else 
+		# benchmark crashed
 		OK=false
+			
+		# remember this benchmark program
+		FAILED_BENCHS="${FAILED_BENCHS} $i"
 	fi
-	echo ${TIME}
 	COUNT=`expr ${COUNT} + 1`
 done
 
-# print some summary of all tests
+# print a summary of all benchmarks
 echo "====================================="
 echo " "
 
 if test "$OK" = true ; then
-	STONES=`echo ${REF_TIME} ${TOTAL_TIME}|awk '{printf "%.2f", $1/$2}'`
-	echo "All benchmarks completed successfully."
-	echo "Your system achieved an overall score of ${STONES} BALLStones"
+	echo "All benchmarks executed."
+	echo "Your system scores `echo ${TOTAL_TIME} ${REF_TIME}|awk '{printf \"%.2f\", $2/$1}'` BALLStones"
 	echo " "
-
 	exit 0
 else
-	echo "Not all benchmarks could be run. Please execute the tesstuite in ../TEST."
-	
+	echo "The following benchmarks failed:"
+
+	for i in ${FAILED_BENCHS} ; do 
+		echo " - $i"
+	done
+
+	echo " "
+	echo "Please mail the output of this run to one of the developers"
+	echo "and include a detailed description of the system you use."
+	echo "It is also neccessary to include the files ../config.mak ../config.h"
+	echo " "
+
 	exit 1
 fi
