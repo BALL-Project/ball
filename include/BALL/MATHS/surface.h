@@ -1,4 +1,4 @@
-// $Id: surface.h,v 1.8 2000/12/19 00:42:24 amoll Exp $
+// $Id: surface.h,v 1.9 2001/06/21 02:32:48 oliver Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -209,7 +209,7 @@ namespace BALL
 		vertex.clear();
 		triangle.clear();
 
-		ifstream file(vert_filename.c_str());
+		std::ifstream file(vert_filename.c_str());
 		if (!file)
 		{
 			throw Exception::FileNotFound(__FILE__, __LINE__, vert_filename);
