@@ -1,0 +1,79 @@
+<H2>Molecular Control</H2>
+The Molecular Control gives a hierarchical overview of the loaded molecules.<br><br>
+
+<img src="images/molecularControl2.png" border=0>
+
+<br><br>
+Every molecule is part of a System, molecules from different Systems do not interfere with each other, e.g. in
+MD-Simulations. BALLView creates a new System for every molecular file, that the user loads.
+
+
+
+<H3>Highlighting</H3>
+By clicking with the left mouse button on the names of molecular entities, 
+users can highlight these. To highlight more then one item, use
+the Shift- or Control-modifier.
+A click with the right mouse button will open a context menu, which will operate on the highlighted molecular items:<br><br>
+<img src="images/mc_context_menu.png" width=490 height=276 border=0>
+
+<H3>Selections</H3>
+Left from the names of the molecular entities are checkboxes, which show the user which molecular entities are 
+currently selected (picked). The selected objects become colored in the <a href="scene.html">Scene</a>.
+If a user starts a MD-Simulation or a Energy Minimization while some molecular entities are selected, 
+BALLView only operates only on these items. (Which is e.g. usefull for optimising the position of only the hydrogen atoms
+of a protein from a PDB-file.)
+
+<H3>Cut, Copy, Paste</H3>
+The user can cut or copy any molecular entities in the Molecular Control and also paste them into other objects
+(see the Menu point "Edit"). <br>
+This makes it possible e.g. to merge Systems:
+<ol>
+	<li>Load two molecular files (e.g. PDB files)</li>
+	<li>Highlight the molecules of the first System (they should become blue like in the picture above)</li>
+	<li>Click on the menu entry "Cut" in "Edit"</li>
+	<li>Highlight the second System</li>
+	<li>Click on the menu entry "Paste" in "Edit"</li>
+	<li>The first System can now be deleted</li>
+</ol>
+
+<H3>Regular expressions</H3>
+At the bottom of the Molecular Control resides a yellow text field.
+In this text field, the user can enter regular expressions to select molecular entities.
+To apply the typed expression, the Return key has to be pressed. The button next to the text field
+clears the current selection.
+Possible predicates are:
+<br><br>
+<table>
+  <tbody>
+    <tr><td> true() </td><td> this is always true </td></tr>
+	<tr><td> false() </td><td> this is always false </td></tr>
+    <tr><td> selected()  </td><td> this is true for already selected atoms </td></tr>
+    <tr><td> name(string) </td><td> the name of atoms </td></tr>
+    <tr><td> type(string) </td><td> type name of atoms </td></tr>
+    <tr><td> element(char) </td><td> element (abbreviated by its symbol) </td></tr>
+    <tr><td> residue(string) </td><td> name of residues </td></tr>
+    <tr><td> residueID(int) </td><td> PDB ID of the residue (usally a number) </td></tr>
+    <tr><td> protein(string) </td><td> name of proteins </td></tr>
+    <tr><td> secondaryStruct(string) </td><td> name of secondary structures </td></tr>
+    <tr><td> chain(string) </td><td> name of chains </td></tr>
+    <tr><td> nucleotide(string) </td><td> name of nucleotides </td></tr>	
+    <tr><td> solvent() </td><td> true if the atom is a solvent atom added by BALL </td></tr>
+    <tr><td> backbone() </td><td> true for backbone atoms </td></tr>
+    <tr><td> inRing() </td><td> true if in a circular entity </td></tr>
+    <tr><td> doubleBonds() </td><td> atoms with double bonds </td></tr>
+    <tr><td> tripleBonds() </td><td> atoms with triple bonds </td></tr>
+    <tr><td> numberOfBonds(int) </td><td> atoms with a given number of bonds </td></tr>	
+    <tr><td> aromaticBonds() </td><td> atoms with aromatic bonds </td></tr>
+    <tr><td> connectedTo(char) </td><td> atoms which are connected to an atom of given element </td></tr>
+    <tr><td> spHybridized() </td><td>  </td></tr>
+    <tr><td> sp2Hybridized() </td><td>  </td></tr>
+    <tr><td> sp3Hybridized() </td><td>  </td></tr>		
+    <tr><td> charge(float) </td><td> atoms with given charge </td></tr>
+	<tr><td> isAxial() </td><td>  </td></tr>
+    <tr><td> is4C1() </td><td>  </td></tr>
+  </tbody>
+</table>
+<p></p>
+
+All predicates can be connected with AND and OR, grouped with brackets, and each predicate can be negated with '!'<br>
+Example: !residueID(12) AND (element(N) OR element(C))
