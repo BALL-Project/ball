@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Expression_test.C,v 1.36 2003/05/26 15:43:40 oliver Exp $
+// $Id: Expression_test.C,v 1.37 2003/06/26 14:34:57 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -21,7 +21,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.36 2003/05/26 15:43:40 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.37 2003/06/26 14:34:57 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -43,342 +43,23 @@ class MickeyPredicate
 
 String mickey_predicate_string("isMickeyMouse");
 
-// tests for class ExpressionPredicate::
-
-ExpressionPredicate* ep_ptr;
-
-CHECK(ExpressionPredicate::ExpressionPredicate() throw())
-	ep_ptr = new ExpressionPredicate;
-	TEST_NOT_EQUAL(ep_ptr, 0)
-RESULT
-
-
-CHECK(ExpressionPredicate::~ExpressionPredicate() throw())
-	delete ep_ptr;
-RESULT
-
-
-CHECK(ExpressionPredicate::ExpressionPredicate(const ExpressionPredicate& predicate) throw())
-	ExpressionPredicate ep1;
-	String test_string("BALL argument test");
-	ep1.setArgument(test_string);
-
-	ExpressionPredicate ep2;
-	bool test = (ep1 == ep2);
-	TEST_NOT_EQUAL(test, true)
-
-	ExpressionPredicate ep3(ep1);
-	test = (ep1 == ep3);
-	TEST_EQUAL(test, true)
-RESULT
-
-
-CHECK(ExpressionPredicate::ExpressionPredicate(const String& argument) throw())
-	String argument("argument test");
-	ExpressionPredicate ep1;
-	TEST_NOT_EQUAL(ep1.getArgument(), argument)
-	ExpressionPredicate ep2(argument);
-	TEST_EQUAL(ep2.getArgument(), argument)
-RESULT
-
-
-CHECK(ExpressionPredicate::ExpressionPredicate& operator = (const ExpressionPredicate& predicate) throw())
-	String arg("Yippieh!");
-	ExpressionPredicate ep1(arg);
-	ExpressionPredicate ep2;
-	TEST_NOT_EQUAL(ep2.getArgument(), arg)
-	ep2 = ep1;
-	TEST_EQUAL(ep2.getArgument(), arg)
-RESULT
-
-
-CHECK(ExpressionPredicate::clear() throw())
-	ExpressionPredicate empty;
-	ExpressionPredicate not_empty("Nonsense Argument");
-	bool test = (empty == not_empty);
-	TEST_NOT_EQUAL(test, true)
-	not_empty.clear();
-	test = (empty == not_empty);
-	TEST_EQUAL(test, true)
-RESULT
-
-
-CHECK(ExpressionPredicate::bool operator == (const ExpressionPredicate& predicate) const  throw())
-	String arg("BALL-Test");
-	ExpressionPredicate ep1;
-	ExpressionPredicate ep2;
-	bool test = (ep1 == ep2);
-	TEST_EQUAL(test, true)
-
-	ep1.setArgument(arg);
-	test = (ep1 == ep2);
-	TEST_NOT_EQUAL(test, true)
-
-	ep2.setArgument(arg);
-	test = (ep1 == ep2);
-	TEST_EQUAL(test, true)
-RESULT
-
-
-CHECK(ExpressionPredicate::bool operator () (const Atom& atom) const  throw())
-	Atom atom;
-	ExpressionPredicate ep;
-	TEST_EQUAL(ep.operator()(atom), true)
-RESULT
-
-
-CHECK(ExpressionPredicate::setArgument(const String& argument) throw())
-	String arg = "BALL-test";
-	ExpressionPredicate ep;
-	TEST_NOT_EQUAL(ep.getArgument(), arg)
-	ep.setArgument(arg);
-	TEST_EQUAL(ep.getArgument(), arg)
-RESULT
-
-
-CHECK(ExpressionPredicate::getArgument() const  throw())
-	String arg = "BALL-test";
-	ExpressionPredicate ep;
-	TEST_NOT_EQUAL(ep.getArgument(), arg)
-	ep.setArgument(arg);
-	TEST_EQUAL(ep.getArgument(), arg)
-RESULT
-
-
-// tests for class ExpressionTree::
-
-ExpressionTree* et_ptr;
-
-CHECK(ExpressionTree::ExpressionTree() throw())
-	et_ptr = new ExpressionTree;
-	TEST_NOT_EQUAL(et_ptr, 0)
-	TEST_EQUAL(et_ptr->getType(), ExpressionTree::INVALID)
-	TEST_EQUAL(et_ptr->getNegate(), false)
-	TEST_EQUAL(et_ptr->getPredicate(), 0)
-	list<const ExpressionTree*> test_list;
-	bool test = (et_ptr->getChildren() == test_list);
-	TEST_EQUAL(test, true)
-RESULT
-
-
-CHECK(ExpressionTree::~ExpressionTree() throw())
-  delete et_ptr;
-RESULT
-
-
-CHECK(ExpressionTree::ExpressionTree(const ExpressionTree& tree) throw())
-	ExpressionPredicate* ep = new ExpressionPredicate;
-	ExpressionTree et1;
-	ExpressionTree* child = new ExpressionTree;
-	et1.setType(ExpressionTree::LEAF);
-	et1.setNegate(true);
-	et1.setPredicate(ep);
-	et1.appendChild(child);
-
-	ExpressionTree et2;
-	bool test = (et1 == et2);
-	TEST_NOT_EQUAL(test, true)
-
-	ExpressionTree et3(et1);
-	test = (et1 == et3);
-	TEST_EQUAL(test, true)
-RESULT
-
-
-CHECK(ExpressionTree::ExpressionTree(ExpressionPredicate* predicate, bool negate = false) throw())
-	ExpressionPredicate* ep = new ExpressionPredicate;
-	ExpressionTree et1;
-
-	ExpressionTree et2(ep, true);
-	bool test = (et1 == et2);
-	TEST_NOT_EQUAL(test, true)
-
-	et1.setNegate(true);
-	test = (et1 == et2);
-	TEST_NOT_EQUAL(test, true)
-
-	et1.setPredicate(new ExpressionPredicate);
-	test = (et1 == et2);
-	TEST_EQUAL(test, true)
-RESULT
-
-
-CHECK(ExpressionTree::ExpressionTree(Type type, list<ExpressionTree*> children, bool negate = false) throw())
-	ExpressionTree* child1 = new ExpressionTree;
-	ExpressionTree* child2 = new ExpressionTree;
-	ExpressionTree* child3 = new ExpressionTree;
-	
-	std::list<const ExpressionTree*> children;
-	children.push_back(child1);
-	children.push_back(child2);
-	children.push_back(child3);
-
-	ExpressionTree et1;
-
-	ExpressionTree et2(ExpressionTree::LEAF, children, true);
-	bool test = (et1 == et2);
-	TEST_NOT_EQUAL(test, true)
-
-	et1.setType(ExpressionTree::LEAF);
-	test = (et1 == et2);
-	TEST_NOT_EQUAL(test, true)
-
-	et1.setNegate(true);
-	test = (et1 == et2);
-	TEST_NOT_EQUAL(test, true)
-RESULT
-
-
-CHECK(ExpressionTree::bool operator () (const Atom& atom) const  throw())
-	ExpressionTree et;
-RESULT
-
-
-CHECK(ExpressionTree::bool operator == (const ExpressionTree& tree) const  throw())
-	ExpressionPredicate* ep = new ExpressionPredicate;
-	ExpressionTree et1;
-	ExpressionTree* child = new ExpressionTree;
-	et1.setType(ExpressionTree::LEAF);
-	et1.setNegate(true);
-	et1.setPredicate(ep);
-	et1.appendChild(child);
-
-	ExpressionTree et2;
-	bool test = (et1 == et2);
-	TEST_NOT_EQUAL(test, true)
-
-	et2.setType(ExpressionTree::LEAF);
-	test = (et1 == et2);
-	TEST_NOT_EQUAL(test, true)
-
-	et2.setNegate(true);
-	test = (et1 == et2);
-	TEST_NOT_EQUAL(test, true)
-
-	et2.setPredicate(new ExpressionPredicate);
-	test = (et1 == et2);
-	TEST_NOT_EQUAL(test, true)
-
-	et2.appendChild(new ExpressionTree);
-	test = (et1 == et2);
-	TEST_EQUAL(test, true)
-RESULT
-
-
-CHECK(ExpressionTree::setType(Type type) throw())
-	ExpressionTree et;
-	TEST_NOT_EQUAL(et.getType(), ExpressionTree::LEAF)
-	et.setType(ExpressionTree::LEAF);
-	TEST_EQUAL(et.getType(), ExpressionTree::LEAF)
-RESULT
-
-
-CHECK(ExpressionTree::getType() const  throw())
-	ExpressionTree et;
-	TEST_NOT_EQUAL(et.getType(), ExpressionTree::OR)
-	et.setType(ExpressionTree::OR);
-	TEST_EQUAL(et.getType(), ExpressionTree::OR)
-RESULT
-
-
-CHECK(ExpressionTree::setNegate(bool negate) throw())
-	ExpressionTree et;
-	TEST_NOT_EQUAL(et.getNegate(), true)
-	et.setNegate(true);
-	TEST_EQUAL(et.getNegate(), true)
-RESULT
-
-
-CHECK(ExpressionTree::getNegate() const  throw())
-	ExpressionTree et;
-	TEST_NOT_EQUAL(et.getNegate(), true)
-	et.setNegate(true);
-	TEST_EQUAL(et.getNegate(), true)
-RESULT
-
-
-CHECK(ExpressionTree::setPredicate(ExpressionPredicate* predicate) throw())
-	ExpressionTree et;
-	ExpressionPredicate* ep = new ExpressionPredicate;
-	TEST_NOT_EQUAL(et.getPredicate(), ep)
-	et.setPredicate(ep);
-	TEST_EQUAL(et.getPredicate(), ep)
-RESULT
-
-
-CHECK(ExpressionTree::getPredicate() const  throw())
-	ExpressionPredicate* ep = new ExpressionPredicate;
-	ExpressionTree et1;
-	TEST_NOT_EQUAL(et1.getPredicate(), ep)
-	ExpressionTree et2(ep, false);
-	TEST_EQUAL(et2.getPredicate(), ep)
-RESULT
-
-
-CHECK(ExpressionTree::appendChild(const ExpressionTree* child) throw())
-	ExpressionTree* child1 = new ExpressionTree;
-	ExpressionTree* child2 = new ExpressionTree;
-	ExpressionTree* child3 = new ExpressionTree;
-	
-	std::list<const ExpressionTree*> children;
-	children.push_back(child1);
-	children.push_back(child2);
-	children.push_back(child3);
-
-	ExpressionTree et(ExpressionTree::OR, children);
-	bool test = (et.getChildren() == children);
-	TEST_EQUAL(test, true)
-
-	et.appendChild(new ExpressionTree);
-	test = (et.getChildren() == children);
-	TEST_EQUAL(test, false)
-RESULT
-
-
-CHECK(ExpressionTree::getChildren() const throw())
-	// Tested above.
-RESULT
-
-
-CHECK(ExpressionTree::ExpressionTree& operator = (const ExpressionTree& tree) throw())
-	ExpressionTree et1(new ExpressionPredicate, true);
-	ExpressionTree et2;
-	bool test = (et1 == et2);
-	TEST_NOT_EQUAL(test, true)
-	et2 = et1;
-	test = (et1 == et2);
-	TEST_EQUAL(test, true)
-RESULT
-
-
-CHECK(ExpressionTree::clear() throw())
-	ExpressionTree nonempty(new ExpressionPredicate, true);
-	ExpressionTree empty;
-	bool test = (empty == nonempty);
-	TEST_NOT_EQUAL(test, true)
-	nonempty.clear();
-	test = (empty == nonempty);
-	TEST_EQUAL(test, true)
-RESULT
-
-
 // tests for class Expression::
 
 Expression* e_ptr = 0;
 
-CHECK(Expression::Expression() throw())
+CHECK(Expression() throw())
 	e_ptr = new Expression;
 	TEST_NOT_EQUAL(e_ptr, 0)
 	TEST_EQUAL(e_ptr->getCreationMethods().size(), 26)
 RESULT
 
 
-CHECK(Expression::~Expression() throw())
+CHECK(~Expression() throw())
 	delete e_ptr;
 RESULT
 
 
-CHECK(Expression::Expression(const Expression& expression) throw())
+CHECK(Expression(const Expression& expression) throw())
 	String expression("connectedTo((-H))");
 	Expression e1(expression);
 	Expression e2;
@@ -392,14 +73,14 @@ CHECK(Expression::Expression(const Expression& expression) throw())
 RESULT
 
 
-CHECK(Expression::Expression(const String& expression_string) throw())
+CHECK(Expression(const String& expression_string) throw())
 	Expression e("true()");
 	TEST_EQUAL(e.getCreationMethods().size(), 26)
 	TEST_EQUAL(e(Atom()), true)
 RESULT
 
 
-CHECK(Expression::hasPredicate(const String& name) const  throw())
+CHECK(bool hasPredicate(const String& name) const throw())
 	Expression e;
 	e.registerPredicate(mickey_predicate_string, MickeyPredicate::createDefault);
 	TEST_EQUAL(e.hasPredicate("You don't have this predicate"), false)
@@ -407,7 +88,7 @@ CHECK(Expression::hasPredicate(const String& name) const  throw())
 RESULT
 
 
-CHECK(Expression::bool operator == (const Expression& expression) const  throw())
+CHECK(bool operator == (const Expression& expression) const throw())
 	Expression e1;
 	Expression e2;
 	bool test = (e1 == e2);
@@ -423,7 +104,7 @@ CHECK(Expression::bool operator == (const Expression& expression) const  throw()
 RESULT
 
 
-CHECK(Expression::bool operator () (const Atom& atom) const  throw())
+CHECK(bool operator () (const Atom& atom) const throw())
 	PDBFile file("data/Expression_test.pdb");
 	System S;
 	file >> S;
@@ -506,7 +187,7 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 RESULT
 
 
-CHECK(Expression::getPredicate(const String& name, const String& args = "") const  throw())
+CHECK(ExpressionPredicate* getPredicate(const String& name, const String& args = "") const throw())
 	Expression e;
 	e.registerPredicate(mickey_predicate_string, MickeyPredicate::createDefault);
 	ExpressionPredicate* ep1 = e.getPredicate(mickey_predicate_string);
@@ -519,7 +200,7 @@ CHECK(Expression::getPredicate(const String& name, const String& args = "") cons
 RESULT
 
 
-CHECK(Expression::registerPredicate(const String& name, CreationMethod creation_method) throw())
+CHECK(void registerPredicate(const String& name, CreationMethod creation_method) throw())
 	Expression e;
 	e.registerPredicate(mickey_predicate_string, MickeyPredicate::createDefault);
 	ExpressionPredicate* ep1 = e.getPredicate(mickey_predicate_string);
@@ -532,7 +213,7 @@ CHECK(Expression::registerPredicate(const String& name, CreationMethod creation_
 RESULT
 
 
-CHECK(Expression::setExpression(const String& expression) throw())
+CHECK(void setExpression(const String& expression) throw(Exception::ParseError))
 	String test_expression("connectedTo((-H))");
 	Expression e;
 	e.setExpression(test_expression);
@@ -540,20 +221,20 @@ CHECK(Expression::setExpression(const String& expression) throw())
 RESULT
 
 
-CHECK(Expression::getExpressionString() const  throw())
+CHECK(const String& getExpressionString() const throw())
 	Expression e("(connectedTo((-H)))");
 	TEST_EQUAL(e.getExpressionString(), "(connectedTo((-H)))")
 RESULT
 
 
-CHECK(Expression::getExpressionTree() const  throw())
+CHECK(const ExpressionTree* getExpressionTree() const throw())
 	Expression e("connectedTo((-H))");
 	const ExpressionTree* tree = e.getExpressionTree();
 	TEST_NOT_EQUAL(tree, 0)
 RESULT
 
 
-CHECK(Expression::Expression& operator = (const Expression& expression) throw())
+CHECK(Expression& operator = (const Expression& expression) throw())
 	Expression e1("connectedTo((-H))");
 	Expression e2;
 	bool test = (e1 == e2);
@@ -565,7 +246,7 @@ CHECK(Expression::Expression& operator = (const Expression& expression) throw())
 RESULT
 
 
-CHECK(Expression::clear() throw())
+CHECK(void clear() throw())
 	Expression empty;
 	Expression nonempty("connectedTo((-H))");
 	bool test = (empty == nonempty);
@@ -576,6 +257,32 @@ CHECK(Expression::clear() throw())
 	TEST_EQUAL(test, true)
 RESULT
 
+
+CHECK(BALL_CREATE(Expression))
+	Expression empty;
+	Expression nonempty("connectedTo((-H))");
+	Expression* e = (Expression*) nonempty.create(false, true);
+	TEST_NOT_EQUAL(e, 0)
+	TEST_NOT_EQUAL(e, &nonempty)
+	TEST_EQUAL(*e == empty, true)
+	delete e;
+	e = (Expression*) nonempty.create(true, false);
+	TEST_EQUAL(*e == nonempty, true)
+	TEST_NOT_EQUAL(e, &nonempty)
+	delete e;
+RESULT
+
+CHECK(const StringHashMap<CreationMethod>& getCreationMethods() const throw())
+	Expression nonempty("connectedTo((-H))");
+	TEST_EQUAL(nonempty.getCreationMethods().size() > 0, true)
+
+	Expression empty;
+	TEST_EQUAL(empty.getCreationMethods().size() > 0, true)
+RESULT
+
+CHECK(typedefvoid* (*CreationMethod)())
+  // ???
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
