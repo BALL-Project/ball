@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.8 2003/10/04 15:42:07 amoll Exp $
+// $Id: molecularControl.C,v 1.9 2003/10/05 14:48:44 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -153,6 +153,9 @@ bool MolecularControl::reactToMessages_(Message* message)
 void MolecularControl::buildContextMenu(Composite& composite)
 	throw()
 {
+	context_menu_.insertItem("Create Representation", this, SLOT(createRepresentation()), CREATE_REPRESENTATION);
+	context_menu_.insertSeparator();
+
 	context_menu_.insertItem("Cut", this, SLOT(cut()), OBJECT__CUT);
 	context_menu_.insertItem("Copy", this, SLOT(copy()), OBJECT__COPY);
 	context_menu_.insertItem("Paste", this, SLOT(paste()), OBJECT__PASTE);
@@ -841,6 +844,17 @@ const List<Composite*>& MolecularControl::getCopyList_() const
 	throw()
 {
 	return copy_list_;
+}
+
+void MolecularControl::createRepresentation() 
+{
+	// make sure selection is send, to enter create Represenation Mode in DP
+	ControlSelectionMessage* message = new ControlSelectionMessage;
+	message->setSelection(selected_);
+	notify_(message);
+
+	ShowDisplayPropertiesMessage* msg = new ShowDisplayPropertiesMessage;
+	notify_(msg);
 }
 
 } } // namespaces

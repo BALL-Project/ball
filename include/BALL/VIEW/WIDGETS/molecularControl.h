@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.5 2003/09/08 02:07:38 amoll Exp $
+// $Id: molecularControl.h,v 1.6 2003/10/05 14:49:26 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -36,13 +36,14 @@ namespace BALL
 		{			
 			enum MolecularMenuEntries
 			{
-				OBJECT__REMOVE               = 0,
-				OBJECT__CUT                  = 1,
-				OBJECT__COPY                 = 2,
-				OBJECT__PASTE                = 3,
-				OBJECT__MOVE                 = 4,
-				SELECT                       = 6,
-				DESELECT                     = 7,
+				CREATE_REPRESENTATION 			 = 1,
+				OBJECT__REMOVE               = 10,
+				OBJECT__CUT                  = 11,
+				OBJECT__COPY                 = 12,
+				OBJECT__PASTE                = 13,
+				OBJECT__MOVE                 = 14,
+				SELECT                       = 26,
+				DESELECT                     = 27,
 
 				CAMERA__CENTER               = 110,
 				BONDS__BUILD                 = 120,
@@ -227,6 +228,9 @@ namespace BALL
 			/** @name Public slots
 			*/
 			//@{
+			
+			/// Create a Representation with the DisplayProperties Dialog
+			void createRepresentation();
 
 			/// Atom properties dialog requested
 			void atomProperties();
