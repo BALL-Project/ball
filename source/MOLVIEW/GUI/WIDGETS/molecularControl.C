@@ -1,4 +1,4 @@
-// $Id: molecularControl.C,v 1.6.4.5 2002/11/28 21:19:10 amoll Exp $
+// $Id: molecularControl.C,v 1.6.4.6 2002/11/28 23:28:02 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -207,15 +207,18 @@ void MolecularControl::buildContextMenu(Composite* composite, QListViewItem* ite
 
 	if (RTTI::isKindOf<Atom>(*composite))
 	{
-		insertContextMenuEntry("atom properties", this, SLOT(atomProperties((Atom*) composite)), ATOM__PROPERTIES);
+		insertContextMenuEntry("atom properties", this, SLOT(atomProperties()), ATOM__PROPERTIES);
 	}
 }
 
-void MolecularControl::atomProperties_(Atom* atom)
+void MolecularControl::atomProperties()
 	throw()
 {
-	AtomSettings as(atom, this);
+	AtomSettings as((Atom*)context_composite_, this);
 	as.exec();
+	ChangedCompositeMessage* message = new ChangedCompositeMessage;
+	message->setComposite(context_composite_);
+	notify_(message);
 }
 	
 
