@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.C,v 1.5 2000/04/04 15:13:17 oliver Exp $
+// $Id: standardColorCalculator.C,v 1.6 2000/05/23 16:25:17 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h>
 
@@ -232,6 +232,14 @@ namespace BALL
   {
 	}
 
+	void AtomChargeColorCalculator::visit(Composite& composite) 
+  {
+		if (RTTI::isKindOf<Atom>(composite))
+		{
+			visit(*RTTI::castTo<Atom>(composite));
+		}
+  }
+
  void AtomChargeColorCalculator::visit(Atom& atom)
 	{
 		float charge = atom.getCharge();
@@ -269,6 +277,156 @@ namespace BALL
 			 blue1 * charge + (1.0 - charge) * blue2);
 	}
 	
+
+
+
+
+
+	AtomDistanceColorCalculator::AtomDistanceColorCalculator()
+		: UnaryProcessor<Atom>(),
+			UnaryProcessor<Composite>(),
+		  atom_2_distance_(),
+			distance_((float)10),
+			null_distance_color_("FF0000FF"),
+			full_distance_color_("00FF00FF")
+	{
+	}
+	
+  AtomDistanceColorCalculator::AtomDistanceColorCalculator(const AtomDistanceColorCalculator& color_calculator)
+		:	UnaryProcessor<Atom>(color_calculator),
+			UnaryProcessor<Composite>(color_calculator),
+			atom_2_distance_(),
+			distance_(color_calculator.distance_),
+			null_distance_color_(color_calculator.null_distance_color_),
+			full_distance_color_(color_calculator.full_distance_color_)
+  {
+	}
+
+	void AtomDistanceColorCalculator::clear()
+  {
+		atom_2_distance_.destroy();
+		distance_ = 10.0;
+		null_distance_color_.set("FF0000FF");
+		full_distance_color_.set("00FF00FF");
+  }
+
+	void AtomDistanceColorCalculator::destroy()
+  {
+		atom_2_distance_.destroy();
+  }
+
+	void AtomDistanceColorCalculator::calculateDistances()
+  {
+ 		AtomDistanceHashMap::Iterator it1 = atom_2_distance_.begin();
+ 		AtomDistanceHashMap::Iterator it1_old;
+
+		// brute force
+		for(; it1 != atom_2_distance_.end();)
+		{
+			Atom* atom1 = (Atom*)(it1->first);
+
+			it1_old = it1;
+
+			AtomDistanceHashMap::Iterator it2 = ++it1;
+
+			for(; it2 != atom_2_distance_.end(); ++it2)
+			{
+				Atom* atom2 = (Atom*)(it2->first);
+
+				if (atom1->getRoot() != atom2->getRoot())
+				{
+					float distance = (atom2->getPosition() - atom1->getPosition()).getLength();
+					
+					if (it1_old->second > distance)
+					{
+						it1_old->second = distance;
+					}
+					
+					if (it2->second > distance)
+					{
+						it2->second = distance;
+					}
+				}
+			}
+		}
+  }
+ 
+	bool AtomDistanceColorCalculator::start()
+  {
+		return true;
+  }
+			
+	bool AtomDistanceColorCalculator::finish()
+  {
+		return true;
+  }
+
+	Processor::Result AtomDistanceColorCalculator::operator() (Composite& composite)
+  {
+		if (RTTI::isKindOf<Atom>(composite))
+		{
+			return this->operator()(*RTTI::castTo<Atom>(composite));
+		}
+		
+		return Processor::CONTINUE;
+  }
+	
+	Processor::Result AtomDistanceColorCalculator::operator() (Atom& atom)
+  {
+ 		AtomDistanceHashMap::Iterator it = atom_2_distance_.find((void*)&atom);
+
+		// atom in hashmap ? => insert into hashmap with start distance = distance_
+		if (it == atom_2_distance_.end())
+		{
+			atom_2_distance_.insert(AtomDistanceHashMap::ValueType((void*)&atom, distance_));
+		}		
+
+		return Processor::CONTINUE;
+  }
+
+	void AtomDistanceColorCalculator::visit(Composite& composite) 
+  {
+		if (RTTI::isKindOf<Atom>(composite))
+		{
+			visit(*RTTI::castTo<Atom>(composite));
+		}
+  }
+	
+	void AtomDistanceColorCalculator::visit(Atom& atom)
+	{
+ 		AtomDistanceHashMap::Iterator it = atom_2_distance_.find((void*)&atom);
+
+		float distance = distance_;
+
+		// atom in hashmap ?
+		if (it != atom_2_distance_.end())
+		{
+			// get distance
+			distance = it->second;
+		}
+
+		float red1, green1, blue1;
+		float red2, green2, blue2;
+
+		// clip the distance to  0 - distance_
+		if (distance > distance_) distance = distance_;
+		if (distance < 0.0) distance = 0.0;
+
+		red1   = null_distance_color_.red();
+		green1 = null_distance_color_.green();
+		blue1  = null_distance_color_.blue();
+
+		red2   = full_distance_color_.red();
+		green2 = full_distance_color_.green();
+		blue2  = full_distance_color_.blue();
+
+		color_.set
+			(red1 + (distance * (red2 - red1)) / distance_,
+			 green1 + (distance * (green2 - green1)) / distance_,
+			 blue1 + (distance * (blue2 - blue1)) / distance_);
+	}
+	
+
 
 #	ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
 #		include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.iC>
