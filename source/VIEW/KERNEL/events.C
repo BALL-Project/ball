@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.C,v 1.3 2003/08/28 13:23:12 oliver Exp $
+// $Id: events.C,v 1.4 2003/08/28 16:57:42 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/events.h>
+#include <BALL/DATATYPE/string.h>
 
 using namespace std;
 
@@ -16,7 +17,8 @@ namespace BALL
 	  Events::EventCombinationNotAllowed::EventCombinationNotAllowed
 		  (const char* file, int line)
 			throw()
-			: Exception::GeneralException(file, line, string("EventCombinationNotAllowed"), string("combination of events of different scene object is not allowed."))
+			: Exception::GeneralException(file, line, "EventCombinationNotAllowed", 
+					"combination of events of different scene object is not allowed.")
 		{
     }
   

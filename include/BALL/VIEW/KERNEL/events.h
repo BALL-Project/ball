@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.h,v 1.3 2003/08/27 13:39:41 amoll Exp $
+// $Id: events.h,v 1.4 2003/08/28 16:56:27 amoll Exp $
 //
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -15,19 +15,9 @@
 #ifndef BALL_VIEW_KERNEL_EVENTS_H
 #define BALL_VIEW_KERNEL_EVENTS_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #	include <BALL/CONCEPT/notification.h>
 #endif
-
-#ifndef BALL_MATHS_QUATERNION_H
-#	include <BALL/MATHS/quaternion.h>
-#endif
-
-#include <iostream>
 
 
 #define BALL_VIEW_DECLARE_OPERATOR(EventTypeA, EventTypeB) \
