@@ -1,0 +1,7 @@
+BALL_INLINE
+void
+DisplayProperties::setObjectProcessor
+	(const MoleculeObjectProcessor &__rMoleculeObjectProcessor)
+{
+	__mpMoleculeObjectProcessor_ = &(const_cast<MoleculeObjectProcessor &>(__rMoleculeObjectProcessor));
+}
