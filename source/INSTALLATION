@@ -7,6 +7,7 @@ Compiler:
 
     - Linux 2.0 using g++ 2.95.1 and 2.95.2
     - Solaris 2.6 and 7/SPARC using g++ 2.95.2
+    - Solaris 7/SPARC using Kuck & Associate (KAI) C++ 3.4g
     - Solaris 7/x86 using g++ 2.95.2
     - IRIX 6.5 using CC 7.3.1.1m 
 
@@ -184,4 +185,4 @@ and libMOLVIEW.so), the qt libraries (libqt.so, libqgl.so), and the OpenGL/Mesa 
 (libGL.so, libGLU.so).
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.6 2000/01/24 20:31:27 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.7 2000/01/30 12:56:59 oliver Exp $
