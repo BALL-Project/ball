@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.h,v 1.4 2005/02/25 13:53:51 bertsch Exp $
+// $Id: buildBondsProcessor.h,v 1.5 2005/02/25 18:23:01 bertsch Exp $
 //
 
 /** TODO
@@ -41,8 +41,6 @@
 #include <vector>
 #include <utility>
 
-#define BALL_STRUCTURE_BUILDBONDSPROCESSOR_DEFAULT_FILE "bond_lengths/bond_lengths.db"
-
 namespace BALL 
 {
 
@@ -67,7 +65,9 @@ namespace BALL
 				
 				/** If true, the existing bonds are deleted before 
 				 *  bonds detection begins. If the atoms are in 
-				 *  non-bond distance no bonds will be build!
+				 *  non-bond distance no bonds will be build! Note
+				 *  that the processor cannot rebuild inter-atomcontainer
+				 *  bonds, that will cause problem using it with proteins.
 				 */
 				static const char* DELETE_EXISTING_BONDS;
 

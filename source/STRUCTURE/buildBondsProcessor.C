@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.C,v 1.4 2005/02/25 13:53:51 bertsch Exp $
+// $Id: buildBondsProcessor.C,v 1.5 2005/02/25 18:23:01 bertsch Exp $
 //
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
@@ -13,6 +13,7 @@
 #include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/MATHS/common.h>
 #include <BALL/FORMAT/resourceFile.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -120,9 +121,40 @@ namespace BALL
 
 		// get the bounding box of ac
 		BoundingBoxProcessor bbox;
-		ac.apply(bbox);
+		ac.apply(bbox);		
 		Vector3 size = bbox.getUpper() - bbox.getLower();
 
+		// check if size is nan
+		if (Maths::isNan(size.x) || Maths::isNan(size.y) || Maths::isNan(size.z))
+		{
+			// now we try to find bonds with a simple method, iterating over all atom pairs
+			// which is quite expensive if the atomcontainer contains a lot of atoms
+			AtomIterator ait1, ait2;
+			BALL_FOREACH_ATOM_PAIR(ac, ait1, ait2)
+			{
+				float dist = ait1->getPosition().getDistance(ait2->getPosition());
+				float max_dist(0), min_dist(0);
+				Size an1(ait1->getElement().getAtomicNumber());
+				Size an2(ait2->getElement().getAtomicNumber());
+
+				if (getMaxBondLength_(max_dist, an1, an2) &&
+						getMinBondLength_(min_dist, an1, an2) &&
+						max_dist != 0 && min_dist != 0)
+				{
+					if (dist <= max_dist && dist >= min_dist)
+					{
+						if (!ait1->isBoundTo(*ait2))
+						{
+							Bond * b = ait1->createBond(*ait2);
+							b->setOrder(Bond::ORDER__UNKNOWN);
+							num_bonds++;
+						}
+					}
+				}
+			}
+			return num_bonds;
+		}
+		
 		// build HashGrid
 		HashGrid3<Atom*> grid(bbox.getLower() - Vector3(max_length_+1.0), size + Vector3((max_length_+1.0)*2), max_length_);
 	

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BuildBondsProcessor_test.C,v 1.3 2005/02/25 13:53:51 bertsch Exp $
+// $Id: BuildBondsProcessor_test.C,v 1.4 2005/02/25 18:23:02 bertsch Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,11 +12,10 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/SDFile.h>
-
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: BuildBondsProcessor_test.C,v 1.3 2005/02/25 13:53:51 bertsch Exp $")
+START_TEST(Fragment, "$Id: BuildBondsProcessor_test.C,v 1.4 2005/02/25 18:23:02 bertsch Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -53,7 +52,7 @@ CHECK(operator() (AtomContainer& ac))
 	infileB >> sysB;
 	sysB.apply(bbp2);
 	TEST_EQUAL(sysB.countBonds(), 468)
-
+		
 	SDFile infileC("data/buildBondsProcessor_test.sdf");
 	System sysC;
 	infileC >> sysC;
@@ -63,8 +62,16 @@ CHECK(operator() (AtomContainer& ac))
 	{
 		mit->apply(bbp2);
 		TEST_EQUAL(mit->countBonds(), results[i]);
-		//TEST_EQUAL(bbp2.getNumberOfBondsBuilt(), results[i]);
 	}
+
+	bbp2.options[BuildBondsProcessor::Option::DELETE_EXISTING_BONDS] = "true";
+	i=0;
+	for (MoleculeIterator mit = sysC.beginMolecule(); +mit; ++mit, i++)
+	{
+		mit->apply(bbp2);
+		TEST_EQUAL(mit->countBonds(), results[i]);
+	}
+
 RESULT
 
 CHECK(setBondLengths(const String& filename))
