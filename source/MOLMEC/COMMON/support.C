@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.2 1999/09/07 13:52:48 len Exp $
+// $Id: support.C,v 1.3 1999/09/08 12:08:07 len Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/DATATYPE/hashGrid.h>
@@ -38,6 +38,14 @@ namespace BALL {
 			float period_y;
 			float period_z;
 
+			// Are atoms stored in atom_?
+
+			if (atom_vector.size() == 0)
+			{
+				Log.warn() << " calculateNonBondedAtomPairs: atom_vector is empty " << endl;
+				return 0;
+			}
+
 			// Test if periodic boundary is enabled or not
 
 			if (periodic_boundary_enabled) 
@@ -74,7 +82,7 @@ namespace BALL {
 					upper.z = box.b.z + period_z;
 				}	
 			} 
-			else if (type == 1) 
+			else  
 			{
 				for (atom_it = atom_vector.begin(); atom_it != atom_vector.end(); ++atom_it)	
 				{
