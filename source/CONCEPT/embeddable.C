@@ -1,4 +1,4 @@
-// $Id: embeddable.C,v 1.2 2000/07/16 19:33:45 oliver Exp $
+// $Id: embeddable.C,v 1.3 2000/07/17 21:25:31 oliver Exp $
 
 #include <BALL/CONCEPT/embeddable.h>
 
@@ -6,17 +6,40 @@ using namespace std;
 
 namespace BALL
 {
+	Embeddable::Embeddable()
+		:	identifier_("<none>")
+	{
+	}
+	
+	Embeddable::Embeddable(const String& identifier)
+		:	identifier_(identifier)
+	{
+	}
+	
 	Embeddable::~Embeddable()
 	{
-		// make sure destructed instances are in certainly unregistered
+		// make sure destructed instances are securely unregistered
 		unregisterInstance_(this);
+		identifier_ = "<destructed>";
 	}
 
-	void Embeddable::registerThis() throw()
+	const String& Embeddable::getIdentifier() const
+	{
+		return identifier_;
+	}
+
+	void Embeddable::setIdentifier(const String& identifier)
+	{
+		identifier_ = identifier;
+	}
+
+	void Embeddable::registerThis() 
+		throw()
 	{
 	}
 
-	void Embeddable::unregisterThis() throw()
+	void Embeddable::unregisterThis() 
+		throw()
 	{
 		Embeddable::unregisterInstance_(this);
 	}
@@ -116,6 +139,32 @@ namespace BALL
 			{
 				// we didn't find the correct index - return NULL
 				instance = 0;
+			}
+		}
+
+		return instance;
+	}
+
+	Embeddable* Embeddable::getInstance_(const type_info& type, const String& identifier)
+		throw()
+	{
+		// the return value;
+		Embeddable* instance = 0;
+
+		// check whether we got a list with that name
+		if (instance_lists_.has(type.name()))
+		{
+			// walk along the list, return the first instance
+			// whose identifier matches
+			EmbeddableList::Iterator it = instance_lists_[type.name()].begin();	
+			for (; it != instance_lists_[type.name()].end(); ++it)
+			{
+				if ((*it)->getIdentifier() == identifier)
+				{
+					// assign the pointer and abort loop
+					instance = *it;
+					break;
+				}
 			}
 		}
 
