@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.40 2003/08/26 18:35:22 amoll Exp $
+// $Id: standardPredicates.h,v 1.41 2003/08/28 08:26:24 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
@@ -22,9 +22,6 @@
 #ifndef BALL_KERNEL_EXPRESSION_H
 #	include <BALL/KERNEL/expression.h>
 #endif
-
-#include <pair.h>
-
 
 namespace BALL 
 {
