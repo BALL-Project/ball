@@ -1,4 +1,4 @@
-// $Id: johnsonBovey.h,v 1.3 2000/03/26 12:37:53 oliver Exp $
+// $Id: johnsonBovey.h,v 1.4 2000/07/03 16:13:43 oliver Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -24,11 +24,14 @@
 #	include <BALL/KERNEL/PDBAtom.h>
 #endif
 
+#ifndef SHIFT_MODULE
+#include<BALL/NMR/ShiftModule.h>
+#endif
+
 #include <list>
 using std::list;
 
-namespace BALL 
-{
+namespace BALL {
 		
 	/**@name	Johnson Bovey Model
 	*/
@@ -37,7 +40,7 @@ namespace BALL
 	/**	Shift assignment processor implementing Johnson Bovey theory.
 	*/
 	class JohnsonBoveyShift
-		:	public UnaryProcessor<Object>
+		:	public ShiftModule
 	{
 		public:
 
@@ -78,8 +81,8 @@ namespace BALL
 
 			// private Variablen :
 
-			double			n_;
-			double			radius_;
+			float			n_;
+			float			radius_;
 			Vector3		mittelpunkt_;
 			Vector3		normal_;
 
@@ -88,15 +91,15 @@ namespace BALL
 			String**				asrings_;
 			Residue* 				residue_;
 			PDBAtom* 				patom_;
-			double 					shift_;
+			float 					shift_;
 
 
 			// private Funktionen :
 
-			double rf(double,double,double);	// Carlson elliptical Integral of 1st kind
-			double rd(double,double,double);	// Carlson elliptical Integral of 2nd kind
-			double ellf(double,double);	// Legendre elliptical Integral of 1st kind
-			double elle(double,double);	// Legendre elliptical Integral of 2nd kind
+			float rf(float,float,float);	// Carlson elliptical Integral of 1st kind
+			float rd(float,float,float);	// Carlson elliptical Integral of 2nd kind
+			float ellf(float,float);	// Legendre elliptical Integral of 1st kind
+			float elle(float,float);	// Legendre elliptical Integral of 2nd kind
 	};
 
 	//@}
