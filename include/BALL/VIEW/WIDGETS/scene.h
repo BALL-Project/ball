@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.9 2003/10/24 22:38:12 amoll Exp $
+// $Id: scene.h,v 1.10 2003/11/03 16:51:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -69,7 +69,7 @@ namespace BALL
 			{
 				public:
 					SceneUpdateEvent()
-						: QCustomEvent( 65432 ){}
+						: QCustomEvent( SCENE_UPDATE_EVENT){}
 			};
 
 			/** @name Class friends
