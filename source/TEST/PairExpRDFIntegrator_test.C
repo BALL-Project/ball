@@ -1,4 +1,4 @@
-// $Id: PairExpRDFIntegrator_test.C,v 1.7 2000/09/28 13:33:17 anker Exp $
+// $Id: PairExpRDFIntegrator_test.C,v 1.8 2000/12/01 15:17:03 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PairExpRDFIntegrator_test.C,v 1.7 2000/09/28 13:33:17 anker Exp $")
+START_TEST(class_name, "$Id: PairExpRDFIntegrator_test.C,v 1.8 2000/12/01 15:17:03 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -98,43 +98,14 @@ CHECK(PairExpRDFIntegrator::PairExpRDFIntegrator(double alpha, double C1, double
 RESULT
 
 
-CHECK(PairExpRDFIntegrator::destroy())
-	PairExpRDFIntegrator integrator(alpha, C1, C2, R_ij_o, k1, k2, rdf);
-	integrator.destroy();
-	vector<Interval> nope;
-	bool test = (integrator.getRDF().getRepresentation().getIntervals() == nope);
-	TEST_EQUAL(test, true);
-	vector<Coefficients> naught;
-	test = (integrator.getRDF().getRepresentation().getCoefficients() == naught);
-	TEST_EQUAL(test, true);
-	// BAUSTELLE: Konstanten
-	// BAUSTELLE: false, Spezialfälle
-RESULT
-
-
 CHECK(PairExpRDFIntegrator::clear())
 	PairExpRDFIntegrator integrator(alpha, C1, C2, R_ij_o, k1, k2, rdf);
-	integrator.destroy();
+	integrator.clear();
 	vector<Interval> nope;
 	bool test = (integrator.getRDF().getRepresentation().getIntervals() == nope);
 	TEST_EQUAL(test, true);
 	vector<Coefficients> naught;
 	test = (integrator.getRDF().getRepresentation().getCoefficients() == naught);
-	TEST_EQUAL(test, true);
-	// BAUSTELLE: Konstanten
-	// BAUSTELLE: false, Spezialfälle
-RESULT
-
-
-CHECK(PairExpRDFIntegrator::set(const PairExpRDFIntegrator& integrator))
-	PairExpRDFIntegrator int1;
-	int1.setRDF(RadialDistributionFunction(poly));
-	int1.setConstants(alpha, C1, C2, R_ij_o, k1, k2);
-	PairExpRDFIntegrator int2;
-	int2.set(int1);
-	bool test = (int2.getRDF().getRepresentation().getIntervals() == intervals);
-	TEST_EQUAL(test, true);
-	test = (int2.getRDF().getRepresentation().getCoefficients() == coefs);
 	TEST_EQUAL(test, true);
 	// BAUSTELLE: Konstanten
 	// BAUSTELLE: false, Spezialfälle
