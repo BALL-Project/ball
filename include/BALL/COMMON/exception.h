@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.3 1999/09/01 12:09:19 hekl Exp $
+// $Id: exception.h,v 1.4 1999/09/01 12:11:37 oliver Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -12,7 +12,6 @@
 #endif
 
 #include <string>
-
 
 namespace BALL 
 {
