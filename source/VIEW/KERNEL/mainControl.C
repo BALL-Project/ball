@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.124 2004/11/10 15:22:11 amoll Exp $
+// $Id: mainControl.C,v 1.125 2004/11/10 15:41:27 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -81,18 +81,26 @@ namespace BALL
 			:	QMainWindow(parent, name),
 				ConnectionObject(),
 				Embeddable("BALL::VIEW::MainControl"),
+				fragment_db_(),
 				selection_(),
+				control_selection_(),
 				message_label_(new QLabel("" , statusBar())),
 				primitive_manager_(this),
+				composite_manager_(),
 				main_control_preferences_(0),
 				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
 				preferences_id_(-1),
 				delete_id_(0),
+				preferences_(),
 				composites_locked_by_main_control_(false),
 				locking_widget_(0),
 				stop_simulation_(false),
 				simulation_thread_(0),
-				timer_(new StatusbarTimer(this)),
+				modular_widgets_(),
+				menu_entries_hints_(),
+				timer_(this),
+				simulation_icon_(0),
+				working_dir_(),
 				logging_file_name_("VIEW.log"),
 				logging_to_file_(false),
 				about_to_quit_(false)
@@ -171,8 +179,8 @@ namespace BALL
 			message_label_->setFont(font); 
 			message_label_->setFrameShape(QLabel::NoFrame);
 
-			timer_->setLabel(message_label_);
-			timer_->setInterval(2000);
+			timer_.setLabel(message_label_);
+			timer_.setInterval(2000);
 
 			connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
 			connect(menuBar(), SIGNAL(highlighted(int)), this, SLOT(menuItemHighlighted(int)));
@@ -411,23 +419,12 @@ namespace BALL
 			// overridden in Controls
 			if (delete_id_ != 0) menuBar()->setItemEnabled(delete_id_, false);
 
-			#ifdef BALL_QT_HAS_THREADS
-			/*
-			setCompositesMuteable(simulation_thread_ == 0 && 
-														Representation::getUpdateThread() == 0 &&
-														locking_widget_ == 0);
-														*/
-			#endif
-
 			// checks all modular widgets 
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
 			for (; it != modular_widgets_.end(); ++it)
 			{
 				(*it)->checkMenu(*this);
 			}
-
-			if (compositesAreLocked()) 	simulation_icon_->hide();
-			else 												simulation_icon_->show();
 
 			menuBar()->setItemEnabled(MENU_STOPSIMULATION, simulation_thread_ != 0);
 		}
@@ -1191,15 +1188,15 @@ namespace BALL
 				QApplication::beep();
 			}
 
-			if (!important && timer_->isImportant())
+			if (!important && timer_.isImportant())
 			{
 				return;
 			}
 
 			message_label_->setText(text.c_str());
 
-			timer_->setImportant(important);
-			timer_->startTimer();
+			timer_.setImportant(important);
+			timer_.startTimer();
 			QWidget::update();
 		}
 
