@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.2 2002/09/06 10:38:35 aubertin Exp $
+// $Id: contourSurface.h,v 1.3 2002/09/10 08:09:22 aubertin Exp $
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
 #define BALL_DATATYPE_CONTOURSURFACE_H
@@ -408,9 +408,8 @@ static int corner_rotation[NUM_CUBE_ROTATIONS][NUM_CUBE_VERTICES] = {
           normal[i]/=l;
           }
 				}
-      Log.info()<<"Anzahl Dreiecke: "<<triangle.size()<<endl;
-      Log.info()<<"Anzahl Normalen: "<<normal.size()<<endl;
-      Log.info()<<"Anzahl Knoten: "<<vertex.size()<<endl;
+      Log.info()<<"Number of triangles generated: "<<triangle.size()<<endl;
+      Log.info()<<"consisting of "<<vertex.size()<<" vertices"<<endl;
 		}
 
 template<typename T>
@@ -436,29 +435,29 @@ void TContourSurface<T>::generateFacetData() {
                     {
                       if (init_facet_data[j][l]>=0) 
                         { 
-                          if(true)
-														{
+                          //if(true)
+													//	{
                           facet_data[i][11-l] = edge_rotation[k][init_facet_data[j][l]];
                           facet_data[0xFF-i][l] = edge_rotation[k][init_facet_data[j][l]];
-														}
+													/*	}
                           else
                             {
                           facet_data[i][l] = edge_rotation[k][init_facet_data[j][l]];
                           facet_data[0xFF-i][11-l] = edge_rotation[k][init_facet_data[j][l]];
-														}
+													}*/
                         }
                       else 
                         { 
-                          if(true)
-														{
+                          //if(true)
+													//	{
                           facet_data[i][11-l] = (-1);
                           facet_data[0xFF-i][l] = (-1);
-														}
+													/*	}
                          else
                             {
                           facet_data[i][l] = (-1);
                           facet_data[0xFF-i][11-l] = (-1);
-														}
+													}*/
                         }
                     }
                 }
@@ -479,291 +478,155 @@ void TContourSurface<T>::computeTriangles(int topology, RegularData3D& from) {
   Normal normale;
   pos=0;
   double threshold = height_;
+  KeyType key;
+
     for(int i=0;i<12;i++) { 
       vec=currentCoords;
 			switch(facet_data[topology][i])
 				{
         case -1: break;
         case 0:
+					  key=pair<Position,Position>(currentPosition,currentPosition+number_of_cells_x*number_of_cells_y);
             d1  = from[currentPosition];
             d2  = from[currentPosition + number_of_cells_y*number_of_cells_x];
             slope = (d2 - d1) / z_spacing;
             vec.z += (threshold - d1)/slope;
-            if (h.has(pair<Position,Position>(currentPosition,currentPosition+number_of_cells_x*number_of_cells_y)))
-							{
-								data_[pos]=h[(pair<Position,Position>(currentPosition,currentPosition+number_of_cells_x*number_of_cells_y))];
-              }
-            else 
-							{
-               h.insert(pair<pair<Position,Position>,unsigned int>
-											 (pair<Position,Position>(currentPosition,currentPosition+number_of_cells_x*number_of_cells_y), size));
-               vertex.push_back(vec);
-               normal.push_back(Vector3(0,0,0));
-							 data_[pos]=(size);
-               size++;
-              }
 						break;
 
         case 1: 
+					  key=pair<Position,Position>(currentPosition,currentPosition+1);
 						d1  = from[currentPosition];
 						d2  = from[currentPosition + 1];
 						slope = (d2 - d1) / x_spacing;
 						vec.x += (threshold - d1)/slope;	
-          	 if (h.has(pair<Position,Position>(currentPosition,currentPosition+1)))
-							{
-								data_[pos]=h[(pair<Position,Position>(currentPosition,currentPosition+1))];
-              }
-            else 
-							{
-               h.insert(pair<pair<Position,Position>,unsigned int>
-											 (pair<Position,Position>(currentPosition,currentPosition+1), size));
-               vertex.push_back(vec);
-               normal.push_back(Vector3(0,0,0));
-							 data_[pos]=size;
-               size++;
-              }	
             break;
 
         case 2:
+					  key=pair<Position,Position>(currentPosition+1,currentPosition+1+number_of_cells_x*number_of_cells_y);
             vec.x+=x_spacing;
 						d1  = from[currentPosition + 1];
             d2  = from[currentPosition + 1 + number_of_cells_x*number_of_cells_y];
 						slope = (d2 - d1) / z_spacing;
-						vec.z += (threshold - d1)/slope; 
-            if (h.has(pair<Position,Position>(currentPosition+1,currentPosition+1+number_of_cells_x*number_of_cells_y)))
-							{
-								data_[pos]=h[(pair<Position,Position>(currentPosition+1,currentPosition+1+number_of_cells_x*number_of_cells_y))];
-              }
-            else 
-							{
-               h.insert(pair<pair<Position,Position>,unsigned int>
-											 (pair<Position,Position>(currentPosition+1,currentPosition+1+number_of_cells_x*number_of_cells_y), size));
-               vertex.push_back(vec);
-               normal.push_back(Vector3(0,0,0));
-							 data_[pos]=size;
-               size++;
-              }	
+						vec.z += (threshold - d1)/slope; 	
 						break;
 
         case 3:
+					  key=pair<Position,Position>(currentPosition+number_of_cells_x*number_of_cells_y,currentPosition+1+number_of_cells_x*number_of_cells_y);
             vec.z+=z_spacing;
 						d1  = from[currentPosition + number_of_cells_x*number_of_cells_y];
 						d2  = from[currentPosition + 1 + number_of_cells_x*number_of_cells_y];
 						slope = (d2 - d1) / x_spacing;
 						vec.x += (threshold - d1)/slope;
-            if (h.has(pair<Position,Position>(currentPosition+number_of_cells_x*number_of_cells_y,currentPosition+1+number_of_cells_x*number_of_cells_y)))
-							{
-								data_[pos]=h[(pair<Position,Position>(currentPosition+number_of_cells_x*number_of_cells_y,currentPosition+1+number_of_cells_x*number_of_cells_y))];
-              }
-            else 
-							{
-               h.insert(pair<pair<Position,Position>,unsigned int>
-											 (pair<Position,Position>(currentPosition+number_of_cells_x*number_of_cells_y,currentPosition+1+number_of_cells_x*number_of_cells_y), size));
-               vertex.push_back(vec);
-               normal.push_back(Vector3(0,0,0));
-							 data_[pos]=size;
-               size++;
-              }
             break;
 
         case 4:
+					  key=pair<Position,Position>(currentPosition+number_of_cells_x,currentPosition+number_of_cells_x*(number_of_cells_y+1));
             vec.y+=y_spacing;
             d1  = from[currentPosition + number_of_cells_x];
             d2  = from[currentPosition + number_of_cells_x*(number_of_cells_y+1)];
             slope = (d2 - d1) / z_spacing;
             vec.z += (threshold - d1)/slope;
-            if (h.has(pair<Position,Position>(currentPosition+number_of_cells_x,currentPosition+number_of_cells_x*(number_of_cells_y+1))))
-							{
-								data_[pos]=h[(pair<Position,Position>(currentPosition+number_of_cells_x,currentPosition+number_of_cells_x*(number_of_cells_y+1)))];
-              }
-            else 
-							{
-               h.insert(pair<pair<Position,Position>,unsigned int>
-											 (pair<Position,Position>(currentPosition+number_of_cells_x,currentPosition+number_of_cells_x*(number_of_cells_y+1)), size));
-               vertex.push_back(vec);
-               normal.push_back(Vector3(0,0,0));
-							 data_[pos]=size;
-               size++;
-							}
             break;
 
 				case 5:
+			  		key=pair<Position,Position>(currentPosition+number_of_cells_x,currentPosition+number_of_cells_x+1);
             vec.y+=y_spacing;
             d1  = from[currentPosition + number_of_cells_x];
             d2  = from[currentPosition + 1 + number_of_cells_x];
             slope = (d2 - d1) / x_spacing;
             vec.x += (threshold - d1)/slope;
-           if (h.has(pair<Position,Position>(currentPosition+number_of_cells_x,currentPosition+number_of_cells_x+1)))
-							{
-								data_[pos]=h[(pair<Position,Position>(currentPosition+number_of_cells_x,currentPosition+number_of_cells_x+1))];
-              }
-            else 
-							{
-               h.insert(pair<pair<Position,Position>,unsigned int>
-											 (pair<Position,Position>(currentPosition+number_of_cells_x,currentPosition+number_of_cells_x+1), size));
-               vertex.push_back(vec);
-               normal.push_back(Vector3(0,0,0));
-							 data_[pos]=size;;
-               size++;
-              }
             break;
 
 				case 6:
+					  key=pair<Position,Position>(currentPosition+1+number_of_cells_x,currentPosition+1+number_of_cells_x*(number_of_cells_y+1));
             vec.y+=y_spacing;
             vec.x+=x_spacing;
             d1  = from[currentPosition + 1 + number_of_cells_x];
             d2  = from[currentPosition + 1 + number_of_cells_x*(number_of_cells_y+1)];
             slope = (d2 - d1) / z_spacing;
             vec.z += (threshold - d1)/slope;
-            if (h.has(pair<Position,Position>(currentPosition+1+number_of_cells_x,currentPosition+1+number_of_cells_x*(number_of_cells_y+1))))
-							{
-								data_[pos]=h[(pair<Position,Position>(currentPosition+1+number_of_cells_x,currentPosition+1+number_of_cells_x*(number_of_cells_y+1)))];
-              }
-            else 
-							{
-               h.insert(pair<pair<Position,Position>,unsigned int>
-											 (pair<Position,Position>(currentPosition+1+number_of_cells_x,currentPosition+1+number_of_cells_x*(number_of_cells_y+1)), size));
-               vertex.push_back(vec);
-               normal.push_back(Vector3(0,0,0));
-							 data_[pos]=size;
-               size++;
-              }
 						break;
 
 			  case 7:
+					  key=pair<Position,Position>(currentPosition+number_of_cells_x*(number_of_cells_y+1),currentPosition+1+number_of_cells_x*(number_of_cells_y+1));
             vec.z+=z_spacing;
 						vec.y+=y_spacing;
             d1  = from[currentPosition + number_of_cells_x*(number_of_cells_y+1)];
             d2  = from[currentPosition + 1 + number_of_cells_x*(number_of_cells_y+1)];
             slope = (d2 - d1) / x_spacing;
             vec.x += (threshold - d1)/slope;
-            if (h.has(pair<Position,Position>(currentPosition+number_of_cells_x*(number_of_cells_y+1),currentPosition+1+number_of_cells_x*(number_of_cells_y+1))))
-							{
-								data_[pos]=h[(pair<Position,Position>(currentPosition+number_of_cells_x*(number_of_cells_y+1),currentPosition+1+number_of_cells_x*(number_of_cells_y+1)))];
-              }
-            else 
-							{
-               h.insert(pair<pair<Position,Position>,unsigned int>
-											 (pair<Position,Position>(currentPosition+number_of_cells_x*(number_of_cells_y+1),currentPosition+1+number_of_cells_x*(number_of_cells_y+1)), size));
-               vertex.push_back(vec);
-               normal.push_back(Vector3(0,0,0));
-							 data_[pos]=size;
-               size++;
-							}
 						break;
 
 
 				case 8:
+					  key=pair<Position,Position>(currentPosition+number_of_cells_x*number_of_cells_y,currentPosition+number_of_cells_x*(number_of_cells_y+1));
             vec.z+=z_spacing;
             d1  = from[currentPosition + number_of_cells_x*number_of_cells_y];
             d2  = from[currentPosition + number_of_cells_x*(number_of_cells_y+1)];
             slope = (d2 - d1) / y_spacing;
-            vec.y += (threshold - d1)/slope;
-            if (h.has(pair<Position,Position>(currentPosition+number_of_cells_x*number_of_cells_y,currentPosition+number_of_cells_x*(number_of_cells_y+1))))
-							{
-								data_[pos]=h[(pair<Position,Position>(currentPosition+number_of_cells_x*number_of_cells_y,currentPosition+number_of_cells_x*(number_of_cells_y+1)))];
-              }
-            else 
-							{
-               h.insert(pair<pair<Position,Position>,unsigned int>
-											 (pair<Position,Position>(currentPosition+number_of_cells_x*number_of_cells_y,currentPosition+number_of_cells_x*(number_of_cells_y+1)), size));
-               vertex.push_back(vec);
-               normal.push_back(Vector3(0,0,0));
-							 data_[pos]=size;
-               size++;
-              }
+            vec.y += (threshold - d1)/slope; 
             break;
 
 				case 9:
+				    key=pair<Position,Position>(currentPosition,currentPosition+number_of_cells_x);
             d1  = from[currentPosition];
             d2  = from[currentPosition + number_of_cells_x];
             slope = (d2 - d1) / y_spacing;
             vec.y += (threshold - d1)/slope;
-            if (h.has(pair<Position,Position>(currentPosition,currentPosition+number_of_cells_x)))
-							{
-								data_[pos]=h[(pair<Position,Position>(currentPosition,currentPosition+number_of_cells_x))];
-              }
-            else 
-							{
-               h.insert(pair<pair<Position,Position>,unsigned int>
-											 (pair<Position,Position>(currentPosition,currentPosition+number_of_cells_x), size));
-               vertex.push_back(vec);
-               normal.push_back(Vector3(0,0,0));
-							 data_[pos]=size;
-               size++;
-              }
             break;
 
 			 case 10:
+			      key=pair<Position,Position>(currentPosition+1,currentPosition+1+number_of_cells_x);
             vec.x+=x_spacing;
 						d1  = from[currentPosition + 1];
             d2  = from[currentPosition + 1 + number_of_cells_x];
 						slope = (d2 - d1) / y_spacing;
 						vec.y += (threshold - d1)/slope;
-            if (h.has(pair<Position,Position>(currentPosition+1,currentPosition+1+number_of_cells_x)))
-							{
-								data_[pos]=h[(pair<Position,Position>(currentPosition+1,currentPosition+1+number_of_cells_x))];
-              }
-            else 
-							{
-               h.insert(pair<pair<Position,Position>,unsigned int>
-											 (pair<Position,Position>(currentPosition+1,currentPosition+1+number_of_cells_x), size));
-               vertex.push_back(vec);
-               normal.push_back(Vector3(0,0,0));
-							 data_[pos]=size;
-               size++;
-              }
             break;
 
 			 case 11:
+			      key=pair<Position,Position>(currentPosition+1+number_of_cells_x*number_of_cells_y,currentPosition+1+number_of_cells_x*(number_of_cells_y+1));
             vec.z+=z_spacing;
             vec.x+=x_spacing;
 						d1  = from[currentPosition + 1 + number_of_cells_x*number_of_cells_y];
             d2  = from[currentPosition + 1 + number_of_cells_x*(number_of_cells_y+1)];
 						slope = (d2 - d1) / y_spacing;
 						vec.y += (threshold - d1)/slope;
-            if (h.has(pair<Position,Position>(currentPosition+1+number_of_cells_x*number_of_cells_y,currentPosition+1+number_of_cells_x*(number_of_cells_y+1))))
-							{
-								data_[pos]=h[(pair<Position,Position>(currentPosition+1+number_of_cells_x*number_of_cells_y,currentPosition+1+number_of_cells_x*(number_of_cells_y+1)))];
-              }
-            else 
-							{
-               h.insert(pair<pair<Position,Position>,unsigned int>
-											 (pair<Position,Position>(currentPosition+1+number_of_cells_x*number_of_cells_y,currentPosition+1+number_of_cells_x*(number_of_cells_y+1)), size));
-               vertex.push_back(vec);
-               normal.push_back(Vector3(0,0,0));
-							 data_[pos]=size;
-               size++;
-              }
             break;
 						}
-			if ((facet_data[topology][i])!=-1){pos++;}
-			if (pos==3)
-				 {
-          t.v1=data_[0];
-          t.v2=data_[1];
-          t.v3=data_[2];
-          triangle.push_back(t);
-          pos=0;
-          h1=vertex[t.v1]-vertex[t.v2];
-          h2=vertex[t.v3]-vertex[t.v2];
-          normale.x=h1.y*h2.z-h1.z*h2.y;
-          normale.y=h1.z*h2.x-h2.z*h1.x;
-          normale.z=h1.x*h2.y-h1.y*h2.x;
-          //if((vertex[t.v1]+normale).getLength()<(vertex[t.v1]).getLength())
-          //Vector3 h;
-          
-          /*h.x=vertex[t.v1].x+(normale.x/abs(normale.x))*x_spacing;
-          h.y=vertex[t.v1].y+(normale.y/abs(normale.y))*x_spacing;
-          h.z=vertex[t.v1].z+(normale.z/abs(normale.z))*x_spacing;
-          if(from[from.getGridCoordinates(vertex[t.v1])]<from[from.getGridCoordinates(vertex[t.v1]+(normale/normale.getLength()))])
-						{
-							normale*=(-1);
-							}*/
-          normal[t.v1]+=normale;
-          normal[t.v2]+=normale;
-          normal[t.v3]+=normale;
-				 }
+
+			if ((facet_data[topology][i])!=-1)
+       {
+				 if (h.has(key))
+					 {
+						 data_[pos]=h[key];
+					 }
+				 else 
+					 {
+						 h.insert(pair<KeyType,unsigned int>(key, size));
+						 vertex.push_back(vec);
+						 normal.push_back(Vector3(0,0,0));
+						 data_[pos]=size;
+						 size++;
+					 }
+				 pos++;
+				 if (pos==3)
+					 {
+						 t.v1=data_[0];
+						 t.v2=data_[1];
+						 t.v3=data_[2];
+						 triangle.push_back(t);
+						 pos=0;
+						 h1=vertex[t.v1]-vertex[t.v2];
+						 h2=vertex[t.v3]-vertex[t.v2];
+						 normale.x=h1.y*h2.z-h1.z*h2.y;
+						 normale.y=h1.z*h2.x-h2.z*h1.x;
+						 normale.z=h1.x*h2.y-h1.y*h2.x;
+						 normal[t.v1]+=normale;
+						 normal[t.v2]+=normale;
+						 normal[t.v3]+=normale;
+					 }
+			 }
     }
 }
 
