@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.60.2.6 2005/01/16 22:54:52 amoll Exp $
+// $Id: representation.C,v 1.60.2.7 2005/01/24 12:13:45 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 
 #include <BALL/KERNEL/atom.h>
@@ -372,8 +373,8 @@ namespace BALL
 			MainControl* mc = getMainControl();
 			if (mc != 0)
 			{
-				RepresentationMessage* message = new RepresentationMessage(**it, RepresentationMessage::UPDATE);
-				mc->sendMessage(message);
+				RepresentationMessage* message = new RepresentationMessage(*this, RepresentationMessage::UPDATE);
+				mc->sendMessage(*message);
 			}
 #endif
 		}
