@@ -1,4 +1,4 @@
-// $Id: colorRGBA.h,v 1.3 2001/07/06 15:30:48 aubertin Exp $
+// $Id: colorRGBA.h,v 1.4 2001/07/11 14:08:47 aubertin Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #define BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -35,8 +35,8 @@ namespace BALL
 				informations.
 				@memo    ColorRGBA class (BALL VIEW datatype framework)
 				@author  $Author: aubertin $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/07/06 15:30:48 $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/07/11 14:08:47 $
 		*/
 		class ColorRGBA
 		{
@@ -335,11 +335,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the red component.
-					Accesses the constant reference of the red component of {\em *this} colorRGBA.
-					See \Ref{ColorUnit} for further information concerning type conversion.
-					@return      ColorUnit& constant reference to the red component of {\em *this} colorRGBA
-					@see         setRed
-					@see         ColorUnit
+					For further information see {\em ColorUnit& getRed()}.
 			*/
 			const ColorUnit& getRed() const
 				throw();
@@ -365,11 +361,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the green component.
-					Accesses the constant reference of the green component of {\em *this} colorRGBA.
-					See \Ref{ColorUnit} for further information concerning type conversion.
-					@return      ColorUnit& constant reference to the green component of {\em *this} colorRGBA
-					@see         setGreen
-					@see         ColorUnit
+					For further information see {\em ColorUnit& getGreen()}.
 			*/
 			const ColorUnit& getGreen() const
 				throw();
@@ -395,11 +387,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the blue component.
-					Accesses the constant reference of the blue component of {\em *this} colorRGBA.
-					See \Ref{ColorUnit} for further information concerning type conversion.
-					@return      ColorUnit& constant reference to the blue component of {\em *this} colorRGBA
-					@see         setBlue
-					@see         ColorUnit
+    					For further information see {\em ColorUnit& getBlue()}
 			*/
 			const ColorUnit& getBlue() const
 				throw();
@@ -425,11 +413,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the alpha component.
-					Accesses the constant reference of the alpha component of {\em *this} colorRGBA.
-					See \Ref{ColorUnit} for further information concerning type conversion.
-					@return      ColorUnit& constant reference to the alpha component of {\em *this} colorRGBA
-					@see         setAlpha
-					@see         ColorUnit
+			                For further information see {\em ColorUnit& getAlpha()}.
 			*/
 			const ColorUnit& getAlpha() const
 				throw();
