@@ -1,4 +1,4 @@
-// $Id: solventDescriptor.C,v 1.5 2001/07/10 17:23:58 amoll Exp $
+// $Id: solventDescriptor.C,v 1.6 2001/07/16 23:59:10 amoll Exp $
 
 #include <BALL/SOLVATION/solventDescriptor.h>
 
@@ -67,7 +67,7 @@ namespace BALL
 	}
 
 
-	String SolventDescriptor::getName() const throw()
+	const String& SolventDescriptor::getName() const throw()
 	{
 		return name_;
 	}
@@ -92,8 +92,14 @@ namespace BALL
 	}
 
 
-	std::vector<SolventAtomDescriptor>
+	const std::vector<SolventAtomDescriptor>&
 		SolventDescriptor::getSolventAtomDescriptorList() const throw()
+	{
+		return solvent_atoms_;
+	}
+	
+	std::vector<SolventAtomDescriptor>&
+		SolventDescriptor::getSolventAtomDescriptorList() throw()
 	{
 		return solvent_atoms_;
 	}
@@ -104,7 +110,18 @@ namespace BALL
 		return (Size)solvent_atoms_.size();
 	}
 
-	SolventAtomDescriptor SolventDescriptor::getAtomDescriptor(Position index) const 
+	const SolventAtomDescriptor& SolventDescriptor::getAtomDescriptor(Position index) const 
+		throw(Exception::IndexOverflow)
+	{
+		if (index >= solvent_atoms_.size())
+		{
+			throw(Exception::IndexOverflow(__FILE__, __LINE__, index, solvent_atoms_.size()));
+		}
+		
+		return solvent_atoms_[index];
+	}
+
+	SolventAtomDescriptor& SolventDescriptor::getAtomDescriptor(Position index)  
 		throw(Exception::IndexOverflow)
 	{
 		if (index >= solvent_atoms_.size())
@@ -135,14 +152,14 @@ namespace BALL
 		// NOTE: This implementation does not recognize descriptions that
 		// have the atoms in different order!
 
-		vector<SolventAtomDescriptor>::const_iterator it = solvent_atoms_.begin();
+		vector<SolventAtomDescriptor>::const_iterator it  = 					 solvent_atoms_.begin();
 		vector<SolventAtomDescriptor>::const_iterator it2 = descriptor.solvent_atoms_.begin();
 
 		for (; it != solvent_atoms_.end(); ++it, ++it2)
 		{
-			if ((it->type != it2->type) 
-				|| (it->element_symbol != it2->element_symbol)
-				|| (it->radius != it2->radius)
+			if  ((it->type 					 	!= it2->type) 
+				|| (it->element_symbol 	!= it2->element_symbol)
+				|| (it->radius 				 	!= it2->radius)
 				|| (it->number_of_atoms != it2->number_of_atoms))
 			{
 				return false;

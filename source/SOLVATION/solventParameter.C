@@ -1,4 +1,4 @@
-// $Id: solventParameter.C,v 1.4 2000/10/20 15:20:44 anker Exp $
+// $Id: solventParameter.C,v 1.5 2001/07/16 23:59:10 amoll Exp $
 
 #include <BALL/SOLVATION/solventParameter.h>
 
@@ -30,7 +30,6 @@ namespace BALL
 	SolventParameter::~SolventParameter() throw()
 	{
 		clear();
-
 		valid_ = false;
 	}
 
@@ -70,10 +69,16 @@ namespace BALL
 	}
 
 
-	SolventDescriptor SolventParameter::getSolventDescriptor() const throw()
+	SolventDescriptor& SolventParameter::getSolventDescriptor() throw()
 	{
 		return solvent_descriptor_;
 	}
+
+	const SolventDescriptor& SolventParameter::getSolventDescriptor() const throw()
+	{
+		return solvent_descriptor_;
+	}
+
 
 	bool SolventParameter::extractSection(ForceFieldParameters& parameters,
 			const String& section_name) throw()
@@ -90,8 +95,7 @@ namespace BALL
 		// check whether all variables we need are defined, terminate otherwi
 		if (!hasVariable("radius") || !hasVariable("number_of_atoms") || !hasVariable("element_symbol"))
 		{
-			Log.error() << "SolventParameter::extractSection(): Variable missing." 
-				<< endl;
+			Log.error() << "SolventParameter::extractSection(): Variable missing." << endl;
 			return false;
 		}
 		else
@@ -102,17 +106,16 @@ namespace BALL
 			}
 			else
 			{
-				Log.warn() << "SolventParameter::extractSection(): no name given." 
-					<< endl;
+				Log.warn() << "SolventParameter::extractSection(): no name given." << endl;
 			}
+
 			if (options.has("number_density"))
 			{
 				number_density_ = options.getReal("number_density");
 			}
 			else
 			{
-				Log.warn() << "SolventParameter::extractSection(): "
-					<< "no number density given." << endl;
+				Log.warn() << "SolventParameter::extractSection(): " << "no number density given." << endl;
 			}
 
 			AtomTypes& atom_types = parameters.getAtomTypes();         
@@ -136,13 +139,12 @@ namespace BALL
 				}
 				else
 				{
-					Log.error() << "SolventParameter::extractSection(): "
-						<< "Cannot assign atom type." << endl;
+					Log.error() << "SolventParameter::extractSection(): " << "Cannot assign atom type." << endl;
 				}
 			}
 			// build descriptor 
-			solvent_descriptor_ = SolventDescriptor(name_, number_density_,
-					solvent_atoms_);
+			solvent_descriptor_ = SolventDescriptor(name_, number_density_, solvent_atoms_);
+
 			return true;
 		}
 	}

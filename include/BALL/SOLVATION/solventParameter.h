@@ -1,4 +1,4 @@
-// $Id: solventParameter.h,v 1.4 2001/03/05 01:55:44 amoll Exp $
+// $Id: solventParameter.h,v 1.5 2001/07/16 23:58:52 amoll Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTPARAMETER_H
 #define BALL_SOLVATION_SOLVENTPARAMETER_H
@@ -61,7 +61,7 @@ namespace BALL
 		/** Assignment operator 
 		*/
 		const SolventParameter& operator = (const SolventParameter& param)
-		throw();
+			throw();
 
 		/** Clear method 
 		*/
@@ -74,7 +74,12 @@ namespace BALL
 
 		/** Return a SolventDescriptor with the values from the parameter file 
 		*/
-		SolventDescriptor getSolventDescriptor() const throw();
+		const SolventDescriptor& getSolventDescriptor() const throw();
+
+		/** Return a SolventDescriptor with the values from the parameter file.
+		 * 	Muteable version.
+		 */
+		SolventDescriptor& getSolventDescriptor() throw();
 
 		//@}
 		/** @name Predicates 

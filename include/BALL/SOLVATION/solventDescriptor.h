@@ -1,4 +1,4 @@
-// $Id: solventDescriptor.h,v 1.8 2001/07/10 17:22:40 amoll Exp $
+// $Id: solventDescriptor.h,v 1.9 2001/07/16 23:58:34 amoll Exp $
 
 #ifndef BALL_SOLVATION_SOLVENTDESCRIPTOR_H
 #define BALL_SOLVATION_SOLVENTDESCRIPTOR_H
@@ -99,7 +99,7 @@ namespace BALL
 
 		/** Get the name 
 		*/
-		String getName() const throw();
+		const String& getName() const throw();
 
 		/** Set the number density 
 		*/
@@ -116,7 +116,12 @@ namespace BALL
 
 		/** Get the list of atom descriptors 
 		*/
-		std::vector<SolventAtomDescriptor> getSolventAtomDescriptorList() const
+		const std::vector<SolventAtomDescriptor>& getSolventAtomDescriptorList() const
+			throw();
+		
+		/** Get the list of atom descriptors 
+		*/
+		std::vector<SolventAtomDescriptor>& getSolventAtomDescriptorList()
 			throw();
 
 		/** Get the number of different atom types within a solvent molecule 
@@ -125,7 +130,12 @@ namespace BALL
 
 		/** Get atom decriptions by index 
 		*/
-		SolventAtomDescriptor getAtomDescriptor(Position index) const 
+		const SolventAtomDescriptor& getAtomDescriptor(Position index) const 
+			throw(Exception::IndexOverflow);
+		
+		/** Get atom decriptions by index 
+		*/
+		SolventAtomDescriptor& getAtomDescriptor(Position index) 
 			throw(Exception::IndexOverflow);
 
 		//@}
