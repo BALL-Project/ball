@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>441</width>
-            <height>280</height>
+            <height>283</height>
         </rect>
     </property>
     <property name="caption">
@@ -17,7 +17,7 @@
     </property>
     <widget class="QTabWidget">
         <property name="name">
-            <cstring>cartoon_tube_radius</cstring>
+            <cstring>tabwidget</cstring>
         </property>
         <property name="geometry">
             <rect>
@@ -164,31 +164,6 @@
                     </rect>
                 </property>
             </spacer>
-            <widget class="QLineEdit">
-                <property name="name">
-                    <cstring>ball_stick_cylinder_radius</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>149</x>
-                        <y>11</y>
-                        <width>50</width>
-                        <height>22</height>
-                    </rect>
-                </property>
-                <property name="minimumSize">
-                    <size>
-                        <width>50</width>
-                        <height>22</height>
-                    </size>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>30</width>
-                        <height>32767</height>
-                    </size>
-                </property>
-            </widget>
             <widget class="QLabel">
                 <property name="name">
                     <cstring>textLabel1_2</cstring>
@@ -230,6 +205,31 @@
                     </rect>
                 </property>
             </spacer>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>ball_stick_cylinder_radius</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>149</x>
+                        <y>11</y>
+                        <width>50</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>50</width>
+                        <height>22</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>30</width>
+                        <height>32767</height>
+                    </size>
+                </property>
+            </widget>
             <widget class="QLineEdit">
                 <property name="name">
                     <cstring>ball_stick_sphere_radius</cstring>
@@ -454,7 +454,7 @@
             </spacer>
             <widget class="QLineEdit">
                 <property name="name">
-                    <cstring>lineEdit1_4</cstring>
+                    <cstring>tube_radius</cstring>
                 </property>
                 <property name="geometry">
                     <rect>
@@ -536,7 +536,7 @@
                             </spacer>
                             <widget class="QLineEdit">
                                 <property name="name">
-                                    <cstring>lineEdit1_4_2</cstring>
+                                    <cstring>cartoon_tube_radius</cstring>
                                 </property>
                                 <property name="minimumSize">
                                     <size>

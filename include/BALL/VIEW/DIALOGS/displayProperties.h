@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.16 2003/11/13 17:47:51 amoll Exp $
+// $Id: displayProperties.h,v 1.17 2003/11/13 19:30:32 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -27,6 +27,7 @@ namespace BALL
 		
 		class ColoringSettingsDialog;
 		class ModelSettingsDialog;
+		class Preferences;
 
 		/**	Dialog for creating and changing representations.
 				for a selection of molecular objects.
@@ -266,6 +267,7 @@ namespace BALL
 			// --------------------------------------------------------------------------------
 			ModelSettingsDialog* 			model_settings_;
 			ColoringSettingsDialog* 	coloring_settings_;
+			Preferences* 							preferences_;
 			
 			// the menu entry id of the dialog
 			int 				id_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.6 2003/10/18 10:59:16 amoll Exp $
+// $Id: backboneModel.C,v 1.7 2003/11/13 19:30:51 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -27,14 +27,16 @@ namespace BALL
 		AddBackboneModel::AddBackboneModel()
 			throw()
 			: ModelProcessor(),
-				last_parent_(0)
+				last_parent_(0),
+				tube_radius_(0.4)
 		{
 		}
 
 		AddBackboneModel::AddBackboneModel(const AddBackboneModel& add_Backbone)
 			throw()
 			:	ModelProcessor(add_Backbone),
-				last_parent_(0)
+				last_parent_(0),
+				tube_radius_(add_Backbone.tube_radius_)
 		{
 		}
 
@@ -53,6 +55,7 @@ namespace BALL
 			ModelProcessor::clear();
 			spline_vector_.clear();
 			last_parent_ = 0;
+			tube_radius_ = 0.4;
 		}
 
 		bool AddBackboneModel::start()
@@ -220,7 +223,7 @@ namespace BALL
 				Tube* tube = new Tube;
 				if (!tube) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
 				
-				tube->setRadius(0.4);
+				tube->setRadius(tube_radius_);
 				tube->setVertex1(last_point_);
 				tube->setVertex2(point);
 				tube->setComposite(atom);
@@ -237,7 +240,7 @@ namespace BALL
 			Sphere* sphere = new Sphere;
 			if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
 
-			sphere->setRadius(0.4);
+			sphere->setRadius(tube_radius_);
 			sphere->setPosition(point);
 			sphere->setComposite(atom);
 			geometric_objects_.push_back(sphere);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.35 2003/11/13 17:48:11 amoll Exp $
+// $Id: displayProperties.C,v 1.36 2003/11/13 19:30:23 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -47,6 +47,7 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 		ModularWidget(name),
 		model_settings_(0),
 		coloring_settings_(0),
+		preferences_(0),
 		id_(-1),
 		rep_(0)
 {
@@ -176,6 +177,7 @@ void DisplayProperties::finalizeWidget(MainControl& main_control)
 void DisplayProperties::initializePreferencesTab(Preferences &preferences)
 	throw()
 {
+	preferences_ = &preferences;
 	model_settings_ = new ModelSettingsDialog(this);
 	preferences.insertTab(model_settings_, "Model Options");
 	coloring_settings_ = new ColoringSettingsDialog(this);
@@ -383,17 +385,21 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 		case MODEL_STICK:
 			model_processor = new AddBallAndStickModel;
 			((AddBallAndStickModel*)model_processor)->enableStickModel();
+			((AddBallAndStickModel*)model_processor)->setStickRadius(model_settings_->getStickStickRadius());
 			break;
 			
 		case MODEL_BALL_AND_STICK:
 			model_processor = new AddBallAndStickModel;
-			((AddBallAndStickModel*) model_processor)->enableBallAndStickModel();
+			((AddBallAndStickModel*)model_processor)->enableBallAndStickModel();
+			((AddBallAndStickModel*)model_processor)->setStickRadius(model_settings_->getBallAndStickStickRadius());
+			((AddBallAndStickModel*)model_processor)->setBallRadius(model_settings_->getBallRadius());
 			break;
 			
 		case MODEL_SE_SURFACE:
 			{
 				AddSurfaceModel* surface_model = new AddSurfaceModel;
 				surface_model->setType(SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE);	
+				surface_model->setProbeRadius(model_settings_->getSurfaceProbeRadius());
 				model_processor = surface_model;
 			}
 			break;
@@ -402,24 +408,32 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 			{
 				AddSurfaceModel* surface_model = new AddSurfaceModel;
 				surface_model->setType(SurfaceProcessor::SOLVENT_ACCESSIBLE_SURFACE);
+				surface_model->setProbeRadius(model_settings_->getSurfaceProbeRadius());
 				model_processor = surface_model;
 			}
 			break;
 			
 		case MODEL_VDW:
 			model_processor = new AddVanDerWaalsModel;
+//			((AddVanDerWaalsModel*) model_processor)->setVDWRadiusFactor(model_settings_->getVDWRadiusFactor());
 			break;
 
 		case MODEL_BACKBONE:
 			model_processor = new AddBackboneModel;
+			((AddBackboneModel*) model_processor)->setTubeRadius(model_settings_->getTubeRadius());
 			break;
 
 		case MODEL_CARTOON:
 			model_processor = new AddCartoonModel;
+			((AddCartoonModel*) model_processor)->setTubeRadius(model_settings_->getCartoonTubeRadius());
+			((AddCartoonModel*) model_processor)->setHelixRadius(model_settings_->getCartoonSphereRadius());
+			((AddCartoonModel*) model_processor)->setArrowWidth(model_settings_->getCartoonArrowWidth());
+			((AddCartoonModel*) model_processor)->setArrowHeight(model_settings_->getCartoonArrowHeight());
 			break;
 			
 		case MODEL_HBONDS:
 			model_processor = new HBondModelProcessor;
+    	((HBondModelProcessor*) model_processor)->setRadius(model_settings_->getHBondsRadius());
 			break;
 			
 		default:
@@ -596,10 +610,20 @@ void DisplayProperties::precisionSliderChanged()
 
 void DisplayProperties::coloringOptionsPressed()
 {
+	if (preferences_ == 0) return;
+
+	preferences_->show();
+	//preferences_->setCurrentPage(preferences_->indexOf(coloring_settings_));
+	preferences_->showPage(coloring_settings_);
 }
 
 void DisplayProperties::modelOptionsPressed()
 {
+	if (preferences_ == 0) return;
+
+	preferences_->show();
+	//preferences_->setCurrentPage(preferences_->indexOf(model_settings_));
+	preferences_->showPage(model_settings_);
 }
 
 void DisplayProperties::precisionBoxChanged(int index)

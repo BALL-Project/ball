@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.6 2003/10/27 16:55:45 amoll Exp $
+// $Id: surfaceModel.C,v 1.7 2003/11/13 19:30:51 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/surfaceModel.h>
@@ -24,7 +24,8 @@ namespace BALL
 			: ModelProcessor(),
 				get_composite_(true),
 				start_composite_(0),
-				type_(SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE)
+				type_(SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE),
+				probe_radius_(1.5)
 		{
 		}
 
@@ -33,7 +34,8 @@ namespace BALL
 			:	ModelProcessor(add_surface),
 				get_composite_(true),
 				start_composite_(0),
-				type_(add_surface.type_)
+				type_(add_surface.type_),
+				probe_radius_(add_surface.probe_radius_)
 		{
 		}
 
@@ -77,6 +79,7 @@ namespace BALL
 
 			SurfaceProcessor sp;
 			sp.setType(getType());
+			sp.setProbeRadius(probe_radius_);
 
 			if (getSurfaceDrawingPrecision() != -1)
 			{

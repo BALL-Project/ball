@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.5 2003/10/18 10:59:34 amoll Exp $
+// $Id: backboneModel.h,v 1.6 2003/11/13 19:30:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -132,6 +132,14 @@ namespace BALL
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 
+			///
+			void setTubeRadius(float radius)
+				throw() { tube_radius_ = radius;}
+
+			///
+			float getTubeRadius() const
+				throw() { return tube_radius_;}
+
 			//@}
 
 			protected:
@@ -162,6 +170,8 @@ namespace BALL
 			Vector3 last_point_;
 			//_ Pointer to the parent of the last processed composite
 			Composite* last_parent_;
+
+			float tube_radius_;
 		};
 
 	} // namespace VIEW

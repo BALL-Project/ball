@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.7 2003/10/18 11:08:44 amoll Exp $
+// $Id: cartoonModel.h,v 1.8 2003/11/13 19:30:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -105,6 +105,31 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+
+			///
+			void setHelixRadius(float radius)
+				throw() { helix_radius_ = radius;}
+
+			///
+			float getHelixRadius() const
+				throw() { return helix_radius_;}
+
+			///
+			void setArrowWidth(float width)
+				throw() {arrow_width_ = width;}
+
+			///
+			float getArrowWidth() const
+				throw() { return arrow_width_;}
+
+			///
+			void setArrowHeight(float heigth)
+				throw() { arrow_height_ = heigth;}
+
+			///
+			float getArrowHeight() const
+				throw() { return arrow_height_;}
+
 			//@}
 
 			protected:
@@ -121,6 +146,10 @@ namespace BALL
 			void insertTriangle_(Position v1, Position v2, Position v3, Mesh& mesh);
 
 			std::vector<Vector3> spline_;
+
+			float helix_radius_;
+			float arrow_width_;
+			float arrow_height_;
 	};
 
 	} // namespace VIEW

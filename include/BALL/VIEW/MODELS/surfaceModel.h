@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.6 2003/09/07 17:24:00 oliver Exp $
+// $Id: surfaceModel.h,v 1.7 2003/11/13 19:30:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_SURFACEMODEL_H
@@ -111,6 +111,15 @@ namespace BALL
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 
+			///
+			void setProbeRadius(float radius) 
+				throw() { probe_radius_ = radius;}
+
+			///
+			float getProbeRadius() const
+				throw() { return probe_radius_;}
+			
+
 		  private:
 
 			bool 							get_composite_;
@@ -120,6 +129,8 @@ namespace BALL
 			HashSet<Atom*> 		atoms_;
 
 			SurfaceProcessor::SurfaceType type_;
+
+			float 						probe_radius_;
 		};
 
 	} // namespace VIEW

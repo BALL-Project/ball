@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.8 2003/11/09 22:38:04 amoll Exp $
+// $Id: cartoonModel.C,v 1.9 2003/11/13 19:30:51 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -29,13 +29,19 @@ namespace BALL
 
 		AddCartoonModel::AddCartoonModel()
 			throw()
-			: AddBackboneModel()
+			: AddBackboneModel(),
+				helix_radius_(2.4),
+				arrow_width_(0.6),
+				arrow_height_(1.5)
 		{
 		}
 
-		AddCartoonModel::AddCartoonModel(const AddCartoonModel& add_Cartoon)
+		AddCartoonModel::AddCartoonModel(const AddCartoonModel& cartoon)
 			throw()
-			:	AddBackboneModel(add_Cartoon)
+			:	AddBackboneModel(cartoon),
+				helix_radius_(cartoon.helix_radius_),
+				arrow_width_(cartoon.arrow_width_),
+				arrow_height_(cartoon.arrow_height_)
 		{
 		}
 
@@ -165,8 +171,6 @@ namespace BALL
 			if (!Maths::isZero(normal.getSquareLength())) normal.normalize();
 			if (!Maths::isZero(right.getSquareLength()))  right.normalize();
 
-			float box_height_ = 0.6;
-			float box_depth_  = 1.5;//3.0;
 			Vector3 perpendic = normal % right; // perpendicular to spline
 
 			Vector3 last_points[4];
@@ -174,10 +178,10 @@ namespace BALL
 
 			Position last_vertices=0;
 
-			last_points[0] = first->getPosition() - (perpendic * box_depth_/2.) - normal * box_height_/2.;
-			last_points[1] = last_points[0] + normal * box_height_;
-			last_points[2] = last_points[1] + perpendic * box_depth_;
-			last_points[3] = last_points[2] - normal * box_height_;
+			last_points[0] = first->getPosition() - (perpendic * arrow_width_/2.) - normal * arrow_height_/2.;
+			last_points[1] = last_points[0] + normal * arrow_height_;
+			last_points[2] = last_points[1] + perpendic * arrow_width_;
+			last_points[3] = last_points[2] - normal * arrow_height_;
 
 			Mesh* mesh = new Mesh;
 			if (mesh == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Mesh));
@@ -249,10 +253,10 @@ namespace BALL
 					perpendic = normal % right; // perpendicular to spline
 					if (!Maths::isZero(perpendic.getSquareLength())) perpendic.normalize();
 
-					current_points[0] = spline_[i*9+j] - (perpendic * box_depth_/2.) - normal * box_height_/2.;
-					current_points[1] = current_points[0] + normal * box_height_;
-					current_points[2] = current_points[1] + perpendic * box_depth_;
-					current_points[3] = current_points[2] - normal * box_height_;
+					current_points[0] = spline_[i*9+j] - (perpendic * arrow_width_/2.) - normal * arrow_height_/2.;
+					current_points[1] = current_points[0] + normal * arrow_height_;
+					current_points[2] = current_points[1] + perpendic * arrow_width_;
+					current_points[3] = current_points[2] - normal * arrow_height_;
 
 					// put the next 4 points and 8 triangles into the mesh
 					vertices.push_back(current_points[0]);
@@ -292,7 +296,7 @@ namespace BALL
 			for (Index j=-1; j<=6; j++)
 			{
 				// interpolate the depth of the box
-				float new_box_depth = 2.5*(1-j*0.95/6.)*box_depth_; 
+				float new_arrow_width = 2.5*(1-j*0.95/6.)*arrow_width_; 
 				
 				right  = spline_[i*9+j+1] - spline_[i*9+j];
 
@@ -305,10 +309,10 @@ namespace BALL
 				perpendic = normal % right; // perpendicular to spline
 				if (!Maths::isZero(perpendic.getSquareLength())) perpendic.normalize();
 
-				current_points[0] = spline_[i*9+j] - (perpendic * new_box_depth/2.) - normal * box_height_/2.;
-				current_points[1] = current_points[0] + normal * box_height_;
-				current_points[2] = current_points[1] + perpendic * new_box_depth;
-				current_points[3] = current_points[2] - normal * box_height_;
+				current_points[0] = spline_[i*9+j] - (perpendic * new_arrow_width/2.) - normal * arrow_height_/2.;
+				current_points[1] = current_points[0] + normal * arrow_height_;
+				current_points[2] = current_points[1] + perpendic * new_arrow_width;
+				current_points[3] = current_points[2] - normal * arrow_height_;
 
 				// put the next 4 points and 8 triangles into the mesh
 				vertices.push_back(current_points[0]);
@@ -416,7 +420,7 @@ namespace BALL
 			for (Position p = 1; lit != catoms.end(); p++)
 			{
 				tube = new Tube;
-				tube->setRadius(2.4);
+				tube->setRadius(helix_radius_);
 				tube->setVertex1(last_pos);
 				last_pos += (normal / (catoms.size() -1));
 				tube->setVertex2(last_pos);
@@ -425,12 +429,12 @@ namespace BALL
 				lit++;
 			}
 				
-			Disc* disc = new Disc( Circle3(first->getPosition(), Vector3(first->getPosition() - last->getPosition()), 2.4));
+			Disc* disc = new Disc( Circle3(first->getPosition(), Vector3(first->getPosition() - last->getPosition()), helix_radius_));
 			if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
 			disc->setComposite(first);
 			geometric_objects_.push_back(disc);
 
-			disc = new Disc(Circle3(last->getPosition(), Vector3(last->getPosition() - first->getPosition() ), 2.4));
+			disc = new Disc(Circle3(last->getPosition(), Vector3(last->getPosition() - first->getPosition() ), helix_radius_));
 			if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
 			disc->setComposite(last);
 			geometric_objects_.push_back(disc);
