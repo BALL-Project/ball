@@ -1,4 +1,6 @@
-XECUTABLE=molview
+// $Id: Makefile,v 1.28 2000/12/08 09:29:57 oliver Exp $
+
+EXECUTABLE=molview
 DIRECTORY=APPLICATIONS/MOLVIEW
 
 all:	$(EXECUTABLE)
