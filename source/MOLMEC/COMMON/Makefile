@@ -5,12 +5,12 @@ THISLIB=$(LIBNAME)
 CPP_SOURCES=\
 	assignTypes.C\
 	atomVector.C\
-	chargeRuleProcessor.C
+	chargeRuleProcessor.C\
 	forceField.C\
 	forceFieldComponent.C\
 	gradient.C\
 	periodicBoundary.C\
-	radiusRuleProcessor.C
+	radiusRuleProcessor.C\
 	rules.C\
 	ruleProcessor.C\
 	snapShot.C\

@@ -1,4 +1,4 @@
-// $Id: ruleProcessor.C,v 1.1 2000/05/24 11:48:33 anker Exp $
+// $Id: ruleProcessor.C,v 1.2 2000/05/24 12:12:53 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleProcessor.h>
 #include <BALL/FORMAT/INIFile.h>
@@ -55,8 +55,19 @@ namespace BALL
 		// BAUSTELLE
 	}
 
-	Processor::Result operator () (const Atom& atom)
+	bool RuleProcessor::start()
 	{
+		return true;
+	}
+
+	bool RuleProcessor::finish()
+	{
+		return true;
+	}
+
+	Processor::Result RuleProcessor::operator () (const Atom& atom)
+	{
+		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	String RuleProcessor::evaluate(const Atom& atom)

@@ -1,25 +1,22 @@
-// $Id: chargeRulePrecessor.C,v 1.1 2000/05/24 11:48:32 anker Exp $
+// $Id: chargeRuleProcessor.C,v 1.1 2000/05/24 12:12:53 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/chargeRuleProcessor.h>
 
 namespace BALL
 {
 	ChargeRuleProcessor::ChargeRuleProcessor()
-		: evaluator_.prefix("")
 	{
-		// BAUSTELLE: Muss hier der Praefix gesetzt werden?
 	}
 
 	ChargeRuleProcessor::ChargeRuleProcessor(INIFile& file,
-			const String prefix)
-		: evaluator_.prefix_(prefix)
+			const String& prefix = "ChargeRules")
 	{
-		// BAUSTELLE
+		initialize(file, prefix);
 	}
 
 	ChargeRuleProcessor::ChargeRuleProcessor(
 			const ChargeRuleProcessor& rule_processor)
-		: evaluator_(rule_processor.evaluator_)
+		: RuleProcessor(rule_processor)
 	{
 	}
 
@@ -29,6 +26,7 @@ namespace BALL
 
 	Processor::Result ChargeRuleProcessor::operator () (Atom& atom)
 	{
-		atom.setCharge(evaluate(atom));
+		atom.setCharge(evaluate(atom).toFloat());
+		return Processor::CONTINUE;
 	}
 }
