@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.36 2004/06/03 11:22:06 amoll Exp $
+// $Id: scene.h,v 1.37 2004/06/03 14:40:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -561,6 +561,7 @@ namespace BALL
 			float y_window_pick_pos_second_;
 
 			Stage* stage_;
+			Camera stereo_camera_;
 
 			GLRenderer gl_renderer_;
 

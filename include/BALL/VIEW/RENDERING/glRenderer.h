@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.16 2004/05/27 19:49:50 oliver Exp $
+// $Id: glRenderer.h,v 1.17 2004/06/03 14:41:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -21,6 +21,10 @@
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #	include <BALL/VIEW/KERNEL/geometricObject.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_STAGE_H
+# include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
 #include <qgl.h>
@@ -137,8 +141,11 @@ namespace BALL
 			float getYScale() const
 				throw() { return y_scale_;}
 
-			///
-			void updateCamera()
+			/** Update the camera position with gluLookAt,
+			 		either from a given Camera, or from the default
+					Stage.
+			*/
+			void updateCamera(const Camera* camera = 0)
 				throw();
 
 			/// Update the background color from the stage

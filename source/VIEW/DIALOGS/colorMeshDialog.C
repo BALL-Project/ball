@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.34 2004/06/03 13:58:48 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.35 2004/06/03 14:40:16 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -397,7 +397,7 @@ void ColorMeshDialog::colorByGrid_()
 	}
 	else if (transparency_group_grid->selected() == alpha_button_grid)
 	{
-		rep_->setTransparency(255 - min_min_color.getAlpha());
+		rep_->setTransparency(255 - (int) min_min_color.getAlpha());
 	}
 }
 

@@ -1,14 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.24 2004/03/14 13:25:04 amoll Exp $
+// $Id: glRenderer.C,v 1.25 2004/06/03 14:41:03 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
 #include <BALL/VIEW/RENDERING/glQuadricObject.h>
 #include <BALL/VIEW/RENDERING/glDisplayList.h>
 #include <BALL/VIEW/KERNEL/common.h>
-#include <BALL/VIEW/KERNEL/stage.h>
 
 #include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/PRIMITIVES/line.h>
@@ -1347,23 +1346,24 @@ namespace BALL
 		}
 
 
-		void GLRenderer::updateCamera()
+		void GLRenderer::updateCamera(const Camera* camera)
 			throw()
 		{
+			if (camera == 0) camera = &stage_->getCamera();
+
 			glLoadIdentity();
 
-			const Camera& camera = stage_->getCamera();
-			gluLookAt(camera.getViewPoint().x, 
-								camera.getViewPoint().y,
-								camera.getViewPoint().z,
-								camera.getLookAtPosition().x, 
-								camera.getLookAtPosition().y,
-								camera.getLookAtPosition().z,
-								camera.getLookUpVector().x,
-								camera.getLookUpVector().y,
-								camera.getLookUpVector().z);
+			gluLookAt(camera->getViewPoint().x, 
+								camera->getViewPoint().y,
+								camera->getViewPoint().z,
+								camera->getLookAtPosition().x, 
+								camera->getLookAtPosition().y,
+								camera->getLookAtPosition().z,
+								camera->getLookUpVector().x,
+								camera->getLookUpVector().y,
+								camera->getLookUpVector().z);
 
-			normal_vector_ = (-stage_->getCamera().getViewVector().normalize());
+			normal_vector_ = (-camera->getViewVector().normalize());
 		}
 
 

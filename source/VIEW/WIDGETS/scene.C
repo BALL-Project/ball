@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.64 2004/06/03 14:05:24 amoll Exp $
+// $Id: scene.C,v 1.65 2004/06/03 14:40:53 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/stage.h>
 #include <BALL/VIEW/DIALOGS/setCamera.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -309,6 +310,8 @@ namespace BALL
 
 				return;
 			}
+			
+			stereo_camera_ = stage_->getCamera();
 
 			Vector3	diff = stage_->getCamera().getRightVector();
 			Vector3 old_view_point = stage_->getCamera().getViewPoint();
@@ -338,9 +341,9 @@ namespace BALL
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			glPushMatrix();
-			stage_->getCamera().setViewPoint(old_view_point + diff);
-			stage_->getCamera().setViewPoint(old_look_at + diff);
-			gl_renderer_.updateCamera();
+			stereo_camera_.setViewPoint(old_view_point + diff);
+			stereo_camera_.setLookAtPosition(old_look_at + diff);
+			gl_renderer_.updateCamera(&stereo_camera_);
 			renderRepresentations_(mode);
 			glPopMatrix();
 
@@ -360,15 +363,11 @@ namespace BALL
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 			glPushMatrix();
-			stage_->getCamera().setViewPoint(old_view_point - diff);
-			stage_->getCamera().setViewPoint(old_look_at - diff);
-			gl_renderer_.updateCamera();
+			stereo_camera_.setViewPoint(old_view_point - diff);
+			stereo_camera_.setLookAtPosition(old_look_at - diff);
+			gl_renderer_.updateCamera(&stereo_camera_);
 			renderRepresentations_(DISPLAY_LISTS_RENDERING);
 			glPopMatrix();
-
-			//================== reset camera values =============
-			stage_->getCamera().setViewPoint(old_view_point);
-			stage_->getCamera().setLookAtPosition(old_look_at);
 
 /*
 			Vector3 old_view_point = stage_->getCamera().getViewPoint();
@@ -686,6 +685,7 @@ namespace BALL
 					+ String(camera.getLookUpVector().z) + ")");
 
 			setStatusbarText(text);
+			Log.info() << text << std::endl;
 		}
 
 		void Scene::resetCamera_()
@@ -700,9 +700,12 @@ namespace BALL
 		void Scene::updateCamera_()
 			throw()
 		{
-			gl_renderer_.updateCamera();
-			gl_renderer_.setLights();
-			light_settings_->updateFromStage();
+			if (!gl_renderer_.isInStereoMode())
+			{
+				gl_renderer_.updateCamera();
+				gl_renderer_.setLights();
+				light_settings_->updateFromStage();
+			}
 			renderView_(REBUILD_DISPLAY_LISTS);
 		}
 
@@ -959,10 +962,9 @@ namespace BALL
 				}
 				if (coordinate_rep != 0)
 				{
-					pm.remove(coordinate_rep);
+					pm.remove(*coordinate_rep);
 					RepresentationMessage* message = new RepresentationMessage(*coordinate_rep, RepresentationMessage::REMOVE);
 					notify_(message);
-					break;
 				}
 			}
 			else if (!showed_coordinate && stage_->coordinateSystemEnabled()) 
