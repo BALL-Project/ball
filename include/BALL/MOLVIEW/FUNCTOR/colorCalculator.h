@@ -1,4 +1,4 @@
-// $Id: colorCalculator.h,v 1.4 2000/01/11 20:11:34 hekl Exp $
+// $Id: colorCalculator.h,v 1.5 2000/03/28 19:23:33 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
@@ -15,8 +15,8 @@
 #	include <BALL/KERNEL/atom.h>
 #endif
 
-#ifndef BALL_KERNEL_PSE_H
-#	include <BALL/KERNEL/PSE.h>
+#ifndef BALL_KERNEL_PTE_H
+#	include <BALL/KERNEL/PTE.h>
 #endif
 
 #ifndef BALL_VIEW_DATATYPE_COLOR_H

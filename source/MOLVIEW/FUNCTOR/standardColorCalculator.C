@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.C,v 1.3 2000/01/13 22:30:32 oliver Exp $
+// $Id: standardColorCalculator.C,v 1.4 2000/03/28 19:22:50 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h>
 
@@ -139,7 +139,7 @@ namespace BALL
 		for (Size i = 0; i < 111; i++)
 		{
 			color_map_.insert
-				(StringHashMap<ColorRGBA>::ValueType(PSE[i].getSymbol(), 
+				(StringHashMap<ColorRGBA>::ValueType(PTE[i].getSymbol(), 
 				 ColorRGBA(color_values[i][0], color_values[i][1], color_values[i][2])));
 		}
 	}

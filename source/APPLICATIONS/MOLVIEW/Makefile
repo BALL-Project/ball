@@ -13,39 +13,23 @@ BALL_INCLUDES=$(BALLVIEW_INCLUDES)
 
 SOURCES=\
 	control.C\
-	control_moc.C\
 	main.C\
 	mainframe.C\
-	mainframe_moc.C\
 	icons.C\
 	DIALOGS/DlgAbout.C\
 	DIALOGS/DlgAboutData.C\
-	DIALOGS/DlgAbout_moc.C\
-	DIALOGS/DlgAboutData_moc.C\
 	DIALOGS/DlgDisplayProperties.C\
-	DIALOGS/DlgDisplayProperties_moc.C\
 	DIALOGS/DlgDisplayPropertiesData.C\
-	DIALOGS/DlgDisplayPropertiesData_moc.C\
 	DIALOGS/DlgPreferences.C\
 	DIALOGS/DlgPreferencesData.C\
-	DIALOGS/DlgPreferences_moc.C\
-	DIALOGS/DlgPreferencesData_moc.C\
 	DIALOGS/DlgPreferencesGeneral.C\
 	DIALOGS/DlgPreferencesGeneralData.C\
-	DIALOGS/DlgPreferencesGeneral_moc.C\
-	DIALOGS/DlgPreferencesGeneralData_moc.C\
 	DIALOGS/DlgPreferencesNetwork.C\
 	DIALOGS/DlgPreferencesNetworkData.C\
-	DIALOGS/DlgPreferencesNetwork_moc.C\
-	DIALOGS/DlgPreferencesNetworkData_moc.C\
 	DIALOGS/DlgPreferencesDisplay.C\
 	DIALOGS/DlgPreferencesDisplayData.C\
-	DIALOGS/DlgPreferencesDisplay_moc.C\
-	DIALOGS/DlgPreferencesDisplayData_moc.C\
 	DIALOGS/DlgSelector.C\
-	DIALOGS/DlgSelector_moc.C\
-	DIALOGS/DlgSelectorData.C\
-	DIALOGS/DlgSelectorData_moc.C
+	DIALOGS/DlgSelectorData.C
 
 
 CPP_SOURCES=$(SOURCES)

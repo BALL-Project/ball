@@ -1,4 +1,4 @@
-// $Id: vanDerWaalsModel.h,v 1.4 2000/02/06 19:50:44 oliver Exp $
+// $Id: vanDerWaalsModel.h,v 1.5 2000/03/28 19:23:33 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
@@ -11,8 +11,8 @@
 #	include <BALL/KERNEL/atom.h>
 #endif
 
-#ifndef BALL_KERNEL_PSE_H
-#	include <BALL/KERNEL/PSE.h>
+#ifndef BALL_KERNEL_PTE_H
+#	include <BALL/KERNEL/PTE.h>
 #endif
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H

@@ -1,4 +1,4 @@
-// $Id: elementColor.h,v 1.3 1999/12/28 18:38:05 oliver Exp $
+// $Id: elementColor.h,v 1.4 2000/03/28 19:23:30 oliver Exp $
 
 #ifndef BALL_VIEW_MOLVIEW_COLORS_ELEMENTCOLOR_H
 #define BALL_VIEW_MOLVIEW_COLORS_ELEMENTCOLOR_H
@@ -77,7 +77,7 @@ namespace BALL
 
 			/* element color array */ 
 			// BAUSTELLE: Konstante fuer Anzahl Elemente
-			// aus PSE uebernehmen
+			// aus PTE uebernehmen
 			static const unsigned char color_values_[111][3];
 		};
 
