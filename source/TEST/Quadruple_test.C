@@ -1,21 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Quadruple_test.C,v 1.6 2003/05/23 10:26:04 oliver Exp $
+// $Id: Quadruple_test.C,v 1.7 2003/06/17 13:39:51 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #	include <BALL/DATATYPE/quadruple.h>
 ///////////////////////////
 
-START_TEST(Quadruple, "$Id: Quadruple_test.C,v 1.6 2003/05/23 10:26:04 oliver Exp $")
+START_TEST(Quadruple, "$Id: Quadruple_test.C,v 1.7 2003/06/17 13:39:51 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-CHECK(Quadruple::BALL_CREATE(Quadruple))
+CHECK(BALL_CREATE(Quadruple))
 	Quadruple<int, int, int, int> a(0, 1, 2, 3);
 	Quadruple<int, int, int, int>* v_ptr = (Quadruple<int, int, int, int>*)a.create();
 	TEST_EQUAL(v_ptr->first, 0)
@@ -23,7 +23,7 @@ CHECK(Quadruple::BALL_CREATE(Quadruple))
 RESULT
 
 Quadruple<int, int, int, int>* q;
-CHECK(Quadruple::Quadruple() throw())
+CHECK(Quadruple() throw())
 	q = new Quadruple<int, int, int, int>;
 	TEST_NOT_EQUAL(0, q);
 	q->first = 1;
@@ -36,7 +36,7 @@ CHECK(Quadruple::Quadruple() throw())
 	TEST_EQUAL(q->fourth, 4)
 RESULT
 
-CHECK(Quadruple::~Quadruple() throw())
+CHECK(~Quadruple() throw())
 	delete q;
 RESULT
 
@@ -46,7 +46,7 @@ my_q.second = 2;
 my_q.third = 3;
 my_q.fourth = 4;
 
-CHECK(Quadruple::Quadruple(const Quadruple& quadruple, bool deep = true) throw())
+CHECK(Quadruple(const Quadruple& quadruple, bool deep = true) throw())
 	Quadruple<int, int, int, int> q1(my_q);
 	TEST_EQUAL(q1.first, 1)
 	TEST_EQUAL(q1.second, 2)
@@ -54,7 +54,7 @@ CHECK(Quadruple::Quadruple(const Quadruple& quadruple, bool deep = true) throw()
 	TEST_EQUAL(q1.fourth, 4)
 RESULT
 
-CHECK(Quadruple::Quadruple(const first& new_first, const second& new_second, const third& new_third, const fourth& new_fourth) throw())
+CHECK(Quadruple(const T1& new_first, const T2& new_second, const T3& new_third, const T4& new_fourth) throw())
 	Quadruple<int, int, int, int> q1 = Quadruple<int, int, int, int>(1, 2, 3, 4);
 	TEST_EQUAL(q1.first, 1)
 	TEST_EQUAL(q1.second, 2)
@@ -62,7 +62,7 @@ CHECK(Quadruple::Quadruple(const first& new_first, const second& new_second, con
 	TEST_EQUAL(q1.fourth, 4)
 RESULT
 
-CHECK(Quadruple::clear() throw())
+CHECK(void clear() throw())
 	Quadruple<int, int, int, int> q1 = Quadruple<int, int, int, int>(1, 2, 3, 4);
 	q1.clear();
 	TEST_EQUAL(q1.first, 0)
@@ -71,7 +71,7 @@ CHECK(Quadruple::clear() throw())
 	TEST_EQUAL(q1.fourth, 0)
 RESULT
 
-CHECK(Quadruple::Quadruple& operator = (const Quadruple& quadruple) throw())
+CHECK(const Quadruple& operator = (const Quadruple& quadruple) throw())
 	Quadruple<int, int, int, int> q1 = Quadruple<int, int, int, int>(1, 2, 3, 4);
 	TEST_EQUAL(q1.first, 1)
 	TEST_EQUAL(q1.second, 2)
@@ -79,7 +79,7 @@ CHECK(Quadruple::Quadruple& operator = (const Quadruple& quadruple) throw())
 	TEST_EQUAL(q1.fourth, 4)
 RESULT
 
-CHECK(Quadruple::set(const first& first, const second& second, const third& third, const fourth& fourth) throw())
+CHECK(void set(const T1& t1, const T2& t2, const T3& t3, const T4& t4) throw())
 	Quadruple<int, int, int, int> q1;
 	q1.set(1, 2, 3, 4);
 	TEST_EQUAL(q1.first, 1)
@@ -88,7 +88,7 @@ CHECK(Quadruple::set(const first& first, const second& second, const third& thir
 	TEST_EQUAL(q1.fourth, 4)
 RESULT
 
-CHECK(Quadruple::get(first& first, second& second, third& third, fourth& fourth) const  throw())
+CHECK(void get(T1& first, T2& second, T3& third, T4& fourth) const throw())
 	Quadruple<int, int, int, int> q1 = Quadruple<int, int, int, int>(1, 2, 3, 4);
 	int a, b, c, d;
 	q1.get(a, b, c, d);
@@ -98,7 +98,7 @@ CHECK(Quadruple::get(first& first, second& second, third& third, fourth& fourth)
 	TEST_EQUAL(d, 4)
 RESULT
 
-CHECK(Quadruple::bool operator == (const Quadruple& quadruple) const  throw())
+CHECK(bool operator == (const Quadruple& quadruple) const throw())
 	Quadruple<int, int, int, int> q1 = Quadruple<int, int, int, int>(1, 2, 3, 4);
 	Quadruple<int, int, int, int> q2 = Quadruple<int, int, int, int>(1, 2, 3, 4);
 	TEST_EQUAL(q1 == q2, true)
@@ -106,7 +106,7 @@ CHECK(Quadruple::bool operator == (const Quadruple& quadruple) const  throw())
 	TEST_EQUAL(q1 == q2, false)
 RESULT
 
-CHECK(Quadruple::bool operator != (const Quadruple& quadruple) const  throw())
+CHECK(bool operator != (const Quadruple& quadruple) const throw())
 	Quadruple<int, int, int, int> q1 = Quadruple<int, int, int, int>(1, 2, 3, 4);
 	Quadruple<int, int, int, int> q2 = Quadruple<int, int, int, int>(1, 2, 3, 4);
 	TEST_EQUAL(q1 != q2, false)
