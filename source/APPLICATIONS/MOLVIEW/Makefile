@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.32 2002/01/15 15:41:35 oliver Exp $
+# $Id: Makefile,v 1.33 2002/01/15 16:01:21 anker Exp $
 
 EXECUTABLE=molview
 DIRECTORY=APPLICATIONS/MOLVIEW
@@ -14,7 +14,7 @@ include .Dependencies
 # specific compiler flags
 LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
 
-BALL_INCLUDES=$(BALLVIEW_INCLUDES) $(PYTHON_INCLUDES)
+BALL_INCLUDES+=$(BALLVIEW_INCLUDES) $(PYTHON_INCLUDES)
 
 CPP_SOURCES=\
 	DIALOGS/DlgAbout.C\
@@ -23,7 +23,7 @@ CPP_SOURCES=\
 	DIALOGS/DlgAmberMinimizationData.C\
 	icons.C\
 	main.C\
-	mainframe.C
+	mainframe.C\
 
 MOC_SOURCES=\
 	DIALOGS/DlgAbout_moc.C\
