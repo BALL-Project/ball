@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomProcessor.sip,v 1.2 2003/08/26 09:18:20 oliver Exp $
+// $Id: pyAtomProcessor.sip,v 1.3 2003/09/09 18:57:07 oliver Exp $
 //
 
 class AtomProcessor
@@ -13,6 +13,6 @@ class AtomProcessor
 	public:
 	bool start();
 	bool finish();
-	virtual Processor::Result operator () (Atom& /atom/);
+	Processor::Result operator () (Atom& /atom/);
 };
 

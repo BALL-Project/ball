@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.sip,v 1.4 2003/08/26 09:18:17 oliver Exp $
+// $Id: matrix44.sip,v 1.5 2003/09/09 18:57:06 oliver Exp $
 //
 
 class Matrix4x4
@@ -67,8 +67,8 @@ class Matrix4x4
   float operator () (Position /row/, Position /col/) const;
   float operator [] (Position /index/) const;
   float operator [] (Position /index/);
-  Matrix4x4 operator + () const;
-  Matrix4x4 operator - () const;
+  // ???? Matrix4x4 operator + () const;
+  // ???? Matrix4x4 operator - () const;
   Matrix4x4 operator + (const Matrix4x4& /m/) const;
   Matrix4x4& operator += (const Matrix4x4& /m/);
   Matrix4x4 operator - (const Matrix4x4& /m/) const;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.sip,v 1.3 2003/08/26 09:18:16 oliver Exp $
+// $Id: fragmentDB.sip,v 1.4 2003/09/09 18:57:06 oliver Exp $
 //
 
 class FragmentDB 
@@ -85,7 +85,7 @@ class NormalizeNamesProcessor
 	// bool matchName(String&  /res_name/, String&  /atom_name/, const StringHashMap<String>* /map/) const;
 	virtual bool start();
 	virtual bool finish();
-	virtual Processor::Result operator () (Fragment& /fragment/);
+	Processor::Result operator () (Fragment& /fragment/);
 };
 
 
@@ -104,7 +104,7 @@ class BuildBondsProcessor
 	~BuildBondsProcessor();
 	virtual bool finish();
 	virtual bool start();
-	virtual Processor::Result operator () (Fragment& /fragment/);
+	Processor::Result operator () (Fragment& /fragment/);
 	Size getNumberOfBondsBuilt();
 	void setFragmentDB(const FragmentDB& /fragment_db/);
 	Size buildFragmentBonds(Fragment& /fragment/) const;

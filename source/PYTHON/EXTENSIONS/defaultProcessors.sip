@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: defaultProcessors.sip,v 1.2 2003/08/26 09:18:15 oliver Exp $
+// $Id: defaultProcessors.sip,v 1.3 2003/09/09 18:57:06 oliver Exp $
 //
 
 class ClearChargeProcessor
@@ -13,7 +13,7 @@ class ClearChargeProcessor
 	using namespace BALL;
 %End
   public:
-  virtual Processor::Result operator () (Atom& /atom/);
+  Processor::Result operator () (Atom& /atom/);
 };
 
 class ClearRadiusProcessor
@@ -25,7 +25,7 @@ class ClearRadiusProcessor
 	using namespace BALL;
 %End
   public:
-  virtual Processor::Result operator () (Atom& /atom/);
+  Processor::Result operator () (Atom& /atom/);
 %MemberCode
 	printf("TEST\n");
 	return 0;
@@ -45,7 +45,7 @@ class AssignRadiusProcessor
   AssignRadiusProcessor(const String& /filename/);
   virtual bool start();
   virtual bool finish();
-  virtual Processor::Result operator() (Atom& /atom/);
+  Processor::Result operator() (Atom& /atom/);
   void setFilename(const String& /filename/);
   String& getFilename();
   Size getNumberOfAssignments();
@@ -63,7 +63,7 @@ class AssignChargeProcessor
   AssignChargeProcessor();
   AssignChargeProcessor(const String& /filename/);
   virtual bool start();
-  virtual Processor::Result operator () (Atom& /atom/);
+  Processor::Result operator () (Atom& /atom/);
   float getTotalCharge();
 };
  

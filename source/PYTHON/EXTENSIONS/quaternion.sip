@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.sip,v 1.4 2003/08/26 09:18:22 oliver Exp $
+// $Id: quaternion.sip,v 1.5 2003/09/09 18:57:07 oliver Exp $
 //
 
 class Quaternion
@@ -27,7 +27,7 @@ class Quaternion
   float getAngle() const;
   Vector3 getAxis();
   Matrix4x4& getRotationMatrix(Matrix4x4& /m/) const;
-  Quaternion operator - () const;
+  // ???? Quaternion operator - () const;
   Quaternion getInverse() const;
   Quaternion getConjugate() const;
   Quaternion& operator += (const Quaternion& /q/);

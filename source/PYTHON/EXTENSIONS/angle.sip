@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.sip,v 1.6 2003/08/26 09:18:12 oliver Exp $
+// $Id: angle.sip,v 1.7 2003/09/09 18:57:05 oliver Exp $
 //
 
 class Angle
@@ -36,8 +36,8 @@ class Angle
   // static T toDegree(const T& radian);
   void normalize(Range /range/);
   void negate();
-  Angle operator + () const;
-  Angle operator - () const;
+  // ???? Angle operator + () const;
+  // ???? Angle operator - () const;
   Angle& operator += (const Angle& /angle/);
   Angle& operator += (float /val/);
   Angle operator + (const Angle& /angle/);

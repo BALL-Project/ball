@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.sip,v 1.5 2003/08/26 09:18:11 oliver Exp $
+// $Id: PDBFile.sip,v 1.6 2003/09/09 18:57:05 oliver Exp $
 //
 
 class PDBFile
@@ -22,8 +22,8 @@ class PDBFile
   virtual void read(System& /system/);
   virtual void write(const Protein& /protein/);
   virtual void write(const System& /system/);
-  virtual void operator >> (Protein& /protein/);
-  virtual void operator >> (System& /system/);
-  virtual void operator << (const Protein& /protein/);
-  virtual void operator << (const System& /system/);
+  void operator >> (Protein& /protein/);
+  void operator >> (System& /system/);
+  void operator << (const Protein& /protein/);
+  void operator << (const System& /system/);
 };

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.sip,v 1.3 2003/08/26 09:18:25 oliver Exp $
+// $Id: vector4.sip,v 1.4 2003/09/09 18:57:08 oliver Exp $
 //
 
 class Vector4
@@ -35,8 +35,8 @@ class Vector4
   void set(float /value/ = 1);
   float operator [] (Index /index/);
   float operator [] (Index /index/) const;
-  Vector4 operator + () const;
-  Vector4 operator - () const;
+  // ???? Vector4 operator + () const;
+  // ???? Vector4 operator - () const;
   Vector4& operator += (const Vector4& /vector/);
   Vector4& operator -= (const Vector4& /vector/);
   Vector4 operator * (float /scalar/);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: typeRuleProcessor.sip,v 1.2 2003/08/26 09:18:24 oliver Exp $
+// $Id: typeRuleProcessor.sip,v 1.3 2003/09/09 18:57:08 oliver Exp $
 //
 
 class TypeRuleProcessor
@@ -18,5 +18,5 @@ class TypeRuleProcessor
 	TypeRuleProcessor(const TypeRuleProcessor& /rule_processor/);
 	~TypeRuleProcessor();
 
-	virtual Processor::Result operator () (Atom& /atom/);
+	Processor::Result operator () (Atom& /atom/);
 };

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.sip,v 1.6 2003/08/26 09:18:24 oliver Exp $
+// $Id: vector2.sip,v 1.7 2003/09/09 18:57:08 oliver Exp $
 //
 
 //Vector2 operator * (float scalar, const Vector2& vector)
@@ -72,47 +72,31 @@ class Vector2
 	float operator [] (Position /position/) const
 		throw(IndexOverflow);
 
-	const Vector2& operator + () const
-		throw();
-	Vector2 operator - () const
-		throw();
-	Vector2 operator + (const Vector2& /vector/) const
-		throw();
-	Vector2 operator - (const Vector2& /vector/) const
-		throw();
-	Vector2& operator += (const Vector2& /vector/)
-		throw();
-	Vector2& operator -= (const Vector2& /vector/)
-		throw();
-	Vector2 operator * (float /scalar/) const
-		throw();
-	Vector2& operator *= (float /scalar/)
-		throw();
-	Vector2 operator / (float /lambda/) const
-		throw(DivisionByZero);
-	Vector2& operator /= (float /lambda/)
-		throw(DivisionByZero);
-	float operator * (const Vector2& /vector/) const
-		throw();
+	// ???? const Vector2& operator + () const throw();
+	// ???? Vector2 operator - () const	throw();
+	Vector2 operator + (const Vector2& /vector/) const throw();
+	Vector2 operator - (const Vector2& /vector/) const throw();
+	Vector2& operator += (const Vector2& /vector/) throw();
+	Vector2& operator -= (const Vector2& /vector/) throw();
+	Vector2 operator * (float /scalar/) const throw();
+	Vector2& operator *= (float /scalar/) throw();
+	Vector2 operator / (float /lambda/) const	throw(DivisionByZero);
+	Vector2& operator /= (float /lambda/) throw(DivisionByZero);
+	float operator * (const Vector2& /vector/) const throw();
 
 	float getDistance(const Vector2& /vector/) const
 		throw();
 	float getSquareDistance(const Vector2& /vector/) const
 		throw();
 
-	bool operator == (const Vector2& /vector/) const
-		throw();
-	bool operator != (const Vector2& /vector/) const
-		throw();
-	bool isZero() const
-		throw();
-	bool isOrthogonalTo(Vector2& /vector/) const
-		throw();
+	bool operator == (const Vector2& /vector/) const throw();
+	bool operator != (const Vector2& /vector/) const throw();
+	bool isZero() const throw();
+	bool isOrthogonalTo(Vector2& /vector/) const throw();
 
 	//void dump(std::ostream& s = std::cout, Size depth = 0) const
 	//				throw();
-	bool isValid() const
-		throw();
+	bool isValid() const throw();
 
 	float x;
 	float y;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chargeRuleProcessor.sip,v 1.2 2003/08/26 09:18:13 oliver Exp $
+// $Id: chargeRuleProcessor.sip,v 1.3 2003/09/09 18:57:05 oliver Exp $
 //
 
 class ChargeRuleProcessor
@@ -16,5 +16,5 @@ class ChargeRuleProcessor
   ChargeRuleProcessor(INIFile& /file/, const String& /prefix/ = "ChargeRules");
   ChargeRuleProcessor(const ChargeRuleProcessor& /rule_processor/);
   ~ChargeRuleProcessor();
-  virtual Processor::Result operator () (Atom& /atom/);
+  Processor::Result operator () (Atom& /atom/);
  };

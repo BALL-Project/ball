@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: object.sip,v 1.4 2003/08/26 09:18:18 oliver Exp $
+// $Id: object.sip,v 1.5 2003/09/09 18:57:07 oliver Exp $
 //
 
 class Object
@@ -18,12 +18,12 @@ using namespace BALL;
   Size getHandle() const throw();
   static Size getNextHandle() throw();
   static Size getNewHandle() throw();
-  virtual bool operator == (const Object& /object/) const;
-  virtual bool operator != (const Object& /object/) const;
-  virtual bool operator < (const Object& /object/) const;
-  virtual bool operator <= (const Object& /object/) const;
- 	virtual bool operator >= (const Object& /object/) const;
-  virtual bool operator > (const Object& /object/) const;
+  bool operator == (const Object& /object/) const;
+  bool operator != (const Object& /object/) const;
+  bool operator < (const Object& /object/) const;
+  bool operator <= (const Object& /object/) const;
+ 	bool operator >= (const Object& /object/) const;
+  bool operator > (const Object& /object/) const;
   int compare(const Object&) const;
   // virtual void read(::std::istream& s);
   // virtual void write(::std::ostream& s) const;

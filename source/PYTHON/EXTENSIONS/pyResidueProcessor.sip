@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyResidueProcessor.sip,v 1.2 2003/08/26 09:18:21 oliver Exp $
+// $Id: pyResidueProcessor.sip,v 1.3 2003/09/09 18:57:07 oliver Exp $
 //
 
 class ResidueProcessor
@@ -13,6 +13,6 @@ class ResidueProcessor
 	public:
 	bool start();
 	bool finish();
-	virtual Processor::Result operator () (Residue& /atom/);
+	Processor::Result operator () (Residue& /atom/);
 };
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reconstructFragmentProcessor.sip,v 1.3 2003/08/26 09:18:22 oliver Exp $
+// $Id: reconstructFragmentProcessor.sip,v 1.4 2003/09/09 18:57:08 oliver Exp $
 //
 
 class ReconstructFragmentProcessor 
@@ -19,7 +19,7 @@ class ReconstructFragmentProcessor
 	~ReconstructFragmentProcessor();
 	virtual bool start();
 	virtual bool finish();
-	virtual Processor::Result operator()(Fragment&);
+	Processor::Result operator()(Fragment&);
 	Size getNumberOfInsertedAtoms();
 	void setFragmentDB(const FragmentDB& /fragment_db/);
 	const FragmentDB* getFragmentDB() const;

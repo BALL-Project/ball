@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.sip,v 1.6 2003/08/26 09:18:25 oliver Exp $
+// $Id: vector3.sip,v 1.7 2003/09/09 18:57:08 oliver Exp $
 //
 
 class Vector3
@@ -38,8 +38,8 @@ class Vector3
   static const Vector3& getUnit();
   float operator [] (Index /index/);
   float operator [] (Index /index/) const;
-  const Vector3& operator + () const;
-  Vector3 operator - () const;
+  // ???? const Vector3& operator + () const;
+  // ???? Vector3 operator - () const;
   Vector3& operator += (const Vector3& /vector/);
   Vector3& operator -= (const Vector3& /vector/);
   Vector3& operator *= (float /scalar/);

@@ -1,7 +1,7 @@
 DIRECTORY=VIEW/WIDGETS
 
 # Where the headers of the derived classes reside
-HEADER_DIR		=$(BALL_PATH)/include/BALL/$(DIRECTORY)
+HEADER_DIR=$(BALL_PATH)/include/BALL/$(DIRECTORY)
 
 # Where the UIC-created headers reside
 UIC_DIR=$(BALL_PATH)/include/BALL/VIEW/UIC
@@ -10,27 +10,34 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	dockWidget.C\
-	geometricControl.C\
 	genericControl.C\
+	genericControlData.C\
 	logView.C\
+	geometricControl.C\
+	trajectoryControl.C\
 	molecularControl.C\
 	molecularProperties.C\
 	regularData1DWidget.C\
-	trajectoryControl.C\
 	scene.C
+
+UIC_SOURCES=\
+  genericControlData.C
+
+UIC_HDR=$(UIC_SOURCES:Data.C=.dh)
 
 PYTHON_CPP_SOURCES=\
 	pyWidget.C
 
 MOC_SOURCES=\
 	dockWidget_moc.C\
-	geometricControl_moc.C\
 	genericControl_moc.C\
+	genericControlData_moc.C\
 	logView_moc.C\
+	trajectoryControl_moc.C\
+	geometricControl_moc.C\
 	molecularControl_moc.C\
 	molecularProperties_moc.C\
 	scene_moc.C\
-	trajectoryControl_moc.C\
 	regularData1DWidget_moc.C
 
 PYTHON_MOC_SOURCES=\
