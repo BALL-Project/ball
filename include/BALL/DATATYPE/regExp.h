@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.14.4.6 2002/12/01 21:45:23 oliver Exp $
+// $Id: regExp.h,v 1.14.4.7 2002/12/01 21:55:31 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -25,6 +25,8 @@
 #	endif
 #			include <regex.h>
 #	ifdef BALL_COMPILER_MSVC
+		}
+#	endif
 #endif
 
 #if !defined(__GNUC__) && !defined(__KAI__) && defined(IRIX)
