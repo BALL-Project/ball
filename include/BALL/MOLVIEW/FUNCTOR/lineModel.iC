@@ -1,0 +1,18 @@
+BALL_INLINE
+Point* AddLineModel::createPoint_()
+{
+	return (Point *)(new Point());
+}
+
+BALL_INLINE
+Line* AddLineModel::createLine_()
+{
+	return (Line *)(new Line());
+}
+
+BALL_INLINE
+TwoColoredLine* AddLineModel::createTwoColoredLine_()
+{
+	return (TwoColoredLine *)(new TwoColoredLine());
+}
+
