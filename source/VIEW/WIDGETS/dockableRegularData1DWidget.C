@@ -29,11 +29,7 @@ void DockableRegularData1DWidget::plot()
 	throw()
 {
 	canWidget_.showObjects();
-//			resize(600, 400); // ???????????? 
 	show();
-	//for testing
-		getWidget().resize(size()); //canWidget_.resize(size()); size(): Returns the size of the widget excluding any window frame
-		//showSize();
 	canWidget_.zoomToFit();
 }
 
@@ -47,28 +43,14 @@ void DockableRegularData1DWidget::contextMenuEvent(QContextMenuEvent* e)
 {
 	//slot, connected to pressMousEvent
 	QPopupMenu context_menu;
-	Position menu_entry_pos = context_menu.insertItem( "Show Size (debug!!!)", this, SLOT(showSize()));
-	Position menu_entry_pos2 = context_menu.insertItem("ZoomToFit (debug!!!)", this, SLOT(zoomToFit()));
-	Position menu_entry_pos3 = context_menu.insertItem("ZoomIn (debug!!!)", this, SLOT(zoomIn()));
-	Position menu_entry_pos4 = context_menu.insertItem("ZoomOut (debug!!!)", this, SLOT(zoomOut()));
+// 	Position menu_entry_pos = context_menu.insertItem( "Show Size (debug!!!)", this, SLOT(showSize()));
+	context_menu.insertItem("ZoomToFit", this, SLOT(zoomToFit()));
+	context_menu.insertItem("ZoomIn", this, SLOT(zoomIn()));
+	context_menu.insertItem("ZoomOut", this, SLOT(zoomOut()));
 	QPoint pos = e->reason() == QContextMenuEvent::Mouse ? e->globalPos() :
-							mapToGlobal( QPoint(e->pos().x(), 0) ) + QPoint( width() / 2, height() / 2 );
-//		connect(&context_menu, SIGNAL(activated(int)), this, SLOT(reactToMessages(int)));
-	context_menu.exec(pos);
+		mapToGlobal( QPoint(e->pos().x(), 0) ) + QPoint( width() / 2, height() / 2 );
+ 	context_menu.exec(pos);
 	e->accept();
-}
-
-void DockableRegularData1DWidget::reactToMessages(int number)
-{
-	if (number==1)
-	{
-		canWidget_.zoomToFit();
-	}
-}
-
-void DockableRegularData1DWidget::zoomToFit()
-{
-	canWidget_.zoomToFit();
 }
 
 void DockableRegularData1DWidget::showSize()
@@ -81,6 +63,11 @@ void DockableRegularData1DWidget::showSize()
 		Log.info() << "canWidget_.viewport()->height() :" << canWidget_.viewport()->height()  << std::endl;
 		Log.info() << "canWidget_.getCanvas().width() :" << canWidget_.getCanvas().width() << std::endl;
 		Log.info() << "canWidget_.getCanvas().height() :" << canWidget_.getCanvas().height()  << std::endl;
+}
+
+void DockableRegularData1DWidget::zoomToFit()
+{
+	canWidget_.zoomToFit();
 }
 
 void DockableRegularData1DWidget::zoomIn()
@@ -96,7 +83,7 @@ void DockableRegularData1DWidget::zoomOut()
 //we need this for SizePolicy
 QSize DockableRegularData1DWidget::sizeHint() const
 {
-	return QSize((qApp->mainWidget()->width()/3.)+55, (qApp->mainWidget()->height()/3.)+55);
+	return QSize((int)(qApp->mainWidget()->width()/3.)+55, (int)(qApp->mainWidget()->height()/3.)+55);
 }
 		
   }// End of namespace VIEW

@@ -13,45 +13,54 @@ namespace BALL
 {
   namespace VIEW
   {      
+
+		///
     class BALL_EXPORT DockableRegularData1DWidget
       : public DockWidget
     {
- 	     Q_OBJECT                        //macro for QT messages
+ 	    Q_OBJECT 
+
 			public:
 
-      //Constructor
-      DockableRegularData1DWidget(const RegularData1D& data, QWidget *parent=0 );
+			///
+      DockableRegularData1DWidget(const RegularData1D* data, QWidget *parent=0 );
 
-      //   DockableRegularData1DWidget(QWidget *parent=0 );
-
-      //Copyconstructor 
-      //  DockableRegularData1DWidget(const  DockableRegularData1DWidget& dockcanwid);
-
-      //Destructor 
+			///
       ~DockableRegularData1DWidget()
 				throw();
 
-      //methods
+			///
       void plot()
-	throw();
+				throw();
   
+			///
       RegularData1DWidget& getWidget()
-	throw();
+				throw();
 
 		public slots:
+		
+			///
 			virtual void zoomToFit();
+		
+			///
 			virtual void showSize();
 
-    protected:
-      RegularData1DWidget canWidget_;
+			///
+			virtual void zoomIn();
+
+			///
+			virtual void zoomOut();
 
 		protected slots:
 			virtual void contextMenuEvent(QContextMenuEvent* e);
-			virtual void reactToMessages(int number);
-    };//end of class dockableRegularData1DWidget
+
+    protected:
+      DockableRegularData1DWidget(const DockableRegularData1DWidget& dockcanwid);
+			QSize sizeHint() const;
+
+      RegularData1DWidget canWidget_;
+    };
     
   }
 }
-
-
 #endif
