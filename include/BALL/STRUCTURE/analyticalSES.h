@@ -1,4 +1,4 @@
-// $Id: analyticalSES.h,v 1.4 2000/06/27 08:27:41 oliver Exp $
+// $Id: analyticalSES.h,v 1.5 2000/06/27 14:35:09 oliver Exp $
 
 #ifndef BALL_STRUCTURE_ANALYTICALSES_H
 #define BALL_STRUCTURE_ANALYTICALSES_H
@@ -24,7 +24,7 @@ namespace BALL
 			@param	number_of_dots the number of dots used per atom
 			@return the SES area in $\AA^2$
 	*/
-	float calculateSESAtomArea
+	float calculateSESAtomAreas
 		(const BaseFragment& fragment, HashMap<Atom*,float>& atom_areas, float probe_radius = 1.5);
 	
 	/**	Calculate the solvent excluded surface area analytically.
