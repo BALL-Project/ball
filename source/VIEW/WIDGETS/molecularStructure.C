@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.19 2004/02/18 23:55:37 amoll Exp $
+// $Id: molecularStructure.C,v 1.20 2004/02/19 10:17:05 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -149,6 +149,16 @@ namespace BALL
 		minimization_dialog_.setCharmmDialog(&charmm_dialog_);
 		md_dialog_.setAmberDialog(&amber_dialog_);
 		md_dialog_.setCharmmDialog(&charmm_dialog_);
+
+		// Assign the settings of the configuration dialogs to the 
+		// force fields.
+		amber_dialog_.setAmberFF(amber_);
+		amber_dialog_.accept();
+
+		charmm_dialog_.setCharmmFF(charmm_);
+		charmm_dialog_.accept();
+
+
 		use_amber_= true; // use amber force field by default
 	}
 
@@ -718,12 +728,9 @@ namespace BALL
 		setStatusbarText("Calcuted RMSD: " + String(rmsd));
 	}
 
-	AmberFF& MolecularStructure::getAMBERFF()
+	AmberFF& MolecularStructure::getAmberFF()
 		throw()
 	{
-		amber_dialog_.setAmberFF(amber_);
-		amber_dialog_.accept();
-
 		return amber_;
 	}
 
@@ -739,43 +746,46 @@ namespace BALL
 		return charmm_dialog_;
 	}
 
-	CharmmFF& MolecularStructure::getCHARMMFF()
+	CharmmFF& MolecularStructure::getCharmmFF()
 		throw()
 	{
-		charmm_dialog_.setCharmmFF(charmm_);
-		charmm_dialog_.accept();
-
 		return charmm_;
 	}
 
-	void MolecularStructure::printAmberResults()
-		throw()
+	ForceField& MolecularStructure::getForceField() throw()
 	{
-		Log.info() << endl;
-		Log.info() << "AMBER Energy:" << endl;
-		Log.info() << " - electrostatic     : " << getAMBERFF().getESEnergy() << " kJ/mol" << endl;
-		Log.info() << " - van der Waals     : " << getAMBERFF().getVdWEnergy() << " kJ/mol" << endl;
-		Log.info() << " - bond stretch      : " << getAMBERFF().getStretchEnergy() << " kJ/mol" << endl;
-		Log.info() << " - angle bend        : " << getAMBERFF().getBendEnergy() << " kJ/mol" << endl;
-		Log.info() << " - torsion           : " << getAMBERFF().getTorsionEnergy() << " kJ/mol" << endl;
-		Log.info() << "---------------------------------------" << endl;
-		Log.info() << "  total energy       : " << getAMBERFF().getEnergy() << " kJ/mol" << endl;
+		return ((use_amber_) ? reinterpret_cast<ForceField&>(amber_) : reinterpret_cast<ForceField&>(charmm_));
 	}
 
-	void MolecularStructure::printCharmmResults()
+	void MolecularStructure::printResults() 
 		throw()
 	{
-		Log.info() << endl;
-		Log.info() << "CHARMM Energy	:" << endl;
-		Log.info() << " - electrostatic	: " << getCHARMMFF().getESEnergy() << " kJ/mol" << endl;
-		Log.info() << " - van der Waals	: " << getCHARMMFF().getVdWEnergy() << " kJ/mol" << endl;
-		Log.info() << " - solvation	: " << getCHARMMFF().getSolvationEnergy() << "kJ/mol" << endl;
-		Log.info() << " - nonbonded		: " << getCHARMMFF().getNonbondedEnergy() << "kJ/mol" << endl;
-		Log.info() << " - bond stretch      : " << getCHARMMFF().getStretchEnergy() << " kJ/mol" << endl;
-		Log.info() << " - angle bend		: " << getCHARMMFF().getBendEnergy() << " kJ/mol" << endl;
-		Log.info() << " - torsion	: " << getCHARMMFF().getTorsionEnergy() << " kJ/mol" << endl;
-		Log.info() << "---------------------------------------" << endl;
-		Log.info() << "  total energy		: " << getCHARMMFF().getEnergy() << " kJ/mol" << endl;
+		if (use_amber_)
+		{
+			Log.info() << endl;
+			Log.info() << "AMBER Energy:" << endl;
+			Log.info() << " - electrostatic     : " << amber_.getESEnergy() << " kJ/mol" << endl;
+			Log.info() << " - van der Waals     : " << amber_.getVdWEnergy() << " kJ/mol" << endl;
+			Log.info() << " - bond stretch      : " << amber_.getStretchEnergy() << " kJ/mol" << endl;
+			Log.info() << " - angle bend        : " << amber_.getBendEnergy() << " kJ/mol" << endl;
+			Log.info() << " - torsion           : " << amber_.getTorsionEnergy() << " kJ/mol" << endl;
+			Log.info() << "---------------------------------------" << endl;
+			Log.info() << "  total energy       : " << amber_.getEnergy() << " kJ/mol" << endl;
+		}
+		else
+		{
+			Log.info() << endl;
+			Log.info() << "CHARMM Energy	:" << endl;
+			Log.info() << " - electrostatic	: " << charmm_.getESEnergy() << " kJ/mol" << endl;
+			Log.info() << " - van der Waals	: " << charmm_.getVdWEnergy() << " kJ/mol" << endl;
+			Log.info() << " - solvation	: " << charmm_.getSolvationEnergy() << "kJ/mol" << endl;
+			Log.info() << " - nonbonded		: " << charmm_.getNonbondedEnergy() << "kJ/mol" << endl;
+			Log.info() << " - bond stretch      : " << charmm_.getStretchEnergy() << " kJ/mol" << endl;
+			Log.info() << " - angle bend		: " << charmm_.getBendEnergy() << " kJ/mol" << endl;
+			Log.info() << " - torsion	: " << charmm_.getTorsionEnergy() << " kJ/mol" << endl;
+			Log.info() << "---------------------------------------" << endl;
+			Log.info() << "  total energy		: " << charmm_.getEnergy() << " kJ/mol" << endl;
+		}
 	}
 
 	void MolecularStructure::fetchPreferences(INIFile& inifile)
@@ -828,118 +838,107 @@ namespace BALL
 
 		// set up the force field
 		setStatusbarText("setting up force field...");
-		AmberFF& amber = getAMBERFF();
-		CharmmFF& charmm = getCHARMMFF();
-		if(use_amber_)
+		ForceField& ff = getForceField();
+
+		if (!ff.setup(*system))
 		{
-			if (!amber.setup(*system))
-			{
-				Log.error() << "Amber force field setup failed." << std::endl;
-				return;
-			}
+			Log.error() << "Force field setup failed." << std::endl;
+			return;
 		}
-		else
+
+		// CHARMM setup may delete atoms (converted to united atoms!),
+		// so we have to make sure the rest of the world realizes something might have changed.
+		if (!use_amber_)
 		{
-			if (!charmm.setup(*system))
-			{
-				Log.error() << "Charmm force field setup failed." <<std::endl;
-				return;
-			}
-
-
-			CompositeMessage *change_message = 
+			CompositeMessage* change_message = 
 				new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
 			notify_(change_message);
-
 		}
 
-		// calculate the energy
-		setStatusbarText("calculating energy...");
-		
-		if(use_amber_)
-		{
-			amber.updateEnergy();
-			// print the result
-			printAmberResults();
-			setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kJ/mol.");
-		}
-		else
-		{
-			charmm.updateEnergy();
-			// print the result
-			printCharmmResults();
-			setStatusbarText("Total CHARMM energy: " + String(charmm.getEnergy()) + " kJ/mol.");
-		}
+		// Compute the single point energy and print the result to Log and the status bar.
+		ff.updateEnergy();
+		printResults();
+		setStatusbarText("Total energy: " + String(ff.getEnergy()) + " kJ/mol.");
 	}
 
 	void MolecularStructure::runMinimization()
 	{
+		// Make sure we run one instance of a simulation at a time only.
 		if (!getMainControl()->compositesAreMuteable())
 		{
 			Log.error() << "Simulation already running or still rendering!" << std::endl;
 			return;
 		}
-		// retrieve the system from the selection
-		System* system = getMainControl()->getSelectedSystem();
-		if (!system) return;
 
-		// execute the minimization dialog
-		// and abort if cancel is clicked or nonsense arguments are given
-		if (!minimization_dialog_.exec() ||
-				!minimization_dialog_.getMaxGradient() ||
-				!minimization_dialog_.getEnergyDifference())
+		// Retrieve the system from the selection and abort if nothing is selected.
+		System* system = getMainControl()->getSelectedSystem();
+		if (system == 0) 
 		{
 			return;
 		}
 
-		// set up the force field
+		// Execute the minimization dialog
+		// and abort if cancel is clicked or nonsense arguments are given
+		if (!minimization_dialog_.exec() ||
+				(minimization_dialog_.getMaxGradient() == 0.0) ||
+				(minimization_dialog_.getEnergyDifference() == 0.0))
+		{
+			return;
+		}
+		// Remember which force field was selected and update the force field's 
+		// settings from the appropriate dialog.
+		use_amber_ = minimization_dialog_.getUseAmber();
+		charmm_dialog_.accept();
+		amber_dialog_.accept();
+
+		// Set up the force field.
 		setStatusbarText("setting up force field...");
 		
-		use_amber_ = minimization_dialog_.getUseAmber();
-		AmberFF& amber = getAMBERFF();
-		CharmmFF& charmm = getCHARMMFF();
-
-		if (use_amber_)
+		ForceField& ff = getForceField();
+		if (!ff.setup(*system))
 		{
-			if (!amber.setup(*system))
-			{
-				Log.error() << "Setup of amber force field failed." << endl;
-				return;
-			}
-			// calculate the energy
-			setStatusbarText("starting simulation...");
-			amber.updateEnergy();
+			setStatusbarText("Force field setup failed. See log for details.");
+			return;
+		}
+
+		// CHARMM setup may delete atoms (converted to united atoms!),
+		// so we have to make sure the rest of the world realizes something might have changed.
+		if (!use_amber_)
+		{
+			CompositeMessage* change_message = 
+				new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+			notify_(change_message);
+		}
+
+		// Start the simulation
+		setStatusbarText("Starting minimization...");
+		ff.updateEnergy();
+
+		EnergyMinimizer* minimizer;
+		if (minimization_dialog_.getUseConjugateGradient())
+		{
+			minimizer = new ConjugateGradientMinimizer;
 		}
 		else
 		{
-			if (!charmm.setup(*system))
-			{
-				Log.error() << "Setup of charmm force field failed." << endl;
-				return;
-			}
-			// calculate the energy
-			setStatusbarText("starting simulation...");
-			charmm.updateEnergy();
+			minimizer = new SteepestDescentMinimizer;
 		}
-
-		// calculate the energy
-		setStatusbarText("starting minimization...");
-
-		EnergyMinimizer* minimizer;
-		if (minimization_dialog_.getUseConjugateGradient())	minimizer = new ConjugateGradientMinimizer;
-		else 																								minimizer = new SteepestDescentMinimizer;
 
 		// set the minimizer options
 		minimizer->options[EnergyMinimizer::Option::MAXIMAL_NUMBER_OF_ITERATIONS] = minimization_dialog_.getMaxIterations();
 		minimizer->options[EnergyMinimizer::Option::MAX_GRADIENT] = minimization_dialog_.getMaxGradient();
 		minimizer->options[EnergyMinimizer::Option::ENERGY_DIFFERENCE_BOUND] = minimization_dialog_.getEnergyDifference();
 		minimizer->options[EnergyMinimizer::Option::ENERGY_OUTPUT_FREQUENCY] = 999999999;
-		if(use_amber_)
-			minimizer->setup(amber);
-		else
-			minimizer->setup(charmm);
-
 		minimizer->setMaxNumberOfIterations(minimization_dialog_.getMaxIterations());
+
+		// Setup the minimizer.
+		if (!minimizer->setup(ff))
+		{
+			setStatusbarText("Setup of minimizer failed. See log for details.");
+			delete minimizer;
+			return;
+		}
+		
 
 		try
 		{
@@ -969,40 +968,26 @@ namespace BALL
 			{
 				getMainControl()->update(*system);
 
-				QString message;
-				if(use_amber_)
-					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
-												minimizer->getNumberOfIterations(), amber.getEnergy(), amber.getRMSGradient());
-				else
-					message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
-												minimizer->getNumberOfIterations(), charmm.getEnergy(), charmm.getRMSGradient());
-				setStatusbarText(String(message.ascii()));
+				setStatusbarText(String("Iteration ") + String(minimizer->getNumberOfIterations())
+												 + ": E = " + String(ff.getEnergy()) + " kJ/mol, RMS grad = "
+												 + String(ff.getRMSGradient()) + " kJ/(mol A)");
 			}
 
+			// Print the final results.
 			Log.info() << endl << "minimization terminated." << endl << endl;
-			if(use_amber_)
-			{
-				printAmberResults();
-				Log.info() << "final RMS gradient    : " << amber.getRMSGradient() << " kJ/(mol A)   after "
+			printResults();			
+			Log.info() << "final RMS gradient    : " << ff.getRMSGradient() << " kJ/(mol A)   after "
 									 << minimizer->getNumberOfIterations() << " iterations" << endl << endl;
-				setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kJ/mol.");
-			}
-			else
-			{
-				printCharmmResults();
-				Log.info() << "final RMS gradient    : " << charmm.getRMSGradient() << "kJ/(mol A) after"
-									<< minimizer->getNumberOfIterations() << " iterations" << endl << endl;
-				setStatusbarText("Total CHARMM energy: " + String(charmm.getEnergy()) + " kJ/mol.");
-			}
+			setStatusbarText("Final energy: " + String(amber.getEnergy()) + " kJ/mol.");
 
 			// clean up
 			delete minimizer;
 	#endif
 		}
-		catch(Exception::GeneralException e)
+		catch(Exception::GeneralException& e)
 		{
-			String txt = "Calculation aborted because of throwed exception";
-			setStatusbarText(txt + ". See Logs");
+			String txt = "Calculation aborted because of unexpected exception: ";
+			setStatusbarText(txt + ". See Log for details.");
 			Log.error() << txt << ":" << std::endl;
 			Log.error() << e << std::endl;
 		}
@@ -1029,8 +1014,8 @@ namespace BALL
 		}
 
 		use_amber_ = md_dialog_.getUseAmber();
-		AmberFF& amber = getAMBERFF();
-		CharmmFF& charmm = getCHARMMFF();
+		AmberFF& amber = getAmberFF();
+		CharmmFF& charmm = getCharmmFF();
 		// set up the force field
 		setStatusbarText("setting up force field...");
 
@@ -1236,7 +1221,7 @@ namespace BALL
 	void MolecularStructure::showCharmmForceFieldOptions()
 	{
 		charmm_dialog_.raise();
-		if(charmm_dialog_.exec() == QDialog::Accepted)
+		if (charmm_dialog_.exec() == QDialog::Accepted)
 		{
 			chooseCharmmFF();
 		}

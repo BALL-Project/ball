@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.7 2004/02/18 23:06:17 amoll Exp $
+// $Id: molecularStructure.h,v 1.8 2004/02/19 10:17:05 oliver Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -129,36 +129,37 @@ namespace BALL
 			void checkMenu(MainControl& main_control)
 				throw();
 
+			/**	Get the currently selected force field instance.
+					This returns either a reference to the amber_ff_ member or to the charmm_ff_ member,
+					depending on the value of use_amber_.
+			*/
+			ForceField& getForceField() throw();
+
 			/** Get the instance of the AMBER forcefield.
 					The forcefield will be created, when this function is called the first time.
 			*/
-			AmberFF& getAMBERFF() 
-				throw();
+			AmberFF& getAmberFF() throw();
 			
 			/** Get the instance of the CHARMM forcefield.
 					The forcefield will be created, when this function is called the first time.
 			*/
-			CharmmFF& getCHARMMFF() 
-				throw();
+			CharmmFF& getCharmmFF() throw();
 
 			/// Get an instance of an dialog to setup the AMBER forcefield
-			AmberConfigurationDialog& getAmberConfigurationDialog()
-				throw();
+			AmberConfigurationDialog& getAmberConfigurationDialog()	throw();
 			
 			/// Get an instance of an dialog to setup the CHARMM forcefield
-			CharmmConfigurationDialog& getCharmmConfigurationDialog()
-				throw();
+			CharmmConfigurationDialog& getCharmmConfigurationDialog()	throw();
 
-			/// Print the results of the AMBER forcefield.
-			void printAmberResults()
-				throw();
+			/** Print detailed results of the energies.
+					This method prints
+					the detailed energies of the individual force field contributions and the total energy
+					to Log.info().
+			*/
+			void printResults() throw();
 				
-			/// Print the results of the CHARMM forcefield
-			void printCharmmResults()
-				throw();
-			
 			/** Fetch the widgets preferences from the INIfile.
-					\param  inifile the INIFile that contains the needed values
+					\param  inifile the INIFile that contains the required values
 			*/
 			virtual void fetchPreferences(INIFile &inifile)
 				throw();
