@@ -1,7 +1,9 @@
-// $Id: singularities.h,v 1.8 2001/06/22 11:03:23 oliver Exp $
+// $Id: singularities.h,v 1.9 2001/06/28 17:15:43 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SINGULARITIES_H
 #define BALL_STRUCTURE_SINGULARITIES_H
+
+//#define debug_singularities
 
 #ifndef BALL_MATHS_ANALYTICALGEOMERTY_H
 #	include <BALL/MATHS/analyticalGeometry.h>
@@ -106,9 +108,11 @@ namespace BALL
 													 const T& radius_of_probe)
 	{
 		list<TSESFace<T>*> faces;
-				std::cout << "SingularFaces.size() = " << singular_faces.size() << "\n";
 		GetFirstCathegoryFaces(singular_faces,faces);
+				#ifdef debug_singularities
+				std::cout << "SingularFaces.size() = " << singular_faces.size() << "\n";
 				std::cout << "FirstCathegoryFaces.size() = " << faces.size() << "\n";
+				#endif
 		while (faces.size() > 0)
 		{
 			TSESFace<T>* face1 = faces.front();
@@ -382,23 +386,31 @@ namespace BALL
 												 TBSDTree<T>* tree, TSolventExcludedSurface<T>* ses,
 												 const T& radius_of_probe)
 	{
+				#ifdef debug_singularities
 				std::cout << "TreatSingularEdge( " << *edge << " , [" << faces.size() << "] , tree, ses, "
 									<< radius_of_probe << ")\n";
+				#endif
 		HashSet<Index> candidates;
 		tree->get(edge->circle.p,edge->circle.radius+radius_of_probe,candidates);
 		if (candidates.size() == 0)
 		{
+					#ifdef debug_singularities
 					std::cout << "end\n";
+					#endif
 			return;
 		}
 		TVector3<T> normal((edge->vertex1->p-edge->circle.p)%
 											 (edge->vertex2->p-edge->circle.p));
+				#ifdef debug_singularities
 				std::cout << "  Drehvektor: " << normal << "\n";
+				#endif
 		TAngle<T> phi;
 		GetAngle(edge->vertex1->p-edge->circle.p,
 						 edge->vertex2->p-edge->circle.p,
 						 phi);
+				#ifdef debug_singularities
 				std::cout << "  Winkel der Edge: " << phi << "\n";
+				#endif
 		TAngle<T> min_phi(Constants::PI,true);
 		TAngle<T> max_phi(0,true);
 		TVector3<T> min_point;
@@ -419,18 +431,24 @@ namespace BALL
 		for (i = candidates.begin(); i != candidates.end(); i++)
 		{
 			probe.p = faces[*i]->rsface->getCenter();
+					#ifdef debug_singularities
 					std::cout << "  Schneide edge mit probe " << *i << " (" << probe << ") ...\n";
+					#endif
 			if (GetIntersectionPointsAndAngles(edge,probe,normal,p1,phi1,p2,phi2))
 			{
+						#ifdef debug_singularities
 						std::cout << "    " << p1 << "  " << phi1 << "\n";
 						std::cout << "    " << p2 << "  " << phi2 << "\n";
+						#endif
 				if (Maths::isGreater(phi1.value,0) && (phi1 < min_phi))
 				{
 					min_phi = phi1;
 					min_point = p1;
 					min_probe = probe;
 					min = (Index)*i;
+							#ifdef debug_singularities
 							std::cout << "    ... new min\n";
+							#endif
 				}
 				if (Maths::isLess(phi2.value,phi.value) && (phi2 > max_phi))
 				{
@@ -438,15 +456,20 @@ namespace BALL
 					max_point = p2;
 					max_probe = probe;
 					max = (Index)*i;
+							#ifdef debug_singularities
 							std::cout << "    ... new max\n";
+							#endif
 				}
 			}
 			else
 			{
+						#ifdef debug_singularities
 						std::cout << "    ... kein Schntt\n";
+						#endif
 			}
 		}
 		Constants::EPSILON = epsilon;
+				#ifdef debug_singularities
 				std::cout << "  Edge: " << *edge << "\n";
 				if (min != -1)
 				{
@@ -481,6 +504,7 @@ namespace BALL
 				output << *system;
 				output.close();
 				delete system;*/
+				#endif
 		if (min_phi > max_phi)
 		{
 			return;
@@ -516,6 +540,7 @@ namespace BALL
 		TSESEdge<T>* a2(NULL);
 		TSESEdge<T>* a3(NULL);
 		TSESEdge<T>* a4(NULL);
+				#ifdef debug_singularities
 				std::cout << "  probe1: " << probe1 << "\n";
 				std::cout << "  probe2: " << probe2 << "\n";
 				std::cout << "  ns1: " << *ns1 << "\n";
@@ -537,6 +562,7 @@ namespace BALL
 				output << *system;
 				output.close();
 				delete system;*/
+				#endif
 		if (min == max)
 		{
 			if (edge->face1->isNeighbouredTo(faces[min]) == false)
@@ -617,7 +643,9 @@ namespace BALL
 			a->face1->orientation.push_back(a->face1->orientation[a->face1->getRelativeEdgeIndex(edge->index)]);
 			a->face2->edge.push_back(a);
 			a->face2->orientation.push_back(a->face2->orientation[a->face2->getRelativeEdgeIndex(edge->index)]);
+					#ifdef debug_singularities
 					std::cout << "  a == " << *a << " != NULL\n";
+					#endif
 		}
 		if (na != NULL)
 		{
@@ -629,7 +657,9 @@ namespace BALL
 			na->face1->orientation.push_back(na->face1->orientation[na->face1->getRelativeEdgeIndex(edge->index)]);
 			na->face2->edge.push_back(na);
 			na->face2->orientation.push_back(na->face2->orientation[na->face2->getRelativeEdgeIndex(edge->index)]);
+					#ifdef debug_singularities
 					std::cout << "  na == " << *na << " != NULL\n";
+					#endif
 		}
 		if (a1 != NULL)
 		{
@@ -641,7 +671,9 @@ namespace BALL
 			a1->face1->orientation.push_back(0);
 			a1->face2->edge.push_back(a1);
 			a1->face2->orientation.push_back(1);
+					#ifdef debug_singularities
 					std::cout << "  a1 == " << *a1 << " != NULL\n";
+					#endif
 		}
 		if (a2 != NULL)
 		{
@@ -653,7 +685,9 @@ namespace BALL
 			a2->face1->orientation.push_back(0);
 			a2->face2->edge.push_back(a2);
 			a2->face2->orientation.push_back(1);
+					#ifdef debug_singularities
 					std::cout << "  a2 == " << *a2 << " != NULL\n";
+					#endif
 		}
 		if (a3 != NULL)
 		{
@@ -665,7 +699,9 @@ namespace BALL
 			a3->face1->orientation.push_back(0);
 			a3->face2->edge.push_back(a3);
 			a3->face2->orientation.push_back(1);
+					#ifdef debug_singularities
 					std::cout << "  a3 == " << *a3 << " != NULL\n";
+					#endif
 		}
 		if (a4 != NULL)
 		{
@@ -677,7 +713,9 @@ namespace BALL
 			a4->face1->orientation.push_back(0);
 			a4->face2->edge.push_back(a4);
 			a4->face2->orientation.push_back(1);
+					#ifdef debug_singularities
 					std::cout << "  a4 == " << *a4 << " != NULL\n";
+					#endif
 		}
 		edge->face1->edge[edge->face1->getRelativeEdgeIndex(edge->index)] = NULL;
 		edge->face2->edge[edge->face2->getRelativeEdgeIndex(edge->index)] = NULL;
@@ -694,10 +732,12 @@ namespace BALL
 			ns2->index = ses->vertices.size();
 			ses->vertices.push_back(ns2);
 		}
-		//ofstream print("singular.log");
-		//print << *ses;
-		//print.close();
-		//		std::cout << "\n\n" << *ses << "\n\n";
+				#ifdef debug_singularities
+				//ofstream print("singular.log");
+				//print << *ses;
+				//print.close();
+				//std::cout << "\n\n" << *ses << "\n\n";
+				#endif
 	}
 
 
