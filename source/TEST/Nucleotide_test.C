@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Nucleotide_test.C,v 1.13 2003/06/30 16:29:51 amoll Exp $
+// $Id: Nucleotide_test.C,v 1.14 2003/07/03 13:20:04 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.13 2003/06/30 16:29:51 amoll Exp $")
+START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.14 2003/07/03 13:20:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -468,6 +468,75 @@ CHECK(BALL_CREATE_DEEP(Nucleotide))
 	TEST_EQUAL(n->getAtom(0)->getName(), "a1")
 	delete n;
 RESULT
+
+
+CHECK(void prepend(Atom& atom) throw())
+	Nucleotide ac1;
+	Atom a1;
+	Atom a2;
+	ac1.insert(a1);
+	TEST_EQUAL(ac1.getAtom(0), &a1)
+	ac1.prepend(a2);
+	TEST_EQUAL(ac1.getAtom(0), &a2)
+	TEST_EQUAL(ac1.getAtom(1), &a1)
+RESULT
+
+CHECK(void insert(Atom& atom) throw())
+	Nucleotide ac1;
+	Atom a1;
+	Atom a2;
+	ac1.insert(a1);
+	TEST_EQUAL(ac1.getAtom(0), &a1)
+	ac1.insert(a2);
+	TEST_EQUAL(ac1.getAtom(0), &a1)
+	TEST_EQUAL(ac1.getAtom(1), &a2)
+RESULT
+
+CHECK(void append(Atom& atom) throw())
+	Nucleotide ac1;
+	Atom a1;
+	Atom a2;
+	ac1.insert(a1);
+	ac1.append(a2);
+	TEST_EQUAL(ac1.getAtom(0), &a1)
+	TEST_EQUAL(ac1.getAtom(1), &a2)
+RESULT
+
+CHECK(void insertBefore(Atom& atom, Composite& before) throw())
+	Nucleotide ac1;
+	Atom a1;
+	Atom a2;
+	Atom a3;
+	ac1.insert(a1);
+	ac1.append(a2);
+	ac1.insertBefore(a3, a2);
+	TEST_EQUAL(ac1.getAtom(0), &a1)
+	TEST_EQUAL(ac1.getAtom(1), &a3)
+	TEST_EQUAL(ac1.getAtom(2), &a2)
+RESULT
+
+CHECK(void insertAfter(Atom& atom, Composite& after) throw())
+	Nucleotide ac1;
+	Atom a1;
+	Atom a2;
+	Atom a3;
+	ac1.insert(a1);
+	ac1.append(a2);
+	ac1.insertAfter(a3, a1);
+	TEST_EQUAL(ac1.getAtom(0), &a1)
+	TEST_EQUAL(ac1.getAtom(1), &a3)
+	TEST_EQUAL(ac1.getAtom(2), &a2)
+RESULT
+
+CHECK(bool remove(Atom& atom) throw())
+	Nucleotide ac1;
+	Atom a;
+	ac1.insert(a);
+	ac1.remove(a);
+	TEST_EQUAL(ac1.getAtom(0), 0)
+	ac1.remove(a);
+RESULT
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

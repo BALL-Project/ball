@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: System_test.C,v 1.13 2003/07/01 15:03:42 amoll Exp $
+// $Id: System_test.C,v 1.14 2003/07/03 13:20:05 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(System, "$Id: System_test.C,v 1.13 2003/07/01 15:03:42 amoll Exp $")
+START_TEST(System, "$Id: System_test.C,v 1.14 2003/07/03 13:20:05 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -575,7 +575,70 @@ RESULT
 
 
 CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Atom)(AtomContainer)(Fragment)(Molecule)(Protein)(Residue)(Chain)(SecondaryStructure) (Nucleotide)(NucleicAcid))
-	// ???
+	System s;
+	Protein p1,p2;
+	Molecule m1, m2;
+	NucleicAcid na1, na2;
+	Nucleotide n1, n2;
+	Chain c1,c2;
+	SecondaryStructure s1,s2;
+	Residue r1, r2;
+	m1.insert(c1);
+	m2.insert(c2);
+	c1.insert(s1);
+	c2.insert(s2);
+	s1.insert(r1);
+	s2.insert(r2);
+	PDBAtom pa1,pa2,pa3;
+	r1.insert(pa1);
+	r2.insert(pa2);
+	r2.insert(pa3);
+
+	na1.insert(n1);
+	na2.insert(n2);
+
+	s.insert(na1);
+	s.insert(na2);
+	s.insert(p1);
+	s.insert(p2);
+	s.insert(m1);
+	s.insert(m2);
+	TEST_EQUAL(&*s.beginResidue(), &r1)
+	TEST_EQUAL(&*--s.endResidue(), &r2)
+	TEST_EQUAL(&*s.rbeginResidue(), &r2)	
+
+	TEST_EQUAL(&*s.beginFragment(), &n1)
+	TEST_EQUAL(&*--s.endFragment(), &r2)
+	TEST_EQUAL(&*s.rbeginFragment(), &r2)	
+
+	TEST_EQUAL(&*s.beginSecondaryStructure(), &s1)
+	TEST_EQUAL(&*--s.endSecondaryStructure(), &s2)
+	TEST_EQUAL(&*s.rbeginSecondaryStructure(), &s2)	
+
+	TEST_EQUAL(&*s.beginNucleotide(), &n1)
+	TEST_EQUAL(&*--s.endNucleotide(), &n2)
+	TEST_EQUAL(&*s.rbeginNucleotide(), &n2)	
+
+	TEST_EQUAL(&*s.beginNucleicAcid(), &na1)
+	TEST_EQUAL(&*--s.endNucleicAcid(), &na2)
+	TEST_EQUAL(&*s.rbeginNucleicAcid(), &na2)	
+
+	TEST_EQUAL(&*s.beginProtein(), &p1)
+	TEST_EQUAL(&*--s.endProtein(), &p2)
+	TEST_EQUAL(&*s.rbeginProtein(), &p2)	
+
+	TEST_EQUAL(&*s.beginMolecule(), &na1)
+	TEST_EQUAL(&*--s.endMolecule(), &m2)
+	TEST_EQUAL(&*s.rbeginMolecule(), &m2)	
+
+	TEST_EQUAL(&*s.beginChain(), &c1)
+	TEST_EQUAL(&*--s.endChain(), &c2)
+	TEST_EQUAL(&*s.rbeginChain(), &c2)	
+
+	TEST_EQUAL(&*s.beginAtom(), &pa1)
+	TEST_EQUAL(&*++s.beginAtom(), &pa2)
+	TEST_EQUAL(&*--s.endAtom(), &pa3)
+	TEST_EQUAL(&*s.rbeginAtom(), &pa3)	
 RESULT
 
 

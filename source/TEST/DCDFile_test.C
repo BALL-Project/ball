@@ -1,42 +1,37 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.13 2003/01/29 20:25:29 anker Exp $
+// $Id: DCDFile_test.C,v 1.14 2003/07/03 13:20:04 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
-
-// insert includes here
 #include <BALL/FORMAT/DCDFile.h>
-
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.13 2003/01/29 20:25:29 anker Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.14 2003/07/03 13:20:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-///  insert tests for each member function here         
-
 String dcd_test_file("data/DCD_test.dcd");
 
 DCDFile* p = new DCDFile;
 
-CHECK(DCDFile::DCDFile() throw())
+CHECK(DCDFile() throw())
   p = new DCDFile;
 	TEST_NOT_EQUAL(p, 0)
 RESULT
 
 
-CHECK(DCDFile::~DCDFile() throw())
+CHECK(~DCDFile() throw())
 	delete p;
 RESULT
 
 
-CHECK(DCDFile::DCDFile(const DCDFile& file) throw())
+CHECK(DCDFile(const DCDFile& file) throw(Exception::FileNotFound))
   DCDFile first_file(dcd_test_file);
 	DCDFile second_file(first_file);
 	bool test = (first_file == second_file);
@@ -44,7 +39,7 @@ CHECK(DCDFile::DCDFile(const DCDFile& file) throw())
 RESULT
 
 
-CHECK(DCDFile::DCDFile(const String& name, File::OpenMode open_mode) throw())
+CHECK(DCDFile(const String& name, File::OpenMode open_mode = std::ios::in) throw())
   DCDFile test_file(dcd_test_file, std::ios::in);
 	TEST_EQUAL(test_file.isOpen(), true)
 	TEST_EQUAL(test_file.getOpenMode(), std::ios::in)
@@ -61,7 +56,7 @@ CHECK(DCDFile::DCDFile(const String& name, File::OpenMode open_mode) throw())
 RESULT
 
 
-CHECK(DCDFile::DCDFile& operator = (const DCDFile& file) throw())
+CHECK(const DCDFile& operator = (const DCDFile& file) throw())
   DCDFile one(dcd_test_file, std::ios::in);
 	DCDFile two;
 	two = one;
@@ -70,7 +65,7 @@ CHECK(DCDFile::DCDFile& operator = (const DCDFile& file) throw())
 RESULT
 
 
-CHECK(DCDFile::clear() throw())
+CHECK(void clear() throw())
 	DCDFile file(dcd_test_file, std::ios::in);
 	file.clear();
 	DCDFile empty;
@@ -79,7 +74,7 @@ CHECK(DCDFile::clear() throw())
 RESULT
 
 
-CHECK(DCDFile::bool operator == (const DCDFile& file) throw())
+CHECK(bool operator == (const DCDFile& file) const throw())
   DCDFile one(dcd_test_file, std::ios::in);
   DCDFile two(dcd_test_file, std::ios::in);
 	bool test = (one == two);
@@ -92,7 +87,7 @@ RESULT
 // init() is called every time an object is constructed, so we won't have a
 // dedicated test here. There is no reasonable way to test it, anyway.
 
-CHECK(DCDFile::readHeader() throw())
+CHECK(bool readHeader() throw())
   DCDFile one(dcd_test_file, std::ios::in);
 	bool test = one.readHeader();
 	TEST_EQUAL(test, false)
@@ -103,7 +98,7 @@ CHECK(DCDFile::readHeader() throw())
 RESULT
 
 
-CHECK(DCDFile::writeHeader() throw())
+CHECK(bool writeHeader() throw())
 	String temporary;
 	NEW_TMP_FILE(temporary)
 	DCDFile one(temporary, std::ios::out);
@@ -115,7 +110,7 @@ CHECK(DCDFile::writeHeader() throw())
 RESULT
 
 
-CHECK(DCDFile::append(const SnapShot& snapshot) throw())
+CHECK(bool append(const SnapShot& snapshot) throw())
 	System system;
 	Molecule mol;
 	Atom atom;
@@ -144,13 +139,37 @@ CHECK(DCDFile::append(const SnapShot& snapshot) throw())
 RESULT
 
 
-CHECK(DCDFile::read(SnapShot& snapshot) throw())
+CHECK(bool read(SnapShot& snapshot) throw())
   //?????
 RESULT
 
 
-CHECK(DCDFile::flushToDisk(const ::std::vector<SnapShot> buffer) throw())
+CHECK(bool flushToDisk(const std::vector<SnapShot>& buffer) throw())
   //?????
+RESULT
+
+CHECK(BALL_CREATE(DCDFile))
+RESULT
+
+CHECK(bool hasVelocities() const throw())
+RESULT
+
+CHECK(bool init() throw())
+RESULT
+
+CHECK(bool isSwappingBytes() const throw())
+RESULT
+
+CHECK(bool open(const String& name, File::OpenMode open_mode = std::ios::in) throw())
+RESULT
+
+CHECK(bool seekAndWriteHeader() throw())
+RESULT
+
+CHECK(void disableVelocityStorage() throw())
+RESULT
+
+CHECK(void enableVelocityStorage() throw())
 RESULT
 
 /////////////////////////////////////////////////////////////

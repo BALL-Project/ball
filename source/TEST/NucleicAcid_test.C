@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NucleicAcid_test.C,v 1.14 2003/06/30 15:06:43 amoll Exp $
+// $Id: NucleicAcid_test.C,v 1.15 2003/07/03 13:20:04 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.14 2003/06/30 15:06:43 amoll Exp $")
+START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.15 2003/07/03 13:20:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -208,7 +208,7 @@ CHECK(Size countNucleotides() const throw())
 	TEST_EQUAL(na1.countNucleotides(), 1)
 RESULT
 
-CHECK(NucleicAcid::isValid())
+CHECK([EXTRA]NucleicAcid::isValid())
 	NucleicAcid na1("");
 	TEST_EQUAL(na1.isValid(), true)
 	na1.setID("");
@@ -217,7 +217,7 @@ CHECK(NucleicAcid::isValid())
 	TEST_EQUAL(na1.isValid(), true)
 RESULT
 
-CHECK(NucleicAcid::dump(ostream&, Size))
+CHECK([EXTRA]NucleicAcid::dump(ostream&, Size))
 	NucleicAcid na1("NA1");
 	Nucleotide n1("N1");
 	na1.insert(n1);
@@ -313,6 +313,16 @@ CHECK(const Nucleotide* getNucleotide(Position position) const throw())
 	TEST_EQUAL(na.getNucleotide(2), 0)
 RESULT
 
+CHECK([EXTRA] iterators)
+	NucleicAcid na;
+	Nucleotide n1,n2;
+	na.insert(n1);
+	na.insert(n2);
+
+	TEST_EQUAL(&*na.beginNucleotide(), &n1)
+	TEST_EQUAL(&*--na.endNucleotide(), &n2)
+	TEST_EQUAL(&*na.rbeginNucleotide(), &n2)	
+RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

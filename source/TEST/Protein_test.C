@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Protein_test.C,v 1.12 2003/07/01 12:25:00 amoll Exp $
+// $Id: Protein_test.C,v 1.13 2003/07/03 13:20:04 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Protein, "$Id: Protein_test.C,v 1.12 2003/07/01 12:25:00 amoll Exp $")
+START_TEST(Protein, "$Id: Protein_test.C,v 1.13 2003/07/03 13:20:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -498,6 +498,44 @@ CHECK(BALL_CREATE_DEEP(Protein))
 	TEST_EQUAL(test->countResidues(), 2)
 	TEST_EQUAL(test->getResidue(0)->getName(), "r1")
   delete test;
+RESULT
+
+CHECK([EXTRA] iterators)
+	Protein s;
+	Chain c1,c2;
+	SecondaryStructure s1,s2;
+	Residue r1, r2;
+	s.insert(c1);
+	s.insert(c2);
+	c1.insert(s1);
+	c2.insert(s2);
+	s1.insert(r1);
+	s2.insert(r2);
+	PDBAtom pa1,pa2,pa3;
+	r1.insert(pa1);
+	r2.insert(pa2);
+	r2.insert(pa3);
+
+	TEST_EQUAL(&*s.beginResidue(), &r1)
+	TEST_EQUAL(&*--s.endResidue(), &r2)
+	TEST_EQUAL(&*s.rbeginResidue(), &r2)	
+
+	TEST_EQUAL(&*s.beginFragment(), &r1)
+	TEST_EQUAL(&*--s.endFragment(), &r2)
+	TEST_EQUAL(&*s.rbeginFragment(), &r2)	
+
+	TEST_EQUAL(&*s.beginSecondaryStructure(), &s1)
+	TEST_EQUAL(&*--s.endSecondaryStructure(), &s2)
+	TEST_EQUAL(&*s.rbeginSecondaryStructure(), &s2)	
+
+	TEST_EQUAL(&*s.beginChain(), &c1)
+	TEST_EQUAL(&*--s.endChain(), &c2)
+	TEST_EQUAL(&*s.rbeginChain(), &c2)	
+
+	TEST_EQUAL(&*s.beginAtom(), &pa1)
+	TEST_EQUAL(&*++s.beginAtom(), &pa2)
+	TEST_EQUAL(&*--s.endAtom(), &pa3)
+	TEST_EQUAL(&*s.rbeginAtom(), &pa3)	
 RESULT
 
 /////////////////////////////////////////////////////////////

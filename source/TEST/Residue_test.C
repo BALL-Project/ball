@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Residue_test.C,v 1.25 2003/07/01 13:20:26 amoll Exp $
+// $Id: Residue_test.C,v 1.26 2003/07/03 13:20:04 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.25 2003/07/01 13:20:26 amoll Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.26 2003/07/03 13:20:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -602,17 +602,27 @@ CHECK(BALL_CREATE_DEEP(Residue))
 	delete test;
 RESULT
 
-CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer))
-  // ???
-RESULT
-
 CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(PDBAtom))
-  // ???
+	Residue c;
+	PDBAtom p1,p2,p3;
+	c.insert(p1);
+	c.insert(p2);
+	c.insert(p3);
+
+	TEST_EQUAL(&*c.beginPDBAtom(), &p1)
+	TEST_EQUAL(&*++c.beginPDBAtom(), &p2)
+	TEST_EQUAL(&*--c.endPDBAtom(), &p3)
+	TEST_EQUAL(&*c.rbeginPDBAtom(), &p3)	
 RESULT
 
 // ============================================================
 // not to be tested:
 // ============================================================
+
+CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer))
+// not to be tested
+RESULT
+
 CHECK(Size countAtomContainers() const throw())
 // not to be tested
 RESULT

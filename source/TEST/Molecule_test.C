@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Molecule_test.C,v 1.16 2003/06/30 14:34:51 amoll Exp $
+// $Id: Molecule_test.C,v 1.17 2003/07/03 13:20:04 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Molecule, "$Id: Molecule_test.C,v 1.16 2003/06/30 14:34:51 amoll Exp $")
+START_TEST(Molecule, "$Id: Molecule_test.C,v 1.17 2003/07/03 13:20:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -411,7 +411,13 @@ CHECK(BALL_CREATE_DEEP(Molecule))
 RESULT
 
 CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Fragment))
-  // ???
+	Molecule m;
+	Fragment f1, f2;
+	m.insert(f1);
+	m.insert(f2);
+	TEST_EQUAL(&*m.beginFragment(), &f1)
+	TEST_EQUAL(&*--m.endFragment(), &f2)
+	TEST_EQUAL(&*m.rbeginFragment(), &f2)	
 RESULT
 
 // ==============================================================

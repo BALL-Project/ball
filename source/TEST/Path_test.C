@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Path_test.C,v 1.11 2003/05/25 21:38:11 oliver Exp $
+// $Id: Path_test.C,v 1.12 2003/07/03 13:20:04 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(Path, "$Id: Path_test.C,v 1.11 2003/05/25 21:38:11 oliver Exp $")
+START_TEST(Path, "$Id: Path_test.C,v 1.12 2003/07/03 13:20:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -30,30 +30,30 @@ string data_suffix2("/data/");
 data_suffix2[0] = FileSystem::PATH_SEPARATOR;
 data_suffix2[5] = FileSystem::PATH_SEPARATOR;
 
-CHECK(getDataPath())
+CHECK(string getDataPath())
 	STATUS(p.getDataPath())
 	TEST_EQUAL(String(p.getDataPath()).hasSuffix(data_suffix1)
 	 		|| String(p.getDataPath()).hasSuffix(data_suffix2), true)
 RESULT
 
-CHECK(setDataPath(const string& path))
+CHECK(void setDataPath(const string& path))
 	p.setDataPath("XXXXX/XXXXX");
 	TEST_EQUAL(p.getDataPath(),"XXXXX/XXXXX")
 RESULT
 
-CHECK(addDataPath(const string& path))
+CHECK(void addDataPath(const string& path))
 	p.addDataPath("XXXXX/XXXXX");
 	STATUS(p.getDataPath())
 	TEST_EQUAL(String(p.getDataPath()).hasSubstring("XXXXX/XXXXX"), true)
 	TEST_EQUAL(String(p.getDataPath()).hasSuffix("XXXXX/XXXXX"), true)
 RESULT
 
-CHECK(getDefaultDataPath())
+CHECK(string getDefaultDataPath())
 	TEST_EQUAL(String(p.getDefaultDataPath()).hasSuffix(data_suffix1)
 			|| String(p.getDefaultDataPath()).hasSuffix(data_suffix2), true)
 RESULT
 
-CHECK(find(const string& name))
+CHECK(string find(const string& name))
 	Path p1;
 	String file = String("fragments") + FileSystem::PATH_SEPARATOR + "Fragments.db";
 	TEST_NOT_EQUAL(p1.find(file), "")
@@ -69,7 +69,7 @@ CHECK(find(const string& name))
 	TEST_EQUAL(p1.find(file), "");
 RESULT
 
-CHECK(findStrict(const string& name))
+CHECK(string findStrict(const string& name))
 	Path p1;
 	TEST_NOT_EQUAL(p1.find("fragments/Fragments.db"), "")
 	TEST_EQUAL(p1.find("Fragments.db"), "")

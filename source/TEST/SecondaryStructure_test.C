@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SecondaryStructure_test.C,v 1.12 2003/07/01 13:38:10 amoll Exp $
+// $Id: SecondaryStructure_test.C,v 1.13 2003/07/03 13:20:04 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/KERNEL/protein.h>
 ///////////////////////////
 
-START_TEST(SecondaryStructure, "$Id: SecondaryStructure_test.C,v 1.12 2003/07/01 13:38:10 amoll Exp $")
+START_TEST(SecondaryStructure, "$Id: SecondaryStructure_test.C,v 1.13 2003/07/03 13:20:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -462,16 +462,31 @@ CHECK(BALL_CREATE_DEEP(SecondaryStructure))
 RESULT
 
 CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS (Residue)(PDBAtom))
-  // ???
-RESULT
+	SecondaryStructure c;
+	Residue r1, r2;
+	c.insert(r1);
+	c.insert(r2);
+	PDBAtom p1,p2,p3;
+	r1.insert(p1);
+	r2.insert(p2);
+	r2.insert(p3);
+	TEST_EQUAL(&*c.beginResidue(), &r1)
+	TEST_EQUAL(&*--c.endResidue(), &r2)
+	TEST_EQUAL(&*c.rbeginResidue(), &r2)	
 
-CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer))
-  // ???
+	TEST_EQUAL(&*c.beginPDBAtom(), &p1)
+	TEST_EQUAL(&*++c.beginPDBAtom(), &p2)
+	TEST_EQUAL(&*--c.endPDBAtom(), &p3)
+	TEST_EQUAL(&*c.rbeginPDBAtom(), &p3)	
 RESULT
 
 // =======================================================================
 // not to be tested
 // =======================================================================
+
+CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer))
+  // not to be tested
+RESULT
 
 CHECK(Atom* getAtom(Position position) throw())
   // not to be tested
