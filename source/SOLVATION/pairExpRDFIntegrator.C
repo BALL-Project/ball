@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.C,v 1.5 2000/09/18 16:18:49 anker Exp $
+// $Id: pairExpRDFIntegrator.C,v 1.6 2000/09/19 09:15:48 anker Exp $
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 
@@ -115,7 +115,7 @@ namespace BALL
 		Interval interval;
 		double val = 0.0;
 
-		Size k = poly.isInRange(from);
+		Size k = poly.getIntervalIndex(from);
 		if (k == INVALID_POSITION)
 		{
 			return 0.0;
@@ -249,10 +249,6 @@ namespace BALL
 		// BAUSTELLE
 		int samples = (int) options.getInteger(Option::SAMPLES);
 		int verbosity = (int) options.getInteger(Option::VERBOSITY);
-		if (verbosity > 0)
-		{
-			Log.info() << "Using " << samples << " sample points for numerical integration" << endl;
-		}
 
 		double val = 0.0;
 		double r = interval.first;
@@ -278,7 +274,10 @@ namespace BALL
 		if (fabs(k2_) < 1e-10)
 		{
 
-			// Log.info() << "keine geometrische Korrektur nötig." << endl;
+			if (verbosity > 1)
+			{
+				Log.info() << "keine geometrische Korrektur nötig." << endl;
+			}
 
 			// the molecule we sit on is that defining the current sphere, so we
 			// dont have to consider the geometric correction. Thus we have an
@@ -309,6 +308,10 @@ namespace BALL
 			// numerically. The method we use is the trapezium method.
 
 			double area = 0;
+			if (verbosity > 0)
+			{
+				Log.info() << "Using " << samples << " sample points for numerical integration" << endl;
+			}
 			unsigned int n = samples;
 
 			// lower case variables are for the potential term
@@ -328,8 +331,9 @@ namespace BALL
 				Log.info() << "e^(-b*" << x << ") = " << exp(-b*x) << endl;
 				Log.info() << "R_ij_o/(" << x << ")^6 = " << R_ij_o_6/pow(x,6) << endl;
 				*/
-				area += ((exp(-b*x) - R_ij_o_6/pow(x,6)) * rdf_(X) 
-						+ (exp(-b*(x+s)) - R_ij_o_6/pow(x+s,6)) * rdf_(X+S))/2.0 * s;
+				area += (x*x*(exp(-b*x) - R_ij_o_6/pow(x,6)) * rdf_(X) 
+						+ (x+s)*(x+s)*(exp(-b*(x+s)) - R_ij_o_6/pow(x+s,6)) * rdf_(X+S))
+					/2.0 * s;
 				x += s;
 				X += S;
 				--n;
