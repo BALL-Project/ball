@@ -1,4 +1,4 @@
-// $Id: composedEnergyProcessor.h,v 1.4 2001/07/14 12:57:09 amoll Exp $
+// $Id: composedEnergyProcessor.h,v 1.5 2001/07/15 22:57:25 amoll Exp $
 
 #ifndef BALL_ENERGY_COMPOSEDENERGYPROCESSOR
 #define BALL_ENERGY_COMPOSEDENERGYPROCESSOR
@@ -91,19 +91,11 @@ namespace BALL
 		/** remove a component from the list 
 		*/
 		void removeComponent(EnergyProcessor* proc) throw();
-
-		/* return the energy value 
-		*/
-		// double getEnergy() throw();
-
+		
 		//@}
 		/** @name Predicates 
 		*/
 		//@{
-
-		/** Validity 
-		*/
-		bool isValid() const throw();
 
 		/** Equality operator 
 		*/
