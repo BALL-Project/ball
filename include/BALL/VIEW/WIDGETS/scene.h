@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.25 2004/03/24 14:20:58 amoll Exp $
+// $Id: scene.h,v 1.26 2004/03/31 10:01:24 anne Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -68,7 +68,29 @@ namespace BALL
 					SceneUpdateEvent()
 						: QCustomEvent( SCENE_UPDATE_EVENT){}
 			};
+			
+			/** @name Type definitions 
+			*/
+			//@{
 
+
+			/**	Predefined constants for the mode types
+			 		Add new enums members in derived classes, for new modi.
+					If you add new modi in this class, you have to add them in front of
+					the PICKING__MODE entry.
+			*/
+			enum ModeType
+			{
+				/// Default value.
+				ROTATE__MODE         = 0,
+
+				// add new modi here!!!
+				
+				/// Picking mode
+				PICKING__MODE
+			};
+
+			
 			//@} 
 			/** @name Enums 
 			*/ 
@@ -368,6 +390,9 @@ namespace BALL
 			virtual void wheelEvent(QWheelEvent* qmouse_event);
 #endif
 
+			//_ state of the scene: picking or rotate mode?
+			int current_mode_;
+			
 			public slots:
 
 			///
@@ -474,8 +499,6 @@ namespace BALL
 			// Menu entry IDs
 			Index rotate_id_, picking_id_, stereo_id_;
 			
-			bool rotate_mode_;
-
 			Vector3 system_origin_;
 			Quaternion quaternion_;
 
