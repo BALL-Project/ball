@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberEnergy.C,v 1.6 2002/02/27 12:21:15 sturm Exp $
+// $Id: amberEnergy.C,v 1.7 2003/09/29 13:26:18 anhi Exp $
 
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -61,18 +61,14 @@ int main(int argc, char** argv)
 	amber.setup(S);
 
 	// calculate the total energy and print it
-	Log.info() << "total energy: " << amber.updateEnergy() << " kJ/mol   "
-						 << "stretch: " << amber.getStretchEnergy() << " kJ/mol   "
+	Log.info() << "total energy: " << amber.updateEnergy() << " kJ/mol   ";
+  Log.info() << "stretch: " << amber.getStretchEnergy() << " kJ/mol   "
 						 << "bend: " << amber.getBendEnergy() << " kJ/mol   "
 						 << "torsion: " << amber.getTorsionEnergy() << " kJ/mol   "
 						 << "ES: " << amber.getESEnergy() << " kJ/mol   "
 						 << "vdW: " << amber.getVdWEnergy() << " kJ/mol" 
 					   << endl;
-	
+
 	// done
 	return 0;
 }
-			
-
-	
-	
