@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.sip,v 1.3 2003/10/29 22:54:40 oliver Exp $
+// $Id: forceField.sip,v 1.3.2.1 2004/06/02 12:30:40 amoll Exp $
 //
 
 class ForceField
@@ -30,7 +30,8 @@ class ForceField
 	const AtomVector& getAtoms() const;
 	System*  getSystem();
 	bool getUseSelection();
-	void setUseSelection(bool);
+	void disableSelection() throw();
+	void enableSelection() throw();
 	// ForceFieldParameters& getParameters();
 	int countComponents() const;
 	void insertComponent(ForceFieldComponent*);
