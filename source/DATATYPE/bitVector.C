@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.12 2000/07/24 09:12:36 oliver Exp $
+// $Id: bitVector.C,v 1.13 2000/07/25 13:35:37 amoll Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 
@@ -156,6 +156,28 @@ namespace BALL
 		first = tmp;
 	}
 
+	void BitVector::validateIndex_(Index& index)
+	{
+		// indices may be given as negative arguments: start from the end
+		// -1 therefore means the last bit.
+		if (index < 0)
+		{
+			index += size_;
+		}
+
+		// if the values are out of bounds - throw an exception
+		// leave it...
+		if (index < 0)
+		{
+			throw Exception::IndexUnderflow(__FILE__, __LINE__);
+		}
+
+		if ((Size)index >= size_)
+		{
+			setSize(index - 1);
+		}
+	}
+
 	void BitVector::validateIndex_(Index& index) const
 	{
 		// indices may be given as negative arguments: start from the end
@@ -174,7 +196,7 @@ namespace BALL
 
 		if ((Size)index >= size_)
 		{
-			const_cast<BitVector*>(this)->setSize(index);
+			throw Exception::IndexOverflow(__FILE__, __LINE__);
 		}
 	}
 

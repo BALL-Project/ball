@@ -1,4 +1,4 @@
-// $Id: bitVector.iC,v 1.9 2000/07/24 09:07:35 oliver Exp $
+// $Id: bitVector.iC,v 1.11 2000/07/29 18:02:57 amoll Exp $
 
 BALL_INLINE
 BitVector::BlockType BitVector::mask_(Index index) const
@@ -132,6 +132,7 @@ bool BitVector::getBit(Index index)
 BALL_INLINE
 bool BitVector::getBit(Index index) const
 {
+	validateIndex_(index);
 	BitVector* const  const_this = const_cast<BitVector *>(this);
 	return const_this->getBit(index);
 }
@@ -139,7 +140,6 @@ bool BitVector::getBit(Index index) const
 BALL_INLINE
 bool BitVector::operator [] (Index index) const
 {
-	//validateIndex_(index);
 	return getBit(index);
 }
  

@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.12 2000/07/25 05:53:26 oliver Exp $
+// $Id: bitVector.h,v 1.13 2000/07/25 13:36:11 amoll Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -433,6 +433,7 @@ namespace BALL
 
 		protected:
 	
+		void validateIndex_(Index& index);
 		void validateIndex_(Index& index) const;
 
 		void validateRange_(Index& first, Index& last) const;
