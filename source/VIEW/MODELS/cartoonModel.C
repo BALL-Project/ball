@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.21 2005/01/08 18:28:25 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.22 2005/01/08 18:32:15 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -388,7 +388,8 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 		
 		right  = spline_points_[res * interpolation_steps_ + j + 1] - spline_points_[res * 9 + j];
 
-		drawStrand_(spline_points_[res * interpolation_steps_ + j], normal, right, new_arrow_width, last_vertices, *mesh);
+		drawStrand_(spline_points_[res * interpolation_steps_ + j], normal, right, new_arrow_width, 
+								last_vertices, *mesh);
 	}
 
 	last_point_ 				= spline_points_[spline_points_.size() - 1];
@@ -546,8 +547,7 @@ Processor::Result AddCartoonModel::operator() (Composite& composite)
 	{
 		if (draw_ribbon_)
 		{
-			Position nr_of_residues = ss.countResidues();
-			Position max = getStartPosition_(ss) + nr_of_residues;
+			Position max = getStartPosition_(ss) + ss.countResidues();
 			if (max > spline_vector_.size() - 1) max = spline_vector_.size() - 1;
 
 			drawRibbon_(spline_vector_position_ * interpolation_steps_, 
@@ -555,7 +555,7 @@ Processor::Result AddCartoonModel::operator() (Composite& composite)
 		}
 		else
 		{
-		 drawHelix_(ss);
+		  drawHelix_(ss);
 		}
 	}
 	else if ((ss.getType() == SecondaryStructure::STRAND) && (ss.countResidues() > 3))
@@ -595,8 +595,7 @@ void AddCartoonModel::drawTube_(SecondaryStructure& ss)
 		return;
 	}
 
-	Position nr_of_residues = ss.countResidues();
-	Position max = getStartPosition_(ss) + nr_of_residues;
+	Position max = getStartPosition_(ss) + ss.countResidues();
 	if (max > spline_vector_.size() - 1) max = spline_vector_.size() - 1;
 
 	buildGraphicalRepresentation_(spline_vector_position_ * interpolation_steps_, 
@@ -1083,7 +1082,7 @@ void AddCartoonModel::calculateComplementaryBases_(const Composite& composite)
 				continue;
 			}
 
-			float new_distance = ((positions[&*rit1] - positions[*rit2]).getSquareLength());
+			const float new_distance = ((positions[&*rit1] - positions[*rit2]).getSquareLength());
 			if (new_distance > distance) 
 			{
 				continue;
