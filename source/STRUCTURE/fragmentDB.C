@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.64 2005/03/11 15:39:01 amoll Exp $
+// $Id: fragmentDB.C,v 1.65 2005/03/15 15:26:22 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -1020,7 +1020,7 @@ namespace BALL
 		it = map.find(match_name);
 		if (+it)
 		{
-			map[it->second].split(s, 2, ":");
+			it->second.split(s, 2, ":");
 			r_name = s[0];
 		}
 		
@@ -1035,7 +1035,7 @@ namespace BALL
 		it = map.find(match_name);
 		if (+it)
 		{
-			map[it->second].split(s, 2, ":");
+			it->second.split(s, 2, ":");
 			a_name = s[1];
 			r_name = s[0];
 			hit = true;
@@ -1047,7 +1047,7 @@ namespace BALL
 			it = map.find(match_name);
 			if (+it)
 			{
-				map[it->second].split(s, 2, ":");
+				it->second.split(s, 2, ":");
 				a_name = s[1];
 				hit = true;
 			}
