@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.24 2001/06/24 21:25:20 oliver Exp $
+// $Id: forceField.C,v 1.25 2001/06/26 02:38:12 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -80,7 +80,6 @@ namespace BALL
 	// assignment operator
 	ForceField& ForceField::operator = (const ForceField& force_field)
 	{
-
 		// guard against self assignment
 		if (&force_field != this) 
 		{ 	
@@ -221,30 +220,68 @@ namespace BALL
 		// clear existing atoms entries
 		atoms_.clear();
 
-
 		// check for selected atoms
 		// if any of the atoms is selected, the atoms_ array holds
 		// the selected atoms first (0 < i < number_of_movable_atoms_) 
 		use_selection_ = system.containsSelection();
 		number_of_movable_atoms_ = 0;
 		AtomConstIterator atom_it = system.beginAtom();
-		if (use_selection_ == true)
+		bool use_selection = getUseSelection();
+		if (use_selection)
 		{
 			for (; +atom_it; ++atom_it)
 			{
-				if (atom_it->isSelected() == true)
+				if (atom_it->isSelected())
 				{
 					atoms_.push_back(const_cast<Atom*>(&(*atom_it)));
 				}
 			}
-		} else {
-			for (; +atom_it; ++atom_it)
+			number_of_movable_atoms_ = (Size)atoms_.size();
+		}
+		
+		for (atom_it = system.beginAtom(); +atom_it; ++atom_it)
+		{
+			if (!use_selection || !atom_it->isSelected())
 			{
 				atoms_.push_back(const_cast<Atom*>(&(*atom_it)));
 			}
 		}
-		
-		number_of_movable_atoms_ = (Size)atoms_.size();
+		if (!use_selection)
+		{
+			number_of_movable_atoms_ = (Size)atoms_.size();
+		}
+	}
+
+	void ForceField::sortSelectedAtomVector_()
+	{
+		if (system_->containsSelection())
+		{
+			// sort by swapping
+			Position first = 0;
+			Position last = atoms_.size() - 1;
+			while (last >= first)
+			{	
+				while ((first < atoms_.size()) && atoms_[first]->isSelected())
+				{
+					first++;
+				}
+				while ((last > 0) && !atoms_[last]->isSelected())
+				{
+					last--;
+				}
+				if ((last > 0) && (first < atoms_.size()))
+				{
+					Atom* tmp = atoms_[first];
+					atoms_[first] = atoms_[last];
+					atoms_[last] = tmp;
+				}
+			}
+			number_of_movable_atoms_ = first - 1;
+		}
+		else
+		{
+			number_of_movable_atoms_ = atoms_.size();
+		}
 	}
 
 	// Setup with a system and a set of options
@@ -358,6 +395,9 @@ namespace BALL
 			// Call update if the selection time stamp changed since
 			// the last call to update. This ensures consistency of
 			// the selection information in pair lists, bond lists, etc.
+			// Also make sure the movable atoms are still in the front
+			// of the atom vevtor.
+			sortSelectedAtomVector_();
 			update();
 		}
 

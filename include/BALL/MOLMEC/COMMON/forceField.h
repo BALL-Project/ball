@@ -1,4 +1,4 @@
-// $Id: forceField.h,v 1.15 2001/06/24 21:26:10 oliver Exp $
+// $Id: forceField.h,v 1.16 2001/06/26 02:38:12 oliver Exp $
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
 #define BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -314,6 +314,10 @@ namespace BALL
 		/*_	Collect all atoms into the atoms_ vector.
 		*/
 		void collectAtoms_(const System& system);
+
+		/*_	Sort the atom vector wrt selection.
+		*/
+		void sortSelectedAtomVector_();
 		
 		/*_	@name	Protected Attributes
 		*/
