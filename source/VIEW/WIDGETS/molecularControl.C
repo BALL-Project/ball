@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.29 2004/01/13 15:28:09 amoll Exp $
+// $Id: molecularControl.C,v 1.30 2004/01/15 10:07:58 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -23,7 +23,8 @@ MolecularControl::SelectableListViewItem::SelectableListViewItem(QListViewItem* 
 	throw()
 	: QCheckListItem(parent, text, QCheckListItem::CheckBox),
 		composite_(composite),
-		control_reference_(control)
+		control_reference_(control),
+		ignore_change_(false)
 {
 	setText(1, type);
 }
@@ -33,15 +34,28 @@ MolecularControl::SelectableListViewItem::SelectableListViewItem(QListView* pare
 	throw()
 	: QCheckListItem(parent, text, QCheckListItem::CheckBox),
 		composite_(composite),
-		control_reference_(control)
+		control_reference_(control),
+		ignore_change_(false)
 {
 	setText(1, type);
 }
 
 
-void MolecularControl::SelectableListViewItem::stateChange(bool)
+void MolecularControl::SelectableListViewItem::stateChange(bool state)
 	throw()
 {
+	if (ignore_change_)
+	{
+		ignore_change_ = false;
+		return;
+	}
+
+	if (!control_reference_.getMainControl()->compositesAreMuteable())
+	{
+		ignore_change_ = true;
+		setOn(!state);
+		return;
+	}
 	control_reference_.selectedComposite_(composite_, isOn());
 }
 
@@ -221,34 +235,40 @@ void MolecularControl::buildContextMenu(Composite& composite)
 	context_menu_.setItemEnabled(DESELECT,  composite.isSelected() && composites_muteable);
 
 	context_menu_.insertSeparator();
-
-	if (RTTI::isKindOf<AtomContainer>(composite))
-	{
-		context_menu_.insertItem("Check residue", this, SLOT(checkResidue()), 0, RESIDUE__CHECK);
-
-		bool system_selected = true;
-		List<Composite*>::Iterator it = selected_.begin();	
-		for (; it != selected_.end(); it++)
-		{
-			if (!RTTI::isKindOf<System>(**it)) system_selected = false;
-			break;
-		}
-
-		context_menu_.setItemEnabled(OBJECT__COPY, system_selected);
-
-		context_menu_.insertItem("Build Bonds", this, SLOT(buildBonds()), 0, BONDS__BUILD);
-		context_menu_.setItemEnabled(BONDS__BUILD, composites_muteable);
-
-		context_menu_.insertItem("Count items", this, SLOT(countItems()), 0, COUNT__ITEMS);
-	}
-
 	context_menu_.insertItem("Focus camera", this, SLOT(centerCamera()), 0, CAMERA__CENTER);
+	context_menu_.insertSeparator();
 
-	if (RTTI::isKindOf<Atom>(composite))
+	// -----------------------------------> AtomContainer
+	bool atom_container_selected = RTTI::isKindOf<AtomContainer>(composite);
+
+	context_menu_.insertItem("Check residue", this, SLOT(checkResidue()), 0, RESIDUE__CHECK);
+	context_menu_.setItemEnabled(RESIDUE__CHECK, atom_container_selected);
+
+	bool system_selected = true;
+	List<Composite*>::Iterator it = selected_.begin();	
+	for (; it != selected_.end(); it++)
 	{
-		context_menu_.insertItem("Properties", this, SLOT(atomProperties()), 0, ATOM__PROPERTIES);
-		context_menu_.insertItem("Show Bonds", this, SLOT(bondProperties()), 0, BOND__PROPERTIES);
+		if (!RTTI::isKindOf<System>(**it)) system_selected = false;
+		break;
 	}
+
+	context_menu_.setItemEnabled(OBJECT__COPY, system_selected);
+
+	context_menu_.insertItem("Build Bonds", this, SLOT(buildBonds()), 0, BONDS__BUILD);
+	context_menu_.setItemEnabled(BONDS__BUILD, composites_muteable && atom_container_selected);
+
+	context_menu_.insertItem("Count items", this, SLOT(countItems()), 0, COUNT__ITEMS);
+	context_menu_.setItemEnabled(COUNT__ITEMS, atom_container_selected);
+	// <----------------------------------- AtomContainer
+	context_menu_.insertSeparator();
+	// -----------------------------------> Atoms
+	bool atom_selected = RTTI::isKindOf<Atom>(composite);
+	context_menu_.insertItem("Atom Properties", this, SLOT(atomProperties()), 0, ATOM__PROPERTIES);
+	context_menu_.setItemEnabled(ATOM__PROPERTIES, atom_selected);
+
+	context_menu_.insertItem("Show Bonds", this, SLOT(bondProperties()), 0, BOND__PROPERTIES);
+	context_menu_.setItemEnabled(BOND__PROPERTIES, atom_selected);
+	// <----------------------------------- Atoms
 
 	context_menu_.insertSeparator();
 	context_menu_.insertItem("Show filename", this, SLOT(showFilename()), 0, SHOW__FILENAME);
