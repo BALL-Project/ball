@@ -1,4 +1,4 @@
-// $Id: function.h,v 1.8 2001/03/09 16:06:16 oliver Exp $
+// $Id: function.h,v 1.9 2001/03/11 18:24:39 anker Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -1406,7 +1406,8 @@ namespace BALL
 	BALL_INLINE
 	MutablePower<Function, DataType>::MutablePower()
 		throw()
-		: exponent_(0)
+		: function_(0),
+			exponent_(0)
 	{
 	}
 
@@ -1431,8 +1432,8 @@ namespace BALL
 	const MutablePower<Function, DataType>& MutablePower<Function, DataType>::operator = (const MutablePower& power)
 		throw()
 	{
-		exponent_ = power.exponent_;
 		function_ = power.function_;
+		exponent_ = power.exponent_;
 		return *this;
 	}
 
