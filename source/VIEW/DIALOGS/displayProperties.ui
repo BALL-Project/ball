@@ -2,12 +2,12 @@
 <class>DisplayPropertiesData</class>
 <widget class="QDialog">
     <property name="name">
-        <cstring>dlgDisplayProperties</cstring>
+        <cstring>DisplayPropertiesData</cstring>
     </property>
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>1</y>
+            <y>0</y>
             <width>425</width>
             <height>185</height>
         </rect>
@@ -2813,49 +2813,49 @@
     <connection>
         <sender>apply_button</sender>
         <signal>clicked()</signal>
-        <receiver>dlgDisplayProperties</receiver>
+        <receiver>DisplayPropertiesData</receiver>
         <slot>applyButtonClicked()</slot>
     </connection>
     <connection>
         <sender>close_button</sender>
         <signal>clicked()</signal>
-        <receiver>dlgDisplayProperties</receiver>
+        <receiver>DisplayPropertiesData</receiver>
         <slot>accept()</slot>
     </connection>
     <connection>
         <sender>edit_selection</sender>
         <signal>clicked()</signal>
-        <receiver>dlgDisplayProperties</receiver>
+        <receiver>DisplayPropertiesData</receiver>
         <slot>editSelectionColor()</slot>
     </connection>
     <connection>
         <sender>custom_button</sender>
         <signal>clicked()</signal>
-        <receiver>dlgDisplayProperties</receiver>
+        <receiver>DisplayPropertiesData</receiver>
         <slot>editColor()</slot>
     </connection>
     <connection>
         <sender>model_type_combobox</sender>
         <signal>activated(int)</signal>
-        <receiver>dlgDisplayProperties</receiver>
+        <receiver>DisplayPropertiesData</receiver>
         <slot>selectModel(int)</slot>
     </connection>
     <connection>
         <sender>precision_combobox</sender>
         <signal>activated(int)</signal>
-        <receiver>dlgDisplayProperties</receiver>
+        <receiver>DisplayPropertiesData</receiver>
         <slot>selectPrecision(int)</slot>
     </connection>
     <connection>
         <sender>coloring_method_combobox</sender>
         <signal>activated(int)</signal>
-        <receiver>dlgDisplayProperties</receiver>
+        <receiver>DisplayPropertiesData</receiver>
         <slot>selectColoringMethod(int)</slot>
     </connection>
     <connection>
         <sender>mode_combobox</sender>
         <signal>activated(int)</signal>
-        <receiver>dlgDisplayProperties</receiver>
+        <receiver>DisplayPropertiesData</receiver>
         <slot>selectMode(int)</slot>
     </connection>
 </connections>
