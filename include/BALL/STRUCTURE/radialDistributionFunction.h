@@ -1,4 +1,4 @@
-// $Id: radialDistributionFunction.h,v 1.3 2000/09/22 16:32:13 anker Exp $
+// $Id: radialDistributionFunction.h,v 1.4 2000/09/25 16:29:10 anker Exp $
 
 #ifndef BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
 #define BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
@@ -92,7 +92,7 @@ namespace BALL
 		bool isInRange(double x) const;
 
 		/** check validity */
-		bool isValid();
+		bool isValid() const;
 
 		//@}
 
