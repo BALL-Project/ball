@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomicContactEnergy.C,v 1.3 2002/12/12 10:15:20 oliver Exp $
+// $Id: atomicContactEnergy.C,v 1.4 2003/05/06 20:27:38 oliver Exp $
+//
 
 #include <BALL/ENERGY/atomicContactEnergy.h>
 
@@ -62,11 +63,11 @@ namespace BALL
 
 	typedef struct 
 	{
-		int					type;
+		Index					type;
 		Vector3			v;
 		unsigned		index;
 		String			name;
-		Atom*				atom;
+		const Atom*	atom;
 	} ACEFastAtomType_;
 
 
@@ -80,8 +81,8 @@ namespace BALL
 		StringHashMap<Atom::Type>	table;
 		float											ACE[18][18];
 		FILE*											ACE_file;
-		int												i;
-		int												j;
+		Index												i;
+		Index												j;
 
 		table = buildTable_();
 
@@ -129,17 +130,17 @@ namespace BALL
 
 		ACEFastAtomType_*		atom;
 		String							atom_name;
-		int									atom_type;
+		Index									atom_type;
 		unsigned						index = 0;
 
 
-		AtomIterator	atom_iterator;
-		for (atom_iterator = atoms.beginAtom(); +atom_iterator; ++atom_iterator) 
+		AtomConstIterator atom_it(atoms.beginAtom());
+		for (atom_it = atoms.beginAtom(); +atom_it; ++atom_it) 
 		{
 			// construct correct name, <RESNAME>:<ATOMNAME>
-			atom_name = atom_iterator->getFragment()->getName().trim();		
+			atom_name = atom_it->getFragment()->getName().trim();		
 			atom_name.append(":");
-			atom_name.append((*atom_iterator).getName().trim());
+			atom_name.append(atom_it->getName().trim());
 
 			// get the atom type from hash table
 			//    atom type = -1 for hydrogen (not to be considered)
@@ -149,7 +150,9 @@ namespace BALL
 			if (table.has(atom_name))
 			{
 				atom_type = table[atom_name];
-			} else {
+			} 
+			else 
+			{
 				atom_type = -3;
 			}
 
@@ -158,13 +161,15 @@ namespace BALL
 			{
 				atom = new ACEFastAtomType_;
 				atom->index = index++;
-				atom->v = atom_iterator->getPosition();
+				atom->v = atom_it->getPosition();
 				atom->type = atom_type;
 				atom->name = atom_name;
-				atom->atom = &(*atom_iterator);
+				atom->atom = &(*atom_it);
 				grid->insert(atom->v, atom);
 				// Log.error() << atom_name << ": " << atom_type << endl;
-			} else {
+			} 
+			else 
+			{
 				// some types are known but not parametrized
 				if (atom_type == -2)
 				{
@@ -179,15 +184,15 @@ namespace BALL
 			}		
 		}
 
-		float			contact_energy = 0;
-		float			sq_distance;
-		Vector3		v;
+		float contact_energy = 0;
+		float	sq_distance;
+		Vector3 v;
 
-		HashGrid3<ACEFastAtomType_*>::BoxIterator					box_iterator;
-		HashGridBox3<ACEFastAtomType_*>::DataIterator			data_iterator;
+		HashGrid3<ACEFastAtomType_*>::BoxIterator					box_it;
+		HashGridBox3<ACEFastAtomType_*>::DataIterator			data_it;
 
-		HashGridBox3<ACEFastAtomType_*>::BoxIterator			box_iterator2;
-		HashGridBox3<ACEFastAtomType_*>::DataIterator			data_iterator2;
+		HashGridBox3<ACEFastAtomType_*>::BoxIterator			box_it2;
+		HashGridBox3<ACEFastAtomType_*>::DataIterator			data_it2;
 
 #ifdef BALL_DEBUG_ACE
 		Size count = 0;
@@ -210,29 +215,29 @@ namespace BALL
 		
 
 		// iterate over all (non empty) grid boxes
-		for (box_iterator = grid->beginBox(); +box_iterator; ++box_iterator)
+		for (box_it = grid->beginBox(); +box_it; ++box_it)
 		{
 			// iterate over all items in the box
-			for (data_iterator = (*box_iterator).beginData(); +data_iterator; ++data_iterator) 
+			for (data_it = (*box_it).beginData(); +data_it; ++data_it) 
 			{
-				v = (*data_iterator)->v;
+				v = (*data_it)->v;
 
 				// iterate over all neighbouring boxes (includig the box itself!)
-				for (box_iterator2 = (*box_iterator).beginBox(); +box_iterator2; ++box_iterator2)
+				for (box_it2 = (*box_it).beginBox(); +box_it2; ++box_it2)
 				{
 					// iterate over all items in the box
-					for (data_iterator2 = (*box_iterator2).beginData(); +data_iterator2; ++data_iterator2) 
+					for (data_it2 = (*box_it2).beginData(); +data_it2; ++data_it2) 
 					{
 						// consider only pairs of different atoms and consider each pair only once 
-						if ((*data_iterator2)->index > (*data_iterator)->index)
+						if ((*data_it2)->index > (*data_it)->index)
 						{					
 							// check whether the distance between the atoms is at most 6.0 Angstrom
-							sq_distance = v.getSquareDistance((*data_iterator2)->v);
+							sq_distance = v.getSquareDistance((*data_it2)->v);
 							if (sq_distance <= 36.0)
 							{
-								if (!(*data_iterator)->atom->isBoundTo(*(*data_iterator2)->atom))
+								if (!(*data_it)->atom->isBoundTo(*(*data_it2)->atom))
 								{
-									contact_energy += ACE[(*data_iterator)->type][(*data_iterator2)->type];
+									contact_energy += ACE[(*data_it)->type][(*data_it2)->type];
 #ifdef BALL_DEBUG_ACE
 									count++;
 #endif

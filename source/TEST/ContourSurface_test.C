@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ContourSurface_test.C,v 1.3 2003/05/04 20:15:48 oliver Exp $
+// $Id: ContourSurface_test.C,v 1.4 2003/05/06 20:27:44 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(ContourSurface, "$Id: ContourSurface_test.C,v 1.3 2003/05/04 20:15:48 oliver Exp $")
+START_TEST(ContourSurface, "$Id: ContourSurface_test.C,v 1.4 2003/05/06 20:27:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -121,6 +121,23 @@ CHECK(TContourSurface<T>::operator << (TRegularData3D<T>& data))
 		TEST_EQUAL(cs.triangle[i].v3, t[i][2])
 	}
 	
+RESULT
+
+
+// ????
+CHECK(exception test)
+	
+	RegularData3D rd;
+	std::ifstream is("2ptc2.loc");
+	is >> rd;
+	is.close();
+	STATUS("read grid")
+	ContourSurface cs(0.02);
+	STATUS("cs ctor")
+	cs << rd;
+	STATUS("done")
+	STATUS(cs.vertex.size())
+	STATUS(cs.triangle.size())
 RESULT
 
 /////////////////////////////////////////////////////////////
