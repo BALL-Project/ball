@@ -1,4 +1,4 @@
-// $Id: function.h,v 1.7 2001/03/06 14:02:18 balltest Exp $
+// $Id: function.h,v 1.8 2001/03/09 16:06:16 oliver Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -936,7 +936,8 @@ namespace BALL
 	};
 
 
-	/** MutablePower class.	\\
+	/** MutablePower class.	
+			\\
 			{\bf Definition:} \URL{BALL/MATHS/function.h}
 	*/
 	template <typename Function, typename DataType = float>
@@ -1413,7 +1414,8 @@ namespace BALL
 	BALL_INLINE
 	MutablePower<Function, DataType>::MutablePower(const MutablePower& power)
 		throw()
-		: exponent_(power.exponent_)
+		: function_(power.function_),
+			exponent_(power.exponent_)
 	{
 	}
 
