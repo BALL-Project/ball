@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.6 2000/02/02 09:51:03 len Exp $
+// $Id: support.C,v 1.7 2000/02/10 15:14:25 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/DATATYPE/hashGrid.h>
@@ -20,7 +20,8 @@ namespace BALL
 			(vector< pair <Atom*, Atom*> >& pair_vector, 
 			 const vector<Atom*>& atom_vector,
 			 const Box3& box, float distance,
-			 bool periodic_boundary_enabled, int type)
+			 bool periodic_boundary_enabled, 
+			 PairListAlgorithmType type)
 		{
 
 			// determine lower and upper corner of the hash grid that contains the box 
@@ -114,7 +115,7 @@ namespace BALL
 			float  squared_distance = distance * distance;
 
 			// initialize the hash grid
-			HashGrid3<Atom*>	grid(lower, upper - lower, distance);
+			HashGrid3<Atom*>	grid(lower - Vector3(0.1), upper - lower + Vector3(0.2), distance);
 			HashGridBox3<Atom*>* hbox;
 
 			// Iterators and hash box pointer for the grid search
@@ -132,7 +133,7 @@ namespace BALL
 
 				// Check what kind of algorithm should be used for determining the neighbours
 
-				if (type == 0) 
+				if (type == BRUTE_FORCE) 
 				{
 					// Brute force algorithm
 
@@ -218,7 +219,7 @@ namespace BALL
 			} else {
 
 				// Check what kind of algorithm should be used for calculating the neighbours
-				if (type == 0) 
+				if (type == BRUTE_FORCE) 
 				{
 					// Brute force algorithm
 					for (Size atom_index_a = 0 ; atom_index_a < (atom_vector.size() - 1) ; ++atom_index_a) 
