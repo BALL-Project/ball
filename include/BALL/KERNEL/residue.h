@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.15 2000/05/15 12:07:57 amoll Exp $
+// $Id: residue.h,v 1.16 2000/05/15 19:12:26 oliver Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -63,6 +63,12 @@ namespace BALL
 			PROPERTY__C_TERMINAL,
 			///
 			PROPERTY__N_TERMINAL,
+			/** Property for cyclic peptides.
+					This property is set by the build bonds processor, if 
+					an atom of the first and an atom of the last residue in a chain
+					share a bond.
+			*/
+			PROPERTY__CYCLIC,
 
 			///
 			NUMBER_OF_PROPERTIES
