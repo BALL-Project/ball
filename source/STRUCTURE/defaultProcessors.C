@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.C,v 1.15 2001/07/31 12:56:06 oliver Exp $
+// $Id: defaultProcessors.C,v 1.16 2002/01/17 15:12:53 oliver Exp $
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
 
@@ -209,13 +209,15 @@ namespace BALL
 	 
 	// AssignChargeProcessor ==================================================
 	AssignChargeProcessor::AssignChargeProcessor()
-		:	AssignRadiusProcessor()
+		:	AssignRadiusProcessor(),
+			total_charge_(0.0)
 	{
 	}
 
 	AssignChargeProcessor::AssignChargeProcessor(const String& filename)
 		throw(Exception::FileNotFound)
-		: AssignRadiusProcessor(filename)
+		: AssignRadiusProcessor(filename),
+			total_charge_(0.0)
 	{
 	}
 
