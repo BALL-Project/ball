@@ -1,7 +1,8 @@
-// $Id: colorExtension2.iC,v 1.2 1999/12/19 17:19:27 oliver Exp $
+// $Id: colorExtension2.iC,v 1.3 2001/05/13 13:47:45 hekl Exp $
 
 BALL_INLINE
 void ColorExtension2::setColor1(const ColorRGBA& color)
+	throw()
 {
   color1_ = color;
 }
@@ -11,24 +12,28 @@ void
 ColorExtension2::setColor1
   (const ColorUnit& red, const ColorUnit& green,
    const ColorUnit& blue, const ColorUnit& alpha)
+	throw()
 {
   color1_.set(red, green, blue, alpha);
 }
 
 BALL_INLINE
 ColorRGBA& ColorExtension2::getColor1()
+	throw()
 {
   return color1_;
 }
 
 BALL_INLINE
 const ColorRGBA& ColorExtension2::getColor1() const
+	throw()
 {
   return color1_;
 }
 
 BALL_INLINE
 void ColorExtension2::getColor1(ColorRGBA& color) const
+	throw()
 {
   color = color1_;
 }
@@ -37,6 +42,7 @@ BALL_INLINE
 void ColorExtension2::getColor1
   (ColorUnit& red, ColorUnit& green,
    ColorUnit& blue, ColorUnit& alpha) const
+	throw()
 {
   color1_.get(red, green, blue, alpha);
 }
@@ -44,6 +50,7 @@ void ColorExtension2::getColor1
 BALL_INLINE
 void ColorExtension2::getColor1
   (ColorUnit& red, ColorUnit& green, ColorUnit& blue) const
+	throw()
 {
   color1_.get(red, green, blue);
 }
@@ -52,6 +59,7 @@ void ColorExtension2::getColor1
 
 BALL_INLINE
 void ColorExtension2::setColor2(const ColorRGBA& color)
+	throw()
 {
   color2_ = color;
 }
@@ -60,24 +68,28 @@ BALL_INLINE
 void ColorExtension2::setColor2
   (const ColorUnit& red, const ColorUnit& green,
    const ColorUnit& blue, const ColorUnit& alpha)
+	throw()
 {
   color2_.set(red, green, blue, alpha);
 }
 
 BALL_INLINE
 ColorRGBA& ColorExtension2::getColor2()
+	throw()
 {
   return color2_;
 }
 
 BALL_INLINE
 const ColorRGBA& ColorExtension2::getColor2() const
+	throw()
 {
   return color2_;
 }
 
 BALL_INLINE
 void ColorExtension2::getColor2(ColorRGBA& color) const
+	throw()
 {
   color = color2_;
 }
@@ -86,6 +98,7 @@ BALL_INLINE
 void ColorExtension2::getColor2
   (ColorUnit& red, ColorUnit& green,
    ColorUnit& blue, ColorUnit& alpha) const
+	throw()
 {
   color2_.get(red, green, blue, alpha);
 }
@@ -93,6 +106,7 @@ void ColorExtension2::getColor2
 BALL_INLINE
 void ColorExtension2::getColor2
   (ColorUnit& red, ColorUnit& green, ColorUnit& blue) const
+	throw()
 {
   color2_.get(red, green, blue);
 }
@@ -100,6 +114,7 @@ void ColorExtension2::getColor2
 BALL_INLINE
 void ColorExtension2::setColors
   (const ColorRGBA& a, const ColorRGBA& b)
+	throw()
 {
   color1_ = a;
   color2_ = b;
@@ -108,6 +123,7 @@ void ColorExtension2::setColors
 BALL_INLINE
 void ColorExtension2::getColors
   (ColorRGBA& a, ColorRGBA& b) const
+	throw()
 {
   a = color1_;
   b = color2_;

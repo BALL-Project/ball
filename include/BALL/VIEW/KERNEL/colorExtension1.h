@@ -1,4 +1,4 @@
-// $Id: colorExtension1.h,v 1.4 2001/02/04 15:58:20 hekl Exp $
+// $Id: colorExtension1.h,v 1.5 2001/05/13 13:47:44 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION1_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION1_H
@@ -20,16 +20,14 @@ namespace BALL
 		/** ColorExtension class.
 				
 				{\bf Framework:} BALL/VIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/colorExtension1.h}
-				\\
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/colorExtension1.h}\\ \\
 				The class ColorExtension is used as a base class for all geometric 
 				objects that need a single color \Ref{ColorRGBA}. It provides the derived
 				class with methods for accessing that color.
-				
 				@memo    ColorExtension class (BALL VIEW kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/04 15:58:20 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/13 13:47:44 $
 		*/
 		class ColorExtension
 		{
@@ -42,48 +40,51 @@ namespace BALL
 			/** Default Constructor.
 					Construct new colorExtension.
 					The color of {\em *this} colorExtension is set to (0.0, 0.0, 0.0, 1.0).
-
-					@return      ColorExtension - new constructed colorExtension
-					@see         ColorRGBA::ColorRGBA
+					@return      ColorExtension new constructed colorExtension
+					@see         ColorRGBA
 			*/
-			ColorExtension();
+			ColorExtension()
+				throw();
 
 			/** Copy constructor.
 					Construct new colorExtension by copying the colorExtension 
 					{\em color_extension}. The color of {\em *this} colorExtension is
 					initialized to the color of {\em color_extension}.
-
 					@param       color_extension the colorExtension to be copied
-					@return      ColorExtension - new constructed colorExtension copied from {\em color_extension}
-					@see         ColorRGBA::ColorRGBA
+					@return      ColorExtension new constructed colorExtension copied from {\em color_extension}
+					@see         ColorRGBA
 			*/
-			ColorExtension(const ColorExtension& color_extension);
+			ColorExtension(const ColorExtension& color_extension)
+				throw();
 
 			//@}
 
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.
 					Default destruction of {\em *this} colorExtension.
-					Calls \Ref{ColorExtension::destroy}.
-					@see         ColorExtension::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
-			virtual ~ColorExtension();
+			virtual ~ColorExtension()
+				throw();
 
 			/** Explicit default initialization.
 					Set the color of {\em *this} colorExtension to the color 
 					(0.0, 0.0, 0.0, 1.0).
-					Calls \Ref{ColorRGBA::clear}				
-
+					Calls \Ref{ColorRGBA::clear}.
 					@see ColorRGBA::clear
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 
 			/** Explicit destructor.
 					Empty for further purpose.
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 		
 			/**	@name	Assignment methods
@@ -95,48 +96,48 @@ namespace BALL
 					colorExtension.
 					The color of {\em *this} colorExtension is initialized to the color of 
 					the colorExtension {\em color_extension}.
-					Calls \Ref{ColorRGBA::set}
-
+					Calls \Ref{ColorRGBA::set}.
 					@param       color_extension the colorExtension to be copied
-					@see         ColorRGBA::ColorRGBA
+					@see         ColorRGBA
 					@see         ColorRGBA::set
 			*/
-			void set(const ColorExtension& color_extension);
+			void set(const ColorExtension& color_extension)
+				throw();
 
 			/** Assignment operator.
 					Assign the colorExtension {\em color_extension} to {\em *this}
 					colorExtension.
-					Calls \Ref{ColorExtension::set}.
+					Calls \Ref{set}.
 					The color of {\em *this} colorExtension is initialized to the color 
 					of the colorExtension {\em color_extension}.\\
-
 					@param       color_extension the colorExtension to be copied
-					@return      ColorExtension& - {\em *this} colorExtension
-					@see         ColorExtension::set
+					@return      ColorExtension& {\em *this} colorExtension
+					@see         set
 			*/
-			ColorExtension& operator = (const ColorExtension& color_extension);
+			const ColorExtension& operator = (const ColorExtension& color_extension)
+				throw();
 
 			/** Copying.
 					Copy {\em *this} colorExtension to the colorExtension {\em color_extension}.
-					Calls \Ref{ColorExtension::set}.
+					Calls \Ref{set}.
 					The color of the colorExtension {\em color_extension} is initialized to the
 					color of {\em *this} colorExtension.\\
-
 					@param       color_extension the colorExtension to be assigned to
-					@see         ColorExtension::set
+					@see         set
 			*/
-			void get(ColorExtension& color_extension) const;
+			void get(ColorExtension& color_extension) const
+				throw();
 
 			/** Swapping of colorExtensions.
 					Swap the color of {\em *this} colorExtension with the colorExtension
 					{\em color_extension}.
-					Calls \Ref{ColorRGBA::swap}
-
+					Calls \Ref{ColorRGBA::swap}.
 					@param       color_extension the colorExtension being swapped with {\em *this} colorExtension 
-					@see         ColorExtension::ColorExtension
+					@see         ColorExtension
 					@see         ColorRGBA::swap
 			*/
-			void swap(ColorExtension& color_extension);
+			void swap(ColorExtension& color_extension)
+				throw();
 			//@}
 
 			/**	@name	Accessors: inspectors and mutators 
@@ -146,84 +147,84 @@ namespace BALL
 			/** Change the color of {\em *this} colorExtension.
 					Change the color of {\em *this} colorExtension to the color
 					represented by the parameter {\em color_extension}.
-
 					@param       color_extension the new color of {\em *this} colorExtension
-					@see         ColorExtension::getColor
-					@see         ColorRGBA::ColorRGBA
+					@see         getColor
+					@see         ColorRGBA
 			*/
-			void setColor(const ColorRGBA& color);
+			void setColor(const ColorRGBA& color)
+				throw();
 			
 			/** Change the color of {\em *this} colorExtension.
 					Change the color of {\em *this} colorExtension to the color represented
 					by the parameters {\em red}, {\em green}, {\em blue} and {\em alpha}.
-
 					@param       red the red component of the new color of {\em *this} colorExtension
 					@param       green the green component of the new color of {\em *this} colorExtension
 					@param       blue the blue component of the new color of {\em *this} colorExtension
 					@param       alpha the alpha component of the new color of {\em *this} colorExtension (Default=1.0)
-					@see         ColorExtension::getColor
-					@see         ColorUnit::ColorUnit
+					@see         getColor
+					@see         ColorUnit
 			*/
 			void setColor
 				(const ColorUnit& red, const ColorUnit& green,
-				 const ColorUnit& blue, const ColorUnit& alpha = (float)1);
+				 const ColorUnit& blue, const ColorUnit& alpha = (float)1)
+				throw();
 			
 			/** Mutable inspection of the color of {\em *this} colorExtension.
 					Access the mutual reference of the color of {\em *this} colorExtension.
-					
-					@return      ColorRGBA& - mutable reference to the color of {\em *this} colorExtension
-					@see         ColorExtension::setColor
-					@see         ColorRGBA::ColorRGBA
+					@return      ColorRGBA& mutable reference to the color of {\em *this} colorExtension
+					@see         setColor
+					@see         ColorRGBA
 			*/
-			ColorRGBA& getColor();
+			ColorRGBA& getColor()
+				throw();
 
 			/** Non-mutable inspection of the color of {\em *this} colorExtension.
 					Access the constant reference of the color of {\em *this} colorExtension.
-					
-					@return      ColorRGBA& - constant reference to the color of {\em *this} colorExtension
-					@see         ColorExtension::setColor
-					@see         ColorRGBA::ColorRGBA
+					@return      ColorRGBA& constant reference to the color of {\em *this} colorExtension
+					@see         setColor
+					@see         ColorRGBA
 			*/
-			const ColorRGBA& getColor() const;
+			const ColorRGBA& getColor() const
+				throw();
 
 			/** Inspection of the color of {\em *this} colorExtension.
 					Access the color of {\em *this} colorExtension by using \Ref{ColorRGBA}.
-					
 					@param       color the color receiving the color of {\em *this} colorExtension
-					@see         ColorExtension::setColor
-					@see         ColorRGBA::ColorRGBA
+					@see         setColor
+					@see         ColorRGBA
 			*/
-			void getColor(ColorRGBA& color) const;
+			void getColor(ColorRGBA& color) const
+				throw();
 
 			/** Inspection of all the components of the color of {\em *this} colorExtension.
 					Access all the components of the color of {\em *this} colorExtension
 					by using \Ref{ColorUnit}.
-					
 					@param       red the red component of the color of {\em *this} colorExtension
 					@param       green the green component of the color of {\em *this} colorExtension
 					@param       blue the blue component of the color of {\em *this} colorExtension
 					@param       alpha the alpha component of the color of {\em *this} colorExtension
-					@see         ColorExtension::setColor
-					@see         ColorUnit::ColorUnit
+					@see         setColor
+					@see         ColorUnit
 			*/
 			void getColor
 				(ColorUnit& red, ColorUnit& green,
-				 ColorUnit& blue, ColorUnit& alpha) const;
+				 ColorUnit& blue, ColorUnit& alpha) const
+				throw();
 
 			/** Inspection of the components of the color of {\em *this} colorExtension.
 					Access only the red, green and blue components of the color 
 					of {\em *this} colorExtension	by using \Ref{ColorUnit}.
-					
 					@param       red the red component of the color of {\em *this} colorExtension
 					@param       green the green component of the color of {\em *this} colorExtension
 					@param       blue the blue component of the color of {\em *this} colorExtension
-					@see         ColorExtension::setColor
-					@see         ColorUnit::ColorUnit
+					@see         setColor
+					@see         ColorUnit
 			*/
 			void getColor
 				(ColorUnit& red,
 				 ColorUnit& green,
-				 ColorUnit& blue) const;
+				 ColorUnit& blue) const
+				throw();
 			//@}
 
 			/**	@name	debuggers and diagnostics
@@ -233,12 +234,12 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current state of {\em *this} colorExtension to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-
 					@param   s output stream where to output the state of {\em *this} colorExtension
 					@param   depth the dumping depth
 					@see     ColorRGBA::operator <<
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers
@@ -247,25 +248,21 @@ namespace BALL
 
 			/** Persistent stream output and state restorage.
   			 Read persistent colorExtension data from the input stream {\em s} and 
-				 restore the state of {\em *this}.
-				 \\
+				 restore the state of {\em *this}.\\
 				 {\bf Note:} Not yet implemented.
-		 
 				 @param       s input stream from where to restore the internal state of {\em *this} colorExtension
-				 @exception   NotImplemented - always
 			*/
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
 			/** Persistent stream output and state storage.
   			 Write persistent colorExtension data to the output stream {\em s} and 
-				 store the state of {\em *this}.
-				 \\
+				 store the state of {\em *this}.\\
 				 {\bf Note:} Not yet implemented.
-		 
 				 @param       s output stream to where to store the internal state of {\em *this} colorExtension
-				 @exception   NotImplemented - always
 			*/
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 			private:

@@ -1,7 +1,8 @@
-// $Id: vertex1.iC,v 1.4 2001/02/04 15:58:21 hekl Exp $
+// $Id: vertex1.iC,v 1.5 2001/05/13 13:47:49 hekl Exp $
 
 BALL_INLINE
 void Vertex::setVertex(const Vector3& v)
+	throw()
 {
   *vertex1_ptr_ = v;
 }
@@ -9,54 +10,63 @@ void Vertex::setVertex(const Vector3& v)
 BALL_INLINE
 void Vertex::setVertex
   (const Real x, const Real y, const Real z)
+	throw()
 {
   vertex1_ptr_->set(x, y, z);
 }
 
 BALL_INLINE
 Vector3& Vertex::getVertex()
+	throw()
 {
   return *vertex1_ptr_;
 }
 
 BALL_INLINE
 const Vector3& Vertex::getVertex() const
+	throw()
 {
   return *vertex1_ptr_;
 }
 
 BALL_INLINE
 void Vertex::getVertex(Vector3& v) const
+	throw()
 {
   v = *vertex1_ptr_;
 }
 
 BALL_INLINE
 void Vertex::getVertex(Real &x, Real &y, Real &z) const
+	throw()
 {
   vertex1_ptr_->get(x, y, z);
 }
 
 BALL_INLINE
 void Vertex::setVertexAddress(const Vector3& v)
+	throw()
 {
   vertex1_ptr_ = (Vector3 *)&v;
 }
 
 BALL_INLINE
 void Vertex::setDefaultVertexAddress()
+	throw()
 {
   vertex1_ptr_ = (Vector3 *)&vertex1_;
 }
 
 BALL_INLINE
 Vector3* Vertex::getVertexAddress() const
+	throw()
 {
   return vertex1_ptr_;
 }
 
 BALL_INLINE
 bool Vertex::isDefaultVertexAddress() const
+	throw()
 {
   return (vertex1_ptr_ == (Vector3 *)&vertex1_);
 }

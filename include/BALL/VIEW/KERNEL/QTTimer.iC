@@ -1,13 +1,15 @@
-// $Id: QTTimer.iC,v 1.4 2001/02/04 15:58:20 hekl Exp $
+// $Id: QTTimer.iC,v 1.5 2001/05/13 13:47:44 hekl Exp $
 
 BALL_INLINE
 int QTTimer::getInterval() const
+	throw()
 {
   return interval_;
 }
 
 BALL_INLINE
 void QTTimer::startTimer()
+	throw()
 {
   if (!timer_enabled_)
   {
@@ -19,6 +21,7 @@ void QTTimer::startTimer()
 
 BALL_INLINE
 void QTTimer::stopTimer()
+	throw()
 {
   if (timer_enabled_)
   {
@@ -29,12 +32,14 @@ void QTTimer::stopTimer()
 
 BALL_INLINE
 bool QTTimer::isTimerEnabled() const
+	throw()
 {
   return (timer_enabled_);
 }
 
 BALL_INLINE
 bool QTTimer::isTimerDisabled() const
+	throw()
 {
   return (!timer_enabled_);
 }

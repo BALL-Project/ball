@@ -1,4 +1,4 @@
-// $Id: connectionObject.h,v 1.6 2001/02/11 13:04:40 hekl Exp $
+// $Id: connectionObject.h,v 1.7 2001/05/13 13:47:46 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 #define BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -32,7 +32,7 @@
 #include <typeinfo>
 
 using std::string;
-using namespace BALL;
+//using namespace BALL;
 
 namespace BALL
 {
@@ -43,7 +43,7 @@ namespace BALL
 				{\bf Framework:} BALL/VIEW/KERNEL\\
 				{\bf Definition:} \URL{BALL/VIEW/KERNEL/connectionObject.h}\\
 				{\bf Category:} \Ref{ConnectionObject} container\\
-				{\bf Category:} \Ref{Message} container\\ 	\\
+				{\bf Category:} \Ref{Message} container\\ \\
 				The class ConnectionObject is a base class for all widgets and dialogs that
 				handles communication between these classes through message posting.
 				There are methods that handle the registering process between the classes that
@@ -66,8 +66,8 @@ namespace BALL
 				that the message is already destroyed when it should be processed.
 				@memo    ConnectionObject class (BALL VIEW kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/02/11 13:04:40 $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/05/13 13:47:46 $
 		*/
 		class ConnectionObject
 		{
@@ -80,9 +80,10 @@ namespace BALL
 			/** Default Constructor.
 					Construct new connectionObject.
 					Initialize the message queue and resets all connection to zero.
-					@return  ConnectionObject - new constructed connectionObject
+					@return  ConnectionObject new constructed connectionObject
 			*/
-			ConnectionObject();
+			ConnectionObject()
+				throw();
 				
 			//@}
 			/** @name Destructors 
@@ -91,22 +92,25 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} connectionObject.
-					Calls \Ref{ConnectionObject::destroy}.
-					@see   ConnectionObject::destroy
+					Calls \Ref{destroy}.
+					@see   destroy
 			*/
-			virtual ~ConnectionObject();
+			virtual ~ConnectionObject()
+				throw();
 
 			/** Explicit default initialization.
 					Clears the message queue and deletes all deletable messages in it.
 					Further all connections to the children and the parent will be cut.
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 
 			/** Explicit destructor.
-					Calls \Ref{ConnectionObject::clear}
-					@see   ConnectionObject::clear
+					Calls \Ref{clear}
+					@see   clear
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
@@ -118,44 +122,49 @@ namespace BALL
 					be the new parent of {\em object} connectionObject. Each connectionObject can only
 					be inserted once to a parent.
 					@param    object the connectionObject that is the new child of {\em *this} connectionObject
-					@see      ConnectionObject::unregisterConnectionObject
-					@see      ConnectionObject::isConnectionObjectRegistered
+					@see      unregisterConnectionObject
+					@see      isConnectionObjectRegistered
 			*/
-			void registerConnectionObject(ConnectionObject &object);
+			void registerConnectionObject(ConnectionObject &object)
+				throw();
 
 			/** Unregister connectionObject.
 					Unregister connectionObject {\em object}. The connectionObject {\em *this} deletes
 					the {\em object} connectionObject from its children list and the parent of
 					{\em object} connectionObject will be set to 0. 
 					@param    object the connectionObject that will be removed from {\em *this} connectionObject
-					@see      ConnectionObject::registerConnectionObject
-					@see      ConnectionObject::isConnectionObjectRegistered
+					@see      registerConnectionObject
+					@see      isConnectionObjectRegistered
 			*/
-			void unregisterConnectionObject(ConnectionObject &object);
+			void unregisterConnectionObject(ConnectionObject &object)
+				throw();
 
 			/** Test if connectionObject is registered.
 					Test if {\em object} connectionObject is a child of {\em *this} connectionObject.
 
 					@param   object the connectionObject to be tested
-					@return  bool - {\tt true} if {\em object} is a child of {\em *this} connectionObject, {\tt false} otherwise
-					@see     ConnectionObject::registerConnectionObject
-					@see     ConnectionObject::unregisterConnectionObject
+					@return  bool {\tt true} if {\em object} is a child of {\em *this} connectionObject, {\tt false} otherwise
+					@see     registerConnectionObject
+					@see     unregisterConnectionObject
 			*/
-			bool isConnectionObjectRegistered(const ConnectionObject &object);
+			bool isConnectionObjectRegistered(const ConnectionObject &object)
+				throw();
 
 			/** Inspection of parent connectionObject.
 					Access the parent connectionObject of {\em *this} connectionObject.
 					If {\em *this} connectionObject is root {\tt 0} will be returned.
-					@return  ConnectionObject* - the pointer to the parent connectionObject, {\tt 0} if {\em *this} is root.
+					@return  ConnectionObject* the pointer to the parent connectionObject, {\tt 0} if {\em *this} is root.
 			*/
-			ConnectionObject *getParent() const;
+			ConnectionObject *getParent() const
+				throw();
 
 			/** Inspection of the root connectionObject.
 					Access the root of {\em *this} connectionObject. Return the connectionObject that
 					parent is {\tt 0}.
-					@return   ConnectionObject* - the connectionObject that is the root
+					@return   ConnectionObject* the connectionObject that is the root
 			*/
-			ConnectionObject *getRoot();
+			ConnectionObject *getRoot()
+				throw();
 
 			/** Message handling method.
 					This method handles messages sent to {\em *this} connectionObject.
@@ -165,7 +174,8 @@ namespace BALL
 					See \Ref{Message} for further information concerning messages.
 					@param   message a pointer to a message. Do not delete the message in this method.
 			*/
-			virtual void onNotify(Message *message);
+			virtual void onNotify(Message *message)
+				throw();
 
 			//@}
 			/**	@name	debuggers and diagnostics
@@ -180,11 +190,12 @@ namespace BALL
 					Checks the tree structure if all connections (in both ways: up and down) are 
 					without error.
 
-					@return			bool - {\tt true} if the internal data structure of {\em *this}
+					@return			bool {\tt true} if the internal data structure of {\em *this}
                       connectionObject is correct (self-validated) and consistent,
 					 						{\tt false} otherwise
 			*/
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			/** Internal value dump.
 					Dump the current state of {\em *this} connectionObject to 
@@ -192,7 +203,8 @@ namespace BALL
 					@param   s output stream where to output the state of {\em *this} connectionObject
 					@param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 
 			//@}
 			/**	@name	Storers
@@ -204,18 +216,18 @@ namespace BALL
 					restore the state of {\em *this}.	\\
 					{\bf Note:} Not yet implemented.
 			  	@param       s input stream from where to restore the internal state of {\em *this} connectionObject
-					@exception   NotImplemented - always
 			*/
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
 			/** Persistent stream output and state storage.
   				Write persistent connectionObject data to the output stream {\em s} and 
 					store the state of {\em *this}. \\
 					{\bf Note:} Not yet implemented.
 		 			@param       s output stream to where to store the internal state of {\em *this} connectionObject
-					@exception   NotImplemented - always
 			*/
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 	
 			//@}
 			/** @name Protected notification methods
@@ -242,26 +254,32 @@ namespace BALL
 					this method for the notification.
 					See \Ref{Message} For further information concerning messages.
 					@param   message a pointer to a message that will be sent through the connectionObject tree.
-					@see     Message::Message
+					@see     Message
 			*/
-			void notify_(Message *message);
+			void notify_(Message *message)
+				throw();
 
 			/** Notification method with reference.
 					See {\em notify_} for detailed information on the notification process.
 					Only use this method if you are absolutely sure what you are doing!
 					@param    message a reference to a message that will be sent through the connectionObject tree.
-					@see      Message::Message
+					@see      Message
 			*/
-			void notify_(Message &message);
+			void notify_(Message &message)
+				throw();
 
 			//@}
 
 			private:
 
-			void setParent_(ConnectionObject &object);
-			void clearParent_();
+			void setParent_(ConnectionObject &object)
+				throw();
 
-			void onNotify_(Message* message);
+			void clearParent_()
+				throw();
+
+			void onNotify_(Message* message)
+				throw();
 
 
 			bool processing_message_queue_;

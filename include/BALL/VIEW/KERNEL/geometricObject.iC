@@ -1,7 +1,8 @@
-// $Id: geometricObject.iC,v 1.5 2000/12/22 19:12:15 amoll Exp $ 
+// $Id: geometricObject.iC,v 1.6 2001/05/13 13:47:47 hekl Exp $ 
 
 BALL_INLINE 
 void GeometricObject::setSelectedColor(const ColorRGBA& color)
+	throw()
 {
   selected_color_ = color;
 }
@@ -10,18 +11,21 @@ BALL_INLINE
 void GeometricObject::setSelectedColor
   (const ColorUnit& red, const ColorUnit& green,
    const ColorUnit& blue, const ColorUnit& alpha)
+	throw()
 {
   selected_color_.set(red, green, blue, alpha);
 }
 
 BALL_INLINE 
 const ColorRGBA& GeometricObject::getSelectedColor() const
+	throw()
 {
   return selected_color_;
 }
 
 BALL_INLINE 
 void GeometricObject::getSelectedColor(ColorRGBA& color) const
+	throw()
 {
  color = selected_color_;
 }
@@ -30,36 +34,42 @@ BALL_INLINE
 void GeometricObject::getSelectedColor
   (ColorUnit& red, ColorUnit& green,
    ColorUnit& blue, ColorUnit& alpha) const
+	throw()
 {
   selected_color_.get(red, green, blue, alpha);
 }
 
 BALL_INLINE 
 void GeometricObject::getSelectedColor(ColorUnit& red, ColorUnit& green, ColorUnit& blue) const
+	throw()
 {
   selected_color_.get(red, green, blue);
 }
 
 BALL_INLINE 
 void GeometricObject::setName(const String& name)
+	throw()
 {
   name_ = name;
 }
 
 BALL_INLINE 
 String& GeometricObject::getName()
+	throw()
 {
   return name_;
 }
 
 BALL_INLINE 
 const String& GeometricObject::getName() const
+	throw()
 {
   return name_;
 }
 
 BALL_INLINE 
 bool GeometricObject::hasName() const
+	throw()
 {
 	return (!name_.isEmpty());
 }

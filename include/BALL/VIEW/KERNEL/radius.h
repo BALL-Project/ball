@@ -1,4 +1,4 @@
-// $Id: radius.h,v 1.4 2001/02/04 15:58:21 hekl Exp $
+// $Id: radius.h,v 1.5 2001/05/13 13:47:48 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_RADIUS_H
 #define BALL_VIEW_KERNEL_RADIUS_H
@@ -14,18 +14,15 @@ namespace BALL
 	{
 
 		/** Radius class.
-				
 				{\bf Framework:} BALL/VIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/radius.h}
-				\\
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/radius.h}\\ \\
 				The class Radius is used as a base class for all geometric objects that
 				needs a radius. It provides the derived class with methods for accessing
 				that radius value.
-				
 				@memo    Radius class (BALL VIEW kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/04 15:58:21 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/13 13:47:48 $
 		*/
 		class Radius
 		{
@@ -38,42 +35,46 @@ namespace BALL
 			/** Default Constructor.
 					Construct new radius.
 					The value of {\em *this} radius is set to 1.0.
-
 					@return      Radius new constructed radius
-					@see         Real::Real
+					@see         Real
 			*/
-			Radius();
+			Radius()
+				throw();
 
 			/** Copy constructor.
 					Construct new radius by copying the radius {\em r}.
-
 					@param       r the radius to be copied
 					@return      Radius new constructed radius copied from {\em r}
-					@see         Real::Real
+					@see         Real
 			*/
-			Radius(const Radius& r);
+			Radius(const Radius& r)
+				throw();
 
 			//@}
 
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.
 					Default destruction of {\em *this} radius.
-					Calls \Ref{Radius::destroy}.
-					@see         Radius::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
-			virtual ~Radius();
+			virtual ~Radius()
+				throw();
 
 			/** Explicit default initialization.
 					Set the value of {\em *this} radius to 1.0.
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 
 			/** Explicit destructor.
 					Empty for further purpose.
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 		
 			/**	@name	Assignment methods
@@ -84,41 +85,41 @@ namespace BALL
 					Assign the radius {\em r} to {\em *this} radius.
 					The value of {\em *this} radius is initialized to the value of 
 					the radius {\em r}.\\
-
 					@param       r the radius to be copied
 			*/
-			void set(const Radius& r);
+			void set(const Radius& r)
+				throw();
 
 			/** Assignment operator.
 					Assign the radius {\em r} to {\em *this} radius.
-					Calls \Ref{Radius::set}.
+					Calls \Ref{set}.
 					The value of {\em *this} radius is initialized to the value 
 					of the radius {\em r}.\\
-
 					@param       r the radius to be copied
-					@return      Radius& {\em *this} radius
-					@see         Radius::set
+					@return      Radius& constant reference of {\em *this} radius
+					@see         set
 			*/
-			Radius& operator = (const Radius& r);
+			const Radius& operator = (const Radius& r)
+				throw();
 
 			/** Copying.
 					Copy {\em *this} radius to the radius {\em r}.
-					Calls \Ref{Radius::set}.
+					Calls \Ref{set}.
 					The value of the radius {\em r} is initialized to the
 					value of {\em *this} radius.\\
-
 					@param       r the radius to be assigned to
-					@see         Radius::set
+					@see         set
 			*/
-			void get(Radius& r) const;
+			void get(Radius& r) const
+				throw();
 
 			/** Swapping of radius's.
 					Swap the value of {\em *this} radius with the radius {\em r}.
-
 					@param       r the radius being swapped with {\em *this} radius 
-					@see         Radius::Radius
+					@see         Radius
 			*/
-			void swap(Radius& r);
+			void swap(Radius& r)
+				throw();
 			//@}
 
 			/**	@name	Accessors: inspectors and mutators 
@@ -128,39 +129,39 @@ namespace BALL
 			/** Change the value of {\em *this} radius.
 					Change the value of {\em *this} radius to the value
 					represented by the parameter {\em r}.
-
 					@param       r the new radius of {\em *this} radius
-					@see         Radius::getRadius
-					@see         Real::Real
+					@see         getRadius
+					@see         Real
 			*/
-			void setRadius(const Real r);
+			void setRadius(const Real r)
+				throw();
 
 			/** Mutable inspection of the value of {\em *this} radius.
 					Access the mutual reference of the value of {\em *this} radius.
-					
 					@return      Real& mutable reference to the value of {\em *this} radius
-					@see         Radius::setRadius
-					@see         Real::Real
+					@see         setRadius
+					@see         Real
 			*/
-			Real& getRadius();
+			Real& getRadius()
+				throw();
 
 			/** Non-mutable inspection of the value of {\em *this} radius.
 					Access the constant reference of the value of {\em *this} radius.
-					
 					@return      Real& constant reference to the value of {\em *this} radius
-					@see         Radius::setRadius
-					@see         Real::Real
+					@see         setRadius
+					@see         Real
 			*/
-			const Real& getRadius() const;
+			const Real& getRadius() const
+				throw();
 
 			/** Inspection of the value of {\em *this} radius.
 					Access the value of {\em *this} radius by using \Ref{Real}.
-					
 					@param       r the real receiving the value of {\em *this} radius
-					@see         Radius::setRadius
-					@see         Real::Real
+					@see         setRadius
+					@see         Real
 			*/
-			void getRadius(Real& r) const;
+			void getRadius(Real& r) const
+				throw();
 			//@}
 			
 			/**	@name	debuggers and diagnostics
@@ -170,11 +171,11 @@ namespace BALL
 			/** Internal value dump.
 					Dump the current value of {\em *this} radius to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-
 					@param   s output stream where to output the value of {\em *this} radius
 					@param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers
@@ -182,26 +183,22 @@ namespace BALL
 			//@{
 
 			/** Persistent stream output and state restorage.
-  			 Read persistent radius data from the input stream {\em s} and 
-				 restore the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s input stream from where to restore the internal value of {\em *this} radius
-				 @exception   NotImplemented always
+  			  Read persistent radius data from the input stream {\em s} and 
+				  restore the state of {\em *this}. \\
+				  {\bf Note:} Not yet implemented.
+				  @param       s input stream from where to restore the internal value of {\em *this} radius
 			*/
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
 			/** Persistent stream output and state storage.
-  			 Write persistent radius data to the output stream {\em s} and 
-				 store the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s output stream to where to store the internal value of {\em *this} radius
-				 @exception   NotImplemented always
+  			  Write persistent radius data to the output stream {\em s} and 
+				  store the state of {\em *this}. \\
+				  {\bf Note:} Not yet implemented.
+				  @param       s output stream to where to store the internal value of {\em *this} radius
 			*/
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 

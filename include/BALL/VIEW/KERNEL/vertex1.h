@@ -1,4 +1,4 @@
-// $Id: vertex1.h,v 1.4 2001/02/04 15:58:21 hekl Exp $
+// $Id: vertex1.h,v 1.5 2001/05/13 13:47:49 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_VERTEX1_H
 #define BALL_VIEW_KERNEL_VERTEX1_H
@@ -18,10 +18,8 @@ namespace BALL
 	{
 
 		/** Vertex class.
-				
 				{\bf Framework:} BALL/VIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/vertex1.h}
-				\\
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/vertex1.h}\\ \\
 				The class Vertex is used as a base class for all geometric objects that
 				have a single vertex. It provides the derived class with methods for accessing
 				that vertex. Further there is the possibility to give an address to a 
@@ -29,11 +27,10 @@ namespace BALL
 				changes the value of {\em *this} vertex changes as well. To avoid 
 				segmentation faults this vector address must be valid as long as 
 				{\em *this} vertex exists.
-				
 				@memo    Vertex class (BALL VIEW kernel framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/02/04 15:58:21 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/13 13:47:49 $
 		*/
 		class Vertex
 		{
@@ -47,46 +44,50 @@ namespace BALL
 					Construct new vertex.
 					The vector of {\em *this} vertex is set to (0.0, 0.0, 0.0). The vertex
 					address is set to the address of the own vector of {\em *this} vertex.
-
-					@return      Vertex - new constructed vertex
-					@see         Vector3::Vector3
+					@return      Vertex new constructed vertex
+					@see         Vector3
 			*/
-			Vertex();
+			Vertex()
+				throw();
 
 			/** Copy constructor.
 					Construct new vertex by copying the vertex {\em vertex}. The vector of
 					{\em vertex} is copied to the vector of {\em *this} vertex.
 					The vertex address of {\em *this} vertex is set to the value of 
 					the vertex address of {\em vertex} vertex.
-
 					@param       vertex the vertex to be copied
-					@return      Vertex - new constructed vertex copied from {\em vertex}
+					@return      Vertex new constructed vertex copied from {\em vertex}
 			*/
-			Vertex(const Vertex& vertex);
+			Vertex(const Vertex& vertex)
+				throw();
 
 			//@}
 
-			/** @name Destructors */
+			/** @name Destructors 
+			*/
 			//@{
 
 			/** Destructor.
 					Default destruction of {\em *this} vertex.
-					Calls \Ref{Vertex::destroy}.
-					@see         Vertex::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
-			virtual ~Vertex();
+			virtual ~Vertex()
+				throw();
 
 			/** Explicit default initialization.
 					Set the vector of {\em *this} vertex to the vector (0.0, 0.0, 0.0).
 					The vertex address of {\em *this} vertex is set to the address of 
 					the own vector of {\em *this} vertex.
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 
 			/** Explicit destructor.
 					Empty for further purpose.
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 			//@}
 			
 			/**	@name	Assignment methods
@@ -97,45 +98,45 @@ namespace BALL
 					Assign the vertex {\em v} to {\em *this} vertex.
 					The vector and the vertex address of {\em *this} vertex is initialized 
 					to the vector and vertex address of the vertex {\em v}.\\
-
 					@param       v the vertex to be copied
-					@see         Vertex::setVertex
-					@see         Vertex::setVertexAddress
-					@see         Vector3::Vector3
+					@see         setVertex
+					@see         setVertexAddress
+					@see         Vector3
 			*/
-			void set(const Vertex& v);
+			void set(const Vertex& v)
+				throw();
 
 			/** Assignment operator.
 					Assign the vertex {\em v} to {\em *this} vertex.
-					Calls \Ref{Vertex::set}.
+					Calls \Ref{set}.
 					The vector and the vertex address of {\em *this} vertex is initialized
 					to the vector and the vertex address of the vertex {\em v}.\\
-
 					@param       v the vertex to be copied
-					@return      Vertex& - {\em *this} vertex
-					@see         Vertex::set
+					@return      Vertex& constant reference of {\em *this} vertex
+					@see         set
 			*/
-			Vertex& operator = (const Vertex& v);
+			const Vertex& operator = (const Vertex& v)
+				throw();
 
 			/** Copying.
 					Copy {\em *this} vertex to the vertex {\em v}.
-					Calls \Ref{Vertex::set}.
+					Calls \Ref{set}.
 					The vector and the vertex address of {\em *this} vertex is initialized
 					to the vector and the vertex address of the vertex {\em v}.\\
-
 					@param       v the vertex to be assigned to
-					@see         Vertex::set
+					@see         set
 			*/
-			void get(Vertex& v) const;
+			void get(Vertex& v) const
+				throw();
 
 			/** Swapping of vertices.
 					Swap the vector and vertex address of {\em *this} vertex with 
 					the vector and vertex address of the vertex	{\em v}.
-
 					@param       v the vertex being swapped with {\em *this} vertex 
-					@see         Vertex::Vertex
+					@see         Vertex
 			*/
-			void swap(Vertex& v);
+			void swap(Vertex& v)
+				throw();
 			//@}
 
 			/**	@name	Accessors: inspectors and mutators 
@@ -145,63 +146,63 @@ namespace BALL
 			/** Change the vector of {\em *this} vertex.
 					Change the vector of {\em *this} vertex to the vector
 					represented by the parameter {\em v}.
-
 					@param       v the new vector of {\em *this} vertex
-					@see         Vertex::getVertex
-					@see         Vector3::Vector3
+					@see         getVertex
+					@see         Vector3
 			*/
-			void setVertex(const Vector3& v);
+			void setVertex(const Vector3& v)
+				throw();
 
 			/** Change the vector of {\em *this} vertex.
 					Change the vector of {\em *this} vertex to the vector represented by the
 					parameters {\em x}, {\em y} and {\em z}.
-
 					@param       x the x component of the new vector of {\em *this} vertex
 					@param       y the y component of the new vector of {\em *this} vertex
 					@param       z the z component of the new vector of {\em *this} vertex
-					@see         Vertex::getVertex
-					@see         Vector3::Vector3
-					@see         Real::Real
+					@see         getVertex
+					@see         Vector3
+					@see         Real
 			*/
-			void setVertex(const Real x, const Real y, const Real z);
+			void setVertex(const Real x, const Real y, const Real z)
+				throw();
 
 			/** Mutable inspection of the vector of {\em *this} vertex.
 					Access the mutual reference of the vector of {\em *this} vertex.
-					
-					@return      Vector3& - mutable reference to the vector of {\em *this} vertex
-					@see         Vertex::setVertex
-					@see         Vector3::Vector3
+					@return      Vector3& mutable reference to the vector of {\em *this} vertex
+					@see         setVertex
+					@see         Vector3
 			*/
-			Vector3& getVertex();
+			Vector3& getVertex()
+				throw();
 
 			/** Non-mutable inspection of the vector of {\em *this} vertex.
 					Access the constant reference of the vector of {\em *this} vertex.
-					
-					@return      Vector3& - constant reference to the vector of {\em *this} vertex
-					@see         Vertex::setVertex
-					@see         Vector3::Vector3
+					@return      Vector3& constant reference to the vector of {\em *this} vertex
+					@see         setVertex
+					@see         Vector3
 			*/
-			const Vector3& getVertex() const;
+			const Vector3& getVertex() const
+				throw();
 
 			/** Inspection of the vector of {\em *this} vertex.
 					Access the vector of {\em *this} vertex by using \Ref{Vector3}.
-					
 					@param       v the vector receiving the vector of {\em *this} vertex
-					@see         Vertex::setVertex
-					@see         Vector3::Vector3
+					@see         setVertex
+					@see         Vector3
 			*/
-			void getVertex(Vector3& v) const;
+			void getVertex(Vector3& v) const
+				throw();
 
 			/** Inspection of the components of the vector of {\em *this} vertex.
 					Access the components of the vector of {\em *this} vertex by using \Ref{Real}.
-					
 					@param       x the x component of the vector of {\em *this} vertex
 					@param       y the y component of the vector of {\em *this} vertex
 					@param       z the z component of the vector of {\em *this} vertex
-					@see         Vertex::setVertex
-					@see         Real::Real
+					@see         setVertex
+					@see         Real
 			*/
-			void getVertex(Real& x, Real& y, Real& z) const;
+			void getVertex(Real& x, Real& y, Real& z) const
+				throw();
 
 			/** Change the vector address of {\em *this} vertex.
 					Change the vector address of {\em *this} vertex to the vector address
@@ -214,12 +215,12 @@ namespace BALL
 					hook itself onto another object (speaking in terms of position). If the
 					object changes its position so the object derived from {\em *this} vertex
 					changes its position.
-
 					@param       v the new vector address of {\em *this} vertex
-					@see         Vertex::getVertexAddress
-					@see         Vector3::Vector3
+					@see         getVertexAddress
+					@see         Vector3
 			*/
-			void setVertexAddress(const Vector3& v);
+			void setVertexAddress(const Vector3& v)
+				throw();
 		
 			/** Change the vector address of {\em *this} vertex to the default address.
 					This method resets the vertex address to the vector address of
@@ -227,20 +228,20 @@ namespace BALL
 					will no longer be ignored and all access methods will return it again.
 					This method unhooks the object from any other objects prio connected
 					with setVertexAddress.
-
-					@see         Vertex::setVertexAddress
+					@see         setVertexAddress
 			*/
-			void setDefaultVertexAddress();
+			void setDefaultVertexAddress()
+				throw();
 
 			/** Mutable inspection of the vertex address of {\em *this} vertex.
 					Access the pointer of the vector that contains the value of
 					{\em *this}	vertex.
-					
-					@return      Vector3* - pointer to the vector that contains the value of {\em *this} vertex
-					@see         Vertex::setVertexAddress
-					@see         Vector3::Vector3
+					@return      Vector3* pointer to the vector that contains the value of {\em *this} vertex
+					@see         setVertexAddress
+					@see         Vector3
 			*/
-			Vector3* getVertexAddress() const;
+			Vector3* getVertexAddress() const
+				throw();
 
 			//@}
 			
@@ -251,14 +252,14 @@ namespace BALL
 			/** Vertex address test.
 					Tests if the vertex address of {\em *this} vertex points to the vector
 					of {\em *this} vertex.
-
 					@return			bool {\tt true} if the vertex address of {\em *this} vertex points to the vector of {\em *this} vertex.
 					 						{\tt false} otherwise
-					@see        Vertex::setVertexAddress					
-					@see        Vertex::getVertexAddress					
-					@see        Vertex::setDefaultVertexAddress					
+					@see        setVertexAddress					
+					@see        getVertexAddress					
+					@see        setDefaultVertexAddress					
 			*/
-			bool isDefaultVertexAddress() const;
+			bool isDefaultVertexAddress() const
+				throw();
 			//@}
 
 			/**	@name	debuggers and diagnostics
@@ -271,23 +272,23 @@ namespace BALL
 					If the internal state of {\em *this} vertex is correct (self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
 					Calls {Vector3::isValid}.
-
 					@return			bool -
 											{\tt true} if the internal state of {\em *this} vertex is correct (self-validated) and consistent,
 					 						{\tt false} otherwise
 					@see        Vector3::isValid
 			*/
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			/** Internal value dump.
 					Dump the current state of {\em *this} vertex to 
 					the output ostream {\em s} with dumping depth {\em depth}.
-
 					@param   s output stream where to output the state of {\em *this} vertex
 					@param   depth the dumping depth
 					@see     Vector3::operator <<
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 			//@}
 
 			/**	@name	Storers
@@ -295,26 +296,22 @@ namespace BALL
 			//@{
 
 			/** Persistent stream output and state restorage.
-  			 Read persistent vertex data from the input stream {\em s} and 
-				 restore the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s input stream from where to restore the internal state of {\em *this} vertex
-				 @exception   NotImplemented - always
+  			  Read persistent vertex data from the input stream {\em s} and 
+				  restore the state of {\em *this}.\\
+				  {\bf Note:} Not yet implemented.
+				  @param       s input stream from where to restore the internal state of {\em *this} vertex
 			*/
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
 			/** Persistent stream output and state storage.
-  			 Write persistent vertex data to the output stream {\em s} and 
-				 store the state of {\em *this}.
-				 \\
-				 {\bf Note:} Not yet implemented.
-		 
-				 @param       s output stream to where to store the internal state of {\em *this} vertex
-				 @exception   NotImplemented - always
+  			  Write persistent vertex data to the output stream {\em s} and 
+				  store the state of {\em *this}. \\
+				  {\bf Note:} Not yet implemented.
+				  @param       s output stream to where to store the internal state of {\em *this} vertex
 			*/
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 			//@}
 
 			private:

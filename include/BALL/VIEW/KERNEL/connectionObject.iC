@@ -3,6 +3,7 @@
 BALL_INLINE
 ConnectionObject *
 ConnectionObject::getParent() const
+	throw()
 {
 	return parent_;
 }
@@ -10,6 +11,7 @@ ConnectionObject::getParent() const
 BALL_INLINE
 void 
 ConnectionObject::setParent_(ConnectionObject &object)
+	throw()
 {
 	parent_ = &object;
 }
@@ -17,6 +19,7 @@ ConnectionObject::setParent_(ConnectionObject &object)
 BALL_INLINE
 void 
 ConnectionObject::clearParent_()
+	throw()
 {
 	parent_ = 0;
 }

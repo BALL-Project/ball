@@ -1,4 +1,4 @@
-// $Id: QTTimer.h,v 1.6 2001/02/06 14:16:49 amoll Exp $
+// $Id: QTTimer.h,v 1.7 2001/05/13 13:47:44 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
 #define BALL_VIEW_KERNEL_QTTIMER_H
@@ -19,7 +19,7 @@ namespace BALL
 
 		/** QTTimer class.		
 				{\bf Framework:} BALL/VIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/QTTimer.h}\\
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/QTTimer.h}\\ \\
 				The QTTimer class is a timer class that is usefull for having repeated a job
 				unhindered by other jobs that are already processing.
 				The protected method {\em timer} will be called every {\em intervall} msec
@@ -30,11 +30,11 @@ namespace BALL
 				the necessary initialization and value savings must be done by the user in the
 				{\em timer} method.
 				The class is derived from the \Ref{QObject} class from the QT library. 
-				Therefore it only functions with qt objects.
+				Therefore it will only function within a qt application.
 				@memo    QTTimer class (BALL VIEW kernel framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/02/06 14:16:49 $
+				@author  $Author: hekl $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/05/13 13:47:44 $
 		*/
 		class QTTimer: public QObject
 		{
@@ -53,7 +53,8 @@ namespace BALL
 			{
 				public:
 
-				NoValidInterval(const char* file, int line, const string& data);
+				NoValidInterval(const char* file, int line, const string& data)
+  				throw();
 			};
 			//@}
 
@@ -68,19 +69,20 @@ namespace BALL
 					  \item interval is set to 100
 						\item timer is halted
 					\end{itemize}
-					@return      QTTimer - new constructed qtTimer
-					@see         QObject::QOBject
+					See documentation of the QT-library for information about QObjects.
+					@return      QTTimer new constructed qtTimer
 			*/
-			QTTimer(QObject* parent=0, const char* name=0);
+			QTTimer(QObject* parent=0, const char* name=0)
+				throw();
 
 			/** Copy constructor.
-					Construct new QTTimer by copying the qtTimer {\em timer}.
-					The state of {\em *this} qtTimer is initialized to the state of the qtTimer {\em timer}.\\
-					@param       timer the qtTimer to be copied
-					@return      QTTimer - new constructed qtTimer copied from {\em timer}
-					@see         QTTimer::QTTimer
+					Construct new QTTimer by copying the qtTimer {\em qt_timer}.
+					The state of {\em *this} qtTimer is initialized to the state of the qtTimer {\em qt_timer}.\\
+					@param       qt_timer the qtTimer to be copied
+					@return      QTTimer new constructed qtTimer copied from {\em qt_timer}
 			*/
-			QTTimer(const QTTimer &timer, QObject* parent=0, const char* name=0);
+			QTTimer(const QTTimer &qt_timer, QObject* parent=0, const char* name=0)
+				throw();
 
 			//@}
 			/** @name Destructors 
@@ -89,10 +91,11 @@ namespace BALL
 
 			/** Destructor.
 					Default destruction of {\em *this} qtTimer.
-					Calls \Ref{QTTimer::destroy}.
-					@see         QTTimer::destroy
+					Calls \Ref{destroy}.
+					@see         destroy
 			*/
-			virtual ~QTTimer();
+			virtual ~QTTimer()
+				throw();
 
 			/** Explicit default initialization.
 					Set the state of {\em *this} qtTimer to the default values.
@@ -102,13 +105,15 @@ namespace BALL
 						\item timer is halted
 					\end{itemize}
 			*/
-			virtual void clear();
+			virtual void clear()
+				throw();
 
 			/** Explicit destructor.
 					Destroy {\em *this} qtTimer.
 					Halts the timer.
 			*/
-			virtual void destroy();
+			virtual void destroy()
+				throw();
 
 			//@}		
 			/**	@name	Assignment methods
@@ -116,43 +121,45 @@ namespace BALL
 			//@{
 
 			/** Assignment with cloning facility.
-					Assign the qtTimer {\em timer} to {\em *this} qtTimer.
+					Assign the qtTimer {\em qt_timer} to {\em *this} qtTimer.
 					The state of {\em *this} qtTimer is initialized to the state of 
-					the qtTimer {\em timer}.
+					the qtTimer {\em qt_timer}.
 					The timer is halted.\\
-					@param       timer the qtTimer to be copied
-					@see         QTTimer::QTTimer
+					@param       qt_timer the qtTimer to be copied
 			*/
-			void set(const QTTimer& timer);
+			void set(const QTTimer& qt_timer)
+				throw();
 
 			/** Assignment operator.
-					Assign the qtTimer {\em timer} to {\em *this} qtTimer.
-					Calls \Ref{QTTimer::set}.
+					Assign the qtTimer {\em qt_timer} to {\em *this} qtTimer.
+					Calls \Ref{set}.
 					The state of {\em *this} qtTimer is initialized to the state 
-					of the qtTimer {\em timer}.\\
-					@param       timer the qtTimer to be copied
-					@return      QTTimer& - {\em *this} qtTimer
-					@see         QTTimer::set
+					of the qtTimer {\em qt_timer}.\\
+					@param       qt_timer the qtTimer to be copied
+					@return      QTTimer& {\em *this} qtTimer
+					@see         set
 			*/
-			QTTimer& operator = (const QTTimer& timer);
+			const QTTimer& operator = (const QTTimer& qt_timer)
+				throw();
 
 			/** Copying.
-					Copy {\em *this} qtTimer to the qtTimer {\em timer}.
-					Calls \Ref{QTTimer::set}.
-					The state of the qtTimer {\em timer} is initialized to the
+					Copy {\em *this} qtTimer to the qtTimer {\em qt_timer}.
+					Calls \Ref{set}.
+					The state of the qtTimer {\em qt_timer} is initialized to the
 					state of {\em *this} qtTimer.\\
-					@param       timer the qtTimer to be assigned to
-					@see         QTTimer::set
+					@param       qt_timer the qtTimer to be assigned to
+					@see         set
 			*/
-			void get(QTTimer& timer) const;
+			void get(QTTimer& qt_timer) const
+  			throw();
 
 			/** Swapping of qtTimer's.
 					Swap the states of {\em *this} qtTimer with the qtTimer
-					{\em timer}. The timer is halted.
-					@param       timer the qtTimer being swapped with {\em *this} qtTimer 
-					@see         QTTimer::QTTimer
+					{\em qt_timer}. The timer is halted.
+					@param       qt_timer the qtTimer being swapped with {\em *this} qtTimer 
 			*/
-			void swap(QTTimer& timer);
+			void swap(QTTimer& qt_timer)
+				throw();
 
 			//@}
 			/**	@name	Accessors: inspectors and mutators 
@@ -164,37 +171,41 @@ namespace BALL
 					represented by the parameter {\em interval}. {\em *this} qtTimer will
 					call the method {\em timer} every {\em interval} msec.
 					@param       interval the new interval of {\em *this} qtTimer
-					@exception   NoValidInterval - thrown if the value of {\em interval} is lower or equal {\tt 0}
-					@see         QTTimer::startTimer
-					@see         QTTimer::stopTimer
-					@see         QTTimer::timer
+					@exception   NoValidInterval thrown if the value of {\em interval} is lower or equal {\tt 0}
+					@see         startTimer
+					@see         stopTimer
+					@see         timer
 			*/
-			void setInterval(int interval);
+			void setInterval(int interval)
+				throw(NoValidInterval);
 
 			/** Inspection of the interval.
 					Access the interval of {\em *this} qtTimer.
-					@return      int - the value of the interval of {\em *this} qtTimer
-					@see         QTTimer::setInterval
+					@return      int the value of the interval of {\em *this} qtTimer
+					@see         setInterval
 			*/
-			int getInterval() const;
+			int getInterval() const
+				throw();
 
 			/** Start the timer.
 					Start the timer of {\em *this} qtTimer.
 					After this method is called the method {\em timer} will be called
 					every {\em interval} msec.
-					@see     QTTimer::stopTimer
-					@see     QTTimer::timer
+					@see     stopTimer
+					@see     timer
 			*/
-			void startTimer();
+			void startTimer()
+				throw();
 			
 			/** Stop the timer.
 					Stop the timer of {\em *this} qtTimer.
 					After this method is called the execution of the {\em timer} method
 					will be stopped.
-					@see     QTTimer::startTimer
-					@see     QTTimer::timer
+					@see     startTimer
+					@see     timer
 			*/
-			void stopTimer();
+			void stopTimer()
+				throw();
 
 			//@}
 			/**	@name	Predicates
@@ -203,17 +214,19 @@ namespace BALL
 
 			/** Test if {\em *this} qtTimer is running.
 					@return  bool -	{\tt true} if {\em *this} qtTimer is running, {\tt false} otherwise
-					@see     QTTimer::startTimer
-					@see     QTTimer::stopTimer
+					@see     startTimer
+					@see     stopTimer
 			*/
-			bool isTimerEnabled() const;
+			bool isTimerEnabled() const
+				throw();
 
 			/** Test if {\em *this} qtTimer is stopped.
 					@return  bool -	{\tt true} if {\em *this} qtTimer is stopped, {\tt false} otherwise
-					@see     QTTimer::startTimer
-					@see     QTTimer::stopTimer
+					@see     startTimer
+					@see     stopTimer
 			*/
-			bool isTimerDisabled() const;
+			bool isTimerDisabled() const
+				throw();
 
 			//@}
 			/**	@name	debuggers and diagnostics
@@ -226,7 +239,8 @@ namespace BALL
 					@param   s output stream where to output the state of {\em *this} qtTimer
 					@param   depth the dumping depth
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+				throw();
 
 			//@}
 			/**	@name	Storers
@@ -238,18 +252,18 @@ namespace BALL
 				  restore the state of {\em *this}.	 \\
 				  {\bf Note:} Not yet implemented.		 
 				  @param       s input stream from where to restore the internal state of {\em *this} qtTimer
-					@exception   NotImplemented - always
 			*/
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
 			/** Persistent stream output and state storage.
   			  Write persistent qtTimer data to the output stream {\em s} and 
 				  store the state of {\em *this}. \\
 				  {\bf Note:} Not yet implemented.	 
 				  @param       s output stream to where to store the internal state of {\em *this} qtTimer
-					@exception   NotImplemented - always
 			*/
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 
 			protected:
 
@@ -269,10 +283,11 @@ namespace BALL
 					application	will hang. Any loops in the code that need a lot of time must
 					be rewritten so every timer call will advance the "loop" a step further.
 					Try to avoid loops.
-					@see    QTTimer::startTimer
-					@see    QTTimer::stopTimer
+					@see    startTimer
+					@see    stopTimer
 			*/
-			virtual void timer();
+			virtual void timer()
+				throw();
 			//@}
 
 			private:

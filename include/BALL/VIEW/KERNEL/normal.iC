@@ -1,8 +1,9 @@
-// $Id: normal.iC,v 1.2 1999/12/19 17:19:29 oliver Exp $
+// $Id: normal.iC,v 1.3 2001/05/13 13:47:48 hekl Exp $
 
 BALL_INLINE
 void NormalVector::setNormalVector
   (const Vector3& n)
+	throw()
 {
   normal_ = n;
 }
@@ -10,24 +11,28 @@ void NormalVector::setNormalVector
 BALL_INLINE
 void NormalVector::setNormalVector
   (const Real x, const Real y, const Real z)
+	throw()
 {
   normal_.set(x, y, z);
 }
 
 BALL_INLINE
 Vector3& NormalVector::getNormalVector()
+	throw()
 {
   return normal_;
 }
 
 BALL_INLINE
 const Vector3& NormalVector::getNormalVector() const
+	throw()
 {
   return normal_;
 }
 
 BALL_INLINE
 void NormalVector::getNormalVector(Vector3& n) const
+	throw()
 {
   n = normal_;
 }
@@ -35,6 +40,7 @@ void NormalVector::getNormalVector(Vector3& n) const
 BALL_INLINE
 void NormalVector::getNormalVector
   (Real& x, Real& y, Real& z) const
+	throw()
 {
   normal_.get(x, y, z);
 }

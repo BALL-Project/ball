@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.6 2001/02/18 20:58:42 amoll Exp $
+// $Id: kernel.doc,v 1.7 2001/05/13 13:47:47 hekl Exp $
 
         /**     @name Client request handling.
                       With the help of the class {\em Client} it is possible
@@ -11,7 +11,6 @@
         */
         //@{
                 //@Include: client.h
-                //@Include: clientScene.h
                 //@Include: QTTimer.h
         //@}
 
@@ -34,8 +33,8 @@
                       The class {\em GeometricObject} is the most important base class
                       for all primitives. It contains the base properties and base
                       interface definition all primitives must have.
-                      The other classes are additional property classes the extend
-                      a primitiv by an extra property.
+                      The other classes are additional property classes to extend
+                      a primitive with extra properties.
         */
         //@{
                 //@Include: geometricObject.h
