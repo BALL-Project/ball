@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.11 2000/02/27 18:55:45 amoll Exp $
+// $Id: angle.h,v 1.12 2000/02/29 11:03:33 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -57,11 +57,11 @@ namespace BALL
 		*/
 		enum Range
 		{
-			// no limitations
+			/// no limitations
 			RANGE__UNLIMITED = 0, 
-			// 0° <= angle <= 360°, 0 <= angle <= (Constants::PI * 2)
+			/// 0° <= angle <= 360°, 0 <= angle <= (Constants::PI * 2)
 			RANGE__UNSIGNED  = 1, 
-			// -180° <= angle <= 180°, -Constants::PI <= angle <= Constants::PI
+			/// -180° <= angle <= 180°, -Constants::PI <= angle <= Constants::PI
 			RANGE__SIGNED    = 2 
 		};
 		//@}
@@ -90,7 +90,7 @@ namespace BALL
 				@param	new_value the value of the angle object
 				@param	radian {\bf true} if {\tt new_value} is in radians, {\tt false} otherwise 
 		*/
-		TAngle(const T& new_value, bool radian = true);
+		explicit TAngle(const T& new_value, bool radian = true);
 
 		/**	Destructor.
 		*/
@@ -126,6 +126,7 @@ namespace BALL
 		/**	Assignment operator
 		*/
 		const TAngle& operator = (const TAngle& angle);
+
 
 		/**	Assignment operator for floats.
 				Assign a float value to the angle.
@@ -233,12 +234,6 @@ namespace BALL
 		*/
 		TAngle operator +	(const TAngle& angle);
 
-		/**	Add a value to this angle and return the result.
-				@param val the value to add
-				@return TAngle&, the new angle
-		*/
-		TAngle operator + (const T& val);
-
 		/**	Substract a angle from this angle.
 				@param angle the angle to substract
 				@return TAngle&, {\tt *this}
@@ -258,32 +253,19 @@ namespace BALL
 		*/
 		TAngle operator - (const TAngle& angle);
 
-		/**	Subtraction a value from this 
-				angle and return the result.
-				@param val the value to substract
-				@return TAngle&, the new angle
-		*/
-		TAngle operator - (const T& val);
-
-		/**	Multiplz an angle with this angle.
+		/**	Multiply an angle with this angle.
 				@param angle the angle to multiply with
 				@return TAngle&, {\tt *this}
 		*/
 		TAngle& operator *= (const TAngle& angle);
 
-		/**	Multiplz a value with this 
+		/**	Multiply a value with this 
 				angle and return the result.
 				@param val the value to multiply with
 				@return TAngle&, {\tt *this}
 		*/
 		TAngle& operator *=	(const T& val);
 
-		/**	Multiplication a value with this 
-				angle and return the result.
-				@param val the value to multiply with
-				@return TAngle&, the new angle
-		*/
-		TAngle operator * (const T& val);
 
 		/**	Calculate the division of this angle by an other.
 				@param angle the angle to divide by
@@ -291,18 +273,20 @@ namespace BALL
 		*/
 		TAngle& operator /= (const TAngle& angle);
 
+
 		/**	Calculate the division of this angle by an value.
 				@param val the angle to divide by
 				@return TAngle&, {\tt *this}
 		*/
 		TAngle& operator /=	(const T& val);
 
+
 		/**	Calculate the division of this angle by an value
 				and return the result.
 				@param val the angle to divide by
 				@return TAngle&, the new angle
 		*/
-		TAngle operator /	(const T& val);
+		TAngle operator /	(const TAngle& val);
 		//@}
 
 		/**	@name	Predicates
@@ -315,11 +299,6 @@ namespace BALL
 		*/
 		bool operator == (const TAngle& angle) const;
 
-		/**	Equality operator.
-				@param val the value to compare with
-				@return bool
-		*/
-		bool operator == (const T& val) const;
 
 		/**	Inequality operator.
 				@param angle the angle to compare with
@@ -327,11 +306,6 @@ namespace BALL
 		*/
 		bool operator != (const TAngle& angle) const;
 
-		/**	Inequality operator.
-				@param val the value to compare with
-				@return bool
-		*/
-		bool operator !=	(const T& val) const;
 
 		/**	Is less operator.
 				@param angle the angle to compare with
@@ -446,6 +420,7 @@ namespace BALL
 		return *this;
 	}
 
+
 	template <typename T>
 	const TAngle<T>& TAngle<T>::operator = (const T& new_value)
 	{
@@ -453,6 +428,7 @@ namespace BALL
 
 		return *this;
 	}
+
 
 	template <typename T>
 	void TAngle<T>::get(TAngle& angle, bool /* deep */) const
@@ -634,12 +610,6 @@ namespace BALL
 	}
 
 	template <typename T>
-	TAngle<T> TAngle<T>::operator + (const T& val) 
-	{
-		return TAngle(value + val);
-	}
-
-	template <typename T>
 	TAngle<T>& TAngle<T>::operator -= (const TAngle& angle) 
 	{
 		value -= angle.value;
@@ -662,18 +632,13 @@ namespace BALL
 	}
 
 	template <typename T>
-	TAngle<T> TAngle<T>::operator - (const T& val) 
-	{
-		return TAngle(value - val);
-	}
-
-	template <typename T>
 	TAngle<T>& TAngle<T>::operator *= (const TAngle& angle) 
 	{
 		value *= angle.value;
 
 		return *this;
 	}
+
 
 	template <typename T>
 	TAngle<T>& TAngle<T>::operator *=	(const T& val) 
@@ -684,18 +649,13 @@ namespace BALL
 	}
 
 	template <typename T>
-	TAngle<T> TAngle<T>::operator * (const T& val)
-	{
-		return TAngle(value * val);
-	}
-
-	template <typename T>
 	TAngle<T>& TAngle<T>::operator /= (const TAngle& angle)
 	{
 		value /= angle.value;
 
 		return *this;
 	}
+
 
 	template <typename T>
 	TAngle<T>& TAngle<T>::operator /=	(const T& val) 
@@ -705,10 +665,11 @@ namespace BALL
 		return *this;
 	}
 
+
 	template <typename T>
-	TAngle<T> TAngle<T>::operator /	(const T& val) 
+	TAngle<T> TAngle<T>::operator /	(const TAngle<T>& val) 
 	{
-		return TAngle(value / val);
+		return TAngle(value / val.value);
 	}
 
 	template <typename T>
@@ -718,21 +679,9 @@ namespace BALL
 	}
 
 	template <typename T>
-	bool TAngle<T>::operator == (const T& val) const
-	{
-		return Maths::isEqual(value, val);
-	}
-
-	template <typename T>
 	bool TAngle<T>::operator != (const TAngle& angle) const 
 	{
 		return Maths::isNotEqual(value, angle.value);
-	}
-
-	template <typename T>
-	bool TAngle<T>::operator !=	(const T& val) const 
-	{
-		return Maths::isNotEqual(value, val);
 	}
 
 	template <typename T>
@@ -790,7 +739,7 @@ namespace BALL
 		BALL_DUMP_HEADER(s, this, this);
 
 		BALL_DUMP_DEPTH(s, depth);
-		s << "  value: " << value << endl;
+		s << "  value: " << value << std::endl;
 
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
