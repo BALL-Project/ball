@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile_test.C,v 1.4.2.1 2003/01/07 13:23:04 anker Exp $
+// $Id: XYZFile_test.C,v 1.4.2.2 2003/02/05 13:20:47 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,11 @@
 
 ///////////////////////////
 
-START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.4.2.1 2003/01/07 13:23:04 anker Exp $")
+<<<<<<< XYZFile_test.C
+START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.4.2.2 2003/02/05 13:20:47 anker Exp $")
+=======
+START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.4.2.2 2003/02/05 13:20:47 anker Exp $")
+>>>>>>> 1.6
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

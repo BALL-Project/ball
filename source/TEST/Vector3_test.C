@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Vector3_test.C,v 1.33.2.1 2003/01/07 13:23:02 anker Exp $
+// $Id: Vector3_test.C,v 1.33.2.2 2003/02/05 13:20:49 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,11 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.33.2.1 2003/01/07 13:23:02 anker Exp $")
+<<<<<<< Vector3_test.C
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.33.2.2 2003/02/05 13:20:49 anker Exp $")
+=======
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.33.2.2 2003/02/05 13:20:49 anker Exp $")
+>>>>>>> 1.35
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
