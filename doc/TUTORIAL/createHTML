@@ -1,0 +1,12 @@
+#/bin/sh
+rm -rf HTML
+rm -rf TEMP
+mkdir TEMP 
+cp * TEMP
+cd TEMP
+sed -i "s/lstlisting}{}/verbatim}/g" *.tex
+sed -i "s/lstlisting}/verbatim}/g" *.tex
+rm -rf HTML
+mkdir HTML
+latex2html -local_icons -init_file latex2html-init.BALL -dir HTML tutorial.tex 2>&1|tee l2h.log
+mv HTML ..
