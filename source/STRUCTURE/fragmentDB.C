@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.32 2001/06/24 14:22:06 oliver Exp $
+// $Id: fragmentDB.C,v 1.33 2001/06/24 14:22:53 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -1288,11 +1288,11 @@ namespace BALL
 		// setting of local variables    
 		// variables beginning with x, are related to             
 		// the prototypes of the fragment database
-		int spiegel1 = 0;	
-		int spiegel2 = 0;
-		int xspiegel1 = 0;
-		int xspiegel2 = 0;
-		int xxspiegel = 0;	
+		int mirror1 = 0;	
+		int mirror2 = 0;
+		int xmirror1 = 0;
+		int xmirror2 = 0;
+		int xxmirror = 0;	
 
 		// moving first point to coordinate center
 		// actual residue 
@@ -1374,44 +1374,44 @@ namespace BALL
 		// actual residue
 		if (c_a.x < 0) 
 		{
-			spiegel1 = 1;
+			mirror1 = 1;
 		}
 	
 		if (c_a.y < 0)
 		{
-			spiegel2 = 1;
+			mirror2 = 1;
 		}
 
 		// residue prototype
 		if (xc_a.x < 0)
 		{
-			xspiegel1 = 1;
+			xmirror1 = 1;
 		}
 
 		if (xc_a.y < 0)
 		{
-			xspiegel2 = 1;
+			xmirror2 = 1;
 		}
 			
 		// using mirrors
 		// actual residue
-		if (spiegel1)
+		if (mirror1)
 		{
 			b_a.x = -b_a.x;
 			c_a.x = -c_a.x;
 		}
-		if (spiegel2)
+		if (mirror2)
 		{
 			b_a.y = -b_a.y;
 			c_a.y = -c_a.y;
 		}
 		// residue prototype
-		if (xspiegel1)
+		if (xmirror1)
 		{
 			xb_a.x = -xb_a.x;
 			xc_a.x = -xc_a.x;
 		}
-		if (xspiegel2)
+		if (xmirror2)
 		{
 			xb_a.y = -xb_a.y;
 			xc_a.y = -xc_a.y;
@@ -1457,11 +1457,11 @@ namespace BALL
 		turn_x1_(d_a, alpha);
 		turn_x3_(d_a, beta);
 		turn_x1_(d_a, gamma);
-		if (spiegel1)
+		if (mirror1)
 		{
 			d_a.x = -d_a.x;
 		}
-		if (spiegel2)
+		if (mirror2)
 		{
 			d_a.y = -d_a.y;
 		}
@@ -1470,11 +1470,11 @@ namespace BALL
 		turn_x3_(xd_a, xbeta);
 		turn_x1_(xd_a, xgamma);
 		turn_x3_(xd_a, w);		       
-		if (xspiegel1)
+		if (xmirror1)
 		{
 			xd_a.x = -xd_a.x;
 		}
-		if (xspiegel2)
+		if (xmirror2)
 		{
 			xd_a.y = -xd_a.y;
 		}
@@ -1484,7 +1484,7 @@ namespace BALL
 		{
 			if ((d_a.z + xd_a.z < 0.2) && (d_a.z + xd_a.z > -0.2)) 
 			{
-				xxspiegel=1;
+				xxmirror=1;
 			}
 		}
 	 
@@ -1497,23 +1497,23 @@ namespace BALL
 		turn_x1_(xtarget_a, xgamma);
 		turn_x3_(xtarget_a, w);		
 		//checking the mirrors
-		if (xspiegel1)
+		if (xmirror1)
 		{
 			xtarget_a.x = -xtarget_a.x;
 		}
-		if (xspiegel2)
+		if (xmirror2)
 		{
 			xtarget_a.y = -xtarget_a.y; 
 		}
-		if (xxspiegel)
+		if (xxmirror)
 		{
 			xtarget_a.z = -xtarget_a.z;
 		}
-		if (spiegel1)
+		if (mirror1)
 		{
 			xtarget_a.x = -xtarget_a.x;
 		}
-		if (spiegel2)
+		if (mirror2)
 		{
 			xtarget_a.y = -xtarget_a.y;  
 		}
