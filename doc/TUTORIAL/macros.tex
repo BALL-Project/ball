@@ -255,6 +255,13 @@
 % BALL file names are typeset in typewriter bold and indexed automatically:
 % with their name and "(file)" appended
 
+\newcommand{\directory}[1]{
+	{\ttfamily\sbseries\mbox{#1}}
+	\index{#1@{\ttfamily\sbseries{#1}} (directory)}
+}
+% BALL directories are typeset in typewriter bold and indexed automatically:
+% with their name and "(directory)" appended
+
 \newcommand{\option}[1]{
 	{\ttfamily\sbseries\mbox{#1}}
 	\index{configure!options!#1@{\ttfamily\sbseries\mbox{#1}}}
