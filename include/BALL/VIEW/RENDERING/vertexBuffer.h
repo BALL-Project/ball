@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.h,v 1.1.2.2 2005/01/18 16:24:10 amoll Exp $
+// $Id: vertexBuffer.h,v 1.1.2.3 2005/01/19 00:19:50 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_VERTEXBUFFER_H
 #define BALL_VIEW_RENDERING_VERTEXBUFFER_H
@@ -36,6 +36,9 @@ namespace BALL
 
 			///
 			~MeshBuffer();
+
+			///
+			static void initGL();
 
 			///
 			const MeshBuffer& operator = (const MeshBuffer& buffer)
