@@ -1,4 +1,4 @@
-// $Id: AtomIterator_test.C,v 1.1 2001/05/30 22:25:50 oliver Exp $
+// $Id: AtomIterator_test.C,v 1.2 2001/12/22 14:14:04 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(AtomIterator, "$Id: AtomIterator_test.C,v 1.1 2001/05/30 22:25:50 oliver Exp $")
+START_TEST(AtomIterator, "$Id: AtomIterator_test.C,v 1.2 2001/12/22 14:14:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -29,8 +29,6 @@ CHECK(typedefs)
 	TEST_EQUAL(ref.getName(), ai->getName())
 	AtomIterator::pointer ptr = &*ai;
 	TEST_EQUAL(ptr, &*ai)
-	// BAUSTELLE
-	// iterator category? 
 RESULT
 
 CHECK(use in copy algorithm)

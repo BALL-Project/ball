@@ -12,9 +12,9 @@ int main(int argc, char **argv)
 	application.setMainWidget(&mainframe);
 
 	#ifdef BALL_PYTHON_SUPPORT
-	// initialize the Python interface
-	mainframe.setIdentifier("MAIN");
-	mainframe.registerThis();
+		// initialize the Python interface
+		mainframe.setIdentifier("MAIN");
+		mainframe.registerThis();
 	#endif
 
 	// start the application

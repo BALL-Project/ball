@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.18 2001/07/25 11:38:12 oliver Exp $
+// $Id: mainControl.C,v 1.19 2001/12/22 14:14:04 oliver Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -52,6 +52,8 @@ namespace BALL
 		MainControl::MainControl(const MainControl& main_control)
 			throw()
 			:	QMainWindow(0, ""),
+				ConnectionObject(main_control),
+				Embeddable(main_control),
 				composite_map_(),
 				descriptor_map_(),
 				descriptors_(),
@@ -137,20 +139,19 @@ namespace BALL
 		void MainControl::clear()
 			throw()
 		{
-			//			list<CompositeDescriptor *>::iterator it = descriptors_.begin();
-
-			//			for (; it != descriptors_.end(); ++it)
+			list<CompositeDescriptor *>::iterator it = descriptors_.begin();
+			for (; it != descriptors_.end(); ++it)
 			{
 				// BAUSTELLE:
 				// Segmentation Fault nach Beenden des Programms, obwohl ueberhaupt
 				// keine Descriptoren angelegt wurden
 
-				//				delete *it;
+				delete *it;
 			}
 
-			//			descriptors_.destroy();
-			//			composite_map_.destroy();
-			//			descriptor_map_.destroy();
+			descriptors_.destroy();
+			composite_map_.destroy();
+			descriptor_map_.destroy();
 		}
 			
 		void MainControl::destroy()

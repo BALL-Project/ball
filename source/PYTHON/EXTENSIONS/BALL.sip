@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.2 2001/12/20 01:13:02 oliver Exp $
+// $Id: BALL.sip,v 1.3 2001/12/22 14:14:04 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -77,6 +77,7 @@
 %Include HINFile.sip
 %Include INIFile.sip
 %Include MOL2File.sip
+%Include MOLFile.sip
 %Include lineBasedFile.sip
 %Include genericMolFile.sip
 %Include genericPDBFile.sip

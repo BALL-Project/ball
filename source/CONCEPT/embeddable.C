@@ -1,8 +1,10 @@
-// $Id: embeddable.C,v 1.8 2001/06/05 15:49:20 anker Exp $
+// $Id: embeddable.C,v 1.9 2001/12/22 14:14:04 oliver Exp $
 
 #include <BALL/CONCEPT/embeddable.h>
 
 using namespace std;
+
+#define DEBUG
 
 namespace BALL
 {
@@ -71,6 +73,10 @@ namespace BALL
 			
 			// ...and in the hash map for fast retrieval of the class id string
 			instance_to_type_map_.insert(pair<Embeddable*, string>(instance, class_id_string));
+			#ifdef DEBUG
+				Log.info() << "Embeddable::registerInstance_: registering " << class_id_string 
+									 << " @ " << (void*)instance << std::endl;
+			#endif
 		}
 		else 
 		{
@@ -95,6 +101,9 @@ namespace BALL
 
 				// remove it from the instance hash map
 				instance_to_type_map_.erase(instance);
+				#ifdef DEBUG
+					Log.info() << "Embeddable::unregisterInstance_: unregistering " << (void*)instance << std::endl;
+				#endif
 			}
 			else 
 			{

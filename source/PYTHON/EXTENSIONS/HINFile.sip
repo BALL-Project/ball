@@ -1,4 +1,4 @@
-// $Id: HINFile.sip,v 1.4 2001/12/21 11:47:04 oliver Exp $
+// $Id: HINFile.sip,v 1.5 2001/12/22 14:14:04 oliver Exp $
 
 class HINFile
 	: GenericMolFile
@@ -15,10 +15,10 @@ class HINFile
 	~HINFile()
 		throw();
 
-  virtual void write(System&);
-  virtual bool read(System&)
+  virtual void write(const System& /system/);
+  virtual bool read(System& /system/)
 		throw(ParseError);
-	virtual void write(const Molecule& /molecule);
+	virtual void write(const Molecule& /molecule/);
 	virtual Molecule* read()
 		throw(ParseError);
 

@@ -1,4 +1,4 @@
-// $Id: MOLFile.C,v 1.5 2001/12/20 01:12:14 oliver Exp $
+// $Id: MOLFile.C,v 1.6 2001/12/22 14:14:04 oliver Exp $
 
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -10,6 +10,9 @@
 
 #define MOLFILE_VERSION_STRING_2 "V2000"
 #define MOLFILE_VERSION_STRING_3 "V3000"
+
+// enable/disable some debug output
+#undef DEBUG
 
 namespace BALL 
 {
@@ -206,6 +209,10 @@ namespace BALL
 	Molecule* MOLFile::readCTAB_(vector<Atom*>& atom_map)
 		throw(Exception::ParseError)
 	{
+
+		#ifdef DEBUG
+			Log.info() << "entering MOLFile::readCTAB_(current line = " << getLineNumber() << ")" << std::endl;
+		#endif
 		// read the counts line
 		CountsStruct counts;
 		readCountsLine_(counts);
@@ -337,6 +344,11 @@ namespace BALL
 				String tag(getLine().getSubstring(3, 3));
 				tag.trim();
 
+				if (tag == "END")
+				{
+					// end of section, abort the wile loop
+					break;
+				}
 				if (tag == "A") // atom alias
 				{
 					//????
@@ -406,12 +418,19 @@ namespace BALL
 		}
 		catch (Exception::GeneralException& e)
 		{
+			#ifdef DEBUG
+				Log.info() << "MOLFile::readCTAB_: caught exception while parsing line " << getLineNumber() << ": " << e << std::endl;
+			#endif
 			// clean up: delete all atoms we just constructed
 			delete molecule;
 			molecule = 0;
 			throw e;
 		}
 		
+		#ifdef DEBUG
+			Log.info() << "MOLFile::readCTAB_ = " << (void*)molecule << std::endl;
+		#endif
+
 		return molecule;
 	}
 

@@ -1,10 +1,12 @@
-// $Id: modularWidget.C,v 1.6 2001/06/07 01:34:12 amoll Exp $
+// $Id: modularWidget.C,v 1.7 2001/12/22 14:14:04 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 
 #include <qwidget.h>
 
 using namespace std;
+
+#define BALL_VIEW_DEBUG
 
 namespace BALL
 {

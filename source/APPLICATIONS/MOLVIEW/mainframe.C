@@ -56,7 +56,7 @@ Mainframe::Mainframe
 	// ---------------------
 	// Logstream setup -----
 	// ---------------------
-  //BAUSTELLE
+  // ???
 	//Log.remove(std::cout);
 
 	// ---------------------
