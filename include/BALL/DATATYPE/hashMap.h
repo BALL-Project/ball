@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.27 2001/06/05 15:41:18 anker Exp $ 
+// $Id: hashMap.h,v 1.27.4.1 2002/05/23 23:55:10 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -706,7 +706,7 @@ namespace BALL
 	}
 
 	template <class Key, class T>
-	HashMap<Key, T>::Iterator HashMap<Key, T>::find(const Key& key)
+	typename HashMap<Key, T>::Iterator HashMap<Key, T>::find(const Key& key)
 		throw()
 	{
 		Iterator it = end();
@@ -729,7 +729,7 @@ namespace BALL
 		
 	template <class Key, class T>
 	BALL_INLINE 
-	HashMap<Key, T>::ConstIterator HashMap<Key, T>::find(const Key& key) const
+	typename HashMap<Key, T>::ConstIterator HashMap<Key, T>::find(const Key& key) const
 		throw()
 	{
 		return (const_cast<HashMap*>(this))->find(key);
@@ -1161,7 +1161,7 @@ namespace BALL
 
 	template <class Key, class T>
 	BALL_INLINE 
-	HashMap<Key, T>::Node* HashMap<Key, T>::newNode_
+	typename HashMap<Key, T>::Node* HashMap<Key, T>::newNode_
 		(const ValueType& value, HashMap<Key, T>::Node* next) const
 		throw()
 	{

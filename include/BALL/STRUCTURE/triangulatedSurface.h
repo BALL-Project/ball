@@ -1,4 +1,4 @@
-// $Id: triangulatedSurface.h,v 1.25 2002/01/14 21:04:28 strobel Exp $
+// $Id: triangulatedSurface.h,v 1.25.4.1 2002/05/23 23:55:13 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -714,7 +714,7 @@ namespace BALL
 		typename std::list<TTriangle<T>*>::iterator t;
 		for (t = triangles_.begin(); t != triangles_.end(); t++)
 		{
-			TSurface<T>::Triangle triangle;
+			typename TSurface<T>::Triangle triangle;
 			triangle.v1 = (*t)->vertex_[0]->index_;
 			triangle.v2 = (*t)->vertex_[1]->index_;
 			triangle.v3 = (*t)->vertex_[2]->index_;

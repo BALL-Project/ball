@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.21 2002/01/14 21:01:34 strobel Exp $
+// $Id: solventExcludedSurface.h,v 1.21.4.1 2002/05/23 23:55:13 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -250,21 +250,22 @@ namespace BALL
 		public:
 
 		Position number_of_vertices_;
-		::std::vector<TSESVertex<T>*> vertices_;
+		std::vector<TSESVertex<T>*> vertices_;
 		Position number_of_edges_;
-		::std::vector<TSESEdge<T>*> edges_;
+		std::vector<TSESEdge<T>*> edges_;
 		Position number_of_singular_edges_;
-		::std::list<TSESEdge<T>*> singular_edges_;
+		std::list<TSESEdge<T>*> singular_edges_;
 		Position number_of_contact_faces_;
-		::std::vector<TSESFace<T>*> contact_faces_;
+		std::vector<TSESFace<T>*> contact_faces_;
 		Position number_of_toric_faces_;
-		::std::vector<TSESFace<T>*> toric_faces_;
+		std::vector<TSESFace<T>*> toric_faces_;
 		Position number_of_spheric_faces_;
-		::std::vector<TSESFace<T>*> spheric_faces_;
+		std::vector<TSESFace<T>*> spheric_faces_;
 		TReducedSurface<T>* reduced_surface_;
-				#ifdef debug_singularities
-				int STOP_SINGULARITIES;
-				#endif
+
+		#ifdef debug_singularities
+			int STOP_SINGULARITIES;
+		#endif
 
 	};
 

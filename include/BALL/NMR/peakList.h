@@ -1,4 +1,4 @@
- // $Id: peakList.h,v 1.7 2002/01/05 03:21:30 oliver Exp $
+ // $Id: peakList.h,v 1.7.4.1 2002/05/23 23:55:12 oliver Exp $
 
 #ifndef BALL_NMR_PEAKLIST_H
 #define BALL_NMR_PEAKLIST_H
@@ -164,7 +164,7 @@ namespace BALL
 	}
 
 	template <typename PT>
-	PeakList<PT>::Position PeakList<PT>::getMinPosition() const
+	typename PeakList<PT>::Position PeakList<PT>::getMinPosition() const
 	{
 		ConstIterator it = begin();
 		PeakList<PT>::Position min = Limits<PeakList<PT>::Position>::max();
@@ -176,7 +176,7 @@ namespace BALL
 	}
 
 	template <typename PT>
-	PeakList<PT>::Position PeakList<PT>::getMaxPosition() const
+	typename PeakList<PT>::Position PeakList<PT>::getMaxPosition() const
 	{
 		ConstIterator it = begin();
 		PeakList<PT>::Position max = -Limits<PeakList<PT>::Position>::max();

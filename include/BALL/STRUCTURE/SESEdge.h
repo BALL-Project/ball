@@ -1,4 +1,4 @@
-// $Id: SESEdge.h,v 1.13 2002/01/14 20:58:57 strobel Exp $
+// $Id: SESEdge.h,v 1.13.4.1 2002/05/23 23:55:13 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SESEDGE_H
 #define BALL_STRUCTURE_SESEDGE_H
@@ -359,7 +359,7 @@ namespace BALL
 
 
 	template <typename T>
-	TSESEdge<T>::Type TSESEdge<T>::getType() const
+	typename TSESEdge<T>::Type TSESEdge<T>::getType() const
 		throw()
 	{
 		return type_;

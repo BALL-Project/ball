@@ -1,4 +1,4 @@
-// $Id: surface.h,v 1.13 2002/01/05 03:57:45 oliver Exp $
+// $Id: surface.h,v 1.13.4.1 2002/05/23 23:55:11 oliver Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -393,7 +393,7 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
-	TSurface<T>::Triangle& TSurface<T>::getTriangle(Position index)
+	typename TSurface<T>::Triangle& TSurface<T>::getTriangle(Position index)
 		throw()
 	{
 		return triangle[index];
@@ -401,7 +401,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	const TSurface<T>::Triangle& TSurface<T>::getTriangle(Position index) const
+	const typename TSurface<T>::Triangle& TSurface<T>::getTriangle(Position index) const
 		throw()
 	{
 		return triangle[index];
@@ -433,7 +433,7 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
-	TSurface<T>::Vertex& TSurface<T>::getVertex(Position index)
+	typename TSurface<T>::Vertex& TSurface<T>::getVertex(Position index)
 		throw()
 	{
 		return vertex[index];
@@ -441,7 +441,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	const TSurface<T>::Vertex& TSurface<T>::getVertex(Position index) const
+	const typename TSurface<T>::Vertex& TSurface<T>::getVertex(Position index) const
 		throw()
 	{
 		return vertex[index];
@@ -472,7 +472,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	TSurface<T>::Normal& TSurface<T>::getNormal(Position index)
+	typename TSurface<T>::Normal& TSurface<T>::getNormal(Position index)
 		throw()
 	{
 		return normal[index];
@@ -480,7 +480,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	const TSurface<T>::Normal& TSurface<T>::getNormal(Position index) const
+	const typename TSurface<T>::Normal& TSurface<T>::getNormal(Position index) const
 		throw()
 	{
 		return normal[index];

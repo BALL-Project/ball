@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.30.4.2 2002/05/22 22:52:51 oliver Exp $ 
+// $Id: hashSet.h,v 1.30.4.3 2002/05/23 23:55:11 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -779,7 +779,7 @@ namespace BALL
 	}
 
 	template <class Key>
-	HashSet<Key>::Iterator HashSet<Key>::find(const Key& key)		throw()
+	typename HashSet<Key>::Iterator HashSet<Key>::find(const Key& key)		throw()
 	{
 		Iterator it = end();
 		Position bucket = hashBucket_(key);
@@ -800,7 +800,7 @@ namespace BALL
 		
 	template <class Key>
 	BALL_INLINE 
-	HashSet<Key>::ConstIterator HashSet<Key>::find(const Key& key) const		throw()
+	typename HashSet<Key>::ConstIterator HashSet<Key>::find(const Key& key) const		throw()
 	{
 		return (const_cast<HashSet*>(this))->find(key);
 	}
@@ -1186,7 +1186,7 @@ namespace BALL
 
 	template <class Key>
 	BALL_INLINE 
-	HashSet<Key>::Node* HashSet<Key>::newNode_
+	typename HashSet<Key>::Node* HashSet<Key>::newNode_
 		(const ValueType& value, HashSet<Key>::Node* next) const		throw()
 	{
 		return new Node(value, next);

@@ -1,4 +1,4 @@
-// $Id: regularData3D.h,v 1.8 2001/08/01 01:01:34 oliver Exp $ 
+// $Id: regularData3D.h,v 1.8.4.1 2002/05/23 23:55:11 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -767,7 +767,7 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	TRegularData3D<GridDataType>::GridIndex TRegularData3D<GridDataType>::getIndex(const Vector3& r) const 
+	typename TRegularData3D<GridDataType>::GridIndex TRegularData3D<GridDataType>::getIndex(const Vector3& r) const 
 		throw(Exception::OutOfGrid)
 	{
 		return getIndex(r.x, r.y, r.z);
@@ -865,7 +865,7 @@ namespace BALL
 
 	template <class GridDataType>
 	BALL_INLINE 
-	TRegularData3D<GridDataType>::GridIndex TRegularData3D<GridDataType>::getIndex
+	typename TRegularData3D<GridDataType>::GridIndex TRegularData3D<GridDataType>::getIndex
 		(float x, float y, float z) const 
 		throw(Exception::OutOfGrid)
 	{

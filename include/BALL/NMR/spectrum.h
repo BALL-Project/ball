@@ -1,4 +1,4 @@
-// $Id: spectrum.h,v 1.6 2001/12/30 13:28:41 sturm Exp $
+// $Id: spectrum.h,v 1.6.4.1 2002/05/23 23:55:12 oliver Exp $
 
 #ifndef BALL_NMR_SPECTRUM_H
 #define BALL_NMR_SPECTRUM_H
@@ -102,7 +102,7 @@ namespace BALL
 	/**	Return the spacing.
 	*/
 	template <typename DataT, typename PeakT, typename PositionT>
-	Spectrum<DataT, PeakT, PositionT>::PositionType Spectrum<DataT, PeakT, PositionT>::getSpacing() const
+	typename Spectrum<DataT, PeakT, PositionT>::PositionType Spectrum<DataT, PeakT, PositionT>::getSpacing() const
 	{
 		return spacing_;
 	}

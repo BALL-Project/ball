@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.25 2002/01/15 16:32:26 anker Exp $
+// $Id: hashGrid.h,v 1.25.4.1 2002/05/23 23:55:10 oliver Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -1765,7 +1765,7 @@ namespace BALL
 		{
 			if (sourcebox->isEmpty() == false)
 			{
-				for (HashGridBox3<Item>::DataItem_* item  = sourcebox->first_item_; item != 0; item = item->next_)
+				for (typename HashGridBox3<Item>::DataItem_* item  = sourcebox->first_item_; item != 0; item = item->next_)
 				{
 					insert_(targetbox, item->item_);
 				}
@@ -2171,7 +2171,7 @@ namespace BALL
 
 		for (HashGridBox3<Item>* box = first_nonempty_; box != 0; box = box->next_)
 		{
-			for (HashGridBox3<Item>::DataItem_ *item = box->first_item_; item != 0; item = item->next_)
+			for (typename HashGridBox3<Item>::DataItem_ *item = box->first_item_; item != 0; item = item->next_)
 			{
 				result = processor(item->item_);
 

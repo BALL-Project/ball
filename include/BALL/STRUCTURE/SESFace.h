@@ -1,4 +1,4 @@
-// $Id: SESFace.h,v 1.15 2002/01/07 17:48:58 strobel Exp $
+// $Id: SESFace.h,v 1.15.4.1 2002/05/23 23:55:13 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -438,7 +438,7 @@ namespace BALL
 
 
 	template <class T>
-	TSESFace<T>::Type TSESFace<T>::getType() const
+	typename TSESFace<T>::Type TSESFace<T>::getType() const
 		throw()
 	{
 		return type_;

@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.16 2001/12/30 13:28:36 sturm Exp $
+// $Id: regularData2D.h,v 1.16.4.1 2002/05/23 23:55:11 oliver Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H
@@ -682,8 +682,8 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	TRegularData2D<GridDataType>::GridIndex 
-		TRegularData2D<GridDataType>::getIndex(const Vector2& r) const 
+	typename TRegularData2D<GridDataType>::GridIndex 
+	TRegularData2D<GridDataType>::getIndex(const Vector2& r) const 
 		throw(Exception::OutOfGrid)
 	{
 		return getIndex(r.x, r.y);
@@ -785,8 +785,8 @@ namespace BALL
 
 	template <class GridDataType>
 	BALL_INLINE 
-	TRegularData2D<GridDataType>::GridIndex 
-		TRegularData2D<GridDataType>::getIndex(float x, float y) const 
+	typename TRegularData2D<GridDataType>::GridIndex 
+	TRegularData2D<GridDataType>::getIndex(float x, float y) const 
 		throw(Exception::OutOfGrid)
 	{
 		if (!has(x, y))

@@ -1,4 +1,4 @@
-// $Id: experiment.h,v 1.2 2001/12/30 13:28:41 sturm Exp $
+// $Id: experiment.h,v 1.2.4.1 2002/05/23 23:55:12 oliver Exp $
 
 #ifndef BALL_NMR_EXPERIMENT_H
 #define BALL_NMR_EXPERIMENT_H
@@ -112,7 +112,7 @@ namespace BALL
 	}
 	
 	template <typename PeakListType>
-	const Experiment<PeakListType>::PeakType& Experiment<PeakListType>::getDefaultPeak() const
+	const typename Experiment<PeakListType>::PeakType& Experiment<PeakListType>::getDefaultPeak() const
 	{
 		return default_peak_;
 	}
