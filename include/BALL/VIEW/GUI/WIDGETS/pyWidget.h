@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.15 2003/03/28 19:37:03 amoll Exp $
+// $Id: pyWidget.h,v 1.16 2003/03/31 15:18:49 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
@@ -22,6 +22,8 @@
 
 namespace BALL
 {
+	class LineBasedFile;
+
 	namespace VIEW
 	{
 
@@ -79,7 +81,12 @@ class PyWidget
 			This is a QT <b>SLOT</b>.
 	*/
 	virtual void stopInterpreter();
-	
+
+	/**	Run a Python program from a file.
+			@param filename the name of the program file
+	*/
+	virtual void runFile(const String& filename);
+			
 	//@}
 	/**	@name	ModularWidget related methods
 	*/

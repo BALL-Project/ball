@@ -1,11 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.14 2003/03/28 19:38:50 amoll Exp $
+// $Id: pyWidget.C,v 1.15 2003/03/31 15:18:43 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 #include <BALL/PYTHON/pyInterpreter.h>
+#include <BALL/FORMAT/lineBasedFile.h>
+//#include <BALL/COMMON/exception.h>
 #include <Python.h>
 
 #include <qscrollbar.h>
@@ -215,7 +217,8 @@ void PyWidget::parseLine_()
 		line = multi_line_text_ + "\n";
 	}
 
-	String result = PyInterpreter::run(line);
+	bool state;
+	String result = PyInterpreter::run(line, state);
 	multi_line_mode_ = false;
 
 	if (result != "") append(result.c_str());
@@ -321,6 +324,34 @@ String PyWidget::getCurrentLine_()
 	int row, col;
 	getCursorPosition(&row, &col);
 	return String(text(row).ascii());
+}
+
+void PyWidget::runFile(const String& filename)
+{
+	bool result;
+	String result_string;
+	LineBasedFile file;
+	try
+	{
+		file.open(filename);
+	}
+	catch(Exception::FileNotFound e)
+	{
+		Log.error() << "Could not find file " << filename << std::endl;
+	}
+
+	while (file.readLine())
+	{
+		result_string = PyInterpreter::run(file.getLine(), result);
+		if (!result)
+		{
+			result_string += "Error in Line " + String(file.getLineNumber()) + " in file " + filename;
+			append(result_string.c_str());
+			return;
+		}
+
+		append(result_string.c_str());
+	}
 }
 
 } } // namespace

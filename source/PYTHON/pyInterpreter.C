@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.C,v 1.5 2002/02/27 12:23:56 sturm Exp $
+// $Id: pyInterpreter.C,v 1.6 2003/03/31 15:19:14 amoll Exp $
 
 #include <BALL/PYTHON/pyInterpreter.h>
+#include <BALL/FORMAT/lineBasedFile.h>
 #include <Python.h>
 
 namespace BALL
@@ -87,8 +88,9 @@ namespace BALL
 	}
 
 
-	String PyInterpreter::run(const String& s)
+	String PyInterpreter::run(const String& s, bool& state)
 	{
+		state = false;
 		if (runSingleString_("OLDSTDOUT=sys.stdout", Py_single_input) == 0) return error_message_;
 		if (runSingleString_("CIO=cStringIO.StringIO()", Py_single_input) == 0) return error_message_;
 		if (runSingleString_("sys.stdout=CIO", Py_single_input) == 0) return error_message_;
@@ -96,6 +98,7 @@ namespace BALL
 		
 		PyErr_Clear();
 		if (runSingleString_(const_cast<char*>(s.c_str()), Py_single_input) == 0) return error_message_;
+		state = true;
 
 		// retrieve output
 		PyObject* result = runSingleString_("str(CIO.getvalue())", Py_eval_input);
@@ -111,10 +114,36 @@ namespace BALL
 		}
 	}
 
-	String PyInterpreter::runFile(const String& /* s */)
+	String PyInterpreter::runFile(const String& filename)
+		throw(Exception::FileNotFound)
 	{
-		// ?????
-		return "<not implemented yet>";
+		if (runSingleString_("OLDSTDOUT=sys.stdout", Py_single_input) == 0) return error_message_;
+		if (runSingleString_("CIO=cStringIO.StringIO()", Py_single_input) == 0) return error_message_;
+		if (runSingleString_("sys.stdout=CIO", Py_single_input) == 0) return error_message_;
+		if (runSingleString_("sys.stderr=CIO", Py_single_input) == 0) return error_message_;
+		PyErr_Clear();
+		
+		String result_string;
+		LineBasedFile file(filename);
+		while (file.readLine())
+		{
+			if (runSingleString_(const_cast<char*>(file.getLine().c_str()), Py_single_input) == 0) 
+			{
+				result_string += "Error in Line " + String(file.getLineNumber()) + " in file " + filename;
+				return result_string;
+			}
+
+			// retrieve output
+			PyObject* result = runSingleString_("str(CIO.getvalue())", Py_eval_input);
+			if (result != 0)
+			{
+				char* buf;
+				PyArg_Parse(result, "s", &buf);
+				result_string += String(buf);
+			}
+		}
+
+		return result_string;
 	}
 
 } // namespace BALL

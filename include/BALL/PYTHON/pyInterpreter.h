@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyInterpreter.h,v 1.8 2003/03/26 13:08:23 sturm Exp $ 
+// $Id: pyInterpreter.h,v 1.9 2003/03/31 15:19:05 amoll Exp $ 
 
 #ifndef BALL_PYTHON_PYINTERPRETER_H
 #define BALL_PYTHON_PYINTERPRETER_H
@@ -16,7 +16,6 @@
 
 namespace BALL 
 {
-
 	/** Embedded Python interpreter.
 			There's just one global instance of the interpreter,
 			so all methods are static. The use of subinterpreters
@@ -50,14 +49,16 @@ namespace BALL
 
 		/**	Execute a string.
 				@param s the string to run (may contain multiple lines with correct indentation)
+				@param result bool reference which contains the result after call of function
 				@return the output of the interpreter (may also contain error messages)
 		*/
-		static String run(const String& s);
+		static String run(const String& s, bool& result);
 
 		/**	Run a Python program from a file.
 				@param file_name the name of the program file
 		*/
-		static String runFile(const String& filename);
+		static String runFile(const String& filename)
+			throw(Exception::FileNotFound);
 			
 		/**	Import a module.	
 				The module with name <tt>module_name</tt> is imported
