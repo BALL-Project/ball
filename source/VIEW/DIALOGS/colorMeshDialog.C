@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.30 2004/05/27 19:50:02 oliver Exp $
-//
+// $Id: colorMeshDialog.C,v 1.31 2004/06/01 14:12:01 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -177,7 +176,29 @@ namespace BALL
 			return true;
 		}
 
+<<<<<<< colorMeshDialog.C
 		void ColorMeshDialog::removeGrid_(RegularData3D& grid)
+=======
+//--------------------- Helper functions ----------------------------------
+bool ColorMeshDialog::insertGrid_(RegularData3D& grid, const String& name)
+{
+	grid_list_.push_back(&grid);
+	grids->insertItem(name.c_str());
+	if (grid_ == 0) grid_ = &grid;
+	if (mesh_ == 0 || !mesh_->vertex.size()) return false;
+
+ 	gridSelected();
+	return true;
+}
+
+void ColorMeshDialog::removeGrid_(RegularData3D& grid)
+{
+	list<RegularData3D*>::iterator it = grid_list_.begin();
+	Position pos = 0;
+	for (; it != grid_list_.end(); it++)
+	{
+		if (*it == &grid)
+>>>>>>> 1.23.2.5
 		{
 			list<RegularData3D*>::iterator it = grid_list_.begin();
 			Position pos = 0;
@@ -199,9 +220,70 @@ namespace BALL
 		}
 
 
+<<<<<<< colorMeshDialog.C
 		void ColorMeshDialog::gridSelected()
 		{
 			if (mesh_ == 0 || rep_ == 0) return;
+=======
+void ColorMeshDialog::gridSelected()
+{
+	if (mesh_ == 0 || rep_ == 0) return;
+
+	// prevent freezing, if clicking on representation, while
+	// an other is still rendering
+	if (!getMainControl()->compositesAreMuteable() ||
+	     rep_->updateRunning())
+	{
+		return;
+	}
+
+	if (grids->count() == 0 || grids->currentItem() == -1)
+	{
+		invalidateGrid_();
+		return;
+	}
+
+	Index pos = grids->currentItem();
+	list<RegularData3D*>::iterator it = grid_list_.begin();
+	for (Position p = 0; p < (Position)pos; p++)
+	{
+		it++;
+	}
+	
+	grid_ = *it;
+
+	if (grid_ == 0) return;
+
+	min_value_  = Limits<float>::max();
+	max_value_  = Limits<float>::min(); 
+	mid_value_  = 0;
+
+	try
+	{
+		for(Position p = 0; p < mesh_->vertex.size(); p++)
+		{
+			float value = grid_->getInterpolatedValue(mesh_->vertex[p]);
+
+			mid_value_ += value;
+			if (value < min_value_) min_value_ = value;
+			if (value > max_value_) max_value_ = value;
+		}
+	}
+	catch(Exception::OutOfGrid)
+	{
+		setStatusbarText("Can not color this surface with this grid, the mesh has points outside the grid!");
+		return;
+	}
+
+	mid_value_ /= mesh_->vertex.size();
+
+	apply_button->setEnabled(true);
+	autoscale->setEnabled(true);
+	min_box->setText(String(min_value_).c_str());
+	mid_box->setText(String(mid_value_).c_str());
+	max_box->setText(String(max_value_).c_str());
+}
+>>>>>>> 1.23.2.5
 
 			// prevent freezing, if clicking on representation, while
 			// an other is still rendering
@@ -211,11 +293,27 @@ namespace BALL
 				return;
 			}
 
+<<<<<<< colorMeshDialog.C
 			if (grids->count() == 0 || grids->currentItem() == -1)
 			{
 				invalidateGrid_();
 				return;
 			}
+=======
+void ColorMeshDialog::setColor_(ColorRGBA& color, const QPushButton* button, const QSpinBox* box, const QRadioButton* rbutton)
+{
+	QPalette p = button->palette();
+	color.set(p.color(QPalette::Active, QColorGroup::Button));
+	if (rbutton->isChecked())
+	{
+		color.setAlpha(box->value());
+	}
+	else
+	{
+		color.setAlpha(255);
+	}
+}
+>>>>>>> 1.23.2.5
 
 			Index pos = grids->currentItem();
 			list<RegularData3D*>::iterator it = grid_list_.begin();
@@ -226,14 +324,98 @@ namespace BALL
 			
 			grid_ = *it;
 
+<<<<<<< colorMeshDialog.C
 			if (grid_ == 0) return;
+=======
+void ColorMeshDialog::colorByCustomColor_()
+{
+	ColorRGBA col(red_box->value(), green_box->value(), blue_box->value(), alpha_box->value());
+
+	if (transparency_group_custom->selected() == none_button_custom)
+	{
+		col.setAlpha(255);
+		rep_->setTransparency(0);
+	}
+	else if (transparency_group_custom->selected() == alpha_button_custom)
+	{
+		rep_->setTransparency(min_min_color.getAlpha());
+	}
+
+	mesh_->colorList.resize(1);
+	mesh_->colorList[0] = col;
+}
+>>>>>>> 1.23.2.5
 
 			min_value_  = Limits<float>::max();
 			max_value_  = Limits<float>::min(); 
 			mid_value_  = 0;
 
+<<<<<<< colorMeshDialog.C
 			try
+=======
+void ColorMeshDialog::colorByGrid_()
+{
+	if (grid_ == 0 ||
+			mesh_ == 0 ||
+			!getMainControl()->compositesAreMuteable() ||
+			rep_ == 0 ||
+			rep_->updateRunning())
+	{
+		setStatusbarText("Could not color surface, maybe because an other thread is still running?");
+		return;
+	}
+
+	try
+	{
+		String((mid_box->text().ascii())).toFloat();
+		String((min_box->text().ascii())).toFloat();
+		String((max_box->text().ascii())).toFloat();
+	}
+	catch(...)
+	{
+		setStatusbarText("Invalid value for min, mid or max value!");
+		return;
+	}
+
+	setColor_(min_min_color, min_min_button, min_min_alpha, alpha_button_grid);
+	setColor_(min_color, min_button, min_alpha, alpha_button_grid);
+	setColor_(mid_color, mid_button, mid_alpha, alpha_button_grid);
+	setColor_(max_color, max_button, max_alpha, alpha_button_grid);
+	setColor_(max_max_color, max_max_button, max_max_alpha, alpha_button_grid);
+
+	// now do the colorizing stuff...
+	mesh_->colorList.resize(mesh_->vertex.size());
+ 	ColorRGBA list[2];
+
+ 	list[0] = min_color;
+ 	list[1] = mid_color;
+
+	ColorTable lower_table(list, 2);
+	lower_table.setMinMaxColors(min_min_color, max_max_color);
+	lower_table.setAlphaBlending(true);
+	lower_table.setNumberOfColors(levels_box->value()/2);
+	lower_table.setRange(String((min_box->text().ascii())).toFloat(), String((mid_box->text().ascii())).toFloat());
+	lower_table.createTable();
+
+ 	list[0] = mid_color;
+ 	list[1] = max_color;
+
+	ColorTable upper_table(list, 2);
+	upper_table.setMinMaxColors(min_min_color, max_max_color);
+	upper_table.setAlphaBlending(true);
+	upper_table.setNumberOfColors(levels_box->value()/2);
+	upper_table.setRange(String((mid_box->text().ascii())).toFloat(), String((max_box->text().ascii())).toFloat());
+	upper_table.createTable();
+
+	try 
+	{
+		for (Position i=0; i<mesh_->colorList.size(); i++)
+		{
+			float grid_value = grid_->getInterpolatedValue(mesh_->vertex[i]);
+			if (grid_value <= String(mid_box->text().ascii()).toFloat())
+>>>>>>> 1.23.2.5
 			{
+<<<<<<< colorMeshDialog.C
 				for(Position p = 0; p < mesh_->vertex.size(); p++)
 				{
 					float value = grid_->getInterpolatedValue(mesh_->vertex[p]);
@@ -242,11 +424,18 @@ namespace BALL
 					if (value < min_value_) min_value_ = value;
 					if (value > max_value_) max_value_ = value;
 				}
+=======
+				mesh_->colorList[i] = lower_table.map(grid_value);
+>>>>>>> 1.23.2.5
 			}
 			catch(Exception::OutOfGrid)
 			{
+<<<<<<< colorMeshDialog.C
 				setStatusbarText("Can not color this surface with this grid, the mesh has points outside the grid!");
 				return;
+=======
+				mesh_->colorList[i] = upper_table.map(grid_value);
+>>>>>>> 1.23.2.5
 			}
 
 			mid_value_ /= mesh_->vertex.size();
@@ -257,9 +446,58 @@ namespace BALL
 			mid_box->setText(String(mid_value_).c_str());
 			max_box->setText(String(max_value_).c_str());
 		}
+<<<<<<< colorMeshDialog.C
+=======
+	}	
+	catch (Exception::OutOfGrid)
+	{
+		Log.error() << "Error! There is a point contained in the surface that is not "
+								<< "inside the grid! Aborting the coloring..." << std::endl;
+		setStatusbarText("Aborted calculation because a point of the surface is out of the grid!");
+		return;
+	}
+
+	if (transparency_group_grid->selected() == none_button_grid)
+	{
+		rep_->setTransparency(0);
+	}
+	else if (transparency_group_grid->selected() == alpha_button_grid)
+	{
+		rep_->setTransparency(min_min_color.getAlpha());
+	}
+}
+>>>>>>> 1.23.2.5
 
 
+<<<<<<< colorMeshDialog.C
 		void ColorMeshDialog::setColor_(ColorRGBA& color, const QPushButton* button, const QSpinBox* box)
+=======
+void ColorMeshDialog::saveSettings_()
+{
+	if (!configs_.has(rep_))
+	{
+		configs_[rep_] = ColoringConfig();
+	}
+	ColoringConfig& config = configs_[rep_];
+
+	setColor_(config.min_min_color, min_min_button, min_min_alpha, alpha_button_grid);
+	setColor_(config.min_color, min_button, min_alpha, alpha_button_grid);
+	setColor_(config.mid_color, mid_button, mid_alpha, alpha_button_grid);
+	setColor_(config.max_color, max_button, max_alpha, alpha_button_grid);
+	setColor_(config.max_max_color, max_max_button, max_max_alpha, alpha_button_grid);
+
+	config.min_value = String(min_box->text().ascii()).toFloat();
+	config.mid_value = String(mid_box->text().ascii()).toFloat();
+	config.max_value = String(max_box->text().ascii()).toFloat();
+
+	config.number_of_levels = levels_box->value();
+
+	config.transparency = 0;
+	if (surface_tab->currentPage() == by_grid)
+	{
+		config.tab = 0;
+		if (transparency_group_grid->selected() == none_button_grid)
+>>>>>>> 1.23.2.5
 		{
 			QPalette p = button->palette();
 			color.set(p.color(QPalette::Active, QColorGroup::Button));
@@ -590,12 +828,98 @@ namespace BALL
 			apply_button->setEnabled(grid_ != 0);
 		}
 
+<<<<<<< colorMeshDialog.C
 		void ColorMeshDialog::show()
 		{
 			ColorMeshDialogData::show();
 			raise();
 		}
+=======
+	if (!RTTI::isKindOf<RegularData3DMessage>(*message)) return;
 
+	RegularData3DMessage *rm = RTTI::castTo<RegularData3DMessage>(*message);
+	switch (rm->getType())
+	{
+		case RegularData3DMessage::NEW:
+			insertGrid_(*rm->getRegularData3D(), rm->getCompositeName());
+			return;
+
+		case RegularData3DMessage::REMOVE:
+			removeGrid_(*rm->getRegularData3D());
+			return;
+		
+		default:
+			return;
+	}
+}
+
+void ColorMeshDialog::invalidateGrid_()
+	throw()
+{
+	grid_ = 0;
+	grids->setCurrentItem(-1);
+	autoscale->setEnabled(false);
+	if (surface_tab->currentPage() == by_grid)
+	{
+		apply_button->setEnabled(false);
+	}
+}
+
+void ColorMeshDialog::invalidateMesh_()
+	throw()
+{
+	mesh_ = 0;
+	rep_ = 0;
+	apply_button->setEnabled(false);
+	autoscale->setEnabled(false);
+}
+
+
+void ColorMeshDialog::setMesh(Mesh* mesh, Representation* rep)
+	throw()
+{
+	mesh_ = mesh;
+	rep_ = rep;
+	if (mesh == 0 || rep == 0)
+	{
+		apply_button->setEnabled(false);
+		return;
+	}
+
+	if (grids->currentItem() == -1 && 
+			grids->count() != 0)
+	{
+		grids->setCurrentItem(grids->count()-1);
+	}
+ 	gridSelected() ;
+ 	apply_button->setEnabled(grid_ != 0);
+}
+
+void ColorMeshDialog::show()
+{
+	ColorMeshDialogData::show();
+	raise();
+}
+>>>>>>> 1.23.2.5
+
+<<<<<<< colorMeshDialog.C
 	} // namespace VIEW
+=======
+void ColorMeshDialog::gridTransparencyChanged()
+{
+	min_min_alpha->setEnabled(alpha_button_grid->isChecked());
+			min_alpha->setEnabled(alpha_button_grid->isChecked());
+			mid_alpha->setEnabled(alpha_button_grid->isChecked());
+	    max_alpha->setEnabled(alpha_button_grid->isChecked());
+	max_max_alpha->setEnabled(alpha_button_grid->isChecked());
+}
+
+void ColorMeshDialog::customColorTransparencyChanged()
+{
+	alpha_box->setEnabled(alpha_button_custom->isChecked());
+}
+
+
+>>>>>>> 1.23.2.5
 
 } // namespace BALL
