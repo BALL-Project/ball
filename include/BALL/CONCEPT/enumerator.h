@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: enumerator.h,v 1.28 2003/03/26 15:59:17 anhi Exp $
+// $Id: enumerator.h,v 1.29 2003/05/08 08:53:11 sneumann Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -562,7 +562,7 @@ namespace BALL
 			bool isBegin() const
 				throw()
 			{
-				return (position_ == 0) && (past_the_end == false);
+				return (position_ == EnumeratorIndex()) && (past_the_end_ == false);
 			}
 			
 			void toEnd()
