@@ -1,4 +1,4 @@
-// $Id: molecularFileDialog.C,v 1.3 2002/12/12 17:45:57 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.4 2002/12/12 18:16:23 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
@@ -81,6 +81,15 @@ namespace BALL
 			String filename(fd->selectedFile());
 			String filter(fd->selectedFilter());
 
+			bool ok = false;
+			try
+			{
+				if (File::isReadable(filename)) ok = true;
+			}
+			catch(...)
+			{}
+
+			if (!ok || filename == "/" || filename == "\\") return;
 
 			// construct a name for the system(the filename without the dir path)
 			QString qfilename = fd->selectedFile();
