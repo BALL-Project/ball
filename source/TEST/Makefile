@@ -282,3 +282,6 @@ solvation_test:	$(EXECUTABLES_SOLVATION)
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
 
+
+ConjugateGradientMinimizer_test: ../MOLMEC/MINIMIZATION/*.o
+	$(CXX) -fPIC  -DBFMT=2 ConjugateGradientMinimizer_test.o  -o ConjugateGradientMinimizer_test $< $(BALL_LIBS)

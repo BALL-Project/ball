@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.14 2003/01/31 15:33:37 anhi Exp $
+// $Id: conjugateGradient.C,v 1.15 2003/02/02 21:54:00 oliver Exp $
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
@@ -10,6 +10,8 @@
 #include <BALL/MOLMEC/COMMON/gradient.h>
 #include <BALL/COMMON/limits.h>
 
+// ????
+#define BALL_DEBUG
 
 // The default method to use for the CG direction update
 // (FLETCHER_REEVES | POLAK_RIBIERE | SHANNO)
@@ -29,6 +31,9 @@ namespace BALL
   // It does nothing but calling its base class constructor 
   ConjugateGradientMinimizer::ConjugateGradientMinimizer()
 		: EnergyMinimizer(),
+			step_(1.0),
+			lambda_(0.0),
+			number_of_atoms_(0),
 			method_(DEFAULT_METHOD)
 	{
 	}
@@ -36,6 +41,9 @@ namespace BALL
 	// Constructor initialized with a force field
 	ConjugateGradientMinimizer::ConjugateGradientMinimizer(ForceField& force_field)
 		: EnergyMinimizer(),
+			step_(1.0),
+			lambda_(0.0),
+			number_of_atoms_(0),
 			method_(DEFAULT_METHOD)
 	{
 		valid_ = setup(force_field);
@@ -50,6 +58,9 @@ namespace BALL
 	ConjugateGradientMinimizer::ConjugateGradientMinimizer
 		(ForceField& force_field, SnapShotManager* ssm)
 		: EnergyMinimizer(),
+			step_(1.0),
+			lambda_(0.0),
+			number_of_atoms_(0),
 			method_(DEFAULT_METHOD)
 	{
 		valid_ = setup(force_field, ssm);
@@ -65,6 +76,9 @@ namespace BALL
 	ConjugateGradientMinimizer::ConjugateGradientMinimizer
 		(ForceField& force_field, const Options& new_options) 
 		: EnergyMinimizer(),
+			step_(1.0),
+			lambda_(0.0),
+			number_of_atoms_(0),
 			method_(DEFAULT_METHOD)
 	{
 		// The actual work is done in setup 
@@ -80,6 +94,9 @@ namespace BALL
 	ConjugateGradientMinimizer::ConjugateGradientMinimizer
 		(ForceField& force_field, SnapShotManager* ssm, const Options& new_options)
 		: EnergyMinimizer(),
+			step_(1.0),
+			lambda_(0.0),
+			number_of_atoms_(0),
 			method_(DEFAULT_METHOD)
 	{
 		// The actual work is done in setup 
@@ -100,20 +117,24 @@ namespace BALL
 
   // The copy constructor 
   ConjugateGradientMinimizer::ConjugateGradientMinimizer 
-		(const ConjugateGradientMinimizer& rhs, bool /* deep */)
+		(const ConjugateGradientMinimizer& rhs)
 		: EnergyMinimizer(rhs),
+			step_(rhs.step_),
+			lambda_(rhs.lambda_),
+			number_of_atoms_(rhs.number_of_atoms_),
 			method_(rhs.method_)
 	{
-		// ?????
 	}
 
   // The assignment operator
-  ConjugateGradientMinimizer& ConjugateGradientMinimizer::operator =
-        (const ConjugateGradientMinimizer& rhs)
+  const ConjugateGradientMinimizer& ConjugateGradientMinimizer::operator =
+		(const ConjugateGradientMinimizer& rhs)
 	{
     EnergyMinimizer::operator = (rhs);
-
-		// ?????
+		method_ = rhs.method_;
+		step_ = rhs.step_;
+		lambda_ = rhs.lambda_;
+		number_of_atoms_ = rhs.number_of_atoms_;
 
     return *this;
 	}
@@ -121,6 +142,12 @@ namespace BALL
   // This method is responsible for doing the specific setup of this class       
   bool ConjugateGradientMinimizer::specificSetup()
 	{
+		// Make sure the force field is assigned and valid!
+		if (force_field_ == 0 || !force_field_->isValid())
+		{
+			return false;
+		}
+
     // set the options  to their default values if not already set  
     step_ = options.setDefaultReal
 			(Option::STEP_LENGTH, Default::STEP_LENGTH); 
@@ -139,13 +166,13 @@ namespace BALL
 	}
 
   // Set explicitly the option step_
-  void	ConjugateGradientMinimizer::setStepLength(double length)
+  void ConjugateGradientMinimizer::setStepLength(double length)
 	{
     step_ = length;
 	}
 
   // get  the value of option step_ 
-  double	ConjugateGradientMinimizer::getStepLength() const 
+  double ConjugateGradientMinimizer::getStepLength() const 
 	{
     return step_; 
 	}
@@ -160,7 +187,6 @@ namespace BALL
   //               Journal of Computational Chemistry, Vol. 9, No. 6, pp. 650-661 (1988)
 	void ConjugateGradientMinimizer::updateDirection()
 	{
-
 		// if the current or the last gradient are undefined or the 
 		// direction is not yet set, we set it to the negative gradient
 		if ((direction_.size() == 0) || !old_grad_.isValid() || !initial_grad_.isValid())
@@ -170,8 +196,8 @@ namespace BALL
 									<< "  old_grad: " << old_grad_.isValid() << endl;
 			Log.error() << "ConjugateGradient::determineNewSearchDirection_: invalid gradient or direction  -  cannot use Fletcher-Reeves." << endl;
 
-			// calculate the current gradient and determine the current
-			// direction as the direction of steepest descent
+			// Calculate the current gradient and determine the current
+			// direction as the direction of steepest descent.
 			updateForces();
 			direction_ = current_grad_;
 			direction_.negate();
@@ -463,8 +489,10 @@ namespace BALL
 
 		// define an alias for the atom vector
 		AtomVector& atoms = const_cast<AtomVector&>(force_field_->getAtoms());
-
-//Log.info() << "CG: " << step_ << " " << lambda_ << " " << initial_energy_ << " " << current_grad_.norm << " " << direction_.norm << endl;
+		
+		#ifdef BALL_DEBUG
+			Log.info() << "CG: " << step_ << " " << lambda_ << " " << initial_energy_ << " " << current_grad_.norm << " " << direction_.norm << endl;
+		#endif
 		
 		bool success = true;
 		while (success)
@@ -478,7 +506,10 @@ namespace BALL
 			}
 			else
 			{
-				Log.info() << "CG1: Adjusted!!!!!" << endl;
+				#ifdef BALL_DEBUG
+					Log.info() << "CG1: Adjusted!!!!!" << endl;
+				#endif
+
 				// find the maximal translation
 				Gradient::ConstIterator grad_it(direction_.begin());
 				double max=0;
@@ -513,12 +544,18 @@ namespace BALL
 				step_ *= 2.0;
 			}
 		}
-//	Log.info() << "CG2: new step " << step_ << endl; 	
+		
+		#ifdef BALL_DEBUG
+			Log.info() << "CG2: new step " << step_ << endl; 	
+		#endif
+
 		// now we perform line searches along direction_
 		LineSearch line_search(*this);
 	
 		bool result =  line_search.minimize(lambda_, step_);
-		//Log.info() << "LineSearch: lambda = " << lambda_ << " result = " << result << endl;
+		#ifdef BALL_DEBUG
+			Log.info() << "LineSearch: lambda = " << lambda_ << " result = " << result << endl;
+		#endif
 		
 		if (!result)
 		{
@@ -527,7 +564,9 @@ namespace BALL
 			// negative gradient
 			direction_ = initial_grad_;
 			direction_.negate();
-			//Log.info() << direction_.rms << "]" << endl;
+			#ifdef BALL_DEBUG
+				Log.info() << direction_.rms << "]" << endl;
+			#endif
 
 			// invalidate the current gradient (LineSearch::minimize())
 			// recalculate it for lambda = 1.0;
@@ -535,12 +574,16 @@ namespace BALL
 
 			// ...and try another line search
 			result = line_search.minimize(lambda_, step_);
-			//Log.info() << "LineSearch: lambda = " << lambda_ << " result = " << result << endl;
+			#ifdef BALL_DEBUG
+				Log.info() << "LineSearch: lambda = " << lambda_ << " result = " << result << endl;
+			#endif
 		}
 
 		if (!result)
 		{
-			//Log.info() << "resetting step length" << endl;
+			#ifdef BALL_DEBUG
+				Log.info() << "resetting step length" << endl;
+			#endif
 			step_ = 0.01 / initial_grad_.norm;
 			
 			// invalidate the current gradient (LineSearch::minimize())
@@ -549,7 +592,9 @@ namespace BALL
 
 			// ...and try another line search
 			result = line_search.minimize(lambda_, step_);
-			//Log.info() << "LineSearch: lambda = " << lambda_ << " result = " << result << endl;
+			#ifdef BALL_DEBUG
+				Log.info() << "LineSearch: lambda = " << lambda_ << " result = " << result << endl;
+			#endif
 		}			
 
 		if (result)
@@ -577,7 +622,7 @@ namespace BALL
 		return result;
 	} // end of method 'findStep'
 
-  // The minimiser optimises the energy of the system 
+  // The minimizer optimizes the energy of the system 
   // by using a conjugate gradient method. 
   // Return value is true when no further steps can be taken!
   bool ConjugateGradientMinimizer::minimize
@@ -595,15 +640,17 @@ namespace BALL
 		}
 		
 
-		// Log.info() << "CGM: minimize(" << iterations << ", " << restart << ")" << endl;
+		#ifdef BALL_DEBUG
+			Log.info() << "CGM: minimize(" << iterations << ", " << restart << ")" << endl;
+		#endif
 		
     // Check the minimizer  and the force field connected to it 
     if (isValid() == false || force_field_->isValid() == false)
     {
-      Log.error() << "The ConjugateGradientMinimizer is not valid or " << endl
+      Log.error() << "ConjugateGradientMinimize: the minimizer is not valid or " << endl
                   << " the force field is not valid!. " << endl; 
 
-      return true;
+      return false;
     }
 
 		// define an alias for the atom vector
@@ -620,18 +667,20 @@ namespace BALL
  		// direction
 		if (!restart || !old_grad_.isValid() || old_grad_.size() == 0)
 		{
-			//Log.info() << "CGM: calculating initial gradient...";
+			#ifdef BALL_DEBUG
+				Log.info() << "CGM: calculating initial gradient...";
+			#endif
+
 			// ...forces
 			updateForces();
-			// Log.info() << " [" << current_grad_.size() << "/" << current_grad_.norm << "/" << current_grad_.rms << " / " << initial_energy_ << "]" << endl;
-			initial_grad_ = current_grad_;
 			initial_energy_ = updateEnergy();
-
-			// Log.info() << " [" << current_grad_.size() << "/" << current_grad_.norm << "/" << current_grad_.rms << " / " << initial_energy_ << "]" << endl;
-
-			// direction = -gradient
+			initial_grad_ = current_grad_;
 			direction_ = current_grad_;
 			direction_.negate();
+
+			#ifdef BALL_DEBUG
+				Log.info() << " [" << current_grad_.size() << "/" << current_grad_.norm << "/" << current_grad_.rms << " / " << initial_energy_ << "]" << endl;
+			#endif
 
 			// reset the same energy counter
 			same_energy_counter_ = 0;
@@ -676,7 +725,7 @@ namespace BALL
 			}
 			else
 			{
-				Log.info() << "CG1: Adjusted!!!!!" << endl;
+				Log.info() << "CG1: Adjusted!!!!" << endl;
 				// find the maximal translation
 				Gradient::ConstIterator grad_it(direction_.begin());
 				double max=0;

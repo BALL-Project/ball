@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.29 2002/12/12 10:41:54 oliver Exp $
+// $Id: forceField.C,v 1.30 2003/02/02 21:53:59 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -19,7 +19,7 @@ namespace BALL
 	ForceField::ForceField()
 		:	periodic_boundary(*this),
 			system_( 0 ),
-			valid_(true),
+			valid_(false),
 			name_("Force Field"),
 			number_of_movable_atoms_(0),
 			use_selection_(false),
@@ -58,22 +58,20 @@ namespace BALL
 
 	// copy constructor 
 	ForceField::ForceField(const ForceField& force_field)
+		:	options(force_field.options),
+			periodic_boundary(force_field.periodic_boundary),
+			system_(force_field.system_),
+			atoms_(force_field.atoms_),
+			parameters_(force_field.parameters_),
+			valid_(force_field.valid_),
+			name_(force_field.name_),
+			energy_(force_field.energy_),
+			number_of_movable_atoms_(force_field.number_of_movable_atoms_),
+			use_selection_(force_field.use_selection_),
+			update_time_stamp_(force_field.update_time_stamp_),
+			setup_time_stamp_(force_field.setup_time_stamp_)
 	{
-		// Copy the attributes
-		name_   = force_field.name_;
-		energy_ = force_field.energy_;
-		options = force_field.options;
-		system_ = force_field.system_;
-		atoms_  = force_field.atoms_;
-		number_of_movable_atoms_ = force_field.number_of_movable_atoms_;
-		parameters_ = force_field.parameters_;
-		periodic_boundary = force_field.periodic_boundary;
-		use_selection_ = force_field.use_selection_;
-		valid_ = force_field.valid_;
-		update_time_stamp_ = force_field.update_time_stamp_;
-		setup_time_stamp_ = force_field.setup_time_stamp_;
-
-		// Copy the component vector
+		// Copy the component vector and its components.
 		for (Size i = 0; i < force_field.components_.size(); i++) 
 		{
 			components_.push_back((ForceFieldComponent*)force_field.components_[i]->create());

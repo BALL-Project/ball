@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.12 2002/12/12 09:48:47 oliver Exp $ 
+// $Id: conjugateGradient.h,v 1.13 2003/02/02 21:53:58 oliver Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -110,7 +110,7 @@ namespace BALL
 
     //@}
 
-    BALL_CREATE_DEEP(ConjugateGradientMinimizer)
+    BALL_CREATE(ConjugateGradientMinimizer)
 
     /**	@name	Constructors and Destructors	
     */
@@ -139,7 +139,7 @@ namespace BALL
 
     /**	Copy constructor
     */
-    ConjugateGradientMinimizer(const ConjugateGradientMinimizer& rhs, bool deep = true);
+    ConjugateGradientMinimizer(const ConjugateGradientMinimizer& rhs);
 
     /**	Destructor.
     */
@@ -152,9 +152,10 @@ namespace BALL
 
     /**	Assignment operator
     */
-    ConjugateGradientMinimizer& operator = (const ConjugateGradientMinimizer& rhs);
+    const ConjugateGradientMinimizer& operator = (const ConjugateGradientMinimizer& rhs);
 
     //@}
+
     /**	@name	Setup methods. They do all necessary preparations. 
     */
     //@{
@@ -164,6 +165,7 @@ namespace BALL
     virtual bool specificSetup();
 
     //@}
+
     /**	@name	Accessors 
     */
     //@{
@@ -209,23 +211,12 @@ namespace BALL
     virtual bool minimize(Size iterations = 0, bool restart = false); 
 
     //@}
-    /**	@name	Public Attributes
-    */
-    //@{
-
-    /**	Force field options
-    */
-    Options	options;
-		
 
     protected:
 
-    //@}
-    /*_	@name	Protected Attributes 
+    /**	@name	Protected Attributes 
 		*/
-    //_@{
-
-		Size number_of_atoms_;
+    //@{
 
     /*_ The step length used in the line search 
     */
@@ -235,11 +226,15 @@ namespace BALL
     */
     double lambda_; 
 
+    /*_ The number of movable atoms.
+    */
+		Size number_of_atoms_; 
+
 		/*_	The update method used for the CG
 		*/
 		UpdateMethod method_;
 
-    //_@}
+    //@}
 
 	};
 

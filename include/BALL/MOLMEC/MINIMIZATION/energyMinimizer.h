@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.28 2002/12/17 18:35:22 anker Exp $
+// $Id: energyMinimizer.h,v 1.29 2003/02/02 21:53:59 oliver Exp $
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
@@ -421,6 +421,7 @@ namespace BALL
 		virtual bool	minimize(Size steps = 0, bool restart = false);
 
 		//@}
+
 		/**	@name	Public Attributes
 		*/
 		//@{
@@ -501,7 +502,7 @@ namespace BALL
 
     /*_ The maximum RMS gradient tolerated (first convergence criterion)
     */
-    float max_gradient_;
+    double max_gradient_;
 
     /*_ The maximum number of iterations with same energy.
         When this number is reached, we assume the system to have converged
@@ -520,13 +521,12 @@ namespace BALL
     /*_ Internal counter: how often is a force update done.
        	Measure for the speed of minimization 
     */
-    int force_update_counter_;
+    Size force_update_counter_;
 
     /*_ Internal counter: how often is an energy update done.
        	Measure for the speed of minimization 
     */
-    int energy_update_counter_; 
-		
+    Size energy_update_counter_; 
 		//_@}
 	};
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.C,v 1.6 2002/12/12 10:43:37 oliver Exp $
+// $Id: lineSearch.C,v 1.7 2003/02/02 21:54:00 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
@@ -19,6 +19,7 @@
 #define LINESEARCH__DEFAULT_MAX_STEPS			10
 
 #define DEBUG
+#define BALL_DEBUG
 
 namespace BALL 
 {
@@ -33,7 +34,7 @@ namespace BALL
 
 
 	// copy constructor 
-	LineSearch::LineSearch(const LineSearch& line_search, bool /* deep */)
+	LineSearch::LineSearch(const LineSearch& line_search)
 		:	alpha_(line_search.alpha_),
 			beta_(line_search.beta_),
 			max_steps_(line_search.max_steps_),
@@ -42,7 +43,7 @@ namespace BALL
 	}
 
 	// assignment operator
-	LineSearch& LineSearch::operator = (const LineSearch& line_search)
+	const LineSearch& LineSearch::operator = (const LineSearch& line_search)
 	{
 		alpha_ = line_search.alpha_;
 		beta_ = line_search.beta_;
@@ -63,6 +64,7 @@ namespace BALL
 
 	// destructor
 	LineSearch::~LineSearch()
+		throw()
 	{
 	}
 		
@@ -123,7 +125,7 @@ namespace BALL
 
 		// define some aliases for convenience
 		AtomVector&				atoms(const_cast<AtomVector&>(minimizer_->getForceField()->getAtoms()));
-		Gradient&					direction(minimizer_->getDirection());
+		const Gradient&		direction(minimizer_->getDirection());
 		EnergyMinimizer&	minimizer(*minimizer_);
 		Gradient&					gradient(minimizer.getGradient());
 		Gradient&					initial_gradient(minimizer.getInitialGradient());
@@ -156,6 +158,9 @@ namespace BALL
 		// calculate it
 		if (!gradient.isValid())
 		{
+			#ifdef BALL_DEBUG
+				Log << "  LineSearch: recalculate Energy/grad @ l = 1.0" << std::endl;
+			#endif
 			// recalculate the gradient and energy for lambda = 1.0
 			atoms.moveTo(direction, step);
 			minimizer_->updateEnergy();

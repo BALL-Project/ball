@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.C,v 1.16 2002/12/17 18:35:51 anker Exp $
+// $Id: energyMinimizer.C,v 1.17 2003/02/02 21:54:00 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 
@@ -9,6 +9,8 @@
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
 
 using namespace std;
+
+#define BALL_DEBUG
 
 namespace BALL 
 {
@@ -359,11 +361,9 @@ namespace BALL
 		valid_ = specificSetup();
 		if (!valid_) 
 		{
-			Log.error() << "EnergyMinimizer::specificSetup: setup  failed!" << endl;
-			return valid_;
+			Log.error() << "EnergyMinimizer::specificSetup failed!" << endl;
 		}
 
-		valid_ = true;
 		return valid_;
 	}
 
@@ -442,7 +442,9 @@ namespace BALL
 			// ...increase the update counter
 			energy_update_counter_++;
 		}
-		//Log.info() << "[E=" << current_energy_ <<"]";
+		#ifdef BALL_DEBUG
+			Log.info() << "EnergyMinimizer: new energy E=" << current_energy_ << std::endl;	
+		#endif
 
 		// return the current energy
 		return current_energy_;
@@ -451,7 +453,6 @@ namespace BALL
 	// calculate new forces
 	void EnergyMinimizer::updateForces()
 	{
-		//Log.info() << "[F]";
 		if (force_field_ != 0)
 		{
 			// recalculate the forces and the energy and ...
@@ -459,6 +460,9 @@ namespace BALL
 
 			// assign the current gradient
 			current_grad_.set(force_field_->getAtoms());
+			#ifdef BALL_DEBUG
+				Log.info() << "EnergyMinimizer: new forces RMS = " << current_grad_.rms << std::endl;	
+			#endif
 		}
 	}
 
@@ -472,10 +476,13 @@ namespace BALL
 
 	void EnergyMinimizer::printEnergy() const
 	{
-		Log.info() << "iteration " << number_of_iteration_
-							 << "  RMS gradient " << initial_grad_.rms
-							 << " kJ/(mol A)      total energy " << initial_energy_ << " kJ/mol"
-							 << endl;
+		if (isValid())
+		{
+			Log.info() << "iteration " << number_of_iteration_
+								 << "  RMS gradient " << current_grad_.rms
+								 << " kJ/(mol A)      total energy " << force_field_->getEnergy() << " kJ/mol"
+								 << std::endl;
+		}
 		//if (force_field_ != 0)
 		//{
 		//	Log.info() << "  components:" << endl;

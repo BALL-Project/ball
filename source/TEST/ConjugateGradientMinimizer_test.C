@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.1 2003/02/02 10:15:50 oliver Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.2 2003/02/02 21:54:00 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,14 +11,15 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.1 2003/02/02 10:15:50 oliver Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.2 2003/02/02 21:54:00 oliver Exp $")
 
 using namespace BALL;
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-AmberFF FF;
+System S;
+AmberFF FF(S);
 	
 ConjugateGradientMinimizer*	em;
 CHECK(ConjugateGradientMinimizer::ConjugateGradientMinimizer())
@@ -102,8 +103,8 @@ CHECK(ConjugateGradientMinimizer::setup(ForceField&, const Options&))
 RESULT
 
 CHECK(ConjugateGradientMinimizer::specificSetup())
-	ConjugateGradientMinimizer em;
-	TEST_EQUAL(em.specificSetup(),true)
+	ConjugateGradientMinimizer em(FF);
+	TEST_EQUAL(em.specificSetup(), true)
 	// specificSetup() shouldn't do anything except returning true
 RESULT
 
@@ -197,38 +198,6 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool))
 	cgm.setMaxGradient(0.01);
 	Log << "grad: " << FF.getRMSGradient() << std::endl;
 	TEST_EQUAL(cgm.isValid(), true)
-	TEST_EQUAL(cgm.minimize(20), true)
-	TEST_REAL_EQUAL(FF.getEnergy(), -0.4)
-	Log << a1->getPosition() << "/" << a2->getPosition() << std::endl;
-	Log << a1->getPosition().getDistance(a2->getPosition()) << std::endl;
-	Log << a1->getCharge() << "/" << a2->getCharge() << std::endl;
-	
-	FF.updateEnergy();
-	FF.updateForces();
-	Log << "grad: " << FF.getRMSGradient() << std::endl;
-	Log << a1->getForce() << std::endl;
-	Log << a2->getForce() << std::endl;
-	Log << "Ttl: " << FF.getEnergy() << std::endl;
-	Log << "vdW: " << FF.getVdWEnergy() << std::endl;
-	Log << "ES:  " << FF.getESEnergy() << std::endl;
-	Log << a1->getPosition() << "/" << a2->getPosition() << std::endl;
-	Log << a1->getPosition().getDistance(a2->getPosition()) << std::endl;
-	TEST_EQUAL(cgm.minimize(20), true)
-	TEST_REAL_EQUAL(FF.getEnergy(), -0.4)
-	Log << a1->getPosition() << "/" << a2->getPosition() << std::endl;
-	Log << a1->getPosition().getDistance(a2->getPosition()) << std::endl;
-	Log << a1->getCharge() << "/" << a2->getCharge() << std::endl;
-	
-	FF.updateEnergy();
-	FF.updateForces();
-	Log << "grad: " << FF.getRMSGradient() << std::endl;
-	Log << a1->getForce() << std::endl;
-	Log << a2->getForce() << std::endl;
-	Log << "Ttl: " << FF.getEnergy() << std::endl;
-	Log << "vdW: " << FF.getVdWEnergy() << std::endl;
-	Log << "ES:  " << FF.getESEnergy() << std::endl;
-	Log << a1->getPosition() << "/" << a2->getPosition() << std::endl;
-	Log << a1->getPosition().getDistance(a2->getPosition()) << std::endl;
 	TEST_EQUAL(cgm.minimize(20), true)
 	TEST_REAL_EQUAL(FF.getEnergy(), -0.4)
 	Log << a1->getPosition() << "/" << a2->getPosition() << std::endl;

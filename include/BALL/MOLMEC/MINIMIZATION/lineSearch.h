@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.h,v 1.9 2002/02/27 12:19:05 sturm Exp $
+// $Id: lineSearch.h,v 1.10 2003/02/02 21:53:59 oliver Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
@@ -30,7 +30,7 @@ namespace BALL
 		*/
 		//@{
 		
-		BALL_CREATE_DEEP(LineSearch)
+		BALL_CREATE(LineSearch)
 
 		/**	Default constructor.
 		*/
@@ -42,22 +42,24 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		LineSearch(const LineSearch& line_search, bool deep = true);
+		LineSearch(const LineSearch& line_search);
 
 		/**	Destructor.
 		*/
-		virtual ~LineSearch();
-
+		virtual ~LineSearch() 
+			throw();
 		//@}
+
 		/**	@name	Assignments 
 		*/
 		//@{
 
 		/**	Assignment operator
 		*/
-		LineSearch&	operator = (const LineSearch& LineSearch);
+		const LineSearch& operator = (const LineSearch& LineSearch);
 
 		//@}
+
 		/**	@name	Accessors
 		*/
 		//@{
@@ -99,9 +101,9 @@ namespace BALL
 		virtual double interpolate	
 			(double lambda_0, double lambda_1, 
 			 double energy_,  double energy_1, 
-			 double grad_0,   double grad_1) const;
-		
+			 double grad_0,   double grad_1) const;		
 		//@}
+
 		/**	@name	Minimization
 		*/
 		//@{
@@ -136,7 +138,6 @@ namespace BALL
 		double current_energy_;
 		double lambda_;
 		double step_;
-		
 	};
 
 } // namespace BALL
