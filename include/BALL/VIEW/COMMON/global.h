@@ -34,18 +34,31 @@ namespace BALL
 		*/
 		enum Command
 		{
-			COMMAND__UNKOWN         = 0,
-			COMMAND__OPEN_SCENE     = 1,
-			COMMAND__CLOSE_SCENE    = 2,
-			COMMAND__RESIZE_SCENE   = 3,
-			COMMAND__SHOW_SCENE     = 4,
-			COMMAND__HIDE_SCENE     = 5,
-			COMMAND__DESTROY_SCENE  = 6,
-			COMMAND__SEND_OBJECT    = 7,
-			COMMAND__UPDATE_SCENE   = 8,
+			COMMAND__UNKOWN              = 0,
+			COMMAND__OPEN_SCENE          = 1,
+			COMMAND__CLOSE_SCENE         = 2,
+			COMMAND__RESIZE_SCENE        = 3,
+			COMMAND__SHOW_SCENE          = 4,
+			COMMAND__HIDE_SCENE          = 5,
+			COMMAND__DESTROY_SCENE       = 6,
+			COMMAND__SEND_OBJECT         = 7,
+			COMMAND__UPDATE_SCENE        = 8,
+			COMMAND__SET_CREATOR_VALUE   = 9,
+			COMMAND__GET_CREATOR_VALUE   = 10,
+			COMMAND__HAS_CREATOR_VALUE   = 11,
+			COMMAND__SET_PROCESSOR_VALUE = 12,
+			COMMAND__GET_PROCESSOR_VALUE = 13,
+			COMMAND__HAS_PROCESSOR_VALUE = 14,
 			
 			NUMBER_OF_COMMANDS
 		};	
+
+		/**     Range enums
+		*/
+		enum Range
+		{
+			RANGE__ADDRESS = 50
+		};
 		//@}
 
 	} // namespace VIEW
