@@ -7,10 +7,30 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>0</y>
-            <width>519</width>
-            <height>82</height>
+            <y>2</y>
+            <width>520</width>
+            <height>80</height>
         </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>0</hsizetype>
+            <vsizetype>0</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>520</width>
+            <height>80</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>520</width>
+            <height>80</height>
+        </size>
     </property>
     <property name="caption">
         <string>SelectorDialog</string>
