@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.9 2005/03/31 13:45:25 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.10 2005/04/01 15:29:57 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -37,9 +37,9 @@ namespace BALL
 		setName("MMFF94");
 
 		// create the component list
-      		insertComponent(new MMFF94Stretch(*this));
-      		insertComponent(new MMFF94Bend(*this));
-      		insertComponent(new MMFF94StretchBend(*this));
+//         		insertComponent(new MMFF94Stretch(*this));
+         		insertComponent(new MMFF94Bend(*this));
+//         		insertComponent(new MMFF94StretchBend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 	}
@@ -51,9 +51,9 @@ namespace BALL
 			parameters_initialized_(false)
   {
 		// create the component list
-insertComponent(new MMFF94Stretch(*this));
-      		insertComponent(new MMFF94Bend(*this));
-      		insertComponent(new MMFF94StretchBend(*this));
+//   insertComponent(new MMFF94Stretch(*this));
+         		insertComponent(new MMFF94Bend(*this));
+//         		insertComponent(new MMFF94StretchBend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 
@@ -76,9 +76,9 @@ insertComponent(new MMFF94Stretch(*this));
 			parameters_initialized_(false)
   {
 		// create the component list
-insertComponent(new MMFF94Stretch(*this));
-   		insertComponent(new MMFF94Bend(*this));
-      		insertComponent(new MMFF94StretchBend(*this));
+//   insertComponent(new MMFF94Stretch(*this));
+      		insertComponent(new MMFF94Bend(*this));
+//         		insertComponent(new MMFF94StretchBend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 
@@ -405,7 +405,7 @@ insertComponent(new MMFF94Stretch(*this));
 			rings_.push_back(HashSet<Atom*>());
 			for (Position j = 0; j < rings[i].size(); j++)
 			{
-				rings_[rings_.size() - 1].insert(rings[i][j]);
+				rings_[i].insert(rings[i][j]);
 			}
 		}
 
@@ -438,8 +438,19 @@ insertComponent(new MMFF94Stretch(*this));
 		}
 
 #ifdef BALL_DEBUG_MMFF
-	Log.info() << "MMFF94: Found " << rings_.size() << " rings." << std::endl;
-	Log.info() << "MMFF94: Found " << aromatic_rings_.size() << " aromatic rings." << std::endl;
+		Log.info() << "MMFF94: Found " << rings_.size() << " rings: ";
+		for (Position pos = 0; pos < rings_.size(); pos++)
+		{
+			Log.info() << rings_[pos].size() << " ";
+		}
+		Log.info() << std::endl;
+
+		Log.info() << "MMFF94: Found " << aromatic_rings_.size() << " aromatic rings: ";
+		for (Position pos = 0; pos < aromatic_rings_.size(); pos++)
+		{
+			Log.info() << aromatic_rings_[pos].size() << " ";
+		}
+		Log.info() << std::endl;
 #endif
 
 	}

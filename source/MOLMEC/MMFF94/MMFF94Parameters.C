@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.12 2005/03/31 16:36:47 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.13 2005/04/01 15:29:58 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -266,10 +266,26 @@ namespace BALL
 		BendMap::ConstIterator it = parameters_.find(
 				getIndex_(bond_type, atom_type1, atom_type2, atom_type3));
 
-		if (it == parameters_.end()) return false;
+		if (it == parameters_.end())
+		{
+#ifdef BALL_DEBUG_MMFF
+			Log.info() << "MMFF94 Bend "  << bond_type 
+								 << " " << atom_type1 << " " << atom_type2 << " " << atom_type3 
+								 << "  ->  ???" << std::endl;
+#endif
+
+			return false;
+		}
+
 
 		ka = it->second.first;
 		angle = it->second.second;
+
+#ifdef BALL_DEBUG_MMFF
+		Log.info() << "MMFF94 Bend "  << bond_type 
+					     << " " << atom_type1 << " " << atom_type2 << " " << atom_type3 
+							 << "  -> " << ka << "  " << angle << std::endl;
+#endif
 
 		return true;
 	}

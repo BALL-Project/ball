@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.11 2005/03/31 16:36:46 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.12 2005/04/01 15:29:58 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -13,7 +13,7 @@
 
 #include <math.h>
 
-//   #define BALL_DEBUG_MMFF
+  #define BALL_DEBUG_MMFF
 
 using namespace std;
 
@@ -119,35 +119,27 @@ namespace BALL
 																				*this_bend.atom3->ptr);
 
 					// check for parameters
-					if (!parameters_.getParameters(this_bend.ATIJK, 
-																				 atom_type_a1, atom_type_a2, atom_type_a3, 
-																				 this_bend.ka, this_bend.theta0))
+					if (!parameters_.getParameters(this_bend.ATIJK, atom_type_a1, atom_type_a2, atom_type_a3, this_bend.ka, this_bend.theta0) &&
+							// try wildcard matching
+						  !parameters_.getParameters(this_bend.ATIJK, 0, 						atom_type_a2, 0, 						this_bend.ka, this_bend.theta0)) 
 					{
-						// try wildcard matching
-						if (!parameters_.getParameters(this_bend.ATIJK, 
-																					 0, atom_type_a2, 0, 
-																					 this_bend.ka, this_bend.theta0))
-						{
-							// complain if nothing was found
-							getForceField()->error() << "MMFF94Bend::setup: cannot find bend parameters for atom types:"
-								<< atom_type_a1 << "-" << atom_type_a2 << "-" << atom_type_a3 << "bend " << this_bend.ATIJK
-								<< " (atoms are: " << this_bend.atom1->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
-								<< this_bend.atom2->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << "/" 
-								<< this_bend.atom3->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ")" << endl;
+						// complain if nothing was found
+						getForceField()->error() << "MMFF94Bend::setup: cannot find bend parameters for atom types:"
+																		 << atom_type_a1 << "-" << atom_type_a2 << "-" << atom_type_a3 << "bend " << this_bend.ATIJK
+																		 << " (atoms are: " << this_bend.atom1->ptr->getFullName() << "/" 
+																												<< this_bend.atom2->ptr->getFullName() << "/" 
+																												<< this_bend.atom3->ptr->getFullName() << ")" << endl;
 
-							getForceField()->getUnassignedAtoms().insert(it2->getPartner(**atom_it));
-							getForceField()->getUnassignedAtoms().insert(*atom_it);
-							getForceField()->getUnassignedAtoms().insert(it1->getPartner(**atom_it));
-							continue;
-						}
-					} 
-					else 
-					{
-						this_bend.is_linear = atom_types[atom_type_a2].lin;
-
-						// store the bend parameters otherwise
-						bends_.push_back(this_bend);
+						getForceField()->getUnassignedAtoms().insert(it2->getPartner(**atom_it));
+						getForceField()->getUnassignedAtoms().insert(*atom_it);
+						getForceField()->getUnassignedAtoms().insert(it1->getPartner(**atom_it));
+						continue;
 					}
+
+					this_bend.is_linear = atom_types[atom_type_a2].lin;
+
+					// store the bend parameters otherwise
+					bends_.push_back(this_bend);
 				}
 			}
 		}
@@ -174,16 +166,12 @@ namespace BALL
 		{
 			const float& ka = bend_it->ka;
 			const float& theta0 = bend_it->theta0;
-
 		
 			v1 = bend_it->atom1->position - bend_it->atom2->position;
 			v2 = bend_it->atom3->position - bend_it->atom2->position;
 			const double square_length = v1.getSquareLength() * v2.getSquareLength();
 
-			if (square_length == 0.0) 
-			{
-				continue;
-			}
+			if (square_length == 0.0) continue;
 
 			const double costheta = v1 * v2 / sqrt(square_length);
 			double theta;

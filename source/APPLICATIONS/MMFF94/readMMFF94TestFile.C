@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.14 2005/03/31 16:36:53 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.15 2005/04/01 15:30:06 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -362,6 +362,7 @@ int runtests(const vector<String>& filenames)
 	{
 //   		if (pos > 5) break;
 
+		Log.info() << "> " << filenames[pos] << std::endl;
 		String full_file_name(dir +FileSystem::PATH_SEPARATOR + filenames[pos] + ".mol2");
 		System* system = readTestFile(full_file_name);
 		if (system == 0)
@@ -378,9 +379,10 @@ int runtests(const vector<String>& filenames)
 
 		mmff.updateEnergy();
 
- 		testStretch(mmff, filenames[pos], false);
- 		testBend(mmff, filenames[pos], false);
-		if (testStretchBend(mmff, filenames[pos], true)) ok++;
+//    		if (testStretch(mmff, filenames[pos], true)) ok++;
+ 		if (testBend(mmff, filenames[pos], true)) ok++;
+//    		testBend(mmff, filenames[pos], false);
+//   		if (testStretchBend(mmff, filenames[pos], true)) ok++;
 	}
 
 	Log.info() << "Tested " << filenames.size() << " files, " << ok << " files ok" << std::endl;
