@@ -1,4 +1,4 @@
-// $Id: surface.h,v 1.9 2001/06/21 02:32:48 oliver Exp $
+// $Id: surface.h,v 1.10 2001/12/27 00:26:44 oliver Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -33,11 +33,14 @@ namespace BALL
 
 		/**
 		*/
-		struct Triangle
+		class Triangle
 		{
+			public:
 			Index	v1;
 			Index	v2;
 			Index	v3;
+
+			bool operator == (const Triangle& triangle) const throw();
 		};
 		//@}
 
@@ -100,11 +103,11 @@ namespace BALL
 		//@{
 
 		///
-		bool operator == (const TSurface& box) const
+		bool operator == (const TSurface& surface) const
 			throw();
 
 		///
-		bool operator != (const TSurface& box) const
+		bool operator != (const TSurface& surface) const
 			throw();
 		//@}
 
@@ -302,6 +305,30 @@ namespace BALL
 	{
 		return valid_;
 	}
+
+	template <typename T>
+	bool TSurface<T>::operator == (const TSurface<T>& surface) const
+		throw()
+	{
+		return ((valid_ == surface.valid_) 
+						&& (surface.vertex == vertex) 
+						&& (surface.normal == normal) 
+						&& (surface.triangle == triangle));
+	}
+
+	template <typename T>
+	bool TSurface<T>::operator != (const TSurface<T>& surface) const
+		throw()
+	{
+		return !(*this == surface);
+	}
+
+	template <typename T>
+	bool TSurface<T>::Triangle::operator == (const TSurface<T>::Triangle& triangle) const throw()
+	{
+		return (v1 == triangle.v1) && (v2 == triangle.v2) && (v3 == triangle.v3);
+	}
+
 
 	/**	Default surface type.
 	*/
