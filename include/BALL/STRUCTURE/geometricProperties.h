@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.h,v 1.20 2003/03/26 15:59:26 anhi Exp $
+// $Id: geometricProperties.h,v 1.21 2003/08/19 19:56:35 amoll Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -14,8 +14,8 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
-#ifndef BALL_MATHS_BOX3_H
-#	include <BALL/MATHS/box3.h>
+#ifndef BALL_MATHS_SIMPLEBOX_H
+#	include <BALL/MATHS/simpleBox3.h>
 #endif
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -107,7 +107,7 @@ namespace BALL
 
 		/** Return the bounding box
 		*/
-		Box3 getBox() const
+		SimpleBox3 getBox() const
 			throw();
 
 		/**	Returns the lower corner of the bounding box
