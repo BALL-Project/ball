@@ -1,4 +1,4 @@
-// $Id: MOLFile.C,v 1.6 2001/12/22 14:14:04 oliver Exp $
+// $Id: MOLFile.C,v 1.7 2001/12/27 17:30:08 oliver Exp $
 
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -187,6 +187,7 @@ namespace BALL
 			
 			bond.stereo = 0;
 			bond.topology = 0;
+			bond.reacting_center_status = 0;
 			
 			writeBondLine_(bond);
 		}
@@ -634,6 +635,9 @@ namespace BALL
 
 		bond.topology = 0;
 		parseColumnFormat("%3d", 15, 3, (void*)&bond.topology);
+
+		bond.reacting_center_status = 0;
+		parseColumnFormat("%3d", 15, 3, (void*)&bond.reacting_center_status);
 	}
 
 	void MOLFile::writeBondLine_(const MOLFile::BondStruct& bond)
