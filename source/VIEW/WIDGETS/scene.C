@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.79 2004/06/16 12:56:04 amoll Exp $
+// $Id: scene.C,v 1.80 2004/06/16 21:42:42 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1179,12 +1179,12 @@ namespace BALL
 			main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
 			no_stereo_id_ = main_control.insertMenuEntry (
- 					MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()), ALT+Key_Y);
+ 					MainControl::DISPLAY_STEREO, "No Stereo", this, SLOT(exitStereo()));
  			menuBar()->setItemChecked(no_stereo_id_, true) ;
 			active_stereo_id_ = main_control.insertMenuEntry (
- 					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()), ALT+Key_Y);
+ 					MainControl::DISPLAY_STEREO, "Shuttter Glasses", this, SLOT(enterActiveStereo()));
 			dual_stereo_id_ = main_control.insertMenuEntry (
- 					MainControl::DISPLAY_STEREO, "Dual Stereo", this, SLOT(enterDualStereo()), ALT+Key_Y);
+ 					MainControl::DISPLAY_STEREO, "Side by Side", this, SLOT(enterDualStereo()));
 
 			hint = "Print the coordinates of the current viewpoint";
 			main_control.insertMenuEntry(
