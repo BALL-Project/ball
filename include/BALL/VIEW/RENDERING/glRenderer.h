@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.23 2004/07/16 14:39:25 amoll Exp $
+// $Id: glRenderer.h,v 1.24 2004/07/20 22:28:37 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -143,7 +143,7 @@ namespace BALL
 				throw();
 
 			/// Set the light sources according to the stage
-			virtual void setLights()
+			virtual void setLights(bool reset_all = false)
 				throw();
 
 			/** Pick geometric objects

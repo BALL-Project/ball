@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.38 2004/07/16 14:41:19 amoll Exp $
+// $Id: glRenderer.C,v 1.39 2004/07/20 22:28:48 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -81,9 +81,6 @@ namespace BALL
 			
  			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
 
-			// do depthcomparisons and update the depth buffer
-			glEnable(GL_DEPTH_TEST);
-
 			// Specifies the depth comparison function:
 			// Passes if the incoming z value is greater than  or equal to the stored z value
 			glDepthFunc(GL_LEQUAL);
@@ -100,6 +97,8 @@ namespace BALL
 			glEnable(GL_LINE_SMOOTH);
 
 			glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
+
+			glBlendFunc(GL_SRC_ALPHA,  GL_ONE_MINUS_SRC_ALPHA);
 
 			glLightModeli(GL_LIGHT_MODEL_LOCAL_VIEWER, GL_FALSE);
 
@@ -162,9 +161,7 @@ namespace BALL
 			render_mode_ = RENDER_MODE_TRANSPARENT;
 			glEnable(GL_DEPTH_TEST);
 			glEnable(GL_BLEND);
-			glBlendFunc(GL_SRC_ALPHA,  GL_ONE_MINUS_SRC_ALPHA);
 			glDepthMask(GL_FALSE);
-			glEnable(GL_CULL_FACE);
 		}
 
 		void GLRenderer::initSolid()
@@ -175,7 +172,6 @@ namespace BALL
 			glEnable(GL_DEPTH_TEST);
 			glDisable(GL_BLEND);
 			glDepthMask(GL_TRUE);
-		 	glDisable(GL_CULL_FACE);
 		}
 
 		void GLRenderer::initAlwaysFront()
@@ -186,7 +182,6 @@ namespace BALL
 			glDisable(GL_DEPTH_TEST);
 			glDisable(GL_BLEND);
 			glDepthMask(GL_TRUE);
-		 	glDisable(GL_CULL_FACE);
 		}
 
 
@@ -200,21 +195,32 @@ namespace BALL
 		}
 			
 
-		void GLRenderer::setLights()
+		void GLRenderer::setLights(bool reset_all)
 			throw()
 		{
 			GLenum light_nr = GL_LIGHT0;
-			GLenum LIGHTS_MAX = GL_MAX_LIGHTS;
-			if (LIGHTS_MAX > GL_LIGHT0 + 10) LIGHTS_MAX = GL_LIGHT0 + 10;
-			for (; light_nr < LIGHTS_MAX; light_nr++)
+
+			if (reset_all)
 			{
-				glDisable(light_nr);
+				GLenum LIGHTS_MAX = GL_MAX_LIGHTS;
+				if (LIGHTS_MAX > GL_LIGHT0 + 10) LIGHTS_MAX = GL_LIGHT0 + 10;
+				for (; light_nr < LIGHTS_MAX; light_nr++)
+				{
+					glDisable(light_nr);
+				}
+				
+				light_nr = GL_LIGHT0;
 			}
-			light_nr = GL_LIGHT0;
 
 			List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
 			for (; it != stage_->getLightSources().end(); it++)
 			{
+				if (reset_all &&
+						!it->isRelativeToCamera())
+				{
+					continue;
+				}
+				
 				// setup the light intensity
 				GLfloat intensity[] = {((float) it->getColor().getRed()) 		* it->getIntensity(),
 															( (float) it->getColor().getGreen()) 	* it->getIntensity(),
@@ -679,7 +685,12 @@ namespace BALL
 				}
 				else
 				{
-					// draw the triangles
+					// draw the triangles solid
+					if (render_mode_ == RENDER_MODE_SOLID)
+					{
+		 				glDisable(GL_CULL_FACE);
+					}
+					
 					glBegin(GL_TRIANGLES);
 					for (Size index = 0; index < mesh.triangle.size(); ++index)
 					{
@@ -693,6 +704,11 @@ namespace BALL
 						vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
 					}
 					glEnd();
+
+					if (render_mode_ == RENDER_MODE_SOLID)
+					{
+						glEnable(GL_CULL_FACE);
+					}
 				}
 				
 				if (drawing_mode_ == DRAWING_MODE_DOTS ||
@@ -742,6 +758,11 @@ namespace BALL
 			else
 			{
 				// draw the triangles solid
+				if (render_mode_ == RENDER_MODE_SOLID)
+				{
+		 			glDisable(GL_CULL_FACE);
+				}
+					
  			  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
 				glBegin(GL_TRIANGLES);
 				for (Size index = 0; index < mesh.triangle.size(); ++index)
@@ -760,6 +781,12 @@ namespace BALL
 				}
 				glEnd();
  			  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
+
+				if (render_mode_ == RENDER_MODE_SOLID)
+				{
+		 			glEnable(GL_CULL_FACE);
+				}
+					
 				// ------------------
 			}
 

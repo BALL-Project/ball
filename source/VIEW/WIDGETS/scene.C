@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.110 2004/07/20 21:23:37 amoll Exp $
+// $Id: scene.C,v 1.111 2004/07/20 22:28:27 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -368,7 +368,7 @@ namespace BALL
 			stereo_camera_.setViewPoint(old_view_point + diff);
 			stereo_camera_.setLookAtPosition(old_look_at + diff);
 			gl_renderer_.updateCamera(&stereo_camera_);
- 			gl_renderer_.setLights();
+ 			gl_renderer_.setLights(true);
 			renderRepresentations_(mode);
 			glPopMatrix();
 
@@ -409,7 +409,7 @@ namespace BALL
 			stereo_camera_.setViewPoint(old_view_point - diff);
 			stereo_camera_.setLookAtPosition(old_look_at - diff);
 			gl_renderer_.updateCamera(&stereo_camera_);
- 			gl_renderer_.setLights();
+ 			gl_renderer_.setLights(true);
  			light_settings_->updateFromStage();
 			renderRepresentations_(DISPLAY_LISTS_RENDERING);
 			glPopMatrix();
@@ -826,7 +826,7 @@ namespace BALL
 			List<LightSource>& lights = stage_->getLightSources();
 			lights.clear();
 			lights.push_back(light);
-			gl_renderer_.setLights();
+			gl_renderer_.setLights(true);
 			light_settings_->updateFromStage();
 
 			if (update_GL) renderView_(REBUILD_DISPLAY_LISTS);
@@ -1064,7 +1064,7 @@ namespace BALL
 			if (light_settings_ == 0) return;
 
 			light_settings_->apply();
-			gl_renderer_.setLights();
+			gl_renderer_.setLights(true);
 
 			bool showed_coordinate = stage_->coordinateSystemEnabled();
 			stage_settings_->apply();
