@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.h,v 1.7 1999/09/15 09:06:38 oliver Exp $
+// $Id: rotamerLibrary.h,v 1.8 1999/09/17 11:16:37 oliver Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -12,8 +12,8 @@
 #ifndef BALL_KERNEL_RESIDUE_H
 #	include <BALL/KERNEL/residue.h>
 #endif
-#ifndef BALL_KERNEL_FRAGMENT_DB_H
-#	include <BALL/KERNEL/fragmentDB.h>
+#ifndef BALL_STRUCTURE_FRAGMENT_DB_H
+#	include <BALL/STRUCTURE/fragmentDB.h>
 #endif
 
 namespace BALL
