@@ -1,4 +1,4 @@
-// $Id: file.sip,v 1.8 2003/04/20 12:46:12 oliver Exp $
+// $Id: file.sip,v 1.9 2003/04/22 21:16:58 oliver Exp $
 
 class std__openmode
 {
@@ -18,20 +18,20 @@ class File
 %End
   public:
 	typedef std__openmode OpenMode;
-	/*static const OpenMode IN;
+	static const OpenMode IN;
 	static const OpenMode OUT;
 	static const OpenMode app;
 	static const OpenMode BINARY;
 	static const OpenMode ATE;
 	static const OpenMode TRUNC;
-*/
+
   File();
 	// default open mode: IN
-  File(const String&, File::OpenMode /openmode/ = std::ios::in);
-  File(const File&);
+  File(const String&, File::OpenMode /openmode/ = File::IN);
+  File(const File& /filename/);
   ~File();
 	// default open mode: IN
-  bool open(const String&, File::OpenMode /openmode/ = std::ios::in);
+  bool open(const String&, File::OpenMode /openmode/ = File::IN);
 
   bool reopen();
   void close();

@@ -1,4 +1,4 @@
-// $Id: MOL2File.sip,v 1.3 2003/03/25 17:08:53 anhi Exp $
+// $Id: MOL2File.sip,v 1.4 2003/04/22 21:16:56 oliver Exp $
 class MOL2File
   : File
 {
@@ -9,7 +9,7 @@ class MOL2File
 %End
   public:
   MOL2File();
-  MOL2File(const String&, File::OpenMode /openmode/ = std::ios::in)
+  MOL2File(const String&, File::OpenMode /openmode/ = File::IN)
 		throw(FileNotFound);
   ~MOL2File()
 		throw();

@@ -1,4 +1,4 @@
-// $Id: XYZFile.sip,v 1.2 2003/03/25 17:08:55 anhi Exp $
+// $Id: XYZFile.sip,v 1.3 2003/04/22 21:16:57 oliver Exp $
 
 class XYZFile 
 	: File
@@ -9,7 +9,7 @@ class XYZFile
 %End
   public:
   XYZFile();
-  XYZFile(const String&, File::OpenMode /openmode/ = std::ios::in)
+  XYZFile(const String&, File::OpenMode /openmode/ = File::IN)
 		throw(FileNotFound);
   ~XYZFile()
 		throw();
