@@ -85,8 +85,9 @@
 // Refer to /usr/include/sys/socket.h in case of doubt
 #define BALL_SOCKLEN_TYPE int
 
-// define some symbols for the size of some variables
+// define some symbols for the (bit)size of some builtin types
 #define BALL_INT_SIZE 32
+#define BALL_CHAR_SIZE 32
 #define BALL_LONG_SIZE 32
 #define BALL_SIZE_T_SIZE 32
 #define BALL_POINTER_SIZE 32
