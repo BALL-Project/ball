@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile_test.C,v 1.23 2003/07/10 12:51:03 amoll Exp $
+// $Id: INIFile_test.C,v 1.24 2003/07/11 00:04:37 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -29,7 +29,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.23 2003/07/10 12:51:03 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.24 2003/07/11 00:04:37 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -575,70 +575,146 @@ CHECK(IteratorTraits_& operator -- ())
 RESULT
 
 CHECK(List<String> ::Iterator getPosition())
+	it = ini.getLine(0);
+	TEST_EQUAL(*(it.getPosition()), "[Section1]")
 RESULT
 
 CHECK(SectionIterator getSection())
-  // ???
+	TEST_EQUAL(it.getSection()->getName(), "Section1")
 RESULT
 
 CHECK(bool operator != (const IteratorTraits_& traits) const)
-  // ???
-RESULT
-
-CHECK(bool operator + () const)
-  // ???
+	it = ini.getLine(0);
+	INIFile::LineIterator it3;
+	TEST_EQUAL(it != it3, true)
+	it3 = ini.getLine(1);
+	TEST_EQUAL(it != it3, true)
+	it3 = ini.getLine(0);
+	TEST_EQUAL(it != it3, false)
 RESULT
 
 CHECK(bool operator == (const IteratorTraits_& traits) const)
-  // ???
+  it = ini.getLine(0);
+	INIFile::LineIterator it3;
+	TEST_EQUAL(it == it3, false)
+	it3 = ini.getLine(1);
+	TEST_EQUAL(it == it3, false)
+	it3 = ini.getLine(0);
+	TEST_EQUAL(it == it3, true)
+RESULT
+
+INIFile::LineIterator it3;
+CHECK(bool operator + () const)
+	TEST_EQUAL(+it, true)
+	TEST_EQUAL(+it3, false)
 RESULT
 
 CHECK(const IteratorTraits_& operator = (const IteratorTraits_ &traits))
-  // ???
+	it3 = ini.getLine(1);
+	TEST_EQUAL(*it3, "[Section2]")
 RESULT
 
 CHECK(const String& operator * () const)
-  // ???
-RESULT
-
-CHECK(const String& operator -> () const)
-  // ???
+	TEST_EQUAL(*it3, "[Section2]")
 RESULT
 
 CHECK(bool isSectionEnd() const)
-  // ???
+	TEST_EQUAL(it3.isSectionEnd(), false)
+	it3 = ini.getLine(3);
+	TEST_EQUAL(it3.isSectionEnd(), false)
+	it3 = ini.getLine(10);
+	TEST_EQUAL(it3.isSectionEnd(), false)
+	++it3;
+	TEST_EQUAL(it3.isSectionEnd(), false)
 RESULT
 
 CHECK(bool isSectionFirstLine() const)
-  // ???
+	it = ini.getLine(0);
+	TEST_EQUAL(it.isSectionFirstLine(), true)
+	it = ini.getLine(2);
+	TEST_EQUAL(it.isSectionFirstLine(), false)
 RESULT
 
 CHECK(bool isSectionLastLine() const)
-  // ???
+	it = ini.getLine(0);
+	TEST_EQUAL(it.isSectionLastLine(), true)
+	it = ini.getLine(3);
+	TEST_EQUAL(it.isSectionLastLine(), true)
+	TEST_EQUAL(+it, true)
 RESULT
 
 CHECK(void toEnd())
-  // ???
+	it.toEnd();
+	TEST_EQUAL(+it, false)
+	--it;
+	TEST_EQUAL(+it, true)
+	TEST_EQUAL(it.getSection()->getName(), "Section4")
+	TEST_EQUAL(*it, "[Section4]")
 RESULT
 
+INIFile::LineIterator unbound;
 CHECK(void toFirstLine())
-  // ???
+	it = ini.getLine(3);
+	TEST_EQUAL(+it, true)
+	it.toFirstLine();
+	TEST_EQUAL(it.getSection()->getName(), "Section1")
+	TEST_EQUAL(+it, true)
+	TEST_EQUAL(*it, "[Section1]")
+	unbound.toFirstLine();
+	TEST_EQUAL(+unbound, false)
 RESULT
 
 CHECK(void toLastLine())
-  // ???
+	it = ini.getLine(3);
+	it.toLastLine();
+	TEST_EQUAL(*it, "[Section4]")
+	it.toLastLine();
+	TEST_EQUAL(+it, true)
+	TEST_EQUAL(*it, "[Section4]")
+	unbound.toLastLine();
+	TEST_EQUAL(+unbound, false)
 RESULT
 
 CHECK(void toSectionEnd())
-  // ???
+	it = ini.getLine(3);
+	it.toSectionEnd();
+	TEST_EQUAL(it.isSectionEnd(), true)
+	TEST_EQUAL(it.getSection()->getName(), "Section2")
+	--it;
+	TEST_EQUAL(+it, true)
+	TEST_EQUAL(*it, "! even more comment")
+	it = ini.getLine(9);
+	it.toSectionEnd();
+	--it;
+	TEST_EQUAL(*it, "[Section4]")
+	unbound.toSectionEnd();
+	TEST_EQUAL(+unbound, false)
 RESULT
 
 CHECK(void toSectionFirstLine())
-  // ???
+	it = ini.getLine(3);
+	it.toSectionFirstLine();
+	TEST_EQUAL(+it, true)
+	TEST_EQUAL(*it, "[Section2]")
+	it = ini.getLine(0);
+	it.toSectionFirstLine();
+	TEST_EQUAL(+it, true)
+	TEST_EQUAL(*it, "[Section1]")
+	unbound.toSectionFirstLine();
+	TEST_EQUAL(+unbound, false)
 RESULT
 
 CHECK(void toSectionLastLine())
-  // ???
+  it = ini.getLine(3);
+	it.toSectionLastLine();
+	TEST_EQUAL(+it, true)
+	TEST_EQUAL(*it, "! even more comment")
+	it = ini.getLine(0);
+	it.toSectionLastLine();
+	TEST_EQUAL(+it, true)
+	TEST_EQUAL(*it, "[Section1]")
+	unbound.toSectionLastLine();
+	TEST_EQUAL(+unbound, false)
 RESULT
 
 
