@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.10 2000/02/25 21:16:12 amoll Exp $
+// $Id: angle.h,v 1.11 2000/02/27 18:55:45 amoll Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -134,11 +134,16 @@ namespace BALL
 		*/
 		const TAngle& operator = (const T& new_value);
 
-		/**	
+		/**	Assign the value to another angle.
+				@param	angle the angle to assign the value to
+				@param	deep ignored
 		*/
 		void get(TAngle& angle, bool deep = true) const;
 
-		/**	
+		/**	Assign the value to an {\tt T} variable.
+				Variable can get the radian or degree value
+				@param	val the variable to assign the value to
+				@param	bool radian: default true
 		*/
 		void get(T& val, bool radian = true) const;
 
@@ -148,27 +153,47 @@ namespace BALL
 		*/
 		//@{
 
-		/**
+		/** /// BAUSTELLE
 		*/
 		operator T () const;
 
-		/**
+		/** Return the value of the angle
+				@return value in radians
 		*/
 		T toRadian() const;
 
-		/**
+		/** Calculate radians from degrees
+				@param degree the value in degrees
+				@return T the value in radians
 		*/
 		static T toRadian(const T& degree);
 
-		/**
+		/** Return the value of the angle
+				@return value in degrees
 		*/
 		T toDegree() const;
 
-		/**
+		/** Calculate degrees from radians
+				@param radian the value in radians
+				@return T the value in degrees
 		*/
 		static T toDegree(const T& radian);
 
-		/**  */
+		/**	Return the torsion angle of four vectors to eachother.
+				@param TVector3& ax 1. vector x component
+				@param TVector3& ay 1. vector y component
+				@param TVector3& az 1. vector z component
+				@param TVector3& bx 2. vector x component
+				@param TVector3& by 2. vector y component
+				@param TVector3& bz 2. vector z component
+				@param TVector3& cx 3. vector x component
+				@param TVector3& cy 3. vector y component
+				@param TVector3& cz 3. vector z component
+				@param TVector3& dx 4. vector x component
+				@param TVector3& dy 4. vector y component
+				@param TVector3& dz 4. vector z component
+				@return static TAngle the torsion angle
+		*/
 		static TAngle getTorsionAngle
 			(const T& ax, const T& ay, const T& az,
 			 const T& bx, const T& by, const T& bz,
@@ -178,52 +203,105 @@ namespace BALL
 		/**  */
 		void normalize(Range range);
 
-		/**  */
+		/**  Negate the angle
+		*/
 		void negate();
 
-		/**  */
+		/**	Positive sign.
+		*/
 		TAngle operator + () const;
 
-		/**  */
+		/**	Negative sign.
+		*/
 		TAngle operator - () const;
 
-		/**  */
+		/**	Add an angle to this angle.
+				@param angle the angle to add
+				@return TAngle&, {\tt *this}
+		*/
 		TAngle& operator += (const TAngle& angle);
 
-		/**  */
-		TAngle& operator += (const T& value);
+		/**	Add a value to this angle.
+				@param value the value to add
+				@return TAngle&, {\tt *this}
+		*/
+		TAngle& operator += (const T& val);
 
-		/**  */
+		/**	Add this angle to another and return the result.
+				@param angle the angle to add
+				@return TAngle&, the new angle
+		*/
 		TAngle operator +	(const TAngle& angle);
 
-		/**  */
+		/**	Add a value to this angle and return the result.
+				@param val the value to add
+				@return TAngle&, the new angle
+		*/
 		TAngle operator + (const T& val);
 
-		/**  */
+		/**	Substract a angle from this angle.
+				@param angle the angle to substract
+				@return TAngle&, {\tt *this}
+		*/
 		TAngle& operator -= (const TAngle& angle);
 
-		/**  */
+		/**	Substract a value from this angle.
+				@param val the value to substract
+				@return TAngle&, {\tt *this}
+		*/
 		TAngle &operator -= (const T& val);
 
-		/**  */
+		/**	Subtraction an angle from this 
+				angle and return the result.
+				@param angle the angle to substract
+				@return TAngle&, the new angle
+		*/
 		TAngle operator - (const TAngle& angle);
 
-		/**  */
+		/**	Subtraction a value from this 
+				angle and return the result.
+				@param val the value to substract
+				@return TAngle&, the new angle
+		*/
 		TAngle operator - (const T& val);
 
-		/**  */
+		/**	Multiplz an angle with this angle.
+				@param angle the angle to multiply with
+				@return TAngle&, {\tt *this}
+		*/
 		TAngle& operator *= (const TAngle& angle);
 
-		/**  */
+		/**	Multiplz a value with this 
+				angle and return the result.
+				@param val the value to multiply with
+				@return TAngle&, {\tt *this}
+		*/
 		TAngle& operator *=	(const T& val);
 
-		/**  */
-		TAngle operator * (const T& value);
+		/**	Multiplication a value with this 
+				angle and return the result.
+				@param val the value to multiply with
+				@return TAngle&, the new angle
+		*/
+		TAngle operator * (const T& val);
 
+		/**	Calculate the division of this angle by an other.
+				@param angle the angle to divide by
+				@return TAngle&, {\tt *this}
+		*/
 		TAngle& operator /= (const TAngle& angle);
 
+		/**	Calculate the division of this angle by an value.
+				@param val the angle to divide by
+				@return TAngle&, {\tt *this}
+		*/
 		TAngle& operator /=	(const T& val);
 
+		/**	Calculate the division of this angle by an value
+				and return the result.
+				@param val the angle to divide by
+				@return TAngle&, the new angle
+		*/
 		TAngle operator /	(const T& val);
 		//@}
 
@@ -231,24 +309,64 @@ namespace BALL
 		*/
 		//@{
 
+		/**	Equality operator.
+				@param angle the angle to compare with
+				@return bool
+		*/
 		bool operator == (const TAngle& angle) const;
 
+		/**	Equality operator.
+				@param val the value to compare with
+				@return bool
+		*/
 		bool operator == (const T& val) const;
 
+		/**	Inequality operator.
+				@param angle the angle to compare with
+				@return bool
+		*/
 		bool operator != (const TAngle& angle) const;
 
+		/**	Inequality operator.
+				@param val the value to compare with
+				@return bool
+		*/
 		bool operator !=	(const T& val) const;
 
+		/**	Is less operator.
+				@param angle the angle to compare with
+				@return bool
+		*/
 		bool operator <	(const TAngle& angle) const;
 
+		/**	Is less operator.
+				@param val the value to compare with
+				@return bool
+		*/
 		bool operator <	(const T& val) const;
 
+		/**	Is less or equal operator.
+				@param angle the angle to compare with
+				@return bool
+		*/
 		bool operator <= (const TAngle& angle) const;
 
+		/**	Is greater or equal operator.
+				@param angle the angle to compare with
+				@return bool
+		*/
 		bool operator >=	(const TAngle& angle) const;
 
+		/**	Is greater operator.
+				@param angle the angle to compare with
+				@return bool
+		*/
 		bool operator > (const TAngle& angle) const;
 
+		/**	Test if an angle ist equivalent
+				@param angle the angle to compare with
+				@return bool
+		*/
 		bool isEquivalent(TAngle angle) const;
 		//@}
 
@@ -257,7 +375,9 @@ namespace BALL
 		*/
 		//@{
 
-		/**
+		/**	Test if instance is valid.
+				always retruns true
+				@return bool {\bf true}
 		*/
 		bool isValid () const;
 
@@ -455,9 +575,15 @@ namespace BALL
 		long mod_factor = (long)(value / (2 * Constants::PI));
 		value -= mod_factor * (Constants::PI * 2);
 
-		if (range == RANGE__SIGNED) { 
-			// invariant: -180 to 180:
-
+		while (Maths::isGreater(value, (Constants::PI * 2)))
+		{
+			value -= (Constants::PI * 2);
+		}
+		while (Maths::isLess(value, -(Constants::PI * 2)))
+		{
+			value += (Constants::PI * 2);
+		}
+		if (range == RANGE__SIGNED) { // invariant: -180 to 180:
 			if (Maths::isGreater(value, Constants::PI)) {
 				value -= (Constants::PI * 2);
 			}
@@ -495,9 +621,9 @@ namespace BALL
 	}
 
 	template <typename T>
-	TAngle<T>& TAngle<T>::operator += (const T& rhs) 
+	TAngle<T>& TAngle<T>::operator += (const T& val) 
 	{
-		value += rhs;
+		value += val;
 		return *this;
 	}
 
@@ -558,9 +684,9 @@ namespace BALL
 	}
 
 	template <typename T>
-	TAngle<T> TAngle<T>::operator * (const T& value)
+	TAngle<T> TAngle<T>::operator * (const T& val)
 	{
-		return TAngle(value * value);
+		return TAngle(value * val);
 	}
 
 	template <typename T>
