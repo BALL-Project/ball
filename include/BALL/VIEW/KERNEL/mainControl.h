@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.31 2004/01/29 12:43:38 amoll Exp $
+// $Id: mainControl.h,v 1.32 2004/02/02 17:12:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -58,6 +58,7 @@ namespace BALL
 		class Preferences;
 		class MainControlPreferences;
 		class GeometricObjectSelectionMessage;
+		class SimulationThread;
 
 		/** Timer class to clear the statusbar of the MainControl after a given time
 		*/
@@ -146,16 +147,19 @@ namespace BALL
 				EDIT = 10100,
 
 				/// Build menu 
-				BUILD,
+				BUILD = 10200,
 
 				/// Display menu 
-				DISPLAY,
+				DISPLAY = 10300,
 
 				/// Display Viewpoint submenu
 				DISPLAY_VIEWPOINT,
 
+				/// Simulations menu
+				SIMULATIONS = 10400,
+
 				/// Tools menu
-				TOOLS,
+				TOOLS = 10500,
 
 				/// Create grid submenu in Tools
 				TOOLS_CREATE_GRID,
@@ -164,14 +168,21 @@ namespace BALL
 				TOOLS_PYTHON,
 
 				/// Windows menu
-				WINDOWS,
-
-				/// Help menu
-				HELP,
+				WINDOWS = 10600,
 
 				/// Userdefined menus
-				USER
+				USER = 10700,
+
+				/// Help menu
+				HELP = 10800
 			};
+
+			///
+			enum MenuEntry
+			{
+				MENU_STOPSIMULATION = 10450
+			};
+
 			//@}
 			/**	@name	Constructors and Destructor
 			*/
@@ -265,7 +276,7 @@ namespace BALL
 					CompositeManager::insert called.
 					\return false if the CompositeManager contains the Composite
 			*/
-			bool insert(Composite& composite)
+			bool insert(Composite& composite, String name = "")
 				throw();
 
 			/** Remove a Composite and notify all ModularWidget.
@@ -381,6 +392,10 @@ namespace BALL
 			*/
 			virtual void checkMenus();
 
+			///
+			void stopSimulation();
+
+	
 			/** Apply preferences.
 					This method calls the method <b>ModularWidget::applyPreferences</b> of all registered
 					ModularWidget objects if the apply button of the Preferences dialog is pressed. 
@@ -428,6 +443,9 @@ namespace BALL
 			*/
 			void menuItemHighlighted(int id)
 				throw();
+			
+			///
+			virtual void customEvent( QCustomEvent * e );
 			
 			public:
 			
@@ -646,6 +664,21 @@ namespace BALL
 			*/
 			bool compositesAreMuteable() {return composites_muteable_;}
 					
+			/// Returns true, if the simulation was told to stop, but hasnt done this so far.
+			bool stopedSimulation() { return stop_simulation_;}
+
+			/** Set the simulation thread.
+			 		The instance of SimulationThread will be deleted after it
+					has finished. If an other simulation is still running, this
+					method returns false.
+			*/
+			bool setSimulationThread(SimulationThread* thread)
+				throw();
+
+			///
+			SimulationThread* getSimulationThread()
+				throw();
+	
 			//@}
 			/**	@name	Debugging and Diagnostics
 			*/
@@ -690,6 +723,10 @@ namespace BALL
 			void selectComposites_(GeometricObjectSelectionMessage& message)
 				throw();
 
+			//_ Called by constructors
+			void setup_()
+				throw();
+
 			//_
 			FragmentDB fragment_db_;
 
@@ -718,6 +755,9 @@ namespace BALL
 			
 			static int 									current_id_;
 			bool 												composites_muteable_;
+			bool 											  stop_simulation_;
+
+			SimulationThread* 					simulation_thread_;
 
 			/*_	A list containing all modular widgets.
 					This list is modified by addModularWidget and
@@ -732,6 +772,7 @@ namespace BALL
 			QLabel*             simulation_icon_;
 			static const char  *simulation_running_xpm_[];
 			static const char  *simulation_stoped_xpm_[];
+
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

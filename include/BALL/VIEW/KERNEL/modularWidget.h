@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.9 2004/01/18 21:55:34 oliver Exp $
+// $Id: modularWidget.h,v 1.10 2004/02/02 17:12:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -14,6 +14,9 @@
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 # include <BALL/VIEW/KERNEL/connectionObject.h>
 #endif
+
+class QObject;
+class QMenuBar;
 
 namespace BALL
 {
@@ -208,6 +211,15 @@ namespace BALL
 					Implemented for convenience.
 			*/
 			FragmentDB& getFragmentDB() const
+				throw();
+
+			/// Wrapper for MainControl::insertMenuEntry
+			int insertMenuEntry(int ID, const String& name, const QObject* receiver, const char* slot, 
+																 int accel, int entry_ID, String hint)
+				throw();
+
+			/// Wrapper for MainControl::menuBar()
+			QMenuBar* menuBar() 
 				throw();
 
 			//@}
