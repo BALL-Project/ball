@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.h,v 1.23 2004/02/19 12:24:32 oliver Exp $
+// $Id: version.h,v 1.24 2004/02/19 12:35:29 oliver Exp $
 //
 
 #ifndef BALL_COMMON_VERSION_H
@@ -22,11 +22,8 @@ namespace BALL
 	/**	Version information class.
 			The BALL release, release data and related version
 			can be retrieved by these methods. \par
-			BALL releases ending on:
-			"a" are alpha releases,  \par
-			"b" are beta releases,  \par
-			"n" are nonpublic releases.  \par
-			Stable releases are not suffixed by a letter.  \par
+			Stable releases are designated with numbers only.  \par
+			Alpha, beta, nonpublic, or prereleases are suffixed as "alpha", "beta", "nonpublic", and "pre", respectively.\par
 			The VersionInfo class contains only static methods
 			that can be used to retrieve the desired information.
 			 \par
