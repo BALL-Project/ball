@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.5 2005/03/24 16:17:34 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.6 2005/03/25 14:43:50 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -62,7 +62,7 @@ namespace BALL
 					continue;
 				}
 				
-				if (infile.getLine().split(fields) != 9)
+				if (infile.getLine().split(fields) < 9)
 				{
 					Log.error() << "Error in " << filename << " Not 9 fields in one line " << infile.getLine() << std::endl;
 					return false;
@@ -71,7 +71,7 @@ namespace BALL
 				Position pos 			= fields[0].toUnsignedInt();
 
 				// shouldnt happen, but just to be sure
-				if (pos > data_.size()) data_.resize(pos);
+				if (pos >= data_.size()) data_.resize(pos + 10);
 
 				data_[pos].aspec 	= fields[1].toUnsignedInt();
 				data_[pos].crd 		= fields[2].toUnsignedInt();
@@ -91,7 +91,6 @@ namespace BALL
 			return false;
 		}
 
-		infile.close();
 
 		is_initialized_ = true;
 		return true;
