@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.h,v 1.4 2000/04/04 15:18:33 oliver Exp $
+// $Id: standardColorCalculator.h,v 1.5 2000/04/04 15:51:04 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
@@ -98,6 +98,10 @@ namespace BALL
 
 			virtual void visit(Composite& composite) 
 			{
+				if (RTTI::isKindOf<Atom>(composite))
+				{
+					visit(*RTTI::castTo<Atom>(composite));
+				}
 			};
 			//@}
 
