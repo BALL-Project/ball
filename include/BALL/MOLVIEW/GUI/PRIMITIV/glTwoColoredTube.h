@@ -1,11 +1,7 @@
-// $Id: glTwoColoredTube.h,v 1.6.4.1 2002/10/18 14:48:19 amoll Exp $
+// $Id: glTwoColoredTube.h,v 1.6.4.2 2002/10/19 13:57:27 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLOBJECT_H
 #	include <BALL/VIEW/GUI/KERNEL/glObject.h>
@@ -15,13 +11,10 @@
 #	include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 #endif
 
-
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-		
 		using VIEW::GLObject;
 		
 		/** GLTwoColoredTube class.
