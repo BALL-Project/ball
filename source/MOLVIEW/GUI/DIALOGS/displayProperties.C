@@ -518,10 +518,7 @@ void DisplayProperties::addHydrogens()
 		(*list_it)->apply(fragmentdb_.add_hydrogens);
 		number_of_hydrogens += fragmentdb_.add_hydrogens.getNumberOfInsertedHydrogens();
 		(*list_it)->apply(fragmentdb_.build_bonds);
-		try
-		{
-			applyOn_(**list_it);	
-		}
+		applyOn_(**list_it);	
 
 		// mark composite for update
 		ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
@@ -762,7 +759,7 @@ void DisplayProperties::setComboBoxIndex_(QComboBox* combo_box, QString& item_st
 
 void DisplayProperties::applyOn_(Composite &composite)
 {
-
+	try{
 // ------------------------------------------------------------------------------
 // models -----------------------------------------------------------------------
 // ------------------------------------------------------------------------------
@@ -947,8 +944,9 @@ void DisplayProperties::applyOn_(Composite &composite)
 				}
 				catch (Exception::GeneralException e)
 				{
+					using namespace Exception;
 					Log.error() << "DisplayProperties: caught exception while constructing graphical representation." << std::endl;
-					Log.error() << "DisplayProperties: " << e << std:::endl;
+					Log.error() << "DisplayProperties: " << e << std::endl;
 				}
 			}
 
@@ -1111,11 +1109,16 @@ void DisplayProperties::applyOn_(Composite &composite)
 					}
 					catch (Exception::GeneralException e)
 					{
+						using namespace Exception;
 						Log.error() << "DisplayProperties: caught exception while constructing graphical representation." << std::endl;
-						Log.error() << "DisplayProperties: " << e << std:::endl;
+						Log.error() << "DisplayProperties: " << e << std::endl;
 					}
 				}
 			}
+	}
+	// BAUSTELLE
+	catch (Exception::GeneralException e)
+	{	Log << e << std::endl;}
 }
 
 void DisplayProperties::calculateCenter_(Composite &composite)
