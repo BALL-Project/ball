@@ -1,4 +1,4 @@
-// $Id: logStream.h,v 1.9 2000/05/29 12:56:23 oliver Exp $
+// $Id: logStream.h,v 1.10 2000/05/29 23:44:07 amoll Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -151,7 +151,7 @@ namespace BALL
 					This method calls sync and {\tt streambuf::overflow(c)} to 
 					prevent a buffer overflow.
 			*/
-			virtual int overflow(int c = -1);
+			virtual int overflow(const int& c = -1);
 			//@}
 
 			struct Stream 
@@ -193,7 +193,7 @@ namespace BALL
 
 
 			// interpret the prefix format string and return the expanded prefix
-			string expandPrefix_(const string& prefix, int level, time_t time) const;
+			string expandPrefix_(const string& prefix, const int& level, const time_t& time) const;
 	
 			char* 									pbuf_;
 
@@ -266,7 +266,7 @@ namespace BALL
 				of level \Ref{ERROR}.
 				@param	associate_stdio bool, default is false
 		*/
-		LogStream(bool associate_stdio = false);
+		LogStream(const bool& associate_stdio = false);
 
 		/** Constructor.
 				Create a new LogStream object with a given LogStreamBuf
@@ -304,7 +304,7 @@ namespace BALL
 				(except for messages which use the temporary loglevel
 				set by \Ref{level}).
 		*/
-		void setLevel(int level);
+		void setLevel(const int& level);
 
 		/**	Return the current log level.
 				The LogStreamBuf object has an internal current log level ({\tt level\_}).
@@ -330,26 +330,25 @@ namespace BALL
 				@return	LogStream the log stream
 				@param	level the temporary log level
 		*/
-		LogStream& level(int n);
+		LogStream& level(const int& n);
 
-			
 		/**	Log an information message.
 				This is method equivalent to \Ref{level}(LogStream::INFORMATION + n). 
 				@param	n the channel 
 		*/
-		LogStream& info(int n = 0);
+		LogStream& info(const int& n = 0);
 
 		/**	Log an error message.
 				This is method equivalent to \Ref{level}(LogStream::ERROR + n). 
 				@param	n the channel 
 		*/
-		LogStream& error(int n = 0);
+		LogStream& error(const int& n = 0);
 
 		/**	Log an information message.
 				This is method equivalent to \Ref{level}(LogStream::WARNING + n). 
 				@param	n the channel 
 		*/
-		LogStream& warn(int n = 0);
+		LogStream& warn(const int& n = 0);
 
 		//@}
 
@@ -365,11 +364,13 @@ namespace BALL
 				to this stream if its log level is between {\tt min\_level}
 				and {\tt max\_level}. If {\tt min\_level} and {\tt max\_level}
 				are omitted, all messages are copied to this stream.
+				If {\tt min\_level}	and {\tt max\_level} are equal, this function can be used
+				to listen to a specified channel.
 				@param	s a reference to the stream to be associated
 				@param	min_level the minimum level of messages copied to this stream
 				@param	max_level the maximum level of messages copied to this stream
 		*/
-		void insert(std::ostream& s, int min_level = INT_MIN, int max_level = INT_MAX);
+		void insert(std::ostream& s, const int& min_level = INT_MIN, const int& max_level = INT_MAX);
 
 		/**	Remove an association with a stream.
 				Remove a stream from the stream list and avoid the copying of new messages to
@@ -395,7 +396,7 @@ namespace BALL
 				@param	s the associated stream
 				@param	min_level the new minimum level
 		*/
-		void setMinLevel(const std::ostream& s, int min_level);
+		void setMinLevel(const std::ostream& s, const int& min_level);
 		
 		/**	Set the maximum log level of an associated stream.
 				This method changes the maximum log level of an already
@@ -404,7 +405,7 @@ namespace BALL
 				@param	s the associated stream
 				@param	min_level the new minimum level
 		*/
-		void setMaxLevel(const std::ostream& s, int max_level);
+		void setMaxLevel(const std::ostream& s, const int& max_level);
 
 		/**	Set prefix for output to this stream.
 				Each line written to the stream will be prefixed by
@@ -445,7 +446,7 @@ namespace BALL
 				@param	min_level the minimum log level of the counted messages
 				@param	max_level the maximum log level of the counted messages
 		*/
-		Size	getNumberOfLines(int min_level = INT_MIN, int max_level = INT_MAX) const;
+		Size	getNumberOfLines(const int& min_level = INT_MIN, const int& max_level = INT_MAX) const;
 
 		/**	Return the text of a specific line.
 				This method returns the content of a specific message without
@@ -453,34 +454,32 @@ namespace BALL
 				@return string the mesasge text
 				@param	Index the index of the line
 		*/
-		string getLineText(Index index) const;
+		string getLineText(const Index& index) const;
 
 		/**	Return the log time of a specific line
+				@param index the index of the messages
+				@return time_t the time of the message
 		*/
-		time_t getLineTime(Index index) const;	
+		time_t getLineTime(const Index& index) const;	
 	
-		/**	Return the log level of a specific line
+		/**	Return the log level of a specific line.
+				If the given line does not exists, {\em -1} is returned.
+				@param index the index of the messages
+				@return int - the level
 		*/
-		int getLineLevel(Index index) const;
+		int getLineLevel(const Index& index) const;
 		
 		/** Retrieve a list of indices of lines that match certain criteria.
+				If a criterion is left empty, it is not used.
+				@param min_level the minimum level of messages
+				@param max_level the maximum level of messages
+				@param earliest (long) the time of messages to start filtering
+				@param latest (long) the time of messages to stop filtering
+				@param s a string to look for
 		*/
-		list<int>	getLineIndices(const int min_level = INT_MIN, const int max_level = INT_MAX, const time_t earliest = 0);
-	
-		/** Filter a list of lines according to their loglevels
-		*/
-		list<int> filterLinesAfterLevel(const list<int>, const int min_level = INT_MIN, int max_level = INT_MAX) const;
-
-		/** Filter a list of indices according to their time
-		*/
-		list<int> filterLinesAfterTime(const list<int>, const time_t earliest, const time_t latest) const;
-
-		/** Filter out lines containing a certain string
-		*/
-		list<int> filterLinesAfterContent(const list<int>, const string& s) const;
-
+		list<int>	filterLines(const int& min_level = INT_MIN, const int& max_level = INT_MAX,
+														 const time_t& earliest = 0, const time_t& latest = LONG_MAX, const string& s = "") const;
 		//@}
-		
 
 		private:
 
