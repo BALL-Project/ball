@@ -1,4 +1,4 @@
-// $Id: Angle_test.C,v 1.3 2000/02/29 11:00:20 oliver Exp $
+// $Id: Angle_test.C,v 1.4 2000/03/02 21:23:24 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Angle_test.C,v 1.3 2000/02/29 11:00:20 oliver Exp $")
+START_TEST(class_name, "$Id: Angle_test.C,v 1.4 2000/03/02 21:23:24 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -412,7 +412,8 @@ RESULT
 
 //line 252: method TAngle::isEquivalent(TAngle angle) const 
 CHECK(TAngle::isEquivalent(TAngle angle) const )
-	Angle a1 = 0.12, a2 = 0.12;
+	Angle a1(0.12);
+	Angle a2(0.12);
 	a1.normalize(Angle::RANGE__UNLIMITED);
 	a2.normalize(Angle::RANGE__UNLIMITED);
 	TEST_EQUAL(a1.isEquivalent(a2), true )
