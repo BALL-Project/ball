@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.34 2001/07/15 22:41:13 oliver Exp $
+// $Id: HINFile.C,v 1.35 2001/07/16 02:10:30 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -25,16 +25,22 @@ namespace BALL
 	};
  
 	HINFile::HINFile()
+		:	box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+			temperature_(0.0)
 	{
 	}
 
 	HINFile::HINFile(const String& name, File::OpenMode open_mode)
-		: File(name, open_mode)
+		: File(name, open_mode),
+			box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+			temperature_(0.0)
 	{
 	}
 
 	HINFile::HINFile(const HINFile& file)
-		: File(file)
+		: File(file),
+			box_(0.0, 0.0, 0.0, 0.0, 0.0, 0.0),
+			temperature_(0.0)
 	{
 	}
 
