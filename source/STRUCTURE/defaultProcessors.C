@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.C,v 1.7 2000/03/28 15:35:28 oliver Exp $
+// $Id: defaultProcessors.C,v 1.8 2000/05/05 08:59:01 oliver Exp $
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
 
@@ -76,7 +76,9 @@ namespace BALL
 		if (frag != 0)
 		{
 			res_name = frag->getName().trim();
-		} else {
+		} 
+		else 
+		{
 			res_name = "";
 		}
 		atom_name = atom.getName().trim();
@@ -116,7 +118,9 @@ namespace BALL
 			number_of_assignments_++;
 			radius = (*table_.find(name.c_str())).second;
 			atom.setRadius(radius);
-		} else {
+		} 
+		else 
+		{
 			// first try the unmodified residue
 			name = original_res_name + ":" + atom_name;
 			if (table_.has(name.c_str()))
@@ -124,7 +128,9 @@ namespace BALL
 				number_of_assignments_++;
 				radius = (*table_.find(name.c_str())).second;
 				atom.setRadius(radius);
-			} else {
+			} 
+			else 
+			{
 				// try wildcard matching
 				name = "*:" + atom_name;
 				if (table_.has(name.c_str()))
@@ -132,7 +138,9 @@ namespace BALL
 					number_of_assignments_++;
 					radius = (*table_.find(name.c_str())).second;
 					atom.setRadius(radius);
-				} else {
+				} 
+				else 
+				{
 					Log.level(LogStream::WARNING) << "Cannot assign radius for " << res_name << ":" << atom_name << endl;
 					number_of_errors_++;
 				}
@@ -222,7 +230,9 @@ namespace BALL
 		if (frag != 0)
 		{
 			res_name = frag->getName().trim();
-		} else {
+		} 
+		else 
+		{
 			res_name = "";
 		}
 		atom_name = atom.getName().trim();
@@ -264,7 +274,9 @@ namespace BALL
 			charge = (*table_.find(name)).second;
 			atom.setCharge(charge);
 			total_charge_ += charge;
-		} else {
+		} 
+		else 
+		{
 			// first try the unmodified residue
 			name = original_res_name + ":" + atom_name;
 			
@@ -274,7 +286,9 @@ namespace BALL
 				charge = (*table_.find(name)).second;
 				atom.setCharge(charge);
 				total_charge_ += charge;
-			} else {
+			} 
+			else 
+			{
 				// try wildcard matching
 				name = "*:" + atom_name;
 				if (table_.has(name))
@@ -283,7 +297,9 @@ namespace BALL
 					charge = (*table_.find(name)).second;
 					atom.setCharge(charge);
 					total_charge_ += charge;
-				} else {
+				} 
+				else 
+				{
 					Log.level(LogStream::WARNING) << "Cannot assign charge for " << res_name << ":" << atom_name << endl;
 					number_of_errors_++;
 				}
