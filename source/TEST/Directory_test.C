@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Directory_test.C,v 1.12 2003/07/02 19:14:33 oliver Exp $
+// $Id: Directory_test.C,v 1.13 2004/03/18 00:47:43 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -17,7 +17,7 @@
 
 
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.12 2003/07/02 19:14:33 oliver Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.13 2004/03/18 00:47:43 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -27,27 +27,45 @@ using namespace BALL;
 String PS = FileSystem::PATH_SEPARATOR;
 Directory* dd;
 String test_dir;
+char buffer[10000];
 CHECK([EXTRA]prerequisites)
-	char* ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
-	test_dir = ptr;
-	free(ptr);
+	::getcwd(buffer, Directory::MAX_PATH_LENGTH);
+	test_dir = buffer;
 	#ifdef BALL_PLATFORM_WINDOWS
 		test_dir += "\\data\\Directory_test";
 	#else
 		test_dir += "/data/Directory_test";
 	#endif
 	TEST_EQUAL(::chdir(test_dir.c_str()), 0)
-	ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);	
-	test_dir = ptr;
-	free(ptr);
+	::getcwd(buffer, Directory::MAX_PATH_LENGTH);
+	test_dir = buffer;
+
+	Directory d(test_dir + PS + "dir_a" + PS + "dir_c");
+
+	d.remove("test1" + PS + "test1");
+	d.remove("test1" + PS + "test2");
+	d.remove("test1" + PS + "test3");
+	d.remove("test1" + PS + "test4");
+
+	d.remove("test2" + PS + "test1");
+	d.remove("test2" + PS + "test2");
+	d.remove("test2" + PS + "test3");
+	d.remove("test2" + PS + "test4");
+	
+	d.remove("test1");
+	d.remove("test2");
+	d.remove("test3");
+	TEST_EQUAL(d.has("test1"), false)
+	TEST_EQUAL(d.has("test2"), false)
+	TEST_EQUAL(d.has("test3"), false)
 RESULT
+
 
 CHECK(Directory())
 	dd = new Directory();
 	TEST_NOT_EQUAL(dd, 0)
-	char* ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
-	TEST_EQUAL(dd->getPath(), String(ptr))
-	free(ptr);
+	::getcwd(buffer, Directory::MAX_PATH_LENGTH);
+	TEST_EQUAL(dd->getPath(), String(buffer))
 	TEST_EQUAL(dd->isCurrent(), true)
 RESULT
 
@@ -55,38 +73,35 @@ CHECK(~Directory())
 	delete dd;
 RESULT
 
-
 CHECK(bool setCurrent(String directory_path))
 	Directory d;
 	bool result = d.setCurrent(test_dir);
 	TEST_EQUAL(result, true);
-	char* ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
-	String path  = ptr;
-	free(ptr);
+	::getcwd(buffer, Directory::MAX_PATH_LENGTH);
+	String path  = buffer;
 	TEST_EQUAL(path, test_dir)
 	result = d.setCurrent("dir_a");
 	TEST_EQUAL(result, true);
-	ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
-	path = ptr;
-	free(ptr);
-	const String& PS = FileSystem::PATH_SEPARATOR;
+	::getcwd(buffer, Directory::MAX_PATH_LENGTH);
+	path = buffer;
+	
+	const String PS = FileSystem::PATH_SEPARATOR;
 	TEST_EQUAL(path, test_dir + PS+"dir_a")
 	result = d.setCurrent("c");
 	TEST_EQUAL(result, false);
-	ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
-	path = ptr;
-	free(ptr);
+	::getcwd(buffer, Directory::MAX_PATH_LENGTH);
+	path = buffer;
 	TEST_EQUAL(path, test_dir + PS+ "dir_a")
 RESULT
+
 
 CHECK(Directory(const String& directory_path, bool set_current = false))
 	::chdir(test_dir.c_str());
 	Directory d("dir_a");
 	TEST_EQUAL(d.isValid(), true)
 
-	char* ptr = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
-	String s = String(ptr) + PS + "dir_a";
-	free(ptr);
+	::getcwd(buffer, Directory::MAX_PATH_LENGTH);
+	String s = String(buffer) + PS + "dir_a";
 	TEST_EQUAL(d.getPath(), s)
 
 	Directory d1("dir_a"+PS, true);
@@ -94,11 +109,9 @@ CHECK(Directory(const String& directory_path, bool set_current = false))
 	TEST_EQUAL(d1.isValid(), true)
 	TEST_EQUAL(d.setCurrent(test_dir), true);
 
-
 	Directory d2("dir_a" + PS + "dir_c"+PS);
 	TEST_EQUAL(d2.isValid(), true)
 
-	
 	Directory d3(test_dir);
 	TEST_EQUAL(d3.isValid(), true)
 
@@ -107,14 +120,12 @@ CHECK(Directory(const String& directory_path, bool set_current = false))
 RESULT
 
 CHECK(Directory(const Directory& directory))
-
 	Directory d("dir_a"+PS);
 	Directory d1(d);
 	TEST_EQUAL(d1 == d, true)
 RESULT
 
 CHECK(void clear())
-
 	Directory d("dir_a"+PS);
 	d.clear();
 	TEST_EQUAL(d.getPath(), "")
@@ -122,7 +133,6 @@ RESULT
 
 CHECK(void destroy())
 	Directory d1("dir_a"+PS);
-
 	d1.destroy();
 RESULT
 
@@ -172,6 +182,7 @@ CHECK(bool create(String path, const mode_t& mode = 0777))
 	d1.remove("test1");
 	d1.remove("test2");
 	d1.remove("test3");
+	TEST_EQUAL(d1.has("test1"), false)
 	bool result = d1.create("test1");
 	TEST_EQUAL(result, true)
 	TEST_EQUAL(d.setCurrent(test_dir), true)
@@ -196,24 +207,24 @@ CHECK(bool getNextEntry(String& entry))
 
 	Directory d2("test1");
 	String s;	
+	
 	bool result = d2.getNextEntry(s);
-	#ifndef BALL_PLATFORM_WINDOWS
-		TEST_EQUAL(result, true)
-		TEST_EQUAL(s, ".");
-		result = d2.getNextEntry(s);
-	#endif
+	TEST_EQUAL(result, true)
+	TEST_EQUAL(s, ".");
+	
+	result = d2.getNextEntry(s);
 	TEST_EQUAL(result, true)
  	TEST_EQUAL(s, "..")
+	
 	result = d2.getNextEntry(s);
 	TEST_EQUAL(s, "test2");
 	TEST_EQUAL(result, true)
 	result = d2.getNextEntry(s);
+	
 	TEST_EQUAL(result, false)
 	d1.remove("test1" + PS + "test2");
 	d1.remove("test1");
 RESULT
-
-
 
 CHECK(Size countItems())
 	Directory d0(test_dir + PS + "dir_a" + PS + "dir_c");
@@ -233,15 +244,14 @@ RESULT
 
 CHECK(Size countDirectories())
 	Directory d0(test_dir + PS + "dir_a" + PS + "dir_c");
+	TEST_EQUAL(d0.countDirectories(), 2)
 	Directory d1(test_dir + PS + "dir_a" + PS + "dir_c" + PS + "test1");
-	TEST_EQUAL(d1.countDirectories(), 4)d1.remove("test1");
+	TEST_EQUAL(d1.countDirectories(), 4)
 	d1.remove("test2");
 	d1.remove("test3");
 	d1.remove("test4");
-	d0.remove("test1");
+	d1.remove("test1");
 RESULT
-
-
 
 CHECK(bool remove(String old_path))
 	Directory d;
@@ -252,7 +262,6 @@ CHECK(bool remove(String old_path))
 	bool result = d1.remove("test1");
 	TEST_EQUAL(result, true)
 	TEST_EQUAL(d1.remove("xxxx"), false)
-
 	d.setCurrent(test_dir);
 RESULT
 
@@ -275,6 +284,7 @@ RESULT
 CHECK(bool renameTo(String new_path))
 	Directory d;
 	Directory d1("dir_a" + PS + "dir_c");
+	d1.remove("test1");
 	bool result = d1.create("test1");
 	TEST_EQUAL(result, true)
 	d.setCurrent(test_dir);
@@ -382,6 +392,12 @@ CHECK(bool setCurrent())
 	TEST_EQUAL(d.setCurrent(), false)
 RESULT
 
+CHECK([Extra]cleanup)
+	Directory d(test_dir + PS + "dir_a" + PS + "dir_c");
+	d.remove("test1");
+	d.remove("test2");
+	d.remove("test3");
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
