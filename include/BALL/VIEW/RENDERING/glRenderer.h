@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.14 2004/03/14 13:25:08 amoll Exp $
+// $Id: glRenderer.h,v 1.14.2.1 2004/05/11 20:37:06 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
 #define BALL_VIEW_RENDERING_GLRENDERER_H
@@ -332,7 +332,7 @@ namespace BALL
 			NameHashMap							object_to_name_;
 			DisplayListHashMap 			display_lists_;
 			Name 										all_names_;
-			unsigned int 						object_buffer_[BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS];
+			GLuint 									object_buffer_[BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS];
 			Vector3 								normal_vector_;
 
 			bool stereo_;
