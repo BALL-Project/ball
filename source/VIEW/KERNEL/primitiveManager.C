@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.20 2004/11/12 15:07:11 amoll Exp $
+// $Id: primitiveManager.C,v 1.21 2004/11/12 15:40:35 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -54,11 +54,16 @@ void PrimitiveManager::clear()
 }
 
 
-void PrimitiveManager::insert(Representation& representation)
+bool PrimitiveManager::insert(Representation& representation)
 	throw()
 {
-	if (has(representation)) return;
+	if (has(representation)) return false;
 	representations_.push_back(&representation);
+
+	RepresentationMessage* rm = new RepresentationMessage(representation, RepresentationMessage::ADD);
+	main_control_->sendMessage(*rm);
+
+	return true;
 }
 
 
@@ -74,7 +79,7 @@ bool PrimitiveManager::has(const Representation& representation) const
 }
 
 
-void PrimitiveManager::remove(Representation& representation)
+bool PrimitiveManager::remove(Representation& representation)
 	throw()
 {
 	bool found = false;
@@ -88,16 +93,22 @@ void PrimitiveManager::remove(Representation& representation)
 		}
 	}
 
-	if (!found) return;
+	if (!found) return false;
+
+	RepresentationMessage* rm = new RepresentationMessage(representation, RepresentationMessage::REMOVE);
+	main_control_->sendMessage(*rm);
 
 	if (willBeUpdated(representation))
 	{
 		representations_to_be_deleted_.insert(&representation);
-		return;
+	}
+	else
+	{
+		representations_.erase(it);
+		delete &representation;
 	}
 
-	representations_.erase(it);
-	delete &representation;
+	return true;
 }
 
 void PrimitiveManager::dump(std::ostream& s, Size depth) const

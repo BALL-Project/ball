@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.11 2004/11/12 15:07:31 amoll Exp $
+// $Id: primitiveManager.h,v 1.12 2004/11/12 15:40:31 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -90,11 +90,11 @@ namespace BALL
 					To do this, send a SceneMessage or a RepresentationMessage.\par
 					Calls Representation::clear.
 			*/
-			void remove(Representation& representation)
+			bool remove(Representation& representation)
 				throw();
 
 			/// Insert a Representation
-			void insert(Representation& representation)
+			bool insert(Representation& representation)
 				throw();
 
 			/// Get the list with the Representations
