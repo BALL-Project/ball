@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.29 2005/02/21 21:36:52 oliver Exp $
+// $Id: PDBFile_test.C,v 1.29.2.1 2005/03/16 16:04:36 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -33,7 +33,7 @@ namespace BALL
 
 }
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.29 2005/02/21 21:36:52 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.29.2.1 2005/03/16 16:04:36 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -176,7 +176,7 @@ RESULT
 CHECK(void writeRawRecord_(const char* format, const char* tag, ...))
 	String filename;
 	NEW_TMP_FILE(filename);
-	TestPDBFile f(filename, File::OUT);
+	TestPDBFile f(filename, std::ios::out);
 	f.writeRawRecord_("%s-%d", "HEADER", "55", 6);
 	f.close();
 RESULT
@@ -184,7 +184,7 @@ RESULT
 CHECK(void writeRecord_(PDB::RecordType record, ...))
 	String filename;
 	NEW_TMP_FILE(filename);
-	TestPDBFile f(filename, File::OUT);
+	TestPDBFile f(filename, std::ios::out);
 	f.writeRecord_(PDB::RECORD_TYPE__ENDMDL);
 	f.writeRecord_(PDB::RECORD_TYPE__AUTHOR, "AA", "BB", "CC", 1L, 2L, 3L);
 	f.close();
@@ -194,7 +194,7 @@ CHECK(void writeRecord_(const PDB::RecordSEQRES& seqres))
 	PDB::RecordSEQRES sr;
 	String filename;
 	NEW_TMP_FILE(filename);
-	TestPDBFile f(filename, File::OUT);
+	TestPDBFile f(filename, std::ios::out);
 	f.writeRecord_(sr);
 	f.close();
 RESULT
