@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularExpression.sip,v 1.4 2003/10/29 22:54:46 oliver Exp $
+// $Id: regularExpression.sip,v 1.5 2003/12/02 12:15:30 oliver Exp $
 //
 
 class RegularExpression
@@ -38,7 +38,7 @@ class RegularExpression
   Size countSubexpressions() const;
   bool match(const char* /text/, const char* /pattern/, int /compile_flags/ = 0, int /execute_flags/ = 0 );
 
-  bool match(const String& /text/, Index /from/ = 0, int /execute_flags/ = 0 ) const
+  bool match(const String& /text/) const
       throw(NullPointer, IndexUnderflow, IndexOverflow);
 
   bool match(const Substring& /text/, Index /from/ = 0, int /execute_flags/ = 0) const;
