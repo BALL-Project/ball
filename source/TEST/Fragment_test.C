@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Fragment_test.C,v 1.14 2002/12/12 11:34:40 oliver Exp $
+// $Id: Fragment_test.C,v 1.15 2003/06/30 13:38:33 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: Fragment_test.C,v 1.14 2002/12/12 11:34:40 oliver Exp $")
+START_TEST(Fragment, "$Id: Fragment_test.C,v 1.15 2003/06/30 13:38:33 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,22 +22,22 @@ String filename;
 NEW_TMP_FILE(filename)
 
 Fragment*	frag;
-CHECK(default constructor)
+CHECK(Fragment() throw())
 frag = new Fragment;
 TEST_NOT_EQUAL(frag, 0);
 RESULT
 
-CHECK(isValid)
+CHECK([EXTRA] isValid)
 TEST_EQUAL(frag->isValid(), true)
 RESULT
 
-CHECK(destructor)
+CHECK(~Fragment() throw())
 delete frag;
 frag = new Fragment;
 delete frag;
 RESULT
 
-CHECK(Fragment(String&))
+CHECK(Fragment(const String& name) throw())
 	Fragment* f1 = new Fragment("hello");
 	TEST_NOT_EQUAL(f1, 0)
 	if (f1 != 0)
@@ -47,7 +47,7 @@ CHECK(Fragment(String&))
 	}
 RESULT
 
-CHECK(Fragment(Fragment&, bool))
+CHECK(Fragment(const Fragment& fragment, bool deep = true) throw())
 	Fragment* f1 = new Fragment;
 	f1->setName("testname");
 	Atom a;
@@ -71,7 +71,7 @@ CHECK(Fragment(Fragment&, bool))
 	delete f1;
 RESULT
 
-CHECK(operator = (Fragment&))
+CHECK(Fragment& operator = (const Fragment& fragment) throw())
 	Fragment f1("name1");
 	Atom a;
 	f1.insert(a);
@@ -81,7 +81,7 @@ CHECK(operator = (Fragment&))
 	TEST_EQUAL(f2.countAtoms(), 1);
 RESULT
 
-CHECK(dump(ostream&, Size))
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	Fragment f1;
 	Fragment f2;
 	f1.setName("f1");
@@ -101,7 +101,7 @@ using namespace RTTI;
 pm.registerClass(getStreamName<Fragment>(), Fragment::createDefault);
 pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 NEW_TMP_FILE(filename)
-CHECK(persistentWrite(PersistenceManager&, String, bool))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Fragment* f1 = new Fragment("name1");
 	Atom* f2 = new Atom();
@@ -116,7 +116,7 @@ CHECK(persistentWrite(PersistenceManager&, String, bool))
 	delete f1;
 RESULT
 
-CHECK(persistentRead(PersistenceManager&))
+CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();
@@ -135,7 +135,7 @@ CHECK(persistentRead(PersistenceManager&))
 	}
 RESULT
 
-CHECK(operator ==)
+CHECK(bool operator == (const Fragment& fragment) const throw())
 	Fragment b1;
 	Fragment b2;
 	TEST_EQUAL(b1 == b2, false)
@@ -143,6 +143,30 @@ CHECK(operator ==)
 	TEST_EQUAL(b1 == b1, true)
 RESULT
 
+CHECK(bool operator != (const Fragment& fragment) const throw())
+	Fragment b1;
+	Fragment b2;
+	TEST_EQUAL(b1 != b2, true)
+	b1 = b2;
+	TEST_EQUAL(b1 != b1, false)
+RESULT
+
+CHECK(BALL_CREATE_DEEP(Fragment))
+	Fragment b1;
+	b1.setName("asddd");
+	Atom a;
+	b1.insert(a);
+
+	Fragment* b2 = (Fragment*)b1.create(false, true);
+	TEST_EQUAL(b2->getName(), "")
+	TEST_EQUAL(b2->countAtoms(), 0)
+	delete b2;
+
+	b2 = (Fragment*)b1.create(true, false);
+	TEST_EQUAL(b2->getName(), "asddd")
+	TEST_EQUAL(b2->countAtoms(), 1)
+	delete b2;
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
