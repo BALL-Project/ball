@@ -9,6 +9,7 @@
 #include <qcolordialog.h>
 #include <qlabel.h>
 #include <qcheckbox.h>
+#include <qslider.h>
 
 namespace BALL
 {
@@ -38,6 +39,8 @@ void StageSettings::updateFromStage()
 {
 	color_sample->setBackgroundColor(stage_->getBackgroundColor().getQColor());
 	coordinate_button->setChecked(stage_->coordinateSystemEnabled());
+
+	slider_->setValue((int) Scene::getMouseSensitivity() - 1);
 }
 
 
@@ -46,6 +49,8 @@ void StageSettings::apply()
 {
 	stage_->setBackgroundColor(color_sample->backgroundColor());
 	stage_->showCoordinateSystem(coordinate_button->isChecked());
+
+	Scene::setMouseSensitivity(slider_->value() + 1);
 }
 
 
@@ -54,6 +59,8 @@ void StageSettings::setDefaultValues()
 {
 	color_sample->setBackgroundColor(black);
 	coordinate_button->setChecked(false);
+
+	slider_->setValue(5);
 }
 
 // NAMESPACE

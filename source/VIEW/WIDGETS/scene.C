@@ -1,14 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.36 2004/02/06 13:42:17 amoll Exp $
+// $Id: scene.C,v 1.37 2004/02/09 13:50:10 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/events.h>
-#include <BALL/VIEW/DIALOGS/mouseSensitivity.h>
 #include <BALL/VIEW/DIALOGS/setCamera.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
@@ -18,7 +17,6 @@
 
 #include <qpainter.h>
 #include <qmenubar.h>
-// #include <qpixmap.h>
 #include <qimage.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
@@ -741,14 +739,6 @@ void Scene::createCoordinateSystem_()
 }
 
 
-void Scene::mouseSensitivity_()
-	throw()
-{
-	MouseSensitivity dialog;
-	dialog.exec();
-}
-
-
 void Scene::exportScene(Renderer &er) const
 	throw()
 {
@@ -838,7 +828,7 @@ void Scene::initializePreferencesTab(Preferences &preferences)
 	light_settings_ = new LightSettings(this);
 	preferences.insertPage(light_settings_, "Lighting");
 	stage_settings_= new StageSettings(this);
-	preferences.insertPage(stage_settings_, "Stage");
+	preferences.insertPage(stage_settings_, "3D View");
 }
 
 
@@ -1050,10 +1040,6 @@ void Scene::initializeWidget(MainControl& main_control)
 	stereo_id_ = main_control.insertMenuEntry(
 		MainControl::DISPLAY, "&Stereo Mode", this, SLOT(switchStereo()));
 
-	hint = "Change the mouse sensitivity. (It also depends on how large the group is, you focused on)";
-	main_control.insertMenuEntry(
-		MainControl::DISPLAY, "&Mouse Sensitivity", this, SLOT(mouseSensitivity_()), CTRL+Key_M, -1, hint);
-
 	hint = "Print the coordinates of the current viewpoint";
 	main_control.insertMenuEntry(
 		MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, SLOT(showViewPoint_()), CTRL+Key_W, -1, hint);
@@ -1083,8 +1069,6 @@ void Scene::finalizeWidget(MainControl& main_control)
 {
 	main_control.removeMenuEntry(MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
 	main_control.removeMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P);		
-	main_control.removeMenuEntry(MainControl::DISPLAY, "&Mouse Sensitivity", this, 
-			SLOT(mouseSensitivity_()), CTRL+Key_M);		
 	main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Show Vie&wpoint", this, 
 																										SLOT(showViewPoint_()), CTRL+Key_W);		
 	main_control.removeMenuEntry(MainControl::DISPLAY_VIEWPOINT, "Set Viewpoi&nt", this, 

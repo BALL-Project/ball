@@ -9,54 +9,145 @@
             <x>0</x>
             <y>0</y>
             <width>435</width>
-            <height>292</height>
+            <height>295</height>
         </rect>
     </property>
     <property name="caption">
         <string>StageSettings</string>
     </property>
-    <widget class="QCheckBox">
+    <widget class="QGroupBox">
         <property name="name">
-            <cstring>coordinate_button</cstring>
+            <cstring>groupBox1</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>5</x>
-                <y>173</y>
-                <width>244</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Show coordinate system</string>
-        </property>
-    </widget>
-    <widget class="QFrame">
-        <property name="name">
-            <cstring>Frame5</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>3</x>
-                <y>3</y>
-                <width>180</width>
-                <height>144</height>
+                <x>217</x>
+                <y>6</y>
+                <width>198</width>
+                <height>69</height>
             </rect>
         </property>
         <property name="frameShape">
             <enum>NoFrame</enum>
         </property>
-        <property name="frameShadow">
-            <enum>Sunken</enum>
+        <property name="title">
+            <string>Mouse sensitivity</string>
         </property>
+        <property name="alignment">
+            <set>AlignHCenter</set>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Change the mouse sensitivity. (It also depends on how large the group is, you focused on)</string>
+        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel1_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>151</x>
+                    <y>45</y>
+                    <width>34</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>max</string>
+            </property>
+            <property name="alignment">
+                <set>AlignVCenter|AlignRight</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>45</y>
+                    <width>33</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>min</string>
+            </property>
+        </widget>
+        <widget class="QSlider">
+            <property name="name">
+                <cstring>slider_</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>21</y>
+                    <width>180</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="maxValue">
+                <number>10</number>
+            </property>
+            <property name="value">
+                <number>5</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="tickmarks">
+                <enum>Below</enum>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>groupBox2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>5</x>
+                <y>6</y>
+                <width>199</width>
+                <height>147</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="title">
+            <string>Background color</string>
+        </property>
+        <property name="alignment">
+            <set>AlignHCenter</set>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>Set the background color of the Scene.</string>
+        </property>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>color_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>55</x>
+                    <y>108</y>
+                    <width>77</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Edit</string>
+            </property>
+        </widget>
         <widget class="QLabel">
             <property name="name">
                 <cstring>color_sample</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>10</x>
-                    <y>24</y>
+                    <x>18</x>
+                    <y>26</y>
                     <width>158</width>
                     <height>75</height>
                 </rect>
@@ -87,45 +178,22 @@
                 <string></string>
             </property>
         </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>9</x>
-                    <y>2</y>
-                    <width>156</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                </font>
-            </property>
-            <property name="text">
-                <string>Background color</string>
-            </property>
-            <property name="alignment">
-                <set>AlignCenter</set>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>color_button</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>47</x>
-                    <y>106</y>
-                    <width>77</width>
-                    <height>30</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Edit</string>
-            </property>
-        </widget>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>coordinate_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>5</x>
+                <y>173</y>
+                <width>200</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Show coordinate system</string>
+        </property>
     </widget>
 </widget>
 <connections>

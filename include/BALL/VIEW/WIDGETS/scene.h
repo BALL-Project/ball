@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.15 2004/01/18 21:55:36 oliver Exp $
+// $Id: scene.h,v 1.16 2004/02/09 13:50:22 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -473,11 +473,6 @@ namespace BALL
 					\see checkMenu
 			*/
 			virtual void pickingMode_();
-
-
-			/// Open mouse sensitivity dialog
-			virtual void mouseSensitivity_()
-				throw();
 
 			/// Show the viewpoint and the look at point in the statusline of the mainwidget.
 			virtual void showViewPoint_()
