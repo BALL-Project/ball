@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer_test.C,v 1.20 2002/12/12 11:34:45 oliver Exp $
+// $Id: TCPTransfer_test.C,v 1.21 2004/12/21 10:37:34 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -22,7 +22,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.20 2002/12/12 11:34:45 oliver Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.21 2004/12/21 10:37:34 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -33,7 +33,7 @@ CHECK(cstr)
 	tcp_ptr = new TCPTransfer;
 	TEST_NOT_EQUAL(tcp_ptr, 0)
 	ABORT_IF(tcp_ptr == 0)
-	TEST_EQUAL(tcp_ptr->getStatusCode(), TCPTransfer::UNINITIALIZED_ERROR)
+	TEST_EQUAL(tcp_ptr->getStatusCode(), TCPTransfer::UNINITIALIZED__ERROR)
 RESULT
 
 CHECK(~TCPTransfer_test)
