@@ -1,4 +1,4 @@
-// $Id: johnsonBoveyShiftProcessor.C,v 1.9 2000/10/07 13:24:36 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.10 2001/05/18 13:06:22 oliver Exp $
 
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -96,7 +96,7 @@ namespace BALL
 		
 		float alamb,ave,delx,dely,delz,ea,eb,ec,ed,ee,fac,sqrtx,sqrty,sqrtz,sum,xt,yt,zt;
 		
-		if(BALL_MIN(x, y) < 0.0 || BALL_MIN(x  +  y, z) < TINY || BALL_MAX3(x, y, z) > BIG)
+		if (BALL_MIN(x, y) < 0.0 || BALL_MIN(x  +  y, z) < TINY || BALL_MAX3(x, y, z) > BIG)
 		{
 			//cout << endl << "Funktion rd : Fehler bei den Argumenten";
 			Log.error() << "Funktion rd : Fehler bei den Argumenten" << endl;
@@ -243,7 +243,8 @@ namespace BALL
 				new_ring.electrons = parameter_section.getValue(key, electrons_column).toUnsignedInt();
 				new_ring.intensity = parameter_section.getValue(key, intensity_column).toFloat();
 				name_list = parameter_section.getValue(key, name_list_column);
-			} catch (Exception::InvalidFormat)
+			} 
+			catch (Exception::InvalidFormat)
 			{
 				Log.error() << "JohnsonBoveyShiftProcessor::init: error interpreting parameter line with key "
 									  << key << endl;
