@@ -1,4 +1,4 @@
-// $Id: version.h,v 1.9 2001/07/16 12:42:46 oliver Exp $
+// $Id: version.h,v 1.10 2001/07/16 13:45:33 amoll Exp $
 
 #ifndef BALL_COMMON_VERSION_H
 #define BALL_COMMON_VERSION_H
@@ -19,15 +19,14 @@ namespace BALL
 			The BALL release, release data and related version
 			can be retrieved by these methods.\\
 			BALL releases ending on:
-			"a" are alpha releases,
-			"b" are beta releases,
-			"n" are nonpublic releases.
-			Stable releases are not suffixed by a letter.
+			"a" are alpha releases, \\
+			"b" are beta releases, \\
+			"n" are nonpublic releases. \\
+			Stable releases are not suffixed by a letter. \\
 			The VersionInfo class contains only static methods
 			that can be used to retrieve the desired information.
 			\\
 			{\bf Definition:}\URL{BALL/COMMON/version.h}
-			\\
 	*/
 	class VersionInfo
 	{
@@ -44,8 +43,7 @@ namespace BALL
 			UNKNOWN
 		};
 
-		/** Return the version number, which is defined in
-				BALL_RELEASE_STRING in \URL{BALL/COMMON/version.h}
+		/** Return the version number, which is defined in BALL_RELEASE_STRING
 		*/
 		static const char* getVersion() throw();
 
