@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.32 2003/02/09 14:08:40 oliver Exp $
+// $Id: angle.h,v 1.33 2003/02/10 17:03:25 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -12,10 +12,6 @@
 
 #ifndef BALL_MATHS_COMMON_H
 #	include <BALL/MATHS/common.h>
-#endif
-
-#ifndef BALL_COMMON_MACROS_H
-#	include <BALL/COMMON/macros.h>
 #endif
 
 namespace BALL 
