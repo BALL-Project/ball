@@ -235,7 +235,7 @@ void ConnectionObject::onNotify_(Message* message)
 		message_queue_.pop_front();
 		
 		// process message, but not if sender = this
-		if (current_message->getSender() != ((void *)this))
+		if (current_message->getSender() != this)
 		{
 			onNotify(current_message);
 		}
