@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.15 2004/02/18 17:17:05 amoll Exp $
+// $Id: molecularStructure.C,v 1.16 2004/02/18 17:37:35 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -98,7 +98,7 @@ namespace BALL
 			
 		hint = "To perform an Energy Minimization, first select the molecular structures.";
 		amber_minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Energy Minimization", this, 
-															SLOT(amberMinimization()), CTRL+Key_E, MainControl::MOLECULARMECHANICS+ 10, hint);
+															SLOT(runMinimization()), CTRL+Key_E, MainControl::MOLECULARMECHANICS+ 10, hint);
 
 		hint = "To perform a MD simulation , first select the molecular structures.";
 		amber_mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", this, 
@@ -883,7 +883,7 @@ namespace BALL
 		}
 	}
 
-	void MolecularStructure::amberMinimization()
+	void MolecularStructure::runMinimization()
 	{
 		if (!getMainControl()->compositesAreMuteable())
 		{
@@ -1276,10 +1276,14 @@ namespace BALL
 		if (use_amber_)
 		{
 			showAmberForceFieldOptions();
+			md_dialog_.setForceField(true);
+			minimization_dialog_.setForceField(true);
 		}
 		else
 		{
 			showCharmmForceFieldOptions();
+			md_dialog_.setForceField(false);
+			minimization_dialog_.setForceField(false);
 		}
 	}
 
