@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.4 1999/12/04 14:12:33 oliver Exp $
+// $Id: angle.h,v 1.5 1999/12/28 18:47:34 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -272,7 +272,7 @@ namespace BALL
 		bool isValid () const;
 
 		///
-		void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
+		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
 		/**	@name	Attributes
@@ -291,13 +291,13 @@ namespace BALL
 	}
 
 	template <typename T>
-	TAngle<T>::TAngle(const TAngle& angle, bool /* deep */ = true)
+	TAngle<T>::TAngle(const TAngle& angle, bool /* deep */)
 		:	value(angle.value)
 	{
 	}
 
 	template <typename T>
-	TAngle<T>::TAngle(const T& new_value, bool radian = true)
+	TAngle<T>::TAngle(const T& new_value, bool radian)
 		:	value((radian == true)
 			 ? (T)new_value 
 			 : (T)BALL_ANGLE_DEGREE_TO_RADIAN((double)new_value))
@@ -324,7 +324,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	void TAngle<T>::set(const T& new_value, bool radian = true)
+	void TAngle<T>::set(const T& new_value, bool radian)
 	{
 		value = (radian == true)
 			 ? new_value 
@@ -348,13 +348,13 @@ namespace BALL
 	}
 
 	template <typename T>
-	void TAngle<T>::get(TAngle& angle, bool /* deep */ = true) const
+	void TAngle<T>::get(TAngle& angle, bool /* deep */) const
 	{
 		angle.value = value;
 	}
 
 	template <typename T>
-	void TAngle<T>::get(T& val, bool radian = true) const
+	void TAngle<T>::get(T& val, bool radian) const
 	{
 		val = (radian == true)
 					 ? value 
@@ -683,7 +683,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	void TAngle<T>::dump(std::ostream& s = std::cout, unsigned long depth = 0) const
+	void TAngle<T>::dump(std::ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
