@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.1 2000/10/05 17:13:39 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.2 2000/10/05 17:24:40 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -49,8 +49,7 @@ namespace BALL
 
 	Pair6_12InteractionEnergyProcessor::Pair6_12InteractionEnergyProcessor()
 		: EnergyProcessor(),
-			solvent_(),
-			valid_(false);
+			solvent_()
 	{
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 		options.setDefaultInteger(Option::USE_RDF, Default::USE_RDF);
@@ -68,8 +67,7 @@ namespace BALL
 	Pair6_12InteractionEnergyProcessor::Pair6_12InteractionEnergyProcessor
 		(const Pair6_12InteractionEnergyProcessor& proc)
 		: EnergyProcessor(proc),
-			solvent_(proc.solvent_),
-			valid_(proc.valid_)
+			solvent_(proc.solvent_)
 	{
 	}
 
