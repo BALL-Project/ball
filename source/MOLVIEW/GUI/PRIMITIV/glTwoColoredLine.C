@@ -1,4 +1,4 @@
-// $Id: glTwoColoredLine.C,v 1.5.4.1 2002/10/18 14:48:28 amoll Exp $
+// $Id: glTwoColoredLine.C,v 1.5.4.2 2002/11/15 16:53:07 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredLine.h>
 
@@ -6,6 +6,7 @@ using namespace std;
 
 namespace BALL
 {
+	using VIEW::BALL_SELECTED_COLOR;
 
 	namespace MOLVIEW
 	{
@@ -96,10 +97,10 @@ namespace BALL
 
 			if (isSelected())
 			{
-				glColor4ub((unsigned char)getSelectedColor().getRed(),
-									 (unsigned char)getSelectedColor().getGreen(),
-									 (unsigned char)getSelectedColor().getBlue(),
-									 (unsigned char)getSelectedColor().getAlpha());
+				glColor4ub((unsigned char)BALL_SELECTED_COLOR.getRed(),
+									 (unsigned char)BALL_SELECTED_COLOR.getGreen(),
+									 (unsigned char)BALL_SELECTED_COLOR.getBlue(),
+									 (unsigned char)BALL_SELECTED_COLOR.getAlpha());
 			}
 
 			if (with_names)

@@ -1,4 +1,4 @@
-// $Id: gllabel.C,v 1.6.4.2 2002/11/05 15:35:08 amoll Exp $
+// $Id: gllabel.C,v 1.6.4.3 2002/11/15 16:53:03 amoll Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
 
@@ -149,10 +149,10 @@ namespace BALL
 			}
 			else
 			{
-				glColor4ub((unsigned char)getSelectedColor().getRed(),
-									 (unsigned char)getSelectedColor().getGreen(),
-									 (unsigned char)getSelectedColor().getBlue(),
-									 (unsigned char)getSelectedColor().getAlpha());
+				glColor4ub((unsigned char)BALL_SELECTED_COLOR.getRed(),
+									 (unsigned char)BALL_SELECTED_COLOR.getGreen(),
+									 (unsigned char)BALL_SELECTED_COLOR.getBlue(),
+									 (unsigned char)BALL_SELECTED_COLOR.getAlpha());
 			}
 
 			if (with_names)

@@ -1,4 +1,4 @@
-// $Id: geometricObject.C,v 1.12.4.1 2002/10/30 12:47:36 amoll Exp $
+// $Id: geometricObject.C,v 1.12.4.2 2002/11/15 16:53:05 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -15,7 +15,6 @@ namespace BALL
 			throw()
 			:	Composite(),
 				PropertyManager(),
-				selected_color_(255, 255, 0, 255),
 				name_("unknown")
 		{
 			clear_();
@@ -26,7 +25,6 @@ namespace BALL
 			throw()
 			:	Composite(geometric_object, deep),
 				PropertyManager(geometric_object),
-				selected_color_(geometric_object.selected_color_),
 				name_(geometric_object.name_)
 		{
 		}
@@ -63,7 +61,6 @@ namespace BALL
 			Composite::set(geometric_object, deep);
 			PropertyManager::set(geometric_object);
 			
-			selected_color_ = geometric_object.selected_color_;
 			name_ = geometric_object.name_;
 		}
 
@@ -86,7 +83,6 @@ namespace BALL
 			Composite::swap(geometric_object);
 			PropertyManager::swap(geometric_object);
 
-			selected_color_.swap(geometric_object.selected_color_);
 			name_.swap(geometric_object.name_);
 		}
 
@@ -157,9 +153,6 @@ namespace BALL
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "type name      : " << getTypeName() << endl;
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "selected color : " << selected_color_ << endl;
 
 			BALL_DUMP_DEPTH(s, depth);
 			s << "property       : " << endl;

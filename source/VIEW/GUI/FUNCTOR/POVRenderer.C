@@ -1,4 +1,4 @@
-// $Id: POVRenderer.C,v 1.1.2.2 2002/10/26 00:15:01 amoll Exp $
+// $Id: POVRenderer.C,v 1.1.2.3 2002/11/15 16:52:59 amoll Exp $
 
 #include <BALL/VIEW/GUI/FUNCTOR/POVRenderer.h>
 #include <BALL/KERNEL/atom.h>
@@ -211,7 +211,7 @@ namespace BALL
 				}
 				else
 				{
-					color = s->getSelectedColor();
+					color = BALL_SELECTED_COLOR;
 				}
 
 				// then, find out its radius
@@ -249,7 +249,7 @@ namespace BALL
 				}
 				else
 				{
-					color = t->getSelectedColor();
+					color = BALL_SELECTED_COLOR;
 				}
 
 				// then, find out its radius

@@ -1,4 +1,4 @@
-// $Id: colorRGBA.C,v 1.2.4.1 2002/11/04 18:14:39 amoll Exp $
+// $Id: colorRGBA.C,v 1.2.4.2 2002/11/15 16:52:54 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
@@ -11,6 +11,8 @@ namespace BALL
 	namespace VIEW
 	{
 
+		ColorRGBA BALL_SELECTED_COLOR(255, 255, 0, 255);
+		
 		ColorRGBA::ColorRGBA()
 			throw()
 			:	red_(),
