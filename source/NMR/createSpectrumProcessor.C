@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.C,v 1.10 2000/12/08 09:25:43 oliver Exp $
+// $Id: createSpectrumProcessor.C,v 1.11 2001/06/14 11:37:14 oliver Exp $
 
 #include <BALL/NMR/createSpectrumProcessor.h>
 #include <BALL/NMR/shiftModule.h>
@@ -116,9 +116,9 @@ namespace BALL
 				{
 					Peak1D peak;
 					peak.setAtom(atom);
-					peak.setValue(shift);
+					peak.setPosition(shift);
 					peak.setWidth(width_);
-					peak.setHeight(1.0);
+					peak.setIntensity(1.0);
 					peaklist_.push_back(peak);	
 				}
 			}	
