@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.143 2004/11/28 22:17:21 amoll Exp $
+// $Id: mainControl.C,v 1.144 2004/11/29 00:43:30 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -113,16 +113,28 @@ namespace BALL
 
 			// store and load the INIFile from the Users homedir
 			// default for UNIX/LINUX
-			char* home_dir = getenv("HOME");
-			if (home_dir == 0) 
+			String home_dir;
+
+			if (getenv("HOME") != 0)
+			{
+				home_dir = getenv("HOME");
+			}
+			else
 			{
 				// windows
-				home_dir = getenv("HOMEPATH");
+				if (getenv("HOMEDRIVE") != 0)
+				{
+					home_dir += getenv("HOMEDRIVE");
+				}
+				if (getenv("HOMEPATH") != 0)
+				{
+					home_dir +=	getenv("HOMEPATH");
+				}
 			}
 
-			if (home_dir != 0)
+			if (home_dir != "")
 			{
-				inifile = String(home_dir) + String(FileSystem::PATH_SEPARATOR) + inifile;
+				inifile = home_dir + String(FileSystem::PATH_SEPARATOR) + inifile;
 			}
 
 			preferences_.setFilename(inifile);
@@ -869,6 +881,7 @@ namespace BALL
 		void MainControl::writePreferences(INIFile &inifile)
 			throw()
 		{
+Log.error() << "#~~#   1 "  << inifile.getFilename()           << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			// the main window position
 			inifile.insertValue("WINDOWS", "Main::x", String(x()));
 			inifile.insertValue("WINDOWS", "Main::y", String(y()));
@@ -895,7 +908,9 @@ namespace BALL
 			}
 			inifile.insertValue("WINDOWS", "Main::dockwidgets", mys);
 
-			inifile.write();
+Log.error() << "#~~#   2 "   <<
+			inifile.write()
+          << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		}
 
 		void MainControl::addModularWidget(ModularWidget* widget)
