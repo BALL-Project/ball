@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.C,v 1.22 2004/05/07 08:12:58 oliver Exp $
+// $Id: MOLFile.C,v 1.23 2004/05/10 09:25:21 oliver Exp $
 //
 
 
@@ -141,11 +141,23 @@ namespace BALL
 			atom.symbol = it->getElement().getSymbol();
 			atom.position = it->getPosition();
 			atom.mass_difference = 0;
-			atom.charge = 0;
+			switch (it->getFormalCharge())
+			{
+				case  3: atom.charge = 1; break;
+				case  2: atom.charge = 2; break;
+				case  1: atom.charge = 3; break;
+				case -1: atom.charge = 5; break;
+				case -2: atom.charge = 6; break;
+				case -3: atom.charge = 7; break;
+
+				default:
+					atom.charge = 0;
+			}
 			atom.parity = 0;
 			atom.hydrogen_count = 0;
 			atom.stereo_care_box = false;
-			atom.valence = it->countBonds();
+			// Detect atypical valences ?????
+			atom.valence = 0;
 			atom.H0_designator = false;
 			atom.reaction_component_type = 0;
 			atom.reaction_component_number = 0;
@@ -279,16 +291,19 @@ namespace BALL
 				// assign the charge (overridden by M CHG lines below)
 				switch (atom_struct.charge)
 				{
-					case 1:	atom->setCharge(3.0); break;
-					case 2:	atom->setCharge(2.0); break;
-					case 3:	atom->setCharge(1.0); break;
-					case 4:	atom->setCharge(0.0); break; // doublet -- how to handle this?
-					case 5: atom->setCharge(-1.0); break;
-					case 6: atom->setCharge(-2.0); break;
-					case 7: atom->setCharge(-3.0); break;
+					case 1:	atom->setCharge(3.0); atom->setFormalCharge(3); break;
+					case 2:	atom->setCharge(2.0); atom->setFormalCharge(2); break;
+					case 3:	atom->setCharge(1.0); atom->setFormalCharge(1); break;
+					// doublet -- how to handle this?
+					case 4:	atom->setCharge(0.0); atom->setFormalCharge(0); break;
+					case 5: atom->setCharge(-1.0); atom->setFormalCharge(-1); break;
+					case 6: atom->setCharge(-2.0); atom->setFormalCharge(-2); break;
+					case 7: atom->setCharge(-3.0); atom->setFormalCharge(-3); break;
 
-					case 0: // charge 0 or
+					case 0: // charge 0 or other
 					default:
+						atom->setCharge(0.0);
+						atom->setFormalCharge(0);
 						break;
 				}
 				
