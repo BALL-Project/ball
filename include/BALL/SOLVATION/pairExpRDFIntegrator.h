@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.h,v 1.3 2000/09/02 16:12:21 anker Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.4 2000/09/02 16:30:39 anker Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #include <BALL/STRUCTURE/piecewiseFunction.h>
+#endif
+
+#ifndef BALL_DATATYPE_OPTIONS_H
+#include <BALL/DATATYPE/options.h>
 #endif
 
 namespace BALL
@@ -119,6 +123,10 @@ namespace BALL
 		virtual double operator () (double x) const;
 
 		//@}
+
+
+		/** */
+		Options options;
 
 
 		protected:
