@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.29 2001/12/30 13:28:49 sturm Exp $
+// $Id: support.C,v 1.30 2002/01/18 01:35:55 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -578,16 +578,6 @@ namespace BALL
 									if ((new_position.getSquareDistance((*data_it)->getPosition())) 
 											< square_distance)
 									{
-										// DEBUG
-										Log.info() << "Removing atom at position " << position 
-											<< endl
-											<< "New position would be " << new_position << ","
-											<< endl
-											<< "colliding with atom at position " 
-											<< (*data_it)->getPosition() << endl
-											<< "(distance = " 
-											<< sqrt(new_position.getSquareDistance((*data_it)->getPosition()))
-											<< ")" << endl;
 										keep = false;
 									}
 								}
@@ -617,16 +607,6 @@ namespace BALL
 									if ((new_position.getSquareDistance((*data_it)->getPosition())) 
 											< square_distance)
 									{
-										// DEBUG
-										Log.info() << "Removing atom at position " << position 
-											<< endl
-											<< "New position would be " << new_position << ","
-											<< endl
-											<< "colliding with atom at position " 
-											<< (*data_it)->getPosition() << endl
-											<< "(distance = " 
-											<< sqrt(new_position.getSquareDistance((*data_it)->getPosition()))
-											<< ")" << endl;
 										keep = false;
 									}
 								}
@@ -656,16 +636,6 @@ namespace BALL
 									if ((new_position.getSquareDistance((*data_it)->getPosition())) 
 											< square_distance)
 									{
-										// DEBUG
-										Log.info() << "Removing atom at position " << position 
-											<< endl
-											<< "New position would be " << new_position << ","
-											<< endl
-											<< "colliding with atom at position " 
-											<< (*data_it)->getPosition() << endl
-											<< "(distance = " 
-											<< sqrt(new_position.getSquareDistance((*data_it)->getPosition()))
-											<< ")" << endl;
 										keep = false;
 									}
 								}
@@ -781,7 +751,6 @@ namespace BALL
 				}
 				mol_count++;
 			} // iteration over molecules
-			Log.info() << "processed " << mol_count << " solvent molecules" << endl;
 		}
 
 

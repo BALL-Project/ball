@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.22 2002/01/11 01:57:57 oliver Exp $
+// $Id: periodicBoundary.C,v 1.23 2002/01/18 01:35:55 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -208,10 +208,6 @@ namespace BALL
 			{
 				for (Size i = it->first; i < it->second; i++) 
 				{
-					// ?????: debugging code
-					Log.info() << "PerBound: translating molecule " 
-						<< atom[i]->getFullName() << "/" << i << " by " 
-						<< translation << endl;
 					atom[i]->setPosition(atom[i]->getPosition() + translation);
 				}
 			}
@@ -403,8 +399,6 @@ namespace BALL
 		}
 		
 		Box3 solvent_box = hin.getPeriodicBoundary();
-		// DEBUG
-		Log.info() << "Box from HINFile = " << solvent_box << endl;
 
 		// adapt foreign water boxes to our definition
 		MolmecSupport::adaptWaterBox(solvent, solvent_box);
@@ -492,8 +486,6 @@ namespace BALL
 			}
 		}
 
-		// DEBUG
-		Log.info() << "added " << added_molecules << " solvent molecules" << endl;
 		return added_molecules;
 	}
 

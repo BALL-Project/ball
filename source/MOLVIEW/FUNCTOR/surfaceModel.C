@@ -1,4 +1,4 @@
-// $Id: surfaceModel.C,v 1.12 2001/12/26 03:35:53 oliver Exp $
+// $Id: surfaceModel.C,v 1.13 2002/01/18 01:35:55 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -100,7 +100,6 @@ namespace BALL
 					Log.info() << "assigning surface (" << sp.getSurface().vertex.size() << " vertices, " 
 										 << sp.getSurface().triangle.size() << " triangles)" << endl;
 					*static_cast<Surface*>(mesh) = sp.getSurface();
-					cerr << "setting mesh name..." << endl;
 
 					mesh->setName(String("Surface of ")
 												+ molecular_information.getTypeName() 

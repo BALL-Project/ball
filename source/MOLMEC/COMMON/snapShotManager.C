@@ -1,4 +1,4 @@
-// $Id: snapShotManager.C,v 1.8 2001/12/30 13:28:49 sturm Exp $
+// $Id: snapShotManager.C,v 1.9 2002/01/18 01:35:55 oliver Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
@@ -400,9 +400,6 @@ namespace BALL
 		// snapshot object
 		snapshot.takeSnapShot(*system_ptr_);
 
-		// DEBUG
-		// Log.info() << snapshot << endl;
-
 		// store the potential energies      
 		// snapshot_ptr->potential_energy_ = force_field_ptr_->getEnergy();
 		snapshot.setPotentialEnergy(force_field_ptr_->getEnergy());
@@ -458,8 +455,6 @@ namespace BALL
 					<< "error reading from the TrajectoryFile" << endl;
 				return false;
 			}
-			// DEBUG 
-			Log.info() << "read SnapShot number " << count << endl;
 		}
 		// now apply the last snapshot we read
 		buffer.applySnapShot(*system_ptr_);
@@ -535,8 +530,6 @@ namespace BALL
 		// if no snapshots are in main memory, then there is nothing to do
 		if (snapshot_buffer_.size() == 0)
 		{
-			Log.info() << "SnapShotManager::flushToDisk(): "
-				<< "nothing to do." << endl;
 			return;
 		}
 
