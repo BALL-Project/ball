@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.27.4.3 2002/06/09 14:24:33 oliver Exp $ 
+// $Id: hashMap.h,v 1.27.4.4 2002/11/26 19:36:36 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -214,7 +214,7 @@ namespace BALL
 				@param	key the key
 		*/
 		const T& operator [] (const Key& key) const 
-			throw(IllegalKey);
+			throw(typename HashMap<Key, T>::IllegalKey);
 
 		/**	Insert a new entry into the hash map.
 		*/
@@ -788,8 +788,8 @@ namespace BALL
 
 	template <class Key, class T>
 	BALL_INLINE 
-	const T& HashMap<Key, T>::operator [] (const Key& key) const
-		throw(HashMap<Key, T>::IllegalKey)
+	typename const T& HashMap<Key, T>::operator [] (const Key& key) const
+		throw(typename HashMap<Key, T>::IllegalKey)
 	{
 		ConstIterator it = find(key);
 		if (it == end())
@@ -1205,7 +1205,7 @@ namespace BALL
 	template <class Key, class T>
 	BALL_INLINE 
 	typename HashMap<Key, T>::Node* HashMap<Key, T>::newNode_
-		(const ValueType& value, HashMap<Key, T>::Node* next) const
+		(const ValueType& value, typename HashMap<Key, T>::Node* next) const
 		throw()
 	{
 		return new Node(value, next);
@@ -1213,7 +1213,7 @@ namespace BALL
 
 	template <class Key, class T>
 	BALL_INLINE 
-	void HashMap<Key, T>::deleteNode_(HashMap<Key, T>::Node* node) const
+	void HashMap<Key, T>::deleteNode_(typename HashMap<Key, T>::Node* node) const
 		throw()
 	{
 		delete node;

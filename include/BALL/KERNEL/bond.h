@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.28 2001/07/15 16:14:22 oliver Exp $
+// $Id: bond.h,v 1.28.4.1 2002/11/26 19:36:36 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -272,7 +272,7 @@ namespace BALL
 				the correct order (see \Ref{Bond}).
 		*/
 		void finalize()
-			throw();
+			throw(Exception::GeneralException);
 
 		//@}
 

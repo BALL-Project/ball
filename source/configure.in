@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.19.4.11 2002/11/26 12:19:51 oliver Exp $
+dnl    $Id: configure.in,v 1.19.4.12 2002/11/26 19:36:40 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -457,8 +457,8 @@ dnl   check whether "echo" understands "-n" (required on some
 dnl   platforms to expand '\n')
 dnl
 AC_MSG_CHECKING(whether echo accepts -e)
-if `echo -e "\n" >/dev/null 2>&1` ; then
-	if test "`echo -e 2>&1`" = "" -a "`echo -e OK`" = "OK" ; then
+if `/bin/sh -c "echo -e \"\n\"" >/dev/null 2>&1` ; then
+	if test "`/bin/sh -c echo -e 2>&1`" = "" -a "`/bin/sh -c echo -e OK`" = "OK" ; then
 		ECHO_COMMAND="echo -e"
 		AC_MSG_RESULT(yes)	
 	else

@@ -1,4 +1,4 @@
-// $Id: function.h,v 1.14 2001/12/30 13:28:39 sturm Exp $
+// $Id: function.h,v 1.14.4.1 2002/11/26 19:36:36 oliver Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -66,7 +66,7 @@ namespace BALL
 
 		/** Copy constructor
 		*/
-		MutableConstant(const MutableConstant& constant)
+		MutableConstant(const MutableConstant<DataType>& constant)
 			throw();
 
 		/** Detailed constructor
@@ -1087,8 +1087,8 @@ namespace BALL
 
 	template <typename DataType>
 	BALL_INLINE
-	MutableConstant<DataType>::MutableConstant(const
-			MutableConstant<DataType>& constant)
+	MutableConstant<DataType>::MutableConstant
+		(const MutableConstant<DataType>& constant)
 		throw()
 		: constant_(constant.constant_)
 	{

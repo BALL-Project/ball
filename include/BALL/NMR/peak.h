@@ -1,4 +1,4 @@
-// $Id: peak.h,v 1.9.4.1 2002/05/23 23:55:12 oliver Exp $
+// $Id: peak.h,v 1.9.4.2 2002/11/26 19:36:36 oliver Exp $
 
 #ifndef BALL_NMR_PEAK_H
 #define BALL_NMR_PEAK_H
@@ -172,14 +172,14 @@ namespace BALL
 
 	template <typename PositionType>
 	BALL_INLINE
-	void Peak<PositionType>::setPosition(const Peak<PositionType>::Position& position)
+	void Peak<PositionType>::setPosition(const typename Peak<PositionType>::Position& position)
 	{
 		position_ = position;
 	}
 
 	template <typename PositionType>
 	BALL_INLINE
-	void Peak<PositionType>::setWidth(const Peak<PositionType>::Position& width)
+	void Peak<PositionType>::setWidth(const typename Peak<PositionType>::Position& width)
 	{
 		width_ = width;
 	}

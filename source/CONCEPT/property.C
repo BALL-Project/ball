@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.27.4.1 2002/05/01 10:36:23 oliver Exp $
+// $Id: property.C,v 1.27.4.2 2002/11/26 19:36:40 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -35,7 +35,7 @@ namespace BALL
 	}
  
 	void NamedProperty::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 			pm.writePrimitive((int)type_, "type_");
@@ -58,7 +58,7 @@ namespace BALL
 	}
 	
 	void NamedProperty::persistentRead(PersistenceManager& pm)
-		throw()
+		throw(Exception::GeneralException)
 	{
 		int type;
 		pm.readPrimitive(type, "type_");

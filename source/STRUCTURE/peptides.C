@@ -1,4 +1,4 @@
-// $Id: peptides.C,v 1.1.2.2 2002/05/14 23:27:44 oliver Exp $
+// $Id: peptides.C,v 1.1.2.3 2002/11/26 19:36:40 oliver Exp $
 
 #include <BALL/STRUCTURE/peptides.h>
 
@@ -38,7 +38,7 @@ namespace BALL
 		{
 			aa = toupper(aa);
 			Position idx = one_letter_codes.find(aa);
-			return ((idx == String::EndPos) ? "UNK" : String(three_letter_codes, idx * 4, 3));
+			return ((idx == String::EndPos) ? String("UNK") : String(three_letter_codes, idx * 4, 3));
 		}
 
 		OneLetterAASequence ThreeLetterToOneLetter(const ThreeLetterAASequence& sequence)

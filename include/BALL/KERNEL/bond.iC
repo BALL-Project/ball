@@ -1,4 +1,4 @@
-// $Id: bond.iC,v 1.2.4.1 2002/02/27 00:32:49 oliver Exp $
+// $Id: bond.iC,v 1.2.4.2 2002/11/26 19:36:36 oliver Exp $
 
 	BALL_INLINE
 	void Bond::clear_()
@@ -32,7 +32,7 @@
 
 	BALL_INLINE
 	void Bond::finalize()
-		throw()
+		throw(Exception::GeneralException)
 	{
 		if (*first_ > *second_)
 		{

@@ -1,4 +1,4 @@
-// $Id: experiment.h,v 1.2.4.1 2002/05/23 23:55:12 oliver Exp $
+// $Id: experiment.h,v 1.2.4.2 2002/11/26 19:36:36 oliver Exp $
 
 #ifndef BALL_NMR_EXPERIMENT_H
 #define BALL_NMR_EXPERIMENT_H
@@ -118,7 +118,7 @@ namespace BALL
 	}
 
 	template <typename PeakListType>
-	void Experiment<PeakListType>::setDefaultPeak(const Experiment<PeakListType>::PeakType& peak) 
+	void Experiment<PeakListType>::setDefaultPeak(const typename Experiment<PeakListType>::PeakType& peak) 
 	{
 		default_peak_ = peak;
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESEdge.h,v 1.13.4.2 2002/08/22 17:17:55 oliver Exp $
+// $Id: SESEdge.h,v 1.13.4.4 2002/11/26 19:36:37 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SESEDGE_H
 #define BALL_STRUCTURE_SESEDGE_H
@@ -354,10 +354,10 @@ namespace BALL
 
 
 	template <typename T>
-	void TSESEdge<T>::setType(TSESEdge<T>::Type typ)
+	void TSESEdge<T>::setType(typename TSESEdge<T>::Type type)
 		throw()
 	{
-		type_ = typ;
+		type_ = type;
 	}
 
 

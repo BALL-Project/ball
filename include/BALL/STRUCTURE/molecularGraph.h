@@ -1,4 +1,4 @@
-// $Id: molecularGraph.h,v 1.1.2.6 2002/11/26 16:00:46 oliver Exp $
+// $Id: molecularGraph.h,v 1.1.2.7 2002/11/26 19:36:37 oliver Exp $
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
 #define BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -313,7 +313,7 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	bool TMolecularGraph<Node, Edge>::deleteNode(TMolecularGraph<Node, Edge>::NodeItemType& node)
+	bool TMolecularGraph<Node, Edge>::deleteNode(typename TMolecularGraph<Node, Edge>::NodeItemType& node)
 	{
 		NodeIterator node_it = std::find(nodes_.begin(), nodes_.end(), node);
 		if (node_it == nodes_.end())
@@ -340,7 +340,7 @@ namespace BALL
 	}
 
 	template <typename Node, typename Edge>
-	bool TMolecularGraph<Node, Edge>::deleteEdge(TMolecularGraph<Node, Edge>::EdgeItemType& edge)
+	bool TMolecularGraph<Node, Edge>::deleteEdge(typename TMolecularGraph<Node, Edge>::EdgeItemType& edge)
 	{
 		typename std::list<EdgeItemType>::iterator edge_it = std::find(edges_.begin(), edges_.end(), edge);
 		if (edge_it == edges_.end())

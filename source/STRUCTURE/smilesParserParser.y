@@ -255,3 +255,4 @@ void yyerror(char* s)
 															String(s) + String(" (at position ") 
 																+ String(SmilesParser::state.char_count) + String(")"));
 }
+

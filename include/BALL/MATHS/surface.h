@@ -1,4 +1,4 @@
-// $Id: surface.h,v 1.13.4.1 2002/05/23 23:55:11 oliver Exp $
+// $Id: surface.h,v 1.13.4.2 2002/11/26 19:36:36 oliver Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -464,7 +464,7 @@ namespace BALL
 	
 	template <typename T>
 	BALL_INLINE
-	void TSurface<T>::pushBackVertex(const TSurface<T>::Vertex& position)
+	void TSurface<T>::pushBackVertex(const typename TSurface<T>::Vertex& position)
 		throw()
 	{
 		vertex.push_back(position);
@@ -502,7 +502,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	void TSurface<T>::pushBackNormal(const TSurface<T>::Normal& n)
+	void TSurface<T>::pushBackNormal(const typename TSurface<T>::Normal& n)
 		throw()
 	{
 		normal.push_back(n);
@@ -516,13 +516,13 @@ namespace BALL
 	}
 
 	template <typename T>
-	bool TSurface<T>::Triangle::operator == (const TSurface<T>::Triangle& triangle) const throw()
+	bool TSurface<T>::Triangle::operator == (const typename TSurface<T>::Triangle& triangle) const throw()
 	{
 		return (v1 == triangle.v1) && (v2 == triangle.v2) && (v3 == triangle.v3);
 	}
 
 	template <typename T>
-	bool TSurface<T>::Triangle::operator != (const TSurface<T>::Triangle& triangle) const throw()
+	bool TSurface<T>::Triangle::operator != (const typename TSurface<T>::Triangle& triangle) const throw()
 	{
 		return !(v1 == triangle.v1) && (v2 == triangle.v2) && (v3 == triangle.v3);
 	}

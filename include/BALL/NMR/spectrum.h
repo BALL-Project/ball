@@ -1,4 +1,4 @@
-// $Id: spectrum.h,v 1.6.4.1 2002/05/23 23:55:12 oliver Exp $
+// $Id: spectrum.h,v 1.6.4.2 2002/11/26 19:36:36 oliver Exp $
 
 #ifndef BALL_NMR_SPECTRUM_H
 #define BALL_NMR_SPECTRUM_H
@@ -110,7 +110,7 @@ namespace BALL
 	/** Set the spacing.
 	*/
 	template <typename DataT, typename PeakT, typename PositionT>
-	void Spectrum<DataT, PeakT, PositionT>::setSpacing(const Spectrum<DataT, PeakT, PositionT>::PositionType& spacing)
+	void Spectrum<DataT, PeakT, PositionT>::setSpacing(const typename Spectrum<DataT, PeakT, PositionT>::PositionType& spacing)
 	{
 		spacing_ = spacing;
 	}

@@ -1,4 +1,4 @@
-// $Id: SmilesParser_test.C,v 1.2 2002/01/09 02:17:04 oliver Exp $
+// $Id: SmilesParser_test.C,v 1.2.4.1 2002/11/26 19:36:40 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -28,7 +28,7 @@ std::ostream& operator << (std::ostream& os, const std::map<String, Size>& f)
 	std::map<String, Size>::const_iterator it(f.begin());
 	for (; it != f.end(); it++)
 	{
-		os << *it << " ";
+		os << it->first << "/" << it->second << " ";
 	}
 	return os;
 }
@@ -61,7 +61,7 @@ Line readSmilesLine(std::istream& is)
 	return s;
 }
 
-START_TEST(SmilesParser, "$Id: SmilesParser_test.C,v 1.2 2002/01/09 02:17:04 oliver Exp $")
+START_TEST(SmilesParser, "$Id: SmilesParser_test.C,v 1.2.4.1 2002/11/26 19:36:40 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

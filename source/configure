@@ -1854,8 +1854,8 @@ echo "$as_me: error: aborted" >&2;}
 
 echo "$as_me:$LINENO: checking whether echo accepts -e" >&5
 echo $ECHO_N "checking whether echo accepts -e... $ECHO_C" >&6
-if `echo -e "\n" >/dev/null 2>&1` ; then
-	if test "`echo -e 2>&1`" = "" -a "`echo -e OK`" = "OK" ; then
+if `/bin/sh -c "echo -e \"\n\"" >/dev/null 2>&1` ; then
+	if test "`/bin/sh -c echo -e 2>&1`" = "" -a "`/bin/sh -c echo -e OK`" = "OK" ; then
 		ECHO_COMMAND="echo -e"
 		echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6

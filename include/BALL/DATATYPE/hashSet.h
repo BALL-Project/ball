@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.30.4.4 2002/06/09 14:24:33 oliver Exp $ 
+// $Id: hashSet.h,v 1.30.4.5 2002/11/26 19:36:36 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -1289,14 +1289,16 @@ namespace BALL
 	template <class Key>
 	BALL_INLINE 
 	typename HashSet<Key>::Node* HashSet<Key>::newNode_
-		(const ValueType& value, HashSet<Key>::Node* next) const		throw()
+		(const ValueType& value, typename HashSet<Key>::Node* next) const		
+		throw()
 	{
 		return new Node(value, next);
 	}
 
 	template <class Key>
 	BALL_INLINE 
-	void HashSet<Key>::deleteNode_(HashSet<Key>::Node* node) const		throw()
+	void HashSet<Key>::deleteNode_(typename HashSet<Key>::Node* node) const		
+		throw()
 	{
 		delete node;
 	}

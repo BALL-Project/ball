@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.19.4.6 2002/06/27 02:38:26 oliver Exp $
+// $Id: enumerator.h,v 1.19.4.7 2002/11/26 19:36:36 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -654,7 +654,7 @@ namespace BALL
 	template <typename Container, typename SiteIterator, typename Variant>
 	BALL_INLINE
 	Enumerator<Container, SiteIterator, Variant>::Enumerator
-		(Container& container, Enumerator<Container, SiteIterator, Variant>::MutatorFunction mutator)
+		(Container& container, typename Enumerator<Container, SiteIterator, Variant>::MutatorFunction mutator)
 		throw()
 		: container_(container),
 			mutator_(mutator)

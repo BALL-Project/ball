@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.26.4.1 2002/05/01 10:30:37 oliver Exp $
+// $Id: property.h,v 1.26.4.2 2002/11/26 19:36:36 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -192,12 +192,12 @@ namespace BALL
 		/**	Write a persistent copy of the object.
 		*/
     virtual void persistentWrite(PersistenceManager& pm, const char* name = "") const
-			throw();
+			throw(Exception::GeneralException);
 
 		/**	Retrieve a persistent copy of the object
 		*/
     virtual void persistentRead(PersistenceManager& pm)
-			throw();
+			throw(Exception::GeneralException);
 		
 		//@}
 		/**	@name	 Accessors 
