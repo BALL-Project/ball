@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.31 2000/05/05 17:39:05 amoll Exp $
+// $Id: matrix44.h,v 1.32 2000/05/06 00:48:04 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -240,8 +240,15 @@ namespace BALL
 		*/
 		T getTrace() const;
 
+		/** Create a zero matrix.
+				A new matrix object is created and all elements set to 0.
+		*/
 		static const TMatrix4x4& getZero();
 
+		/** Create a identity matrix.
+				A new matrix object is created and all elements but the diagonal are 
+				set to zero. The diagonal elements are set to 1.
+		*/
 		static const TMatrix4x4& getIdentity();
 
 		/** Set the TMatrix4x4 to an identity matrix.
@@ -254,7 +261,7 @@ namespace BALL
 				given value (default: 1) and all other elements to 0.
 				@param T the value to fill with (default: 1)
 		*/
-		void fill(const T& t = (T)1);
+		void set(const T& t = (T)1);
 
 		/** Mirror the Matrix at the diagonal.
 				All values are swaped by the mirrored value.
@@ -1144,7 +1151,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	void TMatrix4x4<T>::fill(const T& t)
+	void TMatrix4x4<T>::set(const T& t)
 	{
 			m11 = m12 = m13 = m14 
 		= m21 = m22 = m23 = m24 
