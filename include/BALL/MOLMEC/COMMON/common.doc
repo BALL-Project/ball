@@ -1,4 +1,4 @@
-// $Id: common.doc,v 1.3 2000/03/26 12:41:46 oliver Exp $
+// $Id: common.doc,v 1.4 2000/05/29 11:17:19 oliver Exp $
 
 /**	@name	General Force Field Classes.
 		@nonames
@@ -12,5 +12,14 @@
 	//@Include: periodicBoundary.h
 	//@Include: support.h
 	//@Include: snapShot.h
-
+	/**	@name	Rule-based parameter assignment
+	*/
+	//@{
+		//@Include: ruleEvaluator.h
+		//@Include: ruleProcessor.h
+		//@Include: chargeRuleProcessor.h  
+		//@Include: radiusRuleProcessor.h
+		//@Include: typenameRuleProcessor.h
+		//@Include: typeRuleProcessor.h
+	//@}
 //@}
