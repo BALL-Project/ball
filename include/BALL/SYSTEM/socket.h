@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.14 2000/10/20 14:54:13 oliver Exp $
+// $Id: socket.h,v 1.15 2000/10/20 15:03:49 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -31,17 +31,21 @@
 #include <sys/socket.h>
 #include <netinet/in.h>
 
-#ifndef BALL_HAS_ANSI_IOSTREAM
-#	define _S_USER_BUF		0x0001
-# define _S_UNBUFFERED	0x0002
-# define _S_NO_READS		0x0004
-# define _S_NO_WRITES		0x0008
-# define _S_EOF_SEEN		0x0010
-# define _S_ERR_SEEN		0x0020
-# define _S_DELETE_DONT_CLOSE	0x0040
-# define _S_LINKED		0x0080
-# define _S_LINE_BUF		0x0200
-# define _G_ssize_t size_t
+#ifdef BALL_HAS_ANSI_IOSTREAM
+#	ifndef _S_USER_BUF
+#		define _S_USER_BUF		0x0001
+#		define _S_UNBUFFERED	0x0002
+#		define _S_NO_READS		0x0004
+#		define _S_NO_WRITES		0x0008
+#		define _S_EOF_SEEN		0x0010
+#		define _S_ERR_SEEN		0x0020
+#		define _S_DELETE_DONT_CLOSE	0x0040
+#		define _S_LINKED		0x0080
+#		define _S_LINE_BUF		0x0200
+#	endif
+# ifndef _G_ssize_t
+#		define _G_ssize_t size_t
+#	endif
 #else
 # ifndef _S_USER_BUF // libg++ 2.5.x
 #   define _S_USER_BUF		_IO_USER_BUF		
