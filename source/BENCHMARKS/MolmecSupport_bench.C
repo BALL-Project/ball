@@ -1,4 +1,4 @@
-// $Id: MolmecSupport_bench.C,v 1.1.2.1 2002/06/05 22:46:46 oliver Exp $
+// $Id: MolmecSupport_bench.C,v 1.1.2.2 2002/06/06 00:37:03 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 using namespace BALL;
 
 // args: benchmark name (without '"'), reference time in seconds, CVS ID string
-START_BENCHMARK(MolmecSupport, 10.0, "$Id: MolmecSupport_bench.C,v 1.1.2.1 2002/06/05 22:46:46 oliver Exp $")
+START_BENCHMARK(MolmecSupport, 10.0, "$Id: MolmecSupport_bench.C,v 1.1.2.2 2002/06/06 00:37:03 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -21,8 +21,8 @@ START_BENCHMARK(MolmecSupport, 10.0, "$Id: MolmecSupport_bench.C,v 1.1.2.1 2002/
 System S;
 ForceField ff;
 
-ff.options.setVector(PeriodicBoundary::Option::PERIODIC_BOX_LOWER, Vector3(-20.0));
-ff.options.setVector(PeriodicBoundary::Option::PERIODIC_BOX_UPPER, Vector3(20.0));
+ff.options.setVector(PeriodicBoundary::Option::PERIODIC_BOX_LOWER, Vector3(-15.0));
+ff.options.setVector(PeriodicBoundary::Option::PERIODIC_BOX_UPPER, Vector3(15.0));
 ff.periodic_boundary.enable();
 ff.setup(S);
 

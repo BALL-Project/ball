@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.30.4.3 2002/05/01 10:50:15 oliver Exp $
+// $Id: support.C,v 1.30.4.4 2002/06/06 00:37:07 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -171,7 +171,7 @@ namespace BALL
 							// calculateMinimumImage(difference, period);
 
 							// ?????: should it be < or <= ? We have to define what
-							// should happen when an antom sits on the border
+							// should happen if an atom sits right on the border
 							// (numerically quite improbable, of course)
 							if (difference.x < -half_period_x) 
 							{

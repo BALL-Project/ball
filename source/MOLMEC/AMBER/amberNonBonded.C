@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.20.4.10 2002/06/05 00:29:01 oliver Exp $
+// $Id: amberNonBonded.C,v 1.20.4.11 2002/06/06 00:37:07 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -35,7 +35,7 @@ namespace BALL
 			scaling_vdw_1_4_(0.0),
 			scaling_electrostatic_1_4_(0.0),
 			use_dist_depend_dielectric_(false),
-			algorithm_type_(MolmecSupport::HASH_GRID),
+			algorithm_type_(MolmecSupport::BRUTE_FORCE),
 			van_der_waals_(),
 			hydrogen_bond_()
 	{	
@@ -64,7 +64,7 @@ namespace BALL
 			scaling_vdw_1_4_(0.0),
 			scaling_electrostatic_1_4_(0.0),
 			use_dist_depend_dielectric_(false),
-			algorithm_type_(MolmecSupport::HASH_GRID),
+			algorithm_type_(MolmecSupport::BRUTE_FORCE),
 			van_der_waals_(),
 			hydrogen_bond_()
 	{
@@ -162,7 +162,7 @@ namespace BALL
 		scaling_vdw_1_4_ = 0.0;
 		scaling_electrostatic_1_4_ = 0.0;
 		use_dist_depend_dielectric_ = false;
-		algorithm_type_ = MolmecSupport::HASH_GRID;
+		algorithm_type_ = MolmecSupport::BRUTE_FORCE;
 		van_der_waals_.clear();
 		hydrogen_bond_.clear();
 	}
@@ -184,10 +184,10 @@ namespace BALL
 		throw()
 	{
 		MolmecSupport::PairListAlgorithmType algorithm_type 
-			= MolmecSupport::HASH_GRID;
-		if (force_field_->getAtoms().size() < 200) 
+			= MolmecSupport::BRUTE_FORCE;
+		if (force_field_->getAtoms().size() > 8000) 
 		{ 
-			algorithm_type = MolmecSupport::BRUTE_FORCE;
+			algorithm_type = MolmecSupport::HASH_GRID;
 		} 
 
 		return algorithm_type;
