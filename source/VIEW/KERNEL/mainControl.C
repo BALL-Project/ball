@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.92 2004/06/04 14:43:14 amoll Exp $
+// $Id: mainControl.C,v 1.93 2004/06/25 00:34:32 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -373,13 +373,16 @@ namespace BALL
 		void MainControl::checkMenus()
 		{
 			// preferences dialog not empty
-			if (preferences_dialog_->hasPages())
+			if (preferences_dialog_ != 0 &&
+					preferences_dialog_->hasPages())
 			{
 				menuBar()->setItemChecked(preferences_id_, preferences_dialog_->isVisible());			
 			}
 
 			// overridden in Controls
 			if (delete_id_ != 0) menuBar()->setItemEnabled(delete_id_, false);
+
+			setCompositesMuteable(simulation_thread_ == 0);
 
 			// checks all modular widgets 
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
@@ -390,8 +393,6 @@ namespace BALL
 
 			if (composites_muteable_) simulation_icon_->hide();
 			else 											simulation_icon_->show();
-
-			setCompositesMuteable(!simulation_thread_);
 
 			menuBar()->setItemEnabled(MENU_STOPSIMULATION, !composites_muteable_);
 		}
@@ -1331,10 +1332,10 @@ namespace BALL
 			}
 		}
 
-		void MainControl::enableDeleteEntry()
+		void MainControl::setDeleteEntryEnabled(bool state)
 			throw()
 		{
-			menuBar()->setItemEnabled(delete_id_, true);
+			menuBar()->setItemEnabled(delete_id_, state);
 		}
 
 		void MainControl::setCompositesMuteable(bool state) 

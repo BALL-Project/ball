@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.28 2004/06/10 21:40:18 amoll Exp $
+// $Id: datasetControl.C,v 1.29 2004/06/25 00:34:32 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -88,7 +88,7 @@ void DatasetControl::checkMenu(MainControl& main_control)
 {
 	menuBar()->setItemEnabled(open_trajectory_id_, main_control.getSelectedSystem());
 	ItemList item_list = getSelectedItems(); 
-	if (item_list.size() > 0) main_control.enableDeleteEntry();
+	if (item_list.size() > 0) main_control.setDeleteEntryEnabled(true);
 }
 
 

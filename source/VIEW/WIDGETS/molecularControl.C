@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.57 2004/06/13 21:59:07 amoll Exp $
+// $Id: molecularControl.C,v 1.58 2004/06/25 00:34:33 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -236,8 +236,11 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	menuBar()->setItemEnabled(copy_id_, list_filled);	
  	getMainControl()->setMenuHint(copy_id_, hint);
 
-	// enable global delete entry for all GenericControls.
-	if (list_filled) getMainControl()->enableDeleteEntry();
+	if (selected_.size() > 0)
+	{
+		// enable global delete entry for all GenericControls, if this Control has the selection
+		getMainControl()->setDeleteEntryEnabled(main_control.compositesAreMuteable());
+	}
 }
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.84 2004/06/24 23:03:24 amoll Exp $
+// $Id: scene.C,v 1.85 2004/06/25 00:34:33 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -427,7 +427,7 @@ namespace BALL
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
-			List<ClippingPlane>::ConstIterator cit;
+			List<ClippingPlane>::iterator cit;
 
 			// ============== render Clipping planes ==============================
 			
@@ -1630,7 +1630,7 @@ namespace BALL
 			cplane.translation = Vector3(25,25,25);
 			cplane.plane_vector = Vector3(0,0,0);
 Log.error() << "#~~#   4 " << stage_->getLightSources().size() << " "   << __FILE__ << "  " << __LINE__<< std::endl;
-			stage_->getClippingPlanes().push_front(cplane);
+			stage_->getClippingPlanes().push_back(cplane);
 Log.error() << "#~~#   3 "    << __FILE__ << "  " << __LINE__<< std::endl;
 
 			SceneMessage* msg = new SceneMessage(SceneMessage::UPDATE_CLIPPING_PLANES);
