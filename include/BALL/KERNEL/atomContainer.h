@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.h,v 1.23 2003/06/19 13:09:54 oliver Exp $
+// $Id: atomContainer.h,v 1.24 2003/06/26 14:22:14 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
@@ -287,14 +287,13 @@ namespace BALL
 		Size countBonds() const
 			throw();
 
-		/** Count all bonds which connect 2 atoms in this instance.
+		/** Count all bonds which connect atoms in this instance with atoms outside.
 				@return Size the number of inter bonds
 		*/
 		Size countInterBonds() const
 			throw();
 
-		/** Count all bonds which connect atoms in this instance with atoms
-				outside.
+		/** Count all bonds which connect 2 atoms in this instance.
 				@return Size the number of intra bonds
 		*/
 		Size countIntraBonds() const
