@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.21 2001/02/23 10:02:34 anker Exp $
+// $Id: support.C,v 1.22 2001/02/23 10:17:34 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -623,8 +623,8 @@ namespace BALL
 					result.z -= period.z;
 				}
 			}
+			return result;
 		}
-		return result;
 
 	}	// namespace MolmecSupport
 
