@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricTransformations.sip,v 1.5 2003/11/01 09:27:38 oliver Exp $
+// $Id: geometricTransformations.sip,v 1.6 2004/02/25 10:47:13 oliver Exp $
 //
 
 class TranslationProcessor
@@ -10,6 +10,7 @@ class TranslationProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/geometricTransformations.h>
+	#include "sipBALLAtom.h"
 	using namespace BALL;
 	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
@@ -30,6 +31,7 @@ class TransformationProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/geometricTransformations.h>
+	#include "sipBALLAtom.h"
 	using namespace BALL;
 	typedef UnaryProcessor<Atom> AtomProcessor;
 %End

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: smilesParser.C,v 1.14 2003/08/26 09:18:28 oliver Exp $
+// $Id: smilesParser.C,v 1.15 2004/02/25 10:47:14 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/smilesParser.h>
@@ -95,6 +95,7 @@ namespace BALL
 		{
 			all_atoms_[i]->destroy();
 			delete all_atoms_[i];
+			all_atoms_[i] = 0;
 		}
 		all_atoms_.clear();
 

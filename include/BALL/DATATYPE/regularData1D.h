@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.40 2004/02/23 15:19:58 anhi Exp $
+// $Id: regularData1D.h,v 1.41 2004/02/25 10:47:05 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
@@ -68,15 +68,14 @@ namespace BALL
 		*/
 		//@{
 			
-		/**	Default constructor.
-		*/
+		///	Default constructor.
 		TRegularData1D() throw();
 
-		/**	Copy constructor
-		*/
+		///	Copy constructor
 		TRegularData1D(const TRegularData1D& data)
 			throw(Exception::OutOfMemory);
 	
+		///
 		TRegularData1D(const CoordinateType& origin, const CoordinateType& dimension, const CoordinateType& spacing)
 			throw(Exception::OutOfMemory);
 		
@@ -88,29 +87,11 @@ namespace BALL
 		TRegularData1D(const VectorType& data, const CoordinateType& origin = 0.0, const CoordinateType& dimension = 1.0)
 			throw(Exception::OutOfMemory);
 
-			
-//
-//		/**	Cut constructor form TRegularData2D.
-//				This constructor creates a cut through a \link TRegularData2D TRegularData2D \endlink
-//				running through the given point, either parallel to the x-axis or to the y-axis
-//				@param direction 0: along the x-axis, 1: along the y-axis
-//				@param position the coordinate (in world coordinates) of the cut
-//		*/
-//		TRegularData1D(const TRegularData2D<ValueType>& data, 
-//									 const typename TRegularData2D<ValueType>::CoordinateType& position,
-//									 Position direction = 0)
-//			throw(Exception::OutOfMemory);
+		///	Destructor
+		virtual ~TRegularData1D()	throw();
 
-		/**	Destructor
-		*/
-		virtual ~TRegularData1D()
-			throw();
-
-		/**	Clear the contents
-		*/
-		virtual void clear()
-			throw();
-
+		///	Clear the contents
+		virtual void clear() throw();
 		//@}
 
 

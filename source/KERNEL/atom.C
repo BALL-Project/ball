@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.49 2003/12/15 18:12:42 amoll Exp $
+// $Id: atom.C,v 1.50 2004/02/25 10:47:12 oliver Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -144,7 +144,11 @@ namespace BALL
 			static_attributes_.resize(std::max((size_t)10000, 2 * i));
 
 			// add the free indices to the free list
-			for (; i < static_attributes_.size(); free_list_.push_back((Position)i++));
+			for (; i < static_attributes_.size(); ++i)
+			{
+				free_list_.push_back((Position)i);
+				static_attributes_[i].ptr = 0;
+			}
 		}
 		
 		// return the next free index
@@ -156,6 +160,7 @@ namespace BALL
 	void Atom::freeIndex_(Position index)
 	{
 		free_list_.push_front(index);
+		static_attributes_[index].ptr = 0;
 	}
 
 	void Atom::clear()
@@ -428,19 +433,20 @@ namespace BALL
 		return ((Atom*)this)->getBond(atom);
 	}
 
-	Bond* Atom::createBond(Atom &atom)
+	Bond* Atom::createBond(Atom& atom)
 		throw()
 	{
+		// Check whether this bond exists already
 		Bond* bond = getBond(atom);
-		
-		if (bond == 0)
+
+		// If the atom does not yet exist and the bond is not
+		// to this atom, we have to construct a new one.
+		if ((bond == 0) && (&atom != this))
 		{
-			return Bond::createBond(*new Bond, *this, atom);
+			// No, we have to create a new one.
+			bond = Bond::createBond(*new Bond, *this, atom);
 		} 
-		else 
-		{
-			return bond;
-		}
+		return bond;
 	}
 
 	Bond* Atom::createBond(Bond& bond, Atom& atom)
@@ -456,16 +462,22 @@ namespace BALL
 		
 		if (bond_ptr == 0)
 		{
-			bond_ptr = (Bond *)bond.create();
+			bond_ptr = (Bond*)bond.create();
 			bond_ptr->setFirstAtom(0);
 			bond_ptr->setSecondAtom(0);
 			
-			return Bond::createBond(*bond_ptr, *this, atom);
+			try 
+			{
+				bond_ptr = Bond::createBond(*bond_ptr, *this, atom);
+			}
+			catch (Bond::TooManyBonds&)
+			{
+				// Clear up the mess we made.
+				delete bond_ptr;
+				bond_ptr = 0;
+			}
 		} 
-		else 
-		{
-			return bond_ptr;
-		}
+		return bond_ptr;
 	}
 
 	bool Atom::destroyBond(const Atom& atom)

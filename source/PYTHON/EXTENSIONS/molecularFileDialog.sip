@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.sip,v 1.1 2004/02/12 13:02:22 amoll Exp $
+// $Id: molecularFileDialog.sip,v 1.2 2004/02/25 10:47:13 oliver Exp $
 //
 
 class MolecularFileDialog
@@ -28,7 +28,7 @@ static MolecularFileDialog* getInstance(Position /index/);
   bool writeMOL2File(String, const System&) throw();
   bool writeMOLFile(String, const System&) throw();
   bool writePDBFile(String, const System&) throw();
-  void readFile();
+  void readFiles();
 //  void checkMenuEntries() throw();
 //  void fetchPreferences(INIFile &inifile) throw();
   void finalizeWidget(MainControl&) throw();

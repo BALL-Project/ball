@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.sip,v 1.8 2004/02/23 19:51:24 oliver Exp $
+// $Id: secondaryStructure.sip,v 1.9 2004/02/25 10:47:13 oliver Exp $
 //
 
 class SecondaryStructure
@@ -15,7 +15,7 @@ class SecondaryStructure
 	enum Type
 	{
 		HELIX,
-		RANDOM_COIL,
+		COIL,
 		STRAND,
 		TURN,
 		UNKNOWN, 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.41 2003/08/26 08:04:16 oliver Exp $
+// $Id: bond.h,v 1.42 2004/02/25 10:47:08 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_BOND_H
@@ -72,27 +72,24 @@ namespace BALL
 				of bonds (8 bonds) is exceeded.
 		*/
 		class TooManyBonds
-			:	public	Exception::GeneralException
+			:	public Exception::GeneralException
 		{
 			public:
-			TooManyBonds(const char* file, int line)
-				throw();
-			TooManyBonds(const char* file, int line, const Atom& atom1, const Atom& atom2)
-				throw();
+			TooManyBonds(const char* file, int line) throw();
+			TooManyBonds(const char* file, int line, const Atom& atom1, const Atom& atom2) throw();
 		};
 
 		/**	Not bound to two atoms.
 				This exception may be thrown by  \link getLength getLength \endlink  if this instance is not bound.
 		*/
 		class NotBound
-			:	public	Exception::GeneralException
+			:	public Exception::GeneralException
 		{
 			public:
-			NotBound(const char* file, int line)
-				throw();
+			NotBound(const char* file, int line) throw();
 		};
-
 		//@}
+
 		/** @name Type definitions 
 		*/
 		//@{
@@ -189,8 +186,7 @@ namespace BALL
 				@param       deep ignored
 				@see         createBond
 		*/
-		Bond(const Bond& bond, bool deep = true)
-			throw();
+		Bond(const Bond& bond, bool deep = true) throw();
 	
 		/** Detailed constructor.
 				Calls  \link createBond createBond \endlink  to create a new bond between the two atoms

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricProperties.sip,v 1.6 2003/11/01 09:27:37 oliver Exp $
+// $Id: geometricProperties.sip,v 1.7 2004/02/25 10:47:12 oliver Exp $
 //
 
 class BoundingBoxProcessor
@@ -10,6 +10,7 @@ class BoundingBoxProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/geometricProperties.h>
+	#include "sipBALLAtom.h"
 	using namespace BALL;
 	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
@@ -31,6 +32,7 @@ class GeometricCenterProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/geometricProperties.h>
+	#include "sipBALLAtom.h"
 	using namespace BALL;
 	typedef UnaryProcessor<Atom> AtomProcessor;
 %End
@@ -50,6 +52,7 @@ class FragmentDistanceCollector
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/geometricProperties.h>
+	#include "sipBALLAtom.h"
 	using namespace BALL;
 	typedef UnaryProcessor<Composite> CompositeProcessor;
 %End

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: defaultProcessors.sip,v 1.5 2003/11/01 09:27:37 oliver Exp $
+// $Id: defaultProcessors.sip,v 1.6 2004/02/25 10:47:12 oliver Exp $
 //
 
 class ClearChargeProcessor
@@ -10,6 +10,7 @@ class ClearChargeProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/defaultProcessors.h>
+	#include "sipBALLAtom.h"
 	using namespace BALL;
 %End
   public:
@@ -25,6 +26,7 @@ class ClearRadiusProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/defaultProcessors.h>
+	#include "sipBALLAtom.h"
 	using namespace BALL;
 %End
   public:
@@ -40,6 +42,7 @@ class AssignRadiusProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/defaultProcessors.h>
+	#include "sipBALLAtom.h"
 	using namespace BALL;
 %End
   public:
@@ -62,6 +65,7 @@ class AssignChargeProcessor
 {
 %TypeHeaderCode
 	#include <BALL/STRUCTURE/defaultProcessors.h>
+	#include "sipBALLAtom.h"
 	using namespace BALL;
 %End
   public:

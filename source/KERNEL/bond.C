@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.C,v 1.34 2003/08/26 09:17:48 oliver Exp $
+// $Id: bond.C,v 1.35 2004/02/25 10:47:12 oliver Exp $
 //
 
 #include <BALL/KERNEL/bond.h>
@@ -97,6 +97,8 @@ namespace BALL
 		if (((Size)first.number_of_bonds_ >= (Size)Atom::MAX_NUMBER_OF_BONDS)
 				|| ((Size)second.number_of_bonds_ >= (Size)Atom::MAX_NUMBER_OF_BONDS))
 		{
+			delete bond_ptr;
+			bond_ptr = 0;
 			throw TooManyBonds(__FILE__, __LINE__, first, second);
 		}
 
