@@ -1,4 +1,4 @@
-// $Id: numericalSAS.h,v 1.12 2000/09/01 10:25:05 anker Exp $
+// $Id: numericalSAS.h,v 1.13 2000/10/10 14:24:56 oliver Exp $
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H
@@ -8,14 +8,19 @@
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H
-#include <BALL/MATHS/vector3.h>
+#	include <BALL/MATHS/vector3.h>
+#endif
+
+#ifndef BALL_MATHS_SURFACE_H
+#	include <BALL/MATHS/surface.h>
 #endif
 
 namespace BALL 
 {
 
+
+
 	class Atom;
-	class Surface;
 	class AtomContainer;
 	template <typename Key, typename T>
   class HashMap;
