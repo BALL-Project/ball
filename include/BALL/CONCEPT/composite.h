@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.56 2004/02/23 15:19:56 anhi Exp $
+// $Id: composite.h,v 1.57 2004/04/25 12:02:54 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
@@ -135,7 +135,7 @@ namespace BALL
 				potential tree structures. It also recursively destructs all
 				children of the composite.
 		*/
-		virtual ~Composite()
+		virtual ~Composite() 
 			throw();
 
 		/**	Clear the composite properties.	
@@ -546,6 +546,16 @@ namespace BALL
 				@return false if child could not be removed
 		*/
 		bool removeChild(Composite& child) throw();
+
+
+		/**	Remove selected subcomposites.
+				This method iterates over all children of the current composite
+				and removes all selected composites by <tt>delete</tt>ing them.
+				This is useful in combination with the \link Selector \endlink
+				class in order to remove unwanted partitions of kernel data structures.
+				@return the number of composites deleted.
+		*/
+		Size removeSelected() throw();
 
 		/** This instance and its subtree is removed form its tree and 
 				replaced by <tt>composite</tt> and its subtree.

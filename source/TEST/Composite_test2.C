@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Composite_test2.C,v 1.7 2003/08/26 09:18:30 oliver Exp $
+// $Id: Composite_test2.C,v 1.8 2004/04/25 12:02:55 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -30,7 +30,7 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test2.C,v 1.7 2003/08/26 09:18:30 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test2.C,v 1.8 2004/04/25 12:02:55 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -666,6 +666,20 @@ CHECK([EXTRA] memory leaks...)
 		if (!(i % 1000)) { STATUS("constructed " << i  << " composites.") }
 		delete ptr;
 	}
+RESULT
+
+CHECK(Size removeSelected() throw())
+	Composite a, b, c, d, e, f;
+	a.appendChild(b);
+	b.appendChild(c);
+	b.appendChild(d);
+	c.appendChild(e);
+
+	TEST_EQUAL(a.count(Composite::DEFAULT_UNARY_PREDICATE), 5)
+	c.select();
+	a.removeSelected();
+	TEST_EQUAL(a.count(Composite::DEFAULT_UNARY_PREDICATE), 3)
+	TEST_EQUAL(e.getParent(), 0)	
 RESULT
 
 /////////////////////////////////////////////////////////////

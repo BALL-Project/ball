@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.C,v 1.40 2003/08/26 09:17:44 oliver Exp $
+// $Id: composite.C,v 1.41 2004/04/25 12:02:55 oliver Exp $
 //
 
 #include <BALL/CONCEPT/composite.h>
@@ -1166,6 +1166,43 @@ namespace BALL
 		stamp(MODIFICATION);
 
 		return true;
+	}
+
+	Size Composite::removeSelected() throw()
+	{
+		// Collect all selected composites in a list.
+		std::list<Composite*> composites;
+		for (CompositeIterator ci = beginComposite(); +ci; ++ci)
+		{
+			if (ci->isSelected())
+			{
+				composites.push_back(&*ci);
+			}
+		}
+
+		// Remove all composites from their hierarchy (to avoid recursive
+		// deletion).
+		std::list<Composite*>::iterator li;
+		for (li = composites.begin(); li != composites.end(); ++li)
+		{
+			if ((*li)->getParent() != 0)
+			{
+				(*li)->getParent()->removeChild(**li);
+			}
+		}
+
+		// Delete the individual composites if they are marked
+		// as "autodeletable".
+		for (li = composites.begin(); li != composites.end(); ++li)
+		{
+			if ((*li)->isAutoDeletable())
+			{	
+				delete *li;
+			}
+		}
+
+		// Return the number of composites deleted.
+		return composites.size();
 	}
 
 	void Composite::clear()
