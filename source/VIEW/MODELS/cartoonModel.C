@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.31 2004/09/07 15:06:42 amoll Exp $
+// $Id: cartoonModel.C,v 1.32 2004/09/08 12:24:14 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -82,7 +82,7 @@ namespace BALL
 			{
 				if (it->getName() == "P")
 				{
-					SplinePoint spline_point((*it).getPosition(), &*it);
+					SplinePoint spline_point((*it).getPosition(), 0);
 					spline_vector_.push_back(spline_point);
 				}
 			}
