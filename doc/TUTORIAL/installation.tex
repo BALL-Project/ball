@@ -5,17 +5,17 @@
   BALL requires a (more or less) ANSI compliant \CPP compiler.
   It has been successfully built and tested on the following platforms:
 	\begin{itemize}	
-   	\item Linux/x86 2.x using g{\tt ++} 3.2.1
-   	\item Linux/x86 2.x using g{\tt ++} 2.95.3
+   	\item Linux/x86 2.x using g{\tt ++} 3.3.3
+%   	\item Linux/x86 2.x using g{\tt ++} 2.95.3
 %   	\item Linux/x86 2.x using Kuck \& Associate (KAI) \CPP 4.0
 %   	\item Linux/x86 2.x using Intel Compiler 5.0
    	\item Solaris/SPARC 8 using g{\tt ++} 3.2.1
-   	\item Solaris/SPARC 8 using g{\tt ++} 2.95.3
+%   	\item Solaris/SPARC 8 using g{\tt ++} 2.95.3
 %   	\item Solaris/SPARC 8 using Kuck \& Associate (KAI) \CPP 4.0
-   	\item Solaris/SPARC 8 using Sun Forte Developer 7 C{\tt ++} 5.4 2002/03/09
+%   	\item Solaris/SPARC 8 using Sun Forte Developer 7 C{\tt ++} 5.4 2002/03/09
    	\item IRIX 6.5 using CC 7.3.1.1m (32 and 64 bit)
 %   	\item Compaq Tru64 Unix V4.0f using Compaq \CPP 6.3
-		\item Microsoft Windows XP using Microsoft Visual Studio .NET (MSVC 7.0)
+%		\item Microsoft Windows XP using Microsoft Visual Studio .NET (MSVC 7.0)
  	\end{itemize}
 
 \subsection{External software and libraries}
@@ -29,15 +29,15 @@ other versions of {\tt make}. It is available from \URL{ftp://ftp.gnu.org/gnu/}
 and easy to install.
 
 The compilation of the visualization component VIEW also requires
-the QT library (version 3.0.6) which is available from
-\URL{http://www.troll.no/qt}/.
+the QT library (any version above 3.2), which is available from
+\URL{www.trolltech.com/products/qt}/.
 
 If QT was not installed in one of the standard library paths or the
 QT header files were not installed in one of the compiler's default
 include directories, use \mbox{"\option{--with-qt-libs}{\tt{}=DIR}"} and
 \mbox{"\option{--with-qt-incl}{\tt{}=DIR}"} as options to configure (see
 Section \ref{section:building-ball}) to specify the paths QT was installed
-to.\index{QT}
+to.\index{QT} {\tt configure} will also honor the {\tt QTDIR} environment variable.
 Please remember to compile also \file{libqgl.so}, which is one of the QT
 extensions (to build \file{libqgl.a}, cd to 
 {\tt\nobreak{\$QTDIR/extensions/opengl/src}} and type {\tt make}).
@@ -48,10 +48,19 @@ very similar to that of OpenGL. It can be obtained from
 \URL{http://www.mesa3d.org}.
 \index{MESA}
 
+If your machine has a graphics accelerator from ATI oder NVidia, 
+you can use the vendor-provided OpenGL drivers (\URL{http://www.ati.com/support/driver.html}
+and \URL{http://www.nvidia.com/object/linux.html}).
+But be warned, we experienced serious trouble with both of the drivers. They
+still seem to be unstable up to now (February 2004). If you have freezes in
+molview or display problems in the 3D view, please have a look at our FAQ
+which addresses some of the issues
+(\URL{http://voyager.bioinf.uni-sb.de/OK/BALL/Support/FAQ/}).
+
 To use the Python extensions of BALL (Python is an object oriented
-scripting language), you will also need Python 2.1 installed
-(\URL{http://www.python.org}) and a special version of SIP 3.0 distributed
-through our website (\URL{http://www.bioinf.uni-sb.de/OK/BALL/}). SIP is a tool
+scripting language), you will also need Python (version 2.2 or above) installed
+(\URL{http://www.python.org}) and a recent version of SIP (version 4.0rc2 or
+above, available at \URL{http://www.riverbankcomputing.co.uk/sip/}). SIP is a tool
 for generating Python bindings for C++ class libraries.
 
 Additionally you might need the FFTW package for fast Fourier
@@ -124,18 +133,29 @@ An overview of these options can also be obtained by executing "{\tt configure
                                            creation of the shared libraries
                                            \\\vspace{3mm}
 
+	\option{--with-qt}{\tt{}=DIR}& QT installation is in QT. This option 
+																						is equivalent to setting the {\tt
+																						QTDIR} environment variable.
+																						Using this option should be
+																						preferred over the next two
+																						options, which are only necessary
+																						if the QT installation has non-standard paths for libraries and headers.\\
+																					\vspace{3mm}
   \option{--with-qt-incl}{\tt{}=DIR}&      QT header files are in DIR\\
                                            \vspace{3mm}
 
   \option{--with-qt-libs}{\tt{}=DIR}&      QT libraries are in DIR\\\vspace{3mm}
+	\option{--with-qt-mt}{\tt{}=DIR}&					Use the multithreaded version of the QT
+																						libraries rather than the singlethreaded 
+																						one (libqt-mt instead of libqt).
 	\option{--with-moc}{\tt{}=MOC}& 					The absolute path to the QT meta object
 																						compiler (moc, typically found in
 																						{\tt\$QTDIR/bin/moc})\\\vspace{3mm}
 
-	\option{--with-threadsafe-qt}& 						Set this flag if you the multi-threaded
-																						version of Mesa and you compiled
-																						the thread-safe version of QT\\\vspace{3mm}
-			
+	\option{--with-uic}{\tt{}=MOC}& 					The absolute path to the QT user interface
+																						compiler (uic, typically found in
+																						{\tt\$QTDIR/bin/uic})\\\vspace{3mm}
+
   \option{--with-opengl-incl}{\tt{}=DIR}&  OpenGL/Mesa header files are in DIR/GL\\\vspace{3mm}
 
   \option{--with-opengl-libs}{\tt{}=DIR}&  OpenGL/Mesa libraries are in DIR/GL\\\vspace{3mm}
@@ -149,10 +169,12 @@ An overview of these options can also be obtained by executing "{\tt configure
                                            \\\vspace{3mm}
 
   \option{--with-python=EXE}& 							Enable Python support using the
-																						Python executable in EXE.
-Typically, from the executable {\tt configure} can figure out where the
-headers and the library are hidden, so that the following two options are
-usually not required.\\\vspace{3mm}
+																						Python executable in EXE. If no
+executable is specified ({\tt --with-python} only), {\tt configure} looks for
+an installed python in the current PATH.
+																						Typically, from the executable {\tt configure} can figure out where the
+																						headers and the library are hidden, so that the following two options are
+																						usually not required.\\\vspace{3mm}
   
   \option{--with-python-incl=DIR}&         Python includes (Python.h) is in
                                            DIR\\\vspace{3mm}
@@ -168,19 +190,26 @@ usually not required.\\\vspace{3mm}
                                            QT lib (libqt-mt)
                                            \\\vspace{3mm}
 
-  \option{--with-sip-lib=DIR}&             the SIP library resides in DIR
+  \option{--with-sip-lib}{\tt{}=DIR}&             the SIP library resides in DIR
                                            \\\vspace{3mm}
 
-  \option{--with-sip-incl=DIR}&            the SIP header file resides in DIR
+  \option{--with-sip-incl}{\tt{}=DIR}&            the SIP header file resides in DIR
                                            \\\vspace{3mm}
 
-  \option{--with-sip=DIR}&                 the SIP executable resides in DIR
+  \option{--with-sip}{\tt{}=DIR}&                 the SIP executable resides in DIR
                                            \\\vspace{3mm}
 
   \option{--without-xdr}&                  no RPC/XDR headers available - do
                                            not build portable binary
                                            persistence support
                                            \\\vspace{3mm}
+	\option{--with-fftw-lib}{\tt{}=DIR}& Enable support for the FFTW library and
+																				search for the library in {\tt DIR}.
+																					\\\vspace{3mm}
+	\option{--with-fftw-incl}{\tt{}=DIR}& 	Header files for FFTW are in {\tt DIR}.
+																					Required for non-standard include
+																					paths only.
+																					\\\vspace{3mm}
 
   \option{--help}&                         display help information\\\hline
 \caption{options for {\tt configure}}
@@ -196,10 +225,18 @@ specify
   configure --disable-VIEW
 \end{lstlisting}
 
-To compile the visualization classes using the QT installation in /opt/qt/lib and /opt/qt/include, specify
+To compile the visualization classes using the QT installation in
+/opt/misc/qt, specify the path to the QT directory as follows:
+\begin{lstlisting}{}
+  configure --with-qt=/opt/misc/qt
+\end{lstlisting}
+
+
+If the headers or libraries are installed in non-standard directories, you can
+also specify them separately:
 
 \begin{lstlisting}{}
-  configure --with-qt-libs=/opt/qt/lib 
+  configure --with-qt-libs=/opt/lib 
 		--with-qt-incl=/opt/qt/include
 \end{lstlisting}
 
