@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.44 2004/03/23 21:32:28 amoll Exp $
+// $Id: scene.C,v 1.45 2004/03/23 21:47:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -476,13 +476,13 @@ void Scene::calculateQuaternion_(Quaternion& q, const Quaternion* rotate)
 	Quaternion tmp;
 
 	float right1 = (gl_renderer_.getWidth()  - x_window_pos_old_ * 2.0) / 
-								 gl_renderer_.getWidth() * mouse_sensitivity_ / -ROTATE_FACTOR;
-	float up1 = 		(gl_renderer_.getHeight() - y_window_pos_old_ * 2.0) / 
-								 gl_renderer_.getHeight() * mouse_sensitivity_ / -ROTATE_FACTOR;
+								  gl_renderer_.getWidth() * mouse_sensitivity_ / -ROTATE_FACTOR;
+	float up1 = 	 (gl_renderer_.getHeight() - y_window_pos_old_ * 2.0) / 
+								  gl_renderer_.getHeight() * mouse_sensitivity_ / -ROTATE_FACTOR;
 	float right2 = (gl_renderer_.getWidth()  - x_window_pos_new_ * 2.0) / 
-								 gl_renderer_.getWidth() * mouse_sensitivity_ / -ROTATE_FACTOR;
-	float up2 = 		(gl_renderer_.getHeight() - y_window_pos_new_ * 2.0) / 
-								 gl_renderer_.getHeight() * mouse_sensitivity_ / -ROTATE_FACTOR;
+								  gl_renderer_.getWidth() * mouse_sensitivity_ / -ROTATE_FACTOR;
+	float up2 = 	 (gl_renderer_.getHeight() - y_window_pos_new_ * 2.0) / 
+								  gl_renderer_.getHeight() * mouse_sensitivity_ / -ROTATE_FACTOR;
 
 	Camera& camera = stage_->getCamera();
 
@@ -1079,8 +1079,9 @@ void Scene::mouseMoveEvent(QMouseEvent *e)
 	// ============ picking mode ================
 	if (!rotate_mode_)
 	{
-		if (e->state() == Qt::LeftButton ||
-				e->state() == Qt::RightButton)
+		if (e->state() == Qt::LeftButton  ||
+				e->state() == Qt::RightButton ||
+			  e->state() == (Qt::LeftButton | Qt::ShiftButton))
 		{
 			selectionPressedMoved_(this);
 		}
@@ -1148,13 +1149,20 @@ void Scene::mouseReleaseEvent(QMouseEvent *e)
 	// ============ picking mode ================
 	if (!rotate_mode_)
 	{
-		if (e->button() == Qt::LeftButton)
+		switch (e->state())
 		{
-			selectionReleased_(this);
-		}
-		else if (e->button() == Qt::RightButton)
-		{
-			deselectionReleased_(this);
+			case Qt::LeftButton:
+				selectionReleased_(this);
+				break;
+				
+			case Qt::RightButton:
+				deselectionReleased_(this);
+
+			case (Qt::LeftButton | Qt::ShiftButton):
+				deselectionReleased_(this);
+				
+			default:
+				break;
 		}
 
 		return;
