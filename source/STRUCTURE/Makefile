@@ -12,6 +12,7 @@ CPP_SOURCES= \
 	connolly.C\
 	defaultProcessors.C\
 	fragmentDB.C\
+	buildBondsProcessor.C\
 	geometricProperties.C\
 	geometricTransformations.C\
 	graphEdge.C\
