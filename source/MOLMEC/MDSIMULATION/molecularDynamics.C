@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.C,v 1.10 2001/09/01 16:09:26 oliver Exp $
+// $Id: molecularDynamics.C,v 1.11 2002/02/03 19:24:40 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
@@ -314,13 +314,15 @@ namespace BALL
 	void MolecularDynamics::setEnergyOutputFrequency (Size number)
 	{
 		if (number > 0)
-      {
+    {
 			energy_output_frequency_ = number;
       options[MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY] = number; 
-      }
+    }
 		else
+		{
 			Log.level(LogStream::WARNING) << "Assigning an energy_output_frequency of zero is not allowed. "
 				<< "Using old value." << endl;
+		}
 	}
 
 

@@ -1,4 +1,4 @@
-// $Id: tutorial3.C,v 1.1 2002/01/18 01:35:11 oliver Exp $
+// $Id: tutorial3.C,v 1.2 2002/02/03 19:24:40 oliver Exp $
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
@@ -47,7 +47,8 @@ int main()
 
 	CanonicalMD md(amber);
 	md.setReferenceTemperature(300);
-	md.simulate(10);
+	md.setEnergyOutputFrequency(1);
+	md.simulateIterations(10);
 	std::cout << "Simulation settings:" << std::endl;
 	md.options.dump(std::cout);
 
