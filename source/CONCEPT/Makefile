@@ -18,7 +18,6 @@ CPP_SOURCES=\
 	processor.C\
 	property.C\
 	selectable.C\
-	singleton.C\
 	textPersistenceManager.C\
 	timeStamp.C\
 	visitor.C\
