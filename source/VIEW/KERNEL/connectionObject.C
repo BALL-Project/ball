@@ -12,283 +12,259 @@ namespace BALL
 	{
 		using std::ostream;
 
-		ConnectionObject::ConnectionObject()
-			throw()
-		: processing_message_queue_(false),
-			message_queue_(),
-			parent_(0),
-			children_connection_objects_()
+ConnectionObject::ConnectionObject()
+	throw()
+: processing_message_queue_(false),
+	message_queue_(),
+	parent_(0),
+	children_connection_objects_()
+{
+}
+
+ConnectionObject::~ConnectionObject()
+	throw()
+{
+	#ifdef BALL_VIEW_DEBUG
+		Log.info() << "Destructing object " << (void *)this 
+							 << " of class " << RTTI::getName<ConnectionObject>() << std::endl;
+	#endif 
+
+	destroy();
+}
+
+void ConnectionObject::clear()
+	throw()
+{
+	// clear the message queue
+	List<Message*>::Iterator message_iterator;
+	for(message_iterator = message_queue_.begin();
+			message_iterator != message_queue_.end();
+			++message_iterator)
+	{
+		// order of this if-statement is important
+		// only root has the right to delete deletable messages
+		if (this == getRoot()
+				&& (*message_iterator)->isDeletable())
 		{
+			delete *message_iterator;
 		}
+	}
 
-		ConnectionObject::~ConnectionObject()
-			throw()
+	message_queue_.clear();
+
+	// unregister this from parent if parent exists
+	if (parent_)
+	{
+		parent_->unregisterConnectionObject(*this);
+		clearParent_();
+	}
+
+	// unregister all children
+	List<ConnectionObject*>::Iterator list_iterator;
+
+	for(list_iterator = children_connection_objects_.begin();
+			list_iterator != children_connection_objects_.end();
+			++list_iterator)
+	{
+		(*list_iterator)->clearParent_();
+	}
+
+	children_connection_objects_.destroy();
+}
+
+void ConnectionObject::destroy()
+	throw()
+{
+	clear();
+}
+
+void ConnectionObject::registerConnectionObject(ConnectionObject &object)
+	throw()
+{
+	// register only once
+	if (isConnectionObjectRegistered(object)) return;
+
+	children_connection_objects_.push_back(&object);
+	object.setParent_(*this);
+} 
+
+void ConnectionObject::unregisterConnectionObject(ConnectionObject &object)
+	throw()
+{
+	// search object in list
+	// if inserted cut connection between them
+	List<ConnectionObject*>::Iterator list_iterator;
+	List<ConnectionObject*>::Iterator to_be_deleted_iterator 
+		= children_connection_objects_.end();
+
+	for(list_iterator = children_connection_objects_.begin();
+			list_iterator != children_connection_objects_.end();
+			++list_iterator)
+	{
+		if (*list_iterator == &object)
 		{
-			#ifdef BALL_VIEW_DEBUG
-				Log.info() << "Destructing object " << (void *)this 
-									 << " of class " << RTTI::getName<ConnectionObject>() << std::endl;
-			#endif 
-
-			destroy();
+			to_be_deleted_iterator = list_iterator;
+			(*list_iterator)->clearParent_();
+			break;
 		}
+	}
+	
+	// if there is something to delete, delete it
+	if (to_be_deleted_iterator != children_connection_objects_.end())
+	{
+		children_connection_objects_.erase(to_be_deleted_iterator);
+	}
+}
 
-		void ConnectionObject::clear()
-			throw()
+bool ConnectionObject::isConnectionObjectRegistered(const ConnectionObject &object)
+	throw()
+{
+	// search object in list
+	// if already inserted return true else return false
+	List<ConnectionObject*>::ConstIterator list_iterator;
+
+	for(list_iterator = children_connection_objects_.begin();
+			list_iterator != children_connection_objects_.end();
+			++list_iterator)
+	{
+		if (*list_iterator == &object) return true;
+	}
+
+	return false;
+}
+
+ConnectionObject *ConnectionObject::getRoot()
+	throw()
+{
+	ConnectionObject *object = this;
+
+	while (object->getParent())
+	{
+		object = object->getParent();
+	}
+
+	return object;
+}
+
+void ConnectionObject::onNotify(Message * /* message */)
+	throw()
+{
+} 
+
+bool ConnectionObject::isValid() const
+	throw()
+{
+	// check all children if parent will be ´this´
+	List<ConnectionObject*>::ConstIterator list_iterator;
+
+	for(list_iterator = children_connection_objects_.begin();
+			list_iterator != children_connection_objects_.end();
+			++list_iterator)
+	{
+		if (!(*list_iterator)->ConnectionObject::isValid()) return false;
+	}
+	
+	//has parent a connection to this child
+	if (parent_)
+	{
+		return parent_->isConnectionObjectRegistered(*this);
+	}
+
+	return true;
+}
+
+void ConnectionObject::dump(ostream& s, Size depth) const
+	throw()
+{
+	BALL_DUMP_STREAM_PREFIX(s);
+	
+	BALL_DUMP_DEPTH(s, depth);
+	BALL_DUMP_HEADER(s, this, this);
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "size of message queue: " << message_queue_.size() << std::endl;
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "parent: " << (void*)parent_ << std::endl;
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "number of registered objects: " << children_connection_objects_.size() << std::endl;
+	List<ConnectionObject*>::ConstIterator it = children_connection_objects_.begin();
+	for (Position p = 0; p < children_connection_objects_.size(); p++)
+	{
+		s << String(p) + ": " << *it  << "  " << typeid(**it).name() << std::endl;
+		(*it)->dump(s, depth +1);
+		it++;
+	}
+
+	BALL_DUMP_STREAM_SUFFIX(s);
+}
+
+void ConnectionObject::notify_(Message *message)
+	throw()
+{
+	ConnectionObject *object = getRoot();
+	message->setSender((void *)this);
+	object->onNotify_(message);
+}
+
+void ConnectionObject::notify_(Message &message)
+	throw()
+{
+	ConnectionObject *object = getRoot();
+	message.setSender((void *)this);
+	object->onNotify_(&message);
+}
+
+void ConnectionObject::onNotify_(Message* message)
+	throw()
+{
+	// insert Message into queue (last position)
+	message_queue_.push_back(message);
+
+	// if already processing message queue => exit
+	if (processing_message_queue_) return;
+
+	processing_message_queue_ = true;
+
+	// process messages in queue
+	while (message_queue_.size())
+	{
+		// get first message
+		Message *current_message = *(message_queue_.begin());
+
+		// delete first message from queue
+		message_queue_.pop_front();
+		
+		// process message, but not if sender = this
+		if (current_message->getSender() != ((void *)this))
 		{
-			// clear the message queue
-			List<Message*>::Iterator message_iterator;
-			for(message_iterator = message_queue_.begin();
-					message_iterator != message_queue_.end();
-					++message_iterator)
-			{
-				// order of this if-statement is important
-				// only root has the right to delete deletable messages
-				if (this == getRoot()
-						&& (*message_iterator)->isDeletable())
-				{
-					delete *message_iterator;
-				}
-			}
-
-			message_queue_.clear();
-
-			// unregister this from parent if parent exists
-			if (parent_ != 0)
-			{
-				parent_->unregisterConnectionObject(*this);
-				clearParent_();
-			}
-
-			// unregister all children
-			List<ConnectionObject*>::Iterator list_iterator;
-
-			for(list_iterator = children_connection_objects_.begin();
-					list_iterator != children_connection_objects_.end();
-					++list_iterator)
-			{
-				(*list_iterator)->clearParent_();
-			}
-
-			children_connection_objects_.destroy();
+			onNotify(current_message);
 		}
+		
+		// notify all children
+		List<ConnectionObject *>::Iterator list_iterator;
 
-		void ConnectionObject::destroy()
-			throw()
+		for(list_iterator = children_connection_objects_.begin();
+				list_iterator != children_connection_objects_.end();
+				++list_iterator)
 		{
-			clear();
+			(*list_iterator)->onNotify_(current_message);
 		}
 
-  	void ConnectionObject::registerConnectionObject
-		  (ConnectionObject &object)
-			throw()
-    {
-			// register only once
-			if (isConnectionObjectRegistered(object))
-			{
-				return;
-			}
-
-			children_connection_objects_.push_back(&object);
-
-			object.setParent_(*this);
-    } 
-
-		void ConnectionObject::unregisterConnectionObject
-		  (ConnectionObject &object)
-			throw()
-    {
-			// search object in list
-			// if inserted cut connection between them
-			List<ConnectionObject*>::Iterator list_iterator;
-			List<ConnectionObject*>::Iterator to_be_deleted_iterator 
-				= children_connection_objects_.end();
-
-			for(list_iterator = children_connection_objects_.begin();
-					list_iterator != children_connection_objects_.end();
-					++list_iterator)
-			{
-				if (*list_iterator == &object)
-				{
-					to_be_deleted_iterator = list_iterator;
-
-					(*list_iterator)->clearParent_();
-
-					break;
-				}
-			}
-			
-			// if there is something to delete, delete it
-			if (to_be_deleted_iterator != children_connection_objects_.end())
-			{
-				children_connection_objects_.erase(to_be_deleted_iterator);
-			}
-		}
-
-	  bool ConnectionObject::isConnectionObjectRegistered
-		  (const ConnectionObject &object)
-			throw()
-    {
-			// search object in list
-			// if already inserted return true
-			// else return false
-			List<ConnectionObject*>::ConstIterator list_iterator;
-
-			for(list_iterator = children_connection_objects_.begin();
-					list_iterator != children_connection_objects_.end();
-					++list_iterator)
-			{
-				if (*list_iterator == &object)
-				{
-					return true;
-				}
-			}
-
-			return false;
-		}
-
-		ConnectionObject *ConnectionObject::getRoot()
-			throw()
-    {
-			ConnectionObject *object = this;
-
-			while (object->getParent() != 0)
-			{
-				object = object->getParent();
-			}
-
-			return object;
-    }
-
-	  void ConnectionObject::onNotify(Message * /* message */)
-			throw()
-    {
-    } 
-
-		bool ConnectionObject::isValid() const
-			throw()
+		// delete message if it is deletable and this == root (only root has the right to delete messages)
+		if (this == getRoot() &&
+				current_message->isDeletable())
 		{
-			// check all children if parent will be ´this´
-			List<ConnectionObject*>::ConstIterator list_iterator;
-
-			for(list_iterator = children_connection_objects_.begin();
-					list_iterator != children_connection_objects_.end();
-					++list_iterator)
-			{
-				if ((*list_iterator)->ConnectionObject::isValid() == false)
-				{
-					return false;
-				}
-			}
-			
-			//has parent a connection to this child
-			if (parent_ != 0)
-			{
-				bool valid = parent_->isConnectionObjectRegistered(*this);
-
-				if (valid == false)
-				{
-					return false;
-				}
-			}
-
-			return true;
+			delete current_message;
 		}
+	}
 
-		void ConnectionObject::dump
-			(ostream& s, Size depth) const
-			throw()
-		{
-			BALL_DUMP_STREAM_PREFIX(s);
-			
-			BALL_DUMP_DEPTH(s, depth);
-			BALL_DUMP_HEADER(s, this, this);
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "size of message queue: " << message_queue_.size() << std::endl;
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "parent: " << (void*)parent_ << std::endl;
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "number of registered objects: " << children_connection_objects_.size() << std::endl;
-
-			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void ConnectionObject::notify_(Message *message)
-			throw()
-    {
-			ConnectionObject *object = getRoot();
-
-			message->setSender((void *)this);
-
-			object->onNotify_(message);
-		}
-
-		void ConnectionObject::notify_(Message &message)
-			throw()
-    {
-			ConnectionObject *object = getRoot();
-
-			message.setSender((void *)this);
-
-			object->onNotify_(&message);
-		}
-
-		void ConnectionObject::onNotify_(Message* message)
-			throw()
-    {
-			// insert Message into queue (last position)
-			message_queue_.push_back(message);
-
-			// if already processing message queue => exit
-			if (processing_message_queue_)
-			{
-				return;
-			}
-
-			processing_message_queue_ = true;
-
-			// process messages in queue
-			while (message_queue_.size() > 0)
-			{
-				// get first message
-				Message *current_message = *(message_queue_.begin());
-
-				// delete first message from queue
-				message_queue_.pop_front();
-				
-				// process message, but not if sender = this
-				if (current_message->getSender() != ((void *)this))
-				{
-					onNotify(current_message);
-				}
-				
-				// notify all children
-				List<ConnectionObject *>::Iterator list_iterator;
-
-				for(list_iterator = children_connection_objects_.begin();
-						list_iterator != children_connection_objects_.end();
-						++list_iterator)
-				{
-					(*list_iterator)->onNotify_(current_message);
-				}
-
-				// delete message if it is deletable and this == root (only root has the right to delete messages)
-				if (this == getRoot()
-						&& current_message->isDeletable())
-				{
-					delete current_message;
-				}
-			}
-
-			processing_message_queue_ = false;
-    }
+	processing_message_queue_ = false;
+}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/connectionObject.iC>
 #		endif
 
-	} // namespace VIEW
-
-} // namespace BALL
+} } // namespace
