@@ -17,6 +17,9 @@
 #include <qtooltip.h>
 #include <qwhatsthis.h>
 
+
+#define trUtf8(a) a
+
 /* 
  *  Constructs a AtomSettingsData which is a child of 'parent', with the 
  *  name 'name' and widget flags set to 'f'.
@@ -30,7 +33,7 @@ AtomSettingsData::AtomSettingsData( QWidget* parent,  const char* name, bool mod
     if ( !name )
 	setName( "AtomSettingsData" );
     resize( 221, 506 ); 
-    setCaption( trUtf8( "Atom-Settings" ) );
+    setCaption(  "Atom-Settings" );
 
     QWidget* privateLayoutWidget = new QWidget( this, "Layout12" );
     privateLayoutWidget->setGeometry( QRect( 20, 470, 180, 30 ) ); 

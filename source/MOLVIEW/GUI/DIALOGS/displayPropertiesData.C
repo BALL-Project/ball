@@ -142,8 +142,8 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     color_sample_selection = new QLabel( GroupBox_9_3, "color_sample_selection" );
     color_sample_selection->setGeometry( QRect( 50, 20, 70, 30 ) ); 
     color_sample_selection->setBackgroundMode( QLabel::PaletteBackground );
-    color_sample_selection->setPaletteForegroundColor( QColor( 255, 255, 0 ) );
-    color_sample_selection->setPaletteBackgroundColor( QColor( 255, 255, 0 ) );
+//    color_sample_selection->setPaletteForegroundColor( QColor( 255, 255, 0 ) );
+//    color_sample_selection->setPaletteBackgroundColor( QColor( 255, 255, 0 ) );
     cg.setColor( QColorGroup::Foreground, QColor( 255, 255, 0) );
     cg.setColor( QColorGroup::Button, black );
     cg.setColor( QColorGroup::Light, black );
