@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CharmmFF_test.C,v 1.12 2004/02/17 14:46:04 oliver Exp $
+// $Id: CharmmFF_test.C,v 1.13 2004/03/14 18:20:30 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -15,11 +15,12 @@
 #include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
 
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/FORMAT/HINFile.h>
 #include <BALL/STRUCTURE/defaultProcessors.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.12 2004/02/17 14:46:04 oliver Exp $")
+START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.13 2004/03/14 18:20:30 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -1166,6 +1167,123 @@ CHECK(void* CharmmNonBonded::create())
 	TEST_NOT_EQUAL(cff.getComponent("CHARMM NonBonded"), 0)
 RESULT
 
+CHECK([EXTRA] Additivity of energies w/ selection)
+	HINFile f("data/G4.hin");
+	System S;
+	f.read(S);
+
+	ABORT_IF(S.countAtoms() != 31)
+	CharmmFF ff;
+	ff.options[CharmmFF::Option::OVERWRITE_TYPENAMES] = "true";
+	ff.options[CharmmFF::Option::ASSIGN_TYPENAMES] = "true";
+	ff.options[CharmmFF::Option::ASSIGN_CHARGES] = "true";
+	ff.options[CharmmFF::Option::OVERWRITE_CHARGES] = "true";
+
+	ff.setup(S);
+	double total_energy = ff.updateEnergy();
+	STATUS("total  : " << total_energy)
+
+	ResidueIterator ri(S.beginResidue());
+	Residue& r1 = *ri++;
+	Residue& r2 = *ri++;
+	Residue& r3 = *ri++;
+	Residue& r4 = *ri;
+
+	r1.select();
+	r2.select();
+	r3.select();
+	ff.setup(S);
+	S.deselect();
+	r1.select();
+	double r1_tpl = ff.updateEnergy();
+	STATUS("  ES : " << ff.getESEnergy())
+	STATUS("  VDW: " << ff.getVdWEnergy())
+	STATUS("  STR: " << ff.getStretchEnergy())
+	STATUS("  BEN: " << ff.getBendEnergy())
+	STATUS("  TOR: " << ff.getTorsionEnergy())
+	STATUS("  TTL: " << ff.getEnergy())
+	STATUS("r1 - tpl: " << r1_tpl)
+	
+	S.select();
+	r1.deselect();
+	ff.setup(S);
+	S.deselect();
+	r4.select();
+	double r4_tpl = ff.updateEnergy();
+	STATUS("  ES : " << ff.getESEnergy())
+	STATUS("  VDW: " << ff.getVdWEnergy())
+	STATUS("  STR: " << ff.getStretchEnergy())
+	STATUS("  BEN: " << ff.getBendEnergy())
+	STATUS("  TOR: " << ff.getTorsionEnergy())
+	STATUS("  TTL: " << ff.getEnergy())
+	STATUS("r4 - tpl: " << r4_tpl)
+	
+	S.deselect();
+	r1.select();
+	r4.select();
+	ff.setup(S);
+	r4.deselect();
+	double r1_r4 = ff.updateEnergy();
+	STATUS("  ES : " << ff.getESEnergy())
+	STATUS("  VDW: " << ff.getVdWEnergy())
+	STATUS("  STR: " << ff.getStretchEnergy())
+	STATUS("  BEN: " << ff.getBendEnergy())
+	STATUS("  TOR: " << ff.getTorsionEnergy())
+	STATUS("  TTL: " << ff.getEnergy())
+	STATUS("r1 - r4 : " << r1_r4)
+
+	r4.select();
+	r1.deselect();
+	double r4_r1 = ff.updateEnergy();
+	STATUS("  ES : " << ff.getESEnergy())
+	STATUS("  VDW: " << ff.getVdWEnergy())
+	STATUS("  STR: " << ff.getStretchEnergy())
+	STATUS("  BEN: " << ff.getBendEnergy())
+	STATUS("  TOR: " << ff.getTorsionEnergy())
+	STATUS("  TTL: " << ff.getEnergy())
+	STATUS("r4 - r1 : " << r4_r1)
+
+	S.deselect();
+	r1.select();
+	ff.setup(S);
+	double r1_i = ff.updateEnergy();
+	STATUS("  ES : " << ff.getESEnergy())
+	STATUS("  VDW: " << ff.getVdWEnergy())
+	STATUS("  STR: " << ff.getStretchEnergy())
+	STATUS("  BEN: " << ff.getBendEnergy())
+	STATUS("  TOR: " << ff.getTorsionEnergy())
+	STATUS("  TTL: " << ff.getEnergy())
+	STATUS("r1_i    : " << r1_i)
+
+	S.deselect();
+	r4.select();
+	ff.setup(S);
+	double r4_i = ff.updateEnergy();
+	STATUS("  ES : " << ff.getESEnergy())
+	STATUS("  VDW: " << ff.getVdWEnergy())
+	STATUS("  STR: " << ff.getStretchEnergy())
+	STATUS("  BEN: " << ff.getBendEnergy())
+	STATUS("  TOR: " << ff.getTorsionEnergy())
+	STATUS("  TTL: " << ff.getEnergy())
+	STATUS("r4_i    : " << r4_i)
+
+	S.deselect();
+	r2.select();
+	r3.select();
+	ff.setup(S);
+	double tpl_i = ff.updateEnergy();
+	STATUS("  ES : " << ff.getESEnergy())
+	STATUS("  VDW: " << ff.getVdWEnergy())
+	STATUS("  STR: " << ff.getStretchEnergy())
+	STATUS("  BEN: " << ff.getBendEnergy())
+	STATUS("  TOR: " << ff.getTorsionEnergy())
+	STATUS("  TTL: " << ff.getEnergy())
+	STATUS("tpl_i   : " << tpl_i)
+
+	TEST_REAL_EQUAL(r4_r1 - r4_i, r1_r4 - r1_i)
+	TEST_REAL_EQUAL(r4_r1 - r4_i + r4_tpl + r1_tpl + tpl_i, total_energy)
+	TEST_REAL_EQUAL(r1_r4 - r1_i + r1_tpl + r4_tpl + tpl_i, total_energy)	
+RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
