@@ -76,7 +76,8 @@ from their optimal position in the given structure. We can relax those
 hydrogen positions using a molecular mechanics calculation.
 We will use the AMBER force field\cite{AMBER95} and optimize the hydrogen 
 positions while keeping the heavy atoms rigid. The AMBER force field is
-implemented in the \class{AmberFF} class. Instantiating that with a given
+implemented in the \class{AmberFF} class. Instantiating a force field and
+setting up a calculation is very simple:
 system is very simple:
 
 \begin{lstlisting}{}
@@ -84,3 +85,44 @@ system is very simple:
 \end{lstlisting}
 
 \noindent
+This constructor call creates a new \class{AmberFF}, reads the parameter
+file (the default one, \file{amber94.ini}, which corresponds to the AMBER
+file {\tt parm94.dat}), and the parameters suitable for the system.
+This particular instance of the force field is now {\em bound} to the 
+system and all its cations will apply to that system, unless a different
+system is specified in a call to \method{setup}.
+
+We now want to optimize the hydrogens only. This can be achieved through the
+{\em selection} concept of the kernel classes. Whether an atom is selected or
+not has different meanings at different stages of the force field calculation.
+When calling \method{setup} (as the above constructor does implicitly),
+the force field will ignore all unselected atoms, unless the whole system is
+unselected (as in our case). All other atoms are ignored and will not be part
+of the calculation.
+
+{\em After} \method{setup} has been called, the selection gets a different
+meaning. It now indicates which atoms are to be optimized (in an energy
+minimization), moved (in an MD simulation) or considered for the force and
+energy evaluations at all. Thus by deselecting the whole system (the default)
+we ensure that all atoms are considered by the force field. If we want to
+optimize the hydrogen atoms only, we have to select them. One way to do that
+is the \class{Selector} class. Given a BALL {\em kernel expression} (see the
+documentation for \class{Expression} for details), it will select all atoms
+for which the expression evaluates to true. In our case, the expression 
+{\tt "element(H)"} describes the set of atoms we are interested in:
+
+\begin{lstlisting}{}
+	Selector hydrogen_selector("element(H)");
+	S.apply(hydrogen_selector);
+\end{lstlisting}
+
+\noindent
+An energy minimization of those hydrogens is done using the
+\class{ConjugateGradientMinimizer}. It is not hard to figure out that this
+class indeed implements a conjugate gradient energy minimization.
+In a similar fashion as the force field is bound to a system, the 
+energy minimizer instances are bound to the force field. Again, we can use a
+constructor to do most of the work:
+
+\begin{lstlisting}{}
+\end{lstlisting}
