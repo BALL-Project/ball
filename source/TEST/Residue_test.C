@@ -1,4 +1,4 @@
-// $Id: Residue_test.C,v 1.1 2000/05/09 23:03:38 amoll Exp $
+// $Id: Residue_test.C,v 1.2 2000/05/10 12:41:45 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 ///////////////////////////
 
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.1 2000/05/09 23:03:38 amoll Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.2 2000/05/10 12:41:45 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -158,7 +158,24 @@ CHECK(Residue::swap(Residue& residue))
 RESULT
 
 CHECK(Residue::getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const )
-  //BAUSTELLE
+	Residue r1("r1");
+	Chain c;
+	c.insert(r1);
+	TEST_EQUAL(r1.getFullName(Residue::NO_VARIANT_EXTENSIONS), "r1")
+	TEST_EQUAL(r1.getFullName(Residue::ADD_VARIANT_EXTENSIONS), "r1")
+	r1.setProperty(Residue::PROPERTY__AMINO_ACID);
+	TEST_EQUAL(r1.getFullName(Residue::ADD_VARIANT_EXTENSIONS), "r1-M")
+	Residue r2("r2");
+	r2.setProperty(Residue::PROPERTY__AMINO_ACID);
+	c.insert(r2);
+	TEST_EQUAL(r1.getFullName(Residue::ADD_VARIANT_EXTENSIONS), "r1-N")
+	c.remove(r2);
+	c.prepend(r2);
+	TEST_EQUAL(r1.getFullName(Residue::ADD_VARIANT_EXTENSIONS), "r1-C")
+	r1.setProperty(Residue::PROPERTY__HAS_SSBOND);
+	TEST_EQUAL(r1.getFullName(Residue::ADD_VARIANT_EXTENSIONS), "r1-CS")
+	c.remove(r2);
+	TEST_EQUAL(r2.getFullName(Residue::ADD_VARIANT_EXTENSIONS), "r2")	
 RESULT
 
 CHECK(Residue::hasTorsionPhi() const )
@@ -391,6 +408,8 @@ CHECK(Residue::isTerminal() const )
 	TEST_EQUAL(r1.isTerminal(), true)
 	Residue r2('x');
 	Residue r3('x');
+	r2.setProperty(Residue::PROPERTY__AMINO_ACID);
+	r3.setProperty(Residue::PROPERTY__AMINO_ACID);
 	c1.append(r2);
 	TEST_EQUAL(r1.isTerminal(), true)
 	c1.prepend(r3);
@@ -406,6 +425,8 @@ CHECK(Residue::isNTerminal() const )
 	TEST_EQUAL(r1.isNTerminal(), true)
 	Residue r2('x');
 	Residue r3('x');
+	r2.setProperty(Residue::PROPERTY__AMINO_ACID);
+	r3.setProperty(Residue::PROPERTY__AMINO_ACID);
 	c1.append(r2);
 	TEST_EQUAL(r1.isNTerminal(), true)
 	c1.prepend(r3);
@@ -421,14 +442,18 @@ CHECK(Residue::isCTerminal() const )
 	TEST_EQUAL(r1.isCTerminal(), true)
 	Residue r2('x');
 	Residue r3('x');
-	c1.append(r2);
-	TEST_EQUAL(r1.isCTerminal(), true)
+	r2.setProperty(Residue::PROPERTY__AMINO_ACID);
+	r3.setProperty(Residue::PROPERTY__AMINO_ACID);
 	c1.prepend(r3);
+	TEST_EQUAL(r1.isCTerminal(), true)
+	c1.append(r2);
 	TEST_EQUAL(r1.isCTerminal(), false)
 RESULT
 
 CHECK(Residue::isValid() const )
 	Residue r("r1", "id", 'i');
+	TEST_EQUAL(r.isValid(), true)
+	r.setName("");
 	TEST_EQUAL(r.isValid(), true)
 RESULT
 
