@@ -1,13 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.22 2004/02/26 08:41:48 anhi Exp $
+// $Id: scene.h,v 1.23 2004/03/03 18:21:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
 #define BALL_VIEW_WIDGETS_SCENE_H
 
-#include <qgl.h>
 #include <iostream>
 
 #ifndef BALL_MATHS_QUATERNION_H
@@ -29,6 +28,9 @@
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 # include <BALL/VIEW/KERNEL/common.h>
 #endif 
+
+// has to come after BALL includes to prevent problems with Visual Stuio Net
+#include <qgl.h>
 
 namespace BALL
 {
