@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lennardJones.h,v 1.20 2003/02/25 14:03:33 anhi Exp $
+// $Id: lennardJones.h,v 1.21 2003/02/25 14:29:01 anhi Exp $
 
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
@@ -26,14 +26,16 @@ namespace BALL
 				- <b> A </b> and <b> B </b> are given directly ( \link A_B_FORMAT A_B_FORMAT \endlink )
 				- well depth and minimum radii ( \link EPSILON_R_FORMAT EPSILON_R_FORMAT \endlink )
 				- Slater-Kirkwood parameters ( \link SLATER_KIRKWOOD_FORMAT SLATER_KIRKWOOD_FORMAT \endlink )
+
 			If the Slater-Kirkwood format is used, the values for \f$A_{ij}\f$ and \f$B_{ij}\f$ are calculated
 			as follows (see e.g. Brooks et al., J. Comput. Chem, 4(2):187-217 (1983))
 			\f[
-				B_{ij} & = & \frac{3}{2} \left(\frac{1}{4 \pi \varepsilon_0}\right)^\frac{1}{2}
-						\frac{e \hbar \sqrt{m_e} \alpha_i \alpha_j}{\sqrt{\frac{\alpha_i}{N_i} + \sqrt{\frac{\alpha_j}{N_j}}}}
+				B_{ij} = \frac{3}{2} \left(\frac{1}{4 \pi \varepsilon_0}\right)^\frac{1}{2}
+						\frac{e \hbar \sqrt{m_e} \alpha_i \alpha_j}{\sqrt{\frac{\alpha_i}{N_i} + \sqrt{\frac{\alpha_j}{N_j}}}} 
 			\f]
+			\par
 			\f[
-				A_{ij} & = & \frac{1}2{} B_{ij} (R_i + R_j)^6
+				A_{ij} = \frac{1}2{} B_{ij} (R_i + R_j)^6
 			\f]
 			 \par
 			<b>Definition:</b>BALL/MOLMEC/PARAMETER/lennardJones.h

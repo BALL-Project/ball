@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forEach.h,v 1.9 2003/02/21 16:03:23 anhi Exp $
+// $Id: forEach.h,v 1.10 2003/02/25 14:28:43 anhi Exp $
 
 #ifndef BALL_KERNEL_FOREACH_H
 #define BALL_KERNEL_FOREACH_H
@@ -11,7 +11,9 @@
 #endif
 
 /** @name Convenient iteration macros
+* 	\ingroup Miscellaneous 
 */
+
 //@{
 
 /** Molecule iterator macro.
