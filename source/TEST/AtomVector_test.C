@@ -1,4 +1,4 @@
-// $Id: AtomVector_test.C,v 1.2 2001/07/14 20:14:52 amoll Exp $
+// $Id: AtomVector_test.C,v 1.3 2001/07/15 00:53:36 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/atom.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AtomVector_test.C,v 1.2 2001/07/14 20:14:52 amoll Exp $")
+START_TEST(class_name, "$Id: AtomVector_test.C,v 1.3 2001/07/15 00:53:36 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -38,24 +38,13 @@ Molecule mol;
 mol.insert(a);
 mol.insert(b);
 
-CHECK(CpyCstr)
+CHECK(AtomVector::AtomVector(const AtomVector& atom_vector))
 	av.push_back(&a);
 	av.push_back(&b);
 	AtomVector av2(av);
 	TEST_EQUAL(av2.size(), 2)
 	TEST_EQUAL(av2[0]->getName(), "a")
 	TEST_EQUAL(av2[1]->getName(), "b")
-RESULT
-
-
-CHECK(AtomVector::BALL_CREATE_DEEP(AtomVector))
-	AtomVector* v_ptr = (AtomVector*) av.create(false, true);
-	TEST_EQUAL(v_ptr->size(), 0)
-	delete v_ptr;
-	v_ptr = (AtomVector*) av.create();
-	TEST_EQUAL(v_ptr->size(), 2)
-	TEST_EQUAL((*v_ptr)[0]->getName(), "a")
-	delete v_ptr;
 RESULT
 
 
@@ -180,25 +169,14 @@ CHECK(resize)
 RESULT
 
 
-CHECK(AtomVector::begin())
-	TEST_NOT_EQUAL(av.begin(), 0)
-	TEST_NOT_EQUAL(*av.begin(), 0)
+CHECK(AtomVector::begin()/end())
 	TEST_EQUAL(*av.begin(), &a)
 	TEST_EQUAL((*av.begin())->getName(), "a")
 	AtomVector av2;
-	TEST_EQUAL(av2.begin(), 0)
+	bool result = (av2.begin() == av2.end());
+	TEST_EQUAL(result, true)
 RESULT
 
-
-CHECK(AtomVector::end())
-	AtomVector::Iterator it;
-	TEST_NOT_EQUAL(av.end(), 0)
-	it = av.end();
-	TEST_NOT_EQUAL(it, 0)
-	TEST_EQUAL(*it, 0)
-	--it;
-	TEST_EQUAL(*it, &c)
-RESULT
 
 ///////////////////////////////////////////////////////////////
 ///////////////////////////////////////////////////////////////
