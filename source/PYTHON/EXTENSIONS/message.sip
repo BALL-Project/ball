@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.sip,v 1.8 2004/07/01 13:08:43 amoll Exp $
+// $Id: message.sip,v 1.9 2004/12/19 13:34:28 amoll Exp $
 //
 
 class Message
@@ -39,7 +39,7 @@ class CompositeMessage
 		NEW_COMPOSITE,
 		REMOVED_COMPOSITE,
 		CHANGED_COMPOSITE,
-		CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL,
+		CHANGED_COMPOSITE_HIERARCHY,
 		SELECTED_COMPOSITE,
 		DESELECTED_COMPOSITE,
 		CENTER_CAMERA,

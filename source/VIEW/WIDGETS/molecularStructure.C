@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.77 2004/12/17 16:19:41 amoll Exp $
+// $Id: molecularStructure.C,v 1.78 2004/12/19 13:33:58 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -346,7 +346,7 @@ namespace BALL
 				(*it)->apply(getFragmentDB().build_bonds);
 
 				CompositeMessage *change_message = 
-					new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+					new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 				notify_(change_message);
 			}
 
@@ -386,7 +386,7 @@ namespace BALL
 				(*it)->apply(getFragmentDB().build_bonds);
 
 				CompositeMessage *change_message = 
-					new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+					new CompositeMessage(**it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 				notify_(change_message);
 			}
 
@@ -638,7 +638,7 @@ namespace BALL
 			s.apply(ssp);
 
 			CompositeMessage *change_message = 
-				new CompositeMessage(s, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+				new CompositeMessage(s, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 			notify_(change_message);
 			setStatusbarText("Calculated Secondary Structure", true);
 		}
@@ -905,7 +905,7 @@ namespace BALL
 			if (!use_amber_)
 			{
 				CompositeMessage* change_message = 
-					new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+					new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 				notify_(change_message);
 			}
 
@@ -969,7 +969,7 @@ namespace BALL
 			if (!use_amber_)
 			{
 				CompositeMessage* change_message = 
-					new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+					new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 				notify_(change_message);
 			}
 
@@ -1117,7 +1117,7 @@ namespace BALL
 			if (!use_amber_)
 			{
 				CompositeMessage* change_message = 
-					new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+					new CompositeMessage(*system, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 				notify_(change_message);
 			}
 
@@ -1382,11 +1382,14 @@ namespace BALL
 	
 				CompositeMessage* msg = new CompositeMessage(**ait, CompositeMessage::SELECTED_COMPOSITE);
 				msg->setUpdateRepresentations(false);
+				msg->setShowSelectionInfos(false);
 				notify_(msg);
 			}
 
 			CompositeMessage* msg = new CompositeMessage(*getForceField().getSystem(), CompositeMessage::CHANGED_COMPOSITE);
 			notify_(msg);
+
+			setStatusbarText("Setup of the force field failed for selected atoms.", true);
 		}
 
 	} // namespace VIEW

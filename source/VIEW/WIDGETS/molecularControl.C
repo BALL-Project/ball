@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.90 2004/12/15 15:45:32 amoll Exp $
+// $Id: molecularControl.C,v 1.91 2004/12/19 13:33:58 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -98,7 +98,8 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 			context_menu_(this),
 			model_menu_(this),
 			context_composite_(0),
-			was_delete_(false)
+			was_delete_(false),
+			nr_items_removed_(0)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new MolecularControl " << this << std::endl;
@@ -277,7 +278,7 @@ bool MolecularControl::reactToMessages_(Message* message)
 			case CompositeMessage::CHANGED_COMPOSITE:
 				return false;
 
-			case CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL:
+			case CompositeMessage::CHANGED_COMPOSITE_HIERARCHY:
 			{
 				List<Composite*> open_items;
 				QListViewItemIterator it(listview);
@@ -325,11 +326,11 @@ void MolecularControl::activatedItem_(int pos)
 {
 	if (pos >= 1000 && pos < 2000)
 	{
-		selected_model_ = (ModelType)(pos -1000);
+		selected_model_ = (ModelType)(pos - 1000);
 	}
 	if (pos >= 2000 && pos < 3000)
 	{
-		selected_coloring_method_ = (ColoringMethod)(pos -2000);
+		selected_coloring_method_ = (ColoringMethod)(pos - 2000);
 	}
 
 }
@@ -382,7 +383,7 @@ void MolecularControl::compositeProperties()
 	as.exec();
 
 	CompositeMessage* message = new CompositeMessage(
-			*context_composite_, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+			*context_composite_, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 	getMainControl()->sendMessage(*message);
 }
 
@@ -439,7 +440,8 @@ void MolecularControl::updateSelection()
 
 	selected_.clear();
 
-	// we have to prevent inserting childs of already selected parents, otherwise we get serious trouble
+	// we have to prevent inserting childs of already selected parents, 
+	// otherwise we get serious trouble
 	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)
 	{
@@ -481,7 +483,7 @@ void MolecularControl::updateSelection()
 	notify_(message);
 }
 
-void MolecularControl::onContextMenu_(QListViewItem* item,  const QPoint& point, int /* column */)
+void MolecularControl::onContextMenu_(QListViewItem* item,  const QPoint& point, int /* col*/)
 {
 	// clear the context menu
 	context_menu_.clear();

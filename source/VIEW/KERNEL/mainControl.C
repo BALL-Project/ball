@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.157 2004/12/16 18:54:20 amoll Exp $
+// $Id: mainControl.C,v 1.158 2004/12/19 13:33:57 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -646,7 +646,7 @@ namespace BALL
 					case CompositeMessage::REMOVED_COMPOSITE:
 						remove_(*cmessage->getComposite(), cmessage->updateRepresentations(), true);
 						return;
-					case CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL:
+					case CompositeMessage::CHANGED_COMPOSITE_HIERARCHY:
 					case CompositeMessage::CHANGED_COMPOSITE:
 						if (cmessage->updateRepresentations())
 						{
@@ -666,7 +666,10 @@ namespace BALL
 						{
 							deselectCompositeRecursive(cmessage->getComposite(), true);
 						}
-						printSelectionInfos();
+						if (cmessage->showSelectionInfos())
+						{
+							printSelectionInfos();
+						}
 
 						if (cmessage->updateRepresentations())
 						{
@@ -1292,7 +1295,7 @@ namespace BALL
 			if (!composite_manager_.has(composite)) return false;
 
 			CompositeMessage* cm = new CompositeMessage(composite, 
-					CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+					CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 			notify_(cm);
 			updateRepresentationsOf(composite.getRoot(), true, true);
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.61 2004/12/16 15:59:17 amoll Exp $
+// $Id: message.h,v 1.62 2004/12/19 13:34:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -158,7 +158,7 @@ class BALL_EXPORT CompositeMessage: public Message
 		CHANGED_COMPOSITE,
 		
 		/// Update all datas for a composite (also in MolecularControl)
-		CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL,
+		CHANGED_COMPOSITE_HIERARCHY,
 		
 		/// selected a composite (e.g. per checkboxes in MolecularControl)
 		SELECTED_COMPOSITE,
@@ -241,6 +241,14 @@ class BALL_EXPORT CompositeMessage: public Message
 	bool updateRepresentations() const
 		throw() { return update_representations_;}
 
+	///
+	void setShowSelectionInfos(bool state)
+		throw() { show_selection_infos_ = state;}
+
+	///
+	bool showSelectionInfos()
+		throw() { return show_selection_infos_;}
+
 	//@}
 
 	protected:
@@ -249,6 +257,7 @@ class BALL_EXPORT CompositeMessage: public Message
 	Composite* 						composite_;
 	String 								composite_name_;
 	bool 									update_representations_;
+	bool 									show_selection_infos_;
 };
 
 
