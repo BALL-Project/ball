@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.13 2000/07/02 23:47:53 amoll Exp $
+// $Id: exception.h,v 1.14 2000/07/17 13:42:34 oliver Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -177,7 +177,10 @@ namespace BALL
 			: public GeneralException
 		{
 			public:
-			InvalidFormat(const char* file, int line);
+			InvalidFormat(const char* file, int line, const string& s = "");
+			
+			protected:
+			string format_;
 		};
 
 		/**	Illegal self operation.	
