@@ -24,6 +24,7 @@ EXECUTABLES = \
 	Composite_test\
 	Directory_test\
 	DefaultProcessors_test\
+	EFShiftProcessor_test\
 	Embeddable_test\
 	EnergyMinimizer_test\
 	EnergyProcessor_test\
