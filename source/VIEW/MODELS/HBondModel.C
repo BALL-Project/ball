@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondModel.C,v 1.1 2003/09/03 12:34:09 amoll Exp $
+// $Id: HBondModel.C,v 1.2 2003/09/03 15:10:39 amoll Exp $
 
 #include <BALL/VIEW/MODELS/HBondModel.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -70,23 +70,24 @@ bool HBondModelProcessor::finish()
 Processor::Result HBondModelProcessor::operator() (Composite& composite)
 {
 	if (!RTTI::isKindOf<Atom>(composite) ||
-			!((Atom*)&composite)->hasProperty("H-Bond"))
+			!((Atom*)&composite)->hasProperty("HBOND_DONOR"))
 	{
 		return Processor::CONTINUE;
 	}
 
 	Atom *atom = RTTI::castTo<Atom>(composite);
-	Atom* partner = (Atom*) atom->getProperty("H-Bond").getObject();
+	Atom* partner = (Atom*) atom->getProperty("HBOND_DONOR").getObject();
 
+	if (!partner) return Processor::CONTINUE;
 	// generate single colored tube
 	Tube *tube = new Tube;
 	if (tube == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
 						
-	tube->setRadius(0.5);
+	tube->setRadius(0.3);
 	tube->setComposite(atom);
 	tube->setVertex1Address(atom->getPosition());
 	tube->setVertex2Address(partner->getPosition());
-	tube->setColor(ColorRGBA(1.0,0,0));
+	tube->setColor(ColorRGBA(0.0,0,0.5));
 	geometric_objects_.push_back(tube);
 	
 	return Processor::CONTINUE;
