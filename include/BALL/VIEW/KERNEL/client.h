@@ -1,4 +1,4 @@
-// $Id: client.h,v 1.3 1999/12/28 18:37:45 oliver Exp $
+// $Id: client.h,v 1.4 2000/01/13 22:24:07 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENT_H
 #define BALL_VIEW_KERNEL_CLIENT_H
@@ -38,6 +38,17 @@ namespace BALL
 
 			Client(const Client& client, bool deep = true);
 
+			/**	Create a client and connect to a host.
+					Same as 
+					\begin{verbatim}
+						Client client;
+						client.connect(host, port);
+					\end{verbatim}
+					@param	host the host to connect to
+					@param	port the port the server is listening to
+			*/
+			Client(const String& host, int port = VIEW_DEFAULT_PORT);
+
 			virtual ~Client();
 
 			virtual void clear();
@@ -51,7 +62,7 @@ namespace BALL
 
 			/** connect to a specified host and port. Must be called before any other methodes!
 			*/
-			void connect(const char* host, int port);
+			void connect(const String& host, int port = VIEW_DEFAULT_PORT);
 
 			/** returns a clientscene from the server.
 			*/
@@ -80,8 +91,8 @@ namespace BALL
 			
 			private:
 
-			char *host_;
-			int port_;
+			String	host_;
+			int			port_;
 		};
 
 
