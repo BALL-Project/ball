@@ -1,4 +1,4 @@
-// $Id: baseModel.C,v 1.4 1999/12/30 18:05:37 oliver Exp $
+// $Id: baseModel.C,v 1.5 2000/03/15 08:44:34 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 
@@ -21,7 +21,7 @@ namespace BALL
 
 		BaseModelProcessor::BaseModelProcessor
 			(const BaseModelProcessor& base_model_processor, bool deep)
-			:	UnaryProcessor<Atom>(base_model_processor, deep),
+			:	UnaryProcessor<Atom>(base_model_processor),
 				ExtendedPropertyManager(base_model_processor, deep),
 				find_geometric_object_(base_model_processor.find_geometric_object_, deep),
 				color_calculator_(base_model_processor.color_calculator_)

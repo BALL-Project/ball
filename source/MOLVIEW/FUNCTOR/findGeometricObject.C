@@ -1,4 +1,4 @@
-// $Id: findGeometricObject.C,v 1.5 2000/01/08 20:32:52 hekl Exp $
+// $Id: findGeometricObject.C,v 1.6 2000/03/15 08:44:35 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
 
@@ -19,10 +19,8 @@ namespace BALL
 		}
 
 		FindGeometricObject::FindGeometricObject
-			(const FindGeometricObject &find_geometric_object,
-			 bool deep)
-				:
-				UnaryProcessor<Composite>(find_geometric_object, deep),
+			(const FindGeometricObject &find_geometric_object, bool deep)
+			:	UnaryProcessor<Composite>(find_geometric_object),
 				ExtendedPropertyManager(find_geometric_object, deep),
 				geometric_object_(find_geometric_object.geometric_object_)
 		{

@@ -1,4 +1,4 @@
-// $Id: vertex1.C,v 1.4 1999/12/30 18:05:47 oliver Exp $
+// $Id: vertex1.C,v 1.5 2000/03/15 08:44:38 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/vertex1.h>
 
@@ -17,7 +17,7 @@ namespace BALL
 		}
 
 		Vertex::Vertex(const Vertex& v, bool deep)
-			:	vertex1_(v.vertex1_, deep),
+			:	vertex1_(v.vertex1_),
 				vertex1_ptr_(v.vertex1_ptr_)
 		{
 		}
