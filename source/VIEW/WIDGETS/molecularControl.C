@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.11 2003/10/15 13:31:12 amoll Exp $
+// $Id: molecularControl.C,v 1.12 2003/11/03 16:52:18 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -520,7 +520,7 @@ void MolecularControl::setSelection_(bool open)
 		return;
 	}
 
-	if (selection.size() > 5) open = false;
+	if (selection.size() > 50) open = false;
 
 	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)
