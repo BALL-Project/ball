@@ -55,6 +55,7 @@ PushButton {
 		AutoResize {TRUE}
 		Rect {150 334 59 30}
 		Name {PushButton_4}
+		Signal {[Protected]  pressed --> accept  ()}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
 		BackgroundPixmap {}
