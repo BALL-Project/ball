@@ -1,0 +1,48 @@
+/Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
+/Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
+/  handle: [0-9]
+  auto-deletable: 0
+/Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
+  selected: 0
+/  parent: [0-9]
+/  first: [0-9]
+/  last: [0-9]
+/  previous: [0-9]
+/  next: [0-9]
+  number of children:1
+  contains_selection_:0
+  number of selected children:0
+  number of children containing selection:0
+  children:
+/ .*
+/Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
+/Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
+/      handle: [0-9]
+      auto-deletable: 0
+/Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
+      selected: 0
+/      parent: [0-9]
+/      first: [0-9]
+/      last: [0-9]
+/      previous: [0-9]
+/      next: [0-9]
+      number of children:0
+      contains_selection_:0
+      number of selected children:0
+      number of children containing selection:0
+      children:
+      element: Helium He 18 1 2 4.0026 1.28 0 1.22 0 
+      charge: 0
+      name: a1
+      type name: ?
+      position: (0 0 0)
+      radius: 0
+      type: -1
+      velocity: (0 0 0)
+      force: (0 0 0)
+      number of bonds: 0
+      bonds: 
+
+  name: n1
+  id: test
+  insertion code: X
