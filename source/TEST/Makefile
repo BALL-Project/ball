@@ -85,7 +85,6 @@ EXECUTABLES_KERNEL = \
 	Residue_test\
 	Expression_test\
 	KernelPredicate_test\
-	Expression_test\
 	Selector_test\
 	RuleEvaluator_test\
 	StandardPredicates_test\
@@ -159,8 +158,7 @@ EXECUTABLES_SOLVATION = \
 	Pair6_12RDFIntegrator_test\
 	Pair6_12InteractionEnergyProcessor_test\
 	PairExpInteractionEnergyProcessor_test\
-	PairExpRDFIntegrator_test\
-	SolventDescriptor_test
+	PairExpRDFIntegrator_test
 
 EXECUTABLES = \
 	$(EXECUTABLES_BASIC)\
