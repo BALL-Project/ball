@@ -1,4 +1,4 @@
-// $Id: Timer_test.C,v 1.7 2001/05/10 23:32:08 oliver Exp $
+// $Id: Timer_test.C,v 1.8 2001/05/11 18:17:58 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
 ///////////////////////////
@@ -6,7 +6,7 @@
 #include <BALL/SYSTEM/file.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Timer_test.C,v 1.7 2001/05/10 23:32:08 oliver Exp $")
+START_TEST(class_name, "$Id: Timer_test.C,v 1.8 2001/05/11 18:17:58 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -207,7 +207,6 @@ CHECK(Timer::bool operator <= (const Timer& timer) const )
 	delete &t2;
 RESULT
 
-double x = 0.0;
 CHECK(Timer::bool operator >= (const Timer& timer) const )
 	Timer& t1 = *new Timer;
 	t1.start();
