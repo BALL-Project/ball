@@ -1,4 +1,4 @@
-// $Id: syntaxTree.C,v 1.2 2001/07/16 20:37:21 amoll Exp $
+// $Id: syntaxTree.C,v 1.3 2001/07/17 00:50:37 oliver Exp $
 
 #include <BALL/KERNEL/syntaxTree.h>
 
@@ -389,6 +389,9 @@ namespace BALL
     {
       (*it)->collapseANDs_();
 		}
+
+		// mark as successfully updated
+		evaluated = true;
 	}
  
 
@@ -439,6 +442,9 @@ namespace BALL
     {
       (*it)->collapseORs_();
 		}
+
+		// mark as successfully updated
+		evaluated = true;
 	}
 
 	void SyntaxTree::dump(std::ostream& os, Size depth) const
