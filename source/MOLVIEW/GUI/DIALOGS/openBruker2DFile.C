@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker2DFile.C,v 1.9 2003/01/06 17:43:04 amoll Exp $
+// $Id: openBruker2DFile.C,v 1.10 2003/04/17 15:29:21 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h>
 #include <BALL/FORMAT/bruker2DFile.h>
@@ -60,13 +60,13 @@ namespace BALL
 			}
       catch(...)
 			{
-				 Log.info() << "> read Bruker2D file failed." << endl;
+				 Log.info() << "> read Bruker2D file failed." << std::endl;
 				 delete myfile;
 				 return;
 			}
 
       // writing info to log
-      Log.info() << "> Bruker file " << mydir << " succesfully read." << endl;
+      Log.info() << "> Bruker file " << mydir << " succesfully read." << std::endl;
       
       // notify main window
       NewRegularData2DMessage new_message;
