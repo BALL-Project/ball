@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.65 2005/02/24 14:52:46 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.66 2005/02/28 20:22:21 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -53,7 +53,7 @@ AC_DEFUN(CF_ERROR,[
 	AC_MSG_RESULT()
 	AC_MSG_RESULT([Configure failed. If you cannot solve your problem with the aid])
 	AC_MSG_RESULT([of the above error message, please contact the ]PROJECT[ mailing list])
-S	AC_MSG_RESULT([or the ]PROJECT[ developers. Please enclose the file 'conf.diag.tar'])
+	AC_MSG_RESULT([or the ]PROJECT[ developers. Please enclose the file 'conf.diag.tar'])
 	AC_MSG_RESULT([which has been created in source. It contains the relevant])
 	AC_MSG_RESULT([files from this configure run. In most cases, the information])
 	AC_MSG_RESULT([is necessary to diagnose what went wrong. This file contains])
