@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.17 2000/05/31 01:01:46 amoll Exp $
+// $Id: BaseFragment_test.C,v 1.18 2000/05/31 14:54:56 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.17 2000/05/31 01:01:46 amoll Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.18 2000/05/31 14:54:56 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -220,7 +220,9 @@ CHECK(persistentWrite(PersistenceManager&, String, bool))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	BaseFragment* f1 = new BaseFragment("name1");
 	BaseFragment* f2 = new BaseFragment("name2");
+	BaseFragment* f3 = new BaseFragment("name3");
 	f1->insert(*f2);
+	f1->insert(*f3);
 	pm.setOstream(ofile);
 	*f1 >> pm;
 	ofile.close();
@@ -237,8 +239,9 @@ CHECK(persistentRead(PersistenceManager&))
 		TEST_EQUAL(isKindOf<BaseFragment>(*ptr), true)
 		BaseFragment*	f1 = castTo<BaseFragment>(*ptr);
 		TEST_EQUAL(f1->getName(), "name1")
-		TEST_EQUAL(f1->countBaseFragments(), 1)
+		TEST_EQUAL(f1->countBaseFragments(), 2)
 		TEST_EQUAL(f1->getBaseFragment(0)->getName(), "name2")
+		TEST_EQUAL(f1->getBaseFragment(1)->getName(), "name3")
 		delete f1;
 	} 
 	else 

@@ -1,4 +1,4 @@
-// $Id: Protein_test.C,v 1.2 2000/05/31 01:01:47 amoll Exp $
+// $Id: Protein_test.C,v 1.3 2000/05/31 14:54:57 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Protein_test.C,v 1.2 2000/05/31 01:01:47 amoll Exp $")
+START_TEST(class_name, "$Id: Protein_test.C,v 1.3 2000/05/31 14:54:57 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -425,6 +425,8 @@ CHECK(persistentWrite(PersistenceManager&, String, bool))
 	Protein* f1= new Protein("name1");
 	Chain* f2 = new Chain("name2");
 	f1->insert(*f2);
+	Chain* f3 = new Chain("name3");
+	f1->insert(*f3);
 	pm.setOstream(ofile);
 	*f1 >> pm;
 	ofile.close();
@@ -441,8 +443,9 @@ CHECK(persistentRead(PersistenceManager&))
 		TEST_EQUAL(isKindOf<Protein>(*ptr), true)
 		Protein*	f1 = castTo<Protein>(*ptr);
 		TEST_EQUAL(f1->getName(), "name1")
-		TEST_EQUAL(f1->countChains(), 1)
+		TEST_EQUAL(f1->countChains(), 2)
 		TEST_EQUAL(f1->getChain(0)->getName(), "name2")
+		TEST_EQUAL(f1->getChain(1)->getName(), "name3")
 		delete f1;
 	} 
 	else 

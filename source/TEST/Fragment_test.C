@@ -1,4 +1,4 @@
-// $Id: Fragment_test.C,v 1.8 2000/05/31 01:01:46 amoll Exp $
+// $Id: Fragment_test.C,v 1.9 2000/05/31 14:54:56 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: Fragment_test.C,v 1.8 2000/05/31 01:01:46 amoll Exp $")
+START_TEST(Fragment, "$Id: Fragment_test.C,v 1.9 2000/05/31 14:54:56 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -101,8 +101,11 @@ CHECK(persistentWrite(PersistenceManager&, String, bool))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Fragment* f1 = new Fragment("name1");
 	Atom* f2 = new Atom();
+	Atom* f3 = new Atom();
 	f2->setName("name2");
+	f3->setName("name3");
 	f1->insert(*f2);
+	f1->insert(*f3);
 	pm.setOstream(ofile);
 	*f1 >> pm;
 	ofile.close();
@@ -119,8 +122,9 @@ CHECK(persistentRead(PersistenceManager&))
 		TEST_EQUAL(isKindOf<Fragment>(*ptr), true)
 		Fragment*	f1 = castTo<Fragment>(*ptr);
 		TEST_EQUAL(f1->getName(), "name1")
-		TEST_EQUAL(f1->countAtoms(), 1)
+		TEST_EQUAL(f1->countAtoms(), 2)
 		TEST_EQUAL(f1->getAtom(0)->getName(), "name2")
+		TEST_EQUAL(f1->getAtom(1)->getName(), "name3")
 		delete f1;
 	} else {
 		throw Exception::NullPointer(__FILE__, __LINE__);

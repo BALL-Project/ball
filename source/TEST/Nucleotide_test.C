@@ -1,4 +1,4 @@
-// $Id: Nucleotide_test.C,v 1.5 2000/05/31 01:01:47 amoll Exp $
+// $Id: Nucleotide_test.C,v 1.6 2000/05/31 14:54:57 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.5 2000/05/31 01:01:47 amoll Exp $")
+START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.6 2000/05/31 14:54:57 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -411,6 +411,9 @@ CHECK(persistentWrite(PersistenceManager&, String, bool))
 	Atom* f2 = new Atom();
 	f2->setName("name2");
 	f1->insert(*f2);
+	Atom* f3 = new Atom();
+	f3->setName("name3");
+	f1->insert(*f3);
 	pm.setOstream(ofile);
 	*f1 >> pm;
 	ofile.close();
@@ -427,8 +430,9 @@ CHECK(persistentRead(PersistenceManager&))
 		TEST_EQUAL(isKindOf<Nucleotide>(*ptr), true)
 		Nucleotide*	f1 = castTo<Nucleotide>(*ptr);
 		TEST_EQUAL(f1->getName(), "name1")
-		TEST_EQUAL(f1->countAtoms(), 1)
+		TEST_EQUAL(f1->countAtoms(), 2)
 		TEST_EQUAL(f1->getAtom(0)->getName(), "name2")
+		TEST_EQUAL(f1->getAtom(1)->getName(), "name3")
 		delete f1;
 	} 
 	else 

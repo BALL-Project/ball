@@ -1,4 +1,4 @@
-// $Id: Residue_test.C,v 1.12 2000/05/29 09:31:50 oliver Exp $
+// $Id: Residue_test.C,v 1.13 2000/05/31 14:54:57 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.12 2000/05/29 09:31:50 oliver Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.13 2000/05/31 14:54:57 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -524,12 +524,45 @@ CHECK(Residue::write(std::ostream& s) const )
   //BAUSTELLE
 RESULT
 
-CHECK(Residue::persistentWrite(PersistenceManager& pm, const char* name = 0) const )
-  //BAUSTELLE
+TextPersistenceManager pm;
+using namespace RTTI;
+pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
+pm.registerClass(getStreamName<Molecule>(), Molecule::createDefault);
+NEW_TMP_FILE(filename)
+CHECK(persistentWrite(PersistenceManager&, String, bool))
+	std::ofstream	ofile(filename.c_str(), std::ios::out);
+	Atom* f2= new Atom();
+	f2->setName("name2");
+	Atom* f3= new Atom();
+	f3->setName("name3");
+	Molecule* f1 = new Molecule("name1");
+	f1->insert(*f2);
+	f1->insert(*f3);
+	pm.setOstream(ofile);
+	*f1 >> pm;
+	ofile.close();
+	delete f1;
 RESULT
 
-CHECK(Residue::persistentRead(PersistenceManager& pm))
-  //BAUSTELLE
+CHECK(persistentRead(PersistenceManager&))
+	std::ifstream	ifile(filename.c_str());
+	pm.setIstream(ifile);
+	PersistentObject*	ptr = pm.readObject();
+	TEST_NOT_EQUAL(ptr, 0)
+	if (ptr != 0)
+	{
+		TEST_EQUAL(isKindOf<Molecule>(*ptr), true)
+		Molecule*	f1 = castTo<Molecule>(*ptr);
+		TEST_EQUAL(f1->getName(), "name1")
+		TEST_EQUAL(f1->countAtoms(), 2)
+		TEST_EQUAL(f1->getAtom(0)->getName(), "name2")
+		TEST_EQUAL(f1->getAtom(1)->getName(), "name3")
+		delete f1;
+	} 
+	else 
+	{
+		throw Exception::NullPointer(__FILE__, __LINE__);
+	}
 RESULT
 
 /////////////////////////////////////////////////////////////

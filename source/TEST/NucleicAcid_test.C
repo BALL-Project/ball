@@ -1,4 +1,4 @@
-// $Id: NucleicAcid_test.C,v 1.5 2000/05/31 01:01:47 amoll Exp $
+// $Id: NucleicAcid_test.C,v 1.6 2000/05/31 14:54:57 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.5 2000/05/31 01:01:47 amoll Exp $")
+START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.6 2000/05/31 14:54:57 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -241,9 +241,11 @@ pm.registerClass(getStreamName<NucleicAcid>(), NucleicAcid::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
-	Nucleotide* f2= new Nucleotide("name2");
 	NucleicAcid* f1 = new NucleicAcid("name1");
+	Nucleotide* f2= new Nucleotide("name2");
+	Nucleotide* f3= new Nucleotide("name3");
 	f1->insert(*f2);
+	f1->insert(*f3);
 	pm.setOstream(ofile);
 	*f1 >> pm;
 	ofile.close();
@@ -260,8 +262,9 @@ CHECK(persistentRead(PersistenceManager&))
 		TEST_EQUAL(isKindOf<NucleicAcid>(*ptr), true)
 		NucleicAcid*	f1 = castTo<NucleicAcid>(*ptr);
 		TEST_EQUAL(f1->getName(), "name1")
-		TEST_EQUAL(f1->countNucleotides(), 1)
+		TEST_EQUAL(f1->countNucleotides(), 2)
 		TEST_EQUAL(f1->getNucleotide(0)->getName(), "name2")
+		TEST_EQUAL(f1->getNucleotide(1)->getName(), "name3")
 		delete f1;
 	} 
 	else 

@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.13 2000/05/31 01:11:45 amoll Exp $
+// $Id: Bond_test.C,v 1.14 2000/05/31 14:54:56 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.13 2000/05/31 01:11:45 amoll Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.14 2000/05/31 14:54:56 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -509,8 +509,16 @@ CHECK(persistentRead(PersistenceManager&))
 	{
 		TEST_EQUAL(isKindOf<Bond>(*ptr), true)
 		Bond*	f1 = castTo<Bond>(*ptr);
-		TEST_EQUAL(f1->getFirstAtom()->getName(), "a1")
-		TEST_EQUAL(f1->getSecondAtom()->getName(), "a2")
+		if (f1->getFirstAtom()->getName() == "a1")
+		{
+			TEST_EQUAL(f1->getFirstAtom()->getName(), "a1")
+			TEST_EQUAL(f1->getSecondAtom()->getName(), "a2")
+		}
+		else
+		{
+			TEST_EQUAL(f1->getFirstAtom()->getName(), "a2")
+			TEST_EQUAL(f1->getSecondAtom()->getName(), "a1")
+		}
 		TEST_EQUAL(f1->getName(), "name1")
 		delete f1;
 	} 

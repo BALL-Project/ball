@@ -1,4 +1,4 @@
-// $Id: SecondaryStructure_test.C,v 1.2 2000/05/31 01:01:48 amoll Exp $
+// $Id: SecondaryStructure_test.C,v 1.3 2000/05/31 14:54:57 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/protein.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: SecondaryStructure_test.C,v 1.2 2000/05/31 01:01:48 amoll Exp $")
+START_TEST(class_name, "$Id: SecondaryStructure_test.C,v 1.3 2000/05/31 14:54:57 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -405,7 +405,9 @@ CHECK(persistentWrite(PersistenceManager&, String, bool))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	SecondaryStructure* f1= new SecondaryStructure("name1");
 	Residue* f2 = new Residue("name2");
+	Residue* f3 = new Residue("name3");
 	f1->insert(*f2);
+	f1->insert(*f3);
 	pm.setOstream(ofile);
 	*f1 >> pm;
 	ofile.close();
@@ -422,8 +424,9 @@ CHECK(persistentRead(PersistenceManager&))
 		TEST_EQUAL(isKindOf<SecondaryStructure>(*ptr), true)
 		SecondaryStructure*	f1 = castTo<SecondaryStructure>(*ptr);
 		TEST_EQUAL(f1->getName(), "name1")
-		TEST_EQUAL(f1->countResidues(), 1)
+		TEST_EQUAL(f1->countResidues(), 2)
 		TEST_EQUAL(f1->getResidue(0)->getName(), "name2")
+		TEST_EQUAL(f1->getResidue(1)->getName(), "name3")
 		delete f1;
 	} 
 	else 
