@@ -16,7 +16,7 @@ This document briefly describes the usage of the {\tt PB} application.
 
 \section{Building and using {\tt PB}}
 
-If you did not build the BALL library beforehand, read the tutorial and
+If you did not build the BALL library yet, read the tutorial and
 install the BALL library first.
 
 Change to the directory where you stored the BALL source files, say {\tt
@@ -31,7 +31,7 @@ make
 \end{verbatim}
 
 Now that the executable is built, we can start our first test run. Make sure
-your {\tt LD\_LIBRARY\_PATH} environment varianble is set correctly. If you
+your {\tt LD\_LIBRARY\_PATH} environment variable is set correctly. If you
 do not know how to do this or what I am talking about, please refer to the
 BALL tutorial. Run the program by typing {\tt ./PB} and pressing the
 Enter-key. The output should look like figure \ref{helpmessage}.
@@ -107,11 +107,12 @@ Imagine you want to calculate the solvation free energy of a simple
 monovalent spherical ion in pure water (\textit{i.~e.~} no salt solution
 with counter ions), say K$^+$, which you have stored in a HyperChem HIN
 file named {\tt k.hin}. Additionally you want to compare the calculated
-value with the Born approximation of the solvation free energy.
+value with the Born approximation of the electrostatic contribution to
+solvation free energy.
 
 To perform the calculation you need a charge and a radius for the ion. As
 you stored the ion in a HyperChem file, its charge should already be
-stored there. The radius has to be assigned by using another file
+contained there. The radius has to be assigned by using another file
 containing rules for assigning radii to atoms. For simplicity of the
 example this data is stored in the file {\tt ions.rul}. See the BALL
 reference manual for the usage of these rule files.
@@ -168,17 +169,17 @@ calculating the solvation free energy of spherical ions in water.
 \end{equation}
 
 Inserting our values for the K$^+$ ion (charge of 1, radius of 2.0\AA)
-yields a solvation free energy of -342.80 kJ/mol which is in agreement with
-our calculated values.
+yields a solvation free energy of -342.80 kJ/mol which is in good agreement
+with our calculated values.
 
 \section{The {\tt options} file}
 
-The Poisson-Boltzmann solver of BALL knows many options. The most relevant
-options will be introduced in this short introduction. Please consult the
-BALL reference manula for documentation concerning further options. There
-is a commented {\tt options} file {\tt PB.options} in the source directory
-of the {\tt PB} application which contains all tunable options. This file
-will also be in the appendix. 
+The Poisson-Boltzmann solver of BALL can be controlled via many options.
+The most relevant options will be introduced in this short introduction.
+Please consult the BALL reference manula for documentation concerning
+further options. There is a commented {\tt options} file {\tt PB.options}
+in the source directory of the {\tt PB} application which contains all
+tunable options. This file will also be in the appendix. 
 
 The syntax of the options file is simple. It consists of lines which start
 with an option keyword and contain the option value as the rest of the
@@ -190,7 +191,7 @@ used for comments. Note that option keywords must not contain whitespaces,
 \begin{verbatim}
 ; This is an example for the options syntax
 ;
-; an imagenary option setting the number of hobbits
+; an imaginary option setting the number of hobbits
 hobbit_count 4
 \end{verbatim}
 \end{figure}
@@ -201,7 +202,7 @@ hobbit_count 4
 \item[spacing] is an option controlling the grid granularity. It defines
 	the distance in \AA ngstrom (\AA) between every two grid points of the same
 	axis-parallel line.
-\item[border] sets the minimum distance in \AA between the bounding
+\item[border] sets the minimum distance in \AA~between the bounding
 	box of the molecule and the border of the grid. 
 \end{description}
 
@@ -212,8 +213,8 @@ hobbit_count 4
 	condition of the equation system. There are five different methods from
 	which you can choose:
 	\begin{description}
-	\item[zero] simply sets potential to zero
-	\item[Debye] uses the Debye approximation for initializing the potential
+	\item[zero] simply sets potential to zero at the border
+	\item[Debye] uses the Debye approximation for the boundary
 	\item[Coulomb] \emph{not implemented at the time of writing}
 	\item[dipole] \emph{(default)} uses the effective dipole as boundary
 		condition
@@ -221,7 +222,7 @@ hobbit_count 4
 		result for inititalizing the original grid. This method gives most
 		accurate results but takes a lot more computing time.
 	\end{description}
-\item[charge\_distribution] controlles the distribution of molecule charges
+\item[charge\_distribution] controles the distribution of molecule charges
 	over grid points. You can choose between two algorithms.
 	\begin{description}
 	\item[uniform] \emph{(default)} uses a uniform distribution scheme for
@@ -259,7 +260,7 @@ These options are also adaptable through command line switches
 
 \scriptsize
 \begin{verbatim}
-; $Id: PB.tex,v 1.2 2002/12/12 09:53:11 oliver Exp $
+; $Id: PB.tex,v 1.3 2002/12/16 14:34:43 anker Exp $
 ; Example options file for the PB application
 ;
 ; all options are commented out
