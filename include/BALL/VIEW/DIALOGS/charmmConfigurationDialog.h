@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.h,v 1.4 2004/04/22 23:30:38 amoll Exp $
+// $Id: charmmConfigurationDialog.h,v 1.5 2004/04/23 13:08:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_CHARMMCONFIGURATIONDIALOG_H
@@ -121,6 +121,10 @@ namespace BALL
 			
 			///
 			void chooseSolventFile()
+				throw();
+
+			//_
+			void periodicBoundaryClicked()
 				throw();
 
 			protected:

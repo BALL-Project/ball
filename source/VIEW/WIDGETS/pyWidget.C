@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.30 2004/04/23 00:37:55 amoll Exp $
+// $Id: pyWidget.C,v 1.31 2004/04/23 13:09:01 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -33,9 +33,9 @@ namespace BALL
 
 		void RunPythonThread::run()
 		{
-			Log.disableOutput();
+// 			Log.disableOutput();
 			output = PyInterpreter::run(input, state);
-			Log.enableOutput();
+// 			Log.enableOutput();
 		}
 #endif
 
