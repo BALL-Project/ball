@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.C,v 1.10 2003/12/10 16:05:07 anhi Exp $
+// $Id: genericMolFile.C,v 1.11 2004/03/07 20:17:07 oliver Exp $
 //
 
 #include <BALL/FORMAT/genericMolFile.h>
@@ -23,6 +23,7 @@ namespace BALL
 	}
 
 	GenericMolFile::GenericMolFile(const GenericMolFile& file)
+		throw(Exception::FileNotFound)
 		:	LineBasedFile(file)
 	{
 	}

@@ -4440,7 +4440,7 @@ _ACEOF
     CXXFLAGS_O="${CXXFLAGS_O} -O1"
 
       CXXFLAGS_D="${CXXFLAGS_D} -O0 -w1"
-  CXXFLAGS_DI="${CXXFLAGS_DI}"
+  CXXFLAGS_DI="${CXXFLAGS_DI} -g -gall"
  ;;
 	Compaq )
 		echo "$as_me:$LINENO: checking compiler version" >&5

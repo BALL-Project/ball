@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: events.h,v 1.7 2004/02/26 08:41:37 anhi Exp $
+// $Id: events.h,v 1.8 2004/03/07 20:17:01 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_EVENTS_H
@@ -887,7 +887,7 @@ bool Events::EventName##Event_::onNotify_(Scene* scene) \
 		(scene_->*method_)(scene); \
 	}\
 \
-  Notify(this); \
+  Notify(*this); \
 \
   transmitter_scene_ = scene_; \
 \

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: String_test2.C,v 1.7 2003/08/26 09:18:31 oliver Exp $
+// $Id: String_test2.C,v 1.8 2004/03/07 20:17:07 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test2.C,v 1.7 2003/08/26 09:18:31 oliver Exp $")
+START_TEST(String,"$Id: String_test2.C,v 1.8 2004/03/07 20:17:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -133,8 +133,28 @@ CHECK(short toShort() const throw(Exception::InvalidFormat))
 	TEST_EQUAL(s4.toShort(), (short)0)
 	s4.set("12.34");
 	TEST_EQUAL(s4.toShort(), (short)12)
-	s4.set("999999999999999999999999");
-	TEST_EXCEPTION(Exception::InvalidFormat, s4.toShort())
+	s4.set("9999999");
+	STATUS(s4)
+
+	short x = 0;
+
+  try
+  {
+		x = s4.toShort();
+	}
+	catch (Exception::InvalidFormat&)
+	{
+		STATUS("Caught the right one!")
+	}
+	catch (Exception::GeneralException e)
+	{
+		STATUS(e)
+	}
+	catch (...)
+	{
+		STATUS("caught something!")
+	}
+	TEST_EXCEPTION(Exception::InvalidFormat, x = s4.toShort())
 RESULT
 
 CHECK(unsigned short toUnsignedShort() const throw(Exception::InvalidFormat))
@@ -146,7 +166,7 @@ CHECK(unsigned short toUnsignedShort() const throw(Exception::InvalidFormat))
 	TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)0)
 	s4.set("12.34");
 	TEST_EQUAL(s4.toUnsignedShort(), (unsigned short)12)
-	s4.set("999999999999999999999999");
+	s4.set("99999999");
 	TEST_EXCEPTION(Exception::InvalidFormat, s4.toUnsignedShort())
 RESULT
 

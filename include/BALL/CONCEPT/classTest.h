@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.52 2004/02/23 17:26:01 anhi Exp $
+// $Id: classTest.h,v 1.53 2004/03/07 20:17:01 oliver Exp $
 //
 
 #ifndef BALL_SYSTEM_H
@@ -436,11 +436,11 @@ int main(int argc, char **argv)\
 		{\
 			command;\
 		}\
-		catch (exception_type)\
+		catch (exception_type&)\
 		{\
 			TEST::exception = 1;\
 		}\
-		catch (::BALL::Exception::GeneralException e)\
+		catch (::BALL::Exception::GeneralException& e)\
 		{\
 			TEST::exception = 2;\
 			TEST::exception_name = e.getName();\

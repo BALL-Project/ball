@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile_test.C,v 1.27 2003/08/26 19:04:53 oliver Exp $
+// $Id: HINFile_test.C,v 1.28 2004/03/07 20:17:07 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.27 2003/08/26 19:04:53 oliver Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.28 2004/03/07 20:17:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -178,7 +178,9 @@ CHECK(HINFile(const HINFile& file) throw(Exception::FileNotFound))
 	TEST_EQUAL(f2.getName(), "data/HINFile_test4.hin")
 	HINFile f3(empty);
 	f3.setName("asddasddddddasdasdasdasd");
-	TEST_EXCEPTION(Exception::FileNotFound, HINFile f4(f3))
+	HINFile* f4 = 0;
+	TEST_EXCEPTION(Exception::FileNotFound, f4 = new HINFile(f3))
+	delete f4;
 RESULT
 
 	
