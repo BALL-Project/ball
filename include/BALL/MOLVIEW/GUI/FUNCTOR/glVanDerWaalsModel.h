@@ -1,11 +1,7 @@
-// $Id: glVanDerWaalsModel.h,v 1.6.4.1 2002/10/18 14:48:16 amoll Exp $
+// $Id: glVanDerWaalsModel.h,v 1.6.4.2 2002/10/19 14:20:34 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLVANDERWAALSMODEL_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
 #	include <BALL/VIEW/GUI/PRIMITIV/glsphere.h>
@@ -15,13 +11,10 @@
 #	include <BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h>
 #endif
 
-
 namespace BALL
 {
-	
 	namespace MOLVIEW
 	{
-
 		/** AddGLVanDerWaalsModel class.
 				The class AddGLVanDerWaalsModel is derived from the class 
 				\Ref{AddVanDerWaalsModel} and extents this class by overriding the creation
@@ -53,7 +46,7 @@ namespace BALL
 					addGLVanDerWaalsModel to the state of {\em add_GL_van_der_waals_model}.
 					@param       add_GL_van_der_waals_model the addGLVanDerWaalsModel to be copied
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em add_GL_van_der_waals_model}
-					@return      AddGLVanDerWaalsModel new constructed addGLVanDerWaalsModel copied from {\em add_GL_van_der_waals_model}
+					@return      AddGLVanDerWaalsModel new addGLVanDerWaalsModel copied from {\em add_GL_van_der_waals_model}
 					@see         AddVanDerWaalsModel
 			*/
 			AddGLVanDerWaalsModel
@@ -73,8 +66,8 @@ namespace BALL
 			*/
 			virtual ~AddGLVanDerWaalsModel()
 				throw();
-			//@}
 
+			//@}
 
 			protected:
 
@@ -87,6 +80,7 @@ namespace BALL
 					@see  AddVanDerWaalsModel
 			*/
 			//@{
+
 			/** Creates a sphere.
 					Creates a \Ref{GLSphere} object and returns it as \Ref{Sphere}.
 					This overridden method of the class \Ref{AddVanDerWaalsModel} creates

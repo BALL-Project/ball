@@ -1,11 +1,7 @@
-// $Id: glSurfaceModel.h,v 1.5.4.1 2002/10/18 14:48:15 amoll Exp $
+// $Id: glSurfaceModel.h,v 1.5.4.2 2002/10/19 14:20:34 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLMESH_H
 #	include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
@@ -15,11 +11,8 @@
 #	include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #endif
 
-
-
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -73,8 +66,8 @@ namespace BALL
 			*/
 			virtual ~AddGLSurfaceModel()
 				throw();
-			//@}
 
+			//@}
 
 			protected:
 
@@ -87,6 +80,7 @@ namespace BALL
 					@see  AddSurfaceModel
 			*/
 			//@{
+			
 			/** Creates a mesh.
 					Creates a \Ref{GLMesh} object and returns it as \Ref{Mesh}.
 					This overridden method of the class \Ref{AddSurfaceModel} creates

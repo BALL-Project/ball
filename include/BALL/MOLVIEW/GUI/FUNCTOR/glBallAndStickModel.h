@@ -1,11 +1,7 @@
-// $Id: glBallAndStickModel.h,v 1.5.4.1 2002/10/18 14:48:15 amoll Exp $
+// $Id: glBallAndStickModel.h,v 1.5.4.2 2002/10/19 14:20:33 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
 #	include <BALL/VIEW/GUI/PRIMITIV/glsphere.h>
@@ -22,7 +18,6 @@
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
 #	include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.h>
 #endif
-
 
 namespace BALL
 {
@@ -61,7 +56,7 @@ namespace BALL
 					addGLBallAndStickModel to the state of {\em add_GL_ball_and_stick_model}.
 					@param       add_GL_ball_and_stick_model the addGLBallAndStickModel to be copied
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em add_GL_ball_and_stick_model}
-					@return      AddGLBallAndStickModel new constructed addGLBallAndStickModel copied from {\em add_GL_ball_and_stick_model}
+					@return      AddGLBallAndStickModel new addGLBallAndStickModel copied from {\em add_GL_ball_and_stick_model}
 					@see         AddBallAndStickModel
 			*/
 			AddGLBallAndStickModel

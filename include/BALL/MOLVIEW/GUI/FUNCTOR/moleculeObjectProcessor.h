@@ -1,23 +1,7 @@
-// $Id: moleculeObjectProcessor.h,v 1.3.4.1 2002/10/18 14:48:17 amoll Exp $
+// $Id: moleculeObjectProcessor.h,v 1.3.4.2 2002/10/19 14:20:34 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEOBJECTPROCESSOR_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEOBJECTPROCESSOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_MOLECULE_H
-#	include <BALL/KERNEL/molecule.h>
-#endif
-
-#ifndef BALL_KERNEL_PROTEIN_H
-# include <BALL/KERNEL/protein.h>
-#endif
-
-#ifndef BALL_KERNEL_SYSTEM_H
-# include <BALL/KERNEL/system.h>
-#endif
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 # include <BALL/STRUCTURE/geometricProperties.h>
@@ -63,10 +47,6 @@
 # include <BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
-#	include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h>
-#endif
-
 #ifndef BALL_VIEW_GUI_FUNCTOR_OBJECTPROCESSOR_H
 #	include <BALL/VIEW/GUI/FUNCTOR/objectProcessor.h>
 #endif
@@ -74,10 +54,8 @@
   
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-
 		using VIEW::ObjectProcessor;
 
 		/**
@@ -88,6 +66,7 @@ namespace BALL
 			public:
 
 			BALL_CREATE_DEEP(MoleculeObjectProcessor)
+
 			/**	@name	Constructors and Destructors
 			*/
 			//@{
@@ -99,9 +78,8 @@ namespace BALL
 
 			virtual ~MoleculeObjectProcessor()
 				throw();
+
 			//@}
-
-
 			/**	@name	Exceptions
 			*/
 			//@{
@@ -115,7 +93,6 @@ namespace BALL
 			};
 
 			//@}
-
 			/**	@name Accessors
 			*/
 			//@{

@@ -1,11 +1,7 @@
-// $Id: glAtomBondModelConnector.h,v 1.5.4.1 2002/10/18 14:48:14 amoll Exp $
+// $Id: glAtomBondModelConnector.h,v 1.5.4.2 2002/10/19 14:20:33 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLINE_H
 #	include <BALL/VIEW/GUI/PRIMITIV/glline.h>

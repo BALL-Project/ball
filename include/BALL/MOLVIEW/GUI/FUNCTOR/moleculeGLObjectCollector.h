@@ -1,11 +1,7 @@
-// $Id: moleculeGLObjectCollector.h,v 1.5.4.1 2002/10/18 14:48:16 amoll Exp $
+// $Id: moleculeGLObjectCollector.h,v 1.5.4.2 2002/10/19 14:20:34 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_KERNEL_ATOM_H
 #	include <BALL/KERNEL/atom.h>
@@ -29,10 +25,8 @@
   
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-
 		using VIEW::GLObjectCollector;
 
 		/** MoleculeGLObjectCollector class.
@@ -65,7 +59,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -76,9 +69,8 @@ namespace BALL
 			 */
 			virtual ~MoleculeGLObjectCollector()
 				throw();
+
 			//@}
-
-
 			/**	@name Processor specific methods
 			*/
 			//@{
