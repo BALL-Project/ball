@@ -1,9 +1,10 @@
-// $Id: displayProperties.C,v 1.13.4.17 2002/12/09 18:44:15 amoll Exp $
+// $Id: displayProperties.C,v 1.13.4.18 2002/12/10 00:10:40 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
+#include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
 
 #include <qcolordialog.h>
 #include <qmenubar.h>
@@ -14,8 +15,6 @@
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/system.h>
-
-#define Inherited DisplayPropertiesData
 
 namespace BALL
 {
@@ -30,7 +29,7 @@ namespace BALL
     
 		DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 			throw()
-			:	Inherited( parent, name ),
+			:	DisplayPropertiesData( parent, name ),
 				ModularWidget(name),
 				id_(-1),
 				select_id_(-1),
@@ -64,7 +63,8 @@ namespace BALL
 				backbone_model_dynamic_(),
 				remove_model_static_(),
 				remove_model_dynamic_(),
-				line_model_(),
+				line_model_static_(),
+				line_model_dynamic_(),
 				
 				static_base_model_pointer_(0),
 				dynamic_base_model_pointer_(0),
@@ -80,11 +80,12 @@ namespace BALL
 
 			color_calculator_ = &element_color_calculator_;
 
-			 van_der_waals_model_static_.registerModelConnector(model_connector_);
+			  van_der_waals_model_static_.registerModelConnector(model_connector_);
 			 van_der_waals_model_dynamic_.registerModelConnector(model_connector_);
-			ball_and_stick_model_static_.registerModelConnector(model_connector_);
+			 ball_and_stick_model_static_.registerModelConnector(model_connector_);
 			ball_and_stick_model_dynamic_.registerModelConnector(model_connector_);
-								line_model_.registerModelConnector(model_connector_);
+								 line_model_static_.registerModelConnector(model_connector_);
+								line_model_dynamic_.registerModelConnector(model_connector_);
 
 			// seting up defaults
 			ball_and_stick_model_static_.enableStickModel();
@@ -701,8 +702,6 @@ namespace BALL
 			
 
 			// for top elements in the selection => perform generation
-			setupStaticProcessor_();
-			setupDynamicProcessor_();
 			List<Composite*> updates;
 			List<Composite*>::ConstIterator it = MainControl::getMainControl(this)->getControlSelection().begin();
 			for (; it != MainControl::getMainControl(this)->getControlSelection().end(); ++it)
@@ -710,13 +709,16 @@ namespace BALL
 				updates.push_back(*it);
 			}
 
+			setupStaticProcessor_();
+			setupDynamicProcessor_();
+			ObjectSelector selector;
 			List<Composite*>::Iterator updates_it = updates.begin();
 			for (; updates_it != updates.end(); updates_it++)
 			{
 				applyOn_(**updates_it);
 				if (MainControl::getMainControl(this)->getSelection().has(*updates_it))
 				{
-					(*updates_it)->apply(selector_);
+					(*updates_it)->apply(selector);
 				}
 					
 				// perform update of the composites
@@ -814,7 +816,7 @@ namespace BALL
 			switch (getValue_(ADDRESS__STATIC_MODEL))
 			{
 				case VALUE__MODEL_LINES:
-					static_base_model_pointer_ = &line_model_;
+					static_base_model_pointer_ = &line_model_static_;
 					break;
 
 				case VALUE__MODEL_STICK:
@@ -906,7 +908,7 @@ namespace BALL
 			switch (getValue_(ADDRESS__DYNAMIC_MODEL))
 			{
 				case VALUE__MODEL_LINES:
-					dynamic_base_model_pointer_ = &line_model_;
+					dynamic_base_model_pointer_ = &line_model_dynamic_;
 					break;
 					
 				case VALUE__MODEL_STICK:
