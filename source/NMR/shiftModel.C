@@ -1,4 +1,4 @@
-// $Id: shiftModel.C,v 1.1 2000/09/18 10:31:34 oliver Exp $
+// $Id: shiftModel.C,v 1.2 2000/09/18 11:03:17 oliver Exp $
 
 #include <BALL/NMR/shiftModel.h>
 
@@ -111,6 +111,18 @@ namespace BALL
 		setFilename(filename);
 
 		return *this;		
+	}
+
+	bool ShiftModel::init_()
+		throw()
+	{
+		// inivalidate object
+		valid_ = false;
+
+		// BAUSTELLE
+
+		// return the current state
+		return valid_;
 	}
 	
 }
