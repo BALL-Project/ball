@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.20 2004/05/27 19:49:57 oliver Exp $
+# $Id: Makefile,v 1.21 2005/02/27 14:24:56 oliver Exp $
 #
 
 #========================
@@ -14,6 +14,9 @@ include ../common.mak
 DIRECTORY=EXAMPLES
 EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran PDBChecker addHydrogens
 VIEW_EXECUTABLES=$(BALL_HAS_VIEW:true=BALLVIEWClient)
+
+BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
+
 
 default:	$(EXECUTABLES) $(VIEW_EXECUTABLES)
 
