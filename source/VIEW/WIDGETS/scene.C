@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.156.2.1 2005/01/13 12:27:33 amoll Exp $
+// $Id: scene.C,v 1.156.2.2 2005/01/13 18:28:04 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -24,6 +24,7 @@
 #include <BALL/VIEW/PRIMITIVES/box.h>
 
 #include <BALL/SYSTEM/timer.h>
+#include <BALL/SYSTEM/timer.h>
 
 #include <qpainter.h>
 #include <qmenubar.h>
@@ -34,7 +35,7 @@
 #include <qdragobject.h>
 #include <qdir.h>
 
-// #define BALL_BENCHMARKING
+#define BALL_BENCHMARKING
 
 using std::endl;
 using std::istream;
@@ -523,10 +524,6 @@ namespace BALL
 		void Scene::renderRepresentations_(RenderMode mode)
 			throw()
 		{
-#ifdef BALL_BENCHMARKING
-	Timer t;
-	t.start();
-#endif
 			gl_renderer_.initSolid();
 
 			PrimitiveManager::RepresentationList::ConstIterator it;
@@ -602,18 +599,16 @@ namespace BALL
 					render_(**it, mode);
 				}
 			}
-
-
-#ifdef BALL_BENCHMARKING
-	Log.info() << "Rendering time: " << t.getCPUTime() << std::endl;
-	t.stop();
-#endif
 		}
 
 
 		void Scene::render_(const Representation& rep, RenderMode mode)
 			throw()
 		{
+#ifdef BALL_BENCHMARKING
+	Timer t;
+	t.start();
+#endif
 			switch (mode)
 			{
 				case DISPLAY_LISTS_RENDERING:
@@ -628,6 +623,11 @@ namespace BALL
 					gl_renderer_.render(rep);
 					break;
 			}
+#ifdef BALL_BENCHMARKING
+	t.stop();
+	logString("OpenGL rendering time: " + String(t.getCPUTime()));
+#endif
+
 		}
 
 		void Scene::rotateSystem2_(Scene* /*scene*/)
