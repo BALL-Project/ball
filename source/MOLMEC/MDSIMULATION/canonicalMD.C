@@ -1,4 +1,4 @@
-// $Id: canonicalMD.C,v 1.11 2001/02/01 16:43:40 anker Exp $
+// $Id: canonicalMD.C,v 1.12 2001/02/20 11:26:16 anker Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
@@ -249,12 +249,12 @@ namespace BALL
 		float scaling_factor;
 		Size max_number;
 
-		Atom *atom_ptr;
+		Atom* atom_ptr;
 		Size force_update_freq;
 		Size iteration;
 
-		vector < Atom * >::iterator atom_it;
-		vector < Aux_Factors >::iterator factor_it;
+		vector <Atom*>::iterator atom_it;
+		vector <Aux_Factors>::iterator factor_it;
 
 		if (restart == false)
 		{
@@ -296,7 +296,7 @@ namespace BALL
 		force_update_freq = force_field_ptr_->getUpdateFrequency();
 
 		// If the simulation runs with periodic boundary conditions, update the
-		// list and position of molecules
+		// position of molecules
 		if (force_field_ptr_->periodic_boundary.isEnabled() == true)
 		{
 			force_field_ptr_->periodic_boundary.updateMolecules();
@@ -363,8 +363,8 @@ namespace BALL
 			}
 
 			// Calculate new atomic positions and new tentative velocities 
-			for (atom_it = atom_vector_.begin (), factor_it = mass_factor_.begin();
-					+atom_it; ++atom_it, ++factor_it)
+			for (atom_it = atom_vector_.begin(), factor_it = mass_factor_.begin();
+					atom_it != atom_vector_.end(); ++atom_it, ++factor_it)
 			{
 				atom_ptr = *atom_it;
 
@@ -372,12 +372,12 @@ namespace BALL
 				// x(t+1) = x(t) + time_step_ * v(t) + time_step_^2/(2*mass) * F(t)
 				atom_ptr->setPosition(atom_ptr->getPosition() 
 						+ (float)time_step_ * atom_ptr->getVelocity() 
-						+ (float)factor_it->factor1 * atom_ptr->getForce());
+						+ (float) factor_it->factor1 * atom_ptr->getForce());
 
 				// calculate a tentative  velocity 'v_tent' for the next iteration
 				// v_tent(t+1) = v(t) + time_step_ / (2 * mass) * F(t)
-				atom_ptr->setVelocity (atom_ptr->getVelocity () 
-						+ (float)factor_it->factor2 * atom_ptr->getForce());
+				atom_ptr->setVelocity(atom_ptr->getVelocity() 
+						+ (float) factor_it->factor2 * atom_ptr->getForce());
 
 			}	// next atom 
 
@@ -389,7 +389,7 @@ namespace BALL
 			// Calculate the final velocity for the next iteration
 			// and rescale it in order to keep the temperature constant 
 			for (atom_it = atom_vector_.begin(), factor_it = mass_factor_.begin();
-					+atom_it; ++atom_it, ++factor_it)
+					atom_it != atom_vector_.end(); ++atom_it, ++factor_it)
 			{
 				atom_ptr = *atom_it;
 				atom_ptr->setVelocity(scaling_factor * (atom_ptr->getVelocity()
