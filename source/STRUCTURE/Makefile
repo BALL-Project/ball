@@ -50,7 +50,8 @@ clean_flex_bison:
 
 smilesParserParser.C smilesParserParser.h: smilesParserParser.y
 
-smilesParserLexer.o: ;
+smilesParserLexer.o: smilesParserLexer.C
+	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
 
-smilesParserParser.o:	;
-
+smilesParserParser.o: smilesParserParser.C
+	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
