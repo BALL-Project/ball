@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.35.4.5 2002/06/05 00:29:01 oliver Exp $
+// $Id: atom.C,v 1.35.4.6 2002/11/08 18:52:16 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -216,7 +216,7 @@ namespace BALL
     throw()
   {
     Composite::set(atom, deep);
-    PropertyManager::operator =(atom);
+    PropertyManager::operator = (atom);
     
     element_ = atom.element_;
     name_ = atom.name_;
@@ -238,7 +238,7 @@ namespace BALL
 		throw()
 	{
 		Composite::operator =(atom);
-		PropertyManager::operator =(atom);
+		PropertyManager::operator = (atom);
 		
 		element_ = atom.element_;
 		name_ = atom.name_;

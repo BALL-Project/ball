@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventExcludedSurface.h,v 1.21.4.3 2002/10/15 11:57:50 amoll Exp $
+// $Id: solventExcludedSurface.h,v 1.21.4.4 2002/11/08 18:52:12 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -1658,16 +1658,17 @@ else
 		delete edge2;
 		// replace the old edge by the new
 		toric_faces_[face->index_] = new_face;
-				#ifdef print_ses
+		#ifdef print_ses
 				Molecule* molecule = new Molecule;
 				partitionSingularEdge(new_edge4,10,molecule);
 				System* system = new System;
 				system->insert(*molecule);
-				HINFile hinfile("DATA/SES/singularEdge"+IndexToString(new_edge4->index_,0)+".hin",std::ios::out);
+				HINFile hinfile("DATA/SES/singularEdge"+IndexToString(new_edge4->index_,0)+".hin",ios::out);
 				hinfile << *system;
 				hinfile.close();
 				delete system;
-				#endif
+		#endif
+
 		delete face;
 	}
 
@@ -2810,6 +2811,7 @@ else
 				dphi2.value = (T)0;
 			}
 			Constants::EPSILON = epsilon;
+
 			if (dphi2 < dphi1)
 			{
 				dphi1.swap(dphi2);
@@ -3979,6 +3981,7 @@ else
 		}
 	}
 
+
 	template <class T>
 	void TSolventExcludedSurface<T>::partitionSingularEdge
 			(TSESEdge<T>* edge,
@@ -4045,7 +4048,7 @@ else
 				System *system = new System;
 				Molecule molecule(*edge[i]);
 				system->insert(molecule);
-				HINFile hinfile("DATA/SES/edge"+IndexToString(i,0)+".hin",std::ios::out);
+				HINFile hinfile("DATA/SES/edge"+IndexToString(i,0)+".hin",ios::out);
 				hinfile << *system;
 				hinfile.close();
 				delete system;
@@ -4069,10 +4072,10 @@ else
 						face1.insert(*molecule);
 					}
 				}
-				HINFile hinfile("DATA/SES/faceWithOut"+IndexToString(i,0)+".hin",std::ios::out);
+				HINFile hinfile("DATA/SES/faceWithOut"+IndexToString(i,0)+".hin",ios::out);
 				hinfile << face1;
 				hinfile.close();
-				hinfile.open("DATA/SES/faceWith"+IndexToString(i,0)+".hin",std::ios::out);
+				hinfile.open("DATA/SES/faceWith"+IndexToString(i,0)+".hin",ios::out);
 				hinfile << face2;
 				hinfile.close();
 				for (e = spheric_faces_[i]->edge_.begin(); e != spheric_faces_[i]->edge_.end(); e++)

@@ -1,9 +1,9 @@
-// $Id: RegularData3D_test.C,v 1.4.4.1 2002/09/02 13:24:49 oliver Exp $
+// $Id: RegularData3D_test.C,v 1.4.4.2 2002/11/08 18:52:16 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.4.4.1 2002/09/02 13:24:49 oliver Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.4.4.2 2002/11/08 18:52:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -343,7 +343,7 @@ CHECK(operator << (ostream& os, const RegularData3D&))
 	TRegularData3D<float>	data(lower, upper, 0.5);
 	
 	// fill the grid with something meaning ful
-	for (Index i = 0; i < data.getSize(); i++, data[i] = (float)((float)i / data.getSize()));
+	for (Position i = 0; i < data.getSize(); i++, data[i] = (float)((float)i / data.getSize()));
 	
 	std::ofstream os(filename.c_str(), std::ios::out);
 	os << data;
@@ -369,7 +369,7 @@ CHECK(operator << (ostream& os, const RegularData3D&))
 	TEST_REAL_EQUAL(data.getMaxY(), in_data.getMaxY())
 	TEST_REAL_EQUAL(data.getMaxZ(), in_data.getMaxZ())
 
-	for (Index i = 0; i < data.getSize(); i++)
+	for (Position i = 0; i < data.getSize(); i++)
 	{
 		TEST_REAL_EQUAL(data[i], in_data[i])
 	}

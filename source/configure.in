@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.19.4.8 2002/10/12 11:42:57 oliver Exp $
+dnl    $Id: configure.in,v 1.19.4.9 2002/11/08 18:52:16 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2487,15 +2487,21 @@ if test "${FFTW_SUPPORT}" = true ; then
 	AC_SUBST(BALL_HAS_FFTW)
 
 
-	AC_MSG_CHECKING()
+	AC_MSG_CHECKING(linking against libfftw)
+	dnl ????
 	if test "${X_LINKING_OK+set}" != set ; then
 		X11_LIBS="-lXmu -lXext -lXt -lX11 -lm"
 		SAVE_LIBS=${LIBS}
 		SAVE_LDFLAGS=${LDFLAGS}
-		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		LIBS="${FFTW_LIB}/libfftw.a ${LIBS}"
 		LDFLAGS=
-		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		FFTW_LINKING_OK=0
+		AC_TRY_LINK([  
+								],
+								[
+								], FFTW_LINKING_OK=1)
 		LIBS=${SAVE_LIBS}
+		LDFLAGS=${SAVE_LDFLAGS}
 	fi
 
 fi

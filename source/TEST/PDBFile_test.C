@@ -1,4 +1,4 @@
-// $Id: PDBFile_test.C,v 1.5 2002/01/26 22:01:28 oliver Exp $
+// $Id: PDBFile_test.C,v 1.5.4.1 2002/11/08 18:52:16 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.5 2002/01/26 22:01:28 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.5.4.1 2002/11/08 18:52:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -63,6 +63,7 @@ CHECK(writing of Systems containing Atoms instead of PDBAtoms)
 	TEST_EQUAL(system->countAtoms(), 10)
 	String filename;
 	NEW_TMP_FILE(filename)
+	STATUS(system->countBonds())
 	PDBFile outfile(filename, File::OUT);
 	outfile << *system;
 	outfile.close();

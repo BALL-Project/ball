@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.25 2001/07/15 16:12:42 oliver Exp $
+// $Id: bond.C,v 1.25.4.1 2002/11/08 18:52:16 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
@@ -11,13 +11,13 @@ namespace BALL
 
 	Bond::TooManyBonds::TooManyBonds(const char* file, int line)
 		throw()
-		:	Exception::GeneralException(file, line)
+		:	Exception::GeneralException(file, line, "Bond::TooManyBonds", "Unable to create additional bonds.")
 	{
 	}
 
 	Bond::NotBound::NotBound(const char* file, int line)
 		throw()
-		:	Exception::GeneralException(file, line)
+		:	Exception::GeneralException(file, line, "Bond::NotBound", "The bond is not connected to any atom.")
 	{
 	}
 

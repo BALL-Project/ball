@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.35.4.1 2002/05/31 22:46:55 oliver Exp $
+// $Id: composite.h,v 1.35.4.2 2002/11/08 18:52:12 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -182,14 +182,12 @@ namespace BALL
 
 		/**	Clone with a predicate.
 				This method copies the attributes of {\tt this} composite to root
-				(shallow copy) and then adds recursively each composite of the tree
-				that fulfils the {\tt predicate}.
+				(shallow copy) and then adds recursively each of its children.
 				@param	root the cloning target root is {\tt destroy}ed prior to
 								any copying 
-				@param	predicate the predicate
-				@param  a pointer to the root composite ({\tt &root})
+				@return  a pointer to the root composite ({\tt &root})
 		*/
-		void* clone(Composite& root, KernelPredicateType& predicate) const
+		void* clone(Composite& root) const
 			throw();
 
 		//@}		
@@ -218,14 +216,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Predicative assignment from a tree.
-				@param	composite the Composite tree to assign from
-				@param	predicate the predicate which controls assignment
-		*/
-		void set(const Composite& composite, KernelPredicateType& predicate)
-			throw();
-
-		/**	Regular tree assignment.
+		/**	Assignment.
 				@param	composite the Composite tree to assign from
 				@param	deep a {\tt bool} deciding whether the assignment will be
 								deep or shallow.
@@ -240,18 +231,7 @@ namespace BALL
 		const Composite& operator = (const Composite& composite)
 			throw();
 
-		/**	Predicative assignment of a tree to another.
-				Assign a copy of {\bf this} tree to another tree.
-				Only nodes fulfilling the {\tt predicate}	are copied.
-				The assigned {\tt composite} is destroyed first.
-				@param	composite the composite to be assigned to
-				@param	predicate the predicate used to decide which composites are
-								copied
-		*/
-		void get(Composite& composite, KernelPredicateType& predicate) const
-			throw();
-
-		/**	Regular assignment of a tree to another.
+		/**	Assignment of a tree to another.
 				Create a deep ({\tt deep} = {\bf true}) or shallow copy of a composite
 				and assign it to {\tt composite}. {\tt composite} is destroyed first.
 				@param	composite the composite to assign the copy to
@@ -1835,7 +1815,7 @@ namespace BALL
 		Size countDescendants_() const
 			throw();
 
-		void clone_(Composite& parent, Composite& stack, KernelPredicateType& predicate) const
+		void clone_(Composite& parent, Composite& stack) const
 			throw();
 
 		// traverse forward, valid for composites and subcomposites

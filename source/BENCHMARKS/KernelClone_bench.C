@@ -1,0 +1,153 @@
+// $Id: KernelClone_bench.C,v 1.1.2.1 2002/11/08 18:52:16 oliver Exp $
+#include <BALL/CONCEPT/benchmark.h>
+
+///////////////////////////
+
+#include <BALL/KERNEL/system.h>
+#include <BALL/FORMAT/PDBFile.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
+
+///////////////////////////
+
+using namespace BALL;
+
+START_BENCHMARK(KernelIteration, 1.0, "$Id: KernelClone_bench.C,v 1.1.2.1 2002/11/08 18:52:16 oliver Exp $")
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+PDBFile infile("data/AmberFF_bench.pdb");
+System S1;
+infile >> S1;
+infile.close();
+
+System S;
+Molecule* M = new Molecule;
+S.insert(*M);
+for (Position i = 0; i < 2000; i++)
+{
+	M->insert(*new Atom);
+}
+
+
+
+START_SECTION(Cloning w/o bonds, 0.5)
+
+	for (int count = 0; count < 500; count++)
+	{
+		System S2;
+		START_TIMER
+			S2 = *static_cast<System*>(S.create(true));
+		STOP_TIMER
+		S2.clear();
+	}
+
+END_SECTION
+
+
+AtomIterator it(M->beginAtom());
+Atom* last = &*it;
+for (++it; +it; ++it)
+{
+	it->createBond(*last);
+	last = &*it;
+}
+
+START_SECTION(Cloning, 0.5)
+
+	for (int count = 0; count < 500; count++)
+	{
+		System S2;
+		START_TIMER
+			S2 = *static_cast<System*>(S.create(true));
+		STOP_TIMER
+		S2.clear();
+	}
+
+END_SECTION
+
+START_SECTION(Creation, 0.5)
+
+	for (int count = 0; count < 500; count++)
+	{
+		for (int i = 0; i < 2000; i++)
+		{
+			START_TIMER
+			Atom* a = new Atom;
+			STOP_TIMER
+			delete a;
+		}
+	}
+END_SECTION
+
+START_SECTION(Assignment, 0.5)
+
+	for (int count = 0; count < 500; count++)
+	{
+		Atom atom;
+		for (int i = 0; i < 2000; i++)
+		{
+			Atom* a = new Atom;
+			START_TIMER
+				*a = atom;
+			STOP_TIMER
+			delete a;
+		}
+	}
+END_SECTION
+
+START_SECTION(Cloning (create), 0.5)
+
+	for (int count = 0; count < 500; count++)
+	{
+		Atom atom;
+		for (int i = 0; i < 2000; i++)
+		{
+			Atom* a;
+			START_TIMER
+				a = (Atom*)atom.create();
+			STOP_TIMER
+			delete a;
+		}
+	}
+END_SECTION
+
+START_SECTION(Insertion, 0.5)
+
+	for (int count = 0; count < 500; count++)
+	{
+		for (int i = 0; i < 2000; i++)
+		{
+			Molecule M;
+			Atom* a = new Atom;
+			START_TIMER
+				M.insert(*a);
+			STOP_TIMER
+		}
+	}
+
+END_SECTION
+
+AtomIterator ai(S.beginAtom());
+for (; +ai; ++ai)
+{
+	ai->destroyBonds();
+}
+
+START_SECTION(Deleting, 0.5)
+
+	for (int count = 0; count < 500; count++)
+	{
+		System S2;
+		S2 = *static_cast<System*>(S.create(true));
+		START_TIMER
+			S2.destroy();
+		STOP_TIMER
+	}
+
+END_SECTION
+
+/////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
+
+END_BENCHMARK

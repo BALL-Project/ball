@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.h,v 1.22.4.1 2002/08/22 17:17:56 oliver Exp $
+// $Id: surfaceProcessor.h,v 1.22.4.2 2002/11/08 18:52:13 oliver Exp $
 
 #define SES
 
@@ -50,6 +50,7 @@ namespace BALL
 		vector<Sphere3>& getSpheres();
 
 		protected:
+
 		Surface					surface_;
 		vector<Sphere3>	spheres_;
 		float						density_;

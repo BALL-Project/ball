@@ -1,5 +1,6 @@
-// $Id: glPrimitiveManager.iC,v 1.5.4.2 2002/11/07 19:21:27 amoll Exp $
+// $Id: glPrimitiveManager.iC,v 1.5.4.3 2002/11/08 18:52:13 oliver Exp $
 
+BALL_INLINE
 const GLDisplayList& GLDisplayListObject_::operator ()
 	(unsigned int drawing_mode, unsigned int drawing_precision) const
 	throw(WrongModes)

@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RDFParameter.h,v 1.8.4.1 2002/08/22 17:17:55 oliver Exp $
+// $Id: RDFParameter.h,v 1.8.4.2 2002/11/08 18:52:12 oliver Exp $
 
-#ifndef BALL__RDFPARAMETER_H
-#define BALL__RDFPARAMETER_H
+#ifndef BALL_STRUCTURE_RDFPARAMETER_H
+#define BALL_STRUCTURE_RDFPARAMETER_H
 
 #ifndef BALL_KERNEL_ATOM_H
 # include <BALL/KERNEL/atom.h>

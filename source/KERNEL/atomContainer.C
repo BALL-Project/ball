@@ -1,4 +1,4 @@
-// $Id: atomContainer.C,v 1.11 2001/07/15 20:41:33 oliver Exp $
+// $Id: atomContainer.C,v 1.11.4.1 2002/11/08 18:52:16 oliver Exp $
 
 #include <BALL/KERNEL/atomContainer.h>
 
@@ -100,7 +100,7 @@ namespace BALL
 		// involved!
     if (clone_them && deep)
     {
-      BALL::cloneBonds(atom_container, *this);
+			BALL::cloneBonds(atom_container, *this);
 		}
 
     clone_bonds = clone_them;

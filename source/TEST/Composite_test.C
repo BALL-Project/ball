@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.29 2002/01/26 22:01:26 oliver Exp $
+// $Id: Composite_test.C,v 1.29.4.1 2002/11/08 18:52:16 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.29 2002/01/26 22:01:26 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.29.4.1 2002/11/08 18:52:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -170,14 +170,14 @@ CHECK(Composite(const Composite&, bool))
 	TEST_EQUAL(g.countDescendants(), 0)
 RESULT
 
-CHECK(Composite::clone(Composite&, KernelPredicateType&) const)
+CHECK(Composite::clone(Composite&) const)
 	Composite a, b, c, d, e;
 	a.appendChild(b);
 	b.appendChild(c);
 	b.appendChild(d);
 	c.appendChild(e);
 	Composite f;
-	a.clone(f, Composite::DEFAULT_UNARY_PREDICATE);
+	a.clone(f);
 	TEST_EQUAL(a.getDegree(), 1)
 	TEST_EQUAL(b.getDegree(), 2)
 	TEST_EQUAL(c.getDegree(), 1)
@@ -1230,9 +1230,9 @@ CHECK(bool applyLevel(UnaryProcessor<Composite>& processor, long level))
 	TEST_EQUAL(myproc.getPointer(), 0)
 RESULT
 
-CHECK(set(const Composite&, KernelPredicateType&))
+CHECK(set(const Composite&))
 	Composite x;
-	x.set(a, Composite::DEFAULT_UNARY_PREDICATE);
+	x.set(a);
 	TEST_EQUAL(x.count(Composite::DEFAULT_UNARY_PREDICATE), 5)
 	TEST_NOT_EQUAL(x.getFirstChild()->getChild(1), 0)
 	TEST_NOT_EQUAL(x.getFirstChild()->getFirstChild()->getFirstChild(), 0)
@@ -1257,9 +1257,9 @@ CHECK(operator = (const Composite&))
 	TEST_EQUAL(x.getFirstChild()->getFirstChild()->getFirstChild()->getFirstChild(), 0)
 RESULT
 
-CHECK(get(Composite&, KernelPredicateType&) const)
+CHECK(get(Composite&) const)
 	Composite x;
-	a.get(x, Composite::DEFAULT_UNARY_PREDICATE);
+	a.get(x);
 	TEST_EQUAL(x.count(Composite::DEFAULT_UNARY_PREDICATE), 5)
 	TEST_NOT_EQUAL(x.getFirstChild()->getChild(1), 0)
 	TEST_NOT_EQUAL(x.getFirstChild()->getFirstChild()->getFirstChild(), 0)

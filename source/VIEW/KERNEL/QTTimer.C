@@ -1,10 +1,11 @@
-// $Id: QTTimer.C,v 1.12.4.1 2002/11/04 18:14:47 amoll Exp $
+// $Id: QTTimer.C,v 1.12.4.2 2002/11/08 18:52:16 oliver Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
 #include <BALL/COMMON/exception.h>
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/rtti.h>
+#include <stdio.h>
 
 using namespace std;
 

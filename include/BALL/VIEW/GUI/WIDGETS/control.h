@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.10.4.5 2002/11/07 19:20:09 amoll Exp $
+// $Id: control.h,v 1.10.4.6 2002/11/08 18:52:13 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -61,7 +61,9 @@ namespace BALL
 				will be shown in the structure view of {\em *this} control.
 				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/control.h}
 		*/
-		class Control: public QListView, public ModularWidget
+		class Control
+			: public QListView, 
+				public ModularWidget
 		{
 			
 			Q_OBJECT
