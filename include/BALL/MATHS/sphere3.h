@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.21 2000/12/19 00:42:24 amoll Exp $
+// $Id: sphere3.h,v 1.22 2001/01/29 00:31:43 amoll Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -268,7 +268,7 @@ namespace BALL
 	//@{
 
 	/**	Input- Operator.
-			Reads in an instance of TVector3 and a {\bf T} value : p, radius
+			Reads in an instance of TVector3 and a {\bf T} value : p, radius.
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TSphere3<T>& sphere3)
