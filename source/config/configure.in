@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.57 2000/01/31 17:42:00 oliver Exp $
+dnl    $Id: configure.in,v 1.58 2000/02/01 08:19:48 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -26,8 +26,8 @@ AC_ARG_ENABLE(debuginfo,       [  --disable-debuginfo     remove -g from the com
 AC_ARG_ENABLE(BALLVIEW,        [  --disable-BALLVIEW      disable the compilation of BALLVIEW, the visualization component])
 AC_ARG_ENABLE(64,              [  --enable-64             create 64 bit binaries (if allowed by the compiler)])
 AC_ARG_WITH(compiler,          [  --with-compiler=CXX     use CXX as C++ compiler])
-AC_ARG_WITH(cxxflags,          [  --with-cxxflags=FLAGS   add FLAGS to the C++ compiler flags])
-AC_ARG_WITH(ldflags,           [  --with-ldflags=FLAGS    add FLAGS to the linker flags])
+AC_ARG_WITH(cxxflags,          [  --with-cxxflags=FLAGS   add FLAGS to the C++ compiler flags (commas are converted to blanks)])
+AC_ARG_WITH(ldflags,           [  --with-ldflags=FLAGS    add FLAGS to the linker flags (commas are converted to blanks)])
 AC_ARG_WITH(qt-incl,           [  --with-qt-incl=DIR      QT header files are in DIR])
 AC_ARG_WITH(qt-libs,           [  --with-qt-libs=DIR      QT libraries are in DIR])
 AC_ARG_WITH(moc,               [  --with-moc=MOC          use MOC as the absolute path to the QT meta object compiler (moc)])
@@ -62,11 +62,11 @@ if test "$with_compiler" != "" ; then
 fi
 
 if test "$with_cxxflags" != "" ; then
-	CXXFLAGS=$with_cxxflags
+	CXXFLAGS="${CXXFLAGS}`echo $with_cxxflags|tr , \  `"
 fi
 
 if test "$with_ldflags" != "" ; then
-	LDFLAGS=$with_ldflags
+	LDFLAGS="${LDFLAGS}`echo $with_ldflags|tr ,  \  `"
 fi
 
 if test "$with_qt_incl" != "" ; then

@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.66 2000/01/31 17:42:03 oliver Exp $
+#  $Id: configure,v 1.67 2000/02/01 08:19:51 oliver Exp $
 
 
 ##################################################
@@ -123,9 +123,9 @@ ac_help="$ac_help
 ac_help="$ac_help
   --with-compiler=CXX     use CXX as C++ compiler"
 ac_help="$ac_help
-  --with-cxxflags=FLAGS   add FLAGS to the C++ compiler flags"
+  --with-cxxflags=FLAGS   add FLAGS to the C++ compiler flags (commas are converted to blanks)"
 ac_help="$ac_help
-  --with-ldflags=FLAGS    add FLAGS to the linker flags"
+  --with-ldflags=FLAGS    add FLAGS to the linker flags (commas are converted to blanks)"
 ac_help="$ac_help
   --with-qt-incl=DIR      QT header files are in DIR"
 ac_help="$ac_help
@@ -762,11 +762,11 @@ if test "$with_compiler" != "" ; then
 fi
 
 if test "$with_cxxflags" != "" ; then
-	CXXFLAGS=$with_cxxflags
+	CXXFLAGS="${CXXFLAGS}`echo $with_cxxflags|tr , \  `"
 fi
 
 if test "$with_ldflags" != "" ; then
-	LDFLAGS=$with_ldflags
+	LDFLAGS="${LDFLAGS}`echo $with_ldflags|tr ,  \  `"
 fi
 
 if test "$with_qt_incl" != "" ; then
