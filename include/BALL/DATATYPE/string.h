@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.h,v 1.53 2004/02/23 16:27:16 oliver Exp $
+// $Id: string.h,v 1.54 2004/02/23 16:33:15 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -453,10 +453,6 @@ namespace BALL
 
 		/// Evaluates the string to a double
 		double toDouble() const	throw(Exception::InvalidFormat);
-			
-		#ifdef BALL_HAS_VIEW
-			operator QString () const throw();
-		#endif
 		//@}
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.C,v 1.50 2004/02/23 16:27:23 oliver Exp $
+// $Id: string.C,v 1.51 2004/02/23 16:33:18 oliver Exp $
 //
 
 #include <BALL/DATATYPE/string.h>
@@ -530,13 +530,6 @@ namespace BALL
 		
 		return d;
 	}
-
-	#ifdef BALL_HAS_VIEW
-	void String::operator QString () const throw()
-	{
-		return QString(c_str());
-	}
-	#endif
 
 	void String::toLower(Index from, Size len)
 		throw(Exception::IndexUnderflow, Exception::IndexOverflow)
