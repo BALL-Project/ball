@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.C,v 1.10 2004/06/10 20:47:47 amoll Exp $
+// $Id: regularData2DWidget.C,v 1.11 2004/06/10 22:10:55 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData2DWidget.h> 
@@ -82,11 +82,11 @@ void RegularData2DWidget::createPlot()
 	paint.begin(&pixmap);         // set the Painter 
 
 	QColor pCol;        
-	for (Position y=0; y<=max_y; y++) 
+	for (Position y=0; y< max_y; y++) 
 	{
-		for (Position x=0; x<=max_x; x++) 
+		for (Position x=0; x< max_x; x++) 
 		{
-			ColorRGBA mapcolor = color_table_.map((*data_)[x + y * max_x]);
+			ColorRGBA mapcolor = color_table_.map(data_->getData(x + y * max_x));
 			pCol = QColor(mapcolor.getRed(), mapcolor.getGreen(), mapcolor.getBlue());
 			paint.setPen(pCol);
 			paint.drawPoint(x, y);

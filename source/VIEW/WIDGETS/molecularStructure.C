@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.51 2004/06/10 21:56:58 amoll Exp $
+// $Id: molecularStructure.C,v 1.52 2004/06/10 22:10:55 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1207,7 +1207,7 @@ namespace BALL
 			if (!selection.size() != 1 ||
 					!RTTI::isKindOf<Protein>(**selection.begin()))
 			{
-				setStatusbarText("Exacly one Protein has to be selected for Ramachandran Plot!");
+				setStatusbarText("Exactly one Protein has to be selected for a Ramachandran Plot!");
 			}
 
 			Protein* protein = ((Protein*) *selection.begin());
@@ -1224,11 +1224,8 @@ namespace BALL
 				if (res_it->hasTorsionPhi() &&
 				    res_it->hasTorsionPsi())
 				{
-					// calculate the torsion angle and print its value in degree
 					Angle phi = res_it->getTorsionPhi();
 					Angle psi = res_it->getTorsionPsi();
-//				 	cout << "phi(" << res_it->getName() << res_it->getID() << ") = " << phi.toDegree() << endl;
-// 					cout << "psi(" << res_it->getName() << res_it->getID() << ") = " << psi.toDegree() << endl;
 					(*rd).getClosestValue(Vector2(phi.toDegree(), psi.toDegree())) ++;
 					assigned_residues++;
 				}
