@@ -72,6 +72,10 @@ void BALLViewDemo::show()
 		file_name += "bpti.pdb";
 		MolecularFileDialog* dialog = MolecularFileDialog::getInstance(0);
 		system_ = dialog->openFile(file_name);
+		
+		system_->apply(getFragmentDB().add_hydrogens);
+		system_->apply(getFragmentDB().build_bonds);
+		getMainControl()->update(*system_, true);
 	}
 	catch(Exception::FileNotFound e)
 	{
@@ -136,6 +140,13 @@ void BALLViewDemo::nextStep_()
 void BALLViewDemo::accept()
 {
 	Index id = widget_stack->id(widget_stack->visibleWidget());
+
+	if (id == 15) // last page
+	{
+		hide();
+		return;
+	}
+
 	MolecularStructure* ms = MolecularStructure::getInstance(0);
 	bool disable_button = true;
 
@@ -278,11 +289,6 @@ void BALLViewDemo::accept()
 */
  		disable_button = false;
 		
-	}
-	else if (id == 15) // last
-	{
-		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
-		notify_(crmsg);
 	}
 
 	buttonOk->setEnabled(true);
