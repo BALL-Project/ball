@@ -1,4 +1,4 @@
-// $Id: ruleEvaluator.h,v 1.2 2000/05/24 12:46:30 anker Exp $
+// $Id: ruleEvaluator.h,v 1.3 2000/05/24 16:17:53 oliver Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULEEVALUATOR_H
@@ -6,10 +6,6 @@
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #	include <BALL/DATATYPE/stringHashMap.h>
-#endif
-
-#ifndef BALL_FORMAT_INIFILE_H
-#	include <BALL/FORMAT/INIFile.h>
 #endif
 
 #ifndef BALL_KERNEL_EXPRESSION_H
@@ -22,6 +18,8 @@
 namespace BALL 
 {
 
+	// forward declarations
+	class INIFile;
 
 	/**	
 	*/
