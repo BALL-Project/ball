@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.7 2004/01/18 12:43:09 amoll Exp $
+// $Id: preferences.C,v 1.8 2004/01/18 13:40:59 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -24,6 +24,7 @@ namespace BALL
 			throw()
 			:	PreferencesData(parent, name, FALSE, 208)
 		{
+			setCaption(name);
 		}
 
 		Preferences::~Preferences()

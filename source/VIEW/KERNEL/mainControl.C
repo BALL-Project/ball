@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.53 2004/01/18 12:45:28 amoll Exp $
+// $Id: mainControl.C,v 1.54 2004/01/18 13:39:50 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -209,7 +209,7 @@ void MainControl::show()
 	connect(preferences_dialog_->ok_button, SIGNAL(clicked()), 
 			this, SLOT(applyPreferencesTab()));
 	
-	connect(preferences_dialog_->cancel_button, SIGNAL((clicked())), 
+	connect(preferences_dialog_->cancel_button, SIGNAL(clicked()), 
 			this, SLOT(cancelPreferencesTab()));
 	
 	connect(preferences_dialog_->defaults_button, SIGNAL(clicked()), 
