@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.30.4.3 2002/12/03 17:43:06 anker Exp $
+// $Id: standardPredicates.C,v 1.30.4.4 2002/12/03 22:57:07 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -774,6 +774,7 @@ namespace BALL
 		CTPNode* current = 0;
 		Size verbosity = 1;
 		std::list<CTPNode*> all_nodes;
+		std::vector<CTPNode*> bracket_stack;
 
 		CTPNode* root = new CTPNode;
 		root->setSymbol("/");
@@ -796,9 +797,11 @@ namespace BALL
 			{
 				if (bond_chars.has(input[position - 1]))
 				{
-					Log.error() << "parse error: bond char before bracket." << endl;
+					Log.error() << "ConnectedToPredicate:parse_(): " << endl
+						<< "\tparse error: bond char before bracket." << endl;
 					return(false);
 				}
+				bracket_stack.push_back(current);
 				current = createNewNode_(current);
 				all_nodes.push_back(current);
 				depth++;
@@ -813,19 +816,30 @@ namespace BALL
 			{
 				if (input[position] == ')')
 				{
-					current->setFinished();
-					current = current->getParent();
 					if (current == 0)
 					{
-						Log.error() << "Tried to access a NULL parent. Aborting." << endl;
+						Log.error() << "ConnectedToPredicate::parse_(): " << endl
+							<< "\ttried to access a NULL pointer. Aborting." << endl;
 						return(false);
 					}
+					current->setFinished();
 					depth--;
 					bracket_count--;
 					if (verbosity > 90)
 					{
 						Log.info() << "Found ), new depth is " << depth
 							<< endl;
+					}
+					if (bracket_stack.size() > 0)
+					{
+						current = bracket_stack.back();
+						bracket_stack.pop_back();
+					}
+					else
+					{
+						Log.error() << "ConnectedToPredicate::parse_(): " << endl
+							<< "\tparse error: missing opening bracket." << endl;
+						return(false);
 					}
 				}
 				else
@@ -872,23 +886,23 @@ namespace BALL
 							{
 								if (current->isFinished() == true)
 								{
-									Log.error() << "parse(): "
-										<< "Trying to add a lowercase char to an already finished node." 
+									Log.error() << "ConnectedToPredicate::parse_(): " << endl
+										<< "\tparse error: trying to add a lowercase char to an already finished node." 
 										<< endl;
 									return(0);
 								}
 								String symbol = current->getSymbol();
 								if (symbol.size() != 1)
 								{
-									Log.error() << "parse(): "
-										<< "Trying to add a lowercase char to a symbol with length != 1." 
+									Log.error() << "ConnectedToPredicate::parse_(): "
+										<< "\tparse error: trying to add a lowercase char to a symbol with length != 1." 
 										<< endl;
 									return(0);
 								}
 								if (symbol == '*')
 								{
-									Log.error() << "parse(): "
-										<< "Trying to add a lowercase char to a \"*\"." 
+									Log.error() << "ConnectedToPredicate::parse_(): " << endl
+										<< "\tparse error: trying to add a lowercase char to a \"*\"." 
 										<< endl;
 									return(0);
 								}
@@ -907,8 +921,8 @@ namespace BALL
 										{
 											if (link_map_[link_mark_].second != 0)
 											{
-												Log.error() << "parse(): "
-													<< "Triple mark: " << link_mark_ << endl;
+												Log.error() << "ConnectedToPredicate::parse_(): "
+													<< "\tparse error: triple mark: " << link_mark_ << endl;
 												return(0);
 											}
 											link_map_[link_mark_].second = current;
@@ -918,8 +932,8 @@ namespace BALL
 									}
 									else
 									{
-										Log.error() << "parse(): "
-											<< "Only numbers are allowed as marks." << endl;
+										Log.error() << "ConnectedToPredicate::parse_(): "
+											<< "\tparse error: only numbers are allowed as marks." << endl;
 										return(0);
 									}
 								}
@@ -932,8 +946,8 @@ namespace BALL
 										CTPNode* parent = current->getParent();
 										if (parent == 0)
 										{
-											Log.error() << "Parse error: "
-												<< "Multiplier without parent. Aborting."
+											Log.error() << "ConnectedToPredicate::parse_(): " << endl
+												<< "\tmultiplier without parent. Aborting."
 												<< endl;
 											return(0);
 										}
@@ -948,10 +962,10 @@ namespace BALL
 									}
 									else
 									{
-										Log.error() << "parse(): "
-											<< "Unknown input char: " << input[position]
-											<< endl;
-										return(0);
+										Log.error() << "ConnectedToPredicate::parse_(): " << endl
+											<< "\tparse error: unknown input char: " 
+											<< input[position] << endl;
+										return(false);
 									}
 								}
 							}
@@ -963,15 +977,15 @@ namespace BALL
 
 		if (bracket_count > 0)
 		{
-			Log.error() << "parse(): "
-				<< "Too many opening brackets." << endl;
+			Log.error() << "ConnectedToPredicate::parse_(): " << endl
+				<< "\tparse error: too many opening brackets." << endl;
 			return(0);
 		}
 
 		if (bracket_count < 0)
 		{
-			Log.error() << "parse(): "
-				<< "Too many closing brackets." << endl;
+			Log.error() << "ConnectedToPredicate::parse_(): " << endl
+				<< "\tparse error: Too many closing brackets." << endl;
 			return(0);
 		}
 
@@ -985,8 +999,8 @@ namespace BALL
 
 			if (it->second.second == 0)
 			{
-				Log.error() << "parse(): "
-					<< "Unresolved mark: " << it->first << endl;
+				Log.error() << "ConnectedToPredicate::parse_(): " << endl
+					<< "unresolved mark: " << it->first << endl;
 				return(0);
 			}
 
@@ -1021,8 +1035,8 @@ namespace BALL
 		switch (node.getBondType())
 		{
 			case CTPNode::BONDTYPE__UNINITIALISED:
-				Log.error() << ""
-					<< "Uninitialized bond. Returning false." << endl;
+				Log.error() << "ConnectedToPredicate::bondOrderMatch_(): " << endl
+					<< "\tuninitialized bond. Returning false." << endl;
 				result = false;
 				break;
 
@@ -1056,8 +1070,8 @@ namespace BALL
 				break;
 
 			default:
-				Log.error() << ""
-					<< "Unknown bond type " << node.getBondType() << endl;
+				Log.error() << "ConnectedToPredicate::bondOrderMatch_(): " << endl
+					<< "\tunknown bond type " << node.getBondType() << endl;
 				result = false;
 		}
 		return result;
@@ -1073,8 +1087,8 @@ namespace BALL
 
 		if (current == 0)
 		{
-			Log.error() << "ConnectedToPredicate::find_(): "
-				<< "Encountered a NULL pointer as node pointer, aborting." << endl;
+			Log.error() << "ConnectedToPredicate::find_(): " << endl
+				<< "\tencountered NULL as node pointer, aborting." << endl;
 			return(false);
 		}
 
