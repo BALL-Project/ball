@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.147 2001/07/30 00:51:41 oliver Exp $
+dnl    $Id: configure.in,v 1.148 2001/08/01 01:51:52 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -63,13 +63,14 @@ AC_ARG_WITH(opengl-incl,       [  --with-opengl-incl=DIR  OpenGL/Mesa header fil
 AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL])
 AC_ARG_WITH(mesa,              [  --with-mesa             use MESA instead of OpenGL])
 AC_ARG_WITH(libxnet,           [  --without-libxnet       use -lsocket -lnsl rather than -lxnet (under Solaris)])
-AC_ARG_WITH(python,            [  --with-python           enable Python support])
+AC_ARG_WITH(python,            [  --enable-python       	enable Python support and search for executable])
+AC_ARG_WITH(python,            [  --with-python=EXE       enable Python support and use Python executable in EXE])
 AC_ARG_WITH(python-incl,       [  --with-python-incl=DIR  Python includes (Python.h) is in DIR])
 AC_ARG_WITH(python-libs,       [  --with-python-libs=DIR  Python library (libpython*.a) is in DIR])
 AC_ARG_WITH(python-ldopts,     [  --with-python-ldopts=X  Use additional options X when linking with the Python library])
+AC_ARG_WITH(sip,   	           [  --with-sip=DIR          the SIP executable resides in DIR])
 AC_ARG_WITH(sip-lib,   	       [  --with-sip-lib=DIR      the SIP library resides in DIR])
 AC_ARG_WITH(sip-incl,   	     [  --with-sip-incl=DIR     the SIP header file resides in DIR])
-AC_ARG_WITH(sip,   	           [  --with-sip=DIR          the SIP executable resides in DIR])
 AC_ARG_WITH(xdr,               [  --without-xdr           no RPC/XDR headers available - do not build portable binary persistence support])
 
 dnl
@@ -166,7 +167,7 @@ fi
 # use this switch to enable the python support
 # this also builds libBALLc.so and requires
 # Python.h and libsip.a
-if test "$with_python" = "yes" -o "$enable_python" = yes ; then
+if test "$with_python" != "no" -o "$enable_python" = yes ; then
 	PYTHON_SUPPORT=true
 else
 	PYTHON_SUPPORT=
@@ -969,13 +970,13 @@ dnl normally makedepend doesn't need a redirection.
 dnl if the C++-compiler creates the dependencies, the
 dnl redirection to .Dependencies should be given in 
 dnl MAKEDEP_CXX
-MAKEDEP_CXX_SUFFIX=
+#MAKEDEP_CXX_SUFFIX=
 
 dnl
 dnl	 TEMPLATE_DIR contains the name of the template
 dnl  database dir. This is required for a "make clean"
 dnl
-TEMPLATE_DIR=
+#TEMPLATE_DIR=
 
 dnl
 dnl  Here go the g++-specific flags
@@ -1077,7 +1078,7 @@ dnl
 dnl		Digital C++ specific options
 dnl
 if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
-	TEMPLATE_DIR="cxx_repository"
+	TEMPLATE_DIR="cxx_rep"
 	AR="ar"
 	DYNAR="${CXX}"
 	AROPTS="${AROPTS} -o"
@@ -1088,7 +1089,7 @@ if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
 
 	CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
 	LIB_CXXFLAGS="${LIB_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
-	CXXFLAGS_O="${CXXFLAGS_O} -O1"
+	CXXFLAGS_O="${CXXFLAGS_O} -O2"
 	
 	CXXFLAGS_D="${CXXFLAGS_D}"
 	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
@@ -2765,24 +2766,77 @@ AC_SUBST(SIP_INCLUDES)
 AC_SUBST(PYTHON_INCLUDES)
 AC_SUBST(PYTHON_SUPPORT)
 AC_SUBST(PYTHON_LIBS)
-if test "${PYTHON_SUPPORT}" = true ; then
-	AC_DEFINE(BALL_PYTHON_SUPPORT)
-fi
 
 if test "${PYTHON_SUPPORT}" = true ; then
-	AC_MSG_CHECKING(stuff required for Python extensions)
-	AC_MSG_RESULT(.)
+	AC_DEFINE(BALL_PYTHON_SUPPORT)
+
+	dnl 
+	dnl Find the python executable (specified via --with-python
+	dnl 
+ 
+	if test "$with_python" = "" ; then
+		AC_PATH_PROG(PYTHON_EXECUTABLE, python)
+ 
+		if test "${PYTHON_EXECUTABLE}" = "" ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([Could not find Python interpreter ]${with_python})
+			AC_MSG_RESULT([Please use --with-python=EXE to specify its location.])
+      AC_MSG_ERROR(Aborted)
+		fi
+	else
+		AC_MSG_CHECKING(for Python executable)
+		if test -e "${with_python}" ; then
+	    PYTHON_EXECUTABLE=$with_python
+			AC_MSG_RESULT(${PYTHON_EXECUTABLE})
+		else
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([Did not find a Python executable at the specified location.])
+			AC_MSG_RESULT([Please check the path you specified for --with-python=...])
+			AC_MSG_ERROR(Aborted)
+		fi
+	fi
+
+	dnl
+	dnl	 Run python to retrieve some useful configuration information
+	dnl	
+	AC_MSG_CHECKING(for Python version)
+ 	PYTHON_VERSION=`${PYTHON_EXECUTABLE} -c 'import sys;print sys.version' | ${SED} -n 1p | ${CUT} -d\  -f1`
+	AC_MSG_RESULT(${PYTHON_VERSION})
+	PYTHON_VERSION_NUMBER_1=`echo ${PYTHON_VERSION} | ${CUT} -d. -f1`
+	PYTHON_VERSION_NUMBER_2=`echo ${PYTHON_VERSION} | ${CUT} -d. -f2`
+	PYTHON_VERSION_NUMBER_3=`echo ${PYTHON_VERSION} | ${CUT} -d. -f3`
 	
+	dnl
+	dnl  We need at least Python 2.0
+	dnl
+	if test "${PYTHON_VERSION_NUMBER_1}" -le 1 ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Python verison 2.0 or above required!)
+		AC_MSG_RESULT(Please donwload and install Python from)
+		AC_MSG_RESULT(  http://www.python.org)
+		AC_MSG_ERROR(Aborted)
+	fi
+	
+	AC_MSG_CHECKING(for Python installation paths)
+	PYTHON_PREFIX=`${PYTHON_EXECUTABLE} -c 'import sys;print sys.prefix'`
+	AC_MSG_RESULT(${PYTHON_PREFIX})
+
+
 	dnl
 	dnl  Python include path
 	dnl
 	AC_MSG_CHECKING(for Python.h)
+	if test "${PYTHON_INC_PATH}" = "" ; then
+		PYTHON_INC_PATH="${PYTHON_PREFIX}/include/python${PYTHON_VERSION}"
+	fi
 	AC_FIND_HEADER(PYTHON_INC_PATH, Python.h, ${PYTHON_INCLUDE_PATH})
 	if test "${PYTHON_INC_PATH}" = "" ; then
 		AC_MSG_RESULT(not found!)
 		AC_MSG_RESULT()
-		AC_MSG_RESULT(Please specify the path to the directory that contains)
-		AC_MSG_RESULT(Python.h using the option --with-python-incl=DIR)
+		AC_MSG_RESULT([Please specify the path to the directory that contains])
+		AC_MSG_RESULT([Python.h using the option --with-python-incl=DIR])
+		AC_MSG_RESULT([or ensure that Python is installed in the correct directory])
+		AC_MSG_RESULT([(sys.prefix is ${PYTHON_PREFIX})])
 		AC_MSG_ERROR(Aborted.)
 	else
 		AC_MSG_RESULT(${PYTHON_INC_PATH})
@@ -2793,12 +2847,16 @@ if test "${PYTHON_SUPPORT}" = true ; then
 	dnl	Python library path
 	dnl
 	AC_MSG_CHECKING(for libpython)
+	if test "${PYTHON_LIBPATH}" = "" ; then
+		PYTHON_LIBPATH="${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/config/"
+	fi
 	PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
 	if test "${PYTHON_LIBS}" = "" ; then
-			AC_MSG_RESULT()
+		AC_MSG_RESULT()
 		AC_MSG_RESULT(No libpython*a found in ${PYTHON_LIBPATH}. Please specify)
-		AC_MSG_RESULT(the path where your Python library resides using)
-		AC_MSG_RESULT( --with-python-libs=DIR)
+		AC_MSG_RESULT(the path where your Python library resides using --with-python-libs=DIR)
+		AC_MSG_RESULT(or ensure that libpython is installed in the correct directory)
+		AC_MSG_RESULT([(sys.prefix is ]${PYTHON_PREFIX}[)])
 		AC_MSG_RESULT()
 		AC_MSG_ERROR(Aborted.)
 	fi
