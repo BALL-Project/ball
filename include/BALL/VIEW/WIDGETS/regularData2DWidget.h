@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.h,v 1.4 2004/01/13 12:39:38 anhi Exp $
+// $Id: regularData2DWidget.h,v 1.5 2004/01/26 16:15:41 anne Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -16,7 +16,16 @@
 # include <BALL/VIEW/WIDGETS/canvasWidget.h>
 #endif
 
-#ifndef BALL_DATATYPE_REGULARDATA1D_H
+#ifndef BALL_VIEW_DATATYPE_COLORTABLE_H
+# include <BALL/VIEW/DATATYPE/colorTable.h>
+#endif
+
+#ifndef BALL_VIEW_WIDGET_CANVASWIDGET_H
+# include <BALL/VIEW/WIDGETS/canvasWidget.h>
+#endif
+
+
+#ifndef BALL_DATATYPE_REGULARDATA2D_H
 # include <BALL/DATATYPE/regularData2D.h>
 #endif
 
@@ -33,7 +42,7 @@ namespace BALL
 		//  class regularData2DWidget used to plot one-dimensional data
 		class MainControl;
 
-		/**  New RegularData1D Message Classic.
+		/**  New RegularData2D Message Classic.
 				\ingroup ViewWidgets
 		 */
 		class UpdateRegularData2DMessage 
@@ -81,7 +90,7 @@ namespace BALL
 				
 			public:
 		
-			//			BALL_EMBEDDABLE(RegularData1DWidget) //macro for BALL messages
+			//			BALL_EMBEDDABLE(RegularData2DWidget) //macro for BALL messages
 			
 			/** Detailed constructor
 			 */
@@ -113,8 +122,8 @@ namespace BALL
 			bool line_style_;
 			
 
-		}; //end of class RegularData1DWidget
+		}; //end of class RegularData2DWidget
 
-	} //end of namespace VIEW
-
+	} //end of namespace VIEW	
+	
 }//end of namespace BALL

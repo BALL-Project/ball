@@ -48,10 +48,17 @@ namespace BALL
       //Destructor
       virtual ~CanvasWidget();  
       
+
+			//get/set methods
+			const QCanvas& getCanvas()
+				throw();
+			
       //methods
       void showObjects()	 
-	throw();
+				throw();
       
+				
+			
       /*
       void enlarge()
         throw();
