@@ -1,4 +1,4 @@
-// $Id: AnisotropyShiftProcessor_test.C,v 1.1 2000/09/22 00:33:47 amoll Exp $
+// $Id: AnisotropyShiftProcessor_test.C,v 1.2 2000/09/22 11:15:11 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(AnisotropyShiftProcessor, "$Id: AnisotropyShiftProcessor_test.C,v 1.1 2000/09/22 00:33:47 amoll Exp $")
+START_TEST(AnisotropyShiftProcessor, "$Id: AnisotropyShiftProcessor_test.C,v 1.2 2000/09/22 11:15:11 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
