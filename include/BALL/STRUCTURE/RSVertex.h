@@ -1,4 +1,4 @@
-// $Id: RSVertex.h,v 1.15 2001/07/15 21:21:02 amoll Exp $
+// $Id: RSVertex.h,v 1.16 2001/09/19 17:27:20 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -17,6 +17,9 @@ namespace BALL
 	template <typename T>
 	class TRSEdge;
 
+	template <typename T>
+	class TReducedSurface;
+
 	/** Generic RSVertex Class.	
 			{\bf Definition:} \URL{BALL/STRUCTURE/RSVertex.h}	
 	*/
@@ -24,6 +27,17 @@ namespace BALL
 	class TRSVertex
 	{
 		public:
+
+		/** @name Class friends
+				\begin{itemize}
+					\item class TReducedSurface<T>
+					\item class TRSEdge<T>
+					\item class TRSFace<T>
+				\end{itemize}
+		*/
+		friend class TReducedSurface<T>;
+		friend class TRSEdge<T>;
+		friend class TRSFace<T>;
 
 		BALL_CREATE(TRSVertex)
 
@@ -40,9 +54,11 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new RSVertex object from another.
 				@param	rsvertex	the RSVertex object to be copied
-				@param	bool			ignored - just for interface consistency
+				@param	deep		the edges and faces are setten to NULL, if deep is	
+												false, otherwise they are copied, too	
+												(with deep = false)
 		*/
-		TRSVertex(const TRSVertex<T>& rsvertex, bool = true)
+		TRSVertex(const TRSVertex<T>& rsvertex, bool deep = false)
 			throw();
 
 		/**	Detailled constructor.
@@ -78,9 +94,11 @@ namespace BALL
 
 		/**	Assign from another RSVertex.
 				@param rsvertex	the RSVertex object to assign from
-				@param deep ignored
+				@param	deep		the edges and faces are setten to NULL, if deep is	
+												false, otherwise they are copied, too	
+												(with deep = false)
 		*/
-		void set(const TRSVertex<T>& rsvertex, bool = true)
+		void set(const TRSVertex<T>& rsvertex, bool deep = false)
 			throw();
 
 		/**	Assign to a Index, two HashSets amd another Index.
@@ -153,7 +171,7 @@ namespace BALL
 				@param	edge	a pointer to the RSFace to delete
 		*/
 		void deleteFace(TRSFace<T>* face)
-			throw();
+ 			throw();
 
 		/** Return the HashSet of RFSaces the RSVertex belongs to.
 				@return	HashSet<TRSFace<T>*>	the HashSet of RSFaces the RSVertex	
@@ -233,7 +251,12 @@ namespace BALL
 		*/
 		bool has(TRSEdge<T>* edge) const
 			throw();
-		
+
+		bool hasEdges() const
+			throw()
+		{
+			return !edges_.isEmpty();
+		}
 
 		//@}
 
@@ -258,9 +281,8 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input operator
+	/**	Input- Operator
 			reads in a rsvertex
-			@exception NotImplemented
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TRSVertex<T>& rsvertex)
@@ -268,7 +290,7 @@ namespace BALL
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
-	/**	Output operator
+	/**	Output- Operator
 			prints out a rsvertex
 	*/
 		template <typename T>
@@ -312,13 +334,30 @@ namespace BALL
 
 
 	template <typename T>
-	TRSVertex<T>::TRSVertex(const TRSVertex<T>& rsvertex, bool)
+	TRSVertex<T>::TRSVertex(const TRSVertex<T>& rsvertex, bool deep)
 		throw()
 		: atom_(rsvertex.atom_),
-			edges_(rsvertex.edges_),
-			faces_(rsvertex.faces_),
+			edges_(),
+			faces_(),
 			index_(rsvertex.index_)
 	{
+		if (deep)
+		{
+			TRSEdge<T>* edge;
+			HashSet<TRSEdge<T>*>::ConstIterator e;
+			for (e = rsvertex.edges_.begin(); e != rsvertex.edges_.end(); e++)
+			{
+				edge = new TRSEdge<T>(**e,false);
+				edges_.insert(edge);
+			}
+			TRSFace<T>* face;
+			HashSet<TRSFace<T>*>::ConstIterator f;
+			for (f = rsvertex.faces_.begin(); f != rsvertex.faces_.end(); f++)
+			{
+				face = new TRSFace<T>(**f,false);
+				faces_.insert(face);
+			}
+		}
 	}
 
 
@@ -355,12 +394,27 @@ namespace BALL
 
 
 	template <typename T>
-	void TRSVertex<T>::set(const TRSVertex<T>& rsvertex, bool)
+	void TRSVertex<T>::set(const TRSVertex<T>& rsvertex, bool deep)
 		throw()
 	{
 		atom_ = rsvertex.atom_;
-		edges_ = rsvertex.edges_;
-		faces_ = rsvertex.faces_;
+		if (deep)
+		{
+			TRSEdge<T>* edge;
+			HashSet<TRSEdge<T>*>::ConstIterator e;
+			for (e = rsvertex.edges_.begin(); e != rsvertex.edges_.end(); e++)
+			{
+				edge = new TRSEdge<T>(**e,false);
+				edges_.insert(edge);
+			}
+			TRSFace<T>* face;
+			HashSet<TRSFace<T>*>::ConstIterator f;
+			for (f = rsvertex.faces_.begin(); f != rsvertex.faces_.end(); f++)
+			{
+				face = new TRSFace<T>(**f,false);
+				faces_.insert(face);
+			}
+		}
 		index_ = rsvertex.index_;
 	}
 

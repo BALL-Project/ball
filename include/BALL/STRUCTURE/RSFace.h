@@ -1,4 +1,4 @@
-// $Id: RSFace.h,v 1.17 2001/07/15 21:21:02 amoll Exp $
+// $Id: RSFace.h,v 1.18 2001/09/19 17:26:54 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSFACE_H
 #define BALL_STRUCTURE_RSFACE_H
@@ -16,6 +16,9 @@ namespace BALL
 	template <typename T>
 	class TRSEdge;
 
+	template <typename T>
+	class TReducedSurface;
+
 	/** Generic RSFace Class.	
 			{\bf Definition:} \URL{BALL/STRUCTURE/RSFace.h} 
 	*/
@@ -23,6 +26,17 @@ namespace BALL
 	class TRSFace
 	{
 		public:
+
+		/** @name Class friends
+				\begin{itemize}
+					\item class TReducedSurface<T>
+					\item class TRSVertex<T>
+					\item class TRSEdge<T>
+				\end{itemize}
+		*/
+		friend class TReducedSurface<T>;
+		friend class TRSVertex<T>;
+		friend class TRSEdge<T>;
 
 		BALL_CREATE(TRSFace)
 
@@ -39,9 +53,11 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new RSFace object from another.
 				@param	rsface	the RSFace object to be copied
-				@param	bool		ignored - just for interface consistency
+				@param	deep		the vertices and edges are setten to NULL, if deep is	
+												false, otherwise they are copied, too	
+												(with deep = false)
 		*/
-		TRSFace(const TRSFace<T>& rsface, bool = true)
+		TRSFace(const TRSFace<T>& rsface, bool deep = false)
 			throw();
 
 		/**	Detailled constructor.
@@ -82,9 +98,11 @@ namespace BALL
 
 		/**	Assign from another RSFace.
 				@param	rsface	the RSFace object to assign from
-				@param	deep ignored
+				@param	deep		the vertices and edges are setten to NULL, if deep is	
+												false, otherwise they are copied, too	
+												(with deep = false)
 		*/
-		void set(const TRSFace<T>& rsface, bool = true)
+		void set(const TRSFace<T>& rsface, bool deep = false)
 			throw();
 
 		/**	Assign to a lot of nice objects
@@ -267,6 +285,34 @@ namespace BALL
 		bool substituteVertex(TRSVertex<T>* old_vertex, TRSVertex<T>* new_vertex)
 			throw();
 
+		void remove(HashSet<TRSFace<T>*>& faces)
+		{
+			vertex0_->deleteFace(this);
+			vertex1_->deleteFace(this);
+			vertex2_->deleteFace(this);
+			TRSFace<T>* face;
+			if (edge0_ != NULL)
+			{
+				if ((edge0_->getFace(1) == NULL) && (edge0_->has() == false))
+				{
+					edge0_->remove();
+				}
+				else
+				{
+					face = edge0_->deleteFace(this);
+					faces.insert(face);
+				}
+			}
+			if (edge1_ != NULL)
+			{
+				faces.insert(edge1_->deleteFace(this));
+			}
+			if (edge2_ != NULL)
+			{
+				faces.insert(edge2_->deleteFace(this));
+			}
+		}
+
 		//@}
 
 		protected:
@@ -308,8 +354,7 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input operator
-			@exception NotImplemented
+	/**	Input- Operator
 	*/
 
 	template <typename T>
@@ -319,7 +364,7 @@ namespace BALL
 	}
 
 
-	/**	Output operator
+	/**	Output- Operator
 	*/
 		template <typename T>
 		std::ostream& operator << (std::ostream& s, TRSFace<T>& rsface)
@@ -327,8 +372,11 @@ namespace BALL
 			return (s << "RSFACE"
 								<< rsface.getIndex()
 								<< "([" << (rsface.getVertex(0) == NULL ? -2 : rsface.getVertex(0)->getIndex()) << ' '
+								//<< " (" << (rsface.getVertex(0) == NULL ? -2 : rsface.getVertex(0)->getAtom()) << ") "
 								<<				 (rsface.getVertex(1) == NULL ? -2 : rsface.getVertex(1)->getIndex()) << ' '
+								//<< " (" << (rsface.getVertex(1) == NULL ? -2 : rsface.getVertex(1)->getAtom()) << ") "
 								<<				 (rsface.getVertex(2) == NULL ? -2 : rsface.getVertex(2)->getIndex()) << "] "
+								//<< " (" << (rsface.getVertex(2) == NULL ? -2 : rsface.getVertex(2)->getAtom()) << ") "
 								<< "[" << (rsface.getEdge(0) == NULL ? -2 : rsface.getEdge(0)->getIndex()) << ' '
 								<<				(rsface.getEdge(1) == NULL ? -2 : rsface.getEdge(1)->getIndex()) << ' '
 								<<				(rsface.getEdge(2) == NULL ? -2 : rsface.getEdge(2)->getIndex()) << "] "
@@ -364,19 +412,28 @@ namespace BALL
 
 
 	template <typename T>
-	TRSFace<T>::TRSFace(const TRSFace<T>& rsface, bool)
+	TRSFace<T>::TRSFace(const TRSFace<T>& rsface, bool deep)
 		throw()
-		: vertex0_(rsface.vertex0_),
-			vertex1_(rsface.vertex1_),
-			vertex2_(rsface.vertex2_),
-			edge0_(rsface.edge0_),
-			edge1_(rsface.edge1_),
-			edge2_(rsface.edge2_),
+		: vertex0_(NULL),
+			vertex1_(NULL),
+			vertex2_(NULL),
+			edge0_(NULL),
+			edge1_(NULL),
+			edge2_(NULL),
 			center_(rsface.center_),
 			normal_(rsface.normal_),
 			singular_(rsface.singular_),
 			index_(rsface.index_)
 	{
+		if (deep)
+		{
+			vertex0_ = new TRSVertex<T>(*rsface.vertex0_,false);
+			vertex1_ = new TRSVertex<T>(*rsface.vertex1_,false);
+			vertex2_ = new TRSVertex<T>(*rsface.vertex2_,false);
+			edge0_ = new TRSEdge<T>(*rsface.edge0_,false);
+			edge1_ = new TRSEdge<T>(*rsface.edge1_,false);
+			edge2_ = new TRSEdge<T>(*rsface.edge2_,false);
+		}
 	}
 
 
@@ -415,15 +472,27 @@ namespace BALL
 
 
 	template <typename T>
-	void TRSFace<T>::set(const TRSFace<T>& rsface, bool)
+	void TRSFace<T>::set(const TRSFace<T>& rsface, bool deep)
 		throw()
 	{
-		vertex0_ = rsface.vertex0_;
-		vertex1_ = rsface.vertex1_;
-		vertex2_ = rsface.vertex2_;
-		edge0_ = rsedge.edge0_;
-		edge1_ = rsedge.edge1_;
-		edge2_ = rsedge.edge2_;
+		if (deep)
+		{
+			vertex0_ = new TRSVertex<T>(*rsface.vertex0_,false);
+			vertex1_ = new TRSVertex<T>(*rsface.vertex1_,false);
+			vertex2_ = new TRSVertex<T>(*rsface.vertex2_,false);
+			edge0_ = new TRSEdge<T>(*rsface.edge0_,false);
+			edge1_ = new TRSEdge<T>(*rsface.edge1_,false);
+			edge2_ = new TRSEdge<T>(*rsface.edge2_,false);
+		}
+		else
+		{
+			vertex0_ = NULL;
+			vertex1_ = NULL;
+			vertex2_ = NULL;
+			edge0_ = NULL;
+			edge1_ = NULL;
+			edge2_ = NULL;
+		}
 		center_ = rsface.center_;
 		normal_ = rsface.normal_;
 		singular_ = rsface.singular_;
@@ -466,21 +535,21 @@ namespace BALL
 		{
 			return false;
 		}
-		if ((vertex0_->similar(*rsface.vertex0_) == false) &&
-				(vertex0_->similar(*rsface.vertex1_) == false) &&
-				(vertex0_->similar(*rsface.vertex2_) == false)    )
+		if ((vertex0_->atom_ != rsface.vertex0_->atom_) &&
+				(vertex0_->atom_ != rsface.vertex1_->atom_) &&
+				(vertex0_->atom_ != rsface.vertex2_->atom_)    )
 		{
 			return false;
 		}
-		if ((vertex1_->similar(*rsface.vertex0_) == false) &&
-				(vertex1_->similar(*rsface.vertex1_) == false) &&
-				(vertex1_->similar(*rsface.vertex2_) == false)    )
+		if ((vertex1_->atom_ != rsface.vertex0_->atom_) &&
+				(vertex1_->atom_ != rsface.vertex1_->atom_) &&
+				(vertex1_->atom_ != rsface.vertex2_->atom_)    )
 		{
 			return false;
 		}
-		if ((vertex2_->similar(*rsface.vertex0_) == false) &&
-				(vertex2_->similar(*rsface.vertex1_) == false) &&
-				(vertex2_->similar(*rsface.vertex2_) == false)    )
+		if ((vertex2_->atom_ != rsface.vertex0_->atom_) &&
+				(vertex2_->atom_ != rsface.vertex1_->atom_) &&
+				(vertex2_->atom_ != rsface.vertex2_->atom_)    )
 		{
 			return false;
 		}
@@ -492,21 +561,21 @@ namespace BALL
 	bool TRSFace<T>::similar(const TRSFace& rsface) const
 		throw()
 	{
-		if ((vertex0_->similar(*rsface.vertex0_) == false) &&
-				(vertex0_->similar(*rsface.vertex1_) == false) &&
-				(vertex0_->similar(*rsface.vertex2_) == false)    )
+		if ((vertex0_->atom_ != rsface.vertex0_->atom_) &&
+				(vertex0_->atom_ != rsface.vertex1_->atom_) &&
+				(vertex0_->atom_ != rsface.vertex2_->atom_)    )
 		{
 			return false;
 		}
-		if ((vertex1_->similar(*rsface.vertex0_) == false) &&
-				(vertex1_->similar(*rsface.vertex1_) == false) &&
-				(vertex1_->similar(*rsface.vertex2_) == false)    )
+		if ((vertex1_->atom_ != rsface.vertex0_->atom_) &&
+				(vertex1_->atom_ != rsface.vertex1_->atom_) &&
+				(vertex1_->atom_ != rsface.vertex2_->atom_)    )
 		{
 			return false;
 		}
-		if ((vertex2_->similar(*rsface.vertex0_) == false) &&
-				(vertex2_->similar(*rsface.vertex1_) == false) &&
-				(vertex2_->similar(*rsface.vertex2_) == false)    )
+		if ((vertex2_->atom_ != rsface.vertex0_->atom_) &&
+				(vertex2_->atom_ != rsface.vertex1_->atom_) &&
+				(vertex2_->atom_ != rsface.vertex2_->atom_)    )
 		{
 			return false;
 		}

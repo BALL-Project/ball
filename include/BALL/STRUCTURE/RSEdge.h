@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.17 2001/07/15 21:21:02 amoll Exp $
+// $Id: RSEdge.h,v 1.18 2001/09/19 17:25:41 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -23,6 +23,9 @@ namespace BALL
 {
 
 	template <typename T>
+	class TReducedSurface;
+
+	template <typename T>
 	class TRSFace;
 
 	template <typename T>
@@ -36,6 +39,17 @@ namespace BALL
 	{
 		public:
 
+		/** @name Class friends
+				\begin{itemize}
+					\item class TReducedSurface<T>
+					\item class TRSFace<T>
+					\item class TRSVertex<T>
+				\end{itemize}
+		*/
+		friend class TReducedSurface<T>;
+		friend class TRSFace<T>;
+		friend class TRSVertex<T>;
+
 		BALL_CREATE(TRSEdge)
 
 		/**	@name	Constructors and Destructors
@@ -43,8 +57,7 @@ namespace BALL
 		//@{
 
 		/**	Default constructor.
-				This method creates a new RSEdge object. All components are
-				initialized to {\tt (T)0} or {\tt NULL}, respectivly.
+				This method creates a new RSEdge object.
 		*/
 		TRSEdge()
 			throw();
@@ -52,9 +65,11 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new RSEdge object from another.
 				@param	rsface	the RSEdge object to be copied
-				@param	bool		ignored - just for interface consistency
+				@param	deep		the vertices and faces are setten to NULL, if deep is	
+												false, otherwise they are copied, too	
+												(with deep = false)
 		*/
-		TRSEdge(const TRSEdge<T>& rsedge, bool  = true)
+		TRSEdge(const TRSEdge<T>& rsedge, bool deep = false)
 			throw();
 
 		/**	Detailled constructor.
@@ -68,9 +83,9 @@ namespace BALL
 				@param	phi									assigned to th angle
 				@param	circle1							assigned to the first contact circle
 				@param	circle2							assigned to the second contact circle
-				@param	intersection_point1	assigned to the first intersection point
+				@param	intersection_point1	assigned to the first intersection point	
 																		(in singular case)
-				@param	intersection_point2	assigned to the second intersection point
+				@param	intersection_point2	assigned to the second intersection point	
 																		(in singular case)
 				@param	singular
 				@param	index								assigned to the index
@@ -104,9 +119,11 @@ namespace BALL
 
 		/**	Assign from another RSEdge.
 				@param	rsedge	the RSEdge object to assign from
-				@param	deep		ignored
+				@param	deep		the vertices and faces are setten to NULL, if deep is	
+												false, otherwise they are copied, too	
+												(with deep = false)
 		*/
-		void set(const TRSEdge& rsedge, bool = true)
+		void set(const TRSEdge& rsedge, bool deep = false)
 			throw();
 
 		/**	Assign from a lot of nice objects
@@ -119,9 +136,9 @@ namespace BALL
 				@param	phi									assigned to th angle
 				@param	circle1							assigned to the first contact circle
 				@param	circle2							assigned to the second contact circle
-				@param	intersection_point1	assigned to the first intersection point
+				@param	intersection_point1	assigned to the first intersection point	
 																		(in singular case)
-				@param	intersection_point2	assigned to the second intersection point
+				@param	intersection_point2	assigned to the second intersection point	
 																		(in singular case)
 				@param	singular
 				@param	index								assigned to the index
@@ -147,7 +164,7 @@ namespace BALL
 		//@{
 
 		/** Set one of the two RSVertices of the RSEdge.
-				@param	i				the first vertex is changed if i = 0, the second
+				@param	i				the first vertex is changed if i = 0, the second	
 												otherwise
 				@param	vertex	a pointer to the new vertex
 		*/
@@ -156,29 +173,29 @@ namespace BALL
 
 		/** Return one of the two RSVertices of the RSEdge.
 				@param	i
-				@return	TRSVertex<T>*	a pointer to the first RSVertex if i = 0,
+				@return	TRSVertex<T>*	a pointer to the first RSVertex if i = 0,	
 															a pointer to the second RSVertex otherwise
 		*/
-		TRSVertex<T>* getVertex(Position i)
-			throw();
-
-		/** Return one of the two RSFaces of the RSEdge.
-				@param	i
-				@return	TRSFace<T>*	a pointer to the first RSFace if i = 0,
-														a pointer to the second RSFace otherwise
-		*/
-		TRSFace<T>* getFace(Position i)
+		TRSVertex<T>* getVertex(Position i) const
 			throw();
 
 		/** Set one of the two RSFaces of the RSEdge.
 				@param	i			change the first face, if i = 0, the second otherwise
 				@param	face	a pointer to the new RSFace
 		*/
+
 		void setFace(Position i, TRSFace<T>* face)
+			throw();
+		/** Return one of the two RSFaces of the RSEdge.
+				@param	i
+				@return	TRSFace<T>*	a pointer to the first RSFace if i = 0,	
+														a pointer to the second RSFace otherwise
+		*/
+		TRSFace<T>* getFace(Position i) const
 			throw();
 
 		/** Set the center of the torus.
-				Set the center of the torus described by the probe sphere when it
+				Set the center of the torus described by the probe sphere when it	
 				rolls over the RSEdge.
 				@param	center	the new center
 		*/
@@ -186,49 +203,49 @@ namespace BALL
 			throw();
 
 		/** Return the center of the torus.
-				Return the center of the torus described by the probe sphere when
-				it rolls over the RSEdge.
+				Return the center of the torus described by the probe sphere	
+				when it rolls over the RSEdge.
 				@return	TVector3<T>	the center of the torus
 		*/
-		TVector3<T> getCenterOfTorus()
+		TVector3<T> getCenterOfTorus() const
 			throw();
 
 		/** Set the major radius of the torus.
-				Set the major radius of the torus described by the probe sphere when
-				it rolls over the RSEdge.
+				Set the major radius of the torus described by the probe sphere	
+				when it rolls over the RSEdge.
 				@param	radius	the new radius
 		*/
 		void setMajorRadiusOfTorus(const T& radius)
 			throw();
 
 		/** Return the  major radius of the torus.
-				Return the  major radius of the torus described by the probe sphere
+				Return the  major radius of the torus described by the probe sphere	
 				when it rolls over the RSEdge.
 				@return	TVector3<T>	the major radius of the torus
 		*/
-		T getMajorRadiusOfTorus()
+		T getMajorRadiusOfTorus() const
 			throw();
 
 		/** Set the rotation angle.
-				Set the rotation angle between the starting and ending position of the
-				probe sphere when it rolls over the RSEdge.
+				Set the rotation angle between the starting and ending position of	
+				the probe sphere when it rolls over the RSEdge.
 				@param	phi	the new rotation angle
 		*/
 		void setPhi(const TAngle<T>& phi)
 			throw();
 
 		/** Return the rotation angle.
-				Return the rotation angle between the starting and ending position of
-				the probe sphere when it rolls over the RSEdge.
+				Return the rotation angle between the starting and ending position	
+				of the probe sphere when it rolls over the RSEdge.
 				@return	TAngle<T>	the rotation angle
 		*/
-		TAngle<T> getPhi()
+		TAngle<T> getPhi() const
 			throw();
 
 		/** Set one of the two contact circles.
-				Set one of the two contact circles of the probe sphere with the two
+				Set one of the two contact circles of the probe sphere with the two	
 				RSVertices.
-				@param	i				the first contact circle is changed if i = 0,
+				@param	i				the first contact circle is changed if i = 0,	
 												the second otherwise
 				@param	circle	the new contact circle
 		*/
@@ -236,19 +253,19 @@ namespace BALL
 			throw();
 
 		/** Return one of the the contact circles.
-				Return one of the the contact circles of the probe sphere with the two
-				RSVertices
+				Return one of the the contact circles of the probe sphere with the	
+				two RSVertices
 				@param	i
-				@return	TCircle3<T>	the contact circle with the first RSVertex
-														if i = 0, the contact circle with the second
+				@return	TCircle3<T>	the contact circle with the first RSVertex	
+														if i = 0, the contact circle with the second	
 														RSVertex otherwise
 		*/
-		TCircle3<T> getContactCircle(Position i)
+		TCircle3<T> getContactCircle(Position i) const
 			throw();
 
 		/** Set one of the intersection points.
 				Set one of the intersection points of the probe sphere with the RSEdge.
-				@param	i			the first intersection point is changed if i = 0,
+				@param	i			the first intersection point is changed if i = 0,	
 											the second otherwise
 				@param	point	the new intersection point
 		*/
@@ -256,13 +273,14 @@ namespace BALL
 			throw();
 
 		/** Return one of the intersection points.
-				Return one of the intersection points of the probe sphere
-				with the RSEdge. If the RSEdge not is singular, an exception is thrown.
-				@return	TVector3<T>	the intersection point near to the first RSVertex
-														if i = 0, the intersection point near to the
-														second RSVertex otherwise
+				Return one of the intersection points of the probe sphere	
+				with the RSEdge. If the RSEdge not is singular, an exception	
+				is thrown.
+				@return	TVector3<T>	the intersection point near to the first	
+														RSVertex if i = 0, the intersection point near	
+														to the second RSVertex otherwise
 		*/
-		TVector3<T> getIntersectionPoint(Position i)
+		TVector3<T> getIntersectionPoint(Position i) const
 			throw(Exception::GeneralException);
 
 		/** Set singular
@@ -283,23 +301,55 @@ namespace BALL
 			throw();
 		
 		/** Return a pointer to the other face of the RSEdge.
-				If the given RSFace is not neighboured to the RSEdge, an exception is
-				thrown.
+				If the given RSFace is not neighboured to the RSEdge, an exception	
+				is thrown.
 				@param	TRSFace<T>*	one of the faces of the RSEdge
 				@return	TRSFace<T>*	the other face
 		*/
-		TRSFace<T>* other(TRSFace<T>* face)
+		TRSFace<T>* other(TRSFace<T>* face) const
 			throw(Exception::GeneralException);
 
 		/** Substitute a RSVertex by an other one.
 				@param	old_vertex	the vertex that has to be substituted
 				@param	new_vertex	the new vertex
-				@return	bool				{\bf true}, if the vertex can be substituted,
+				@return	bool				{\bf true}, if the vertex can be substituted,	
 														{\bf false} otherwise
 		*/
 		bool substituteVertex(TRSVertex<T>* old_vertex,
 				TRSVertex<T>* new_vertex)
 			throw();
+
+		void remove()
+		{	
+			vertex0_->deleteEdge(this);
+			vertex1_->deleteEdge(this);
+			/*if (face0_ != NULL)
+			{
+				face0_->deleteEdge(this);
+			}
+			if (face1_ != NULL)
+			{
+				face1_->deleteEdge(this);
+			}*/
+		}
+
+		TRSFace<T>* deleteFace(TRSFace<T>* face)
+		{
+			if (face1_ == face)
+			{
+				face1_ = NULL;
+			}
+			else
+			{
+				if (face0_ == face)
+				{
+					face0_ = face1_;
+					face1_ = NULL;
+				}
+			}
+			return face0_;
+		}
+
 		//@}
 
 
@@ -308,37 +358,37 @@ namespace BALL
 		//@{
 
 		/**	Equality operator.
-				@return bool, {\bf true} if all vertices are similar and all faces
+				@return bool, {\bf true} if all vertices are similar and all faces	
 											are equal modulo order, {\bf false} otherwise
 		*/
-		bool operator == (const TRSEdge& rsedge) const
+		bool operator == (const TRSEdge<T>& rsedge) const
 			throw();
 
 		/**	similar.
-				@return	bool	{\bf true} if all vertices are similar modulo order,
+				@return	bool	{\bf true} if all vertices are similar modulo order,	
 											{\bf false} otherwise
 		*/
-		bool similar(const TRSEdge& rsedge) const
+		bool similar(const TRSEdge<T>& rsedge) const
 			throw();
 
 		/**	Inequality operator.
-				@return	bool	{\bf false} if all vertices are similar and all faces
+				@return	bool	{\bf false} if all vertices are similar and all faces	
 											are equal modulo order, {\bf true} otherwise
 		*/
-		bool operator != (const TRSEdge& rsedge) const
+		bool operator != (const TRSEdge<T>& rsedge) const
 			throw();
 		
 		/** isSingular
-				@return	bool	{\bf true} if the RSEdge is singular,
+				@return	bool	{\bf true} if the RSEdge is singular,	
 											{\bf false} otherwise
 		*/
-		bool isSingular()
+		bool isSingular() const
 			throw();
-		
+
 		/** isFree
 				@return	bool	{\bf true} if the RSEdge is free, {\bf false} otherwise
 		*/
-		bool isFree()
+		bool isFree() const
 			throw();
 
 		//@}
@@ -358,15 +408,15 @@ namespace BALL
 		/*_ The second RSFace of the RSEdge
 		*/
 		TRSFace<T>* face1_;
-		/*_ The center of the torus described by the probe when ir rolls over
+		/*_ The center of the torus described by the probe when ir rolls over	
 				the RSEdge
 		*/
 		TVector3<T> center_of_torus_;
-		/*_ The major radius of the torus described by the probe when ir rolls over
-				the RSEdge
+		/*_ The major radius of the torus described by the probe when ir rolls	
+				over the RSEdge
 		*/
 		T radius_of_torus_;
-		/*_ The rotation angle between the starting and ending position of the
+		/*_ The rotation angle between the starting and ending position of the	
 				probe sphere when it rolls over the RSEdge
 		*/
 		TAngle<T> phi_;
@@ -376,11 +426,11 @@ namespace BALL
 		/*_ The contact circle of the probe sphere with the second RSVertex
 		*/
 		TCircle3<T> circle1_;
-		/*_ The intersection point of the probe sphere with the RSEdge near to
+		/*_ The intersection point of the probe sphere with the RSEdge near to	
 				the first RSVertex (in singular case).
 		*/
 		TVector3<T> intersection_point0_;
-		/*_ The intersection point of the probe sphere with the RSEdge near to
+		/*_ The intersection point of the probe sphere with the RSEdge near to	
 				the second RSVertex (in singular case).
 		*/
 		TVector3<T> intersection_point1_;
@@ -397,10 +447,8 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input operator
-			@exception NotImplemented
+	/**	Input- Operator
 	*/
-
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TRSEdge<T>& rsedge)
 	{
@@ -408,16 +456,20 @@ namespace BALL
 	}
 
 
-	/**	Output operator
+	/**	Output- Operator
 	*/
 		template <typename T>
 		std::ostream& operator << (std::ostream& s, TRSEdge<T>& rsedge)
 		{
 			s << "RSEDGE" << rsedge.getIndex()
-				<< "([" << (rsedge.getVertex(0) == NULL ? -2 : rsedge.getVertex(0)->getIndex()) << ' '
-				<<				 (rsedge.getVertex(1) == NULL ? -2 : rsedge.getVertex(1)->getIndex()) << "] "
-				<< "[" << (rsedge.getFace(0) == NULL ? -2 : rsedge.getFace(0)->getIndex()) << ' '
-				<<				(rsedge.getFace(1) == NULL ? -2 : rsedge.getFace(1)->getIndex()) << "] "
+				<< "([" << (rsedge.getVertex(0) == NULL ?
+												-2 : rsedge.getVertex(0)->getIndex()) << ' '
+				<<				 (rsedge.getVertex(1) == NULL ?
+												-2 : rsedge.getVertex(1)->getIndex()) << "] "
+				<< "[" << (rsedge.getFace(0) == NULL ?
+												-2 : rsedge.getFace(0)->getIndex()) << ' '
+				<<				(rsedge.getFace(1) == NULL ?
+												-2 : rsedge.getFace(1)->getIndex()) << "] "
 				<< rsedge.getCenterOfTorus() << ' '
 				<< rsedge.getMajorRadiusOfTorus() << ' ' << rsedge.getPhi() << ' '
 				<< rsedge.getContactCircle(0) << ' '
@@ -430,7 +482,8 @@ namespace BALL
 			}
 			else
 			{
-				s << TVector3<T>::getZero() << ' ' << TVector3<T>::getZero() << " false)";
+				s << TVector3<T>::getZero() << ' '
+					<< TVector3<T>::getZero() << " false)";
 			}
 			return s;
 		}
@@ -467,12 +520,12 @@ namespace BALL
 
 
 	template <typename T>
-	TRSEdge<T>::TRSEdge(const TRSEdge<T>& rsedge, bool)
+	TRSEdge<T>::TRSEdge(const TRSEdge<T>& rsedge, bool deep)
 		throw()
-		: vertex0_(rsedge.vertex0_),
-			vertex1_(rsedge.vertex1_),
-			face0_(rsedge.face0_),
-			face1_(rsedge.face1_),
+		: vertex0_(NULL),
+			vertex1_(NULL),
+			face0_(NULL),
+			face1_(NULL),
 			center_of_torus_(rsedge.center_of_torus_),
 			radius_of_torus_(rsedge.radius_of_torus_),
 			phi_(rsedge.phi_),
@@ -483,6 +536,13 @@ namespace BALL
 			singular_(rsedge.singular_),
 			index_(rsedge.index_)
 	{
+		if (deep)
+		{
+			vertex0_ = new TRSVertex<T>(*rsedge.vertex0_,false);
+			vertex1_ = new TRSVertex<T>(*rsedge.vertex1_,false);
+			face0_ = new TRSFace<T>(*rsedge.face0_,false);
+			face1_ = new TRSFace<T>(*rsedge.face1_,false);
+		}
 	}
 
 
@@ -526,13 +586,23 @@ namespace BALL
 
 
 	template <typename T>
-	void TRSEdge<T>::set(const TRSEdge& rsedge, bool)
+	void TRSEdge<T>::set(const TRSEdge<T>& rsedge, bool deep)
 		throw()
 	{
-		vertex0_ = rsedge.vertex0_;
-		vertex1_ = rsedge.vertex1_;
-		face0_ = rsedge.face0_;
-		face1_ = rsedge.face1_;
+		if (deep)
+		{
+			vertex0_ = new TRSVertex<T>(*rsedge.vertex0_,false);
+			vertex1_ = new TRSVertex<T>(*rsedge.vertex1_,false);
+			face0_ = new TRSFace<T>(*rsedge.face0_,false);
+			face1_ = new TRSFace<T>(*rsedge.face1_,false);
+		}
+		else
+		{
+			vertex0_ = NULL;
+			vertex1_ = NULL;
+			face0_ = NULL;
+			face1_ = NULL;
+		}
 		center_of_torus_ = rsedge.center_of_torus_;
 		radius_of_torus_ = rsedge.radius_of_torus_;
 		phi_ = rsedge.phi_;
@@ -593,7 +663,7 @@ namespace BALL
 
 
 	template <typename T>
-	TRSVertex<T>* TRSEdge<T>::getVertex(Position i)
+	TRSVertex<T>* TRSEdge<T>::getVertex(Position i) const
 		throw()
 	{
 		if (i == 0)
@@ -603,21 +673,6 @@ namespace BALL
 		else
 		{
 			return vertex1_;
-		}
-	}
-
-
-	template <typename T>
-	TRSFace<T>* TRSEdge<T>::getFace(Position i)
-		throw()
-	{
-		if (i == 0)
-		{
-			return face0_;
-		}
-		else
-		{
-			return face1_;
 		}
 	}
 
@@ -638,6 +693,21 @@ namespace BALL
 
 
 	template <typename T>
+	TRSFace<T>* TRSEdge<T>::getFace(Position i) const
+		throw()
+	{
+		if (i == 0)
+		{
+			return face0_;
+		}
+		else
+		{
+			return face1_;
+		}
+	}
+
+
+	template <typename T>
 	void TRSEdge<T>::setCenterOfTorus(const TVector3<T>& center)
 		throw()
 	{
@@ -646,7 +716,7 @@ namespace BALL
 
 
 	template <typename T>
-	TVector3<T> TRSEdge<T>::getCenterOfTorus()
+	TVector3<T> TRSEdge<T>::getCenterOfTorus() const
 		throw()
 	{
 		return center_of_torus_;
@@ -662,7 +732,7 @@ namespace BALL
 
 
 	template <typename T>
-	T TRSEdge<T>::getMajorRadiusOfTorus()
+	T TRSEdge<T>::getMajorRadiusOfTorus() const
 		throw()
 	{
 		return radius_of_torus_;
@@ -678,7 +748,7 @@ namespace BALL
 
 
 	template <typename T>
-	TAngle<T> TRSEdge<T>::getPhi()
+	TAngle<T> TRSEdge<T>::getPhi() const
 		throw()
 	{
 		return phi_;
@@ -701,7 +771,7 @@ namespace BALL
 
 
 	template <typename T>
-	TCircle3<T> TRSEdge<T>::getContactCircle(Position i)
+	TCircle3<T> TRSEdge<T>::getContactCircle(Position i) const
 		throw()
 	{
 		if (i == 0)
@@ -731,7 +801,7 @@ namespace BALL
 
 
 	template <typename T>
-	TVector3<T> TRSEdge<T>::getIntersectionPoint(Position i)
+	TVector3<T> TRSEdge<T>::getIntersectionPoint(Position i) const
 		throw(Exception::GeneralException)
 	{
 		if (singular_ == false)
@@ -774,7 +844,7 @@ namespace BALL
 
 
 	template <typename T>
-	TRSFace<T>* TRSEdge<T>::other(TRSFace<T>* face)
+	TRSFace<T>* TRSEdge<T>::other(TRSFace<T>* face) const
 		throw(Exception::GeneralException)
 	{
 		if (face0_ == face)
@@ -820,16 +890,16 @@ namespace BALL
 
 
 	template <typename T>
-	bool TRSEdge<T>::operator == (const TRSEdge& rsedge) const
+	bool TRSEdge<T>::operator == (const TRSEdge<T>& rsedge) const
 		throw()
 	{
-		if ((vertex0_->similar(*rsedge.vertex0_) == false) &&
-				(vertex0_->similar(*rsedge.vertex1_) == false)    )
+		if ((vertex0_->atom_ != rsedge.vertex0_->atom_) &&
+				(vertex0_->atom_ != rsedge.vertex1_->atom_)    )
 		{
 			return false;
 		}
-		if ((vertex1_->similar(*rsedge.vertex0_) == false) &&
-				(vertex1_->similar(*rsedge.vertex1_) == false)    )
+		if ((vertex1_->atom_ != rsedge.vertex0_->atom_) &&
+				(vertex1_->atom_ != rsedge.vertex1_->atom_)    )
 		{
 			return false;
 		}
@@ -846,16 +916,16 @@ namespace BALL
 
 
 	template <typename T>
-	bool TRSEdge<T>::similar(const TRSEdge& rsedge) const
+	bool TRSEdge<T>::similar(const TRSEdge<T>& rsedge) const
 		throw()
 	{
-		if ((vertex0_->similar(*rsedge.vertex0_) == false) &&
-				(vertex0_->similar(*rsedge.vertex1_) == false)    )
+		if ((vertex0_->atom_ != rsedge.vertex0_->atom_) &&
+				(vertex0_->atom_ != rsedge.vertex1_->atom_)    )
 		{
 			return false;
 		}
-		if ((vertex1_->similar(*rsedge.vertex0_) == false) &&
-				(vertex1_->similar(*rsedge.vertex1_) == false)    )
+		if ((vertex1_->atom_ != rsedge.vertex0_->atom_) &&
+				(vertex1_->atom_ != rsedge.vertex1_->atom_)    )
 		{
 			return false;
 		}
@@ -864,14 +934,15 @@ namespace BALL
 
 
 	template <typename T>
-	bool TRSEdge<T>::operator != (const TRSEdge& rsedge) const
+	bool TRSEdge<T>::operator != (const TRSEdge<T>& rsedge) const
 		throw()
 	{
 		return (bool)(!(*this == rsedge));
 	}
 
+
 	template <typename T>
-	bool TRSEdge<T>::isSingular()
+	bool TRSEdge<T>::isSingular() const
 		throw()
 	{
 		return singular_;
@@ -879,7 +950,7 @@ namespace BALL
 
 
 	template <typename T>
-	bool TRSEdge<T>::isFree()
+	bool TRSEdge<T>::isFree() const
 		throw()
 	{
 		return (face0_ == NULL);
