@@ -1,24 +1,16 @@
-// $Id: Socket_test.C,v 1.2 1999/11/23 13:10:48 oliver Exp $
+// $Id: Socket_test.C,v 1.3 1999/11/24 14:54:25 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/socket.h>
 ///////////////////////////
 
-START_TEST(Socket, "$Id: Socket_test.C,v 1.2 1999/11/23 13:10:48 oliver Exp $")
+START_TEST(Socket, "$Id: Socket_test.C,v 1.3 1999/11/24 14:54:25 oliver Exp $")
 using namespace BALL;
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
-	IOSockStream* s;
-	CHECK(IOSockStream::IOSockStream())
-  s =  new IOSockStream;
-	TEST_NOT_EQUAL(s, 0)
-	RESULT
 
-	CHECK(IOSockStream::~IOSOckStream())
-	delete s;
-	RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,11 +1,11 @@
-// $Id: ResourceFile_test.C,v 1.3 1999/11/23 13:10:48 oliver Exp $
+// $Id: ResourceFile_test.C,v 1.4 1999/11/24 14:54:24 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/resourceFile.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.3 1999/11/23 13:10:48 oliver Exp $")
+START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.4 1999/11/24 14:54:24 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -268,11 +268,6 @@ TEST_EQUAL(U.getPath(), "/TEST1/TEST4")
 TEST_EQUAL(T.getPath(), "/TEST1/TEST3")
 TEST_EQUAL(S.getPath(), "/TEST1/TEST2")
 TEST_EQUAL(R.getPath(), "/TEST1")
-V.getName();
-U.getName();
-T.getName();
-S.getName();
-R.getName();
 RESULT
 
 CHECK(ResourceEntry::getEntry(const String&))
