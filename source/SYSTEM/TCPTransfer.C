@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.18.4.1 2002/08/22 17:34:02 oliver Exp $
+// $Id: TCPTransfer.C,v 1.18.4.2 2002/08/23 07:45:04 oliver Exp $
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
 #define BSD_COMP
@@ -821,17 +821,30 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		return status_;
 	}
 
-	while (control_bytes > 0)
+	buffer_[control_bytes] = '\0';
+	int countdown = 20;
+	while (control_bytes > 0 || countdown >= 0)
 	{
-		buffer_[control_bytes] = '\0';
-
 		// test if file was transfer correct
-		printf("read control: [%d] '%s'\n", control_bytes, buffer_);
 		temp = buffer_;
 		temp = temp.getSubstring(0, 3);
+		if (buffer_[0] != '1')
+		{
+			// if command successful or error status: abort
+			break;
+		}
 
 		control_bytes = read(socket_, buffer_, BUFFER_SIZE);
-		printf("socket read: %d\n", control_bytes);
+		if (control_bytes < 0)
+		{
+			sleep(1);
+			countdown--;
+			buffer_[0] = '\0';
+		}
+		else
+		{
+			buffer_[control_bytes] = '\0';
+		}
 	}
 
 	status = (Status)temp.toUnsignedInt();
