@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.27.2.15 2005/01/23 23:20:09 amoll Exp $
+// $Id: glRenderer.h,v 1.27.2.16 2005/01/23 23:26:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -267,7 +267,8 @@ namespace BALL
 			vector<String> getExtensions();
 
 			///
-			bool enableVertexBuffers(bool state);
+			bool enableVertexBuffers(bool state)
+				throw();
 
 			///
 			bool vertexBuffersEnabled() const;

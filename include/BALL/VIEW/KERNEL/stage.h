@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.14.2.2 2005/01/22 00:24:19 amoll Exp $
+// $Id: stage.h,v 1.14.2.3 2005/01/23 23:26:14 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -160,10 +160,6 @@ namespace BALL
 			/// Translate the LightSource
 			void translate(const Vector3& v3)
 				throw() { position_+=v3; direction_+=v3;}
-
-			///
-			void rotate(const Quaternion& q)
-				throw();
 
 			//@}
 			/**	@name Predicates

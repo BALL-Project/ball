@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.58.2.4 2005/01/23 14:38:15 amoll Exp $
+// $Id: scene.h,v 1.58.2.5 2005/01/23 23:26:15 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -417,7 +417,7 @@ namespace BALL
 				throw() { return show_light_sources_;}
 
 			/// 
-			GLRenderer& getGLRenderer_()
+			GLRenderer& getGLRenderer()
 				throw() { return gl_renderer_;}
 			
 			protected:
