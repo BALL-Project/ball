@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.16 2001/07/10 08:27:19 amoll Exp $
+// $Id: regularData1D.h,v 1.17 2001/07/10 12:50:40 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -15,6 +15,10 @@ namespace BALL
 	/**	A class to store regularaly spaced data.
 			This class can is intended to hold regularly spaced, one-dimensional data sets.
 			It might be useful to hold data sets like spectra, or precomputed function values.\\
+			The two bounds (set with \Ref{setBoundaries}) designate an X-range with \Ref{getSize}
+			equally spaced values. The data can be accessed in the same way as data of an STL vector
+			(i.e., using operator [] and iterators).
+			\\
 			{\bf Definition:} \URL{BALL/DATATYPE/regularData1D.h}
 	*/
 	template <typename T>
@@ -107,17 +111,21 @@ namespace BALL
 		T& operator [] (Position index)
 			throw(Exception::IndexOverflow);
 			
-		/**	Return the number of items 
+		/**	Return the number of values
 		*/
 		Size getSize() const
 			throw();
 
-		/**	Return the lower bound
+		/**	Return the lower bound.
+				The lower bound represents the X-coordinate associated with the leftmost
+				data (data_[0]).
 		*/
 		double getLowerBound() const
 			throw();
 		
 		/**	Return the upper bound
+				The lower bound represents the X-coordinate associated with the rightmost
+				data (data_[getSize() - 1]).
 		*/
 		double getUpperBound() const
 			throw();
