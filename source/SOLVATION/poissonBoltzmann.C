@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.29 2001/12/31 00:30:54 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.29.2.1 2002/09/13 14:08:28 anker Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -10,6 +10,7 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/COMMON/limits.h>
+#include <BALL/KERNEL/PTE.h>
 
 using namespace std;
 
@@ -258,12 +259,19 @@ namespace BALL
 		BALL_FOREACH_ATOM(system, atom_iterator)
 		{
 			fast_atom.q = (*atom_iterator).getCharge();
+			fast_atom.r = atom_iterator->getRadius();
 			position = atom_iterator->getPosition();
 			fast_atom.x = position.x;
 			fast_atom.y = position.y;
 			fast_atom.z = position.z;
-			fast_atom.r = atom_iterator->getRadius();
 			atom_array->push_back(fast_atom);
+			if ((fast_atom.r == 0.0) && (fast_atom.q != 0.0))
+			{
+				Log.warn() << "Encountered atom with radius 0 and charge != 0 while setting up atom array: "
+					<< atom_iterator->getFullName() << " " 
+					<< atom_iterator->getElement().getSymbol() << " " 
+					<< atom_iterator->getCharge() << endl;
+			}
 		}
 		
 		step_timer.stop();
@@ -2395,12 +2403,16 @@ namespace BALL
 			min_distance_vector = Vector3(0.0);
 			for (atom_iterator = atom_array->begin(); atom_iterator != atom_array->end(); ++atom_iterator)
 			{
-				distance_vector = boundary_point - Vector3(atom_iterator->x, atom_iterator->y, atom_iterator->z);
-				distance = distance_vector.getLength() - atom_iterator->r;
-				if (distance < min_distance) 
+				if (atom_iterator->r > 0.0)
 				{
-					min_distance = distance;
-					min_distance_vector = distance_vector;
+					distance_vector = boundary_point 
+						- Vector3(atom_iterator->x, atom_iterator->y, atom_iterator->z);
+					distance = distance_vector.getLength() - atom_iterator->r;
+					if (distance < min_distance) 
+					{
+						min_distance = distance;
+						min_distance_vector = distance_vector;
+					}
 				}
 			}
 				
@@ -2443,13 +2455,25 @@ namespace BALL
 						// calculate the distance of the charge
 						distance_vector.set(atom_iterator->x, atom_iterator->y, atom_iterator->z);
 						distance_vector -= image_position;
-
-						// calculate the coulomb energy caused by this image charge
-						// with every atom charge						
-						double phi_q = delta_i 
-												/ (distance_vector.getLength() * 1e-10 * 4.0 
-													 * Constants::PI * Constants::VACUUM_PERMITTIVITY);
-						energy += atom_iterator->q * Constants::e0 * phi_q;
+						double d = distance_vector.getLength();
+						if (d > 0.0)
+						{
+							// calculate the coulomb energy caused by this image charge
+							// with every atom charge						
+							double phi_q = delta_i 
+								/ (distance_vector.getLength() * 1e-10 * 4.0 
+										* Constants::PI * Constants::VACUUM_PERMITTIVITY);
+							energy += atom_iterator->q * Constants::e0 * phi_q;
+						}
+						else
+						{
+							Log.warn() << "calculateReactionFieldEnergy(): WARNING: " << endl
+								<< "encountered zero distance between charge and image, "
+								<< "ignoring atom charge " 
+								<< atom_iterator->q << " at position (" << atom_iterator->x 
+								<< "," << atom_iterator->y << "," << atom_iterator->z 
+								<< "); radius " << atom_iterator->r << endl;
+						}
 					}
 				}
 			}
