@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.1.2.9 2002/11/30 12:49:20 oliver Exp $
+dnl    $Id: configure.ac,v 1.1.2.10 2002/11/30 14:26:21 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -244,7 +244,6 @@ if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_SUN fi
 if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_SGI fi
 if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_COMPAQ fi
 if test "${CXX_IDENTIFIED}" != true ; then CF_IDENTIFY_INTEL fi
-CF_BUILD_FULL_CXX_NAME
 
 dnl
 dnl		Default (fall-back) for make depend
@@ -263,6 +262,7 @@ case "${CXX_NAME}" in
 	MIPSpro )		CF_MIPSPRO_OPTIONS ;;
 	SunCC )			CF_SUNCC_OPTIONS ;;
 esac
+CF_BUILD_FULL_CXX_NAME
 
 dnl
 dnl   checking for DEBUG-Flag
