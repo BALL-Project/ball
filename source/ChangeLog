@@ -6,6 +6,7 @@
       - switching functions added for CHARMM and AMBER
 			- reaction field energy implemented (Poisson-Boltzmann code)
       - new architecture with better modularity for MolVIEW
+			- new example application: PB - Finite Difference Poisson-Boltzmann Solver
       - new website 
       - license terms
 
