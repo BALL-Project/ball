@@ -1,4 +1,4 @@
-// $Id: vertex2.h,v 1.6 2001/07/09 18:10:06 sturm Exp $
+// $Id: vertex2.h,v 1.7 2001/07/16 14:49:33 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_VERTEX2_H
 #define BALL_VIEW_KERNEL_VERTEX2_H
@@ -19,19 +19,14 @@ namespace BALL
 	{
 
 		/** Vertex2 class.
-				{\bf Framework:} BALL/VIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/vertex2.h}\\ \\
 				The class Vertex2 is used as a base class for all geometric objects that
 				have two vertices. It provides the derived class with methods for accessing
 				that vertices. Further there is the possibility to give an address to a 
 				vector \Ref{Vector3} as vertices. So if the values of these given vectors
 				changes the values of the vectors of {\em *this} vertex2 changes 
 				as well. To avoid segmentation faults these vector addresses must be 
-				valid as long as {\em *this} vertex2 exists.
-				@memo    Vertex2 class (BALL VIEW kernel framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/07/09 18:10:06 $
+				valid as long as {\em *this} vertex2 exists. \\
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/vertex2.h}
 		*/
 		class Vertex2
 		{

@@ -1,4 +1,4 @@
-// $Id: glObjectCollector.h,v 1.5 2001/07/09 18:26:43 sturm Exp $
+// $Id: glObjectCollector.h,v 1.6 2001/07/16 14:49:29 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_GLOBJECTCOLLECTOR_H
 #define BALL_VIEW_GUI_FUNCTOR_GLOBJECTCOLLECTOR_H
@@ -27,20 +27,14 @@ namespace BALL
 	{
 
 		/** GLObjectCollector class.
-				{\bf Framework:} BALL/VIEW/GUI/FUNCTOR\\
-				{\bf Defintion:} \URL{BALL/VIEW/GUI/FUNCTOR/glObjectCollector.h}\\
-				{\bf Category:} \Ref{GLObject} container\\ \\
 				The class GLObjectCollector is responsible for collecting the \Ref{GLObject}
 				objects that are found in a \Ref{Composite} tree for the later processing
 				in the render engine \Ref{CompositeDescriptor}. The \Ref{GLObject} objects
 				are separated into different visualization groups (=lists) that are necessary
 				for proper rendering.
 				This class will be used internally from the \Ref{CompositeDescriptor} class
-				to collect {\em *this} objects.
-				@memo    GLObjectCollector class (BALL VIEW gui functor framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/07/09 18:26:43 $
+				to collect {\em *this} objects. \\
+				{\bf Defintion:} \URL{BALL/VIEW/GUI/FUNCTOR/glObjectCollector.h}\\
 		*/
 		class GLObjectCollector: public UnaryProcessor<Composite>
 		{

@@ -1,4 +1,4 @@
-// $Id: line.h,v 1.8 2001/05/13 13:40:37 hekl Exp $
+// $Id: line.h,v 1.9 2001/07/16 14:49:33 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LINE_H
 #define BALL_VIEW_PRIMITIV_LINE_H
@@ -27,8 +27,6 @@ namespace BALL
 	{
 
 		/** Line class.
-				{\bf Framework:} BALL/VIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/line.h}\\ \\
 				An instance of Line represents an instance of the geometric representation "line".
 				A line has the following properties. 
 				\begin{itemize}
@@ -38,11 +36,8 @@ namespace BALL
 				\end{itemize}
 				The class Line is derived from the classes \Ref{GeometricObject}, \Ref{ColorExtension}
 				and \Ref{Vertex2}. See these classes for further information concerning
-				interface and additional methods.
-				@memo    Line class (BALL VIEW primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/05/13 13:40:37 $
+				interface and additional methods. \\
+				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/line.h}
 		*/
 		class Line
 			: public GeometricObject,

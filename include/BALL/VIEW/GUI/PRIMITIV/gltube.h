@@ -1,4 +1,4 @@
-// $Id: gltube.h,v 1.6 2001/05/13 13:59:14 hekl Exp $
+// $Id: gltube.h,v 1.7 2001/07/16 14:49:30 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLTUBE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLTUBE_H
@@ -23,8 +23,6 @@ namespace BALL
 	{
 
 		/** GLTube class.
-				{\bf Framework:} BALL/VIEW/GUI/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/gltube.h}\\ \\
 				An instance of GLTube represents an instance of the geometric
 				visualization "tube".
 				The class GLTube is derived from the classes \Ref{Tube} and
@@ -33,10 +31,7 @@ namespace BALL
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				tube. OpenGL code is used for the visualization.
 				See these classes for further information.
-				@memo    GLTube class (BALL VIEW gui primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/13 13:59:14 $
+				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/gltube.h}
 		*/
 		class GLTube
 			: public Tube,

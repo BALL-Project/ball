@@ -1,4 +1,4 @@
-// $Id: geometricCollector.h,v 1.5 2001/07/11 15:14:18 aubertin Exp $
+// $Id: geometricCollector.h,v 1.6 2001/07/16 14:49:29 amoll Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_GEOMETRICCOLLECTOR_H
 #define BALL_VIEW_FUNCTOR_GEOMETRICCOLLECTOR_H
@@ -27,21 +27,15 @@ namespace BALL
 	{
 
 		/** GeometricCollector class.
-				{\bf Framework:} BALL/VIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/VIEW/FUNCTOR/geometricCollector.h}\\
-				{\bf Concept:} processor design pattern\\ \\
 				The class GeometricCollector is a \Ref{Processor} that collects
 				\Ref{GeometricObject} objects that can either be selected or
 				not. It is also a base class for collector objects that can collect
 				\Ref{Composite} objects. Overrides the	methods \Ref{operator},
 				\Ref{start} and \Ref{finish} to	change the collection filter criteria. 
-				This class is used by the class \Ref{Scene} to collect picked objects.
+				This class is used by the class \Ref{Scene} to collect picked objects. \\
+				{\bf Definition:} \URL{BALL/VIEW/FUNCTOR/geometricCollector.h}
 				@see     GeometricObject
 				@see     Scene
-				@memo    GeometricCollector class (BALL VIEW functor framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/07/11 15:14:18 $
 		*/
 		class GeometricCollector: public UnaryProcessor<Composite>
 		{

@@ -1,4 +1,4 @@
-// $Id: backbone.h,v 1.5 2001/07/14 12:59:05 amoll Exp $
+// $Id: backbone.h,v 1.6 2001/07/16 14:49:28 amoll Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_BACKBONE_H
 #define BALL_MOLVIEW_PRIMITIV_BACKBONE_H
@@ -44,8 +44,6 @@ namespace BALL
 	{
 
 		/** Backbone class.
-				{\bf Framework:} BALL/MOLVIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/PRIMITIV/backbone.h}\\ \\
 				An instance of Backbone represents a graphical representation of a spline
 				path through a list of given \Ref{Atom} objects. The spline path
 				will be created from \Ref{Tube} and \Ref{Sphere} objects. Before creating
@@ -55,11 +53,8 @@ namespace BALL
 				To create the Backbone use the method \Ref{createBackbone}.
 				The class Backbone is derived from the class \Ref{GeometricObject}.
 				See this class for further information concerning
-				interface and additional methods.
-				@memo    Backbone class (BALL MOLVIEW primitiv framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/07/14 12:59:05 $
+				interface and additional methods. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/PRIMITIV/backbone.h}
 		*/
 		class Backbone
 			: public GeometricObject

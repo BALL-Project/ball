@@ -1,4 +1,4 @@
-// $Id: filter.h,v 1.4 2001/07/15 18:48:52 oliver Exp $
+// $Id: filter.h,v 1.5 2001/07/16 14:49:29 amoll Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_FILTER_H
 #define BALL_VIEW_FUNCTOR_FILTER_H
@@ -27,9 +27,6 @@ namespace BALL
 	{
 		
 		/** Filter class.
-				{\bf Framework:} BALL/VIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/VIEW/FUNCTOR/filter.h}\\ 
-				{\bf Concept:} visitor design pattern\\ \\
 				The class Filter is a base class for filter objects. This class filters
 				\Ref{Composite} objects. Override the method \Ref{visit} to
 				specify the needed filter criteria und use the method \Ref{setResult_} 
@@ -39,12 +36,9 @@ namespace BALL
 				from this class the method \Ref{getResult} returns {\tt true}, otherwise
 				{\tt false}.
 				This class is used by the class \Ref{Control} to filter for \Ref{GeometricObject}
-				objects.
+				objects. \\
+				{\bf Definition:} \URL{BALL/VIEW/FUNCTOR/filter.h}
 				@see     Control
-				@memo    Filter class (BALL VIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/07/15 18:48:52 $
 		*/
 		class Filter: public Visitor<Composite>
 		{

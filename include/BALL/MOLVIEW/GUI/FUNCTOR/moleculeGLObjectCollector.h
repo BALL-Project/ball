@@ -1,4 +1,4 @@
-// $Id: moleculeGLObjectCollector.h,v 1.4 2001/07/06 13:06:58 aubertin Exp $
+// $Id: moleculeGLObjectCollector.h,v 1.5 2001/07/16 14:49:28 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
@@ -36,9 +36,6 @@ namespace BALL
 		using VIEW::GLObjectCollector;
 
 		/** MoleculeGLObjectCollector class.
-  
-				{\bf Framework:} BALL/MOLVIEW/GUI/FUNCTOR\\
-				{\bf Defintion:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h}\\ \\
 				The class MoleculeGLObjectCollector is responsible for additionally collecting 
 				the \Ref{GLObject} objects that are found in \Ref{Bond} objects that are available
 				in the processed \Ref{Molecule} object. This is done by overriding the \Ref{finish}
@@ -48,11 +45,8 @@ namespace BALL
 				are separated into different visualization groups (=lists) that are necessary
 				for proper rendering.
 				See \Ref{GLObjectCollector} for further information about collecting \Ref{GLObject}
-				objects.
-				@memo    MoleculeGLObjectCollector class (BALL MOLVIEW gui functor framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/07/06 13:06:58 $
+				objects. \\
+				{\bf Defintion:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h}
 		*/
 		class MoleculeGLObjectCollector: public GLObjectCollector
 		{

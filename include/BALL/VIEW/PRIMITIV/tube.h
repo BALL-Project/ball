@@ -1,4 +1,4 @@
-// $Id: tube.h,v 1.10 2001/06/25 14:12:53 sturm Exp $
+// $Id: tube.h,v 1.11 2001/07/16 14:49:33 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
 #define BALL_VIEW_PRIMITIV_TUBE_H
@@ -30,8 +30,6 @@ namespace BALL
 	{
 
 		/** Tube class.				
-				{\bf Framework:} BALL/VIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/tube.h}\\ \\
 				An instance of Tube represents an instance of the geometric representation "tube".
 				A tube has the following properties. 
 				\begin{itemize}
@@ -43,11 +41,8 @@ namespace BALL
 				The class Tube is derived from the classes \Ref{GeometricObject}, \Ref{ColorExtension},
 				\Ref{Radius} and \Ref{Vertex2}. 
 				See these classes for further information concerning
-				interface and additional methods.
-				@memo    Tube class (BALL VIEW primitiv framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.10 $
-				@date    $Date: 2001/06/25 14:12:53 $
+				interface and additional methods. \\
+				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/tube.h}
 		*/
 		class Tube
 			: public GeometricObject,

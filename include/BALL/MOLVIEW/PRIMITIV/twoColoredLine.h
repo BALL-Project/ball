@@ -1,4 +1,4 @@
-// $Id: twoColoredLine.h,v 1.7 2001/05/13 14:55:25 hekl Exp $
+// $Id: twoColoredLine.h,v 1.8 2001/07/16 14:49:29 amoll Exp $
 
 #ifndef BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
 #define BALL_VIEW_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
@@ -29,8 +29,6 @@ namespace BALL
 		using VIEW::Vertex2;
 
 		/** TwoColoredLine class.
-				{\bf Framework:} BALL/MOLVIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/PRIMITIV/twoColoredLine.h}\\ \\
 				An instance of TwoColoredLine represents an instance of the geometric
 				representation of a two colored "line".
 				A twoColoredLine has the following properties. 
@@ -47,11 +45,8 @@ namespace BALL
 				The class TwoColoredLine is derived from the classes \Ref{GeometricObject},
 				\Ref{ColorExtension2}	and \Ref{Vertex2}.
 				See these classes for further information concerning
-				interface and additional methods.
-				@memo    TwoColoredLine class (BALL MOLVIEW primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/05/13 14:55:25 $
+				interface and additional methods. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/PRIMITIV/twoColoredLine.h}
 		*/
 		class TwoColoredLine
 			: public GeometricObject,

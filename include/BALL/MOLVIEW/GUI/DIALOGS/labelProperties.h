@@ -35,29 +35,20 @@
 # include <BALL/MOLVIEW/GUI/DIALOGS/labelPropertiesData.h>
 #endif
 
-//using namespace BALL;
 using namespace BALL::VIEW;
-//using namespace BALL::MOLVIEW;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-
 		/**	The LabelProperties class.
-				{\bf Framework:} BALL/MOLVIEW/GUI/DIALOGS\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/labelProperties.h}\\ \\
 				The class LabelProperties is a dialog for appending to a selection of 
 				molecular objects a label which text and color can be changed.
 				The class \Ref{MolecularControl} is responsible for creating such a selection.
 				If this dialog is used, it should be created with \Ref{MainControl} as parent.
 				The class LabelPropertiesData contains the definition of the layout of
-				this dialog and is therefore not necessary for understanding.
-				@memo    LabelProperties class (BALL MOLVIEW gui dialogs framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/07/06 13:48:22 $
+				this dialog and is therefore not necessary for understanding. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/labelProperties.h}
 		*/
 		class LabelProperties : 
 			public BALL::MOLVIEW::LabelPropertiesData,

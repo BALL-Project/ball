@@ -19,19 +19,13 @@ namespace BALL
 	{
 
 		/** Preferences class.
-				
-				{\bf Framework:} BALL/VIEW/GUI/DIALOGS\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/DIALOGS/preferences.h}\\ \\
 				The class Preferences is a tab dialog for other preference dialogs to be
 				inserted. An interface for adding and removing other tab dialogs is
 				available. {\em *this} preferences dialog will be created by the class
 				\Ref{MainControl}. The \Ref{MainControl} will add other tab dialogs of
 				\Ref{ModularWidget} objects to {\em *this} preferences dialog if those
-				other \Ref{ModularWidget} objects have preferences tab dialogs.
-				@memo    Preferences class (BALL VIEW gui dialogs framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.2 $
-				@date    $Date: 2001/05/13 13:52:43 $
+				other \Ref{ModularWidget} objects have preferences tab dialogs. \\
+				{\bf Definition:} \URL{BALL/VIEW/GUI/DIALOGS/preferences.h}
 		*/
 		class Preferences : public QTabDialog
 		{

@@ -1,4 +1,4 @@
-// $Id: scene.h,v 1.7 2001/05/27 10:26:37 hekl Exp $
+// $Id: scene.h,v 1.8 2001/07/16 14:49:32 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 #define BALL_VIEW_GUI_WIDGETS_SCENE_H
@@ -62,8 +62,6 @@ namespace BALL
 	{
 
 		/**	The Scene class.
-				{\bf Framework:} BALL/VIEW/GUI/WIDGETS\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/scene.h}\\ \\
 				The class Scene is the main visualization widget that shows that graphical
 				representation of the inserted \Ref{Composite} objects that are stored
 				in the \Ref{MainControl} object.
@@ -77,10 +75,7 @@ namespace BALL
 				scenes. These other scenes can have different camera angles or other properties.
 				The class \Ref{Events} is a container class of appropriate events that can
 				be assigned to a scene.
-				@memo    Scene class (BALL VIEW gui widgets framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/05/27 10:26:37 $
+				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/scene.h}
 		*/
 		class Scene: public QGLWidget, public ModularWidget
 		{

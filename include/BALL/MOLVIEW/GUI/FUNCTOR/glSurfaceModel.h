@@ -1,4 +1,4 @@
-// $Id: glSurfaceModel.h,v 1.4 2001/07/10 12:43:18 aubertin Exp $
+// $Id: glSurfaceModel.h,v 1.5 2001/07/16 14:49:28 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLSURFACEMODEL_H
@@ -24,17 +24,12 @@ namespace BALL
 	{
 
 		/** AddGLSurfaceModel class.
-				{\bf Framework:} BALL/MOLVIEW/GUI/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/glSurfaceModel.h}\\ \\
 				The class AddGLSurfaceModel is derived from the class 
 				\Ref{SurfaceModel} and extents this class by overriding the creation
 				method used for creating the \Ref{Surface}. This new primitive contains
 				OpenGL implementation to generate the graphical visualization of the surface.
-				This class has the same functionality as its base class \Ref{AddSurfaceModel}.
-				@memo    AddGLSurfaceModel class (BALL MOLVIEW gui functor framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/07/10 12:43:18 $
+				This class has the same functionality as its base class \Ref{AddSurfaceModel}. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/glSurfaceModel.h}
 		*/
 		class AddGLSurfaceModel: public AddSurfaceModel
 		{

@@ -1,4 +1,4 @@
-// $Id: point.h,v 1.9 2001/05/13 13:40:38 hekl Exp $
+// $Id: point.h,v 1.10 2001/07/16 14:49:33 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_POINT_H
 #define BALL_VIEW_PRIMITIV_POINT_H
@@ -31,8 +31,6 @@ namespace BALL
 	{
 
 		/** Point class.
-				{\bf Framework:} BALL/VIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/point.h}\\ \\
 				An instance of Point represents an instance of the geometric representation "point".
 				A point has the following properties. 
 				\begin{itemize}
@@ -41,11 +39,8 @@ namespace BALL
 				\end{itemize}
 				The class Point is derived from the classes \Ref{GeometricObject}, \Ref{ColorExtension}
 				and \Ref{Vertex}. See these classes for further information concerning
-				interface and additional methods.
-				@memo    Point class (BALL VIEW primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.9 $
-				@date    $Date: 2001/05/13 13:40:38 $
+				interface and additional methods. \\
+				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/point.h}
 		*/
 		class Point
 			: public GeometricObject,

@@ -1,4 +1,4 @@
-// $Id: information.h,v 1.6 2001/07/15 18:48:52 oliver Exp $
+// $Id: information.h,v 1.7 2001/07/16 14:49:29 amoll Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_INFORMATION_H
 #define BALL_VIEW_FUNCTOR_INFORMATION_H
@@ -52,9 +52,6 @@ namespace BALL
 	{
 		
 		/** Information class.
-				{\bf Framework:} BALL/VIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/VIEW/FUNCTOR/information.h}\\
-				{\bf Concept:} visitor design pattern\\ \\
 				The class Information is a base class for information objects.
 				This class retrieves information concerning
 				\Ref{Composite} objects. Override the \Ref{visit} method to
@@ -64,12 +61,9 @@ namespace BALL
 				In this implementation the types and type names of \Ref{Type} will be already
 				recognized.
 				This class is used by the class \Ref{Control} to retrieve informations
-				about the shown \Ref{Composite} objects.
+				about the shown \Ref{Composite} objects. \\
+				{\bf Definition:} \URL{BALL/VIEW/FUNCTOR/information.h}
 				@see     Control
-				@memo    Information class (BALL VIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/07/15 18:48:52 $
 		*/
 		class Information: public Visitor<Composite>
 		{

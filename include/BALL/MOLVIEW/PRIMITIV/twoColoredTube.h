@@ -1,4 +1,4 @@
-// $Id: twoColoredTube.h,v 1.7 2001/05/13 14:55:26 hekl Exp $
+// $Id: twoColoredTube.h,v 1.8 2001/07/16 14:49:29 amoll Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
@@ -29,16 +29,12 @@ namespace BALL
 	
 	namespace MOLVIEW
 	{
-
-
 		using VIEW::GeometricObject;
 		using VIEW::ColorExtension2;
 		using VIEW::Radius;
 		using VIEW::Vertex2;
 
 		/** TwoColoredTube class.
-				{\bf Framework:} BALL/MOLVIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/PRIMITIV/twoColoredTube.h}\\ \\
 				An instance of TwoColoredTube represents an instance of the geometric
 				representation of a two colored "tube".
 				A twoColoredTube has the following properties. 
@@ -55,11 +51,8 @@ namespace BALL
 				The class TwoColoredTube is derived from the classes \Ref{GeometricObject},
 				\Ref{ColorExtension2}, \Ref{Radius}	and \Ref{Vertex2}.
 				See these classes for further information concerning
-				interface and additional methods.
-				@memo    TwoColoredTube class (BALL MOLVIEW primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/05/13 14:55:26 $
+				interface and additional methods. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/PRIMITIV/twoColoredTube.h}
 		*/
 		class TwoColoredTube
 			: public GeometricObject,

@@ -1,4 +1,4 @@
-// $Id: objectCreator.h,v 1.4 2001/05/13 13:57:02 hekl Exp $
+// $Id: objectCreator.h,v 1.5 2001/07/16 14:49:30 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
 #define BALL_VIEW_GUI_KERNEL_OBJECTCREATOR_H
@@ -37,17 +37,12 @@ namespace BALL
 	{
 
 		/** ObjectCreator class.
-				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/objectCreator.h}\\ \\
 				The class ObjectCreator is a base class for converting \Ref{PersistentObject}
 				objects into \Ref{Composite} objects. It defines methods for initialization
 				and conversion that must be overriden by the derived class. 
 				This class is used by the class \Ref{Server} to convert incoming
 				\Ref{PersistentObject} objects to \Ref{Composite} objects.
-				@memo    ObjectCreator class (BALL VIEW gui kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 13:57:02 $
+				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/objectCreator.h}
 		*/
 		class ObjectCreator
 		{

@@ -1,4 +1,4 @@
-// $Id: sphere.h,v 1.10 2001/07/14 12:55:55 amoll Exp $
+// $Id: sphere.h,v 1.11 2001/07/16 14:49:33 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #define BALL_VIEW_PRIMITIV_SPHERE_H
@@ -35,8 +35,6 @@ namespace BALL
 	{
 
 		/** Sphere class.			
-				{\bf Framework:} BALL/VIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/sphere.h}	\\ \\
 				An instance of Sphere represents an instance of the geometric representation "sphere".
 				A sphere has the following properties. 
 				\begin{itemize}
@@ -46,11 +44,8 @@ namespace BALL
 				\end{itemize}
 				The class Sphere is derived from the classes \Ref{GeometricObject}, \Ref{ColorExtension},
 				\Ref{Vertex} and \Ref{Radius}. See these classes for further information concerning
-				interface and additional methods.
-				@memo    Sphere class (BALL VIEW primitiv framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.10 $
-				@date    $Date: 2001/07/14 12:55:55 $
+				interface and additional methods. \\
+				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/sphere.h}	
 		*/
 		class Sphere
 			: public GeometricObject,

@@ -33,9 +33,6 @@ namespace BALL
 	{
 
 		/** LogView class.
-				{\bf Framework:} BALL/VIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/logView.h}\\
-				{\bf Concept:} notification design pattern\\ \\
 				The class LogView records all messages sent to the \Ref{Log} object and
 				displays them as a text history. The class is derived from 
 				{\em NotificationTarget<LogStreamNotifier>} that provides the connection
@@ -44,10 +41,7 @@ namespace BALL
 				Use the class LogView as a widget. There are no initializations necessary.
 				Just create this widget as a child widgets of your application and it will
 				record and show all messages sent to the \Ref{Log} object.
-				@memo    LogView class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 13:47:47 $
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/logView.h}
 		*/
 		class LogView
 			: public NotificationTarget<LogStreamNotifier>,

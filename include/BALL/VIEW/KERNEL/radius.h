@@ -1,4 +1,4 @@
-// $Id: radius.h,v 1.6 2001/07/09 17:57:02 sturm Exp $
+// $Id: radius.h,v 1.7 2001/07/16 14:49:32 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_RADIUS_H
 #define BALL_VIEW_KERNEL_RADIUS_H
@@ -14,15 +14,10 @@ namespace BALL
 	{
 
 		/** Radius class.
-				{\bf Framework:} BALL/VIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/radius.h}\\ \\
 				The class Radius is used as a base class for all geometric objects that
 				needs a radius. It provides the derived class with methods for accessing
-				that radius value.
-				@memo    Radius class (BALL VIEW kernel framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/07/09 17:57:02 $
+				that radius value. \\
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/radius.h}
 		*/
 		class Radius
 		{

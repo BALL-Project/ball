@@ -1,4 +1,4 @@
-// $Id: vanDerWaalsModel.h,v 1.10 2001/07/15 18:49:19 oliver Exp $
+// $Id: vanDerWaalsModel.h,v 1.11 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
@@ -33,27 +33,19 @@
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-
-
 		using VIEW::Sphere;
 
 		/** AddVanDerWaalsModel class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h}\\ \\
 				The class AddVanDerWaalsModel is a model processor that is responsible
 				for creating a {\em Van der Waals} model.
 				This processor creates only the primitive objects without openGL implementation.
 				The derived class \Ref{AddGLVanDerWaalsModel} uses the primitives with
 				openGL implementation.
 				For information about the processor concept see \Ref{Processor} in tbe BALL
-				documentation.
-				@memo    AddVanDerWaalsModel class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.10 $
-				@date    $Date: 2001/07/15 18:49:19 $
+				documentation. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/vanDerWaalsModel.h}
 		*/
 		class AddVanDerWaalsModel: public AtomBondModelBaseProcessor
 		{

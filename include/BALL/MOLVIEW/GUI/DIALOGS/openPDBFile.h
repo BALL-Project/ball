@@ -1,4 +1,4 @@
-// $Id: openPDBFile.h,v 1.5 2001/07/06 14:12:46 aubertin Exp $
+// $Id: openPDBFile.h,v 1.6 2001/07/16 14:49:27 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENPDBFILE_H
 #define BALL_MOLVIEW_GUI_DIALOGS_OPENPDBFILE_H
@@ -19,8 +19,6 @@
 #	include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
 #endif
 
-//using namespace std;
-//using namespace BALL;
 using namespace BALL::VIEW;
 
 namespace BALL
@@ -30,17 +28,12 @@ namespace BALL
 	{
 
 		/** OpenPDBFile class.
-				{\bf Framework:} BALL/MOLVIEW/GUI/DIALOGS\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h}\\ \\
 				The class OpenPDBFile is a class for reading pdb files into \Ref{System} objects.
 				It is derived from
 				the class \Ref{FileDialog}. If a pdb file is read it will be converted
 				into a \Ref{Composite} object. See \Ref{openFile} for information
-				concerning conversion and notification.
-				@memo    OpenPDBFile class (BALL MOLVIEW gui dialogs framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/07/06 14:12:46 $
+				concerning conversion and notification. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h}
 		*/
 		class OpenPDBFile: public FileDialog
 		{

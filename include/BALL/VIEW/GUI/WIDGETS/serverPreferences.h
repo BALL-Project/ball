@@ -17,9 +17,6 @@ namespace BALL
 	{
 
 		/** ServerPreferences class.
-				
-				{\bf Framework:} BALL/VIEW/GUI/WIDGETS\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h}\\ \\
 				The class ServerPreferences is a widget that will be inserted into the
 				tab dialog \Ref{Preferences}. It contains the preferences 
 				of the \Ref{Server}. The \Ref{Server} will access those preferences
@@ -27,10 +24,7 @@ namespace BALL
 				{\em *this} serverPreferences will be created by the \Ref{Server}
 				object in the \Ref{Server::initializePreferencesTab} and will be inserted
 				into the \Ref{Preferences} dialog by the \Ref{MainControl}.
-				@memo    ServerPreferences class (BALL VIEW gui widgets framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.2 $
-				@date    $Date: 2001/05/13 14:03:45 $
+				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h}\\ \\
 		*/
 		class ServerPreferences : public QWidget
 		{

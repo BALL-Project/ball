@@ -1,4 +1,4 @@
-// $Id: extendedProperty.h,v 1.5 2001/05/13 14:55:25 hekl Exp $
+// $Id: extendedProperty.h,v 1.6 2001/07/16 14:49:28 amoll Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
 #define BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
@@ -22,8 +22,6 @@ namespace BALL
 	{
 
 		/** ExtendedPropertyManager class.
-				{\bf Framework:} BALL/MOLVIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/extendedPropertyManager.h}\\ \\
 				The class ExtendedPropertyManager overrides the \Ref{setProperty} method
 				from the class \Ref{PropertyManager}. That is necessary because there are
 				certain properties which cannot be set together (e.g. properties of the
@@ -32,11 +30,8 @@ namespace BALL
 				and MODEL_VAN_DER_WAALS cannot be set together, so the last set property
 				will clear the one previously set).
 				This class will be used by the class \Ref{BaseModelProcessor}, so that all
-				derived processors can make use of the properties.
-				@memo    ExtendedPropertyManager class (BALL MOLVIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 14:55:25 $
+				derived processors can make use of the properties. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/extendedPropertyManager.h}
 		*/
 		class ExtendedPropertyManager: public PropertyManager
 		{

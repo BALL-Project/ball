@@ -1,4 +1,4 @@
-// $Id: glBackboneModel.h,v 1.3 2001/05/13 14:55:24 hekl Exp $
+// $Id: glBackboneModel.h,v 1.4 2001/07/16 14:49:28 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
@@ -24,17 +24,12 @@ namespace BALL
 	{
 
 		/** AddGLBackboneModel class.
-				{\bf Framework:} BALL/MOLVIEW/GUI/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/glBackboneModel.h}\\ \\
 				The class AddGLBackboneModel is derived from the class 
 				\Ref{BackboneModel} and extents this class by overriding the creation
 				method used for creating the \Ref{Backbone}. This new primitive contains
 				OpenGL implementation to generate the graphical visualization of the backbone.
-				This class has the same functionality as its base class \Ref{AddBackboneModel}.
-				@memo    AddGLBackboneModel class (BALL MOLVIEW gui functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/05/13 14:55:24 $
+				This class has the same functionality as its base class \Ref{AddBackboneModel}. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/glBackboneModel.h}
 		*/
 		class AddGLBackboneModel: public AddBackboneModel
 		{

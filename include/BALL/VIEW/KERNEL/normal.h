@@ -1,4 +1,4 @@
-// $Id: normal.h,v 1.7 2001/07/14 12:55:55 amoll Exp $
+// $Id: normal.h,v 1.8 2001/07/16 14:49:32 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_NORMAL_H
 #define BALL_VIEW_KERNEL_NORMAL_H
@@ -18,15 +18,10 @@ namespace BALL
 	{
 
 		/** NormalVector class.
-				{\bf Framework:} BALL/VIEW/KERNEL\\ 
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/normal.h}\\ \\
 				The class NormalVector is used as a base class for all geometric objects that
 				needs a normal vector. It provides the derived class with methods for accessing
-				that normal vector.
-				@memo    NormalVector class (BALL VIEW kernel framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/07/14 12:55:55 $
+				that normal vector. \\
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/normal.h}
 		*/
 		class NormalVector
 		{

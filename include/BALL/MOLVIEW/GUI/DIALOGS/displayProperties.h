@@ -1,4 +1,4 @@
-// $Id: displayProperties.h,v 1.9 2001/07/15 16:24:36 oliver Exp $
+// $Id: displayProperties.h,v 1.10 2001/07/16 14:49:27 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -87,8 +87,6 @@ namespace BALL
 	{
 
 		/**	The DisplayProperties class.
-				{\bf Framework:} BALL/MOLVIEW/GUI/DIALOGS\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h}\\ \\
 				The class DisplayProperties is a dialog used for changing the graphical
 				representation of a selection of molecular objects.
 				With the help of various combo boxes it is possible to customize the look of
@@ -119,11 +117,8 @@ namespace BALL
 				The class \Ref{MolecularControl} is responsible for creating such a selection.
 				If this dialog is used, it should be created with \Ref{MainControl} as parent.
 				The class DisplayPropertiesData contains the definition of the layout of
-				this dialog and is therefore not necessary for understanding.
-				@memo    DisplayProperties class (BALL MOLVIEW gui dialogs framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.9 $
-				@date    $Date: 2001/07/15 16:24:36 $
+				this dialog and is therefore not necessary for understanding. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h}
 		*/
 		class DisplayProperties 
 			: public BALL::MOLVIEW::DisplayPropertiesData,

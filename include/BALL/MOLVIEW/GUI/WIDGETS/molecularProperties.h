@@ -1,4 +1,4 @@
-// $Id: molecularProperties.h,v 1.6 2001/07/06 14:28:42 aubertin Exp $
+// $Id: molecularProperties.h,v 1.7 2001/07/16 14:49:28 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
@@ -46,8 +46,6 @@ namespace BALL
 	{
 
 		/**	The MolecularProperties class.
-				{\bf Framework:} BALL/MOLVIEW/GUI/WIDGETS\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h}\\ \\
 				The class MolecularProperties is a widget that converts certain \Ref{Message}
 				objects to other \Ref{Message} objects.
 				This class is necessary to convert new \Ref{Composite} objects opened with either
@@ -55,11 +53,8 @@ namespace BALL
 				that have certain molecular properties. Further it converts the geometric selection
 				sent by \Ref{Scene} to a molecular selection whose objects can be given a new
 				graphical representation by the \Ref{DisplayProperties} dialog.
-				See \Ref{onNotify} for information concerning the conversion mechanism.
-				@memo    MolecularProperties class (BALL MOLVIEW gui widgets framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/07/06 14:28:42 $
+				See \Ref{onNotify} for information concerning the conversion mechanism. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h}
 		*/
 		class MolecularProperties: public QWidget, public ModularWidget
 		{

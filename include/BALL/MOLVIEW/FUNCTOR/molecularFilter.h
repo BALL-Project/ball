@@ -1,4 +1,4 @@
-// $Id: molecularFilter.h,v 1.5 2001/07/15 18:49:18 oliver Exp $
+// $Id: molecularFilter.h,v 1.6 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
@@ -34,19 +34,13 @@ namespace BALL
 	{
 		
 		/** MolecularFilter class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/molecularFilter.h} \\
-				{\bf Concept:} visitor design pattern\\ \\
 				The class MolecularFilter is a class that filters
 				\Ref{Composite} objects. The \Ref{visit} method implements the filter
 				criteria. In this case this method filters \Ref{Composite} objects
 				that are of kind \Ref{Atom} or of kind \Ref{AtomContainer}.
 				This class is used by the class \Ref{MolecularControl} to filter
-				\Ref{Composite} objects that are of the kind specified above.
-				@memo    MolecularFilter class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/07/15 18:49:18 $
+				\Ref{Composite} objects that are of the kind specified above. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/molecularFilter.h} 
 		*/
 		class MolecularFilter: public Filter
 		{

@@ -1,4 +1,4 @@
-// $Id: glDisplayList.h,v 1.5 2001/05/13 13:57:01 hekl Exp $
+// $Id: glDisplayList.h,v 1.6 2001/07/16 14:49:30 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
 #define BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
@@ -16,8 +16,6 @@ namespace BALL
 	{
 
 		/** GLDisplayList class.
-				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glDisplayList.h}\\ \\
 				The class GLDisplayList is a container for graphical objects.
 				Graphical objects can be drawn directly to the screen or the can be
 				stored in a display list for faster drawing afterwards. This class
@@ -25,11 +23,8 @@ namespace BALL
 				This class is a wrapper class for the OpenGL display list mechanims.
 				It defines some useful methods for easy creation of a display list and
 				handles errors that can occur when using display lists. See the OpenGL
-				defintion of display lists for further information concerning display lists.
-				@memo    GLDisplayList class (BALL VIEW gui kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:57:01 $
+				defintion of display lists for further information concerning display lists.\\
+				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glDisplayList.h}
 		*/
 		class GLDisplayList
 		{

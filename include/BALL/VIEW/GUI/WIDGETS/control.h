@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.9 2001/07/09 19:16:24 sturm Exp $
+// $Id: control.h,v 1.10 2001/07/16 14:49:31 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -46,8 +46,6 @@ namespace BALL
 	{
 
 		/**	The Control class.
-				{\bf Framework:} BALL/VIEW/GUI/WIDGETS\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/control.h}\\ \\
 				The Control class is a widget to display the structure of \Ref{Composite}
 				objects. There are methods available to change the structure as well as
 				copy or paste objects into {\em *this} control.
@@ -57,10 +55,7 @@ namespace BALL
 				To use this widget in the application just create it with \Ref{MainControl} as
 				parent and all inserted \Ref{Composite} objects sent with \Ref{NewCompositeMessage}
 				will be shown in the structure view of {\em *this} control.
-				@memo    Control class (BALL VIEW gui widgets framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.9 $
-				@date    $Date: 2001/07/09 19:16:24 $
+				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/control.h}
 		*/
 		class Control: public QListView, public ModularWidget
 		{

@@ -1,4 +1,4 @@
-// $Id: lineModel.h,v 1.8 2001/07/15 18:49:18 oliver Exp $
+// $Id: lineModel.h,v 1.9 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
@@ -46,19 +46,14 @@ namespace BALL
 
 
 		/** AddLineModel class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/lineModel.h}\\ \\
 				The class AddLineModel is a model processor that is responsible
 				for creating a line model.
 				This processor creates only the primitive objects without openGL implementation.
 				The derived class \Ref{AddGLLineModel} uses the primitives with
 				openGL implementation.
 				For information about the processor concept see \Ref{Processor} in tbe BALL
-				documentation.
-				@memo    AddLineModel class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/07/15 18:49:18 $
+				documentation. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/lineModel.h}
 		*/
 		class AddLineModel: public AtomBondModelBaseProcessor
 		{

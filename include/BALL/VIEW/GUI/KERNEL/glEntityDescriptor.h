@@ -1,4 +1,4 @@
-// $Id: glEntityDescriptor.h,v 1.8 2001/07/09 18:50:48 sturm Exp $
+// $Id: glEntityDescriptor.h,v 1.9 2001/07/16 14:49:30 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
@@ -19,9 +19,6 @@ namespace BALL
 	{
 
 		/** GLEntityDescriptor class.
-				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glEntityDescriptor.h} \\
-				{\bf Category:} \Ref{GLDisplayList} container\\	\\
 				The class GLEntityDescriptor is a container for \Ref{GLDisplayList}'s.
 				A graphical representation of an object contains different graphical
 				visualizations (e.g. a solid part, a transparent part, a wireframe part, etc.).
@@ -36,20 +33,24 @@ namespace BALL
 				\Ref{CompositeDescriptor} class.
 				The different visualization parts are:
 				\begin{itemize}
-				  \item  {\bf static display list} - this \Ref{GLDisplayList} stores the visualization of an object in the non-moveable state
-					\item  {\bf static always front display list} - this \Ref{GLDisplayList} stores the visualization of an object in the non-moveable state that should be always in front of other objects
-					\item  {\bf static wireframe display list} - this \Ref{GLDisplayList} stores the visualization of an object in the non-moveable state that should be drawn as wireframe
-					\item  {\bf static always front wireframe display list} - this \Ref{GLDisplayList} stores the visualization of an object in the non-moveable state that should be drawn as wireframe and should be always in front of other objects.
+				  \item  {\bf static display list} - this \Ref{GLDisplayList} stores the 
+								 visualization of an object in the non-moveable state
+					\item  {\bf static always front display list} - this \Ref{GLDisplayList} stores the 
+								 visualization of an object in the non-moveable state that should be always in front of other objects
+					\item  {\bf static wireframe display list} - this \Ref{GLDisplayList} stores the 
+								 visualization of an object in the non-moveable state that should be drawn as wireframe
+					\item  {\bf static always front wireframe display list} - this \Ref{GLDisplayList} stores the visualization 
+								 of an object in the non-moveable state that should be drawn as wireframe and should be always in front of other objects.
 					\item  {\bf dynamic display list} - this \Ref{GLDisplayList} stores the visualization of an object in the moveable state
-					\item  {\bf dynamic always front display list} - this \Ref{GLDisplayList} stores the visualization of an object in the moveable state that should be always in front of other objects
-					\item  {\bf transparent display list} - this \Ref{GLDisplayList} stores the visualization of an object in the moveable state that should be drawn transparent
-					\item  {\bf transparent always front display list} - this \Ref{GLDisplayList} stores the visualization of an object in the moveable state that should be drawn transparent and should be always in front of other objects.
+					\item  {\bf dynamic always front display list} - this \Ref{GLDisplayList} stores the visualization 
+								 of an object in the moveable state that should be always in front of other objects
+					\item  {\bf transparent display list} - this \Ref{GLDisplayList} stores the visualization of 
+								 an object in the moveable state that should be drawn transparent
+					\item  {\bf transparent always front display list} - this \Ref{GLDisplayList} stores the visualization
+								 of an object in the moveable state that should be drawn transparent and should be always in front of other objects.
 				\end{itemize}
-				This class is used internally by the \Ref{CompositeDescriptor} class.
-				@memo    GLEntityDescriptor class (BALL VIEW gui kernel framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/07/09 18:50:48 $
+				This class is used internally by the \Ref{CompositeDescriptor} class. \\
+				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glEntityDescriptor.h}
 		*/
 		class GLEntityDescriptor
 		{

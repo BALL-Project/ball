@@ -1,4 +1,4 @@
-// $Id: colorExtension3.h,v 1.7 2001/07/09 17:49:44 sturm Exp $
+// $Id: colorExtension3.h,v 1.8 2001/07/16 14:49:32 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION3_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION3_H
@@ -22,15 +22,10 @@ namespace BALL
 	{
 
 		/** ColorExtension3 class.
-				{\bf Framework:} BALL/VIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/colorExtension3.h}\\ \\
 				The class ColorExtension3 is used as a base class for all geometric 
 				objects that needs three colors \Ref{ColorRGBA}. It provides the derived
 				class with methods for accessing these colors.
-				@memo    ColorExtension3 class (BALL VIEW kernel framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/07/09 17:49:44 $
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/colorExtension3.h}
 		*/
 		class ColorExtension3: public ColorExtension2
 		{

@@ -1,4 +1,4 @@
-// $Id: glsimpleBox.h,v 1.6 2001/05/13 13:59:14 hekl Exp $
+// $Id: glsimpleBox.h,v 1.7 2001/07/16 14:49:30 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSIMPLEBOX_H
 #define BALL_VIEW_GUI_PRIMITIV_GLSIMPLEBOX_H
@@ -23,8 +23,6 @@ namespace BALL
 	{
 
 		/** GLSimpleBox class.
-				{\bf Framework:} BALL/VIEW/GUI/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glsimpleBox.h}\\ \\
 				An instance of GLSimpleBox represents an instance of the geometric
 				visualization "simpleBox".
 				The class GLSimpleBox is derived from the classes \Ref{SimpleBox} and
@@ -33,10 +31,7 @@ namespace BALL
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				simpleBox. OpenGL code is used for the visualization.
 				See these classes for further information.
-				@memo    GLSimpleBox class (BALL VIEW gui primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/13 13:59:14 $
+				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glsimpleBox.h}\\ \\
 		*/
 		class GLSimpleBox
 			: public SimpleBox,

@@ -1,4 +1,4 @@
-// $Id: colorRGBA.h,v 1.4 2001/07/11 14:08:47 aubertin Exp $
+// $Id: colorRGBA.h,v 1.5 2001/07/16 14:49:29 amoll Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 #define BALL_VIEW_DATATYPE_COLORRGBA_H
@@ -27,16 +27,11 @@ namespace BALL
 		class ColorHSV;
 
 		/** ColorRGBA class.
-				{\bf Framework:} BALL/VIEW/DATATYPE\\
-				{\bf Definition:} \URL{BALL/VIEW/DATATYPE/colorRGBA.h}\\ \\
 				An instance of ColorRGBA represents a color consisting of the components
 				red, green, blue and alpha. The components are \Ref{ColorUnit}'s. This class
 				allows many types of input parameters. See description of this class for further
-				informations.
-				@memo    ColorRGBA class (BALL VIEW datatype framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/07/11 14:08:47 $
+				informations. \\
+				{\bf Definition:} \URL{BALL/VIEW/DATATYPE/colorRGBA.h}
 		*/
 		class ColorRGBA
 		{

@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.h,v 1.10 2001/07/15 18:49:19 oliver Exp $
+// $Id: standardColorCalculator.h,v 1.11 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
@@ -23,18 +23,13 @@ namespace BALL
 	{
 			
 		/** ElementColorCalculator class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h}\\ \\
 				The class ElementColorCalculator is derived from the class \Ref{ColorCalculator}.
 				It is used for calculating element colors of a given \Ref{Atom} object.
 				In the constructor a \Ref{ColorMap} is initialized that contains all colors
 				corresponding to the element symbols of atoms.
 				This colorCalculator can be set in the class \Ref{DisplayProperties}
-				to color an entire object in its element colors.
-				@memo    ElementColorCalculator class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.10 $
-				@date    $Date: 2001/07/15 18:49:19 $
+				to color an entire object in its element colors. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h}
 		*/
 		class ElementColorCalculator
 			: public ColorCalculator
@@ -58,19 +53,14 @@ namespace BALL
 		};
 
 		/** ResidueNameColorCalculator class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h}\\ \\
 				The class ResidueNameColorCalculator is derived from the class \Ref{ColorCalculator}.
 				It is used for calculating residue colors of a given \Ref{Atom} object 
 				(A residue color of a given atom is the color of the residue the atom is contained in).
 				In the constructor a \Ref{ColorMap} is initialized that contains all colors
 				corresponding to the residue names of the residues.
 				This colorCalculator can be set in the class \Ref{DisplayProperties}
-				to color an entire object in its residue colors.
-				@memo    ResidueNameColorCalculator class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.10 $
-				@date    $Date: 2001/07/15 18:49:19 $
+				to color an entire object in its residue colors. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h}
 		*/
 		class ResidueNameColorCalculator
 			: public ColorCalculator
@@ -116,8 +106,6 @@ namespace BALL
 
 			
 		/** AtomChargeColorCalculator class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h}\\ \\
 				The class AtomChargeColorCalculator is derived from the class \Ref{ColorCalculator}.
 				It is used for calculating charge colors of a given \Ref{Atom} object 
 				There can be set three colors for the charge boundaries. A color for a negative charge 
@@ -128,11 +116,8 @@ namespace BALL
 				is greater than {\tt +1} or lower than {\tt -1} it will be set to {\tt +1} or
 				{\tt -1}.
 				This colorCalculator can be set in the class \Ref{DisplayProperties}
-				to color an entire object in its atom charge colors.
-				@memo    AtomChargeColorCalculator class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.10 $
-				@date    $Date: 2001/07/15 18:49:19 $
+				to color an entire object in its atom charge colors. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h}
 		*/
 		class AtomChargeColorCalculator
 			: public ColorCalculator
@@ -351,8 +336,6 @@ namespace BALL
 
 
 		/** AtomDistanceColorCalculator class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h}\\ \\
 				The class AtomDistanceColorCalculator is derived from the class \Ref{ColorCalculator}
 				and from \Ref{UnaryProcessor} for \Ref{Atom} and \Ref{Composite}.
 				It is used for calculating distance colors of \Ref{Atom} objects that are stored in
@@ -365,11 +348,8 @@ namespace BALL
 				With this class it is possible to color two or more atom container (e.g. Molecules)
 				according to their atom distances.
 				This colorCalculator can be set in the class \Ref{DisplayProperties}
-				to color the atoms in multiple atom container according to their distance.
-				@memo    AtomDistanceColorCalculator class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.10 $
-				@date    $Date: 2001/07/15 18:49:19 $
+				to color the atoms in multiple atom container according to their distance. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h}
 		*/
 		class AtomDistanceColorCalculator
 			:	public UnaryProcessor<Atom>,

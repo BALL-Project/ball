@@ -1,4 +1,4 @@
-// $Id: events.h,v 1.6 2001/07/04 00:15:40 oliver Exp $
+// $Id: events.h,v 1.7 2001/07/16 14:49:31 amoll Exp $
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -927,8 +927,6 @@ namespace BALL
 
 
 		/**	The Events class.
-				{\bf Framework:} BALL/VIEW/GUI/WIDGETS\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/events.h}\\ \\
 				The class Events declares some event classes, the appropriate receiver classes
 				and event combination operators to handle, process and combine events.
 				Macros are used to declare these classes.  The \Ref{Notification} concept of
@@ -939,10 +937,7 @@ namespace BALL
 				\Ref{Notification} mechanism of BALL.
 				The names of the methods may seems a bit too long and unreadable but they are only
 				event names and will used and created automatically for the \Ref{Scene} object.
-				@memo    Events class (BALL VIEW gui widgets framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/07/04 00:15:40 $
+				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/events.h}
 		*/
 		class Events
 		{

@@ -1,4 +1,4 @@
-// $Id: baseModelConnector.h,v 1.4 2001/05/13 16:32:06 hekl Exp $
+// $Id: baseModelConnector.h,v 1.5 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
@@ -35,10 +35,6 @@ namespace BALL
 	{
 		
 		/** BaseModelConnector class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/baseModelConnector.h}\\
-				{\bf Concept:} visitor design pattern\\
-				{\bf Concept:} property design pattern\\ \\
 				The class BaseModelConnector is derived from \Ref{Visitor} and
 				\Ref{PropertyManager}. It contains therefore the visitor interface
 				and the property concept.
@@ -52,11 +48,8 @@ namespace BALL
 				the model connector class must be extended to deal with this new model and
 				its connections to the other models.
 				This class has access to the class \Ref{FindGeometricObjects} and the class 
-				\Ref{ColorCalculator}.
-				@memo    BaseModelConnector class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 16:32:06 $
+				\Ref{ColorCalculator}. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/baseModelConnector.h}
 		*/
 		class BaseModelConnector
 			: public Visitor<Composite>,

@@ -1,4 +1,4 @@
-// $Id: colorHSV.h,v 1.5 2001/07/11 14:46:42 aubertin Exp $
+// $Id: colorHSV.h,v 1.6 2001/07/16 14:49:29 amoll Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORHSV_H
 #define BALL_VIEW_DATATYPE_COLORHSV_H
@@ -30,17 +30,12 @@ namespace BALL
 		class ColorRGBA;
 
 		/** ColorHSV class.
-				{\bf Framework:} BALL/VIEW/DATATYPE\\
-				{\bf Definition:} \URL{BALL/VIEW/DATATYPE/colorHSV.h}	\\ \\
 				An instance of ColorHSV represents a color consisting of the components
 				hue, saturation and value. The components staturation and values are 
 				\Ref{ColorUnit}'s. The component hue is of class type \Ref{ColorUnitHue}.
 				See description of these classes for further informations concerning type
-				conversions.
-				@memo    ColorHSV class (BALL VIEW datatype framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/07/11 14:46:42 $
+				conversions. \\
+				{\bf Definition:} \URL{BALL/VIEW/DATATYPE/colorHSV.h}	
 		*/
 		class ColorHSV
 		{

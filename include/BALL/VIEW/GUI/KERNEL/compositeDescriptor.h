@@ -1,4 +1,4 @@
-// $Id: compositeDescriptor.h,v 1.8 2001/07/09 18:33:18 sturm Exp $
+// $Id: compositeDescriptor.h,v 1.9 2001/07/16 14:49:30 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
@@ -55,10 +55,6 @@ namespace BALL
 	{
 
 		/** CompositeDescriptor class.
-				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Defintion:} \URL{BALL/VIEW/GUI/KERNEL/compositeDescriptor.h}\\
-				{\bf Category:} \Ref{CompositeDescriptor} container\\
-				{\bf Category:} \Ref{GLEntityDescriptor} container\\ \\
 				The class CompositeDescriptor is responsible for maintaining
 				the graphical representation stored in \Ref{GLEntityDescriptor} objects of 
 				a given \Ref{Composite}.
@@ -78,11 +74,8 @@ namespace BALL
 				with its parent.
 				If the parent of such a shallow copy will be deleted the shallow copy will be
 				deleted as well because all attributs are no longer available. This mechanism
-				will work automatically.
-				@memo    CompositeDescriptor class (BALL VIEW gui kernel framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/07/09 18:33:18 $
+				will work automatically. \\
+				{\bf Defintion:} \URL{BALL/VIEW/GUI/KERNEL/compositeDescriptor.h}
 		*/
 		class CompositeDescriptor
 		{
@@ -92,8 +85,8 @@ namespace BALL
 			*/
 			//@{
 			BALL_CREATE_DEEP(CompositeDescriptor)
+			
 			//@}
-
 			/**	@name	Constructors
 			*/	
 			//@{
@@ -146,7 +139,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -182,8 +174,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
+			
 			//@}
-
 			/**	@name	Assignment
 			*/
 			//@{
@@ -232,8 +224,8 @@ namespace BALL
 			*/
 			void swap(CompositeDescriptor& composite_descriptor)
 				throw();
+			
 			//@}
-
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -382,8 +374,8 @@ namespace BALL
 			*/
 			void update()
 				throw();
+			
 			//@}
-
 			/** @name Internally used render engine methods.
 			*/
 			//@{
@@ -472,8 +464,8 @@ namespace BALL
 			*/
 			void drawDirect(bool dynamic = false, bool with_names = false)
 				throw();
+			
 			//@}
-
 			/**	@name	Predicates
 			*/
 			//@{
@@ -491,8 +483,8 @@ namespace BALL
 			*/
 			bool isDeepCopy() const
 				throw();
+			
 			//@}
-
 			/**	@name	Debugging and Diagnostics
 			*/
 			//@{
@@ -517,8 +509,8 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+			
 			//@}
-
 			/**	@name	Storers
 			*/
 			//@{
@@ -540,9 +532,9 @@ namespace BALL
 			*/
 			virtual void write(std::ostream& s) const
 				throw();
+			
 			//@}
 		
-
 			private:
 			
 			void drawDirectStatic_(bool with_names = false);

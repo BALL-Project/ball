@@ -1,4 +1,4 @@
-// $Id: colorCalculator.h,v 1.8 2001/07/15 18:49:18 oliver Exp $
+// $Id: colorCalculator.h,v 1.9 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
@@ -43,9 +43,6 @@ namespace BALL
 	{
 		
 		/** ColorCalculator class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/colorCalculator.h} \\
-				{\bf Concept:} visitor design pattern\\	\\
 				The class ColorCalculator is derived from both \Ref{Visitor} of \Ref{Atom}
 				and \Ref{Composite}. So there are \Ref{visit} methods for both \Ref{Atom} and
 				\Ref{Composite} objects. The class ColorCalculator is used for calculating
@@ -54,11 +51,8 @@ namespace BALL
 				\Ref{calculateKey} from the given object. If a name is not inserted into the 
 				color map a default color	will be returned. 
 				This class and their derived classes will be used by the model processors to
-				calculate a color for each \Ref{Atom} object they process.
-				@memo    ColorCalculator class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/07/15 18:49:18 $
+				calculate a color for each \Ref{Atom} object they process. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/colorCalculator.h} 
 		*/
 		class ColorCalculator
 			: public Visitor<Atom>,

@@ -1,4 +1,4 @@
-// $Id: removeModel.h,v 1.8 2001/07/15 18:49:18 oliver Exp $
+// $Id: removeModel.h,v 1.9 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
@@ -27,26 +27,18 @@
 #	include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
 #endif
 
-
-
 namespace BALL
 {
-	
 	namespace MOLVIEW
 	{
 		/** RemoveModel class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/removeModel.h}\\ \\
 				The class RemoveModel is a processor that is responsible for removing models.
 				It is started on a \Ref{Composite} object and removes all geometric primitives
 				that are located on \Ref{Atom} and \Ref{Bond} objects and that have a model
 				property. The method used for this action is \Ref{removeGeometricObjects_}.
 				For information about the processor concept see \Ref{Processor} in tbe BALL
-				documentation.
-				@memo    RemoveModel class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/07/15 18:49:18 $
+				documentation. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/removeModel.h}
 		*/
 		class RemoveModel: public AtomBondModelBaseProcessor
 		{

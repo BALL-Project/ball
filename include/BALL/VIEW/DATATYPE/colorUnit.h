@@ -1,4 +1,4 @@
-// $Id: colorUnit.h,v 1.9 2001/07/08 10:58:58 aubertin Exp $
+// $Id: colorUnit.h,v 1.10 2001/07/16 14:49:29 amoll Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
 #define BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -20,8 +20,6 @@ namespace BALL
 	{
 
 		/** ColorUnit class.
-				{\bf Framework:} BALL/VIEW/DATATYPE\\
-				{\bf Definition:} \URL{BALL/VIEW/DATATYPE/colorUnit.h}\\ \\	
 				An instance of ColorUnit can represent a value for the red, green, blue
 				and alpha component of the class \Ref{ColorRGBA}. Furthermore this class is
 				used for the value and saturation component of the class \Ref{ColorHSV}.
@@ -31,11 +29,8 @@ namespace BALL
 				given are in hex format "00"-"FF".
 				ColorUnit provides certain conversion functions as well, that will convert
 				its value to the needed type.
-				This class is used by the class \Ref{ColorRGBA} and \Ref{ColorHSV}.
-				@memo    ColorUnit class (BALL VIEW datatype framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.9 $
-				@date    $Date: 2001/07/08 10:58:58 $
+				This class is used by the class \Ref{ColorRGBA} and \Ref{ColorHSV}. \\
+				{\bf Definition:} \URL{BALL/VIEW/DATATYPE/colorUnit.h}
 		*/
 		class ColorUnit
 		{

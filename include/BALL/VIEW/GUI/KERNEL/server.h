@@ -1,4 +1,4 @@
-// $Id: server.h,v 1.8 2001/07/14 12:55:51 amoll Exp $
+// $Id: server.h,v 1.9 2001/07/16 14:49:30 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_SERVER_H
 #define BALL_VIEW_GUI_KERNEL_SERVER_H
@@ -56,9 +56,6 @@ namespace BALL
 	{
 
 		/** Server class.
-				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/server.h} \\
-				{\bf Category:} \Ref{Composite} container\\	\\
 				The class Server handles all incoming \Ref{PersistentObject} objects,
 				converts them into \Ref{Composite} objects (if possible) and sents
 				them through the \Ref{ConnectionObject} tree with the message
@@ -68,10 +65,7 @@ namespace BALL
 				\Ref{RemovedCompositeMessage} will be sent through the \Ref{ConnectionObject}
 				tree and after that the the message \Ref{NewCompositeMessage} with the new
 				received composite will be sent.
-				@memo    Server class (BALL VIEW gui kernel framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/07/14 12:55:51 $
+				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/server.h} 
 		*/
 		class Server
 			: public QTTimer,

@@ -1,4 +1,4 @@
-// $Id: glObject.h,v 1.7 2001/05/27 10:26:36 hekl Exp $
+// $Id: glObject.h,v 1.8 2001/07/16 14:49:30 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLOBJECT_H
@@ -22,11 +22,9 @@ namespace BALL
 	namespace VIEW
 	{
 
-		/* forward */
 		class CompositeDescriptor;
 		
 		/** GLObject class.
-				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
 				{\bf Definition:} \URL{BALL/VIEW/GUI/KERNEL/glObject.h}\\ \\
 				The class GLObject is the base class for all geometric primitives that have a 
 				graphical representation. GLObject declares an interface for the drawing mechanism
@@ -35,10 +33,6 @@ namespace BALL
 				The class glObject has access to the class glPrimitiveManager that holds a number
 				of primitives in variable resolutions. See \Ref{GLPrimitiveManager} for further
 				information concerning available primitives.
-				@memo    GLObject class (BALL VIEW gui kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/05/27 10:26:36 $
 		*/
 		class GLObject
 		{

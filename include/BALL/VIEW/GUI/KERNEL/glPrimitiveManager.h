@@ -1,4 +1,4 @@
-// $Id: glPrimitiveManager.h,v 1.6 2001/05/13 16:31:02 hekl Exp $
+// $Id: glPrimitiveManager.h,v 1.7 2001/07/16 14:49:30 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
 #define BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
@@ -34,17 +34,12 @@ namespace BALL
 	namespace VIEW
 	{
 		/**	GLDisplayListObject_ class.
-				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}\\ \\
 				The class GLDisplayListObject_ is a base class for the concrete display list
 				classes \Ref{GLSphereDisplayLists_}, \Ref{GLTubeDisplayLists_} and
 				\Ref{GLSimpleBoxDisplayLists_}. It defines an interface that every display
 				list class must have.
-				This is an internally used class and should not be used in any programs.
-				@memo    GLDisplayListObject_ class (BALL VIEW gui kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/13 16:31:02 $
+				This is an internally used class and should not be used in any programs. \\
+				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}
 		*/
 		class GLDisplayListObject_
 		{
@@ -147,17 +142,12 @@ namespace BALL
 
 
 		/**	GLSphereDisplayLists_ class.
-				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}\\ \\
 				The class GLSphereDisplayLists_ is the graphical representation of the
 				geometric primitive "sphere".
 				It is derived from the class \Ref{GLDisplayListObject_} and creates the
 				different graphical visualizations of a sphere.
-				This is an internally used class and should not be used in any programs.
-				@memo    GLSphereDisplayLists_ class (BALL VIEW gui kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/13 16:31:02 $
+				This is an internally used class and should not be used in any programs. \\
+				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}
 		*/
 		class GLSphereDisplayLists_: public GLDisplayListObject_
 		{
@@ -284,19 +274,13 @@ namespace BALL
 		};
 
 
-
 		/**	GLTubeDisplayLists_ class.
-				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}\\ \\
 				The class GLTubeDisplayLists_ is the graphical representation of the
 				geometric primitive "tube".
 				It is derived from the class \Ref{GLDisplayListObject_} and creates the
 				different graphical visualizations of a tube.
-				This is an internally used class and should not be used in any programs.
-				@memo    GLTubeDisplayLists_ class (BALL VIEW gui kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/13 16:31:02 $
+				This is an internally used class and should not be used in any programs. \\
+				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}
 		*/
 		class GLTubeDisplayLists_: public GLDisplayListObject_
 		{
@@ -408,17 +392,12 @@ namespace BALL
 
 
 		/**	GLSimpleBoxDisplayLists_ class.
-				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}\\ \\
 				The class GLSimpleBoxDisplayLists_ is the graphical representation of the
 				geometric primitive "simpleBox".
 				It is derived from the class \Ref{GLDisplayListObject_} and creates the
 				different graphical visualizations of a simpleBox.
-				This is an internally used class and should not be used in any programs.
-				@memo    GLSimpleBoxDisplayLists_ class (BALL VIEW gui kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/13 16:31:02 $
+				This is an internally used class and should not be used in any programs. \\
+				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}
 		*/
 		class GLSimpleBoxDisplayLists_: public GLDisplayListObject_
 		{
@@ -539,17 +518,12 @@ namespace BALL
 
 
 		/**	GLPrimitiveManager class.
-				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}\\ \\
 				The class GLPrimitiveManager is container for the predefined primitives
 				\Ref{GLSphereDisplayLists_}, \Ref{GLTubeDisplayLists_} and \Ref{GLSimpleBoxDisplayLists_}.
 				Further it provides methods for naming and accessing \Ref{GeometricObject} objects.
 				This mechanism is used by the class \Ref{Scene} to name all primitives to identify them
-				when picked.
-				@memo    GLPrimitiveManager class (BALL VIEW gui kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/13 16:31:02 $
+				when picked. \\
+				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h}
 		*/
 		class GLPrimitiveManager
 		{

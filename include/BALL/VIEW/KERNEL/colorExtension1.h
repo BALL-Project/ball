@@ -1,4 +1,4 @@
-// $Id: colorExtension1.h,v 1.6 2001/07/09 17:27:19 sturm Exp $
+// $Id: colorExtension1.h,v 1.7 2001/07/16 14:49:32 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION1_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION1_H
@@ -18,16 +18,10 @@ namespace BALL
 	{
 
 		/** ColorExtension class.
-				
-				{\bf Framework:} BALL/VIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/colorExtension1.h}\\ \\
 				The class ColorExtension is used as a base class for all geometric 
 				objects that need a single color \Ref{ColorRGBA}. It provides the derived
 				class with methods for accessing that color.
-				@memo    ColorExtension class (BALL VIEW kernel framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/07/09 17:27:19 $
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/colorExtension1.h}
 		*/
 		class ColorExtension
 		{

@@ -1,4 +1,4 @@
-// $Id: surfaceModel.h,v 1.4 2001/07/15 18:49:19 oliver Exp $
+// $Id: surfaceModel.h,v 1.5 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
@@ -41,8 +41,6 @@ namespace BALL
 		using VIEW::Mesh;
 
 		/** AddSurfaceModel class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/surfaceModel.h}\\ \\
 				The class AddSurfaceModel is a model processor that creates a surface model
 				of the given start \Ref{Composite} object. If the start composite object
 				is of kind \Ref{System} than the \Ref{SurfaceProcessor} is applied to it.
@@ -51,13 +49,10 @@ namespace BALL
 				The derived class \Ref{AddGLSurfaceModel} uses the \Ref{GLMesh} with
 				openGL implementation.
 				For information about the processor concept see \Ref{Processor} in tbe BALL
-				documentation.
+				documentation. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/surfaceModel.h}
 				@see     Mesh
 				@see     SurfaceProcessor
-				@memo    AddSurfaceModel class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/07/15 18:49:19 $
 		*/
 		class AddSurfaceModel: public BaseModelProcessor
 		{

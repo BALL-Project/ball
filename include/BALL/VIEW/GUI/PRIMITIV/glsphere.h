@@ -1,4 +1,4 @@
-// $Id: glsphere.h,v 1.8 2001/05/27 10:26:37 hekl Exp $
+// $Id: glsphere.h,v 1.9 2001/07/16 14:49:30 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
@@ -23,8 +23,6 @@ namespace BALL
 	{
 
 		/** GLSphere class.
-				{\bf Framework:} BALL/VIEW/GUI/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glsphere.h}	\\ \\
 				An instance of GLSphere represents an instance of the geometric
 				visualization "sphere".
 				The class GLSphere is derived from the classes \Ref{Sphere} and
@@ -33,10 +31,7 @@ namespace BALL
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				sphere. OpenGL code is used for the visualization.
 				See these classes for further information.
-				@memo    GLSphere class (BALL VIEW gui primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/05/27 10:26:37 $
+				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glsphere.h}	\\ \\
 		*/
 		class GLSphere
 			: public Sphere,

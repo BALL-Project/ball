@@ -1,4 +1,4 @@
-// $Id: molecularMessage.h,v 1.4 2001/07/14 12:59:02 amoll Exp $
+// $Id: molecularMessage.h,v 1.5 2001/07/16 14:49:28 amoll Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
 #define BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
@@ -20,8 +20,6 @@ namespace BALL
 	namespace MOLVIEW
 	{
 		/** NewMolecularMessage class.
-				{\bf Framework:} BALL/MOLVIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/molecularMessage.h}\\ \\
 				The class NewMolecularMessage is responsible for making known a new molecular
 				structure in the \Ref{ConnectionObject} tree. This message will be converted
 				from the message \Ref{NewCompositeMessage} if the \Ref{Composite} object contains
@@ -32,11 +30,8 @@ namespace BALL
 				Because the RTTI mechanism of BALL is used to identify the different messages
 				this class is not derived from \Ref{NewCompositeMessage}. Otherwise every method
 				accepting \Ref{NewCompositeMessage} object would also accept 
-				\Ref{NewMolecularMessage} objects and that is not allowed.
-				@memo    NewMolecularMessage class (BALL MOLVIEW kernel framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/07/14 12:59:02 $
+				\Ref{NewMolecularMessage} objects and that is not allowed. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/molecularMessage.h}
 		*/
 		class NewMolecularMessage: public CompositeMessage
 		{
@@ -83,8 +78,6 @@ namespace BALL
 
 
 		/** RemovedMolecularMessage class.
-				{\bf Framework:} BALL/MOLVIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/message.h}\\ \\
 				The class RemovedCompositeMessage is the message class that is responsible for
 				marking a \Ref{Composite} object as removed inside the \Ref{ConnectionObject} tree.
 				It will be sent by existing \Ref{ConnectionObject} objects that remove (or would like to
@@ -92,11 +85,8 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
 				objects.
 				This class is only provided for convinience. So in MOLVIEW applications one can
-				use this class in the same way as the class \Ref{RemovedCompositeMessage}.
-				@memo    RemovedMolecularMessage class (BALL MOLVIEW kernel framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/07/14 12:59:02 $
+				use this class in the same way as the class \Ref{RemovedCompositeMessage}. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/message.h}
 		*/
 		class RemovedMolecularMessage: public RemovedCompositeMessage
 		{
@@ -145,8 +135,6 @@ namespace BALL
 
 
 		/** ChangedMolecularMessage class.
-				{\bf Framework:} BALL/MOLVIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/message.h}\\ \\
 				The class ChangedCompositeMessage is the message class that is responsible for
 				marking a \Ref{Composite} object as changed inside the \Ref{ConnectionObject} tree.
 				It will be sent by existing \Ref{ConnectionObject} objects that change (or would like to
@@ -154,11 +142,8 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
 				objects.
 				This class is only provided for convinience. So in MOLVIEW applications one can
-				use this class in the same way as the class \Ref{ChangedCompositeMessage}.
-				@memo    ChangedMolecularMessage class (BALL MOLVIEW kernel framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/07/14 12:59:02 $
+				use this class in the same way as the class \Ref{ChangedCompositeMessage}. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/message.h}\
 		*/
 		class ChangedMolecularMessage: public ChangedCompositeMessage
 		{
@@ -206,9 +191,6 @@ namespace BALL
 
 
 		/** MolecularSelectionMessage class.
-				{\bf Framework:} BALL/MOLVIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/message.h}\\
-				{\bf Category:} \Ref{Composite} container\\	\\
 				The class MolecularSelectionMessage is the message class that is a container for
 				\Ref{Composite} objects that are somehow selected.
 				It will be sent by existing \Ref{ConnectionObject} objects that collect
@@ -217,11 +199,8 @@ namespace BALL
 				such messages in the {\em onNotify} method of user constructed \Ref{ConnectionObject}
 				objects.
 				This class is only provided for convinience. So in MOLVIEW applications one can
-				use this class in the same way as the class \Ref{SelectionMessage}.
-				@memo    MolecularSelectionMessage class (BALL MOLVIEW kernel framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/07/14 12:59:02 $
+				use this class in the same way as the class \Ref{SelectionMessage}. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/KERNEL/message.h}
 		*/
 		class MolecularSelectionMessage: public SelectionMessage
 		{

@@ -1,4 +1,4 @@
-// $Id: vertex1.h,v 1.6 2001/07/09 18:02:58 sturm Exp $
+// $Id: vertex1.h,v 1.7 2001/07/16 14:49:32 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_VERTEX1_H
 #define BALL_VIEW_KERNEL_VERTEX1_H
@@ -18,19 +18,14 @@ namespace BALL
 	{
 
 		/** Vertex class.
-				{\bf Framework:} BALL/VIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/vertex1.h}\\ \\
 				The class Vertex is used as a base class for all geometric objects that
 				have a single vertex. It provides the derived class with methods for accessing
 				that vertex. Further there is the possibility to give an address to a 
 				vector \Ref{Vector3} as vertex. So if the value of that given vector
 				changes the value of {\em *this} vertex changes as well. To avoid 
 				segmentation faults this vector address must be valid as long as 
-				{\em *this} vertex exists.
-				@memo    Vertex class (BALL VIEW kernel framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/07/09 18:02:58 $
+				{\em *this} vertex exists. \\
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/vertex1.h}
 		*/
 		class Vertex
 		{

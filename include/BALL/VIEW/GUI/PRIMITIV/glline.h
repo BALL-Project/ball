@@ -1,4 +1,4 @@
-// $Id: glline.h,v 1.6 2001/05/13 13:59:13 hekl Exp $
+// $Id: glline.h,v 1.7 2001/07/16 14:49:30 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLINE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLLINE_H
@@ -23,8 +23,6 @@ namespace BALL
 	{
 
 		/** GLLine class.
-				{\bf Framework:} BALL/VIEW/GUI/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glline.h}\\ \\
 				An instance of GLLine represents an instance of the geometric
 				visualization "line".
 				The class GLLine is derived from the classes \Ref{Line} and
@@ -33,10 +31,7 @@ namespace BALL
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				line. OpenGL code is used for the visualization.
 				See these classes for further information.
-				@memo    GLLine class (BALL VIEW gui primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/13 13:59:13 $
+				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glline.h}
 		*/
 		class GLLine
 			: public Line,

@@ -1,4 +1,4 @@
-// $Id: fileDialog.h,v 1.5 2001/05/13 13:52:43 hekl Exp $
+// $Id: fileDialog.h,v 1.6 2001/07/16 14:49:29 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
@@ -13,10 +13,6 @@
 
 #include <qfiledialog.h>
 
-//using namespace std;
-//using namespace BALL;
-//using namespace BALL::VIEW;
-
 namespace BALL
 {
 
@@ -24,18 +20,13 @@ namespace BALL
 	{
 
 		/** FileDialog class.
-				{\bf Framework:} BALL/VIEW/GUI/DIALOGS\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/DIALOGS/fileDialog.h}\\ \\
 				The class FileDialog is a base class for file dialogs. Its base classes are
 				\Ref{QFileDialog} (See QT documentation) and \Ref{ModularWidget}.
 				The virtual method \Ref{openFile_} can be overridden for specifying
 				what should be done with the selected file. With the method \Ref{exec}
 				{\em *this} fileDialog can be opened. If a file was selected the path and the file
-				name can be accessed with the methods \Ref{getPathName} and \Ref{getFileName}.
-				@memo    FileDialog class (BALL VIEW gui dialogs framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:52:43 $
+				name can be accessed with the methods \Ref{getPathName} and \Ref{getFileName}. \\
+				{\bf Definition:} \URL{BALL/VIEW/GUI/DIALOGS/fileDialog.h}\
 		*/
 		class FileDialog: public QFileDialog,	public ModularWidget
 		{

@@ -1,4 +1,4 @@
-// $Id: client.h,v 1.9 2001/07/08 11:30:09 aubertin Exp $
+// $Id: client.h,v 1.10 2001/07/16 14:49:32 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENT_H
 #define BALL_VIEW_KERNEL_CLIENT_H
@@ -33,8 +33,6 @@ namespace BALL
 	{
 
 		/** Client class.	
-				{\bf Framework:} BALL/VIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/client.h}	\\ \\
 				The class Client introduces a rudimentary interface for sending \Ref{Composite}
 				objects to the visualization.
 				In this version only the one way direction from {\em *this} client to the
@@ -46,11 +44,8 @@ namespace BALL
 				of this \Ref{Composite} changes as well.
 				The Client class connects to the \Ref{Server} class that is also a part of
 				the VIEW library. See \Ref{Server} for further information.
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/client.h}	
 				@see     Server
-				@memo    Client class (BALL VIEW kernel framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.9 $
-				@date    $Date: 2001/07/08 11:30:09 $
 		*/
 		class Client
 		{

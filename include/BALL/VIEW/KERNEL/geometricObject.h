@@ -1,4 +1,4 @@
-// $Id: geometricObject.h,v 1.18 2001/07/09 17:27:56 sturm Exp $
+// $Id: geometricObject.h,v 1.19 2001/07/16 14:49:32 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -46,9 +46,6 @@ namespace BALL
 		class Scene;
 
 		/** GeometricObject class.
-				{\bf Framework:} BALL/VIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/geometricObject.h}\\
-				{\bf Concept:} composite design pattern\\ \\
 				The class GeometricObject is the most important base class for a
 				geometric primitive.  All geometric primitives must be derived from
 				this class.  GeometricObject is derived from \Ref{Composite}.
@@ -61,11 +58,7 @@ namespace BALL
 				in the base class \Ref{GLObject}.  The class geometricObject
 				handles the different properties (see predefined properties), the
 				selected color, the name and the typename of a geometric object.
-				
-				@memo    GeometricObject class (BALL VIEW kernel framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.18 $
-				@date    $Date: 2001/07/09 17:27:56 $
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/geometricObject.h}
 		*/
 		class GeometricObject
 			: public Composite,

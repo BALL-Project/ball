@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.17 2001/07/09 19:06:59 sturm Exp $
+// $Id: mainControl.h,v 1.18 2001/07/16 14:49:30 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -71,11 +71,6 @@ namespace BALL
 		class ModularWidget;
 
 		/**	MainControl class.
-				{\bf Framework:} BALL/VIEW/GUI/KERNEL\\
-				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/mainControl.h}\\
-				{\bf Category:} \Ref{CompositeDescriptor} container\\
-				{\bf Category:} \Ref{ModularWidget} container\\
-				{\bf Concept:} embeddable design pattern\\ \\
 				{\bf Caveat:} Due to a peculiarity of the QT Meta Object Compiler (MOC)
 				you have to specify the full namsespace qualified name of this classes
 				when deriving from it.
@@ -99,10 +94,7 @@ namespace BALL
 				It handles also the general preferences tab \Ref{Preferences} of the main
 				application and notifies all
 				registered \Ref{ModularWidget} objects if the preferences has changed.
-				@memo    MainControl class (BALL VIEW gui kernel framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.17 $
-				@date    $Date: 2001/07/09 19:06:59 $
+				{\bf Definition:}\URL{BALL/VIEW/GUI/KERNEL/mainControl.h}
 		*/
 		class MainControl
 			: public QMainWindow,

@@ -1,4 +1,4 @@
-// $Id: QTTimer.h,v 1.9 2001/07/10 12:33:06 aubertin Exp $
+// $Id: QTTimer.h,v 1.10 2001/07/16 14:49:32 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_QTTIMER_H
 #define BALL_VIEW_KERNEL_QTTIMER_H
@@ -18,8 +18,6 @@ namespace BALL
 	{
 
 		/** QTTimer class.		
-				{\bf Framework:} BALL/VIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/QTTimer.h}\\ \\
 				The QTTimer class is a timer class that is useful to have a job repeated
 				unhindered by other jobs that are already processing.
 				The protected method {\em timer} will be called every {\em intervall} msec
@@ -31,10 +29,7 @@ namespace BALL
 				{\em timer} method.
 				The class is derived from the \Ref{QObject} class from the QT library. 
 				Therefore it will only function within a qt application.
-				@memo    QTTimer class (BALL VIEW kernel framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.9 $
-				@date    $Date: 2001/07/10 12:33:06 $
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/QTTimer.h}
 		*/
 		class QTTimer: public QObject
 		{

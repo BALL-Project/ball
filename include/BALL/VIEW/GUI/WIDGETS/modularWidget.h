@@ -1,4 +1,4 @@
-// $Id: modularWidget.h,v 1.8 2001/06/07 01:32:32 amoll Exp $
+// $Id: modularWidget.h,v 1.9 2001/07/16 14:49:31 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -27,16 +27,11 @@
 # include <BALL/VIEW/KERNEL/connectionObject.h>
 #endif
 
-//using namespace BALL;
-
 namespace BALL
 {
 	namespace VIEW
 	{
-
 		/**	The ModularWidget class.
-				{\bf Framework:} BALL/VIEW/GUI/WIDGETS\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/modularWidget.h} \\
 				The base class for all modular widgets.
 				BALLVIEW provides a simple mechanism for Rapid Application Prototyping based 
 				on {\em modular widgets}.	Using the modular widgets and the \Ref{MainControl} class
@@ -51,7 +46,8 @@ namespace BALL
 				to the class (from Python), please remember	to include the \Ref{BALL_EMBEDDABLE} 
 				macro in the public section	of your class declaration. Also make sure that the QT 
 				class you	derive from (e.g. QWidget) is the {\em first} base class and 
-				ModularWidget	second.
+				ModularWidget	second. \\
+				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/modularWidget.h}
 				@see MainControl
 				@see Embeddable
 				@see PyInterpreter

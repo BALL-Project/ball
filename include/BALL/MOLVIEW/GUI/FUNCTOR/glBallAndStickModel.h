@@ -1,4 +1,4 @@
-// $Id: glBallAndStickModel.h,v 1.4 2001/07/10 12:38:05 aubertin Exp $
+// $Id: glBallAndStickModel.h,v 1.5 2001/07/16 14:49:28 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBALLANDSTICKMODEL_H
@@ -31,18 +31,13 @@ namespace BALL
 	{
 
 		/** AddGLBallAndStickModel class.
-				{\bf Framework:} BALL/MOLVIEW/GUI/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/glBallAndStickModel.h}\\ \\
 				The class AddGLBallAndStickModel is derived from the class 
 				\Ref{AddBallAndStickModel} and extents this class by overriding the creation
 				methods used for creating the primitives. These new primitives contain
 				OpenGL implementation to generate the graphical visualization of geometric
 				shapes they present.
 				This class has the same functionality as its base class \Ref{AddBallAndStickModel}.
-				@memo    AddGLBallAndStickModel class (BALL MOLVIEW gui functor framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/07/10 12:38:05 $
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/FUNCTOR/glBallAndStickModel.h}
 		*/
 		class AddGLBallAndStickModel: public AddBallAndStickModel
 		{

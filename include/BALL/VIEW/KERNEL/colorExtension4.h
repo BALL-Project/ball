@@ -1,4 +1,4 @@
-// $Id: colorExtension4.h,v 1.6 2001/07/09 17:40:11 sturm Exp $
+// $Id: colorExtension4.h,v 1.7 2001/07/16 14:49:32 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION4_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION4_H
@@ -22,15 +22,10 @@ namespace BALL
 	{
 
 		/** ColorExtension4 class.
-				{\bf Framework:} BALL/VIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/colorExtension4.h}\\ \\
 				The class ColorExtension4 is used as a base class for all geometric 
 				objects that needs four colors \Ref{ColorRGBA}. It provides the derived
 				class with methods for accessing these colors.
-				@memo    ColorExtension4 class (BALL VIEW kernel framework)
-				@author  $Author: sturm $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/07/09 17:40:11 $
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/colorExtension4.h}
 		*/
 		class ColorExtension4: public ColorExtension3
 		{

@@ -1,4 +1,4 @@
-// $Id: gllabel.h,v 1.6 2001/05/13 13:59:13 hekl Exp $
+// $Id: gllabel.h,v 1.7 2001/07/16 14:49:30 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLABEL_H
 #define BALL_VIEW_GUI_PRIMITIV_GLLABEL_H
@@ -27,8 +27,6 @@ namespace BALL
 	{
 
 		/** GLLabel class.
-				{\bf Framework:} BALL/VIEW/GUI/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/gllabel.h}\\ \\
 				An instance of GLLabel represents an instance of the geometric
 				visualization "label".
 				The class GLLabel is derived from the classes \Ref{Label} and
@@ -37,10 +35,7 @@ namespace BALL
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				label. OpenGL code is used for the visualization.
 				See these classes for further information.
-				@memo    GLLabel class (BALL VIEW gui primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/13 13:59:13 $
+				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/gllabel.h}
 		*/
 		class GLLabel
 			: public Label,

@@ -1,4 +1,4 @@
-// $Id: simpleBox.h,v 1.8 2001/07/14 12:55:55 amoll Exp $
+// $Id: simpleBox.h,v 1.9 2001/07/16 14:49:33 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_SIMPLEBOX_H
 #define BALL_VIEW_PRIMITIV_SIMPLEBOX_H
@@ -31,8 +31,6 @@ namespace BALL
 	{
 
 		/** SimpleBox class.	
-				{\bf Framework:} BALL/VIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/simpleBox.h}\\ \\
 				An instance of SimpleBox represents an instance of the geometric representation "Box".
 				A simpleBox is a box whose sides are parallel to the coordinate axes. Therefore only
 				two vertices are needed. The first vertex is the lower left corner and the second
@@ -45,11 +43,8 @@ namespace BALL
 				\end{itemize}
 				The class SimpleBox is derived from the classes \Ref{GeometricObject}, \Ref{ColorExtension}
 				and \Ref{Vertex2}. See these classes for further information concerning
-				interface and additional methods.
-				@memo    SimpleBox class (BALL VIEW primitiv framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/07/14 12:55:55 $
+				interface and additional methods. \\
+				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/simpleBox.h}
 		*/
 		class SimpleBox
 			: public GeometricObject,

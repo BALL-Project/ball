@@ -1,4 +1,4 @@
-// $Id: backboneModel.h,v 1.4 2001/07/15 18:49:17 oliver Exp $
+// $Id: backboneModel.h,v 1.5 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
@@ -47,8 +47,6 @@ namespace BALL
 	{
 
 		/** AddBackboneModel class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/backboneModel.h}\\ \\
 				The class AddBackboneModel is a model processor that creates a backbone model
 				through the {\em CA}-atoms of the processed \Ref{Composite} object.
 				The created \Ref{Backbone} object will be inserted to the root of the 
@@ -57,11 +55,8 @@ namespace BALL
 				The derived class \Ref{AddGLBackboneModel} uses the \Ref{GLBackBone} with
 				openGL implementation.
 				For information about the processor concept see \Ref{Processor} in tbe BALL
-				documentation.
-				@memo    AddBackboneModel class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/07/15 18:49:17 $
+				documentation. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/backboneModel.h}
 		*/
 		class AddBackboneModel: public BaseModelProcessor
 		{

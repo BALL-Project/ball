@@ -1,4 +1,4 @@
-// $Id: colorUnitHue.h,v 1.8 2001/07/08 11:10:23 aubertin Exp $
+// $Id: colorUnitHue.h,v 1.9 2001/07/16 14:49:29 amoll Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNITHUE_H
 #define BALL_VIEW_DATATYPE_COLORUNITHUE_H
@@ -24,8 +24,6 @@ namespace BALL
 	{
 
 		/** ColorUnitHue class.
-				{\bf Framework:} BALL/VIEW/DATATYPE\\
-				{\bf Definition:} \URL{BALL/VIEW/DATATYPE/colorUnitHue.h}\\ \\
 				An instance of ColorUnitHue represents a value for the hue
 				component of the class \Ref{ColorHSV}.
 				The class handles the many possible variations a hue value can be set
@@ -34,11 +32,8 @@ namespace BALL
 				are given in hex format {\tt "000"-"168"} for the values {\tt 0-360}.
 				ColorUnitHue provides certain conversion functions as well that will convert
 				its value to the needed type.
-				This class is used by the class \Ref{ColorHSV}.
-				@memo    ColorUnitHue class (BALL VIEW datatype framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/07/08 11:10:23 $
+				This class is used by the class \Ref{ColorHSV}. \\
+				{\bf Definition:} \URL{BALL/VIEW/DATATYPE/colorUnitHue.h}
 		*/
 		class ColorUnitHue
 		{

@@ -1,4 +1,4 @@
-// $Id: atomBondModelBaseProcessor.h,v 1.6 2001/07/15 18:49:17 oliver Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.7 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
@@ -45,9 +45,6 @@ namespace BALL
 
 
 		/** AtomBondModelBaseProcessor class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h} 
-				\\
 				The class AtomBondModelBaseProcessor is the base class for all
 				models whose structure is somewhat orientated after the \Ref{Atom}
 				and \Ref{Bond} structure (e.g. the model {\em Ball And Stick} has
@@ -61,16 +58,13 @@ namespace BALL
 				that all \Ref{Bond} objects that can be reached from the inserted
 				\Ref{Atom} objects can get their connecting models. This is
 				achieved by the class \Ref{BaseModelConnector} and its derived
-				classes.
+				classes. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h} 
 				@see     finish
 				@see     buildBondModels_
 				@see     BaseModelConnector
 				@see     Atom
 				@see     Bond
-				@memo    AtomBondModelBaseProcessor class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/07/15 18:49:17 $
 		*/
 		class AtomBondModelBaseProcessor
 			:	public BaseModelProcessor

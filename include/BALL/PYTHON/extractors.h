@@ -1,4 +1,4 @@
-// $Id: extractors.h,v 1.7 2001/02/03 15:30:30 amoll Exp $
+// $Id: extractors.h,v 1.8 2001/07/16 14:49:29 amoll Exp $
 
 #ifndef BALL_PYTHON_EXTRACTORS_H
 #define BALL_PYTHON_EXTRACTORS_H
@@ -45,7 +45,6 @@ namespace BALL
 					print atom.getFullName()
 			\end{verbatim}
 			{\bf Definition:} \URL{BALL/PYTHON/extractors.h}
-			{\bf Framework:} PYTHON scripting
 	*/
 	//@{
 

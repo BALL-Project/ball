@@ -1,4 +1,4 @@
-// $Id: baseModel.h,v 1.10 2001/05/13 16:32:06 hekl Exp $
+// $Id: baseModel.h,v 1.11 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
@@ -45,10 +45,6 @@ namespace BALL
 
 
 		/** BaseModelProcessor class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/baseModel.h}\\
-				{\bf Concept:} processor design pattern\\
-				{\bf Concept:} property design pattern\\ \\
 				The class BaseModelProcessor is derived from \Ref{UnaryProcessor} and
 				\Ref{ExtendedPropertyManager}. It contains therefore the processor interface
 				and the property concept.
@@ -58,11 +54,8 @@ namespace BALL
 				See \Ref{GeometricObject} for information about static and dynamic object creation.
 				Every model must have a \Ref{ColorCalculator} and a \Ref{BaseModelConnector} object
 				so interface methods are available too.
-				Some protected helper methods are included that are used by some model processors.
-				@memo    BaseModelProcessor class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.10 $
-				@date    $Date: 2001/05/13 16:32:06 $
+				Some protected helper methods are included that are used by some model processors. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/baseModel.h}
 		*/
 		class BaseModelProcessor
 			: public UnaryProcessor<Composite>,

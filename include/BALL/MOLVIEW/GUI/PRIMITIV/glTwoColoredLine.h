@@ -1,4 +1,4 @@
-// $Id: glTwoColoredLine.h,v 1.6 2001/07/06 15:00:04 aubertin Exp $
+// $Id: glTwoColoredLine.h,v 1.7 2001/07/16 14:49:28 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
@@ -25,8 +25,6 @@ namespace BALL
 		using VIEW::GLObject;
 		
 		/** GLTwoColoredLine class.
-				{\bf Framework:} BALL/MOLVIEW/GUI/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredLine.h}\\ \\
 				An instance of GLTwoColoredLine represents an instance of the geometric
 				visualization of a two colored "line".
 				The class GLTwoColoredLine is derived from the classes \Ref{TwoColoredLine} and
@@ -34,11 +32,8 @@ namespace BALL
 				of the geometrical definition of the class twoColoredLine.
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				twoColoredLine. OpenGL code is used for the visualization.
-				See these classes for further information.
-				@memo    GLTwoColoredLine class (BALL MOLVIEW gui primitiv framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/07/06 15:00:04 $
+				See these classes for further information. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredLine.h}
 		*/
 		class GLTwoColoredLine
 			: public TwoColoredLine,

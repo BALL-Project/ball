@@ -1,4 +1,4 @@
-// $Id: connectionObject.h,v 1.7 2001/05/13 13:47:46 hekl Exp $
+// $Id: connectionObject.h,v 1.8 2001/07/16 14:49:32 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 #define BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -40,10 +40,6 @@ namespace BALL
 	namespace VIEW
 	{
 		/** ConnectionObject class.		
-				{\bf Framework:} BALL/VIEW/KERNEL\\
-				{\bf Definition:} \URL{BALL/VIEW/KERNEL/connectionObject.h}\\
-				{\bf Category:} \Ref{ConnectionObject} container\\
-				{\bf Category:} \Ref{Message} container\\ \\
 				The class ConnectionObject is a base class for all widgets and dialogs that
 				handles communication between these classes through message posting.
 				There are methods that handle the registering process between the classes that
@@ -64,10 +60,7 @@ namespace BALL
 				always be created with the new command and the flag deletable must be set to {\em true}.
 				If a message if statically created in the {\em onNotify} method there is the possibility
 				that the message is already destroyed when it should be processed.
-				@memo    ConnectionObject class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/05/13 13:47:46 $
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/connectionObject.h}\\
 		*/
 		class ConnectionObject
 		{

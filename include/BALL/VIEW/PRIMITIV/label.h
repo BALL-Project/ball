@@ -1,4 +1,4 @@
-// $Id: label.h,v 1.8 2001/07/14 12:55:55 amoll Exp $
+// $Id: label.h,v 1.9 2001/07/16 14:49:33 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LABEL_H
 #define BALL_VIEW_PRIMITIV_LABEL_H
@@ -29,8 +29,6 @@ namespace BALL
 	{
 
 		/** Label class.
-				{\bf Framework:} BALL/VIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/label.h}\\ \\
 				An instance of Label represents an instance of the geometric representation "label".
 				A label is an information text that can be pinned to another \Ref{Composite} or
 				\Ref{GeometricObject}. A label is both visible in the dynamic and static render
@@ -43,11 +41,8 @@ namespace BALL
 				\end{itemize}
 				The class Label is derived from the classes \Ref{GeometricObject}, \Ref{ColorExtension}
 				and \Ref{Vertex}. See these classes for further information concerning
-				interface and additional methods.
-				@memo    Label class (BALL VIEW primitiv framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/07/14 12:55:55 $
+				interface and additional methods. \\
+				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/label.h}
 		*/
 		class Label
 			: public GeometricObject,

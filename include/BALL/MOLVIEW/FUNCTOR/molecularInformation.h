@@ -1,4 +1,4 @@
-// $Id: molecularInformation.h,v 1.5 2001/07/15 18:49:18 oliver Exp $
+// $Id: molecularInformation.h,v 1.6 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
@@ -56,9 +56,6 @@ namespace BALL
 	{
 		
 		/** MolecularInformation class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/molecularInformation.h} \\
-				{\bf Concept:} visitor design pattern\\	\\
 				The class MolecularInformation is derived from the class \Ref{Information}.
 				It overrides the \Ref{visit} method to extract the name and the type of
 				\Ref{Composite} objects that are of a molecular kind. The new types that will be
@@ -66,12 +63,9 @@ namespace BALL
 				types specified in the \Ref{Type} enumeration than the request will be given to
 				the \Ref{Information} class.
 				This class is used by the class \Ref{MolecularControl} to retrieve names and types
-				of the displayed \Ref{Composite} objects.
+				of the displayed \Ref{Composite} objects. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/molecularInformation.h} 
 				@see     Information
-				@memo    MolecularInformation class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/07/15 18:49:18 $
 		*/
 		class MolecularInformation: public Information
 		{

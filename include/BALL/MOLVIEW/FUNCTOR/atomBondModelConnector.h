@@ -1,4 +1,4 @@
-// $Id: atomBondModelConnector.h,v 1.4 2001/05/13 16:32:06 hekl Exp $
+// $Id: atomBondModelConnector.h,v 1.5 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
@@ -47,19 +47,13 @@
 #	include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 #endif
 
-//using namespace BALL;
 using namespace BALL::VIEW;
-
  
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-		
 		/** AtomBondModelConnector class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/atomBondModelConnector.h}\\ \\
 				The class AtomBondModelConnector is derived from \Ref{BaseModelConnector}.
 				This class is a connector class which connects different models with each
 				other.
@@ -75,11 +69,8 @@ namespace BALL
 				The connector model is used for the \Ref{Bond} objects between the various models
 				of the adjacent \Ref{Atom} objects.
 				This class is used by the model processors to determine the connector model
-				between different models.
-				@memo    AtomBondModelConnector class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 16:32:06 $
+				between different models. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/atomBondModelConnector.h}
 		*/
 		class AtomBondModelConnector
 			: public BaseModelConnector

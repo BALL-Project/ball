@@ -1,4 +1,4 @@
-// $Id: moleculeObjectCreator.h,v 1.3 2001/07/06 14:15:48 aubertin Exp $
+// $Id: moleculeObjectCreator.h,v 1.4 2001/07/16 14:49:28 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
 #define BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
@@ -44,8 +44,6 @@ namespace BALL
 		using VIEW::ObjectCreator;
 
 		/** MoleculeObjectCreator class.
-				{\bf Framework:} BALL/MOLVIEW/GUI/KERNEL\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h}\\ \\
 				The class MoleculeObjectCreator is a class for converting \Ref{PersistentObject}
 				objects that represent molecular structures into \Ref{Composite} objects.
 				Objects that do not represent molecular structures will not be converted.
@@ -53,11 +51,8 @@ namespace BALL
 				will be done in the method \Ref{initPersistenceManager}.
 				The conversion will be executed in the method \Ref{convertObject}.
 				This class is used by the class \Ref{Server} to convert incoming
-				\Ref{PersistentObject} objects to \Ref{Composite} objects.
-				@memo    MoleculeObjectCreator class (BALL MOLVIEW gui kernel framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/07/06 14:15:48 $
+				\Ref{PersistentObject} objects to \Ref{Composite} objects. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h}
 		*/
 		class MoleculeObjectCreator: public ObjectCreator
 		{

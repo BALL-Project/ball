@@ -1,4 +1,4 @@
-// $Id: mesh.h,v 1.9 2001/07/14 12:55:55 amoll Exp $
+// $Id: mesh.h,v 1.10 2001/07/16 14:49:33 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #define BALL_VIEW_PRIMITIV_MESH_H
@@ -30,8 +30,6 @@ namespace BALL
 	{
 
 		/** Mesh class.			
-				{\bf Framework:} BALL/VIEW/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/mesh.h}	\\ \\
 				An instance of Mesh represents an instance of the geometric representation "mesh".
 				A mesh has the following properties. 
 				\begin{itemize}
@@ -40,11 +38,8 @@ namespace BALL
 				The class Mesh is derived from the classes \Ref{GeometricObject}, \Ref{ColorExtension}
 				and \Ref{Surface}. The data structures defining the mesh are implemented in
 				the class \Ref{Surface}. Therefore one can use {\em *this} mesh in the
-				same fashion as \Ref{Surface}.
-				@memo    Mesh class (BALL VIEW primitiv framework)
-				@author  $Author: amoll $
-				@version $Revision: 1.9 $
-				@date    $Date: 2001/07/14 12:55:55 $
+				same fashion as \Ref{Surface}. \\
+				{\bf Definition:} \URL{BALL/VIEW/PRIMITIV/mesh.h}	
 		*/
 		class Mesh
 			: public GeometricObject,

@@ -1,4 +1,4 @@
-// $Id: glTwoColoredTube.h,v 1.5 2001/07/06 15:06:32 aubertin Exp $
+// $Id: glTwoColoredTube.h,v 1.6 2001/07/16 14:49:28 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
@@ -25,8 +25,6 @@ namespace BALL
 		using VIEW::GLObject;
 		
 		/** GLTwoColoredTube class.
-				{\bf Framework:} BALL/MOLVIEW/GUI/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.h}\\ \\
 				An instance of GLTwoColoredTube represents an instance of the geometric
 				visualization of a two colored "tube".
 				The class GLTwoColoredTube is derived from the classes \Ref{TwoColoredTube} and
@@ -34,11 +32,8 @@ namespace BALL
 				of the geometrical definition of the class twoColoredTube.
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				twoColoredTube. OpenGL code is used for the visualization.
-				See these classes for further information.
-				@memo    GLTwoColoredTube class (BALL MOLVIEW gui primitiv framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/07/06 15:06:32 $
+				See these classes for further information. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.h}
 		*/
 		class GLTwoColoredTube
 			: public TwoColoredTube,

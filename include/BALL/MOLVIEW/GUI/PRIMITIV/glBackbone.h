@@ -1,4 +1,4 @@
-// $Id: glBackbone.h,v 1.5 2001/07/06 14:49:30 aubertin Exp $
+// $Id: glBackbone.h,v 1.6 2001/07/16 14:49:28 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
@@ -35,8 +35,6 @@ namespace BALL
 	{
 
 		/** GlBackbone class.
-				{\bf Framework:} BALL/MOLVIEW/GUI/PRIMITIV\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.h}\\ \\
 				An instance of GLBackbone represents an instance of the geometric
 				visualization of a \Ref{Backbone}.
 				The class GLBackbone is derived from the classes \Ref{Backbone} and
@@ -44,11 +42,8 @@ namespace BALL
 				of the geometrical definition of the class backbone.
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				backbone. OpenGL code is used for the visualization.
-				See these classes for further information.
-				@memo    GlBackbone class (BALL MOLVIEW gui primitiv framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/07/06 14:49:30 $
+				See these classes for further information. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.h}
 		*/
 		class GLBackbone
 			: public Backbone,

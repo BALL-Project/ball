@@ -1,4 +1,4 @@
-// $Id: objectSelector.h,v 1.2 2001/07/15 18:49:18 oliver Exp $
+// $Id: objectSelector.h,v 1.3 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
@@ -35,11 +35,6 @@
 #	include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
 #endif
 
-
-//using namespace BALL;
-//using namespace BALL::VIEW;
-
-
 namespace BALL
 {
  	using namespace VIEW;
@@ -47,8 +42,6 @@ namespace BALL
 	namespace MOLVIEW
 	{
 		/** ObjectSelector class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/objectSelector.h}\\ \\
 				The class ObjectSelector is responsible for selecting or deselecting
 				\Ref{Composite} objects. The method \Ref{Selectable::select} or 
 				\Ref{Selectable::deselect} will be called from each processed \Ref{Composite} object
@@ -56,13 +49,10 @@ namespace BALL
 				If \Ref{GeometricObject} objects are found their color will be set to the 
 				selected color if they are selected.
 				See \Ref{Selectable} for information about selecting or deselecting objects.
-				For information about the processor concept see \Ref{Processor} in tbe BALL
-				documentation.
+				for information about the processor concept see \Ref{Processor} in tbe BALL 
+				documentation. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/objectSelector.h}
 				@see  Selectable
-				@memo    ObjectSelector class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.2 $
-				@date    $Date: 2001/07/15 18:49:18 $
 		*/
 		class ObjectSelector: public AtomBondModelBaseProcessor
 		{

@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.h,v 1.9 2001/07/15 18:49:18 oliver Exp $
+// $Id: ballAndStickModel.h,v 1.10 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
@@ -46,8 +46,6 @@ namespace BALL
 		using VIEW::Tube;
 
 		/** AddBallAndStickModel class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h}\\ \\
 				The class AddBallAndStickModel is a model processor that is responsible
 				for creating either a {\em ball and stick} model or only a {\em stick} model.
 				In a ball and stick model the graphical representation of the \Ref{Atom} objects
@@ -58,11 +56,8 @@ namespace BALL
 				The derived class \Ref{AddGLBallAndStickModel} uses the primitives with
 				openGL implementation.
 				For information about the processor concept see \Ref{Processor} in tbe BALL
-				documentation.
-				@memo    AddBallAndStickModel class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.9 $
-				@date    $Date: 2001/07/15 18:49:18 $
+				documentation. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h}
 		*/
 		class AddBallAndStickModel: public AtomBondModelBaseProcessor
 		{

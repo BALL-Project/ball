@@ -16,17 +16,12 @@ namespace BALL
 	{
 
 		/** MainControlPreferences class.
-				{\bf Framework:} BALL/VIEW/GUI/WIDGETS\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h}\\ \\
 				The class MainControlPreferences is a widget that will be inserted into the
 				tab dialog \Ref{Preferences}. It contains the style preferences 
 				of the \Ref{MainControl}.
 				{\em *this} mainControlPreferences will be created in the \Ref{MainControl}
 				object and will be inserted into the \Ref{Preferences} dialog.
-				@memo    MainControlPreferences class (BALL VIEW gui widgets framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.2 $
-				@date    $Date: 2001/05/13 14:03:44 $
+				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/mainControlPreferences.h}
 		*/
 		class MainControlPreferences : public QWidget
 		{

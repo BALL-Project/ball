@@ -1,4 +1,4 @@
-// $Id: findGeometricObject.h,v 1.7 2001/07/15 18:49:18 oliver Exp $
+// $Id: findGeometricObject.h,v 1.8 2001/07/16 14:49:23 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H
 #define BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H
@@ -34,10 +34,6 @@ namespace BALL
 	{
 		
 		/** FindGeometricObjects class.
-				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/findGeometricObject.h}\\
-				{\bf Concept:} processor design pattern\\
-				{\bf Concept:} property design pattern\\ \\
 				The class FindGeometricObjects is derived from \Ref{UnaryProcessor} and
 				\Ref{ExtendedPropertyManager}. It contains therefore the processor interface
 				and the property concept. This class is used to find \Ref{GeometricObject} objects that
@@ -45,11 +41,8 @@ namespace BALL
 				that have the same properties as {\em *this} findGeometricObjects. The found objects
 				can be accessed by the method \Ref{getGeometricObjects}.
 				This class is used by some model processors (e.g. \Ref{AddBallAndStickModelProcessor})
-				to find \Ref{GeometricObject} objects they will change or delete.
-				@memo    FindGeometricObjects class (BALL MOLVIEW functor framework)
-				@author  $Author: oliver $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/07/15 18:49:18 $
+				to find \Ref{GeometricObject} objects they will change or delete. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/findGeometricObject.h}
 		*/
 		class FindGeometricObjects
 			: public UnaryProcessor<Composite>,

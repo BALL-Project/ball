@@ -1,4 +1,4 @@
-// $Id: molecularControl.h,v 1.6 2001/07/06 14:26:44 aubertin Exp $
+// $Id: molecularControl.h,v 1.7 2001/07/16 14:49:28 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -39,8 +39,6 @@ namespace BALL
 	namespace MOLVIEW
 	{
 		/**	The MolecularControl class.
-				{\bf Framework:} BALL/MOLVIEW/GUI/WIDGETS\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h}\\ \\
 				The MolecularControl class is a widget to display the molecular structure of 
 				\Ref{Composite}	objects. 
 				This class is derived from the class \Ref{Control} and extends it for showing
@@ -48,11 +46,8 @@ namespace BALL
 				disable the menu entries properly. The cut, copy and paste menus will work
 				only with \Ref{System} objects. Further the internal selection mechanism
 				is reimplemented to work on molecular objects instead of \Ref{GeometricObject}
-				objects.
-				@memo    MolecularControl class (BALL MOLVIEW gui widgets framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/07/06 14:26:44 $
+				objects. \\
+				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h}
 		*/
 		class MolecularControl: public BALL::VIEW::Control
 		{			
