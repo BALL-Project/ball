@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.37 2003/06/16 12:02:00 anker Exp $
+// $Id: PDBFile.C,v 1.38 2003/06/19 13:22:01 oliver Exp $
+//
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -462,7 +463,7 @@ namespace BALL
 		} 
 		else 
 		{
-			Composite::SubcompositeConstIterator it = system.beginSubcomposite();
+			Composite::CompositeConstIterator it = system.beginComposite();
 			for (; +it && !RTTI::isKindOf<Protein>(*it); ++it);
 			if (+it)
 			{
