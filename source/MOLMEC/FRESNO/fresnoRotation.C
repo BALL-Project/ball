@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.11 2002/11/21 20:54:47 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.12 2002/11/22 15:12:40 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -115,6 +115,7 @@ namespace BALL
 
 		// clear the vector of lipophilic interactions
 		rotatable_bonds_.clear();
+
 		// clear the grid that contains the receptor
 		if (grid_ != 0)
 		{
@@ -150,6 +151,9 @@ namespace BALL
 		algorithm_type_
 			= options.setDefaultInteger(FresnoFF::Option::ROT_ALGORITHM,
 					FresnoFF::Default::ROT_ALGORITHM);
+		Size verbosity
+			= options.setDefaultInteger(FresnoFF::Option::VERBOSITY,
+					FresnoFF::Default::VERBOSITY);
 
 		// create a grid for the receptor and insert all its atoms
 		// this grid is needed to find out whether an atom of the ligand is
@@ -209,7 +213,7 @@ namespace BALL
 		cycleDFS_(atom1, visited,
 				tree, possible_cycle_bonds, cycle_bonds, cycle_count);
 
-		cout << "Tree size: " << tree.size() << endl;
+		if (verbosity >= 90) { Log.info() << "Tree size: " << tree.size() << endl; }
 
 		// initialize the data structures for another dfs and count the heavy
 		// atoms in the system 
@@ -258,20 +262,22 @@ namespace BALL
 			if (!cycle_bonds.has(*tree_it))
 			{
 
-				// DEBUG
-				// cout << atom1->getFullName() << "---" << atom2->getFullName()
-				//	<< endl;
-				// cout << "hasH3Group(*atom1) " << hasH3Group(*atom1) << endl;
-				// cout << "hasH2Group(*atom1) " << hasH2Group(*atom1) << endl;
-				// cout << "hasF3Group(*atom1) " << hasF3Group(*atom1) << endl;
-				// cout << "isCarbon(*atom1) " << isCarbon(*atom1) << endl;
-				// cout << "isNitrogen(*atom1) " << isNitrogen(*atom1) << endl;
-				// cout << "hasH3Group(*atom2) " << hasH3Group(*atom2) << endl;
-				// cout << "hasH2Group(*atom2) " << hasH2Group(*atom2) << endl;
-				// cout << "hasF3Group(*atom2) " << hasF3Group(*atom2) << endl;
-				// cout << "isCarbon(*atom2) " << isCarbon(*atom2) << endl;
-				// cout << "isNitrogen(*atom2) " << isNitrogen(*atom2) << endl;
-				// /DEBUG
+				if (verbosity >= 100)
+				{
+					Log.info() << atom1->getFullName() << "---" << atom2->getFullName()
+						<< endl;
+					Log.info() << "hasH3Group(*atom1) " << hasH3Group(*atom1) << endl;
+					Log.info() << "hasH2Group(*atom1) " << hasH2Group(*atom1) << endl;
+					Log.info() << "hasF3Group(*atom1) " << hasF3Group(*atom1) << endl;
+					Log.info() << "isCarbon(*atom1) " << isCarbon(*atom1) << endl;
+					Log.info() << "isNitrogen(*atom1) " << isNitrogen(*atom1) << endl;
+					Log.info() << "hasH3Group(*atom2) " << hasH3Group(*atom2) << endl;
+					Log.info() << "hasH2Group(*atom2) " << hasH2Group(*atom2) << endl;
+					Log.info() << "hasF3Group(*atom2) " << hasF3Group(*atom2) << endl;
+					Log.info() << "isCarbon(*atom2) " << isCarbon(*atom2) << endl;
+					Log.info() << "isNitrogen(*atom2) " << isNitrogen(*atom2) << endl;
+				}
+
 				if (!((hasH3Group(*atom1) & (isCarbon(*atom1) | isNitrogen(*atom1)))
 							| (hasH2Group(*atom1) & isNitrogen(*atom1))
 							| (hasF3Group(*atom1) & isCarbon(*atom1))
@@ -290,21 +296,26 @@ namespace BALL
 						{
 							if (bondlengths.has(sym2))
 							{
-								// DEBUG
-								if (sym2 == "N")
+								if (verbosity >= 100)
 								{
-									cout << atom1->getFullName() << "---" 
-										<< atom2->getFullName() << endl;
-									cout << "length: " << dist << endl;
+									if (sym2 == "N")
+									{
+										Log.info() << atom1->getFullName() << "---" 
+											<< atom2->getFullName() << endl;
+										Log.info() << "length: " << dist << endl;
+									}
 								}
-								// /DEBUG
 								float lower = bondlengths[sym2].first;
 								float upper = bondlengths[sym2].second;
 								if ((dist > (lower * 0.975)) && (dist <= (upper * 1.025)))
 								{
-									cout << "found rotatable bond:" << endl;
-									cout << atom1->getFullName() << "---" << atom2->getFullName() << endl;
-									cout << "length: " << dist << endl;
+									if (verbosity >= 90)
+									{
+										Log.info() << "found rotatable bond:" << endl;
+										Log.info() << atom1->getFullName() << "---" 
+											<< atom2->getFullName() << endl;
+										Log.info() << "length: " << dist << endl;
+									}
 									found_rotatable_bond = true;
 									guessed_bonds++;
 								}
@@ -317,20 +328,27 @@ namespace BALL
 								if (bondlengths.has(sym1))
 								{
 									// DEBUG
-									if (sym2 == "N")
+									if (verbosity >= 100)
 									{
-										cout << atom1->getFullName() << "---" 
-											<< atom2->getFullName() << endl;
-										cout << "length: " << dist << endl;
+										if (sym2 == "N")
+										{
+											Log.info() << atom1->getFullName() << "---" 
+												<< atom2->getFullName() << endl;
+											Log.info() << "length: " << dist << endl;
+										}
 									}
 									// /DEBUG
 									float lower = bondlengths[sym1].first;
 									float upper = bondlengths[sym1].second;
 									if ((dist > (lower * 0.975)) && (dist <= (upper * 1.025)))
 									{
-										cout << "found rotatable bond:" << endl;
-										cout << atom1->getFullName() << "---" << atom2->getFullName() << endl;
-										cout << "length: " << dist << endl;
+										if (verbosity >= 90)
+										{
+											Log.info() << "found rotatable bond:" << endl;
+											Log.info() << atom1->getFullName() << "---" 
+												<< atom2->getFullName() << endl;
+											Log.info() << "length: " << dist << endl;
+										}
 										found_rotatable_bond = true;
 										guessed_bonds++;
 									}
@@ -352,12 +370,15 @@ namespace BALL
 							B_CO = (isCarbon(*atom2) & hasAromaticBondedOxygen(*atom2));
 
 							// DEBUG
-							// cout << "A SP2: " << A_sp2 << endl;
-							// cout << "A SP3: " << A_sp3 << endl;
-							// cout << "B SP2: " << B_sp2 << endl;
-							// cout << "B SP3: " << B_sp3 << endl;
-							// cout << "A CO: " << A_CO << endl;
-							// cout << "B CO: " << B_CO << endl;
+							if (verbosity >= 100)
+							{
+								Log.info() << "A SP2: " << A_sp2 << endl;
+								Log.info() << "A SP3: " << A_sp3 << endl;
+								Log.info() << "B SP2: " << B_sp2 << endl;
+								Log.info() << "B SP3: " << B_sp3 << endl;
+								Log.info() << "A CO: " << A_CO << endl;
+								Log.info() << "B CO: " << B_CO << endl;
+							}
 							// /DEBUG
 
 							if (((A_sp2 & B_sp3) | (B_sp2 & A_sp3) | (A_sp3 & B_sp3))
@@ -365,9 +386,12 @@ namespace BALL
 										| (A_sp3 & B_CO & isCarbon(*atom1))) == true)
 							{
 								// DEBUG
-								// cout << "found possible rotatable bond: " 
-								// 	<< atom1->getFullName() << "---" << atom2->getFullName()
-								// 	<< endl;
+								if (verbosity >= 100)
+								{
+									Log.info() << "found possible rotatable bond: " 
+										<< atom1->getFullName() << "---" << atom2->getFullName()
+										<< endl;
+								}
 								// /DEBUG
 								found_rotatable_bond = true;
 							}
@@ -391,9 +415,12 @@ namespace BALL
 						heavy_atom_count, nonlip_heavy_atom_count);
 				double first_fraction = (double) nonlip_heavy_atom_count / (double) heavy_atom_count;
 
-				cout << heavy_atom_count << " "
-					<< first_fraction << " "
-					<< atom1->getFullName() << ":" << atom2->getFullName() << " " ;
+				if (verbosity >= 90)
+				{
+					Log.info() << heavy_atom_count << " "
+						<< first_fraction << " "
+						<< atom1->getFullName() << ":" << atom2->getFullName() << " " ;
+				}
 
 				visited.clear();
 				heavy_atom_count = 0;
@@ -405,19 +432,23 @@ namespace BALL
 				heavy_atom_fractions_.push_back
 					(pair<double, double>(first_fraction, second_fraction));
 
-				cout << heavy_atom_count 
-					<< " " << second_fraction << endl;
+				if (verbosity >= 90)
+				{
+					Log.info() << heavy_atom_count 
+						<< " " << second_fraction << endl;
+				}
 			}
 		}
 
 		N_rot_ = rotatable_bonds_.size();
 		is_frozen_.resize(rotatable_bonds_.size());
 
-		// DEBUG
-		cout << "FresnoRotation setup statistics:" << endl;
-		cout << "Found " << rotatable_bonds_.size() 
-			<< " rotatable bonds" << endl << endl;
-		// /DEBUG
+		if (verbosity >= 9)
+		{
+			Log.info() << "FresnoRotation setup statistics:" << endl;
+			Log.info() << "Found " << rotatable_bonds_.size() 
+				<< " rotatable bonds" << endl << endl;
+		}
 
 		return true;
 
@@ -427,6 +458,10 @@ namespace BALL
 	double FresnoRotation::updateEnergy()
 		throw()
 	{
+
+		Size verbosity
+			= getForceField()->options.setDefaultInteger(FresnoFF::Option::VERBOSITY,
+					FresnoFF::Default::VERBOSITY);
 
 		if (N_rot_ == 0)
 		{
@@ -447,7 +482,10 @@ namespace BALL
 				{
 					val = heavy_atom_fractions_[i].first + heavy_atom_fractions_[i].second;
 					val /= 2.0;
-					cout << "ROT: adding score of " << val << endl;
+					if (verbosity >= 90)
+					{
+						Log.info() << "ROT: adding score of " << val << endl;
+					}
 					energy_ += val;
 				}
 			}
@@ -456,9 +494,10 @@ namespace BALL
 			energy_ += 1.0;
 			energy_ = factor_ * energy_;
 
-			// DEBUG
-			cout << "ROT: energy is " << energy_ << endl;
-			// /DEBUG
+			if (verbosity > 0)
+			{
+				Log.info() << "ROT: energy is " << energy_ << endl;
+			}
 
 			return energy_;
 		}
@@ -559,7 +598,7 @@ namespace BALL
 										if (((*set_it)->getSecondAtom() == tmp->getFirstAtom())
 											|| ((*set_it)->getSecondAtom() == tmp->getSecondAtom()))
 										{
-											cout << "found missing CYCLE bond: "
+											Log.info() << "found missing CYCLE bond: "
 												<< (*set_it)->getFirstAtom()->getFullName() << ":" 
 												<< (*set_it)->getSecondAtom()->getFullName() << endl;
 										}
@@ -569,7 +608,7 @@ namespace BALL
 										if (((*set_it)->getFirstAtom() == tmp->getFirstAtom())
 											|| ((*set_it)->getFirstAtom() == tmp->getSecondAtom()))
 										{
-											cout << "found missing CYCLE bond: "
+											Log.info() << "found missing CYCLE bond: "
 												<< (*set_it)->getFirstAtom()->getFullName() << ":" 
 												<< (*set_it)->getSecondAtom()->getFullName() << endl;
 										}
@@ -698,7 +737,7 @@ namespace BALL
 							if (dist < bind_distance)
 							{
 								// DEBUG
-								cout << "Found bound atom " << atom->getFullName() 
+								Log.info() << "Found bound atom " << atom->getFullName() 
 									<< ". dist: " << dist << " bind_distance: "
 									<< bind_distance << endl;
 								// /DEBUG

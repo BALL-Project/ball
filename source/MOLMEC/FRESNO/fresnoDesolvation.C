@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.C,v 1.1.2.15 2002/11/21 20:54:46 anker Exp $
+// $Id: fresnoDesolvation.C,v 1.1.2.16 2002/11/22 15:11:54 anker Exp $
 // Molecular Mechanics: Fresno force field, desolvation component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -142,29 +142,44 @@ namespace BALL
 			switch(calculation_method_)
 			{
 				case CALCULATION__FRESNO:
-					Log.info() << "Model " << calculation_method_ 
-						<< ": original Fresno." << endl << endl;
-					break;
+					if (verbosity_ > 0)
+					{
+						Log.info() << "Model " << calculation_method_ 
+							<< ": original Fresno." << endl << endl;
+						break;
+					}
 
 				case CALCULATION__FULL_FRESNO:
-					Log.info() << "Model " << calculation_method_ 
-						<< ": modified Fresno." << endl << endl;
-					break;
+					if (verbosity_ > 0)
+					{
+						Log.info() << "Model " << calculation_method_ 
+							<< ": modified Fresno." << endl << endl;
+						break;
+					}
 
 				case CALCULATION__FULL_CYCLE:
-					Log.info() << "Model " << calculation_method_ 
-						<< ": full thermodynamic cycle." << endl << endl;
-					break;
+					if (verbosity_ > 0)
+					{
+						Log.info() << "Model " << calculation_method_ 
+							<< ": full thermodynamic cycle." << endl << endl;
+						break;
+					}
 
 				case CALCULATION__KEKSE:
-					Log.info() << "Model " << calculation_method_ 
-						<< ": full thermodynamic cycle with focused grid." << endl << endl;
-					break;
+					if (verbosity_ > 0)
+					{
+						Log.info() << "Model " << calculation_method_ 
+							<< ": full thermodynamic cycle with focused grid." << endl << endl;
+						break;
+					}
 
 				case CALCULATION__EEF1:
-					Log.info() << "Model " << calculation_method_ 
-						<< ": CHARMM/EEF1 solvation." << endl << endl;
-					break;
+					if (verbosity_ > 0)
+					{
+						Log.info() << "Model " << calculation_method_ 
+							<< ": CHARMM/EEF1 solvation." << endl << endl;
+						break;
+					}
 
 			}
 		}
@@ -253,7 +268,6 @@ namespace BALL
 
 					result = computeEnergyDifference_(system, tmp_energy);
 					if (result == false) return false;
-					Log.info() << "no perm: " << tmp_energy << endl;
 					dG_reac_ligand += tmp_energy;
 
 					// ????? hardcoded
@@ -271,7 +285,6 @@ namespace BALL
 						fdpb_.options.setVector(FDPB::Option::OFFSET, offset_vector);
 						result = computeEnergyDifference_(system, tmp_energy);
 						if (result == false) return false;
-						Log.info() << "perm " << i << ": " << tmp_energy << endl;
 						dG_reac_ligand += tmp_energy;
 						if (tmp_energy < minimal_energy) minimal_energy = tmp_energy;
 						if (tmp_energy > maximal_energy) maximal_energy = tmp_energy;
@@ -279,7 +292,7 @@ namespace BALL
 
 					dG_reac_ligand /= 9.0;
 
-					if (verbosity_ > 0)
+					if (verbosity_ > 8)
 					{
 						Log.info() << "Minimal energy: " << minimal_energy << endl;
 						Log.info() << "Maximal energy: " << maximal_energy << endl;
@@ -404,10 +417,11 @@ namespace BALL
 						cut_system.insert(*((Molecule*)(cut_ligand.create(true))));
 						cut_system.insert(*((Molecule*)(cut_protein.create(true))));
 
-						// DEBUG
-						Log.info() << "cut: added " << cut_system.countAtoms() 
-							<< " atoms" << endl;
-						// /DEBUG
+						if (verbosity_ > 8)
+						{
+							Log.info() << "cut: added " << cut_system.countAtoms() 
+								<< " atoms" << endl;
+						}
 
 						if (averaging_ == AVERAGING__NONE)
 						{
@@ -445,7 +459,6 @@ namespace BALL
 								result = computeFullCycle_(cut_system, cut_protein,
 										cut_ligand, tmp_energy);
 								if (result == false) return false;
-								Log.info() << "no perm: " << tmp_energy << endl;
 								energy_ += tmp_energy;
 
 								// energy minimium
@@ -462,13 +475,12 @@ namespace BALL
 									if (result == false) return false;
 									if (tmp_energy < minimal_energy) minimal_energy = tmp_energy;
 									if (tmp_energy > maximal_energy) maximal_energy = tmp_energy;
-									Log.info() << "perm " << i << ": " << tmp_energy << endl;
 									energy_ += tmp_energy;
 								}
 
 								energy_ /= 9.0;
 
-								if (verbosity_ > 0)
+								if (verbosity_ > 8)
 								{
 									Log.info() << "Minimal energy: " << minimal_energy << endl;
 									Log.info() << "Maximal energy: " << maximal_energy << endl;
@@ -503,10 +515,11 @@ namespace BALL
 		throw()
 	{
 
-		// DEBUG
-		Log.info() << "DESOLV" << calculation_method_ << ": energy is " 
-			<< energy_ << endl;
-		// /DEBUG
+		if (verbosity_ > 0)
+		{
+			Log.info() << "DESOLV" << calculation_method_ << ": energy is " 
+				<< energy_ << endl;
+		}
 
 		return energy_;
 	}

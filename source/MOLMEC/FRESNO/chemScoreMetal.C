@@ -1,4 +1,4 @@
-// $Id: chemScoreMetal.C,v 1.1.2.2 2002/04/24 09:19:20 anker Exp $
+// $Id: chemScoreMetal.C,v 1.1.2.3 2002/11/22 15:11:26 anker Exp $
 // 
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -99,6 +99,10 @@ namespace BALL
 			= options.setDefaultReal(FresnoFF::Option::METAL_R2,
 					FresnoFF::Default::METAL_R2);
 
+		Size verbosity 
+			= options.setDefaultInteger(FresnoFF::Option::VERBOSITY,
+					FresnoFF::Default::VERBOSITY);
+
 		const HashMap<const Atom*, short>& fresno_types = fff->getFresnoTypes();
 
 		// quadratic run time. not nice.
@@ -124,14 +128,15 @@ namespace BALL
 						{
 							possible_metal_interactions_.push_back(pair<const Atom*,
 									const Atom*>(&*rec_it, &*lig_it));
-							// DEBUG
-							cout << "found possible metal int.: " 
-								<< rec_it->getFullName() << "..." << lig_it->getFullName()
-								<< " (length: " 
-								<< (rec_it->getPosition() - lig_it->getPosition()).getLength() 
-								<< " A) " 
-								<< endl;
-							// /DEBUG
+							if (verbosity >= 90)
+							{
+								Log.info() << "found possible metal int.: " 
+									<< rec_it->getFullName() << "..." << lig_it->getFullName()
+									<< " (length: " 
+									<< (rec_it->getPosition() - lig_it->getPosition()).getLength() 
+									<< " A) " 
+									<< endl;
+							}
 						}
 					}
 				}
@@ -145,11 +150,12 @@ namespace BALL
 			// /PARANOIA
 		}
 
-		// DEBUG
-		cout << "ChemScoreMetal setup statistics:" << endl;
-		cout << "Found " << possible_metal_interactions_.size() 
-			<< " possible metal interactions" << endl << endl;
-		// /DEBUG
+		if (verbosity >= 90)
+		{
+			Log.info() << "ChemScoreMetal setup statistics:" << endl;
+			Log.info() << "Found " << possible_metal_interactions_.size() 
+				<< " possible metal interactions" << endl << endl;
+		}
 
 		return true;
 
@@ -160,13 +166,17 @@ namespace BALL
 		throw()
 	{
 
-		double E = 0.0;
-		double val = 0.0;
-		double distance;
-		double R1;
-		double R2;
+		energy_ = 0.0;
+		float val = 0.0;
+		float distance;
+		float R1;
+		float R2;
 		const Atom* atom1;
 		const Atom* atom2;
+
+		Size verbosity 
+			= getForceField()->options.setDefaultInteger(FresnoFF::Option::VERBOSITY,
+					FresnoFF::Default::VERBOSITY);
 
 		::vector< pair<const Atom*, const Atom*> >::const_iterator it;
 		for (it = possible_metal_interactions_.begin();
@@ -190,20 +200,21 @@ namespace BALL
 				// difference between R1 and R2 is constant
 				val = MolmecSupport::calculateFresnoHelperFunction(distance, R1, R2);
 
-				// DEBUG
-				cout << "METAL: adding score of " << val
-					<< " (distance " << distance << ", R1 " << R1 << ", R2 " << R2 << ")"
-					<< endl;
-				// /DEBUG
+				if (verbosity >= 90)
+				{
+					Log.info() << "METAL: adding score of " << val
+						<< " (distance " << distance << ", R1 " << R1 << ", R2 " 
+						<< R2 << ")" << endl;
+				}
 
-				E += val;
+				energy_ += val;
 			}
 		}
-		energy_ = factor_ * E;
-		// DEBUG
-		cout << "METAL: score is " << E << endl;
-		cout << "METAL: energy is " << energy_ << endl;
-		// /DEBUG
+		energy_ = factor_ * energy_;
+		if (verbosity > 0)
+		{
+			Log.info() << "METAL: energy is " << energy_ << endl;
+		}
 		return energy_;
 	}
 
