@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.29 2001/12/18 03:16:01 oliver Exp $
+// $Id: classTest.h,v 1.30 2002/01/16 00:01:49 oliver Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -657,7 +657,7 @@ int main(int argc, char **argv)\
 				TEST::newline = true;\
 				std::cout << std::endl;\
 			}\
-			std::cout << "    (line " << __LINE__ << " COMPARE_OUTPUT(" << #text << "): got " << (TEST_strstr_contents) << ", expected " << (text) << ") ";\
+			std::cout << "    (line " << __LINE__ << " COMPARE_OUTPUT(" << #text << "): got '" << (TEST_strstr_contents) << "', expected '" << (text) << "') ";\
 			if (TEST::this_test)\
 				std::cout << " + " << std::endl;\
 			else \
