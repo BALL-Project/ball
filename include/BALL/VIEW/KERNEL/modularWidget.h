@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.7 2003/12/09 14:46:54 amoll Exp $
+// $Id: modularWidget.h,v 1.8 2003/12/09 14:59:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -40,6 +40,7 @@ namespace BALL
 				macro in the public section	of your class declaration. Also make sure that the QT 
 				class you	derive from (e.g. QWidget) is the <b>first</b> base class and 
 				ModularWidget	second. \par
+				<b>Remember:</b> A ModularWidget is not notified by the Messages it sends itself!
 				\see MainControl
 				\see Embeddable
 				\see PyInterpreter
