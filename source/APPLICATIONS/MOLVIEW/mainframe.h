@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.2 2000/01/08 20:34:08 hekl Exp $
+// $Id: mainframe.h,v 1.3 2000/01/09 17:46:32 hekl Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -17,7 +17,6 @@
 #include <qmessagebox.h>
 #include <qpopupmenu.h>
 #include <qlayout.h>
-//#include <qtextview.h>
 #include <qstring.h>
 #include <qfiledialog.h>
 
@@ -84,7 +83,7 @@ class Mainframe: public QWidget
 			MENU__SELECT          = 7,
 			MENU__DESELECT        = 8,
 			MENU__CENTER_CAMERA   = 9,
-			MENU__CHANGE_DISPLAY  = 10,
+			MENU__OPEN_DISPLAY    = 10,
 			MENU__CLEAR_CLIPBOARD = 11
 		};
 	
@@ -112,8 +111,6 @@ class Mainframe: public QWidget
 
 		void about();
 
-		void displayString(QString __QString);
-		
 		void updateEditMenuFromSelection(bool selected__bool, bool residue__bool);
 		void updateEditMenuFromCutOrCopy(bool copied__bool);
     
@@ -137,9 +134,7 @@ class Mainframe: public QWidget
 
 		Control __mControl_;
 
-		QString history__mQString_;
-		//		QTextView *__mpQTextView_;
-		TimerTextView *__mpTimerTextView_;
+		TimerTextView __mTimerTextView_;
 
 		List<QPopupMenu *> popup_menus__mList_;
 };

@@ -15,9 +15,7 @@ Mainframe::Mainframe
 		__mpQVBoxLayout_(0),
 		__mpQHBoxLayout_(0),
 		__mControl_(this),
-		history__mQString_(),
-		//		__mpQTextView_(0),
-		__mpTimerTextView_(0),
+		__mTimerTextView_(this),
 		popup_menus__mList_()
 {
 	setCaption("MolVIEW");
@@ -101,9 +99,6 @@ Mainframe::Mainframe
 	edit__pQPopupMenu->insertItem("focus c&amera", &__mControl_, 
 																SLOT(centerCamera()), CTRL+Key_A, MENU__CENTER_CAMERA);
 	edit__pQPopupMenu->insertSeparator();
-	edit__pQPopupMenu->insertItem("change D&isplay", &__mControl_, 
-																SLOT(changeDisplay()), CTRL+Key_I, MENU__CHANGE_DISPLAY);
-	edit__pQPopupMenu->insertSeparator();
 	edit__pQPopupMenu->insertItem("cl&ear Clipboard", &__mControl_, 
 																SLOT(clearClipboard()), CTRL+Key_E, MENU__CLEAR_CLIPBOARD);
 
@@ -116,8 +111,16 @@ Mainframe::Mainframe
 	edit__mpQPopupMenu_->setItemEnabled(MENU__SELECT, FALSE);
 	edit__mpQPopupMenu_->setItemEnabled(MENU__DESELECT, FALSE);
 	edit__mpQPopupMenu_->setItemEnabled(MENU__CENTER_CAMERA, FALSE);
-	edit__mpQPopupMenu_->setItemEnabled(MENU__CHANGE_DISPLAY, FALSE);
 	edit__mpQPopupMenu_->setItemEnabled(MENU__CLEAR_CLIPBOARD, FALSE);
+	
+	// Windows-Menu -------------------------------------------------------------------
+	
+	QPopupMenu *windows__pQPopupMenu = new QPopupMenu(this);
+	CHECK_PTR(windows__pQPopupMenu);
+	popup_menus__mList_.push_back(windows__pQPopupMenu);
+
+	windows__pQPopupMenu->insertItem("open D&isplay window", &__mControl_, 
+																	 SLOT(openDisplay()), CTRL+Key_I, MENU__OPEN_DISPLAY);
 	
 	// Help-Menu -------------------------------------------------------------------
 
@@ -131,7 +134,7 @@ Mainframe::Mainframe
 
 	__mQMenuBar_.insertItem("&File", file__pQPopupMenu);
 	__mQMenuBar_.insertItem("&Edit", edit__pQPopupMenu);
-	//	__mQMenuBar_.insertItem("&Options", options__pQPopupMenu);
+	__mQMenuBar_.insertItem("&Windows", windows__pQPopupMenu);
 	__mQMenuBar_.insertSeparator();
 	__mQMenuBar_.insertItem("&Help", help__pQPopupMenu);
 	__mQMenuBar_.setSeparator(QMenuBar::InWindowsStyle);
@@ -155,23 +158,11 @@ Mainframe::Mainframe
 	__mControl_.setScene(__mScene_);
 	__mControl_.setMoleculeObjectProcessor(__mMoleculeObjectProcessor_);
 
-	connect(&__mControl_, 
-					SIGNAL(writeText(QString)),
-					this,
-					SLOT(displayString(QString)));	
-	
 	// ---------------------
 	// TextView setup ------
 	// ---------------------
 
-	//	__mpQTextView_ = new QTextView(this);
-	//	CHECK_PTR(__mpQTextView_);
-	__mpTimerTextView_ = new TimerTextView(this);
-	CHECK_PTR(__mpTimerTextView_);
-
-	displayString(history__mQString_);
-
-	Log.info() << "Hallo" << endl;
+	Log.info() << "Welcome to MolVIEW." << endl;
 
 	// ---------------------
 	// Layout --------------
@@ -193,37 +184,12 @@ Mainframe::Mainframe
 	// contains in the first row a horizontal layout with two columns
 	__mpQVBoxLayout_->setMenuBar(&__mQMenuBar_);
 	__mpQVBoxLayout_->addLayout(__mpQHBoxLayout_, 4);
-	//	__mpQVBoxLayout_->addWidget(__mpQTextView_ ,1);
-	__mpQVBoxLayout_->addWidget(__mpTimerTextView_ ,1);
+	__mpQVBoxLayout_->addWidget(&__mTimerTextView_ ,1);
 }
 
 Mainframe::~Mainframe
   (void)
 {
-	/*
-	if (__mpQVBoxLayout_ != 0)
-	{
-		delete __mpQVBoxLayout_;
-		__mpQVBoxLayout_ = 0;
-	}
-
-	if (__mpQHBoxLayout_ != 0)
-	{
-		delete __mpQHBoxLayout_;
-		__mpQHBoxLayout_ = 0;
-	}
-
-//	if (__mpQTextView_ != 0)
-//	{
-//		delete __mpQTextView_;
-//		__mpQTextView_ = 0;
-//	}
-	if (__mpTimerTextView_ != 0)
-	{
-		delete __mpTimerTextView_;
-		__mpTimerTextView_ = 0;
-	}
-	*/
 	List<QPopupMenu *>::Iterator iterator__List;
 
 	for (iterator__List = popup_menus__mList_.begin();
@@ -262,7 +228,7 @@ void Mainframe::importPDB
 			}
 
 			// PDB file laden
-			displayString(QString("opening PDB-File ..."));
+			Log.info() << "> opening PDB-File." << endl;
 
 			PDBFile __PDBFile(filename__QString.ascii());
 
@@ -276,10 +242,10 @@ void Mainframe::importPDB
 				return;
 			}
 			*/
-			/*
-      FragmentDB db("Fragments.db");
-      __System.apply(*db.buildBonds);
-			*/
+
+			Log.info() << "> generating bonds." << endl;
+      __System.apply(*(__mMoleculeObjectProcessor_.fragmentdb.buildBonds));
+
 			// construct a name (the filename without the dir path)
 			filename__QString.remove(0, __QFileDialog.dirPath().length() + 1);
 
@@ -287,8 +253,6 @@ void Mainframe::importPDB
 			{
 				filename__QString = filename__QString.left(filename__QString.find('.'));
 			}
-
-			displayString(QString("done.\n\n"));	
 
 			__mControl_.addComposite(&__System, &filename__QString);
 		}
@@ -319,7 +283,7 @@ void Mainframe::importHIN
 				return;
 			}
 
-			displayString(QString("opening HIN-File ..."));
+			Log.info() << "> opening HIN-File." << endl;
 
 			HINFile __HINFile(filename__QString.ascii());
 
@@ -334,10 +298,10 @@ void Mainframe::importHIN
 				return;
 			}
 			*/
-			/*
-      FragmentDB db("Fragments.db");
-      __System.apply(*db.buildBonds);
-			*/
+
+			Log.info() << "> generating bonds." << endl;
+      __System.apply(*(__mMoleculeObjectProcessor_.fragmentdb.buildBonds));
+
 			// construct a name (the filename without the dir path)
 			filename__QString.remove(0, __QFileDialog.dirPath().length() + 1);
 
@@ -346,8 +310,6 @@ void Mainframe::importHIN
 				filename__QString = filename__QString.left(filename__QString.find('.'));
 			}
 			
-			displayString(QString("done.\n\n"));	
-
 			__mControl_.addComposite(&__System, &filename__QString);
 		}
 	}
@@ -380,22 +342,6 @@ void Mainframe::about
 	QMessageBox::about(this, "About Molview", "Version 0.01");
 }
 
-void Mainframe::displayString
-  (QString __QString)
-{
-	history__mQString_ += __QString;
-	//	__mpQTextView_->setText(history__mQString_);
-	//	__mpQTextView_->scrollBy(0, __mpQTextView_->visibleHeight());
-	//	__mpQTextView_->repaint();
-	__mpTimerTextView_->setText(history__mQString_);
-	__mpTimerTextView_->scrollBy(0, __mpTimerTextView_->visibleHeight());
-	__mpTimerTextView_->repaint();
-
-	//	repaint();
-
-	qApp->processEvents();
-}
-
 void Mainframe::updateEditMenuFromSelection(bool selected__bool, bool residue__bool)
 {
 	if (residue__bool == true)
@@ -416,7 +362,6 @@ void Mainframe::updateEditMenuFromSelection(bool selected__bool, bool residue__b
 		edit__mpQPopupMenu_->setItemEnabled(MENU__SELECT, TRUE);
 		edit__mpQPopupMenu_->setItemEnabled(MENU__DESELECT, TRUE);
 		edit__mpQPopupMenu_->setItemEnabled(MENU__CENTER_CAMERA, TRUE);
-		edit__mpQPopupMenu_->setItemEnabled(MENU__CHANGE_DISPLAY, TRUE);
 	}
 	else
 	{
@@ -428,7 +373,6 @@ void Mainframe::updateEditMenuFromSelection(bool selected__bool, bool residue__b
 		edit__mpQPopupMenu_->setItemEnabled(MENU__SELECT, FALSE);
 		edit__mpQPopupMenu_->setItemEnabled(MENU__DESELECT, FALSE);
 		edit__mpQPopupMenu_->setItemEnabled(MENU__CENTER_CAMERA, FALSE);
-		edit__mpQPopupMenu_->setItemEnabled(MENU__CHANGE_DISPLAY, FALSE);
 	}
 }
 
