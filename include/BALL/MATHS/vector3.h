@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.32 2000/04/18 13:57:08 oliver Exp $
+// $Id: vector3.h,v 1.33 2000/04/18 21:13:26 amoll Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -1035,11 +1035,7 @@ namespace BALL
 	std::istream& operator >> (std::istream& s, TVector3<T>& v)
 	{
 		char c;
-		for (int i=0; i<8 ; i++)
-		{
-			s >> c;
-		}
-		s >> v.x >> v.y >> v.z >> c;
+		s >> c >> v.x >> v.y >> v.z >> c;
 
 		return s;
 	}

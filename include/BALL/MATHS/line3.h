@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.19 2000/04/18 18:50:26 amoll Exp $
+// $Id: line3.h,v 1.20 2000/04/18 21:13:25 amoll Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -320,11 +320,7 @@ namespace BALL
 	std::istream& operator >> (std::istream& s, TLine3<T>& line)
 	{
 		char c;
-		for (int i=0; i<5; i++)
-		{
-			s >> c;
-		}
-		s >> line.p >> line.d >> c;
+		s >> c >> line.p >> line.d >> c;
 		return s;
 	}
 

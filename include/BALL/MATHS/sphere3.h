@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.14 2000/04/18 18:50:36 amoll Exp $
+// $Id: sphere3.h,v 1.15 2000/04/18 21:13:26 amoll Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -254,11 +254,7 @@ namespace BALL
 	std::istream& operator >> (std::istream& s, TSphere3<T>& sphere3)
 	{
 		char c;
-		for (int i=0; i<7 ; i++)
-		{
-			s >> c;
-		}
-		s >> sphere3.p >> sphere3.radius >> c;
+		s >> c >> sphere3.p >> sphere3.radius >> c;
 		return s;
 	}
 

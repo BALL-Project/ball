@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.22 2000/04/18 13:57:04 oliver Exp $
+// $Id: angle.h,v 1.23 2000/04/18 21:13:25 amoll Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -710,12 +710,7 @@ namespace BALL
 	std::istream& operator >> (std::istream& s, TAngle<T>& angle)
 	{
 		char c;
-		for (int i=0; i<6 ; i++)
-		{
-			s >> c;
-		}
-		s >> angle.value >> c;
-
+		s >> c >> angle.value >> c;
 		return s;
 	}
 
@@ -727,7 +722,7 @@ namespace BALL
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TAngle<T>& angle)
 	{
-		s << angle.value;
+		s << '(' << angle.value << ')';
 
 		return s;
 	}

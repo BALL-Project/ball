@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.15 2000/04/18 13:57:06 oliver Exp $
+// $Id: quaternion.h,v 1.16 2000/04/18 21:13:26 amoll Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -501,11 +501,7 @@ namespace BALL
 	std::istream& operator >>(std::istream& s, TQuaternion<T>& q)
 	{
 		char c;
-		for (int i=0; i<11 ; i++)
-		{
-			s >> c;
-		}
-		s >> q.i >> q.j >> q.k >> q.angle >> c;
+		s >> c >> q.i >> q.j >> q.k >> q.angle >> c;
 
 		return s;
 	}

@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.14 2000/04/18 13:57:04 oliver Exp $
+// $Id: box3.h,v 1.15 2000/04/18 21:13:25 amoll Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -217,8 +217,8 @@ namespace BALL
 
 	template <class T>
 	TBox3<T>::TBox3()
-		:	a(0, 0, 0),
-			b(0, 0, 0)
+		:	a(),
+			b()
 	{
 	}
 
@@ -444,7 +444,7 @@ namespace BALL
 	std::istream& operator >> (std::istream& s, TBox3<T>& box)
 	{
 		char c;
-		s >> c >> c >> c >> c >> c >> box.a >> box.b >> c;
+		s >> c >> box.a >> box.b >> c;
 		return s;
 	}
 
