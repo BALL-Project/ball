@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.66 2004/09/15 11:45:04 amoll Exp $
+// $Id: molecularControl.C,v 1.67 2004/09/15 11:47:06 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -9,6 +9,7 @@
 #include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/DIALOGS/bondProperties.h>
 #include <BALL/STRUCTURE/geometricTransformations.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
 #include <qmenubar.h>
