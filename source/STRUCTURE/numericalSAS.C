@@ -1,10 +1,12 @@
-// $Id: numericalSAS.C,v 1.19 2000/10/30 00:19:59 amoll Exp $
+// $Id: numericalSAS.C,v 1.20 2001/05/10 13:55:11 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/DATATYPE/hashMap.h>
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/MATHS/surface.h>
+
+#include <values.h>
 
 using namespace std;
 
@@ -571,7 +573,7 @@ int          last_cubus=0;
 		{
 			NSC_WARNING << "calculateSASArea: invalid argument" << f << endl;
 		}
-		return(M_PI_2);
+		return(M_PI * M_PI);
 	}
 
 #define CALLOC(n, size) mycalloc(__FILE__,__LINE__, n, size)
