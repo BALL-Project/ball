@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.C,v 1.20 2002/12/12 10:19:12 oliver Exp $
+// $Id: DCDFile.C,v 1.21 2003/01/29 11:34:48 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -14,9 +14,16 @@ namespace BALL
 	DCDFile::DCDFile()
 		throw()
 		: TrajectoryFile(),
-			header_(),
+			verbosity_(0),
 			swap_bytes_(false),
-			has_velocities_(false)
+			has_velocities_(false),
+			charmm_extra_block_A_(false),
+			charmm_extra_block_B_(false),
+			CORD_("CORD"),
+			step_number_of_starting_time_(0),
+			steps_between_saves_(0),
+			time_step_length_(0.0),
+			number_of_comments_(0)
 	{
 		init();
 	}
@@ -25,9 +32,16 @@ namespace BALL
 	DCDFile::DCDFile(const DCDFile& file)
 		throw(Exception::FileNotFound)
 		:	TrajectoryFile(file),
-			header_(file.header_),
+			verbosity_(0),
 			swap_bytes_(file.swap_bytes_),
-			has_velocities_(file.has_velocities_)
+			has_velocities_(file.has_velocities_),
+			charmm_extra_block_A_(file.charmm_extra_block_A_),
+			charmm_extra_block_B_(file.charmm_extra_block_B_),
+			CORD_("CORD"),
+			step_number_of_starting_time_(file.step_number_of_starting_time_),
+			steps_between_saves_(file.steps_between_saves_),
+			time_step_length_(file.time_step_length_),
+			number_of_comments_(file.number_of_comments_)
 	{
 		init();
 	}
@@ -36,20 +50,34 @@ namespace BALL
 	DCDFile::DCDFile(const String& name, File::OpenMode open_mode)
 		throw()
 		: TrajectoryFile(name, open_mode),
-			header_(),
+			verbosity_(0),
 			swap_bytes_(false),
-			has_velocities_(false)
+			has_velocities_(false),
+			charmm_extra_block_A_(false),
+			charmm_extra_block_B_(false),
+			CORD_("CORD"),
+			step_number_of_starting_time_(0),
+			steps_between_saves_(0),
+			time_step_length_(0.0),
+			number_of_comments_(0)
 	{
 		init();
 
-		// If we want to open the file for writing, we need a valid header for
-		// later use by readHeader(). If we open it for reading, we have to
-		// synchronize header and DCDFile by calling init().
-		if ((open_mode & std::ios::out) == 1)
+		// If we want to open the file for writing, write a default header,
+		// else read the header information from the existing file.
+		// ?????
+		// Are there other file modes I have to check for?
+		// open() has to do the same!
+		if ((open_mode & std::ios::out) != 0)
 		{
 			// if this file is to be overwritten, write a default header.
 			writeHeader();
 		}
+		else
+		{
+			readHeader();
+		}
+
 	}
 
 
@@ -65,7 +93,7 @@ namespace BALL
 		throw()
 	{
 		TrajectoryFile::operator = (file);
-		header_ = file.header_;
+		verbosity_ = file.verbosity_;
 		swap_bytes_ = file.swap_bytes_;
 		has_velocities_ = file.has_velocities_;
 
@@ -76,7 +104,6 @@ namespace BALL
 	void DCDFile::clear()
 		throw()
 	{
-		header_ = DCDHeader();
 		swap_bytes_ = false;
 		has_velocities_ = false;
 		TrajectoryFile::clear();
@@ -99,17 +126,29 @@ namespace BALL
 	}
 
 
-	/*
 	bool DCDFile::open(const String& name, File::OpenMode open_mode)
 		throw()
 	{
-		if ((open_mode & File::OUT) == 1)
+
+		if (TrajectoryFile::open(name, open_mode) == true)
 		{
-			// if this file is to be overwritten, write a default header.
-			writeHeader();
+
+			if ((open_mode & std::ios::out) != 0)
+			{
+				// if this file is to be overwritten, write a default header.
+				writeHeader();
+			}
+			else
+			{
+				readHeader();
+			}
+
+			return(true);
+
 		}
+		else return(false);
+		
 	}
-	*/
 
 
 	bool DCDFile::hasVelocities() const
@@ -152,33 +191,47 @@ namespace BALL
 		for (Size i = 0; i < 4; ++i)
 		{
 			*this >> adapt_char;
-			if (adapt_char.getData() != header_.CORD[i])
+			if (adapt_char.getData() != CORD_[i])
 			{
 				Log.error() << "DCDFile::readHeader(): "
-					<< "error in CORD; expected " << header_.CORD[i] 
+					<< "error in CORD; expected " << CORD_[i] 
 					<< ", got " << adapt_char.getData() << endl;
 				return false;
 			}
 		}
 
 		// read the number of coordinate sets contained in this file
-		// ?????:
-		// storing that number in this instance AND in header_ might not be too
-		// clever.
 		*this >> adapt_Size;
 		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		header_.number_of_coordinate_sets = number_of_snapshots_ 
-			= adapt_Size.getData();
-		
+		number_of_snapshots_ = adapt_Size.getData();
+		if (verbosity_ > 0)
+		{
+			Log.info() << "DCDFile::readHeader(): "
+				<< "number of snapshots: " << number_of_snapshots_
+				<< endl;
+		}
+
+		bool count_snapshots = false;
+
+		if (number_of_snapshots_ == 0)
+		{
+			Log.info() << "DCDFile::readHeader(): "
+				<< "Number of snapshots seems to be zero, trying to count"
+				<< endl
+				<< "\tsnapshots. Please ignore a single error message about an X header."
+				<< endl;
+			count_snapshots = true;
+		}
+
 		// read the number of the first step
 		*this >> adapt_Size;
 		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		header_.step_number_of_starting_time = adapt_Size.getData();
+		step_number_of_starting_time_ = adapt_Size.getData();
 
 		// read the number of steps between saves
 		*this >> adapt_Size;
 		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		header_.steps_between_saves = adapt_Size.getData();
+		steps_between_saves_ = adapt_Size.getData();
 
 		// is this really DCD or is it DC2?
 		*this >> adapt_Size;
@@ -187,9 +240,9 @@ namespace BALL
 		{
 			if (adapt_Size.getData() == 1)
 			{
-				Log.info() << "DCDFile contains velocities" << endl;
+				Log.info() << "DCDFile::readHeader(): "
+					<< "DCDFile contains velocities" << endl;
 				has_velocities_ = true;
-				header_.BALL_flag = true;
 			}
 			else
 			{
@@ -204,15 +257,76 @@ namespace BALL
 			*this >> adapt_Size;
 		}
 
+		// save position in case we are reading a CHARMm file
+		Position ts_pos = tellg();
+
 		// read the length of a time step
 		*this >> adapt_double;
 		if (swap_bytes_) swapBytes(adapt_double.getData());
-		header_.time_step_length = adapt_double.getData();
+		time_step_length_ = adapt_double.getData();
+		if (verbosity_ > 0)
+		{
+			Log.info() << "DCDFile::readHeader(): "
+				<< "length of a time step: " << time_step_length_
+				<< endl;
+		}
 
 		// skip unused fields
-		for (Size i = 0; i < 9; ++i)
+		for (Size i = 0; i < 8; ++i)
 		{
 			*this >> adapt_Size;
+		}
+
+		// read the CHARMm version info, if any
+		*this >> adapt_Size;
+		if (swap_bytes_) swapBytes(adapt_Size.getData());
+		if (adapt_Size.getData() != 0)
+		{
+			Log.info() << "DCDFile::readHeader(): "
+				<< "encountered CHARMm version number " << adapt_Size.getData()
+				<< ", rereading several" << endl
+				<< "\tfields" << endl;
+
+			Position here = tellg();
+			seekg(ts_pos);
+
+			// read the length of a time step
+			BinaryFileAdaptor<float> adapt_float;
+			*this >> adapt_float;
+			if (swap_bytes_) swapBytes(adapt_float.getData());
+			time_step_length_ = adapt_float.getData();
+			if (verbosity_ > 0)
+			{
+				Log.info() << "DCDFile::readHeader(): "
+					<< "length of a time step: " << time_step_length_
+					<< endl;
+			}
+
+			*this >> adapt_Size;
+			if (adapt_Size.getData() == 1)
+			{
+				charmm_extra_block_A_ = true;
+				if (verbosity_ > 0)
+				{
+					Log.info() << "DCDFile::readHeader(): "
+						<< "CHARMm extra block A present." << endl;
+				}
+			}
+
+
+			*this >> adapt_Size;
+			if (adapt_Size.getData() == 1)
+			{
+				charmm_extra_block_B_ = true;
+				if (verbosity_ > 0)
+				{
+					Log.info() << "DCDFile::readHeader(): "
+						<< "CHARMm extra block B present." << endl;
+				}
+			}
+
+			seekg(here);
+
 		}
 
 		// read the "footer" of the 84 byte block. This also must contain the
@@ -246,13 +360,13 @@ namespace BALL
 		if (swap_bytes_) swapBytes(adapt_Size.getData());
 		if (adapt_Size.getData() != number_of_comments)
 		{
-			Log.error() << "DCDFile::readHeader(): "
+			Log.warn() << "DCDFile::readHeader(): "
 				<< "comments block size (" << adapt_Size.getData()
-				<< ") does not match number of comments ("
+				<< ") does not match number of" << endl
+				<< "\tcomments ("
 				<< number_of_comments << ")" << endl;
-			return false;
 		}
-		header_.number_of_comments = number_of_comments;
+		number_of_comments_ = number_of_comments;
 
 		// read the comment blocks
 		// ?????: for now just skip them
@@ -290,7 +404,7 @@ namespace BALL
 		// now read the actual number of atoms
 		*this >> adapt_Size;
 		if (swap_bytes_) swapBytes(adapt_Size.getData());
-		header_.number_of_atoms = number_of_atoms_ = adapt_Size.getData();
+		number_of_atoms_ = adapt_Size.getData();
 
 		// and check the footer
 		*this >> adapt_Size;
@@ -303,6 +417,29 @@ namespace BALL
 			return false;
 		}
 
+
+		if (count_snapshots == true)
+		{
+			SnapShot dummy;
+			Size count = 0;
+
+			Position pos = tellg();
+
+			seekg(0, ios::end);
+			int end = tellg();
+			seekg(pos);
+
+			do
+			{
+				if (read(dummy) == true) count++;
+			}
+			while ((tellg() > 0) && (tellg() < end));
+
+			seekg(pos);
+
+			number_of_snapshots_ = count;
+		}
+
 		return true;
 
 	}
@@ -311,41 +448,53 @@ namespace BALL
 	bool DCDFile::writeHeader()
 		throw()
 	{
-		// the following would be nice. Unfortunately the compiler does strange
-		// things when storing the struct in memory...
-		// *this << BinaryFileAdaptor<struct DCDHeader>(header_);
 
+		// DEBUG
+		// Log.info() << good() << " " << bad() << endl;
+		// /DEBUG
 		Size i;
 
-		*this << BinaryFileAdaptor<Size>(header_.start_info_block);
+		// write the info block
+		*this << BinaryFileAdaptor<Size>(84);
 		for (i = 0; i < 4; ++i)
 		{
-			*this << BinaryFileAdaptor<char>(header_.CORD[i]);
+			*this << BinaryFileAdaptor<char>(CORD_[i]);
 		}
-		*this << BinaryFileAdaptor<Size>(header_.number_of_coordinate_sets);
-		*this << BinaryFileAdaptor<Size>(header_.step_number_of_starting_time);
-		*this << BinaryFileAdaptor<Size>(header_.steps_between_saves);
-		*this << BinaryFileAdaptor<Size>(header_.BALL_flag);
+		// DEBUG
+		// Log.info() << "wH: number_of_snapshots_ " << number_of_snapshots_ << endl;
+		// /DEBUG
+		*this << BinaryFileAdaptor<Size>(number_of_snapshots_);
+		*this << BinaryFileAdaptor<Size>(step_number_of_starting_time_);
+		*this << BinaryFileAdaptor<Size>(steps_between_saves_);
+		*this << BinaryFileAdaptor<Size>((Size)has_velocities_);
 		for (i = 0; i < 5; ++i)
 		{
-			*this << BinaryFileAdaptor<Size>(header_.unused_1[i]);
+			*this << BinaryFileAdaptor<Size>(0);
 		}
-		*this << BinaryFileAdaptor<double>(header_.time_step_length);
+		*this << BinaryFileAdaptor<double>(time_step_length_);
 		for (i = 0; i < 9; ++i)
 		{
-			*this << BinaryFileAdaptor<Size>(header_.unused_2[i]);
+			*this << BinaryFileAdaptor<Size>(0);
 		}
-		*this << BinaryFileAdaptor<Size>(header_.end_info_block);
-		*this << BinaryFileAdaptor<Size>(header_.start_title_block);
-		*this << BinaryFileAdaptor<Size>(header_.number_of_comments);
-		for (i = 0; i < 160; ++i)
+		*this << BinaryFileAdaptor<Size>(84);
+
+		// write the comment block
+		*this << BinaryFileAdaptor<Size>((number_of_comments_*80)+4);
+		*this << BinaryFileAdaptor<Size>(number_of_comments_);
+		for (i = 0; i < (number_of_comments_*80); ++i)
 		{
-			*this << BinaryFileAdaptor<char>(header_.title[i]);
+			*this << BinaryFileAdaptor<char>(' ');
 		}
-		*this << BinaryFileAdaptor<Size>(header_.end_title_block);
-		*this << BinaryFileAdaptor<Size>(header_.start_atomnumber_block);
-		*this << BinaryFileAdaptor<Size>(header_.number_of_atoms);
-		*this << BinaryFileAdaptor<Size>(header_.end_atomnumber_block);
+		*this << BinaryFileAdaptor<Size>((number_of_comments_*80)+4);
+
+		// write the atom number block
+		*this << BinaryFileAdaptor<Size>(4);
+		// DEBUG
+		Log.info() << "wH: number_of_atoms_ " << number_of_atoms_ << endl;
+		// /DEBUG
+		*this << BinaryFileAdaptor<Size>(number_of_atoms_);
+		*this << BinaryFileAdaptor<Size>(4);
+
 		return true;
 	}
 
@@ -353,7 +502,20 @@ namespace BALL
 	bool DCDFile::append(const SnapShot& snapshot)
 		throw()
 	{
-		Size noa = snapshot.getNumberOfAtoms();
+		// DEBUG
+		Log.info() << good() << " " << bad() << endl;
+		// /DEBUG
+
+		// ?????
+		// We should check here whether this is the *correct* number of atoms,
+		// i. e. whether earlier snapshots had the same number.
+		number_of_atoms_ = snapshot.getNumberOfAtoms();
+		// DEBUG
+		Log.info() << "append: number_of_atoms_ " << number_of_atoms_ << endl;
+		// /DEBUG
+		// increase the snapshot counter for a correct header
+		number_of_snapshots_++;
+
 		const vector<Vector3>& positions = snapshot.getAtomPositions();
 		if (positions.size() == 0)
 		{
@@ -362,24 +524,24 @@ namespace BALL
 			return false;
 		}
 
-		*this << BinaryFileAdaptor<Size>(4*noa);
-		for (Size atom = 0; atom < noa; ++atom)
+		*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
+		for (Size atom = 0; atom < number_of_atoms_; ++atom)
 		{
 			*this << BinaryFileAdaptor<float>((float) positions[atom].x);
 		}
-		*this << BinaryFileAdaptor<Size>(4*noa);
-		*this << BinaryFileAdaptor<Size>(4*noa);
-		for (Size atom = 0; atom < noa; ++atom)
+		*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
+		*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
+		for (Size atom = 0; atom < number_of_atoms_; ++atom)
 		{
 			*this << BinaryFileAdaptor<float>((float) positions[atom].y);
 		}
-		*this << BinaryFileAdaptor<Size>(4*noa);
-		*this << BinaryFileAdaptor<Size>(4*noa);
-		for (Size atom = 0; atom < noa; ++atom)
+		*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
+		*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
+		for (Size atom = 0; atom < number_of_atoms_; ++atom)
 		{
 			*this << BinaryFileAdaptor<float>((float) positions[atom].z);
 		}
-		*this << BinaryFileAdaptor<Size>(4*noa);
+		*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
 
 		if (has_velocities_)
 		{
@@ -391,26 +553,27 @@ namespace BALL
 				return false;
 			}
 
-			*this << BinaryFileAdaptor<Size>(4*noa);
-			for (Size atom = 0; atom < noa; ++atom)
+			*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
+			for (Size atom = 0; atom < number_of_atoms_; ++atom)
 			{
 				*this << BinaryFileAdaptor<float>((float) velocities[atom].x);
 			}
-			*this << BinaryFileAdaptor<Size>(4*noa);
-			*this << BinaryFileAdaptor<Size>(4*noa);
-			for (Size atom = 0; atom < noa; ++atom)
+			*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
+			*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
+			for (Size atom = 0; atom < number_of_atoms_; ++atom)
 			{
 				*this << BinaryFileAdaptor<float>((float) velocities[atom].y);
 			}
-			*this << BinaryFileAdaptor<Size>(4*noa);
-			*this << BinaryFileAdaptor<Size>(4*noa);
-			for (Size atom = 0; atom < noa; ++atom)
+			*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
+			*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
+			for (Size atom = 0; atom < number_of_atoms_; ++atom)
 			{
 				*this << BinaryFileAdaptor<float>((float) velocities[atom].z);
 			}
-			*this << BinaryFileAdaptor<Size>(4*noa);
+			*this << BinaryFileAdaptor<Size>(4*number_of_atoms_);
 		}
 
+		seekAndWriteHeader();
 		return true;
 	}
 
@@ -418,6 +581,11 @@ namespace BALL
 	bool DCDFile::read(SnapShot& snapshot)
 		throw()
 	{
+
+		// DEBUG
+		// Log.info() << "file position at beginning of read(): " << tellg() << endl;
+		// /DEBUG
+
 		Size tmp;
 
 		// the number of atoms has to be read from the file header before ever
@@ -438,12 +606,27 @@ namespace BALL
 		BinaryFileAdaptor<Size> adapt_Size;
 		BinaryFileAdaptor<float> adapt_float;
 
+		// ignore the CHARMm extra block A if present
+
+		if (charmm_extra_block_A_ == true)
+		{
+			*this >> adapt_Size;
+			Size count = adapt_Size.getData();
+			// ?????
+			// maybe we should check whether count is dividable by 4...
+			for (Size i = 0; i < (count / 4); ++i) *this >> adapt_Size;
+			*this >> adapt_Size;
+			if (adapt_Size.getData() != count)
+			{
+				Log.error() << "DCDFile::read(): "
+					<< "CHARMm extra block A corrupt." << endl;
+				return false;
+			}
+		}
+
 		// first read the x coordinates
 
 		// read the block "header"...
-
-		// ?????
-		// *this >> BinaryFileAdaptor<Size>(tmp);
 
 		*this >> adapt_Size; 
 		if (swap_bytes_) swapBytes(adapt_Size.getData());
@@ -546,6 +729,20 @@ namespace BALL
 		}
 
 		snapshot.setAtomPositions(positions);
+
+		if (charmm_extra_block_B_ == true)
+		{
+			*this >> adapt_Size;
+			Size count = adapt_Size.getData();
+			for (Size i = 0; i < count; ++i) *this >> adapt_Size;
+			*this >> adapt_Size;
+			if (adapt_Size.getData() != count)
+			{
+				Log.error() << "DCDFile::read(): "
+					<< "CHARMm extra block B corrupt." << endl;
+				return false;
+			}
+		}
 
 		if (has_velocities_)
 		{
@@ -664,27 +861,38 @@ namespace BALL
 	}
 
 
+	bool DCDFile::seekAndWriteHeader()
+		throw()
+	{
+		Position here = tellp();
+		seekp(0, ios::beg);
+		bool return_value = writeHeader();
+		seekp(here);
+		return(return_value);
+	}
+
+
 	bool DCDFile::flushToDisk(const ::std::vector<SnapShot>& buffer)
 		throw()
 	{
 		::std::vector<SnapShot>::const_iterator it = buffer.begin();
 
 		// adjust the number of snapshots 
-		header_.number_of_coordinate_sets += buffer.size();
+		number_of_snapshots_ += buffer.size();
 		// ?????:
 		// this is not quite the place to do this. it should be done when the
 		// snapshot manager is set up or at some similar place. the question is
 		// how much information has to be replicated at which place in the
 		// code.
 		// we should think about something like updateHeader().
-		header_.number_of_atoms = it->getNumberOfAtoms();
+		number_of_atoms_ = it->getNumberOfAtoms();
 
 		// write the header
-		reopen(std::ios::in | std::ios::out | std::ios::binary);
+		seekp(0, ios::beg);
 		writeHeader();
 
 		// append the data
-		reopen(std::ios::app | std::ios::binary);
+		seekp(0, ios::end);
 		for(; it != buffer.end(); ++it)
 		{
 			append(*it);
@@ -699,6 +907,10 @@ namespace BALL
 	bool DCDFile::init()
 		throw()
 	{
+		// DEBUG
+		// verbosity_ = 1;
+		// /DEBUG
+
 		if (sizeof(Size) != 4)
 		{
 			Log.error() << "DCDFile::DCDFile(): "
@@ -712,36 +924,15 @@ namespace BALL
 				<< "Size of double is not equal to 4 on this machine." << endl;
 			return false;
 		}
-		// ?????
-		// return readHeader();
+
 		return true;
 	}
 
 
-	const DCDFile::DCDHeader& DCDFile::getHeader() const
-		throw()
-	{
-		return header_;
-	}
-
-
-	void DCDFile::setHeader(const DCDFile::DCDHeader& header)
-		throw()
-	{
-		header_.number_of_coordinate_sets = header.number_of_coordinate_sets;
-		header_.step_number_of_starting_time = header.step_number_of_starting_time;
-		header_.steps_between_saves = header.steps_between_saves;
-		header_.BALL_flag = header.BALL_flag;
-		header_.time_step_length = header.time_step_length;
-		header_.number_of_atoms = header.number_of_atoms;
-	}
-
-	
 	void DCDFile::enableVelocityStorage()
 		throw()
 	{
 		has_velocities_ = true;
-		header_.BALL_flag = 1;
 	}
 
 	
@@ -749,7 +940,6 @@ namespace BALL
 		throw()
 	{
 		has_velocities_ = false;
-		header_.BALL_flag = 0;
 	}
 
 
