@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: socket.h,v 1.33 2003/03/26 13:08:44 sturm Exp $
+// $Id: socket.h,v 1.34 2003/04/17 06:07:21 oliver Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -75,9 +75,9 @@
 #	endif //  !_S_USER_BUF
 #endif //  !_G_config_h
 
-// linux leaves these things out. We define it for compatitbility
-// not for their use.
-#if (defined(BALL_OS_LINUX) || defined(__CYGWIN__))
+// Some platforms leave these defines out. We define them for compatitbility
+// not for their use -- no warranty whatsoever.
+#if (defined(BALL_OS_LINUX) || defined(__CYGWIN__) || defined(BALL_OS_DARWIN))
 # ifndef SO_ACCEPTCONN
 #		define SO_ACCEPTCONN	0x0002
 # endif

@@ -1,21 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.43 2003/03/26 15:59:27 anhi Exp $
+// $Id: reducedSurface.h,v 1.44 2003/04/17 06:07:21 oliver Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
 
-#ifndef BALL_STRUCTURE_RSEDGE_H
-#	include <BALL/STRUCTURE/RSEdge.h>
-#endif
-
-#ifndef BALL_STRUCTURE_RSFACE_H
-#	include <BALL/STRUCTURE/RSFace.h>
-#endif
-
-#ifndef BALL_STRUCTURE_RSVERTEX_H
-#	include <BALL/STRUCTURE/RSVertex.h>
+#ifndef BALL_MATHC_COMMON_H
+#	include <BALL/MATHS/common.h>
 #endif
 
 #ifndef BALL_MATHS_BOX3_H
@@ -44,6 +36,18 @@
 
 #ifndef BALL_COMMON_EXCEPTION_H
 #	include <BALL/COMMON/exception.h>
+#endif
+
+#ifndef BALL_STRUCTURE_RSEDGE_H
+#	include <BALL/STRUCTURE/RSEdge.h>
+#endif
+
+#ifndef BALL_STRUCTURE_RSFACE_H
+#	include <BALL/STRUCTURE/RSFace.h>
+#endif
+
+#ifndef BALL_STRUCTURE_RSVERTEX_H
+#	include <BALL/STRUCTURE/RSVertex.h>
 #endif
 
 #include <list>

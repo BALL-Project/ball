@@ -1,10 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.h,v 1.16 2003/03/26 15:59:28 anhi Exp $
+// $Id: residueChecker.h,v 1.17 2003/04/17 06:07:21 oliver Exp $
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
 #define BALL_STRUCTURE_RESIDUECHECKER_H
+
+#ifndef BALL_MATHS_COMMON_H
+#	include <BALL/MATHS/common.h>
+#endif
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>

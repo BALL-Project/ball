@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.22 2003/03/14 11:49:14 sturm Exp $
+// $Id: common.h,v 1.23 2003/04/17 06:07:20 oliver Exp $
 
-#ifndef BALL_MATHS_COMPARISON_H
-#define BALL_MATHS_COMPARISON_H
+#ifndef BALL_MATHS_COMMON_H
+#define BALL_MATHS_COMMON_H
 
 #ifndef BALL_CONFIG_CONFIG_H
 #	include <BALL/CONFIG/config.h>
@@ -354,4 +354,4 @@ namespace BALL
 
 } // namespace BALL
 
-#endif // BALL_MATHS_COMPARISON_H
+#endif // BALL_MATHS_COMMON_H
