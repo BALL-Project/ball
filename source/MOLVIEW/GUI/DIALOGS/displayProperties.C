@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.13.4.11 2002/11/17 18:35:51 amoll Exp $
+// $Id: displayProperties.C,v 1.13.4.12 2002/11/29 00:52:13 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -44,7 +44,6 @@ namespace BALL
 				precision_string_dynamic_("high"),
 				coloring_method_string_("by element"),
 				distance_coloring_(false),
-				selection_(),
 
 				view_center_vector_(0,0,0),
 				view_direction_(2),
@@ -229,13 +228,13 @@ namespace BALL
 			bool selected = true;
 			int number_of_selected_objects = 0;
 
-			if (selection_.empty())
+			if (MainControl::getMainControl(this)->getSelection().size() == 0)
 			{
 				selected = false;
 			}
 			else
 			{
-				number_of_selected_objects = selection_.size();
+				number_of_selected_objects = MainControl::getMainControl(this)->getSelection().size();
 			}
 
 			(main_control.menuBar())->setItemEnabled(select_id_, selected);
@@ -509,16 +508,16 @@ namespace BALL
 			// selection => store last selection for later processing
 			else if (RTTI::isKindOf<MolecularSelectionMessage>(*message))
 			{
-				MolecularSelectionMessage *selection = RTTI::castTo<MolecularSelectionMessage>(*message);
-				selection_ = selection->getSelection();
+//				MolecularSelectionMessage *selection = RTTI::castTo<MolecularSelectionMessage>(*message);
+//				selection_ = selection->getSelection();
 			}
 			else
 			{
-				selection_.clear();
+//				selection_.clear();
 			}
 
 			// disable apply button if selection is empty
-			if (selection_.empty())
+			if (MainControl::getMainControl(this)->getSelection().size() == 0)
 			{
 				apply_button->setEnabled(false);
 			}
@@ -531,6 +530,7 @@ namespace BALL
 
 		void DisplayProperties::select()
 		{
+/*
 			if (selection_.size() == 0)
 			{
 				return;
@@ -570,11 +570,13 @@ namespace BALL
 			notify_(scene_message);
 
 			setStatusbarText_("");
+*/
 		}
 
 
 		void DisplayProperties::deselect()
 		{
+/*
 			if (selection_.size() == 0)
 			{
 				return;
@@ -613,18 +615,19 @@ namespace BALL
 			notify_(scene_message);
 
 			setStatusbarText_("");
+*/
 		}
 
 
 		void DisplayProperties::centerCamera()
 		{
-			if (selection_.size() != 1)
+			if (MainControl::getMainControl(this)->getSelection().size() != 1)
 			{
 				return;
 			}
 
 			// use specified object processor for calculating the center
-			calculateCenter_(*selection_.front());
+			calculateCenter_(**MainControl::getMainControl(this)->getSelection().begin());
 
 			Vector3 view_point = getViewCenter_();
 
@@ -641,7 +644,7 @@ namespace BALL
 
 		void DisplayProperties::buildBonds()
 		{
-			if (selection_.size() == 0)
+			if (MainControl::getMainControl(this)->getSelection().size() == 0)
 			{
 				return;
 			}
@@ -649,22 +652,22 @@ namespace BALL
 			// notify the main window
 			setStatusbarText_("building bonds ...");
 
-			// copy list because the selection_ list can change after a changemessage event
-			List<Composite*> temp_selection_ = selection_;
-			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
+			// copy the selection_, it can change after a changemessage event
+			HashSet<Composite*> temp_selection_ = MainControl::getMainControl(this)->getSelection();
+			HashSet<Composite*>::ConstIterator it = temp_selection_.begin();	
 			
 			ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
 			change_message->setDeletable(false);
 			
 			Size number_of_bonds = 0;
-			for (; list_it != temp_selection_.end(); ++list_it)
+			for (; it != temp_selection_.end(); ++it)
 			{	
-				(*list_it)->apply(fragmentdb_.build_bonds);
+				(*it)->apply(fragmentdb_.build_bonds);
 				number_of_bonds += fragmentdb_.build_bonds.getNumberOfBondsBuilt();
-				applyOn_(**list_it);
+				applyOn_(**it);
 
 				// mark composite for update
-				change_message->setComposite((*list_it));
+				change_message->setComposite((*it));
 				notify_(change_message);
 			}
 
@@ -682,7 +685,7 @@ namespace BALL
 
 		void DisplayProperties::addHydrogens()
 		{
-			if (selection_.size() == 0)
+			if (MainControl::getMainControl(this)->getSelection().size() == 0)
 			{
 				return;
 			}
@@ -695,24 +698,24 @@ namespace BALL
 			window_message->setDeletable(true);
 			notify_(window_message);
 
-			// copy list because the selection_ list can change after a changemessage event
-			List<Composite*> temp_selection_ = selection_;
-			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
+			// copy the selection_, it can change after a changemessage event
+			HashSet<Composite*> temp_selection_ = MainControl::getMainControl(this)->getSelection();
+			HashSet<Composite*>::ConstIterator it = temp_selection_.begin();	
 
 			ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
 			change_message->setDeletable(false);
 
 			Size number_of_hydrogens = 0;
 
-			for (; list_it != temp_selection_.end(); ++list_it)
+			for (; it != temp_selection_.end(); ++it)
 			{	
-				(*list_it)->apply(fragmentdb_.add_hydrogens);
+				(*it)->apply(fragmentdb_.add_hydrogens);
 				number_of_hydrogens += fragmentdb_.add_hydrogens.getNumberOfInsertedAtoms();
-				(*list_it)->apply(fragmentdb_.build_bonds);
-				applyOn_(**list_it);	
+				(*it)->apply(fragmentdb_.build_bonds);
+				applyOn_(**it);	
 
 				// mark composite for update
-				change_message->setComposite((*list_it));
+				change_message->setComposite((*it));
 				notify_(change_message);
 			}
 
@@ -731,7 +734,7 @@ namespace BALL
 		void DisplayProperties::applyButtonClicked()
 		{
 			// no selection present => return
-			if (selection_.empty())
+			if (MainControl::getMainControl(this)->getSelection().size() == 0)
 			{
 				return;
 			}
@@ -742,36 +745,36 @@ namespace BALL
 				distance_color_calculator_.destroy();
 
 				// for each element in the selection => perform generation
-				List<Composite*>::Iterator list_it = selection_.begin();
-				for (; list_it != selection_.end(); ++list_it)
+				HashSet<Composite*>::Iterator it = ((HashSet<Composite*>) MainControl::getMainControl(this)->getSelection()).begin();
+				for (; it != MainControl::getMainControl(this)->getSelection().end(); ++it)
 				{
-					(**list_it).apply(*((UnaryProcessor<Composite>*)&distance_color_calculator_));
+					(**it).apply(*((UnaryProcessor<Composite>*)&distance_color_calculator_));
 				}
 
 				distance_color_calculator_.calculateDistances();
 			}
 			
-			List<Composite*> update_list;
+			HashSet<Composite*> update_list;
 
 			// for each element in the selection => perform generation
-			List<Composite*>::ConstIterator list_it = selection_.begin();
+			HashSet<Composite*>::ConstIterator it = MainControl::getMainControl(this)->getSelection().begin();
 			setupStaticProcessor_();
 			setupDynamicProcessor_();
-			for (; list_it != selection_.end(); ++list_it)
+			for (; it != MainControl::getMainControl(this)->getSelection().end(); ++it)
 			{
-				applyOn_(**list_it);
+				applyOn_(**it);
 
 				// move composite pointer to update list for later update
-				update_list.push_back(*list_it);
+				update_list.insert(*it);
 			}
 
 			// perform update of the composites
-			list_it = update_list.begin();
+			it = update_list.begin();
 			ChangedCompositeMessage change_message;
-			for (; list_it != update_list.end(); ++list_it)
+			for (; it != update_list.end(); ++it)
 			{
 				// mark composite for update
-				change_message.setComposite((*list_it));
+				change_message.setComposite((*it));
 				notify_(change_message);
 			}
 
