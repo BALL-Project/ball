@@ -70,7 +70,6 @@
  		<node>PRO-N
  			<node>Delete
 	 			<node>OXT</node>
-	 			<node>H</node>
  			</node>
  			<node>Properties
  				<node>N_TERMINAL</node>
