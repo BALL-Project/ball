@@ -1,4 +1,4 @@
-// $Id: baseFragment.h,v 1.8 2000/04/13 23:05:18 amoll Exp $
+// $Id: baseFragment.h,v 1.9 2000/04/14 00:11:14 amoll Exp $
 
 #ifndef BALL_KERNEL_BASEFRAGMENT_H
 #define BALL_KERNEL_BASEFRAGMENT_H
@@ -117,7 +117,7 @@ namespace BALL
 		void set(const BaseFragment& base_fragment, bool deep = true);
 
 		/** Assignment operator.
-				Assign the atom {\em base_fragment} to {\em *this} base_fragment.
+				Assign the BaseFragment {\em base_fragment} to {\em *this} base_fragment.
 				The assignment is either deep or shallow (default).
 				@param   base_fragment the BaseFragment to be copied (cloned)
 				@return  BaseFragment& - {\em *this} BaseFragment
@@ -205,7 +205,7 @@ namespace BALL
 		*/
 		const BaseFragment* getSuperBaseFragment() const;
 
-		/** Get a pointer to a subaltern BaseFragment at given position.
+		/** Get a pointer to a subaltern BaseFragment at a given position.
 				The reference is 0 if {\em *this} BaseFragment does not have a BaseFragment at the given position.
 				@param   index the position of the subaltern BaseFragment
 				@exception IndexUnderflow if {\tt index < 0}
@@ -214,7 +214,7 @@ namespace BALL
 		*/
 		BaseFragment* getBaseFragment(Index index);
 	
-		/** Get a constant pointer to a subaltern BaseFragment at given position.
+		/** Get a constant pointer to a subaltern BaseFragment at a given position.
 				The reference is 0 if {\em *this} BaseFragment does not have a BaseFragment at the given position.
 				@param   index the position of the subaltern BaseFragment
 				@exception IndexUnderflow if {\tt index < 0}
@@ -223,7 +223,7 @@ namespace BALL
 		*/
 		const BaseFragment* getBaseFragment(Index index) const;
 	
-		/** Get a pointer to a subaltern atom at given position.
+		/** Get a pointer to a subaltern atom at a given position.
 				The reference is 0 if {\em *this} BaseFragment does not have a atom at the given position.
 				@param   index the position of the subaltern atom
 				@exception IndexUnderflow if {\tt index < 0}
@@ -232,7 +232,7 @@ namespace BALL
 		*/
 		Atom* getAtom(Index index);
 	
-		/** Get a pointer to a subaltern atom at given position.
+		/** Get a pointer to a subaltern atom at a given position.
 				The reference is 0 if {\em *this} BaseFragment does not have a atom at the given position.
 				@param   index the position of the subaltern atom
 				@exception IndexUnderflow if {\tt index < 0}
@@ -351,7 +351,7 @@ namespace BALL
 		*/
 		void spliceAfter(BaseFragment& base_fragment);
 
-		/**	Insert the children of base_fragment into this BaseFragment.
+		/**	Insert the children of {\em base_fragment} into this BaseFragment.
 				The children of {\tt base_fragment} are inserted at the position of 
 				{\tt base_fragment} if {\tt base_fragment} is a child of {\tt this}.
 				Otherwise the children are inserted using \Ref{spliceBefore}.
