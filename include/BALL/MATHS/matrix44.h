@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.21 2000/03/15 02:21:50 amoll Exp $
+// $Id: matrix44.h,v 1.22 2000/03/16 08:20:41 amoll Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -415,70 +415,132 @@ namespace BALL
 		*/
 		T getDeterminant() const;
 
-		///
+		/**	Translate the matrix.
+				@param x the x-component of the translation
+				@param y the y-component of the translation
+				@param z the z-component of the translation
+		*/
 		void translate(const T &x, const T &y, const T &z);
 
-		///
+		/**	Translate the matrix.
+				@param v the vector to translate with
+		*/
 		void translate(const TVector3<T>& v);
 
-		///
+		/**	Set the matrix to a translation matrix.
+				@param x the x-component of the translation
+				@param y the y-component of the translation
+				@param z the z-component of the translation
+		*/
 		void setTranslation(const T& x, const T& y, const T& z);
 
-		///
+		/**	Set the matrix to a translation matrix.
+				@param v the vector to translate with
+		*/
 		void setTranslation(const TVector3<T>& v);
 
-		///
+		/**	Scale the matrix.
+				@param x_scale the x scale factor
+				@param y_scale the y scale factor
+				@param z_scale the z scale factor
+		*/
 		void scale(const T& x_scale, const T& y_scale, const T& z_scale);
 
-		///
+		/**	Scale the matrix.
+				@param scale the scale factor
+		*/
 		void scale(const T& scale);
 
-		///
+		/**	Scale the matrix.
+				@param v the vector with the scale factor
+		*/
 		void scale(const TVector3<T>& v);
 
-		///
+		/**	Set the matrix to a translation matrix.
+				@param x_scale the x scale factor
+				@param y_scale the y scale factor
+				@param z_scale the z scale factor
+		*/
 		void setScale(const T& x_scale, const T& y_scale, const T& z_scale);
 
-		///
+		/**	Set the matrix to a translation matrix.
+				@param scale the scale factor
+		*/
 		void setScale(const T& scale);
 
-		///
-		void setScale(const TVector3<T> &);
+		/**	Set the matrix to a translation matrix.
+				@param v the vector with the scale factor
+		*/
+		void setScale(const TVector3<T>& v);
 
-		///
+		/**	Rotate the matrix around the x axis.
+				@param phi the rotation angle
+		*/
 		void rotateX(const Angle& phi);
 
-		///
+		/**	Set the matrix to a x rotation matrix.
+				@param phi the rotation angle
+		*/
 		void setRotationX(const Angle& phi);
 
-		///
+		/**	Rotate the matrix around the y axis.
+				@param phi the rotation angle
+		*/
 		void rotateY(const Angle& phi);
 
-		///
+		/**	Set the matrix to a y rotation matrix.
+				@param phi the rotation angle
+		*/
 		void setRotationY(const Angle& phi);
 
-		///
+		/**	Rotate the matrix around the z axis.
+				@param phi the rotation angle
+		*/
 		void rotateZ(const Angle &phi);
 
-		///
+		/**	Set the matrix to a z rotation matrix.
+				@param phi the rotation angle
+		*/
 		void setRotationZ(const Angle &phi);
 
-		///
+		/** Rotate the matrix around a given axis.
+				@param phi the rotation angle
+				@param axis_x the x component of the axis
+				@param axis_y the y component of the axis
+				@param axis_z the z component of the axis
+		*/
 		void rotate(const Angle& phi, const T& axis_x, const T& axis_y, const T& axis_z);
 
-		///
+		/** Rotate the matrix around a given axis.
+				@param phi the rotation angle
+				@param axis the axis vector
+		*/
 		void rotate(const Angle& phi, const TVector3<T>& axis);
 
-		///
+		/** Rotate the matrix around a given axis.
+				@param phi the rotation angle
+				@param axis the axis vector, the fourth component of the vector is ignored
+		*/
 		void rotate(const Angle& phi, const TVector4<T>& axis);
 
-		///
+		/**	Set the matrix to a rotation matrix around a given matrix.
+				@param phi the rotation angle
+				@param axis_x the x component of the axis
+				@param axis_y the y component of the axis
+				@param axis_z the z component of the axis				
+		*/
 		void setRotation(const Angle& phi, const T& axis_x, const T& axis_y, const T& axis_z); 
 
-		///
+		/**	Set the matrix to a rotation matrix around a given matrix.
+				@param phi the rotation angle
+				@param axis the axis vector
+		*/
 		void setRotation(const Angle& phi, const TVector3<T>& axis);
 
-		///
+		/**	Set the matrix to a rotation matrix around a given matrix.
+				@param phi the rotation angle
+				@param axis the axis vector, the fourth component of the vector is ignored
+		*/
 		void setRotation(const Angle& phi, const TVector4<T>& axis);
 
 		//@}
@@ -556,70 +618,70 @@ namespace BALL
 		//@{
 
 		/**
-				1. cell in the 1. column
+				1. cell in the 1. row
 		*/
 		T m11;
 		/**
-				2. cell in the 1. column
+				2. cell in the 1. row
 		*/
 		T m12;
 		/**
-				3. cell in the 1. column
+				3. cell in the 1. row
 		*/
 		T m13;
 		/**
-				4. cell in the 1. column
+				4. cell in the 1. row
 		*/
 		T m14;
 
 		/**
-				1. cell in the 2. column
+				1. cell in the 2. row
 		*/
 		T m21;
 		/**
-				2. cell in the 2. column
+				2. cell in the 2. row
 		*/
 		T m22;
 		/**
-				3. cell in the 2. column
+				3. cell in the 2. row
 		*/
 		T m23;
 		/**
-				4. cell in the 2. column
+				4. cell in the 2. row
 		*/
 		T m24;
 
 		/**
-				1. cell in the 3. column
+				1. cell in the 3. row
 		*/
 		T m31;
 		/**
-				2. cell in the 3. column
+				2. cell in the 3. row
 		*/
 		T m32;
 		/**
-				3. cell in the 3. column
+				3. cell in the 3. row
 		*/
 		T m33;
 		/**
-				4. cell in the 3. column
+				4. cell in the 3. row
 		*/
 		T m34;
 
 		/**
-				1. cell in the 4. column
+				1. cell in the 4. row
 		*/
 		T m41;
 		/**
-				2. cell in the 4. column
+				2. cell in the 4. row
 		*/
 		T m42;
 		/**
-				3. cell in the 4. column
+				3. cell in the 4. row
 		*/
 		T m43;
 		/**
-				4. cell in the 4. column
+				4. cell in the 4. row
 		*/
 		T m44;
 		//@}
