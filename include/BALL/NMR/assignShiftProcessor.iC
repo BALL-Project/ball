@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.iC,v 1.9 2001/01/24 11:59:10 amoll Exp $
+// $Id: assignShiftProcessor.iC,v 1.10 2001/06/11 11:06:00 amoll Exp $
 BALL_INLINE
 AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atom_data)
 	:	atom_data_(atom_data),
@@ -6,7 +6,7 @@ AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atom_data
 {
 	if (atom_data.size() == 0)
 	{
-		Log.error() << "AssignShiftProcessor: given vector contains no shift data " << std::endl;
+		Log.error() << "AssignShiftProcessor: given vector contains no shift data " << ::std::endl;
 	}
 	else
 	{
