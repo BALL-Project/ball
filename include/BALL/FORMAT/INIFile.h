@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.22 2001/05/14 10:56:07 amoll Exp $
+// $Id: INIFile.h,v 1.23 2001/08/16 00:37:28 oliver Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -319,7 +319,7 @@ namespace BALL
 
 		/**	Default constructor.
 				The state of valid_ is set to false.
-				An instance is valid if it is read or writen succesfully.
+				An instance is valid if it is read or written successfully.
 		*/
 		INIFile();
 
@@ -344,6 +344,7 @@ namespace BALL
 		void clear();
 
 		//@}
+
 		/** @name	File I/O and related
 		*/
 		//@{
