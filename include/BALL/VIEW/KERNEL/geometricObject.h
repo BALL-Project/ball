@@ -1,4 +1,4 @@
-// $Id: geometricObject.h,v 1.9 2000/12/12 16:15:45 oliver Exp $
+// $Id: geometricObject.h,v 1.10 2000/12/19 22:06:25 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -171,7 +171,8 @@ namespace BALL
 			/**	@name	Debugging and Diagnostics
 			*/
 			//@{
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			virtual void dump
 				(std::ostream& s = std::cout, Size depth = 0) const
