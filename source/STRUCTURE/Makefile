@@ -41,11 +41,7 @@ CPP_SOURCES= $(SMILES_SOURCES)\
 include ../common.mak
 include .Dependencies
 
-test:
-	@echo "SMILES_SOURCE      = $(SMILES_SOURCES)"
-	@echo "BALL_HAS_FLEX_YACC = $(BALL_HAS_FLEX_YACC)"
-	@echo "CPP_SOURCES        = $(CPP_SOURCES)"
-	@echo "OBJECTS            = $(OBJECTS)"
+depend:	$(SMILES_SOURCES)
 
 smilesParserParser.C:	smilesParserParser.y
 	$(YACC) -d smilesParserParser.y &&\
