@@ -1,4 +1,4 @@
-// $Id: charmm.C,v 1.9 2000/06/30 05:56:14 oliver Exp $
+// $Id: charmm.C,v 1.10 2000/08/07 17:28:57 oliver Exp $
 // Molecular Mechanics: Charmm force field class
 
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -131,7 +131,7 @@ namespace BALL
 	{
 	}
 
-	// force field specific setup method BAUSTELLE
+	// force field specific setup method
 	bool CharmmFF::specificSetup()
 	{
 		// check whether the system is assigned
@@ -146,7 +146,9 @@ namespace BALL
 		{
 			filename_ = options[Option::FILENAME];
 			setName("Charmm [" + filename_ + "]");
-		} else {
+		} 
+		else 
+		{
 			options[Option::FILENAME] = filename_;
 		}
 
@@ -169,7 +171,9 @@ namespace BALL
 			// this is the first time, parameters was initialized
 			// tell all components about it
 			parameters_initialized_ = false;
-		} else {
+		} 
+		else	
+		{
 			// parameters_ are already initialized, tell all components about it
 			parameters_initialized_ = true;
 		}
@@ -246,11 +250,15 @@ namespace BALL
 			if (assign_charges && assign_type_names)
 			{
 				templates.assign(*getSystem(), overwrite_type_names, overwrite_charges);
-			} else {
+			} 
+			else 
+			{
 				if (assign_type_names)
 				{
 					templates.assignTypeNames(*getSystem(), overwrite_type_names);
-				} else {
+				} 
+				else 
+				{
 					templates.assignCharges(*getSystem(), overwrite_charges);
 				}
 			}
@@ -273,7 +281,9 @@ namespace BALL
 		if (component != 0)
 		{
 			return component->getEnergy();
-		} else {
+		} 
+		else 
+		{
 			return 0;
 		}
 	}
@@ -284,7 +294,9 @@ namespace BALL
 		if (component != 0)
 		{
 			return component->getEnergy();
-		} else {
+		} 
+		else 
+		{
 			return 0;
 		}
 	}
@@ -295,7 +307,9 @@ namespace BALL
 		if (component != 0)
 		{
 			return component->getEnergy();
-		} else {
+		} 
+		else 
+		{
 			return 0;
 		}
 	}
@@ -306,7 +320,9 @@ namespace BALL
 		if (component != 0)
 		{
 			return component->getEnergy();
-		} else {
+		} 
+		else 
+		{
 			return 0;
 		}
 	}
