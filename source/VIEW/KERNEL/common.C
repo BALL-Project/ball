@@ -24,6 +24,8 @@ String getModelName(ModelTypes type)
 			return "SES";
 		case MODEL_SA_SURFACE:
 			return "SAS";
+		case MODEL_CONTOUR_SURFACE:
+			return "Contour Surface";
 		case MODEL_BACKBONE:
 			return "Backbone";
 		case MODEL_CARTOON:
