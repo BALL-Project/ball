@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.17 2000/08/31 15:49:46 amoll Exp $
+// $Id: BitVector_test.C,v 1.18 2000/10/21 11:10:11 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.17 2000/08/31 15:49:46 amoll Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.18 2000/10/21 11:10:11 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -246,7 +246,7 @@ RESULT
 
 CHECK(BitVector::setUnsignedChar(unsigned char)/getUnsignedChar)
 	BitVector bv8(8);
-	bv8.setUnsignedChar((char)0xaa);
+	bv8.setUnsignedChar((unsigned char)0xaa);
 	TEST_EQUAL(bv8.getBit(0), false)
 	TEST_EQUAL(bv8.getBit(1), true)
 	TEST_EQUAL(bv8.getBit(2), false)
