@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.26 2003/12/11 16:05:39 amoll Exp $
+// $Id: BALL.sip,v 1.27 2003/12/11 16:22:41 amoll Exp $
 //
 //
 //
@@ -296,6 +296,7 @@
 
 // VIEW/MODELS
 %Include colorProcessor.sip
+%Include standardColorProcessor.sip
 %Include modelProcessor.sip
 %Include atomBondModelBaseProcessor.sip
 %Include backboneModel.sip
