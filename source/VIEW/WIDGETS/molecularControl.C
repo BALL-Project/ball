@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.38 2004/02/09 12:52:30 amoll Exp $
+// $Id: molecularControl.C,v 1.39 2004/02/09 13:51:17 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -16,6 +16,7 @@
 #include <qlineedit.h> 
 #include <qpushbutton.h> 
 #include <qmessagebox.h> 
+#include <qtooltip.h> 
 
 using std::endl;
 
@@ -89,20 +90,32 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 	listview->setColumnWidth(0, 120);
 	listview->setColumnWidth(1, 60);
 
+	QHBoxLayout* layout2 = new QHBoxLayout();
+	getLayout()->addLayout(layout2);
+
+	selector_edit_->setPaletteBackgroundColor(QColor(255, 255, 0));
+	selector_edit_->resize(90, 30);
+	selector_edit_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
+	layout2->addWidget(selector_edit_);
+
+	QPushButton* clear_button = new QPushButton(this);
+	clear_button->resize(30, 30);
+	clear_button->setMaximumSize(30, 30);
+	clear_button->setText("<");
+	clear_button->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed, 0, 0, false));
+	connect(clear_button, SIGNAL(clicked()), this, SLOT(clearSelector()));
+	QToolTip::add(clear_button, tr("Clear the selection."));
+	layout2->addWidget(clear_button);
+
 	QPushButton* help_button = new QPushButton(this);
 	help_button->resize(30, 30);
 	help_button->setMaximumSize(30, 30);
 	help_button->setText("?");
 	help_button->setSizePolicy( QSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed, 0, 0, false));
 	connect(help_button, SIGNAL(clicked()), this, SLOT(showSelectorHelp()));
-
-	QHBoxLayout* layout2 = new QHBoxLayout();
-	selector_edit_->setPaletteBackgroundColor(QColor(255, 255, 0));
-	selector_edit_->resize(90, 30);
-	selector_edit_->setSizePolicy( QSizePolicy(QSizePolicy::Expanding, QSizePolicy::Fixed, 0, 0, false));
-	layout2->addWidget(selector_edit_);
+	QToolTip::add(help_button, tr("Show a help dialog."));
 	layout2->addWidget(help_button);
-	getLayout()->addLayout(layout2);
+
 	connect(selector_edit_, SIGNAL(returnPressed()), this, SLOT(applySelector()));
 
 	// if the selection of any item changed,
@@ -1133,7 +1146,7 @@ void MolecularControl::showSelectorHelp()
 			String(
 			String("In this text field, you can enter regular expressions to select molecular entities.\n")+
 			"To apply your selection, just press Return key after you are finished. If you want to\n"+
-			"clear your selection, just clear the text field and press again the Return key.\n\n"+
+			"clear your selection, just click on the button next to the help button.\n\n"+
 			"Possible predicates are: \n"+
 			"true() \t this is always true\n" +
 			"false() \t this is always false\n" +
@@ -1165,6 +1178,12 @@ void MolecularControl::showSelectorHelp()
 			"AND and OR, grouped with brackets, and each predicate can be negated with '!'\n"
 			).c_str(),
 			"&OK");
+}
+
+void MolecularControl::clearSelector()
+{
+	selector_edit_->setText("");
+	getMainControl()->clearSelection();
 }
 
 
