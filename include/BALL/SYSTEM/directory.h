@@ -1,4 +1,4 @@
-// $Id: directory.h,v 1.7 2000/06/29 14:09:00 amoll Exp $
+// $Id: directory.h,v 1.8 2000/07/04 08:16:27 oliver Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -19,17 +19,30 @@
 #	include <BALL/SYSTEM/fileSystem.h>
 #endif
 
-#ifndef __DIRENT_H
-# include <dirent.h>
-#endif
+
+// forward declarations instead of include <dirent.h>
+class DIR; 
+class dirent; 
 
 namespace BALL 
 {
-	/**	Directory class 
+
+	/**	Directory class.
+			{\bf Definition:}\URL{BALL/SYSTEM/directory.C}
 	*/
 	class Directory
 	{
 		public:
+
+		/**	@name Constants
+		*/
+		//@{
+		/**	The maximum length of a path.
+				This constant is used for system calls that require
+				a maximum length (e.g., getcwd()). Default is 8192.
+		*/
+		static const Size MAX_PATH_LENGTH;
+		//@}
 
 		/**	@name	Constructors and Destructors */
 		//@{

@@ -1,4 +1,4 @@
-
+// $Id: directory.iC,v 1.7 2000/07/04 08:16:29 oliver Exp $
 BALL_INLINE 
 void Directory::destroy()
 {
@@ -110,9 +110,9 @@ bool Directory::isValid() const
 BALL_INLINE 
 void Directory::synchronize_()
 {
-  if (::getcwd(NULL, 64) != directory_path_)
+  if (::getcwd(NULL, MAX_PATH_LENGTH) != directory_path_)
   {
-    backup_path_ = ::getcwd(NULL, 64);
+    backup_path_ = ::getcwd(NULL, MAX_PATH_LENGTH);
     ::chdir(directory_path_.data());
   }
 }
