@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.C,v 1.10 2000/10/23 10:24:52 anker Exp $
+// $Id: pairExpInteractionEnergyProcessor.C,v 1.11 2000/11/06 18:06:19 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -31,10 +31,6 @@ namespace BALL
 		= "rdf_filename";
 	const char* PairExpInteractionEnergyProcessor::Option::SOLVENT_FILENAME
 		= "solvent_filename";
-	const char* PairExpInteractionEnergyProcessor::Option::SOLVENT_NUMBER_DENSITY 
-		= "solvent_number_density";
-	const char* PairExpInteractionEnergyProcessor::Option::RADIUS_RULE_FILE
-		= "radius_rule_file";
 	const char* PairExpInteractionEnergyProcessor::Option::SURFACE_TYPE
 		= "surface_type";
 	const char* PairExpInteractionEnergyProcessor::Option::SURFACE_FILENAME
@@ -54,10 +50,6 @@ namespace BALL
 		= "rdf.ini";
 	const char* PairExpInteractionEnergyProcessor::Default::SOLVENT_FILENAME
 		= "solvent.ini";
-	const float PairExpInteractionEnergyProcessor::Default::SOLVENT_NUMBER_DENSITY 
-		= 3.33253e-2;
-	const char* PairExpInteractionEnergyProcessor::Default::RADIUS_RULE_FILE
-		= "radius.rul";
 	const int PairExpInteractionEnergyProcessor::Default::SURFACE_TYPE
 		= SURFACE__SAS;
 	const char* PairExpInteractionEnergyProcessor::Default::SURFACE_FILENAME
@@ -81,10 +73,6 @@ namespace BALL
 		options.setDefaultBool(Option::USE_RDF, Default::USE_RDF);
 		options.setDefault(Option::RDF_FILENAME, Default::RDF_FILENAME);
 		options.setDefault(Option::SOLVENT_FILENAME, Default::SOLVENT_FILENAME);
-		options.setDefaultReal(Option::SOLVENT_NUMBER_DENSITY, 
-				Default::SOLVENT_NUMBER_DENSITY);
-		options.setDefault(Option::RADIUS_RULE_FILE,
-				Default::RADIUS_RULE_FILE);
 		options.setDefault(Option::SURFACE_TYPE, Default::SURFACE_TYPE);
 		options.setDefault(Option::SURFACE_FILENAME, Default::SURFACE_FILENAME);
 	}
@@ -155,8 +143,6 @@ namespace BALL
 		String rdf_filename = options.get(Option::RDF_FILENAME);
 		// the file contacining the solvent description
 		String solvent_filename = options.get(Option::SOLVENT_FILENAME);
-		// rho is the number density of the solvent (i. e. water) [1/m^3]
-		double rho = options.getReal(Option::SOLVENT_NUMBER_DENSITY);
 		int surface_type = options.getInteger(Option::SURFACE_TYPE);
 		String surface_filename = options.get(Option::SURFACE_FILENAME);
 
@@ -172,7 +158,13 @@ namespace BALL
 		}
 		SolventDescriptor solvent_descriptor 
 			= solvent_parameter_section.getSolventDescriptor();
-		rho = solvent_descriptor.getNumberDensity();
+		// rho is the number density of the solvent (i. e. water) [1/A^3]
+		double rho = solvent_descriptor.getNumberDensity();
+
+		if (verbosity > 1)
+		{
+			Log.info() << "Using a number density of " << rho << " [1/A^3]" << endl;
+		}
 
 		// define the rdf, if desired
 		ForceFieldParameters rdf_ff_param;
@@ -482,7 +474,7 @@ namespace BALL
 		}
 
 		// return the energy in units of kJ/mol
-		energy_ = 4184 * E;
+		energy_ = 4.184 * E;
 		return true;
 	}
 
