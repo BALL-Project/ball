@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.7.4.15 2002/12/09 16:56:57 amoll Exp $
+// $Id: control.C,v 1.7.4.16 2002/12/09 21:09:43 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <BALL/KERNEL/atom.h>
@@ -259,7 +259,8 @@ void Control::invalidateSelection()
 }
 
 
-void Control::setSelection_()
+// set the checkboxes according to the selection in the MainControl
+void Control::setSelection_(bool open)
 	throw(MainControlMissing)
 {	
 	MainControl* main_control = MainControl::getMainControl(this);	
@@ -279,25 +280,33 @@ void Control::setSelection_()
 		return;
 	}
 
+	if (selection.size() > 5) open = false;
+
 	QListViewItemIterator it(this);
 	for (; it.current(); ++it)
 	{
 		if (selection.has(getCompositeAddress_(it.current())))
 		{
 			((QCheckListItem*) it.current())->setOn(true);
-			it.current()->setSelected(true);
-			QListViewItem* parent = it.current()->parent();
-			while (parent != 0)
+			if (open)
 			{
-				parent->setOpen(true);
-				parent = parent->parent();
+				it.current()->setSelected(true);
+				QListViewItem* parent = it.current()->parent();
+				while (parent != 0)
+				{
+					parent->setOpen(true);
+					parent = parent->parent();
+				}
 			}
 		}
 		else
 		{
 			((QCheckListItem*) it.current())->setOn(false);
-			it.current()->setSelected(false);
-			it.current()->setOpen(false);
+			if (open)
+			{
+				it.current()->setSelected(false);
+				it.current()->setOpen(false);
+			}
 		}
 	}
 }
@@ -389,8 +398,7 @@ bool Control::reactToMessages_(Message* message)
 	}
 	else if (RTTI::isKindOf<NewSelectionMessage> (*message))
 	{
-		setSelection_();
-		update = true;
+		setSelection_(true);
 	}
 
 	return update;
@@ -576,13 +584,6 @@ void Control::cut()
 	GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
 	notify_(message);
 
-	/*
-	RemovedCompositeMessage *remove_message = new RemovedCompositeMessage;
-	remove_message->setComposite(system);
-	remove_message->setDeletable(true);
-	notify_(remove_message);
-	*/
-
 	// update scene
 	SceneMessage *scene_message = new SceneMessage;
 	scene_message->updateOnly();
@@ -747,10 +748,13 @@ void Control::selectedComposite(Composite* composite, bool state)
 	if (state)	selectRecursive_(composite);
 	else			  deselectRecursive_(composite);
 
+	
 	CompositeSelectedMessage* message = new CompositeSelectedMessage(composite, state);
 	message->setDeletable(false);
 	message->composite_ = composite;
 	notify_(message);
+	
+	setSelection_(false);
 }
 
 void Control::selectRecursive_(Composite* composite)
