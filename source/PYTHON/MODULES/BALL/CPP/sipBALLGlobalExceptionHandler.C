@@ -33,7 +33,7 @@ static PyTypeObject sipType_GlobalExceptionHandler = {
 	0,
 };
 
-static PyObject *sipDo_GlobalExceptionHandler_setName(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_GlobalExceptionHandler_setName(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -76,7 +76,7 @@ static PyObject *sipDo_GlobalExceptionHandler_setName(PyObject *,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_GlobalExceptionHandler_setMessage(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_GlobalExceptionHandler_setMessage(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -119,7 +119,7 @@ static PyObject *sipDo_GlobalExceptionHandler_setMessage(PyObject *,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_GlobalExceptionHandler_setLine(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_GlobalExceptionHandler_setLine(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -151,7 +151,7 @@ static PyObject *sipDo_GlobalExceptionHandler_setLine(PyObject *,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_GlobalExceptionHandler_setFile(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_GlobalExceptionHandler_setFile(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -194,7 +194,7 @@ static PyObject *sipDo_GlobalExceptionHandler_setFile(PyObject *,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_GlobalExceptionHandler_set(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_GlobalExceptionHandler_set(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -252,7 +252,7 @@ static PyObject *sipDo_GlobalExceptionHandler_set(PyObject *,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_GlobalExceptionHandler(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_GlobalExceptionHandler(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_GlobalExceptionHandler)
 		return ptr;

@@ -33,7 +33,7 @@ static PyTypeObject sipType_Plane3 = {
 	0,
 };
 
-static PyObject *sipDo_Plane3_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Plane3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -81,7 +81,7 @@ static PyObject *sipDo_Plane3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Plane3_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Plane3_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -204,7 +204,7 @@ static PyObject *sipDo_Plane3_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Plane3_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Plane3_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -288,7 +288,7 @@ static PyObject *sipDo_Plane3_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Plane3_normalize(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Plane3_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -326,7 +326,7 @@ static PyObject *sipDo_Plane3_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Plane3_hessify(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Plane3_hessify(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -364,7 +364,7 @@ static PyObject *sipDo_Plane3_hessify(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Plane3_has(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Plane3_has(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -445,7 +445,7 @@ static PyObject *sipDo_Plane3_has(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Plane3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Plane3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -485,7 +485,7 @@ static PyObject *sipDo_Plane3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Plane3(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Plane3(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Plane3)
 		return ptr;

@@ -96,7 +96,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_Bit_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Bit_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -126,9 +126,49 @@ static PyObject *sipDo_Bit_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
+extern "C" PyObject *sipDo_Bit_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Bit)) == NULL)
+		return NULL;
+
+	{
+		const Bit * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Bit,&a0obj))
+		{
+			bool res;
+			Bit *ptr;
+
+			if ((ptr = (Bit *)sipGetCppPtr(sipThis,sipClass_Bit)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Bit(a0obj,(Bit **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = ptr -> Bit::operator==(* a0);
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_Bit,sipName_BALL_CmpOp);
+
+	return NULL;
+}
+
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Bit(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Bit(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Bit)
 		return ptr;
@@ -222,6 +262,7 @@ PyObject *sipNew_Bit(PyObject *sipSelf,PyObject *sipArgs)
 
 PyMethodDef sipClassAttrTab_Bit[] = {
 	{sipName_BALL_clear, sipDo_Bit_clear, METH_VARARGS, NULL},
+	{sipName_BALL_CmpOp, sipDo_Bit_CmpOp, METH_VARARGS, NULL},
 	{NULL}
 };
 

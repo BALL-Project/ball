@@ -33,7 +33,7 @@ static PyTypeObject sipType_ResourceFile = {
 	0,
 };
 
-static PyObject *sipDo_ResourceFile_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResourceFile_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -71,7 +71,7 @@ static PyObject *sipDo_ResourceFile_destroy(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_ResourceFile_open(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResourceFile_open(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -122,7 +122,7 @@ static PyObject *sipDo_ResourceFile_open(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_ResourceFile_close(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResourceFile_close(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -160,7 +160,7 @@ static PyObject *sipDo_ResourceFile_close(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_ResourceFile_saveAs(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResourceFile_saveAs(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -211,7 +211,7 @@ static PyObject *sipDo_ResourceFile_saveAs(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_ResourceFile_save(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResourceFile_save(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -282,7 +282,7 @@ static PyObject *sipDo_ResourceFile_save(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_ResourceFile_getSize(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResourceFile_getSize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -320,7 +320,7 @@ static PyObject *sipDo_ResourceFile_getSize(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_ResourceFile_getRoot(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResourceFile_getRoot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -358,7 +358,7 @@ static PyObject *sipDo_ResourceFile_getRoot(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_ResourceFile_getEntry(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResourceFile_getEntry(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -445,7 +445,7 @@ static PyObject *sipDo_ResourceFile_getEntry(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_ResourceFile_getValue(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResourceFile_getValue(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -532,7 +532,7 @@ static PyObject *sipDo_ResourceFile_getValue(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_ResourceFile_insert(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResourceFile_insert(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -589,7 +589,7 @@ static PyObject *sipDo_ResourceFile_insert(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_ResourceFile_removeKey(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResourceFile_removeKey(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -640,7 +640,7 @@ static PyObject *sipDo_ResourceFile_removeKey(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_ResourceFile_hasKey(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResourceFile_hasKey(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -691,7 +691,7 @@ static PyObject *sipDo_ResourceFile_hasKey(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_ResourceFile_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResourceFile_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -729,7 +729,7 @@ static PyObject *sipDo_ResourceFile_isEmpty(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_ResourceFile_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResourceFile_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -769,7 +769,7 @@ static PyObject *sipDo_ResourceFile_isValid(PyObject *sipThisObj,PyObject *sipAr
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_ResourceFile(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_ResourceFile(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

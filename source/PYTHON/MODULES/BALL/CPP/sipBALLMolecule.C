@@ -5,7 +5,7 @@
 PyObject *sipClass_Molecule;
 
 static void sipDealloc_Molecule(sipThisType *);
-static PyObject * sip__str__Molecule(PyObject *a0);
+extern "C" PyObject * sip__str__Molecule(PyObject *a0);
 
 static PyTypeObject sipType_Molecule = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -118,7 +118,7 @@ void sipMolecule::clear()
 		Molecule::clear();
 }
 
-static PyObject *sipDo_Molecule_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -148,7 +148,7 @@ static PyObject *sipDo_Molecule_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Molecule_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -178,7 +178,7 @@ static PyObject *sipDo_Molecule_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Molecule_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -227,7 +227,7 @@ static PyObject *sipDo_Molecule_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Molecule_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -276,7 +276,7 @@ static PyObject *sipDo_Molecule_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Molecule_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -324,7 +324,7 @@ static PyObject *sipDo_Molecule_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Molecule_getSystem(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_getSystem(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -385,7 +385,7 @@ static PyObject *sipDo_Molecule_getSystem(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Molecule_prepend(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -466,7 +466,7 @@ static PyObject *sipDo_Molecule_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Molecule_append(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_append(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -547,7 +547,7 @@ static PyObject *sipDo_Molecule_append(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Molecule_insert(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_insert(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -628,7 +628,7 @@ static PyObject *sipDo_Molecule_insert(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Molecule_insertBefore(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_insertBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -715,7 +715,7 @@ static PyObject *sipDo_Molecule_insertBefore(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Molecule_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -802,7 +802,7 @@ static PyObject *sipDo_Molecule_insertAfter(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_Molecule_remove(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_remove(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -883,7 +883,7 @@ static PyObject *sipDo_Molecule_remove(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Molecule_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -931,7 +931,7 @@ static PyObject *sipDo_Molecule_spliceBefore(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Molecule_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -979,7 +979,7 @@ static PyObject *sipDo_Molecule_spliceAfter(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_Molecule_splice(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_splice(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1027,7 +1027,7 @@ static PyObject *sipDo_Molecule_splice(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Molecule_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Molecule_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1059,7 +1059,7 @@ static PyObject *sipDo_Molecule_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Molecule(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Molecule(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 
@@ -1088,7 +1088,7 @@ static void sipDealloc_Molecule(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__Molecule(PyObject *a0)
+extern "C" PyObject * sip__str__Molecule(PyObject *a0)
 {
 #line 47 "molecule.sip"
   Molecule* ptr;

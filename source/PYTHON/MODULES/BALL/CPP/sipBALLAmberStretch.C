@@ -104,7 +104,7 @@ bool sipAmberStretch::setup()
 		AmberStretch::setup();
 }
 
-static PyObject *sipDo_AmberStretch_setup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AmberStretch_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -142,7 +142,7 @@ static PyObject *sipDo_AmberStretch_setup(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_AmberStretch_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AmberStretch_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -180,7 +180,7 @@ static PyObject *sipDo_AmberStretch_updateEnergy(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_AmberStretch_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AmberStretch_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -220,7 +220,7 @@ static PyObject *sipDo_AmberStretch_updateForces(PyObject *sipThisObj,PyObject *
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_AmberStretch(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_AmberStretch(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

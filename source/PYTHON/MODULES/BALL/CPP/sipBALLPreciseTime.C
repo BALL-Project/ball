@@ -5,7 +5,7 @@
 PyObject *sipClass_PreciseTime;
 
 static void sipDealloc_PreciseTime(sipThisType *);
-static PyObject * sip__str__PreciseTime(PyObject *a0);
+extern "C" PyObject * sip__str__PreciseTime(PyObject *a0);
 
 static PyTypeObject sipType_PreciseTime = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -34,7 +34,7 @@ static PyTypeObject sipType_PreciseTime = {
 	0,
 };
 
-static PyObject *sipDo_PreciseTime_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PreciseTime_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -92,7 +92,7 @@ static PyObject *sipDo_PreciseTime_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_PreciseTime_getSeconds(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PreciseTime_getSeconds(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -122,7 +122,7 @@ static PyObject *sipDo_PreciseTime_getSeconds(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_PreciseTime_getMicroSeconds(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PreciseTime_getMicroSeconds(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -152,18 +152,18 @@ static PyObject *sipDo_PreciseTime_getMicroSeconds(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_PreciseTime_now(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PreciseTime_now(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,"-"))
 		{
-			const PreciseTime *res;
+			PreciseTime *res;
 
-			res = &PreciseTime::now();
+			res = new PreciseTime(PreciseTime::now());
 
-			return sipMapCppToSelf(res,sipClass_PreciseTime);
+			return sipNewCppToSelf(res,sipClass_PreciseTime,SIP_SIMPLE | SIP_PY_OWNED);
 		}
 	}
 
@@ -176,7 +176,7 @@ static PyObject *sipDo_PreciseTime_now(PyObject *,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_PreciseTime(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_PreciseTime(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_PreciseTime)
 		return ptr;
@@ -194,7 +194,7 @@ static void sipDealloc_PreciseTime(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__PreciseTime(PyObject *a0)
+extern "C" PyObject * sip__str__PreciseTime(PyObject *a0)
 {
 #line 30 "timeStamp.sip"
   PreciseTime* ptr;
@@ -202,7 +202,7 @@ static PyObject * sip__str__PreciseTime(PyObject *a0)
     return NULL;
 
 	char buf[128];
-	long secs = ptr->getSeconds();
+	time_t secs = ptr->getSeconds();
 	strftime(buf, 127, "\045Y\045m\045d\045H\045M\045S", localtime(&secs));
 	String time_str(buf);
 	time_str.append(".");

@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.1 2000/07/18 21:30:12 oliver Exp $
+# $Id: Makefile,v 1.2 2001/08/01 01:28:10 oliver Exp $
 #
 
 
@@ -197,7 +197,7 @@ PYBALL_SOURCES=\
 	pyNucleotideList.C\
 	pyNucleicAcidList.C
 
-include /KM/usr/oliver/BALL/source/${BALL_BINFMT}/config.mak
+include ../../../config.mak
 
 SIPFLAGS += $(PYTHON_INCLUDES) $(SIP_INCLUDES)
 CXXFLAGS += $(SIPFLAGS)

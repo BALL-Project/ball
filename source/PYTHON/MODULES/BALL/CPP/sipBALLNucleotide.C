@@ -117,7 +117,7 @@ void sipNucleotide::clear()
 		Nucleotide::clear();
 }
 
-static PyObject *sipDo_Nucleotide_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -147,7 +147,7 @@ static PyObject *sipDo_Nucleotide_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -177,7 +177,7 @@ static PyObject *sipDo_Nucleotide_destroy(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -226,7 +226,7 @@ static PyObject *sipDo_Nucleotide_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -275,7 +275,7 @@ static PyObject *sipDo_Nucleotide_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -323,7 +323,7 @@ static PyObject *sipDo_Nucleotide_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_getNucleicAcid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_getNucleicAcid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -384,7 +384,7 @@ static PyObject *sipDo_Nucleotide_getNucleicAcid(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_setID(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_setID(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -435,7 +435,7 @@ static PyObject *sipDo_Nucleotide_setID(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_getID(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_getID(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -473,7 +473,7 @@ static PyObject *sipDo_Nucleotide_getID(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_setInsertionCode(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_setInsertionCode(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -513,7 +513,7 @@ static PyObject *sipDo_Nucleotide_setInsertionCode(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_getInsertionCode(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_getInsertionCode(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -551,7 +551,7 @@ static PyObject *sipDo_Nucleotide_getInsertionCode(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_prepend(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -599,7 +599,7 @@ static PyObject *sipDo_Nucleotide_prepend(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_append(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_append(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -647,7 +647,7 @@ static PyObject *sipDo_Nucleotide_append(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_insert(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_insert(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -695,7 +695,7 @@ static PyObject *sipDo_Nucleotide_insert(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_insertBefore(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_insertBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -746,7 +746,7 @@ static PyObject *sipDo_Nucleotide_insertBefore(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -797,7 +797,7 @@ static PyObject *sipDo_Nucleotide_insertAfter(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_remove(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_remove(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -845,7 +845,7 @@ static PyObject *sipDo_Nucleotide_remove(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -893,7 +893,7 @@ static PyObject *sipDo_Nucleotide_spliceBefore(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -941,7 +941,7 @@ static PyObject *sipDo_Nucleotide_spliceAfter(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_splice(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_splice(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -989,7 +989,7 @@ static PyObject *sipDo_Nucleotide_splice(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_isTerminal(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_isTerminal(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1027,7 +1027,7 @@ static PyObject *sipDo_Nucleotide_isTerminal(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_is3Prime(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_is3Prime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1065,7 +1065,7 @@ static PyObject *sipDo_Nucleotide_is3Prime(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_is5Prime(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_is5Prime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1103,7 +1103,7 @@ static PyObject *sipDo_Nucleotide_is5Prime(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Nucleotide_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Nucleotide_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1135,7 +1135,7 @@ static PyObject *sipDo_Nucleotide_isValid(PyObject *sipThisObj,PyObject *sipArgs
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Nucleotide(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Nucleotide(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

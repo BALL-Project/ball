@@ -163,7 +163,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_BoundingBoxProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_BoundingBoxProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -193,7 +193,7 @@ static PyObject *sipDo_BoundingBoxProcessor_start(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_BoundingBoxProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_BoundingBoxProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -223,7 +223,7 @@ static PyObject *sipDo_BoundingBoxProcessor_finish(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_BoundingBoxProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_BoundingBoxProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -263,7 +263,7 @@ static PyObject *sipDo_BoundingBoxProcessor_CallOp(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_BoundingBoxProcessor_getBox(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_BoundingBoxProcessor_getBox(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -301,7 +301,7 @@ static PyObject *sipDo_BoundingBoxProcessor_getBox(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_BoundingBoxProcessor_getLower(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_BoundingBoxProcessor_getLower(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -339,7 +339,7 @@ static PyObject *sipDo_BoundingBoxProcessor_getLower(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_BoundingBoxProcessor_getUpper(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_BoundingBoxProcessor_getUpper(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -379,7 +379,7 @@ static PyObject *sipDo_BoundingBoxProcessor_getUpper(PyObject *sipThisObj,PyObje
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_BoundingBoxProcessor(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_BoundingBoxProcessor(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

@@ -261,7 +261,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_ForceFieldComponent_setup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceFieldComponent_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -299,7 +299,7 @@ static PyObject *sipDo_ForceFieldComponent_setup(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_ForceFieldComponent_getForceField(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceFieldComponent_getForceField(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -337,7 +337,7 @@ static PyObject *sipDo_ForceFieldComponent_getForceField(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_ForceFieldComponent_setForceField(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceFieldComponent_setForceField(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -385,7 +385,7 @@ static PyObject *sipDo_ForceFieldComponent_setForceField(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_ForceFieldComponent_setName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceFieldComponent_setName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -436,7 +436,7 @@ static PyObject *sipDo_ForceFieldComponent_setName(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_ForceFieldComponent_getName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceFieldComponent_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -474,7 +474,7 @@ static PyObject *sipDo_ForceFieldComponent_getName(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_ForceFieldComponent_getEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceFieldComponent_getEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -512,7 +512,7 @@ static PyObject *sipDo_ForceFieldComponent_getEnergy(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_ForceFieldComponent_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceFieldComponent_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -550,7 +550,7 @@ static PyObject *sipDo_ForceFieldComponent_updateEnergy(PyObject *sipThisObj,PyO
 	return NULL;
 }
 
-static PyObject *sipDo_ForceFieldComponent_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceFieldComponent_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -590,7 +590,7 @@ static PyObject *sipDo_ForceFieldComponent_updateForces(PyObject *sipThisObj,PyO
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_ForceFieldComponent(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_ForceFieldComponent(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_ForceFieldComponent)
 		return ptr;

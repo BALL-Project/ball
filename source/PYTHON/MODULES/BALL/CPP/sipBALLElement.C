@@ -33,7 +33,7 @@ static PyTypeObject sipType_Element = {
 	0,
 };
 
-static PyObject *sipDo_Element_setName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_setName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -84,7 +84,7 @@ static PyObject *sipDo_Element_setName(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Element_getName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -122,7 +122,7 @@ static PyObject *sipDo_Element_getName(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Element_setSymbol(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_setSymbol(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -173,7 +173,7 @@ static PyObject *sipDo_Element_setSymbol(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Element_getSymbol(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_getSymbol(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -211,7 +211,7 @@ static PyObject *sipDo_Element_getSymbol(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Element_setGroup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_setGroup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -251,7 +251,7 @@ static PyObject *sipDo_Element_setGroup(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Element_getGroup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_getGroup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -289,7 +289,7 @@ static PyObject *sipDo_Element_getGroup(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Element_setPeriod(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_setPeriod(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -329,7 +329,7 @@ static PyObject *sipDo_Element_setPeriod(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Element_getPeriod(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_getPeriod(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -367,7 +367,7 @@ static PyObject *sipDo_Element_getPeriod(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Element_setAtomicNumber(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_setAtomicNumber(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -407,7 +407,7 @@ static PyObject *sipDo_Element_setAtomicNumber(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Element_getAtomicNumber(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_getAtomicNumber(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -445,7 +445,7 @@ static PyObject *sipDo_Element_getAtomicNumber(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Element_setAtomicWeight(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_setAtomicWeight(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -485,7 +485,7 @@ static PyObject *sipDo_Element_setAtomicWeight(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Element_getAtomicWeight(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_getAtomicWeight(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -523,7 +523,7 @@ static PyObject *sipDo_Element_getAtomicWeight(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Element_setAtomicRadius(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_setAtomicRadius(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -563,7 +563,7 @@ static PyObject *sipDo_Element_setAtomicRadius(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Element_getAtomicRadius(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_getAtomicRadius(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -601,7 +601,7 @@ static PyObject *sipDo_Element_getAtomicRadius(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Element_setCovalentRadius(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_setCovalentRadius(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -641,7 +641,7 @@ static PyObject *sipDo_Element_setCovalentRadius(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_Element_getCovalentRadius(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_getCovalentRadius(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -679,7 +679,7 @@ static PyObject *sipDo_Element_getCovalentRadius(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_Element_setVanDerWaalsRadius(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_setVanDerWaalsRadius(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -719,7 +719,7 @@ static PyObject *sipDo_Element_setVanDerWaalsRadius(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_Element_getVanDerWaalsRadius(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_getVanDerWaalsRadius(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -757,7 +757,7 @@ static PyObject *sipDo_Element_getVanDerWaalsRadius(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_Element_setElectronegativity(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_setElectronegativity(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -797,7 +797,7 @@ static PyObject *sipDo_Element_setElectronegativity(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_Element_getElectronegativity(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_getElectronegativity(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -835,7 +835,55 @@ static PyObject *sipDo_Element_getElectronegativity(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_Element_isUnknown(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Element_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Element)) == NULL)
+		return NULL;
+
+	{
+		const Element * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Element,&a0obj))
+		{
+			bool res;
+			Element *ptr;
+
+			if ((ptr = (Element *)sipGetCppPtr(sipThis,sipClass_Element)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Element(a0obj,(Element **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = ptr -> Element::operator==(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_Element,sipName_BALL_CmpOp);
+
+	return NULL;
+}
+
+extern "C" PyObject *sipDo_Element_isUnknown(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -875,7 +923,7 @@ static PyObject *sipDo_Element_isUnknown(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Element(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Element(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 
@@ -997,6 +1045,7 @@ PyMethodDef sipClassAttrTab_Element[] = {
 	{sipName_BALL_getVanDerWaalsRadius, sipDo_Element_getVanDerWaalsRadius, METH_VARARGS, NULL},
 	{sipName_BALL_setElectronegativity, sipDo_Element_setElectronegativity, METH_VARARGS, NULL},
 	{sipName_BALL_getElectronegativity, sipDo_Element_getElectronegativity, METH_VARARGS, NULL},
+	{sipName_BALL_CmpOp, sipDo_Element_CmpOp, METH_VARARGS, NULL},
 	{sipName_BALL_isUnknown, sipDo_Element_isUnknown, METH_VARARGS, NULL},
 	{NULL}
 };

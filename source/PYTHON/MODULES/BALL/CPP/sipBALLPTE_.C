@@ -33,7 +33,7 @@ static PyTypeObject sipType_PTE_ = {
 	0,
 };
 
-static PyObject *sipDo_PTE__getElement(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PTE__getElement(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -97,9 +97,168 @@ static PyObject *sipDo_PTE__getElement(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
+extern "C" PyObject *sipDo_PTE__GetItemOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PTE_)) == NULL)
+		return NULL;
+
+	{
+		const String * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		{
+			Element *res;
+			PTE_ *ptr;
+
+			if ((ptr = (PTE_ *)sipGetCppPtr(sipThis,sipClass_PTE_)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> PTE_::operator[](* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			if (istemp0)
+				delete a0;
+
+			return sipMapCppToSelf(res,sipClass_Element);
+		}
+	}
+
+	{
+		const String * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		{
+			const Element *res;
+			PTE_ *ptr;
+
+			if ((ptr = (PTE_ *)sipGetCppPtr(sipThis,sipClass_PTE_)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> PTE_::operator[](* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			if (istemp0)
+				delete a0;
+
+			return sipMapCppToSelf(res,sipClass_Element);
+		}
+	}
+
+	{
+		Index * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Index,&a0obj))
+		{
+			Element *res;
+			PTE_ *ptr;
+
+			if ((ptr = (PTE_ *)sipGetCppPtr(sipThis,sipClass_PTE_)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Index(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> PTE_::operator[](* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			if (istemp0)
+				delete a0;
+
+			return sipMapCppToSelf(res,sipClass_Element);
+		}
+	}
+
+	{
+		Index * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Index,&a0obj))
+		{
+			const Element *res;
+			PTE_ *ptr;
+
+			if ((ptr = (PTE_ *)sipGetCppPtr(sipThis,sipClass_PTE_)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_Index(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> PTE_::operator[](* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			if (istemp0)
+				delete a0;
+
+			return sipMapCppToSelf(res,sipClass_Element);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_PTE_,sipName_BALL_GetItemOp);
+
+	return NULL;
+}
+
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_PTE_(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_PTE_(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 
@@ -202,6 +361,7 @@ PyObject *sipNew_PTE_(PyObject *sipSelf,PyObject *sipArgs)
 
 PyMethodDef sipClassAttrTab_PTE_[] = {
 	{sipName_BALL_getElement, sipDo_PTE__getElement, METH_VARARGS, NULL},
+	{sipName_BALL_GetItemOp, sipDo_PTE__GetItemOp, METH_VARARGS, NULL},
 	{NULL}
 };
 

@@ -33,7 +33,7 @@ static PyTypeObject sipType_Surface = {
 	0,
 };
 
-static PyObject *sipDo_Surface_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Surface_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -71,7 +71,7 @@ static PyObject *sipDo_Surface_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Surface_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Surface_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -119,7 +119,7 @@ static PyObject *sipDo_Surface_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Surface_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Surface_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -167,7 +167,7 @@ static PyObject *sipDo_Surface_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Surface_readMSMSFile(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Surface_readMSMSFile(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -224,7 +224,7 @@ static PyObject *sipDo_Surface_readMSMSFile(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_Surface_getArea(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Surface_getArea(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -262,7 +262,7 @@ static PyObject *sipDo_Surface_getArea(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Surface_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Surface_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -302,7 +302,7 @@ static PyObject *sipDo_Surface_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Surface(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Surface(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Surface)
 		return ptr;

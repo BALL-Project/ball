@@ -175,7 +175,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_FragmentDistanceCollector_start(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_FragmentDistanceCollector_start(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -205,7 +205,7 @@ static PyObject *sipDo_FragmentDistanceCollector_start(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_FragmentDistanceCollector_finish(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_FragmentDistanceCollector_finish(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -235,7 +235,7 @@ static PyObject *sipDo_FragmentDistanceCollector_finish(PyObject *sipThisObj,PyO
 	return NULL;
 }
 
-static PyObject *sipDo_FragmentDistanceCollector_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_FragmentDistanceCollector_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -275,7 +275,7 @@ static PyObject *sipDo_FragmentDistanceCollector_CallOp(PyObject *sipThisObj,PyO
 	return NULL;
 }
 
-static PyObject *sipDo_FragmentDistanceCollector_getNumberOfFragments(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_FragmentDistanceCollector_getNumberOfFragments(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -313,7 +313,7 @@ static PyObject *sipDo_FragmentDistanceCollector_getNumberOfFragments(PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_FragmentDistanceCollector_setComposite(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_FragmentDistanceCollector_setComposite(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -361,7 +361,7 @@ static PyObject *sipDo_FragmentDistanceCollector_setComposite(PyObject *sipThisO
 	return NULL;
 }
 
-static PyObject *sipDo_FragmentDistanceCollector_getComposite(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_FragmentDistanceCollector_getComposite(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -399,7 +399,7 @@ static PyObject *sipDo_FragmentDistanceCollector_getComposite(PyObject *sipThisO
 	return NULL;
 }
 
-static PyObject *sipDo_FragmentDistanceCollector_getDistance(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_FragmentDistanceCollector_getDistance(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -437,7 +437,7 @@ static PyObject *sipDo_FragmentDistanceCollector_getDistance(PyObject *sipThisOb
 	return NULL;
 }
 
-static PyObject *sipDo_FragmentDistanceCollector_setDistance(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_FragmentDistanceCollector_setDistance(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -479,7 +479,7 @@ static PyObject *sipDo_FragmentDistanceCollector_setDistance(PyObject *sipThisOb
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_FragmentDistanceCollector(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_FragmentDistanceCollector(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

@@ -33,7 +33,7 @@ static PyTypeObject sipType_PeriodicBoundary = {
 	0,
 };
 
-static PyObject *sipDo_PeriodicBoundary_setup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PeriodicBoundary_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -71,7 +71,7 @@ static PyObject *sipDo_PeriodicBoundary_setup(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_PeriodicBoundary_generateMoleculesVector(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PeriodicBoundary_generateMoleculesVector(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -109,7 +109,7 @@ static PyObject *sipDo_PeriodicBoundary_generateMoleculesVector(PyObject *sipThi
 	return NULL;
 }
 
-static PyObject *sipDo_PeriodicBoundary_enable(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PeriodicBoundary_enable(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -147,7 +147,7 @@ static PyObject *sipDo_PeriodicBoundary_enable(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_PeriodicBoundary_disable(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PeriodicBoundary_disable(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -185,7 +185,7 @@ static PyObject *sipDo_PeriodicBoundary_disable(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_PeriodicBoundary_getBox(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PeriodicBoundary_getBox(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -223,7 +223,7 @@ static PyObject *sipDo_PeriodicBoundary_getBox(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_PeriodicBoundary_setBox(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PeriodicBoundary_setBox(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -271,7 +271,7 @@ static PyObject *sipDo_PeriodicBoundary_setBox(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_PeriodicBoundary_addSolvent(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PeriodicBoundary_addSolvent(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -322,7 +322,7 @@ static PyObject *sipDo_PeriodicBoundary_addSolvent(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_PeriodicBoundary_removeSolvent(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PeriodicBoundary_removeSolvent(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -360,7 +360,7 @@ static PyObject *sipDo_PeriodicBoundary_removeSolvent(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_PeriodicBoundary_isEnabled(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PeriodicBoundary_isEnabled(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -398,7 +398,7 @@ static PyObject *sipDo_PeriodicBoundary_isEnabled(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_PeriodicBoundary_updateMolecules(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PeriodicBoundary_updateMolecules(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -438,7 +438,7 @@ static PyObject *sipDo_PeriodicBoundary_updateMolecules(PyObject *sipThisObj,PyO
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_PeriodicBoundary(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_PeriodicBoundary(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_PeriodicBoundary)
 		return ptr;
@@ -560,7 +560,7 @@ PyObject *sipNew_PeriodicBoundary(PyObject *sipSelf,PyObject *sipArgs)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_PeriodicBoundary_options(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_PeriodicBoundary_options(PyObject *sipThisObj,PyObject *valobj)
 {
 	int iserr = 0;
 	Options *val;

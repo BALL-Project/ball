@@ -206,7 +206,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_ModularWidget_registerThis(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ModularWidget_registerThis(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -236,7 +236,7 @@ static PyObject *sipDo_ModularWidget_registerThis(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_ModularWidget_unregisterThis(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ModularWidget_unregisterThis(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -266,7 +266,7 @@ static PyObject *sipDo_ModularWidget_unregisterThis(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_ModularWidget_setIdentifier(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ModularWidget_setIdentifier(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -317,7 +317,7 @@ static PyObject *sipDo_ModularWidget_setIdentifier(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_ModularWidget_getIdentifier(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ModularWidget_getIdentifier(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -355,7 +355,7 @@ static PyObject *sipDo_ModularWidget_getIdentifier(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_ModularWidget_registerWidget(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ModularWidget_registerWidget(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -395,7 +395,7 @@ static PyObject *sipDo_ModularWidget_registerWidget(PyObject *,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_ModularWidget_initializeWidget(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ModularWidget_initializeWidget(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -443,7 +443,7 @@ static PyObject *sipDo_ModularWidget_initializeWidget(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_ModularWidget_finalizeWidget(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ModularWidget_finalizeWidget(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -491,7 +491,7 @@ static PyObject *sipDo_ModularWidget_finalizeWidget(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_ModularWidget_checkMenu(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ModularWidget_checkMenu(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -533,7 +533,7 @@ static PyObject *sipDo_ModularWidget_checkMenu(PyObject *sipThisObj,PyObject *si
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_ModularWidget(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_ModularWidget(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

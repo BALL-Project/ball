@@ -17,9 +17,9 @@ class Bit
   // operator bool() const throw(NullPointer);
   // const Bit& operator = (const Bit& bit) throw();
   // const Bit& operator = (bool bit) 
-  // throw(NullPointer, IllegalOperation);
+  //   throw(NullPointer, IllegalOperation);
   virtual void clear() throw();
-  // bool operator == (const Bit& bit) const throw();
+  bool operator == (const Bit& /bit/) const throw();
   // bool operator == (bool bit) const throw(NullPointer);
 	// bool operator != (const Bit& bit) const throw();
   // bool operator != (bool bit) const throw(NullPointer);
@@ -40,7 +40,7 @@ class BitVector
 		throw(OutOfMemory);
 	BitVector(const char* /bit_string/)
 		throw(OutOfMemory);
-	// virtual ~BitVector() throw();
+	~BitVector() throw();
 	void clear() throw();
 	void set(const BitVector& /bit_vector/, bool /deep/ = true)
 		throw(OutOfMemory);
@@ -53,18 +53,18 @@ class BitVector
 	void get(BitVector& /bitvector/, bool /deep/ = true) const
 		throw(OutOfMemory);
 	void swap(BitVector& /bitvector/) throw();
-	// BitVector operator () (Index first,Index last) const
-	//	throw(IndexUnderflow, IndexOverflow);
+	BitVector operator () (Index /first/, Index /last/) const
+		throw(IndexUnderflow, IndexOverflow);
 	void setSize(Size /size/, bool /keep/ = true)
 		throw(OutOfMemory);
 	Size getSize() const throw();
 	Size countValue(bool /value/) const throw();
 	// BlockType* getBitSet() throw();
 	// const BlockType* getBitSet() const throw();
-	// Bit operator [] (Index index)
-	//	throw(IndexUnderflow, OutOfMemory);
-	// bool operator [] (Index index) const
-	//	throw(IndexUnderflow, IndexOverflow);
+	Bit operator [] (Index /index/)
+		throw(IndexUnderflow, OutOfMemory);
+	bool operator [] (Index /index/) const
+		throw(IndexUnderflow, IndexOverflow);
 	void setBit(Index /index/, bool /value/ = true)
 		throw(IndexUnderflow, OutOfMemory);
 	bool getBit(Index /index/)
@@ -89,23 +89,23 @@ class BitVector
 	void bitwiseOr(const BitVector& /bit_vector/) throw(OutOfMemory);
 	void bitwiseXor(const BitVector& /bit_vector/) throw(OutOfMemory);
 	void bitwiseAnd(const BitVector& /bit_vector/) throw(OutOfMemory);
-	// BitVector operator | (const BitVector& bit_vector) throw(OutOfMemory);
-	// BitVector& operator |= (const BitVector& bit_vector) throw(OutOfMemory);
-	// BitVector operator & (const BitVector& bit_vector) throw(OutOfMemory);
-	// BitVector& operator &= (const BitVector& bit_vector) throw(OutOfMemory);
-	// BitVector operator ^ (const BitVector& bit_vector) throw(OutOfMemory);
-	// BitVector& operator ^= (const BitVector& bit_vector) throw(OutOfMemory);
-	// BitVector operator ~ () throw(OutOfMemory);
-	// bool operator == (const BitVector& bit_vector) const throw();
-	// bool operator != (const BitVector& bit_vector) const throw();
+	BitVector operator | (const BitVector& /bit_vector/) throw(OutOfMemory);
+	BitVector& operator |= (const BitVector& /bit_vector/) throw(OutOfMemory);
+	BitVector operator & (const BitVector& /bit_vector/) throw(OutOfMemory);
+	BitVector& operator &= (const BitVector& /bit_vector/) throw(OutOfMemory);
+	BitVector operator ^ (const BitVector& /bit_vector/) throw(OutOfMemory);
+	BitVector& operator ^= (const BitVector& /bit_vector/) throw(OutOfMemory);
+	BitVector operator ~ () throw(OutOfMemory);
+	bool operator == (const BitVector& /bit_vector/) const throw();
+	// bool operator != (const BitVector& /bit_vector/) const throw();
 	bool isAnyBit(bool /value/, Index /first/ = 0, Index /last/ = -1) const
 		throw(IndexUnderflow, IndexOverflow);
 	bool isEveryBit(bool /value/, Index /first/ = 0, Index /last/ = -1) const
 		throw(IndexUnderflow, IndexOverflow);
 	bool isValid() const throw();
-	// friend std::istream& operator >> (std::istream& s, BitVector& bit_vector)
+	// friend std::istream& operator >> (std::istream& s, BitVector& /bit_vector/)
 	//	throw(OutOfMemory);
-	// friend std::ostream& operator << (std::ostream& s, const BitVector& bit_vector)
+	// friend std::ostream& operator << (std::ostream& s, const BitVector& /bit_vector/)
 	//	throw();
 	// virtual void read(std::istream& s)
 	// 	throw(OutOfMemory);

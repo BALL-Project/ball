@@ -5,7 +5,7 @@
 PyObject *sipClass_String;
 
 static void sipDealloc_String(sipThisType *);
-static PyObject * sip__str__String(PyObject *a0);
+extern "C" PyObject * sip__str__String(PyObject *a0);
 
 static PyTypeObject sipType_String = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -34,7 +34,7 @@ static PyTypeObject sipType_String = {
 	0,
 };
 
-static PyObject *sipDo_String_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -72,7 +72,7 @@ static PyObject *sipDo_String_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -193,7 +193,7 @@ static PyObject *sipDo_String_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_setCompareMode(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_setCompareMode(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -225,7 +225,7 @@ static PyObject *sipDo_String_setCompareMode(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_getCompareMode(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_getCompareMode(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -255,7 +255,7 @@ static PyObject *sipDo_String_getCompareMode(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_toBool(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_toBool(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -293,7 +293,7 @@ static PyObject *sipDo_String_toBool(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_toChar(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_toChar(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -331,7 +331,7 @@ static PyObject *sipDo_String_toChar(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_toShort(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_toShort(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -369,7 +369,7 @@ static PyObject *sipDo_String_toShort(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_toInt(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_toInt(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -407,7 +407,7 @@ static PyObject *sipDo_String_toInt(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_toLong(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_toLong(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -445,7 +445,7 @@ static PyObject *sipDo_String_toLong(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_toFloat(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_toFloat(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -483,7 +483,7 @@ static PyObject *sipDo_String_toFloat(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_toDouble(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_toDouble(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -521,7 +521,7 @@ static PyObject *sipDo_String_toDouble(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_toLower(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_toLower(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -573,7 +573,7 @@ static PyObject *sipDo_String_toLower(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_toUpper(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_toUpper(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -625,7 +625,7 @@ static PyObject *sipDo_String_toUpper(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_getSubstring(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_getSubstring(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -677,7 +677,7 @@ static PyObject *sipDo_String_getSubstring(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_String_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -729,7 +729,7 @@ static PyObject *sipDo_String_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_before(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_before(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -786,7 +786,7 @@ static PyObject *sipDo_String_before(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_through(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_through(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -843,7 +843,7 @@ static PyObject *sipDo_String_through(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_from(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_from(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -900,7 +900,7 @@ static PyObject *sipDo_String_from(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_after(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_after(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -957,7 +957,7 @@ static PyObject *sipDo_String_after(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_countFields(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_countFields(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -997,7 +997,7 @@ static PyObject *sipDo_String_countFields(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_String_getField(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_getField(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1049,7 +1049,7 @@ static PyObject *sipDo_String_getField(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_trimLeft(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_trimLeft(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1089,7 +1089,7 @@ static PyObject *sipDo_String_trimLeft(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_trimRight(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_trimRight(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1129,7 +1129,7 @@ static PyObject *sipDo_String_trimRight(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_trim(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_trim(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1169,7 +1169,7 @@ static PyObject *sipDo_String_trim(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_truncate(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_truncate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1209,7 +1209,7 @@ static PyObject *sipDo_String_truncate(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_left(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_left(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1249,7 +1249,7 @@ static PyObject *sipDo_String_left(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_right(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_right(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1289,7 +1289,7 @@ static PyObject *sipDo_String_right(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_instr(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_instr(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1346,7 +1346,7 @@ static PyObject *sipDo_String_instr(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_AddOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_AddOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1386,7 +1386,7 @@ static PyObject *sipDo_String_AddOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1437,7 +1437,7 @@ static PyObject *sipDo_String_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_reverse(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_reverse(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1489,7 +1489,7 @@ static PyObject *sipDo_String_reverse(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_substitute(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_substitute(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1549,7 +1549,7 @@ static PyObject *sipDo_String_substitute(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_has(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_has(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1589,7 +1589,7 @@ static PyObject *sipDo_String_has(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_hasSubstring(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_hasSubstring(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1646,7 +1646,7 @@ static PyObject *sipDo_String_hasSubstring(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_String_hasPrefix(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_hasPrefix(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1697,7 +1697,7 @@ static PyObject *sipDo_String_hasPrefix(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_hasSuffix(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_hasSuffix(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1748,7 +1748,7 @@ static PyObject *sipDo_String_hasSuffix(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1786,7 +1786,7 @@ static PyObject *sipDo_String_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_isAlpha(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_isAlpha(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1824,7 +1824,7 @@ static PyObject *sipDo_String_isAlpha(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_isAlnum(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_isAlnum(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1862,7 +1862,7 @@ static PyObject *sipDo_String_isAlnum(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_isDigit(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_isDigit(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1900,7 +1900,7 @@ static PyObject *sipDo_String_isDigit(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_isSpace(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_isSpace(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1938,7 +1938,7 @@ static PyObject *sipDo_String_isSpace(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_isWhitespace(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_isWhitespace(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1976,7 +1976,7 @@ static PyObject *sipDo_String_isWhitespace(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_String_compare(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_compare(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2188,7 +2188,7 @@ static PyObject *sipDo_String_compare(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2226,7 +2226,7 @@ static PyObject *sipDo_String_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_String_size(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_String_size(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2266,7 +2266,7 @@ static PyObject *sipDo_String_size(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_String(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_String(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 
@@ -2304,7 +2304,7 @@ static void sipDealloc_String(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__String(PyObject *a0)
+extern "C" PyObject * sip__str__String(PyObject *a0)
 {
 #line 239 "string.sip"
   const char *s;

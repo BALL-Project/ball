@@ -1,4 +1,4 @@
-// $Id: exception.sip,v 1.3 2001/07/29 17:31:16 oliver Exp $
+// $Id: exception.sip,v 1.4 2001/08/01 01:28:39 oliver Exp $
 
 class GeneralException 
 {
@@ -206,7 +206,7 @@ class FileNotFound
 %End
   public:
   FileNotFound(const char* /file/, int /line/, const String& /filename/);
-  const String& getFilename() const;
+  String getFilename() const;
 };
 
 class GlobalExceptionHandler

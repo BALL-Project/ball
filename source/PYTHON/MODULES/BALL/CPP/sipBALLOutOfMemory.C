@@ -35,7 +35,7 @@ static PyTypeObject sipType_OutOfMemory = {
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_OutOfMemory(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_OutOfMemory(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

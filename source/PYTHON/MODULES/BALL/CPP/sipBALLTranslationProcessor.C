@@ -67,7 +67,7 @@ Processor::Result sipTranslationProcessor::operator()(Atom& a0)
 		TranslationProcessor::operator()(a0);
 }
 
-static PyObject *sipDo_TranslationProcessor_setTranslation(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TranslationProcessor_setTranslation(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -115,7 +115,7 @@ static PyObject *sipDo_TranslationProcessor_setTranslation(PyObject *sipThisObj,
 	return NULL;
 }
 
-static PyObject *sipDo_TranslationProcessor_getTranslation(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TranslationProcessor_getTranslation(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -153,7 +153,7 @@ static PyObject *sipDo_TranslationProcessor_getTranslation(PyObject *sipThisObj,
 	return NULL;
 }
 
-static PyObject *sipDo_TranslationProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TranslationProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -203,7 +203,7 @@ static PyObject *sipDo_TranslationProcessor_CallOp(PyObject *sipThisObj,PyObject
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_TranslationProcessor(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_TranslationProcessor(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

@@ -1,4 +1,4 @@
-// $Id: HINFile.sip,v 1.1 2000/07/18 21:26:53 oliver Exp $
+// $Id: HINFile.sip,v 1.2 2001/08/01 01:28:38 oliver Exp $
 
 class HINFile
 	: File
@@ -10,12 +10,15 @@ class HINFile
   public:
   HINFile();
 	// default open mode is "IN"
-  HINFile(String&, File::OpenMode /openmode/ = File::IN);
+  HINFile(String&, File::OpenMode /openmode/ = File::IN)
+		throw(FileNotFound);
+	~HINFile()
+		throw();
 
   virtual void write(System&);
   virtual void read(System&);
-  // virtual HINFile& operator >> (System& system);
-  // virtual HINFile& operator << (const System& system);
+  virtual HINFile& operator >> (System& /system/);
+  virtual HINFile& operator << (System& /system/);
   bool hasPeriodicBoundary() const;
   Box3 getPeriodicBoundary() const;
   float getTemperature() const;

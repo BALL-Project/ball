@@ -1,4 +1,4 @@
-// $Id: timeStamp.sip,v 1.3 2001/07/25 11:32:37 oliver Exp $
+// $Id: timeStamp.sip,v 1.4 2001/08/01 01:28:39 oliver Exp $
 
 class PreciseTime
 {
@@ -21,7 +21,7 @@ class PreciseTime
  	// bool operator == (const PreciseTime& /time/) const throw();
   long getSeconds() const throw();
   long getMicroSeconds() const throw();
-  static const PreciseTime& now() throw();
+  static PreciseTime now() throw();
   //  void write(PersistenceManager& pm)const;
   //  bool read(PersistenceManager& pm);
 	PyMethods:
@@ -32,7 +32,7 @@ class PreciseTime
     return NULL;
 
 	char buf[128];
-	long secs = ptr->getSeconds();
+	time_t secs = ptr->getSeconds();
 	strftime(buf, 127, "\045Y\045m\045d\045H\045M\045S", localtime(&secs));
 	String time_str(buf);
 	time_str.append(".");
@@ -69,7 +69,7 @@ class TimeStamp
   if ((ptr = (TimeStamp*)sipGetCppPtr((sipThisType*)a0,sipClass_TimeStamp)) == NULL)
     return NULL;
 
-	long secs = ptr->getTime().getSeconds();
+	time_t secs = ptr->getTime().getSeconds();
 	char buf[128];
 	strftime(buf, 127, "\045Y\045m\045d\045H\045M\045S", localtime(&secs));
 	String time_str(buf);

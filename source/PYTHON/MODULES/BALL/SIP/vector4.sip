@@ -1,4 +1,4 @@
-// $Id: vector4.sip,v 1.1 2000/07/18 21:28:34 oliver Exp $
+// $Id: vector4.sip,v 1.2 2001/08/01 01:28:39 oliver Exp $
 
 class Vector4
 {
@@ -12,7 +12,8 @@ class Vector4
   // Vector4(float* /ptr/);
   Vector4(float /x/, float /y/, float /z/, float /h/ = 1);
   Vector4(const Vector4& /vector/);
-  ~Vector4();
+  ~Vector4() 
+		throw();
   // void set(float* /ptr/);
   void set(float /rx/, float /ry/, float /rz/, float /rh/ = 1);
   void set(const Vector4& /vector/);
@@ -32,20 +33,21 @@ class Vector4
   float operator [] (Index /index/) const;
   Vector4 operator + () const;
   Vector4 operator - () const;
-  // Vector4& operator += (const Vector4& vector);
-  // Vector4& operator -= (const Vector4& vector);
+  Vector4& operator += (const Vector4& /vector/);
+  Vector4& operator -= (const Vector4& /vector/);
   Vector4 operator * (float /scalar/);
-  // Vector4& operator *= (float /scalar/);
+  Vector4& operator *= (float /scalar/);
   Vector4 operator / (float /scalar/);
-  // Vector4& operator /= (float /scalar/);
+  Vector4& operator /= (float /scalar/);
   float operator * (const Vector4& /vector/) const;
   float getDistance(const Vector4& /vector/) const;
   float getSquareDistance(const Vector4& /vector/) const;
-  // bool operator == (const Vector4& /vector/) const;
+  bool operator == (const Vector4& /vector/) const;
   // bool operator != (const Vector4& /vector/) const;
   bool isOrthogonalTo(Vector4& /vector/) const;
   bool isValid() const;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;
+
   float x;
   float y;
   float z;

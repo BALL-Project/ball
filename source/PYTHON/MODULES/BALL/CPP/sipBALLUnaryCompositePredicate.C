@@ -105,7 +105,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_UnaryCompositePredicate_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_UnaryCompositePredicate_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -147,7 +147,7 @@ static PyObject *sipDo_UnaryCompositePredicate_CallOp(PyObject *sipThisObj,PyObj
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_UnaryCompositePredicate(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_UnaryCompositePredicate(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_UnaryCompositePredicate)
 		return ptr;

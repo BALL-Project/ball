@@ -163,7 +163,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_GeometricCenterProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_GeometricCenterProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -193,7 +193,7 @@ static PyObject *sipDo_GeometricCenterProcessor_start(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_GeometricCenterProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_GeometricCenterProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -223,7 +223,7 @@ static PyObject *sipDo_GeometricCenterProcessor_finish(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_GeometricCenterProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_GeometricCenterProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -263,7 +263,7 @@ static PyObject *sipDo_GeometricCenterProcessor_CallOp(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_GeometricCenterProcessor_getCenter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_GeometricCenterProcessor_getCenter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -303,7 +303,7 @@ static PyObject *sipDo_GeometricCenterProcessor_getCenter(PyObject *sipThisObj,P
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_GeometricCenterProcessor(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_GeometricCenterProcessor(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

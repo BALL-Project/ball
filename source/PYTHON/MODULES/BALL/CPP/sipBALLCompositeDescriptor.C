@@ -5,7 +5,7 @@
 PyObject *sipClass_CompositeDescriptor;
 
 static void sipDealloc_CompositeDescriptor(sipThisType *);
-static PyObject * sip__str__CompositeDescriptor(PyObject *a0);
+extern "C" PyObject * sip__str__CompositeDescriptor(PyObject *a0);
 
 static PyTypeObject sipType_CompositeDescriptor = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -199,7 +199,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_CompositeDescriptor_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CompositeDescriptor_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -229,7 +229,7 @@ static PyObject *sipDo_CompositeDescriptor_clear(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CompositeDescriptor_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -259,7 +259,7 @@ static PyObject *sipDo_CompositeDescriptor_destroy(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CompositeDescriptor_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -308,7 +308,7 @@ static PyObject *sipDo_CompositeDescriptor_set(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CompositeDescriptor_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -356,7 +356,7 @@ static PyObject *sipDo_CompositeDescriptor_swap(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_setName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CompositeDescriptor_setName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -407,7 +407,7 @@ static PyObject *sipDo_CompositeDescriptor_setName(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_getName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CompositeDescriptor_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -468,7 +468,7 @@ static PyObject *sipDo_CompositeDescriptor_getName(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -586,7 +586,7 @@ static PyObject *sipDo_CompositeDescriptor_setQuaternion(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_getQuaternion(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CompositeDescriptor_getQuaternion(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -647,7 +647,7 @@ static PyObject *sipDo_CompositeDescriptor_getQuaternion(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_getComposite(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CompositeDescriptor_getComposite(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -684,7 +684,7 @@ static PyObject *sipDo_CompositeDescriptor_getComposite(PyObject *sipThisObj,PyO
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_update(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CompositeDescriptor_update(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -722,7 +722,7 @@ static PyObject *sipDo_CompositeDescriptor_update(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_drawEntity(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CompositeDescriptor_drawEntity(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -762,7 +762,7 @@ static PyObject *sipDo_CompositeDescriptor_drawEntity(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_drawDirect(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CompositeDescriptor_drawDirect(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -803,7 +803,7 @@ static PyObject *sipDo_CompositeDescriptor_drawDirect(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_isShallowCopy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CompositeDescriptor_isShallowCopy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -841,7 +841,7 @@ static PyObject *sipDo_CompositeDescriptor_isShallowCopy(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_isDeepCopy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CompositeDescriptor_isDeepCopy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -879,7 +879,7 @@ static PyObject *sipDo_CompositeDescriptor_isDeepCopy(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_CompositeDescriptor_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CompositeDescriptor_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -911,7 +911,7 @@ static PyObject *sipDo_CompositeDescriptor_isValid(PyObject *sipThisObj,PyObject
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_CompositeDescriptor(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_CompositeDescriptor(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_CompositeDescriptor)
 		return ptr;
@@ -935,7 +935,7 @@ static void sipDealloc_CompositeDescriptor(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__CompositeDescriptor(PyObject *a0)
+extern "C" PyObject * sip__str__CompositeDescriptor(PyObject *a0)
 {
 #line 70 "compositeDescriptor.sip"
   CompositeDescriptor* ptr;

@@ -5,7 +5,7 @@
 PyObject *sipClass_TimeStamp;
 
 static void sipDealloc_TimeStamp(sipThisType *);
-static PyObject * sip__str__TimeStamp(PyObject *a0);
+extern "C" PyObject * sip__str__TimeStamp(PyObject *a0);
 
 static PyTypeObject sipType_TimeStamp = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -100,7 +100,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_TimeStamp_isNewerThan(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TimeStamp_isNewerThan(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -165,7 +165,7 @@ static PyObject *sipDo_TimeStamp_isNewerThan(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_TimeStamp_isOlderThan(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TimeStamp_isOlderThan(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -230,7 +230,7 @@ static PyObject *sipDo_TimeStamp_isOlderThan(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_TimeStamp_stamp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TimeStamp_stamp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -270,7 +270,7 @@ static PyObject *sipDo_TimeStamp_stamp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_TimeStamp_getTime(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TimeStamp_getTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -302,7 +302,7 @@ static PyObject *sipDo_TimeStamp_getTime(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_TimeStamp(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_TimeStamp(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_TimeStamp)
 		return ptr;
@@ -326,14 +326,14 @@ static void sipDealloc_TimeStamp(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__TimeStamp(PyObject *a0)
+extern "C" PyObject * sip__str__TimeStamp(PyObject *a0)
 {
 #line 68 "timeStamp.sip"
   TimeStamp* ptr;
   if ((ptr = (TimeStamp*)sipGetCppPtr((sipThisType*)a0,sipClass_TimeStamp)) == NULL)
     return NULL;
 
-	long secs = ptr->getTime().getSeconds();
+	time_t secs = ptr->getTime().getSeconds();
 	char buf[128];
 	strftime(buf, 127, "\045Y\045m\045d\045H\045M\045S", localtime(&secs));
 	String time_str(buf);

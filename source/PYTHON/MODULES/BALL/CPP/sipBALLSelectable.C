@@ -147,7 +147,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_Selectable_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Selectable_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -177,7 +177,7 @@ static PyObject *sipDo_Selectable_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Selectable_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Selectable_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -207,7 +207,7 @@ static PyObject *sipDo_Selectable_destroy(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Selectable_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Selectable_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -248,7 +248,7 @@ static PyObject *sipDo_Selectable_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Selectable_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Selectable_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -289,7 +289,7 @@ static PyObject *sipDo_Selectable_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Selectable_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Selectable_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -329,7 +329,7 @@ static PyObject *sipDo_Selectable_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Selectable_select(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Selectable_select(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -359,7 +359,7 @@ static PyObject *sipDo_Selectable_select(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Selectable_deselect(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Selectable_deselect(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -389,7 +389,7 @@ static PyObject *sipDo_Selectable_deselect(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Selectable_isSelected(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Selectable_isSelected(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -421,7 +421,7 @@ static PyObject *sipDo_Selectable_isSelected(PyObject *sipThisObj,PyObject *sipA
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Selectable(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Selectable(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Selectable)
 		return ptr;

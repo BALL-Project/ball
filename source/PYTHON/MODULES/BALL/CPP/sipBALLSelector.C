@@ -118,7 +118,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_Selector_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Selector_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -158,7 +158,7 @@ static PyObject *sipDo_Selector_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Selector_start(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Selector_start(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -188,7 +188,7 @@ static PyObject *sipDo_Selector_start(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Selector_getNumberOfSelectedAtoms(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Selector_getNumberOfSelectedAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -228,7 +228,7 @@ static PyObject *sipDo_Selector_getNumberOfSelectedAtoms(PyObject *sipThisObj,Py
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Selector(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Selector(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

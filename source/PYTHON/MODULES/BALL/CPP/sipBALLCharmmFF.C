@@ -73,7 +73,7 @@ bool sipCharmmFF::specificSetup()
 		CharmmFF::specificSetup();
 }
 
-static PyObject *sipDo_CharmmFF_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CharmmFF_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -111,7 +111,7 @@ static PyObject *sipDo_CharmmFF_specificSetup(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_CharmmFF_getStretchEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CharmmFF_getStretchEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -149,7 +149,7 @@ static PyObject *sipDo_CharmmFF_getStretchEnergy(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_CharmmFF_getBendEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CharmmFF_getBendEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -187,7 +187,7 @@ static PyObject *sipDo_CharmmFF_getBendEnergy(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_CharmmFF_getTorsionEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CharmmFF_getTorsionEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -225,7 +225,7 @@ static PyObject *sipDo_CharmmFF_getTorsionEnergy(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_CharmmFF_getImproperTorsionEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CharmmFF_getImproperTorsionEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -263,7 +263,7 @@ static PyObject *sipDo_CharmmFF_getImproperTorsionEnergy(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_CharmmFF_getProperTorsionEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CharmmFF_getProperTorsionEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -301,7 +301,7 @@ static PyObject *sipDo_CharmmFF_getProperTorsionEnergy(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_CharmmFF_getNonbondedEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CharmmFF_getNonbondedEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -339,7 +339,7 @@ static PyObject *sipDo_CharmmFF_getNonbondedEnergy(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_CharmmFF_getVdWEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CharmmFF_getVdWEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -377,7 +377,7 @@ static PyObject *sipDo_CharmmFF_getVdWEnergy(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_CharmmFF_getESEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CharmmFF_getESEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -415,7 +415,7 @@ static PyObject *sipDo_CharmmFF_getESEnergy(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_CharmmFF_getSolvationEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CharmmFF_getSolvationEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -453,7 +453,7 @@ static PyObject *sipDo_CharmmFF_getSolvationEnergy(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_CharmmFF_hasInitializedParameters(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CharmmFF_hasInitializedParameters(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -493,7 +493,7 @@ static PyObject *sipDo_CharmmFF_hasInitializedParameters(PyObject *sipThisObj,Py
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_CharmmFF(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_CharmmFF(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

@@ -33,7 +33,7 @@ static PyTypeObject sipType_Circle3 = {
 	0,
 };
 
-static PyObject *sipDo_Circle3_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Circle3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -81,7 +81,7 @@ static PyObject *sipDo_Circle3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Circle3_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Circle3_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -166,7 +166,7 @@ static PyObject *sipDo_Circle3_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Circle3_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Circle3_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -251,7 +251,55 @@ static PyObject *sipDo_Circle3_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Circle3_has(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Circle3_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Circle3)) == NULL)
+		return NULL;
+
+	{
+		const Circle3 * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Circle3,&a0obj))
+		{
+			bool res;
+			Circle3 *ptr;
+
+			if ((ptr = (Circle3 *)sipGetCppPtr(sipThis,sipClass_Circle3)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Circle3(a0obj,(Circle3 **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = ptr -> Circle3::operator==(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_Circle3,sipName_BALL_CmpOp);
+
+	return NULL;
+}
+
+extern "C" PyObject *sipDo_Circle3_has(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -300,7 +348,7 @@ static PyObject *sipDo_Circle3_has(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Circle3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Circle3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -340,7 +388,7 @@ static PyObject *sipDo_Circle3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Circle3(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Circle3(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Circle3)
 		return ptr;
@@ -470,6 +518,7 @@ PyMethodDef sipClassAttrTab_Circle3[] = {
 	{sipName_BALL_swap, sipDo_Circle3_swap, METH_VARARGS, NULL},
 	{sipName_BALL_set, sipDo_Circle3_set, METH_VARARGS, NULL},
 	{sipName_BALL_get, sipDo_Circle3_get, METH_VARARGS, NULL},
+	{sipName_BALL_CmpOp, sipDo_Circle3_CmpOp, METH_VARARGS, NULL},
 	{sipName_BALL_has, sipDo_Circle3_has, METH_VARARGS, NULL},
 	{sipName_BALL_isValid, sipDo_Circle3_isValid, METH_VARARGS, NULL},
 	{NULL}

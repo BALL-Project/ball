@@ -449,7 +449,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_PyWidget_countInstances(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PyWidget_countInstances(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -479,7 +479,7 @@ static PyObject *sipDo_PyWidget_countInstances(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_PyWidget_getInstance(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PyWidget_getInstance(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -554,7 +554,7 @@ static PyObject *sipDo_PyWidget_getInstance(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_PyWidget_startInterpreter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PyWidget_startInterpreter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -592,7 +592,7 @@ static PyObject *sipDo_PyWidget_startInterpreter(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_PyWidget_stopInterpreter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PyWidget_stopInterpreter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -630,7 +630,7 @@ static PyObject *sipDo_PyWidget_stopInterpreter(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_PyWidget_initializeWidget(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PyWidget_initializeWidget(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -678,7 +678,7 @@ static PyObject *sipDo_PyWidget_initializeWidget(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_PyWidget_finalizeWidget(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PyWidget_finalizeWidget(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -726,7 +726,7 @@ static PyObject *sipDo_PyWidget_finalizeWidget(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_PyWidget_cursorUp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PyWidget_cursorUp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -766,7 +766,7 @@ static PyObject *sipDo_PyWidget_cursorUp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_PyWidget_cursorDown(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PyWidget_cursorDown(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -806,7 +806,7 @@ static PyObject *sipDo_PyWidget_cursorDown(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_PyWidget_newLine(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PyWidget_newLine(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -844,7 +844,7 @@ static PyObject *sipDo_PyWidget_newLine(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_PyWidget_cursorLeft(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PyWidget_cursorLeft(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -885,7 +885,7 @@ static PyObject *sipDo_PyWidget_cursorLeft(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_PyWidget_backspace(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PyWidget_backspace(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -923,7 +923,7 @@ static PyObject *sipDo_PyWidget_backspace(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_PyWidget_cursorRight(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PyWidget_cursorRight(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -966,7 +966,7 @@ static PyObject *sipDo_PyWidget_cursorRight(PyObject *sipThisObj,PyObject *sipAr
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_PyWidget(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_PyWidget(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

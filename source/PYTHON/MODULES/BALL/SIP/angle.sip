@@ -1,4 +1,4 @@
-// $Id: angle.sip,v 1.4 2001/07/29 17:31:16 oliver Exp $
+// $Id: angle.sip,v 1.5 2001/08/01 01:28:38 oliver Exp $
 
 class Angle
 {
@@ -32,18 +32,18 @@ class Angle
   // static T toDegree(const T& radian);
   void normalize(Range /range/);
   void negate();
-  //Angle operator + () const;
-  // Angle operator - () const;
-  // Angle& operator += (const Angle& /angle/);
-  // Angle& operator += (float /val/);
+  Angle operator + () const;
+  Angle operator - () const;
+  Angle& operator += (const Angle& /angle/);
+  Angle& operator += (float /val/);
   Angle operator + (const Angle& /angle/);
-  // Angle& operator -= (const Angle& /angle/);
-  // Angle& operator -= (float /val/);
+  Angle& operator -= (const Angle& /angle/);
+  Angle& operator -= (float /val/);
   Angle operator - (const Angle& /angle/);
-  // Angle& operator *= (const Angle& /angle/);
-  // Angle& operator *= (float /val/);
-  // Angle& operator /= (const Angle& /angle/);
-  // Angle& operator /= (float /val/);
+  Angle& operator *= (const Angle& /angle/);
+  Angle& operator *= (float /val/);
+  Angle& operator /= (const Angle& /angle/);
+  Angle& operator /= (float /val/);
   Angle operator / (const Angle& /val/);
   bool operator == (const Angle& /angle/) const;
   // bool operator != (const Angle& /angle/) const;

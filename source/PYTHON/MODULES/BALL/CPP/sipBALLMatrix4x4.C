@@ -33,7 +33,7 @@ static PyTypeObject sipType_Matrix4x4 = {
 	0,
 };
 
-static PyObject *sipDo_Matrix4x4_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -188,7 +188,7 @@ static PyObject *sipDo_Matrix4x4_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -318,7 +318,7 @@ static PyObject *sipDo_Matrix4x4_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -366,7 +366,7 @@ static PyObject *sipDo_Matrix4x4_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_getTrace(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_getTrace(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -404,7 +404,7 @@ static PyObject *sipDo_Matrix4x4_getTrace(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_getZero(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_getZero(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -434,7 +434,7 @@ static PyObject *sipDo_Matrix4x4_getZero(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_getIdentity(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_getIdentity(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -464,7 +464,7 @@ static PyObject *sipDo_Matrix4x4_getIdentity(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_setIdentity(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_setIdentity(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -502,7 +502,7 @@ static PyObject *sipDo_Matrix4x4_setIdentity(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_transpose(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_transpose(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -540,7 +540,7 @@ static PyObject *sipDo_Matrix4x4_transpose(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_getRow(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_getRow(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -591,7 +591,7 @@ static PyObject *sipDo_Matrix4x4_getRow(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_getColumn(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_getColumn(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -642,7 +642,7 @@ static PyObject *sipDo_Matrix4x4_getColumn(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_setRow(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_setRow(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -696,7 +696,7 @@ static PyObject *sipDo_Matrix4x4_setRow(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_setColumn(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_setColumn(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -750,7 +750,7 @@ static PyObject *sipDo_Matrix4x4_setColumn(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_isEqual(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_isEqual(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -798,7 +798,7 @@ static PyObject *sipDo_Matrix4x4_isEqual(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_getDiagonal(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_getDiagonal(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -817,7 +817,7 @@ static PyObject *sipDo_Matrix4x4_getDiagonal(PyObject *sipThisObj,PyObject *sipA
 
    try
    {
-			res = &ptr -> Matrix4x4::getDiagonal();
+			res = new Vector4(ptr -> Matrix4x4::getDiagonal());
    }
    catch (...)
     {
@@ -825,7 +825,7 @@ static PyObject *sipDo_Matrix4x4_getDiagonal(PyObject *sipThisObj,PyObject *sipA
       return NULL;
 		}
 
-			return sipMapCppToSelf(res,sipClass_Vector4);
+			return sipNewCppToSelf(res,sipClass_Vector4,SIP_SIMPLE | SIP_PY_OWNED);
 		}
 	}
 
@@ -836,7 +836,7 @@ static PyObject *sipDo_Matrix4x4_getDiagonal(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -935,7 +935,7 @@ static PyObject *sipDo_Matrix4x4_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_GetItemOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_GetItemOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1022,7 +1022,7 @@ static PyObject *sipDo_Matrix4x4_GetItemOp(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_AddOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_AddOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1093,7 +1093,7 @@ static PyObject *sipDo_Matrix4x4_AddOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_SubOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_SubOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1164,7 +1164,103 @@ static PyObject *sipDo_Matrix4x4_SubOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_MultOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_IAddOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Matrix4x4)) == NULL)
+		return NULL;
+
+	{
+		const Matrix4x4 * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Matrix4x4,&a0obj))
+		{
+			Matrix4x4 *res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Matrix4x4(a0obj,(Matrix4x4 **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> Matrix4x4::operator+=(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			return sipMapCppToSelf(res,sipClass_Matrix4x4);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_Matrix4x4,sipName_BALL_IAddOp);
+
+	return NULL;
+}
+
+extern "C" PyObject *sipDo_Matrix4x4_ISubOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Matrix4x4)) == NULL)
+		return NULL;
+
+	{
+		const Matrix4x4 * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Matrix4x4,&a0obj))
+		{
+			Matrix4x4 *res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Matrix4x4(a0obj,(Matrix4x4 **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> Matrix4x4::operator-=(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			return sipMapCppToSelf(res,sipClass_Matrix4x4);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_Matrix4x4,sipName_BALL_ISubOp);
+
+	return NULL;
+}
+
+extern "C" PyObject *sipDo_Matrix4x4_MultOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1251,7 +1347,7 @@ static PyObject *sipDo_Matrix4x4_MultOp(PyObject *sipThisObj,PyObject *sipArgs)
 
    try
    {
-			res = &ptr -> Matrix4x4::operator*(* a0);
+			res = new Vector4(ptr -> Matrix4x4::operator*(* a0));
    }
    catch (...)
     {
@@ -1259,7 +1355,7 @@ static PyObject *sipDo_Matrix4x4_MultOp(PyObject *sipThisObj,PyObject *sipArgs)
       return NULL;
 		}
 
-			return sipMapCppToSelf(res,sipClass_Vector4);
+			return sipNewCppToSelf(res,sipClass_Vector4,SIP_SIMPLE | SIP_PY_OWNED);
 		}
 	}
 
@@ -1270,7 +1366,80 @@ static PyObject *sipDo_Matrix4x4_MultOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_DivOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_IMultOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Matrix4x4)) == NULL)
+		return NULL;
+
+	{
+		float a0;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"f",&a0))
+		{
+			Matrix4x4 *res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> Matrix4x4::operator*=( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			return sipMapCppToSelf(res,sipClass_Matrix4x4);
+		}
+	}
+
+	{
+		const Matrix4x4 * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Matrix4x4,&a0obj))
+		{
+			Matrix4x4 *res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Matrix4x4(a0obj,(Matrix4x4 **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> Matrix4x4::operator*=(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			return sipMapCppToSelf(res,sipClass_Matrix4x4);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_Matrix4x4,sipName_BALL_IMultOp);
+
+	return NULL;
+}
+
+extern "C" PyObject *sipDo_Matrix4x4_DivOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1310,7 +1479,47 @@ static PyObject *sipDo_Matrix4x4_DivOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_invert(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_IDivOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Matrix4x4)) == NULL)
+		return NULL;
+
+	{
+		float a0;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"f",&a0))
+		{
+			Matrix4x4 *res;
+			Matrix4x4 *ptr;
+
+			if ((ptr = (Matrix4x4 *)sipGetCppPtr(sipThis,sipClass_Matrix4x4)) == NULL)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> Matrix4x4::operator/=( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			return sipMapCppToSelf(res,sipClass_Matrix4x4);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_Matrix4x4,sipName_BALL_IDivOp);
+
+	return NULL;
+}
+
+extern "C" PyObject *sipDo_Matrix4x4_invert(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1381,7 +1590,7 @@ static PyObject *sipDo_Matrix4x4_invert(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_getDeterminant(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_getDeterminant(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1419,7 +1628,7 @@ static PyObject *sipDo_Matrix4x4_getDeterminant(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_translate(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_translate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1494,7 +1703,7 @@ static PyObject *sipDo_Matrix4x4_translate(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_setTranslation(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_setTranslation(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1569,7 +1778,7 @@ static PyObject *sipDo_Matrix4x4_setTranslation(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_scale(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_scale(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1669,7 +1878,7 @@ static PyObject *sipDo_Matrix4x4_scale(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_setScale(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_setScale(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1769,7 +1978,7 @@ static PyObject *sipDo_Matrix4x4_setScale(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_rotateX(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_rotateX(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1817,7 +2026,7 @@ static PyObject *sipDo_Matrix4x4_rotateX(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_setRotationX(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_setRotationX(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1865,7 +2074,7 @@ static PyObject *sipDo_Matrix4x4_setRotationX(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_rotateY(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_rotateY(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1913,7 +2122,7 @@ static PyObject *sipDo_Matrix4x4_rotateY(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_setRotationY(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_setRotationY(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1961,7 +2170,7 @@ static PyObject *sipDo_Matrix4x4_setRotationY(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_rotateZ(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_rotateZ(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2009,7 +2218,7 @@ static PyObject *sipDo_Matrix4x4_rotateZ(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_setRotationZ(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_setRotationZ(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2057,7 +2266,7 @@ static PyObject *sipDo_Matrix4x4_setRotationZ(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_rotate(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_rotate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2180,7 +2389,7 @@ static PyObject *sipDo_Matrix4x4_rotate(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_setRotation(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_setRotation(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2303,7 +2512,7 @@ static PyObject *sipDo_Matrix4x4_setRotation(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_isIdentity(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_isIdentity(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2341,7 +2550,7 @@ static PyObject *sipDo_Matrix4x4_isIdentity(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_isRegular(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_isRegular(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2379,7 +2588,7 @@ static PyObject *sipDo_Matrix4x4_isRegular(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_isSingular(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_isSingular(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2417,7 +2626,7 @@ static PyObject *sipDo_Matrix4x4_isSingular(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_isSymmetric(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_isSymmetric(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2455,7 +2664,7 @@ static PyObject *sipDo_Matrix4x4_isSymmetric(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_isLowerTriangular(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_isLowerTriangular(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2493,7 +2702,7 @@ static PyObject *sipDo_Matrix4x4_isLowerTriangular(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_isUpperTriangular(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_isUpperTriangular(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2531,7 +2740,7 @@ static PyObject *sipDo_Matrix4x4_isUpperTriangular(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_isDiagonal(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_isDiagonal(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2569,7 +2778,7 @@ static PyObject *sipDo_Matrix4x4_isDiagonal(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_Matrix4x4_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Matrix4x4_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2609,7 +2818,7 @@ static PyObject *sipDo_Matrix4x4_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Matrix4x4(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Matrix4x4(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Matrix4x4)
 		return ptr;
@@ -2773,7 +2982,7 @@ PyObject *sipNew_Matrix4x4(PyObject *sipSelf,PyObject *sipArgs)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m44(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m44(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -2804,7 +3013,7 @@ static PyObject *sipGetSetVar_Matrix4x4_m44(PyObject *sipThisObj,PyObject *valob
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m43(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m43(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -2835,7 +3044,7 @@ static PyObject *sipGetSetVar_Matrix4x4_m43(PyObject *sipThisObj,PyObject *valob
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m42(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m42(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -2866,7 +3075,7 @@ static PyObject *sipGetSetVar_Matrix4x4_m42(PyObject *sipThisObj,PyObject *valob
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m41(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m41(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -2897,7 +3106,7 @@ static PyObject *sipGetSetVar_Matrix4x4_m41(PyObject *sipThisObj,PyObject *valob
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m34(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m34(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -2928,7 +3137,7 @@ static PyObject *sipGetSetVar_Matrix4x4_m34(PyObject *sipThisObj,PyObject *valob
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m33(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m33(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -2959,7 +3168,7 @@ static PyObject *sipGetSetVar_Matrix4x4_m33(PyObject *sipThisObj,PyObject *valob
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m32(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m32(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -2990,7 +3199,7 @@ static PyObject *sipGetSetVar_Matrix4x4_m32(PyObject *sipThisObj,PyObject *valob
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m31(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m31(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -3021,7 +3230,7 @@ static PyObject *sipGetSetVar_Matrix4x4_m31(PyObject *sipThisObj,PyObject *valob
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m24(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m24(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -3052,7 +3261,7 @@ static PyObject *sipGetSetVar_Matrix4x4_m24(PyObject *sipThisObj,PyObject *valob
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m23(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m23(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -3083,7 +3292,7 @@ static PyObject *sipGetSetVar_Matrix4x4_m23(PyObject *sipThisObj,PyObject *valob
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m22(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m22(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -3114,7 +3323,7 @@ static PyObject *sipGetSetVar_Matrix4x4_m22(PyObject *sipThisObj,PyObject *valob
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m21(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m21(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -3145,7 +3354,7 @@ static PyObject *sipGetSetVar_Matrix4x4_m21(PyObject *sipThisObj,PyObject *valob
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m14(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m14(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -3176,7 +3385,7 @@ static PyObject *sipGetSetVar_Matrix4x4_m14(PyObject *sipThisObj,PyObject *valob
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m13(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m13(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -3207,7 +3416,7 @@ static PyObject *sipGetSetVar_Matrix4x4_m13(PyObject *sipThisObj,PyObject *valob
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m12(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m12(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -3238,7 +3447,7 @@ static PyObject *sipGetSetVar_Matrix4x4_m12(PyObject *sipThisObj,PyObject *valob
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Matrix4x4_m11(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Matrix4x4_m11(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Matrix4x4 *ptr;
@@ -3288,8 +3497,12 @@ PyMethodDef sipClassAttrTab_Matrix4x4[] = {
 	{sipName_BALL_GetItemOp, sipDo_Matrix4x4_GetItemOp, METH_VARARGS, NULL},
 	{sipName_BALL_AddOp, sipDo_Matrix4x4_AddOp, METH_VARARGS, NULL},
 	{sipName_BALL_SubOp, sipDo_Matrix4x4_SubOp, METH_VARARGS, NULL},
+	{sipName_BALL_IAddOp, sipDo_Matrix4x4_IAddOp, METH_VARARGS, NULL},
+	{sipName_BALL_ISubOp, sipDo_Matrix4x4_ISubOp, METH_VARARGS, NULL},
 	{sipName_BALL_MultOp, sipDo_Matrix4x4_MultOp, METH_VARARGS, NULL},
+	{sipName_BALL_IMultOp, sipDo_Matrix4x4_IMultOp, METH_VARARGS, NULL},
 	{sipName_BALL_DivOp, sipDo_Matrix4x4_DivOp, METH_VARARGS, NULL},
+	{sipName_BALL_IDivOp, sipDo_Matrix4x4_IDivOp, METH_VARARGS, NULL},
 	{sipName_BALL_invert, sipDo_Matrix4x4_invert, METH_VARARGS, NULL},
 	{sipName_BALL_getDeterminant, sipDo_Matrix4x4_getDeterminant, METH_VARARGS, NULL},
 	{sipName_BALL_translate, sipDo_Matrix4x4_translate, METH_VARARGS, NULL},

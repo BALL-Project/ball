@@ -40,7 +40,7 @@ sipMOL2File::sipMOL2File()
 }
 
 sipMOL2File::sipMOL2File(const String& a0,std__openmode a1)
-   : MOL2File(a0,a1)
+   throw(FileNotFound) : MOL2File(a0,a1)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
@@ -52,7 +52,7 @@ sipMOL2File::sipMOL2File(const MOL2File& a0)
 }
 
 sipMOL2File::~sipMOL2File()
-
+ throw()
 {
 	sipCommonDtor(sipPyThis);
 }
@@ -153,7 +153,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_MOL2File_write(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MOL2File_write(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -201,7 +201,7 @@ static PyObject *sipDo_MOL2File_write(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_MOL2File_read(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MOL2File_read(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -251,7 +251,7 @@ static PyObject *sipDo_MOL2File_read(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_MOL2File(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_MOL2File(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 
@@ -259,6 +259,9 @@ const void *sipCast_MOL2File(const void *ptr,PyObject *targetClass)
 		return ptr;
 
 	if ((res = sipCast_File((File *)(MOL2File *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_FileNotFound((FileNotFound *)(MOL2File *)ptr,targetClass)) != NULL)
 		return res;
 
 	return NULL;
@@ -333,9 +336,10 @@ PyObject *sipNew_MOL2File(PyObject *sipSelf,PyObject *sipArgs)
    {
 			sipNew = new sipMOL2File(* a0,* a1);
    }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
+   catch (FileNotFound e)
+   {
+      FileNotFound *my_exception = new FileNotFound(e);
+      PyErr_SetObject(sipClass_FileNotFound, sipNewCppToSelf(my_exception,sipClass_FileNotFound,SIP_SIMPLE | SIP_PY_OWNED));
       return NULL;
 		}
 

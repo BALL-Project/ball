@@ -87,7 +87,7 @@ Processor::Result sipChargeRuleProcessor::operator()(Atom& a0)
 		ChargeRuleProcessor::operator()(a0);
 }
 
-static PyObject *sipDo_ChargeRuleProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ChargeRuleProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -137,7 +137,7 @@ static PyObject *sipDo_ChargeRuleProcessor_CallOp(PyObject *sipThisObj,PyObject 
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_ChargeRuleProcessor(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_ChargeRuleProcessor(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

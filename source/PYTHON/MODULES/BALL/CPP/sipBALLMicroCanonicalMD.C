@@ -149,7 +149,7 @@ bool sipMicroCanonicalMD::setup(ForceField& a0,SnapShotManager * a1)
 		MicroCanonicalMD::setup(a0,a1);
 }
 
-static PyObject *sipDo_MicroCanonicalMD_setup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MicroCanonicalMD_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -239,7 +239,7 @@ static PyObject *sipDo_MicroCanonicalMD_setup(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_MicroCanonicalMD_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MicroCanonicalMD_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -277,7 +277,7 @@ static PyObject *sipDo_MicroCanonicalMD_specificSetup(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_MicroCanonicalMD_setTimeStep(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MicroCanonicalMD_setTimeStep(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -317,7 +317,7 @@ static PyObject *sipDo_MicroCanonicalMD_setTimeStep(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_MicroCanonicalMD_simulate(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MicroCanonicalMD_simulate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -357,7 +357,7 @@ static PyObject *sipDo_MicroCanonicalMD_simulate(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_MicroCanonicalMD_simulateIterations(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MicroCanonicalMD_simulateIterations(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -398,7 +398,7 @@ static PyObject *sipDo_MicroCanonicalMD_simulateIterations(PyObject *sipThisObj,
 	return NULL;
 }
 
-static PyObject *sipDo_MicroCanonicalMD_simulateTime(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MicroCanonicalMD_simulateTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -441,7 +441,7 @@ static PyObject *sipDo_MicroCanonicalMD_simulateTime(PyObject *sipThisObj,PyObje
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_MicroCanonicalMD(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_MicroCanonicalMD(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

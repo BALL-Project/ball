@@ -159,7 +159,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_RegularExpression_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RegularExpression_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -189,7 +189,7 @@ static PyObject *sipDo_RegularExpression_clear(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_RegularExpression_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RegularExpression_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -227,7 +227,7 @@ static PyObject *sipDo_RegularExpression_destroy(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_RegularExpression_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RegularExpression_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -313,7 +313,7 @@ static PyObject *sipDo_RegularExpression_set(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_RegularExpression_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RegularExpression_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -362,7 +362,7 @@ static PyObject *sipDo_RegularExpression_get(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_RegularExpression_getPattern(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RegularExpression_getPattern(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -400,7 +400,7 @@ static PyObject *sipDo_RegularExpression_getPattern(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_RegularExpression_countSubexpressions(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RegularExpression_countSubexpressions(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -438,7 +438,7 @@ static PyObject *sipDo_RegularExpression_countSubexpressions(PyObject *sipThisOb
 	return NULL;
 }
 
-static PyObject *sipDo_RegularExpression_match(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RegularExpression_match(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -562,7 +562,7 @@ static PyObject *sipDo_RegularExpression_match(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_RegularExpression_find(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RegularExpression_find(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -666,7 +666,7 @@ static PyObject *sipDo_RegularExpression_find(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_RegularExpression_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RegularExpression_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -704,7 +704,7 @@ static PyObject *sipDo_RegularExpression_isEmpty(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_RegularExpression_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RegularExpression_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -736,7 +736,7 @@ static PyObject *sipDo_RegularExpression_isValid(PyObject *sipThisObj,PyObject *
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_RegularExpression(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_RegularExpression(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_RegularExpression)
 		return ptr;

@@ -5,7 +5,7 @@
 PyObject *sipClass_SecondaryStructure;
 
 static void sipDealloc_SecondaryStructure(sipThisType *);
-static PyObject * sip__str__SecondaryStructure(PyObject *a0);
+extern "C" PyObject * sip__str__SecondaryStructure(PyObject *a0);
 
 static PyTypeObject sipType_SecondaryStructure = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -118,7 +118,7 @@ void sipSecondaryStructure::clear()
 		SecondaryStructure::clear();
 }
 
-static PyObject *sipDo_SecondaryStructure_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -148,7 +148,7 @@ static PyObject *sipDo_SecondaryStructure_clear(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -178,7 +178,7 @@ static PyObject *sipDo_SecondaryStructure_destroy(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -227,7 +227,7 @@ static PyObject *sipDo_SecondaryStructure_set(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -276,7 +276,7 @@ static PyObject *sipDo_SecondaryStructure_get(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -324,7 +324,7 @@ static PyObject *sipDo_SecondaryStructure_swap(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_getProtein(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_getProtein(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -385,7 +385,7 @@ static PyObject *sipDo_SecondaryStructure_getProtein(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_getChain(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -446,7 +446,7 @@ static PyObject *sipDo_SecondaryStructure_getChain(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_getResidue(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_getResidue(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -511,7 +511,7 @@ static PyObject *sipDo_SecondaryStructure_getResidue(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_getNTerminal(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_getNTerminal(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -572,7 +572,7 @@ static PyObject *sipDo_SecondaryStructure_getNTerminal(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_getCTerminal(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_getCTerminal(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -633,7 +633,7 @@ static PyObject *sipDo_SecondaryStructure_getCTerminal(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_getPDBAtom(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -698,7 +698,7 @@ static PyObject *sipDo_SecondaryStructure_getPDBAtom(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_countResidues(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_countResidues(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -736,7 +736,7 @@ static PyObject *sipDo_SecondaryStructure_countResidues(PyObject *sipThisObj,PyO
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_countPDBAtoms(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_countPDBAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -774,7 +774,7 @@ static PyObject *sipDo_SecondaryStructure_countPDBAtoms(PyObject *sipThisObj,PyO
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_prepend(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -822,7 +822,7 @@ static PyObject *sipDo_SecondaryStructure_prepend(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_append(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_append(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -870,7 +870,7 @@ static PyObject *sipDo_SecondaryStructure_append(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_insert(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_insert(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -918,7 +918,7 @@ static PyObject *sipDo_SecondaryStructure_insert(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_insertBefore(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_insertBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -969,7 +969,7 @@ static PyObject *sipDo_SecondaryStructure_insertBefore(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1020,7 +1020,7 @@ static PyObject *sipDo_SecondaryStructure_insertAfter(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_remove(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_remove(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1068,7 +1068,7 @@ static PyObject *sipDo_SecondaryStructure_remove(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1116,7 +1116,7 @@ static PyObject *sipDo_SecondaryStructure_spliceBefore(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1164,7 +1164,7 @@ static PyObject *sipDo_SecondaryStructure_spliceAfter(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_splice(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_splice(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1212,7 +1212,7 @@ static PyObject *sipDo_SecondaryStructure_splice(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_SecondaryStructure_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SecondaryStructure_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1244,7 +1244,7 @@ static PyObject *sipDo_SecondaryStructure_isValid(PyObject *sipThisObj,PyObject 
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_SecondaryStructure(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_SecondaryStructure(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 
@@ -1273,7 +1273,7 @@ static void sipDealloc_SecondaryStructure(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__SecondaryStructure(PyObject *a0)
+extern "C" PyObject * sip__str__SecondaryStructure(PyObject *a0)
 {
 #line 53 "secondaryStructure.sip"
   SecondaryStructure* ptr;

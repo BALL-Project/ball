@@ -1,4 +1,4 @@
-// $Id: MOL2File.sip,v 1.1 2000/07/18 21:26:55 oliver Exp $
+// $Id: MOL2File.sip,v 1.2 2001/08/01 01:28:38 oliver Exp $
 class MOL2File
   : File
 {
@@ -8,8 +8,10 @@ class MOL2File
 %End
   public:
   MOL2File();
-  MOL2File(const String&, File::OpenMode /openmode/ = File::IN);
-  // virtual ~MOL2File();
+  MOL2File(const String&, File::OpenMode /openmode/ = File::IN)
+		throw(FileNotFound);
+  ~MOL2File()
+		throw();
   virtual void write(const System&);
   virtual void read(System&);
 };

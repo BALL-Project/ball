@@ -5,7 +5,7 @@
 PyObject *sipClass_Box3;
 
 static void sipDealloc_Box3(sipThisType *);
-static PyObject * sip__str__Box3(PyObject *a0);
+extern "C" PyObject * sip__str__Box3(PyObject *a0);
 
 static PyTypeObject sipType_Box3 = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -34,7 +34,7 @@ static PyTypeObject sipType_Box3 = {
 	0,
 };
 
-static PyObject *sipDo_Box3_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Box3_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -148,7 +148,7 @@ static PyObject *sipDo_Box3_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Box3_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Box3_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -262,7 +262,7 @@ static PyObject *sipDo_Box3_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Box3_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Box3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -310,7 +310,7 @@ static PyObject *sipDo_Box3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Box3_getSurface(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Box3_getSurface(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -348,7 +348,7 @@ static PyObject *sipDo_Box3_getSurface(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Box3_getVolume(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Box3_getVolume(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -386,7 +386,7 @@ static PyObject *sipDo_Box3_getVolume(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Box3_getWidth(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Box3_getWidth(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -424,7 +424,7 @@ static PyObject *sipDo_Box3_getWidth(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Box3_getHeight(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Box3_getHeight(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -462,7 +462,7 @@ static PyObject *sipDo_Box3_getHeight(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Box3_getDepth(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Box3_getDepth(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -500,7 +500,7 @@ static PyObject *sipDo_Box3_getDepth(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Box3_join(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Box3_join(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -548,7 +548,55 @@ static PyObject *sipDo_Box3_join(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Box3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Box3_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Box3)) == NULL)
+		return NULL;
+
+	{
+		const Box3 * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Box3,&a0obj))
+		{
+			bool res;
+			Box3 *ptr;
+
+			if ((ptr = (Box3 *)sipGetCppPtr(sipThis,sipClass_Box3)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Box3(a0obj,(Box3 **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = ptr -> Box3::operator==(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_Box3,sipName_BALL_CmpOp);
+
+	return NULL;
+}
+
+extern "C" PyObject *sipDo_Box3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -588,7 +636,7 @@ static PyObject *sipDo_Box3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Box3(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Box3(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Box3)
 		return ptr;
@@ -606,7 +654,7 @@ static void sipDealloc_Box3(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__Box3(PyObject *a0)
+extern "C" PyObject * sip__str__Box3(PyObject *a0)
 {
 #line 42 "box3.sip"
   	Box3* ptr;
@@ -622,7 +670,7 @@ static PyObject * sip__str__Box3(PyObject *a0)
    tmp += String(ptr->b.y) + " ";
    tmp += String(ptr->b.z) + ") }";
    return PyString_FromString(tmp.c_str());
-#line 630 "sipBALLBox3.cpp"
+#line 678 "sipBALLBox3.cpp"
 }
 
 PyObject *sipNew_Box3(PyObject *sipSelf,PyObject *sipArgs)
@@ -754,7 +802,7 @@ PyObject *sipNew_Box3(PyObject *sipSelf,PyObject *sipArgs)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Box3_b(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Box3_b(PyObject *sipThisObj,PyObject *valobj)
 {
 	int iserr = 0;
 	Vector3 *val;
@@ -786,7 +834,7 @@ static PyObject *sipGetSetVar_Box3_b(PyObject *sipThisObj,PyObject *valobj)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Box3_a(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Box3_a(PyObject *sipThisObj,PyObject *valobj)
 {
 	int iserr = 0;
 	Vector3 *val;
@@ -828,6 +876,7 @@ PyMethodDef sipClassAttrTab_Box3[] = {
 	{sipName_BALL_getHeight, sipDo_Box3_getHeight, METH_VARARGS, NULL},
 	{sipName_BALL_getDepth, sipDo_Box3_getDepth, METH_VARARGS, NULL},
 	{sipName_BALL_join, sipDo_Box3_join, METH_VARARGS, NULL},
+	{sipName_BALL_CmpOp, sipDo_Box3_CmpOp, METH_VARARGS, NULL},
 	{sipName_BALL_isValid, sipDo_Box3_isValid, METH_VARARGS, NULL},
 	{NULL}
 };

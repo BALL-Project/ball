@@ -5,7 +5,7 @@
 PyObject *sipClass_PDBAtom;
 
 static void sipDealloc_PDBAtom(sipThisType *);
-static PyObject * sip__str__PDBAtom(PyObject *a0);
+extern "C" PyObject * sip__str__PDBAtom(PyObject *a0);
 
 static PyTypeObject sipType_PDBAtom = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -118,7 +118,7 @@ void sipPDBAtom::clear()
 		PDBAtom::clear();
 }
 
-static PyObject *sipDo_PDBAtom_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -148,7 +148,7 @@ static PyObject *sipDo_PDBAtom_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -178,7 +178,7 @@ static PyObject *sipDo_PDBAtom_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -227,7 +227,7 @@ static PyObject *sipDo_PDBAtom_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -276,7 +276,7 @@ static PyObject *sipDo_PDBAtom_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -324,7 +324,7 @@ static PyObject *sipDo_PDBAtom_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_getProtein(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_getProtein(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -385,7 +385,7 @@ static PyObject *sipDo_PDBAtom_getProtein(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_getChain(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -446,7 +446,7 @@ static PyObject *sipDo_PDBAtom_getChain(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_getResidue(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_getResidue(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -507,7 +507,7 @@ static PyObject *sipDo_PDBAtom_getResidue(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_setBranchDesignator(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_setBranchDesignator(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -547,7 +547,7 @@ static PyObject *sipDo_PDBAtom_setBranchDesignator(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_getBranchDesignator(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_getBranchDesignator(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -585,7 +585,7 @@ static PyObject *sipDo_PDBAtom_getBranchDesignator(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_setRemotenessIndicator(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_setRemotenessIndicator(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -625,7 +625,7 @@ static PyObject *sipDo_PDBAtom_setRemotenessIndicator(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_getRemotenessIndicator(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_getRemotenessIndicator(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -663,7 +663,7 @@ static PyObject *sipDo_PDBAtom_getRemotenessIndicator(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_setAlternateLocationIndicator(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_setAlternateLocationIndicator(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -703,7 +703,7 @@ static PyObject *sipDo_PDBAtom_setAlternateLocationIndicator(PyObject *sipThisOb
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_getAlternateLocationIndicator(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_getAlternateLocationIndicator(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -741,7 +741,7 @@ static PyObject *sipDo_PDBAtom_getAlternateLocationIndicator(PyObject *sipThisOb
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_setOccupancy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_setOccupancy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -781,7 +781,7 @@ static PyObject *sipDo_PDBAtom_setOccupancy(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_getOccupancy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_getOccupancy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -819,7 +819,7 @@ static PyObject *sipDo_PDBAtom_getOccupancy(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_setTemperatureFactor(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_setTemperatureFactor(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -859,7 +859,7 @@ static PyObject *sipDo_PDBAtom_setTemperatureFactor(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_getTemperatureFactor(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_getTemperatureFactor(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -897,7 +897,7 @@ static PyObject *sipDo_PDBAtom_getTemperatureFactor(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_PDBAtom_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBAtom_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -929,7 +929,7 @@ static PyObject *sipDo_PDBAtom_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_PDBAtom(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_PDBAtom(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 
@@ -958,7 +958,7 @@ static void sipDealloc_PDBAtom(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__PDBAtom(PyObject *a0)
+extern "C" PyObject * sip__str__PDBAtom(PyObject *a0)
 {
 #line 60 "PDBAtom.sip"
   PDBAtom* ptr;

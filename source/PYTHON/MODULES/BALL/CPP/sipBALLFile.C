@@ -33,7 +33,7 @@ static PyTypeObject sipType_File = {
 	0,
 };
 
-static PyObject *sipDo_File_open(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_open(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -85,7 +85,7 @@ static PyObject *sipDo_File_open(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_reopen(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_reopen(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -123,7 +123,7 @@ static PyObject *sipDo_File_reopen(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_close(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_close(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -161,7 +161,7 @@ static PyObject *sipDo_File_close(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_getName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -199,7 +199,7 @@ static PyObject *sipDo_File_getName(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_getSize(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_getSize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -237,7 +237,7 @@ static PyObject *sipDo_File_getSize(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_getOpenMode(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_getOpenMode(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -275,7 +275,7 @@ static PyObject *sipDo_File_getOpenMode(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_copyTo(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_copyTo(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -326,7 +326,7 @@ static PyObject *sipDo_File_copyTo(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -377,7 +377,7 @@ static PyObject *sipDo_File_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_remove(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_remove(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -415,7 +415,7 @@ static PyObject *sipDo_File_remove(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_renameTo(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_renameTo(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -466,7 +466,7 @@ static PyObject *sipDo_File_renameTo(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_truncate(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_truncate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -506,7 +506,7 @@ static PyObject *sipDo_File_truncate(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_isOpen(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_isOpen(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -544,7 +544,7 @@ static PyObject *sipDo_File_isOpen(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_isClosed(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_isClosed(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -582,7 +582,7 @@ static PyObject *sipDo_File_isClosed(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_isAccessible(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_isAccessible(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -620,7 +620,7 @@ static PyObject *sipDo_File_isAccessible(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_isCanonized(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_isCanonized(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -658,7 +658,7 @@ static PyObject *sipDo_File_isCanonized(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_isReadable(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_isReadable(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -696,7 +696,7 @@ static PyObject *sipDo_File_isReadable(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_isWritable(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_isWritable(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -734,7 +734,7 @@ static PyObject *sipDo_File_isWritable(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_isExecutable(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_isExecutable(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -772,7 +772,7 @@ static PyObject *sipDo_File_isExecutable(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_File_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_File_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -812,7 +812,7 @@ static PyObject *sipDo_File_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_File(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_File(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_File)
 		return ptr;

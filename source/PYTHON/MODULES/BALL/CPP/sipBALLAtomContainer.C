@@ -5,7 +5,7 @@
 PyObject *sipClass_AtomContainer;
 
 static void sipDealloc_AtomContainer(sipThisType *);
-static PyObject * sip__str__AtomContainer(PyObject *a0);
+extern "C" PyObject * sip__str__AtomContainer(PyObject *a0);
 
 static PyTypeObject sipType_AtomContainer = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -118,7 +118,7 @@ void sipAtomContainer::clear()
 		AtomContainer::clear();
 }
 
-static PyObject *sipDo_AtomContainer_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -148,7 +148,7 @@ static PyObject *sipDo_AtomContainer_clear(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -178,7 +178,7 @@ static PyObject *sipDo_AtomContainer_destroy(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -227,7 +227,7 @@ static PyObject *sipDo_AtomContainer_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -276,7 +276,7 @@ static PyObject *sipDo_AtomContainer_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -324,7 +324,7 @@ static PyObject *sipDo_AtomContainer_swap(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_setName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_setName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -375,7 +375,7 @@ static PyObject *sipDo_AtomContainer_setName(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_getName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -413,7 +413,7 @@ static PyObject *sipDo_AtomContainer_getName(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_getSuperAtomContainer(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_getSuperAtomContainer(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -474,7 +474,7 @@ static PyObject *sipDo_AtomContainer_getSuperAtomContainer(PyObject *sipThisObj,
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_getAtomContainer(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_getAtomContainer(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -561,7 +561,7 @@ static PyObject *sipDo_AtomContainer_getAtomContainer(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_getAtom(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_getAtom(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -720,7 +720,7 @@ static PyObject *sipDo_AtomContainer_getAtom(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_countAtomContainers(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_countAtomContainers(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -758,7 +758,7 @@ static PyObject *sipDo_AtomContainer_countAtomContainers(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_countAtoms(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_countAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -796,7 +796,7 @@ static PyObject *sipDo_AtomContainer_countAtoms(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_countBonds(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_countBonds(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -834,7 +834,7 @@ static PyObject *sipDo_AtomContainer_countBonds(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_countInterBonds(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_countInterBonds(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -872,7 +872,7 @@ static PyObject *sipDo_AtomContainer_countInterBonds(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_countIntraBonds(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_countIntraBonds(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -910,7 +910,7 @@ static PyObject *sipDo_AtomContainer_countIntraBonds(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_prepend(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -991,7 +991,7 @@ static PyObject *sipDo_AtomContainer_prepend(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_append(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_append(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1072,7 +1072,7 @@ static PyObject *sipDo_AtomContainer_append(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_insert(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_insert(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1153,7 +1153,7 @@ static PyObject *sipDo_AtomContainer_insert(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_insertBefore(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_insertBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1240,7 +1240,7 @@ static PyObject *sipDo_AtomContainer_insertBefore(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1327,7 +1327,7 @@ static PyObject *sipDo_AtomContainer_insertAfter(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_remove(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_remove(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1408,7 +1408,7 @@ static PyObject *sipDo_AtomContainer_remove(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1456,7 +1456,7 @@ static PyObject *sipDo_AtomContainer_spliceBefore(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1504,7 +1504,7 @@ static PyObject *sipDo_AtomContainer_spliceAfter(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_splice(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_splice(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1552,7 +1552,7 @@ static PyObject *sipDo_AtomContainer_splice(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_destroyBonds(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_destroyBonds(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1590,7 +1590,7 @@ static PyObject *sipDo_AtomContainer_destroyBonds(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_isSubAtomContainerOf(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_isSubAtomContainerOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1638,7 +1638,7 @@ static PyObject *sipDo_AtomContainer_isSubAtomContainerOf(PyObject *sipThisObj,P
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_isSuperAtomContainerOf(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_isSuperAtomContainerOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1686,7 +1686,7 @@ static PyObject *sipDo_AtomContainer_isSuperAtomContainerOf(PyObject *sipThisObj
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1716,7 +1716,7 @@ static PyObject *sipDo_AtomContainer_isValid(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_AtomContainer_apply(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomContainer_apply(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1865,7 +1865,7 @@ static PyObject *sipDo_AtomContainer_apply(PyObject *sipThisObj,PyObject *sipArg
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_AtomContainer(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_AtomContainer(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 
@@ -1897,7 +1897,7 @@ static void sipDealloc_AtomContainer(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__AtomContainer(PyObject *a0)
+extern "C" PyObject * sip__str__AtomContainer(PyObject *a0)
 {
 #line 77 "atomContainer.sip"
   AtomContainer* ptr;

@@ -5,7 +5,7 @@
 PyObject *sipClass_Fragment;
 
 static void sipDealloc_Fragment(sipThisType *);
-static PyObject * sip__str__Fragment(PyObject *a0);
+extern "C" PyObject * sip__str__Fragment(PyObject *a0);
 
 static PyTypeObject sipType_Fragment = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -120,7 +120,7 @@ void sipFragment::clear()
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Fragment(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Fragment(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 
@@ -149,7 +149,7 @@ static void sipDealloc_Fragment(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__Fragment(PyObject *a0)
+extern "C" PyObject * sip__str__Fragment(PyObject *a0)
 {
 #line 29 "fragment.sip"
   Fragment* ptr;

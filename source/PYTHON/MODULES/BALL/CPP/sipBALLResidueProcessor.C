@@ -105,7 +105,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_ResidueProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResidueProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -143,7 +143,7 @@ static PyObject *sipDo_ResidueProcessor_start(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_ResidueProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResidueProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -181,7 +181,7 @@ static PyObject *sipDo_ResidueProcessor_finish(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_ResidueProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ResidueProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -231,7 +231,7 @@ static PyObject *sipDo_ResidueProcessor_CallOp(PyObject *sipThisObj,PyObject *si
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_ResidueProcessor(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_ResidueProcessor(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_ResidueProcessor)
 		return ptr;

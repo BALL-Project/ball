@@ -1,33 +1,29 @@
-// dummy class to emulate nested classes
-class GridIndex3D 
+// $Id: regularData3D.sip,v 1.4 2001/08/01 01:28:39 oliver Exp $
+class RegularData3D 
 {
 %HeaderCode
 	#include <BALL/DATATYPE/regularData3D.h>
-	using namespace BALL;
-	typedef BALL::RegularData3D<float>::GridIndex GridIndex3D;
-%End
-	public:
-  Position x;
-  Position y;
-  Position z;
-};
-
-class FloatRegularData3D 
-{
-%HeaderCode
-	#include <BALL/DATATYPE/regularData3D.h>
-	#include <BALL/COMMON/exception.h>
-	#include "sipBALLOutOfMemory.h"
-	#include "sipBALLOutOfGrid.h"
 	using namespace BALL;
 	using namespace BALL::Exception;
-	typedef BALL::RegularData3D<float> FloatRegularData3D;
 %End
+	class GridIndex
+	{
+%HeaderCode
+	#include <BALL/DATATYPE/regularData3D.h>
+	using namespace BALL;
+	using namespace BALL::Exception;
+%End
+		public:
+		Position x;
+		Position y;
+		Position z;
+	};
+
 	public:
-	FloatRegularData3D() throw(); 
-	FloatRegularData3D(const FloatRegularData3D& /grid/)
+	RegularData3D() throw(); 
+	RegularData3D(const RegularData3D& /grid/)
 		throw(OutOfMemory); 
-	FloatRegularData3D
+	RegularData3D
 		(float /lower_x/, 
 		 float /lower_y/, 
 		 float /lower_z/,
@@ -38,20 +34,20 @@ class FloatRegularData3D
 		 Size /grid_points_y/, 
 		 Size /grid_points_z/)
 		throw(OutOfMemory);
-	FloatRegularData3D
+	RegularData3D
 		(Vector3& /lower/, 
 		 Vector3& /upper/,
 		 Size /grid_points_x/, 
 		 Size /grid_points_y/, 
 		 Size /grid_points_z/)
 		throw(OutOfMemory);
-	FloatRegularData3D(const Vector3& /lower/, const Vector3& /upper/,
+	RegularData3D(const Vector3& /lower/, const Vector3& /upper/,
 			float /spacing/)
 		throw(OutOfMemory);
-	~FloatRegularData3D() throw();
+	~RegularData3D() throw();
 	virtual void clear() throw();
-	void set(const FloatRegularData3D& /grid/) throw(OutOfMemory);
-	// const FloatRegularData3D& operator = (const FloatRegularData3D& /grid/) throw(OutOfMemory);
+	void set(const RegularData3D& /grid/) throw(OutOfMemory);
+	// const RegularData3D& operator = (const RegularData3D& /grid/) throw(OutOfMemory);
 	// virtual void dump(std::ostream& /stream/) const throw(); 
 	bool isValid() const throw();
 	float getMaxX() const throw();
@@ -67,8 +63,8 @@ class FloatRegularData3D
 	float getXSpacing() const throw();
 	float getYSpacing() const throw();
 	float getZSpacing() const throw();
-	GridIndex3D getIndex(const Vector3&) const throw(OutOfGrid);
-	GridIndex3D getIndex(float, float, float) const
+	GridIndex getIndex(const Vector3&) const throw(OutOfGrid);
+	GridIndex getIndex(float, float, float) const
 		throw(OutOfGrid);
 	// float* getData(const Position /i/, const Position /j/, const Position /k/)
 	//	throw(OutOfGrid);
@@ -103,6 +99,6 @@ class FloatRegularData3D
 	// bool has(const float& /x/, const float& /y/, const float& /z/) const throw();
 	float getInterpolatedValue(const Vector3& /vector/) const 
 		throw(OutOfGrid);
-	bool operator == (const FloatRegularData3D& /grid/) const throw();
-	// bool operator != (const FloatRegularData3D& grid) const throw();
+	bool operator == (const RegularData3D& /grid/) const throw();
+	// bool operator != (const RegularData3D& grid) const throw();
 };

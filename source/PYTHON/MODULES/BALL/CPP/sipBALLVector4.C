@@ -33,7 +33,7 @@ static PyTypeObject sipType_Vector4 = {
 	0,
 };
 
-static PyObject *sipDo_Vector4_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -134,7 +134,7 @@ static PyObject *sipDo_Vector4_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -210,7 +210,7 @@ static PyObject *sipDo_Vector4_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -258,7 +258,7 @@ static PyObject *sipDo_Vector4_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_getLength(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_getLength(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -296,7 +296,7 @@ static PyObject *sipDo_Vector4_getLength(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_getSquareLength(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_getSquareLength(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -334,7 +334,7 @@ static PyObject *sipDo_Vector4_getSquareLength(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_normalize(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -372,7 +372,7 @@ static PyObject *sipDo_Vector4_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_getZero(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_getZero(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -402,7 +402,7 @@ static PyObject *sipDo_Vector4_getZero(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_getUnit(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_getUnit(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -432,7 +432,7 @@ static PyObject *sipDo_Vector4_getUnit(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_GetItemOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_GetItemOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -519,7 +519,7 @@ static PyObject *sipDo_Vector4_GetItemOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_AddOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_AddOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -557,7 +557,7 @@ static PyObject *sipDo_Vector4_AddOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_SubOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_SubOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -595,7 +595,103 @@ static PyObject *sipDo_Vector4_SubOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_MultOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_IAddOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Vector4)) == NULL)
+		return NULL;
+
+	{
+		const Vector4 * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector4,&a0obj))
+		{
+			Vector4 *res;
+			Vector4 *ptr;
+
+			if ((ptr = (Vector4 *)sipGetCppPtr(sipThis,sipClass_Vector4)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Vector4(a0obj,(Vector4 **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> Vector4::operator+=(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			return sipMapCppToSelf(res,sipClass_Vector4);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_Vector4,sipName_BALL_IAddOp);
+
+	return NULL;
+}
+
+extern "C" PyObject *sipDo_Vector4_ISubOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Vector4)) == NULL)
+		return NULL;
+
+	{
+		const Vector4 * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector4,&a0obj))
+		{
+			Vector4 *res;
+			Vector4 *ptr;
+
+			if ((ptr = (Vector4 *)sipGetCppPtr(sipThis,sipClass_Vector4)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Vector4(a0obj,(Vector4 **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> Vector4::operator-=(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			return sipMapCppToSelf(res,sipClass_Vector4);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_Vector4,sipName_BALL_ISubOp);
+
+	return NULL;
+}
+
+extern "C" PyObject *sipDo_Vector4_MultOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -668,7 +764,47 @@ static PyObject *sipDo_Vector4_MultOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_DivOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_IMultOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Vector4)) == NULL)
+		return NULL;
+
+	{
+		float a0;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"f",&a0))
+		{
+			Vector4 *res;
+			Vector4 *ptr;
+
+			if ((ptr = (Vector4 *)sipGetCppPtr(sipThis,sipClass_Vector4)) == NULL)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> Vector4::operator*=( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			return sipMapCppToSelf(res,sipClass_Vector4);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_Vector4,sipName_BALL_IMultOp);
+
+	return NULL;
+}
+
+extern "C" PyObject *sipDo_Vector4_DivOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -708,7 +844,47 @@ static PyObject *sipDo_Vector4_DivOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_getDistance(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_IDivOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Vector4)) == NULL)
+		return NULL;
+
+	{
+		float a0;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"f",&a0))
+		{
+			Vector4 *res;
+			Vector4 *ptr;
+
+			if ((ptr = (Vector4 *)sipGetCppPtr(sipThis,sipClass_Vector4)) == NULL)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> Vector4::operator/=( a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			return sipMapCppToSelf(res,sipClass_Vector4);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_Vector4,sipName_BALL_IDivOp);
+
+	return NULL;
+}
+
+extern "C" PyObject *sipDo_Vector4_getDistance(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -756,7 +932,7 @@ static PyObject *sipDo_Vector4_getDistance(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_getSquareDistance(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_getSquareDistance(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -804,7 +980,55 @@ static PyObject *sipDo_Vector4_getSquareDistance(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_isOrthogonalTo(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Vector4)) == NULL)
+		return NULL;
+
+	{
+		const Vector4 * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Vector4,&a0obj))
+		{
+			bool res;
+			Vector4 *ptr;
+
+			if ((ptr = (Vector4 *)sipGetCppPtr(sipThis,sipClass_Vector4)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Vector4(a0obj,(Vector4 **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = ptr -> Vector4::operator==(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			return sipConvertFromBool((int)res);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_Vector4,sipName_BALL_CmpOp);
+
+	return NULL;
+}
+
+extern "C" PyObject *sipDo_Vector4_isOrthogonalTo(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -852,7 +1076,7 @@ static PyObject *sipDo_Vector4_isOrthogonalTo(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Vector4_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector4_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -892,7 +1116,7 @@ static PyObject *sipDo_Vector4_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Vector4(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Vector4(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Vector4)
 		return ptr;
@@ -1009,7 +1233,7 @@ PyObject *sipNew_Vector4(PyObject *sipSelf,PyObject *sipArgs)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Vector4_h(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Vector4_h(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Vector4 *ptr;
@@ -1040,7 +1264,7 @@ static PyObject *sipGetSetVar_Vector4_h(PyObject *sipThisObj,PyObject *valobj)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Vector4_z(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Vector4_z(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Vector4 *ptr;
@@ -1071,7 +1295,7 @@ static PyObject *sipGetSetVar_Vector4_z(PyObject *sipThisObj,PyObject *valobj)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Vector4_y(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Vector4_y(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Vector4 *ptr;
@@ -1102,7 +1326,7 @@ static PyObject *sipGetSetVar_Vector4_y(PyObject *sipThisObj,PyObject *valobj)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Vector4_x(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Vector4_x(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Vector4 *ptr;
@@ -1145,10 +1369,15 @@ PyMethodDef sipClassAttrTab_Vector4[] = {
 	{sipName_BALL_GetItemOp, sipDo_Vector4_GetItemOp, METH_VARARGS, NULL},
 	{sipName_BALL_AddOp, sipDo_Vector4_AddOp, METH_VARARGS, NULL},
 	{sipName_BALL_SubOp, sipDo_Vector4_SubOp, METH_VARARGS, NULL},
+	{sipName_BALL_IAddOp, sipDo_Vector4_IAddOp, METH_VARARGS, NULL},
+	{sipName_BALL_ISubOp, sipDo_Vector4_ISubOp, METH_VARARGS, NULL},
 	{sipName_BALL_MultOp, sipDo_Vector4_MultOp, METH_VARARGS, NULL},
+	{sipName_BALL_IMultOp, sipDo_Vector4_IMultOp, METH_VARARGS, NULL},
 	{sipName_BALL_DivOp, sipDo_Vector4_DivOp, METH_VARARGS, NULL},
+	{sipName_BALL_IDivOp, sipDo_Vector4_IDivOp, METH_VARARGS, NULL},
 	{sipName_BALL_getDistance, sipDo_Vector4_getDistance, METH_VARARGS, NULL},
 	{sipName_BALL_getSquareDistance, sipDo_Vector4_getSquareDistance, METH_VARARGS, NULL},
+	{sipName_BALL_CmpOp, sipDo_Vector4_CmpOp, METH_VARARGS, NULL},
 	{sipName_BALL_isOrthogonalTo, sipDo_Vector4_isOrthogonalTo, METH_VARARGS, NULL},
 	{sipName_BALL_isValid, sipDo_Vector4_isValid, METH_VARARGS, NULL},
 	{NULL}

@@ -1,13 +1,13 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.13 2001/07/29 17:30:53 oliver Exp $
+# $Id: Makefile,v 1.14 2001/08/01 01:28:10 oliver Exp $
 #
-
 all: libBALLc.so
 
 SIP_SOURCES_COMMON=\
 	sipBALLIndex.C\
+	sipBALLConstant.C\
 	sipBALLPosition.C\
 	sipBALLVersionInfo.C\
 	sipBALLGlobalExceptionHandler.C\
@@ -47,11 +47,11 @@ SIP_SOURCES_CONCEPT=\
 	sipBALLUnaryCompositePredicate.C
 
 SIP_SOURCES_DATATYPE=\
-	sipBALLGridIndex2D.C\
-	sipBALLGridIndex3D.C\
-	sipBALLFloatRegularData1D.C\
-	sipBALLFloatRegularData2D.C\
-	sipBALLFloatRegularData3D.C\
+	sipBALLRegularData1D.C\
+	sipBALLRegularData2D.C\
+	sipBALLRegularData3D.C\
+	sipBALLRegularData2DGridIndex.C\
+	sipBALLRegularData3DGridIndex.C\
 	sipBALLOptions.C\
 	sipBALLRegularExpression.C\
 	sipBALLString.C\
@@ -218,10 +218,10 @@ SIP_SOURCES=\
 PYBALL_SOURCES=\
 	extractors.C\
 	pyBALLSipHelper.C\
+	pyConstant.C\
 	pyAtomList.C\
 	pyAtomContainerList.C\
 	pyBondList.C\
-	pyConstant.C\
 	pyFragmentList.C\
 	pyMoleculeList.C\
 	pyPDBAtomList.C\
@@ -243,13 +243,21 @@ BALL_LIBS=$(BALLVIEW_LIBS)
 SIP_OBJECTS			=	$(SIP_SOURCES:.C=.o)
 PYBALL_OBJECTS 	= $(PYBALL_SOURCES:.C=.o)
 
-.SUFFIXES: .sip
+CPP_SOURCES = $(SIP_SOURCES) $(PYBALL_SOURCES)
 
 clean:	
-	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	core a.out $(EXECUTABLES) $(SIBOBJECTS) libBALLc.so
+	@$(RM) -rf *.o *~ *.log ii_files cxx_repository Templates.DB	core a.out $(EXECUTABLES) $(SIBOBJECTS) libBALLc.so
 
 libBALLc.so:	$(SIP_OBJECTS) $(PYBALL_OBJECTS)
 	$(DYNAR) $(DYNAROPTS) libBALLc.so $(SIP_OBJECTS) $(PYBALL_OBJECTS) $(SIP_LIB) -L$(BALL_PATH)/lib/$(BINFMT) $(BALL_LIBS)
 
 install: libBALLc.so
 	cp libBALLc.so BALL.py $(BALL_PATH)/lib/$(BINFMT)
+
+depend:
+	@echo "creating dependencies for $(DIRECTORY)..."
+	@echo "" > .Dependencies
+	@/usr/local/bin/g++ -M  -fPIC   $(CPP_SOURCES) $(ADD_CPP_SOURCES) $(STD_CPP_INCLUDES) $(ADD_INCLUDES) $(SIP_INCLUDES) $(PYTHON_INCLUDES) $(BALL_INCLUDES)  >.Dependencies
+
+include .Dependencies
+

@@ -33,7 +33,7 @@ static PyTypeObject sipType_PropertyManager = {
 	0,
 };
 
-static PyObject *sipDo_PropertyManager_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PropertyManager_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -71,7 +71,7 @@ static PyObject *sipDo_PropertyManager_clear(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_PropertyManager_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PropertyManager_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -109,7 +109,7 @@ static PyObject *sipDo_PropertyManager_destroy(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_PropertyManager_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PropertyManager_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -157,7 +157,7 @@ static PyObject *sipDo_PropertyManager_set(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_PropertyManager_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PropertyManager_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -205,7 +205,7 @@ static PyObject *sipDo_PropertyManager_get(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_PropertyManager_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PropertyManager_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -253,7 +253,7 @@ static PyObject *sipDo_PropertyManager_swap(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -480,7 +480,7 @@ static PyObject *sipDo_PropertyManager_setProperty(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_PropertyManager_clearProperty(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PropertyManager_clearProperty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -556,7 +556,7 @@ static PyObject *sipDo_PropertyManager_clearProperty(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_PropertyManager_toggleProperty(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PropertyManager_toggleProperty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -596,7 +596,7 @@ static PyObject *sipDo_PropertyManager_toggleProperty(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_PropertyManager_countProperties(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PropertyManager_countProperties(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -634,7 +634,7 @@ static PyObject *sipDo_PropertyManager_countProperties(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_PropertyManager_getProperty(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PropertyManager_getProperty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -685,7 +685,7 @@ static PyObject *sipDo_PropertyManager_getProperty(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_PropertyManager_countNamedProperties(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PropertyManager_countNamedProperties(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -723,7 +723,7 @@ static PyObject *sipDo_PropertyManager_countNamedProperties(PyObject *sipThisObj
 	return NULL;
 }
 
-static PyObject *sipDo_PropertyManager_hasProperty(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PropertyManager_hasProperty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -799,7 +799,7 @@ static PyObject *sipDo_PropertyManager_hasProperty(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_PropertyManager_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PropertyManager_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -839,7 +839,7 @@ static PyObject *sipDo_PropertyManager_isValid(PyObject *sipThisObj,PyObject *si
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_PropertyManager(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_PropertyManager(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_PropertyManager)
 		return ptr;

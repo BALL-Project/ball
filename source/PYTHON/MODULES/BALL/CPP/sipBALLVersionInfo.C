@@ -5,7 +5,7 @@
 PyObject *sipClass_VersionInfo;
 
 static void sipDealloc_VersionInfo(sipThisType *);
-static PyObject * sip__str__VersionInfo(PyObject *a0);
+extern "C" PyObject * sip__str__VersionInfo(PyObject *a0);
 
 static PyTypeObject sipType_VersionInfo = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -34,7 +34,7 @@ static PyTypeObject sipType_VersionInfo = {
 	0,
 };
 
-static PyObject *sipDo_VersionInfo_getVersion(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_VersionInfo_getVersion(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -70,7 +70,7 @@ static PyObject *sipDo_VersionInfo_getVersion(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_VersionInfo_getMajorRevision(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_VersionInfo_getMajorRevision(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -100,7 +100,7 @@ static PyObject *sipDo_VersionInfo_getMajorRevision(PyObject *,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_VersionInfo_getMinorRevision(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_VersionInfo_getMinorRevision(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -130,7 +130,7 @@ static PyObject *sipDo_VersionInfo_getMinorRevision(PyObject *,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_VersionInfo_getType(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_VersionInfo_getType(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -162,7 +162,7 @@ static PyObject *sipDo_VersionInfo_getType(PyObject *,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_VersionInfo(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_VersionInfo(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_VersionInfo)
 		return ptr;
@@ -180,7 +180,7 @@ static void sipDealloc_VersionInfo(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__VersionInfo(PyObject *a0)
+extern "C" PyObject * sip__str__VersionInfo(PyObject *a0)
 {
 #line 26 "version.sip"
   return PyString_FromString(VersionInfo::getVersion());  	

@@ -169,7 +169,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_AssignRadiusProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AssignRadiusProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -207,7 +207,7 @@ static PyObject *sipDo_AssignRadiusProcessor_start(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_AssignRadiusProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AssignRadiusProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -245,7 +245,7 @@ static PyObject *sipDo_AssignRadiusProcessor_finish(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_AssignRadiusProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AssignRadiusProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -293,7 +293,7 @@ static PyObject *sipDo_AssignRadiusProcessor_CallOp(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_AssignRadiusProcessor_setFilename(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AssignRadiusProcessor_setFilename(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -344,7 +344,7 @@ static PyObject *sipDo_AssignRadiusProcessor_setFilename(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_AssignRadiusProcessor_getFilename(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AssignRadiusProcessor_getFilename(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -382,7 +382,7 @@ static PyObject *sipDo_AssignRadiusProcessor_getFilename(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_AssignRadiusProcessor_getNumberOfAssignments(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AssignRadiusProcessor_getNumberOfAssignments(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -420,7 +420,7 @@ static PyObject *sipDo_AssignRadiusProcessor_getNumberOfAssignments(PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_AssignRadiusProcessor_getNumberOfErrors(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AssignRadiusProcessor_getNumberOfErrors(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -460,7 +460,7 @@ static PyObject *sipDo_AssignRadiusProcessor_getNumberOfErrors(PyObject *sipThis
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_AssignRadiusProcessor(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_AssignRadiusProcessor(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

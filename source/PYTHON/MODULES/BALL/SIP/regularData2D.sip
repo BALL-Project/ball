@@ -1,56 +1,57 @@
-// $Id: regularData2D.sip,v 1.3 2001/07/29 17:31:17 oliver Exp $
+// $Id: regularData2D.sip,v 1.4 2001/08/01 01:28:39 oliver Exp $
 
-// dummy class to emulate nested classes
-class GridIndex2D
-{
-%HeaderCode
-  #include <BALL/DATATYPE/regularData2D.h>
-  using namespace BALL;
-  typedef BALL::RegularData2D<float>::GridIndex GridIndex2D;
-%End
-  public:
-  Position x;
-  Position y;
-};
 
 typedef float GridDataType;
-
-class FloatRegularData2D
+class RegularData2D
 {
 %HeaderCode
 	#include <BALL/DATATYPE/regularData2D.h>
 	#include "sipBALLOutOfMemory.h"
 	#include "sipBALLOutOfGrid.h"
-	typedef BALL::RegularData2D<float> FloatRegularData2D;
-	typedef BALL::RegularData2D<float>::GridIndex GridIndex2D;
+	using namespace BALL;
 	using namespace BALL::Exception;
 %End
-	public:
-	// BALL_CREATE_DEEP(FloatRegularData2D)
-	// typedef TVector2<Position> GridIndex2D;
+	class GridIndex
+	{
+%HeaderCode
+	#include <BALL/DATATYPE/regularData2D.h>
+	#include "sipBALLOutOfMemory.h"
+	#include "sipBALLOutOfGrid.h"
+	using namespace BALL;
+	using namespace BALL::Exception;
+%End
+		public:
+		Position x;
+		Position y;
+	};
 
-	FloatRegularData2D() throw();
-	FloatRegularData2D(const FloatRegularData2D& /grid/)
+	public:
+
+	// BALL_CREATE_DEEP(RegularData2D)
+	// typedef TVector2<Position> GridIndex;
+
+	RegularData2D() throw();
+	RegularData2D(const RegularData2D& /grid/)
 					throw(OutOfMemory);
 
-	FloatRegularData2D(float /lower_x/, float /lower_y/,
+	RegularData2D(float /lower_x/, float /lower_y/,
 									float /upper_x/, float /upper_y/,
 									Size /grid_points_x/, Size /grid_points_y/)
 					 throw(OutOfMemory);
 
-	FloatRegularData2D
+	RegularData2D
 					(const Vector2& /lower/, const Vector2& /upper/,
 					 Size /grid_points_x/, Size /grid_points_y/)
 					 throw(OutOfMemory);
-	FloatRegularData2D(const Vector2& /lower/, const Vector2& /upper/, float /spacing/)
+	RegularData2D(const Vector2& /lower/, const Vector2& /upper/, float /spacing/)
 					throw(OutOfMemory);
 
-	~FloatRegularData2D() throw();
+	~RegularData2D() throw();
 	virtual void clear() throw();
 
-	void set(const FloatRegularData2D& /grid/) 
+	void set(const RegularData2D& /grid/) 
 		throw(OutOfMemory);
-	//const FloatRegularData2D& operator = (const FloatRegularData2D& /grid/) 
+	//const RegularData2D& operator = (const RegularData2D& /grid/) 
 	//	throw(OutOfMemory);
 
 	//virtual void dump(std::ostream& stream) const throw();
@@ -64,9 +65,9 @@ class FloatRegularData2D
 	Size getSize() const throw();
 	float getXSpacing() const throw();
 	float getYSpacing() const throw();
-	GridIndex2D getIndex(const Vector2& /v/) const 
+	GridIndex getIndex(const Vector2& /v/) const 
 		throw(OutOfGrid);
-	GridIndex2D getIndex(float /x/, float /y/) const
+	GridIndex getIndex(float /x/, float /y/) const
 		throw(OutOfGrid);
 	//GridDataType getData(const Position /i/, const Position /j/)
 	//	throw(OutOfGrid);
@@ -105,7 +106,7 @@ class FloatRegularData2D
 	GridDataType getMaxValue() const throw();
 	GridDataType getMinValue() const throw();
 	void rescale(float /minValue/, float /maxValue/) throw();
-	bool operator == (const FloatRegularData2D& /grid/) const throw();
-	//bool operator != (const FloatRegularData2D& /grid/) const throw();
+	bool operator == (const RegularData2D& /grid/) const throw();
+	//bool operator != (const RegularData2D& /grid/) const throw();
 	//float* data;
 };

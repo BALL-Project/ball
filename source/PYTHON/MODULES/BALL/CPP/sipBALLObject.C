@@ -147,7 +147,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_Object_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Object_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -177,7 +177,7 @@ static PyObject *sipDo_Object_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Object_getHandle(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Object_getHandle(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -207,7 +207,7 @@ static PyObject *sipDo_Object_getHandle(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Object_getNextHandle(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Object_getNextHandle(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -229,7 +229,7 @@ static PyObject *sipDo_Object_getNextHandle(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Object_getNewHandle(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Object_getNewHandle(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -251,7 +251,7 @@ static PyObject *sipDo_Object_getNewHandle(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Object_compare(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Object_compare(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -299,7 +299,7 @@ static PyObject *sipDo_Object_compare(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Object_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Object_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -331,7 +331,7 @@ static PyObject *sipDo_Object_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Object(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Object(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Object)
 		return ptr;

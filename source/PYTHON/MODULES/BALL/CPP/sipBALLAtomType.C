@@ -5,7 +5,7 @@
 PyObject *sipClass_AtomType;
 
 static void sipDealloc_AtomType(sipThisType *);
-static PyObject * sip__str__AtomType(PyObject *a0);
+extern "C" PyObject * sip__str__AtomType(PyObject *a0);
 
 static PyTypeObject sipType_AtomType = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -36,7 +36,7 @@ static PyTypeObject sipType_AtomType = {
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_AtomType(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_AtomType(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_AtomType)
 		return ptr;
@@ -54,7 +54,7 @@ static void sipDealloc_AtomType(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__AtomType(PyObject *a0)
+extern "C" PyObject * sip__str__AtomType(PyObject *a0)
 {
 #line 139 "atom.sip"
 	AtomType* ptr;

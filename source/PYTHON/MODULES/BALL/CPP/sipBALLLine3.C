@@ -33,7 +33,7 @@ static PyTypeObject sipType_Line3 = {
 	0,
 };
 
-static PyObject *sipDo_Line3_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Line3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -81,7 +81,7 @@ static PyObject *sipDo_Line3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Line3_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Line3_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -166,7 +166,7 @@ static PyObject *sipDo_Line3_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Line3_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Line3_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -251,7 +251,7 @@ static PyObject *sipDo_Line3_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Line3_normalize(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Line3_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -289,7 +289,7 @@ static PyObject *sipDo_Line3_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Line3_has(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Line3_has(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -337,7 +337,7 @@ static PyObject *sipDo_Line3_has(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Line3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Line3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -377,7 +377,7 @@ static PyObject *sipDo_Line3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Line3(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Line3(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Line3)
 		return ptr;
@@ -503,7 +503,7 @@ PyObject *sipNew_Line3(PyObject *sipSelf,PyObject *sipArgs)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Line3_d(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Line3_d(PyObject *sipThisObj,PyObject *valobj)
 {
 	int iserr = 0;
 	Vector3 *val;
@@ -535,7 +535,7 @@ static PyObject *sipGetSetVar_Line3_d(PyObject *sipThisObj,PyObject *valobj)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Line3_p(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Line3_p(PyObject *sipThisObj,PyObject *valobj)
 {
 	int iserr = 0;
 	Vector3 *val;

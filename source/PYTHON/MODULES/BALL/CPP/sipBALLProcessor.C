@@ -35,7 +35,7 @@ static PyTypeObject sipType_Processor = {
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Processor(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Processor(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Processor)
 		return ptr;

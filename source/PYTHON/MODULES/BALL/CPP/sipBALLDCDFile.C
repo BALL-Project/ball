@@ -108,7 +108,7 @@ void sipDCDFile::clear()
 		DCDFile::clear();
 }
 
-static PyObject *sipDo_DCDFile_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_DCDFile_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -138,7 +138,7 @@ static PyObject *sipDo_DCDFile_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_DCDFile_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_DCDFile_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -178,7 +178,7 @@ static PyObject *sipDo_DCDFile_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_DCDFile_isSwappingBytes(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_DCDFile_isSwappingBytes(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -208,7 +208,7 @@ static PyObject *sipDo_DCDFile_isSwappingBytes(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_DCDFile_hasVelocities(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_DCDFile_hasVelocities(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -238,7 +238,7 @@ static PyObject *sipDo_DCDFile_hasVelocities(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_DCDFile_init(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_DCDFile_init(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -268,7 +268,7 @@ static PyObject *sipDo_DCDFile_init(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_DCDFile_readHeader(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_DCDFile_readHeader(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -298,7 +298,7 @@ static PyObject *sipDo_DCDFile_readHeader(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_DCDFile_writeHeader(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_DCDFile_writeHeader(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -328,7 +328,7 @@ static PyObject *sipDo_DCDFile_writeHeader(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_DCDFile_append(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_DCDFile_append(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -368,7 +368,7 @@ static PyObject *sipDo_DCDFile_append(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_DCDFile_read(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_DCDFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -408,7 +408,7 @@ static PyObject *sipDo_DCDFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_DCDFile_getHeader(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_DCDFile_getHeader(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -438,7 +438,7 @@ static PyObject *sipDo_DCDFile_getHeader(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_DCDFile_setHeader(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_DCDFile_setHeader(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -478,7 +478,7 @@ static PyObject *sipDo_DCDFile_setHeader(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_DCDFile_enableVelocityStorage(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_DCDFile_enableVelocityStorage(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -508,7 +508,7 @@ static PyObject *sipDo_DCDFile_enableVelocityStorage(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_DCDFile_disableVelocityStorage(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_DCDFile_disableVelocityStorage(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -540,7 +540,7 @@ static PyObject *sipDo_DCDFile_disableVelocityStorage(PyObject *sipThisObj,PyObj
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_DCDFile(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_DCDFile(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

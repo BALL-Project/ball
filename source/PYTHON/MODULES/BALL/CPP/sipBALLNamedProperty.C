@@ -33,7 +33,7 @@ static PyTypeObject sipType_NamedProperty = {
 	0,
 };
 
-static PyObject *sipDo_NamedProperty_getType(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_NamedProperty_getType(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -71,7 +71,7 @@ static PyObject *sipDo_NamedProperty_getType(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_NamedProperty_getName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_NamedProperty_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -109,7 +109,7 @@ static PyObject *sipDo_NamedProperty_getName(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_NamedProperty_getBool(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_NamedProperty_getBool(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -147,7 +147,7 @@ static PyObject *sipDo_NamedProperty_getBool(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_NamedProperty_getInt(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_NamedProperty_getInt(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -185,7 +185,7 @@ static PyObject *sipDo_NamedProperty_getInt(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_NamedProperty_getFloat(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_NamedProperty_getFloat(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -223,7 +223,7 @@ static PyObject *sipDo_NamedProperty_getFloat(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_NamedProperty_getUnsignedInt(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_NamedProperty_getUnsignedInt(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -261,7 +261,7 @@ static PyObject *sipDo_NamedProperty_getUnsignedInt(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_NamedProperty_getObject(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_NamedProperty_getObject(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -299,7 +299,7 @@ static PyObject *sipDo_NamedProperty_getObject(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_NamedProperty_getString(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_NamedProperty_getString(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -339,7 +339,7 @@ static PyObject *sipDo_NamedProperty_getString(PyObject *sipThisObj,PyObject *si
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_NamedProperty(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_NamedProperty(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

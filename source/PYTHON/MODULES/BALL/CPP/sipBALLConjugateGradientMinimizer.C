@@ -186,7 +186,7 @@ bool sipConjugateGradientMinimizer::specificSetup()
 		ConjugateGradientMinimizer::specificSetup();
 }
 
-static PyObject *sipDo_ConjugateGradientMinimizer_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ConjugateGradientMinimizer_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -224,7 +224,7 @@ static PyObject *sipDo_ConjugateGradientMinimizer_specificSetup(PyObject *sipThi
 	return NULL;
 }
 
-static PyObject *sipDo_ConjugateGradientMinimizer_setStepLength(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ConjugateGradientMinimizer_setStepLength(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -264,7 +264,7 @@ static PyObject *sipDo_ConjugateGradientMinimizer_setStepLength(PyObject *sipThi
 	return NULL;
 }
 
-static PyObject *sipDo_ConjugateGradientMinimizer_getStepLength(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ConjugateGradientMinimizer_getStepLength(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -302,7 +302,7 @@ static PyObject *sipDo_ConjugateGradientMinimizer_getStepLength(PyObject *sipThi
 	return NULL;
 }
 
-static PyObject *sipDo_ConjugateGradientMinimizer_findStep(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ConjugateGradientMinimizer_findStep(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -340,7 +340,7 @@ static PyObject *sipDo_ConjugateGradientMinimizer_findStep(PyObject *sipThisObj,
 	return NULL;
 }
 
-static PyObject *sipDo_ConjugateGradientMinimizer_updateDirection(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ConjugateGradientMinimizer_updateDirection(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -378,7 +378,7 @@ static PyObject *sipDo_ConjugateGradientMinimizer_updateDirection(PyObject *sipT
 	return NULL;
 }
 
-static PyObject *sipDo_ConjugateGradientMinimizer_minimize(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ConjugateGradientMinimizer_minimize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -421,7 +421,7 @@ static PyObject *sipDo_ConjugateGradientMinimizer_minimize(PyObject *sipThisObj,
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_ConjugateGradientMinimizer(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_ConjugateGradientMinimizer(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 
@@ -677,7 +677,7 @@ PyObject *sipNew_ConjugateGradientMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_ConjugateGradientMinimizer_options(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_ConjugateGradientMinimizer_options(PyObject *sipThisObj,PyObject *valobj)
 {
 	int iserr = 0;
 	Options *val;

@@ -169,7 +169,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_BuildBondsProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_BuildBondsProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -207,7 +207,7 @@ static PyObject *sipDo_BuildBondsProcessor_finish(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_BuildBondsProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_BuildBondsProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -245,7 +245,7 @@ static PyObject *sipDo_BuildBondsProcessor_start(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_BuildBondsProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_BuildBondsProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -293,7 +293,7 @@ static PyObject *sipDo_BuildBondsProcessor_CallOp(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_BuildBondsProcessor_getNumberOfBondsBuilt(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_BuildBondsProcessor_getNumberOfBondsBuilt(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -331,7 +331,7 @@ static PyObject *sipDo_BuildBondsProcessor_getNumberOfBondsBuilt(PyObject *sipTh
 	return NULL;
 }
 
-static PyObject *sipDo_BuildBondsProcessor_setFragmentDB(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_BuildBondsProcessor_setFragmentDB(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -379,7 +379,7 @@ static PyObject *sipDo_BuildBondsProcessor_setFragmentDB(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_BuildBondsProcessor_buildFragmentBonds(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_BuildBondsProcessor_buildFragmentBonds(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -427,7 +427,7 @@ static PyObject *sipDo_BuildBondsProcessor_buildFragmentBonds(PyObject *sipThisO
 	return NULL;
 }
 
-static PyObject *sipDo_BuildBondsProcessor_buildInterFragmentBonds(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_BuildBondsProcessor_buildInterFragmentBonds(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -480,7 +480,7 @@ static PyObject *sipDo_BuildBondsProcessor_buildInterFragmentBonds(PyObject *sip
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_BuildBondsProcessor(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_BuildBondsProcessor(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

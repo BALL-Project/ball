@@ -504,7 +504,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_SnapShotManager_setup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -565,7 +565,7 @@ static PyObject *sipDo_SnapShotManager_setup(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -595,7 +595,7 @@ static PyObject *sipDo_SnapShotManager_clear(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -625,7 +625,7 @@ static PyObject *sipDo_SnapShotManager_isValid(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_setSystem(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_setSystem(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -665,7 +665,7 @@ static PyObject *sipDo_SnapShotManager_setSystem(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_getSystem(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_getSystem(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -695,7 +695,7 @@ static PyObject *sipDo_SnapShotManager_getSystem(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_setForceField(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_setForceField(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -735,7 +735,7 @@ static PyObject *sipDo_SnapShotManager_setForceField(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_getForceField(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_getForceField(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -765,7 +765,7 @@ static PyObject *sipDo_SnapShotManager_getForceField(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_setTrajectoryFile(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_setTrajectoryFile(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -805,7 +805,7 @@ static PyObject *sipDo_SnapShotManager_setTrajectoryFile(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_getTrajectoryFile(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_getTrajectoryFile(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -835,7 +835,7 @@ static PyObject *sipDo_SnapShotManager_getTrajectoryFile(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_setFlushToDiskFrequency(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_setFlushToDiskFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -867,7 +867,7 @@ static PyObject *sipDo_SnapShotManager_setFlushToDiskFrequency(PyObject *sipThis
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_getFlushToDiskFrequency(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_getFlushToDiskFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -897,7 +897,7 @@ static PyObject *sipDo_SnapShotManager_getFlushToDiskFrequency(PyObject *sipThis
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_takeSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_takeSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -927,7 +927,7 @@ static PyObject *sipDo_SnapShotManager_takeSnapShot(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_applySnapShot(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_applySnapShot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -959,7 +959,7 @@ static PyObject *sipDo_SnapShotManager_applySnapShot(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_applyFirstSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_applyFirstSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -989,7 +989,7 @@ static PyObject *sipDo_SnapShotManager_applyFirstSnapShot(PyObject *sipThisObj,P
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_applyNextSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_applyNextSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1019,7 +1019,7 @@ static PyObject *sipDo_SnapShotManager_applyNextSnapShot(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_applyLastSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_applyLastSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1049,7 +1049,7 @@ static PyObject *sipDo_SnapShotManager_applyLastSnapShot(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_SnapShotManager_flushToDisk(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_SnapShotManager_flushToDisk(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1081,7 +1081,7 @@ static PyObject *sipDo_SnapShotManager_flushToDisk(PyObject *sipThisObj,PyObject
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_SnapShotManager(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_SnapShotManager(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_SnapShotManager)
 		return ptr;
@@ -1226,7 +1226,7 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_SnapShotManager_options(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_SnapShotManager_options(PyObject *sipThisObj,PyObject *valobj)
 {
 	int iserr = 0;
 	Options *val;

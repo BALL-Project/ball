@@ -312,7 +312,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_TrajectoryFile_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TrajectoryFile_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -342,7 +342,7 @@ static PyObject *sipDo_TrajectoryFile_clear(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_TrajectoryFile_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TrajectoryFile_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -382,7 +382,7 @@ static PyObject *sipDo_TrajectoryFile_CmpOp(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_TrajectoryFile_getNumberOfSnapShots(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TrajectoryFile_getNumberOfSnapShots(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -412,7 +412,7 @@ static PyObject *sipDo_TrajectoryFile_getNumberOfSnapShots(PyObject *sipThisObj,
 	return NULL;
 }
 
-static PyObject *sipDo_TrajectoryFile_getNumberOfAtoms(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TrajectoryFile_getNumberOfAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -442,7 +442,7 @@ static PyObject *sipDo_TrajectoryFile_getNumberOfAtoms(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_TrajectoryFile_readHeader(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TrajectoryFile_readHeader(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -472,7 +472,7 @@ static PyObject *sipDo_TrajectoryFile_readHeader(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_TrajectoryFile_writeHeader(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TrajectoryFile_writeHeader(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -502,7 +502,7 @@ static PyObject *sipDo_TrajectoryFile_writeHeader(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_TrajectoryFile_append(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TrajectoryFile_append(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -542,7 +542,7 @@ static PyObject *sipDo_TrajectoryFile_append(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_TrajectoryFile_read(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TrajectoryFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -584,7 +584,7 @@ static PyObject *sipDo_TrajectoryFile_read(PyObject *sipThisObj,PyObject *sipArg
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_TrajectoryFile(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_TrajectoryFile(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

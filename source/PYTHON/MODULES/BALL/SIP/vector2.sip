@@ -1,4 +1,4 @@
-// $Id: vector2.sip,v 1.1 2001/07/25 11:32:37 oliver Exp $
+// $Id: vector2.sip,v 1.2 2001/08/01 01:28:39 oliver Exp $
 
 //Vector2 operator * (float scalar, const Vector2& vector)
 //  throw();
@@ -63,7 +63,7 @@ class Vector2
 		throw();
 	static const Vector2& getUnit()
 		throw();
-	//float& operator [] (Position /position/)
+	// float& operator [] (Position /position/)
 	//	throw(IndexOverflow);
 	float operator [] (Position /position/) const
 		throw(IndexOverflow);

@@ -36,25 +36,45 @@ static PyTypeObject sipType_HINFile = {
 sipHINFile::sipHINFile()
    : HINFile()
 {
-	sipCommonCtor(sipPyMethods,2);
+	sipCommonCtor(sipPyMethods,4);
 }
 
 sipHINFile::sipHINFile(String& a0,std__openmode a1)
-   : HINFile(a0,a1)
+   throw(FileNotFound) : HINFile(a0,a1)
 {
-	sipCommonCtor(sipPyMethods,2);
+	sipCommonCtor(sipPyMethods,4);
 }
 
 sipHINFile::sipHINFile(const HINFile& a0)
    : HINFile(a0)
 {
-	sipCommonCtor(sipPyMethods,2);
+	sipCommonCtor(sipPyMethods,4);
 }
 
 sipHINFile::~sipHINFile()
-
+ throw()
 {
 	sipCommonDtor(sipPyThis);
+}
+
+HINFile& sipHINFile::operator<<(System& a0)
+
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_LShiftOp,&relLock) ?
+		sipHINFile::sipVH_LShiftOp(&sipPyMethods[0],sipPyThis,relLock,a0) :
+		HINFile::operator<<(a0);
+}
+
+HINFile& sipHINFile::operator>>(System& a0)
+
+{
+	int relLock;
+
+	return sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_RShiftOp,&relLock) ?
+		sipHINFile::sipVH_RShiftOp(&sipPyMethods[1],sipPyThis,relLock,a0) :
+		HINFile::operator>>(a0);
 }
 
 void sipHINFile::read(System& a0)
@@ -62,8 +82,8 @@ void sipHINFile::read(System& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_read,&relLock))
-		sipHINFile::sipVH_read(&sipPyMethods[0],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_read,&relLock))
+		sipHINFile::sipVH_read(&sipPyMethods[2],sipPyThis,relLock,a0);
 	else
 		HINFile::read(a0);
 }
@@ -73,10 +93,100 @@ void sipHINFile::write(System& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_write,&relLock))
-		sipHINFile::sipVH_write(&sipPyMethods[1],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_write,&relLock))
+		sipHINFile::sipVH_write(&sipPyMethods[3],sipPyThis,relLock,a0);
 	else
 		HINFile::write(a0);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+HINFile& sipHINFile::sipVH_LShiftOp(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,System& a0)
+{
+	HINFile *res;
+	PyObject *resobj;
+	PyObject *sipArgs;
+	PyObject *a0obj;
+
+	a0obj = sipMapCppToSelf(&a0,sipClass_System);
+
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		int iserr = 0;
+
+		res = sipForceConvertTo_HINFile(resobj,&iserr);
+		sipTransferSelf(resobj,1);
+
+		Py_DECREF(resobj);
+
+		if (!iserr)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_HINFile,sipName_BALL_LShiftOp);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+
+	return *res;
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+HINFile& sipHINFile::sipVH_RShiftOp(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,System& a0)
+{
+	HINFile *res;
+	PyObject *resobj;
+	PyObject *sipArgs;
+	PyObject *a0obj;
+
+	a0obj = sipMapCppToSelf(&a0,sipClass_System);
+
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		int iserr = 0;
+
+		res = sipForceConvertTo_HINFile(resobj,&iserr);
+		sipTransferSelf(resobj,1);
+
+		Py_DECREF(resobj);
+
+		if (!iserr)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_HINFile,sipName_BALL_RShiftOp);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+
+	return *res;
 }
 
 // The common handler for all classes that inherit this virtual member
@@ -153,7 +263,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_HINFile_write(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_HINFile_write(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -201,7 +311,7 @@ static PyObject *sipDo_HINFile_write(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_HINFile_read(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_HINFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -249,7 +359,103 @@ static PyObject *sipDo_HINFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_HINFile_hasPeriodicBoundary(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_HINFile_RShiftOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_HINFile)) == NULL)
+		return NULL;
+
+	{
+		System * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		{
+			HINFile *res;
+			HINFile *ptr;
+
+			if ((ptr = (HINFile *)sipGetCppPtr(sipThis,sipClass_HINFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_System(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> HINFile::operator>>(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			return sipMapCppToSelf(res,sipClass_HINFile);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_HINFile,sipName_BALL_RShiftOp);
+
+	return NULL;
+}
+
+extern "C" PyObject *sipDo_HINFile_LShiftOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_HINFile)) == NULL)
+		return NULL;
+
+	{
+		System * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		{
+			HINFile *res;
+			HINFile *ptr;
+
+			if ((ptr = (HINFile *)sipGetCppPtr(sipThis,sipClass_HINFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_System(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> HINFile::operator<<(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			return sipMapCppToSelf(res,sipClass_HINFile);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_HINFile,sipName_BALL_LShiftOp);
+
+	return NULL;
+}
+
+extern "C" PyObject *sipDo_HINFile_hasPeriodicBoundary(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -287,7 +493,7 @@ static PyObject *sipDo_HINFile_hasPeriodicBoundary(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_HINFile_getPeriodicBoundary(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_HINFile_getPeriodicBoundary(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -325,7 +531,7 @@ static PyObject *sipDo_HINFile_getPeriodicBoundary(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_HINFile_getTemperature(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_HINFile_getTemperature(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -365,7 +571,7 @@ static PyObject *sipDo_HINFile_getTemperature(PyObject *sipThisObj,PyObject *sip
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_HINFile(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_HINFile(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 
@@ -373,6 +579,9 @@ const void *sipCast_HINFile(const void *ptr,PyObject *targetClass)
 		return ptr;
 
 	if ((res = sipCast_File((File *)(HINFile *)ptr,targetClass)) != NULL)
+		return res;
+
+	if ((res = sipCast_FileNotFound((FileNotFound *)(HINFile *)ptr,targetClass)) != NULL)
 		return res;
 
 	return NULL;
@@ -447,9 +656,10 @@ PyObject *sipNew_HINFile(PyObject *sipSelf,PyObject *sipArgs)
    {
 			sipNew = new sipHINFile(* a0,* a1);
    }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
+   catch (FileNotFound e)
+   {
+      FileNotFound *my_exception = new FileNotFound(e);
+      PyErr_SetObject(sipClass_FileNotFound, sipNewCppToSelf(my_exception,sipClass_FileNotFound,SIP_SIMPLE | SIP_PY_OWNED));
       return NULL;
 		}
 
@@ -513,6 +723,8 @@ PyObject *sipNew_HINFile(PyObject *sipSelf,PyObject *sipArgs)
 PyMethodDef sipClassAttrTab_HINFile[] = {
 	{sipName_BALL_write, sipDo_HINFile_write, METH_VARARGS, NULL},
 	{sipName_BALL_read, sipDo_HINFile_read, METH_VARARGS, NULL},
+	{sipName_BALL_RShiftOp, sipDo_HINFile_RShiftOp, METH_VARARGS, NULL},
+	{sipName_BALL_LShiftOp, sipDo_HINFile_LShiftOp, METH_VARARGS, NULL},
 	{sipName_BALL_hasPeriodicBoundary, sipDo_HINFile_hasPeriodicBoundary, METH_VARARGS, NULL},
 	{sipName_BALL_getPeriodicBoundary, sipDo_HINFile_getPeriodicBoundary, METH_VARARGS, NULL},
 	{sipName_BALL_getTemperature, sipDo_HINFile_getTemperature, METH_VARARGS, NULL},

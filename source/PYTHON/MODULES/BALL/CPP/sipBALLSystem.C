@@ -5,7 +5,7 @@
 PyObject *sipClass_System;
 
 static void sipDealloc_System(sipThisType *);
-static PyObject * sip__str__System(PyObject *a0);
+extern "C" PyObject * sip__str__System(PyObject *a0);
 
 static PyTypeObject sipType_System = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -118,7 +118,7 @@ void sipSystem::clear()
 		System::clear();
 }
 
-static PyObject *sipDo_System_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -148,7 +148,7 @@ static PyObject *sipDo_System_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_System_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -178,7 +178,7 @@ static PyObject *sipDo_System_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_System_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -227,7 +227,7 @@ static PyObject *sipDo_System_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_System_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -276,7 +276,7 @@ static PyObject *sipDo_System_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_System_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -324,7 +324,7 @@ static PyObject *sipDo_System_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_System_setName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_setName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -375,7 +375,7 @@ static PyObject *sipDo_System_setName(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_System_getName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -413,7 +413,7 @@ static PyObject *sipDo_System_getName(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_System_countMolecules(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_countMolecules(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -451,7 +451,7 @@ static PyObject *sipDo_System_countMolecules(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_System_countFragments(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_countFragments(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -489,7 +489,7 @@ static PyObject *sipDo_System_countFragments(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_System_countAtoms(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_countAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -527,7 +527,7 @@ static PyObject *sipDo_System_countAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_System_prepend(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -575,7 +575,7 @@ static PyObject *sipDo_System_prepend(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_System_append(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_append(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -623,7 +623,7 @@ static PyObject *sipDo_System_append(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_System_insert(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_insert(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -671,7 +671,7 @@ static PyObject *sipDo_System_insert(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_System_insertBefore(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_insertBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -722,7 +722,7 @@ static PyObject *sipDo_System_insertBefore(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_System_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -773,7 +773,7 @@ static PyObject *sipDo_System_insertAfter(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_System_remove(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_remove(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -821,7 +821,7 @@ static PyObject *sipDo_System_remove(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_System_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -869,7 +869,7 @@ static PyObject *sipDo_System_spliceBefore(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_System_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -917,7 +917,7 @@ static PyObject *sipDo_System_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_System_splice(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_splice(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -965,7 +965,7 @@ static PyObject *sipDo_System_splice(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_System_destroyBonds(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_destroyBonds(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1003,7 +1003,7 @@ static PyObject *sipDo_System_destroyBonds(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_System_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_System_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1035,7 +1035,7 @@ static PyObject *sipDo_System_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_System(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_System(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 
@@ -1067,7 +1067,7 @@ static void sipDealloc_System(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__System(PyObject *a0)
+extern "C" PyObject * sip__str__System(PyObject *a0)
 {
 #line 50 "system.sip"
   System* ptr;

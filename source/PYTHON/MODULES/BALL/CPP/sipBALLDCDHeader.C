@@ -35,7 +35,7 @@ static PyTypeObject sipType_DCDHeader = {
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_DCDHeader(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_DCDHeader(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_DCDHeader)
 		return ptr;
@@ -123,7 +123,7 @@ PyObject *sipNew_DCDHeader(PyObject *sipSelf,PyObject *sipArgs)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_DCDHeader_end_atomnumber_block(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_DCDHeader_end_atomnumber_block(PyObject *sipThisObj,PyObject *valobj)
 {
 	int val;
 	DCDHeader *ptr;
@@ -154,7 +154,7 @@ static PyObject *sipGetSetVar_DCDHeader_end_atomnumber_block(PyObject *sipThisOb
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_DCDHeader_number_of_atoms(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_DCDHeader_number_of_atoms(PyObject *sipThisObj,PyObject *valobj)
 {
 	int val;
 	DCDHeader *ptr;
@@ -185,7 +185,7 @@ static PyObject *sipGetSetVar_DCDHeader_number_of_atoms(PyObject *sipThisObj,PyO
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_DCDHeader_start_atomnumber_block(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_DCDHeader_start_atomnumber_block(PyObject *sipThisObj,PyObject *valobj)
 {
 	int val;
 	DCDHeader *ptr;
@@ -216,7 +216,7 @@ static PyObject *sipGetSetVar_DCDHeader_start_atomnumber_block(PyObject *sipThis
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_DCDHeader_end_title_block(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_DCDHeader_end_title_block(PyObject *sipThisObj,PyObject *valobj)
 {
 	int val;
 	DCDHeader *ptr;
@@ -247,7 +247,7 @@ static PyObject *sipGetSetVar_DCDHeader_end_title_block(PyObject *sipThisObj,PyO
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_DCDHeader_number_of_comments(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_DCDHeader_number_of_comments(PyObject *sipThisObj,PyObject *valobj)
 {
 	int val;
 	DCDHeader *ptr;
@@ -278,7 +278,7 @@ static PyObject *sipGetSetVar_DCDHeader_number_of_comments(PyObject *sipThisObj,
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_DCDHeader_start_title_block(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_DCDHeader_start_title_block(PyObject *sipThisObj,PyObject *valobj)
 {
 	int val;
 	DCDHeader *ptr;
@@ -309,7 +309,7 @@ static PyObject *sipGetSetVar_DCDHeader_start_title_block(PyObject *sipThisObj,P
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_DCDHeader_end_info_block(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_DCDHeader_end_info_block(PyObject *sipThisObj,PyObject *valobj)
 {
 	int val;
 	DCDHeader *ptr;
@@ -340,7 +340,7 @@ static PyObject *sipGetSetVar_DCDHeader_end_info_block(PyObject *sipThisObj,PyOb
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_DCDHeader_time_step_length(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_DCDHeader_time_step_length(PyObject *sipThisObj,PyObject *valobj)
 {
 	double val;
 	DCDHeader *ptr;
@@ -371,7 +371,7 @@ static PyObject *sipGetSetVar_DCDHeader_time_step_length(PyObject *sipThisObj,Py
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_DCDHeader_BALL_flag(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_DCDHeader_BALL_flag(PyObject *sipThisObj,PyObject *valobj)
 {
 	int val;
 	DCDHeader *ptr;
@@ -402,7 +402,7 @@ static PyObject *sipGetSetVar_DCDHeader_BALL_flag(PyObject *sipThisObj,PyObject 
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_DCDHeader_steps_between_saves(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_DCDHeader_steps_between_saves(PyObject *sipThisObj,PyObject *valobj)
 {
 	int val;
 	DCDHeader *ptr;
@@ -433,7 +433,7 @@ static PyObject *sipGetSetVar_DCDHeader_steps_between_saves(PyObject *sipThisObj
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_DCDHeader_step_number_of_starting_time(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_DCDHeader_step_number_of_starting_time(PyObject *sipThisObj,PyObject *valobj)
 {
 	int val;
 	DCDHeader *ptr;
@@ -464,7 +464,7 @@ static PyObject *sipGetSetVar_DCDHeader_step_number_of_starting_time(PyObject *s
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_DCDHeader_number_of_coordinate_sets(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_DCDHeader_number_of_coordinate_sets(PyObject *sipThisObj,PyObject *valobj)
 {
 	int val;
 	DCDHeader *ptr;
@@ -495,7 +495,7 @@ static PyObject *sipGetSetVar_DCDHeader_number_of_coordinate_sets(PyObject *sipT
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_DCDHeader_start_info_block(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_DCDHeader_start_info_block(PyObject *sipThisObj,PyObject *valobj)
 {
 	int val;
 	DCDHeader *ptr;

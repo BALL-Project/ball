@@ -114,7 +114,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_ForceField_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -152,7 +152,7 @@ static PyObject *sipDo_ForceField_isValid(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_setup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -238,7 +238,7 @@ static PyObject *sipDo_ForceField_setup(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -276,7 +276,7 @@ static PyObject *sipDo_ForceField_specificSetup(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_setName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_setName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -327,7 +327,7 @@ static PyObject *sipDo_ForceField_setName(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_getName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -365,7 +365,7 @@ static PyObject *sipDo_ForceField_getName(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_getNumberOfAtoms(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_getNumberOfAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -403,7 +403,7 @@ static PyObject *sipDo_ForceField_getNumberOfAtoms(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_getNumberOfMovableAtoms(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_getNumberOfMovableAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -441,7 +441,7 @@ static PyObject *sipDo_ForceField_getNumberOfMovableAtoms(PyObject *sipThisObj,P
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_getAtoms(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_getAtoms(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -479,7 +479,7 @@ static PyObject *sipDo_ForceField_getAtoms(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_getSystem(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_getSystem(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -517,7 +517,7 @@ static PyObject *sipDo_ForceField_getSystem(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_getUseSelection(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_getUseSelection(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -555,7 +555,7 @@ static PyObject *sipDo_ForceField_getUseSelection(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_setUseSelection(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_setUseSelection(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -595,7 +595,7 @@ static PyObject *sipDo_ForceField_setUseSelection(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_countComponents(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_countComponents(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -633,7 +633,7 @@ static PyObject *sipDo_ForceField_countComponents(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_insertComponent(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_insertComponent(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -681,7 +681,7 @@ static PyObject *sipDo_ForceField_insertComponent(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_removeComponent(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_removeComponent(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -765,7 +765,7 @@ static PyObject *sipDo_ForceField_removeComponent(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_getComponent(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_getComponent(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -841,7 +841,7 @@ static PyObject *sipDo_ForceField_getComponent(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_getEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_getEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -879,7 +879,7 @@ static PyObject *sipDo_ForceField_getEnergy(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -917,7 +917,7 @@ static PyObject *sipDo_ForceField_updateEnergy(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -955,7 +955,7 @@ static PyObject *sipDo_ForceField_updateForces(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_getRMSGradient(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_getRMSGradient(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -993,7 +993,7 @@ static PyObject *sipDo_ForceField_getRMSGradient(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_getUpdateFrequency(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_getUpdateFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1031,7 +1031,7 @@ static PyObject *sipDo_ForceField_getUpdateFrequency(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_ForceField_update(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ForceField_update(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1071,7 +1071,7 @@ static PyObject *sipDo_ForceField_update(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_ForceField(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_ForceField(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 
@@ -1242,7 +1242,7 @@ PyObject *sipNew_ForceField(PyObject *sipSelf,PyObject *sipArgs)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_ForceField_periodic_boundary(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_ForceField_periodic_boundary(PyObject *sipThisObj,PyObject *valobj)
 {
 	int iserr = 0;
 	PeriodicBoundary *val;
@@ -1274,7 +1274,7 @@ static PyObject *sipGetSetVar_ForceField_periodic_boundary(PyObject *sipThisObj,
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_ForceField_options(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_ForceField_options(PyObject *sipThisObj,PyObject *valobj)
 {
 	int iserr = 0;
 	Options *val;

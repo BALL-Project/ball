@@ -411,7 +411,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_MolecularDynamics_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -459,7 +459,7 @@ static PyObject *sipDo_MolecularDynamics_set(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -497,7 +497,7 @@ static PyObject *sipDo_MolecularDynamics_isValid(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_setup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -587,7 +587,7 @@ static PyObject *sipDo_MolecularDynamics_setup(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -625,7 +625,7 @@ static PyObject *sipDo_MolecularDynamics_specificSetup(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_setNumberOfIteration(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_setNumberOfIteration(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -665,7 +665,7 @@ static PyObject *sipDo_MolecularDynamics_setNumberOfIteration(PyObject *sipThisO
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_setMaximalNumberOfIterations(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_setMaximalNumberOfIterations(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -705,7 +705,7 @@ static PyObject *sipDo_MolecularDynamics_setMaximalNumberOfIterations(PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_setMaximalSimulationTime(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_setMaximalSimulationTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -745,7 +745,7 @@ static PyObject *sipDo_MolecularDynamics_setMaximalSimulationTime(PyObject *sipT
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_setTimeStep(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_setTimeStep(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -785,7 +785,7 @@ static PyObject *sipDo_MolecularDynamics_setTimeStep(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_setReferenceTemperature(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_setReferenceTemperature(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -825,7 +825,7 @@ static PyObject *sipDo_MolecularDynamics_setReferenceTemperature(PyObject *sipTh
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_setCurrentTime(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_setCurrentTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -865,7 +865,7 @@ static PyObject *sipDo_MolecularDynamics_setCurrentTime(PyObject *sipThisObj,PyO
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_setEnergyOutputFrequency(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_setEnergyOutputFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -905,7 +905,7 @@ static PyObject *sipDo_MolecularDynamics_setEnergyOutputFrequency(PyObject *sipT
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_setSnapShotFrequency(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_setSnapShotFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -945,7 +945,7 @@ static PyObject *sipDo_MolecularDynamics_setSnapShotFrequency(PyObject *sipThisO
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_getEnergyOutputFrequency(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_getEnergyOutputFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -983,7 +983,7 @@ static PyObject *sipDo_MolecularDynamics_getEnergyOutputFrequency(PyObject *sipT
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_getNumberOfIteration(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_getNumberOfIteration(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1021,7 +1021,7 @@ static PyObject *sipDo_MolecularDynamics_getNumberOfIteration(PyObject *sipThisO
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_getMaximalNumberOfIterations(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_getMaximalNumberOfIterations(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1059,7 +1059,7 @@ static PyObject *sipDo_MolecularDynamics_getMaximalNumberOfIterations(PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_getMaximalSimulationTime(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_getMaximalSimulationTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1097,7 +1097,7 @@ static PyObject *sipDo_MolecularDynamics_getMaximalSimulationTime(PyObject *sipT
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_getTimeStep(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_getTimeStep(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1135,7 +1135,7 @@ static PyObject *sipDo_MolecularDynamics_getTimeStep(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_getSnapShotFrequency(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_getSnapShotFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1173,7 +1173,7 @@ static PyObject *sipDo_MolecularDynamics_getSnapShotFrequency(PyObject *sipThisO
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_getTemperature(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_getTemperature(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1211,7 +1211,7 @@ static PyObject *sipDo_MolecularDynamics_getTemperature(PyObject *sipThisObj,PyO
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_getTime(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_getTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1249,7 +1249,7 @@ static PyObject *sipDo_MolecularDynamics_getTime(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_getTotalEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_getTotalEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1287,7 +1287,7 @@ static PyObject *sipDo_MolecularDynamics_getTotalEnergy(PyObject *sipThisObj,PyO
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_getPotentialEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_getPotentialEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1325,7 +1325,7 @@ static PyObject *sipDo_MolecularDynamics_getPotentialEnergy(PyObject *sipThisObj
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_getKineticEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_getKineticEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1363,7 +1363,7 @@ static PyObject *sipDo_MolecularDynamics_getKineticEnergy(PyObject *sipThisObj,P
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_getForceField(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_getForceField(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1401,7 +1401,7 @@ static PyObject *sipDo_MolecularDynamics_getForceField(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_simulate(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_simulate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1441,7 +1441,7 @@ static PyObject *sipDo_MolecularDynamics_simulate(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_simulateIterations(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_simulateIterations(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1482,7 +1482,7 @@ static PyObject *sipDo_MolecularDynamics_simulateIterations(PyObject *sipThisObj
 	return NULL;
 }
 
-static PyObject *sipDo_MolecularDynamics_simulateTime(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MolecularDynamics_simulateTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1525,7 +1525,7 @@ static PyObject *sipDo_MolecularDynamics_simulateTime(PyObject *sipThisObj,PyObj
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_MolecularDynamics(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_MolecularDynamics(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_MolecularDynamics)
 		return ptr;
@@ -1686,7 +1686,7 @@ PyObject *sipNew_MolecularDynamics(PyObject *sipSelf,PyObject *sipArgs)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_MolecularDynamics_options(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_MolecularDynamics_options(PyObject *sipThisObj,PyObject *valobj)
 {
 	int iserr = 0;
 	Options *val;

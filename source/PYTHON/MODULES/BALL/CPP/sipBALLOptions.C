@@ -5,7 +5,7 @@
 PyObject *sipClass_Options;
 
 static void sipDealloc_Options(sipThisType *);
-static PyObject * sip__str__Options(PyObject *a0);
+extern "C" PyObject * sip__str__Options(PyObject *a0);
 
 static PyTypeObject sipType_Options = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -34,7 +34,7 @@ static PyTypeObject sipType_Options = {
 	0,
 };
 
-static PyObject *sipDo_Options_isInteger(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_isInteger(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -85,7 +85,7 @@ static PyObject *sipDo_Options_isInteger(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Options_isBool(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_isBool(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -136,7 +136,7 @@ static PyObject *sipDo_Options_isBool(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Options_isReal(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_isReal(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -187,7 +187,7 @@ static PyObject *sipDo_Options_isReal(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Options_isVector(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_isVector(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -238,7 +238,7 @@ static PyObject *sipDo_Options_isVector(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Options_isSet(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_isSet(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -289,7 +289,7 @@ static PyObject *sipDo_Options_isSet(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Options_setName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_setName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -340,7 +340,7 @@ static PyObject *sipDo_Options_setName(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Options_getName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -378,7 +378,7 @@ static PyObject *sipDo_Options_getName(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Options_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -429,7 +429,7 @@ static PyObject *sipDo_Options_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Options_getBool(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_getBool(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -480,7 +480,7 @@ static PyObject *sipDo_Options_getBool(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Options_getReal(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_getReal(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -531,7 +531,7 @@ static PyObject *sipDo_Options_getReal(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Options_getVector(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_getVector(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -582,7 +582,7 @@ static PyObject *sipDo_Options_getVector(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Options_getInteger(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_getInteger(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -633,7 +633,7 @@ static PyObject *sipDo_Options_getInteger(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Options_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -690,7 +690,7 @@ static PyObject *sipDo_Options_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Options_setReal(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_setReal(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -742,7 +742,7 @@ static PyObject *sipDo_Options_setReal(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Options_setVector(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_setVector(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -796,7 +796,7 @@ static PyObject *sipDo_Options_setVector(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Options_setInteger(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_setInteger(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -848,7 +848,7 @@ static PyObject *sipDo_Options_setInteger(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Options_setBool(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_setBool(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -900,7 +900,7 @@ static PyObject *sipDo_Options_setBool(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Options_setDefault(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_setDefault(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -957,7 +957,7 @@ static PyObject *sipDo_Options_setDefault(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Options_setDefaultInteger(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_setDefaultInteger(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1009,7 +1009,7 @@ static PyObject *sipDo_Options_setDefaultInteger(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_Options_setDefaultReal(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_setDefaultReal(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1061,7 +1061,7 @@ static PyObject *sipDo_Options_setDefaultReal(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Options_setDefaultBool(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_setDefaultBool(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1113,7 +1113,7 @@ static PyObject *sipDo_Options_setDefaultBool(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Options_readOptionFile(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Options_readOptionFile(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1166,7 +1166,7 @@ static PyObject *sipDo_Options_readOptionFile(PyObject *sipThisObj,PyObject *sip
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Options(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Options(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Options)
 		return ptr;
@@ -1184,7 +1184,7 @@ static void sipDealloc_Options(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__Options(PyObject *a0)
+extern "C" PyObject * sip__str__Options(PyObject *a0)
 {
 #line 40 "options.sip"
   Options* ptr;

@@ -35,7 +35,7 @@ static PyTypeObject sipType_InvalidIterator = {
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_InvalidIterator(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_InvalidIterator(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

@@ -549,7 +549,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_EnergyMinimizer_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -587,7 +587,7 @@ static PyObject *sipDo_EnergyMinimizer_isValid(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_setup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -746,7 +746,7 @@ static PyObject *sipDo_EnergyMinimizer_setup(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -784,7 +784,7 @@ static PyObject *sipDo_EnergyMinimizer_specificSetup(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_isConverged(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_isConverged(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -822,7 +822,7 @@ static PyObject *sipDo_EnergyMinimizer_isConverged(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_findStep(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_findStep(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -860,7 +860,7 @@ static PyObject *sipDo_EnergyMinimizer_findStep(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_updateDirection(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_updateDirection(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -898,7 +898,7 @@ static PyObject *sipDo_EnergyMinimizer_updateDirection(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -936,7 +936,7 @@ static PyObject *sipDo_EnergyMinimizer_updateEnergy(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -974,7 +974,7 @@ static PyObject *sipDo_EnergyMinimizer_updateForces(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_printEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_printEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1012,7 +1012,7 @@ static PyObject *sipDo_EnergyMinimizer_printEnergy(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_takeSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_takeSnapShot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1050,7 +1050,7 @@ static PyObject *sipDo_EnergyMinimizer_takeSnapShot(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_finishIteration(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_finishIteration(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1088,7 +1088,7 @@ static PyObject *sipDo_EnergyMinimizer_finishIteration(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_getNumberOfIteration(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_getNumberOfIteration(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1126,7 +1126,7 @@ static PyObject *sipDo_EnergyMinimizer_getNumberOfIteration(PyObject *sipThisObj
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_getDirection(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_getDirection(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1164,7 +1164,7 @@ static PyObject *sipDo_EnergyMinimizer_getDirection(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_getGradient(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_getGradient(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1202,7 +1202,7 @@ static PyObject *sipDo_EnergyMinimizer_getGradient(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_getInitialGradient(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_getInitialGradient(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1240,7 +1240,7 @@ static PyObject *sipDo_EnergyMinimizer_getInitialGradient(PyObject *sipThisObj,P
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_getEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_getEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1278,7 +1278,7 @@ static PyObject *sipDo_EnergyMinimizer_getEnergy(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_getInitialEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_getInitialEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1316,7 +1316,7 @@ static PyObject *sipDo_EnergyMinimizer_getInitialEnergy(PyObject *sipThisObj,PyO
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_setNumberOfIteration(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_setNumberOfIteration(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1356,7 +1356,7 @@ static PyObject *sipDo_EnergyMinimizer_setNumberOfIteration(PyObject *sipThisObj
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_getMaximalNumberOfIterations(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_getMaximalNumberOfIterations(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1394,7 +1394,7 @@ static PyObject *sipDo_EnergyMinimizer_getMaximalNumberOfIterations(PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_setMaximalNumberOfIterations(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_setMaximalNumberOfIterations(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1434,7 +1434,7 @@ static PyObject *sipDo_EnergyMinimizer_setMaximalNumberOfIterations(PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_setMaxSameEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_setMaxSameEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1474,7 +1474,7 @@ static PyObject *sipDo_EnergyMinimizer_setMaxSameEnergy(PyObject *sipThisObj,PyO
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_getMaxSameEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_getMaxSameEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1512,7 +1512,7 @@ static PyObject *sipDo_EnergyMinimizer_getMaxSameEnergy(PyObject *sipThisObj,PyO
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_setEnergyOutputFrequency(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_setEnergyOutputFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1552,7 +1552,7 @@ static PyObject *sipDo_EnergyMinimizer_setEnergyOutputFrequency(PyObject *sipThi
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_getEnergyOutputFrequency(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_getEnergyOutputFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1590,7 +1590,7 @@ static PyObject *sipDo_EnergyMinimizer_getEnergyOutputFrequency(PyObject *sipThi
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_setEnergyDifferenceBound(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_setEnergyDifferenceBound(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1630,7 +1630,7 @@ static PyObject *sipDo_EnergyMinimizer_setEnergyDifferenceBound(PyObject *sipThi
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_getEnergyDifferenceBound(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_getEnergyDifferenceBound(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1668,7 +1668,7 @@ static PyObject *sipDo_EnergyMinimizer_getEnergyDifferenceBound(PyObject *sipThi
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_setMaxGradient(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_setMaxGradient(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1708,7 +1708,7 @@ static PyObject *sipDo_EnergyMinimizer_setMaxGradient(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_getMaxGradient(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_getMaxGradient(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1746,7 +1746,7 @@ static PyObject *sipDo_EnergyMinimizer_getMaxGradient(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_setMaximalShift(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_setMaximalShift(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1786,7 +1786,7 @@ static PyObject *sipDo_EnergyMinimizer_setMaximalShift(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_getMaximalShift(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_getMaximalShift(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1824,7 +1824,7 @@ static PyObject *sipDo_EnergyMinimizer_getMaximalShift(PyObject *sipThisObj,PyOb
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_setSnapShotFrequency(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_setSnapShotFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1864,7 +1864,7 @@ static PyObject *sipDo_EnergyMinimizer_setSnapShotFrequency(PyObject *sipThisObj
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_getSnapShotFrequency(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_getSnapShotFrequency(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1902,7 +1902,7 @@ static PyObject *sipDo_EnergyMinimizer_getSnapShotFrequency(PyObject *sipThisObj
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_getForceField(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_getForceField(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1940,7 +1940,7 @@ static PyObject *sipDo_EnergyMinimizer_getForceField(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_EnergyMinimizer_minimize(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_EnergyMinimizer_minimize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1983,7 +1983,7 @@ static PyObject *sipDo_EnergyMinimizer_minimize(PyObject *sipThisObj,PyObject *s
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_EnergyMinimizer(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_EnergyMinimizer(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_EnergyMinimizer)
 		return ptr;
@@ -2173,7 +2173,7 @@ PyObject *sipNew_EnergyMinimizer(PyObject *sipSelf,PyObject *sipArgs)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_EnergyMinimizer_options(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_EnergyMinimizer_options(PyObject *sipThisObj,PyObject *valobj)
 {
 	int iserr = 0;
 	Options *val;

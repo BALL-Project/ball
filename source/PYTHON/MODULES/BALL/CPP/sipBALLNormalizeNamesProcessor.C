@@ -169,7 +169,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_NormalizeNamesProcessor_setFragmentDB(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_NormalizeNamesProcessor_setFragmentDB(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -217,7 +217,7 @@ static PyObject *sipDo_NormalizeNamesProcessor_setFragmentDB(PyObject *sipThisOb
 	return NULL;
 }
 
-static PyObject *sipDo_NormalizeNamesProcessor_setNamingStandard(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_NormalizeNamesProcessor_setNamingStandard(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -268,7 +268,7 @@ static PyObject *sipDo_NormalizeNamesProcessor_setNamingStandard(PyObject *sipTh
 	return NULL;
 }
 
-static PyObject *sipDo_NormalizeNamesProcessor_getNamingStandard(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_NormalizeNamesProcessor_getNamingStandard(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -306,7 +306,7 @@ static PyObject *sipDo_NormalizeNamesProcessor_getNamingStandard(PyObject *sipTh
 	return NULL;
 }
 
-static PyObject *sipDo_NormalizeNamesProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_NormalizeNamesProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -344,7 +344,7 @@ static PyObject *sipDo_NormalizeNamesProcessor_start(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_NormalizeNamesProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_NormalizeNamesProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -382,7 +382,7 @@ static PyObject *sipDo_NormalizeNamesProcessor_finish(PyObject *sipThisObj,PyObj
 	return NULL;
 }
 
-static PyObject *sipDo_NormalizeNamesProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_NormalizeNamesProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -432,7 +432,7 @@ static PyObject *sipDo_NormalizeNamesProcessor_CallOp(PyObject *sipThisObj,PyObj
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_NormalizeNamesProcessor(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_NormalizeNamesProcessor(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

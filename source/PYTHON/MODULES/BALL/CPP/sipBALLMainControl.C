@@ -197,7 +197,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_MainControl_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -227,7 +227,7 @@ static PyObject *sipDo_MainControl_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -257,7 +257,7 @@ static PyObject *sipDo_MainControl_destroy(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_insert(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_insert(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -315,7 +315,7 @@ static PyObject *sipDo_MainControl_insert(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_remove(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_remove(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -396,7 +396,7 @@ static PyObject *sipDo_MainControl_remove(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_getDescriptorList(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_getDescriptorList(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -437,7 +437,7 @@ static PyObject *sipDo_MainControl_getDescriptorList(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_setName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_setName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -491,7 +491,7 @@ static PyObject *sipDo_MainControl_setName(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_getName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -572,7 +572,7 @@ static PyObject *sipDo_MainControl_getName(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -725,7 +725,7 @@ static PyObject *sipDo_MainControl_getDescriptor(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_setCenter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_setCenter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -776,7 +776,7 @@ static PyObject *sipDo_MainControl_setCenter(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_getCenter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_getCenter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -857,7 +857,7 @@ static PyObject *sipDo_MainControl_getCenter(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_update(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_update(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -905,7 +905,7 @@ static PyObject *sipDo_MainControl_update(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_updateAll(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_updateAll(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -943,7 +943,7 @@ static PyObject *sipDo_MainControl_updateAll(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_isInserted(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_isInserted(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1024,7 +1024,7 @@ static PyObject *sipDo_MainControl_isInserted(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1054,7 +1054,7 @@ static PyObject *sipDo_MainControl_isValid(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_countInstances(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_countInstances(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -1084,7 +1084,7 @@ static PyObject *sipDo_MainControl_countInstances(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_MainControl_getInstance(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_MainControl_getInstance(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -1129,7 +1129,7 @@ static PyObject *sipDo_MainControl_getInstance(PyObject *,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_MainControl(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_MainControl(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

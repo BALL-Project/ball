@@ -169,7 +169,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_RuleProcessor_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RuleProcessor_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -207,7 +207,7 @@ static PyObject *sipDo_RuleProcessor_clear(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_RuleProcessor_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RuleProcessor_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -245,7 +245,7 @@ static PyObject *sipDo_RuleProcessor_destroy(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_RuleProcessor_initialize(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RuleProcessor_initialize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -299,7 +299,7 @@ static PyObject *sipDo_RuleProcessor_initialize(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_RuleProcessor_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RuleProcessor_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -347,7 +347,7 @@ static PyObject *sipDo_RuleProcessor_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_RuleProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RuleProcessor_start(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -385,7 +385,7 @@ static PyObject *sipDo_RuleProcessor_start(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_RuleProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RuleProcessor_finish(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -423,7 +423,7 @@ static PyObject *sipDo_RuleProcessor_finish(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_RuleProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RuleProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -471,7 +471,7 @@ static PyObject *sipDo_RuleProcessor_CallOp(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_RuleProcessor_evaluate(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RuleProcessor_evaluate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -519,7 +519,7 @@ static PyObject *sipDo_RuleProcessor_evaluate(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_RuleProcessor_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_RuleProcessor_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -559,7 +559,7 @@ static PyObject *sipDo_RuleProcessor_isValid(PyObject *sipThisObj,PyObject *sipA
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_RuleProcessor(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_RuleProcessor(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

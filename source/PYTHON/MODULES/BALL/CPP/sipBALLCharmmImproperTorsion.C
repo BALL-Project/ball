@@ -104,7 +104,7 @@ bool sipCharmmImproperTorsion::setup()
 		CharmmImproperTorsion::setup();
 }
 
-static PyObject *sipDo_CharmmImproperTorsion_setup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CharmmImproperTorsion_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -142,7 +142,7 @@ static PyObject *sipDo_CharmmImproperTorsion_setup(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_CharmmImproperTorsion_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CharmmImproperTorsion_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -180,7 +180,7 @@ static PyObject *sipDo_CharmmImproperTorsion_updateEnergy(PyObject *sipThisObj,P
 	return NULL;
 }
 
-static PyObject *sipDo_CharmmImproperTorsion_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_CharmmImproperTorsion_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -220,7 +220,7 @@ static PyObject *sipDo_CharmmImproperTorsion_updateForces(PyObject *sipThisObj,P
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_CharmmImproperTorsion(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_CharmmImproperTorsion(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

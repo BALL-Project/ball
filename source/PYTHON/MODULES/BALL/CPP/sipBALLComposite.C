@@ -145,7 +145,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_Composite_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -175,7 +175,7 @@ static PyObject *sipDo_Composite_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -230,7 +230,7 @@ static PyObject *sipDo_Composite_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -279,7 +279,7 @@ static PyObject *sipDo_Composite_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -328,7 +328,7 @@ static PyObject *sipDo_Composite_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_getDegree(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_getDegree(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -366,7 +366,7 @@ static PyObject *sipDo_Composite_getDegree(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_countDescendants(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_countDescendants(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -404,7 +404,7 @@ static PyObject *sipDo_Composite_countDescendants(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_getPathLength(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_getPathLength(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -452,7 +452,7 @@ static PyObject *sipDo_Composite_getPathLength(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_getDepth(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_getDepth(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -490,7 +490,7 @@ static PyObject *sipDo_Composite_getDepth(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_getHeight(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_getHeight(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -528,7 +528,7 @@ static PyObject *sipDo_Composite_getHeight(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_getRoot(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_getRoot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -589,7 +589,7 @@ static PyObject *sipDo_Composite_getRoot(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_getLowestCommonAncestor(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_getLowestCommonAncestor(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -670,7 +670,7 @@ static PyObject *sipDo_Composite_getLowestCommonAncestor(PyObject *sipThisObj,Py
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_getParent(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_getParent(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -731,7 +731,7 @@ static PyObject *sipDo_Composite_getParent(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_getChild(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_getChild(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -818,7 +818,7 @@ static PyObject *sipDo_Composite_getChild(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_getSibling(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_getSibling(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -905,7 +905,7 @@ static PyObject *sipDo_Composite_getSibling(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_getFirstChild(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_getFirstChild(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -966,7 +966,7 @@ static PyObject *sipDo_Composite_getFirstChild(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_getLastChild(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_getLastChild(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1027,7 +1027,7 @@ static PyObject *sipDo_Composite_getLastChild(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_getModificationTime(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_getModificationTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1057,7 +1057,7 @@ static PyObject *sipDo_Composite_getModificationTime(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_getSelectionTime(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_getSelectionTime(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1087,7 +1087,7 @@ static PyObject *sipDo_Composite_getSelectionTime(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_expand(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_expand(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1125,7 +1125,7 @@ static PyObject *sipDo_Composite_expand(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_collapse(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_collapse(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1163,7 +1163,7 @@ static PyObject *sipDo_Composite_collapse(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_prependChild(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_prependChild(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1211,7 +1211,7 @@ static PyObject *sipDo_Composite_prependChild(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_appendChild(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_appendChild(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1259,7 +1259,7 @@ static PyObject *sipDo_Composite_appendChild(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_insertParent(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_insertParent(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -1306,7 +1306,7 @@ static PyObject *sipDo_Composite_insertParent(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_insertBefore(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_insertBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1354,7 +1354,7 @@ static PyObject *sipDo_Composite_insertBefore(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_insertAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1402,7 +1402,7 @@ static PyObject *sipDo_Composite_insertAfter(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_spliceBefore(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1450,7 +1450,7 @@ static PyObject *sipDo_Composite_spliceBefore(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_spliceAfter(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1498,7 +1498,7 @@ static PyObject *sipDo_Composite_spliceAfter(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_splice(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_splice(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1546,7 +1546,7 @@ static PyObject *sipDo_Composite_splice(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_removeChild(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_removeChild(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1594,7 +1594,7 @@ static PyObject *sipDo_Composite_removeChild(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_replace(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_replace(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1642,7 +1642,7 @@ static PyObject *sipDo_Composite_replace(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1690,7 +1690,7 @@ static PyObject *sipDo_Composite_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_select(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_select(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1720,7 +1720,7 @@ static PyObject *sipDo_Composite_select(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_deselect(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_deselect(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1750,7 +1750,7 @@ static PyObject *sipDo_Composite_deselect(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isExpanded(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isExpanded(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1788,7 +1788,7 @@ static PyObject *sipDo_Composite_isExpanded(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isCollapsed(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isCollapsed(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1826,7 +1826,7 @@ static PyObject *sipDo_Composite_isCollapsed(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1864,7 +1864,7 @@ static PyObject *sipDo_Composite_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isRoot(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isRoot(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1902,7 +1902,7 @@ static PyObject *sipDo_Composite_isRoot(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isRootOf(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isRootOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1950,7 +1950,7 @@ static PyObject *sipDo_Composite_isRootOf(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isInterior(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isInterior(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1988,7 +1988,7 @@ static PyObject *sipDo_Composite_isInterior(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_hasChild(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_hasChild(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2026,7 +2026,7 @@ static PyObject *sipDo_Composite_hasChild(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isChildOf(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isChildOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2074,7 +2074,7 @@ static PyObject *sipDo_Composite_isChildOf(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isFirstChild(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isFirstChild(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2112,7 +2112,7 @@ static PyObject *sipDo_Composite_isFirstChild(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isFirstChildOf(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isFirstChildOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2160,7 +2160,7 @@ static PyObject *sipDo_Composite_isFirstChildOf(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isLastChild(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isLastChild(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2198,7 +2198,7 @@ static PyObject *sipDo_Composite_isLastChild(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isLastChildOf(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isLastChildOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2246,7 +2246,7 @@ static PyObject *sipDo_Composite_isLastChildOf(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_hasParent(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_hasParent(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2284,7 +2284,7 @@ static PyObject *sipDo_Composite_hasParent(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isParentOf(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isParentOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2332,7 +2332,7 @@ static PyObject *sipDo_Composite_isParentOf(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_hasSibling(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_hasSibling(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2370,7 +2370,7 @@ static PyObject *sipDo_Composite_hasSibling(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isSiblingOf(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isSiblingOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2418,7 +2418,7 @@ static PyObject *sipDo_Composite_isSiblingOf(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_hasPreviousSibling(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_hasPreviousSibling(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2456,7 +2456,7 @@ static PyObject *sipDo_Composite_hasPreviousSibling(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isPreviousSiblingOf(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isPreviousSiblingOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2504,7 +2504,7 @@ static PyObject *sipDo_Composite_isPreviousSiblingOf(PyObject *sipThisObj,PyObje
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_hasNextSibling(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_hasNextSibling(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2542,7 +2542,7 @@ static PyObject *sipDo_Composite_hasNextSibling(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isNextSiblingOf(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isNextSiblingOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2590,7 +2590,7 @@ static PyObject *sipDo_Composite_isNextSiblingOf(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isDescendantOf(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isDescendantOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2638,7 +2638,7 @@ static PyObject *sipDo_Composite_isDescendantOf(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isAncestorOf(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isAncestorOf(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2686,7 +2686,7 @@ static PyObject *sipDo_Composite_isAncestorOf(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isRelatedWith(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isRelatedWith(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2734,7 +2734,7 @@ static PyObject *sipDo_Composite_isRelatedWith(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isHomomorph(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isHomomorph(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2782,7 +2782,7 @@ static PyObject *sipDo_Composite_isHomomorph(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_containsSelection(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_containsSelection(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2820,7 +2820,7 @@ static PyObject *sipDo_Composite_containsSelection(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_Composite_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Composite_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -2852,7 +2852,7 @@ static PyObject *sipDo_Composite_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Composite(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Composite(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

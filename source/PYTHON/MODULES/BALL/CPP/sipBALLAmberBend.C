@@ -104,7 +104,7 @@ bool sipAmberBend::setup()
 		AmberBend::setup();
 }
 
-static PyObject *sipDo_AmberBend_setup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AmberBend_setup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -142,7 +142,7 @@ static PyObject *sipDo_AmberBend_setup(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_AmberBend_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AmberBend_updateEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -180,7 +180,7 @@ static PyObject *sipDo_AmberBend_updateEnergy(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_AmberBend_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AmberBend_updateForces(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -220,7 +220,7 @@ static PyObject *sipDo_AmberBend_updateForces(PyObject *sipThisObj,PyObject *sip
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_AmberBend(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_AmberBend(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

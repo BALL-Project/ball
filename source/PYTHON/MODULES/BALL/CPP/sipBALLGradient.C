@@ -33,7 +33,7 @@ static PyTypeObject sipType_Gradient = {
 	0,
 };
 
-static PyObject *sipDo_Gradient_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Gradient_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -114,7 +114,7 @@ static PyObject *sipDo_Gradient_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Gradient_negate(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Gradient_negate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -152,7 +152,7 @@ static PyObject *sipDo_Gradient_negate(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Gradient_normalize(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Gradient_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -190,7 +190,7 @@ static PyObject *sipDo_Gradient_normalize(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Gradient_size(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Gradient_size(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -228,7 +228,7 @@ static PyObject *sipDo_Gradient_size(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Gradient_invalidate(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Gradient_invalidate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -266,7 +266,7 @@ static PyObject *sipDo_Gradient_invalidate(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Gradient_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Gradient_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -306,7 +306,7 @@ static PyObject *sipDo_Gradient_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Gradient(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Gradient(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Gradient)
 		return ptr;
@@ -455,7 +455,7 @@ PyObject *sipNew_Gradient(PyObject *sipSelf,PyObject *sipArgs)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Gradient_rms(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Gradient_rms(PyObject *sipThisObj,PyObject *valobj)
 {
 	double val;
 	Gradient *ptr;
@@ -486,7 +486,7 @@ static PyObject *sipGetSetVar_Gradient_rms(PyObject *sipThisObj,PyObject *valobj
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Gradient_inv_norm(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Gradient_inv_norm(PyObject *sipThisObj,PyObject *valobj)
 {
 	double val;
 	Gradient *ptr;
@@ -517,7 +517,7 @@ static PyObject *sipGetSetVar_Gradient_inv_norm(PyObject *sipThisObj,PyObject *v
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Gradient_norm(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Gradient_norm(PyObject *sipThisObj,PyObject *valobj)
 {
 	double val;
 	Gradient *ptr;

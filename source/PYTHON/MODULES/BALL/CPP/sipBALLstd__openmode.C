@@ -35,7 +35,7 @@ static PyTypeObject sipType_std__openmode = {
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_std__openmode(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_std__openmode(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_std__openmode)
 		return ptr;

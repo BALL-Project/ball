@@ -1,4 +1,4 @@
-// $Id: matrix44.sip,v 1.1 2000/07/18 21:27:44 oliver Exp $
+// $Id: matrix44.sip,v 1.2 2001/08/01 01:28:39 oliver Exp $
 
 class Matrix4x4
 {
@@ -58,7 +58,7 @@ class Matrix4x4
   void setRow(Position /row/, const Vector4& /row_value/);
   void setColumn(Position /col/, const Vector4& /col_value/);
   bool isEqual(const Matrix4x4& /m/) const;
-  Vector4& getDiagonal() const;
+  Vector4 getDiagonal() const;
   float operator () (Position /row/, Position /col/);
   float operator () (Position /row/, Position /col/) const;
   float operator [] (Position /index/) const;
@@ -66,16 +66,16 @@ class Matrix4x4
   Matrix4x4 operator + () const;
   Matrix4x4 operator - () const;
   Matrix4x4 operator + (const Matrix4x4& /m/) const;
-  // Matrix4x4& operator += (const Matrix4x4& /m/);
+  Matrix4x4& operator += (const Matrix4x4& /m/);
   Matrix4x4 operator - (const Matrix4x4& /m/) const;
-  // Matrix4x4& operator -= (const Matrix4x4& /m/);
+  Matrix4x4& operator -= (const Matrix4x4& /m/);
   Matrix4x4 operator * (float /scalar/) const;
-  // Matrix4x4& operator *= (float /scalar/);
+  Matrix4x4& operator *= (float /scalar/);
   Matrix4x4 operator / (float /scalar/) const;
-  // Matrix4x4& operator /= (float /scalar/);
+  Matrix4x4& operator /= (float /scalar/);
   Matrix4x4 operator * (const Matrix4x4& /m/) const;
-  // Matrix4x4& operator *= (const Matrix4x4& /m/);
-  Vector4& operator * (const Vector4& /vector/) const;
+  Matrix4x4& operator *= (const Matrix4x4& /m/);
+  Vector4 operator * (const Vector4& /vector/) const;
   bool invert(Matrix4x4& /inverse/) const;
   bool invert();
   float getDeterminant() const;

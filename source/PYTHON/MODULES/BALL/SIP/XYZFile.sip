@@ -1,4 +1,4 @@
-// $Id: XYZFile.sip,v 1.1 2000/07/18 21:26:59 oliver Exp $
+// $Id: XYZFile.sip,v 1.2 2001/08/01 01:28:38 oliver Exp $
 
 class XYZFile 
 	: File
@@ -9,8 +9,10 @@ class XYZFile
 %End
   public:
   XYZFile();
-  XYZFile(const String&, File::OpenMode /openmode/ = File::IN);
-  //virtual ~XYZFile();
+  XYZFile(const String&, File::OpenMode /openmode/ = File::IN)
+		throw(FileNotFound);
+  ~XYZFile()
+		throw();
   virtual void write(const System&);
   virtual void read(System&);
 };

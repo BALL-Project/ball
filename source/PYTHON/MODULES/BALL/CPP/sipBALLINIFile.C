@@ -33,7 +33,7 @@ static PyTypeObject sipType_INIFile = {
 	0,
 };
 
-static PyObject *sipDo_INIFile_destroy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -71,7 +71,7 @@ static PyObject *sipDo_INIFile_destroy(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -109,7 +109,7 @@ static PyObject *sipDo_INIFile_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_read(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -147,7 +147,7 @@ static PyObject *sipDo_INIFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_write(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_write(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -185,7 +185,7 @@ static PyObject *sipDo_INIFile_write(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_getFilename(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_getFilename(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -223,7 +223,7 @@ static PyObject *sipDo_INIFile_getFilename(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_setFilename(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_setFilename(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -274,7 +274,7 @@ static PyObject *sipDo_INIFile_setFilename(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -312,7 +312,7 @@ static PyObject *sipDo_INIFile_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_getNumberOfLines(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_getNumberOfLines(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -350,7 +350,7 @@ static PyObject *sipDo_INIFile_getNumberOfLines(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_hasSection(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_hasSection(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -401,7 +401,7 @@ static PyObject *sipDo_INIFile_hasSection(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_getNumberOfSections(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_getNumberOfSections(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -439,7 +439,7 @@ static PyObject *sipDo_INIFile_getNumberOfSections(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_getSectionLength(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_getSectionLength(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -490,7 +490,7 @@ static PyObject *sipDo_INIFile_getSectionLength(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_deleteSection(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_deleteSection(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -541,7 +541,7 @@ static PyObject *sipDo_INIFile_deleteSection(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_appendSection(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_appendSection(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -592,7 +592,7 @@ static PyObject *sipDo_INIFile_appendSection(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_hasEntry(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_hasEntry(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -649,7 +649,7 @@ static PyObject *sipDo_INIFile_hasEntry(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_getValue(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_getValue(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -706,7 +706,7 @@ static PyObject *sipDo_INIFile_getValue(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_setValue(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_setValue(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -769,7 +769,7 @@ static PyObject *sipDo_INIFile_setValue(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -817,7 +817,7 @@ static PyObject *sipDo_INIFile_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_setDuplicateKeyCheck(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_setDuplicateKeyCheck(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -857,7 +857,7 @@ static PyObject *sipDo_INIFile_setDuplicateKeyCheck(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_INIFile_getDuplicateKeyCheck(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_INIFile_getDuplicateKeyCheck(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -897,7 +897,7 @@ static PyObject *sipDo_INIFile_getDuplicateKeyCheck(PyObject *sipThisObj,PyObjec
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_INIFile(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_INIFile(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_INIFile)
 		return ptr;

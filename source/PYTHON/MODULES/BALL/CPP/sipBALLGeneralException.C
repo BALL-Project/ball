@@ -33,7 +33,7 @@ static PyTypeObject sipType_GeneralException = {
 	0,
 };
 
-static PyObject *sipDo_GeneralException_getName(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_GeneralException_getName(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -77,7 +77,7 @@ static PyObject *sipDo_GeneralException_getName(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_GeneralException_getMessage(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_GeneralException_getMessage(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -121,7 +121,7 @@ static PyObject *sipDo_GeneralException_getMessage(PyObject *sipThisObj,PyObject
 	return NULL;
 }
 
-static PyObject *sipDo_GeneralException_getLine(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_GeneralException_getLine(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -159,7 +159,7 @@ static PyObject *sipDo_GeneralException_getLine(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_GeneralException_getFile(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_GeneralException_getFile(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -205,7 +205,7 @@ static PyObject *sipDo_GeneralException_getFile(PyObject *sipThisObj,PyObject *s
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_GeneralException(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_GeneralException(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_GeneralException)
 		return ptr;

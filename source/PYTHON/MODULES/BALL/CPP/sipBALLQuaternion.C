@@ -33,7 +33,7 @@ static PyTypeObject sipType_Quaternion = {
 	0,
 };
 
-static PyObject *sipDo_Quaternion_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Quaternion_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -143,7 +143,7 @@ static PyObject *sipDo_Quaternion_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Quaternion_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Quaternion_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -191,7 +191,7 @@ static PyObject *sipDo_Quaternion_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Quaternion_setIdentity(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Quaternion_setIdentity(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -229,7 +229,7 @@ static PyObject *sipDo_Quaternion_setIdentity(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Quaternion_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Quaternion_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -277,7 +277,7 @@ static PyObject *sipDo_Quaternion_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Quaternion_getAngle(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Quaternion_getAngle(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -315,7 +315,7 @@ static PyObject *sipDo_Quaternion_getAngle(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Quaternion_getAxis(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Quaternion_getAxis(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -353,7 +353,7 @@ static PyObject *sipDo_Quaternion_getAxis(PyObject *sipThisObj,PyObject *sipArgs
 	return NULL;
 }
 
-static PyObject *sipDo_Quaternion_getRotationMatrix(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Quaternion_getRotationMatrix(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -401,7 +401,7 @@ static PyObject *sipDo_Quaternion_getRotationMatrix(PyObject *sipThisObj,PyObjec
 	return NULL;
 }
 
-static PyObject *sipDo_Quaternion_getInverse(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Quaternion_getInverse(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -439,7 +439,7 @@ static PyObject *sipDo_Quaternion_getInverse(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_Quaternion_getConjugate(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Quaternion_getConjugate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -479,7 +479,7 @@ static PyObject *sipDo_Quaternion_getConjugate(PyObject *sipThisObj,PyObject *si
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Quaternion(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Quaternion(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Quaternion)
 		return ptr;
@@ -623,7 +623,7 @@ PyObject *sipNew_Quaternion(PyObject *sipSelf,PyObject *sipArgs)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Quaternion_angle(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Quaternion_angle(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Quaternion *ptr;
@@ -654,7 +654,7 @@ static PyObject *sipGetSetVar_Quaternion_angle(PyObject *sipThisObj,PyObject *va
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Quaternion_k(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Quaternion_k(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Quaternion *ptr;
@@ -685,7 +685,7 @@ static PyObject *sipGetSetVar_Quaternion_k(PyObject *sipThisObj,PyObject *valobj
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Quaternion_j(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Quaternion_j(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Quaternion *ptr;
@@ -716,7 +716,7 @@ static PyObject *sipGetSetVar_Quaternion_j(PyObject *sipThisObj,PyObject *valobj
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Quaternion_i(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Quaternion_i(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Quaternion *ptr;

@@ -67,7 +67,7 @@ Processor::Result sipTransformationProcessor::operator()(Atom& a0)
 		TransformationProcessor::operator()(a0);
 }
 
-static PyObject *sipDo_TransformationProcessor_setTransformation(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TransformationProcessor_setTransformation(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -115,7 +115,7 @@ static PyObject *sipDo_TransformationProcessor_setTransformation(PyObject *sipTh
 	return NULL;
 }
 
-static PyObject *sipDo_TransformationProcessor_getTransformation(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TransformationProcessor_getTransformation(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -153,7 +153,7 @@ static PyObject *sipDo_TransformationProcessor_getTransformation(PyObject *sipTh
 	return NULL;
 }
 
-static PyObject *sipDo_TransformationProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_TransformationProcessor_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -203,7 +203,7 @@ static PyObject *sipDo_TransformationProcessor_CallOp(PyObject *sipThisObj,PyObj
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_TransformationProcessor(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_TransformationProcessor(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

@@ -33,7 +33,7 @@ static PyTypeObject sipType_FileNotFound = {
 	0,
 };
 
-static PyObject *sipDo_FileNotFound_getFilename(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_FileNotFound_getFilename(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -44,7 +44,7 @@ static PyObject *sipDo_FileNotFound_getFilename(PyObject *sipThisObj,PyObject *s
 	{
 		if (sipParseArgs(&sipArgsParsed,sipArgs,""))
 		{
-			const String *res;
+			String *res;
 			FileNotFound *ptr;
 
 			if ((ptr = (FileNotFound *)sipGetCppPtr(sipThis,sipClass_FileNotFound)) == NULL)
@@ -52,7 +52,7 @@ static PyObject *sipDo_FileNotFound_getFilename(PyObject *sipThisObj,PyObject *s
 
    try
    {
-			res = &ptr -> FileNotFound::getFilename();
+			res = new String(ptr -> FileNotFound::getFilename());
    }
    catch (...)
     {
@@ -60,7 +60,7 @@ static PyObject *sipDo_FileNotFound_getFilename(PyObject *sipThisObj,PyObject *s
       return NULL;
 		}
 
-			return sipMapCppToSelf(res,sipClass_String);
+			return sipNewCppToSelf(res,sipClass_String,SIP_SIMPLE | SIP_PY_OWNED);
 		}
 	}
 
@@ -73,7 +73,7 @@ static PyObject *sipDo_FileNotFound_getFilename(PyObject *sipThisObj,PyObject *s
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_FileNotFound(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_FileNotFound(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

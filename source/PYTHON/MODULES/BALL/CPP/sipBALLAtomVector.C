@@ -33,7 +33,7 @@ static PyTypeObject sipType_AtomVector = {
 	0,
 };
 
-static PyObject *sipDo_AtomVector_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomVector_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -71,7 +71,7 @@ static PyObject *sipDo_AtomVector_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_AtomVector_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomVector_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -153,7 +153,7 @@ static PyObject *sipDo_AtomVector_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_AtomVector_size(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomVector_size(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -191,7 +191,7 @@ static PyObject *sipDo_AtomVector_size(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_AtomVector_savePositions(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomVector_savePositions(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -229,7 +229,7 @@ static PyObject *sipDo_AtomVector_savePositions(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_AtomVector_resetPositions(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomVector_resetPositions(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -267,7 +267,7 @@ static PyObject *sipDo_AtomVector_resetPositions(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_AtomVector_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomVector_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -316,7 +316,7 @@ static PyObject *sipDo_AtomVector_moveTo(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_AtomVector_push_back(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomVector_push_back(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -364,7 +364,7 @@ static PyObject *sipDo_AtomVector_push_back(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_AtomVector_resize(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AtomVector_resize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -406,7 +406,7 @@ static PyObject *sipDo_AtomVector_resize(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_AtomVector(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_AtomVector(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_AtomVector)
 		return ptr;

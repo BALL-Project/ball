@@ -5,7 +5,7 @@
 PyObject *sipClass_OpenMode;
 
 static void sipDealloc_OpenMode(sipThisType *);
-static PyObject * sip__str__OpenMode(PyObject *a0);
+extern "C" PyObject * sip__str__OpenMode(PyObject *a0);
 
 static PyTypeObject sipType_OpenMode = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -36,7 +36,7 @@ static PyTypeObject sipType_OpenMode = {
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_OpenMode(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_OpenMode(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_OpenMode)
 		return ptr;
@@ -54,7 +54,7 @@ static void sipDealloc_OpenMode(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__OpenMode(PyObject *a0)
+extern "C" PyObject * sip__str__OpenMode(PyObject *a0)
 {
 #line 106 "file.sip"
   OpenMode* ptr;

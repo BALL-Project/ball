@@ -73,7 +73,7 @@ bool sipAmberFF::specificSetup()
 		AmberFF::specificSetup();
 }
 
-static PyObject *sipDo_AmberFF_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AmberFF_specificSetup(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -111,7 +111,7 @@ static PyObject *sipDo_AmberFF_specificSetup(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_AmberFF_getStretchEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AmberFF_getStretchEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -149,7 +149,7 @@ static PyObject *sipDo_AmberFF_getStretchEnergy(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_AmberFF_getBendEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AmberFF_getBendEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -187,7 +187,7 @@ static PyObject *sipDo_AmberFF_getBendEnergy(PyObject *sipThisObj,PyObject *sipA
 	return NULL;
 }
 
-static PyObject *sipDo_AmberFF_getTorsionEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AmberFF_getTorsionEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -225,7 +225,7 @@ static PyObject *sipDo_AmberFF_getTorsionEnergy(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_AmberFF_getNonbondedEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AmberFF_getNonbondedEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -263,7 +263,7 @@ static PyObject *sipDo_AmberFF_getNonbondedEnergy(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_AmberFF_getESEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AmberFF_getESEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -301,7 +301,7 @@ static PyObject *sipDo_AmberFF_getESEnergy(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_AmberFF_getVdWEnergy(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AmberFF_getVdWEnergy(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -339,7 +339,7 @@ static PyObject *sipDo_AmberFF_getVdWEnergy(PyObject *sipThisObj,PyObject *sipAr
 	return NULL;
 }
 
-static PyObject *sipDo_AmberFF_hasInitializedParameters(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_AmberFF_hasInitializedParameters(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -379,7 +379,7 @@ static PyObject *sipDo_AmberFF_hasInitializedParameters(PyObject *sipThisObj,PyO
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_AmberFF(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_AmberFF(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

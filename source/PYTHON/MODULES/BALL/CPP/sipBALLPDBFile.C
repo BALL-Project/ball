@@ -36,19 +36,19 @@ static PyTypeObject sipType_PDBFile = {
 sipPDBFile::sipPDBFile()
    : PDBFile()
 {
-	sipCommonCtor(sipPyMethods,4);
+	sipCommonCtor(sipPyMethods,8);
 }
 
 sipPDBFile::sipPDBFile(const String& a0,std__openmode a1)
-   : PDBFile(a0,a1)
+   throw(FileNotFound) : PDBFile(a0,a1)
 {
-	sipCommonCtor(sipPyMethods,4);
+	sipCommonCtor(sipPyMethods,8);
 }
 
 sipPDBFile::sipPDBFile(const PDBFile& a0)
    : PDBFile(a0)
 {
-	sipCommonCtor(sipPyMethods,4);
+	sipCommonCtor(sipPyMethods,8);
 }
 
 sipPDBFile::~sipPDBFile()
@@ -57,13 +57,57 @@ sipPDBFile::~sipPDBFile()
 	sipCommonDtor(sipPyThis);
 }
 
+void sipPDBFile::operator<<(const System& a0)
+
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_LShiftOp,&relLock))
+		sipPDBFile::sipVH_LShiftOp(&sipPyMethods[0],sipPyThis,relLock,a0);
+	else
+		PDBFile::operator<<(a0);
+}
+
+void sipPDBFile::operator<<(const Protein& a0)
+
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_LShiftOp,&relLock))
+		sipPDBFile::sipVH_LShiftOp(&sipPyMethods[1],sipPyThis,relLock,a0);
+	else
+		PDBFile::operator<<(a0);
+}
+
+void sipPDBFile::operator>>(System& a0)
+
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_RShiftOp,&relLock))
+		sipPDBFile::sipVH_RShiftOp(&sipPyMethods[2],sipPyThis,relLock,a0);
+	else
+		PDBFile::operator>>(a0);
+}
+
+void sipPDBFile::operator>>(Protein& a0)
+
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_RShiftOp,&relLock))
+		sipPDBFile::sipVH_RShiftOp(&sipPyMethods[3],sipPyThis,relLock,a0);
+	else
+		PDBFile::operator>>(a0);
+}
+
 void sipPDBFile::write(const System& a0)
 
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_write,&relLock))
-		sipPDBFile::sipVH_write(&sipPyMethods[0],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_write,&relLock))
+		sipPDBFile::sipVH_write(&sipPyMethods[4],sipPyThis,relLock,a0);
 	else
 		PDBFile::write(a0);
 }
@@ -73,8 +117,8 @@ void sipPDBFile::write(const Protein& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_write,&relLock))
-		sipPDBFile::sipVH_write(&sipPyMethods[1],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_write,&relLock))
+		sipPDBFile::sipVH_write(&sipPyMethods[5],sipPyThis,relLock,a0);
 	else
 		PDBFile::write(a0);
 }
@@ -84,8 +128,8 @@ void sipPDBFile::read(System& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_read,&relLock))
-		sipPDBFile::sipVH_read(&sipPyMethods[2],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[6],sipPyThis,NULL,sipName_BALL_read,&relLock))
+		sipPDBFile::sipVH_read(&sipPyMethods[6],sipPyThis,relLock,a0);
 	else
 		PDBFile::read(a0);
 }
@@ -95,10 +139,158 @@ void sipPDBFile::read(Protein& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_read,&relLock))
-		sipPDBFile::sipVH_read(&sipPyMethods[3],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[7],sipPyThis,NULL,sipName_BALL_read,&relLock))
+		sipPDBFile::sipVH_read(&sipPyMethods[7],sipPyThis,relLock,a0);
 	else
 		PDBFile::read(a0);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipPDBFile::sipVH_LShiftOp(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,const System& a0)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+	PyObject *a0obj;
+
+	a0obj = sipMapCppToSelf(&a0,sipClass_System);
+
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_PDBFile,sipName_BALL_LShiftOp);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipPDBFile::sipVH_LShiftOp(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,const Protein& a0)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+	PyObject *a0obj;
+
+	a0obj = sipMapCppToSelf(&a0,sipClass_Protein);
+
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_PDBFile,sipName_BALL_LShiftOp);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipPDBFile::sipVH_RShiftOp(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,System& a0)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+	PyObject *a0obj;
+
+	a0obj = sipMapCppToSelf(&a0,sipClass_System);
+
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_PDBFile,sipName_BALL_RShiftOp);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
+}
+
+// The common handler for all classes that inherit this virtual member
+// function.
+
+void sipPDBFile::sipVH_RShiftOp(const sipMethodCache *pymc,sipThisType *sipThis,int sipRelLock,Protein& a0)
+{
+	PyObject *resobj;
+	PyObject *sipArgs;
+	PyObject *a0obj;
+
+	a0obj = sipMapCppToSelf(&a0,sipClass_Protein);
+
+	sipArgs = Py_BuildValue("(ON)",sipThis -> sipSelf,a0obj);
+
+	if (sipArgs == NULL)
+		goto reportError;
+
+	resobj = sipEvalMethod(&pymc -> pyMethod,sipArgs);
+
+	Py_DECREF(sipArgs);
+
+	if (resobj != NULL)
+	{
+		Py_DECREF(resobj);
+
+		if (resobj == Py_None)
+			goto releaseLock;
+
+		sipBadVirtualResultType(sipName_BALL_PDBFile,sipName_BALL_RShiftOp);
+	}
+
+reportError:
+	PyErr_Print();
+
+releaseLock:
+	sipCondReleaseLock(sipRelLock);
 }
 
 // The common handler for all classes that inherit this virtual member
@@ -249,7 +441,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_PDBFile_read(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -330,7 +522,7 @@ static PyObject *sipDo_PDBFile_read(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_PDBFile_write(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_PDBFile_write(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -411,12 +603,179 @@ static PyObject *sipDo_PDBFile_write(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
+extern "C" PyObject *sipDo_PDBFile_RShiftOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBFile)) == NULL)
+		return NULL;
+
+	{
+		Protein * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Protein,&a0obj))
+		{
+			PDBFile *ptr;
+
+			if ((ptr = (PDBFile *)sipGetCppPtr(sipThis,sipClass_PDBFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Protein(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			ptr -> PDBFile::operator>>(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	{
+		System * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		{
+			PDBFile *ptr;
+
+			if ((ptr = (PDBFile *)sipGetCppPtr(sipThis,sipClass_PDBFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_System(a0obj,&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			ptr -> PDBFile::operator>>(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBFile,sipName_BALL_RShiftOp);
+
+	return NULL;
+}
+
+extern "C" PyObject *sipDo_PDBFile_LShiftOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_PDBFile)) == NULL)
+		return NULL;
+
+	{
+		const Protein * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_Protein,&a0obj))
+		{
+			PDBFile *ptr;
+
+			if ((ptr = (PDBFile *)sipGetCppPtr(sipThis,sipClass_PDBFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_Protein(a0obj,(Protein **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			ptr -> PDBFile::operator<<(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	{
+		const System * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_System,&a0obj))
+		{
+			PDBFile *ptr;
+
+			if ((ptr = (PDBFile *)sipGetCppPtr(sipThis,sipClass_PDBFile)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			sipConvertTo_System(a0obj,(System **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			ptr -> PDBFile::operator<<(* a0);
+   }
+   catch (...)
+    {
+      PyErr_SetString(PyExc_Exception, "unknown");
+      return NULL;
+		}
+
+			Py_INCREF(Py_None);
+			return Py_None;
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_PDBFile,sipName_BALL_LShiftOp);
+
+	return NULL;
+}
+
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_PDBFile(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_PDBFile(const void *ptr,PyObject *targetClass)
 {
+	const void *res;
+
 	if (targetClass == sipClass_PDBFile)
 		return ptr;
+
+	if ((res = sipCast_FileNotFound((FileNotFound *)(PDBFile *)ptr,targetClass)) != NULL)
+		return res;
 
 	return NULL;
 }
@@ -490,9 +849,10 @@ PyObject *sipNew_PDBFile(PyObject *sipSelf,PyObject *sipArgs)
    {
 			sipNew = new sipPDBFile(* a0,* a1);
    }
-   catch (...)
-    {
-      PyErr_SetString(PyExc_Exception, "unknown");
+   catch (FileNotFound e)
+   {
+      FileNotFound *my_exception = new FileNotFound(e);
+      PyErr_SetObject(sipClass_FileNotFound, sipNewCppToSelf(my_exception,sipClass_FileNotFound,SIP_SIMPLE | SIP_PY_OWNED));
       return NULL;
 		}
 
@@ -556,6 +916,8 @@ PyObject *sipNew_PDBFile(PyObject *sipSelf,PyObject *sipArgs)
 PyMethodDef sipClassAttrTab_PDBFile[] = {
 	{sipName_BALL_read, sipDo_PDBFile_read, METH_VARARGS, NULL},
 	{sipName_BALL_write, sipDo_PDBFile_write, METH_VARARGS, NULL},
+	{sipName_BALL_RShiftOp, sipDo_PDBFile_RShiftOp, METH_VARARGS, NULL},
+	{sipName_BALL_LShiftOp, sipDo_PDBFile_LShiftOp, METH_VARARGS, NULL},
 	{NULL}
 };
 

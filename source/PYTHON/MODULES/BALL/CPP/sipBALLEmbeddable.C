@@ -96,7 +96,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_Embeddable_unregisterThis(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Embeddable_unregisterThis(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -126,7 +126,7 @@ static PyObject *sipDo_Embeddable_unregisterThis(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_Embeddable_registerThis(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Embeddable_registerThis(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -158,7 +158,7 @@ static PyObject *sipDo_Embeddable_registerThis(PyObject *sipThisObj,PyObject *si
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Embeddable(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Embeddable(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Embeddable)
 		return ptr;

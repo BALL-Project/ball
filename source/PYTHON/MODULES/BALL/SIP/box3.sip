@@ -1,4 +1,4 @@
-// $Id: box3.sip,v 1.2 2001/07/25 11:32:32 oliver Exp $
+// $Id: box3.sip,v 1.3 2001/08/01 01:28:38 oliver Exp $
 
 class Box3
 {
@@ -30,7 +30,7 @@ class Box3
   float getHeight() const;
   float getDepth() const;
   void join(Box3&);
-  // bool operator == (Box3& box) const;
+  bool operator == (const Box3& /box/) const;
   // bool operator != (Box3& box) const;
   bool isValid() const;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;

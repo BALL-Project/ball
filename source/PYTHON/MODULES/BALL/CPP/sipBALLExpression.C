@@ -111,7 +111,7 @@ releaseLock:
 	return res;
 }
 
-static PyObject *sipDo_Expression_hasPredicate(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Expression_hasPredicate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -162,7 +162,7 @@ static PyObject *sipDo_Expression_hasPredicate(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Expression_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Expression_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -202,7 +202,7 @@ static PyObject *sipDo_Expression_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Expression_getPredicate(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Expression_getPredicate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -259,7 +259,7 @@ static PyObject *sipDo_Expression_getPredicate(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Expression_setExpression(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Expression_setExpression(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -310,7 +310,7 @@ static PyObject *sipDo_Expression_setExpression(PyObject *sipThisObj,PyObject *s
 	return NULL;
 }
 
-static PyObject *sipDo_Expression_getExpressionString(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Expression_getExpressionString(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -350,7 +350,7 @@ static PyObject *sipDo_Expression_getExpressionString(PyObject *sipThisObj,PyObj
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Expression(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Expression(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Expression)
 		return ptr;

@@ -115,7 +115,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_ExpressionPredicate_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ExpressionPredicate_CallOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -155,7 +155,7 @@ static PyObject *sipDo_ExpressionPredicate_CallOp(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
-static PyObject *sipDo_ExpressionPredicate_setArgument(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_ExpressionPredicate_setArgument(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -200,7 +200,7 @@ static PyObject *sipDo_ExpressionPredicate_setArgument(PyObject *sipThisObj,PyOb
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_ExpressionPredicate(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_ExpressionPredicate(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 

@@ -33,7 +33,7 @@ static PyTypeObject sipType_Sphere3 = {
 	0,
 };
 
-static PyObject *sipDo_Sphere3_swap(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Sphere3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -81,7 +81,7 @@ static PyObject *sipDo_Sphere3_swap(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Sphere3_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Sphere3_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -163,7 +163,7 @@ static PyObject *sipDo_Sphere3_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Sphere3_get(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Sphere3_get(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -245,7 +245,7 @@ static PyObject *sipDo_Sphere3_get(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Sphere3_has(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Sphere3_has(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -294,7 +294,7 @@ static PyObject *sipDo_Sphere3_has(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Sphere3_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Sphere3_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -332,7 +332,7 @@ static PyObject *sipDo_Sphere3_isEmpty(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Sphere3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Sphere3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -372,7 +372,7 @@ static PyObject *sipDo_Sphere3_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Sphere3(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Sphere3(const void *ptr,PyObject *targetClass)
 {
 	if (targetClass == sipClass_Sphere3)
 		return ptr;
@@ -495,7 +495,7 @@ PyObject *sipNew_Sphere3(PyObject *sipSelf,PyObject *sipArgs)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Sphere3_radius(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Sphere3_radius(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Sphere3 *ptr;
@@ -526,7 +526,7 @@ static PyObject *sipGetSetVar_Sphere3_radius(PyObject *sipThisObj,PyObject *valo
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Sphere3_p(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Sphere3_p(PyObject *sipThisObj,PyObject *valobj)
 {
 	int iserr = 0;
 	Vector3 *val;

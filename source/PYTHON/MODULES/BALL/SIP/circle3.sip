@@ -1,4 +1,4 @@
-// $Id: circle3.sip,v 1.1 2000/07/18 21:27:21 oliver Exp $
+// $Id: circle3.sip,v 1.2 2001/08/01 01:28:38 oliver Exp $
 
 class Circle3
 {
@@ -18,7 +18,7 @@ class Circle3
   // Circle3& operator = (const Circle3& /circle/);
   void get(Circle3& /circle/) const;
   void get(Vector3& /point/, Vector3& /normal/, float /rhs/) const;
-  // bool operator == (const Circle3& /circle/) const;
+  bool operator == (const Circle3& /circle/) const;
   // bool operator != (const Circle3& /circle/) const;
   bool has(const Vector3& /point/, bool /on_surface/ = false) const;
   bool isValid() const;

@@ -5,7 +5,7 @@
 PyObject *sipClass_Vector2;
 
 static void sipDealloc_Vector2(sipThisType *);
-static PyObject * sip__str__Vector2(PyObject *a0);
+extern "C" PyObject * sip__str__Vector2(PyObject *a0);
 
 static PyTypeObject sipType_Vector2 = {
 	PyObject_HEAD_INIT(&PyType_Type)
@@ -109,7 +109,7 @@ releaseLock:
 	sipCondReleaseLock(sipRelLock);
 }
 
-static PyObject *sipDo_Vector2_clear(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_clear(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -139,7 +139,7 @@ static PyObject *sipDo_Vector2_clear(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_set(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_set(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -214,7 +214,7 @@ static PyObject *sipDo_Vector2_set(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_getLength(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_getLength(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -244,7 +244,7 @@ static PyObject *sipDo_Vector2_getLength(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_getSquareLength(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_getSquareLength(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -274,7 +274,7 @@ static PyObject *sipDo_Vector2_getSquareLength(PyObject *sipThisObj,PyObject *si
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_normalize(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -313,7 +313,7 @@ static PyObject *sipDo_Vector2_normalize(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_negate(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_negate(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -343,7 +343,7 @@ static PyObject *sipDo_Vector2_negate(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_getZero(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_getZero(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -365,7 +365,7 @@ static PyObject *sipDo_Vector2_getZero(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_getUnit(PyObject *,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_getUnit(PyObject *,PyObject *sipArgs)
 {
 	int sipArgsParsed = 0;
 
@@ -387,7 +387,7 @@ static PyObject *sipDo_Vector2_getUnit(PyObject *,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_GetItemOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_GetItemOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -439,7 +439,7 @@ static PyObject *sipDo_Vector2_GetItemOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_AddOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_AddOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -494,7 +494,7 @@ static PyObject *sipDo_Vector2_AddOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_SubOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_SubOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -549,7 +549,7 @@ static PyObject *sipDo_Vector2_SubOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_IAddOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_IAddOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -589,7 +589,7 @@ static PyObject *sipDo_Vector2_IAddOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_ISubOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_ISubOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -629,7 +629,7 @@ static PyObject *sipDo_Vector2_ISubOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_MultOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_MultOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -686,7 +686,7 @@ static PyObject *sipDo_Vector2_MultOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_IMultOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_IMultOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -718,7 +718,7 @@ static PyObject *sipDo_Vector2_IMultOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_DivOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_DivOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -759,7 +759,7 @@ static PyObject *sipDo_Vector2_DivOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_IDivOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_IDivOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -800,7 +800,7 @@ static PyObject *sipDo_Vector2_IDivOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_getDistance(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_getDistance(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -840,7 +840,7 @@ static PyObject *sipDo_Vector2_getDistance(PyObject *sipThisObj,PyObject *sipArg
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_getSquareDistance(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_getSquareDistance(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -880,7 +880,7 @@ static PyObject *sipDo_Vector2_getSquareDistance(PyObject *sipThisObj,PyObject *
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -920,7 +920,7 @@ static PyObject *sipDo_Vector2_CmpOp(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_isZero(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_isZero(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -950,7 +950,7 @@ static PyObject *sipDo_Vector2_isZero(PyObject *sipThisObj,PyObject *sipArgs)
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_isOrthogonalTo(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_isOrthogonalTo(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -990,7 +990,7 @@ static PyObject *sipDo_Vector2_isOrthogonalTo(PyObject *sipThisObj,PyObject *sip
 	return NULL;
 }
 
-static PyObject *sipDo_Vector2_isValid(PyObject *sipThisObj,PyObject *sipArgs)
+extern "C" PyObject *sipDo_Vector2_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 {
 	sipThisType *sipThis;
 	int sipArgsParsed = 0;
@@ -1022,7 +1022,7 @@ static PyObject *sipDo_Vector2_isValid(PyObject *sipThisObj,PyObject *sipArgs)
 
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
-const void *sipCast_Vector2(const void *ptr,PyObject *targetClass)
+extern "C" const void *sipCast_Vector2(const void *ptr,PyObject *targetClass)
 {
 	const void *res;
 
@@ -1063,7 +1063,7 @@ static void sipDealloc_Vector2(sipThisType *sipThis)
 
 	sipDeleteThis(sipThis);
 }
-static PyObject * sip__str__Vector2(PyObject *a0)
+extern "C" PyObject * sip__str__Vector2(PyObject *a0)
 {
 #line 119 "vector2.sip"
   Vector2* ptr;
@@ -1166,7 +1166,7 @@ PyObject *sipNew_Vector2(PyObject *sipSelf,PyObject *sipArgs)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Vector2_y(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Vector2_y(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Vector2 *ptr;
@@ -1197,7 +1197,7 @@ static PyObject *sipGetSetVar_Vector2_y(PyObject *sipThisObj,PyObject *valobj)
 	return Py_None;
 }
 
-static PyObject *sipGetSetVar_Vector2_x(PyObject *sipThisObj,PyObject *valobj)
+extern "C" PyObject *sipGetSetVar_Vector2_x(PyObject *sipThisObj,PyObject *valobj)
 {
 	float val;
 	Vector2 *ptr;
