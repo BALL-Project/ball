@@ -1,13 +1,13 @@
-// $Id: triangulatedSES.h,v 1.3 2002/01/07 18:09:09 strobel Exp $
+// $Id: triangulatedSES.h,v 1.4 2002/01/14 22:19:34 strobel Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSES_H
 #define BALL_STRUCTURE_TRIANGULATEDSES_H
 
 //#define with_indices
 //#define debug_triangulation
-//#define debug_triangulation_with_planes
 #ifdef debug_triangulation
 #	define with_bonds
+#	define debug_triangulation_with_planes
 #endif
 #ifdef with_indices
 #	define print_debug_info
@@ -82,6 +82,7 @@ namespace BALL
 
 		#ifdef debug_triangulation
 		void printToHINFile(string filename);
+		void Contour2HIN(const std::list<TTriangleEdge<T>*>& contour, const string& file);
 		#endif
 
 		BALL_CREATE(TTriangulatedSES)
@@ -202,7 +203,9 @@ namespace BALL
 
 		void triangulateSphericFace
 				(TSESFace<T>* face,
-				 const std::vector< std::list<TTriangleEdge<T>*> >& edge)
+				 const TSphere3<T>&																	sphere,
+				 TTriangulatedSES<T>*																probe,
+				 const std::vector< std::list<TTriangleEdge<T>*> >& edge_contours)
 			throw();
 
 		void buildSphericTriangles
@@ -210,10 +213,11 @@ namespace BALL
 							 std::list<TTriangleEdge<T>*>&								border,
 				 const std::vector< std::list<TTriangleEdge<T>*> >& edge_contours,
 				 const std::vector<TSESEdge<T>*>&										sesedge,
-				 const TSphere3<T>&																	sphere
+				 const TSphere3<T>&																	sphere,
 			 			#ifdef print_debug_info
-				 		, int halt
+				 		int halt,
 			 			#endif
+			 	 bool																								convex = true
 				)
 			throw();
 
@@ -224,10 +228,11 @@ namespace BALL
 				 const std::vector< std::list<TTriangleEdge<T>*> >& edge_contours,
 				 const vector<TSESEdge<T>*>&												sesedge,
 				 const TSphere3<T>&																	sphere,
-				 const HashSet<TTrianglePoint<T>*>&									points
+				 const HashSet<TTrianglePoint<T>*>&									points,
 							#ifdef print_debug_info
-							, int& halt
+							int& halt,
 							#endif
+			 	 bool																								convex
 				)
 			throw();
 
@@ -237,10 +242,11 @@ namespace BALL
 				 std::list<TTriangleEdge<T>*>& border,
 				 Size&												 border_size,
 				 const TSphere3<T>&						 sphere,
-				 TTriangulatedSES<T>&					 part
+				 TTriangulatedSES<T>&					 part,
 							#ifdef print_debug_info
-							, int& halt
+							int& halt,
 							#endif
+			 	 bool													 convex
 				)
 			throw();
 
@@ -250,10 +256,11 @@ namespace BALL
 				 std::list<TTriangleEdge<T>*>& border,
 				 Size&												 border_size,
 				 const TSphere3<T>&						 sphere,
-				 TTriangulatedSES<T>&					 part
+				 TTriangulatedSES<T>&					 part,
 							#ifdef print_debug_info
-							, int& halt
+							int& halt,
 							#endif
+			 	 bool													 convex
 				)
 			throw();
 
@@ -265,7 +272,8 @@ namespace BALL
 				 bool&							old1,
 				 TTriangleEdge<T>*& edge2,
 				 bool&							old2,
-				 TTriangle<T>*&			triangle
+				 TTriangle<T>*&			triangle,
+			 	 bool								convex
 				)
 			throw();
 
@@ -464,6 +472,15 @@ namespace BALL
 		{
 			partitionSingularEdge(*se,sqrt_density,point,edge);
 		}
+				#ifdef print_debug_info
+				for (Position i = 0; i < edge.size(); i++)
+				{
+					if ((edge[i].size() == 0) && (ses_->edges_[i] != NULL))
+					{
+						std::cout << "Edge" << i << " ohne Kontur!\n";
+					}
+				}
+				#endif
 		// Now we triangulate the contact faces.
 				#ifdef debug_surface_processor
 				std::cerr << "  triangulate contact faces\n";
@@ -486,9 +503,17 @@ namespace BALL
 				#ifdef debug_surface_processor
 				std::cerr << "  triangulate spheric reentrant faces\n";
 				#endif
+		sphere.radius = ses_->reduced_surface_->probe_radius_;
+		TTriangulatedSES<T>* probe = new TTriangulatedSES<T>;
+		probe = new TTriangulatedSES<T>;
+		probe->icosaeder(false);
+		probe->refineSphere(numberOfRefinements(density_,sphere.radius),false);
+		probe->blowUp(sphere.radius);
+		probe->setIndices();
 		for (Position i = 0; i < ses_->number_of_spheric_faces_; i++)
 		{
-			triangulateSphericFace(ses_->spheric_faces_[i],edge);
+			sphere.p = ses_->spheric_faces_[i]->rsface_->center_;
+			triangulateSphericFace(ses_->spheric_faces_[i],sphere,probe,edge);
 		}
 	}
 
@@ -743,7 +768,7 @@ namespace BALL
 				number_of_segments++;
 			}
 			TAngle<T> psi(phi.value/number_of_segments,true);
-			vector< TVector3<T> > points;
+			std::vector< TVector3<T> > points;
 			partitionOfCircle(singular_edge->circle_,TVector3<T>::getZero(),psi,number_of_segments,points,false);
 			points.pop_back();
 			TTrianglePoint<T>* p0;
@@ -764,7 +789,6 @@ namespace BALL
 				e = new TTriangleEdge<T>;
 				e->vertex_[0] = p1;
 				e->vertex_[1] = p2;
-				//e->face_.clear();
 				edges_.push_back(e);
 				edge[singular_edge->index_].push_back(e);
 				p1->edges_.push_back(e);
@@ -774,11 +798,14 @@ namespace BALL
 			e = new TTriangleEdge<T>;
 			e->vertex_[0] = p1;
 			e->vertex_[1] = p0;
-			//e->face_.clear();
 			edges_.push_back(e);
 			edge[singular_edge->index_].push_back(e);
 			p1->edges_.push_back(e);
 			p0->edges_.push_back(e);
+					#ifdef debug_triangulation
+					Contour2HIN(edge[singular_edge->index_],
+											"DATA/MOLECULE/edge"+IndexToString(singular_edge->index_,(T)0)+".hin");
+					#endif
 		}
 		else
 		{
@@ -796,7 +823,7 @@ namespace BALL
 			TVector3<T> normal((singular_edge->vertex_[0]->point_-singular_edge->circle_.p)%
 												 (singular_edge->vertex_[1]->point_-singular_edge->circle_.p));
 			singular_edge->circle_.n = normal;
-			vector< TVector3<T> > points;
+			std::vector< TVector3<T> > points;
 			partitionOfCircle(singular_edge->circle_,singular_edge->vertex_[0]->point_,psi,number_of_segments,
 												points);
 			points.pop_back();
@@ -805,17 +832,16 @@ namespace BALL
 			TTrianglePoint<T>* p2;
 			TTriangleEdge<T>* e;
 			p1 = point[singular_edge->vertex_[0]->index_];
-			p1->normal_ = p1->point_-singular_edge->circle_.p;
+			p1->normal_ = singular_edge->circle_.p-p1->point_;
 			for (Position k = 1; k < points.size()-1; k++)
 			{
 				p2 = new TTrianglePoint<T>;
 				p2->point_ = points[k];
-				p2->normal_ = p2->point_-singular_edge->circle_.p;
+				p2->normal_ = singular_edge->circle_.p-p2->point_;
 				points_.push_back(p2);
 				e = new TTriangleEdge<T>;
 				e->vertex_[0] = p1;
 				e->vertex_[1] = p2;
-				//e->face_.clear();
 				edges_.push_back(e);
 				edge[singular_edge->index_].push_back(e);
 				p1->edges_.push_back(e);
@@ -823,15 +849,18 @@ namespace BALL
 				p1 = p2;
 			}
 			p2 = point[singular_edge->vertex_[1]->index_];
-			p2->normal_ = p2->point_-singular_edge->circle_.p;
+			p2->normal_ = singular_edge->circle_.p-p2->point_;
 			e = new TTriangleEdge<T>;
 			e->vertex_[0] = p1;
 			e->vertex_[1] = p2;
-			//e->face_.clear();
 			edges_.push_back(e);
 			edge[singular_edge->index_].push_back(e);
 			p1->edges_.push_back(e);
 			p2->edges_.push_back(e);
+					#ifdef debug_triangulation
+					Contour2HIN(edge[singular_edge->index_],
+											"DATA/MOLECULE/edge"+IndexToString(singular_edge->index_,(T)0)+".hin");
+					#endif
 		}
 	}
 
@@ -883,7 +912,7 @@ namespace BALL
 						#ifdef debug_triangulation_with_planes
 						plane.p += sphere.p;
 						Plane2HIN(plane,"DATA/PLANES/circle"+IndexToString(k,0)+"of"+
-														IndexToString(face->index,0)+".hin");
+														IndexToString(face->index_,0)+".hin");
 						#endif
 			}
 			TVector3<T> p1;
@@ -893,6 +922,7 @@ namespace BALL
 			TVector3<T> axis;
 			TAngle<T> angle;
 			TAngle<T> min;
+			Position min_point;
 			// now cut the face with several planes through three of their vertices
 			if (number_of_points == 3)
 			{
@@ -981,7 +1011,7 @@ namespace BALL
 							#endif
 							#ifdef debug_triangulation_with_planes
 							plane.p += sphere.p;
-							Plane2HIN(plane,"DATA/PLANES/plane0of"+IndexToString(face->index,0)+".hin");
+							Plane2HIN(plane,"DATA/PLANES/plane0of"+IndexToString(face->index_,0)+".hin");
 							#endif
 				}
 			}
@@ -990,10 +1020,12 @@ namespace BALL
 				if (number_of_points > 3)
 				{
 					TPlane3<T> test_plane;
+					TPlane3<T> edge_plane;
 					Position k = 0;
 					while (k < number_of_edges)
 					{
 						edge = face->edge_[k];
+						edge_plane.set(edge->circle_.p,edge->circle_.n);
 						if (edge->isFree() == false)
 						{
 									#ifdef print_debug_info
@@ -1013,7 +1045,7 @@ namespace BALL
 							normal.set(edge_normal%axis);
 							if (edge->rsedge_->phi_.value > Constants::PI)
 							{
-								if (Maths::isGreater(normal*edge->circle_.p,normal*p1))
+								if (Maths::isGreater(normal*(edge->circle_.p-p1),0.0))
 								{
 									axis.negate();
 											#ifdef debug_triangulation_with_planes
@@ -1026,7 +1058,7 @@ namespace BALL
 							}
 							else
 							{
-								if (Maths::isLess(normal*edge->circle_.p,normal*p1))
+								if (Maths::isLess(normal*(edge->circle_.p-p1),0.0))
 								{
 									axis.negate();
 											#ifdef debug_triangulation_with_planes
@@ -1068,6 +1100,7 @@ namespace BALL
 										plane.set(test_plane);
 										min = angle;
 										found = true;
+										min_point = l;
 									}
 									test_plane.n.negate();
 									angle = getOrientedAngle(edge_normal,test_plane.n,axis);
@@ -1076,11 +1109,12 @@ namespace BALL
 										plane.set(test_plane);
 										min = angle;
 										found = true;
+										min_point = l;
 									}
 								}
 								l++;
 							}
-							if (found)
+							if (found && (edge_plane.has(face->vertex_[min_point]->point_) == false))
 							{
 										#ifdef print_debug_info
 										std::cout << "Minimum gefunden ... ";
@@ -1090,7 +1124,7 @@ namespace BALL
 										#ifdef debug_triangulation_with_planes
 										plane.p += sphere.p;
 										Plane2HIN(plane,"DATA/PLANES/plane"+IndexToString(k,0)+"of"+
-																		IndexToString(face_->index,0)+".hin");
+																		IndexToString(face->index_,0)+".hin");
 										#endif
 										#ifdef print_debug_info
 										std::cout << part.number_of_points_ << " (" << part.points_.size() << ")\n";
@@ -1101,16 +1135,22 @@ namespace BALL
 					}
 				}
 			}
+			part.shrink();
 			std::list<TTriangleEdge<T>*> border;
 			part.getBorder(border);
 			part.shift(sphere.p);
-					#ifdef print_debug_info
-					part.setIndices();
-					int halt = 0;
-					if (halt == 0) cin >> halt; else { cout << "\n"; halt--;}
-					#endif
 					#ifdef debug_triangulation
 					part.printToHINFile("DATA/MOLECULE/contactFaceCut"+IndexToString(face->index_,0)+".hin");
+					#endif
+					#ifdef print_debug_info
+					part.setIndices();
+					typename std::list<TTrianglePoint<T>*>::iterator ppart;
+					for (ppart = part.points_.begin(); ppart != part.points_.end(); ppart++)
+					{
+						(*ppart)->index_ += 10000;
+					}
+					int halt = 0;
+					if (halt == 0) cin >> halt; else { cout << "\n"; halt--;}
 					#endif
 					#ifdef debug_surface_processor_verbose
 					bool empty = (border.size() == 0);
@@ -1151,7 +1191,7 @@ namespace BALL
 					#endif
 		}
 					#ifdef debug_triangulation
-					part.printToHINFile("DATA/MOLECULE/contactFace"+IndexToString(face->index_,0)+".hin");
+					//part.printToHINFile("DATA/MOLECULE/contactFace"+IndexToString(face->index_,0)+".hin");
 					#endif
 		join(part);
 	}
@@ -1159,123 +1199,102 @@ namespace BALL
 
 	template <class T>
 	void TTriangulatedSES<T>::triangulateSphericFace
-			(TSESFace<T>* face,
-			 const std::vector< std::list<TTriangleEdge<T>*> >& edge)
+			(TSESFace<T>*																				face,
+			 const TSphere3<T>&																	sphere,
+			 TTriangulatedSES<T>*																probe,
+			 const std::vector< std::list<TTriangleEdge<T>*> >& edge_contours)
 		throw()
 	{
-						#ifdef debug_surface_processor_verbose
-						std::cout << "    ... " << face->index_ << "\n";
+					#ifdef debug_surface_processor_verbose
+					std::cout << "    ... " << face->index_ << " ... ";
+					#endif
+		TTriangulatedSES<T> part(*probe);
+		Position number_of_edges = face->number_of_edges_;
+		//Position number_of_points = face->number_of_vertices_;
+				#ifdef print_debug_info
+				ofstream file("surface.log");
+				file << probe;
+				file.close();
+				#endif
+		TPlane3<T> plane;
+		TSESEdge<T>* edge;
+		// cut the face with all its edges
+		for (Position k = 0; k < number_of_edges; k++)
+		{
+			edge = face->edge_[k];
+			if (edge != NULL)
+			{
+				plane.p = edge->circle_.p-sphere.p;
+				if (face->orientation_[k] == 0)
+				{
+					plane.n = edge->circle_.n;
+				}
+				else
+				{
+					plane.n = -(edge->circle_.n);
+				}
+				part.cut(plane,0.05);
+						#ifdef print_debug_info
+						std::cout << "schneide mit plane " << plane << " von edge " << *edge
+											<< " ... " << part.number_of_points_ << " (" << part.points_.size() << ")\n";
 						#endif
-		std::list<Position> ecken;
-		ecken.push_back(0);
-		ecken.push_back(1);
-		ecken.push_back(2);
-		if (face->edge_[0] == NULL)
-		{
-			ecken.remove(0);
-			ecken.remove(1);
-			ecken.push_back(3);
-			ecken.push_back(4);
-			if (face->edge_[1] == NULL)
-			{
-				ecken.remove(2);
-				ecken.push_back(5);
-				ecken.push_back(6);
-				if (face->edge_[2] == NULL)
-				{
-					ecken.push_back(7);
-					ecken.push_back(8);
-				}
-			}
-			else
-			{
-				if (face->edge_[2] == NULL)
-				{
-					ecken.remove(2);
-					ecken.push_back(5);
-					ecken.push_back(6);
-				}
-			}
-		}
-		else
-		{
-			if (face->edge_[1] == NULL)
-			{
-				ecken.remove(1);
-				ecken.remove(2);
-				ecken.push_back(3);
-				ecken.push_back(4);
-				if (face->edge_[2] == NULL)
-				{
-					ecken.remove(0);
-					ecken.push_back(5);
-					ecken.push_back(6);
-				}
-			}
-			else
-			{
-				if (face->edge_[2] == NULL)
-				{
-					ecken.remove(0);
-					ecken.remove(2);
-					ecken.push_back(3);
-					ecken.push_back(4);
-				}
-			}
-		}
-		TVector3<T> mass(0,0,0);
-		typename std::list<Position>::iterator j;
-		for (j = ecken.begin(); j != ecken.end(); j++)
-		{
-			mass += face->vertex_[*j]->point_;
-		}
-		mass -= (face->rsface_->center_*(T)ecken.size());
-		mass.normalize();
-		mass *= ses_->reduced_surface_->probe_radius_;
-		mass += face->rsface_->center_;
-		TTrianglePoint<T>* point = new TTrianglePoint<T>;
-		point->point_ = mass;
-		point->normal_ = face->rsface_->center_-mass;
-		TTriangle<T>* triangle;
-						#ifdef debug_triangulation
-						TTriangulatedSES<T>* face_part = new TTriangulatedSES<T>;
+						#ifdef debug_triangulation_with_planes
+						plane.p += sphere.p;
+						Plane2HIN(plane,"DATA/PLANES/circle"+IndexToString(k,0)+"of"+
+														IndexToString(face->index_,0)+".hin");
 						#endif
-		for (Position j = 0; j < face->number_of_edges_; j++)
-		{
-			if (face->edge_[j] != NULL)
-			{
-				typename std::list<TTriangleEdge<T>*>::const_iterator e;
-				for (e = edge[face->edge_[j]->index_].begin(); e != edge[face->edge_[j]->index_].end(); e++)
-				{
-					triangle = new TTriangle<T>;
-					TVector3<T> norm(((*e)->vertex_[0]->point_-(*e)->vertex_[1]->point_)%
-													 ((*e)->vertex_[0]->point_-point->point_));
-					if (Maths::isLess(norm*((*e)->vertex_[0]->point_-face->rsface_->center_),0))
-					{
-						triangle->vertex_[0] = (*e)->vertex_[0];
-						triangle->vertex_[1] = (*e)->vertex_[1];
-					}
-					else
-					{
-						triangle->vertex_[0] = (*e)->vertex_[1];
-						triangle->vertex_[1] = (*e)->vertex_[0];
-					}
-					triangle->vertex_[2] = point;
-					triangles_.push_back(triangle);
-							#ifdef debug_triangulation
-							face_part->triangles_.push_back(triangle);
-							#endif
-				}
 			}
 		}
-		points_.push_back(point);
-						#ifdef debug_triangulation
-						face_part->printToHINFile("DATA/MOLECULE/sphericFace"+IndexToString(face->index_,0)+".hin");
-						face_part->points_.clear();
-						face_part->edges_.clear();
-						face_part->triangles_.clear();
-						delete face_part;
-						#endif
+		part.shrink();
+		std::list<TTriangleEdge<T>*> border;
+		part.getBorder(border);
+		part.shift(sphere.p);
+				#ifdef debug_triangulation
+				part.printToHINFile("DATA/MOLECULE/sphericFaceCut"+IndexToString(face->index_,0)+".hin");
+				#endif
+				#ifdef print_debug_info
+				part.setIndices();
+				typename std::list<TTrianglePoint<T>*>::iterator ppart;
+				for (ppart = part.points_.begin(); ppart != part.points_.end(); ppart++)
+				{
+					(*ppart)->index_ += 10000;
+				}
+				int halt = 0;
+				if (halt == 0) cin >> halt; else { cout << "\n"; halt--;}
+				#endif
+				#ifdef debug_surface_processor_verbose
+				bool empty = (border.size() == 0);
+				#endif
+				#ifdef debug_triangulation
+				sewSystem = new System;
+				sewMolecule = new Molecule;
+				#endif
+		#ifdef print_debug_info
+		buildSphericTriangles(part,border,edge_contours,face->edge_,sphere,halt,false);
+		#else
+		buildSphericTriangles(part,border,edge_contours,face->edge_,sphere,false);
+		#endif
+				#ifdef debug_triangulation
+				sewSystem->insert(*sewMolecule);
+				HINFile output("DATA/MOLECULE/sphericFaceSew"+IndexToString(face->index_,0)+".hin",std::ios::out);
+				output << *sewSystem;
+				output.close();
+				delete sewSystem;
+				#endif
+				#ifdef debug_surface_processor_verbose
+				if (empty)
+				{
+					std::cout << "cut, joined (empty)\n";
+				}
+				else
+				{
+					std::cout << "cut, joined\n";
+				}
+				#endif
+				#ifdef debug_triangulation
+				//part.printToHINFile("DATA/MOLECULE/sphericFace"+IndexToString(face->index_,0)+".hin");
+				#endif
+		join(part);
 	}
 
 
@@ -1285,10 +1304,11 @@ namespace BALL
 						 std::list<TTriangleEdge<T>*>&								border,
 			 const std::vector< std::list<TTriangleEdge<T>*> >& edge_contours,
 			 const std::vector<TSESEdge<T>*>&										sesedge,
-			 const TSphere3<T>&																	sphere
+			 const TSphere3<T>&																	sphere,
 		 			#ifdef print_debug_info
-			 		, int halt
+			 		int halt,
 			 		#endif
+			 bool																								convex
 			)
 		throw()
 	{
@@ -1316,30 +1336,65 @@ namespace BALL
 		typename std::list<TTriangleEdge<T>*>::const_iterator c;
 		for (Position k = 0; k < sesedge.size(); k++)
 		{
-					#ifdef print_debug_info
-					std::cout << sesedge[k]->index_ << ":  ";
-					#endif
-			for (c = edge_contours[sesedge[k]->index_].begin();
-					 c != edge_contours[sesedge[k]->index_].end(); c++)
+			if (sesedge[k] != NULL)
 			{
-				points.insert((*c)->vertex_[0]);
-				points.insert((*c)->vertex_[1]);
 						#ifdef print_debug_info
-						std::cout << (*c)->vertex_[0]->index_ << "  ";
-						std::cout << (*c)->vertex_[1]->index_ << "  ";
+						std::cout << sesedge[k]->index_ << ":  ";
+						#endif
+				for (c = edge_contours[sesedge[k]->index_].begin();
+						 c != edge_contours[sesedge[k]->index_].end(); c++)
+				{
+					points.insert((*c)->vertex_[0]);
+					points.insert((*c)->vertex_[1]);
+							#ifdef print_debug_info
+							std::cout << (*c)->vertex_[0]->index_;
+							if (sphere.has((*c)->vertex_[0]->point_))
+							{
+								std::cout << "+  ";
+							}
+							else
+							{
+								std::cout << "-  ";
+							}
+							std::cout << (*c)->vertex_[1]->index_;
+							if (sphere.has((*c)->vertex_[1]->point_))
+							{
+								std::cout << "+  ";
+							}
+							else
+							{
+								std::cout << "-  ";
+							}
+							#endif
+				}
+						#ifdef print_debug_info
+						std::cout << "\n";
 						#endif
 			}
-				#ifdef print_debug_info
-				std::cout << "\n";
-				#endif
 		}
+				#ifdef print_debug_info
+				for (Position k = 0; k < sesedge.size(); k++)
+				{
+					if (sesedge[k] != NULL)
+					{
+						std::cout << sesedge[k]->index_ << ":  ";
+						for (c = edge_contours[sesedge[k]->index_].begin();
+								 c != edge_contours[sesedge[k]->index_].end(); c++)
+						{
+							std::cout << "  " << **c << "\n";
+							std::cout << "    " << *((*c)->vertex_[0]) << "\n";
+							std::cout << "    " << *((*c)->vertex_[1]) << "\n";
+						}
+					}
+				}
+				#endif
 		Size border_size = border.size();
 		if (border_size == 0)
 		{
 			#ifdef print_debug_info
-			buildFirstTriangle(part,border,border_size,edge_contours,sesedge,sphere,points,halt);
+			buildFirstTriangle(part,border,border_size,edge_contours,sesedge,sphere,points,halt,convex);
 			#else
-			buildFirstTriangle(part,border,border_size,edge_contours,sesedge,sphere,points);
+			buildFirstTriangle(part,border,border_size,edge_contours,sesedge,sphere,points,convex);
 			#endif
 		}
 				#ifdef print_debug_info
@@ -1370,16 +1425,49 @@ namespace BALL
 			TVector3<T> normal((third_point->point_-edge->vertex_[0]->point_) %
 												 (third_point->point_-edge->vertex_[1]->point_)	);
 			T test_value = normal*third_point->point_;
-			if (Maths::isLess(normal*sphere.p,test_value))
+			// ###########
+			TVector3<double> third_point_double((double)third_point->point_.x,
+																					(double)third_point->point_.y,
+																					(double)third_point->point_.z);
+			TVector3<double> vertex0_double((double)edge->vertex_[0]->point_.x,
+																			(double)edge->vertex_[0]->point_.y,
+																			(double)edge->vertex_[0]->point_.z);
+			TVector3<double> vertex1_double((double)edge->vertex_[1]->point_.x,
+																			(double)edge->vertex_[1]->point_.y,
+																			(double)edge->vertex_[1]->point_.z);
+			TVector3<double> sphere_point_double((double)sphere.p.x,
+																					 (double)sphere.p.y,
+																					 (double)sphere.p.z);
+			TVector3<double> normal_double((third_point_double-vertex0_double) %
+																		 (third_point_double-vertex1_double)	);
+			double test_value_double = normal_double*third_point_double;
+			// ###########
+			// test wie in buildFirstTriangle
+			if (Maths::isLess(normal_double*sphere_point_double,test_value_double))
 			{
 				normal.negate();
 				test_value = -test_value;
+				normal_double.negate();
+				test_value_double = -test_value_double;
+				#ifdef print_debug_info
+				if (Maths::isGreaterOrEqual(normal*sphere.p,test_value))
+				{
+					cout << "Achtung: anderes Ergebnis mit double (1)\n";
+				}
+				#endif
 			}
 			else
 			{
 				TTrianglePoint<T>* tmp = edge->vertex_[0];
 				edge->vertex_[0] = edge->vertex_[1];
 				edge->vertex_[1] = tmp;
+				vertex0_double.swap(vertex1_double);
+				#ifdef print_debug_info
+				if (Maths::isLess(normal*sphere.p,test_value))
+				{
+					cout << "Achtung: anderes Ergebnis mit double (1)\n";
+				}
+				#endif
 			}
 					#ifdef print_debug_info
 					std::cout << pre << "starte mit Edge " << *edge << " (" << edge << ")\n";
@@ -1390,6 +1478,9 @@ namespace BALL
 			typename HashSet<TTrianglePoint<T>*>::Iterator next = points.begin();
 			while ((*next == edge->vertex_[0]) || (*next == edge->vertex_[1]) || (*next == third_point))
 			{
+						#ifdef print_debug_info
+						std::cout << pre << "  dritter Punkt: " << (*next)->index_ << " ... --  ";
+						#endif
 				next++;
 			}
 			std::list<TTrianglePoint<T>*> third;
@@ -1397,11 +1488,20 @@ namespace BALL
 			normal.set(((*next)->point_-edge->vertex_[1]->point_) %
 								 ((*next)->point_-edge->vertex_[0]->point_)	);
 			test_value = normal*edge->vertex_[0]->point_;
+			// #########
+			std::list<TTrianglePoint<T>*> third_double;
+			third_double.push_back(*next);
+			TVector3<double> next_double((double)(*next)->point_.x,
+																	 (double)(*next)->point_.y,
+																	 (double)(*next)->point_.z);
+			normal_double.set((next_double-vertex1_double)%(next_double-vertex0_double));
+			test_value_double = normal_double*vertex0_double;
+			// #########
 					#ifdef print_debug_info
 					std::cout << pre << "  dritter Punkt: " << (*next)->index_
-										<< " (" << test_value << ") " << " ... ";
-					std::cout << "not ok (" << test_value << ")  "
-										<< "--> " << normal << ":  " << test_value << "  ";
+										<< " (" << test_value << " / " << test_value_double << ")" << " ... ";
+					std::cout << "not ok (" << test_value << " / " << test_value_double << ") "
+										<< "--> " << normal << ":  " << test_value  << " / " << test_value_double << "  ";
 					if (halt == 0)  std::cin >> halt; else { std::cout << "\n"; halt--; }
 					#endif
 			next++;
@@ -1452,6 +1552,56 @@ namespace BALL
 							std::cout << pre << "  dritter Punkt: " << (*next)->index_ << " ... --  ";
 						}
 						#endif
+				// ###########
+				if ((*next != edge->vertex_[0]) && (*next != edge->vertex_[1]) &&
+						(*next != third_point))
+				{
+					next_double.set((double)(*next)->point_.x,
+													(double)(*next)->point_.y,
+													(double)(*next)->point_.z);
+					double this_value_double = normal_double*next_double;
+							#ifdef print_debug_info
+							std::cout << "\n" << pre << "  dritter Punkt: " << (*next)->index_
+									 << " (" << test_value_double << ") " << " ... ";
+							#endif
+					if (Maths::isGreater(this_value_double,test_value_double))
+					{
+								#ifdef print_debug_info
+								std::cout << "not ok (" << this_value_double << ")  ";
+								#endif
+						third_double.clear();
+						third_double.push_back(*next);
+						normal_double.set((next_double-vertex1_double) %
+															(next_double-vertex0_double)	);
+						test_value_double = normal_double*vertex0_double;
+								#ifdef print_debug_info
+								std::cout << "--> " << normal_double << ":  " << test_value_double << "  ";
+								#endif
+					}
+					else
+					{
+						if (Maths::isEqual(this_value_double,test_value_double))
+						{
+							third_double.push_back(*next);
+								#ifdef print_debug_info
+								std::cout << "added (" << this_value_double << ")  ";
+								#endif
+						}
+								#ifdef print_debug_info
+								else
+								{
+									std::cout << "ok (" << this_value_double << ")  ";
+								}
+								#endif
+					}
+				}
+						#ifdef print_debug_info
+						else
+						{
+							std::cout << pre << "  dritter Punkt: " << (*next)->index_ << " ... --  ";
+						}
+						#endif
+				// ###########
 				next++;
 						#ifdef print_debug_info
 						if (halt == 0)  std::cin >> halt; else { std::cout << "\n"; halt--; }
@@ -1467,17 +1617,17 @@ namespace BALL
 				case 1 :
 									#ifdef print_debug_info
 									buildUnambiguousTriangle(edge,third.front(),border,border_size,sphere,part,
-																					 halt);
+																					 halt,convex);
 									#else
-									buildUnambiguousTriangle(edge,third.front(),border,border_size,sphere,part);
+									buildUnambiguousTriangle(edge,third.front(),border,border_size,sphere,part,convex);
 									#endif
 									break;
 				default :
 									#ifdef print_debug_info
 									buildAmbiguousTriangles(edge,third,border,border_size,sphere,part,
-																					halt);
+																					halt,convex);
 									#else
-									buildAmbiguousTriangles(edge,third,border,border_size,sphere,part);
+									buildAmbiguousTriangles(edge,third,border,border_size,sphere,part,convex);
 									#endif
 									break;
 			}
@@ -1493,24 +1643,57 @@ namespace BALL
 			 const std::vector< std::list<TTriangleEdge<T>*> >& edge_contours,
 			 const vector<TSESEdge<T>*>&												sesedge,
 			 const TSphere3<T>&																	sphere,
-			 const HashSet<TTrianglePoint<T>*>&									points
+			 const HashSet<TTrianglePoint<T>*>&									points,
 						#ifdef print_debug_info
-						, int& halt
+						int& halt,
 						#endif
+				bool																							convex
 			)
 		throw()
 	{
+		TSESEdge<T>* first_sesedge;
+		TTriangleEdge<T>* edge;
 		Position i = 0;
-		TSESEdge<T>* first_sesedge = sesedge[0];
-		while (first_sesedge->type_ == TSESEdge<T>::TYPE_SINGULAR)
+		bool found = false;
+		bool found_;
+		while ((found == false) && (i < sesedge.size()))
 		{
-			i++;
-			first_sesedge = sesedge[i];
+			found_ = false;
+			while (found_ == false)
+			{
+				if (sesedge[i] == NULL)
+				{
+					i++;
+				}
+				else
+				{
+					if (sesedge[i]->type_ == TSESEdge<T>::TYPE_SINGULAR)
+					{
+						i++;
+					}
+					else
+					{
+						found_ = true;
+						first_sesedge = sesedge[i];
+					}
+				}
+			}
+					#ifdef print_debug_info
+					halt = 0;
+					std::cout << "nichtsinguläre SESEdge: " << *first_sesedge << "\n";
+					#endif
+			edge = edge_contours[first_sesedge->index_].front();
+			found = true;
+			if (edge_contours[first_sesedge->index_].size() == 1)
+			{
+				TVector3<T> diff(edge->vertex_[0]->point_-edge->vertex_[1]->point_);
+				if (diff*diff < 0.01)
+				{
+					found = false;
+					i++;
+				}
+			}
 		}
-				#ifdef print_debug_info
-				halt = 0;
-				std::cout << "nichtsinguläre SESEdge: " << *first_sesedge << "\nPunkte: ";
-				#endif
 		HashSet<TTrianglePoint<T>*> same_edge;
 		typename std::list<TTriangleEdge<T>*>::const_iterator c;
 		for (c = edge_contours[first_sesedge->index_].begin();
@@ -1520,35 +1703,82 @@ namespace BALL
 			same_edge.insert((*c)->vertex_[1]);
 		}
 				#ifdef print_debug_info
+				halt = 0;
+				std::cout << "nichtsinguläre SESEdge: " << *first_sesedge << "\nPunkte: ";
 				typename HashSet<TTrianglePoint<T>*>::Iterator se;
 				for (se = same_edge.begin(); se != same_edge.end(); se++)
 				{
 					std::cout << (*se)->index_ << "  ";
 				}
 				if (halt == 0) std::cin >> halt; else { std::cout << "\n"; halt--; }
-				#endif
-		TTriangleEdge<T>* edge = edge_contours[first_sesedge->index_].front();
-				#ifdef print_debug_info
 				std::cout << "suche Dreieck zu edge " << *edge;
+				if (halt == 0) std::cin >> halt; else { std::cout << "\n"; halt--; }
+				#endif
+		// orientiere die edge so, wie sie im existierenden Dreieck NICHT orientiert ist
+		// (so soll sie im neuen Dreieck orientiert sein)
+		TVector3<T> edge_vector(edge->vertex_[0]->point_-edge->vertex_[1]->point_);
+		TTriangle<T>* triangle = edge->face_[0];
+		Index p0 = triangle->getRelativeVertexIndex(edge->vertex_[0]);
+		Index p1 = triangle->getRelativeVertexIndex(edge->vertex_[1]);
+		Index diff = p1-p0;
+		if ((diff == 1) || (diff == -2))
+		{
+			TTrianglePoint<T>* tmp = edge->vertex_[0];
+			edge->vertex_[0] = edge->vertex_[1];
+			edge->vertex_[1] = tmp;
+			edge_vector = -edge_vector;
+		}
+				#ifdef print_debug_info
+				std::cout << "edge " << *edge << " orientiert ";
 				if (halt == 0) std::cin >> halt; else { std::cout << "\n"; halt--; }
 				#endif
 		typename HashSet<TTrianglePoint<T>*>::ConstIterator next = points.begin();
 		typename HashSet<TTrianglePoint<T>*>::ConstIterator test;
 		std::list<TTrianglePoint<T>*> third;
 		TVector3<T> normal;
-		TVector3<T> edge_vector = edge->vertex_[0]->point_-edge->vertex_[1]->point_;
 		while (next != points.end())
 		{
+						#ifdef print_debug_info
+						std::cout << **next << " ...\n";
+						#endif
 			if (!same_edge.has(*next))
 			{
 				normal.set(edge_vector % (edge->vertex_[0]->point_-(*next)->point_));
 				T test_value = normal*edge->vertex_[0]->point_;
-				bool in = false;
-				bool out = false;
+				//bool in = false;
+				//bool out = false;
+				bool is_convex = true;
 				test = points.begin();
 				while (test != points.end())
 				{
+							#ifdef print_debug_info
+							std::cout << "    " << (*test)->index_ << " ... ";
+							#endif
 					if ((*test != *next) && (*test != edge->vertex_[0]) && (*test != edge->vertex_[1]))
+					{
+						T this_value = normal*(*test)->point_;
+						if ((Maths::isGreater(this_value,test_value) && convex) ||
+								(Maths::isLess(this_value,test_value) && !convex))
+						{
+							is_convex = false;
+									#ifdef print_debug_info
+									std::cout << "not ok\n";
+									#endif
+						}
+								#ifdef print_debug_info
+								else
+								{
+									std::cout << "ok\n";
+								}
+								#endif
+					}
+							#ifdef print_debug_info
+							else
+							{
+								std::cout << "--\n";
+							}
+							#endif
+					/*if ((*test != *next) && (*test != edge->vertex_[0]) && (*test != edge->vertex_[1]))
 					{
 						T this_value = normal*(*test)->point_;
 						if (Maths::isLess(this_value,test_value))
@@ -1562,10 +1792,10 @@ namespace BALL
 								out = true;
 							}
 						}
-					}
+					}*/
 					test++;
 				}
-				if (!(in && out))
+				/*if (!(in && out))
 				{
 					third.push_back(*next);
 							#ifdef print_debug_info
@@ -1576,6 +1806,19 @@ namespace BALL
 						else
 						{
 							std::cout << **next << " passt nicht\n";
+						}
+						#endif*/
+				if (is_convex)
+				{
+					third.push_back(*next);
+							#ifdef print_debug_info
+							std::cout << "  ... passt\n";
+							#endif
+				}
+						#ifdef print_debug_info
+						else
+						{
+							std::cout << "  ... passt nicht\n";
 						}
 						#endif
 			}
@@ -1588,23 +1831,6 @@ namespace BALL
 				{
 					std::cout << (*rt)->index_ << "  ";
 				}
-				if (halt == 0) std::cin >> halt; else { std::cout << "\n"; halt--; }
-				#endif
-		TTriangle<T>* triangle = edge->face_[0];
-		// orientiere die edge so, wie sie im existierenden Dreieck NICHT orientiert ist
-		// (so soll sie im neuen Dreieck orientiert sein)
-		Index p0 = triangle->getRelativeVertexIndex(edge->vertex_[0]);
-		Index p1 = triangle->getRelativeVertexIndex(edge->vertex_[1]);
-		Index diff = p1-p0;
-		if ((diff == 1) || (diff == -2))
-		{
-			TTrianglePoint<T>* tmp = edge->vertex_[0];
-			edge->vertex_[0] = edge->vertex_[1];
-			edge->vertex_[1] = tmp;
-			edge_vector = -edge_vector;
-		}
-				#ifdef print_debug_info
-				std::cout << "edge " << *edge << " orientiert";
 				if (halt == 0) std::cin >> halt; else { std::cout << "\n"; halt--; }
 				#endif
 		// normal vector of the old triangle (shows out of the molecule)
@@ -1654,17 +1880,17 @@ namespace BALL
 			case 1 :
 								#ifdef print_debug_info
 								buildUnambiguousTriangle(edge,real_third.front(),border,border_size,sphere,part,
-																				 halt);
+																				 halt,convex);
 								#else
-								buildUnambiguousTriangle(edge,real_third.front(),border,border_size,sphere,part);
+								buildUnambiguousTriangle(edge,real_third.front(),border,border_size,sphere,part,convex);
 								#endif
 								break;
 			default :
 								#ifdef print_debug_info
 								buildAmbiguousTriangles(edge,real_third,border,border_size,sphere,part,
-																				halt);
+																				halt,convex);
 								#else
-								buildAmbiguousTriangles(edge,real_third,border,border_size,sphere,part);
+								buildAmbiguousTriangles(edge,real_third,border,border_size,sphere,part,convex);
 								#endif
 								break;
 		}
@@ -1678,10 +1904,11 @@ namespace BALL
 			 std::list<TTriangleEdge<T>*>& border,
 			 Size&												 border_size,
 			 const TSphere3<T>&						 sphere,
-			 TTriangulatedSES<T>&					 part
+			 TTriangulatedSES<T>&					 part,
 						#ifdef print_debug_info
-						, int& halt
+						int& halt,
 						#endif
+				bool													convex
 			)
 		throw()
 	{
@@ -1693,7 +1920,7 @@ namespace BALL
 		TTriangleEdge<T>* edge2;
 		TTriangle<T>* triangle;
 		bool old1, old2;
-		createTriangleAndEdges(edge,point,sphere,edge1,old1,edge2,old2,triangle);
+		createTriangleAndEdges(edge,point,sphere,edge1,old1,edge2,old2,triangle,convex);
 		if (old1 == true)
 		{
 			edge1->face_[1] = triangle;
@@ -1770,6 +1997,23 @@ namespace BALL
 										<< pre << "  surface";
 					if (halt == 0)  std::cin >> halt; else { std::cout << "\n"; halt--; }
 					#endif
+					#ifdef debug_triangulation
+					Atom* atom1 = new Atom;
+					Atom* atom2 = new Atom;
+					Atom* atom3 = new Atom;
+					atom1->setPosition(triangle->vertex_[0]->point_);
+					atom2->setPosition(triangle->vertex_[1]->point_);
+					atom3->setPosition(triangle->vertex_[2]->point_);
+					atom1->setElement(PTE[Element::H]);
+					atom2->setElement(PTE[Element::H]);
+					atom3->setElement(PTE[Element::H]);
+					atom1->createBond(*atom2);
+					atom2->createBond(*atom3);
+					atom3->createBond(*atom1);
+					sewMolecule->insert(*atom1);
+					sewMolecule->insert(*atom2);
+					sewMolecule->insert(*atom3);
+					#endif
 	}
 
 
@@ -1780,10 +2024,11 @@ namespace BALL
 			 std::list<TTriangleEdge<T>*>& border,
 			 Size&												 border_size,
 			 const TSphere3<T>&						 sphere,
-			 TTriangulatedSES<T>&					 part
+			 TTriangulatedSES<T>&					 part,
 						#ifdef print_debug_info
-						, int& halt
+						int& halt,
 						#endif
+				bool												 convex
 			)
 		throw()
 	{
@@ -1837,13 +2082,14 @@ namespace BALL
 							std::cout << pre << "baue Dreieck mit Punkt " << **p << " (" << *p << ") ";
 							if (halt == 0)  std::cin >> halt; else { std::cout << "\n"; halt--; }
 							#endif
-					createTriangleAndEdges(edge0,*p,sphere,edge1,old1,edge2,old2,triangle);
+					createTriangleAndEdges(edge0,*p,sphere,edge1,old1,edge2,old2,triangle,convex);
 							#ifdef print_debug_info
 							std::cout << pre << "teste dieses Dreieck: ";
 							if (halt == 0) std::cin >> halt; else { std::cout << "\n"; halt--; }
 							#endif
 					if (edge0 == edge)
 					{
+						// the first triangle has not to be tested
 						built = true;
 					}
 					else
@@ -1903,7 +2149,7 @@ namespace BALL
 						else
 						{
 							edge1->face_[0] = triangle;
-							border.push_back(edge1);		// ACHTUNG ?
+							border.push_back(edge1);
 							border_size++;
 							planar_edges.push_back(edge1);
 							edge1->vertex_[0]->edges_.push_back(edge1);
@@ -1932,7 +2178,7 @@ namespace BALL
 						else
 						{
 							edge2->face_[0] = triangle;
-							border.push_back(edge2);		// ACHTUNG ?
+							border.push_back(edge2);		
 							border_size++;
 							planar_edges.push_back(edge2);
 							edge2->vertex_[0]->edges_.push_back(edge2);
@@ -1960,6 +2206,23 @@ namespace BALL
 								std::cout << pre << "pushe Triangle " << *triangle << " (" << triangle << ") to\n"
 													<< pre << "  part";
 								if (halt == 0)  std::cin >> halt; else { std::cout << "\n"; halt--; }
+								#endif
+								#ifdef debug_triangulation
+								Atom* atom1 = new Atom;
+								Atom* atom2 = new Atom;
+								Atom* atom3 = new Atom;
+								atom1->setPosition(triangle->vertex_[0]->point_);
+								atom2->setPosition(triangle->vertex_[1]->point_);
+								atom3->setPosition(triangle->vertex_[2]->point_);
+								atom1->setElement(PTE[Element::H]);
+								atom2->setElement(PTE[Element::H]);
+								atom3->setElement(PTE[Element::H]);
+								atom1->createBond(*atom2);
+								atom2->createBond(*atom3);
+								atom3->createBond(*atom1);
+								sewMolecule->insert(*atom1);
+								sewMolecule->insert(*atom2);
+								sewMolecule->insert(*atom3);
 								#endif
 					}
 					else
@@ -1999,7 +2262,8 @@ namespace BALL
 			 bool&							old1,
 			 TTriangleEdge<T>*& edge2,
 			 bool&							old2,
-			 TTriangle<T>*&			triangle
+			 TTriangle<T>*&			triangle,
+			 bool								convex
 			)
 		throw()
 	{
@@ -2007,11 +2271,9 @@ namespace BALL
 		edge1	= new TTriangleEdge<T>;
 		edge1->vertex_[0] = edge->vertex_[0];
 		edge1->vertex_[1] = point;
-		//edge1->triangle.clear();
 		edge2 = new TTriangleEdge<T>;
 		edge2->vertex_[0] = point;
 		edge2->vertex_[1] = edge->vertex_[1];
-		//edge2->triangle.clear();
 				#ifdef print_debug_info
 				string pre = "      ";
 				std::cout << pre << "zwei Edges konstruiert\n"
@@ -2060,8 +2322,9 @@ namespace BALL
 		// swap triangle if necessary
 		TVector3<T> test_vector((triangle->vertex_[1]->point_-triangle->vertex_[0]->point_)%
 														(triangle->vertex_[2]->point_-triangle->vertex_[0]->point_));
-		if (Maths::isGreater(test_vector*sphere.p,
-												 test_vector*triangle->vertex_[0]->point_))
+		T test_value = test_vector*(sphere.p-triangle->vertex_[0]->point_);
+		if ((Maths::isGreater(test_value,0) && convex) ||
+				(Maths::isLess(test_value,0) && !convex)			)
 		{
 			TTrianglePoint<T>* temp = triangle->vertex_[0];
 			triangle->vertex_[0] = triangle->vertex_[1];
@@ -2069,23 +2332,6 @@ namespace BALL
 		}
 				#ifdef print_debug_info
 				std::cout << pre << "Dreieck gebaut: " << *triangle << " (" << triangle << ")\n";
-				#endif
-				#ifdef debug_triangulation
-				Atom* atom1 = new Atom;
-				Atom* atom2 = new Atom;
-				Atom* atom3 = new Atom;
-				atom1->setPosition(triangle->vertex_[0]->point_);
-				atom2->setPosition(triangle->vertex_[1]->point_);
-				atom3->setPosition(triangle->vertex_[2]->point_);
-				atom1->setElement(PTE[Element::H]);
-				atom2->setElement(PTE[Element::H]);
-				atom3->setElement(PTE[Element::H]);
-				atom1->createBond(*atom2);
-				atom2->createBond(*atom3);
-				atom3->createBond(*atom1);
-				sewMolecule->insert(*atom1);
-				sewMolecule->insert(*atom2);
-				sewMolecule->insert(*atom3);
 				#endif
 	}
 
@@ -2101,7 +2347,6 @@ namespace BALL
 		throw()
 	{
 		TVector4<T> p;
-		//if (circle.has(p0,true))
 		if (on_surface)
 		{
 			TVector3<T> p_(p0-circle.p);
@@ -2327,7 +2572,6 @@ namespace BALL
 				new_edge->vertex_[0]->edges_.push_back(new_edge);
 				new_edge->vertex_[1] = points[offset2+1];
 				new_edge->vertex_[1]->edges_.push_back(new_edge);
-				//new_edge->triangle.clear();
 				if ((j == 0) && (edge0 != 0))
 				{
 					border[edge0->index_].push_back(new_edge);
@@ -2356,7 +2600,6 @@ namespace BALL
 				new_edge->vertex_[0]->edges_.push_back(new_edge);
 				new_edge->vertex_[1] = points[offset2+end];
 				new_edge->vertex_[1]->edges_.push_back(new_edge);
-				//new_edge->triangle.clear();
 				if ((i == 0) && (edge1 != 0))
 				{
 					border[edge1->index_].push_back(new_edge);
@@ -2385,7 +2628,6 @@ namespace BALL
 				new_edge->vertex_[0]->edges_.push_back(new_edge);
 				new_edge->vertex_[1] = points[offset2+j+end+1];
 				new_edge->vertex_[1]->edges_.push_back(new_edge);
-				//new_edge->triangle.clear();
 				edges[offset2+add2] = new_edge;
 			}
 		}
@@ -2395,9 +2637,6 @@ namespace BALL
 		//																				: 2*number_of_segments*(number_of_triangles-1));
 		std::vector<TTriangle<T>*> triangles(triangle_number);
 		// build the triangles
-				#ifdef debug_triangulation
-				TTriangulatedSES<T>* face_part = new TTriangulatedSES<T>;
-				#endif
 		for (Position i = 0; i < end-1; i++)
 		{
 			for (Position j = 0; j < number_of_segments; j++)
@@ -2439,10 +2678,6 @@ namespace BALL
 							t2->index_ = 2*(number_of_segments*i+j)+1;
 							#endif
 					triangles[2*(number_of_segments*i+j)+1] = t2;
-							#ifdef debug_triangulation
-							face_part->triangles_.push_back(t1);
-							face_part->triangles_.push_back(t2);
-							#endif
 			}
 		}
 		// close free faces
@@ -2453,6 +2688,8 @@ namespace BALL
 				edges_.push_back(edge);
 				edge->vertex_[0] = points[offset];
 				edge->vertex_[1] = points[0];
+				points[offset]->edges_.push_back(edge);
+				points[0]->edges_.push_back(edge);
 				border[edge1->index_].push_back(edge);
 			for (Position i = 0; i < number_of_triangles; i++)
 			{
@@ -2467,6 +2704,8 @@ namespace BALL
 						edges_.push_back(edge);
 						edge->vertex_[0] = points[offset2];
 						edge->vertex_[1] = points[i+1];
+						points[offset2]->edges_.push_back(edge);
+						points[i+1]->edges_.push_back(edge);
 					t1->edge_[1] = edge;
 					t1->edge_[2] = edges[i];
 					t1->vertex_[0]->faces_.push_back(t1);
@@ -2490,6 +2729,8 @@ namespace BALL
 						edges_.push_back(edge);
 						edge->vertex_[0] = points[offset2+1];
 						edge->vertex_[1] = points[i+1];
+						points[offset2+1]->edges_.push_back(edge);
+						points[i+1]->edges_.push_back(edge);
 					t2->edge_[2] = edge;
 					t2->vertex_[0]->faces_.push_back(t2);
 					t2->vertex_[1]->faces_.push_back(t2);
@@ -2501,12 +2742,8 @@ namespace BALL
 							t2->index_ = triangles.size();
 							#endif
 					triangles.push_back(t2);
-							#ifdef debug_triangulation
-							face_part->triangles_.push_back(t1);
-							face_part->triangles_.push_back(t2);
-							#endif
 			}
-			border[edge3->index_].push_back(edges.back());
+			border[edge3->index_].push_back(edge);
 		}
 		// get the top of a singular face
 		if (edge3 == NULL)
@@ -2550,12 +2787,22 @@ namespace BALL
 							t->index_ = triangles.size();
 							#endif
 					triangles.push_back(t);
-							#ifdef debug_triangulation
-							face_part->triangles_.push_back(t);
-							#endif
 			}
 		}
 					#ifdef debug_triangulation
+					TTriangulatedSES<T>* face_part = new TTriangulatedSES<T>;
+					for (Position i = 0; i != points.size(); i++)
+					{
+						face_part->points_.push_back(points[i]);
+					}
+					for (Position i = 0; i != edges.size(); i++)
+					{
+						face_part->edges_.push_back(edges[i]);
+					}
+					for (Position i = 0; i != triangles.size(); i++)
+					{
+						face_part->triangles_.push_back(triangles[i]);
+					}
 					face_part->printToHINFile("DATA/MOLECULE/toricFace"+IndexToString(tindex,(T)0)+".hin");
 					tindex++;
 					face_part->points_.clear();
@@ -2575,31 +2822,51 @@ namespace BALL
 	template <class T>
 	void TTriangulatedSES<T>::printToHINFile(string filename)
 	{
+		setIndices();
+		std::vector<Atom*> atom;
 		Molecule* molecule = new Molecule;
-		Atom* atom1;
-		Atom* atom2;
-		Atom* atom3;
+		typename std::list<TTrianglePoint<T>*>::iterator p;
+		for (p = points_.begin(); p != points_.end(); p++)
+		{
+			Atom* new_atom = new Atom;
+			new_atom->setPosition((*p)->point_);
+			new_atom->setElement(PTE[Element::H]);
+			atom.push_back(new_atom);
+			molecule->insert(*new_atom);
+		}
+		#ifdef with_bonds
 		typename std::list<TTriangle<T>*>::iterator t;
 		for (t = triangles_.begin(); t != triangles_.end(); t++)
 		{
-			atom1 = new Atom;
-			atom2 = new Atom;
-			atom3 = new Atom;
-			atom1->setPosition((*t)->vertex_[0]->point_);
-			atom2->setPosition((*t)->vertex_[1]->point_);
-			atom3->setPosition((*t)->vertex_[2]->point_);
-			atom1->setElement(PTE[Element::H]);
-			atom2->setElement(PTE[Element::H]);
-			atom3->setElement(PTE[Element::H]);
-			molecule->insert(*atom1);
-			molecule->insert(*atom2);
-			molecule->insert(*atom3);
-			#ifdef with_bonds
+			Atom* atom1 = atom[(*t)->vertex_[0]->index_];
+			Atom* atom2 = atom[(*t)->vertex_[1]->index_];
+			Atom* atom3 = atom[(*t)->vertex_[2]->index_];
 			atom1->createBond(*atom3);
 			atom1->createBond(*atom2);
 			atom3->createBond(*atom2);
-			#endif
+			/*if (atom1.number_of_bonds_ >= Atom::MAX_NUMBER_OF_BONDS)
+			{
+				atom[(*t)->vertex_[0]->index_] = new Atom;
+				atom[(*t)->vertex_[0]->index_]->setPosition(atom1->getPosition());
+				atom[(*t)->vertex_[0]->index_]->setElement(PTE[Element::H]);
+				molecule->insert(*atom[(*t)->vertex_[0]->index_]);
+			}
+			if (atom2.number_of_bonds_ >= Atom::MAX_NUMBER_OF_BONDS)
+			{
+				atom[(*t)->vertex_[1]->index_] = new Atom;
+				atom[(*t)->vertex_[1]->index_]->setPosition(atom2->getPosition());
+				atom[(*t)->vertex_[1]->index_]->setElement(PTE[Element::H]);
+				molecule->insert(*atom[(*t)->vertex_[1]->index_]);
+			}
+			if (atom2.number_of_bonds_ >= Atom::MAX_NUMBER_OF_BONDS)
+			{
+				atom[(*t)->vertex_[2]->index_] = new Atom;
+				atom[(*t)->vertex_[2]->index_]->setPosition(atom3->getPosition());
+				atom[(*t)->vertex_[2]->index_]->setElement(PTE[Element::H]);
+				molecule->insert(*atom[(*t)->vertex_[2]->index_]);
+			}*/
 		}
+		#endif
 		System* system = new System;
 		system->insert(*molecule);
 		HINFile hinfile(filename,std::ios::out);
@@ -2706,6 +2973,43 @@ namespace BALL
 		Molecule* molecule = new Molecule;
 		molecule->insert(*a1);
 		molecule->insert(*a2);
+		System* system = new System;
+		system->insert(*molecule);
+		HINFile hinfile(file,std::ios::out);
+		hinfile << *system;
+		hinfile.close();
+		delete system;
+	}
+	#endif
+
+
+	#ifdef debug_triangulation
+	template <class T>
+	void TTriangulatedSES<T>::Contour2HIN(const std::list<TTriangleEdge<T>*>& contour, const string& file)
+	{
+		HashSet<TTrianglePoint<T>*> points;
+		typename std::list<TTriangleEdge<T>*>::const_iterator c;
+		for (c = contour.begin(); c != contour.end(); c++)
+		{
+			points.insert((*c)->vertex_[0]);
+			points.insert((*c)->vertex_[1]);
+		}
+		Molecule* molecule = new Molecule;
+		std::vector<Atom*> atom;
+		typename HashSet<TTrianglePoint<T>*>::Iterator p;
+		for (p = points.begin(); p != points.end(); p++)
+		{
+			(*p)->index_ = atom.size();
+			Atom* new_atom = new Atom;
+			new_atom->setPosition((*p)->point_);
+			new_atom->setElement(PTE[Element::H]);
+			atom.push_back(new_atom);
+			molecule->insert(*new_atom);
+		}
+		for (c = contour.begin(); c != contour.end(); c++)
+		{
+			atom[(*c)->vertex_[0]->index_]->createBond(*atom[(*c)->vertex_[1]->index_]);
+		}
 		System* system = new System;
 		system->insert(*molecule);
 		HINFile hinfile(file,std::ios::out);
