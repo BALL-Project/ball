@@ -1,6 +1,8 @@
-// $Id: molecularProperties.C,v 1.7.4.1 2002/10/18 14:48:30 amoll Exp $
+// $Id: molecularProperties.C,v 1.7.4.2 2002/10/19 12:07:26 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
+#include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
+
 
 using namespace std;
 

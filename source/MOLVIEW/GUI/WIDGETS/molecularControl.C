@@ -1,6 +1,7 @@
-// $Id: molecularControl.C,v 1.6.4.1 2002/10/18 14:48:29 amoll Exp $
+// $Id: molecularControl.C,v 1.6.4.2 2002/10/19 12:07:26 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
+#include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 
@@ -155,14 +156,8 @@ bool MolecularControl::reactToMessages_(Message* message)
 }
 
 
-
-
-
-
-// BAUSTELLE
 /*
-void MolecularControl::ContextMenu
-  (QListViewItem* item,  const QPoint& point, int column)
+void MolecularControl::ContextMenu(QListViewItem* item, const QPoint& point, int column)
 {
 	enum
 	{
@@ -316,7 +311,6 @@ void MolecularControl::ContextMenu
 	}
 }
 */
-
 	} // namespace MOLVIEW
 
 } // namespace BALL

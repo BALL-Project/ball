@@ -1,15 +1,7 @@
-// $Id: molecularControl.h,v 1.7.4.2 2002/10/18 18:50:37 amoll Exp $
+// $Id: molecularControl.h,v 1.7.4.3 2002/10/19 12:07:03 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #	include <BALL/VIEW/GUI/WIDGETS/control.h>
@@ -21,10 +13,6 @@
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
 #	include <BALL/MOLVIEW/FUNCTOR/molecularFilter.h>
-#endif
-
-#ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
-#	include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
 #endif
 
 using namespace BALL::VIEW;
