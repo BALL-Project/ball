@@ -1,7 +1,4 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: mainControl.C,v 1.24 2002/12/12 11:43:24 oliver Exp $
+// $Id: mainControl.C,v 1.25 2002/12/12 17:50:53 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -250,6 +247,9 @@ namespace BALL
 
 		void MainControl::aboutToExit()
 		{
+			preferences_.clear();
+			preferences_.appendSection("WINDOWS");
+
 			// finalizes all modular widgets
 			List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
 			for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
@@ -801,10 +801,10 @@ namespace BALL
 			throw()
 		{
 			// the main window position
-			inifile.insertValue ("WINDOWS", "Main::x", String(x()));
-			inifile.insertValue ("WINDOWS", "Main::y", String(y()));
-			inifile.insertValue ("WINDOWS", "Main::width", String(width()));
-			inifile.insertValue ("WINDOWS", "Main::height", String(height()));
+			inifile.insertValue("WINDOWS", "Main::x", String(x()));
+			inifile.insertValue("WINDOWS", "Main::y", String(y()));
+			inifile.insertValue("WINDOWS", "Main::width", String(width()));
+			inifile.insertValue("WINDOWS", "Main::height", String(height()));
 
 			// the default preferences tab (if existent)
 			if (main_control_preferences_ != 0)
@@ -812,12 +812,6 @@ namespace BALL
 				main_control_preferences_->writePreferences(inifile);
 			}
 			
-			List<ModularWidget*>::Iterator it = modular_widgets_.begin();
-			for (; it != modular_widgets_.end(); it++)
-			{
-				(*it)->writePreferences(inifile);
-			}
-
 			inifile.write();
 		}
 
