@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData3D_test.C,v 1.9 2003/05/03 17:29:34 oliver Exp $
+// $Id: RegularData3D_test.C,v 1.10 2003/05/03 18:25:25 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.9 2003/05/03 17:29:34 oliver Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.10 2003/05/03 18:25:25 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -150,23 +150,23 @@ CHECK(operator[]/1/2)
 	TEST_EQUAL((*grid)[3 + 11 * 3 + 11 * 11 * 3], (*grid)[lower]);
 RESULT
 
-CHECK(getGridCoordinates/1)
-	lower = grid->getGridCoordinates(0, 0, 0);
+CHECK(getCoordinates/1)
+	lower = grid->getCoordinates(0, 0, 0);
 	TEST_REAL_EQUAL(lower.x, 0.0)
 	TEST_REAL_EQUAL(lower.y, 0.0)
 	TEST_REAL_EQUAL(lower.z, 0.0)
 RESULT
 
-CHECK(getGridCoordinates/2)
-	lower = grid->getGridCoordinates(2 + 2 * 11 + 2 * 11 * 11);
+CHECK(getCoordinates/2)
+	lower = grid->getCoordinates(2 + 2 * 11 + 2 * 11 * 11);
 	TEST_REAL_EQUAL(lower.x, 2.0)
 	TEST_REAL_EQUAL(lower.y, 2.0)
 	TEST_REAL_EQUAL(lower.z, 2.0)
 RESULT
 
-CHECK(getGridCoordinates/3)
+CHECK(getCoordinates/3)
 	upper.set(3.999999, 4.0, 3.0001);
-	lower = grid->getGridCoordinates(upper);
+	lower = grid->getCoordinates(upper);
 	TEST_REAL_EQUAL(lower.x, 3.0)
 	TEST_REAL_EQUAL(lower.y, 4.0)
 	TEST_REAL_EQUAL(lower.z, 3.0)
