@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.16 2004/02/24 11:10:31 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.17 2004/04/07 14:51:48 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -193,9 +193,6 @@ namespace BALL
 				return false;
 			}
 			
-
-			setStatusbarText("writing PDB file...");
-
 			QFileDialog *fd = new QFileDialog(
 					(MainControl*) ((ConnectionObject*)this)->getRoot()
 					, "Molecular File Dialog", true);
@@ -227,6 +224,8 @@ namespace BALL
 			{
 				return false;
 			}
+
+			setStatusbarText("writing molecular file...");
 
 			const System& system = *(const System*) (*selection.begin());
 

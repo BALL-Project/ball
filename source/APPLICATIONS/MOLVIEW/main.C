@@ -1,24 +1,41 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.20 2004/03/21 11:48:35 amoll Exp $
+// $Id: main.C,v 1.21 2004/04/07 14:47:21 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
 #include <qapplication.h>
 #include "mainframe.h"
+#include <iostream>
 
 #ifndef BALL_PLATFORM_WINDOWS
 int main(int argc, char **argv)
+{
 #else
 int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
-#endif
 {
-
-#ifdef BALL_PLATFORM_WINDOWS
 	int argc = __argc;
 	char** argv = __argv;
 #endif
+
+
+	char*	molview_data_path = getenv("MOLVIEW_DATA_PATH");
+	if (molview_data_path == 0)
+	{
+		char*	ball_data_path = getenv("BALL_DATA_PATH");
+		if (ball_data_path == 0)
+		{
+			std::cerr << "Error: Neither BALL_DATA_PATH or MOLVIEW_DATA_PATH environment variable are set. Aborting..." 
+								<< std::endl;
+			return 1;
+		}
+	}
+	else
+	{
+		setenv("BALL_DATA_PATH", molview_data_path, true);
+	}
+
 	QApplication application(argc, argv);
 
 	// Create the mainframe.
