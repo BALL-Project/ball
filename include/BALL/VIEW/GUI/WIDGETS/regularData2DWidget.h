@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.h,v 1.14 2001/05/27 10:26:37 hekl Exp $
+// $Id: regularData2DWidget.h,v 1.15 2001/06/06 14:33:44 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -131,25 +131,8 @@ class RegularData2DWidget
   void onNotify(Message *message)
 	throw();
 
-  /**	@name	ModularWidget related methods
-   */
-  //@{
-  /**	Setup the menu entries.
-	RegularData2DWidget creates an entry in Tools|RegularData2DWidget and connects
-	the entry to createPlot()
-  */
-  virtual void initializeWidget(MainControl& main_control)
-	throw();
-
-  /**	Remove menu entries.
-   */
-  virtual void finalizeWidget(MainControl& main_control)
-	throw();
-  //@}
-
-  bool reactToMessages_(Message* message);
-
 public slots:
+  bool reactToMessages_(Message* message);
 
   void paintEvent( QPaintEvent * );
   void drawContents( QPainter *paint, int clipx, int clipy, int clipw, int cliph );
@@ -163,6 +146,21 @@ public slots:
 
   void mousePressEvent( QMouseEvent *e );
   
+  /**	@name	ModularWidget related methods
+   */
+  //@{
+  /**	Setup the menu entries.
+	RegularData2DWidget creates an entry in Tools|RegularData2DWidget and connects
+	the entry to createPlot()
+  */
+  virtual void initializeWidget(MainControl& main_control);
+		//throw();
+					
+  /**	Remove menu entries.
+   */
+  virtual void finalizeWidget(MainControl& main_control);
+	//  throw();
+  //@}
 
   void createPlot();
 
@@ -191,7 +189,7 @@ public slots:
   void eraseSelectFrame();
   void drawSelectFrame();
 
-  QPixmap *pm_, *legend_map_;
+  //QPixmap *pm_, *legend_map_;
 
   Position legend_last_x_, legend_last_y_;
 
@@ -243,7 +241,9 @@ public slots:
 
   /* These variables store the parameters of the spectrum */
   Size spec_length_x_, spec_length_y_;
-
+ 
+  QPixmap *pm_, *legend_map_;
+  
   /* This pixmap is intended to hold the contour-lines */
   QPixmap *pm_cont_;
 
