@@ -44,14 +44,14 @@ HashGridBox3                        DEIX        Z
       DataIteratorTraits_
 HashGrid3                           DEI         Z
       BoxIteratorTraits_
-HashMap                             D           /
+HashMap                             D           /       
       IllegalKey
       IteratorTraits_
 HashSet                             DX          /       store methods
       IllegalKey
       Node
       IteratorTraits_
-List                                X           /       apply?
+List                                /           /
 Options                             /           /
 PointGrid                           EI          /
 Quadruple                           EI          /
@@ -61,7 +61,7 @@ String                              DEI         /
 Substring                           DEI         /
       UnboundSubstring
       InvalidSubstring
-StringHashMap                       /           Z
+StringHashMap                       /           /       
 StackListItem                       DEI         /
 StackList                           DEI         /
 TStackListItem                      DEI         /
