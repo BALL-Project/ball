@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.6 2003/09/19 18:18:00 amoll Exp $
+// $Id: molecularControl.C,v 1.7 2003/09/19 23:55:34 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -250,7 +250,6 @@ void MolecularControl::showFilename()
 
 void MolecularControl::updateSelection()
 {
-Log.error() << "#~~#   3" << std::endl;
 	setStatusbarText("");
 	selected_.clear();
 
@@ -297,17 +296,12 @@ Log.error() << "#~~#   3" << std::endl;
 		context_composite_ = *selected_.begin();
 		showFilename();
 	}
-Log.error() << "#~~#   4" << std::endl;
 
 	// sent new selection through tree
 	ControlSelectionMessage* message = new ControlSelectionMessage;
 	message->setSelection(selected_);
-Log.error() << "#~~#   61  " << message->isDeletable() << std::endl;
 	message->setDeletable(true);
-Log.error() << "#~~#   62  " << message->isDeletable() << std::endl;
-Log.error() << "#~~#   63  " << message << std::endl;
 	notify_(message);
-Log.error() << "#~~#   5" << std::endl;
 }
 
 void MolecularControl::onContextMenu_(QListViewItem* item,  const QPoint& point, int /* column */)
