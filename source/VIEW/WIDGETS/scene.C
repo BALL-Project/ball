@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.98 2004/07/03 12:09:31 amoll Exp $
+// $Id: scene.C,v 1.99 2004/07/03 17:41:25 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -753,35 +753,6 @@ namespace BALL
 			notify_(message);
 		}
 
-		void Scene::changeEyeDistance_(Scene* scene)
-		{
-			// Differences between the old and new x and y positions in the window
-			float delta_x = scene->x_window_pos_new_ - scene->x_window_pos_old_;
-			float new_distance = stage_->getEyeDistance() + (delta_x / 250.0);
-			
-			// prevent strange values
-			if (new_distance < 0 || new_distance > 4) return;
-
-			stage_->setEyeDistance(new_distance);
-			stage_settings_->updateFromStage();
-
-			paintGL();
-		}
-
-		void Scene::changeFocalDistance_(Scene* scene)
-		{
-			// Differences between the old and new x and y positions in the window
-			float delta_x = scene->x_window_pos_new_ - scene->x_window_pos_old_;
-			float new_distance = stage_->getFocalDistance() + (delta_x / 10.0);
-			
-			// prevent strange values
-			if (new_distance < 7 || new_distance > 100) return;
-
-			stage_->setFocalDistance(new_distance);
-			stage_settings_->updateFromStage();
-
-			paintGL();
-		}
 
 		void Scene::setViewPoint_()
 			throw()
@@ -1400,14 +1371,6 @@ namespace BALL
 
 			switch (e->state())
 			{
-				case (Qt::AltButton | Qt::ShiftButton | Qt::LeftButton): 
-					changeFocalDistance_(this);
-					break;
-
-				case (Qt::AltButton | Qt::LeftButton): 
-					changeEyeDistance_(this);
-					break;
-
 				case (Qt::ShiftButton | Qt::LeftButton): 
 					zoomSystem_(this);
 					break;
@@ -1489,6 +1452,52 @@ namespace BALL
 						 e->key() == Key_Escape)
 				{
 					exitStereo();
+				}
+
+				// setting of eye and focal distance
+				if (e->key() >= Key_Left &&
+						e->key() <= Key_Down)
+				{
+					float new_distance = stage_->getEyeDistance();
+					float new_focal_distance = stage_->getFocalDistance();
+
+					// setting of eye distance
+					if (e->key() == Key_Left ||
+					    e->key() == Key_Right)
+					{
+						if (e->key() == Key_Left)
+						{
+							new_distance -= 0.1;
+						}
+						else
+						{
+							new_distance += 0.1;
+						}
+						
+						// prevent strange values
+						if (new_distance < 0 || new_distance > 4) return;
+					}
+					// setting of focal distance
+					else
+					{
+						if (e->key() == Key_Down)
+						{
+							new_focal_distance -= 1;
+						}
+						else
+						{
+							new_focal_distance += 1;
+						}
+			
+						// prevent strange values
+						if (new_focal_distance < 7 || new_focal_distance > 100) return;
+					}
+
+					stage_->setEyeDistance(new_distance);
+					stage_->setFocalDistance(new_focal_distance);
+					stage_settings_->updateFromStage();
+
+					paintGL();
 				}
 			}
 		}
@@ -1653,6 +1662,7 @@ namespace BALL
 			}
 			*/
 			
+			gl_renderer_.setStereoMode(GLRenderer::ACTIVE_STEREO);
 			last_pos_ = pos();
 			hide();
 			showNormal();  // needed on windows

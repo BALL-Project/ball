@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.47 2004/07/03 12:10:10 amoll Exp $
+// $Id: scene.h,v 1.48 2004/07/03 17:41:43 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -529,9 +529,6 @@ namespace BALL
 			void render_(const Representation& rep, RenderMode mode)
 				throw();
 
-
-			void changeEyeDistance_(Scene* scene);
-			void changeFocalDistance_(Scene* scene);
 
 			void processRotateModeMouseEvents_(QMouseEvent* e);
 
