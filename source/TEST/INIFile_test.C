@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile_test.C,v 1.21 2003/01/22 17:16:58 anker Exp $
+// $Id: INIFile_test.C,v 1.22 2003/04/22 14:33:06 sneumann Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -20,7 +20,7 @@ class MyItemCollector
 
 	Processor::Result operator () (DataType& item)
 	{	//cout << *item << endl;
-		list_.push_back(&item);
+		ItemCollector<DataType>::list_.push_back(&item);
 		list2.push_back(*item);
 		return Processor::CONTINUE;
 	}
@@ -29,7 +29,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.21 2003/01/22 17:16:58 anker Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.22 2003/04/22 14:33:06 sneumann Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

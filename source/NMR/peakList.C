@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peakList.C,v 1.3 2002/02/27 12:23:54 sturm Exp $
+// $Id: peakList.C,v 1.4 2003/04/22 14:34:07 sneumann Exp $
 
 #include <BALL/NMR/peakList.h>
 
@@ -11,9 +11,9 @@ namespace BALL
 	template <>
 	PeakList<Peak2D>::Position PeakList<Peak2D>::getMinPosition() const
 	{
-		ConstIterator it = begin();
+		ConstIterator it = PeakList<Peak2D>::begin();
 		Peak2D::Position min(Limits<float>::max(), Limits<float>::max());
-		for (; it != end(); ++it)
+		for (; it != PeakList<Peak2D>::end(); ++it)
 		{
 			min.x = std::min(min.x, it->getPosition().x);
 			min.y = std::min(min.y, it->getPosition().y);
@@ -25,9 +25,9 @@ namespace BALL
 	template <>
 	PeakList<Peak2D>::Position PeakList<Peak2D>::getMaxPosition() const
 	{
-		ConstIterator it = begin();
+		ConstIterator it = PeakList<Peak2D>::begin();
 		Peak2D::Position max(-Limits<float>::max(), -Limits<float>::max());
-		for (; it != end(); ++it)
+		for (; it != PeakList<Peak2D>::end(); ++it)
 		{
 			max.x = std::max(max.x, it->getPosition().x);
 			max.y = std::max(max.y, it->getPosition().y);
@@ -39,9 +39,9 @@ namespace BALL
 	template <>
 	PeakList<Peak3D>::Position PeakList<Peak3D>::getMinPosition() const
 	{
-		ConstIterator it = begin();
+		ConstIterator it = PeakList<Peak3D>::begin();
 		Peak3D::Position min(Limits<float>::max(), Limits<float>::max(), Limits<float>::max());
-		for (; it != end(); ++it)
+		for (; it != PeakList<Peak3D>::end(); ++it)
 		{
 			min.x = std::min(min.x, it->getPosition().x);
 			min.y = std::min(min.y, it->getPosition().y);
@@ -54,9 +54,9 @@ namespace BALL
 	template <>
 	PeakList<Peak3D>::Position PeakList<Peak3D>::getMaxPosition() const
 	{
-		ConstIterator it = begin();
+		ConstIterator it = PeakList<Peak3D>::begin();
 		Peak3D::Position max(-Limits<float>::max(), -Limits<float>::max(), -Limits<float>::max());
-		for (; it != end(); ++it)
+		for (; it != PeakList<Peak3D>::end(); ++it)
 		{
 			max.x = std::max(max.x, it->getPosition().x);
 			max.y = std::max(max.y, it->getPosition().y);
@@ -67,3 +67,10 @@ namespace BALL
 	}
 
 } // namespace BALL
+
+
+
+
+
+
+
