@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.13 2000/03/24 13:53:55 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.14 2000/03/24 18:58:06 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -290,9 +290,9 @@ namespace BALL
 		}
 	}
 
-	/**	Get the partition. ???
-			@param	a the 
-			@param	b the 
+	/**	Get the partition of two vectors.
+			@param	a the first vector
+			@param	b the second vector
 			@return TVector3 the partition
 	*/
 	template <class T>
@@ -302,11 +302,12 @@ namespace BALL
 		return TVector3<T>((b.x + a.x) / 2, (b.y + a.y) / 2, (b.z + a.z) / 2);
 	}
 
-	/**	Get the partition. ???
-			@param	a the 
-			@param	b the 
-			@param r
-			@param s
+	/**	Get the partition of two vectors, calculated
+			with two ratio factors.
+			@param	a the first vector
+			@param	b the second vector
+			@param  r the ratio factor of the first vector
+			@param  s the ratio factor of the second vector
 			@return TVector3 the partition
 	*/
 	template <class T>
@@ -351,6 +352,10 @@ namespace BALL
 	BALL_INLINE 
 	T GetDistance(const TLine3<T>& line, const TVector3<T>& point)
 	{
+		if (line.d.getLength() == (T)0)
+		{
+			throw Exception::DivisionByZero(__FILE__, __LINE__);
+		}		
 		return ((line.d % (point - line.p)).getLength() / line.d.getLength());
 	}
 
@@ -378,7 +383,10 @@ namespace BALL
 		
 		if (Maths::isZero(cross_product_length))
 		{ // invariant: parallel lines
-			
+			if (a.d.getLength() == (T)0)
+			{
+				throw Exception::DivisionByZero(__FILE__, __LINE__);
+			}					
 			return ((a.d % (b.p - a.p)).getLength() / a.d.getLength());
 		} else {
 			T spat_product = TVector3<T>::getSpatProduct(a.d, b.d, b.p - a.p);
