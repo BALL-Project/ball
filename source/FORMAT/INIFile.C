@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.16 2001/04/09 11:26:55 amoll Exp $
+// $Id: INIFile.C,v 1.17 2001/04/09 23:04:40 amoll Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -18,6 +18,7 @@ namespace BALL
 		: valid_(false),
 			filename_("")
 	{	
+		appendSection(HEADER);
 	}
 
 	INIFile::INIFile(const String& filename)
@@ -215,7 +216,7 @@ namespace BALL
 	bool INIFile::setLine(LineIterator line_it, const String& line)
 	{
 		// section lines cannot be changed with this method
-		if (!+line_it || (*line_it)[0] == '[')
+		if (!isValid(line_it) || (*line_it)[0] == '[')
 		{
 			return false;
 		}
@@ -247,10 +248,45 @@ namespace BALL
 		return true;
 	}
 
+	bool INIFile::insertLine(LineIterator line_it, const String& line)
+	{
+		if (!isValid(line_it))
+		{
+			return false;
+		}
+
+		//LineIterator it(line_it);
+
+		Section& section(*line_it.getSection());
+
+		// key?
+    if (line.find_first_of("=") > 0)
+    {
+			String key(line.before("="));
+			key.trim();
+
+			if (section.key_map_.has(key))
+			{
+				return false;
+			}
+
+			line_it.getSectionNextLine();
+
+			section.lines_.insert(line_it.position_, line);
+			--line_it;
+			section.key_map_[key] = line_it.position_;
+			return true;
+		}
+
+		--line_it;
+		section.lines_.insert(line_it.position_, line);
+		return true;
+	}
+
 	bool INIFile::deleteLine(LineIterator line_it)
 	{
 		// test if line exists and if we try to remove a section line
-		if (!+line_it || (*line_it)[0] == '[')
+		if (!isValid(line_it) || (*line_it)[0] == '[')
 		{
 			return false;
 		}
@@ -426,6 +462,65 @@ namespace BALL
 		return match_name;
 	}
 
+	bool INIFile::deleteSection(const String& section_name)
+	{
+		if (!section_index_.has(section_name))
+		{
+			return false;
+		}
+
+		if (section_name == HEADER)
+		{
+			while (+getSectionFirstLine(HEADER))
+			{
+				deleteLine(getSectionFirstLine(HEADER));
+			}
+			
+			return true;
+		}
+
+		sections_.erase(section_index_[section_name]);
+		section_index_.remove(section_name);
+		return true;
+	}
+
+	bool INIFile::appendSection(const String& section_name)
+	{
+		// strip the bracket to get the name
+		String line(section_name);
+		if (line[0] == '[')
+		{	
+			// remove the leading '['
+			line.erase(0, 1);
+		}
+		if (line.has('['))
+		{
+			line = line.before("]");
+		}
+
+		if (section_index_.has(line))
+		{
+			return false;
+		}
+
+		Section section;
+		section.name_ = line;
+		sections_.push_back(section);
+
+		Section_iterator section_it(sections_.end());
+		section_it--;
+
+		// remember the current section_name
+		section_index_[line] = section_it;
+
+		// store the line
+		line = '[' + line +']';
+		section_it->lines_.push_back(line);
+
+		return true;
+	}
+
+
 	bool INIFile::apply(UnaryProcessor<LineIterator>& processor)
 	{		
 		if (!processor.start())
@@ -447,12 +542,14 @@ namespace BALL
 		return (processor.finish());
 	}
 
+	bool INIFile::isValid(const LineIterator& it) const
+	{
+		return (+it && it.getBound_() == &sections_);
+	}
+
 	bool INIFile::operator == (const INIFile& inifile) const
 	{
-		return (valid_ == inifile.valid_
-				&& filename_ == inifile.filename_
-				&& sections_ == inifile.sections_
-				&& section_index_ == inifile.section_index_);
+		return (sections_ == inifile.sections_);
 	}
 
 } // namespace BALL

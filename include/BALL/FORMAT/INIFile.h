@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.15 2001/04/09 11:26:41 amoll Exp $
+// $Id: INIFile.h,v 1.16 2001/04/09 23:04:09 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -57,8 +57,7 @@ namespace BALL
 			bool operator == (const Section& section) const
 			{
 				return (name_		 == section.name_		&&
-								lines_	 == section.lines_	&&
-								key_map_ == section.key_map_);
+								lines_	 == section.lines_);
 			}
 
 			protected:
@@ -134,11 +133,6 @@ namespace BALL
 			{
 				return *position_;
 			}
-/*
-			const String& getLine() const
-			{
-				return *position_;
-			}*/
 
 			IteratorTraits_& operator ++ ()
 			{
@@ -165,6 +159,33 @@ namespace BALL
 
 				return *this;
 			}
+
+			IteratorTraits_& operator -- ()
+			{
+				if (bound_ == 0)
+				{
+					return *this;
+				}
+
+				if (!isSectionFirstLine())
+				{
+					position_--;
+
+					return *this;
+				}
+
+				section_--;
+
+				if (section_ == bound_->begin())
+				{
+					return *this;
+				}
+
+				toSectionLastLine();
+
+				return *this;
+			}
+
 
 			IteratorTraits_& getSectionNextLine()
 			{
@@ -202,45 +223,72 @@ namespace BALL
 				return (+ (*this));
 			}
 
-			void toBegin()
+			void toSectionFirstLine()
 			{
 				position_ = section_->lines_.begin();
 			}
 
-			bool isSectionBegin() const
+			void toSectionLastLine()
 			{
-				return (position_ == section_->lines_.begin());
+				List<String>::Iterator it = section_->lines_.end();
+				--it;
+				position_ = it;
 			}
 
 			void toSectionEnd()
 			{
 				position_ = section_->lines_.end();
 			}
-			
-			bool isSectionEnd() const
-			{
-				return (position_ == section_->lines_.end());
-			}
-			
+
+
 			bool isSectionLastLine() const
 			{
 				List<String>::Iterator it = section_->lines_.end();
 				it--;
 				return (position_ == it);
+			}				
+
+			bool isSectionFirstLine() const
+			{
+				return (position_ == section_->lines_.begin());
 			}
 
-			protected:
-/*
-			String& operator *()
+			bool isSectionEnd() const
 			{
-				return *position_;
-			}*/
+				return (position_ == section_->lines_.end());
+			}
+
+			void toFirstLine()
+			{
+				section_->lines_.begin();
+				position_ = section_->lines_.begin();
+			}
+
+			void toLastLine()
+			{
+				toEnd();
+				--section_;
+				toSectionLastLine();
+			}
+
+			void toEnd()
+			{
+				section_->lines_.end();
+				toSectionEnd();
+			}
+
+
+			protected:
+
+			const List<Section>* getBound_() const
+			{
+				return bound_;
+			}
 
 			void setLine_(const String& line)
 			{
 				(*position_) = line;
 			}
-
 
 			private:
 
@@ -338,11 +386,10 @@ namespace BALL
 				If the file could be opened, the whole file is read into an 
 				internal buffer and the different sections are interpreted.
 				Then, internal datastructures for fast acces to the stored data
-				are built (hash tables containing the section names).\\
+				are built (hash table containing the sections).\\
 				Line starting with '!', ';', or '\#' are treated as comment
 				lines and are stored, but not interpreted.
 				Key-names and values are trimmed.
-				If the file could not be read, valid_ is set to false, ow true.
 				IF a line starts with "[", but no closing bracket occurs, the line is skipped.
 				@return	bool \begin{itemize}
 												\item {\bf true} if the file could be opened and read
@@ -361,7 +408,7 @@ namespace BALL
 		bool write();
 
 		/**	Returns the current filename.
-				@return 	String& -  the filename
+				@return String& -  the filename
 		*/	
 		const String& getFilename() const;
 
@@ -382,12 +429,11 @@ namespace BALL
 		bool isValid() const;
 
 		//@}
-
 		/** @name	Methods for line-wise access.	
-				The INI file may be also accessed line-wise (ignoring the section
-				structure). Each line can be accessed via its index (starting with 0)
-				by \Ref{getLine} and modified by \Ref{setLine}. The index has to be less than
-				the value returned by \Ref{getNumberOfLines}.
+				The INI file can be accessed line-wise (ignoring the section structure). 
+				Each line can be accessed via its index (starting with 0)	by \Ref{getLine} 
+				and modified by \Ref{setLine}. 
+				The index has to be less than	the value returned by \Ref{getNumberOfLines}.
 		*/
 		//@{	
 
@@ -395,21 +441,29 @@ namespace BALL
 				If the {\bf line_number} given is not valid (less than
 				0 or greater or equal to the number returned by \Ref{getNumberOfLines})
 				a non-valid iterator is returned.
+				Use of this method is not recommended, because in the worst case, it could
+				be O(n).
 				@param	line_number, first line starts with 0
 				@return	LineIterator to the specified line
 		*/	
 		LineIterator getLine(Size line_number);
 
+		//@}
+		/** @name	Methods for access with an iterator.
+				The INI file may be also accessed with an LineIterator.			
+		*/
+		//@{		
+		
 		/**	Change the contents of a line.
-				Replaces the line given by {\bf line_number} by the text in {\bf line}.
+				Replaces the line given by {\bf line_it} by the text in {\bf line}.
 				Section lines cannot be changed with this method.
 				If the line contains a key, the old one is deleted and the new one
 				(if any) is set.
 				If line starts with "[" the method aborts.
-				@param	line_number number of the line to change, first line is 0
+				@param	line_it iterator to the line to change
 				@param	line new content of the line
 				@return	bool \begin{itemize}
-											\item {\bf true} if line_number was in a valid range
+											\item {\bf true} if line_it is valid
 											\item {\bf false} otherwise
 										\end{itemize}
 		*/	
@@ -434,6 +488,11 @@ namespace BALL
 		*/
 		bool insertLine(LineIterator line_it, const String& line);
 		
+		//@}
+		/** @name	Methods for access per section.
+		*/
+		//@{		
+
 		/** Append a line to a section.
 				To add a line to the HEADER use {\bf INIFile::HEADER} as section_name.
 				If the given section does not exists, false is returned.
@@ -510,6 +569,18 @@ namespace BALL
 		*/	
 		Size getSectionLength(const String& section_name) const;
 
+		/** Delete a section.
+				If the given section does not exist, false is returned.
+				If you remove the header, all lines of the header are removed,
+				but the header itself still remains as section in the instance.
+		*/
+		bool deleteSection(const String& section);
+
+		/** Append a section.
+				If the given section does already exists, false is returned.
+		*/
+		bool appendSection(const String& section);
+
 		//@}
 		/** @name	Methods to access single entries
 		*/
@@ -550,30 +621,36 @@ namespace BALL
 		*/	
 		bool setValue(const String& section, const String& key, const String& value);
 
-		/**	Apply a processor to all lines of the file.
-		*/
-		bool apply(UnaryProcessor<LineIterator>& processor);
-
 		//@}
 		/** @name Predicates
 		*/
 		//@{
 
-		/** Equality operator 
+		/** Equality operator.
+				Two instances are equal if they have the same sections
+				with the same lines.
 		*/
 		bool operator == (const INIFile& inifile) const;
 
+		/** Test if the given iterator is valid for this instance.
+		*/
+		bool isValid(const LineIterator& it) const;
+
 		//@}
+
+		/**	Apply a processor to all lines of the file.
+		*/
+		bool apply(UnaryProcessor<LineIterator>& processor);
+
 
 		protected:
 
-		bool									valid_;
+		bool															valid_;
 
-		String								filename_;	
+		String														filename_;	
 
-		// all sections
-		// 0. section is "[HEADER]"
-		List<Section>		sections_;
+		// all sections, 0. section is "[HEADER]"
+		List<Section>											sections_;
 
 		// hashmap with the section names  => index
 		StringHashMap<Section_iterator>		section_index_;
