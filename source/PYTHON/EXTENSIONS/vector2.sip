@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.sip,v 1.10 2003/11/01 09:27:40 oliver Exp $
+// $Id: vector2.sip,v 1.11 2004/02/25 12:04:41 oliver Exp $
 //
 
 //Vector2 operator * (float scalar, const Vector2& vector)
@@ -18,6 +18,8 @@ class Vector2
 {
 %TypeHeaderCode
         #include <BALL/MATHS/vector2.h>
+				#include "sipBALLIndex.h"
+				#include "sipBALLPosition.h"
         using namespace BALL;
         using namespace BALL::Exception;
 %End
@@ -25,16 +27,11 @@ class Vector2
 	//BALL_CREATE(Vector2)
 
 	Vector2() throw();
-	Vector2(float /value/)
-		throw();
-	Vector2(float /vx/, float /vy/)
-		throw();
-	Vector2(const Vector2& /vector/)
-		throw();
-	~Vector2()
-		throw();
-	virtual void clear()
-		throw();
+	Vector2(float /value/) throw();
+	Vector2(float /vx/, float /vy/) throw();
+	Vector2(const Vector2& /vector/) throw();
+	~Vector2() throw();
+	virtual void clear() throw();
 
 	//virtual void persistentWrite
 	//	(PersistenceManager& /pm/, const char* /name/ = 0) const
@@ -43,30 +40,22 @@ class Vector2
 	//virtual void persistentRead(PersistenceManager& /pm/)
 	//	throw();
 
-	void set(float /value/)
-		throw();
-	void set(float /vx/, float /vy/)
-		throw();
-	void set(const Vector2& /vector/)
-		throw();
+	void set(float /value/) throw();
+	void set(float /vx/, float /vy/) throw();
+	void set(const Vector2& /vector/) throw();
 	//const Vector2& operator = (const Vector2& /v/)
 	//	throw();
 	//const Vector2& operator = (float /value/)
 	//	throw();
 	//const Vector2& operator = (const T* ptr)
 	//				throw(NullPointer);
-	float getLength() const
-		throw();
-	float getSquareLength() const
-		throw();
+	float getLength() const throw();
+	float getSquareLength() const throw();
 	Vector2& normalize()
 		throw(DivisionByZero);
-	Vector2& negate()
-		throw();
-	static const Vector2& getZero()
-		throw();
-	static const Vector2& getUnit()
-		throw();
+	Vector2& negate() throw();
+	static const Vector2& getZero() throw();
+	static const Vector2& getUnit() throw();
 	// float& operator [] (Position /position/)
 	//	throw(IndexOverflow);
 	float operator [] (Position /position/) const throw(IndexOverflow);

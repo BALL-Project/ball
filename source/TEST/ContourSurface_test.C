@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ContourSurface_test.C,v 1.6 2003/05/28 16:51:09 oliver Exp $
+// $Id: ContourSurface_test.C,v 1.7 2004/02/25 12:04:44 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(ContourSurface, "$Id: ContourSurface_test.C,v 1.6 2003/05/28 16:51:09 oliver Exp $")
+START_TEST(ContourSurface, "$Id: ContourSurface_test.C,v 1.7 2004/02/25 12:04:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -19,12 +20,12 @@ START_TEST(ContourSurface, "$Id: ContourSurface_test.C,v 1.6 2003/05/28 16:51:09
 using namespace BALL;
 
 ContourSurface* cs_ptr = 0;
-CHECK(ContourSurface::ContourSurface())
+CHECK(TContourSurface() throw())
 	cs_ptr = new ContourSurface;
 	TEST_NOT_EQUAL(cs_ptr, 0)
 RESULT
 
-CHECK(ContourSurface::~ContourSurface())
+CHECK(~TContourSurface() throw())
 	delete cs_ptr;
 RESULT
 
@@ -124,9 +125,7 @@ CHECK(TContourSurface<T>::operator << (TRegularData3D<T>& data))
 RESULT
 
 
-// ????
-CHECK(exception test)
-	
+CHECK([EXTRA]Exceptions)
 	RegularData3D rd;
 	std::ifstream is("2ptc2.loc");
 	is >> rd;
@@ -138,6 +137,66 @@ CHECK(exception test)
 	STATUS("done")
 	STATUS(cs.vertex.size())
 	STATUS(cs.triangle.size())
+RESULT
+
+CHECK(Cube(const TRegularData3D<T>& grid) throw())
+  // ???
+RESULT
+
+CHECK(Position computeTopology(double threshold) throw())
+  // ???
+RESULT
+
+CHECK(Position getIndex(Position corner) const)
+  // ???
+RESULT
+
+CHECK(TContourSurface(T threshold))
+  // ???
+RESULT
+
+CHECK(TContourSurface(const TContourSurface& surface))
+  // ???
+RESULT
+
+CHECK((TContourSurface(const TRegularData3D<T>& data, T threshold = 0.0)))
+  // ???
+RESULT
+
+CHECK(Vector3 getCoordinates(Position index) const)
+  // ???
+RESULT
+
+CHECK(Vector3 getOrigin() const)
+  // ???
+RESULT
+
+CHECK(bool operator == (const TContourSurface<T>& surface) const)
+  // ???
+RESULT
+
+CHECK(const TContourSurface& operator = (const TContourSurface<T>& surface))
+  // ???
+RESULT
+
+CHECK(const TContourSurface<T> & operator << (const TRegularData3D<T>& data))
+  // ???
+RESULT
+
+CHECK(const Vector3& getSpacing() const)
+  // ???
+RESULT
+
+CHECK(void clear())
+  // ???
+RESULT
+
+CHECK(void setTo(Position p))
+  // ???
+RESULT
+
+CHECK(void shift() throw())
+  // ???
 RESULT
 
 /////////////////////////////////////////////////////////////

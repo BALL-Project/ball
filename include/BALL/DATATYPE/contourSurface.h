@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.15 2003/08/26 08:04:10 oliver Exp $
+// $Id: contourSurface.h,v 1.16 2004/02/25 12:04:36 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
@@ -309,9 +309,8 @@ namespace BALL
 	template <typename T>
 	bool TContourSurface<T>:: operator == (const TContourSurface<T>& data) const
 	{
-		// ???? Surface::operator ==
 		return ((threshold_    == data.threshold_)
-						 && (data_  == data.data_));
+						 && Surface::operator == (data.data_));
 	}
 
   template <typename T>
