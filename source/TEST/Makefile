@@ -1,6 +1,6 @@
 default:	all
 
-include ../common.mak
+include ../$(BALL_BINFMT)/common.mak
 
 DEXECUTABLES	= AmberFF_test
 EXECUTABLES = \
