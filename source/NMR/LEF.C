@@ -1,4 +1,4 @@
-// $Id: LEF.C,v 1.1 2000/07/03 20:02:15 oliver Exp $
+// $Id: LEF.C,v 1.2 2000/07/04 13:52:13 oliver Exp $
 
 #include<BALL/NMR/LEF.h>
 
@@ -54,7 +54,7 @@ bool LEFShift::finish()
 	list<PDBAtom*>::iterator atom_iter;
 	proton_iter=proton_list_.begin();
 	
-	if ( (proton_list_.begin()!=NULL) && (atom_list_.begin()!=NULL) )
+	if ( (proton_list_.size() > 0) && (atom_list_.size() > 0))
 		{
 		for(;proton_iter!=proton_list_.end();++proton_iter)
 			{
