@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.2 1999/08/31 22:01:15 oliver Exp $
+// $Id: exception.C,v 1.3 1999/09/19 20:54:00 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -75,10 +75,22 @@ namespace BALL
 			}
 
 			IndexUnderflow::IndexUnderflow(const char* file, int line, Index index, Size size)
-				: GeneralException(file, line, "IndexUnderflow", "an index was too small"),
+				: GeneralException(file, line, "IndexUnderflow", ""),
 					size_(size),
 					index_(index)
 			{
+				message_ = "the given index was too small: ";
+				char buf[40];
+
+				sprintf(buf, "%ld", (long)index);
+				message_ += buf;
+				message_ += " (size = ";
+
+				sprintf(buf, "%ld", (long)size);
+				message_ += buf;
+				message_ += ")";
+
+				globalHandler.setMessage(message_);
 			}
 
 			IndexOverflow::IndexOverflow(const char* file, int line, Index index, Size size)
@@ -86,6 +98,18 @@ namespace BALL
 					size_(size),
 					index_(index)
 			{
+				message_ = "the given index was too large: ";
+				char buf[40];
+
+				sprintf(buf, "%ld", (long)index);
+				message_ += buf;
+				message_ += " (size = ";
+
+				sprintf(buf, "%ld", (long)size);
+				message_ += buf;
+				message_ += ")";
+
+				globalHandler.setMessage(message_);
 			}
 
 			SizeUnderflow::SizeUnderflow(const char* file, int line, Size size)
