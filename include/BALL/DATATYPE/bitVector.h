@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.23 2001/02/10 20:00:58 amoll Exp $
+// $Id: bitVector.h,v 1.24 2001/02/23 19:22:16 oliver Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -129,7 +129,7 @@ namespace BALL
 				The bit in the bitvector is set to the given value.
 				@exception IllegalOperation if instance points to a const bitvector
 		*/
-		const Bit& operator = (bool bit) 
+		const Bit& operator = (const bool bit) 
 			throw(Exception::NullPointer, IllegalOperation);
 
 		/** Clear method 
