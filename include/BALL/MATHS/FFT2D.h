@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.h,v 1.1.2.3 2002/09/02 09:27:41 anhi Exp $
+// $Id: FFT2D.h,v 1.1.2.4 2002/09/05 10:38:12 anhi Exp $
 
 #ifndef BALL_MATHS_FFT2D_H
 #define BALL_MATHS_FFT2D_H
@@ -251,11 +251,6 @@ namespace BALL
 	};
 
 }
-
-/** This function is needed, but I don't know yet where to put it...
- */
-std::ostream& operator << (std::ostream& s, const FFTW_COMPLEX& c)
-			throw();
-				 
+			 
 
 #endif // BALL_MATHS_FFT2D_H
