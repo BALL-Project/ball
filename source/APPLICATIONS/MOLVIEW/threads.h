@@ -39,8 +39,9 @@ namespace BALL
 			4. At the end of the run() method, always call finish_() to notify the 
 				 main thread to delete the simulation thread, otherwise there will be 
 				 a memory leak.
-			If you dont pay attention to these points, dont wonder if molview freezes
+			If you dont pay attention to these rules, dont wonder if molview freezes
 			or crashes!
+			This class already has a mutex as member, so use it.
 	*/
 	class SimulationThread
 		: public QThread
@@ -50,7 +51,7 @@ namespace BALL
 			///
 			SimulationThread();
 			
-			///
+			/// Overloaded method QThread::run()
 			virtual void run();
 
 			///
@@ -60,14 +61,19 @@ namespace BALL
 			///
 			void setMainframe(Mainframe* mf) throw() {main_frame_ = mf;}
 
+			///
 			void setDCDFile(DCDFile* file) throw() {dcd_file_ = file;}
 
+			///
 			DCDFile* getDCDFile() throw() { return dcd_file_;}
 
+			///
 			void setComposite(Composite* composite) throw() {composite_ = composite;}
 
+			///
 			Composite* getComposite() throw() { return composite_;}
 
+			///
 			QMutex& getMutex() throw() { return mutex_;}
 
 		protected:
