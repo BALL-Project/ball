@@ -22,34 +22,79 @@ class test:
 	f = open(sys.argv[1])
 
 	# expressions for use in all files.
-	exp = [\
-		re.compile(''),																		#00 DOS carriage
-		re.compile('\?\?\?'),																#01 code problems
-		re.compile('cout'),																	#02 no cout in BALL!
-		re.compile('cerr'),																	#03 no cerr in BALL!
-		re.compile('[\s(]+int[\s\(\)\&\*]+'),								#04 integer values are bad!
-		re.compile('[\s(]+long[\s\(\)\&\*]+'),              #05 long values are
-		re.compile('[\s(]+short[\s\(\)\&\*]+'),							#06 short values are bad!
-		re.compile(';{2}'),																	#07 ;;
-		re.compile('}[\s]*else[\s]*{'),											#08 } else {
-		re.compile('throw[\s]*Exception::NotImplemented'),  #09 Exception Not Implemented
-		re.compile('\([\s]*Exception::NotImplemented'),  		#10 Exception Not Implemented in throw specifier
-		re.compile('[^:]std::endl'),                        #11 missing :: before std::endl
-		re.compile('\([\s]*bool[\s]*\)'),										#12 superflous bool cast
-		re.compile('const[\s]*float[\s]*&'),								#13 no const float references
-		re.compile('const[\s]*double[\s]*&')								#14 no const double references
-	]
-	
-	#																											#99 tab info line lack
+	exp = []
+	# error messages
+	msg = []
+
+	exp +=[re.compile('')]
+	msg +=['#00 DOS carriage']
+
+	exp +=[re.compile('\?\?\?')]
+	msg +=['#01 code problems']
+
+	exp +=[re.compile('cout')]
+	msg +=['#02 no cout in BALL!']
+
+	exp +=[re.compile('cerr')]
+	msg +=['#03 no cerr in BALL!']
+
+	exp +=[re.compile('[\s(]+int[\s\(\)\&\*]+')]
+	msg +=['#04 integer values are bad!']
+
+	exp +=[re.compile('[\s(]+long[\s\(\)\&\*]+')]
+	msg +=['#05 long values are']
+
+	exp +=[re.compile('[\s(]+short[\s\(\)\&\*]+')]
+	msg +=['#06 short values are bad!']
+
+	exp +=[re.compile(';{2}')]
+	msg +=['#07 ;;']
+
+	exp +=[re.compile('}[\s]*else[\s]*{')]
+	msg +=['#08 } else {']
+
+	exp +=[re.compile('throw[\s]*Exception::NotImplemented')]
+	msg +=['#09 Exception Not Implemented']
+
+	exp +=[re.compile('\([\s]*Exception::NotImplemented')]
+	msg +=['#10 Exception Not Implemented in throw specifier']
+
+	exp +=[re.compile('[^:]std::endl')]
+	msg +=['#11 missing :: before std::endl']
+
+	exp +=[re.compile('\([\s]*bool[\s]*\)')]
+	msg +=['#12 superflous bool cast']
+
+	exp +=[re.compile('const[\s]*float[\s]*&')]
+	msg +=['#13 no const float references']
+
+	exp +=[re.compile('const[\s]*double[\s]*&')]
+	msg +=['#14 no const double references']
+
+	exp += [re.compile('^M')]
+	msg +=['#15 msdos carriage return']
+
+	#	99 tab info line lack
+
 	
 	# expressions for use with header-files
-	exp_header = [
-		re.compile('///[\s]*\Z'),														#100 empty comment
-		re.compile('/\*\*[\s]*\Z'),													#101 empty comment
-		re.compile('@exception[\s]*NotImplemented'),				#102 no usefull information
-		re.compile('@param[\s]*{'),													#103 standard problem => tex error
-		re.compile('@return[\s]*{') 												#104 standard problem => tex error
-	]
+	exp_header = []
+	msg_header = []
+
+	exp_header +=[re.compile('///[\s]*\Z')]
+	msg_header +=['#100 empty comment']
+
+	exp_header +=[re.compile('/\*\*[\s]*\Z')]
+	msg_header +=['#101 empty comment']
+
+	exp_header +=[re.compile('@exception[\s]*NotImplemented')]
+	msg_header +=['#102 no usefull information']
+
+	exp_header +=[re.compile('@param[\s]*{')]
+	msg_header +=['#103 standard problem => tex error']
+
+	exp_header +=[re.compile('@return[\s]*{')]
+	msg_header +=['#104 standard problem => tex error']
 	
 	
 	#test if check is empty																		
@@ -59,12 +104,13 @@ class test:
 		re.compile('BAUSTELLE')
 	]
 
+		
 	# expressions for use in test-files
 	#exp_test = []																				#not yet an idea
 
 			
 	def write(self, error_code):
-		print '\n------------ ' + `self.linenr` + ' --------------- ' + `error_code`
+		print '\n--------------------------------- ' + `self.linenr` + ' --------------- ' + error_code
 		print string.strip(self.line[0:-1]),
 
 
@@ -79,11 +125,11 @@ class test:
 		#test for DOS-carriage, print it just once
 		if self.exp[0].search(x, 0) and self.carriage==0:
 			self.carriage=1
-			self.write(0)
+			self.write(self.msg[0])
 		for i in range(0, len(self.exp)):
 			if self.exp[i].search(x, 0):
 				self.errors = self.errors + 1	
-				self.write(i)
+				self.write(self.msg[i])
 	
 	
 	def getLine(self):
@@ -110,7 +156,7 @@ class test:
 			self.line = self.f.readline()
 			if not self.line: break;
 			if string.find(self.line, tabInfoLines[self.linenr]) == -1: 
-				self.write(99)
+				self.write('#99 tab info line lack')
 				break
 		return 1
 
@@ -131,7 +177,7 @@ class test:
 			for i in range(len(self.exp_header)):
 				if self.exp_header[i].search(self.line, 0):
 					self.errors = self.errors + 1	
-					self.write('header')
+					self.write(self.msg_header[i])
 		self.ende()
 
 
