@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.80 2004/04/30 13:17:15 amoll Exp $
+// $Id: mainControl.C,v 1.80.2.1 2004/05/06 12:57:53 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -33,6 +33,7 @@
 #include <qtooltip.h>
 #include <qpushbutton.h> // needed for preferences
 #include <qcursor.h>     // wait cursor
+#include <qmessagebox.h> 
 
 #include <algorithm> // sort
 
@@ -97,6 +98,45 @@ namespace BALL
 		void MainControl::setup_()
 			throw()
 		{
+			// copy the environment variable BALLVIEW_DATA_PATH to BALL_DATA_PATH
+			// this has to be done here also, if it was done in main.C, no idea why!
+			char*	BALLView_data_path = getenv("BALLVIEW_DATA_PATH");
+			if (BALLView_data_path != 0)
+			{
+				putenv((char*)((BALL::String("BALL_DATA_PATH=") + BALL::String(BALLView_data_path)).c_str()));
+			}
+
+			try
+			{
+				fragment_db_ = FragmentDB("fragments/Fragments.db");
+			}
+			catch(Exception::GeneralException e)
+			{
+				char*	BALLView_data_path = getenv("BALLVIEW_DATA_PATH");
+				char*	BALL_data_path = getenv("BALL_DATA_PATH");
+				String vdp, bdp;
+				if (BALLView_data_path!= 0) vdp = String(BALLView_data_path);
+				if (BALL_data_path!= 0) bdp = String(BALL_data_path);
+
+				QMessageBox::critical(0, "Critical error",
+						QString("Could not read the FragmentDB data!\n") + 
+						"Please check, that the BALL_DATA_PATH or BALLVIEW_DATA_PATH\n" + 
+						"environment variable is set to the directory containing the\n" + 
+						"BALL or BALLView data directory (e.g. to C:\\BALL\\data).\n"+
+						"Currently:\n" + 
+						"BALLVIEW_DATA_PATH = " + vdp.c_str() + "\n"+ 
+						"BALL_DATA_PATH = "     + bdp.c_str() + "\n"+ 
+						"If the problem persists, start the application with the\n"+
+						"-l flag to enable logging and read the file "+
+						logging_file_name_.c_str() + "." +
+						"This file is created in either your home directory or\n"+ 
+						"in the directory with this executeable.",
+						QMessageBox::Abort,  QMessageBox::NoButton);
+				Log.error() << e << std::endl;
+
+				exit(-1);
+			}
+
 			preferences_.read();
 
 			statusBar()->setMinimumSize(2, 25);
