@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.7 1999/12/16 17:24:07 oliver Exp $
+// $Id: string.C,v 1.8 1999/12/17 14:27:40 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -61,8 +61,6 @@ namespace BALL
 	void Substring::dump(ostream& s, unsigned long depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
-
-		BALL_DUMP_DEPTH(s, depth);
 
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  bound String: " << (void *)bound_ << endl;
@@ -958,8 +956,6 @@ namespace BALL
 	void String::dump(ostream &s, unsigned long depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
-
-		BALL_DUMP_DEPTH(s, depth);
 
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  capacity: " << capacity() << endl;
