@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.34.4.1 2002/12/06 15:29:08 oliver Exp $
+// $Id: File_test.C,v 1.34.4.2 2002/12/10 13:41:55 crauser Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(File, "$Id: File_test.C,v 1.34.4.1 2002/12/06 15:29:08 oliver Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.34.4.2 2002/12/10 13:41:55 crauser Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -267,6 +267,7 @@ CHECK(isAccessible())
 	TEST_EQUAL(f.isAccessible(), true)
 	file.copyTo("XXX");
 	File f1("XXX");
+
 	f1.remove();
 	TEST_EQUAL(f1.isAccessible(), false)
 RESULT
@@ -312,13 +313,17 @@ CHECK(isWritable())
 RESULT
 
 CHECK(isExecutable(String name))
+#ifndef BALL_COMPILER_MSVC
 	TEST_EQUAL(f.isExecutable(BALL_PATH "/source/configure"), true)	
+#endif
 	TEST_EQUAL(f.isExecutable("File_test.C"), false)	
 RESULT
 
 CHECK(isExecutable())
+#ifndef BALL_COMPILER_MSVC
 	File f1(BALL_PATH "/source/configure");
 	TEST_EQUAL(f1.isExecutable(), true)	
+#endif
 	File f2("File_test.C");
 	TEST_EQUAL(f2.isExecutable(), false)	
 RESULT

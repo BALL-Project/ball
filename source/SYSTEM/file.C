@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.33.4.3 2002/12/06 13:25:38 oliver Exp $
+// $Id: file.C,v 1.33.4.4 2002/12/10 13:41:54 crauser Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/TCPTransfer.h>
@@ -430,11 +430,11 @@ namespace BALL
 		#ifdef BALL_COMPILER_MSVC
 			if ((stats.st_mode & _S_IFDIR) == _S_IFDIR)
 			{
-				return File::TYPE__REGULAR_FILE;
-			}
-			if ((stats.st_mode & _S_IFREG) == _S_IFREG)
-			{
 				return File::TYPE__DIRECTORY;
+			}
+			if ((stats.st_mode & _S_IFREG)== _S_IFREG)
+			{
+				return File::TYPE__REGULAR_FILE;
 			}
 		#else
 			if (S_ISREG(stats.st_mode))
