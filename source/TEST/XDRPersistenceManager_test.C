@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager_test.C,v 1.3 2000/12/14 19:36:04 oliver Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.4 2000/12/23 15:13:30 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.3 2000/12/14 19:36:04 oliver Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.4 2000/12/23 15:13:30 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -274,13 +274,13 @@ pm.checkStreamHeader();
 CHECK(XDRPersistenceManager::get(char& c))
 	char c;
 	pm.get(c);
-	TEST_EQUAL((Index)c, 0)
+	TEST_EQUAL((Index)(signed char)c, 0)
 	pm.get(c);
-	TEST_EQUAL((Index)c, 85)
+	TEST_EQUAL((Index)(signed char)c, 85)
 	pm.get(c);
-	TEST_EQUAL((Index)c, -86)
+	TEST_EQUAL((Index)(signed char)c, -86)
 	pm.get(c);
-	TEST_EQUAL((Index)c, -1)
+	TEST_EQUAL((Index)(signed char)c, -1)
 RESULT
 
 
@@ -369,10 +369,8 @@ CHECK(XDRPersistenceManager::get(PointerSizeInt& p))
 	TEST_EQUAL(p, 0)
 	pm.get(p);
 	TEST_EQUAL(p, psi1)
-	cout << p - psi1 << endl;
 	pm.get(p);
 	TEST_EQUAL(p, psi2)
-	cout << p - psi2 << endl;
 RESULT
 
 pm.checkStreamTrailer();
