@@ -1,11 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.9 2004/06/07 13:27:31 amoll Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.10 2004/07/12 16:56:54 amoll Exp $
 
 #include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
+
+#include <BALL/QSAR/ringPerceptionProcessor.h>
 
 using namespace std;
 
@@ -139,7 +141,18 @@ namespace BALL
 			throw()
 		{
 			buildBondModels_();
+			visualiseRings_();
+			rings_.clear();
 			return true;
+		}
+
+		Processor::Result AtomBondModelBaseProcessor::operator () (Composite& composite)
+		{
+			if (!RTTI::isKindOf<Molecule>(composite)) return Processor::CONTINUE;
+
+			RingPerceptionProcessor rpp;
+			rpp.calculateSSSR(rings_, (*reinterpret_cast<Molecule*>(&composite)));
+			return Processor::CONTINUE;
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

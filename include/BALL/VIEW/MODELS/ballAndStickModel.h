@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.10 2004/06/07 10:17:17 amoll Exp $
+// $Id: ballAndStickModel.h,v 1.11 2004/07/12 16:56:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BALLANDSTICKMODEL_H
@@ -202,6 +202,9 @@ namespace BALL
 			protected:
 
 			void visualiseBond_(const Bond& bond)
+				throw();
+
+			virtual void visualiseRings_()
 				throw();
 
 			private:

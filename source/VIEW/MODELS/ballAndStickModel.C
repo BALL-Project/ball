@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.12 2004/07/12 14:58:59 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.13 2004/07/12 16:56:54 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
+#include <BALL/VIEW/PRIMITIVES/disc.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 
 using namespace std;
@@ -116,6 +117,8 @@ void AddBallAndStickModel::setStickRadius(const float radius)
 
 Processor::Result AddBallAndStickModel::operator() (Composite& composite)
 {
+	AtomBondModelBaseProcessor::operator() (composite);
+
 	if (!RTTI::isKindOf<Atom>(composite))
 	{
 		return Processor::CONTINUE;
@@ -222,6 +225,58 @@ void AddBallAndStickModel::visualiseBond_(const Bond& bond)
 	tube->setVertex2Address(bond.getSecondAtom()->getPosition());
 	tube->setComposite(&bond);
 	geometric_objects_.push_back(tube);
+}
+
+void AddBallAndStickModel::visualiseRings_()
+	throw()
+{
+	vector<vector<Atom*> >::iterator it = rings_.begin();
+	for(; it != rings_.end(); it++)
+	{
+		vector<Atom*>& ring = *it;
+		if (ring.size() != 5 && ring.size() != 6) continue;
+
+		vector<Atom*>::iterator ait = ring.begin();
+
+		Vector3 center;
+		for (; ait != ring.end(); ait++)
+		{
+			center += (**ait).getPosition();
+		}
+		center /= ring.size();
+
+		float min_distance = 9999999999.0;
+		for (ait = ring.begin(); ait != ring.end(); ait++)
+		{
+			float distance = Vector3(center - (**ait).getPosition()).getLength();
+			if (distance < min_distance) min_distance = distance;
+		}
+
+		min_distance -= 0.6;
+		if (min_distance < 0) continue;
+
+		Disc* sphere_ptr = new Disc();
+		if (sphere_ptr == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
+
+		sphere_ptr->setComposite((**ring.begin()).getParent());
+
+		ait = ring.begin();
+		Vector3 positions[3];
+		for (Position i = 0; i < 3; i++)
+		{
+		 	positions[i] = (**ait).getPosition();
+			ait++;
+		}
+
+		Plane3 plane(positions[0], positions[1], positions[2]);
+		Circle3 c;
+		c.p = center;
+		c.radius = min_distance;
+		c.n = plane.n;
+		sphere_ptr->setCircle(c);
+		// append sphere in Atom
+		geometric_objects_.push_back(sphere_ptr);
+	}
 }
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

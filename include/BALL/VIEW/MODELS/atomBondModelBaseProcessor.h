@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.11 2004/06/07 10:17:16 amoll Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.12 2004/07/12 16:56:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
@@ -97,7 +97,16 @@ namespace BALL
 			/**	@name Processor specific methods 
 			*/ 
 			//@{
-			
+
+			/**	Operator method.
+					This method iterates over each Composite object reachable in the 
+					Composite tree. If a Composite is of kind Moleculue and has 
+					aromatic rings, these rings are stored for later processing in 
+					the finish method.
+					\param  composite the Composite object that will be processed
+			*/
+			virtual Processor::Result operator() (Composite& composite);
+		
 			/** Start method.
 					Calls clearUsedAtoms_().
 					Calls ModelProcessor::start.
@@ -176,10 +185,16 @@ namespace BALL
 			virtual void visualiseBond_(const Bond& bond)
 				throw();
 
+			virtual void visualiseRings_()
+				throw(){};
+
+			vector<vector<Atom*> > rings_;
+
 			private:
 
 			List<const Atom*> used_atoms_;
 			HashSet<const Atom*> atom_set_;
+// 			HashSet< std::vector<const Atom*> > ring_atoms_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
