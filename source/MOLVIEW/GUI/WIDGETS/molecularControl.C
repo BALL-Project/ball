@@ -1,4 +1,4 @@
-// $Id: molecularControl.C,v 1.6.4.15 2002/12/09 21:08:28 amoll Exp $
+// $Id: molecularControl.C,v 1.6.4.16 2002/12/10 00:11:36 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -18,8 +18,7 @@ namespace BALL
 	namespace MOLVIEW
 	{
 
-MolecularControl::MolecularControl
-  (QWidget* parent, const char* name)
+MolecularControl::MolecularControl(QWidget* parent, const char* name)
 	throw()
 		:	Control(parent, name),
 			molecular_information_(),
