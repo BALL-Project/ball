@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.6 2001/03/02 14:49:49 anker Exp $
+// $Id: DCDFile.C,v 1.7 2001/03/11 19:39:37 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -14,17 +14,7 @@ namespace BALL
 			header_(),
 			swap_bytes_(false)
 	{
-		if (sizeof(int) != 4)
-		{
-			Log.error() << "DCDFile::DCDFile(): "
-				<< "Size of int is not equal to 4 on this machine." << endl;
-		}
-
-		if (sizeof(double) != 8)
-		{
-			Log.error() << "DCDFile::DCDFile(): "
-				<< "Size of double is not equal to 4 on this machine." << endl;
-		}
+		init();
 	}
 
 
@@ -34,17 +24,7 @@ namespace BALL
 			header_(file.header_),
 			swap_bytes_(file.swap_bytes_)
 	{
-		if (sizeof(int) != 4)
-		{
-			Log.error() << "DCDFile::DCDFile(): "
-				<< "Size of int is not equal to 4 on this machine." << endl;
-		}
-
-		if (sizeof(double) != 8)
-		{
-			Log.error() << "DCDFile::DCDFile(): "
-				<< "Size of double is not equal to 4 on this machine." << endl;
-		}
+		init();
 	}
 
 
@@ -54,23 +34,45 @@ namespace BALL
 			header_(),
 			swap_bytes_(false)
 	{
-		if (sizeof(int) != 4)
-		{
-			Log.error() << "DCDFile::DCDFile(): "
-				<< "Size of int is not equal to 4 on this machine." << endl;
-		}
+		init();
 
-		if (sizeof(double) != 8)
+		// If we want to open the file for writing, we need a valid header for
+		// later use by readHeader(). If we open it for reading, we have to
+		// synchronize header and DCDFile by calling init().
+		if ((open_mode & File::OUT) == 1)
 		{
-			Log.error() << "DCDFile::DCDFile(): "
-				<< "Size of double is not equal to 4 on this machine." << endl;
+			// if this file is to be overwritten, write a default header.
+			writeHeader();
 		}
 	}
+
+
+	/*
+	bool DCDFile::open(const String& name, File::OpenMode open_mode)
+		throw()
+	{
+		TrajectoryFile::open(name, open_mode);
+
+		// If we want to open the file for writing, we need a valid header for
+		// later use by readHeader(). If we open it for reading, we have to
+		// synchronize header and DCDFile by calling readHeader().
+		if ((open_mode & File::OUT) == 1)
+		{
+			// if this file is to be overwritten, write a default header.
+			writeHeader();
+		}
+		else
+		{
+			readHeader();
+		}
+	}
+	*/
 
 
 	DCDFile::~DCDFile()
 		throw()
 	{
+		close();
 		clear();
 	}
 
@@ -107,123 +109,146 @@ namespace BALL
 		throw()
 	{
 
-		return true;
+		BinaryFileAdaptor<char> adapt_char;
+		BinaryFileAdaptor<Size> adapt_Size;
+		BinaryFileAdaptor<DoubleReal> adapt_DoubleReal;
 
-		/*
-		char			fourbytes[4];
-		char			eightyfourbytes[84];
-		int				tmp_int;
-
-		DCDHeader	tmp_header;
-
-		File::read(fourbytes, 4);
-		tmp_int = *((int*)fourbytes);
-		if (tmp_int != 84)
+		// read the "header" of the 84 byte block. This must contain the number
+		// 84 to indicate the size of this block
+		*this >> adapt_Size; 
+		if (adapt_Size.getData() != 84)
 		{
-			// it might be a problem of endianness, so swap the bytes and test
-			// again.
-			// tmp_int = swapFourBytes(tmp_int);
-			if (tmp_int != 84)
+			Log.error() << "DCDFile::readHeader(): "
+				<< "wrong header; expected 84, got " << adapt_Size.getData() << endl;
+			return false;
+		}
+
+		// read the distinct components of the block
+
+		// first the CORD characters
+		for (Size i = 0; i < 4; ++i)
+		{
+			*this >> adapt_char;
+			if (adapt_char.getData() != header_.CORD[i])
 			{
 				Log.error() << "DCDFile::readHeader(): "
-					<< "file seems corrupted (wrong magic number)" << endl;
+					<< "error in CORD; expected " << header_.CORD[i] 
+					<< ", got " << adapt_char.getData() << endl;
 				return false;
-			}
-			else
-			{
-				// we have to swap bytes...
-				// if (verbosity > 1)
-				// {
-					Log.info() << "DCDFile::readHeader(): enabling byte swap" << endl;
-				// }
-				swap_bytes_ = true;
 			}
 		}
 
-		// read this block
-		File::read(eightyfourbytes, 84);
-		if (swap_bytes_)
+		// read the number of coordinate sets contained in this file
+		*this >> adapt_Size;
+		header_.number_of_coordinate_sets = adapt_Size.getData();
+		
+		// read the number of the first step
+		*this >> adapt_Size;
+		header_.step_number_of_starting_time = adapt_Size.getData();
+
+		// read the number of steps between saves
+		*this >> adapt_Size;
+		header_.steps_between_saves = adapt_Size.getData();
+
+		// skip unused fields
+		for (Size i = 0; i < 6; ++i)
 		{
-			// BAUSTELLE
+			*this >> adapt_Size;
 		}
-		else
+
+		// read the length of a time step
+		*this >> adapt_DoubleReal;
+		header_.time_step_length = adapt_DoubleReal.getData();
+
+		// skip unused fields
+		for (Size i = 0; i < 9; ++i)
 		{
-			// check for "CORD" signature
-			if ((eightyfourbytes[0] != 'C') || (eightyfourbytes[1] != 'O')
-				|| (eightyfourbytes[2] != 'O') || (eightyfourbytes[3] != 'D'))
-			{
-				Log.error() << "DCDFile::readHeader() "
-					<< "File seems to be corrupted (CORD missing)" << endl;
-				return false;
-			}
-			tmp_header.number_of_coordinate_sets = *((int*)(eightyfourbytes + 4));
-			tmp_header.step_number_of_starting_time = *((int*)(eightyfourbytes + 8));
-			tmp_header.steps_between_saves = *((int*)(eightyfourbytes + 12));
-			tmp_header.time_step_length = *((double*)(eightyfourbytes + 40));
-
-			// check if the block is terminated correctly
-			File::read(fourbytes, 4);
-			tmp_int = *((int*)fourbytes);
-			if (tmp_int != 84)
-			{
-				Log.error() << "DCDFile::readHeader() "
-					<< "File seems to be corrupted (84 bytes incorrectly terninated)"
-					<< endl;
-				return false;
-			}
-
-			// now handle the next block
-			File::read(fourbytes, 4);
-			tmp_int = *((int*)fourbytes);
-
-			// check if the length of the next block allows n titles of 80 chars
-			// length
-
-			int number_of_titles;
-			if (((tmp_int - 4) % 80) == 0)
-			{
-				File::read(fourbytes, 4);
-				number_of_titles = *((int*)fourbytes);
-				// here we believe that the number stated in the file is correct.
-				for (int i = 0; i < number_of_titles; ++i)
-				{
-					File::read(eightyfourbytes, 80);
-					// BAUSTELLE jetzt noch was mit den titeln tun...
-				}
-			}
-			else
-			{
-				Log.error() << "DCDFile::readHeader() "
-					<< "File seems to be corrupted (number of titles wrong)"
-					<< endl;
-				return false;
-			}
-			File::read(fourbytes, 4);
-			tmp_int = *((int*)fourbytes);
-
-			if (tmp_int != number_of_titles)
-			{
-				Log.error() << "DCDFile::readHeader(): "
-					<< "File seems to be corrupted (title block terminated incorrectly"
-					<< endl;
-				return false;
-			}
-
-			// GROSSBAUSTELLE
+			*this >> adapt_Size;
 		}
 
-		return false;
-		*/
-	}
+		// read the "footer" of the 84 byte block. This also must contain the
+		// number 84 to indicate the size of this block
+		*this >> adapt_Size; 
+		if (adapt_Size.getData() != 84)
+		{
+			Log.error() << "DCDFile::readHeader(): "
+				<< "wrong header; expected 84, got " << adapt_Size.getData() << endl;
+			return false;
+		}
 
+		// now the comments
+		// read the block "header" again. The comment block consist of an
+		// integer indicating the number of 80 bytes comment blocks within this
+		// block, so the block size minus 4 must be dividable by 80
+		*this >> adapt_Size; 
+		Size comment_size = adapt_Size.getData();
+		if ((comment_size - 4) % 80 != 0)
+		{
+			Log.error() << "DCDFile::readHeader(): "
+				<< "size of comment block (" << comment_size - 4
+				<< ") is no multiple of 80" << endl;
+			return false;
+		}
+		Size number_of_comments = (comment_size - 4) / 80;
+		
+		*this >> adapt_Size; 
+		if (adapt_Size.getData() != number_of_comments)
+		{
+			Log.error() << "DCDFile::readHeader(): "
+				<< "comments block size (" << adapt_Size.getData()
+				<< ") does not match number of comments ("
+				<< number_of_comments << ")" << endl;
+			return false;
+		}
+		header_.number_of_comments = number_of_comments;
 
-	bool DCDFile::updateHeader(const SnapShotManager& manager)
-		throw()
-	{
-		// BAUSTELLE
-		header_.number_of_coordinate_sets = manager.getNumberOfSnapShots();
-		header_.number_of_atoms = manager.getNumberOfAtoms();
+		// read the comment blocks
+		// BAUSTELLE: for now just skip them
+		for (Size i = 0; i < number_of_comments; i++)
+		{
+			for (Size j = 0; j < 80; j++)
+			{
+				*this >> adapt_char;
+			}
+		}
+
+		// read the "footer" and compare it with the "header"
+		*this >> adapt_Size;
+		if (adapt_Size.getData() != comment_size)
+		{
+			Log.error() << "DCDFile::readHeader(): "
+				<< "comment block footer (" << adapt_Size.getData()
+				<< ") does not match header ("
+				<< comment_size << ")" << endl;
+			return false;
+		}
+
+		// read the block containing the number of atoms
+		*this >> adapt_Size;
+		if (adapt_Size.getData() != 4)
+		{
+			Log.error() << "DCDFile::readHeader(): "
+				<< "atomnumber-block header contains wrong size " 
+				<< adapt_Size.getData() << endl;
+			return false;
+		}
+
+		// now read the actual number of atoms
+		*this >> adapt_Size;
+		header_.number_of_atoms = adapt_Size.getData();
+
+		// and check the footer
+		*this >> adapt_Size;
+		if (adapt_Size.getData() != 4)
+		{
+			Log.error() << "DCDFile::readHeader(): "
+				<< "atomnumber-block footer contains wrong size " 
+				<< adapt_Size.getData() << endl;
+			return false;
+		}
+
 		return true;
+
 	}
 
 
@@ -286,7 +311,7 @@ namespace BALL
 		throw()
 	{
 		Size noa = snapshot.getNumberOfAtoms();
-		vector<Vector3> positions = snapshot.getAtomPositions();
+		const vector<Vector3>& positions = snapshot.getAtomPositions();
 		if (positions.size() == 0)
 		{
 			Log.error() << "DCDFile::append(): "
@@ -315,5 +340,156 @@ namespace BALL
 
 		return true;
 	}
+
+
+	bool DCDFile::read(SnapShot& snapshot)
+		throw()
+	{
+		Size tmp;
+		// the number if atoms has to be read from the file header before ever
+		// thinking of reading correct information
+		Size expected_noa = snapshot.getNumberOfAtoms();
+		Size expected_size = 4 * expected_noa;
+		vector<Vector3> positions = snapshot.getAtomPositions();
+		BinaryFileAdaptor<Size> adaptSize;
+		BinaryFileAdaptor<Real> adaptReal;
+
+		// first read the x coordinates
+
+		// read the block "header"...
+
+		// BAUSTELLE
+		// *this >> BinaryFileAdaptor<Size>(tmp);
+
+		*this >> adaptSize; tmp = adaptSize.getData();
+		// ...and compare it to what we would expect. This value stems from the
+		// information of the file header.
+		if (tmp != expected_size)
+		{
+			Log.error() << "DCDFile::read(): "
+				<< "expected " << expected_size << " but got " << tmp << endl;
+			return false;
+		}
+		// now read the x positions
+		for (Size atom = 0; atom < expected_noa; ++atom)
+		{
+			*this >> adaptReal; positions[atom].x = adaptReal.getData();
+		}
+		// and the block "footer"
+		*this >> adaptSize; tmp = adaptSize.getData();
+		if (tmp != expected_size)
+		{
+			Log.error() << "DCDFile::read(): "
+				<< "expected " << expected_size << " but got " << tmp << endl;
+			return false;
+		}
+
+		// the same proecedure for y coordinates
+
+		// header
+		*this >> adaptSize; tmp = adaptSize.getData();
+		// sanity check
+		if (tmp != expected_size)
+		{
+			Log.error() << "DCDFile::read(): "
+				<< "expected " << expected_size << " but got " << tmp << endl;
+			return false;
+		}
+		// data
+		for (Size atom = 0; atom < expected_noa; ++atom)
+		{
+			*this >> adaptReal; positions[atom].x = adaptReal.getData();
+		}
+		// footer
+		*this >> adaptSize; tmp = adaptSize.getData();
+		// sanity check
+		if (tmp != expected_size)
+		{
+			Log.error() << "DCDFile::read(): "
+				<< "expected " << expected_size << " but got " << tmp << endl;
+			return false;
+		}
+
+		// and z coordinates
+
+		// header
+		*this >> adaptSize; tmp = adaptSize.getData();
+		// sanity check
+		if (tmp != expected_size)
+		{
+			Log.error() << "DCDFile::read(): "
+				<< "expected " << expected_size << " but got " << tmp << endl;
+			return false;
+		}
+		// data
+		for (Size atom = 0; atom < expected_noa; ++atom)
+		{
+			*this >> adaptReal; positions[atom].x = adaptReal.getData();
+		}
+		// footer
+		*this >> adaptSize; tmp = adaptSize.getData();
+		// sanity check
+		if (tmp != expected_size)
+		{
+			Log.error() << "DCDFile::read(): "
+				<< "expected " << expected_size << " but got " << tmp << endl;
+			return false;
+		}
+
+		if (positions.size() == 0)
+		{
+			Log.error() << "DCDFile::append(): "
+				<< "No atom positions available" << endl;
+			return false;
+		}
+
+		return true;
+	}
+
+
+	bool DCDFile::flushToDisk(const ::std::vector<SnapShot> buffer)
+		throw()
+	{
+		::std::vector<SnapShot>::const_iterator it = buffer.begin();
+
+		// adjust the number of snapshots 
+		header_.number_of_coordinate_sets += buffer.size();
+		// BAUSTELLE:
+		// this is not quite the place to do this. it should be done when the
+		// snapshot manager is set up or at some similar place. the question is
+		// how much information has to be replicated at which place in the
+		// code.
+		header_.number_of_atoms = it->getNumberOfAtoms();
+
+		// write the header
+		reopen(File::IN | File::OUT | File::BINARY);
+		writeHeader();
+
+		// append the data
+		reopen(File::APP | File::BINARY);
+		for(; it != buffer.end(); ++it)
+		{
+			append(*it);
+		}
+	}
+
+
+	bool DCDFile::init()
+		throw()
+	{
+		if (sizeof(Size) != 4)
+		{
+			Log.error() << "DCDFile::DCDFile(): "
+				<< "Size of int is not equal to 4 on this machine." << endl;
+		}
+
+		if (sizeof(DoubleReal) != 8)
+		{
+			Log.error() << "DCDFile::DCDFile(): "
+				<< "Size of double is not equal to 4 on this machine." << endl;
+		}
+		// return readHeader();
+	}
+
 
 } // namespace BALL
