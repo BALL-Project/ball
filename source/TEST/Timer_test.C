@@ -1,12 +1,16 @@
-// $Id: Timer_test.C,v 1.12 2002/01/26 22:01:29 oliver Exp $
+// $Id: Timer_test.C,v 1.12.4.1 2002/12/05 16:48:26 crauser Exp $
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
 ///////////////////////////
 #include <BALL/SYSTEM/timer.h>
 #include <BALL/SYSTEM/file.h>
+
+#ifdef BALL_COMPILER_MSVC
+#include<windows.h>
+#endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.12 2002/01/26 22:01:29 oliver Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.12.4.1 2002/12/05 16:48:26 crauser Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -92,7 +96,11 @@ CHECK(Timer::getClockTime() const )
 	Timer t1;
 	TEST_EQUAL(t1.getClockTime(), 0)	
 	t1.start();
+#ifdef BALL_COMPILER_MSVC
+	Sleep(2000);
+#else
 	sleep(2);
+#endif
 	t1.stop();
 	TEST_EQUAL(t1.getClockTime() > 1, true)
 	TEST_EQUAL(t1.getClockTime() < 3, true)	
@@ -128,7 +136,11 @@ CHECK(Timer::getCPUTime() const )
 	Timer t1;
 	TEST_EQUAL(t1.getCPUTime(), 0)	
 	t1.start();
+#ifdef BALL_COMPILER_MSVC
+	Sleep(2000);
+#else
 	sleep(2);
+#endif
 	t1.stop();
 	TEST_EQUAL(t1.getCPUTime() <= 1, true)	
 	t1.reset();
@@ -164,7 +176,11 @@ RESULT
 CHECK(Timer::bool operator == (const Timer& timer) const )
 	Timer t1;
 	t1.start();
+#ifdef BALL_COMPILER_MSVC
+	Sleep(1000);
+#else
 	sleep(1);
+#endif
 	t1.stop();
 	Timer t2;
 	TEST_EQUAL(t1 == t2, false);
@@ -247,7 +263,9 @@ CHECK(Timer::dump(::std::ostream& s = ::std::cout, Size depth = 0L) const )
 	t1.stop();
   String filename;
 	NEW_TMP_FILE(filename)
+
 	std::ofstream outfile(filename.c_str(), File::OUT);
+
 	t1.dump(outfile);
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Timer_test.txt")

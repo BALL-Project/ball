@@ -1,14 +1,16 @@
-// $Id: LogStream_test.C,v 1.16 2002/01/26 22:01:27 oliver Exp $
+// $Id: LogStream_test.C,v 1.16.4.1 2002/12/05 16:48:26 crauser Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/COMMON/logStream.h>
+#ifdef BALL_HAS_SYS_TIME_H
 #include <sys/time.h>
+#endif
 #include <BALL/MATHS/common.h>
 #include <BALL/CONCEPT/notification.h>
 ///////////////////////////
 
-START_TEST(LogStream, "$Id: LogStream_test.C,v 1.16 2002/01/26 22:01:27 oliver Exp $")
+START_TEST(LogStream, "$Id: LogStream_test.C,v 1.16.4.1 2002/12/05 16:48:26 crauser Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,13 +1,22 @@
-// $Id: networkTest.h,v 1.4 2002/01/16 03:47:44 oliver Exp $
+// $Id: networkTest.h,v 1.4.4.1 2002/12/05 16:48:26 crauser Exp $
 
 // workaround for Solaris -- this should be caught by configure -- OK
 #define BSD_COMP 
-
+#ifdef BALL_USE_WINSOCK
+#include <windows.h>
+#include<winsock.h>
+#endif
+#ifdef BALL_HAS_SYS_SOCKET_H
 #include <sys/socket.h>	  // socket
+#endif
+#ifdef BALL_HAS_NETDB_H
 #include <netdb.h>	  // gethostbyname
+#endif
+#ifdef BALL_HAS_NETINET_IN_H
 #include <netinet/in.h>	  // sockaddr_in
+#endif
 #include <unistd.h>	  // close
-#include <sys/ioctl.h>
+//#include <sys/ioctl.h>
 #include <iostream>	  // cout, endl
 
 class NetworkTest
@@ -48,7 +57,11 @@ class NetworkTest
 			host.sin_addr 	= *(struct in_addr*)ht->h_addr;  
 			
 			result = (connect(my_socket, (struct sockaddr*)&host, sizeof(struct sockaddr)) != -1);
+#ifdef BALL_USE_WINSOCK
+			closesocket(my_socket);
+#else
 			close(my_socket);
+#endif
 		}
 		else
 		{

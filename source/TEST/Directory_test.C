@@ -1,11 +1,11 @@
-// $Id: Directory_test.C,v 1.5 2001/07/15 17:32:38 amoll Exp $
+// $Id: Directory_test.C,v 1.5.4.1 2002/12/05 16:48:26 crauser Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/directory.h>
 ///////////////////////////
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.5 2001/07/15 17:32:38 amoll Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.5.4.1 2002/12/05 16:48:26 crauser Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -15,16 +15,27 @@ using namespace BALL;
 Directory* dd;
 String test_dir;
 CHECK(prerequisites)
+#ifdef BALL_COMPILER_MSVC
+	test_dir = ::_getcwd(NULL, Directory::MAX_PATH_LENGTH);
+	test_dir += "/data/Directory_test";
+	TEST_EQUAL(::_chdir(test_dir.c_str()), 0)
+	test_dir = ::_getcwd(NULL, Directory::MAX_PATH_LENGTH);
+#else
 	test_dir = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
 	test_dir += "/data/Directory_test";
 	TEST_EQUAL(::chdir(test_dir.c_str()), 0)
 	test_dir = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
+#endif
 RESULT
 
 CHECK(Directory::Directory())
 	dd = new Directory();
 	TEST_NOT_EQUAL(dd, 0)
+#ifdef BALL_COMPILER_MSVC
+	TEST_EQUAL(dd->getPath(), String(::_getcwd(NULL, Directory::MAX_PATH_LENGTH)))
+#else
 	TEST_EQUAL(dd->getPath(), String(::getcwd(NULL, Directory::MAX_PATH_LENGTH)))
+#endif
 	TEST_EQUAL(dd->isCurrent(), true)
 RESULT
 
@@ -37,23 +48,43 @@ Directory d;
 CHECK(Directory::setCurrent(const String& path))
 	bool result = d.setCurrent(test_dir);
 	TEST_EQUAL(result, true);
+#ifdef BALL_COMPILER_MSVC
+	String path  = ::_getcwd(NULL, Directory::MAX_PATH_LENGTH);
+#else
 	String path  = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
+#endif
 	TEST_EQUAL(path, test_dir)
 	result = d.setCurrent("dir_a");
 	TEST_EQUAL(result, true);
+#ifdef BALL_COMPILER_MSVC
+	path = ::_getcwd(NULL, Directory::MAX_PATH_LENGTH);
+#else
 	path = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
+#endif
 	TEST_EQUAL(path, test_dir + "/dir_a")
 	result = d.setCurrent("c");
 	TEST_EQUAL(result, false);
+#ifdef BALL_COMPILER_MSVC
+	path = ::_getcwd(NULL, Directory::MAX_PATH_LENGTH);
+#else
 	path = ::getcwd(NULL, Directory::MAX_PATH_LENGTH);
+#endif
 	TEST_EQUAL(path, test_dir + "/dir_a")
 RESULT
 
 CHECK(Directory::Directory(const String& directory_path, bool set_current = false))
+#ifdef BALL_COMPILER_MSVC
+	::_chdir(test_dir.c_str());
+#else
 	::chdir(test_dir.c_str());
+#endif
 	Directory d("dir_a");
 	TEST_EQUAL(d.isValid(), true)
+#ifdef BALL_COMPILER_MSVC
+	String s = String(::_getcwd(NULL, Directory::MAX_PATH_LENGTH)) + "/dir_a";
+#else
 	String s = String(::getcwd(NULL, Directory::MAX_PATH_LENGTH)) + "/dir_a";
+#endif
 	TEST_EQUAL(d.getPath(), s)
 
 	Directory d1("dir_a/", true);
@@ -136,7 +167,11 @@ CHECK(Directory::getPath() const )
 RESULT
 
 CHECK(Directory::create(String& path, mode_t mode = 0777))
+#ifdef BALL_COMPILER_MSVC
+	::_chdir(test_dir.c_str());
+#else
 	::chdir(test_dir.c_str());
+#endif
 	Directory d1("dir_a/dir_c/", true);
 	TEST_EQUAL(d1.isValid(), true)
 	d1.remove("test1");
@@ -158,7 +193,11 @@ CHECK(Directory::create(String& path, mode_t mode = 0777))
 RESULT
 
 CHECK(Directory::getNextEntry(String& entry))
+#ifdef BALL_COMPILER_MSVC
+	::_chdir(String(test_dir + "/dir_a/dir_c").c_str());
+#else
 	::chdir(String(test_dir + "/dir_a/dir_c").c_str());
+#endif
 	Directory d1(".", true);
 	TEST_EQUAL(d1.isValid(), true)
 	d1.create("test1");
@@ -208,7 +247,11 @@ d0.remove("test1");
 
 
 CHECK(Directory::remove(String old_path))
+#ifdef BALL_COMPILER_MSVC
+	::_chdir(test_dir.c_str());
+#else
 	::chdir(test_dir.c_str());
+#endif
 	Directory d1("dir_a/dir_c/", true);
 	d1.create("test1");
 	TEST_EQUAL(d1.isValid(), true)
