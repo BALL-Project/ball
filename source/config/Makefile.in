@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.9 1999/12/22 17:50:44 oliver Exp $
+# $Id: Makefile.in,v 1.10 2000/01/06 09:49:12 oliver Exp $
 #
 
 include config.mak
@@ -32,6 +32,9 @@ OBJECT_LISTS = $(STATIC_LIBS:.a=.objects)
 
 default:	lib
 
+sharedlibs: $(SHARED_LIBS)
+
+staticlibs: $(STATIC_LIBS)
 
 install:	install.static install.shared
 
