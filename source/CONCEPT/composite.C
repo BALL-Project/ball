@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.C,v 1.37 2003/06/11 16:09:25 oliver Exp $
+// $Id: composite.C,v 1.38 2003/06/12 15:42:23 oliver Exp $
 //
 
 #include <BALL/CONCEPT/composite.h>
@@ -211,15 +211,15 @@ namespace BALL
 		}
 	} 
 
-	Composite* Composite::getLowestCommonAncestor(Composite& composite)
+	Composite* Composite::getLowestCommonAncestor(const Composite& composite)
 		throw()
 	{
-		Composite* composite_ptr = 0;
-
 		// determine depth of node A
 		const Size size_a = getDepth() + 1;
 		Index index_a = 0;
 		
+		Composite* composite_ptr = 0;
+
 		// create an array and store all nodes on the path to the root	
 		Composite** composites_a = new Composite* [size_a];
 		for (composite_ptr = this; composite_ptr != 0; composite_ptr = composite_ptr->parent_)
@@ -233,7 +233,7 @@ namespace BALL
 
 		// and store all ancestor nodes of B in an array
 		Composite** composites_b = new Composite *[size_b];
-		for (composite_ptr =& composite; composite_ptr != 0;composite_ptr = composite_ptr->parent_)
+		for (composite_ptr = const_cast<Composite*>(&composite); composite_ptr != 0;composite_ptr = composite_ptr->parent_)
 		{
 			composites_b[index_b++] = composite_ptr;
 		}

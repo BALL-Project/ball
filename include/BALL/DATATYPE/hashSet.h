@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashSet.h,v 1.39 2003/04/17 16:32:16 oliver Exp $ 
+// $Id: hashSet.h,v 1.40 2003/06/12 15:42:22 oliver Exp $ 
+//
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -77,6 +78,7 @@ namespace BALL
 	
 		class IteratorTraits_
 		{
+
 			friend class HashSet<Key>;
 			public:
 

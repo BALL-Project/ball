@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.48 2003/06/12 10:40:02 oliver Exp $
+// $Id: composite.h,v 1.49 2003/06/12 15:42:22 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
@@ -226,7 +226,7 @@ namespace BALL
 				@param	composite the Composite tree to assign from
 				@return	a const reference to <b>this</b>
 		*/
-		const Composite& operator = (const Composite& composite)
+		Composite& operator = (const Composite& composite)
 			throw();
 
 		/**	Assignment of a tree to another.
@@ -293,10 +293,10 @@ namespace BALL
 			throw();
 
 		/** Get the lowest common ancestor of this item with an other.
-				If no comman ancestor exists 0 is returned.
+				If no common ancestor exists 0 is returned.
 				@return Composite& the lowest common ancestor
 		*/
-		Composite* getLowestCommonAncestor(Composite& composite)
+		Composite* getLowestCommonAncestor(const Composite& composite)
 			throw();
 
 		/** Get a const reference to the lowest common ancestor of this item
@@ -324,7 +324,7 @@ namespace BALL
 								or 0 if no matching composite was found to the root of the
 								tree
 		*/
-		template <class T>
+		template <typename T>
 		const T* getAncestor(const T& /* dummy */) const
 			throw();
 
@@ -346,7 +346,7 @@ namespace BALL
 								or 0 if no matching composite was found up to the root of
 								the tree
 		*/
-		template <class T>
+		template <typename T>
 		const T* getPrevious(const T& dummy) const
 			throw();
 
@@ -368,7 +368,7 @@ namespace BALL
 								or 0 if no matching composite was found up to the root of
 								the tree
 		*/
-		template <class T>
+		template <typename T>
 		const T* getNext(const T& dummy) const
 			throw();
 
@@ -920,8 +920,6 @@ namespace BALL
 		{
 			public:
 
-			BALL_CREATE_DEEP(AncestorIteratorTraits)
-
 			BALL_INLINE
 			AncestorIteratorTraits()
 				throw()
@@ -939,7 +937,7 @@ namespace BALL
 			}
 		
 			BALL_INLINE
-			AncestorIteratorTraits(const AncestorIteratorTraits& traits, bool /* deep */ = true)
+			AncestorIteratorTraits(const AncestorIteratorTraits& traits)
 				throw()
 				:	bound_(traits.bound_),
 					ancestor_(traits.ancestor_)
@@ -1269,7 +1267,7 @@ namespace BALL
 			{
 			}
 		
-			CompositeIteratorTraits(const CompositeIteratorTraits& traits, bool /* deep */ = true)
+			CompositeIteratorTraits(const CompositeIteratorTraits& traits)
 				throw()
 				:	bound_(traits.bound_),
 					position_(traits.position_)
@@ -1898,7 +1896,7 @@ namespace BALL
 		return T_ptr;
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	const T* Composite::getAncestor(const T& /* dummy */) const
 		throw()
@@ -1950,7 +1948,7 @@ namespace BALL
 		return dynamic_cast<T*>(ptr);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	const T* Composite::getPrevious(const T& dummy) const
 		throw()
@@ -1992,7 +1990,7 @@ namespace BALL
 		return dynamic_cast<T*>(ptr);
 	}
 
-	template <class T>
+	template <typename T>
 	BALL_INLINE 
 	const T* Composite::getNext(const T& dummy) const
 		throw()

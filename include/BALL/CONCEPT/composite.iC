@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.iC,v 1.19 2002/12/16 17:15:32 oliver Exp $
+// $Id: composite.iC,v 1.20 2003/06/12 15:42:22 oliver Exp $
+//
 
 BALL_INLINE 
-const Composite& Composite::operator = (const Composite& composite)
+Composite& Composite::operator = (const Composite& composite)
 	throw()
 {
   set(composite);
