@@ -48,8 +48,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 10, 95, 137) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setActive( cg );
     cg.setColor( QColorGroup::Foreground, black );
     cg.setColor( QColorGroup::Button, QColor( 228, 228, 228) );
@@ -65,8 +63,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 10, 95, 137) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setInactive( cg );
     cg.setColor( QColorGroup::Foreground, QColor( 128, 128, 128) );
     cg.setColor( QColorGroup::Button, QColor( 228, 228, 228) );
@@ -82,8 +78,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 0, 0, 128) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setDisabled( cg );
     setPalette( pal );
     setCaption( trUtf8( "Display Settings" ) );
@@ -105,8 +99,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 10, 95, 137) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setActive( cg );
     cg.setColor( QColorGroup::Foreground, black );
     cg.setColor( QColorGroup::Button, QColor( 228, 228, 228) );
@@ -122,8 +114,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 10, 95, 137) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setInactive( cg );
     cg.setColor( QColorGroup::Foreground, QColor( 128, 128, 128) );
     cg.setColor( QColorGroup::Button, QColor( 228, 228, 228) );
@@ -139,8 +129,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 0, 0, 128) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setDisabled( cg );
     GroupBox_9_3->setPalette( pal );
     GroupBox_9_3->setBackgroundOrigin( QGroupBox::ParentOrigin );
@@ -170,8 +158,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, black );
     cg.setColor( QColorGroup::HighlightedText, black );
-    cg.setColor( QColorGroup::Link, black );
-    cg.setColor( QColorGroup::LinkVisited, black );
     pal.setActive( cg );
     cg.setColor( QColorGroup::Foreground, QColor( 255, 255, 0) );
     cg.setColor( QColorGroup::Button, black );
@@ -187,8 +173,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, black );
     cg.setColor( QColorGroup::HighlightedText, black );
-    cg.setColor( QColorGroup::Link, black );
-    cg.setColor( QColorGroup::LinkVisited, black );
     pal.setInactive( cg );
     cg.setColor( QColorGroup::Foreground, QColor( 255, 255, 0) );
     cg.setColor( QColorGroup::Button, black );
@@ -204,8 +188,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, black );
     cg.setColor( QColorGroup::HighlightedText, black );
-    cg.setColor( QColorGroup::Link, black );
-    cg.setColor( QColorGroup::LinkVisited, black );
     pal.setDisabled( cg );
     color_sample_selection->setPalette( pal );
     color_sample_selection->setFocusPolicy( QLabel::NoFocus );
@@ -242,8 +224,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 10, 95, 137) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setActive( cg );
     cg.setColor( QColorGroup::Foreground, black );
     cg.setColor( QColorGroup::Button, QColor( 228, 228, 228) );
@@ -259,8 +239,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 10, 95, 137) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setInactive( cg );
     cg.setColor( QColorGroup::Foreground, QColor( 128, 128, 128) );
     cg.setColor( QColorGroup::Button, QColor( 228, 228, 228) );
@@ -276,8 +254,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 0, 0, 128) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setDisabled( cg );
     model_groupbox->setPalette( pal );
     model_groupbox->setBackgroundOrigin( QGroupBox::ParentOrigin );
@@ -353,8 +329,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 10, 95, 137) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setActive( cg );
     cg.setColor( QColorGroup::Foreground, black );
     cg.setColor( QColorGroup::Button, QColor( 228, 228, 228) );
@@ -370,8 +344,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 10, 95, 137) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setInactive( cg );
     cg.setColor( QColorGroup::Foreground, QColor( 128, 128, 128) );
     cg.setColor( QColorGroup::Button, QColor( 228, 228, 228) );
@@ -387,8 +359,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 0, 0, 128) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setDisabled( cg );
     model_groupbox_2->setPalette( pal );
     model_groupbox_2->setBackgroundOrigin( QGroupBox::ParentOrigin );
@@ -464,8 +434,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 10, 95, 137) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setActive( cg );
     cg.setColor( QColorGroup::Foreground, black );
     cg.setColor( QColorGroup::Button, QColor( 228, 228, 228) );
@@ -481,8 +449,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 10, 95, 137) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setInactive( cg );
     cg.setColor( QColorGroup::Foreground, QColor( 128, 128, 128) );
     cg.setColor( QColorGroup::Button, QColor( 228, 228, 228) );
@@ -498,8 +464,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 0, 0, 128) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setDisabled( cg );
     close_button->setPalette( pal );
     close_button->setFocusPolicy( QPushButton::TabFocus );
@@ -524,8 +488,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 10, 95, 137) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setActive( cg );
     cg.setColor( QColorGroup::Foreground, black );
     cg.setColor( QColorGroup::Button, QColor( 228, 228, 228) );
@@ -541,8 +503,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 10, 95, 137) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setInactive( cg );
     cg.setColor( QColorGroup::Foreground, QColor( 128, 128, 128) );
     cg.setColor( QColorGroup::Button, QColor( 228, 228, 228) );
@@ -558,8 +518,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 0, 0, 128) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setDisabled( cg );
     apply_button->setPalette( pal );
     apply_button->setFocusPolicy( QPushButton::TabFocus );
@@ -584,8 +542,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 10, 95, 137) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setActive( cg );
     cg.setColor( QColorGroup::Foreground, black );
     cg.setColor( QColorGroup::Button, QColor( 228, 228, 228) );
@@ -601,8 +557,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 10, 95, 137) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setInactive( cg );
     cg.setColor( QColorGroup::Foreground, QColor( 128, 128, 128) );
     cg.setColor( QColorGroup::Button, QColor( 228, 228, 228) );
@@ -618,8 +572,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, QColor( 0, 0, 128) );
     cg.setColor( QColorGroup::HighlightedText, white );
-    cg.setColor( QColorGroup::Link, QColor( 0, 0, 255) );
-    cg.setColor( QColorGroup::LinkVisited, QColor( 255, 0, 255) );
     pal.setDisabled( cg );
     color_groupbox->setPalette( pal );
     color_groupbox->setBackgroundOrigin( QGroupBox::ParentOrigin );
@@ -665,8 +617,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, black );
     cg.setColor( QColorGroup::HighlightedText, black );
-    cg.setColor( QColorGroup::Link, black );
-    cg.setColor( QColorGroup::LinkVisited, black );
     pal.setActive( cg );
     cg.setColor( QColorGroup::Foreground, black );
     cg.setColor( QColorGroup::Button, black );
@@ -682,8 +632,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, black );
     cg.setColor( QColorGroup::HighlightedText, black );
-    cg.setColor( QColorGroup::Link, black );
-    cg.setColor( QColorGroup::LinkVisited, black );
     pal.setInactive( cg );
     cg.setColor( QColorGroup::Foreground, black );
     cg.setColor( QColorGroup::Button, black );
@@ -699,8 +647,6 @@ DisplayPropertiesData::DisplayPropertiesData( QWidget* parent,  const char* name
     cg.setColor( QColorGroup::Shadow, black );
     cg.setColor( QColorGroup::Highlight, black );
     cg.setColor( QColorGroup::HighlightedText, black );
-    cg.setColor( QColorGroup::Link, black );
-    cg.setColor( QColorGroup::LinkVisited, black );
     pal.setDisabled( cg );
     color_sample->setPalette( pal );
     color_sample->setFocusPolicy( QLabel::NoFocus );
