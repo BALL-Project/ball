@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.9.4.7 2002/11/30 14:07:33 oliver Exp $
+// $Id: global.h,v 1.9.4.8 2002/11/30 14:09:41 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -35,7 +35,7 @@ namespace BALL
 	typedef int (*ComparatorType)(const void *, const void *);
 
 
-	#ifndef BALL_INCLUDE_STDINT
+	#ifndef BALL_HAS_STDINT_H
 	/**	@name Type aliases defined by BALL.
 			These predefined types are used in BALL for portability and
 			comprehensibility.
