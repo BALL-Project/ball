@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.C,v 1.17 2001/12/11 12:04:08 oliver Exp $
+// $Id: genericPDBFile.C,v 1.18 2002/01/04 01:39:07 oliver Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -122,7 +122,8 @@ namespace BALL
 		// If the element_symbol entry is valid, it has precedence
 		if (((element_symbol[0] == ' ') && (element_symbol[1] == ' '))
 				|| (element_symbol[0] == '\0') || (element_symbol[1] == '\0')
-				|| String::isDigit(element_symbol[0]) || String::isDigit(element_symbol[1]))
+				|| String::isDigit(element_symbol[0]) || String::isDigit(element_symbol[1])
+				|| (String::isAlpha(element_symbol[0]) && (element_symbol[1] == ' ')))
 		{
 			// Otherwise, we try to reconstruct the element
 			// from the atom name (which is dangerous if non-PDB names are
