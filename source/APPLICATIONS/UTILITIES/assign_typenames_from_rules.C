@@ -1,4 +1,8 @@
-// $Id: assign_typenames_from_rules.C,v 1.3 2003/10/04 09:38:17 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: assign_typenames_from_rules.C,v 1.4 2004/05/27 18:13:08 oliver Exp $
+//
 
 #include <BALL/common.h>
 #include <BALL/KERNEL/system.h>

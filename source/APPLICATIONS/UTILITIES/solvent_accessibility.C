@@ -1,4 +1,7 @@
-// $Id: solvent_accessibility.C,v 1.2 2004/05/14 17:07:18 oliver Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: solvent_accessibility.C,v 1.3 2004/05/27 18:13:08 oliver Exp $
 //
 // This utility reads a PDB structure, removes water from it and
 // computes which residues are solvent exposed by summing up

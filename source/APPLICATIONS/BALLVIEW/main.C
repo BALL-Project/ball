@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.8 2004/05/05 18:16:13 amoll Exp $
+// $Id: main.C,v 1.9 2004/05/27 18:13:07 oliver Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes

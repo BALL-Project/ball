@@ -1,4 +1,7 @@
-// $Id: pdb2amber_naming.C,v 1.3 2004/05/10 11:52:10 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: pdb2amber_naming.C,v 1.4 2004/05/27 18:13:08 oliver Exp $
 //
 // A little helper program that takes standard PDB files and converts them
 // to PDB files which use the AMBER naming scheme.

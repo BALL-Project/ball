@@ -1,4 +1,7 @@
-// $Id: add_hydrogens.C,v 1.6 2004/05/10 11:52:10 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: add_hydrogens.C,v 1.7 2004/05/27 18:13:07 oliver Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a

@@ -1,4 +1,8 @@
-// $Id: export_fragment.C,v 1.2 2003/02/18 15:51:45 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: export_fragment.C,v 1.3 2004/05/27 18:13:08 oliver Exp $
+//
 
 #include <fstream>
 

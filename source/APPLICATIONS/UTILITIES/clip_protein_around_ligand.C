@@ -1,4 +1,7 @@
-// $Id: clip_protein_around_ligand.C,v 1.7 2004/05/10 11:52:10 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: clip_protein_around_ligand.C,v 1.8 2004/05/27 18:13:08 oliver Exp $
 //
 // A program for extracting a parts of a protein around a ligand.
 // The output are XYZFiles because we use this program for creating AMSOL

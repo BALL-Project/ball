@@ -1,4 +1,7 @@
-// $Id: dcd2dcd.C,v 1.2 2003/01/29 10:21:47 anker Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: dcd2dcd.C,v 1.3 2004/05/27 18:13:08 oliver Exp $
 //
 // a little helper program converting unreadable CHARMm DCD files to
 // simpler but usable X-PLOR DCD files.

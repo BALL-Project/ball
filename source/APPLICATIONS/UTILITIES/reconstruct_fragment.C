@@ -1,4 +1,7 @@
-// $Id: reconstruct_fragment.C,v 1.6 2004/05/10 11:52:11 amoll Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: reconstruct_fragment.C,v 1.7 2004/05/27 18:13:08 oliver Exp $
 //
 // A little helper program that tries to reconstruct broken fragments in a
 // molecule. This program assumes that there is only *one* chain in the
