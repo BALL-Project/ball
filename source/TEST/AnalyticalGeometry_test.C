@@ -1,4 +1,4 @@
-// $Id: AnalyticalGeometry_test.C,v 1.23 2000/09/13 06:33:03 oliver Exp $
+// $Id: AnalyticalGeometry_test.C,v 1.24 2001/06/20 11:37:08 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/analyticalGeometry.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.23 2000/09/13 06:33:03 oliver Exp $")
+START_TEST(class_name, "$Id: AnalyticalGeometry_test.C,v 1.24 2001/06/20 11:37:08 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -517,7 +517,7 @@ CHECK(GetIntersection(const TPlane3<T>& a, const TPlane3<T>& b, TLine3<T>& line)
 	v3.set(0.0, 0.0, 10.0);  
 	p2 = Plane3(v1, v2, v3);
 	v1.set(0.0, 0.0, 0.0);
-	v2.set(1.0, 0.0, 0.0);
+	v2.set(-1.0, 0.0, 0.0);
 	l1.set(v1, v2);
 	TEST_EQUAL(GetIntersection(p1, p2, l2), true)
 	l2.normalize();
