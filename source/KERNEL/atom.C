@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.25 2000/07/25 21:12:41 oliver Exp $
+// $Id: atom.C,v 1.26 2000/09/27 07:44:08 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -227,6 +227,11 @@ namespace BALL
 	Fragment* Atom::getFragment()
 	{
 		return Composite::getAncestor(RTTI::getDefault<Fragment>());
+	}
+					                                                                                                                              
+	const Residue* Atom::getResidue() const
+	{
+		return Composite::getAncestor(RTTI::getDefault<Residue>());
 	}
 					                                                                                                                              
 	String Atom::getFullName(Atom::FullNameType type) const
