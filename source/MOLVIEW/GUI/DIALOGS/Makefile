@@ -9,7 +9,9 @@ CPP_SOURCES=\
 	labelPropertiesData.C\
 	openHINFile.C\
 	openPDBFile.C\
-	openBruker2DFile.C
+	openBruker2DFile.C\
+	DlgMoveOverlay.C\
+	DlgMoveOverlayData.C
 
 MOC_SOURCES=\
 	displayProperties_moc.C\
@@ -18,7 +20,9 @@ MOC_SOURCES=\
 	labelPropertiesData_moc.C\
 	openHINFile_moc.C\
 	openPDBFile_moc.C\
-	openBruker2DFile_moc.C
+	openBruker2DFile_moc.C\
+	DlgMoveOverlay_moc.C\
+	DlgMoveOverlayData_moc.C
 
 include ../../../common.mak
 include .Dependencies
@@ -45,3 +49,9 @@ openPDBFile_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h
 
 openBruker2DFile_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h
 	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h -o openBruker2DFile_moc.C
+
+DlgMoveOverlay_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlay.h
+	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlay.h -o DlgMoveOverlay_moc.C
+
+DlgMoveOverlayData_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlayData.h
+	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlayData.h -o DlgMoveOverlayData_moc.C

@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.h,v 1.4 2000/12/01 17:26:08 anhi Exp $
+// $Id: regularData2DWidget.h,v 1.5 2000/12/04 16:09:13 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -50,6 +50,8 @@
 #ifndef BALL_DATATYPE_CONTOUR_H
 #       include <BALL/DATATYPE/contour.h>
 #endif
+
+#include <BALL/MOLVIEW/GUI/DIALOGS/DlgMoveOverlay.h>
 
 using namespace BALL;
 using namespace BALL::VIEW;
@@ -142,6 +144,11 @@ class RegularData2DWidget
    */
   void addLorentzian( double xpos, double ypos, double amp, int xwidth=1, int ywidth=1 );
 
+  /**    Decides whether the coordinates (x, y) (in regular-data coordinates) are visible and if so,
+	 returns the Position in the Pixmap
+  */
+  bool isVisibleAs(double x, double y, pair<Position, Position>& res);
+
  public slots:
   void onNotify(Message *message);
   bool reactToMessages_(Message* message);
@@ -174,9 +181,19 @@ class RegularData2DWidget
 
   void createPlot();
 
+  /**   Creates a new contour plot erasing all former plots.
+   */
+  void createContour();
+
   /**   Display the data as contour-plot.
    */
   void plotContour();
+
+  /**   Create a contour plot as an overlay over the pixmap we are using right now.
+   */
+  void plotOverlay();
+
+  void slotOverlayMove(int i);
 
  protected:
   QPixmap *pm, *legendMap, *bufferMap;
@@ -187,7 +204,7 @@ class RegularData2DWidget
   /* Length of field (after interpolation). */
   Size fullLengthx, fullLengthy;
   /* Range. */
-  double min_, max_, minx_, maxx_, miny_, maxy_;
+  double min_, max_;
   /* Flag that decides whether to plot mousepos or not. */
   bool showMousePos_;
   /* Shows mouse position.*/
@@ -195,7 +212,6 @@ class RegularData2DWidget
   double soffsetf1_, soffsetf2_;
   double swidthf1_, swidthf2_;
   double bfreqf1_, bfreqf2_;
-  Size snumpoints_;
   /* Stores the spectrum */
   RegularData2D *spec_;
   /* Context-menu */
@@ -203,6 +219,7 @@ class RegularData2DWidget
   /* If we zoom into the data, we have to store the position of the lower left corner of the
      area we are looking at at the moment and we have to know a zoom - factor.
   */
+  double xvis_low_, xvis_high_, yvis_low_, yvis_high_;
   Position act_lower_left_x_;
   Position act_lower_left_y_;
   double zoom_x_;
@@ -211,6 +228,8 @@ class RegularData2DWidget
   Contour *cont_;
   /* The number and range of the contour-lines we want to plot. */
   Size cont_num_, cont_start_, cont_end_;
+  DlgMoveOverlay* mvover_;
+  Position ind_side_, ind_updown_;
 };
   
 #endif

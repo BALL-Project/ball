@@ -1,4 +1,4 @@
-// $Id: contour.h,v 1.2 2000/12/01 18:46:03 anhi Exp $
+// $Id: contour.h,v 1.3 2000/12/04 16:07:52 anhi Exp $
 
 #ifndef BALL_DATATYPE_CONTOUR_H
 #define BALL_DATATYPE_CONTOUR_H
@@ -78,6 +78,7 @@ using namespace BALL::VIEW;
     double start_;
     double end_;
     vector< TContourLine<T> >::const_iterator it_;
+    Position index_;
 };
 
 /**     Default type
@@ -85,12 +86,12 @@ using namespace BALL::VIEW;
 typedef TContour<float> Contour;
 
 template <typename T>
-TContour<T>::TContour(Size num_lines, double start, double end) : num_lines_(num_lines), start_(start), end_(end), lines_(num_lines)
+TContour<T>::TContour(Size num_lines, double start, double end) : lines_(num_lines), num_lines_(num_lines), start_(start), end_(end), index_(0)
 {
 }
 
 template <typename T>
-TContour<T>::TContour(const TContour& copyTContour)
+TContour<T>::TContour(const TContour& copyTContour) : lines_(copyTContour.lines_), num_lines_(copyTContour.num_lines_), start_(copyTContour.start_), end_(copyTContour.end_), index_(copyTContour.index_)
 {
 }
 
@@ -116,13 +117,14 @@ void TContour<T>::clear()
   end_       = 0;
   num_lines_ = 0;
   lines_     = vector< TContourLine<T> >(0);
+  index_     = 0;
 }
 
 template <typename T>
 bool TContour<T>::operator == (const TContour& compTContour) const
 {
   return ((start_ == compTContour.start_) && (end_ == compTContour.end_) && (lines_ == compTContour.lines_)
-	  && (num_lines_ == compTContour.num_lines_) && (it_ == compTContour.it_));
+	  && (num_lines_ == compTContour.num_lines_) && (it_ == compTContour.it_) && (index_ == compTContour.index_));
 }
 
 template <typename T>
@@ -135,39 +137,35 @@ void TContour<T>::apply(const TRegularData2D<T>& data)
   {
     TContourLine<T> con(start_ + i*step);
     con.createContourLine(data);
-    lines_.push_back(con);
+    lines_[i]=con;
   };
 
   if (num_lines_ > 0)
   {
     it_ = lines_.begin();
+    index_ = 0;
   };
 }
 
 template <typename T>
 bool TContour<T>::getNextContourLine(TContourLine<T>& cont)
 {
-  if (it_ != 0)
-  {
-    ++it_;
-    if (it_ == lines_.end())
+  if (index_<num_lines_)
     {
-      return false;
-    } else {
       cont = *it_;
-      return true;
+      it_++;
+      index_++;
+      return (true);
+    } else {
+      return false;
     };
-  };
-  return false;
 }
 
 template <typename T>
 void TContour<T>::resetCounter()
 {
-  if (lines_)
-  {
-    it_ = lines_.begin();
-  };
+  it_ = lines_.begin();
+  index_ = 0;
 }
 
 #endif

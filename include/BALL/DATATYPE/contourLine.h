@@ -1,4 +1,4 @@
-// $Id: contourLine.h,v 1.2 2000/12/01 17:21:23 anhi Exp $
+// $Id: contourLine.h,v 1.3 2000/12/04 16:07:52 anhi Exp $
 
 #ifndef BALL_DATATYPE_CONTOURLINE_H
 #define BALL_DATATYPE_CONTOURLINE_H
@@ -36,7 +36,7 @@ namespace BALL
              slope = (d2 - d1) / (dummy2.second - dummy.second);\
              dummy.second += (threshold - d1)/slope;\
              data_.push_back(dummy);\
-       }
+      }
 
   #define INTERPOL24 {  \
             from.getConvertedPosition(act_cell_x+1, act_cell_y, dummy);\
@@ -131,10 +131,15 @@ namespace BALL
        */
       bool getNextPoint(PointType &p);
 
-      private:
+      /**    Reset the counter.
+       */
+      void resetCounter();
+
+      //      private:
         T height_;
 	VectorType data_;
-	VectorType::iterator it;
+	VectorType::iterator it_;
+	Position index_;
     };
 
     /**    Default type
@@ -142,7 +147,7 @@ namespace BALL
     typedef TContourLine<float> ContourLine;
 
     template <typename T>
-    TContourLine<T>::TContourLine(T height) : height_(height)
+      TContourLine<T>::TContourLine(T height) : height_(height), index_(0)
     {
     }
 
@@ -154,7 +159,9 @@ namespace BALL
     template <typename T>
     TContourLine<T>::TContourLine(const TContourLine<T>& from)
       : height_(from.height_),
-        data_(from.data_)
+        data_(from.data_),
+      it_(from.it_),
+      index_(from.index_)
     {
     }
 
@@ -162,6 +169,8 @@ namespace BALL
     void TContourLine<T>::clear()
     {
       data_.clear();
+      it_=data_.begin();
+      index_ = 0;
     }
 
     template <typename T>
@@ -169,13 +178,17 @@ namespace BALL
     {
       data_ = data.data_;
       height_ = data.height_;
+      it_ = data.it_;
+      index_ = data.index_;
     }
 
     template <typename T>
     bool TContourLine<T>:: operator == (const TContourLine<T>& data) const
     {
       return ((height_ == data.height_)
-               && (data_ == data.data_));
+               && (data_ == data.data_)
+	       && (it_ == data.it_)
+	       && (index_ == data.index_));
     }
 
 
@@ -269,20 +282,28 @@ namespace BALL
 		};
 	    }
 	}
-      it = data_.begin();
+      index_ = 0;
+      it_ = data_.begin();
     }
 
     template <typename T>
     bool TContourLine<T>::getNextPoint(TContourLine<T>::PointType &p)
     {
-      if (it != data_.end()) {
-	p = *it;
-	it++;
+      if (index_<data_.size()) {
+	p = *it_;
+	index_++;
+	it_++;
 	return (true);
       } else {
 	return (false);
       };
     }
-    
+
+    template <typename T>
+    void TContourLine<T>::resetCounter()
+    {
+      it_ = data_.begin();
+      index_ = 0;
+    }
 }
 #endif
