@@ -1,4 +1,4 @@
-// $Id: resourceFile.iC,v 1.5 2000/10/23 23:31:03 amoll Exp $
+// $Id: resourceFile.iC,v 1.6 2000/10/24 00:04:07 amoll Exp $
 
 BALL_INLINE 
 void ResourceEntry::set(const ResourceEntry& entry, bool deep)
@@ -252,7 +252,20 @@ void ResourceEntry::deleteEntryArray(ResourceEntry** entry_array) const
 {
   delete [] entry_array;
 }
-  
+ 
+BALL_INLINE
+bool ResourceEntry::operator == (const ResourceEntry& entry) const
+{
+	return (key_ == entry.key_ && value_ == entry.value_ && 
+					number_children_ == entry.number_children_);
+}
+
+BALL_INLINE
+bool ResourceEntry::operator != (const ResourceEntry& entry) const
+{
+	return !(*this == entry);
+}
+
 
 
 BALL_INLINE 
@@ -390,4 +403,15 @@ void ResourceFile::skipWhitespaces_()
 
 	putback(c);
 }
- 
+
+BALL_INLINE
+bool ResourceFile::operator == (const ResourceFile& rf) const
+{
+	return (File::operator == (rf));
+}
+
+BALL_INLINE
+bool ResourceFile::operator != (const ResourceFile& rf) const
+{
+	return !(*this == rf);
+}

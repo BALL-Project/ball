@@ -1,4 +1,4 @@
-// $Id: resourceFile.h,v 1.8 2000/10/23 23:31:02 amoll Exp $
+// $Id: resourceFile.h,v 1.9 2000/10/24 00:04:07 amoll Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -826,28 +826,6 @@ namespace BALL
 	};
 
 	//@}
-
-	bool ResourceEntry::operator == (const ResourceEntry& entry) const
-	{
-		return (key_ == entry.key_ && value_ == entry.value_ && 
-						number_children_ == entry.number_children_);
-	}
-
-	bool ResourceEntry::operator != (const ResourceEntry& entry) const
-	{
-		return !(*this == entry);
-	}
-
-	bool ResourceFile::operator == (const ResourceFile& rf) const
-	{
-		return (File::operator == (rf));
-	}
-
-	bool ResourceFile::operator != (const ResourceFile& rf) const
-	{
-		return !(*this == rf);
-	}
-
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/FORMAT/resourceFile.iC>
