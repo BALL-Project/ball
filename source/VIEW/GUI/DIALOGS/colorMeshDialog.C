@@ -1,8 +1,8 @@
 #include <BALL/VIEW/GUI/DIALOGS/colorMeshDialog.h>
-#include <BALL/DATATYPE/string.h>
 #include <BALL/DATATYPE/regularData3D.h>
 #include <BALL/SYSTEM/file.h>
 #include <BALL/VIEW/DATATYPE/colorTable.h>
+#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 #include <BALL/SYSTEM/path.h>
 
 #include <qlineedit.h>
@@ -26,56 +26,53 @@ ColorMeshDialog::ColorMeshDialog( QWidget* parent,  const char* name, bool modal
 	connect((QObject*)Browseload, SIGNAL(clicked()), this, SLOT(browseLoadFiles()));
 }
 
-/*  
- *  Destroys the object and frees any allocated resources
- */
 ColorMeshDialog::~ColorMeshDialog()
 {
-    // no need to delete child widgets, Qt does it all for us
+ // no need to delete child widgets, Qt does it all for us
 }
 
 void ColorMeshDialog::colorMesh()
 {
 	String fileName(Loadfile_->text().latin1());
 
-	if (!fileName.isEmpty())
+	if (fileName.isEmpty())
 	{
-		File infile(fileName, File::IN);
-
-		RegularData3D dat;
-
-		infile >> dat;
-		infile.close();
-	
-		// now do the colorizing stuff...
-		mesh->colorList.resize(mesh->vertex.size());
-		ColorRGBA list[3];
-		list[0] = ColorRGBA(0.,0.,1.,1.);
-		list[1] = ColorRGBA(0.,1.,1.,1.);
-		list[2] = ColorRGBA(1.,1.,0.,1.);
-
-		ColorTable table(list, 3);
-		table.setNumberOfColors(numberOfColors->value());
-		table.createTable();
-		table.setRange(atof(MinVal->text().latin1()), atof(MaxVal->text().latin1()));
-
-		try {
-			for (Position i=0; i<mesh->colorList.size(); i++)
-			{
-			//	Log.info() << table.map(dat[mesh->vertex[i]]) << endl;
-				mesh->colorList[i] = table.map(dat[mesh->vertex[i]]);
-			}
-		}	catch (Exception::OutOfGrid)
-			{
-				Log.error() << "Error! There is a point contained in the surface that is not inside the grid! Aborting the coloring..." << endl;
-				return;
-			}
-/*		ChangedCompositeMessage *changed_message = new ChangedCompositeMessage;
-		changed_message->setComposite(comp->getRoot());
-		changed_message->setDeletable(true);
-		notify_(changed_message);
-*/
+		return;
 	}
+
+	RegularData3D dat;
+	File infile(fileName, File::IN);
+	infile >> dat;
+	infile.close();
+
+	// now do the colorizing stuff...
+	mesh->colorList.resize(mesh->vertex.size());
+	ColorRGBA list[3];
+	list[0] = ColorRGBA(0.,0.,1.,1.);
+	list[1] = ColorRGBA(0.,1.,1.,1.);
+	list[2] = ColorRGBA(1.,1.,0.,1.);
+
+	ColorTable table(list, 3);
+	table.setNumberOfColors(numberOfColors->value());
+	table.createTable();
+	table.setRange(atof(MinVal->text().latin1()), atof(MaxVal->text().latin1()));
+
+	try 
+	{
+		for (Position i=0; i<mesh->colorList.size(); i++)
+		{
+			mesh->colorList[i] = table.map(dat[mesh->vertex[i]]);
+		}
+	}	
+	catch (Exception::OutOfGrid)
+	{
+		Log.error() << "Error! There is a point contained in the surface that is not "
+								<< "inside the grid! Aborting the coloring..." << std::endl;
+		return;
+	}
+	
+	// update of the scene and the composites needed
+	MainControl::getMainControl(this)->updateAll();
 }
 
 void ColorMeshDialog::browseLoadFiles()
