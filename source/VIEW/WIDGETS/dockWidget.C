@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.5 2003/09/10 01:27:49 amoll Exp $
+// $Id: dockWidget.C,v 1.6 2003/09/10 01:43:27 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -112,6 +112,13 @@ void DockWidget::writePreferences(INIFile& inifile)
 void DockWidget::fetchPreferences(INIFile & inifile)
 	throw()
 {
+	if (inifile.hasEntry("WINDOWS", getIdentifier() + "::docked") &&
+			inifile.getValue("WINDOWS", getIdentifier() + "::docked").toUnsignedInt() != 0)
+	{
+		undock();
+		show();
+	}
+
 	if (	 (inifile.hasEntry("WINDOWS", getIdentifier() + "::on") &&
 				  inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt() == 0)
 		  || (!default_visible_))
@@ -125,12 +132,6 @@ void DockWidget::fetchPreferences(INIFile & inifile)
 		            inifile.getValue("WINDOWS", getIdentifier() + "::y").toUnsignedInt(),
 		            inifile.getValue("WINDOWS", getIdentifier() + "::width").toUnsignedInt(),
 		            inifile.getValue("WINDOWS", getIdentifier() + "::height").toUnsignedInt());
-	}
-
-	if (inifile.hasEntry("WINDOWS", getIdentifier() + "::docked") &&
-			inifile.getValue("WINDOWS", getIdentifier() + "::docked").toUnsignedInt() != 0)
-	{
-		undock();
 	}
 }
 
