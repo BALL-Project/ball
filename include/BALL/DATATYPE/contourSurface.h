@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.4.2.1 2002/10/29 15:55:48 anhi Exp $
+// $Id: contourSurface.h,v 1.4.2.2 2002/10/30 00:08:47 amoll Exp $
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
 #define BALL_DATATYPE_CONTOURSURFACE_H
@@ -215,7 +215,8 @@ static int corner_rotation[NUM_CUBE_ROTATIONS][NUM_CUBE_VERTICES] = {
       TContourSurface(const TContourSurface& copyTContourSurface);
 
       /// Destructor
-      virtual ~TContourSurface();
+      virtual ~TContourSurface()
+				throw();
       //@}
 
       /// Creates a contour surface from a given data set.
@@ -290,6 +291,7 @@ static int corner_rotation[NUM_CUBE_ROTATIONS][NUM_CUBE_VERTICES] = {
 
     template <typename T>
     TContourSurface<T>::~TContourSurface()
+			throw()		
     {
     }
 
