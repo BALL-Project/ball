@@ -1,4 +1,4 @@
-// $Id: Substring_test.C,v 1.1.2.1 2002/05/22 22:58:23 oliver Exp $
+// $Id: Substring_test.C,v 1.1.2.2 2002/12/08 14:14:54 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: Substring_test.C,v 1.1.2.1 2002/05/22 22:58:23 oliver Exp $")
+START_TEST(String,"$Id: Substring_test.C,v 1.1.2.2 2002/12/08 14:14:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -396,13 +396,13 @@ String filename;
 using std::ofstream;
 using std::ios;
 
-CHECK(Substring::friend::std::ostream& operator << (::std::ostream& s, const Substring& substring))
+CHECK(std::ostream& operator << (std::ostream& s, const Substring& substring))
 	NEW_TMP_FILE(filename)
 	std::ofstream outstr(filename.c_str(), std::ios::out);
 	test_sub1.bind(ABCDEF, 1, 4);
 	outstr << test_sub1;
 	outstr.close();
-	TEST_FILE(filename.c_str(), "data/String_test2.txt")
+	TEST_FILE(filename.c_str(), "data/Substring_test2.txt")
 	std::ofstream outstr2(filename.c_str(), std::ios::out);
 	outstr2 << empty_sub;
 	outstr2.close();
@@ -416,13 +416,13 @@ CHECK(Substring::isValid() const )
 	TEST_EQUAL(test_sub1.isValid(), true)
 RESULT
 
-CHECK(Substring::dump(::std::ostream& s = ::std::cout, Size depth = 0) const )
+CHECK(Substring::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	NEW_TMP_FILE(filename)
 	std::ofstream outfile(filename.c_str(), ios::out);
 	test_sub1.bind(ABCDEF, 1, 4);
 	test_sub1.dump(outfile);
 	outfile.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/String_test.txt")
+	TEST_FILE_REGEXP(filename.c_str(), "data/Substring_test.txt")
 	std::ofstream outfile2(filename.c_str(), ios::out);
 	TEST_EXCEPTION(Substring::UnboundSubstring, empty_sub.dump(outfile2))
 	outfile2.close();
