@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.7 2003/06/06 10:40:56 amoll Exp $
+// $Id: backboneModel.C,v 1.8 2003/06/10 21:30:30 amoll Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/backboneModel.h>
 #include <BALL/MOLVIEW/PRIMITIV/backbone.h>
@@ -152,7 +152,7 @@ namespace BALL
 		{
 			// first and last spline point have tangential vectors (0,0,0)
 			// so lets forget about the first and the last spline point
-			for (Index index = 1; index < spline_vector_.size() - 1; ++index)
+			for (Position index = 1; index < spline_vector_.size() - 1; ++index)
 			{
 				Vector3 tangent;
 
@@ -175,7 +175,7 @@ namespace BALL
 		void AddBackboneModel::createSplinePath_()
 		{
 			// creates the spline
-			for (Index index = 0; index < spline_vector_.size() - 1; ++index)
+			for (Position index = 0; index < spline_vector_.size() - 1; ++index)
 			{
 				createSplineSegment_(spline_vector_[index], spline_vector_[index + 1]);
 			}
@@ -185,7 +185,7 @@ namespace BALL
 		// create a spline segment between two spline points a and b
 		void AddBackboneModel::createSplineSegment_(const SplinePoint &a, const SplinePoint &b)
 		{
-			int max_step = 6;
+			int max_step = 9;
 			double time = 0.0;
 			double step = (double)1 / (double)max_step;
 
