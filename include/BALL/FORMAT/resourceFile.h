@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.h,v 1.15 2002/02/27 12:18:42 sturm Exp $
+// $Id: resourceFile.h,v 1.16 2002/12/18 16:09:22 anker Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -168,63 +168,65 @@ namespace BALL
 		*/
 		const ResourceEntry* getEntry(const String& key_path) const;
 
-		/**	
+		/**	Return the key of this ResourceEntry.
 		*/
 		const String& getKey() const;
 
-		/**	
+		/** Set the value of this ResourceEntry.
 		*/
 		void setValue(const String& value);
 
-		/**	
+		/**	Get a mutable reference to the value of this ResourceEntry.
 		*/
 		String& getValue();
 
-		/**	
+		/**	Get a constant reference to the value of this ResourceEntry.
 		*/
 		const String& getValue() const;
 
-		/**	
+		/**	Return the path of an entry.
 		*/
 		String getPath() const;
 
-		/**	
+		/**	Return the number of child entries.
 		*/
 		Size countChildren() const;
 
-		/**	
+		/**	Return the number of children which are not leaves.
 		*/
 		Size countDescendants() const;
 
-		/**	
+		/**	????? What is the size of an entry? Why not use size()?
 		*/
 		Size getSize() const;
 	
-		/**	
+		/**	Compute the depth of this entry within the tree.
 		*/
 		Size getDepth() const;
 	
-		/**	
+		/**	Insert a child into the tree below this entry, if the key has not
+				been used yet.
 		*/
 		ResourceEntry* insertChild(const String& key, const String& value, bool replace_value = true);
 
-		/**	
+		/**	Insert a child into the tree below the parent entry.
 		*/
 		ResourceEntry* insertSibling(const String& key, const String& value, bool replace_value = true);
 
-		/**	
+		/**	Insert a child into the tree below this entry, if the key has not
+				been used yet.
 		*/
 		ResourceEntry* insertChild(ResourceEntry& entry, bool replace_value = true);
 	
-		/**	
+		/**	Insert a resource entry at the appropriate place in the tree.
 		*/
 		ResourceEntry* insert(const String& key_path, const String& name);
 
-		/**	
+		/**	Merge the children of a resource entry.
 		*/
 		bool mergeChildrenOf(ResourceEntry& entry, bool replace_value = true);
 
-		/**	
+		/** Remove a child of a resource entry.
 		*/
 		bool removeChild(const String& key, ResourceEntry** removed = 0);
 
