@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.C,v 1.1.2.17 2002/11/22 16:05:27 anker Exp $
+// $Id: fresnoDesolvation.C,v 1.1.2.18 2003/02/24 16:58:16 anker Exp $
 // Molecular Mechanics: Fresno force field, desolvation component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -535,30 +535,30 @@ namespace BALL
 			float& energy)
 		throw()
 	{
-		float dG_reac;
+		float dG;
 
 		fdpb_.options[FDPB::Option::SOLVENT_DC] = bulk_water_dc_;
 		if (fdpb_.setup(system))
 		{
 			fdpb_.solve();
+			dG = fdpb_.getEnergy();
 			if (verbosity_ > 0)
 			{
-				Log.info() << "dG_reac in water: " 
-					<< fdpb_.getReactionFieldEnergy() << endl;
+				Log.info() << "dG in water: " 
+					<< fdpb_.getEnergy() << endl;
 			}
-			dG_reac = fdpb_.getReactionFieldEnergy();
 
 			fdpb_.options[FDPB::Option::SOLVENT_DC] = vacuum_dc_;
 			fdpb_.setup(system);
 			fdpb_.solve();
 			if (verbosity_ > 0)
 			{
-				Log.info() << "dG_reac in vacuum: " 
-					<< fdpb_.getReactionFieldEnergy() << endl;
+				Log.info() << "dG in vacuum: " 
+					<< fdpb_.getEnergy() << endl;
 			}
-			dG_reac -= fdpb_.getReactionFieldEnergy();
+			dG -= fdpb_.getEnergy();
 
-			energy = dG_reac;
+			energy = dG;
 			return true;
 		}
 		else
@@ -576,7 +576,7 @@ namespace BALL
 		if (fdpb_.setup(system))
 		{
 			fdpb_.solve();
-			energy = fdpb_.getReactionFieldEnergy();
+			energy = fdpb_.getEnergy();
 			return true;
 		}
 		else
