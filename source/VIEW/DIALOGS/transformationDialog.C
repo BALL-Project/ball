@@ -6,6 +6,7 @@
 
 #include <BALL/VIEW/DIALOGS/transformationDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <qlineedit.h>
 
 namespace BALL
