@@ -1,49 +1,10 @@
-// $Id: bruker2DFile.C,v 1.6 2000/11/24 17:24:52 anhi Exp $
+// $Id: bruker2DFile.C,v 1.7 2000/11/28 17:29:29 anhi Exp $
 
 #include <BALL/FORMAT/bruker2DFile.h>
 
 namespace BALL
 {
-  // First I define some macros needed for the marching cube-algorithm. The names come from the number associated with
-  // the different corners of the square.
-  #define INTERPOL12 { \
-            dummy = GetShift(act_cell_x, act_cell_y);\
-            d1 = spectrum_[act_cell_x + act_cell_y*(number_of_cells_x+1)];\
-            d2 = spectrum_[act_cell_x + 1 + act_cell_y*(number_of_cells_x+1)];\
-            slope = (d2 - d1) / (GetShift(act_cell_x + 1, act_cell_y + 1).first - dummy.first);\
-            dummy.first += (threshold - d1)/slope;\
-            reslist->push_back(dummy);\
-      } 
-
-   #define INTERPOL18 { \
-             dummy = GetShift(act_cell_x, act_cell_y);\
-             d1 = spectrum_[act_cell_x + act_cell_y*(number_of_cells_x+1)];\
-   	     d2 = spectrum_[act_cell_x + (act_cell_y+1)*(number_of_cells_x+1)];\
-             slope = (d2 - d1) / (GetShift(act_cell_x, act_cell_y+1).second - dummy.second);\
-             dummy.second += (threshold - d1)/slope;\
-             reslist->push_back(dummy);\
-       }
-
-  #define INTERPOL24 {  \
-            dummy = GetShift(act_cell_x+1, act_cell_y);\
-            d1 = spectrum_[act_cell_x+1 + act_cell_y*(number_of_cells_x+1)];\
-            d2 = spectrum_[act_cell_x+1 + (act_cell_y+1)*(number_of_cells_x+1)];\
-            slope = (d2 - d1) / (GetShift(act_cell_x+1, act_cell_y+1).second - dummy.second);\
-            dummy.second += (threshold - d1)/slope;\
-            reslist->push_back(dummy);\
-      }
-
-  #define INTERPOL48 {  \
-	    dummy = GetShift(act_cell_x+1, act_cell_y+1);\
-            d1 = spectrum_[act_cell_x+1 + (act_cell_y+1)*(number_of_cells_x+1)];\
-            d2 = spectrum_[act_cell_x   + (act_cell_y+1)*(number_of_cells_x+1)];\
-            slope = (d2 - d1) / (GetShift(act_cell_x, act_cell_y+1).first - dummy.first);\
-            dummy.second += (threshold - d1)/slope;\
-            reslist->push_back(dummy);\
-      }
-
-  
-        Bruker2D::Bruker2D() : File()
+         Bruker2D::Bruker2D() : File()
         {
 	}
 
@@ -135,16 +96,16 @@ namespace BALL
 		  {
 		  } else { // conversion from little to big
 		    numdum = ( ((numdum & 0x000000FFL) << 24)
-              		      |((numdum & 0x0000FF00L) << 16)
-              		      |((numdum & 0x00FF0000L) >> 16)
+              		      |((numdum & 0x0000FF00L) << 8)
+              		      |((numdum & 0x00FF0000L) >> 8)
 			      |((numdum & 0xFF000000L) >> 24));
 		  };
 		} else {
 		  if (littleEndian == true) // conversion from big to little
 		  {
 		    numdum = ( ((numdum & 0x000000FFL) << 24)
-              		      |((numdum & 0x0000FF00L) << 16)
-              		      |((numdum & 0x00FF0000L) >> 16)
+              		      |((numdum & 0x0000FF00L) << 8)
+              		      |((numdum & 0x00FF0000L) >> 8)
 			      |((numdum & 0xFF000000L) >> 24));
 		  } else { // no conversion needed;
 		  };
@@ -214,16 +175,16 @@ namespace BALL
 		  {
 		  } else { // conversion from little to big
 		    numdum = ( ((numdum & 0x000000FFL) << 24)
-              		      |((numdum & 0x0000FF00L) << 16)
-              		      |((numdum & 0x00FF0000L) >> 16)
+              		      |((numdum & 0x0000FF00L) << 8)
+              		      |((numdum & 0x00FF0000L) >> 8)
 			      |((numdum & 0xFF000000L) >> 24));
 		  };
 		} else {
 		  if (littleEndian == true) // conversion from big to little
 		  {
 		    numdum = ( ((numdum & 0x000000FFL) << 24)
-              		      |((numdum & 0x0000FF00L) << 16)
-              		      |((numdum & 0x00FF0000L) >> 16)
+              		      |((numdum & 0x0000FF00L) << 8)
+              		      |((numdum & 0x00FF0000L) >> 8)
 			      |((numdum & 0xFF000000L) >> 24));
 		  } else { // no conversion needed;
 		  };
@@ -272,105 +233,6 @@ namespace BALL
 
     return res;
   }
-
-  /**
-   * Returns a list of endpoints of a contour-line corresponding to the value "threshold". 
-   */
-  list< pair<double, double> > &Bruker2D::GetContourLine(double threshold)
-  {
-    // This function uses a "marching cubes"-style algorithm to determine the contour-lines.
-    Size number_of_cells;
-    Size number_of_cells_x;
-    Size number_of_cells_y;
-    Position act_cell;
-    Position act_cell_x;
-    Position act_cell_y;
-    pair<double, double> dummy;
-    list< pair<double, double> > *reslist = new list< pair<double, double> >;
-    double d1, d2, slope;
-
-    number_of_cells_x = (Size) spointnumf2_-1;
-    number_of_cells_y = (Size) spointnumf1_-1;
-    number_of_cells   = number_of_cells_x * number_of_cells_y;
-
-    
-    for (act_cell_y = 0; act_cell_y < number_of_cells_y; act_cell_y++)
-    {
-      for (act_cell_x = 0; act_cell_x < number_of_cells_x; act_cell_x++)
-	{
-	  // First we have to find out the topology of the actual square.
-	  int topology = 0;
-	  
-	  if (spectrum_[act_cell_x + act_cell_y*(number_of_cells_x+1)] > threshold)
-	    topology |= 1;
-	  if (spectrum_[act_cell_x+1 + act_cell_y*(number_of_cells_x+1)] > threshold)
-	    topology |= 2;
-	  if (spectrum_[act_cell_x+1 + (act_cell_y+1)*(number_of_cells_x+1)] > threshold)
-	    topology |= 4;
-	  if (spectrum_[act_cell_x + (act_cell_y+1)*(number_of_cells_x+1)] > threshold)
-	    topology |= 8;
-
-	  // now we can use this information to compute the contour-line.
-	  switch (topology)
-	  {
-	    // no cut of contour-line here
-	    case 0  :
-	    case 15 : break;
-
-	    // Line from upper left to lower right
-       	    case 1  : 
-	    case 14 : INTERPOL18
-		      INTERPOL12
-		      break;
-
-	    case 4  :
-	    case 11 : INTERPOL48
-                      INTERPOL24
-		      break;
-
-	    // Line from upper right to lower left
-       	    case 2  :
-  	    case 13 : INTERPOL12
-                      INTERPOL24
-     		      break;
-
-	    case 8  :
-  	    case 7  : INTERPOL18
-                      INTERPOL48
-		      break;
-
-	    // Line through the middle (upwards)
-     	    case 9  :
-	    case 6  : INTERPOL12
-                      INTERPOL48
-		      break;
-
-	    // Line through the middle (left to right)
-	    case 3  :
-	    case 12 : INTERPOL18
-                      INTERPOL24
-		      break;
-
-	    // Two lines from upper right to lower left
-	    case 10 : INTERPOL18
-                      INTERPOL12
-                      INTERPOL48
-                      INTERPOL24
-		      break;
-
-	    // Two lines from upper left to lower right
-	    case 5  : INTERPOL12
-                      INTERPOL24
-                      INTERPOL18
-                      INTERPOL48
-		      break;
-	  };
-	}
-    }
-    return (*reslist);
-  }
-
-
 
   /** Returns a list of peaks found in the spectrum. Peaks at the edge are ignored.
    */

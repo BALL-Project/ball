@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.1 2000/11/15 18:17:29 anhi Exp $
+// $Id: regularData2DWidget.C,v 1.2 2000/11/28 17:43:45 anhi Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -34,9 +34,41 @@ QColor con2rgb(double arg, double min, double max)
     return (QColor(ri, gi, bi));
 }
 
+NewRegularData2DMessage::NewRegularData2DMessage()
+  :
+  CompositeMessage()
+{
+}
+
+NewRegularData2DMessage::NewRegularData2DMessage(const CompositeMessage &message, bool /* deep */)
+  :
+  CompositeMessage(message)
+{
+}
+
+NewRegularData2DMessage::~NewRegularData2DMessage()
+{
+  #ifdef BALL_VIEW_DEBUG
+  cout << "Destructing object " << (void *)this
+       << " of class " << RTTI::getName<NewRegularData2DMessage>() << endl;
+  #endif
+}
+
 PixWid::PixWid( QWidget *w ) : QWidget( w )
 {
   setMouseTracking(true);
+};
+
+void PixWid::mousePressEvent( QMouseEvent *e )
+{
+  beg_old = beg;
+  beg = e->pos();
+};
+
+void PixWid::mouseReleaseEvent( QMouseEvent *e )
+{
+  end_old = end;
+  end = e->pos();
 };
 
 void PixWid::mouseMoveEvent( QMouseEvent *e )
@@ -44,7 +76,7 @@ void PixWid::mouseMoveEvent( QMouseEvent *e )
   emit (mouseMoved(e->x(), e->y()));
 }
 
-RegularData2DWidget::RegularData2DWidget(vector<double> &d_, int lx_, int ly_, double min, double max, QWidget *parent) : QScrollView(parent), ModularWidget("RegularData2DWidget"), lengthx(lx_), lengthy(ly_), min_(min), max_(max), minx_(0), maxx_(1), miny_(0), maxy_(1), showMousePos_(true), posLabel_(0), soffsetf1_(0), soffsetf2_(0), swidthf1_(0), swidthf2_(0), bfreqf1_(0), bfreqf2_(0), spectrum_(0)
+RegularData2DWidget::RegularData2DWidget(int lx_, int ly_, double min, double max, QWidget *parent) : QScrollView(parent), ModularWidget("RegularData2DWidget"), lengthx(lx_), lengthy(ly_), min_(min), max_(max), minx_(0), maxx_(1), miny_(0), maxy_(1), showMousePos_(true), posLabel_(0), soffsetf1_(0), soffsetf2_(0), swidthf1_(0), swidthf2_(0), bfreqf1_(0), bfreqf2_(0), spectrum_(0), pm(0), legendMap(0), bufferMap(0)
 {
   createLegend( 20, 40 );
 
@@ -56,6 +88,10 @@ RegularData2DWidget::RegularData2DWidget(vector<double> &d_, int lx_, int ly_, d
   // register the widget with the MainControl
   ModularWidget::registerWidget(this);
   snumpoints_ = lengthx * lengthy;
+
+  // create the context menu
+  men_ = new QPopupMenu(this);
+  men_->insertItem("Create Baseline");
 }
 
 RegularData2DWidget::RegularData2DWidget(const RegularData2DWidget& widget) : QScrollView(), ModularWidget(widget)
@@ -64,6 +100,11 @@ RegularData2DWidget::RegularData2DWidget(const RegularData2DWidget& widget) : QS
 
 RegularData2DWidget::~RegularData2DWidget()
 {
+  if (men_)
+  {
+    delete (men_);
+    men_ = NULL;
+  }
 }
 
 void RegularData2DWidget::initializeWidget(MainControl& main_control)
@@ -74,6 +115,21 @@ void RegularData2DWidget::initializeWidget(MainControl& main_control)
 void RegularData2DWidget::finalizeWidget(MainControl& main_control)
 {
   main_control.removeMenuEntry(MainControl::TOOLS, "&2D-NMR", this, SLOT(createPlot()));
+}
+
+bool RegularData2DWidget::reactToMessages_(Message* message)
+{
+  bool update = false;
+
+  if (RTTI::isKindOf<NewRegularData2DMessage>(*message))
+    {
+      NewRegularData2DMessage *composite_message = RTTI::castTo<NewRegularData2DMessage>(*message);
+
+      spec_ = (RegularData2D *)composite_message->getComposite();
+      update = true;
+    }
+
+  return update;
 }
 
 /**
@@ -110,18 +166,27 @@ void RegularData2DWidget::createLegend( int w, int h )
 
 /** Scale to dimensions nx, ny
  */
-void RegularData2DWidget::scale(Size nx, Size ny)
+void RegularData2DWidget::scale(Size nx, Size ny, double x1, double y1, double x2, double y2)
 {
   if (nx && ny && spectrum_)
   {
     QPainter paint;
     QColor pCol;
 
-    Size stepx, stepy;
-    int x, y;
+    double stepx, stepy;
+    Size x, y;
     double actx, acty;
 
-    pm->resize(nx, ny);
+    if (pm)
+      delete (pm);
+    if (pixWid)
+      delete (pixWid);
+
+    pixWid = new PixWid( viewport() );
+    connect( pixWid, SIGNAL(mouseMoved(int, int)), this, SLOT(NewMousePos(int,int)));
+    pixWid->resize(nx, ny);
+
+    pm = new QPixmap(nx, ny);
     pm->fill();
 
     fullLengthx = nx;
@@ -130,18 +195,22 @@ void RegularData2DWidget::scale(Size nx, Size ny)
     lengthx = (Position) spectrum_->parsf2_->parameter("SI");
     lengthy = (Position) spectrum_->parsf1_->parameter("SI");
 
-    stepx = lengthx / nx;
-    stepy = lengthy / ny;
+    //stepx = (double)lengthx / nx;
+    //stepy = (double)lengthy / ny;
+    stepx = (x2 - x1) / nx;
+    stepy = (y2 - y1) / ny;
 
-    actx = spectrum_->parsf2_->parameter("OFFSET");
-    acty = spectrum_->parsf1_->parameter("OFFSET");
+    //    actx = spectrum_->parsf2_->parameter("OFFSET");
+    //    acty = spectrum_->parsf1_->parameter("OFFSET");
+    actx = x1;
+    acty = y1;
 
     paint.begin( pm );
     
-    paint.setViewport(0, 0, lengthx, lengthy);
+    paint.setViewport(0, 0, nx, ny);
     
     // Transformation: (0,0) in untere linke Ecke.
-    QWMatrix m(1, 0, 0, -1, 0, fullLengthy);
+    QWMatrix m(1, 0, 0, -1, 0, ny);
     paint.setWorldMatrix( m );
 
     for (y=0; y<ny; y++) {
@@ -151,7 +220,12 @@ void RegularData2DWidget::scale(Size nx, Size ny)
 	    paint.drawPoint( x, y );
 	    };
 	};
-    }
+    paint.end();
+    addChild( pixWid );
+    pixWid->show();
+    QScrollView::resizeEvent(new QResizeEvent(size(), size()));
+    
+  };
 }
 
 /**
@@ -162,7 +236,10 @@ void RegularData2DWidget::getData(Size nx, Size ny, double startx, double endx, 
   Position actx, acty;
   double stepx, stepy;
 
-  pm->resize(nx, ny);
+  if (pm)
+    delete (pm);
+
+  pm = new QPixmap(nx, ny);
   pm->fill();
 
   stepx = fabs(endx - startx) / nx;
@@ -184,7 +261,7 @@ void RegularData2DWidget::getData(Size nx, Size ny, double startx, double endx, 
  */
 void RegularData2DWidget::addLorentzian( double xpos, double ypos, double amp, int xwidth=1, int ywidth=1 )
 {
-  int x, y;
+  Position x, y;
   
   for (y=0; y<lengthy; y++) {
     if (spec_) {
@@ -241,16 +318,6 @@ void RegularData2DWidget::createPlot()
   if (pixWid)
     delete (pixWid);
 
-//   // do we have to clip or interpolate?
-//   if ((width() > lengthx) && (height() > lengthy)) { // interpolate in x - and y - direction
-//     scaleData( lengthx, lengthy );
-//   };
-
-//   if ((width() <= lengthx) && (height() <= lengthy)) { // clip in x - and y - direction
-//     fullData = spec_;
-//     fullLengthx = lengthx;
-//     fullLengthy = lengthy;
-//   };
 
   //  fullData = spec_;
   fullLengthx = lengthx;
@@ -278,33 +345,16 @@ void RegularData2DWidget::createPlot()
     };
   };
 
-//   // TEST!
-//   list< pair<double, double> > t;
-//   t = spectrum_->GetContourLine(0.7 * max_);
-//   QPoint f1, f2;
-//   paint.setPen(QColor(black));
-//   _List_iterator<pair<double,double>,pair<double,double>&,pair<double,double>*> it;
-//   it = t.begin();
-//   pair<Position, Position> pd;
-
-//   for (int i=0; i<t.size()-1; i++)
-//   {
-//     pd = spectrum_->GetPosition(it->first, it->second);
-//     f1 = QPoint(pd.first, pd.second);
-//     it++;
-//     i++;
-//     pd = spectrum_->GetPosition(it->first, it->second);
-//     f2 = QPoint(pd.first, pd.second);
-//     paint.drawLine(f1, f2);
-//     it++;
-//   };
-//   // TEST!
+  // TEST!!!
+  spec_->createGroundState();
+  cout << "gs: " << spec_->getGroundState() << " si: " << spec_->getSigmaGroundState() << endl;
 
   paint.end();
   addChild( pixWid );
   // Hack to enable display of scrollbars etc...
   pixWid->show();
   QScrollView::resizeEvent(new  QResizeEvent( size(), size() ));
+
 }
 
 void RegularData2DWidget::drawContents( QPainter *paint, int clipx, int clipy, int clipw, int cliph )
@@ -411,6 +461,14 @@ void RegularData2DWidget::NewMousePos( int x, int y )
       posLabel_->show();
     };
   };
+}
+
+void RegularData2DWidget::mousePressEvent( QMouseEvent *e )
+{
+  if (e->button() == QMouseEvent::RightButton)
+  {
+    men_->popup(e->pos());
+  }
 }
 
 Bruker2D& RegularData2DWidget::GetBrukerFile()

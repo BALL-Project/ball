@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.3 2000/11/24 16:48:08 anhi Exp $
+// $Id: regularData2D.h,v 1.4 2000/11/28 17:21:01 anhi Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
 #define BALL_DATATYPE_REGULARDATA2D_H
@@ -100,6 +100,10 @@ namespace BALL
 		/**     Return the position of the data point nearest to x, y.
 		 */
 		void getNearestPosition(double x, double y, pair<Position, Position>& dum);
+
+		/**     Return the position of x, y in the internal coordinate system.
+		 */
+		void getConvertedPosition(Position x, Position y, pair<T, T>& dum) const;
 
 		/**     Return the value at coordinates x, y. If there's no data point at that location, it will be
                         interpolated.
@@ -380,15 +384,19 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
+	void TRegularData2D<T>::getConvertedPosition(Position x, Position y, pair<T, T>& dum) const
+	{
+	  dum.first = xlower_ - (double) x / xsize_ * (double)(xupper_ - xlower_) / xsize_;
+	  dum.second = ylower_ - (double) y / ysize_ * (double)(yupper_ - ylower_) / ysize_;
+	}
+
+	template <typename T>
+	BALL_INLINE
 	const T& TRegularData2D<T>::getValue(T valx, T valy)
 	{
 	  double stepx, stepy;
-	  double correctionx, correctiony;
-	  double shx, shy;
-	  pair<Position, Position> dum[4];
 	  double res=0.0;
 	  double t, u;
-	  int i;
 
 	  if (xsize_ && ysize_)
 	  {
@@ -532,18 +540,17 @@ namespace BALL
 	template <typename T>
 	void TRegularData2D<T>::createGroundState()
 	{
-	  Position numsamples, actnum, actval;
+	  Size numsamples, actnum, actval;
 	  
 	  Size num;
 	  double ran;
 
-	  srand48(rand());
+	  srand48(42);
 	  
 	  num = data_.size();
-	  numsamples = (num / 100);
-	  vector<double> samplevals(numsamples);
+	  numsamples = (Size) (num / 100);
+	  vector<T> samplevals(numsamples);
 	  
-
 	  groundState_ = 0;
 	  sigmaGroundState_ = 0;
 
@@ -551,7 +558,8 @@ namespace BALL
 	  for (actnum = 0; actnum < numsamples; actnum++)
 	  {
 	    ran = drand48();
-	    actval = (Position) ran * num;
+	    actval = (Position) (ran * num);
+	    
 	    samplevals[actnum] = data_[actval];
 	    groundState_ += data_[actval];
 	  };
@@ -562,7 +570,6 @@ namespace BALL
 	  for (actnum = 0; actnum < numsamples; actnum++)
 	  {
 	    sigmaGroundState_ += pow(samplevals[actnum] - groundState_, 2);
-	    //	    cerr << samplevals[actnum] << " " <<sigmaGroundState_ <<endl;
 	  };
 	  
 	  sigmaGroundState_ /= (numsamples - 1);

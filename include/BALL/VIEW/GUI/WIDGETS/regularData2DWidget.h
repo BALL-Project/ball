@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.h,v 1.2 2000/11/24 16:50:22 anhi Exp $
+// $Id: regularData2DWidget.h,v 1.3 2000/11/28 17:42:18 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_REGULARDATA2DWIDGET_H
@@ -14,7 +14,6 @@
 #include <iostream>
 #include <fstream>
 #include <string>
-#include <glib.h>
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -22,6 +21,10 @@
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #       include <BALL/CONCEPT/composite.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_MESSAGE_H
+#       include <BALL/VIEW/KERNEL/message.h>
 #endif
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -44,7 +47,50 @@
 #       include <BALL/FORMAT/JCAMPFile.h>
 #endif
 
+#ifndef BALL_DATATYPE_CONTOURLINE_H
+#       include <BALL/DATATYPE/contourLine.h>
+#endif
+
 using namespace BALL;
+using namespace BALL::VIEW;
+
+/** New RegularData2D Message Class
+ */
+class NewRegularData2DMessage: public CompositeMessage
+{
+ public:
+  /**     @name Constructors and Destructors
+   */
+  //@{
+  NewRegularData2DMessage();
+
+  NewRegularData2DMessage(const CompositeMessage& message, bool deep = true);
+
+  virtual ~NewRegularData2DMessage();
+  //@}
+
+  /**     @name   Assignment
+   */
+  //@{
+  //@}
+
+  /**     @name   Accessors
+   */
+  //@{
+  //@}
+
+  /**     @name   Debugging and Diagnostics
+   */
+  //@{
+  //@}
+
+  /**     @name   Storers
+   */
+  //@{
+  //@}
+
+ private:
+};
 
 /**
  * Must be implemented to pass mouse position upwards.
@@ -58,8 +104,13 @@ class PixWid
     PixWid( QWidget *parent );
   public slots:
     void mouseMoveEvent( QMouseEvent *e );
+    void mousePressEvent( QMouseEvent *e );
+    void mouseReleaseEvent( QMouseEvent *e );
   signals:
     void mouseMoved( int, int );
+
+  private:
+    QPoint beg_old, beg, end_old, end;
 };
 
 class RegularData2DWidget 
@@ -103,6 +154,8 @@ class RegularData2DWidget
   void SetShiftRange(double offsetf1, double offsetf2, double swidthf1, double swidthf2, double bfreqf1, double bfreqf2);
 
  public slots:
+  bool reactToMessages_(Message* message);
+
   void paintEvent( QPaintEvent * );
   void drawContents( QPainter *paint, int clipx, int clipy, int clipw, int cliph );
   void resizeEvent( QResizeEvent * );

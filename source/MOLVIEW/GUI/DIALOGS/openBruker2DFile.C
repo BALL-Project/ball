@@ -1,4 +1,4 @@
-// $Id: openBruker2DFile.C,v 1.1 2000/11/24 16:43:01 anhi Exp $
+// $Id: openBruker2DFile.C,v 1.2 2000/11/28 17:38:31 anhi Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h>
 
@@ -49,28 +49,28 @@ namespace BALL
       notify_(window_message);
 
       // reading the file
-      RegularData2DWidget *mywid = new RegularData2DWidget(400, 400, 0, 1);
+      Bruker2D *myfile = new Bruker2D();
       
       String mydir = getExistingDirectory().latin1();
 
       try
 	{
-	  mywid->readSpec(mydir);
+	  myfile->read(mydir);
 	}
       catch(...)
 	{
 	  Log.info() << "> read Bruker2D file failed." << endl;
-	  delete mywid;
+	  delete myfile;
 	  
 	  return;
 	}
 
       // writing info to log
-      Log.info() << "> Bruker file " << getExistingDirectory() << " succesfully read." << endl;
+      Log.info() << "> Bruker file " << myfile << " succesfully read." << endl;
       
       // notify main window
-      NewCompositeMessage new_message;
-      new_message.setComposite((Composite*)mywid);
+      NewRegularData2DMessage new_message;
+      new_message.setComposite((Composite *)myfile->GetData());
       new_message.setCompositeName(mydir);
 
       notify_(new_message);

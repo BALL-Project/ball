@@ -1,4 +1,4 @@
-// $Id: bruker2DFile.h,v 1.7 2000/11/24 17:23:52 anhi Exp $
+// $Id: bruker2DFile.h,v 1.8 2000/11/28 17:26:03 anhi Exp $
 
 #ifndef BALL_FORMAT_BRUKER2DFILE_H
 #define BALL_FORMAT_BRUKER2DFILE_H
@@ -64,12 +64,6 @@ class Bruker2D
   /** Return a reference to the spectrum.
    */
   RegularData2D* GetData();
-
-  /**
-   * Returns a list of endpoints of a contour-line corresponding to the value "threshold".
-   * The coordinates are given in the form of shifts.
-   */
-  list<pair <double, double> > &GetContourLine(double threshold);
 
   /**
    * Returns a list of peaks found in the spectrum.
