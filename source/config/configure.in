@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.47 2000/01/25 16:23:57 oliver Exp $
+dnl    $Id: configure.in,v 1.48 2000/01/26 18:11:05 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1367,7 +1367,7 @@ fi
 dnl
 dnl check for gethostname in the header
 dnl
-if test "${HAVE_GETHOSTNAME+unset}" != unset ; then
+if test "${HAVE_GETHOSTNAME}" = 1 ; then
 	AC_MSG_CHECKING(for gethostname in unistd.h)
 	AC_TRY_COMPILE(
 		[	

@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.55 2000/01/25 16:23:54 oliver Exp $
+#  $Id: configure,v 1.56 2000/01/26 18:11:08 oliver Exp $
 
 
 ##################################################
@@ -3217,7 +3217,7 @@ EOF
 	fi
 fi
 
-if test "${HAVE_GETHOSTNAME+unset}" != unset ; then
+if test "${HAVE_GETHOSTNAME}" = 1 ; then
 	echo $ac_n "checking for gethostname in unistd.h""... $ac_c" 1>&6
 echo "configure:3122: checking for gethostname in unistd.h" >&5
 	cat > conftest.$ac_ext <<EOF
