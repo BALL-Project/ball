@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.18 2002/01/15 02:00:46 oliver Exp $
+// $Id: enumerator.h,v 1.19 2002/01/16 11:33:10 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -21,6 +21,7 @@
 
 #include <vector>
 #include <list>
+#include <algorithm>
 
 namespace BALL
 {
