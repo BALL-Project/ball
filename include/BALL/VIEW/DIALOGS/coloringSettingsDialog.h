@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.8 2003/11/21 01:22:21 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.9 2004/01/21 23:05:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -122,6 +122,9 @@ namespace BALL
 			///
 			vector<ColorRGBA> getResidueColors() const
 				throw();
+
+			///
+			void showPage(int nr);
 
 			protected slots:
 

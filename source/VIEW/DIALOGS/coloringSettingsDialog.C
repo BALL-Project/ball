@@ -6,10 +6,11 @@
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/KERNEL/PTE.h>
 
-#include <qtabwidget.h>
 #include <qcolordialog.h>
 #include <qslider.h>
 #include <qlabel.h>
+#include <qlistbox.h>
+#include <qwidgetstack.h>
 
 #include <qpoint.h>
 namespace BALL
@@ -38,7 +39,7 @@ QColorTable::QColorTable(QWidget* parent)
 {
   setNumCols(2);
   horizontalHeader()->setLabel(1, "Color");
-	setGeometry(5,5, 260, 250);
+	setGeometry(5,5, 260, 283);
 	setSelectionMode(NoSelection);
 }
 
@@ -96,8 +97,8 @@ QWidget* QColorTable::beginEdit(int row, int col, bool)
 ColoringSettingsDialog::ColoringSettingsDialog( QWidget* parent,  const char* name, WFlags fl )
     : ColoringSettingsDialogData( parent, name, fl )
 {
-	element_table_ = new QColorTable(tabwidget->page(0));
-	residue_table_ = new QColorTable(tabwidget->page(2));
+	element_table_ = new QColorTable(widget_stack->widget(0));
+	residue_table_ = new QColorTable(widget_stack->widget(2));
 	setDefaults();
 }
 
@@ -215,7 +216,7 @@ void ColoringSettingsDialog::setDefaults(bool all)
 
 	// =============================================================
 	// setting element colors
-	if (all || tabwidget->currentPageIndex() == 0)
+	if (all || widget_stack->visibleWidget() == 0)
 	{
 		// create a dummy processor to get the default values
 		ElementColorProcessor elp;
@@ -240,7 +241,7 @@ void ColoringSettingsDialog::setDefaults(bool all)
 	// =============================================================
 	// setting residue name colors
 	// create a dummy processor to get the default values
-	if (all || tabwidget->currentPageIndex() == 2)
+	if (all || widget_stack->id(widget_stack->visibleWidget()) == 2)
 	{
 		ResidueNameColorProcessor rcp;
 		const StringHashMap<ColorRGBA>& color_map = rcp.getColorMap();
@@ -258,7 +259,7 @@ void ColoringSettingsDialog::setDefaults(bool all)
 		
 	// =============================================================
 	// setting residue number colors
-	if (all || tabwidget->currentPageIndex() == 1)
+	if (all || widget_stack->id(widget_stack->visibleWidget()) == 1)
 	{
 		first_residue_color_.set(255,255,0);
 		middle_residue_color_.set(0,255,0);
@@ -266,7 +267,7 @@ void ColoringSettingsDialog::setDefaults(bool all)
 	}
 	// =============================================================
 	// setting charge colors
-	if (all || tabwidget->currentPageIndex() == 3)
+	if (all || widget_stack->id(widget_stack->visibleWidget()) == 3)
 	{
 		negative_charge_color_.set(255,0,0);
 		neutral_charge_color_.set(255,255,255);
@@ -274,7 +275,7 @@ void ColoringSettingsDialog::setDefaults(bool all)
 	}
 	// =============================================================
 	// setting distance colors
-	if (all || tabwidget->currentPageIndex() == 4)
+	if (all || widget_stack->id(widget_stack->visibleWidget()) == 4)
 	{
 		null_distance_color_.set(255,0,0);
 		max_distance_color_.set(0,0,255);
@@ -282,7 +283,7 @@ void ColoringSettingsDialog::setDefaults(bool all)
 	}
 	// =============================================================
 	// setting temperature factor colors
-	if (all || tabwidget->currentPageIndex() == 5)
+	if (all || widget_stack->id(widget_stack->visibleWidget()) == 5)
 	{
 		minimum_tf_color_.set(0,0,255);
 		maximum_tf_color_.set(255,255,0);
@@ -291,7 +292,7 @@ void ColoringSettingsDialog::setDefaults(bool all)
 	}
 	// =============================================================
 	// setting occupancy colors
-	if (all || tabwidget->currentPageIndex() == 6)
+	if (all || widget_stack->id(widget_stack->visibleWidget()) == 6) 
 	{
 		minimum_occupancy_color_.set(0,0,255);
 		maximum_occupancy_color_.set(255,255,0);
@@ -299,7 +300,7 @@ void ColoringSettingsDialog::setDefaults(bool all)
 	}
 	// =============================================================
 	// setting secondary structure colors
-	if (all || tabwidget->currentPageIndex() == 7)
+	if (all || widget_stack->id(widget_stack->visibleWidget()) == 7)
 	{
 		helix_color_.set(0,0,255);
 		coil_color_.set(0,155,155);
@@ -603,5 +604,21 @@ void ColoringSettingsDialog::setDefaultValues()
 {
 	setDefaults(false);
 }
+
+
+void ColoringSettingsDialog::showPage(int nr)
+{
+	if (widget_stack->widget(nr) == 0)
+	{
+		return;
+	}
+
+	if (list_box->currentItem() != nr)
+	{
+		list_box->setCurrentItem(nr);
+	}
+	widget_stack->raiseWidget(nr);
+}
+
 
 } } // NAMESPACE

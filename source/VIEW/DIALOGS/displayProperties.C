@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.63 2004/01/20 16:47:56 amoll Exp $
+// $Id: displayProperties.C,v 1.64 2004/01/21 23:02:26 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -29,7 +29,7 @@
 #include <qcombobox.h>
 #include <qslider.h>
 #include <qradiobutton.h>
-#include <qtabwidget.h>
+#include <qlistbox.h>
 
 namespace BALL
 {
@@ -685,38 +685,38 @@ void DisplayProperties::coloringOptionsPressed()
 	switch (coloring_method_combobox->currentItem())
 	{
 		case COLORING_ELEMENT:
-			coloring_settings_->tabwidget->setCurrentPage(0);
+			coloring_settings_->list_box->setCurrentItem(0);
 			break;
 
 		case COLORING_RESIDUE_NAME:
-			coloring_settings_->tabwidget->setCurrentPage(2);
+			coloring_settings_->list_box->setCurrentItem(2);
 			break;
 
 		case COLORING_RESIDUE_INDEX:
-			coloring_settings_->tabwidget->setCurrentPage(1);
+			coloring_settings_->list_box->setCurrentItem(1);
 			break;
 
 		case COLORING_SECONDARY_STRUCTURE:
-			coloring_settings_->tabwidget->setCurrentPage(7);
+			coloring_settings_->list_box->setCurrentItem(7);
 			break;
 
 		case COLORING_ATOM_CHARGE:
-			coloring_settings_->tabwidget->setCurrentPage(3);
+			coloring_settings_->list_box->setCurrentItem(3);
 			break;
 
 		case COLORING_CUSTOM:
 			break;
 
 		case COLORING_DISTANCE:
-			coloring_settings_->tabwidget->setCurrentPage(4);
+			coloring_settings_->list_box->setCurrentItem(4);
 			break;
 
 		case COLORING_TEMPERATURE_FACTOR:
-			coloring_settings_->tabwidget->setCurrentPage(5);
+			coloring_settings_->list_box->setCurrentItem(5);
 			break;
 
 		case COLORING_OCCUPANCY:
-			coloring_settings_->tabwidget->setCurrentPage(6);
+			coloring_settings_->list_box->setCurrentItem(6);
 			break;
 	}
 

@@ -7,8 +7,8 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>1</y>
-            <width>590</width>
+            <y>3</y>
+            <width>620</width>
             <height>350</height>
         </rect>
     </property>
@@ -22,13 +22,13 @@
     </property>
     <property name="minimumSize">
         <size>
-            <width>590</width>
+            <width>620</width>
             <height>350</height>
         </size>
     </property>
     <property name="maximumSize">
         <size>
-            <width>590</width>
+            <width>640</width>
             <height>350</height>
         </size>
     </property>
@@ -60,36 +60,6 @@
             <enum>Vertical</enum>
         </property>
     </widget>
-    <widget class="QWidgetStack">
-        <property name="name">
-            <cstring>widget_stack</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>139</x>
-                <y>7</y>
-                <width>447</width>
-                <height>300</height>
-            </rect>
-        </property>
-        <property name="frameShape">
-            <enum>NoFrame</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>Plain</enum>
-        </property>
-        <property name="lineWidth">
-            <number>0</number>
-        </property>
-        <widget class="QWidget">
-            <property name="name">
-                <cstring>WStackPage</cstring>
-            </property>
-            <attribute name="id">
-                <number>0</number>
-            </attribute>
-        </widget>
-    </widget>
     <widget class="QListBox">
         <property name="name">
             <cstring>list_box</cstring>
@@ -111,14 +81,44 @@
             </sizepolicy>
         </property>
     </widget>
+    <widget class="QWidgetStack">
+        <property name="name">
+            <cstring>widget_stack</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>139</x>
+                <y>7</y>
+                <width>476</width>
+                <height>300</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>Plain</enum>
+        </property>
+        <property name="lineWidth">
+            <number>0</number>
+        </property>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>WStackPage</cstring>
+            </property>
+            <attribute name="id">
+                <number>0</number>
+            </attribute>
+        </widget>
+    </widget>
     <widget class="QPushButton">
         <property name="name">
             <cstring>ok_button</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>174</x>
-                <y>316</y>
+                <x>207</x>
+                <y>314</y>
                 <width>145</width>
                 <height>30</height>
             </rect>
@@ -148,8 +148,8 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>325</x>
-                <y>316</y>
+                <x>358</x>
+                <y>314</y>
                 <width>127</width>
                 <height>30</height>
             </rect>
@@ -176,8 +176,8 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>458</x>
-                <y>316</y>
+                <x>491</x>
+                <y>314</y>
                 <width>126</width>
                 <height>30</height>
             </rect>
