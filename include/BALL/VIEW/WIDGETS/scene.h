@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.54 2004/09/14 15:01:17 amoll Exp $
+// $Id: scene.h,v 1.55 2004/09/14 15:20:12 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -654,7 +654,7 @@ namespace BALL
 				throw();
 
 			// Menu entry IDs
-			Index rotate_id_, picking_id_;
+			Index rotate_id_, picking_id_, move_id_;
 			Index no_stereo_id_, active_stereo_id_, dual_stereo_id_;
 			Index record_animation_id_, start_animation_id_, clear_animation_id_, cancel_animation_id_;
 			Index animation_export_POV_id_, animation_export_PNG_id_, animation_repeat_id_;

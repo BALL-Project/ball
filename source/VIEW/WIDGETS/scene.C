@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.131 2004/09/14 15:14:21 amoll Exp $
+// $Id: scene.C,v 1.132 2004/09/14 15:20:14 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1740,23 +1740,38 @@ namespace BALL
 
 		void Scene::rotateMode_()
 		{
+			if (current_mode_ == ROTATE__MODE) return;
+			
 			last_mode_ = current_mode_;
 			current_mode_ = ROTATE__MODE;		
 			setCursor(QCursor(Qt::SizeAllCursor));
+			menuBar()->setItemChecked(rotate_id_, true);
+			menuBar()->setItemChecked(picking_id_, false);
+			menuBar()->setItemChecked(move_id_, false);
 		}
 
 		void Scene::pickingMode_()
 		{
+			if (current_mode_ == PICKING__MODE) return;
+			
 			last_mode_ = current_mode_;
 			current_mode_ = PICKING__MODE;
 			setCursor(QCursor(Qt::CrossCursor));
+			menuBar()->setItemChecked(rotate_id_, false);
+			menuBar()->setItemChecked(picking_id_, true);
+			menuBar()->setItemChecked(move_id_, false);
 		}
 
 		void Scene::moveMode_()
 		{
+			if (current_mode_ == MOVE__MODE) return;
+			
 			last_mode_ = current_mode_;
 			current_mode_ = MOVE__MODE;
 			setCursor(QCursor(Qt::PointingHandCursor));
+			menuBar()->setItemChecked(rotate_id_, false);
+			menuBar()->setItemChecked(picking_id_, false);
+			menuBar()->setItemChecked(move_id_, true);
 		}
 
 		void Scene::selectionPressed_()
