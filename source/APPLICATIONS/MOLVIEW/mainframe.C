@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.62 2003/08/27 14:35:37 amoll Exp $
+// $Id: mainframe.C,v 1.63 2003/08/27 16:40:08 amoll Exp $
 
 
 #include "mainframe.h"
@@ -38,7 +38,7 @@
 #include <qlabel.h>
 #include <qaccel.h> 
 
-#undef QT_THREAD_SUPPORT
+//#undef QT_THREAD_SUPPORT
 #ifdef QT_THREAD_SUPPORT
  #include "threads.h"
 #endif
@@ -545,7 +545,7 @@ void Mainframe::amberMDSimulation()
 #else
 	// ============================= WITHOUT MULTITHREADING ==============================
 	// iterate until done and refresh the screen every "steps" iterations
-	/*
+	
 	String dcdfile = md_dialog_->getDCDFile();
 	bool store_dcd = dcdfile.size() != 0;
 	DCDFile dcd;
@@ -573,7 +573,7 @@ void Mainframe::amberMDSimulation()
  	}
 
 	if (store_dcd) manager.flushToDisk();
-*/
+
 	Log.info() << std::endl << "simulation terminated." << std::endl << endl;
 	printAmberResults(*amber);
 	Log.info() << "final RMS gadient    : " << amber->getRMSGradient() << " kJ/(mol A)   after " 

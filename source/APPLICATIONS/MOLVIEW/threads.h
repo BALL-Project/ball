@@ -1,6 +1,8 @@
 #ifndef BALL_APPLICATIONS_MOLVIEW_THREADS_H
 #define BALL_APPLICATIONS_MOLVIEW_THREADS_H
 
+#ifdef QT_THREAD_SUPPORT
+
 #ifndef BALL_COMMON_H
 	#include <BALL/common.h>
 #endif
@@ -133,4 +135,5 @@ namespace BALL
 	};
 
 }
-#endif
+#endif //QT_THREAD_SUPPORT
+#endif //BALL_APPLICATIONS_MOLVIEW_THREADS_H

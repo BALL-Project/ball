@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.40 2003/08/27 13:20:30 amoll Exp $
+# $Id: Makefile,v 1.41 2003/08/27 16:40:08 amoll Exp $
 #
 
 EXECUTABLE=molview
@@ -23,9 +23,8 @@ BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 CPP_SOURCES=\
 	icons.C\
 	main.C\
-	mainframe.C
-
-#	threads.C
+	mainframe.C\
+ 	threads.C
 
 MOC_SOURCES=\
 	mainframe_moc.C
