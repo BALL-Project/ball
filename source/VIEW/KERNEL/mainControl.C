@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.6 2003/09/15 15:13:57 amoll Exp $
+// $Id: mainControl.C,v 1.7 2003/09/17 22:16:40 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -213,13 +213,14 @@ void MainControl::show()
 	// own menu entries
 	insertPopupMenuSeparator(MainControl::FILE);
 	insertMenuEntry(MainControl::FILE, "&Quit", qApp, SLOT(quit()), CTRL+Key_Q);	
+	insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(whatsThis()));	
 	
 	// if the preferences dialog has any tabs then show it
 	if (preferences_dialog_->hasTabs())
 	{
 		initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 		
-		preferences_id_ = insertMenuEntry(MainControl::DISPLAY, 
+		preferences_id_ = insertMenuEntry(MainControl::EDIT, 
 																			"Preferences", 
 																			preferences_dialog_, 
 																			SLOT(openDialog()), CTRL+Key_Z);

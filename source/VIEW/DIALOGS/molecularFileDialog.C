@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.5 2003/09/14 17:50:23 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.6 2003/09/17 22:16:40 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -46,18 +46,18 @@ namespace BALL
 		void MolecularFileDialog::initializeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.insertMenuEntry(MainControl::FILE, "&Open...", (QObject *)this, 
+			main_control.insertMenuEntry(MainControl::FILE, "&Open Structure", (QObject *)this, 
 																	 SLOT(readFile()), CTRL+Key_O);
-			main_control.insertMenuEntry(MainControl::FILE, "&Save As...", (QObject *)this, 
+			main_control.insertMenuEntry(MainControl::FILE, "&Save Structure", (QObject *)this, 
 																	 SLOT(writeFile()), CTRL+Key_S);
 		}
 		
 		void MolecularFileDialog::finalizeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.removeMenuEntry(MainControl::FILE, "&Open...", (QObject *)this, 
+			main_control.removeMenuEntry(MainControl::FILE, "&Open Structure", (QObject *)this, 
 																	 SLOT(readFile()), CTRL+Key_R);
-			main_control.removeMenuEntry(MainControl::FILE, "&Save As...", (QObject *)this, 
+			main_control.removeMenuEntry(MainControl::FILE, "&Save Structure", (QObject *)this, 
 																		SLOT(writeFile()), CTRL+Key_S);
 		}
 

@@ -24,6 +24,7 @@ LogView::LogView(QWidget *parent, const char *name)
 		strstream_(),
 		output_running_(false)
 {
+	default_visible_ = false;
 	setGuest(*text_edit_);
 }
 
@@ -36,6 +37,7 @@ LogView::LogView(const LogView& view)
 		strstream_(),
 		output_running_(false)
 {
+	default_visible_ = false;
 	setGuest(*text_edit_);
 }
 
@@ -84,7 +86,7 @@ void LogView::initializeWidget(MainControl& main_control)
 	text_edit_->setTextFormat(PlainText);
 
 	DockWidget::initializeWidget(main_control);
-	main_control.insertMenuEntry(MainControl::TOOLS, "Clear Logs", text_edit_, SLOT(clear()));
+	main_control.insertMenuEntry(MainControl::EDIT, "Clear Logs", text_edit_, SLOT(clear()));
 }
 
 
@@ -92,7 +94,7 @@ void LogView::finalizeWidget(MainControl& main_control)
 	throw()
 {
 	DockWidget::finalizeWidget(main_control);
-	main_control.removeMenuEntry(MainControl::TOOLS, "Clear Logs", text_edit_, SLOT(clear()));
+	main_control.removeMenuEntry(MainControl::EDIT, "Clear Logs", text_edit_, SLOT(clear()));
 	Log.remove(strstream_);
 }
 

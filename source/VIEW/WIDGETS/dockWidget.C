@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.12 2003/09/15 15:13:57 amoll Exp $
+// $Id: dockWidget.C,v 1.13 2003/09/17 22:16:40 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -33,7 +33,9 @@ DockWidget::DockWidget(QWidget* parent, const char* name)
   caption_label_->setFrameShape(QLabel::NoFrame);
   caption_label_->setAlignment(QLabel::AlignCenter);
 	layout_->addWidget(caption_label_);
+	Log.remove(std::cerr);
 	boxLayout()->addItem(layout_);
+	Log.insert(std::cerr);
 
 	setOrientation(Qt::Vertical);
 
@@ -136,10 +138,19 @@ void DockWidget::fetchPreferences(INIFile & inifile)
 		}
 	}
 
-	if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on") &&
-			!inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt())
+	if (inifile.hasEntry("WINDOWS", getIdentifier() + "::on"))
+	{	
+		if (!inifile.getValue("WINDOWS", getIdentifier() + "::on").toUnsignedInt())
+		{
+			switchShowWidget();
+		}
+	}
+	else 
 	{
-		switchShowWidget();
+		if (!default_visible_)
+		{
+			switchShowWidget();
+		}
 	}
 
 	if (!BALL_VIEW_DOCKWINDOWS_SHOW_LABELS) caption_label_->hide();

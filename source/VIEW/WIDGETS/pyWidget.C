@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.6 2003/09/14 17:23:57 amoll Exp $
+// $Id: pyWidget.C,v 1.7 2003/09/17 22:16:41 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/pyWidget.h>
@@ -398,6 +398,7 @@ PyWidget::PyWidget(QWidget *parent, const char *name)
 	: DockWidget(parent, name),
 		text_edit_(new PyWidgetData())
 {
+	default_visible_ = false;
 	setGuest(*text_edit_);
 }
 
@@ -426,13 +427,13 @@ void PyWidget::finalizeWidget(MainControl& main_control)
 void PyWidget::fetchPreferences(INIFile& inifile)
 	throw()
 {
+	DockWidget::fetchPreferences(inifile);
+
 	if (!inifile.hasEntry("PYTHON", "StartupScript")) return;
 
 	text_edit_->startup_script_ =	inifile.getValue("PYTHON", "StartupScript");
 	text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
 	if (text_edit_->startup_script_ != "") text_edit_->runFile(text_edit_->startup_script_);
-
-	DockWidget::fetchPreferences(inifile);
 }
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryControl.C,v 1.9 2003/09/14 17:24:59 amoll Exp $
+// $Id: trajectoryControl.C,v 1.10 2003/09/17 22:16:41 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/trajectoryControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -13,6 +13,7 @@
 #include <qmenubar.h>
 #include <qfiledialog.h>
 #include <qlistview.h>
+#include <qtooltip.h>
 
 using std::endl;
 
@@ -23,10 +24,9 @@ namespace BALL
 
 TrajectoryControl::TrajectoryControl(QWidget* parent, const char* name)
 	throw()
-		:	GenericControl(parent, name),
-			context_trajectory_(0),
-			dialog_(0),
-			visualise_id_(0)
+	:	GenericControl(parent, name),
+		context_trajectory_(0),
+		dialog_(0)
 {
 	listview->addColumn("Name");
 	listview->addColumn("from");
@@ -51,7 +51,10 @@ TrajectoryControl::~TrajectoryControl()
 void TrajectoryControl::initializeWidget(MainControl& main_control)
 	throw()
 {
-	main_control.insertMenuEntry(MainControl::FILE, "Load Trajectory", this, SLOT(addTrajectory()));
+	open_trajectory_id_ = 
+		main_control.insertMenuEntry(MainControl::FILE, "Open Trajectory", this, SLOT(addTrajectory()));
+	main_control.menuBar()->
+		setWhatsThis(open_trajectory_id_, "To open a trajectory file, one System has to be selected.");
 	GenericControl::initializeWidget(main_control);
 }
 
@@ -59,7 +62,7 @@ void TrajectoryControl::initializeWidget(MainControl& main_control)
 void TrajectoryControl::finalizeWidget(MainControl& main_control)
 	throw()
 {
-	main_control.removeMenuEntry(MainControl::FILE, "Load Trajectory", this, SLOT(addTrajectory()));
+	main_control.removeMenuEntry(MainControl::FILE, "Open Trajectory", this, SLOT(addTrajectory()));
 	GenericControl::finalizeWidget(main_control);
 }
 
@@ -67,7 +70,7 @@ void TrajectoryControl::finalizeWidget(MainControl& main_control)
 void TrajectoryControl::checkMenu(MainControl& main_control)
 	throw()
 {
-	getMainControl()->menuBar()->setItemEnabled(visualise_id_, main_control.getSelectedSystem());
+	getMainControl()->menuBar()->setItemEnabled(open_trajectory_id_, main_control.getSelectedSystem());
 }
 
 
