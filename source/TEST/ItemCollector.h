@@ -1,8 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
+
 #include <BALL/CONCEPT/comparator.h>
 #include <BALL/DATATYPE/list.h>
+#include <BALL/KERNEL/fragment.h>
 
 #include <iostream>
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularGraph.h,v 1.9 2003/05/08 09:09:16 sneumann Exp $
+// $Id: molecularGraph.h,v 1.10 2003/07/01 18:15:02 oliver Exp $
 
 #ifndef BALL_STRUCTURE_MOLECULARGRAPH_H
 #define BALL_STRUCTURE_MOLECULARGRAPH_H
@@ -9,11 +9,17 @@
 #ifndef BALL_KERNEL_ATOM_H
 #	include <BALL/KERNEL/atom.h>
 #endif
+
 #ifndef BALL_KERNEL_BOND_H
 #	include <BALL/KERNEL/bond.h>
 #endif
+
 #ifndef BALL_STRUCTURE_MOLECULE_H
 #	include <BALL/KERNEL/molecule.h>
+#endif
+
+#ifndef BALL_STRUCTURE_FRAGMENT_H
+#	include <BALL/KERNEL/fragment.h>
 #endif
 
 #include <list>

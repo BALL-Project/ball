@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Descriptor_test.C,v 1.3 2002/02/27 12:24:28 sturm Exp $
+// $Id: Descriptor_test.C,v 1.4 2003/07/01 18:15:05 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(Descriptor, "$Id: Descriptor_test.C,v 1.3 2002/02/27 12:24:28 sturm Exp $")
+START_TEST(Descriptor, "$Id: Descriptor_test.C,v 1.4 2003/07/01 18:15:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

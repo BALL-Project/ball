@@ -1,17 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomVector_test.C,v 1.7 2002/02/27 12:24:23 sturm Exp $
+// $Id: AtomVector_test.C,v 1.8 2003/07/01 18:15:04 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MOLMEC/COMMON/atomVector.h>
 #include <BALL/MOLMEC/COMMON/gradient.h>
 #include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/atom.h>
 ///////////////////////////
 
-START_TEST(AtomVector, "$Id: AtomVector_test.C,v 1.7 2002/02/27 12:24:23 sturm Exp $")
+START_TEST(AtomVector, "$Id: AtomVector_test.C,v 1.8 2003/07/01 18:15:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

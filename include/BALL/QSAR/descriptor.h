@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: descriptor.h,v 1.9 2003/03/26 13:56:56 anhi Exp $
+// $Id: descriptor.h,v 1.10 2003/07/01 18:15:02 oliver Exp $
 
 #ifndef BALL_QSAR_DESCRIPTOR_H
 #define BALL_QSAR_DESCRIPTOR_H
@@ -12,6 +12,10 @@
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #	include <BALL/KERNEL/molecule.h>
+#endif
+
+#ifndef BALL_KERNEL_FRAGMENT_H
+#	include <BALL/KERNEL/fragment.h>
 #endif
 
 namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.C,v 1.27 2003/05/25 21:38:10 oliver Exp $
+// $Id: TCPTransfer.C,v 1.28 2003/07/01 18:15:04 oliver Exp $
 //
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
@@ -64,7 +64,6 @@ namespace BALL
 		status_(UNINITIALIZED_ERROR),
 		received_bytes_(0),
 		protocol_(UNKNOWN_PROTOCOL),
-		buffer_(),
 		socket_(0),
 		fstream_(0)
 	{
@@ -99,7 +98,6 @@ namespace BALL
 		status_(UNINITIALIZED_ERROR),
 		received_bytes_(0),
 		protocol_(UNKNOWN_PROTOCOL),
-		buffer_(),
 		socket_(0),
 		fstream_(0)
 	{	
