@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.h,v 1.1 2000/08/31 18:24:32 anker Exp $
+// $Id: pairExpInteractionEnergyProcessor.h,v 1.2 2000/09/21 15:23:12 anker Exp $
 
 // BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
@@ -209,10 +209,32 @@ namespace BALL
 		/** Default constructor */
 		PairExpInteractionEnergyProcessor();
 
-		/** Destructor */
-		~PairExpInteractionEnergyProcessor();
+		/** Copy constructor */
+		PairExpInteractionEnergyProcessor(const PairExpInteractionEnergyProcessor& proc);
 
+		/** Destructor */
+		virtual ~PairExpInteractionEnergyProcessor();
+
+		/** Destroy function */
+		virtual void destroy();
+
+		/** Clear function */
+		virtual void clear();
 		//@}
+
+
+		/** @name Assignment */
+		//@{
+
+		/** Set method */
+		void set(const PairExpInteractionEnergyProcessor& proc);
+
+		/** Assignment operator */
+		const PairExpInteractionEnergyProcessor& operator = 
+			(const PairExpInteractionEnergyProcessor& proc);
+		
+		//@}
+
 
 		/** @name Processor functions */
 		//@{
@@ -226,17 +248,8 @@ namespace BALL
 		/** @name Options */
 		//@{
 
-		/** Options for the calculation of the caviation free energy */
+		/** Options for the calculation of the free energy */
 		Options options;
-
-		//@}
-
-
-		/** Accessors */
-		//@{
-
-		/** Set the RDF to be used */
-		void setRDF(const RadialDistributionFunction& RDF);
 
 		//@}
 
@@ -255,7 +268,7 @@ namespace BALL
 
 		void computeClaverieParameters(Atom::Type solvent_type,
 				Atom::Type solute_type, std::pair<float, float>& parameters);
-		void getExternalSurface_(vector< pair<Vector3, Surface> >& surface_map, 
+		void getExternalSurface_(std::vector< std::pair<Vector3, Surface> >& surface_map, 
 				const char* surface_file);
 
 	};
