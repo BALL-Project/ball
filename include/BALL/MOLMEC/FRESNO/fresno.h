@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.10 2002/10/31 14:51:41 anker Exp $
+// $Id: fresno.h,v 1.1.2.11 2002/11/19 01:48:57 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -164,6 +164,10 @@ namespace BALL
 			*/
 			static const char* VERBOSITY;
 
+			/**
+			*/
+			static const char* SOLVENT_DESCRIPTOR_FILE;
+
 
 		};
 
@@ -294,6 +298,10 @@ namespace BALL
 			/**
 			*/
 			static const Size VERBOSITY;
+
+			/**
+			*/
+			static const String SOLVENT_DESCRIPTOR_FILE;
 
 		};
 

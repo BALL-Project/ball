@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.h,v 1.12 2001/12/30 13:28:41 sturm Exp $
+// $Id: pair6_12InteractionEnergyProcessor.h,v 1.12.2.1 2002/11/19 01:48:57 anker Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
 #define BALL_SOLVATION_PAIR6_12INTERACTIONENERGYPROCESSOR_H
@@ -95,6 +95,14 @@ namespace BALL
 			 */
 			static const char* SOLVENT_FILENAME;
 
+			/** Lennard Jones parameter file option.
+					This option sets the name of the file containig the Lennard-Jones
+					parameters. Use char* values with this option.
+					@see Default::LJ_FILENAME;
+					@param lennard_jones_file_name char*
+			 */
+			static const char* LJ_FILENAME;
+
 			/** The number density of the solvent.
 					This option defines the number density of the surrounding solvent. 
 					Use	float values of unit $ A^{-3} $ with this option.
@@ -135,6 +143,7 @@ namespace BALL
 			static const bool USE_RDF;
 			static const char* RDF_FILENAME;
 			static const char* SOLVENT_FILENAME;
+			static const char* LJ_FILENAME;
 
 			/** Default number density.
 					This default value is the number density of water at 300 K and

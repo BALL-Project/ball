@@ -1,4 +1,4 @@
-// $Id: fresnoNonPolar.h,v 1.1.2.2 2002/11/12 16:26:03 anker Exp $
+// $Id: fresnoNonPolar.h,v 1.1.2.3 2002/11/19 01:48:57 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNONONPOLAR_H
 #define BALL_MOLMEC_FRESNO_FRESNONONPOLAR_H
@@ -125,11 +125,11 @@ namespace BALL
 
 		/*_
 		*/
-		double factor_;
+		Size verbosity_;
 
 		/*_
 		*/
-		Size verbosity_;
+		double factor_;
 
 		/*_
 		*/
