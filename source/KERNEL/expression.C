@@ -1,6 +1,7 @@
-// $Id: expression.C,v 1.32 2001/07/30 00:52:22 oliver Exp $
+// $Id: expression.C,v 1.33 2002/01/26 22:08:08 oliver Exp $
 
 #include <BALL/KERNEL/expression.h>
+#include <BALL/KERNEL/expressionParser.h>
 #include <BALL/KERNEL/standardPredicates.h>
 
 #include <BALL/CONCEPT/selectable.h>
@@ -186,11 +187,11 @@ namespace BALL
 		
 
 		// create a temporary tree from which the expression_tree_ can be built
-		SyntaxTree tree(expression_string);
-		tree.parse();
+		ExpressionParser parser;
+		parser.parse(expression_string);
 
 		// construct the tree
-		expression_tree_ = constructExpressionTree_(tree);
+		expression_tree_ = constructExpressionTree_(parser.getSyntaxTree());
 	}
 
 
@@ -215,7 +216,7 @@ namespace BALL
 	}
 
 
-  ExpressionTree* Expression::constructExpressionTree_(const SyntaxTree& t)
+  ExpressionTree* Expression::constructExpressionTree_(const ExpressionParser::SyntaxTree& t)
 		throw()
   {
     ExpressionTree* root = new ExpressionTree();
@@ -240,7 +241,7 @@ namespace BALL
 		else
 		{
 
-      for (SyntaxTree::ConstIterator it = t.begin(); it != t.end(); ++it)
+      for (ExpressionParser::SyntaxTree::ConstIterator it = t.begin(); it != t.end(); ++it)
       {
         root->appendChild(constructExpressionTree_(**it));
 			}
