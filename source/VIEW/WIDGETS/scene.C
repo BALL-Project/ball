@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.73 2004/06/10 12:59:45 amoll Exp $
+// $Id: scene.C,v 1.74 2004/06/10 13:29:21 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -38,7 +38,7 @@ namespace BALL
 		float Scene::mouse_sensitivity_ = 5;
 		float Scene::mouse_wheel_sensitivity_ = 5;
 		#define  ZOOM_FACTOR 			7
-		#define  ROTATE_FACTOR    11
+		#define  ROTATE_FACTOR    22
 		#define  TRANSLATE_FACTOR 6 
 
 	  QGLFormat Scene::gl_format_(QGL::DepthBuffer | QGL::StereoBuffers);
@@ -547,13 +547,13 @@ namespace BALL
 
 			Quaternion tmp;
 
-			float right1 = (gl_renderer_.getWidth()  - x_window_pos_old_ * 2.0) / 
+			float right1 = (gl_renderer_.getWidth()  - x_window_pos_old_) / 
 				gl_renderer_.getWidth() * mouse_sensitivity_ / -ROTATE_FACTOR;
-			float up1 = 	 (gl_renderer_.getHeight() - y_window_pos_old_ * 2.0) / 
+			float up1 = 	 (gl_renderer_.getHeight() - y_window_pos_old_) / 
 				gl_renderer_.getHeight() * mouse_sensitivity_ / -ROTATE_FACTOR;
-			float right2 = (gl_renderer_.getWidth()  - x_window_pos_new_ * 2.0) / 
+			float right2 = (gl_renderer_.getWidth()  - x_window_pos_new_) / 
 				gl_renderer_.getWidth() * mouse_sensitivity_ / -ROTATE_FACTOR;
-			float up2 = 	 (gl_renderer_.getHeight() - y_window_pos_new_ * 2.0) / 
+			float up2 = 	 (gl_renderer_.getHeight() - y_window_pos_new_) / 
 				gl_renderer_.getHeight() * mouse_sensitivity_ / -ROTATE_FACTOR;
 
 			Camera& camera = stage_->getCamera();
