@@ -1,4 +1,4 @@
-// $Id: molecularControl.C,v 1.6.4.12 2002/12/06 18:22:58 amoll Exp $
+// $Id: molecularControl.C,v 1.6.4.13 2002/12/09 16:56:30 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -130,6 +130,7 @@ bool MolecularControl::reactToMessages_(Message* message)
 	else if (RTTI::isKindOf<VIEW::NewSelectionMessage> (*message))
 	{
 		setSelection_();
+		update = true;
 	}
 
 	return update;
@@ -141,13 +142,7 @@ void MolecularControl::buildContextMenu(Composite* composite, QListViewItem* ite
 	Control::buildContextMenu(composite, item);
 
 	// build the context menu
-	if (RTTI::isKindOf<Residue>(*composite) || 
-			RTTI::isKindOf<System>(*composite) ||
-			RTTI::isKindOf<Protein>(*composite) ||
-			RTTI::isKindOf<Molecule>(*composite) ||
-			RTTI::isKindOf<Chain>(*composite) ||
-			RTTI::isKindOf<SecondaryStructure>(*composite) ||
-			RTTI::isKindOf<Fragment>(*composite))
+	if (RTTI::isKindOf<AtomContainer>(*composite))
 	{
 		insertContextMenuEntry("check Residue", this, SLOT(checkResidue()), RESIDUE__CHECK);
 		context_menu_.insertSeparator();
@@ -162,8 +157,11 @@ void MolecularControl::buildContextMenu(Composite* composite, QListViewItem* ite
 		context_menu_.insertSeparator();
 		insertContextMenuEntry("build Bonds", this, SLOT(buildBonds()), BONDS__BUILD);
 		insertContextMenuEntry("remove Bonds", this, SLOT(removeBonds()), BONDS__REMOVE);
-
 		context_menu_.insertSeparator();
+	}
+	if (RTTI::isKindOf<Atom>(*composite) ||
+			RTTI::isKindOf<AtomContainer>(*composite))
+	{
 		insertContextMenuEntry("select", this, SLOT(select()), SELECT);
 		insertContextMenuEntry("deselect", this, SLOT(deselect()), DESELECT);
 		context_menu_.setItemEnabled(SELECT,   !composite->isSelected());
