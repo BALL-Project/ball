@@ -1,5 +1,5 @@
 #!/usr/local/bin/bash
-# $Id: makehtmldoc,v 1.3 2000/02/17 00:31:41 oliver Exp $
+# $Id: makehtmldoc,v 1.4 2000/03/17 11:33:07 oliver Exp $
 
 # highly non-portable code - but doesn't matter as it is intended for
 # the developers only! - OK
@@ -32,7 +32,7 @@ if test "$1" != "-f" -a "$2" != "-f" ; then
 	echo "copying headers..."
 
 	for i in ${HEADER_NAMES} ; do 
-		cat ../../include/$i | gawk -f tools/remove_doc_comments.awk  > $i
+		cat ../../include/$i | expand -t 2 | /opt/gnu/bin/gawk -f tools/remove_doc_comments.awk  > $i
 	done
 
 fi
