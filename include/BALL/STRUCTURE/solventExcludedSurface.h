@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: solventExcludedSurface.h,v 1.27 2002/12/12 09:48:55 oliver Exp $
+// $Id: solventExcludedSurface.h,v 1.28 2002/12/12 13:10:36 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -452,18 +452,18 @@ namespace BALL
 		public:
 
 		Position number_of_vertices_;
-		std::vector<TSESVertex<T>*> vertices_;
+		::std::vector<TSESVertex<T>*> vertices_;
 		HashGrid3<Index> vertex_grid_;
 		Position number_of_edges_;
-		std::vector<TSESEdge<T>*> edges_;
+		::std::vector<TSESEdge<T>*> edges_;
 		Position number_of_singular_edges_;
-		std::list<TSESEdge<T>*> singular_edges_;
+		::std::list<TSESEdge<T>*> singular_edges_;
 		Position number_of_contact_faces_;
-		std::vector<TSESFace<T>*> contact_faces_;
+		::std::vector<TSESFace<T>*> contact_faces_;
 		Position number_of_toric_faces_;
-		std::vector<TSESFace<T>*> toric_faces_;
+		::std::vector<TSESFace<T>*> toric_faces_;
 		Position number_of_spheric_faces_;
-		std::vector<TSESFace<T>*> spheric_faces_;
+		::std::vector<TSESFace<T>*> spheric_faces_;
 		TReducedSurface<T>* reduced_surface_;
 		HashMap< Position,
 						 HashMap< Position,
@@ -1401,13 +1401,40 @@ namespace BALL
 		TVector3<T> n_(edge->circle_.n);
 		TVector3<double> n((double)n_.x,(double)n_.y,(double)n_.z);
 		TAngle<T> test_phi(getOrientedAngle(v1,v2,n));
-		TAngle<T> tf(getOrientedAngle(edge->vertex_[0]->point_-edge->circle_.p,
+TAngle<T> tf(getOrientedAngle(edge->vertex_[0]->point_-edge->circle_.p,
 															edge->vertex_[1]->point_-edge->circle_.p,
 															edge->circle_.n));
 		if ((test_phi.value-(double)Constants::PI)*((double)edge->rsedge_->phi_.value-(double)Constants::PI) < 0)
 		{
+			if (Maths::abs(test_phi.value-(double)edge->rsedge_->phi_.value) <
+					Maths::abs((double)Constants::PI-(double)edge->rsedge_->phi_.value))
+			{
+//				cout << "    different results!\n";
+			}
 			edge->revert();
 		}
+		else
+		{
+			if (Maths::abs(test_phi.value-(double)edge->rsedge_->phi_.value) >
+					Maths::abs((double)Constants::PI-(double)edge->rsedge_->phi_.value))
+			{
+//				cout << "    different results!\n";
+			}
+		}
+/*if ((test_phi.value-(double)Constants::PI)*((double)edge->rsedge_->phi_.value-(double)Constants::PI) < 0)
+{
+	if ((tf.value-Constants::PI)*(edge->rsedge_->phi_.value-Constants::PI) >= 0)
+	{
+//		cout << "    different result with double in tf" << toric_face->index_ << "!\n";
+	}
+}
+else
+{
+	if ((tf.value-Constants::PI)*(edge->rsedge_->phi_.value-Constants::PI) < 0)
+	{
+//		cout << "    different result with double in tf" << toric_face->index_ << "!\n";
+	}
+}*/
 		return edge;
 	}
 
@@ -1631,7 +1658,7 @@ namespace BALL
 		delete edge2;
 		// replace the old edge by the new
 		toric_faces_[face->index_] = new_face;
-		#ifdef print_ses
+				#ifdef print_ses
 				Molecule* molecule = new Molecule;
 				partitionSingularEdge(new_edge4,10,molecule);
 				System* system = new System;
@@ -1640,7 +1667,7 @@ namespace BALL
 				hinfile << *system;
 				hinfile.close();
 				delete system;
-		#endif
+				#endif
 		delete face;
 	}
 
@@ -2783,6 +2810,10 @@ namespace BALL
 				dphi2.value = (T)0;
 			}
 			Constants::EPSILON = epsilon;
+/*<<<<<<<<<<
+			TVector3<T> e1(point-circle.p);
+			TVector3<T> e2(circle.n%e1);
+<<<<<<<<<<*/
 			if (dphi2 < dphi1)
 			{
 				dphi1.swap(dphi2);
@@ -3409,7 +3440,7 @@ namespace BALL
 				m++;
 			}
 		}
-			#ifdef debug_singularities
+				#ifdef debug_singularities
 				std::cout << "    beende edge mit Punkt " << point_ << " an face " << face2 << "\n";
 				#endif
 		if (spheric_face1->isNeighbouredTo(spheric_face2) == false)
@@ -4046,115 +4077,6 @@ namespace BALL
 				hinfile << face1;
 				hinfile.close();
 				hinfile.open("DATA/SES/faceWith"+IndexToString(i,0)+".hin",ios::out);
-				hinfile << face2;
-				hinfile.close();
-				for (e = spheric_faces_[i]->edge_.begin(); e != spheric_faces_[i]->edge_.end(); e++)
-				{
-					if ((*e)->type_ != SESEdge::TYPE_SINGULAR)
-					{
-						face1.remove(*edge[(*e)->index_]);
-					}
-					face2.remove(*edge[(*e)->index_]);
-				}
-			}
-		}
-	}
-	#endif
-
-	template <class T>
-	void TSolventExcludedSurface<T>::partitionSingularEdge
-			(TSESEdge<T>* edge,
-			 const float& sqrt_density,
-			 Molecule* molecule)
-	{
-		Angle phi(getOrientedAngle(edge->vertex_[0]->point_-edge->circle_.p,
-															 edge->vertex_[1]->point_-edge->circle_.p,
-															 edge->circle_.n));
-		Size number_of_segments	= (Size)Maths::round(phi.value*edge->circle_.radius*sqrt_density);
-		if (number_of_segments == 0)
-		{
-			number_of_segments++;
-		}
-		Angle psi(phi.value/number_of_segments,true);
-		std::vector<Vector3> points;
-		partitionOfCircle(edge->circle_,edge->vertex_[0]->point_,psi,number_of_segments,points,true);
-		points.pop_back();
-		points.push_back(edge->vertex_[1]->point_);
-		Atom* a1;
-		Atom* a2;
-		a1 = new Atom;
-		a1->setPosition(points[0]);
-		a1->setElement(PTE[Element::H]);
-		molecule->insert(*a1);
-		for (Position k = 1; k < points.size(); k++)
-		{
-			a2 = new Atom;
-			a2->setPosition(points[k]);
-			a2->setElement(PTE[Element::H]);
-			a2->createBond(*a1);
-			a1 = a2;
-			molecule->insert(*a1);
-		}
-	}
-	
-	template <class T>
-	void TSolventExcludedSurface<T>::buildHINFiles()
-	{
-		vector<Molecule*> edge(number_of_edges_);
-		std::cerr << "  build molecules from SES-edges ...\n";
-		T sqrt_density = 3;
-		for (Position i = 0; i < number_of_edges_; i++)
-		{
-			if (edges_[i] != NULL)
-			{
-				SESEdge* sesedge = edges_[i];
-				edge[i] = new Molecule;
-				if (sesedge->vertex_[0] == NULL)
-				{
-					partitionFreeEdge(sesedge,sqrt_density,edge[i]);
-				}
-				else
-				{
-					if (sesedge->type_ == SESEdge::TYPE_SINGULAR)
-					{
-						partitionSingularEdge(sesedge,sqrt_density,edge[i]);
-					}
-					else
-					{
-						partitionEdge(sesedge,sqrt_density,edge[i]);
-					}
-				}
-				System *system = new System;
-				Molecule molecule(*edge[i]);
-				system->insert(molecule);
-				HINFile hinfile("DATA/SES/edge"+IndexToString(i,0)+".hin", std::ios::out);
-				hinfile << *system;
-				hinfile.close();
-				delete system;
-			}
-		}
-		for (Position i = 0; i < number_of_spheric_faces_; i++)
-		{
-			if (spheric_faces_[i] != NULL)
-			{
- 				System face1;
-				System face2;
-				typename std::list<SESEdge*>::iterator e;
-				for (e = spheric_faces_[i]->edge_.begin(); e != spheric_faces_[i]->edge_.end(); e++)
-				{
-					SESEdge* sesedge = *e;
-					Molecule* molecule = new Molecule(*edge[sesedge->index_]);
-					face2.insert(*molecule);
-					if (sesedge->type_ != SESEdge::TYPE_SINGULAR)
-					{
-						Molecule* molecule = new Molecule(*edge[sesedge->index_]);
-						face1.insert(*molecule);
-					}
-				}
-				HINFile hinfile("DATA/SES/faceWithOut"+IndexToString(i,0)+".hin",std::ios::out);
-				hinfile << face1;
-				hinfile.close();
-				hinfile.open("DATA/SES/faceWith"+IndexToString(i,0)+".hin",std::ios::out);
 				hinfile << face2;
 				hinfile.close();
 				for (e = spheric_faces_[i]->edge_.begin(); e != spheric_faces_[i]->edge_.end(); e++)
