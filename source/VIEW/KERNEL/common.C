@@ -66,6 +66,8 @@ String getColoringName(ColoringMethod type)
 			return "by temperature factor";
 		case COLORING_OCCUPANCY:
 			return "by occupancy";
+		case COLORING_FORCES:
+			return "by forces";
 		case COLORING_CUSTOM:
 			return "custom";
 		case COLORING_UNKNOWN:
