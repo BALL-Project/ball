@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.h,v 1.26 2003/04/04 11:55:10 oliver Exp $
+// $Id: rotamerLibrary.h,v 1.27 2003/04/28 19:21:27 oliver Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -138,19 +138,31 @@ namespace BALL
 
 		/**	
 		*/
-		Iterator begin();
+		Iterator begin()
+		{
+			return rotamers_.begin();
+		}
 
 		/**
 		*/
-		Iterator end();
+		Iterator end()
+		{
+			return rotamers_.end();
+		}
 		
 		/**
 		*/
-		ConstIterator begin() const;
+		ConstIterator begin() const
+		{
+			return rotamers_.begin();
+		}
 
 		/**
 		*/
-		ConstIterator end() const;
+		ConstIterator end() const
+		{
+			return rotamers_.end();
+		}
 		//@}
 
 		/**	@name	Assignment
@@ -206,7 +218,16 @@ namespace BALL
 		/**	Random access operator for single rotamers.
 		*/
 		Rotamer& operator [] (Position index)
-			throw(Exception::IndexOverflow);
+			throw(Exception::IndexOverflow)
+		{
+			if (index >= rotamers_.size())
+			{
+				throw Exception::IndexOverflow(__FILE__, __LINE__, index, rotamers_.size() - 1);
+			}
+			return rotamers_[index];
+		}
+ 
+
 		//@}
 
 		/**	@name	Rotamer Assignment
@@ -387,7 +408,7 @@ namespace BALL
 	};
 
 #ifndef BALL_NO_INLINE_FUNCTIONS
-#	include <BALL/STRUCTURE/rotamerLibrary.iC>
+#include <BALL/STRUCTURE/rotamerLibrary.iC>
 #endif
   
 } // namespace BALL

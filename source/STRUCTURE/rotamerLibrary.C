@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.24 2003/04/17 18:51:15 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.25 2003/04/28 19:21:27 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
@@ -915,8 +915,8 @@ namespace BALL
 		return rotamers_[index % getNumberOfRotamers()];
 	}
 
-#	ifdef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/STRUCTURE/rotamerLibrary.iC>
-#	endif
+#ifdef BALL_NO_INLINE_FUNCTIONS
+#include <BALL/STRUCTURE/rotamerLibrary.iC>
+#endif
  
 } // namespace BALL

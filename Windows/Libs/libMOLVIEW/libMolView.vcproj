@@ -189,6 +189,9 @@
 						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\atomPropertiesData.C">
 					</File>
 					<File
+						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\contourSurfaceDialog.C">
+					</File>
+					<File
 						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\displayProperties.C">
 					</File>
 					<File
@@ -478,7 +481,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -594,7 +598,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -605,7 +610,8 @@
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
@@ -768,7 +774,8 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\atomPropertiesData.C&quot; -impl &quot;..\
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running UIC on $(InputPath)"
-						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\countourSurfaceDialogData.h&quot; &quot;$(InputPath)&quot;"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\countourSurfaceDialogData.h&quot; &quot;$(InputPath)&quot;
+"
 						Outputs="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.h;$(InputDir)contourSurfaceDialogData.C"/>
 				</FileConfiguration>
 			</File>

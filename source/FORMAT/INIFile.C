@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.C,v 1.29 2002/12/12 10:19:12 oliver Exp $
+// $Id: INIFile.C,v 1.30 2003/04/28 19:21:27 oliver Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 #include <fstream>
@@ -75,6 +75,12 @@ namespace BALL
 		// destroy all datastructures - we make a new start
 		// we only keep the filename...
 		clear();
+
+		// If the filename is empty, there's no point in opening it...
+		if (filename_ == "")
+		{
+			return false;
+		}
 
 		// try to open the file
 		ifstream infile(filename_.c_str());

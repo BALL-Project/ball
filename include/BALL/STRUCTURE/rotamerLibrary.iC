@@ -1,36 +1,4 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.iC,v 1.6 2003/04/04 11:55:10 oliver Exp $
-
-// rotamer iterator - begin()/end() methods
-ResidueRotamerSet::Iterator ResidueRotamerSet::begin()
-{
-	return rotamers_.begin();
-}
-
-ResidueRotamerSet::ConstIterator ResidueRotamerSet::begin() const
-{
-	return rotamers_.begin();
-}
-
-ResidueRotamerSet::Iterator ResidueRotamerSet::end()
-{
-	return rotamers_.end();
-}
-
-ResidueRotamerSet::ConstIterator ResidueRotamerSet::end() const
-{
-	return rotamers_.end();
-}
-
-Rotamer& ResidueRotamerSet::operator [] (Position index)
-	throw(Exception::IndexOverflow)
-{
-	if (index >= rotamers_.size())
-	{
-		throw Exception::IndexOverflow(__FILE__, __LINE__, index, rotamers_.size() - 1);
-	}
-	return rotamers_[index];
-}
- 
+// $Id: rotamerLibrary.iC,v 1.7 2003/04/28 19:21:27 oliver Exp $

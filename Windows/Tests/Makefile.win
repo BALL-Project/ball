@@ -3,8 +3,9 @@
 # by Andreas Crauser 
 #---------------------------------------------------------------
 
-CC = cl -c -nologo -MTd -Zm1200 -TP -EHsc -GR
+CC = cl -c -nologo -MTd -Zm1200 -TP -EHsc -GR -ZI
 LD = cl -nologo -MTd 
+LDOPTS = /link /OPT:NOREF /DEBUG
 
 
 
@@ -21,14 +22,14 @@ o = .obj
 e = .exe
 
 .obj.exe:
-	$(LD) $(LFLAGS) $*.obj  $(BALL_LIB) $(XLIB)
+	$(LD) $(LFLAGS) $*.obj  $(BALL_LIB) $(XLIB) $(LDOPTS)
 
 .c.obj:
 	$(CC) $(CFLAGS) $(DFLAGS) $(IFLAGS) $(INCL) $(*).C
 
 .c.exe:
 	$(CC) $(CFLAGS) $(DFLAGS) $(IFLAGS) $(INCL) $(*).C
-	$(LD) $(LFLAGS) $*.obj  $(BALL_LIB) $(XLIB)
+	$(LD) $(LFLAGS) $*.obj  $(BALL_LIB) $(XLIB) $(LDOPTS)
 
 
 !include Make.lst

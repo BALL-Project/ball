@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Directory_test.C,v 1.8 2002/12/20 19:10:23 oliver Exp $
+// $Id: Directory_test.C,v 1.9 2003/04/28 19:21:27 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 
 
 
-START_TEST(Directory, "$Id: Directory_test.C,v 1.8 2002/12/20 19:10:23 oliver Exp $")
+START_TEST(Directory, "$Id: Directory_test.C,v 1.9 2003/04/28 19:21:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -182,9 +182,11 @@ CHECK(Directory::getNextEntry(String& entry))
 	Directory d2("test1");
 	String s;	
 	bool result = d2.getNextEntry(s);
-	TEST_EQUAL(result, true)
-	TEST_EQUAL(s, ".");
-	result = d2.getNextEntry(s);
+	#ifndef BALL_PLATFORM_WINDOWS
+		TEST_EQUAL(result, true)
+		TEST_EQUAL(s, ".");
+		result = d2.getNextEntry(s);
+	#endif
 	TEST_EQUAL(result, true)
  	TEST_EQUAL(s, "..")
 	result = d2.getNextEntry(s);

@@ -105,12 +105,17 @@ EXECUTABLES_KERNEL = \
 	GlobalKernel_test$(e)
 
 EXECUTABLES_MOLMEC = \
+	AtomTypes_test$(e)\
 	Gradient_test$(e)\
 	AtomVector_test$(e)\
+	ForceField_test$(e)\
 	MolmecSupport_test$(e)\
 	AmberFF_test$(e)\
 	CharmmFF_test$(e)\
+	LineSearch_test$(e)\
 	EnergyMinimizer_test$(e)\
+	SteepestDescentMinimizer_test$(e)\
+	ConjugateGradientMinimizer_test$(e)\
 	SnapShot_test$(e)\
 	SnapShotManager_test$(e)
 
@@ -157,7 +162,10 @@ EXECUTABLES_STRUCTURE = \
 	AnalyticalSES_test$(e)\
 	MolecularGraph_test$(e)\
 	NumericalSAS_test$(e)\
+	PeptideBuilder_test$(e)\
 	Peptides_test$(e)\
+	ResidueChecker_test$(e)\
+	RotamerLibrary_test$(e)\
 	RadialDistributionFunction_test$(e)\
 	RDFIntegrator_test$(e)\
 	RDFParameter_test$(e)\
@@ -171,6 +179,7 @@ EXECUTABLES_STRUCTURE = \
 
 EXECUTABLES_SOLVATION = \
 	PoissonBoltzmann_test$(e)\
+	PARSE_test$(e)\
 	SolventDescriptor_test$(e)\
 	SolventParameter_test$(e)\
 	ClaverieParameter_test$(e)\

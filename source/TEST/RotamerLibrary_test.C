@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RotamerLibrary_test.C,v 1.4 2003/04/17 14:19:53 oliver Exp $
+// $Id: RotamerLibrary_test.C,v 1.5 2003/04/28 19:21:27 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 #include <BALL/FORMAT/HINFile.h>
+#include <BALL/SYSTEM/file.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -16,7 +17,7 @@
 
 ///////////////////////////
 
-START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.4 2003/04/17 14:19:53 oliver Exp $")
+START_TEST(RotamerLibrary, "$Id: RotamerLibrary_test.C,v 1.5 2003/04/28 19:21:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -346,7 +347,10 @@ CHECK(Side chain positions for Pro)
 	TEST_EQUAL(rc.getStatus(), true)		
 	String outfile_name;
 	NEW_TMP_FILE(outfile_name)
-	HINFile outfile(outfile_name, File::OUT);
+
+
+	float x = 0;
+	HINFile outfile(outfile_name, std::ios::out);
 	outfile << S;
 	outfile.close();
 	
@@ -367,9 +371,8 @@ CHECK(Side chain positions for Pro)
 	TEST_EQUAL(rc.getStatus(), true)		
 
 	NEW_TMP_FILE(outfile_name)
-	outfile.open(outfile_name, File::OUT);
+	outfile.open(outfile_name, std::ios::out);
 	outfile << S;
-
 
 RESULT
 
@@ -408,7 +411,7 @@ CHECK(side-chain conformations for Dunbrack library)
 				{
 					String outfile_name;
 					NEW_TMP_FILE(outfile_name)
-					HINFile outfile(outfile_name, File::OUT);
+					HINFile outfile(outfile_name, std::ios::out);
 					outfile << S;
 				}
 			}

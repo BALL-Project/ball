@@ -250,6 +250,9 @@ del *.exe"
 			RelativePath="Make.lst">
 		</File>
 		<File
+			RelativePath="Makefile.win">
+		</File>
+		<File
 			RelativePath="..\..\source\TEST\MathsCommon_test.C">
 		</File>
 		<File
