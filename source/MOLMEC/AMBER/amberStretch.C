@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberStretch.C,v 1.20.2.1 2004/05/22 21:33:17 oliver Exp $
+// $Id: amberStretch.C,v 1.20.2.2 2004/05/23 20:34:27 oliver Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
@@ -139,15 +139,6 @@ namespace BALL
 	// update bond lists if the selection has changed
 	void AmberStretch::update()
 	{
-		if ((getForceField() == 0) || (getForceField()->getSystem() == 0))
-		{
-			return;
-		}
-
-		if (getForceField()->getUpdateTime().isOlderThan(getForceField()->getSystem()->getSelectionTime()))
-		{
-			setup();
-		}
 	}
 	
 

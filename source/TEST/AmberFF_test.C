@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AmberFF_test.C,v 1.16 2004/03/09 21:17:07 oliver Exp $
+// $Id: AmberFF_test.C,v 1.16.2.1 2004/05/23 20:34:27 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.16 2004/03/09 21:17:07 oliver Exp $")
+START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.16.2.1 2004/05/23 20:34:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -381,7 +381,7 @@ CHECK([EXTRA] Energies w/ selection)
 	TEST_EQUAL(ff.getNumberOfMovableAtoms(), 1)
 	S.beginResidue()->select();
 	ff.updateEnergy();
-	TEST_REAL_EQUAL(ff.getEnergy(), 0.7434)
+	TEST_REAL_EQUAL(ff.getEnergy(), 0.0)
 	TEST_REAL_EQUAL(ff.getVdWEnergy(), 0.0)
 	TEST_REAL_EQUAL(ff.getESEnergy(), 0.0)
 
