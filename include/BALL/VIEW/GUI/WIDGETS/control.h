@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.10.4.11 2002/12/03 15:55:28 amoll Exp $
+// $Id: control.h,v 1.10.4.12 2002/12/06 18:24:15 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -266,7 +266,7 @@ namespace BALL
 					@see   buildContextMenu
 			*/
 			void insertContextMenuEntry(const String& name, const QObject* receiver = 0, 
-																  const char* slot = 0, int accel = 0, int entry_ID = -1)
+																  const char* slot = 0, int entry_ID = -1, int accel = 0)
 				throw();
 
 			/**	Initialize the widget.

@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.7.4.12 2002/12/06 16:47:07 amoll Exp $
+// $Id: control.C,v 1.7.4.13 2002/12/06 18:23:48 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <BALL/KERNEL/atom.h>
@@ -241,7 +241,7 @@ void Control::buildContextMenu(Composite* composite, QListViewItem* item)
 	}
 }
 
-void Control::insertContextMenuEntry(const String& name, const QObject* receiver, const char* slot, int accel, int entry_ID)
+void Control::insertContextMenuEntry(const String& name, const QObject* receiver, const char* slot, int entry_ID, int accel)
 	throw()
 {
 	context_menu_.insertItem(name.c_str(), receiver, slot, accel, entry_ID);
@@ -719,8 +719,7 @@ void Control::onContextMenu(QListViewItem* item,  const QPoint& point, int /* co
 	// get composite address
 	Composite* composite = getCompositeAddress_(item);
 	// create the context menu
-	if (composite != 0
-			&& item != 0)
+	if (composite != 0 && item != 0)
 	{
 		context_composite_ = composite;
 		context_item_ = item;
