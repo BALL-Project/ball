@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.8 1999/12/30 20:30:37 oliver Exp $
+// $Id: composite.h,v 1.9 2000/01/11 20:11:34 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -249,36 +249,44 @@ namespace BALL
 				This method walks up the tree from parent to paretn and
 				checks whether the composite object is a kind of {\tt T}.
 				This method is useful to identify special container classes.
-				@param	t an (usually default) instance of a certain class type
 				@return a pointer to the first composite found that is a kind of T or 0 if no
-								matching composite was found to the root of the tree
+								matching composite was found up to the root of the tree
 		*/
 		template <typename T>
-		Composite* getAncestor(const T& /* t */)
+		T* getAncestor()
 		{
-			
+			T* T_ptr = 0;
 			for (Composite* composite_ptr = parent_;
 					 composite_ptr != 0; composite_ptr = composite_ptr->parent_)
 			{
-				if (RTTI::isKindOf<T>(*composite_ptr))
+				if ((T_ptr = dynamic_cast<T*>(composite_ptr)) != 0)
 				{
-					return composite_ptr;
-				}
+					break;
+				}	
 			}
 			
-			return 0;
+			return T_ptr;
 		}
 
 		/**	Find the first ancestor of type T (const method).
 				This method operates also on constant trees.
-				@param	t an (usually default) instance of a certain class type
 				@return a pointer to the first composite found that is a kind of T or 0 if no
 								matching composite was found to the root of the tree
 		*/
 		template <class T>
-		const Composite* getAncestor(const T& t) const
+		const T* getAncestor() const
 		{
-			return (const_cast<Composite *>(this))->getAncestor(t);
+			T* T_ptr = 0;
+			for (Composite* composite_ptr = parent_;
+					 composite_ptr != 0; composite_ptr = composite_ptr->parent_)
+			{
+				if ((T_ptr = dynamic_cast<T*>(composite_ptr)) != 0)
+				{
+					break;
+				}	
+			}
+			
+			return const_cast<const T*>(T_ptr);
 		}
 
 		/**	Return the composite's parent.
@@ -513,9 +521,9 @@ namespace BALL
 
 		///
 		template <class T>
-		bool hasAncestor(const T& t) const 
+		bool hasAncestor() const 
 		{
-			return (getAncestor(t) != 0);	
+			return (getAncestor<T>() != 0);	
 		}
 
 		///
