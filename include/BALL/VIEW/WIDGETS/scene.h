@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.35 2004/06/03 11:17:18 amoll Exp $
+// $Id: scene.h,v 1.36 2004/06/03 11:22:06 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -23,7 +23,7 @@
 # include <BALL/VIEW/KERNEL/common.h>
 #endif 
 
-// has to come after BALL includes to prevent problems with Visual Stuio Net
+// has to come after BALL includes to prevent problems with Visual Studio Net
 #include <qgl.h>
 
 namespace BALL
