@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.C,v 1.26 2003/04/29 16:07:16 oliver Exp $
+// $Id: amberNonBonded.C,v 1.27 2003/08/19 16:00:14 amoll Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -269,7 +269,7 @@ namespace BALL
 		// the box - we use the minimum image convention!
 		if (getForceField()->periodic_boundary.isEnabled())
 		{
-			Box3 box = getForceField()->periodic_boundary.getBox();
+			SimpleBox3 box = getForceField()->periodic_boundary.getBox();
 			float max_cut_off = 0.5 * Maths::min(box.getWidth(), box.getHeight(), box.getDepth());
 
 			if (cut_off_electrostatic_ > max_cut_off)
@@ -911,7 +911,7 @@ namespace BALL
 		if (use_periodic_boundary)
 		{
 			// calculate the box period (half of the box period)
-			const Box3& box = force_field_->periodic_boundary.getBox();
+			const SimpleBox3& box = force_field_->periodic_boundary.getBox();
 			period = box.b - box.a;
 		}
 
@@ -1110,7 +1110,7 @@ namespace BALL
 			// constant 
 
 			// Calculate periods and half periods
-			Box3 box = force_field_->periodic_boundary.getBox();
+			SimpleBox3 box = force_field_->periodic_boundary.getBox();
 			period = box.b - box.a; 
 
 			// first deal with 1-4 non-bonded pairs 
@@ -1138,7 +1138,7 @@ namespace BALL
 				// dielectric constant 
 
 				// Calculate periods and half periods
-				Box3 box = force_field_->periodic_boundary.getBox();
+				SimpleBox3 box = force_field_->periodic_boundary.getBox();
 				period = box.b - box.a; 
 
 				// first deal with 1-4 non-bonded pairs
