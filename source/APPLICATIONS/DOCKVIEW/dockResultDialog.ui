@@ -44,14 +44,6 @@
                     <pixmap></pixmap>
                 </property>
             </column>
-            <row>
-                <property name="text">
-                    <string>1</string>
-                </property>
-                <property name="pixmap">
-                    <pixmap></pixmap>
-                </property>
-            </row>
             <property name="name">
                 <cstring>result_table</cstring>
             </property>
@@ -73,7 +65,7 @@
                 <enum>Manual</enum>
             </property>
             <property name="numRows">
-                <number>1</number>
+                <number>0</number>
             </property>
             <property name="numCols">
                 <number>2</number>
@@ -82,6 +74,9 @@
                 <bool>true</bool>
             </property>
             <property name="columnMovingEnabled">
+                <bool>true</bool>
+            </property>
+            <property name="readOnly">
                 <bool>true</bool>
             </property>
         </widget>
