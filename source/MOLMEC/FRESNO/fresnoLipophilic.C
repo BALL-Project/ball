@@ -1,4 +1,4 @@
-// $Id: fresnoLipophilic.C,v 1.1.2.8 2002/11/21 20:54:46 anker Exp $
+// $Id: fresnoLipophilic.C,v 1.1.2.9 2002/11/22 16:05:28 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -96,6 +96,9 @@ namespace BALL
 		r2_offset_
 			= options.setDefaultReal(FresnoFF::Option::LIPO_R2_OFFSET,
 					FresnoFF::Default::LIPO_R2_OFFSET);
+		Size verbosity 
+			= options.setDefaultInteger(FresnoFF::Option::VERBOSITY,
+					FresnoFF::Default::VERBOSITY);
 
 		const HashMap<const Atom*, short>& fresno_types = fff->getFresnoTypes();
 
@@ -124,24 +127,27 @@ namespace BALL
 						{
 							possible_lipophilic_interactions_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
 							// DEBUG
-							// cout << "found possible lipophilic int.: " 
-							// 	<< A_it->getFullName() << "..." << B_it->getFullName()
-							// 	<< " (length: " 
-							// 	<< (A_it->getPosition() - B_it->getPosition()).getLength() 
-							// 	<< " A) " 
-							// 	<< endl;
-							// /DEBUG
+							if (verbosity >= 90)
+							{
+								Log.info() << "found possible lipophilic int.: " 
+									<< A_it->getFullName() << "..." << B_it->getFullName()
+									<< " (length: " 
+									<< (A_it->getPosition() - B_it->getPosition()).getLength() 
+									<< " A) " 
+									<< endl;
+							}
 						}
 					}
 				}
 			}
 		}
 
-		// DEBUG
-		cout << "FresnoLipophilic setup statistics:" << endl;
-		cout << "Found " << possible_lipophilic_interactions_.size() 
-			<< " possible lipophilic interactions" << endl << endl;
-		// /DEBUG
+		if (verbosity > 8)
+		{
+			Log.info() << "FresnoLipophilic setup statistics:" << endl;
+			Log.info() << "Found " << possible_lipophilic_interactions_.size() 
+				<< " possible lipophilic interactions" << endl << endl;
+		}
 
 		return true;
 
@@ -151,6 +157,9 @@ namespace BALL
 	double FresnoLipophilic::updateEnergy()
 		throw()
 	{
+
+		Size verbosity 
+			= getForceField()->options.getInteger(FresnoFF::Option::VERBOSITY);
 
 		energy_ = 0.0;
 		float val = 0.0;
@@ -182,12 +191,13 @@ namespace BALL
 				// we could possibly speed up the next step by using the fact that the
 				// difference between R1 and R2 is constant
 				val = MolmecSupport::calculateFresnoHelperFunction(distance, R1, R2);
-				// DEBUG
-				// cout << "LIPO: adding score of " << val << ": "
-				// 	<< atom1->getFullName() << "..." << atom2->getFullName()
-				// 	<< " (distance " << distance << ", R1 " << R1 << ", R2 " << R2 << ")"
-				// 	<< endl;
-				// /DEBUG
+				if (verbosity >= 90)
+				{
+					Log.info() << "LIPO: adding score of " << val << ": "
+						<< atom1->getFullName() << "..." << atom2->getFullName()
+						<< " (distance " << distance << ", R1 " << R1 << ", R2 " 
+						<< R2 << ")" << endl;
+				}
 				
 				energy_ += val;
 			}
@@ -195,9 +205,10 @@ namespace BALL
 
 		energy_ = factor_ * energy_;
 
-		// DEBUG
-		cout << "LIPO: energy is " << energy_ << endl;
-		// /DEBUG
+		if (verbosity > 0)
+		{
+			Log.info() << "LIPO: energy is " << energy_ << endl;
+		}
 
 		return energy_;
 	}

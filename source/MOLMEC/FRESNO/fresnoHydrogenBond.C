@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.C,v 1.1.2.9 2002/11/21 20:54:46 anker Exp $
+// $Id: fresnoHydrogenBond.C,v 1.1.2.10 2002/11/22 16:05:27 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -116,6 +116,9 @@ namespace BALL
 		h_bond_angle_upper_
 			= options.setDefaultReal(FresnoFF::Option::HB_ANG_UPPER,
 					FresnoFF::Default::HB_ANG_UPPER);
+		Size verbosity
+			= options.setDefaultInteger(FresnoFF::Option::VERBOSITY,
+					FresnoFF::Default::VERBOSITY);
 
 		const HashMap<const Atom*, short>& fresno_types = fff->getFresnoTypes();
 
@@ -142,15 +145,17 @@ namespace BALL
 									|| (fresno_types[&*B_it] == FresnoFF::HBOND_ACCEPTOR))
 							{
 								possible_hydrogen_bonds_.push_back(pair<const Atom*, const Atom*>(&*A_it, &*B_it));
-								// DEBUG
-								// cout << "found possible HB: " 
-								// 	<< A_it->getBond(0)->getPartner(*A_it)->getFullName() << "---"
-								// 	<< A_it->getFullName() << "..." << B_it->getFullName()
-								// 	<< " (length: " 
-								// 	<< (A_it->getPosition() - B_it->getPosition()).getLength() 
-								// 	<< " A) " 
-								// 	<< endl;
-								// /DEBUG
+								if (verbosity >= 90)
+								{
+									Log.info() << "found possible HB: " 
+										<< A_it->getBond(0)->getPartner(*A_it)->getFullName() 
+										<< "---"
+										<< A_it->getFullName() << "..." << B_it->getFullName()
+										<< " (length: " 
+										<< (A_it->getPosition() - B_it->getPosition()).getLength() 
+										<< " A) " 
+										<< endl;
+								}
 							}
 						}
 					}
@@ -173,15 +178,16 @@ namespace BALL
 									|| (fresno_types[&*A_it] == FresnoFF::HBOND_ACCEPTOR))
 							{
 								possible_hydrogen_bonds_.push_back(pair<const Atom*, const Atom*>(&*B_it, &*A_it));
-								// DEBUG
-								// cout << "found possible HB: " 
-								// 	<< B_it->getBond(0)->getPartner(*B_it)->getFullName() << "-"
-								// 	<< B_it->getFullName() << "..." << A_it->getFullName()
-								// 	<< " (length: " 
-								// 	<< (B_it->getPosition() - A_it->getPosition()).getLength() 
-								// 	<< " A) " 
-								// 	<< endl;
-								// /DEBUG
+								if (verbosity >= 90)
+								{
+									Log.info() << "found possible HB: " 
+										<< B_it->getBond(0)->getPartner(*B_it)->getFullName() << "-"
+										<< B_it->getFullName() << "..." << A_it->getFullName()
+										<< " (length: " 
+										<< (B_it->getPosition() - A_it->getPosition()).getLength() 
+										<< " A) " 
+										<< endl;
+								}
 							}
 						}
 					}
@@ -189,11 +195,12 @@ namespace BALL
 			}
 		}
 
-		// DEBUG
-		cout << "FresnoHydrogenBond setup statistics:" << endl;
-		cout << "Found " << possible_hydrogen_bonds_.size() 
-			<< " possible hydrogen bonds" << endl << endl;
-		// /DEBUG
+		if (verbosity > 8)
+		{
+			Log.info() << "FresnoHydrogenBond setup statistics:" << endl;
+			Log.info() << "Found " << possible_hydrogen_bonds_.size() 
+				<< " possible hydrogen bonds" << endl << endl;
+		}
 
 		return true;
 
@@ -210,6 +217,9 @@ namespace BALL
 		{
 			au_it->second = false;
 		}
+
+		Size verbosity 
+			= getForceField()->options.getInteger(FresnoFF::Option::VERBOSITY);
 
 		energy_ = 0.0;
 		float val = 0.0;
@@ -292,12 +302,13 @@ namespace BALL
 							}
 							// /PARANOIA
 
-							// DEBUG
-							// cout << "HB: adding score of " << val 
-							// 	<< "(distance " << distance
-							// 	<< ", angle " << angle << ")"
-							// 	<< endl;
-							// /DEBUG
+							if (verbosity >= 90)
+							{
+								Log.info() << "HB: adding score of " << val 
+									<< "(distance " << distance
+									<< ", angle " << angle << ")"
+									<< endl;
+							}
 							energy_ += val;
 						}
 					}
@@ -313,9 +324,10 @@ namespace BALL
 
 		energy_ = factor_ * energy_;
 
-		// DEBUG
-		cout << "HB: energy is " << energy_ << endl;
-		// /DEBUG
+		if (verbosity > 0)
+		{
+			Log.info() << "HB: energy is " << energy_ << endl;
+		}
 
 		return energy_;
 	}

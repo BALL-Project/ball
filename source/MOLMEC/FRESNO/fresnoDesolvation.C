@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.C,v 1.1.2.16 2002/11/22 15:11:54 anker Exp $
+// $Id: fresnoDesolvation.C,v 1.1.2.17 2002/11/22 16:05:27 anker Exp $
 // Molecular Mechanics: Fresno force field, desolvation component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -753,17 +753,18 @@ namespace BALL
 		float ddGsolv = dGes_B_cav_A - dGes_B + dGes_A_cav_B - dGes_A;
 		float dGele = ddGsolv + ((dGint_AB + dGint_BA) / 2.0);
 
-		// DEBUG
-		Log.info() << "dGes_A = " << dGes_A << endl;
-		Log.info() << "dGes_B = " << dGes_B << endl;
-		Log.info() << "dGes_A_cav_B = " << dGes_A_cav_B << endl;
-		Log.info() << "dGes_B_cav_A = " << dGes_B_cav_A << endl;
-		Log.info() << "dGint_AB = " << dGint_AB << endl;
-		Log.info() << "dGint_BA = " << dGint_BA << endl;
-		Log.info() << "ddGsolv = " << ddGsolv << endl;
-		Log.info() << "dGint = " << (dGint_AB + dGint_BA) / 2.0 << endl;
-		Log.info() << "dGele = " << dGele << endl;
-		// /DEBUG
+		if (verbosity_ > 8)
+		{
+			Log.info() << "dGes_A = " << dGes_A << endl;
+			Log.info() << "dGes_B = " << dGes_B << endl;
+			Log.info() << "dGes_A_cav_B = " << dGes_A_cav_B << endl;
+			Log.info() << "dGes_B_cav_A = " << dGes_B_cav_A << endl;
+			Log.info() << "dGint_AB = " << dGint_AB << endl;
+			Log.info() << "dGint_BA = " << dGint_BA << endl;
+			Log.info() << "ddGsolv = " << ddGsolv << endl;
+			Log.info() << "dGint = " << (dGint_AB + dGint_BA) / 2.0 << endl;
+			Log.info() << "dGele = " << dGele << endl;
+		}
 
 		// restore radii and charges of the whole system for further usage
 		it = system.beginAtom();
