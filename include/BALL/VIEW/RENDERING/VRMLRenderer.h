@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.h,v 1.1 2003/10/10 16:06:00 amoll Exp $
+// $Id: VRMLRenderer.h,v 1.3 2003/10/15 13:55:04 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_VRMLRENDERER_H
@@ -117,6 +117,15 @@ class VRMLRenderer : public Renderer
 
 	void renderMesh_(const Mesh& mesh)
 		throw();
+
+	void out_(const String& data)
+		throw();
+
+	void outheader_(const String& data)
+		throw() {out_(data); current_intend_ += 1;}
+
+	void outfinish_(const String& data)
+		throw() {out_(data); current_intend_ -= 1;}
 	//@}
 
 		Size width, height;
@@ -126,6 +135,7 @@ class VRMLRenderer : public Renderer
 
 		Vector3   origin_;
 		Matrix4x4 rotation_;
+		Index current_intend_;
 
 };
   

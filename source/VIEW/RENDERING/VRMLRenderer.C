@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: VRMLRenderer.C,v 1.1 2003/10/10 16:05:51 amoll Exp $
+// $Id: VRMLRenderer.C,v 1.2 2003/10/15 13:52:30 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/VRMLRenderer.h>
@@ -33,7 +33,8 @@ namespace BALL
 VRMLRenderer::VRMLRenderer()
 	throw()
 	: Renderer(),
-		outfile_()
+		outfile_(),
+		current_intend_(0)
 {
 }
 
@@ -41,7 +42,8 @@ VRMLRenderer::VRMLRenderer(const String& name)
 	throw(Exception::FileNotFound)
 	: Renderer(),
 		width(600),
-		height(600)
+		height(600),
+		current_intend_(0)
 {
 	outfile_.open(name, std::ios::out);
 }
@@ -59,12 +61,14 @@ void VRMLRenderer::clear()
 	throw()
 {
 	outfile_.clear();
+	current_intend_ = 0;
 }
 
 void VRMLRenderer::setFileName(const String& name)
 	throw(Exception::FileNotFound)
 {
 	outfile_.open(name, std::ios::out);
+	current_intend_ = 0;
 }
 
 String VRMLRenderer::VRMLColorRGBA(const ColorRGBA& input)
@@ -103,9 +107,8 @@ bool VRMLRenderer::init(const Stage& stage)
 
 	stage_ = &stage;
 
-	outfile_	<< "# VRML file created by the BALL VRMLRenderer" 
-						<< std::endl 
-						<< std::endl;
+	out_("#VRML V2.0 utf8");
+	out_("");
 /*
 	// Find out the position of the camera.
 	const Camera& camera = stage_->getCamera();
@@ -115,9 +118,6 @@ bool VRMLRenderer::init(const Stage& stage)
 	Vector3 right_vector = camera.getRightVector(); 
 	Vector3 look_at      = camera.getLookAtPosition();// camera.getLookAtPosition();
 */
-	outfile_ << "Transform {" << endl;
-	outfile_ << "  children [" << endl;
-	outfile_ << "    shape {" << endl;
 
 	return true;
 }
@@ -125,10 +125,8 @@ bool VRMLRenderer::init(const Stage& stage)
 bool VRMLRenderer::finish()
 	throw()
 {
-	outfile_ << "    }" << endl;
-	outfile_ << "  ]" << endl;
-	outfile_ << "}" << endl;
 	outfile_.close();
+	current_intend_ = 0;
 
 	return true;
 }
@@ -136,202 +134,139 @@ bool VRMLRenderer::finish()
 void VRMLRenderer::renderSphere_(const Sphere& sphere)
 	throw()
 {
-	outfile_ << "Transform {" << std::endl;
-	outfile_ << "translation_ " << VRMLVector3(sphere.getPosition()) << std::endl;
-	outfile_ << "children [" << std::endl;
+	outheader_("Transform {");
+	outheader_("translation " + VRMLVector3(sphere.getPosition()));
+	outheader_("children [");
 
-		VRMLobjectColor(sphere);
+	outheader_("Shape {");
+	VRMLobjectColor(sphere);
 
-		outfile_ << " Sphere {" << endl;
-		outfile_ << "  radius " << sphere.getRadius() << std::endl;
-		outfile_ << " }" << endl << endl;
-	outfile_ << "]" << std::endl;
+	outheader_("geometry Sphere {");
+	out_("radius " + String(sphere.getRadius()));
+	current_intend_ --;
+	outfinish_("}");
+	outfinish_("}");
+	outfinish_("]");
+	out_("}");
 }
 
 void VRMLRenderer::VRMLobjectColor(const GeometricObject& object)
 	throw()
 {
-	outfile_ << "appearence Appearance {" << std::endl;
-	outfile_ << "material Material {" << std::endl;
-	outfile_ << "diffuseColor " 
-					 << String ((float)object.getColor().getRed()) << " "
-					 << String ((float)object.getColor().getBlue()) << " "
-					 << String ((float)object.getColor().getGreen()) << std::endl;
+	outheader_("appearance Appearance {");
+	outheader_("material Material {");
+	out_("diffuseColor " 
+					 + String ((float)object.getColor().getRed()) + " "
+					 + String ((float)object.getColor().getBlue()) + " "
+					 + String ((float)object.getColor().getGreen()));
 
-	outfile_ << "shininess 0.5" << std::endl;
-	outfile_ << "  }" << std::endl;
-	outfile_ << "}" << std::endl;
+	out_("shininess 0.5");
+	current_intend_ --;
+	outfinish_("}");
+	outfinish_("}");
 }
 
 void VRMLRenderer::renderDisc_(const Disc& disc)
 	throw()
 {
-return;
-	ColorRGBA color;
-	// first find out its color
-	if ((disc.getComposite() && (disc.getComposite()->isSelected())))
-	{
-		color = BALL_SELECTED_COLOR;
-	}
-	else
-	{
-		color = disc.getColor();
-	}
-
-	// then, find out its radius
-	float radius;
-
-	// its normal
-	Vector3 normal;
-	// and finally, its position
-	Vector3 position;
-
-	disc.getCircle().get(position, normal, radius);
-//Log.error() << normal << std::endl;
-	normal -= origin_;
-
-	// now write the information into the outfile_
-	outfile_ << "\tdisc {" << endl << "\t\t";
-	outfile_ << VRMLVector3(position) << ", ";
-	outfile_ << VRMLVector3(normal) << ", ";
-	outfile_ << radius << endl;
-	//outfile_ <<"\t\ttexture {" << endl;
-	outfile_ << "\tpigment { " << VRMLColorRGBA(color) << " } " << endl;
-	outfile_ << "\t} " << endl << endl;
 }
 
 void VRMLRenderer::renderTube_(const Tube& tube)
 	throw()
 {
-return;
-	ColorRGBA color;
-	// first, find out its color
-	if ((tube.getComposite()) && (tube.getComposite()->isSelected()))
-	{
-		color = BALL_SELECTED_COLOR;
-	}
-	else
-	{
-		color = tube.getColor();
-	}
-
-	// then, find out its radius
-	float radius = tube.getRadius();
-
-	// and finally, the base and the cap
-	Vector3 base_point = tube.getVertex1();
-	Vector3  cap_point = tube.getVertex2();
-
-	// now write the information into the outfile_
-	outfile_ << "\tcylinder {" << endl;
-	outfile_ << "\t\t" << VRMLVector3(base_point) << ", ";
-	outfile_           << VRMLVector3( cap_point) << ", ";
-	outfile_           <<                 radius << endl;
-	//outfile_ <<"\t\ttexture {" << endl;
-	//outfile_ << "\t\t\t\tpigment { " << VRMLColorRGBA(color);
-	outfile_ << "\tpigment { " << VRMLColorRGBA(color) << " } " << endl;
-	outfile_ << "\t} " << endl;
 }	
 
 void VRMLRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
 	throw()
 {
-return;
-	// we have found a two colored tube
-	ColorRGBA color1, color2;
-
-	// first, find out its color
-	if (tube.getComposite() && (tube.getComposite()->isSelected()))
-	{
-		color1 = BALL_SELECTED_COLOR;
-		color2 = BALL_SELECTED_COLOR;
-	}
-	else
-	{
-		color1 = tube.getColor();
-		color2 = tube.getColor2();
-	}
-
-	// then, find out its radius
-	float radius = tube.getRadius();
-
-	// and finally, the base and the cap
-	Vector3 base_point = tube.getVertex1();
-	Vector3  cap_point = tube.getVertex2();
-	Vector3  mid_point = tube.getMiddleVertex();
-
-	// now write the information into the outfile_
-	outfile_ << "\tcylinder {" << endl;
-	outfile_ << "\t\t" << VRMLVector3(base_point) << ", ";
-	outfile_           << VRMLVector3( mid_point) << ", ";
-	outfile_           <<                 radius << endl;
-	outfile_ << "\tpigment { " << VRMLColorRGBA(color1) << " } " << endl;
-	outfile_ << "\t}" << endl << endl;
-	
-	outfile_ << "\tcylinder {" << endl;
-	outfile_ << "\t\t" << VRMLVector3(mid_point) << ", ";
-	outfile_           << VRMLVector3(cap_point) << ", ";
-	outfile_           <<                 radius << endl;
-	outfile_ << "\tpigment { " << VRMLColorRGBA(color2) << " } " << endl;
-	outfile_ << "\t}" << endl << endl;
 }
 
 void VRMLRenderer::renderMesh_(const Mesh& mesh)
 	throw()
 {
 	// so we should let VRMLRay know...
-	outfile_ << "geometry IndexedFaceSet {" << endl;
-	outfile_ << "coord Coordinate {" << endl;
-	outfile_ << "point [" << endl;
+	outheader_("Shape {");
+	outheader_("geometry IndexedFaceSet {");
+	outheader_("coord Coordinate {");
+	outheader_("point [");
 
 	// print vertices
 	vector<Vector3>::const_iterator itv = mesh.vertex.begin(); 
 	for (; itv != mesh.vertex.end(); itv++)
 	{
-		outfile_ << VRMLVector3(*itv);
+		String out = VRMLVector3(*itv);
 		if (itv != mesh.vertex.end()) 
 		{
-			outfile_ << "," << std::endl;
+			out += ",";
 		}
+		out_(out);
 	}
-	outfile_ << std::endl << "     ]" << std::endl;
-	outfile_ << "    }" << std::endl;
+	current_intend_ --;
+	outfinish_("]");
+	out_("}"); // correct
 	
 	// print triangles =====================================
-	outfile_ << "coordIndex [" << std::endl;
+	outheader_("coordIndex [");
 	
 	vector<Surface::Triangle>::const_iterator itt = mesh.triangle.begin(); 
 	for (; itt != mesh.triangle.end(); itt++)
 	{
-		outfile_ << String((*itt).v1) << " " 
-						 << String((*itt).v2) << " " 
-						 << String((*itt).v3) << " " 
-						 << " -1"; 
+		String out = (String((*itt).v1) + " " 
+						 + String((*itt).v2) + " " 
+						 + String((*itt).v3) + " " 
+						 + " -1"); 
 
 		if (itt != mesh.triangle.end()) 
 		{
-			outfile_ << "," << std::endl;
+			out +=  ",";
 		}
+		out_(out);
 	}
-	outfile_ << std::endl << "     ]" << std::endl;
+	current_intend_ --;
+	outfinish_("]");
 
 // print colors ========================================
-	outfile_ << "color Color {" << std::endl;
-	outfile_ << "color [" << std::endl;
-	vector<ColorRGBA>::const_iterator itc = mesh.colorList.begin(); 
-	for (; itc != mesh.colorList.end(); itc++)
+	outheader_("color Color {");
+	outheader_("color [");
+	if (mesh.colorList.size() == 0)
 	{
-		outfile_ << VRMLColorRGBA(*itc) << std::endl;
-
-		if (itc != mesh.colorList.end()) 
+		out_(VRMLColorRGBA(ColorRGBA(1.,1,1)));
+	}
+	else
+	{
+		vector<ColorRGBA>::const_iterator itc = mesh.colorList.begin(); 
+		for (; itc != mesh.colorList.end(); itc++)
 		{
-			outfile_ << "," << std::endl;
+			String out = VRMLColorRGBA(*itc);
+			if (itc != mesh.colorList.end()) 
+			{
+				out += ",";
+			}
+			out_(out);
 		}
 	}
-	outfile_ << std::endl << "     ]" << std::endl;
-	outfile_ << "    }" << std::endl;
-	outfile_ << "    colorPerVertex FALSE" << std::endl;
-	outfile_ << "  }" << std::endl;
+	current_intend_ --;
+	outfinish_("]");
+	out_("}");
+	outfinish_("colorPerVertex FALSE");
+	outfinish_("}");
+	outfinish_("}");
+}
+
+void VRMLRenderer::out_(const String& data)
+	throw()
+{
+	if (current_intend_ < 0)
+	{
+		Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
+	}
+	String out;
+	for (Index p=0; p< current_intend_; p++)
+	{
+		out += " ";
+	}
+	out += data;
+	outfile_ << out << std::endl;
 }
 
 } } // namespaces
