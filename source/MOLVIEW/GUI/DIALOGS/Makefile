@@ -19,7 +19,8 @@ MOC_SOURCES=\
 	displayProperties_moc.C\
 	displayPropertiesData_moc.C\
 	labelProperties_moc.C\
-	labelPropertiesData_moc.C
+	labelPropertiesData_moc.C\
+	contourSurfaceDialog_moc.C
 
 include ../../../common.mak
 include .Dependencies
@@ -37,4 +38,7 @@ labelProperties_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/labelProper
 
 labelPropertiesData_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/labelPropertiesData.h
 	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/labelPropertiesData.h -o labelPropertiesData_moc.C
+
+contourSurfaceDialog_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h
+	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h -o contourSurfaceDialog_moc.C
 
