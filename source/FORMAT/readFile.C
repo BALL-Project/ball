@@ -1,4 +1,8 @@
+// $Id: readFile.C,v 1.5 2000/09/24 13:25:17 oliver Exp $
+
 #include<BALL/FORMAT/readFile.h>
+
+using namespace std;
 
 namespace BALL
 {
