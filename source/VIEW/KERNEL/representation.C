@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.46 2004/07/26 13:45:10 amoll Exp $
+// $Id: representation.C,v 1.47 2004/10/18 12:00:07 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -346,6 +346,8 @@ namespace BALL
 				thread_->wait(500); 
 			}
 
+			delete thread_;
+			thread_ = 0;
 			mc->setStatusbarText("");
 			mc->setCompositesMuteable(true);
 			

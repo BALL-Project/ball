@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.24 2004/10/14 15:21:24 amoll Exp $
+// $Id: representation.h,v 1.25 2004/10/18 12:00:20 amoll Exp $
 //
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -292,6 +292,9 @@ namespace BALL
 			///
 			CompositesConstIterator end() const
 				throw() { return composites_.end();}
+
+			///
+			static UpdateRepresentationThread* getUpdateThread() { return thread_;}
 			
 			//@}
 
