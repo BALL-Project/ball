@@ -1,4 +1,4 @@
-/* $Id */
+// $Id: nmr.doc,v 1.2 2000/09/18 10:59:35 oliver Exp $
 
 /**@name	Nuclear Magnetic Resonance Spectroscopy
 		This chapter contains all relevant information on 
@@ -7,10 +7,28 @@
 */
 //@{
 
-	/**@name	Ring current models
+	/**	@name	Shift model classes
+	*/
+	//@{
+		//@Include: shiftModule.h
+		//@Include:	shiftModel.h
+	//@}
+
+	/**	@name NMR spectra and related classes
+	*/
+	//@{
+		//@Include: NMRSpectrum1D.h
+		//@Include:	peak1D.h
+	//@}
+
+	/**@name	NMR shift modules
 	*/
 	//@{
 		//@Include: johnsonBovey.h
+		//@Include: haighMallion.h
+		//@Include: LEF.h
+		//@Include: anisotropy.h
+		//@Include:	randomCoil.h
 	//@}
 
 //@}
