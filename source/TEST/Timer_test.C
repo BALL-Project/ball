@@ -1,4 +1,4 @@
-// $Id: Timer_test.C,v 1.12.4.4 2002/12/09 12:59:02 crauser Exp $
+// $Id: Timer_test.C,v 1.12.4.5 2002/12/09 21:57:43 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
 ///////////////////////////
@@ -6,11 +6,14 @@
 #include <BALL/SYSTEM/file.h>
 
 #ifdef BALL_COMPILER_MSVC
-#include<windows.h>
+#	include<windows.h>
+#	define sleep(a) Sleep(1000 * a)
 #endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.12.4.4 2002/12/09 12:59:02 crauser Exp $")
+
+
+START_TEST(Timer, "$Id: Timer_test.C,v 1.12.4.5 2002/12/09 21:57:43 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -19,7 +22,7 @@ using namespace BALL;
 
 #define BUSY_WAIT \
 	STATUS("WAITING")\
-	{ double x = 0.0; for (int i = 0; i < 5000000; i++, x += rand()); }
+	{ double x = 0.0; for (int i = 0; i < 5e6; i++, x += rand()); }
 
 CHECK(Timer::Timer())
 	Timer* t1 = new Timer();
@@ -96,11 +99,7 @@ CHECK(Timer::getClockTime() const )
 	Timer t1;
 	TEST_EQUAL(t1.getClockTime(), 0)	
 	t1.start();
-#ifdef BALL_COMPILER_MSVC
-	Sleep(2000);
-#else
 	sleep(2);
-#endif
 	t1.stop();
 	TEST_EQUAL(t1.getClockTime() > 1, true)
 	TEST_EQUAL(t1.getClockTime() < 3, true)	
@@ -133,25 +132,27 @@ CHECK(Timer::getSystemTime() const )
 RESULT
 
 CHECK(Timer::getCPUTime() const )
+	Timer t0;
+	t0.start();
 	Timer t1;
+	STATUS(t1.getCPUTime())
 	TEST_EQUAL(t1.getCPUTime(), 0)	
 	t1.start();
-#ifdef BALL_COMPILER_MSVC
-	Sleep(2000);
-#else
 	sleep(2);
-#endif
 	t1.stop();
+	STATUS(t1.getCPUTime())
 	TEST_EQUAL(t1.getCPUTime() <= 1, true)	
 	t1.reset();
 	t1.start();
 	BUSY_WAIT
-#ifdef BALL_COMPILER_MSVC
 	BUSY_WAIT
-#endif
 	t1.stop();
+	STATUS(t1.getCPUTime())
 	TEST_EQUAL(t1.getCPUTime() > 0, true)	
 	TEST_REAL_EQUAL(t1.getCPUTime(), t1.getSystemTime() + t1.getUserTime())	
+	STATUS(t0.getCPUTime())
+	t0.stop();
+	STATUS(t0.getCPUTime())
 RESULT
 
 CHECK(Timer::Timer& operator = (const Timer& timer))
@@ -179,11 +180,7 @@ RESULT
 CHECK(Timer::bool operator == (const Timer& timer) const )
 	Timer t1;
 	t1.start();
-#ifdef BALL_COMPILER_MSVC
-	Sleep(1000);
-#else
 	sleep(1);
-#endif
 	t1.stop();
 	Timer t2;
 	TEST_EQUAL(t1 == t2, false);
