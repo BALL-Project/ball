@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.6 2000/02/20 20:49:02 oliver Exp $ #include
+// $Id: Vector3_test.C,v 1.7 2000/02/20 21:55:30 oliver Exp $ #include
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.6 2000/02/20 20:49:02 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.7 2000/02/20 21:55:30 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -62,7 +62,6 @@ CHECK(TVector3(const T& x, const T& y, const T& z);)
 	TEST_EQUAL(v[0], 1)
 	TEST_EQUAL(v[1], 2)
 	TEST_EQUAL(v[2], 3)
-	TEST_EQUAL(v[3], 4)
 RESULT
 
 //line
