@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.38 2004/11/07 14:44:14 oliver Exp $
+// $Id: logStream.C,v 1.39 2005/01/18 21:21:36 amoll Exp $
 //
 
 #include <limits>
@@ -180,19 +180,19 @@ namespace BALL
 						break;
 
 					case 'y':	// append the message type (error/warning/information)
-						if (level >= LogStream::ERROR) 
+						if (level >= LogStream::ERROR_LEVEL) 
 						{
 							result.append("ERROR");
 						}
 						else 
 						{
-							if (level >= LogStream::WARNING) 
+							if (level >= LogStream::WARNING_LEVEL) 
 							{
 								result.append("WARNING");
 							}
 							else 
 							{
-								if (level >= LogStream::INFORMATION) 
+								if (level >= LogStream::INFORMATION_LEVEL) 
 								{
 									result.append("INFORMATION");
 								}
@@ -280,8 +280,8 @@ namespace BALL
 		{
 			// associate cout to informations and warnings,
 			// cerr to errors by default
-			insert(std::cout, INFORMATION, ERROR - 1);
-			insert(std::cerr, ERROR);
+			insert(std::cout, INFORMATION_LEVEL, ERROR_LEVEL - 1);
+			insert(std::cerr, ERROR_LEVEL);
 		}
 	}
 

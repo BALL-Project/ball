@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.iC,v 1.10 2004/02/18 23:24:03 oliver Exp $
+// $Id: logStream.iC,v 1.11 2005/01/18 21:21:53 amoll Exp $
 //
 
 BALL_INLINE
@@ -73,7 +73,7 @@ LogStream& LogStream::error(int level)
 	// will be reset by sync(), i.e. at the end of the next line
 	if (rdbuf() != 0)
 	{
-		rdbuf()->tmp_level_ = ERROR + level;
+		rdbuf()->tmp_level_ = ERROR_LEVEL + level;
 	}
 
 	return *this;
@@ -86,7 +86,7 @@ LogStream& LogStream::warn(int level)
 	// will be reset by sync(), i.e. at the end of the next line
 	if (rdbuf() != 0)
 	{
-		rdbuf()->tmp_level_ = WARNING + level;
+		rdbuf()->tmp_level_ = WARNING_LEVEL + level;
 	}
 
 	return *this;
@@ -99,7 +99,7 @@ LogStream& LogStream::info(int level)
 	// will be reset by sync(), i.e. at the end of the next line
 	if (rdbuf() != 0)
 	{
-		rdbuf()->tmp_level_ = INFORMATION + level;
+		rdbuf()->tmp_level_ = INFORMATION_LEVEL + level;
 	}
 
 	return *this;
