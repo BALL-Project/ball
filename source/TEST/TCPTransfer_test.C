@@ -1,4 +1,4 @@
-// $Id: TCPTransfer_test.C,v 1.12 2002/01/09 12:22:17 amoll Exp $
+// $Id: TCPTransfer_test.C,v 1.13 2002/01/09 12:27:03 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -17,7 +17,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.12 2002/01/09 12:22:17 amoll Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.13 2002/01/09 12:27:03 amoll Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -35,7 +35,6 @@ CHECK(~TCPTransfer_test)
 RESULT
 
 CHECK(set(ofstream& file, const String& address))
-	ABORT_IF(!NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP))
 	TCPTransfer tcp_t;
 	ofstream out;
 	tcp_t.set(out, "http://www.mpi-sb.mpg.de/BALL/test/http_test.txt");
