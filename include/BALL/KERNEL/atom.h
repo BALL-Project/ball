@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.25 2000/08/30 19:58:05 oliver Exp $
+// $Id: atom.h,v 1.26 2000/09/26 19:25:16 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -47,6 +47,7 @@ namespace BALL
 	class Bond;
 	class Element;
 	class Fragment;
+	class Residue;
 	class Molecule;
 
 	/** Atom class.
@@ -83,8 +84,8 @@ namespace BALL
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.25 $
-			@date    $Date: 2000/08/30 19:58:05 $
+			@version $Revision: 1.26 $
+			@date    $Date: 2000/09/26 19:25:16 $
 	*/
 	class Atom
 		: public Composite,
@@ -419,7 +420,7 @@ namespace BALL
 			*/
 			Fragment* getFragment();
 
-			/** Mutable inspection of the atom's parent fragment.
+			/** Non-mutable inspection of the atom's parent fragment.
 					Access a constant reference to the parent fragment of {\em *this} atom.
 					The reference is 0 if {\em *this} atom does not have a parent fragment.\\
 					\\
@@ -432,6 +433,17 @@ namespace BALL
 											 0 if {\em *this} atom does not have a parent fragment
 			*/
 			const Fragment* getFragment() const;
+
+			/** Non-mutable inspection of the atom's parent residue.
+					Access a constant reference to the parent residue of {\em *this} atom.
+					The reference is 0 if {\em *this} atom does does not have a parent residue.\\
+					\\
+
+					@return      Residue* -
+											 constant reference to the parent residue of {\em *this} atom,
+											 0 if {\em *this} atom does not have a parent residue
+			*/
+			const Residue* getResidue() const;
 
 			/** Change of the atom's name.
 					Change the name of {\em *this} atom to {\em name}.
