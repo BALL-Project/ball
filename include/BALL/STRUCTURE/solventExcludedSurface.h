@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.17 2001/07/15 21:21:02 amoll Exp $
+// $Id: solventExcludedSurface.h,v 1.18 2001/09/19 17:51:39 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -76,7 +76,7 @@ namespace BALL
 					print << pre << "SolventExcludedSurface(reducedSurface)\n";
 					pre += "  ";
 					#endif
-			vector< TRSVertex<T>* > rs_vertices(reduced_surface->getVertices());
+			std::vector<TRSVertex<T>*> rs_vertices(reduced_surface->getVertices());
 			for (Position i = 0; i < rs_vertices.size(); i++)
 			{
 				if (rs_vertices[i] != NULL)
@@ -275,7 +275,7 @@ namespace BALL
 
 		TSESEdge<T>* createConvexEdge(TSESFace<T>* toric_face, TRSVertex<T>* rsvertex)
 		{
-			TSESEdge<T>* edge = new TSESEdge<T>();
+			TSESEdge<T>* edge = new TSESEdge<T>;
 			Index atom = rsvertex->getAtom();
 			Index index = rsvertex->getIndex();
 			Position i = 0;
@@ -548,9 +548,8 @@ namespace BALL
 	};
 
 
-	/**	Input operator.
+	/**	Input- Operator.
 			Reads in a SolventExcludedSurface
-			@exception NotImplemented
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TSolventExcludedSurface<T>& ses)
@@ -558,7 +557,7 @@ namespace BALL
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
-	/**	Output operator.
+	/**	Output- Operator.
 			Prints out a SolventExcludedSurface
 	*/
 	template <typename T>
