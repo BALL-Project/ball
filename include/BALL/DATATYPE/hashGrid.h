@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.16 2001/03/06 14:02:10 anker Exp $
+// $Id: hashGrid.h,v 1.17 2001/03/07 17:24:47 anker Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -219,7 +219,7 @@ namespace BALL
 				}
 			}
 
-			~DataItem_()
+			virtual ~DataItem_()
 				throw()
 			{
 			}
@@ -245,7 +245,7 @@ namespace BALL
 				}
 			}
 
-			~NeighbourBoxItem_()
+			virtual ~NeighbourBoxItem_()
 				throw()
 			{
 			}
