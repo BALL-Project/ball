@@ -38,7 +38,7 @@ can \member{apply}{} it to any given kernel data structure:
 Instantiating \class{FragmentDB} usually takes a few seconds to parse the
 fragment database and the naming conversion tables stored in
 \directory{BALL/data/Fragments}. The resulting data may then be used by two
-very handy processors: \member{add\_hydrogens}{} and \member{build\_bonds}{}.
+very handy processors: add_hydrogens and build_bonds.
 As their names suggest, those processors add the missing hydrogen atoms and
 rebuild missing bonds. We will now add the missing atoms and bonds of BPTI 
 through simple application of the two processors:
@@ -91,7 +91,7 @@ setting up a calculation is very simple:\index{AMBER force field}
 \end{lstlisting}
 
 \noindent
-This constructor call creates a new \class{AmberFF}, reads the parameter
+This constructor-call creates a new \class{AmberFF}, reads the parameter
 file (the default one, \file{amber94.ini}, which corresponds to the AMBER
 file {\tt parm94.dat}), and constructs some internal data structures.
 This particular instance of the force field is now {\em bound} to the 

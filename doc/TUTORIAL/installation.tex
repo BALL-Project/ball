@@ -24,8 +24,8 @@ for various purposes. These utilities are standard software and should be
 installed on every contemporary UN*X machine. The newest versions are
 downloadable from \URL{http://www.gnu.org/software/}.
 
-The usage of GNU make is recommended, although BALL will also build with
-other versions of make. It is available from \URL{ftp://ftp.gnu.org/gnu/}
+The usage of GNU {\tt make} is recommended, although BALL will also build with
+other versions of {\tt make}. It is available from \URL{ftp://ftp.gnu.org/gnu/}
 and easy to install.
 
 The compilation of the visualization component BALLVIEW also requires
@@ -54,7 +54,7 @@ scripting language), you will also need Python 2.1 installed
 through our website (\URL{http://www.bioinf.uni-sb.de/OK/BALL/}). SIP is a tool
 for generating Python bindings for C++ class libraries.
 
-Additionally you need might need the FFTW package for fast Fourier
+Additionally you might need the FFTW package for fast Fourier
 transformations (Verson 2.1.3), available from \URL{http://www.fftw.org/}.
 
 Please make sure that the required external \CPP libraries (i.e. QT and SIP)
@@ -162,6 +162,10 @@ usually not required.\\\vspace{3mm}
 
   \option{--with-python-ldopts=X}&         Use additional options X when
                                            linking with the Python library
+                                           \\\vspace{3mm}
+
+  \option{--with-qt-mt}&                   use a threadsafe version of the
+                                           QT lib (libqt-mt)
                                            \\\vspace{3mm}
 
   \option{--with-sip-lib=DIR}&             the SIP library resides in DIR
