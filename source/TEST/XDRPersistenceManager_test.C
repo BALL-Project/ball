@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager_test.C,v 1.12 2003/06/28 19:18:38 oliver Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.13 2004/07/07 19:29:04 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -10,10 +10,11 @@
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 #include <BALL/CONCEPT/composite.h>
+#include <BALL/FORMAT/PDBFile.h>
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.12 2003/06/28 19:18:38 oliver Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.13 2004/07/07 19:29:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -418,6 +419,27 @@ RESULT
 CHECK(void initializeOutputStream() throw())
 	// ???
 RESULT
+
+CHECK([Extra] full_test)
+	PDBFile pdb("data/OoiEnergy_test.pdb");
+	System s;
+	pdb >> s;
+
+	NEW_TMP_FILE(filename);
+	ofstream os(filename.c_str(), std::ios::out);
+	XDRPersistenceManager pm(os);
+	s >> pm;
+	os.close();
+
+	ifstream is(filename.c_str(), std::ios::in);
+	XDRPersistenceManager pm2(is);
+	System* s2 = (System*) pm2.readObject();
+	is.close();
+
+	TEST_EQUAL(s.countAtoms(), s2->countAtoms())
+RESULT
+
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
