@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.6 2000/03/15 05:12:34 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.7 2000/03/16 08:03:21 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -760,19 +760,21 @@ namespace BALL
 	*/
 	template <class T>
 	bool GetIntersection
-		(const TSphere3<T> &sphere, const TLine3<T>& line,
-		 TVector3<T> &intersection_point1, TVector3<T> &intersection_point2)
+		(const TSphere3<T>& sphere, const TLine3<T>& line,
+		 TVector3<T>& intersection_point1, TVector3<T>& intersection_point2)
 	{
 		T x1, x2;
 		short number_of_solutions 
-			= SolveSquaredEquality(line.d * line.d,
-								 						 2 * (line.p - Sphere3.p) * line.d,
-			 											 (line.p - sphere.p) * (line.p - sphere.p)
-															- sphere.radius * sphere.radius,
-		 												 x1, x2);
+			= SolveSquaredEquality
+					(line.d * line.d,
+					 2 * (line.p - sphere.p) * line.d,
+					 (line.p - sphere.p) * (line.p - sphere.p) - sphere.radius * sphere.radius,
+					 x1, x2);
 
 		if (number_of_solutions == 0)
+		{
 			return false;
+		}
 
 		intersection_point1 = line.p + x1 * line.d;
 		intersection_point2 = line.p + x2 * line.d;
