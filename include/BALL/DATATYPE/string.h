@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.31 2001/02/10 20:01:00 amoll Exp $
+// $Id: string.h,v 1.32 2001/02/11 23:05:07 amoll Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -87,14 +87,15 @@ namespace BALL
 				requiring indices.
 		*/
 		static const Size EndPos;
-		//@}
 
+		//@}
 		/**	@name	Predefined character classes
 				There exist several predefined character classes, that may
 				be used in several functions (e.g. trim methods) to represent 
 				a set of characters. 
 		*/
 		//@{
+
 		/// Character class containing all letters (lower and upper case)
 		static const char* CHARACTER_CLASS__ASCII_ALPHA;
 
@@ -117,11 +118,11 @@ namespace BALL
 				Whitespace characters are:\\
 				\begin{itemize}
 					\item blank ({\tt" "})
-					\item horizontal tab ({\tt"\\t"})
-					\item new-line ({\tt"\\n"})
-					\item line-feed ({\tt"\\r"})
-					\item vertical tab ({\tt"\\v"})
-					\item form-feed ({\tt"\\f"})
+					\item horizontal tab ({\tt"\\ t"})
+					\item new-line ({\tt"\\ n"})
+					\item line-feed ({\tt"\\ r"})
+					\item vertical tab ({\tt"\\ v"})
+					\item form-feed ({\tt"\\ f"})
 				\end{itemize}
 		*/
 		static const char* CHARACTER_CLASS__WHITESPACE;
@@ -129,9 +130,11 @@ namespace BALL
 		/**	Character class containing double quotes.
 		*/
 		static const char* CHARACTER_CLASS__QUOTES;
-		//@}
 
-		/** @name	Constructors and Destructors */
+		//@}
+		/** @name	Constructors and Destructors 
+		*/
+		//@{
 
 		/// Default Constructor
 		String()
@@ -167,7 +170,7 @@ namespace BALL
 				to the result of a call to {\bf sprintf} using {\bf format} as a
 				format string and all additional parameters as arguments.\\
 				The result of the sprintf call is intermediately written to a buffer
-				of a maximum soze of {\bf buffer_size} characters, so choose an 
+				of a maximum size of {\bf buffer_size} characters, so choose an 
 				appropriate size for this variables.\\
 				@exception IndexUnderflow, if the buffer size specified is not larger than 0
 				@exception NullPointer, if {\tt format == 0}
@@ -185,7 +188,7 @@ namespace BALL
 
 		/** Creates a new string from len copies of c.
 		*/
-		String(const char c, Size size = 1)
+		String(const char c, Size len = 1)
 			throw();
 
 		/// Creates a string just containing an unsigned character
@@ -236,7 +239,9 @@ namespace BALL
 		virtual void clear()
 			throw();
 
-		/**	@name	Assignment methods */
+		//@}
+		/**	@name	Assignment methods 
+		*/
 		//@{
 
 		/**	Assign a String from a range of another string
@@ -302,11 +307,11 @@ namespace BALL
 		void set(float f)
 			throw();
 
-		/// Assign a String from a float value
+		/// Assign a String from a double value
 		void set(double d)
 			throw();
 
-		/// Assign a C type string
+		/// Assign to a C type string
 		void get(char* char_ptr, Index from = 0, Size len = EndPos) const
 			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 
@@ -336,7 +341,7 @@ namespace BALL
 		const String& operator = (short s)
 			throw();
 
-		/// Assign a String from ans unsigned short
+		/// Assign a String from an unsigned short
 		const String& operator = (unsigned short us)
 			throw();
 
@@ -365,17 +370,25 @@ namespace BALL
 			throw();
 
 		//@}
-		
+		/** @name Compare mode setting
+		*/
+		//@{
 
-		/// 
+		/** Set the compare mode for all string compares
+				@see CompareMode
+		*/
 		static void setCompareMode(CompareMode compare_mode)
 			throw();
 
-		///
+		/** Get the compare mode.
+				@see CompareMode
+		*/
 		static CompareMode getCompareMode()
 			throw();
 
-		/** @name Converters */
+		//@}
+		/** @name Converters 
+		*/
 		//@{
 
 		/**	Converts the string to a bool value.
@@ -424,10 +437,10 @@ namespace BALL
 		/// Evaluates the string to a double
 		double toDouble() const
 			throw(Exception::InvalidFormat);
+
 		//@}
-	
-		
-		/**	@name	Case Conversion */
+		/**	@name	Case Conversion 
+		*/
 		//@{			
 
 		/// Converts all characters in the given range to lower case
@@ -439,8 +452,8 @@ namespace BALL
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		//@}
-
-		/**	@name Substring Definition */
+		/**	@name Substring Definition 
+		*/
 		//@{
 
 		/// Returns a substring
@@ -472,8 +485,8 @@ namespace BALL
 			throw();
 
 		//@}
- 
-		/**	@name	AWK style field operations */
+		/**	@name	AWK style field operations 
+		*/
 		//@{
 
 		/// Count the fields that are separated by a defined set of delimiters
@@ -519,11 +532,9 @@ namespace BALL
 			throw(Exception::IndexUnderflow, Exception::NullPointer);
 
 		//@}
-
-
-		/**	@name BASIC style string operations */
+		/**	@name BASIC style string operations 
+		*/
 		//@{
-
 
 		/** Strips all characters in {\bf trimmed} from the left of the string.
 				trimLeft stops at the first character encountered that is not in {\bf trimmed}.
@@ -540,13 +551,13 @@ namespace BALL
 				remove blanks from the end of a string.
 				Strings consisting of character from {\tt trimmed} only yield an empty string.
 		*/
-		String& trimRight(const char* trimmed_chars = CHARACTER_CLASS__WHITESPACE)
+		String& trimRight(const char* trimmed = CHARACTER_CLASS__WHITESPACE)
 			throw();
 
 		/**	Strips all characters in {\bf trimmed} from both sides of the string.
 				trim calls {\tt trimRight(trimmed).trimLeft(trimmed)}.
 		*/
-		String& trim(const char* trimmed_chars = CHARACTER_CLASS__WHITESPACE)
+		String& trim(const char* trimmed = CHARACTER_CLASS__WHITESPACE)
 			throw();
 
 		/// Truncate the string to length {\bf size}
@@ -567,16 +578,16 @@ namespace BALL
 				incremental search.
 				@return	Substring containing the search pattern, empty if not found
 				@param	pattern the search pattern
-				@from		the index in the string to start the search from
+				@param  from		the index in the string to start the search from
 		*/
 		Substring instr(const String& pattern, Index from = 0) const
 			throw();
 
 		//@}
-
-
-		/**	@name	String Operations  */
+		/**	@name	String Operations  
+		*/
 		//@{
+
 		///	Concatenates two strings
 		String operator + (const string& string) const
 			throw();
@@ -616,9 +627,8 @@ namespace BALL
 			throw();
 
 		//@}
-			
-
-		/**	@name	Predicates */
+		/**	@name	Predicates 
+		*/
 		//@{
 
 		/// True, if the string contains character {\bf c}
@@ -695,15 +705,15 @@ namespace BALL
 		static bool isSpace(char c)
 			throw();
 
-		/** True, if the character is any whitespace character
+		/** True, if the character is any whitespace character.
 				Whitespaces are defined in CHARACTER_CLASS__WHITESPACE
 		*/
 		static bool isWhitespace(char c)
 			throw();
 
 		//@}
-
-		/**	@name	Comparators */
+		/**	@name	Comparators 
+		*/
 		//@{
 
 		///
@@ -848,8 +858,8 @@ namespace BALL
 			throw();
 
 		//@}
-
-		/**	@name	Debugging and Diagnostics */
+		/**	@name	Debugging and Diagnostics 
+		*/
 		//@{
 
 		///
@@ -861,9 +871,6 @@ namespace BALL
 			throw();
 
 		//@}			
-
-
-
 		/**	@name	Stream Operations 
 		*/
 		//@{
@@ -875,8 +882,8 @@ namespace BALL
 		///
 		friend ::std::istream& getline(::std::istream& s,  String& string,  char delimiter = '\n')
 			throw();
-		//@}
 
+		//@}
 
 		protected:
 	
@@ -911,11 +918,10 @@ namespace BALL
 
 	/**	A substring class.
 			The Substring class represents an efficient way to deal with substrings
-			of \Ref{String}s. Each Substring is bound to an instance of String and 
+			of \Ref{String}. Each Substring is bound to an instance of String and 
 			is defined by a start and end index. It can be used like a String (with several
 			restrictions) but only affects the given range of the string it is bount to.\\
-			{\bf Definition:} \URL{BALL/DATATYPE/string.h}
-			\\
+			{\bf Definition:} \URL{BALL/DATATYPE/string.h} \\
 	*/
 	class Substring
 	{
@@ -953,7 +959,6 @@ namespace BALL
 		};
 
 		//@}
-
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -1000,9 +1005,7 @@ namespace BALL
 		virtual void clear()
 			throw();
 
-	
 		//@}
-
 		/**	@name Converters 
 		*/
 		//@{
@@ -1018,9 +1021,8 @@ namespace BALL
 		*/
 		String toString() const
 			throw(Substring::UnboundSubstring);
+
 		//@}
-
-
 		/**	@name Binding and Unbinding Substrings 
 		*/
 		//@{
@@ -1052,8 +1054,8 @@ namespace BALL
 			throw();
 
 		//@}
-		
-		/**	@name	Assignment */
+		/**	@name	Assignment 
+		*/
 		//@{
 	
 		/** Sets the substring to a certain string
@@ -1083,8 +1085,8 @@ namespace BALL
 			throw(Substring::UnboundSubstring, Exception::NullPointer);
 
 		//@}
-
-		/**	@name	Accessors and Mutators */
+		/**	@name	Accessors and Mutators 
+		*/
 		//@{	
 		
 		/// Returns a pointer to the substring's contents
@@ -1095,11 +1097,15 @@ namespace BALL
 		const char* c_str() const
 			throw(Substring::UnboundSubstring);
 
-		/// Returns the first index of the substring
+		/** Returns the first index of the substring.
+				This means the starting point in the bound string.
+		*/
 		Index getFirstIndex() const
 			throw(Substring::UnboundSubstring);
 
-		/// Returns the last index of the substring
+		/** Returns the last index of the substring
+				This means the end point in the bound string.
+		*/
 		Index getLastIndex() const
 			throw(Substring::UnboundSubstring);
 
@@ -1111,7 +1117,7 @@ namespace BALL
 		char& operator [] (Index index)
 			throw(Substring::UnboundSubstring, Exception::IndexUnderflow, Exception::IndexOverflow);
 
-		/// Random access to a character of the substring
+		/// Random access to a character of the substring (const method).
 		char operator [] (Index index) const
 			throw(Substring::UnboundSubstring, Exception::IndexUnderflow, Exception::IndexOverflow);
 
@@ -1124,9 +1130,10 @@ namespace BALL
 			throw(Substring::UnboundSubstring);
 			
 		//@}
-
-		/**	@name Predicates */
+		/**	@name Predicates 
+		*/
 		//@{
+
 		/// Returns true, if the substring is bound to a String
 		bool isBound() const
 			throw();
@@ -1134,10 +1141,10 @@ namespace BALL
 		/// Returns true, if the substring is empty or unbound
 		bool isEmpty() const
 			throw();
-		//@}
-			
 
-		/**	@name	Comparison Operators */
+		//@}
+		/**	@name	Comparison Operators 
+		*/
 		//@{
 
 		/// returns true, if the contents of the two substrings are equal
@@ -1164,32 +1171,34 @@ namespace BALL
 		friend bool operator != (const String& string, const Substring& substring)
 			throw(Substring::UnboundSubstring);
 
-		/// Returns true, if the contents of the substring are equal to the contents of the string the char pointer points to
+		/// Returns true, if the contents of the substring are equal to the contents of the C-string
 		bool operator == (const char* char_ptr) const
 			throw(Substring::UnboundSubstring, Exception::NullPointer);
 
-		/// Returns true, if the contents of the substring are not equal to the contents of the string the char pointer points to
+		/// Returns true, if the contents of the substring are not equal to the contents of the C-string
 		bool operator != (const char* char_ptr) const
 			throw(Substring::UnboundSubstring, Exception::NullPointer);
 
-		/// Returns truw, if the substring has length 1 and contains the given char
+		/// Returns true, if the substring has length 1 and contains the given char
 		bool operator == (char c) const
 			throw(Substring::UnboundSubstring);
 
 		/// Returns true, if the substring is differnet from the given char
 		bool operator != (char c) const
 			throw(Substring::UnboundSubstring);
-		//@}
 
-		/**	@name	Stream I/O */
+		//@}
+		/**	@name	Stream I/O 
+		*/
 		//@{
 
 		/// Writes the substring to a stream
 		friend ::std::ostream& operator << (::std::ostream& s, const Substring& substring)
 			throw();
+
 		//@}
-	
-		/**	@name	Debugging and Diagnostics */
+		/**	@name	Debugging and Diagnostics 
+		*/
 		//@{
 
 		/** Returns true, if the string is bound to a string and its indices are valid.
@@ -1199,9 +1208,10 @@ namespace BALL
 		bool isValid() const
 			throw();
 
-		///	Dumps the substring object (including the values of its private memebers)
+		///	Dumps the substring object (including the values of its private members)
 		void dump(::std::ostream& s = ::std::cout, Size depth = 0) const 
 			throw(Substring::UnboundSubstring);
+
 		//@}
 		
 		protected:

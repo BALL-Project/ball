@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.33 2001/01/21 21:10:14 amoll Exp $
+// $Id: vector4.h,v 1.34 2001/02/11 23:05:12 amoll Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -79,7 +79,7 @@ namespace BALL
 
 		/**	Array constructor.
 				This constructor creates a TVector4 object from the first
-				four elements pointed of array {\tt ptr}.
+				four elements pointed by {\tt ptr}.
 				@param ptr the array to construct from
 				@exception NullPointer if {\tt ptr == 0}
 		*/
@@ -120,14 +120,13 @@ namespace BALL
 		}
 
 		//@}
-
 		/**	@name	Assignment
 		*/
 		//@{
 	
 		/**	Assign from an array.
 				Assign the four components {\tt x}, {\tt y}, {\tt z} and {\tt h} from
-				the first four elements of the array pointed of array {\tt ptr}.
+				the first four elements of the array pointed to by {\tt ptr}.
 				@param ptr an array
 				@exception Nullpointer if {\tt ptr == 0}
 		*/
@@ -194,8 +193,8 @@ namespace BALL
 		*/
 		void swap(TVector4& vector)
       throw();
-		//@}
 
+		//@}
 		/**	@name	Accessors
 		*/
 		//@{
@@ -252,11 +251,12 @@ namespace BALL
 		*/
 		const T& operator [] (Position position) const
       throw(Exception::IndexOverflow);
+
 		//@}
-		
 		/**	@name	Arithmetic operators
 		*/
 		//@{
+
 		/**	Positive sign.
 		*/
 		TVector4 operator + () const
@@ -301,7 +301,7 @@ namespace BALL
 				Return {\tt TVector4(x / scalar, y / scalar, z / scalar, h / scalar)}.
 				@param scalar the scalar to divide by
 				@return TVector4 
-				@exception Exception::DivisionByZero if {\tt lambda == (T)0}
+				@exception Exception::DivisionByZero if {\tt scalar == (T)0}
 		*/
 		TVector4 operator / (const T& scalar)
       throw(Exception::DivisionByZero);
@@ -309,7 +309,7 @@ namespace BALL
 		/**	Divide a vector by a scalar.
 				@param scalar the scalar to divide by
 				@return TVector4&, {\em *this}
-				@exception Exception::DivisionByZero if {\tt lambda == (T)0}
+				@exception Exception::DivisionByZero if {\tt scalar == (T)0}
 		*/
 		TVector4& operator /= (const T& scalar)
       throw(Exception::DivisionByZero);
@@ -336,8 +336,8 @@ namespace BALL
 		*/
 		T getSquareDistance(const TVector4& vector) const
       throw();
-		//@}
 
+		//@}
 		/**	@name	Predicates
 		*/
 		//@{
@@ -358,11 +358,12 @@ namespace BALL
 		*/
 		bool isOrthogonalTo(TVector4& vector) const
       throw();
-		//@}
 
+		//@}
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
+
 		/**	Test whether instance is valid.
 				Always returns true
 				@return bool {\bf true}
@@ -378,10 +379,10 @@ namespace BALL
 		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
       throw();
+
 		//@}
-
-
 		/**	@name	Attributes
+				All vector components are public members for convenience.
 		*/
 		//@{
 
@@ -401,7 +402,6 @@ namespace BALL
 		*/
 		T h;
 
-		/** All vector components are public members for convenience. */
 		//@}
 	};
 

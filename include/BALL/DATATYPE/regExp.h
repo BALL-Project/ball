@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.12 2001/02/03 15:31:16 amoll Exp $
+// $Id: regExp.h,v 1.13 2001/02/11 23:05:07 amoll Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -108,7 +108,7 @@ namespace BALL
 
 		/**	Detailled constructor	
 				@param pattern the string to create the pattern from
-				@param wildcard_pattern
+				@param wildcard_pattern BAUSTELLE
 		*/
 		RegularExpression(const String& pattern, bool wildcard_pattern = false)
 			throw();
@@ -136,17 +136,24 @@ namespace BALL
 		const RegularExpression& operator = (const RegularExpression& expression) throw();
 
 		/**	Assign from another instance
+				@param deep ignored (needed for a consistent interface only)
 		*/
 		void set(const RegularExpression& regular_expression, bool deep = true) throw();
 
-		/**	Assign from a string
+		/**	Assign from a string.
+				@param wildcard_pattern BAUSTELLE
 		*/
 		void set(const String& pattern, bool wildcard_pattern = false) throw();
 
 		/**	Assign to an other instance
+				@param deep ignored (needed for a consistent interface only)
 		*/
 		void get(RegularExpression& regular_expression, bool deep = true) const throw();
+
 		//@}
+		/**	@name	Accessors
+		*/
+		//@{
 
 		/**	Get the expression pattern.
 		*/
@@ -156,45 +163,60 @@ namespace BALL
 		*/
 		Size countSubexpressions() const throw();
 
-		/**	Match a text with a given pattern
+		/**	Match a text with a given pattern.
+				@param text to process
+				@param pattern to compare with
+				@param compile_flags BAUSTELLE
+				@param execute_flags BAUSTELLE
+				@exception NullPointer if {\tt text} or {\tt pattern} are NULL
 		*/
 		static bool match(const char* text, const char* pattern,
 											int compile_flags = 0 | REG_EXTENDED | REG_NOSUB, int execute_flags = 0)
 			throw(Exception::NullPointer);
 		
 		/**	Match a text with this regular expression.
+				@param text to process
 				@param from index in the string to start the matching
+				@param execute_flags BAUSTELLE
 		*/
 		bool match(const String& text, Index from = 0, int execute_flags = 0 ) const
 			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 	
 		/**	Match a substring with this regular expression.
+				@param text to process
 				@param from index in the substring to start the matching
+				@param execute_flags BAUSTELLE
 		*/
 		bool match(const Substring& text, Index from = 0, int execute_flags = 0) const
 			throw(Substring::InvalidSubstring, Exception::IndexUnderflow, Exception::IndexOverflow);
 	
 		/**	Match a C-String with this regular expression.
+				@param text to process
+				@param execute_flags BAUSTELLE
 		*/
 		bool match(const char* text, int execute_flags = 0) const
 			throw(Exception::NullPointer);
 	
 		/**	Find this expression in a string
 				@param from index in the string to start the matching
-				@param found the result is stored here
+				@param found the result is stored as a substring here
+				@param execute_flags BAUSTELLE
 		*/
 		bool find(const String& text, Substring& found,
 							Index from = 0, int execute_flags = 0) const
 							throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 			
 		/**	Find this expression in a string
-				@param from index in the string to start the matching
+				@param text to process
 				@param subexpressions the results are stored here
+				@param from index in the string to start the matching		
+				@param execute_flags BAUSTELLE
 		*/
 		bool find(const String& text, vector<Substring>& subexpressions,
 							Index from = 0, int execute_flags = 0) const
 							throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 						
+		//@}
 		/**	@name	Predicates
 		*/
 		//@{
@@ -226,8 +248,8 @@ namespace BALL
 		/**	Greater operator
 		*/
 		bool operator > (const RegularExpression& regular_expression) const throw();
-		//@}
 
+		//@}
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
@@ -237,12 +259,14 @@ namespace BALL
 		virtual bool isValid() const throw();
 
 		/**	Dump this instance to an ostream
+				depth is normaly just used for internal use.
 				@param s the ostream, default is the standard output
+				@param depth the indentation depth of the output
 		*/
 		virtual void dump(::std::ostream& s = ::std::cout, Size depth = 0) const
 			throw();
-		//@}
 
+		//@}
 		/**	@name Storers
 		*/
 		//@{
@@ -256,6 +280,7 @@ namespace BALL
 		*/
 		friend ::std::istream& operator >> (::std::istream& s, RegularExpression& regular_expression)
 			throw();
+
 		//@}
 		
 		private:

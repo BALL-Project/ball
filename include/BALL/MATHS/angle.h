@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.29 2001/01/21 21:10:13 amoll Exp $
+// $Id: angle.h,v 1.30 2001/02/11 23:05:12 amoll Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -17,11 +17,10 @@ namespace BALL
 	class TAngle;
 
 	/**	@name Angle
-			@memo representation of angles: class \Ref{TAngle} and class \Ref{Angle}
+			representation of angles: class \Ref{TAngle} and class \Ref{Angle}
 	*/
 	//@{
 	
-
 	template <typename T>
 	BALL_INLINE
 	TAngle<T> operator * (const T& val, const TAngle<T>& angle)
@@ -42,8 +41,7 @@ namespace BALL
 			Use this class to describe angles. The TAngle class permits the conversion
 			from degree to radians and is the return type of all functions used to calculate
 			angles.\\
-			{\bf Definition:} \URL{BALL/MATHS/angle.h}
-			\\
+			{\bf Definition:} \URL{BALL/MATHS/angle.h} \\
 	*/
 	template <typename T>
 	class TAngle
@@ -71,7 +69,6 @@ namespace BALL
 			RANGE__SIGNED    = 2 
 		};
 		//@}
-
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -168,7 +165,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	@name	Accessors
 		*/
 		//@{
@@ -305,8 +301,8 @@ namespace BALL
 		*/
 		TAngle operator /	(const TAngle& val)
 			throw(Exception::DivisionByZero);
-		//@}
 
+		//@}
 		/**	@name	Predicates
 		*/
 		//@{
@@ -382,9 +378,8 @@ namespace BALL
 		*/
 		bool isEquivalent(TAngle angle) const
 			throw();
+
 		//@}
-
-
 		/**	@name	Debugging and Diagnostics
 		*/
 		//@{
@@ -404,8 +399,8 @@ namespace BALL
 		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Attributes
 		*/
 		//@{
@@ -413,6 +408,7 @@ namespace BALL
 		/**	The value
 		*/
 		T value;
+
 		//@}
 	};
 

@@ -1,4 +1,4 @@
-// $Id: quadruple.h,v 1.5 2001/01/19 23:01:26 amoll Exp $
+// $Id: quadruple.h,v 1.6 2001/02/11 23:05:07 amoll Exp $
 
 #ifndef BALL_DATATYPE_QUADRUPLE_H
 #define BALL_DATATYPE_QUADRUPLE_H
@@ -33,7 +33,7 @@ namespace BALL
 		/**	Copy constructor.
 				Creates a new Quadruple object from another.
 				@param	quadruple the Quadruple object to be copied
-				@param	cone_deep not used (needed for a consistent interface only)
+				@param	deep not used (needed for a consistent interface only)
 		*/
 		Quadruple(const Quadruple& quadruple, bool deep = true) throw();
 
@@ -68,12 +68,6 @@ namespace BALL
 		*/
 		const Quadruple& operator = (const Quadruple& quadruple) throw();
 
-		//@}
-
-		/**	@name	Accessors
-		*/
-		//@{
-
 		/**
 		*/
 		void set(const T1& t1, const T2& t2, const T3& t3, const T4& t4) throw();
@@ -81,8 +75,8 @@ namespace BALL
 		/**
 		*/
 		void get(T1& first, T2& second, T3& third, T4& fourth) const throw();
-		//@}
 
+		//@}
 		/**	@name	Predicates
 		*/
 		//@{

@@ -1,5 +1,4 @@
-// $Id: vector3.h,v 1.48 2001/01/21 21:10:14 amoll Exp $
-
+// $Id: vector3.h,v 1.49 2001/02/11 23:05:12 amoll Exp $
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -150,6 +149,7 @@ namespace BALL
 				Create a TVector3 object and set its coordinates to 
 				the point described by the three spherical polar coordinates
 				{\tt r} (radius), {\tt phi} (azimuth), and {\tt theta} (co-latitude).
+				@see set(const T& r, const TAngle<T>& phi, const TAngle<T> &theta)
 				@param r the radius
 				@param phi the azimuth 
 				@param theta the co-latitude
@@ -413,7 +413,7 @@ namespace BALL
 			throw();
 
 		/**	Fraction of a vector.
-				Return {\tt TVector3(x / scalar, y / scalar, z / scalar)}.
+				Return {\tt TVector3(x / lambda, y / lambda, z / lambda)}.
 				@param lambda the scalar value to divide by
 				@return TVector3& 
 				@exception Exception::DivisionByZero if {\tt lambda == (T)0}
@@ -477,10 +477,10 @@ namespace BALL
 			throw();
 
 		/**	Return the perpendicular normalization of the vector
-				@param TVector3& a 1st vector
-				@param TVector3& b 2nd vector
-				@param TVector3& c 3rd vector
-				@return static TVector3 the perpendicular normalization
+				@param a 1st vector
+				@param b 2nd vector
+				@param c 3rd vector
+				@return TVector3 the perpendicular normalization
 		*/
 		static TVector3 getPerpendicularNormalization
 			(const TVector3& a, const TVector3& b, const TVector3& c)
