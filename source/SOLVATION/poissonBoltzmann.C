@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.14 2000/05/04 13:37:06 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.15 2000/05/05 04:25:47 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -542,8 +542,8 @@ namespace BALL
 		}
 		
 		// document the number of inside and outside points
-		results.setInteger("inside_points", inside_points);
-		results.setInteger("outside_points", outside_points);
+		results.setInteger("inside_points", (long)inside_points);
+		results.setInteger("outside_points", (long)outside_points);
 
 		// variables for fast index evaluation
 		Size Nx = eps_grid->getMaxXIndex() + 1;
