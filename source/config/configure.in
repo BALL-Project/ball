@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.102 2000/07/16 22:04:51 oliver Exp $
+dnl    $Id: configure.in,v 1.103 2000/07/16 22:07:19 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2323,7 +2323,7 @@ if test "${PYTHON_SUPPORT}" = true ; then
 		AC_MSG_RESULT()
 		AC_MSG_RESULT(Please specify the path to the directory that contains)
 		AC_MSG_RESULT(libsip.a using the option --with-sip-lib=DIR.)
-		AC_MSG_RESULT("If you do not have that file, you should obtain SIP")
+		AC_MSG_RESULT([If you do not have that file, you should obtain SIP])
 		AC_MSG_RESULT(from)
 		AC_MSG_RESULT(  www.thekompany.com/projects/pykde)
 		AC_MSG_ERROR(Aborted.)
@@ -2339,7 +2339,7 @@ if test "${PYTHON_SUPPORT}" = true ; then
 		AC_MSG_RESULT()
 		AC_MSG_RESULT(Please specify the path to the directory that contains)
 		AC_MSG_RESULT(sip.h using the option --with-sip-incl=DIR.)
-		AC_MSG_RESULT("If you do not have that file, you should obtain SIP")
+		AC_MSG_RESULT([If you do not have that file, you should obtain SIP])
 		AC_MSG_RESULT(from)
 		AC_MSG_RESULT(  www.thekompany.com/projects/pykde)
 		AC_MSG_ERROR(Aborted.)
