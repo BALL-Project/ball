@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.iC,v 1.15 2004/05/10 11:10:40 amoll Exp $
+// $Id: atom.iC,v 1.16 2004/05/11 07:28:57 oliver Exp $
 //
 
 BALL_INLINE
@@ -30,6 +30,20 @@ float Atom::getCharge() const
 	throw()
 {
 	return static_attributes_[index_].charge;
+}
+
+BALL_INLINE
+void Atom::setFormalCharge(Index charge)
+	throw()
+{
+	static_attributes_[index_].formal_charge = charge;
+}
+
+BALL_INLINE
+Index Atom::getFormalCharge() const
+	throw()
+{
+	return static_attributes_[index_].formal_charge;
 }
 
 BALL_INLINE

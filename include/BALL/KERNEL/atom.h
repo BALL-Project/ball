@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.64 2004/05/04 18:45:47 oliver Exp $
+// $Id: atom.h,v 1.65 2004/05/11 07:28:57 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -364,7 +364,7 @@ namespace BALL
 
 			/** Return the formal charge of the atom
 			*/
-			float getFormalCharge() const throw();
+			Index getFormalCharge() const throw();
 
 
 			/** Mutable inspection of the atom's parent molecule.
