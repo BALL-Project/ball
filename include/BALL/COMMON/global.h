@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.10 2002/02/27 12:18:20 sturm Exp $
+// $Id: global.h,v 1.11 2002/12/12 09:48:39 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -17,12 +17,28 @@
 #	include <BALL/COMMON/memory.h>
 #endif
 
+#ifdef BALL_HAS_BASETSD_H
+#	include <basetsd.h>
+#endif
+
+// If possible use the ISO C99-compliant header stdint.h
+// to define the portable integer types.
+#ifdef BALL_HAS_STDINT_H
+#	include <stdint.h>
+#endif
+
+// Added to avoid warnings with MS Visual Studio .NET
+#ifdef BALL_COMPILER_MSVC
+#pragma warning( disable : 4290 )
+#endif
+
 namespace BALL
 {
-
+	 
 	typedef int (*ComparatorType)(const void *, const void *);
 
 
+	#ifndef BALL_HAS_STDINT_H
 	/**	@name Type aliases defined by BALL.
 			These predefined types are used in BALL for portability and
 			comprehensibility.
@@ -31,7 +47,7 @@ namespace BALL
 	//@{
 
 	/**	Distance type.
-			Use this type to represent distances in indices.
+			Use this type to represent distances in indices. Signed.
 			\\
 			{\bf Size:} 32 bit\\
 			{\bf persistent}
@@ -41,7 +57,7 @@ namespace BALL
 	/**	Handle type.
 			Use this type to represent {\bf handles}. Handles are used
 			for the non-ambiguous identification of objects (e.g. object derived
-      from \Ref{Object}).
+      from \Ref{Object}). Handles are unsigned.
 			\\
 			{\bf Size:} 32 bit\\
 			{\bf persistent}
@@ -144,6 +160,23 @@ namespace BALL
 			{\bf persistent}
 	*/
 	typedef BALL_64BIT_UINT_TYPE PointerSizeInt;
+	#else
+		// the ISO C99 definitions
+		typedef int32_t	Distance; 
+		typedef uint32_t	Handle;
+		typedef int32_t	Index;
+		typedef uint32_t	Size;
+		typedef time_t	Time;
+		typedef	uint32_t	HashIndex;
+		typedef	uint32_t	Position;
+		typedef float Real;
+		typedef double DoubleReal;
+		typedef uint32_t Property;
+		typedef int32_t ErrorCode;
+		typedef	uint8_t Byte;
+		typedef uint64_t PointerSizeInt;
+
+	#endif
 
 	//@}
 

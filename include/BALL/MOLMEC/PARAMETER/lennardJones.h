@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lennardJones.h,v 1.17 2002/02/27 12:19:06 sturm Exp $
+// $Id: lennardJones.h,v 1.18 2002/12/12 09:48:47 oliver Exp $
+
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_LENNARDJONES_H
@@ -70,12 +71,14 @@ namespace BALL
 
 		struct Data
 		{
-			Atom*		atom1;
-			Atom*		atom2;
-			Values	values;
+			Atom::StaticAtomAttributes* atom1;
+			Atom::StaticAtomAttributes* atom2;
+			Values	 values;
 		};
 
 		//@}
+
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -164,7 +167,6 @@ namespace BALL
 		FormatType						format_;
 			
 		std::vector<String>		names_;
-
 	};
 
 } // namespace BALL

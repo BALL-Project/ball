@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reverseBidirectionalIterator.h,v 1.9 2002/02/27 12:18:28 sturm Exp $
+// $Id: reverseBidirectionalIterator.h,v 1.10 2002/12/12 09:46:22 oliver Exp $
 
 #ifndef BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
@@ -64,7 +64,11 @@ namespace BALL
 		/**
 		*/
 		ReverseBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
-			throw();
+			throw()
+			:	BidirectionalIterator<Container, DataType, Position, Traits>(iterator)
+		{	
+		}
+
 
 		/**
 		 */
@@ -147,14 +151,6 @@ namespace BALL
 		throw()
 		:	BidirectionalIterator<Container, DataType, Position, Traits>(iterator)
 	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	ReverseBidirectionalIterator<Container, DataType, Position, Traits>
-	::ReverseBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
-		throw()
-		:	BidirectionalIterator<Container, DataType, Position, Traits>(iterator)
-	{	
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -359,7 +355,11 @@ namespace BALL
 		/**
 		*/
 		ConstReverseBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
-			throw();
+			throw()
+			:	ConstBidirectionalIterator<Container, DataType, Position, Traits>(iterator)
+		{
+		}
+
 
 		/**
 		 */
@@ -442,12 +442,14 @@ namespace BALL
 	{
 	}
 
+	/** WIN
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseBidirectionalIterator<Container, DataType, Position, Traits>::ConstReverseBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
 		throw()
 		:	ConstBidirectionalIterator<Container, DataType, Position, Traits>(iterator)
 	{
 	}
+	*/
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	ConstReverseBidirectionalIterator<Container, DataType, Position, Traits>::~ConstReverseBidirectionalIterator()

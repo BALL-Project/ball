@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.4 2002/10/24 14:50:08 aubertin Exp $
+// $Id: contourSurface.h,v 1.5 2002/12/12 09:48:43 oliver Exp $
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
 #define BALL_DATATYPE_CONTOURSURFACE_H
@@ -34,13 +34,13 @@
 
 namespace BALL
 {
-	typedef pair<Position,Position> KeyType;
+	typedef std::pair<Position, Position> KeyType;
 
 
 	template<>
-	HashIndex BALL::Hash(const KeyType& p);
+	HashIndex Hash(const KeyType& p) throw();
 
-static int init_facet_data[NUM_BASIS_CUBES][NUM_CUBE_EDGES] = {
+	static int init_facet_data[NUM_BASIS_CUBES][NUM_CUBE_EDGES] = {
 	  /* 7654 3210 (corners markers) */
 	  
 	  /* 0000 0000b */   {-1,-1,-1,  -1,-1,-1,  -1,-1,-1,  -1,-1,-1,},
@@ -184,7 +184,8 @@ static int corner_rotation[NUM_CUBE_ROTATIONS][NUM_CUBE_VERTICES] = {
       {\bf Definition:} \URL{BALL/DATATYPE/contourLine.h}
   */
   template <typename T>  
-  class TContourSurface : public Surface
+  class TContourSurface 
+		: public Surface
   {
     public:
 
@@ -215,7 +216,8 @@ static int corner_rotation[NUM_CUBE_ROTATIONS][NUM_CUBE_VERTICES] = {
       TContourSurface(const TContourSurface& copyTContourSurface);
 
       /// Destructor
-      virtual ~TContourSurface();
+      virtual ~TContourSurface()
+				throw();
       //@}
 
       /// Creates a contour surface from a given data set.
@@ -290,6 +292,7 @@ static int corner_rotation[NUM_CUBE_ROTATIONS][NUM_CUBE_VERTICES] = {
 
     template <typename T>
     TContourSurface<T>::~TContourSurface()
+			throw()		
     {
     }
 

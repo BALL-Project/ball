@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.h,v 1.18 2002/02/27 12:18:38 sturm Exp $
+// $Id: HINFile.h,v 1.19 2002/12/12 09:48:44 oliver Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -42,7 +42,7 @@ namespace BALL
 
 		/** Detailed constructor
 		*/
-		HINFile(const String& filename, File::OpenMode open_mode = File::IN)
+		HINFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
 		/**	Destructor

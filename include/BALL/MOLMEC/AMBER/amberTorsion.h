@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.h,v 1.12 2002/02/27 12:18:59 sturm Exp $
+// $Id: amberTorsion.h,v 1.13 2002/12/12 09:48:47 oliver Exp $
+
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERTORSION_H
@@ -36,10 +37,10 @@ namespace BALL
 
 		struct SingleAmberTorsion 
 		{
-			Atom*	atom1;
-			Atom*	atom2;
-			Atom*	atom3;
-			Atom*	atom4;
+			Atom::StaticAtomAttributes*	atom1;
+			Atom::StaticAtomAttributes*	atom2;
+			Atom::StaticAtomAttributes*	atom3;
+			Atom::StaticAtomAttributes*	atom4;
 
 			float					V;
 			unsigned char	f;
@@ -59,19 +60,19 @@ namespace BALL
 
 			SingleAmberTorsion(CosineTorsion::SingleData& t)
 			{
-				atom1 = t.atom1;
-				atom2 = t.atom2;
-				atom3 = t.atom3;
-				atom4 = t.atom4;
+				atom1 = &Atom::getAttributes()[t.atom1->getIndex()];
+				atom2 = &Atom::getAttributes()[t.atom2->getIndex()];
+				atom3 = &Atom::getAttributes()[t.atom3->getIndex()];
+				atom4 = &Atom::getAttributes()[t.atom4->getIndex()];
 
 				V = t.values.V / t.values.n;
 				f = (unsigned char)t.values.f;
 				phase = ((2.0 * BALL::Constants::PI)/360.0) * t.values.phase;
-
 			}
 		};
 
 		//@}	
+
 		/**	@name	Constructors and Destructors	
 		*/
 		//@{

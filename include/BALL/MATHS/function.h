@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: function.h,v 1.15 2002/02/27 12:18:54 sturm Exp $
+// $Id: function.h,v 1.16 2002/12/12 09:48:46 oliver Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -69,7 +69,7 @@ namespace BALL
 
 		/** Copy constructor
 		*/
-		MutableConstant(const MutableConstant& constant)
+		MutableConstant(const MutableConstant<DataType>& constant)
 			throw();
 
 		/** Detailed constructor
@@ -1090,8 +1090,8 @@ namespace BALL
 
 	template <typename DataType>
 	BALL_INLINE
-	MutableConstant<DataType>::MutableConstant(const
-			MutableConstant<DataType>& constant)
+	MutableConstant<DataType>::MutableConstant
+		(const MutableConstant<DataType>& constant)
 		throw()
 		: constant_(constant.constant_)
 	{

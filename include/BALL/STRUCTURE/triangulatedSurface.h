@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSurface.h,v 1.27 2002/04/18 18:13:38 strobel Exp $
+// $Id: triangulatedSurface.h,v 1.28 2002/12/12 09:48:56 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -162,7 +162,7 @@ namespace BALL
 											the point to delete
 				@param	deep	look above
 		*/
-		void remove(typename std::list<TTrianglePoint<T>*>::iterator p, bool deep = true)
+		void removePoint(typename std::list<TTrianglePoint<T>*>::iterator p, bool deep = true)
 			throw();
 
 		/** Remove an edge from the TriangulatedSurface.
@@ -179,7 +179,7 @@ namespace BALL
 											the edge to delete
 				@param	deep	look above
 		*/
-		void remove(typename std::list<TTriangleEdge<T>*>::iterator e, bool deep = false)
+		void removeEdge(typename std::list<TTriangleEdge<T>*>::iterator e, bool deep = false)
 			throw();
 
 		/** Remove a triangle from the TriangulatedSurface.
@@ -196,7 +196,7 @@ namespace BALL
 											the triangle to delete
 				@param	deep	look above
 		*/
-		void remove(typename std::list<TTriangle<T>*>::iterator t, bool deep = false)
+		void removeTriangle(typename std::list<TTriangle<T>*>::iterator t, bool deep = false)
 			throw();
 
 		/** Create a Surface objact from th TriangulatedeSurface.
@@ -593,7 +593,7 @@ namespace BALL
 
 
 	template <class T>
-	void TTriangulatedSurface<T>::remove(typename std::list<TTrianglePoint<T>*>::iterator point, bool deep)
+	void TTriangulatedSurface<T>::removePoint(typename std::list<TTrianglePoint<T>*>::iterator point, bool deep)
 		throw()
 	{
 		if (deep)
@@ -656,7 +656,7 @@ namespace BALL
 
 
 	template <class T>
-	void TTriangulatedSurface<T>::remove(typename std::list<TTriangleEdge<T>*>::iterator e, bool deep)
+	void TTriangulatedSurface<T>::removeEdge(typename std::list<TTriangleEdge<T>*>::iterator e, bool deep)
 		throw()
 	{
 		if (deep)
@@ -695,7 +695,7 @@ namespace BALL
 
 
 	template <class T>
-	void TTriangulatedSurface<T>::remove(typename std::list<TTriangle<T>*>::iterator t, bool deep)
+	void TTriangulatedSurface<T>::removeTriangle(typename std::list<TTriangle<T>*>::iterator t, bool deep)
 		throw()
 	{
 		if (deep)
@@ -729,7 +729,7 @@ namespace BALL
 		typename std::list<TTriangle<T>*>::iterator t;
 		for (t = triangles_.begin(); t != triangles_.end(); t++)
 		{
-			TSurface<T>::Triangle triangle;
+			typename TSurface<T>::Triangle triangle;
 			triangle.v1 = (*t)->vertex_[0]->index_;
 			triangle.v2 = (*t)->vertex_[1]->index_;
 			triangle.v3 = (*t)->vertex_[2]->index_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.iC,v 1.4 2002/02/27 12:19:47 sturm Exp $
+// $Id: rotamerLibrary.iC,v 1.5 2002/12/12 09:48:55 oliver Exp $
 
 // rotamer iterator - begin()/end() methods
 ResidueRotamerSet::Iterator ResidueRotamerSet::begin()

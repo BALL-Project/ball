@@ -1,30 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelConnector.h,v 1.6 2002/02/27 12:19:09 sturm Exp $
+// $Id: atomBondModelConnector.h,v 1.7 2002/12/12 09:48:48 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELCONNECTOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_BOND_H
-#	include <BALL/KERNEL/bond.h>
-#endif
-
-#ifndef BALL_VIEW_DATATYPE_COLOR_H
-#	include <BALL/VIEW/DATATYPE/color.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#	include <BALL/VIEW/KERNEL/geometricObject.h>
-#endif
 
 #ifndef BALL_VIEW_PRIMITIV_LINE_H
 #	include <BALL/VIEW/PRIMITIV/line.h>
@@ -32,10 +12,6 @@
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
 #	include <BALL/VIEW/PRIMITIV/tube.h>
-#endif
-
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
 #endif
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
@@ -50,10 +26,14 @@
 #	include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 #endif
 
-using namespace BALL::VIEW;
- 
+using BALL::VIEW::Line;
+using BALL::VIEW::Tube;
+
 namespace BALL
 {
+	class Atom;
+	class Bond;
+
 	namespace MOLVIEW
 	{
 		/** AtomBondModelConnector class.
@@ -247,10 +227,6 @@ namespace BALL
 		};
 
 			
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/FUNCTOR/atomBondModelConnector.iC>
-#			endif
-
 	} // namespace MOLVIEW
 
 } // namespace BALL

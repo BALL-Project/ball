@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorCalculator.h,v 1.12 2002/02/27 12:19:14 sturm Exp $
+// $Id: standardColorCalculator.h,v 1.13 2002/12/12 09:48:49 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
@@ -14,14 +14,8 @@
 #	include <BALL/DATATYPE/hashMap.h>
 #endif
 
-#ifndef BALL_KERNEL_RESIDUE_H
-#	include <BALL/KERNEL/residue.h>
-#endif
-
-  
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 			

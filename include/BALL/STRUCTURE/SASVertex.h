@@ -1,4 +1,4 @@
-// $Id: SASVertex.h,v 1.1 2002/06/19 12:52:23 strobel Exp $
+// $Id: SASVertex.h,v 1.2 2002/12/12 09:48:54 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SASVERTEX_H
 #define BALL_STRUCTURE_SASVERTEX_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.h,v 1.42 2002/02/27 12:18:35 sturm Exp $
+// $Id: string.h,v 1.43 2002/12/12 09:48:44 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -30,7 +30,7 @@
 #include <errno.h>
 #include <stdlib.h>
 #include <string.h>
-#include <strstream>
+#include <sstream>
 #include <iostream>
 #include <vector>
 
@@ -182,12 +182,12 @@ namespace BALL
 		String(Size buffer_size, const char* format, ... )
 			throw(Exception::IndexUnderflow, Exception::NullPointer);
 
-		/**	Create a new string from the contents of a {\bf strstream}.
-				The contents of the {\tt strstream} are not modified, i.e.
-				successive construction of multiple strings from the same {\tt strstream}
+		/**	Create a new string from the contents of a {\bf stringstream}.
+				The contents of the {\tt stringstream} are not modified, i.e.
+				successive construction of multiple strings from the same {\tt stringstream}
 				object leads to identical copies.
 		*/
-		String(std::strstream& s)
+		String(std::stringstream& s)
 			throw();
 
 		/** Creates a new string from len copies of c.
@@ -269,10 +269,10 @@ namespace BALL
 		void set(Size buffer_size, const char *format, ...)
 			throw(Exception::IndexUnderflow, Exception::NullPointer);
 
-		/** Assign a String from a {\bf strstream}.
-				The contents of the {\tt strstream} object are not modified.
+		/** Assign a String from a {\bf stringstream}.
+				The contents of the {\tt stringstream} object are not modified.
 		*/
-		void set(std::strstream& s)
+		void set(std::stringstream& s)
 			throw();
 
 		/// Assign a String from the result of repeating {\bf c} {\bf len} times
@@ -327,10 +327,10 @@ namespace BALL
 		const String& operator = (const char* pc)
 			throw(Exception::NullPointer);
 
-		/** Assign a string from a {\bf strstream}.
-				The contents of the {\tt strstream} object are not modified.
+		/** Assign a string from a {\bf stringstream}.
+				The contents of the {\tt stringstream} object are not modified.
 		*/
-		const String& operator = (std::strstream& s)
+		const String& operator = (std::stringstream& s)
 			throw();
 
 		/// Assign a String from a single char

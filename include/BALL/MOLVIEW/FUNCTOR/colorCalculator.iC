@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorCalculator.iC,v 1.6 2002/02/27 12:19:12 sturm Exp $
+// $Id: colorCalculator.iC,v 1.7 2002/12/12 09:48:48 oliver Exp $
 
 BALL_INLINE
 const ColorRGBA& ColorCalculator::getColor() const
@@ -37,3 +37,11 @@ const ColorCalculator::ColorMap& ColorCalculator::getColorMap() const
 {
 	return color_map_;
 }
+
+BALL_INLINE
+const String& ColorCalculator::calculateKey(const Atom& atom) const
+	throw()
+{
+	return atom.getElement().getSymbol();
+}
+

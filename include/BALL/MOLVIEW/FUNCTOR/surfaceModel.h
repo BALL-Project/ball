@@ -1,43 +1,25 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.6 2002/02/27 12:19:15 sturm Exp $
+// $Id: surfaceModel.h,v 1.7 2002/12/12 09:48:49 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_DATATYPE_LIST_H
 #	include <BALL/DATATYPE/list.h>
-#endif
-
-#ifndef BALL_KERNEL_FOREACH_H
-#	include <BALL/KERNEL/forEach.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#	include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
 #ifndef BALL_VIEW_PRIMITIV_MESH_H
 #	include <BALL/VIEW/PRIMITIV/mesh.h>
 #endif
 
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
-#endif
-
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #	include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 #endif
 
-
 namespace BALL
 {
-	
 	namespace MOLVIEW
 	{
 
@@ -202,10 +184,6 @@ namespace BALL
 
 			Composite* start_composite_;
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/FUNCTOR/surfaceModel.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

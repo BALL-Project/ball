@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timeStamp.h,v 1.14 2002/02/27 12:18:29 sturm Exp $
+// $Id: timeStamp.h,v 1.15 2002/12/12 09:46:22 oliver Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -23,6 +23,10 @@
 #endif
 
 #include <iostream>
+#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+#	include <windows.h>
+#	include <sys/timeb.h>
+#endif
 
 namespace BALL 
 {
@@ -38,7 +42,10 @@ namespace BALL
 	*/
 	class PreciseTime
 	{
-		
+
+#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+		static long ticks;
+#endif
 		public:
 
 		BALL_CREATE(PreciseTime)

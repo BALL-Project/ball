@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quadraticAngleBend.h,v 1.11 2002/02/27 12:19:07 sturm Exp $
+// $Id: quadraticAngleBend.h,v 1.12 2002/12/12 09:48:47 oliver Exp $
  
 #ifndef BALL_MOLMEC_PARAMETER_QUADRATICANGLEBEND_H
 #define BALL_MOLMEC_PARAMETER_QUADRATICANGLEBEND_H
@@ -14,13 +14,17 @@
 #	include <BALL/MOLMEC/PARAMETER/atomTypes.h>
 #endif
 
+#ifndef BALL_KERNEL_ATOM_H
+#	include <BALL/KERNEL/atom.h>
+#endif
+
 namespace BALL 
 {
 		
 	/** QuadraticAngleBend.
-			{\bf Definition:}\URL{BALL/MOLMEC/PARAMETER/quadraticAngleBend.h}	\\
 			Molecular Mechanics Parameter: class describing the parameters required to
-			implement a harmonic potential describing angles.
+			implement a harmonic potential describing angle bends.\\
+			{\bf Definition:}\URL{BALL/MOLMEC/PARAMETER/quadraticAngleBend.h}	\\
 	*/
 	class QuadraticAngleBend 
 		:	public ParameterSection
@@ -40,10 +44,10 @@ namespace BALL
 
 		struct Data
 		{
-			Atom*		atom1;
-			Atom*		atom2;
-			Atom*		atom3;
-			Values	values;
+			Atom::StaticAtomAttributes*	atom1;
+			Atom::StaticAtomAttributes*	atom2;
+			Atom::StaticAtomAttributes*	atom3;
+			Values values;
 		};
 
 

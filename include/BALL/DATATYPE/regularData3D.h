@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.10 2002/09/05 11:39:13 oliver Exp $ 
+// $Id: regularData3D.h,v 1.11 2002/12/12 09:48:44 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -111,31 +111,21 @@ namespace BALL
 		/**	Destructor. 
 				Frees all allocated memory.
 		*/
-		virtual ~TRegularData3D() throw()
-		{
-			delete [] data;
-		}
+		virtual ~TRegularData3D()
+			throw();
 
 		/** Clear method.
 				Frees all allocated memory.
 				The instance is set to not valid.
 		*/
-		virtual void clear() throw();
+		virtual void clear() 
+			throw();
 
 		//@}
 
 		/**	@name Assignment
 		*/
 		//@{
-
-		/**	Copy the contents of another grid.
-				Replaces the contents and dimensions of the current
-				grid with those of {\tt grid}. The previous content
-				is deleted and memory is freed.
-				If copying the grid fails (e.g., due to insufficient memory),
-				\Ref{isValid} returns {\bf false} after this operation.
-		*/
-		void set(const TRegularData3D& grid) throw(Exception::OutOfMemory);
 
 		/**	Assignment operator.
 				Implemented using \Ref{set}.
@@ -169,64 +159,77 @@ namespace BALL
 
 		/**	Returns the largest possible x coordinate for the box.
 		*/
-		float getMaxX() const throw();
+		float getMaxX() const 
+			throw();
 
 		/**	Returns the largest possible y coordinate for the box.
 		*/
-		float getMaxY() const throw();
+		float getMaxY() const 
+			throw();
 
 		/**	Returns the largest possible z coordinate for the box.
 		*/
-		float getMaxZ() const throw();
+		float getMaxZ() const 
+			throw();
 
 		/**	Returns the x coordinate of the grid origin.
 		*/
-		float getMinX() const throw();
+		float getMinX() const 
+			throw();
 
 		/**	Returns the y coordinate of the grid origin.
 		*/
-		float getMinY() const throw();
+		float getMinY() const 
+			throw();
 
 		/**	Returns the z coordinate of the grid origin.
 		*/
-		float getMinZ() const throw();
+		float getMinZ() const 
+			throw();
 
 		/**	Return the largest grid position for the x direction.
 				This method returns the maximum position allowed in the grid.
 				As the point in the origin has the indices (0, 0, 0), this
 				method returns the number of points in X direction minus one.
 		*/
-		Size getMaxXIndex() const throw();
+		Size getMaxXIndex() const 
+			throw();
 
 		/**	Return the largest grid position for the y direction.
 				This method returns the maximum position allowed in the grid.
 				As the point in the origin has the indices (0, 0, 0), this
 				method returns the number of points in Y direction minus one.
 		*/
-		Size getMaxYIndex() const throw();
+		Size getMaxYIndex() const 
+			throw();
 
 		/**	Return the largest grid position for the z direction.
 				This method returns the maximum position allowed in the grid.
 				As the point in the origin has the indices (0, 0, 0), this
 				method returns the number of points in Z direction minus one.
 		*/
-		Size getMaxZIndex() const throw();
+		Size getMaxZIndex() const 
+			throw();
 
 		/**	Returns the total number of grid points.
 		*/
-		Size getSize() const throw();
+		Size getSize() const 
+			throw();
 
 		/**	Returns the grid spacing in x direction.
 		*/	
-		float getXSpacing() const throw();
+		float getXSpacing() const 
+			throw();
 
 		/**	Returns the grid spacing in y direction.
 		*/	
-		float getYSpacing() const throw();
+		float getYSpacing() const 
+			throw();
 
 		/**	Returns the grid spacing in z direction.
 		*/	
-		float getZSpacing() const throw();
+		float getZSpacing() const 
+			throw();
 
 		/**	Returns the position of the grid point closest to the given vector.
 				If there are multiple grid points with equal distance, the
@@ -234,9 +237,11 @@ namespace BALL
 				returned.
 				@exception OutOfGrid if the point is outside the grid
 		*/
-		GridIndex getIndex(const Vector3&) const throw(Exception::OutOfGrid);
+		GridIndex getIndex(const Vector3&) const 
+			throw(Exception::OutOfGrid);
 
-		/**	Returns the position of the grid point closest to three given coordinates.
+		/**	Returns the position of the grid point closest to three given
+				coordinates.
 				If there are multiple grid points with equal distance, the
 				grid point with the lowest indices in x, y, and z direction is
 				returned.
@@ -245,7 +250,8 @@ namespace BALL
 		GridIndex getIndex(float x, float y, float z) const
 			throw(Exception::OutOfGrid);
 		
-		/**	Returns a pointer to the grid contents determined by the three indices.
+		/**	Returns a pointer to the grid contents determined by the three 
+				indices.
 				@exception OutOfGrid if the point is outside the grid
 		*/
 		GridDataType* getData(Position i, Position j, Position k)
@@ -255,12 +261,14 @@ namespace BALL
 				Determination of the selected grid point is made via getPosition.
 				@exception OutOfGrid if the point is outside the grid
 		*/
-		GridDataType* getData(const Vector3& r) throw(Exception::OutOfGrid);
+		GridDataType* getData(const Vector3& r) 
+			throw(Exception::OutOfGrid);
 
 		/**	Returns a pointer to the grid contents determined by the position.
 				@exception OutOfGrid if the point is outside the grid
 		*/
-		GridDataType* getData(Position position) throw(Exception::OutOfGrid);
+		GridDataType* getData(Position position) 
+			throw(Exception::OutOfGrid);
 
 		/**	Subscript operator.
 				Returns the data of the grid point specified by its {\tt position}.
@@ -424,22 +432,44 @@ namespace BALL
 				@exception OutOfGrid if the point is outside the grid
 				@param	vector the position to evaluate
 		*/
-		GridDataType getInterpolatedValue(const Vector3& vector) const throw(Exception::OutOfGrid);
+		GridDataType getInterpolatedValue(const Vector3& vector) 
+			const throw(Exception::OutOfGrid);
 		
 		/** Equality operator.
-				Two point grids are equal if they have the same number of points in all three
-				dimensions, same origin, spacing  and the data fields are equal.
-				Both grids have to be valid or false is returned.
+				Two point grids are equal if they have the same number of points in
+				all three dimensions, same origin, spacing and the data fields are
+				equal. Both grids have to be valid or false is returned.
 		*/
-		bool operator == (const TRegularData3D<GridDataType>& grid) const throw();
+		bool operator == (const TRegularData3D<GridDataType>& grid) const
+			throw();
 
 		/** Inequality operator.
 				@see operator ==
 		*/
-		bool operator != (const TRegularData3D<GridDataType>& grid) const throw();
+		bool operator != (const TRegularData3D<GridDataType>& grid) const 
+			throw();
 
 		//@}
 		
+		///
+		void resize(Size i, Size j, Size k)
+			throw(Exception::OutOfMemory);
+
+		///
+		void resize(float lower_x, float lower_y, float lower_z,
+				float upper_x, float upper_y, float upper_z,
+				Size number_of_grid_points_x, Size number_of_grid_points_y, Size number_of_grid_points_z)
+			throw(Exception::OutOfMemory);
+
+		///
+		void resize(Vector3 lower, Vector3 upper,
+				Size number_of_grid_points_x, Size number_of_grid_points_y, Size number_of_grid_points_z)
+			throw(Exception::OutOfMemory);
+
+		///
+		void resize(Vector3 lower, Vector3 upper, TVector3<Size> number_of_grid_points)
+			throw(Exception::OutOfMemory);
+
 		/**	The grid data
 		*/
 		GridDataType* data;
@@ -479,42 +509,47 @@ namespace BALL
 	};
 
 	template <typename T>
-	std::ostream& operator << (std::ostream& os, const TRegularData3D<T>& data) 
+	std::ostream& operator << (std::ostream& os, const TRegularData3D<T>& grid) 
 		throw()
 	{
-		os << data.getMinX() << " " << data.getMinY() << " " << data.getMinZ() << std::endl;
-		os << data.getMaxX() << " " << data.getMaxY() << " " << data.getMaxZ() << std::endl;
-		os << data.getMaxXIndex() << " " << data.getMaxYIndex() << " " << data.getMaxZIndex() << std::endl;
-		for (Position i = 0; i < data.getSize(); i++)	
+		os << grid.getMinX() << " " << grid.getMinY() << " " << grid.getMinZ() 
+			<< std::endl
+			<< grid.getMaxX() << " " << grid.getMaxY() << " " << grid.getMaxZ() 
+			<< std::endl
+			<< grid.getMaxXIndex() << " " << grid.getMaxYIndex() << " " << grid.getMaxZIndex() 
+			<< std::endl;
+
+		for (Position i = 0; i < grid.getSize(); i++)	
 		{
-			os << data.data[i] << std::endl;
+			os << grid.data[i] << std::endl;
 		}
 		return os;
 	}
 
 	template <typename T>
-	std::istream& operator >> (std::istream& is, TRegularData3D<T>& data) 
+	std::istream& operator >> (std::istream& is, TRegularData3D<T>& grid) 
 		throw()
 	{
 		Vector3 lower;
 		Vector3 upper;
-		TVector3<Size> size;
+		TVector3<Size> number_of_grid_points;
 
 		is >> lower.x >> lower.y >> lower.z;
 		is >> upper.x >> upper.y >> upper.z;
-		is >> size.x >> size.y >> size.z;
+		is >> number_of_grid_points.x >> number_of_grid_points.y 
+			>> number_of_grid_points.z;
 
-		data.set(TRegularData3D<T>(lower, upper, size.x + 1, size.y + 1, size.z + 1));
+		grid.resize(lower, upper, number_of_grid_points.x + 1, 
+				number_of_grid_points.y + 1, number_of_grid_points.z + 1);
 
-		for (Position i = 0; i < data.getSize(); i++)
+		for (Position i = 0; i < grid.getSize(); i++)
 		{
-			is >> data[i];
+			is >> grid[i];
 		}
 		
 		return is;
 	}
 	
-
 	/**	Default type
 	*/
 	typedef TRegularData3D<float> RegularData3D;
@@ -552,55 +587,14 @@ namespace BALL
 			upper_(0,0,0),
 			valid_(false)
 	{
-		set(grid);
-	}
 
-	// assignment operator
-	template <typename GridDataType>
-	BALL_INLINE
-	const TRegularData3D<GridDataType>& TRegularData3D<GridDataType>::operator = 
-		(const TRegularData3D<GridDataType>& grid)
-		throw(Exception::OutOfMemory)
-	{
-		set(grid);
-		return *this;
-	}
+		// resize the grid
+		resize(grid.origin_, grid.upper_,
+				grid.number_of_points_x_,
+				grid.number_of_points_y_,
+				grid.number_of_points_z_);
 
-	// set method
-	template <typename GridDataType>
-	BALL_INLINE
-	void TRegularData3D<GridDataType>::set(const TRegularData3D<GridDataType>& grid)
-		throw(Exception::OutOfMemory)
-	{
-		// throw away the old data 
-		if (data != 0)
-		{
-			delete [] data;
-		}
-
-		// create a new array to hold the contents of the grid
-		data = new GridDataType[grid.number_of_grid_points_];
-
-		// if the alloc failed, mark this instance as invalid
-		valid_ = (data != 0);
-		
-		if (!valid_)
-		{
-			throw Exception::OutOfMemory(__FILE__, __LINE__, 
-																	 grid.number_of_grid_points_ * (Size)sizeof(GridDataType));
-		}
-
-		// copy the remaining attributes
-		origin_ = grid.getOrigin();
-		size_ = grid.getDimension();
-		spacing_.set(grid.getXSpacing(), grid.getYSpacing(), grid.getZSpacing());
-		number_of_points_x_ = grid.number_of_points_x_;
-		number_of_points_y_ = grid.number_of_points_y_;
-		number_of_points_z_ = grid.number_of_points_z_;
-		number_of_grid_points_ = grid.number_of_grid_points_;
-		upper_ = grid.upper_;
-
-		// copy the contents of grid (if enough memory could be allocated)
+		// copy data
 		if (valid_)
 		{
 			for (Position i = 0; i < number_of_grid_points_; i++)
@@ -608,7 +602,8 @@ namespace BALL
 				data[i] = grid.data[i];
 			}
 		}
-  }
+
+	}
 
 	//  First constructor for TRegularData3D
 	//  lower_[x,y,z] should be set to the coordinates of
@@ -627,16 +622,107 @@ namespace BALL
 		 float upper_x, float upper_y, float upper_z,
 		 Size grid_points_x, Size grid_points_y, Size grid_points_z)
 		throw(Exception::OutOfMemory)
+		: data(0),
+			origin_(0,0,0),
+			size_(0,0,0),
+			spacing_(0,0,0),
+			number_of_points_x_(0),
+			number_of_points_y_(0),
+			number_of_points_z_(0),
+			number_of_grid_points_(0),
+			upper_(0,0,0),
+			valid_(false)
 	{
+		resize(lower_x, lower_y, lower_z, upper_x, upper_y, upper_z, 
+				grid_points_x, grid_points_y, grid_points_z);
+	}
 
-		// set data and number_of_grid_points_ to 0/0, just to be sure 
-		data = (GridDataType*) 0;
-		number_of_grid_points_ = 0;
+	template <class GridDataType>
+	TRegularData3D<GridDataType>::TRegularData3D
+		(const Vector3& lower, const Vector3& upper,
+		 Size grid_points_x, Size grid_points_y, Size grid_points_z) 
+		throw(Exception::OutOfMemory)
+		: data(0),
+			origin_(0,0,0),
+			size_(0,0,0),
+			spacing_(0,0,0),
+			number_of_points_x_(0),
+			number_of_points_y_(0),
+			number_of_points_z_(0),
+			number_of_grid_points_(0),
+			upper_(0,0,0),
+			valid_(false)
+	{
+		resize(lower, upper, 
+				grid_points_x, grid_points_y, grid_points_z);
+	}
+
+	template <class GridDataType>
+	TRegularData3D<GridDataType>::TRegularData3D
+		(const Vector3& lower,
+		 const Vector3& upper,
+		 float spacing) 
+		throw(Exception::OutOfMemory)
+		: data(0),
+			origin_(0,0,0),
+			size_(0,0,0),
+			spacing_(0,0,0),
+			number_of_points_x_(0),
+			number_of_points_y_(0),
+			number_of_points_z_(0),
+			number_of_grid_points_(0),
+			upper_(0,0,0),
+			valid_(false)
+	{
+		resize(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
+				(Size)((upper.x - lower.x) / spacing + 1), 
+				(Size)((upper.y - lower.y) / spacing + 1), 
+				(Size)((upper.z - lower.z) / spacing + 1));
+	}
+
+	template <class GridDataType>
+	TRegularData3D<GridDataType>::~TRegularData3D()
+		throw()
+	{
+		clear();
+	}
+
+	// assignment operator
+	template <typename GridDataType>
+	BALL_INLINE
+	const TRegularData3D<GridDataType>& TRegularData3D<GridDataType>::operator = 
+		(const TRegularData3D<GridDataType>& grid)
+		throw(Exception::OutOfMemory)
+	{
+		resize(grid.origin_, grid.upper_, grid.number_of_points_x_,
+				grid.number_of_points_y_, grid.number_of_points_z_);
+		if (valid_)
+		{
+			for (Position i = 0; i < number_of_grid_points_; i++)
+			{
+				data[i] = grid.data[i];
+			}
+		}
+
+		return *this;
+	}
+
+	template <typename GridDataType>
+	BALL_INLINE
+	void TRegularData3D<GridDataType>::resize(Size i, Size j, Size k)
+		throw(Exception::OutOfMemory)
+	{
+		// 
+		if (data != 0)
+		{
+			delete [] data;
+			data = 0;
+		}
 
 		// set the number of grid points in all directions
-		number_of_points_x_ = grid_points_x;
-		number_of_points_y_ = grid_points_y;
-		number_of_points_z_ = grid_points_z;
+		number_of_points_x_ = i;
+		number_of_points_y_ = j;
+		number_of_points_z_ = k;
 
 		// if the number of grid points in any direction is below 2
 		// (which means that the grid is not three-dimensional!)
@@ -649,10 +735,43 @@ namespace BALL
 		{
 			number_of_points_y_ = 2;
 		}
-		if (number_of_points_y_ < 2)
+		if (number_of_points_z_ < 2)
 		{
-			number_of_points_y_ = 2;
+			number_of_points_z_ = 2;
 		}
+
+		// calculate the total number of grid points
+		number_of_grid_points_ 
+			= number_of_points_x_ * number_of_points_y_ * number_of_points_z_;
+		
+		// allocate space for the array containing pointers to the objects
+		data = new GridDataType[number_of_grid_points_];
+
+		// mark this instance as invalid if the alloc failed
+		valid_ = (data != 0);			
+
+		if (!valid_)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, 
+					number_of_grid_points_ * (Size)sizeof(GridDataType));
+		}
+	}
+
+	template <typename GridDataType>
+	BALL_INLINE
+	void TRegularData3D<GridDataType>::resize(float lower_x, float lower_y, float lower_z,
+			float upper_x, float upper_y, float upper_z,
+			Size number_of_grid_points_x, Size number_of_grid_points_y, Size number_of_grid_points_z)
+		throw(Exception::OutOfMemory)
+	{
+
+		// throw away the old data
+		clear();
+
+		// resize the data section and set the internal variables holding the
+		// number of grid points for every direction
+		resize(number_of_grid_points_x, number_of_grid_points_y,
+				number_of_grid_points_z);
 
 		// calculate the origin as the lowest given coordinates
 		// of each direction
@@ -672,48 +791,27 @@ namespace BALL
 		spacing_.x = size_.x / (number_of_points_x_ - 1);
 		spacing_.y = size_.y / (number_of_points_y_ - 1);
 		spacing_.z = size_.z / (number_of_points_z_ - 1);
-		
-		// calculate the total number of grid points
-		number_of_grid_points_ = number_of_points_x_ * number_of_points_y_ * number_of_points_z_;
-		
-		// allocate space for the array containing pointers to the objects
-		data = new GridDataType[number_of_grid_points_];
+  }
 
-		// mark this instance as invalid if the alloc failed
-		valid_ = (data != 0);			
-
-		if (!valid_)
-		{
-			throw Exception::OutOfMemory(__FILE__, __LINE__, 
-																	 number_of_grid_points_ * (Size)sizeof(GridDataType));
-		}
-	}
-
-	template <class GridDataType>
-	TRegularData3D<GridDataType>::TRegularData3D
-		(const Vector3& lower, const Vector3& upper,
-		 Size grid_points_x, Size grid_points_y, Size grid_points_z) 
+	template <typename GridDataType>
+	BALL_INLINE
+	void TRegularData3D<GridDataType>::resize(Vector3 lower, Vector3 upper,
+			Size number_of_grid_points_x, Size number_of_grid_points_y, Size number_of_grid_points_z)
 		throw(Exception::OutOfMemory)
-		: data(0)
 	{
-		*this = TRegularData3D(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
-											grid_points_x, grid_points_y, grid_points_z);
+		resize(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
+				number_of_grid_points_x, number_of_grid_points_y, number_of_grid_points_z);
 	}
 
-	template <class GridDataType>
-	TRegularData3D<GridDataType>::TRegularData3D
-		(const Vector3& lower,
-		 const Vector3& upper,
-		 float spacing) 
+	template <typename GridDataType>
+	BALL_INLINE
+	void TRegularData3D<GridDataType>::resize(Vector3 lower, Vector3 upper, TVector3<Size> number_of_grid_points)
 		throw(Exception::OutOfMemory)
-		: data(0)
 	{
-		*this = TRegularData3D(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
-											(Size)((upper.x - lower.x) / spacing + 1), 
-											(Size)((upper.y - lower.y) / spacing + 1), 
-											(Size)((upper.z - lower.z) / spacing + 1));
+		resize(lower.x, lower.y, lower.z, upper.x, upper.y, upper.z,
+				number_of_grid_points.x, number_of_grid_points.y, number_of_grid_points.z);
 	}
-			
+
 	template <class GridDataType>
 	void TRegularData3D<GridDataType>::dump(std::ostream& stream) const throw()
 	{
@@ -860,14 +958,18 @@ namespace BALL
 	template <class GridDataType>
 	void TRegularData3D<GridDataType>::setOrigin(const Vector3& origin) 	throw()
 	{
+		Vector3 diff(upper_ - origin_);
 		origin_ = origin;
+		upper_ = origin_ + diff;
 	}
 
 	template <class GridDataType>
 	void TRegularData3D<GridDataType>::setOrigin(float x, float y, float z) 
 	 	throw()
 	{
+		Vector3 diff(upper_ - origin_);
 		origin_.set(x, y, z);
+		upper_ = origin_ + diff;
 	}
 
 	template <class GridDataType> 
@@ -936,14 +1038,16 @@ namespace BALL
 		(Position i, Position j, Position k) 
 		throw(Exception::OutOfGrid)
 	{
-		if (i > number_of_points_x_ ||	j > number_of_points_y_ ||	k > number_of_points_z_
-				|| !valid_)
+		if (i > number_of_points_x_ 
+			|| j > number_of_points_y_ 
+			|| k > number_of_points_z_
+			|| !valid_)
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}		
 
-		return &(data[i + j * number_of_points_x_ + k 
-												* number_of_points_x_ 
+		return &(data[i + j * number_of_points_x_ 
+				            + k * number_of_points_x_ 
 												* number_of_points_y_]);
 	}
 
@@ -969,7 +1073,7 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	GridDataType& TRegularData3D<GridDataType>::operator[] (Position position)
+	GridDataType& TRegularData3D<GridDataType>::operator [] (Position position)
 		throw(Exception::OutOfGrid)
 	{
 		if (position > number_of_grid_points_)
@@ -980,7 +1084,7 @@ namespace BALL
 	}
 
 	template <class GridDataType>
-	GridDataType& TRegularData3D<GridDataType>::operator[](const Vector3& v)
+	GridDataType& TRegularData3D<GridDataType>::operator [] (const Vector3& v)
 		throw(Exception::OutOfGrid)
 	{
 		return *(getData(v));
@@ -1140,8 +1244,11 @@ namespace BALL
 	template <typename GridDataType>
 	void TRegularData3D<GridDataType>::clear() throw()
 	{
-		delete [] data;
-		data = 0;
+		if (data != 0)
+		{
+			delete [] data;
+			data = 0;
+		}
 
 		origin_		=
 		size_			=

@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glAtomBondModelConnector.h,v 1.6 2002/02/27 12:19:19 sturm Exp $
+// $Id: glAtomBondModelConnector.h,v 1.7 2002/12/12 09:48:51 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLLINE_H
 #	include <BALL/VIEW/GUI/PRIMITIV/glline.h>
@@ -166,10 +162,9 @@ namespace BALL
 			//@}
 		};
 
-			
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/FUNCTOR/glAtomBondModelConnector.iC>
-#			endif
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/MOLVIEW/GUI/FUNCTOR/glAtomBondModelConnector.iC>
+#	endif
 
 	} // namespace MOLVIEW
 

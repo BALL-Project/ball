@@ -1,5 +1,23 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.iC,v 1.4 2002/02/27 12:19:13 sturm Exp $
+// $Id: lineModel.iC,v 1.5 2002/12/12 09:48:48 oliver Exp $
+
+BALL_INLINE
+Point* AddLineModel::createPoint_()
+{
+	return (Point *)(new Point());
+}
+
+BALL_INLINE
+Line* AddLineModel::createLine_()
+{
+	return (Line *)(new Line());
+}
+
+BALL_INLINE
+TwoColoredLine* AddLineModel::createTwoColoredLine_()
+{
+	return (TwoColoredLine *)(new TwoColoredLine());
+}
 

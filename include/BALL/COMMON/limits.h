@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: limits.h,v 1.10 2002/02/27 12:18:20 sturm Exp $
+// $Id: limits.h,v 1.11 2002/12/12 09:48:39 oliver Exp $
 
 #ifndef BALL_COMMON_LIMITS_H
 #define BALL_COMMON_LIMITS_H
@@ -10,11 +10,16 @@
 #	include <BALL/CONFIG/config.h>
 #endif
 
-#ifdef BALL_HAVE_NUMERIC_LIMITS
+#ifdef BALL_HAS_NUMERIC_LIMITS
 #	include <limits>
 #else
-#	include <limits.h>
-#	ifdef BALL_INCLUDE_FLOAT_H
+#	ifdef BALL_HAS_LIMITS_H
+#		include <limits.h>
+#	endif
+#	ifdef BALL_HAS_VALUES_H
+#		include <limits.h>
+#	endif
+#	ifdef BALL_HAS_FLOAT_H
 #		include <float.h>
 #	endif
 #endif

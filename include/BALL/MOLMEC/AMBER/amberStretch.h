@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberStretch.h,v 1.13 2002/02/27 12:18:59 sturm Exp $ 
+// $Id: amberStretch.h,v 1.14 2002/12/12 09:48:47 oliver Exp $ 
+
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERSTRETCH_H

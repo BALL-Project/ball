@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.h,v 1.7 2002/02/27 12:18:57 sturm Exp $
+// $Id: vector2.h,v 1.8 2002/12/12 09:48:46 oliver Exp $
 
-#ifndef BALL_MATHS_Vector2_H
-#define BALL_MATHS_Vector2_H
+#ifndef BALL_MATHS_VECTOR2_H
+#define BALL_MATHS_VECTOR2_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -129,14 +129,14 @@ namespace BALL
 		*/
 		virtual void persistentWrite(PersistenceManager& pm,
 				const char* name = 0) const
-			throw();
+			throw(Exception::GeneralException);
 
 		/**	Persistent reading.
 				Reads a TVector2 object from a persistent stream.
 				@param pm the persistence manager
 		*/
 		virtual void persistentRead(PersistenceManager& pm)
-			throw();
+			throw(Exception::GeneralException);
 
 		//@}
 
@@ -468,7 +468,7 @@ namespace BALL
 
 	template <typename T>
   void TVector2<T>::persistentWrite(PersistenceManager& pm, const char* name) const
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.writeObjectHeader(this, name);
 			pm.writePrimitive(x, "x");
@@ -478,7 +478,7 @@ namespace BALL
 
 	template <typename T>
 	void TVector2<T>::persistentRead(PersistenceManager& pm)
-		throw()
+		throw(Exception::GeneralException)
 	{
 		pm.readPrimitive(x, "x");
 		pm.readPrimitive(y, "y");
@@ -847,4 +847,4 @@ namespace BALL
 		
 }// namespace BALL
 
-#endif // BALL_MATHS_Vector2_H
+#endif // BALL_MATHS_VECTOR2_H

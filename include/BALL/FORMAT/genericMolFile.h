@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.h,v 1.11 2002/02/27 12:18:40 sturm Exp $
+// $Id: genericMolFile.h,v 1.12 2002/12/12 09:48:44 oliver Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -69,7 +69,7 @@ namespace BALL
 
 		/** Detailed constructor
 		*/
-		GenericMolFile(const String& filename, File::OpenMode open_mode = File::IN)
+		GenericMolFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
 		/**	Copy constructor

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.23 2002/02/27 12:19:05 sturm Exp $
+// $Id: energyMinimizer.h,v 1.24 2002/12/12 09:48:47 oliver Exp $
+
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -359,7 +360,7 @@ namespace BALL
     /** Set the maximum RMS gradient (first convergence criterion).
       The gradient unit of the gradient is {\bf kJ/(mol \AA)}.
     */
-    void  setMaxGradient(float max_gradient);
+    void setMaxGradient(float max_gradient);
 
     /** Get the maximum RMS gradient (first convergence criterion).
         The gradient unit of the gradient is {\bf kJ/(mol \AA)}.

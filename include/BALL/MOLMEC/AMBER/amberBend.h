@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberBend.h,v 1.9 2002/02/27 12:18:58 sturm Exp $
+// $Id: amberBend.h,v 1.10 2002/12/12 09:48:46 oliver Exp $
+
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERBEND_H
@@ -55,6 +56,7 @@ namespace BALL
 		virtual ~AmberBend();
 
 		//@}
+
 		/**	@name	Setup Methods	
 		*/
 		//@{
@@ -64,6 +66,8 @@ namespace BALL
 		virtual bool setup();
 
 		//@}
+
+
 		/**	@name	Accessors	
 		*/
 		//@{

@@ -1,21 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.h,v 1.9 2002/02/27 12:19:25 sturm Exp $
+// $Id: molecularProperties.h,v 1.10 2002/12/12 09:48:52 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#include <iostream>
-#include <qwidget.h>
-
-#ifndef BALL_CONCEPT_COMPOSITE_H
-#	include <BALL/CONCEPT/composite.h>
-#endif
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #	include <BALL/STRUCTURE/fragmentDB.h>
@@ -25,22 +14,7 @@
 # include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_LOGVIEW_H
-#	include <BALL/VIEW/KERNEL/logView.h>
-#endif
-
-#ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
-#	include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
-#endif
-
-#ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
-#	include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
-#endif
-
-
-//using namespace BALL;
 using namespace BALL::VIEW;
-
 
 namespace BALL
 {
@@ -73,8 +47,8 @@ namespace BALL
 			/** Default Constructor.
 					Constructs new molecularProperties.
 					Calls \Ref{registerWidget}.
-					@param      parent the parent widget of {\em *this} molecularProperties (See documentation of QT-library for information concerning widgets)
-					@param      name the name of {\em *this} molecularProperties (See documentation of QT-library for information concerning widgets)
+					@param      parent the parent widget of {\em *this} molecularProperties 
+					@param      name the name of {\em *this} molecularProperties 
 					@return     MolecularProperties new constructed molecularProperties
 					@see        QWidget
 					@see        ModularWidget
@@ -125,10 +99,6 @@ namespace BALL
 			
 			FragmentDB fragment_db_;  			
 		};
-
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.iC>
-#		endif
 
 	} // namespace MOLVIEW
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: plane3.h,v 1.24 2002/02/27 12:18:56 sturm Exp $
+// $Id: plane3.h,v 1.25 2002/12/12 09:48:46 oliver Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -10,7 +10,7 @@
 #	include <BALL/common.h>
 #endif
 
-#ifdef BALL_INCLUDE_IEEEFP
+#ifdef BALL_HAS_IEEEFP_H
 #	include <ieeefp.h>
 #endif
 

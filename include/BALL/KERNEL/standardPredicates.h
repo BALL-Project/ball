@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.21 2002/02/27 12:18:52 sturm Exp $
+// $Id: standardPredicates.h,v 1.22 2002/12/12 09:48:45 oliver Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -465,8 +465,189 @@ namespace BALL
 	class ConnectedToPredicate
 		:	public	ExpressionPredicate
 	{
+
+		private:
+
+			class CTPNode
+			{
+				public:
+
+					enum BondType
+					{
+						BONDTYPE__UNINITIALISED = 0,
+						BONDTYPE__ANY           = 1,
+						BONDTYPE__SINGLE        = 2,
+						BONDTYPE__DOUBLE        = 3,
+						BONDTYPE__TRIPLE        = 4,
+						BONDTYPE__QUADRUPLE     = 5,
+						BONDTYPE__AROMATIC      = 6
+					};
+
+					typedef std::list<CTPNode*>::iterator Iterator;
+					typedef std::list<CTPNode*>::const_iterator ConstIterator;
+
+					/**
+					 */
+					CTPNode()
+						throw();
+
+					/**
+					 */
+					CTPNode(const CTPNode& node)
+						throw();
+
+					/**
+					 */
+					virtual ~CTPNode()
+						throw();
+
+					/**
+					 */
+					void setParent(CTPNode* parent)
+						throw();
+
+					/**
+					 */
+					CTPNode* getParent() const
+						throw();
+
+					/**
+					 */
+					void addChild(CTPNode* child)
+						throw();
+
+					/**
+					 */
+					void removeChild(CTPNode* child)
+						throw();
+
+					Iterator begin()
+						throw();
+
+					ConstIterator begin() const
+						throw();
+
+					Iterator end()
+						throw();
+
+					ConstIterator end() const
+						throw();
+
+					/**
+					 */
+					Size getNumberOfChildren() const
+						throw();
+
+					/**
+					 */
+					void setBondType(Size type)
+						throw();
+
+					/**
+					 */
+					void setBondType(char type)
+						throw();
+
+					/**
+					 */
+					Size getBondType() const
+						throw();
+
+					/**
+					 */
+					char getBondTypeChar() const
+						throw();
+
+					/**
+					 */
+					String getSymbol() const
+						throw();
+
+					/**
+					 */
+					void setSymbol(const String& symbol)
+						throw();
+
+					/**
+					 */
+					void setFinished()
+						throw();
+
+					/**
+					 */
+					void unsetFinished()
+						throw();
+
+					/**
+					 */
+					bool isFinished() const
+						throw();
+
+					/**
+					 */
+					void setLinked()
+						throw();
+
+					/**
+					 */
+					void unsetLinked()
+						throw();
+
+					/**
+					 */
+					bool isLinked() const
+						throw();
+
+					/**
+					 */
+					void linkWith(const CTPNode* partner)
+						throw();
+
+					/**
+					 */
+					const std::list<const CTPNode*>& getLinkList() const
+						throw();
+
+
+				private: 
+
+					/*_
+					 */
+					String element_symbol_;
+
+					/*_ Bond type means the bond connecting *to* this node.
+					 */
+					Size bond_type_;
+
+					/*_
+					 */
+					std::list<CTPNode*> children_;
+
+					/*_
+					 */
+					CTPNode* parent_;
+
+					/*_
+					 */
+					bool finished_;
+
+					/*_
+					 */
+					bool linked_;
+
+					/*_
+					 */
+					list<const CTPNode*> link_list_;
+			};
+
 		public:
 			BALL_CREATE(ConnectedToPredicate)
+
+			ConnectedToPredicate()
+				throw();
+
+			virtual ~ConnectedToPredicate()
+				throw();
 
 			/** Evaluate the predicate for the atom {\tt atom}.
 					@param atom the atom to test
@@ -475,19 +656,50 @@ namespace BALL
 			virtual bool operator () (const Atom& atom) const
 				throw();
 		
+			void dump() const
+				throw();
+
+			void dump(const CTPNode* current) const
+				throw();
+
+			virtual void setArgument(const String& argument)
+				throw();
+
 		private:
-			bool parse_(const String& group, 
-					std::list< std::pair<String, String> >& subs) const
+			/*_ The syntax tree
+			*/
+			CTPNode* tree_;
+
+			/*_ Needed for realising parsing of loops (or links).
+			*/
+			HashMap<char, pair<CTPNode*, CTPNode*> > link_map_;
+
+			/*_ Needed for realising parsing of loops (or links).
+			*/
+			char link_mark_;
+
+			/*_ Keep it consistent
+			*/
+			CTPNode* createNewNode_(CTPNode* node)
 				throw();
-			bool bondOrderMatch_(const String& bond_description, 
-					const Bond::Order order) const
+		
+			/*_
+			*/
+			CTPNode* parse_()
 				throw();
-			bool find_(const String& group, const Atom& atom, 
-					const Bond* source) const
+
+			/*_
+			*/
+			CTPNode* parse_(const String& input)
 				throw();
-			bool findAndTest_(const String& group, const Atom& atom,
-					const Bond* source) const
+
+			bool bondOrderMatch_(const Bond& bond, const CTPNode& node) const
 				throw();
+
+			bool find_(const Atom& atom, const CTPNode* current,
+					HashSet<const Bond*>& visited) const
+				throw();
+
 	};
 
 	/** Predicate indicating sp hybridized atoms.
@@ -537,6 +749,27 @@ namespace BALL
 			*/
 			virtual bool operator () (const Atom& atom) const
 				throw();
+	};
+
+	/** Charge predicate
+	 */
+	class ChargePredicate
+		:	public	ExpressionPredicate
+	{
+		public:
+		BALL_CREATE(ChargePredicate)
+
+		/** Return true if the charge is in the indicated range.
+				The argument of this predicate is either a number,
+				in which case the charge of the atom has to be equal to 
+				that number (down to the specified accuracy for floating 
+				point comparisons, \Ref{EPSILON}), or an operator followed	
+				by a number. Possible operators are: {\tt <}, {\tt >}, {\tt >=}, {\tt <=}, {\tt =}.
+				@param atom the atom to test
+				@return true, if the predicate is true, false otherwise
+		*/
+		virtual bool operator () (const Atom& atom) const
+			throw();
 	};
 
 	//@}	

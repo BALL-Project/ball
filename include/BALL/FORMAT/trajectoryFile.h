@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.h,v 1.11 2002/02/27 12:18:42 sturm Exp $
+// $Id: trajectoryFile.h,v 1.12 2002/12/12 09:48:45 oliver Exp $
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
 #define BALL_FORMAT_TRAJECTORYFILE_H
@@ -54,7 +54,7 @@ namespace BALL
 				@param open_mode the mode in which this file should be opened
 		*/
 		TrajectoryFile(const String& filename,
-				File::OpenMode open_mode = File::IN)
+			File::OpenMode open_mode = std::ios::in)
 			throw();
 
 		/// Destructor

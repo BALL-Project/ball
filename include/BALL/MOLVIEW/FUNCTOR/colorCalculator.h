@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorCalculator.h,v 1.10 2002/02/27 12:19:11 sturm Exp $
+// $Id: colorCalculator.h,v 1.11 2002/12/12 09:48:48 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_VISITOR_H
 #	include <BALL/CONCEPT/visitor.h>
@@ -22,28 +18,17 @@
 #	include <BALL/KERNEL/PTE.h>
 #endif
 
-#ifndef BALL_VIEW_DATATYPE_COLOR_H
-#	include <BALL/VIEW/DATATYPE/color.h>
-#endif
-
 #ifndef BALL_VIEW_DATATYPE_COLORTABLE_H
 #	include <BALL/VIEW/DATATYPE/colorTable.h>
 #endif
 
-#ifndef BALL_MOLVIEW_COLORS_ELEMENTCOLOR_H
-#	include <BALL/MOLVIEW/COLORS/elementColor.h>
-#endif
-
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
-#endif
-
-  
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
+				
+		using VIEW::ColorTable;
+		using VIEW::ColorRGBA;
 		
 		/** ColorCalculator class.
 				The class ColorCalculator is derived from both \Ref{Visitor} of \Ref{Atom}
@@ -97,8 +82,7 @@ namespace BALL
 					@see         default_color_
 					@see         color_
 			*/
-			ColorCalculator
-				(const ColorCalculator& color_calculator)
+			ColorCalculator(const ColorCalculator& color_calculator)
 				throw();
 
 			//@}
@@ -150,8 +134,7 @@ namespace BALL
 					@see         default_color_
 					@see         color_map_
 			*/
-			void set
-				(const ColorCalculator& color_calculator)
+			void set(const ColorCalculator& color_calculator)
 				throw();
 
 			/** Assignment operator.
@@ -164,8 +147,7 @@ namespace BALL
 					@return      ColorCalculator& constant reference of {\em *this} colorCalculator
 					@see         set
 			*/
-			const ColorCalculator&  operator =
-				(const ColorCalculator& color_calculator)
+			const ColorCalculator&  operator = (const ColorCalculator& color_calculator)
 				throw();
 
 			/** Copying.
@@ -177,8 +159,7 @@ namespace BALL
 					@param       color_calculator the colorCalculator to be assigned to
 					@see         set
 			*/
-			void get
-				(ColorCalculator&  color_calculator) const
+			void get(ColorCalculator&  color_calculator) const
 				throw();
 
 			/** Swapping of colorCalculator's.
@@ -191,8 +172,7 @@ namespace BALL
 					@see         default_color_
 					@see         color_map_
 			*/
-			void swap
-				(ColorCalculator&  color_calculator)
+			void swap(ColorCalculator&  color_calculator)
 				throw();
 			//@}
 
@@ -321,8 +301,7 @@ namespace BALL
 					@param   s output stream where to output the state of {\em *this} colorCalculator
 					@param   depth the dumping depth
 			*/
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 			//@}
 

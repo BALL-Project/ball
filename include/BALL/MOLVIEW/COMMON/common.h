@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.13 2002/02/27 12:19:08 sturm Exp $
+// $Id: common.h,v 1.14 2002/12/12 09:48:47 oliver Exp $
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #define BALL_MOLVIEW_COMMON_COMMON_H
@@ -130,10 +130,6 @@ namespace BALL
 				NUMBER_OF_PROPERTIES
 			};
 			//		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/COMMON/common.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

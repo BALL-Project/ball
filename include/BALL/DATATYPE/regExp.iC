@@ -1,15 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regExp.iC,v 1.6 2002/02/27 12:18:34 sturm Exp $
+// $Id: regExp.iC,v 1.7 2002/12/12 09:48:43 oliver Exp $
 
 BALL_INLINE 
 void RegularExpression::set(const RegularExpression& regular_expression, bool /* deep */)
- throw()
+	throw()
 {
-  pattern_.set(regular_expression.pattern_);
+	pattern_.set(regular_expression.pattern_);
 	regfree(&regex_);
-  compilePattern_();
+	compilePattern_();
 }
 
 BALL_INLINE 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.h,v 1.16 2002/02/27 12:18:37 sturm Exp $
+// $Id: DCDFile.h,v 1.17 2002/12/12 09:48:44 oliver Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -172,7 +172,7 @@ namespace BALL
 			throw(Exception::FileNotFound);
 
 		/// Detailed constructor
-		DCDFile(const String& name, File::OpenMode open_mode = File::IN)
+		DCDFile(const String& name, File::OpenMode open_mode = std::ios::in)
 			throw();
 
 		/// Destructor

@@ -1,4 +1,4 @@
-// $Id: triangulatedSAS.h,v 1.1 2002/06/19 12:53:27 strobel Exp $
+// $Id: triangulatedSAS.h,v 1.2 2002/12/12 09:48:56 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSAS_H
 #define BALL_STRUCTURE_TRIANGULATEDSAS_H

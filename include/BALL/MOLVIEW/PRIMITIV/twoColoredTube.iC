@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.iC,v 1.5 2002/02/27 12:19:28 sturm Exp $
+// $Id: twoColoredTube.iC,v 1.6 2002/12/12 09:48:53 oliver Exp $
 
 BALL_INLINE
 Real TwoColoredTube::getLength() const
@@ -15,4 +15,18 @@ Vector3 TwoColoredTube::getMiddleVertex()
 	throw()
 {
   return (getVertex1() + (getVertex2() - getVertex1()) / 2.0);
+}
+
+BALL_INLINE
+void TwoColoredTube::setRadius(Real radius)
+	throw()
+{
+	radius_ = radius;
+}
+
+BALL_INLINE
+Real TwoColoredTube::getRadius() const
+	throw()
+{
+	return radius_;
 }

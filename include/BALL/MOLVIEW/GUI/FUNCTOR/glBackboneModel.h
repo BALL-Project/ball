@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBackboneModel.h,v 1.5 2002/02/27 12:19:20 sturm Exp $
+// $Id: glBackboneModel.h,v 1.6 2002/12/12 09:48:51 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
 #	include <BALL/MOLVIEW/GUI/PRIMITIV/glBackbone.h>
@@ -17,8 +13,6 @@
 #ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #	include <BALL/MOLVIEW/FUNCTOR/backboneModel.h>
 #endif
-
-
 
 namespace BALL
 {
@@ -104,10 +98,6 @@ namespace BALL
 			//@}
 		};
 
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/FUNCTOR/glBackboneModel.iC>
-#			endif
-		
 	} // namespace MOLVIEW
 
 } // namespace BALL

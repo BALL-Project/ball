@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.h,v 1.34 2002/06/19 12:42:02 strobel Exp $
+// $Id: reducedSurface.h,v 1.35 2002/12/12 09:48:55 oliver Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -172,8 +172,6 @@ namespace BALL
 			STATUS_OK  = 0,
 			STATUS_NOT_OK = 1,
 			STATUS_NOT_TESTED = 2
-			//STATUS_JUST_TREATED = 3,
-			//STATUS_NOT_EXISTING = 4
 		};
 
 		/** status of an atom
@@ -785,7 +783,7 @@ namespace BALL
 				Index atom1,
 				Index atom2,
 				Index atom3)
-			throw();
+				throw(Exception::GeneralException);
 
 		/*_
 		*/
@@ -3306,11 +3304,11 @@ namespace BALL
 		}
 		if (extrem == 0)
 		{
-			return Maths::min(min, max);
+			return std::min(min, max);
 		}
 		else
 		{
-			return Maths::max(min, max);
+			return std::max(min, max);
 		}
 	}
 
@@ -3636,7 +3634,7 @@ namespace BALL
 			Index atom1,
 			Index atom2,
 			Index atom3)
-		throw()
+			throw(Exception::GeneralException)
 	{
 				#ifdef print_rs_debug_info
 				std::cout << "check probe sphere " << probe << " with atom ...\n";

@@ -1,14 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.iC,v 1.17 2002/02/27 12:18:24 sturm Exp $
-
-BALL_INLINE 
-void Composite::set(const Composite& composite, UnaryPredicate<Composite>& predicate)
-	throw()
-{
-  composite.clone(*this, predicate);
-}
+// $Id: composite.iC,v 1.18 2002/12/12 09:46:22 oliver Exp $
 
 BALL_INLINE 
 const Composite& Composite::operator = (const Composite& composite)
@@ -17,13 +10,6 @@ const Composite& Composite::operator = (const Composite& composite)
   set(composite);
   return *this;
 }    
-
-BALL_INLINE 
-void Composite::get(Composite& composite, UnaryPredicate<Composite>& predicate) const
-	throw()
-{
-  composite.set(*this, predicate);
-}
 
 BALL_INLINE 
 void Composite::get(Composite& composite, bool deep) const

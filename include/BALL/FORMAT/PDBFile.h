@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.18 2002/02/27 12:18:39 sturm Exp $
+// $Id: PDBFile.h,v 1.19 2002/12/12 09:48:44 oliver Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -40,7 +40,7 @@ namespace BALL
 {
 
 	inline
-	Index Hash(const Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar>& quadruple)
+	HashIndex Hash(const Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar>& quadruple)
 	{
 		return (Index)quadruple.third;
 	}
@@ -60,6 +60,7 @@ namespace BALL
 		: public GenericPDBFile
 	{
 		public:
+
 
 		/**	@name	Constructors and Destructors 
 		*/
@@ -81,7 +82,7 @@ namespace BALL
 				@param	filename the name of the file to open
 				@param	open_mode the file mode
 		*/
-		PDBFile(const String& filename, File::OpenMode open_mode = File::IN)
+		PDBFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
 		/// Destructor

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XYZFile.h,v 1.7 2002/02/27 12:18:40 sturm Exp $
+// $Id: XYZFile.h,v 1.8 2002/12/12 09:48:44 oliver Exp $
 
 #ifndef BALL_FORMAT_XYZFILE_H
 #define BALL_FORMAT_XYZFILE_H
@@ -53,7 +53,7 @@ namespace BALL
 				@param filename the filename
 				@param open_mode the openmode - default is \Ref{File::IN}
 		*/
-		XYZFile(const String& filename, File::OpenMode open_mode = File::IN)
+		XYZFile(const String& filename, File::OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
 		/**	Copy constructor

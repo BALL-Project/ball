@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.10 2002/02/27 12:18:48 sturm Exp $
+// $Id: global.h,v 1.11 2002/12/12 09:48:45 oliver Exp $
 
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H
@@ -103,7 +103,7 @@ namespace BALL
 			{
 				Atom* a1 = atom_map[(*list_iter)->getFirstAtom()];
 				Atom* a2 = atom_map[(*list_iter)->getSecondAtom()];
-				Bond*	tmp_bond = new Bond;
+				Bond*	tmp_bond = static_cast<Bond*>((*list_iter)->create(false, true));
 				tmp_bond->createBond(*tmp_bond, *a1, *a2);
 				(*tmp_bond) = (**list_iter);
 				tmp_bond->setFirstAtom(a1);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.h,v 1.9 2002/02/27 12:19:28 sturm Exp $
+// $Id: twoColoredTube.h,v 1.10 2002/12/12 09:48:53 oliver Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
@@ -22,19 +22,12 @@
 #	include <BALL/VIEW/KERNEL/vertex2.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_RADIUS_H
-#	include <BALL/VIEW/KERNEL/radius.h>
-#endif
-
-
 namespace BALL
 {
-	
 	namespace MOLVIEW
 	{
 		using VIEW::GeometricObject;
 		using VIEW::ColorExtension2;
-		using VIEW::Radius;
 		using VIEW::Vertex2;
 
 		/** TwoColoredTube class.
@@ -60,7 +53,6 @@ namespace BALL
 		class TwoColoredTube
 			: public GeometricObject,
 			  public ColorExtension2,
-				public Radius,
    			public Vertex2
 		{
 			public:
@@ -82,7 +74,6 @@ namespace BALL
 					@return      TwoColoredTube new constructed twoColoredTube
 					@see         GeometricObject
 					@see         ColorExtension2
-					@see         Radius
 					@see         Vertex2
 			*/
 			TwoColoredTube()
@@ -96,11 +87,9 @@ namespace BALL
 					@return      TwoColoredTube new constructed twoColoredTube copied from {\em two_colored_tube}
 					@see         GeometricObject
 					@see         ColorExtension2
-					@see         Radius
 					@see         Vertex2
 			*/
-			TwoColoredTube
-				(const TwoColoredTube& two_colored_tube, bool deep = true)
+			TwoColoredTube(const TwoColoredTube& two_colored_tube, bool deep = true)
 				throw();
 
 			/** Copy constructor from geometricObject.
@@ -110,15 +99,12 @@ namespace BALL
 					@return      TwoColoredTube new constructed twoColoredTube initialized from {\em geometric_object}
 					@see         GeometricObject
 					@see         ColorExtension2
-					@see         Radius
 					@see         Vertex2
 			*/
-			TwoColoredTube
-				(const GeometricObject& geometric_object)
+			TwoColoredTube (const GeometricObject& geometric_object)
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -156,9 +142,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
+
 			//@}
-
-
 			/**	@name	Assignment methods
 			*/
 			//@{
@@ -216,11 +201,12 @@ namespace BALL
 			*/
 			void swap(TwoColoredTube& two_colored_tube)
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
+
 			/** Inspection of the length of the tube.
 					Access the length of {\em *this} tube.
 					@return  Real the length of {\em *this} tube
@@ -236,9 +222,8 @@ namespace BALL
 			*/
 			Vector3 getMiddleVertex()
 				throw();
+
 			//@}
-
-
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -250,8 +235,8 @@ namespace BALL
 					(self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
 					Calls {GeometricObject::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} twoColoredTube is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} twoColoredTube 
+											is correct (self-validated) and consistent, {\tt false} otherwise
 					@see        GeometricObject::isValid
 			*/
 			virtual bool isValid() const
@@ -273,8 +258,8 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Storers
 			*/
 			//@{
@@ -296,9 +281,18 @@ namespace BALL
 			*/
 			virtual void write(std::ostream& s) const
 				throw();
+
+			/**	Get the radius.
+			 */
+			Real getRadius() const
+				throw();
+
+			/** Set the radius.
+			 */
+			void setRadius(Real radius)
+				throw();
+
 			//@}
-
-
 			
 			protected:
 
@@ -310,11 +304,15 @@ namespace BALL
 			*/
 			virtual bool extract()
 				throw();
+
+			private:
+
+			Real radius_;
 		};
 
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.iC>
-#			endif
+	#ifndef BALL_NO_INLINE_FUNCTIONS
+	# include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.iC>
+	#endif
 
 	} // namespace MOLVIEW
 

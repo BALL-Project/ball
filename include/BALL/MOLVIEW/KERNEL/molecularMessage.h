@@ -1,25 +1,22 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularMessage.h,v 1.6 2002/02/27 12:19:26 sturm Exp $
+// $Id: molecularMessage.h,v 1.7 2002/12/12 09:48:53 oliver Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
 #define BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
-
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #	include <BALL/VIEW/KERNEL/message.h>
 #endif
 
-using namespace BALL::VIEW;
-
+using BALL::VIEW::CompositeMessage;
+using BALL::VIEW::RemovedCompositeMessage;
+using BALL::VIEW::ChangedCompositeMessage;
+using BALL::VIEW::SelectionMessage;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 		/** NewMolecularMessage class.
@@ -250,10 +247,6 @@ namespace BALL
 		};
 
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/MOLVIEW/KERNEL/molecularMessage.iC>
-#		endif
-		
 	} // namespace MOLVIEW
 
 } // namespace BALL

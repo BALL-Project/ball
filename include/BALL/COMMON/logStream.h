@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.h,v 1.15 2002/02/27 12:18:20 sturm Exp $
+// $Id: logStream.h,v 1.16 2002/12/12 09:48:39 oliver Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -18,7 +18,12 @@
 #	include <BALL/COMMON/debug.h>
 #endif
 
-#include <sys/time.h>
+#ifdef BALL_HAS_SYS_TIME_H
+#	include <sys/time.h>
+#endif
+#ifdef BALL_HAS_TIME_H
+#	include <time.h>
+#endif
 
 #include <iostream>
 #include <list>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: circle3.h,v 1.28 2002/02/27 12:18:53 sturm Exp $
+// $Id: circle3.h,v 1.29 2002/12/12 09:48:46 oliver Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -10,7 +10,7 @@
 #	include <BALL/common.h>
 #endif
 
-#ifdef BALL_INCLUDE_IEEEFP
+#ifdef BALL_HAS_IEEEFP_H
 #	include <ieeefp.h>
 #endif 
 

@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glTwoColoredTube.h,v 1.7 2002/02/27 12:19:24 sturm Exp $
+// $Id: glTwoColoredTube.h,v 1.8 2002/12/12 09:48:52 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLOBJECT_H
 #	include <BALL/VIEW/GUI/KERNEL/glObject.h>
@@ -18,13 +14,10 @@
 #	include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 #endif
 
-
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-		
 		using VIEW::GLObject;
 		
 		/** GLTwoColoredTube class.
@@ -229,10 +222,6 @@ namespace BALL
 				(const Vector3& vertex_1, const Vector3& vertex_2,
 				 const Vector3& rotation_axis, const Real angle);
 		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.iC>
-#			endif
 
 	} // namespace MOLVIEW
 

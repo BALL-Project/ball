@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.26 2002/02/27 12:18:38 sturm Exp $
+// $Id: INIFile.h,v 1.27 2002/12/12 09:48:44 oliver Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -24,6 +24,8 @@
 
 namespace BALL 
 {
+
+	class INIFile;
 
 	/**	INIFile.
 			This class provides support to read and evaluate
@@ -50,7 +52,7 @@ namespace BALL
 			public:
 
 			friend class INIFile;
-			friend class INIFile::IteratorTraits_;
+			friend class IteratorTraits_;
 
 			const String& getName() const
 			{
@@ -601,6 +603,18 @@ namespace BALL
 								\end{itemize}
 		*/	
 		bool setValue(const String& section, const String& key, const String& value);
+
+		/** Insert a new value in a given section
+		 		If the key exists allready or the sections doesnt exist, nothing happens.
+				@param	section	the section to insert the key
+				@param	key	the key to insert
+				@param	value the new value
+				@return	bool - \begin{itemize}
+									\item {\bf true} if the value was inserted
+									\item {\bf false} if key or section do not exist
+								\end{itemize}
+		*/
+		bool insertValue(const String& section, const String& key, const String& value);
 
 		//@}
 		/** @name Predicates

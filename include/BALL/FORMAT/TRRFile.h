@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TRRFile.h,v 1.3 2002/02/27 12:18:40 sturm Exp $
+// $Id: TRRFile.h,v 1.4 2002/12/12 09:48:44 oliver Exp $
 
 #ifndef BALL_FORMAT_TRRFILE_H
 #define BALL_FORMAT_TRRFILE_H
@@ -175,7 +175,7 @@ namespace BALL
 			throw(Exception::FileNotFound);
 
 		/// Detailed constructor
-		TRRFile(const String& name, File::OpenMode open_mode = File::IN)
+		TRRFile(const String& name, File::OpenMode open_mode = std::ios::in)
 			throw();
 
 		/// Destructor
@@ -276,7 +276,7 @@ namespace BALL
 			throw();
 
 		///
-		bool setPrecision(const Size newprecision)
+		bool setPrecision(const Size precision)
 			throw();
 
 		///

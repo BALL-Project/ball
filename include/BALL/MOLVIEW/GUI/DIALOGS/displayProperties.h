@@ -1,18 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.12 2002/02/27 12:19:17 sturm Exp $
+// $Id: displayProperties.h,v 1.13 2002/12/12 09:48:50 oliver Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
-# include <BALL/STRUCTURE/geometricProperties.h>
-#endif
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 # include <BALL/STRUCTURE/fragmentDB.h>
@@ -22,24 +14,20 @@
 #	include <BALL/FORMAT/INIFile.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_LOGVIEW_H
-#	include <BALL/VIEW/KERNEL/logView.h>
-#endif
-
-#ifndef BALL_STRUCTURE_RESIDUECHECKER_H
-# include <BALL/STRUCTURE/residueChecker.h>
-#endif
-
-#ifndef BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
-# include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
-#endif
-
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
 # include <BALL/MOLVIEW/GUI/FUNCTOR/glAtomBondModelConnector.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
-# include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
+#ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
+#	include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h>
+#endif
+
+#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
+# include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#endif
+
+#ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIESDATA_H
+# include <BALL/MOLVIEW/GUI/DIALOGS/displayPropertiesData.h>
 #endif
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
@@ -62,32 +50,22 @@
 # include <BALL/MOLVIEW/GUI/FUNCTOR/glVanDerWaalsModel.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
-#	include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h>
+#ifndef BALL_MOLVIEW_GUI_FUNCTOR_REMOVEMODEL_H
+# include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
 #endif
-
-
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-# include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
-#endif
-
-#ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
-# include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
-#endif
-
-#ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIESDATA_H
-# include <BALL/MOLVIEW/GUI/DIALOGS/displayPropertiesData.h>
-#endif
-
-//using namespace BALL;
-using namespace BALL::VIEW;
-//using namespace BALL::MOLVIEW;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
+
+			/// Exception to be thrown if invalid option is given for a modelprocessor
+ 			class InvalidOption: public Exception::GeneralException
+			{
+  			public:
+	   			InvalidOption(const char* file, int line, int option)
+					throw();
+			};
 
 		/**	The DisplayProperties class.
 				The class DisplayProperties is a dialog used for changing the graphical
@@ -115,8 +93,7 @@ namespace BALL
 				For information about the drawing precision see \Ref{GeometricObject}.\\
 				This dialog is also responsible for selecting and deselecting,
 				building bonds and adding hydrogens to molecular objects. Further it is possible
-				to center the camera of the \Ref{Scene} to the geometric center of the selection
-				of molecular objects.
+				to center the camera of the \Ref{Scene} to the geometric center of the selection of molecular objects.
 				The class \Ref{MolecularControl} is responsible for creating such a selection.
 				If this dialog is used, it should be created with \Ref{MainControl} as parent.
 				The class DisplayPropertiesData contains the definition of the layout of
@@ -124,7 +101,7 @@ namespace BALL
 				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h}
 		*/
 		class DisplayProperties 
-			: public BALL::MOLVIEW::DisplayPropertiesData,
+			: public DisplayPropertiesData,
 			  public ModularWidget
 		{
 			Q_OBJECT
@@ -142,8 +119,8 @@ namespace BALL
 					This combo box as well as the others can be set differently according to saved
 					preferences. See \Ref{fetchPreferences}.
 					Calls \Ref{registerWidget}.
-					@param      parent the parent widget of {\em *this} displayProperties (See documentation of QT-library for information concerning widgets)
-					@param      name the name of {\em *this} displayProperties (See documentation of QT-library for information concerning widgets)
+					@param      parent the parent widget of {\em *this} displayProperties 
+					@param      name the name of {\em *this} displayProperties 
 					@return     DisplayProperties new constructed displayProperties
 					@see        fetchPreferences
 					@see        ElementColorCalculator
@@ -152,8 +129,8 @@ namespace BALL
 			*/
 			DisplayProperties(QWidget *parent = NULL, const char* name = NULL)
 					throw();
-			//@}
 
+			//@}
 			/** @name Destructors 
 			*/
 			//@{
@@ -163,11 +140,12 @@ namespace BALL
 			*/
 			virtual ~DisplayProperties()
 				throw();
+
 			//@}
-				
 			/**	@name	Accessors: inspectors and mutators 
 			 */
 			//@{
+
 			/** Message handling method.
 					Handles messages sent by other registered \Ref{ConnectionObject} objects.
 					Catches \Ref{NewMolecularMessage} and \Ref{MolecularSelectionMessage}.
@@ -193,8 +171,8 @@ namespace BALL
 			*/
 			virtual void onNotify(Message *message)
 					throw();
+			
 			//@}
-
 			/**	ModularWidget methods
 			*/
 			//@{
@@ -231,13 +209,13 @@ namespace BALL
 						\item  {\em Display Properties} - opens the dialog (indicates if open)
 						\item  {\em Select} - marks the selected molecular objects in the selected color (See \Ref{GeometricObject})
 						\item  {\em Deselect} - uses the previously set color of the selected molecular objects
-						\item  {\em Focus Camera} - centers the camera of \Ref{Scene} to the geometric center of the molecular objects in the selection
+						\item  {\em Focus Camera} - centers the camera of \Ref{Scene} to the geometric center 
+										of the molecular objects in the selection
 						\item  {\em Build Bonds} - generates the \Ref{Bond} object to the molecular objects in the selection
 						\item  {\em Add Hydrogens} - adds hydrogens to the molecular objects in the selection
 					\end{itemize}
 					and adds them to the appropriate slots.
-					This method is called automatically	immediately before the main application 
-					is started. 
+					This method is called automatically	immediately before the main application is started. 
 					This method will be called by \Ref{show} from the \Ref{MainControl} object.
 					@param main_control the \Ref{MainControl} object to be initialized with {\em *this} displayProperties
 					@see   openDialog
@@ -259,8 +237,7 @@ namespace BALL
 			/**	Removes the widget.
 					Removes the checkable submenus from the popup menu
 					{\em Display}	and cut the all previously registered connections.
-					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl}
-					object.
+					This method will be called by \Ref{aboutToExit} from the \Ref{MainControl} object.
 					@param main_control the \Ref{MainControl} object to be finalized with {\em *this} displayProperties
 					@see   initializeWidget
 					@see   checkMenu
@@ -290,10 +267,10 @@ namespace BALL
 			*/
 			virtual void checkMenu(MainControl& main_control)
 					throw();
-			//@}
 				
 			public slots:
 					
+			//@}
 			/** @name Public slots
 			*/
 			//@{
@@ -389,15 +366,15 @@ namespace BALL
 					See documentation of QT-library for information concerning QDialog widgets.
 			*/
 			void openDialog();
-			//@}
 				
 			protected slots:
 					
+			//@}
 			/** @name Protected slots
 			*/
 			//@{
 					
-			/** Changes the drawing precision.
+			/** Changes the drawing precision for the static modell.
 					This slot is connected to the drawing precision combo box and will be automatically
 					called if the contents of this combo box is changed.
 					This method changes the drawing precision of the selected model.
@@ -406,19 +383,25 @@ namespace BALL
 					@see     applyButtonClicked
 					@see     selectModel
 			*/
-			virtual void selectPrecision(const QString& string);
+			virtual void selectPrecisionStatic(const QString& string);
+
+			/** Changes the drawing precision for the dynamic modell.
+			 */
+			virtual void selectPrecisionDynamic(const QString& string);
 				
-			/** Changes the model.
-					This slot is connected to the model combo box and will be automatically
+			/** Changes the static model.
+					This slot is connected to the static model combo box and will be automatically
 					called if the content of this combo box is changed.
-					This method changes the model the will be created by pressing the apply button.
-					The selected drawing precision and the coloring method will be used for this model.
 					@param   string the string containing the new model
 					@see     selectColoringMethod
 					@see     applyButtonClicked
 					@see     selectPrecision
 			*/
-			virtual void selectModel(const QString& string);
+			virtual void selectModelStatic(const QString& string);
+
+			/** Changes the dynamic model.
+			 */
+			virtual void selectModelDynamic(const QString& string);
 			
 			/** Changes the coloring method.
 					This slot is connected to the coloring method combo box and will be automatically
@@ -457,10 +440,16 @@ namespace BALL
 					@see   selectColoringMethod
 			 */ 
 			virtual void editColor();
+
+			/** Opens the color dialog for the color of selected items.
+			 		@see BALL_SELECTED_COLOR
+			*/
+			virtual void editSelectionColor();
 			//@}
 				
 			private:
 			
+			/*_ Set the selection of a given combobox to a given value */
 			void setComboBoxIndex_(QComboBox* combo_box, QString& item_string);
 
 			// --------------------------------------------------------------------------------
@@ -520,7 +509,7 @@ namespace BALL
 			Vector3 getViewCenter_() const;
 
 			void setViewDirection_(int view_direction);
-			// muss noch verbessert werden (VIEW_DIRECTION)
+			// ????? muss noch verbessert werden (VIEW_DIRECTION)
 			int getViewDirection_() const;
 			void setViewDistance_(Real view_distance);
 			Real getViewDistance_() const;
@@ -534,10 +523,11 @@ namespace BALL
 																			 const ColorRGBA &third_color = ColorRGBA());
 			virtual void setColorCalculator_(ColorCalculator& color_calculator);
 
+			virtual void setupStaticProcessor_()
+				throw();
 
-			void applyOnComposite_(Composite& composite, UnaryProcessor<Composite>* processor);		
-			void applyOnComposite_(Composite& composite, UnaryProcessor<Atom>* processor);		
-
+			virtual void setupDynamicProcessor_()
+				throw();
 
 			// --------------------------------------------------------------------------------
 			// attributs
@@ -550,32 +540,45 @@ namespace BALL
 			int build_bonds_id_;
 			int add_hydrogens_id_;
 			
-			QString   model_string_;
-			QString   precision_string_;
-			QString   coloring_method_string_;
-			ColorRGBA custom_color_;
+			QString  					model_string_static_;
+			QString  					model_string_dynamic_;
+			QString   				precision_string_static_;
+			QString   				precision_string_dynamic_;
+			QString   				coloring_method_string_;
+			ColorRGBA 				custom_color_;
 			
-			// MoleculeObjectProcessor object_processor_;
+			bool 							distance_coloring_;
 			
-			bool distance_coloring_;
-			
-			List<Composite*> selection_;
-
-
 			// --------------------------------------------------------------------------------
 			// Attributs for the model processors
 			// --------------------------------------------------------------------------------
 		
 			// general
-			Vector3 view_center_vector_;
-			int view_direction_;
-			Real view_distance_;
-			vector<int> address_array_;
+			Vector3 										view_center_vector_;
+			int 												view_direction_;
+			Real 												view_distance_;
+			vector<int> 								address_array_;
 
 			// model specific
-			FragmentDB fragmentdb_;
-			ColorCalculator *color_calculator_;
-			GLAtomBondModelConnector model_connector_;
+			FragmentDB 									fragmentdb_;
+			ColorCalculator*						color_calculator_;
+			GLAtomBondModelConnector 		model_connector_;
+
+			AddGLBallAndStickModel 			ball_and_stick_model_static_;
+			AddGLBallAndStickModel 			ball_and_stick_model_dynamic_;
+			AddGLSurfaceModel 					surface_model_static_;
+			AddGLSurfaceModel 					surface_model_dynamic_;
+			AddGLVanDerWaalsModel 			van_der_waals_model_static_;
+			AddGLVanDerWaalsModel 			van_der_waals_model_dynamic_;
+			AddGLBackboneModel 					backbone_model_static_;
+			AddGLBackboneModel 					backbone_model_dynamic_;
+			RemoveModel 								remove_model_static_;
+			RemoveModel 								remove_model_dynamic_;
+			AddGLLineModel 							line_model_static_;
+			AddGLLineModel 							line_model_dynamic_;
+
+			BaseModelProcessor* 				static_base_model_pointer_;
+			BaseModelProcessor* 				dynamic_base_model_pointer_;
 
 			ElementColorCalculator      element_color_calculator_;
 			ResidueNameColorCalculator  residue_name_color_calculator_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: complex.h,v 1.10 2002/10/12 17:06:47 oliver Exp $
+// $Id: complex.h,v 1.12 2002/12/12 17:00:52 oliver Exp $
 
 #ifndef BALL_MATHS_COMPLEX_H
 #define BALL_MATHS_COMPLEX_H
@@ -10,7 +10,7 @@
 #	include <BALL/common.h>
 #endif
 
-#ifdef BALL_HAS_FFTW
+#ifdef BALL_HAS_FFTW_H
 # include <fftw.h>
 #endif
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.iC,v 1.39 2002/02/27 12:18:35 sturm Exp $
+// $Id: string.iC,v 1.40 2002/12/12 09:48:44 oliver Exp $
 
 BALL_INLINE 
 String::String()
@@ -51,12 +51,10 @@ String::String(const String& s, Index from, Size len)
 }
 
 BALL_INLINE 
-void String::set(std::strstream& s)
+void String::set(std::stringstream& s)
 	throw()
 {
-	s << std::ends;
-	char* char_ptr = s.str();
-	assign(char_ptr);
+	s >> (*this);
 }
 
 BALL_INLINE 
@@ -421,7 +419,7 @@ const String& String::operator = (const char* char_ptr)
 }
 
 BALL_INLINE 
-const String& String::operator = (std::strstream& s)
+const String& String::operator = (std::stringstream& s)
 	throw()
 {
   set(s);

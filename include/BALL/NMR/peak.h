@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peak.h,v 1.10 2002/02/27 12:19:31 sturm Exp $
+// $Id: peak.h,v 1.11 2002/12/12 09:48:54 oliver Exp $
 
 #ifndef BALL_NMR_PEAK_H
 #define BALL_NMR_PEAK_H
@@ -161,28 +161,28 @@ namespace BALL
 
 	template <typename PositionType>
 	BALL_INLINE
-	const Peak<PositionType>::Position& Peak<PositionType>::getPosition() const
+	const typename Peak<PositionType>::Position& Peak<PositionType>::getPosition() const
 	{
 		return position_;
 	}
 
 	template <typename PositionType>
 	BALL_INLINE
-	const Peak<PositionType>::Position& Peak<PositionType>::getWidth() const
+	const typename Peak<PositionType>::Position& Peak<PositionType>::getWidth() const
 	{
 		return width_;
 	}
 
 	template <typename PositionType>
 	BALL_INLINE
-	void Peak<PositionType>::setPosition(const Peak<PositionType>::Position& position)
+	void Peak<PositionType>::setPosition(const typename Peak<PositionType>::Position& position)
 	{
 		position_ = position;
 	}
 
 	template <typename PositionType>
 	BALL_INLINE
-	void Peak<PositionType>::setWidth(const Peak<PositionType>::Position& width)
+	void Peak<PositionType>::setWidth(const typename Peak<PositionType>::Position& width)
 	{
 		width_ = width;
 	}

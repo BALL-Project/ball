@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: experiment.h,v 1.3 2002/02/27 12:19:30 sturm Exp $
+// $Id: experiment.h,v 1.4 2002/12/12 09:48:54 oliver Exp $
 
 #ifndef BALL_NMR_EXPERIMENT_H
 #define BALL_NMR_EXPERIMENT_H
@@ -115,13 +115,13 @@ namespace BALL
 	}
 	
 	template <typename PeakListType>
-	const Experiment<PeakListType>::PeakType& Experiment<PeakListType>::getDefaultPeak() const
+	const typename Experiment<PeakListType>::PeakType& Experiment<PeakListType>::getDefaultPeak() const
 	{
 		return default_peak_;
 	}
 
 	template <typename PeakListType>
-	void Experiment<PeakListType>::setDefaultPeak(const Experiment<PeakListType>::PeakType& peak) 
+	void Experiment<PeakListType>::setDefaultPeak(const typename Experiment<PeakListType>::PeakType& peak) 
 	{
 		default_peak_ = peak;
 	}

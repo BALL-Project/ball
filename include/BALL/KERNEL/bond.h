@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.29 2002/02/27 12:18:45 sturm Exp $
+// $Id: bond.h,v 1.30 2002/12/12 09:48:45 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -275,7 +275,7 @@ namespace BALL
 				the correct order (see \Ref{Bond}).
 		*/
 		void finalize()
-			throw();
+			throw(Exception::GeneralException);
 
 		//@}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.h,v 1.14 2002/02/27 12:18:40 sturm Exp $
+// $Id: bruker1DFile.h,v 1.15 2002/12/12 09:48:44 oliver Exp $
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
 #define BALL_FORMAT_BRUKER1DFILE_H
@@ -30,11 +30,12 @@
 
 namespace BALL
 {
+	//????
 	/**	Bruker 1D spectrum format.
-			This class....	\\
+			A class for handling Bruker one-dimensional NMR spectra.
+			\\
 			{\bf Definition:}\URL{BALL/FORMAT/bruker1DFile.h}
 	*/
-	// ?????
 	class Bruker1D 
 		: public File
 	{
@@ -51,7 +52,7 @@ namespace BALL
 		/**	Constructor.
 				@param name important: name of the Bruker-*directory*
 		*/
-		Bruker1D(const String& name, OpenMode open_mode = File::IN|File::BINARY)
+		Bruker1D(const String& name, OpenMode open_mode = std::ios::in | std::ios::binary)
 			throw(Exception::FileNotFound);
 
 		/// Copy constructor

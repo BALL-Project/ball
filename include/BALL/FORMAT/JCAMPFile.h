@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.8 2002/02/27 12:18:38 sturm Exp $
+// $Id: JCAMPFile.h,v 1.9 2002/12/12 09:48:44 oliver Exp $
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
 #define BALL_FORMAT_JCAMPFILE_H
@@ -36,7 +36,7 @@ namespace BALL
 
 		/** Detailed constructor.
 		*/
-		JCAMPFile(const String& name, OpenMode open_mode = IN)
+			JCAMPFile(const String& name, OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
 		/** Copy constructor.

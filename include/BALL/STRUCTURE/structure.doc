@@ -1,4 +1,4 @@
-// $Id: structure.doc,v 1.7 2002/05/12 14:03:22 oliver Exp $
+// $Id: structure.doc,v 1.8 2002/12/12 09:48:56 oliver Exp $
 
 /**	@name	Molecular Structure
 		This chapter contains all relevant information on 
@@ -15,6 +15,8 @@
 	//@Include: smilesParser.h
   //@Include: rotamerLibrary.h
   //@Include: structureMapper.h
+	//@Include: molecularGraph.h
+	//@Include: peptides.h
 
 	/**	@name Radial Distribution Functions
 	*/

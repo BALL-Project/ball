@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalGeometry.h,v 1.51 2002/05/02 11:51:36 strobel Exp $
+// $Id: analyticalGeometry.h,v 1.52 2002/12/12 09:48:46 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H

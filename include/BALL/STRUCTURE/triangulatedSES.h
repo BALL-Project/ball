@@ -1,8 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triangulatedSES.h,v 1.9 2002/06/19 12:48:44 strobel Exp $
-// $Id: triangulatedSES.h,v 1.9 2002/06/19 12:48:44 strobel Exp $
+// $Id: triangulatedSES.h,v 1.10 2002/12/12 09:48:56 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSES_H
 #define BALL_STRUCTURE_TRIANGULATEDSES_H
@@ -1691,8 +1690,8 @@ namespace BALL
 		TAngle<T> angle;
 		while (p != third.end())
 		{
-			new_normal.set(edge_vector % (edge->vertex_[0]->point_-(*p)->point_));
-			angle = getOrientedAngle(normal,new_normal,edge_vector);
+			new_normal.set(edge_vector % (edge->vertex_[0]->point_ - (*p)->point_));
+			angle = getOrientedAngle(normal, new_normal,edge_vector);
 			if (angle < min)
 			{
 				real_third.clear();

@@ -1,21 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseModel.h,v 1.12 2002/02/27 12:19:11 sturm Exp $
+// $Id: baseModel.h,v 1.13 2002/12/12 09:48:48 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
-#endif
-
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
 #endif
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
@@ -30,23 +22,14 @@
 #	include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
 #endif
 
-#ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
-#	include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
-#endif
-
 #ifndef BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
 #	include <BALL/MOLVIEW/KERNEL/extendedProperty.h>
 #endif
 
-using namespace BALL::VIEW;
-
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-
-
 		/** BaseModelProcessor class.
 				The class BaseModelProcessor is derived from \Ref{UnaryProcessor} and
 				\Ref{ExtendedPropertyManager}. It contains therefore the processor interface
@@ -362,7 +345,6 @@ namespace BALL
 			virtual Processor::Result operator() (Composite& composite);
 
 			//@}
-				
 			/**	@name	Predicates
 			*/
 			//@{
@@ -394,7 +376,7 @@ namespace BALL
 			/** Test if creation of dynamic models is enabled.
 					Test if the property {\tt PROPERTY__OBJECT_DYNAMIC} is set for {\em *this} baseModelProcessor.
 					See \Ref{GeometricObject} for information about this property.
-					@return  bool {\tt true} if dynamic models of {\em *this} baseModelProcessor should be created, {\tt false} otherwise
+					@return  bool {\tt true} if dynamic models of {\em *this} baseModelProcessor should be created
 					@see     enableDynamicModel
 					@see     disableDynamicModel
 					@see     GeometricObject
@@ -406,7 +388,7 @@ namespace BALL
 			/** Test if creation of dynamic models is disabled.
 					Test if the property {\tt PROPERTY__OBJECT_DYNAMIC} is not set for {\em *this} baseModelProcessor.
 					See \Ref{GeometricObject} for information about this property.
-					@return  bool {\tt true} if dynamic models of {\em *this} baseModelProcessor should not be created, {\tt false} otherwise
+					@return  bool {\tt true} if dynamic models of {\em *this} baseModelProcessor should not be created
 					@see     enableDynamicModel
 					@see     disableDynamicModel
 					@see     GeometricObject
@@ -443,7 +425,7 @@ namespace BALL
 					Calls \Ref{ExentedPropertyManager::isValid}.
 					Calls \Ref{BaseModelConnector::isValid}.
 					Calls \Ref{FindGeometricObjects::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this}atomBondModelConnector is correct (self-validated) and consistent, {\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this}atomBondModelConnector is correct
 					@see       ExentedPropertyManager
 					@see       BaseModelConnector
 					@see       FindGeometricObjects
@@ -473,7 +455,7 @@ namespace BALL
 					atomBondModelConnector.
 					This object is used to search for specific \Ref{GeometricObject} objects that
 					have certain properties.
-					@return  FindGeometricObjects& a mutable reference to the \Ref{FindGeometricObjects} of {\em *this} atomBondModelConnector
+					@return  FindGeometricObjects& a mutable reference to the \Ref{FindGeometricObjects} 
 					@see     FindGeometricObjects
 			*/
 			FindGeometricObjects& getSearcher_()
@@ -504,7 +486,7 @@ namespace BALL
 					objects are removed that have a model property (determined with the method \Ref{isModel_}).
 					All found \Ref{GeometricObject} objects are deleted.
 					@param  composite the \Ref{Composite} object that should be search for \Ref{GeometricObject} objects
-					@param  only_models if set to {\tt true} only \Ref{GeometricObject} objects are searched that have a model property
+					@param  only_models if set to {\tt true} \Ref{GeometricObject} objects are searched that have a model property
 					@see    isModel_
 					@see    GeometricObject
 					@see    Composite
@@ -528,13 +510,12 @@ namespace BALL
 			*/
 			void clear_()
 				throw();
+							
 			//@}
-
 			
 			private:
 
-			void dump_
-				(std::ostream& s, Size depth) const;
+			void dump_(std::ostream& s, Size depth) const;
 
 
 			/* search processor */ 

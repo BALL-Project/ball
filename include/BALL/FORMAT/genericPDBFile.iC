@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericPDBFile.iC,v 1.5 2002/02/27 12:18:41 sturm Exp $
+// $Id: genericPDBFile.iC,v 1.6 2002/12/12 09:48:45 oliver Exp $
 
 BALL_INLINE 
 void GenericPDBFile::clear(int state)
@@ -12,7 +12,7 @@ void GenericPDBFile::clear(int state)
 BALL_INLINE 
 float GenericPDBFile::getVersion() const
 {
-  return 2.1;
+  return (float)2.1;
 }
 
 BALL_INLINE 

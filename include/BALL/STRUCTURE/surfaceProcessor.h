@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceProcessor.h,v 1.25 2002/09/10 06:10:08 oliver Exp $
+// $Id: surfaceProcessor.h,v 1.26 2002/12/12 09:48:56 oliver Exp $
 
 #define SES
 

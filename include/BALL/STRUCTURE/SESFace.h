@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SESFace.h,v 1.18 2002/06/19 12:40:43 strobel Exp $
+// $Id: SESFace.h,v 1.19 2002/12/12 09:48:55 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -435,7 +435,7 @@ namespace BALL
 
 
 	template <class T>
-	void TSESFace<T>::setType(TSESFace<T>::Type type)
+	void TSESFace<T>::setType(typename TSESFace<T>::Type type)
 		throw()
 	{
 		type_ = type;
@@ -443,7 +443,7 @@ namespace BALL
 
 
 	template <class T>
-	TSESFace<T>::Type TSESFace<T>::getType() const
+	typename TSESFace<T>::Type TSESFace<T>::getType() const
 		throw()
 	{
 		return type_;

@@ -1,22 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.11 2002/02/27 12:19:10 sturm Exp $
+// $Id: ballAndStickModel.h,v 1.12 2002/12/12 09:48:48 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#	include <BALL/VIEW/KERNEL/geometricObject.h>
-#endif
 
 #ifndef BALL_VIEW_PRIMITIV_SPHERE_H
 #	include <BALL/VIEW/PRIMITIV/sphere.h>
@@ -24,10 +12,6 @@
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
 #	include <BALL/VIEW/PRIMITIV/tube.h>
-#endif
-
-#ifndef BALL_MOLVIEW_COMMON_COMMON_H
-#	include <BALL/MOLVIEW/COMMON/common.h>
 #endif
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
@@ -38,10 +22,10 @@
 #	include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 #endif
 
-
 namespace BALL
 {
-	
+	class Atom;
+
 	namespace MOLVIEW
 	{
 
