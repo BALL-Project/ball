@@ -154,40 +154,41 @@ void BALLViewDemo::accept()
 		}
 	}
 
-	if (id < MODEL_HBONDS)
+	if (id < MODEL_HBONDS - 1)
 	{
+		if (((ModelType)id) >= MODEL_SE_SURFACE) id ++;
  		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, (ModelType) id, COLORING_ELEMENT);
 //   CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
 		notify_(crmsg);
 	}
-	else if (id == MODEL_HBONDS)
+	else if (id == MODEL_HBONDS - 1)
 	{
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
 		notify_(crmsg);
 		crmsg = new CreateRepresentationMessage(composites_, MODEL_HBONDS, COLORING_ELEMENT);
 		notify_(crmsg);
 	}
-	else if (id == MODEL_HBONDS + 1)
+	else if (id == MODEL_HBONDS)
 	{
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_VDW, COLORING_TEMPERATURE_FACTOR);
 		notify_(crmsg);
 	}
-	else if (id == MODEL_HBONDS + 2)
+	else if (id == MODEL_HBONDS + 1)
 	{
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_CARTOON, COLORING_SECONDARY_STRUCTURE);
 		notify_(crmsg);
 	}
-	else if (id == MODEL_HBONDS + 3)
+	else if (id == MODEL_HBONDS + 2)
 	{
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_CARTOON, COLORING_RESIDUE_INDEX);
 		notify_(crmsg);
 	}
-	else if (id == MODEL_HBONDS + 4)
+	else if (id == MODEL_HBONDS + 3)
 	{
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_RESIDUE_NAME);
 		notify_(crmsg);
 	}
-	else if (id == MODEL_HBONDS + 5)
+	else if (id == MODEL_HBONDS + 4)
 	{
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
 		notify_(crmsg);
@@ -197,13 +198,13 @@ void BALLViewDemo::accept()
  		ms->getMDSimulationDialog().setNumberOfSteps(30);
 		ms->MDSimulation(false);
 	}
-	else if (id == MODEL_HBONDS + 6) //FDPB
+	else if (id == MODEL_HBONDS + 5) //FDPB
 	{
 		ms->calculateFDPB();
 		ms->getFDPBDialog()->okPressed();
 		disable_button = false;
 	}
-	else if (id == MODEL_HBONDS + 7) // SES colored 
+	else if (id == MODEL_HBONDS + 6) // SES colored 
 	{
 		getMainControl()->getPrimitiveManager().setMultithreadingMode(false);
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_SE_SURFACE, COLORING_ELEMENT);
@@ -277,7 +278,7 @@ void BALLViewDemo::accept()
  		disable_button = false;
 		
 	}
-	else if (id == MODEL_HBONDS + 8) // last
+	else if (id == MODEL_HBONDS + 7) // last
 	{
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
 		notify_(crmsg);
