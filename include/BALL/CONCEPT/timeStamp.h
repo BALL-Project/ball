@@ -1,4 +1,4 @@
-// $Id: timeStamp.h,v 1.1 2000/08/28 11:44:18 oliver Exp $
+// $Id: timeStamp.h,v 1.2 2000/08/28 14:13:15 amoll Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -94,11 +94,11 @@ namespace BALL
 
 		/**	Return the seconds since Jan. 1, 1970.
 		*/
-		long getSeconds() const;
+		long getSeconds() const throw();
 
 		/**	Return the microseconds.
 		*/
-		long getMicroSeconds() const;
+		long getMicroSeconds() const throw();
 
 		/**	Return the current time.
 				@return Time the current time in seconds since Jan. 1, 1970
