@@ -1,4 +1,4 @@
-// $Id: TCPTransfer_test.C,v 1.15 2002/01/09 16:35:31 amoll Exp $
+// $Id: TCPTransfer_test.C,v 1.16 2002/01/13 18:27:54 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -17,7 +17,7 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.15 2002/01/09 16:35:31 amoll Exp $")
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.16 2002/01/13 18:27:54 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -51,7 +51,7 @@ RESULT
 
 CHECK(http/no login)
 	ABORT_IF(!NetworkTest::test("www.mpi-sb.mpg.de", NetworkTest::HTTP))
-	File::createTemporaryFilename(filename);
+	NEW_TMP_FILE(filename)
 	ofstream out(filename.c_str(), std::ios::out);
 	
 	TCPTransfer tcp_t(out ,"http://www.mpi-sb.mpg.de/BALL/test/http_test.txt");
@@ -69,7 +69,7 @@ RESULT
 
 CHECK(http/login)
 	ABORT_IF(!NetworkTest::test("www.zbi.uni-saarland.de", NetworkTest::HTTP))
-	File::createTemporaryFilename(filename);
+	NEW_TMP_FILE(filename)
 	ofstream out(filename.c_str(), std::ios::out);
 	TCPTransfer tcp_t(out ,"http://BALL-TEST:test@www.zbi.uni-saarland.de/zbi/BALL/test/protected/TCPTransferTest.txt");
 	TEST_EQUAL(tcp_t.getHostAddress(), "www.zbi.uni-saarland.de")
@@ -86,7 +86,7 @@ RESULT
 
 CHECK(ftp)
 	ABORT_IF(!NetworkTest::test("ftp.mpi-sb.mpg.de", NetworkTest::FTP))
-	File::createTemporaryFilename(filename);
+	NEW_TMP_FILE(filename);
 	ofstream out(filename.c_str(), std::ios::out);
 	TCPTransfer tcp_t(out, "ftp://ftp.mpi-sb.mpg.de/pub/outgoing/BALL/ftp_test.txt");
 	TEST_EQUAL(tcp_t.getHostAddress(), "ftp.mpi-sb.mpg.de")
@@ -103,7 +103,7 @@ CHECK(ftp)
 RESULT
 
 CHECK(http/exception)
-	File::createTemporaryFilename(filename);
+	NEW_TMP_FILE(filename)
 	ofstream out(filename.c_str(), std::ios::out);
 	TEST_EXCEPTION(TCPTransfer::TransferFailed, TCPTransfer tcp_t(out, "ftp://xcajsjddnnakadnndakndna.de/ffaadad.caadd"))
 	out.close();
