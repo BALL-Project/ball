@@ -40,7 +40,7 @@ sipGenericPDBFile::sipGenericPDBFile()
 }
 
 sipGenericPDBFile::sipGenericPDBFile(const GenericPDBFile& a0)
-   : GenericPDBFile()
+   : GenericPDBFile(a0)
 {
 	sipCommonCtor(sipPyMethods,2);
 }
