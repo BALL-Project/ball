@@ -80,6 +80,8 @@ Changed:
 		- changed Coloring or Model settings are now visible after pressing apply
 		- disabled Server in BALLView by default
 		- cleanup for storing of settings from dialogs
+		- storing PNG and POV export filenames in config file, so no 
+		  files will be overwritten by accident
 	- ~ModularWidget now calls MainControl::removeModularWidget, so
 		from ModularWidget derived classes no longer have to deregister themselves
 
