@@ -1,4 +1,4 @@
-// $Id: descriptor.h,v 1.2 2001/12/17 03:00:12 oliver Exp $
+// $Id: descriptor.h,v 1.3 2001/12/17 03:17:51 oliver Exp $
 
 #ifndef BALL_QSAR_DESCRIPTOR_H
 #define BALL_QSAR_DESCRIPTOR_H
@@ -40,8 +40,6 @@ namespace BALL
 		/**	@name	Processor-related methods
 		*/	
 		//@{
-		virtual bool start();
-		virtual bool finish();
 		virtual Processor::Result operator () (Molecule& molecule);
 		//@}
 
@@ -52,6 +50,9 @@ namespace BALL
 		void setName(const String& name);
 		virtual double compute(const Molecule& molecule);
 		//@}
+
+		protected:
+		String	name_;
 	};
 
 } // namespace BALL
