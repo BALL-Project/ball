@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.31 2004/06/13 21:58:47 amoll Exp $
+// $Id: molecularControl.h,v 1.32 2004/07/26 21:17:32 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -479,6 +479,10 @@ namespace BALL
 			void createRepresentation_();
 
 		  protected:
+
+			// only for Python Interface
+			MolecularControl(const MolecularControl& mc)
+				throw();
 			
 			// ATTRIBUTES
 			List<Composite*> 				selected_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.58 2004/06/25 00:34:33 amoll Exp $
+// $Id: molecularControl.C,v 1.59 2004/07/26 21:17:19 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -78,6 +78,13 @@ void MolecularControl::SelectableListViewItem::stateChange(bool state)
 }
 
 
+MolecularControl::MolecularControl(const MolecularControl& mc)
+	throw()
+	: GenericControl(mc)
+{
+}
+
+			
 
 MolecularControl::MolecularControl(QWidget* parent, const char* name)
 	throw()
