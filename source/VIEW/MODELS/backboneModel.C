@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.1 2004/12/20 21:20:25 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.2 2004/12/20 23:43:19 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -186,11 +186,11 @@ namespace BALL
 		// create a spline segment between two spline points a and b
 		void AddBackboneModel::createSplineSegment_(const SplinePoint &a, const SplinePoint &b)
 		{
-			int max_step = 9;
+			Size max_step = 9;
 			double time = 0.0;
 			double step = (double)1 / (double)max_step;
 
-			for (int index = 0; index <= max_step; ++index, time += step)
+			for (Size index = 0; index < max_step; ++index, time += step)
 			{
 				double t_2 = time * time;
 				double t_3 = t_2 * time;
@@ -223,7 +223,6 @@ namespace BALL
 											 (h4 * b.getTangentialVector().z));
 
 				spline_points_.push_back(new_vector);
-
 				atoms_of_spline_points_.push_back((index <= max_step/2) ? a.getAtom() : b.getAtom());
 			}
 		}

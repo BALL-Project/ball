@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.2 2004/12/20 22:00:07 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.3 2004/12/20 23:43:13 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -235,11 +235,10 @@ namespace BALL
 			} // iteration over all residues of secondary structure
 
 
+//   			spline_points_.push_back(spline_vector_[0].getVector());
+//   			atoms_of_spline_points_.push_back(spline_vector_[0].getAtom());
+
 			calculateTangentialVectors_();
-
-			spline_points_.push_back(spline_vector_[0].getVector());
-			atoms_of_spline_points_.push_back(spline_vector_[0].getAtom());
-
 			createSplinePath_();
 			
 			// if two adjacent normals differ by more than 90 degrees, we
@@ -252,7 +251,7 @@ namespace BALL
 					Vector3 rotaxis = (peptide_normals[i] % peptide_normals[i + 1]).normalize();
 					Matrix4x4 rotmat;
 					rotmat.rotate(Angle(M_PI), rotaxis);
-					peptide_normals[i + 1] = rotmat * peptide_normals[i + 1];
+ 					peptide_normals[i + 1] = rotmat * peptide_normals[i + 1];
 				}
 			}
 			
@@ -272,7 +271,6 @@ namespace BALL
 
 					Angle diff_angle = new_angle - current;
 					Matrix4x4 rotmat;
-
 					rotmat.rotate(diff_angle, rotaxis);
 
 					peptide_normals[i + 1] = rotmat * peptide_normals[i + 1];
@@ -301,13 +299,13 @@ namespace BALL
 			mesh->colorList.push_back(ColorRGBA(0.0, 1.0, 1.0, 1.0));
 			mesh->setComposite(ss.getResidue(0));
 
-			vector<Vector3>* vertices = &mesh->vertex;
-			vector<Vector3>* normals  = &mesh->normal;
+			vector<Vector3>& vertices = mesh->vertex;
+			vector<Vector3>& normals  = mesh->normal;
 
 			for (Position i = 0; i < 4; i++)
 			{
-				vertices->push_back(last_points[i]);
-				normals->push_back(right * -1);
+				vertices.push_back(last_points[i]);
+				normals.push_back(right * -1);
 			}
 
 			Surface::Triangle t;
@@ -325,28 +323,29 @@ namespace BALL
 			// the triangles...
 			for (Position p = 0; p < 4; p++)
 			{
-				vertices->push_back(last_points[p]);
-				vertices->push_back(last_points[p]);
+				vertices.push_back(last_points[p]);
+				vertices.push_back(last_points[p]);
 			}
 
 			Position last_vertices = 4;
 
-			normals->push_back(perpendic*-1.);
-			normals->push_back(normal*-1.);
+			normals.push_back(-perpendic);
+			normals.push_back(-normal);
 
-			normals->push_back(perpendic*-1.);
-			normals->push_back(normal);
+			normals.push_back(-perpendic);
+			normals.push_back(normal);
 
-			normals->push_back(perpendic);
-			normals->push_back(normal);
+			normals.push_back(perpendic);
+			normals.push_back(normal);
 
-			normals->push_back(perpendic);
-			normals->push_back(normal*-1.);
+			normals.push_back(perpendic);
+			normals.push_back(-normal);
 
 			Mesh* last_mesh = 0;
 			// iterate over all but the last amino acid (last amino acid becomes the arrow)
 			Position res;
-			for (res = 0; res < spline_vector_.size() - 1; res++)
+			Position spline_point_nr = 0;
+			for (res = 0; res < spline_vector_.size() - 2; res++)
 			{
 				if (res != 0) 
 				{
@@ -365,12 +364,19 @@ namespace BALL
 				// iterate over the spline points between two amino acids
 				for (Position j = 0; j < 9; j++)
 				{
-					right  = spline_points_[res * 9 + j + 1] - spline_points_[res * 9 + j];
+					right  = spline_points_[spline_point_nr + 1] - spline_points_[spline_point_nr];
+					if (right.getSquareLength() == 0)
+					{
+						spline_point_nr++;
+						continue;
+					}
 
 					normal =   peptide_normals[res    ] *(1 - j * 0.9 / 8.0) 
 									 + peptide_normals[res + 1] *     j * 0.9 / 8.0;
 
-					drawStrand_(spline_points_[res * 9 + j], normal, right, arrow_width_, last_vertices, *mesh);
+ 					drawStrand_(spline_points_[spline_point_nr], normal, right, arrow_width_, 
+											last_vertices, *mesh);
+					spline_point_nr ++;
 				}
 
 				last_mesh = mesh;
@@ -619,7 +625,7 @@ namespace BALL
 				}
 			}
 			*/
- 			buildGraphicalRepresentation_(spline_vector_position_ * 10, max * 10); // ?????????? 9 || 10 ?
+ 			buildGraphicalRepresentation_(spline_vector_position_ * 9, max * 9); // ?????????? 9 || 10 ?
 
 			have_start_point_ = false;
 		}
@@ -646,8 +652,7 @@ namespace BALL
 			{
 				if (it->getName() == "C")
 				{
-					SplinePoint spline_point(it->getPosition(), &*it);
-					spline_vector_.push_back(spline_point);
+					spline_vector_.push_back(SplinePoint(it->getPosition(), &*it));
 				}
 			}
 
@@ -690,7 +695,8 @@ namespace BALL
 			if (!Maths::isZero(perpendic.getSquareLength())) perpendic.normalize();
 
 			Vector3 current_points[4];
-			current_points[0] = start - (perpendic * arrow_width/2.) - normal * arrow_height_/2.;
+			current_points[0] = start - (perpendic * arrow_width   / 2.0) 
+																- (normal    * arrow_height_ / 2.0);
 			current_points[1] = current_points[0] + normal * arrow_height_;
 			current_points[2] = current_points[1] + perpendic * arrow_width;
 			current_points[3] = current_points[2] - normal * arrow_height_;
@@ -703,16 +709,16 @@ namespace BALL
 			}
 
 			normals->push_back(perpendic);
-			normals->push_back(normal* -1.);
+			normals->push_back(-normal);
 
 			normals->push_back(perpendic);
-			normals->push_back(normal* -1.);
+			normals->push_back(-normal);
 
-			normals->push_back(perpendic *  1);
-			normals->push_back(normal*  -1.);
+			normals->push_back(perpendic);
+			normals->push_back(-normal);
 
-			normals->push_back(perpendic *  1);
-			normals->push_back(normal*  -1.);
+			normals->push_back(perpendic);
+			normals->push_back(-normal);
 
 			// one side band
 			insertTriangle_(last_vertices    , last_vertices +  2, last_vertices + 10, mesh);
