@@ -1,7 +1,7 @@
 	// -*- Mode: C++; tab-width: 2; -*-
 	// vi: set ts=2:
 	//
-	// $Id: snapShotManager.h,v 1.17 2003/10/15 14:13:55 amoll Exp $
+	// $Id: snapShotManager.h,v 1.18 2004/08/29 16:23:31 amoll Exp $
 	//
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -21,15 +21,13 @@ namespace BALL
 	class System;
 	class ForceField;
 
-/**	Snapshot management for MD simulations.
-		This class manages a list of single snapshot objects.
+/**	Snapshot management e.g. for MD simulations.
+		This class manages a list of single SnapShot objects.
 		Snapshots are numbered starting with 1.	 \par
-		
 		\ingroup  MolmecCommon
 */
 class SnapShotManager
 {
-
 	public:
 
 	///  Local class for handling options
@@ -63,35 +61,27 @@ class SnapShotManager
 		throw();
 
 	/** This constructor expects a valid system, a valid force field
-			and the name of a snapshot file. If the <tt>overwrite</tt> is true
-			then any existing file of the given name will be overwritten,
-			otherwise the new data will be appended, provided that the systems
-			match. 
+			and the name of a snapshot file. 
+			Any existing file of the given name will be overwritten.
 			@param my_system the system to bind this manager to
 			@param my_force_field the force field that is bound to the system
 			@param my_snapshot_file 
-			@param overwrite
 	*/
-	SnapShotManager
-		(System* my_system, const ForceField* my_force_field,
-		 TrajectoryFile* my_snapshot_file, bool overwrite = true)
+	SnapShotManager(System* my_system, const ForceField* my_force_field,
+		 							TrajectoryFile* my_snapshot_file)
 		throw();
 
 	/** This constructor expects a valid system, a valid force field
-			and the name of a snapshot file. If the <tt>overwrite</tt> is true
-			then any existing file of the given name will be overwritten,
-			otherwise the new data will be appended, provided that the systems
-			match. 
+			and the name of a snapshot file. 
+			Any existing file of the given name will be overwritten.
 			@param my_system the system to bind this manager to
 			@param my_force_field the force field that is bound to the system
 			@param my_options
 			@param filename the name of the snapshot file
-			@param overwrite <b>true</b>: overwrite existing snapshot file, 
-											 <b>false</b>: append to the file.
 	*/
 	SnapShotManager	
 		(System* my_system, const ForceField* my_force_field,
-		 const Options& my_options, TrajectoryFile* file, bool overwrite = true)
+		 const Options& my_options, TrajectoryFile* file)
 		throw();
 
 	/// Copy constructor.
@@ -238,6 +228,15 @@ class SnapShotManager
 	Size getNumberOfSnapShotsInBuffer()
 		throw() { return  snapshot_buffer_.size();}
 
+	/** Try to read all SnapShot 's from the TrajectoryFile into the memory.
+	*/
+	bool readFromFile()
+		throw();
+
+	/// Clear all currently loaded SnapShot 's.
+	void clearBuffer()
+		throw();
+
 	//@}
 	/// @name Public Attributes
 	//@{
@@ -268,9 +267,11 @@ class SnapShotManager
 	*/
 	Size flush_to_disk_frequency_; 
 
-	/*_
-	*/
+	//_ Number of taken SnapShot sine last flushToDisk
 	Size buffer_counter_;
+
+	//_ Number of the current SnapShot (used with buffer_)
+	Position current_snapshot_;
 
 	//_@}
 	/*_ @name Protected methods
