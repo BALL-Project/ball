@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.43 2000/08/20 15:41:06 amoll Exp $
+// $Id: vector3.h,v 1.44 2000/08/28 16:01:35 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -519,7 +519,9 @@ namespace BALL
 			if (Maths::isNotZero(x))
 			{
 				angle = atan(b / a);
-			} else {
+			} 
+			else	
+			{
 				angle = BALL_SGN(b) * Constants::PI / 2;
 			}
 
