@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryControl.h,v 1.4 2003/09/07 23:40:41 amoll Exp $
+// $Id: trajectoryControl.h,v 1.5 2003/09/17 22:16:46 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_TrajectoryControl_H
 #define BALL_VIEW_WIDGETS_TrajectoryControl_H
@@ -136,7 +136,7 @@ namespace BALL
 			QListViewItem* 								context_item_;
 
 			SnapshotVisualisationDialog* 	dialog_;
-			Index 												visualise_id_;
+			Index 												open_trajectory_id_;
 
 			HashMap<QListViewItem*	, SnapShotManager*> item_to_trajectory_;
 		};
