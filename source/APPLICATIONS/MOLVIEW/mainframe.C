@@ -70,7 +70,7 @@ Mainframe::Mainframe
 	hor_splitter_ = new QSplitter(vert_splitter_, "HorSplitter");
 	CHECK_PTR(hor_splitter_);
 
-	control_ = new Control(hor_splitter_);
+	control_ = new MolecularControl(hor_splitter_);
 	CHECK_PTR(control_);
 
 	scene_ = new Scene(hor_splitter_);

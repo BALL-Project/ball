@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.14 2000/05/16 15:41:46 hekl Exp $
+// $Id: mainframe.h,v 1.15 2000/05/16 21:11:20 hekl Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -49,8 +49,8 @@
 # include <BALL/VIEW/OPENGL/WIDGETS/scene.h>
 #endif
 
-#ifndef BALL_MOLVIEW_OPENGL_WIDGETS_CONTROL_H
-# include <BALL/MOLVIEW/OPENGL/WIDGETS/control.h>
+#ifndef BALL_MOLVIEW_OPENGL_WIDGETS_MOLECULARCONTROL_H
+# include <BALL/MOLVIEW/OPENGL/WIDGETS/molecularControl.h>
 #endif
 
 #ifndef BALL_MOLVIEW_OPENGL_WIDGETS_MOLECULARPROPERTIES_H
@@ -181,7 +181,7 @@ class Mainframe
   private:
 
 	Scene*								scene_;
-	Control*							control_;
+	MolecularControl*			control_;
 	DlgDisplayProperties* display_properties_;
 	DlgPreferences*				preferences_dialog_;
 	DlgAmberMinimization*	minimization_dialog_;
