@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.134 2004/11/13 13:18:17 amoll Exp $
+// $Id: mainControl.C,v 1.135 2004/11/13 16:22:26 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -91,7 +91,7 @@ namespace BALL
 				preferences_id_(-1),
 				delete_id_(0),
 				preferences_(),
-				composites_locked_by_main_control_(false),
+				composites_locked_(false),
 				locking_widget_(0),
 				stop_simulation_(false),
 				simulation_thread_(0),
@@ -207,7 +207,7 @@ namespace BALL
 				preferences_dialog_(new Preferences(this, "BALLView Preferences")),
 				preferences_id_(-1),
 				delete_id_(0),
-				composites_locked_by_main_control_(main_control.composites_locked_by_main_control_),
+				composites_locked_(false),
 				locking_widget_(0),
 				about_to_quit_(false)
 		{
@@ -1279,13 +1279,11 @@ namespace BALL
 		
 			if (MolecularStructure::getInstance(0) != 0)
 			{
-				cm = new CompositeMessage(composite, 
-						CompositeMessage::NEW_COMPOSITE);
+				cm = new CompositeMessage(composite, CompositeMessage::NEW_COMPOSITE);
 			}
 			else
 			{
-				cm = new CompositeMessage(composite, 
-						CompositeMessage::NEW_MOLECULE);
+				cm = new CompositeMessage(composite, CompositeMessage::NEW_MOLECULE);
 			}
 
 			cm->setCompositeName(name);
@@ -1387,6 +1385,8 @@ namespace BALL
 
 		void MainControl::setBusyMode_(bool state) 
 		{
+			checkMenus();
+
 			if (state)
 			{
 				QApplication::setOverrideCursor( QCursor(Qt::WaitCursor) );
@@ -1397,37 +1397,42 @@ namespace BALL
 				QApplication::restoreOverrideCursor();
 				simulation_icon_->hide();
 			}
-
 		}
-
 		void MainControl::stopSimulation() 
 		{
 		#ifdef BALL_QT_HAS_THREADS
+			if (simulation_thread_ == 0) return;
+
 			stop_simulation_ = true;
+			// keep the user informed: we are still terminating the calculation
+			Position pos = 3;
+			String dots;
+			while (simulation_thread_ != 0) 
+			{
+				setStatusbarText("Terminating calculation " + dots, true);
+				qApp->wakeUpGuiThread();
+				qApp->processEvents();
+				if (pos < 40) 
+				{
+					pos ++;
+					dots +="..";
+				}
+				else 
+				{
+					pos = 3;
+					dots = "...";
+				}
+				composites_locked_wait_condition_.wait(500); 
+			}
+			#endif
+		}
+
+		// is called when the SimulationThread has finished
+		void MainControl::stopedSimulation_()
+		{
+			#ifdef BALL_QT_HAS_THREADS
 			if (simulation_thread_ != 0)
 			{
-				// keep the user informed: we are still terminating the calculation
-				Position pos = 3;
-				String dots;
-				while (simulation_thread_->running()) 
-				{
-					setStatusbarText("Terminating calculation " + dots, true);
-					setStatusbarText("Creating Model " + dots);
-					qApp->wakeUpGuiThread();
-					qApp->processEvents();
-					if (pos < 40) 
-					{
-						pos ++;
-						dots +="..";
-					}
-					else 
-					{
-						pos = 3;
-						dots = "...";
-					}
-					simulation_thread_->wait(500); 
-				}
-
 				DCDFile* file = simulation_thread_->getDCDFile();
 				if (file != 0)
 				{
@@ -1445,15 +1450,13 @@ namespace BALL
 				simulation_thread_ = 0;
 			}
 
-			setStatusbarText("Calculation terminated.");
+			setStatusbarText("Calculation terminated.", true);
 			stop_simulation_ = false;
-			composites_locked_by_main_control_ = false;
-			locking_widget_ = 0;
-			setBusyMode_(false);
-		#endif
+			unlockCompositesFor(locking_widget_);
+			#endif
 		}
 
-		void MainControl::customEvent( QCustomEvent * e )
+		void MainControl::customEvent(QCustomEvent* e)
 		{
 			e->type(); // prevent warning for single thread build
 
@@ -1466,7 +1469,7 @@ namespace BALL
 
 			if (e->type() == (QEvent::Type)SIMULATION_THREAD_FINISHED_EVENT)
 			{
-				stopSimulation();
+				stopedSimulation_();
 				return;
 			}
 			
@@ -1474,11 +1477,7 @@ namespace BALL
 			{
 				SimulationOutput* so = (SimulationOutput*) e;
 				Log.info() << so->getMessage() << std::endl;
-//   				if (so->isImportant() ||
-//   				    getStatusbarText().size() == 0)
-//   				{
-				setStatusbarText(so->getMessage(), true);
-//   				}
+				setStatusbarText(so->getMessage(), so->isImportant());
 				return;
 			}
 			
@@ -1500,24 +1499,21 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_QT_HAS_THREADS
-				if (simulation_thread_ != 0) 
-				{
-					return false;
-				}
+				if (!lockCompositesFor(0)) return false;
 
 				simulation_thread_ = thread;
 				if (thread != 0) 
 				{
 					thread->setMainControl(this);
 				}
+
+				checkMenus();
+				setBusyMode_(thread != 0);
+
 			#else
 				// prevent warning
 				thread != 0;
 			#endif
-
-			composites_locked_by_main_control_ = true;
-			checkMenus();
-			setBusyMode_(true);
 
 			return true;
 		}
@@ -1535,7 +1531,6 @@ namespace BALL
 			for (; it != getCompositeManager().end(); it++)
 			{
 				complementSelectionHelper_(**it);
-
 				updateRepresentationsOf(**it, false);
 			}
 
@@ -1671,10 +1666,10 @@ namespace BALL
 		bool MainControl::lockCompositesFor(ModularWidget* widget)
 			throw()
 		{
-			if (locking_widget_ == widget) return true;
-			if (composites_locked_by_main_control_ || locking_widget_ != 0) return false;
+			if (!composites_locked_mutex_.tryLock()) return false;
 
 			locking_widget_ = widget;
+			composites_locked_ = true;
 			setBusyMode_(true);
 			return true;
 		}
@@ -1682,21 +1677,11 @@ namespace BALL
 		bool MainControl::unlockCompositesFor(ModularWidget* widget)
 			throw()
 		{
-			if (composites_locked_by_main_control_) return false;
-			if (locking_widget_ == 0) return true;
 			if (locking_widget_ != widget) return false;
-
-			locking_widget_ = 0;
+			composites_locked_mutex_.unlock();
+			composites_locked_wait_condition_.wakeAll();
+			composites_locked_ = false;
 			setBusyMode_(false);
-			return true;
-		}
-
-		bool MainControl::lockCompositesForMainControl_()
-			throw()
-		{
-			if (locking_widget_ != 0) return false;
-			composites_locked_by_main_control_ = true;
-			setBusyMode_(true);
 			return true;
 		}
 
