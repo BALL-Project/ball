@@ -1,4 +1,4 @@
-// $Id: conjugateGradient.C,v 1.9 2000/04/25 14:43:57 oliver Exp $
+// $Id: conjugateGradient.C,v 1.10 2001/04/27 15:18:54 anker Exp $
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
@@ -570,7 +570,7 @@ namespace BALL
 		// define an alias for the atom vector
 		AtomVector& atoms = const_cast<AtomVector&>(force_field_->getAtoms());
 
-    // If there are no atoms  in the system, minimization is easy!
+    // If there are no atoms in the system, minimization is easy!
     if (atoms.size() == 0)
     {
       return true;
