@@ -21,6 +21,8 @@ namespace BALL
 			throw()
 			: MainControlPreferencesData(parent, name, fl)
 		{
+			style_box_.setEditable(false);
+			style_box_.insertStringList(QStyleFactory::keys());
 			show();
 		}
 		
@@ -36,28 +38,7 @@ namespace BALL
 		QStyle* MainControlPreferences::getStyle()
 			throw()
 		{
-			QStyle* new_style = 0;
-			if (is_platinum_style->isChecked())
-			{
-				new_style = new QPlatinumStyle();
-			}
-			if (is_windows_style->isChecked())
-			{
-				new_style = new QWindowsStyle();
-			}
-			if (is_motif_style->isChecked())
-			{
-				new_style = new QMotifStyle();
-			}
-			if (is_cde_style->isChecked())
-			{
-				new_style = new QCDEStyle();
-			}
-			if (is_sgi_style->isChecked())
-			{
-				new_style = new QSGIStyle;
-			}
-			
+			QStyle* new_style = QStyleFactory.create(style_box_.currentText());			
 			return new_style;
 		}
 		
@@ -69,58 +50,21 @@ namespace BALL
 			{
 				style = inifile.getValue("WINDOWS", "style");
 			}
-			
-			if (style == "motif")
+			if (QStyleFactory::keys().grep(style).size() > 0)
 			{
-				is_motif_style->setChecked(TRUE);
-			} 
-			else if (style == "windows")
-			{
-				is_windows_style->setChecked(TRUE);
-			}
-			else if (style == "cde")
-			{
-				is_cde_style->setChecked(TRUE);
-			} 
-			else if (style == "sgi")
-			{
-				is_sgi_style->setChecked(true);
-			}
-			else 
-			{
-				is_platinum_style->setChecked(TRUE);
+				style_box_.setCurrentText(*QStyleFactory::keys().grep(style).begin());
 			}
 		}
 		
 		void MainControlPreferences::writePreferences(INIFile& inifile)
 			throw()
 		{
-			String style = "platinum";
-			if (is_platinum_style->isChecked())
-			{
-				style = "platinum";
-			}
-			else if (is_windows_style->isChecked())
-			{
-				style = "windows";
-			}
-			else if (is_motif_style->isChecked())
-			{
-				style = "motif";
-			}
-			else if (is_cde_style->isChecked())
-			{
-				style = "cde";
-			}	
-			else if (is_sgi_style->isChecked())
-			{
-				style = "sgi";
-			}
-			
 			// save the style settings
+			String style = style_box_.getCurrentText();
 			inifile.insertValue("WINDOWS", "style", style);
 		}
 		
 	} // namespace VIEW
+
 } // namespace BALL
 
