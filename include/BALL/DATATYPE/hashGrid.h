@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.5 1999/09/13 10:49:26 oliver Exp $
+// $Id: hashGrid.h,v 1.6 1999/09/21 06:38:30 oliver Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -27,7 +27,8 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	@name	Three-dimensional Hash Grid
 	*/
