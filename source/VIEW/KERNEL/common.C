@@ -267,5 +267,21 @@ Vector3 getNormal(const Vector3& v)
 	return n;
 }
 
+void log(const String& data)
+{
+	if (MainControl::getInstance(0) == 0) return;
+	LogEvent* su = new LogEvent;
+	su->setMessage(data);
+	su->setImportant(false);
+	qApp->postEvent(MainControl::getInstance(0), su);  // Qt will delete it when done
+}
+
+
+LogEvent::LogEvent()
+	: QCustomEvent(LOG_EVENT),
+		important_(false)
+{
+}
+
 
 } } //namespaces

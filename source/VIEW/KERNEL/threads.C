@@ -43,7 +43,7 @@ namespace BALL
 
 			if (main_control_->stopedSimulation()) return;
 
-			SimulationOutput* su = new SimulationOutput;
+			LogEvent* su = new LogEvent;
 			su->setMessage(string);
 			su->setImportant(important);
 			qApp->postEvent(main_control_, su);  // Qt will delete it when done
@@ -333,12 +333,6 @@ namespace BALL
 			md_ = md;
 		}
 
-		SimulationOutput::SimulationOutput()
-			: QCustomEvent(SIMULATION_OUTPUT_EVENT),
-			  important_(false)
-		{
-		}
-		
 		// =================================================0
 		
 		CalculateFDPBThread::CalculateFDPBThread()

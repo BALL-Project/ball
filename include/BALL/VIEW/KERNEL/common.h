@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.32.2.1 2004/12/22 23:29:59 amoll Exp $
+// $Id: common.h,v 1.32.2.2 2005/01/10 13:21:07 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -15,6 +15,7 @@
  #include <BALL/MATHS/vector3.h>
 #endif
 
+#include <qevent.h>
 
 namespace BALL
 {
@@ -91,7 +92,7 @@ namespace BALL
 			SIMULATION_THREAD_FINISHED_EVENT,
 
 			/// see SimulationOutput
-			SIMULATION_OUTPUT_EVENT,
+			LOG_EVENT,
 
 			/// see UpdateCompositeEvent
 			UPDATE_COMPOSITE_EVENT,
@@ -335,6 +336,35 @@ namespace BALL
 		///
 		Vector3 getNormal(const Vector3& v)
 			throw();
+
+		/// Event class used for thread safe output to logview
+		class BALL_EXPORT LogEvent
+			: public QCustomEvent
+		{
+			public:
+
+				///
+				LogEvent();
+
+				///
+				void setMessage(const String& msg) {message_ = msg;}
+
+				///
+				String getMessage() {return message_;}
+
+				/// will allways be shown in Statusbar or just when no other message shown?
+				bool isImportant() { return important_;}
+
+				///
+				void setImportant(bool state) { important_ = state;}
+
+			protected:
+				String message_;
+				bool   important_;
+		};
+
+		/// thread safe output to logview
+		void log(const String& data);
 		
 		//@}
 
