@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.13 2003/12/10 17:16:54 amoll Exp $
+// $Id: molecularProperties.C,v 1.14 2003/12/15 02:27:23 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -109,27 +109,6 @@ void MolecularProperties::onNotify(Message *message)
 				return;
 		}
 	}
-	else if (RTTI::isKindOf<GeometricObjectSelectionMessage>(*message))
-	{
-		const List<GeometricObject*>& geometric_selection = 
-			(RTTI::castTo<GeometricObjectSelectionMessage>(*message))->getSelection();
-
-		// geometric selection is not empty
-		if (!geometric_selection.empty())
-		{
-			List<Composite*> selection;
-			
-			// new collection not empty
-			if (!selection.empty())
-			{
-				// create a molecular selection message and sent molecular objects
-				SelectionMessage *molecular_selection = new SelectionMessage;
-				molecular_selection->setSelection(selection);
-
-				notify_(molecular_selection);
-			}
-		}
-	}
 	else if (RTTI::isKindOf<MolecularTaskMessage>(*message))
 	{
 		switch (((RTTI::castTo<MolecularTaskMessage>(*message)))->getType())
@@ -147,7 +126,6 @@ void MolecularProperties::onNotify(Message *message)
 				createGridFromDistance();
 				return;
 
-	
 			default:
 				Log.error() << "Unknown type of MolecularTaskMessage in " 
 										<< __FILE__ << "  " << __LINE__ << std::endl;
