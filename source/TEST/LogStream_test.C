@@ -1,4 +1,4 @@
-// $Id: LogStream_test.C,v 1.11 2001/05/10 23:53:20 amoll Exp $
+// $Id: LogStream_test.C,v 1.12 2001/05/11 00:23:28 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: LogStream_test.C,v 1.11 2001/05/10 23:53:20 amoll Exp $")
+START_TEST(class_name, "$Id: LogStream_test.C,v 1.12 2001/05/11 00:23:28 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -265,14 +265,23 @@ CHECK(filterLines(const int min_level = LogStreamBuf::MIN_LEVEL, const int max_l
 RESULT
 
 CHECK(special)
-String section_name="Section1";
-String file_name="data/ParameterSection_test.ini";
-String format_line_="";
-int number_of_fields=0;
-Log.error() << "ParameterSection::extractSection: error reading section " << section_name
-            << " of file " << filename << ": wrong number of fields in the format line: "
-            << number_of_fields << endl;
-Log.error() << "FORMAT: " << format_line_ << endl;
+//kein fehler!!!:
+/*
+String out;
+for (int i=0; i< 200; i++)
+{
+	out+="a";
+	//Log.error() << i << endl;
+	Log.error() << out << endl;
+}
+*/
+
+//fehler:
+//String test="aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa";
+//Log.error() << test << endl;
+
+//fehler:
+Log.error()	<< "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" << endl;
 RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
