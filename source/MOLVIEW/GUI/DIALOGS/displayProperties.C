@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.21 2002/12/17 17:56:22 amoll Exp $
+// $Id: displayProperties.C,v 1.22 2002/12/17 18:52:27 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -472,7 +472,7 @@ namespace BALL
 			ObjectSelector selector;
 
 			ChangedCompositeMessage* ccm = new ChangedCompositeMessage;
-			ccm->setDeletable();
+			ccm->setDeletable(false);
 			const HashSet<Composite*>& picked_objects = MainControl::getMainControl(this)->getSelection();
 			List<Composite*>::Iterator updates_it = updates.begin();
 			for (; updates_it != updates.end(); updates_it++)
@@ -549,7 +549,9 @@ namespace BALL
 		void DisplayProperties::applyOn_(Composite& composite)
 		{
 			// apply static visualization processor
+			if (getValue_(ADDRESS__STATIC_MODEL) == VALUE__MODEL_SURFACE) composite.apply(remove_model_static_);
 			composite.apply(*static_base_model_pointer_);
+			if (getValue_(ADDRESS__DYNAMIC_MODEL) == VALUE__MODEL_SURFACE) composite.apply(remove_model_dynamic_);
 			composite.apply(*dynamic_base_model_pointer_);
 		}
 
