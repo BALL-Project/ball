@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.28 2001/12/30 13:28:46 sturm Exp $
+// $Id: standardPredicates.C,v 1.29 2002/01/09 01:27:28 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -870,15 +870,7 @@ namespace BALL
 	bool ConnectedToPredicate::operator () (const Atom& atom) const
 		throw()
 	{
-		// ?????
-		if (find_(argument_, atom, 0))
-		{
-			return true;
-		}
-		else
-		{
-			return false;
-		}
+		return find_(argument_, atom, 0);
 	}
 
 

@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.22 2001/12/30 13:28:46 sturm Exp $
+// $Id: selector.C,v 1.23 2002/01/09 01:27:27 oliver Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -47,9 +47,6 @@ namespace BALL
 	void Selector::clear()
 		throw()
 	{
-		// ?????:
-		// UnaryProcessor<> does not implement the OCI
-		// UnaryProcessor<Composite>::clear();
 		number_of_selected_atoms_ = 0;
 		expression_.clear();
 	}
@@ -57,9 +54,6 @@ namespace BALL
 	const Selector& Selector::operator = (const Selector& selector)
 		throw()
 	{
-		// ?????:
-		// UnaryProcessor<> does not implement the OCI
-		// UnaryProcessor<Composite>::operator = (selector);
 		number_of_selected_atoms_ = selector.number_of_selected_atoms_;
 		expression_ = selector.expression_;
 		
@@ -69,9 +63,6 @@ namespace BALL
 	bool Selector::operator == (const Selector& selector) const
 		throw()
 	{
-		// ?????:
-		// UnaryProcessor<> does not implement the OCI
-		// return ((UnaryProcessor<Composite>::operator == (selector))
 		return ((number_of_selected_atoms_ == selector.number_of_selected_atoms_)
 				&& (expression_ == selector.expression_));
 	}
