@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.17 2000/05/26 17:57:12 anker Exp $
+// $Id: standardPredicates.C,v 1.18 2000/07/06 14:00:01 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -18,26 +18,18 @@ using namespace std;
 
 namespace BALL 
 {
-
-	/*
-	void writeit(const HashSet<const Bond*>& bla)
-	{
-		Log.info() << "#" << bla.size() << " {";
-		HashSet<const Bond*>::ConstIterator it = bla.begin();
-		for (; +it; ++it)
-		{
-			Log.info() << "(" << (*it)->getFirstAtom()->getName() << "-" <<
-			(*it)->getSecondAtom()->getName() << ")"; 
-		}
-		Log.info() << "}";
-	}
-	*/
-
 	// True predicate
 
 	bool TruePredicate::operator () (const Atom& atom) const
 	{
     return true;
+ 	}
+
+	// selected predicate
+
+	bool SelectedPredicate::operator () (const Atom& atom) const
+	{
+    return atom.isSelected();
  	}
 
 	// Atom name predicate
@@ -129,10 +121,10 @@ namespace BALL
 	
 	// solvent predicate
 
-	bool SolventPredicate::operator () (const Atom& /* atom */) const
+	bool SolventPredicate::operator () (const Atom& atom) const
 	{
-		//BAUSTELLE
-		return false;
+		const Molecule* molecule = atom.getMolecule();
+		return ((molecule != 0) && (molecule->hasProperty(Molecule::IS_SOLVENT)));
 	}
 	
 	// backbone predicate
