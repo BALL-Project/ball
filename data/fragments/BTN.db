@@ -1,0 +1,174 @@
+<node>BTN
+	<node>Names
+		<node>Biotin
+		</node>
+	</node>
+	<node>Atoms
+		<node>O1
+			<value>O 8.710 3.550 -15.230
+			</value>
+		</node>
+		<node>C1
+			<value>C 8.940 4.470 -14.420
+			</value>
+		</node>
+		<node>O2
+			<value>O 8.200 5.450 -14.180
+			</value>
+		</node>
+		<node>C10
+			<value>C 10.250 4.400 -13.630
+			</value>
+		</node>
+		<node>1H10
+			<value>H 10.371 5.245 -13.108
+			</value>
+		</node>
+		<node>2H10
+			<value>H 11.016 4.286 -14.263
+			</value>
+		</node>
+		<node>C9
+			<value>C 10.200 3.210 -12.670
+			</value>
+		</node>
+		<node>1H9
+			<value>H 10.037 2.373 -13.192
+			</value>
+		</node>
+		<node>2H9
+			<value>H 9.456 3.346 -12.016
+			</value>
+		</node>
+		<node>C8
+			<value>C 11.520 3.080 -11.910
+			</value>
+		</node>
+		<node>1H8
+			<value>H 11.491 3.679 -11.110
+			</value>
+		</node>
+		<node>2H8
+			<value>H 12.267 3.362 -12.512
+			</value>
+		</node>
+		<node>C7
+			<value>C 11.780 1.640 -11.440
+			</value>
+		</node>
+		<node>1H7
+			<value>H 12.735 1.591 -11.147
+			</value>
+		</node>
+		<node>2H7
+			<value>H 11.641 1.040 -12.228
+			</value>
+		</node>
+		<node>C2
+			<value>C 10.920 1.090 -10.290
+			</value>
+		</node>
+		<node>1H2
+			<value>H 10.012 1.054 -10.708
+			</value>
+		</node>
+		<node>S1
+			<value>S 10.680 2.150 -8.770
+			</value>
+		</node>
+		<node>C6
+			<value>C 10.390 0.730 -7.590
+			</value>
+		</node>
+		<node>1H6
+			<value>H 9.408 0.586 -7.466
+			</value>
+		</node>
+		<node>2H6
+			<value>H 10.812 0.931 -6.706
+			</value>
+		</node>
+		<node>C5
+			<value>C 11.050 -0.570 -8.220
+			</value>
+		</node>
+		<node>1H5
+			<value>H 10.425 -1.344 -8.113
+			</value>
+		</node>
+		<node>C4
+			<value>C 11.460 -0.330 -9.830
+			</value>
+		</node>
+		<node>1H4
+			<value>H 11.095 -1.015 -10.460
+			</value>
+		</node>
+		<node>N2
+			<value>N 13.030 -0.290 -9.760
+			</value>
+		</node>
+		<node>HAB
+			<value>H 13.580 -0.140 -10.580
+			</value>
+		</node>
+		<node>C3
+			<value>C 13.530 -0.470 -8.440
+			</value>
+		</node>
+		<node>O3
+			<value>O 14.710 -0.460 -8.150
+			</value>
+		</node>
+		<node>N1
+			<value>N 12.460 -0.670 -7.530
+			</value>
+		</node>
+		<node>HAA
+			<value>H 12.550 -0.850 -6.550
+			</value>
+		</node>
+	</node>
+	<node>Bonds
+		<node>1<value>O1 C1 a</value></node>
+		<node>2<value>O2 C1 a</value></node>
+		<node>3<value>C1 C10 s</value></node>
+		<node>4<value>C10 1H10 s</value></node>
+		<node>5<value>C10 2H10 s</value></node>
+		<node>6<value>C10 C9 s</value></node>
+		<node>7<value>C9 1H9 s</value></node>
+		<node>8<value>C9 2H9 s</value></node>
+		<node>9<value>C9 C8 s</value></node>
+		<node>10<value>C8 1H8 s</value></node>
+		<node>11<value>C8 2H8 s</value></node>
+		<node>12<value>C8 C7 s</value></node>
+		<node>13<value>C7 1H7 s</value></node>
+		<node>14<value>C7 2H7 s</value></node>
+		<node>15<value>C7 C2 s</value></node>
+		<node>16<value>C2 1H2 s</value></node>
+		<node>17<value>C2 S1 s</value></node>
+		<node>18<value>S1 C6 s</value></node>
+		<node>19<value>C6 1H6 s</value></node>
+		<node>20<value>C6 2H6 s</value></node>
+		<node>21<value>C6 C5 s</value></node>
+		<node>22<value>C5 1H5 s</value></node>
+		<node>23<value>C5 C4 s</value></node>
+		<node>24<value>C5 N1 s</value></node>
+		<node>25<value>N1 HAA s</value></node>
+		<node>26<value>N1 C3 s</value></node>
+		<node>27<value>C3 O3 d</value></node>
+		<node>28<value>C3 N2 s</value></node>
+		<node>29<value>N2 HAB s</value></node>
+		<node>30<value>N2 C4 s</value></node>
+		<node>31<value>C4 1H4 s</value></node>
+		<node>32<value>C4 C2 s</value></node>
+	</node>
+	<node>Connections
+	</node>
+	<node>Properties
+	</node>
+	<node>Variants
+		<node>Default
+		</node>
+	</node>
+</node>

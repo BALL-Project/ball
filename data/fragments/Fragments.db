@@ -25,6 +25,7 @@
 	<node>#include:MG<value>fragments/MG.db:/MG</value></node>
 	<node>#include:ZN<value>fragments/ZN.db:/ZN</value></node>
 	<node>#include:HOH<value>fragments/HOH.db:/HOH</value></node>
+	<node>#include:BTN<value>fragments/BTN.db:/BTN</value></node>
 </node>
 <node>Names
 	<node>#include:Discover<value>fragments/Names.Discover.db:/Discover</value></node>
