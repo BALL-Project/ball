@@ -1,4 +1,4 @@
-// $Id: assignTypes.C,v 1.4 1999/09/08 09:44:18 oliver Exp $
+// $Id: assignTypes.C,v 1.5 1999/09/17 17:17:56 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/assignTypes.h>
 #include <iostream.h>
@@ -10,7 +10,13 @@ namespace BALL
 		(const String& filename, bool overwrite)
 		:	overwrite_(overwrite)
 	{
-		ifstream	type_file(filename.c_str());
+		Path path;
+		String filepath = path.find(filename);
+		if (filepath == "")
+		{
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+		}
+		ifstream	type_file(filepath.c_str());
 
 		String line;
 		String type;
