@@ -1,4 +1,4 @@
-// $Id: PDBFile_test.C,v 1.1 1999/12/17 14:25:13 oliver Exp $
+// $Id: PDBFile_test.C,v 1.2 1999/12/19 17:15:24 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.1 1999/12/17 14:25:13 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.2 1999/12/19 17:15:24 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -36,6 +36,12 @@ System S;
 f.read(S);
 TEST_EQUAL(S.countAtoms(), 892);
 f.close();
+
+f.open(tmp_filename, std::ios::out);
+f.write(S);
+f.close();
+
+TEST_FILE(tmp_filename.c_str(), "data/PDBFile_test2.txt", true)
 
 f.open(tmp_filename, std::ios::out);
 f.write(S);

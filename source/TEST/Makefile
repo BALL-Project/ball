@@ -1,8 +1,10 @@
 default:	all
 
-include ../common.mak
+DIRECTORY=TEST
 
-DEXECUTABLES	= AmberFF_test
+include ../common.mak
+include .Dependencies
+
 EXECUTABLES = \
 	AmberFF_test\
 	AnalyticalSES_test\
@@ -17,6 +19,7 @@ EXECUTABLES = \
 	FragmentDB_test\
 	KernelPredicate_test\
 	Limits_test\
+	List_test\
 	NumericalSAS_test\
 	Options_test\
 	PDBFile_test\
@@ -30,8 +33,7 @@ EXECUTABLES = \
 	TransformationApplicator_test\
 	TranslationApplicator_test
 
-t:	t.o
-	$(CXX)	$(LDFLAGS) -o $@ $@.o
+CPP_SOURCES=$(EXECUTABLES:=.C)
 
 all:	$(EXECUTABLES)
 
@@ -77,6 +79,9 @@ KernelPredicate_test:	KernelPredicate_test.o
 Limits_test:	Limits_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
+List_test:	List_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
 NucleicAcid_test:	NucleicAcid_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
@@ -105,9 +110,6 @@ Socket_test:	Socket_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Skeleton_test:	Skeleton_test.o
-	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
-
-tmp:	tmp.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 StructureMapper_test:	StructureMapper_test.o
