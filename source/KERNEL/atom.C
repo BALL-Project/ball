@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.13 2000/03/17 11:24:46 oliver Exp $
+// $Id: atom.C,v 1.14 2000/03/27 21:37:05 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -6,7 +6,7 @@
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/molecule.h>
-#include <BALL/KERNEL/PSE.h> 
+#include <BALL/KERNEL/PTE.h> 
 
 using namespace std;
 
@@ -119,7 +119,7 @@ namespace BALL
 
 		String s;
 		pm.readPrimitive(s, "element_");	
-		element_ = &PSE[s];
+		element_ = &PTE[s];
 		pm.readPrimitive(charge_, "charge_");
 		pm.readPrimitive(radius_, "radius_");
 		pm.readPrimitive(name_, "name_");

@@ -1,10 +1,10 @@
-// $Id: selector.C,v 1.12 2000/03/14 19:35:45 oliver Exp $
+// $Id: selector.C,v 1.13 2000/03/27 21:37:05 oliver Exp $
 
 #include <BALL/KERNEL/selector.h>
 
 #include <BALL/CONCEPT/selectable.h>
 #include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/PSE.h>
+#include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/nucleotide.h>
 
