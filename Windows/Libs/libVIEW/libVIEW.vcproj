@@ -64,14 +64,14 @@
 			<Tool
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/D &quot;BALL_BUILD_DLL&quot;"
-				Optimization="3"
+				Optimization="2"
 				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="TRUE"
+				EnableIntrinsicFunctions="FALSE"
 				FavorSizeOrSpeed="1"
-				OmitFramePointers="TRUE"
-				OptimizeForProcessor="2"
-				OptimizeForWindowsApplication="TRUE"
+				OmitFramePointers="FALSE"
+				OptimizeForProcessor="0"
+				OptimizeForWindowsApplication="FALSE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(QTDIR)\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;LIBVIEW_EXPORTS;_USRDLL;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG;BALL_QT_HAS_THREADS"
 				StringPooling="TRUE"
@@ -89,7 +89,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt333.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libball.lib"
+				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt334.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libball.lib C:\Programme\Python23\libs\python23.lib"
 				OutputFile="$(ProjectDir)..\..\..\lib\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\..\lib\&quot;;&quot;$(QTDIR)\lib&quot;"/>
 			<Tool
@@ -489,6 +489,9 @@
 					RelativePath="..\..\..\source\VIEW\RENDERING\renderer.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\View\Rendering\vertexBuffer.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\RENDERING\VRMLRenderer.C">
 				</File>
 			</Filter>
@@ -646,6 +649,12 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\preferencesData_moc.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\View\Dialogs\pythonHotkeys_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\View\Dialogs\pythonHotkeysData_moc.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\pythonSettings_moc.C">
 					<FileConfiguration
 						Name="Release|Win32">
@@ -664,8 +673,7 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\WIDGETS\pyWidget_moc.C">
 					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="TRUE">
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"/>
 					</FileConfiguration>
@@ -924,6 +932,12 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\preferencesData.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\View\Dialogs\pythonHotkeys.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\View\Dialogs\pythonHotkeysData.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\pythonSettings.C">
 					<FileConfiguration
 						Name="Release|Win32">
@@ -1015,8 +1029,7 @@
 				<File
 					RelativePath="..\..\..\source\VIEW\WIDGETS\pyWidget.C">
 					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="TRUE">
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
 							AdditionalIncludeDirectories="C:\Programme\Python23\include"/>
@@ -2141,6 +2154,28 @@
 							Description="Running MOC on $(InputFileName)"
 							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
 "
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\Ball\View\Dialogs\pythonHotkeys.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\Ball\View\Uic\pythonHotkeysData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;"
 							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
 					</FileConfiguration>
 				</File>
@@ -3382,6 +3417,18 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(Inp
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\View\Dialogs\pythonHotkeys.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
 						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
 $(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
 "
