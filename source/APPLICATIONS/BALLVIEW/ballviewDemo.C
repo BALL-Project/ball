@@ -11,12 +11,14 @@
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/FORMAT/HINFile.h>
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/STRUCTURE/HBondProcessor.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/DATATYPE/colorTable.h>
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
+#include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -56,33 +58,21 @@ void BALLViewDemo::show()
 	dp->enableCreationForNewMolecules(false);
 	system_ = new System();
 
-	PDBFile file;
 	try
 	{
 		Path path;
 		String file_name(path.getDataPath());
-		file_name + FileSystem::PATH_SEPARATOR;
-		file_name += "structures";
+		file_name = file_name.before("data");
+		file_name += "data";
 		file_name += FileSystem::PATH_SEPARATOR;
-		file_name += "bpti.pdb";
- 		file.open(file_name);
-//   		file.open("AlaAla.pdb");
-		file >> *system_;
-		system_->apply(getFragmentDB().add_hydrogens);
-		system_->apply(getFragmentDB().build_bonds);
-		HBondProcessor proc;
-		system_->apply(proc);
-
-		CompositeMessage *change_message = 
-			new CompositeMessage(*system_, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-		notify_(change_message);
-
-
-		getMainControl()->insert(*system_, "demo");
+		file_name += String("structures");
+		file_name += FileSystem::PATH_SEPARATOR;
+		MolecularFileDialog* dialog = MolecularFileDialog::getInstance(0);
+		system_ = dialog->openFile(file_name);
 	}
-	catch(...)
+	catch(Exception::FileNotFound e)
 	{
-		Log.error() << "Could not open bpti.pdb" << std::endl;
+		Log.error() << "Could not open " << e.getFilename() << std::endl;
 		return;
 	}
 
