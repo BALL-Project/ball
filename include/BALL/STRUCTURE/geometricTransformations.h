@@ -1,4 +1,4 @@
-// $Id: geometricTransformations.h,v 1.5 2000/10/30 00:19:27 amoll Exp $
+// $Id: geometricTransformations.h,v 1.6 2001/02/03 13:35:42 amoll Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
 #define BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
@@ -27,7 +27,6 @@ namespace BALL
 {
 
 	/**	@name	Geometric transformation applicators
-			@nonames
 	*/
 	//@{
 
@@ -36,9 +35,7 @@ namespace BALL
 			The translation may be given in the constructor, or by calling setTranslation.
 			Applying the processor to a given Composite object will add the given
 			translation vector to the coordinates of each Atom object (and derived classes).\\
-
 			{\bf Definition:} \URL{BALL/STRUCTURE/geometricTransformations.h}
-			\\
 	*/
 	class TranslationProcessor
 		:	public UnaryProcessor<Atom> 
@@ -46,8 +43,8 @@ namespace BALL
 		public:
 
 		/**	Default constructor.
-				The translation applicator object is initialized and the transformation
-				is set to (0, 0, 0).
+				The translation applicator object is initialized and the 
+				transformation is set to (0, 0, 0).
 		*/
 		TranslationProcessor();
 		
@@ -58,12 +55,12 @@ namespace BALL
 		*/
 		TranslationProcessor(const Vector3&	translation);
 
-		/**	Sets a new translation
+		/**	Sets a new translation.
 				@param	translation the new translation vector
 		*/
 		void setTranslation(const Vector3& translation);
 
-		/**	Returns the translation vector
+		/**	Returns the translation vector.
 				@return	the current translation vector
 		*/
 		const Vector3& getTranslation() const;	
@@ -85,7 +82,6 @@ namespace BALL
 			of each Atom object (or objects derived from Atom) with the given transformation
 			matrix.\\
 			{\bf Definition:} \URL{BALL/STRUCTURE/geometricTransformations.h}
-			\\
 	*/
 	class TransformationProcessor
 		:public UnaryProcessor<Atom> 
@@ -114,12 +110,12 @@ namespace BALL
 		*/
 		TransformationProcessor(const Matrix4x4&	transformation);
 
-		/**	Sets a new transformation
+		/**	Sets a new transformation.
 				@param	transformation the new transformation matrix
 		*/
 		void setTransformation(const Matrix4x4& transformation);
 
-		/**	Returns the transformation vector
+		/**	Returns the transformation vector.
 				@return	the current transformation matrix
 		*/
 		const Matrix4x4& getTransformation() const;
