@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.27 2000/12/07 21:31:57 amoll Exp $
+// $Id: string.h,v 1.28 2000/12/08 09:37:36 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -42,325 +42,7 @@ namespace BALL
 	*/
 	//@{
 
-	class String;
-
-	/**	A substring class.
-			The Substring class represents an efficient way to deal with substrings
-			of \Ref{String}s. Each Substring is bound to an instance of String and 
-			is defined by a start and end index. It can be used like a String (with several
-			restrictions) but only affects the given range of the string it is bount to.\\
-			{\bf Definition:} \URL{BALL/DATATYPE/string.h}
-			\\
-	*/
-	class Substring
-	{
-		friend class String;
-
-		public:
-
-		BALL_CREATE_DEEP(Substring)
-
-		/**	@name	Exceptions
-		*/
-		//@{
-
-		/**	Exception thrown if an unbound substring is accessed.
-				This exception is thrown by most accessors and predicates of
-				Substring if the substring is not bound to a string.
-		*/
-		class UnboundSubstring
-			:	public Exception::GeneralException
-		{
-			public:
-			UnboundSubstring(const char* file, int line); 
-		};
-
-		/**	Exception thrown if an invalid substring is accessed.
-				This exception is thrown if an invalid substring
-				is to be used.
-				@see isValid
-		*/
-		class InvalidSubstring
-			:	public Exception::GeneralException
-		{
-			public:
-			InvalidSubstring(const char* file, int line); 
-		};
-
-		//@}
-
-		/**	@name	Constructors and Destructors
-		*/
-		//@{
-
-		/** Default constructor.
-				Create an empty string.
-		*/
-		Substring() 
-			throw();
-
-		/** Copy constructor.
-				Create a substring from another substring.
-				@param substring the substring to be copied
-				@param deep ignored
-		*/
-		Substring(const Substring& substring, bool deep = true)
-			throw();
-
-		/** Create a substring from a string and two indices.
-				@param	string the string the substring is bound to.
-				@param	from the start index of the substring
-				@param	len the length of the substring (default {\tt npos}: to the end of the string)
-		*/
-		Substring(const String& string, Index from = 0, Size len = string::npos)
-			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
-
-		/** Destructor.
-				Destruct the substring.
-		*/
-		virtual ~Substring()
-			throw();
-
-		/** Clear the substrings contents.
-				Unbind the substring from its string and set the
-				start and the end position to 0.
-		*/
-		void destroy()
-			throw();
-
-		/** Clear the substrings contents.
-				Unbind the substring from its string and set the
-				start and the end position to 0.
-		*/
-		virtual void clear()
-			throw();
-
-	
-		//@}
-
-		/**	@name Converters 
-		*/
-		//@{
-
-		/** Convert a substring to a string.
-				Return a copy of the substring's contents.
-		*/
-		operator String() const
-			throw(Substring::UnboundSubstring);
-
-		/** Convert a substring to a string.
-				Return a copy of the substring's contents.
-		*/
-		String toString() const
-			throw(Substring::UnboundSubstring);
-		//@}
-
-
-		/**	@name Binding and Unbinding Substrings 
-		*/
-		//@{
-		
-		/** Bind the substring to a string.
-				@param string the string to bind to
-				@param from the start position in the string (default is the beginning of the string)
-				@param len the substring's length (default is to the end of the string)
-		*/
-		Substring& bind(const String& string, Index from = 0, Size len = string::npos)
-			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
-
-		/** Bind the substring to the same string another substring is bound to.
-				@param	substring the substring that is bound to a string
-		*/
-		Substring& bind(const Substring& substring, Index from = 0, Size len = string::npos)
-			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
-
-		/// unbinds the substring from the string it is bound to
-		void unbind()
-			throw();
-
-		/// Returns a pointer to the bound String
-		String* getBoundString()
-			throw();
-
-		/// Retunrs a const pointer to the bound String
-		const String* getBoundString() const
-			throw();
-
-		//@}
-		
-		/**	@name	Assignment */
-		//@{
-	
-		/** Sets the substring to a certain string
-		*/
-		void set(const String& string)
-			throw(Substring::UnboundSubstring);
-
-		/** Copies a substring from another substring
-		*/
-		void set(const Substring& s)
-			throw(Substring::UnboundSubstring);
-
-		/// Assigns a substring from a char pointer
-		void set(const char* char_ptr, Size size = string::npos)
-			throw(Substring::UnboundSubstring, Exception::NullPointer, Exception::SizeUnderflow);
-
-		/// String assignment operator
-		const Substring& operator = (const String& string)
-			throw(Substring::UnboundSubstring);
-
-		/// Substring assignment operator
-		const Substring& operator = (const Substring& substring)
-			throw(Substring::UnboundSubstring);
-
-		/// char pointer assignment operator
-		const Substring& operator = (const char* char_ptr)
-			throw(Substring::UnboundSubstring, Exception::NullPointer);
-
-		//@}
-
-		/**	@name	Accessors and Mutators */
-		//@{	
-		
-		/// Returns a pointer to the substring's contents
-		char* c_str()
-			throw(Substring::UnboundSubstring);
-
-		/// Returns a const pointer to the substring's contents
-		const char* c_str() const
-			throw(Substring::UnboundSubstring);
-
-		/// Returns the first index of the substring
-		Index getFirstIndex() const
-			throw(Substring::UnboundSubstring);
-
-		/// Returns the last index of the substring
-		Index getLastIndex() const
-			throw(Substring::UnboundSubstring);
-
-		/// Returns the substring size
-		Size size() const
-			throw();
-
-		/// Mutable random access to a character of the substring
-		char& operator [] (Index index)
-			throw(Substring::UnboundSubstring, Exception::IndexUnderflow, Exception::IndexOverflow);
-
-		/// Random access to a character of the substring
-		char operator [] (Index index) const
-			throw(Substring::UnboundSubstring, Exception::IndexUnderflow, Exception::IndexOverflow);
-
-		/// Converts the substring to lower case characters
-		Substring& toLower()	
-			throw(Substring::UnboundSubstring);
-
-		/// Converts the substring to lower case characters
-		Substring& toUpper()	
-			throw(Substring::UnboundSubstring);
-			
-		//@}
-
-		/**	@name Predicates */
-		//@{
-		/// Returns true, if the substring is bound to a String
-		bool isBound() const
-			throw();
-		
-		/// Returns true, if the substring is empty or unbound
-		bool isEmpty() const
-			throw();
-		//@}
-			
-
-		/**	@name	Comparison Operators */
-		//@{
-
-		/// returns true, if the contents of the two substrings are equal
-		bool operator == (const Substring& substring) const
-			throw(Substring::UnboundSubstring);
-
-		/// Returns true, if the contents of the two substrings are not equal
-		bool operator != (const Substring& substring) const
-			throw(Substring::UnboundSubstring);
-
-		/// Returns true, if the contents of the substring and the string are equal
-		bool operator == (const String& string) const
-			throw(Substring::UnboundSubstring);
-
-		/// Returns true, if the contents of the substring and the string are not equal
-		bool operator != (const String& string) const
-			throw(Substring::UnboundSubstring);
-
-		/// Returns true, if the contents of the substring and the string are equal
-		friend bool operator == (const String& string, const Substring& substring)
-			throw(Substring::UnboundSubstring);
-
-		/// Returns true, if the contents of the substring and the string are not equal
-		friend bool operator != (const String& string, const Substring& substring)
-			throw(Substring::UnboundSubstring);
-
-		/// Returns true, if the contents of the substring are equal to the contents of the string the char pointer points to
-		bool operator == (const char* char_ptr) const
-			throw(Substring::UnboundSubstring, Exception::NullPointer);
-
-		/// Returns true, if the contents of the substring are not equal to the contents of the string the char pointer points to
-		bool operator != (const char* char_ptr) const
-			throw(Substring::UnboundSubstring, Exception::NullPointer);
-
-		/// Returns truw, if the substring has length 1 and contains the given char
-		bool operator == (char c) const
-			throw(Substring::UnboundSubstring);
-
-		/// Returns true, if the substring is differnet from the given char
-		bool operator != (char c) const
-			throw(Substring::UnboundSubstring);
-		//@}
-
-		/**	@name	Stream I/O */
-		//@{
-
-		/// Writes the substring to a stream
-		friend ::std::ostream& operator << (::std::ostream& s, const Substring& substring)
-			throw();
-		//@}
-	
-		/**	@name	Debugging and Diagnostics */
-		//@{
-
-		/** Returns true, if the string is bound to a string and its indices are valid.
-				Valid indices means that the first index is not greater than the last index, 
-				both indices are non-negative and lesser than the size of the bound string.
-		*/
-		bool isValid() const
-			throw();
-
-		///	Dumps the substring object (including the values of its private memebers)
-		void dump(::std::ostream& s = ::std::cout, Size depth = 0) const 
-			throw(Substring::UnboundSubstring);
-		//@}
-		
-		protected:
-			
-		void validateRange_(Index& from, Size& len) const
-			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
-
-		private:
-		
-		/*_	@name	Attributes
-		*/
-		//_@{
-
-		/// pointer to the bound String
-		String* 	bound_;
-
-		/// start index in the bound String
-		Index 		from_;
-
-		/// end index in the bound String
-		Index 		to_;
-		//_@}
-	};
-
+	class Substring;
 
 	/**	Extended String class.
 	*/
@@ -380,7 +62,7 @@ namespace BALL
 		virtual void* create(bool /* deep */ = true, bool empty = false) const
 			throw();
 	
-		/**	@name	Enums */
+		/**	@name	Enums and Constants */
 		//@{
 
 		/**	Constants to set the compare mode.
@@ -399,6 +81,12 @@ namespace BALL
 			CASE_INSENSITIVE = 1 
 		};
 
+		/**	Constant indicating the end of the string.
+				Use this constant instead of {\tt string::npos} to indicate an invalid 
+				position inside the string or the end of the string in those methods
+				requiring indices.
+		*/
+		static const Size EndPos;
 		//@}
 
 		/**	@name	Predefined character classes
@@ -462,16 +150,16 @@ namespace BALL
 				@exception Exception::IndexUnderflow if {\tt from < 0}
 				@exception Exception::IndexOverflow if {\tt from >= size()}
 		*/
-		String(const String& s, Index from, Size len = npos)
+		String(const String& s, Index from, Size len = EndPos)
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 	
 		/**	Creates a new string from a C type string.
 				The new string contains the contents of {\bf s} until 
 				it has reached a length of {\bf len} or contains a zero character
-				(whichever comes first). Default value for {\bf len} is {\bf npos}
+				(whichever comes first). Default value for {\bf len} is {\bf EndPos},
 				meaning as long as possible.
 		*/
-		String(const char* char_ptr, Index from = 0, Size len = npos)
+		String(const char* char_ptr, Index from = 0, Size len = EndPos)
 			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/**	Creates a string using {\bf sprintf}.
@@ -555,14 +243,14 @@ namespace BALL
 				@exception Exception::IndexOverflow if {\tt from < 0}
 				@exception Exception::IndexUnderflow if {\tt from >= size()}
 		*/
-		void set(const String& string, Index from = 0, Size len = npos)
+		void set(const String& string, Index from = 0, Size len = EndPos)
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/** Assign a String from a C type string 
 				@exception Exception::IndexUnderflow if {\tt from < 0}
 				@exception Exception::IndexOverflow if {\tt from >= size()}
 		*/
-		void set(const char* char_ptr, Index from = 0, Size len = npos)
+		void set(const char* char_ptr, Index from = 0, Size len = EndPos)
 			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 	
 		/** Assign a string to the result of a {\bf sprintf} call
@@ -619,7 +307,7 @@ namespace BALL
 			throw();
 
 		/// Assign a C type string
-		void get(char* char_ptr, Index from = 0, Size len = npos) const
+		void get(char* char_ptr, Index from = 0, Size len = EndPos) const
 			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/// Assign a String from another String
@@ -743,11 +431,11 @@ namespace BALL
 		//@{			
 
 		/// Converts all characters in the given range to lower case
-		void toLower(Index from = 0, Size len = npos)
+		void toLower(Index from = 0, Size len = EndPos)
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 			
 		/// Converts all characters in the given range to upper case
-		void toUpper(Index from = 0, Size len = npos)
+		void toUpper(Index from = 0, Size len = EndPos)
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		//@}
@@ -756,11 +444,11 @@ namespace BALL
 		//@{
 
 		/// Returns a substring
-		Substring getSubstring(Index from = 0, Size len = npos) const
+		Substring getSubstring(Index from = 0, Size len = EndPos) const
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/// Returns a substring
-		Substring operator () (Index from, Size len = npos) const
+		Substring operator () (Index from, Size len = EndPos) const
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/** Returns a substring containing the string before the first occurence of {\bf s}
@@ -920,7 +608,7 @@ namespace BALL
 				@param	to last index of the sequence to be reversed
 				@see		String:Indices
 		*/
-		String& reverse(Index from = 0, Size len = npos)
+		String& reverse(Index from = 0, Size len = EndPos)
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
 		/// Substitutes the first occurence of {\bf to_replace} by the content of {\bf replacing}
@@ -1219,6 +907,323 @@ namespace BALL
 			throw();
 
 		static CompareMode compare_mode_;
+	};
+
+	/**	A substring class.
+			The Substring class represents an efficient way to deal with substrings
+			of \Ref{String}s. Each Substring is bound to an instance of String and 
+			is defined by a start and end index. It can be used like a String (with several
+			restrictions) but only affects the given range of the string it is bount to.\\
+			{\bf Definition:} \URL{BALL/DATATYPE/string.h}
+			\\
+	*/
+	class Substring
+	{
+		friend class String;
+
+		public:
+
+		BALL_CREATE_DEEP(Substring)
+
+		/**	@name	Exceptions
+		*/
+		//@{
+
+		/**	Exception thrown if an unbound substring is accessed.
+				This exception is thrown by most accessors and predicates of
+				Substring if the substring is not bound to a string.
+		*/
+		class UnboundSubstring
+			:	public Exception::GeneralException
+		{
+			public:
+			UnboundSubstring(const char* file, int line); 
+		};
+
+		/**	Exception thrown if an invalid substring is accessed.
+				This exception is thrown if an invalid substring
+				is to be used.
+				@see isValid
+		*/
+		class InvalidSubstring
+			:	public Exception::GeneralException
+		{
+			public:
+			InvalidSubstring(const char* file, int line); 
+		};
+
+		//@}
+
+		/**	@name	Constructors and Destructors
+		*/
+		//@{
+
+		/** Default constructor.
+				Create an empty string.
+		*/
+		Substring() 
+			throw();
+
+		/** Copy constructor.
+				Create a substring from another substring.
+				@param substring the substring to be copied
+				@param deep ignored
+		*/
+		Substring(const Substring& substring, bool deep = true)
+			throw();
+
+		/** Create a substring from a string and two indices.
+				@param	string the string the substring is bound to.
+				@param	from the start index of the substring
+				@param	len the length of the substring (default {\tt EndPos}: to the end of the string)
+		*/
+		Substring(const String& string, Index from = 0, Size len = String::EndPos)
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
+
+		/** Destructor.
+				Destruct the substring.
+		*/
+		virtual ~Substring()
+			throw();
+
+		/** Clear the substrings contents.
+				Unbind the substring from its string and set the
+				start and the end position to 0.
+		*/
+		void destroy()
+			throw();
+
+		/** Clear the substrings contents.
+				Unbind the substring from its string and set the
+				start and the end position to 0.
+		*/
+		virtual void clear()
+			throw();
+
+	
+		//@}
+
+		/**	@name Converters 
+		*/
+		//@{
+
+		/** Convert a substring to a string.
+				Return a copy of the substring's contents.
+		*/
+		operator String() const
+			throw(Substring::UnboundSubstring);
+
+		/** Convert a substring to a string.
+				Return a copy of the substring's contents.
+		*/
+		String toString() const
+			throw(Substring::UnboundSubstring);
+		//@}
+
+
+		/**	@name Binding and Unbinding Substrings 
+		*/
+		//@{
+		
+		/** Bind the substring to a string.
+				@param string the string to bind to
+				@param from the start position in the string (default is the beginning of the string)
+				@param len the substring's length (default is to the end of the string)
+		*/
+		Substring& bind(const String& string, Index from = 0, Size len = String::EndPos)
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
+
+		/** Bind the substring to the same string another substring is bound to.
+				@param	substring the substring that is bound to a string
+		*/
+		Substring& bind(const Substring& substring, Index from = 0, Size len = String::EndPos)
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
+
+		/// unbinds the substring from the string it is bound to
+		void unbind()
+			throw();
+
+		/// Returns a pointer to the bound String
+		String* getBoundString()
+			throw();
+
+		/// Retunrs a const pointer to the bound String
+		const String* getBoundString() const
+			throw();
+
+		//@}
+		
+		/**	@name	Assignment */
+		//@{
+	
+		/** Sets the substring to a certain string
+		*/
+		void set(const String& string)
+			throw(Substring::UnboundSubstring);
+
+		/** Copies a substring from another substring
+		*/
+		void set(const Substring& s)
+			throw(Substring::UnboundSubstring);
+
+		/// Assigns a substring from a char pointer
+		void set(const char* char_ptr, Size size = String::EndPos)
+			throw(Substring::UnboundSubstring, Exception::NullPointer, Exception::SizeUnderflow);
+
+		/// String assignment operator
+		const Substring& operator = (const String& string)
+			throw(Substring::UnboundSubstring);
+
+		/// Substring assignment operator
+		const Substring& operator = (const Substring& substring)
+			throw(Substring::UnboundSubstring);
+
+		/// char pointer assignment operator
+		const Substring& operator = (const char* char_ptr)
+			throw(Substring::UnboundSubstring, Exception::NullPointer);
+
+		//@}
+
+		/**	@name	Accessors and Mutators */
+		//@{	
+		
+		/// Returns a pointer to the substring's contents
+		char* c_str()
+			throw(Substring::UnboundSubstring);
+
+		/// Returns a const pointer to the substring's contents
+		const char* c_str() const
+			throw(Substring::UnboundSubstring);
+
+		/// Returns the first index of the substring
+		Index getFirstIndex() const
+			throw(Substring::UnboundSubstring);
+
+		/// Returns the last index of the substring
+		Index getLastIndex() const
+			throw(Substring::UnboundSubstring);
+
+		/// Returns the substring size
+		Size size() const
+			throw();
+
+		/// Mutable random access to a character of the substring
+		char& operator [] (Index index)
+			throw(Substring::UnboundSubstring, Exception::IndexUnderflow, Exception::IndexOverflow);
+
+		/// Random access to a character of the substring
+		char operator [] (Index index) const
+			throw(Substring::UnboundSubstring, Exception::IndexUnderflow, Exception::IndexOverflow);
+
+		/// Converts the substring to lower case characters
+		Substring& toLower()	
+			throw(Substring::UnboundSubstring);
+
+		/// Converts the substring to lower case characters
+		Substring& toUpper()	
+			throw(Substring::UnboundSubstring);
+			
+		//@}
+
+		/**	@name Predicates */
+		//@{
+		/// Returns true, if the substring is bound to a String
+		bool isBound() const
+			throw();
+		
+		/// Returns true, if the substring is empty or unbound
+		bool isEmpty() const
+			throw();
+		//@}
+			
+
+		/**	@name	Comparison Operators */
+		//@{
+
+		/// returns true, if the contents of the two substrings are equal
+		bool operator == (const Substring& substring) const
+			throw(Substring::UnboundSubstring);
+
+		/// Returns true, if the contents of the two substrings are not equal
+		bool operator != (const Substring& substring) const
+			throw(Substring::UnboundSubstring);
+
+		/// Returns true, if the contents of the substring and the string are equal
+		bool operator == (const String& string) const
+			throw(Substring::UnboundSubstring);
+
+		/// Returns true, if the contents of the substring and the string are not equal
+		bool operator != (const String& string) const
+			throw(Substring::UnboundSubstring);
+
+		/// Returns true, if the contents of the substring and the string are equal
+		friend bool operator == (const String& string, const Substring& substring)
+			throw(Substring::UnboundSubstring);
+
+		/// Returns true, if the contents of the substring and the string are not equal
+		friend bool operator != (const String& string, const Substring& substring)
+			throw(Substring::UnboundSubstring);
+
+		/// Returns true, if the contents of the substring are equal to the contents of the string the char pointer points to
+		bool operator == (const char* char_ptr) const
+			throw(Substring::UnboundSubstring, Exception::NullPointer);
+
+		/// Returns true, if the contents of the substring are not equal to the contents of the string the char pointer points to
+		bool operator != (const char* char_ptr) const
+			throw(Substring::UnboundSubstring, Exception::NullPointer);
+
+		/// Returns truw, if the substring has length 1 and contains the given char
+		bool operator == (char c) const
+			throw(Substring::UnboundSubstring);
+
+		/// Returns true, if the substring is differnet from the given char
+		bool operator != (char c) const
+			throw(Substring::UnboundSubstring);
+		//@}
+
+		/**	@name	Stream I/O */
+		//@{
+
+		/// Writes the substring to a stream
+		friend ::std::ostream& operator << (::std::ostream& s, const Substring& substring)
+			throw();
+		//@}
+	
+		/**	@name	Debugging and Diagnostics */
+		//@{
+
+		/** Returns true, if the string is bound to a string and its indices are valid.
+				Valid indices means that the first index is not greater than the last index, 
+				both indices are non-negative and lesser than the size of the bound string.
+		*/
+		bool isValid() const
+			throw();
+
+		///	Dumps the substring object (including the values of its private memebers)
+		void dump(::std::ostream& s = ::std::cout, Size depth = 0) const 
+			throw(Substring::UnboundSubstring);
+		//@}
+		
+		protected:
+			
+		void validateRange_(Index& from, Size& len) const
+			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
+
+		private:
+		
+		/*_	@name	Attributes
+		*/
+		//_@{
+
+		/// pointer to the bound String
+		String* 	bound_;
+
+		/// start index in the bound String
+		Index 		from_;
+
+		/// end index in the bound String
+		Index 		to_;
+		//_@}
 	};
 	
 	//@}
