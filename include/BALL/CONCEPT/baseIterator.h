@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseIterator.h,v 1.25 2003/05/08 08:46:51 sneumann Exp $
+// $Id: baseIterator.h,v 1.26 2003/05/08 18:19:29 oliver Exp $
+//
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -87,7 +88,7 @@ namespace BALL
 
 		/**
 		*/
-		typedef ::std::bidirectional_iterator_tag iterator_category;
+		typedef std::bidirectional_iterator_tag iterator_category;
 
 		
 		//@}
@@ -201,6 +202,7 @@ namespace BALL
 			throw(Exception::InvalidIterator);
 			
 		//@}
+
 		/**	@name	Predicates
 		*/
 		//@{
@@ -610,21 +612,21 @@ namespace BALL
 	Traits& BaseIterator<Container, DataType, Position, Traits>::getTraits() const
 		throw()
 	{
-		return *BaseIterator<Container, DataType, Position, Traits>::traits_ptr_;
+		return *ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_;
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	Container* BaseIterator<Container, DataType, Position, Traits>::getContainer() const
 		throw()
 	{
-		return BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer();
+		return ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	DataType& BaseIterator<Container, DataType, Position, Traits>::operator * () const
 		throw(Exception::InvalidIterator)
 	{
-		if (!BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+		if (!ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
@@ -636,7 +638,7 @@ namespace BALL
 	DataType* BaseIterator<Container, DataType, Position, Traits>::operator -> () const
 		throw(Exception::InvalidIterator)
 	{
-		if (!BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+		if (!ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}

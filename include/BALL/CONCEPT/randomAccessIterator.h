@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: randomAccessIterator.h,v 1.20 2003/05/08 08:57:05 sneumann Exp $ 
+// $Id: randomAccessIterator.h,v 1.21 2003/05/08 18:19:30 oliver Exp $ 
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
 #define BALL_CONCEPT_RANDOMACCESSITERATOR_H
@@ -288,110 +288,110 @@ namespace BALL
 	bool RandomAccessIterator<Container, DataType, Position, Traits>::operator + () const
 		throw()
 	{
-		return RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid();
+		return BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool RandomAccessIterator<Container, DataType, Position, Traits>::operator - () const
 		throw()
 	{
-		return (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid() == false);
+		return (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid() == false);
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void RandomAccessIterator<Container, DataType, Position, Traits>::toBegin()
 		throw(Exception::InvalidIterator)
 	{
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->toBegin();
+		BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->toBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool RandomAccessIterator<Container, DataType, Position, Traits>::isBegin() const
 		throw(Exception::InvalidIterator)
 	{
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isBegin();
+		return BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void RandomAccessIterator<Container, DataType, Position, Traits>::toEnd()
 		throw(Exception::InvalidIterator)
 	{
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->toEnd();
+		BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->toEnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool RandomAccessIterator<Container, DataType, Position, Traits>::isEnd() const
 		throw(Exception::InvalidIterator)
 	{
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isEnd();
+		return BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isEnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void RandomAccessIterator<Container, DataType, Position, Traits>::toRBegin()
 		throw(Exception::InvalidIterator)
 	{
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->toRBegin();
+		BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->toRBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool RandomAccessIterator<Container, DataType, Position, Traits>::isRBegin() const
 		throw(Exception::InvalidIterator)
 	{
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isRBegin();
+		return BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isRBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void RandomAccessIterator<Container, DataType, Position, Traits>::toREnd()
 		throw(Exception::InvalidIterator)
 	{
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->toREnd();
+		BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->toREnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool RandomAccessIterator<Container, DataType, Position, Traits>::isREnd() const
 		throw(Exception::InvalidIterator)
 	{
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isREnd();
+		return BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isREnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -399,12 +399,12 @@ namespace BALL
 		RandomAccessIterator<Container, DataType, Position, Traits>::operator ++ ()
 		throw(Exception::InvalidIterator)
 	{
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->forward();
+		BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->forward();
 		return *this;
 	}
 
@@ -423,12 +423,12 @@ namespace BALL
 		RandomAccessIterator<Container, DataType, Position, Traits>::operator -- ()
 		throw(Exception::InvalidIterator)
 	{
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->backward();
+		BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->backward();
 		return *this;
 	}
 
@@ -447,7 +447,7 @@ namespace BALL
 		RandomAccessIterator<Container, DataType, Position, Traits>::operator += (Distance distance)
 		throw(Exception::InvalidIterator)
 	{
-		if (!RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+		if (!BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
@@ -457,7 +457,7 @@ namespace BALL
 			return (*this -= -distance);
 		}
 
-		RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->forward(distance);
+		BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->forward(distance);
 		return *this;
 	}
 
@@ -466,7 +466,7 @@ namespace BALL
 		RandomAccessIterator<Container, DataType, Position, Traits>::operator -= (Distance distance)
 		throw(Exception::InvalidIterator)
 	{
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
@@ -476,14 +476,14 @@ namespace BALL
 			return (*this += -distance);
 		}
 
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isEnd() == true)
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isEnd() == true)
 		{
-			RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->toRBegin();
-			RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->backward(distance - 1);
+			BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->toRBegin();
+			BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->backward(distance - 1);
 		}
 		else 
 		{
-			RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->backward(distance);
+			BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->backward(distance);
 		}
 		return *this;
 	}
@@ -513,7 +513,7 @@ namespace BALL
 		 (const RandomAccessIterator<Container, DataType, Position, Traits>& iterator) const
 		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 		{
-			if (!RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+			if (!BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
 			}
@@ -521,11 +521,11 @@ namespace BALL
 			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
 			}
-			if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+			if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
 			{
 				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 			}
-			return RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->getDistance(*(iterator.traits_ptr_));
+			return BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getDistance(*(iterator.traits_ptr_));
 		}
 	
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -542,7 +542,7 @@ namespace BALL
 		(const RandomAccessIterator& iterator) const
 		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 	{
-		if (!RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+		if (!BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
@@ -550,12 +550,12 @@ namespace BALL
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
 		{
 			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 		}
 
-		return (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->operator < (*iterator.traits_ptr_));
+		return (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->operator < (*iterator.traits_ptr_));
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -563,7 +563,7 @@ namespace BALL
 		(const RandomAccessIterator& iterator) const
 		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 	{
-		if (!RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+		if (!BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
@@ -571,12 +571,12 @@ namespace BALL
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
 		{
 			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 		}
 
-		return !(RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->operator > (*iterator.traits_ptr_));
+		return !(BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->operator > (*iterator.traits_ptr_));
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -584,7 +584,7 @@ namespace BALL
 		(const RandomAccessIterator& iterator) const
 		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 	{
-		if (!RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+		if (!BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
@@ -592,12 +592,12 @@ namespace BALL
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
 		{
 			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 		}
 
-		return !(RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->operator < (*iterator.traits_ptr_));
+		return !(BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->operator < (*iterator.traits_ptr_));
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -605,7 +605,7 @@ namespace BALL
 		(const RandomAccessIterator& iterator) const
 		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 	{
-		if (!RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+		if (!BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
@@ -613,24 +613,24 @@ namespace BALL
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		if (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+		if (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
 		{
 			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 		}
 
-		return (RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->operator > (*iterator.traits_ptr_));
+		return (BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->operator > (*iterator.traits_ptr_));
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	DataType& RandomAccessIterator<Container, DataType, Position, Traits>::operator [] (Index index)
 		throw(Exception::InvalidIterator)
 	{
-		if (!RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+		if (!BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return (DataType&)RandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->getData(index);
+		return (DataType&)BaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getData(index);
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -968,104 +968,104 @@ namespace BALL
 	bool ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator + () const
 		throw()
 	{
-		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid();
+		return ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator - () const
 		throw()
 	{
-		return (!ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid());
+		return (!ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid());
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void ConstRandomAccessIterator<Container, DataType, Position, Traits>::toBegin()
 		throw(Exception::InvalidIterator)
 	{
-		if (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->toBegin();
+		ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->toBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstRandomAccessIterator<Container, DataType, Position, Traits>::isBegin() const
 		throw(Exception::InvalidIterator)
 	{
-		if (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isBegin();
+		return ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void ConstRandomAccessIterator<Container, DataType, Position, Traits>::toEnd()
 		throw(Exception::InvalidIterator)
 	{
-		if (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->toEnd();
+		ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->toEnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstRandomAccessIterator<Container, DataType, Position, Traits>::isEnd() const
 		throw(Exception::InvalidIterator)
 	{
-		if (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isEnd();
+		return ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isEnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void ConstRandomAccessIterator<Container, DataType, Position, Traits>::toRBegin()
 		throw(Exception::InvalidIterator)
 	{
-		if (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->toRBegin();
+		ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->toRBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstRandomAccessIterator<Container, DataType, Position, Traits>::isRBegin() const
 		throw(Exception::InvalidIterator)
 	{
-		if (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isRBegin();
+		return ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isRBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void ConstRandomAccessIterator<Container, DataType, Position, Traits>::toREnd()
 		throw(Exception::InvalidIterator)
 	{
-		if (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}	
 
-		ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->toREnd();
+		ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->toREnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstRandomAccessIterator<Container, DataType, Position, Traits>::isREnd() const
 		throw(Exception::InvalidIterator)
 	{
-		if (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isREnd();
+		return ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isREnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -1073,11 +1073,11 @@ namespace BALL
 		ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator ++ ()
 		throw(Exception::InvalidIterator)
 	{
-		if (!ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+		if (!ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->forward();
+		ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->forward();
 		return *this;
 	}
 
@@ -1097,11 +1097,11 @@ namespace BALL
 		ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator -- ()
 		throw(Exception::InvalidIterator)
 	{
-		if (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->backward();
+		ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->backward();
 		return *this;
 	}
 
@@ -1120,7 +1120,7 @@ namespace BALL
 		ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator += (Distance distance)
 		throw(Exception::InvalidIterator)
 	{
-		if (!ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+		if (!ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
@@ -1128,7 +1128,7 @@ namespace BALL
 		{
 			return (*this -= -distance);
 		}
-		ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->forward(distance);
+		ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->forward(distance);
 		return *this;
 	}
 
@@ -1137,7 +1137,7 @@ namespace BALL
 		ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator -= (Distance distance)
 		throw(Exception::InvalidIterator)
 	{
-		if (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
+		if (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isSingular())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
@@ -1145,14 +1145,14 @@ namespace BALL
 		{
 			return (*this += -distance);
 		}
-		if (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isEnd() == true)
+		if (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isEnd() == true)
 		{
-			ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->toRBegin();
-			ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->backward(distance - 1);
+			ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->toRBegin();
+			ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->backward(distance - 1);
 		}
 		else 
 		{
-			ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->backward(distance);
+			ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->backward(distance);
 		}
 		return *this;
 	}
@@ -1180,7 +1180,7 @@ namespace BALL
 		(const ConstRandomAccessIterator& iterator) const
 		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 	{
-		if (!ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+		if (!ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
@@ -1188,12 +1188,12 @@ namespace BALL
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);				
 		}
-		if (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+		if (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
 		{
 			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 		}
 
-		return (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->operator < (*iterator.traits_ptr_));
+		return (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->operator < (*iterator.traits_ptr_));
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -1201,7 +1201,7 @@ namespace BALL
 		(const ConstRandomAccessIterator& iterator) const
 		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 	{
-		if (!ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+		if (!ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
@@ -1209,11 +1209,11 @@ namespace BALL
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		if (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+		if (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
 		{
 			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 		}
-		return !(ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->operator > (*iterator.traits_ptr_));
+		return !(ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->operator > (*iterator.traits_ptr_));
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -1221,7 +1221,7 @@ namespace BALL
 		(const ConstRandomAccessIterator& iterator) const
 		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 	{
-		if (!ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+		if (!ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
@@ -1229,12 +1229,12 @@ namespace BALL
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		if (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+		if (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
 		{
 			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 		}
 
-		return !(ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->operator < (*iterator.traits_ptr_));
+		return !(ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->operator < (*iterator.traits_ptr_));
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -1242,7 +1242,7 @@ namespace BALL
 		(const ConstRandomAccessIterator& iterator) const
 		throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 	{
-		if (!ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+		if (!ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
@@ -1250,12 +1250,12 @@ namespace BALL
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
-		if (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+		if (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
 		{
 			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 		}
 
-		return (ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->operator > (*iterator.traits_ptr_));
+		return (ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->operator > (*iterator.traits_ptr_));
 	}
 
 	
@@ -1263,7 +1263,7 @@ namespace BALL
 	const DataType& ConstRandomAccessIterator<Container, DataType, Position, Traits>::operator [] (Index index) const
 		throw(Exception::InvalidIterator)
 	{
-		if (!ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
+		if (!ConstBaseIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid())
 		{
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}

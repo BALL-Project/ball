@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reverseBidirectionalIterator.h,v 1.16 2003/05/08 08:57:05 sneumann Exp $
+// $Id: reverseBidirectionalIterator.h,v 1.17 2003/05/08 18:19:30 oliver Exp $
 
 #ifndef BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
@@ -126,7 +126,7 @@ namespace BALL
 		static ReverseBidirectionalIterator end(const Container &container)
 			throw(Exception::InvalidIterator);
 
-		static ReverseBidirectionalIterator rbegin(const Container &container)
+		static ReverseBidirectionalIterator rbegin(const Container &container)
 			throw(Exception::InvalidIterator);
 
 		static ReverseBidirectionalIterator rend(const Container &container)
@@ -165,21 +165,21 @@ namespace BALL
 	bool ReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator + () const
 		throw()
 	{
-		return ReverseBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid();
+		return BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator - () const
 		throw()
 	{
-		return (ReverseBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid() == false);
+		return (BidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid() == false);
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	void ReverseBidirectionalIterator<Container, DataType, Position, Traits>::toBegin()
 		throw(Exception::InvalidIterator)
 	{
-		ReverseBidirectionalIterator<Container, DataType, Position, Traits>::toRBegin();
+		BidirectionalIterator<Container, DataType, Position, Traits>::toRBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -462,14 +462,14 @@ namespace BALL
 	bool ConstReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator + () const
 		throw()
 	{
-		return ConstReverseBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid();
+		return ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	bool ConstReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator - () const
 		throw()
 	{
-		return (ConstReverseBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid() == false);
+		return (ConstBidirectionalIterator<Container, DataType, Position, Traits>::traits_ptr_->isValid() == false);
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>

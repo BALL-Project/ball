@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reverseRandomAccessIterator.h,v 1.13 2003/05/08 08:57:06 sneumann Exp $
+// $Id: reverseRandomAccessIterator.h,v 1.14 2003/05/08 18:19:30 oliver Exp $
 
 #ifndef BALL_CONCEPT_REVERSERANDOMACCESS_H
 #define BALL_CONCEPT_REVERSERANDOMACCESS_H
@@ -46,7 +46,7 @@ namespace BALL
 		/** Tag this iterator as a random access iterator according to the STL
 				scheme.
 		 */
-		typedef ::std::random_access_iterator_tag iterator_category;
+		typedef std::random_access_iterator_tag iterator_category;
 
 		//@}
 
@@ -204,7 +204,7 @@ namespace BALL
 	bool ReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator + () const
 		throw()
 	{
-		return ReverseRandomAccessIterator<Container, DataType, Position, Traits>::traits_->isValid();
+		return RandomAccessIterator<Container, DataType, Position, Traits>::traits_->isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -418,7 +418,7 @@ namespace BALL
 		/** Tag this iterator as a random access iterator according to the STL
 				scheme.
 		 */
-		typedef ::std::random_access_iterator_tag iterator_category;
+		typedef std::random_access_iterator_tag iterator_category;
 
 		//@}
 
@@ -576,7 +576,7 @@ namespace BALL
 	bool ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::operator + () const
 		throw()
 	{
-		return ConstReverseRandomAccessIterator<Container, DataType, Position, Traits>::traits_->isValid();
+		return ConstRandomAccessIterator<Container, DataType, Position, Traits>::traits_->isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
