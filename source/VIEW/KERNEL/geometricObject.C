@@ -1,4 +1,4 @@
-// $Id: geometricObject.C,v 1.11 2001/02/11 13:06:32 hekl Exp $
+// $Id: geometricObject.C,v 1.12 2001/06/18 17:28:18 oliver Exp $
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 
@@ -24,7 +24,7 @@ namespace BALL
 			(const GeometricObject& geometric_object, bool deep)
 			throw()
 			:	Composite(geometric_object, deep),
-				PropertyManager(geometric_object, deep),
+				PropertyManager(geometric_object),
 				selected_color_(geometric_object.selected_color_),
 				name_(geometric_object.name_)
 		{
@@ -64,7 +64,7 @@ namespace BALL
 			throw()
 		{
 			Composite::set(geometric_object, deep);
-			PropertyManager::set(geometric_object, deep);
+			PropertyManager::set(geometric_object);
 			
 			selected_color_ = geometric_object.selected_color_;
 			name_ = geometric_object.name_;
