@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.1 1999/08/26 07:53:18 oliver Exp $
+// $Id: vector3.h,v 1.2 1999/12/04 14:12:33 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -446,10 +446,6 @@ namespace BALL
 		*/
 		bool isZero() const;
 
-		/**	Unity predicate.
-		*/
-		bool isUnit() const;
-
 		/**	Orthogonality predicate.
 		*/
 		bool isOrthogonalTo(TVector3& vector) const;
@@ -818,7 +814,7 @@ namespace BALL
 	{
 		static TVector3<T> unit_vector(1, 1, 1);
 		
-		return unit_vector3;
+		return unit_vector;
 	}
 
 	template <typename T>
@@ -1089,6 +1085,13 @@ namespace BALL
 	bool TVector3<T>::isValid() const
 	{
 		return true;
+	}
+
+	template <typename T>
+	BALL_INLINE 
+	bool TVector3<T>::isZero() const
+	{
+		return (Maths::isZero(x) && Maths::isZero(y) && Maths::isZero(z));
 	}
 
 	template <typename T>

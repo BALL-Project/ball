@@ -1,9 +1,14 @@
-// $Id: callback.h,v 1.1 1999/08/26 07:53:16 oliver Exp $
+// $Id: callback.h,v 1.2 1999/12/04 14:12:24 oliver Exp $
 
 #ifndef BALL_CONCEPT_CALLBACK_H
 #define BALL_CONCEPT_CALLBACK_H
 
-namespace BALL {
+#ifndef BALL_CONFIG_H
+#	include <BALL/CONFIG/config.h>
+#endif
+
+namespace BALL 
+{
 
 	/**	Callback class.
 			{\bf Definition:} \URL{BALL/CONCEPT/callback.h}

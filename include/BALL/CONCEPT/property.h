@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.2 1999/10/30 12:53:22 oliver Exp $
+// $Id: property.h,v 1.3 1999/12/04 14:12:24 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -211,11 +211,11 @@ namespace BALL
 
 		
 		
-		private:
-
 		/*	The default constructor
 		*/
 		NamedProperty();
+
+		private:
 
 		/**	The kind of information contained in the NamedProperty
 		*/
