@@ -1,4 +1,4 @@
-// $Id: johnsonBoveyShiftProcessor.h,v 1.4 2000/09/26 19:27:19 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.h,v 1.5 2000/09/27 16:26:45 burch Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -44,6 +44,7 @@ namespace BALL
 		struct Ring
     {
 			float						radius;
+			float						intensity;
 			Size						electrons;
 			vector<String>	atom_names;
 		} ;
