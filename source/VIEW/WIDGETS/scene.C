@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.61 2004/05/28 14:12:53 amoll Exp $
+// $Id: scene.C,v 1.62 2004/06/02 14:24:10 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -322,8 +322,7 @@ namespace BALL
 			float nearf = 1.5; 
 			float farf = 300;
 
-			float focallength = 20; ///???????????????
-			float ndfl    = nearf / focallength;
+			float ndfl    = nearf / stage_->getFocalDistance();
 			float eye_distance = stage_->getEyeDistance();
 
       glMatrixMode(GL_PROJECTION);
@@ -631,7 +630,6 @@ namespace BALL
 		{
 			// Differences between the old and new x and y positions in the window
 			float delta_x = scene->x_window_pos_new_ - scene->x_window_pos_old_;
-//		 	float delta_y = scene->y_window_pos_new_ - scene->y_window_pos_old_;
 			float new_distance = stage_->getEyeDistance() + (delta_x / 250.0);
 			
 			// prevent strange values
@@ -642,7 +640,19 @@ namespace BALL
 			update();
 		}
 
+		void Scene::changeFocalDistance_(Scene* scene)
+		{
+			// Differences between the old and new x and y positions in the window
+			float delta_x = scene->x_window_pos_new_ - scene->x_window_pos_old_;
+			float new_distance = stage_->getEyeDistance() + (delta_x / 20.0);
+			
+			// prevent strange values
+			if (new_distance < 0 || new_distance > 100) return;
 
+			stage_->setFocalDistance(new_distance);
+			stage_settings_->updateFromStage();
+			update();
+		}
 
 		void Scene::setViewPoint_()
 			throw()
@@ -1184,6 +1194,10 @@ namespace BALL
 
 					case (Qt::ControlButton | Qt::LeftButton):
 						translateSystem_(this);
+						break;
+
+					case (Qt::AltButton | Qt::ShiftButton | Qt::LeftButton): 
+						changeFocalDistance_(this);
 						break;
 
 					case (Qt::AltButton | Qt::LeftButton): 

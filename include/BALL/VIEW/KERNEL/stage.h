@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.8 2004/05/21 12:07:05 amoll Exp $
+// $Id: stage.h,v 1.9 2004/06/02 14:24:20 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -431,6 +431,14 @@ namespace BALL
 			/// Get the eye distance for the stereo view
 			float getEyeDistance() const
 				throw() { return eye_distance_;}
+				
+			/// Set the focal distance for the stereo view
+			void setFocalDistance(float value) 
+				throw() { focal_distance_ = value;}
+
+			/// Get the focal distance for the stereo view
+			float getFocalDistance() const
+				throw() { return focal_distance_;}
 			
 			//@}
 			/**	@name Predicates
@@ -468,6 +476,9 @@ namespace BALL
 
 			//_
 			float 							eye_distance_;
+			
+			//_
+			float 							focal_distance_;
 		};
 
 

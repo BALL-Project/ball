@@ -170,7 +170,8 @@ Stage::Stage()
 		light_sources_(),
 		camera_(),
 		show_coordinate_system_(false),
-		eye_distance_(2.0)
+		eye_distance_(2.0),
+		focal_distance_(40)
 {}
 
 Stage::Stage(const Stage& stage)
@@ -179,7 +180,8 @@ Stage::Stage(const Stage& stage)
 		light_sources_(stage.light_sources_),
 		camera_(stage.camera_),
 		show_coordinate_system_(false),
-		eye_distance_(stage.eye_distance_)
+		eye_distance_(stage.eye_distance_),
+		focal_distance_(stage.focal_distance_)
 {
 }
 
@@ -191,6 +193,7 @@ void Stage::clear()
 	camera_ = Camera();
 	show_coordinate_system_ = false;
 	eye_distance_ = 2.0;
+	focal_distance_ = 40;
 }
 
 void Stage::removeLightSource(const LightSource& light_source)
@@ -213,7 +216,9 @@ bool Stage::operator == (const Stage& stage) const
 	return light_sources_ 					== stage.light_sources_ 		&&
 				 camera_ 					 				== stage.camera_ 					&&
 				 background_color_ 				== stage.background_color_ &&
-				 show_coordinate_system_ 	== stage.show_coordinate_system_;
+				 show_coordinate_system_ 	== stage.show_coordinate_system_ &&
+				 eye_distance_ 						== stage.eye_distance_ &&
+				 focal_distance_ 						== stage.focal_distance_;
 }
 
 
@@ -246,7 +251,10 @@ void Stage::dump(std::ostream& s, Size depth) const
 	s << "Show coordinate system:  " << show_coordinate_system_ << endl;
 
 	BALL_DUMP_DEPTH(s, depth);
-	s << "Show eye distance :  " << eye_distance_<< endl;
+	s << "Eye distance :  " << eye_distance_<< endl;
+
+	BALL_DUMP_DEPTH(s, depth);
+	s << "Focal width:  " << focal_distance_<< endl;
 
 	BALL_DUMP_STREAM_SUFFIX(s);
 }

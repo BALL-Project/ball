@@ -43,7 +43,9 @@ void StageSettings::updateFromStage()
 	wheel_slider_->setValue((int) Scene::getMouseWheelSensitivity() - 1);
 
 	eye_distance_slider->setValue((int) (stage_->getEyeDistance() * 10.0));
+	focal_distance_slider->setValue((int) (stage_->getFocalDistance()));
 	eyeDistanceChanged();
+	focalDistanceChanged();
 }
 
 
@@ -57,6 +59,7 @@ void StageSettings::apply()
 	Scene::setMouseWheelSensitivity(wheel_slider_->value() + 1);
 
 	stage_->setEyeDistance((float)(eye_distance_slider->value() / 10.0));
+	stage_->setFocalDistance((float)(eye_distance_slider->value()));
 }
 
 
@@ -69,6 +72,7 @@ void StageSettings::setDefaultValues()
 	slider_->setValue(5);
 
 	eye_distance_slider->setValue(20);
+	focal_distance_slider->setValue(40);
 }
 
 void StageSettings::eyeDistanceChanged()
@@ -86,6 +90,23 @@ void StageSettings::eyeDistanceChanged()
 	}
 	eye_distance_label->setText(text.c_str());
 }
+
+void StageSettings::focalDistanceChanged()
+{
+	if (focal_distance_slider->value() == 0)
+	{
+		focal_distance_label->setText("0");
+		return;
+	}
+
+	String text(focal_distance_slider->value());
+	while(text[text.size() -1] == '.' || text[text.size() -1] == '0')
+	{
+		text.truncate(text.size() - 1);
+	}
+	focal_distance_label->setText(text.c_str());
+}
+
 
 // NAMESPACE
 } }
