@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.C,v 1.1 1999/08/26 08:02:35 oliver Exp $
+// $Id: textPersistenceManager.C,v 1.2 1999/09/06 22:21:50 oliver Exp $
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
@@ -157,7 +157,7 @@ namespace BALL
 		if (ptr == 0) 
 		{
 #			ifdef BALL_DEBUG_PERSISTENCE
-				Log.level(LogStream::ERROR) << "Could not read a valid object pointer: " << dec << (unsigned int)ptr << "!" << endl;
+				Log.level(LogStream::ERROR) << "Could not read a valid object pointer: " << dec << (PointerInt)ptr << "!" << endl;
 #			endif
 
 			return false;
@@ -207,7 +207,7 @@ namespace BALL
 		if (ptr == 0) 
 		{
 #		ifdef BALL_DEBUG_PERSISTENCE
-			Log.level(LogStream::ERROR) << "Could not read a valid object pointer: " << dec << (unsigned int)ptr << "!" << endl;
+			Log.level(LogStream::ERROR) << "Could not read a valid object pointer: " << dec << (PointerInt)ptr << "!" << endl;
 #		endif
 
 			return false;
