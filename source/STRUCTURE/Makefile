@@ -20,6 +20,7 @@ CPP_SOURCES= \
 	molecularGraph.C\
 	numericalSAS.C\
 	peptides.C\
+	peptideBuilder.C\
 	radialDistributionFunction.C\
 	reconstructFragmentProcessor.C\
 	RDFIntegrator.C\
