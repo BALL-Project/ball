@@ -1,4 +1,4 @@
-// $Id: RDFSection.C,v 1.2 2000/09/01 06:11:33 oliver Exp $
+// $Id: RDFSection.C,v 1.3 2000/09/21 13:29:52 anker Exp $
 
 #include <BALL/STRUCTURE/RDFSection.h>
 #include <BALL/FORMAT/parameters.h>
@@ -101,6 +101,7 @@ namespace BALL
 		Size degree;
 		Coefficients coeffs;
 		std::vector<Coefficients> coefficients;
+		String upper_limit;
 
 		switch(type) 
 		{
@@ -126,7 +127,16 @@ namespace BALL
 				for (Size i = 0; i < number_of_intervals; ++i)
 				{
 					interval.first = getValue(i, 0).toFloat();
-					interval.second = getValue(i, 1).toFloat();
+					// special case: an upper limit can be infinity
+					upper_limit = getValue(i, 1);
+					if (upper_limit == "inf")
+					{
+						interval.second = INFINITY;
+					}
+					else 
+					{
+						interval.second = getValue(i, 1).toFloat();
+					}
 					for (Size col = 0; col < degree; ++col)
 					{
 						coeffs[col] = getValue(i, col + 2).toFloat();
