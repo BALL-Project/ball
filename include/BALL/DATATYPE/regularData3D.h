@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.29 2003/08/26 08:04:11 oliver Exp $ 
+// $Id: regularData3D.h,v 1.30 2004/03/07 01:06:06 amoll Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -467,9 +467,9 @@ namespace BALL
 
   template <class ValueType>
   TRegularData3D<ValueType>::TRegularData3D
-    (const TRegularData3D<ValueType>::IndexType& size,
-     const TRegularData3D<ValueType>::CoordinateType& origin,
-     const TRegularData3D<ValueType>::CoordinateType& dimension)
+    (const typename TRegularData3D<ValueType>::IndexType& size,
+     const typename TRegularData3D<ValueType>::CoordinateType& origin,
+     const typename TRegularData3D<ValueType>::CoordinateType& dimension)
     throw(Exception::OutOfMemory)
     : data_(),
       origin_(origin),
@@ -498,9 +498,9 @@ namespace BALL
 
   template <class ValueType>
   TRegularData3D<ValueType>::TRegularData3D
-    (const TRegularData3D<ValueType>::CoordinateType& origin,
-     const TRegularData3D<ValueType>::CoordinateType& dimension,
-     const TRegularData3D<ValueType>::CoordinateType& spacing)
+    (const typename TRegularData3D<ValueType>::CoordinateType& origin,
+     const typename TRegularData3D<ValueType>::CoordinateType& dimension,
+     const typename TRegularData3D<ValueType>::CoordinateType& spacing)
     throw(Exception::OutOfMemory)
     : data_(),
       origin_(origin),
@@ -680,7 +680,7 @@ namespace BALL
 
 	template <class ValueType> 
 	BALL_INLINE
-	bool TRegularData3D<ValueType>::isInside(const TRegularData3D<ValueType>::CoordinateType& r) const		
+	bool TRegularData3D<ValueType>::isInside(const typename TRegularData3D<ValueType>::CoordinateType& r) const		
 		throw()
 	{
 		return !((r.x > (origin_.x + dimension_.x )) 
@@ -745,7 +745,7 @@ namespace BALL
 	template <class ValueType>
   BALL_INLINE
   typename TRegularData3D<ValueType>::CoordinateType TRegularData3D<ValueType>::getCoordinates
-    (const TRegularData3D<ValueType>::IndexType& index) const
+    (const typename TRegularData3D<ValueType>::IndexType& index) const
     throw(Exception::OutOfGrid)
   {
     if ((index.x >= size_.x) || (index.y >= size_.y) || (index.z >= size_.z))

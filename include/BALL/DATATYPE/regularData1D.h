@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.43 2004/03/05 13:51:13 anhi Exp $
+// $Id: regularData1D.h,v 1.44 2004/03/07 01:06:06 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
@@ -425,7 +425,7 @@ namespace BALL
 
   template <class ValueType>
   TRegularData1D<ValueType>::TRegularData1D
-    (const TRegularData1D<ValueType>::IndexType& size)
+    (const typename TRegularData1D<ValueType>::IndexType& size)
     throw(Exception::OutOfMemory)
     : origin_(0.0),
       dimension_(1.0),

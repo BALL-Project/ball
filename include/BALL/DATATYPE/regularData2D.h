@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.38 2003/08/26 08:04:11 oliver Exp $
+// $Id: regularData2D.h,v 1.39 2004/03/07 01:06:06 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
@@ -444,9 +444,9 @@ namespace BALL
 
 	template <class ValueType>
 	TRegularData2D<ValueType>::TRegularData2D
-		(const TRegularData2D<ValueType>::IndexType& size,
-		 const TRegularData2D<ValueType>::CoordinateType& origin,
-		 const TRegularData2D<ValueType>::CoordinateType& dimension)
+		(const typename TRegularData2D<ValueType>::IndexType& size,
+		 const typename TRegularData2D<ValueType>::CoordinateType& origin,
+		 const typename TRegularData2D<ValueType>::CoordinateType& dimension)
 		throw(Exception::OutOfMemory)
 		: data_(),
 			origin_(origin),
@@ -473,9 +473,9 @@ namespace BALL
 
 	template <class ValueType>
 	TRegularData2D<ValueType>::TRegularData2D
-		(const TRegularData2D<ValueType>::CoordinateType& origin,
-		 const TRegularData2D<ValueType>::CoordinateType& dimension,
-		 const TRegularData2D<ValueType>::CoordinateType& spacing)
+		(const typename TRegularData2D<ValueType>::CoordinateType& origin,
+		 const typename TRegularData2D<ValueType>::CoordinateType& dimension,
+		 const typename TRegularData2D<ValueType>::CoordinateType& spacing)
 		throw(Exception::OutOfMemory)
 		: data_(),
 			origin_(origin),
@@ -721,7 +721,7 @@ namespace BALL
 	template <class ValueType>
 	BALL_INLINE 
 	typename TRegularData2D<ValueType>::CoordinateType TRegularData2D<ValueType>::getCoordinates
-		(const TRegularData2D<ValueType>::IndexType& index) const 
+		(const typename TRegularData2D<ValueType>::IndexType& index) const 
 		throw(Exception::OutOfGrid)
 	{
 		if ((index.x >= size_.x) ||	(index.y >= size_.y))
@@ -756,7 +756,7 @@ namespace BALL
 	template <typename ValueType>
 	BALL_INLINE
 	void TRegularData2D<ValueType>::getEnclosingIndices
-		(const TRegularData2D<ValueType>::CoordinateType& r,
+		(const typename TRegularData2D<ValueType>::CoordinateType& r,
 		 Position& ll, Position& lr, Position& ul, Position& ur) const
 		throw(Exception::OutOfGrid)
 	{
