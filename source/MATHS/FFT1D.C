@@ -1,386 +1,828 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT1D.C,v 1.6 2003/08/26 09:17:50 oliver Exp $
+// $Id: FFT1D.C,v 1.7 2005/02/02 10:50:48 anhi Exp $
 //
 
 #include <BALL/MATHS/FFT1D.h>
 
 namespace BALL
 {
-	FFT1D::FFT1D()
-		throw()
-		: TRegularData1D<FFTW_COMPLEX>(0, 0, 1.)  // This is necessary because FFTW_COMPLEX has no default constructor
-	{
-	}
+	// rest see FFT1D.h
+	
+	
+#ifdef BALL_HAS_FFTW_DOUBLE
 
-	FFT1D::~FFT1D()
+	template <>
+	TFFT1D<DoubleTraits>::~TFFT1D()
 		throw()
 	{
-	}
-
-	FFT1D::FFT1D(const FFT1D &data)
-		throw()
-		: TRegularData1D<FFTW_COMPLEX>(data),
-			length_(data.length_),
-			in_fourier_space_(data.in_fourier_space_),
-			num_phys_to_fourier_(data.num_phys_to_fourier_),
-			num_fourier_to_phys_(data.num_fourier_to_phys_),
-			origin_(data.origin_),
-			step_phys_(data.step_phys_),
-			step_fourier_(data.step_fourier_),
-      min_phys_((-1.)*origin_),
-      max_phys_(((length_-1)*step_phys_)-origin_),
-      min_fourier_((-1.)*(length_/2.-1)*step_fourier_),
-      max_fourier_((length_/2.)*step_fourier_)
-	{
-		 plan_forward_  = fftw_create_plan(length_, FFTW_FORWARD,  FFTW_ESTIMATE | FFTW_IN_PLACE);
-		 plan_backward_ = fftw_create_plan(length_, FFTW_BACKWARD, FFTW_ESTIMATE | FFTW_IN_PLACE);								
-	}
-
-	FFT1D::FFT1D(Size ldn, double step_phys, double origin, bool in_fourier_space)
-		throw()
-		: TRegularData1D<FFTW_COMPLEX>(-origin, (((1<<ldn)-1)*step_phys)-origin, step_phys),
-		  length_(1<<ldn),
-			in_fourier_space_(in_fourier_space),
-			num_phys_to_fourier_(0),
-			num_fourier_to_phys_(0),
-			origin_(origin),
-			step_phys_(step_phys),
-			step_fourier_(2.*M_PI/(step_phys_*length_)),
-      min_phys_((-1.)*origin_),
-      max_phys_(((length_-1)*step_phys_)-origin_),
-      min_fourier_((-1.)*(length_/2.-1)*step_fourier_),
-      max_fourier_((length_/2.)*step_fourier_)
-	{
-		plan_forward_  = fftw_create_plan(length_, FFTW_FORWARD,  FFTW_ESTIMATE | FFTW_IN_PLACE);
-	  plan_backward_ = fftw_create_plan(length_, FFTW_BACKWARD, FFTW_ESTIMATE | FFTW_IN_PLACE);								
-
-	 	if (in_fourier_space)
+		// AR: destroy FFTW plans if there are any
+		if (planCalculated_)
 		{
-			origin_ = min_fourier_;
-			dimension_ = max_fourier_ - min_fourier_;
-			spacing_ = step_fourier_;
+			dataAdress_ = 0;
+			fftw_destroy_plan(planForward_);
+			fftw_destroy_plan(planBackward_);
 		}
 	}
-
+	
+	template <>
+	TFFT1D<DoubleTraits>::TFFT1D(const TFFT1D<DoubleTraits> &data)
+		throw()
+		: TRegularData1D<Complex>(data),
+			length_(data.length_),
+			inFourierSpace_(data.inFourierSpace_),
+			numPhysToFourier_(data.numPhysToFourier_),
+			numFourierToPhys_(data.numFourierToPhys_),
+			origin_(data.origin_),
+			stepPhys_(data.stepPhys_),
+			stepFourier_(data.stepFourier_),
+      minPhys_((-1.)*origin_),
+      maxPhys_(((length_-1)*stepPhys_)-origin_),
+      minFourier_((-1.)*(length_/2.-1)*stepFourier_),
+      maxFourier_((length_/2.)*stepFourier_)
+	{
+		// AR: new version for FFTW3
+		if (length_ != 0)
+		{
+			dataAdress_ = &data_[0];
+			planCalculated_ = true;
+			planForward_  = fftw_plan_dft_1d(length_, reinterpret_cast<fftw_complex*>(dataAdress_), 
+																			reinterpret_cast<fftw_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+			planBackward_ = fftw_plan_dft_1d(length_, reinterpret_cast<fftw_complex*>(dataAdress_), 
+																			reinterpret_cast<fftw_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+		}
+		else
+		{
+			planCalculated_ = false;
+			dataAdress_ = 0;
+		}
+	}
+	
+	
+	// AR: ldn is not any longer the binary logarithm but the absolute number of grid points
+	template <>
+	TFFT1D<DoubleTraits>::TFFT1D(Size ldn, double stepPhys, double origin, bool inFourierSpace)
+		throw()
+		: TRegularData1D<Complex>(-origin, ((ldn)-1)*stepPhys, stepPhys),
+		  length_(ldn),
+			inFourierSpace_(inFourierSpace),
+			numPhysToFourier_(0),
+			numFourierToPhys_(0),
+			origin_(origin),
+			stepPhys_(stepPhys),
+			stepFourier_(2.*M_PI/(stepPhys_*length_)),
+      minPhys_((-1.)*origin_),
+      maxPhys_(((length_-1)*stepPhys_)-origin_),
+      minFourier_((-1.)*(length_/2.-1)*stepFourier_),
+      maxFourier_((length_/2.)*stepFourier_)
+	{
+		// AR: new version for FFTW3
+		dataAdress_ = &data_[0];
+		planCalculated_ = true;
+		planForward_  = fftw_plan_dft_1d(length_, reinterpret_cast<fftw_complex*>(dataAdress_), 
+																		reinterpret_cast<fftw_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+		planBackward_ = fftw_plan_dft_1d(length_, reinterpret_cast<fftw_complex*>(dataAdress_), 
+																		reinterpret_cast<fftw_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+	 	if (inFourierSpace)
+		{
+			origin_ = minFourier_;
+			dimension_ = maxFourier_ - minFourier_;
+			spacing_ = stepFourier_;
+		}
+	}
+	
+	
+	
+	template <>
+	void TFFT1D<DoubleTraits>::clear()
+		throw()
+	{
+		TRegularData1D<Complex>::clear();
+		
+		// AR: new version for FFTW3
+    dataAdress_ = 0;
+    length_ = 0;
+    
+    if (planCalculated_)
+    {
+			fftw_destroy_plan(planForward_);
+			fftw_destroy_plan(planBackward_);
+			planCalculated_ = false;
+    }
+	}
+	
+	
+		
+	template <>
 	BALL_INLINE
-	const FFT1D& FFT1D::operator = (const FFT1D& fft1d)
+	const TFFT1D<DoubleTraits>& TFFT1D<DoubleTraits>::operator = (const TFFT1D<DoubleTraits>& fft1d)
 		throw()
 	{
 		clear();
 		origin_ = fft1d.origin_;
 		dimension_ = fft1d.dimension_;
 		spacing_ = fft1d.spacing_;
-		data_ = fft1d.data_;
-		length_ = fft1d.length_;
 		origin_ = fft1d.origin_;
-		step_phys_ = fft1d.step_phys_;
-		step_fourier_ = fft1d.step_fourier_;
-    min_phys_ = ((-1.)*origin_);
-    max_phys_ = (((length_-1)*step_phys_)-origin_);
-    min_fourier_ = ((-1.)*(length_/2.-1)*step_fourier_);
-    max_fourier_ = ((length_/2.)*step_fourier_);
-    num_phys_to_fourier_ = fft1d.num_phys_to_fourier_;
-		num_fourier_to_phys_ = fft1d.num_fourier_to_phys_;
-		plan_forward_ = fft1d.plan_forward_;
-		plan_backward_ = fft1d.plan_backward_;
+		stepPhys_ = fft1d.stepPhys_;
+		stepFourier_ = fft1d.stepFourier_;
+    minPhys_ = ((-1.)*origin_);
+    maxPhys_ = (((length_-1)*stepPhys_)-origin_);
+    minFourier_ = ((-1.)*(length_/2.-1)*stepFourier_);
+    maxFourier_ = ((length_/2.)*stepFourier_);
+    numPhysToFourier_ = fft1d.numPhysToFourier_;
+		numFourierToPhys_ = fft1d.numFourierToPhys_;
+		
+		// AR: new code for FFTW3
+		
+		// if there are old plans, destroy them first...
+		if (planCalculated_)
+		{
+			fftw_destroy_plan(planForward_);
+			fftw_destroy_plan(planBackward_);
+		}
+		
+		data_ = fft1d.data_;
+		length_ = fft1d.data_.size();
+		if (length_ != 0)
+		{
+			planCalculated_ = true;
+			dataAdress_ = &data_[0];
+		
+			// ...and calculate new ones
+			planForward_  = fftw_plan_dft_1d(length_, reinterpret_cast<fftw_complex*>(dataAdress_), 
+																				reinterpret_cast<fftw_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+			planBackward_ = fftw_plan_dft_1d(length_, reinterpret_cast<fftw_complex*>(dataAdress_), 
+																				reinterpret_cast<fftw_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+		}
+		else
+		{
+			planCalculated_ = false;
+			dataAdress_ = 0;
+		}
 		
 		return *this;
 	}
 
-	void FFT1D::clear()
-		throw()
-	{
-		TRegularData1D<FFTW_COMPLEX>::clear();
-	}
 
-	void FFT1D::destroy()
+	template <>
+	void TFFT1D<DoubleTraits>::destroy()
 		throw()
 	{		
-		TRegularData1D<FFTW_COMPLEX>::clear();
+		TRegularData1D<Complex >::clear();
 		
 		length_ = 0;
 		origin_ = 
-		step_phys_ = 
-		step_fourier_ = 0.;
-		num_phys_to_fourier_ = 
-		num_fourier_to_phys_ = 0;
-    min_phys_ =
-    max_phys_ =
-    min_fourier_ =
-    max_fourier_ = 0.;
+		stepPhys_ = 
+		stepFourier_ = 0.;
+		numPhysToFourier_ = 
+		numFourierToPhys_ = 0;
+    minPhys_ =
+    maxPhys_ =
+    minFourier_ =
+    maxFourier_ = 0.;
+    
+    // AR: new version for FFTW3
+    dataAdress_ = 0;
+    
+    if (planCalculated_)
+    {
+			fftw_destroy_plan(planForward_);
+			fftw_destroy_plan(planBackward_);
+			planCalculated_ = false;
+    }
 	}
-
-	bool FFT1D::operator == (const FFT1D& fft1d) const
+	
+	template <>
+	void TFFT1D<DoubleTraits>::doFFT()
 		throw()
 	{
-		if (length_ == fft1d.length_ &&
-				origin_ == fft1d.origin_ &&
-				step_phys_ == fft1d.step_phys_ &&
-				step_fourier_ == fft1d.step_fourier_ &&
-				min_phys_ == fft1d.min_phys_ &&
-				max_phys_ == fft1d.max_phys_ &&
-				min_fourier_ == fft1d.min_fourier_ &&
-				max_fourier_ == fft1d.max_fourier_ &&
-				num_phys_to_fourier_ == fft1d.num_phys_to_fourier_ &&
-				num_fourier_to_phys_ == fft1d.num_fourier_to_phys_)
+		// AR: new version, if start adress or vector size has changed, recalculate the plans
+		if ((dataAdress_ != &data_[0]) || (length_ != data_.size()))
 		{
-			double min  = in_fourier_space_ ?  min_fourier_ :  min_phys_;
-			double max  = in_fourier_space_ ?  max_fourier_ :  max_phys_;
-			double step = in_fourier_space_ ? step_fourier_ : step_phys_;
+			// AR: if there are any old plans, destroy them
+			if (planCalculated_)
+			{
+				fftw_destroy_plan(planForward_);
+				fftw_destroy_plan(planBackward_);
+			}
+			
+			length_ = data_.size();
+			if (length_ != 0)
+			{
+				dataAdress_ = &data_[0];
+				planCalculated_ = true;
+				planForward_  = fftw_plan_dft_1d(length_, reinterpret_cast<fftw_complex*>(dataAdress_), 
+																				reinterpret_cast<fftw_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+				planBackward_ = fftw_plan_dft_1d(length_, reinterpret_cast<fftw_complex*>(dataAdress_), 
+																				reinterpret_cast<fftw_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+			}
+			else
+			{
+				dataAdress_ = 0;
+				planCalculated_ = false;
 				
-			for (double pos=min; pos<=max; pos+=step)
+				// AR: if there are no data return without doing anything but update 'dataAdress_' and the flag
+				//     Clear fft1d in that case?
+				return;
+			}				
+		}
+		
+		fftw_execute(planForward_);
+		
+		// AR: old version
+		//fftw_one(planForward_, reinterpret_cast<fftw_complex*>(&(*data_.begin())), 0);
+		inFourierSpace_ = true;
+		numPhysToFourier_++;
+	}
+	
+	
+	
+	template <>
+	void TFFT1D<DoubleTraits>::doiFFT()
+		throw()
+	{
+		// AR: new version, if vector size or start adress has changed, recalculate the plans
+		if ((dataAdress_ != &data_[0]) || (length_ != data_.size()))
+		{
+			// AR: if there are any old plans, destroy them
+			if (planCalculated_)
 			{
-				if (getData(pos) != fft1d.getData(pos))
-				{
-					return false;
-				}
+				fftw_destroy_plan(planForward_);
+				fftw_destroy_plan(planBackward_);
 			}
 			
-			return true;
+			length_ = data_.size();
+			if (length_ != 0)
+			{
+				dataAdress_ = &data_[0];
+				planCalculated_ = true;
+				planForward_  = fftw_plan_dft_1d(length_, reinterpret_cast<fftw_complex*>(dataAdress_), 
+																				reinterpret_cast<fftw_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+				planBackward_ = fftw_plan_dft_1d(length_, reinterpret_cast<fftw_complex*>(dataAdress_), 
+																				reinterpret_cast<fftw_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+			}
+			else
+			{
+				dataAdress_ = 0;
+				planCalculated_ = false;
+				
+				// AR: if there are no data return without doing anything but update 'dataAdress_' and the flag
+				//     Clear fft1d in that case?
+				return;
+			}				
 		}
-	
-		return false;
-	}
-
-	void FFT1D::doFFT()
-		throw()
-	{
-		fftw_one(plan_forward_, &(*data_.begin()), 0);
-		in_fourier_space_ = true;
-		num_phys_to_fourier_++;
-	}
-
-	void FFT1D::doiFFT()
-		throw()
-	{
+		
+		fftw_execute(planBackward_);
+		
+		// AR: old version
 		// Is this cast vector -> array portable?
-		fftw_one(plan_backward_, &(*data_.begin()), 0);
-		in_fourier_space_ = false;
-		num_fourier_to_phys_++;
+		//fftw_one(planBackward_, reinterpret_cast<fftw_complex*>(&(*data_.begin())), 0);
+		inFourierSpace_ = false;
+		numFourierToPhys_++;
 	}
+	
+#endif // BALL_HAS_FFTW_DOUBLE	
 
-	bool FFT1D::translate(double trans_origin)
+#ifdef BALL_HAS_FFTW_FLOAT	
+
+	template <>
+	TFFT1D<FloatTraits>::~TFFT1D()
 		throw()
 	{
-		Position internalOrigin = (int) rint(trans_origin/step_phys_);
-		if (internalOrigin <= length_)
+		// AR: destroy FFTW plans if there are any
+		if (planCalculated_)
 		{
-			origin_ = trans_origin;
-
-      min_phys_ = ((-1.)*origin_);
-      max_phys_ = (((length_-1)*step_phys_)-origin_);
-      min_fourier_ = ((-1.)*(length_/2.-1)*step_fourier_);
-      max_fourier_ = ((length_/2.)*step_fourier_);
-      
-			return true;
-		}
-		else
-		{
-			return false;
-		}
-	}
-
-	bool FFT1D::setPhysStepWidth(double new_width)
-		throw()
-	{
-		if (new_width < 0)
-		{
-			return false;
-		}
-		else
-		{
-			step_phys_ = new_width;
-			step_fourier_ = 2.*M_PI/(step_phys_*length_);
-
-      min_phys_ = ((-1.)*origin_);
-      max_phys_ = (((length_-1)*step_phys_)-origin_);
-      min_fourier_ = ((-1.)*(length_/2.-1)*step_fourier_);
-      max_fourier_ = ((length_/2.)*step_fourier_);
-
-      return true;
+			dataAdress_ = 0;
+			fftwf_destroy_plan(planForward_);
+			fftwf_destroy_plan(planBackward_);
 		}
 	}
 	
-	double FFT1D::getPhysStepWidth() const
+	template <>
+	TFFT1D<FloatTraits>::TFFT1D(const TFFT1D<FloatTraits> &data)
 		throw()
+		: TRegularData1D<Complex>(data),
+			length_(data.length_),
+			inFourierSpace_(data.inFourierSpace_),
+			numPhysToFourier_(data.numPhysToFourier_),
+			numFourierToPhys_(data.numFourierToPhys_),
+			origin_(data.origin_),
+			stepPhys_(data.stepPhys_),
+			stepFourier_(data.stepFourier_),
+      minPhys_((-1.)*origin_),
+      maxPhys_(((length_-1)*stepPhys_)-origin_),
+      minFourier_((-1.)*(length_/2.-1)*stepFourier_),
+      maxFourier_((length_/2.)*stepFourier_)
 	{
-		return step_phys_;
-	}
-
-	double FFT1D::getFourierStepWidth() const
-		throw()
-	{
-		return step_fourier_;
-	}
-
-	double FFT1D::getPhysSpaceMin() const
-		throw()
-	{
-    return min_phys_;
-  }
-
-	double FFT1D::getPhysSpaceMax() const
-		throw()
-	{
-    return max_phys_;
- 	}
-
-	double FFT1D::getFourierSpaceMin() const
-		throw()
-	{
-		return min_fourier_;
-	}
-
-	double FFT1D::getFourierSpaceMax() const
-		throw()
-	{
-		return max_fourier_;
-	}
-
-	Complex FFT1D::getData(const double pos) const
-		throw(Exception::OutOfGrid)
-	{
-		Complex result;
-		double normalization=1.;
-
-		if (!in_fourier_space_)
+		// AR: new version for FFTW3
+		if (length_ != 0)
 		{
-			result = Complex((*this)[pos].re, (*this)[pos].im);
-			normalization=1./pow(length_,num_fourier_to_phys_);
+			dataAdress_ = &data_[0];
+			planCalculated_ = true;
+			planForward_  = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), 
+																			reinterpret_cast<fftwf_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+			planBackward_ = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), 
+																			reinterpret_cast<fftwf_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
 		}
 		else
 		{
-			result = Complex((*this)[pos].re,(*this)[pos].im) * phase(pos);
-			normalization=1./(sqrt(2.*M_PI))*step_phys_/pow(length_,num_fourier_to_phys_);
+			planCalculated_ = false;
+			dataAdress_ = 0;
 		}
-
-		result *= normalization;
-		
-		return result;
 	}
-
-	Complex FFT1D::getInterpolatedValue(const double pos) const
-		throw(Exception::OutOfGrid)
-	{
-		Complex result;
-		
-		double min  = in_fourier_space_ ? min_fourier_  :  min_phys_;
-		double max  = in_fourier_space_ ? max_fourier_  :  max_phys_;
-		double step = in_fourier_space_ ? step_fourier_ : step_phys_;
-		
-		if ((pos < min) || (pos > max))
-		{
-			throw Exception::OutOfGrid(__FILE__, __LINE__);
-		}
-
-		double h = pos - min;
-		double mod = fmod(h,step);
-
-		if (mod ==0) // we are on the grid
-		{
-			return getData(pos);
-		}
-
-		double before = floor(h/step)*step+ min;
-		double after  = ceil(h/step)*step+ min;
-			
-		double t = (pos - before)/step;
-
-		result  =  getData(before)*(BALL_COMPLEX_PRECISION)(1.-t);
-		result +=  getData(after)*(BALL_COMPLEX_PRECISION)t; 
-
-		return result;
-	}
-
-	void FFT1D::setData(double pos, Complex val)
-		throw(Exception::OutOfGrid)
-	{
-		FFTW_COMPLEX dummy;
 	
-		if (!in_fourier_space_)
+		
+	// AR: ldn is not any longer the binary logarithm but the absolute number of grid points
+	template <>
+	TFFT1D<FloatTraits>::TFFT1D(Size ldn, double stepPhys, double origin, bool inFourierSpace)
+		throw()
+		: TRegularData1D<Complex >(-origin, ((ldn)-1)*stepPhys, stepPhys),
+		  length_(ldn),
+			inFourierSpace_(inFourierSpace),
+			numPhysToFourier_(0),
+			numFourierToPhys_(0),
+			origin_(origin),
+			stepPhys_(stepPhys),
+			stepFourier_(2.*M_PI/(stepPhys_*length_)),
+      minPhys_((-1.)*origin_),
+      maxPhys_(((length_-1)*stepPhys_)-origin_),
+      minFourier_((-1.)*(length_/2.-1)*stepFourier_),
+      maxFourier_((length_/2.)*stepFourier_)
+	{
+		// AR: new version for FFTW3
+		dataAdress_ = &data_[0];
+		planCalculated_ = true;
+		planForward_  = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), 
+																		reinterpret_cast<fftwf_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+		planBackward_ = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), 
+																		reinterpret_cast<fftwf_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+
+	 	if (inFourierSpace)
 		{
-			dummy.re = val.re*((float)pow((float)(length_),(int)num_fourier_to_phys_));
-			dummy.im = val.im*((float)pow((float)(length_),(int)num_fourier_to_phys_));
-	
-			(*this)[pos]=dummy;
-		}
-		else
-		{
-			val*=phase(pos)*(BALL_COMPLEX_PRECISION)((sqrt(2*M_PI)/step_phys_))
-										 *(float)pow((float)length_,(int)num_fourier_to_phys_);
-			
-			dummy.re = val.re;
-			dummy.im = val.im;
-			
-			(*this)[pos]=dummy;
+			origin_ = minFourier_;
+			dimension_ = maxFourier_ - minFourier_;
+			spacing_ = stepFourier_;
 		}
 	}
-
-	FFTW_COMPLEX& FFT1D::operator[](const double pos)
-		throw(Exception::OutOfGrid)
+	
+	
+		
+	template <>
+	void TFFT1D<FloatTraits>::clear()
+		throw()
 	{
-		Index internalPos;
-
-		if (!in_fourier_space_)
+		TRegularData1D<Complex>::clear();
+		
+		// AR: new version for FFTW3
+    dataAdress_ = 0;
+    length_ = 0;
+    
+    if (planCalculated_)
+    {
+			fftwf_destroy_plan(planForward_);
+			fftwf_destroy_plan(planBackward_);
+			planCalculated_ = false;
+    }
+	}
+	
+	template <>
+	BALL_INLINE
+	const TFFT1D<FloatTraits>& TFFT1D<FloatTraits>::operator = (const TFFT1D<FloatTraits>& fft1d)
+		throw()
+	{
+		clear();
+		origin_ = fft1d.origin_;
+		dimension_ = fft1d.dimension_;
+		spacing_ = fft1d.spacing_;
+		origin_ = fft1d.origin_;
+		stepPhys_ = fft1d.stepPhys_;
+		stepFourier_ = fft1d.stepFourier_;
+    minPhys_ = ((-1.)*origin_);
+    maxPhys_ = (((length_-1)*stepPhys_)-origin_);
+    minFourier_ = ((-1.)*(length_/2.-1)*stepFourier_);
+    maxFourier_ = ((length_/2.)*stepFourier_);
+    numPhysToFourier_ = fft1d.numPhysToFourier_;
+		numFourierToPhys_ = fft1d.numFourierToPhys_;
+		
+		// AR: new code for FFTW3
+		
+		// if there are old plans, destroy them first...
+		if (planCalculated_)
 		{
-			internalPos = (Index) rint((pos+origin_)/step_phys_);
+			fftwf_destroy_plan(planForward_);
+			fftwf_destroy_plan(planBackward_);
+		}
+		
+		data_ = fft1d.data_;
+		length_ = fft1d.data_.size();
+		if (length_ != 0)
+		{
+			planCalculated_ = true;
+			dataAdress_ = &data_[0];
+		
+			// ...and calculate new ones
+			planForward_  = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), 
+																				reinterpret_cast<fftwf_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+			planBackward_ = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), 
+																				reinterpret_cast<fftwf_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
 		}
 		else
 		{
-			internalPos =  (Index) rint(pos/step_fourier_);
-
-			if (internalPos < 0)
+			planCalculated_ = false;
+			dataAdress_ = 0;
+		}
+		
+		return *this;
+	}
+	
+	
+	
+	template <>
+	void TFFT1D<FloatTraits>::destroy()
+		throw()
+	{		
+		TRegularData1D<Complex >::clear();
+		
+		length_ = 0;
+		origin_ = 
+		stepPhys_ = 
+		stepFourier_ = 0.;
+		numPhysToFourier_ = 
+		numFourierToPhys_ = 0;
+    minPhys_ =
+    maxPhys_ =
+    minFourier_ =
+    maxFourier_ = 0.;
+    
+    // AR: new version for FFTW3
+    dataAdress_ = 0;
+    
+    if (planCalculated_)
+    {
+			fftwf_destroy_plan(planForward_);
+			fftwf_destroy_plan(planBackward_);
+			planCalculated_ = false;
+    }
+	}
+	
+	
+	
+	template <>
+	void TFFT1D<FloatTraits>::doFFT()
+		throw()
+	{
+		// AR: new version, if start adress or vector size has changed, recalculate the plans
+		if ((dataAdress_ != &data_[0]) || (length_ != data_.size()))
+		{
+			// AR: if there are any old plans, destroy them
+			if (planCalculated_)
 			{
-				internalPos+=length_;
+				fftwf_destroy_plan(planForward_);
+				fftwf_destroy_plan(planBackward_);
 			}
-		}
-
-		if ((internalPos < 0) || (internalPos>=(Index) length_))
-		{
-			throw Exception::OutOfGrid(__FILE__, __LINE__);
+			
+			length_ = data_.size();
+			if (length_ != 0)
+			{
+				dataAdress_ = &data_[0];
+				planCalculated_ = true;
+				planForward_  = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), 
+																				reinterpret_cast<fftwf_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+				planBackward_ = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), 
+																				reinterpret_cast<fftwf_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+			}
+			else
+			{
+				dataAdress_ = 0;
+				planCalculated_ = false;
+				
+				// AR: if there are no data return without doing anything but update 'dataAdress_' and the flag
+				//     Clear fft1d in that case?
+				return;
+			}				
 		}
 		
-		return data_[internalPos];
+		fftwf_execute(planForward_);	
+
+		// AR: old version
+		//fftw_one(planForward_, reinterpret_cast<fftw_complex*>(&(*data_.begin())), 0);
+		inFourierSpace_ = true;
+		numPhysToFourier_++;
+	}
+	
+	
+		
+	template <>
+	void TFFT1D<FloatTraits>::doiFFT()
+		throw()
+	{
+		// AR: new version, if vector size or start adress has changed, recalculate the plans
+		if ((dataAdress_ != &data_[0]) || (length_ != data_.size()))
+		{
+			// AR: if there are any old plans, destroy them
+			if (planCalculated_)
+			{
+				fftwf_destroy_plan(planForward_);
+				fftwf_destroy_plan(planBackward_);
+			}
+			
+			length_ = data_.size();
+			if (length_ != 0)
+			{
+				dataAdress_ = &data_[0];
+				planCalculated_ = true;
+				planForward_  = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), 
+																				reinterpret_cast<fftwf_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+				planBackward_ = fftwf_plan_dft_1d(length_, reinterpret_cast<fftwf_complex*>(dataAdress_), 
+																				reinterpret_cast<fftwf_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+			}
+			else
+			{
+				dataAdress_ = 0;
+				planCalculated_ = false;
+				
+				// AR: if there are no data return without doing anything but update 'dataAdress_' and the flag
+				//     Clear fft1d in that case?
+				return;
+			}				
+		}
+		
+		fftwf_execute(planBackward_);
+		
+		// AR: old version
+		// Is this cast vector -> array portable?
+		//fftw_one(planBackward_, reinterpret_cast<fftw_complex*>(&(*data_.begin())), 0);
+		inFourierSpace_ = false;
+		numFourierToPhys_++;
 	}
 
-	const FFTW_COMPLEX& FFT1D::operator[](const double pos) const
-		throw(Exception::OutOfGrid)
-	{
-		Index internalPos;
+#endif // BALL_HAS_FFTW_FLOAT	
 
-		if (!in_fourier_space_)
+#ifdef BALL_HAS_FFTW_LONG_DOUBLE
+
+	template <>
+	TFFT1D<LongDoubleTraits>::~TFFT1D()
+		throw()
+	{
+		// AR: destroy FFTW plans if there are any
+		if (planCalculated_)
 		{
-			internalPos = (Index) rint((pos+origin_)/step_phys_);
+			dataAdress_ = 0;
+			fftwl_destroy_plan(planForward_);
+			fftwl_destroy_plan(planBackward_);
+		}
+	}
+	
+	template <>
+	TFFT1D<LongDoubleTraits>::TFFT1D(const TFFT1D<LongDoubleTraits> &data)
+		throw()
+		: TRegularData1D<Complex>(data),
+			length_(data.length_),
+			inFourierSpace_(data.inFourierSpace_),
+			numPhysToFourier_(data.numPhysToFourier_),
+			numFourierToPhys_(data.numFourierToPhys_),
+			origin_(data.origin_),
+			stepPhys_(data.stepPhys_),
+			stepFourier_(data.stepFourier_),
+      minPhys_((-1.)*origin_),
+      maxPhys_(((length_-1)*stepPhys_)-origin_),
+      minFourier_((-1.)*(length_/2.-1)*stepFourier_),
+      maxFourier_((length_/2.)*stepFourier_)
+	{
+		// AR: new version for FFTW3
+		if (length_ != 0)
+		{
+			dataAdress_ = &data_[0];
+			planCalculated_ = true;
+			planForward_  = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
+																			reinterpret_cast<fftwl_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+			planBackward_ = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
+																			reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
 		}
 		else
 		{
-			internalPos =  (Index) rint(pos/step_fourier_);
-
-			if (internalPos < 0)
-			{
-				internalPos+=length_;
-			}
+			planCalculated_ = false;
+			dataAdress_ = 0;
 		}
-
-		if ((internalPos < 0) || (internalPos>=(Index) length_))
-		{
-			throw Exception::OutOfGrid(__FILE__, __LINE__);
-		}
-		
-		return data_[internalPos];
 	}
+	
+	// AR: ldn is not any longer the binary logarithm but the absolute number of grid points
+	template <>
+	TFFT1D<LongDoubleTraits>::TFFT1D(Size ldn, double stepPhys, double origin, bool inFourierSpace)
+		throw()
+		: TRegularData1D<Complex>(-origin, ((ldn)-1)*stepPhys, stepPhys),
+		  length_(ldn),
+			inFourierSpace_(inFourierSpace),
+			numPhysToFourier_(0),
+			numFourierToPhys_(0),
+			origin_(origin),
+			stepPhys_(stepPhys),
+			stepFourier_(2.*M_PI/(stepPhys_*length_)),
+      minPhys_((-1.)*origin_),
+      maxPhys_(((length_-1)*stepPhys_)-origin_),
+      minFourier_((-1.)*(length_/2.-1)*stepFourier_),
+      maxFourier_((length_/2.)*stepFourier_)
+	{
+		// AR: new version for FFTW3
+		dataAdress_ = &data_[0];
+		planCalculated_ = true;
+		planForward_  = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
+																		reinterpret_cast<fftwl_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+		planBackward_ = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
+																		reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
 
-	Complex FFT1D::phase(const double pos) const
+	 	if (inFourierSpace)
+		{
+			origin_ = minFourier_;
+			dimension_ = maxFourier_ - minFourier_;
+			spacing_ = stepFourier_;
+		}
+	}
+	
+	template <>
+	void TFFT1D<LongDoubleTraits>::clear()
 		throw()
 	{
-	  double phase = 2.*M_PI*(rint(pos/step_fourier_))
-		                     *(rint(origin_/step_phys_))
-		                     /length_;
-
-		Complex result = Complex(cos(phase), sin(phase));
-						
-		return result;
+		TRegularData1D<Complex>::clear();
+		
+		// AR: new version for FFTW3
+    dataAdress_ = 0;
+    length_ = 0;
+    
+    if (planCalculated_)
+    {
+			fftwl_destroy_plan(planForward_);
+			fftwl_destroy_plan(planBackward_);
+			planCalculated_ = false;
+    }
 	}
-}	
+	
+	template <>
+	BALL_INLINE
+	const TFFT1D<LongDoubleTraits>& TFFT1D<LongDoubleTraits>::operator = (const TFFT1D<LongDoubleTraits>& fft1d)
+		throw()
+	{
+		clear();
+		origin_ = fft1d.origin_;
+		dimension_ = fft1d.dimension_;
+		spacing_ = fft1d.spacing_;
+		origin_ = fft1d.origin_;
+		stepPhys_ = fft1d.stepPhys_;
+		stepFourier_ = fft1d.stepFourier_;
+    minPhys_ = ((-1.)*origin_);
+    maxPhys_ = (((length_-1)*stepPhys_)-origin_);
+    minFourier_ = ((-1.)*(length_/2.-1)*stepFourier_);
+    maxFourier_ = ((length_/2.)*stepFourier_);
+    numPhysToFourier_ = fft1d.numPhysToFourier_;
+		numFourierToPhys_ = fft1d.numFourierToPhys_;
+		
+		// AR: new code for FFTW3
+		
+		// if there are old plans, destroy them first...
+		if (planCalculated_)
+		{
+			fftwl_destroy_plan(planForward_);
+			fftwl_destroy_plan(planBackward_);
+		}
+		
+		data_ = fft1d.data_;
+		length_ = fft1d.data_.size();
+		if (length_ != 0)
+		{
+			planCalculated_ = true;
+			dataAdress_ = &data_[0];
+		
+			// ...and calculate new ones
+			planForward_  = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
+																				reinterpret_cast<fftwl_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+			planBackward_ = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
+																				reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+		}
+		else
+		{
+			planCalculated_ = false;
+			dataAdress_ = 0;
+		}
+		
+		return *this;
+	}
+	
+	template <>
+	void TFFT1D<LongDoubleTraits>::destroy()
+		throw()
+	{		
+		TRegularData1D<Complex >::clear();
+		
+		length_ = 0;
+		origin_ = 
+		stepPhys_ = 
+		stepFourier_ = 0.;
+		numPhysToFourier_ = 
+		numFourierToPhys_ = 0;
+    minPhys_ =
+    maxPhys_ =
+    minFourier_ =
+    maxFourier_ = 0.;
+    
+    // AR: new version for FFTW3
+    dataAdress_ = 0;
+    
+    if (planCalculated_)
+    {
+			fftwl_destroy_plan(planForward_);
+			fftwl_destroy_plan(planBackward_);
+			planCalculated_ = false;
+    }
+	}
+	
+	template <>
+	void TFFT1D<LongDoubleTraits>::doFFT()
+		throw()
+	{
+		// AR: new version, if start adress or vector size has changed, recalculate the plans
+		if ((dataAdress_ != &data_[0]) || (length_ != data_.size()))
+		{
+			// AR: if there are any old plans, destroy them
+			if (planCalculated_)
+			{
+				fftwl_destroy_plan(planForward_);
+				fftwl_destroy_plan(planBackward_);
+			}
+			
+			length_ = data_.size();
+			if (length_ != 0)
+			{
+				dataAdress_ = &data_[0];
+				planCalculated_ = true;
+				planForward_  = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
+																				reinterpret_cast<fftwl_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+				planBackward_ = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
+																				reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+			}
+			else
+			{
+				dataAdress_ = 0;
+				planCalculated_ = false;
+				
+				// AR: if there are no data return without doing anything but update 'dataAdress_' and the flag
+				//     Clear fft1d in that case?
+				return;
+			}				
+		}
+		
+		fftwl_execute(planForward_);
+		
+		// AR: old version
+		//fftw_one(planForward_, reinterpret_cast<fftw_complex*>(&(*data_.begin())), 0);
+		inFourierSpace_ = true;
+		numPhysToFourier_++;
+	}
+	
+	template <>
+	void TFFT1D<LongDoubleTraits>::doiFFT()
+		throw()
+	{
+		// AR: new version, if vector size or start adress has changed, recalculate the plans
+		if ((dataAdress_ != &data_[0]) || (length_ != data_.size()))
+		{
+			// AR: if there are any old plans, destroy them
+			if (planCalculated_)
+			{
+				fftwl_destroy_plan(planForward_);
+				fftwl_destroy_plan(planBackward_);
+			}
+			
+			length_ = data_.size();
+			if (length_ != 0)
+			{
+				dataAdress_ = &data_[0];
+				planCalculated_ = true;
+				planForward_  = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
+																				reinterpret_cast<fftwl_complex*>(dataAdress_),  FFTW_FORWARD,  FFTW_ESTIMATE);
+				planBackward_ = fftwl_plan_dft_1d(length_, reinterpret_cast<fftwl_complex*>(dataAdress_), 
+																				reinterpret_cast<fftwl_complex*>(dataAdress_), FFTW_BACKWARD, FFTW_ESTIMATE);
+			}
+			else
+			{
+				dataAdress_ = 0;
+				planCalculated_ = false;
+				
+				// AR: if there are no data return without doing anything but update 'dataAdress_' and the flag
+				//     Clear fft1d in that case?
+				return;
+			}				
+		}
+		
+		fftwl_execute(planBackward_);
+		
+		// AR: old version
+		// Is this cast vector -> array portable?
+		//fftw_one(planBackward_, reinterpret_cast<fftw_complex*>(&(*data_.begin())), 0);
+		inFourierSpace_ = false;
+		numFourierToPhys_++;
+	}
+	
+#endif // BALL_HAS_FFTW_LONG_DOUBLE
+	
+}
