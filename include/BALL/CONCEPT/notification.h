@@ -1,4 +1,4 @@
-// $Id: notification.h,v 1.2 1999/10/30 12:53:21 oliver Exp $
+// $Id: notification.h,v 1.3 2000/01/07 21:51:56 oliver Exp $
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H
@@ -213,7 +213,7 @@ namespace BALL
 
 		/**
 		*/
-		virtual bool onNotify(NotificationSource &) = 0;
+		virtual bool onNotify(NotificationSource& source) = 0;
 
 		/**
 		*/
