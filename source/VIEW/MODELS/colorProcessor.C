@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.31.2.4 2005/01/12 22:10:27 amoll Exp $
+// $Id: colorProcessor.C,v 1.31.2.5 2005/01/12 22:27:25 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -105,8 +105,7 @@ namespace BALL
 					return Processor::CONTINUE;
 				}
 
-				if (!atom_grid_created_ || 
-						(composite != 0 && last_composite_of_grid_ != composite))
+				if (composite != last_composite_of_grid_)
 				{
 					createAtomGrid_(composite);
 				}
@@ -115,11 +114,12 @@ namespace BALL
 				return Processor::CONTINUE;
 			}
 
+			ColorExtension2* const two_colored = dynamic_cast<ColorExtension2*>(object);
+
 			if (composite == 0 ||
 					composite == &composite_to_be_ignored_for_colorprocessors_)
 			{
 				object->setColor(default_color_); 
-				ColorExtension2* const two_colored = dynamic_cast<ColorExtension2*>(object);
 				if (two_colored != 0)
 				{
 					two_colored->setColor2(default_color_);
@@ -127,7 +127,6 @@ namespace BALL
 				return Processor::CONTINUE;
 			}
 
-			ColorExtension2* const two_colored = dynamic_cast<ColorExtension2*>(object);
 			if (two_colored == 0)
 			{
 				if (composite->isSelected())
@@ -185,7 +184,6 @@ namespace BALL
 		void ColorProcessor::createAtomGrid_(const Composite* from_mesh)
 			throw()
 		{
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			atom_grid_.clear();
 			if (composites_ == 0 && from_mesh == 0)
 			{
@@ -254,17 +252,13 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 				atom_grid_.insert((*lit)->getPosition(), *lit);
 			}
 
-			atom_grid_created_ = true;
 			last_composite_of_grid_ = from_mesh;
 		}
 
 		void ColorProcessor::colorMeshFromGrid_(Mesh& mesh)
 			throw()
 		{
-			if (!atom_grid_created_ || atom_grid_.isEmpty())
-			{
-				return;
-			}
+			if (atom_grid_.isEmpty()) return;
 			
 			mesh.colorList.resize(mesh.vertex.size());
 			
@@ -294,9 +288,7 @@ Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<<
 		void ColorProcessor::clearAtomGrid()
 			throw()
 		{
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			atom_grid_.clear();
-			atom_grid_created_ = false;
 		}
 
 		void ColorProcessor::setDefaultColor(const ColorRGBA& color)

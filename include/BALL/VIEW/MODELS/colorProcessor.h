@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.27.2.2 2005/01/12 20:50:24 amoll Exp $
+// $Id: colorProcessor.h,v 1.27.2.3 2005/01/12 22:27:52 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -167,6 +167,14 @@ class BALL_EXPORT ColorProcessor
 	void clearAtomGrid()
 		throw();
 
+	///
+	void setAdditionalGridDistance(float distance)
+		throw() { additional_grid_distance_ = distance;}
+
+	///
+	float getAdditionalGridDistance() const
+		throw() { return additional_grid_distance_;}
+
 	//@} 
 	/**	@name	debuggers and diagnostics 
 	*/ 
@@ -213,8 +221,9 @@ class BALL_EXPORT ColorProcessor
 	const 			CompositeSet* composites_;
 
 	AtomGrid 		atom_grid_;
-	bool 				atom_grid_created_;
 	ModelType   model_type_;
+	const Composite*  last_composite_of_grid_;
+	float 			additional_grid_distance_;
 	//@}
 };
 
