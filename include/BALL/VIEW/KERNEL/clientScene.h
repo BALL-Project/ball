@@ -1,4 +1,4 @@
-// $Id: clientScene.h,v 1.4 1999/12/28 18:37:45 oliver Exp $
+// $Id: clientScene.h,v 1.5 2000/01/13 22:23:16 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENTSCENE_H
 #define BALL_VIEW_KERNEL_CLIENTSCENE_H
@@ -49,7 +49,7 @@ namespace BALL
 			*/
 			ClientScene();
 
-			ClientScene(char *host, int port, SceneHandle scenehandle);
+			ClientScene(const String& host, int port, SceneHandle scenehandle);
 
 			/** Copy constructor.
 					Construct new clientscene by copying the clientscene {\em atom}.
@@ -136,8 +136,8 @@ namespace BALL
 			
 			private:
 
-			char *host_;
-			int port_;
+			String	host_;
+			int			port_;
 			SceneHandle scenehandle_;
 			TextPersistenceManager pm_;
 		};
