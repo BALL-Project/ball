@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.25 2001/06/28 18:35:10 amoll Exp $
+// $Id: bond.h,v 1.26 2001/06/28 21:03:47 amoll Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -53,7 +53,6 @@ namespace BALL
 				\item "bond order" (\Ref{Bond::bond_order_})
 				\item "bond type" (\Ref{Bond::bond_type_})
 			\end{itemize}
-			\\
 			{\bf Definition:} \URL{BALL/KERNEL/bond.h}\\
 	*/
 	class Bond
