@@ -2,10 +2,10 @@
 // vi: set ts=2:
 //
 
-#ifndef BALL_VIEW_DIALOGS_AMBERMINIMIZATIONDIALOG_H
-#define BALL_VIEW_DIALOGS_AMBERMINIMIZATIONDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_MINIMIZATIONDIALOG_H
+#define BALL_VIEW_DIALOGS_MINIMIZATIONDIALOG_H
 
-#include <BALL/VIEW/UIC/amberMinimizationDialogData.h>
+#include <BALL/VIEW/UIC/minimizationDialogData.h>
 
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/SYSTEM/path.h>
@@ -20,18 +20,18 @@ namespace BALL
 /** Dialog for performing energy minimisations
 		\ingroup ViewDialogs
 */
-class AmberMinimizationDialog 
-	: public AmberMinimizationDialogData
+class MinimizationDialog 
+	: public MinimizationDialogData
 {
     Q_OBJECT
 
 		public:
 
 		///
-    AmberMinimizationDialog(QWidget* parent = NULL, const char* name = NULL );
+    MinimizationDialog(QWidget* parent = NULL, const char* name = NULL );
 
 		///
-    virtual ~AmberMinimizationDialog();
+    virtual ~MinimizationDialog();
 
 		///
 		void writePreferences(INIFile& inifile) const;
