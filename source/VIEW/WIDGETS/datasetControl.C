@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.24 2004/04/21 15:06:14 amoll Exp $
+// $Id: datasetControl.C,v 1.25 2004/06/10 16:49:38 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -162,7 +162,7 @@ void DatasetControl::onNotify(Message *message)
 	if (RTTI::isKindOf<RegularData3DMessage>(*message))
 	{
 		RegularData3DMessage* ntm = RTTI::castTo<RegularData3DMessage>(*message);
-		insertGrid_(ntm->getRegularData3D(), (System*)ntm->getComposite(), ntm->getCompositeName());
+		insertGrid_(ntm->getData(), (System*)ntm->getComposite(), ntm->getCompositeName());
 		return;
 	}
 	else if (RTTI::isKindOf<NewTrajectoryMessage>(*message))
@@ -219,7 +219,7 @@ void DatasetControl::deleteItem_(QListViewItem& item)
 		RegularData3D* ssm = item_to_grid_[&item];
 
 		RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::REMOVE);
-		msg->setRegularData3D(*ssm);
+		msg->setData(*ssm);
 		notify_(msg);
 
 		item_to_grid_.erase(&item);
@@ -320,7 +320,7 @@ void DatasetControl::add3DGrid()
 	infile.close();
 	insertGrid_(dat, 0, String(result.ascii()));
 	RegularData3DMessage* msg = new RegularData3DMessage(RegularData3DMessage::NEW);
-	msg->setRegularData3D(*dat);
+	msg->setData(*dat);
 	msg->setCompositeName(result.ascii());
 	notify_(msg);
 }
@@ -381,7 +381,7 @@ void DatasetControl::updateSelection()
 		if (item->isSelected() &&
 				item_to_grid_.has(item))
 		{
-			message->setRegularData3D(*item_to_grid_[item]);
+			message->setData(*item_to_grid_[item]);
 			message->setCompositeName(item->text(0).ascii());
 			break;
 		}

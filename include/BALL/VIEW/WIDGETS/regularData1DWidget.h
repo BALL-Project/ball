@@ -1,12 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.h,v 1.9 2004/06/10 16:09:35 amoll Exp $
+// $Id: regularData1DWidget.h,v 1.10 2004/06/10 16:51:19 amoll Exp $
 //
-
-#ifndef BALL_VIEW_KERNEL_MESSAGE_H
-# include <BALL/VIEW/KERNEL/message.h>
-#endif
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
 # include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -26,49 +22,7 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/**  RegularData1D Message
-				\ingroup ViewWidgets
-		 */
-		class BALL_EXPORT RegularData1DMessage 
-			: public Message
-		{
-		 public:
-			 
-			/**  @name Constructors and Destructors
-			 */
-			//@{
-			
-			///
-			RegularData1DMessage()
-				throw()
-			{}
-
-			///
-			RegularData1DMessage(const RegularData1DMessage& message)
-				throw(){}
-
-			///
-			virtual ~RegularData1DMessage()
-				throw() {}
-
-			///
-			void setData(RegularData1D* data)
-				throw() { data_ = data;}
-
-			///
-			RegularData1D* getData() 
-				throw() { return data_;}
-
-		 protected:
-
-			RegularData1D* data_;
-			
-			//@}
-		};
-
-
 		/** Widget used to display one-dimensional data.
-		 		WARNING: This code is still under heavy development, no warranty given.
 		 		\ingroup ViewWidgets
 		 */
 		class BALL_EXPORT RegularData1DWidget
@@ -109,12 +63,13 @@ namespace BALL
 			void createPolygon()
 				throw();
 			
-		protected:
+			protected:
+
 			const RegularData1D* data_;
 			QColor diagram_color_;
 			QColor background_color_;
 			QColor axis_color_;
-		}; //end of class RegularData1DWidget
+		}; 
 
 	} //end of namespace VIEW
 }//end of namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.35 2004/06/03 14:40:16 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.36 2004/06/10 16:44:58 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -544,11 +544,11 @@ void ColorMeshDialog::onNotify(Message *message)
 	switch (rm->getType())
 	{
 		case RegularData3DMessage::NEW:
-			insertGrid_(*rm->getRegularData3D(), rm->getCompositeName());
+			insertGrid_(*rm->getData(), rm->getCompositeName());
 			return;
 
 		case RegularData3DMessage::REMOVE:
-			removeGrid_(*rm->getRegularData3D());
+			removeGrid_(*rm->getData());
 			return;
 		
 		default:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.13 2004/05/27 19:50:01 oliver Exp $
+// $Id: FDPBDialog.C,v 1.14 2004/06/10 16:43:44 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -258,7 +258,7 @@ namespace BALL
 			fdpb_.setup(*system_, options_);
 			fdpb_.solve();
 			RegularData3DMessage* message = new RegularData3DMessage(RegularData3DMessage::NEW); 
-			message->setRegularData3D(*fdpb_.phi_grid);
+			message->setData(*fdpb_.phi_grid);
 			message->setComposite(*system_);
 			message->setCompositeName("FDPB_" + system_->getName());
 			notify_(message);

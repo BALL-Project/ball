@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.50 2004/06/10 16:41:05 amoll Exp $
+// $Id: message.h,v 1.51 2004/06/10 16:42:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -664,6 +664,19 @@ class BALL_EXPORT NewTrajectoryMessage
 		TrajectoryFile* file_;
 };
 
+
+/** Message send by one GenericControl to notify all other GenericControl instances to
+ 		deselect their QListView.
+*/
+class BALL_EXPORT DeselectControlsMessage
+	: public Message
+{
+	public:
+		DeselectControlsMessage()
+			: Message() {};
+};
+
+
 /// Message concerning RegularDatas
 class BALL_EXPORT RegularDataMessage
 	:public CompositeMessage
@@ -691,8 +704,10 @@ class BALL_EXPORT RegularDataMessage
 
 /// Message concerning RegularData1D
 class BALL_EXPORT RegularData1DMessage
-:public RegularDataMessage
+	: public RegularDataMessage
 {
+	public:
+
 	///
 	RegularData1DMessage(RegularDataMessageType type = UNDEFINED)
 		throw();
@@ -705,15 +720,17 @@ class BALL_EXPORT RegularData1DMessage
 	RegularData1D* getData()
 		throw() { return data_;}
 
-protected:
+	protected:
 	RegularData1D* data_;
 };
 
 
 /// Message concerning RegularData2D
 class BALL_EXPORT RegularData2DMessage
-:public RegularDataMessage
+	: public RegularDataMessage
 {
+	public:
+
 	///
 	RegularData2DMessage(RegularDataMessageType type = UNDEFINED)
 		throw();
@@ -726,15 +743,17 @@ class BALL_EXPORT RegularData2DMessage
 	RegularData2D* getData()
 		throw() { return data_;}
 
-protected:
+	protected:
 	RegularData2D* data_;
 };
 
 
 /// Message concerning RegularData3D
 class BALL_EXPORT RegularData3DMessage
-:public RegularDataMessage
+	: public RegularDataMessage
 {
+	public:
+
 	///
 	RegularData3DMessage(RegularDataMessageType type = UNDEFINED)
 		throw();
@@ -747,19 +766,8 @@ class BALL_EXPORT RegularData3DMessage
 	RegularData3D* getData()
 		throw() { return data_;}
 
-protected:
+	protected:
 	RegularData3D* data_;
-};
-
-/** Message send by one GenericControl to notify all other GenericControl instances to
- 		deselect their QListView.
-*/
-class BALL_EXPORT DeselectControlsMessage
-	: public Message
-{
-	public:
-		DeselectControlsMessage()
-			: Message() {};
 };
 
 //@}

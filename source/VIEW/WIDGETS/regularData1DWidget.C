@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.12 2004/06/10 16:02:29 amoll Exp $
+// $Id: regularData1DWidget.C,v 1.13 2004/06/10 16:51:00 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
+#include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/limits.h>
 
 namespace BALL
@@ -136,7 +137,23 @@ void RegularData1DWidget::onNotify(Message *message)
 	RegularData1DMessage& msg = *(RegularData1DMessage*) message;
 	if (msg.getData() != data_) return;
 
-	createPolygon();
+	if ((RegularData1DMessage::RegularDataMessageType) msg.getType() 
+				== RegularData1DMessage::UPDATE)
+	{
+		createPolygon();
+	}
+	else if ((RegularData1DMessage::RegularDataMessageType) msg.getType() 
+							== RegularData1DMessage::REMOVE)
+	{
+		data_ = 0;
+
+    QCanvasItemList list = canvas()->allItems();
+    QCanvasItemList::Iterator it = list.begin();
+    for (; it != list.end(); ++it) 
+		{
+      if ( *it ) delete *it;
+    }
+	}
 }
 
 	}//end of namespace VIEW

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.49 2004/06/04 12:44:27 amoll Exp $
+// $Id: molecularStructure.C,v 1.50 2004/06/10 16:51:00 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -546,7 +546,7 @@ namespace BALL
 			RegularData3DMessage* message = new RegularData3DMessage(RegularData3DMessage::NEW);
 			message->setComposite(S);
 			message->setCompositeName(S.getName() + "_distance");
-			message->setRegularData3D(*regdat);
+			message->setData(*regdat);
 			notify_(message);
 
 			setStatusbarText("done");
