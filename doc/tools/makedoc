@@ -1,5 +1,5 @@
 #!/usr/local/bin/bash
-# $Id: makedoc,v 1.5 2001/07/17 09:45:24 amoll Exp $
+# $Id: makedoc,v 1.6 2001/07/17 12:12:51 amoll Exp $
 
 # This script is used to build the BALL-documentation.
 # It can receive "complete", "html", and "tex" as first parameter to
@@ -18,7 +18,7 @@
 
 makedoc_init ()
 {
-	DOCPP_HTML_OPTIONS_DEFAULT="-u -m -w -W -v -ep amsmath -ei -ep graphicx -G -eo 11pt"
+	DOCPP_HTML_OPTIONS_DEFAULT="-u -m -w -W -v -ep amsmath -ei -ep graphicx -G -eo 11pt -f -B banner.inc -d ."
 	 DOCPP_TEX_OPTIONS_DEFAULT="-u -m -w -W -v -ep amsmath -ei -ng -X -D 3 -t -o"
 
 	#=================== Path to BALL ==================================
@@ -116,7 +116,7 @@ build_html_docu ()
 			sed "s/@DATE@/${DATE}/" > `basename $i`
 	done
 	
-	$DOCPP_PATH $DOCPP_HTML_OPTIONS . $BALL_PATH/include/BALL/BALL.doc
+	$DOCPP_PATH $DOCPP_HTML_OPTIONS $BALL_PATH/include/BALL/BALL.doc
 }
 
 #=============================== TEX =================================
