@@ -1,4 +1,4 @@
-// $Id: AnalyticalSES_test.C,v 1.2 2000/05/23 10:23:45 oliver Exp $
+// $Id: AnalyticalSES_test.C,v 1.3 2000/05/30 10:29:16 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,14 +6,14 @@
 #include <BALL/KERNEL/fragment.h>
 ///////////////////////////
 
-START_TEST(AnalyticalSES, "$Id: AnalyticalSES_test.C,v 1.2 2000/05/23 10:23:45 oliver Exp $")
+START_TEST(AnalyticalSES, "$Id: AnalyticalSES_test.C,v 1.3 2000/05/30 10:29:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-CHECK(calculateSESArea(const	Composite&, float))
+CHECK(calculateSESArea(const BaseFragment&, float))
 Fragment	f;
 Atom a1, a2;
 a1.setRadius(1.0);
@@ -34,8 +34,6 @@ area = calculateSESArea(f, 1.5);
 TEST_REAL_EQUAL(area, 18.722)
 
 RESULT
-
-
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
