@@ -1,4 +1,4 @@
-// $Id: surfaceProcessor.h,v 1.6 2000/12/08 05:48:28 oliver Exp $
+// $Id: surfaceProcessor.h,v 1.7 2000/12/08 14:48:03 strobel Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -68,8 +68,8 @@ namespace BALL
 	{
 		double old_epsilon = Constants::EPSILON;
 		Constants::EPSILON = 1e-4;
-				// cout << "probe radius:    "; cin >> probe_radius_;
-				probe_radius_ = 1.4;
+		                probe_radius_ = 1.5;
+				/*cout << "probe radius:    "; cin >> probe_radius_;
 				spheres_.clear();
 				char* filename;
 				string name;
@@ -98,15 +98,15 @@ namespace BALL
 					{
 						spheres_.push_back(Sphere3(Vector3(x,y,z),std_radius));
 					}
-				}
+				}*/
 				std::cerr << "initialising reduced surface ...\n";
 
 		ReducedSurface* rs = new ReducedSurface(spheres_,probe_radius_);
 				std::cerr << "... ok\ncomputing reduced surface ...\n";
 		rs->compute();
-				std::ofstream rsfile("ReducedSurface.log");
+				/*std::ofstream rsfile("ReducedSurface.log");
 				rsfile << *rs;
-				rsfile.close();
+				rsfile.close();*/
 				/*for (Position p = 0; p < rs->numberOfVertices(); p++)
 				{
 					Index atom = rs->getVertex(p)->getAtom();
@@ -140,9 +140,9 @@ namespace BALL
 		SolventExcludedSurface* ses = new SolventExcludedSurface(rs);
 				std::cerr << "... ok\ncomputing solvent excluded surface ...\n";
 		ses->get(rs);
-				std::ofstream sesfile("SolventExcludedSurface.log");
+				/*std::ofstream sesfile("SolventExcludedSurface.log");
 				sesfile << *ses;
-				sesfile.close();
+				sesfile.close();*/
 				std::cerr << "... ok\ntreating singularities ...\n";
 		//TreatSingularities(ses,probe_radius_);
 				density_ = 0.25;
@@ -200,3 +200,10 @@ namespace BALL
 	}
 
 }
+
+
+
+
+
+
+
