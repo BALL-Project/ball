@@ -1,4 +1,4 @@
-// $Id: directory.h,v 1.8 2000/07/04 08:16:27 oliver Exp $
+// $Id: directory.h,v 1.9 2000/07/04 14:24:40 oliver Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -19,10 +19,7 @@
 #	include <BALL/SYSTEM/fileSystem.h>
 #endif
 
-
-// forward declarations instead of include <dirent.h>
-class DIR; 
-class dirent; 
+#include <dirent.h>
 
 namespace BALL 
 {
