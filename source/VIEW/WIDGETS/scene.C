@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.168 2005/02/24 15:52:34 amoll Exp $
+// $Id: scene.C,v 1.169 2005/03/01 16:46:28 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -2244,6 +2244,18 @@ namespace BALL
 		void Scene::dragEnterEvent(QDragEnterEvent* event)
 		{
 			event->accept(QTextDrag::canDecode(event));
+		}
+
+
+		bool Scene::stereoBufferSupportTest()
+		{
+			QGLFormat test_format(QGL::DepthBuffer | QGL::StereoBuffers | QGL::DoubleBuffer);
+			QGLWidget* gl_test = new QGLWidget(test_format, 0);
+			gl_test->makeCurrent();
+			bool supports =  gl_test->isValid();
+			delete gl_test;
+			if (supports) gl_format_ = (QGL::DepthBuffer | QGL::DoubleBuffer);
+			return supports;
 		}
 
 } }// namespaces

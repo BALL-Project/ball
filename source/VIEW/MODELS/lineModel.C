@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.C,v 1.10 2004/09/27 15:29:16 oliver Exp $
+// $Id: lineModel.C,v 1.11 2005/03/01 16:49:00 amoll Exp $
 
 #include <BALL/VIEW/MODELS/lineModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -78,6 +78,8 @@ namespace BALL
 		void AddLineModel::visualiseBond_(const Bond& bond)
 			throw()
 		{
+			if (bond.getType() == Bond::TYPE__HYDROGEN) return;
+
 			// generate two colored tube
 			TwoColoredLine *line = new TwoColoredLine;
 

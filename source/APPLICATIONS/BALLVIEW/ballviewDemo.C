@@ -175,7 +175,7 @@ void BALLViewDemo::accept()
 	else if (id == 7)
 	{
 		HBondProcessor proc;
-	 	system_->apply(proc); 
+ 	 	system_->apply(proc); 
    	CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
    	notify_(crmsg);
  		crmsg = new CreateRepresentationMessage(composites_, MODEL_HBONDS, COLORING_ELEMENT);
@@ -292,7 +292,7 @@ void BALLViewDemo::accept()
 		
 	}
 
-	buttonOk->setEnabled(true);
+	buttonOk->setEnabled(!disable_button);
 }
 
 

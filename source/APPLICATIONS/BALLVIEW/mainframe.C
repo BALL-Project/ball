@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.53 2005/02/28 19:22:13 amoll Exp $
+// $Id: mainframe.C,v 1.54 2005/03/01 16:46:25 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -88,6 +88,7 @@ namespace BALL
 		dataset_control_ = new DatasetControl(this, "Datasets");
 		CHECK_PTR(dataset_control_);
 
+		Scene::stereoBufferSupportTest();
 		scene_ = new Scene(this, "3D View");
 		CHECK_PTR(scene_);
 		scene_->setMinimumSize(10, 10);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.61 2005/02/27 21:39:40 amoll Exp $
+// $Id: scene.h,v 1.62 2005/03/01 16:46:34 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -419,6 +419,9 @@ namespace BALL
 			/// 
 			GLRenderer& getGLRenderer()
 				throw() { return gl_renderer_;}
+
+			///
+			static bool stereoBufferSupportTest();
 			
 			protected:
 
