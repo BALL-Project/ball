@@ -1,4 +1,4 @@
-// $Id: regExp.iC,v 1.4 2000/12/04 18:19:13 amoll Exp $
+// $Id: regExp.iC,v 1.5 2000/12/05 10:28:00 amoll Exp $
 
 BALL_INLINE 
 void RegularExpression::set(const RegularExpression& regular_expression, bool /* deep */)
@@ -22,6 +22,7 @@ void RegularExpression::set(const String& pattern, bool wildcard_pattern) throw(
 	compilePattern_();
 }
 
+BALL_INLINE 
 const RegularExpression& RegularExpression::operator = (const RegularExpression& expression) 
 	throw()
 {
