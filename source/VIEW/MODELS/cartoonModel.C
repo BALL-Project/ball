@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.13 2005/01/04 23:12:36 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.14 2005/01/05 15:29:27 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -870,7 +870,7 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 	////////////////////////////////////////////////////////////
 	Mesh::Triangle t;
 	Size s_old = 2;  // start position of the last points in the meshs vertices
-	Size s_new = 0;  // start position of the  new points in the meshs vertices
+	Size s_new = 2;  // start position of the  new points in the meshs vertices
 
 	//------------------------------------------------------>
 	// iterate over all spline_points_
@@ -922,14 +922,14 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 			geometric_objects_.push_back(mesh);
 
 			// insert the vertices and normals of the last points again into the new mesh
-			for (Position point_pos = old_mesh->vertex.size() - slides * 2 - 2;
+			for (Position point_pos = old_mesh->vertex.size() - (slides * 2 + 2);
 										point_pos < old_mesh->vertex.size(); point_pos++)
 			{
 				mesh->vertex.push_back(old_mesh->vertex[point_pos]);
 				mesh->normal.push_back(old_mesh->normal[point_pos]);
 			}
 
-			s_old = 0;
+			s_old = 2;
 		}
 		
 		
@@ -939,15 +939,16 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		mesh->vertex.push_back(point - helix_dir);
 		mesh->normal.push_back(r_new);
 
-		const Size s = mesh->vertex.size() - 1;
-		t.v1 = s - slides - 2;
-		t.v2 = s - slides - 1;
-		t.v3 = s;
+		const Size sn = mesh->vertex.size() - 2;
+		const Size so = mesh->vertex.size() - 2 - slides * 2 - 2;
+		t.v1 = sn;
+		t.v2 = so + 1;
+		t.v3 = so;
  		mesh->triangle.push_back(t);
 
-		t.v1 = s - slides - 1;
-		t.v2 = s;
-		t.v3 = s - 1;
+		t.v1 = sn;
+		t.v2 = sn + 1;
+		t.v3 = so + 1;
  		mesh->triangle.push_back(t);
 
 
@@ -956,10 +957,6 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		////////////////////////////////////////////////////////////
 		// we will add an other point next, so here we do an off by one :)
 		s_new = mesh->vertex.size();
-
-		helix_dir = r_new;
-		helix_dir.normalize();
-		helix_dir *= (ribbon_width_ * 0.5);
 
 		//------------------------------------------------------>
 		// iterate over all points of the circle
@@ -972,12 +969,12 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 			t.v1 = s_old;			// last lower
 			t.v2 = s_old + 2;	// last upper
 			t.v3 = s_new;			// new upper
-			mesh->triangle.push_back(t);
+ 			mesh->triangle.push_back(t);
 
 			t.v1 = s_new;			// new upper
 			t.v2 = s_new - 2;	// new lower
 			t.v3 = s_old; 		// last lower
-			mesh->triangle.push_back(t);
+ 			mesh->triangle.push_back(t);
 
 			s_old++;
 			s_new++;
@@ -988,12 +985,12 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 			t.v1 = s_old;			// last lower
 			t.v2 = s_old + 2;	// last upper
 			t.v3 = s_new;			// new upper
-			mesh->triangle.push_back(t);
+ 			mesh->triangle.push_back(t);
 
 			t.v1 = s_new;			// new upper
 			t.v2 = s_new - 2;	// new lower
 			t.v3 = s_old; 		// last lower
-			mesh->triangle.push_back(t);
+ 			mesh->triangle.push_back(t);
 
 			s_old++;
 			s_new++;
