@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.18 2000/04/17 19:20:45 oliver Exp $
+// $Id: atom.C,v 1.19 2000/04/17 19:36:03 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -219,41 +219,6 @@ namespace BALL
 		atom.number_of_bonds_ = temp_c;
 	}
 		
-	Molecule* Atom::getMolecule()
-	{
-		return Composite::getAncestor(RTTI::getDefault<Molecule>());
-	}
-
-	const Molecule* Atom::getMolecule() const
-	{
-		return ((Atom *)this)->getMolecule();
-	}
-
-	Fragment* Atom::getFragment()
-	{
-		return Composite::getAncestor(RTTI::getDefault<Fragment>());
-	}
-
-	const Fragment *Atom::getFragment() const
-	{
-		return ((Atom *)this)->getFragment();
-	}
-
-	void Atom::setName(const String &name)
-	{
-		name_ = name;
-	}
-
-	String& Atom::getName()
-	{
-		return name_;
-	}
-
-	const String& Atom::getName() const
-	{
-		return name_;
-	}
-
 	String Atom::getFullName(Atom::FullNameType type) const
 	{
 		// determine the parent`s name
