@@ -1,4 +1,4 @@
-// $Id: PTE.h,v 1.8 2000/08/30 19:58:05 oliver Exp $
+// $Id: PTE.h,v 1.9 2000/12/08 05:47:51 oliver Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -57,7 +57,7 @@ namespace BALL
 	{
 		public:
 
-			BALL_CREATE_DEEP(Element)
+			BALL_CREATE(Element)
 
 			/**		Group
 			*/
@@ -77,7 +77,7 @@ namespace BALL
 			enum Name
 			{
 				ACTINIUM = 0,
-				ALUMINIUM,
+				ALUMINUM,
 				AMERICIUM,
 				ANTIMONY, STIBIUM = ANTIMONY,
 				ARGON,
@@ -331,7 +331,7 @@ namespace BALL
 
 			/**	Constructor
 			*/
-			Element(const Element& element, bool deep = true);
+			Element(const Element& element);
 
 			/**	Detailed constructor
 			*/
@@ -621,7 +621,7 @@ namespace BALL
 	{
 		public:
 
-			BALL_CREATE_DEEP(PTE_)
+			BALL_CREATE(PTE_)
 
 			/**	
 			*/
@@ -640,7 +640,7 @@ namespace BALL
 
 			/**	Default constructor
 			*/
-			PTE_(const PTE_& pse, bool deep);
+			PTE_(const PTE_& pse);
 
 			/**	Destructor
 			*/
