@@ -1,4 +1,4 @@
-// $Id: system.sip,v 1.5 2003/03/29 12:43:39 oliver Exp $
+// $Id: system.sip,v 1.6 2003/04/20 12:46:13 oliver Exp $
 
 class System
   : AtomContainer,
@@ -48,7 +48,7 @@ class System
 %MemberCode
     System *ptr;
 
-    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_Atom,&ptr))
+    if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_System,&ptr))
     {
 		  return PyString_FromString(String(String("System ") + ptr->getName() 
 							+ " { " + String(ptr->countMolecules()) + " molecules,  " 

@@ -1,4 +1,4 @@
-// $Id: copying.sip,v 1.1 2001/12/27 00:25:43 oliver Exp $
+// $Id: copying.sip,v 1.2 2003/04/20 12:46:12 oliver Exp $
 
 %Copying
 You are installing the RESEARCH version (BALL-R) of BALL that can
@@ -18,7 +18,7 @@ For more information about the license terms please contact
                  66041 Saarbruecken 
                  Germany
                  http://www.algorithmic-solutions.com
-                 email:leda@algorithmic-solutions.com
+                 email: ball@algorithmic-solutions.com
                  fax: +49 681 842502
 
 You are allowed to continue with the installation of BALL only if you are 

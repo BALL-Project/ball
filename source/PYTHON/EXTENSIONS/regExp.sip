@@ -1,4 +1,4 @@
-// $Id: regExp.sip,v 1.3 2001/12/27 11:47:18 oliver Exp $
+// $Id: regExp.sip,v 1.4 2003/04/20 12:46:12 oliver Exp $
 
 class RegularExpression
 {
@@ -32,9 +32,7 @@ class RegularExpression
   void get(RegularExpression& /regular_expression/, bool /deep/ = true) const;
   const String& getPattern() const;
   Size countSubexpressions() const;
-  //static bool match
-  // (const char* /text/, const char* /pattern/,
-  //  int /compile_flags/ = 0, int /execute_flags/ = 0 );
+  bool match(const char* /text/, const char* /pattern/, int /compile_flags/ = 0, int /execute_flags/ = 0 );
   bool match(const String& /text/, Index /from/ = 0, int /execute_flags/ = 0 ) const;
   bool match(const Substring& /text/, Index /from/ = 0, int /execute_flags/ = 0) const;
   bool match(const char* /text/, int /execute_flags/ = 0) const;

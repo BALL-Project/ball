@@ -1,7 +1,7 @@
 #!/usr/bin/env /opt/bin/python2.1
 from ClassTest import *
 
-START_TEST('ClassTest')
+START_TEST('ClassTest', '$Id')
 
 CHECK('TEST_EQUAL')
 try:

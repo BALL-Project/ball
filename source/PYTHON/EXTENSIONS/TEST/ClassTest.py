@@ -67,10 +67,11 @@ class Status:
 			else:
 				print " - FAILED"
 
-	def startTest(self, args):
+	def startTest(self, name, id):
 		self.all_passed = true
 		if self.verbose:
-			print "running class tests for",args
+			print "running class tests for", name
+			print "(version: %s)" % id
 
 	def endTest(self):
 		if self.all_passed:
@@ -88,8 +89,8 @@ class Status:
 
 status = Status()
 
-def START_TEST(args):
-	status.startTest(args)
+def START_TEST(name, id):
+	status.startTest(name, id)
 
 def END_TEST():
 	status.endTest()

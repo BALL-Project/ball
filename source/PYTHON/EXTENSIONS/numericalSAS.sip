@@ -1,4 +1,4 @@
-// $Id: numericalSAS.sip,v 1.4 2002/12/12 11:00:19 oliver Exp $
+// $Id: numericalSAS.sip,v 1.5 2003/04/20 12:46:12 oliver Exp $
 
 %HeaderCode
 	#include <BALL/STRUCTURE/numericalSAS.h>
@@ -13,7 +13,6 @@ PyAtomDict& calculateSASAtomAreas
      (const AtomContainer& /fragment/, float /probe_radius/ = 1.5, Size /number_of_dots/ = 400);
 %MemberCode
 	const AtomContainer *a0;
-	PyObject *a0obj;
 	float a1 = 1.5;
 	Size a2 = 400;
 

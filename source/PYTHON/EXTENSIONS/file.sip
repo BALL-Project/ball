@@ -1,4 +1,4 @@
-// $Id: file.sip,v 1.7 2003/03/28 14:53:53 oliver Exp $
+// $Id: file.sip,v 1.8 2003/04/20 12:46:12 oliver Exp $
 
 class std__openmode
 {
@@ -32,34 +32,6 @@ class File
   ~File();
 	// default open mode: IN
   bool open(const String&, File::OpenMode /openmode/ = std::ios::in);
-%MemberCode
-
-    const String* a0;
-		int a0IsTemp = 0;
-    File::OpenMode a1 = std::ios::in;
-
-    File* ptr = 0;
-    if (sipParseArgs(&sipArgsParsed,sipArgs,"mM1i",sipThisObj, sipClass_File,&ptr,
-										sipConvertTo_String,&a0,&a0IsTemp,
-										&a1))
-    {
-      bool res;
-
-      res = ptr -> File::open(*a0, a1);
-
-			if (res == false)
-			{
-				Log.error() << "Cannot open file " << *a0 << std::endl;
-			}
-
-      if (a0IsTemp)
-			{
-				delete a0;
-			}
-
-      return sipConvertFromBool((int)res);
-    }
-%End
 
   bool reopen();
   void close();

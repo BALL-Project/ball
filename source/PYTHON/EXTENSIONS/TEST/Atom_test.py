@@ -1,7 +1,7 @@
 #!/usr/bin/env /opt/bin/python2.1
 from ClassTest import *
 
-START_TEST('Atom::Atom()')
+START_TEST('Atom', '$Id: Atom_test.py,v 1.2 2003/04/20 12:46:13 oliver Exp $')
 
 CHECK('Atom.Atom()')
 a = Atom()

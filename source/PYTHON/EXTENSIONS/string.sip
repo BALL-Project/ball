@@ -1,4 +1,4 @@
-// $Id: string.sip,v 1.8 2003/03/28 14:53:54 oliver Exp $
+// $Id: string.sip,v 1.9 2003/04/20 12:46:13 oliver Exp $
 
 class Substring
 {
@@ -243,21 +243,28 @@ class String
 
     if (sipParseArgs(&sipArgsParsed,sipArgs,"n",&sipSelfObj,sipClass_String,&ptr))
     {
-      const char *s;
-
-      s = ptr->c_str();
-
-      if ((ptr != 0) && (s == 0))
+			if (ptr == 0)
 			{
-        s = "";
+				return PyString_FromString("");
 			}
-
-      return PyString_FromString(s);
-		}
+			else
+			{
+				return PyString_FromString(ptr->c_str());
+			}
+    }
 %End
 
- 
 %ConvertToTypeCode
+  if (sipIsErr == NULL)
+    return (PyString_Check(sipPy) || sipIsSubClassInstance(sipPy,sipClass_String));
+
+  if (sipPy == Py_None)
+  {
+    *sipCppPtr = new String;
+
+    return 1;
+  }
+
   if (PyString_Check(sipPy))
   {
     *sipCppPtr = new String(PyString_AS_STRING(sipPy));
@@ -265,7 +272,7 @@ class String
     return 1;
   }
 
-  *sipCppPtr = (String*)sipConvertToCpp(sipPy,sipClass_String,sipIsErr);
+  *sipCppPtr = (String *)sipConvertToCpp(sipPy,sipClass_String,sipIsErr);
 
   return 0;
 %End
