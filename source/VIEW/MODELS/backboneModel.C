@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.17 2004/12/27 13:48:23 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.18 2004/12/28 11:28:30 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -379,15 +379,16 @@ namespace BALL
  				(*new_points)[new_points->size() - 1] = (*new_points)[0];
 				////////////////////////////////////////////////////////////
 				
-				if (mesh->getComposite() != atoms_of_spline_points_[p])
+				if (mesh->getComposite() != atoms_of_spline_points_[p]->getParent())
 				{
 					mesh = new Mesh();
 					mesh->setComposite(atoms_of_spline_points_[p]->getParent());
 					geometric_objects_.push_back(mesh);
 
-					// insert the vertices and normals of last points again
+					// iterater over all points of the circle
 					for (Position point_pos = 0; point_pos < slides; point_pos++)
 					{
+						// insert the vertices and normals of last points again into the new mesh
 						mesh->vertex.push_back(last_point_ + (*last_points)[point_pos]);
 						mesh->vertex.push_back(			point  + (* new_points)[point_pos]);
 						mesh->vertex.push_back(last_point_ + (*last_points)[point_pos + 1]);
@@ -418,34 +419,41 @@ namespace BALL
 					// this is important for the number of vertices, which were added in the last round
 					// step is used to calculate the position of the vertices from the last round
 					Size step = 0;
-					if (mesh->vertex.size() > 2 * slides)
+					Size step2 = 0;
+					if (mesh->vertex.size() > 4 * slides)
 					{
 						step = 2;
+						step2 = 1;
 					}
 					else
 					{
 						step = 4;
+						step2 = 2;
 					}
 					
+					Size s_old = mesh->vertex.size() - 1;
+					// iterater over all points of the circle
 					for (Position point_pos = 0; point_pos < slides; point_pos++)
 					{
-						mesh->vertex.push_back(point  + (*new_points)[point_pos]);
-						mesh->vertex.push_back(point  + (*new_points)[point_pos + 1]);
+						mesh->vertex.push_back(point + (*new_points)[point_pos]);
+						mesh->vertex.push_back(point + (*new_points)[point_pos + 1]);
 
 						mesh->normal.push_back((*new_points)[point_pos]);
 						mesh->normal.push_back((*new_points)[point_pos + 1]);
 
 						const Size s_new = mesh->vertex.size() - 1;
-						const Size s_old = s_new - slides * step;
-						t.v1 = s_old;				// last lower
-						t.v2 = s_old + 1;		// last upper
-						t.v3 = s_new;				// new upper
+						
+						t.v1 = s_old - step2;		// last lower
+						t.v2 = s_old;						// last upper
+						t.v3 = s_new;						// new upper
 						mesh->triangle.push_back(t);
 
-						t.v1 = s_new;				// new upper
-						t.v2 = s_new - 1;		// new lower
-						t.v3 = s_old;				// last lower
+						t.v1 = s_new;					// new upper
+						t.v2 = s_new - 1;			// new lower
+						t.v3 = s_old - step2; // last lower
 						mesh->triangle.push_back(t);
+
+						s_old += step;
 					}
 				}
 
