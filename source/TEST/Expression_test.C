@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.28 2002/01/28 00:43:55 oliver Exp $
+// $Id: Expression_test.C,v 1.28.4.1 2002/05/01 10:52:33 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -17,7 +17,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.28 2002/01/28 00:43:55 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.28.4.1 2002/05/01 10:52:33 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -479,8 +479,14 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	test_expressions.insert(pair<String, Size>("connectedTo((H)(H))", 14));
 	test_expressions.insert(pair<String, Size>("connectedTo(C(H)(H)(H))", 0));
 	test_expressions.insert(pair<String, Size>("element(H)", 38));
+	test_expressions.insert(pair<String, Size>("!element(H)", 38));
 	test_expressions.insert(pair<String, Size>("element(O)", 6));
 	test_expressions.insert(pair<String, Size>("element(C)", 22));
+	test_expressions.insert(pair<String, Size>("!element(C)", 54));
+	test_expressions.insert(pair<String, Size>("((element(C)))", 22));
+	test_expressions.insert(pair<String, Size>("!(element(C))", 54));
+	test_expressions.insert(pair<String, Size>("(!element(C))", 54));
+	test_expressions.insert(pair<String, Size>("!(!element(C))", 22));
 	test_expressions.insert(pair<String, Size>("element(H) OR (name(CA) AND chain(A))", 40));
 
 	Expression e;
@@ -494,6 +500,7 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 		{
 			if (e.operator () (*it)) counter++;
 		}
+		STATUS("testing expression " << exp_iterator->first)
 		TEST_EQUAL(counter, exp_iterator->second);
 	}
 
