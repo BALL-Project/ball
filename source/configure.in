@@ -1,0 +1,3266 @@
+dnl    $Id: configure.in,v 1.1 2001/08/23 10:28:04 oliver Exp $
+dnl    Process this file with autoconf to produce a configure script.
+dnl   
+
+dnl
+dnl    disable caching in MULTI_BUILD mode - just to be sure
+dnl   
+if test "${MULTI_BUILD}" = "true" ; then
+	rm config.cache
+fi
+
+dnl 
+dnl    some initialization stuff...
+dnl 
+AC_INIT(KERNEL/atom.C)
+AC_CONFIG_HEADER([
+	config.h:config/config.h.in
+])
+AC_LANG_CPLUSPLUS
+
+dnl
+dnl		display the license and abort if not accepted
+dnl		we create the file config.lic if the license was
+dnl		accepted and do not show the license the second time
+dnl
+AC_PATH_PROG(PAGER, more, no)
+if test "${PAGER}" = "no" ; then
+	PAGER=cat
+fi
+if test ! -f config.lic ; then
+	${PAGER} LICENSE
+	echo " "
+	echo "Do you accept this license terms (y/n)?"
+	answer=""
+	while test "$answer" != "y" -a "$answer" != "n" ; do
+		read answer 
+	done
+	if test "$answer" = "n" ; then	
+		exit
+	else
+		echo "accepted" > config.lic
+	fi
+fi
+
+dnl		
+dnl    define command line arguments for QT, Mesa, and OpenGL
+dnl    includes and libraries
+dnl
+AC_ARG_ENABLE(optimization,    [  --enable-optimization   optimize the library for speed. Omits debug info!])
+AC_ARG_ENABLE(debuginfo,       [  --enable-debuginfo      add -g to the compiler flags (to create debug information)])
+AC_ARG_ENABLE(BALLVIEW,        [  --disable-BALLVIEW      disable the compilation of BALLVIEW, the visualization component])
+AC_ARG_ENABLE(64,              [  --enable-64             create 64 bit binaries (if allowed by the compiler)])
+AC_ARG_WITH(compiler,          [  --with-compiler=CXX     use CXX as C++ compiler])
+AC_ARG_WITH(cxxflags,          [  --with-cxxflags=FLAGS   add FLAGS to the C++ compiler flags (commas are converted to blanks)])
+AC_ARG_WITH(ldflags,           [  --with-ldflags=FLAGS    add FLAGS to the linker flags (commas are converted to blanks)])
+AC_ARG_WITH(arflags,           [  --with-arflags=FLAGS    add FLAGS to the flags for the creation of the static libraries])
+AC_ARG_WITH(dynarflags,        [  --with-dynarflags=FLAGS add FLAGS to the flags for the creation of the shared libraries])
+AC_ARG_WITH(qt-incl,           [  --with-qt-incl=DIR      QT header files are in DIR])
+AC_ARG_WITH(qt-libs,           [  --with-qt-libs=DIR      QT libraries are in DIR])
+AC_ARG_WITH(qt-mt,             [  --with-threadsafe-qt    use a threadsafe version of the QT lib (libqt-mt)])
+AC_ARG_WITH(moc,               [  --with-moc=MOC          use MOC as the absolute path to the QT meta object compiler (moc)])
+AC_ARG_WITH(opengl-incl,       [  --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL])
+AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL])
+AC_ARG_WITH(mesa,              [  --with-mesa             use MESA instead of OpenGL])
+AC_ARG_WITH(libxnet,           [  --without-libxnet       use -lsocket -lnsl rather than -lxnet (under Solaris)])
+AC_ARG_WITH(python,            [  --enable-python       	enable Python support and search for executable])
+AC_ARG_WITH(python,            [  --with-python=EXE       enable Python support and use Python executable in EXE])
+AC_ARG_WITH(python-incl,       [  --with-python-incl=DIR  Python includes (Python.h) is in DIR])
+AC_ARG_WITH(python-libs,       [  --with-python-libs=DIR  Python library (libpython*.a) is in DIR])
+AC_ARG_WITH(python-ldopts,     [  --with-python-ldopts=X  Use additional options X when linking with the Python library])
+AC_ARG_WITH(sip,   	           [  --with-sip=DIR          the SIP executable resides in DIR])
+AC_ARG_WITH(sip-lib,   	       [  --with-sip-lib=DIR      the SIP library resides in DIR])
+AC_ARG_WITH(sip-incl,   	     [  --with-sip-incl=DIR     the SIP header file resides in DIR])
+AC_ARG_WITH(xdr,               [  --without-xdr           no RPC/XDR headers available - do not build portable binary persistence support])
+
+dnl
+dnl    interpret switches...
+dnl
+if test "$enable_optimization" = "yes" ; then
+	DEBUG=false
+else
+	DEBUG=true
+fi
+
+if test "$enable_debuginfo" = "yes" ; then
+	DEBUG_INFO=true
+else
+	DEBUG_INFO=false
+fi
+
+if test "$enable_64" = "yes" ; then
+	BINFMT_64_BIT=true
+else
+	BINFMT_64_BIT=false
+fi
+
+if test "$with_compiler" != "" ; then
+	CXX=$with_compiler
+fi
+
+if test "$with_cxxflags" != "" ; then
+	CXXFLAGS="${CXXFLAGS}`echo $with_cxxflags|tr , \  `"
+fi
+
+if test "$with_ldflags" != "" ; then
+	LDFLAGS="${LDFLAGS}`echo $with_ldflags|tr ,  \  `"
+fi
+
+if test "$with_dynarflags" != "" ; then
+	DYNAROPTS="${DYNAROPTS}`echo $with_dynarflags|tr ,  \  `"
+fi
+
+if test "$with_arflags" != "" ; then
+	AROPTS="${AROPTS}`echo $with_arflags|tr ,  \  `"
+fi
+
+if test "$with_qt_incl" != "" ; then
+	QT_INCPATH=$with_qt_incl
+fi
+if test "$with_qt_libs" != "" ; then
+	QT_LIBPATH=$with_qt_libs
+fi
+if test "$with_qt_mt" = "yes" ; then
+	USE_THREADSAFE_QT=true
+	QT_MT_SUFFIX="-mt"
+else
+	USE_THREADSAFE_QT=false
+	QT_MT_SUFFIX=""
+fi
+if test "$with_opengl_incl" != "" ; then
+	OPENGL_INCPATH=$with_opengl_incl
+fi
+if test "$with_opengl_libs" != "" ; then
+	OPENGL_LIBPATH=$with_opengl_libs
+fi
+
+if test "$with_mesa" != "yes" ; then	
+	BALLVIEW_PLATFORM=OpenGL
+else
+ 	BALLVIEW_PLATFORM=Mesa
+fi
+
+if test "$with_moc" != "" ; then	
+	MOC=$with_moc
+else
+ 	MOC=moc
+fi
+
+if test "$with_libxnet" != "no" ; then	
+	USE_LIBXNET=true
+else
+	USE_LIBXNET=false
+fi
+
+if test "$with_BALLVIEW" = "no" ; then
+	USE_BALLVIEW=false
+else	
+	USE_BALLVIEW=true
+fi
+
+if test "$with_xdr" = "no" ; then
+	BALL_NO_XDR=true
+else
+	BALL_NO_XDR=false
+fi
+
+# use this switch to enable the python support
+# this also builds libBALLc.so and requires
+# Python.h and libsip.a
+if test "$with_python" != "" -a "$with_python" != "no" -o "$enable_python" = yes ; then
+	PYTHON_SUPPORT=true
+else
+	PYTHON_SUPPORT=
+fi
+
+# the path to the python includes (Python.h)
+PYTHON_INCLUDE_PATH=$with_python_incl
+
+# the path to the python library (libpython*.a)
+# and additional linker options (e.g. -ltermcap etc.)
+PYTHON_LIBPATH=$with_python_libs
+PYTHON_LDOPTS=$with_python_ldopts
+
+# the paths to the SIP library, header, and executable
+SIP_LIBPATH=$with_sip_lib
+SIP_INCLUDE_PATH=$with_sip_incl
+SIP=$with_sip
+
+
+
+
+
+dnl
+dnl 	global definitions
+dnl
+
+dnl		the file containing the list of supported (configure`d) 
+dnl   binary formats. configure will add a line with ${BINFMT} to this file
+BINFORMAT_FILE=config/binary_formats
+
+
+dnl		define a macro to remove the directory name
+dnl		from a fully specified path
+dnl
+AC_DEFUN(AC_BASENAME,[
+	TMP__DIR="$1/"
+	while test "${TMP__DIR}" != "" ; do
+		TMP__NAME=`echo ${TMP__DIR}|${CUT} -d/ -f1`
+		TMP__DIR=`echo ${TMP__DIR}|${CT} -d/ -f2-`
+		if test "${TMP__DIR}" = "${TMP__NAME}" ; then
+			TMP__DIR=""
+		fi
+	done
+])
+	
+
+dnl    define a macro to inform the user about failed tests for programs
+dnl    it checks for the unix command given as second parameter and
+dnl    sets the shell variable given as second parameter to its absolute path
+dnl 
+AC_DEFUN(AC_MSG_PATH_PROG,[
+	AC_PATH_PROG($1,$2,no)
+	if test $$1 = no ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([This script requires the unix command $2, but cannot find it.])
+		AC_MSG_RESULT([Please add the correct path to $2 to your \$PATH variable])
+		AC_MSG_RESULT([and restart configure.])
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(aborted)
+		exit
+	fi
+])
+
+dnl
+dnl    define macro to search for header files that may be somewhere in the filesystem
+dnl    if ${FIND}!=- (i.e. it has been set BEFORE py AC_PATH_PROG!) find will be used
+dnl    too if everything fails - this may take some time...
+dnl
+dnl    syntax: AC_FIND_HEADER(<PATH_VAR>,<header.h>,<additional dirnames>)
+dnl    
+dnl        PATH_VAR will be set to the include path or to empty string (if not found)
+dnl        header.h is the header file name (e.g. wait.h, GL/gl.h)
+dnl        additional dirnames are included in searches these should be absolute names!
+dnl 
+
+AC_DEFUN(AC_FIND_HEADER,[
+	_INCLUDES=
+
+	dnl    immediate return on predefined directory (read from file?)
+	if test "${$1}" != "" ; then
+		_INCLUDES=${$1}
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /usr/include /opt/include $3 ; do
+			if test -f "$i/$2" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" ; then
+		for i in /usr/*/include /opt/*/include ; do
+			if test -f "$i/$2" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+	
+	if test "${_INCLUDES}" = "" ; then
+		for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
+			if test -f "$i/$2" -a "${_INCLUDES}" = ""; then
+				_INCLUDES="$i"
+			fi
+		done
+	fi
+
+	if test "${_INCLUDES}" = "" -a "${FIND}" != "-" ; then
+		if test "${FIND_KNOWS_PATH}" = false ; then
+			FIND_OPT="-name"
+			_TMP_FIND_NAME="$2"
+			while test _`egrep / $_TMP_FIND_NAME`_ != __ ; do
+				_TMP_FIND_NAME=`echo ${_TMP_FIND_NAME}|${CUT} -d/ -f2-`
+			done
+			
+			FIND_ARG="\*${_TMP_FIND_NAME}\*"
+		else
+			FIND_OPT="-path"
+			FIND_ARG="\*$2\*"
+		fi
+
+		_TMP=`${FIND} /usr ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+		for j in ${_TMP} ; do
+			if test "${_INCLUDES}" = "" ; then
+				_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+			fi
+		done
+		
+		if test "${_INCLUDES}" = "" ; then
+			_TMP=`${FIND} /opt ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_INCLUDES}" = "" ; then
+					_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+				fi
+			done
+		fi
+
+		if test "${_INCLUDES}" = "" -a "$3" != ""; then
+			for i in $3 /dev/null ; do
+				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
+				for j in ${_TMP} ; do
+					if test "${_INCLUDES}" = "" ; then
+						_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
+					fi
+				done
+			done
+		fi
+	fi
+
+	$1="${_INCLUDES}"
+])
+
+
+dnl
+dnl    define macro to search for libraries that may be somewhere in the filesystem
+dnl    if ${FIND}!=- (i.e. it has been set BEFORE py AC_PATH_PROG!) find will be used
+dnl    too if everything fails - this may take some time...
+dnl
+dnl    syntax: AC_FIND_LIB(<PATH_VAR>,<libXXX>,<additional dirnames>)
+dnl    
+dnl        PATH_VAR will be set to the library path or to empty string (if not found)
+dnl        libXXX is the header file name (e.g. libGLUT, libGL) .a, .so etc. should be omitted
+dnl        additional dirnames are included in searches these should be absolute names!
+dnl 
+
+AC_DEFUN(AC_FIND_LIB,[
+	_LIBS=
+
+	dnl   immediate "return" on preset directory (read from file?)
+	if test "${$1}" != "" ; then
+		_LIBS=${$1}
+	fi
+
+	if test "${_LIBS}" = "" ; then
+		for i in $3 /usr/lib /opt/lib ; do
+			for j in $i/$2.* ; do
+				if test -f "$j" -a "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
+
+	if test "${_LIBS}" = "" ; then
+		for i in /usr/*/lib /opt/*/lib ; do
+			for j in $i/$2.* ; do
+				if test -f "$j" -a "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
+	
+	if test "${_LIBS}" = "" ; then
+		for i in /opt/*/*/lib /usr/*/*/lib /usr/local/*/*/lib ; do
+			for j in $i/$2.* ; do
+				if test -f "$j" -a "${_LIBS}" = ""; then
+					_LIBS="$i"
+				fi
+			done
+		done
+	fi
+
+	if test "${_LIBS}" = "" -a "${FIND}" != "-" ; then
+		if test "${_LIBS}" = "" -a "$3" != ""; then
+			for i in $3 /dev/null; do
+				if test "${_LIBS}" = "" ; then
+					_TMP=`${FIND} $i -name "$2*" -print 2>/dev/null`
+					for j in ${_TMP} ; do
+						if test "${_LIBS}" = "" ; then
+							_LIBS=`echo $j|${SED} "s/\/$2.*/\//"`
+						fi
+					done
+				fi
+			done
+		fi
+		
+		if test "${_LIBS}" = "" ; then
+			_TMP=`${FIND} /opt -name "$2*" -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_LIBS}" = "" ; then
+					_LIBS=`echo $j|${SED} "s/\/$2.*/\//"`
+				fi
+			done
+		fi
+
+		if test "${_LIBS}" = "" ; then
+			_TMP=`${FIND} /usr -name "$2*" -print 2>/dev/null`
+			for j in ${_TMP} ; do
+				if test "${_LIBS}" = "" ; then
+					_LIBS=`echo $j|${SED} "s/\/$2.*/\//"`
+				fi
+			done
+		fi
+		
+	fi
+
+	$1="${_LIBS}"
+])
+	
+
+
+dnl
+dnl    just trying to find myself
+dnl
+
+BALL_PATH=`cd ..; pwd`
+
+
+dnl
+dnl   check for programs used to determine architecture
+dnl
+
+AC_MSG_PATH_PROG(UNAME,uname)
+AC_MSG_PATH_PROG(CUT,cut)
+AC_MSG_PATH_PROG(TR,tr)
+AC_MSG_PATH_PROG(AR,ar)
+
+dnl
+dnl    determine OS and architecture and all this stuff
+dnl
+
+AC_SUBST(OSMAJOR)
+AC_SUBST(OS)
+AC_SUBST(OSREV)
+AC_SUBST(BINFMT)
+AC_SUBST(BINFMT_PATH)
+AC_SUBST(ARCHITECTURE)
+
+AC_MSG_CHECKING(your OS)
+OS=`${UNAME} -s`
+OSREV=`${UNAME} -r`
+OSMAJOR=`echo $OSREV|${CUT} -d"." -f1`
+
+dnl		default...
+BINFMT="${OS}"
+
+if test "$OS" = SunOS ; then
+	if test "$OSMAJOR" = 5 ; then
+		OS=Solaris
+		ARCHITECTURE=`${UNAME} -p`
+		BINFMT="${OS}-${OSREV}-${ARCHITECTURE}"
+	else
+		OS=SunOS
+	fi
+fi
+
+if test "$OS" = Linux ; then
+	PROCESSOR=`${UNAME} -m`
+	ARCHITECTURE=unknown
+	if test "${PROCESSOR}" = sparc -o "${PROCESSOR}" = SPARC ; then
+		ARCHITECTURE=sparc
+		BINFMT=Linux-sparc
+	fi
+	if test `echo $PROCESSOR|${CUT} -c1` = i ; then
+		ARCHITECTURE=i386
+		BINFMT=Linux-i386
+	fi
+	if test `echo $PROCESSOR` = alpha ; then
+		ARCHITECTURE=alpha
+		BINFMT=Linux-alpha
+	fi
+
+	if test "${ARCHITECTURE}" = "unknown" ; then
+		AC_MSG_RESULT(OS: ${OS} / hardware: ${PROCESSOR})
+		AC_MSG_RESULT(Sorry - this architecture is currently not supported...)
+		AC_MSG_ERROR(aborted)
+	fi
+fi
+
+if test "${OS}" = IRIX64 ; then
+	OS=IRIX
+fi
+
+if test "${OS}" = IRIX ; then
+	BINFMT=IRIX-${OSREV}
+fi
+
+if test "${OS}" = OSF1 ; then
+	BINFMT="OSF1-${OSREV}"
+	PROCESSOR=`${UNAME} -m`
+	ARCHITECTURE=unknown
+	if test `echo $PROCESSOR` = alpha ; then
+		ARCHITECTURE=alpha
+	fi
+fi
+
+if test "`echo $OS | ${CUT} -d_ -f1`" = "CYGWIN" ; then
+	OS="CYGWIN"
+	BALL_NO_XDR=true
+	USE_BALLVIEW=false
+fi
+
+if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX -a  "$OS" != OSF1 -a "$OS" != FreeBSD -a "$OS" != "CYGWIN" ; then
+	AC_MSG_RESULT(Sorry - your OS is currently not supported...)
+	AC_MSG_ERROR(aborted)
+fi
+
+dnl
+dnl 	create OS defines in config.h:
+dnl
+if test "${OS}" = Linux ; then
+	AC_DEFINE(BALL_OS_LINUX,LINUX)
+fi
+if test "${OS}" = Solaris ; then
+	AC_DEFINE(BALL_OS_SOLARIS,SOLARIS)
+fi
+if test "${OS}" = IRIX ; then
+	AC_DEFINE(BALL_OS_IRIX,IRIX)
+fi
+if test "${OS}" = OSF1 ; then
+	AC_DEFINE(BALL_OS_OSF1,OSF1)
+fi
+if test "${OS}" = FreeBSD ; then
+	AC_DEFINE(BALL_OS_FREEBSD,FREEBSD)
+fi
+
+dnl
+dnl		create ARCHITECTURE defines
+dnl
+if test "$ARCHITECTURE" = sparc ; then
+	AC_DEFINE(BALL_ARCH_SPARC,SPARC)
+fi
+if test "$ARCHITECTURE" = i386 ; then
+	AC_DEFINE(BALL_ARCH_I386,I386)
+fi
+if test "$ARCHITECTURE" = mips ; then
+	AC_DEFINE(BALL_ARCH_MIPS,MIPS)
+fi
+if test "$ARCHITECTURE" = alpha ; then
+	AC_DEFINE(BALL_ARCH_ALPHA,ALPHA)
+fi
+
+AC_MSG_RESULT($OS $OSREV (BINFMT=$BINFMT))
+
+dnl
+dnl	some definitions the depend solely on the OS
+dnl
+SHARED_LIB_SUFFIX=so
+if test "${OS}" = HP-UX ; then
+	SHARED_LIB_SUFFIX=sl
+fi
+AC_SUBST(SHARED_LIB_SUFFIX)
+
+dnl
+dnl    check for programs needed for build
+dnl 
+
+AC_PROG_LN_S
+AC_MSG_PATH_PROG(CP,cp,no)
+AC_MSG_PATH_PROG(RM,rm,no)
+AC_MSG_PATH_PROG(MV,mv,no)
+AC_MSG_PATH_PROG(LN,ln,no)
+AC_MSG_PATH_PROG(SED,sed,no)
+AC_MSG_PATH_PROG(FIND,find,no)
+AC_MSG_PATH_PROG(DIFF,diff,no)
+AC_MSG_PATH_PROG(TAIL,tail,no)
+AC_MSG_PATH_PROG(GREP,grep,no)
+AC_MSG_PATH_PROG(CAT,cat,no)
+
+dnl   
+dnl   check whether find can be called with the parameter -path
+dnl   (needed to find headers in a certain path like GL/libgl.h
+dnl
+if test "${FIND}" != "no" ; then
+	RESULT=`${FIND} KERNEL -path . -print 2>&1`
+	if test "${RESULT}" != "" ; then     dnl    did get an error message ... bad.
+		FIND_KNOWS_PATH=false
+	else
+		FIND_KNOWS_PATH=true
+	fi
+fi
+		
+
+dnl		
+dnl		Declare compiler search order
+dnl			1) look for compiler defined in configure
+dnl			2) look for vendor supplied compilers (CC)
+dnl			3) check for g++, egcs, eg++, gcc
+dnl		Except for Solaris, where the vendor supplied compiler
+dnl		CC (at least releases 5.0 and below) is not usable.
+if test "${OS}" = "Solaris" ; then
+	CXX_SEARCH_ORDER="egcs g++ eg++ CC "
+else 
+	if test "${OS}" = "OSF1" ; then
+		CXX_SEARCH_ORDER="cxx CC egcs g++ eg++ "
+	else
+		CXX_SEARCH_ORDER="CC egcs g++ eg++ "
+	fi
+fi
+CXX_NAME=""
+
+dnl		
+dnl		If we are running IRIX, search for the older compilers, too
+dnl
+if test "${OS}" = "IRIX" ; then
+	CXX_SEARCH_ORDER="${CXX_SEARCH_ORDER} NCC DCC OCC"
+	CC_SEARCH_ORDER="${CC_SEARCH_ORDER} ncc dcc occ"
+fi
+
+
+
+dnl
+dnl		Search for the C++ compiler
+dnl
+
+AC_MSG_RESULT(searching for a C++ compiler:)
+if test "${CXX}" != "" ; then
+	if test -x "${CXX}" ; then
+		AC_MSG_RESULT(from the command line: ${CXX})
+	else
+		AC_PATH_PROG(CXXPATH,${CXX},no)
+		if test "${CXXPATH}" = no ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Cannot find ${CXX}. Please add it to your PATH)
+			AC_MSG_RESULT(or specify an absolute path in configure.)
+			AC_MSG_ERROR(aborted)
+		else
+			CXX=${CXXPATH}
+		fi
+	fi
+else
+	CXXPATH=""
+	while test "${CXXPATH}" = "" ; do
+		CXX=`echo ${CXX_SEARCH_ORDER}|${CUT} -d\  -f1`
+		if test _`echo ${CXX} | ${TR} -d " "`_ = __ ; then
+			CXXPATH="END"
+		fi
+		if test "${CXXPATH}" != "END" ; then
+			AC_PATH_PROG(CXXPATH,${CXX},no)
+			if test "${CXXPATH}" = no ; then
+				CXXPATH=""
+				unset ac_cv_path_CXXPATH
+			else
+				CXX=${CXXPATH}
+			fi
+		fi
+			
+		CXX_SEARCH_ORDER=`echo "${CXX_SEARCH_ORDER} " |${CUT} -d\  -f2-`
+	done
+
+	if test "${CXXPATH}" = "end" ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Could not find a C++ compiler. Please change the settings)
+		AC_MSG_RESULT(of your PATH environment variable (using setenv export))
+		AC_MSG_RESULT(or specify an absolute path in configure by setting the variable)
+		AC_MSG_RESULT(CXX=<pathname> or specify the compiler by passing the option)
+		AC_MSG_RESULT(--with-compiler=<compiler> to configure.)
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(aborted)
+	fi
+fi
+
+dnl
+dnl		extract the executable name of the compiler 
+dnl 	as default compiler name (CXX_NAME is needed
+dnl		to name the default directory the libraries 
+dnl		reside in)
+dnl
+
+if test "${CXX_PATH}" = "" ; then
+	if test "${CXX}" = "" ; then
+		CXX_NAME=unknown
+	else
+		CXX_NAME="${CXX}"
+	fi
+else
+	CXX_NAME="${CXX_PATH}"
+fi
+	
+while test "`echo ${CXX_NAME}|  ${GREP} /`" != "" ; do
+	CXX_NAME=`echo ${CXX_NAME} |  ${CUT} -d/ -f2-`
+done
+
+
+dnl
+dnl		Check whether the C++ compiler is a GNU compiler
+dnl
+
+AC_MSG_CHECKING(for GNU compiler)
+cat > /tmp/$$.conftest.c << EOF
+#ifdef __GNUC__
+GXX:true
+#else
+GXX:false
+#endif
+EOF
+
+IS_GXX=`${CXX} -E /tmp/$$.conftest.c 2>/dev/null |egrep GXX|${CUT} -d: -f2|${TR} -d " "`
+if test "${IS_GXX}" = "true" ; then
+	AC_MSG_RESULT(yes)
+	HAS_GPLUSPLUS=true
+	CXX_NAME="g++"
+else
+	AC_MSG_RESULT(no)
+	HAS_GPLUSPLUS=false
+fi
+rm /tmp/$$.conftest.c
+
+dnl
+dnl		Check for KAI C++ (if no GNU compiler found!)
+dnl		At least under linux the damned frontend won't tell 
+dnl		its version number, so we try to extract the word kai 
+dnl		from its drivers options when called in verbose mode.
+dnl		Nasty - but seems to work. Anybody with a better solution 
+dnl 	should feel free to inform me!
+dnl
+if test "${IS_GXX}" = "false" ; then
+	AC_MSG_CHECKING(for KAI C++ compiler)
+	KAI=`${CXX} -v --version 2>&1 | sed "s/.*KAI.*/__KAI__/g" |sed "s/.*kai.*/__KAI__/g" | egrep "^__KAI__$" | sed -n 1p`
+	if test "${KAI}" = "__KAI__" ; then
+		IS_KCC=true
+		AC_MSG_RESULT(yes)
+		CXX_NAME="KCC"
+	else
+		IS_KCC=false
+		AC_MSG_RESULT(no)
+	fi
+fi
+
+dnl 
+dnl  	check for the Digital C++ compiler
+dnl
+dnl
+if test "${IS_GXX}" = false -a "${IS_KCC}" = false ; then
+	AC_MSG_CHECKING(for Digital/Compaq C++ compiler)
+	DIGITAL_CXX=`${CXX} -V 2>/dev/null | ${GREP} "C++" | ${CUT} -d" " -f-2` 
+	if test "${DIGITAL_CXX}" = "DIGITAL C++" -o "${DIGITAL_CXX}" = "Compaq C++"; then
+		IS_DIGITALCXX=true
+		AC_MSG_RESULT(yes)
+		CXX_NAME="Digital"
+	else
+		IS_DIGITALCXX=false
+		AC_MSG_RESULT(no)
+	fi	
+fi
+
+dnl
+dnl 	Try to find out the exact compiler release on different
+dnl		operating systems and differentiate between gcc/egcs
+dnl
+if test "${IS_GXX}" = "true" ; then
+	AC_MSG_CHECKING(compiler version)
+	CXX_VERSION=`${CXX} --version`
+	if test `echo ${CXX_VERSION}|${CUT} -c1-4` = "egcs" ; then
+		IS_EGXX=true
+		CXX_NAME="egcs"
+		CXX_VERSION=`${CXX} -v 2>&1 | grep release | ${CUT} -d\( -f2 | cut -d\) -f1 | ${SED} "s/egcs-//" | ${CUT} -d" " -f1`
+		VERSION_OUTPUT="egcs ${CXX_VERSION}"
+		CXX_COMPILER_NAME="egcs"
+	else
+		IS_EGXX=false
+		VERSION_OUTPUT="g++ ${CXX_VERSION}"
+		CXX_COMPILER_NAME="g++"
+	fi
+	
+	AC_MSG_RESULT(${VERSION_OUTPUT})
+
+	CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
+	CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
+	if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
+		CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
+	fi
+	if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
+		CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+	fi
+	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
+		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
+	fi
+
+	if test "${IS_EGXX}" = "true" ; then	
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(egcs won't compile BALL due to several internal compiler errors.)
+		AC_MSG_RESULT(Please upgrade to a more recent version of GNU g++ (e.g. 2.95.2).)
+		AC_MSG_RESULT(If you have already installed a different compiler, you may)
+		AC_MSG_RESULT(specify the path to this compiler by passing the option)
+		AC_MSG_RESULT( --with-compiler=<compiler> to configure.)
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(aborted)
+	fi
+	if test "${CXX_VERSION_1}" -lt 2 \
+		-o "${CXX_VERSION_1}" = 2 -a "${CXX_VERSION_2}" -lt 95 ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([The version of gcc you are using is not supported by BALL.])
+		AC_MSG_RESULT([Please update to a newer version of g++ (at least 2.95.x)])
+		AC_MSG_RESULT([which can be obtained from])
+		AC_MSG_RESULT([  ftp://gcc.gnu.org/pub/gcc/releases/index.html])
+		AC_MSG_RESULT([or specify a different compiler using the option --with-compiler=])
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(aborted)
+	fi
+
+	if test "${CXX_VERSION_1}" -ge 3 ; then
+		LIBS="${LIBS} -liberty"	
+	fi
+fi
+
+dnl
+dnl identify the KAI version
+dnl
+if test "${IS_KCC}" = true ; then
+	AC_MSG_CHECKING(compiler version)
+	echo "int main(){}" > conftest.C
+	CXX_VERSION=`${CXX} -v --version conftest.C 2>&1| ${GREP} "KAI C++ " | ${CUT} -d" " -f3`
+	CXX_NAME="KCC"
+	VERSION_OUTPUT="KAI C++ ${CXX_VERSION}"
+	CXX_COMPILER_NAME="KCC"
+	
+	AC_MSG_RESULT(${VERSION_OUTPUT})
+
+	CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
+	CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
+	if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
+		CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
+	fi
+	if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
+		CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+	fi
+	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
+		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
+	fi
+fi
+
+dnl
+dnl identify the Digital C++ version
+dnl
+if test "${IS_DIGITALCXX}" = true ; then
+	AC_MSG_CHECKING(compiler version)
+	echo "int main(){}" > conftest.C
+	CXX_VERSION=`${CXX} -V  2>/dev/null| ${GREP} "C++" | ${CUT} -d" " -f3 | tr -d V`
+	CXX_NAME=`${CXX} -V | ${GREP} "C++" | ${CUT} -d" " -f1` 
+	VERSION_OUTPUT="${CXX_NAME} C++ ${CXX_VERSION}"
+	CXX_COMPILER_NAME="Digital"
+	
+	AC_MSG_RESULT(${VERSION_OUTPUT})
+
+	CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1 | tr -d "A-Za-z"`
+	CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.-]//g" | wc -c`
+	if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
+		CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2 | ${CUT} -d- -f1`
+	fi
+	if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
+		CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f2 | ${CUT} -d- -f2`
+	fi
+
+	if test "${CXX_VERSION_1}" -lt 6 -o "${CXX_VERSION_1}" -eq 6 -a "${CXX_VERSION_2}" -lt 2 ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Your version of Digital/Compaq C++ does not provide all)
+		AC_MSG_RESULT(ANSI C++ features required by BALL.)
+		AC_MSG_RESULT(Please upgrade to release 6.2 or above.)
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(aborted.)
+	fi
+fi
+
+if test "${IS_GXX}" != true -a "${IS_KCC}" != true -a "${IS_DIGITALCXX}" != true ; then
+	dnl
+	dnl		Now we got a problem: we have to identify the compiler
+	dnl		This is nearly impossible, but we give our best...
+	dnl
+	if test "${OS}" = "IRIX" ; then
+		AC_MSG_CHECKING(compiler version)
+		CXX_VERSION_STRING=`${CXX} -n32 -version 2>&1 | egrep ersion`
+		if test "${CXX_VERSION_STRING}" = "" ; then
+			AC_BASENAME(${CXX})
+			CXX_VERSION="${TMP__NAME}"
+			CXX_VERSION_OUTPUT="${CXX_VERSION} (unknown version)"
+		else
+			CXX_VERSION=`echo ${CXX_VERSION_STRING} | ${SED} "s/^.*ersion //g"`
+			CXX_COMPILER_NAME=`echo ${CXX_VERSION_STRING} | ${CUT} -d\  -f1`
+			CXX_VERSION_OUTPUT="${CXX_VERSION} (${CXX_COMPILER_NAME})"
+		fi
+
+		CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
+		CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
+		if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
+			CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
+		fi
+		if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
+			CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+		fi
+		if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
+			CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
+		fi
+
+		AC_MSG_RESULT(${CXX_VERSION_OUTPUT})
+	fi
+
+	if test "${OS}" = "Solaris" ; then
+		AC_MSG_CHECKING(compiler version)
+
+		CXX_VERSION_STRING=`${CXX} -V 2>&1 | egrep CC:`
+
+		CXX_VERSION=`echo ${CXX_VERSION_STRING} | ${TR} -d "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ:" | ${TR} -s " " | ${CUT} -d\  -f2`
+		changequote(<<,>>)
+		CXX_VERSION_TEST=`echo ${CXX_VERSION} | ${SED} s/\^\\[0-9\\.\\]*[a-zA-Z\\.]*//g`
+		changequote([,])
+		if test "${CXX_VERSION_TEST}" != "" ; then
+			AC_BASENAME(${CXX})
+			CXX_VERSION="${TMP__NAME}"
+			CXX_VERSION_OUTPUT="${CXX_VERSION} (unknown version)"
+		else
+			CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
+			CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
+			if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
+				CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
+			fi
+			if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
+				CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+			fi
+			if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
+				CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
+			fi
+			CXX_VERSION_OUTPUT="${CXX_VERSION}"
+		fi
+		AC_MSG_RESULT(${CXX_VERSION_OUTPUT})
+
+		if test "${CXX_VERSION_1}" -lt 6 ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Wrong version of CC! CC before release 6 is not ANSI C++ compliant)
+			AC_MSG_RESULT(Please upgrade to a more recent version of CC.)
+			AC_MSG_ERROR(aborted)
+		fi
+	fi
+fi
+
+dnl
+dnl		Assemble the complete compiler name by adding
+dnl		the release numbers (if known) of the compiler
+dnl
+
+AC_MSG_CHECKING(standardized compiler name)
+if test "${CXX_VERSION_1}" != "" ; then
+	CXX_NAME="${CXX_NAME}_${CXX_VERSION_1}"
+	if test "${CXX_VERSION_2}" != "" ; then
+		CXX_NAME="${CXX_NAME}.${CXX_VERSION_2}"
+		if test "${CXX_VERSION_3}" != "" ; then
+			CXX_NAME="${CXX_NAME}.${CXX_VERSION_3}"
+			if test "${CXX_VERSION_4}" != "" ; then
+				CXX_NAME="${CXX_NAME}.${CXX_VERSION_4}"
+			fi
+		fi
+	fi
+fi
+
+AC_MSG_RESULT(${CXX_NAME})
+
+
+dnl
+dnl		default makedepend name
+dnl
+CXX_MAKEDEPEND="makedepend"
+
+dnl
+dnl   run C++ dependencies first to file .Dependencies....
+dnl
+MAKEDEP_CXX_OPTS="-f.Dependencies -D__cplusplus --"
+
+dnl normally makedepend doesn't need a redirection.
+dnl if the C++-compiler creates the dependencies, the
+dnl redirection to .Dependencies should be given in 
+dnl MAKEDEP_CXX
+#MAKEDEP_CXX_SUFFIX=
+
+dnl
+dnl	 TEMPLATE_DIR contains the name of the template
+dnl  database dir. This is required for a "make clean"
+dnl
+#TEMPLATE_DIR=
+
+dnl
+dnl  Here go the g++-specific flags
+dnl 
+if test "${HAS_GPLUSPLUS}" = "true" ; then
+	CXX_MAKEDEPEND="${CXX}"
+	MAKEDEP_CXX_OPTS="-M"
+	CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
+	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
+	CXXFLAGS_O="${CXXFLAGS_O} -O2"
+	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
+
+	dnl  We do not need the -fPIC flag for CYGWIN,
+	dnl  because its code is always position independent.
+  dnl  A warning is emitted otherwise.
+	if test "${OS}" != "CYGWIN" ; then
+		CXXFLAGS="${CXXFLAGS} -fPIC"
+	fi
+
+	DYNAR="${CXX}"
+	if test "${OS}" != "Solaris" ; then
+		DYNAROPTS="${DYNAROPTS} -shared -fPIC -o"		
+	else 
+		DYNAROPTS="${DYNAROPTS} -G -fPIC -o"
+	fi
+
+	if test "${IS_EGXX}" = true; then
+		BALL_TYPENAME=typename
+	else
+		if test "${CXX_VERSION_1}" -gt 2 -o "${CXX_VERSION_1}" -eq 2 -a "${CXX_VERSION_2}" -ge 8 ; then
+			BALL_TYPENAME=typename
+		fi
+	fi
+	COMPILER_DONE=true
+fi
+
+dnl
+dnl		KAI C++ specific options
+dnl
+if test "${COMPILER_DONE}" != true -a "${IS_KCC}" = true ; then
+	dnl		KAI C++ stores a list of instantiated templates
+	dnl		in directories called ti_files
+	dnl		make clean should remove these
+	TEMPLATE_DIR="ti_files"
+	AR="${CXX}"
+	DYNAR="${CXX}"
+	AROPTS="${AROPTS} -o"
+	DYNAROPTS="${DYNAROPTS} -o"
+	CXX_MAKEDEPEND="${CXX}"
+	MAKEDEP_CXX_OPTS="-M"
+	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
+
+	dnl	
+	dnl		Someone at KAI seems to have the need
+	dnl		to torture developers by introducing 
+	dnl		a new flag for position independent code 
+	dnl		on EVERY platform...
+	dnl		
+	CXXFLAGS="${CXXFLAGS} --one_per"
+	if test "${OS}" = Linux ; then
+		CXXFLAGS="${CXXFLAGS} -fPIC"
+	fi
+	if test "${OS}" = Solaris ; then
+		CXXFLAGS="${CXXFLAGS} -KPIC"
+	fi
+	if test "${OS}" = IRIX ; then
+		CXXFLAGS="${CXXFLAGS} -KPIC"
+	fi
+	
+	dnl		optimze as on highest level: this compiler 
+	dnl		does a good job optimizing!
+	CXXFLAGS_O="${CXXFLAGS_O} +K3"
+	
+	dnl		avoid high level optimization to
+	dnl		get debuggable code...
+	CXXFLAGS_D="${CXXFLAGS_D} +K0"
+	CXXFLAGS_DI="${CXXFLAGS_DI}"
+
+	dnl
+	dnl	if we are running under Solaris/SPARC,
+  dnl	KAI can produce 32 or 64 bit code
+	dnl
+	if test "${OS}" = "Solaris" -a "${ARCHITECTURE}" = sparc ; then
+		if test "${BINFMT_64_BIT}" = true ; then
+			CXX_NAME="${CXX_NAME}_V9"
+			LDFLAGS="${LDFLAGS} -xarch=v9"
+			CXXFLAGS="${CXXFLAGS} -xarch=v9"
+			AROPTS="${AROPTS} -xarch=v9"
+			DYNAROPTS="-xarch=v9 ${DYNAROPTS}"
+		else
+			CXX_NAME="${CXX_NAME}_V8"
+		fi
+	fi
+
+	COMPILER_DONE=true
+fi
+
+dnl
+dnl		Digital C++ specific options
+dnl
+if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
+	TEMPLATE_DIR="cxx_rep"
+	AR="ar"
+	DYNAR="${CXX}"
+	AROPTS="${AROPTS} -o"
+	DYNAROPTS="${DYNAROPTS} -shared -nocxxstd -ptr \$(BALL_PATH)/source/cxx_rep -o"
+	CXX_MAKEDEPEND="${CXX}"
+	MAKEDEP_CXX_OPTS="-M -noimplicit_include"
+	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
+
+	CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
+	LIB_CXXFLAGS="${LIB_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
+	CXXFLAGS_O="${CXXFLAGS_O} -O2"
+	
+	CXXFLAGS_D="${CXXFLAGS_D}"
+	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
+
+	dnl		Problem with linux headers:
+	dnl   cannot use -std strict_ansi since the socket headers
+	dnl   cause an error #280
+	if test "${OS}" != "Linux" ; then
+		CXXFLAGS="${CXXFLAGS} -std strict_ansi"
+		MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -std strict_ansi"
+	fi
+
+	COMPILER_DONE=true
+fi
+
+dnl
+dnl try to identify the compiler for each OS
+dnl
+dnl
+if test "${COMPILER_DONE}" != true ; then
+	if test "${OS}" = IRIX ; then
+		dnl  set the name for the template repository
+		dnl
+		TEMPLATE_DIR="ii_files"
+
+		dnl	 set the default binary format (if none selected)
+		dnl
+		if test "${BINFMT_64_BIT}" = true ; then
+			IRIX_BINFMT=64
+			CXX_NAME="${CXX_NAME}_64"
+		else
+			IRIX_BINFMT=N32
+			CXX_NAME="${CXX_NAME}_N32"
+		fi
+		
+		BALL_TYPENAME=typename
+
+		dnl 
+		dnl			a version above 7.2 is required
+		dnl
+		if test "${CXX_VERSION_1}" -lt 7\
+						-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" = 10\
+						-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" = 20\
+						-o "${CXX_VERSION_1}" -eq 7 -a "${CXX_VERSION_2}" -lt 2; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(MipsPro CC version 7.30 or above is required. Please update your compiler.)
+			AC_ERROR(Aborted)
+		fi
+
+
+		AR=${CXX}
+		AROPTS="${AROPTS} -ar -o"
+		DYNAR=${CXX}
+		DYNAROPTS="${DYNAROPTS} -LANG:std -shared -quickstart_info -no_unresolved -o"
+
+		dnl  issue a warning about an old compiler with a broken ostream implementation: reopening a fstream
+		dnl  and writing to it will omit the first 16k written to the stream. Nasty, but confirmed with SGI
+		dnl  and fixed in 7.3.1.1m
+		if test "${CXX_VERSION_1}" = 7 -a "${CXX_VERSION_2}" = 3 \
+						-a "${CXX_VERSION_3}" = 1m -a "${CXX_VERSION_4}" = ""\
+						-o "${CXX_VERSION_1}" = 7 -a "{CXX_VERSION_2}" = 30 ; then
+			COMMENTS="${COMMENTS}\nPlease take care - this version of SGI CC (7.3.1m) contains serious bugs\n"
+			COMMENTS="${COMMENTS}in its implementaion of fstream/iostream. This may lead to strange behaviour\n"
+			COMMENTS="${COMMENTS}and causes PDBFile_test to fail. Please update your compiler.\n\n"
+			AC_MSG_RESULT(${COMMENTS})
+			ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}${COMMENTS}"
+			COMMENTS=""
+		fi
+
+		CXX_MAKEDEPEND="${CXX}"
+		MAKEDEP_CXX_OPTS="-M 2>/dev/null"
+		MAKEDEP_CXX_SUFFIX=" >.Dependencies"
+
+		if test "${IRIX_BINFMT}" = 64 ; then
+			DEF_BOOL=false
+			CXXFLAGS="$CXXFLAGS -64 -LANG:std"
+			DYNAROPTS="-64 ${DYNAROPTS}"
+			CXXFLAGS_O="${CXXFLAGS_O} -O3 -OPT:Olimit=60000 -multigot -G 5 -DEBUG:woff=3333"
+			CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,3333,1110,1209"
+			CXXFLAGS_DI="${CXXFLAGS_DI} -g"
+			LDFLAGS="$LDFLAGS -64 -LANG:std"
+			AC_DEFINE(IRIX64,)
+		fi
+		if test "${IRIX_BINFMT}" = N32 ; then
+			DEF_BOOL=false
+			CXXFLAGS="$CXXFLAGS -n32 -LANG:std"
+			DYNAROPTS="-n32 ${DYNAROPTS}"
+			CXXFLAGS_O="${CXXFLAGS_O} -O3 -OPT:Olimit=60000 -multigot -G 5 -DEBUG:woff=3333"
+			CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,3333,1110,1209"
+			CXXFLAGS_DI="${CXXFLAGS_DI} -g"
+			LDFLAGS="$LDFLAGS -n32 -LANG:std"
+			AC_DEFINE(IRIX32,)
+		fi
+		 
+		dnl
+		dnl  -O3 requires -IPA for linking
+		dnl
+		if test "${DEBUG}" = yes ; then
+			DYNAROPTS="-IPA ${DYNAROPTS}"
+		fi
+
+		AC_DEFINE(MIPS,)	
+		AC_DEFINE(IRIX,)
+	fi
+
+	dnl
+	dnl  old SunOS 4.x - only for completeness
+	dnl
+	if test $OS = SunOS ; then
+		CXXFLAGS_D="$CXXFLAGS_D}"
+		CXXFLAGS_DI="$CXXFLAGS_DI} -g"
+		CXXFLAGS_O="${CXXFLAGS_O} -O2"
+		AC_DEFINE(SPARC,)
+		AC_DEFINE(SUNOS,)
+		AC_ERROR(SunOS not supported - please use Solaris)
+	fi
+
+	dnl
+	dnl  SUN Solaris (2.x)
+	dnl
+	if test $OS = Solaris ; then
+		dnl
+		dnl		Make sure we use at least Workshop 6.0
+		dnl		(SUNPro < 6 is a mess - hasn't even heard of ANSI C++!)
+		dnl
+		if test "${CXX_VERSION_1}" -lt 6 ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(BALL requires an ANSI C++ compliant compiler)
+			AC_MSG_RESULT(SUNPro compilers are ANSI compliant for version 6.0 and above)
+			AC_MSG_RESULT(Please upgrade your compiler!)
+			AC_MSG_RESULT()
+			AC_ERROR(Abort)
+		fi
+
+		AC_DEFINE(SOLARIS,)
+
+		TEMPLATE_DIR="SunWS_cache"
+
+		dnl	 set the default binary format (if none selected)
+		dnl
+		if test "${BINFMT_64_BIT}" = true ; then
+			SUN_BINFMT=V9
+			CXX_NAME="${CXX_NAME}_V9"
+			LDFLAGS="${LDFLAGS} -xarch=v9"
+			CXXFLAGS="${CXXFLAGS} -xarch=v9"
+			AROPTS="${AROPTS} -xarch=v9"
+			DYNAROPTS="-xarch=v9 ${DYNAROPTS}"
+		else
+			SUN_BINFMT=V8
+			CXX_NAME="${CXX_NAME}_V8"
+		fi
+
+		DEF_BOOL=true
+		AR="${CXX}"
+		DYNAR="${CXX}"
+		AROPTS="${AROPTS} -xar -KPIC -o"
+		DYNAROPTS="${DYNAROPTS} -pto -G -KPIC -o"
+		NONLIB_CXXFLAGS="-pto"
+		LIB_CXXFLAGS=""
+		CXX_MAKEDEPEND="${CXX}"
+		MAKEDEP_CXX_OPTS="-xM1"
+		MAKEDEP_CXX_SUFFIX=" >.Dependencies"
+
+		AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
+		CXXFLAGS="${CXXFLAGS} -KPIC"
+		CXXFLAGS_O="${CXXFLAGS_O} -xO5"
+		CXXFLAGS_D="${CXXFLAGS_D}"
+		CXXFLAGS_DI="${CXXFLAGS_DI} -g"
+	fi
+fi
+
+dnl
+dnl   checking for DEBUG-Flag
+dnl
+
+AC_MSG_CHECKING(for DEBUG flag)
+if test "$DEBUG" != "" ; then
+	dnl   define a debug flag and prevent the compilation of
+	dnl   inline functions by defining BALL_NO_INLINE_FUNCTIONS
+	dnl   (see COMMON/debug.h)
+	if test "$DEBUG" = true ; then	
+		dnl  if debug information is also required, add the corresponding flag
+		dnl
+		if test "${DEBUG_INFO}" = true -a "$CXXFLAGS_DI" != "" ; then
+			CXXFLAGS_D="${CXXFLAGS_D} ${CXXFLAGS_DI}"
+		fi
+		AC_DEFINE(BALL_DEBUG,)
+		AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
+		AC_MSG_RESULT(enabled)
+		CPP_MODE_FLAGS="${CXXFLAGS_D}"
+		CPP_MODE_FLAGS_NO_OPTIMIZATION="${CXXFLAGS_D}"
+	else
+		AC_MSG_RESULT(disabled)
+		CPP_MODE_FLAGS="${CXXFLAGS_O}"
+		CPP_MODE_FLAGS_NO_OPTIMIZATION=""
+	fi
+else
+	AC_MSG_RESULT(disabled)
+	CPP_MODE_FLAGS="${CXXFLAGS_O}"
+	CPP_MODE_FLAGS_NO_OPTIMIZATION=""
+fi
+
+dnl
+dnl		check for multi-platform build
+dnl
+if test "${MULTI_BUILD}" = "true" ; then
+	AC_MSG_CHECKING(multi-platform build)
+	AC_MSG_RESULT(enabled)
+fi
+
+dnl
+dnl		checks for header files
+dnl
+
+dnl
+dnl		some platforms need to include ieeefp.h
+dnl		for the definition of finite
+dnl
+if test "$OS" = IRIX -o "$OS" = Solaris ; then
+	INCLUDE_IEEEFP=true
+	BALL_INCLUDE_IEEEFP=true
+fi
+
+dnl 	check for standard C headers
+dnl 	and how to run the preprocessor
+AC_HEADER_STDC
+
+dnl
+dnl		check for limits header (class numeric limits, to be precise)
+dnl
+dnl
+AC_MSG_CHECKING(for numeric_limits class)
+AC_TRY_COMPILE(
+	[
+		#include <limits>
+	],
+	[
+		float f = std::numeric_limits<float>::min();
+	],
+	BALL_HAVE_NUMERIC_LIMITS=true
+)
+if test "${BALL_HAVE_NUMERIC_LIMITS}" = true ; then
+	AC_MSG_RESULT(available)
+	AC_DEFINE(BALL_HAVE_NUMERIC_LIMITS)
+else
+	AC_MSG_RESULT(not available)
+	BALL_HAVE_NUMERIC_LIMITS=false
+
+	dnl
+	dnl	 we didn't find a numeric limits class, so we implement
+	dnl  it by ourselves. Try to figure out whether we only need 
+	dnl  limts.h or also float.h (sometimes FLT_MIN seems to be missing)
+	dnl
+	AC_MSG_CHECKING(whether float.h has to be included)
+	AC_TRY_COMPILE(
+		[
+			#include <limits.h>
+		],
+		[
+			float a = FLT_MAX;
+			float b = FLT_MIN;
+			float c = DBL_MAX;
+			float d = DBL_MIN;
+		],
+		BALL_INCLUDE_FLOAT_H=false
+	)
+	if test "${BALL_INCLUDE_FLOAT_H}" != false ; then
+		AC_TRY_COMPILE(
+			[
+				#include <float.h>
+			],
+			[
+				float a = FLT_MAX;
+				float b = FLT_MIN;
+				float c = DBL_MAX;
+				float d = DBL_MIN;
+			],
+			BALL_INCLUDE_FLOAT_H=true
+		)
+	fi
+	if test "${BALL_INCLUDE_FLOAT_H+set}" != set ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(limits.h seems to be corrupt or float.h is missing!)
+		AC_MSG_RESULT()
+	else 
+		if test "${BALL_INCLUDE_FLOAT_H}" = true ; then
+			AC_MSG_RESULT(yes)
+			AC_DEFINE(BALL_INCLUDE_FLOAT_H)	
+		else 
+			AC_MSG_RESULT(no)
+		fi
+	fi 
+fi
+rm /tmp/$$.conftest.c a.out 2>/dev/null
+
+
+
+dnl
+dnl		check for template arguments needed for friends of template
+dnl 	classses. Some compilers require "<>" after the method name,
+dnl		others don't - so let's find it out!
+dnl
+AC_MSG_CHECKING(for null template arguments)
+BALL_NULL_TEMPLATE_ARGS="NULL"
+AC_TRY_COMPILE(
+	[
+		template <typename T>
+		class A
+		{
+			public:
+			friend bool operator == <> (const A&, const A&);
+		};
+	],
+	[	
+	],
+	BALL_NULL_TEMPLATE_ARGS="<>")	
+if test "${BALL_NULL_TEMPLATE_ARGS}" = "NULL" ; then
+	AC_TRY_COMPILE(
+		[
+			template <typename T>
+			class A
+			{
+				public:
+				friend bool operator == (const A&, const A&);
+			};
+		],
+		[
+		],
+		BALL_NULL_TEMPLATE_ARGS="")	
+fi
+AC_MSG_RESULT(\"$BALL_NULL_TEMPLATE_ARGS\")
+if test "${BALL_NULL_TEMPLATE_ARGS}" = "NULL" ; then
+	AC_MSG_RESULT(could not find a suitable argument for null templates)
+	AC_ERROR(aborted)
+fi
+
+dnl
+dnl		check for ANSI compliant <iostream>
+dnl 	We need this for the base classes (ios vs. basic_ios<char>) in socket.h/C
+dnl
+AC_MSG_CHECKING(for ANSI compliant iostream)
+BALL_HAS_ANSI_IOSTREAM=no
+AC_TRY_COMPILE(
+	[
+		#include <iostream>
+		class A:public std::iostream
+		{
+			A():std::basic_ios<char>(0),std::iostream(0)
+			{}
+		};
+	],
+	[	
+ 	],
+	BALL_HAS_ANSI_IOSTREAM=yes
+)	
+AC_MSG_RESULT($BALL_HAS_ANSI_IOSTREAM)
+
+dnl
+dnl		check for ANSI or ARM style access modification
+dnl		either (ARM style) Base::foo or (ANSI style) using Base::foo 	
+dnl
+AC_MSG_CHECKING(for ANSI or ARM style access modification)
+BALL_CFG_USING_METHOD_DIRECTIVE=none
+AC_TRY_COMPILE(
+	[
+		class A
+		{
+			protected: void foo(){};
+		};
+
+		class B : public A
+		{
+			public: using A::foo;
+		};
+	],
+	[	
+		B b;
+		b.foo();
+ 	],
+	BALL_CFG_USING_METHOD_DIRECTIVE=ANSI
+)	
+if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = none ; then
+	AC_TRY_COMPILE(
+		[
+			class A
+			{
+				protected: void foo(){};
+			};
+
+			class B : public A
+			{
+				public: A::foo;
+			};
+		],
+		[	
+			B b;
+			b.foo();
+		],
+		BALL_CFG_USING_METHOD_DIRECTIVE=ARM
+	)	
+fi
+AC_MSG_RESULT(${BALL_CFG_USING_METHOD_DIRECTIVE})
+if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = ANSI ; then
+	AC_DEFINE(BALL_CFG_USING_METHOD_DIRECTIVE)
+fi
+if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = none ; then
+	AC_MSG_RESULT()
+	AC_MSG_RESULT([Compiler does not understand ARM or ANSI style method access modification.])
+	AC_MSG_RESULT([Please specify a different compiler (e.g. g++ 2.95.2) using the option])
+	AC_MSG_RESULT([--with-compiler=<compiler>.])
+	AC_MSG_RESULT()
+	AC_ERROR(aborted.)
+fi
+
+
+dnl
+dnl		Checks for typedefs, structures, and compiler characteristics.
+dnl
+
+AC_TYPE_SIZE_T
+AC_HEADER_TIME
+
+dnl
+dnl		check for the size of int and pointers (may cause trouble on 64 bit architectures)
+dnl		we define the type PointerInt (in COMMON/global.h) according to the macro
+dnl		BALL_POINTERSIZE_INT (which is set here)
+dnl   We also define a 64 bit unsigned numeric type. All pointers that are read or written
+dnl   in persistence-related methods use this type to ensure compatibility between 32 and
+dnl   64bit BALL versions.
+dnl	  missing: usage of the result of AC_TYPE_SIZE_T
+dnl
+AC_CHECK_SIZEOF(char, 4)
+AC_CHECK_SIZEOF(int, 4)
+AC_CHECK_SIZEOF(long, 4)
+AC_CHECK_SIZEOF(long long, 8)
+AC_CHECK_SIZEOF(size_t, 4)
+AC_CHECK_SIZEOF(void*, 4)
+
+SIZEOF_INT=$ac_cv_sizeof_int
+SIZEOF_CHAR=$ac_cv_sizeof_char
+SIZEOF_LONG=$ac_cv_sizeof_long
+SIZEOF_SIZE_T=$ac_cv_sizeof_size_t
+SIZEOF_VOID_P=$ac_cv_sizeof_voidp
+SIZEOF_UINT=$ac_cv_sizeof_int
+SIZEOF_ULONG=$ac_cv_sizeof_long
+SIZEOF_ULONGLONG=$ac_cv_sizeof_long_long
+
+AC_DEFINE_UNQUOTED(BALL_CHAR_SIZE, ${SIZEOF_CHAR})
+AC_DEFINE_UNQUOTED(BALL_INT_SIZE, ${SIZEOF_INT})
+AC_DEFINE_UNQUOTED(BALL_LONG_SIZE, ${SIZEOF_LONG})
+AC_DEFINE_UNQUOTED(BALL_SIZE_T_SIZE, ${SIZEOF_SIZE_T})
+AC_DEFINE_UNQUOTED(BALL_POINTER_SIZE, ${SIZEOF_VOID_P})
+AC_DEFINE_UNQUOTED(BALL_UINT_SIZE, ${SIZEOF_UINT})
+AC_DEFINE_UNQUOTED(BALL_ULONG_SIZE, ${SIZEOF_ULONG})
+AC_DEFINE_UNQUOTED(BALL_ULONGLONG_SIZE, ${SIZEOF_ULONGLONG})
+
+
+dnl
+dnl  define an unsigned type that can hold 64 bit pointers
+dnl
+if test "${SIZEOF_UINT}" = 8; then
+	BALL_64BIT_UINT="unsigned int"
+else 
+	if test "${SIZEOF_ULONG}" = 8; then
+		BALL_64BIT_UINT="unsigned long"
+	else
+		if test "${SIZEOF_ULONGLONG}" = 8 ; then
+			BALL_64BIT_UINT="unsigned long long"
+		else
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(cannot find appropriate numeric type for 64bit unsigned int)
+			AC_MSG_ERROR(abort)
+		fi
+	fi
+fi
+AC_DEFINE_UNQUOTED(BALL_64BIT_UINT_TYPE, ${BALL_64BIT_UINT})
+
+dnl
+dnl	define a 32 bit type for Size and Index
+dnl
+if test "${SIZEOF_UINT}" = "${SIZEOF_VOID_P}" ; then
+	BALL_POINTER_TYPE="unsigned int"
+else 
+	if test "${SIZEOF_ULONG}" = "${SIZEOF_VOID_P}" ; then
+		BALL_POINTER_TYPE="unsigned long"
+	else
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(cannot find appropriate integer type of same size as void*)
+		AC_MSG_ERROR(abort)
+	fi
+fi
+AC_DEFINE_UNQUOTED(BALL_POINTERSIZEINT_TYPE, ${BALL_POINTER_TYPE})
+
+dnl
+dnl	define a (true) pointer size int for several conversion issues
+dnl (e.g. PersistenceManager) - just a define, no real typedef
+dnl since for internal use only!
+dnl
+if test "${SIZEOF_INT}" = 4 ; then
+	BALL_INDEX_TYPE="int"
+	BALL_SIZE_TYPE="unsigned int"
+else 
+	if test "${SIZEOF_LONG}" = 4 ; then
+		BALL_INDEX_TYPE="long"
+		BALL_SIZE_TYPE="unsigned long"
+	else
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(cannot find appropriate numeric type for 32bit int)
+		AC_MSG_ERROR(abort)
+	fi
+fi
+AC_DEFINE_UNQUOTED(BALL_SIZE_TYPE, ${BALL_SIZE_TYPE})
+AC_DEFINE_UNQUOTED(BALL_INDEX_TYPE, ${BALL_INDEX_TYPE})
+
+dnl  define 64 bit unsigned type
+if test "${SIZEOF_ULONG}" = "8" ; then
+	BALL_ULONG64_TYPE="unsigned long"
+	AC_DEFINE(BALL_64BIT_ARCHITECTURE)
+else 
+	if test "${SIZEOF_ULONGLONG}" = "8" ; then
+		BALL_ULONG64_TYPE="unsigned long long"
+	else
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(cannot find unsigned 64bit type.)
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(abort)
+	fi
+fi
+AC_DEFINE_UNQUOTED(BALL_ULONG64_TYPE, ${BALL_ULONG64_TYPE})
+
+
+dnl 
+dnl   check for endianness of the architecture
+dnl
+dnl
+AC_MSG_CHECKING(for byte order)
+AC_TRY_RUN(
+		[
+			#include <iostream>
+			#include <fstream>
+			int main(int, char**)
+			{
+		] ${BALL_SIZE_TYPE} endian_one = 1; [
+			std::ofstream os("config.endian.log", std::ios::out);
+
+	    if (*(char*)&endian_one == '\001')
+      {
+				// big endian
+				os << "LITTLE" << std::endl;
+      }
+	    else
+      {
+				// little endian
+				os << "BIG" << std::endl;
+      }
+			os.close();
+			
+			return 0;
+			}
+		],
+		BALL_ENDIAN_TEST=true,
+		DUMMY=0,
+		DUMMY=0
+)
+if test "${BALL_ENDIAN_TEST+set}" != set ; then
+	AC_MSG_RESULT(<cannot determine>)
+	AC_MSG_RESULT()
+	AC_MSG_ERROR(Cannot determine endianness of machine.)
+else
+	dnl
+	dnl	read the result of the endian test from the file
+	dnl and delete the file
+	dnl
+	ENDIAN_TYPE=`${CAT} config.endian.log`
+	if test "${ENDIAN_TYPE}" = "LITTLE" ; then
+		BALL_LITTLE_ENDIAN=true
+		AC_DEFINE(BALL_LITTLE_ENDIAN, true)
+		AC_MSG_RESULT(little endian)
+	else
+		if test "${ENDIAN_TYPE}" = "BIG" ; then
+			BALL_BIG_ENDIAN=true
+			AC_DEFINE(BALL_BIG_ENDIAN, true)
+			AC_MSG_RESULT(big endian)
+		else
+			AC_MSG_RESULT(<cannot determine>)
+			AC_MSG_RESULT()
+			AC_MSG_ERROR(Cannot determine endianness of machine.)
+		fi
+	fi
+fi
+
+dnl
+dnl		check whether vsnprintf is defined
+dnl
+AC_CHECK_FUNCS(vsnprintf, HAVE_VSNPRINTF=1)
+if test "${HAVE_VSNPRINTF}" = 1 ; then
+	dnl
+	dnl   check whether vsnprintf works as expected 
+	dnl   on Solaris 2.x it is broken in the 64bit version
+	dnl
+	AC_TRY_RUN(
+		[
+			#include <stdlib.h> 
+			int main()
+			{
+				char* buffer[50];
+				vsnprintf(buffer, "%1s", "TEST");
+				
+				if (!strcmp(buffer, "T"))
+				{			
+					return 0;
+				}
+				else
+				{
+					return 1;
+				}
+			}
+		], 
+		VSNPRINTF_OK=1,
+		DUMMY=0,
+		DUMMY=0
+	)
+
+	if test "${VSNPRINTF_OK}" = 1 ; then
+		AC_DEFINE(BALL_HAVE_VSNPRINTF)
+	fi
+fi
+
+dnl   
+dnl   check for some network stuff needed for socket class
+dnl   this test tries to identify the neccessary libraries
+dnl		solaris needs xnet or socket/nsl to link the tcp stuff
+dnl  	
+
+dnl
+dnl		check whether we need sysinfo or gethostname
+dnl
+		
+AC_CHECK_FUNCS(gethostname, HAVE_GETHOSTNAME=1)
+if test "${HAVE_GETHOSTNAME}" = 1 ; then
+	AC_DEFINE(BALL_HAVE_GETHOSTNAME)
+else
+	AC_CHECK_FUNCS(sysinfo, HAVE_SYSINFO=1)
+	if test "${HAVE_SYSINFO}" = 1  ; then
+		AC_DEFINE(BALL_HAVE_SYSINFO)
+	else
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([Could not find gethostname or sysinfo methods!])
+		AC_MSG_RESULT([Please refer to config.log to identify the problem.])
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(Aborted)
+	fi
+fi
+
+dnl
+dnl check for gethostname in the header
+dnl
+if test "${HAVE_GETHOSTNAME}" = 1 ; then
+	AC_MSG_CHECKING(for gethostname in unistd.h)
+	AC_TRY_COMPILE(
+		[	
+			#include <unistd.h>
+		],
+		[
+			char name[1024];
+			gethostname(name, 1023);
+		],
+		HAVE_GETHOSTNAME_HEADER=1
+	)
+	if test "${HAVE_GETHOSTNAME_HEADER+set}" != set ; then
+		AC_MSG_RESULT(no)
+		AC_DEFINE(BALL_DEFINE_GETHOSTNAME)
+	else
+		AC_MSG_RESULT(yes)
+	fi
+fi
+
+dnl
+dnl 	first check if everythings already defined in libc
+dnl 
+AC_CHECK_FUNCS(inet_addr, HAVE_INET_ADDR=1)
+AC_CHECK_FUNCS(gethostbyname, HAVE_GETHOSTBYNAME=1)
+if test "${HAVE_INET_ADDR+set}" = set ; then
+	AC_CHECK_FUNC(inet_aton, HAVE_INET_ATON=1)
+fi 
+
+dnl   if gethostbyname was not defined in libc, try libxnet (Solaris only?)
+if test "${HAVE_GETHOSTBYNAME+set}" != set -a "${USE_LIBXNET}" != false; then
+	AC_CHECK_LIB(xnet, gethostbyname)
+	unset ac_cv_func_gethostbyname
+	AC_CHECK_FUNCS(gethostbyname,HAVE_GETHOSTBYNAME=1)
+fi
+if test "${HAVE_INET_ADDR+set}" != set ; then
+	unset ac_cv_func_inet_addr
+	AC_CHECK_FUNCS(inet_addr,HAVE_INET_ADDR=1)
+	if test "${HAVE_INET_ADDR+set}" != set -a "${USE_LIBXNET}" != false; then
+		AC_CHECK_LIB(xnet, inet_addr)
+		unset ac_cv_func_inet_addr
+		AC_CHECK_FUNCS(inet_addr,HAVE_INET_ADDR=1)
+	fi
+fi
+
+if test "${HAVE_GETHOSTBYNAME+set}" != set ; then 
+	AC_CHECK_LIB(nsl, gethostbyname)
+	unset ac_cv_func_gethostbyname
+	AC_CHECK_FUNCS(gethostbyname,HAVE_GETHOSTBYNAME=1)
+fi
+
+if test "${HAVE_INET_ADDR+set}" != set ; then
+	AC_CHECK_LIB(socket, inet_addr)
+	unset ac_cv_func_inet_addr
+	AC_CHECK_FUNCS(inet_addr,HAVE_INET_ADDR=1)
+fi
+
+
+dnl check again whether inet_aton exists (perhaps it was hidden in one
+dnl of the other libraries..
+if test "${HAVE_INET_ATON+set}" != set ; then
+	unset ac_cv_func_inet_aton
+	AC_CHECK_FUNC(inet_aton,HAVE_INET_ATON=1)
+fi
+
+if test "${HAVE_INET_ATON+set}" = set ; then
+	AC_DEFINE(HAVE_INET_ATON,)
+fi
+
+dnl
+dnl		Now for something related: check whether size arguments
+dnl 	in function calls like getsockname getpeername or accept
+dnl		require a specialized typename or int
+dnl		We simply compile a short example with all known types
+dnl		and take one that didn't cause a warning (or an error)
+dnl
+AC_MSG_CHECKING(for socketlen type)
+AC_TRY_COMPILE(
+	[
+		#include <sys/types.h>
+		#include <sys/socket.h>	
+		#include <netinet/in.h>
+	],
+	[	sockaddr_in   addr;
+	  socklen_t     len = 0;
+	  getsockname(0, (struct sockaddr*)&addr, &len);
+	],
+	BALL_SOCKLEN_TYPE=socklen_t)	
+if test "${BALL_SOCKLEN_TYPE}" = "" ; then
+	AC_TRY_COMPILE(
+		[
+			#include <sys/types.h>	
+			#include <sys/socket.h>	
+			#include <netinet/in.h>
+		],
+		[	sockaddr_in   addr;
+		  size_t    len = 0;
+		  getsockname(0, (struct sockaddr*)&addr, &len);
+		],
+		BALL_SOCKLEN_TYPE=size_t)	
+fi
+if test "${BALL_SOCKLEN_TYPE}" = "" ; then
+	AC_TRY_COMPILE(
+		[
+			#include <sys/types.h>	
+			#include <sys/socket.h>	
+			#include <netinet/in.h>
+		],
+		[	sockaddr_in   addr;
+		  unsigned int  len = 0;
+		  getsockname(0, (struct sockaddr*)&addr, &len);
+		],
+		BALL_SOCKLEN_TYPE="unsigned int")	
+fi
+if test "${BALL_SOCKLEN_TYPE}" = "" ; then
+	AC_TRY_COMPILE(
+		[
+			#include <sys/types.h>	
+			#include <sys/socket.h>	
+			#include <netinet/in.h>
+		],
+		[	sockaddr_in   addr;
+		  int 					len = 0;
+		  getsockname(0, (struct sockaddr*)&addr, &len);
+		],
+		BALL_SOCKLEN_TYPE="int")	
+fi
+if test "${BALL_SOCKLEN_TYPE}" = "" ; then
+	AC_MSG_RESULT(FAILED)
+	AC_MSG_RESULT(-------------WARNING!---------------)
+	AC_MSG_RESULT(could not find a matching type for socket length argument)
+	AC_MSG_RESULT(in call to getsockname)
+	AC_MSG_RESULT(please check the setting for BALL_SOCKLEN_TYPE in config.mak)
+	AC_MSG_RESULT(and set it to the type needed for the third arguemnt of  getsockname)
+	AC_MSG_RESULT()
+else
+	AC_MSG_RESULT($BALL_SOCKLEN_TYPE)
+fi
+
+AC_DEFINE_UNQUOTED(BALL_SOCKLEN_TYPE, ${BALL_SOCKLEN_TYPE})
+
+
+dnl
+dnl   check for the XDR functions: their interface and the libraries they're hidden in.
+dnl
+if test "${BALL_NO_XDR}" = "true" ; then
+
+	AC_MSG_RESULT([No XDR headers available - building of XDR persistence support disabled])
+	AC_DEFINE(BALL_HAS_XDR, )
+	BALL_HAS_XDR=""
+	AC_SUBST(BALL_HAS_XDR)
+else
+
+	AC_CHECK_HEADER(rpc/types.h, HAS_RPC_TYPES_H=true, HAS_RPC_TYPES_H=false)
+	if test "${HAS_RPC_TYPES_H}" = false ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([Cannot find RPC headers (rpc/types.h).])
+		AC_MSG_RESULT([If your system does not provide an RPC/XDR implementation (e.g., CYGWIN),])
+		AC_MSG_RESULT([please specify the option --without-xdr to avoid this error.])
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(Aborted.)
+	fi
+
+	AC_CHECK_HEADER(rpc/xdr.h, HAS_XDR_H=true, HAS_XDR_H=false)
+	if test "${HAS_XDR_H}" = false ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([Cannot find XDR headers (rpc/xdr.h).])
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(Aborted.)
+	fi
+
+	AC_MSG_CHECKING([arg types for xdrrec_create])
+	AC_TRY_COMPILE(
+			[
+				#include <rpc/types.h>
+				#include <rpc/xdr.h>
+				extern "C" int dummy(void*, void*, unsigned int) {return 0;}
+				void foo(){ 
+					XDR xdrs;
+					xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+				}
+			],
+			[	
+			],
+			BALL_XDRREC_VOID_VOID_UINT=true,
+			BALL_XDRREC_VOID_VOID_UINT=false
+	)
+	if test "${BALL_XDRREC_VOID_VOID_UINT}" = false ; then
+		AC_TRY_COMPILE(
+				[
+					#include <rpc/types.h>
+					#include <rpc/xdr.h>
+					extern "C" int dummy(void*, char*, int) {return 0;}
+					void foo(){ 
+						XDR xdrs;
+						xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+					}
+				],
+				[	
+				],
+				BALL_XDRREC_VOID_CHAR_INT=true,
+				BALL_XDRREC_VOID_CHAR_INT=false
+		)
+		if test "${BALL_XDRREC_VOID_CHAR_INT}" = true ; then
+			AC_MSG_RESULT([(void*, char*, int)])
+		else
+			AC_TRY_COMPILE(
+					[
+						#include <rpc/types.h>
+						#include <rpc/xdr.h>
+						extern "C" int dummy(char*, char*, int) {return 0;}
+						void foo(){ 
+							XDR xdrs;
+							xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+						}
+					],
+					[	
+					],
+					BALL_XDRREC_CHAR_CHAR_INT=true,
+					BALL_XDRREC_CHAR_CHAR_INT=false
+			)
+			if test "${BALL_XDRREC_CHAR_CHAR_INT}" = true ; then
+				AC_MSG_RESULT([(char*, char*, int)])
+			else
+				AC_TRY_COMPILE(
+					[
+						#include <rpc/types.h>
+						#include <rpc/xdr.h>
+						extern "C" int dummy() {return 0;}
+						void foo(){
+							XDR xdrs;
+							xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+						}
+					],
+					[
+					],
+					BALL_XDRREC_VOID=true,
+					BALL_XDRREC_VOID=false
+				)
+				if test "${BALL_XDRREC_VOID}" = true ; then
+					AC_MSG_RESULT(())
+				else
+					AC_MSG_RESULT(not found!)
+					AC_MSG_ERROR(Aborted)
+				fi
+			fi
+		fi
+	else
+		AC_MSG_RESULT([(void*, void*, unsigned int)])
+	fi
+
+	dnl
+	dnl  check whether there is a function to store 64bit
+	dnl  unsigned ints (xdr_u_hyper)
+	dnl
+	AC_MSG_CHECKING(for xdr_u_hyper function)
+	BALL_HAS_XDR_U_HYPER=false
+	AC_TRY_COMPILE(
+		[
+			#include <rpc/types.h>
+			#include <rpc/xdr.h>
+		],
+		[
+			xdr_u_hyper(0, 0);
+		],	
+		BALL_HAS_XDR_U_HYPER=true
+	)	
+
+	if test "${BALL_HAS_XDR_U_HYPER}" = "true" ; then
+		AC_MSG_RESULT(found)
+
+		AC_MSG_CHECKING([for 64-bit XDR type (for xdr_u_hyper)])
+		BALL_U_QUAD_TYPE=""
+		AC_TRY_COMPILE(
+			[
+				#include <rpc/types.h>
+				#include <rpc/xdr.h>
+			],
+			[	u_quad_t   q;
+				XDR xdrs;
+		  		xdr_u_hyper(&xdrs, &q);
+			],
+			BALL_U_QUAD_TYPE=u_quad_t
+		)	
+
+		if test "${BALL_U_QUAD_TYPE}" = "" ; then
+			AC_TRY_COMPILE(
+				[
+					#include <rpc/types.h>
+					#include <rpc/xdr.h>
+				],
+				[	u_longlong_t   q;
+					XDR xdrs;
+					xdr_u_hyper(&xdrs, &q);
+				],
+				BALL_U_QUAD_TYPE=u_longlong_t
+			)	
+		fi
+
+		if test "${BALL_U_QUAD_TYPE}" = "" ; then
+			AC_TRY_COMPILE(
+				[
+					#include <rpc/types.h>
+					#include <rpc/xdr.h>
+				],
+				[	unsigned long long int  q;
+					XDR xdrs;
+					xdr_u_hyper(&xdrs, &q);
+				],
+				BALL_U_QUAD_TYPE="unsigned long long int"
+			)	
+		fi
+
+		if test "${BALL_U_QUAD_TYPE}" = "" ; then
+			AC_TRY_COMPILE(
+				[
+					#include <rpc/types.h>
+					#include <rpc/xdr.h>
+				],
+				[	__uint64_t  q;
+					XDR xdrs;
+					xdr_u_hyper(&xdrs, &q);
+				],
+				BALL_U_QUAD_TYPE=__uint64_t
+			)	
+		fi
+		if test "${BALL_U_QUAD_TYPE}" = "" ; then
+			AC_MSG_RESULT([Could not identify an appropriate type for xdr_u_hyper.])
+			AC_MSG_ERROR([Aborted.])
+		fi
+
+		AC_MSG_RESULT(${BALL_U_QUAD_TYPE})
+		AC_DEFINE_UNQUOTED(BALL_XDR_UINT64_TYPE, ${BALL_U_QUAD_TYPE})
+		AC_DEFINE(BALL_HAS_XDR_U_HYPER)
+
+	else
+
+		dnl
+		dnl	we do not have xdr_u_hyper, so BALL has to use two 
+		dnl	calls to xdr_u_int instead. 
+		dnl	However, we have to identify whether the system supports
+		dnl	64bit unsigned types at all
+		dnl	
+		AC_TRY_COMPILE(
+			[
+			],
+			[	
+				unsigned long long int  q = 1234567890123456789LL;
+			],
+			BALL_U_QUAD_TYPE="unsigned long long int"
+		)	
+		if test "${BALL_U_QUAD_TYPE}" = "" ; then
+			AC_MSG_RESULT([Could not identify an 64 bit unsigned type (long long).])
+			AC_MSG_ERROR(aborted)
+		fi
+	
+		AC_DEFINE_UNQUOTED(BALL_XDR_UINT64_TYPE, ${BALL_U_QUAD_TYPE})
+		AC_MSG_RESULT(unsigned long long int)
+	
+	fi
+
+
+	dnl
+	dnl Define appropriate symbols in config.h.
+	dnl The symbols are used in CONCEPT/XDRPersistenceManager.C only.
+	dnl
+	if test "${BALL_XDRREC_VOID_CHAR_INT}" = true ; then
+		AC_DEFINE(BALL_XDRREC_CREATE_VOID_CHAR_INT)
+	fi
+	if test "${BALL_XDRREC_CHAR_CHAR_INT}" = true ; then
+		AC_DEFINE(BALL_XDRREC_CREATE_CHAR_CHAR_INT)
+	fi
+	if test "${BALL_XDRREC_VOID}" = true ; then
+		AC_DEFINE(BALL_XDRREC_CREATE_VOID)
+	fi
+	
+	dnl
+	dnl		Try to guess the library required for the XDR stuff.
+	dnl   It is often in libc, but Solaris hides it in libnsl.
+	dnl
+	AC_MSG_CHECKING(for XDR symbols in libc)
+	AC_TRY_LINK([
+			#include <rpc/types.h>
+			#include <rpc/xdr.h>
+		],
+		[
+			XDR xdrs;
+			int i;
+			xdr_int(&xdrs, &i);
+		],
+		XDR_IN_LIBC=true
+	)
+	if test "${XDR_IN_LIBC}" != true ; then
+		AC_MSG_RESULT(not found!)
+		AC_MSG_CHECKING(for XDR symbols in libnsl)
+
+		SAVE_LIBS=${LIBS}
+		LIBS="-lnsl ${LIBS}"
+		AC_TRY_LINK([
+				#include <rpc/types.h>
+				#include <rpc/xdr.h>
+			],
+			[
+				XDR xdrs;
+				int i;
+				xdr_int(&xdrs, &i);
+			],
+			XDR_IN_LIBNSL=true
+		)
+		if test "${XDR_IN_LIBNSL}" = true ; then
+			AC_MSG_RESULT(yes)
+		else
+			AC_MSG_RESULT(no)
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Did not find XDR symbols in libc or libnsl.)
+			AC_MSG_ERROR(Aborted.)
+		fi
+	else
+		dnl
+		dnl	XDR symbols are in libc.
+		dnl
+		AC_MSG_RESULT(yes)
+	fi
+	AC_DEFINE(BALL_HAS_XDR, true)
+	BALL_HAS_XDR=true
+	AC_SUBST(BALL_HAS_XDR)
+fi
+
+
+dnl
+dnl   check whether ieeefp.h does really exist
+dnl
+if test "$BALL_INCLUDE_IEEEFP" = true ; then
+	AC_CHECK_HEADERS(ieeefp.h,
+			[BALL_INCLUDE_IEEEFP=true],
+			[BALL_INCLUDE_IEEEFP=false])
+	if test ${BALL_INCLUDE_IEEEFP} = true ; then
+		AC_DEFINE(BALL_INCLUDE_IEEEFP,)
+	fi
+fi
+
+dnl
+dnl   check whether values.h does really exist
+dnl
+AC_CHECK_HEADERS(values.h,
+			[BALL_INCLUDE_VALUES=true],
+			[BALL_INCLUDE_VALUES=false])
+if test ${BALL_INCLUDE_VALUES} = true ; then
+	AC_DEFINE(BALL_INCLUDE_VALUES,)
+fi
+
+dnl
+dnl		check whether the <regex.h> header exists
+dnl
+AC_CHECK_HEADER(regex.h, HAS_REGEX_H=true, HAS_REGEX_H=false)
+if test "${HAS_REGEX_H}" = "false" ; then
+	AC_CHECK_HEADER(regexp.h, HAS_REGEX_H=true, HAS_REGEX_H=false)
+	AC_DEFINE(BALL_USE_REGEXP_H)
+fi
+if test "${HAS_REGEX_H}" = "false" ; then
+	AC_MSG_RESULT()
+	AC_MSG_RESULT([Regular expression headers regex.h not found!])
+	AC_MSG_RESULT([If you do not have this header on your system,])
+	AC_MSG_RESULT([please install the GNU regexp package from])
+	AC_MSG_RESULT()
+	AC_MSG_RESULT([  ftp://ftp.gnu.org/gnu/regex/regex-0.12.tar.gz])
+	AC_MSG_RESULT()
+	AC_MSG_ERROR(Aborted.)
+fi
+
+dnl
+dnl		Checks for library functions
+dnl
+
+dnl
+dnl		BALLVIEW
+dnl
+
+dnl
+dnl    search for X-libs and includes and BALLView (OpenGL/MESA) stuff
+dnl 
+if test "${USE_BALLVIEW}" = true ; then
+	AC_PATH_X
+	X11_INCPATH=${x_includes}
+	X11_LIBPATH=${x_libraries}
+
+	if test "${no_x}" = "yes" ; then
+		USE_BALLVIEW=false
+	fi
+
+	if test "${USE_BALLVIEW}" = true ; then
+		if test "${X11_LIBPATH}" = "/usr/lib" -o "${X11_LIBPATH}" = "" ; then
+			X11_LIBPATH=""
+			X11_LIBPATHOPT=""
+		else
+			X11_LIBPATHOPT="-L${X11_LIBPATH}"
+		fi
+	fi
+
+	if test "${USE_BALLVIEW}" = true ; then
+		if test "${BALLVIEW_PLATFORM}" = Mesa ; then
+			AC_MSG_CHECKING(for Mesa includes)
+			AC_FIND_HEADER(MESA_INCLUDES,GL/gl.h, ${OPENGL_INCPATH} ${X11_INCPATH})
+			if test "${MESA_INCLUDES}" = "" ; then
+				AC_MSG_RESULT((not found!))
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(No Mesa headers found! Please specify the path to the directory)
+				AC_MSG_RESULT(containing the Mesa headers using --with-opengl-incl=DIR.)
+				AC_MSG_RESULT(Mesa can be obtained from www.mesa3d.org.)
+				AC_MSG_RESULT(Disabling support for visualization component BALLVIEW)
+				USE_BALLVIEW=false
+			else
+				AC_MSG_RESULT(${MESA_INCLUDES})
+			fi
+
+			if test "${USE_BALLVIEW}" = true ; then
+				AC_MSG_CHECKING(for Mesa library)
+				AC_FIND_LIB(MESA_LIBS,libMesaGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
+				if test "${MESA_LIBS}" = "" ; then
+					AC_FIND_LIB(MESA_LIBS,libGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
+				fi
+				if test "${MESA_LIBS}" = "" ; then
+					AC_MSG_RESULT((not found!))
+					AC_MSG_RESULT()
+					AC_MSG_RESULT(No Mesa library libMesaGL or libGL found! Please specify the path)
+					AC_MSG_RESULT(to the directory containing the library using the --with-opengl-libs=DIR.)
+					AC_MSG_RESULT(Mesa can be obtained from www.mesa3d.org.)
+					AC_MSG_RESULT(Disabling support for visualization component BALLVIEW)
+					USE_BALLVIEW=false
+				else
+					AC_MSG_RESULT((${MESA_LIBS}))
+				fi
+			fi
+			
+			dnl prevent the use of -L/usr/lib - this may lead to problems with different
+			dnl binary formats (e.g. SGI O32/N32 format)
+			if test "${MESA_INCLUDES}" != /usr/include -a "${MESA_INCLUDES}" != "" ; then
+				BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${MESA_INCLUDES}"
+			fi
+		fi
+
+		if test ${BALLVIEW_PLATFORM} = OpenGL ; then
+			AC_MSG_CHECKING(for OpenGL includes)
+			AC_FIND_HEADER(OPENGL_INCPATH,GL/gl.h)
+			if test "${OPENGL_INCPATH}" = "" ; then
+				AC_MSG_RESULT((not found!))
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(no OpenGL headers found! Please use the option --with-opengl-incl=DIR)
+				AC_MSG_RESULT(of configure to specify the correct path to these headers.)
+				AC_MSG_ERROR(aborted)
+			else
+				AC_MSG_RESULT((${OPENGL_INCPATH}))
+			fi
+
+			AC_MSG_CHECKING(for OpenGL library)
+			AC_FIND_LIB(OPENGL_LIBPATH,libGL)
+			if test "${OPENGL_LIBPATH}" = "" ; then
+				AC_MSG_RESULT((not found!))
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(no OpenGL lib found! Please use the option --with-opengl-libs=DIR)
+				AC_MSG_RESULT(of configure to specify the correct path to these libraries.)
+				AC_MSG_ERROR(aborted)
+			else
+				AC_MSG_RESULT((${OPENGL_LIBPATH}))
+			fi
+			
+			if test "${OPENGL_INCPATH}" != /usr/include && test "${OPENGL_INCPATH}" != "" ; then
+				BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${OPENGL_INCPATH}"
+			fi
+		fi
+
+		if test "${USE_BALLVIEW}" = true ; then
+			AC_MSG_CHECKING(for QT headers)
+			if test "${QTDIR}" != "" ; then
+				AC_FIND_HEADER(QT_INCPATH,qgl.h,${QTDIR}/include ${BALL_PATH}/contrib/qt/include)
+			else
+				AC_FIND_HEADER(QT_INCPATH,qgl.h,${BALL_PATH}/contrib/qt/include)
+			fi
+
+			if test "${QT_INCPATH}" = "" ; then
+				AC_MSG_RESULT((not found!))
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(No QT header files found! Please specify the path to the QT headers)
+				AC_MSG_RESULT(by passing the option --with-qt-incl=DIR to configure.)
+				AC_MSG_RESULT(You may also set the environment variable QTDIR to the correct)
+				AC_MSG_RESULT(path - configure will recognize this, too.)
+				AC_MSG_RESULT(The QT package can be found under the following URL:)
+				AC_MSG_RESULT(  http://www.troll.no/qt)
+				AC_MSG_ERROR(Building of the visualization component BALLVIEW was disabled!)
+			else
+				AC_MSG_RESULT((${QT_INCPATH}))	
+			fi
+
+			AC_MSG_CHECKING(for libqt${QT_MT_SUFFIX})
+			if test "${QTDIR}" != "" ; then
+				AC_FIND_LIB(QT_LIBPATH,libqt${QT_MT_SUFFIX},${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
+			else
+				AC_FIND_LIB(QT_LIBPATH,libqt${QT_MT_SUFFIX},${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
+			fi
+
+			if test "${QT_LIBPATH}" = "" ; then
+				AC_MSG_RESULT((not found!))
+				AC_MSG_RESULT()
+				AC_MSG_RESULT([The QT library could not be found. Please specify the path to libqt])
+				AC_MSG_RESULT([by passing the option --with-qt-libs=DIR to configure.])
+				AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
+				AC_MSG_RESULT([path - configure will recognize this, too.])
+				AC_MSG_RESULT([If the QT library was built with thread support enabled (liqt-mt])
+				AC_MSG_RESULT([instead of libqt), please specify the option --with-threadsafe-qt.])
+				AC_MSG_RESULT([The QT package can be found under the following URL:])
+				AC_MSG_RESULT(  http://www.troll.no/qt)
+				AC_MSG_RESULT()
+				AC_MSG_ERROR(Aborted.)
+			else
+				AC_MSG_RESULT((${QT_LIBPATH}))	
+			fi
+
+			
+			dnl
+			dnl extract the QT version number and version number string from include/qglobal.h
+			dnl
+			QT_VERSION=`${GREP} "#define QT_VERSION[^_]" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
+			QT_VERSION_STR=`${GREP} "#define QT_VERSION_STR" ${QT_INCPATH}/qglobal.h | ${TR} '\011' ' ' | ${TR} -s ' ' | ${CUT} -d\  -f3`
+			AC_MSG_CHECKING(for QT version number in qglobal.h)
+			AC_MSG_RESULT([${QT_VERSION} (${QT_VERSION_STR})])
+			
+	
+			dnl
+			dnl  QT libraries befor release 2.0 contained the OGL support in a separate
+			dnl   librarie: libqgl.a, so we hav to look for that one as well....
+			dnl
+			if test "${QT_VERSION}" -lt 200 ; then
+				QGL_LIBPATH=${QT_LIBPATH}
+				AC_MSG_CHECKING(for libqgl)
+				if test "${QTDIR}" != "" ; then
+					AC_FIND_LIB(QGL_LIBPATH,libqgl,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
+				else
+					AC_FIND_LIB(QGL_LIBPATH,libqgl,${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
+				fi
+
+				if test "${QGL_LIBPATH}" = "" ; then
+					AC_MSG_RESULT((not found!))
+					AC_MSG_RESULT()
+					AC_MSG_RESULT([The QT Opengl library libqgl.a could not be found. Please specify])
+					AC_MSG_RESULT([the path to libqt/libqgl by passing the option --with-qt-libs=DIR])
+					AC_MSG_RESULT([to configure.])
+					AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
+					AC_MSG_RESULT([path - configure will recognize this, too.])
+					AC_MSG_RESULT([Perhaps you simple forgot to compile the OpenGl extsions, too?])
+					AC_MSG_RESULT([You find these extensions in ${QTDIR}/extensions/opengl])
+					AC_MSG_RESULT()
+					AC_MSG_RESULT([The complete QT package can be found under the following URL:])
+					AC_MSG_RESULT([  http://www.troll.no/qt])
+					AC_MSG_RESULT()
+					AC_MSG_RESULT([Building of the visualization component BALLVIEW was disabled!])
+				else
+					AC_MSG_RESULT((${QT_LIBPATH}))	
+				fi
+				if test "${QGL_PATH}" != "${QT_PATH}" ; then
+					QT_PATH=${QGL_PATH}
+					AC_MSG_RESULT(using ${QT_PATH} to look for liqt.so and libqgl.s)
+				fi
+
+			fi
+
+			if test "${QT_INCPATH}" != /usr/include && test "${QT_INCPATH}" != "" ; then
+				BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${QT_INCPATH}"
+			fi	
+		fi
+	fi
+fi
+
+
+dnl
+dnl   verify libraries needed for BALLVIEW
+dnl   (X, QT, Mesa/OpenGL)
+dnl
+
+if test "${USE_BALLVIEW}" = true ; then		
+	dnl  
+	dnl
+	dnl  identify the X11 libraries needed to link agains
+	dnl
+	dnl
+	
+	AC_MSG_CHECKING(linking against X11 libraries)
+	dnl 
+	dnl   if the user specified X libraries, try these first
+	dnl
+	if test "${X11_LIBS}" != "" ; then
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+
+	dnl 		
+	dnl  now try the default guess: Xmu, Xext, Xt, and X11 
+	dnl
+	if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXext -lXt -lX11 -lm"
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+	
+	dnl 		
+	dnl  second guess: add SM and ICE
+	dnl
+	if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXext -lXt -lX11 -lSM -lICE -lm"
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+	
+	dnl 		
+	dnl  now try the default guess: Xmu, Xext, Xt, and X11 
+	dnl
+	if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXt -lX11 -lm"
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+	
+	dnl 		
+	dnl  second guess: add SM and ICE
+	dnl
+	if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXt -lX11 -lSM -lICE -lm"
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+	
+	dnl 
+	dnl  if we could not link - complain about it!
+	dnl
+	if test "${X_LINKING_OK+set}" = set ; then
+		AC_MSG_RESULT(yes)	
+	else
+		AC_MSG_RESULT(no)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Don't know how to link with X11 libraries.)
+		AC_MSG_RESULT(Please specify the correct libraries (e.g. -lXmu -lXt -lX11) in the)
+		AC_MSG_RESULT(environment variable X11_LIBS)
+		AC_MSG_RESULT(If you are running Solaris 2.x you might also try the option --without-libxnet)
+		AC_MSG_RESULT(if your X libraries were linked against libsocket and libnsl instead of libxnet.)
+		AC_MSG_RESULT(Built of visualization component BALLVIEW disabled.)
+		AC_MSG_RESULT()
+		USE_BALLVIEW=false
+	fi
+
+	dnl		
+	dnl  define some variables: X11_LIBOPTS and BALLVIEW_LIBS
+	dnl
+	X11_LIBOPTS="${X11_LIBPATHOPT} ${X11_LIBS}"
+fi
+
+if test "${USE_BALLVIEW}" = true ; then
+	if test "${BALLVIEW_PLATFORM}" = OpenGL ; then
+		if test "${OPENGL_LIBPATH}" != "/usr/lib" -a "${OPENGL_LIBPATH}" != "" ; then
+			OPENGL_LIBOPTS="-L${OPENGL_LIBPATH} -lGLU -lGL"
+		else
+			OPENGL_LIBPATH=""
+			OPENGL_LIBOPTS="-lGLU -lGL"
+		fi
+
+		dnl make sure we have OpenGL libs and no Mesa libs!
+		dnl
+		SAVE_LIBS=${LIBS}
+		SAVE_LDFLAGS=${LDFLAGS}
+		LIBS="${LIBS} ${X11_LIBOPTS}"
+		if test "${OPENGL_LIBPATH}" != "" ; then
+			LDFLAGS="${LDFLAGS} -L${OPENGL_LIBPATH}"
+		fi
+		AC_CHECK_LIB(GL, XMesaGarbageCollect, BALLVIEW_PLATFORM=Mesa)
+		LIBS=${SAVE_LIBS}
+		LDFLAGS=${SAVE_LDFLAGS}
+		if test "${BALLVIEW_PLATFORM}" != Mesa ; then
+			AC_MSG_CHECKING(linking against OpenGL libraries)
+			SAVE_LIBS=${LIBS}
+			LIBS="${OPENGL_LIBOPTS} ${LIBS}"
+			AC_TRY_LINK([],[],OPENGL_LINKING_OK=1)
+			LIBS=${SAVE_LIBS}
+			if test "${OPENGL_LINKING_OK+set}" != set ; then
+				AC_MSG_RESULT(no)
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(Cannot link against libGL/GLU - disabling visualization support!)
+				AC_MSG_RESULT(Please specify the path to OpenGL libraries using --with-opengl-libs=DIR)
+				AC_MSG_RESULT()
+				USE_BALLVIEW=false
+			else
+				AC_MSG_RESULT(yes)
+			fi
+		fi
+	fi
+fi
+
+if test "${USE_BALLVIEW}" = true ; then
+	if test "${BALLVIEW_PLATFORM}" = Mesa ; then
+		dnl
+		dnl  strip default path
+		dnl
+	
+		if test "${MESA_LIBS}" = "" ; then 
+			MESA_LIBS=${OPENGL_LIBPATH}
+		fi
+		if test "${MESA_LIBS}" != "/usr/lib" -a "${MESA_LIBS}" != "" ; then
+			OPENGL_LIBPATH="${MESA_LIBS}"
+			OPENGL_LIBPATHOPT="-L${MESA_LIBS}"			
+		else
+			OPENGL_LIBPATH=""
+			OPENGL_LIBPATHOPT=""
+		fi
+		
+		dnl
+		dnl  out first guess for the names of the Mesa libraries
+		dnl
+		OPENGL_LIBS="-lGLU -lGL"
+
+		dnl
+		dnl  try to link against mesa libraries
+		dnl
+		AC_MSG_CHECKING(linking against Mesa libs)
+		SAVE_LIBS=${LIBS}
+		LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
+		AC_TRY_LINK([],[], HAVE_MESALIBS=1)
+		LIBS=${SAVE_LIBS}
+
+		dnl
+		dnl  could not link against libGLU/libGL,
+    dnl  so try libMesaGLU/libMesaGL
+		dnl
+		if test "${HAVE_MESALIBS+set}" != set ; then
+			OPENGL_LIBS="-lMesaGLU -lMesaGL"
+			SAVE_LIBS=${LIBS}
+			LIBS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS} ${X11_LIBOPTS} ${LIBS} "
+			AC_TRY_LINK([],[], HAVE_MESALIBS=1)
+			LIBS=${SAVE_LIBS}
+		fi
+
+		if test "${HAVE_MESALIBS+set}" != set ; then
+			AC_MSG_RESULT(no)
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Cannot link against libMesaGL/GLU - disabling visualization support!)
+			AC_MSG_RESULT(Please specify the path to libMesaGL using --with-opengl-libs=DIR)
+			AC_MSG_RESULT()
+			USE_BALLVIEW=false
+		else
+			AC_MSG_RESULT(yes)
+			OPENGL_LIBOPTS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS}"
+		fi
+	fi
+fi
+if test "${USE_BALLVIEW}" = true ; then
+	if test "${QT_LIBPATH}" != "/usr/lib" ; then
+		QTQGL_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt${QT_MT_SUFFIX}"
+		QT_LIBOPTS="-L${QT_LIBPATH} -lqt${QT_MT_SUFFIX}"
+	else 
+		QT_LIBPATH=""
+		QTQGL_LIBOPTS="-lqgl -lqt${QT_MT_SUFFIX}"
+		QT_LIBOPTS="-lqt${QT_MT_SUFFIX}"
+	fi
+fi
+if test "${USE_BALLVIEW}" = true ; then
+	AC_MSG_CHECKING(linking against QT libraries)
+
+
+	SAVE_LIBS=${LIBS}
+	LIBS="${QTQGL_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+	AC_TRY_LINK([const char* qGLVersion();], [qGLVersion();], QT_LINKING_OK=1)
+	LIBS=${SAVE_LIBS}
+
+
+	if test "${QT_LINKING_OK+set}" != set ; then
+		SAVE_LIBS=${LIBS}
+		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+		AC_TRY_LINK([const char* qGLVersion();], [qGLVersion();], QT_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	else
+		dnl link agains qgl as well (for qt <= 2.0)
+		QT_LIBOPTS="${QTQGL_LIBOPTS}"
+	fi
+
+	if test "${QT_LINKING_OK+set}" != set ; then
+		AC_MSG_RESULT(no)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([Cannot link against libqgl/qt - disabling support for visualization!])
+		AC_MSG_RESULT([If QT is installed, please specify the path to the library])
+		AC_MSG_RESULT([using the option --with-qt-libs=DIR])
+		AC_MSG_RESULT()
+		USE_BALLVIEW=false
+	else
+		AC_MSG_RESULT(yes)
+		
+		dnl  
+		dnl  identify the version of the library
+		dnl
+		AC_MSG_CHECKING(QT library version)
+		SAVE_LIBS=${LIBS}
+		LIBS="${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+		LD_LIBRARY_PATH="${X11_LIBPATH}:${OPENGL_LIBPATH}:${QT_LIBPATH}:${LD_LIBRARY_PATH}"
+		export LD_LIBRARY_PATH
+		echo "LD_LIBRARY_PATH = ${LD_LIBRARY_PATH}" 1>&5
+		AC_TRY_RUN(
+			[
+				#include <stdio.h> 
+				const char* qVersion();
+				int main()
+				{
+					FILE* f = fopen("qt.version", "w");
+					fprintf(f, "%s\n", qVersion());
+					fclose(f);
+					exit(0);
+				}
+			], 
+			QT_VERSION_OK=1,
+			DUMMY=0,
+			DUMMY=0
+		)
+		LIBS=${SAVE_LIBS}
+		
+		dnl
+		dnl	if the program compiled and ran successfully,
+		dnl extract the QT version number
+		dnl
+		if test "${QT_VERSION_OK+set}" != set; then
+			AC_MSG_RESULT(no)
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(The execution of a program linked against the QT)
+			AC_MSG_RESULT(library failed. Please have a look at config.log)
+			AC_MSG_RESULT((the last few lines) to find out what happened.)
+			AC_MSG_RESULT(Perhaps you specified the wrong library or the)
+			AC_MSG_RESULT(X11 libraries are in conflict with any other library.)
+			AC_MSG_RESULT(You might also want to check your LD_LIBRARY_PATH.)
+			AC_MSG_RESULT(Support for visualization is disabled.)
+			AC_MSG_RESULT()
+			USE_BALLVIEW=false
+		else
+			QT_VERSION_STRING=`cat qt.version`
+			AC_MSG_RESULT(${QT_VERSION_STRING})
+
+			dnl
+			dnl  test whether this version is the right one
+			dnl  (2.x.y and at least 2.0.2
+			dnl
+			rm qt.version 2>/dev/null
+			QT_MAJOR=`echo ${QT_VERSION_STRING} | ${CUT} -d. -f1`
+			if test "${QT_MAJOR}" != 2 ; then
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(QT version 2.x is required.)
+				AC_MSG_RESULT(Please install version QT Version 2 (at least 2.0.2))
+				AC_MSG_RESULT(which can be obtained from)
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(  www.troll.no/qt)
+				AC_MSG_RESULT()
+				AC_MSG_RESULT(Support for visualization is disabled.)
+				AC_MSG_RESULT()
+				USE_BALLVIEW=false
+			else
+				dnl
+				dnl  give a hint if somebody is using 2.00 which
+				dnl  has a serious bug in QListView: multiple selection
+        dnl  does not work as expected!
+				dnl
+				if test "${QT_VERSION_STRING}" = "2.00" ; then
+					AC_MSG_RESULT()
+					AC_MSG_RESULT(QT verison 2.00 is known to contain a bug)
+					AC_MSG_RESULT(that affects some features of MOLVIEW.)
+					AC_MSG_RESULT(Please install at least version 2.0.2)
+					AC_MSG_RESULT(which can be obtained from)
+					AC_MSG_RESULT()
+					AC_MSG_RESULT(  www.troll.no/qt)
+					AC_MSG_RESULT()
+					AC_MSG_RESULT()
+				fi
+			fi
+		fi
+	fi
+fi
+
+dnl
+dnl	try to find the MOC (QT meta object compiler)
+dnl It is usually installed in ${QTDIR}/bin/moc
+dnl
+if test "${USE_BALLVIEW}" = true ; then
+	if test "${MOC}" = moc ; then
+		if test "${QTDIR}" != "" ; then
+			MOC=${QTDIR}/bin/moc
+		fi
+	fi
+
+	dnl
+	dnl  try to find that damned moc
+	dnl
+	AC_PATH_PROG(MOC,moc,moc)
+	if test "${MOC}" = moc ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([Could not find the QT Meta Object Compiler (moc)!])
+		AC_MSG_RESULT([You might run into trouble if you want to compile MolVIEW.])
+		AC_MSG_RESULT([Please include the correct path to moc into your])
+		AC_MSG_RESULT([PATH environment variable or specify the path to moc])
+		AC_MSG_RESULT([using the option --with-moc=PATH to rerun configure.])
+		AC_MSG_RESULT()
+	fi
+fi
+
+if test "${USE_BALLVIEW}" = "true" ; then
+	LIBBALLVIEW="libVIEW.a libMOLVIEW.a"
+	BALLVIEW="VIEW MOLVIEW"
+else
+	BALLVIEW=
+fi
+
+dnl
+dnl		Python extension support
+dnl
+
+dnl
+dnl  variable subsitutions for config.mak
+dnl
+AC_SUBST(SIP)
+AC_SUBST(SIP_LIB)
+AC_SUBST(SIP_INCLUDES)
+AC_SUBST(PYTHON_INCLUDES)
+AC_SUBST(PYTHON_SUPPORT)
+AC_SUBST(PYTHON_LIBS)
+
+if test "${PYTHON_SUPPORT}" = true ; then
+	AC_DEFINE(BALL_PYTHON_SUPPORT)
+
+	dnl 
+	dnl Find the python executable (specified via --with-python
+	dnl 
+ 
+	if test "$with_python" = "" ; then
+		AC_PATH_PROG(PYTHON_EXECUTABLE, python)
+ 
+		if test "${PYTHON_EXECUTABLE}" = "" ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([Could not find Python interpreter ]${with_python})
+			AC_MSG_RESULT([Please use --with-python=EXE to specify its location.])
+      AC_MSG_ERROR(Aborted)
+		fi
+	else
+		AC_MSG_CHECKING(for Python executable)
+		if test -e "${with_python}" ; then
+	    PYTHON_EXECUTABLE=$with_python
+			AC_MSG_RESULT(${PYTHON_EXECUTABLE})
+		else
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([Did not find a Python executable at the specified location.])
+			AC_MSG_RESULT([Please check the path you specified for --with-python=...])
+			AC_MSG_ERROR(Aborted)
+		fi
+	fi
+
+	dnl
+	dnl	 Run python to retrieve some useful configuration information
+	dnl	
+	AC_MSG_CHECKING(for Python version)
+ 	PYTHON_VERSION=`${PYTHON_EXECUTABLE} -c 'import sys;print sys.version' | ${SED} -n 1p | ${CUT} -d\  -f1`
+	AC_MSG_RESULT(${PYTHON_VERSION})
+	PYTHON_VERSION_NUMBER_1=`echo ${PYTHON_VERSION} | ${CUT} -d. -f1`
+	PYTHON_VERSION_NUMBER_2=`echo ${PYTHON_VERSION} | ${CUT} -d. -f2`
+	PYTHON_VERSION_NUMBER_3=`echo ${PYTHON_VERSION} | ${CUT} -d. -f3`
+	
+	dnl
+	dnl  We need at least Python 2.0
+	dnl
+	if test "${PYTHON_VERSION_NUMBER_1}" -le 1 ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Python verison 2.0 or above required!)
+		AC_MSG_RESULT(Please donwload and install Python from)
+		AC_MSG_RESULT(  http://www.python.org)
+		AC_MSG_ERROR(Aborted)
+	fi
+	
+	AC_MSG_CHECKING(for Python installation paths)
+	PYTHON_PREFIX=`${PYTHON_EXECUTABLE} -c 'import sys;print sys.prefix'`
+	AC_MSG_RESULT(${PYTHON_PREFIX})
+
+
+	dnl
+	dnl  Python include path
+	dnl
+	AC_MSG_CHECKING(for Python.h)
+	if test "${PYTHON_INC_PATH}" = "" ; then
+		PYTHON_INC_PATH="${PYTHON_PREFIX}/include/python${PYTHON_VERSION}"
+	fi
+	AC_FIND_HEADER(PYTHON_INC_PATH, Python.h, ${PYTHON_INCLUDE_PATH})
+	if test "${PYTHON_INC_PATH}" = "" ; then
+		AC_MSG_RESULT(not found!)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT([Please specify the path to the directory that contains])
+		AC_MSG_RESULT([Python.h using the option --with-python-incl=DIR])
+		AC_MSG_RESULT([or ensure that Python is installed in the correct directory])
+		AC_MSG_RESULT([(sys.prefix is ${PYTHON_PREFIX})])
+		AC_MSG_ERROR(Aborted.)
+	else
+		AC_MSG_RESULT(${PYTHON_INC_PATH})
+		PYTHON_INCLUDES="-I${PYTHON_INC_PATH}"
+	fi
+
+	dnl
+	dnl	Python library path
+	dnl
+	AC_MSG_CHECKING(for libpython)
+	if test "${PYTHON_LIBPATH}" = "" ; then
+		PYTHON_LIBPATH="${PYTHON_PREFIX}/lib/python${PYTHON_VERSION}/config/"
+	fi
+	PYTHON_LIBS=`${FIND} ${PYTHON_LIBPATH} -name libpython*.a 2>/dev/null`
+	if test "${PYTHON_LIBS}" = "" ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(No libpython*a found in ${PYTHON_LIBPATH}. Please specify)
+		AC_MSG_RESULT(the path where your Python library resides using --with-python-libs=DIR)
+		AC_MSG_RESULT(or ensure that libpython is installed in the correct directory)
+		AC_MSG_RESULT([(sys.prefix is ]${PYTHON_PREFIX}[)])
+		AC_MSG_RESULT()
+		AC_MSG_ERROR(Aborted.)
+	fi
+	AC_MSG_RESULT(${PYTHON_LIBS})
+
+	if test "${PYTHON_LDOPTS}" = "" ; then
+		PYTHON_MAKEFILE=`${FIND} ${PYTHON_LIBPATH} -name Makefile 2>/dev/null`
+		if test "${PYTHON_MAKEFILE}" = "" ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Makefile in the Python lib/config directory not found!)
+			AC_MSG_RESULT(Please specify the correct options needed to link)
+			AC_MSG_RESULT(against the Python library using)
+			AC_MSG_RESULT( --with-python-ldopts=OPTIONS)
+			AC_MSG_RESULT([(e.g. --with-python-ldopts="-ltermcap -lm")])
+			AC_MSG_RESULT()
+			AC_MSG_ERROR(Aborted.)
+		fi
+		PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
+		PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^BASEMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-`"
+		PYTHON_LIBS="${PYTHON_LIBS} `${GREP} \^LOCALMODLIBS= ${PYTHON_MAKEFILE} | ${CUT} -d=  -f2-` -lm"
+		PYTHON_LIBS=`echo ${PYTHON_LIBS} | ${TR} -s " "`
+	fi
+	AC_MSG_RESULT(Linker options for Python library: ${PYTHON_LIBS})
+		
+	dnl
+	dnl	 SIP
+	dnl
+	AC_MSG_CHECKING(sip executable)
+	AC_MSG_RESULT(${SIP})
+
+	dnl
+	dnl libsip.a 
+	dnl
+	AC_MSG_CHECKING(libsip.a)
+	if test -r "${SIP_LIBPATH}/libsip.a" ; then
+		SIP_LIB=${SIP_LIBPATH}/libsip.a
+		AC_MSG_RESULT(${SIP_LIB})
+	else
+		AC_MSG_RESULT(not found in ${SIP_LIBPATH})
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Please specify the path to the directory that contains)
+		AC_MSG_RESULT(libsip.a using the option --with-sip-lib=DIR.)
+		AC_MSG_RESULT([If you do not have that file, you should obtain SIP])
+		AC_MSG_RESULT(from)
+		AC_MSG_RESULT(  www.thekompany.com/projects/pykde)
+		AC_MSG_ERROR(Aborted.)
+	fi
+	
+	dnl
+	dnl	sip.h
+	dnl
+	AC_MSG_CHECKING(sip headers (sip.h))
+	AC_FIND_HEADER(SIP_INC_PATH, sip.h, ${SIP_INCLUDE_PATH})
+	if test "${SIP_INC_PATH}" = "" ; then
+		AC_MSG_RESULT(not found!)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Please specify the path to the directory that contains)
+		AC_MSG_RESULT(sip.h using the option --with-sip-incl=DIR.)
+		AC_MSG_RESULT([If you do not have that file, you should obtain SIP])
+		AC_MSG_RESULT(from)
+		AC_MSG_RESULT(  www.thekompany.com/projects/pykde)
+		AC_MSG_ERROR(Aborted.)
+	else
+		AC_MSG_RESULT(${SIP_INC_PATH})
+		SIP_INCLUDES="-I${SIP_INC_PATH}"
+	fi
+fi
+
+if test "${PYTHON_SUPPORT}" = true ; then
+	PYTHON=PYTHON
+else
+	PYTHON=
+fi
+
+BALL_INCLUDES="-I$BALL_PATH/include"
+
+dnl
+dnl		expand BINFMT to include the compiler name
+dnl
+BINFMT="${BINFMT}-${CXX_NAME}"
+
+
+dnl		MULTI-BUILD MODE ONLY:
+dnl 	add the binary format to the list of supported binary formats
+dnl 	held in config/binary_formats. Avoid double entries
+dnl
+if test "${MULTI_BUILD}" = "true" ; then
+	touch ${BINFORMAT_FILE}
+	if test "`${GREP} \^${BINFMT}\\$ ${BINFORMAT_FILE}`" = "" ; then
+		echo ${BINFMT} >> ${BINFORMAT_FILE}
+	fi
+fi
+
+dnl
+dnl   create the global config.h (the one including the platform specific
+dnl   config.h.${BINFMT})
+dnl
+if test "${MULTI_BUILD}" = "true" ; then
+	${CAT} config/config.h.header | ${SED} 1,2d > config.h
+
+	dnl
+	dnl add an error line to catch all compilations without -DBMFT=
+	dnl (this is usually a problem with a missing "include config.mak" in the makefile)
+	dnl
+	echo "#ifndef BFMT" >> config.h
+	echo "# error BALL was configured in MULTI BUILD mode! Please specify -DBMFT=<BINFMT_INDEX> or rerun configure" >> config.h
+	echo "#endif" >> config.h
+	echo "" >> config.h
+
+	LINES=`cat config/binary_formats | wc -l`
+	i=1
+	while test $i -le $LINES ; do
+		BFMT=`cat ${BINFORMAT_FILE} | ${SED} -n ${i}p`
+		echo "#if ( BFMT == $i )" >> config.h
+		echo "#	include <BALL/CONFIG/config.h.${BFMT}>" >> config.h
+		echo "#endif" >> config.h
+		echo " " >> config.h
+		i=`expr $i + 1`
+	done
+	${CAT} config/config.h.footer | ${SED} 1,2d >> config.h
+	${MKDIR} ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
+	if test -f ${BALL_PATH}/include/BALL/CONFIG/config.h ; then
+		if test "`${DIFF} ${BALL_PATH}/include/BALL/CONFIG/config.h config.h`" != "" ; then
+			${RM} ${BALL_PATH}/include/BALL/CONFIG/config.h
+			${MV} config.h  ${BALL_PATH}/include/BALL/CONFIG/config.h
+		else 
+			${RM} config.h
+		fi
+	else
+		${MV} config.h  ${BALL_PATH}/include/BALL/CONFIG/config.h
+	fi
+
+	BINFMT_INDEX="-DBFMT="`${GREP} -n ${BINFMT} ${BINFORMAT_FILE} | ${CUT} -d: -f1 | ${TAIL} -1`
+else
+	BINFMT_INDEX=""
+fi
+
+LIBS="${LIBS} -lm"
+BALLVIEW_LIBS="${BALLVIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+
+BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
+if test "${USE_BALLVIEW}" = true ; then
+	BALLVIEW_INCLUDES="${BALL_INCLUDES} ${BALLVIEW_INCLUDES}"
+	BALLVIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lMOLVIEW -lVIEW -lBALL ${BALLVIEW_LIBS}"
+fi
+
+LDFLAGS="$LDFLAGS"
+LIBS="$BALL_LIBS"
+
+
+dnl
+dnl   joining all flags
+dnl
+CXXFLAGS="$CXXFLAGS $DEFINES"
+
+dnl
+dnl  we try to remove dependencies from non-BALL files
+dnl  to speed up compilation
+dnl  This works only for compilers that create one-line dependencies
+dnl  (most compilers except for g++). We simply "grep" away all foreign stuff.
+dnl  We can only insert ou egrep filter, if the compiler needs
+dnl  a redirection of the output (MAKEDEP_CXX_SUFFIX != "")
+dnl
+dnl  btw: escaping is FUN! the expression below uses \ to escape the damned shell,
+dnl  [] to escape m4, and finally $$ to escape make - the correct expression
+dnl  is something like "(${BALL_PATH}|^[^/]*$)". Send me an email if got that immediately...
+dnl
+if test "${HAS_GPLUSPLUS}" = false -a "${MAKEDEP_CXX_SUFFIX}" != "" ; then
+	MAKEDEP_CXX_SUFFIX="|egrep \"(${BALL_PATH}|^[[^/]]*\$\$)\" ${MAKEDEP_CXX_SUFFIX}"
+fi
+
+
+
+dnl  
+dnl   neccessary variable substitutions in *.mak
+dnl
+
+
+dnl         PATHS
+
+AC_SUBST(BALL_PATH)         dnl path to top level directory
+AC_SUBST(BALL_INCLUDES)     dnl includes 
+
+
+dnl					DEPENDENCIES
+
+MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} ${CXXFLAGS}"
+if test ${CXX_MAKEDEPEND} = "makedepend" ; then
+	MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -- "
+fi
+	
+AC_SUBST(CXX_MAKEDEPEND)		dnl path to C++ makedepend
+AC_SUBST(MAKEDEP_CXX_OPTS)	dnl options to C++ makedepend
+AC_SUBST(MAKEDEP_CXX_SUFFIX)dnl optional suffix (for redirection) for C++ makedepend
+AC_SUBST(DEPENDENCY_GREPS)  dnl command line to remove non-BALL headers from the dependencies
+
+
+dnl         COMPILER
+
+AC_SUBST(CXX)               dnl C++ compiler (absolute path)
+AC_SUBST(CXXFLAGS)          dnl C++ compiler flags
+AC_SUBST(ADD_CXXFLAGS)      dnl additional C++ compiler falgs (not passed on to makedepend)
+AC_SUBST(LIB_CXXFLAGS)			dnl C++ compiler flags used during compilation of the library only
+AC_SUBST(NONLIB_CXXFLAGS)		dnl C++ compiler flags used during compilation of applications, tests, examples only
+AC_SUBST(HAS_GPLUSPLUS)     dnl true, if C++ compiler is g++
+AC_SUBST(STD_CPP_INCLUDES)  dnl standard include paths of C++ compiler
+AC_SUBST(MAKEDEP_OPTS)      dnl options for makedep (needed for Linux)
+AC_SUBST(BALL_TYPENAME)			dnl if the compiler requires the use of typename
+                            dnl this variable is set to "typename". "" otherwise.
+AC_SUBST(BINFMT_INDEX)      dnl BFMT: binformat index of the current BINFMT - passed to the compiler
+                            dnl   as -DBFMT=${BINFMT_INDEX} to decide which config.h to use
+                            dnl   used in multi-platform build only!
+
+dnl         LINKER
+
+AC_SUBST(BALLVIEW_LIBS)     dnl BALLVIEW libs
+AC_SUBST(OPENGL_LIBOPTS)    dnl compiler options for OpenGL libs (-Lxxx -lGLU -lGL)
+AC_SUBST(OPENGL_LIBPATH)    dnl path to OpenGL libs (without -L)
+AC_SUBST(QT_LIBOPTS)        dnl copiler options for QT libs (-Lxxx -lqgl -lqt)
+AC_SUBST(QT_LIBPATH)        dnl path to QT libs (without -L)
+AC_SUBST(MOC)        				dnl path to QT meta object compiler
+AC_SUBST(X11_LIBOPTS)       dnl compiler options for X11 libs (-Lxx -lXmu -lXt -lX11 [-lSM -lICE])
+AC_SUBST(X11_LIBPATH)       dnl path to X11 libs (without -L)
+AC_SUBST(X11_LIBS)          dnl the X11 libraries only (-lXmu -lXt...)
+AC_SUBST(BALL_LIBS)         dnl libraries
+AC_SUBST(LDFLAGS)           dnl linker flags
+AC_SUBST(LIBS)              dnl linker libraries
+AC_SUBST(DEFINES)           dnl defines (part of LDFLAGS)
+AC_SUBST(CXXFLAGS_D)        dnl debug flags for compiler 
+AC_SUBST(CXXFLAGS_O)        dnl optimization flags for compiler 
+AC_SUBST(CPP_MODE_FLAGS)    dnl set to CXXFLAGS_D|CXXFLAGS_O, depending on BALL_DEBUG
+AC_SUBST(CPP_MODE_FLAGS_NO_OPTIMIZATION)    
+														dnl set to CXXFLAGS_D|"", depending on BALL_DEBUG
+
+
+
+
+
+dnl					ARCHIVER
+
+dnl if nothing has been defined for AR/AROPTS,
+dnl use default
+
+if test "${AR}" = "no" ; then
+	AR="ar"
+fi
+if test "${AROPTS}" = "" ; then
+	AROPTS="cru"
+fi
+
+AC_SUBST(AR)
+AC_SUBST(AROPTS)
+AC_SUBST(DYNAR)
+AC_SUBST(DYNAROPTS)
+
+
+dnl				  MISC
+
+dnl   ADDTIONAL_COMMENTS is substituted at the end of the
+dnl   information text in Makefile and will be printed after
+dnl 	the library has been built.
+dnl   Any hints concerning a special OS/compiler combination 
+dnl   might want to print some information here (as is the
+dnl   case for the IRIX LD_LBRARY_PATH/LD_LIBRARY64_PATH/LD_LIBRARYN32_PATH)
+dnl   If BALLVIEW is to be built, we add a hint for MolVIEW.
+if test "${ADDITIONAL_COMMENTS}" = "" ; then
+	ADDITIONAL_COMMENTS=""
+fi
+if test "${USE_BALLVIEW}" = true ; then
+	ADDITIONAL_COMMENTS="${ADDITIONAL_COMMENTS}\n\nTo build the molecule viewer MolVIEW, please type\n\n   make molview\n\nThe executable is built in the directory APPLICATIONS/MOLVIEW\n"
+fi
+AC_SUBST(ADDITIONAL_COMMENTS)
+
+dnl	    BALLVIEW
+
+AC_SUBST(USE_BALLVIEW)				dnl bool: use ballview (default=true)
+AC_SUBST(BALLVIEW_PLATFORM)		dnl Mesa or OpenGL
+AC_SUBST(BALLVIEW_INCLUDES)		dnl BALLVIEW includes
+AC_SUBST(LIBBALLVIEW)					dnl static library name
+
+
+dnl    	define the standard installation path
+dnl     and the binary format string
+AC_DEFINE_UNQUOTED(BALL_PATH, "${BALL_PATH}")
+AC_DEFINE_UNQUOTED(BALL_BINFMT, "${BINFMT}")
+
+dnl			define BALL_NULL_TEMPLATE_ARGS
+AC_DEFINE_UNQUOTED(BALL_NULL_TEMPLATE_ARGS, ${BALL_NULL_TEMPLATE_ARGS})
+
+dnl			define BALL_HAS_ANSI_IOSTREAM
+if test "$BALL_HAS_ANSI_IOSTREAM" = yes ; then
+	AC_DEFINE(BALL_HAS_ANSI_IOSTREAM)
+fi
+
+dnl	
+dnl		 make target "clean" should also remove 
+dnl    template repositories. The name of this directory 
+dnl    depends on the compiler and ist set in TEMPLATE_DIR
+dnl
+AC_SUBST(TEMPLATE_DIR)
+
+dnl
+dnl    create files
+dnl
+
+SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR SOLVATION STRUCTURE SYSTEM ${BALLVIEW} ${PYTHON}"
+AC_SUBST(SUBDIRS)
+
+if test "${MULTI_BUILD}" = "true" ; then
+	AC_MSG_RESULT(creating shadow directories...)
+	config/shadowsource.sh `pwd`"/${BINFMT}" `pwd` "${SUBDIRS} TEST BENCHMARKS EXAMPLES TUTORIAL APPLICATIONS"
+	${RM} -fr `pwd`/${BINFMT}/TEST/data 2>/dev/null
+	${RM} -fr `pwd`/${BINFMT}/BENCHMARKS/data 2>/dev/null
+	${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/TEST 2>/dev/null
+	${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/TEST 2>/dev/null
+	${LN} -s `pwd`/BENCHMARKS/data `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
+	${LN} -s `pwd`/BENCHMARKS/runbenchmarks `pwd`/${BINFMT}/BENCHMARKS 2>/dev/null
+
+	${CP} config/Makefile.multiplatform Makefile
+
+	dnl   define the string to substitute in common.mak
+	BINFMT_PATH="/${BINFMT}"
+else
+	BINFMT_PATH=""
+fi
+
+AC_OUTPUT([
+	Makefile.tmp:config/Makefile.in
+	config.mak.tmp:config/config.mak.in 
+	common.mak.tmp:config/common.mak.in 
+])
+
+if test "${MULTI_BUILD}" = "true" ; then
+	${MV} Makefile.tmp ${BINFMT}/Makefile
+	${MV} common.mak.tmp ${BINFMT}/common.mak
+	${MV} config.mak.tmp ${BINFMT}/config.mak
+else 
+	${MV} Makefile.tmp Makefile
+	${MV} common.mak.tmp common.mak
+	${MV} config.mak.tmp config.mak
+fi
+
+dnl
+dnl    copy config.h to the includes directory
+dnl    remove obsolete dependency file
+dnl
+
+if test "${MULTI_BUILD}" = "true" ; then
+	mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
+	${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h.${BINFMT}
+else
+	dnl	
+	dnl move that damned file only if it differs from the previous
+	dnl version. Otherwise we have to rebuild _everything_ after each configure
+	dnl
+	if test -f $BALL_PATH/include/BALL/CONFIG/config.h ; then
+		if test "`${DIFF} config.h $BALL_PATH/include/BALL/CONFIG/config.h`" != "" ; then
+			${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
+		fi
+	else 
+		dnl
+		dnl  create the directory BALL/include/CONFIG
+		dnl  and move config.h to that directory
+		dnl
+		mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
+		${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h
+	fi
+fi
+	
+
+dnl
+dnl		make sure the dependencies and object lists are (re)built
+dnl
+if test "${MULTI_BUILD}" = "true" ; then
+	${RM}  ${BINFMT}/.Dependencies 2>/dev/null
+	${RM}  ${BINFMT}/lib*.objects 2>/dev/null
+else
+	${RM}  .Dependencies 2>/dev/null
+	${RM}  lib*.objects 2>/dev/null
+fi
+
+dnl
+dnl Just give another helpful message and exit
+dnl
+
+AC_MSG_RESULT()
+AC_MSG_RESULT()
+AC_MSG_RESULT(Your Makefiles have been created. If everything went OK: just type)
+AC_MSG_RESULT()
+AC_MSG_RESULT(		make)
+AC_MSG_RESULT()
+AC_MSG_RESULT(to build BALL.)
+AC_MSG_RESULT()
