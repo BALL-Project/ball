@@ -1,7 +1,9 @@
-// $Id: DCDFile.C,v 1.2 2000/12/19 13:29:01 anker Exp $
+// $Id: DCDFile.C,v 1.3 2000/12/19 14:02:17 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
+
+using namespace std;
 
 namespace BALL
 {
