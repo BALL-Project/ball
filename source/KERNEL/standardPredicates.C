@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.30 2002/01/10 14:40:16 anker Exp $
+// $Id: standardPredicates.C,v 1.30.4.1 2002/05/16 01:29:43 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -943,6 +943,13 @@ namespace BALL
 		Size i;
 		if (atom.countBonds() != 4)
 		{
+			if (atom.getElement() == PTE[Element::O])
+			{
+				if (atom.countBonds() == 2)
+				{
+					return true;
+				}
+			}
 			return false;
 		}
 		else
@@ -956,6 +963,44 @@ namespace BALL
 			}
 			return true;
 		}
+	}
+
+
+	bool ChargePredicate::operator () (const Atom& atom) const
+		throw()
+	{
+		String s = argument_;
+		s.trim();
+
+		float crg = atom.getCharge();
+		bool result = true;
+
+		if (s.hasPrefix("<="))
+		{
+			result = (crg <= s.after("<=").toString().toFloat());
+		}
+		else if (s.hasPrefix(">="))
+		{
+			result = (crg >= s.after(">=").toString().toFloat());
+		}
+		else if (s.hasPrefix("<"))
+		{
+			result = (crg < s.after("<").toString().toFloat());
+		}
+		else if (s.hasPrefix(">"))
+		{
+			result = (crg > s.after(">").toString().toFloat());
+		}
+		else if (s.hasPrefix("="))
+		{
+			result = (fabs(crg - s.after("=").toString().toFloat() < Constants::EPSILON));
+		}
+		else					
+		{
+			result = (fabs(crg - s.toFloat()) < Constants::EPSILON);
+		}
+
+		return result;
 	}
 
 
