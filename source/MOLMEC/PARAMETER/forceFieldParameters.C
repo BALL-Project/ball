@@ -1,4 +1,4 @@
-// $Id: forceFieldParameters.C,v 1.3 2000/01/10 15:51:14 oliver Exp $
+// $Id: forceFieldParameters.C,v 1.4 2000/02/11 17:56:17 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
@@ -49,7 +49,10 @@ namespace BALL
 	bool ForceFieldParameters::init()
 	{
 		// read the parameter file
-		INI_file_.read();
+		if (!INI_file_.read())
+		{
+			throw Exception::FileNotFound(__FILE__, __LINE__, INI_file_.getFilename().c_str());
+		}
 
 		// extract the AtomTypes section
 		// set valid_ as extractSection checks for valid parameters!
