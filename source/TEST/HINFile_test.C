@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile_test.C,v 1.23 2003/05/08 10:11:53 oliver Exp $
+// $Id: HINFile_test.C,v 1.24 2003/07/09 12:53:44 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.23 2003/05/08 10:11:53 oliver Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.24 2003/07/09 12:53:44 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,35 +22,37 @@ using namespace BALL;
 
 HINFile* ptr;
 
-CHECK(HINFile::HINFile())
+CHECK(HINFile() throw())
 	ptr = new HINFile;
 	TEST_NOT_EQUAL(ptr, 0)
 RESULT
 
 
-CHECK(HINFile::~HINFile())
+CHECK(~HINFile() throw())
   delete ptr;
 RESULT
 
 HINFile hin;
+HINFile empty;
 
-CHECK(HINFile::getTemperature() const )
+CHECK(float getTemperature() const)
   TEST_REAL_EQUAL(hin.getTemperature(), 0.0)
 RESULT
 
-CHECK(HINFile::getPeriodicBoundary() const )
+CHECK(Box3 getPeriodicBoundary() const)
 	Box3 box3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	TEST_EQUAL(hin.getPeriodicBoundary(), box3)
 RESULT
 
 
-CHECK(HINFile::HINFile(const String& filename, File::OpenMode open_mode = std::ios::in))
+CHECK(HINFile(const String& filename, File::OpenMode open_mode = std::ios::in) throw(Exception::FileNotFound))
   hin = HINFile("data/HINFile_test.hin");
   TEST_EQUAL(hin.isValid(), true)
+	TEST_EXCEPTION(Exception::FileNotFound, HINFile f2("asddasdcasdasdasddwad"))
 RESULT
 
 System system;
-CHECK(HINFile::read(System& system))
+CHECK(bool read(System& system) throw(Exception::ParseError))
   hin.read(system);
 	hin.reopen();
 	Vector3 position(0.59038, -0.410275, -0.860515);
@@ -85,29 +87,35 @@ CHECK(HINFile::read(System& system))
 	TEST_EQUAL(S2.countChains(), 1)
 	TEST_EQUAL(S2.countMolecules(), 1)
 	TEST_EQUAL(S2.countBonds(), 30)
+
+	TEST_EQUAL(empty.read(S2), false)
 RESULT
 
-CHECK(HINFile::write(const System& system))
+CHECK(void write(const System& system))
   String filename;
   NEW_TMP_FILE(filename)
   HINFile hin2(filename, std::ios::out);
 	hin2.write(system);
   TEST_FILE_REGEXP(filename.c_str(), "data/HINFile_test2.hin")
+
+	empty.write(system);
 RESULT
 
-CHECK(HINFile::HINFile& operator >> (System& system))
+CHECK([EXTRA]HINFile::HINFile& operator >> (System& system))
 	System system2;
   hin >> system2;
 	TEST_EQUAL(system.countAtoms(), system2.countAtoms())
+
+	empty >> system;
 RESULT
 
 
-CHECK(HINFile::hasPeriodicBoundary() const )
+CHECK(bool hasPeriodicBoundary() const)
 	TEST_EQUAL(hin.hasPeriodicBoundary(), true)
 RESULT
 
 
-CHECK(HINFile::HINFile& operator << (const System& system))
+CHECK([EXTRA]HINFile::HINFile& operator << (const System& system))
   String filename;
   NEW_TMP_FILE(filename)
   HINFile hin2(filename, std::ios::out);
@@ -123,13 +131,80 @@ CHECK(HINFile::HINFile& operator << (const System& system))
 		hin3 << system;
 	COMPARE_OUTPUT("HINFile::write: truncated atom name 'NAME TEST' to 'NAME'.\n")
 	TEST_FILE_REGEXP(filename.c_str(), "data/HINFile_test3.hin")
+
+	empty << system;
 RESULT
 
-CHECK(robust reading)	
+CHECK([EXTRA]robust reading)	
 	HINFile f("data/HINFile_test4.hin");
 	System S;
 	TEST_EXCEPTION(Exception::ParseError, f >> S)
 	f.close();
+RESULT
+
+CHECK(Molecule* read() throw(Exception::ParseError))
+  hin = HINFile("data/HINFile_test.hin");
+	Molecule* m = 0;
+	m = hin.read();
+	TEST_NOT_EQUAL(m, 0)
+  TEST_EQUAL(m->countAtoms(), 3)
+	TEST_EQUAL(m->getAtom(0)->getPosition(), Vector3(0.590381, -0.410275, -0.860515))
+	delete m;
+	m = 0;
+
+	m = hin.read();
+	TEST_NOT_EQUAL(m, 0)
+  TEST_EQUAL(m->countAtoms(), 3)
+	TEST_EQUAL(m->getAtom(0)->getPosition(), Vector3(-0.31307, -0.461289, 1.82765))
+	delete m;
+
+
+	HINFile f("data/HINFile_test4.hin");
+	TEST_EXCEPTION(Exception::ParseError, f.read())
+RESULT
+
+CHECK(BALL_CREATE(HINFile))
+	HINFile f("data/HINFile_test4.hin");
+	HINFile* ptr = (HINFile*) f.create();
+	TEST_NOT_EQUAL(ptr, 0)
+	TEST_EQUAL(ptr->getName(), "data/HINFile_test4.hin")
+	delete ptr;
+RESULT
+
+CHECK(HINFile(const HINFile& file) throw(Exception::FileNotFound))
+	HINFile f("data/HINFile_test4.hin");
+	HINFile f2(f);
+	TEST_EQUAL(f2.getName(), "data/HINFile_test4.hin")
+	HINFile f3(empty);
+	f3.setName("asddasddddddasdasdasdasd");
+	TEST_EXCEPTION(Exception::FileNotFound, HINFile f4(f3))
+RESULT
+
+	
+CHECK(const HINFile& operator = (const HINFile& rhs) throw(Exception::FileNotFound))
+	HINFile f("data/HINFile_test4.hin");
+	HINFile f2;
+	f2 = f;
+	TEST_EQUAL(f2.getName(), "data/HINFile_test4.hin")
+	HINFile f3;
+	TEST_EXCEPTION(Exception::FileNotFound, f2 = empty)
+	f3.setName("asddasddddddasdasdasdasd");
+	TEST_EXCEPTION(Exception::FileNotFound, f2 = f3)
+RESULT
+
+CHECK(void write(const Molecule& molecule))
+	empty.write(Molecule());
+	String filename;
+	NEW_TMP_FILE(filename);
+	Molecule m;
+	Atom a;
+	m.insert(a);
+	a.setName("Atom1");
+	a.setPosition(Vector3(1,2,3));
+	HINFile f(filename, File::OUT);
+	f.write(m);
+	f.close();
+	TEST_NOT_EQUAL(f.getSize(), 0)
 RESULT
 
 /////////////////////////////////////////////////////////////
