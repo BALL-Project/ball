@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.14 2003/02/14 11:02:45 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.15 2003/02/17 14:51:58 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -74,10 +74,6 @@ namespace BALL
 	FresnoRotation::~FresnoRotation()
 		throw()
 	{
-		if (grid_ != 0)
-		{
-			delete grid_;
-		}
 		clear();
 	}
 
@@ -91,6 +87,7 @@ namespace BALL
 		algorithm_type_ = 0;
 		heavy_atom_fractions_.clear();
 		if (grid_ != 0) grid_->clear();
+		grid_ = 0;
 		grid_spacing_ = 0.0;
 		fresno_types_ = 0;
 		// ?????
