@@ -3495,6 +3495,8 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
 
+EXEEXT=$EXEEXT
+
 CXXFLAGS="${SAVE_CXXFLAGS}"
 
 

@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.9 2003/05/21 15:48:57 oliver Exp $
+dnl    $Id: configure.ac,v 1.10 2003/06/30 19:09:09 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -265,6 +265,7 @@ SAVE_CXXFLAGS="${CXXFLAGS}"
 AC_PROG_CXX
 AC_OBJEXT
 AC_EXEEXT
+AC_SUBST(EXEEXT,$EXEEXT)
 CXXFLAGS="${SAVE_CXXFLAGS}"
 
 dnl
