@@ -1,9 +1,9 @@
-// $Id: RegularData3D_test.C,v 1.1 2000/12/05 12:20:58 amoll Exp $
+// $Id: RegularData3D_test.C,v 1.2 2001/05/10 16:46:09 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.1 2000/12/05 12:20:58 amoll Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.2 2001/05/10 16:46:09 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -309,27 +309,27 @@ CHECK(operator !=)
 RESULT
 
 CHECK(has()1/1)
-	RegularData3D<float> g(0, 0, 0, 10, 10, 10,	11, 11, 11);
-	TEST_EQUAL(g.has(0, 0, 0), true)
-	Vector3 v(0, 0, 0);
+	RegularData3D<float> g(0.0, 0.0, 0.0, 10.0, 10.0, 10.0,	11, 11, 11);
+	TEST_EQUAL(g.has(0.0, 0.0, 0.0), true)
+	Vector3 v(0.0, 0.0, 0.0);
 	TEST_EQUAL(g.has(v), true)
 
-	TEST_EQUAL(g.has(10, 10, 10), true)
-	v = Vector3(10, 10, 10);
+	TEST_EQUAL(g.has(10.0, 10.0, 10.0), true)
+	v = Vector3(10.0, 10.0, 10.0);
 	TEST_EQUAL(g.has(v), true)
 
-	TEST_EQUAL(g.has(10.1, 10, 10), false)
-	v = Vector3(10, 10, 10.1);
+	TEST_EQUAL(g.has(10.1, 10.0, 10.0), false)
+	v = Vector3(10.0, 10.0, 10.1);
 	TEST_EQUAL(g.has(v), false)
 
-	TEST_EQUAL(g.has(0, 0, -0.1), false)
-	v = Vector3(0, 0, -0.1);
+	TEST_EQUAL(g.has(0.0, 0.0, -0.1), false)
+	v = Vector3(0.0, 0.0, -0.1);
 	TEST_EQUAL(g.has(v), false)
 
 	RegularData3D<float> h;
 	TEST_EQUAL(h.isValid(), false)
-	TEST_EQUAL(h.has(0, 0, 0), false)
-	v = Vector3(0, 0, 0);
+	TEST_EQUAL(h.has(0.0, 0.0, 0.0), false)
+	v = Vector3(0.0, 0.0, 0.0);
 	TEST_EQUAL(h.has(v), false)
 RESULT
 
