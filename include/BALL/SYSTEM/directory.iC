@@ -1,0 +1,129 @@
+
+BALL_INLINE 
+void Directory::destroy()
+{
+	clear();
+}
+
+BALL_INLINE 
+Directory& Directory::operator = (const Directory& directory)
+{
+  set(directory);
+  return *this;
+}
+
+BALL_INLINE 
+void Directory::get(Directory& directory) const
+{
+  directory.set(*this);
+}
+
+BALL_INLINE 
+void Directory::clear()
+{
+  dir_ = 
+  dirent_ = 
+  directory_depth_ = 0;
+  directory_path_ = "";
+}
+
+BALL_INLINE 
+void Directory::set(const String& directory_path, bool set_current)
+{
+  dir_ = 
+  dirent_ = 
+  directory_depth_ = 0;
+  directory_path_ = directory_path;
+  if (set_current) ::chdir(directory_path_.data());
+}
+
+BALL_INLINE 
+void Directory::set(const Directory& directory)
+{
+  dir_ =
+  dirent_ = 
+  directory_depth_ = 0;
+  directory_path_ = directory.directory_path_;
+}
+
+BALL_INLINE 
+const String& Directory::getPath() const
+{
+  return directory_path_;
+}
+
+BALL_INLINE 
+bool Directory::rename(String old_path, String new_path)
+{ 
+  FileSystem::canonizePath(old_path);
+  FileSystem::canonizePath(new_path);
+  return (::rename(old_path.data(), new_path.data()) == 0);
+}
+
+BALL_INLINE 
+bool Directory::renameTo(String new_path)
+{
+  if (rename(directory_path_, new_path))
+  {
+    directory_path_ = new_path;
+    return true;
+  }
+  else return false;
+}
+
+BALL_INLINE 
+bool Directory::setCurrent(String directory_path)
+{
+  FileSystem::canonizePath(directory_path);
+  return (::chdir(directory_path.data()) == 0);
+}
+
+BALL_INLINE 
+bool Directory::setCurrent()
+{
+  return Directory::setCurrent(directory_path_);
+}
+
+BALL_INLINE 
+bool Directory::create(String path, const mode_t& mode)
+{
+  FileSystem::canonizePath(path);
+  return (::mkdir(path.data(), mode) == 0);
+}
+
+BALL_INLINE 
+bool Directory::remove(String path)
+{
+  FileSystem::canonizePath(path);
+  return (::rmdir(path.data()) == 0);
+}
+
+BALL_INLINE 
+bool Directory::find(const String &filename, String &filepath, bool recursive) const
+{
+  return find(filename, filepath, recursive);
+}
+
+BALL_INLINE 
+bool Directory::isEmpty() const
+{
+  return (countItems() == 0);
+}
+
+BALL_INLINE 
+bool Directory::operator == (const Directory& directory) const
+{
+  return (directory_path_ == directory.directory_path_);
+}
+
+BALL_INLINE 
+bool Directory::operator != (const Directory& directory) const
+{
+  return (directory_path_ != directory.directory_path_);
+}
+
+BALL_INLINE 
+Directory::FileFinder_::FileFinder_(const String& filename)
+  :filename_(filename)
+{
+}
