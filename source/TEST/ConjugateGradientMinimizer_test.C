@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.14 2003/03/24 09:29:38 oliver Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.15 2003/04/12 10:09:19 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 #include <BALL/STRUCTURE/residueChecker.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.14 2003/03/24 09:29:38 oliver Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.15 2003/04/12 10:09:19 oliver Exp $")
 
 using namespace BALL;
 
@@ -228,7 +228,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, SHANNO) ethan)
 	ConjugateGradientMinimizer cgm(FF);
 
 	cgm.setEnergyOutputFrequency(5);
-	cgm.setMaxGradient(0.01);
+	cgm.setMaxGradient(0.418);
 	cgm.setEnergyDifferenceBound(0.00000001);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::SHANNO);
 	ConjugateGradientMinimizer::UpdateMethod um;
@@ -319,6 +319,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES) AlaAla)
 	TEST_EQUAL(cgm.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
+	cgm.setMaxNumberOfIterations(10000);
 	bool result = cgm.minimize(5000);
 
 	TEST_EQUAL(result, true)
@@ -441,7 +442,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, FLETCHER_REEVES))
 	ConjugateGradientMinimizer cgm(FF);
 
 	cgm.setEnergyOutputFrequency(5);
-	cgm.setMaxGradient(0.01);
+	cgm.setMaxGradient(0.418);
 	cgm.setEnergyDifferenceBound(0.00000001);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::FLETCHER_REEVES);
 	ConjugateGradientMinimizer::UpdateMethod um;
@@ -513,7 +514,7 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool, POLAK_RIBIERE))
 	ConjugateGradientMinimizer cgm(FF);
 
 	cgm.setEnergyOutputFrequency(5);
-	cgm.setMaxGradient(0.01);
+	cgm.setMaxGradient(0.418);
 	cgm.setEnergyDifferenceBound(0.00000001);
 	cgm.setUpdateMethod(ConjugateGradientMinimizer::POLAK_RIBIERE);
 	ConjugateGradientMinimizer::UpdateMethod um;
