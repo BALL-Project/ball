@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.23 2001/06/27 10:43:10 oliver Exp $
+// $Id: bond.C,v 1.24 2001/06/28 18:34:31 amoll Exp $
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
@@ -118,24 +118,7 @@ namespace BALL
 		arrangeBonds_();
 	}
 
-	void Bond::clear()
-		throw()
-	{
-		PropertyManager::clear();
-		
-		arrangeBonds_();
-		clear_();
-	}
-
-	void Bond::destroy()
-		throw()
-	{
-		PropertyManager::destroy();
-		arrangeBonds_();
-		clear_();
-	}
-
-  void Bond::persistentWrite(PersistenceManager& pm, const char* name) const
+ void Bond::persistentWrite(PersistenceManager& pm, const char* name) const
 		throw()
 	{
 		pm.writeObjectHeader(this, name);
@@ -171,17 +154,6 @@ namespace BALL
 		bond_type_ = (Bond::Order)tmp;
 	}
  
-	void Bond::finalize()
-		throw()
-	{
-		if (*first_ > *second_)
-		{
-			Atom* tmp = first_;
-			first_ = second_;
-			second_ = tmp;
-		}
-	}
-
 	const Bond& Bond::operator = (const Bond& bond)
 		throw()
 	{
@@ -220,173 +192,6 @@ namespace BALL
 		bond.bond_type_ = temp_type;
 	}
 
-	void Bond::setFirstAtom(Atom* atom)
-		throw()
-	{
-		first_ = atom;
-	}
-		 
-	const Atom* Bond::getFirstAtom() const
-		throw()
-	{
-		return first_;
-	}
-		 
-	Atom* Bond::getPartner(const Atom& atom) const
-		throw()
-	{
-		Atom* partner = 0;
-		if (&atom == first_)
-		{
-			partner = second_;
-		} 
-		else 
-		{
-			if (&atom == second_)
-			{
-				partner = first_;
-			}
-		}		
-		return partner;
-	}
-	
-	void Bond::setSecondAtom(Atom* atom)
-		throw()
-	{
-		second_ = atom;
-	}
-		 
-	const Atom* Bond::getSecondAtom() const
-		throw()
-	{
-		return second_;
-	}
-
-	void Bond::setName(const String& name)
-		throw()
-	{
-		name_ = name;
-	}
-
-	const String& Bond::getName() const
-		throw()
-	{
-		return name_;
-	}
-
-	void Bond::setOrder(Bond::Order bond_order)
-		throw()
-	{
-		bond_order_ = bond_order;
-	}
-		
-	Bond::Order Bond::getOrder() const
-		throw()
-	{
-		return bond_order_;
-	}
-		
-	void Bond::setType(Type bond_type)
-		throw()
-	{
-		bond_type_ = bond_type;
-	}
-		
-	Bond::Type Bond::getType() const
-		throw()
-	{
-		return bond_type_;
-	}
-		
-	Real Bond::getLength() const
-		throw(Bond::NotBound)
-	{
-		if (first_ == 0 || second_ == 0)
-		{
-			throw NotBound(__FILE__, __LINE__);
-		}
-		
-		return first_->position_.getDistance(second_->position_);
-	}
-	const Atom* Bond::getBoundAtom(const Atom& atom) const
-		throw()
-  {
-    if (first_ == &atom)
-    {
-      return second_;
-		}
-    else
-    {
-      if (second_ == &atom)
-      {
-        return first_;
-			}
-		}
- 
-    return 0;
-	}                                                                                                                                           
-
-	bool Bond::isBondOf(const Atom& atom) const
-		throw()
-	{
-		return atom.hasBond(*this);
-	}
-
-	bool Bond::isBound() const
-		throw()
-	{
-		return (first_ != 0);
-	}
-
-	bool Bond::isInterBond() const
-		throw()
-	{
-		// the two atoms have to be inside the same (non-NULL) composite
-		return (isBound() && (first_->Composite::getRoot() != second_->Composite::getRoot())
-						&& (&first_->Composite::getRoot() != first_));
-	}
-
-	bool Bond::isInterBondOf(const AtomContainer& atom_container) const
-		throw()
-	{
-		if (isBound())
-		{
-  		bool first_atom_is_descendant  = first_->Composite::isDescendantOf(atom_container);
-			bool second_atom_is_descendant = second_->Composite::isDescendantOf(atom_container);
-
-			return (( first_atom_is_descendant && !second_atom_is_descendant) ||
-							(!first_atom_is_descendant &&  second_atom_is_descendant));
-		} 
-
-		return false;
-	}
-
-	bool Bond::isIntraBond() const
-		throw()
-	{	
-		// the two atoms have to be inside two different (non-NULL) composite
-		return (isBound() && (first_->Composite::getRoot() == second_->Composite::getRoot()) 
-						&& (&first_->Composite::getRoot() != first_) && (&second_->Composite::getRoot() != second_));
-	}
-
-	bool Bond::isIntraBondOf(const AtomContainer &atom_container) const
-		throw()
-	{
-		return (isBound() &&  first_->Composite::isDescendantOf(atom_container)
-											&& second_->Composite::isDescendantOf(atom_container));
-	}
-
-	bool Bond::isValid () const
-		throw()
-	{
-		return (PropertyManager::isValid()
-									&& first_  != 0
-									&& second_ != 0
-									&& first_  != second_
-									&& first_->hasBond(*this)
-									&& second_->hasBond(*this));
-	}
-
 	void Bond::dump(ostream& s, Size depth) const
 		throw()
 	{
@@ -412,8 +217,8 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
-	void Bond::arrangeBonds_()
-		throw()
+  void Bond::arrangeBonds_()
+	      throw() 
 	{
 		if (first_ != 0 && second_ != 0)
 		{
@@ -421,7 +226,7 @@ namespace BALL
 			{
 				first_->swapLastBond_(second_);
 			}
-			
+		
 			if (second_->number_of_bonds_ > 0)
 			{
 				second_->swapLastBond_(first_);
@@ -429,27 +234,8 @@ namespace BALL
 		}
 	}
 
-	void Bond::clear_()
-		throw()
-	{
-		first_ = BALL_BOND_DEFAULT_FIRST_ATOM;
-		second_ = BALL_BOND_DEFAULT_SECOND_ATOM;
-		name_ = BALL_BOND_DEFAULT_NAME;
-		bond_order_ = BALL_BOND_DEFAULT_ORDER;
-		bond_type_ = BALL_BOND_DEFAULT_TYPE;
-	}
-
-	bool Bond::operator == (const Bond& bond) const
-		throw()
-	{
-		return(Object::operator ==(bond));
-	}
-
-	bool Bond::operator != (const Bond& bond) const
-		throw()
-	{
-		return ! (*this == bond);
-	}
-
+# ifdef BALL_NO_INLINE_FUNCTIONS
+#   include <BALL/KERNEL/bond.iC>
+# endif
 
 } // namespace BALL
