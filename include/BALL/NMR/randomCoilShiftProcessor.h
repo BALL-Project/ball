@@ -1,4 +1,4 @@
-// $Id: randomCoilShiftProcessor.h,v 1.3 2000/09/21 22:31:30 amoll Exp $
+// $Id: randomCoilShiftProcessor.h,v 1.4 2000/09/21 22:46:31 amoll Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #	include<BALL/NMR/shiftModule.h>
@@ -7,11 +7,7 @@
 #ifndef BALL_DATAYTPE_STRINGHASHMAP_H
 #	include<BALL/DATATYPE/stringHashMap.h>
 #endif
-/*
-#ifndef BALL_KERNEL_EXPRESSION_H
-#	include<BALL/KERNEL/expression.h>
-#endif
-*/
+
 namespace BALL 
 {
 		
@@ -55,7 +51,6 @@ namespace BALL
 			throw();
 		
 		//@}
-
 
 		/**	@name Accessors
 		*/

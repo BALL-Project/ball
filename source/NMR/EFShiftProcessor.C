@@ -1,12 +1,9 @@
-// $Id: EFShiftProcessor.C,v 1.7 2000/09/21 13:48:34 oliver Exp $
+// $Id: EFShiftProcessor.C,v 1.8 2000/09/21 22:46:24 amoll Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
-#include <BALL/SYSTEM/path.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/FORMAT/parameterSection.h>
-
-using namespace std;
 
 namespace BALL 
 {
@@ -56,7 +53,7 @@ namespace BALL
 		parameter_section.extractSection(*parameters_, "ElectricFieldEffect");
 
 		// ..and that this section contains the correct column names
-		if (!parameter_section.hasVariable("first_atom") || !parameter_section.hasVariable("second_atom")
+		if ( !parameter_section.hasVariable("first_atom") || !parameter_section.hasVariable("second_atom")
 				|| !parameter_section.hasVariable("epsilon1") || !parameter_section.hasVariable("epsilon2"))
 		{
 			return;
@@ -192,10 +189,10 @@ namespace BALL
 				}
 				// Otherwise: try first/second and second/first
 				else if (first_atom_expressions_[i](*(*bond_it)->getSecondAtom())
-						&& second_atom_expressions_[i](*(*bond_it)->getFirstAtom()))
+						 && second_atom_expressions_[i](*(*bond_it)->getFirstAtom()))
 				{
 					// remember the atoms and the bond type (for the parameters)
-					first_atom = (*bond_it)->getSecondAtom();
+					first_atom  = (*bond_it)->getSecondAtom();
 					second_atom = (*bond_it)->getFirstAtom();
 					bond_type = i;
 					break;
@@ -234,9 +231,7 @@ namespace BALL
 					}
 				}
 					
-
 				// Calculate the field component E_z along the bond axis
-				// 
 				float Ez = (bond_vector * E) / bond_vector.getLength();
 				
 				// calculate the secondary shift induced by this field

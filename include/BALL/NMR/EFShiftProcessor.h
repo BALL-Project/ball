@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.h,v 1.4 2000/09/21 10:08:29 oliver Exp $
+// $Id: EFShiftProcessor.h,v 1.5 2000/09/21 22:46:31 amoll Exp $
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
 #define BALL_NMR_EFSHIFTPROCESSOR_H
@@ -9,10 +9,6 @@
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #	include<BALL/KERNEL/expression.h>
-#endif
-
-#ifndef BALL_FORMAT_PARAMETERS_H
-#	include<BALL/FORMAT/parameters.h>
 #endif
 
 namespace BALL 
@@ -39,7 +35,6 @@ namespace BALL
 		static const char* PROPERTY__EF_SHIFT;
 		//@}
 		
-	
 		/**@name	Constructors and Destructors
 		*/
 		//@{
@@ -65,12 +60,12 @@ namespace BALL
 		//@{
 		/**	Initialization method.
 				This method reads the parameter section "ElectricFieldEffect" and
-				parses its contents. 
+				parses its contents.
 				This section contains the definition of two expressions that define
 				a bond (the first expression matches the atom whose shift is to be
 				calculated, the second describes its bond partner).
-				For each of these bonds, two parameters are given, $\varepsilon_1$ and
-				$\varepsilon_2$.
+				For each of these bonds, two parameters are given, 
+				$\varepsilon_1$ and	$\varepsilon_2$.
 				\\
 				Then, this method extracts the contents of the "Charges"
 				section and thus constructs an hash map containing residue and atom names 
@@ -88,7 +83,7 @@ namespace BALL
 		//@{
 		
 		/**	Processor start method.
-				This method clear the bond and effector list.
+				This method clears the bond and effector list.
 				It fails if no parameters were assigned.
 				@return {\bf false} if {\tt parameters_ == 0}
 		*/
@@ -98,8 +93,8 @@ namespace BALL
 
 		/**	operator ().
 				This method sets the charge for all atoms it encounters
-				(using \Ref{assign_charge_processor_}). Charged atoms
-				are stored in the atom list \Ref{effector_list_}.
+				(using \Ref{assign_charge_processor_}). 
+				Charged atoms	are stored in the atom list \Ref{effector_list_}.
 				All bonds are stored in \Ref{bond_list_}.
 				@return \Ref{Processor::CONTINUE}
 				@param composite an arbitrary composite. All non-atom objects are ignored
@@ -115,8 +110,7 @@ namespace BALL
 				the electric field vector is calculated at the bond position using
 				Coulomb's law and the charges and positions of the atoms in the 
 				\Ref{effector_list_}.
-				The chemical shift induced by the electric field effect
-				is the calculated as
+				The chemical shift induced by the electric field effect is calculated as
 				\begin{equation}
 					\delta_{EF} = \varepsilon_1 E_z + \varepsilon_2 * E^2
 				\end{equation}
@@ -135,46 +129,46 @@ namespace BALL
 	
 		/**	The list of bonds collected by {\tt operator ()}
 		*/
-		list<Bond*>						bond_list_;
+		std::list<Bond*>				bond_list_;
 
 		/**	The list of charged atoms (effectors).
 		*/
-		list<Atom*>						effector_list_;
+		std::list<Atom*>				effector_list_;
 
 		/**	The expressions describing the first atom of a bond
 		*/
-		vector<Expression>		first_atom_expressions_;
+		std::vector<Expression>	first_atom_expressions_;
 
 		/**	The expressions describing the first atom of a bond
 		*/
-		vector<Expression>		second_atom_expressions_;
+		std::vector<Expression>	second_atom_expressions_;
 
 		/**	The parameter $\varepsilon_1$
 		*/
-		vector<float>					epsilon1_;
+		std::vector<float>			epsilon1_;
 
 		/**	The parameter $\varepsilon_2$
 		*/
-		vector<float>					epsilon2_;
+		std::vector<float>			epsilon2_;
 
 		/**	The charge assignment map.
 		*/
-		StringHashMap<float>	charge_map_;
+		StringHashMap<float>		charge_map_;
 
 		/**	A flag indicating whether effectors in the same residues are to be considered.
 				Set this flag by specifying the option "{\tt exclude_residue_field=true}" in 
 				the ElectricFieldShift section of the parameter file.
 				Default is false.
 		*/
-		bool									exclude_residue_field_;
+		bool										exclude_residue_field_;
 
 		/**	A cut off value for the electric field effect.
 				Any effector that is further away than this cut off is ignored.
-				THe distance is read from the option {\tt cut_off} in the 
+				The distance is read from the option {\tt cut_off} in the 
 				section {\tt ElectricFieldEffect} from the parameter file.
 				This member contains the squared value(!) of the distance.
 		*/
-		float cut_off2_;
+		float										cut_off2_;
  	};
 
 } // namespace BALL
