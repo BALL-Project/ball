@@ -1,9 +1,11 @@
-// $Id: dlgMoveOverlay.h,v 1.1.2.1 2002/10/21 09:22:36 amoll Exp $
+// $Id: dlgMoveOverlay.h,v 1.1.2.2 2002/10/25 23:41:00 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_DLGMOVEOVERLAY_H
 #define BALL_VIEW_GUI_DIALOGS_DLGMOVEOVERLAY_H 
 
-#include "dlgMoveOverlayData.h"
+#ifndef DlgMoveOverlayData_included
+# include "dlgMoveOverlayData.h"
+#endif
 
 class DlgMoveOverlay 
 	: public DlgMoveOverlayData

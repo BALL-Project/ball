@@ -11,8 +11,6 @@
 #include <qwidget.h>
 #include <qstring.h>
 
-//using namespace BALL;
-
 namespace BALL
 {
 	namespace VIEW
@@ -58,7 +56,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -82,8 +79,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -136,11 +133,10 @@ namespace BALL
 			*/
 			void writePreferences(INIFile &inifile)
 				throw();
-			//@}
-
 
 			public slots:
 
+			//@}
 			/** @name Public slots
 			*/
 			//@{
@@ -149,8 +145,8 @@ namespace BALL
 					Open {\em *this} preferences.
 			*/
 			void openDialog();
+						
 			//@}
-
 
 		  private:
 

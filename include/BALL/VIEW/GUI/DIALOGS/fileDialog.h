@@ -1,11 +1,7 @@
-// $Id: fileDialog.h,v 1.7 2001/12/28 02:33:39 oliver Exp $
+// $Id: fileDialog.h,v 1.7.4.1 2002/10/25 23:41:00 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
 #define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 # include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
@@ -15,7 +11,6 @@
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -57,7 +52,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -81,8 +75,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
+							
 			//@}
-
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -102,11 +96,11 @@ namespace BALL
 			*/
 			const string& getFileName() const
 				throw();
-			//@}
 
 
 			public slots:
 
+			//@}
 			/** @name Public slots
 			*/
 			//@{
@@ -119,10 +113,10 @@ namespace BALL
 			*/
 			int exec();
 
-			//@}
 
    		protected:
 
+			//@}
 			/**	@name	Protected Members
 			*/
 			//@{
@@ -143,9 +137,9 @@ namespace BALL
 			string filename_;
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/DIALOGS/fileDialog.iC>
-#		endif 
+#ifndef BALL_NO_INLINE_FUNCTIONS
+#	include <BALL/VIEW/GUI/DIALOGS/fileDialog.iC>
+#endif 
 
 		} // namespace VIEW
 
