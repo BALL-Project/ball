@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.C,v 1.5 1999/12/30 18:05:40 oliver Exp $
+// $Id: defaultProcessors.C,v 1.6 2000/02/16 19:21:04 oliver Exp $
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
 
@@ -15,14 +15,14 @@ using namespace std;
 namespace BALL 
 {
 
-	Processor::Result ClearChargeProcessor::operator()(Atom& atom)
+	Processor::Result ClearChargeProcessor::operator () (Atom& atom)
 	{
 		atom.setCharge(0);
 
 		return Processor::CONTINUE;
 	}
 
-	Processor::Result ClearRadiusProcessor::operator()(Atom& atom)
+	Processor::Result ClearRadiusProcessor::operator () (Atom& atom)
 	{
 		atom.setRadius(0);
 
@@ -298,29 +298,4 @@ namespace BALL
 		return total_charge_;
 	}
 
-	ElementSelector::ElementSelector()
-		:	element_(&Element::UNKNOWN)
-	{
-	}
-
-	ElementSelector::ElementSelector(const Element& element)
-		:	element_(&element)
-	{
-	}
-
-	void ElementSelector::setElement(const Element& element)
-	{
-		element_ = &element;
-	}
-
-	Processor::Result ElementSelector::operator () (Atom& atom)
-	{
-		if (atom.getElement() == *element_)
-		{
-			atom.select();
-		}
-		
-		return Processor::CONTINUE;
-	}
-	
 } // namespace BALL
