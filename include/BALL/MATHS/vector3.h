@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.52 2001/03/13 10:10:42 oliver Exp $
+// $Id: vector3.h,v 1.53 2001/03/14 15:58:25 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -1159,17 +1159,7 @@ namespace BALL
 		return TVector3<T>(scalar * vector.x, scalar * vector.y, scalar * vector.z);
 	}
 
-	/**	Multiplication operator for a vector and a scalar.
-  		@return TVector3 the new vector
-	*/
-	template <typename T>
-	TVector3<T> operator * (const TVector3<T>& vector, const T& scalar)
-		throw()
-	{
-		return TVector3<T>(scalar * vector.x, scalar * vector.y, scalar * vector.z);
-	}
-
-	/**	Input- Operator.
+	/**	Input operator.
 			Reads the values of {\tt three} vector components of type {\em T}
 			from an istream. The components are read in the order of x, y, z.
 	*/
@@ -1183,7 +1173,7 @@ namespace BALL
 		return s;
 	}
 
-	/**	Output- Operator.
+	/**	Output operator.
 			Writes the values of {\tt three} vector components of type {\em T}
 			to an ostream. The components are writen in the order of x, y, z.
 	*/
