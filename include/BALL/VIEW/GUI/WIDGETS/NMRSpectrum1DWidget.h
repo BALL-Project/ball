@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum1DWidget.h,v 1.1 2000/11/15 18:19:39 anhi Exp $
+// $Id: NMRSpectrum1DWidget.h,v 1.2 2000/12/08 16:10:21 anhi Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGET_NMRSPECTRUM1DWIDGET_H
 #define BALL_VIEW_GUI_WIDGET_NMRSPECTRUM1DWIDGET_H
@@ -118,7 +118,7 @@ class NMRSpectrum1DWidget
 
   /** Tries to load a spectrum from bruker-directory "dirName". Hopefully the directory's structure is like this in general.
    */
-  bool NMRSpectrum1DWidget::readSpec( String dirName );
+  bool readSpec( String dirName );
 
  public slots:
   /**    @name    ModularWidget related methods
