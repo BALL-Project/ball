@@ -7,8 +7,7 @@ CPP_SOURCES=\
 	composedEnergyProcessor.C\
 	coulomb.C\
 	distanceCoulomb.C\
-	energyProcessor.C\
-	fresnoEnergyProcessor.C
+	energyProcessor.C
 
 include ../common.mak
 include .Dependencies
