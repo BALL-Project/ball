@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.9 2003/12/02 02:34:42 amoll Exp $
+// $Id: glRenderer.C,v 1.10 2003/12/02 13:23:13 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1360,9 +1360,7 @@ namespace BALL
 								camera.getLookUpVector().y,
 								camera.getLookUpVector().z);
 
-			normal_vector_ = (-stage_->getCamera().getViewVector().normalize())
-												-stage_->getCamera().getRightVector()
-												- stage_->getCamera().getLookUpVector();
+			normal_vector_ = (-stage_->getCamera().getViewVector().normalize());
 		}
 
 
