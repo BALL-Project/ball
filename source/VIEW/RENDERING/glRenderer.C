@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.59 2005/02/07 12:18:33 amoll Exp $
+// $Id: glRenderer.C,v 1.60 2005/02/07 16:41:07 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -289,17 +289,6 @@ namespace BALL
 
 		if (rep.getGeometricObjects().size() == 0) return;
 
-		while (rep.isBusy())
-		{
-#ifdef BALL_PLATFORM_WINDOWS
-			Sleep(1);
-#else
-			sleep(1);
-#endif
-		}
-
-		((Representation*)&rep)->setBusy(true);
-
 		if (vertexBuffersEnabled())
 		{
 			clearVertexBuffersFor(*(Representation*)&rep);
@@ -309,12 +298,10 @@ namespace BALL
 		if (hit == display_lists_.end()) 
 		{
 			busy_ = false;
-			((Representation*)&rep)->setBusy(false);
 			return;
 		}
 		delete hit->second;
 		display_lists_.erase(hit);
-		((Representation*)&rep)->setBusy(false);
 		busy_ = false;
 	}
 
