@@ -1,4 +1,4 @@
-// $Id: geometricObject.h,v 1.15 2001/05/13 13:47:47 hekl Exp $
+// $Id: geometricObject.h,v 1.16 2001/06/26 09:04:38 anker Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -49,21 +49,23 @@ namespace BALL
 				{\bf Framework:} BALL/VIEW/KERNEL\\
 				{\bf Definition:} \URL{BALL/VIEW/KERNEL/geometricObject.h}\\
 				{\bf Concept:} composite design pattern\\ \\
-				The class GeometricObject is the most important base class for a geometric primitive.
-				All geometric primitives must be derived from this class.
-				GeometricObject is derived from \Ref{Composite}. Therefore all geometric primitive
-				can be appended to other composites. With the help of this class the
-				graphical representation can be easily added to the information (stored as composites)
-				which should be visualized. This class contains only the general information 
-				like selection color and properties a geometric object can have. All other methods
-				concerning drawing are in the base class \Ref{GLObject}.
-				The class geometricObject handles the different properties (see predefined properties),
-				the selected color, the name and the typename of a geometric object.
+				The class GeometricObject is the most important base class for a
+				geometric primitive.  All geometric primitives must be derived from
+				this class.  GeometricObject is derived from \Ref{Composite}.
+				Therefore all geometric primitive can be appended to other
+				composites. With the help of this class the graphical
+				representation can be easily added to the information (stored as
+				composites) which should be visualized. This class contains only
+				the general information like selection color and properties a
+				geometric object can have. All other methods concerning drawing are
+				in the base class \Ref{GLObject}.  The class geometricObject
+				handles the different properties (see predefined properties), the
+				selected color, the name and the typename of a geometric object.
 				
 				@memo    GeometricObject class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.15 $
-				@date    $Date: 2001/05/13 13:47:47 $
+				@author  $Author: anker $
+				@version $Revision: 1.16 $
+				@date    $Date: 2001/06/26 09:04:38 $
 		*/
 		class GeometricObject
 			: public Composite,
