@@ -1,4 +1,4 @@
-// $Id: RegularData1D_test.C,v 1.11.4.1 2002/08/22 18:04:21 oliver Exp $
+// $Id: RegularData1D_test.C,v 1.11.4.2 2002/12/11 14:10:23 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.11.4.1 2002/08/22 18:04:21 oliver Exp $")
+START_TEST(RegularData1D, "$Id: RegularData1D_test.C,v 1.11.4.2 2002/12/11 14:10:23 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -91,15 +91,6 @@ CHECK(TRegularData1D::clear())
 RESULT
 
 
-CHECK(TRegularData1D::destroy())
-	rd[0] = 2.3;
-	rd.destroy();
-	TEST_REAL_EQUAL(rd.getLowerBound(), 0.0)
-	TEST_REAL_EQUAL(rd.getUpperBound(), 0.0)
-	TEST_EQUAL(rd.getSize(), 0)
-RESULT
-
-
 CHECK(TRegularData1D::TRegularData1D& operator = (const TRegularData1D& data))
 	rd.setBoundaries(1.1, 2.1);
 	rd.resize(1);
@@ -132,7 +123,7 @@ RESULT
 
 
 CHECK(TRegularData1D::bool operator == (const TRegularData1D& data) const )
-	rd.destroy();
+	rd.clear();
 	rd.resize(4);
 	rd[0] = 1.1;
 	rd[1] = 1.2;
