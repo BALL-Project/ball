@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.14 2000/01/24 21:00:47 oliver Exp $
+// $Id: string.C,v 1.15 2000/01/25 16:23:19 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -25,9 +25,14 @@ namespace BALL
 		// something more sophisticated... OK
 		char* tmp = new char[65536];
 		vsprintf(tmp, format, ap);
-		strncpy(s, tmp, n);
+		if (n > 65535)
+		{	
+			n = 65535;
+		}
+		strncpy(s, tmp, n - 1);
+		s[n - 1] = (char)0;
 		delete [] tmp;
-		return strlen(s);
+		return (int)strlen(s);
 	}
 #	define vsnprintf BALLString_vsnprintf
 #endif
