@@ -14,5 +14,5 @@ OBJECTS=\
 	mainframe_moc.o
 
 molview:	$(OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) -lVIEW -lMOLVIEW $(BALLVIEW_LIBS)
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(BALLVIEW_LIBS)
 
