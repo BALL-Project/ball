@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.15 2000/02/18 13:09:04 oliver Exp $
+// $Id: vector3.h,v 1.16 2000/02/20 02:47:34 amoll Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -46,11 +46,6 @@ namespace BALL
 	TVector3<T> operator - (const TVector3<T>& a, const TVector3<T>& b);
 
 	template <typename T>
-	BALL_INLINE
-	TVector3<T> operator * (const T& scalar, const TVector3<T>& vector);
-
-
-	template <typename T>
 	std::istream& operator >> (std::istream& s, TVector3<T>& vector);
 
 	template <typename T>
@@ -66,7 +61,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(TVector3<T>) ;
+		BALL_CREATE(TVector3<T>)
 
 		/**	@name	Constructors and Destructors
 		*/
@@ -131,7 +126,7 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new TVector3 object from another.
 				@param vector the TVector3 object to be copied
-				@param bool ignored - jjust for interface consistency
+				@param bool ignored - just for interface consistency
 		*/	
 		TVector3(const TVector3& vector, bool deep = true)
 			:	PersistentObject(),
@@ -262,7 +257,7 @@ namespace BALL
 		*/
 		void get(T& x, T& y, T& z) const;
 
-		/**	Assign to anothe Vector3.
+		/**	Assign to another Vector3.
 				Assigns the vector components to another vector.
 				@param vector	the vector to be asigned to
 				@param deep ignored
@@ -341,42 +336,42 @@ namespace BALL
 		/**	Add a vector to this vector.
 				Add the components of {\tt vector} to this vector.
 				@param vector the vector to add
-				@return TVector3, {\tt *this}
+				@return {\tt TVector3}, {\tt *this}
 		*/
 		TVector3& operator += (const TVector3& vector);
 
 		/**	Subtract a vector from this vector.
 				Subtract {\tt vector} from this vector componentwise.
 				@param vector the vector to subtract
-				@return TVector3, {\tt *this}
+				@return {\tt TVector3}, {\tt *this}
 		*/
 		TVector3& operator -= (const TVector3& vector);
 
 		/**	Scalar product.
 				Return {\tt TVector3(x * scalar, y * scalar, z * scalar)}.
 				@param scalar, the scalar to multiply with
-				@return TVector3, the scalar product of this vector and {\tt scalar}
+				@return {\tt TVector3}, the scalar product of this vector and {\tt scalar}
 		*/
 		TVector3 operator * (const T& scalar);
 
 		/**	Multiply with a scalar.
 				Multiply all components of the vector with a {\tt scalar}.
 				@param scalar the scalar to multiply with
-				@return TVector3\&, {\tt *this}
+				@return {\tt TVector3}\&, {\tt *this}
 		*/
 		TVector3& operator *= (const T& scalar);
 
 		/**	Fraction of a vector.
 				Return {\tt TVector3(x / scalar, y / scalar, z / scalar)}.
-				@param scalar the scalar to divide by
-				@return TVector3 
+				@param lambda the scalar to divide by
+				@return {\tt TVector3} 
 				@exception Exception::DivisionByZero if {\tt lambda == (T)0}
 		*/
 		TVector3 operator / (const T& lambda);
 
 		/**	Divide a vector by a scalar.
-				@param scalar the scalar to divide by
-				@return TVector3\&, {\tt *this}
+				@param lambda the scalar to divide by
+				@return {\tt TVector3}\&, {\tt *this}
 				@exception Exception::DivisionByZero if {\tt lambda == (T)0}
 		*/
 		TVector3& operator /= (const T& lambda);
@@ -421,11 +416,23 @@ namespace BALL
 		*/
 		TVector3 getOrthogonalProjection(const TVector3& direction) const;
 
-		/// 
+		///BAUSTELLE
+		/**	Return 
+				@param TVector3& a 1. vector
+				@param TVector3& b 2. vector
+				@param TVector3& c 3. vector
+				@return static TVector3
+		*/
 		static TVector3 getPerpendicularNormalization
 			(const TVector3& a, const TVector3& b, const TVector3& c);
 
-		/// 
+		/**	Return the torsion angle of four vectors to eachother.
+				@param TVector3& a 1. vector
+				@param TVector3& b 2. vector
+				@param TVector3& c 3. vector
+				@param TVector3& d 4. vector
+				@return static TAngle the torsion angle
+		*/
 		static TAngle<T> getTorsionTAngle
 			(const TVector3& a, const TVector3& b,
 			 const TVector3& c, const TVector3& d);
@@ -441,7 +448,7 @@ namespace BALL
 		*/
 		bool operator == (const TVector3& vector) const;
 	
-		/**	Equality operator.
+		/**	Inequality operator.
 				@return bool, {\bf true} if the two vectors differ in at least on component, {\bf false} otherwise
 		*/
 		bool operator != (const TVector3& vector) const;
@@ -463,7 +470,10 @@ namespace BALL
 		///
 		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
-		///
+		/**	Test if instance is valid.
+				always retruns true
+				@return bool {\bf true}
+		*/
 		bool isValid() const;
 
 		//@}
@@ -475,18 +485,17 @@ namespace BALL
 		*/
 		//@{
 	
-		///
+		/**	x component of the vector
+		*/
+		T x;
 
-		T x ;
+		/**	y component of the vector
+		*/
+		T y;
 
-		///
-
-		T y ;
-
-		///
-
-		T z ;
-
+		/**	z component of the vector
+		*/
+		T z;
 		//@}
 
 		private:
@@ -495,24 +504,19 @@ namespace BALL
 		{
 			TAngle<T> angle;
 	
-			if (Maths::isNotZero(x))
-			{
+			if (Maths::isNotZero(x)){
 				angle = atan(y / x);
 			} else {
-				angle = Maths::sgn(y) * Constants::PI / 2;
+				angle = BALLSgn(y) * Constants::PI / 2;
 			}
 
-			if (Maths::isLess(x, 0)) 
-			{
+			if (Maths::isLess(x, 0)) {
 				angle += Constants::PI;
 			}
 
-			if (Maths::isLess(angle.value, 0)) 
-			{
+			if (Maths::isLess(angle.value, 0)) {
 				return (angle.value += 2 * Constants::PI);
-			} 
-			else 
-			{
+			} else {
 				return angle;
 			}
 		}
@@ -981,32 +985,35 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
-	/**
+	/**	Default three-dimensional vector class
 	*/
 	typedef TVector3<float> Vector3;
 
 	/**	Operators
 	*/
 	//@{
-	/**
+	/** Addition operator for two vectors
+  		@return {\tt TVector3} the new vector
 	*/
 	template <typename T>
-	BALL_INLINE
+	inline 
 	TVector3<T> operator + (const TVector3<T>& a, const TVector3<T>& b)
 	{
 		return TVector3<T>(a.x + b.x, a.y + b.y, a.z + b.z);
 	}
 
-	/**
+	/** Subtraction operator of two vectors
+  		@return {\tt TVector3} the new vector
 	*/
 	template <typename T>
-	BALL_INLINE
+	inline
 	TVector3<T> operator - (const TVector3<T>& a, const TVector3<T>& b)
 	{
 		return TVector3<T>(a.x - b.x, a.y - b.y, a.z - b.z);
 	}
 
-	/**
+	/**	Multiply operator for a scalar with a vector
+  		@return {\tt TVector3} the new vector
 	*/
 	template <typename T>
 	BALL_INLINE 
@@ -1015,7 +1022,17 @@ namespace BALL
 		return TVector3<T>(scalar * vector.x, scalar * vector.y, scalar * vector.z);
 	}
 
-	/**
+	/**	Multiply operator for a vector with a scalar
+  		@return {\tt TVector3} the new vector
+	*/
+	template <typename T>
+	TVector3<T> operator * (const TVector3<T>& vector, const T& scalar);
+	{
+		return TVector3<T>(scalar * vector.x, scalar * vector.y, scalar * vector.z);
+	}
+
+	/**	Input- Operator
+			reads in four {\bf T} : x, y, z, h
 	*/
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TVector3<T>& v)
@@ -1031,7 +1048,8 @@ namespace BALL
 		return s;
 	}
 
-	/**
+	/**	Output- Operator
+			gives three {\bf T} out: x, y, z
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TVector3<T>& v)
