@@ -156,6 +156,7 @@ EXECUTABLES = \
 	$(EXECUTABLES_CONCEPTS)\
 	$(EXECUTABLES_KERNEL)\
 	$(EXECUTABLES_FILES)\
+	$(EXECUTABLES_MOLMEC)\
 	$(EXECUTABLES_ENERGY)\
 	$(EXECUTABLES_NMR)\
 	$(EXECUTABLES_STRUCTURE)\
@@ -183,7 +184,7 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)
 %%.C:
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C $(LDFLAGS) -o $@ $(LIBS)
 
-test: info basic_test system_test maths_test datatypes_test concepts_test kernel_test files_test energy_test nmr_test structure_test solvation_test
+test: info basic_test system_test maths_test datatypes_test concepts_test kernel_test files_test energy_test molmec_test nmr_test structure_test solvation_test
 	@./runtests -success
 
 info:
@@ -212,6 +213,9 @@ files_test:	$(EXECUTABLES_FILES)
 	
 energy_test:	$(EXECUTABLES_ENERGY)
 	@./runtests -section "ENERGY" $(TEST_OPTIONS) $(EXECUTABLES_ENERGY)
+	
+molmec_test:	$(EXECUTABLES_MOLMEC)
+	@./runtests -section "MOLMEC" $(TEST_OPTIONS) $(EXECUTABLES_MOLMEC)
 	
 nmr_test:	$(EXECUTABLES_NMR)
 	@./runtests -section "NMR" $(TEST_OPTIONS) $(EXECUTABLES_NMR)
