@@ -6,7 +6,7 @@ Compiler:
   It has been successfully built and tested on the following platforms:
 
     - Linux/x86 2.x using g++ 2.95.1 and 2.95.2
-    - Solaris/SPARC 2.6 and 7 using g++ 2.95.2
+    - Solaris/SPARC 2.6, 7, and 8 using g++ 2.95.2
     - Solaris/SPARC 7 using Kuck & Associate (KAI) C++ 3.4g
 		- Solaris/SPARC 7 using SUN Workshop CC 6.0ea
     - Solaris/x86 2.6 using g++ 2.95.2
@@ -188,4 +188,4 @@ and libMOLVIEW.so), the qt libraries (libqt.so, libqgl.so), and the OpenGL/Mesa 
 (libGL.so, libGLU.so).
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.8 2000/03/29 09:45:35 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.9 2000/05/03 19:50:50 oliver Exp $
