@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.8 1999/12/29 00:21:18 oliver Exp $ 
+// $Id: pointGrid.h,v 1.9 2000/01/07 21:50:20 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -128,7 +128,11 @@ namespace BALL
 				Frees all allocated memory.
 				@memo
 		*/
-		virtual ~PointGrid();
+		virtual ~PointGrid()
+		{
+			delete [] data;
+		}
+
 		//@}
 
 
@@ -641,15 +645,6 @@ namespace BALL
 	}
 			
 		
-	/*
-					Destructor, frees the array of allocated grid elements 
-	*/
-	template <class GridDataType>
-	PointGrid<GridDataType>::~PointGrid() {
-		delete [] data;
-	}
-
-
 	 
 
 	template <class GridDataType>

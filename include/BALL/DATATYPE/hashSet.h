@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.5 1999/12/29 00:31:13 oliver Exp $ 
+// $Id: hashSet.h,v 1.6 2000/01/07 21:50:19 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -118,7 +118,13 @@ namespace BALL
 
 		/**	Destructor.
 		*/
-		virtual ~HashSet();
+		virtual ~HashSet()
+		{
+			destroy();
+			
+			deleteBuckets_();
+		}
+
 
 		/**
 		*/
@@ -498,13 +504,6 @@ namespace BALL
 		}
 	}
 
-	template <class Key>
-	HashSet<Key>::~HashSet()
-	{
-		destroy();
-		
-		deleteBuckets_();
-	}
 
 	template <class Key>
 	void HashSet<Key>::clear()

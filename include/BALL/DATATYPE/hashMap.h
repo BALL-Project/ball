@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.5 1999/12/28 21:29:14 oliver Exp $ 
+// $Id: hashMap.h,v 1.6 2000/01/07 21:50:19 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -114,7 +114,13 @@ namespace BALL
 
 		/**	Destructor.
 		*/
-		virtual ~HashMap();
+		virtual ~HashMap()
+		{
+			destroy();
+			
+			deleteBuckets_();
+		}
+
 
 		/**	Clear the hash map.
 				Remove all nodes from all buckets.
@@ -537,13 +543,6 @@ namespace BALL
 		}
 	}
 
-	template <class Key, class T>
-	HashMap<Key, T>::~HashMap()
-	{
-		destroy();
-		
-		deleteBuckets_();
-	}
 
 	template <class Key, class T>
 	void HashMap<Key, T>::clear()
