@@ -19,10 +19,7 @@ CPP_SOURCES=\
 	scene.C\
 	canvasWidget.C\
 	regularData2DWidget.C\
-	regularData1DWidget.C\
-	dockableRegularData1DWidget.C
-
-#	dockableRegularData2DWidget.C
+	regularData1DWidget.C
 
 
 PYTHON_CPP_SOURCES=\
@@ -39,10 +36,7 @@ MOC_SOURCES=\
 	scene_moc.C\
 	canvasWidget_moc.C\
 	regularData1DWidget_moc.C\
-	regularData2DWidget_moc.C\
-	dockableRegularData1DWidget_moc.C
-	
-#	dockableRegularData2DWidget_moc.C
+	regularData2DWidget_moc.C
 
 PYTHON_MOC_SOURCES=\
 	pyWidget_moc.C
@@ -83,12 +77,6 @@ regularData1DWidget_moc.C:	$(HEADER_DIR)/regularData1DWidget.h
 
 regularData2DWidget_moc.C:	$(HEADER_DIR)/regularData2DWidget.h
 	$(MOC) $(HEADER_DIR)/regularData2DWidget.h -o $@
-
-dockableRegularData1DWidget_moc.C:	$(HEADER_DIR)/dockableRegularData1DWidget.h
-	$(MOC) $(HEADER_DIR)/dockableRegularData1DWidget.h -o $@
-
-#dockableRegularData2DWidget_moc.C:	$(HEADER_DIR)/dockableRegularData2DWidget.h
-#	$(MOC) $(HEADER_DIR)/dockableRegularData2DWidget.h -o $@
 
 canvasWidget_moc.C:	$(HEADER_DIR)/canvasWidget.h
 	$(MOC) $(HEADER_DIR)/canvasWidget.h -o $@
