@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBackbone.h,v 1.8 2002/12/12 09:48:52 oliver Exp $
+// $Id: glBackbone.h,v 1.9 2003/01/06 17:42:36 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
@@ -29,7 +29,8 @@
 
 namespace BALL
 {
-	
+	using VIEW::GLObject;
+
 	namespace MOLVIEW
 	{
 

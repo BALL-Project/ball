@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.19 2002/12/22 11:45:17 sturm Exp $
+// $Id: regularData2D.h,v 1.20 2003/01/06 17:42:36 amoll Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H
@@ -12,7 +12,6 @@
 # include <BALL/MATHS/vector2.h>
 #endif
 
-using namespace std;
 
 namespace BALL 
 {

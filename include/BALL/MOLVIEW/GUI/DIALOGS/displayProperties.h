@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.20 2002/12/18 16:00:27 sturm Exp $
+// $Id: displayProperties.h,v 1.21 2003/01/06 17:42:36 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -56,16 +56,25 @@
 
 namespace BALL
 {
+	using VIEW::ModularWidget;
+	using VIEW::Message;
+	using VIEW::MainControl;
+	using VIEW::BALL_SELECTED_COLOR;
+	using VIEW::CenterCameraMessage;
+	using VIEW::DrawMessage;
+	using VIEW::SceneMessage;
+
 	namespace MOLVIEW
 	{
 
-			/// Exception to be thrown if invalid option is given for a modelprocessor
- 			class InvalidOption: public Exception::GeneralException
-			{
-  			public:
-	   			InvalidOption(const char* file, int line, int option)
+		/// Exception to be thrown if invalid option is given for a modelprocessor
+ 		class InvalidOption: public Exception::GeneralException
+		{
+  		public:
+
+	   		InvalidOption(const char* file, int line, int option)
 					throw();
-			};
+		};
 
 		/**	The DisplayProperties class.
 				The class DisplayProperties is a dialog used for changing the graphical
@@ -128,7 +137,7 @@ namespace BALL
 					@see        ModularWidget
 			*/
 			DisplayProperties(QWidget *parent = NULL, const char* name = NULL)
-					throw();
+				throw();
 
 			//@}
 			/** @name Destructors 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker2DFile.C,v 1.8 2002/12/12 10:57:45 oliver Exp $
+// $Id: openBruker2DFile.C,v 1.9 2003/01/06 17:43:04 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h>
 #include <BALL/FORMAT/bruker2DFile.h>
@@ -9,6 +9,8 @@
 
 namespace BALL
 {
+	using namespace VIEW;
+
   namespace MOLVIEW
   {
     OpenBruker2DFile::OpenBruker2DFile(QWidget* parent, const char* name)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glAtomBondModelConnector.h,v 1.7 2002/12/12 09:48:51 oliver Exp $
+// $Id: glAtomBondModelConnector.h,v 1.8 2003/01/06 17:42:36 amoll Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_GLATOMBONDMODELCONNECTOR_H
@@ -26,10 +26,10 @@
 #	include <BALL/MOLVIEW/GUI/PRIMITIV/glTwoColoredTube.h>
 #endif
 
-using namespace BALL::VIEW;
- 
 namespace BALL
 {
+	using VIEW::GLLine;
+	using VIEW::GLTube;
 
 	namespace MOLVIEW
 	{
@@ -69,12 +69,10 @@ namespace BALL
 					@return      GLAtomBondModelConnector new constructed glAtomBondModelConnector copied from {\em connector}
 					@see         AtomBondModelConnector
 			*/
-			GLAtomBondModelConnector
-				(const GLAtomBondModelConnector& connector, bool deep = true)
+			GLAtomBondModelConnector(const GLAtomBondModelConnector& connector, bool deep = true)
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{

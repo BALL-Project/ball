@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.6 2002/02/27 12:20:09 sturm Exp $
+// $Id: pyWidget.h,v 1.7 2003/01/06 17:42:37 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_PYWIDGET_H
@@ -20,8 +20,10 @@
 
 #include <qmultilineedit.h>
 
-using namespace BALL;
-using namespace BALL::VIEW;
+namespace BALL
+{
+	namespace VIEW
+	{
 
 /** Python Widget class.
 		{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/pyWidget.h}
@@ -148,5 +150,7 @@ class PyWidget
 	Position				history_position_;
 	String					current_line_;
 }; 
+
+} } // namespaces
 	
 #endif // BALL_VIEW_GUI_WIDGETS_PYWIDGET_H

@@ -22,10 +22,13 @@
 # include <BALL/MOLVIEW/GUI/DIALOGS/labelPropertiesData.h>
 #endif
 
-using namespace BALL::VIEW;
-
 namespace BALL
 {
+	using VIEW::ModularWidget;
+	using VIEW::MainControl;
+	using VIEW::Message;
+	using VIEW::ColorRGBA;
+
 	namespace MOLVIEW
 	{
 		/**	The LabelProperties class.
@@ -38,7 +41,7 @@ namespace BALL
 				{\bf Definition:} \URL{BALL/MOLVIEW/GUI/DIALOGS/labelProperties.h}
 		*/
 		class LabelProperties : 
-			public BALL::MOLVIEW::LabelPropertiesData,
+			public LabelPropertiesData,
 			public ModularWidget
 		{
 			Q_OBJECT

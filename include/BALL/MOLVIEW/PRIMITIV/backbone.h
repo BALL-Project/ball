@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backbone.h,v 1.9 2002/12/16 12:22:44 sturm Exp $
+// $Id: backbone.h,v 1.10 2003/01/06 17:42:37 amoll Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_BACKBONE_H
 #define BALL_MOLVIEW_PRIMITIV_BACKBONE_H
@@ -34,10 +34,14 @@
 #	include <BALL/VIEW/PRIMITIV/tube.h>
 #endif
 
-using namespace BALL::VIEW;
-
 namespace BALL
 {
+	using VIEW::Line;
+	using VIEW::Tube;
+	using VIEW::Sphere;
+	using VIEW::GeometricObject;
+	using VIEW::ColorRGBA;
+
 	namespace MOLVIEW
 	{
 

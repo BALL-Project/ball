@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBackboneModel.h,v 1.6 2002/12/12 09:48:51 oliver Exp $
+// $Id: glBackboneModel.h,v 1.7 2003/01/06 17:42:36 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_GLBACKBONEMODEL_H
@@ -16,7 +16,6 @@
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
 
@@ -53,12 +52,10 @@ namespace BALL
 					@return      AddGLBackboneModel new constructed addGLBackboneModel copied from {\em add_gl_backbone_model}
 					@see         AddBackboneModel
 			*/
-			AddGLBackboneModel
-				(const AddGLBackboneModel& add_gl_backbone_model, bool deep = true)
+			AddGLBackboneModel(const AddGLBackboneModel& add_gl_backbone_model, bool deep = true)
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -70,8 +67,8 @@ namespace BALL
 			*/
 			virtual ~AddGLBackboneModel()
 				throw();
+			
 			//@}
-
 
 			protected:
 
