@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.30 2003/04/24 20:49:54 oliver Exp $
+// $Id: conjugateGradient.C,v 1.31 2003/05/02 12:34:36 anhi Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -284,7 +284,7 @@ namespace BALL
 				//
 				//     \beta = \frac{<g_{k}, g_{k}>}{<g_{k-1}, g_{k-1}>}
 				//  
-				beta = std::min(initial_grad_.norm * initial_grad_.norm * old_grad_.inv_norm * old_grad_.inv_norm, 3.0);
+				beta = initial_grad_.norm * initial_grad_.norm * old_grad_.inv_norm * old_grad_.inv_norm;
 
 				// calculate the new conjugate gradient search direction:
 				// direction_ = - initial_gradient_ + beta * direction_;
@@ -312,6 +312,9 @@ namespace BALL
 					beta += initial_grad_[i] * (initial_grad_[i] - old_grad_[i]);
 				}
 				beta *= old_grad_.inv_norm * old_grad_.inv_norm;
+
+				// This is the proposed criterion by Nocedal and Wright
+				beta = std::max(0.0f, beta);
 
 				// calculate the new conjugate gradient search direction:
 				// direction_ = - initial_gradient_ + beta * direction_;
@@ -793,6 +796,7 @@ namespace BALL
 		if (result)
 		{
 			updateStepSize(lambda_);
+			step_ = std::max(0.01, step_);
 		}
 		else
 		{
@@ -818,7 +822,7 @@ namespace BALL
 	void ConjugateGradientMinimizer::updateStepSize(double /* lambda */)
 	{
 		#ifdef BALL_DEBUG
-			Log.info() << "updateStepSize: result = " << result << " lambda = " << lambda_;
+			//Log.info() << "updateStepSize: result = " << result << " lambda = " << lambda_;
 		#endif
 
 		if (lambda_ < 0.1)
