@@ -34,7 +34,7 @@ MOC_SOURCES=\
 	molecularControl_moc.C\
 	molecularStructure_moc.C\
 	scene_moc.C\
-	canvasWidget_moc.C
+	canvasWidget_moc.C\
 	regularData1DWidget_moc.C\
 	regularData2DWidget_moc.C
 
