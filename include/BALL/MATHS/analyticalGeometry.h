@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.2 2000/01/10 15:51:02 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.3 2000/02/16 17:04:27 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -42,6 +42,7 @@ namespace BALL
 {
 
 	template <class T>
+	BALL_INLINE
 	T GetDeterminant_(const T* m, Size dim)
 	{
 		T determinant = 0;
@@ -51,10 +52,15 @@ namespace BALL
 		{
 			T *submatrix = new T[dim1 * dim1];
 
-			for (register Index i = 0; i < dim; ++i) {
-				for (register Index j = 0; j < dim1; ++j) 
+			for (Index i = 0; i < dim; ++i) 
+			{
+				for (Index j = 0; j < dim1; ++j) 
+				{
 					for (register Index k = 0; k < dim1; ++k) 
+					{
 						*(submatrix + j * dim1 + k) = *(m + (j + 1) * dim + (k < i ? k : k + 1));
+					}
+				}
 
 				determinant += *(m + i) * (i / 2.0 == i / 2 ? 1 : -1) * GetDeterminant_(submatrix, dim1);
 			}
@@ -69,12 +75,13 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	T GetDeterminant(const T *m, Size dim)
+	T GetDeterminant(const T* m, Size dim)
 	{
 		if (dim == 2)
 		{
 			return (BALL_CELL(0,0) * BALL_CELL(1,1) - BALL_CELL(0,1) * BALL_CELL(1,0));
-		} else if (dim == 3)
+		} 
+		else if (dim == 3)
 		{
 			return (  BALL_CELL(0,0) * BALL_CELL(1,1) * BALL_CELL(2,2) 
 							+ BALL_CELL(0,1) * BALL_CELL(1,2) * BALL_CELL(2,0) 
@@ -196,7 +203,9 @@ namespace BALL
 			x[i] = BALL_MATRIX_CELL(matrix, dim, i, dim);
 
 			for (j = i + 1; j < dim; ++j) 
-				x[i] -= BALL_MATRIX_CELL(matrix, dim, i, j) * x[j];
+			{
+				x[i] -= BALL_MATRIX_CELL(matrix, dim, i, j) * x[j];	
+			}
 		}
 
 		delete [] matrix;
