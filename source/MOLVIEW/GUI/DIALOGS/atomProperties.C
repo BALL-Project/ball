@@ -72,12 +72,12 @@ void AtomProperties::applyClicked()
 {
 	try
 	{
-		atom_->setName(String(name_edit->text()));
-		atom_->setType(String(type_edit->text()).toShort());
-		atom_->setTypeName(String(type_name_edit->text()));
-		atom_->setCharge(String(charge_edit->text()).toFloat());
-		atom_->setRadius(String(radius_edit->text()).toFloat());
-		atom_->setElement(PTE[(String(element_box->currentText()))]);
+		atom_->setName(String(name_edit->text().latin1()));
+		atom_->setType(String(type_edit->text().latin1()).toShort());
+		atom_->setTypeName(String(type_name_edit->text().latin1()));
+		atom_->setCharge(String(charge_edit->text().latin1()).toFloat());
+		atom_->setRadius(String(radius_edit->text().latin1()).toFloat());
+		atom_->setElement(PTE[(String(element_box->currentText().latin1()))]);
 	}
 	catch(Exception::InvalidFormat)
 	{
