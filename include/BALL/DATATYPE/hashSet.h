@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.27 2001/05/17 12:19:20 oliver Exp $ 
+// $Id: hashSet.h,v 1.28 2001/05/22 15:38:53 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -221,7 +221,8 @@ namespace BALL
 
 		/**	Host a visitor for all set entries.
 		*/
-		void host(Visitor<HashSet<Key> >& visitor)	throw();
+		virtual void host(Visitor<HashSet<Key> >& visitor)	
+			throw();
 
 		//@}
 		/**	@name	Predicates
@@ -920,14 +921,16 @@ namespace BALL
 
 	template <class Key>
 	BALL_INLINE 
-	void HashSet<Key>::host(Visitor<HashSet<Key> >& visitor)	throw()
+	void HashSet<Key>::host(Visitor<HashSet<Key> >& visitor)	
+		throw()
 	{
 		visitor.visit(*this);
 	}
 		
 	template <class Key>
 	BALL_INLINE 
-	bool HashSet<Key>::has(const Key& key) const	throw()
+	bool HashSet<Key>::has(const Key& key) const	
+		throw()
 	{
 		return (find(key) != end());
 	}
@@ -1051,7 +1054,7 @@ namespace BALL
 	BALL_INLINE 
 	HashIndex HashSet<Key>::hash(const Key& key) const		throw()
 	{
-		return Hash(key);
+		return (HashIndex)Hash(key);
 	}
 
 	template <class Key>

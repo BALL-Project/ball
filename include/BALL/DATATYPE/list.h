@@ -1,4 +1,4 @@
-// $Id: list.h,v 1.9 2000/12/01 14:58:02 amoll Exp $
+// $Id: list.h,v 1.10 2001/05/22 15:39:16 oliver Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -74,7 +74,7 @@ namespace BALL
 		/** Clear the list.
 				Remove all contents from the list.
 		*/
-		void destroy()  throw()
+ 		void destroy()  throw()
 		{
 			clear();
 		}
@@ -183,11 +183,8 @@ namespace BALL
 				Lists may be visited.
 				@param	visitor	the visitor
 		*/
-		void host(Visitor<List<Value> >& visitor) throw()
-		{
-			visitor.visit(*this);
-		}
-  			
+		virtual void host(Visitor<List<Value> >& visitor) 
+			throw();
 		//@}
 
 		/**	@name	Internal Iterators */
@@ -256,6 +253,13 @@ namespace BALL
 		}
 
 	};
+
+	template <typename Value>
+	void List<Value>::host(Visitor<List<Value> >& visitor) 
+		throw()
+	{
+		visitor.visit(*this);
+	}
 
 } // namespace BALL
 
