@@ -1,0 +1,15 @@
+/Object: [0-9a-fx]+ is instance of class: Timer
+/CPU speed: [0-9]+
+is running: false
+/last clock seconds: [0-9]+
+/last user seconds: [0-9]+
+/last user time: [0-9]+
+/last system time: [0-9]+
+/current clock seconds: [0-9]+
+/current user seconds: [0-9]+
+/current user time: [0-9]+
+/current system time: 0
+/effective clock time: [0-9]+
+/effective user time: [0-9]+
+effective system time: 0
+/effective CPU time: [0-9]+
