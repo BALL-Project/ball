@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.12 2003/09/11 16:41:57 amoll Exp $
+// $Id: displayProperties.C,v 1.13 2003/09/18 12:51:43 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -218,13 +218,14 @@ namespace BALL
 		void DisplayProperties::onNotify(Message *message)
 			throw()
 		{
-			// new composite => build graphical representation and notify scene
-			if (RTTI::isKindOf<NewMolecularMessage>(*message))
+			// new molecule => build graphical representation and notify scene
+			if (RTTI::isKindOf<CompositeMessage>(*message))
 			{
-				NewMolecularMessage *composite_message = RTTI::castTo<NewMolecularMessage>(*message);
-
+				CompositeMessage *composite_message = RTTI::castTo<CompositeMessage>(*message);
+				if (composite_message->getType() != CompositeMessage::NEW_MOLECULE) return;
 				// generate graphical representation
 				createRepresentation_(composite_message->getComposite());
+				return;
 			}
 
 			if (RTTI::isKindOf<ShowDisplayPropertiesMessage>(*message))
@@ -253,15 +254,15 @@ namespace BALL
 					default:
 						return;
 				}
+				return;
 			}
 
 			if (RTTI::isKindOf<ControlSelectionMessage>(*message))
 			{
 				createRepresentationMode();
+				// disable apply button if selection is empty
+				apply_button->setEnabled(getMainControl()->getControlSelection().size());
 			}
-
-			// disable apply button if selection is empty
-			apply_button->setEnabled(getMainControl()->getControlSelection().size());
 		}
 
 
@@ -459,14 +460,13 @@ namespace BALL
 			// no refocus, if a representation already exists
 			if (getMainControl()->getPrimitiveManager().getRepresentations().size() == 1)
 			{
-				CenterCameraMessage* ccmessage = new CenterCameraMessage;
-				ccmessage->setDeletable(true);
+				CompositeMessage* ccmessage = new CompositeMessage;
 				ccmessage->setComposite(composite);
+				ccmessage->setType(CompositeMessage::CENTER_CAMERA);
 				notify_(ccmessage);
 			}
 
 			RepresentationMessage* message = new RepresentationMessage;
-			message->setDeletable(true);
 			if (!rep_)
 			{
 				message->setType(RepresentationMessage::ADD);
@@ -479,5 +479,4 @@ namespace BALL
 			notify_(message);
 		}
 
-	} // namespace VIEW
-} // namespace BALL
+} } // namespaces

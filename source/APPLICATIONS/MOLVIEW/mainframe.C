@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.80 2003/09/18 09:17:48 amoll Exp $
+// $Id: mainframe.C,v 1.81 2003/09/18 12:51:42 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -342,9 +342,7 @@ namespace BALL
 		rep->insert(*mesh);
 		rep->setModelType(4); // Setting Representation type to Surface
 
-		RepresentationMessage* message = new RepresentationMessage;
-		message->setRepresentation(rep);
-		message->setType(RepresentationMessage::ADD);
+		RepresentationMessage* message = new RepresentationMessage(*rep, RepresentationMessage::ADD);
 		notify_(message);
 	}
 
@@ -592,7 +590,6 @@ namespace BALL
 			NewTrajectoryMessage* message = new NewTrajectoryMessage;
 			message->setComposite(amber->getSystem());
 			message->setTrajectoryFile(dcd);
-			message->setDeletable(true);
 			notify_(message);
 		}
 
@@ -667,9 +664,7 @@ namespace BALL
 		System* system = new System;
 		system->insert(*protein);
 		composite_manager_.insert(*system);
-		NewCompositeMessage* new_message = new NewCompositeMessage;
-		new_message->setDeletable(false);
-		new_message->setComposite(system);
+		CompositeMessage* new_message = new CompositeMessage(*system, CompositeMessage::NEW_COMPOSITE);
 		new_message->setCompositeName("Peptide");
 		notify_(new_message);
 	}
@@ -692,7 +687,6 @@ namespace BALL
 				NewTrajectoryMessage* message = new NewTrajectoryMessage;
 				message->setComposite(simulation_thread_->getComposite());
 				message->setTrajectoryFile(file);
-				message->setDeletable(true);
 				notify_(message);
 			}
 			

@@ -406,9 +406,9 @@ bool FDPBDialog::applyProcessors_()
 		return false;
 	}
 
-	ChangedCompositeMessage* message = new ChangedCompositeMessage;
-	message->setDeletable(true);
+	CompositeMessage* message = new CompositeMessage;
 	message->setComposite(system_);
+	message->setType(CompositeMessage::CHANGED_COMPOSITE);
 	notify_(message);
 
 	return true;

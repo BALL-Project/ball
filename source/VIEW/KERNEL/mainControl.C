@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.8 2003/09/17 23:40:46 amoll Exp $
+// $Id: mainControl.C,v 1.9 2003/09/18 12:51:43 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -322,7 +322,6 @@ bool MainControl::remove_(Composite& composite)
 		rr_message = new RepresentationMessage;
 		rr_message->setType(RepresentationMessage::REMOVE);
 		rr_message->setRepresentation(*reps_it);
-		rr_message->setDeletable(true);
 		notify_(rr_message);
 	}
 
@@ -336,24 +335,23 @@ bool MainControl::update(const Composite& composite)
 {
 	if (!composite_manager_.has(composite)) return false;
 	
-	// delete all representations containing the composite
-	List<Representation*> changed_representations;
-	changed_representations = primitive_manager_.changedComposite(composite);
-	RepresentationMessage* ur_message = 0;
+	// update all representations containing the composite
+	RepresentationMessage* ur_message = new RepresentationMessage;
+	ur_message->setType(RepresentationMessage::UPDATE);
+	ur_message->setDeletable(false);
+
+	List<Representation*> changed_representations = primitive_manager_.changedComposite(composite);
 	List<Representation*>::Iterator reps_it = changed_representations.begin();
 	// notify GeometricControl of changed representations
 	for (; reps_it != changed_representations.end(); reps_it++)
 	{
-		ur_message = new RepresentationMessage;
 		ur_message->setRepresentation(*reps_it);
-		ur_message->setType(RepresentationMessage::UPDATE);
-		ur_message->setDeletable(true);
 		notify_(ur_message);
 	}
+	delete ur_message;
 
 	SceneMessage *scene_message = new SceneMessage;
 	scene_message->setType(SceneMessage::REDRAW);
-	scene_message->setDeletable(true);
 	notify_(scene_message);
 
 	return true;
@@ -374,7 +372,6 @@ void MainControl::updateAll(bool rebuild_display_lists)
 		scene_message->setType(SceneMessage::REDRAW);
 	}
 
-	scene_message->setDeletable(true);
 	notify_(scene_message); 
 }
 
@@ -382,20 +379,41 @@ void MainControl::updateAll(bool rebuild_display_lists)
 void MainControl::onNotify(Message *message)
 	throw()
 {
-	if (RTTI::isKindOf<NewCompositeMessage>(*message))
+	if (RTTI::isKindOf<CompositeMessage>(*message))
 	{
-		NewCompositeMessage* new_message = RTTI::castTo<NewCompositeMessage>(*message);
-		composite_manager_.insert(*new_message->getComposite());
-	}
-	else if (RTTI::isKindOf<RemovedCompositeMessage>(*message))
-	{
-		RemovedCompositeMessage *composite_message = RTTI::castTo<RemovedCompositeMessage>(*message);
-		remove_(*composite_message->getComposite());
-	}
-	else if (RTTI::isKindOf<ChangedCompositeMessage>(*message))
-	{
-		ChangedCompositeMessage *composite_message = RTTI::castTo<ChangedCompositeMessage>(*message);
-		update(composite_message->getComposite()->getRoot());
+		CompositeMessage* cmessage = RTTI::castTo<CompositeMessage>(*message);
+		switch(cmessage->getType())
+		{
+			case CompositeMessage::NEW_COMPOSITE:
+				composite_manager_.insert(*cmessage->getComposite());
+				return;
+			case CompositeMessage::REMOVED_COMPOSITE:
+				remove_(*cmessage->getComposite());
+				return;
+			case CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL:
+			case CompositeMessage::CHANGED_COMPOSITE:
+				update(cmessage->getComposite()->getRoot());
+				return;
+			case CompositeMessage::SELECTED_COMPOSITE:
+			case CompositeMessage::DESELECTED_COMPOSITE:
+			{
+				bool selected = (cmessage->getType() == CompositeMessage::SELECTED_COMPOSITE);
+				if (selected == selection_.has(cmessage->getComposite())) return;
+				if (selected)
+				{
+					selectCompositeRecursive(cmessage->getComposite(), true);
+				}
+				else
+				{
+					deselectCompositeRecursive(cmessage->getComposite(), true);
+				}
+				NewSelectionMessage* nws_message = new NewSelectionMessage;					
+				notify_(nws_message);
+				// sending of scene message and geometric object selection is done in 
+				// MolecularProperties
+			}
+			return;
+		}
 	}
 	else if (RTTI::isKindOf<ControlSelectionMessage> (*message))
 	{
@@ -407,25 +425,6 @@ void MainControl::onNotify(Message *message)
 		GeometricObjectSelectionMessage* selection_message = 
 			RTTI::castTo<GeometricObjectSelectionMessage>(*message);
 		selectComposites_(*selection_message);
-	}
-	else if(RTTI::isKindOf<CompositeSelectedMessage>(*message))
-	{
-		// Selection came from selecting checkbox in Control or "select" menu in displayProperties
-		CompositeSelectedMessage * selection_message = RTTI::castTo<CompositeSelectedMessage>(*message);
-		if (selection_message->isSelected() == selection_.has(selection_message->getComposite())) return;
-		if (selection_message->isSelected())
-		{
-			selectCompositeRecursive(selection_message->getComposite(), true);
-		}
-		else
-		{
-			deselectCompositeRecursive(selection_message->getComposite(), true);
-		}
-		NewSelectionMessage* nws_message = new NewSelectionMessage;					
-		notify_(nws_message);
-
-		// sending of scene message and geometric object selector is done in 
-		// MolecularProperties
 	}
 }
 
@@ -686,7 +685,6 @@ void MainControl::selectComposites_(GeometricObjectSelectionMessage& message)
 	#endif
 
 	NewSelectionMessage* new_message = new NewSelectionMessage;
-	new_message->setDeletable(true);
 	notify_(new_message);
 }
 

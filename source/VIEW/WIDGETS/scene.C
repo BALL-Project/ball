@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.9 2003/09/16 15:18:52 amoll Exp $
+// $Id: scene.C,v 1.10 2003/09/18 12:51:44 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -234,7 +234,7 @@ void Scene::onNotify(Message *message)
 				gl_renderer_.addRepresentation(*rep);
 				break;
 
-			case RepresentationMessage::UNKNOWN:
+			case RepresentationMessage::UNDEFINED:
 			case RepresentationMessage::SELECTED:
 				break;
 		}
@@ -579,7 +579,6 @@ void Scene::selectObjects_(bool select)
 	gl_renderer_.pickObjects2(objects, width, height);
 
 	GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
-	message->setDeletable(true);
 	message->setSelection(objects);
 	message->setSelected(select);
 	// sent collected objects
@@ -716,9 +715,7 @@ void Scene::createCoordinateSystem_()
 	// because the message wont arrive in Scene::onNotify
 	gl_renderer_.addRepresentation(*rp);
 	
-	RepresentationMessage* message = new RepresentationMessage;
-	message->setRepresentation(rp);
-	message->setType(RepresentationMessage::ADD);
+	RepresentationMessage* message = new RepresentationMessage(*rp, RepresentationMessage::ADD);
 	notify_(message);
 }
 
@@ -867,9 +864,7 @@ void Scene::applyPreferences(Preferences & /* preferences */)
 		for (; it != reps.end(); it++)
 		{
 			pm.remove(**it);
-			RepresentationMessage* message = new RepresentationMessage;
-			message->setRepresentation(*it);
-			message->setType(RepresentationMessage::REMOVE);
+			RepresentationMessage* message = new RepresentationMessage(**it, RepresentationMessage::REMOVE);
 			notify_(message);
 		}
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.8 2003/09/18 09:17:48 amoll Exp $
+// $Id: geometricControl.C,v 1.9 2003/09/18 12:51:44 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -66,6 +66,11 @@ GeometricControl::~GeometricControl()
 void GeometricControl::addRepresentation(Representation& rep)
 	throw()
 {
+	if (representation_to_item_.has(&rep)) 
+	{
+		Log.error() << "Tried to add an already inserted Representation in " << __FILE__ << __LINE__ << std::endl;
+		return;
+	}
 	generateListViewItem_(rep);
 
 	// update the view

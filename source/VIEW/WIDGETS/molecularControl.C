@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.4 2003/09/11 09:52:09 amoll Exp $
+// $Id: molecularControl.C,v 1.5 2003/09/18 12:51:44 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -113,49 +113,30 @@ bool MolecularControl::reactToMessages_(Message* message)
 	throw()
 {
 	// react only to NewMolecularMessage, but not to NewCompositeMessage
-	if (RTTI::isKindOf<NewMolecularMessage>(*message))
+	if (RTTI::isKindOf<CompositeMessage>(*message))
 	{
-		NewMolecularMessage *composite_message = RTTI::castTo<NewMolecularMessage>(*message);
-		addComposite(*(Composite *)composite_message->getComposite());
-		return false;
-	}
-
-	if (RTTI::isKindOf<NewCompositeMessage>(*message))
-	{ 
-		return false;
-	}
-
-	if (RTTI::isKindOf<RemovedCompositeMessage>(*message))
-	{
-		RemovedCompositeMessage *composite_message = RTTI::castTo<RemovedCompositeMessage>(*message);
-		removeComposite(*(Composite *)composite_message->getComposite());
-	}   
-	else if (RTTI::isKindOf<ChangedCompositeMessage>(*message))
-	{
-		#ifdef BALL_VIEW_DEBUG
-			Log.error() << "updating composite in Control" << std::endl;
-		#endif 
-		ChangedCompositeMessage *composite_message = RTTI::castTo<ChangedCompositeMessage>(*message);
-		recurseUpdate_(0, *composite_message->getComposite());
-		#ifdef BALL_VIEW_DEBUG
-			Log.error() << "updating composite in Control finished" << std::endl;
-		#endif 
-		return (composite_message->isUpdateControl());
-	}
-	else if (RTTI::isKindOf<CompositeSelectedMessage>(*message))
-	{
-		CompositeSelectedMessage* composite_message = RTTI::castTo<CompositeSelectedMessage>(*message);
-		updateListViewItem_(0, *composite_message->getComposite());
-		return true;
+		CompositeMessage* composite_message = RTTI::castTo<CompositeMessage>(*message);
+		switch (composite_message->getType())
+		{
+			case CompositeMessage::NEW_MOLECULE:
+				addComposite(*(Composite *)composite_message->getComposite());
+				return false;
+			case CompositeMessage::REMOVED_COMPOSITE:
+				removeComposite(*(Composite *)composite_message->getComposite());
+				return false;
+			case CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL:
+			case CompositeMessage::CHANGED_COMPOSITE:
+				recurseUpdate_(0, *composite_message->getComposite());
+				return (composite_message->getType() == CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
+			case CompositeMessage::SELECTED_COMPOSITE:
+			case CompositeMessage::DESELECTED_COMPOSITE:
+				updateListViewItem_(0, *composite_message->getComposite());
+				return true;
+		}
 	}
 	else if (RTTI::isKindOf<NewSelectionMessage> (*message))
 	{
 		setSelection_(true);
-	}
-	else if (RTTI::isKindOf<NewCompositeMessage>(*message))
-	{
-		NewCompositeMessage *composite_message = RTTI::castTo<NewCompositeMessage>(*message);
-		addComposite(*(Composite *)composite_message->getComposite());
 	}
 
 	return false;
@@ -220,33 +201,26 @@ void MolecularControl::atomProperties()
 	AtomProperties as((Atom*)context_composite_, this);
 	as.exec();
 
-	ChangedCompositeMessage* message = new ChangedCompositeMessage;
-	message->setComposite(context_composite_);
-	message->setUpdateControl(true);
-	message->setDeletable();
+	CompositeMessage* message = new CompositeMessage(
+			*context_composite_, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
 	notify_(message);
 }
 	
 void MolecularControl::buildBonds()
 {
-	MolecularTaskMessage* message = new MolecularTaskMessage;
-	message->setType(MolecularTaskMessage::BUILD_BONDS);
-	message->setDeletable();
+	MolecularTaskMessage* message = new MolecularTaskMessage(MolecularTaskMessage::BUILD_BONDS);
 	notify_(message);
 }
 	
 void MolecularControl::centerCamera()
 {
-	CenterCameraMessage* message = new CenterCameraMessage;
-	message->setDeletable();
+	CompositeMessage* message = new CompositeMessage(*context_composite_, CompositeMessage::CENTER_CAMERA);
 	notify_(message);
 }
 
 void MolecularControl::checkResidue()
 {
-	MolecularTaskMessage* message = new MolecularTaskMessage;
-	message->setType(MolecularTaskMessage::CHECK_RESIDUE);
-	message->setDeletable();
+	MolecularTaskMessage* message = new MolecularTaskMessage(MolecularTaskMessage::CHECK_RESIDUE);
 	notify_(message);
 }
 
@@ -307,7 +281,6 @@ void MolecularControl::updateSelection()
 	// sent new selection through tree
 	ControlSelectionMessage* message = new ControlSelectionMessage;
 	message->setSelection(selected_);
-	message->setDeletable(true);
 
 	if (transformation_dialog_ && selected_.size()>0)
 	{
@@ -381,9 +354,9 @@ void MolecularControl::selectedComposite_(Composite* composite, bool state)
 		}
 	}
 
-	CompositeSelectedMessage* message = new CompositeSelectedMessage(composite, state);
-	message->setDeletable(false);
-	message->setComposite(composite);
+	Index id = CompositeMessage::DESELECTED_COMPOSITE;
+	if (state) id = CompositeMessage::SELECTED_COMPOSITE;
+	CompositeMessage* message = new CompositeMessage(*composite, id);
 	notify_(message);
 	
 	setSelection_(false);
@@ -620,8 +593,9 @@ void MolecularControl::cut()
 		to_delete.erase(*child_it);
 	}
 	
-	RemovedCompositeMessage* remove_message = new RemovedCompositeMessage;
+	CompositeMessage* remove_message = new CompositeMessage;
 	remove_message->setDeletable(false);
+	remove_message->setType(CompositeMessage::REMOVED_COMPOSITE);
 	Size nr_of_items = 0;
 
 	delete_it = to_delete.begin();
@@ -637,13 +611,12 @@ void MolecularControl::cut()
 
 	selected_.clear();
 	ControlSelectionMessage* message = new ControlSelectionMessage;
-	message->setDeletable(true);
 	notify_(message);
 
 	if (!roots.size()) return;
-	ChangedCompositeMessage* ccmessage = new ChangedCompositeMessage;
+	CompositeMessage* ccmessage = new CompositeMessage;
 	ccmessage->setDeletable(false);
-	ccmessage->setUpdateControl(false);
+	ccmessage->setType(CompositeMessage::CHANGED_COMPOSITE);
 	HashSet<Composite*>::Iterator roots_it = roots.begin();
 	for (roots_it = roots.begin(); roots_it != roots.end(); roots_it++)
 	{
@@ -702,12 +675,8 @@ void MolecularControl::paste()
 		Composite *new_composite = (Composite*)(*list_it)->create();
 
 		// insert Composite in mainControl
-		NewCompositeMessage *new_message = new NewCompositeMessage;
-		new_message->setDeletable(true);
-		new_message->setComposite(new_composite);
-		
 		new_composite->host(getInformationVisitor_());
-		
+		CompositeMessage *new_message = new CompositeMessage(*new_composite, CompositeMessage::NEW_COMPOSITE);
 		new_message->setCompositeName(getInformationVisitor_().getName());
 		notify_(new_message);
 	}

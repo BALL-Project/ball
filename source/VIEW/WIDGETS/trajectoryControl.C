@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryControl.C,v 1.11 2003/09/17 23:40:46 amoll Exp $
+// $Id: trajectoryControl.C,v 1.12 2003/09/18 12:51:44 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/trajectoryControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -125,9 +125,10 @@ void TrajectoryControl::insertTrajectory_(TrajectoryFile* file, System& system)
 void TrajectoryControl::onNotify(Message *message)
 	throw()
 {
-	if (RTTI::isKindOf<RemovedCompositeMessage>(*message))
+	if (RTTI::isKindOf<CompositeMessage>(*message))
   {
-    RemovedCompositeMessage *composite_message = RTTI::castTo<RemovedCompositeMessage>(*message);
+    CompositeMessage *composite_message = RTTI::castTo<CompositeMessage>(*message);
+		if (!composite_message->getType() == CompositeMessage::REMOVED_COMPOSITE) return;
     Composite* composite = (Composite *)composite_message->getComposite();
 		List<QListViewItem*> to_delete;
 		HashMap<QListViewItem*, SnapShotManager*>::Iterator it = item_to_trajectory_.begin();

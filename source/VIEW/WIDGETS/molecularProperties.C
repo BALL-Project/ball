@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.C,v 1.3 2003/09/02 16:06:23 amoll Exp $
+// $Id: molecularProperties.C,v 1.4 2003/09/18 12:51:44 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularProperties.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -65,10 +65,26 @@ namespace BALL
 	  void MolecularProperties::onNotify(Message *message)
 			throw()
     {
-			if (RTTI::isKindOf<NewCompositeMessage>(*message))
+			if (RTTI::isKindOf<CompositeMessage>(*message))
 			{
-				NewCompositeMessage* new_message = RTTI::castTo<NewCompositeMessage>(*message);
-				addComposite_(*new_message->getComposite(), new_message->getCompositeName());
+				CompositeMessage* cmessage = RTTI::castTo<CompositeMessage>(*message);
+				switch (cmessage->getType())
+				{
+					case CompositeMessage::NEW_COMPOSITE:
+						addComposite_(*cmessage->getComposite(), cmessage->getCompositeName());
+						return;
+					case CompositeMessage::SELECTED_COMPOSITE:
+					case CompositeMessage::DESELECTED_COMPOSITE:
+					{
+						SceneMessage* scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
+						notify_(scene_message);
+						getMainControl()->printSelectionInfos();
+						return;
+					}
+					case CompositeMessage::CENTER_CAMERA:
+						centerCamera(cmessage->getComposite());
+						return;
+				}
 			}
 			else if (RTTI::isKindOf<GeometricObjectSelectionMessage>(*message))
 			{
@@ -92,13 +108,6 @@ namespace BALL
 					}
 				}
 			}
-			else if(RTTI::isKindOf<CompositeSelectedMessage>(*message))
-			{
-				SceneMessage* scene_message = new SceneMessage;
-				scene_message->setType(SceneMessage::REBUILD_DISPLAY_LISTS);
-				notify_(scene_message);
-				getMainControl()->printSelectionInfos();
-			}
 			else if (RTTI::isKindOf<MolecularTaskMessage>(*message))
 			{
 				switch (((RTTI::castTo<MolecularTaskMessage>(*message)))->getType())
@@ -116,10 +125,6 @@ namespace BALL
 						Log.error() << "Unknown type of MolecularTaskMessage in " 
 												<< __FILE__ << "  " << __LINE__ << std::endl;
 				}
-			}
-			else if (RTTI::isKindOf<CenterCameraMessage>(*message))
-			{
-				centerCamera(((CenterCameraMessage*) message)->getComposite());
 			}
 		}	
 
@@ -178,9 +183,9 @@ namespace BALL
 			List<Composite*> temp_selection_ = getMainControl()->getControlSelection();
 			List<Composite*>::ConstIterator it = temp_selection_.begin();	
 
-			ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
+			CompositeMessage *change_message = new CompositeMessage;
 			change_message->setDeletable(false);
-			change_message->setUpdateControl(true);
+			change_message->setType(CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
 
 			Size number_of_hydrogens = 0;
 
@@ -214,9 +219,9 @@ namespace BALL
 			List<Composite*> temp_selection_ = getMainControl()->getControlSelection();
 			List<Composite*>::ConstIterator it = temp_selection_.begin();	
 			
-			ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
+			CompositeMessage *change_message = new CompositeMessage;
 			change_message->setDeletable(false);
-			change_message->setUpdateControl(true);
+			change_message->setType(CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
 			
 			Size number_of_bonds = 0;
 			for (; it != temp_selection_.end(); ++it)
@@ -254,13 +259,10 @@ namespace BALL
 			Vector3 view_point = view_center_vector_;
 
 			// update scene
-			SceneMessage *scene_message = new SceneMessage;
+			SceneMessage *scene_message = new SceneMessage(SceneMessage::UPDATE_CAMERA);
 			scene_message->getCamera().setLookAtPosition(view_point);
-
 			view_point.z += view_distance_;
 			scene_message->getCamera().setViewPoint(view_point);
-			scene_message->setDeletable(true);
-			scene_message->setType(SceneMessage::UPDATE_CAMERA);
 			notify_(scene_message);
 		}
 
@@ -336,8 +338,9 @@ namespace BALL
 			List<Composite*> temp_selection_ = selection;
 						
 			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
-			CompositeSelectedMessage* cs_message = new CompositeSelectedMessage(0, true);
+			CompositeMessage* cs_message = new CompositeMessage();
 			cs_message->setDeletable(false);
+			cs_message->setType(CompositeMessage::SELECTED_COMPOSITE);
 
 			for (; list_it != temp_selection_.end(); ++list_it)
 			{
@@ -350,8 +353,7 @@ namespace BALL
 			getMainControl()->printSelectionInfos();
 
 			// we have to send SceneMessage here, because it wont be send in onNotify 
-			SceneMessage* scene_message = new SceneMessage;
-			scene_message->setType(SceneMessage::REBUILD_DISPLAY_LISTS);
+			SceneMessage* scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
 			notify_(scene_message);
 		}
 
@@ -372,8 +374,9 @@ namespace BALL
 			List<Composite*> temp_selection_ = selection;
 
 			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
-			CompositeSelectedMessage* cs_message = new CompositeSelectedMessage(0, false);
+			CompositeMessage* cs_message = new CompositeMessage();
 			cs_message->setDeletable(false);
+			cs_message->setType(CompositeMessage::DESELECTED_COMPOSITE);
 			for (; list_it != temp_selection_.end(); ++list_it)
 			{
 				if (!(*list_it)->isSelected()) continue;
@@ -387,8 +390,7 @@ namespace BALL
 			getMainControl()->printSelectionInfos();
 
 			// we have to send SceneMessage here, because it wont be send in onNotify 
-			SceneMessage* scene_message = new SceneMessage;
-			scene_message->setType(SceneMessage::REBUILD_DISPLAY_LISTS);
+			SceneMessage* scene_message = new SceneMessage(SceneMessage::REBUILD_DISPLAY_LISTS);
 			notify_(scene_message);
 		}
 
@@ -447,16 +449,13 @@ namespace BALL
 				atom_container.setName(name);
 			}
 			
-			// continue with molecular message
-			NewMolecularMessage* mol_message = new NewMolecularMessage;
-			mol_message->setComposite(composite);
-			mol_message->setDeletable(true);
-			
 			#ifdef BALL_VIEW_DEBUG
 				Log.error() << "finished applying molecular properties" << std::endl;
 			#endif
+			// continue with molecular message
+			CompositeMessage* mol_message = new CompositeMessage(composite, CompositeMessage::NEW_MOLECULE);
 			notify_(mol_message);
 		}
+
 #undef BALL_VIEW_DEBUG
-	} // namespace VIEW
-} // namespace BALL
+} } // namespaces
