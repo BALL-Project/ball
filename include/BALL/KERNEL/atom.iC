@@ -1,139 +1,162 @@
-// $Id: atom.iC,v 1.8 2000/10/26 14:41:48 anker Exp $
+// $Id: atom.iC,v 1.9 2000/12/16 21:29:02 amoll Exp $
 
 	BALL_INLINE
   void Atom::setElement(const Element& element)
+		throw()
   {
     element_ = &element;
 	}
 
 	BALL_INLINE
   const Element& Atom::getElement() const
+		throw()
   {
     return *element_;
 	}
 
 	BALL_INLINE
   void Atom::setCharge(float charge)
+		throw()
   {
     charge_ = charge;
 	}
 
 	BALL_INLINE
   float Atom::getCharge() const
+		throw()
   {
     return charge_;
 	}
 
 	BALL_INLINE
 	String& Atom::getName()
+		throw()
 	{
 		return name_;
 	}
 
 	BALL_INLINE
   const String& Atom::getName() const
+		throw()
   {
     return name_;
 	}
 
 	BALL_INLINE
   const Molecule* Atom::getMolecule() const
+		throw()
   {
     return ((Atom *)this)->getMolecule();
 	}
 
 	BALL_INLINE
   const Fragment* Atom::getFragment() const
+		throw()
   {
     return ((Atom*)this)->getFragment();
 	}
 
 	BALL_INLINE
   void Atom::setName(const String &name)
+		throw()
   {
     name_ = name;
 	}
  
 	BALL_INLINE
   void Atom::setPosition(const Vector3 &position)
+		throw()
   {
     position_.set(position);
 	}
 
 	BALL_INLINE
   Vector3& Atom::getPosition()
+		throw()
   {
     return position_;
 	}
 
 	BALL_INLINE
   const Vector3& Atom::getPosition() const
+		throw()
   {
     return position_;
 	}
 
 	BALL_INLINE
   void Atom::setRadius(float radius)
+		throw()
   {
     radius_ = radius;
 	}
 
 	BALL_INLINE
   float Atom::getRadius() const
+		throw()
   {
     return radius_;
 	}
 
 	BALL_INLINE
   void Atom::setType(Type atom_type)
+		throw()
   {
     type_ = atom_type;
 	}
 
 	BALL_INLINE
   Atom::Type Atom::getType() const
+		throw()
   {
     return type_;
 	}
 
 	BALL_INLINE
   void Atom::setTypeName(const String& type_name)
+		throw()
   {
     type_name_ = type_name;
 	}
 
 	BALL_INLINE
   String Atom::getTypeName() const
+		throw()
   {
     return type_name_;
 	}
 
 	BALL_INLINE
   void Atom::setVelocity(const Vector3 &velocity)
+		throw()
   {
     velocity_.set(velocity);
 	}
 
 	BALL_INLINE
   const Vector3& Atom::getVelocity() const
+		throw()
   {
     return velocity_;
 	}
 
 	BALL_INLINE
   void Atom::setForce(const Vector3& force)
+		throw()
   {
     force_.set(force);
 	}
 
  	BALL_INLINE
   Vector3& Atom::getForce()
+		throw()
   {
     return force_;
 	}
 
 	BALL_INLINE
   const Vector3& Atom::getForce() const
+		throw()
   {
     return force_;
 	}

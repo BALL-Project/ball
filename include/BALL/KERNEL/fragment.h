@@ -1,4 +1,4 @@
-// $Id: fragment.h,v 1.11 2000/12/11 21:13:20 oliver Exp $
+// $Id: fragment.h,v 1.12 2000/12/16 21:29:03 amoll Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -47,13 +47,16 @@ namespace BALL
 		//@{
 
 		/** Default constructor */
-		Fragment();
+		Fragment()
+			throw();
 	
 		/** Copy constructor */
-		Fragment(const Fragment& fragment, bool deep = true);
+		Fragment(const Fragment& fragment, bool deep = true)
+			throw();
 	
 		/** Constructor */
-		Fragment(const String& name);
+		Fragment(const String& name)
+			throw();
 
 		/** Destructor */
 		virtual ~Fragment()
@@ -68,13 +71,15 @@ namespace BALL
 				Writes a Fragment object to a persistent stream.
 				@param pm the persistence manager
 		*/
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
+			throw();
 
 		/**	Persistent reading.
 				Reads a Fragment object from a persistent stream.
 				@param pm the persistence manager
 		*/
-		void persistentRead(PersistenceManager& pm);
+		void persistentRead(PersistenceManager& pm)
+			throw();
 
 		//@}
 
@@ -86,7 +91,8 @@ namespace BALL
 				@param   fragment the Fragment to be copied (cloned)
 				@return  Fragment& - {\em *this} instance
 		*/
-		Fragment& operator = (const Fragment& fragment);
+		const Fragment& operator = (const Fragment& fragment)
+			throw();
 
 		//@}
 
@@ -114,7 +120,8 @@ namespace BALL
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
-		virtual void read(std::istream& s);
+		virtual void read(std::istream& s)
+			throw();
 
 		/* Persistent stream input and state restorage.
 				Read persistent data from the input stream {\em s} and restore the state of {\em *this}.
@@ -122,7 +129,8 @@ namespace BALL
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
-		virtual void write(std::ostream& s) const;
+		virtual void write(std::ostream& s) const
+			throw();
 		//@}
 	};
 

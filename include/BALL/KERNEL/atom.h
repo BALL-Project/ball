@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.28 2000/12/11 21:13:19 oliver Exp $
+// $Id: atom.h,v 1.29 2000/12/16 21:29:02 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -83,9 +83,9 @@ namespace BALL
 			\end{itemize}
 			
 			@memo    Atom class (BALL kernel framework)
-			@author  $Author: oliver $
-			@version $Revision: 1.28 $
-			@date    $Date: 2000/12/11 21:13:19 $
+			@author  $Author: amoll $
+			@version $Revision: 1.29 $
+			@date    $Date: 2000/12/16 21:29:02 $
 	*/
 	class Atom
 		: public Composite,
@@ -167,7 +167,8 @@ namespace BALL
 					@see         Composite::Composite
 					@see         PropertyManager::PropertyManager
 			*/
-			Atom();
+			Atom()
+				throw();
 		
 			/** Copy constructor.
 					Construct new atom by copying the atom {\em atom}.
@@ -181,7 +182,8 @@ namespace BALL
 					@see         Composite::Composite
 					@see         PropertyManager::PropertyManager
 			*/
-			Atom(const Atom& atom, bool deep = true);
+			Atom(const Atom& atom, bool deep = true)
+				throw();
 		
 			/** Detailed state initializing constructor.
 					Construct new atom.
@@ -213,15 +215,15 @@ namespace BALL
 					@see         Composite::Composite
 					@see         PropertyManager::PropertyManager
 			*/
-			Atom
-				(Element& element,
+			Atom(Element& element,
 				 const String& name, const String& type_name = BALL_ATOM_DEFAULT_TYPE_NAME,
 				 Type atom_type = BALL_ATOM_DEFAULT_TYPE,
 				 const Vector3& position = Vector3(BALL_ATOM_DEFAULT_POSITION),
 				 const Vector3& velocity = Vector3(BALL_ATOM_DEFAULT_VELOCITY),
 				 const Vector3& force = Vector3(BALL_ATOM_DEFAULT_FORCE),
 				 float charge = BALL_ATOM_DEFAULT_CHARGE,
-				 float radius = BALL_ATOM_DEFAULT_RADIUS);
+				 float radius = BALL_ATOM_DEFAULT_RADIUS)	
+				throw();
 
 			//@}
 
@@ -291,13 +293,15 @@ namespace BALL
 					Writes a Atom object to a persistent stream.
 					@param pm the persistence manager
 			*/
-			virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+			virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const
+				throw();
 
 			/**	Persistent reading.
 					Reads a Atom object from a persistent stream.
 					@param pm the persistence manager
 			*/
-			virtual void persistentRead(PersistenceManager& pm);
+			virtual void persistentRead(PersistenceManager& pm)
+				throw();
 			//@}
 
 			/** @name Assignment methods */
@@ -313,7 +317,8 @@ namespace BALL
 					@param       atom the atom to be copied (cloned)
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em atom}
 			*/
-			void set(const Atom& atom, bool deep = true);
+			void set(const Atom& atom, bool deep = true)
+				throw();
 
 			/** Assignment operator.
 					Assign the atom {\em atom} to {\em *this} atom.
@@ -327,7 +332,8 @@ namespace BALL
 					@return      Atom& - {\em *this} atom
 					@see         Atom::set
 			*/
-			Atom& operator = (const Atom& atom);
+			const Atom& operator = (const Atom& atom)
+				throw();
 
 			/** Copying with cloning facility.
 					Copy {\em *this} atom to the atom {\em atom}.
@@ -340,14 +346,16 @@ namespace BALL
 					@param  atom the atom to be assigned to
 					@see         Atom::set
 			*/
-			void get(Atom& atom, bool deep = true) const;
+			void get(Atom& atom, bool deep = true) const
+				throw();
 
 			/** Swapping of atoms.
 					Swap the states of {\em *this} atom with the atom {\em atom}.
 					@param       atom the atom being swapped with {\em *this} atom 
 					@see         Atom::Atom
 			*/
-			void swap(Atom& atom);
+			void swap(Atom& atom)
+				throw();
 
 			//@}
 
@@ -359,28 +367,32 @@ namespace BALL
 					@param       element the new element type of {\em *this} atom
 					@see         Atom::getElement
 			*/
-			void setElement(const Element& element);
+			void setElement(const Element& element)
+				throw();
 				
 			/** Constant inspection of the atom element type.
 					Access a constant reference to the element type of {\em *this} atom.
 					@return      String& - constant reference to the element type of {\em *this} atom
 					@see         Atom::setElement
 			*/
-			const Element& getElement() const;
+			const Element& getElement() const
+				throw();
 
 			/** Change of the atom's charge.
 					Change the charge of {\em *this} atom to {\em charge}.
 					@param       charge the new charge of {\em *this} atom
 					@see         Atom::getCharge
 			*/
-			void setCharge(float charge);
+			void setCharge(float charge)
+				throw();
 
 			/** Constant inspection of the atom's charge.
 					Access the charge of {\em *this} atom.
 					@return      float - copy of the charge of {\em *this} atom
 					@see         Atom::setCharge
 			*/
-			float getCharge() const;
+			float getCharge() const
+				throw();
 
 			/** Mutable inspection of the atom's parent molecule.
 					Access a mutable reference to the parent molecule of {\em *this} atom.
@@ -394,7 +406,8 @@ namespace BALL
 											 mutable reference to the parent molecule of {\em *this} atom,
 											 0 if {\em *this} atom does not have a parent molecule
 			*/
-			Molecule *getMolecule();
+			Molecule *getMolecule()
+				throw();
 
 			/** Mutable inspection of the atom's parent molecule.
 					Access a constant reference to the parent molecule of {\em *this} atom.
@@ -408,7 +421,8 @@ namespace BALL
 											 constant reference to the parent molecule of {\em *this} atom,
 											 0 if {\em *this} atom does not have a parent molecule
 			*/
-			const Molecule *getMolecule() const;
+			const Molecule *getMolecule() const
+				throw();
 
 			/** Mutable inspection of the atom's parent fragment.
 					Access a mutable reference to the parent fragment of {\em *this} atom.
@@ -421,7 +435,8 @@ namespace BALL
 											 mutable reference to the parent fragment of {\em *this} atom,
 											 0 if {\em *this} atom does not have a parent fragment
 			*/
-			Fragment* getFragment();
+			Fragment* getFragment()
+				throw();
 
 			/** Non-mutable inspection of the atom's parent fragment.
 					Access a constant reference to the parent fragment of {\em *this} atom.
@@ -435,7 +450,8 @@ namespace BALL
 											 constant reference to the parent fragment of {\em *this} atom,
 											 0 if {\em *this} atom does not have a parent fragment
 			*/
-			const Fragment* getFragment() const;
+			const Fragment* getFragment() const
+				throw();
 
 			/** Non-mutable inspection of the atom's parent residue.
 					Access a constant reference to the parent residue of {\em *this} atom.
@@ -446,21 +462,24 @@ namespace BALL
 											 constant reference to the parent residue of {\em *this} atom,
 											 0 if {\em *this} atom does not have a parent residue
 			*/
-			const Residue* getResidue() const;
+			const Residue* getResidue() const
+				throw();
 
 			/** Change of the atom's name.
 					Change the name of {\em *this} atom to {\em name}.
 					@param       name the new name of {\em *this} atom
 					@see         Atom::getName
 			*/
-			void setName(const String& name);
+			void setName(const String& name)
+				throw();
 
 			/** Mutable inspection of the atom's name.
 			Access a mutable reference to the name of {\em *this} atom.
 			@return  String& - mutable reference to the name of {\em *this} atom
 			@see     Atom::setName
 			*/
-			String& getName();
+			String& getName()
+				throw();
 
 
 			/** Constant inspection of the atom's name.
@@ -468,7 +487,8 @@ namespace BALL
 					@return      String& - constant reference to the name of {\em *this} atom
 					@see         Atom::setName
 			*/
-			const String& getName() const;
+			const String& getName() const
+				throw();
 
 			/** Assemble a fully specified atom name.
 					This method returns at fully specified atom name as used for charge and type assignments.
@@ -495,35 +515,40 @@ namespace BALL
 					@param	type if type is set to {\tt Atom::NO_VARIANT_EXTENSIONS}, the variant extension ({\tt -XX}) is omitted
 					@return	String the full name
 			*/
-			String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const;
+			String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const
+				throw();
 
 			/** Change of the atom's position vector.
 					Change the position vector of {\em *this} atom to {\em position}.
 					@param       position the new position vector of {\em *this} atom
 					@see         Atom::getPosition
 			*/
-			void setPosition(const Vector3& position);
+			void setPosition(const Vector3& position)
+				throw();
 
 			/** Mutable inspection of the atom's position vector.
 					Access a muteable reference to the position vector of {\em *this} atom.
 					@return      Vector3& - muteable reference to the position vector of {\em *this} atom
 					@see         Atom::setPosition
 			*/
-			Vector3& getPosition();
+			Vector3& getPosition()
+				throw();
 
 			/** Constant inspection of the atom's position vector.
 					Access a constant reference to the position vector of {\em *this} atom.
 					@return      Vector3& - constant reference to the position vector of {\em *this} atom
 					@see         Atom::setPosition
 			*/
-			const Vector3& getPosition() const;
+			const Vector3& getPosition() const
+				throw();
 
 			/** Change of the atom's radius.
 					Change the radius of {\em *this} atom to {\em radius}.
 					@param       radius the new radius of {\em *this} atom
 					@see         Atom::getRadius
 			*/
-			void setRadius(float radius);
+			void setRadius(float radius)
+				throw();
 				
 
 			/** Constant inspection of the atom's radius.
@@ -531,37 +556,43 @@ namespace BALL
 					@return      float - copy of the radius of {\em *this} atom
 					@see         Atom::setRadius
 			*/
-			float getRadius() const;
+			float getRadius() const
+				throw();
 
 			/** Change of the atom's type.
 					Change the type of {\em *this} atom to the type {\em atom_type}.
 					@param       atom_type the new type of {\em *this} atom
 					@see         Atom::getType
 			*/
-			void setType(Type atom_type);
+			void setType(Type atom_type)
+				throw();
 		
 			/** Constant inspection of the atom's type.
 					Access the type of {\em *this} atom.
 					@return      Type - copy of the type of {\em *this} atom
 					@see         Atom::setType
 			*/
-			Type getType() const;
+			Type getType() const
+				throw();
 		
 
 			/**	Get the type name of the atom.
 			*/
-			String getTypeName() const;
+			String getTypeName() const
+				throw();
 
 			/**	Set the type name of the atom.
 			*/
-			void setTypeName(const String& name);
+			void setTypeName(const String& name)
+				throw();
 
 			/** Change of the atom's velocity vector.
 					Change the velocity vector of {\em *this} atom to {\em velocity}.
 					@param       velocity the new velocity vector of {\em *this} atom
 					@see         Atom::getVelocity
 			*/
-			void setVelocity(const Vector3& velocity);
+			void setVelocity(const Vector3& velocity)
+				throw();
 
 			/** Constant inspection of the atom's velocity vector.
 					Access a constant reference to the velocity vector of {\em *this} atom.
@@ -569,7 +600,8 @@ namespace BALL
 					@return      Vector3& - constant reference to the velocity vector of {\em *this} atom
 					@see         Atom::setVelocity
 			*/
-			const Vector3& getVelocity() const;
+			const Vector3& getVelocity() const
+				throw();
 
 			/** Change of the atom's force vector.
 					Change the force vector of {\em *this} atom to {\em force}.
@@ -577,7 +609,8 @@ namespace BALL
 					@param       force the new force vector of {\em *this} atom
 					@see         Atom::getForce
 			*/
-			void setForce(const Vector3& force);
+			void setForce(const Vector3& force)
+				throw();
 
 			/** Mutable inspection of the atom's force vector.
 					Access a mutable reference to the force vector of {\em *this} atom.
@@ -585,7 +618,8 @@ namespace BALL
 					@return      Vector3& - mutable reference to the force vector of {\em *this} atom
 					@see         Atom::setForce
 			*/
-			Vector3& getForce();
+			Vector3& getForce()
+				throw();
 
 			/** Constant inspection of the atom's force vector.
 					Access a constant reference to the force vector of {\em *this} atom.
@@ -593,13 +627,15 @@ namespace BALL
 					@return      Vector3& - constant reference to the force vector of {\em *this} atom
 					@see         Atom::setForce
 			*/
-			const Vector3& getForce() const;
+			const Vector3& getForce() const
+				throw();
 
 			/** Constant inspection of the atom's number of bonds.
 					Access the number of bonds of {\em *this} atom.
 					@return	Size - copy of number of bonds of {\em *this} atom
 			*/
-			Size countBonds() const;
+			Size countBonds() const
+				throw();
 
 			/** Mutable inspection of an atom's indexed bond.
 					Access a mutable reference to the bond with index {\em index} in {\em *this} atom's bond table.
@@ -616,7 +652,8 @@ namespace BALL
 											 mutable reference to the bond that is indexed in {\em *this} atom's bond table,
 											 0 if {\em *this} atom does not have a bond with index {\em index}
 			*/
-			Bond* getBond(Position index);
+			Bond* getBond(Position index)
+				throw(Exception::IndexOverflow);
 
 			/** Constant inspection of an atom's indexed bond.
 					Access a constant reference to the bond with index {\em index} in {\em *this} atom's bond table.
@@ -634,7 +671,8 @@ namespace BALL
 											 constant reference to the bond that is indexed in {\em *this} atom's bond table,
 											 0 if {\em *this} atom does not have a bond with index {\em index}
 			*/
-			const Bond* getBond(Position index) const;
+			const Bond* getBond(Position index) const
+				throw(Exception::IndexOverflow);
 
 			/** Mutable inspection of an atom's bond with another atom.
 					Access a mutable reference to the bond that connects the atom {\em atom} with {\em *this} atom.
@@ -645,7 +683,8 @@ namespace BALL
 											 0 if {\em *this} atom does not have a bond with the atom {\em atom}
 					@see         Atom::createBond	     
 			*/
-			Bond* getBond(const Atom& atom);
+			Bond* getBond(const Atom& atom)
+				throw();
 
 			/** Constant inspection of an atom's bond with another atom.
 					Access a constant reference to the bond that connects the atom {\em atom} with {\em *this} atom.
@@ -656,7 +695,8 @@ namespace BALL
 											 0 if {\em *this} atom does not have a bond with the atom {\em atom}
 					@see         Atom::createBond	     
 			*/
-			const Bond *getBond(const Atom& atom) const;
+			const Bond *getBond(const Atom& atom) const
+				throw();
 
 			//@}
 
@@ -670,7 +710,8 @@ namespace BALL
 					@return        Bond* - default initialized Bond instance that connects {\em *this} atom to {\em atom}
 					@see           Bond::createBond
 			*/
-			Bond *createBond(Atom& atom);
+			Bond *createBond(Atom& atom)
+				throw();
 
 			/** Extended bond creation.
 					Initialize the bond {\em bond} to connect {\em *this} atom to the atom {\em atom}.
@@ -683,10 +724,12 @@ namespace BALL
 					@return        Bond* - default initialized bond {\em bond} that connects {\em *this} atom to {\em atom}
 					@see           Bond::createBond
 			*/
-			Bond *createBond(Bond& bond, Atom& atom);
+			Bond *createBond(Bond& bond, Atom& atom)
+				throw();
 
 			// UNDOCUMENTED, yet
-			Bond *cloneBond(Bond& bond, Atom& atom);
+			Bond *cloneBond(Bond& bond, Atom& atom)
+				throw();
 
 			/** Explicit bond destruction.
 					Destroy the bond connecting {\em *this atom} and the atom {\em atom} explicitly.
@@ -699,7 +742,8 @@ namespace BALL
 					@see           AutoDeletable
 					@see           Bond::destroy
 			*/
-			bool destroyBond(const Atom& atom);
+			bool destroyBond(const Atom& atom)
+				throw();
 
 			/** Explicit bond table destruction.
 					Destroy all the bonds connecting {\em *this atom} with another atom explicitly.
@@ -712,7 +756,8 @@ namespace BALL
 					@see           AutoDeletable
 					@see           Bond::destroy
 			*/
-			void destroyBonds();
+			void destroyBonds()
+				throw();
 
 			//@}
 
@@ -727,7 +772,8 @@ namespace BALL
 											 {\tt false} otherwise
 					@see         Atom::hasBond
 			*/
-			bool hasBond(const Bond& bond) const;
+			bool hasBond(const Bond& bond) const
+				throw();
 
 			/** Determine whether the atom is bound to another.
 					Query, if {\em *this} atom is bound to {\tt atom}.
@@ -739,7 +785,8 @@ namespace BALL
 											 {\tt false} otherwise
 					@see         Atom::getBond
 			*/
-			bool isBoundTo(const Atom& atom) const;
+			bool isBoundTo(const Atom& atom) const
+				throw();
 
 			/** Determine whether the atom has any bond.
 					If the atoms shares a bond with any other atom {\tt true} is returned, {\tt false} otherwise. 
@@ -748,7 +795,8 @@ namespace BALL
 											 {\tt false} otherwise
 					@see         Atom::hasBond
 			*/
-			bool isBound() const;
+			bool isBound() const
+				throw();
 
 			/**	True if the two atoms are geminal.
 					Two atoms are geminal if they do not share a common bond but
@@ -757,14 +805,16 @@ namespace BALL
 					@param	atom the second atom
 					@return bool - {\bf true} if {\tt atom} is geminal to {\tt this} atom
 			*/
-			bool isGeminal(const Atom& atom) const;
+			bool isGeminal(const Atom& atom) const
+				throw();
 
 			/**	True if the two atoms are vicinal.
 					Two atoms are vicinal if they are separated by three bonds (1-4 position).
 					@param	atom the second atom
 					@return bool - {\bf true} if {\tt atom} is vicinal to {\tt this} atom
 			*/
-			bool isVicinal(const Atom& atom) const;
+			bool isVicinal(const Atom& atom) const
+				throw();
 
 			//@}
 
@@ -780,7 +830,8 @@ namespace BALL
 											{\tt true} if the internal state of {\em *this} atom is correct (self-validated) and consistent,
 					 						{\tt false} otherwise
 			*/
-			virtual bool isValid() const;
+			virtual bool isValid() const
+				throw();
 
 			/** Internal state dump.
 					Dump the current internal state of {\em *this} atom to 
@@ -805,7 +856,8 @@ namespace BALL
 				 @param  s input stream from where to restore the internal state of {\em *this} atom
 				 @see    Object::operator >>
 			*/
-			virtual void read(std::istream& s);
+			virtual void read(std::istream& s)
+				throw();
 
 			/* Persistent stream output and state storage.
   			 Write persistent bond data to the output stream {\em s} and store the state of {\em *this}.
@@ -816,7 +868,8 @@ namespace BALL
 				 @param  s input stream from where to restore the internal state of {\em *this} atom
 				 @see         Object::operator <<
 			*/
-			virtual void write(std::ostream& s) const;
+			virtual void write(std::ostream& s) const
+				throw();
 
 			//@}  
 
@@ -831,7 +884,8 @@ namespace BALL
 											 {\tt true} if application has been terminated successfully,
 											 {\tt false} otherwise
 			*/
-			bool applyBonds(UnaryProcessor<Bond>& processor);
+			bool applyBonds(UnaryProcessor<Bond>& processor)
+				throw();
 
 			//@}
 
@@ -847,24 +901,28 @@ namespace BALL
 				BALL_CREATE_DEEP(BondIteratorTraits_)
 
 				BondIteratorTraits_()
+					throw()
 					:	bound_(0),
 						position_(0)
 				{
 				}
 				
 				BondIteratorTraits_(const Atom& atom)
+					throw()
 					:	bound_((Atom*)&atom),
 						position_(0)
 				{
 				}
 				
 				BondIteratorTraits_(const BondIteratorTraits_& traits, bool /* deep */ = true)
+					throw()
 					:	bound_(traits.bound_),
 						position_(traits.position_)
 				{
 				}
 				
-				BondIteratorTraits_& operator = (const BondIteratorTraits_& traits)
+				const BondIteratorTraits_& operator = (const BondIteratorTraits_& traits)
+					throw()
 				{
 					bound_ = traits.bound_;
 					position_ = traits.position_;
@@ -872,147 +930,176 @@ namespace BALL
 				}
 
 				Atom* getContainer()
+					throw()
 				{
 					return bound_;
 				}
 
 				const Atom* getContainer() const
+					throw()
 				{
 					return bound_;
 				}
 
 				bool isSingular() const
+					throw()
 				{
-					return (bool)(bound_ == 0);
+					return (bound_ == 0);
 				}
 
 				BondIteratorPosition_& getPosition()
+					throw()
 				{
 					return position_;
 				}
 
 				const BondIteratorPosition_& getPosition() const
+					throw()
 				{
 					return position_;
 				}
 
 				bool operator == (const BondIteratorTraits_& traits) const
+					throw()
 				{
-					return (bool)(position_ == traits.position_);
+					return (position_ == traits.position_);
 				}
 
 				bool operator != (const BondIteratorTraits_& traits) const
+					throw()
 				{
-					return (bool)(position_ != traits.position_);
+					return (position_ != traits.position_);
 				}
 				
 				bool operator < (const BondIteratorTraits_& traits) const
+					throw()
 				{
-					return (bool)(position_ < traits.position_);
+					return (position_ < traits.position_);
 				}
 
 				Distance getDistance(const BondIteratorTraits_& traits) const
+					throw()
 				{
 					return (Distance)(position_ - traits.position_);
 				}
 
 				bool isValid() const
+					throw()
 				{
-					return (bool)(bound_ != 0 && position_ >= 0 && position_ < bound_->number_of_bonds_);
+					return (bound_ != 0 && position_ >= 0 && position_ < bound_->number_of_bonds_);
 				}
 
 				void invalidate()
+					throw()
 				{
 					bound_ = 0;
 					position_ = 0;
 				}
 
 				void toBegin()
+					throw()
 				{
 					position_ = 0;
 				}
 
 				bool isBegin() const
+					throw()
 				{
-					return (bool)(position_ == 0);
+					return (position_ == 0);
 				}
 
 				void toEnd()
+					throw()
 				{
 					position_ = bound_->number_of_bonds_;
 				}
 
 				bool isEnd() const
+					throw()
 				{
-					return (bool)(position_ >= bound_->number_of_bonds_);
+					return (position_ >= bound_->number_of_bonds_);
 				}
 
 				Bond& getData()
+					throw()
 				{
 					return *(bound_->bond_[position_]);
 				}
 
 				const Bond& getData() const
+					throw()
 				{
 					return *(bound_->bond_[position_]);
 				}
 
 				void forward()
+					throw()
 				{
 					++position_;
 				}
 
 				friend std::ostream& operator << (std::ostream& s, const BondIteratorTraits_& traits)
+					throw()
 				{
 					return (s << traits.position_ << ' ');
 				}
 
 				void dump(std::ostream& s) const
+					throw()
 				{
 					s << position_ << std::endl;
 				}
 
 				void toRBegin()
+					throw()
 				{
 					position_ = bound_->number_of_bonds_ - 1;
 				}
 
 				bool isRBegin() const
+					throw()
 				{
-					return (bool)(position_ == bound_->number_of_bonds_ - 1);
+					return (position_ == bound_->number_of_bonds_ - 1);
 				}
 				
 				void toREnd()
+					throw()
 				{
 					position_ = -1;
 				}
 
 				bool isREnd() const
+					throw()
 				{
-					return (bool)(position_ <= -1);
+					return (position_ <= -1);
 				}
 				
 				void backward()
+					throw()
 				{
 					--position_;
 				}
 
 				void backward(Distance distance)
+					throw()
 				{
 					position_ -= distance;
 				}
 
 				void forward(Distance distance)
+					throw()
 				{
 					position_ += distance;
 				}
 
 				Bond& getData(Index index)
+					throw()
 				{
 					return *(bound_->bond_[index]);
 				}
 
 				const Bond &getData(Index index) const
+					throw()
 				{
 					return *(bound_->bond_[index]);
 				}
@@ -1042,6 +1129,7 @@ namespace BALL
 												of {\em *this} atom positioned at its first bond
 			*/
 			BondIterator beginBond()
+				throw()
 			{
 				return BondIterator::begin(*this);
 			}
@@ -1057,6 +1145,7 @@ namespace BALL
 					instance of {\em *this} atom positioned past its last forward reachable bond
 			*/
 			BondIterator endBond()
+				throw()
 			{
 				return BondIterator::end(*this);
 			}
@@ -1077,6 +1166,7 @@ namespace BALL
 												constant atom positioned at its first constant bond
 			*/
 			BondConstIterator beginBond() const
+				throw()
 			{
 				return BondConstIterator::begin(*this);
 			}
@@ -1093,6 +1183,7 @@ namespace BALL
 												instance of {\em *this} atom positioned past its last forward reachable constant bond
 			*/
 			BondConstIterator endBond() const
+				throw()
 			{
 				return BondConstIterator::end(*this);
 			}
@@ -1104,11 +1195,13 @@ namespace BALL
 				BondReverseIterator;
 
 			BondReverseIterator rbeginBond()
+				throw()
 			{
 				return BondReverseIterator::begin(*this);
 			}
 
 			BondReverseIterator rendBond()
+				throw()
 			{
 				return BondReverseIterator::end(*this);
 			}
@@ -1120,11 +1213,13 @@ namespace BALL
 				BondConstReverseIterator;
 
 			BondConstReverseIterator rbeginBond() const
+				throw()
 			{
 				return BondConstReverseIterator::begin(*this);
 			}
 
 			BondConstReverseIterator rendBond() const
+				throw()
 			{
 				return BondConstReverseIterator::end(*this);
 			}
@@ -1135,23 +1230,24 @@ namespace BALL
 
 		private:
 
-			void clear_();
+			void clear_()
+				throw();
 
-			void swapLastBond_(const Atom* atom);
+			void swapLastBond_(const Atom* atom)
+				throw();
 
 			// Attributes - names are self-explaining...
 			const Element* 	element_;
-			float 		charge_;
-			String 		name_;
-			String 		type_name_;
-			Vector3 	position_;
-			float 		radius_;
-			Type 			type_;
-			Vector3 	velocity_;
-			Vector3 	force_;
-
-			unsigned char number_of_bonds_;
-			Bond* bond_[MAX_NUMBER_OF_BONDS];
+			float 					charge_;
+			String 					name_;
+			String 					type_name_;
+			Vector3 				position_;
+			float 					radius_;
+			Type 						type_;
+			Vector3 				velocity_;
+			Vector3 				force_;
+			unsigned char		number_of_bonds_;
+			Bond*						bond_[MAX_NUMBER_OF_BONDS];
 	};
 
 # ifndef BALL_NO_INLINE_FUNCTIONS

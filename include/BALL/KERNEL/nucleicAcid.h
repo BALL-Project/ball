@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.h,v 1.14 2000/12/11 21:13:20 oliver Exp $ 
+// $Id: nucleicAcid.h,v 1.15 2000/12/16 21:29:03 amoll Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -48,15 +48,18 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		NucleicAcid();
+		NucleicAcid()
+			throw();
 	
 		/**	Copy constructor.
 		*/
-		NucleicAcid(const NucleicAcid& nucleic_acid, bool deep = true);
+		NucleicAcid(const NucleicAcid& nucleic_acid, bool deep = true)
+			throw();
 	
 		/**	Detailled constructor.
 		*/
-		NucleicAcid(const String& name, const String& id = BALL_NUCLEICACID_DEFAULT_ID);
+		NucleicAcid(const String& name, const String& id = BALL_NUCLEICACID_DEFAULT_ID)
+			throw();
 
 		/**	Destructor.
 		*/
@@ -84,13 +87,15 @@ namespace BALL
 				Writes a NucleicAcid object to a persistent stream.
 				@param pm the persistence manager
 		*/
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
+			throw();
 
 		/**	Persistent reading.
 				Reads a NucleicAcid object from a persistent stream.
 				@param pm the persistence manager
 		*/
-		void persistentRead(PersistenceManager& pm);
+		void persistentRead(PersistenceManager& pm)
+			throw();
 
 		//@}
 
@@ -104,19 +109,23 @@ namespace BALL
 				@param  nucleic_acid the NucleicAcid to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em nucleic_acid}
 		*/
-		void set(const NucleicAcid& nucleic_acid, bool deep = true);
+		void set(const NucleicAcid& nucleic_acid, bool deep = true)
+			throw();
 
 		/**	Assignment operator.
 		*/
-		NucleicAcid& operator = (const NucleicAcid& nucleic_acid);
+		const NucleicAcid& operator = (const NucleicAcid& nucleic_acid)
+			throw();
 
 		/**	Assign a NucleicAcid object from another.
 		*/
-		void get(NucleicAcid& nucleic_acid, bool deep = true) const;
+		void get(NucleicAcid& nucleic_acid, bool deep = true) const
+			throw();
 	
 		/**	Swap the contents of two NucleicAcid objects.
 		*/
-		void swap(NucleicAcid& nucleic_acid);
+		void swap(NucleicAcid& nucleic_acid)
+			throw();
 	
 		//@}
 
@@ -130,7 +139,8 @@ namespace BALL
 				@return  Nucleotide* -
 								 mutable reference to the child Nucleotide at {\em positon} of {\em *this},
 		*/
-		Nucleotide* getNucleotide(Position position);
+		Nucleotide* getNucleotide(Position position)
+			throw();
 	
 		/** Get a pointer to a child Nucleotide at a given position.
 				The reference is 0 if {\em *this} instance does not have a Nucleotide at the given position.
@@ -138,50 +148,58 @@ namespace BALL
 				@return  Nucleotide* -
 								 constant reference to the child Nucleotide at {\em positon} of {\em *this},
 		*/
-		const Nucleotide* getNucleotide(Position position) const;
+		const Nucleotide* getNucleotide(Position position) const
+			throw();
 
 		/**	Retrieve a pointer to the Nucleotide at the 3'-end of {\em *this}.
 				The reference is 0 if {\em *this} instance does not have a Nucleotide.
 				@return  Nucleotide* -
 								 mutable reference to the first child Nucleotide
 		*/
-		Nucleotide* get3Prime();
+		Nucleotide* get3Prime()
+			throw();
 
 		/**	Retrieve a const pointer to the nucleotide at the 3'-end of {\em *this}.
 				The reference is 0 if {\em *this} instance does not have a Nucleotide.
 				@return  Nucleotide* -
 								 constant reference to the first child Nucleotide
 		*/
-		const Nucleotide* get3Prime() const;
+		const Nucleotide* get3Prime() const
+			throw();
 
 		/**	Retrieve a pointer to the Nucleotide at the 5'-end of {\em *this}.
 				The reference is 0 if {\em *this} instance does not have a Nucleotide.
 				@return  Nucleotide* -
 								 mutable reference to the last child Nucleotide
 		*/
-		Nucleotide* get5Prime();
+		Nucleotide* get5Prime()
+			throw();
 
 		/**	Retrieve a const pointer to the Nucleotide at the 5'-end of {\em *this}.
 				The reference is 0 if {\em *this} instance does not have a Nucleotide.
 				@return  Nucleotide* -
 								 constant reference to the last child Nucleotide
 		*/
-		const Nucleotide* get5Prime() const;
+		const Nucleotide* get5Prime() const
+			throw();
 
 		/**	Set the ID of the NucleicAcid.
 				@param id the new ID
 		*/
-		void setID(const String& id);
+		void setID(const String& id)
+			throw();
 
 		/**	Retrieve the ID of the NucleicAcid.
 				@return String the ID
 		*/
-		const String& getID() const;
+		const String& getID() const
+			throw();
 
 		/**	Return the number of Nucleotides contained in {\em *this} NucleicAcid.
 				@return Size - number of Nucleotides
 		*/
-		Size countNucleotides() const;
+		Size countNucleotides() const
+			throw();
 		//@}
 
 #ifdef	BALL_CFG_USING_METHOD_DIRECTIVE
@@ -219,7 +237,8 @@ namespace BALL
 										{\tt true} if the internal state of {\em *this} atom is correct (self-validated)
 										and consistent,	{\tt false} otherwise
 		*/
-		virtual bool isValid() const;
+		virtual bool isValid() const
+			throw();
 
 			/** Internal state dump.
 					Dump the current internal state of {\em *this} to the output ostream {\em s}
@@ -241,7 +260,8 @@ namespace BALL
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
-		virtual void read(std::istream& s);
+		virtual void read(std::istream& s)
+			throw();
 
 		/* Persistent stream input and state restorage.
 				Read persistent data from the input stream {\em s} and restore the state of {\em *this}.
@@ -249,7 +269,8 @@ namespace BALL
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
-		virtual void write(std::ostream& s) const;
+		virtual void write(std::ostream& s) const
+			throw();
 		//@}
 
 		// --- EXTERNAL ITERATORS
@@ -258,8 +279,6 @@ namespace BALL
 		
 
 		private:
-
-		void clear_();
 
 		// --- ATTRIBUTES
 

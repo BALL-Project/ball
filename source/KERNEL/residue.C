@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.16 2000/12/11 21:14:49 oliver Exp $
+// $Id: residue.C,v 1.17 2000/12/16 21:29:22 amoll Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -12,6 +12,7 @@ namespace BALL
 {
 
 	Residue::Residue()
+		throw()
 		:	Fragment(),
 			id_(BALL_RESIDUE_DEFAULT_ID),
 			insertion_code_(BALL_RESIDUE_DEFAULT_INSERTION_CODE)
@@ -19,6 +20,7 @@ namespace BALL
 	}
 		
 	Residue::Residue(const Residue& residue, bool deep)
+		throw()
 		:	Fragment(residue, deep),
 			id_(residue.id_),
 			insertion_code_(residue.insertion_code_)
@@ -26,6 +28,7 @@ namespace BALL
 	}
 		
 	Residue::Residue(const String& name, const String& id, char insertion_code)
+		throw()
 		:	Fragment(name),
 			id_(id),
 			insertion_code_(insertion_code)
@@ -42,19 +45,21 @@ namespace BALL
 		throw()
 	{
 		Fragment::clear();
-
-		clear_();
+		id_ = BALL_RESIDUE_DEFAULT_ID;
+		insertion_code_ = BALL_RESIDUE_DEFAULT_INSERTION_CODE;
 	}
 		
 	void Residue::destroy()
 		throw()
 	{
 		Fragment::destroy();
+		id_ = BALL_RESIDUE_DEFAULT_ID;
+		insertion_code_ = BALL_RESIDUE_DEFAULT_INSERTION_CODE;
 
-		clear_();
 	}
 
 	void Residue::persistentWrite(PersistenceManager& pm, const char* name) const
+		throw()
 	{
 		pm.writeObjectHeader(this, name);
 			Fragment::persistentWrite(pm);
@@ -64,6 +69,7 @@ namespace BALL
 	}
 
 	void Residue::persistentRead(PersistenceManager& pm)
+		throw()
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Fragment>());
 			Fragment::persistentRead(pm);
@@ -74,6 +80,7 @@ namespace BALL
 	}
 		
 	void Residue::set(const Residue& residue, bool deep)
+		throw()
 	{
 		Fragment::set(residue, deep);
 
@@ -81,19 +88,21 @@ namespace BALL
 		insertion_code_ = residue.insertion_code_;
 	}
 			
-	Residue& Residue::operator =(const Residue& residue)
+	const Residue& Residue::operator =(const Residue& residue)
+		throw()
 	{
 		set(residue);
-
 		return *this;
 	}
 
 	void Residue::get(Residue& residue, bool deep) const
+		throw()
 	{
 		residue.set(*this, deep);
 	}
 			
 	void Residue::swap(Residue& residue)
+		throw()
 	{
 		Fragment::swap(residue);
 
@@ -105,6 +114,7 @@ namespace BALL
 	}
 
 	bool Residue::hasTorsionPsi() const
+		throw()
 	{
 		// instance must have a parent chain
 		if (getChain() == 0)
@@ -122,6 +132,7 @@ namespace BALL
 	}
 	
 	Angle Residue::getTorsionPsi() const
+		throw()
 	{
 		Angle result(0.0);
 		if (hasTorsionPsi())
@@ -169,6 +180,7 @@ namespace BALL
 	}
 
 	bool Residue::hasTorsionPhi() const
+		throw()
 	{
 		// instance must have a parent chain
 		if (getChain() == 0)
@@ -186,6 +198,7 @@ namespace BALL
 	}
 	
 	Angle Residue::getTorsionPhi() const
+		throw()
 	{
 		Angle result(0.0);
 		if (hasTorsionPhi())
@@ -233,6 +246,7 @@ namespace BALL
 	}
 
 	Protein* Residue::getProtein()
+		throw()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor(); !ancestor_it.isEnd(); ++ancestor_it)
 		{
@@ -246,11 +260,13 @@ namespace BALL
 	}
 
 	const Protein* Residue::getProtein() const
+		throw()
 	{
 		return ((Residue *)this)->getProtein();
 	}
 
 	Chain* Residue::getChain()
+		throw()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor(); !ancestor_it.isEnd(); ++ancestor_it)
 		{
@@ -264,11 +280,13 @@ namespace BALL
 	}
 
 	const Chain *Residue::getChain() const
+		throw()
 	{
 		return ((Residue *)this)->getChain();
 	}
 
 	PDBAtom *Residue::getPDBAtom(Position position)
+		throw()
 	{
 		for (PDBAtomIterator protein_atom_iterator = beginPDBAtom();
 				 !protein_atom_iterator.isEnd(); ++protein_atom_iterator)
@@ -283,31 +301,37 @@ namespace BALL
 	}
 
 	const PDBAtom* Residue::getPDBAtom(Position position) const
+		throw()
 	{
 		return ((Residue *)this)->getPDBAtom(position);
 	}
 
 	void Residue::setID(const String &id)
+		throw()
 	{
 		id_ = id;
 	}
 
 	const String &Residue::getID() const
+		throw()
 	{
 		return id_;
 	}
 
 	void Residue::setInsertionCode(char insertion_code)
+		throw()
 	{
 		insertion_code_ = insertion_code;
 	}
 
 	char Residue::getInsertionCode() const
+		throw()
 	{
 		return insertion_code_;
 	}
 
 	Size Residue::countPDBAtoms() const
+		throw()
 	{
 		register Size size = 0;
 
@@ -321,62 +345,73 @@ namespace BALL
 	}
 
 	void Residue::prepend(PDBAtom &protein_atom)
+		throw()
 	{
 		Fragment::prepend(protein_atom);
 	}
 
 	void Residue::append(PDBAtom& protein_atom)
+		throw()
 	{
 		Fragment::append(protein_atom);
 	}
 
-	void 
-	Residue::insert(PDBAtom& protein_atom)
+	void Residue::insert(PDBAtom& protein_atom)
+		throw()
 	{
 		Fragment::insert(protein_atom);
 	}
 
 	void Residue::insertBefore(PDBAtom& protein_atom, Composite& before)
+		throw()
 	{
 		Fragment::insertBefore(protein_atom, before);
 	}
 
 	void Residue::insertAfter(PDBAtom& protein_atom, Composite& after)
+		throw()
 	{
 		Fragment::insertAfter(protein_atom, after);
 	}
 
 	bool Residue::remove(PDBAtom& protein_atom)
+		throw()
 	{
 		return Fragment::remove(protein_atom);
 	}
 
 	void Residue::spliceBefore(Residue& residue)
+		throw()
 	{
 		Fragment::spliceBefore(residue);
 	}
 
 	void Residue::spliceAfter(Residue& residue)
+		throw()
 	{
 		Fragment::spliceAfter(residue);
 	}
 
 	void Residue::splice(Residue& residue)
+		throw()
 	{
 		Fragment::splice(residue);
 	}
 
 	bool Residue::isAminoAcid() const
+		throw()
 	{
 		return hasProperty(PROPERTY__AMINO_ACID);
 	}
 
 	bool Residue::isTerminal() const
+		throw()
 	{
 		return (isNTerminal() || isCTerminal());
 	}
 
 	bool Residue::isNTerminal() const
+		throw()
 	{
 		if (isAminoAcid() == true)
 		{
@@ -395,6 +430,7 @@ namespace BALL
 	}
 		
 	bool Residue::isCTerminal() const
+		throw()
 	{
 		if (isAminoAcid() == true)
 		{
@@ -413,14 +449,9 @@ namespace BALL
 	}
 		
 	bool Residue::isValid() const
+		throw()
 	{ 
-		if (Fragment::isValid() == false
-				|| id_.isValid() == false)
-		{
-			return false;
-		}
-
-		return true;
+		return (Fragment::isValid() && id_.isValid());
 	}
 
 	void Residue::dump(ostream& s, Size depth) const
@@ -440,22 +471,19 @@ namespace BALL
 	}
 
 	void Residue::read(istream&  /* s */)
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	void Residue::write(ostream&  /* s */) const
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
-	void Residue::clear_()
-	{
-		id_ = BALL_RESIDUE_DEFAULT_ID;
-		insertion_code_ = BALL_RESIDUE_DEFAULT_INSERTION_CODE;
-	}
-
 	String Residue::getFullName(Residue::FullNameType type) const
+		throw()
 	{
 		// retrieve the residue name and remove blanks
 		String full_name = getName();

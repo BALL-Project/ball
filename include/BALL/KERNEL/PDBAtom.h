@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.14 2000/12/11 21:13:18 oliver Exp $
+// $Id: PDBAtom.h,v 1.15 2000/12/16 21:29:02 amoll Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -81,13 +81,16 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		PDBAtom();
+		PDBAtom()
+			throw();
 
 		/// Copy constructor
-		PDBAtom(const PDBAtom& pdb_atom, bool deep = true);
+		PDBAtom(const PDBAtom& pdb_atom, bool deep = true)
+			throw();
 	
 		/// Constructor
-		PDBAtom(const String& name);
+		PDBAtom(const String& name)
+			throw();
 
 		/// Detailled constructor
 		PDBAtom
@@ -104,7 +107,8 @@ namespace BALL
 			 char remoteness_indicator =BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR,
 			 char alternate_location_indicator = BALL_PDBATOM_DEFAULT_ALTERNATE_LOCATION_INDICATOR,
 			 float occupancy = BALL_PDBATOM_DEFAULT_OCCUPANCY,
-			 float temperature_factor = BALL_PDBATOM_DEFAULT_TEMPERATURE_FACTOR);
+			 float temperature_factor = BALL_PDBATOM_DEFAULT_TEMPERATURE_FACTOR)
+			throw();
 
 		/// Destructor
 		virtual ~PDBAtom()
@@ -127,13 +131,15 @@ namespace BALL
 				Writes a PDBAtom object to a persistent stream.
 				@param pm the persistence manager
 		*/
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
+			throw();
 
 		/**	Persistent reading.
 				Reads a PDBAtom object from a persistent stream.
 				@param pm the persistence manager
 		*/
-		void persistentRead(PersistenceManager& pm);
+		void persistentRead(PersistenceManager& pm)
+			throw();
 
 		//@}
 
@@ -147,7 +153,8 @@ namespace BALL
 				@param  pdb_atom the PDBAtom to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em pdb_atom}
 		*/
-		void set(const PDBAtom& pdb_atom, bool deep = true);
+		void set(const PDBAtom& pdb_atom, bool deep = true)
+			throw();
 
 		/** Assignment operator.
 				Assign the PDBAtom {\em pdb_atom} to {\em *this}.
@@ -155,20 +162,23 @@ namespace BALL
 				@param   pdb_atom the PDBAtom to be copied (cloned)
 				@return  pdb_atom& - {\em *this} PDBAtom
 		*/
-		PDBAtom& operator = (const PDBAtom& pdb_atom);
+		const PDBAtom& operator = (const PDBAtom& pdb_atom)
+			throw();
 
 		/** Copying with cloning facility.
 				Copy {\em *this} PDBAtom to {\em pdb_atom}.
 				The assignment is either deep or shallow (default).
 				@param  pdb_atom the PDBAtom to be assigned to
 		*/
-		void get(PDBAtom& pdb_atom, bool deep = true) const;
+		void get(PDBAtom& pdb_atom, bool deep = true) const
+			throw();
 
 		/** Swapping of PDBAtoms.
 				Swap the states of {\em *this} PDBAtom with {\em pdb_atom}.
 				@param  pdb_atom the PDBAtom {\em *this} is being swapped with
 		*/
-		void swap(PDBAtom& pdb_atom);
+		void swap(PDBAtom& pdb_atom)
+			throw();
 		
 		//@}
 
@@ -180,92 +190,108 @@ namespace BALL
 				@return  Protein* -
 								 mutable reference to the parent protein of {\em *this} PDBAtom,
 		*/
-		Protein* getProtein();
+		Protein* getProtein()
+			throw();
 
 		/** Get a pointer to the parent protein.
 				The reference is 0 if {\em *this} PDBAtom does not have a parent protein.
 				@return  Protein* -
 								 constant reference to the parent protein of {\em *this} PDBAtom,
 		*/
-		const Protein* getProtein() const;
+		const Protein* getProtein() const
+			throw();
 
 		/** Get a pointer to the parent chain.
 				The reference is 0 if {\em *this} PDBAtom does not have a parent chain.
 				@return  Chain* -
 								 mutable reference to the parent chain of {\em *this} PDBAtom,
 		*/
-		Chain* getChain();
+		Chain* getChain()
+			throw();
 
 		/** Get a pointer to the parent chain.
 				The reference is 0 if {\em *this} PDBAtom does not have a parent chain.
 				@return  Chain* -
 								 constant reference to the parent chain of {\em *this} PDBAtom,
 		*/
-		const Chain* getChain() const;
+		const Chain* getChain() const
+			throw();
 
 		/** Get a pointer to the parent residue.
 				The reference is 0 if {\em *this} PDBAtom does not have a parent residue.
 				@return  Residue* -
 								 mutable reference to the parent residue of {\em *this} PDBAtom,
 		*/
-		Residue* getResidue();
+		Residue* getResidue()
+			throw();
 
 		/** Get a pointer to the parent residue.
 				The reference is 0 if {\em *this} PDBAtom does not have a parent residue.
 				@return  Residue* -
 								 constant reference to the parent residue of {\em *this} PDBAtom,
 		*/
-		const Residue* getResidue() const;
+		const Residue* getResidue() const
+			throw();
 
 		/** Set the branch designator of this PDBAtom.
 				@param branch_designator the branch designator
 		*/
-		void setBranchDesignator(char branch_designator);
+		void setBranchDesignator(char branch_designator)
+			throw();
 
 		/** Get the branch designator of this PDBAtom.
 				@return char the branch designator
 		*/
-		char getBranchDesignator() const;
+		char getBranchDesignator() const
+			throw();
 
 		/** Set the remoteness indicator of this PDBAtom.
 				@param remoteness_indicator the remoteness indicator
 		*/
-		void setRemotenessIndicator(char remoteness_indicator);
+		void setRemotenessIndicator(char remoteness_indicator)
+			throw();
 
 		/** Get the remoteness indicator of this PDBAtom.
 				@return char the remoteness indicator
 		*/
-		char getRemotenessIndicator() const;
+		char getRemotenessIndicator() const
+			throw();
 
 		/** Set the alternate location indicator of this PDBAtom.
 				@param alternate_location_indicator the alternate location indicator
 		*/
-		void setAlternateLocationIndicator(char alternate_location_indicator);
+		void setAlternateLocationIndicator(char alternate_location_indicator)
+			throw();
 
 		/** Get the alternate location indicator of this PDBAtom.
 				@return char the alternate location indicator
 		*/
-		char getAlternateLocationIndicator() const;
+		char getAlternateLocationIndicator() const
+			throw();
 
 		/** Set the occupancy of this PDBAtom.
 				@param occupancy the occupancy
 		*/
-		void setOccupancy(float occupancy);
+		void setOccupancy(float occupancy)
+			throw();
 
 		/** Get the occupancy of this PDBAtom.
 				@return float occupancy the occupancy
 		*/
-		float getOccupancy() const;
+		float getOccupancy() const
+			throw();
 
 		/** Set the temperature factor of this PDBAtom.
 				@param temperature_factor the temperature factor
 		*/
-		void setTemperatureFactor(float temperature_factor);
+		void setTemperatureFactor(float temperature_factor)
+			throw();
 
 		/** Get the temperature factor of this PDBAtom.
 				@return float the temperature factor
 		*/
-		float getTemperatureFactor() const;
+		float getTemperatureFactor() const
+			throw();
 
 		//@}
 
@@ -293,7 +319,8 @@ namespace BALL
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this} PDBAtom
 		*/
-		virtual void read(std::istream& s);
+		virtual void read(std::istream& s)
+			throw();
 
 		/* Persistent stream output and state storage.
 				Write persistent data to the output stream {\em s} and store the state of {\em *this}.
@@ -301,12 +328,14 @@ namespace BALL
 				{\bf Note:} Not yet implemented.	
 				@param  s input stream from where to restore the internal state of {\em *this} PDBAtom
 		*/
-		virtual void write(std::ostream& s) const;
+		virtual void write(std::ostream& s) const
+			throw();
 		//@}
 
 		private:
 
-		void clear_();
+		void clear_()
+			throw();
 
 		char 	branch_designator_;
 		char	remoteness_indicator_;

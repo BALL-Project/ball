@@ -1,4 +1,4 @@
-// $Id: nucleotide.C,v 1.6 2000/12/11 21:14:49 oliver Exp $
+// $Id: nucleotide.C,v 1.7 2000/12/16 21:29:22 amoll Exp $
 
 #include <BALL/KERNEL/nucleotide.h>
 
@@ -10,6 +10,7 @@ namespace BALL
 {
 
 	Nucleotide::Nucleotide()
+		throw()
 		:	Fragment(),
 			id_(BALL_NUCLEOTIDE_DEFAULT_ID),
 			insertion_code_(BALL_NUCLEOTIDE_DEFAULT_INSERTION_CODE)
@@ -17,6 +18,7 @@ namespace BALL
 	}
 		
 	Nucleotide::Nucleotide(const Nucleotide& nucleotide, bool deep)
+		throw()
 		:	Fragment(nucleotide, deep),
 			id_(nucleotide.id_),
 			insertion_code_(nucleotide.insertion_code_)
@@ -24,6 +26,7 @@ namespace BALL
 	}
 		
 	Nucleotide::Nucleotide(const String& name, const String& id, char insertion_code)
+		throw()
 		:	Fragment(name),
 			id_(id),
 			insertion_code_(insertion_code)
@@ -40,19 +43,20 @@ namespace BALL
 		throw()
 	{
 		Fragment::clear();
-
-		clear_();
+		id_ = BALL_NUCLEOTIDE_DEFAULT_ID;
+		insertion_code_ = BALL_NUCLEOTIDE_DEFAULT_INSERTION_CODE;
 	}
 		
 	void Nucleotide::destroy()
 		throw()
 	{
 		Fragment::destroy();
-
-		clear_();
+		id_ = BALL_NUCLEOTIDE_DEFAULT_ID;
+		insertion_code_ = BALL_NUCLEOTIDE_DEFAULT_INSERTION_CODE;
 	}
 
 	void Nucleotide::persistentWrite(PersistenceManager& pm, const char* name) const
+		throw()
 	{
 		pm.writeObjectHeader(this, name);
 			Fragment::persistentWrite(pm);
@@ -62,6 +66,7 @@ namespace BALL
 	}
 
 	void Nucleotide::persistentRead(PersistenceManager& pm)
+		throw()
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Fragment>());
 			Fragment::persistentRead(pm);
@@ -72,26 +77,28 @@ namespace BALL
 	}
 		
 	void Nucleotide::set(const Nucleotide& nucleotide, bool deep)
+		throw()
 	{
 		Fragment::set(nucleotide, deep);
-
 		id_ = nucleotide.id_;
 		insertion_code_ = nucleotide.insertion_code_;
 	}
 			
-	Nucleotide& Nucleotide::operator =(const Nucleotide& nucleotide)
+	const Nucleotide& Nucleotide::operator =(const Nucleotide& nucleotide)
+		throw()
 	{
 		set(nucleotide);
-
 		return *this;
 	}
 
 	void Nucleotide::get(Nucleotide& nucleotide, bool deep) const
+		throw()
 	{
 		nucleotide.set(*this, deep);
 	}
 			
 	void Nucleotide::swap(Nucleotide& nucleotide)
+		throw()
 	{
 		Fragment::swap(nucleotide);
 
@@ -103,6 +110,7 @@ namespace BALL
 	}
 
 	NucleicAcid* Nucleotide::getNucleicAcid()
+		throw()
 	{
 		NucleicAcid* nucleic_acid_ptr = 0;
 		for (Composite::AncestorIterator ancestor_it = beginAncestor(); !ancestor_it.isEnd(); ++ancestor_it)
@@ -118,76 +126,91 @@ namespace BALL
 	}
 
 	const NucleicAcid* Nucleotide::getNucleicAcid() const
+		throw()
 	{
 		return (const_cast<Nucleotide*>(this)->getNucleicAcid());
 	}
 
 	void Nucleotide::setID(const String &id)
+		throw()
 	{
 		id_ = id;
 	}
 
 	const String &Nucleotide::getID() const
+		throw()
 	{
 		return id_;
 	}
 
 	void Nucleotide::setInsertionCode(char insertion_code)
+		throw()
 	{
 		insertion_code_ = insertion_code;
 	}
 
 	char Nucleotide::getInsertionCode() const
+		throw()
 	{
 		return insertion_code_;
 	}
 
 	void Nucleotide::prepend(Atom& atom)
+		throw()
 	{
 		Composite::prependChild(atom);
 	}
 
 	void Nucleotide::append(Atom &atom)
+		throw()
 	{
 		Composite::appendChild(atom);
 	}
 
 	void Nucleotide::insert(Atom &atom)
+		throw()
 	{
 		append(atom);
 	}
 
 	void Nucleotide::insertBefore(Atom &atom, Composite& before)
+		throw()
 	{
 		before.Composite::insertBefore(atom);
 	}
 
 	void Nucleotide::insertAfter(Atom& atom, Composite &after)
+		throw()
 	{
 		after.Composite::insertAfter(atom);
 	}
 
 	bool Nucleotide::remove(Atom& atom)
+		throw()
 	{
 		return Composite::removeChild(atom);
 	}
 
 	void Nucleotide::spliceBefore(Nucleotide& nucleotide)
+		throw()
 	{
 		Composite::spliceBefore(nucleotide);
 	}
 
 	void Nucleotide::spliceAfter(Nucleotide& nucleotide)
+		throw()
 	{
 		Composite::spliceAfter(nucleotide);
 	}
 
 	void Nucleotide::splice(Nucleotide& nucleotide)
+		throw()
 	{
 		Composite::splice(nucleotide);
 	}
 
 	bool Nucleotide::isTerminal() const
+		throw()
 	{
 		const NucleicAcid* parent = (*this).getNucleicAcid();
 		if (parent != 0)
@@ -202,6 +225,7 @@ namespace BALL
 	}
 
 	bool Nucleotide::is5Prime() const
+		throw()
 	{
 		const NucleicAcid* parent = getNucleicAcid();
 		if (parent != 0)
@@ -215,6 +239,7 @@ namespace BALL
 	}
 		
 	bool Nucleotide::is3Prime() const
+		throw()
 	{
 		const NucleicAcid* parent = getNucleicAcid();
 		if (parent != 0)
@@ -228,14 +253,9 @@ namespace BALL
 	}
 
 	bool Nucleotide::isValid() const
+		throw()
 	{ 
-		if (Fragment::isValid() == false
-				|| id_.isValid() == false)
-		{
-			return false;
-		}
-
-		return true;
+		return (Fragment::isValid() && id_.isValid());
 	}
 
 	void Nucleotide::dump(ostream& s, Size depth) const
@@ -255,19 +275,15 @@ namespace BALL
 	}
 
 	void Nucleotide::read(istream&  /* s */)
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	void Nucleotide::write(ostream&  /*s */) const
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	void Nucleotide::clear_()
-	{
-		id_ = BALL_NUCLEOTIDE_DEFAULT_ID;
-		insertion_code_ = BALL_NUCLEOTIDE_DEFAULT_INSERTION_CODE;
 	}
 
 } // namespace BALL

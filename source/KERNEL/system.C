@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.16 2000/12/11 21:14:50 oliver Exp $
+// $Id: system.C,v 1.17 2000/12/16 21:29:22 amoll Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -13,22 +13,26 @@ namespace BALL
 {
 
 	System::System()
+		throw()
 		:	AtomContainer()
 	{
 	}
 		
 	System::System(const System& system, bool deep)
+		throw()
 		: AtomContainer()
 	{
 		set(system, deep);
 	}
 		
 	System::System(const String& name)
+		throw()
 		:	AtomContainer(name)
 	{
 	}
 
   void System::persistentWrite(PersistenceManager& pm, const char* name) const
+		throw()
   {
     pm.writeObjectHeader(this, name);
       AtomContainer::persistentWrite(pm);
@@ -36,6 +40,7 @@ namespace BALL
 	}
 
   void System::persistentRead(PersistenceManager& pm)
+		throw()
   {
     pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
 			AtomContainer::persistentRead(pm);
@@ -49,38 +54,46 @@ namespace BALL
 	}
 		
 	void System::set(const System& system, bool deep)
+		throw()
 	{
 		AtomContainer::set(system, deep);
 	}
 			
-	System& System::operator = (const System& system)
+	const System& System::operator = (const System& system)
+		throw()
 	{
 		AtomContainer::set(system);
-
 		return *this;
 	}
 
 	void System::get(System& system, bool deep) const
+		throw()
 	{
 		system.set(*this, deep);
 	}
 
-	Molecule *System::getMolecule(Position position)
+	Molecule* System::getMolecule(Position position)
+		throw()
 	{
 		for (MoleculeIterator res_it = beginMolecule(); !res_it.isEnd(); ++res_it)
+		{
 			if (position-- == 0)
+			{
 				return &(*res_it);
+			}
+		}
 
 		return 0;
 	}
 
-	const Molecule *System::getMolecule(Position position) const
+	const Molecule* System::getMolecule(Position position) const
+		throw()
 	{
 		return ((System *)this)->getMolecule(position);
 	}
-
 			
 	Size System::countMolecules() const
+		throw()
 	{
 		Size size = 0;
 
@@ -93,6 +106,7 @@ namespace BALL
 	}
 
 	Size  System::countFragments() const
+		throw()
 	{
 		Size size = 0;
 
@@ -105,6 +119,7 @@ namespace BALL
 	}
 
 	Size  System::countResidues() const
+		throw()
 	{
 		Size size = 0;
 
@@ -117,6 +132,7 @@ namespace BALL
 	}
 
 	Size  System::countAtoms() const
+		throw()
 	{
 		Size size = 0;
 
@@ -129,6 +145,7 @@ namespace BALL
 	}
 
 	Size  System::countProteins() const
+		throw()
 	{
 		Size size = 0;
 
@@ -141,6 +158,7 @@ namespace BALL
 	}
 
 	Size  System::countChains() const
+		throw()
 	{
 		Size size = 0;
 
@@ -153,6 +171,7 @@ namespace BALL
 	}
 
 	Size  System::countSecondaryStructures() const
+		throw()
 	{
 		Size size = 0;
 
@@ -165,6 +184,7 @@ namespace BALL
 	}
 
 	Size  System::countNucleotides() const
+		throw()
 	{
 		Size size = 0;
 
@@ -177,6 +197,7 @@ namespace BALL
 	}
 
 	Size  System::countNucleicAcids() const
+		throw()
 	{
 		Size size = 0;
 
@@ -189,56 +210,67 @@ namespace BALL
 	}
 
 	void System::prepend(Molecule& molecule)
+		throw()
 	{
 		Composite::prependChild(molecule);
 	}
 
 	void System::append(Molecule& molecule)
+		throw()
 	{
 		Composite::appendChild(molecule);
 	}
 
 	void System::insert(Molecule& molecule)
+		throw()
 	{
 		append(molecule);
 	}
 
 	void System::insertBefore(Molecule& molecule, Composite& before)
+		throw()
 	{
 		before.Composite::insertBefore(molecule);
 	}
 
 	void System::insertAfter(Molecule& molecule, Composite& after)
+		throw()
 	{
 		after.Composite::insertAfter(molecule);
 	}
 
 	bool System::remove(Molecule& molecule)
+		throw()
 	{
 		return Composite::removeChild(molecule);
 	}
 
 	void System::spliceBefore(System& system)
+		throw()
 	{
 		Composite::spliceBefore(system);
 	}
 
 	void System::spliceAfter(System& system)
+		throw()
 	{
 		Composite::spliceAfter(system);
 	}
 
 	void System::splice(System& system)
+		throw()
 	{
 		Composite::splice(system);
 	}
 
 	void System::read(istream& /* s */)
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	void System::write(ostream& /* s */) const
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}

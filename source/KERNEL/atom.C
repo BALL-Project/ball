@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.29 2000/12/12 16:21:12 oliver Exp $
+// $Id: atom.C,v 1.30 2000/12/16 21:29:22 amoll Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -14,6 +14,7 @@ namespace BALL
 {
 
 	Atom::Atom()
+		throw()
 		:	Composite(),
 			PropertyManager(),
 			element_(BALL_ATOM_DEFAULT_ELEMENT),
@@ -30,6 +31,7 @@ namespace BALL
 	}
 		
 	Atom::Atom(const Atom& atom, bool deep)
+		throw()
 		:	Composite(atom, deep),
 			PropertyManager(atom, deep),
 			element_(atom.element_),
@@ -49,6 +51,7 @@ namespace BALL
 						 const String& type_name, Atom::Type type,
 						 const Vector3& position, const Vector3& velocity,
 						 const Vector3& force, float charge, float radius)
+		throw()
 		:	Composite(),
 			PropertyManager(),
 			element_(&element),
@@ -89,6 +92,7 @@ namespace BALL
 	}
 
 	void Atom::persistentWrite(PersistenceManager& pm, const char* name) const
+		throw()
 	{
 		pm.writeObjectHeader(this, name);
 
@@ -113,6 +117,7 @@ namespace BALL
 	}
 
 	void Atom::persistentRead(PersistenceManager& pm)
+		throw()
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Composite>());
 			Composite::persistentRead(pm);
@@ -154,6 +159,7 @@ namespace BALL
 	}
 
 	void Atom::set(const Atom& atom, bool deep)
+		throw()
 	{
 		Composite::set(atom, deep);
 		PropertyManager::set(atom, deep);
@@ -170,19 +176,21 @@ namespace BALL
 		number_of_bonds_ = 0;
 	}
 			
-	Atom& Atom::operator =(const Atom &atom)
+	const Atom& Atom::operator =(const Atom &atom)
+		throw()
 	{
 		set(atom);
-
 		return *this;
 	}
 
 	void Atom::get(Atom &atom, bool deep) const
+		throw()
 	{
 		atom.set(*this, deep);
 	}
 			
 	void Atom::swap(Atom &atom)
+		throw()
 	{
 		Composite::swap(atom);
 		PropertyManager::swap(atom);
@@ -212,7 +220,7 @@ namespace BALL
 		force_.swap(atom.force_);
 
 		Bond *temp_bond = 0;
-		for (register int i = 0; i < MAX_NUMBER_OF_BONDS;++i)
+		for (int i = 0; i < MAX_NUMBER_OF_BONDS;++i)
 		{
 			temp_bond = bond_[i];
 			bond_[i] = atom.bond_[i];
@@ -225,21 +233,25 @@ namespace BALL
 	}
 		
 	Molecule* Atom::getMolecule()
+		throw()
 	{
 		return Composite::getAncestor(RTTI::getDefault<Molecule>());
 	}
 
 	Fragment* Atom::getFragment()
+		throw()
 	{
 		return Composite::getAncestor(RTTI::getDefault<Fragment>());
 	}
 					                                                                                                                              
 	const Residue* Atom::getResidue() const
+		throw()
 	{
 		return Composite::getAncestor(RTTI::getDefault<Residue>());
 	}
 					                                                                                                                              
 	String Atom::getFullName(Atom::FullNameType type) const
+		throw()
 	{
 		// determine the parent`s name
 		String parent_name;
@@ -281,11 +293,13 @@ namespace BALL
 	}
 
 	Size Atom::countBonds() const
+		throw()
 	{
 		return number_of_bonds_;
 	}
 
 	Bond* Atom::getBond(Position index)
+		throw(Exception::IndexOverflow)
 	{
 		if (index >= (Index)MAX_NUMBER_OF_BONDS)
 		{
@@ -296,15 +310,17 @@ namespace BALL
 	}
 
 	const Bond* Atom::getBond(Position index) const
+		throw(Exception::IndexOverflow)
 	{
 		return (const Bond *)((Atom *)this)->getBond(index);
 	}
 
 	Bond* Atom::getBond(const Atom &atom)
+		throw()
 	{
 		if (&atom != this)
 		{
-			for (register int i = 0; i < number_of_bonds_; ++i)
+			for (int i = 0; i < number_of_bonds_; ++i)
 			{
 				if (bond_[i]->first_ == &atom || bond_[i]->second_ == &atom)
 				{
@@ -317,28 +333,34 @@ namespace BALL
 	}
 
 	const Bond* Atom::getBond(const Atom &atom) const
+		throw()
 	{
 		return ((Atom *)this)->getBond(atom);
 	}
 
 	Bond* Atom::createBond(Atom &atom)
+		throw()
 	{
 		Bond* bond = getBond(atom);
 		
 		if (bond == 0)
 		{
 			return Bond::createBond(*new Bond, *this, atom);
-		} else {
+		} 
+		else 
+		{
 			return bond;
 		}
 	}
 
 	Bond* Atom::createBond(Bond& bond, Atom& atom)
+		throw()
 	{
 		return Bond::createBond(bond, *this, atom);
 	}
 
 	Bond* Atom::cloneBond(Bond& bond, Atom& atom)
+		throw()
 	{
 		Bond* bond_ptr = getBond(atom);
 		
@@ -349,12 +371,15 @@ namespace BALL
 			bond_ptr->setSecondAtom(0);
 			
 			return Bond::createBond(*bond_ptr, *this, atom);
-		} else {
+		} 
+		else 
+		{
 			return bond_ptr;
 		}
 	}
 
 	bool Atom::destroyBond(const Atom& atom)
+		throw()
 	{
 		Bond* bond = getBond(atom);
 
@@ -366,7 +391,9 @@ namespace BALL
 		if (bond->isAutoDeletable() == true)
 		{
 			delete bond;
-		} else {
+		} 
+		else 
+		{
 			bond->destroy();
 		}
 
@@ -374,13 +401,16 @@ namespace BALL
 	}
 
 	void Atom::destroyBonds()
+		throw()
 	{
-		for (register int i = char(number_of_bonds_) - 1; i >= 0; --i)
+		for (int i = char(number_of_bonds_) - 1; i >= 0; --i)
 		{
 			if (bond_[i]->isAutoDeletable() == true)
 			{
 				delete bond_[i];
-			} else {
+			} 
+			else 
+			{
 				bond_[i]->destroy();
 			}
 		}
@@ -389,25 +419,32 @@ namespace BALL
 	}
 
 	bool Atom::hasBond(const Bond& bond) const
+		throw()
 	{
-		for (register int i = 0; i < number_of_bonds_; ++i)
+		for (int i = 0; i < number_of_bonds_; ++i)
+		{
 			if (bond_[i] == &bond)
+			{
 				return true;
-
+			}
+		}
 		return false;
 	}
 
 	bool 	Atom::isBoundTo(const Atom& atom) const
+		throw()
 	{
-		return (bool)(getBond(atom) != 0);
+		return (getBond(atom) != 0);
 	}
 
 	bool Atom::isBound() const
+		throw()
 	{
-		return (bool)(number_of_bonds_ > 0);
+		return (number_of_bonds_ > 0);
 	}
 
 	bool Atom::isGeminal(const Atom& atom) const
+		throw()
 	{
 		// an atom is geminal to another, if it 
 		// is not directly bonded to it
@@ -436,6 +473,7 @@ namespace BALL
 	}
 
 	bool Atom::isVicinal(const Atom& atom) const
+		throw()
 	{ 
 		// an atom is vicinal to another, if it 
 		// is not directly bonded to it
@@ -469,6 +507,7 @@ namespace BALL
 	}
 
 	bool Atom::isValid() const
+		throw()
 	{ 
 		if (Composite::isValid() == false
 				|| PropertyManager::isValid() == false
@@ -480,13 +519,16 @@ namespace BALL
 			return false;
 		}
 
-		for (register int i = 0; i < number_of_bonds_; ++i)
+		for (int i = 0; i < number_of_bonds_; ++i)
 		{
 			if (bond_[i]->isValid() == false)
+			{
 				return false;
-
+			}
 			if (bond_[i]->first_ != this && bond_[i]->second_ != this)
+			{
 				return false;
+			}
 		}
 
 		return true;
@@ -532,43 +574,51 @@ namespace BALL
 		BALL_DUMP_DEPTH(s, depth);
 		s << "  bonds: " << endl;
 
-		for (register int i = 0; i < number_of_bonds_; ++i)
+		for (int i = 0; i < number_of_bonds_; ++i)
+		{
 			bond_[i]->dump(s, depth + 1);
-
+		}
 		s << endl;
 
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
 	void Atom::read(istream & /* s */)
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	void Atom::write(ostream & /* s */) const
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	bool Atom::applyBonds(UnaryProcessor<Bond>& processor)
+		throw()
 	{
 		if (processor.start() == false)
+		{
 			return false;
-
+		}
 		Processor::Result result;
 
-		for (register int i = 0; i < number_of_bonds_; ++i)
+		for (int i = 0; i < number_of_bonds_; ++i)
 		{
 			result = processor(*bond_[i]);
 
 			if (result <= Processor::BREAK)
+			{
 				return (result == Processor::BREAK) ? true : false;
+			}
 		}
 
 		return processor.finish();
 	}
 
 	void Atom::clear_()
+		throw()
 	{
 		element_ = BALL_ATOM_DEFAULT_ELEMENT;
 		charge_ = BALL_ATOM_DEFAULT_CHARGE;
@@ -584,8 +634,9 @@ namespace BALL
 	}
 		
 	void Atom::swapLastBond_(const Atom *atom)
+		throw()
 	{
-		for (register int i = 0; i < number_of_bonds_; ++i)
+		for (int i = 0; i < number_of_bonds_; ++i)
 		{
 			if (bond_[i]->first_ == atom
 					|| bond_[i]->second_ == atom)

@@ -1,163 +1,190 @@
-// $Id: PTE.iC,v 1.3 2000/04/27 15:09:45 amoll Exp $
+// $Id: PTE.iC,v 1.4 2000/12/16 21:29:02 amoll Exp $
 
 BALL_INLINE 
 void Element::setName(const String& name)
+	throw()
 {
   name_ = name;
 }
 
 BALL_INLINE 
 const String& Element::getName() const
+	throw()
 {
   return name_;
 }
 
 BALL_INLINE 
 void Element::setSymbol(const String& symbol)
+	throw()
 {
   symbol_ = symbol;
 }
 
 BALL_INLINE 
 const String& Element::getSymbol() const
+	throw()
 {
   return symbol_;
 }
 
 BALL_INLINE 
 void Element::setGroup(Element::Group group)
+	throw()
 {
   group_ = group;
 }
 
 BALL_INLINE 
 Element::Group Element::getGroup() const
+	throw()
 {
   return group_;
 }
 
 BALL_INLINE 
 void Element::setPeriod(Element::Period period)
+	throw()
 {
   period_ = period;
 }
 
 BALL_INLINE 
 Element::Period Element::getPeriod() const
+	throw()
 {
   return period_;
 }
 
 BALL_INLINE 
 void Element::setAtomicNumber(Element::AtomicNumber atomic_number)
+	throw()
 {
   atomic_number_ = atomic_number;
 }
 
 BALL_INLINE 
 Element::AtomicNumber Element::getAtomicNumber() const
+	throw()
 {
   return atomic_number_;
 }
 
 BALL_INLINE 
 void Element::setAtomicWeight(float atomic_weight)
+	throw()
 {
   atomic_weight_ = atomic_weight;
 }
 
 BALL_INLINE 
 float Element::getAtomicWeight() const
+	throw()
 {
   return atomic_weight_;
 }
 
 BALL_INLINE 
 void Element::setAtomicRadius(float atomic_radius)
+	throw()
 {
   atomic_radius_ = atomic_radius;
 }
 
 BALL_INLINE 
 float Element::getAtomicRadius() const
+	throw()
 {
   return atomic_radius_;
 }
 
 BALL_INLINE 
 void Element::setCovalentRadius(float covalent_radius)
+	throw()
 {
   covalent_radius_ = covalent_radius;
 }
 
 BALL_INLINE 
 float Element::getCovalentRadius() const
+	throw()
 {
   return covalent_radius_;
 }
 
 BALL_INLINE 
 void Element::setVanDerWaalsRadius(float van_der_waals_radius)
+	throw()
 {
   van_der_waals_radius_ = van_der_waals_radius;
 }
 
 BALL_INLINE 
 float Element::getVanDerWaalsRadius() const
+	throw()
 {
   return van_der_waals_radius_;
 }
 
 BALL_INLINE 
 void Element::setElectronegativity(float electronegativity)
+	throw()
 {
   electronegativity_ = electronegativity;
 }
 
 BALL_INLINE 
 float Element::getElectronegativity() const
+	throw()
 {
   return electronegativity_;
 }
 
 BALL_INLINE
 bool Element::operator == (const Element& element) const
+	throw()
 {
-  return (bool)(atomic_number_ == element.atomic_number_);
+  return (atomic_number_ == element.atomic_number_);
 }
 
 BALL_INLINE 
 bool Element::operator !=(const Element& element) const
+	throw()
 {
-  return (bool)(atomic_number_ != element.atomic_number_);
+  return (atomic_number_ != element.atomic_number_);
 }
 
 BALL_INLINE 
 bool Element::operator < (const Element& element) const
+	throw()
 {
-  return (bool)(atomic_number_ < element.atomic_number_);
+  return (atomic_number_ < element.atomic_number_);
 }
 
 BALL_INLINE 
 bool Element::operator <=(const Element& element) const
+	throw()
 {
-  return (bool)(atomic_number_ <= element.atomic_number_);
+  return (atomic_number_ <= element.atomic_number_);
 }
 
 BALL_INLINE 
 bool Element::operator >= (const Element& element) const
+	throw()
 {
-  return (bool)(atomic_number_ >= element.atomic_number_);
+  return (atomic_number_ >= element.atomic_number_);
 }
 
 BALL_INLINE 
 bool Element::operator >(const Element& element) const
+	throw()
 {
-  return (bool)(atomic_number_ > element.atomic_number_);
+  return (atomic_number_ > element.atomic_number_);
 }
 
 BALL_INLINE 
 bool Element::isUnknown() const
+	throw()
 {
   return operator==(Element::UNKNOWN);
 }
@@ -166,42 +193,49 @@ bool Element::isUnknown() const
 
 BALL_INLINE 
 Element& PTE_::operator [](const String& symbol)
+	throw()
 {
   return getElement(symbol);
 }
 
 BALL_INLINE 
 const Element& PTE_::operator [](const String& symbol) const
+	throw()
 {
   return getElement(symbol);
 }
 
 BALL_INLINE 
 Element& PTE_::operator [](Element::Name name)
+	throw()
 {
   return element_[name];
 }
 
 BALL_INLINE 
 const Element& PTE_::operator [](Element::Name name) const
+	throw()
 {
   return element_[name];
 }
 
 BALL_INLINE 
 Element& PTE_::operator [](Element::Symbol symbol)
+	throw()
 {
   return element_[symbol];
 }
 
 BALL_INLINE 
 const Element& PTE_::operator [](Element::Symbol symbol) const
+	throw()
 {
   return element_[symbol];
 }
 
 BALL_INLINE 
 Element& PTE_::operator [] (Position position)
+	throw()
 {
   return ((position >= 1 && position <= Element::NUMBER_OF_ELEMENTS)
 	  ? *atomic_number_to_element_[position - 1]
@@ -210,6 +244,7 @@ Element& PTE_::operator [] (Position position)
 
 BALL_INLINE 
 const Element& PTE_::operator [] (Position position) const
+	throw()
 {
   return ((PTE_ *)this)->operator[](position);
 }

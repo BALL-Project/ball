@@ -1,4 +1,4 @@
-// $Id: fragment.C,v 1.7 2000/12/11 21:14:48 oliver Exp $
+// $Id: fragment.C,v 1.8 2000/12/16 21:29:22 amoll Exp $
 
 #include <BALL/KERNEL/fragment.h>
 
@@ -8,16 +8,19 @@ namespace BALL
 {
 
 	Fragment::Fragment()
+		throw()
 		:	AtomContainer()
 	{
 	}
 		
 	Fragment::Fragment(const Fragment& fragment, bool deep)
+		throw()
 		: AtomContainer(fragment, deep)
 	{
 	}
 		
 	Fragment::Fragment(const String& name)
+		throw()
 		: AtomContainer(name)
 	{
 	}
@@ -29,6 +32,7 @@ namespace BALL
 	}
 
 	void Fragment::persistentWrite(PersistenceManager& pm, const char* name) const
+		throw()
   {
     pm.writeObjectHeader(this, name);
       AtomContainer::persistentWrite(pm);
@@ -36,16 +40,17 @@ namespace BALL
 	}
 
   void Fragment::persistentRead(PersistenceManager& pm)
+		throw()
   {    
 		pm.checkObjectHeader(RTTI::getStreamName<AtomContainer>());
 			AtomContainer::persistentRead(pm);
     pm.checkObjectTrailer(0);
 	}
 	
-	Fragment& Fragment::operator =(const Fragment& fragment)
+	const Fragment& Fragment::operator =(const Fragment& fragment)
+		throw()
 	{
 		AtomContainer::operator =(fragment);
-
 		return *this;
 	}
 			
@@ -63,11 +68,13 @@ namespace BALL
 	}
 
 	void Fragment::read(istream&  /* s */)
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	void Fragment::write(ostream& /* s */) const
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}

@@ -1,4 +1,4 @@
-// $Id: protein.C,v 1.7 2000/12/11 21:14:49 oliver Exp $
+// $Id: protein.C,v 1.8 2000/12/16 21:29:22 amoll Exp $
 
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/global.h>
@@ -9,18 +9,21 @@ namespace BALL
 {
 
 	Protein::Protein()
+		throw()
 		:	Molecule(),
 			id_(BALL_PROTEIN_DEFAULT_ID)
 	{
 	}
 
 	Protein::Protein(const Protein& protein, bool deep)
+		throw()
 		:	Molecule(protein, deep),
 			id_(protein.id_)
 	{
 	}
 		
 	Protein::Protein(const String& name,const String& id)
+		throw()
 		:	Molecule(name),
 			id_(id)
 	{
@@ -36,19 +39,18 @@ namespace BALL
 		throw()
 	{
 		Molecule::clear();
-
-		clear_();
+		id_ = BALL_PROTEIN_DEFAULT_ID;
 	}
 		
 	void Protein::destroy()
 		throw()
 	{
 		Molecule::destroy();
-
-		clear_();
+		id_ = BALL_PROTEIN_DEFAULT_ID;
 	}
 		
 	void Protein::persistentWrite(PersistenceManager& pm, const char* name) const
+		throw()
 	{
 		pm.writeObjectHeader(this, name);
 			Molecule::persistentWrite(pm);
@@ -57,6 +59,7 @@ namespace BALL
 	}
 
 	void Protein::persistentRead(PersistenceManager& pm)
+		throw()
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Molecule>());
 			Molecule::persistentRead(pm);
@@ -64,34 +67,35 @@ namespace BALL
 		pm.readPrimitive(id_, "id_");
 	}
 
-
 	void Protein::set(const Protein& protein, bool deep)
+		throw()
 	{
 		Molecule::set(protein, deep);
-
 		id_ = protein.id_;
 	}
 			
-	Protein& Protein::operator =(const Protein &protein)
+	const Protein& Protein::operator =(const Protein &protein)
+		throw()
 	{
 		set(protein);
-
 		return *this;
 	}
 
 	void Protein::get(Protein &protein, bool deep) const
+		throw()
 	{
 		protein.set(*this, deep);
 	}
 			
 	void Protein::swap(Protein& protein)
+		throw()
 	{
 		Molecule::swap(protein);
-
 		id_.swap(protein.id_);
 	}
 		
-	Chain *Protein::getChain(Position position)
+	Chain* Protein::getChain(Position position)
+		throw()
 	{
 		for (ChainIterator chain_it = beginChain(); !chain_it.isEnd(); ++chain_it)
 		{
@@ -104,13 +108,14 @@ namespace BALL
 		return 0;
 	}
 
-	const Chain *
-	Protein::getChain(Position position) const
+	const Chain* Protein::getChain(Position position) const
+		throw()
 	{
 		return ((Protein *)this)->getChain(position);
 	}
 
 	SecondaryStructure* Protein::getSecondaryStructure(Position position)
+		throw()
 	{
 		for (SecondaryStructureIterator secondary_structure_it = beginSecondaryStructure();
 				 !secondary_structure_it.isEnd(); ++secondary_structure_it)
@@ -125,11 +130,13 @@ namespace BALL
 	}
 
 	const SecondaryStructure* Protein::getSecondaryStructure(Position position) const
+		throw()
 	{
 		return ((Protein *)this)->getSecondaryStructure(position);
 	}
 
 	Residue* Protein::getResidue(Position position)
+		throw()
 	{
 		for (ResidueIterator res_it = beginResidue(); !res_it.isEnd(); ++res_it)
 		{
@@ -143,31 +150,37 @@ namespace BALL
 	}
 
 	const Residue* Protein::getResidue(Position position) const
+		throw()
 	{
 		return ((Protein *)this)->getResidue(position);
 	}
 
 	Residue* Protein::getNTerminal()
+		throw()
 	{
 		return (Residue *)::BALL::getNTerminal(*this);
 	}
 		
 	const Residue* Protein::getNTerminal() const
+		throw()
 	{
 		return ::BALL::getNTerminal(*this);
 	}
 
 	Residue* Protein::getCTerminal()
+		throw()
 	{
 		return (Residue *)::BALL::getCTerminal(*this);
 	}
 		
 	const Residue* Protein::getCTerminal() const
+		throw()
 	{
 		return ::BALL::getCTerminal(*this);
 	}
 
 	PDBAtom* Protein::getPDBAtom(Position position)
+		throw()
 	{
 		for (PDBAtomIterator protein_atom_it = beginPDBAtom();
 				 !protein_atom_it.isEnd(); ++protein_atom_it)
@@ -182,21 +195,25 @@ namespace BALL
 	}
 
 	const PDBAtom* Protein::getPDBAtom(Position position) const
+		throw()
 	{
 		return ((Protein *)this)->getPDBAtom(position);
 	}
 
 	void Protein::setID(const String& id)
+		throw()
 	{
 		id_ = id;
 	}
 
 	const String& Protein::getID() const
+		throw()
 	{
 		return id_;
 	}
 
 	Size Protein::countChains() const
+		throw()
 	{
 		Size size = 0;
 
@@ -209,6 +226,7 @@ namespace BALL
 	}
 
 	Size Protein::countSecondaryStructures() const
+		throw()
 	{
 		Size size = 0;
 
@@ -222,6 +240,7 @@ namespace BALL
 	}
 
 	Size Protein::countResidues() const
+		throw()
 	{
 		Size size = 0;
 
@@ -234,6 +253,7 @@ namespace BALL
 	}
 
 	Size Protein::countPDBAtoms() const
+		throw()
 	{
 		Size size = 0;
 
@@ -246,14 +266,9 @@ namespace BALL
 	}
 
 	bool Protein::isValid() const
+		throw()
 	{ 
-		if (Molecule::isValid() == false
-				|| id_.isValid() == false)
-		{
-			return false;
-		}
-
-		return true;
+		return(Molecule::isValid() && id_.isValid());
 	}
 
 	void	Protein::dump(ostream& s, Size depth) const
@@ -270,18 +285,15 @@ namespace BALL
 	}
 
 	void Protein::read(istream& /* s */)
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	void Protein::write(ostream&  /* s */) const
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	void Protein::clear_()
-	{
-		id_ = BALL_PROTEIN_DEFAULT_ID;
 	}
 
 } // namespace BALL

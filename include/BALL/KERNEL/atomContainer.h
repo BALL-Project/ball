@@ -1,4 +1,4 @@
-// $Id: atomContainer.h,v 1.2 2000/12/11 21:13:19 oliver Exp $
+// $Id: atomContainer.h,v 1.3 2000/12/16 21:29:02 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -69,13 +69,16 @@ namespace BALL
 		//@{
 
 		/** Default constructor */
-		AtomContainer();
+		AtomContainer()
+			throw();
 	
 		/** Copy constructor */
-		AtomContainer(const AtomContainer& atom_container, bool deep = true);
+		AtomContainer(const AtomContainer& atom_container, bool deep = true)
+			throw();
 	
 		/** Constructor */
-		AtomContainer(const String& name);
+		AtomContainer(const String& name)
+			throw();
 
 		/** Destructor */
 		virtual ~AtomContainer()
@@ -104,13 +107,15 @@ namespace BALL
 				Writes a AtomContainer object to a persistent stream.
 				@param pm the persistence manager
 		*/
-		virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+		virtual void persistentWrite(PersistenceManager& pm, const char* name = 0) const
+			throw();
 
 		/**	Persistent reading.
 				Reads a AtomContainer object from a persistent stream.
 				@param pm the persistence manager
 		*/
-		virtual void persistentRead(PersistenceManager& pm);
+		virtual void persistentRead(PersistenceManager& pm)
+			throw();
 
 		//@}			
 	
@@ -123,7 +128,8 @@ namespace BALL
 				@param  atom_container the atom_container to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em atom_container}
 		*/
-		void set(const AtomContainer& atom_container, bool deep = true);
+		void set(const AtomContainer& atom_container, bool deep = true)
+			throw();
 
 		/** Assignment operator.
 				Assign {\em atom_container} to {\em *this} instance.
@@ -132,7 +138,8 @@ namespace BALL
 				@return  AtomContainer& - {\em *this} AtomContainer
 				@see     AtomContainer::set
 		*/
-		AtomContainer& operator = (const AtomContainer& atom_container);
+		const AtomContainer& operator = (const AtomContainer& atom_container)
+			throw();
 
 		/** Copying with cloning facility.
 				Copy {\em *this} to {\em atom_container}.
@@ -140,13 +147,15 @@ namespace BALL
 				@param  atom_container the AtomContainer to be assigned to
 				@see    AtomContainer::set
 		*/
-		void get(AtomContainer& atom_container, bool deep = true) const;
+		void get(AtomContainer& atom_container, bool deep = true) const
+			throw();
 
 		/** Swapping of AtomContainers.
 				Swap the states of {\em *this} with {\em atom_container}.
 				@param  atom_container the AtomContainer {\em *this} is being swapped with
 		*/
-		void swap(AtomContainer& atom_container);
+		void swap(AtomContainer& atom_container)
+			throw();
 
 		//@}
 	
@@ -158,21 +167,24 @@ namespace BALL
 				@param  name the new name
 				@see    AtomContainer::getName
 		*/
-		void setName(const String& name);
+		void setName(const String& name)
+			throw();
 
     /** Mutable inspection of the name.
     Access a mutable reference to the name of {\em *this}.
 	  @return  String& - mutable reference to the name
     @see     AtomContainer::setName
 		*/
-		String& getName();
+		String& getName()
+			throw();
 
 		/** Constant inspection of the name.
 				Access a constant reference to the name of {\em *this}.
 				@return  String& - constant reference to the name of {\em *this}
 				@see     AtomContainer::setName
 		*/
-		const String& getName() const;
+		const String& getName() const
+			throw();
 
 		/** Mutable inspection of the parent molecule.
 				Access a mutable reference to the parent molecule of {\em *this}.
@@ -185,7 +197,8 @@ namespace BALL
 								 mutable reference to the parent molecule of {\em *this},
 								 0 if {\em *this} AtomContainer does not have a parent molecule
 		*/
-		Molecule* getMolecule();
+		Molecule* getMolecule()
+			throw();
 
 		/** Mutable inspection of the parent molecule.
 				Access a constant reference to the parent molecule of {\em *this}.
@@ -198,21 +211,24 @@ namespace BALL
 								 constant reference to the parent molecule of {\em *this},
 								 0 if {\em *this} does not have a parent molecule
 		*/
-		const Molecule* getMolecule() const;
+		const Molecule* getMolecule() const
+			throw();
 
 		/** Get a pointer to the parent AtomContainer.
 				The reference is 0 if {\em *this} instance does not have a parent AtomContainer.
 				@return  AtomContainer* -
 								 mutable reference to the parent AtomContainer of {\em *this},
 		*/
-		AtomContainer* getSuperAtomContainer();
+		AtomContainer* getSuperAtomContainer()
+			throw();
 
 		/** Get a constant pointer to the parent AtomContainer.
 				The reference is 0 if {\em *this} instance does not have a parent AtomContainer.
 				@return  AtomContainer* -
 								 constant reference to the parent AtomContainer of {\em *this},
 		*/
-		const AtomContainer* getSuperAtomContainer() const;
+		const AtomContainer* getSuperAtomContainer() const
+			throw();
 
 		/** Get a pointer to a child AtomContainer at a given position.
 				The reference is 0 if {\em *this} instance does not have a AtomContainer at the given position.
@@ -220,7 +236,8 @@ namespace BALL
 				@return  AtomContainer* -
 								 mutable reference to the child AtomContainer at {\em positon} of {\em *this},
 		*/
-		AtomContainer* getAtomContainer(Position position);
+		AtomContainer* getAtomContainer(Position position)
+			throw();
 	
 		/** Get a constant pointer to a child AtomContainer at a given position.
 				The reference is 0 if {\em *this} instance does not have a AtomContainer at the given position.
@@ -228,7 +245,8 @@ namespace BALL
 				@return  AtomContainer* -
 								 constant reference to the child AtomContainer at {\em positon} of {\em *this},
 		*/
-		const AtomContainer* getAtomContainer(Position position) const;
+		const AtomContainer* getAtomContainer(Position position) const
+			throw();
 	
 		/** Get a pointer to a child atom at a given position.
 				The reference is 0 if {\em *this} instance does not have an atom at the given position.
@@ -236,7 +254,8 @@ namespace BALL
 				@return  Atom* -
 								 mutable reference to the child atom at {\em positon} of {\em *this},
 		*/
-		Atom* getAtom(Position position);
+		Atom* getAtom(Position position)
+			throw();
 	
 		/** Get a pointer to a child atom at a given position.
 				The reference is 0 if {\em *this} instance does not have an atom at the given position.
@@ -244,7 +263,8 @@ namespace BALL
 				@return  Atom* -
 								 constant reference to the child atom at {\em position} of {\em *this},
 		*/
-		const Atom* getAtom(Position position) const;
+		const Atom* getAtom(Position position) const
+			throw();
 	
 		/** Get a pointer to a child atom with the name {\em name}.
 				The reference is 0 if {\em *this} instance does not have an atom with this name.
@@ -252,7 +272,8 @@ namespace BALL
 				@return  Atom* -
 								 mutable reference to the child atom with the name {\em name} of {\em *this},
 		*/
-		Atom* getAtom(const String& name);
+		Atom* getAtom(const String& name)
+			throw();
 	
 		/** Get a pointer to a child atom with the name {\em name}.
 				The reference is 0 if {\em *this} AtomContainer does not have an atom with this name.
@@ -260,114 +281,135 @@ namespace BALL
 				@return  Atom* -
 								 constant reference to the child atom with the name {\em name} of {\em *this},
 		*/
-		const Atom* getAtom(const String& name) const;
+		const Atom* getAtom(const String& name) const
+			throw();
 	
 		/** Count the child AtomContainers.
 				@return Size the number of AtomContainers
 		*/
-		Size countAtomContainers() const;
+		Size countAtomContainers() const
+			throw();
 
 		/** Count the child atoms.
 				@return Size the number of atoms
 		*/
-		Size countAtoms() const;
+		Size countAtoms() const
+			throw();
 
 		/** Count the child bonds.
 				@return Size the number of bonds
 		*/
-		Size countBonds() const;
+		Size countBonds() const
+			throw();
 
 		/** Count the inter bonds.
 				@return Size the number of inter bonds
 		*/
-		Size countInterBonds() const;
+		Size countInterBonds() const
+			throw();
 
 		/** Count the intra bonds.
 				@return Size the number of intra bonds
 		*/
-		Size countIntraBonds() const;
+		Size countIntraBonds() const
+			throw();
 
 		/** Prepend an atom at position 0.
 				@param atom, the atom to prepend
 		*/
-		void prepend(Atom& atom);
+		void prepend(Atom& atom)
+			throw();
 
 		/** Append an atom to the last position.
 				@param atom, the atom to append
 		*/
-		void append(Atom& atom);
+		void append(Atom& atom)
+			throw();
 
 		/** Insert an atom to the last position.
 				@param atom, the atom to insert
 		*/
-		void insert(Atom& atom);
+		void insert(Atom& atom)
+			throw();
 
 		/** Insert an atom before a given {\em Comosite} object.
 				@param atom, the atom to insert
 				@param before, the {\em Comosite} object to insert before
 		*/
-		void insertBefore(Atom& atom, Composite& before);
+		void insertBefore(Atom& atom, Composite& before)
+			throw();
 
 		/** Insert an atom after a given {\em Comosite} object.
 				@param atom, the atom to insert
 				@param after, the {\em Comosite} object to insert after
 		*/
-		void insertAfter(Atom& atom, Composite& after);
+		void insertAfter(Atom& atom, Composite& after)
+			throw();
 
 		/** Remove an atom
 				@param atom the atom to remove
 		*/
-		bool remove(Atom& atom);
+		bool remove(Atom& atom)
+			throw();
 
 		/** Prepend a AtomContainer at position 0.
 				@param atom_container, the AtomContainer to prepend
 		*/
-		void prepend(AtomContainer& atom_container);
+		void prepend(AtomContainer& atom_container)
+			throw();
 
 		/** Append a AtomContainer at the last position.
 				@param atom_container, the AtomContainer to prepend
 		*/
-		void append(AtomContainer& atom_container);
+		void append(AtomContainer& atom_container)
+			throw();
 
 		/** Insert a AtomContainer at the last position.
 				@param atom_container, the AtomContainer to insert
 		*/
-		void insert(AtomContainer& atom_container);
+		void insert(AtomContainer& atom_container)
+			throw();
 
 		/** Insert a AtomContainer before a given {\em Comosite} object.
 				@param atom_container, the AtomContainer to insert
 				@param before, the {\em Comosite} object to insert before
 		*/
-		void insertBefore(AtomContainer& atom_container, Composite& before);
+		void insertBefore(AtomContainer& atom_container, Composite& before)
+			throw();
 
 		/** Insert a AtomContainer after a given {\em Comosite} object.
 				@param atom_container, the AtomContainer to insert
 				@param after, the {\em Comosite} object to insert after
 		*/
-		void insertAfter(AtomContainer& atom_container, Composite& after);
+		void insertAfter(AtomContainer& atom_container, Composite& after)
+			throw();
 
 		/**	Cut all children of {\tt atom_container} and prepend them before the children of {\em *this}.
 				@param atom_container the AtomContainer to access
 		*/
-		void spliceBefore(AtomContainer& atom_container);
+		void spliceBefore(AtomContainer& atom_container)
+			throw();
 
 		/**	Cut all children of {\tt atom_container} and append them after the children of {\em *this}.
 				@param atom_container the AtomContainer to access
 		*/
-		void spliceAfter(AtomContainer& atom_container);
+		void spliceAfter(AtomContainer& atom_container)
+			throw();
 
 		/**	Move the children of {\em atom_container} into {\em *this} instance.
 				The children of {\tt atom_container} are inserted at its position
 				if it is is a child of {\tt this}.
 				Otherwise the children are inserted using \Ref{spliceBefore}.
 		*/
-		void splice(AtomContainer& atom_container);
+		void splice(AtomContainer& atom_container)
+			throw();
 
 		/** Remove a AtomContainer
 				@param atom_container the AtomContainer to remove
 				@return false if {\em atom_container} could not be removed
 		*/
-		bool remove(AtomContainer& atom_container);
+		bool remove(AtomContainer& atom_container)
+			throw();
 
 		//@}
 
@@ -376,7 +418,8 @@ namespace BALL
 
 		/** Destroy all bonds in {\tt this} AtomContainer
 		*/
-		void destroyBonds();
+		void destroyBonds()
+			throw();
 
 		//@}
 	
@@ -386,12 +429,14 @@ namespace BALL
 		/** Test if a AtomContainer is a child of {\tt this}.
 				@param atom_container the AtomContainer to test
 		*/
-		bool isSubAtomContainerOf(const AtomContainer& atom_container) const;
+		bool isSubAtomContainerOf(const AtomContainer& atom_container) const
+			throw();
 
 		/** Test if a AtomContainer is a parent of {\tt this}.
 				@param atom_container the AtomContainer to test
 		*/
-		bool isSuperAtomContainerOf(const AtomContainer& atom_container) const;
+		bool isSuperAtomContainerOf(const AtomContainer& atom_container) const
+			throw();
 		//@}
 
 		/**	Debugging and Diagnostics */
@@ -405,7 +450,8 @@ namespace BALL
 										{\tt true} if the internal state of {\em *this} is correct (self-validated) and consistent,
 										{\tt false} otherwise
 		*/
-		virtual bool isValid() const;
+		virtual bool isValid() const
+			throw();
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to the output ostream {\em s} with dumping depth {\em depth}.
@@ -426,7 +472,8 @@ namespace BALL
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
-		virtual void read(std::istream& s);
+		virtual void read(std::istream& s)
+			throw();
 
 		/* Persistent stream output and state storage.
 				Write persistent data to the output stream {\em s} and store the state of {\em *this}.
@@ -434,7 +481,8 @@ namespace BALL
 				{\bf Note:} Not yet implemented.	
 				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
-		virtual void write(std::ostream& s) const;
+		virtual void write(std::ostream& s) const
+			throw();
 
 		//@}
 
@@ -444,10 +492,12 @@ namespace BALL
 		//@{
 
 		///	Apply to all bonds inside this AtomContainer
-		bool applyIntraBond(UnaryProcessor<Bond>& processor);
+		bool applyIntraBond(UnaryProcessor<Bond>& processor)
+			throw();
 
 		/// Apply to all bonds to atoms outside this AtomContainer
-		bool applyInterBond(UnaryProcessor<Bond>& processor);
+		bool applyInterBond(UnaryProcessor<Bond>& processor)
+			throw();
 		//@}
 
 		// --- EXTERNAL ITERATORS
@@ -458,10 +508,7 @@ namespace BALL
 
 		private:
 
-		void clear_();
-
 		// --- ATTRIBUTES
-
 		String  name_;
 	};
 

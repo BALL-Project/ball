@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.16 2000/12/11 21:13:21 oliver Exp $
+// $Id: secondaryStructure.h,v 1.17 2000/12/16 21:29:03 amoll Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -58,13 +58,16 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		SecondaryStructure();
+		SecondaryStructure()
+			throw();
 	
 		/// Copy constructor
-		SecondaryStructure(const SecondaryStructure& secondary_structure,bool deep = true);
+		SecondaryStructure(const SecondaryStructure& secondary_structure,bool deep = true)
+			throw();
 	
 		/// Detailled constructor 
-		SecondaryStructure(const String& name);
+		SecondaryStructure(const String& name)
+			throw();
 
 		///	Destructor
 		virtual ~SecondaryStructure()
@@ -87,13 +90,15 @@ namespace BALL
 				Writes a SecondaryStructure object to a persistent stream.
 				@param pm the persistence manager
 		*/
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
+			throw();
 
 		/**	Persistent reading.
 				Reads a SecondaryStructure object from a persistent stream.
 				@param pm the persistence manager
 		*/
-		void persistentRead(PersistenceManager& pm);
+		void persistentRead(PersistenceManager& pm)
+			throw();
 
 		//@}
 
@@ -106,7 +111,8 @@ namespace BALL
 				@param  secondary_structure the SecondaryStructure to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em secondary_structure}
 		*/
-		void set(const SecondaryStructure& secondary_structure, bool deep = true);
+		void set(const SecondaryStructure& secondary_structure, bool deep = true)
+			throw();
 
 		/** Assignment operator.
 				Assign {\em secondary_structure} to {\em *this}.
@@ -115,7 +121,8 @@ namespace BALL
 				@return  Secondary_structure& - {\em *this}
 				@see     SecondaryStructure::set
 		*/
-		SecondaryStructure& operator =(const SecondaryStructure& secondary_structure);
+		const SecondaryStructure& operator =(const SecondaryStructure& secondary_structure)
+			throw();
 
 		/** Copying with cloning facility.
 				Copy {\em *this} to {\em secondary_structure}.
@@ -123,13 +130,15 @@ namespace BALL
 				@param  secondary_structure the SecondaryStructure to be assigned to
 				@see    secondary_structure::set
 		*/
-		void get(SecondaryStructure& secondary_structure, bool deep = true) const;
+		void get(SecondaryStructure& secondary_structure, bool deep = true) const
+			throw();
 
 		/** Swapping of two secondary structures.
 				Swap the states of {\em *this} with {\em secondary_structure}.
 				@param  secondary_structure to swap with {\em *this}
 		*/
-		void swap(SecondaryStructure& secondary_structure);
+		void swap(SecondaryStructure& secondary_structure)
+			throw();
 
 		//@}
 
@@ -142,28 +151,32 @@ namespace BALL
 				@return  Protein* -
 								 mutable reference to the parent protein of {\em *this},
 		*/
-		Protein* getProtein();
+		Protein* getProtein()
+			throw();
 
 		/** Get a pointer to the parent protein.
 				The reference is 0 if {\em *this} does not have a parent protein.
 				@return  Protein* -
 								 constant reference to the parent protein of {\em *this},
 		*/
-		const Protein* getProtein() const;
+		const Protein* getProtein() const
+			throw();
 
 		/** Get a pointer to the parent chain.
 				The reference is 0 if {\em *this} does not have a parent chain.
 				@return  Protein* -
 								 mutable reference to the parent chain of {\em *this},
 		*/
-		Chain* getChain();
+		Chain* getChain()
+			throw();
 
 		/** Get a pointer to the parent chain.
 				The reference is 0 if {\em *this} does not have a parent chain.
 				@return  Protein* -
 								 constant reference to the parent chain of {\em *this},
 		*/
-		const Chain* getChain() const;
+		const Chain* getChain() const
+			throw();
 
 		/** Get a pointer to a child Residue at a given position.
 				The reference is 0 if {\em *this} does not have a Residue at the given position.
@@ -171,7 +184,8 @@ namespace BALL
 				@return  Residue* -
 								 mutable reference to the child Residue at {\em position} of {\em *this},
 		*/
-		Residue* getResidue(Position position);
+		Residue* getResidue(Position position)
+			throw();
 	
 		/** Get a pointer to a child Residue at a given position.
 				The reference is 0 if {\em *this} does not have a Residue at the given position.
@@ -179,35 +193,40 @@ namespace BALL
 				@return  Residue* -
 								 constant reference to the child Residue at {\em position} of {\em *this},
 		*/
-		const Residue* getResidue(Position position) const;
+		const Residue* getResidue(Position position) const
+			throw();
 
 		/** Get a pointer to the N-terminal Residue.
 				The reference is 0 if {\em *this} does not have a Residue.
 				@return  Residue* -
 								 mutable reference to the N-terminal Residue
 		*/
-		Residue* getNTerminal();
+		Residue* getNTerminal()
+			throw();
 	
 		/** Get a pointer to the N-terminal Residue.
 				The reference is 0 if {\em *this} does not have a Residue.
 				@return  Residue* -
 								 constant reference to the N-terminal Residue
 		*/
-		const Residue* getNTerminal() const;
+		const Residue* getNTerminal() const
+			throw();
 
 		/** Get a pointer to the C-terminal Residue.
 				The reference is 0 if {\em *this} does not have a Residue.
 				@return  Residue* -
 								 mutable reference to the C-terminal Residue
 		*/
-		Residue* getCTerminal();
+		Residue* getCTerminal()
+			throw();
 	
 		/** Get a pointer to the C-terminal Residue.
 				The reference is 0 if {\em *this} does not have a Residue.
 				@return  Residue* -
 								 constant reference to the C-terminal Residue
 		*/
-		const Residue* getCTerminal() const;
+		const Residue* getCTerminal() const
+			throw();
 
 		/** Get a pointer to a child PDBAtom at a given position.
 				The reference is 0 if {\em *this} residue does not have a PDBAtom at this position.
@@ -215,7 +234,8 @@ namespace BALL
 				@return  PDBAtom* -
 								 constant reference to the child PDBAtom at {\em position} of {\em *this},
 		*/
-		PDBAtom* getPDBAtom(Position position);
+		PDBAtom* getPDBAtom(Position position)
+			throw();
 	
 		/** Get a pointer to a child PDBAtom at a given position.
 				The reference is 0 if {\em *this} residue does not have a PDBAtom at this position.
@@ -223,66 +243,78 @@ namespace BALL
 				@return  PDBAtom* -
 								 mutable reference to the child PDBAtom at {\em position} of {\em *this},
 		*/
-		const PDBAtom* getPDBAtom(Position position) const;
+		const PDBAtom* getPDBAtom(Position position) const
+			throw();
 	
 		/** Count the Residues.
 				@return  Size the number of residues
 		*/
-		Size countResidues() const;
+		Size countResidues() const
+			throw();
 
 		/** Count the PDBAtoms.
 				@return  Size the number of PDBAtoms
 		*/
-		Size countPDBAtoms() const;
+		Size countPDBAtoms() const
+			throw();
 
 		/** Prepend a Residue at position 0.
 				@param residue, the Residue to prepend
 		*/
-		void prepend(Residue& residue);
+		void prepend(Residue& residue)
+			throw();
 
 		/** Append a Residue after the last position.
 				@param residue, the Residue to append
 		*/
-		void append(Residue& residue);
+		void append(Residue& residue)
+			throw();
 
 		/** Insert a Residue after the last position.
 				@param residue, the Residue to insert
 		*/
-		void insert(Residue& residue);
+		void insert(Residue& residue)
+			throw();
 
 		/** Insert a Residue before a given {\em Comosite} object.
 				@param residue, the Residue to insert
 				@param before, the {\em Comosite} object to insert before
 		*/
-		void insertBefore(Residue& residue, Composite& before);
+		void insertBefore(Residue& residue, Composite& before)
+			throw();
 
 		/** Insert a Residue after a given {\em Comosite} object.
 				@param residue, the Residue to insert
 				@param after, the {\em Comosite} object to insert before
 		*/
-		void insertAfter(Residue& residue, Composite& after);
+		void insertAfter(Residue& residue, Composite& after)
+			throw();
 
 		/** Remove a Residue.
 				@param residue the Residue to remove
 		*/
-		bool remove(Residue& residue);
+		bool remove(Residue& residue)
+			throw();
 
 		/**	Move the children of {\tt secondary_structure} into {\em *this}.
 				Cut all children of {\tt secondary_structure} and prepend them before the children of {\em *this}.
 				@param secondary_structure the SecondaryStructure to access
 		*/
-		void spliceBefore(SecondaryStructure& secondary_structure);
+		void spliceBefore(SecondaryStructure& secondary_structure)
+			throw();
 
 		/**	Move the children of {\tt secondary_structure} into {\em *this}.
 				Cut all children of {\tt secondary_structure} and append them after the children of {\em *this}.
 				@param secondary_structure the SecondaryStructure to access
 		*/
-		void spliceAfter(SecondaryStructure& secondary_structure);
+		void spliceAfter(SecondaryStructure& secondary_structure)
+			throw();
 
 		/**	Move the children of {\tt secondary_structure} into {\em *this}.
 				The children are inserted using \Ref{spliceBefore}.
 		*/
-		void splice(SecondaryStructure& secondary_structure);
+		void splice(SecondaryStructure& secondary_structure)
+			throw();
 		//@}
 
 		/**	@name	Debugging and Diagnostics */
@@ -294,7 +326,8 @@ namespace BALL
 										{\tt true} if the internal state of {\em *this} is correct (self-validated) and consistent,
 										{\tt false} otherwise
 		*/
-		virtual bool isValid() const;
+		virtual bool isValid() const
+			throw();
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to the output ostream {\em s} with dumping depth {\em depth}.
@@ -313,7 +346,8 @@ namespace BALL
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
-		virtual void read(std::istream& s);
+		virtual void read(std::istream& s)
+			throw();
 
 		/* Persistent stream output and state storage.
 				Write persistent data to the output stream {\em s} and store the state of {\em *this}.
@@ -321,7 +355,8 @@ namespace BALL
 				{\bf Note:} Not yet implemented.	
 				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
-		virtual void write(std::ostream& s) const;
+		virtual void write(std::ostream& s) const
+			throw();
 
 			
 		// --- EXTERNAL ITERATORS
@@ -329,51 +364,68 @@ namespace BALL
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Residue)
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(PDBAtom)
 
-	protected:
 
 	private:
 
-		Fragment* getFragment(Position position);
+		Fragment* getFragment(Position position)
+			throw();
 	
-		const Fragment* getFragment(Position position) const;
+		const Fragment* getFragment(Position position) const
+			throw();
 	
-		Atom* getAtom(Position position);
+		Atom* getAtom(Position position)
+			throw();
 	
-		const Atom* getAtom(Position position) const;
+		const Atom* getAtom(Position position) const
+			throw();
 
-		void prepend(Atom &atom);
+		void prepend(Atom &atom)
+			throw();
 
-		void append(Atom &atom);
+		void append(Atom &atom)
+			throw();
 
-		void insert(Atom &atom);
+		void insert(Atom &atom)
+			throw();
 
-		void insertBefore(Atom &atom, Composite &before);
+		void insertBefore(Atom &atom, Composite &before)
+			throw();
 
-		void insertAfter(Atom &atom, Composite &after);
+		void insertAfter(Atom &atom, Composite &after)
+			throw();
 
-		bool remove(Atom &atom);
+		bool remove(Atom &atom)
+			throw();
 
-		void prepend(AtomContainer &atom_container);
+		void prepend(AtomContainer &atom_container)
+			throw();
 
-		void append(AtomContainer &atom_container);
+		void append(AtomContainer &atom_container)
+			throw();
 
-		void insert(AtomContainer &atom_container);
+		void insert(AtomContainer &atom_container)
+			throw();
 			
-		void insertBefore(AtomContainer &atom_container, Composite &before);
+		void insertBefore(AtomContainer &atom_container, Composite &before)
+			throw();
 
-		void insertAfter(AtomContainer &atom_container, Composite &after);
+		void insertAfter(AtomContainer &atom_container, Composite &after)
+			throw();
 
-		void spliceBefore(AtomContainer &atom_container);
+		void spliceBefore(AtomContainer &atom_container)
+			throw();
 
-		void spliceAfter(AtomContainer &atom_container);
+		void spliceAfter(AtomContainer &atom_container)
+			throw();
 
-		void splice(AtomContainer &atom_container);
+		void splice(AtomContainer &atom_container)
+			throw();
 
-		bool remove(AtomContainer &atom_container);
+		bool remove(AtomContainer &atom_container)
+			throw();
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
 
-		void clear_();
 	};
 
 } // namespace BALL

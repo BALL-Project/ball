@@ -1,4 +1,4 @@
-// $Id: atomContainer.C,v 1.2 2000/12/11 21:14:48 oliver Exp $
+// $Id: atomContainer.C,v 1.3 2000/12/16 21:29:22 amoll Exp $
 
 #include <BALL/KERNEL/atomContainer.h>
 
@@ -14,6 +14,7 @@ namespace BALL
 {
 
 	AtomContainer::AtomContainer()
+		throw()
 		:	Composite(),
 			PropertyManager(),
 			name_(BALL_ATOMCONTAINER_DEFAULT_NAME)
@@ -21,6 +22,7 @@ namespace BALL
 	}
 		
 	AtomContainer::AtomContainer(const AtomContainer& atom_container, bool deep)
+		throw()
 		:	Composite(),
 			PropertyManager(),
 			name_()
@@ -29,6 +31,7 @@ namespace BALL
 	}
 		
 	AtomContainer::AtomContainer(const String& name)
+		throw()
 		:	Composite(),
 			PropertyManager(),
 			name_(name)
@@ -47,7 +50,7 @@ namespace BALL
 		Composite::clear();
 		PropertyManager::clear();
 
-		clear_();
+		name_ = BALL_ATOMCONTAINER_DEFAULT_NAME;
 	}
 		
 	void AtomContainer::destroy()
@@ -56,10 +59,11 @@ namespace BALL
 		Composite::destroy();
 		PropertyManager::destroy();
 
-		clear_();
+		name_ = BALL_ATOMCONTAINER_DEFAULT_NAME;
 	}
 		
 	void AtomContainer::persistentWrite(PersistenceManager& pm, const char* name) const
+		throw()
 	{
 		pm.writeObjectHeader(this, name);
 			Composite::persistentWrite(pm);
@@ -71,6 +75,7 @@ namespace BALL
 	}
 
 	void AtomContainer::persistentRead(PersistenceManager& pm)
+		throw()
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Composite>());
 			Composite::persistentRead(pm);
@@ -82,6 +87,7 @@ namespace BALL
 	}
 
 	void AtomContainer::set(const AtomContainer& atom_container, bool deep)
+		throw()
 	{
     bool clone_them = clone_bonds;
     clone_bonds = false;
@@ -100,59 +106,68 @@ namespace BALL
     clone_bonds = clone_them;
 	}
 			
-	AtomContainer& AtomContainer::operator = (const AtomContainer& atom_container)
+	const AtomContainer& AtomContainer::operator = (const AtomContainer& atom_container)
+		throw()
 	{
 		set(atom_container);
-
 		return *this;
 	}
 
 	void AtomContainer::get(AtomContainer& atom_container, bool deep) const
+		throw()
 	{
 		atom_container.set(*this, deep);
 	}
 			
 	void AtomContainer::swap(AtomContainer& atom_container)
+		throw()
 	{
 		Composite::swap(atom_container);
 		PropertyManager::swap(atom_container);
-
 		name_.swap(atom_container.name_);
 	}
 		
 	void AtomContainer::setName(const String& name)
+		throw()
 	{
 		name_ = name;
 	}
 
 	String& AtomContainer::getName()
+		throw()
   {
 	  return name_;
 	}
 
 	const String& AtomContainer::getName() const
+		throw()
 	{
 		return name_;
 	}
 
 	Molecule* AtomContainer::getMolecule()
+		throw()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
 		{
 			if (RTTI::isKindOf<Molecule>(*ancestor_it) == true)
+			{
 				return (Molecule *)&*ancestor_it;
+			}
 		}
 
 		return 0;
 	}
 
 	const Molecule* AtomContainer::getMolecule() const
+		throw()
 	{
 		return ((AtomContainer *)this)->getMolecule();
 	}
 
 	AtomContainer* AtomContainer::getSuperAtomContainer()
+		throw()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
@@ -167,11 +182,13 @@ namespace BALL
 	}
 
 	const AtomContainer* AtomContainer::getSuperAtomContainer() const
+		throw()
 	{
 		return ((AtomContainer *)this)->getSuperAtomContainer();
 	}
 
 	AtomContainer* AtomContainer::getAtomContainer(Position position)
+		throw()
 	{
 		for (AtomContainerIterator atom_container_it = ++beginAtomContainer();
 				 !atom_container_it.isEnd(); ++atom_container_it)
@@ -186,11 +203,13 @@ namespace BALL
 	}
 
 	const AtomContainer*  AtomContainer::getAtomContainer(Position position) const
+		throw()
 	{
 		return ((AtomContainer *)this)->getAtomContainer(position);
 	}
 
 	Atom* AtomContainer::getAtom(Position position)
+		throw()
 	{
 		for (AtomIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
 		{
@@ -204,11 +223,13 @@ namespace BALL
 	}
 
 	const Atom* AtomContainer::getAtom(Position position) const
+		throw()
 	{
 		return ((AtomContainer *)this)->getAtom(position);
 	}
 
 	Atom* AtomContainer::getAtom(const String& name)
+		throw()
 	{
 		for (AtomIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
 		{
@@ -222,13 +243,15 @@ namespace BALL
 	}
 
 	const Atom* AtomContainer::getAtom(const String& name) const
+		throw()
 	{
 		return ((AtomContainer *)this)->getAtom(name);
 	}
 
 	Size AtomContainer::countAtomContainers() const
+		throw()
 	{
-		register Size size = 0;
+		Size size = 0;
 
 		for (AtomContainerIterator atom_container_it = ++beginAtomContainer();
 				 !atom_container_it.isEnd();++atom_container_it)
@@ -240,8 +263,9 @@ namespace BALL
 	}
 
 	Size AtomContainer::countAtoms() const
+		throw()
 	{
-		register Size size = 0;
+		Size size = 0;
 
 		for (AtomIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
 		{
@@ -252,9 +276,10 @@ namespace BALL
 	}
 
 	Size  AtomContainer::countBonds() const
+		throw()
 	{
-		register Size			size = 0;
-		AtomIterator			atom_it;
+		Size								size = 0;
+		AtomIterator				atom_it;
 		Atom::BondIterator	bond_it;
 
 		BALL_FOREACH_BOND(*this, atom_it, bond_it)
@@ -266,8 +291,9 @@ namespace BALL
 	}
 
 	Size AtomContainer::countInterBonds() const
+		throw()
 	{
-		register Size size = 0;
+		Size size = 0;
 		AtomIterator atom_it;
 		Atom::BondIterator bond_it;
 
@@ -280,8 +306,9 @@ namespace BALL
 	}
 
 	Size AtomContainer::countIntraBonds() const
+		throw()
 	{
-		register Size size = 0;
+		Size size = 0;
 		AtomIterator atom_it;
 		Atom::BondIterator bond_it;
 
@@ -294,81 +321,97 @@ namespace BALL
 	}
 
 	void AtomContainer::prepend(Atom& atom)
+		throw()
 	{
 		Composite::prependChild(atom);
 	}
 
 	void AtomContainer::append(Atom &atom)
+		throw()
 	{
 		Composite::appendChild(atom);
 	}
 
 	void AtomContainer::insert(Atom &atom)
+		throw()
 	{
 		append(atom);
 	}
 
 	void AtomContainer::insertBefore(Atom &atom, Composite& before)
+		throw()
 	{
 		before.Composite::insertBefore(atom);
 	}
 
 	void AtomContainer::insertAfter(Atom& atom, Composite &after)
+		throw()
 	{
 		after.Composite::insertAfter(atom);
 	}
 
 	bool AtomContainer::remove(Atom& atom)
+		throw()
 	{
 		return Composite::removeChild(atom);
 	}
 
 	void AtomContainer::prepend(AtomContainer& atom_container)
+		throw()
 	{
 		Composite::prependChild(atom_container);
 	}
 
 	void AtomContainer::append(AtomContainer& atom_container)
+		throw()
 	{
 		Composite::appendChild(atom_container);
 	}
 
 	void AtomContainer::insert(AtomContainer& atom_container)
+		throw()
 	{
 		append(atom_container);
 	}
 
 	void AtomContainer::insertBefore(AtomContainer& atom_container, Composite& before)
+		throw()
 	{
 		before.Composite::insertBefore(atom_container);
 	}
 
 	void AtomContainer::insertAfter(AtomContainer& atom_container, Composite& after)
+		throw()
 	{
 		after.Composite::insertAfter(atom_container);
 	}
 
 	void AtomContainer::spliceBefore(AtomContainer& atom_container)
+		throw()
 	{
 		Composite::spliceBefore(atom_container);
 	}
 
 	void AtomContainer::spliceAfter(AtomContainer& atom_container)
+		throw()
 	{
 		Composite::spliceAfter(atom_container);
 	}
 
 	void AtomContainer::splice(AtomContainer& atom_container)
+		throw()
 	{
 		Composite::splice(atom_container);
 	}
 
 	bool AtomContainer::remove(AtomContainer& atom_container)
+		throw()
 	{
 		return Composite::removeChild(atom_container);
 	}
 
 	void AtomContainer::destroyBonds()
+		throw()
 	{
 		for (AtomIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
 		{
@@ -377,25 +420,21 @@ namespace BALL
 	}
 
 	bool AtomContainer::isSubAtomContainerOf(const AtomContainer& atom_container) const
+		throw()
 	{
 		return atom_container.isAncestorOf(*this);
 	}
 
 	bool AtomContainer::isSuperAtomContainerOf(const AtomContainer& atom_container) const
+		throw()
 	{
 		return isAncestorOf(atom_container);
 	}
 
 	bool AtomContainer::isValid() const
+		throw()
 	{ 
-		if (Composite::isValid() == false
-				|| PropertyManager::isValid() == false
-				|| name_.isValid() == false)
-		{
-			return false;
-		}
-
-		return true;
+		return (Composite::isValid() && PropertyManager::isValid() && name_.isValid());
 	}
 
 	void AtomContainer::dump(ostream& s, Size depth) const
@@ -412,45 +451,53 @@ namespace BALL
 	}
 
 	void AtomContainer::read(istream&  /* s */)
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	void AtomContainer::write(ostream&  /* s */) const
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 
 	bool AtomContainer::applyInterBond(UnaryProcessor<Bond>& processor)
+		throw()
 	{
 		if (processor.start() == false)
+		{
 			return false;
+		}
 
-		Processor::Result result;
-
-		AtomIterator atom_it;
-		Atom::BondIterator bond_it;
+		Processor::Result		result;
+		AtomIterator				atom_it;
+		Atom::BondIterator	bond_it;
 
 		BALL_FOREACH_INTERBOND(*this, atom_it, bond_it)
 		{
 			result = processor(*bond_it);
 
 			if (result <= Processor::BREAK)
+			{
 				return (result == Processor::BREAK) ? true : false;
+			}
 		}
 
 		return processor.finish();
 	}
 
 	bool AtomContainer::applyIntraBond(UnaryProcessor<Bond> &processor)
+		throw()
 	{
     if (processor.start() == false)
+		{
       return false;
+		}
  
-		Processor::Result result;
-
-		AtomIterator atom_it;
+		Processor::Result  result;
+		AtomIterator			 atom_it;
 		Atom::BondIterator bond_it;
 
 		BALL_FOREACH_INTRABOND(*this, atom_it, bond_it)
@@ -458,15 +505,12 @@ namespace BALL
 			result = processor(*bond_it);
 
 			if (result <= Processor::BREAK)
+			{
 				return (result == Processor::BREAK) ? true : false;
+			}
 		}
  
 		return processor.finish();
-	}
-
-	void AtomContainer::clear_()
-	{
-		name_ = BALL_ATOMCONTAINER_DEFAULT_NAME;
 	}
 
 } // namespace BALL 

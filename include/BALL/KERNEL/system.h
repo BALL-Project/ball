@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.16 2000/12/11 21:13:21 oliver Exp $
+// $Id: system.h,v 1.17 2000/12/16 21:29:03 amoll Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -62,13 +62,16 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		System();
+		System()
+			throw();
 	
 		/// Copy constructor
-		System(const System& system, bool deep = true);
+		System(const System& system, bool deep = true)
+			throw();
 	
 		/// Detailled constructor
-		System(const String& name);
+		System(const String& name)
+			throw();
 
 		///	Destructor
 		virtual ~System()
@@ -83,13 +86,15 @@ namespace BALL
 				Writes a System object to a persistent stream.
 				@param pm the persistence manager
 		*/
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
+			throw();
 
 		/**	Persistent reading.
 				Reads a System object from a persistent stream.
 				@param pm the persistence manager
 		*/
-		void persistentRead(PersistenceManager& pm);
+		void persistentRead(PersistenceManager& pm)
+			throw();
 
 		//@}
 
@@ -103,7 +108,8 @@ namespace BALL
 				@param  system the System to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em system}
 		*/
-		void set(const System& system, bool deep = true);
+		void set(const System& system, bool deep = true)
+			throw();
 
 		/** Assignment operator.
 				Assign {\em system} to {\em *this}.
@@ -111,7 +117,8 @@ namespace BALL
 				@return  System& - {\em *this}
 				@see     System::set
 		*/
-		System& operator = (const System& system);
+		const System& operator = (const System& system)
+			throw();
 
 		/** Copying with cloning facility.
 				Copy {\em *this} to {\em system}.
@@ -119,7 +126,8 @@ namespace BALL
 				@param  System the System to be assigned to
 				@see    System::set
 		*/
-		void get(System& system, bool deep = true) const;
+		void get(System& system, bool deep = true) const
+			throw();
 	
 		//@}
 
@@ -133,7 +141,8 @@ namespace BALL
 				@return  Molecule* -
 								 mutable reference to the child molecule at {\em position} of {\em *this}
 		*/
-		Molecule* getMolecule(Position position);
+		Molecule* getMolecule(Position position)
+			throw();
 
 		/** Get a pointer to a child Molecule at a given position.
 				The reference is 0 if {\em *this} does not have a Molecule at this position.
@@ -141,101 +150,120 @@ namespace BALL
 				@return  Molecule* -
 								 constant reference to the child molecule at {\em position} of {\em *this}
 		*/
-		const Molecule* getMolecule(Position position) const;
+		const Molecule* getMolecule(Position position) const
+			throw();
 
 		/** Count the molecules in this system.
 				@return Size the number of molecules
 		*/
-		Size countMolecules() const;
+		Size countMolecules() const
+			throw();
 
 		/** Count the fragments in this system.
 				@return Size the number of fragments
 		*/
-		Size countFragments() const;
+		Size countFragments() const
+			throw();
 
 		/** Count the atoms in this system.
 				@return Size the number of atoms
 		*/
-		Size countAtoms() const;
+		Size countAtoms() const
+			throw();
 
 		/** Count the proteins in this system.
 				@return Size the number of proteins
 		*/
-		Size countProteins() const;
+		Size countProteins() const
+			throw();
 
 		/** Count the chains in this system.
 				@return Size the number of chains
 		*/
-		Size countChains() const;
+		Size countChains() const
+			throw();
 
 		/** Count the secondary structures in this system.
 				@return Size the number of secondary structures
 		*/
-		Size countSecondaryStructures() const;
+		Size countSecondaryStructures() const
+			throw();
 
 		/** Count the residues in this system.
 				@return Size the number of residues
 		*/
-		Size countResidues() const;
+		Size countResidues() const
+			throw();
 
 		/** Count the nucleic acids in this system.
 				@return Size the number of nucleic acids
 		*/
-		Size countNucleicAcids() const;
+		Size countNucleicAcids() const
+			throw();
 
 		/** Count the nucleotides in this system.
 				@return Size the number of nucleotides
 		*/
-		Size countNucleotides() const;
+		Size countNucleotides() const
+			throw();
 
 		/** Prepend a molecule at position 0.
 				@param molecule, the molecule to prepend
 		*/
-		void prepend(Molecule& molecule);
+		void prepend(Molecule& molecule)
+			throw();
 
 		/** Append a molecule after the last position.
 				@param molecule, the molecule to append
 		*/
-		void append(Molecule& molecule);
+		void append(Molecule& molecule)
+			throw();
 
 		/** Insert a molecule after the last position.
 				@param molecule, the molecule to insert
 		*/
-		void insert(Molecule& molecule);
+		void insert(Molecule& molecule)
+			throw();
 
 		/** Insert a molecule before a given {\em Comosite} object.
 				@param molecule, the molecule to insert
 				@param before, the {\em Comosite} object to insert before
 		*/
-		void insertBefore(Molecule& molecule, Composite& before);
+		void insertBefore(Molecule& molecule, Composite& before)
+			throw();
 
 		/** Insert a molecule after a given {\em Comosite} object.
 				@param molecule, the molecule to insert
 				@param after, the {\em Comosite} object to insert before
 		*/
-		void insertAfter(Molecule& molecule, Composite& after);
+		void insertAfter(Molecule& molecule, Composite& after)
+			throw();
 
 		/** Remove a molecule.
 				@param molecule the molecule to remove
 		*/
-		bool remove(Molecule& molecule);
+		bool remove(Molecule& molecule)
+			throw();
 
 		/**	Move the children of {\tt system} into {\em *this}.
 				Cut all children of {\tt system} and prepend them before the children of {\em *this}.
 				@param system the system to access
 		*/
-		void spliceBefore(System& system);
+		void spliceBefore(System& system)
+			throw();
 
 		/**	Move the children of {\tt system} into {\em *this}.
 				Cut all children of {\tt system} and append them after the children of {\em *this}.
 				@param system the system to access
 		*/
-		void spliceAfter(System& system);
+		void spliceAfter(System& system)
+			throw();
 
 		/**	Move the children of {\tt system} into {\em *this}.
 				The children are inserted using \Ref{spliceBefore}.
 		*/
-		void splice(System& system);		
+		void splice(System& system)
+			throw();
 		//@}
 
 		/**	@name	Storers */
@@ -247,7 +275,8 @@ namespace BALL
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
-		virtual void read(std::istream& s);
+		virtual void read(std::istream& s)
+			throw();
 
 		/* Persistent stream output and state storage.
 				Write persistent data to the output stream {\em s} and store the state of {\em *this}.
@@ -255,7 +284,8 @@ namespace BALL
 				{\bf Note:} Not yet implemented.	
 				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
-		virtual void write(std::ostream& s) const;
+		virtual void write(std::ostream& s) const
+			throw();
 		//@}
 		
 		// --- EXTERNAL ITERATORS ---

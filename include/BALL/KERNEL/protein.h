@@ -1,4 +1,4 @@
-// $Id: protein.h,v 1.12 2000/12/11 21:13:21 oliver Exp $ 
+// $Id: protein.h,v 1.13 2000/12/16 21:29:03 amoll Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -66,13 +66,16 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		Protein();
+		Protein()
+			throw();
 	
 		/// Copy constructor
-		Protein(const Protein& protein, bool deep = true);
+		Protein(const Protein& protein, bool deep = true)
+			throw();
 	
 		/// Detailled constructor 
-		Protein(const String& name, const String& id = BALL_PROTEIN_DEFAULT_ID);
+		Protein(const String& name, const String& id = BALL_PROTEIN_DEFAULT_ID)
+			throw();
 
 		///	Destructor
 		virtual ~Protein()
@@ -89,7 +92,6 @@ namespace BALL
 
 		//@}
 
-
 		/**	@name	Persistence */
 		//@{
 		
@@ -97,16 +99,17 @@ namespace BALL
 				Writes a Protein object to a persistent stream.
 				@param pm the persistence manager
 		*/
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
+			throw();
 
 		/**	Persistent reading.
 				Reads a Protein object from a persistent stream.
 				@param pm the persistence manager
 		*/
- 		void persistentRead(PersistenceManager& pm);
+ 		void persistentRead(PersistenceManager& pm)
+			throw();
 
 		//@}
-
 
 		/**	@name Assignment Methods */
 		//@{
@@ -117,7 +120,8 @@ namespace BALL
 				@param  protein the Protein to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em protein}
 		*/
-		void set(const Protein& protein, bool deep = true);
+		void set(const Protein& protein, bool deep = true)
+			throw();
 
 		/** Assignment operator.
 				Assign {\em protein} to {\em *this}.
@@ -126,7 +130,8 @@ namespace BALL
 				@return  Protein& - {\em *this}
 				@see     Protein::set
 		*/
-		Protein& operator = (const Protein& protein);
+		const Protein& operator = (const Protein& protein)
+			throw();
 
 		/** Copying with cloning facility.
 				Copy {\em *this} to {\em protein}.
@@ -134,16 +139,17 @@ namespace BALL
 				@param  protein the Protein to be assigned to
 				@see    Protein::set
 		*/
-		void get(Protein& protein, bool deep = true) const;
+		void get(Protein& protein, bool deep = true) const
+			throw();
 	
 		/** Swapping of two proteins.
 				Swap the states of {\em *this} with {\em protein}.
 				@param  protein to swap with {\em *this}
 		*/
-		void swap(Protein& protein);
+		void swap(Protein& protein)
+			throw();
 	
 		//@}
-
 
 		/**	@name Accessors */
 		//@{
@@ -154,7 +160,8 @@ namespace BALL
 				@return  Chain* -
 								 mutable reference to the child chain at {\em position} of {\em *this},
 		*/
-		Chain* getChain(Position position);
+		Chain* getChain(Position position)
+			throw();
 
 		/** Get a pointer to a child chain at a given position.
 				The reference is 0 if {\em *this} does not have a chain at the given position.
@@ -162,7 +169,8 @@ namespace BALL
 				@return  Chain* -
 								 constant reference to the child chain at {\em position} of {\em *this},
 		*/
-		const Chain* getChain(Position position) const;
+		const Chain* getChain(Position position) const
+			throw();
 
 		/** Get a pointer to a child SecondaryStructure at a given position.
 				The reference is 0 if {\em *this} does not have a SecondaryStructure at the given position.
@@ -170,7 +178,8 @@ namespace BALL
 				@return  SecondaryStructure* - mutable reference to the child SecondaryStructure
 																			 at {\em position} of {\em *this},
 		*/
-		SecondaryStructure* getSecondaryStructure(Position position);
+		SecondaryStructure* getSecondaryStructure(Position position)
+			throw();
 
 		/** Get a pointer to a child SecondaryStructure at a given position.
 				The reference is 0 if {\em *this} does not have a SecondaryStructure at the given position.
@@ -178,7 +187,8 @@ namespace BALL
 				@return  SecondaryStructure* - constant reference to the child SecondaryStructure
 																			 at {\em position} of {\em *this},
 		*/
-		const SecondaryStructure* getSecondaryStructure(Position position) const;
+		const SecondaryStructure* getSecondaryStructure(Position position) const
+			throw();
 
 		/** Get a pointer to a child Residue at a given position.
 				The reference is 0 if {\em *this} does not have a Residue at the given position.
@@ -186,7 +196,8 @@ namespace BALL
 				@return  Residue* - mutable reference to the child 
 														Residue at {\em position} of {\em *this},
 		*/
-		Residue* getResidue(Position position);
+		Residue* getResidue(Position position)
+			throw();
 
 		/** Get a pointer to a child Residue at a given position.
 				The reference is 0 if {\em *this} does not have a Residue at the given position.
@@ -194,31 +205,36 @@ namespace BALL
 				@return  Residue* - constant reference to the child 
 														Residue at {\em position} of {\em *this},
 		*/
-		const Residue* getResidue(Position position) const;
+		const Residue* getResidue(Position position) const
+			throw();
 
 		/** Get a pointer to the N-terminal Residue.
 				The reference is 0 if {\em *this} does not have a N-terminal Residue.
 				@return  Residue* - mutable reference to the N-terminal	Residue
 		*/
-		Residue* getNTerminal();
+		Residue* getNTerminal()
+			throw();
 
 		/** Get a pointer to the N-terminal Residue.
 				The reference is 0 if {\em *this} does not have a N-terminal Residue.
 				@return  Residue* - constant reference to the N-terminal Residue
 		*/
-		const Residue* getNTerminal() const;
+		const Residue* getNTerminal() const
+			throw();
 
 		/** Get a pointer to the C-terminal Residue.
 				The reference is 0 if {\em *this} does not have a C-terminal Residue.
 				@return  Residue* - mutable reference to the C-terminal	Residue
 		*/
-		Residue* getCTerminal();
+		Residue* getCTerminal()
+			throw();
 
 		/** Get a pointer to the C-terminal Residue.
 				The reference is 0 if {\em *this} does not have a C-terminal Residue.
 				@return  Residue* - constant reference to the C-terminal Residue
 		*/
-		const Residue* getCTerminal() const;
+		const Residue* getCTerminal() const
+			throw();
 
 		/** Get a pointer to a child PDB-Atom at a given position.
 				The reference is 0 if {\em *this} does not have a PDB-Atom at the given position.
@@ -226,7 +242,8 @@ namespace BALL
 				@return  Residue* - mutable reference to the child 
 														PDB-Atom at {\em position} of {\em *this},
 		*/
-		PDBAtom* getPDBAtom(Position position);
+		PDBAtom* getPDBAtom(Position position)
+			throw();
 
 		/** Get a pointer to a child PDB-Atom at a given position.
 				The reference is 0 if {\em *this} does not have a PDB-Atom at the given position.
@@ -234,37 +251,44 @@ namespace BALL
 				@return  Residue* - constant reference to the child 
 														PDB-Atom at {\em position} of {\em *this},
 		*/
-		const PDBAtom* getPDBAtom(Position position) const;
+		const PDBAtom* getPDBAtom(Position position) const
+			throw();
 
 		/**	Set the ID of the NucleicAcid.
 				@param id the new ID
 		*/
-		void setID(const String& id);
+		void setID(const String& id)
+			throw();
 
 		/**	Retrieve the ID of the NucleicAcid.
 				@return String the ID
 		*/
-		const String& getID() const;
+		const String& getID() const
+			throw();
 
 		/** Count the child chains.
 				@return Size the number of chains
 		*/
-		Size countChains() const;
+		Size countChains() const
+			throw();
 
 		/** Count the child SecondaryStructures.
 				@return Size the number of SecondaryStructures
 		*/
-		Size countSecondaryStructures() const;
+		Size countSecondaryStructures() const
+			throw();
 
 		/** Count the child Residues.
 				@return Size the number of Residues
 		*/
-		Size countResidues() const;
+		Size countResidues() const
+			throw();
 
 		/** Count the child PDB-Atoms.
 				@return Size the number of PDB-Atoms
 		*/
-		Size countPDBAtoms() const;
+		Size countPDBAtoms() const
+			throw();
 		//@}
 
 #ifdef	BALL_CFG_USING_METHOD_DIRECTIVE
@@ -299,7 +323,8 @@ namespace BALL
 										{\tt true} if the internal state of {\em *this} is correct (self-validated) and consistent,
 										{\tt false} otherwise
 		*/
-		virtual bool isValid() const;
+		virtual bool isValid() const
+			throw();
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to the output ostream {\em s} with dumping depth {\em depth}.
@@ -321,7 +346,8 @@ namespace BALL
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
-		virtual void read(std::istream& s);
+		virtual void read(std::istream& s)
+			throw();
 
 		/* Persistent stream input and state restorage.
 				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
@@ -329,7 +355,8 @@ namespace BALL
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
-		virtual void write(std::ostream& s) const;
+		virtual void write(std::ostream& s) const
+			throw();
 		//@}
 
 		// --- EXTERNAL ITERATORS
@@ -341,8 +368,6 @@ namespace BALL
 
 		
 		private:
-
-		void clear_();
 
 		// --- ATTRIBUTES
 

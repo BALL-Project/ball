@@ -1,4 +1,4 @@
-// $Id: nucleotide.h,v 1.14 2000/12/11 21:13:21 oliver Exp $
+// $Id: nucleotide.h,v 1.15 2000/12/16 21:29:03 amoll Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -55,16 +55,19 @@ namespace BALL
 		//@{	
 	
 		/// Default constructor
-		Nucleotide();
+		Nucleotide()
+			throw();
 	
 		/// Copy constructor
-		Nucleotide(const Nucleotide& nucleotide, bool deep = true);
+		Nucleotide(const Nucleotide& nucleotide, bool deep = true)
+			throw();
 	
 		/// Detailled constructor
 		Nucleotide
 			(const String& name,
 			 const String& id = BALL_NUCLEOTIDE_DEFAULT_ID,
-			 char insertion_code = BALL_NUCLEOTIDE_DEFAULT_INSERTION_CODE);
+			 char insertion_code = BALL_NUCLEOTIDE_DEFAULT_INSERTION_CODE)
+			throw();
 
 		/// Destructor
 		virtual ~Nucleotide()
@@ -87,13 +90,15 @@ namespace BALL
 				Writes a Nucleotide object to a persistent stream.
 				@param pm the persistence manager
 		*/
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
+			throw();
 
 		/**	Persistent reading.
 				Reads a Nucleotide object from a persistent stream.
 				@param pm the persistence manager
 		*/
-		void persistentRead(PersistenceManager& pm);
+		void persistentRead(PersistenceManager& pm)
+			throw();
 
 		//@}
 
@@ -107,7 +112,8 @@ namespace BALL
 				@param  nucleotide the nucleotide to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em nucleotide}
 		*/
-		void set(const Nucleotide& nucleotide, bool deep = true);
+		void set(const Nucleotide& nucleotide, bool deep = true)
+			throw();
 
 		/** Assignment operator.
 				Assign {\em nucleotide} to {\em *this}.
@@ -116,7 +122,8 @@ namespace BALL
 				@return  nucleotide& - {\em *this} nucleotide
 				@see     nucleotide::set
 		*/
-		Nucleotide& operator = (const Nucleotide& nucleotide);
+		const Nucleotide& operator = (const Nucleotide& nucleotide)
+			throw();
 
 		/** Copying with cloning facility.
 				Copy {\em *this} instance to {\em nucleotide}.
@@ -124,13 +131,15 @@ namespace BALL
 				@param  nucleotide the nucleotide to be assigned to
 				@see    nucleotide::set
 		*/
-		void get(Nucleotide& nucleotide, bool deep = true) const;
+		void get(Nucleotide& nucleotide, bool deep = true) const
+			throw();
 
 		/** Swapping of instaces of nucleotide.
 				Swap the states of {\em *this} with the {\em nucleotide}.
 				@param  nucleotide the instance of nucleotide to swap with
 		*/
-		void swap(Nucleotide& nucleotide);
+		void swap(Nucleotide& nucleotide)
+			throw();
 	
 		//@}
 
@@ -142,81 +151,96 @@ namespace BALL
 				@return  NucleicAcid* -
 								 mutable reference to the parent NucleicAcid of {\em *this} nucleotide,
 		*/
-		NucleicAcid* getNucleicAcid();
+		NucleicAcid* getNucleicAcid()
+			throw();
 		
 		/** Get a pointer to the parent NucleicAcid.
 				The reference is 0 if {\em *this} nucleotide does not have a parent NucleicAcid.
 				@return  NucleicAcid* -
 								 constant reference to the parent NucleicAcid of {\em *this} nucleotide,
 		*/
-		const NucleicAcid* getNucleicAcid() const;
+		const NucleicAcid* getNucleicAcid() const
+			throw();
 
 		/**	Set the ID of the nucleotide.
 				@param id the new ID
 		*/
-		void setID(const String& id);
+		void setID(const String& id)
+			throw();
 
 		/**	Retrieve the ID of the nucleotide.
 				@return String the ID (constant)
 		*/
-		const String& getID() const;
+		const String& getID() const
+			throw();
 
 		/**	Set the insertion code of the nucleotide.
 				@param insertion_code the new insertion code
 		*/
-		void setInsertionCode(char insertion_code);
+		void setInsertionCode(char insertion_code)
+			throw();
 
 		/**	Retrieve the insertion code of the nucleotide.
 				@return String the insertion code (constant)
 		*/
-		char getInsertionCode() const;
+		char getInsertionCode() const
+			throw();
 
 		/** Prepend an atom at position 0.
 				@param atom, the atom to prepend
 		*/
-		void prepend(Atom& atom);
+		void prepend(Atom& atom)
+			throw();
 
 		/** Append an atom after the last position.
 				@param atom, the atom to append
 		*/
-		void append(Atom& atom);
+		void append(Atom& atom)
+			throw();
 
 		/** Insert an atom after the last position.
 				@param atom, the atom to insert
 		*/
-		void insert(Atom& atom);
+		void insert(Atom& atom)
+			throw();
 
 		/** Insert an atom before a given {\em Comosite} object.
 				@param atom, the atom to insert
 				@param before, the {\em Comosite} object to insert before
 		*/
-		void insertBefore(Atom& atom, Composite& before);
+		void insertBefore(Atom& atom, Composite& before)
+			throw();
 
 		/** Insert an atom after a given {\em Comosite} object.
 				@param atom, the atom to insert
 				@param after, the {\em Comosite} object to insert after
 		*/
-		void insertAfter(Atom& atom, Composite& after);
+		void insertAfter(Atom& atom, Composite& after)
+			throw();
 
 		/** Remove an atom.
 				@param atom the atom to remove
 		*/
-		bool remove(Atom& atom);
+		bool remove(Atom& atom)
+			throw();
 
 		/**	Cut all children of {\tt nucleotide} and prepend them before the children of this instance.
 				@param nucleotide the nucleotide to access
 		*/
-		void spliceBefore(Nucleotide& nucleotide);
+		void spliceBefore(Nucleotide& nucleotide)
+			throw();
 
 		/**	Cut all children of {\tt nucleotide} and append them after the children of this instance.
 				@param nucleotide the nucleotide to access
 		*/
-		void spliceAfter(Nucleotide& nucleotide);
+		void spliceAfter(Nucleotide& nucleotide)
+			throw();
 
 		/**	Move the children of {\tt nucleotide} into this instance.
 				The children are inserted using \Ref{spliceBefore}.
 		*/
-		void splice(Nucleotide& nucleotide);
+		void splice(Nucleotide& nucleotide)
+			throw();
 
 		//@}
 
@@ -229,19 +253,22 @@ namespace BALL
 				last nucleotide in its parent NucleicAcid.
 				@return bool
 		*/
-		bool isTerminal() const;
+		bool isTerminal() const
+			throw();
 	
 		/**	Test if {\em *this} nucleotide is 3-prime.
 				Returns true, if {\em *this} instance is the first nucleotide in its parent NucleicAcid.
 				@return bool
 		*/
-		bool is3Prime() const;
+		bool is3Prime() const
+			throw();
 
 		/**	Test if {\em *this} nucleotide is 5-prime.
 				Returns true, if {\em *this} instance is the last nucleotide in its parent NucleicAcid.
 				@return bool
 		*/
-		bool is5Prime() const;
+		bool is5Prime() const
+			throw();
 		//@}
 
 	
@@ -256,7 +283,8 @@ namespace BALL
 										{\tt true} if the internal state of {\em *this} nucleotide is correct
 										(self-validated) and consistent, {\tt false} otherwise
 		*/
-		virtual bool isValid() const;
+		virtual bool isValid() const
+			throw();
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} 
@@ -278,7 +306,8 @@ namespace BALL
 				{\bf Note:} Not yet implemented.
 				@param  s input stream from where to restore the internal state of {\em *this} nucleotide
 		*/
-		virtual void read(std::istream& s);
+		virtual void read(std::istream& s)
+			throw();
 
 		/* Persistent stream output and state storage.
 				Write persistent data to the output stream {\em s} and store the state of {\em *this}.
@@ -286,41 +315,53 @@ namespace BALL
 				{\bf Note:} Not yet implemented.	
 				@param  s input stream from where to restore the internal state of {\em *this} nucleotide
 		*/
-		virtual void write(std::ostream& s) const;
+		virtual void write(std::ostream& s) const
+			throw();
 		//@}
 
 
 		private:
 
-		AtomContainer* getAtomContainer(Position position);
+		AtomContainer* getAtomContainer(Position position)
+			throw();
 	
-		const AtomContainer* getAtomContainer(Position position) const;
+		const AtomContainer* getAtomContainer(Position position) const
+			throw();
 	
-		Size countAtomContainers() const;
+		Size countAtomContainers() const
+			throw();
 
-		void prepend(AtomContainer& atom_container);
+		void prepend(AtomContainer& atom_container)
+			throw();
 
-		void append(AtomContainer& atom_container);
+		void append(AtomContainer& atom_container)
+			throw();
 
-		void insert(AtomContainer& atom_container);
+		void insert(AtomContainer& atom_container)
+			throw();
 
-		void insertBefore(AtomContainer& atom_container, Composite& composite);
+		void insertBefore(AtomContainer& atom_container, Composite& composite)
+			throw();
 
-		void insertAfter(AtomContainer& atom_container, Composite& composite);
+		void insertAfter(AtomContainer& atom_container, Composite& composite)
+			throw();
 
-		void spliceBefore(AtomContainer& atom_container);
+		void spliceBefore(AtomContainer& atom_container)
+			throw();
 
-		void spliceAfter(AtomContainer& base_ragment);
+		void spliceAfter(AtomContainer& base_ragment)
+			throw();
 
-		void splice(AtomContainer& AtomContainer);
+		void splice(AtomContainer& AtomContainer)
+			throw();
 
-		bool remove(AtomContainer& AtomContainer);
+		bool remove(AtomContainer& AtomContainer)
+			throw();
 
-		bool isSuperAtomContainerOf(const AtomContainer& atom_container) const;
+		bool isSuperAtomContainerOf(const AtomContainer& atom_container) const
+			throw();
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
-
-		void clear_();
 
 		// --- ATTRIBUTES
 

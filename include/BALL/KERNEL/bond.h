@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.16 2000/12/11 21:13:19 oliver Exp $
+// $Id: bond.h,v 1.17 2000/12/16 21:29:02 amoll Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -61,9 +61,9 @@ namespace BALL
 			\end{itemize}
 			
 			@memo    Bond class (BALL kernel framework)
-			@author  $Author: oliver $
-			@version $Revision: 1.16 $
-			@date    $Date: 2000/12/11 21:13:19 $
+			@author  $Author: amoll $
+			@version $Revision: 1.17 $
+			@date    $Date: 2000/12/16 21:29:02 $
 	*/
 	class Bond
 		: public Composite,
@@ -90,8 +90,21 @@ namespace BALL
 			:	public	Exception::GeneralException
 		{
 			public:
-			TooManyBonds(const char* file, int line);
+			TooManyBonds(const char* file, int line)
+				throw();
 		};
+
+		/**	Not bounded to two atoms.
+				This exception may be thrown by \Ref{getLength} if this instance is not bounded.
+		*/
+		class NotBounded
+			:	public	Exception::GeneralException
+		{
+			public:
+			NotBounded(const char* file, int line)
+				throw();
+		};
+
 		//@}
 
 		/** @name Type definitions */
@@ -172,7 +185,8 @@ namespace BALL
 
 				@return    Bond - new constructed bond
 		*/
-		Bond();
+		Bond()
+			throw();
 
 		/** Copy constructor.
 				Construct new bond by copying the bond {\em bond}.
@@ -189,7 +203,8 @@ namespace BALL
 				@return      Bond - new constructed bond cloned from {\em bond}
 				@see         createBond
 		*/
-		Bond(const Bond& bond, bool deep = true);
+		Bond(const Bond& bond, bool deep = true)
+			throw();
 	
 		/** Detailed state initializing constructor.
 				Construct new bond.
@@ -210,7 +225,8 @@ namespace BALL
 				@return      Bond - new constructed bond
 		*/
 		 Bond(const String& name, Atom& first, Atom& second, Order order = BALL_BOND_DEFAULT_ORDER,
-				 Type type = BALL_BOND_DEFAULT_TYPE);
+				 Type type = BALL_BOND_DEFAULT_TYPE)
+			throw();
 
 		/** Global bond creation.
 				Connect the first atom {\em first} to the second atom {\em second} via the bond {\em bond}.
@@ -226,7 +242,8 @@ namespace BALL
 				@param 	second the second atom of the bond
 				@return Bond* - bond that connects the first atom {\em first} with the second atom {\em second}
 		*/
-		static Bond* createBond(Bond& bond, Atom& first, Atom& second);
+		static Bond* createBond(Bond& bond, Atom& first, Atom& second)
+			throw(TooManyBonds);
 
 		/** Destructor.
 				Default destruction of {\em *this} bond.
@@ -276,18 +293,21 @@ namespace BALL
 				Writes a Bond object to a persistent stream.
 				@param pm the persistence manager
 		*/
-		void persistentWrite(PersistenceManager& pm, const char* name = 0) const;
+		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
+			throw();
 
 		/**	Persistent reading.
 				Reads a Bond object from a persistent stream.
 				@param pm the persistence manager
 		*/
-		void persistentRead(PersistenceManager& pm);
+		void persistentRead(PersistenceManager& pm)
+			throw();
 
 		/**	Finalize the deserialization.
 				Bond might have to swap {\tt first_} and {\tt second_}.
 		*/
-		void finalize();
+		void finalize()
+			throw();
 
 		//@}
 
@@ -307,7 +327,8 @@ namespace BALL
 				@param bond the bond to be copied (cloned)
 				@param deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em bond}
 		*/
-		void set(const Bond& bond, bool deep = true);
+		void set(const Bond& bond, bool deep = true)
+			throw();
 		
 		/** Assignment operator.
 				Assign the bond {\em bond} to {\em *this}.
@@ -323,7 +344,8 @@ namespace BALL
 				@return Bond - {\em *this} bond
 				@see    Bond::set
 		*/
-		Bond& operator = (const Bond& bond);
+		const Bond& operator = (const Bond& bond)
+			throw();
 
 		/** Copying with cloning facility.
 				Copy {\em *this} to the bond {\em bond}.
@@ -338,320 +360,350 @@ namespace BALL
 				@param bond the bond to be assigned to
 				@see   Bond::set
 		*/
-		void get(Bond& bond, bool deep = true) const;
+		void get(Bond& bond, bool deep = true) const
+			throw();
 
-			/** Swapping of bonds.
-					Swap the states of {\em *this} with the bond {\em bond}.
+		/** Swapping of bonds.
+				Swap the states of {\em *this} with the bond {\em bond}.
 
-					@param bond the bond {\em *this} is being swapped with
-					@see   Bond::Bond
-			*/
-			void swap(Bond& bond);
-		
-			//@}
-		
-			/** @name Accessors: inspectors and mutators */
-			//@{ 
+				@param bond the bond {\em *this} is being swapped with
+				@see   Bond::Bond
+		*/
+		void swap(Bond& bond)
+			throw();
+	
+		//@}
+	
+		/** @name Accessors: inspectors and mutators */
+		//@{ 
 
-			/** Set the first Atom.
-					@param atom the atom to set
-			*/
-			void setFirstAtom(Atom* atom);
-		
-			/** Mutable inspection of the first bond atom.
-					Access a mutable reference to the first atom of {\em *this} bond.
-					The reference is 0 if no first atom is connected to {\em *this} bond.\\
-					\\
-					{\bf Note:} No corresponding mutator Bond::setFirstAtom exists to provide consistency 
-											of the bond tables in the atoms.
-					@return      Atom* -
-											 mutable reference to the first atom that is connected to {\em *this} bond,
+		/** Set the first Atom.
+				@param atom the atom to set
+		*/
+		void setFirstAtom(Atom* atom)
+			throw();
+	
+		/** Mutable inspection of the first bond atom.
+				Access a mutable reference to the first atom of {\em *this} bond.
+				The reference is 0 if no first atom is connected to {\em *this} bond.\\
+				\\
+				{\bf Note:} No corresponding mutator Bond::setFirstAtom exists to provide consistency 
+										of the bond tables in the atoms.
+				@return      Atom* -
+										 mutable reference to the first atom that is connected to {\em *this} bond,
+										 0 if no first atom exists
+				@see         Bond::getSecondAtom
+		*/
+		Atom* getFirstAtom()
+			throw();
+	 
+		/** Constant inspection of the first bond atom.
+				Access a constant reference to the first atom of {\em *this} bond.
+				The reference is 0 if no first atom is connected to {\em *this} bond.\\
+				\\
+				{\bf Note:} No corresponding mutator Bond::setFirstAtom exists to provide consistency 
+										of the bond tables in the atoms.
+				@return      Atom* - 
+										 constant reference to the first atom that is connected to {\em *this} bond,
 											 0 if no first atom exists
-					@see         Bond::getSecondAtom
-			*/
-			Atom* getFirstAtom();
-		 
-			/** Constant inspection of the first bond atom.
-					Access a constant reference to the first atom of {\em *this} bond.
-					The reference is 0 if no first atom is connected to {\em *this} bond.\\
-					\\
-					{\bf Note:} No corresponding mutator Bond::setFirstAtom exists to provide consistency 
-											of the bond tables in the atoms.
-					@return      Atom* - 
-											 constant reference to the first atom that is connected to {\em *this} bond,
-												 0 if no first atom exists
-					@see         Bond::getSecondAtom
-			*/
-			const Atom* getFirstAtom() const;
-		 
-			/**	Return the partner atom of an atom.
-					If the given {\tt atom} is part of this bond, the other atom
-					of the bond is returned. 0 is returned if {\tt atom} is not
-					one of the bond's atoms.
-					@param	atom one of the bond's atoms
-					@return	the atom's bond partner
-			*/
-			Atom* getPartner(const Atom& atom) const;
+				@see         Bond::getSecondAtom
+		*/
+		const Atom* getFirstAtom() const
+			throw();
+	 
+		/**	Return the partner atom of an atom.
+				If the given {\tt atom} is part of this bond, the other atom
+				of the bond is returned. 0 is returned if {\tt atom} is not
+				one of the bond's atoms.
+				@param	atom one of the bond's atoms
+				@return	the atom's bond partner
+		*/
+		Atom* getPartner(const Atom& atom) const
+			throw();
 
-			/** Set the second Atom.
-					@param atom the atom to set
-			*/
-			void setSecondAtom(Atom* atom);
-		
-			/** Mutable inspection of the second bond atom.
-					Access a mutable reference to the second atom of {\em *this} bond.
-					The reference is 0 if no second atom is connected to {\em *this} bond.\\
-					\\
-					{\bf Note:} No corresponding mutator Bond::setSecondAtom exists to provide consistency
-											of the bond tables in the atoms.
-					@return      Atom* - 
-											 mutable reference to the second atom that is connected to {\em *this} bond,
-											 0 if no second atom exists
-					@see         Bond::getFirstAtom
-			*/
-			Atom* getSecondAtom();
-		 
-			/** Constant inspection of the second bond atom.
-					Access a constant reference to the second atom of {\em *this} bond.
-					The reference is 0 if no second atom is connected to {\em *this} bond.\\
-					\\
-					{\bf Note:} No corresponding mutator Bond::setSecondAtom exists to provide consistency
-											of the bond tables in the atoms.
-					@return      Atom* -
-											 constant reference to the second atom that is connected to {\em *this} bond,
-											 0 if no second atom exists
-					@see         Bond::getFirstAtom
-			*/
-			const Atom* getSecondAtom() const;
+		/** Set the second Atom.
+				@param atom the atom to set
+		*/
+		void setSecondAtom(Atom* atom)
+			throw();
+	
+		/** Mutable inspection of the second bond atom.
+				Access a mutable reference to the second atom of {\em *this} bond.
+				The reference is 0 if no second atom is connected to {\em *this} bond.\\
+				\\
+				{\bf Note:} No corresponding mutator Bond::setSecondAtom exists to provide consistency
+										of the bond tables in the atoms.
+				@return      Atom* - 
+										 mutable reference to the second atom that is connected to {\em *this} bond,
+										 0 if no second atom exists
+				@see         Bond::getFirstAtom
+		*/
+		Atom* getSecondAtom()
+			throw();
+	 
+		/** Constant inspection of the second bond atom.
+				Access a constant reference to the second atom of {\em *this} bond.
+				The reference is 0 if no second atom is connected to {\em *this} bond.\\
+				\\
+				{\bf Note:} No corresponding mutator Bond::setSecondAtom exists to provide consistency
+										of the bond tables in the atoms.
+				@return      Atom* -
+										 constant reference to the second atom that is connected to {\em *this} bond,
+										 0 if no second atom exists
+				@see         Bond::getFirstAtom
+		*/
+		const Atom* getSecondAtom() const
+			throw();
 
-			/** Change of the bond's name.
-					Change the name of {\em *this} bond to {\em name}.
-					@param name the new name of {\em *this} bond
-					@see         Bond::getName
-			*/
-			void setName(const String& name);
+		/** Change of the bond's name.
+				Change the name of {\em *this} bond to {\em name}.
+				@param name the new name of {\em *this} bond
+				@see         Bond::getName
+		*/
+		void setName(const String& name)
+			throw();
 
-			/** Constant inspection of the bond's name.
-					Access a constant reference to the name of {\em *this} bond.
-					@return      String& - constant reference to the name of {\em *this} bond
-					@see         Bond::setName
-			*/
-			const String& getName() const;
+		/** Constant inspection of the bond's name.
+				Access a constant reference to the name of {\em *this} bond.
+				@return      String& - constant reference to the name of {\em *this} bond
+				@see         Bond::setName
+		*/
+		const String& getName() const
+			throw();
 
-			/** Change of the bond's order.
-					Change the order of {\em *this} bond to the order {\em bond_order}.
-					@param       bond_order the new order of {\em *this} bond
-					@see         Bond::getOrder
-			*/
-			void setOrder(Order bond_order);
-		
-			/** Constant inspection of the bond's order.
-					Access the order of {\em *this} bond.
-					@return      Order - copy of the order of {\em *this} bond
-					@see         Bond::setOrder
-			*/
-			Order getOrder() const;
-		
-			/** Change of the bond's type.
-					Change the type of {\em *this} bond to the type {\em bond_type}.
-					@param       bond_type the new type of {\em *this} bond
-					@see         Bond::getType
-			*/
-			void setType(Type bond_type);
-		
-			/** Constant inspection of the bond's type.
-					Access the type of {\em *this} bond.
-					@return      Type - copy of the type of {\em *this} bond
-					@see         Bond::setType
-			*/
-			Type getType() const;
-		
-			/** Constant inspection of the bond's length.
-					Access the length of {\em *this} bond.
-					@exception NullPointer if the bond has not two atoms
-					@return      Real - copy of the length of {\em *this} bond
-			*/
-			Real getLength() const;
+		/** Change of the bond's order.
+				Change the order of {\em *this} bond to the order {\em bond_order}.
+				@param       bond_order the new order of {\em *this} bond
+				@see         Bond::getOrder
+		*/
+		void setOrder(Order bond_order)
+			throw();
+	
+		/** Constant inspection of the bond's order.
+				Access the order of {\em *this} bond.
+				@return      Order - copy of the order of {\em *this} bond
+				@see         Bond::setOrder
+		*/
+		Order getOrder() const
+			throw();
+	
+		/** Change of the bond's type.
+				Change the type of {\em *this} bond to the type {\em bond_type}.
+				@param       bond_type the new type of {\em *this} bond
+				@see         Bond::getType
+		*/
+		void setType(Type bond_type)
+			throw();
+	
+		/** Constant inspection of the bond's type.
+				Access the type of {\em *this} bond.
+				@return      Type - copy of the type of {\em *this} bond
+				@see         Bond::setType
+		*/
+		Type getType() const
+			throw();
+	
+		/** Constant inspection of the bond's length.
+				Access the length of {\em *this} bond.
+				@exception NotBounded if the bond has not two atoms
+				@return      Real - copy of the length of {\em *this} bond
+		*/
+		Real getLength() const
+			throw(NotBounded);
 
-			/** Global mutable inspection of a bond.
-					Access the bond that might connect the atom {\em first} with the atom {\em second}.
-					If no such bond exists 0 is returned. The order of atoms may be arbitrary. Calls \Ref{Atom::getBond}.
-					@return      Bond* -
-											 mutable reference to the bond connecting the atom {\em first} and {\em second},
-											 0 if no such bond exists
-					@see         Atom::getBond
-			*/
-			static Bond* getBond(Atom& first, Atom& second);
+		/** Global mutable inspection of a bond.
+				Access the bond that might connect the atom {\em first} with the atom {\em second}.
+				If no such bond exists 0 is returned. The order of atoms may be arbitrary. Calls \Ref{Atom::getBond}.
+				@return      Bond* -
+										 mutable reference to the bond connecting the atom {\em first} and {\em second},
+										 0 if no such bond exists
+				@see         Atom::getBond
+		*/
+		static Bond* getBond(Atom& first, Atom& second)
+			throw();
 
-			/** Mutable inspection of the bound atom
-					It is tested, if {\em *this} bond connects the two atoms.
-					if this is true a pointer to the bound atom is returned.
-					@param			 atom , its partner is looked for
-					@return      mutable reference to the bound atom
-											 0 if the atom has no bound atom
-			*/
-			Atom* getBoundAtom(const Atom& atom);
+		/** Mutable inspection of the bound atom
+				It is tested, if {\em *this} bond connects the two atoms.
+				if this is true a pointer to the bound atom is returned.
+				@param			 atom , its partner is looked for
+				@return      mutable reference to the bound atom
+										 0 if the atom has no bound atom
+		*/
+		Atom* getBoundAtom(const Atom& atom)
+			throw();
 
-			/** Constant inspection of the bound atom
-					It is tested, if {\em *this} bond connects the two atoms.
-					if this is true a pointer to the bound atom is returned.
-					@param			 atom , its partner is looked for
-					@return      constant reference to the bound atom
-											 0 if the atom has no bound atom
-			*/
-			const Atom* getBoundAtom(const Atom& atom) const;
+		/** Constant inspection of the bound atom
+				It is tested, if {\em *this} bond connects the two atoms.
+				if this is true a pointer to the bound atom is returned.
+				@param			 atom , its partner is looked for
+				@return      constant reference to the bound atom
+										 0 if the atom has no bound atom
+		*/
+		const Atom* getBoundAtom(const Atom& atom) const
+			throw();
 
-			//@}
+		//@}
 
-			/** @name Predicates */
-			//@{ 
+		/** @name Predicates */
+		//@{ 
 
-			/** Determine whether the bond belongs to an atom.
-					Query, if {\em *this} bond connects the atom {\em atom} with another atom.
-					If such a bond exists {\tt true} is returned, {\tt false} otherwise.
-					Calls \Ref{Atom::hasBond}.
-					@param atom the atom that is queried to connect {\em *this} bond to another atom
-					@return  bool -
-									 {\tt true} if bond connects the atom {\em atom} with another atom,
-									 {\tt false} otherwise
-					@see     Atom::hasBond
-			*/
-			bool isBondOf(const Atom& atom) const;
+		/** Determine whether the bond belongs to an atom.
+				Query, if {\em *this} bond connects the atom {\em atom} with another atom.
+				If such a bond exists {\tt true} is returned, {\tt false} otherwise.
+				Calls \Ref{Atom::hasBond}.
+				@param atom the atom that is queried to connect {\em *this} bond to another atom
+				@return  bool -
+								 {\tt true} if bond connects the atom {\em atom} with another atom,
+								 {\tt false} otherwise
+				@see     Atom::hasBond
+		*/
+		bool isBondOf(const Atom& atom) const
+			throw();
 
-			/** Determine whether this bond contains any atom.
-					Query, if {\em *this} bond connects an atom.
-					If such a bond exists {\tt true} is returned, {\tt false} otherwise.
-					@return      bool -
-											 {\tt true} if bond connects the atom {\em atom} with another atom,
-											 {\tt false} otherwise
-					@see         Atom::hasBond
-			*/
-			bool isBound() const;
+		/** Determine whether this bond contains any atom.
+				Query, if {\em *this} bond connects an atom.
+				If such a bond exists {\tt true} is returned, {\tt false} otherwise.
+				@return      bool -
+										 {\tt true} if bond connects the atom {\em atom} with another atom,
+										 {\tt false} otherwise
+				@see         Atom::hasBond
+		*/
+		bool isBound() const
+			throw();
 
-			/** Determine whether the bond connects two fragments.
-					Query, if {\em *this} bond connects its two atoms within a common parent \Ref{Composite} instance.
-					If {\em *this} bond is intermolecular {\tt true} is returned, {\tt false} otherwise.
-					Calls \Ref{Composite::getRoot}.
-					@return      bool -
-											 {\tt true} if {\em *this} bond is intermolecular
-											 {\tt false} otherwise
-					@see         Composite::getRoot
-			*/
-			bool isInterBond() const;
+		/** Determine whether the bond connects two fragments.
+				Query, if {\em *this} bond connects its two atoms within a common parent \Ref{Composite} instance.
+				If {\em *this} bond is intermolecular {\tt true} is returned, {\tt false} otherwise.
+				Calls \Ref{Composite::getRoot}.
+				@return      bool -
+										 {\tt true} if {\em *this} bond is intermolecular
+										 {\tt false} otherwise
+				@see         Composite::getRoot
+		*/
+		bool isInterBond() const
+			throw();
 
-			/** Request for the intermolecular bonding of {\em *this} bond within {\em atom_container}.
-					Query, if {\em *this} bond connects its two atoms within the common parent {\em atom_container} instance.
-					If {\em *this} bond is intermolecular {\tt true} is returned, {\tt false} otherwise.
-					Calls \Ref{Composite::isDescendantOf}.
-					@param  	atom_container the queried parent fragment.
-					@return  	bool -
-									 	{\tt true} if {\em *this} bond is intermolecular
-									 	{\tt false} otherwise
-					@see      Composite::isDescendantOf
-			*/
-			bool isInterBondOf(const AtomContainer& atom_container) const;
+		/** Request for the intermolecular bonding of {\em *this} bond within {\em atom_container}.
+				Query, if {\em *this} bond connects its two atoms within the common parent {\em atom_container} instance.
+				If {\em *this} bond is intermolecular {\tt true} is returned, {\tt false} otherwise.
+				Calls \Ref{Composite::isDescendantOf}.
+				@param  	atom_container the queried parent fragment.
+				@return  	bool -
+									{\tt true} if {\em *this} bond is intermolecular
+									{\tt false} otherwise
+				@see      Composite::isDescendantOf
+		*/
+		bool isInterBondOf(const AtomContainer& atom_container) const
+			throw();
 
-			/** Request for the intermolecular bonding of {\em *this} bond within {\em system}.
-					Query, if {\em *this} bond connects its two atoms within the common parent {\em system} instance.
-					If {\em *this} bond is intermolecular {\tt true} is returned, {\tt false} otherwise.
-					Calls \Ref{Composite::isDescendantOf}.
-		
-					@param 	system the queried parent system.
-					@return	bool -
-								 	{\tt true} if {\em *this} bond is intermolecular
-					 				{\tt false} otherwise
-					@see    Composite::isDescendantOf
-			*/
-			bool isInterBondOf(const System& system) const;
+		/** Request for the intermolecular bonding of {\em *this} bond within {\em system}.
+				Query, if {\em *this} bond connects its two atoms within the common parent {\em system} instance.
+				If {\em *this} bond is intermolecular {\tt true} is returned, {\tt false} otherwise.
+				Calls \Ref{Composite::isDescendantOf}.
+	
+				@param 	system the queried parent system.
+				@return	bool -
+								{\tt true} if {\em *this} bond is intermolecular
+								{\tt false} otherwise
+				@see    Composite::isDescendantOf
+		*/
+		bool isInterBondOf(const System& system) const
+			throw();
 
-			/**	Request for the intramolecular bonding of {\em *this} bond.
-					Query, if {\em *this} bond connects its two atoms within a common parent \Ref{Composite} instance.
-					If {\em *this} bond is intramolecular {\tt true} is returned, {\tt false} otherwise.
-					Calls \Ref{Composite::getRoot}.
-		
-					@return      bool -
-											 {\tt true} if {\em *this} bond is intramolecular
-											 {\tt false} otherwise
-					@see         Composite::getRoot
-			*/
-			bool isIntraBond() const;
+		/**	Request for the intramolecular bonding of {\em *this} bond.
+				Query, if {\em *this} bond connects its two atoms within a common parent \Ref{Composite} instance.
+				If {\em *this} bond is intramolecular {\tt true} is returned, {\tt false} otherwise.
+				Calls \Ref{Composite::getRoot}.
+	
+				@return      bool -
+										 {\tt true} if {\em *this} bond is intramolecular
+										 {\tt false} otherwise
+				@see         Composite::getRoot
+		*/
+		bool isIntraBond() const
+			throw();
 
-			/** Request for the intramolecular bonding of {\em *this} bond within {\em atom_container}.
-					Query, if {\em *this} bond connects its two atoms within the common parent {\em atom_container} instance.
-					If {\em *this} bond is intramolecular {\tt true} is returned, {\tt false} otherwise.
-					Calls \Ref{Composite::isDescendantOf}.
-		
-					@param       atom_container the queried parent fragment.
-					@return      bool -
-											 {\tt true} if {\em *this} bond is intramolecular
-											 {\tt false} otherwise
-					@see         Composite::isDescendantOf
-			*/
-			bool isIntraBondOf(const AtomContainer& atom_container) const;
+		/** Request for the intramolecular bonding of {\em *this} bond within {\em atom_container}.
+				Query, if {\em *this} bond connects its two atoms within the common parent {\em atom_container} instance.
+				If {\em *this} bond is intramolecular {\tt true} is returned, {\tt false} otherwise.
+				Calls \Ref{Composite::isDescendantOf}.
+	
+				@param       atom_container the queried parent fragment.
+				@return      bool -
+										 {\tt true} if {\em *this} bond is intramolecular
+										 {\tt false} otherwise
+				@see         Composite::isDescendantOf
+		*/
+		bool isIntraBondOf(const AtomContainer& atom_container) const
+			throw();
 
-			/** Request for the intramolecular bonding of {\em *this} bond within {\em system}.
-					Query, if {\em *this} bond connects its two atoms within the common parent {\em system} instance.
-					If {\em *this} bond is intramolecular {\tt true} is returned, {\tt false} otherwise.
-					Calls \Ref{Composite::isDescendantOf}.
-		
-					@param 		system the queried parent system.
-					@return   bool -
-										{\tt true} if {\em *this} bond is intramolecular
-										{\tt false} otherwise
-					@see         Composite::isDescendantOf
-			*/
-			bool isIntraBondOf(const System& system) const;
+		/** Request for the intramolecular bonding of {\em *this} bond within {\em system}.
+				Query, if {\em *this} bond connects its two atoms within the common parent {\em system} instance.
+				If {\em *this} bond is intramolecular {\tt true} is returned, {\tt false} otherwise.
+				Calls \Ref{Composite::isDescendantOf}.
+	
+				@param 		system the queried parent system.
+				@return   bool -
+									{\tt true} if {\em *this} bond is intramolecular
+									{\tt false} otherwise
+				@see      Composite::isDescendantOf
+		*/
+		bool isIntraBondOf(const System& system) const
+			throw();
 
-			//@}
+		//@}
 
-			/** @name Debuggers and diagnostics */
-			//@{ 
+		/** @name Debuggers and diagnostics */
+		//@{ 
 
-			/** Internal state and consistency self-validation.
-					Initiate self-validation of the internal state and data structure consistencies of {\em *this} bond.
-					If the internal state of {\em *this} bond is correct (self-validated) and consistent {\tt true} 
-					is returned,{\tt false} otherwise. 
-		
-					@return      bool -
-											 {\tt true} if the internal state of {\em *this} bond is correct (self-validated)
-											 and consistent, {\tt false} otherwise
-			*/
-			virtual bool isValid() const;
+		/** Internal state and consistency self-validation.
+				Initiate self-validation of the internal state and data structure consistencies of {\em *this} bond.
+				If the internal state of {\em *this} bond is correct (self-validated) and consistent {\tt true} 
+				is returned,{\tt false} otherwise. 
+	
+				@return      bool -
+										 {\tt true} if the internal state of {\em *this} bond is correct (self-validated)
+										 and consistent, {\tt false} otherwise
+		*/
+		virtual bool isValid() const
+			throw();
 
-			/** Internal state dump.
-					Dump the current internal state of {\em *this} bond to the output ostream {\em s}
-					with dumping depth {\em depth}.
-		
-					@param	s output stream where to output the internal state of {\em *this} bond
-					@param  depth the dumping depth
-			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
-				throw();
-		
-			//@}
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} bond to the output ostream {\em s}
+				with dumping depth {\em depth}.
+	
+				@param	s output stream where to output the internal state of {\em *this} bond
+				@param  depth the dumping depth
+		*/
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+			throw();
+	
+		//@}
 
 		protected:
 		
 		private:
 
-			void arrangeBonds_();
+			void arrangeBonds_()
+				throw();
 
-			void clear_();
+			void clear_()
+				throw();
 
 			//_ first atom of the bond (bond owner)
-			Atom* first_;
+			Atom*		first_;
 
 			//_ second atom
-			Atom* second_;
+			Atom*		second_;
 
 			//_ bond name
-			String name_;
+			String	name_;
 
 			//_ bond order
-			Order bond_order_;
+			Order		bond_order_;
 
 			//_ bond type
-			Type bond_type_;
+			Type		bond_type_;
 	};
 
 } // namespace BALL

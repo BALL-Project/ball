@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.C,v 1.5 2000/12/11 21:14:49 oliver Exp $
+// $Id: nucleicAcid.C,v 1.6 2000/12/16 21:29:22 amoll Exp $
 
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/global.h>
@@ -9,18 +9,21 @@ namespace BALL
 {
 
 	NucleicAcid::NucleicAcid()
+		throw()
 		:	Molecule(),
 			id_(BALL_NUCLEICACID_DEFAULT_ID)
 	{
 	}
 
 	NucleicAcid::NucleicAcid(const NucleicAcid& nucleic_acid, bool deep)
+		throw()
 		:	Molecule(nucleic_acid, deep),
 			id_(nucleic_acid.id_)
 	{
 	}
 		
 	NucleicAcid::NucleicAcid(const String& name,const String& id)
+		throw()
 		:	Molecule(name),
 			id_(id)
 	{
@@ -36,19 +39,18 @@ namespace BALL
 		throw()
 	{
 		Molecule::clear();
-
-		clear_();
+		id_ = BALL_NUCLEICACID_DEFAULT_ID;
 	}
 		
 	void NucleicAcid::destroy()
 		throw()
 	{
 		Molecule::destroy();
-
-		clear_();
+		id_ = BALL_NUCLEICACID_DEFAULT_ID;
 	}
 		
 	void NucleicAcid::persistentWrite(PersistenceManager& pm, const char* name) const
+		throw()
 	{
 		pm.writeObjectHeader(this, name);
 			Molecule::persistentWrite(pm);
@@ -57,6 +59,7 @@ namespace BALL
 	}
 
 	void NucleicAcid::persistentRead(PersistenceManager& pm)
+		throw()
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Molecule>());
 			Molecule::persistentRead(pm);
@@ -64,34 +67,35 @@ namespace BALL
 		pm.readPrimitive(id_, "id_");
 	}
 
-
 	void NucleicAcid::set(const NucleicAcid& nucleic_acid, bool deep)
+		throw()
 	{
 		Molecule::set(nucleic_acid, deep);
-
 		id_ = nucleic_acid.id_;
 	}
 			
-	NucleicAcid& NucleicAcid::operator =(const NucleicAcid &nucleic_acid)
+	const NucleicAcid& NucleicAcid::operator =(const NucleicAcid &nucleic_acid)
+		throw()
 	{
 		set(nucleic_acid);
-
 		return *this;
 	}
 
 	void NucleicAcid::get(NucleicAcid &nucleic_acid, bool deep) const
+		throw()
 	{
 		nucleic_acid.set(*this, deep);
 	}
 			
 	void NucleicAcid::swap(NucleicAcid& nucleic_acid)
+		throw()
 	{
 		Molecule::swap(nucleic_acid);
-
 		id_.swap(nucleic_acid.id_);
 	}
 
 	Nucleotide* NucleicAcid::getNucleotide(Position position)
+		throw()
 	{
 		for (NucleotideIterator Nucleotide_it = beginNucleotide(); !Nucleotide_it.isEnd(); ++Nucleotide_it)
 		{
@@ -105,42 +109,50 @@ namespace BALL
 	}
 
 	const Nucleotide* NucleicAcid::getNucleotide(Position position) const
+		throw()
 	{
 		return ((NucleicAcid *)this)->getNucleotide(position);
 	}
 		
 
 	Nucleotide* NucleicAcid::get3Prime()
+		throw()
 	{
 		return getNucleotide(0);
 	}
 		
 	const Nucleotide* NucleicAcid::get3Prime() const
+		throw()
 	{
 		return getNucleotide(0);
 	}
 
 	Nucleotide* NucleicAcid::get5Prime()
+		throw()
 	{
 		return getNucleotide(countNucleotides()-1);
 	}
 		
 	const Nucleotide* NucleicAcid::get5Prime() const
+		throw()
 	{
 		return getNucleotide(countNucleotides()-1);
 	}
 
 	void NucleicAcid::setID(const String& id)
+		throw()
 	{
 		id_ = id;
 	}
 
 	const String& NucleicAcid::getID() const
+		throw()
 	{
 		return id_;
 	}
 
 	Size NucleicAcid::countNucleotides() const
+		throw()
 	{
 		Size size = 0;
 
@@ -153,14 +165,9 @@ namespace BALL
 	}
 
 	bool NucleicAcid::isValid() const
+		throw()
 	{ 
-		if (Molecule::isValid() == false
-				|| id_.isValid() == false)
-		{
-			return false;
-		}
-
-		return true;
+		return (Molecule::isValid() && id_.isValid());
 	}
 
 	void	NucleicAcid::dump(ostream& s, Size depth) const
@@ -177,18 +184,15 @@ namespace BALL
 	}
 
 	void NucleicAcid::read(istream& /* s */)
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	void NucleicAcid::write(ostream&  /* s */) const
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
-	}
-
-	void NucleicAcid::clear_()
-	{
-		id_ = BALL_NUCLEICACID_DEFAULT_ID;
 	}
 
 } // namespace BALL

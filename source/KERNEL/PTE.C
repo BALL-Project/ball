@@ -1,4 +1,4 @@
-// $Id: PTE.C,v 1.8 2000/12/11 21:14:47 oliver Exp $
+// $Id: PTE.C,v 1.9 2000/12/16 21:29:22 amoll Exp $
 
 #include <BALL/KERNEL/PTE.h>
 
@@ -13,8 +13,8 @@ using namespace std;
 namespace BALL 
 {
 
-	extern "C" int PTEcompare_
-		(const void* a_ptr, const void* b_ptr)
+	extern "C" int PTEcompare_(const void* a_ptr, const void* b_ptr)
+		throw()
 	{
 		return strcmp(((PTE_::SymbolToElement*)a_ptr)->symbol,
 									((PTE_::SymbolToElement*)b_ptr)->symbol);
@@ -23,7 +23,6 @@ namespace BALL
 
 	Element Element::UNKNOWN
 						("Unknown",                  "?",         0,    0,       0,       0.0,       0.0,   0.0,  0.0,  0.0);
-
 
 
 	Element PTE_::element_[] =
@@ -259,7 +258,7 @@ namespace BALL
 		{"ZR",  &PTE_::element_[Element::ZIRCONIUM]}
 	};
 
-	Element *PTE_::atomic_number_to_element_[] = 
+	Element* PTE_::atomic_number_to_element_[] = 
 	{
 		&PTE_::element_[Element::HYDROGEN],
 		&PTE_::element_[Element::HELIUM],
@@ -376,6 +375,7 @@ namespace BALL
 	};
 
 	Element::Element()
+		throw()
 		:	name_(BALL_ELEMENT_NAME_DEFAULT),
 			symbol_(BALL_ELEMENT_SYMBOL_DEFAULT),
 			group_(BALL_ELEMENT_GROUP_DEFAULT),
@@ -390,6 +390,7 @@ namespace BALL
 	}
 
 	Element::Element(const Element& element)
+		throw()
 			:	PropertyManager(),
 				name_(element.name_),
 				symbol_(element.symbol_),
@@ -404,7 +405,6 @@ namespace BALL
 	{
 	}
 
-
 	Element::Element
 		(const String& name,
 		 const String& symbol,
@@ -416,6 +416,7 @@ namespace BALL
 		 float covalent_radius,
 		 float van_der_waals_radius,
 		 float electronegativity)
+		throw()
 		:	name_(name),
 			symbol_(symbol),
 			group_(group),
@@ -429,13 +430,13 @@ namespace BALL
 	{
 	}
 
-
 	Element::~Element()
 		throw()
 	{
 	}
 
 	ostream& operator <<(ostream& s, const Element& element)
+		throw()
 	{
 		s	<< element.name_ << ' '
 			<< element.symbol_ << ' '
@@ -454,10 +455,12 @@ namespace BALL
 
 
 	PTE_::PTE_()
+		throw()
 	{
 	}
 
 	PTE_::PTE_(const PTE_& pte)
+		throw()
 		:	PropertyManager(pte)
 	{
 		// no nonstatic members to copy
@@ -469,6 +472,7 @@ namespace BALL
 	}
 
 	Element& PTE_::getElement(Position position)
+		throw()
 	{
 		return ((position < Element::NUMBER_OF_ELEMENTS)
 						 ? element_[position]
@@ -476,6 +480,7 @@ namespace BALL
 	}
  
 	Element& PTE_::getElement(const String& symbol)
+		throw()
 	{
 		if (symbol.isEmpty() == true)
 		{
@@ -489,17 +494,20 @@ namespace BALL
 		{
 			symbol_buffer[0] = toupper(symbol[0]);
 		} 
-		else if (symbol.size() == 2)
-		{
-			symbol_buffer[0] = toupper(symbol[0]);
-			symbol_buffer[1] = toupper(symbol[1]);
-		} 
 		else 
 		{
-			symbol_buffer[0] = toupper(symbol[0]);
-			symbol_buffer[1] = toupper(symbol[1]);
-			symbol_buffer[2] = toupper(symbol[2]);
-		};
+			if (symbol.size() == 2)
+			{
+				symbol_buffer[0] = toupper(symbol[0]);
+				symbol_buffer[1] = toupper(symbol[1]);
+			} 
+			else 
+			{
+				symbol_buffer[0] = toupper(symbol[0]);
+				symbol_buffer[1] = toupper(symbol[1]);
+				symbol_buffer[2] = toupper(symbol[2]);
+			}
+		}
 
 		SymbolToElement* result = (SymbolToElement*)::bsearch 
 			((const void*)&compare, 
@@ -517,18 +525,23 @@ namespace BALL
 	}
 
 	bool PTE_::apply(UnaryProcessor<Element>& processor)
+		throw()
 	{
 		if (processor.start() == false)
+		{
 			return false;
+		}
 
 		Processor::Result result;
 
-		for (register Position position = 0; position < Element::NUMBER_OF_ELEMENTS; ++position)
+		for (Position position = 0; position < Element::NUMBER_OF_ELEMENTS; ++position)
 		{
 			result = processor(element_[position]);
 
 			if (result <= Processor::BREAK)
+			{
 				return (result == Processor::BREAK) ? true : false;
+			}
 		}
 
 		return processor.finish();

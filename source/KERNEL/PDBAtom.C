@@ -1,4 +1,4 @@
-// $Id: PDBAtom.C,v 1.7 2000/12/11 21:14:47 oliver Exp $
+// $Id: PDBAtom.C,v 1.8 2000/12/16 21:29:22 amoll Exp $
 
 #include <BALL/KERNEL/PDBAtom.h>
 
@@ -12,6 +12,7 @@ namespace BALL
 {
 
 	PDBAtom::PDBAtom()
+		throw()
 		:	Atom(),
 			branch_designator_(BALL_PDBATOM_DEFAULT_BRANCH_DESIGNATOR),
 			remoteness_indicator_(BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR),
@@ -22,6 +23,7 @@ namespace BALL
 	}
 		
 	PDBAtom::PDBAtom(const PDBAtom& pdb_atom, bool deep)
+		throw()
 		:	Atom(pdb_atom, deep),
 			branch_designator_(pdb_atom.branch_designator_),
 			remoteness_indicator_(pdb_atom.remoteness_indicator_),
@@ -32,12 +34,12 @@ namespace BALL
 	}
 
 	PDBAtom::PDBAtom
-		(Element& element,
-		 const String& name,
+		(Element& element, 
+		 const String& name, 
 		 const String& type_name,
 		 Atom::Type atom_type,
-		 const Vector3& position,
-		 const Vector3& velocity,
+		 const Vector3& position, 
+		 const Vector3& velocity, 
 		 const Vector3& force,
 		 float charge,
 		 float radius,
@@ -46,8 +48,8 @@ namespace BALL
 		 char alternate_location_indicator,
 		 float occupancy,
 		 float temperature_factor)
-		:	Atom(element, name, type_name, atom_type,
-				 position, velocity, force, charge, radius),
+		throw()
+		:	Atom(element, name, type_name, atom_type, position, velocity, force, charge, radius),
 			branch_designator_(branch_designator),
 			remoteness_indicator_(remoteness_indicator),
 			alternate_location_indicator_(alternate_location_indicator),
@@ -57,6 +59,7 @@ namespace BALL
 	}
 		
 	PDBAtom::PDBAtom(const String& name)
+		throw()
 		:	Atom(),
 			branch_designator_(BALL_PDBATOM_DEFAULT_BRANCH_DESIGNATOR),
 			remoteness_indicator_(BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR),
@@ -77,7 +80,6 @@ namespace BALL
 		throw()
 	{
 		Atom::clear();
-
 		clear_();
 	}
 		
@@ -85,11 +87,11 @@ namespace BALL
 		throw()
 	{
 		Atom::destroy();
-
 		clear_();
 	}
 
 	void PDBAtom::persistentWrite(PersistenceManager& pm, const char* name) const	
+		throw()
 	{
 		pm.writeObjectHeader(this, name);
 			Atom::persistentWrite(pm);
@@ -102,6 +104,7 @@ namespace BALL
 	}
 
 	void PDBAtom::persistentRead(PersistenceManager& pm)
+		throw()
 	{
 		pm.checkObjectHeader(RTTI::getStreamName<Atom>());
 			Atom::persistentRead(pm);
@@ -114,8 +117,8 @@ namespace BALL
 		pm.readPrimitive(temperature_factor_, "temperature_factor_");		
 	}
  
-
 	void PDBAtom::set(const PDBAtom& pdb_atom, bool deep)
+		throw()
 	{
 		Atom::set(pdb_atom, deep);
 
@@ -126,19 +129,21 @@ namespace BALL
 		temperature_factor_ = pdb_atom.temperature_factor_;
 	}
 			
-	PDBAtom& PDBAtom::operator =(const PDBAtom& pdb_atom)
+	const PDBAtom& PDBAtom::operator =(const PDBAtom& pdb_atom)
+		throw()
 	{
 		set(pdb_atom);
-
 		return *this;
 	}
 
 	void PDBAtom::get(PDBAtom& pdb_atom, bool deep) const
+		throw()
 	{
 		pdb_atom.set(*this, deep);
 	}
 			
 	void PDBAtom::swap(PDBAtom& pdb_atom)
+		throw()
 	{
 		Atom::swap(pdb_atom);
 
@@ -164,6 +169,7 @@ namespace BALL
 	}
 		
 	Protein* PDBAtom::getProtein()
+		throw()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
@@ -178,11 +184,13 @@ namespace BALL
 	}
 
 	const Protein* PDBAtom::getProtein() const
+		throw()
 	{
 		return ((PDBAtom *)this)->getProtein();
 	}
 
 	Chain* PDBAtom::getChain()
+		throw()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
@@ -197,11 +205,13 @@ namespace BALL
 	}
 
 	const Chain* PDBAtom::getChain() const
+		throw()
 	{
 		return ((PDBAtom *)this)->getChain();
 	}
 
 	Residue* PDBAtom::getResidue()
+		throw()
 	{
 		for (Composite::AncestorIterator ancestor_it = beginAncestor();
 				 !ancestor_it.isEnd(); ++ancestor_it)
@@ -216,56 +226,67 @@ namespace BALL
 	}
 
 	const Residue* PDBAtom::getResidue() const
+		throw()
 	{
 		return ((PDBAtom *)this)->getResidue();
 	}
 
 	void PDBAtom::setBranchDesignator(char branch_designator)
+		throw()
 	{
 		branch_designator_ = branch_designator;
 	}
 
 	char PDBAtom::getBranchDesignator() const
+		throw()
 	{
 		return branch_designator_;
 	}
 
 	void PDBAtom::setRemotenessIndicator(char remoteness_indicator)
+		throw()
 	{
 		remoteness_indicator_ = remoteness_indicator;
 	}
 
 	char PDBAtom::getRemotenessIndicator() const
+		throw()
 	{
 		return remoteness_indicator_;
 	}
 
 	void PDBAtom::setAlternateLocationIndicator(char alternate_location_indicator)
+		throw()
 	{
 		alternate_location_indicator_ = alternate_location_indicator;
 	}
 
 	char PDBAtom::getAlternateLocationIndicator() const
+		throw()
 	{
 		return alternate_location_indicator_;
 	}
 
 	void PDBAtom::setOccupancy(float occupancy)
+		throw()
 	{
 		occupancy_ = occupancy;
 	}
 
 	float PDBAtom::getOccupancy() const
+		throw()
 	{
 		return occupancy_;
 	}
 
 	void PDBAtom::setTemperatureFactor(float temperature_factor)
+		throw()
 	{
 		temperature_factor_ = temperature_factor;
 	}
 
 	float PDBAtom::getTemperatureFactor() const
+		throw()
 	{
 		return temperature_factor_;
 	}
@@ -284,17 +305,19 @@ namespace BALL
 	}
 
 	void PDBAtom::read(istream & /* s */)
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
-
 	void PDBAtom::write(ostream& /* s */) const
+		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	void PDBAtom::clear_()
+		throw()
 	{
 		branch_designator_						= BALL_PDBATOM_DEFAULT_BRANCH_DESIGNATOR;
 		remoteness_indicator_					= BALL_PDBATOM_DEFAULT_REMOTENESS_INDICATOR;
