@@ -1,4 +1,4 @@
-// $Id: BinarySearchTree_test.C,v 1.9 2000/08/06 18:01:23 amoll Exp $
+// $Id: BinarySearchTree_test.C,v 1.10 2000/08/07 12:54:47 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,6 +6,7 @@
 #include <BALL/DATATYPE/binarySearchTree.h>
 #include <iostream>
 #include <BALL/CONCEPT/comparator.h>
+#include <BALL/DATATYPE/list.h>
 ///////////////////////////
 
 using namespace BALL;
@@ -60,8 +61,8 @@ class ItemCollector	: public UnaryProcessor<DataType>
 	}
 
 	private:
-	list<DataType*>	list_;
-	list<DataType*>::iterator list_it_;
+	List<DataType*>	list_;
+	List<DataType*>::iterator list_it_;
 };
 
 
@@ -98,7 +99,7 @@ void initialize_()
 	rrright_ = TBSTreeItem<int>(8, 0, 0, BSTreeItem::BLACK);
 }
 
-START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.9 2000/08/06 18:01:23 amoll Exp $")
+START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.10 2000/08/07 12:54:47 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -119,6 +120,8 @@ CHECK(BSTreeItem(BSTreeItem* left_item, BSTreeItem* right_item, char color = BST
   BSTreeItem* item;
   BSTreeItem* item2;
   BSTreeItem* item3;
+	item2 = new BSTreeItem(0, 0, BSTreeItem::RED);
+	item3 = new BSTreeItem(0, 0, BSTreeItem::RED);
 	item = new BSTreeItem(item2, item3, BSTreeItem::RED);
 	TEST_NOT_EQUAL(item, 0)
 	TEST_EQUAL(item->getLeftChild(), item2)
@@ -466,7 +469,7 @@ CHECK(detachMinimum(BSTreeItem*& root))
 RESULT
 
 CHECK(detachMaximum(BSTreeItem*& root))
-	//BSTreeItem* root = &item;
+//	BSTreeItem* root = &item;
 //	TEST_EQUAL(item.detachMaximum(root), &rrright) 
 //warum pointer angeben???
 // =>segfault
@@ -491,7 +494,7 @@ CHECK(detachMaximum(BSTreeItem*& root))
 RESULT
 }
 // tests for class TBSTreeItem::
-
+{
 TBSTreeItem<int>* tbsitem;
 CHECK(TBSTreeItem())
 	tbsitem = new TBSTreeItem<int>;
@@ -569,7 +572,7 @@ CHECK(setRightChild())
 RESULT
 
 CHECK(count(const DataType& data, const Comparator<DataType>* comparator))
-	initialize_();
+	initialize_();	// warum umbedingt Comparator notwendig ???
 	Comparator<int>* comp;
 	TEST_EXCEPTION(Exception::NullPointer, item_.count(1, 0))
 	comp = new Comparator<int>();
@@ -624,41 +627,80 @@ RESULT
 CHECK(apply)
   //BAUSTELLE
 RESULT
+}
+// tests for class BSTreeIterator::
 
-// tests for class TBSTreeItem::TreeItemProcessor_::
+BSTreeIterator* it;
 
-CHECK(TBSTreeItem::TreeItemProcessor_::TreeItemProcessor_(UnaryProcessor<DataType>* processor = 0))
-  //BAUSTELLE
+CHECK(BSTreeIterator::BSTreeIterator(const BSTreeItem* item = 0, WalkOrder walk_order = BSTreeIterator::WALK_ORDER__PREORDER))
+	it = new BSTreeIterator();
+	TEST_NOT_EQUAL(it, 0)
+	it = new BSTreeIterator(&item, BSTreeIterator::WALK_ORDER__PREORDER);
+	TEST_NOT_EQUAL(it, 0)
 RESULT
 
-CHECK(TBSTreeItem::TreeItemProcessor_::Processor::Result operator () (BSTreeItem& item))
-  //BAUSTELLE
+CHECK(BSTreeIterator::BSTreeIterator(const BSTreeIterator& iterator))
+	BSTreeIterator* it2;
+	it2 = new BSTreeIterator(*it);
+	TEST_NOT_EQUAL(it2, 0)
 RESULT
 
-// tests for class TBSTreeItem::BSTreeIterator::
-
-CHECK(TBSTreeItem::BSTreeIterator::BSTreeIterator(const BSTreeItem* item = 0, WalkOrder walk_order = BSTreeIterator::WALK_ORDER__PREORDER))
-  //BAUSTELLE
+CHECK(BSTreeIterator::~BSTreeIterator())
+	BSTreeIterator* it2;
+	it2 = new BSTreeIterator(&item, BSTreeIterator::WALK_ORDER__PREORDER);
+  delete it2;
 RESULT
 
-CHECK(TBSTreeItem::BSTreeIterator::BSTreeIterator(const BSTreeIterator& iterator))
-  //BAUSTELLE
-RESULT
-
-CHECK(TBSTreeItem::BSTreeIterator::~BSTreeIterator())
-  //BAUSTELLE
-RESULT
+BSTreeIterator it2;
 
 CHECK(TBSTreeItem::set(const BSTreeIterator& iterator))
-  //BAUSTELLE
+	it2.set(*it);
+RESULT
+
+CHECK(TBSTreeItem::set(const BSTreeItem* item, WalkOrder walk_order = BSTreeIterator::WALK_ORDER__PREORDER))
+	it2.set(&item);
+RESULT
+
+CHECK(BSTreeIterator& operator = (const BSTreeIterator& iterator))
+	it2 = *it;
+RESULT
+
+CHECK(clear())
+	it2 = *it;
+	it2.clear();
 RESULT
 
 CHECK(TBSTreeItem::forward())
-  //BAUSTELLE
+	TEST_EQUAL(it->forward(), &left)
+	it = new BSTreeIterator(&item, BSTreeIterator::WALK_ORDER__INORDER);
+	TEST_EQUAL(it->forward(), &left)
+	it = new BSTreeIterator(&item, BSTreeIterator::WALK_ORDER__POSTORDER);
+	TEST_EQUAL(it->forward(), &left)
+	it = new BSTreeIterator(&item, BSTreeIterator::WALK_ORDER__LEVELORDER);
+	TEST_EQUAL(it->forward(), &left)
 RESULT
 
 CHECK(TBSTreeItem::bool operator == (const BSTreeIterator& iterator) const )
-  //BAUSTELLE
+	it2.set(*it);
+	TEST_EQUAL(*it == it2, true)
+	it2 = BSTreeIterator(&item, BSTreeIterator::WALK_ORDER__LEVELORDER);
+	TEST_EQUAL(*it == it2, false)
+	it = new BSTreeIterator(&item, BSTreeIterator::WALK_ORDER__INORDER); // Segfault ???
+
+/*	TEST_EQUAL(it->forward(), &left)
+	it2 = BSTreeIterator(&item, BSTreeIterator::WALK_ORDER__LEVELORDER);
+	TEST_EQUAL(*it == it2, false)*/
+RESULT
+
+CHECK(TBSTreeItem::bool operator != (const BSTreeIterator& iterator) const )/*
+	it2.set(*it);
+	TEST_EQUAL(*it != it2, false)
+	it2 = BSTreeIterator(&item, BSTreeIterator::WALK_ORDER__LEVELORDER);
+	TEST_EQUAL(*it != it2, true)
+	it = new BSTreeIterator(&item, BSTreeIterator::WALK_ORDER__INORDER);
+	it->forward();
+	it2 = BSTreeIterator(&item, BSTreeIterator::WALK_ORDER__LEVELORDER);
+	TEST_EQUAL(*it != it2, true)*/
 RESULT
 
 // tests for class TBSTreeIterator::
