@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.C,v 1.23 2003/06/11 08:10:02 oliver Exp $ 
+// $Id: options.C,v 1.24 2003/06/27 16:30:47 amoll Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -32,7 +32,7 @@ namespace BALL
 
 	Options::Options(const Options& options, bool deep)
 	 throw()
-		:	StringHashMap<String>(options, deep),
+		:	StringHashMap<String>(options),
 			name_(options.name_)
 	{
 	}
