@@ -1,4 +1,4 @@
-// $Id: bruker2DFile.C,v 1.10 2000/12/11 21:16:00 oliver Exp $
+// $Id: bruker2DFile.C,v 1.11 2000/12/18 12:18:48 anker Exp $
 
 #include <BALL/FORMAT/bruker2DFile.h>
 
@@ -6,11 +6,13 @@ using namespace std;
 
 namespace BALL
 {
-         Bruker2D::Bruker2D() : File()
-        {
+	Bruker2D::Bruker2D() 
+		: File()
+	{
 	}
 
-	Bruker2D::Bruker2D( const String& name, OpenMode open_mode ) : File( name+"/2rr", open_mode )
+	Bruker2D::Bruker2D( const String& name, OpenMode open_mode ) 
+		: File( name+"/2rr", open_mode )
 	{
 		parsf1_ = new JCAMPFile( name + "/proc2s" );
 		parsf2_ = new JCAMPFile( name + "/procs"  );
@@ -22,28 +24,33 @@ namespace BALL
 		maxx_ = (int) parsf2_->parameter( "YMAX_p" );
 	}
 
-	Bruker2D::Bruker2D( const Bruker2D& file ) : File( file )
+	Bruker2D::Bruker2D( const Bruker2D& file ) 
+		: File( file )
 	{
 	}
 
 	Bruker2D::~Bruker2D()
 	{
 		if (parsf1_)
+		{
 			delete parsf1_;
+		}
 		if (parsf2_)
+		{
 			delete parsf2_;
+		}
 	}
 
-        void Bruker2D::read(const String& name)
-        {
-	  parsf1_ = new JCAMPFile( name + "/proc2s" );
-	  parsf2_ = new JCAMPFile( name + "/procs"  );
-	  parsf1_->read();
-	  parsf2_->read();
-	  miny_ = (int) parsf1_->parameter( "YMIN_p" );
-	  maxy_ = (int) parsf1_->parameter( "YMAX_p" );
-	  minx_ = (int) parsf2_->parameter( "YMIN_p" );
-	  maxx_ = (int) parsf2_->parameter( "YMAX_p" );
+	void Bruker2D::read(const String& name)
+	{
+		parsf1_ = new JCAMPFile( name + "/proc2s" );
+		parsf2_ = new JCAMPFile( name + "/procs"  );
+		parsf1_->read();
+		parsf2_->read();
+		miny_ = (int) parsf1_->parameter( "YMIN_p" );
+		maxy_ = (int) parsf1_->parameter( "YMAX_p" );
+		minx_ = (int) parsf2_->parameter( "YMIN_p" );
+		maxx_ = (int) parsf2_->parameter( "YMAX_p" );
 		
 	  close();
 	  open(name+"/2rr");
@@ -53,7 +60,7 @@ namespace BALL
 	void Bruker2D::read()
 	{
 	  char c[4];
-	  signed long int &numdum = *(signed long int*) (&c[0]);
+		signed long int &numdum = *(signed long int*) (&c[0]);
 	  int actMat, actMatF1, actMatF2;
 	  int matNumF1, matNumF2, f1, f2;
 	  File& f = static_cast<File&> (*this);
@@ -61,12 +68,15 @@ namespace BALL
 	  bool littleEndian;
 	  double a, b;
 
-	  // first we will have to find out whether we are using big or little endian on this machine.
+		// first we will have to find out whether we are using big or little
+		// endian on this machine.
 	  int endTest = 1;
 	  if (*(char *) &endTest == 1)
 	  {
 	    littleEndian = true;
-	  } else {
+	  } 	
+		else
+		{
 	    littleEndian = false;
 	  };
 
@@ -101,42 +111,54 @@ namespace BALL
 	  matNumF2 = (int) (SIF2_ / XDIMF2_); // Number of matrices in x - direction
 	  matNumF1 = (int) (SIF1_ / XDIMF1_); // Number of matrices in y - direction
 	  
-	  for ( actMat=0; actMat < matNumF2 * matNumF1; actMat++ ) { // Walk through all submatrices
-	    for ( f1 = 0; f1 < XDIMF1_; f1++ ) {   // for each matrix: look at every row
-	      for ( f2 = 0; f2 < XDIMF2_; f2++ ) { // look at every column
-		if (!f.good()) {
-		  break;
-		};
-		
-		f.read(c, 4);
-		if ( parsf1_->parameter( "BYTORDP" ) == 1 ) {
-		  if (littleEndian == true) // no conversion needed;
-		  {
-		  } else { // conversion from little to big
-		    numdum = ( ((numdum & 0x000000FFL) << 24)
-              		      |((numdum & 0x0000FF00L) << 8)
-              		      |((numdum & 0x00FF0000L) >> 8)
-			      |((numdum & 0xFF000000L) >> 24));
-		  };
-		} else {
-		  if (littleEndian == true) // conversion from big to little
-		  {
-		    numdum = ( ((numdum & 0x000000FFL) << 24)
-              		      |((numdum & 0x0000FF00L) << 8)
-              		      |((numdum & 0x00FF0000L) >> 8)
-			      |((numdum & 0xFF000000L) >> 24));
-		  } else { // no conversion needed;
-		  };
-		};
-		
-		// We need to know the number of the matrix we are looking at right now.
-		actMatF2 = (actMat % matNumF2); // x - coordinate of submatrix
-		actMatF1 = (actMat / matNumF2); // y - coordinate of submatrix
-		
-		spectrum_[ f2 + XDIMF2_ * actMatF2 + ( ( f1 + XDIMF1_ * actMatF1 ) * SIF2_ ) ] = numdum;
-	      };
-	    };
-	  };
+		for ( actMat=0; actMat < matNumF2 * matNumF1; actMat++ ) 
+		{ // Walk through all submatrices
+			for ( f1 = 0; f1 < XDIMF1_; f1++ ) 
+			{   // for each matrix: look at every row
+				for ( f2 = 0; f2 < XDIMF2_; f2++ ) 
+				{ // look at every column
+					if (!f.good()) 
+					{
+						break;
+					}
+
+					f.read(c, 4);
+					if ( parsf1_->parameter( "BYTORDP" ) == 1 ) 
+					{
+						if (littleEndian == true) // no conversion needed;
+						{
+						}
+						else 
+						{ // conversion from little to big
+							numdum = ( ((numdum & 0x000000FFL) << 24)
+									|((numdum & 0x0000FF00L) << 8)
+									|((numdum & 0x00FF0000L) >> 8)
+									|((numdum & 0xFF000000L) >> 24));
+						}
+					} 
+					else 
+					{
+						if (littleEndian == true) // conversion from big to little
+						{
+							numdum = ( ((numdum & 0x000000FFL) << 24)
+									|((numdum & 0x0000FF00L) << 8)
+									|((numdum & 0x00FF0000L) >> 8)
+									|((numdum & 0xFF000000L) >> 24));
+						} 
+						else 
+						{ // no conversion needed;
+						}
+					}
+
+					// We need to know the number of the matrix we are looking at
+					// right now.
+					actMatF2 = (actMat % matNumF2); // x - coordinate of submatrix
+					actMatF1 = (actMat / matNumF2); // y - coordinate of submatrix
+
+					spectrum_[ f2 + XDIMF2_ * actMatF2 + ( ( f1 + XDIMF1_ * actMatF1 ) * SIF2_ ) ] = numdum;
+				}
+			}
+		}
 	}
 
   /** Return a reference to the spectrum.
@@ -189,38 +211,38 @@ namespace BALL
     {
       for (x=1; x<xdim-1; x++)
       {
-	numdum = spectrum_[x + xdim * y];
-	if (numdum > spectrum_[x-1 + (xdim*(y-1))])               // upper left
-	{
-	  if (numdum > spectrum_[x + (xdim*(y-1))])               // upper middle
-	  {
-	    if (numdum > spectrum_[x+1 + (xdim*(y-1))])           // upper right
-	    {
-	      if (numdum > spectrum_[x-1 + (xdim*y)])             // left
-	      {
-		if (numdum > spectrum_[x+1 + (xdim*y)])           // right
-		{
-		  if (numdum  > spectrum_[x-1 + (xdim*(y+1))])    // lower left
-		  {
-		    if (numdum > spectrum_[x + (xdim*(y+1))])     // lower middle
-		    {
-		      if (numdum > spectrum_[x+1 + (xdim*(y+1))]) // lower right
-		      {
-			dummy = new pair<int, int>;
-			dummy->first  = x;
-			dummy->second = y;
-			retlist->push_back(*dummy);
-		      };
-		    };
-		  };
+				numdum = spectrum_[x + xdim * y];
+				if (numdum > spectrum_[x-1 + (xdim*(y-1))])               // upper left
+				{
+					if (numdum > spectrum_[x + (xdim*(y-1))])               // upper middle
+					{
+						if (numdum > spectrum_[x+1 + (xdim*(y-1))])           // upper right
+						{
+							if (numdum > spectrum_[x-1 + (xdim*y)])             // left
+							{
+								if (numdum > spectrum_[x+1 + (xdim*y)])           // right
+								{
+									if (numdum  > spectrum_[x-1 + (xdim*(y+1))])    // lower left
+									{
+										if (numdum > spectrum_[x + (xdim*(y+1))])     // lower middle
+										{
+											if (numdum > spectrum_[x+1 + (xdim*(y+1))]) // lower right
+											{
+												dummy = new pair<int, int>;
+												dummy->first  = x;
+												dummy->second = y;
+												retlist->push_back(*dummy);
+											};
+										};
+									};
+								};
+							};
+						};
+					};
+				};
+			};
 		};
-	      };
-	    };
-	  };
-	};
-      };
-    };
-    return (*retlist);
+		return (*retlist);
   }
 
   void Bruker2D::SetShiftRange(double offsetf1, double offsetf2, double swidthf1, double swidthf2, double bfreqf1, double bfreqf2, double spointnumf1, double spointnumf2)
