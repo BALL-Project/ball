@@ -37,6 +37,10 @@ echo " "
 # remember any failed tests by setting OK=false
 OK=true
 
+# remove any core in the directory and all backtrace files
+rm core *.backtrace 2>/dev/null
+
+
 # loop over all tests
 COUNT=1
 for i in $* ; do
@@ -55,8 +59,9 @@ for i in $* ; do
 		OK=false
 			
 		# if backtracing suport is configured, try a stack backtrace
-		if test "${BALL_BACKTRACE}" != "" ; then
+		if test "${BALL_BACKTRACE}" != "" -a -f core ; then
 			${BALL_BACKTRACE} $i
+			rm core 2>/dev/null
 		fi
 	
 		# remember this test
@@ -65,7 +70,10 @@ for i in $* ; do
 		# rerun it in verbose mode to find out which
 		# subtest failed
 		echo "Failure in test $i. Please check log file $i.log."
-		./$i -V 2>&1 >$i.log
+		( ./$i -V 2>&1 >$i.log ) 2>/dev/null
+		if test -f core ; then
+			rm core
+		fi
 	fi
 	COUNT=`expr ${COUNT} + 1`
 done
