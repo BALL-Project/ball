@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.12 2000/10/23 23:31:10 amoll Exp $
+// $Id: parameterSection.C,v 1.13 2001/03/09 20:54:28 amoll Exp $
 //
 
 #include <BALL/FORMAT/parameterSection.h>
@@ -87,18 +87,26 @@ namespace BALL
 		// store the section name
 		section_name_ = section_name;
 		
+		INIFile&  ini_file = parameters.getParameterFile();		
+
 		// check for the existence of the required section
-		if (!parameters.getParameterFile().hasSection(section_name))
+		if (!ini_file.hasSection(section_name) ||
+				 ini_file.getSectionLength(section_name) == 0)
 		{
 			return false;
 		}
 
+		// if section has the length 0, we are finished
+		if (ini_file.getSectionLength(section_name) == 0)
+   	{
+			 Log.info() << "ParameterSectionFile " << ini_file.getFilename() 
+									<< " Section " << section_name << "isEmpty." << endl;
+   		 return true;
+   	}
+
 		// count non-comment lines only
 		int	number_of_lines = 0;
 		String line;
-		Position i;
-
-		INIFile&	ini_file = parameters.getParameterFile();
 
 		// loop over all lines and store the format line
 		// skip all comment and options lines
@@ -106,9 +114,14 @@ namespace BALL
 		Size first_line = ini_file.getSectionFirstLine(section_name);
 		Size last_line = ini_file.getSectionLastLine(section_name);
 
-		for (i = first_line; i <= last_line; i++)
-		{
+		for (Position i = first_line; i <= last_line; i++)
+		{						
 			// get the line and remove leading white spaces
+			if (ini_file.getLine(i) == 0)
+			{
+				Log.error() << "Could not make INIFile::getLine(), i = " << i << endl;
+				return false;
+			}
 			line = *ini_file.getLine(i);
 			line.trimLeft();
 
@@ -163,49 +176,51 @@ namespace BALL
 
 		// check every field definition 
 
-		// true, if each line contains version information
-		// indicated by a variable definition named "ver"
-		bool check_version;
-		check_version = false;
 
-		for (i = 0; i < (Position)number_of_fields; i++)
+
+		for (Position i = 0; i < (Position)number_of_fields; i++)
 		{
 			if (f[i].hasPrefix("key:"))
 			{
 				keys[number_of_keys++] = (Index)i;
+				continue;
 			} 
-			else if (f[i].hasPrefix("value:")) 
+
+			if (f[i].hasPrefix("value:")) 
 			{
 				// check whether a  variable name was given
 				String variable_name = f[i].after(":", 0);
 				if (variable_name == "")
 				{
 					Log.error() << "ParameterSection::extractSection: error while reading section "
-							<< section_name << ": empty variable name: " << f[i] << endl;	
+											<< section_name << ": empty variable name: " << f[i] << endl;	
+					continue;
 				}
-				else if (variable_names_.has(variable_name))
+
+				if (variable_names_.has(variable_name))
 				{	
 					Log.error() << "ParameterSection::extractSection: error while reading section "
-							<< section_name << ": duplicate variable name: " << f[i] << endl;	
+											<< section_name << ": duplicate variable name: " << f[i] << endl;	
+					continue;
 				}
-				else
-				{
-					// correct definition: store it.
-					variable_names_[variable_name] = (Index)number_of_variables;
-					variables[number_of_variables++] = (Index)i;
-				}
+
+				// correct definition: store it.
+				variable_names_[variable_name] = (Index)number_of_variables;
+				variables[number_of_variables++] = (Index)i;
 			} 
 		}
 
-		check_version = variable_names_.has("ver");
-
-		// store for faster access
-		number_of_variables_ = variable_names_.size();
-		
 		if (number_of_keys == 0)
 		{
 			return false;
 		}
+
+		// true, if each line contains version information
+		// indicated by a variable definition named "ver"
+		bool check_version(variable_names_.has("ver"));
+
+		// store for faster access
+		number_of_variables_ = variable_names_.size();
 
 		// allocate space for all entries
 		entries_.clear();
@@ -218,8 +233,7 @@ namespace BALL
 		// now extract all non-comment lines
 		bool ignore_entry;
 		number_of_lines = -1; // skip format line
-		for (i = ini_file.getSectionFirstLine(section_name); 
-				 i <= ini_file.getSectionLastLine(section_name); i++) 
+		for (Position i = 0; i < ini_file.getSectionLength(section_name); i++)
 		{
 			line = *ini_file.getLine(i);
 			line.trimLeft();
@@ -411,9 +425,9 @@ namespace BALL
 		if (variable_names_.has(variable))
 		{
 			return variable_names_[variable];
-		} else {
-			return 0;
 		}
+ 
+		return 0;
 	}
 
 	const ParameterSection& ParameterSection::operator = 
