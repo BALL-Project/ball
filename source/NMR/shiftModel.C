@@ -1,4 +1,4 @@
-// $Id: shiftModel.C,v 1.5 2000/09/18 17:09:43 oliver Exp $
+// $Id: shiftModel.C,v 1.6 2000/09/18 21:25:14 oliver Exp $
 
 #include <BALL/NMR/shiftModel.h>
 #include <BALL/FORMAT/parameterSection.h>
@@ -153,15 +153,15 @@ namespace BALL
 			ParameterSection module_section;
 			module_section.extractSection(parameters_, MODULE_LIST_SECTION);
 
-			if (module_section.hasVariable("name") && module_section.hasVariable("type"))
+			if (module_section.hasVariable("name"))
 			{
 				// the section contains the columns "name" and "type", let's construct
 				// the corresponding modules 
-				Position type_col = module_section.getColumnIndex("type");
+				Position name_col = module_section.getColumnIndex("nmae");
 				for (Position i = 0; i < module_section.getNumberOfKeys(); i++)
 				{
-					String name = module_section.getKey(i);
-					String type = module_section.getValue(i, type_col);
+					String type = module_section.getKey(i);
+					String name = module_section.getValue(i, name_col);
 
 					if (registered_modules_.has(type))
 					{
