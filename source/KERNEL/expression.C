@@ -42,7 +42,7 @@ namespace BALL
 		return create_methods_.has(name);
 	}
 
-	bool Expression::operator () (const Atom& atom)
+	bool Expression::operator () (const Atom& atom) const
 	{
 		if (expression_tree_ != 0)
 		{
