@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.100 2004/07/05 13:17:14 amoll Exp $
+// $Id: scene.C,v 1.101 2004/07/05 13:42:04 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1479,7 +1479,7 @@ namespace BALL
 						modifier = +0.1;
 					}
 
-					if (e->key() == ShiftButton)
+					if (e->state() == ShiftButton)
 					{
 						modifier *= 10;
 					}
@@ -1514,7 +1514,7 @@ namespace BALL
 						modifier = +1;
 					}
 
-					if (e->key() == ShiftButton)
+					if (e->state() == ShiftButton)
 					{
 						modifier *= 10;
 					}
