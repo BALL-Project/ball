@@ -1,0 +1,141 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>DockResultDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>DockResultDialogData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>380</width>
+            <height>422</height>
+        </rect>
+    </property>
+    <property name="sizePolicy">
+        <sizepolicy>
+            <hsizetype>7</hsizetype>
+            <vsizetype>7</vsizetype>
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+        </sizepolicy>
+    </property>
+    <property name="caption">
+        <string>Docking Results</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QTable" row="0" column="0" rowspan="3" colspan="1">
+            <column>
+                <property name="text">
+                    <string>snapshot number</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap></pixmap>
+                </property>
+            </column>
+            <column>
+                <property name="text">
+                    <string>score</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap></pixmap>
+                </property>
+            </column>
+            <row>
+                <property name="text">
+                    <string>1</string>
+                </property>
+                <property name="pixmap">
+                    <pixmap></pixmap>
+                </property>
+            </row>
+            <property name="name">
+                <cstring>result_table</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>7</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>250</width>
+                    <height>400</height>
+                </size>
+            </property>
+            <property name="resizePolicy">
+                <enum>Manual</enum>
+            </property>
+            <property name="numRows">
+                <number>1</number>
+            </property>
+            <property name="numCols">
+                <number>2</number>
+            </property>
+            <property name="rowMovingEnabled">
+                <bool>true</bool>
+            </property>
+            <property name="columnMovingEnabled">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <spacer row="0" column="1">
+            <property name="name">
+                <cstring>spacer2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>31</width>
+                    <height>291</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>show_button</cstring>
+            </property>
+            <property name="text">
+                <string>Show snapshot</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="2" column="1">
+            <property name="name">
+                <cstring>close_button</cstring>
+            </property>
+            <property name="text">
+                <string>Close</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<connections>
+    <connection>
+        <sender>close_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockResultDialogData</receiver>
+        <slot>close()</slot>
+    </connection>
+    <connection>
+        <sender>show_button</sender>
+        <signal>clicked()</signal>
+        <receiver>DockResultDialogData</receiver>
+        <slot>showSnapshot()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>showSnapshot()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
