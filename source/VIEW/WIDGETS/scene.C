@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.12 2003/09/20 15:36:35 amoll Exp $
+// $Id: scene.C,v 1.13 2003/09/22 15:29:35 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -424,19 +424,13 @@ void Scene::render_(const Representation& rep, RenderMode mode)
 
 void Scene::rotateSystem_(Scene* scene)
 {
-	//scene->calculateQuaternion_(quaternion_);
-	
-
-	need_update_ = true;
 	scene->calculateQuaternion_(quaternion_);
 
 	// ??? We have to put that into the stage_'s Camera somehow...
 	stage_->translate((float)(-1.)*system_origin_);
 	stage_->rotate(quaternion_);
 	stage_->translate(system_origin_);
-	gl_renderer_.updateCamera();
-	gl_renderer_.setLights();
-	updateGL();
+	updateCamera_();
 }
 
 
@@ -466,11 +460,7 @@ void Scene::translateSystem_(Scene* scene)
 	Vector3 v(right_translate + up_translate);
 
 	stage_->translate(v);
-	gl_renderer_.updateCamera();
-
-	need_update_ = true;
-
-	updateGL();
+	updateCamera_();
 }
 
 
@@ -490,11 +480,7 @@ void Scene::zoomSystem_(Scene *scene)
 						* mouse_sensitivity_ / 5);  
 
 	stage_->translate(v);
-	gl_renderer_.updateCamera();
-
-	need_update_ = true;
-
-	updateGL();
+	updateCamera_();
 }
 
 
@@ -648,8 +634,8 @@ void Scene::resetCamera_()
 void Scene::updateCamera_()
 	throw()
 {
-	gl_renderer_.setLights();
 	gl_renderer_.updateCamera();
+	gl_renderer_.setLights();
 	updateGL();
 }
 
