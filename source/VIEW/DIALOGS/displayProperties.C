@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.15 2003/09/22 10:48:43 amoll Exp $
+// $Id: displayProperties.C,v 1.16 2003/09/22 12:55:31 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -276,9 +276,8 @@ void DisplayProperties::onNotify(Message *message)
 
 void DisplayProperties::applyButtonClicked()
 {
-	// no selection present => return
-	if (getMainControl()->getControlSelection().size() == 0 &&
-			!rep_)
+	// no molecular or representation selection present 
+	if (!getMainControl()->getControlSelection().size() && !rep_)
 	{
 		return;
 	}
@@ -465,7 +464,7 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 	rep->update();
 
 	// no refocus, if a representation already exists
-	if (getMainControl()->getPrimitiveManager().getRepresentations().size() == 1)
+	if (getMainControl()->getPrimitiveManager().getRepresentations().size() == 1 && !rep_)
 	{
 		CompositeMessage* ccmessage = new CompositeMessage;
 		ccmessage->setComposite(composite);
