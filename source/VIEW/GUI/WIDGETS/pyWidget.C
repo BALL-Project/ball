@@ -1,4 +1,4 @@
-// $Id: pyWidget.C,v 1.4 2001/07/15 15:18:17 oliver Exp $
+// $Id: pyWidget.C,v 1.5 2001/08/01 01:44:18 oliver Exp $
 
 
 #include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
@@ -52,7 +52,6 @@ void PyWidget::stopInterpreter()
 
 void PyWidget::startInterpreter()
 {
-	std::cerr << "starting Py interpreter..." << std::endl;
 	// initialize the interpreter
 	PyInterpreter::initialize();
 
@@ -146,7 +145,6 @@ void PyWidget::cursorDown(bool /* mark */)
 
 void PyWidget::newLine()
 {
-	std::cerr << "parsing line..." << std::endl;
 	// move the cursor to the end of the line
 	end();
 
@@ -228,8 +226,11 @@ void PyWidget::parseLine_()
 
 	int line_no, row_no;
 	getCursorPosition(&line_no, &row_no);
-
-	QString line(textLine(line_no).mid(4));
+	QString line(textLine(line_no - 1));
+	if (line.length() > 4)
+	{
+		line = line.mid(4);
+	}
 	if (multi_line_mode_ == true)
 	{
 		if (line.isEmpty())
@@ -269,7 +270,10 @@ void PyWidget::parseLine_()
 			}
 		}
 	}
-	if (line.isEmpty()) return;			
+	if (line.isEmpty())
+	{
+		return;			
+	}
 
 	// store single lines only - lines from 
 	// multi line input are already in the history!
