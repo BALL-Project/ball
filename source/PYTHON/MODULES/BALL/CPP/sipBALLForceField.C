@@ -155,7 +155,15 @@ static PyObject *sipDo_ForceField_setup(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			res = ptr -> ForceField::setup(* a0);
+					try
+		{
+res = ptr -> ForceField::setup(* a0);
+		}
+		catch (FileNotFound e)
+		{
+			PyErr_SetString(PyExc_Exception, "FileNotFound");
+			return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
@@ -183,7 +191,15 @@ static PyObject *sipDo_ForceField_setup(PyObject *sipThisObj,PyObject *sipArgs)
 			if (iserr)
 				return NULL;
 
-			res = ptr -> ForceField::setup(* a0,* a1);
+					try
+		{
+res = ptr -> ForceField::setup(* a0,* a1);
+		}
+		catch (FileNotFound e)
+		{
+			PyErr_SetString(PyExc_Exception, "FileNotFound");
+			return NULL;
+		}
 
 			return sipConvertFromBool((int)res);
 		}
