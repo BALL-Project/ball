@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: BaseFragment_test.C,v 1.2 1999/09/06 22:22:29 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 ///////////////////////////
 
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.2 1999/09/06 22:22:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -294,9 +294,9 @@ TEST_EQUAL(bf3.getName(), "bf3")
 TEST_EQUAL(bf3.getBaseFragment(0), &bf4)
 bf1.swap(bf3);
 TEST_EQUAL(bf1.getName(), "bf3")
-TEST_EQUAL(bf1.getBaseFragment(0), &bf2)
+TEST_EQUAL(bf1.getBaseFragment(0), &bf4)
 TEST_EQUAL(bf3.getName(), "bf1")
-TEST_EQUAL(bf3.getBaseFragment(0), &bf4)
+TEST_EQUAL(bf3.getBaseFragment(0), &bf2)
 bf1.swap(bf3);
 TEST_EQUAL(bf1.getName(), "bf1")
 TEST_EQUAL(bf1.getBaseFragment(0), &bf2)

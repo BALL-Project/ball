@@ -1,6 +1,6 @@
 default:	all
 
-include ../$(BALL_BINFMT)/common.mak
+include ../common.mak
 
 DEXECUTABLES	= AmberFF_test
 EXECUTABLES = \
@@ -9,6 +9,7 @@ EXECUTABLES = \
 	Atom_test\
 	Bond_test\
 	BaseFragment_test\
+	Composite_test\
 	Fragment_test\
 	FragmentDB_test\
 	Limits_test\
@@ -43,6 +44,9 @@ BaseFragment_test:	BaseFragment_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Bond_test:	Bond_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+Composite_test:	Composite_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Fragment_test:	Fragment_test.o
