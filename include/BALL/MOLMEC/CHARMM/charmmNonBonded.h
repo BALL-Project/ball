@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.h,v 1.19 2003/08/26 08:04:24 oliver Exp $
+// $Id: charmmNonBonded.h,v 1.20 2004/12/22 16:01:54 amoll Exp $
 //
 // Molecular Mechanics: Charmm force field, non-bonded component
 // (van der Waals, electrostatics, EEF1 solvation)
@@ -108,7 +108,7 @@ namespace BALL
 		/**	Setup method.
 		*/
 		virtual bool setup()
-			throw();
+			throw(ForceField::TooManyErrors);
 
 		//@}
 		/**	@name	Accessors	

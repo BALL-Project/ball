@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberStretch.C,v 1.22 2004/12/17 15:29:32 amoll Exp $
+// $Id: amberStretch.C,v 1.23 2004/12/22 16:02:23 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
@@ -49,6 +49,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool AmberStretch::setup()
+		throw(ForceField::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{
@@ -115,7 +116,7 @@ namespace BALL
 						} 
 						else 
 						{
-							Log.error() << "cannot find stretch parameters for atom types " 
+							getForceField()->error() << "cannot find stretch parameters for atom types " 
 													<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_A) << "-" 
 													<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_B)
 													<< " (atoms are: " << stretch_.back().atom1->ptr->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) 
@@ -128,11 +129,6 @@ namespace BALL
 
 							getForceField()->getUnassignedAtoms().insert(bond.getFirstAtom());
 							getForceField()->getUnassignedAtoms().insert(bond.getSecondAtom());
-							if (getForceField()->getNumberOfUnassignedAtoms() > 
-									getForceField()->getMaximumUnassignedAtoms())
-							{
-								return false;
-							}
 						}
 						stretch_.back().values = values;
 					}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.h,v 1.20 2003/08/26 08:04:23 oliver Exp $
+// $Id: amberTorsion.h,v 1.21 2004/12/22 16:01:49 amoll Exp $
 //
 
 // Molecular Mechanics: Amber force field, bond stretch component
@@ -19,6 +19,10 @@
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELDCOMPONENT_H
 #	include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
+#endif
+
+#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
+# include <BALL/MOLMEC/COMMON/forceField.h>
 #endif
 
 namespace BALL 
@@ -102,7 +106,8 @@ namespace BALL
 
 		/**	Setup method.
 		*/
-		virtual bool setup();
+		virtual bool setup()
+			throw(ForceField::TooManyErrors);
 
 		//@}
 		/**	@name	Accessors	

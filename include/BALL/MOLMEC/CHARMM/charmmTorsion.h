@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmTorsion.h,v 1.17 2003/08/26 08:04:24 oliver Exp $
+// $Id: charmmTorsion.h,v 1.18 2004/12/22 16:01:55 amoll Exp $
 //
 
 // Molecular Mechanics: CHARMM force field, proper torsion component
@@ -23,6 +23,10 @@
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELDCOMPONENT_H
 #	include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
+#endif
+
+#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
+# include <BALL/MOLMEC/COMMON/forceField.h>
 #endif
 
 namespace BALL 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberTorsion.C,v 1.31 2004/12/17 15:29:33 amoll Exp $
+// $Id: amberTorsion.C,v 1.32 2004/12/22 16:02:24 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
@@ -54,6 +54,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool AmberTorsion::setup()
+		throw(ForceField::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{
@@ -172,7 +173,7 @@ namespace BALL
 										} 
 										else 
 										{
-											Log.error() << "AmberTorsion::setup: cannot find torsion parameter for:"
+											getForceField()->error() << "AmberTorsion::setup: cannot find torsion parameter for:"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a1) << "-"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a2) << "-"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a3) << "-"
@@ -184,11 +185,6 @@ namespace BALL
 											getForceField()->getUnassignedAtoms().insert(a2);
 											getForceField()->getUnassignedAtoms().insert(a3);
 											getForceField()->getUnassignedAtoms().insert(a4);
-											if (getForceField()->getNumberOfUnassignedAtoms() > 
-													getForceField()->getMaximumUnassignedAtoms())
-											{
-												return false;
-											}
 										}
 									}
 								} 

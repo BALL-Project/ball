@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmImproperTorsion.h,v 1.19 2004/05/27 19:49:43 oliver Exp $
+// $Id: charmmImproperTorsion.h,v 1.20 2004/12/22 16:01:54 amoll Exp $
 //
 
 // Molecular Mechanics: Charmm force field, bond stretch component
@@ -23,6 +23,10 @@
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELDCOMPONENT_H
 #	include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
+#endif
+
+#ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
+# include <BALL/MOLMEC/COMMON/forceField.h>
 #endif
 
 namespace BALL 
@@ -74,7 +78,8 @@ namespace BALL
 
 		/**	Setup method.
 		*/
-		virtual bool setup();
+		virtual bool setup()
+			throw(ForceField::TooManyErrors);
 
 		//@}
 		/**	@name	Accessors	

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberBend.C,v 1.23 2004/12/17 15:29:32 amoll Exp $
+// $Id: amberBend.C,v 1.24 2004/12/22 16:02:23 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
@@ -46,6 +46,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool AmberBend::setup()
+		throw(ForceField::TooManyErrors)
 	{
 		// clear old bends:
 		bend_.clear();
@@ -104,7 +105,7 @@ namespace BALL
 							if (!bend_parameters.assignParameters(this_bend.values, Atom::ANY_TYPE, atom_type_a2, Atom::ANY_TYPE))
 							{
 								// complain if nothing was found
-								Log.error() << "AmberBend::setup: cannot find bend parameters for atom types:"
+								getForceField()->error() << "AmberBend::setup: cannot find bend parameters for atom types:"
 									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
 									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
 									<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) 
@@ -115,11 +116,6 @@ namespace BALL
 								getForceField()->getUnassignedAtoms().insert(it2->getPartner(**atom_it));
 								getForceField()->getUnassignedAtoms().insert((const Atom*)&*atom_it);
 								getForceField()->getUnassignedAtoms().insert(it1->getPartner(**atom_it));
-								if (getForceField()->getNumberOfUnassignedAtoms() > 
-										getForceField()->getMaximumUnassignedAtoms())
-								{
-									return false;
-								}
 							}
 							else
 							{

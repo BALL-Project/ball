@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.C,v 1.30 2004/12/17 15:29:32 amoll Exp $
+// $Id: amberNonBonded.C,v 1.31 2004/12/22 16:02:23 amoll Exp $
 //
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
@@ -202,7 +202,7 @@ namespace BALL
 	}
 
 	void AmberNonBonded::update()
-		throw()
+		throw(ForceField::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{
@@ -231,7 +231,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool AmberNonBonded::setup()
-		throw()
+		throw(ForceField::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{
@@ -381,12 +381,6 @@ namespace BALL
 		// build the nonbonded pairs
 		update();
 
-		if (getForceField()->getNumberOfUnassignedAtoms() > 
-				getForceField()->getMaximumUnassignedAtoms())
-		{
-			return false;
-		}
-
 		return true;
 	}
 
@@ -397,7 +391,7 @@ namespace BALL
 		(const vector<pair<Atom*, Atom*> >& atom_vector,
 		 const LennardJones& lennard_jones, 
 		 const Potential1210& hydrogen_bond)
-		throw()
+		throw(ForceField::TooManyErrors)
 	{
 		// throw away the old rubbish
 		non_bonded_.clear();
@@ -447,7 +441,7 @@ namespace BALL
 					// hydrogen bond parameters are assigned later - do nothing!
 					if (!hydrogen_bond.hasParameters(type_atom1, type_atom2))
 					{
-						Log.error() << "AmberNonBonded::setup(): "
+						getForceField()->error() << "AmberNonBonded::setup(): "
 												<< "cannot find vdw parameters for types "
 												<< atom1->getTypeName() << "-" << atom2->getTypeName() 
 												<< " (" << atom1->getFullName() << "-" << atom2->getFullName() << ")" << endl;
@@ -456,11 +450,6 @@ namespace BALL
 
 						getForceField()->getUnassignedAtoms().insert(atom1);
 						getForceField()->getUnassignedAtoms().insert(atom2);
-						if (getForceField()->getNumberOfUnassignedAtoms() > 
-								getForceField()->getMaximumUnassignedAtoms())
-						{
-							return;
-						}
 					}
 				}
 

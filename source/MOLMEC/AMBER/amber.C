@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amber.C,v 1.26 2004/12/17 15:29:32 amoll Exp $
+// $Id: amber.C,v 1.27 2004/12/22 16:02:23 amoll Exp $
 //
 // Molecular Mechanics: Amber force field class
 //
@@ -150,6 +150,7 @@ namespace BALL
 	}
 
 	bool AmberFF::specificSetup()
+		throw(ForceField::TooManyErrors)
 	{
 		// check whether the system is assigned
 		if (getSystem() == 0)
@@ -236,7 +237,7 @@ namespace BALL
 		if (assign_charges || assign_type_names)
 		{
 			Templates templates;
-			templates.setMaximumUnassignedAtoms(max_number_unassigned_atoms_);
+			templates.setMaximumUnassignedAtoms(max_number_of_errors_);
 			templates.extractSection(parameters_, "ChargesAndTypeNames");
 			if (assign_charges && assign_type_names)
 			{
@@ -259,17 +260,19 @@ namespace BALL
 			{
 			  getUnassignedAtoms().insert(*it);
 			}
+
+			number_of_errors_ += templates.getUnassignedAtoms().size();
 	
-			if (getNumberOfUnassignedAtoms() > getMaximumUnassignedAtoms())
+			if (number_of_errors_ > max_number_of_errors_)
 			{
-				return false;
+				throw(TooManyErrors(__FILE__, __LINE__));
 			}
 		}
 		if (assign_types)
 		{
 			// convert the type names to types
 			AssignTypeProcessor type_proc(parameters_.getAtomTypes());
-			type_proc.setMaximumUnassignedAtoms(max_number_unassigned_atoms_);
+			type_proc.setMaximumUnassignedAtoms(max_number_of_errors_);
 			getSystem()->apply(type_proc);			
 
 			HashSet<const Atom*>::ConstIterator it = type_proc.getUnassignedAtoms().begin();
@@ -277,13 +280,15 @@ namespace BALL
 			{
 			  getUnassignedAtoms().insert(*it);
 			}
+
+			number_of_errors_ += type_proc.getUnassignedAtoms().size();
+
+			if (number_of_errors_ > max_number_of_errors_)
+			{
+				throw(TooManyErrors(__FILE__, __LINE__));
+			}
 		}
 
-		if (getNumberOfUnassignedAtoms() > getMaximumUnassignedAtoms())
-		{
-			return false;
-		}
-	
 		return true;
 	}
 
