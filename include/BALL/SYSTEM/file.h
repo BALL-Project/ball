@@ -1,17 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.53 2003/07/03 10:06:35 amoll Exp $
+// $Id: file.h,v 1.54 2003/07/03 10:57:02 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
 
 #ifndef BALL_COMMON_H
-#	include <BALL/common.h>
+//#	include <BALL/common.h>
 #endif
 
 #ifndef BALL_DATATYPE_REGEXP_H
-#	include <BALL/DATATYPE/regularExpression.h>
+//#	include <BALL/DATATYPE/regularExpression.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -65,19 +65,21 @@
 namespace BALL 
 {
 	/**	This class handles automatic file transformation methods.
-		   \link File File \endlink  provides the ability to transform files on the fly using predefined 
-			transformation commands  (e.g. unix-style filters). For example, compressed 
+		   \link File File \endlink  provides the ability to transform files on the fly using 
+			predefined transformation commands  (e.g. unix-style filters). For example, compressed 
       files can be automatically decompressed by calling the unic <tt>compress</tt> command.
 			The respective commands are selectedvia a suitable regular expression, usually
       matching the file suffix. A frequent application for this transformation is the
 			compressed storage of PDB files in the unix compressed format (<tt>*.Z</tt>).
 			Transformation manager basically contains a map consisting of two strings.
-			Using  \link findTransformationCommand findTransformationCommand \endlink ,  \link File File \endlink  can determine whether there
+			Using  \link findTransformationCommand findTransformationCommand \endlink ,  
+			\link File File \endlink  can determine whether there
 			is a suitable transformation command available for a given file name.
 			User-defined transformation may be defined at any time using the 
-			 \link registerTransformation registerTransformation \endlink  method of the static instance of  \link TransformationManager TransformationManager \endlink 
+			\link registerTransformation registerTransformation \endlink  method of the static 
+			instance of  \link TransformationManager TransformationManager \endlink 
 			accessible through  \link File::getTransformationManager File::getTransformationManager \endlink .
-	\ingroup System
+			\ingroup System
 	*/
 	class TransformationManager
 	{	
@@ -94,7 +96,6 @@ namespace BALL
 		~TransformationManager();
 		
 		//@}
-
 		/**	Accessors
 		*/
 		//@{
@@ -115,14 +116,15 @@ namespace BALL
 				TransformationManager's map. The following rules apply (in that order):
 
 					- <tt>%s</tt> is replaced by the full content of <tt>name</tt>
-					- <tt>%f</tt> is replaced by the full content of <tt>name</tt>, without any file type suffix (i.e. anything after
-								the last dot in the filename is removed)
+					- <tt>%f</tt> is replaced by the full content of <tt>name</tt>, 
+						without any file type suffix (i.e. anything after the last dot in the filename is removed)
 					- <tt>%f[suffix]</tt> is replaced by the previous content of <tt>name</tt> without the <tt>suffix</tt>
 					- <tt>%b</tt> and <tt>%b[suffix]</tt> like <tt>%f</tt> and {\tt %f[suffix]}, except that the
 								path is removed as well, so it is only the {\em base name} of the file
 					- <tt>%p</tt> the path to the file
-					- <tt>%t</tt> a temporary file name (all occurences of <tt>%t</tt> are replace with the same file name for
-												the same invocation of  \link transform transform \endlink , but different file names on subsequent invocations)
+					- <tt>%t</tt> a temporary file name (all occurences of <tt>%t</tt> are replace 
+							with the same file name for the same invocation of  \link transform transform \endlink,
+							but different file names on subsequent invocations)
 				
 		*/
 		String transform(const String& name);
@@ -135,7 +137,7 @@ namespace BALL
 	};
 		
 	/**	File Class.	
-	\ingroup System		
+			\ingroup System		
 	*/
 	class File
 		: public std::fstream
@@ -153,7 +155,6 @@ namespace BALL
 		typedef std::ios::openmode OpenMode;			
 
 		//@}
-
 		/**	@name	Constants
 		*/
 		//@{
@@ -175,15 +176,14 @@ namespace BALL
 
 		/// Truncate an existing file.
 		static const OpenMode TRUNC = std::ios::trunc;
-		//@}
 
+		//@}
 		/**	@name	Enums
 		*/
 		//@{
 
 		/**	Transformation types for file.
-				This enum defines some possible types for on-the-fly 
-				file transformation.
+				This enum defines some possible types for on-the-fly file transformation.
 		*/
 		enum Transformation
 		{
@@ -217,48 +217,40 @@ namespace BALL
 			TYPE__FIFO_SPECIAL_FILE  = 7
 		};
 
-		/// Prefix for filenames that are created through the execution of commands
+		/// Prefix for filenames that are created through the execution of commands "exec:"
 		static const String TRANSFORMATION_EXEC_PREFIX;
 
-		/// Prefix for files (to mimick URL-like behavior)
+		/// Prefix for files (to mimick URL-like behavior) "file:"
 		static const String TRANSFORMATION_FILE_PREFIX;
 
-		/// Prefix for FTP-transfers
+		/// Prefix for FTP-transfers "ftp://"
 		static const String TRANSFORMATION_FTP_PREFIX;
 
-		/// Prefix for HTTP-transfer
+		/// Prefix for HTTP-transfer "http://"
 		static const String TRANSFORMATION_HTTP_PREFIX;
 
 		//@}
-
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
 
 		/** Default constructor.
-				Construct new File object.
-				@return File - new constructed File object
 		*/
 		File()
 			throw();
 
-		/** Detailed constructor.
-				Construct new File object from the file {\em name}
-				and open the file.
+		/** Construct new File object from the file {\em name} and open the file.
 				@param  name the name of the file to be opend
 				@param  open_mode the openmode to be used
 				@see    open
-				@return File - new constructed File object
 		*/
 		File(const String& name, OpenMode open_mode = std::ios::in)
 			throw(Exception::FileNotFound);
 
 		/** Copy constructor.
-				Construct new File object by copying the filename from File {\em file}.
 				The file is not opend.
 				@param  file the File object to be copied (cloned)
 				@see    open
-				@return File - new constructed File object cloned from {\em file}
 		*/
 		File(const File& file)
 			throw(Exception::FileNotFound);
@@ -275,8 +267,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/**	@name	Assignment 
 		*/
 		//@{
@@ -347,7 +337,6 @@ namespace BALL
 			throw();
 
 		/**	Return the size of a given file.
-				@exception FileNotFound if file does not exists.
 				@return Size the size of the file
 		*/
 		static Size getSize(String name)
@@ -382,8 +371,7 @@ namespace BALL
 				@param buffer_size the buffer size to use while copying
 				@return true if copying was successfull
 		*/
-		static bool copy
-			(String source_name, String destination_name, Size buffer_size = 4096)
+		static bool copy(String source_name, String destination_name, Size buffer_size = 4096)
 			throw(Exception::FileNotFound);
 
 		/**	Copy the file to a given destination.
@@ -412,7 +400,7 @@ namespace BALL
 		bool moveTo(const String& destination_name)
 			throw(Exception::FileNotFound);
 
-		/**	Remove the file "name".
+		/**	Remove the given file.
 				@param name the name of the file to be removed
 				@return bool true if the file could be removed
 		*/
@@ -471,21 +459,23 @@ namespace BALL
         @return std::fstream the stream
     */
     std::fstream& getFileStream();
+
 		//@}
-		
 		/**@name On-the-fly file transformation
 				@see TransformationManager
 		*/
 		//@{
 
 		/**	Mutable access the TransformationManager.
-				 \link File File \endlink  defines a static instance of  \link TransformationManager TransformationManager \endlink  to
+				\link File File \endlink  defines a static instance of  
+				\link TransformationManager TransformationManager \endlink  to
 				handle on-the-fly conversions of files (e.g. compression, charset conversion, etc.).
 		*/
 		TransformationManager& getTransformationManager();
 
 		/**	Constant access to the TransformationManager.
-				 \link File File \endlink  defines a static instance of  \link TransformationManager TransformationManager \endlink  to
+				\link File File \endlink  defines a static instance of  
+				\link TransformationManager TransformationManager \endlink  to
 				handle on-the-fly conversions of files (e.g. compression, charset conversion, etc.).
 		*/
 		const TransformationManager& getTransformationManager() const;
@@ -509,8 +499,8 @@ namespace BALL
 		/**	
 		*/
 		static void unregisterTransformation(const String& pattern);
-		//@}
 
+		//@}
 		/**	@name Predicates 
 		*/
 		//@{
@@ -544,14 +534,12 @@ namespace BALL
 		/**	Test if a given file can be accessed.
 				@param name the name of the file to be tested
 				@return bool true if the file can be accessed
-				@exception FileNotFound is thrown if name is an empty string
 		*/
 		static bool isAccessible(String name)
 			throw ();
 
 		/**	Test if the file can be accessed.
 				@return bool true if the file can be accessed
-				@exception FileNotFound is thrown if name is an empty string
 		*/
 		bool isAccessible()
 			const throw (Exception::FileNotFound);
@@ -639,8 +627,8 @@ namespace BALL
 			functions. \par
 			<b>Caveat:</b> This concept relies on the C++ memory layout and thus 
 			is highly non-portable!
-			 \par
-	\ingroup System		
+			\par
+			\ingroup System		
 	*/
 	template <typename T>
 	class BinaryFileAdaptor
@@ -658,8 +646,8 @@ namespace BALL
 		/// Detailed constructor
 		BinaryFileAdaptor(const T& data)
 			throw();
-		//@}
 
+		//@}
 		///@name Accessors
 		//@{
 
@@ -670,13 +658,11 @@ namespace BALL
 			throw();
 
 		/** Returns a const reference to the data stored in the adaptor
-				@return a const reference to <tt>data</tt>
 		*/
 		const T& getData() const
 			throw();
 
 		/** Returns a mutable reference to the data stored in the adaptor
-				@return a mutable reference to <tt>data</tt>
 				*/
 		T& getData()
 			throw();
