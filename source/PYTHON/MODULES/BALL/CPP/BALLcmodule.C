@@ -85,6 +85,7 @@
 #include "sipBALLPyAtomList.h"
 #include "sipBALLAtomProcessor.h"
 #include "sipBALLFragmentProcessor.h"
+#include "sipBALLResidueProcessor.h"
 #include "sipBALLPyCompositeDescriptorList.h"
 #include "sipBALLCompositeProcessor.h"
 #include "sipBALLPyBondList.h"
@@ -111,6 +112,7 @@
 #include "sipBALLFragmentDistanceCollector.h"
 #include "sipBALLTranslationProcessor.h"
 #include "sipBALLTransformationProcessor.h"
+#include "sipBALLResidueChecker.h"
 #include "sipBALLFile.h"
 #include "sipBALLOpenMode.h"
 #include "sipBALLMainControl.h"
@@ -171,6 +173,8 @@ char sipName_BALL_BINARY[] = "BINARY";
 char sipName_BALL_APP[] = "APP";
 char sipName_BALL_OUT[] = "OUT";
 char sipName_BALL_IN[] = "IN";
+char sipName_BALL_getStatus[] = "getStatus";
+char sipName_BALL_ResidueChecker[] = "ResidueChecker";
 char sipName_BALL_calculateSASPoints[] = "calculateSASPoints";
 char sipName_BALL_calculateSASAtomAreas[] = "calculateSASAtomAreas";
 char sipName_BALL_calculateSASVolume[] = "calculateSASVolume";
@@ -233,6 +237,7 @@ char sipName_BALL_PyFragmentList[] = "PyFragmentList";
 char sipName_BALL_PyBaseFragmentList[] = "PyBaseFragmentList";
 char sipName_BALL_PyBondList[] = "PyBondList";
 char sipName_BALL_PyCompositeDescriptorList[] = "PyCompositeDescriptorList";
+char sipName_BALL_ResidueProcessor[] = "ResidueProcessor";
 char sipName_BALL_FragmentProcessor[] = "FragmentProcessor";
 char sipName_BALL_finish[] = "finish";
 char sipName_BALL_AtomProcessor[] = "AtomProcessor";
@@ -961,7 +966,7 @@ static PyObject *sipDo_calculateSASPoints(PyObject *,PyObject *sipArgs)
 
 		return sipMapCppToSelf(res,sipClass_Surface);
 	}
-#line 969 "../CPP/BALLcmodule.cpp"
+#line 974 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -1000,7 +1005,7 @@ static PyObject *sipDo_calculateSASAtomAreas(PyObject *,PyObject *sipArgs)
 
 		return resobj;
 	}
-#line 1008 "../CPP/BALLcmodule.cpp"
+#line 1013 "../CPP/BALLcmodule.cpp"
 	}
 
 	// Report an error if the arguments couldn't be parsed.
@@ -3020,6 +3025,7 @@ static sipClassDef classesTable[] = {
 	{sipName_BALL_CompositeDescriptor, sipNew_CompositeDescriptor, &sipClass_CompositeDescriptor, sipClassAttrTab_CompositeDescriptor, NULL},
 	{sipName_BALL_MainControl, sipNew_MainControl, &sipClass_MainControl, sipClassAttrTab_MainControl, NULL},
 	{sipName_BALL_OpenMode, sipNew_OpenMode, &sipClass_OpenMode, sipClassAttrTab_OpenMode, NULL},
+	{sipName_BALL_ResidueChecker, sipNew_ResidueChecker, &sipClass_ResidueChecker, sipClassAttrTab_ResidueChecker, NULL},
 	{sipName_BALL_TransformationProcessor, sipNew_TransformationProcessor, &sipClass_TransformationProcessor, sipClassAttrTab_TransformationProcessor, NULL},
 	{sipName_BALL_TranslationProcessor, sipNew_TranslationProcessor, &sipClass_TranslationProcessor, sipClassAttrTab_TranslationProcessor, NULL},
 	{sipName_BALL_FragmentDistanceCollector, sipNew_FragmentDistanceCollector, &sipClass_FragmentDistanceCollector, sipClassAttrTab_FragmentDistanceCollector, NULL},
@@ -3045,6 +3051,7 @@ static sipClassDef classesTable[] = {
 	{NULL, NULL, NULL, NULL, NULL},
 	{NULL, NULL, NULL, NULL, NULL},
 	{NULL, NULL, NULL, NULL, NULL},
+	{sipName_BALL_ResidueProcessor, sipNew_ResidueProcessor, &sipClass_ResidueProcessor, sipClassAttrTab_ResidueProcessor, NULL},
 	{sipName_BALL_FragmentProcessor, sipNew_FragmentProcessor, &sipClass_FragmentProcessor, sipClassAttrTab_FragmentProcessor, NULL},
 	{sipName_BALL_AtomProcessor, sipNew_AtomProcessor, &sipClass_AtomProcessor, sipClassAttrTab_AtomProcessor, NULL},
 	{NULL, NULL, NULL, NULL, NULL},
@@ -3136,7 +3143,7 @@ static sipClassDef classesTable[] = {
 
 static sipModuleDef sipModule = {
 	sipName_BALL_BALL,
-	117,
+	119,
 	classesTable
 };
 
