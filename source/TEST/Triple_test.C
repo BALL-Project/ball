@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Triple_test.C,v 1.4 2003/05/22 21:57:22 oliver Exp $
+// $Id: Triple_test.C,v 1.5 2003/05/23 10:26:56 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/DATATYPE/triple.h>
 ///////////////////////////
 
-START_TEST(Triple, "$Id: Triple_test.C,v 1.4 2003/05/22 21:57:22 oliver Exp $")
+START_TEST(Triple, "$Id: Triple_test.C,v 1.5 2003/05/23 10:26:56 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -38,15 +38,20 @@ CHECK(Triple::~Triple() throw())
 	delete q;
 RESULT
 
+Triple<int, int, int> my_q;
+my_q.first = 1;
+my_q.second = 2;
+my_q.third = 3;
+
 CHECK(Triple::Triple(const Triple& triple, bool deep = true) throw())
-	Triple<int, int, int> q1 = *q;
+	Triple<int, int, int> q1(my_q);
 	TEST_EQUAL(q1.first, 1)
 	TEST_EQUAL(q1.second, 2)
 	TEST_EQUAL(q1.third, 3)
 RESULT
 
 CHECK(Triple::Triple(const first& new_first, const second& new_second, const third& new_third, const fourth& new_fourth) throw())
-	Triple<int, int, int> q1 = Triple<int, int, int>(1, 2, 3);
+	Triple<int, int, int> q1(1, 2, 3);
 	TEST_EQUAL(q1.first, 1)
 	TEST_EQUAL(q1.second, 2)
 	TEST_EQUAL(q1.third, 3)
