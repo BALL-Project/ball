@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.137 2004/11/14 22:41:44 amoll Exp $
+// $Id: mainControl.C,v 1.138 2004/11/14 23:25:42 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1487,8 +1487,8 @@ namespace BALL
 			if (e->type() == (QEvent::Type)SIMULATION_OUTPUT_EVENT)
 			{
 				SimulationOutput* so = (SimulationOutput*) e;
-				Log.info() << so->getMessage() << std::endl;
-				setStatusbarText(so->getMessage(), so->isImportant());
+ 				Log.info() << so->getMessage() << std::endl;
+ 				setStatusbarText(so->getMessage(), so->isImportant());
 				return;
 			}
 			
@@ -1499,13 +1499,6 @@ namespace BALL
 				{
 					Log.warn() << "Could not update visualisation in " << __FILE__ << __LINE__ << std::endl;
 					return;
-				}
-
-				if (simulation_thread_ != 0)
-				{
-//   Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
-//   					simulation_thread_ready_condition_.wait();
-//   Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 				}
 
 				updateRepresentationsOf(*(Composite*)so->getComposite(), true);
