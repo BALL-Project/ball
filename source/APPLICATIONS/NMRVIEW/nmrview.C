@@ -1,9 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
-#include <BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h>
-#include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
+// $Id: nmrview.C,v 1.4 2003/08/27 18:05:47 oliver Exp $
+//
+
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/DIALOGS/openBruker2DFile.h>
+#include <BALL/VIEW/WIDGETS/regularData2DWidget.h>
 
 using namespace BALL::VIEW;
 using namespace BALL::MOLVIEW;

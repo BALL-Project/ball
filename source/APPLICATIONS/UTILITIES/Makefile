@@ -1,5 +1,7 @@
-# $Id: Makefile,v 1.6 2003/05/28 04:12:51 anker Exp $
+#
+# $Id: Makefile,v 1.7 2003/08/27 18:05:47 oliver Exp $
 # Makefile for BALL utilities
+#
 
 DIRECTORY=APPLICATIONS/UTILITIES
 

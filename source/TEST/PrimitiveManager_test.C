@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PrimitiveManager_test.C,v 1.4 2003/08/20 21:34:49 oliver Exp $
+// $Id: PrimitiveManager_test.C,v 1.5 2003/08/27 18:05:48 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
-#include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
+#include <BALL/VIEW/KERNEL/primitiveManager.h>
 ///////////////////////////
 
 /////////////////////////////////////////////////////////////
