@@ -1,13 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.5 2003/11/15 12:53:57 oliver Exp $
+// $Id: preferences.h,v 1.6 2004/01/18 12:43:36 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
 #define BALL_VIEW_DIALOGS_PREFERENCES_H
 
 #include <qtabdialog.h>
+#include <BALL/DATATYPE/string.h>
+#include <BALL/VIEW/UIC/preferencesData.h>
 
 namespace BALL
 {
@@ -23,7 +25,7 @@ namespace BALL
 				\ingroup ViewDialogs
 		*/
 		class Preferences 
-			: public QTabDialog
+			: public PreferencesData
 		{
 			Q_OBJECT
 			
@@ -46,7 +48,7 @@ namespace BALL
 					\param       width (Default <tt>width=400</tt>)
 					\param       height (Default <tt>height=300</tt>)
 			*/
-			Preferences(QWidget *parent = NULL,	const char *name = NULL, int width = 400, int height = 300)
+			Preferences(QWidget *parent = NULL,	const char *name = NULL)
 				throw();
 
 			/// Copy constructur
@@ -55,8 +57,8 @@ namespace BALL
 			
 			/// Destructor.
 			virtual ~Preferences() throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors
 			*/
 			//@{
@@ -64,7 +66,7 @@ namespace BALL
 			/** Check if tabs are available.				
 					\return bool <tt>true</tt> if tabs are available
 			*/
-			bool hasTabs()
+			bool hasPages()
 				throw();
 
 			/** Insert a new tab dialog 
@@ -73,7 +75,7 @@ namespace BALL
 					\param  name the name of the new tab dialog
 					\see    removeTab
 			*/
-			void insertTab(QWidget *child, const QString &name)
+			void insertPage(QWidget *child, const String &name)
 				throw();
 
 			/** Remove a tab dialog previously inserted from this preferences.
@@ -81,7 +83,7 @@ namespace BALL
 					\param  child a pointer to the tab dialog to be removed 
 					\see    insertTab
 			*/
-			void removeTab(QWidget *child)
+			void removePage(QWidget *child)
 				throw();
 
 			/** Fetch the preferences (the position) from the INIFile <tt>inifile</tt>.
@@ -110,16 +112,17 @@ namespace BALL
 			/** Open the preferences dialog.
 			*/
 			void show();
+			
+			///
+			void showPage(QWidget* page);
 						
+			///
+			void showPage(int nr);
+
 			//@}
-
-			private:
-
-			int number_of_tabs_;
 		};
 
   } // namespace VIEW
-
 } // namespace BALL
 
 #endif // BALL_VIEW_DIALOGS_PREFERENCES_H

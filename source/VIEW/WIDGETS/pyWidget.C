@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.20 2003/12/09 13:33:06 amoll Exp $
+// $Id: pyWidget.C,v 1.21 2004/01/18 12:44:12 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -501,7 +501,7 @@ namespace BALL
 		{
 			text_edit_->python_settings_= new PythonSettings(this);
 			text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
-			preferences.insertTab(text_edit_->python_settings_, "Python");
+			preferences.insertPage(text_edit_->python_settings_, "Python");
 		}
 
 		void PyWidget::finalizePreferencesTab(Preferences &preferences)
@@ -509,7 +509,7 @@ namespace BALL
 		{
 			if (text_edit_->python_settings_ != 0)
 			{
-				preferences.removeTab(text_edit_->python_settings_);
+				preferences.removePage(text_edit_->python_settings_);
 
 				delete text_edit_->python_settings_;
 				text_edit_->python_settings_ = 0;

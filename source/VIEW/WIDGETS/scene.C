@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.32 2004/01/13 16:04:03 amoll Exp $
+// $Id: scene.C,v 1.33 2004/01/18 12:44:12 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -835,9 +835,9 @@ void Scene::initializePreferencesTab(Preferences &preferences)
 	throw()
 {
 	light_settings_ = new LightSettings(this);
-	preferences.insertTab(light_settings_, "Lighting");
+	preferences.insertPage(light_settings_, "Lighting");
 	stage_settings_= new StageSettings(this);
-	preferences.insertTab(stage_settings_, "Stage");
+	preferences.insertPage(stage_settings_, "Stage");
 }
 
 
@@ -846,13 +846,13 @@ void Scene::finalizePreferencesTab(Preferences &preferences)
 {
 	if (light_settings_) 
 	{
-		preferences.removeTab(light_settings_);
+		preferences.removePage(light_settings_);
 		delete light_settings_;
 		light_settings_ = 0;
 	}
 	if (stage_settings_) 
 	{
-		preferences.removeTab(stage_settings_);
+		preferences.removePage(stage_settings_);
 		delete stage_settings_;
 		stage_settings_= 0;
 	}

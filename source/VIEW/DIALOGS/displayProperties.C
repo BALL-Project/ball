@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.60 2004/01/16 16:34:17 amoll Exp $
+// $Id: displayProperties.C,v 1.61 2004/01/18 12:43:08 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -201,9 +201,9 @@ void DisplayProperties::initializePreferencesTab(Preferences &preferences)
 {
 	preferences_ = &preferences;
 	model_settings_ = new ModelSettingsDialog(this);
-	preferences.insertTab(model_settings_, "Model Options");
+	preferences.insertPage(model_settings_, "Models");
 	coloring_settings_ = new ColoringSettingsDialog(this);
-	preferences.insertTab(coloring_settings_, "Coloring Options");
+	preferences.insertPage(coloring_settings_, "Model Colors");
 }
 
 void DisplayProperties::finalizePreferencesTab(Preferences &preferences)
@@ -211,13 +211,13 @@ void DisplayProperties::finalizePreferencesTab(Preferences &preferences)
 {
 	if (model_settings_) 
 	{
-		preferences.removeTab(model_settings_);
+		preferences.removePage(model_settings_);
 		delete model_settings_;
 		model_settings_ = 0;
 	}
 	if (coloring_settings_) 
 	{
-		preferences.removeTab(coloring_settings_);
+		preferences.removePage(coloring_settings_);
 		delete coloring_settings_;
 		coloring_settings_ = 0;
 	}

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.28 2004/01/16 16:51:22 amoll Exp $
+# $Id: Makefile,v 1.29 2004/01/18 12:43:08 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -50,6 +50,7 @@ CPP_SOURCES=\
 	peptideDialog.C\
 	peptideDialogData.C\
 	preferences.C\
+	preferencesData.C\
 	setCamera.C\
 	setCameraData.C\
 	pythonSettings.C\
@@ -102,6 +103,7 @@ MOC_SOURCES=\
 	peptideDialog_moc.C\
 	peptideDialogData_moc.C\
 	preferences_moc.C\
+	preferencesData_moc.C\
 	pythonSettings_moc.C\
 	pythonSettingsData_moc.C\
 	selectorDialog_moc.C\
@@ -134,6 +136,7 @@ UIC_SOURCES=\
 	mouseSensitivityData.C\
 	parsedFunctionDialogData.C\
 	peptideDialogData.C\
+	preferencesData.C\
 	pythonSettingsData.C\
 	selectorDialogData.C\
 	setCameraData.C\
@@ -156,9 +159,6 @@ serverPreferences_moc.C: $(HEADER_DIR)/serverPreferences.h
 
 openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
 	$(MOC) $(HEADER_DIR)/openBruker1DFile.h -o $@
-
-preferences_moc.C: $(HEADER_DIR)/preferences.h
-	$(MOC) $(HEADER_DIR)/preferences.h -o $@
 
 depend: $(UIC_SOURCES) $(MOC_SOURCES)
 
