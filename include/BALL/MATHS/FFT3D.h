@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.7 2003/03/26 09:31:55 sturm Exp $
+// $Id: FFT3D.h,v 1.8 2003/05/27 18:46:58 oliver Exp $
 
 #ifndef BALL_MATHS_FFT3D_H
 #define BALL_MATHS_FFT3D_H
@@ -297,7 +297,7 @@ namespace BALL
 				*/
 			const FFTW_COMPLEX& operator[](const Vector3& pos) const
 				throw(Exception::OutOfGrid);
-			
+
 			/** Access the (raw) data at Position pos.
 			 */
 			FFTW_COMPLEX& operator[](const Position& pos)
