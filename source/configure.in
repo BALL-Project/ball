@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.22 2002/12/12 14:51:31 oliver Exp $
+dnl    $Id: configure.in,v 1.23 2002/12/12 17:29:53 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -31,6 +31,7 @@ AC_ARG_WITH(qt-incl,           [  --with-qt-incl=DIR      QT header files are in
 AC_ARG_WITH(qt-libs,           [  --with-qt-libs=DIR      QT libraries are in DIR])
 AC_ARG_WITH(qt-mt,             [  --with-qt-mt            use a threadsafe version of the QT lib (libqt-mt)])
 AC_ARG_WITH(moc,               [  --with-moc=MOC          use MOC as the absolute path to the QT meta object compiler (moc)])
+AC_ARG_WITH(uic,               [  --with-moc=UIC          use UIC as the absolute path to the QT user interface compiler (uic)])
 AC_ARG_WITH(opengl-incl,       [  --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL])
 AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL])
 AC_ARG_WITH(mesa,              [  --with-mesa             use MESA instead of OpenGL])
@@ -120,6 +121,12 @@ if test "$with_moc" != "" ; then
 	MOC=$with_moc
 else
  	MOC=moc
+fi
+
+if test "$with_uic" != "" ; then	
+	UIC=$with_uic
+else
+ 	UIC=uic
 fi
 
 if test "$with_libxnet" != "no" ; then	
