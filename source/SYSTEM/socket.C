@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.19 2000/10/30 00:20:06 amoll Exp $
+// $Id: socket.C,v 1.20 2001/04/30 13:42:18 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -516,42 +516,6 @@ namespace BALL
 
 		return wlen;
 	}
-
-#	ifndef BALL_OS_LINUX
-	// linux does not have sendmsg or recvmsg
-
-	int SocketBuf::recvmsg(msghdr* msg, int msgf)
-	{
-		if (rtmo != -1 && is_readready (rtmo)==0) 
-		{
-			return 0;
-		}
-		
-		int	rval;
-		if ((rval = ::recvmsg(rep->sock, msg, msgf)) == -1)
-		{
-			errnoError_("SocketBuf::recvmsg");
-		}
-
-		return (rval==0)? EOF: rval;
-	}
-
-	int SocketBuf::sendmsg(msghdr* msg, int msgf)
-	{
-		if (stmo != -1 && is_writeready (stmo)==0)
-		{
-			return 0;
-		}
-		
-		int	wval;
-		if ((wval = ::sendmsg (rep->sock, msg, msgf)) == -1)
-		{
-			errnoError_("SocketBuf::sendmsg");
-		}
-
-		return wval;
-	}
-#	endif // !LINUX
 
 	int SocketBuf::sendtimeout(int wp)
 	{
