@@ -1,4 +1,4 @@
-// $Id: ruleEvaluator.C,v 1.3 2000/05/24 16:20:40 oliver Exp $
+// $Id: ruleEvaluator.C,v 1.4 2000/05/24 17:58:03 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/ruleEvaluator.h>
 #include <BALL/FORMAT/INIFile.h>
@@ -134,6 +134,7 @@ namespace BALL
 					expression_string = line.after("=");
 				}
 				expression_string.trim();
+				value.trim();
 
 				// push the expression into the list
 				rule_map_[symbol].push_back(pair<Expression, String>(Expression(expression_string), value));
