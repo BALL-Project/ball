@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.20.4.2 2002/10/29 17:30:54 amoll Exp $
+// $Id: mainControl.h,v 1.20.4.3 2002/11/29 00:56:10 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -801,6 +801,22 @@ namespace BALL
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 							
+			/** Get the HashSet with the selected composites
+			 */
+			const HashSet<Composite*>& getSelection() const
+				throw();
+
+			/** Return true if exact one system is selected and nothing else
+			 */
+			bool isSystemSelected()
+				throw();
+
+			/** Select the composite parents of the geometric objects.
+			 		The message is sent by the Scene.
+			 */
+			void selectComposites_(GeometricObjectSelectionMessage& message)
+				throw();
+
 			//@}
 			/**	@name	Storers
 			*/
@@ -825,6 +841,12 @@ namespace BALL
 							
 			//@}
 			
+			protected:
+
+			/*_ List with the selected composites
+			*/
+			HashSet<Composite*> 						selection_;
+
 			private:
 
 			/*_	Create a unique item ID.
