@@ -1,4 +1,4 @@
-dnl		$Id: aclocal.m4,v 1.14 2003/01/21 10:50:11 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.15 2003/03/03 13:09:04 anhi Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -1348,6 +1348,29 @@ AC_DEFUN(CF_CHECK_ANSI_IOSTREAM, [
 		BALL_HAS_ANSI_IOSTREAM=yes
 	)
 	AC_MSG_RESULT($BALL_HAS_ANSI_IOSTREAM)
+])
+
+dnl
+dnl		check if we can use <sstream> or if we need to support old
+dnl		style strstream
+dnl
+AC_DEFUN(CF_CHECK_HAS_SSTREAM, [
+	AC_MSG_CHECKING(for sstream headers)
+	BALL_HAS_SSTREAM=no
+	AC_TRY_COMPILE(
+		[
+			#include <sstream>
+			class A : public std::stringbuf
+			{
+				A() : std::stringbuf()
+				{}
+			};
+		],
+		[
+		],
+		BALL_HAS_SSTREAM=yes
+	)
+	AC_MSG_RESULT($BALL_HAS_SSTREAM)
 ])
 
 dnl
