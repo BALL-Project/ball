@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Atom_test.C,v 1.19 2003/06/25 16:38:18 amoll Exp $
+// $Id: Atom_test.C,v 1.20 2003/06/26 11:44:50 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -18,7 +18,7 @@
 #include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.19 2003/06/25 16:38:18 amoll Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.20 2003/06/26 11:44:50 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -72,12 +72,13 @@ CHECK(void setPosition(const Vector3& position) throw())
 RESULT
 			
 CHECK(const Vector3& getPosition() const throw())
-	TEST_EQUAL(ac.getPosition(), BALL_ATOM_DEFAULT_POSITION)
+	TEST_EQUAL(ac.getPosition(), Vector3(BALL_ATOM_DEFAULT_POSITION))
 RESULT
 
 CHECK(Vector3& getPosition() throw())
 	Atom a;
-	a.getPosition() = Vector3(1,2,3);
+	Log.error() << &a.getPosition() << std::endl;
+	a.getPosition().set(1,2,3);
 	TEST_EQUAL(a.getPosition(), Vector3(1,2,3))
 RESULT
 
@@ -108,7 +109,7 @@ CHECK(void setVelocity(const Vector3& velocity) throw())
 RESULT
 			
 CHECK(const Vector3& getVelocity() const throw())
-	TEST_EQUAL(ac.getVelocity(), BALL_ATOM_DEFAULT_VELOCITY)
+	TEST_EQUAL(ac.getVelocity(), Vector3(BALL_ATOM_DEFAULT_VELOCITY))
 RESULT
 
 CHECK(void setForce(const Vector3& force) throw())
@@ -118,7 +119,7 @@ CHECK(void setForce(const Vector3& force) throw())
 RESULT
 
 CHECK(const Vector3& getForce() const throw())
-	TEST_EQUAL(ac.getForce(), BALL_ATOM_DEFAULT_FORCE)
+	TEST_EQUAL(ac.getForce(), Vector3(BALL_ATOM_DEFAULT_FORCE))
 RESULT
 
 CHECK(Vector3& getForce() throw())
@@ -437,7 +438,6 @@ CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const t
 	pm.registerClass(getStreamName<Composite>(), Composite::createDefault);
 	pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 	pm.registerClass(getStreamName<Bond>(), Bond::createDefault);
-	//fragment->remove(*atom);
 	*atom >> pm;
 	ofile.close();
 RESULT
@@ -693,15 +693,26 @@ CHECK(const Residue* getResidue() const throw())
 RESULT
 
 CHECK(const StaticAtomAttributes* getAttributePtr() const)
-  // ???
+	Atom a;
+	a.setCharge(1.23);
+	TEST_NOT_EQUAL(a.getAttributePtr(), 0)
+	TEST_REAL_EQUAL(a.getAttributePtr()->charge, 1.23)
 RESULT
 
 CHECK(static AttributeVector& getAttributes())
-  // ???
+	Atom a;
+	TEST_EQUAL(a.getAttributes().size() > 0, true)
 RESULT
 
 CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
-  // ???
+	Atom a(PTE[Element::HELIUM], "Atom1", "my_type_name", 'A',Vector3(1,2,3), Vector3(4,5,6), Vector3(7,8,9), 10.1, 11.2);
+
+  String filename;
+	NEW_TMP_FILE(filename)
+	std::ofstream outfile(filename.c_str(), std::ios::out);
+	a.dump(outfile);
+	outfile.close();
+	TEST_FILE_REGEXP(filename.c_str(), "data/Atom_test.txt")
 RESULT
 
 
