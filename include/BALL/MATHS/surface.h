@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surface.h,v 1.17 2002/12/17 13:18:34 anker Exp $
+// $Id: surface.h,v 1.18 2003/01/07 14:14:52 amoll Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -16,6 +16,9 @@
 
 namespace BALL 
 {
+	/** @name Surface
+	 */
+	//@{
 
 	/**	Generic Three-dimensional Surface class.
 			This class describes a three-dimensional triangulated surface. 
@@ -527,11 +530,11 @@ namespace BALL
 	}
 
 
-
-
 	/**	Default surface type.
 	*/
 	typedef TSurface<float> Surface;
+
+	//@}
 
 } // namespace BALL
 

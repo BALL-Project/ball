@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.h,v 1.29 2002/02/27 12:18:56 sturm Exp $
+// $Id: quaternion.h,v 1.30 2003/01/07 14:14:52 amoll Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -22,6 +22,9 @@
 
 namespace BALL 
 {
+	/** @name Quaternions
+	 */
+	//@{
 
 	/**	Generic Quaternion Class. 
       {\bf Definition:} \URL{BALL/MATHS/quaternion.h} \\
@@ -618,7 +621,8 @@ namespace BALL
 	*/
 	typedef TQuaternion<float> Quaternion;
 
-
+	//@}
+	
 } // namespace BALL
 
 #endif // BALL_MATHS_QUATERNION_H

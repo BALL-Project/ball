@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line3.h,v 1.33 2002/12/12 09:48:46 oliver Exp $
+// $Id: line3.h,v 1.34 2003/01/07 14:14:52 amoll Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -24,6 +24,9 @@
 namespace BALL 
 {
 
+	/** @name Line
+	 */
+	//@{
 	template <typename T>
 	class TLine3;
 	
@@ -36,7 +39,7 @@ namespace BALL
 		throw();
 	
 	/**	Generic Line in Three-Dimensional Space.
-      {\bf Definition:} \URL{BALL/MATHS/line3.h}  \\
+      {\bf Definition:} \URL{BALL/MATHS/line3.h}  \\ \\
 	*/
 	template <typename T>
 	class TLine3
@@ -64,8 +67,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Default constructor.
-				This method creates a new TLine3 object.
+		/**	Default constructor
 		*/
 		TLine3()
 			throw()
@@ -75,7 +77,6 @@ namespace BALL
 		}
 
 		/**	Copy constructor.
-				Create a new TLine3 object from another.
 				@param TLine3 the TLine3 object to be copied
 				@param bool ignored - just for interface consistency
 		*/	
@@ -384,6 +385,8 @@ namespace BALL
 		s << '(' << line.p << ' ' << line.d << ')';
 		return s;
 	}
+	//@}
+	
 	//@}
 
 

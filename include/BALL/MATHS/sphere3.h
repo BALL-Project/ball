@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere3.h,v 1.26 2002/12/12 09:48:46 oliver Exp $
+// $Id: sphere3.h,v 1.27 2003/01/07 14:14:52 amoll Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -27,6 +27,10 @@
 
 namespace BALL 
 {
+
+	/** @name Sphere
+	 */
+	//@{
 
 	/** Generic Sphere Class.
       {\bf Definition:} \URL{BALL/MATHS/sphere3.h}  \\
@@ -302,6 +306,8 @@ namespace BALL
 			be used. It is predefined as {\tt Sphere3} for convenience.
 	*/
 	typedef TSphere3<float> Sphere3;
+	
+	//@}
 
 } // namespace BALL
 

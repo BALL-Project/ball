@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: function.h,v 1.16 2002/12/12 09:48:46 oliver Exp $
+// $Id: function.h,v 1.17 2003/01/07 14:14:52 amoll Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
@@ -12,7 +12,6 @@
 
 namespace BALL
 {
-
 	/** Constant function class. This function represents a constant that is
 			already known at compile time. 
 			{\bf Definition:} \URL{BALL/MATHS/function.h}
