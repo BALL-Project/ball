@@ -1,18 +1,32 @@
-// $Id: rtti.C,v 1.5 2001/06/21 02:40:47 oliver Exp $
+// $Id: rtti.C,v 1.6 2001/06/22 11:06:37 oliver Exp $
 
 #include <BALL/COMMON/rtti.h>
 #include <typeinfo>
 #include <ctype.h>
+
+#ifdef __GNUC__
+	extern "C" char* cplus_demangle(const char* s, int options); 
+#endif
 
 namespace BALL 
 {
 
 	string streamClassName(const std::type_info& t)
 	{
-		string s(t.name());
 #ifdef __GNUC__
-    s = GNUDemangling::demangle(s);
+    // s = GNUDemangling::demangle(s);
+		string s("_Z");
+		s += t.name();		
+		char* name = cplus_demangle(s.c_str(), 1 << 8);
+		if (name != 0)
+		{
+			 s = name;
+		} 
+	
+#else
+		string s(t.name());
 #endif
+
 
 		for (unsigned int i = 0; i < s.size(); i++)
 		{
