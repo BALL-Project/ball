@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.9 1999/10/30 12:53:41 oliver Exp $
+dnl    $Id: configure.in,v 1.10 1999/11/03 12:12:42 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -31,13 +31,13 @@ dnl		from a fully specified path
 dnl
 AC_DEFUN(AC_BASENAME,[
 	TMP__DIR="$1/"
-  while test "${TMP__DIR}" != "" ; do
-    TMP__NAME=`echo ${TMP__DIR}|cut -d/ -f1`
-    TMP__DIR=`echo ${TMP__DIR}|cut -d/ -f2-`
-    if test "${TMP__DIR}" = "${TMP__NAME}" ; then
-      TMP__DIR=""
-    fi
-  done
+	while test "${TMP__DIR}" != "" ; do
+		TMP__NAME=`echo ${TMP__DIR}|cut -d/ -f1`
+		TMP__DIR=`echo ${TMP__DIR}|cut -d/ -f2-`
+		if test "${TMP__DIR}" = "${TMP__NAME}" ; then
+			TMP__DIR=""
+		fi
+	done
 ])
 	
 
@@ -424,19 +424,19 @@ dnl
 
 AC_MSG_RESULT(searching for a C++ compiler:)
 if test "${CXX}" != "" ; then
-  if test -f "${CXX}" ; then
-    AC_MSG_RESULT(predefined in configure: ${CXX})
-  else
-    AC_PATH_PROG(CXXPATH,${CXX},no)
-    if test "${CXXPATH}" = no ; then
-      AC_MSG_RESULT()
-      AC_MSG_RESULT(Cannot find ${CXX}. Please add it to your PATH)
-      AC_MSG_RESULT(or specify an absolute path in configure.)
-      AC_MSG_ERROR(aborted)
-    else
-      CXX=${CXXPATH}
-    fi
-  fi
+	if test -f "${CXX}" ; then
+		AC_MSG_RESULT(predefined in configure: ${CXX})
+	else
+		AC_PATH_PROG(CXXPATH,${CXX},no)
+		if test "${CXXPATH}" = no ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Cannot find ${CXX}. Please add it to your PATH)
+			AC_MSG_RESULT(or specify an absolute path in configure.)
+			AC_MSG_ERROR(aborted)
+		else
+			CXX=${CXXPATH}
+		fi
+	fi
 else
 	CXXPATH=""
 	while test "${CXXPATH}" = "" ; do
@@ -445,25 +445,25 @@ else
 			CXXPATH="END"
 		fi
 		if test "${CXXPATH}" != "END" ; then
-	  	AC_PATH_PROG(CXXPATH,${CXX},no)
-	    if test "${CXXPATH}" = no ; then
-	  		CXXPATH=""
+			AC_PATH_PROG(CXXPATH,${CXX},no)
+			if test "${CXXPATH}" = no ; then
+				CXXPATH=""
 				unset ac_cv_path_CXXPATH
-	    else
-  		  CXX=${CXXPATH}
-		  fi
+			else
+				CXX=${CXXPATH}
+			fi
 		fi
 			
 		CXX_SEARCH_ORDER=`echo "${CXX_SEARCH_ORDER} " |${CUT} -d\  -f2-`
 	done
 
-  if test "${CXXPATH}" = "end" ; then
-    AC_MSG_RESULT()
-    AC_MSG_RESULT(Could not find a C++ compiler. Please change the settings)
-    AC_MSG_RESULT(of your PATH environment variable (using setenv export))
+	if test "${CXXPATH}" = "end" ; then
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Could not find a C++ compiler. Please change the settings)
+		AC_MSG_RESULT(of your PATH environment variable (using setenv export))
 		AC_MSG_RESULT(or specify an absolute path in configure by setting the variable)
 		AC_MSG_RESULT(CXX=<pathname>.)
-    AC_MSG_ERROR(aborted)
+		AC_MSG_ERROR(aborted)
 	fi
 fi
 
@@ -564,7 +564,7 @@ if test "${IS_GXX}" = "true" ; then
 		if test "${CXX_VERSION_1}" -le 1 -a "${CXX_VERSION_2}" -eq 0 ; then
 			AC_MSG_RESULT()
 			AC_MSG_RESULT(Wrong version of egcs! egcs below release 1.1.x won't compile due to an internal compiler error)
-	 		AC_MSG_RESULT(Please upgrade to a more recent version of egcs.)
+			AC_MSG_RESULT(Please upgrade to a more recent version of egcs.)
 			AC_MSG_ERROR(aborted)
 		fi
 	fi
@@ -682,9 +682,9 @@ if test "${HAS_GPLUSPLUS}" = "true" ; then
 	if test "${IS_EGXX}" = true; then
 		BALL_TYPENAME=typename
 	else
-  	if test "${CXX_VERSION_1}" -gt 2 -o "${CXX_VERSION_1}" -eq 2 -a "${CXX_VERSION_2}" -ge 8 ; then
+		if test "${CXX_VERSION_1}" -gt 2 -o "${CXX_VERSION_1}" -eq 2 -a "${CXX_VERSION_2}" -ge 8 ; then
 			BALL_TYPENAME=typename
-  	fi
+		fi
 	fi
 else
 	dnl
@@ -956,7 +956,7 @@ AC_TRY_COMPILE(
 		};
 	],
 	[	
- 	],
+	],
 	BALL_NULL_TEMPLATE_ARGS="<>")	
 if test "${BALL_NULL_TEMPLATE_ARGS}" = "NULL" ; then
 	AC_TRY_COMPILE(
@@ -977,6 +977,27 @@ if test "${BALL_NULL_TEMPLATE_ARGS}" = "NULL" ; then
 	AC_MSG_RESULT(could not find a suitable argument for null templates)
 	AC_ERROR(aborted)
 fi
+
+dnl
+dnl		check for ANSI compliant <iostream>
+dnl 	Wee need this for the base classes (ios vs. basic_ios<char>) in socket.h/C
+dnl
+AC_MSG_CHECKING(for ANSI compliant iostream)
+BALL_HAS_ANSI_IOSTREAM=no
+AC_TRY_COMPILE(
+	[
+		#include <iostream>
+		class A:public std::iostream
+		{
+			A():std::basic_ios<char>(0),std::iostream(0)
+			{}
+		};
+	],
+	[	
+ 	],
+	BALL_HAS_ANSI_IOSTREAM=yes
+)	
+AC_MSG_RESULT($BALL_HAS_ANSI_IOSTREAM)
 
 dnl
 dnl		Checks for typedefs, structures, and compiler characteristics.
@@ -1630,6 +1651,11 @@ AC_DEFINE_UNQUOTED(BALL_PATH, "${BALL_PATH}")
 
 dnl			define BALL_NULL_TEMPLATE_ARGS
 AC_DEFINE_UNQUOTED(BALL_NULL_TEMPLATE_ARGS, ${BALL_NULL_TEMPLATE_ARGS})
+
+dnl			define BALL_HAS_ANSI_IOSTREAM
+if test "$BALL_HAS_ANSI_IOSTREAM" = yes ; then
+	AC_DEFINE(BALL_HAS_ANSI_IOSTREAM)
+fi
 
 dnl			Some compilers (SUN CC/4.2) don't like
 dnl			the way we use the arrow operator (->)

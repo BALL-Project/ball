@@ -177,3 +177,8 @@
 // either "" or "<>"
 #define BALL_NULL_TEMPLATE_ARGS ""
 
+// Define whether the compiler provides an ANSI-compliant implementation
+// of <iostream>. This is required in COMMON/socket.h/C since we need
+// the correct initialisation of the base classes. These base classes are
+// either something like std::basic_ios<char> etc., or ios, istream etc.
+#undef BALL_HAS_ANSI_IOSTREAM

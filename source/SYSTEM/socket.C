@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.6 1999/11/03 08:41:04 oliver Exp $
+// $Id: socket.C,v 1.7 1999/11/03 12:12:35 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -1108,20 +1108,18 @@ namespace BALL
 	}
 
 	IOStreamSocket::IOStreamSocket(SocketBuf::type ty, int proto)
-		:	std::basic_ios<char>(new SockInetBuf(ty, proto))
+		:	BALL_IOS(new SockInetBuf(ty, proto))
 	{
-		std::cerr << "called IOStreamSocket(type = " << ty << ",  proto = " << proto << ")" << std::endl;
 	}
 
 	IOStreamSocket::IOStreamSocket(SocketBuf& sb)
-		: std::basic_ios<char>(new SockInetBuf(sb))
+		: BALL_IOS(new SockInetBuf(sb))
 	{
-		std::cerr << "called IOStreamSocket(SocketBuf& sb = " << (void*)&sb << ")" << std::endl;
 	}
 
 	IOStreamSocket::~IOStreamSocket()
 	{
-		delete std::basic_ios<char>::rdbuf();
+		delete rdbuf();
 		init(0);
 	}
 
