@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.19 2002/12/15 01:52:49 amoll Exp $
+// $Id: displayProperties.C,v 1.20 2002/12/16 15:34:17 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -29,8 +29,8 @@ namespace BALL
 				id_(-1),
 				model_string_static_("stick"),
 				model_string_dynamic_("line"),
-				precision_string_static_("ultra"),
-				precision_string_dynamic_("high"),
+				precision_string_static_("high"),
+				precision_string_dynamic_("medium"),
 				coloring_method_string_("by element"),
 				distance_coloring_(false),
 
@@ -218,10 +218,6 @@ namespace BALL
 			{
 				setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_HIGH);
 			}
-			else if (string == "ultra")
-			{
-				setValue_(ADDRESS__STATIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_ULTRA);
-			}
 			else
 			{
 				Log.error() << "Unknown static precision: " << string << std::endl;
@@ -244,10 +240,6 @@ namespace BALL
 			else if (string == "high")
 			{
 				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_HIGH);
-			}
-			else if (string == "ultra")
-			{
-				setValue_(ADDRESS__DYNAMIC_DRAWING_PRECISION, VALUE__DRAWING_PRECISION_ULTRA);
 			}
 			else
 			{
@@ -618,10 +610,6 @@ namespace BALL
 					static_base_model_pointer_->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH);
 					break;
 					
-				case VALUE__DRAWING_PRECISION_ULTRA:
-					static_base_model_pointer_->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA);
-					break;
-					
 				default:
 					throw(InvalidOption(__FILE__, __LINE__, getValue_(ADDRESS__STATIC_DRAWING_PRECISION)));
 			}
@@ -709,10 +697,6 @@ namespace BALL
 					
 				case VALUE__DRAWING_PRECISION_HIGH:
 					dynamic_base_model_pointer_->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_HIGH);
-					break;
-					
-				case VALUE__DRAWING_PRECISION_ULTRA:
-					dynamic_base_model_pointer_->setProperty(VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_ULTRA);
 					break;
 					
 				default:
