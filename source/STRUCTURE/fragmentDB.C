@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.36 2001/07/25 11:36:12 oliver Exp $
+// $Id: fragmentDB.C,v 1.37 2001/12/11 12:06:26 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -12,6 +12,7 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/MATHS/matrix44.h>
 #include <BALL/MATHS/quaternion.h>
+#include <BALL/DATATYPE/stringHashMap.h>
 	
 /*			Things still missing (among others)
 				===================================
@@ -21,6 +22,7 @@
 */
 
 #define FRAGMENT_DB_INCLUDE_TAG "#include:"
+#define DEBUG
 
 using namespace std;
 
@@ -837,19 +839,27 @@ namespace BALL
 		// As the fragment should be const, we store the properties
 		// in a bit vector and OR them later with the fragment's properties
 		BitVector	additional_properties;
-		if (RTTI::isKindOf<Residue>(fragment))
+		const Residue* residue = dynamic_cast<const Residue*>(&fragment);
+		if (residue != 0)
 		{
-			const Residue*	residue = RTTI::castTo<const Residue>(fragment);
 			if (residue->isCTerminal())
 			{
 				additional_properties.setBit(Residue::PROPERTY__C_TERMINAL);
+				Log.info() << "is C terminal!" << std::endl;
 			}
 			if (residue->isNTerminal())
 			{
 				additional_properties.setBit(Residue::PROPERTY__N_TERMINAL);
+				Log.info() << "is C terminal!" << std::endl;
 			}
 		}
-
+#ifdef DEBUG
+		else
+		{
+			Log.info() << " not a residue!" << std::endl;
+		}
+#endif
+	
 		Fragment* variant = 0;
 		// the number of properties that matched.
 		// the fragment with the largest number of matched
@@ -870,8 +880,14 @@ namespace BALL
 			props |= additional_properties;
 			property_difference = (int)abs((int)props.countValue(true) 
 													- (int)(*it)->getBitVector().countValue(true));
+#ifdef DEBUG
+			Log.info() << " props = " << props << "  bv = " << (*it)->getBitVector() << "   add = " << additional_properties << std::endl;
+#endif
 			props &= (*it)->getBitVector();
 			number_of_properties = (int)props.countValue(true);
+#ifdef DEBUG
+			Log.info() << " considering variant " << (*it)->getName() << ". # properties: " << number_of_properties << std::endl;
+#endif
 
 			if ((number_of_properties > best_number_of_properties)
 					|| ((number_of_properties == best_number_of_properties) 
@@ -1800,6 +1816,11 @@ namespace BALL
 		{
 			return 0;
 		}
+		
+#ifdef DEBUG
+		Log.info() << "FragmentDB::BuildBondsProcessor: building bonds for " 
+							 << fragment.getName() << " from template " << tplate->getName() << std::endl;
+#endif
 
 		Size bond_count = 0;
 		AtomConstIterator				tmp_it1;
@@ -1810,57 +1831,71 @@ namespace BALL
 		}
 
 		// iterate over all atoms in the tplate
-		AtomConstIterator				tplate_atom_it;
-		AtomIterator				frag_atom_it;
+		AtomConstIterator				catom_it;
+		AtomIterator						frag_atom_it;
 		Atom::BondConstIterator	tplate_bond_it;
-		Atom*								partner;
+		Atom*										partner;
 
 		// count the counds we build...
 		Size bonds_built = 0;
 
-		// iterate over all template atoms 
-		for (tplate_atom_it = tplate->beginAtom(); +tplate_atom_it; ++tplate_atom_it) 
+		StringHashMap<const Atom*> template_names;
+
+		String atom_name;
+		for (catom_it = tplate->beginAtom(); +catom_it; ++catom_it)
 		{
-			// determing the corresponding fragment atom
-			for (frag_atom_it = fragment.beginAtom(); +frag_atom_it; ++frag_atom_it) 
+			atom_name = catom_it->getName().trim();
+#ifdef DEBUG
+			if (template_names.has(atom_name))
 			{
-				if ((*frag_atom_it).getName().trim() == (*tplate_atom_it).getName()) 
+				Log.warn() << "FragmentDB::BuildBondsProcessor: duplicate atom name in template " << tplate->getName() << std::endl;
+			}
+#endif
+			template_names.insert(atom_name, &*catom_it);
+		}
+
+		// iterate over all fragment atoms 
+		for (frag_atom_it = fragment.beginAtom(); +frag_atom_it; ++frag_atom_it) 
+		{
+			atom_name = frag_atom_it->getName().trim();
+			if (template_names.has(atom_name)) 
+			{
+				const Atom* tplate_atom = template_names[atom_name];
+
+				// we found two matching atoms. Great! Now check their bonds..
+				// iterate over all bonds of the template
+				for (tplate_bond_it = tplate_atom->beginBond(); +tplate_bond_it; ++tplate_bond_it) 
 				{
-					// we found two matching atoms. Great! Now check their bonds..
-					// iterate over all bonds of the template
-					for (tplate_bond_it = (*tplate_atom_it).beginBond(); +tplate_bond_it; ++tplate_bond_it) 
+					partner = tplate_bond_it->getPartner(*tplate_atom);
+					// if we found the bond partner, create the new bond
+					if (partner != 0) 
 					{
-						partner = (*tplate_bond_it).getPartner(*tplate_atom_it);
-						// if we found the bond partner, create the new bond
-						if (partner != 0) 
+						name = partner->getName();
+						AtomIterator	second_frag_it;
+						for (second_frag_it = fragment.beginAtom(); +second_frag_it; ++second_frag_it) 
 						{
-							name = partner->getName();
-							AtomIterator	second_frag_it;
-							for (second_frag_it = fragment.beginAtom(); +second_frag_it; ++second_frag_it) 
+							if (second_frag_it->getName().trim() == name) 
 							{
-								if (second_frag_it->getName().trim() == name) 
+								Bond* bond = second_frag_it->getBond(*frag_atom_it);
+								if (bond == 0)
 								{
-									Bond* bond = second_frag_it->getBond(*frag_atom_it);
-									if (bond == 0)
-									{
-										// if the bond did not yet exist, create it											
-										bond = frag_atom_it->createBond(*second_frag_it);
-									}
-
-									// assign the correct bond order, name, and type
-									// (even if the bond exists -- too correct PDB CONECT entries)
-									if (bond != 0)
-									{
-										// assign the bond type and order
-										bond->setOrder(tplate_bond_it->getOrder());
-										bond->setType(tplate_bond_it->getType());
-										bond->setName(tplate_bond_it->getName());
-
-										// count this bond 
-										bonds_built++;
-									}
-									break;
+									// if the bond did not yet exist, create it											
+									bond = frag_atom_it->createBond(*second_frag_it);
 								}
+
+								// assign the correct bond order, name, and type
+								// (even if the bond exists -- to correct PDB CONECT entries)
+								if (bond != 0)
+								{
+									// assign the bond type and order
+									bond->setOrder(tplate_bond_it->getOrder());
+									bond->setType(tplate_bond_it->getType());
+									bond->setName(tplate_bond_it->getName());
+
+									// count this bond 
+									bonds_built++;
+								}
+								break;
 							}
 						}
 					}
