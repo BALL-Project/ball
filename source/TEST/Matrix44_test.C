@@ -1,4 +1,4 @@
-// $Id: Matrix44_test.C,v 1.4 2000/03/13 18:07:19 amoll Exp $
+// $Id: Matrix44_test.C,v 1.5 2000/03/15 02:21:29 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <math.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Matrix44_test.C,v 1.4 2000/03/13 18:07:19 amoll Exp $")
+START_TEST(class_name, "$Id: Matrix44_test.C,v 1.5 2000/03/15 02:21:29 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -130,7 +130,7 @@ CHECK(TMatrix4x4(const T* ptr);)
 	TEST_EXCEPTION(Exception::NullPointer, m1 = Matrix4x4((float*)0))
 RESULT
 
-CHECK(TMatrix4x4(const T* ptr[4]))
+CHECK(TMatrix4x4(const T ptr[4][4]))
 	float v[4][4];
 	float pos = 1.0;
 	for (int i=0; i<4; i++ )
@@ -141,7 +141,7 @@ CHECK(TMatrix4x4(const T* ptr[4]))
 				pos++;
 			}
 	}
-	//m1 = Matrix4x4(v);
+	m1 = Matrix4x4(v);
 	TEST_EQUAL(m1, m)
 	TEST_EXCEPTION(Exception::NullPointer, m1 = Matrix4x4((float*)0))
 RESULT
@@ -164,7 +164,7 @@ CHECK(set( const T* ptr))
 	TEST_EXCEPTION(Exception::NullPointer, m1.set((float*)0))
 RESULT
 
-CHECK(set( const T* ptr[4]))
+CHECK(set( const T ptr[4][4]))
 	m1 = Matrix4x4();
 	float v[4][4];
 	float pos = 1.0;
@@ -176,7 +176,7 @@ CHECK(set( const T* ptr[4]))
 				pos++;
 			}
 	}
-	//m1.set(v);
+	m1.set(v);
 	TEST_EQUAL(m1, m)
 	TEST_EXCEPTION(Exception::NullPointer, m1.set((float*)0))
 RESULT
@@ -217,7 +217,7 @@ CHECK(operator = ( const T* ptr))
 	TEST_EQUAL(m1, m)
 RESULT
 
-CHECK(operator = ( const T* ptr[4]))
+CHECK(operator = ( const T ptr[4][4]))
 	m1 = Matrix4x4();
 	float v[4][4];
 	float pos = 1.0;
@@ -229,7 +229,7 @@ CHECK(operator = ( const T* ptr[4]))
 				pos++;
 			}
 	}
-	//m1 = v;
+	m1 = v;
 	TEST_EQUAL(m1, m)
 RESULT
 
@@ -247,11 +247,11 @@ CHECK(get(T* ptr) const)
 	TEST_EXCEPTION(Exception::NullPointer, m1.get((float*)0))
 RESULT
 
-CHECK(get(T* ptr[4]) const)
+CHECK(get(T* ptr[4][4]) const)
 	m1 = Matrix4x4();
 	float arr[4][4];
-	//m.get(arr);
-	//m1.set(arr);
+	m.get(arr);
+	m1.set(arr);
 	TEST_EQUAL(m1, m)
 	TEST_EXCEPTION(Exception::NullPointer, m1.get((float*)0))
 RESULT
@@ -964,9 +964,9 @@ RESULT
 
 CHECK(TMatrix4x4::isEqual(TMatrix4x4<T>& m, T maxDiff) const )
 	m1 = Matrix4x4(m);
-	TEST_EQUAL(m1.isEqual(m, 0.0001), true)
+	TEST_EQUAL(m1.isEqual(m, 0.00001), true)
 		m1.m41 = 12.12;
-	TEST_EQUAL(m1.isEqual(m, 0.0001), false)
+	TEST_EQUAL(m1.isEqual(m, 0.00001), false)
 RESULT
 
 //line 566: method TMatrix4x4::isValid() const 
