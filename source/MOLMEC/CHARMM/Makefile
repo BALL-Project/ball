@@ -1,6 +1,7 @@
+# MOLMEC/CHARMM/Makefile
+# $Id: Makefile,v 1.2 2000/02/10 11:54:57 oliver Exp $
+#
 DIRECTORY=MOLMEC/CHARMM
-
-all: test
 
 THISLIB=$(LIBNAME)
 
@@ -12,12 +13,5 @@ CPP_SOURCES=\
 	charmmStretch.C\
 	charmmTorsion.C
 
-
 include ../../common.mak
 include .Dependencies
-
-test:	$(OBJECTS) charmm_test.o
-	echo $(OBJECTS)
-	$(CXX) -o test charmm_test.o $(OBJECTS) $(LIBS)
-		
-
