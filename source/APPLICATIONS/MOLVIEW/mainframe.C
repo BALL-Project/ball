@@ -37,7 +37,9 @@ Mainframe::Mainframe
 		hor_splitter_(0),
 		vert_splitter_(0),
 		logview_(0),
-		py_widget_(0),
+		#ifdef BALL_PYTHON_SUPPORT
+			py_widget_(0),
+		#endif
 		vboxlayout_(0),
 		popup_menus_(),
 		selection_(),
@@ -107,8 +109,10 @@ Mainframe::Mainframe
 	logview_ = new LogView(vert_splitter_);
 	CHECK_PTR(logview_);
 
-	py_widget_ = new PyWidget(vert_splitter_);
-	CHECK_PTR(py_widget_);
+	#ifdef BALL_PYTHON_SUPPORT
+		py_widget_ = new PyWidget(vert_splitter_);
+		CHECK_PTR(py_widget_);
+	#endif
 
 	QLabel* message_label = new QLabel(tr("Ready."), statusBar());
 	statusBar()->addWidget(message_label, 20);
@@ -171,8 +175,10 @@ Mainframe::Mainframe
 	// ---------------------
 	// PyWidget setup
 	// ---------------------
-	py_widget_->setFont(f);
-	py_widget_->startInterpreter();
+	#ifdef BALL_PYTHON_SUPPORT
+		py_widget_->setFont(f);
+		py_widget_->startInterpreter();
+	#endif
 	
 
 	// ---------------------

@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.18 2000/07/16 19:33:16 oliver Exp $
+// $Id: mainframe.h,v 1.19 2000/07/16 22:27:31 oliver Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -33,8 +33,10 @@
 #	include <BALL/VIEW/KERNEL/logView.h>
 #endif
 
-#ifndef BALL_VIEW_OPENGL_WIDGETS_PYWIDGET_H
-#	include <BALL/VIEW/OPENGL/WIDGETS/pyWidget.h>
+#ifdef BALL_SUPPORT_PYTHON
+#	ifndef BALL_VIEW_OPENGL_WIDGETS_PYWIDGET_H
+#		include <BALL/VIEW/OPENGL/WIDGETS/pyWidget.h>
+#	endif
 #endif
 
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
@@ -224,7 +226,9 @@ class Mainframe
 	QSplitter*		hor_splitter_;
 	QSplitter*		vert_splitter_;
 	LogView*			logview_;
-	PyWidget*			py_widget_;
+	#ifdef BALL_SUPPORT_PYTHON
+		PyWidget*			py_widget_;
+	#endif
 	QVBoxLayout*	vboxlayout_;
 	
 	List<QPopupMenu*> popup_menus_;
