@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.1 2002/02/14 17:02:55 anker Exp $
+// $Id: fresno.C,v 1.1.2.2 2002/02/14 19:04:16 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -240,6 +240,7 @@ namespace BALL
 		Size acc_don_counter = 0;
 		Size acc_counter = 0;
 		Size polar_counter = 0;
+		Size hyd_counter = 0;
 
 		// STEP 1
 		// ======
@@ -261,7 +262,7 @@ namespace BALL
 						it->second = FresnoFF::HBOND_ACCEPTOR_DONOR;
 						++acc_don_counter;
 						// DEBUG
-						Log.info () << it->first->getFullName() << ": ACC_DON" << endl;
+						cout << it->first->getFullName() << ": ACC_DON" << endl;
 						// /DEBUG
 					}
 					else
@@ -269,7 +270,7 @@ namespace BALL
 						it->second = FresnoFF::HBOND_DONOR;
 						++donor_counter;
 						// DEBUG
-						Log.info () << it->first->getFullName() << ": DON" << endl;
+						cout << it->first->getFullName() << ": DON" << endl;
 						// /DEBUG
 					}
 				}
@@ -280,7 +281,7 @@ namespace BALL
 						it->second = FresnoFF::HBOND_ACCEPTOR;
 						++acc_counter;
 						// DEBUG
-						Log.info () << it->first->getFullName() << ": ACC" << endl;
+						cout << it->first->getFullName() << ": ACC" << endl;
 						// /DEBUG
 					}
 					else
@@ -288,7 +289,7 @@ namespace BALL
 						it->second = FresnoFF::POLAR;
 						++polar_counter;
 						// DEBUG
-						Log.info () << it->first->getFullName() << ": POL" << endl;
+						cout << it->first->getFullName() << ": POL" << endl;
 						// /DEBUG
 					}
 				}
@@ -300,19 +301,19 @@ namespace BALL
 					connectedTo.setArgument("(O)");
 					if (connectedTo(*atom))
 					{
-						it->second = FresnoFF::HBOND_DONOR;
-						++donor_counter;
+						it->second = FresnoFF::HBOND_HYDROGEN;
+						++hyd_counter;
 						// DEBUG
-						Log.info () << it->first->getFullName() << ": DON" << endl;
+						cout << it->first->getFullName() << ": HYD" << endl;
 						// /DEBUG
 					}
 					connectedTo.setArgument("(N)");
 					if (connectedTo(*atom))
 					{
-						it->second = FresnoFF::HBOND_DONOR;
-						++donor_counter;
+						it->second = FresnoFF::HBOND_HYDROGEN;
+						++hyd_counter;
 						// DEBUG
-						Log.info () << it->first->getFullName() << ": DON" << endl;
+						cout << it->first->getFullName() << ": HYD" << endl;
 						// /DEBUG
 					}
 				}
@@ -326,7 +327,7 @@ namespace BALL
 							it->second = FresnoFF::HBOND_DONOR;
 							++donor_counter;
 							// DEBUG
-							Log.info () << it->first->getFullName() << ": DON" << endl;
+							cout << it->first->getFullName() << ": DON" << endl;
 							// /DEBUG
 						}
 						else
@@ -334,7 +335,7 @@ namespace BALL
 							it->second = FresnoFF::HBOND_ACCEPTOR;
 							++acc_counter;
 							// DEBUG
-							Log.info () << it->first->getFullName() << ": ACC" << endl;
+							cout << it->first->getFullName() << ": ACC" << endl;
 							// /DEBUG
 						}
 					}
@@ -344,7 +345,7 @@ namespace BALL
 						{
 							it->second = FresnoFF::POLAR;
 							// DEBUG
-							Log.info () << it->first->getFullName() << ": POL" << endl;
+							cout << it->first->getFullName() << ": POL" << endl;
 							// /DEBUG
 							++polar_counter;
 						}
@@ -356,7 +357,7 @@ namespace BALL
 								{
 									it->second = FresnoFF::POLAR;
 									// DEBUG
-									Log.info () << it->first->getFullName() << ": POL" << endl;
+									cout << it->first->getFullName() << ": POL" << endl;
 									// /DEBUG
 									++polar_counter;
 								}
@@ -371,7 +372,7 @@ namespace BALL
 									{
 										it->second = FresnoFF::POLAR;
 										// DEBUG
-										Log.info () << it->first->getFullName() << ": POL" << endl;
+										cout << it->first->getFullName() << ": POL" << endl;
 										// /DEBUG
 										++polar_counter;
 									}
@@ -382,7 +383,7 @@ namespace BALL
 										{
 											it->second = FresnoFF::POLAR;
 											// DEBUG
-											Log.info () << it->first->getFullName() << ": POL" << endl;
+											cout << it->first->getFullName() << ": POL" << endl;
 											// /DEBUG
 											++polar_counter;
 										}
@@ -398,7 +399,7 @@ namespace BALL
 										{
 											it->second = FresnoFF::LIPOPHILIC;
 											// DEBUG
-											Log.info () << it->first->getFullName() << ": LIP" << endl;
+											cout << it->first->getFullName() << ": LIP" << endl;
 											// /DEBUG
 											++lipo_counter;
 											++lipo_counter;
@@ -407,7 +408,7 @@ namespace BALL
 										{
 											it->second = FresnoFF::HBOND_ACCEPTOR;
 											// DEBUG
-											Log.info () << it->first->getFullName() << ": ACC" << endl;
+											cout << it->first->getFullName() << ": ACC" << endl;
 											// /DEBUG
 											++acc_counter;
 											++acc_counter;
@@ -427,6 +428,7 @@ namespace BALL
 		cout << "h bond acceptors:        " << acc_counter << endl;
 		cout << "h bond acceptors/donors: " << acc_don_counter << endl;
 		cout << "h bond donors:           " << donor_counter << endl;
+		cout << "h bond hydrogens:        " << hyd_counter << endl;
 		cout << "polar atoms:             " << polar_counter << endl;
 		cout << "remaining atoms:         " 
 			<< getSystem()->countAtoms() - lipo_counter - acc_counter -
@@ -467,7 +469,7 @@ namespace BALL
 							{
 								it->second = FresnoFF::POLAR;
 								// DEBUG
-								Log.info () << it->first->getFullName() << ": POL" << endl;
+								cout << it->first->getFullName() << ": POL" << endl;
 								// /DEBUG
 								++polar_counter;
 								break;
@@ -515,7 +517,7 @@ namespace BALL
 									{
 										it->second = FresnoFF::POLAR;
 										// DEBUG
-										Log.info () << it->first->getFullName() << ": POL" << endl;
+										cout << it->first->getFullName() << ": POL" << endl;
 										// /DEBUG
 										++polar_counter;
 										break;
@@ -551,6 +553,7 @@ namespace BALL
 		cout << "h bond acceptors:        " << acc_counter << endl;
 		cout << "h bond acceptors/donors: " << acc_don_counter << endl;
 		cout << "h bond donors:           " << donor_counter << endl;
+		cout << "h bond hydrogens:        " << hyd_counter << endl;
 		cout << "polar atoms:             " << polar_counter << endl;
 		cout << "remaining atoms:         " 
 			<< getSystem()->countAtoms() - lipo_counter - acc_counter -
@@ -573,7 +576,7 @@ namespace BALL
 				{
 					it->second = FresnoFF::LIPOPHILIC;
 					// DEBUG
-					Log.info () << it->first->getFullName() << ": LIP" << endl;
+					cout << it->first->getFullName() << ": LIP" << endl;
 					// /DEBUG
 					++lipo_counter;
 				}
@@ -586,7 +589,7 @@ namespace BALL
 					{
 						it->second = FresnoFF::LIPOPHILIC;
 						// DEBUG
-						Log.info () << it->first->getFullName() << ": LIP" << endl;
+						cout << it->first->getFullName() << ": LIP" << endl;
 						// /DEBUG
 						++lipo_counter;
 					}
@@ -600,6 +603,7 @@ namespace BALL
 		cout << "h bond acceptors:        " << acc_counter << endl;
 		cout << "h bond acceptors/donors: " << acc_don_counter << endl;
 		cout << "h bond donors:           " << donor_counter << endl;
+		cout << "h bond hydrogens:        " << hyd_counter << endl;
 		cout << "polar atoms:             " << polar_counter << endl;
 		cout << "remaining atoms:         " 
 			<< getSystem()->countAtoms() - lipo_counter - acc_counter -
