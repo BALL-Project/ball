@@ -65,7 +65,7 @@ namespace BALL
 		{
 			String hint("Download a PDB file from www.rcsb.org");
 			main_control.insertMenuEntry(MainControl::FILE_OPEN, "Downlo&ad Structure", (QObject *)this,
-																	 SLOT(show()), ALT+Key_A, -1, hint);
+																	 SLOT(show()), ALT+Key_I, -1, hint);
 		}
 
 		void DownloadPDBFile::finalizeWidget(MainControl& main_control)
