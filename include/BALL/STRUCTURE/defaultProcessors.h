@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.h,v 1.5 2001/03/06 00:12:23 amoll Exp $
+// $Id: defaultProcessors.h,v 1.6 2001/07/15 17:53:03 amoll Exp $
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
 #define BALL_STRUCTURE_DEFAULTPROCESSORS_H
@@ -68,7 +68,8 @@ namespace BALL
 
 		AssignRadiusProcessor();
 
-		AssignRadiusProcessor(const String& filename);
+		AssignRadiusProcessor(const String& filename)
+			throw(Exception::FileNotFound);
 
 		virtual bool start();
 
@@ -78,7 +79,8 @@ namespace BALL
 
 		/**	Set the filename to read the charges from
 		*/
-		void setFilename(const String& filename);
+		void setFilename(const String& filename)
+			throw(Exception::FileNotFound);
 
 		/**	Return the current filename
 		*/
@@ -86,11 +88,11 @@ namespace BALL
 		
 		/**	Return the number of assigned atoms
 		*/
-		unsigned long getNumberOfAssignments();
+		Size 	getNumberOfAssignments();
 
 		/**	Return the number of unassignable atoms
 		*/
-		unsigned long getNumberOfErrors();
+		Size 	getNumberOfErrors();
 
 
 		protected:
@@ -98,8 +100,8 @@ namespace BALL
 		bool										buildTable_();
 		String									filename_;
 		StringHashMap<float>		table_;
-		unsigned long						number_of_errors_;
-		unsigned long						number_of_assignments_;
+		Size 										number_of_errors_;
+		Size										number_of_assignments_;
 	};
 
 
