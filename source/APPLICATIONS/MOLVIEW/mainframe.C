@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.74 2003/09/07 21:56:20 oliver Exp $
+// $Id: mainframe.C,v 1.75 2003/09/08 16:47:11 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -96,18 +96,18 @@ namespace BALL
 
 		hor_splitter_ = new QSplitter(vert_splitter_, "HorSplitter");
 		CHECK_PTR(hor_splitter_);
-
+/*
 		vert_splitter2_ = new QSplitter(hor_splitter_, "VertSplitter2");
 		vert_splitter2_->setOrientation(Vertical);
 		CHECK_PTR(vert_splitter2_);
-		
-		new DockWidget(this, "Structures", control_ = new MolecularControl(0));
+*/		
+		control_ = new MolecularControl(this, "Structures");
 		CHECK_PTR(control_);
 	
-		new DockWidget(this, "Models", geometric_control_ = new GeometricControl(0));
+	  geometric_control_ = new GeometricControl(this, "Representations");
 		CHECK_PTR(geometric_control_);
 
-		new DockWidget(this, "Trajectories", trajectory_control_ = new TrajectoryControl(0));
+		trajectory_control_ = new TrajectoryControl(this, "Datasets");
 		CHECK_PTR(trajectory_control_);
 
 		scene_ = new Scene(hor_splitter_);
@@ -657,7 +657,7 @@ namespace BALL
 			{
 				value_list.append(value_string.getField(i).toInt());
 			}
-			vert_splitter2_->setSizes(value_list);
+			//vert_splitter2_->setSizes(value_list);
 			value_list.clear();
 		}
 
@@ -705,6 +705,7 @@ namespace BALL
 		inifile.insertValue("WINDOWS", "Main::vert_splitter", value_string);
 
 		// --------------------------------
+		/*
 		value_string = "";
 		size_list = vert_splitter2_->sizes();
 		list_it = size_list.begin();
@@ -713,7 +714,7 @@ namespace BALL
 			value_string += String(*list_it) + " ";
 		}
 		inifile.insertValue("WINDOWS", "Main::vert_splitter2", value_string);
-
+*/
 		minimization_dialog_->writePreferences(inifile);
 		md_dialog_->writePreferences(inifile);
 
