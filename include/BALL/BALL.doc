@@ -1,3 +1,9 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: BALL.doc,v 1.21 2003/08/26 08:04:02 oliver Exp $
+//
+
 
 /** \mainpage	BALL
 
@@ -18,13 +24,12 @@
 			functionality provided by BALL.
 
 		 <center><h1>Biochemical Algorithms Library</h1><p>Reference Manual</center>
-		\version 1.0pre1
+		\version 1.0
 		\author 
 				- Tim Aubertin
 				- Nicolas Pascal Boghossian
 		 		- Andreas Burchardt
 				-	Andreas Crauser
-				- Anna Dehof
 				-	Andreas Hildebrandt
 				-	Heiko Klein
 				- Andreas Kerzmann
@@ -34,7 +39,6 @@
 				- Peter M&uuml;ller
 				- Stefan Strobel
 				- Marc Sturm
-
 */
 
 
