@@ -1,0 +1,91 @@
+<h2>3D Scene</h2>
+
+The Scene widget provides the three-dimensional visualisation of the loaded molecules.<br>
+All activated Representations are shown here.
+<br><br>
+<img src="images/scene.png" width=565 height=509 border=0>
+<br>
+
+<br><br>
+The Scene has two distinct modes:
+<ol>
+  <li>Rotate Mode  (Hotkey CTRL-R)</li>
+  <li>Picking Mode (Hotkey CTRL-P)</li>
+</ol>
+The user can switch between the two modes, either by pressing on the according menu entries in the menu point "Display",
+or use the hotkeys.
+
+<H3>Rotate Mode</H3>
+In the Rotate Mode, the user can zoom, rotate or translate the view by pressing the mouse buttons and moving the mouse:
+<br><br>
+
+<table border="1" cellpadding="5" width=500>
+  <tbody>
+    <tr>
+      <td width=50%>Button</td>
+      <td>Effect</td>
+    </tr>
+    <tr>
+      <td>Left</td>
+      <td>Rotate left/right and up/down</td>
+    </tr>
+    <tr>
+      <td>Middle</td>
+      <td>Zoom in and out</td>
+    </tr>
+    <tr>
+      <td>Right</td>
+      <td>Translate up/down and left/right</td>
+    </tr>	
+  </tbody>
+</table>
+
+<br><br>
+For user with less then three mouse buttons exist special combinations, so that BALLView works well also with one mouse button:
+
+<table border="1" cellpadding="5" width=500>
+  <tbody>
+    <tr>
+      <td widht=50%>Mouse button + key pressed</td>
+      <td>Effect</td>
+    </tr>
+    <tr>
+      <td>Left</td>
+      <td>Rotate left/right and up/down</td>
+    </tr>
+    <tr>
+      <td>Left + Shift</td>
+      <td>Zoom in and out</td>
+    </tr>
+    <tr>
+      <td>Left + Control</td>
+      <td>Translate up/down and left/right</td>
+    </tr>	
+  </tbody>
+</table>
+
+<H3>Picking Mode</H3>
+The Picking Mode is designed to identify parts of molecules or mark them for special tasks. 
+A special cursor occurs, an the user can either click on single items or moving the mouse button with 
+pressed left or right mouse button to create a selection rectangle. Any picked objects become instantly colored 
+(normaly yellow, see image on top). In the <a href="molecularControl.html">Molecular Control</a>, 
+the checkboxes for the entries of these items become checked. The user can also deselect picked objects
+by using the right button (or for users with only one mouse button, by using the left mouse button and the Shift-modifier).
+
+<br><br>
+<table border="1" cellpadding="5" width=500>
+  <tbody>
+    <tr>
+      <td widht=50%>Mouse button + key pressed</td>
+      <td>Effect</td>
+    </tr>
+    <tr>
+      <td>Left</td>
+      <td>Select geometric objects, e.g. for atoms</td>
+    </tr>
+    <tr>
+      <td>Right (or Left + Shift)</td>
+      <td>Deselect geometric objects</td>
+    </tr>
+  </tbody>
+</table>
