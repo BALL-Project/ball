@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TCPTransfer.h,v 1.15 2003/03/26 13:08:43 sturm Exp $
+// $Id: TCPTransfer.h,v 1.16 2003/05/23 06:52:41 oliver Exp $
 
 #ifndef BALL_SYSTEM_TCPTRANSFER
 #define BALL_SYSTEM_TCPTRANSFER
@@ -78,7 +78,8 @@ namespace BALL
 			 		This exception is thrown if a transfer fails.
 			\ingroup System
 			*/
-			class TransferFailed : public Exception::GeneralException
+			class TransferFailed 
+				: public Exception::GeneralException
 			{
 				 public:
 
@@ -99,11 +100,11 @@ namespace BALL
 			 *	the syntax:  \par
 			 *	http[ftp]://login:pass@server.com:port/fileaddress
 			 */
-			TCPTransfer(::std::ofstream& file, const String& address)
+			TCPTransfer(std::ofstream& file, const String& address)
 				throw(TransferFailed);
 			
 			/// Destructor.
-			~TCPTransfer()
+			virtual ~TCPTransfer()
 				throw();
 		
 			/** Clear method.

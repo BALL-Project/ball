@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.h,v 1.23 2003/04/17 06:07:20 oliver Exp $
+// $Id: logStream.h,v 1.24 2003/05/23 06:52:32 oliver Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -276,7 +276,7 @@ namespace BALL
 		*/
 		//@{
 
-		/** Default constructor.
+		/** Constructor.
 				Creates a new LogStream object that is not associated with any stream.
 				If the argument <tt>associate\_stdio</tt> is set to <b>true</b>,
 				<tt>cout</tt> is associated with all messages of levels  \link INFORMATION INFORMATION \endlink  
@@ -284,12 +284,7 @@ namespace BALL
 				of level  \link ERROR ERROR \endlink .
 				@param	associate_stdio bool, default is false
 		*/
-		LogStream(bool associate_stdio = false);
-
-		/** Constructor.
-				Create a new LogStream object with a given LogStreamBuf
-		*/
-		LogStream(LogStreamBuf* buf);
+		LogStream(LogStreamBuf* buf = 0, bool delete_buf = true, bool associate_stdio = false);
 
 		/** Destructor.
 				Clears all message buffers.
