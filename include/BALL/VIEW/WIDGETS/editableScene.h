@@ -8,6 +8,11 @@
 #ifndef BALL_VIEW_WIDGETS_EDITABLESCENE_H
 #define BALL_VIEW_WIDGETS_EDITABLESCENE_H
 
+
+#ifndef BALL_KERNEL_SYSTME_H
+#include <BALL/KERNEL/system.h>
+#endif
+
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
 #include <BALL/VIEW/WIDGETS/scene.h>
 #endif
@@ -20,8 +25,14 @@
 # include <BALL/VIEW/KERNEL/common.h>
 #endif 
 
+#ifndef BALL_MATHS_VECTOR2_H
+# include <BALL/MATHS/vector2.h>
+#endif
+
 // has to come after BALL includes to prevent problems with Visual Stuio Net
 #include <qgl.h>
+
+
 
 namespace BALL
 {
@@ -37,11 +48,11 @@ class BALL_EXPORT EditableScene
 
 			BALL_EMBEDDABLE(EditableScene, ModularWidget)	
 
+				//@} 
 			/**	@name	Constructors 
 			*/	
 			//@{
 
-			///
 			EditableScene()
 				throw();
 	
@@ -95,47 +106,65 @@ class BALL_EXPORT EditableScene
 			virtual void clear()
 				throw();
 			
-			//@}
 
-			///
 			enum EditMode
 			{
-				INSERT__MODE = PICKING__MODE + 1
+				EDIT__MODE = PICKING__MODE + 1,
+				BOND__MODE = PICKING__MODE + 2	
 			};
 
 
-			///
+			
 			void initializeWidget(MainControl& main_control)
 				throw();
 	
-			///
 			void finalizeWidget(MainControl& main_control)
 				throw();
 
-			///
+
 			void checkMenu(MainControl& main_control)
 				throw();
 
 
-		public slots:
-
-			///
+	public slots:
+			//#############################################################
+			//								Mouse Events
+			//############################################################
 			virtual void mousePressEvent(QMouseEvent* e);
 
-			///
+			
 		  virtual void mouseMoveEvent(QMouseEvent *e);
 
-			///
+
 			virtual void mouseReleaseEvent(QMouseEvent *e);
 
 
 	protected slots:
 			virtual void editMode_();
+			virtual void bondMode_();
+
 
 			
 		private:
 			Index edit_id_;	
-			Molecule *current_molecule_;	
+			System system_; // Do we need them?? 
+			Molecule *current_molecule_;	//Do we need them??
+			Atom* first_atom_for_bond_;
+			
+			float x_ewindow_bond_pos_first_;
+			float y_ewindow_bond_pos_first_;
+			float x_ewindow_bond_pos_second_new_;
+			float y_ewindow_bond_pos_second_new_;
+			float x_ewindow_bond_pos_second_old_;
+			float y_ewindow_bond_pos_second_old_;
+			
+			
+			double limit_;			
+			void insert_(int x_, int y_, PDBAtom &atom_);
+			TVector2<Position> getScreenPosition_(Vector3 vec);
+			Vector3 clickedPointOnViewPlane_(int x, int y);
+			Atom* getClickedAtom_(int x, int y);
+
 };
 
 	}//end of namespace

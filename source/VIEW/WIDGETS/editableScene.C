@@ -14,13 +14,16 @@
 #include <BALL/KERNEL/bond.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/compositeManager.h>
 
+#include <qpainter.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 #include <qcursor.h>
 
 #include <BALL/MATHS/vector3.h>
 #include <BALL/MATHS/matrix44.h>
+#include <BALL/MATHS/angle.h>
 
 using std::endl;
 using std::ostream;
@@ -36,7 +39,8 @@ EditableScene::EditableScene()
 	throw()
 	:	Scene(),
 		edit_id_(-1),
-		system_()
+		system_(),
+		limit_(3)
 {
 }
 
@@ -44,7 +48,8 @@ EditableScene::EditableScene(QWidget* parent_widget, const char* name, WFlags w_
 	throw()
 	: Scene(parent_widget, name, w_flags),
 		edit_id_(-1),
-		system_()
+		system_(), 
+		limit_(3)
 {
 }
 
@@ -53,7 +58,8 @@ EditableScene::EditableScene(const EditableScene& eScene, QWidget* parent_widget
 	throw()
 	: Scene(eScene, parent_widget, name, w_flags),
 		edit_id_(-1),
-		system_(eScene.system_)
+		system_(eScene.system_),
+		limit_(eScene.limit_)
 {
 	//current_molecule_ = new Molecule();
 	//current_molecule_ = eScene.current_molecule_;
@@ -95,7 +101,7 @@ void EditableScene::initializeWidget(MainControl& main_control)
 void EditableScene::finalizeWidget(MainControl& main_control)
 	throw()
 {
-  if (current_mode_ == INSERT__MODE)
+  if (current_mode_ == (Scene::ModeType)EDIT__MODE)
 	{
 		main_control.removeMenuEntry(MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), CTRL+Key_E);
 	}
@@ -106,7 +112,7 @@ void EditableScene::finalizeWidget(MainControl& main_control)
 void EditableScene::checkMenu(MainControl& main_control)
 	throw()
 {
-	menuBar()->setItemChecked(edit_id_,(current_mode_ == INSERT__MODE));
+	menuBar()->setItemChecked(edit_id_,(current_mode_ == (Scene::ModeType)EDIT__MODE));
 	Scene::checkMenu(main_control);
 }
 
@@ -114,34 +120,60 @@ void EditableScene::checkMenu(MainControl& main_control)
 
 void EditableScene::mousePressEvent(QMouseEvent* e)
 {
-	// This is a TEST... instead of picking mode we will use edit mode later on...
-	if (current_mode_ == INSERT__MODE)
-	{
-		int x_window_pos_old_ = e->x();
-		int y_window_pos_old_ = e->y();
-
-		std::cout << "\tINSERTION VARIABLES: " << std::endl;
-		std::cout << "X:" << x_window_pos_old_ << "   Y:"  << y_window_pos_old_  << std::endl;
-
-		PDBAtom* a = new PDBAtom(PTE[Element::C], "C");
-		//PDBAtom* b = new PDBAtom(PTE[Element::C], "C");
-		
-		insert_(e->x(), e->y(), *a);		
-		//double xs_ = (getGLRenderer_()).getXScale();
-		//double ys_ = (getGLRenderer_()).getYScale();
-		double xs_ = width();
-		double ys_ = height(); 
-		//double ys_ = (getGLRenderer_()).getYScale();
-	//	insert_(0, 0, *b);
-	//	insert_(xs_, 0, *c);
-	//	insert_(0, ys, *d);
-	//	insert_(xs_, ys, *e);
-		
-
-//		CompositeMessage *message_ = new CompositeMessage(*current_molecule_, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
-//		notify_(message_);
-	}
+	//store the old positions of the press Event
+	x_ewindow_bond_pos_first_ = e->x();
+	y_ewindow_bond_pos_first_ = e->y();
+	x_ewindow_bond_pos_second_old_ = e->x();
+  y_ewindow_bond_pos_second_old_ = e->y();
 	
+	Log.info()<< "MousePres Event: x_e_pos_old" << x_ewindow_bond_pos_second_old_ << "\n e_bond_first:" << x_ewindow_bond_pos_first_ << "\n x_e_pos_new : "<< x_ewindow_bond_pos_second_new_ << endl; 
+	
+	if (current_mode_ == (Scene::ModeType)EDIT__MODE)
+	{
+		if(e->button() == Qt::LeftButton )
+		{	
+			// ToDo: Is the representation ok? Can the user see all aktual atoms?
+			
+			// if no atom is selected
+			PDBAtom* a = new PDBAtom(PTE[Element::C], "C");
+			insert_(e->x(), e->y(), *a);		
+			first_atom_for_bond_ = a;
+			current_mode_ =(Scene::ModeType)BOND__MODE;
+			x_ewindow_bond_pos_first_ = e->x();
+			y_ewindow_bond_pos_first_ = e->y();
+
+			return;
+		}
+		if(e->button() == Qt::RightButton )
+		{
+			//TODO:: Proof, wheather Atom is defined 
+			Atom *atom = getClickedAtom_(e->x(), e->y());
+
+			// TEST
+			if (atom)
+				atom->select();
+
+			Log.info() << atom << " selected" << std::endl;
+			return;
+			
+		}
+		if(e->button() == Qt::MidButton)
+		{
+			//is there an atom in radius 1??  Anstroem? 
+			Atom *atom = getClickedAtom_(e->x(), e->y());
+
+			// TEST
+			if (atom)
+			{
+				atom->select();
+				first_atom_for_bond_ = atom;
+				current_mode_ =(Scene::ModeType)BOND__MODE;
+				TVector2<Position> pos =  getScreenPosition_(atom->getPosition());
+				x_ewindow_bond_pos_second_new_ = pos.x; 
+  			y_ewindow_bond_pos_second_new_ = pos.y;
+			}	
+		}
+	}
 	Scene::mousePressEvent(e);
 }
 
@@ -149,160 +181,358 @@ void EditableScene::mousePressEvent(QMouseEvent* e)
 
 void EditableScene::mouseMoveEvent(QMouseEvent *e)
 {
+	x_ewindow_bond_pos_second_new_ = e->x();
+  y_ewindow_bond_pos_second_new_ = e->y();
+
+  // ============ bond mode ================
+  if (current_mode_ == (Scene::ModeType)BOND__MODE)
+  {
+		Log.info()<< "MouseMoveEvent: x_e_pos_old" << x_ewindow_bond_pos_second_old_ << "\n e_bond_first:" << x_ewindow_bond_pos_first_ << "\n x_e_pos_new : "<< x_ewindow_bond_pos_second_new_ << endl; 
+  	
+		if (e->state() == Qt::LeftButton  ||
+        e->state() == Qt::MidButton )
+		{
+			//is there an atom nearby the actual mouse position? 
+			Atom *atom = getClickedAtom_(e->x(), e->y());
+
+			if (atom)
+			{
+				TVector2<Position> pos =  getScreenPosition_(atom->getPosition());
+				x_ewindow_bond_pos_second_new_ = pos.x; 
+  			y_ewindow_bond_pos_second_new_ = pos.y;
+			}
+			//paint the line representing the offered bond
+			QPainter painter(this);
+			painter.setPen(white);
+			painter.setRasterOp(XorROP);
+
+			painter.drawLine(
+					(int) (x_ewindow_bond_pos_second_old_) ,  
+					(int) (y_ewindow_bond_pos_second_old_),   
+					(int) (x_ewindow_bond_pos_first_),
+					(int) (y_ewindow_bond_pos_first_));
+
+
+			painter.drawLine(
+					(int) (x_ewindow_bond_pos_second_new_) , 
+					(int) (y_ewindow_bond_pos_second_new_), 
+					(int) (x_ewindow_bond_pos_first_),
+					(int) (y_ewindow_bond_pos_first_));
+
+			painter.end();
+
+		}
+  }
+	
+	//tidy up
+	x_ewindow_bond_pos_second_old_ =	x_ewindow_bond_pos_second_new_ ;
+	y_ewindow_bond_pos_second_old_ =	y_ewindow_bond_pos_second_new_ ;
+			
+	x_ewindow_bond_pos_second_new_ = e->x();
+  y_ewindow_bond_pos_second_new_ = e->y();
+	
 	Scene::mouseMoveEvent(e);
+}
+
+
+Atom* EditableScene::getClickedAtom_(int x, int y)
+{
+	// vector to store all atoms and their distances from clicking-ray
+	vector< std::pair <Atom*, double> > distvec_;
+	
+	//get the AtomContainer
+	CompositeManager& cm = getMainControl()->getCompositeManager();
+	CompositeManager::iterator it = cm.begin();
+	System *s=0;
+	for (; it != cm.end(); it++)
+	{
+		//check if composite is a system or a molecule
+		if(RTTI::isKindOf<System>(**it))
+		{
+			s = RTTI::castTo<System>(**it);
+			Log.error() << "System" << endl;
+		}	
+		else
+		{
+			Log.error() << "Composite has not a useable type!!  " << endl;
+			break;
+		}
+
+		//The Composite is a system/molecule
+		if (s!=0)
+		{
+			std::pair<Atom*, double> pair_;
+			double dist;
+			AtomIterator ai;
+			for(ai=s->beginAtom();+ai;++ai)
+			{
+				Vector3 cam_to_atom(0. , 0., 0.);
+				Vector3 cam_to_clickedPoint(0. , 0., 0.);
+
+				cam_to_atom = (ai->getPosition() - getStage()->getCamera().getViewPoint());
+				Log.info() << "cam to atom: " << cam_to_atom << std::endl;
+				cam_to_clickedPoint = clickedPointOnViewPlane_(x, y) - getStage()->getCamera().getViewPoint();
+
+				Angle	alpha((float)acos(  (cam_to_atom * cam_to_clickedPoint)
+							/(cam_to_atom.getLength() * cam_to_clickedPoint.getLength())
+							)); 
+				Log.info() << "alpha: " << alpha << std::endl;
+				dist  = sin(alpha) * cam_to_atom.getLength();
+				pair_.first = &(*ai);
+				pair_.second = dist;
+				distvec_.push_back(pair_);
+				Log.info() << "blablabla " << dist << std::endl;
+			}
+		}
+	}	
+	std::pair<Atom*, double> minimum;
+	minimum.second = limit_ + 100; //first_atom_for_bond_
+
+	//is the minimal distance beyond a boundary 
+	std::vector< std::pair <Atom*, double> >  ::iterator pair_it = distvec_.begin();	
+	for (; pair_it != distvec_.end(); pair_it++)
+	{
+	//	Log.info() << "distance: " << pair_it->second << std::endl;
+		if(pair_it->second < minimum.second)
+			minimum = *pair_it;	
+	}	
+
+	if (minimum.second < limit_)
+	{
+		//Log.info()<<"atom found" << std::endl;
+		return minimum.first;
+	}
+
+	return 0;
 }
 
 
 void EditableScene::mouseReleaseEvent(QMouseEvent *e)
 {
+	x_ewindow_bond_pos_second_new_ = e->x();
+  y_ewindow_bond_pos_second_new_ = e->y();
+
+	if (current_mode_ == (Scene::ModeType)BOND__MODE)
+	{
+		//is there an atom in radius 1 Angstroem
+		Atom *atom = getClickedAtom_(e->x(), e->y());
+
+		if (atom)
+		{
+			// delete last symbol bond line	
+			QPainter painter(this);
+			painter.setPen(white);
+			painter.setRasterOp(XorROP);
+			
+			painter.drawLine(
+					(int) (x_ewindow_bond_pos_second_old_) ,  
+					(int) (y_ewindow_bond_pos_second_old_),   
+					(int) (x_ewindow_bond_pos_first_),
+					(int) (y_ewindow_bond_pos_first_));
+
+			//set the bond
+			Bond* c = new Bond("first try", *first_atom_for_bond_, *atom, Bond::ORDER__DOUBLE);		
+			//update representation
+			CompositeMessage *m = 0;
+			m = new CompositeMessage(*atom, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);	
+			notify_(m); 
+		}	
+		//return to edit mode
+		current_mode_ =(Scene::ModeType)EDIT__MODE;
+
+		return;
+	}
+	
+	if (current_mode_ == (Scene::ModeType)EDIT__MODE)
+	{
+
+		return;
+	}	
 	Scene::mouseReleaseEvent(e);
+}
+
+
+void EditableScene::bondMode_()
+{
+	current_mode_ = (Scene::ModeType)BOND__MODE;		
+	setCursor(QCursor(Qt::SizeAllCursor));
+	//ToDo:: Cursor should look different
 }
 
 
 void EditableScene::editMode_()
 {
-	current_mode_ = INSERT__MODE;		
+	current_mode_ = (Scene::ModeType)EDIT__MODE;		
 	setCursor(QCursor(Qt::SizeAllCursor));
+	//ToDo:: Cursor should look different
 }
 
 
-void EditableScene::insert_(int x_, int y_, PDBAtom &atom_)
+void EditableScene::insert_(int x, int y, PDBAtom &atom_)
 {
+	Vector3 point = clickedPointOnViewPlane_(x,y);
+	atom_.setPosition( point );
 
+	//b->setPosition(Vector3(e->x()-10.,e->y()-10., 0));
+	//Bond* c = new Bond("first try", *a, *b, Bond::ORDER__DOUBLE);		
+	//current_molecule_->insert(*a);
+	//current_molecule_->insert(*b);
+
+	Log.info() << "Atom inserted" << std::endl;
+	
+	//where should the atom be inserted? 
+	//Is there an existing AtomContainer? 
+	CompositeManager& cm = getMainControl()->getCompositeManager(); 
+	System* system = 0;
+	List <Composite * > compositeList = getMainControl()->getMolecularControlSelection(); 
+	bool newsystem = true;
+	List <Composite *>::iterator it = compositeList.begin(); 
+	AtomContainer* 	ai = 0;
+
+	//message to update the representation
+	CompositeMessage *m = 0; 
+	
+	if(compositeList.size() ==1 )
+	{
+		if(RTTI::isKindOf<AtomContainer>( **it))
+		{
+			ai = RTTI::castTo<AtomContainer>(**it);
+			newsystem = false;
+			ai->insert(atom_);
+			m = new CompositeMessage(*ai, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);	
+			notify_(m); 
+		}
+	}else 
+	if(compositeList.size() > 1 )
+	{
+		Log.error() <<"Please insert highlight exactly one AtomContainer" << endl;
+	}else
+	{
+		system = new System();
+		newsystem = true;
+		Molecule* current_molecule = new Molecule();
+		system->insert(*current_molecule);
+		current_molecule->insert(atom_);
+		m = new CompositeMessage(*system, CompositeMessage::NEW_COMPOSITE);	
+		notify_(m); 
+	}	
+	
+	Log.info() << "Number of Composites after insertion" << cm.getNumberOfComposites() << std::endl;
+}	
+
+
+TVector2<Position> EditableScene::getScreenPosition_(Vector3 vec)
+{
+	//find the monitor coordinates of a given vector
+	TVector2<Position> pos ; 
+	
+	return pos;
+}
+
+
+Vector3 EditableScene::clickedPointOnViewPlane_(int x, int y)
+{
 	// matrix for the Projection matrix 	
-		GLdouble mat_[16];
-	// matrox for the Modelview matrix
-		GLdouble mod_view_vec_[16];
-			
+	GLdouble projection_matrix[16];
+	// matrix for the Modelview matrix
+	GLdouble modelview_matrix[16];
+
 	// 	Scale variables for Frustum
-		//double xs_ = (getGLRenderer_()).getXScale();
-		//double ys_ = (getGLRenderer_()).getYScale();
-		double xs_ = width();
-		double ys_ = height(); 
+	double xs_ = width();
+	double ys_ = height(); 
 
-		std::cout << "\tSCALE VARIABLES: " << std::endl;
-		std::cout << "Xmax: "<< xs_ << "   Ymax:" <<  ys_ <<  std::endl;
-		
 	// variables for definition of projection matrix
-		float near_=0, left_=0, right_=0, bottom_ =0, top_=0; 
+	float near_=0, left_=0, right_=0, bottom_ =0, top_=0; 
 
-		// vectors of the nearplane
-		Vector3 near_left_bot_(0. , 0., 0.);  //TODO:: name in XYZ left_bot_mnear
-	  Vector3 near_right_bot_(0. , 0., 0.);
-	  Vector3 near_left_top_(0. , 0., 0.);
-		
-		
-		// vectors for arithmetics
-		Vector3 p_(0., 0., 0.);      // vector look_at ray ----> insertion ray cutting the nearplane
-		Vector3 la_m_d_(0., 0., 0.); // look_at vector ray cutting the near plane
-		Vector3 la_m_v_(0., 0., 0.); // look_at vector ray cutting the near plane
-		Vector3 s_(0., 0., 0.);      // vector look_at_ray ----> insertion ray cutting viewing plane
-		Vector3 k_(0., 0., 0.);      // vector of insertionpoint in the viewing volume
-		
+	// vectors of the nearplane
+	Vector3 near_left_bot_(0. , 0., 0.);  //TODO:: name in XYZ left_bot_mnear
+	Vector3 near_right_bot_(0. , 0., 0.);
+	Vector3 near_left_top_(0. , 0., 0.);
+
+	// vectors for arithmetics
+	// TODO: give sensible names!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+	Vector3 p_(0., 0., 0.);      // vector look_at ray ----> insertion ray cutting the nearplane
+	Vector3 la_m_d_(0., 0., 0.); // look_at vector ray cutting the near plane
+	Vector3 la_m_v_(0., 0., 0.); // look_at vector ray cutting the near plane
+	Vector3 s_(0., 0., 0.);      // vector look_at_ray ----> insertion ray cutting viewing plane
+	Vector3 k_(0., 0., 0.);      // vector of insertionpoint in the viewing volume
+
 	// take the Projection matrix	
-		glMatrixMode(GL_PROJECTION);
-		glGetDoublev(GL_PROJECTION_MATRIX, mat_);
-		glMatrixMode(GL_MODELVIEW);
-		glGetDoublev(GL_MODELVIEW_MATRIX, mod_view_vec_); 
-		
+	glMatrixMode(GL_PROJECTION);
+	glGetDoublev(GL_PROJECTION_MATRIX, projection_matrix);
+	glMatrixMode(GL_MODELVIEW);
+	glGetDoublev(GL_MODELVIEW_MATRIX, modelview_matrix); 
+
 	// determine the projection variables
-		if(mat_[0]==0. || mat_[5]==0. || mat_[10]==1.)
-		{	
-			Log.error() << "Projection variables equal zero! " << endl;
-			return;
-		}	
-		near_   = mat_[14]/(mat_[10]-1);
-		left_   = mat_[14]*(mat_[8]-1) / (mat_[0]*(mat_[10]-1));
-		right_  = mat_[14]*(mat_[8]+1) / (mat_[0]*(mat_[10]-1));
-		bottom_ = mat_[14]*(mat_[9]-1) / (mat_[5]*(mat_[10]-1));
-		top_    = mat_[14]*(mat_[9]+1) / (mat_[5]*(mat_[10]-1));
-	
- //we have to move all points of the viewing volume with the inverted Modelview matrix 
-		Matrix4x4 mod_view_mat_(mod_view_vec_[0], mod_view_vec_[4], mod_view_vec_[8], mod_view_vec_[12],
-			 											mod_view_vec_[1], mod_view_vec_[5], mod_view_vec_[9], mod_view_vec_[13],
-														mod_view_vec_[2], mod_view_vec_[6], mod_view_vec_[10], mod_view_vec_[14],
-														mod_view_vec_[3], mod_view_vec_[7], mod_view_vec_[11],	mod_view_vec_[15]);
-		
-	
-		Matrix4x4 inverse_mod_view_mat_;
-		mod_view_mat_.invert(inverse_mod_view_mat_);
+	if(projection_matrix[0]==0. || projection_matrix[5]==0. || projection_matrix[10]==1.)
+	{	
+		Log.error() << "Projection variables equal zero! " << endl;
+		return Vector3(0.);
+	}	
+	near_   = projection_matrix[14]/(projection_matrix[10]-1);
+	left_   = projection_matrix[14]*(projection_matrix[8]-1) / (projection_matrix[0]*(projection_matrix[10]-1));
+	right_  = projection_matrix[14]*(projection_matrix[8]+1) / (projection_matrix[0]*(projection_matrix[10]-1));
+	bottom_ = projection_matrix[14]*(projection_matrix[9]-1) / (projection_matrix[5]*(projection_matrix[10]-1));
+	top_    = projection_matrix[14]*(projection_matrix[9]+1) / (projection_matrix[5]*(projection_matrix[10]-1));
 
-		// determine the nearplane vectors
-		near_left_bot_ =Vector3(left_,  bottom_, near_*-1.); //a
- 		near_right_bot_=Vector3(right_, bottom_, near_*-1.); //b
-		near_left_top_=Vector3(left_,  top_,    near_*-1.);  //c	
+	// we have to move all points of the viewing volume with the inverted Modelview matrix 
+	Matrix4x4 mod_view_mat_(modelview_matrix[0], modelview_matrix[4], modelview_matrix[8], modelview_matrix[12],
+			modelview_matrix[1], modelview_matrix[5], modelview_matrix[9], modelview_matrix[13],
+			modelview_matrix[2], modelview_matrix[6], modelview_matrix[10], modelview_matrix[14],
+			modelview_matrix[3], modelview_matrix[7], modelview_matrix[11],	modelview_matrix[15]);
 
-		near_left_bot_  = inverse_mod_view_mat_*near_left_bot_;
-		near_right_bot_ = inverse_mod_view_mat_*near_right_bot_;
-		near_left_top_  = inverse_mod_view_mat_*near_left_top_;
-			
-		std::cout << "\tPROJECTION VARIABLES: " << std::endl;
-		std::cout << "near:" << near_ << " left:" << left_ << " right:" << right_<< " top:" << top_ << " bottom:" << bottom_ << std::endl;
-	//	std::cout << "\tFRUSTUM VALUES: " << std::endl;
-	//	std::cout <<  "near:" << "1.5" << " left:" << -2.*xs_<< " right:" << 2.*xs_<< " top:" << 2.*ys_ << " bottom:" <<-2.*ys_ << std::endl;
 
+	Matrix4x4 inverse_mod_view_mat_;
+	mod_view_mat_.invert(inverse_mod_view_mat_);
+
+	// determine the nearplane vectors
+	near_left_bot_ =Vector3(left_,  bottom_, near_*-1.); //a
+	near_right_bot_=Vector3(right_, bottom_, near_*-1.); //b
+	near_left_top_=Vector3(left_,  top_,    near_*-1.);  //c	
+
+	near_left_bot_  = inverse_mod_view_mat_*near_left_bot_;
+	near_right_bot_ = inverse_mod_view_mat_*near_right_bot_;
+	near_left_top_  = inverse_mod_view_mat_*near_left_top_;
+
+	std::cout << "\tPROJECTION VARIABLES: " << std::endl;
+	std::cout << "near:" << near_ << " left:" << left_ << " right:" << right_<< " top:" << top_ << " bottom:" << bottom_ << std::endl;
 
 	// determine the vector/look_at ray : camera --> lookAt cuts the near plane
-		la_m_d_=Vector3(  near_left_bot_
-										+( (near_right_bot_ - near_left_bot_)*0.5 )
-										+( (near_left_top_  - near_left_bot_)*0.5 )
-				           );	
-	//Warum darf das nicht? 	
-	//	la_m_d_ = la_m_d_ - stage_->getCamera().getViewPoint();
-		
-  // determine the vector look_at point--->insertion_ray cutting the near plane 
-		p_=Vector3((   near_left_top_  //c
-							  + ( x_ / (float)xs_ * (near_right_bot_ - near_left_bot_) )  //b-a
-							  - ( y_ / (float)ys_ * (near_left_top_  - near_left_bot_) )  //c-a
-							 )
-							 - la_m_d_ );
-	
-		std::cout << "v_p: " << stage_->getCamera().getViewPoint() << std::endl;
-		std::cout << "la_d: " << la_m_d_ << std::endl;
-		std::cout << "l_a: " << stage_->getCamera().getLookAtPosition() << std::endl;
-		std::cout << "nlt: " << near_left_top_ << "  nrb: " << near_right_bot_ << "  nlb: " << near_left_bot_ << " " << std::endl;
-		std::cout << " p_: " << p_ << std::endl;
-		
+	la_m_d_=Vector3(  near_left_bot_
+			+( (near_right_bot_ - near_left_bot_)*0.5 )
+			+( (near_left_top_  - near_left_bot_)*0.5 )
+			);	
+
+	// determine the vector look_at point--->insertion_ray cutting the near plane 
+	p_=Vector3((   near_left_top_  //c
+				+ ( x / (float)xs_ * (near_right_bot_ - near_left_bot_) )  //b-a
+				- ( y / (float)ys_ * (near_left_top_  - near_left_bot_) )  //c-a
+				)
+			- la_m_d_ );
+
+	std::cout << "v_p: " << getStage()->getCamera().getViewPoint() << std::endl;
+	std::cout << "la_d: " << la_m_d_ << std::endl;
+	std::cout << "l_a: " << getStage()->getCamera().getLookAtPosition() << std::endl;
+	std::cout << "nlt: " << near_left_top_ << "  nrb: " << near_right_bot_ << "  nlb: " << near_left_bot_ << " " << std::endl;
+	std::cout << " p_: " << p_ << std::endl;
+
 	// determine the vector look_at_ray ----> insertion ray cutting viewing plane
- 		s_= Vector3(   ( ( stage_->getCamera().getLookAtPosition() - stage_->getCamera().getViewPoint() ).getLength()
-				 							 / (la_m_d_ -  stage_->getCamera().getViewPoint()).getLength()) 
-			  			  	* p_ );
-		
+	s_= Vector3(   ( ( getStage()->getCamera().getLookAtPosition() - getStage()->getCamera().getViewPoint() ).getLength()
+				/ (la_m_d_ -  getStage()->getCamera().getViewPoint()).getLength()) 
+			* p_ );
 
-	//--------------------------------------------------------	
-	/*	 s_= Vector3(   ( ( stage_->getCamera().getLookAtPosition().getLength())
-				 							 / (la_m_d_.getLength()) ) 
-			  			  	* p_ );
- */
+	std::cout << "\tStrahlensatzfaktor: " <<  getStage()->getCamera().getLookAtPosition().getLength()/ (la_m_d_.getLength()) << std::endl;
+	std::cout << "Länge LookAt:" <<  (getStage()->getCamera().getLookAtPosition() - getStage()->getCamera().getViewPoint()).getLength() 
+		<< " Länge LookAt-D:" << (la_m_d_.getLength()) << std::endl;
 
-		std::cout << "\tStrahlensatzfaktor: " <<  stage_->getCamera().getLookAtPosition().getLength()/ (la_m_d_.getLength()) << std::endl;
-		std::cout << "Länge LookAt:" <<  (stage_->getCamera().getLookAtPosition() - stage_->getCamera().getViewPoint()).getLength() 
-		 << " Länge LookAt-D:" << (la_m_d_.getLength()) << std::endl;
-	
-	
-		std::cout << "Camera:" << stage_->getCamera().getViewPoint() << std::endl;
-		std::cout << "LookAt:" << stage_->getCamera().getLookAtPosition() << std::endl;
-		
+
+	std::cout << "Camera:" << getStage()->getCamera().getViewPoint() << std::endl;
+	std::cout << "LookAt:" << getStage()->getCamera().getLookAtPosition() << std::endl;
+
 	// vector of insertionpoint in the viewing volume
-		k_=Vector3( stage_->getCamera().getLookAtPosition() + s_ );		
-		
-		atom_.setPosition(  k_ );
-	
-		std::cout << "\t\t Atom inserted at : " << k_ << std::endl;
-		
-		//b->setPosition(Vector3(e->x()-10.,e->y()-10., 0));
-		//Bond* c = new Bond("first try", *a, *b, Bond::ORDER__DOUBLE);		
-		//current_molecule_->insert(*a);
-		//current_molecule_->insert(*b);
-		
-Log.info() << "blubb" << std::endl;
-	
-		current_molecule_ = new Molecule();
-		current_molecule_->insert(atom_);
-		system_.insert(*current_molecule_);
-		CompositeMessage *m = new CompositeMessage(*current_molecule_, CompositeMessage::NEW_MOLECULE);	
-		notify_(m);                   
+	k_=Vector3( getStage()->getCamera().getLookAtPosition() + s_ );		
 
+	return k_;
 }	
 
 
