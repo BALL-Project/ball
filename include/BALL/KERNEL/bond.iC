@@ -1,4 +1,15 @@
-// $Id: bond.iC,v 1.1 2001/06/28 18:33:16 amoll Exp $
+// $Id: bond.iC,v 1.2 2001/06/29 19:33:06 oliver Exp $
+
+	BALL_INLINE
+	void Bond::clear_()
+		throw()
+	{
+		first_ = BALL_BOND_DEFAULT_FIRST_ATOM;
+		second_ = BALL_BOND_DEFAULT_SECOND_ATOM;
+		name_ = BALL_BOND_DEFAULT_NAME;
+		bond_order_ = BALL_BOND_DEFAULT_ORDER;
+		bond_type_ = BALL_BOND_DEFAULT_TYPE;
+	}
 
 	BALL_INLINE
 	void Bond::clear()
@@ -217,17 +228,6 @@
 									&& first_  != second_
 									&& first_->hasBond(*this)
 									&& second_->hasBond(*this));
-	}
-
-	BALL_INLINE
-	void Bond::clear_()
-		throw()
-	{
-		first_ = BALL_BOND_DEFAULT_FIRST_ATOM;
-		second_ = BALL_BOND_DEFAULT_SECOND_ATOM;
-		name_ = BALL_BOND_DEFAULT_NAME;
-		bond_order_ = BALL_BOND_DEFAULT_ORDER;
-		bond_type_ = BALL_BOND_DEFAULT_TYPE;
 	}
 
 	BALL_INLINE
