@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.14 2002/12/12 09:48:47 oliver Exp $
+// $Id: common.h,v 1.15 2002/12/16 15:36:04 amoll Exp $
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #define BALL_MOLVIEW_COMMON_COMMON_H
@@ -21,56 +21,8 @@ using BALL::VIEW::GeometricObject;
 
 namespace BALL
 {
-	
 	namespace MOLVIEW
 	{
-		/*
-		enum Address
-		{
-			ADDRESS__UNKOWN                    = 0,
-			ADDRESS__STATIC_MODEL,
-			ADDRESS__DYNAMIC_MODEL,
-			ADDRESS__ALWAYS_FRONT_MODEL,
-			ADDRESS__TRANSPARENT_MODEL,
-			ADDRESS__STATIC_DRAWING_PRECISION,
-			ADDRESS__STATIC_DRAWING_MODE,
-			ADDRESS__DYNAMIC_DRAWING_PRECISION,
-			ADDRESS__DYNAMIC_DRAWING_MODE,
-			ADDRESS__CAMERA_DISTANCE
-		};		
-
-		enum Value
-		{
-			VALUE__MODEL_UNKOWN         = 0,
-			VALUE__MODEL_LINES          = 1,
-			VALUE__MODEL_STICK          = 2,
-			VALUE__MODEL_BALL_AND_STICK = 3,
-			VALUE__MODEL_SURFACE        = 4,
-			VALUE__MODEL_VAN_DER_WAALS  = 5,
-			VALUE__MODEL_REMOVE         = 6,
-			VALUE__MODEL_BACKBONE       = 7,
-			VALUE__SELECT               = 20,
-			VALUE__DESELECT             = 21,
-
-			VALUE__DRAWING_PRECISION_LOW    = 0,
-			VALUE__DRAWING_PRECISION_MEDIUM = 1,
-			VALUE__DRAWING_PRECISION_HIGH   = 2,
-			VALUE__DRAWING_PRECISION_ULTRA  = 3,
-
-			VALUE__DRAWING_MODE_DOTS      = 0,
-			VALUE__DRAWING_MODE_WIREFRAME = 1,
-			VALUE__DRAWING_MODE_SOLID     = 2
-		};
-
-		enum ColorCalculatorValues
-		{
-			COLORCALCULATOR_VALUES__ELEMENT          = 0,
-			COLORCALCULATOR_VALUES__RESIDUE_NAME     = 1,
-			COLORCALCULATOR_VALUES__ATOM_CHARGE      = 2,
-			COLORCALCULATOR_VALUES__CUSTOM           = 3
-		};
-		*/
-
 		//		struct GeometricObject
 		//		{
 			/** Predefined properties.
@@ -83,30 +35,6 @@ namespace BALL
 			{
 				/// unkown property
 				PROPERTY__UNKNOWN = -1,
-				/*
-				// Object Properties
-				PROPERTY__OBJECT_STATIC = VIEW::GeometricObject::PROPERTY__OBJECT_STATIC,     // Default
-				PROPERTY__OBJECT_DYNAMIC,
-				PROPERTY__OBJECT_ALWAYS_FRONT,               
-				PROPERTY__OBJECT_TRANSPARENT,
-				PROPERTY__OBJECT_OPAQUE,
-				PROPERTY__OBJECT_VISIBLE,
-				PROPERTY__OBJECT_HIDDEN,
-				PROPERTY__OBJECT_OPENED,
-				PROPERTY__OBJECT_CLOSED,
-				
-				// DrawingMode Properties
-				PROPERTY__DRAWING_MODE_DOTS = VIEW::GeometricObject::PROPERTY__DRAWING_MODE_DOTS,
-				PROPERTY__DRAWING_MODE_WIREFRAME,
-				PROPERTY__DRAWING_MODE_SOLID,
-				
-				// DrawingPrecision Properties
-				PROPERTY__DRAWING_PRECISION_LOW = VIEW::GeometricObject::PROPERTY__DRAWING_PRECISION_LOW,
-				PROPERTY__DRAWING_PRECISION_MEDIUM,
-				PROPERTY__DRAWING_PRECISION_HIGH,
-				PROPERTY__DRAWING_PRECISION_ULTRA,
-				PROPERTY__DRAWING_PRECISION_USER_DEFINED,
-				*/
 				
 				/// defines the number of the first model available (the next free number).
 				PROPERTY__FIRST_MODEL            = GeometricObject::NUMBER_OF_PROPERTIES,
