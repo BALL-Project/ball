@@ -1,4 +1,4 @@
-// $Id: forceFieldParameters.h,v 1.3 2000/02/06 19:49:32 oliver Exp $
+// $Id: forceFieldParameters.h,v 1.4 2000/02/14 09:18:35 oliver Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_MOLMEC_FORCEFIELDPARAMETERS_H
@@ -8,16 +8,8 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_FORMAT_INIFILE_H
-# include <BALL/FORMAT/INIFile.h>
-#endif
-
-#ifndef BALL_KERNEL_SYSTEM_H
-# include <BALL/KERNEL/system.h>
-#endif
-
-#ifndef BALL_DATATYPE_OPTIONS_H
-# include <BALL/DATATYPE/options.h>
+#ifndef BALL_FORMAT_PARAMETERS_H
+# include <BALL/FORMAT/parameters.h>
 #endif
 
 #ifndef BALL_MOLMEC_PARAMETER_ATOMTYPES_H
@@ -30,6 +22,7 @@ namespace BALL
 	/**	Force field parameter class.
 	*/
 	class ForceFieldParameters
+		:	public Parameters
 	{
 		public:
 
@@ -59,25 +52,13 @@ namespace BALL
 		/**@name	Accessors 	*/
 		//@{
 
-		/**	Sets the filename for the INI file.
-		*/
-		void setFilename(const String& filename);
-
-		/**	Return the current INI file's name.
-		*/
-		const String& getFilename() const;
-
-		/**	Return a reference to the INI file.
-		*/
-		INIFile& getParameterFile();
-			
 		/**	Return a reference to the atom type parameter section
 		*/
 		FFPSAtomTypes&	getAtomTypes();
 
 		/**	Read the contents of the INI file and interpret them.
 		*/
-		bool init();
+		virtual bool init();
 		//@}
 
 		/**	@name	Predicates
@@ -90,21 +71,13 @@ namespace BALL
 				object is valid.
 				@return {\tt valid\_ \&\& parameter\_file\_.isValid() \&\& atom\_types\_.isValid()}
 		*/
-		bool isValid() const;
+		virtual bool isValid() const;
 		//@}
 
 		protected:
 
 		/*_@name	Protected Members */
 		//_@{ 
-
-		/*_
-		*/
-		bool		valid_;
-
-		/*_	the INIFile
-		*/
-		INIFile	INI_file_;
 
 		/*_	the atom types section
 		*/
