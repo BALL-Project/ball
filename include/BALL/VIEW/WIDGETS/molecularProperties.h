@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.h,v 1.3 2003/09/04 23:14:15 amoll Exp $
+// $Id: molecularProperties.h,v 1.4 2003/09/19 18:41:58 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
@@ -157,6 +157,9 @@ namespace BALL
 			 */
 			virtual bool checkResidue();
 
+			///
+			virtual void createGridFromDistance();
+
 			//@}
 
 			
@@ -167,19 +170,15 @@ namespace BALL
 			virtual void addComposite_(Composite& composite, const String& name)
 				throw();
 
-			int center_camera_id_;
-			int build_bonds_id_;
-			int add_hydrogens_id_;
-			int check_structure_id_;
-			int select_id_;
-			int deselect_id_;
+			Index center_camera_id_, build_bonds_id_, add_hydrogens_id_, check_structure_id_,
+						select_id_, deselect_id_, create_distance_grid_id_;
+
 			
 			Vector3 										view_center_vector_;
 			Real 												view_distance_;
 
 		};
 
-	} // namespace VIEW
-} // namespace BALL
+} } // namespaces
 
 #endif // BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H

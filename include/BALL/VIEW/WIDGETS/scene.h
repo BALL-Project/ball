@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.7 2003/09/16 15:18:32 amoll Exp $
+// $Id: scene.h,v 1.8 2003/09/19 18:41:58 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -564,9 +564,7 @@ namespace BALL
 				throw();
 			
 			// Menu entry IDs
-			Index rotate_id_;
-			Index picking_id_;
-			Index stereo_id_;
+			Index rotate_id_, picking_id_, stereo_id_;
 			
 			bool rotate_mode_;
 
@@ -608,7 +606,6 @@ namespace BALL
 #		include <BALL/VIEW/WIDGETS/scene.iC>
 #	endif
 
-	} // namespace VIEW
-} // namespace BALL
+} } // namespaces
 
 #endif // BALL_VIEW_WIDGETS_SCENE_H

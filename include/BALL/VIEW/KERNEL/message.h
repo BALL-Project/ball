@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.29 2003/09/18 19:10:33 amoll Exp $
+// $Id: message.h,v 1.30 2003/09/19 18:41:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -534,7 +534,9 @@ class MolecularTaskMessage
 		///
 		CHECK_RESIDUE,
 		///
-		ADD_HYDROGENS
+		ADD_HYDROGENS,
+		///
+		CREATE_DISTANCE_GRID
 	};
 
 	///
@@ -554,60 +556,6 @@ class MolecularTaskMessage
 	Index type_;
 };
 
-
-/** MolecularSelectionMessage class.
-		The class MolecularSelectionMessage is the message class that is a container for
-		 \link Composite Composite \endlink  objects that are somehow selected.
-		It will be sent by existing  \link ConnectionObject ConnectionObject \endlink  objects that collect
-		 \link Composites Composites \endlink  objects for a certain purpose.
-		One can use the  \link RTTI RTTI \endlink  mechanism to identify
-		such messages in the {\em onNotify} method of user constructed  \link ConnectionObject ConnectionObject \endlink 
-		objects.
-		This class is only provided for convinience. So in VIEW applications one can
-		use this class in the same way as the class  \link SelectionMessage SelectionMessage \endlink .  \par
-		
-*/
-class MolecularSelectionMessage: public SelectionMessage
-{
-	public:
-
-	/**	@name	Constructors
-	*/	
-	//@{
-
-	/** Default Constructor.
-			Construct new molecularSelectionMessage.
-			@return      MolecularSelectionMessage new constructed molecularSelectionMessage
-			@see         SelectionMessage
-	*/
-	MolecularSelectionMessage()
-		throw();
-
-	/** Copy constructor.
-			Construct new molecularSelectionMessage by copying the molecularSelectionMessage
-			{\em message}.
-			The state of {\em *this} molecularSelectionMessage is set to the set of 
-			{\em message} molecularSelectionMessage.
-			@param       message the molecularSelectionMessage to be copied
-			@return      MolecularSelectionMessage new constructed molecularSelectionMessage copied from {\em message}
-			@see         SelectionMessage
-	*/
-	MolecularSelectionMessage(const SelectionMessage& message)
-		throw();
-
-	//@}
-
-	/** @name Destructors 
-	*/
-	//@{
-
-	/** Destructor.
-			Default destruction of {\em *this} molecularSelectionMessage.
-	*/
-	virtual ~MolecularSelectionMessage()
-		throw();
-	//@}
-};
 
 ///
 class ShowDisplayPropertiesMessage

@@ -55,7 +55,7 @@ namespace BALL
 									 bool modal = FALSE, WFlags fl = 0);
 
 				///
-				~FDPBDialog()
+				virtual ~FDPBDialog()
 					throw();
 					
 				///

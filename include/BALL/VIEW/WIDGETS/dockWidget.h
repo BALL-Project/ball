@@ -28,8 +28,12 @@ class DockWidget
 
 	BALL_EMBEDDABLE(DockWidget)
 
+	///
   DockWidget(QWidget* parent, const char* title = 0);
 
+	///
+	virtual ~DockWidget() throw() {}
+	
 	/** Insert a widget with the content of the window.
 	 */
 	void setGuest(QWidget& guest);
@@ -82,8 +86,6 @@ class DockWidget
 	void setWindowsMenuEntry(bool state);
 
 	//@} 
-
-	virtual ~DockWidget() throw() {}
 
 	protected:
 

@@ -1,12 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.iC,v 1.6 2003/08/26 08:05:08 oliver Exp $
+// $Id: message.iC,v 1.7 2003/09/19 18:41:57 amoll Exp $
 
 BALL_INLINE
 void Message::setSender(const void* object)
 	throw()
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "Message " << this << " setSender " << object<< std::endl;
+#endif
   connection_object_ = const_cast<void*>(object);
 }
 
@@ -21,6 +24,9 @@ BALL_INLINE
 void Message::setDeletable(bool flag)
 	throw()
 {
+#ifdef BALL_VIEW_DEBUG
+	Log.error() << "Message " << this << " setDeletable" << flag<< std::endl;
+#endif
 	deletable_ = flag;
 }
 

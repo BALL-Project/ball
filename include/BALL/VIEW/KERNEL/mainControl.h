@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.8 2003/09/17 23:40:45 amoll Exp $
+// $Id: mainControl.h,v 1.9 2003/09/19 18:41:57 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -465,14 +465,6 @@ class MainControl
 	/**	@name	Debugging and Diagnostics
 	*/
 	//@{
-
-	/** Internal state and consistency self-validation.
-			If the internal state of this mainControl is correct (self-validated) and 
-			consistent <tt>true</tt> is returned, <tt>false</tt> otherwise.
-			\return			bool <tt> true</tt> if the internal state is correct
-	*/
-	virtual bool isValid() const
-		throw();
 
 	/** Internal state dump.
 			Dump the current internal state of this mainControl to 

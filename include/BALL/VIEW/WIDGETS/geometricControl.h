@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.6 2003/09/08 02:07:38 amoll Exp $
+// $Id: geometricControl.h,v 1.7 2003/09/19 18:41:58 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -242,7 +242,6 @@ namespace BALL
 			MolecularInformation information_;
 		};
 		
-	} // namespace VIEW
-} // namespace BALL
+} } // namespaces
 
 #endif // BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
