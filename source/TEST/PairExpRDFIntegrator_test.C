@@ -1,4 +1,4 @@
-// $Id: PairExpRDFIntegrator_test.C,v 1.3 2000/09/19 09:29:00 anker Exp $
+// $Id: PairExpRDFIntegrator_test.C,v 1.4 2000/09/22 16:31:02 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PairExpRDFIntegrator_test.C,v 1.3 2000/09/19 09:29:00 anker Exp $")
+START_TEST(class_name, "$Id: PairExpRDFIntegrator_test.C,v 1.4 2000/09/22 16:31:02 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -173,6 +173,16 @@ CHECK(PairExpRDFIntegrator::integrateToInf(double from) const )
 	val = integrator.integrateToInf(3);
 	double rel_err = fabs((val - 1.66807) / 1.66807);
 	TEST_REAL_EQUAL(rel_err, 0.01);
+
+	integrator = PairExpRDFIntegrator(3, 1, 1, 2, 0, 0, rdf); 
+	val = integrator.integrateToInf(3);
+	rel_err = fabs((val - (-1.37452)) / (-1.37452));
+	TEST_REAL_EQUAL(rel_err, 0.01);
+
+	val = integrator.integrateToInf(2);
+	Log.info() << "val = " << val << endl;
+	rel_err = fabs((val - (-2.09822)) / -2.09822);
+	TEST_REAL_EQUAL(rel_err, 0.01);
   //BAUSTELLE
 RESULT
 
@@ -203,7 +213,6 @@ CHECK(PairExpRDFIntegrator::integrate(double from, double to, double alpha, doub
 	// Zuerst der triviale Test (keine geometrische Korrektur)
 	PairExpRDFIntegrator integrator(0, 0, 0, 0, 0, 0, rdf);
 	integrator.setRDF(rdf);
-	integrator.options.readOptionFile("integrator.options");
 	double val;
 	double rel_err;
 
