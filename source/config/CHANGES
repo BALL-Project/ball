@@ -34,6 +34,7 @@ fixed:
 - SnapShotVisualisation Dialog could cause core dump
 - DatasetControl could cause core dump, after deleting trajectory when 
 	SnapShotVisualisation Dialog was still open
+- A click on the "default" button in Preferences now only works on currently selected page
 - issue with restoring window's geometry on X11 (still buggy on some X-Servers)
 - restoring of working dir
 - MDS dialog: switching off storing to trajectory file
