@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.2 1999/12/04 18:34:19 oliver Exp $
+// $Id: secondaryStructure.h,v 1.3 1999/12/28 18:38:46 oliver Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -183,14 +183,14 @@ namespace BALL
 		virtual bool isValid() const;
 
 		///
-		virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
 		// --- STORERS
 
-		virtual void read(istream& s);
+		virtual void read(std::istream& s);
 
-		virtual void write(ostream& s) const;
+		virtual void write(std::ostream& s) const;
 
 			
 		// --- EXTERNAL ITERATORS

@@ -1,4 +1,4 @@
-// $Id: colorUnitHue.h,v 1.2 1999/12/19 17:19:23 oliver Exp $
+// $Id: colorUnitHue.h,v 1.3 1999/12/28 18:37:44 oliver Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNITHUE_H
 #define BALL_VIEW_DATATYPE_COLORUNITHUE_H
@@ -205,7 +205,7 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(std::ostream& s = std::cout, unsigned long depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
 
 			/**	@name	Storers

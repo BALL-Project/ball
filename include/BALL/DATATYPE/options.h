@@ -1,4 +1,4 @@
-// $Id: options.h,v 1.2 1999/12/04 18:34:13 oliver Exp $
+// $Id: options.h,v 1.3 1999/12/28 18:37:22 oliver Exp $
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -19,7 +19,8 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**		Options class.
 				This object is intended to store options for complex
@@ -322,7 +323,7 @@ namespace BALL {
 		//@{
 		
 		/** 	Dumps the whole content of the object */
-		virtual void dump (ostream& s = cout, unsigned long depth = 0) const;
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
 
 
 		//@}

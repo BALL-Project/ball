@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.2 1999/09/06 22:21:19 oliver Exp $
+// $Id: bond.h,v 1.3 1999/12/28 18:38:44 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -63,8 +63,8 @@ namespace BALL
 			
 			@memo    Bond class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.2 $
-			@date    $Date: 1999/09/06 22:21:19 $
+			@version $Revision: 1.3 $
+			@date    $Date: 1999/12/28 18:38:44 $
 	*/
 	class Bond
 		: public Composite,
@@ -620,7 +620,7 @@ namespace BALL
 					@param	s output stream where to output the internal state of {\em *this} bond
 					@param  depth the dumping depth
 			*/
-			virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		
 			//@}
 

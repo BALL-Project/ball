@@ -1,4 +1,4 @@
-// $Id: colorExtension1.h,v 1.2 1999/12/19 17:19:26 oliver Exp $
+// $Id: colorExtension1.h,v 1.3 1999/12/28 18:37:45 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION1_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION1_H
@@ -89,7 +89,7 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(std::ostream& s = std::cout, unsigned long depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
 
 			/**	@name	Storers

@@ -1,4 +1,4 @@
-// $Id: PSE.h,v 1.2 1999/12/04 18:34:16 oliver Exp $
+// $Id: PSE.h,v 1.3 1999/12/28 18:38:43 oliver Exp $
 
 #ifndef BALL_KERNEL_PSE_H
 #define BALL_KERNEL_PSE_H
@@ -453,7 +453,7 @@ namespace BALL {
 			bool operator >(const Element& element) const;
 
 			///
-			friend ostream &operator << (ostream& s, const Element& element);
+			friend std::ostream &operator << (std::ostream& s, const Element& element);
 
 			//@}
 

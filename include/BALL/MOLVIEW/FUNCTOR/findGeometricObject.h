@@ -1,4 +1,4 @@
-// $Id: findGeometricObject.h,v 1.2 1999/12/19 17:18:49 oliver Exp $
+// $Id: findGeometricObject.h,v 1.3 1999/12/28 18:38:06 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECT_H
 #define BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECT_H
@@ -105,7 +105,7 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(ostream& s = cout, unsigned long depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
 
 

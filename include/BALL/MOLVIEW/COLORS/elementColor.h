@@ -1,4 +1,4 @@
-// $Id: elementColor.h,v 1.2 1999/12/19 17:18:41 oliver Exp $
+// $Id: elementColor.h,v 1.3 1999/12/28 18:38:05 oliver Exp $
 
 #ifndef BALL_VIEW_MOLVIEW_COLORS_ELEMENTCOLOR_H
 #define BALL_VIEW_MOLVIEW_COLORS_ELEMENTCOLOR_H
@@ -57,7 +57,7 @@ namespace BALL
 			//@{
 
 			virtual void dump
-				(std::ostream& s = std::cout, unsigned long depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
 
 			/**	@name Storers

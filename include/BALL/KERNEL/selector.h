@@ -1,4 +1,4 @@
-// $Id: selector.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: selector.h,v 1.2 1999/12/28 18:38:46 oliver Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -67,6 +67,7 @@ namespace BALL
 		:	public UnaryProcessor<Composite>
 	{
 		
+		public:
 		/**	@name	Nested Classes
 		*/
 		//@{

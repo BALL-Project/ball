@@ -1,4 +1,4 @@
-// $Id: line.h,v 1.2 1999/12/19 17:19:41 oliver Exp $
+// $Id: line.h,v 1.3 1999/12/28 18:37:51 oliver Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_LINE_H
 #define BALL_VIEW_PRIMITIV_LINE_H
@@ -74,16 +74,16 @@ namespace BALL
 			virtual bool isValid() const;
 
 			virtual void dump
-				(ostream& s = cout, unsigned long depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
 
 			/**	@name	Storers
 			*/
 			//@{
 
-			virtual void read(istream& s);
+			virtual void read(std::istream& s);
 
-			virtual void write(ostream& s) const;
+			virtual void write(std::ostream& s) const;
 			//@}
 
 

@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.3 1999/09/06 22:21:18 oliver Exp $
+// $Id: atom.h,v 1.4 1999/12/28 18:38:43 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -84,8 +84,8 @@ namespace BALL {
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.3 $
-			@date    $Date: 1999/09/06 22:21:18 $
+			@version $Revision: 1.4 $
+			@date    $Date: 1999/12/28 18:38:43 $
 	*/
 	class Atom
 		: public Composite,
@@ -780,7 +780,7 @@ namespace BALL {
 					@param   s - output stream where to output the internal state of {\em *this} atom
 					@param   depth - the dumping depth
 			*/
-			virtual void dump(ostream& s = cout, unsigned long depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 		
 			//@}
@@ -797,7 +797,7 @@ namespace BALL {
 					@param  s input stream from where to restore the internal state of {\em *this} atom
 					@see    Object::operator >>
 			*/
-			virtual void read(istream& s);
+			virtual void read(std::istream& s);
 
 			/* Persistent stream output and state storage.
 					Write persistent bond data to the output stream {\em s} and store the state of {\em *this} atom.
@@ -808,7 +808,7 @@ namespace BALL {
 					@param  s input stream from where to restore the internal state of {\em *this} atom
 					@see         Object::operator <<
 			*/
-			virtual void write(ostream& s) const;
+			virtual void write(std::ostream& s) const;
 
 			//@}  
 
@@ -965,14 +965,14 @@ namespace BALL {
 					++position_;
 				}
 
-				friend ostream& operator << (ostream& s, const BondIteratorTraits_& traits)
+				friend std::ostream& operator << (std::ostream& s, const BondIteratorTraits_& traits)
 				{
 					return (s << traits.position_ << ' ');
 				}
 
-				void dump(ostream& s) const
+				void dump(std::ostream& s) const
 				{
-					s << position_ << endl;
+					s << position_ << std::endl;
 				}
 
 				void toRBegin()

@@ -1,4 +1,4 @@
-// $Id: removeModel.h,v 1.1 1999/12/19 18:17:34 oliver Exp $
+// $Id: removeModel.h,v 1.2 1999/12/28 18:38:07 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
@@ -119,16 +119,16 @@ namespace BALL
 			*/
 			//@{
 			virtual void dump
-				(ostream& s = cout, unsigned long depth = 0) const;
+				(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
 
 			/**	@name	Storers
 			*/
 			//@{
 
-			virtual void read(istream& s);
+			virtual void read(std::istream& s);
 
-			virtual void write(ostream& s) const;
+			virtual void write(std::ostream& s) const;
 			//@}
 
 

@@ -1,4 +1,4 @@
-// $Id: pointGrid.h,v 1.5 1999/12/04 18:34:14 oliver Exp $ 
+// $Id: pointGrid.h,v 1.6 1999/12/28 18:37:21 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_POINTGRID_H
 #define BALL_DATATYPE_POINTGRID_H
@@ -140,7 +140,7 @@ namespace BALL
 
 		/**
 		*/
-		virtual void dump(ostream& stream) const; 
+		virtual void dump(std::ostream& stream) const; 
 
 		/**	Returns the current stat of the object.	
 				isValid() returns false, if the grid couldn't be initialized 
@@ -655,18 +655,19 @@ namespace BALL
 	 
 
 	template <class GridDataType>
-	void PointGrid<GridDataType>::dump(ostream& stream) const
+	void PointGrid<GridDataType>::dump(std::ostream& stream) const
 	{
 		Index i;
 
 		stream << "Dump of " << typeid(this).name()<< " (" << getMaxXIndex() 
 					 << "x" << getMaxYIndex() << "x" << getMaxZIndex() 
-					 << ")" << endl;
-		stream << "--------------------------------------" << endl;
-		for (i = 0; i < number_of_grid_points_; i++){
+					 << ")" << std::endl;
+		stream << "--------------------------------------" << std::endl;
+		for (i = 0; i < number_of_grid_points_; i++)
+		{
 			stream << "(" << data[i] << ")";
 		}
-		stream << endl << "--------------------------------------" << endl;
+		stream << std::endl << "--------------------------------------" << std::endl;
 	}
 
 

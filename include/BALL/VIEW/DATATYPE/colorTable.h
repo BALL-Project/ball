@@ -1,4 +1,4 @@
-// $Id: colorTable.h,v 1.2 1999/12/19 17:19:22 oliver Exp $
+// $Id: colorTable.h,v 1.3 1999/12/28 18:37:44 oliver Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORTABLE_H
 #define BALL_VIEW_DATATYPE_COLORTABLE_H
@@ -70,7 +70,7 @@ namespace BALL
 
 			/**	
 			*/
-			virtual void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
 
 			/**	@name	Storers
