@@ -1,4 +1,4 @@
-// $Id: scene.iC,v 1.7.4.2 2002/11/01 17:10:23 amoll Exp $
+// $Id: scene.iC,v 1.7.4.3 2002/11/27 17:22:10 amoll Exp $
 
 BALL_INLINE
 void Scene::setRenderMode_(RenderMode mode)
@@ -201,12 +201,6 @@ BALL_INLINE
 void Scene::deselectionPressed_(Scene* /* scene */)
 {
 	selectionPressed_(this);
-}
-
-BALL_INLINE
-void Scene::deselectionReleased_(Scene* /* scene */)
-{
-	selectionReleased_(this);
 }
 
 BALL_INLINE
