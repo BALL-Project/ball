@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.18 2000/05/05 17:56:20 oliver Exp $
+# $Id: Makefile.in,v 1.19 2000/06/10 11:24:59 oliver Exp $
 #
 
 include config.mak
@@ -43,6 +43,9 @@ molview:
 
 PB:
 	@( cd APPLICATIONS/PB; make )
+
+amber:
+	@( cd APPLICATIONS/AMBER; make )
 
 clean:
 	@echo "Cleaning up object files, cores,  and (uninstalled) library files..."
@@ -136,7 +139,7 @@ delete.shared:
 depend:
 	@echo "creating dependencies..."
 	@echo "" >.Dependencies
-	@for i in $(DIRS) TEST APPLICATIONS/MOLVIEW APPLICATIONS/PB ; do ( cd $$i; echo "" >.Dependencies; cd .. ) ; done
+	@for i in $(DIRS) TEST APPLICATIONS/MOLVIEW APPLICATIONS/PB APPLICATIONS/AMBER; do ( cd $$i; echo "" >.Dependencies; cd .. ) ; done
 	@set -e; for i in $(DIRS) TEST ; do ( cd $$i; $(MAKE) depend; cd .. ) ; done
 
 
