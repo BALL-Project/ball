@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.68 2004/07/05 10:11:46 amoll Exp $
+// $Id: displayProperties.C,v 1.69 2004/07/07 16:17:11 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -939,6 +939,7 @@ bool DisplayProperties::getSettingsFromString(const String& data)
 
 	void DisplayProperties::setSurfaceDrawingPrecision(float value)
 	{
+		if (value < 0.1) return;
 		precision_slider->setValue((int)(value * 10.0));
 	}
 			
