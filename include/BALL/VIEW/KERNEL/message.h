@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.53 2004/06/25 14:52:50 amoll Exp $
+// $Id: message.h,v 1.54 2004/09/14 13:43:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -764,6 +764,33 @@ class BALL_EXPORT RegularData3DMessage
 	protected:
 	RegularData3D* data_;
 };
+
+class BALL_EXPORT TransformationMessage
+	: public Message
+{
+	public:
+
+	///
+	TransformationMessage()
+		throw();
+
+	///
+	TransformationMessage(const Matrix4x4& m)
+		throw();
+
+	///
+	void setMatrix(const Matrix4x4& m)
+		throw() { matrix_ = m;}
+
+	///
+	const Matrix4x4& getMatrix() const
+		throw() { return matrix_;}
+
+	private:
+
+	Matrix4x4 matrix_;
+};
+	
 
 //@}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.22 2004/06/24 23:03:24 amoll Exp $
+// $Id: message.C,v 1.23 2004/09/14 13:43:15 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -295,6 +295,20 @@ CreateRepresentationMessage::CreateRepresentationMessage(const List<Composite*>&
 		composites_(composites), 
 		model_type_(model_type),
 		coloring_method_(coloring_method)
+{
+}
+
+TransformationMessage::TransformationMessage()
+	throw()
+	: Message(),
+		matrix_()
+{
+}
+
+TransformationMessage::TransformationMessage(const Matrix4x4& m)
+	throw()
+	: Message(),
+		matrix_(m)
 {
 }
 
