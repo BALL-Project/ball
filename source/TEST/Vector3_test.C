@@ -1,4 +1,4 @@
-// $Id: Vector3_test.C,v 1.12 2000/02/25 21:22:52 amoll Exp $ #include
+// $Id: Vector3_test.C,v 1.13 2000/03/02 21:12:13 amoll Exp $ #include
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.12 2000/02/25 21:22:52 amoll Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.13 2000/03/02 21:12:13 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -474,10 +474,10 @@ CHECK(TAngle<T> TVector3<T>::getTorsionTAngle())
 	b = Vector3(100, 201, 302);
 	c = Vector3(50, 101, 202);
 	d = Vector3(200, 401, 602);
-	angle = a.getTorsionTAngle(a, b, c, d);
+	angle = a.getTorsionAngle(a, b, c, d);
   TEST_EQUAL(angle == 0, true )
 	d = Vector3(50, 101, 602);
-	angle = a.getTorsionTAngle(a, b, c, d);
+	angle = a.getTorsionAngle(a, b, c, d);
   TEST_EQUAL(angle == 0, true )
 RESULT
 
@@ -528,7 +528,6 @@ CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	std::ofstream outfile(filename.c_str(), ios::out);
 	v.dump(outfile);
 	outfile.close();
-	
 	TEST_FILE(filename.c_str(), "data/Vector3_test.txt", true)
 RESULT
 
@@ -599,6 +598,6 @@ CHECK(std::ostream& operator << (std::ostream& s, const TVector3<T>& vector))
 RESULT
 
 
-/////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
