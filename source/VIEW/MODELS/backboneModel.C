@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.9 2004/12/21 21:05:00 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.10 2004/12/22 13:24:37 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -287,7 +287,7 @@ have_start_point_ = false;
 			m.setRotation(Angle(360.0 / (slides), false), n % r);
 			points.push_back(x);
 			// initialise a first set of points in a circle around the start position
-			for (float p = 0; p < slides; p++)
+			for (Position p = 0; p < slides; p++)
 			{
 				x = m * x;
 				points.push_back(x);
@@ -295,68 +295,54 @@ have_start_point_ = false;
 			// add also a dummy for closing of ring
 			points.push_back(points[0]);
 
-			for (float p = 0; p < points.size() - 2; p++)
-			{
-				Line* line = new Line();
-				line->setVertex1(last_point_ + points[(Size)p]);
-				line->setVertex2(last_point_ + points[(Size)p+1]);
- 				geometric_objects_.push_back(line);
-			}
-
 			Mesh* mesh = new Mesh();
 			Mesh::Triangle t;
+			vector<Vector3> new_points;
+			new_points.resize(points.size());
+			Matrix4x4 m2;
 				
 			// iterate over all spline_points_
 			for (Position p = start + 1; p < end; p++)
 			{
 				Vector3 point 	= spline_points_[p];
-				Vector3 dir_new = (spline_points_[p + 1] - point + dir) / 2.0;
+				Vector3 dir_new = spline_points_[p + 1] - spline_points_[p];
+//   				Vector3 dir_new = (spline_points_[p + 1] - point + dir) / 2.0;
 
-				Vector3 r_new = VIEW::getNormal(dir_new) * tube_radius_;
+				float f1 = dir_new.x * r.x + 
+									 dir_new.y * r.y + 
+									 dir_new.z * r.z;
+				float f2 = dir_new.x * dir_new.x +
+									 dir_new.y * dir_new.y + 
+									 dir_new.z * dir_new.z;
+				Vector3 r_new = r - ((f1/f2)*dir_new);
+				r_new.normalize();
+				r_new *= tube_radius_;
 
-				
+				/*
 				Angle angle;
 				GetAngle(r, r_new, angle);
 				Matrix4x4 m;
-				m.setRotation(angle, dir_new % r_new); 
-				/*
-				Angle angle;
-				GetAngle(dir, dir_new, angle);
-				Matrix4x4 m;
-				m.setRotation(angle, dir_new % r_new);
-				Vector3 z = m * r_new;
-
-				GetAngle(r, z, angle);
-				Matrix4x4 m2;
-				m2.setRotation(angle, dir_new);
-				m *= m2;
+				m.setRotation(-angle, dir_new % r_new); 
 				*/
 
-				vector<Vector3> new_points;
-				for (Position point_pos = 0; point_pos < points.size() - 1; point_pos++)
+				m2.setRotation(Angle(360.0 / (slides), false), dir_new);
+				x = r_new;
+				new_points[0] = x;
+				for (Position p = 0; p < slides; p++)
 				{
-					new_points.push_back(m * points[point_pos]);
+					x = m2 * x;
+					new_points[p+1] = x;
 				}
+				// add also a dummy for closing of ring
+				new_points[new_points.size() - 1] = new_points[0];
 
 				for (Position point_pos = 0; point_pos < points.size() - 2; point_pos++)
 				{
-					/*
-					Line* line = new Line();
-					line->setVertex1(last_point_ + points[point_pos]);
-					points[point_pos] = m * points[point_pos];
-					line->setVertex2(point + points[point_pos]);
- 					geometric_objects_.push_back(line);
-					*/
 
-					Vector3 o = 	last_point_ + 		points[point_pos];
-					Vector3 n = 			 point  + new_points[point_pos];
-					Vector3 on = 	last_point_ + 		points[point_pos + 1];
-					Vector3 nn =  	   point  + new_points[point_pos + 1];
-
-					mesh->vertex.push_back(o);
-					mesh->vertex.push_back(n);
-					mesh->vertex.push_back(on);
-					mesh->vertex.push_back(nn);
+					mesh->vertex.push_back(last_point_ + 		 points[point_pos]);
+					mesh->vertex.push_back(			point  + new_points[point_pos]);
+					mesh->vertex.push_back(last_point_ + 		 points[point_pos + 1]);
+					mesh->vertex.push_back(     point  + new_points[point_pos + 1]);
 
 					mesh->normal.push_back(points[point_pos]);
 					mesh->normal.push_back(new_points[point_pos]);
@@ -377,6 +363,11 @@ have_start_point_ = false;
 
 				r = r_new;
 				last_point_ = point;
+
+				for (Position p = 0; p < points.size(); p++)
+				{
+					points[p] = new_points[p];
+				}
 			}
 
 			geometric_objects_.push_back(mesh);
