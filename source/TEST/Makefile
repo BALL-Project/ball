@@ -54,6 +54,7 @@ EXECUTABLES = \
 	Protein_test\
 	PTE_test\
 	Quaternion_test\
+	RegularExpression_test\
 	Residue_test\
 	ResourceFile_test\
 	RTTI_test\
@@ -166,8 +167,8 @@ MathsCommon_test:	MathsCommon_test.o
 Matrix44_test:	Matrix44_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
-MOL2File_test:	MOL2File_test.o ../FORMAT/MOL2File.o
-	$(CXX)	$(LDFLAGS) -o $@ $@.o ../FORMAT/MOL2File.o $(LIBS)
+MOL2File_test:	MOL2File_test.o 
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Molecule_test:	Molecule_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
@@ -211,6 +212,9 @@ Quaternion_test: Quaternion_test.o
 Residue_test:	Residue_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
+RegularExpression_test:	RegularExpression_test.o 
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
 ResourceFile_test:	ResourceFile_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
@@ -229,8 +233,8 @@ Skeleton_test:	Skeleton_test.o
 Sphere3_test:	Sphere3_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
-StandardPredicates_test:	../KERNEL/standardPredicates.o StandardPredicates_test.o
-	$(CXX)	$(LDFLAGS) -o $@ $@.o ../KERNEL/standardPredicates.o $(LIBS)
+StandardPredicates_test: StandardPredicates_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 StructureMapper_test:	StructureMapper_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
