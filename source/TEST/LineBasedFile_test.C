@@ -1,11 +1,11 @@
-// $Id: LineBasedFile_test.C,v 1.3 2000/10/14 16:40:26 oliver Exp $
+// $Id: LineBasedFile_test.C,v 1.4 2000/10/14 18:51:50 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/lineBasedFile.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: LineBasedFile_test.C,v 1.3 2000/10/14 16:40:26 oliver Exp $")
+START_TEST(class_name, "$Id: LineBasedFile_test.C,v 1.4 2000/10/14 18:51:50 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -102,8 +102,8 @@ CHECK(getField(Position pos = 0, const String& quotes = "",
 	TEST_EQUAL(f1.getField(2), "/2")
 	TEST_EQUAL(f1.getField(0, "/"), "0")
 	TEST_EQUAL(f1.getField(1, "/"), "1")
-	TEST_EQUAL(f1.getField(2, "/"), "2 2")
-	TEST_EQUAL(f1.getField(3, "/"), "3")
+	TEST_EQUAL(f1.getField(2, "/"), "2 23")
+	TEST_EQUAL(f1.getField(3, "/"), "")
 
 	TEST_EQUAL(fx.getField(), "")
 RESULT
@@ -124,7 +124,7 @@ CHECK(startsWith(const String& text) const  throw())
 	TEST_EQUAL(f1.startsWith("/0/ /1/ /2 2//3/"), true)
 	TEST_EQUAL(f1.startsWith("/0/ /1/ /2 2//3/X"), false)
 
-	TEST_EQUAL(fx.startsWith(""), false)
+	TEST_EQUAL(fx.startsWith(""), true)
 RESULT
 
 CHECK(has(const String& text) const  throw())
@@ -134,7 +134,7 @@ CHECK(has(const String& text) const  throw())
 	TEST_EQUAL(f1.has("X"), false)
 
 	TEST_EQUAL(fx.has("X"), false)
-	TEST_EQUAL(fx.has(""), false)
+	TEST_EQUAL(fx.has(""), true)
 RESULT
 
 CHECK(search(const String& text) throw())
@@ -142,16 +142,28 @@ CHECK(search(const String& text) throw())
 	TEST_EQUAL(f1.search("line4-"), true)
 	TEST_EQUAL(f1.search("line4-"), false)
 
-	TEST_EQUAL(fx.search("line4-"), false)
+  f1.rewind();
+	f1.skipLines(2);
+	TEST_EQUAL(f1.getLine(), "line3-")
+	f1.search("XXX", true);
+	TEST_EQUAL(f1.getLine(), "line3-")
+
+	TEST_EXCEPTION(LineBasedFile::LineBasedFileError, fx.search("line4-"))
 RESULT
 
 CHECK(search(const String& text, const String& stop) throw())
   f1.rewind();
-	TEST_EQUAL(f1.search("line3", "line4"), true)
+	TEST_EQUAL(f1.search("line3", "line4", true), true)
   f1.rewind();
-	TEST_EQUAL(f1.search("line4", "line3"), false)
+	TEST_EQUAL(f1.search("line4", "line3", true), false)
 
-	TEST_EQUAL(fx.search("line4", "line3"), false)
+  f1.rewind();
+	f1.skipLines(2);
+	TEST_EQUAL(f1.getLine(), "line3-")
+	f1.search("XXX", "line4", true);
+	TEST_EQUAL(f1.getLine(), "line3-")
+
+	TEST_EXCEPTION(LineBasedFile::LineBasedFileError, fx.search("line4", "line3"))
 RESULT
 
 CHECK(switchString(const std::vector<String>& data) const  throw())
@@ -178,36 +190,55 @@ CHECK(test(const char* file, int line, bool condition, const String& msg)
 	fx.test(__FILE__, __LINE__, true, "test");
 RESULT
 
-CHECK(readLine() throw())
+CHECK(readLine() throw(LineBasedFileError))
   f1.rewind();
 	f1.readLine();
 
 	TEST_EQUAL(f1.getLine(), "line1")
 
-	fx.readLine();
+	TEST_EXCEPTION(LineBasedFile::LineBasedFileError, fx.readLine())
 	TEST_EQUAL(fx.getLine(), "")
 RESULT
 
-CHECK(skipLines(Size number = 1) throw(Exception::IndexUnderflow))
+CHECK(skipLines(Size number = 1) throw(Exception::IndexUnderflow, LineBasedFileError))
   f1.rewind();
-	f1.skipLines(2);
-	TEST_EQUAL(f1.getLine(), "line3")
+	TEST_EQUAL(f1.skipLines(2), true)
+	TEST_EQUAL(f1.getLine(), "line3-")
 	TEST_EQUAL(f1.getLineNumber(), 3)
+	TEST_EQUAL(f1.skipLines(2), false)
 
-	fx.skipLines(2);
+	TEST_EXCEPTION(LineBasedFile::LineBasedFileError, fx.skipLines(2))
 	TEST_EQUAL(fx.getLine(), "")
 	TEST_EQUAL(fx.getLineNumber(), 0)
 RESULT
 
-CHECK(rewind() throw())
+CHECK(rewind() throw(LineBasedFileError))
   f1.rewind();
 	TEST_EQUAL(f1.getLine(), "")
 	TEST_EQUAL(f1.getLineNumber(), 0)
 
-  fx.rewind();
+  TEST_EXCEPTION(LineBasedFile::LineBasedFileError,fx.rewind())
 	TEST_EQUAL(fx.getLine(), "")
 	TEST_EQUAL(fx.getLineNumber(), 0)
 RESULT
+
+CHECK(goToLine(Position line_number) throw(LineBasedFileError))
+  f1.rewind();
+	f1.skipLines(4);
+	TEST_EQUAL(f1.goToLine(3), true)
+	TEST_EQUAL(f1.getLine(), "line3-" )
+
+	TEST_EQUAL(f1.goToLine(5), true)
+	TEST_EQUAL(f1.getLine(), "line5-" )
+
+	TEST_EQUAL(f1.goToLine(6), false)
+	TEST_EQUAL(f1.getLine(), "line5-" )
+
+  TEST_EXCEPTION(LineBasedFile::LineBasedFileError,fx.goToLine(2))
+	TEST_EQUAL(fx.getLine(), "")
+	TEST_EQUAL(fx.getLineNumber(), 0)
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

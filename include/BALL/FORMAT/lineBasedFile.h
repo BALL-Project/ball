@@ -26,7 +26,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(LineBasedFile)
+		//BALL_CREATE(LineBasedFile)
 
 		/**	@name Exceptions
 		*/
@@ -66,7 +66,9 @@ namespace BALL
 		*/
 		//@{
 			
-		/// Assignment operator
+		/** Assignment operator.
+				The file is opened and the same position in it is seeked.
+		*/
 		const LineBasedFile& operator = (const LineBasedFile& file)
 			throw();
 			
@@ -89,19 +91,58 @@ namespace BALL
 
 		//@}
 
-		/*_	@name	Help-Methods for File Acces
+		/**	@name	Help-Methods for File Acces
 		*/
-		//_@{
+		//@{
 
-		/** Function to get a token surrounded by delimiter
+		/** Reads a line and counts the line number.
+				@return true if a line could be read, false if End Of File.
+		*/
+		bool readLine()
+			throw(LineBasedFileError);
+
+		/** Skip a given number of lines.
+				@return false, if EOF occurs.
+		*/
+		bool skipLines(Size number = 1)
+			throw(LineBasedFileError);
+
+		/** Function to search for a line starting like a given String.
+				The search is started at the actual line.
+				@param return_to_point : true if line can not be found return to the starting position
+				@return true if line could be found
+		*/
+		bool search(const String& text, bool return_to_point = false)
+			throw(LineBasedFileError);
+
+		/** Like search above, but stop search when coming to a line staring with stop
+		*/
+		bool search(const String& text, const String& stop, bool return_to_point = false)
+			throw(LineBasedFileError);
+
+		/** Go to a given line.
+				@return false if EOF occurs
+		*/
+		bool goToLine(Position line_number)
+			throw(LineBasedFileError);
+
+		/// Rewind file to start
+		void rewind()
+			throw(LineBasedFileError);
+
+		/// Tests a condition, if false prints an errormsg and terminates the programm
+		void test(const char* file, int line, bool condition, const String& msg) 
+			const throw(LineBasedFileError);
+
+		/** Function to get a field surrounded by delimiter
 		*/
 		String getField(Position pos = 0, const String& quotes = "",
 										const String& delimiters = String::CHARACTER_CLASS__WHITESPACE)
-			const	throw(Exception::IndexUnderflow, Exception::NullPointer);
+			const	throw(Exception::IndexUnderflow);
 
 		/// Copy a substring to a new String
-		String copyString(Position start, Position end = 0) 
-			const throw(Exception::IndexUnderflow, Exception::NullPointer);
+		String copyString(Index start = 0, Index end = -1) 
+			const throw(Exception::IndexUnderflow);
 
 		/// Function to test if a String starts like an other String
 		bool startsWith(const String& text) 
@@ -111,33 +152,9 @@ namespace BALL
 		bool has(const String& text) 
 			const throw();
 
-		/// Function to test if a String starts like an other String
-		bool search(const String& text)
-			throw();
-
-		/// Like search above, but stops search when coming to a line staring with stop
-		bool search(const String& text, const String& stop)
-			throw();
-
 		/// Return the position of line_ in data or -1 if it does not exist in data
 		Index switchString(const std::vector<String>& data) 
 			const throw();
-
-		/// Tests a condition, if false prints an errormsg and terminates the programm
-		void test(const char* file, int line, bool condition, const String& msg) 
-			const throw(LineBasedFileError);
-
-		/// Reads a line and counts the line number
-		void readLine()
-			throw();
-
-		/// Skip a given number of lines
-		void skipLines(Size number = 1)
-			throw(Exception::IndexUnderflow);
-
-		/// Rewind file to start
-		void rewind()
-			throw();
 
 		//_@}
 

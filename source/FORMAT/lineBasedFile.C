@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.C,v 1.3 2000/10/14 13:04:18 oliver Exp $
+// $Id: lineBasedFile.C,v 1.4 2000/10/14 18:48:26 amoll Exp $
 
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/COMMON/exception.h>
@@ -26,6 +26,197 @@ namespace BALL
 		Exception::globalHandler.setMessage(message_);
 	}
 
+	LineBasedFile::LineBasedFile()
+		throw()
+		:	File(),
+			line_number_(0)
+	{
+	}
+
+	LineBasedFile::LineBasedFile(const LineBasedFile& f)
+	 throw()
+		: File(f),
+			line_number_(0)
+	{
+		if (f.line_number_ == 1)
+		{
+			readLine();
+		}
+
+		if (f.line_number_ > 1)
+		{
+			skipLines(f.line_number_ - 1);
+		}
+	}
+
+	LineBasedFile::LineBasedFile(const String& filename, File::OpenMode open_mode)
+		throw(Exception::FileNotFound)
+		: File(filename, open_mode),
+			line_number_(0)
+	{
+		if (!isAccessible())
+		{
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+		}
+	}
+
+	const LineBasedFile& LineBasedFile::operator = (const LineBasedFile& f)
+		throw()
+	{
+		*this = LineBasedFile(f);
+		return *this;
+	}
+
+	bool LineBasedFile::search(const String& text, bool return_to_point)
+		throw(LineBasedFileError)
+	{
+		if (!isOpen() || getOpenMode() != IN)
+		{
+			throw LineBasedFileError(__FILE__, __LINE__, this, 
+							"File " + name_ +" is not opend for read access or at all.");
+		}
+
+		Position start_point = line_number_;
+
+		while (readLine())
+		{
+			if (startsWith(text))
+			{
+				return true;
+			}
+		}
+		
+		if (return_to_point)
+		{
+			goToLine(start_point);
+		}
+
+		return false;
+	}
+
+	bool LineBasedFile::search(const String& text, const String& stop, bool return_to_point)
+		throw(LineBasedFileError)
+	{
+		if (!isOpen() || getOpenMode() != IN)
+		{
+			throw LineBasedFileError(__FILE__, __LINE__, this, 
+							"File " + name_ +" is not opend for read access or at all.");
+		}
+
+		Position start_point = line_number_;
+
+		while (readLine())
+		{
+			if (has(stop))
+			{
+				if (return_to_point)
+				{
+					goToLine(start_point);
+				}
+
+				return false;
+			}
+
+			if (startsWith(text))
+			{
+				return true;
+			}
+		}
+
+		if (return_to_point)
+		{
+			goToLine(start_point);
+		}
+
+		return false;
+	}
+
+	bool LineBasedFile::readLine()
+		throw(LineBasedFileError)
+	{
+		if (!isOpen() || getOpenMode() != IN)
+		{
+			throw LineBasedFileError(__FILE__, __LINE__, this, 
+							"File " + name_ +" is not opend for read access or at all.");
+		}
+
+		if (eof())
+		{
+			return false;
+		}
+
+		char* c = new char[200];
+		getline(c, 200);
+		line_ = c;
+		++line_number_;
+		
+		return true;
+	}
+
+	bool LineBasedFile::skipLines(Size number)
+		throw(LineBasedFileError)
+	{
+		for (Position i = 0; i < number +1; i++)
+		{
+			if (!readLine())
+			{
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	void LineBasedFile::rewind()
+		 throw(LineBasedFileError)
+	{
+		if (!isOpen())
+		{
+			throw LineBasedFileError(__FILE__, __LINE__, this, 
+							"File " + name_ +" is not opend.");
+		}
+		File::reopen();
+		line_number_ = 0;
+		line_ = "";
+	}
+
+	bool LineBasedFile::goToLine(Position line_number)
+		 throw(LineBasedFileError)
+	{
+		if (!isOpen())
+		{
+			throw LineBasedFileError(__FILE__, __LINE__, this, 
+							"File " + name_ +" is not opend.");
+		}
+
+		if (line_number == line_number_)
+		{
+			return true;
+		}
+
+		if (line_number < line_number_)
+		{
+			rewind();
+			if (line_number == 0)
+			{
+				return true;
+			}
+
+			return skipLines(line_number - 1);
+		}
+
+		return skipLines(line_number - line_number_ - 1);
+	}
+
+
+	void LineBasedFile::clear()
+		throw()
+	{
+		line_ = "";
+		line_number_ = 0;
+		close();
+		name_ = "";
+	}
 
 	Position LineBasedFile::getLineNumber() 
 		const throw()
@@ -39,28 +230,17 @@ namespace BALL
 		return line_;
 	}
 
-	LineBasedFile::LineBasedFile()
-		throw()
-		:	File(),
-			line_number_(0)
+	void LineBasedFile::test(const char* file, int line, bool condition, const String& msg)
+		const throw(LineBasedFileError)
 	{
-	}
-
-	LineBasedFile::LineBasedFile(const String& filename, File::OpenMode open_mode)
-		throw(Exception::FileNotFound)
-		: File(filename, open_mode),
-			line_number_(0)
-	{
-	}
-
-	void LineBasedFile::clear()
-		throw()
-	{
-		// BAUSTELLE
+		if (!condition)
+		{
+			throw LineBasedFileError(file, line, this, msg);
+		}
 	}
 
 	String LineBasedFile::getField(Position pos, const String& quotes, const String& delimiters)
-		const	throw(Exception::IndexUnderflow, Exception::NullPointer)
+		const	throw(Exception::IndexUnderflow)
 	{
 		if (quotes == "")
 		{
@@ -70,12 +250,19 @@ namespace BALL
 		return line_.getFieldQuoted(pos, delimiters.c_str(), quotes.c_str());
 	}
 
-	String LineBasedFile::copyString(Position start, Position end)
-		const throw(Exception::IndexUnderflow, Exception::NullPointer)
+	String LineBasedFile::copyString(Index start, Index end)
+		const throw(Exception::IndexUnderflow)
 	{
-		if (end == 0)
+		if (end < 0)
 		{
-			end = line_.size() - 1;
+      end = line_.size() + end;
+
+			// if the values are out of bounds - throw an exception
+			// and leave it...
+			if (end < 0)
+			{
+				throw Exception::IndexUnderflow(__FILE__, __LINE__, end, line_.size());
+			}
 		}
 
 		return String(start, end - start);
@@ -100,99 +287,10 @@ namespace BALL
 		return line_.hasPrefix(text);
 	}
 
-	bool LineBasedFile::search(const String& text)
-		throw()
-	{
-		while (!eof())
-		{
-			readLine();
-
-			if (startsWith(text))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
-	bool LineBasedFile::search(const String& text, const String& stop)
-		throw()
-	{
-		while (!eof())
-		{
-			readLine();
-			if (has(stop))
-			{
-				return false;
-			}
-
-			if (startsWith(text))
-			{
-				return true;
-			}
-		}
-		return false;
-	}
-
-	void LineBasedFile::test(const char* file, int line, bool condition, const String& msg)
-		const throw(LineBasedFileError)
-	{
-		if (!condition)
-		{
-			throw LineBasedFileError(file, line, this, msg);
-		}
-	}
-
-	void LineBasedFile::readLine()
-		throw()
-	{
-		char* c = new char[200];
-		getline(c, 200);
-		line_ = c;
-		++line_number_;
-	}
-
-	void LineBasedFile::skipLines(Size number)
-		throw(Exception::IndexUnderflow)
-	{
-		if (number < 1)
-		{
-			throw Exception::IndexUnderflow(__FILE__, __LINE__);
-		}
-		for (Position i = 0; i < number +1; i++)
-		{
-			readLine();
-		}
-	}
-
 	bool LineBasedFile::has(const String& text) 
 		const throw()
 	{
 		return line_.hasSubstring(text);
-	}
-
-	void LineBasedFile::rewind()
-		 throw()
-	{
-		File::reopen();
-		line_number_ = 0;
-		line_ = "";
-	}
-
-	const LineBasedFile& LineBasedFile::operator = (const LineBasedFile& f)
-		throw()
-	{
-		name_ = f.name_;
-		rewind();
-		return *this;
-	}
-
-	LineBasedFile::LineBasedFile(const LineBasedFile& f)
-	 throw()
-		: File(f)
-	{
-		name_ = f.name_;
-		rewind();
 	}
 
 } //namespace
