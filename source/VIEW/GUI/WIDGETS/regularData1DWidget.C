@@ -1,4 +1,4 @@
-// $Id: regularData1DWidget.C,v 1.2 2001/02/06 18:14:32 anhi Exp $
+// $Id: regularData1DWidget.C,v 1.3 2001/03/11 23:42:45 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h>
 
@@ -21,7 +21,6 @@ NewRegularData1DMessage::~NewRegularData1DMessage()
   #endif
 }
 
-/* Default constructor */
 RegularData1DWidget::RegularData1DWidget(int l, double min, double max, QWidget *parent) 
   throw()
   : QScrollView(parent), 
@@ -39,7 +38,6 @@ RegularData1DWidget::RegularData1DWidget(int l, double min, double max, QWidget 
   viewport()->setMouseTracking(true);
 }
 
-/* Copy constructor */
 RegularData1DWidget::RegularData1DWidget(const RegularData1DWidget& widget) 
   throw()
   : QScrollView(), 
@@ -48,7 +46,6 @@ RegularData1DWidget::RegularData1DWidget(const RegularData1DWidget& widget)
 {
 }
 
-/* Destructor */
 RegularData1DWidget::~RegularData1DWidget()
   throw()
 {
@@ -71,8 +68,6 @@ void RegularData1DWidget::onNotify(Message* message)
 
 bool RegularData1DWidget::reactToMessages_(Message* message)
 {
-  bool update = false;
-
   if (RTTI::isKindOf<NewRegularData1DMessage>(*message))
   {
     NewRegularData1DMessage *composite_message = RTTI::castTo<NewRegularData1DMessage>(*message);
@@ -90,10 +85,10 @@ bool RegularData1DWidget::reactToMessages_(Message* message)
 
     createPlot();
     
-    update = true;
+    return true;
   }
   
-  return update;
+  return false;
 }
 
 const RegularData1DWidget& RegularData1DWidget::operator = (const RegularData1DWidget &widget)
@@ -125,22 +120,21 @@ void RegularData1DWidget::clear()
 bool RegularData1DWidget::operator == (const RegularData1DWidget &widget) const
   throw()
 {
-  if ((spec_ == widget.spec_) && (length_ == widget.length_) 
-      && (min_ == widget.min_) && (max_ == widget.max_))
+  if ((spec_ == widget.spec_) && (length_ == widget.length_) &&
+      (min_  == widget.min_)  && (max_    == widget.max_))
   {
-    return (true);
-  };
-  return (false);
+    return true;
+  }
+
+  return false;
 }
 
 void RegularData1DWidget::createPlot()
 {
   QPointArray fdummy(length_);
-  Size i;
-  double min_el, max_el;
 
-  min_el = spec_->getLowerBound(); // we have to be careful not to lose important digits
-  max_el = spec_->getUpperBound();
+	// we have to be careful not to lose important digits
+  double max_el(spec_->getUpperBound());
 
   pm_.fill();
   resize( length_, height() );
@@ -149,16 +143,14 @@ void RegularData1DWidget::createPlot()
   QPainter p( &pm_ );
 
   // scale
-  p.setWindow(0, 0, length_, max_el);
-
+  p.setWindow(  0, 0, length_, max_el);
   p.setViewport(0, 0, length_, height());
   
   // transform: set (0,0) to lower left corner
   QWMatrix m(1, 0, 0, -1, 0, max_el);
   p.setWorldMatrix(m);
 
-
-  for (i=0; i<length_; i++)
+  for (Size i=0; i<length_; i++)
   {
     fdummy.putPoints(i, 1, i, (*spec_)[i]);
     cout << (*spec_)[i] << endl;
