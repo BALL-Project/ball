@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.h,v 1.1.2.5 2002/11/12 16:24:58 anker Exp $
+// $Id: fresnoDesolvation.h,v 1.1.2.6 2002/11/21 20:46:58 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
 #define BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
@@ -154,6 +154,14 @@ namespace BALL
 		/*_
 		*/
 		double factor_;
+
+		/*_
+		*/
+		Molecule desolv_protein_;
+
+		/*_
+		*/
+		Molecule desolv_ligand_;
 
 		/*_
 		*/
