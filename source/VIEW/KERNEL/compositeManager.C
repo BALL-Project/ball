@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.C,v 1.4 2003/11/12 09:43:20 bender Exp $
+// $Id: compositeManager.C,v 1.5 2004/01/17 20:48:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/compositeManager.h>
@@ -20,7 +20,7 @@ namespace BALL
 		{
 		}
 
-		CompositeManager::CompositeManager(const CompositeManager& cm)
+		CompositeManager::CompositeManager(const CompositeManager& /*cm*/)
 			throw()
 		{
 			// ???? copy ctor not implemented!
