@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.C,v 1.8 2000/09/27 18:05:24 oliver Exp $
+// $Id: createSpectrumProcessor.C,v 1.9 2000/09/30 16:44:24 oliver Exp $
 
 #include <BALL/NMR/createSpectrumProcessor.h>
 #include <BALL/NMR/shiftModule.h>
@@ -12,6 +12,10 @@ namespace BALL
 {
 
 	CreateSpectrumProcessor::CreateSpectrumProcessor()
+		:	width_(1.0),
+			use_averaging_(true),
+			use_ignore_table_(true),
+			expression_("element(H)")
 	{
 	}
 
@@ -87,8 +91,6 @@ namespace BALL
 		}
 		eqfile.close();
 
-		Log.info() << "init: " << equivalency_residues_.size() << "/" << ignore_atoms_.size() << endl;
-
 		// initialization successful
 		valid_ = true;
 
@@ -106,63 +108,59 @@ namespace BALL
 			{
 				float shift = atom->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
 				// if the atom is in the ignore table, skip it
-				if (!ignore_atoms_.has(atom->getFullName())
-						&& !ignore_atoms_.has("*:" + atom->getName())
-						&& (atom->getElement() == PTE[Element::H])
+				if ((!(ignore_atoms_.has(atom->getFullName())
+							 || ignore_atoms_.has("*:" + atom->getName()))
+						 || !use_ignore_table_)
+						&& (expression_(*atom) == true)
 						&& (shift != 0.0))
 				{
 					Peak1D peak;
 					peak.setAtom(atom);
 					peak.setValue(shift);
-					peak.setWidth(1.0);
+					peak.setWidth(width_);
 					peak.setHeight(1.0);
 					peaklist_.push_back(peak);	
-					Log.info() << "inserting " << atom->getFullName() << " into peak list as #" << peaklist_.size() << endl;
-				}
-				else 
-				{
-					Log.info() << "ignoring shift for " << atom->getFullName() << endl;
 				}
 			}	
 		}
 		
-		// average the shifts of chemically equivalent nuclei
-		// in a residue
-		Residue* residue = dynamic_cast<Residue*>(&composite);
-		if (residue != 0)
-		{
-			String residue_name = residue->getName();
-			Log.info() << "averaging " << residue_name << endl;
 
-			for (Position i = 0; i < equivalency_residues_.size(); i++)
+		if (use_averaging_ == true)
+		{
+			// average the shifts of chemically equivalent nuclei
+			// in a residue
+			Residue* residue = dynamic_cast<Residue*>(&composite);
+			if (residue != 0)
 			{
-				if (residue_name == equivalency_residues_[i])
+				String residue_name = residue->getName();
+
+				for (Position i = 0; i < equivalency_residues_.size(); i++)
 				{
-					float shift = 0.0;
-					list<Atom*> atoms;
-					for (AtomIterator it = residue->beginAtom(); +it; ++it)
+					if (residue_name == equivalency_residues_[i])
 					{
-						for (Position j = 0; j < equivalency_atoms_[i].size(); j++)
+						float shift = 0.0;
+						list<Atom*> atoms;
+						for (AtomIterator it = residue->beginAtom(); +it; ++it)
 						{
-							if (equivalency_atoms_[i][j] == it->getName())
+							for (Position j = 0; j < equivalency_atoms_[i].size(); j++)
 							{
-								atoms.push_back(&*it);
-								shift += it->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
-								break;
+								if (equivalency_atoms_[i][j] == it->getName())
+								{
+									atoms.push_back(&*it);
+									shift += it->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+									break;
+								}
 							}
 						}
-					}
-					if (atoms.size() != 0)
-					{
-						shift /= atoms.size();
-						list<Atom*>::const_iterator list_it = atoms.begin();
-						Log.info() << "Averaging " << residue->getName() << residue->getID() << ":";
-						for (; list_it != atoms.end(); ++list_it)
+						if (atoms.size() != 0)
 						{
-							(*list_it)->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
-							Log.info() << (*list_it)->getName() << " ";
+							shift /= atoms.size();
+							list<Atom*>::const_iterator list_it = atoms.begin();
+							for (; list_it != atoms.end(); ++list_it)
+							{
+								(*list_it)->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
+							}
 						}
-						Log.info() << endl;
 					}
 				}
 			}
@@ -176,4 +174,33 @@ namespace BALL
 		return peaklist_;
 	}
 
+	void CreateSpectrumProcessor::setWidth(float width)
+		throw()
+	{
+		width_ = width;
+	}
+	
+	float CreateSpectrumProcessor::getWidth() const
+		throw()
+	{
+		return width_;
+	}
+
+	void CreateSpectrumProcessor::enableAveraging(bool flag)
+		throw()
+	{
+		use_averaging_ = flag;
+	}
+
+	void CreateSpectrumProcessor::enableIgnoreTable(bool flag)
+		throw()
+	{
+		use_ignore_table_ = flag;
+	}
+	
+	void CreateSpectrumProcessor::setExpression(const String& expression)
+		throw()
+	{
+		expression_.setExpression(expression);
+	}
 }	// namespace BALL
