@@ -58,7 +58,7 @@ RegularData1D                       /           Z
 RegularData2D                       /           Z
 RegularData3D                       /           /
 RegularExpression                   D           /
-String                              D           /
+String                              D           X
 Substring                           D           /
       UnboundSubstring
       InvalidSubstring
@@ -130,7 +130,7 @@ EnergyProcessor                     X           Z
 Bruker1D                            DEI,        Z
 Bruker2D                            DEI,        Z
 BrukerParameter                     DEIX,       Z       warum in JCAMPFILE?, parameter->getParameter
-resourcefile                        E,          X
+resourcefile                        E,          Z
 resourceEntry                       E,          X
 GenericMolFile                      I,          /
 GenericPDBFile                      DEI,        Z
@@ -144,7 +144,7 @@ Parameters                          E           X
 ParameterSection                    I,          X
 PDBFile                             DEI,        X
 XYZFile                             DEI,        /
-DCDFile				    X?		?
+DCDFile				    X?		Z
 ------------------------KERNEL----------------------------------------------
 Atom                                DX          /           read, write fehlt
             BondIteratorTraits_     DEI         Z
@@ -156,7 +156,7 @@ Bond                                /           /
 Chain                               X           /           read, write fehlt
 ChainIteratorTraits_                EI
 CompositeIteratorTraits_            EI          Z
-Expression                          EIX
+Expression                          EIX		X
 ExpressionPredicate                 EIX
 ExpressionTree                      EIX         
 SyntaxTree                          EI
@@ -221,7 +221,7 @@ TSphere3                            /           /
 TSurface                            X           Z    
 TVector3                            /           /
 TVector4                            /           /
-Function			    IX		/
+Function			    IX		X
 NumericalIntegrator		    ?		Z
 ------------------------MOLMEC----------------------------------------------
                         ---------AMBER-----
@@ -235,7 +235,7 @@ CharmmBend                          DEI         Z
 CharmmImproperTorsion               DEI         Z
 CharmmFF                            EI          /
 CharmmStretch                       DEI         Z
-CharmmTorsion                       DEI         Z
+CharmmTorsion                       DEIX        Z
 CharmmNonBonded                     DEI         Z
                         --------COMMON-----
 AtomVector                          EI          Z
@@ -245,22 +245,22 @@ ChargeRuleProcessor                 DEI         Z
 ForceField                          EI          Z
 ForceFieldComponent                 EI          Z
 Gradient                            EI          X
-PeriodicBoundary                    EI          Z
+PeriodicBoundary                    EIX         Z
 RadiusRuleProcessor                 DEI         Z
-RuleEvaluator                       /           X
-RuleProcessor                       DEI         Z
+RuleEvaluator                       X           X
+RuleProcessor                       DEIX        Z
 SnapShot                            EI          Z
             SnapShotManager         EIX         Z
 TypeRuleProcessor                   DEI         Z
 TypenameRuleProcessor               DEI         Z
 (support)                           EI          Z
                         -----MDSIMULATION--
-CanonicalMD                         EI          Z
-MicroCanonicalMD                    EI          Z
+CanonicalMD                         EIX         Z
+MicroCanonicalMD                    EIX         Z
 MolecularDynamics                   EI          Z
                         -----MINIMIZATION--
-ConjugateGradientMinimizer          EI          Z
-EnergyMinimizer                     EI          X
+ConjugateGradientMinimizer          EIX         Z
+EnergyMinimizer                     EIX         X
 LineSearch                          EI          X
 SteepestDescentMinimizer            DEI         Z
                         -----PARAMETER-----
@@ -269,13 +269,13 @@ CharmmEEF1                          D           Z
 CosineTorsion                       /           Z
             SingleValues            DEI         Z
             Values                  DEI         Z
-ForceFieldParameters                I           Z
+ForceFieldParameters                IX          Z
 ResidueTorsions                     I           Z
 Templates                           EI          Z
 QuadraticAngleBend                  EI          Z
 QuadraticBondStretch                EI          Z
 QuadraticImproperTorsion            /           Z
-LennardJones                        D           Z
+LennardJones                        DX          Z
 Potential1210                       I           Z
 ------------------------MOLVIEW---------------------------------------------
                         -----COLORS-------
@@ -288,11 +288,11 @@ AtomBondModelConnector              DEI         Z
             MemoryAllocationFailed
 AddBallAndStickModel                DEI         Z
 AddLineModel                        DEI         Z
-BaseModelConnector                  DEI         Z
+BaseModelConnector                  DEIX        Z
 BaseModelProcessor                  DEI         Z
 ColorCalculator                     DEI         Z
 ElementColorCalculator              DEI         Z
-  ResidueNameColorCalculator
+  ResidueNameColorCalculator	    X
   AtomChargeColorCalculator
   AtomDistanceColorCalculator
 FindGeometricObjects                DEI         Z
@@ -300,6 +300,7 @@ GeometricObjectSelector             DEI         Z
 MolecularFilter                     DEI         Z
 MolecularInformation                DEI         Z
 RemoveModel                         DEI         Z
+
                         -------GUI-------
 LabelProperties                     EI          Z
 DisplayProperties                   EI          Z
@@ -312,7 +313,7 @@ AddGLBallAndStickModel              DEI         Z
 AddGLLineModel                      DEI         Z
 AddGLVanDerWaalsModel               DEI         Z
 GLAtomBondModelConnector            DEI         Z
-MoleculeGLObjectCollector           DEI         Z
+MoleculeGLObjectCollector           DEIX        Z
 MoleculeObjectProcessor             DEI         Z
             AllocationFailure       
 MoleculeObjectCreator               DEI         Z
@@ -321,6 +322,8 @@ GLTwoColoredTube                    DEI         Z
 Control                             DEI         Z
 MolecularControl                    DEI         Z
 MolecularProperties                 DEI         Z
+GLBackbone			    DEIX	Z
+ExtendedGLObjectCollector	    DEIX	Z
                         -----KERNEL------
 ExtendedPropertyManager             DEI         Z
 GeometricConvertor                  DEI         Z
@@ -389,7 +392,7 @@ BoundingBoxProcessor                EI          Z
 FragmentDistanceCollector           EI          Z
 GeometricCenterProcessor            IX          Z	    angle-calculation should be done somewhere else
 
-FragmentDB                          EI          X               
+FragmentDB                          EIX         X               
             NoFragmentNode          EI          Z
             NormalizeNamesProcessor EI          Z
             AddHydrogensProcessor   EI          Z
@@ -466,7 +469,7 @@ FileDialog                          EI          Z
 ObjectProcessor                     DEI         Z
 GLObjectCollector                   DEI         Z
 GLDisplayList                       DEI         Z
-CompositeDescriptor                 EI          Z
+CompositeDescriptor                 EIX         Z
 GLQuadricObject                     DEI         Z
 GLDisplayListObject_                DEI         Z
   GLSphereDisplayLists_
@@ -476,7 +479,7 @@ GLDisplayListObject_                DEI         Z
 GLObject                            DEI         Z
 Server                              DEI         Z
 GLEntityDescriptor                  DEI         Z
-MainControl                         EI          Z
+MainControl                         EIX         Z
 ObjectCreator                       DEI         Z
 
 Sphere                              DEI         Z
