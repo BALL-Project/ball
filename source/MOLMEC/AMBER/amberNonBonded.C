@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.4 2001/02/01 16:42:59 anker Exp $
+// $Id: amberNonBonded.C,v 1.5 2001/02/20 09:04:40 anker Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -422,27 +422,36 @@ namespace BALL
     {
       difference.x += period.x;
 		}
-    else if (difference.x > half_period.x)
-    {
-      difference.x -= period.x;
+    else 
+		{
+			if (difference.x > half_period.x)
+			{
+				difference.x -= period.x;
+			}
 		}
 
     if (difference.y < -half_period.y)
     {
       difference.y += period.y;
 		}
-    else if (difference.y > half_period.y)
-    {
-      difference.y -= period.y;
+    else 
+		{
+			if (difference.y > half_period.y)
+			{
+				difference.y -= period.y;
+			}
 		}
 
     if (difference.z < -half_period.z)
     {
       difference.z += period.z;
 		}
-    else if (difference.z > half_period.z)
-    {
-      difference.z -= period.z;
+    else 
+		{
+			if (difference.z > half_period.z)
+			{
+				difference.z -= period.z;
+			}
 		}
   }
 
@@ -546,7 +555,7 @@ namespace BALL
 	}	// end  of function AMBERcalculateNBEnergy() 
 
 
-	// This  function AMBERcalculates the  force vector
+	// This  function AMBERcalculates the force vector
 	// resulting from non-bonded interactions between two atoms 
 	BALL_INLINE
 	void AMBERcalculateNBForce
@@ -949,8 +958,8 @@ namespace BALL
 		cut_on_electrostatic_2,\
 		inverse_distance_off_on_electrostatic_3_
 
-	// This method AMBERcalculates the current forces resulting from Van-der-Waals
-	// and electrostatic interactions 
+	// This method AMBERcalculates the current forces resulting from
+	// Van-der-Waals and electrostatic interactions 
 	void AmberNonBonded::updateForces()
 	{
 		// Define variables for the squared cut_offs, the unit factors and so on
