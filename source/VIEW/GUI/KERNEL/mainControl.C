@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.34 2002/12/18 16:00:43 sturm Exp $
+// $Id: mainControl.C,v 1.35 2002/12/18 20:30:50 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -12,6 +12,7 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/MATHS/analyticalGeometry.h>
+#include <BALL/MATHS/common.h>
 
 #include <qapplication.h>
 #include <qwidget.h>
@@ -885,9 +886,24 @@ namespace BALL
 			}
 			else if (nr_of_atoms == 3)
 			{
-				// if tree atoms were picked, show their angle
-				Vector3 vector1(atoms[0]->getPosition() - atoms[1]->getPosition());
-				Vector3 vector2(atoms[0]->getPosition() - atoms[2]->getPosition());
+				PreciseTime min_time = Maths::min(atoms[0]->getSelectionTime(),
+																	 				atoms[1]->getSelectionTime(),
+																	 				atoms[2]->getSelectionTime());
+				PreciseTime max_time = Maths::max(atoms[0]->getSelectionTime(),
+																				  atoms[1]->getSelectionTime(),
+																	 				atoms[2]->getSelectionTime());
+
+				Atom* ordered_atoms[3];
+
+				for (int pos = 0; pos < 3; pos++)
+				{
+					if 			(atoms[pos]->getSelectionTime() == min_time)  ordered_atoms[0] = atoms[pos];
+					else if (atoms[pos]->getSelectionTime() == max_time)  ordered_atoms[2] = atoms[pos];
+					else 																									ordered_atoms[1] = atoms[pos];
+				}
+
+				Vector3 vector1(ordered_atoms[1]->getPosition() - ordered_atoms[2]->getPosition());
+				Vector3 vector2(ordered_atoms[1]->getPosition() - ordered_atoms[0]->getPosition());
 				Angle result;
 				GetAngle(vector1, vector2, result);
 				setStatusbarText("Angle between atoms " + 
