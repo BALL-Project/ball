@@ -8,7 +8,8 @@ CPP_SOURCES=\
 	fileSystem.C\
 	path.C\
 	socket.C\
-	timer.C
+	timer.C\
+	TCPTransfer.C\
 
 
 include ../common.mak
