@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.C,v 1.20 2004/01/16 13:45:22 amoll Exp $
+// $Id: steepestDescent.C,v 1.21 2004/02/09 10:46:18 anhi Exp $
 //
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/COMMON/limits.h>
 
-// #define BALL_DEBUG
+//#define BALL_DEBUG
 #undef BALL_DEBUG
 
 using namespace std;
@@ -165,15 +165,15 @@ namespace BALL
 
 			// Try to find a new step
 			double lambda = findStep();
-			
+
 			// If the result was less than zero, the line search failed.
 			if (lambda < 0)
 			{
 				#ifdef BALL_DEBUG
 					Log << "SDM: first line search failed." << std::endl;
 				#endif
-				// Try another step with the initial step size
-				step_ = initial_step;
+				// Try another step with half the initial step size
+				step_ = initial_step/2.;
 				lambda = findStep();
 				
 				// Didn't help, we abort the minimization.
@@ -205,6 +205,14 @@ namespace BALL
 		// Perform a line search with the current step size.
 		// We search along the current gradient: direction = current gradient
 		updateDirection();
+
+		// if the norm of the new direction is too close to zero, we assume 
+		// convergence
+		if (direction_.norm <= 1e-12)
+		{
+			return 0;
+		}
+
 		double lambda = -1.0;
 		bool result = line_search_.minimize(lambda, step_ * direction_.inv_norm);
 
