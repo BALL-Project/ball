@@ -54,50 +54,50 @@ molview:	$(OBJECTS) $(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALLVIEW_LIBS)
 
 mainframe_moc.C:	mainframe.h
-	moc mainframe.h -o $@
+	$(MOC) mainframe.h -o $@
 
 control_moc.C:	control.h
-	moc control.h -o $@
+	$(MOC) control.h -o $@
 
 DIALOGS/DlgAbout_moc.C:	DIALOGS/DlgAbout.h
-	moc DIALOGS/DlgAbout.h -o $@
+	$(MOC) DIALOGS/DlgAbout.h -o $@
 
 DIALOGS/DlgAboutData_moc.C:	DIALOGS/DlgAboutData.h
-	moc DIALOGS/DlgAboutData.h -o $@
+	$(MOC) DIALOGS/DlgAboutData.h -o $@
 
 DIALOGS/DlgSelector_moc.C:	DIALOGS/DlgSelector.h
-	moc DIALOGS/DlgSelector.h -o $@
+	$(MOC) DIALOGS/DlgSelector.h -o $@
 
 DIALOGS/DlgSelectorData_moc.C:	DIALOGS/DlgSelectorData.h
-	moc DIALOGS/DlgSelectorData.h -o $@
+	$(MOC) DIALOGS/DlgSelectorData.h -o $@
 
 DIALOGS/DlgDisplayProperties_moc.C:	DIALOGS/DlgDisplayProperties.h
-	moc DIALOGS/DlgDisplayProperties.h -o $@
+	$(MOC) DIALOGS/DlgDisplayProperties.h -o $@
 
 DIALOGS/DlgDisplayPropertiesData_moc.C:	DIALOGS/DlgDisplayPropertiesData.h
-	moc DIALOGS/DlgDisplayPropertiesData.h -o $@
+	$(MOC) DIALOGS/DlgDisplayPropertiesData.h -o $@
 
 DIALOGS/DlgPreferences_moc.C:	DIALOGS/DlgPreferences.h
-	moc DIALOGS/DlgPreferences.h -o $@
+	$(MOC) DIALOGS/DlgPreferences.h -o $@
 
 DIALOGS/DlgPreferencesData_moc.C:	DIALOGS/DlgPreferencesData.h
-	moc DIALOGS/DlgPreferencesData.h -o $@
+	$(MOC) DIALOGS/DlgPreferencesData.h -o $@
 
 DIALOGS/DlgPreferencesGeneral_moc.C:	DIALOGS/DlgPreferencesGeneral.h
-	moc DIALOGS/DlgPreferencesGeneral.h -o $@
+	$(MOC) DIALOGS/DlgPreferencesGeneral.h -o $@
 
 DIALOGS/DlgPreferencesGeneralData_moc.C:	DIALOGS/DlgPreferencesGeneralData.h
-	moc DIALOGS/DlgPreferencesGeneralData.h -o $@
+	$(MOC) DIALOGS/DlgPreferencesGeneralData.h -o $@
 
 DIALOGS/DlgPreferencesNetwork_moc.C:	DIALOGS/DlgPreferencesNetwork.h
-	moc DIALOGS/DlgPreferencesNetwork.h -o $@
+	$(MOC) DIALOGS/DlgPreferencesNetwork.h -o $@
 
 DIALOGS/DlgPreferencesNetworkData_moc.C:	DIALOGS/DlgPreferencesNetworkData.h
-	moc DIALOGS/DlgPreferencesNetworkData.h -o $@
+	$(MOC) DIALOGS/DlgPreferencesNetworkData.h -o $@
 
 DIALOGS/DlgPreferencesDisplay_moc.C:	DIALOGS/DlgPreferencesDisplay.h
-	moc DIALOGS/DlgPreferencesDisplay.h -o $@
+	$(MOC) DIALOGS/DlgPreferencesDisplay.h -o $@
 
 DIALOGS/DlgPreferencesDisplayData_moc.C:	DIALOGS/DlgPreferencesDisplayData.h
-	moc DIALOGS/DlgPreferencesDisplayData.h -o $@
+	$(MOC) DIALOGS/DlgPreferencesDisplayData.h -o $@
 
