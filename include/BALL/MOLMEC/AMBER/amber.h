@@ -1,4 +1,4 @@
-// $Id: amber.h,v 1.10 2001/02/28 01:17:25 amoll Exp $ 
+// $Id: amber.h,v 1.11 2001/03/06 14:03:52 anker Exp $ 
 // Molecular Mechanics: Amber force field class
 
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
@@ -31,20 +31,21 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Options names
+		/**	Option names
 		*/
 		struct Option
 		{
-			/**	The parameter file name
+			/**	The parameter file name (@see Default::FILENAME)
 			*/
 			static const char* FILENAME;
 
-			/**	Nonbonded cutoff
+			/**	Nonbonded cutoff. This value is used as cutoff radius in
+					calculations of nonbonded interactions. The unit of this option
+					is {\AA} (@see Default::NONBONDED_CUTOFF)
 			*/
 			static const char* NONBONDED_CUTOFF;
 
 			/**	Van der Waals cutoff
-					
 			*/
 			static const char* VDW_CUTOFF;
 
@@ -93,35 +94,36 @@ namespace BALL
 			static const char* OVERWRITE_TYPENAMES;
 		};
 
-		/** Default falues
+		/** Default values for AMBER options.
 		*/
 		struct Default
 		{
-			/**	Default filename for the parameter file
+			/**	Default filename for the parameter file (@see Option::FILENAME).
 			*/
 			static const char* FILENAME;
 
-			/**	Non bonded cutoff
+			/**	Default non bonded cutoff of 20.0 {\AA}.
 			*/
 			static const float NONBONDED_CUTOFF;
 
-			/**	Van der Waals cutoff
+			/**	Default van der Waals cutoff of 15.0 {\AA}.
 			*/
 			static const float VDW_CUTOFF;
 
-			/**	Van der Waals cuton
+			/**	Default van der Waals cuton of 13.0 {\AA}.
 			*/
 			static const float VDW_CUTON;
 
-			/**	Electrostatic cutoff
+			/**	Default electrostatic cutoff of 15.0 {\AA}.
 			*/
 			static const float ELECTROSTATIC_CUTOFF;
 
-			/**	Electrostatic cuton
+			/**	Default electrostatic cuton of 13.0 {\AA}.
 			*/
 			static const float ELECTROSTATIC_CUTON;
 
-			/**	Electrosstatic scaling factor for 1-4 interaction
+			/**	Default electrosstatic scaling factor for 1-4 interaction. The
+					default is 2.0.
 			*/
 			static const float SCALING_ELECTROSTATIC_1_4; 
 
