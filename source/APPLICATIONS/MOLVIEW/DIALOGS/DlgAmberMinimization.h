@@ -13,7 +13,7 @@
 #include "DlgAmberMinimizationData.h"
 
 #include <BALL/FORMAT/INIFile.h>
-#include <BALL/COMMON/path.h>
+#include <BALL/SYSTEM/path.h>
 
 using namespace BALL;
 
