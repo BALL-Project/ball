@@ -21,7 +21,6 @@ namespace BALL
 {
 
 	/**	Generic QSAR molecular descriptor class.
-			{\bf Definition:}\URL{BALL/include/BALL/QSAR/descriptor.h}
 			\\
 	*/
 	class Descriptor

@@ -20,7 +20,6 @@ namespace BALL
 	/** QSAR molecular simple descriptors base class, this
 			class implements some methods to calculate simple
 			descriptors.
-			{\bf Definition:}\URL{BALL/include/BALL/QSAR/simpleBase.h}
 			\\
 	*/
 	class SimpleBase

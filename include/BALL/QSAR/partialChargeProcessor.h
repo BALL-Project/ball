@@ -20,7 +20,6 @@
 namespace BALL
 {
 	/**	Generic .
-			{\bf Definition:}\URL{BALL/include/BALL/QSAR/ringFinder.h}
 			\\
 	*/
 	class PartialChargeProcessor

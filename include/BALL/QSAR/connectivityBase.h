@@ -18,7 +18,6 @@ namespace BALL
 {
 
 	/** Generic QSAR molecular connectivity descriptors class
-			{\bf Definition:}\URL{BALL/include/BALL/QSAR/connectivityBase.h}
 			\\
 	*/
 	class ConnectivityBase

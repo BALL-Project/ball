@@ -17,7 +17,6 @@
 namespace BALL
 {
 	/** Generic QSAR molecular surface descriptors class
-			{\bf Definition:}\URL{BALL/include/BALL/QSAR/surfaceBase.h}
 		\\
 	*/
 	class SurfaceBase

@@ -17,7 +17,6 @@
 namespace BALL
 {
 	/** Generic QSAR molecular partial charge descriptor class
-			{\bf Definition:}\URL{BALL/include/BALL/QSAR/partialCharge.h}
 			\\
 	*/
 	class PartialChargeBase

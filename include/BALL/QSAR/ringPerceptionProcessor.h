@@ -15,7 +15,6 @@
 namespace BALL
 {
 	/**	Generic .
-			{\bf Definition:}\URL{BALL/include/BALL/QSAR/ringPerceptionProcessor.h}
 			\\
 	*/
 	class RingPerceptionProcessor

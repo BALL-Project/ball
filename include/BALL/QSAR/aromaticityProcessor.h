@@ -18,7 +18,6 @@ namespace BALL
 			as a processor with the operator (), the RingPerceptionProcessor is 
 			called before, to calculate a ring set. It can be called explicitely
 			with aromatize with a ringset as parameter.
-			{\bf Definition:}\URL{BALL/include/BALL/QSAR/aromaticityProcessor.h}
 			\\
 	*/
 	class AromaticityProcessor
