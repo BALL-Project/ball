@@ -1,4 +1,6 @@
-// $Id: property.iC,v 1.13 2001/01/15 10:38:54 amoll Exp $
+// $Id: property.iC,v 1.14 2001/01/15 12:53:39 amoll Exp $
+
+using namespace std;
 
 BALL_INLINE 
 NamedProperty::NamedProperty(const string& name)
