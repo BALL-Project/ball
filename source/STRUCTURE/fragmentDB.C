@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.12 2000/01/14 20:33:25 oliver Exp $
+// $Id: fragmentDB.C,v 1.13 2000/01/19 17:56:01 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -1837,13 +1837,16 @@ namespace BALL
 							{
 								if ((*second_frag_it).getName().trim() == name) 
 								{
-									(*frag_atom_it).createBond(*second_frag_it);
-									bonds_built++;
-									break;
+									if (!second_frag_it->isBondedTo(*frag_atom_it))
+									{
+										// if the bond did not yet exist, create it											
+										(*frag_atom_it).createBond(*second_frag_it);
+										bonds_built++;
+										break;
+									}
 								}
 							}
 						}
-
 					}
 				}
 			}
