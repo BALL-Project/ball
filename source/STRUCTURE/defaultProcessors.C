@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.C,v 1.13 2001/07/15 18:12:24 amoll Exp $
+// $Id: defaultProcessors.C,v 1.14 2001/07/16 00:34:23 amoll Exp $
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
 
@@ -133,7 +133,7 @@ namespace BALL
 				} 
 				else 
 				{
-					Log.level(LogStream::WARNING) << "Cannot assign radius for " << res_name << ":" << atom_name << endl;
+					Log.warn() << "Cannot assign radius for " << res_name << ":" << atom_name << endl;
 					number_of_errors_++;
 				}
 			}
@@ -297,7 +297,7 @@ namespace BALL
 				} 
 				else 
 				{
-					Log.level(LogStream::WARNING) << "Cannot assign charge for " << res_name << ":" << atom_name << endl;
+					Log.warn() << "Cannot assign charge for " << res_name << ":" << atom_name << endl;
 					number_of_errors_++;
 				}
 			}
