@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.10.4.7 2002/11/29 01:00:34 amoll Exp $
+// $Id: control.h,v 1.10.4.8 2002/12/01 14:05:20 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -445,7 +445,9 @@ namespace BALL
 					@see    GeometricObject
 			*/
 			void eraseGeometricObject();
-		
+
+			/**
+			*/
 			void selectedComposite(Composite* composite, bool state)
 				throw();
 
