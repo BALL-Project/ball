@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.15 2004/11/10 15:27:21 amoll Exp $
+// $Id: primitiveManager.C,v 1.16 2004/11/10 23:10:16 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -203,6 +203,7 @@ List<Representation*> PrimitiveManager::getRepresentationsOf(const Composite& co
 	return changed_representations;
 }
 
+#ifdef BALL_QT_HAS_THREADS
 void PrimitiveManager::update_(Representation& rep)
 	throw()
 {
@@ -300,6 +301,14 @@ void PrimitiveManager::finishedUpdate_()
 	}
 }
 
+bool PrimitiveManager::updateRunning() const
+	throw() 
+{
+	return (thread_.getRepresentation() != 0); 
+}
+
+#endif
+
 bool PrimitiveManager::willBeUpdated(const Representation& rep) const
 	throw()
 {
@@ -310,12 +319,6 @@ bool PrimitiveManager::willBeUpdated(const Representation& rep) const
 	}
 
 	return false;
-}
-
-bool PrimitiveManager::updateRunning() const
-	throw() 
-{
-	return (thread_.getRepresentation() != 0); 
 }
 
 } } // namespaces

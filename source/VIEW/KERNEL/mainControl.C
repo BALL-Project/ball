@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.127 2004/11/10 16:08:02 amoll Exp $
+// $Id: mainControl.C,v 1.128 2004/11/10 23:10:16 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1490,11 +1490,15 @@ namespace BALL
 				{
 					return false;
 				}
+
 				simulation_thread_ = thread;
 				if (thread != 0) 
 				{
 					thread->setMainControl(this);
 				}
+			#else
+				// prevent warning
+				thread != 0;
 			#endif
 
 			composites_locked_by_main_control_ = true;

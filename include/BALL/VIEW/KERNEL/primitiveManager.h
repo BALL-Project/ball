@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.7 2004/11/09 21:35:30 amoll Exp $
+// $Id: primitiveManager.h,v 1.8 2004/11/10 23:10:24 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -149,10 +149,6 @@ namespace BALL
 			List<Representation*> getRepresentationsOf(const Composite& composite)
 				throw();
 
-			/// Return true, if a Representation is currently beeing updated
-			bool updateRunning() const
-				throw();
-
 			/// Return true if a Representation will be updated
 			bool willBeUpdated(const Representation& rep) const
 				throw();
@@ -162,12 +158,18 @@ namespace BALL
 				throw() { main_control_ = &mc;}
 
 			#ifdef BALL_QT_HAS_THREADS
+			
+			/// Return true, if a Representation is currently beeing updated
+			bool updateRunning() const
+				throw();
+
 			///
 			static UpdateRepresentationThread& getUpdateThread() { return thread_;}
 			#endif
 			
 			protected:
 
+			#ifdef BALL_QT_HAS_THREADS
 			void startUpdateThread_(Representation& rep)
 				throw();
 
@@ -176,6 +178,7 @@ namespace BALL
 
 			void finishedUpdate_()
 				throw();
+			#endif
 
 			//_ List with all representations
 			RepresentationList representations_;

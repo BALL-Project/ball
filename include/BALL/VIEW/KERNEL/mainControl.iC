@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.iC,v 1.3 2004/11/10 15:22:08 amoll Exp $
+// $Id: mainControl.iC,v 1.4 2004/11/10 23:10:24 amoll Exp $
 
 BALL_INLINE 
 int MainControl::getNextID_()
@@ -63,7 +63,10 @@ BALL_INLINE
 bool MainControl::updateOfRepresentationRunning()
 	throw()
 {
+#ifdef BALL_QT_HAS_THREADS
 	return primitive_manager_.updateRunning();
+#endif
+	return false;
 }
 
 BALL_INLINE
