@@ -1,4 +1,4 @@
-// $Id: amberBend.C,v 1.13 2001/06/24 21:25:19 oliver Exp $
+// $Id: amberBend.C,v 1.14 2001/06/26 02:43:51 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -24,7 +24,7 @@ namespace BALL
 		:	ForceFieldComponent(force_field)
 	{
 		// set component name
-		setName( "Amber Bend" );
+		setName("Amber Bend");
 	}
 
 
@@ -64,7 +64,6 @@ namespace BALL
 			{
 				Log.error() << "AmberBend::setup: cannot find section QuadraticAngleBend" << endl;
 				return false;
-		
 			}
 		}
 
@@ -72,21 +71,20 @@ namespace BALL
 		vector<Atom*>::const_iterator	atom_it = getForceField()->getAtoms().begin();
 		Atom::BondIterator it1;
 		Atom::BondIterator it2;
-		QuadraticAngleBend::Data	this_bend;
+		QuadraticAngleBend::Data this_bend;
 		for ( ; atom_it != getForceField()->getAtoms().end(); ++atom_it) 
 		{
 			for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
 			{
 				for (it1 = it2, ++it1; +it1 ; ++it1) 
 				{
-				
 					this_bend.atom1 = it2->getPartner(**atom_it);
 					this_bend.atom2 = *atom_it;
 					this_bend.atom3 = it1->getPartner(**atom_it);
 
 					if (getForceField()->getUseSelection() == false ||
 					   (getForceField()->getUseSelection() == true && 
-					   (this_bend.atom1->isSelected() && this_bend.atom2->isSelected() && this_bend.atom3->isSelected())))
+					   (this_bend.atom1->isSelected() || this_bend.atom2->isSelected() || this_bend.atom3->isSelected())))
 					{ 
 
 						Atom::Type atom_type_a1 = this_bend.atom1->getType();
@@ -124,8 +122,6 @@ namespace BALL
 	{
 		double length;
 		energy_ = 0;
-		// BAUSTELLE: test
-		Size number_of_selected = 0;
 
 		for (Size i = 0 ; i < bend_.size() ; i++) 
 		{
@@ -170,12 +166,10 @@ namespace BALL
 					theta = acos(costheta);
 				}
 			
-				number_of_selected++;
 				energy_ += bend_[i].values.k * (theta - bend_[i].values.theta0) * (theta - bend_[i].values.theta0);
 			}
 
 		}
-		Log.info() << "AmberBend: " << (float)number_of_selected / bend_.size() * 100.0 << "% selected" << endl;
 		
 		return energy_;
 	}
