@@ -66,6 +66,15 @@ namespace BALL
 
 				color_sample_->setBackgroundColor(qcolor);
 			}
+			else
+			{
+				custom_color_.set(ColorRGBA(1.,1.,0.,1.));
+				QColor qcolor(custom_color_.getRed(), 
+											custom_color_.getGreen(), 
+											custom_color_.getBlue());
+
+				color_sample_->setBackgroundColor(qcolor);
+	    }			
 		}
 
 		void LabelProperties::writePreferences(INIFile& inifile)
