@@ -1,4 +1,4 @@
-// $Id: nucleotide.C,v 1.2 2000/04/17 14:02:03 amoll Exp $
+// $Id: nucleotide.C,v 1.3 2000/05/10 18:54:30 amoll Exp $
 
 #include <BALL/KERNEL/nucleotide.h>
 
@@ -135,6 +135,57 @@ namespace BALL
 	char Nucleotide::getInsertionCode() const
 	{
 		return insertion_code_;
+	}
+
+	void Nucleotide::prepend(Atom& atom)
+	{
+		Composite::prependChild(atom);
+	}
+
+	void Nucleotide::append(Atom &atom)
+	{
+		Composite::appendChild(atom);
+	}
+
+	void Nucleotide::insert(Atom &atom)
+	{
+		append(atom);
+	}
+
+	void Nucleotide::insertBefore(Atom &atom, Composite& before)
+	{
+		before.Composite::insertBefore(atom);
+	}
+
+	void Nucleotide::insertAfter(Atom& atom, Composite &after)
+	{
+		after.Composite::insertAfter(atom);
+	}
+
+	bool Nucleotide::remove(Atom& atom)
+	{
+		return Composite::removeChild(atom);
+	}
+
+	void Nucleotide::spliceBefore(Nucleotide& nucleotide)
+	{
+		Composite::spliceBefore(nucleotide);
+	}
+
+	void Nucleotide::spliceAfter(Nucleotide& nucleotide)
+	{
+		Composite::spliceAfter(nucleotide);
+	}
+
+	void Nucleotide::splice(Nucleotide& nucleotide)
+	{
+		Composite::splice(nucleotide);
+	}
+
+	bool Nucleotide::isTerminal() const
+	{
+		// BAUSTELLE
+		return false;
 	}
 
 	bool Nucleotide::is5Prime() const
