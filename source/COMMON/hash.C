@@ -1,4 +1,4 @@
-// $Id: hash.C,v 1.8 2000/11/30 23:00:15 amoll Exp $
+// $Id: hash.C,v 1.9 2001/05/17 01:30:48 oliver Exp $
 
 #include <BALL/COMMON/hash.h>
 
@@ -127,7 +127,7 @@ namespace BALL
       l++;
 		}
 
-    HashIndex sqr = (long) sqrt((double)l) + 1;
+    HashIndex sqr = (HashIndex)sqrt((double)l) + 1;
     HashIndex div = 0;
 
     for (;;)

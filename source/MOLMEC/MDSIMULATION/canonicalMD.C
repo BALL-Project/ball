@@ -1,4 +1,4 @@
-// $Id: canonicalMD.C,v 1.13 2001/04/02 09:50:10 anker Exp $
+// $Id: canonicalMD.C,v 1.14 2001/05/17 01:30:54 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
@@ -261,7 +261,7 @@ namespace BALL
 			// reset the current number of iteration and the simulation time to
 			// the values given in the options
 			number_of_iteration_
-				= options.getInteger(MolecularDynamics::Option::NUMBER_OF_ITERATION);
+				= (Size)options.getInteger(MolecularDynamics::Option::NUMBER_OF_ITERATION);
 			current_time_
 				= options.getReal(MolecularDynamics::Option::CURRENT_TIME);
 		}

@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.C,v 1.10 2000/06/30 05:56:14 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.11 2001/05/17 01:30:52 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -415,7 +415,7 @@ namespace BALL
 		}
 
 		// Determine and set the number of 1-4 interactions (torsions)
-		number_of_1_4_ = non_bonded_.size();
+		number_of_1_4_ = (Size)non_bonded_.size();
 
 		// Iterate and search non torsions, fill them in the vector non_bonded_
 		bool_it = is_torsion.begin();

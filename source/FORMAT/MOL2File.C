@@ -1,4 +1,4 @@
-// $Id: MOL2File.C,v 1.9 2000/10/23 23:31:09 amoll Exp $
+// $Id: MOL2File.C,v 1.10 2001/05/17 01:30:50 oliver Exp $
 
 #include <BALL/FORMAT/MOL2File.h>
 #include <BALL/DATATYPE/string.h>
@@ -86,7 +86,7 @@ namespace BALL
 			}
 
 			// store the name and the pointer 
-			substructure_map.insert(pair<const AtomContainer*, Position>(&*frag_it, substructure_name.size()));
+			substructure_map.insert(pair<const AtomContainer*, Position>(&*frag_it, (Size)substructure_name.size()));
 			substructure_pointers.push_back(&*frag_it);
 			substructure_name.push_back(name);
 		}
@@ -647,7 +647,7 @@ namespace BALL
 		// insert all atoms into their proper substructures
 		for (i = 0; i < sub_ptr.size(); i++)
 		{
-			Size last = atoms_.size();
+			Size last = (Size)atoms_.size();
 			if (i < sub_ptr.size() - 1)
 			{
 				last = substructures_[i + 1].root_atom - 1;

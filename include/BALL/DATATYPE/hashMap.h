@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.25 2001/03/06 13:08:49 balltest Exp $ 
+// $Id: hashMap.h,v 1.26 2001/05/17 01:30:45 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -574,7 +574,7 @@ namespace BALL
 		throw()
 		:	size_(hash_map.size_),
 			capacity_(hash_map.capacity_),
-			bucket_(hash_map.bucket_.size())
+			bucket_((Size)hash_map.bucket_.size())
 	{
 		Node* node = 0;
 		
@@ -678,7 +678,7 @@ namespace BALL
 	Size HashMap<Key, T>::getBucketSize() const
 		throw()
 	{
-		return bucket_.size();
+		return (Size)bucket_.size();
 	}
 
 	template <class Key, class T>
@@ -891,7 +891,7 @@ namespace BALL
 		Position last_bucket = l.getTraits().bucket_;
 		if (l == end())
 		{
-			last_bucket = bucket_.size() - 1;
+			last_bucket = (Position)bucket_.size() - 1;
 		}
 
 		if (f.getTraits().bucket_ > last_bucket)
@@ -1136,7 +1136,7 @@ namespace BALL
 	void HashMap<Key, T>::rehash()
 		throw()
 	{
-		capacity_ = (Size)getNextPrime(bucket_.size() * 2);
+		capacity_ = (Size)getNextPrime((Size)bucket_.size() * 2);
 	}
 
 
@@ -1144,10 +1144,9 @@ namespace BALL
 	void HashMap<Key, T>::deleteBuckets_()
 		throw()
 	{
-		Size i = 0;
 		Node*	node = 0;
 		Node*	next_node = 0;
-		for (i = 0; i < bucket_.size(); i++)
+		for (Position i = 0; i < (Position)bucket_.size(); i++)
 		{
 			node = bucket_[i];
 			while (node != 0)

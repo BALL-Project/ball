@@ -202,7 +202,7 @@ namespace BALL
 		{
 			if (atom_data_sets_[pos]->atom_data.size() > max)
 			{
-				 max = atom_data_sets_[pos]->atom_data.size();
+				 max = (Size)atom_data_sets_[pos]->atom_data.size();
 			}
 		}
 

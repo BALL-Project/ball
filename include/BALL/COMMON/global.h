@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.8 2001/02/04 10:29:43 amoll Exp $
+// $Id: global.h,v 1.9 2001/05/17 01:30:41 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -141,6 +141,7 @@ namespace BALL
 			{\bf persistent}
 	*/
 	typedef BALL_64BIT_UINT_TYPE PointerSizeInt;
+
 	//@}
 
 	enum ASCII

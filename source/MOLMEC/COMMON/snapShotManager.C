@@ -1,4 +1,4 @@
-// $Id: snapShotManager.C,v 1.5 2001/03/27 11:19:15 anker Exp $
+// $Id: snapShotManager.C,v 1.6 2001/05/17 01:30:53 oliver Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
@@ -149,7 +149,7 @@ namespace BALL
 		force_field_ptr_ = 0;
 		snapshot_buffer_.clear();
 		trajectory_file_ptr_ = 0;
-		flush_to_disk_frequency_ = 
+		flush_to_disk_frequency_ = (Size)
 			options.getInteger(SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY);
 		buffer_counter_ = 0;
 		valid_ = false;
@@ -201,7 +201,7 @@ namespace BALL
 
 		// first get the options
 		flush_to_disk_frequency_ =
-			options.getInteger(SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY);
+			(Size)options.getInteger(SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY);
 
 		// if there was already snapshot data, clear it.
 		// clear() does too much... Should I rewrite setup()? Or do I believe,

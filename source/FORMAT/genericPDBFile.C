@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.C,v 1.11 2000/12/11 21:16:00 oliver Exp $
+// $Id: genericPDBFile.C,v 1.12 2001/05/17 01:30:51 oliver Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -231,7 +231,7 @@ namespace BALL
 			return false;
 		}
 
-		Size size = gcount();
+		Size size = (Size)gcount();
 		
 #		ifdef BALL_STRICT_PDB_LINE_IMPORT
 		

@@ -1,4 +1,4 @@
-// $Id: gradient.C,v 1.3 2000/10/06 10:01:26 anker Exp $
+// $Id: gradient.C,v 1.4 2001/05/17 01:30:53 oliver Exp $
 // Atom gradient class: this class represents the gradient (i.e. the negative forces)
 // for a given system as a vector<Vector3>. THe gradient is stored in units of kJ/(mol A)
 
@@ -37,7 +37,7 @@ namespace BALL
 	void Gradient::set(const AtomVector& atoms)
 	{
 		// change the size to hold all vectors
-		Size max_index = atoms.size();
+		Size max_index = (Size)atoms.size();
 		resize(max_index);
 
 		// copy all forces.
@@ -97,7 +97,7 @@ namespace BALL
 	// dot product of two gradients
 	double Gradient::operator * (const Gradient& gradient) const
 	{
-		Size max_index = size();
+		Size max_index = (Size)size();
 		if (gradient.size() != max_index)
 		{
 			throw Exception::InvalidRange(__FILE__, __LINE__);

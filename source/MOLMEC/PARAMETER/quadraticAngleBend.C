@@ -1,4 +1,4 @@
-// $Id: quadraticAngleBend.C,v 1.9 2000/10/18 10:40:07 anker Exp $
+// $Id: quadraticAngleBend.C,v 1.10 2001/05/17 01:30:56 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticAngleBend.h>
@@ -140,8 +140,8 @@ namespace BALL
 
 
 					// set the indices
-					value_index_[index] = values_.size();
-					value_index_[sym_index] = values_.size();
+					value_index_[index] = (Size)values_.size();
+					value_index_[sym_index] = (Size)values_.size();
 
 					// store the values 
 					values.k = getValue(i, index_k).toFloat() * factor_k;

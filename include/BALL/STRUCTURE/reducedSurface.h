@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.12 2001/03/06 00:12:23 amoll Exp $
+// $Id: reducedSurface.h,v 1.13 2001/05/17 01:30:47 oliver Exp $
 
 //#define debug_rs
 //#define print cout
@@ -1018,7 +1018,7 @@ namespace BALL
 			TRSEdge<T>* e3 = new TRSEdge<T>();
 			TRSFace<T>* face = new TRSFace<T>();
 			updateFaceAndEdges(vertex1,vertex2,vertex3,probe,7,face,e1,e2,e3);
-			face->setIndex(faces_.size());
+			face->setIndex((Size)faces_.size());
 			faces_.push_back(face);
 			vertex1->pushFace(face);
 			vertex2->pushFace(face);
@@ -1032,12 +1032,13 @@ namespace BALL
 			indices.remove(a1);
 			indices.remove(a2);
 			indices.remove(a3);
-			vertex1->setIndex(vertices_.size());
+			vertex1->setIndex((Size)vertices_.size());
 			vertices_.push_back(vertex1);
-			vertex2->setIndex(vertices_.size());
+			vertex2->setIndex((Size)vertices_.size());
 			vertices_.push_back(vertex2);
-			vertex3->setIndex(vertices_.size());
+			vertex3->setIndex((Size)vertices_.size());
 			vertices_.push_back(vertex3);
+
 			return face;
 		}
 
@@ -1079,14 +1080,14 @@ namespace BALL
 			TRSEdge<T>* edge = createFreeEdge(vertex1,vertex2,atom_list);
 			if (edge != NULL)
 			{
-				edge->setIndex(edges_.size());
+				edge->setIndex((Size)edges_.size());
 				edges_.push_back(edge);
 				vertex1->pushEdge(edge);
-				vertex1->setIndex(vertices_.size());
+				vertex1->setIndex((Size)vertices_.size());
 				vertices_.push_back(vertex1);
 				indices.remove(a1);
 				vertex2->pushEdge(edge);
-				vertex2->setIndex(vertices_.size());
+				vertex2->setIndex((Size)vertices_.size());
 				vertices_.push_back(vertex2);
 				indices.remove(a2);
 			}

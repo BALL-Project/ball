@@ -1,4 +1,4 @@
-// $Id: conjugateGradient.C,v 1.10 2001/04/27 15:18:54 anker Exp $
+// $Id: conjugateGradient.C,v 1.11 2001/05/17 01:30:55 oliver Exp $
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
@@ -125,7 +125,7 @@ namespace BALL
 		step_ *= current_grad_.norm;
 
     // determine the number of atoms
-    number_of_atoms_ = force_field_->getAtoms().size(); 
+    number_of_atoms_ = (Size)force_field_->getAtoms().size(); 
 
     return true;
 	}
@@ -438,7 +438,7 @@ namespace BALL
 				{
 					direction_.norm = sqrt(direction_.norm);
 					direction_.inv_norm = 1.0 / direction_.norm;
-					direction_.rms = direction_.norm / sqrt(3.0 * direction_.size());
+					direction_.rms = direction_.norm / sqrt(3.0 * (double)direction_.size());
 				}
 				else
 				{

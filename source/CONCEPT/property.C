@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.24 2000/12/09 21:56:15 amoll Exp $
+// $Id: property.C,v 1.25 2001/05/17 01:30:49 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -195,7 +195,7 @@ namespace BALL
 		throw()
   {
 		pm.writeStorableObject(bitvector_, "bitvector_");
-		Size size = named_properties_.size();
+		Size size = (Size)named_properties_.size();
 		pm.writePrimitive(size, "size");
 		for (Size i = 0; i < size; i++)
 		{

@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.20 2000/12/05 13:10:23 amoll Exp $ 
+// $Id: poissonBoltzmann.C,v 1.21 2001/05/17 01:30:58 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -67,8 +67,8 @@ namespace BALL
 	const float FDPB::Default::SOLUTE_DC = 2.0;
 	const float FDPB::Default::RMS_CRITERION = 1e-5;
 	const float FDPB::Default::MAX_CRITERION = 1e-4;
-	const long  FDPB::Default::MAX_ITERATIONS = 500;
-	const long  FDPB::Default::CHECK_AFTER_ITERATIONS = 10;
+	const Index  FDPB::Default::MAX_ITERATIONS = 500;
+	const Index  FDPB::Default::CHECK_AFTER_ITERATIONS = 10;
 
 
 
@@ -166,7 +166,7 @@ namespace BALL
 		return reaction_field_energy_;
 	}
 
-	unsigned long FDPB::getNumberOfIterations() const
+	Size FDPB::getNumberOfIterations() const
 	{
 		return number_of_iterations_;
 	}
@@ -213,7 +213,7 @@ namespace BALL
 		// first, check whether we should tell to our user what we`re doing
 		int verbosity = (int)options.getInteger(Option::VERBOSITY);
 
-		// ...and whether we should tell how long it took us.
+		// ...and whether we should tell how Index it took us.
 		bool print_timing = options.getBool(Option::PRINT_TIMING);
 
 		if (verbosity > 1)
@@ -281,7 +281,7 @@ namespace BALL
 		// first, check whether we should tell to our user what we`re doing
 		verbosity = (int)options.getInteger(Option::VERBOSITY);
 
-		// ...and whether we should tell him how long it took us...
+		// ...and whether we should tell him how Index it took us...
 		print_timing = options.getInteger(Option::PRINT_TIMING);
 
 		Timer	step_timer;
@@ -297,7 +297,7 @@ namespace BALL
 		// using the keyword "offset" an offset vector may be given	
 		// its units are _ grid _ spacings
 		// i.e. giving "offset=0.0 1.0 0.0" will cause all atomic
-		// centers to be translated by one grid spacing along the y-axis
+		// centers to be translated by one grid spacing aIndex the y-axis
 		// In fact, not the atoms are translated, but the grid is 
 		// translated in the opposite direction.
 		use_offset_ = false;
@@ -558,8 +558,8 @@ namespace BALL
 		}
 		
 		// document the number of inside and outside points
-		results.setInteger("inside_points", (long)inside_points);
-		results.setInteger("outside_points", (long)outside_points);
+		results.setInteger("inside_points", (Index)inside_points);
+		results.setInteger("outside_points", (Index)outside_points);
 
 		// variables for fast index evaluation
 		Size Nx = eps_grid->getMaxXIndex() + 1;
@@ -738,7 +738,7 @@ namespace BALL
 		// first, check whether we should tell to our user what we`re doing
 		int verbosity = (int)options.getInteger(Option::VERBOSITY);
 
-		// ...and whether we should tell how long it took us.
+		// ...and whether we should tell how Index it took us.
 		bool print_timing = options.getBool(Option::PRINT_TIMING);
 
 		// if an old grid exists, remove it
@@ -790,7 +790,7 @@ namespace BALL
 		// first, check whether we should tell to our user what we`re doing
 		int verbosity = (int)options.getInteger(Option::VERBOSITY);
 
-		// ...and whether we should tell how long it took us.
+		// ...and whether we should tell how Index it took us.
 		bool print_timing = options.getBool(Option::PRINT_TIMING);
 
 		if (verbosity > 1)
@@ -867,8 +867,8 @@ namespace BALL
 				// closest gridpoints
 					
 				RegularData3D<float>::GridIndex	grid_index;
-				long i;
-				for (i = 0; i < (long)(*atom_array).size(); i++)
+				Index i;
+				for (i = 0; i < (Index)(*atom_array).size(); i++)
 				{
 
 					grid_index.x = (int)(((*atom_array)[i].x - origin_x) / spacing_);
@@ -876,7 +876,7 @@ namespace BALL
 					grid_index.z = (int)(((*atom_array)[i].z - origin_z) / spacing_);
 
 					// calculate the absolute grid position
-					index = (long)grid_index.x + (long)grid_index.y * Nx + (long)grid_index.z * Nxy;
+					index = (Index)grid_index.x + (Index)grid_index.y * Nx + (Index)grid_index.z * Nxy;
 					
 					
 					// check whether the charge is outside the grid
@@ -924,7 +924,7 @@ namespace BALL
 
 				// counter: counts the numer of grid points inside
 				// an atom
-				long count;
+				Index count;
 
 				// the number of grid points that fully include the atom_radius
 				short radius_on_grid;
@@ -960,7 +960,7 @@ namespace BALL
 
 					count = 0;
 					// loop variables
-					unsigned long q, r, s;
+					Size q, r, s;
 
 					float x_u, y_u, z_u, squared_distance;
 
@@ -1025,7 +1025,7 @@ namespace BALL
 						lower_grid_index.y = (int)(((*atom_array)[i].y - origin_y) / spacing_);
 						lower_grid_index.z = (int)(((*atom_array)[i].z - origin_z) / spacing_);
 
-						long index = (long)(lower_grid_index.x + Nx * lower_grid_index.y 
+						Index index = (Index)(lower_grid_index.x + Nx * lower_grid_index.y 
 													 + Nxy * lower_grid_index.z);
 						
 						// check whether the point is inside the grid
@@ -1056,7 +1056,7 @@ namespace BALL
 		// now calculate the total distributed charge
 		// and the number of charged atoms
 		float total_charge = 0.0;
-		long number_of_charged_atoms = 0;
+		Index number_of_charged_atoms = 0;
 
 		for (i = 0; i < (Index)atom_array->size(); i++)
 		{
@@ -1070,7 +1070,7 @@ namespace BALL
 					
 		// store this information in the results
 		results.setReal("total_charge", total_charge);
-		results.setInteger("number_of_atoms", (long)atom_array->size() + 1L);
+		results.setInteger("number_of_atoms", (Index)atom_array->size() + 1L);
 		results.setInteger("number_of_charged_atoms", number_of_charged_atoms);
 
 		step_timer.stop();
@@ -1096,7 +1096,7 @@ namespace BALL
 		// first, check whether we should tell to our user what we`re doing
 		int verbosity = (int)options.getInteger(Option::VERBOSITY);
 
-		// ...and whether we should tell how long it took us.
+		// ...and whether we should tell how Index it took us.
 		bool print_timing = options.getBool(Option::PRINT_TIMING);
 
 		float ionic_strength = options.getReal(Option::IONIC_STRENGTH);
@@ -1150,7 +1150,7 @@ namespace BALL
 		// first, check whether we should tell to our user what we`re doing
 		int verbosity = (int)options.getInteger(Option::VERBOSITY);
 
-		// ...and whether we should tell how long it took us.
+		// ...and whether we should tell how Index it took us.
 		bool print_timing = options.getBool(Option::PRINT_TIMING);
 
 		if (verbosity > 1)
@@ -1192,7 +1192,7 @@ namespace BALL
 		// first, check whether we should tell to our user what we`re doing
 		int verbosity = (int)options.getInteger(Option::VERBOSITY);
 
-		// ...and whether we should tell how long it took us.
+		// ...and whether we should tell how Index it took us.
 		bool print_timing = options.getBool(Option::PRINT_TIMING);
 
 		if (verbosity > 1)
@@ -1294,7 +1294,7 @@ namespace BALL
 													
 
 		// variable to hold the calculated grid index
-		long idx;
+		Index idx;
 
 		// variable to hold the distance between the current grid_point
 		// and the current atom
@@ -1308,12 +1308,12 @@ namespace BALL
 		Vector3			positive_vector, negative_vector;
 
 		// loop variables
-		long x, y, z, i;
+		Index x, y, z, i;
 				
-		long Nx = (long)phi_grid->getMaxXIndex() + 1L;
-		long Ny = (long)phi_grid->getMaxYIndex() + 1L;
-		long Nz = (long)phi_grid->getMaxZIndex() + 1L;
-		long Nxy = Nx * Ny;
+		Index Nx = (Index)phi_grid->getMaxXIndex() + 1;
+		Index Ny = (Index)phi_grid->getMaxYIndex() + 1;
+		Index Nz = (Index)phi_grid->getMaxZIndex() + 1;
+		Index Nxy = Nx * Ny;
 
 		float charge;
 		Vector3	position;
@@ -1421,7 +1421,7 @@ namespace BALL
 
 							(*phi_grid)[idx] = 0.0;
 
-							for (i = 0; i < (long)atom_array->size(); i++)
+							for (i = 0; i < (Index)atom_array->size(); i++)
 							{
 								charge = (*atom_array)[i].q;
 								position.set((*atom_array)[i].x, 
@@ -1721,7 +1721,7 @@ namespace BALL
 		// first, check whether we should tell to our user what we`re doing
 		int verbosity = (int)options.getInteger(Option::VERBOSITY);
 
-		// ...and whether we should tell how long it took us.
+		// ...and whether we should tell how Index it took us.
 		bool print_timing = options.getBool(Option::PRINT_TIMING);
 
 		if (!setupAtomArray(system))
@@ -1801,24 +1801,24 @@ namespace BALL
 		float*	tmp_phi;
 
 		// some generally used loop variables
-		unsigned long	i;
-		unsigned long	j, k, l;
+		Size	i;
+		Size	j, k, l;
 
 		// retrieve some basic grid properties and set the 
 		// corresponding variables
 
-		unsigned long Nx = q_grid->getMaxXIndex() + 1;
-		unsigned long Ny = q_grid->getMaxYIndex() + 1;
-		unsigned long Nz = q_grid->getMaxZIndex() + 1;
+		Size Nx = q_grid->getMaxXIndex() + 1;
+		Size Ny = q_grid->getMaxYIndex() + 1;
+		Size Nz = q_grid->getMaxZIndex() + 1;
 
-		unsigned long Nxy = Nx * Ny;
-		unsigned long N = Nxy * Nz;
+		Size Nxy = Nx * Ny;
+		Size N = Nxy * Nz;
 
 		Q	=	new float[N];
 		tmp_phi	= new float[N];
 		if (tmp_phi == 0)
 		{
-			throw Exception::OutOfMemory(__FILE__, __LINE__, N * sizeof(float));
+			throw Exception::OutOfMemory(__FILE__, __LINE__, N * (Size)sizeof(float));
 		}
 
 		// the potential will remain in its grid,
@@ -1858,7 +1858,7 @@ namespace BALL
 		T	= new float[N * 6];
 		if (T == 0)
 		{
-			throw Exception::OutOfMemory(__FILE__, __LINE__, 6 * N * sizeof(float));
+			throw Exception::OutOfMemory(__FILE__, __LINE__, 6 * N * (Size)sizeof(float));
 		}
 
 		// T[i] = 0   BAUSTELLE: muss das sein?
@@ -1896,12 +1896,12 @@ namespace BALL
 
 		// Now, find out which grid points are charged and store them (or, 
 		// more precisely, their indices) into two arrays
-		long					number_of_charged_black_points; 
-		long					number_of_charged_white_points;
+		Index					number_of_charged_black_points; 
+		Index					number_of_charged_white_points;
 
 		// pointer to array to hold the indices
-		long*				charged_black_points;
-		long*				charged_white_points;
+		Index*				charged_black_points;
+		Index*				charged_white_points;
 		
 
 		// get the number of charged grid_points
@@ -1930,16 +1930,16 @@ namespace BALL
 			}
 		}
 		
-		charged_black_points = new long[number_of_charged_black_points];
+		charged_black_points = new Index[number_of_charged_black_points];
 		if (charged_black_points == 0)
 		{
-			throw Exception::OutOfMemory(__FILE__, __LINE__, number_of_charged_black_points * sizeof(long));
+			throw Exception::OutOfMemory(__FILE__, __LINE__, number_of_charged_black_points * (Size)sizeof(Index));
 		}
 
-		charged_white_points = new long[number_of_charged_white_points];
+		charged_white_points = new Index[number_of_charged_white_points];
 		if (charged_white_points == 0)
 		{
-			throw Exception::OutOfMemory(__FILE__, __LINE__, number_of_charged_white_points * sizeof(long));
+			throw Exception::OutOfMemory(__FILE__, __LINE__, number_of_charged_white_points * (Size)sizeof(Index));
 		}
 
 
@@ -1957,11 +1957,11 @@ namespace BALL
 					{
 						if ((i + j + k) % 2 == 1)
 						{
-							charged_black_points[number_of_charged_black_points++] = (long)l;
+							charged_black_points[number_of_charged_black_points++] = (Index)l;
 						}
 						else
 						{
-							charged_white_points[number_of_charged_white_points++] = (long)l;
+							charged_white_points[number_of_charged_white_points++] = (Index)l;
 						}
 					}
 				}
@@ -1995,22 +1995,22 @@ namespace BALL
 			Log.info(1) << "starting iterations." << endl;
 		}
 
-		long x, y, z;
+		Index x, y, z;
 					
-		long max_iterations;
+		Index max_iterations;
 		if (options.isSet(Option::MAX_ITERATIONS))
 		{
-			max_iterations = options.getInteger(Option::MAX_ITERATIONS);
+			max_iterations = (Size)options.getInteger(Option::MAX_ITERATIONS);
 		} 
 		else 
 		{
 			max_iterations = Default::MAX_ITERATIONS;
 		}
 
-		long check_after_iterations;
+		Index check_after_iterations;
 		if (options.isSet(Option::CHECK_AFTER_ITERATIONS))
 		{
-			check_after_iterations = options.getInteger(Option::CHECK_AFTER_ITERATIONS);
+			check_after_iterations = (Size)options.getInteger(Option::CHECK_AFTER_ITERATIONS);
 		} 
 		else 
 		{
@@ -2019,7 +2019,7 @@ namespace BALL
 		
 
 		// iteration counts the iterations
-		long									iteration;
+		Index									iteration;
 		iteration = 0;
 
 		// needed for determination of convergence
@@ -2048,7 +2048,7 @@ namespace BALL
 		// lambda: 1 - omega
 		float omega;
 		float lambda;
-		long black, white;
+		Index black, white;
 
 		// Gauss-Seidel spectral radius (squared value
 		// of the Jacobi spectral radius)
@@ -2069,12 +2069,12 @@ namespace BALL
 		{
 
 			// first half of Gauss-Seidel iteration (black fields only)
-			for (z = 1; z < (long)(Nx - 1); z++)
-				for (y = 1; y < (long)(Nx - 1); y++)
+			for (z = 1; z < (Index)(Nx - 1); z++)
+				for (y = 1; y < (Index)(Nx - 1); y++)
 				{
 					black = ((y % 2) + (z % 2)) % 2;
 					i = y * Nx + z * Nxy + 1 + black;
-					for (x = 1 + black; x < (long)(Nx - 1); x += 2)
+					for (x = 1 + black; x < (Index)(Nx - 1); x += 2)
 					{
 						phi[i] = omega * (T[6 * i    ] * phi[i + 1 ]
 															+ T[6 * i + 1] * phi[i - 1 ]
@@ -2087,7 +2087,7 @@ namespace BALL
 					}
 				}
 
-			long* charge_pointer;
+			Index* charge_pointer;
 			charge_pointer = charged_black_points;
 			for (charge_pointer = charged_black_points;
 					 charge_pointer < &charged_black_points[number_of_charged_black_points]; 
@@ -2110,12 +2110,12 @@ namespace BALL
 			}
 
 			// second half of Gauss-Seidel iteration (white fields only)
-			for (z = 1; z < (long)(Nx - 1); z++)
-				for (y = 1; y < (long)(Nx - 1); y++)
+			for (z = 1; z < (Index)(Nx - 1); z++)
+				for (y = 1; y < (Index)(Nx - 1); y++)
 				{
 					white = 1 - ((y % 2) + (z % 2)) % 2;
 					i = y * Nx + z * Nxy + 1 + white;
-					for (x = 1 + white; x < (long)(Nx - 1); x += 2)
+					for (x = 1 + white; x < (Index)(Nx - 1); x += 2)
 					{
 						phi[i] = omega * (T[6 * i    ] * phi[i + 1 ]
 															+ T[6 * i + 1] * phi[i - 1 ]
@@ -2211,12 +2211,12 @@ namespace BALL
 		// E =  1/2 * \sum \phi_i q_i
 		// 
 		energy_ = 0;
-		for (i = 0; i < (unsigned long)number_of_charged_black_points; i++)
+		for (i = 0; i < (Size)number_of_charged_black_points; i++)
 		{
 			l = charged_black_points[i];
 			energy_ += phi[l] * (*q_grid)[(Index)l];
 		}
-		for (i = 0; i < (unsigned long)number_of_charged_white_points; i++)
+		for (i = 0; i < (Size)number_of_charged_white_points; i++)
     {
 			l = charged_white_points[i];
 			energy_ += phi[l] * (*q_grid)[(Index)l];

@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.C,v 1.7 2000/07/24 20:13:16 oliver Exp $
+// $Id: molecularDynamics.C,v 1.8 2001/05/17 01:30:54 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
@@ -167,7 +167,7 @@ namespace BALL
 		// The number of iterations (= time steps) that will be carried out 
 		options.setDefaultInteger (MolecularDynamics::Option::MAXIMAL_NUMBER_OF_ITERATIONS,
 															 MolecularDynamics::Default::MAXIMAL_NUMBER_OF_ITERATIONS);
-		maximal_number_of_iterations_ = options.getInteger (MolecularDynamics::Option::MAXIMAL_NUMBER_OF_ITERATIONS);
+		maximal_number_of_iterations_ = (Size)options.getInteger (MolecularDynamics::Option::MAXIMAL_NUMBER_OF_ITERATIONS);
 
     // An equivalent formulation by time
 		options.setDefaultReal (MolecularDynamics::Option::MAXIMAL_SIMULATION_TIME,     
@@ -177,7 +177,7 @@ namespace BALL
 		// The start value for the iteration number 
 		options.setDefaultInteger (MolecularDynamics::Option::NUMBER_OF_ITERATION,
 															 MolecularDynamics::Default::NUMBER_OF_ITERATION);
-		number_of_iteration_ = options.getInteger (MolecularDynamics::Option::NUMBER_OF_ITERATION);
+		number_of_iteration_ = (Size)options.getInteger (MolecularDynamics::Option::NUMBER_OF_ITERATION);
 
 
 		// The length of a single time step in picoseconds 

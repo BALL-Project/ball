@@ -1,4 +1,4 @@
-// $Id: embeddable.C,v 1.6 2000/12/19 12:51:05 amoll Exp $
+// $Id: embeddable.C,v 1.7 2001/05/17 01:30:49 oliver Exp $
 
 #include <BALL/CONCEPT/embeddable.h>
 
@@ -118,7 +118,7 @@ namespace BALL
 		if (instance_lists_.has(type.name()))
 		{
 			// retrieve the size of the coresponding instance list
-			number = instance_lists_[type.name()].size();
+			number = (Size)instance_lists_[type.name()].size();
 		}
 
 		return number;

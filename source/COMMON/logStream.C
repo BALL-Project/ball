@@ -1,4 +1,4 @@
-// $Id: logStream.C,v 1.23 2001/05/10 23:32:42 oliver Exp $
+// $Id: logStream.C,v 1.24 2001/05/17 01:30:48 oliver Exp $
 
 #include <limits.h>
 #include <BALL/COMMON/logStream.h>
@@ -164,7 +164,7 @@ namespace BALL
 			if (copied_index < index) 
 			{
 				result.append(prefix.substr(copied_index, index - copied_index));
-				copied_index = index;
+				copied_index = (Index)index;
 			}
 			
 			if (index < prefix.size()) 

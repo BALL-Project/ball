@@ -1,4 +1,4 @@
-// $Id: solventDescriptor.C,v 1.3 2000/10/17 17:20:45 anker Exp $
+// $Id: solventDescriptor.C,v 1.4 2001/05/17 01:30:58 oliver Exp $
 
 #include <BALL/SOLVATION/solventDescriptor.h>
 
@@ -101,7 +101,7 @@ namespace BALL
 
 	Size SolventDescriptor::getNumberOfAtomTypes() const throw()
 	{
-		return solvent_atoms_.size();
+		return (Size)solvent_atoms_.size();
 	}
 
 	SolventAtomDescriptor SolventDescriptor::getAtomDescriptor(Position

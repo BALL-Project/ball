@@ -1,4 +1,4 @@
-// $Id: structureMapper.C,v 1.11 2001/04/30 13:36:26 oliver Exp $
+// $Id: structureMapper.C,v 1.12 2001/05/17 01:30:59 oliver Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 
@@ -111,7 +111,7 @@ namespace BALL
 		AtomBijection& pair_array = *new AtomBijection;
 		AtomPairType pair;
 
-		Size minimum = min(A.size(), B.size());
+		Size minimum = (Size)min(A.size(), B.size());
 
 		Fragment* fragment_A = 0;
 		Fragment* fragment_B = 0;
@@ -148,7 +148,7 @@ namespace BALL
 	{
 		StructureMapper::AtomBijection fragment_bijection = calculateFragmentBijection(A, B);
 
-		Size size = fragment_bijection.size();
+		Size size = (Size)fragment_bijection.size();
 
 		// if no bijection could be found, return false
 		if(size == 0)
@@ -780,13 +780,13 @@ namespace BALL
 		 Composite& composite, double max_rmsd, double max_center_tolerance, double upper_bound, double lower_bound)
 	{
 		// determine number of fragments in the pattern
-		Size no_of_frag = pattern.size();
+		Size no_of_frag = (Size)pattern.size();
 
 		// calculate the distances of the centers of the pattern fragments 
 		// and store them in the array dist_pattern
 
-		vector < float >pattern_distances(no_of_frag * no_of_frag);
-		vector < Vector3 > pattern_centers(no_of_frag);
+		vector<float>	pattern_distances(no_of_frag * no_of_frag);
+		vector<Vector3> pattern_centers(no_of_frag);
 
 		Size i, j;
 		GeometricCenterProcessor geo_center;
@@ -825,7 +825,7 @@ namespace BALL
 		}
 
 		// determine the number of fragments of the composite
-		Size no_of_comp_frag = composite_fragments.size();
+		Size no_of_comp_frag = (Size)composite_fragments.size();
 
 		// calculate the centers of the composite fragments
 		vector < Vector3 > composite_centers(no_of_comp_frag);

@@ -1,4 +1,4 @@
-// $Id: geometricProperties.C,v 1.12 2001/04/29 23:57:56 oliver Exp $
+// $Id: geometricProperties.C,v 1.13 2001/05/17 01:30:59 oliver Exp $
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -211,8 +211,8 @@ namespace BALL
 		Vector3 atom_position;
 		float   distance = sqrt(squared_distance_);
 
-		number_of_atoms = reference_atoms.size();
-		size = all_fragments_.size();
+		number_of_atoms = (Size)reference_atoms.size();
+		size = (Size)all_fragments_.size();
 
 		for (i = 0; i < size; i++) 
 		{
@@ -269,7 +269,7 @@ namespace BALL
 	Size FragmentDistanceCollector::getNumberOfFragments()
 		throw()
 	{
-		return fragments.size();
+		return (Size)fragments.size();
 	}
 
 	void FragmentDistanceCollector::setComposite(const Composite& composite)

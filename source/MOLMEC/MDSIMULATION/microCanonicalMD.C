@@ -1,4 +1,4 @@
-// $Id: microCanonicalMD.C,v 1.6 2000/07/20 19:34:10 oliver Exp $
+// $Id: microCanonicalMD.C,v 1.7 2001/05/17 01:30:54 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
@@ -187,22 +187,21 @@ namespace BALL
 	  vector < Atom * >::iterator atom_it;
 	  vector < Aux_Factors >::iterator factor_it;
 
-    if(restart == false)
-      {
+    if (restart == false)
+    {
       // reset the current number of iteration and the simulation time  to the values given
       // in the options 
-      number_of_iteration_  = options.getInteger(MolecularDynamics::Option::NUMBER_OF_ITERATION);
+      number_of_iteration_  = (Size)options.getInteger(MolecularDynamics::Option::NUMBER_OF_ITERATION);
       current_time_ = options.getReal(MolecularDynamics::Option::CURRENT_TIME);
-      }
+    }
     else
-     {
-     // the values from the last simulation run are used; increase by one to start in the
-     // next iteration 
-     number_of_iteration_++; 
-     }
+    {
+			// the values from the last simulation run are used; increase by one to start in the
+			// next iteration 
+			number_of_iteration_++; 
+    }
 
      
-
 		// determine the largest value for the iteration counter 
 	  max_number = number_of_iteration_ + iterations;
 
@@ -255,8 +254,9 @@ namespace BALL
 			// If the simulation runs with periodic boundary conditions, update the
 			// list and position of molecules
 			if (force_field_ptr_->periodic_boundary.isEnabled() == true)
+			{
 				force_field_ptr_->periodic_boundary.updateMolecules();
-
+			}
 
 			// In regular intervals, calculate and  output the current energy
 			if (iteration % energy_output_frequency_ == 0)

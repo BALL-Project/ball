@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.C,v 1.13 2000/10/30 00:20:00 amoll Exp $
+// $Id: rotamerLibrary.C,v 1.14 2001/05/17 01:30:59 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
@@ -83,7 +83,7 @@ namespace BALL
 
 	Size RotamerLibrary::getNumberOfVariants() const 
 	{
-		return variants_.size();
+		return (Size)variants_.size();
 	}
 
 	Size RotamerLibrary::getNumberOfRotamers() const 
@@ -419,7 +419,7 @@ namespace BALL
 	// return the number of rotamers
 	Size ResidueRotamerSet::getNumberOfRotamers() const
 	{
-		return rotamers_.size();
+		return (Size)rotamers_.size();
 	}
 
 	// return the number of torsions

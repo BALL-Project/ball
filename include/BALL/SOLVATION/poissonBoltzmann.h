@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.h,v 1.10 2001/03/05 01:55:44 amoll Exp $ 
+// $Id: poissonBoltzmann.h,v 1.11 2001/05/17 01:30:47 oliver Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -458,13 +458,13 @@ namespace BALL
 					very large grids. 
 					@see	Option::MAX_ITERATIONS
 			*/
-			static const long MAX_ITERATIONS;
+			static const Index MAX_ITERATIONS;
 
 			/**	Default for the number of iterations between two checks for convergence.
 					Default is 10
 					@see	Option::CHECK_AFTER_ITERATIONS
 			*/
-			static const long CHECK_AFTER_ITERATIONS;
+			static const Index CHECK_AFTER_ITERATIONS;
 		};
 
 		/** 	Compact internal datastructure for the 
@@ -483,7 +483,7 @@ namespace BALL
 			float q;
 			float r;
 			float x, y, z;
-			unsigned long index;
+			Index index;
 		};
 
 		typedef struct FastAtomStruct FastAtom;
@@ -681,7 +681,7 @@ namespace BALL
 				@see	Option::max_iterations
 				@see	Default::max_iterations
 		*/
-		unsigned long	getNumberOfIterations() const;
+		Size	getNumberOfIterations() const;
 
 		//@}
 		/**	@name	Debugging	
@@ -780,7 +780,7 @@ namespace BALL
 		vector<Position>	boundary_points_;
 
 		// number of iterations of the last calculation
-		unsigned long number_of_iterations_;
+		Size number_of_iterations_;
 
 		// error code. use getErrorMessage to access the corresponding 
 		// error message

@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.20 2001/05/16 01:46:18 oliver Exp $
+// $Id: forceField.C,v 1.21 2001/05/17 01:30:53 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -171,7 +171,7 @@ namespace BALL
 			
 		// collect the atoms of the system in the atoms_ vector
 		collectAtoms_(system);
-		Size old_size = atoms_.size();
+		Size old_size = (Size)atoms_.size();
 
 		// generate the vector of molecules if periodic boundary is enabled
 		if (periodic_boundary.isEnabled())
@@ -244,7 +244,7 @@ namespace BALL
 			}
 		}
 		
-		number_of_movable_atoms_ = atoms_.size();
+		number_of_movable_atoms_ = (Size)atoms_.size();
 	}
 
 	// Setup with a system and a set of options
@@ -282,7 +282,7 @@ namespace BALL
 	// Returns the number of atoms stored in the vector atoms_
 	Size ForceField::getNumberOfAtoms() const
 	{
-		return atoms_.size();
+		return (Size)atoms_.size();
 	}
 
 	// Returns the number of movable (non-fixed) atoms stored in the vector atoms_
@@ -473,7 +473,7 @@ namespace BALL
 	// Returns the number of components
 	Size ForceField::countComponents() const
 	{
-		return components_.size();
+		return (Size)components_.size();
 	}
 
 	// Returns the component with index "index"

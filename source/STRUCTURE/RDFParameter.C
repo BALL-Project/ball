@@ -1,4 +1,4 @@
-// $Id: RDFParameter.C,v 1.7 2001/05/15 17:56:16 anker Exp $
+// $Id: RDFParameter.C,v 1.8 2001/05/17 01:30:59 oliver Exp $
 
 #include <BALL/STRUCTURE/RDFParameter.h>
 #include <BALL/STRUCTURE/RDFSection.h>
@@ -189,7 +189,7 @@ namespace BALL
 					if (rdf_section.extractSection(parameters, name_ij))
 					{
 						rdf_list_.push_back(rdf_section.getRDF());
-						Position index = rdf_list_.size() - 1;
+						Position index = (Position)rdf_list_.size() - 1;
 
 						if (rdf_indices_.has(type_i))
 						{

@@ -1,4 +1,4 @@
-// $Id: residueTorsions.C,v 1.6 2000/10/18 10:40:07 anker Exp $
+// $Id: residueTorsions.C,v 1.7 2001/05/17 01:30:56 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/residueTorsions.h>
@@ -69,7 +69,7 @@ namespace BALL
 		if (torsions_.has(residue_name))
 		{
 			// return the size of the corresponding array
-			return torsions_[residue_name].size();
+			return (Size)torsions_[residue_name].size();
 		}
 		
 		return 0;
@@ -83,7 +83,7 @@ namespace BALL
 		if (torsions_.has(name))
 		{
 			// ...verify the index...
-			Size max_index = torsions_[name].size();
+			Size max_index = (Size)torsions_[name].size();
 
 			if (i < (Position)max_index)
 			{

@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.16 2001/03/17 17:46:23 anker Exp $
+// $Id: periodicBoundary.C,v 1.17 2001/05/17 01:30:53 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -253,7 +253,7 @@ namespace BALL
 			}
 		}
 
-		return(molecules_.size());
+		return (Size)molecules_.size();
 	}
 
 	// Setup the periodic boundary	

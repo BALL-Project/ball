@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.11 2001/05/16 11:21:02 anker Exp $
+// $Id: amberNonBonded.C,v 1.12 2001/05/17 01:30:52 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -300,7 +300,7 @@ namespace BALL
 		{
 			// reserve the required size plus 20% 
 			// to avoid frequent resizing)
-			non_bonded_.reserve((Size)(atom_vector.size() * 1.2));
+			non_bonded_.reserve((Size)((double)atom_vector.size() * 1.2));
 		}
 
 		// bool vector for storing torsion information
@@ -354,7 +354,7 @@ namespace BALL
 		}
 
 		// Determine and set the number of 1-4 interactions (torsions)
-		number_of_1_4_ = non_bonded_.size();
+		number_of_1_4_ = (Size)non_bonded_.size();
 
 		// Iterate and search non torsions, fill them in the vector non_bonded_
 		bool_it = is_torsion.begin();

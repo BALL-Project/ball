@@ -1,4 +1,4 @@
-// $Id: atomTypes.C,v 1.8 2000/10/18 10:40:06 anker Exp $
+// $Id: atomTypes.C,v 1.9 2001/05/17 01:30:55 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/atomTypes.h>
@@ -120,7 +120,7 @@ namespace BALL
 
 	Size AtomTypes::getNumberOfTypes() const throw()
 	{
-		return names_.size();
+		return (Size)names_.size();
 	}
 
 

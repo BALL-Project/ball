@@ -1,4 +1,4 @@
-// $Id: cosineTorsion.C,v 1.5 2000/10/18 10:40:06 anker Exp $
+// $Id: cosineTorsion.C,v 1.6 2001/05/17 01:30:55 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/cosineTorsion.h>
@@ -122,14 +122,14 @@ namespace BALL
 
 						// create a new torsion and store 
 						// it in the vector of torsions
-						Size array_idx = torsions_.size();	
+						Size array_idx = (Size)torsions_.size();	
 						torsions_.push_back(Values(n));
 						
 						// try to find the torsion terms
 						for (i = 0; i < n; i++)
 						{
 							// calculate the correct key: "I J K L <number>"
-							String term_key(key, 0, key.size() - 1);
+							String term_key(key, 0, (Size)key.size() - 1);
 							term_key += (String)(i + 1);
 							
 							// lookup the corresponding entry

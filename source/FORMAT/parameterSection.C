@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.21 2001/05/10 22:03:06 amoll Exp $
+// $Id: parameterSection.C,v 1.22 2001/05/17 01:30:51 oliver Exp $
 
 #include <BALL/FORMAT/parameterSection.h>
 #include <BALL/FORMAT/parameters.h>
@@ -378,7 +378,7 @@ namespace BALL
 
 	Size ParameterSection::getNumberOfKeys() const throw()
 	{
-		return keys_.size();
+		return (Size)keys_.size();
 	}
 
 	Size ParameterSection::getNumberOfVariables() const throw()

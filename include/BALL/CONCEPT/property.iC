@@ -1,4 +1,4 @@
-// $Id: property.iC,v 1.17 2001/03/02 14:52:38 anker Exp $
+// $Id: property.iC,v 1.18 2001/05/17 01:30:45 oliver Exp $
 
 using namespace std;
 
@@ -369,14 +369,14 @@ BALL_INLINE
 Size PropertyManager::countProperties() const
 	throw()
 {
-  return (bitvector_.getSize() + named_properties_.size());
+  return ((Size)bitvector_.getSize() + (Size)named_properties_.size());
 }
 
 BALL_INLINE 
 Size PropertyManager::countNamedProperties() const
 	throw()
 {
-  return named_properties_.size();
+  return (Size)named_properties_.size();
 }
 
 BALL_INLINE 

@@ -1,4 +1,4 @@
-// $Id: quadraticImproperTorsion.C,v 1.5 2000/10/18 10:40:07 anker Exp $
+// $Id: quadraticImproperTorsion.C,v 1.6 2001/05/17 01:30:56 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticImproperTorsion.h>
@@ -157,7 +157,7 @@ namespace BALL
 
 				// create a new torsion and store 
 				// it in the vector of torsions
-				Size array_idx = torsions_.size();	
+				Size array_idx = (Size)torsions_.size();	
 				Values v;
 				v.phase = getValue(key, "phase").toFloat() * factor_phase;
 				v.k = getValue(key, "k").toFloat() * factor_k;

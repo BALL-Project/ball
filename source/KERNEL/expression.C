@@ -482,7 +482,7 @@ namespace BALL
     sy++;
     Index bracket_count = 1;
     Size i;
-    for (i = sy; i < s.size() && bracket_count > 0; ++i)
+    for (i = sy; (i < (Size)s.size()) && (bracket_count > 0); ++i)
     {
       switch (s[i])
       {
@@ -517,7 +517,7 @@ namespace BALL
     // we identified the first expresion in brackets.
     // now decide, whether it is a predicate or a bracket expresion
     // or something strange
-    String left(s, (Index)sx, ex);
+    String left(s, (Index)sx, (Index)ex);
     Size number_of_fields = left.countFields();
     if (number_of_fields == 0)
     {
@@ -527,7 +527,7 @@ namespace BALL
       ex = sx;
 
       // expand the expression inside the brackets
-      SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sy, ey - sy - 1));
+      SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sy, (Index)(ey - sy - 1)));
       children.push_front(new_t);
       new_t->expandBrackets_();
 
@@ -539,7 +539,7 @@ namespace BALL
       String left_word = left.getField((Index)number_of_fields - 1);
       if (left_word == "AND" || left_word == "OR" || left_word == "!")
       {
-        SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sy, ey - sy - 1));
+        SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sy, (Index)(ey - sy - 1)));
         new_t->expandBrackets_();
         children.push_front(new_t);
 
@@ -572,7 +572,7 @@ namespace BALL
 			else
 			{
 
-        SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sy, ey - sy - 1));
+        SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sy, (Index)(ey - sy - 1)));
         new_t->type = ExpressionTree::LEAF;
         new_t->argument = new_t->expression;
         new_t->expression = left_word;
@@ -614,13 +614,13 @@ namespace BALL
 
     if (ex != sx)
     {
-      SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sx, ex - sx));
+      SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sx, (Index)(ex - sx)));
       new_t->expandBrackets_();
       mergeLeft(new_t);
 		}
     if (ez != sz)
     {
-      SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sz, ez - sz));
+      SyntaxTree* new_t = new SyntaxTree(String(s, (Index)sz, (Index)(ez - sz)));
       new_t->expandBrackets_();
       mergeRight(new_t);
 		}

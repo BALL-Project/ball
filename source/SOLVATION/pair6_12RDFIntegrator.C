@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.C,v 1.11 2000/12/05 11:50:57 anker Exp $
+// $Id: pair6_12RDFIntegrator.C,v 1.12 2001/05/17 01:30:57 oliver Exp $
 
 #include <BALL/MATHS/common.h>
 #include <BALL/SOLVATION/pair6_12RDFIntegrator.h>
@@ -113,12 +113,13 @@ namespace BALL
 	}
 
 
-	double Pair6_12RDFIntegrator::integrateToInf(double from) const throw()
+	double Pair6_12RDFIntegrator::integrateToInf(double from) 
+		const throw()
 	{
 
-		int verbosity =
-			options.getInteger(Pair6_12RDFIntegrator::Option::VERBOSITY);
-		int method = options.getInteger(Pair6_12RDFIntegrator::Option::METHOD);
+		Index verbosity =
+			(Index)options.getInteger(Pair6_12RDFIntegrator::Option::VERBOSITY);
+		Index method = options.getInteger(Pair6_12RDFIntegrator::Option::METHOD);
 
 		if (method == METHOD__UNKNOWN)
 		{

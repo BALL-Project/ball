@@ -1,4 +1,4 @@
-// $Id: regularData3D.h,v 1.4 2001/05/10 17:22:44 oliver Exp $ 
+// $Id: regularData3D.h,v 1.5 2001/05/17 01:30:46 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -553,7 +553,7 @@ namespace BALL
 		if (!valid_)
 		{
 			throw Exception::OutOfMemory(__FILE__, __LINE__, 
-																	 grid.number_of_grid_points_ * sizeof(GridDataType));
+																	 grid.number_of_grid_points_ * (Size)sizeof(GridDataType));
 		}
 
 		// copy the remaining attributes
@@ -651,7 +651,7 @@ namespace BALL
 		if (!valid_)
 		{
 			throw Exception::OutOfMemory(__FILE__, __LINE__, 
-																	 number_of_grid_points_ * sizeof(GridDataType));
+																	 number_of_grid_points_ * (Size)sizeof(GridDataType));
 		}
 	}
 
