@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.h,v 1.1.2.4 2005/01/19 12:52:16 amoll Exp $
+// $Id: vertexBuffer.h,v 1.1.2.5 2005/01/19 13:00:05 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_VERTEXBUFFER_H
 #define BALL_VIEW_RENDERING_VERTEXBUFFER_H
@@ -28,6 +28,7 @@ namespace BALL
 				(up to 5 fold!) compared with OpenGL display lists.
 				To ensure a maximum of platform independence we use method pointers in the source file.
 				These must be initialises by calling MeshBuffer::initGL() (See below).
+				\ingroup ViewRendering
 		*/
 		class BALL_EXPORT MeshBuffer
 		{
