@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryControl.h,v 1.1 2003/09/01 22:29:07 amoll Exp $
+// $Id: trajectoryControl.h,v 1.2 2003/09/02 10:57:53 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_TrajectoryControl_H
 #define BALL_VIEW_WIDGETS_TrajectoryControl_H
@@ -21,11 +21,10 @@
 #include <qlistview.h>
 #include <qmessagebox.h>
 #include <qpoint.h>
-#include <qpopupmenu.h>
 
 namespace BALL
 {
-	class Composite;
+	class TrajectoryFile;
 
 	namespace VIEW
 	{
@@ -92,12 +91,6 @@ namespace BALL
 			virtual void onNotify(Message *message)
 				throw();
 
-			/** Create a new context menu entry with the given parameters.
-			*/
-			void insertContextMenuEntry(const String& name, const QObject* receiver = 0, 
-																  const char* slot = 0, int entry_ID = -1, int accel = 0)
-				throw();
-
 			/**	Initialize the widget.
 			*/
 			virtual void initializeWidget(MainControl& main_control)
@@ -129,18 +122,6 @@ namespace BALL
 			//@{
 			public slots:
 
-			/** Invalidate the selection.
-					All selected items in the tree will be deselected. \par
-					Calls updateSelection().
-			*/
-			void invalidateSelection();
-
-			/** Update the selection.
-			 		Stores the selected items from the QListView to a list and sends the selection.
-					\see   sendSelection
-			*/
-//			virtual void updateSelection();
-
 			void addTrajectory()
 				throw();
 
@@ -160,14 +141,13 @@ namespace BALL
 	
 			void onContextMenu_(QListViewItem* item, const QPoint& point, int column);
 
-		  protected:
-
 			//@}
 
 		  protected:
+
+			void insertTrajectory_(TrajectoryFile* file, System& system)
+				throw();
 			
-			// the context menu
-			QPopupMenu 										context_menu_;
 			SnapShotManager* 							context_trajectory_;
 			QListViewItem* 								context_item_;
 

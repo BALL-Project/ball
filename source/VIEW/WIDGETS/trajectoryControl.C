@@ -1,12 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryControl.C,v 1.1 2003/09/01 22:28:10 amoll Exp $
+// $Id: trajectoryControl.C,v 1.2 2003/09/02 10:57:09 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/trajectoryControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
@@ -25,7 +24,6 @@ TrajectoryControl::TrajectoryControl(QWidget* parent, const char* name)
 	throw()
 		:	QListView(parent, name),
 			ModularWidget(name),
-			context_menu_(),
 			context_trajectory_(0),
 			context_item_(0),
 			dialog_(0),
@@ -40,15 +38,9 @@ TrajectoryControl::TrajectoryControl(QWidget* parent, const char* name)
 	setColumnWidth(0, 120);
 	setColumnWidth(1, 60);
 
-	// if the selection of any item changed,
-	// mark the complete selection as invalid
-	// it is then re-determined by getSelection()
-//	connect(this, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
-
 	connect(this, SIGNAL(rightButtonPressed(QListViewItem*, const QPoint&, int)), this,
 					SLOT(onContextMenu_(QListViewItem*, const QPoint&, int)));
 
-	// register ModularWidget
 	registerWidget(this);
 }
 
@@ -108,17 +100,26 @@ void TrajectoryControl::addTrajectory()
 
 	// construct a name for the system(the filename without the dir path)
 	DCDFile* dcd = new DCDFile(filename, File::IN);
-	if (dcd->getNumberOfAtoms() != getMainControl()->getSelectedSystem()->countAtoms())
+	insertTrajectory_(dcd, *getMainControl()->getSelectedSystem());
+}
+
+void TrajectoryControl::insertTrajectory_(TrajectoryFile* file, System& system)
+	throw()
+{
+	if (file->getNumberOfAtoms() != system.countAtoms())
 	{
 		setStatusbarText("Number of atoms do not match. Aborting...");
-		delete dcd;
+		delete file;
 		return;
 	}
 
-	SnapShotManager* manager = new SnapShotManager(getMainControl()->getSelectedSystem(), 0, dcd);
-	QListViewItem* item = new QListViewItem(this, filename.c_str(), QString(" "));
+	SnapShotManager* manager = new SnapShotManager(getMainControl()->getSelectedSystem(), 0, file);
+
+	String name = file->getName();
+	name = name.getField(name.countFields(String(FileSystem::PATH_SEPARATOR).c_str()), 
+																			  String(FileSystem::PATH_SEPARATOR).c_str());
+	QListViewItem* item = new QListViewItem(this, name.c_str(), system.getName().c_str());
 	item_to_trajectory_[item] = manager;
-	// update the view
 	updateContents();
 }
 
@@ -140,28 +141,16 @@ void TrajectoryControl::onNotify(Message *message)
 				return;
 			}
 		}
+		return;
 	}   
-}
 
-
-void TrajectoryControl::insertContextMenuEntry(const String& name, const QObject* receiver, const char* slot, int entry_ID, int accel)
-	throw()
-{
-	context_menu_.insertItem(name.c_str(), receiver, slot, accel, entry_ID);
-}
-
-
-void TrajectoryControl::invalidateSelection()
-{
-	QListViewItemIterator it(this);
-	for (; it.current(); ++it)
+	if (RTTI::isKindOf<NewTrajectoryMessage>(*message))
 	{
-		it.current()->setSelected(FALSE);
+		NewTrajectoryMessage* ntm = RTTI::castTo<NewTrajectoryMessage>(*message);
+		insertTrajectory_(ntm->getTrajectoryFile(), *(System*)ntm->getComposite());
+		return;
 	}
-
-	updateContents();
 }
-
 
 void TrajectoryControl::deleteTrajectory_()
 {
@@ -178,23 +167,19 @@ void TrajectoryControl::deleteTrajectory_()
 
 void TrajectoryControl::onContextMenu_(QListViewItem* item,  const QPoint& point, int /* column */)
 {
-	// clear the context menu
-	context_menu_.clear();
-
-	// get composite address
 	if (item == 0) return;
-
 	context_item_ = item;
 
-	insertContextMenuEntry("Save", this, SLOT(saveTrajectory_()));
-	insertContextMenuEntry("Visualise", this, SLOT(visualiseTrajectory_()));
-	insertContextMenuEntry("Delete", this, SLOT(deleteTrajectory_()));
+	QPopupMenu context_menu;
+	context_menu.insertItem("Save", this, SLOT(saveTrajectory_()));
+	context_menu.insertItem("Visualise", this, SLOT(visualiseTrajectory_()));
+	context_menu.insertItem("Delete", this, SLOT(deleteTrajectory_()));
 //	insertContextMenuEntry("Export to PNGs", this, SLOT(visualiseTrajectory_()));
 
 	// show the context menu if it is not empty
-	if (context_menu_.count())
+	if (context_menu.count())
 	{
-		context_menu_.exec(point);
+		context_menu.exec(point);
 	}
 }
 
@@ -260,13 +245,8 @@ void TrajectoryControl::saveTrajectory_()
 	if (!fd->exec()== QDialog::Accepted) return;
 
 	String filename(fd->selectedFile().ascii());
-	delete fd;
-Log.error() << "#~~#   17  " << ssm->getNumberOfSnapShotsInBuffer()<< std::endl;
-	DCDFile dcd(filename, File::OUT);
-	ssm->setTrajectoryFile(&dcd);
-	ssm->flushToDisk();
+	ssm->getTrajectoryFile()->copyTo(filename);
 	setStatusbarText("Writen DCDFile");
-	ssm->setTrajectoryFile(0);
 }
 
 
