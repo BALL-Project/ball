@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.10 2004/02/26 17:45:04 amoll Exp $
+// $Id: backboneModel.C,v 1.11 2004/06/07 10:16:58 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -63,14 +63,6 @@ namespace BALL
 			spline_vector_.clear();
 			last_parent_ = 0;
 			have_start_point_ = false;
-		}
-
-		bool AddBackboneModel::finish()
-		{
-			if (spline_vector_.size() == 0) return false;
-
-			createBackbone_();
-			return true;
 		}
 
 		Processor::Result AddBackboneModel::operator () (Composite& composite)
@@ -243,6 +235,13 @@ namespace BALL
 			sphere->setPosition(point);
 			sphere->setComposite(atom);
 			geometric_objects_.push_back(sphere);
+		}
+
+		bool AddBackboneModel::createGeometricObjects()
+			throw()
+		{
+			createBackbone_();
+			return true;
 		}
 
 		

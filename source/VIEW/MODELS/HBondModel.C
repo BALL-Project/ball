@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondModel.C,v 1.6 2004/03/15 12:54:59 amoll Exp $
+// $Id: HBondModel.C,v 1.7 2004/06/07 10:16:58 amoll Exp $
 
 #include <BALL/VIEW/MODELS/HBondModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -65,11 +65,6 @@ void HBondModelProcessor::swap(HBondModelProcessor& model)
 	AtomBondModelBaseProcessor::swap(model);
 }
 
-		
-bool HBondModelProcessor::finish()
-{
-	return true;
-}
 		
 Processor::Result HBondModelProcessor::operator() (Composite& composite)
 {

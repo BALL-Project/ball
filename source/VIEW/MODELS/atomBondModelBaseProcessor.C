@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.7 2004/01/27 16:25:56 amoll Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.8 2004/06/07 10:16:58 amoll Exp $
 
 #include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
 #include <BALL/KERNEL/forEach.h>
@@ -79,12 +79,6 @@ namespace BALL
 			used_atoms_.clear();
 		}
 				
-		bool AtomBondModelBaseProcessor::finish()
-		{
-			buildBondModels_();
-			return true;
-		}
-			
 		void AtomBondModelBaseProcessor::dump(ostream& s, Size depth) const
 			throw()
 		{
@@ -139,6 +133,12 @@ namespace BALL
 		void AtomBondModelBaseProcessor::visualiseBond_(const Bond& /*bond*/)
 			throw()
 		{
+		}
+
+		bool AtomBondModelBaseProcessor::createGeometricObjects()
+			throw()
+		{
+			buildBondModels_();
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

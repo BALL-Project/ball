@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.12 2004/05/27 19:49:49 oliver Exp $
+// $Id: modelProcessor.h,v 1.13 2004/06/07 10:17:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
@@ -98,6 +98,10 @@ namespace BALL
 				///
 				float getSurfaceDrawingPrecision() const
 					throw() { return surface_drawing_precision_;}
+
+				///
+				virtual bool createGeometricObjects() 
+					throw();
 				
 				protected:
 				

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.10 2004/02/26 08:41:40 anhi Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.11 2004/06/07 10:17:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
@@ -105,16 +105,6 @@ namespace BALL
 			*/
 			virtual bool start();
 			
-			/** Finish method.
-					This method will be internally called from the processor mechanism if the processor
-					has finished processing the Composite tree.
-					All previously inserted Atom objects (inserted with the method insertAtom_())
-					will be processed with the method buildBondModels_() to create the graphical 
-					representation of the Bond objects.
-					\return bool true if the finish was successful
-			*/
-			virtual bool finish();
-
 			//@} 
 			/**	@name	debuggers and diagnostics 
 			*/ 
@@ -133,7 +123,11 @@ namespace BALL
 			///
 			virtual void clearComposites()
 				throw();
-							
+
+			/// 
+			virtual bool createGeometricObjects()
+				throw();
+		
 			protected:
 
 			//@}
@@ -176,6 +170,7 @@ namespace BALL
 					which has to be overloaded in derived classes.
 			*/
 			void buildBondModels_();
+
 			//@}
 			
 			virtual void visualiseBond_(const Bond& bond)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.36 2004/05/27 19:50:02 oliver Exp $
+// $Id: representation.C,v 1.37 2004/06/07 10:16:38 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -338,6 +338,7 @@ namespace BALL
 				{
 					(const_cast<Composite*>(*it))->apply(*model_processor_);
 				}
+				model_processor_->createGeometricObjects();
 				geometric_objects_ = model_processor_->getGeometricObjects();
 				model_build_time_ = PreciseTime::now();
 			}

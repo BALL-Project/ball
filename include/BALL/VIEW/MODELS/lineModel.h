@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.h,v 1.8 2004/02/26 08:41:41 anhi Exp $
+// $Id: lineModel.h,v 1.9 2004/06/07 10:17:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_LINEMODEL_H
@@ -90,7 +90,6 @@ namespace BALL
 		};
 
 	} // namespace VIEW
-
 } // namspace BALL
 
 #endif // BALL_VIEW_MODELS_LINEMODEL_H

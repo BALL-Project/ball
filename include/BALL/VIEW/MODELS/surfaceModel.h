@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.11 2004/02/26 08:41:42 anhi Exp $
+// $Id: surfaceModel.h,v 1.12 2004/06/07 10:17:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_SURFACEMODEL_H
@@ -79,15 +79,6 @@ namespace BALL
 			*/ 
 			//@{
 			
-			/** Finish method.
-					This method will be internally called from the processor mechanism when the processor
-					has finished processing the Composite tree.
-					\return bool true if the finish was successful
-					@exception OutOfMemory thrown if the memory allocation for the Mesh object failed
-					\see    Mesh
-			*/
-			virtual bool finish();
-			
 			/**	Operator method.
 					This method stores all Composite objects. In the finish()
 					method for all stored start composite a Mesh object will be created.
@@ -119,6 +110,10 @@ namespace BALL
 			float getProbeRadius() const
 				throw() { return probe_radius_;}
 			
+			/// 
+			virtual bool createGeometricObjects()
+				throw();
+		
 		  private:
 
 			HashSet<Atom*> 		atoms_;

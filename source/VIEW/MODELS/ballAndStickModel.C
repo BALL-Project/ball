@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.10 2004/03/15 12:54:59 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.11 2004/06/07 10:16:58 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -191,7 +191,6 @@ void AddBallAndStickModel::visualiseBond_(const Bond& bond)
 	tube->setComposite(&bond);
 	geometric_objects_.push_back(tube);
 }
-
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/MODELS/ballAndStickModel.iC>

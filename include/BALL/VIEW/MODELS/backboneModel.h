@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.10 2004/02/26 17:44:51 amoll Exp $
+// $Id: backboneModel.h,v 1.11 2004/06/07 10:17:16 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -90,16 +90,6 @@ namespace BALL
 			*/ 
 			//@{
 		
-			/** Finish method.
-					This method will be internally called from the processor mechanism when the processor
-					has finished processing the Composite tree.
-					All previously inserted Atom objects 
-					(inserted in the method operator()) will be used to create a backbone.
-					\return bool true if the finish was successful, false otherwise
-					@exception OutOfMemory thrown if the memory allocation failed
-			*/
-			virtual bool finish();
-			
 			/**	Operator method.
 					This method iterates over each Composite object reachable in the 
 					Composite tree. If a Composite is of kind Atom and has the
@@ -132,6 +122,10 @@ namespace BALL
 			float getTubeRadius() const
 				throw() { return tube_radius_;}
 
+			/// 
+			virtual bool createGeometricObjects()
+				throw();
+		
 			//@}
 
 			protected:

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.10 2004/02/04 17:31:56 amoll Exp $
+// $Id: surfaceModel.C,v 1.11 2004/06/07 10:16:58 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/surfaceModel.h>
@@ -49,8 +49,49 @@ namespace BALL
 			type_ = SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE;
 		}
 
-		bool AddSurfaceModel::finish()
+				
+		Processor::Result AddSurfaceModel::operator () (Composite& composite)
 		{
+			if (RTTI::isKindOf<AtomContainer>(composite)) 
+			{
+				AtomIterator it;
+				BALL_FOREACH_ATOM(*(AtomContainer*) &composite, it)
+				{
+					atoms_.insert((Atom*) &*it);
+				}
+				return Processor::CONTINUE;
+			}
+			
+			if (!RTTI::isKindOf<Atom>(composite)) return Processor::CONTINUE;
+
+			atoms_.insert((Atom*) &composite);
+
+			return Processor::CONTINUE;
+		}
+
+		void AddSurfaceModel::dump(std::ostream& s, Size depth) const
+			throw()
+		{
+			BALL_DUMP_STREAM_PREFIX(s);
+			
+			BALL_DUMP_DEPTH(s, depth);
+			BALL_DUMP_HEADER(s, this, this);
+
+			ModelProcessor::dump(s, depth + 1);
+
+			BALL_DUMP_STREAM_SUFFIX(s);
+		}
+
+		void AddSurfaceModel::clearComposites()
+			throw()
+		{
+			atoms_.clear();
+		}
+
+		bool AddSurfaceModel::createGeometricObjects()
+			throw()
+		{
+			ModelProcessor::createGeometricObjects();
 			Mesh* mesh = new Mesh;
 
 			if (mesh == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Mesh));
@@ -115,44 +156,6 @@ namespace BALL
 			*static_cast<Surface*>(mesh) = sp.getSurface();
 			geometric_objects_.push_back(mesh);
 			return true;
-		}
-				
-		Processor::Result AddSurfaceModel::operator () (Composite& composite)
-		{
-			if (RTTI::isKindOf<AtomContainer>(composite)) 
-			{
-				AtomIterator it;
-				BALL_FOREACH_ATOM(*(AtomContainer*) &composite, it)
-				{
-					atoms_.insert((Atom*) &*it);
-				}
-				return Processor::CONTINUE;
-			}
-			
-			if (!RTTI::isKindOf<Atom>(composite)) return Processor::CONTINUE;
-
-			atoms_.insert((Atom*) &composite);
-
-			return Processor::CONTINUE;
-		}
-
-		void AddSurfaceModel::dump(std::ostream& s, Size depth) const
-			throw()
-		{
-			BALL_DUMP_STREAM_PREFIX(s);
-			
-			BALL_DUMP_DEPTH(s, depth);
-			BALL_DUMP_HEADER(s, this, this);
-
-			ModelProcessor::dump(s, depth + 1);
-
-			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void AddSurfaceModel::clearComposites()
-			throw()
-		{
-			atoms_.clear();
 		}
 
 	} // namespace VIEW
