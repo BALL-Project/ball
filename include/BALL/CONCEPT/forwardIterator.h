@@ -1,4 +1,4 @@
-// $Id: forwardIterator.h,v 1.6 2001/06/20 19:58:55 amoll Exp $
+// $Id: forwardIterator.h,v 1.7 2001/06/23 10:38:38 amoll Exp $
 
 #ifndef BALL_CONCEPT_FORWARDITER_H
 #define BALL_CONCEPT_FORWARDITER_H
@@ -15,7 +15,6 @@ namespace BALL
 {
 
 	/**	@name	Generic Forward Iterator Classes.
-			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/forwardIterator.h}
 	*/
 	//@{
@@ -377,7 +376,6 @@ namespace BALL
 			throw(Exception::InvalidIterator);
 
 		//@}
-
 
 		protected:
 
