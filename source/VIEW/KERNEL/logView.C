@@ -93,8 +93,8 @@ namespace BALL
 				history_string_ += QString(line.c_str());
 
 				setText(history_string_);
-				setCursorPosition(numLines(), 0);
-				repaint();
+				//setCursorPosition(numLines(), 0);
+				//repaint();
 
 				qApp->processEvents();
 			}
