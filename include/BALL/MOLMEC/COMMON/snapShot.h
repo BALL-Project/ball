@@ -1,4 +1,4 @@
-// $Id: snapShot.h,v 1.11 2000/12/19 13:22:50 anker Exp $
+// $Id: snapShot.h,v 1.12 2000/12/19 18:34:45 anker Exp $
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
 // They can be used to obtain snapshots from an MD simulation or an energy 
@@ -259,7 +259,6 @@ namespace BALL
   class SnapShotManager
   {
 
-
     public:
 
     //  Local class for handling options
@@ -370,7 +369,6 @@ namespace BALL
 
     //@{
 
-		// BAUSTELLE: nach .C 
     /** Is the SnapshotManager ready for use?
     */
     virtual bool isValid() const
@@ -416,6 +414,10 @@ namespace BALL
     */ 
 		// BAUSTELLE (Warum virtual?)
     Size getNumberOfSnapShots() const 
+			throw();
+
+		/// obtain the number of atoms covered by this SnapshotManager 
+		Size getNumberOfAtoms() const
 			throw();
 
     //@}

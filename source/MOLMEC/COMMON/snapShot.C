@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.16 2000/12/19 14:02:39 anker Exp $
+// $Id: snapShot.C,v 1.17 2000/12/19 18:36:53 anker Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -667,8 +667,7 @@ namespace BALL
 		}
 
 		trajectory_file_->reopen(File::IN | File::BINARY);
-		// BAUSTELLE
-		// trajectory_file_->readHeader();
+		trajectory_file_->readHeader();
 
 		trajectory_file_->updateHeader(*this);
 
@@ -690,5 +689,11 @@ namespace BALL
 	{
 		return snapshot_counter_;
 	} 
+
+	Size SnapShotManager::getNumberOfAtoms() const
+		throw()
+	{
+		return number_of_atoms_;
+	}
 
 }	// end of namespace BALL
