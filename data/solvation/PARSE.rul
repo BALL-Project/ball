@@ -4,7 +4,7 @@
 #   Sitkoff, Sharp, and Honig: Accurate Calculation of Hydration Free Energies 
 #   Using Macroscopic Solvent Models, H. Phys. Chem, (1994), 98, 1978-1988
 #
-# $Id: PARSE.rul,v 1.5 2000/11/21 16:20:59 anker Exp $
+# $Id: PARSE.rul,v 1.5.2.1 2002/04/03 18:51:31 anker Exp $
 #
 
 
@@ -89,7 +89,7 @@
 ; carbons at the hydroxyl group in aromatic rings (e.g. TYR:CZ)
  0.055 = connectedTo((~*)(~*)(O(H)))
 ; sulfur bridge (e. g. CYS-CYS)
- 0.29  = connectedTo((-S(-S(-C)))))
+ 0.29  = connectedTo((-S(-S(-C))))
 ; carbons at the fusion points of condensed aromatic and heteroaromatic rings do not bear any charge
 0.000   = sp2Hybridized() AND (connectedTo((~C)(~C)(~C)) OR connectedTo((~C)(~N)(~C)) OR connectedTo((~C)(~N)(~N)))
 ; carbons in aromatic rings are assigned a negative charge
