@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.45 2004/02/27 23:28:06 amoll Exp $
+// $Id: molecularControl.C,v 1.46 2004/02/28 14:11:00 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/VIEW/DIALOGS/atomProperties.h>
+#include <BALL/VIEW/DIALOGS/compositeProperties.h>
 #include <BALL/VIEW/DIALOGS/bondProperties.h>
 #include <BALL/VIEW/DIALOGS/transformationDialog.h>
 #include <BALL/KERNEL/system.h>
@@ -257,14 +257,11 @@ void MolecularControl::activatedItem_(int pos)
 void MolecularControl::buildContextMenu(Composite& composite)
 	throw()
 {
-	bool one_item = (selected_.size() == 1);
 	bool composites_muteable = getMainControl()->compositesAreMuteable();
+	bool one_item = (getSelection().size() == 1);
 
 	context_menu_.insertItem("Create Representation", &model_menu_, 0, CREATE_REPRESENTATION);
 	context_menu_.insertSeparator();
-
-	context_menu_.insertItem("Rename", this, SLOT(rename()), 0, RENAME);
-	context_menu_.setItemEnabled(RENAME, composites_muteable && composites_muteable && one_item);
 
 	context_menu_.insertItem("Move", this, SLOT(move()), 0, OBJECT__MOVE);
 
@@ -278,24 +275,18 @@ void MolecularControl::buildContextMenu(Composite& composite)
 	context_menu_.insertSeparator();
 
 	// -----------------------------------> AtomContainer
-	bool atom_container_selected = RTTI::isKindOf<AtomContainer>(composite);
-
-	bool allow_id_change = one_item && RTTI::isKindOf<Residue>(**selected_.begin());
-	context_menu_.insertItem("Change ID", this, SLOT(changeID()), 0, CHANGEID);
-	context_menu_.setItemEnabled(CHANGEID, composites_muteable && allow_id_change);
-
 	context_menu_.insertItem("Count items", this, SLOT(countItems()), 0, COUNT__ITEMS);
-	context_menu_.setItemEnabled(COUNT__ITEMS, atom_container_selected);
-
+	context_menu_.setItemEnabled(COUNT__ITEMS, RTTI::isKindOf<AtomContainer>(composite));
 	// <----------------------------------- AtomContainer
+	
 	context_menu_.insertSeparator();
-	// -----------------------------------> Atoms
-	bool atom_selected = RTTI::isKindOf<Atom>(composite);
-	context_menu_.insertItem("Atom Properties", this, SLOT(atomProperties()), 0, ATOM__PROPERTIES);
-	context_menu_.setItemEnabled(ATOM__PROPERTIES, atom_selected);
+	context_menu_.insertItem("Properties", this, SLOT(compositeProperties()), 0, COMPOSITE__PROPERTIES);
+	context_menu_.setItemEnabled(COMPOSITE__PROPERTIES, composites_muteable && one_item);
 
+	// -----------------------------------> Atoms
 	context_menu_.insertItem("Show Bonds", this, SLOT(bondProperties()), 0, BOND__PROPERTIES);
-	context_menu_.setItemEnabled(BOND__PROPERTIES, atom_selected);
+	context_menu_.setItemEnabled(BOND__PROPERTIES, 
+															 RTTI::isKindOf<Atom>(composite) && one_item && composites_muteable);
 	// <----------------------------------- Atoms
 
 	context_menu_.insertSeparator();
@@ -304,14 +295,14 @@ void MolecularControl::buildContextMenu(Composite& composite)
 }
 
 
-void MolecularControl::atomProperties()
+void MolecularControl::compositeProperties()
 {
-	AtomProperties as((Atom*)context_composite_, this);
+	CompositeProperties as(context_composite_, this);
 	as.exec();
 
 	CompositeMessage* message = new CompositeMessage(
 			*context_composite_, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
-	notify_(message);
+	getMainControl()->sendMessage(*message);
 }
 
 void MolecularControl::bondProperties()

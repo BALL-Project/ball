@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.35 2004/02/18 17:37:00 amoll Exp $
+# $Id: Makefile,v 1.36 2004/02/28 14:11:42 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -17,8 +17,6 @@ CPP_SOURCES=\
 	amberConfigurationDialogData.C\
 	minimizationDialog.C\
 	minimizationDialogData.C\
-	atomProperties.C\
-	atomPropertiesData.C\
 	bondProperties.C\
 	bondPropertiesData.C\
 	charmmConfigurationDialog.C\
@@ -27,6 +25,8 @@ CPP_SOURCES=\
 	colorMeshDialogData.C\
 	coloringSettingsDialog.C\
 	coloringSettingsDialogData.C\
+	compositeProperties.C\
+	compositePropertiesData.C\
 	contourSurfaceDialog.C\
 	contourSurfaceDialogData.C\
 	downloadPDBFile.C\
@@ -70,8 +70,8 @@ MOC_SOURCES=\
 	amberConfigurationDialogData_moc.C\
 	minimizationDialog_moc.C\
 	minimizationDialogData_moc.C\
-	atomProperties_moc.C\
-	atomPropertiesData_moc.C\
+	compositeProperties_moc.C\
+	compositePropertiesData_moc.C\
 	bondProperties_moc.C\
 	bondPropertiesData_moc.C\
 	charmmConfigurationDialog_moc.C\
@@ -121,11 +121,11 @@ MOC_SOURCES=\
 UIC_SOURCES=\
 	amberConfigurationDialogData.C\
 	minimizationDialogData.C\
-	atomPropertiesData.C\
 	bondPropertiesData.C\
 	charmmConfigurationDialogData.C\
 	coloringSettingsDialogData.C\
 	colorMeshDialogData.C\
+	compositePropertiesData.C\
 	contourSurfaceDialogData.C\
 	downloadPDBFileData.C\
 	displayPropertiesData.C\
