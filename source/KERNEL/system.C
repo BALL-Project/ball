@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.5 1999/12/30 18:05:34 oliver Exp $
+// $Id: system.C,v 1.6 2000/02/23 07:53:24 oliver Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -13,9 +13,7 @@ namespace BALL
 {
 
 	System::System()
-		:	Composite(),
-			PropertyManager(),
-			name_(BALL_SYSTEM_DEFAULT_NAME)
+		:	BaseFragment()
 	{
 	}
 		
@@ -25,32 +23,22 @@ namespace BALL
 	}
 		
 	System::System(const String& name)
-		:	Composite(),
-			PropertyManager(),
-			name_(name)
+		:	BaseFragment(name)
 	{
 	}
 
   void System::persistentWrite(PersistenceManager& pm, const char* name) const
   {
     pm.writeObjectHeader(this, name);
-      Composite::persistentWrite(pm);
-
-      pm.writeStorableObject(*(PropertyManager*)this, "PropertyManager");
- 
-      pm.writePrimitive(name_, "name_");
+      BaseFragment::persistentWrite(pm);
     pm.writeObjectTrailer(name);
 	}
 
   void System::persistentRead(PersistenceManager& pm)
   {
-    pm.checkObjectHeader(RTTI::getStreamName<Composite>());
+    pm.checkObjectHeader(RTTI::getStreamName<BaseFragment>());
 			Composite::persistentRead(pm);
     pm.checkObjectTrailer(0);
-
-		pm.readStorableObject(*(PropertyManager*)this, "PropertyManager");
-
-    pm.readPrimitive(name_, "name_");
 	}
  
 
@@ -61,40 +49,22 @@ namespace BALL
 
 	void System::clear()
 	{
-		Composite::clear();
-		PropertyManager::clear();
-
-		clear_();
+		BaseFragment::clear();
 	}
 		
 	void System::destroy()
 	{
-		Composite::destroy();
-		PropertyManager::destroy();
-
-		clear_();
+		BaseFragment::destroy();
 	}
 		
 	void System::set(const System& system, bool deep)
 	{
-		bool clone_them = clone_bonds;
-		clone_bonds = false;
-
-		Composite::set(system, deep);
-		PropertyManager::set(system, deep);
-		name_ = system.name_;
-
-		if (clone_them && deep)
-		{
-			BALL::cloneBonds(system, *this);
-		}
-		
-		clone_bonds = clone_them;
+		BaseFragment::set(system, deep);
 	}
 			
 	System& System::operator = (const System& system)
 	{
-		set(system);
+		BaseFragment::set(system);
 
 		return *this;
 	}
@@ -106,25 +76,7 @@ namespace BALL
 			
 	void System::swap(System& system)
 	{
-		Composite::swap(system);
-		PropertyManager::swap(system);
-
-		name_.swap(system.name_);
-	}
-
-	void System::setName(const String &name)
-	{
-		name_ = name;
-	}
-
-	String& System::getName()
-	{
-		return name_;
-	}
-
-	const String& System::getName() const
-	{
-		return name_;
+		BaseFragment::swap(system);
 	}
 
 	Size System::countMolecules() const
@@ -132,7 +84,9 @@ namespace BALL
 		Size size = 0;
 
 		for (MoleculeIterator mol_it = beginMolecule(); !mol_it.isEnd(); ++mol_it)
+		{
 			++size;
+		}
 
 		return size;
 	}
@@ -142,7 +96,9 @@ namespace BALL
 		Size size = 0;
 
 		for (FragmentIterator frag_it = beginFragment(); !frag_it.isEnd(); ++frag_it)
+		{
 			++size;
+		}
 
 		return size;
 	}
@@ -152,7 +108,9 @@ namespace BALL
 		Size size = 0;
 
 		for (AtomIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
+		{
 			++size;
+		}
 
 		return size;
 	}
@@ -206,31 +164,21 @@ namespace BALL
 	{
 		for (AtomIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
 		{
-			(*atom_it).destroyBonds();
+			atom_it->destroyBonds();
 		}
 	}
 
 	bool System::isValid() const
 	{ 
-		if (Composite::isValid() == false
-				|| PropertyManager::isValid() == false
-				|| name_.isValid() == false)
-		{
-			return false;
-		}
-
-		return true;
+		return BaseFragment::isValid();
 	}
 
 	void System::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		
-		Composite::dump(s, depth);
+		BaseFragment::dump(s, depth);
 
-		BALL_DUMP_DEPTH(s, depth);
-		s << "  name: " << name_ << endl;
-		
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
@@ -243,11 +191,4 @@ namespace BALL
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
-
-	void System::clear_()	
-	{
-		name_ = BALL_SYSTEM_DEFAULT_NAME;
-	}
-
-
 } // namespace BALL
