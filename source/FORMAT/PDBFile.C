@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.38 2003/06/19 13:22:01 oliver Exp $
+// $Id: PDBFile.C,v 1.39 2003/07/03 11:49:18 amoll Exp $
 //
 
 #include <BALL/FORMAT/PDBFile.h>
@@ -11,8 +11,8 @@
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
-#include <BALL/CONCEPT/composite.h>
 #include <BALL/COMMON/logStream.h>
+#include <BALL/DATATYPE/regularExpression.h>
 
 using namespace std;
 

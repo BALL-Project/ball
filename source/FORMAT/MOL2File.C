@@ -1,20 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.C,v 1.18 2003/03/03 09:27:36 anhi Exp $
+// $Id: MOL2File.C,v 1.19 2003/07/03 11:49:18 amoll Exp $
 
 #include <BALL/FORMAT/MOL2File.h>
-#include <BALL/DATATYPE/string.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/system.h>
-#include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PDBAtom.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/forEach.h>
 
-#include <stack>
+#include <BALL/DATATYPE/regularExpression.h>
 
 using namespace std;
 
