@@ -1,14 +1,15 @@
-// $Id: Vector3_test.C,v 1.11 2000/02/25 16:01:57 oliver Exp $ #include
+// $Id: Vector3_test.C,v 1.12 2000/02/25 21:22:52 amoll Exp $ #include
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MATHS/vector3.h>
 #include <math.h>
 #include <BALL/CONCEPT/persistenceManager.h>
+#include <BALL/CONCEPT/textPersistenceManager.h>
 #include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.11 2000/02/25 16:01:57 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.12 2000/02/25 21:22:52 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -23,7 +24,7 @@ CHECK(TVector3::BALL_CREATE(TVector3<T>))
 	TEST_REAL_EQUAL(v_ptr->y, 0.0)
 	TEST_REAL_EQUAL(v_ptr->z, 0.0)
 	delete v_ptr;
-	Vector3* v_ptr = (Vector3*)v.create();
+	v_ptr = (Vector3*)v.create();
 	TEST_REAL_EQUAL(v_ptr->x, 1.0)
 	TEST_REAL_EQUAL(v_ptr->y, 2.0)
 	TEST_REAL_EQUAL(v_ptr->z, 3.0)
@@ -123,7 +124,7 @@ CHECK(virtual void persistentWrite(PersistenceManager& pm, const char* name = 0)
 	ofstream  ofile(filename.c_str(), ios::out);
 	pm.setOstream(ofile);
 	pm.registerClass(getStreamName<Vector3>(), getNew<Vector3>);
-	*v >> pm;
+	v >> pm;
 	ofile.close();	
 RESULT
 
@@ -523,12 +524,12 @@ RESULT
 CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Vector3 v(1.2, 2.3, 3.4);
   String filename;
-	NEW_TMP_FILENAME(filename)
+	NEW_TMP_FILE(filename)
 	std::ofstream outfile(filename.c_str(), ios::out);
 	v.dump(outfile);
 	outfile.close();
 	
-	TEST_FILE(filename.c_str(), "data/Vector3_test.txt", false)
+	TEST_FILE(filename.c_str(), "data/Vector3_test.txt", true)
 RESULT
 
 //line 477
@@ -560,7 +561,7 @@ RESULT
 //line 1020
 CHECK(TVector3 operator * (const T& scalar, const TVector3<T>& vector))
  	v = Vector3(1, 2, 3);
-	v = 2.0 * v;
+	v = (float) 2.0 * v;
 	TEST_REAL_EQUAL(v[0], 2)
 	TEST_REAL_EQUAL(v[1], 4)
 	TEST_REAL_EQUAL(v[2], 6)
