@@ -1,7 +1,4 @@
-// -*- Mode: C++; tab-width: 2; -*-
-// vi: set ts=2:
-//
-// $Id: message.h,v 1.11 2002/12/12 09:39:49 oliver Exp $
+// $Id: message.h,v 1.12 2002/12/12 17:13:04 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #define BALL_VIEW_KERNEL_MESSAGE_H
@@ -811,7 +808,70 @@ namespace BALL
 			private:
 		};
 
+		/** Message to build bonds.
+		 		Send by MolecularControl to MolecularProperties.
+		 */
+		class BuildBondsMessage: public Message
+		{
+			public:
 
+			BuildBondsMessage()
+				throw()
+			{};
+		};
+
+		/** Message to center camera.
+		 		Send by MolecularControl to MolecularProperties.
+		 */
+		class CenterCameraMessage: public Message
+		{
+			public:
+
+			CenterCameraMessage()
+				throw()
+			{};
+		};
+
+		/** Message to check residues.
+		 		Send by MolecularControl to MolecularProperties.
+		 */
+		class CheckResidueMessage: public Message
+		{
+			public:
+
+			CheckResidueMessage()
+				throw()
+			{};
+		};
+
+		/** Message to (re)draw a composite.
+		 		Send by MolecularProperties to DisplayProperties.
+		 */
+		class DrawMessage: public CompositeMessage
+		{
+			public:
+
+			DrawMessage()
+				throw()
+				: CompositeMessage()
+			{};
+		};
+
+		/** Message to select or deselect composites.
+		 		Send by MolecularControl to MolecularProperties.
+		 */
+		class SelectMessage: public Message
+		{
+			public:
+
+			SelectMessage()
+				throw()
+				: select_(false)
+			{};
+
+			bool select_;
+		};
+		
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/KERNEL/message.iC>
 #		endif
