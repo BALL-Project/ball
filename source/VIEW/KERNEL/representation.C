@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.18 2003/12/18 02:47:20 amoll Exp $
+// $Id: representation.C,v 1.19 2003/12/18 11:58:57 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -10,6 +10,7 @@
 
 #include <BALL/VIEW/KERNEL/threads.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/message.h>
 
 #include <qapplication.h>
 
@@ -231,30 +232,15 @@ namespace BALL
 			throw()
 		{
 #ifndef BALL_QT_HAS_THREADS
-			// if no ModelProcessor was given, there can only exist 
-			// handmade GeometricObjects, which dont need to be updated
-			if (model_processor_ != 0 && rebuild) 
+			update_(rebuild);
+#else
+			MainControl* mc = MainControl::getInstance(0);
+			if (mc == 0)
 			{
-				clearGeometricObjects_();
-				model_processor_->getGeometricObjects().clear();
-				
-				CompositeSet::Iterator it = composites_.begin();
-				for (; it!= composites_.end(); it++)
-				{
-					(const_cast<Composite*>(*it))->apply(*model_processor_);
-				}
-				geometric_objects_ = model_processor_->getGeometricObjects();
-				model_build_time_ = PreciseTime::now();
+				update_(rebuild);
+				return;
 			}
 
-			if (color_processor_ != 0) 
-			{
-				// make sure, that the atom grid is recomputed for meshes
-				if (rebuild) color_processor_->setComposites(&composites_);
-				color_processor_->setTransparency(transparency_);
-				geometric_objects_.apply(*color_processor_);
-			}
-#else
 			if (thread_ != 0)
 			{
 				thread_->wait();
@@ -283,16 +269,58 @@ namespace BALL
 					dots = "...";
 				}
 				
-				if (MainControl::getInstance(0) == 0) return;
-				MainControl::getInstance(0)->setStatusbarText("Creating Model " + dots);
-				usleep(1500);
+				mc->setStatusbarText("Creating Model " + dots);
+				sleep(1);
 			}
 			
 			thread_->wait(); 
+			
+			RepresentationMessage* message = new RepresentationMessage;
+			if (mc->getPrimitiveManager().has(*this))
+			{
+				message->setType(RepresentationMessage::UPDATE);
+			}
+			else
+			{
+				mc->getPrimitiveManager().insert(*this);
+				message->setType(RepresentationMessage::ADD);
+			}
+
+			message->setRepresentation(*this);
+			mc->sendMessage(*message);
+
 #endif
 		}
 
+		void Representation::update_(bool rebuild) 
+			throw()
+		{
+			// if no ModelProcessor was given, there can only exist 
+			// handmade GeometricObjects, which dont need to be updated
+			if (model_processor_ != 0 && rebuild) 
+			{
+				clearGeometricObjects();
+				model_processor_->getGeometricObjects().clear();
+				
+				CompositeSet::Iterator it = composites_.begin();
+				for (; it!= composites_.end(); it++)
+				{
+					(const_cast<Composite*>(*it))->apply(*model_processor_);
+				}
+				geometric_objects_ = model_processor_->getGeometricObjects();
+				model_build_time_ = PreciseTime::now();
+			}
+
+			if (color_processor_ != 0) 
+			{
+				// make sure, that the atom grid is recomputed for meshes
+				if (rebuild) color_processor_->setComposites(&composites_);
+				color_processor_->setTransparency(transparency_);
+				geometric_objects_.apply(*color_processor_);
+			}
+		}
 		
+
 		String Representation::getModelName() const
 			throw()
 		{

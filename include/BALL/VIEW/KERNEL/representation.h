@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.14 2003/12/18 02:43:01 amoll Exp $
+// $Id: representation.h,v 1.15 2003/12/18 11:59:10 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
 #define  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -47,6 +47,7 @@ namespace BALL
 		class Representation
 			: public PropertyManager
 		{
+			friend class UpdateRepresentationThread;
 			public:
 
 			BALL_CREATE(Representation)
@@ -274,6 +275,10 @@ namespace BALL
 			//@}
 
 			protected:
+
+			/// Can be called by rebuild directly, or by UpdateRepresentationThread
+			void update_(bool rebuild)
+				throw();
 
 			//_
 			DrawingMode 				drawing_mode_;
