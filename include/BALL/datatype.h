@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datatype.h,v 1.4 2002/02/27 12:18:17 sturm Exp $
+// $Id: datatype.h,v 1.5 2003/06/16 12:01:52 anker Exp $
 // DATATYPE header file
 // collective header file for all headers in BALL/DATATYPE
 
@@ -52,8 +52,8 @@
 #	include <BALL/DATATYPE/redBlackTree.h>
 #endif
 
-#ifndef BALL_DATATYPE_REGEXP_H
-#	include <BALL/DATATYPE/regExp.h>
+#ifndef BALL_DATATYPE_REGULAREXPRESSION_H
+#	include <BALL/DATATYPE/regularExpression.h>
 #endif
 
 #ifndef BALL_DATATYPE_SPLAYTREE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.36 2003/06/11 08:10:02 oliver Exp $
+// $Id: PDBFile.C,v 1.37 2003/06/16 12:02:00 anker Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -1574,17 +1574,21 @@ namespace BALL
 
 	void PDBFile::postprocessRandomCoils_()
 	{
+		if (current_protein_ == 0)
+		{
+			return;
+		}
+
 		ResidueIterator protein_res_it;
-		Residue *initial_residue = 0;
-		Residue *terminal_residue = 0;
-		SecondaryStructure *sec_struc = 0;
+		Residue* initial_residue = 0;
+		Residue* terminal_residue = 0;
+		SecondaryStructure* sec_struc = 0;
 		
 		for (ChainIterator chain_it = current_protein_->beginChain();
-				 !chain_it.isEnd();
-				 ++chain_it)
+				 +chain_it; ++chain_it)
 		{
-			for (protein_res_it = (*chain_it).beginResidue();
-					 !protein_res_it.isEnd(); ++protein_res_it)
+			for (protein_res_it = chain_it->beginResidue();
+					 +protein_res_it; ++protein_res_it)
 			{
 				if ((*protein_res_it).hasProperty(Residue::PROPERTY__AMINO_ACID) == true
 						&& (*protein_res_it).Composite::hasAncestor(RTTI::getDefault<SecondaryStructure>()) == false)

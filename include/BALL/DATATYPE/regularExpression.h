@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regExp.h,v 1.21 2003/06/09 22:40:44 oliver Exp $
+// $Id: regularExpression.h,v 1.1 2003/06/16 12:01:53 anker Exp $
 //
 
-#ifndef BALL_DATATYPE_REGEXP_H
-#define BALL_DATATYPE_REGEXP_H
+#ifndef BALL_DATATYPE_REGULAREXPRESSION_H
+#define BALL_DATATYPE_REGULAREXPRESSION_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -316,8 +316,8 @@ namespace BALL
 	};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/DATATYPE/regExp.iC>
+#		include <BALL/DATATYPE/regularExpression.iC>
 #	endif
 } // namespace BALL
 
-#endif // BALL_DATATYPE_REGEXP_H
+#endif // BALL_DATATYPE_REGULAREXPRESSION_H

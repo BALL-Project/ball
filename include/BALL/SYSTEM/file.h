@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.51 2003/05/08 08:58:43 sneumann Exp $
+// $Id: file.h,v 1.52 2003/06/16 12:01:56 anker Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -11,7 +11,7 @@
 #endif
 
 #ifndef BALL_DATATYPE_REGEXP_H
-#	include <BALL/DATATYPE/regExp.h>
+#	include <BALL/DATATYPE/regularExpression.h>
 #endif
 
 #ifndef BALL_DATATYPE_STRING_H

@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regExp.C,v 1.16 2003/06/09 22:40:51 oliver Exp $ 
+// $Id: regularExpression.C,v 1.1 2003/06/16 12:02:00 anker Exp $ 
 
-#include <BALL/DATATYPE/regExp.h>
+#include <BALL/DATATYPE/regularExpression.h>
 
 using std::endl;
 using std::istream;
@@ -276,7 +276,7 @@ namespace BALL
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
-#		include <BALL/DATATYPE/regExp.iC>
+#		include <BALL/DATATYPE/regularExpression.iC>
 #	endif
 
 } // namespace BALL

@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileSystem.C,v 1.17 2003/05/08 13:52:02 anhi Exp $
+// $Id: fileSystem.C,v 1.18 2003/06/16 12:02:04 anker Exp $
 //
 
 #include <BALL/SYSTEM/fileSystem.h>
 
-#include <BALL/DATATYPE/regExp.h>
+#include <BALL/DATATYPE/regularExpression.h>
 #ifdef BALL_HAS_PWD_H
 #include <pwd.h> // 'getpwnam'
 #endif
