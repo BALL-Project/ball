@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surface.h,v 1.13.2.2 2003/02/05 14:55:51 anker Exp $
+// $Id: surface.h,v 1.13.2.3 2003/02/05 14:56:05 anker Exp $
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -529,11 +529,6 @@ namespace BALL
 		return !(*this == surface);
 	}
 
-<<<<<<< surface.h
-
-
-=======
->>>>>>> 1.18
 
 	/**	Default surface type.
 	*/
