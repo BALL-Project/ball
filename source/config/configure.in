@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.2 1999/08/26 09:24:18 oliver Exp $
+dnl    $Id: configure.in,v 1.3 1999/08/26 10:14:50 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1612,19 +1612,23 @@ if test "${MULTI_BUILD}" = "true" ; then
 	${LN} -s `pwd`/TEST/data `pwd`/${BINFMT}/TEST
 	${LN} -s `pwd`/TEST/runtests `pwd`/${BINFMT}/TEST
 
-	AC_OUTPUT([
-		${BINFMT}/Makefile:config/Makefile.in
-		${BINFMT}/config.mak:config/config.mak.in 
-		${BINFMT}/common.mak:config/common.mak.in 
-	])
-
 	${CP} config/Makefile.multiplatform Makefile
+fi
+
+AC_OUTPUT([
+	Makefile.tmp:config/Makefile.in
+	config.mak.tmp:config/config.mak.in 
+	common.mak.tmp:config/common.mak.in 
+])
+
+if test "${MULTI_BUILD}" = "true" ; then
+	${MV} Makefile.tmp ${BINFMT}/Makefile
+	${MV} common.mak.tmp ${BINFMT}/common.mak
+	${MV} config.mak.tmp ${BINFMT}/config.mak
 else 
-	AC_OUTPUT([
-		Makefile:config/Makefile.in
-		config.mak:config/config.mak.in 
-		common.mak:config/common.mak.in 
-	])
+	${MV} Makefile.tmp Makefile
+	${MV} common.mak.tmp common.mak
+	${MV} config.mak.tmp config.mak
 fi
 
 dnl

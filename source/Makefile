@@ -1,56 +1,174 @@
-###############################################################
-# Main Makefile   ($Id: Makefile,v 1.2 1999/08/26 09:24:16 oliver Exp $)
-###############################################################
+# Generated automatically from Makefile.in by configure.
+#
+# $Id: Makefile,v 1.4 1999/08/26 10:58:00 oliver Exp $
+#
 
-BINFMT=`config/binfmt.sh`
+include config.mak
 
-DIRMAKE=cd $(BINFMT); $(MAKE)
+#	options for library generation
+AROPTS	= cru
 
-default:	config/binary_formats
-	@$(DIRMAKE) default
+# options for shared library generation
+DYNAROPTS = -G -fPIC -o
 
-binary_formats:
-	@configure
+# suffix of shared library filenames
+SHARED_LIB_SUFFIX = so
 
-install:
-	@$(DIRMAKE) install
+# 	library version number
+LIB_VERSION	= 0
+
+#	default library name
+LIBNAME		= libBALL
+
+# 	names of the static libraries
+STATIC_LIBS	= libBALL.a 
+
+#	names of the shared libraries
+SHARED_LIBS	= $(STATIC_LIBS:.a=.so)
+
+# names of the library object file lists
+OBJECT_LISTS = $(STATIC_LIBS:.a=.objects)
+
+.SUFFIXES:	.objects .a	.so
+
+default:	lib
+
+
+install:	install.static install.shared
 
 clean:
-	@$(DIRMAKE) clean
+	@echo "Cleaning up object files, cores,  and (uninstalled) library files..."
+	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=default_clean
+	@-$(RM) -f  $(STATIC_LIBS) $(SHARED_LIBS)
+	@-$(RM) -rf .Dependencies; */.Dependencies *.objects *~ 
+	@cd TEST ; $(MAKE) clean
 
-all_clean:
-	@$(DIRMAKE) all_clean
+lib_clean:
+	@echo "Removing all installed libraries..."
+	@-$(RM) -rf ../lib
 
-lib:
-	@$(DIRMAKE) lib
 
-install.static:
-	@$(DIRMAKE) install.static
+libBALL.objects:
+	@echo "Collecting object files for libraries..."
+	@-rm -f *.objects
+	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=collectlib LIBNAME=$(LIBNAME)
+	
+libMOLVIEW.objects:	
+	@echo "Collecting object files for libraries..."
+	@-rm -f *.objects
+	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=collectlib LIBNAME=$(LIBNAME)
+	
+libVIEW.objects:
+	@echo "Collecting object files for libraries..."
+	@-rm -f *.objects
+	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=collectlib LIBNAME=$(LIBNAME)
+	
 
-install.shared:
-	@$(DIRMAKE) install.shared
+collect:	$(OBJECT_LISTS)
+	
+prelink:	collect 
+	@echo "Prelinking object files..."
+	@echo no external prelinker needed...	
 
-collect:
-	@$(DIRMAKE) collect
+
+libBALL.so:	collect
+	$(DYNAR) $(DYNAROPTS) libBALL.so `cat libBALL.objects` -lm
+
+libVIEW.so:	libBALL.so
+	$(DYNAR) $(DYNAROPTS) libVIEW.so `cat libVIEW.objects` -L. -lBALL -lm
+
+libMOLVIEW.so:	libVIEW.so
+	$(DYNAR) $(DYNAROPTS) libMOLVIEW.so `cat libMOLVIEW.objects` -L. -lVIEW -lBALL -lm
+
+.objects.a:	
+	@echo "Creating library $@ ..."
+	$(AR) $(AROPTS) $*.a `cat $*.objects`
+
+lib:	.Dependencies dirs collect prelink $(SHARED_LIBS)
+	@echo "Creating static libraries $(STATIC_LIBS) ... DONE"
+	@echo " "
+	@echo " "
+	@echo "You may now install the libraries with the command"
+	@echo " "
+	@echo "   make install"
+	@echo " "
+	@echo "If you do not trust this Makefile, try"
+	@echo " "
+	@echo "   make -n install"
+	@echo " "
+	@echo "first to check where the libraries would be installed."
+	@echo " "
+	@echo "After you ran make install, please verify the validity"
+	@echo "of the installed library by executing"
+	@echo "   make test"
+	@echo " "
+	@echo "This will compile and run an extensive test suite."
+	@echo " "
+	@echo "If you use the shared libraries, don't forget to add"
+	@echo "the path "
+	@echo " $(BALL_PATH)/lib/$(BINFMT)"
+	@echo "to your LD_LIBRARY_PATH. "
+	@echo ""
+
+install.static:	
+	@echo Installing static libraries under $(BALL_PATH)/lib/$(BINFMT)...
+	@-mkdir $(BALL_PATH)/lib 2>/dev/null
+	@-mkdir $(BALL_PATH)/lib/$(BINFMT) 2>/dev/null
+	@$(CP) $(STATIC_LIBS) $(BALL_PATH)/lib/$(BINFMT)
+
+install.shared:	
+	@echo Installing shared libraries under $(BALL_PATH)/lib/$(BINFMT)...
+	@-mkdir $(BALL_PATH)/lib 2>/dev/null
+	@-mkdir $(BALL_PATH)/lib/$(BINFMT) 2>/dev/null
+	@$(CP) $(SHARED_LIBS) $(BALL_PATH)/lib/$(BINFMT)
+
+.Dependencies:
+	@$(MAKE) depend
 
 depend:
-	@$(DIRMAKE) depend
+	@echo "creating dependencies..."
+	@echo "" >.Dependencies
+	@set -e; for i in $(DIRS); do ( cd $$i; $(MAKE) depend; cd .. ) ; done
 
-test:
-	@$(DIRMAKE) test
 
-doc:	texdoc htmldoc
-	
-texdoc:
-	@$(DIRMAKE) texdoc
+dirs:		dummy
+	@$(MAKE) subdirs SUBDIRS="$(DIRS)" TARGET=default
 
+subdirs:	dummy
+	@set -e; for i in $(SUBDIRS); do cd $$i; if $(MAKE) $(TARGET); then cd .. ; else cd .. ; exit 1 ; fi ; done
+
+
+test:	dummy
+	@cd TEST ; $(MAKE) test
+
+
+#
+#    special targets - internal use only! 
+#
+
+# creates the documentation
+doc:	htmldoc texdoc
+
+# creates the documentation in LaTeX format
+texdoc:	
+	@config/maketexdoc
+
+# creates the documentation in HTML format
 htmldoc:
-	@$(DIRMAKE) htmldoc
+	@config/makehtmldoc
 
-configure:  config/configure.in config/configure.header
-	@echo "Creating new ./configure from config/configure.in"
-	@autoconf config/configure.in > configure.tmp
-	@cat configure.tmp|sed "2r config/configure.header" >configure
-	@-rm configure.tmp
-	@chmod 755 configure
- 
+# creates a distributable .tgz file
+dist:
+	@config/makedistribution
+
+# creates distribution for internal use - everything included
+intdist:
+	@config/makedistribution -int
+
+# creates distribution for internal use - without documentation
+intdistnodoc:
+	@config/makedistribution -intnodoc
+
+dummy:
+
+
