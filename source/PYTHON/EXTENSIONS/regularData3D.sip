@@ -1,10 +1,13 @@
-// $Id: regularData3D.sip,v 1.4 2003/06/18 15:49:19 anker Exp $
+// $Id: regularData3D.sip,v 1.5 2003/06/19 10:01:27 anker Exp $
 class RegularData3D 
 {
 %HeaderCode
 	#include <BALL/DATATYPE/regularData3D.h>
 	using namespace BALL;
 	using namespace BALL::Exception;
+	// typedef TVector3<float> Vector3;
+	// typedef typename std::vector<float>::iterator Iterator;
+	// typedef typename std::vector<float>::const_iterator ConstIterator;
 %End
 	class IndexType
 	{
@@ -23,82 +26,93 @@ class RegularData3D
 	RegularData3D() throw(); 
 	RegularData3D(const RegularData3D& /grid/)
 		throw(OutOfMemory); 
-	RegularData3D
-		(float /lower_x/, 
-		 float /lower_y/, 
-		 float /lower_z/,
-		 float /upper_x/, 
-		 float /upper_y/, 
-		 float /upper_z/,
-		 Size /grid_points_x/, 
-		 Size /grid_points_y/, 
-		 Size /grid_points_z/)
-		throw(OutOfMemory);
-	RegularData3D
-		(Vector3& /lower/, 
-		 Vector3& /upper/,
-		 Size /grid_points_x/, 
-		 Size /grid_points_y/, 
-		 Size /grid_points_z/)
-		throw(OutOfMemory);
-	RegularData3D(const Vector3& /lower/, const Vector3& /upper/,
-			float /spacing/)
-		throw(OutOfMemory);
+	// sip: RegularData3D unsupported ctor argument type - provide explicit code
+	// RegularData3D(const Vector3& /origin/,
+	//		const Vector3& /dimension/,
+	//		const Vector3& /spacing/)
+	//	throw(OutOfMemory);
+	//RegularData3D(const IndexType& /size/, const Vector3& /origin/, const
+	//		Vector3& /dimension/)
+	//	throw(OutOfMemory);
 	~RegularData3D() throw();
-	virtual void clear() throw();
-//	void set(const RegularData3D& /grid/) throw(OutOfMemory);
-	// const RegularData3D& operator = (const RegularData3D& /grid/) throw(OutOfMemory);
+	void clear() throw();
+	// const RegularData3D& operator = (const RegularData3D& /data/) 
+	//	throw(OutOfMemory);
+	bool operator != (const RegularData3D& /grid/) 
+		const throw();
+	bool operator == (const RegularData3D& /grid/) 
+		const throw();
+	bool empty() const throw();
+	bool isInside(const Vector3& /r/) const throw();
 	// virtual void dump(std::ostream& /stream/) const throw(); 
-	bool isValid() const throw();
-	float getMaxX() const throw();
-	float getMaxY() const throw();
-	float getMaxZ() const throw();
-	float getMinX() const throw();
-	float getMinY() const throw();
-	float getMinZ() const throw();
-	Size getMaxXIndex() const throw();
-	Size getMaxYIndex() const throw();
-	Size getMaxZIndex() const throw();
-	Size getSize() const throw();
-	float getXSpacing() const throw();
-	float getYSpacing() const throw();
-	float getZSpacing() const throw();
-	IndexType getIndex(const Vector3&) const throw(OutOfGrid);
-	IndexType getIndex(float, float, float) const
+	// ConstIterator begin() const throw();
+	// ConstIterator end() const throw();
+	// Iterator begin() throw();
+	// Iterator end() throw();
+	// size_type size() const throw();
+	// size_type max_size() const throw();
+	void swap(RegularData3D& /grid/);
+	float getData(const IndexType& /index/) const
+	 	throw(OutOfGrid);
+	float getData(const IndexType& /index/)
 		throw(OutOfGrid);
-	// float* getData(const Position /i/, const Position /j/, const Position /k/)
-	//	throw(OutOfGrid);
-	// float* getData(const Vector3& /r/) throw(OutOfGrid);
-	// float* getData(const Position /position/) throw(OutOfGrid);
-	float operator [] (const Position /position/) throw(OutOfGrid);
-	float operator [] (const Vector3& /vector/) throw(OutOfGrid);
-	Vector3 getGridCoordinates(const Position /i/, const Position /j/, const
-			Position /k/) const
+	float getData(Position /index/) const
 		throw(OutOfGrid);
-	Vector3 getGridCoordinates(const Vector3& /r/) const 
+	float getData(Position /index/)
 		throw(OutOfGrid);
-	Vector3 getGridCoordinates(const Position /position/) const 
+	//	/local/anker/BALL/include/BALL/DATATYPE/regularData3D.h: In member function 
+	//		 `ValueType& BALL::TRegularData3D<ValueType>::getClosestValue(const 
+	//		 BALL::TVector3<float>&) [with ValueType = float]':
+	//	sipBALLRegularData3D.C:512:	 instantiated from here
+	//	/local/anker/BALL/include/BALL/DATATYPE/regularData3D.h:963: no match for `
+	//		 std::vector<float, std::allocator<float> >& [
+	//		 BALL::TRegularData3D<float>::IndexType&]' operator
+	//	/opt/gnu/gcc/3.2.1/include/c++/3.2.1/bits/stl_vector.h:289: candidates are: 
+	//		 _Tp& std::vector<_Tp, _Alloc>::operator[](unsigned int) [with _Tp = float, 
+	//		 _Alloc = std::allocator<float>]
+	//	/opt/gnu/gcc/3.2.1/include/c++/3.2.1/bits/stl_vector.h:300:								 
+	//		 const _Tp& std::vector<_Tp, _Alloc>::operator[](unsigned int) const [with 
+	//		 _Tp = float, _Alloc = std::allocator<float>]
+	// float operator [] (const IndexType& /index/) const throw();
+	// float operator [] (const IndexType& /index/) throw();
+	float operator [] (Position /index/) const throw();
+	float operator [] (Position /index/) throw();
+	float operator () (const Vector3& /x/) const throw();
+	float getInterpolatedValue(const Vector3& /x/) const
 		throw(OutOfGrid);
-	void getBoxIndices
-		(const Vector3& /vector/,
+	// float getClosestValue(const Vector3& /x/) const
+	// 	throw(OutOfGrid);
+	// float getClosestValue(const Vector3& /x/) 
+	// 	throw(OutOfGrid);
+	IndexType getClosestIndex(const Vector3& /v/) const
+		throw(OutOfGrid);
+	IndexType getLowerIndex(const Vector3& /v/) const
+		throw(OutOfGrid);
+	const IndexType& getSize() const throw();
+	const Vector3& getOrigin() const throw();
+	const Vector3& getSpacing() const throw();
+	void setOrigin(const Vector3& /origin/) throw();
+	const Vector3& getDimension() const throw();
+	void setDimension(const Vector3& /dimension/) throw();
+	void resize(const IndexType& /size/) throw(OutOfMemory);
+	void rescale(const IndexType& /new_size/) throw(OutOfMemory);
+	Vector3 getCoordinates(const IndexType& /index/) const
+		throw(OutOfGrid);
+	Vector3 getCoordinates(Position /index/) const
+		throw(OutOfGrid);
+	void getEnclosingValues
+		(const Vector3& /r/,
+		 float /llf/, float /rlf/, float /luf/, float /ruf/,
+		 float /llb/, float /rlb/, float /lub/, float /rub/) const
+		throw(OutOfGrid);
+	void getEnclosingIndices
+		(const Vector3& /r/,
 		 Position& /llf/, Position& /rlf/, Position& /luf/, Position& /ruf/,
 		 Position& /llb/, Position& /rlb/, Position& /lub/, Position& /rub/) const
 		throw(OutOfGrid);
-	// void getBoxData
-	//	(const Vector3& /vector/,
-	//	 float& /llf/, float& /rlf/, float& /luf/, float& /ruf/,
-	//	 float& /llb/, float& /rlb/, float& /lub/, float& /rub/) const
-	//	throw(OutOfGrid);
-	Vector3& getOrigin() throw();
-	const Vector3& getOrigin() const throw();
-	void setOrigin(const Vector3& /origin/) throw();
-	void setOrigin(float /x/, float /y/, float /z/) throw();
-	Vector3& getDimension() throw();
-	const Vector3& getDimension() const throw();
-	bool has(const Vector3& /vector/) const throw();
-	// bool has(const float& /x/, const float& /y/, const float& /z/) const throw();
-	float getInterpolatedValue(const Vector3& /vector/) const 
-		throw(OutOfGrid);
-	bool operator == (const RegularData3D& /grid/) const throw();
-	bool operator != (const RegularData3D& /grid/) const throw();
+	void binaryWrite(const String& /filename/) const
+		throw();
+	void binaryRead(const String& /filename/)
+		throw();
+
 };
