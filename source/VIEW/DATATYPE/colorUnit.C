@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.C,v 1.9 2002/12/16 12:23:05 sturm Exp $
+// $Id: colorUnit.C,v 1.10 2003/04/17 09:48:59 amoll Exp $
 
 #include <BALL/VIEW/DATATYPE/colorUnit.h>
 #include <stdio.h>
@@ -137,17 +137,6 @@ namespace BALL
 			}
 
 			value_ = (float)d;
-		}
-
-		ColorUnit::ColorUnit(const long double ld)
-			throw(Exception::InvalidRange)
-		{
-			if ((ld < 0.0) || (ld > 1.0))
-      {
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
-			}
-
-			value_ = (float)ld;
 		}
 
 		ColorUnit::~ColorUnit()
