@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.96 2003/12/10 15:10:52 amoll Exp $
+// $Id: mainframe.C,v 1.97 2003/12/10 15:38:49 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -469,7 +469,12 @@ void Mainframe::amberMinimization()
 	thread->setNumberOfStepsBetweenUpdates(minimization_dialog_->getRefresh());
 	thread->setMainframe(this);
 	thread->setComposite(system);
-	thread->start(QThread::LowPriority);
+
+ #if QT_VERSION >=	320
+		thread->start(QThread::LowPriority);
+ #else
+		thread->start();
+ #endif
 #else
 	// ============================= WITHOUT MULTITHREADING =================================
 	// iterate until done and refresh the screen every "steps" iterations
@@ -591,8 +596,11 @@ void Mainframe::amberMDSimulation()
 	thread->setSaveImages(md_dialog_->saveImages());
 	thread->setDCDFile(dcd);
 	thread->setComposite(system);
-	thread->start(QThread::LowPriority);
-
+ #if QT_VERSION >=	320
+		thread->start(QThread::LowPriority);
+ #else
+		thread->start();
+ #endif
 #else
 	// ============================= WITHOUT MULTITHREADING ==============================
 	// iterate until done and refresh the screen every "steps" iterations
