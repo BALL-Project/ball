@@ -1,14 +1,15 @@
-// $Id: HINFile_test.C,v 1.6 2001/04/03 14:24:58 amoll Exp $
+// $Id: HINFile_test.C,v 1.7 2001/04/24 22:05:02 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/KERNEL/PTE.h>
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.6 2001/04/03 14:24:58 amoll Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.7 2001/04/24 22:05:02 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -31,24 +32,46 @@ HINFile hin;
 
 CHECK(HINFile::HINFile(const String& filename, File::OpenMode open_mode = File::IN))
   hin = HINFile("data/HINFile_test.hin");
+  TEST_EQUAL(hin.isValid(), true)
 RESULT
 
+System system;
 CHECK(HINFile::read(System& system))
-	System system;
   hin.read(system);
+	hin.reopen();
+	Vector3 position(0.59038, -0.410275, -0.860515);
+  TEST_EQUAL(hin.isValid(), true)
+  TEST_EQUAL(system.countAtoms(), 648)
+  TEST_EQUAL(system.countMolecules(), 216)
+	TEST_EQUAL(system.getAtom(0)->getName(), "O")
+  TEST_EQUAL(system.getAtom(0)->getElement(), PTE["O"])
+	TEST_REAL_EQUAL(system.getAtom(0)->getCharge(), -0.834)
+  TEST_EQUAL(system.getAtom(0)->getPosition(), position)
+  TEST_NOT_EQUAL(system.getAtom(0)->getRadius(), 0)
+  TEST_EQUAL(system.getAtom(0)->countBonds(), 2) 
 RESULT
 
 CHECK(HINFile::write(const System& system))
-  //BAUSTELLE
+  String filename;
+  NEW_TMP_FILE(filename)
+  HINFile hin2(filename, std::ios::out);
+	hin2.write(system);
+  TEST_FILE("data/HINFile_test2.hin", filename.c_str(), false)
 RESULT
 
 CHECK(HINFile::HINFile& operator >> (System& system))
-  //BAUSTELLE
+	System system2;
+  hin >> system2;
+	TEST_EQUAL(system.countAtoms(), system2.countAtoms())
 RESULT
 
 
 CHECK(HINFile::HINFile& operator << (const System& system))
-  //BAUSTELLE
+  String filename;
+  NEW_TMP_FILE(filename)
+  HINFile hin2(filename, std::ios::out);
+  hin2 << system;
+  TEST_FILE("data/HINFile_test2.hin", filename.c_str(), false)
 RESULT
 
 
