@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.1 2000/09/23 13:28:34 hekl Exp $
+// $Id: mainControl.C,v 1.2 2000/10/05 22:34:46 oliver Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -43,6 +43,11 @@ namespace BALL
 			//			}
 		}
 			
+		MainControl::MainControl(const MainControl& main_control)
+		{	
+			// BAUSTELLE
+		}
+
 		MainControl::~MainControl()
 		{
 			#ifdef BALL_VIEW_DEBUG
