@@ -1,8 +1,22 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.h,v 1.2 2005/02/17 15:04:25 bertsch Exp $
+// $Id: buildBondsProcessor.h,v 1.3 2005/02/20 21:36:31 bertsch Exp $
 //
+
+/** TODO
+	* - parameter section for:
+	*		o hash grid size parameter
+	*		o mass defect parameter
+	*		o #atoms-threshold for switch hash grid/ simple version 
+	*			(or skip simple version?)
+	*	- how to deal with existing bonds? option for complete rebuild?
+	* - method to reestimate bond orders of rings (due to bad aromatic
+	*		bond order detection, bc it is hard to distinguish between 
+	*		double and aromatic bonds)
+	*	-	complete the test methods
+	*/
+
 
 #ifndef BALL_STRUCTURE_BUILDBONDSPROCESSOR_H
 #define BALL_STRUCTURE_BUILDBONDSPROCESSOR_H
@@ -48,9 +62,12 @@ namespace BALL
 			//@{
 			///	default constructor
 			BuildBondsProcessor();
-			
+		
+			/// copy construcor
+			BuildBondsProcessor(const BuildBondsProcessor& bbp);
+		
 			/// constructor with parameter filename
-			BuildBondsProcessor(const String& file_name);
+			BuildBondsProcessor(const String& file_name) throw(Exception::FileNotFound);
 			
 			/// destructor
 			virtual ~BuildBondsProcessor();
@@ -79,10 +96,20 @@ namespace BALL
 			void setBondLengths(const String& file_name) throw(Exception::FileNotFound);
 			//@}
 
+			/** @name Assignment
+			*/
+			//@{
+			/// assignment operator
+			BuildBondsProcessor& operator = (const BuildBondsProcessor& bbp);
+			//@}
+
 		protected:
 		
-			/// builds bonds, based on atom distances read from parameter file
-			Size buildBonds_(AtomContainer& ac);
+			/// builds bonds, based on atom distances read from parameter file using a 3D hash grid
+			Size buildBondsHashGrid3_(AtomContainer& ac);
+		
+			/// builds bonds, based on atom distances read from parameter file; simply iterates over atom pairs
+			Size buildBondsSimple_(AtomContainer& ac);
 
 			/// after the bonds are built, the orders are estimated
 			void estimateBondOrders_(AtomContainer& ac);
@@ -118,6 +145,9 @@ namespace BALL
 					holds the minimal length of such a bond.
 			*/
 			bool getMinBondLength_(float& length, Size an1, Size an2);
+
+			/// parameter which holds the longest possible bond
+			float max_length_;
 			
 	};
 
