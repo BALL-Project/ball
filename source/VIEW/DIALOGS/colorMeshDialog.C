@@ -1,20 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.7 2003/09/20 09:15:57 oliver Exp $
+// $Id: colorMeshDialog.C,v 1.8 2003/09/22 11:26:10 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
+#include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/DATATYPE/colorTable.h>
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/file.h>
-#include <BALL/VIEW/DATATYPE/colorTable.h>
 #include <BALL/DATATYPE/regularData3D.h>
-
-#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/COMMON/limits.h>
-
 #include <BALL/KERNEL/system.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -132,6 +131,13 @@ void ColorMeshDialog::maxMaxPressed()
 
 void ColorMeshDialog::tabChanged()
 {
+	if (!mesh_ || !rep_)
+	{
+		autoscale->setEnabled(false);
+		apply_button->setEnabled(false);
+		return;
+	}
+
 	if (surface_tab->currentPage() == by_grid)
 	{
 		if (grid_label->text() == "")
@@ -166,8 +172,8 @@ void ColorMeshDialog::autoScalePressed()
 //--------------------- Helper functions ----------------------------------
 bool ColorMeshDialog::insertGrid_(RegularData3D& grid, const String& name)
 {
+	if (!mesh_ || !mesh_->vertex.size()) return false;
 	autoscale->setEnabled(true);
-	if (!mesh_->vertex.size()) return false;
 	grid_ = &grid;
 	grid_label->setText(name.c_str());
 
@@ -292,6 +298,7 @@ void ColorMeshDialog::colorByGrid_()
 	{
 		Log.error() << "Error! There is a point contained in the surface that is not "
 								<< "inside the grid! Aborting the coloring..." << std::endl;
+		setStatusbarText("Aborted calculation, see Logs for more information");
 		return;
 	}
 
@@ -442,18 +449,44 @@ void ColorMeshDialog::onNotify(Message *message)
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "ColorMeshDialog " << this << " onNotify " << message << std::endl;
 #endif
+	if (RTTI::isKindOf<RepresentationMessage>(*message))
+	{
+		RepresentationMessage *rm = RTTI::castTo<RepresentationMessage>(*message);
+		Representation* rep = rm->getRepresentation();
+		if (rm->getType() == RepresentationMessage::UPDATE && rep == rep_)
+		{
+			// if current Representation changed from Surface to something else, invalidate
+			if ((rep->getModelType() != MODEL_SE_SURFACE && 
+					 rep->getModelType() != MODEL_SA_SURFACE) ||
+					!rep->getGeometricObjects().size())
+			{
+				apply_button->setEnabled(false);
+				mesh_ = 0;
+				rep_ = 0;
+				autoscale->setEnabled(false);
+				return;
+			}
+
+			// new Surface in Representation
+			mesh_ = (Mesh*) *rep->getGeometricObjects().begin();
+		}
+		return;
+	}
+
 	if (!RTTI::isKindOf<RegularData3DMessage>(*message)) return;
 
 	RegularData3DMessage *rm = RTTI::castTo<RegularData3DMessage>(*message);
 	switch (rm->getType())
 	{
 		case RegularData3DMessage::SELECTED:
+			// No Mesh selected
 			if (!rm->getRegularData3D())
 			{
 				invalidateGrid_();
 				return;
 			}
 
+			// grid but no mesh
 			if (!mesh_) 
 			{
 				grid_ = rm->getRegularData3D();
@@ -461,9 +494,11 @@ void ColorMeshDialog::onNotify(Message *message)
 				return;
 			}
 			
+			// we have got everything, enable 
 			insertGrid_(*rm->getRegularData3D(), rm->getCompositeName());
 			return;
 
+		// if current grid is removed
 		case RegularData3DMessage::REMOVE:
 			if (rm->getRegularData3D() == grid_)
 			{
