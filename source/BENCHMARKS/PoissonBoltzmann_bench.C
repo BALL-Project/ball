@@ -1,9 +1,9 @@
-// $Id: PoissonBoltzmann_bench.C,v 1.1 2001/04/10 16:26:30 oliver Exp $
-#include <BALL/CONCEPT/classTest.h>
+// $Id: PoissonBoltzmann_bench.C,v 1.2 2001/04/10 17:50:48 oliver Exp $
+#include <BALL/CONCEPT/benchmark.h>
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
 
-START_BENCHMARK(FDPB, "$Id: PoissonBoltzmann_bench.C,v 1.1 2001/04/10 16:26:30 oliver Exp $")
+START_BENCHMARK(FDPB, 1.0, "$Id: PoissonBoltzmann_bench.C,v 1.2 2001/04/10 17:50:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -18,11 +18,10 @@ system->insert(*molecule);
 atom->setRadius( 2.0);
 atom->setCharge(+1.0);
 
+Options options;
 FDPB*		fdpb;
 
-START_SECTION(setup)
-	delete fdpb;
-	options.destroy();
+START_SECTION(setup, 0.5)
 	options.setReal(FDPB::Option::SOLVENT_DC, 78.0);
 	options.setReal(FDPB::Option::SOLUTE_DC, 1.0);
 	options.setReal(FDPB::Option::SPACING, 0.3);
@@ -32,10 +31,9 @@ START_SECTION(setup)
 	options[FDPB::Option::IONIC_STRENGTH] = 0.0;
 	options[FDPB::Option::VERBOSITY] = 0;
 	fdpb = new FDPB(*system, options);
-	TEST_NOT_EQUAL(fdpb, 0)
-END_SECTION
+	END_SECTION
 
-START_SECTION(solve)
+START_SECTION(solve, 0.5)
 	START_TIMER
 	fdpb->solve();
 	STOP_TIMER

@@ -1,4 +1,4 @@
-// $Id: AmberFF_bench.C,v 1.1 2001/04/10 16:16:55 oliver Exp $
+// $Id: AmberFF_bench.C,v 1.2 2001/04/10 17:50:48 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(AmberFF, "$Id: AmberFF_bench.C,v 1.1 2001/04/10 16:16:55 oliver Exp $")
+START_BENCHMARK(AmberFF, 1.0, "$Id: AmberFF_bench.C,v 1.2 2001/04/10 17:50:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -20,38 +20,38 @@ System S;
 pdb >> S;
 
 AmberFF amber;
-START_SECTION(Setup)
+START_SECTION(Setup, 0.05)
 	START_TIMER
 		amber.setup(S);
 	STOP_TIMER
 END_SECTION
 
-START_SECTION(Update w/o selection)
+START_SECTION(Update w/o selection, 0.2)
 	START_TIMER
 		amber.update();
 	STOP_TIMER
 END_SECTION
 
-START_SECTION(Energy calculation w/o selection)
+START_SECTION(Energy calculation w/o selection, 0.2)
 	START_TIMER
 		amber.updateEnergy();
 	STOP_TIMER
 END_SECTION
 
-START_SECTION(Second energy calculation w/o selection)
+START_SECTION(Second energy calculation w/o selection, 0.2)
 	START_TIMER
 		amber.updateEnergy();
 	STOP_TIMER
 END_SECTION
 
 S.beginResidue()->select();
-START_SECTION(Update w/ selection)
+START_SECTION(Update w/ selection, 0.2)
 	START_TIMER
 		amber.update();
 	STOP_TIMER
 END_SECTION
 
-START_SECTION(Energy calculation w/ selection)
+START_SECTION(Energy calculation w/ selection, 0.2)
 	START_TIMER
 		amber.updateEnergy();
 	STOP_TIMER

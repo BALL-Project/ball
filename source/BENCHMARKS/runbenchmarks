@@ -1,0 +1,70 @@
+#!/bin/sh
+
+REF_TIME="2.0"
+
+# try to figure out which syntax we need
+# to prevent a linefeed at the end of echo
+# Some versions of sh use -n as an option
+# others use \c at the end of the line.
+# This is just for cosmetic reasons...
+A=`echo "\c"|grep c`
+if test "$A" != "" ; then 
+	A=`echo -n "k"|grep n` 
+	if test "$A" == "" ; then 
+		ECHO="echo -n "
+		SUFFIX=""
+	else 
+		ECHO="echo"
+		SUFFIX=""
+	fi 
+else  
+	ECHO="echo"
+	SUFFIX="\c"
+fi
+
+
+echo " "
+echo "Now running all benchmarks."
+echo "This may take a while...."
+echo " "
+
+# remove any core in the directory and all backtrace files
+rm core *.backtrace 2>/dev/null
+
+# loop over all tests
+COUNT=1
+TOTAL_TIME=0.0
+OK=true
+for i in $* ; do
+	# print the name of the test running
+	$ECHO " (${COUNT}) $i: $SUFFIX"
+	
+	# remove potential log files
+	rm $i.log 2>/dev/null
+
+	# run it and examine its return value
+	TIME=`./$i 2>&1` 
+	TOTAL_TIME=`echo "${TOTAL_TIME} ${TIME}"|tr -d "()"|awk '{print $1+$2}'`
+	if test `echo ${TIME}|tr -d "()"` != "${TIME}" ; then
+		OK=false
+	fi
+	echo ${TIME}
+	COUNT=`expr ${COUNT} + 1`
+done
+
+# print some summary of all tests
+echo "====================================="
+echo " "
+
+if test "$OK" = true ; then
+	STONES=`echo ${REF_TIME} ${TOTAL_TIME}|awk '{printf "%.2f", $1/$2}'`
+	echo "All benchmarks completed successfully."
+	echo "Your system achieved an overall score of ${STONES} BALLStones"
+	echo " "
+
+	exit 0
+else
+	echo "Not all benchmarks could be run. Please execute the tesstuite in ../TEST."
+	
+	exit 1
+fi
