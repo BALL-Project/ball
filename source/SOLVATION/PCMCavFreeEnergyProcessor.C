@@ -1,4 +1,4 @@
-// $Id: PCMCavFreeEnergyProcessor.C,v 1.8 2001/06/05 15:53:28 anker Exp $
+// $Id: PCMCavFreeEnergyProcessor.C,v 1.9 2001/09/24 07:37:34 aubertin Exp $
 
 #include <BALL/SOLVATION/PCMCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -58,6 +58,36 @@ namespace BALL
 		valid_ = true;
 	}
 
+        const PCMCavFreeEnergyProcessor& PCMCavFreeEnergyProcessor::operator = (const PCMCavFreeEnergyProcessor& proc) throw()     
+        {
+	         valid_=proc.valid_;
+                 energy_=proc.energy_;
+                 fragment_=proc.fragment_;  
+                 return *this;
+        }
+
+        bool PCMCavFreeEnergyProcessor::operator == (const PCMCavFreeEnergyProcessor& proc) const throw()
+        {
+          bool result;
+		if ((fragment_ == 0) && (proc.fragment_ == 0))
+		{
+			result = ((energy_ == proc.energy_) && (valid_ == proc.valid_));
+		}
+		else
+		{
+			if ((fragment_ == 0) || (proc.fragment_ == 0))
+			{
+				result = false;
+			}
+			else
+			{
+				result = ((*fragment_ == *proc.fragment_) 
+						&& (energy_ 	 == proc.energy_)
+						&& (valid_ 	 == proc.valid_));
+			}
+		}
+		return result;
+	}
 	
 	bool PCMCavFreeEnergyProcessor::finish() throw()
 	{
