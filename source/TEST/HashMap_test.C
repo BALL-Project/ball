@@ -1,4 +1,4 @@
-// $Id: HashMap_test.C,v 1.7 2000/09/04 20:47:31 amoll Exp $
+// $Id: HashMap_test.C,v 1.8 2000/09/05 14:01:09 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -28,7 +28,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashMap, "$Id: HashMap_test.C,v 1.7 2000/09/04 20:47:31 amoll Exp $")
+START_TEST(HashMap, "$Id: HashMap_test.C,v 1.8 2000/09/05 14:01:09 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -136,23 +136,7 @@ CHECK(HashMap::erase(const KeyType& key))
 	TEST_EQUAL(hm.getSize(), 2)
 RESULT
 
-CHECK(HashMap::erase(Iterator pos))/*
-	HashMap<int, int> hm;
-	hm.insert(HashMap<int, int>::ValueType(0, 0));
-	hm.insert(HashMap<int, int>::ValueType(1, 1));
-	hm.insert(HashMap<int, int>::ValueType(2, 2));
-	hm.insert(HashMap<int, int>::ValueType(3, 3));
-	HashMap<int, int>::Iterator it1 = hm.begin();
-	++it1;
-	hm.erase(it1);
-	TEST_EQUAL(hm.has(0), true)
-	TEST_EQUAL(hm.has(2), true)
-	TEST_EQUAL(hm.has(1), false)
-	TEST_EQUAL(hm.getSize(), 3)*/
-RESULT
-
-
-CHECK(HashMap::erase(Iterator first, Iterator last))/*
+CHECK(HashMap::erase(Iterator first, Iterator last))
 	HashMap<int, int> hm;
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
 	hm.insert(HashMap<int, int>::ValueType(1, 1));
@@ -160,22 +144,69 @@ CHECK(HashMap::erase(Iterator first, Iterator last))/*
 	hm.insert(HashMap<int, int>::ValueType(3, 3));
 
 	HashMap<int, int>::Iterator it1 = hm.begin();
-	++it1;
-
 	HashMap<int, int>::Iterator it2 = hm.begin();
-	++it1;
+	++it2;
+	++it2;
 	++it1;
 
 	hm.erase(it1, it2);
-//	hm.erase((hm.begin()+1), (hm.end()-1));
-	TEST_EQUAL(hm.getSize(), 3)
-	TEST_EQUAL(hm.has(0), true)
+	TEST_EQUAL(hm.has(0), false)
 	TEST_EQUAL(hm.has(2), true)
 	TEST_EQUAL(hm.has(3), true)
-	TEST_EQUAL(hm.has(1), false)
+	TEST_EQUAL(hm.has(1), true)
+	TEST_EQUAL(hm.getSize(), 3)
 
 	hm.erase(hm.begin(), hm.end());
-	TEST_EQUAL(hm.getSize(), 0)*/
+	TEST_EQUAL(hm.getSize(), 0)
+
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	hm.insert(HashMap<int, int>::ValueType(1, 1));
+	hm.insert(HashMap<int, int>::ValueType(2, 2));
+	hm.insert(HashMap<int, int>::ValueType(3, 3));
+	TEST_EQUAL(hm.getSize(), 4)
+	it1 = hm.begin();
+	++it1;
+	++it1;
+	hm.erase(it1, hm.end());
+	TEST_EQUAL(hm.getSize(), 2)
+	TEST_EQUAL(hm.has(0), true)
+	TEST_EQUAL(hm.has(1), false)
+	TEST_EQUAL(hm.has(2), false)
+	TEST_EQUAL(hm.has(3), true)
+
+	HashMap<int, int> hm2;
+	TEST_EXCEPTION(Exception::IncompatibleIterators, hm.erase(hm.begin(), hm2.end()))
+	TEST_EXCEPTION(Exception::IncompatibleIterators, hm.erase(hm2.begin(), hm.end()))
+RESULT
+
+CHECK(Hashmet::erase(Iterator pos))
+	HashMap<int, int> hm;
+	hm.insert(HashMap<int, int>::ValueType(0, 0));
+	hm.insert(HashMap<int, int>::ValueType(1, 1));
+	hm.insert(HashMap<int, int>::ValueType(2, 2));
+	hm.insert(HashMap<int, int>::ValueType(3, 3));
+	HashMap<int, int>::Iterator it1 = hm.begin();
+	++it1;
+	TEST_EQUAL(it1->first, 0)
+	hm.erase(it1);
+	TEST_EQUAL(hm.has(0), false)
+	TEST_EQUAL(hm.has(1), true)
+	TEST_EQUAL(hm.has(2), true)
+	TEST_EQUAL(hm.has(3), true)
+	TEST_EQUAL(hm.getSize(), 3)
+	hm.erase(hm.end());
+	TEST_EQUAL(hm.getSize(), 3)
+	hm.erase(hm.begin());
+	TEST_EQUAL(hm.getSize(), 2)
+	hm.erase(hm.begin());
+	TEST_EQUAL(hm.getSize(), 1)
+	hm.erase(hm.begin());
+	TEST_EQUAL(hm.getSize(), 0)
+	hm.erase(hm.begin());
+	TEST_EQUAL(hm.getSize(), 0)
+
+	HashMap<int, int> hm2;
+	TEST_EXCEPTION(Exception::IncompatibleIterators, hm2.erase(hm.begin()))
 RESULT
 
 CHECK(HashMap::operator [] (const int& key))
@@ -399,7 +430,6 @@ CHECK(HashMap::apply(UnaryProcessor))
 	TEST_EQUAL(myproc.getPointer()->first, 0) myproc.forward();
 	TEST_EQUAL(myproc.getPointer()->first, 1) myproc.forward();
 RESULT
-
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
