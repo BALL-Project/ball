@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.24 2003/05/28 16:50:42 oliver Exp $ 
+// $Id: regularData3D.h,v 1.25 2003/06/19 11:46:07 oliver Exp $ 
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
@@ -127,7 +127,7 @@ namespace BALL
     /** Assignment operator.
         Copy the data, the origin, and the dimension (spacing is copied implicitly as well).
     */
-    const TRegularData3D& operator = (const TRegularData3D<ValueType>& data)
+		TRegularData3D& operator = (const TRegularData3D<ValueType>& data)
       throw(Exception::OutOfMemory);
     //@}
 
@@ -534,7 +534,7 @@ namespace BALL
 
   template <typename ValueType>
   BALL_INLINE
-  const TRegularData3D<ValueType>& TRegularData3D<ValueType>::operator =
+  TRegularData3D<ValueType>& TRegularData3D<ValueType>::operator =
     (const TRegularData3D<ValueType>& rhs)
     throw(Exception::OutOfMemory)
   {

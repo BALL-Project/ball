@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.33 2003/05/28 16:50:41 oliver Exp $
+// $Id: regularData2D.h,v 1.34 2003/06/19 11:46:07 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
@@ -129,7 +129,7 @@ namespace BALL
 		/**	Assignment operator.
 				Copy the data, the origin, and the dimension (spacing is copied implicitly as well).
 		*/
-		const TRegularData2D& operator = (const TRegularData2D<ValueType>& data) 
+		TRegularData2D& operator = (const TRegularData2D<ValueType>& data) 
 			throw(Exception::OutOfMemory);
 		//@}
 			
@@ -507,7 +507,7 @@ namespace BALL
 	// assignment operator
 	template <typename ValueType>
 	BALL_INLINE
-	const TRegularData2D<ValueType>& TRegularData2D<ValueType>::operator = 
+	TRegularData2D<ValueType>& TRegularData2D<ValueType>::operator = 
 		(const TRegularData2D<ValueType>& rhs)
 		throw(Exception::OutOfMemory)
 	{
@@ -893,7 +893,7 @@ namespace BALL
 		position.x = (Position)((r.x - origin_.x) / spacing_.x + 0.5);
 		position.y = (Position)((r.y - origin_.y) / spacing_.y + 0.5);
 
-		return data_[position];
+		return data_[size_.x * position.y + position.x];
 	}
 
 	template <typename ValueType>
@@ -911,7 +911,7 @@ namespace BALL
 		position.x = (Position)((r.x - origin_.x) / spacing_.x + 0.5);
 		position.y = (Position)((r.y - origin_.y) / spacing_.y + 0.5);
 
-		return data_[position];
+		return data_[size_.x * position.y + position.x];
 	}
 
 	template <typename ValueType>

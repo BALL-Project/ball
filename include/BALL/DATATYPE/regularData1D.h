@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.36 2003/05/28 16:50:41 oliver Exp $
+// $Id: regularData1D.h,v 1.37 2003/06/19 11:46:07 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
@@ -122,13 +122,13 @@ namespace BALL
 		/**	Assignment operator.
 				Copy the data and the boundaries.
 		*/
-		const TRegularData1D& operator = (const TRegularData1D<ValueType>& data)
+		TRegularData1D& operator = (const TRegularData1D<ValueType>& data)
 			throw(Exception::OutOfMemory);
 
 		/**	Assignment from a <tt>vector</tt> of <tt>ValueType</tt>.
 				Copy the contents of the data without changing the boundaries.
 		*/
-		const TRegularData1D& operator = (const VectorType& data)
+		TRegularData1D& operator = (const VectorType& data)
 			throw(Exception::OutOfMemory);
 
 		//@}
@@ -475,7 +475,7 @@ namespace BALL
 	}
 
 	template <typename ValueType>
-	const TRegularData1D<ValueType>& TRegularData1D<ValueType>::operator = (const TRegularData1D<ValueType>& rhs)
+	TRegularData1D<ValueType>& TRegularData1D<ValueType>::operator = (const TRegularData1D<ValueType>& rhs)
 		throw(Exception::OutOfMemory)
 	{
 		// copy all members...
@@ -496,7 +496,7 @@ namespace BALL
 	}
 
 	template <typename ValueType>
-	const TRegularData1D<ValueType>& TRegularData1D<ValueType>::operator = (const VectorType& rhs)
+	TRegularData1D<ValueType>& TRegularData1D<ValueType>::operator = (const VectorType& rhs)
 		throw(Exception::OutOfMemory)
 	{
 		// Copy the data. The boundaries remain unchanged.
