@@ -1,13 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.8 2003/12/12 15:20:46 amoll Exp $
+// $Id: surfaceModel.C,v 1.9 2003/12/12 15:28:51 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/surfaceModel.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
-#include <BALL/VIEW/KERNEL/molecularInformation.h>
-#include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/KERNEL/forEach.h>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.13 2003/12/05 23:55:13 amoll Exp $
+// $Id: glRenderer.C,v 1.14 2003/12/12 15:31:15 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -27,6 +27,12 @@
 #include <qpainter.h>
 #include <qbitmap.h>
 #include <qimage.h>
+
+
+
+
+//testing
+#include <BALL/KERNEL/bond.h>
 
 using namespace std;
 
@@ -135,18 +141,11 @@ namespace BALL
 		}
 
 
-		void GLRenderer::initTransparent(bool special)
+		void GLRenderer::initTransparent()
 			throw()
 		{
 			glEnable(GL_BLEND);
-			if (special)
-			{
-				glBlendFunc(GL_SRC_ALPHA,  GL_ONE_MINUS_SRC_ALPHA);
-			}
-			else
-			{
-				glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_DST_ALPHA);
-			}
+			glBlendFunc(GL_SRC_ALPHA,  GL_ONE_MINUS_SRC_ALPHA);
 			glDepthMask(GL_FALSE);
 			glCullFace(GL_BACK);
 			glEnable(GL_CULL_FACE);
@@ -589,6 +588,11 @@ namespace BALL
 
 			glDisable(GL_LIGHTING);
 			glBegin(GL_LINE_STRIP);
+Log.error() << "#~~#   3 " << std::endl;
+Log.error() << ((Bond*)line.getComposite())->getFirstAtom()->getPosition() << std::endl;
+Log.error() << "#~~#   6 " << std::endl;
+			Log.error() << line.getVertex1Address()<< std::endl;
+Log.error() << "#~~#   5 " << std::endl;
 			vertexVector3_(line.getVertex1());
 			vertexVector3_(line.getMiddleVertex());
 

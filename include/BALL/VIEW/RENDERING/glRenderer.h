@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.7 2003/12/05 23:53:53 amoll Exp $
+// $Id: glRenderer.h,v 1.8 2003/12/12 15:30:41 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
 #define BALL_VIEW_RENDERING_GLRENDERER_H
@@ -139,7 +139,7 @@ namespace BALL
 				throw();
 
 			// Initialise transparent rendering
-			void initTransparent(bool special) 
+			void initTransparent() 
 				throw();
 
 			// Initialise solid rendering

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.28 2003/12/11 10:52:07 anhi Exp $
+// $Id: scene.C,v 1.29 2003/12/12 15:30:48 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -390,7 +390,7 @@ void Scene::renderRepresentations_(RenderMode mode)
 		}
 	}
 
-	gl_renderer_.initTransparent(true);
+	gl_renderer_.initTransparent();
 	it = getMainControl()->getPrimitiveManager().getRepresentations().begin();
 	for(; it != getMainControl()->getPrimitiveManager().getRepresentations().end(); it++)
 	{
