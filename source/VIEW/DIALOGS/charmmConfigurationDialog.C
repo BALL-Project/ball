@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.C,v 1.7 2004/12/17 16:19:40 amoll Exp $
+// $Id: charmmConfigurationDialog.C,v 1.8 2004/12/22 16:19:49 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
@@ -402,7 +402,7 @@ namespace BALL
 			try
 			{
 				if (String(max_unassigned_atoms->text().ascii()).toUnsignedInt() == 0) error = true;
-				charmm.setMaximumUnassignedAtoms(String(max_unassigned_atoms->text().ascii()).toUnsignedInt());
+				charmm.setMaximumNumberOfErrors(String(max_unassigned_atoms->text().ascii()).toUnsignedInt());
 			}
 			catch(...)
 			{
@@ -412,7 +412,7 @@ namespace BALL
 			if (error)
 			{
 				max_unassigned_atoms->setText("10");
-				charmm.setMaximumUnassignedAtoms(10);
+				charmm.setMaximumNumberOfErrors(10);
  				Log.error() << "Invalid value for max number of unassigned atoms, using default value of 10" << std::endl;
 			}
 
