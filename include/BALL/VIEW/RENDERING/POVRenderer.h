@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.7.2.1 2004/12/30 15:25:13 amoll Exp $
+// $Id: POVRenderer.h,v 1.7.2.2 2005/01/04 14:41:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -88,7 +88,6 @@ namespace BALL
 			/// Set a stream as output device
 			void setOstream(std::ostream& out_stream);
 
-
 			/// 
 			void setHumanReadable(bool state)
 				throw() { human_readable_ = state;}
@@ -147,12 +146,23 @@ namespace BALL
 
 			void renderMesh_(const Mesh& mesh)
 				throw();
+
+			void renderTwoColoredLine_(const TwoColoredLine& line)
+				throw();
+
+			void renderLine_(const Line& line)
+				throw();
+
+			void renderPoint_(const Point& point)
+				throw();
+
 			//@}
 
 			protected:
 
 				std::ostream* outfile_;
 				String trimFloatValue_(float value);
+				const ColorRGBA& getColor_(const GeometricObject& object);
 
 				Vector3   origin_;
 				Matrix4x4 rotation_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.18.2.7 2005/01/04 14:20:51 amoll Exp $
+// $Id: POVRenderer.C,v 1.18.2.8 2005/01/04 14:41:34 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -29,6 +29,8 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+#define BALLVIEW_POVRAY_LINE_RADIUS 0.05
 
 		POVRenderer::POVRenderer()
 			throw()
@@ -322,16 +324,7 @@ namespace BALL
 		{
 			std::ostream& out = *outfile_;
 
-			ColorRGBA color;
-			// first find out its color
-			if ((sphere.getComposite()) && sphere.getComposite()->isSelected())
-			{
-				color = BALL_SELECTED_COLOR;
-			}
-			else
-			{
-				color = sphere.getColor();
-			}
+			const ColorRGBA& color = getColor_(sphere);
 
 			if ((Size) color.getAlpha() == 255) out << "Sphere(";
 			else 																out << "SphereT(";
@@ -346,16 +339,7 @@ namespace BALL
 		{
 			std::ostream& out = *outfile_;
 
-			ColorRGBA color;
-			// first find out its color
-			if ((disc.getComposite() && (disc.getComposite()->isSelected())))
-			{
-				color = BALL_SELECTED_COLOR;
-			}
-			else
-			{
-				color = disc.getColor();
-			}
+			const ColorRGBA& color = getColor_(disc);
 
 			// then, find out its radius, its normal, and its position
 			float radius;
@@ -374,32 +358,23 @@ namespace BALL
 			out << "} " << endl;
 		}
 
-		void POVRenderer::renderTube_(const Tube& tube)
+		void POVRenderer::renderLine_(const Line& line)
 			throw()
 		{
 			std::ostream& out = *outfile_;
 
-			ColorRGBA color;
-			// first, find out its color
-			if ((tube.getComposite()) && (tube.getComposite()->isSelected()))
-			{
-				color = BALL_SELECTED_COLOR;
-			}
-			else
-			{
-				color = tube.getColor();
-			}
+			const ColorRGBA& color = getColor_(line);
 
 			if ((Size) color.getAlpha() == 255) out << "Tube(";
 			else 																out << "TubeT(";
 
-		  out << POVVector3(tube.getVertex1()) << ", "
-		      << POVVector3(tube.getVertex2()) << ", "
-					<< tube.getRadius() << ", "
+		  out << POVVector3(line.getVertex1()) << ", "
+		      << POVVector3(line.getVertex2()) << ", "
+					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
 					<< POVColorRGBA(color) << ")" << endl;
-		}	
+		}
 
-		void POVRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
+		void POVRenderer::renderTwoColoredLine_(const TwoColoredLine& tube)
 			throw()
 		{
 			std::ostream& out = *outfile_;
@@ -410,8 +385,76 @@ namespace BALL
 			// first, find out its color
 			if (tube.getComposite() && (tube.getComposite()->isSelected()))
 			{
-				color1 = BALL_SELECTED_COLOR;
-				color2 = BALL_SELECTED_COLOR;
+				color1 = color2 = BALL_SELECTED_COLOR;
+			}
+			else
+			{
+				color1 = tube.getColor();
+				color2 = tube.getColor2();
+			}
+
+  		if ((Size) color1.getAlpha() == 255) out << "Tube(";
+			else 																 out << "TubeT(";
+			
+		  out << POVVector3(tube.getVertex1()) << ", "
+		      << POVVector3(tube.getMiddleVertex()) << ", "
+					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
+					<< POVColorRGBA(color1) << ")" << endl;
+
+  		if ((Size) color1.getAlpha() == 255) out << "Tube(";
+			else 																 out << "TubeT(";
+			
+		  out << POVVector3(tube.getMiddleVertex()) << ", "
+		      << POVVector3(tube.getVertex2()) << ", "
+					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
+					<< POVColorRGBA(color2) << ")" << endl;
+		}
+
+
+		void POVRenderer::renderTube_(const Tube& tube)
+			throw()
+		{
+			std::ostream& out = *outfile_;
+
+			const ColorRGBA& color = getColor_(tube);
+
+			if ((Size) color.getAlpha() == 255) out << "Tube(";
+			else 																out << "TubeT(";
+
+		  out << POVVector3(tube.getVertex1()) << ", "
+		      << POVVector3(tube.getVertex2()) << ", "
+					<< tube.getRadius() << ", "
+					<< POVColorRGBA(color) << ")" << endl;
+		}	
+
+		void POVRenderer::renderPoint_(const Point& point)
+			throw()
+		{
+			std::ostream& out = *outfile_;
+
+			const ColorRGBA& color = getColor_(point);
+
+			if ((Size) color.getAlpha() == 255) out << "Sphere(";
+			else 																out << "SphereT(";
+
+		  out << POVVector3(point.getVertex()) << ", "
+					<< BALLVIEW_POVRAY_LINE_RADIUS << ", "
+					<< POVColorRGBA(color) << ")" << endl;
+		}
+
+
+		void POVRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
+			throw()
+		{
+			std::ostream& out = *outfile_;
+
+			// we have found a two colored tube
+			ColorRGBA color1, color2;
+
+			// first, find out its color
+			if (tube.getComposite() && tube.getComposite()->isSelected())
+			{
+				color1 = color2 = BALL_SELECTED_COLOR;
 			}
 			else
 			{
@@ -541,7 +584,6 @@ namespace BALL
 				}
 			}
 			out << "\t\t}" << endl;
-
 			out << "\t}" << endl;
 		}
 				
@@ -557,6 +599,15 @@ namespace BALL
 			clipping_planes_.push_back(plane);
 		}
 
+		const ColorRGBA& POVRenderer::getColor_(const GeometricObject& object)
+		{
+			if ((object.getComposite()) && object.getComposite()->isSelected())
+			{
+				return BALL_SELECTED_COLOR;
+			}
+			
+			return object.getColor();
+		}
 		
 	} // namespaces
 }
