@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.13.4.4 2002/10/23 13:19:01 amoll Exp $
+// $Id: displayProperties.C,v 1.13.4.5 2002/10/29 16:00:50 anhi Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 
@@ -1085,8 +1085,10 @@ namespace BALL
 		// applies the processors to the composite --------------------------------------
 		// ------------------------------------------------------------------------------
 
-					if (getValue_(ADDRESS__STATIC_MODEL)
-							!= VALUE__MODEL_BACKBONE)
+					if (   (getValue_(ADDRESS__STATIC_MODEL)
+							    != (VALUE__MODEL_BACKBONE) )
+							&& (getValue_(ADDRESS__STATIC_MODEL)
+									!= (VALUE__MODEL_SURFACE)  )  )
 					{
 						//				object_pointer->apply(*static_base_model_pointer);
 						//			object_pointer->apply(*dynamic_base_model_pointer);
