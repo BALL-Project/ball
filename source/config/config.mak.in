@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# RCS ID: $Id: config.mak.in,v 1.3 1999/08/27 09:14:46 oliver Exp $
+# RCS ID: $Id: config.mak.in,v 1.4 1999/08/27 12:04:36 oliver Exp $
 #
 # author:    $author$
 # date:      $date$
@@ -32,10 +32,14 @@ STRIP	=@STRIP@
 PRELINK	=@PRELINK@
 
 
-OS	     = @OS@		   	  # name of your OS
-OSREV	   = @OSREV@	   	# full revision number
-OSMAJOR	 = @OSMAJOR@		# major revision number (full revision number cut at the first dot)
-BINFMT   = @BINFMT@     # binary format type (platform-architecture-compiler)
+OS	     =@OS@
+# name of your OS
+OSREV	   =@OSREV@
+# full revision number
+OSMAJOR	 =@OSMAJOR@
+# major revision number (full revision number cut at the first dot)
+BINFMT   =@BINFMT@
+# binary format type (platform-architecture-compiler)
 
 # BALL_PATH is the BALL root directory (the directory in which include and source reside)
 # BALL_INCLUDES contains compiler flags to set the BALL include paths
