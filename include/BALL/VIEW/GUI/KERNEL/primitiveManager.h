@@ -1,4 +1,4 @@
-// $Id: primitiveManager.h,v 1.1.2.1 2002/11/23 17:39:45 amoll Exp $
+// $Id: primitiveManager.h,v 1.1.2.2 2002/11/24 20:32:23 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_PRIMITIVEMANAGER_H
 #define BALL_VIEW_GUI_KERNEL_PRIMITIVEMANAGER_H
@@ -23,8 +23,14 @@
 # include <BALL/DATATYPE/list.h>
 #endif
 
+#ifndef BALL_COMMON_EXCEPTION_H
+# include <BALL/COMMON/exception.h>
+#endif
+
 namespace BALL
 {
+	using namespace Exception;
+
 	namespace VIEW
 	{
 		/**	PrimitiveManager class.
@@ -78,7 +84,7 @@ namespace BALL
 				throw();
 						
 			bool insertGeometricObject(GeometricObject* object, Composite* composite)
-				throw();
+				throw(NullPointer);
 								
 			bool removeGeometricObject(GeometricObject* object)
 				throw();
@@ -102,7 +108,6 @@ namespace BALL
 			Size getNumberOfGeometricObjects() const
 				throw();
 
-						
 			//@}
 			/**	@name	debuggers and diagnostics
 			*/
@@ -143,8 +148,6 @@ namespace BALL
 				throw();
 			//@}
 
-			private:
-
 			List_it getFirstIterator(Composite* composite)
 				throw();
 							
@@ -157,9 +160,15 @@ namespace BALL
 			List_const_it getSecondIterator(Composite* composite) const
 				throw();
 
-
-
+			List_it getEndIterator() 
+				throw();
 						
+			List_const_it getEndIterator() const
+				throw();
+						
+
+			private:
+
 			List<GeometricObject*> 				objects_list_;		
 						
 			// used to prevent multiple insertion of same GeometricObject			
