@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.23 2004/05/27 19:49:49 oliver Exp $
+// $Id: standardColorProcessor.h,v 1.24 2004/07/10 09:54:14 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -422,6 +422,21 @@ namespace BALL
 
 			///
 			OccupancyColorProcessor();
+
+			///	Operator ()
+			virtual ColorRGBA getColor(const Composite* composite);
+		};
+
+		/** Coloring by the forces, acting on atoms.
+				\ingroup  ViewModels
+		*/
+		class ForceColorProcessor
+			: public InterpolateColorProcessor
+		{
+			public:
+
+			///
+			ForceColorProcessor();
 
 			///	Operator ()
 			virtual ColorRGBA getColor(const Composite* composite);
