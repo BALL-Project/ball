@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.22.4.2 2002/10/29 17:31:34 amoll Exp $
+// $Id: mainControl.C,v 1.22.4.3 2002/11/04 14:42:03 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -779,7 +779,6 @@ namespace BALL
 		void MainControl::fetchPreferences(INIFile &inifile)
 			throw()
 		{
-			Log.info() << "MainControl::fetchPreferences" << endl;
 			// 
 			// the geometry of the main window
 			//
