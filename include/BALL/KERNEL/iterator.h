@@ -1,4 +1,4 @@
-// $Id: iterator.h,v 1.9 2001/07/04 15:57:04 anker Exp $
+// $Id: iterator.h,v 1.10 2001/07/15 20:39:41 oliver Exp $
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H
@@ -112,11 +112,11 @@ namespace BALL
 		*/
 		//@{
 
-		/// BAUSTELLE
+		/// Return a pointer to the container the iterator is bound to
 		Composite *getContainer()
 			throw();
 	
-		/// BAUSTELLE
+		/// Return a const pointer to the container the iterator is bound to
 		const Composite* getContainer() const
 			throw();
 	
@@ -135,94 +135,121 @@ namespace BALL
 	
 		//@}
 
-		/// BAUSTELLE
+		/**	@name Predicates
+		*/
+		//@{
+		/** Return the current status of the iterator.
+				If the iterator is bound and its subcomposite iterator is valid,
+				this predicate returns {\tt true}.
+		*/
 		bool isValid() const
 			throw();
 
-		/// BAUSTELLE
+		/// Check whether the iterator is bound to a container.
 		bool isSingular() const
 			throw();
 	
-		/// BAUSTELLE
-		Composite::SubcompositeIterator& getPosition()
-			throw();
-	
-		/// BAUSTELLE
-		const Composite::SubcompositeIterator& getPosition() const
-			throw();
-	
-		/// BAUSTELLE
-		void invalidate()
-			throw();
-
-		/// BAUSTELLE
-		void toBegin()
-			throw(Exception::InvalidIterator);
-
-		/// BAUSTELLE
+		/** Return true if the iterator is at the first element of the container.
+				@exception InvalidIterator if the iterator is {\em singular}
+				@see isSingular
+		*/
 		bool isBegin() const
 			throw(Exception::InvalidIterator);
 
-		/// BAUSTELLE
-		void toEnd()
-			throw();
-
-		/// BAUSTELLE
+		/** Return true if the iterator is beyond the last element of the container.
+				@exception InvalidIterator if the iterator is {\em singular}
+				@see isSingular
+		*/
 		bool isEnd() const
 			throw();
-	
-		/// BAUSTELLE
-		Composite& getData()
-			throw();
-	
-		/// BAUSTELLE
-		const Composite &getData() const
-			throw();
-	
-		/// BAUSTELLE
-		void forward()
-			throw();
-	
-		/// BAUSTELLE
-		void toRBegin()
-			throw(Exception::InvalidIterator);
 
-		/// BAUSTELLE
+		/** Return true if the iterator is at the last element of the container.
+				@exception InvalidIterator if the iterator is {\em singular}
+				@see isSingular
+		*/
 		bool isRBegin() const
 			throw(Exception::InvalidIterator);
 			
-		/// BAUSTELLE
-		void toREnd()
-			throw();
-
-		/// BAUSTELLE
+		/** Return true if the iterator is beyond the first element of the container.
+				@exception InvalidIterator if the iterator is {\em singular}
+				@see isSingular
+		*/
 		bool isREnd() const
 			throw();
-			
-		/// BAUSTELLE
+		//@}
+	
+		/// Return the current iterator position
+		Composite::SubcompositeIterator& getPosition()
+			throw();
+	
+		/// Return the current iterator posittion (const method)
+		const Composite::SubcompositeIterator& getPosition() const
+			throw();
+	
+		/**	Invalidate the iterator.
+				The iterator is separated from its container (\Ref{isSingular} is {\bf true} afterwards)
+				and its \Ref{SubCompositeIterator} is invalidated as well.
+		void invalidate()
+			throw();
+
+		/**	Reposition the iterator to the first element of the container.
+				@exception InvalidIterator if the iterator is {\em singular}.
+				@see isSingular
+		*/
+		void toBegin()
+			throw(Exception::InvalidIterator);
+
+		/**	Reposition the iterator after the last element of the container.
+				@exception InvalidIterator if the iterator is {\em singular}.
+				@see isSingular
+		*/
+		void toEnd()
+			throw();
+
+		/// Return a reference to the current element
+		Composite& getData()
+			throw();
+	
+		/// Return a const reference to the current element
+		const Composite& getData() const
+			throw();
+	
+		/// Increment the iterator by one element.
+		void forward()
+			throw();
+	
+		/// Decrement the iterator one element
 		void backward()
 			throw();
 			
-		/// BAUSTELLE
+		/// Reposition the (backward) iterator to the last element of the container
+		void toRBegin()
+			throw(Exception::InvalidIterator);
+
+		/// Reposition the (backward) iterator beyond the first element of the container
+		void toREnd()
+			throw();
+
+		/// Assign the current predicate associated with the iterator
 		void setPredicate(const UnaryPredicate<Composite>& predicate)
 			throw();
 			
-		/// BAUSTELLE
+		/// Return the current predicate associated with the iterator
 		const UnaryPredicate<Composite>* getPredicate() const
 			throw();
 
 
 		protected:
 
-		/*_ BAUSTELLE
+		/*_ The pointer to the container
 		*/
 		Composite*												bound_;
 
-		/*_ BAUSTELLE
+		/*_ The internal iterator to iterate over the current node's children
 		*/
 		Composite::SubcompositeIterator 	subcomposite_iterator_;
 
-		/*_ BAUSTELLE
+		/*_ The predicate
 		*/
 		const UnaryPredicate<Composite>*	predicate_;
 
