@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondProcessor.C,v 1.8 2005/02/08 17:32:38 oliver Exp $
+// $Id: HBondProcessor.C,v 1.9 2005/02/11 15:27:13 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/HBondProcessor.h>
@@ -15,9 +15,9 @@ namespace BALL
 {
 
 	HBondProcessor::HBondProcessor()
-		: BOND_LENGTH_N_H(1.020),
+		:	MAX_LENGTH(5.2 + 4.2),
+			BOND_LENGTH_N_H(1.020),
 			BOND_LENGTH_C_O(1.240),
-			MAX_LENGTH(5.2+4.2),
 			vec_()
 	{
 	}
@@ -29,12 +29,12 @@ namespace BALL
 	void HBondProcessor::preComputeBonds_(ResidueIterator& data)
 	{
 		POS pos;
-		int j=0;                // index to serially the residues TOTHINK:maybe it is possible 
+		int j = 0;                //   index to serially the residues TOTHINK:maybe it is possible 
 		                        //   to identify the residue by residue ID 
-		bool haveO=false;
-		bool haveN=false;
-		bool haveC=false;
-		bool found_N_term=false;
+		bool haveO = false;
+		bool haveN = false;
+		bool haveC = false;
+		bool found_N_term = false;
 		
 		// iteration over all residues of the protein
 		// to find the C,N,O atoms
@@ -42,25 +42,25 @@ namespace BALL
 		// the N-terminus is special
 
 		PDBAtomIterator ai;
-		Residue res=*data;
+		Residue res = *data;
   
 		for(; +data && (!found_N_term) ; ++data)
 		{	
-			res=*data;
+			res = *data;
 		
-			for(ai=res.beginPDBAtom();+ai;++ai)
+			for(ai = res.beginPDBAtom();+ai;++ai)
 			{
-				if(ai->getName() == "C")
+				if(ai->getName() ==  "C")
 				{
 					pos.pos_C = ai->getPosition();
 					haveC = true;
 				}
-				else if(ai->getName() == "O")
+				else if(ai->getName() ==  "O")
 				{
 					pos.pos_O = ai->getPosition();
 					haveO = true;
 				}
-				else if(ai->getName() == "N")
+				else if(ai->getName() ==  "N")
 				{
 					pos.pos_N = ai->getPosition();
           haveN = true;
@@ -80,38 +80,38 @@ namespace BALL
 			j++;
 			pos.res = &(*data);
 			++data;
-			found_N_term=true;
+			found_N_term = true;
 			vec_.push_back(pos);  
 		}	
 		
 		//iterate over the following residues
 		for(; +data; ++data)
 		{	
-			res=*data;
+			res = *data;
 
 			//initialize the bool
-			haveO=false;
-			haveN=false;
-			haveC=false;
+			haveO = false;
+			haveN = false;
+			haveC = false;
 			
 			if (!res.isAminoAcid())
 			{
 				continue;
 			}
 
-			for(ai=res.beginPDBAtom();+ai;++ai)
+			for(ai = res.beginPDBAtom();+ai;++ai)
 			{
-				if(ai->getName() == "N")
+				if(ai->getName() ==  "N")
 				{
 					pos.pos_N = ai->getPosition();
 					haveN = true;
 				}
-				else if(ai->getName() == "C")
+				else if(ai->getName() ==  "C")
 				{
 					pos.pos_C = ai->getPosition();
 					haveC = true;
 				}
-				else if(ai->getName() == "O")
+				else if(ai->getName() ==  "O")
 				{
 					pos.pos_O = ai->getPosition();
 					haveO = true;
@@ -132,7 +132,7 @@ namespace BALL
 			Vector3 C = vec_[j-1].pos_C;
 
 			//TODO: Division durch 0!!!
-			if ((O - C).getLength() != 0.)
+			if ((O - C).getLength() !=  0.)
 			{
 				pos.pos_H = pos.pos_N - ((O-C) * BOND_LENGTH_N_H)/(O-C).getLength();
 			}
@@ -142,8 +142,8 @@ namespace BALL
 			}
 
 			//set identification number of the residue
-			// pos.number=res.getID().toInt();
-			pos.number=j;
+			// pos.number = res.getID().toInt();
+			pos.number = j;
 			j++;
 			
 			// point pres at data
@@ -157,7 +157,7 @@ namespace BALL
 
 	bool HBondProcessor::finish()
 	{
-		//      TODO  :  if vec_.size()==0 there was no composit 
+		//      TODO  :  if vec_.size() =  = 0 there was no composit 
 
 		// matrix to save the existence of a HBond
 		h_bond_pairs_.resize(vec_.size()); 
@@ -167,9 +167,9 @@ namespace BALL
 
 
 		// insert all protein-residues in respect of N-atom
-		// the last residue does not _have_ an O. => don't use it
-//		for(Size i=0; i<(vec_.size()-1); i++) 
-		for(Size i=0; i<(vec_.size()); i++) 
+		// the last residue does not _have_ an O.  = > don't use it
+//		for(Size i = 0; i<(vec_.size()-1); i++) 
+		for(Size i = 0; i<(vec_.size()); i++) 
 		{
 			if (vec_[i].is_complete)
 			{
@@ -184,7 +184,7 @@ namespace BALL
 		float energy, dist_ON, dist_CH, dist_OH, dist_CN;
 
  		// now compute the energies and see whether we have a hydrogen bond
-		for (Size i=0; i<vec_.size(); i++)
+		for (Size i = 0; i<vec_.size(); i++)
 		{
 			if (vec_[i].is_complete)
 			{
@@ -199,14 +199,14 @@ namespace BALL
 				atom_grid.getIndices(*box, x, y, z);         // compute the indices of the actual box
 
 				// Iterate over all the neighbouring boxes
-				// for (box_it=box->beginBox(); +box_it; ++box_it) //as mentioned beginBox doesn't work
-				for (int nx=x-1; (nx < size_x) && (nx < (int)x+2); nx++)
+				// for (box_it = box->beginBox(); +box_it; ++box_it) //as mentioned beginBox doesn't work
+				for (int nx = x-1; (nx < size_x) && (nx < (int)x+2); nx++)
 				{
-					for (int ny=y-1; (ny < size_y) && (ny < (int)y+2); ny++)
+					for (int ny = y-1; (ny < size_y) && (ny < (int)y+2); ny++)
 					{
-						for (int nz=z-1; (nz < size_z) && (nz < (int)z+2); nz++)
+						for (int nz = z-1; (nz < size_z) && (nz < (int)z+2); nz++)
 						{
-							if ( (nx>=0) && (ny>=0) && (nz>=0) )  // we shouldn't run outside the box
+							if ( (nx >= 0) && (ny >= 0) && (nz >= 0) )  // we shouldn't run outside the box
 							{
 								// compute the neighbour box
 								HashGridBox3<POS> *nb = atom_grid.getBox(nx, ny, nz); 
@@ -218,7 +218,7 @@ namespace BALL
 									//       Does this criterion always work? We should check for
 									//       an existing bond between data_it and vec[i] instead!
 
-									if (((int)abs((int)(data_it->number - vec_[i].number)) > 1) && (data_it->number!=0))
+									if (((int)abs((int)(data_it->number - vec_[i].number)) > 1) && (data_it->number!= 0))
 									{
 										// compute the distances between the relevant atoms
 										dist_ON = (vec_[i].pos_O - data_it->pos_N).getLength();
@@ -227,8 +227,8 @@ namespace BALL
 										dist_CN = (vec_[i].pos_C - data_it->pos_N).getLength();
 
 										// compute the electrostatic energy of the bond-building groups
-										energy  = 0.42*0.20 * 332.;
-										energy *= (1./dist_ON + 1./dist_CH - 1./dist_OH - 1./dist_CN);
+										energy  = 0.42 * 0.20 * 332.;
+										energy *=  (1./dist_ON + 1./dist_CH - 1./dist_OH - 1./dist_CN);
 
 										if (energy < -0.5)
 										{
@@ -236,19 +236,19 @@ namespace BALL
 											AtomIterator ai;
 											Atom *acceptor = 0;
 											Atom* donor = 0; 
-											for(ai=(vec_[i].res)->beginAtom(); +ai; ++ai)
+											for(ai = (vec_[i].res)->beginAtom(); +ai; ++ai)
 											{
-												if(ai->getName() == "O")
+												if(ai->getName() ==  "O")
 												{
-													acceptor=&(*ai);
+													acceptor = &(*ai);
 												}
 											}	
 
-											for(ai=(data_it->res)->beginAtom(); +ai; ++ai)
+											for(ai = (data_it->res)->beginAtom(); +ai; ++ai)
 											{
-												if(ai->getName() == "N")
+												if(ai->getName() ==  "N")
 												{
-													donor=&*ai;
+													donor = &*ai;
 												}
 											}		
 

@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.18 2005/02/08 17:32:38 oliver Exp $
+# $Id: Makefile.lst,v 1.19 2005/02/11 15:27:14 oliver Exp $
 #
 
 XDR_DEPENDENT_EXECUTABLES=\
@@ -182,7 +182,6 @@ EXECUTABLES_FORMATS =\
 	ParameterSection_test$(EXEEXT)\
 	ResourceFile_test$(EXEEXT)\
 	GenericMolFile_test$(EXEEXT)\
-	GenericPDBFile_test$(EXEEXT)\
 	HINFile_test$(EXEEXT)\
 	MOLFile_test$(EXEEXT)\
 	SDFile_test$(EXEEXT)\

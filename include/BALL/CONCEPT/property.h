@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: property.h,v 1.38 2004/05/27 19:49:37 oliver Exp $
+// $Id: property.h,v 1.39 2005/02/11 15:27:12 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_PROPERTY_H
@@ -597,38 +597,30 @@ namespace BALL
 				the array of properties.
 				@param name the name of the property to be removed
 		*/
-		void clearProperty(const string& name)
-			throw();
+		void clearProperty(const string& name) throw();
 
 		/**	Return the number of named properties.
 				@return Size the number of named properties stored in the ProprtyManager object
 		*/
-		Size countNamedProperties() const
-			throw();
+		Size countNamedProperties() const throw();
 		//@}
 
 		/**	@name	Predicates 
 		*/
 		//@{
 		/// Query for an unnamed property
-		bool hasProperty(Property property) const
-			throw();
+		bool hasProperty(Property property) const	throw();
 
 		/// Query for a named property
-		bool hasProperty(const string& name) const
-			throw();
+		bool hasProperty(const string& name) const throw();
 
 		/** Equality operator
 				Two instances are equal if they have the same named and unnamed properties.
 		*/
-		bool operator == (const PropertyManager& pm) const
-			throw();
+		bool operator == (const PropertyManager& pm) const throw();
 
-		/** Inequality operator
-				@see operator ==
-		*/
-		bool operator != (const PropertyManager& pm) const
-			throw();
+		/// Inequality operator
+		bool operator != (const PropertyManager& pm) const throw();
 
 		//@}
 
@@ -636,18 +628,13 @@ namespace BALL
 		/**	@name Storable Interface
 		*/
 		//@{
-		
-		/**	Persistent stream writing.
-		*/
-		void write(PersistenceManager& pm) const
-			throw();
+		///	Persistent stream writing.
+		void write(PersistenceManager& pm) const throw();
 
-		/**	Persistent stream reading.
-		*/
-		bool read(PersistenceManager& pm)
-			throw();
-
+		///	Persistent stream reading.
+		bool read(PersistenceManager& pm) throw();
 		//@}
+
 		/**	@name	Debugging and Diagnostics 
 		 */
 		//@{
@@ -656,8 +643,7 @@ namespace BALL
 				Returns true if the bitvector is valid.
 				@return bool <b>true</b>
 		*/
-		bool isValid() const
-			throw();
+		bool isValid() const throw();
 	
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to 
@@ -665,16 +651,14 @@ namespace BALL
 				@param   s - output stream where to output the internal state of {\em *this}
 				@param   depth - the dumping depth
 		*/
-		void dump(std::ostream& s = std::cout, Size depth = 0) const
-			throw();
+		void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
 		
 		//@}
 
 		private:
 
-		BitVector							bitvector_;
-
-		vector<NamedProperty>	named_properties_;
+		BitVector bitvector_;
+		std::vector<NamedProperty> named_properties_;
 	};
 
 	//@}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.39 2005/02/06 10:53:15 oliver Exp $
+// $Id: BALL.sip,v 1.40 2005/02/11 15:27:13 oliver Exp $
 //
 //
 //
@@ -92,7 +92,6 @@
 %Include SDFile.sip
 %Include lineBasedFile.sip
 %Include genericMolFile.sip
-%Include genericPDBFile.sip
 %Include PDBFile.sip
 %Include XYZFile.sip
 // genericPDBFile.h // not supported

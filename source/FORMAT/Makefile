@@ -7,7 +7,6 @@ CPP_SOURCES=\
 	bruker2DFile.C\
 	DCDFile.C\
 	genericMolFile.C\
-	genericPDBFile.C\
 	HINFile.C\
 	INIFile.C\
 	JCAMPFile.C\
@@ -18,6 +17,7 @@ CPP_SOURCES=\
 	NMRStarFile.C\
 	parameters.C\
 	parameterSection.C\
+	PDBdefs.C\
 	PDBFile.C\
 	PDBInfo.C\
 	PDBRecords.C\
