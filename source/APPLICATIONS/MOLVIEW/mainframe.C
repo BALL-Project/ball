@@ -1,5 +1,6 @@
 #include "mainframe.h"
 #include "DlgAbout.h"
+#include <qcolordialog.h>
 
 using namespace std;
 
@@ -345,7 +346,10 @@ void Mainframe::about(void)
 	
 	
 	DlgAbout about_box;
-	about_box.show();
+	about_box.exec();
+	QColor color = QColorDialog::getColor(about_box.backgroundColor());
+	about_box.setBackgroundColor(color);
+	about_box.exec();
 }
 
 void Mainframe::updateEditMenuFromSelection(bool selected__bool, bool residue__bool)
