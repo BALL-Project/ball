@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.42 2001/07/15 16:14:21 oliver Exp $
+// $Id: atom.h,v 1.43 2001/12/17 01:40:21 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -32,13 +32,13 @@
 #endif
 
 // Defines for default values for an atom
-#define BALL_ATOM_DEFAULT_ELEMENT    &Element::UNKNOWN
+#define BALL_ATOM_DEFAULT_ELEMENT &Element::UNKNOWN
 #define BALL_ATOM_DEFAULT_CHARGE     0
 #define BALL_ATOM_DEFAULT_NAME       ""
 #define BALL_ATOM_DEFAULT_TYPE_NAME  "?"
 #define BALL_ATOM_DEFAULT_POSITION   0,0,0
 #define BALL_ATOM_DEFAULT_RADIUS     0
-#define BALL_ATOM_DEFAULT_TYPE       UNKNOWN_TYPE
+#define BALL_ATOM_DEFAULT_TYPE       Atom::UNKNOWN_TYPE
 #define BALL_ATOM_DEFAULT_VELOCITY   0,0,0
 #define BALL_ATOM_DEFAULT_FORCE   	 0,0,0
 
