@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.31 2001/05/07 00:56:00 oliver Exp $
+// $Id: HINFile.C,v 1.32 2001/05/07 18:05:06 anker Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -353,10 +353,8 @@ namespace BALL
 			return;
 		}
 		
-		if (!isOpen())
-		{
-			reopen();
-		}
+		// this is just for the paranoid...
+		reopen();
 
 		// destroy the old contents of the system
 		system.destroy();
