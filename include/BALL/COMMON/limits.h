@@ -1,7 +1,11 @@
-// $Id: limits.h,v 1.5 2000/03/26 17:08:25 oliver Exp $
+// $Id: limits.h,v 1.6 2000/03/27 09:07:23 oliver Exp $
 
 #ifndef BALL_COMMON_LIMITS_H
 #define BALL_COMMON_LIMITS_H
+
+#ifndef BALL_CONFIG_CONFIG_H
+#	include <BALL/CONFIG/config.h>
+#endif
 
 #ifdef BALL_HAVE_NUMERIC_LIMITS
 #	include <limits>
