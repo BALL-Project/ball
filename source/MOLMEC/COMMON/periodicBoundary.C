@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.18 2001/06/06 10:57:06 anker Exp $
+// $Id: periodicBoundary.C,v 1.19 2001/09/03 15:45:09 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -355,7 +355,10 @@ namespace BALL
 			// add the solvent
 			try 
 			{
-				addSolvent(filename);
+				if (addSolvent(filename) == 0)
+				{
+					return false;
+				}
 			}
 			catch (Exception::FileNotFound e)
 			{
@@ -400,6 +403,7 @@ namespace BALL
 		}
 		
 		Box3 solvent_box = hin.getPeriodicBoundary();
+		// DEBUG
 		Log.info() << "Box from HINFile = " << solvent_box << endl;
 
 		// adapt foreign water boxes to our definition
