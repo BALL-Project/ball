@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.sip,v 1.6 2003/12/18 19:03:20 oliver Exp $
+// $Id: message.sip,v 1.7 2004/04/16 13:32:26 amoll Exp $
 //
 
 class Message
@@ -91,7 +91,7 @@ class SceneMessage
 };
 
 
-class SelectionMessage
+class GenericSelectionMessage
 	: Message
 {
 %TypeHeaderCode
@@ -102,16 +102,16 @@ class SelectionMessage
 
 	public:
 
-	SelectionMessage() throw();
-	SelectionMessage(const SelectionMessage& ) throw();
-	~SelectionMessage() throw();
+	GenericSelectionMessage() throw();
+	GenericSelectionMessage(const GenericSelectionMessage& ) throw();
+	~GenericSelectionMessage() throw();
 	void setSelection(const PyCompositeList&) throw();
 	PyCompositeList getSelection() const throw();
 };
 
 
 class ControlSelectionMessage
-	: SelectionMessage
+	: GenericSelectionMessage
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/KERNEL/message.h>
