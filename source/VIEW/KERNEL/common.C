@@ -7,7 +7,7 @@ namespace BALL
 
 bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS = true;
 
-String getModelName(ModelTypes type) 
+String getModelName(ModelType type) 
 	throw()
 {
 	switch (type)

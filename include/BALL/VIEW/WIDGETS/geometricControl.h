@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.7 2003/09/19 18:41:58 amoll Exp $
+// $Id: geometricControl.h,v 1.8 2003/11/23 16:41:00 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -53,7 +53,7 @@ namespace BALL
 				public:
 
 				SelectableListViewItem(QListView* parent, const QString& text, 
-															 const QString& type, Representation* representation, 
+															 Representation* representation, 
 															 GeometricControl& control)
 					throw();
 

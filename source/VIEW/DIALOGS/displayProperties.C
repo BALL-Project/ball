@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.45 2003/11/21 01:22:51 amoll Exp $
+// $Id: displayProperties.C,v 1.46 2003/11/23 16:42:48 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -61,7 +61,7 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 	model_type_combobox->clear();
 	for (Index p = 0; p < MODEL_LABEL; p++)
 	{
-		model_type_combobox->insertItem(VIEW::getModelName((VIEW::ModelTypes)p).c_str());
+		model_type_combobox->insertItem(VIEW::getModelName((VIEW::ModelType)p).c_str());
 	}
 
 	coloring_method_combobox->clear();
@@ -249,9 +249,9 @@ void DisplayProperties::modifyRepresentationMode()
 {
 	setCaption("modify Representation");
 	apply_button->setText("Modify");
-	if (rep_->getColoringType() != COLORING_UNKNOWN)
+	if (rep_->getColoringMethod() != COLORING_UNKNOWN)
 	{
-		coloring_method_combobox->setCurrentItem(rep_->getColoringType());
+		coloring_method_combobox->setCurrentItem(rep_->getColoringMethod());
 	}
 	
 	precision_combobox->setCurrentItem(rep_->getDrawingPrecision());
@@ -542,7 +542,7 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 	if (rep_ == 0)
 	{
 		// create a new Representation
-		rep = new Representation(model_type_combobox->currentItem(), 
+		rep = new Representation((ModelType)model_type_combobox->currentItem(), 
 														 precision_combobox->currentItem(), 
 														 mode_combobox->currentItem());
 		rebuild_representation = true;
@@ -597,7 +597,7 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 	}
 	else
 	{
-		rep_->setModelType(model_type_combobox->currentItem());
+		rep_->setModelType((ModelType)model_type_combobox->currentItem());
 		if (custom_precision_button->isChecked())
 		{
 			rep_->setSurfaceDrawingPrecision(((float)precision_slider->value()) / 10.0);
@@ -610,7 +610,7 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 		rep_->setDrawingMode(mode_combobox->currentItem());
 	}
 
-	rep->setColoringType(coloring_method_combobox->currentItem());
+	rep->setColoringMethod((ColoringMethod)coloring_method_combobox->currentItem());
 	rep->update(rebuild_representation);
 
 	// no refocus, if a representation already exists

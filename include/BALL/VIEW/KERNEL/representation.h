@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.8 2003/10/28 00:23:16 amoll Exp $
+// $Id: representation.h,v 1.9 2003/11/23 16:40:59 amoll Exp $
 
 #ifndef  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
 #define  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
@@ -20,6 +20,10 @@
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_COMMON_H
+# include <BALL/VIEW/KERNEL/common.h>
 #endif
 
 namespace BALL
@@ -84,7 +88,7 @@ namespace BALL
 				throw();
 
 			///
-			Representation(Index model_type,
+			Representation(ModelType model_type,
 										 Index drawing_precision_,
 										 Index drawing_mode_)
 				throw();
@@ -198,20 +202,24 @@ namespace BALL
 				throw();
 
 			///
-			void setModelType(Index type)
+			void setModelType(ModelType type)
 				throw() { model_type_ = type;}
 
 			///
-			Index getModelType() const
+			ModelType  getModelType() const
 				throw() { return model_type_;}
 
 			///
-			void setColoringType(Index type)
-				throw() { coloring_type_ = type;}
+			String getColoringName() const
+				throw();
 
 			///
-			Index getColoringType() const
-				throw() { return coloring_type_;}
+			void setColoringMethod(ColoringMethod type)
+				throw() { coloring_method_= type;}
+
+			///
+			Index getColoringMethod() const
+				throw() { return coloring_method_;}
 
 			///
 			String getProperties() const
@@ -262,10 +270,10 @@ namespace BALL
 			float 							surface_drawing_precision_;
 
 			//_
-			Index 							model_type_;
+			ModelType 					model_type_;
 
 			//_
-			Index 							coloring_type_;
+			ColoringMethod 			coloring_method_;
 
 			//_
 			Size  							transparency_;

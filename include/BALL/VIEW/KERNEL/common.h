@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.13 2003/11/09 23:42:16 amoll Exp $
+// $Id: common.h,v 1.14 2003/11/23 16:40:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -103,7 +103,7 @@ enum DrawingPrecision
 		Add new model entries before MODEL_LABEL if you want them to show up 
 		in the DisplayProperties dialog!
 */
-enum ModelTypes
+enum ModelType
 {
 	/// unkown property
 	MODEL_UNKNOWN = -1,
@@ -180,7 +180,7 @@ enum ColoringMethod
 };
 
 ///
-String getModelName(ModelTypes type) 
+String getModelName(ModelType type) 
 	throw();
 
 ///

@@ -1,13 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.12 2003/11/03 16:50:34 amoll Exp $
+// $Id: representation.C,v 1.13 2003/11/23 16:42:48 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
-#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/MATHS/common.h>
 
 namespace BALL
@@ -21,7 +20,7 @@ namespace BALL
 					drawing_precision_(DRAWING_PRECISION_HIGH),
 					surface_drawing_precision_(-1),
 					model_type_(MODEL_UNKNOWN),
-					coloring_type_(COLORING_UNKNOWN),
+					coloring_method_(COLORING_UNKNOWN),
 					transparency_(0),
 					model_processor_(0),
 					color_processor_(0),
@@ -38,7 +37,7 @@ namespace BALL
 		}
 
 
-		Representation::Representation(Index model_type,
+		Representation::Representation(ModelType model_type,
 																	 Index drawing_precision,
 																	 Index drawing_mode)
 			throw()
@@ -79,7 +78,7 @@ namespace BALL
 			drawing_mode_= representation.drawing_mode_;
 			drawing_precision_= representation.drawing_precision_;
 			model_type_ = representation.model_type_;
-			coloring_type_ = representation.coloring_type_;
+			coloring_method_ = representation.coloring_method_;
 			transparency_ = representation.transparency_;
 			surface_drawing_precision_ = representation.surface_drawing_precision_;
 
@@ -142,7 +141,7 @@ namespace BALL
 			drawing_mode_= DRAWING_MODE_SOLID;
 			drawing_precision_= DRAWING_PRECISION_HIGH;
 			model_type_ = MODEL_UNKNOWN;
-			coloring_type_ = COLORING_UNKNOWN;
+			coloring_method_ = COLORING_UNKNOWN;
 			transparency_ = 0;
 			surface_drawing_precision_ = -1;
 		}
@@ -175,7 +174,7 @@ namespace BALL
 			BALL_DUMP_DEPTH(s, depth);
 			s << "model type : " << model_type_ << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
-			s << "coloring type : " << coloring_type_ << std::endl;
+			s << "coloring type : " << coloring_method_ << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
 			s << "number of primitives: " << geometric_objects_.size() << std::endl;
 			BALL_DUMP_DEPTH(s, depth);
@@ -245,8 +244,15 @@ namespace BALL
 		String Representation::getModelName() const
 			throw()
 		{
-			return VIEW::getModelName((VIEW::ModelTypes)model_type_);
+			return VIEW::getModelName(model_type_);
 		}
+
+		String Representation::getColoringName() const
+			throw()
+		{
+			return VIEW::getColoringName(coloring_method_);
+		}
+
 
 		String Representation::getProperties() const
 			throw()
