@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.63 2004/11/08 22:12:41 amoll Exp $
+// $Id: molecularStructure.C,v 1.64 2004/11/09 08:49:50 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -541,7 +541,7 @@ namespace BALL
 			}
 			catch (Exception::GeneralException e)
 			{
-				Log.error() << " > normalize named failed: " <<endl; 
+				Log.error() << " > normalize names failed: " <<endl; 
 				Log.error() << e << endl;
 			}
 			catch (std::exception e)
