@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.5 2000/06/30 15:44:35 amoll Exp $
+// $Id: File_test.C,v 1.6 2000/07/04 09:30:10 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 //#include <fstream>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: File_test.C,v 1.5 2000/06/30 15:44:35 amoll Exp $")
+START_TEST(class_name, "$Id: File_test.C,v 1.6 2000/07/04 09:30:10 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -303,12 +303,12 @@ CHECK(isWritable())
 RESULT
 
 CHECK(isExecutable(String name))
-	TEST_EQUAL(f.isExecutable("../configure"), true)	
+	TEST_EQUAL(f.isExecutable(BALL_PATH "/source/configure"), true)	
 	TEST_EQUAL(f.isExecutable("File_test.C"), false)	
 RESULT
 
 CHECK(isExecutable())
-	File f1("../configure");
+	File f1(BALL_PATH "/source/configure");
 	TEST_EQUAL(f1.isExecutable(), true)	
 	File f2("File_test.C");
 	TEST_EQUAL(f2.isExecutable(), false)	
