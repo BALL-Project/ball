@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regExp.h,v 1.20 2003/03/26 13:56:19 anhi Exp $
+// $Id: regExp.h,v 1.21 2003/06/09 22:40:44 oliver Exp $
+//
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -51,7 +52,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_DEEP(RegularExpression)
+		BALL_CREATE(RegularExpression)
 
 		/**	@name	String constants 
 		*/
@@ -122,7 +123,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		RegularExpression(const RegularExpression& regular_expression, bool deep = true)
+		RegularExpression(const RegularExpression& regular_expression)
 			throw();
 
 		/**	Detailled constructor	
@@ -152,22 +153,20 @@ namespace BALL
 
 		/** Assignment operator
 		*/
-		const RegularExpression& operator = (const RegularExpression& expression) throw();
+		RegularExpression& operator = (const RegularExpression& expression) throw();
 
 		/**	Assign from another instance
-				@param deep ignored (needed for a consistent interface only)
 		*/
-		void set(const RegularExpression& regular_expression, bool deep = true) throw();
+		void set(const RegularExpression& regular_expression) throw();
 
 		/**	Assign from a string.
 				@param wildcard_pattern ?????
 		*/
 		void set(const String& pattern, bool wildcard_pattern = false) throw();
 
-		/**	Assign to an other instance
-				@param deep ignored (needed for a consistent interface only)
+		/**	Assign to another instance
 		*/
-		void get(RegularExpression& regular_expression, bool deep = true) const throw();
+		void get(RegularExpression& regular_expression) const throw();
 
 		//@}
 		/**	@name	Accessors
@@ -198,7 +197,7 @@ namespace BALL
 				@param from index in the string to start the matching
 				@param execute_flags ?????
 		*/
-		bool match(const String& text, Index from = 0, int execute_flags = 0 ) const
+		bool match(const String& text, Index from = 0, int execute_flags = 0) const
 			throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow);
 	
 		/**	Match a substring with this regular expression.
@@ -282,7 +281,7 @@ namespace BALL
 				@param s the ostream, default is the standard output
 				@param depth the indentation depth of the output
 		*/
-		virtual void dump(::std::ostream& s = ::std::cout, Size depth = 0) const
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
 
 		//@}
@@ -292,12 +291,12 @@ namespace BALL
 
 		/**	output operator
 		*/
-		friend ::std::ostream& operator << (::std::ostream& s, const RegularExpression& regular_expression)
+		friend std::ostream& operator << (std::ostream& s, const RegularExpression& regular_expression)
 			throw();
 
 		/**	input operator
 		*/
-		friend ::std::istream& operator >> (::std::istream& s, RegularExpression& regular_expression)
+		friend std::istream& operator >> (std::istream& s, RegularExpression& regular_expression)
 			throw();
 
 		//@}

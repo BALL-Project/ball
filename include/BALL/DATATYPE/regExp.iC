@@ -1,10 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regExp.iC,v 1.7 2002/12/12 09:48:43 oliver Exp $
+// $Id: regExp.iC,v 1.8 2003/06/09 22:40:44 oliver Exp $
+//
 
 BALL_INLINE 
-void RegularExpression::set(const RegularExpression& regular_expression, bool /* deep */)
+void RegularExpression::set(const RegularExpression& regular_expression)
 	throw()
 {
 	pattern_.set(regular_expression.pattern_);
@@ -26,7 +27,7 @@ void RegularExpression::set(const String& pattern, bool wildcard_pattern) throw(
 }
 
 BALL_INLINE 
-const RegularExpression& RegularExpression::operator = (const RegularExpression& expression) 
+RegularExpression& RegularExpression::operator = (const RegularExpression& expression) 
 	throw()
 {
 	this->set(expression);
@@ -35,9 +36,9 @@ const RegularExpression& RegularExpression::operator = (const RegularExpression&
 
 
 BALL_INLINE 
-void RegularExpression::get(RegularExpression& regular_expression, bool deep) const throw()
+void RegularExpression::get(RegularExpression& regular_expression) const throw()
 {
-  regular_expression.set(*this, deep);
+  regular_expression.set(*this);
 }
 
 BALL_INLINE 
