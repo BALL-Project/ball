@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.5 1999/10/30 12:53:38 oliver Exp $
+// $Id: socket.C,v 1.6 1999/11/03 08:41:04 oliver Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -32,7 +32,6 @@
 #define FD_ZERO(p) (memset ((p), 0, sizeof *(p)))
 
 using std::cerr;
-using std::ios;
 using std::endl;
 
 namespace BALL 
@@ -118,9 +117,9 @@ namespace BALL
 	{
 		overflow(EOF);
 
-		if (rep->cnt == 1 && !(xflags () & _S_DELETE_DONT_CLOSE))
+		if (rep->cnt == 1 && !(xflags() & _S_DELETE_DONT_CLOSE))
 		{
-			close ();
+			close();
 		}
 
 		delete [] pbase();
@@ -166,14 +165,14 @@ namespace BALL
 	// return EOF when it could not flush
 	int SocketBuf::flush_output()
 	{
-		if (pptr () <= pbase ()) 
+		if (pptr() <= pbase()) 
 		{
 			return 0;
 		}
 
-		if (!(xflags () & _S_NO_WRITES)) 
+		if (!(xflags() & _S_NO_WRITES)) 
 		{
-			int wlen = (int)(pptr () - pbase());
+			int wlen = (int)(pptr() - pbase());
 			int wval = (int)sys_write(pbase(), wlen);
 			int status = (wval == wlen) ? 0: EOF;
 
@@ -228,7 +227,7 @@ namespace BALL
 			return EOF;
 		}
 		
-		int bufsz = unbuffered () ? 1: BUFSIZ;
+		int bufsz = unbuffered() ? 1: BUFSIZ;
 		int rval = (int)sys_read(pbase(), bufsz);
 
 		if (rval == EOF) 
@@ -264,7 +263,7 @@ namespace BALL
 			return EOF;
 		}
 		
-		if (pptr () >= epptr() && flush_output() == EOF)
+		if (pptr() >= epptr() && flush_output() == EOF)
 		{
 			return EOF;
 		}
@@ -314,7 +313,7 @@ namespace BALL
 
 	int SocketBuf::connect(SockAddr& sa)
 	{
-		if (::connect(rep->sock, sa.getAddr (), sa.getSize()) == -1) 
+		if (::connect(rep->sock, sa.getAddr(), sa.getSize()) == -1) 
 		{
 			// error("SocketBuf::connect");
 			return errno;
@@ -335,7 +334,7 @@ namespace BALL
 		BALL_SOCKLEN_TYPE len = sa.getSize();
 		int soc = -1;
 
-		while ((soc = ::accept (rep->sock, sa.getAddr (), &len)) == -1 && errno == EINTR)
+		while ((soc = ::accept (rep->sock, sa.getAddr(), &len)) == -1 && errno == EINTR)
 		{
 			errno = 0;
 		}
@@ -407,7 +406,7 @@ namespace BALL
 		int	rval;
 		BALL_SOCKLEN_TYPE	sock_addr_len = sa.getSize();
 		
-		if ((rval = ::recvfrom (rep->sock, (char*) buf, len, msgf, sa.getAddr (), &sock_addr_len)) == -1)
+		if ((rval = ::recvfrom (rep->sock, (char*) buf, len, msgf, sa.getAddr(), &sock_addr_len)) == -1)
 		{
 			error ("SocketBuf::recvfrom");
 		}
@@ -474,7 +473,7 @@ namespace BALL
 		while(len>0) 
 		{
 			int	wval;
-			if ((wval = ::sendto (rep->sock, (char*) buf, len, msgf, sa.getAddr (), sa.getSize())) == -1) 
+			if ((wval = ::sendto (rep->sock, (char*) buf, len, msgf, sa.getAddr(), sa.getSize())) == -1) 
 			{
 				error ("SocketBuf::sendto");
 				return wval;
@@ -570,7 +569,7 @@ namespace BALL
 		int ret = select (rep->sock+1, 0, &fds, 0, (wp_sec == -1) ? 0: &tv);
 		if (ret == -1) 
 		{
-			error ("Select::operator ()");
+			error ("Select::operator()");
 			return 0;
 		}
 
@@ -590,7 +589,7 @@ namespace BALL
 		int ret = select (rep->sock+1, 0, 0, &fds, (wp_sec == -1) ? 0: &tv);
 		if (ret == -1) 
 		{
-			error ("Select::operator ()");
+			error ("Select::operator()");
 			return 0;
 		}
 
@@ -779,7 +778,7 @@ namespace BALL
 
 	ISockStream::~ISockStream()
 	{
-		delete ios::rdbuf();
+		delete rdbuf();
 		init(0);
 	}
 
@@ -790,7 +789,7 @@ namespace BALL
 
 	OSockStream::~OSockStream()
 	{
-		delete ios::rdbuf();
+		delete rdbuf();
 		init(0);
 	}
 
@@ -801,7 +800,7 @@ namespace BALL
 
 	IOSockStream::~IOSockStream()
 	{
-		delete ios::rdbuf();
+		delete rdbuf();
 		init(0);
 	}
 
@@ -1108,21 +1107,21 @@ namespace BALL
 		return connect(sa);
 	}
 
-
-
 	IOStreamSocket::IOStreamSocket(SocketBuf::type ty, int proto)
-		: ios(new SockInetBuf(ty, proto))
+		:	std::basic_ios<char>(new SockInetBuf(ty, proto))
 	{
+		std::cerr << "called IOStreamSocket(type = " << ty << ",  proto = " << proto << ")" << std::endl;
 	}
 
-	IOStreamSocket::IOStreamSocket(const SocketBuf& sb)
-		: ios(new SockInetBuf(sb))
+	IOStreamSocket::IOStreamSocket(SocketBuf& sb)
+		: std::basic_ios<char>(new SockInetBuf(sb))
 	{
+		std::cerr << "called IOStreamSocket(SocketBuf& sb = " << (void*)&sb << ")" << std::endl;
 	}
 
-	IOStreamSocket::~IOStreamSocket (void)
+	IOStreamSocket::~IOStreamSocket()
 	{
-		delete ios::rdbuf();
+		delete std::basic_ios<char>::rdbuf();
 		init(0);
 	}
 
