@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.h,v 1.6 2003/10/15 14:25:56 amoll Exp $
+// $Id: molecularProperties.h,v 1.7 2003/10/15 14:29:03 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
@@ -23,9 +23,8 @@ namespace BALL
 	namespace VIEW
 	{
 
-/**	The MolecularProperties class.
-		The class MolecularProperties is a widget that converts certain Message
-		objects to other Message objects.
+/**	MolecularProperties is a widget that reacts to Messages itself and converts some
+		to other Message objects.
 		This class is necessary to convert new Composite objects opened with either
 		openPDBFile or openHINFile to Composite objects
 		that have certain molecular properties. Further it converts the geometric selection
@@ -48,7 +47,6 @@ class MolecularProperties
 	//@{
 
 	/** Default Constructor.
-			Constructs new molecularProperties.
 			Calls registerWidget.
 			\param      parent the parent widget of this molecularProperties 
 			\param      name the name of this molecularProperties 
@@ -65,7 +63,6 @@ class MolecularProperties
 	//@{
 
 	/** Destructor.
-			Default destruction of this molecularProperties.
 	*/
 	virtual ~MolecularProperties()
 		throw();
@@ -75,16 +72,11 @@ class MolecularProperties
 	 */
 	//@{
 
-	/** Message handling method.
-			Handles messages sent by other registered ConnectionObject objects.
+	/** Handles messages sent by other registered ConnectionObject objects.
 			Converts NewCompositeMessage to NewMolecularMessage if the
 			retrieved Composite object is kind of AtomContainer and
 			applies molecular properties to it (like normalize_names and
 			build_bonds).\par
-			Converts GeometricObjectSelectionMessage to NewMolecularMessage
-			if every Composite object in the selection has an ancestor that is
-			an AtomContainer. These found ancestors are put into a new selection
-			that is sent with the NewMolecularMessage.
 			\param message the pointer to the message that should be processed
 			\see   Message
 			\see   NewCompositeMessage
@@ -101,15 +93,13 @@ class MolecularProperties
 			will be enabled if the selection of molecular objects is not empty.
 			The menu <b> Focus camera</b> will be enabled only if only one molecular object
 			is in the selection list.
-
-	 */
+	*/
 	void checkMenu(MainControl& main_control)
 		throw();
 
 	public slots:
 
-	/** Centers the camera.
-			Centers the camera of Scene to the geometric center of the molecular objects
+	/** Centers the camera of Scene to the geometric center of the molecular objects
 			in the selection list.
 			The messages WindowMessage and SceneMessage will
 			be sent to inform the MainControl and the Scene about the change.
@@ -138,7 +128,6 @@ class MolecularProperties
 	*/
 	void addHydrogens();
 	
-
 	/** Colors selected objects uniquely.
 			If selected molecular objects are available they will be colored according to
 			the selected color as specified in GeometricObject.
@@ -175,8 +164,13 @@ private:
 	virtual void addComposite_(Composite& composite, const String& name)
 		throw();
 
-	Index center_camera_id_, build_bonds_id_, add_hydrogens_id_, check_structure_id_,
-				select_id_, deselect_id_, create_distance_grid_id_;
+	Index center_camera_id_, 
+				build_bonds_id_, 
+				add_hydrogens_id_, 
+				check_structure_id_,
+				select_id_, 
+				deselect_id_, 
+				create_distance_grid_id_;
 
 	
 	Vector3 										view_center_vector_;

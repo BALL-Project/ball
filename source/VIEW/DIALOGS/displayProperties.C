@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.17 2003/10/15 13:53:32 amoll Exp $
+// $Id: displayProperties.C,v 1.18 2003/10/15 14:31:35 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -429,7 +429,6 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 		rep = rep_;
 	}
 
-	rep->setColorProcessor(color_processor);
 	model_processor->setColorProcessor(color_processor);
 	rep->setModelProcessor(model_processor);
 	if (transparency->value() != 0)
