@@ -1,4 +1,4 @@
-// $Id: constants.h,v 1.6 2000/05/15 19:11:50 oliver Exp $
+// $Id: constants.h,v 1.7 2001/02/04 10:29:42 amoll Exp $
 
 #ifndef BALL_COMMON_CONSTANTS_H
 #define BALL_COMMON_CONSTANTS_H
@@ -17,22 +17,13 @@ namespace BALL
 					\item specify all namespaces:\\
 							{\tt float my_pi = BALL::Constants::PI}
 					\item shortcut via the {\tt using directive}:\\
-							{\tt using namespace BALL::Constants; float my_pi = PI;}
+							{\tt using namespace BALL::Constants; \\float my_pi = PI;}
 				\end{itemize}
 				{\bf Definition:} \URL{BALL/COMMON/constants.h}
 		*/
 		//@{
 
-		/**	@name	Mathematical constants
-				All constants are double precision.\\
-				There are basically two ways of accessing these constants:
-				\begin{itemize}
-					\item specify all namespaces:\\
-							{\tt float my_pi = BALL::Constants::PI}
-					\item shortcut via the {\tt using directive}:\\
-							{\tt using namespace BALL::Constants; float my_pi = PI;}
-				\end{itemize}
-				{\bf Definition:} \URL{BALL/COMMON/constants.h}
+		/**	@name	Mathematical constants.
 		*/
 		//@{
 
@@ -48,16 +39,7 @@ namespace BALL
 		extern double EPSILON;
 		//@}
 			
-		/**	@name Chemical/physical constants
-				All constants are double precision.\\
-				There are basically two ways of accessing these constants:
-				\begin{itemize}
-					\item specify all namespaces:\\
-							{\tt float my_pi = BALL::Constants::PI}
-					\item shortcut via the {\tt using directive}:\\
-							{\tt using namespace BALL::Constants; float my_pi = PI;}
-				\end{itemize}
-				{\bf Definition:} \URL{BALL/COMMON/constants.h}
+		/**	@name Chemical/physical constants.
 		*/
 		//@{
 		
@@ -174,15 +156,6 @@ namespace BALL
 		//@}
 
 		/**	@name	Conversion factors
-				All constants are double precision.\\
-				There are basically two ways of accessing these constants:
-				\begin{itemize}
-					\item specify all namespaces:\\
-							{\tt float my_pi = BALL::Constants::PI}
-					\item shortcut via the {\tt using directive}:\\
-							{\tt using namespace BALL::Constants; float my_pi = PI;}
-				\end{itemize}
-				{\bf Definition:} \URL{BALL/COMMON/constants.h}
 		*/
 		//@{		
 			

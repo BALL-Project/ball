@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.7 2000/12/12 16:14:46 oliver Exp $
+// $Id: global.h,v 1.8 2001/02/04 10:29:43 amoll Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -116,11 +116,10 @@ namespace BALL
 	typedef BALL_SIZE_TYPE Property;
 
 	/**	Error code property type.
-			Use this type to represent (signed) error codes.
-			@see PropertyManager
-			\\
+			Use this type to represent (signed) error codes. \\
 			{\bf Size:} 32 bit\\
 			{\bf persistent}
+			@see PropertyManager
 	*/
 	typedef BALL_INDEX_TYPE ErrorCode;
 

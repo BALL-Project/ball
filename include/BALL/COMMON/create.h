@@ -1,10 +1,9 @@
-// $Id: create.h,v 1.3 2000/08/30 19:57:59 oliver Exp $
+// $Id: create.h,v 1.4 2001/02/04 10:29:43 amoll Exp $
 
 #ifndef BALL_COMMON_CREATE_H
 #define BALL_COMMON_CREATE_H
 
 /**	@name	Dynamic Creation and Virtual Construction of Objects
-		@nonames
 */
 //@{
 
