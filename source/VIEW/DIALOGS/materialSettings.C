@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.C,v 1.8 2004/10/08 14:49:15 amoll Exp $
+// $Id: materialSettings.C,v 1.9 2004/10/22 20:33:41 amoll Exp $
 // 
 
 #include <BALL/VIEW/DIALOGS/materialSettings.h>
@@ -53,10 +53,10 @@ namespace BALL
 		void MaterialSettings::setDefaultValues(bool /*all*/)
 			throw()
 		{
-			material_values_[0] = 0.774;// specular
-			material_values_[1] = 0.4; 	// diffuse
-			material_values_[2] = 0.25; // ambient
-			material_values_[3] = 76.8; // shininess
+			material_values_[0] = (float) 0.774;// specular
+			material_values_[1] = (float) 0.4; 	// diffuse
+			material_values_[2] = (float) 0.25; // ambient
+			material_values_[3] = (float) 76.8; // shininess
 
 			setValues_();
 		}
