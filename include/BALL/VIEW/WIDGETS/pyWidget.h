@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.14 2004/04/19 12:51:54 amoll Exp $
+// $Id: pyWidget.h,v 1.15 2004/04/19 17:09:37 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -41,8 +41,6 @@ namespace BALL
 
 			public:
 			
-			//BALL_EMBEDDABLE(PyWidgetData)
-
 			/**	@name	Constructors and Destructors
 			*/
 			//@{
@@ -80,6 +78,9 @@ namespace BALL
 
 			/// Open a dialog to select a start up script
 			virtual void scriptDialog();
+
+			///
+			virtual void abortScript();
 
 			/**	Run a Python program from a file.
 					\param filename the name of the program file
@@ -158,6 +159,7 @@ namespace BALL
 			String					current_line_;
 			String 					startup_script_;
 			PythonSettings* python_settings_;
+			bool 						stop_script_;
 		}; 
 
 
@@ -173,7 +175,7 @@ namespace BALL
 
 			public:
 			
-			//BALL_EMBEDDABLE(PyWidget)
+			BALL_EMBEDDABLE(PyWidget, Embeddable)
 
 			/**	@name	Constructors and Destructors
 			*/
@@ -186,6 +188,14 @@ namespace BALL
 					\param name the widget name
 			*/
 			PyWidget(QWidget* parent = 0, const char* name = 0)
+				throw();
+
+			/// only needed for Pyhon Interface
+			PyWidget(const PyWidget& p)
+				throw();
+
+			///
+			~PyWidget()
 				throw();
 
 			/**	@name	ModularWidget related methods
@@ -228,8 +238,14 @@ namespace BALL
 			void cancelPreferences(Preferences&)
 				throw();
 
+			///
 			virtual void startInterpreter();
+			
+			///
 			virtual void stopInterpreter();
+			
+			///
+			bool toAbortScript() throw() { return text_edit_->stop_script_;}
 
 			protected:
 

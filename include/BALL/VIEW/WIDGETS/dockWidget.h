@@ -29,7 +29,7 @@ namespace BALL
 
 			public:
 
-			BALL_EMBEDDABLE(DockWidget,ModularWidget)
+			BALL_EMBEDDABLE(DockWidget,Embeddable)
 
 			// required for Python bindings, but dont use this method
 			DockWidget();

@@ -1,36 +1,29 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.sip,v 1.6 2003/10/31 23:15:50 oliver Exp $
+// $Id: pyWidget.sip,v 1.7 2004/04/19 17:08:19 amoll Exp $
 //
 
 class PyWidget
-  // : public QMultiLineEdit,
   : ModularWidget
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/WIDGETS/pyWidget.h>
 	using namespace BALL;
-	using namespace VIEW;
+	using namespace BALL::VIEW;
 %End
- 	// Q_OBJECT
   public:
-	// BALL_EMBEDDABLE(PyWidget)
-	// is expanded to:
-	//static Size countInstances();
-	//static PyWidget* getInstance(const String& /identifier/);
-	//static PyWidget* getInstance(Position /index/);
+	// methods implemented by the BALL_EMBEDDED macro
+	static Size countInstances();
+	static PyWidget* getInstance(Position /index/);
 	
-  // PyWidget(QWidget* /parent/ = 0, const char* /name/ = 0);
-	PyWidget(const PyWidget& /widget/);
- 	~PyWidget() throw();
+  PyWidget() throw();
+	PyWidget(const PyWidget& /widget/) throw();
+  ~PyWidget() throw();
 	
-	// public slots:
-	public:
-	virtual void startInterpreter();
-	virtual void stopInterpreter();
-	virtual void initializeWidget(MainControl& /main_control/) throw();
-	virtual void finalizeWidget(MainControl& /main_control/) throw();
-
-	// virtual void mousePressEvent(QMouseEvent* /m/);
+	void startInterpreter();
+	void stopInterpreter();
+	void initializeWidget(MainControl& /main_control/) throw();
+	void finalizeWidget(MainControl& /main_control/) throw();
+	bool toAbortScript() throw();
 }; 
