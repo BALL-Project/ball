@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.12 2000/09/01 11:12:16 oliver Exp $ 
+// $Id: hashMap.h,v 1.13 2000/09/01 23:01:43 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -61,9 +61,7 @@ namespace BALL
 		{
 			public:
 			IllegalKey(const char* file, int line)
-				:	Exception::GeneralException(file, line)
-			{	
-			}
+				:	Exception::GeneralException(file, line) {}
 		};
 		//@}
 
@@ -102,9 +100,10 @@ namespace BALL
 		//@{
 
 		BALL_CREATE(HashMap)
+
 		/**	Default constructor.
 				Create a new and empty hash map.
-				@param initial_capacity the capcaity of the hash map
+				@param initial_capacity the capacity of the hash map
 				@param number_of_buckets the number of buckets to create
 		*/
 		HashMap(Size initial_capacity = INITIAL_CAPACITY, Size number_of_buckets = INITIAL_NUMBER_OF_BUCKETS);
@@ -120,10 +119,8 @@ namespace BALL
 		virtual ~HashMap()
 		{
 			destroy();
-			
 			deleteBuckets_();
 		}
-
 
 		/**	Clear the hash map.
 				Remove all nodes from all buckets.
@@ -214,7 +211,9 @@ namespace BALL
 
 		/**	Erase a range of elements.
 				Erase all elemntes in the range {\tt \[first, last)}.
+				Not yet implemented.
 		*/
+		// BAUSTELLE
 		void erase(Iterator first, Iterator last);
 		//@}
 
@@ -253,12 +252,12 @@ namespace BALL
 		//@{
 
 		/**	Return true if the hash map is consistent.
-				Condition: the number of entries in all buckets has to equal the 
+				Condition: the number of entries in all buckets has to be equal the 
 				stored number of entries (getSize()).
 		*/
 		bool isValid() const;
 
-		/**
+		/** Dump the constent of this instance to an ostream.
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
@@ -277,6 +276,10 @@ namespace BALL
 
 		// --- INTERNAL ITERATORS
 
+		/** Apply a processor to the hashmap.
+				Not yet implemented.
+				@return true if the processor could be applied.
+		*/
 		bool apply(UnaryProcessor<ValueType>& processor);
 
 		// --- EXTERNAL ITERATORS
@@ -513,8 +516,7 @@ namespace BALL
 	};
 
 	template <class Key, class T>
-	HashMap<Key, T>::HashMap
-		(Size initial_capacity, Size number_of_buckets)
+	HashMap<Key, T>::HashMap(Size initial_capacity, Size number_of_buckets)
 		:	size_(0),
 			capacity_(initial_capacity),
 			bucket_(number_of_buckets)
@@ -526,8 +528,7 @@ namespace BALL
 	}
 
 	template <class Key, class T>
-	HashMap<Key, T>::HashMap
-		(const HashMap& hash_map)
+	HashMap<Key, T>::HashMap(const HashMap& hash_map)
 		:	size_(hash_map.size_),
 			capacity_(hash_map.capacity_),
 			bucket_(hash_map.bucket_.size())
@@ -544,7 +545,6 @@ namespace BALL
 			}
 		}
 	}
-
 
 	template <class Key, class T>
 	void HashMap<Key, T>::clear()
@@ -574,8 +574,7 @@ namespace BALL
 
 	template <class Key, class T>
 	BALL_INLINE 
-	void HashMap<Key, T>::set
-		(const HashMap& hash_map)
+	void HashMap<Key, T>::set(const HashMap& hash_map)
 	{
 		if (&hash_map == this)
 		{
@@ -781,27 +780,6 @@ namespace BALL
 			return 0;
 		}
 	}
-
-
-	template <class Key, class T>
-	BALL_INLINE 
-	void HashMap<Key, T>::deleteBuckets_()
-	{
-		Size i = 0;
-		Node*	node = 0;
-		Node*	next_node = 0;
-		for (i = 0; i < bucket_.size(); i++)
-		{
-			node = bucket_[i];
-			while (node != 0)
-			{
-				next_node = node->next;
-				deleteNode_(node);
-				node = next_node;
-			}
-			bucket_[i] = 0;
-		}
-	}
 		
 	template <class Key, class T>
 	BALL_INLINE 
@@ -915,22 +893,7 @@ namespace BALL
 	{
 		// BAUSTELLE
 	}
-
-	template <class Key, class T>
-	BALL_INLINE 
-	HashMap<Key, T>::Node* HashMap<Key, T>::newNode_
-		(const ValueType& value, HashMap<Key, T>::Node* next) const
-	{
-		return new Node(value, next);
-	}
 		
-	template <class Key, class T>
-	BALL_INLINE 
-	void HashMap<Key, T>::deleteNode_(HashMap<Key, T>::Node* node) const
-	{
-		delete node;
-	}
-
 	template <class Key, class T>
 	BALL_INLINE 
 	HashIndex HashMap<Key, T>::hash(const Key& key) const
@@ -940,17 +903,54 @@ namespace BALL
 
 	template <class Key, class T>
 	BALL_INLINE 
+	void HashMap<Key, T>::rehash()
+	{
+		capacity_ = (Size)getNextPrime(bucket_.size() * 2);
+	}
+
+
+	template <class Key, class T>
+	BALL_INLINE 
+	void HashMap<Key, T>::deleteBuckets_()
+	{
+		Size i = 0;
+		Node*	node = 0;
+		Node*	next_node = 0;
+		for (i = 0; i < bucket_.size(); i++)
+		{
+			node = bucket_[i];
+			while (node != 0)
+			{
+				next_node = node->next;
+				deleteNode_(node);
+				node = next_node;
+			}
+			bucket_[i] = 0;
+		}
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	HashMap<Key, T>::Node* HashMap<Key, T>::newNode_
+		(const ValueType& value, HashMap<Key, T>::Node* next) const
+	{
+		return new Node(value, next);
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
+	void HashMap<Key, T>::deleteNode_(HashMap<Key, T>::Node* node) const
+	{
+		delete node;
+	}
+
+	template <class Key, class T>
+	BALL_INLINE 
 	bool HashMap<Key, T>::needRehashing_() const
 	{
 		return (bool)(size_ >= capacity_);
 	}
 
-	template <class Key, class T>
-	BALL_INLINE 
-	void HashMap<Key, T>::rehash()
-	{
-		capacity_ = (Size)getNextPrime(bucket_.size() * 2);
-	}
 
 	template <class Key, class T>
 	BALL_INLINE 
