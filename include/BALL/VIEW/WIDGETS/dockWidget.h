@@ -46,6 +46,10 @@ namespace BALL
 			/** Insert a widget with the content of the window.
 			 */
 			void setGuest(QWidget& guest);
+
+			///
+			QVBoxLayout* getLayout()
+				throw() {return layout_;}
 			
 			/**	Initialize the widget.
 					@see ModularWidget::initializeWidget
