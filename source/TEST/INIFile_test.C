@@ -1,4 +1,4 @@
-// $Id: INIFile_test.C,v 1.9 2001/04/09 23:03:11 amoll Exp $
+// $Id: INIFile_test.C,v 1.10 2001/04/10 12:29:24 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.9 2001/04/09 23:03:11 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.10 2001/04/10 12:29:24 amoll Exp $")
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
@@ -253,7 +253,7 @@ CHECK(INIFile::getSectionFirstLine(const String& section_name) const )
   TEST_EQUAL(*ini.getSectionFirstLine("Section2"), "[Section2]")
   TEST_EQUAL(*ini.getSectionFirstLine("Section3"), "[Section3]")
   TEST_EQUAL(*ini.getSectionFirstLine("Section4"), "[Section4]")
-  TEST_EQUAL(ini.getSectionFirstLine("") == it, true)
+  TEST_EQUAL(+ini.getSectionFirstLine(""), false)
 RESULT
 
 
