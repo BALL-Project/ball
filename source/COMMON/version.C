@@ -1,16 +1,16 @@
-// $Id: version.C,v 1.6 2000/07/17 22:38:16 oliver Exp $
+// $Id: version.C,v 1.7 2000/11/13 01:49:50 amoll Exp $
 
 #include <BALL/COMMON/version.h>
 #include <BALL/DATATYPE/string.h>
 
 namespace BALL
 {
-	const char* VersionInfo::getVersion()
+	const char* VersionInfo::getVersion() throw()
 	{
 		return BALL_RELEASE_STRING " ("__DATE__", " __TIME__ ")";
 	}
 
-	int VersionInfo::getMinorRevision()
+	int VersionInfo::getMinorRevision() throw(Exception::InvalidFormat)
 	{
 		static String release(BALL_RELEASE_STRING);
 		String minor = release.getField(1, ".");
@@ -19,13 +19,13 @@ namespace BALL
 		return minor.toInt();
 	}
 	
-	int VersionInfo::getMajorRevision()
+	int VersionInfo::getMajorRevision() throw(Exception::InvalidFormat)
 	{
 		static String release(BALL_RELEASE_STRING);
 		return release.getField(0, ". ").toInt();
 	}
 	
-	VersionInfo::Type VersionInfo::getType()
+	VersionInfo::Type VersionInfo::getType() throw()
 	{
 		static String release(BALL_RELEASE_STRING);
 		
