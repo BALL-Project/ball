@@ -1,4 +1,4 @@
-// $Id: amber.h,v 1.12 2001/06/24 21:26:09 oliver Exp $ 
+// $Id: amber.h,v 1.13 2002/02/14 16:46:52 anker Exp $ 
 // Molecular Mechanics: Amber force field class
 
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
@@ -158,7 +158,7 @@ namespace BALL
 		};
 
 		//@}
-		/** @name	Constructors and Destructors
+		/** @name	Constructors and Destructor
 		*/
 		//@{
 
@@ -186,7 +186,7 @@ namespace BALL
 		virtual ~AmberFF();
 
 		//@}
-		/**	Assignment
+		/**	@name Assignment
 		*/
 		//@{
 
@@ -210,7 +210,7 @@ namespace BALL
 		virtual bool specificSetup();
 
 		//@}
-		/**	Accessors specific to the AMBER force field
+		/**	@name Accessors specific to the AMBER force field
 		*/
 		//@{
 
