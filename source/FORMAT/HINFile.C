@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.55 2003/05/22 15:14:15 oliver Exp $
+// $Id: HINFile.C,v 1.56 2003/05/23 06:48:23 oliver Exp $
 //
 
 #include <BALL/FORMAT/HINFile.h>
@@ -186,8 +186,8 @@ namespace BALL
 		// search components until all atoms have been considered
 		while (start_index < atom_vector.size())
 		{
-			while ((index_vector[start_index] >= 0) && 
-						 (start_index < atom_vector.size()))
+			while ((start_index < atom_vector.size()) && (index_vector[start_index] >= 0))
+						 
 			{
 				start_index++;
 			}
@@ -733,7 +733,8 @@ namespace BALL
 					// create a fragment to insert the "loose" atoms into
 					if (fragment == 0)
 					{
-						chain->AtomContainer::insert(*(fragment = new Fragment));
+						fragment = new Fragment;
+						chain->AtomContainer::insert(*fragment);
 					}
 
 					// now check for a molecule, that might already exist
@@ -834,10 +835,17 @@ namespace BALL
 					{
 						if (fragment->countAtoms() == 0)
 						{
-							chain->AtomContainer::remove(*fragment);
+							delete fragment;
 						}
 					}
 					fragment = 0;
+					if (chain != 0)
+					{
+						if (chain->countAtoms() == 0)
+						{
+							delete chain;
+						}
+					}
 					chain = 0;
 
 
