@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.12 2000/07/18 08:29:56 oliver Exp $
+// $Id: snapShot.C,v 1.13 2000/07/24 20:14:57 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -95,11 +95,12 @@ namespace BALL
 	// It the file is already existent and overwrite is set to false, the header will read in and compared
 	// with the given system. They must match. Subsequent snapshots will then 
 	// be appended to the file.
-	SnapShotManager::SnapShotManager (System & my_system, ForceField & my_forcefield, 
-                     String my_snapshot_file,bool overwrite)
+	SnapShotManager::SnapShotManager
+		(System& my_system, ForceField& my_forcefield, 
+		 const String& my_snapshot_file, bool overwrite)
 	{
 		// call the setup method
-		valid_ = setup (my_system, my_forcefield, my_snapshot_file, overwrite, options);
+		valid_ = setup (my_system, my_forcefield, options, my_snapshot_file, overwrite);
 	}
 
 
@@ -112,12 +113,12 @@ namespace BALL
 	// It the file is already existent and overwrite is set to false, the header will read in and compared
 	// with the given system. They must match. Subsequent snapshots will 
 	// be appended to the file. 
-	SnapShotManager::SnapShotManager (System & my_system, 
-											ForceField & my_forcefield, String my_snapshot_file, bool overwrite,
-                                    Options & myoptions)
+	SnapShotManager::SnapShotManager 
+		(System& my_system, ForceField& my_forcefield, Options & myoptions,
+		 const String& my_snapshot_file, bool overwrite)
 	{
 		// simply call the setup method
-		valid_ = setup (my_system, my_forcefield, my_snapshot_file, overwrite, myoptions);
+		valid_ = setup (my_system, my_forcefield, myoptions, my_snapshot_file, overwrite);
 	}
 
 	// A simple constructor for SnapShotManager, which does basically nothing 
@@ -250,14 +251,14 @@ namespace BALL
 
 
 	// The setup method does the actual preparations
-	bool SnapShotManager::setup (System & my_system,
-															 ForceField & my_forcefield, String my_snapshot_file, 
-                               bool overwrite, Options & myoptions)
+	bool SnapShotManager::setup 
+		(System& my_system, ForceField& my_forcefield, Options & myoptions,
+		 const String& my_snapshot_file, bool overwrite)
 	{
 		// local variables
 		bool result;
 
-		  vector < SnapShot * >::iterator it;
+		vector<SnapShot*>::iterator it;
 
 		// delete the vector of pointers to SnapShot objects
 		for (it = snapshot_list_.begin(); it != snapshot_list_.end(); ++it)
