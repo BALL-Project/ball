@@ -1,4 +1,4 @@
-// $Id: HINFile.h,v 1.10 2001/01/24 11:51:20 anker Exp $
+// $Id: HINFile.h,v 1.11 2001/02/27 01:58:46 amoll Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -25,10 +25,8 @@ namespace BALL
 	class Atom;
 
 	/**	HyperChem file class.
-			This class enables BALL to read and write HyperChem HIN files.
-			\\
-			{\bf Definition:} \URL{BALL/FORMAT/HINFile.h}
-			\\
+			This class enables BALL to read and write HyperChem HIN files. \\
+			{\bf Definition:} \URL{BALL/FORMAT/HINFile.h} \\
 	*/
 	class HINFile
 		: public File
@@ -57,7 +55,6 @@ namespace BALL
 		virtual ~HINFile();
 		
 		//@}
-
 		/**	@name Reading and Writing of Kernel Datastructures
 		*/
 		//@{
@@ -89,7 +86,7 @@ namespace BALL
 		bool hasPeriodicBoundary() const;
 
 		/**	Return the periodic boundary of the file.
-				an emptry box is returned if no periodic boundary is defined.
+				An emptry box is returned if no periodic boundary is defined.
 				@return	the boundary box
 		*/
 		Box3	getPeriodicBoundary() const;
@@ -97,10 +94,11 @@ namespace BALL
 		/**	Return the temperature stored in the file.
 				HIN files may contain a {\tt sys} entry containing
 				the temperature of the last simulation step. If it is set,
-				it is returned. Otwerwise 0 is returned.
+				it is returned. Otherwise 0 is returned.
 				@return	the final simulation temperature
 		*/
 		float	getTemperature() const;
+
 		//@}
 
 		protected:

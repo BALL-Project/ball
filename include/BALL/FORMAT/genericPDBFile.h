@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.h,v 1.8 2001/01/31 21:32:27 amoll Exp $
+// $Id: genericPDBFile.h,v 1.9 2001/02/27 01:58:47 amoll Exp $
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
 #define BALL_FORMAT_GENERICPDBFILE_H
@@ -802,7 +802,8 @@ namespace BALL
 		};
 	}
 
-	/**	Generic PDB file class
+	/**	Generic PDB file class \\
+			{\bf Definition:} \URL{BALL/FORMAT/genericPDBFile.h} \\
 	*/
 	class GenericPDBFile
 		: public File,

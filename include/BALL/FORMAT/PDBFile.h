@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.11 2000/12/15 13:15:02 amoll Exp $
+// $Id: PDBFile.h,v 1.12 2001/02/27 01:58:47 amoll Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -50,13 +50,15 @@ namespace BALL
 
 	
 	/**	PDB file class
+			{\bf Definition:} \URL{BALL/FORMAT/PDBFile.h} \\
 	*/
 	class PDBFile
 		: public GenericPDBFile
 	{
 		public:
 
-		/**	@name	Constructors and Destructors */
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{
 
 		/// Default Constructor
@@ -173,43 +175,53 @@ namespace BALL
 			 PDB::RecordTURN::TerminalResidue& terminal_residue,
 			 PDB::PDBString comment);
 
-		/**	@name	Reading and Writing Files */
+		/**	@name	Reading and Writing Files 
+		*/
 		//@{
 
-		virtual void read(Protein& protein);
-
-		/**
+		/**	Read a system from the PDBfile
 		*/
 		virtual void read(System& system);
 
-		PDBFile& operator >> (Protein& protein);
-
-		/**
-		*/
-		PDBFile& operator >> (System& system);
-
-		virtual void write(const Molecule& molecule);
-
-    virtual void write(const Protein& protein);
-
-		/**
+		/**	Write a system to the PDBfile
 		*/
 		virtual void write(const System& system);
 
-		PDBFile& operator << (const Molecule& molecule);
-  
-    PDBFile& operator << (const Protein& protein);
-		
-		/**
+		/**	Read a system from the PDBfile
+		*/
+		PDBFile& operator >> (System& system);
+
+		/**	Write a system to the PDB file
 		*/
 		PDBFile& operator << (const System& system);
-		//@}
 
+
+		/**	Write a protein to the PDBfile
+		*/
+    virtual void write(const Protein& protein);
+
+		/**	Read a protein from the PDBfile
+		*/
+		virtual void read(Protein& protein);
+
+		/**	Read a protein from the PDBfile
+		*/
+		PDBFile& operator >> (Protein& protein);
+
+		/**	Write a protein to the PDBfile
+		*/
+    PDBFile& operator << (const Protein& protein);
+
+
+		virtual void write(const Molecule& molecule);
+
+		PDBFile& operator << (const Molecule& molecule);
+  
+		//@}
 
 		protected:
 		
 		void clear_();
-
 
 
 		private:

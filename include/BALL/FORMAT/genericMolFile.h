@@ -1,4 +1,4 @@
-// $Id: genericMolFile.h,v 1.2 2000/10/23 23:31:01 amoll Exp $
+// $Id: genericMolFile.h,v 1.3 2001/02/27 01:58:47 amoll Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -16,10 +16,8 @@ namespace BALL
 	class Atom;
 	class System;
 
-	/**	Base class for all molecule file format classes.
-			\\
-			{\bf Definition:} \URL{BALL/FORMAT/genericMolFile.h}
-			\\
+	/**	Base class for all molecule file format classes. \\
+			{\bf Definition:} \URL{BALL/FORMAT/genericMolFile.h} \\
 	*/
 	class GenericMolFile
 		: public File
@@ -42,11 +40,11 @@ namespace BALL
 		*/
 		GenericMolFile(const GenericMolFile& file);
 
-		/// Destructor
+		/** Destructor
+		*/
 		virtual ~GenericMolFile();
 		
 		//@}
-
 		/**	@name Reading and Writing of Kernel Datastructures
 		*/
 		//@{
@@ -68,7 +66,6 @@ namespace BALL
 		virtual GenericMolFile& operator << (const System& system);
 		
 		//@}
-
 		/**	@name	Accessors
 		*/
 		//@{
@@ -78,18 +75,19 @@ namespace BALL
 		bool hasPeriodicBoundary() const;
 
 		/**	Return the periodic boundary of the file.
-				an emptry box is returned if no periodic boundary is defined.
+				An emptry box is returned if no periodic boundary is defined.
 				@return	the boundary box
 		*/
 		Box3	getPeriodicBoundary() const;
 
 		/**	Return the temperature stored in the file.
-				HIN files may contain a {\tt sys} entry containing
-				the temperature of the last simulation step. If it is set,
-				it is returned. Otwerwise 0 is returned.
+				HIN files may contain a {\tt sys} entry containing the temperature 
+				of the last simulation step. If it is set, it is returned. 
+				Otherwise 0 is returned.
 				@return	the final simulation temperature
 		*/
 		float	getTemperature() const;
+
 		//@}
 
 		protected:

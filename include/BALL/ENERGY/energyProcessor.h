@@ -1,4 +1,4 @@
-// $Id: energyProcessor.h,v 1.5 2000/10/17 17:11:06 anker Exp $
+// $Id: energyProcessor.h,v 1.6 2001/02/27 01:58:22 amoll Exp $
 
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
 #define BALL_ENERGY_ENERGYPROCESSOR_H
@@ -18,11 +18,10 @@
 namespace BALL
 {
 	/** Processor for energy calculations.
-		With this class we provide an interface to different (free) energy
-		calculations.
-		{\bf Definition:} \URL{BALL/ENERGY/energyProcessor.h}
+			With this class we provide an interface to different (free) energy
+			calculations.
+			{\bf Definition:} \URL{BALL/ENERGY/energyProcessor.h}
 	*/
-
 	class EnergyProcessor
 		:	public UnaryProcessor<AtomContainer>
 	{
@@ -31,23 +30,25 @@ namespace BALL
 
 		BALL_CREATE(EnergyProcessor)
 
-
-		/** @name Constructors and Destructors */
+		/** @name Constructors and Destructors 
+		*/
 		//@{
 
-		/** Default constructor */
+		/** Default constructor 
+		*/
 		EnergyProcessor() throw();
 
-		/** Copy constructor */
+		/** Copy constructor 
+		*/
 		EnergyProcessor(const EnergyProcessor& proc) throw();
 
-		/** Destructor */
+		/** Destructor 
+		*/
 		virtual ~EnergyProcessor() throw();
 
 		//@}
-
-
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
 		/** */
@@ -57,40 +58,41 @@ namespace BALL
 		virtual void clear() throw();
 
 		//@}
-
-
-		/** @name Hmmm. */
+		/** @name	Processor related methods
+		*/
 		//@{
 
-		/** Start-function. */
+		/** Start-function. 
+		*/
 		virtual bool start() throw();
 
-		/** Operator-function. This function only stores the AtomContainer. */
+		/** Operator-function. This function only stores the AtomContainer. 
+		*/
 		virtual Processor::Result operator () (AtomContainer& fragment) throw();
 		
 		//@}
-
-
-		/** @name Accessors */
+		/** @name Accessors 
+		*/
 		//@{
 
-		/** return the computed energy */
+		/** Return the computed energy 
+		*/
 		double getEnergy() const throw();
 
-		//@}
-
-		
-		/** @name Predicates */
+		//@}	
+		/** @name Predicates 
+		*/
 		//@{
 
-		/** Validity */
+		/** Validity 
+		*/
 		bool isValid() const throw();
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const EnergyProcessor& proc) const throw();
 
 		//@}
-
 
 		protected:
 

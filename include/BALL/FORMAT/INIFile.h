@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.8 2000/10/23 23:31:01 amoll Exp $
+// $Id: INIFile.h,v 1.9 2001/02/27 01:58:47 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -19,11 +19,7 @@ namespace BALL
 	/**	INIFile.
 			This class provides support to read and evaluate
 			the contents of Windows-style INI files.\\
-
-			{\bf Definition:}	\URL{BALL/FORMAT/INIFile.h}
-			\\
-			{\bf Implementation:}	\URL[source/FORMAT/INIFile.C]{../../source/FORMAT/INIFile.C}
-			\\
+			{\bf Definition:}	\URL{BALL/FORMAT/INIFile.h}	\\
 	*/
 	class INIFile
 	{
@@ -33,11 +29,12 @@ namespace BALL
 		*/
 		enum
 		{
-		/**	Maximum line length for each entry (1024)
-		*/
+			/**	Maximum line length for each entry (1024)
+			*/
 			MAX_LINE_LENGTH = 1024
 		};
-		/**@name	Constructors and Destructors
+
+		/** @name	Constructors and Destructors
 		*/
 		//@{
 
@@ -54,34 +51,33 @@ namespace BALL
 		virtual ~INIFile();
 
 		/**	Destroy the contents of the object.
-				{\tt destroy} calls {\tt clear} and also resets
+				{\tt Destroy} calls {\tt clear} and also resets
 				the filename to the empty string and invalidates the object.
 		*/
 		void destroy();
 
 		/**	Clear the internal datastructures.
-				{\tt clear} frees all allocated memory but retains the
+				{\tt Clear} frees all allocated memory but retains the
 				filename set for the {\tt INIFile} object.
 		*/
 		void clear();
+
 		//@}
-		
-		/**@name	File I/O and related
+		/** @name	File I/O and related
 		*/
 		//@{
+
 		/**	Open a file and read its contents.
 				This method destroys all existing data in memory and
 				then tries to open the file specified by setFilename.
-				If the file could not be opened, the method returns immediately,
-				leaving the \Ref{INIFile} instance in invalid state (as returned
-				by \Ref{isValid}).\\
+				If the file could not be opened, the method returns immediately false,
+				leaving the INIFile instance in invalid state (as returned by \Ref{isValid}). \\
 				If the file could be opened, the whole file is read into an 
 				internal buffer and the different sections are interpreted.
 				Then, internal datastructures for fast acces to the stored data
 				are built (hash tables containing the section names).\\
 				Line starting with '!', ';', or '\#' are treated as comment
 				lines and are stored, but not interpreted.
-
 				@return	bool \begin{itemize}
 												\item {\bf true} if the file could be opened and read
 												\item {\bf false} otherwise
@@ -91,7 +87,6 @@ namespace BALL
 
 		/**	Writes the buffer contents to a file.
 				Not yet implemented!
-
 				@return	bool - \begin{itemize}
 												\item {\bf true} if the file could be succesfully written
 												\item {\bf false} otherwise
@@ -110,8 +105,7 @@ namespace BALL
 		void setFilename(const String& filename);
 
 		//@}
-
-		/**@name	Debugging and Diagnostics
+		/** @name	Debugging and Diagnostics
 		*/
 		//@{
 
@@ -121,11 +115,10 @@ namespace BALL
 
 		//@}
 
-		/**@name	Methods for line-wise access.
-				
+		/** @name	Methods for line-wise access.	
 				The INI file may be also accessed line-wise (ignoring the section
 				structure). Each line can be accessed via its index (starting with 0)
-				by \Ref{getLine} and modified by \Ref{setLine}. The index has to me less than
+				by \Ref{getLine} and modified by \Ref{setLine}. The index has to be less than
 				the value returned by \Ref{getNumberOfLines}.
 		*/
 		//@{	
@@ -134,7 +127,7 @@ namespace BALL
 				If the {\bf line_number} given is not valid (less than
 				0 or greater or equal to the number returned by \Ref{getNumberOfLines})
 				0 is returned
-				@param	line_number	first line starts with 0
+				@param	line_number, first line starts with 0
 				@return	a pointer to the specified line (as a \Ref{String}) or 0
 		*/	
 		String* getLine(Size line_number);
@@ -158,7 +151,6 @@ namespace BALL
 		Size getNumberOfLines() const;
 
 		/**	Queries for a certain section.
-				
 				@param	section_name	the name of the section (without square brackets)
 				@return bool \begin{itemize}
 											\item {\bf true} if the section exists (is hashed!)
@@ -168,55 +160,63 @@ namespace BALL
 		bool hasSection(const String& section_name) const;
 
 		/**	Returns the index of the first line of a section.
-				The first line of a section is the line immediately following the
+				The first line of a section is the line immediately following the 
 				section name (in square brackets).
-				@return	Size - the index of the first line, or -1 if the section
-						could not be found
+				@return	Size \begin{itemize}
+											\item the index of the first line, or 
+											\item -1 if the section could not be found
+										 \end{itemize}
 				@param	section_name	the name of the section to be found
 		*/	
 		Size getSectionFirstLine(const String& section_name) const;
 
 		/**	Returns the index of the last line of a section.
-				The last line of a section is either the last line
-				before a new section definition (starting with square brackets)
+				The last line of a section is either the last line 
+				before a new section definition (starting with square brackets) 
 				or the last line of a file.
-				@return	Size - the index of the last line, or -1 if the section
-						could not be found
+				@return	Size \begin{itemize}
+											\item the index of the last line, or 
+											\item -1 if the section could not be found
+										 \end{itemize}
 				@param	section_name	the name of the section to be found
 		*/	
 		Size getSectionLastLine(const String& section_name) const;	
 
 		/**	Returns the number of line in a section.
-				The header line is not counted. The last section is terminated
+				The header line is not counted. The last section is terminated 
 				by the last line of the file.
-				@return	Size - the number of lines, or -1 if the section
-						could not be found
+				@return	Size \begin{itemize}
+											\item the number of lines, or 
+											\item -1 if the section could not be found
+										 \end{itemize}
 				@param	section_name	the name of the section to be found
 		*/	
 		Size getSectionLength(const String& section_name) const;
 
 		//@}
-
-		/**@name	Methods to access single entries
+		/** @name	Methods to access single entries
 		*/
 		//@{
 
 		/**	Check whether the given section contains a certain key.
-				
-				@return	bool - {\bf true} if the key could be found in the section,
-											{\bf false} if either key or section didn't exist
-				@param	section	the section to lokk in for the key
+				@return	bool \begin{itemize}
+											\item {\bf true} if the key could be found in the section, 
+											\item {\bf false} if either key or section didn't exist
+										 \end{itemize}
+				@param	section	the section to look in for the key
 				@param	key the key to look for
 		*/	
 		bool hasEntry(const String& section, const String& key) const;
 		
 		/** Query the value corresponding to a given key.
-				If no value exists for the given key, or either the section or
+				If no value exists for the given key, or either the section or 
 				the key are not defined, an empty string is returned.
 				@param	section	the section name to look in for the key
 				@param	key a key in the {\bf section}
-				@return	String - the value corresponding to the {\bf key} in {\bf section}
-								or an empty string
+				@return	String \begin{itemize} 
+												\item the value corresponding to the {\bf key} in {\bf section}
+												\item or an empty string
+											 \end{itemize}
 		*/	
 		String getValue(const String& section, const String& key) const;
 
@@ -233,15 +233,15 @@ namespace BALL
 		bool setValue(const String& section, const String& key, const String& value);
 
 		//@}
-
-		/** @name Predicates */
+		/** @name Predicates
+		*/
 		//@{
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const INIFile& inifile) const;
 
 		//@}
-
 
 		private:	
 

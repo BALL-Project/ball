@@ -1,4 +1,4 @@
-// $Id: composedEnergyProcessor.h,v 1.2 2000/10/05 17:20:25 anker Exp $
+// $Id: composedEnergyProcessor.h,v 1.3 2001/02/27 01:58:22 amoll Exp $
 
 #ifndef BALL_ENERGY_COMPOSEDENERGYPROCESSOR
 #define BALL_ENERGY_COMPOSEDENERGYPROCESSOR
@@ -11,20 +11,23 @@
 #include <BALL/DATATYPE/list.h>
 #endif
 
-// BAUSTELLE: Pfad?
 #ifndef BALL_ENERGY_ENERGYPROCESSOR
-#include "energyProcessor.h"
+#include <BALL/ENERGY/energyProcessor.h>
 #endif
 
 namespace BALL
 {
-	typedef List<EnergyProcessor*> EnergyProcessorList;
 
 	/** A class for composed energy calculations.
-		Most energies are compositions of several energy contributions. To model
-		this in a convenient way this class is intended to calculate and sum a
-		given list of energy contributions (@see EnergyProcessor).
-	 */
+			Most energies are compositions of several energy contributions. To model
+			this in a convenient way this class is intended to calculate and sum a
+			given list of energy contributions.
+			@see EnergyProcessor
+	*/
+
+	///
+	typedef List<EnergyProcessor*> EnergyProcessorList;
+
 	class ComposedEnergyProcessor
 		: public EnergyProcessor
 	{
@@ -33,72 +36,80 @@ namespace BALL
 
 		BALL_CREATE(ComposedEnergyProcessor)
 
-		/** @name Constructors and destructors */
+		/** @name Constructors and destructors 
+		*/
 		//@{
 
-		/** Default constructor */
+		/** Default constructor 
+		*/
 		ComposedEnergyProcessor() throw();
 
-		/** Copy constructor */
+		/** Copy constructor 
+		*/
 		ComposedEnergyProcessor(const ComposedEnergyProcessor& composed_energy_proc) throw();
 
-		/** Detailed constructor */
+		/** Detailed constructor 
+		*/
 		ComposedEnergyProcessor(EnergyProcessorList proc_list) throw();
 
-		/** Destructor */
+		/** Destructor 
+		*/
 		virtual ~ComposedEnergyProcessor() throw();
 
 		//@}
-
-
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
-		/** Assignment operator */
+		/** Assignment operator 
+		*/
 		const ComposedEnergyProcessor& operator = 
 			(const ComposedEnergyProcessor& proc) throw();
 
-		/** Clear method */
+		/** Clear method 
+		*/
 		virtual void clear() throw();
 
 		//@}
-
-
-		/** @name Processor functions */
+		/** @name Processor functions 
+		*/
 		//@{
 		
-		/** Do all calculations and sum up the different energy contributions */
+		/** Do all calculations and sum up the different energy contributions 
+		*/
 		virtual bool finish() throw();
 
 		//@}
-
-
-		/** @name Accessors */
+		/** @name Accessors 
+		*/
 		//@{
 
-		/** Add a component to the list of EnergyProcessors */
+		/** Add a component to the list of EnergyProcessors 
+		*/
 		void addComponent(EnergyProcessor* proc) throw();
 
-		/** remove a component from the list */
+		/** remove a component from the list 
+		*/
 		void removeComponent(EnergyProcessor* proc) throw();
 
-		/** return the energy value */
+		/* return the energy value 
+		*/
 		// double getEnergy() throw();
 
 		//@}
-
-
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{
 
-		/** Validity */
+		/** Validity 
+		*/
 		bool isValid() const throw();
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const ComposedEnergyProcessor& proc) const throw();
 
 		//@}
-
 
 		protected:
 
@@ -109,7 +120,8 @@ namespace BALL
 
 		/*_ check the validity of this instance. If one of the processors in
 		 * the list is invalid, then this instance of ComposedEnergyProcessor
-		 * is invalid */
+		 * is invalid 
+		*/
 		void checkValidity() throw();
 
 	};

@@ -1,4 +1,4 @@
-// $Id: coulomb.h,v 1.4 2000/08/30 19:58:03 oliver Exp $
+// $Id: coulomb.h,v 1.5 2001/02/27 01:58:22 amoll Exp $
 
 #ifndef BALL_ENERGY_COULOMB_H
 #define BALL_ENERGY_COULOMB_H
@@ -17,6 +17,7 @@ namespace BALL
 			to calculateCoulomb()
 			@see	Atom::setCharge
 			@see	AssignChargeProcessor
+			{\bf Definition:} \URL{BALL/ENERGY/coulomb.h}	\\
 	*/
 	double calculateCoulomb(const AtomContainer& atoms);
 

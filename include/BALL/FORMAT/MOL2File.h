@@ -1,4 +1,4 @@
-// $Id: MOL2File.h,v 1.7 2000/07/12 19:30:55 oliver Exp $
+// $Id: MOL2File.h,v 1.8 2001/02/27 01:58:47 amoll Exp $
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H
@@ -22,10 +22,8 @@ namespace BALL
 	class System;
 
 	/**	SYBYL MOL2 file class.
-			This class is used to read and write SYBYL MOL2 files (Tripos).
-			\\
-			{\bf Definition:} \URL{BALL/FORMAT/MOL2File.h}
-			\\
+			This class is used to read and write SYBYL MOL2 files (Tripos).	\\
+			{\bf Definition:} \URL{BALL/FORMAT/MOL2File.h} \\
 	*/
 	class MOL2File
 		: public File
@@ -61,34 +59,31 @@ namespace BALL
 		virtual ~MOL2File();
 		
 		//@}
-
 		/**	@name Reading and Writing of Kernel Datastructures
 		*/
 		//@{
 		
-		/**	Write a system to the HIN file
+		/**	Write a system to the MOL2 file
 		*/
 		virtual void write(const System&	system);
 		
-		/**	Read a system from the HIN file
+		/**	Read a system from the MOL2 file
 		*/
 		virtual void read(System&	system);
 
-		/**
+		/**	Read a system from the MOL2 file
 		*/
 		virtual MOL2File& operator >> (System& system)
 		{
 			read(system);
-			
 			return *this;
 		}
 		
-		/**
+		/**	Write a system to the MOL2 file
 		*/
 		virtual MOL2File& operator << (const System& system)
 		{
-			write(system);
-			
+			write(system);	
 			return *this;
 		}
 		
