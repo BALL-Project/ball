@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.C,v 1.4 2000/03/28 19:22:50 oliver Exp $
+// $Id: standardColorCalculator.C,v 1.5 2000/04/04 15:13:17 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h>
 
@@ -225,7 +225,14 @@ namespace BALL
 	{
 	}
 	
-	void AtomChargeColorCalculator::visit(Atom& atom)
+  AtomChargeColorCalculator::AtomChargeColorCalculator(const AtomChargeColorCalculator& color_calculator)
+    : positive_color_(color_calculator.positive_color_),
+      neutral_color_(color_calculator.neutral_color_),
+      negative_color_(color_calculator.negative_color_)
+  {
+	}
+
+ void AtomChargeColorCalculator::visit(Atom& atom)
 	{
 		float charge = atom.getCharge();
 		float red1, green1, blue1;
