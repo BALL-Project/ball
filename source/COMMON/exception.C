@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.8 2000/05/30 10:33:42 oliver Exp $
+// $Id: exception.C,v 1.9 2000/05/30 23:58:35 oliver Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -132,6 +132,10 @@ namespace BALL
 				message_ += " bytes) ";
 
 				globalHandler.setMessage(message_);
+			}
+
+			OutOfMemory::~OutOfMemory() throw()
+			{
 			}
 
 			SizeUnderflow::SizeUnderflow(const char* file, int line, Size size)
