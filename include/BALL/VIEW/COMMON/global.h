@@ -9,21 +9,22 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/**     @name Type aliases defined by VIEW.
-						These predefined types are used in VIEW for portability and
-						comprehensibility.
-						{\bf Definition:} \URL{BALL/VIEW/COMMON/global.h}
+		/** @name Type aliases defined by VIEW.
+				These predefined types are used in VIEW for portability and
+				comprehensibility.
+				{\bf Definition:} \URL{BALL/VIEW/COMMON/global.h}
 		*/
 		//@{
 		
-		/**     SceneHandle type.
-						Use this type to represent {\bf scene handles}. Scene handles are used
-						for the non-ambiguous identification of scenes.
+		/** SceneHandle type.
+				Use this type to represent {\bf scene handles}. Scene handles are used
+				for the non-ambiguous identification of scenes.
 		*/
-		typedef unsigned long    SceneHandle;      
+		typedef unsigned long    SceneHandle;   
+		
 		//@}
 
-		/**			@name Constant definition
+		/**	@name Constant definition
 		*/	
 		//@{
 
@@ -34,14 +35,14 @@ namespace BALL
 
 		//@}
 
-		/**     @name Enums defined by VIEW.
+		/** @name Enums defined by VIEW.
 		*/
 		//@{
 
-		/**     Command enums.
-						Use these enums in the client server classes.
-						These enums specify the commands the server is able
-						to understand.
+		/** Command enums.
+				Use these enums in the client server classes.
+				These enums specify the commands the server is able
+				to understand.
 		*/
 		enum Command
 		{
@@ -80,7 +81,7 @@ namespace BALL
 			NUMBER_OF_COMMANDS
 		};	
 
-		/**     Range enum.
+		/** Range enum.
 		*/
 		enum Range
 		{
@@ -88,7 +89,7 @@ namespace BALL
 			RANGE__ADDRESS = 50
 		};
 
-		/**     Value enum
+		/** Value enum
 		*/
 		enum Value
 		{
