@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.iC,v 1.26 2002/12/16 17:15:32 oliver Exp $
+// $Id: bitVector.iC,v 1.27 2003/06/11 14:30:51 amoll Exp $
 
 BALL_INLINE 
 BALL::Size BitVector::getSize() const
@@ -192,7 +192,7 @@ bool BitVector::isValid() const
 
 BALL_INLINE
 Bit BitVector::operator [] (Index index)
-  throw(Exception::IndexUnderflow, Exception::OutOfMemory)
+  throw(Exception::OutOfMemory)
 {
 	block_(index);
 	return Bit(this, index);

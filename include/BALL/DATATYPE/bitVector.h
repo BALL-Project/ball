@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.h,v 1.36 2003/03/26 13:56:16 anhi Exp $
+// $Id: bitVector.h,v 1.37 2003/06/11 14:30:51 amoll Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -302,7 +302,7 @@ namespace BALL
 				@return Bit a Bit pointing to the given element of this instance
 		*/
 		Bit operator []	(Index index)
-		  throw(Exception::IndexUnderflow, Exception::OutOfMemory);
+		  throw(Exception::OutOfMemory);
 
 		/**	Constant random access to the components.
 				If the given index is greater than the size of this instance an exception is thrown.
@@ -452,7 +452,7 @@ namespace BALL
 
 		/** Xor Operator.
 				Creates a new BitVector object and fills it with the result of
-				{\em this Xor bit\_Vector}.
+				{\em this Xor bit\_vector}.
 		*/
 		BitVector operator ^ (const BitVector& bit_vector) 
 			throw(Exception::OutOfMemory);
