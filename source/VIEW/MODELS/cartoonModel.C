@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.43 2004/09/14 13:03:20 amoll Exp $
+// $Id: cartoonModel.C,v 1.44 2004/09/14 13:31:17 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 
@@ -149,7 +149,6 @@ namespace BALL
 				Atom* base_atom = base_atoms[r];
 				if (base_atom == 0) 
 				{
-Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 					continue;
 				}
 
@@ -218,7 +217,6 @@ Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<<
 
 					if (partner_base == 0) 
 					{
-Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 						continue;
 					}
 				}
