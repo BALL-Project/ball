@@ -1,16 +1,11 @@
-// $Id: qsar.doc,v 1.1 2001/12/16 23:22:29 oliver Exp $
+// $Id: qsar.doc,v 1.2 2003/02/25 13:59:41 anhi Exp $
 
-/**@name QSAR -- Qunatitative Structure Activity Relationship.
+/** \defgroup QSAR QSAR -- Quantitative Structure Activity Relationship.
+		\ingroup Foundation
 		This chapter contains all relevant information on 
 		BALL classes related to QSAR methods.
 */
-//@{
 
-	/**	@name	Molecular Descriptors
-	*/
-	//@{
-		//@Include: descriptor.h
-		//@Include:	simpleDescriptors.h
-	//@}
-
-//@}
+/**	\defgroup MolecularDescriptors Molecular Descriptors
+ *	\ingroup QSAR
+ */
