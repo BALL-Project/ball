@@ -1,4 +1,4 @@
-// $Id: message.h,v 1.9.4.2 2002/12/02 16:37:00 amoll Exp $
+// $Id: message.h,v 1.9.4.3 2002/12/06 16:51:41 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
 #define BALL_VIEW_KERNEL_MESSAGE_H
@@ -723,6 +723,15 @@ namespace BALL
 		};
 
 
+		/** Used to inform MainControl of selection in Control (not the one of the checkboxes!)
+		 */
+		class ControlSelectionMessage: public SelectionMessage
+		{
+			public:
+			ControlSelectionMessage()
+				throw();
+		};
+
 		/** Used to inform MainControl and MolecularProperties of the selection of one composite in Control.
 		 		MolecularProperties sends as answer a CompositeChanged message to inform the Scene.
 		 */
@@ -742,7 +751,8 @@ namespace BALL
 		class NewSelectionMessage: public Message
 		{
 			public:
-			NewSelectionMessage();
+			NewSelectionMessage()
+				throw();
 		};
 
 		/** GeometricObjectSelectionMessage class.
