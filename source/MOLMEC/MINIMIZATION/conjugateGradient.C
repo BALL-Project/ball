@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.28 2003/04/12 10:00:37 oliver Exp $
+// $Id: conjugateGradient.C,v 1.29 2003/04/22 21:16:11 oliver Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -551,12 +551,6 @@ namespace BALL
 			return true;
 		}
 
-		// remember <g_i, d_i> (the scalar product of the last 
-		// search direction and the last gradient)
-		// keep them static for restarts
-		static double old_dir_grad;
-		static bool old_dir_grad_valid;
-		
 		// define an alias for the atom vector
 		AtomVector& atoms(const_cast<AtomVector&>(getForceField()->getAtoms()));
 
@@ -569,8 +563,6 @@ namespace BALL
 			same_energy_counter_ = 0;
 
 			current_grad_.invalidate();
-			// Compute an initial direction (along the negative gradient).
-			old_dir_grad_valid = false;	
 
 			// If we do not have a valid gradient, recalculate the gradient, the energy, and the search 
 			// direction
@@ -660,31 +652,6 @@ namespace BALL
 			// it is flagged as valid (since it is new!)
 			//
 			updateDirection();
-
-/*
-			// non-constant step size option
-			//
-			double dir_grad = initial_grad_ * direction_;
-			if (old_dir_grad_valid)
-			{
-				step_ = lambda_ * step_ * old_dir_grad / dir_grad;
-
-				// we have to capture those cases where step_ would be zero
-				if (step_ == 0.0)
-				{
-					step_ = 0.01;
-				}
-	
-			}
-			else
-			{
-				// for restart steps, we reset the step size 
-				// to 0.01/(||d_i||) ??? what and where is ||d_i|| ???
-				step_ = 0.01;
-			}
-			old_dir_grad = dir_grad;
-			old_dir_grad_valid = true;
-*/
 
 			#ifdef BALL_DEBUG
 				Log << "CGM: end of main: current grad RMS = " << current_grad_.rms << std::endl;
