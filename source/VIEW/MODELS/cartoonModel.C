@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.1 2004/12/20 21:20:26 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.2 2004/12/20 22:00:07 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -434,14 +434,14 @@ namespace BALL
 			if (catoms.size() == 0) return;
 
 			List<const Atom*>::ConstIterator lit = catoms.begin();
-			lit++;
+//   			lit++;
 			Vector3 normal = last->getPosition() - first->getPosition();
 
 			// calcluate slices for the helix cylinder according to the C-atoms
 			Vector3 last_pos = first->getPosition();
 			Vector3 diff = (normal / (catoms.size() ));
 
-			for (Position p = 0; p < catoms.size() -1; p++)
+			for (Position p = 0; p < catoms.size(); p++)
 			{
 				Tube* tube = new Tube;
 				tube->setRadius(helix_radius_);
