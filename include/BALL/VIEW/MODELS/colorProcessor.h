@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.27 2004/09/02 11:41:22 amoll Exp $
+// $Id: colorProcessor.h,v 1.27.2.1 2005/01/12 16:44:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -39,7 +39,7 @@ namespace BALL
 				This class defines the interface and basic algorithms to colorize geometric objects, e.g. 
 				Sphere, Tube, TwoColoredTube, etc.
 				Derived classes implement special ways to colorize, e.g. by charge or element.
-				They have to overload the method getColor(Composite*). 
+				They have to overload the method getColor(Composite). 
 				<br>
 				If no color can be calculated for a GeometricObject, e.g. if it has no Composite, the default
 				color is set.
@@ -136,11 +136,12 @@ namespace BALL
 			virtual Processor::Result operator() (GeometricObject*& object);
 
 			/** Calculate a color for a Composite.
-			 		This method is called by the operator().
-					Here it just returns the default color.
+			 		The given ColorRGBA instance is set to the calculated color.
+			 		This method is called by the operator() method.
+					Here it just sets the default color.
 					You have to overload this operator in derived classes.
 			*/
-			virtual ColorRGBA getColor(const Composite* composite);
+			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 
 			///
 			Size getTransparency() const
@@ -203,6 +204,8 @@ namespace BALL
 
 			//_ a color that will be used if no other color can be calculated.
 			ColorRGBA		default_color_;
+			//_ for speedup, we dont have to set transparency each time we color a geometric object
+			ColorRGBA		selection_color_;
 			Size 				transparency_;
 
 			const 			CompositeSet* composites_;

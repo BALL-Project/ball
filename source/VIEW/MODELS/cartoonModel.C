@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.32 2005/01/12 13:16:09 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.33 2005/01/12 16:44:51 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -46,7 +46,8 @@ AddCartoonModel::AddCartoonModel()
 		ribbon_width_(1.8),
 		ribbon_radius_(0.1),
 		draw_DNA_as_ladder_(false),
-		draw_ribbon_(true)
+		draw_ribbon_(true),
+		use_two_colors_(true)
 {
 }
 
@@ -63,7 +64,8 @@ AddCartoonModel::AddCartoonModel(const AddCartoonModel& cartoon)
 		ribbon_width_(cartoon.ribbon_width_),
 		ribbon_radius_(cartoon.ribbon_radius_),
 		draw_DNA_as_ladder_(cartoon.draw_DNA_as_ladder_),
-		draw_ribbon_(cartoon.draw_ribbon_)
+		draw_ribbon_(cartoon.draw_ribbon_),
+		use_two_colors_(true)
 {
 }
 
@@ -827,21 +829,41 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 	////////////////////////////////////////////////////////////
 	// every residue get its own meshes to enable picking for the tube model
 	Mesh* mesh1 = new Mesh(); // the two tubes
-	Mesh* mesh2 = new Mesh(); // connection between tubes
+	Mesh* mesh2 = new Mesh(); // connection between tubes 1
+	Mesh* mesh3 = new Mesh(); // connection between tubes 2
 	if (atoms_of_spline_points_[start] != 0)
 	{
 		mesh1->setComposite(atoms_of_spline_points_[start]->getParent());
 		mesh2->setComposite(atoms_of_spline_points_[start]->getParent());
+		if (!use_two_colors_)
+		{
+			mesh3->setComposite(atoms_of_spline_points_[start]->getParent());
+		}
+		else
+		{
+			mesh3->setComposite(&composite_to_be_ignored_for_colorprocessors_);
+		}
 	}
 	geometric_objects_.push_back(mesh1);
 	geometric_objects_.push_back(mesh2);
+	geometric_objects_.push_back(mesh3);
+
+	// distance vector between the two connections
+	Vector3 diff = r.normalize() * 0.1;
 	
-	// insert connection between tubes 2 times, because of trouble with normals
-	mesh2->vertex.push_back(last_point + tube_diff);
-	mesh2->vertex.push_back(last_point - tube_diff);
+	// insert connection between tubes
+	mesh2->vertex.push_back(last_point + tube_diff + diff);
+	mesh2->vertex.push_back(last_point - tube_diff + diff);
 	Vector3 vn(-(dir % helix_dir));
 	mesh2->normal.push_back(vn);
 	mesh2->normal.push_back(vn);
+	
+	// insert connection between tubes
+	mesh3->vertex.push_back(last_point + tube_diff - diff);
+	mesh3->vertex.push_back(last_point - tube_diff - diff);
+	mesh3->normal.push_back(-vn);
+	mesh3->normal.push_back(-vn);
+
 
 	for (Position p = 0; p < slides; p++)
 	{
@@ -851,9 +873,7 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		mesh1->normal.push_back(new_points[p]);
 	}
 	
-	////////////////////////////////////////////////////////////
 	// same data structures for faster access
-	////////////////////////////////////////////////////////////
 	Mesh::Triangle t;
 	Size s_old = 0;  // start position of the last points of the mesh1 vertices
 
@@ -878,7 +898,6 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 
 		////////////////////////////////////////////////////////////
 		// rotate all points of the circle according to new normal
-		////////////////////////////////////////////////////////////
 		m.setRotation(slides_angle, dir_new);
 		x = r_new;
 		new_points[0] = x;
@@ -908,6 +927,7 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 				mesh1->normal.push_back(old_mesh1->normal[point_pos]);
 			}
 
+			// first band
 			const Mesh* old_mesh2 = mesh2;
 			mesh2 = new Mesh();
 			const Size vs = old_mesh2->vertex.size() - 2;
@@ -916,13 +936,30 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 			mesh2->normal.push_back(old_mesh2->normal[vs]);
 			mesh2->normal.push_back(old_mesh2->normal[vs + 1]);
 
+			// second band
+			const Mesh* old_mesh3 = mesh3;
+			mesh3 = new Mesh();
+			mesh3->vertex.push_back(old_mesh3->vertex[vs]);
+			mesh3->vertex.push_back(old_mesh3->vertex[vs + 1]);
+			mesh3->normal.push_back(old_mesh3->normal[vs]);
+			mesh3->normal.push_back(old_mesh3->normal[vs + 1]);
+
 			geometric_objects_.push_back(mesh1);
 			geometric_objects_.push_back(mesh2);
+			geometric_objects_.push_back(mesh3);
 
 			if (atoms_of_spline_points_[p] != 0)
 			{
 				mesh1->setComposite(atoms_of_spline_points_[p]->getParent());
 				mesh2->setComposite(atoms_of_spline_points_[p]->getParent());
+				if (!use_two_colors_)
+				{
+					mesh3->setComposite(atoms_of_spline_points_[p]->getParent());
+				}
+				else
+				{
+					mesh3->setComposite(&composite_to_be_ignored_for_colorprocessors_);
+				}
 			}
 
 			s_old = 0;
@@ -940,10 +977,14 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 			tube_diff -= helix_step;
 		}
 
+		// distance between the two bands
+
+		// first band
 		Vector3 vn(-(dir_new % helix_dir));
-		mesh2->vertex.push_back(point + tube_diff);
+		Vector3 diff = vn.normalize() * -0.1;
+		mesh2->vertex.push_back(point + tube_diff + diff);
 		mesh2->normal.push_back(vn);
-		mesh2->vertex.push_back(point - tube_diff);
+		mesh2->vertex.push_back(point - tube_diff + diff);
 		mesh2->normal.push_back(vn);
 
 		const Size sn = mesh2->vertex.size() - 1;
@@ -956,6 +997,23 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		t.v2 = sn - 2;
 		t.v3 = sn - 3;
 		mesh2->triangle.push_back(t);
+		
+		// second band
+		mesh3->vertex.push_back(point + tube_diff - diff);
+		mesh3->normal.push_back(vn);
+		mesh3->vertex.push_back(point - tube_diff - diff);
+		mesh3->normal.push_back(vn);
+
+		t.v1 = sn - 1;
+		t.v2 = sn;
+		t.v3 = sn - 2;
+ 		mesh3->triangle.push_back(t);
+
+		t.v1 = sn - 1;
+		t.v2 = sn - 2;
+		t.v3 = sn - 3;
+		mesh3->triangle.push_back(t);
+
 
 		////////////////////////////////////////////////////////////
 		// insert the points of the two new circles

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.26.2.8 2005/01/11 14:53:37 amoll Exp $
+// $Id: cartoonModel.h,v 1.26.2.9 2005/01/12 16:44:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -209,6 +209,7 @@ namespace BALL
 
 			bool  draw_DNA_as_ladder_;
 			bool  draw_ribbon_;
+			bool  use_two_colors_;
 
 			HashMap<Residue*, Residue*> complementary_bases_;
 			HashMap<SecondaryStructure*, Position> ss_to_spline_start_;

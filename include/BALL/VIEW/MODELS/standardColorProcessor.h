@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.27 2004/10/23 18:10:32 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.27.2.1 2005/01/12 16:44:56 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -14,6 +14,15 @@
 #ifndef BALL_VIEW_DATATYPTE_COLORTABLE_H
 # include <BALL/VIEW/DATATYPE/colorTable.h>
 #endif
+
+#ifndef BALL_KERNEL_RESIDUE_H
+# include<BALL/KERNEL/residue.h>
+#endif
+
+#ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
+# include<BALL/KERNEL/secondaryStructure.h>
+#endif
+
 
 namespace BALL
 {
@@ -48,7 +57,7 @@ namespace BALL
 				throw();
 
 			///
-			virtual ColorRGBA getColor(const Composite* composite);
+			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 
 			///
 			HashMap<Position, ColorRGBA>& getColorMap() { return color_map_;}
@@ -76,7 +85,7 @@ namespace BALL
 					throw();
 
 				///
-				virtual ColorRGBA getColor(const Composite* composite);
+				virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 
 				///
 				void setFirstColor(const ColorRGBA& color) { first_color_ = color;}
@@ -106,6 +115,7 @@ namespace BALL
 				ColorTable table_;
 				Position min_;
 				Position max_;
+				Residue dummy_residue_;
 		};
 
 
@@ -138,7 +148,7 @@ namespace BALL
 			//@{
 
 			///
-			virtual ColorRGBA getColor(const Composite* composite);
+			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 			//@}
 			
 			///
@@ -146,8 +156,10 @@ namespace BALL
 			
 			///
 			const StringHashMap<ColorRGBA>& getColorMap() const { return color_map_;}
+
 			protected:	
 				StringHashMap<ColorRGBA> color_map_;
+				Residue 								 dummy_residue;
 		};
 
 			
@@ -233,7 +245,7 @@ namespace BALL
 				throw();
 
 			///
-			virtual ColorRGBA getColor(const Composite* composite);
+			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 
 			//@}
 
@@ -334,14 +346,6 @@ namespace BALL
 			const ColorRGBA& getMaxDistanceColor() const
 				throw();
 
-			/// Set wheter the selected molecular entities are also shown
-			void setShowSelected(bool state) 
-				throw() {show_selected_ = state;}
-
-			///
-			bool showSelected() const
-				throw() { return show_selected_;}
-			
 			/** Calculate the distances.
 					If this method is called the distances of all previously inserted Atom objects 
 					to each other are calculated. Only Atom objects are used for the distance
@@ -368,8 +372,8 @@ namespace BALL
 			*/ 
 			//@{
 
-			///	Operator ().
-			virtual ColorRGBA getColor(const Composite* composite);
+			///
+			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 
 			/** Collect all atoms from the geometric objects
 			*/
@@ -385,8 +389,6 @@ namespace BALL
 			GeometricObjectList list_;
 
 			float 			distance_;
-
-			bool 				show_selected_;
 
 			ColorRGBA		null_distance_color_;
 			ColorRGBA		full_distance_color_;
@@ -417,8 +419,8 @@ namespace BALL
 			///
 			TemperatureFactorColorProcessor();
 
-			///	Operator ()
-			virtual ColorRGBA getColor(const Composite* composite);
+			///
+			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 		};
 
 		
@@ -433,8 +435,8 @@ namespace BALL
 			///
 			OccupancyColorProcessor();
 
-			///	Operator ()
-			virtual ColorRGBA getColor(const Composite* composite);
+			///
+			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 		};
 
 		/** Coloring by the forces, acting on atoms.
@@ -448,8 +450,8 @@ namespace BALL
 			///
 			ForceColorProcessor();
 
-			///	Operator ()
-			virtual ColorRGBA getColor(const Composite* composite);
+			///
+			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 		};
 
 
@@ -464,8 +466,8 @@ namespace BALL
 			///
 			SecondaryStructureColorProcessor();
 
-			/// Operator ()
-			virtual ColorRGBA getColor(const Composite* composite);
+			///
+			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 
 			///
 			void setHelixColor(const ColorRGBA& color)
@@ -510,6 +512,8 @@ namespace BALL
 								coil_color_,
 								strand_color_,
 								turn_color_;
+
+			SecondaryStructure dummy_ss_;
 		};
 			
 	
@@ -524,8 +528,8 @@ namespace BALL
 			///
 			ResidueTypeColorProcessor();
 
-			/// Operator ()
-			virtual ColorRGBA getColor(const Composite* composite);
+			///
+			virtual void getColor(const Composite& composite, ColorRGBA& color_to_be_set);
 
 			///
 			void setBasicColor(const ColorRGBA& color)
@@ -588,6 +592,8 @@ namespace BALL
 								hydrophobic_color_,
 								aromatic_color_,
 								other_color_;
+
+			Residue   dummy_residue_;
 		};
 			
 #	ifndef BALL_NO_INLINE_FUNCTIONS

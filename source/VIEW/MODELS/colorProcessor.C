@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.31.2.1 2004/12/27 17:44:18 amoll Exp $
+// $Id: colorProcessor.C,v 1.31.2.2 2005/01/12 16:44:51 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -33,6 +33,7 @@ namespace BALL
 			throw()
 			:	UnaryProcessor<GeometricObject*>(cp),
 				default_color_(cp.default_color_),
+				selection_color_(cp.selection_color_),
 				transparency_(0)
 		{
 		}
@@ -52,6 +53,7 @@ namespace BALL
 			transparency_ = 0;
 			composites_ = 0;
 			clearAtomGrid();
+			selection_color_ = BALL_SELECTED_COLOR;
 		}
 
 		void ColorProcessor::set(const ColorProcessor& cp)
@@ -60,6 +62,7 @@ namespace BALL
 			default_color_ = cp.default_color_;
 			composites_ = cp.composites_;
 			transparency_ = cp.transparency_;
+			selection_color_ = cp.selection_color_;
 		}
 
 
@@ -87,11 +90,14 @@ namespace BALL
 
 		Processor::Result ColorProcessor::operator() (GeometricObject*& object)
 		{
+			const Composite* composite = object->getComposite();
+
 			if (RTTI::isKindOf<Mesh> (*object))
 			{
 				Mesh* mesh = dynamic_cast<Mesh*>(object);
 				mesh->colorList.clear();
-				if (composites_ == 0)
+				if (composite == &composite_to_be_ignored_for_colorprocessors_ ||
+						composites_ == 0)
 				{
 					mesh->colorList.push_back(default_color_);
 					return Processor::CONTINUE;
@@ -99,16 +105,17 @@ namespace BALL
 
 				if (!atom_grid_created_ || mesh->getComposite() != 0)
 				{
-					const Composite* c = mesh->getComposite();
-					createAtomGrid_(c);
+					createAtomGrid_(composite);
 				}
 
 				colorMeshFromGrid_(*mesh);
 
 				return Processor::CONTINUE;
 			}
-			
-			if (object->getComposite() == 0)
+
+		
+			if (composite == 0 ||
+					composite == &composite_to_be_ignored_for_colorprocessors_)
 			{
 				object->setColor(default_color_); 
 				if (RTTI::isKindOf<ColorExtension2>(*object))
@@ -118,27 +125,60 @@ namespace BALL
 				}
 				return Processor::CONTINUE;
 			}
-			
+
+
 			if (!RTTI::isKindOf<ColorExtension2>(*object))
 			{
-				object->setColor(getColor(object->getComposite())); 
+				if (composite->isSelected())
+				{
+					object->setColor(selection_color_);
+				}
+				else
+				{
+					getColor(*object->getComposite(), object->getColor()); 
+				}
 				return Processor::CONTINUE;
 			}
 
 			// ok, we have a two colored object
 			ColorExtension2* two_colored = dynamic_cast<ColorExtension2*>(object);
-			if (RTTI::isKindOf<Bond>(*object->getComposite()))
+			if (RTTI::isKindOf<Bond>(*composite))
 			{
-				Bond* bond = (Bond*) object->getComposite();
-				object->setColor(getColor(bond->getFirstAtom()));
-				two_colored->setColor2(getColor(bond->getSecondAtom()));
+				Bond* bond = (Bond*) composite;
+				const Atom* atom = bond->getFirstAtom();
+				if (!atom->isSelected())
+				{
+					getColor(*atom, object->getColor());
+				}
+				else
+				{
+					object->setColor(selection_color_);
+				}
+
+				const Atom* atom2 = bond->getSecondAtom();
+				if (!atom2->isSelected())
+				{
+					getColor(*atom2, two_colored->getColor2());
+				}
+				else
+				{
+					two_colored->setColor2(selection_color_);
+				}
 			}
 			else
 			{
-				ColorRGBA color = getColor(object->getComposite());
-				object->setColor(color); 
-				two_colored->setColor2(color);
+				if (composite->isSelected())
+				{
+					object->setColor(selection_color_);
+					two_colored->setColor2(selection_color_);
+				}
+				else
+				{
+ 					getColor(*composite, object->getColor());
+ 					two_colored->setColor2(object->getColor());
+				}
 			}
+
 			return Processor::CONTINUE;
 		}
 
@@ -223,20 +263,21 @@ namespace BALL
 			{
 				return;
 			}
-			mesh.colorList.clear();
-			std::vector<Vector3>::iterator sit = mesh.vertex.begin();
-			for(; sit != mesh.vertex.end(); sit++)
+			
+			mesh.colorList.resize(mesh.vertex.size());
+			
+			for (Position p = 0; p < mesh.vertex.size(); p++)
 			{
 				// make sure we found an atom
-				const Atom* atom = getClosestItem_(*sit);
+				const Atom* atom = getClosestItem_(mesh.vertex[p]);
 
 				if (atom == 0)
 				{
-					mesh.colorList.push_back(default_color_);
+					mesh.colorList[p] = default_color_;
 				}
 				else
 				{
-					mesh.colorList.push_back(getColor(atom));
+					getColor(*atom, mesh.colorList[p]);
 				}
 			}
 		}
@@ -267,21 +308,18 @@ namespace BALL
 		{ 
 			transparency_ = value;
 			default_color_.setAlpha(255 - value);
+			selection_color_.setAlpha(255 - value);
 		}
 
-		ColorRGBA ColorProcessor::getColor(const Composite* composite)
+		void ColorProcessor::getColor(const Composite& composite, ColorRGBA& color_to_be_set)
 		{
-			if (composite == 0) return default_color_;
-
-			if (composite->isSelected())
+			if (composite.isSelected())
 			{
-				ColorRGBA color(BALL_SELECTED_COLOR);
-				color.setAlpha(255 - transparency_);
-				return color;
+				color_to_be_set = selection_color_;
 			}
 			else
 			{
-				return default_color_;
+				color_to_be_set = default_color_;
 			}
 		}
 
