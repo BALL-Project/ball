@@ -1,8 +1,7 @@
-// $Id: snapShot.C,v 1.24 2001/04/02 09:48:33 anker Exp $
+// $Id: snapShot.C,v 1.25 2001/04/30 03:02:28 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
-#include <BALL/CONCEPT/XDRPersistenceManager.h>
 
 // STL includes 
 #include <algorithm>
