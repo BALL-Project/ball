@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.32 2001/01/20 00:27:19 amoll Exp $
+// $Id: atom.C,v 1.33 2001/06/14 00:30:12 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -33,7 +33,7 @@ namespace BALL
 	Atom::Atom(const Atom& atom, bool deep)
 		throw()
 		:	Composite(atom, deep),
-			PropertyManager(atom, deep),
+			PropertyManager(atom),
 			element_(atom.element_),
 			charge_(atom.charge_),
 			name_(atom.name_),
