@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.78 2000/03/28 17:59:54 oliver Exp $
+dnl    $Id: configure.in,v 1.79 2000/03/28 19:21:16 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1928,7 +1928,7 @@ if test "${USE_BALLVIEW}" = true ; then
 	fi
 
 	dnl 		
-	dnl  now try the default guess: Xmu, Xt, and X11 
+	dnl  now try the default guess: Xmu, Xext, Xt, and X11 
 	dnl
 	if test "${X_LINKING_OK+set}" != set ; then
 		X11_LIBS="-lXmu -lXext -lXt -lX11 -lm"
@@ -1943,6 +1943,28 @@ if test "${USE_BALLVIEW}" = true ; then
 	dnl
 	if test "${X_LINKING_OK+set}" != set ; then
 		X11_LIBS="-lXmu -lXext -lXt -lX11 -lSM -lICE -lm"
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+	
+	dnl 		
+	dnl  now try the default guess: Xmu, Xext, Xt, and X11 
+	dnl
+	if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXt -lX11 -lm"
+		SAVE_LIBS=${LIBS}
+		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
+		AC_TRY_LINK([],[],X_LINKING_OK=1)
+		LIBS=${SAVE_LIBS}
+	fi
+	
+	dnl 		
+	dnl  second guess: add SM and ICE
+	dnl
+	if test "${X_LINKING_OK+set}" != set ; then
+		X11_LIBS="-lXmu -lXt -lX11 -lSM -lICE -lm"
 		SAVE_LIBS=${LIBS}
 		LIBS="${X11_LIBPATHOPT} ${X11_LIBS} ${LIBS}"
 		AC_TRY_LINK([],[],X_LINKING_OK=1)
