@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.14 2000/02/17 00:30:43 oliver Exp $
+// $Id: vector3.h,v 1.15 2000/02/18 13:09:04 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -46,6 +46,11 @@ namespace BALL
 	TVector3<T> operator - (const TVector3<T>& a, const TVector3<T>& b);
 
 	template <typename T>
+	BALL_INLINE
+	TVector3<T> operator * (const T& scalar, const TVector3<T>& vector);
+
+
+	template <typename T>
 	std::istream& operator >> (std::istream& s, TVector3<T>& vector);
 
 	template <typename T>
@@ -61,7 +66,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(TVector3<T>)
+		BALL_CREATE(TVector3<T>) ;
 
 		/**	@name	Constructors and Destructors
 		*/
@@ -471,13 +476,17 @@ namespace BALL
 		//@{
 	
 		///
-		T x;
+
+		T x ;
 
 		///
-		T y;
+
+		T y ;
 
 		///
-		T z;
+
+		T z ;
+
 		//@}
 
 		private:
@@ -486,19 +495,24 @@ namespace BALL
 		{
 			TAngle<T> angle;
 	
-			if (Maths::isNotZero(x)){
+			if (Maths::isNotZero(x))
+			{
 				angle = atan(y / x);
 			} else {
-				angle = BALLSgn(y) * Constants::PI / 2;
+				angle = Maths::sgn(y) * Constants::PI / 2;
 			}
 
-			if (Maths::isLess(x, 0)) {
+			if (Maths::isLess(x, 0)) 
+			{
 				angle += Constants::PI;
 			}
 
-			if (Maths::isLess(angle.value, 0)) {
+			if (Maths::isLess(angle.value, 0)) 
+			{
 				return (angle.value += 2 * Constants::PI);
-			} else {
+			} 
+			else 
+			{
 				return angle;
 			}
 		}
@@ -977,7 +991,7 @@ namespace BALL
 	/**
 	*/
 	template <typename T>
-	inline 
+	BALL_INLINE
 	TVector3<T> operator + (const TVector3<T>& a, const TVector3<T>& b)
 	{
 		return TVector3<T>(a.x + b.x, a.y + b.y, a.z + b.z);
@@ -986,7 +1000,7 @@ namespace BALL
 	/**
 	*/
 	template <typename T>
-	inline
+	BALL_INLINE
 	TVector3<T> operator - (const TVector3<T>& a, const TVector3<T>& b)
 	{
 		return TVector3<T>(a.x - b.x, a.y - b.y, a.z - b.z);
@@ -1000,11 +1014,6 @@ namespace BALL
 	{
 		return TVector3<T>(scalar * vector.x, scalar * vector.y, scalar * vector.z);
 	}
-
-	/**
-	*/
-	template <typename T>
-	TVector3<T> operator * (const T& scalar, const TVector3<T>& vector);
 
 	/**
 	*/
