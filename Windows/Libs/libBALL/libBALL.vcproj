@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="libBALL"
 	ProjectGUID="{98714B1B-8ADD-418B-BF10-404EAA830356}"
 	Keyword="Win32Proj">
@@ -51,6 +51,12 @@
 				Name="VCResourceCompilerTool"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -75,7 +81,7 @@
 				StringPooling="TRUE"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
@@ -104,6 +110,12 @@
 				Name="VCResourceCompilerTool"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Python|Win32"
@@ -157,6 +169,12 @@
 				Name="VCResourceCompilerTool"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Python Multithreaded|Win32"
@@ -209,8 +227,16 @@
 				Name="VCResourceCompilerTool"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Quelldateien"
@@ -432,33 +458,6 @@
 			<Filter
 				Name="CONCEPT"
 				Filter="">
-				<File
-					RelativePath="..\..\..\source\CONCEPT\XDRPersistenceManager.C">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							CompileAs="2"/>
-					</FileConfiguration>
-				</File>
 				<File
 					RelativePath="..\..\..\source\CONCEPT\autoDeletable.C">
 					<FileConfiguration
@@ -810,6 +809,33 @@
 							CompileAs="2"/>
 					</FileConfiguration>
 				</File>
+				<File
+					RelativePath="..\..\..\source\CONCEPT\XDRPersistenceManager.C">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							CompileAs="2"/>
+					</FileConfiguration>
+				</File>
 			</Filter>
 			<Filter
 				Name="DATATYPE"
@@ -1033,7 +1059,19 @@
 				Name="FORMAT"
 				Filter="">
 				<File
+					RelativePath="..\..\..\source\FORMAT\bruker1DFile.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\FORMAT\bruker2DFile.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\FORMAT\DCDFile.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\FORMAT\genericMolFile.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\FORMAT\genericPDBFile.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\FORMAT\HINFile.C">
@@ -1043,6 +1081,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\FORMAT\JCAMPFile.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\FORMAT\lineBasedFile.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\FORMAT\MOL2File.C">
@@ -1060,10 +1101,22 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\source\FORMAT\parameters.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\FORMAT\parameterSection.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\FORMAT\PDBFile.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\FORMAT\resourceFile.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\FORMAT\SDFile.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\FORMAT\trajectoryFile.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\FORMAT\TRRFile.C">
@@ -1071,43 +1124,10 @@
 				<File
 					RelativePath="..\..\..\source\FORMAT\XYZFile.C">
 				</File>
-				<File
-					RelativePath="..\..\..\source\FORMAT\bruker1DFile.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\FORMAT\bruker2DFile.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\FORMAT\genericMolFile.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\FORMAT\genericPDBFile.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\FORMAT\lineBasedFile.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\FORMAT\parameterSection.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\FORMAT\parameters.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\FORMAT\resourceFile.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\FORMAT\trajectoryFile.C">
-				</File>
 			</Filter>
 			<Filter
 				Name="KERNEL"
 				Filter="">
-				<File
-					RelativePath="..\..\..\source\KERNEL\PDBAtom.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\KERNEL\PTE.C">
-				</File>
 				<File
 					RelativePath="..\..\..\source\KERNEL\atom.C">
 				</File>
@@ -1256,10 +1276,16 @@
 					RelativePath="..\..\..\source\KERNEL\nucleotide.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\KERNEL\PDBAtom.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\KERNEL\predicate.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\KERNEL\protein.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\KERNEL\PTE.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\KERNEL\residue.C">
@@ -1280,6 +1306,45 @@
 			<Filter
 				Name="MATHS"
 				Filter="">
+				<File
+					RelativePath="..\..\..\source\MATHS\analyticalGeometry.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\MATHS\angle.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\MATHS\box3.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\MATHS\circle3.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\MATHS\complex.C">
+					<FileConfiguration
+						Name="Debug|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32"
+						ExcludedFromBuild="TRUE">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
+				</File>
 				<File
 					RelativePath="..\..\..\source\MATHS\FFT1D.C">
 					<FileConfiguration
@@ -1336,45 +1401,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\MATHS\FFT3D.C">
-					<FileConfiguration
-						Name="Debug|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32"
-						ExcludedFromBuild="TRUE">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\..\source\MATHS\analyticalGeometry.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\MATHS\angle.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\MATHS\box3.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\MATHS\circle3.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\MATHS\complex.C">
 					<FileConfiguration
 						Name="Debug|Win32"
 						ExcludedFromBuild="TRUE">
@@ -1713,10 +1739,10 @@
 						RelativePath="..\..\..\source\MOLMEC\COMMON\support.C">
 					</File>
 					<File
-						RelativePath="..\..\..\source\MOLMEC\COMMON\typeRuleProcessor.C">
+						RelativePath="..\..\..\source\MOLMEC\COMMON\typenameRuleProcessor.C">
 					</File>
 					<File
-						RelativePath="..\..\..\source\MOLMEC\COMMON\typenameRuleProcessor.C">
+						RelativePath="..\..\..\source\MOLMEC\COMMON\typeRuleProcessor.C">
 					</File>
 				</Filter>
 				<Filter
@@ -1790,12 +1816,6 @@
 				Name="NMR"
 				Filter="">
 				<File
-					RelativePath="..\..\..\source\NMR\EFShiftProcessor.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\NMR\HBondShiftProcessor.C">
-				</File>
-				<File
 					RelativePath="..\..\..\source\NMR\anisotropyShiftProcessor.C">
 				</File>
 				<File
@@ -1808,10 +1828,16 @@
 					RelativePath="..\..\..\source\NMR\createSpectrumProcessor.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\NMR\EFShiftProcessor.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\NMR\experiment.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\NMR\haighMallionShiftProcessor.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\NMR\HBondShiftProcessor.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\NMR\johnsonBoveyShiftProcessor.C">
@@ -1884,9 +1910,6 @@
 				Name="SOLVATION"
 				Filter="">
 				<File
-					RelativePath="..\..\..\source\SOLVATION\PCMCavFreeEnergyProcessor.C">
-				</File>
-				<File
 					RelativePath="..\..\..\source\SOLVATION\claverieParameter.C">
 				</File>
 				<File
@@ -1935,6 +1958,9 @@
 					RelativePath="..\..\..\source\SOLVATION\pairExpRDFIntegrator.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\SOLVATION\PCMCavFreeEnergyProcessor.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\SOLVATION\pierottiCavFreeEnergyProcessor.C">
 				</File>
 				<File
@@ -1956,54 +1982,6 @@
 			<Filter
 				Name="STRUCTURE"
 				Filter="">
-				<File
-					RelativePath="..\..\..\source\STRUCTURE\HBondProcessor.C">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\..\source\STRUCTURE\RDFIntegrator.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\STRUCTURE\RDFParameter.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\STRUCTURE\RDFSection.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\STRUCTURE\RSEdge.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\STRUCTURE\RSFace.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\STRUCTURE\RSVertex.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\STRUCTURE\SASEdge.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\STRUCTURE\SASFace.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\STRUCTURE\SASVertex.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\STRUCTURE\SESEdge.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\STRUCTURE\SESFace.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\STRUCTURE\SESVertex.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\STRUCTURE\UCK.C">
-				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\analyticalSES.C">
 				</File>
@@ -2032,6 +2010,15 @@
 					RelativePath="..\..\..\source\STRUCTURE\graphVertex.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\STRUCTURE\HBondProcessor.C">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+				</File>
+				<File
 					RelativePath="..\..\..\source\STRUCTURE\md5.C">
 				</File>
 				<File
@@ -2050,6 +2037,15 @@
 					RelativePath="..\..\..\source\STRUCTURE\radialDistributionFunction.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\STRUCTURE\RDFIntegrator.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\RDFParameter.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\RDFSection.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\STRUCTURE\reconstructFragmentProcessor.C">
 				</File>
 				<File
@@ -2062,6 +2058,24 @@
 					RelativePath="..\..\..\source\STRUCTURE\rotamerLibrary.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\STRUCTURE\RSEdge.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\RSFace.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\RSVertex.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\SASEdge.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\SASFace.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\SASVertex.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\STRUCTURE\secondaryStructureProcessor.C">
 					<FileConfiguration
 						Name="Debug|Win32">
@@ -2069,6 +2083,15 @@
 							Name="VCCLCompilerTool"
 							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\SESEdge.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\SESFace.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\SESVertex.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\smilesParser.C">
@@ -2218,18 +2241,13 @@
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\triangulatedSurface.C">
 				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\UCK.C">
+				</File>
 			</Filter>
 			<Filter
 				Name="SYSTEM"
 				Filter="">
-				<File
-					RelativePath="..\..\..\source\SYSTEM\TCPTransfer.C">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"/>
-					</FileConfiguration>
-				</File>
 				<File
 					RelativePath="..\..\..\source\SYSTEM\directory.C">
 					<FileConfiguration
@@ -2264,6 +2282,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\SYSTEM\socket.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\SYSTEM\TCPTransfer.C">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\SYSTEM\timer.C">
@@ -2390,9 +2416,6 @@
 				Name="CONCEPT"
 				Filter="">
 				<File
-					RelativePath="..\..\..\include\BALL\CONCEPT\XDRPersistenceManager.h">
-				</File>
-				<File
 					RelativePath="..\..\..\include\BALL\CONCEPT\autoDeletable.h">
 				</File>
 				<File
@@ -2472,6 +2495,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\CONCEPT\visitor.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\CONCEPT\XDRPersistenceManager.h">
 				</File>
 			</Filter>
 			<Filter
@@ -2558,7 +2584,19 @@
 				Name="FORMAT"
 				Filter="">
 				<File
+					RelativePath="..\..\..\include\BALL\FORMAT\bruker1DFile.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\FORMAT\bruker2DFile.h">
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\FORMAT\DCDFile.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\FORMAT\genericMolFile.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\FORMAT\genericPDBFile.h">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\FORMAT\HINFile.h">
@@ -2570,6 +2608,9 @@
 					RelativePath="..\..\..\include\BALL\FORMAT\JCAMPFile.h">
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\FORMAT\lineBasedFile.h">
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\FORMAT\MOL2File.h">
 				</File>
 				<File
@@ -2579,10 +2620,22 @@
 					RelativePath="..\..\..\include\BALL\FORMAT\NMRStarFile.h">
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\FORMAT\parameters.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\FORMAT\parameterSection.h">
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\FORMAT\PDBFile.h">
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\FORMAT\resourceFile.h">
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\FORMAT\SDFile.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\FORMAT\trajectoryFile.h">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\FORMAT\TRRFile.h">
@@ -2590,46 +2643,10 @@
 				<File
 					RelativePath="..\..\..\include\BALL\FORMAT\XYZFile.h">
 				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\FORMAT\bruker1DFile.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\FORMAT\bruker2DFile.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\FORMAT\genericMolFile.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\FORMAT\genericPDBFile.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\FORMAT\lineBasedFile.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\FORMAT\parameterSection.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\FORMAT\parameters.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\FORMAT\resourceFile.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\FORMAT\trajectoryFile.h">
-				</File>
 			</Filter>
 			<Filter
 				Name="KERNEL"
 				Filter="">
-				<File
-					RelativePath="..\..\..\include\BALL\KERNEL\PDBAtom.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\KERNEL\PDBAtomIterator.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\KERNEL\PTE.h">
-				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\KERNEL\atom.h">
 				</File>
@@ -2703,6 +2720,12 @@
 					RelativePath="..\..\..\include\BALL\KERNEL\nucleotideIterator.h">
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\KERNEL\PDBAtom.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\KERNEL\PDBAtomIterator.h">
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\KERNEL\predicate.h">
 				</File>
 				<File
@@ -2710,6 +2733,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\KERNEL\proteinIterator.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\KERNEL\PTE.h">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\KERNEL\residue.h">
@@ -2737,15 +2763,6 @@
 				Name="MATHS"
 				Filter="">
 				<File
-					RelativePath="..\..\..\include\BALL\MATHS\FFT1D.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\MATHS\FFT2D.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\MATHS\FFT3D.h">
-				</File>
-				<File
 					RelativePath="..\..\..\include\BALL\MATHS\analyticalGeometry.h">
 				</File>
 				<File
@@ -2762,6 +2779,15 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\MATHS\complex.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\MATHS\FFT1D.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\MATHS\FFT2D.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\MATHS\FFT3D.h">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\MATHS\function.h">
@@ -2899,10 +2925,10 @@
 						RelativePath="..\..\..\include\BALL\MOLMEC\COMMON\support.h">
 					</File>
 					<File
-						RelativePath="..\..\..\include\BALL\MOLMEC\COMMON\typeRuleProcessor.h">
+						RelativePath="..\..\..\include\BALL\MOLMEC\COMMON\typenameRuleProcessor.h">
 					</File>
 					<File
-						RelativePath="..\..\..\include\BALL\MOLMEC\COMMON\typenameRuleProcessor.h">
+						RelativePath="..\..\..\include\BALL\MOLMEC\COMMON\typeRuleProcessor.h">
 					</File>
 				</Filter>
 				<Filter
@@ -2976,12 +3002,6 @@
 				Name="NMR"
 				Filter="">
 				<File
-					RelativePath="..\..\..\include\BALL\NMR\EFShiftProcessor.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\NMR\HBondShiftProcessor.h">
-				</File>
-				<File
 					RelativePath="..\..\..\include\BALL\NMR\anisotropyShiftProcessor.h">
 				</File>
 				<File
@@ -2994,10 +3014,16 @@
 					RelativePath="..\..\..\include\BALL\NMR\createSpectrumProcessor.h">
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\NMR\EFShiftProcessor.h">
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\NMR\experiment.h">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\NMR\haighMallionShiftProcessor.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\NMR\HBondShiftProcessor.h">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\NMR\johnsonBoveyShiftProcessor.h">
@@ -3065,9 +3091,6 @@
 				Name="SOLVATION"
 				Filter="">
 				<File
-					RelativePath="..\..\..\include\BALL\SOLVATION\PCMCavFreeEnergyProcessor.h">
-				</File>
-				<File
 					RelativePath="..\..\..\include\BALL\SOLVATION\claverieParameter.h">
 				</File>
 				<File
@@ -3092,6 +3115,9 @@
 					RelativePath="..\..\..\include\BALL\SOLVATION\pairExpRDFIntegrator.h">
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\SOLVATION\PCMCavFreeEnergyProcessor.h">
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\SOLVATION\pierottiCavFreeEnergyProcessor.h">
 				</File>
 				<File
@@ -3114,52 +3140,10 @@
 				Name="STRUCTURE"
 				Filter="">
 				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\BSDTree.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\HBondProcessor.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\RDFIntegrator.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\RDFParameter.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\RDFSection.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\RSEdge.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\RSFace.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\RSVertex.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\SASEdge.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\SASFace.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\SASVertex.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\SESEdge.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\SESFace.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\SESVertex.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\STRUCTURE\UCK.h">
-				</File>
-				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\analyticalSES.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\BSDTree.h">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\defaultProcessors.h">
@@ -3183,6 +3167,9 @@
 					RelativePath="..\..\..\include\BALL\STRUCTURE\graphVertex.h">
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\HBondProcessor.h">
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\md5.h">
 				</File>
 				<File
@@ -3201,6 +3188,15 @@
 					RelativePath="..\..\..\include\BALL\STRUCTURE\radialDistributionFunction.h">
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\RDFIntegrator.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\RDFParameter.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\RDFSection.h">
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\reconstructFragmentProcessor.h">
 				</File>
 				<File
@@ -3213,7 +3209,34 @@
 					RelativePath="..\..\..\include\BALL\STRUCTURE\rotamerLibrary.h">
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\RSEdge.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\RSFace.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\RSVertex.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\SASEdge.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\SASFace.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\SASVertex.h">
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\secondaryStructureProcessor.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\SESEdge.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\SESFace.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\SESVertex.h">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\smilesParser.h">
@@ -3248,13 +3271,13 @@
 				<File
 					RelativePath="..\..\..\include\BALL\STRUCTURE\triangulatedSurface.h">
 				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\STRUCTURE\UCK.h">
+				</File>
 			</Filter>
 			<Filter
 				Name="SYSTEM"
 				Filter="">
-				<File
-					RelativePath="..\..\..\include\BALL\SYSTEM\TCPTransfer.h">
-				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\SYSTEM\directory.h">
 				</File>
@@ -3269,6 +3292,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\SYSTEM\socket.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\SYSTEM\TCPTransfer.h">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\SYSTEM\timer.h">

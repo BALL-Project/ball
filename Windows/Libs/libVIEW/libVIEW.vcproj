@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="libView"
 	ProjectGUID="{D22286C8-99CD-4416-A394-ACB3346751BE}"
 	Keyword="Win32Proj">
@@ -47,6 +47,12 @@
 				Name="VCResourceCompilerTool"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -71,7 +77,7 @@
 				StringPooling="TRUE"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
@@ -83,7 +89,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt323.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libball.lib"
+				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt333.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libball.lib"
 				OutputFile="$(ProjectDir)..\..\..\lib\$(ProjectName).dll"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\..\lib\&quot;;&quot;$(QTDIR)\lib&quot;"/>
 			<Tool
@@ -99,7 +105,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Python|Win32"
@@ -149,6 +161,12 @@
 				Name="VCResourceCompilerTool"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Python Multithreaded|Win32"
@@ -202,9 +220,17 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Quelldateien"
@@ -343,9 +369,6 @@
 				Name="MODELS"
 				Filter="">
 				<File
-					RelativePath="..\..\..\source\VIEW\MODELS\HBondModel.C">
-				</File>
-				<File
 					RelativePath="..\..\..\source\VIEW\MODELS\atomBondModelBaseProcessor.C">
 				</File>
 				<File
@@ -362,6 +385,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\MODELS\forceModel.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\MODELS\HBondModel.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\MODELS\lineModel.C">
@@ -420,9 +446,6 @@
 				Name="KERNEL"
 				Filter="">
 				<File
-					RelativePath="..\..\..\source\VIEW\KERNEL\QTTimer.C">
-				</File>
-				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\client.C">
 				</File>
 				<File
@@ -462,6 +485,9 @@
 					RelativePath="..\..\..\source\VIEW\KERNEL\primitiveManager.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\VIEW\KERNEL\QTTimer.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\representation.C">
 				</File>
 				<File
@@ -478,12 +504,6 @@
 				Name="RENDERING"
 				Filter="">
 				<File
-					RelativePath="..\..\..\source\VIEW\RENDERING\POVRenderer.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\RENDERING\VRMLRenderer.C">
-				</File>
-				<File
 					RelativePath="..\..\..\source\VIEW\RENDERING\glDisplayList.C">
 				</File>
 				<File
@@ -493,80 +513,86 @@
 					RelativePath="..\..\..\source\VIEW\RENDERING\glRenderer.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\VIEW\RENDERING\POVRenderer.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\RENDERING\renderer.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\RENDERING\VRMLRenderer.C">
 				</File>
 			</Filter>
 			<Filter
 				Name="MOC Files"
 				Filter="">
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialogData_moc.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialog_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\amberConfigurationDialog_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\amberConfigurationDialogData_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\amberConfigurationDialog_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\bondProperties_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\bondPropertiesData_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\bondProperties_moc.C">
-				</File>
-				<File
 					RelativePath="..\..\..\source\VIEW\WIDGETS\canvasWidget_moc.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\charmmConfigurationDialogData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\charmmConfigurationDialog_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\colorMeshDialogData_moc.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\colorMeshDialog_moc.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialogData_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\charmmConfigurationDialogData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialog_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\compositePropertiesData_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialogData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\colorMeshDialog_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\colorMeshDialogData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\compositeProperties_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\contourSurfaceDialogData_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\compositePropertiesData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\contourSurfaceDialog_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\WIDGETS\datasetControl_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\contourSurfaceDialogData_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\displayPropertiesData_moc.C">
+					RelativePath="..\..\..\source\VIEW\WIDGETS\datasetControl_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\displayProperties_moc.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\displayPropertiesData_moc.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\WIDGETS\dockWidget_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\downloadPDBFile_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\downloadPDBFileData_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\downloadPDBFile_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialog_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialogData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\WIDGETS\genericControl_moc.C">
@@ -575,55 +601,55 @@
 					RelativePath="..\..\..\source\VIEW\WIDGETS\geometricControl_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\labelDialogData_moc.C">
-				</File>
-				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\labelDialog_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\lightSettingsData_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\labelDialogData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\lightSettings_moc.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\lightSettingsData_moc.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\WIDGETS\logView_moc.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\mainControlPreferencesData_moc.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\mainControlPreferences_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\mainControl_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\materialSettingsData_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\mainControlPreferences_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\mainControlPreferencesData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\materialSettings_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\minimizationDialogData_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\materialSettingsData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\minimizationDialog_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\modelSettingsDialogData_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\minimizationDialogData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\modelSettingsDialog_moc.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\modelSettingsDialogData_moc.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\VIEW\WIDGETS\molecularControl_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\molecularDynamicsDialogData_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\molecularDynamicsDialog_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\molecularDynamicsDialog_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\molecularDynamicsDialogData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\molecularFileDialog_moc.C">
@@ -632,28 +658,27 @@
 					RelativePath="..\..\..\source\VIEW\WIDGETS\molecularStructure_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\parsedFunctionDialogData_moc.C">
-				</File>
-				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\parsedFunctionDialog_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\peptideDialogData_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\parsedFunctionDialogData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\peptideDialog_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\preferencesData_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\peptideDialogData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\preferences_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\WIDGETS\pyWidget_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\preferencesData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\pythonSettings_moc.C">
 					<FileConfiguration
-						Name="Release|Win32"
-						ExcludedFromBuild="TRUE">
+						Name="Release|Win32">
 						<Tool
 							Name="VCCLCompilerTool"/>
 					</FileConfiguration>
@@ -667,9 +692,10 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\pythonSettings_moc.C">
+					RelativePath="..\..\..\source\VIEW\WIDGETS\pyWidget_moc.C">
 					<FileConfiguration
-						Name="Release|Win32">
+						Name="Release|Win32"
+						ExcludedFromBuild="TRUE">
 						<Tool
 							Name="VCCLCompilerTool"/>
 					</FileConfiguration>
@@ -687,57 +713,27 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\serverPreferences_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\setCameraData_moc.C">
-				</File>
-				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\setCamera_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\snapShotVisualisationData_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\setCameraData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\snapShotVisualisation_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\stageSettingsData_moc.C">
+					RelativePath="..\..\..\source\VIEW\DIALOGS\snapShotVisualisationData_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\stageSettings_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\stageSettingsData_moc.C">
 				</File>
 			</Filter>
 			<Filter
 				Name="DIALOGS"
 				Filter="">
-				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialog.C">
-					<FileConfiguration
-						Name="Debug|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32">
-						<Tool
-							Name="VCCLCompilerTool"
-							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialogData.C">
-				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\amberConfigurationDialog.C">
 				</File>
@@ -755,6 +751,12 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\charmmConfigurationDialogData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialog.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialogData.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\colorMeshDialog.C">
@@ -787,12 +789,6 @@
 					RelativePath="..\..\..\source\VIEW\DIALOGS\colorMeshDialogData.C">
 				</File>
 				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialog.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialogData.C">
-				</File>
-				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\compositeProperties.C">
 				</File>
 				<File
@@ -815,6 +811,36 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\downloadPDBFileData.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialog.C">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							ObjectFile="$(IntDir)/$(InputName)1.obj"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialogData.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\DIALOGS\labelDialog.C">
@@ -1090,66 +1116,6 @@
 				Name="DIALOGS"
 				Filter="">
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\FDPBDialog.h">
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\UIC\FDPBDialogData.h">
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\amberConfigurationDialog.h">
 					<FileConfiguration
 						Name="Release|Win32">
@@ -1294,66 +1260,6 @@
 					</FileConfiguration>
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\colorMeshDialog.h">
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\UIC\colorMeshDialogData.h">
-					<FileConfiguration
-						Name="Release|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-					<FileConfiguration
-						Name="Python Multithreaded|Win32">
-						<Tool
-							Name="VCCustomBuildTool"
-							Description="Running MOC on $(InputFileName)"
-							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
-"
-							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
-					</FileConfiguration>
-				</File>
-				<File
 					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\coloringSettingsDialog.h">
 					<FileConfiguration
 						Name="Release|Win32">
@@ -1385,6 +1291,66 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\UIC\coloringSettingsDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\colorMeshDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\colorMeshDialogData.h">
 					<FileConfiguration
 						Name="Release|Win32">
 						<Tool
@@ -1598,6 +1564,66 @@
 					RelativePath="..\..\..\include\BALL\VIEW\UIC\downloadPDBFileData.h">
 					<FileConfiguration
 						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\DIALOGS\FDPBDialog.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python Multithreaded|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\UIC\FDPBDialogData.h">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCustomBuildTool"
+							Description="Running MOC on $(InputFileName)"
+							CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C&quot;
+"
+							Outputs="$(InputDir)\..\..\..\..\source\VIEW\DIALOGS\$(InputName)_moc.C"/>
+					</FileConfiguration>
+					<FileConfiguration
+						Name="Python|Win32">
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="Running MOC on $(InputFileName)"
@@ -2457,9 +2483,6 @@
 				Name="KERNEL"
 				Filter="">
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\QTTimer.h">
-				</File>
-				<File
 					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\client.h">
 				</File>
 				<File
@@ -2529,6 +2552,9 @@
 					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\primitiveManager.h">
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\QTTimer.h">
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\VIEW\KERNEL\representation.h">
 				</File>
 				<File
@@ -2544,9 +2570,6 @@
 			<Filter
 				Name="MODELS"
 				Filter="">
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\MODELS\HBondModel.h">
-				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\MODELS\atomBondModelBaseProcessor.h">
 				</File>
@@ -2564,6 +2587,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\MODELS\forceModel.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\MODELS\HBondModel.h">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\VIEW\MODELS\lineModel.h">
@@ -2585,12 +2611,6 @@
 				Name="RENDERING"
 				Filter="">
 				<File
-					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\POVRenderer.h">
-				</File>
-				<File
-					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\VRMLRenderer.h">
-				</File>
-				<File
 					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\glDisplayList.h">
 				</File>
 				<File
@@ -2600,7 +2620,13 @@
 					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\glRenderer.h">
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\POVRenderer.h">
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\renderer.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\RENDERING\VRMLRenderer.h">
 				</File>
 			</Filter>
 			<Filter
@@ -2946,39 +2972,6 @@
 			Name="Ressourcendateien"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
 			<File
-				RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialog.ui">
-				<FileConfiguration
-					Name="Release|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Running UIC on $(InputPath)"
-						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
-$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
-"
-						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Running UIC on $(InputPath)"
-						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
-$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
-"
-						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Python Multithreaded|Win32">
-					<Tool
-						Name="VCCustomBuildTool"
-						Description="Running UIC on $(InputPath)"
-						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
-$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
-"
-						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\source\VIEW\DIALOGS\amberConfigurationDialog.ui">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -3058,7 +3051,7 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(Inp
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\VIEW\DIALOGS\colorMeshDialog.ui">
+				RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialog.ui">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -3091,7 +3084,7 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(Inp
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\VIEW\DIALOGS\coloringSettingsDialog.ui">
+				RelativePath="..\..\..\source\VIEW\DIALOGS\colorMeshDialog.ui">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -3216,6 +3209,39 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(Inp
 				RelativePath="..\..\..\source\VIEW\DIALOGS\downloadPDBFile.ui">
 				<FileConfiguration
 					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\VIEW\DIALOGS\FDPBDialog.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\..\..\..\include\BALL\VIEW\UIC\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+				<FileConfiguration
+					Name="Python|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
 						Description="Running UIC on $(InputPath)"

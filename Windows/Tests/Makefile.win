@@ -3,8 +3,8 @@
 # by Andreas Crauser 
 #---------------------------------------------------------------
 
-CC = cl -c -nologo -MTd -Zm1200 -TP -EHsc -GR -Zi /D "WIN32"
-LD = cl -nologo -MTd 
+CC = cl -c -nologo -MD -Zm1200 -TP -EHsc -GR -Zi /D "WIN32"
+LD = cl -nologo -MD
 LDOPTS = /link /OPT:NOREF /DEBUG 
 BALL_LIB = ..\..\lib\libBall.lib
 

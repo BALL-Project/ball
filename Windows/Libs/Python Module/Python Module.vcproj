@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="Python Module"
 	ProjectGUID="{0B89FAB2-C97D-4A9D-BA5E-1A5E9A74995F}"
 	Keyword="ManagedCProj">
@@ -47,7 +47,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -86,7 +92,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Python|Win32"
@@ -94,7 +106,7 @@
 			IntermediateDirectory="Python"
 			ConfigurationType="2"
 			CharacterSet="2"
-			ManagedExtensions="TRUE"
+			ManagedExtensions="FALSE"
 			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -108,8 +120,7 @@
 				BufferSecurityCheck="FALSE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				CompileAsManaged="0"/>
+				WarningLevel="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -134,7 +145,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Python Multithreaded|Win32"
@@ -142,7 +159,7 @@
 			IntermediateDirectory="Python Multithreaded"
 			ConfigurationType="2"
 			CharacterSet="2"
-			ManagedExtensions="TRUE"
+			ManagedExtensions="FALSE"
 			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -157,8 +174,7 @@
 				BufferSecurityCheck="FALSE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
-				WarningLevel="3"
-				CompileAsManaged="0"/>
+				WarningLevel="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -183,9 +199,17 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Quelldateien"
@@ -1106,6 +1130,15 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLcmodule.C">
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLColorExtension2.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
@@ -1547,15 +1580,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLINIFile.C">
-				<FileConfiguration
-					Name="Python Multithreaded|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="2"/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLIllegalKey.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
@@ -1602,6 +1626,15 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLIndexUnderflow.C">
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLINIFile.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
@@ -1682,24 +1715,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMOL2File.C">
-				<FileConfiguration
-					Name="Python Multithreaded|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMOLFile.C">
-				<FileConfiguration
-					Name="Python Multithreaded|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="2"/>
-				</FileConfiguration>
-			</File>
-			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMainControl.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
@@ -1763,6 +1778,15 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMOL2File.C">
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMolecularDynamics.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
@@ -1782,6 +1806,15 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMolecule.C">
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMOLFile.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
@@ -1925,6 +1958,15 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLParseError.C">
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPDBAtom.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
@@ -1935,24 +1977,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPDBFile.C">
-				<FileConfiguration
-					Name="Python Multithreaded|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPTE_.C">
-				<FileConfiguration
-					Name="Python Multithreaded|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLParseError.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
@@ -2052,6 +2076,15 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLProtein.C">
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPTE_.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
@@ -2413,7 +2446,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSDFile.C">
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSceneMessage.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
@@ -2422,7 +2455,7 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSceneMessage.C">
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSDFile.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
@@ -2549,6 +2582,15 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLStage.C">
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLstd__openmode.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
@@ -2765,24 +2807,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLXYZFile.C">
-				<FileConfiguration
-					Name="Python Multithreaded|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLcmodule.C">
-				<FileConfiguration
-					Name="Python Multithreaded|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						CompileAs="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLstd__openmode.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
@@ -3137,9 +3161,6 @@
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLHINFile.h">
 			</File>
 			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLINIFile.h">
-			</File>
-			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLIllegalKey.h">
 			</File>
 			<File
@@ -3156,6 +3177,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLIndexUnderflow.h">
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLINIFile.h">
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLInvalidFormat.h">
@@ -3182,12 +3206,6 @@
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLLineBasedFile.h">
 			</File>
 			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMOL2File.h">
-			</File>
-			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMOLFile.h">
-			</File>
-			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMainControl.h">
 			</File>
 			<File
@@ -3209,6 +3227,9 @@
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLModularWidget.h">
 			</File>
 			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMOL2File.h">
+			</File>
+			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMolecularDynamics.h">
 			</File>
 			<File
@@ -3216,6 +3237,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMolecule.h">
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMOLFile.h">
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLNamedProperty.h">
@@ -3263,16 +3287,13 @@
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLOutOfMemory.h">
 			</File>
 			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLParseError.h">
+			</File>
+			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPDBAtom.h">
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPDBFile.h">
-			</File>
-			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPTE_.h">
-			</File>
-			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLParseError.h">
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPeriodicBoundary.h">
@@ -3306,6 +3327,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLProtein.h">
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPTE_.h">
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyAtomContainerList.h">
@@ -3425,10 +3449,10 @@
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLRuleProcessor.h">
 			</File>
 			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSDFile.h">
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSceneMessage.h">
 			</File>
 			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSceneMessage.h">
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSDFile.h">
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSecondaryStructure.h">
@@ -3471,6 +3495,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLStage.h">
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLstd__openmode.h">
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLString.h">
@@ -3543,9 +3570,6 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLXYZFile.h">
-			</File>
-			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLstd__openmode.h">
 			</File>
 		</Filter>
 		<Filter

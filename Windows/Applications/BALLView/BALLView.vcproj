@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="BALLView"
 	ProjectGUID="{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}"
-	Keyword="ManagedCProj">
+	Keyword="Win32Proj">
 	<Platforms>
 		<Platform
 			Name="Win32"/>
@@ -16,7 +16,7 @@
 			IntermediateDirectory="Debug"
 			ConfigurationType="1"
 			CharacterSet="2"
-			ManagedExtensions="TRUE"
+			ManagedExtensions="FALSE"
 			WholeProgramOptimization="FALSE">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -29,8 +29,7 @@
 				RuntimeTypeInfo="TRUE"
 				WarningLevel="0"
 				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="3"
-				CompileAsManaged="0"/>
+				DebugInformationFormat="3"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -55,7 +54,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Release|Win32"
@@ -63,34 +68,33 @@
 			IntermediateDirectory="Release"
 			ConfigurationType="1"
 			CharacterSet="2"
-			ManagedExtensions="TRUE"
+			ManagedExtensions="FALSE"
 			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
-				Optimization="3"
-				GlobalOptimizations="TRUE"
+				Optimization="4"
+				GlobalOptimizations="FALSE"
 				InlineFunctionExpansion="2"
-				EnableIntrinsicFunctions="TRUE"
+				EnableIntrinsicFunctions="FALSE"
 				FavorSizeOrSpeed="1"
-				OptimizeForProcessor="2"
+				OptimizeForProcessor="0"
 				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
 				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG;BALL_QT_HAS_THREADS"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
-				RuntimeLibrary="0"
+				RuntimeLibrary="2"
 				BufferSecurityCheck="FALSE"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
 				WarningLevel="0"
 				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="0"
-				CompileAsManaged="0"/>
+				DebugInformationFormat="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt323.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libview.lib libball.lib"
+				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt333.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libview.lib libball.lib"
 				OutputFile="$(OutDir)/BALLView.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -110,7 +114,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Python|Win32"
@@ -118,7 +128,7 @@
 			IntermediateDirectory="Python"
 			ConfigurationType="1"
 			CharacterSet="2"
-			ManagedExtensions="TRUE"
+			ManagedExtensions="FALSE"
 			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -141,8 +151,7 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="0"
 				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="0"
-				CompileAsManaged="0"/>
+				DebugInformationFormat="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -170,7 +179,13 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 		<Configuration
 			Name="Python Multithreaded|Win32"
@@ -178,7 +193,7 @@
 			IntermediateDirectory="Python Multithreaded"
 			ConfigurationType="1"
 			CharacterSet="2"
-			ManagedExtensions="TRUE"
+			ManagedExtensions="FALSE"
 			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
@@ -202,8 +217,7 @@
 				UsePrecompiledHeader="0"
 				WarningLevel="0"
 				Detect64BitPortabilityProblems="TRUE"
-				DebugInformationFormat="0"
-				CompileAsManaged="0"/>
+				DebugInformationFormat="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
@@ -231,9 +245,17 @@
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
 			<Tool
+				Name="VCXMLDataGeneratorTool"/>
+			<Tool
 				Name="VCWebDeploymentTool"/>
+			<Tool
+				Name="VCManagedWrapperGeneratorTool"/>
+			<Tool
+				Name="VCAuxiliaryManagedWrapperGeneratorTool"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<Filter
 			Name="Quelldateien"
@@ -455,9 +477,6 @@
 			Name="Ressourcendateien"
 			Filter="">
 			<File
-				RelativePath="BALLView.rc">
-			</File>
-			<File
 				RelativePath="..\..\..\source\APPLICATIONS\BALLVIEW\aboutDialog.ui">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -489,6 +508,9 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName).C&quot; -impl &quot;$(InputDi
 "
 						Outputs="&quot;$(InputDir)\$(InputName).h&quot;;&quot;$(InputDir)\$(InputName).C&quot;"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="BALLView.rc">
 			</File>
 		</Filter>
 		<File

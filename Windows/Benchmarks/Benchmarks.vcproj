@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding = "Windows-1252"?>
+<?xml version="1.0" encoding="Windows-1252"?>
 <VisualStudioProject
 	ProjectType="Visual C++"
-	Version="7.00"
+	Version="7.10"
 	Name="Benchmarks"
 	ProjectGUID="{253B8927-6644-43B8-A48F-847A4D338C59}"
 	Keyword="MakeFileProj">
@@ -83,18 +83,14 @@ del *.exe"
 				Output="BENCHMARKS.log"/>
 		</Configuration>
 	</Configurations>
+	<References>
+	</References>
 	<Files>
 		<File
 			RelativePath="Make.lst">
-			<FileConfiguration
-				Name="Python Multithreaded|Win32">
-			</FileConfiguration>
 		</File>
 		<File
 			RelativePath="Makefile.win">
-			<FileConfiguration
-				Name="Python Multithreaded|Win32">
-			</FileConfiguration>
 		</File>
 	</Files>
 	<Globals>
