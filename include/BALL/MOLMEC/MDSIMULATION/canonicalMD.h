@@ -1,13 +1,4 @@
-// $Id: canonicalMD.h,v 1.5 2000/07/06 14:01:45 oliver Exp $
-
-// Canonical MD: A class for doing molecular dynamics simulations      
-// according to the principle of a canonical ensemble (NVT), i.e., 
-// the temperature is kept constant. 
-// This is achieved via the velocity rescaling proposed by
-// Berendsen et al., J. Chem. Physics, 81:3684, 1984.
-// Note that this approach does  not give all properties of a
-// true canonical system. In particular, the heat capacity 
-// cannot be calculated! 
+// $Id: canonicalMD.h,v 1.6 2000/07/24 20:12:21 oliver Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
@@ -60,17 +51,32 @@
 #include <vector>
 
 namespace BALL 
-  {
-  class CanonicalMD : public MolecularDynamics
-    {
+{
+
+	/** a MD simulation in the canoncial ensemble.
+		A class for doing molecular dynamics simulations      
+		according to the principle of a canonical ensemble (NVT), i.e., 
+		the temperature is kept constant. 
+		This is achieved via the velocity rescaling proposed by
+		Berendsen et al., J. Chem. Physics, 81:3684, 1984.
+		Note that this approach does  not give all properties of a
+		true canonical system. In particular, the heat capacity 
+		cannot be calculated! 
+		\\
+		{\bf Definition:}\URL{BALL/MOLMEC/MDSIMULATION/canonicalMD.h}
+		\\
+	*/
+  class CanonicalMD 
+		: public MolecularDynamics
+	{
     public: 
 
     /** A local auxiliary class
     */
     struct Aux_Factors
-      {
-      double factor1,factor2; 
-      }; 
+    {
+      double factor1, factor2; 
+    }; 
     
     /** @name Constructors and Destructors
     */
@@ -85,12 +91,12 @@ namespace BALL
     /** This constructor expects a force field 
         The force field's options are used and no saving  of snapshots is done 
     */
-    CanonicalMD(ForceField &myforcefield); 
+    CanonicalMD(ForceField& myforcefield); 
 
     /** This constructor expects a force field and a snapshot manager 
         The force field's options are used. 
     */
-    CanonicalMD(ForceField &myforcefield,SnapShotManager *ssm); 
+    CanonicalMD(ForceField& myforcefield, SnapShotManager* ssm); 
 
     /** This constructor wants a force field, a snapshot manager  and new options 
     */
