@@ -1,4 +1,4 @@
-// $Id: piecewisePolynomial.h,v 1.6 2001/02/23 22:02:41 amoll Exp $
+// $Id: piecewisePolynomial.h,v 1.7 2001/02/25 01:19:29 amoll Exp $
 
 #ifndef BALL_MATHS_PPOLYNOMIAL_H
 #define BALL_MATHS_PPOLYNOMIAL_H
@@ -8,7 +8,7 @@
 #endif
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
-#include <BALL/MATHS/piecewiseFunction.h
+#include <BALL/MATHS/piecewiseFunction.h>
 #endif
 
 namespace BALL 
