@@ -1,4 +1,4 @@
-// $Id: Function_test.C,v 1.2 2000/12/19 13:25:13 anker Exp $
+// $Id: Function_test.C,v 1.3 2000/12/23 15:31:32 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Function_test.C,v 1.2 2000/12/19 13:25:13 anker Exp $")
+START_TEST(class_name, "$Id: Function_test.C,v 1.3 2000/12/23 15:31:32 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -131,7 +131,7 @@ CHECK(Addition::getFirst())
 	add1.setFirst(c1);
 	Addition<MutableConstant<>, MutableConstant<> > add2 = add1;
 	bool test(add2.getFirst() == c1);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 CHECK(Addition::setFirst())
@@ -140,7 +140,7 @@ CHECK(Addition::setFirst())
 	add1.setFirst(c1);
 	Addition<MutableConstant<>, MutableConstant<> > add2 = add1;
 	bool test(add2.getFirst() == c1);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 CHECK(Addition::getSecond())
@@ -149,7 +149,7 @@ CHECK(Addition::getSecond())
 	add1.setSecond(c2);
 	Addition<MutableConstant<>, MutableConstant<> > add2 = add1;
 	bool test(add2.getSecond() == c2);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 CHECK(Addition::setSecond())
@@ -158,7 +158,7 @@ CHECK(Addition::setSecond())
 	add1.setSecond(c2);
 	Addition<MutableConstant<>, MutableConstant<> > add2 = add1;
 	bool test(add2.getSecond() == c2);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 
@@ -217,7 +217,7 @@ CHECK(Subtraction::getFirst())
 	sub1.setFirst(c1);
 	Subtraction<MutableConstant<>, MutableConstant<> > sub2 = sub1;
 	bool test(sub2.getFirst() == c1);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 CHECK(Subtraction::setFirst())
@@ -226,7 +226,7 @@ CHECK(Subtraction::setFirst())
 	sub1.setFirst(c1);
 	Subtraction<MutableConstant<>, MutableConstant<> > sub2 = sub1;
 	bool test(sub2.getFirst() == c1);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 CHECK(Subtraction::getSecond())
@@ -235,7 +235,7 @@ CHECK(Subtraction::getSecond())
 	sub1.setSecond(c2);
 	Subtraction<MutableConstant<>, MutableConstant<> > sub2 = sub1;
 	bool test(sub2.getSecond() == c2);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 CHECK(Subtraction::setSecond())
@@ -244,7 +244,7 @@ CHECK(Subtraction::setSecond())
 	sub1.setSecond(c2);
 	Subtraction<MutableConstant<>, MutableConstant<> > sub2 = sub1;
 	bool test(sub2.getSecond() == c2);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 
@@ -303,7 +303,7 @@ CHECK(Product::getFirst())
 	prod1.setFirst(c1);
 	Product<MutableConstant<>, MutableConstant<> > prod2 = prod1;
 	bool test(prod2.getFirst() == c1);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 CHECK(Product::setFirst())
@@ -312,7 +312,7 @@ CHECK(Product::setFirst())
 	prod1.setFirst(c1);
 	Product<MutableConstant<>, MutableConstant<> > prod2 = prod1;
 	bool test(prod2.getFirst() == c1);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 CHECK(Product::getSecond())
@@ -321,7 +321,7 @@ CHECK(Product::getSecond())
 	prod1.setSecond(c2);
 	Product<MutableConstant<>, MutableConstant<> > prod2 = prod1;
 	bool test(prod2.getSecond() == c2);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 CHECK(Product::setSecond())
@@ -330,7 +330,7 @@ CHECK(Product::setSecond())
 	prod1.setSecond(c2);
 	Product<MutableConstant<>, MutableConstant<> > prod2 = prod1;
 	bool test(prod2.getSecond() == c2);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 
@@ -389,7 +389,7 @@ CHECK(Division::getFirst())
 	div1.setFirst(c1);
 	Division<MutableConstant<>, MutableConstant<> > div2 = div1;
 	bool test(div2.getFirst() == c1);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 CHECK(Division::setFirst())
@@ -398,7 +398,7 @@ CHECK(Division::setFirst())
 	div1.setFirst(c1);
 	Division<MutableConstant<>, MutableConstant<> > div2 = div1;
 	bool test(div2.getFirst() == c1);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 CHECK(Division::getSecond())
@@ -407,7 +407,7 @@ CHECK(Division::getSecond())
 	div1.setSecond(c2);
 	Division<MutableConstant<>, MutableConstant<> > div2 = div1;
 	bool test(div2.getSecond() == c2);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 CHECK(Division::setSecond())
@@ -416,7 +416,7 @@ CHECK(Division::setSecond())
 	div1.setSecond(c2);
 	Division<MutableConstant<>, MutableConstant<> > div2 = div1;
 	bool test(div2.getSecond() == c2);
-	TEST_REAL_EQUAL(test, true);
+	TEST_EQUAL(test, true);
 RESULT
 
 
