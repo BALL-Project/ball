@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.14 2001/07/16 02:08:41 oliver Exp $
+// $Id: regularData2D.h,v 1.15 2001/07/25 11:26:51 oliver Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H
@@ -25,7 +25,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_DEEP(TRegularData2D<GridDataType>)
+		BALL_CREATE(TRegularData2D<GridDataType>)
 
 		/**	@name	Type Definitions
 		*/
@@ -36,6 +36,7 @@ namespace BALL
 		typedef TVector2<Position> GridIndex;
 		
 		//@}
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -355,18 +356,16 @@ namespace BALL
 		GridDataType getInterpolatedValue(const Vector2& vector) const throw(Exception::OutOfGrid);
 		
 		/** Get the maximum value in the the data set.
-		 * 	If the data grid is empty, 0 is returned.
-		 * 	@param position returns the position of the first maximum value
-		 * 	@return GridDataTyperData2D the maximum value
+		 * 	If the data grid is empty, 0.0 is returned.
+		 * 	@return GridDataType the maximum value
 		 */ 	
-		const GridDataType* getMaxValue(Vector2& position) const throw();
+		GridDataType getMaxValue() const throw();
 		
 		/** Get the minimum value in the the data set.
-		 * 	If the data grid is empty, 0 is returned.
-		 * 	@param position returns the position of the first minimum value
-		 * 	@return GridDataTyperData2D the minimum value
+		 * 	If the data grid is empty, 0.0 is returned.
+		 * 	@return GridDataType the minimum value
 		 */ 	
-		const GridDataType* getMinValue(Vector2& position) const throw();
+		GridDataType getMinValue() const throw();
 			
 		/** Rescale the data.
 		 * 	All data values are rescaled to fit between a minimum and a maximum value.
@@ -992,48 +991,40 @@ namespace BALL
 	}
 
 	template <typename GridDataType>
-	const GridDataType* TRegularData2D<GridDataType>::getMinValue(Vector2& position) const throw()
+	GridDataType TRegularData2D<GridDataType>::getMinValue() const throw()
 	{
 		if (number_of_grid_points_ == 0)
 		{
 			return 0;
 		}
 		
-		GridDataType* min = new GridDataType(data[0]);
-		Position pos(0);
+		GridDataType min = data[0];
 		for (Position i = 0; i < number_of_grid_points_; i++)
 		{
-			if (data[i] < *min)
+			if (data[i] < min)
 			{
-				*min = data[i];
-				pos = i;
+				min = data[i];
 			}
 		}
-		
-		position = getGridCoordinates(pos);
 		return min;
 	}
 	
 	template <typename GridDataType>
-	const GridDataType* TRegularData2D<GridDataType>::getMaxValue(Vector2& position) const throw()
+	GridDataType TRegularData2D<GridDataType>::getMaxValue() const throw()
 	{
 		if (number_of_grid_points_ == 0)
 		{
-			return 0;
+			return 0.0;
 		}
 		
-		GridDataType* max = new GridDataType(data[0]);
-		Position pos(0);
+		GridDataType max = data[0];
 		for (Position i = 0; i < number_of_grid_points_; i++)
 		{
-			if (data[i] > *max)
+			if (data[i] > max)
 			{
-				*max = data[i];
-				pos = i;
+				max = data[i];
 			}
 		}
-		
-		position = getGridCoordinates(pos);
 		return max;
 	}
 	
@@ -1054,9 +1045,8 @@ namespace BALL
 			new_max = minValue;
 		}
 		
-		Vector2 dummy;
-		GridDataType old_min = *getMinValue(dummy);
-		GridDataType old_max = *getMaxValue(dummy);
+		GridDataType old_min = getMinValue();
+		GridDataType old_max = getMaxValue();
 
 		GridDataType shift_factor(old_min - new_min);
 		GridDataType resize_factor = new_max / (old_max - shift_factor);
