@@ -38,7 +38,7 @@
                 <string>&lt;blockquote&gt;
 Welcome to the BALLView tutorial. It will show you some of 
 BALLViews main features. The demo is divided in 
-several steps, wich have to be finished one after the other. 
+several steps, wich have to be finished one by one.
 The button "next" will be enabled after finishing each individual step.
 &lt;br&gt;
 &lt;br&gt;
@@ -84,7 +84,7 @@ Then press the "&lt;b&gt;Build&lt;/b&gt;" button.
 After we created the peptide you can have a look at the peptides
 hierarchy. In the main window there is a listview with the title
 "Structures". This widget contains a hierarchical list of all loaded
-molecules. Double click the cross to the left of the name of your
+molecules. Click the cross to the left of the name of your
 newly created protein to open the hierarchy tree. Repeat this
 to see, that the peptide clearly consists of four amino acids
 (if you entered the sequence correctly).
@@ -168,7 +168,7 @@ and a trajectory file was created.
 To visualise the resulting trajectory, we will have a look at the 
 DatasetControl. It is one of the listviews in the main window and
 has the caption "Datasets". 
-(Maybe it is hidden, if you dont find it, have a look at the menu
+(Maybe it is hidden, if you don't find it, have a look at the menu
 entry &lt;b&gt;"Windows-&gt;Datasets"&lt;/b&gt;.)&lt;br&gt;&lt;br&gt;
 The DatasetControl should have an entry for the trajectory.
 To visualise it, click on the entry and open the context menu with

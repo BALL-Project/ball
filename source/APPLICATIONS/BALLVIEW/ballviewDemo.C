@@ -80,7 +80,7 @@ void BALLViewDemo::onNotify(Message *message)
 
 	Index id = widget_stack->id(widget_stack->visibleWidget());
 
-	if (id <= MODEL_HBONDS &&
+	if (id <= MODEL_HBONDS + 6 &&
 		  rmsg != 0 && 
 			rmsg->getType() == RepresentationMessage::UPDATE)
 	{
@@ -157,6 +157,7 @@ void BALLViewDemo::accept()
 
 		ms->chooseAmberFF();
 		ms->MDSimulation();
+		ms->md_dialog_->apply();
 	}
 				
 
