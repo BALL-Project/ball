@@ -1,4 +1,4 @@
-// $Id: HashSet_test.C,v 1.12.4.1 2002/05/18 02:07:25 oliver Exp $
+// $Id: HashSet_test.C,v 1.12.4.2 2002/05/22 23:00:12 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -36,7 +36,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.12.4.1 2002/05/18 02:07:25 oliver Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.12.4.2 2002/05/22 23:00:12 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -218,6 +218,91 @@ CHECK(HashSet::operator |= (const HashSet& rhs))
 	TEST_EQUAL(hs.has(1), true)
 	TEST_EQUAL(hs.has(2), false)
 	TEST_EQUAL(hs.has(3), true)
+RESULT
+
+CHECK(HashSet::operator & (const HashSet& rhs) const)
+	HashSet<int> hs, hs2;
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+
+	HashSet<int> hs3 = hs2 & hs;
+	TEST_EQUAL(hs2.getSize(), 0)
+	hs3 = hs & hs2;
+	TEST_EQUAL(hs2.getSize(), 0)
+	TEST_EQUAL(hs.getSize(), 3)
+
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	hs.insert(3);
+	hs2.insert(1);
+	hs2.insert(3);
+	hs3 = hs & hs2;
+	TEST_EQUAL(hs3.getSize(), 2)
+	TEST_EQUAL(hs3.has(0), false)
+	TEST_EQUAL(hs3.has(1), true)
+	TEST_EQUAL(hs3.has(2), false)
+	TEST_EQUAL(hs3.has(3), true)
+	TEST_EQUAL(hs.getSize(), 4)
+	TEST_EQUAL(hs2.getSize(), 2)
+	hs3 = hs2 & hs;
+	TEST_EQUAL(hs3.getSize(), 2)
+	TEST_EQUAL(hs3.has(0), false)
+	TEST_EQUAL(hs3.has(1), true)
+	TEST_EQUAL(hs3.has(2), false)
+	TEST_EQUAL(hs3.has(3), true)
+	TEST_EQUAL(hs.getSize(), 4)
+	TEST_EQUAL(hs2.getSize(), 2)
+RESULT
+
+CHECK(HashSet::operator |= (const HashSet& rhs))
+	HashSet<int> hs, hs2;
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+
+	HashSet<int> hs3 = hs2 | hs;
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+	TEST_EQUAL(hs3.getSize(), 3)
+
+	hs3 = hs | hs2;
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs2.getSize(), 0)
+	TEST_EQUAL(hs3.getSize(), 3)
+
+	hs3 = hs | hs;
+	TEST_EQUAL(hs.getSize(), 3)
+	TEST_EQUAL(hs3.getSize(), 3)
+
+	hs3 = hs2 | hs2;
+	TEST_EQUAL(hs2.getSize(), 0)
+	TEST_EQUAL(hs3.getSize(), 0)
+
+	hs.clear();
+	hs.insert(0);
+	hs.insert(3);
+	hs2.clear();
+	hs2.insert(1);
+	hs2.insert(3);
+	hs3 = hs | hs2;
+	TEST_EQUAL(hs3.getSize(), 3)
+	TEST_EQUAL(hs3.has(0), true)
+	TEST_EQUAL(hs3.has(1), true)
+	TEST_EQUAL(hs3.has(2), false)
+	TEST_EQUAL(hs3.has(3), true)
+
+	hs3 = hs2 | hs;
+	TEST_EQUAL(hs3.getSize(), 3)
+	TEST_EQUAL(hs3.has(0), true)
+	TEST_EQUAL(hs3.has(1), true)
+	TEST_EQUAL(hs3.has(2), false)
+	TEST_EQUAL(hs3.has(3), true)
 RESULT
 
 CHECK(HashSet::getBucketSize() const)
