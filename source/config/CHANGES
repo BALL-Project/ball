@@ -12,6 +12,7 @@ added:
 - Visualisation of forces
 - Writing and loading of project files
 - Benchmark Scritps for BALLView
+- Visualisation for double- and aromatic bonds in BallAndStick Model
 
 fixed:
 - selection in MolecularControl with CRTG and SHIFT modifier
