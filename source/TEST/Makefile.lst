@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.7 2003/08/26 09:18:30 oliver Exp $
+# $Id: Makefile.lst,v 1.8 2004/02/23 19:51:31 oliver Exp $
 #
 
 XDR_DEPENDENT_EXECUTABLES=\
@@ -216,7 +216,8 @@ EXECUTABLES_STRUCTURE = \
 	StructureMapper_test$(EXEEXT)\
 	TransformationProcessor_test$(EXEEXT)\
 	TranslationProcessor_test$(EXEEXT)\
-	SurfaceProcessor_test$(EXEEXT)
+	SurfaceProcessor_test$(EXEEXT)\
+	SecondaryStructureProcessor_test$(EXEEXT)
 
 EXECUTABLES_SOLVATION = \
 	PoissonBoltzmann_test$(EXEEXT)\

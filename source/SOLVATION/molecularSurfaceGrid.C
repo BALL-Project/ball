@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularSurfaceGrid.C,v 1.19 2003/08/26 09:18:26 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.20 2004/02/23 19:51:27 oliver Exp $
 //
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
@@ -17,7 +17,7 @@ namespace BALL
 #endif
 	comparePointerSizeIntPtr_(const void* a, const void* b)
 	{
-		return (int)(*(PointerSizeInt*)a - *(PointerSizeInt*)b);
+		return (int)(*(BALL_POINTERSIZEINT_TYPE*)a - *(BALL_POINTERSIZEINT_TYPE*)b);
 	}
 
 
@@ -30,8 +30,8 @@ namespace BALL
 
 		// points in the grid marked with
 
-		PointerSizeInt* fast_sphere;
-		PointerSizeInt* fast_sphere_relative;
+		BALL_POINTERSIZEINT_TYPE* fast_sphere;
+		BALL_POINTERSIZEINT_TYPE* fast_sphere_relative;
 		
 		// contains the squared length of the diagonal distance in the grid
 		float	d2, d;
@@ -80,30 +80,30 @@ namespace BALL
 		origin = grid->getOrigin();
 
 		// Nx is the number of points in the grid along the x-axis
-		PointerSizeInt Nx = grid->getSize().x;
+		BALL_POINTERSIZEINT_TYPE Nx = grid->getSize().x;
 
 		// Nxy is the number of points in an xy-plane
-		PointerSizeInt Nxy = Nx * grid->getSize().y;
+		BALL_POINTERSIZEINT_TYPE Nxy = Nx * grid->getSize().y;
 
-		PointerSizeInt i;
-		PointerSizeInt j;
-		PointerSizeInt k;
+		BALL_POINTERSIZEINT_TYPE i;
+		BALL_POINTERSIZEINT_TYPE j;
+		BALL_POINTERSIZEINT_TYPE k;
 
 		// constructing the FAST probe sphere, a collection of points 
 		// of a sphere on the grid relative to the sphere's origin
 		
-		PointerSizeInt count;
-		PointerSizeInt relative_count;
+		BALL_POINTERSIZEINT_TYPE count;
+		BALL_POINTERSIZEINT_TYPE relative_count;
 
 		// the probe_radius (squared) in squared grid units
 		unsigned short grid_radius;
 		grid_radius = (unsigned short)((probe_radius) * (probe_radius) / spacing2 + 0.5);
 		count = 0;
-		for (i = 0; i < (PointerSizeInt)(probe_radius / spacing + 2); i++)
+		for (i = 0; i < (BALL_POINTERSIZEINT_TYPE)(probe_radius / spacing + 2); i++)
 		{
-			for (j = 0; j < (PointerSizeInt)(probe_radius / spacing + 2); j++)
+			for (j = 0; j < (BALL_POINTERSIZEINT_TYPE)(probe_radius / spacing + 2); j++)
 			{
-				for (k = 0; k < (PointerSizeInt)(probe_radius / spacing + 2); k++)
+				for (k = 0; k < (BALL_POINTERSIZEINT_TYPE)(probe_radius / spacing + 2); k++)
 				{
 					if ((i * i + j * j + k * k) < grid_radius)
 					{
@@ -113,13 +113,13 @@ namespace BALL
 			}
 		}
 
-		fast_sphere = new PointerSizeInt[count * 8];
-		fast_sphere_relative = new PointerSizeInt[count * 8];
+		fast_sphere = new BALL_POINTERSIZEINT_TYPE[count * 8];
+		fast_sphere_relative = new BALL_POINTERSIZEINT_TYPE[count * 8];
 
 		count = 0;
-		for (i = 0; i < (PointerSizeInt)(probe_radius / spacing + 2); i++)
-			for (j = 0; j < (PointerSizeInt)(probe_radius / spacing + 2); j++)
-					for (k = 0; k < (PointerSizeInt)(probe_radius / spacing + 2); k++)
+		for (i = 0; i < (BALL_POINTERSIZEINT_TYPE)(probe_radius / spacing + 2); i++)
+			for (j = 0; j < (BALL_POINTERSIZEINT_TYPE)(probe_radius / spacing + 2); j++)
+					for (k = 0; k < (BALL_POINTERSIZEINT_TYPE)(probe_radius / spacing + 2); k++)
 						if ((i * i + j * j + k * k) < grid_radius){
 							fast_sphere[count++] =  (long)k + (long)j * (long)Nx + (long)i * (long)Nxy;
 							fast_sphere[count++] = -(long)k + (long)j * (long)Nx + (long)i * (long)Nxy;
@@ -138,7 +138,7 @@ namespace BALL
 		relative_count = 1;
 		last_index = fast_sphere[0];
 		// loop variable
-		PointerSizeInt u;
+		BALL_POINTERSIZEINT_TYPE u;
 
 		fast_sphere_relative[0] = fast_sphere[0];
 		for (u = 1; u < count; u++){
@@ -206,22 +206,22 @@ namespace BALL
 		// which are less then probe_radius apart from the border point
 		// (actually this means to "roll" the probe sphere along the border
 		// and just retain points which haven't been touched by the probe sphere)
-		PointerSizeInt idx;
-		PointerSizeInt grid_pointer, grid_begin, grid_end;
-		PointerSizeInt* fast_sphere_end;
-		PointerSizeInt* sphere_pointer;
+		BALL_POINTERSIZEINT_TYPE idx;
+		BALL_POINTERSIZEINT_TYPE grid_pointer, grid_begin, grid_end;
+		BALL_POINTERSIZEINT_TYPE* fast_sphere_end;
+		BALL_POINTERSIZEINT_TYPE* sphere_pointer;
 
 		unsigned short border;
 
-		PointerSizeInt border_count;
+		BALL_POINTERSIZEINT_TYPE border_count;
 		border_count = 0;
 					
-		grid_begin = (PointerSizeInt)grid->getData(0);
-		grid_end = (PointerSizeInt)grid->getData(grid->size());
+		grid_begin = (BALL_POINTERSIZEINT_TYPE)grid->getData(0);
+		grid_end = (BALL_POINTERSIZEINT_TYPE)grid->getData(grid->size());
 
-		PointerSizeInt s;
-		PointerSizeInt t;
-		PointerSizeInt q;
+		BALL_POINTERSIZEINT_TYPE s;
+		BALL_POINTERSIZEINT_TYPE t;
+		BALL_POINTERSIZEINT_TYPE q;
 
 		char* data = &(grid->getData(0));
 		for (s = 1; s < grid->getSize().z - 1; s++)
@@ -248,12 +248,12 @@ namespace BALL
 						{			
 							// Okay, we found a point on the boundary
 							border_count++;												
-							grid_pointer = (PointerSizeInt)&(data[idx]);
+							grid_pointer = reinterpret_cast<BALL_POINTERSIZEINT_TYPE>(&(data[idx]));
 							fast_sphere_end = &(fast_sphere_relative[relative_count - 1]);
 
 							for (sphere_pointer = fast_sphere_relative; sphere_pointer <= fast_sphere_end; sphere_pointer++)
 							{
-								grid_pointer += *sphere_pointer;
+								grid_pointer += reinterpret_cast<BALL_POINTERSIZEINT_TYPE>(*sphere_pointer);
 								if ((grid_pointer <= grid_end) && (grid_pointer >= grid_begin))
 								{
 									*((char*)grid_pointer) |= CCONN__INSIDE_PROBE;
@@ -274,7 +274,7 @@ namespace BALL
 		// the probe_radius of any border point
 
 		grid_value = &(grid->getData(0));
-		PointerSizeInt l;
+		BALL_POINTERSIZEINT_TYPE l;
 
 		for (l = 0; l < grid->size(); l++)
 		{
@@ -340,10 +340,10 @@ namespace BALL
 		origin = grid->getOrigin();
 
 		// Nx is the number of points in the grid along the x-axis
-		PointerSizeInt Nx = grid->getSize().x;
+		BALL_POINTERSIZEINT_TYPE Nx = grid->getSize().x;
 
 		// Nxy is the number of points in an xy-plane
-		PointerSizeInt Nxy = Nx * grid->getSize().y;
+		BALL_POINTERSIZEINT_TYPE Nxy = Nx * grid->getSize().y;
 
 		// mark the whole grid with CCONN__OUTSIDE, meaning OUTSIDE
 		// There will be three different marks: INSIDE(I), OUTSIDE(O), and BORDER(B)
@@ -370,11 +370,11 @@ namespace BALL
 
 				upper_index = grid->getClosestIndex(Vector3(r0.x + R_b + d, r0.y + R_b + d, r0.z + R_b + d));
 
-				for (PointerSizeInt k = lower_index.z; k <= upper_index.z; k++)
+				for (BALL_POINTERSIZEINT_TYPE k = lower_index.z; k <= upper_index.z; k++)
 				{
-					for (PointerSizeInt j = lower_index.y; j <= upper_index.y; j++)
+					for (BALL_POINTERSIZEINT_TYPE j = lower_index.y; j <= upper_index.y; j++)
 					{
-						for (PointerSizeInt i = lower_index.x; i <= upper_index.x; i++)
+						for (BALL_POINTERSIZEINT_TYPE i = lower_index.x; i <= upper_index.x; i++)
 						{
 							x = (float)i * spacing + origin.x;
 							y = (float)j * spacing + origin.y;

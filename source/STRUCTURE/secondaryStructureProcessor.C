@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.C,v 1.4 2004/02/23 17:58:35 oliver Exp $
+// $Id: secondaryStructureProcessor.C,v 1.5 2004/02/23 19:51:29 oliver Exp $
+//
 
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
 #include <BALL/STRUCTURE/HBondProcessor.h>
@@ -348,60 +349,57 @@ namespace BALL
 			 vector<char> summary(size, '-');
 		 */
 
-		for(Size i = 0; i < size;i++)
+		for(Size i=0; i<size;i++)
 		{
-			if (Fourturn[i]!='-')
+			if(Fourturn[i]!='-')
 			{
 				summary[i]= 'H';
 			}
-			else if ((bridge1[i] != '-') || (bridge2[i] != '-'))
+			else if( (bridge1[i] != '-') || (bridge2[i] != '-'))
 			{
-				if ((bridge1[i-1] != bridge1[i]) 
-						&& (bridge1[i] != bridge1[i+1])
-						&& (bridge2[i-1] != bridge1[i]) 
-						&& bridge2[i+1] != bridge1[i])
+				if( (bridge1[i-1]!=bridge1[i]) 
+						&& (bridge1[i]!=bridge1[i+1])
+						&& (bridge2[i-1]!=bridge1[i]) 
+						&& bridge2[i+1]!=bridge1[i])
 				{
 					summary[i]='B';
 				}	
-				else if((bridge2[i-1] != bridge2[i]) 
-								&& (bridge2[i] != bridge2[i+1])
-								&& (bridge2[i] != bridge1[i-1]) 
-								&& (bridge2[i] != bridge1[i+1]))
+				else if( (bridge2[i-1] != bridge2[i]) 
+						&& (bridge2[i] != bridge2[i+1])
+						&& (bridge2[i] != bridge1[i-1]) 
+						&& (bridge2[i] != bridge1[i+1]))
 				{
-					summary[i] = 'B';
+					summary[i]='B';
 				}	
 				else
 				{
-					summary[i] = 'E';
+					summary[i]='E';
 				}
 			}
-			else if	(Threeturn[i] != '-')
+			else if	(Threeturn[i]!='-')
 			{
-				summary[i] = 'G';
+				summary[i]='G';
 			}	
-			else if (Fiveturn[i] != '-')
+			else if (Fiveturn[i]!='-')
 			{
 				summary[i]= 'I';
 			}
 
 		}
-	/*
-		// ?????
 		//!!!T wenn die Helix zu klein ist
 		for(Size i= 0; i<size;i++)
 		{
 		} 
-	*/
 
 		String s1, s2, s3, s4, s5, s6;
 		for (Size i=0; i<size; i++)
 		{
-			s1 += summary[i];
-			s2 += Threeturn[i];
-			s3 += Fourturn[i];
-			s4 += Fiveturn[i];
-			s5 += bridge1[i];
-			s6 += bridge2[i];
+			s1+=summary[i];
+			s2+=Threeturn[i];
+			s3+=Fourturn[i];
+			s4+=Fiveturn[i];
+			s5+=bridge1[i];
+			s6+=bridge2[i];
 		}
 /*
 		std::cout << "summary"<< s1 << std::endl;
@@ -451,33 +449,23 @@ namespace BALL
 				}
 			}
 
-			
 			// first determine the type of this residue
-			switch (summary[resnum])
+			if (summary[resnum] == 'H') 			// Alpha - HELIX
 			{
-				case 'H':
-				case 'G':
-				case 'I':
-					// Assign all helices as type HELIX
-					ss->setType(SecondaryStructure::HELIX);
-					break;
-				
-				case 'E':
-				case 'B':
-					// Assign all strands/extended as type STRAND
-					ss->setType(SecondaryStructure::STRAND);
-					break;
-
-				case 'T':
-					// Assign all turns to type TURN
-					ss->setType(SecondaryStructure::TURN);
-					break;
-				
-				default:
-					// Default: loop region
-					ss->setType(SecondaryStructure::COIL);
+				// TODO: what about other helices???
+				ss->setType(SecondaryStructure::HELIX);
+				last_struct = 'H';
 			}
-			last_struct = summary[resnum];
+			else if (summary[resnum] == 'E') 	// Beta - STRAND
+			{
+				ss->setType(SecondaryStructure::STRAND);
+				last_struct = 'E';
+			}
+			else 															// LOOP
+			{
+				ss->setType(SecondaryStructure::COIL);
+				last_struct = 'L';
+			}
 
 			new_parent.push_back(ss);
 			residues.push_back(&*ri);
@@ -494,23 +482,29 @@ namespace BALL
 		// ------ remove old SecondaryStructures ----------
 		vector<SecondaryStructure*> to_remove;
 		SecondaryStructureIterator ssit = p->beginSecondaryStructure();
-		for (;+ssit; ++ssit)
+		for (; +ssit; ++ssit)
 		{
 			to_remove.push_back(&*ssit);
 		}
 
 		for (Position i = 0; i < to_remove.size(); i++)
 		{
-			p->remove(*to_remove[i]);
+			delete to_remove[i];
 		}
 
+		BALL_POSTCONDITION_EXCEPTION(p->countSecondaryStructures() == 0, 
+		 "SecondaryStructureProcessor did not remove all old secondary structures!")
+		
 		// ------ insert new SecondaryStructures ----------
 		for (Position i = 0; i < new_ss.size(); i++)
 		{
 			p->insert(*new_ss[i]);
 		}
 	
+		BALL_POSTCONDITION_EXCEPTION(p->countSecondaryStructures() == new_ss.size(),
+		 "SecondaryStructureProcessor did not add all new secondary structures!")
+
 		return Processor::CONTINUE;
 	}
 
-} //Namespace BALL
+} // namespace BALL

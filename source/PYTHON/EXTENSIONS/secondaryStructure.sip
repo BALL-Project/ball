@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.sip,v 1.7 2003/11/01 09:27:40 oliver Exp $
+// $Id: secondaryStructure.sip,v 1.8 2004/02/23 19:51:24 oliver Exp $
 //
 
 class SecondaryStructure
@@ -12,13 +12,14 @@ class SecondaryStructure
 	using namespace BALL;
 %End
   public:
-	enum Property
+	enum Type
 	{
-		PROPERTY__HELIX,
-		PROPERTY__RANDOM_COIL,
-		PROPERTY__STRAND,
-		PROPERTY__TURN,
-		NUMBER_OF_PROPERTIES
+		HELIX,
+		RANDOM_COIL,
+		STRAND,
+		TURN,
+		UNKNOWN, 
+		NUMBER_OF_TYPES
 	};
   SecondaryStructure();
   SecondaryStructure(const SecondaryStructure&,bool = true);
@@ -32,6 +33,8 @@ class SecondaryStructure
 	//  SecondaryStructure &operator =(const SecondaryStructure&);
   void get(SecondaryStructure&, bool = true) const;
   void swap(SecondaryStructure&);
+	Type getType() const throw();
+	void setType(Type /type/) throw();
   Protein* getProtein();
   const Protein* getProtein() const;
   Chain* getChain();
