@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.h,v 1.7 2000/05/10 08:38:21 pmueller Exp $
+// $Id: molecularDynamics.h,v 1.8 2000/07/06 14:01:28 oliver Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -186,8 +186,12 @@ namespace BALL
 
 		/**  Assignment operator
 		*/
-		MolecularDynamics& operator = (const MolecularDynamics & rhs);
+		const MolecularDynamics& operator = (const MolecularDynamics& rhs);
 
+		/**	Assign a molecular dynamics objects.
+		*/	
+		void set(const MolecularDynamics& rhs);
+			
 		//@}
 
 		/**  @name Debugging and Diagnostics 

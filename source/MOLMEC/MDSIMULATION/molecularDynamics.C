@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.C,v 1.4 2000/05/10 08:39:03 pmueller Exp $
+// $Id: molecularDynamics.C,v 1.5 2000/07/06 14:01:31 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
@@ -10,89 +10,59 @@ namespace BALL
 
 
 	// Definition of default values and options
-	const char *MolecularDynamics::Option::MAXIMAL_NUMBER_OF_ITERATIONS = "maximal_number_of_iterations";
-  const char *MolecularDynamics::Option::MAXIMAL_SIMULATION_TIME = "maximal_simulation_time";
-
-	const char *MolecularDynamics::Option::NUMBER_OF_ITERATION = "number_of_iteration";
-
-	const char *MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY = "energy_output_frequency";
-
-	const char *MolecularDynamics::Option::SNAPSHOT_FREQUENCY = "snapshot_frequency";
-
-	const char *MolecularDynamics::Option::TIME_STEP = "time_step";
-
-	const char *MolecularDynamics::Option::REFERENCE_TEMPERATURE = "reference_temperature";
-
-	const char *MolecularDynamics::Option::BATH_RELAXATION_TIME = "bath_relaxation_time";
-
-	const char *MolecularDynamics::Option::CURRENT_TIME = "current_time";
-
+	const char* MolecularDynamics::Option::MAXIMAL_NUMBER_OF_ITERATIONS = "maximal_number_of_iterations";
+  const char* MolecularDynamics::Option::MAXIMAL_SIMULATION_TIME = "maximal_simulation_time";
+	const char* MolecularDynamics::Option::NUMBER_OF_ITERATION = "number_of_iteration";
+	const char* MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY = "energy_output_frequency";
+	const char* MolecularDynamics::Option::SNAPSHOT_FREQUENCY = "snapshot_frequency";
+	const char* MolecularDynamics::Option::TIME_STEP = "time_step";
+	const char* MolecularDynamics::Option::REFERENCE_TEMPERATURE = "reference_temperature";
+	const char* MolecularDynamics::Option::BATH_RELAXATION_TIME = "bath_relaxation_time";
+	const char* MolecularDynamics::Option::CURRENT_TIME = "current_time";
 
 
 	const int MolecularDynamics::Default::MAXIMAL_NUMBER_OF_ITERATIONS = 10000;
-
-  const double MolecularDynamics::Default::MAXIMAL_SIMULATION_TIME = 5;  // product of maxNoIterations and time step 
-
+  const double MolecularDynamics::Default::MAXIMAL_SIMULATION_TIME = 1;  // product of maxNoIterations and time step 
 	const int MolecularDynamics::Default::NUMBER_OF_ITERATION = 0;        // index of start iteration 
-
 	const int MolecularDynamics::Default::ENERGY_OUTPUT_FREQUENCY = 500;
-
 	const int MolecularDynamics::Default::SNAPSHOT_FREQUENCY = 500;
-
-	const double MolecularDynamics::Default::TIME_STEP = 0.0005;
-
+	const double MolecularDynamics::Default::TIME_STEP = 0.0001;
 	const double MolecularDynamics::Default::REFERENCE_TEMPERATURE = 300.0;
-
 	const double MolecularDynamics::Default::BATH_RELAXATION_TIME = 0.2;
-
 	const double MolecularDynamics::Default::CURRENT_TIME = 0.0;          // start time 
 
 
 
 
 	// The default constructor with no arguments
-	  MolecularDynamics::MolecularDynamics ()
+  MolecularDynamics::MolecularDynamics()
+		:	valid_(false),
+			force_field_ptr_(0),
+			system_ptr_(0)
 	{
 		// As no force field has been named, there is not much to do. 
 		// Just indicate that the MD simulation is not ready yet. 
-		valid_ = false;
-		force_field_ptr_ = 0;
-		system_ptr_ = 0;
 	}
 
 	// Constructor expecting a force field 
-	MolecularDynamics::MolecularDynamics (ForceField & myforcefield)
+	MolecularDynamics::MolecularDynamics(ForceField& force_field)
 	{
 		valid_ = true;
-		force_field_ptr_ = &myforcefield;
+		force_field_ptr_ = &force_field;
 
 		if (!valid_)
 		{
 			// The setup has failed for some reason. Output an error message.
-			Log.level (LogStream::ERROR) << "Setup of instance of class 'MolecularDynamics' has failed." << endl;
+			Log.error() << "Setup of instance of class 'MolecularDynamics' has failed." << endl;
 		}
 	}
 
 	// Copy constructor 
 	// Just for heaven's sake as it does standard memberwise copy and all classes used
 	// overload the assignment operator on their own 
-	MolecularDynamics::MolecularDynamics (const MolecularDynamics & rhs, bool deep)
+	MolecularDynamics::MolecularDynamics(const MolecularDynamics& rhs, bool deep)
 	{
-		// copy all attributes of the class instance
-		options = rhs.options;
-		valid_ = rhs.valid_;
-		force_field_ptr_ = rhs.force_field_ptr_;
-		maximal_number_of_iterations_ = rhs.maximal_number_of_iterations_;
-		number_of_iteration_ = rhs.number_of_iteration_;
-		time_step_ = rhs.time_step_;
-
-		reference_temperature_ = rhs.reference_temperature_;
-		current_temperature_ = rhs.current_temperature_;
-		current_time_ = rhs.current_time_;
-
-		energy_output_frequency_ = rhs.energy_output_frequency_;
-		snapshot_frequency_ = rhs.snapshot_frequency_;
-		snapshot_manager_ptr_ = rhs.snapshot_manager_ptr_;
+		set(rhs);
 	}
 
 	// Destructor
@@ -102,7 +72,13 @@ namespace BALL
 	}
 
 	// The assignment operator 
-	MolecularDynamics & MolecularDynamics::operator = (const MolecularDynamics & rhs)
+	const MolecularDynamics& MolecularDynamics::operator = (const MolecularDynamics& rhs)
+	{
+		set(rhs);
+		return *this;
+	}
+	
+	void MolecularDynamics::set(const MolecularDynamics& rhs)
 	{
 		// Check if some fool tries a self--assignment. In that case, nothing is done
 		// although it would not be a problem, anyway, as just memberwise copying is
@@ -122,13 +98,11 @@ namespace BALL
 			snapshot_frequency_ = rhs.snapshot_frequency_;
 			snapshot_manager_ptr_ = rhs.snapshot_manager_ptr_;
 		}
-
-		return *this;
 	}
 
 
 	// This  method tells whether the MD class is fully functional
-	bool MolecularDynamics::isValid () const
+	bool MolecularDynamics::isValid() const
 	{
 		return valid_;
 	}
@@ -136,32 +110,32 @@ namespace BALL
 
 	// This method does all necessary initialisations. It basically calls
 	// another setup method where the work is really done
-	bool MolecularDynamics::setup (ForceField & myforcefield, SnapShotManager * ssm)
+	bool MolecularDynamics::setup (ForceField& force_field, SnapShotManager* ssm)
 	{
 		// No specific Options have been handed over, so we use the options of the
 		// force field instead.
-		valid_ = setup (myforcefield, ssm, myforcefield.options);
+		valid_ = setup (force_field, ssm, force_field.options);
 
 		return valid_;
 	}
 
 	// This is the real setup method doing all the work! 
-	bool MolecularDynamics::setup (ForceField & myforcefield, SnapShotManager * ssm, const Options & myoptions)
+	bool MolecularDynamics::setup (ForceField & force_field, SnapShotManager* ssm, const Options& new_options)
 	{
 		// First check whether the force field is valid. If not, then it is useless
 		// to do anything here.
-		if (myforcefield.isValid () == false)
+		if (force_field.isValid() == false)
 		{
 			// The setup has failed for some reason. Output an error message.
-			Log.level (LogStream::ERROR) << "Setup of instance of class 'MolecularDynamics' has failed." << endl;
-			Log.level (LogStream::ERROR) << "ForceField is not valid!" << endl;
+			Log.error() << "Setup of instance of class 'MolecularDynamics' has failed." << endl;
+			Log.error() << "ForceField is not valid!" << endl;
 
 			valid_ = false;
 			return false;
 		}
 
 		// store the force field and some important data
-		force_field_ptr_ = &myforcefield;
+		force_field_ptr_ = &force_field;
 		system_ptr_ = force_field_ptr_->getSystem ();
 
 		// check if the user wants to do snapshots 
@@ -185,7 +159,7 @@ namespace BALL
 		}
 
 		// set the options 
-		options = myoptions;
+		options = new_options;
 
 		// Set (if not already done) all class-specific options to their default values
 		// and adopt them for internal class variables 
@@ -304,7 +278,7 @@ namespace BALL
 		 }
 	 else
 	  {
-		Log.level (LogStream::WARNING) << "Assigning a time step of zero is not allowed. "
+		Log.level(LogStream::WARNING) << "Assigning a time step of zero is not allowed. "
 				<< "Using old value." << endl;
 		}
   }
@@ -347,7 +321,7 @@ namespace BALL
       options[MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY] = number; 
       }
 		else
-			Log.level (LogStream::WARNING) << "Assigning an energy_output_frequency of zero is not allowed. "
+			Log.level(LogStream::WARNING) << "Assigning an energy_output_frequency of zero is not allowed. "
 				<< "Using old value." << endl;
 	}
 
@@ -362,7 +336,7 @@ namespace BALL
       options[MolecularDynamics::Option::SNAPSHOT_FREQUENCY] = snapshot_frequency_; 
 		  }
 		else
-			Log.level (LogStream::WARNING) << "Assigning a snapshot_frequency_ of zero is not allowed. "
+			Log.level(LogStream::WARNING) << "Assigning a snapshot_frequency_ of zero is not allowed. "
 				<< "Using old value." << endl;
 	}
 
@@ -390,7 +364,7 @@ namespace BALL
 	// This method returns the current potential energy
 	double MolecularDynamics::getPotentialEnergy () const
 	{
-		return force_field_ptr_->getEnergy ();
+		return force_field_ptr_->getEnergy();
 	}
 
 	// This method returns the current kinetic energy
@@ -446,15 +420,14 @@ namespace BALL
 		double sq_velocity;
 		double sum;
 
-		  vector < Atom * >::iterator atom_it;
+	  vector <Atom*>::iterator atom_it;
 
-		  sum = 0.0;
+	  sum = 0.0;
 
 		// The current temperature (calculated as instantaneous kinetic energy)
 		// If we use a periodic boundary box, then we use the molecules' centres of
 		// gravity, otherwise we iterate directly over the individual atoms of the system 
-
-		  atom_it = atom_vector_.begin ();
+	  atom_it = atom_vector_.begin ();
 
 		if (force_field_ptr_->periodic_boundary.isEnabled () == true)
 		{
@@ -467,15 +440,18 @@ namespace BALL
 			Vector3 centre_velocity;
 
 
-			  centre_velocity.x = centre_velocity.y = centre_velocity.z = 0;
+		  centre_velocity.x = centre_velocity.y = centre_velocity.z = 0;
 
 			// Get the molecule of the first atom in the system 
-			  old = (*atom_it)->getMolecule ();
+			if (atom_it != atom_vector_.end())
+			{
+				old = (*atom_it)->getMolecule();
+			}
 
 			// Iterate over all atoms in the system and determine for every
 			// molecule the velocity of its centre of mass
 			// This velocity contributes to the overall temperature 
-			  vector < Atom * >::iterator end_it = atom_vector_.end ();
+		  vector<Atom*>::iterator end_it = atom_vector_.end ();
 
 			while (atom_it != end_it)
 			{
@@ -572,7 +548,7 @@ namespace BALL
 		}
 
 		// Determine the total energy of the selected atoms 
-		total_energy_ = kinetic_energy_ + force_field_ptr_->getEnergy ();
+		total_energy_ = kinetic_energy_ + force_field_ptr_->getEnergy();
 
 	}	// end of 'updateInstantaneousTemperature' 
 
