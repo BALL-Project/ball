@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.12 2000/09/04 00:11:04 amoll Exp $ 
+// $Id: hashSet.h,v 1.13 2000/09/04 16:14:17 amoll Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -197,22 +197,20 @@ namespace BALL
 		*/
 		std::pair<Iterator, bool> insert(const ValueType& item);
 
-		/**	Erase element at a given position.
-				@param pos an iterator pointing to the element to delete
-		*/
-		// BAUSTELLE
-		void erase(Iterator pos);
-
 		/**	Erase element with key {\tt key}.
 				@return Size the number of elements erased (0 or 1)
 		*/
-		Size erase(const KeyType& key);
+		bool erase(const KeyType& key);
+
+		/**	Erase element at a given position.
+				@param pos an iterator pointing to the element to delete
+		*/
+		void erase(Iterator pos);
 
 		/**	Erase a range of elements.
 				Erase all elemntes in the range {\tt \[f, l)}.
 				Not yet implemented.
 		*/
-		// BAUSTELLE
 		void erase(Iterator f, Iterator l);
 		//@}
 
@@ -715,7 +713,7 @@ namespace BALL
 	}
 
 	template <class Key>
-	Size HashSet<Key>::erase(const KeyType& key)
+	bool HashSet<Key>::erase(const KeyType& key)
 	{
 		Position	bucket = hashBucket_(key);
 		Node*			previous = 0;
@@ -748,6 +746,64 @@ namespace BALL
 		}
 
 		return false;
+	}
+
+	template <class Key>
+	void HashSet<Key>::erase(Iterator pos)
+	{
+		if (pos.bound_ != this)
+		{
+			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
+		}
+
+		if (pos == end())
+		{
+			return;
+		}
+				
+		if (pos == bucket_[pos.bucket_])
+		{
+			bucket_[pos.bucket_] = pos->next;
+		} else {
+			(pos-1)->next = pos->next;
+		}
+
+		deleteNode_(pos);
+		--size_;
+	}
+
+	template <class Key>
+	void HashSet<Key>::erase(Iterator f, Iterator l)
+	{
+		if (f.bound_ != this || l.bound_ != this)
+		{
+			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
+		}
+		
+		if (f.position_ > l.position_)
+		{
+			std::swap(f, l);
+		}
+
+		if (f == end())
+		{
+			return;
+		}
+
+		if (f == bucket_[f.bucket_])
+		{
+			bucket_[f.bucket_] = l->next;
+		} else {
+			(f-1)->next = l->next;
+		}
+
+		int diff = f.position_ - l.position_;
+		while (f.position_ <= l.position_)
+		{
+			deleteNode_(f);
+			f++;
+		}
+		size_ -= diff +1;
 	}
 
 	template <class Key>
@@ -859,10 +915,27 @@ namespace BALL
 	BALL_INLINE 
 	bool HashSet<Key>::apply(UnaryProcessor<ValueType>& processor)
 	{
-		//BAUSTELLE
+    if (processor.start() == false)
+		{
+			return false;
+		}
+
+    Processor::Result result;
+
+		Iterator it = begin();
+		while (it != end())
+		{
+			result = processor(*it);
+			if (result <= Processor::BREAK)
+			{
+				return (result == Processor::BREAK);
+			}
+			it++;
+		}
+
+    return processor.finish();
 	}
 
-		
 	template <class Key>
 	BALL_INLINE 
 	HashIndex HashSet<Key>::hash(const Key& key) const
