@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.157 2005/02/06 20:57:12 oliver Exp $
+// $Id: scene.C,v 1.158 2005/02/06 22:47:34 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1048,7 +1048,6 @@ namespace BALL
 		void Scene::fetchPreferences(INIFile& inifile)
 			throw()
 		{
-logString(String("#~~#   2 ") + String( )                        + "             " + __FILE__ + "  " + String(__LINE__));
 			ModularWidget::fetchPreferences(inifile);
 			if (inifile.hasEntry("WINDOWS", "Main::mouseSensitivity"))
 			{
