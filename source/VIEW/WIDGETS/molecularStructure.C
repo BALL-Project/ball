@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.70 2004/11/26 11:30:51 amoll Exp $
+// $Id: molecularStructure.C,v 1.71 2004/11/27 10:58:11 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -17,6 +17,7 @@
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/KERNEL/system.h>
+#include <BALL/SYSTEM/directory.h>
 
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
@@ -1113,8 +1114,11 @@ namespace BALL
 				DCDFile* dcd = 0;
 				if (md_dialog_.getDCDFile().size() != 0) 
 				{
+					Directory d;
+					// use an absolute filename
+					String name = d.getPath() + FileSystem::PATH_SEPARATOR + md_dialog_.getDCDFile();
 					dcd = new DCDFile;
-					dcd->open(md_dialog_.getDCDFile(), File::OUT);
+					dcd->open(name, File::OUT);
 					dcd->enableVelocityStorage();
 				}
 				// ============================= WITH MULTITHREADING ===================================
@@ -1177,7 +1181,10 @@ namespace BALL
 				{
 					dcd->close();
 					delete dcd;
-					dcd = new DCDFile(md_dialog_.getDCDFile(), File::IN);
+					Directory d;
+					// use an absolute filename
+					String name = d.getPath() + FileSystem::PATH_SEPARATOR + md_dialog_.getDCDFile();
+					dcd = new DCDFile(name, File::IN);
 
 					NewTrajectoryMessage* message = new NewTrajectoryMessage;
 					message->setComposite(*system);

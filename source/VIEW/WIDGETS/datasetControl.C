@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.33 2004/11/15 17:33:29 anhi Exp $
+// $Id: datasetControl.C,v 1.34 2004/11/27 10:58:11 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -389,10 +389,26 @@ void DatasetControl::saveTrajectory_()
 
 	if (s == QString::null) return;
 	String filename = s.ascii();
+
 	setWorkingDirFromFilename_(filename);
 
-	ssm->getTrajectoryFile()->copyTo(filename);
-	setStatusbarText("Writen DCDFile");
+	if (!ssm->getTrajectoryFile()->copyTo(filename))
+	{
+		if (ssm->getTrajectoryFile()->getName() == filename)
+		{
+			setStatusbarText("Could not write DCDFile, you tried to save the file onto itself.", 
+											 true);
+		}
+		else
+		{
+			setStatusbarText("Could not write DCDFile.", true);
+		}
+
+		return;
+	}
+											
+
+	setStatusbarText("Written DCDFile", true);
 }
 
 String DatasetControl::chooseGridFileForOpen_()
