@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.15 2005/03/10 16:57:39 amoll Exp $
+// $Id: sysinfo.C,v 1.16 2005/03/10 19:10:14 oliver Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>
@@ -24,7 +24,7 @@
 #	 include <sys/sysinfo.h>
 #	 include <BALL/SYSTEM/file.h>
 #else
-# ifdef BALL_PLATFORM_WINDOWS
+# ifdef BALL_COMPILER_MSVC
 #	  define WIN32_LEAN_AND_MEAN
 #	  include <windows.h>
 # endif
@@ -99,7 +99,7 @@ namespace BALL
 			return info.freeswap * info.mem_unit;
 		}
 #else
-#ifdef BALL_PLATFORM_WINDOWS
+#ifdef BALL_COMPILER_MSVC
 
 		LongIndex getAvailableMemory()
 		{
