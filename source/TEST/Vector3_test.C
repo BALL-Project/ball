@@ -1,13 +1,13 @@
-// $Id: Vector3_test.C,v 1.2 2000/02/20 12:19:21 oliver Exp $
+// $Id: Vector3_test.C,v 1.3 2000/02/20 13:28:26 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-#include <BALL/MATHS/Vector3.h>
+#include <BALL/MATHS/vector3.h>
 
 ///////////////////////////
 
-START_TEST(TVector3, "$Id: Vector3_test.C,v 1.2 2000/02/20 12:19:21 oliver Exp $")
+START_TEST(TVector3, "$Id: Vector3_test.C,v 1.3 2000/02/20 13:28:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
