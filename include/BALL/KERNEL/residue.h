@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.23 2001/01/14 21:57:15 amoll Exp $
+// $Id: residue.h,v 1.24 2001/02/24 22:52:33 amoll Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -85,9 +85,10 @@ namespace BALL
 			///
 			ADD_VARIANT_EXTENSIONS
 		};
-		//@}
 
-		/**	@name	Constructors and Destructors */
+		//@}
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{	
 	
 		/// Default constructor
@@ -118,27 +119,25 @@ namespace BALL
 			throw();
 	
 		//@}
-
-		/** @name Persistence */
+		/** @name Persistence 
+		*/
 		//@{
 
-		/**	Persistent writing.
-				Writes a Residue object to a persistent stream.
+		/**	Writes a Residue object to a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
 			throw();
 
-		/**	Persistent reading.
-				Reads a Residue object from a persistent stream.
+		/**	Reads a Residue object from a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentRead(PersistenceManager& pm)
 			throw();
 
 		//@}
-
-		/**	@name	Assignment */
+		/**	@name	Assignment 
+    */
 		//@{
 
 		/** Assignment with cloning facility.
@@ -149,24 +148,26 @@ namespace BALL
 		void set(const Residue& residue, bool deep = true)
 			throw();
 
-		/**	Assignment operator	*/
+		/**	Assignment operator	
+		*/
 		const Residue& operator = (const Residue& residue)
 			throw();
 
-		/**	Assign a Residue object from another instance.*/
+		/**	Assign a Residue object from another instance.
+		*/
 		void get(Residue& residue, bool deep = true) const
 			throw();
 
-		/**	Swap the contents of two Residue objects. */
+		/**	Swap the contents of two Residue objects. 
+		*/
 		void swap(Residue& residue)
 			throw();
 	
 		//@}
 
 		/**	Equality operator.
-				Two residues are equal if they have the same attributes and properties and are homomorph.
-				This method uses Fragment::operator == .
-				@see Fragment::operator ==
+				Two residues are equal if they have the same handle.
+				@see Object::operator ==
 		*/
 		bool operator == (const Residue& residue) const
 			throw();
@@ -178,7 +179,8 @@ namespace BALL
 			throw();
 
 
-		/**	@name	Accessors */
+		/**	@name	Accessors 
+		*/
 		//@{
 
 		/**	Return the fully qualified name.
@@ -189,9 +191,9 @@ namespace BALL
 					\item {\tt [-]S} is added for CYS involved in a disulphide bridge
 					\item {\tt -M} is added for individual amino acids (C and N terminal)
 				\end{itemize}
-			@param	type if type is set to {\tt NO_VARIANT_EXTENSIONS},
-							the variant extension ({\tt -XX}) is omitted.
-			@return String the full fragment name
+				@param	type if type is set to {\tt NO_VARIANT_EXTENSIONS},
+								the variant extension ({\tt -XX}) is omitted.
+				@return String the full fragment name
 		*/
 		String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const
 			throw();
@@ -221,80 +223,74 @@ namespace BALL
 			throw();
 
 		/** Get a pointer to the parent protein.
-				The reference is 0 if {\em *this} instance does not have a parent protein.
-				@return  Protein* -
-								 mutable reference to the parent protein of {\em *this}
+				The pointer is 0 if this instance does not have a parent protein.
+				@return  Protein* - mutable pointer to the parent protein
 		*/
 		Protein* getProtein()
 			throw();
 
 		/** Get a constant pointer to the parent protein.
-				The reference is 0 if {\em *this} instance does not have a parent protein.
-				@return  Protein* -
-								 constant reference to the parent protein of {\em *this}
+				The pointer is 0 if this instance does not have a parent protein.
+				@return  Protein* - constant pointer to the parent protein
 		*/
 		const Protein* getProtein() const
 			throw();
 
 		/** Get a pointer to the parent chain.
-				The reference is 0 if {\em *this} instance does not have a parent chain.
-				@return  Chain* -
-								 mutable reference to the parent chain of {\em *this}
+				The pointer is 0 if this instance does not have a parent chain.
+				@return  Chain* - mutable pointer to the parent chain
 		*/
 		Chain* getChain()
 			throw();
 
 		/** Get a pointer to the parent chain.
-				The reference is 0 if {\em *this} instance does not have a parent chain.
-				@return  Chain* -
-								 constant reference to the parent chain of {\em *this}
+				The pointer is 0 if this instance does not have a parent chain.
+				@return  Chain* - constant pointer to the parent chain
 		*/
 		const Chain* getChain() const
 			throw();
 
 		/** Get a pointer to a child PDBAtom at a given position.
-				The reference is 0 if {\em *this} instance does not have a PDBAtom at this position.
+				The pointer is 0 if this instance does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
-				@return  PDBAtom* -
-								 mutable reference to the child PDBAtom at {\em position} of {\em *this}
+				@return  PDBAtom* - mutable pointer to the child PDBAtom at {\em position}
 		*/
 		PDBAtom* getPDBAtom(Position position)
 			throw();
 	
 		/** Get a pointer to a child PDBAtom at a given position.
-				The reference is 0 if {\em *this} instance does not have a PDBAtom at this position.
+				The pointer is 0 if this instance does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
-				@return  PDBAtom* -
-								 constant reference to the child PDBAtom at {\em position} of {\em *this}
+				@return  PDBAtom* - constant pointer to the child PDBAtom at {\em position}
 		*/
 		const PDBAtom* getPDBAtom(Position position) const
 			throw();
 	
-		/**	Set the ID of {\em *this} instance.
+		/**	Set the ID.
 				@param id the new ID
 		*/
 		void setID(const String& id)
 			throw();
 
-		/**	Retrieve the ID of {\em *this} instance.
+		/**	Retrieve the ID.
 				@return String the ID
 		*/
 		const String& getID() const
 			throw();
 
-		/**	Set the insertion code of {\em *this} instance.
+		/**	Set the insertion code.
 				@param insertion_code the new insertion code
 		*/
 		void setInsertionCode(char insertion_code)
 			throw();
 
-		/**	Get the insertion code of {\em *this} instance.
+		/**	Get the insertion code.
 				@return  char the insertion code
 		*/
 		char getInsertionCode() const
 			throw();
 
-		/**	Count the child PDBAtoms of {\em *this} instance.
+		/**	Count the child PDBAtoms.
 				@return  Size the number of PDBAtoms
 		*/
 		Size countPDBAtoms() const
@@ -318,16 +314,16 @@ namespace BALL
 		void insert(PDBAtom& atom)
 			throw();
 
-		/** Insert a PDBAtom before a given {\em Comosite} object.
+		/** Insert a PDBAtom before a given Composite object.
 				@param atom, the PDBAtom to insert
-				@param before, the {\em Comosite} object to insert before
+				@param before, the Composite object to insert before
 		*/
 		void insertBefore(PDBAtom& atom, Composite& before)
 			throw();
 
-		/** Insert a PDBAtom after a given {\em Comosite} object.
+		/** Insert a PDBAtom after a given Composite object.
 				@param atom, the PDBAtom to insert
-				@param after, the {\em Comosite} object to insert after
+				@param after, the Composite object to insert after
 		*/
 		void insertAfter(PDBAtom& atom, Composite& after)
 			throw();
@@ -338,27 +334,27 @@ namespace BALL
 		bool remove(PDBAtom& atom)
 			throw();
 
-		/**	Cut all children of {\tt residue} and prepend them before the children of {\em *this}.
+		/**	Cut all children of {\tt residue} and prepend them before the children of this instance.
 				@param residue the residue to access
 		*/
 		void spliceBefore(Residue& residue)
 			throw();
 
-		/**	Cut all children of {\tt residue} and prepend them after the children of {\em *this}.
+		/**	Cut all children of {\tt residue} and append them after the children of this instance.
 				@param residue the residue to access
 		*/
 		void spliceAfter(Residue& residue)
 			throw();
 
-		/**	Move the children of {\tt residue} into {\em *this}.
+		/**	Move the children of {\tt residue} into this instance.
 				The children are inserted using \Ref{spliceBefore}.
 		*/
 		void splice(Residue& residue)
 			throw();
 
 		//@}
-
-		/**	@name	Predicates */
+		/**	@name	Predicates 
+		*/
 		//@{
 
 		/** Test if this residue is an amino acid.
@@ -393,48 +389,48 @@ namespace BALL
 			throw();
 
 		//@}
-
-	
-		/**	@name	Debugging and Diagnostics */
+		/**	@name	Debugging and Diagnostics 
+		*/
 		//@{
 
 		/** Internal state and consistency self-validation.
-				Initiate self-validation of the internal state and data structure consistencies of {\em *this}.
-				@return			bool -
-										{\tt true} if the internal state of {\em *this} is correct (self-validated) and consistent,
-										{\tt false} otherwise
+				@return	 bool - {\tt true} if the internal state 
+								 is correct (self-validated) and consistent, {\tt false} otherwise
 		*/
 		virtual bool isValid() const
 			throw();
 
 		/** Internal state dump.
-				Dump the current internal state of {\em *this} to the output ostream {\em s} with dumping depth {\em depth}.
-				@param	s output stream where to output the internal state of {\em *this}
+				Dump the current internal state to the output
+				ostream {\em s} with dumping depth {\em depth}.
+				@param	s output stream where to output the internal state
 				@param  depth the dumping depth
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
-		//@}
 
-		/**	@name	Storers */
+		//@}
+		/**	@name	Storers 
+		*/
+		//@{
 
 		/* Persistent stream input and state restorage.
-				Read persistent data from the input stream {\em s} and restore the state of {\em *this}.
-				\\
-				{\bf Note:} Not yet implemented.
-				@param  s input stream from where to restore the internal state of {\em *this}
+			 Read persistent data from the input stream {\em s} and restore the state. \\ 
+			 {\bf Note:} Not yet implemented.
+			 @param  s input stream from where to restore the internal state
 		*/
 		virtual void read(std::istream& s)
 			throw();
 
 		/* Persistent stream input and state restorage.
-				Read persistent data from the input stream {\em s} and restore the state of {\em *this}.
-				\\
-				{\bf Note:} Not yet implemented.
-				@param  s input stream from where to restore the internal state of {\em *this}
+			 Read persistent data from the input stream {\em s} and restore the state.\\
+			 {\bf Note:} Not yet implemented.
+			 @param  s input stream from where to restore the internal state
 		*/
 		virtual void write(std::ostream& s) const
 			throw();
+
+		//@}
 
 		// --- EXTERNAL ITERATORS	
 

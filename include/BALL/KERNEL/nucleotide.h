@@ -1,4 +1,4 @@
-// $Id: nucleotide.h,v 1.16 2001/01/14 21:57:14 amoll Exp $
+// $Id: nucleotide.h,v 1.17 2001/02/24 22:52:33 amoll Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -49,9 +49,10 @@ namespace BALL
 			///
 			NUMBER_OF_PROPERTIES
 		};
-		//@}
 
-		/**	@name	Constructors and Destructors */
+		//@}
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{	
 	
 		/// Default constructor
@@ -82,51 +83,45 @@ namespace BALL
 			throw();
 	
 		//@}
-
-		/** @name Persistence */
+		/** @name Persistence 
+		*/
 		//@{
 
-		/**	Persistent writing.
-				Writes a Nucleotide object to a persistent stream.
+		/**	Writes a Nucleotide object to a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
 			throw();
 
-		/**	Persistent reading.
-				Reads a Nucleotide object from a persistent stream.
+		/**	Reads a Nucleotide object from a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentRead(PersistenceManager& pm)
 			throw();
 
 		//@}
-
-
-		/**	@name	Assignment */
+		/**	@name	Assignment 
+		*/
 		//@{
 
 		/** Assignment with cloning facility.
-				Assign {\em nucleotide} to {\em *this} nucleotide.
 				The assignment is either deep or shallow (default).
 				@param  nucleotide the nucleotide to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em nucleotide}
+				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
 		*/
 		void set(const Nucleotide& nucleotide, bool deep = true)
 			throw();
 
 		/** Assignment operator.
-				Assign {\em nucleotide} to {\em *this}.
 				The assignment is either deep or shallow (default).
 				@param   nucleotide the nucleotide to be copied (cloned)
-				@return  nucleotide& - {\em *this} nucleotide
+				@return  nucleotide& - this instance nucleotide
 				@see     nucleotide::set
 		*/
 		const Nucleotide& operator = (const Nucleotide& nucleotide)
 			throw();
 
-		/** Copying with cloning facility.
-				Copy {\em *this} instance to {\em nucleotide}.
+		/** Copy this instance to {\em nucleotide}.
 				The assignment is either deep or shallow (default).
 				@param  nucleotide the nucleotide to be assigned to
 				@see    nucleotide::set
@@ -135,7 +130,6 @@ namespace BALL
 			throw();
 
 		/** Swapping of instaces of nucleotide.
-				Swap the states of {\em *this} with the {\em nucleotide}.
 				@param  nucleotide the instance of nucleotide to swap with
 		*/
 		void swap(Nucleotide& nucleotide)
@@ -144,8 +138,8 @@ namespace BALL
 		//@}
 
 		/**	Equality operator.
-				Two nucleotides are equal if they have the same attributes and properties and are homomorph.
-				@see Fragment::operator ==
+				Two nucleotides are equal if they have the same handle.
+				@see Object::operator ==.
 		*/
 		bool operator == (const Nucleotide& nucleotide) const
 			throw();
@@ -160,17 +154,15 @@ namespace BALL
 		//@{
 
 		/** Get a pointer to the parent NucleicAcid.
-				The reference is 0 if {\em *this} nucleotide does not have a parent NucleicAcid.
-				@return  NucleicAcid* -
-								 mutable reference to the parent NucleicAcid of {\em *this} nucleotide,
+				The pointer is 0 if this instance nucleotide does not have a parent NucleicAcid.
+				@return  NucleicAcid* - mutable pointer to the parent NucleicAcid
 		*/
 		NucleicAcid* getNucleicAcid()
 			throw();
 		
 		/** Get a pointer to the parent NucleicAcid.
-				The reference is 0 if {\em *this} nucleotide does not have a parent NucleicAcid.
-				@return  NucleicAcid* -
-								 constant reference to the parent NucleicAcid of {\em *this} nucleotide,
+				The pointer is 0 if this instance nucleotide does not have a parent NucleicAcid.
+				@return  NucleicAcid* - constant pointer to the parent NucleicAcid
 		*/
 		const NucleicAcid* getNucleicAcid() const
 			throw();
@@ -217,16 +209,16 @@ namespace BALL
 		void insert(Atom& atom)
 			throw();
 
-		/** Insert an atom before a given {\em Comosite} object.
+		/** Insert an atom before a given Composite object.
 				@param atom, the atom to insert
-				@param before, the {\em Comosite} object to insert before
+				@param before, the Composite object to insert before
 		*/
 		void insertBefore(Atom& atom, Composite& before)
 			throw();
 
-		/** Insert an atom after a given {\em Comosite} object.
+		/** Insert an atom after a given Composite object.
 				@param atom, the atom to insert
-				@param after, the {\em Comosite} object to insert after
+				@param after, the Composite object to insert after
 		*/
 		void insertAfter(Atom& atom, Composite& after)
 			throw();
@@ -256,83 +248,78 @@ namespace BALL
 			throw();
 
 		//@}
-
-	
-		/**	@name	Predicates */
+		/**	@name	Predicates 
+		*/
 		//@{
 
-		/**	Test if {\em *this} nucleotide is terminal.
-				Returns true, if {\em *this} instance is the first or
+		/**	Test if this instance nucleotide is terminal.
+				Returns true, if this instance is the first or 
 				last nucleotide in its parent NucleicAcid.
 				@return bool
 		*/
 		bool isTerminal() const
 			throw();
 	
-		/**	Test if {\em *this} nucleotide is 3-prime.
-				Returns true, if {\em *this} instance is the first nucleotide in its parent NucleicAcid.
+		/**	Test if this instance nucleotide is 3-prime.
+				Returns true, if this instance is the first nucleotide in its parent NucleicAcid.
 				@return bool
 		*/
 		bool is3Prime() const
 			throw();
 
-		/**	Test if {\em *this} nucleotide is 5-prime.
-				Returns true, if {\em *this} instance is the last nucleotide in its parent NucleicAcid.
+		/**	Test if this instance nucleotide is 5-prime.
+				Returns true, if this instance is the last nucleotide in its parent NucleicAcid.
 				@return bool
 		*/
 		bool is5Prime() const
 			throw();
-		//@}
 
-	
-		/**	@name	Debugging and Diagnostics */
+		//@}
+		/**	@name	Debugging and Diagnostics 
+		*/
 		//@{
 
 		/** Internal state and consistency self-validation.
-				Initiate self-validation of the internal state and data structure consistencies of {\em *this}.
-				If the internal state of {\em *this} nucleotide is correct (self-validated)
-				and consistent {\tt true} is returned, {\tt false} otherwise. 
-				@return			bool -
-										{\tt true} if the internal state of {\em *this} nucleotide is correct
-										(self-validated) and consistent, {\tt false} otherwise
+				@return	 bool -	{\tt true} if the internal state of this instance nucleotide is correct
+												(self-validated) and consistent, {\tt false} otherwise
 		*/
 		virtual bool isValid() const
 			throw();
 
 		/** Internal state dump.
-				Dump the current internal state of {\em *this} 
+				Dump the current internal state of this instance 
 				to the output ostream {\em s} with dumping depth {\em depth}.
-				@param	s output stream where to output the internal state of {\em *this} nucleotide
+				@param	s output stream where to output the internal state of this instance nucleotide
 				@param  depth the dumping depth
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Storers
 		*/
 		//@{
 
 		/* Persistent stream input and state restorage.
-				Read persistent data from the input stream {\em s} and restore the state of {\em *this}.
-				\\
-				{\bf Note:} Not yet implemented.
-				@param  s input stream from where to restore the internal state of {\em *this} nucleotide
+			 Read persistent data from the input stream {\em s} and restore 
+			 the state of this instance. \\
+			 {\bf Note:} Not yet implemented.
+			 @param  s input stream from where to restore the internal state of this instance nucleotide
 		*/
 		virtual void read(std::istream& s)
 			throw();
 
 		/* Persistent stream output and state storage.
-				Write persistent data to the output stream {\em s} and store the state of {\em *this}.
-				\\
-				{\bf Note:} Not yet implemented.	
-				@param  s input stream from where to restore the internal state of {\em *this} nucleotide
+			 Write persistent data to the output stream {\em s} and store 
+			 the state of this instance. \\
+			 {\bf Note:} Not yet implemented.	
+			 @param  s input stream from where to restore the internal state of this instance nucleotide
 		*/
 		virtual void write(std::ostream& s) const
 			throw();
+
 		//@}
-
-
+ 
 		private:
 
 		AtomContainer* getAtomContainer(Position position)

@@ -1,4 +1,4 @@
-// $Id: protein.h,v 1.14 2001/01/14 21:57:15 amoll Exp $ 
+// $Id: protein.h,v 1.15 2001/02/24 22:52:33 amoll Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -39,9 +39,9 @@ namespace BALL
 
 	/**	Kernel Protein Class.
 			This class is used to represent proteins.
-			A protein may contain several \Ref{Chains}, \Ref{SecondaryStructure}s,
-			and \Ref{Residue}s.\\
-			{\bf Definition:}\URL{BALL/KERNEL/protein.h}
+			A protein may contain several \Ref{Chain}, \Ref{SecondaryStructure},
+			and \Ref{Residue}.\\
+			{\bf Definition:} \URL{BALL/KERNEL/protein.h}
 	*/
 	class Protein
 		: public Molecule
@@ -60,9 +60,10 @@ namespace BALL
 		{
 			NUMBER_OF_PROPERTIES = Molecule::NUMBER_OF_PROPERTIES
 		};
-		//@}
 
-		/** @name	Constructors and Destructors */
+		//@}
+		/** @name	Constructors and Destructors 
+		*/
 		//@{
 
 		/// Default constructor
@@ -91,60 +92,51 @@ namespace BALL
 			throw();
 
 		//@}
-
-		/**	@name	Persistence */
+		/**	@name	Persistence 
+		*/
 		//@{
 		
-		/**	Persistent writing.
-				Writes a Protein object to a persistent stream.
+		/**	Writes a Protein object to a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
 			throw();
 
-		/**	Persistent reading.
-				Reads a Protein object from a persistent stream.
+		/**	Reads a Protein object from a persistent stream.
 				@param pm the persistence manager
 		*/
  		void persistentRead(PersistenceManager& pm)
 			throw();
 
 		//@}
-
-		/**	@name Assignment Methods */
+		/**	@name Assignment Methods 
+		*/
 		//@{
 
 		/** Assignment with cloning facility.
-				Assign {\em protein} to {\em *this}.
 				The assignment is either deep or shallow (default).
 				@param  protein the Protein to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em protein}
+				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
 		*/
 		void set(const Protein& protein, bool deep = true)
 			throw();
 
 		/** Assignment operator.
-				Assign {\em protein} to {\em *this}.
-				The assignment is either deep or shallow (default).
 				@param   protein the Protein to be copied (cloned)
-				@return  Protein& - {\em *this}
-				@see     Protein::set
+				@return  Protein& - this instance
 		*/
 		const Protein& operator = (const Protein& protein)
 			throw();
 
-		/** Copying with cloning facility.
-				Copy {\em *this} to {\em protein}.
+		/** Copy this instance to {\em protein}.
 				The assignment is either deep or shallow (default).
 				@param  protein the Protein to be assigned to
-				@see    Protein::set
 		*/
 		void get(Protein& protein, bool deep = true) const
 			throw();
 	
 		/** Swapping of two proteins.
-				Swap the states of {\em *this} with {\em protein}.
-				@param  protein to swap with {\em *this}
+				@param  protein to swap with this instance
 		*/
 		void swap(Protein& protein)
 			throw();
@@ -152,8 +144,8 @@ namespace BALL
 		//@}
 
 		/**	Equality operator.
-				Two proteins are equal if they have the same attributes and properties and are homomorph.
-				@see Molecule::operator ==
+				Two proteins are equal if they have the same handle.
+				@see Object::operator ==.
 		*/
 		bool operator == (const Protein& protein) const
 			throw();
@@ -168,101 +160,99 @@ namespace BALL
 		//@{
 
 		/** Get a pointer to a child chain at a given position.
-				The reference is 0 if {\em *this} does not have a chain at the given position.
+				The pointer is 0 if this instance does not have a chain at the given position.
 				@param   position the position of the child chain
-				@return  Chain* -
-								 mutable reference to the child chain at {\em position} of {\em *this},
+				@return  Chain* - mutable pointer to the child chain at {\em position}
 		*/
 		Chain* getChain(Position position)
 			throw();
 
 		/** Get a pointer to a child chain at a given position.
-				The reference is 0 if {\em *this} does not have a chain at the given position.
+				The pointer is 0 if this instance does not have a chain at the given position.
 				@param   position the position of the child chain
-				@return  Chain* -
-								 constant reference to the child chain at {\em position} of {\em *this},
+				@return  Chain* - constant pointer to the child chain at {\em position}
 		*/
 		const Chain* getChain(Position position) const
 			throw();
 
 		/** Get a pointer to a child SecondaryStructure at a given position.
-				The reference is 0 if {\em *this} does not have a SecondaryStructure at the given position.
+				The pointer is 0 if this instance does not have a SecondaryStructure at the given position.
 				@param   position the position of the child SecondaryStructure
-				@return  SecondaryStructure* - mutable reference to the child SecondaryStructure
-																			 at {\em position} of {\em *this},
+				@return  SecondaryStructure* - 
+								 mutable pointer to the child SecondaryStructure at {\em position}
 		*/
 		SecondaryStructure* getSecondaryStructure(Position position)
 			throw();
 
 		/** Get a pointer to a child SecondaryStructure at a given position.
-				The reference is 0 if {\em *this} does not have a SecondaryStructure at the given position.
+				The pointer is 0 if this instance does not have a SecondaryStructure at the given position.
 				@param   position the position of the child SecondaryStructure
-				@return  SecondaryStructure* - constant reference to the child SecondaryStructure
-																			 at {\em position} of {\em *this},
+				@return  SecondaryStructure* - 
+								 constant pointer to the child SecondaryStructure at {\em position}
 		*/
 		const SecondaryStructure* getSecondaryStructure(Position position) const
 			throw();
 
 		/** Get a pointer to a child Residue at a given position.
-				The reference is 0 if {\em *this} does not have a Residue at the given position.
+				The pointer is 0 if this instance does not have a Residue at the given position.
 				@param   position the position of the child Residue
-				@return  Residue* - mutable reference to the child 
-														Residue at {\em position} of {\em *this},
+				@return  Residue* - mutable pointer to the child Residue at {\em position}
 		*/
 		Residue* getResidue(Position position)
 			throw();
 
 		/** Get a pointer to a child Residue at a given position.
-				The reference is 0 if {\em *this} does not have a Residue at the given position.
+				The pointer is 0 if this instance does not have a Residue at the given position.
 				@param   position the position of the child Residue
-				@return  Residue* - constant reference to the child 
-														Residue at {\em position} of {\em *this},
+				@return  Residue* - constant pointer to the child	Residue at {\em position}
 		*/
 		const Residue* getResidue(Position position) const
 			throw();
 
 		/** Get a pointer to the N-terminal Residue.
-				The reference is 0 if {\em *this} does not have a N-terminal Residue.
-				@return  Residue* - mutable reference to the N-terminal	Residue
+				The pointer is 0 if this instance does not have a Residue with
+				the property "PROPERTY__AMINO_ACID".
+				@return  Residue* - mutable pointer to the N-terminal	Residue
 		*/
 		Residue* getNTerminal()
 			throw();
 
 		/** Get a pointer to the N-terminal Residue.
-				The reference is 0 if {\em *this} does not have a N-terminal Residue.
-				@return  Residue* - constant reference to the N-terminal Residue
+				The pointer is 0 if this instance does not have a Residue with
+				the property "PROPERTY__AMINO_ACID".
+				@return  Residue* - constant pointer to the N-terminal Residue
 		*/
 		const Residue* getNTerminal() const
 			throw();
 
 		/** Get a pointer to the C-terminal Residue.
-				The reference is 0 if {\em *this} does not have a C-terminal Residue.
-				@return  Residue* - mutable reference to the C-terminal	Residue
+				The pointer is 0 if this instance does not have a Residue with
+				the property "PROPERTY__AMINO_ACID".
+				@return  Residue* - mutable pointer to the C-terminal	Residue
 		*/
 		Residue* getCTerminal()
 			throw();
 
 		/** Get a pointer to the C-terminal Residue.
-				The reference is 0 if {\em *this} does not have a C-terminal Residue.
-				@return  Residue* - constant reference to the C-terminal Residue
+				The pointer is 0 if this instance does not have a Residue with
+				the property "PROPERTY__AMINO_ACID".
+				@return  Residue* - constant pointer to the C-terminal Residue
 		*/
 		const Residue* getCTerminal() const
 			throw();
 
 		/** Get a pointer to a child PDB-Atom at a given position.
-				The reference is 0 if {\em *this} does not have a PDB-Atom at the given position.
+				The pointer is 0 if this instance does not have a PDB-Atom at the given position.
 				@param   position the position of the child PDB-Atom
-				@return  Residue* - mutable reference to the child 
-														PDB-Atom at {\em position} of {\em *this},
+				@return  Residue* - mutable pointer to the child PDB-Atom at {\em position}
 		*/
 		PDBAtom* getPDBAtom(Position position)
 			throw();
 
 		/** Get a pointer to a child PDB-Atom at a given position.
-				The reference is 0 if {\em *this} does not have a PDB-Atom at the given position.
+				The pointer is 0 if this instance does not have a PDB-Atom at the given position.
 				@param   position the position of the child PDB-Atom
-				@return  Residue* - constant reference to the child 
-														PDB-Atom at {\em position} of {\em *this},
+				@return  Residue* - constant pointer to the child	PDB-Atom at {\em position}
 		*/
 		const PDBAtom* getPDBAtom(Position position) const
 			throw();
@@ -302,6 +292,7 @@ namespace BALL
 		*/
 		Size countPDBAtoms() const
 			throw();
+
 		//@}
 
 #ifdef	BALL_CFG_USING_METHOD_DIRECTIVE
@@ -331,45 +322,42 @@ namespace BALL
 		//@{
 
 		/** Internal state and consistency self-validation.
-				Initiate self-validation of the internal state and data structure consistencies of {\em *this}.
-				@return			bool -
-										{\tt true} if the internal state of {\em *this} is correct (self-validated) and consistent,
-										{\tt false} otherwise
+				@return	 bool -{\tt true} if the internal state of this instance is 
+								 correct (self-validated) and consistent, {\tt false} otherwise
 		*/
 		virtual bool isValid() const
 			throw();
 
 		/** Internal state dump.
-				Dump the current internal state of {\em *this} to the output ostream {\em s} with dumping depth {\em depth}.
-	
-				@param	s output stream where to output the internal state of {\em *this}
+				Dump the current internal state  to the output 
+				ostream {\em s} with dumping depth {\em depth}.
+				@param	s output stream where to output the internal state 
 				@param  depth the dumping depth
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Storers
 		*/
 		//@{
 
 		/* Persistent stream input and state restorage.
-				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
-				\\
+				Read persistent bond data from the input stream {\em s} and restore the state. \\
 				{\bf Note:} Not yet implemented.
-				@param  s input stream from where to restore the internal state of {\em *this}
+				@param  s input stream from where to restore the internal state 
 		*/
 		virtual void read(std::istream& s)
 			throw();
 
 		/* Persistent stream input and state restorage.
-				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
-				\\
+				Read persistent bond data from the input stream {\em s} and restore the state. \\
 				{\bf Note:} Not yet implemented.
-				@param  s input stream from where to restore the internal state of {\em *this}
+				@param  s input stream from where to restore the internal state 
 		*/
 		virtual void write(std::ostream& s) const
 			throw();
+
 		//@}
 
 		// --- EXTERNAL ITERATORS

@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.20 2001/01/14 21:57:14 amoll Exp $
+// $Id: chain.h,v 1.21 2001/02/24 22:52:32 amoll Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -47,9 +47,10 @@ namespace BALL
 		{
 			NUMBER_OF_PROPERTIES = AtomContainer::NUMBER_OF_PROPERTIES
 		};
-		//@}
 
-		/**	@name	Constructors and Destructors */
+		//@}
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{
 
 		/// Default constrcutor
@@ -69,31 +70,28 @@ namespace BALL
 			throw();
 			
 		//@}
-
-		/** @name Persistence */
+		/** @name Persistence 
+		*/
 		//@{
 
-		/**	Persistent writing.
-				Writes a Chain object to a persistent stream.
+		/**	Writes a Chain object to a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
 			throw();
 
-		/**	Persistent reading.
-				Reads a Chain object from a persistent stream.
+		/**	Reads a Chain object from a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentRead(PersistenceManager& pm)
 			throw();
 
 		//@}
-		
-		/**	@name Assignment */
+		/**	@name Assignment 
+		*/
 		//@{
 
 		/** Assignment with cloning facility.
-				Assign the chain {\em chain} to {\em *this}.
 				The assignment is either deep or shallow (default).
 				@param  chain the chain to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em chain}
@@ -102,17 +100,15 @@ namespace BALL
 			throw();
 
 		/** Assignment operator.
-				Assign the chain {\em chain} to {\em *this}.
-				The assignment is either deep or shallow (default).
+				The assignment is deep.
 				@param   chain the chain to be copied (cloned)
-				@return  chain& - {\em *this}
+				@return  chain& - this instance.
 				@see     chain::set
 		*/
 		const Chain& operator = (const Chain& chain)
 			throw();
 
 		/** Copying with cloning facility.
-				Copy {\em *this} to the chain {\em chain}.
 				The assignment is either deep or shallow (default).
 				@param  chain the chain to be assigned to
 				@see    chain::set
@@ -121,8 +117,7 @@ namespace BALL
 			throw();
 
 		/** Swapping of chains.
-				Swap the states of {\em *this} with the chain {\em chain}.
-				@param  chain the chain {\em *this} is being swapped with
+				@param  chain the chain this instance is being swapped with
 		*/
 		void swap(Chain& chain)
 			throw();
@@ -130,8 +125,8 @@ namespace BALL
 		//@}
 	
 		/**	Equality operator.
-				Two chains are equal if they have the same attributes and properties and are homomorph.
-				@see AtomContainer::operator ==
+				Two chains are equal if they have the same handle.
+				@see Object::operator ==
 		*/
 		bool operator == (const Chain& chain) const
 			throw();
@@ -143,107 +138,98 @@ namespace BALL
 			throw();
 
 
-		/**	@name	Accessors */
+		/**	@name	Accessors 
+		*/
 		//@{
 
 		/** Get a pointer to the parent protein.
-				The reference is 0 if {\em *this} does not have a parent protein.
-				@return  Protein* -
-								 mutable reference to the parent protein of {\em *this},
+				The pointer is 0 if this instance does not have a parent protein.
+				@return  Protein* - mutable pinter to the parent protein
 		*/
 		Protein* getProtein()
 			throw();
 
 		/** Get a constant pointer to the parent protein.
-				The reference is 0 if {\em *this} does not have a parent protein.
-				@return  Protein* -
-								 constant reference to the parent protein of {\em *this},
+				The pointer is 0 if this instance does not have a parent protein.
+				@return  Protein* - constant pointer to the parent protein
 		*/
 		const Protein* getProtein() const
 			throw();
 
 		/** Get a pointer to a child SecondaryStructure at a given position.
-				The reference is 0 if {\em *this} does not have a SecondaryStructure at this position.
+				The pointer is 0 if this instance does not have a SecondaryStructure at this position.
 				@param   position the position of the child SecondaryStructure
 				@return  SecondaryStructure* -
-								 mutable reference to the child SecondaryStructure at {\em position} of {\em *this},
+								 mutable pointer to the child SecondaryStructure at {\em position}
 		*/
 		SecondaryStructure* getSecondaryStructure(Position position)
 			throw();
 	
 		/** Get a constant pointer to a child SecondaryStructure at a given position.
-				The reference is 0 if {\em *this} does not have a SecondaryStructure at this position.
+				The pointer is 0 if this instance does not have a SecondaryStructure at this position.
 				@param   position the position of the child SecondaryStructure
 				@return  SecondaryStructure* -
-								 constant reference to the child SecondaryStructure at {\em position} of {\em *this},
+								 constant pointer to the child SecondaryStructure at {\em position}
 		*/
 		const SecondaryStructure* getSecondaryStructure(Position position) const
 			throw();
 	
 		/** Get a pointer to a child Residue at a given position.
-				The reference is 0 if {\em *this} does not have a Residue at this position.
+				The pointer is 0 if this instance does not have a Residue at this position.
 				@param   position the position of the child Residue
-				@return  Residue* -
-								 mutable reference to the child Residue at {\em position} of {\em *this},
+				@return  Residue* - mutable pointer to the child Residue at {\em position}
 		*/
 		Residue* getResidue(Position position)
 			throw();
 	
 		/** Get a pointer to a child Residue at a given position.
-				The reference is 0 if {\em *this} does not have a Residue at this position.
+				The pointer is 0 if this instance does not have a Residue at this position.
 				@param   position the position of the child Residue
-				@return  Residue* -
-								 constant reference to the child Residue at {\em position} of {\em *this},
+				@return  Residue* - constant pointer to the child Residue at {\em position}
 		*/
 		const Residue* getResidue(Position position) const
 			throw();
 	
 		/** Get a pointer to the N-terminal Residue.
-				The reference is 0 if {\em *this} does not have a Residue at this position.
-				@return  Residue* -
-								 mutable reference to the N-terminal Residue
+				The pointer is 0 if this instance does not have a Residue.
+				@return  Residue* - mutable pointer to the N-terminal Residue
 		*/
 		Residue* getNTerminal()
 			throw();
 	
 		/** Get a constant pointer to the N-terminal Residue.
-				The reference is 0 if {\em *this} does not have a Residue at this position.
-				@return  Residue* -
-								 constant reference to the N-terminal Residue
+				The pointer is 0 if this instance does not have a Residue.
+				@return  Residue* - constant pointer to the N-terminal Residue
 		*/
 		const Residue* getNTerminal() const
 			throw();
 
 		/** Get a pointer to the C-terminal Residue.
-				The reference is 0 if {\em *this} does not have a Residue at this position.
-				@return  Residue* -
-								 mutable reference to the C-terminal Residue
+				The pointer is 0 if this instance does not have a Residue.
+				@return  Residue* - mutable pointer to the C-terminal Residue
 		*/
 		Residue* getCTerminal()
 			throw();
 	
 		/** Get a constant pointer to the C-terminal Residue.
-				The reference is 0 if {\em *this} does not have a Residue at this position.
-				@return  Residue* -
-								 constant reference to the C-terminal Residue
+				The pointer is 0 if this instance does not have a Residue.
+				@return  Residue* - constant pointer to the C-terminal Residue
 		*/
 		const Residue* getCTerminal() const
 			throw();
 
 		/** Get a pointer to a child PDBAtom at a given position.
-				The reference is 0 if {\em *this} does not have a PDBAtom at this position.
+				The pointer is 0 if this instance does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
-				@return  PDBAtom* -
-								 mutable reference to the child PDBAtom at {\em position} of {\em *this},
+				@return  PDBAtom* - mutable pointer to the child PDBAtom at {\em position}
 		*/
 		PDBAtom* getPDBAtom(Position position)
 			throw();
 	
 		/** Get a pointer to a child PDBAtom at a given position.
-				The reference is 0 if {\em *this} does not have a PDBAtom at this position.
+				The pointer is 0 if this instance does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
-				@return  PDBAtom* -
-								 constant reference to the child PDBAtom at {\em position} of {\em *this},
+				@return  PDBAtom* - constant pointer to the child PDBAtom at {\em position}
 		*/
 		const PDBAtom* getPDBAtom(Position position) const
 			throw();
@@ -284,16 +270,16 @@ namespace BALL
 		void insert(SecondaryStructure& secondary_structure)
 			throw();
 
-		/** Insert a SecondaryStructure before a given {\em Comosite} object.
+		/** Insert a SecondaryStructure before a given Composite object.
 				@param secondary_structure, the SecondaryStructure to insert
-				@param before, the {\em Comosite} object to insert before
+				@param before, the Composite object to insert before
 		*/
 		void insertBefore(SecondaryStructure& secondary_structure, Composite& before)
 			throw();
 
-		/** Insert a SecondaryStructure after a given {\em Comosite} object.
+		/** Insert a SecondaryStructure after a given Composite object.
 				@param secondary_structure, the SecondaryStructure to insert
-				@param after, the {\em Comosite} object to insert before
+				@param after, the Composite object to insert after
 		*/
 		void insertAfter(SecondaryStructure& secondary_structure, Composite& after)
 			throw();
@@ -322,16 +308,16 @@ namespace BALL
 		void insert(Residue& residue)
 			throw();
 
-		/** Insert a Residue before a given {\em Comosite} object.
+		/** Insert a Residue before a given Composite object.
 				@param residue, the Residue to insert
-				@param before, the {\em Comosite} object to insert before
+				@param before, the Composite object to insert before
 		*/
-		void insertBefore(Residue& residue,Composite& before)
+		void insertBefore(Residue& residue, Composite& before)
 			throw();
 
-		/** Insert a Residue after a given {\em Comosite} object.
+		/** Insert a Residue after a given Composite object.
 				@param residue, the Residue to insert
-				@param after, the {\em Comosite} object to insert after
+				@param after, the Composite object to insert after
 		*/
 		void insertAfter(Residue& residue, Composite& after)
 			throw();
@@ -361,39 +347,41 @@ namespace BALL
 			throw();
 		
 		//@}
-
-		/**	@name	Debugging and Diagnostics */
+		/**	@name	Debugging and Diagnostics 
+		*/
 		//@{
 		
 		/** Internal state dump.
-				Dump the current internal state of {\em *this} to the output ostream {\em s} with dumping depth {\em depth}.
-				@param   s - output stream where to output the internal state of {\em *this}
+				Dump the current internal state to the output 
+				ostream {\em s} with dumping depth {\em depth}.
+				@param   s - output stream where to output the internal state.
 				@param   depth - the dumping depth
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
 
 		//@}
-
-		// --- STORERS
+		/**	@name	Storers
+		*/
+		//@{
 
 		/* Persistent stream input and state restorage.
-				Read persistent chain data from the input stream {\em s} and restore the state of {\em *this}.
-				\\
-				{\bf Note:} Not yet implemented.
-				@param  s input stream from where to restore the internal state of {\em *this}
+			 Read persistent chain data from the input stream {\em s} and restore the state. \\
+			 {\bf Note:} Not yet implemented.
+			 @param  s input stream from where to restore the internal state.
 		*/
 		virtual void read(std::istream& s)
 			throw();
 
 		/* Persistent stream output and state storage.
-				Write persistent chain data to the output stream {\em s} and store the state of {\em *this}.
-				\\
-				{\bf Note:} Not yet implemented.	
-				@param  s input stream from where to restore the internal state of {\em *this}
+			 Write persistent chain data to the output stream {\em s} and store the state. \\
+			 {\bf Note:} Not yet implemented.	
+			 @param  s input stream from where to restore the internal state.
 		*/
 		virtual void write(std::ostream& s) const
 			throw();
+
+		//@}
 
 		// --- EXTERNAL ITERATORS
 

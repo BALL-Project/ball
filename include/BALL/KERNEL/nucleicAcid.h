@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.h,v 1.16 2001/01/14 21:57:14 amoll Exp $ 
+// $Id: nucleicAcid.h,v 1.17 2001/02/24 22:52:32 amoll Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -41,9 +41,10 @@ namespace BALL
 		{
 			NUMBER_OF_PROPERTIES = Molecule::NUMBER_OF_PROPERTIES
 		};
-		//@}
 
-		/** @name	Constructors and Destructors */
+		//@}
+		/** @name	Constructors and Destructors 
+		*/
 		//@{
 
 		/**	Default constructor.
@@ -78,36 +79,31 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/**	@name	Persistence */
+		/**	@name	Persistence 
+		*/
 		//@{
 		
-		/**	Persistent writing.
-				Writes a NucleicAcid object to a persistent stream.
+		/**	Writes a NucleicAcid object to a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
 			throw();
 
-		/**	Persistent reading.
-				Reads a NucleicAcid object from a persistent stream.
+		/**	Reads a NucleicAcid object from a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentRead(PersistenceManager& pm)
 			throw();
 
 		//@}
-
-
-		/**	@name Assignment Methods */
+		/**	@name Assignment Methods 
+		*/
 		//@{
 
 		/** Assignment with cloning facility.
-				Assign the NucleicAcid {\em nucleic_acid} to {\em *this}.
 				The assignment is either deep or shallow (default).
 				@param  nucleic_acid the NucleicAcid to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em nucleic_acid}
+				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
 		*/
 		void set(const NucleicAcid& nucleic_acid, bool deep = true)
 			throw();
@@ -130,8 +126,8 @@ namespace BALL
 		//@}
 
 		/**	Equality operator.
-				Two nucleic acids are equal if they have the same attributes and properties and are homomorph.
-				@see Molecule::operator ==
+				Two nucleic acids are equal if they have the same handle.
+				@see Object::operator ==.
 		*/
 		bool operator == (const NucleicAcid& nucleic_acid) const
 			throw();
@@ -146,51 +142,45 @@ namespace BALL
 		//@{
 
 		/** Get a pointer to a child Nucleotide at a given position.
-				The reference is 0 if {\em *this} instance does not have a Nucleotide at the given position.
+				The pointer is 0 if this instance does not have a Nucleotide at the given position.
 				@param   position the position of the child Nucleotide
-				@return  Nucleotide* -
-								 mutable reference to the child Nucleotide at {\em positon} of {\em *this},
+				@return  Nucleotide* - mutable pointer to the child Nucleotide at {\em positon}
 		*/
 		Nucleotide* getNucleotide(Position position)
 			throw();
 	
 		/** Get a pointer to a child Nucleotide at a given position.
-				The reference is 0 if {\em *this} instance does not have a Nucleotide at the given position.
+				The pointer is 0 if this instance does not have a Nucleotide at the given position.
 				@param   position the position of the child Nucleotide
-				@return  Nucleotide* -
-								 constant reference to the child Nucleotide at {\em positon} of {\em *this},
+				@return  Nucleotide* - constant pointer to the child Nucleotide at {\em positon}
 		*/
 		const Nucleotide* getNucleotide(Position position) const
 			throw();
 
-		/**	Retrieve a pointer to the Nucleotide at the 3'-end of {\em *this}.
-				The reference is 0 if {\em *this} instance does not have a Nucleotide.
-				@return  Nucleotide* -
-								 mutable reference to the first child Nucleotide
+		/**	Retrieve a pointer to the Nucleotide at the 3'-end of this instance.
+				The pointer is 0 if this instance does not have a Nucleotide.
+				@return  Nucleotide* - mutable pointer to the first child Nucleotide
 		*/
 		Nucleotide* get3Prime()
 			throw();
 
-		/**	Retrieve a const pointer to the nucleotide at the 3'-end of {\em *this}.
-				The reference is 0 if {\em *this} instance does not have a Nucleotide.
-				@return  Nucleotide* -
-								 constant reference to the first child Nucleotide
+		/**	Retrieve a const pointer to the nucleotide at the 3'-end of this instance.
+				The pointer is 0 if this instance does not have a Nucleotide.
+				@return  Nucleotide* - constant pointer to the first child Nucleotide
 		*/
 		const Nucleotide* get3Prime() const
 			throw();
 
-		/**	Retrieve a pointer to the Nucleotide at the 5'-end of {\em *this}.
-				The reference is 0 if {\em *this} instance does not have a Nucleotide.
-				@return  Nucleotide* -
-								 mutable reference to the last child Nucleotide
+		/**	Retrieve a pointer to the Nucleotide at the 5'-end of this instance.
+				The pointer is 0 if this instance does not have a Nucleotide.
+				@return  Nucleotide* - mutable pointer to the last child Nucleotide
 		*/
 		Nucleotide* get5Prime()
 			throw();
 
-		/**	Retrieve a const pointer to the Nucleotide at the 5'-end of {\em *this}.
-				The reference is 0 if {\em *this} instance does not have a Nucleotide.
-				@return  Nucleotide* -
-								 constant reference to the last child Nucleotide
+		/**	Retrieve a const pointer to the Nucleotide at the 5'-end of this instance.
+				The pointer is 0 if this instance does not have a Nucleotide.
+				@return  Nucleotide* - constant pointer to the last child Nucleotide
 		*/
 		const Nucleotide* get5Prime() const
 			throw();
@@ -207,11 +197,12 @@ namespace BALL
 		const String& getID() const
 			throw();
 
-		/**	Return the number of Nucleotides contained in {\em *this} NucleicAcid.
+		/**	Return the number of Nucleotides contained in this instance NucleicAcid.
 				@return Size - number of Nucleotides
 		*/
 		Size countNucleotides() const
 			throw();
+
 		//@}
 
 #ifdef	BALL_CFG_USING_METHOD_DIRECTIVE
@@ -241,48 +232,44 @@ namespace BALL
 		//@{
 
 		/** Internal state and consistency self-validation.
-				Initiate self-validation of the internal state and data structure consistencies of {\em *this}.
-				If the internal state of {\em *this} is correct (self-validated) and consistent {\tt true}
-				is returned, {\tt false} otherwise. 
-	
-				@return			bool -
-										{\tt true} if the internal state of {\em *this} atom is correct (self-validated)
-										and consistent,	{\tt false} otherwise
+				@return	 bool - {\tt true} if the internal state of this instance atom 
+								 is correct (self-validated) and consistent,	{\tt false} otherwise
 		*/
 		virtual bool isValid() const
 			throw();
 
 			/** Internal state dump.
-					Dump the current internal state of {\em *this} to the output ostream {\em s}
+					Dump the current internal state of this instance to the output ostream {\em s}
 					with dumping depth {\em depth}.
-					@param   s - output stream where to output the internal state of {\em *this}
+					@param   s - output stream where to output the internal state of this instance
 					@param   depth - the dumping depth
 			*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Storers
 		*/
 		//@{
 
 		/* Persistent stream input and state restorage.
-				Read persistent data from the input stream {\em s} and restore the state of {\em *this}.
-				\\
-				{\bf Note:} Not yet implemented.
-				@param  s input stream from where to restore the internal state of {\em *this}
+			 Read persistent data from the input stream {\em s} and restore 
+			 the state of this instance.	\\
+			 {\bf Note:} Not yet implemented.
+			 @param  s input stream from where to restore the internal state of this instance
 		*/
 		virtual void read(std::istream& s)
 			throw();
 
 		/* Persistent stream input and state restorage.
-				Read persistent data from the input stream {\em s} and restore the state of {\em *this}.
-				\\
-				{\bf Note:} Not yet implemented.
-				@param  s input stream from where to restore the internal state of {\em *this}
+			 Read persistent data from the input stream {\em s} and restore 
+			 the state of this instance.	\\
+			 {\bf Note:} Not yet implemented.
+			 @param  s input stream from where to restore the internal state of this instance
 		*/
 		virtual void write(std::ostream& s) const
 			throw();
+
 		//@}
 
 		// --- EXTERNAL ITERATORS

@@ -1,4 +1,4 @@
-// $Id: fragment.h,v 1.13 2001/01/14 21:57:14 amoll Exp $
+// $Id: fragment.h,v 1.14 2001/02/24 22:52:32 amoll Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -29,7 +29,6 @@ namespace BALL
 		public:
 
 		BALL_CREATE_DEEP(Fragment)
-
 		
 		/**	@name	Enums 
 		*/
@@ -41,55 +40,57 @@ namespace BALL
 			///
 			NUMBER_OF_PROPERTIES = AtomContainer::NUMBER_OF_PROPERTIES
 		};
-		//@}
-			
-		/**	@name	Constructors and Destructors */
+
+		//@}		
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{
 
-		/** Default constructor */
+		/** Default constructor 
+		*/
 		Fragment()
 			throw();
 	
-		/** Copy constructor */
+		/** Copy constructor 
+		*/
 		Fragment(const Fragment& fragment, bool deep = true)
 			throw();
 	
-		/** Constructor */
+		/** Constructor 
+		*/
 		Fragment(const String& name)
 			throw();
 
-		/** Destructor */
+		/** Destructor 
+		*/
 		virtual ~Fragment()
 			throw();
 
 		//@}
-	
-		/** @name Persistence */
+		/** @name Persistence 
+		*/
 		//@{
 
-		/**	Persistent writing.
-				Writes a Fragment object to a persistent stream.
+		/**	Writes a Fragment object to a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
 			throw();
 
-		/**	Persistent reading.
-				Reads a Fragment object from a persistent stream.
+		/**	Reads a Fragment object from a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentRead(PersistenceManager& pm)
 			throw();
 
 		//@}
-
-		/**	@name	Assignment */
+		/**	@name	Assignment 
+		*/
 		//@{
 
 		/** Assignment operator.
-				Assign {\em fragment} to {\em *this} instance.
 				@param   fragment the Fragment to be copied (cloned)
-				@return  Fragment& - {\em *this} instance
+				@return  Fragment& - this instance
 		*/
 		const Fragment& operator = (const Fragment& fragment)
 			throw();
@@ -97,9 +98,8 @@ namespace BALL
 		//@}
 
 		/**	Equality operator.
-				Two fragments are equal if they have the same attributes and properties and are homomorph.
-				This method uses AtomContainer::operator == .
-				@see AtomContainer::operator ==
+				Two fragments are equal if they have the same handle.
+				@see Object::operator ==.
 		*/
 		bool operator == (const Fragment& fragment) const
 			throw();
@@ -110,40 +110,40 @@ namespace BALL
 		bool operator != (const Fragment& fragment) const
 			throw();
 
-		/**	@name	Debugging and Diagnostics */
+		/**	@name	Debugging and Diagnostics 
+		*/
 		//@{
 
 		/** Internal state dump.
-				Dump the current internal state of {\em *this} Fragment to the output ostream 
+				Dump the current internal state to the output ostream 
 				{\em s} with dumping depth {\em depth}.
-				@param   s - output stream where to output the internal state of {\em *this} Fragment
+				@param   s - output stream where to output the internal state
 				@param   depth - the dumping depth
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
+
 		//@}
-
-
-		/**	@name	Storers */
+		/**	@name	Storers 
+		*/
 		//@{
 
 		/* Persistent stream input and state restorage.
-				Read persistent data from the input stream {\em s} and restore the state of {\em *this}.
-				\\
-				{\bf Note:} Not yet implemented.
-				@param  s input stream from where to restore the internal state of {\em *this}
+			 Read persistent data from the input stream {\em s} and restore the state. \\ 
+			 {\bf Note:} Not yet implemented.
+			 @param  s input stream from where to restore the internal state
 		*/
 		virtual void read(std::istream& s)
 			throw();
 
 		/* Persistent stream input and state restorage.
-				Read persistent data from the input stream {\em s} and restore the state of {\em *this}.
-				\\
+				Read persistent data from the input stream {\em s} and restore the state.	\\
 				{\bf Note:} Not yet implemented.
-				@param  s input stream from where to restore the internal state of {\em *this}
+				@param  s input stream from where to restore the internal state
 		*/
 		virtual void write(std::ostream& s) const
 			throw();
+
 		//@}
 	};
 

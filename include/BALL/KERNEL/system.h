@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.19 2001/01/21 20:40:27 amoll Exp $
+// $Id: system.h,v 1.20 2001/02/24 22:52:33 amoll Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -58,7 +58,8 @@ namespace BALL
 
 		BALL_CREATE_DEEP(System)
 
-		/**	@name	Constructors and Destructors*/
+		/**	@name	Constructors and Destructors
+		*/
 		//@{
 
 		/// Default constructor
@@ -78,32 +79,28 @@ namespace BALL
 			throw();
 
 		//@}
-	
-		/** @name Persistence */
+		/** @name Persistence 
+		*/
 		//@{
 
-		/**	Persistent writing.
-				Writes a System object to a persistent stream.
+		/**	Writes a System object to a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
 			throw();
 
-		/**	Persistent reading.
-				Reads a System object from a persistent stream.
+		/**	Reads a System object from a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentRead(PersistenceManager& pm)
 			throw();
 
 		//@}
-
-	
-		/**	@name	Assignemnt */
+		/**	@name	Assignemnt 
+		*/
 		//@{
 
 		/** Assignment with cloning facility.
-				Assign {\em system} to {\em *this}.
 				The assignment is either deep or shallow (default).
 				@param  system the System to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em system}
@@ -112,16 +109,14 @@ namespace BALL
 			throw();
 
 		/** Assignment operator.
-				Assign {\em system} to {\em *this}.
 				@param   system the System to be copied (cloned)
-				@return  System& - {\em *this}
+				@return  System& - this instance
 				@see     System::set
 		*/
 		const System& operator = (const System& system)
 			throw();
 
 		/** Copying with cloning facility.
-				Copy {\em *this} to {\em system}.
 				The assignment is either deep or shallow (default).
 				@param  System the System to be assigned to
 				@see    System::set
@@ -143,24 +138,22 @@ namespace BALL
 		bool operator != (const System& system) const
 			throw();
 
-
-		/**	@name	Accessors */
+		/**	@name	Accessors 
+		*/
 		//@{
 
 		/** Get a pointer to a child Molecule at a given position.
-				The reference is 0 if {\em *this} does not have a Molecule at this position.
+				The pointer is 0 if this instance does not have a Molecule at this position.
 				@param   position the position of the child molecule
-				@return  Molecule* -
-								 mutable reference to the child molecule at {\em position} of {\em *this}
+				@return  Molecule* - mutable pointer to the child molecule at {\em position}
 		*/
 		Molecule* getMolecule(Position position)
 			throw();
 
 		/** Get a pointer to a child Molecule at a given position.
-				The reference is 0 if {\em *this} does not have a Molecule at this position.
+				The pointer is 0 if this instance does not have a Molecule at this position.
 				@param   position the position of the child molecule
-				@return  Molecule* -
-								 constant reference to the child molecule at {\em position} of {\em *this}
+				@return  Molecule* - constant pointer to the child molecule at {\em position}
 		*/
 		const Molecule* getMolecule(Position position) const
 			throw();
@@ -237,16 +230,16 @@ namespace BALL
 		void insert(Molecule& molecule)
 			throw();
 
-		/** Insert a molecule before a given {\em Comosite} object.
+		/** Insert a molecule before a given Composite object.
 				@param molecule, the molecule to insert
-				@param before, the {\em Comosite} object to insert before
+				@param before, the Composite object to insert before
 		*/
 		void insertBefore(Molecule& molecule, Composite& before)
 			throw();
 
-		/** Insert a molecule after a given {\em Comosite} object.
+		/** Insert a molecule after a given Composite object.
 				@param molecule, the molecule to insert
-				@param after, the {\em Comosite} object to insert before
+				@param after, the Composite object to insert before
 		*/
 		void insertAfter(Molecule& molecule, Composite& after)
 			throw();
@@ -257,47 +250,47 @@ namespace BALL
 		bool remove(Molecule& molecule)
 			throw();
 
-		/**	Move the children of {\tt system} into {\em *this}.
-				Cut all children of {\tt system} and prepend them before the children of {\em *this}.
+		/**	Move the children of {\tt system} into this instance.
+				Cut all children of {\tt system} and prepend them before the children of this instance.
 				@param system the system to access
 		*/
 		void spliceBefore(System& system)
 			throw();
 
-		/**	Move the children of {\tt system} into {\em *this}.
-				Cut all children of {\tt system} and append them after the children of {\em *this}.
+		/**	Move the children of {\tt system} into this instance.
+				Cut all children of {\tt system} and append them after the children of this instance.
 				@param system the system to access
 		*/
 		void spliceAfter(System& system)
 			throw();
 
-		/**	Move the children of {\tt system} into {\em *this}.
+		/**	Move the children of {\tt system} into this instance.
 				The children are inserted using \Ref{spliceBefore}.
 		*/
 		void splice(System& system)
 			throw();
-		//@}
 
-		/**	@name	Storers */
+		//@}
+		/**	@name	Storers 
+		*/
 		//@{
 
 		/* Persistent stream input and state restorage.
-				Read persistent data from the input stream {\em s} and restore the state of {\em *this}.
-				\\
-				{\bf Note:} Not yet implemented.
-				@param  s input stream from where to restore the internal state of {\em *this}
+			 Read persistent data from the input stream {\em s} and restore the state of this instance.	\\
+			 {\bf Note:} Not yet implemented.
+			 @param  s input stream from where to restore the internal state of this instance
 		*/
 		virtual void read(std::istream& s)
 			throw();
 
 		/* Persistent stream output and state storage.
-				Write persistent data to the output stream {\em s} and store the state of {\em *this}.
-				\\
-				{\bf Note:} Not yet implemented.	
-				@param  s input stream from where to restore the internal state of {\em *this}
+			 Write persistent data to the output stream {\em s} and store the state of this instance.	\\
+			 {\bf Note:} Not yet implemented.	
+			 @param  s input stream from where to restore the internal state of this instance
 		*/
 		virtual void write(std::ostream& s) const
 			throw();
+
 		//@}
 		
 		// --- EXTERNAL ITERATORS ---

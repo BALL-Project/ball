@@ -1,4 +1,4 @@
-// $Id: molecule.h,v 1.16 2001/01/14 21:57:14 amoll Exp $
+// $Id: molecule.h,v 1.17 2001/02/24 22:52:32 amoll Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -42,50 +42,52 @@ namespace BALL
 			IS_SOLVENT = AtomContainer::NUMBER_OF_PROPERTIES,
 			NUMBER_OF_PROPERTIES
 		};
-		//@}
 
-		/**	@name	Constructors and Destructors */
+		//@}
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{
 
-		/**	Default constructor. */
+		/**	Default constructor. 
+		*/
 		Molecule()
 			throw();
 	
-		/** Copy constructor. */
+		/** Copy constructor. 
+		*/
 		Molecule(const Molecule& molecule, bool deep = true)
 			throw();
 	
-		/** Detailled constructor. */
+		/** Detailled constructor. 
+		*/
 		Molecule(const String& name)
 			throw();
 
-		/** Destructor. */
+		/** Destructor. 
+		*/
 		virtual ~Molecule()
 			throw();
 		
 		//@}
-
-		/** @name Persistence */
+		/** @name Persistence 
+		*/
 		//@{
 
-		/**	Persistent writing.
-				Writes a Molecule object to a persistent stream.
+		/**	Writes a Molecule object to a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
 			throw();
 
-		/**	Persistent reading.
-				Reads a Molecule object from a persistent stream.
+		/**	Reads a Molecule object from a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentRead(PersistenceManager& pm)
 			throw();
 
 		//@}
-
-
-		/**	@name	Assignment */
+		/**	@name	Assignment 
+		*/
 		//@{
 
 		/**	Assign from another Molecule.
@@ -96,14 +98,12 @@ namespace BALL
 			throw();
 
 		/**	Assignment operator.
-				Assign the components from another Molecule.
 				@param molecule the Molecule to assign from
 		**/
 		const Molecule& operator = (const Molecule& molecule)
 			throw();
 
 		/**	Assign to another Molecule.
-				Assigns the components to another Molecule.
 				@param molecule	the Molecule to be assigned to
 				@param deep
 		*/
@@ -117,8 +117,8 @@ namespace BALL
 			throw();
 	
 		//@}
-		
-		/**	@name	Accessors */
+		/**	@name	Accessors 
+		*/
 		//@{
 
 		/**	Access the parent System.
@@ -133,34 +133,34 @@ namespace BALL
 		const System* getSystem() const
 			throw();
 
-		/** Insert an atom as the first child of {\em *this} instance.
+		/** Insert an atom as the first child.
 				@param atom the atom to add
 		*/
 		void prepend(Atom& atom)
 			throw();
 
-		/** Insert an atom as the last child of {\em *this} instance.
+		/** Insert an atom as the last child.
 				@param atom the atom to add
 		*/
 		void append(Atom& atom)
 			throw();
 
-		/** Insert an atom as the last child of {\em *this} instance.
+		/** Insert an atom as the last child.
 				@param atom the atom to add
 		*/
 		void insert(Atom& atom)
 			throw();
 
-		/** Insert an atom before a {\em Comosite} object.
+		/** Insert an atom before a Composite object.
 				@param atom, the atom to insert
-				@param before, the {\em Comosite} object to insert before
+				@param before, the Composite object to insert before
 		*/
 		void insertBefore(Atom& atom, Composite& before)
 			throw();
 
-		/** Insert an atom after a {\em Comosite} object.
+		/** Insert an atom after a Composite object.
 				@param atom, the atom to insert
-				@param after, the {\em Comosite} object to insert after
+				@param after, the Composite object to insert after
 		*/
 		void insertAfter(Atom& atom, Composite& after)
 			throw();
@@ -171,34 +171,34 @@ namespace BALL
 		bool remove(Atom& atom)
 			throw();
 
-		/** Insert a AtomContainer as the first child of {\em *this} instance.
+		/** Insert an AtomContainer as the first child.
 				@param atom_container the AtomContainer to add
 		*/
 		void prepend(AtomContainer& atom_container)
 			throw();
 
-		/** Append a AtomContainer as the last child of {\em *this} instance.
+		/** Append an AtomContainer as the last child.
 				@param atom_container the AtomContainer to add
 		*/
 		void append(AtomContainer& atom_container)
 			throw();
 
-		/** Insert a AtomContainer as the last child of {\em *this} instance.
+		/** Insert an AtomContainer as the last child.
 				@param atom_container the AtomContainer to add
 		*/
 		void insert(AtomContainer& atom_container)
 			throw();
 
-		/** Insert a AtomContainer before a given {\em Comosite} object.
+		/** Insert an AtomContainer before a given Composite object.
 				@param atom_container, the AtomContainer to insert
-				@param before, the {\em Comosite} object to insert before
+				@param before, the Composite object to insert before
 		*/
 		void insertBefore(AtomContainer& atom_container, Composite& before)
 			throw();
 
-		/** Insert a AtomContainer after a given {\em Comosite} object.
+		/** Insert an AtomContainer after a given Composite object.
 				@param atom_container, the AtomContainer to insert
-				@param after, the {\em Comosite} object to insert after
+				@param after, the Composite object to insert after
 		*/
 		void insertAfter(AtomContainer& atom_container, Composite& after)
 			throw();
@@ -217,28 +217,27 @@ namespace BALL
 
 		/**	Move the children of atom_container into this molecule.
 				The children of {\tt atom_container} are inserted at the position of 
-				{\tt atom_container} if {\tt atom_container} is a child of {\tt this}.
+				{\tt atom_container} if it is a child of {\tt this}.
 				Otherwise the children are inserted using \Ref{spliceBefore}.
 		*/
 		void splice(AtomContainer& atom_container)
 			throw();
 
-		/** Remove a AtomContainer.
+		/** Remove an AtomContainer.
 				@param atom_container the AtomContainer to remove
 		*/
 		bool remove(AtomContainer& atom_container)
 			throw();
 
 		//@}
-
-	
-		/**	@name Debugging and Diagnostics */
+		/**	@name Debugging and Diagnostics 
+		*/
 		//@{
 
 		/** Internal state dump.
-				Dump the current internal state of {\em *this} molecule to the 
+				Dump the current internal state to the 
 				output ostream {\em s} with dumping depth {\em depth}.
-				@param	s output stream where to output the internal state of {\em *this} molecule
+				@param	s output stream where to output the internal state
 				@param  depth the dumping depth
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
@@ -247,8 +246,8 @@ namespace BALL
 		//@}
 
 		/**	Equality operator.
-				Two molecules are equal if they have the same attributes and properties and are homomorph.
-				@see AtomContainer::operator ==
+				Two molecules are equal if they have the same handle.
+				@see Object::operator ==.
 		*/
 		bool operator == (const Molecule& molecule) const
 			throw();
@@ -263,7 +262,6 @@ namespace BALL
 		//@{
 
 		/**	Read the components of a molecule from an instream.
-				\\
 				{\bf Note:} Not yet implemented.	
 				@param s the instream
 		*/
@@ -271,7 +269,6 @@ namespace BALL
 			throw();
 
 		/**	Write the components of a molecule to an outstream.
-				\\
 				{\bf Note:} Not yet implemented.	
 				@param s the outstream
 		*/
