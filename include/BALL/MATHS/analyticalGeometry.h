@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.23 2000/04/04 21:29:21 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.24 2000/04/24 20:13:14 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -31,8 +31,8 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
-#define BALL_MATRIX_CELL(m,dim,row,col)   *((m) + (row) * (dim) + (col))
-#define BALL_CELL(x,y)                          *((m) + (y) * (dim) + (x))
+#define BALL_MATRIX_CELL(m, dim, row, col)   *((m) + (row) * (dim) + (col))
+#define BALL_CELL(x, y)                      *((m) + (y) * (dim) + (x))
 
 namespace BALL 
 {
@@ -101,7 +101,9 @@ namespace BALL
 							- BALL_CELL(0,2) * BALL_CELL(1,1) * BALL_CELL(2,0) 
 							- BALL_CELL(0,0) * BALL_CELL(1,2) * BALL_CELL(2,1) 
 							- BALL_CELL(0,1) * BALL_CELL(1,0) * BALL_CELL(2,2)); 
-		} else {
+		} 
+		else 
+		{
 			return GetDeterminant_(m, dim);
 		}
 	}
@@ -175,25 +177,27 @@ namespace BALL
 	{
 		T pivot;
 		Index i, j, k, p;
+		// the column dimension of the matrix
+		const Size col_dim = dim + 1;
 		T* matrix = new T[dim * (dim + 1)];
 		const T* source = m;
 		T* target = (T*)matrix;
-		T* end = (T*)&BALL_MATRIX_CELL(matrix, dim, dim - 1, dim);
+		T* end = (T*)&BALL_MATRIX_CELL(matrix, col_dim, dim - 1, dim);
 
-		while(target <= end)
+		while (target <= end)
 		{
 			*target++ = *source++;
 		}
 
 		for (i = 0; i < (Index)dim; ++i)
 		{
-			pivot = BALL_MATRIX_CELL(matrix, dim, i, i);
+			pivot = BALL_MATRIX_CELL(matrix, col_dim, i, i);
 			p = i;
 			for (j = i + 1; j < (Index)dim; ++j)
 			{
-				if (Maths::isLess(pivot, BALL_MATRIX_CELL(matrix, dim, j, i)))
+				if (Maths::isLess(pivot, BALL_MATRIX_CELL(matrix, col_dim, j, i)))
 				{
-					pivot = BALL_MATRIX_CELL(matrix, dim, j, i);
+					pivot = BALL_MATRIX_CELL(matrix, col_dim, j, i);
 					p = j;
 				}
 			}
@@ -205,13 +209,13 @@ namespace BALL
 				for (k = i; k < (Index)dim + 1; ++k)
 				{
 					tmp = BALL_MATRIX_CELL(matrix, dim, i, k);
-					BALL_MATRIX_CELL(matrix, dim, i, k) = BALL_MATRIX_CELL(matrix, dim, p, k);
-					BALL_MATRIX_CELL(matrix, dim, p, k) = tmp;
+					BALL_MATRIX_CELL(matrix, col_dim, i, k) = BALL_MATRIX_CELL(matrix, col_dim, p, k);
+					BALL_MATRIX_CELL(matrix, col_dim, p, k) = tmp;
 				}
 			}
 			else if (Maths::isZero(pivot) || Maths::isNan(pivot))
-			{ // invariant: matrix m is singular
-
+			{ 
+				// invariant: matrix m is singular
 				delete [] matrix;
 				
 				return false;
@@ -219,27 +223,29 @@ namespace BALL
 
 			for (j = dim; j >= i; --j) 
 			{
-				BALL_MATRIX_CELL(matrix, dim, i, j) /= pivot;
+				BALL_MATRIX_CELL(matrix, col_dim, i, j) /= pivot;
 			}
 
 			for (j = i + 1; j < (Index)dim; ++j)
 			{
-				pivot = BALL_MATRIX_CELL(matrix, dim, j, i);
+				pivot = BALL_MATRIX_CELL(matrix, col_dim, j, i);
 
 				for (k = dim; k>= i; --k) 
-					BALL_MATRIX_CELL(matrix, dim, j, k) -= pivot * BALL_MATRIX_CELL(matrix, dim, i, k);
+				{
+					BALL_MATRIX_CELL(matrix, col_dim, j, k) -= pivot * BALL_MATRIX_CELL(matrix, col_dim, i, k);
+				}
 			}
 		}
 
-		x[dim - 1] = BALL_MATRIX_CELL(matrix, dim, dim - 1, dim);
+		x[dim - 1] = BALL_MATRIX_CELL(matrix, col_dim, dim - 1, dim);
 
 		for (i = dim - 2; i >= 0; --i)
 		{
-			x[i] = BALL_MATRIX_CELL(matrix, dim, i, dim);
+			x[i] = BALL_MATRIX_CELL(matrix, col_dim, i, dim);
 
 			for (j = i + 1; j < (Index)dim; ++j) 
 			{
-				x[i] -= BALL_MATRIX_CELL(matrix, dim, i, j) * x[j];	
+				x[i] -= BALL_MATRIX_CELL(matrix, col_dim, i, j) * x[j];	
 			}
 		}
 
@@ -248,7 +254,8 @@ namespace BALL
 		return true;
 	}
 
-	#undef BALL_CELL
+#undef BALL_CELL
+#undef BALL_MATRIX_CELL
 
 	/**	Solve a system of two equations of the form
 		  a_1 x_1 + b_1 x_2 = c_1
@@ -273,7 +280,9 @@ namespace BALL
 		T quot = (a1 * b2 - a2 * b1);
 
 		if (Maths::isZero(quot))
+		{
 			return false;
+		}
 
 		x1 = (c1 * b2 - c2 * b1) / quot;
 		x2 = (a1 * c2 - a2 * c1) / quot;
@@ -315,7 +324,9 @@ namespace BALL
 			x1 = x2 = -b / (2 * a);
 
 			return 1;
-		} else {
+		} 
+		else 
+		{
 			x1 = (-b + sqrt_discriminant) / (2 * a);
 			x2 = (-b - sqrt_discriminant) / (2 * a);
 
@@ -421,15 +432,19 @@ namespace BALL
 				throw Exception::DivisionByZero(__FILE__, __LINE__);
 			}					
 			return ((a.d % (b.p - a.p)).getLength() / a.d.getLength());
-		} else {
+		} 
+		else 
+		{
 			T spat_product = TVector3<T>::getSpatProduct(a.d, b.d, b.p - a.p);
 
 			if (Maths::isNotZero(spat_product))
 			{ // invariant: windschiefe lines
 				
 				return (Maths::abs(spat_product) / cross_product_length);
-			} else { // invariant: intersecting lines
-
+			} 
+			else 
+			{ 
+				// invariant: intersecting lines
 				return 0;
 			}
 		}
@@ -568,7 +583,9 @@ namespace BALL
 		if (Maths::isZero(length_product))
 		{
 			return false;
-		} else {
+		} 
+		else 
+		{
 			intersection_angle = asin(Maths::abs(plane.n * Vector3) / sqrt(length_product));
 			
 			return true;
@@ -607,7 +624,9 @@ namespace BALL
 		if (Maths::isZero(length_product))
 		{
 			return false;
-		} else {
+		} 
+		else	
+		{
 			intersection_angle = asin(Maths::abs(plane.n * line.d) / sqrt(length_product));
 			
 			return true;
@@ -680,7 +699,9 @@ namespace BALL
 			point.set(a.p.x + a.d.x * c1, a.p.y + a.d.y * c1, a.p.z + a.d.z * c1);
 			
 			return true;
-		} else {
+		} 
+		else 
+		{
 			return false;
 		}
 	}
@@ -758,13 +779,19 @@ namespace BALL
 				if (SolveSystem2(ab, ac, -ad, bb, bc, -bd, x1, x2) == false)
 				{
 					return false;
-				} else {
+				} 
+				else 
+				{
 					p.set(0, x1, x2);
 				}
-			} else {
+			} 
+			else 
+			{
 				p.set(x1, 0, x2);
 			}
-		} else {
+		} 
+		else 
+		{
 			p.set(x1, x2, 0);
 		}
 
@@ -845,7 +872,9 @@ namespace BALL
 			intersection_circle.set(sphere.p + sphere.radius * Vector3, plane.n, 0);
 
 			return true;
-		} else {
+		} 
+		else 
+		{
 			TVector3<T> Vector3(plane.n);
 
 			Vector3.normalize();
