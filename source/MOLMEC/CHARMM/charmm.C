@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.C,v 1.14 2002/12/19 21:01:35 oliver Exp $
+// $Id: charmm.C,v 1.15 2002/12/22 14:48:30 anker Exp $
 // Molecular Mechanics: Charmm force field class
 
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -39,7 +39,7 @@ namespace BALL
 	const char* CharmmFF::Option::OVERWRITE_TYPENAMES = "overwrite_non-empty_typenames"; 
 	const char* CharmmFF::Option::USE_EEF1 = "use_EEF1"; 
  
-	const char* CharmmFF::Default::FILENAME = "CHARMM/param22.ini";
+	const char* CharmmFF::Default::FILENAME = "CHARMM/EEF1/param19_eef1.ini";
 	const float CharmmFF::Default::NONBONDED_CUTOFF = 20.0;
 	const float CharmmFF::Default::VDW_CUTOFF = 9.0;
 	const float CharmmFF::Default::VDW_CUTON = 7.0;
