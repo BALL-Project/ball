@@ -1,4 +1,4 @@
-// $Id: AutoDeletable_test.C,v 1.1 2001/07/05 17:48:12 oliver Exp $
+// $Id: AutoDeletable_test.C,v 1.2 2001/07/15 15:30:41 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,11 +9,12 @@
 
 using namespace BALL;
 
-class A: public AutoDeletable
+class A
+	: public AutoDeletable
 {
 };
 
-START_TEST(class_name, "$Id: AutoDeletable_test.C,v 1.1 2001/07/05 17:48:12 oliver Exp $")
+START_TEST(AutoDeletable, "$Id: AutoDeletable_test.C,v 1.2 2001/07/15 15:30:41 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -25,14 +26,6 @@ A* array_ptr;
 CHECK(AutoDeletable::void* operator new(size_t size) throw())
 	a_ptr = new A;
 	array_ptr = new A[12];	
-RESULT
-
-CHECK(AutoDeletable::void* operator new(size_t size, void* ptr) throw())
-	// BAUSTELLE
-RESULT
-
-CHECK(AutoDeletable::void operator delete(void* ptr) throw())
-	// BAUSTELLE
 RESULT
 
 A a;
@@ -56,8 +49,20 @@ CHECK(AutoDeletable::isAutoDeletable() const )
 RESULT
 
 CHECK(AutoDeletable::setAutoDeletable(bool enable))
-  //BAUSTELLE
+	TEST_EQUAL(a.isAutoDeletable(), false)
+	a.setAutoDeletable(true);
+	TEST_EQUAL(a.isAutoDeletable(), true)
+	a.setAutoDeletable(false);
+	TEST_EQUAL(a.isAutoDeletable(), false)
+	TEST_EQUAL(a_ptr->isAutoDeletable(), true)
+	a_ptr->setAutoDeletable(false);
+	TEST_EQUAL(a_ptr->isAutoDeletable(), false)
+	a_ptr->setAutoDeletable(true);
+	TEST_EQUAL(a_ptr->isAutoDeletable(), true)
 RESULT
+
+delete a_ptr;
+delete [] array_ptr;
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
