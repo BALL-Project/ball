@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.C,v 1.9 2003/08/26 09:17:47 oliver Exp $
+// $Id: genericMolFile.C,v 1.10 2003/12/10 16:05:07 anhi Exp $
 //
 
 #include <BALL/FORMAT/genericMolFile.h>
@@ -69,7 +69,7 @@ namespace BALL
 	bool GenericMolFile::write(const Molecule& /* molecule */)
 		throw(File::CannotWrite)
 	{
-		if (!isOpen() || getOpenMode() != File::OUT)
+		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
 			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}
@@ -79,7 +79,7 @@ namespace BALL
 	bool GenericMolFile::write(const System& system)
 		throw(File::CannotWrite)
 	{
-		if (!isOpen() || getOpenMode() != File::OUT)
+		if (!isOpen() || getOpenMode() != std::ios::out)
 		{
 			throw (File::CannotWrite(__FILE__, __LINE__, name_));
 		}
