@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.9.6.1 2005/03/17 15:43:04 amoll Exp $
+# $Id: Makefile,v 1.9.6.2 2005/03/21 12:49:21 amoll Exp $
 # Makefile for BALL utilities
 #
 
@@ -14,8 +14,6 @@ EXECUTABLES = \
 	pdb2amber_naming\
 	pdb2dcd\
 	reconstruct_fragment\
-	splitMMFFTestSuiteMolFiles\
-	splitMMFFTestSuiteOptiFiles\
 	solvent_accessibility
 
 # default target
