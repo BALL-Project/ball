@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.96 2004/07/02 15:01:17 amoll Exp $
+// $Id: scene.C,v 1.97 2004/07/03 11:02:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -44,9 +44,9 @@ namespace BALL
 		float Scene::mouse_sensitivity_ = 5;
 		float Scene::mouse_wheel_sensitivity_ = 5;
 		bool  Scene::show_light_sources_ = false;
-		#define  ZOOM_FACTOR 			7
+		#define  ZOOM_FACTOR 			17
 		#define  ROTATE_FACTOR    22
-		#define  TRANSLATE_FACTOR 6 
+		#define  TRANSLATE_FACTOR 10
 
 	  QGLFormat Scene::gl_format_(QGL::DepthBuffer | QGL::StereoBuffers);
 
@@ -974,6 +974,7 @@ namespace BALL
 
 			inifile.insertValue("STAGE", "EyeDistance", String(stage_->getEyeDistance()));
 			inifile.insertValue("STAGE", "FocalDistance", String(stage_->getFocalDistance()));
+			inifile.insertValue("STAGE", "FogIntensity", String(stage_->getFogIntensity()));
 			inifile.insertValue("STAGE", "BackgroundColor", String(data));
 			inifile.insertValue("STAGE", "ShowCoordinateSystem", String(stage_->coordinateSystemEnabled()));
 			writeLights_(inifile);
@@ -1001,6 +1002,11 @@ namespace BALL
 			if (inifile.hasEntry("STAGE", "FocalDistance"))
 			{
 				stage_->setFocalDistance(inifile.getValue("STAGE", "FocalDistance").toFloat());
+			}
+
+			if (inifile.hasEntry("STAGE", "FogIntensity"))
+			{
+				stage_->setFogIntensity(inifile.getValue("STAGE", "FogIntensity").toFloat());
 			}
 
 			if (inifile.hasEntry("STAGE", "BackgroundColor"))

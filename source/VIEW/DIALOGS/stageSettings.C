@@ -46,6 +46,7 @@ void StageSettings::updateFromStage()
 	eye_distance_slider->setValue((int) (stage_->getEyeDistance() * 10.0));
 	focal_distance_slider->setValue((int) (stage_->getFocalDistance()));
 	fog_slider->setValue((int) (stage_->getFogIntensity()));
+	enable_fog->setChecked(stage_->getFogIntensity() > 0);
 	eyeDistanceChanged();
 	focalDistanceChanged();
 }
