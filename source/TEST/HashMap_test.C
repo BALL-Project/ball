@@ -1,4 +1,4 @@
-// $Id: HashMap_test.C,v 1.5 2000/08/31 22:36:13 amoll Exp $
+// $Id: HashMap_test.C,v 1.6 2000/09/01 11:11:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,28 +9,27 @@
 using namespace BALL;
 using namespace std;
 
-class myVisitor : public Visitor <pair<int, int> >
+class MyVisitor 
+	: public Visitor <pair<int, int> >
 {
 	public:
-	int value;
+	MyVisitor()
+		: value_sum(0),
+			key_sum(0)
+	{
+	}
+	int value_sum;
+	int key_sum;
 	void visit(pair<int, int>& v)
 	{
-		value = v.first;
+		key_sum += v.first;
+		value_sum += v.second;
 	}
 };
-/*
-class myVisitor : public Visitor <HashMap<int, int> >
-{
-	public:
-	int value;
-	void visit(HashMap<int, int>& v)
-	{
-		value = v[0];
-	}
-};*/
 
 
-START_TEST(HashMap, "$Id: HashMap_test.C,v 1.5 2000/08/31 22:36:13 amoll Exp $")
+
+START_TEST(HashMap, "$Id: HashMap_test.C,v 1.6 2000/09/01 11:11:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -254,10 +253,18 @@ CHECK(HashMap::swap(HashMap&, bool))
 	hm.insert(HashMap<int, int>::ValueType(0, 0));
 	hm.insert(HashMap<int, int>::ValueType(1, 1));
 
-	hm.insert(HashMap<int, int>::ValueType(10, 10));
-	hm.insert(HashMap<int, int>::ValueType(11, 11));
+	hm2.insert(HashMap<int, int>::ValueType(10, 10));
+	hm2.insert(HashMap<int, int>::ValueType(11, 11));
 
+	TEST_EQUAL(hm.getSize(), 2)
+	TEST_EQUAL(hm2.getSize(), 2)
+	TEST_EQUAL(hm2[10], 10)
+	TEST_EQUAL(hm2[11], 11)
+	TEST_EQUAL(hm[0], 0)
+	TEST_EQUAL(hm[1], 1)
 	hm.swap(hm2);
+	TEST_EQUAL(hm.getSize(), 2)
+	TEST_EQUAL(hm2.getSize(), 2)
 	TEST_EQUAL(hm[10], 10)
 	TEST_EQUAL(hm[11], 11)
 	TEST_EQUAL(hm2[0], 0)
@@ -274,14 +281,15 @@ CHECK(HashMap::operator = (const HashMap&))
 	TEST_EQUAL(hm2[1], 1)
 RESULT
 
-CHECK(HashMap::host(Visitor<int>&))
+CHECK(HashMap::host(Visitor<pair<key, value> >& visitor))
 	HashMap<int, int> hm;
-	hm.insert(HashMap<int, int>::ValueType(0, 0));
-	hm.insert(HashMap<int, int>::ValueType(1, 1));
+	hm.insert(HashMap<int, int>::ValueType(100, 200));
+	hm.insert(HashMap<int, int>::ValueType(11, 22));
 
-	myVisitor mv;
-	//hm.host(mv);
-	TEST_EQUAL(mv.value, 0)
+	MyVisitor mv;
+	hm.host(mv);
+	TEST_EQUAL(mv.key_sum, 111)
+	TEST_EQUAL(mv.value_sum, 222)
 RESULT
 
 CHECK(HashMap::has(const Key&))
