@@ -3,6 +3,7 @@ DIRECTORY=BENCHMARKS
 EXECUTABLES = \
 	CompositeCreation_bench\
 	CompositeClone_bench\
+	DataStructures_bench\
 	KernelCreation_bench\
 	KernelClone_bench\
 	KernelIteration_bench\
