@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.32 2004/02/24 08:19:39 oliver Exp $
+// $Id: logStream.C,v 1.33 2004/02/24 08:45:11 oliver Exp $
 //
 
 #include <limits.h>
@@ -32,7 +32,7 @@ namespace BALL
 	const Time LogStreamBuf::MAX_TIME = INT_MAX;
 
 	LogStreamBuf::LogStreamBuf() 
-		: streambuf(),
+		: std::streambuf(),
 			pbuf_(0),
 			loglines_(),
 			level_(0),
@@ -41,7 +41,7 @@ namespace BALL
 			incomplete_line_()
 	{
 		pbuf_ = new char [BUFFER_LENGTH];
-		streambuf::setp(pbuf_, pbuf_ + BUFFER_LENGTH - 1);
+		std::streambuf::setp(pbuf_, pbuf_ + BUFFER_LENGTH - 1);
 	}
 		
 	LogStreamBuf::~LogStreamBuf() 
@@ -51,7 +51,7 @@ namespace BALL
 		delete [] pbuf_;
 	}
 
-	void LogStreamBuf::dump(ostream& stream) 
+	void LogStreamBuf::dump(std::ostream& stream) 
 	{
 		char buf[BUFFER_LENGTH];
 		Size line;
@@ -59,7 +59,7 @@ namespace BALL
 		{
 			strftime(&(buf[0]), BUFFER_LENGTH - 1, "%d.%m.%Y %H:%M:%S ", localtime(&(loglines_[line - 1].time)));
 			stream << buf << "[" << loglines_[line - 1].level
-						 << "]:" << loglines_[line - 1].text.c_str() << endl;
+						 << "]:" << loglines_[line - 1].text.c_str() << std::endl;
 		}
 	}
  
@@ -103,15 +103,14 @@ namespace BALL
 
 					// if there are any streams in our list, we
 					// copy the line into that streams, too and flush them
-					using ::std::list;
-					list<StreamStruct>::iterator list_it = stream_list_.begin();
+					std::list<StreamStruct>::iterator list_it = stream_list_.begin();
 					for (; list_it != stream_list_.end(); ++list_it)
 					{
 						// if the stream is open for that level, write to it...
 						if ((list_it->min_level <= tmp_level_) && (list_it->max_level >= tmp_level_))
 						{
 							*(list_it->stream) << expandPrefix_(list_it->prefix, tmp_level_, time(0)).c_str()
-																 << outstring.c_str() << endl;
+																 << outstring.c_str() << std::endl;
 							if (list_it->target != 0)
 							{
 								list_it->target->notify();
@@ -302,7 +301,7 @@ namespace BALL
 		rdbuf()->loglines_.clear();
 	}
 
-	void LogStream::insert(ostream& stream, int min_level, int max_level) 
+	void LogStream::insert(std::ostream& stream, int min_level, int max_level) 
 	{
 		// return if no LogStreamBuf is defined!
 		if (rdbuf() == 0)
@@ -311,10 +310,8 @@ namespace BALL
 		}
 			
 		// first, check whether the stream is already associated (avoid
-		// multiple insertions)
-																																	
-		using std::list;
-		list<LogStreamBuf::StreamStruct>::iterator list_it = rdbuf()->stream_list_.begin();
+		// multiple insertions)																																	
+		std::list<LogStreamBuf::StreamStruct>::iterator list_it = rdbuf()->stream_list_.begin();
 		for (; list_it != rdbuf()->stream_list_.end(); ++list_it) 
 		{
 			if ((*list_it).stream == &stream) 
@@ -331,7 +328,7 @@ namespace BALL
 		rdbuf()->stream_list_.push_back(s_struct);
 	}
 
-	void LogStream::remove(ostream& stream) 
+	void LogStream::remove(std::ostream& stream) 
 	{
 		// return if no LogStreamBuf is defined!
 		if (rdbuf() == 0)
@@ -340,9 +337,7 @@ namespace BALL
 		}
 			
 		// find the stream in the LogStreamBuf's list
-		
-    using std::list;																																
-		list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
+		std::list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
 		for (; list_it != rdbuf()->stream_list_.end(); ++list_it)
 		{
 			if ((*list_it).stream == &stream) 
@@ -356,7 +351,7 @@ namespace BALL
 		// if the stream is not found nothing happens!		
 	}
 
-	void LogStream::insertNotification(const ostream& s, const LogStream::Target& target)
+	void LogStream::insertNotification(const std::ostream& s, const LogStream::Target& target)
 	{
 		// return if no LogStreamBuf is defined!
 		if (rdbuf() == 0)
@@ -365,9 +360,7 @@ namespace BALL
 		}
 			
 		// find the stream in the LogStreamBuf's list
-		
-    using std::list;																																
-		list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
+		std::list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
 		for (; list_it != rdbuf()->stream_list_.end(); ++list_it)
 		{
 			if (list_it->stream == &s) 
@@ -382,7 +375,7 @@ namespace BALL
 	}
 
 	
-	void LogStream::removeNotification(const ostream& s) 
+	void LogStream::removeNotification(const std::ostream& s) 
 	{
 		// return if no LogStreamBuf is defined!
 		if (rdbuf() == 0)
@@ -391,9 +384,7 @@ namespace BALL
 		}
 			
 		// find the stream in the LogStreamBuf's list
-		
-    using std::list;																																
-		list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
+		std::list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
 		for (; list_it != rdbuf()->stream_list_.end(); ++list_it)
 		{
 			if (list_it->stream == &s) 
@@ -408,7 +399,7 @@ namespace BALL
 		// if the stream is not found nothing happens!		
 	}
 
-	void LogStream::setMinLevel(const ostream& stream, int level) 
+	void LogStream::setMinLevel(const std::ostream& stream, int level) 
 	{
 		// return if no LogStreamBuf is defined!
 		if (rdbuf() == 0)
@@ -417,9 +408,7 @@ namespace BALL
 		}
 			
 		// find the stream in the LogStreamBuf's list
-		
-    using std::list;																																
-		list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
+		std::list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
 		for (; list_it != rdbuf()->stream_list_.end(); ++list_it)
 		{
 			if ((*list_it).stream == &stream) 
@@ -431,7 +420,7 @@ namespace BALL
 		}
 	}
 
-	void LogStream::setMaxLevel(const ostream& stream, int level) 
+	void LogStream::setMaxLevel(const std::ostream& stream, int level) 
 	{
 		// return if no LogStreamBuf is defined!
 		if (rdbuf() == 0)
@@ -442,9 +431,7 @@ namespace BALL
 		// find the stream in the LogStreamBuf's list:
 		// iterate over the list until you find the stream`s pointer
 
-    using std::list;																																
-		list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
-
+		std::list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
 		for (; list_it != rdbuf()->stream_list_.end(); ++list_it)
 		{
 			if ((*list_it).stream == &stream) 
@@ -456,7 +443,7 @@ namespace BALL
 		}
 	}
 	
-	void LogStream::setPrefix(const ostream& s, const string& prefix) 
+	void LogStream::setPrefix(const std::ostream& s, const string& prefix) 
 	{
 		// return if no LogStreamBuf is defined!
 		if (rdbuf() == 0)
@@ -466,16 +453,13 @@ namespace BALL
 			
 		// find the stream in the LogStreamBuf's list:
 		// iterate over the list until you find the stream`s pointer
-
-    using std::list;																																
-		list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
-
+		std::list<LogStreamBuf::StreamStruct>::iterator	list_it = rdbuf()->stream_list_.begin();
 		for (; list_it != rdbuf()->stream_list_.end(); ++list_it)
 		{
 			if ((*list_it).stream == &s) 
 			{
 				// change the streams max_level and exit the loop
-				(*list_it).prefix = prefix;
+				list_it->prefix = prefix;
 				return;
 			} 
 		}
@@ -561,12 +545,11 @@ namespace BALL
 		return non_const_this->rdbuf()->loglines_[index].time;	
 	}
 
-	list<int>	LogStream::filterLines
+	std::list<int>	LogStream::filterLines
 		(int min_level, int max_level,
 		 Time earliest, Time latest, const string& s) const
 	{
-    using std::list;																																
-		list<int>	list_indices;
+		std::list<int>	list_indices;
 		Position pos = 0;
 		LogStreamBuf* log = const_cast<LogStream*>(this)->rdbuf();
 

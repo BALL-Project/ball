@@ -2,6 +2,8 @@
 \index{testing}
 \index{test programs}
 
+\subsection{Unit tests}
+
 BALL provides an extensive suite of test programs to ensure the correctness of
 the code on all platforms. This test suite requires a lot of patience since
 the compilation takes quite some time. However, we recommend to run these
@@ -15,13 +17,11 @@ execution of the test programs will fail.
 Each of the test programs tests one or more classes of BALL. When a test
 program (\eg~{\tt Atom\_test}) is run, the program prints either "OK" (if all
 tests passed) or "FAILED" if any of the tests failed. "{\tt make test}" runs
-all tests and complains if a certain test fails.  If this happens, please let
-us know by mailing the files specified in the output of "{\tt make test}" to
-one of the developers - this helps us to improve the library.  The mail
-address for bug reports is:
-\begin{enumerate}
-	\item[] \eMail{ball-bugs@bioinf.uni-sb.de}
-\end{enumerate}
+all tests and complains if a certain test fails.  
+
+
+If this happens, please let report a bug through our online bug tracking
+system at \URL{http://www.bioinf.uni-sb.de/OK/BALL/Support/BugTracker}.
 
 \noindent
 For all bug reports, please include your system configuration, the file
