@@ -1,4 +1,4 @@
-// $Id: Time_test.C,v 1.2 2000/08/28 18:03:50 oliver Exp $
+// $Id: Time_test.C,v 1.3 2000/10/16 20:04:34 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(Time, "$Id: Time_test.C,v 1.2 2000/08/28 18:03:50 oliver Exp $")
+START_TEST(Time, "$Id: Time_test.C,v 1.3 2000/10/16 20:04:34 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -77,6 +77,19 @@ CHECK(Time::Time& operator = (const Time& time) throw())
 	TEST_EQUAL(t2, t1)
 	TEST_EQUAL(t2.getSeconds(), 12345678)
 	TEST_EQUAL(t2.getMicroSeconds(), 23456789)
+RESULT
+
+CHECK(void Time::clear() throw())
+	Time t1;
+	Time t2;
+	TEST_EQUAL(t1, t2)
+	TEST_EQUAL(t1.getSeconds(), 0)
+	TEST_EQUAL(t1.getMicroSeconds(), 0)
+	t1.set(12345, 23456);
+	TEST_EQUAL(t1.getSeconds(), 12345)
+	TEST_EQUAL(t1.getMicroSeconds(), 23456)
+	t1.clear();
+	TEST_EQUAL(t1, t2)
 RESULT
 
 
