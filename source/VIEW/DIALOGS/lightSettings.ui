@@ -40,250 +40,6 @@
             <set>AlignCenter</set>
         </property>
     </widget>
-    <widget class="QListBox">
-        <property name="name">
-            <cstring>lights_list</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>20</y>
-                <width>110</width>
-                <height>148</height>
-            </rect>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>lights list</string>
-        </property>
-    </widget>
-    <widget class="QButtonGroup">
-        <property name="name">
-            <cstring>light_type</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>179</y>
-                <width>110</width>
-                <height>100</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Type</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <property name="exclusive">
-            <bool>true</bool>
-        </property>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>ambient</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>20</y>
-                    <width>96</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Ambient</string>
-            </property>
-            <property name="buttonGroupId">
-                <number>0</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>Ambient light doesnt have a specific position source</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>directional</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>72</y>
-                    <width>96</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Directional</string>
-            </property>
-            <property name="buttonGroupId">
-                <number>2</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>light from an infinite distance (position needed for angle of rays)</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>point</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>46</y>
-                    <width>96</width>
-                    <height>17</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Point</string>
-            </property>
-            <property name="buttonGroupId">
-                <number>1</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>light from a specific position</string>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>GroupBox4_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>149</x>
-                <y>56</y>
-                <width>295</width>
-                <height>45</height>
-            </rect>
-        </property>
-        <property name="frameShape">
-            <enum>NoFrame</enum>
-        </property>
-        <property name="title">
-            <string>Direction</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>direction_x</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>8</x>
-                    <y>15</y>
-                    <width>90</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>direction x</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>direction_y</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>104</x>
-                    <y>15</y>
-                    <width>90</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>direction y</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>direction_z</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>200</x>
-                    <y>15</y>
-                    <width>90</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>direction z</string>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
-            <cstring>GroupBox4</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>149</x>
-                <y>5</y>
-                <width>292</width>
-                <height>45</height>
-            </rect>
-        </property>
-        <property name="frameShape">
-            <enum>NoFrame</enum>
-        </property>
-        <property name="title">
-            <string>Position</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>position_x</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>8</x>
-                    <y>15</y>
-                    <width>90</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>position x</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>position_y</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>104</x>
-                    <y>15</y>
-                    <width>90</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>position y</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>position_z</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>199</x>
-                    <y>15</y>
-                    <width>90</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>position z</string>
-            </property>
-        </widget>
-    </widget>
     <widget class="QButtonGroup">
         <property name="name">
             <cstring>relative_to_camera</cstring>
@@ -307,34 +63,12 @@
         </property>
         <widget class="QRadioButton">
             <property name="name">
-                <cstring>relative</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>19</y>
-                    <width>140</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>relative to camera</string>
-            </property>
-            <property name="buttonGroupId">
-                <number>1</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>keep lightsource relative to camera</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
                 <cstring>not_relative</cstring>
             </property>
             <property name="geometry">
                 <rect>
                     <x>195</x>
-                    <y>19</y>
+                    <y>22</y>
                     <width>83</width>
                     <height>16</height>
                 </rect>
@@ -349,62 +83,28 @@
                 <string>keep lightsource static</string>
             </property>
         </widget>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>remove_lights_button</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>297</x>
-                <y>251</y>
-                <width>160</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Remove</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>remove a light</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>add_lights_button</cstring>
-        </property>
-        <property name="enabled">
-            <bool>true</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>132</x>
-                <y>251</y>
-                <width>159</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Add Light</string>
-        </property>
-        <property name="toolTip" stdset="0">
-            <string>create a new light</string>
-        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>relative</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>22</y>
+                    <width>180</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>relative to camera</string>
+            </property>
+            <property name="buttonGroupId">
+                <number>1</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>keep lightsource relative to camera</string>
+            </property>
+        </widget>
     </widget>
     <widget class="QLabel">
         <property name="name">
@@ -434,45 +134,6 @@
         </property>
         <property name="alignment">
             <set>AlignVCenter|AlignRight</set>
-        </property>
-    </widget>
-    <widget class="QSlider">
-        <property name="name">
-            <cstring>intensity</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>261</x>
-                <y>171</y>
-                <width>100</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>0</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>100</width>
-                <height>0</height>
-            </size>
-        </property>
-        <property name="maxValue">
-            <number>100</number>
-        </property>
-        <property name="orientation">
-            <enum>Horizontal</enum>
-        </property>
-        <property name="tickmarks">
-            <enum>Above</enum>
-        </property>
-        <property name="tickInterval">
-            <number>50</number>
         </property>
     </widget>
     <widget class="QLabel">
@@ -597,6 +258,345 @@
         <property name="toolTip" stdset="0">
             <string>open a color dialog</string>
         </property>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>GroupBox4_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>149</x>
+                <y>56</y>
+                <width>295</width>
+                <height>45</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="title">
+            <string>Direction</string>
+        </property>
+        <property name="alignment">
+            <set>AlignHCenter</set>
+        </property>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>direction_z</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>200</x>
+                    <y>17</y>
+                    <width>90</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>direction z</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>direction_x</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>17</y>
+                    <width>90</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>direction x</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>direction_y</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>104</x>
+                    <y>17</y>
+                    <width>90</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>direction y</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QSlider">
+        <property name="name">
+            <cstring>intensity</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>261</x>
+                <y>171</y>
+                <width>100</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>100</width>
+                <height>0</height>
+            </size>
+        </property>
+        <property name="maxValue">
+            <number>100</number>
+        </property>
+        <property name="orientation">
+            <enum>Horizontal</enum>
+        </property>
+        <property name="tickmarks">
+            <enum>Above</enum>
+        </property>
+        <property name="tickInterval">
+            <number>50</number>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>remove_lights_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>315</x>
+                <y>249</y>
+                <width>160</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Remove</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>remove a light</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>add_lights_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>true</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>150</x>
+                <y>249</y>
+                <width>159</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Add Light</string>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>create a new light</string>
+        </property>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>light_type</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>179</y>
+                <width>131</width>
+                <height>100</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Type</string>
+        </property>
+        <property name="alignment">
+            <set>AlignHCenter</set>
+        </property>
+        <property name="exclusive">
+            <bool>true</bool>
+        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>directional</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>72</y>
+                    <width>117</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Directional</string>
+            </property>
+            <property name="buttonGroupId">
+                <number>2</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>light from an infinite distance (position needed for angle of rays)</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>point</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>46</y>
+                    <width>96</width>
+                    <height>17</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Point</string>
+            </property>
+            <property name="buttonGroupId">
+                <number>1</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>light from a specific position</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>ambient</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>20</y>
+                    <width>112</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Ambient</string>
+            </property>
+            <property name="buttonGroupId">
+                <number>0</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Ambient light doesnt have a specific position source</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QListBox">
+        <property name="name">
+            <cstring>lights_list</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>20</y>
+                <width>130</width>
+                <height>148</height>
+            </rect>
+        </property>
+        <property name="toolTip" stdset="0">
+            <string>lights list</string>
+        </property>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>GroupBox4</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>149</x>
+                <y>5</y>
+                <width>292</width>
+                <height>45</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
+        <property name="title">
+            <string>Position</string>
+        </property>
+        <property name="alignment">
+            <set>AlignHCenter</set>
+        </property>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>position_y</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>104</x>
+                    <y>17</y>
+                    <width>90</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>position y</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>position_z</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>199</x>
+                    <y>17</y>
+                    <width>90</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>position z</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>position_x</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>17</y>
+                    <width>90</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>position x</string>
+            </property>
+        </widget>
     </widget>
 </widget>
 <connections>

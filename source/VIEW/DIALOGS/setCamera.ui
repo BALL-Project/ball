@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>SetCameraData</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,43 +8,36 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>322</width>
+            <width>350</width>
             <height>112</height>
         </rect>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>350</width>
+            <height>0</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>350</width>
+            <height>32767</height>
+        </size>
     </property>
     <property name="caption">
         <string>Set Camera</string>
     </property>
-    <widget class="QLabel">
+    <widget class="QLineEdit">
         <property name="name">
-            <cstring>TextLabel1_2</cstring>
+            <cstring>view_y</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>8</x>
-                <y>40</y>
-                <width>72</width>
-                <height>20</height>
+                <x>193</x>
+                <y>7</y>
+                <width>68</width>
+                <height>23</height>
             </rect>
-        </property>
-        <property name="text">
-            <string>Look at</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>7</x>
-                <y>10</y>
-                <width>80</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>View point</string>
         </property>
     </widget>
     <widget class="QLineEdit">
@@ -53,20 +46,7 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>89</x>
-                <y>9</y>
-                <width>68</width>
-                <height>23</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>view_y</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>169</x>
+                <x>113</x>
                 <y>8</y>
                 <width>68</width>
                 <height>23</height>
@@ -79,34 +59,8 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>248</x>
-                <y>8</y>
-                <width>68</width>
-                <height>23</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>look_x</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>89</x>
-                <y>38</y>
-                <width>68</width>
-                <height>23</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>look_y</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>169</x>
-                <y>37</y>
+                <x>272</x>
+                <y>7</y>
                 <width>68</width>
                 <height>23</height>
             </rect>
@@ -118,63 +72,135 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>248</x>
+                <x>272</x>
+                <y>36</y>
+                <width>68</width>
+                <height>23</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>look_x</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>113</x>
                 <y>37</y>
                 <width>68</width>
                 <height>23</height>
             </rect>
         </property>
     </widget>
-    <widget class="QPushButton">
+    <widget class="QLineEdit">
         <property name="name">
-            <cstring>ok_button</cstring>
+            <cstring>look_y</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>41</x>
-                <y>74</y>
-                <width>115</width>
-                <height>29</height>
+                <x>193</x>
+                <y>36</y>
+                <width>68</width>
+                <height>23</height>
             </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>0</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-        <property name="text">
-            <string>OK</string>
-        </property>
-        <property name="default">
-            <bool>true</bool>
         </property>
     </widget>
-    <widget class="QPushButton">
+    <widget class="QLabel">
         <property name="name">
-            <cstring>cancel_button</cstring>
+            <cstring>TextLabel1</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>162</x>
-                <y>74</y>
-                <width>115</width>
-                <height>29</height>
+                <x>6</x>
+                <y>10</y>
+                <width>101</width>
+                <height>21</height>
             </rect>
         </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>7</hsizetype>
-                <vsizetype>0</vsizetype>
-                <horstretch>0</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
+        <property name="text">
+            <string>View point</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>8</x>
+                <y>40</y>
+                <width>96</width>
+                <height>21</height>
+            </rect>
         </property>
         <property name="text">
-            <string>Cancel</string>
+            <string>Look at</string>
         </property>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>layout107</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>74</y>
+                <width>331</width>
+                <height>35</height>
+            </rect>
+        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>ok_button</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>7</hsizetype>
+                        <vsizetype>0</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>32767</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>OK</string>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>cancel_button</cstring>
+                </property>
+                <property name="sizePolicy">
+                    <sizepolicy>
+                        <hsizetype>7</hsizetype>
+                        <vsizetype>0</vsizetype>
+                        <horstretch>0</horstretch>
+                        <verstretch>0</verstretch>
+                    </sizepolicy>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>32767</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>Cancel</string>
+                </property>
+            </widget>
+        </hbox>
     </widget>
 </widget>
 <connections>
@@ -201,12 +227,12 @@
     <tabstop>ok_button</tabstop>
     <tabstop>cancel_button</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
+</includes>
 <slots>
     <slot>okPressed()</slot>
 </slots>
-<includes>
-	<include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
-</includes>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

@@ -64,295 +64,6 @@
     </widget>
     <widget class="QGroupBox">
         <property name="name">
-            <cstring>sliderBox</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>3</x>
-                <y>1</y>
-                <width>384</width>
-                <height>115</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Navigation</string>
-        </property>
-        <property name="alignment">
-            <set>AlignHCenter</set>
-        </property>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>hundredForwardButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>288</x>
-                    <y>78</y>
-                    <width>40</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&gt;&gt;&gt;</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>lastSnapshotButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>338</x>
-                    <y>78</y>
-                    <width>30</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&gt;|</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>tenForwardButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>238</x>
-                    <y>78</y>
-                    <width>40</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&gt;&gt;</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>currentSnapshot</cstring>
-            </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>266</x>
-                    <y>20</y>
-                    <width>90</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>90</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="paletteBackgroundColor">
-                <color>
-                    <red>239</red>
-                    <green>239</green>
-                    <blue>239</blue>
-                </color>
-            </property>
-            <property name="readOnly">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>oneForwardButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>198</x>
-                    <y>78</y>
-                    <width>30</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&gt;</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>numberOfSnapshots</cstring>
-            </property>
-            <property name="enabled">
-                <bool>true</bool>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>100</x>
-                    <y>20</y>
-                    <width>90</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>90</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="paletteBackgroundColor">
-                <color>
-                    <red>239</red>
-                    <green>239</green>
-                    <blue>239</blue>
-                </color>
-            </property>
-            <property name="readOnly">
-                <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>oneBackwardButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>148</x>
-                    <y>78</y>
-                    <width>30</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&lt;</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>firstSnapshotButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>8</x>
-                    <y>78</y>
-                    <width>30</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>|&lt;</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>hundredBackwardButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>48</x>
-                    <y>78</y>
-                    <width>40</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&lt;&lt;&lt;</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>tenBackwardButton</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>98</x>
-                    <y>78</y>
-                    <width>40</width>
-                    <height>26</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>&lt;&lt;</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel2_2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>210</x>
-                    <y>19</y>
-                    <width>50</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>50</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>Current</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>6</x>
-                    <y>19</y>
-                    <width>90</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>70</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>Snapshots</string>
-            </property>
-        </widget>
-        <widget class="QSlider">
-            <property name="name">
-                <cstring>snapShotSlider</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>8</x>
-                    <y>48</y>
-                    <width>360</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>360</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="cursor">
-                <cursor>0</cursor>
-            </property>
-            <property name="pageStep">
-                <number>5</number>
-            </property>
-            <property name="orientation">
-                <enum>Horizontal</enum>
-            </property>
-            <property name="tickmarks">
-                <enum>Both</enum>
-            </property>
-            <property name="tickInterval">
-                <number>20</number>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QGroupBox">
-        <property name="name">
             <cstring>groupBox2</cstring>
         </property>
         <property name="geometry">
@@ -369,13 +80,202 @@
         <property name="alignment">
             <set>AlignHCenter</set>
         </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel2_3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>19</x>
+                    <y>25</y>
+                    <width>50</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>50</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>Start</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel2_4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>19</x>
+                    <y>65</y>
+                    <width>50</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>50</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>End</string>
+            </property>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox10</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>220</x>
+                    <y>23</y>
+                    <width>130</width>
+                    <height>91</height>
+                </rect>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="title">
+                <string></string>
+            </property>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>rockLoopButton</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>true</bool>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>5</x>
+                        <y>51</y>
+                        <width>84</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Rock</string>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>noLoopButton</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>5</x>
+                        <y>-3</y>
+                        <width>111</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Don't loop</string>
+                </property>
+                <property name="checked">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QRadioButton">
+                <property name="name">
+                    <cstring>forwardLoopButton</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>true</bool>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>5</x>
+                        <y>24</y>
+                        <width>84</width>
+                        <height>21</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>Loop</string>
+                </property>
+                <property name="checked">
+                    <bool>false</bool>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>startSnapshot</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>75</x>
+                    <y>25</y>
+                    <width>110</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>100</width>
+                    <height>0</height>
+                </size>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>endSnapshot</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>75</x>
+                    <y>65</y>
+                    <width>110</width>
+                    <height>23</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>100</width>
+                    <height>0</height>
+                </size>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>export_POV</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>227</x>
+                    <y>121</y>
+                    <width>147</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>110</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>export POVRay</string>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Export one PNG image for each Snapshot.</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Export one PNG image for each Snapshot.</string>
+            </property>
+        </widget>
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>groupBox4</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>11</x>
+                    <x>4</x>
                     <y>117</y>
                     <width>210</width>
                     <height>54</height>
@@ -709,9 +609,9 @@
             </property>
             <property name="geometry">
                 <rect>
-                    <x>244</x>
+                    <x>227</x>
                     <y>147</y>
-                    <width>130</width>
+                    <width>146</width>
                     <height>21</height>
                 </rect>
             </property>
@@ -731,65 +631,216 @@
                 <string>Export one PNG image for each Snapshot.</string>
             </property>
         </widget>
-        <widget class="QCheckBox">
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>sliderBox</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>3</x>
+                <y>1</y>
+                <width>384</width>
+                <height>115</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Navigation</string>
+        </property>
+        <property name="alignment">
+            <set>AlignHCenter</set>
+        </property>
+        <widget class="QPushButton">
             <property name="name">
-                <cstring>export_POV</cstring>
+                <cstring>hundredForwardButton</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>244</x>
-                    <y>121</y>
-                    <width>130</width>
-                    <height>21</height>
+                    <x>288</x>
+                    <y>78</y>
+                    <width>40</width>
+                    <height>26</height>
                 </rect>
             </property>
-            <property name="minimumSize">
-                <size>
-                    <width>110</width>
-                    <height>0</height>
-                </size>
+            <property name="text">
+                <string>&gt;&gt;&gt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>lastSnapshotButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>338</x>
+                    <y>78</y>
+                    <width>30</width>
+                    <height>26</height>
+                </rect>
             </property>
             <property name="text">
-                <string>export POVRay</string>
+                <string>&gt;|</string>
             </property>
-            <property name="toolTip" stdset="0">
-                <string>Export one PNG image for each Snapshot.</string>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>tenForwardButton</cstring>
             </property>
-            <property name="whatsThis" stdset="0">
-                <string>Export one PNG image for each Snapshot.</string>
+            <property name="geometry">
+                <rect>
+                    <x>238</x>
+                    <y>78</y>
+                    <width>40</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&gt;&gt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>oneForwardButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>198</x>
+                    <y>78</y>
+                    <width>30</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&gt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>oneBackwardButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>148</x>
+                    <y>78</y>
+                    <width>30</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>firstSnapshotButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>78</y>
+                    <width>30</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>|&lt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>hundredBackwardButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>48</x>
+                    <y>78</y>
+                    <width>40</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;&lt;&lt;</string>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>tenBackwardButton</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>98</x>
+                    <y>78</y>
+                    <width>40</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;&lt;</string>
             </property>
         </widget>
         <widget class="QLabel">
             <property name="name">
-                <cstring>TextLabel2_3</cstring>
+                <cstring>TextLabel2</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>19</x>
-                    <y>25</y>
-                    <width>50</width>
+                    <x>6</x>
+                    <y>19</y>
+                    <width>90</width>
                     <height>23</height>
                 </rect>
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>50</width>
+                    <width>70</width>
                     <height>0</height>
                 </size>
             </property>
             <property name="text">
-                <string>Start</string>
+                <string>Snapshots</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>numberOfSnapshots</cstring>
+            </property>
+            <property name="enabled">
+                <bool>true</bool>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>100</x>
+                    <y>21</y>
+                    <width>90</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>90</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>239</red>
+                    <green>239</green>
+                    <blue>239</blue>
+                </color>
+            </property>
+            <property name="readOnly">
+                <bool>true</bool>
             </property>
         </widget>
         <widget class="QLabel">
             <property name="name">
-                <cstring>TextLabel2_4</cstring>
+                <cstring>TextLabel2_2</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>19</x>
-                    <y>65</y>
-                    <width>50</width>
+                    <x>210</x>
+                    <y>19</y>
+                    <width>72</width>
                     <height>23</height>
                 </rect>
             </property>
@@ -800,124 +851,73 @@
                 </size>
             </property>
             <property name="text">
-                <string>End</string>
-            </property>
-        </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>groupBox10</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>220</x>
-                    <y>23</y>
-                    <width>130</width>
-                    <height>91</height>
-                </rect>
-            </property>
-            <property name="frameShape">
-                <enum>NoFrame</enum>
-            </property>
-            <property name="title">
-                <string></string>
-            </property>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>noLoopButton</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>22</x>
-                        <y>-1</y>
-                        <width>111</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Don't loop</string>
-                </property>
-                <property name="checked">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>forwardLoopButton</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>true</bool>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>22</x>
-                        <y>26</y>
-                        <width>84</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Loop</string>
-                </property>
-                <property name="checked">
-                    <bool>false</bool>
-                </property>
-            </widget>
-            <widget class="QRadioButton">
-                <property name="name">
-                    <cstring>rockLoopButton</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>true</bool>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>22</x>
-                        <y>53</y>
-                        <width>84</width>
-                        <height>21</height>
-                    </rect>
-                </property>
-                <property name="text">
-                    <string>Rock</string>
-                </property>
-            </widget>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>startSnapshot</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>75</x>
-                    <y>25</y>
-                    <width>110</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>100</width>
-                    <height>0</height>
-                </size>
+                <string>Current</string>
             </property>
         </widget>
         <widget class="QLineEdit">
             <property name="name">
-                <cstring>endSnapshot</cstring>
+                <cstring>currentSnapshot</cstring>
+            </property>
+            <property name="enabled">
+                <bool>true</bool>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>75</x>
-                    <y>65</y>
-                    <width>110</width>
-                    <height>23</height>
+                    <x>285</x>
+                    <y>20</y>
+                    <width>90</width>
+                    <height>20</height>
                 </rect>
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>100</width>
+                    <width>90</width>
                     <height>0</height>
                 </size>
+            </property>
+            <property name="paletteBackgroundColor">
+                <color>
+                    <red>239</red>
+                    <green>239</green>
+                    <blue>239</blue>
+                </color>
+            </property>
+            <property name="readOnly">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QSlider">
+            <property name="name">
+                <cstring>snapShotSlider</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>48</y>
+                    <width>365</width>
+                    <height>26</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>360</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="cursor">
+                <cursor>0</cursor>
+            </property>
+            <property name="pageStep">
+                <number>5</number>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="tickmarks">
+                <enum>Both</enum>
+            </property>
+            <property name="tickInterval">
+                <number>20</number>
             </property>
         </widget>
     </widget>

@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>555</width>
-            <height>416</height>
+            <width>650</width>
+            <height>450</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -22,196 +22,687 @@
     </property>
     <property name="minimumSize">
         <size>
-            <width>555</width>
-            <height>416</height>
+            <width>650</width>
+            <height>450</height>
         </size>
     </property>
     <property name="maximumSize">
         <size>
-            <width>555</width>
-            <height>416</height>
+            <width>570</width>
+            <height>450</height>
         </size>
     </property>
     <property name="caption">
         <string>AMBER Options</string>
     </property>
-    <widget class="QGroupBox">
+    <widget class="QLayoutWidget">
         <property name="name">
-            <cstring>check_options</cstring>
+            <cstring>layout54</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>186</x>
-                <y>38</y>
-                <width>363</width>
-                <height>104</height>
+                <x>3</x>
+                <y>5</y>
+                <width>641</width>
+                <height>32</height>
+            </rect>
+        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>Label_10</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>110</width>
+                        <height>29</height>
+                    </size>
+                </property>
+                <property name="backgroundMode">
+                    <enum>PaletteBackground</enum>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="focusPolicy">
+                    <enum>NoFocus</enum>
+                </property>
+                <property name="lineWidth">
+                    <number>1</number>
+                </property>
+                <property name="text">
+                    <string>Parameter file</string>
+                </property>
+                <property name="textFormat">
+                    <enum>AutoText</enum>
+                </property>
+                <property name="alignment">
+                    <set>AlignVCenter|AlignRight</set>
+                </property>
+            </widget>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>parameter_file_edit</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>150</width>
+                        <height>23</height>
+                    </size>
+                </property>
+                <property name="backgroundMode">
+                    <enum>PaletteBase</enum>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="focusPolicy">
+                    <enum>StrongFocus</enum>
+                </property>
+                <property name="text">
+                    <string>Amber/amber96.ini</string>
+                </property>
+                <property name="maxLength">
+                    <number>32767</number>
+                </property>
+                <property name="frame">
+                    <bool>true</bool>
+                </property>
+                <property name="echoMode">
+                    <enum>Normal</enum>
+                </property>
+                <property name="alignment">
+                    <set>AlignRight</set>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>browse_button</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="backgroundMode">
+                    <enum>PaletteButton</enum>
+                </property>
+                <property name="font">
+                    <font>
+                    </font>
+                </property>
+                <property name="focusPolicy">
+                    <enum>TabFocus</enum>
+                </property>
+                <property name="text">
+                    <string>Browse</string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+            </widget>
+        </hbox>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>layout59</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>7</x>
+                <y>412</y>
+                <width>630</width>
+                <height>35</height>
+            </rect>
+        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>close_button</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>&amp;Close</string>
+                </property>
+                <property name="accel">
+                    <string>Alt+C</string>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>cancel_button</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>Cancel</string>
+                </property>
+                <property name="accel">
+                    <string></string>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>reset_button</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="text">
+                    <string>Reset</string>
+                </property>
+                <property name="accel">
+                    <string></string>
+                </property>
+            </widget>
+        </hbox>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>AmberFF_Options</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>1</x>
+                <y>151</y>
+                <width>638</width>
+                <height>258</height>
             </rect>
         </property>
         <property name="minimumSize">
             <size>
-                <width>330</width>
+                <width>520</width>
                 <height>0</height>
             </size>
         </property>
-        <property name="font">
-            <font>
-                <bold>1</bold>
-            </font>
-        </property>
         <property name="title">
-            <string>Charge and type assignment</string>
+            <string>Amber Options</string>
         </property>
         <property name="alignment">
             <set>AlignHCenter</set>
         </property>
-        <widget class="QCheckBox">
+        <widget class="QLabel">
             <property name="name">
-                <cstring>assign_charges_checkBox</cstring>
+                <cstring>nonbonded_cutoff_label</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>12</x>
-                    <y>49</y>
-                    <width>165</width>
-                    <height>21</height>
+                    <x>10</x>
+                    <y>28</y>
+                    <width>322</width>
+                    <height>28</height>
                 </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>140</width>
+                    <width>260</width>
                     <height>0</height>
                 </size>
             </property>
             <property name="font">
                 <font>
-                    <bold>0</bold>
                 </font>
             </property>
             <property name="text">
-                <string>Assign Charges</string>
+                <string>NONBONDED_CUTOFF</string>
             </property>
-            <property name="checked">
-                <bool>true</bool>
+            <property name="buddy" stdset="0">
+                <cstring>nonbonded_cutoff_line_edit</cstring>
             </property>
         </widget>
-        <widget class="QCheckBox">
+        <widget class="QLineEdit">
             <property name="name">
-                <cstring>assign_typenames_checkBox</cstring>
+                <cstring>nonbonded_cutoff_line_edit</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>12</x>
-                    <y>22</y>
-                    <width>165</width>
-                    <height>21</height>
+                    <x>338</x>
+                    <y>28</y>
+                    <width>150</width>
+                    <height>28</height>
                 </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>165</width>
+                    <width>150</width>
                     <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>150</width>
+                    <height>32767</height>
                 </size>
             </property>
             <property name="font">
                 <font>
-                    <bold>0</bold>
                 </font>
             </property>
             <property name="text">
-                <string>Assign Typenames</string>
+                <string>20.0</string>
             </property>
-            <property name="checked">
+            <property name="maxLength">
+                <number>32767</number>
+            </property>
+            <property name="frame">
                 <bool>true</bool>
+            </property>
+            <property name="echoMode">
+                <enum>Normal</enum>
+            </property>
+            <property name="alignment">
+                <set>AlignRight</set>
             </property>
         </widget>
-        <widget class="QCheckBox">
+        <widget class="QLabel">
             <property name="name">
-                <cstring>assign_types_checkBox</cstring>
+                <cstring>vdw_cutoff_label</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>12</x>
-                    <y>76</y>
-                    <width>165</width>
-                    <height>21</height>
+                    <x>10</x>
+                    <y>60</y>
+                    <width>322</width>
+                    <height>28</height>
                 </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>140</width>
+                    <width>260</width>
                     <height>0</height>
                 </size>
             </property>
             <property name="font">
                 <font>
-                    <bold>0</bold>
                 </font>
             </property>
             <property name="text">
-                <string>Assign Types</string>
+                <string>VDW_CUTOFF</string>
             </property>
-            <property name="checked">
-                <bool>true</bool>
+            <property name="buddy" stdset="0">
+                <cstring>vdw_cutoff_line_edit</cstring>
             </property>
         </widget>
-        <widget class="QCheckBox">
+        <widget class="QLineEdit">
             <property name="name">
-                <cstring>overwrite_charges_checkBox</cstring>
+                <cstring>vdw_cutoff_line_edit</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>180</x>
-                    <y>50</y>
-                    <width>155</width>
-                    <height>21</height>
+                    <x>338</x>
+                    <y>60</y>
+                    <width>150</width>
+                    <height>28</height>
                 </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>0</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>155</width>
+                    <width>150</width>
                     <height>0</height>
+                </size>
+            </property>
+            <property name="maximumSize">
+                <size>
+                    <width>150</width>
+                    <height>32767</height>
                 </size>
             </property>
             <property name="font">
                 <font>
-                    <bold>0</bold>
                 </font>
             </property>
             <property name="text">
-                <string>Overwrite Charges</string>
+                <string>15.0</string>
             </property>
-            <property name="checked">
+            <property name="frame">
                 <bool>true</bool>
+            </property>
+            <property name="echoMode">
+                <enum>Normal</enum>
+            </property>
+            <property name="alignment">
+                <set>AlignRight</set>
             </property>
         </widget>
-        <widget class="QCheckBox">
+        <widget class="QLabel">
             <property name="name">
-                <cstring>overwrite_typenames_checkBox</cstring>
+                <cstring>vdw_cuton_label</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>180</x>
-                    <y>20</y>
-                    <width>176</width>
-                    <height>21</height>
+                    <x>10</x>
+                    <y>92</y>
+                    <width>322</width>
+                    <height>28</height>
                 </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>155</width>
+                    <width>260</width>
                     <height>0</height>
                 </size>
             </property>
             <property name="font">
                 <font>
-                    <bold>0</bold>
                 </font>
             </property>
             <property name="text">
-                <string>Overwrite Typenames</string>
+                <string>VDW_CUTON</string>
             </property>
-            <property name="checked">
-                <bool>true</bool>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>vdw_cuton_line_edit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>338</x>
+                    <y>92</y>
+                    <width>150</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                </font>
+            </property>
+            <property name="text">
+                <string>13.0</string>
+            </property>
+            <property name="alignment">
+                <set>AlignRight</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>electrostatic_cutoff_label</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>124</y>
+                    <width>322</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>260</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="font">
+                <font>
+                </font>
+            </property>
+            <property name="text">
+                <string>ELECTROSTATIC_CUTOFF</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>electrostatic_cutoff_line_edit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>338</x>
+                    <y>124</y>
+                    <width>150</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                </font>
+            </property>
+            <property name="text">
+                <string>15.0</string>
+            </property>
+            <property name="alignment">
+                <set>AlignRight</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>electrostatic_cuton_label</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>156</y>
+                    <width>322</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>260</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="font">
+                <font>
+                </font>
+            </property>
+            <property name="text">
+                <string>ELECTROSTATIC_CUTON</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>electrostatic_cuton_line_edit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>338</x>
+                    <y>156</y>
+                    <width>150</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                </font>
+            </property>
+            <property name="text">
+                <string>13.0</string>
+            </property>
+            <property name="alignment">
+                <set>AlignRight</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>scaling_electrostatic_1_4_label</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>188</y>
+                    <width>322</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>260</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="font">
+                <font>
+                </font>
+            </property>
+            <property name="text">
+                <string>SCALING_ELECTROSTATIC_1_4</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>scaling_electrostatic_1_4_line_edit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>338</x>
+                    <y>188</y>
+                    <width>150</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                </font>
+            </property>
+            <property name="text">
+                <string>2.0</string>
+            </property>
+            <property name="alignment">
+                <set>AlignRight</set>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>scaling_vdw_1_4</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>220</y>
+                    <width>322</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>5</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>260</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="font">
+                <font>
+                </font>
+            </property>
+            <property name="text">
+                <string>SCALING_VDW_1_4</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>scaling_vdw_1_4_line_edit</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>338</x>
+                    <y>220</y>
+                    <width>150</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                </font>
+            </property>
+            <property name="text">
+                <string>2.0</string>
+            </property>
+            <property name="alignment">
+                <set>AlignRight</set>
             </property>
         </widget>
     </widget>
@@ -222,9 +713,9 @@
         <property name="geometry">
             <rect>
                 <x>1</x>
-                <y>38</y>
-                <width>180</width>
-                <height>103</height>
+                <y>41</y>
+                <width>211</width>
+                <height>105</height>
             </rect>
         </property>
         <property name="minimumSize">
@@ -232,11 +723,6 @@
                 <width>180</width>
                 <height>0</height>
             </size>
-        </property>
-        <property name="font">
-            <font>
-                <bold>1</bold>
-            </font>
         </property>
         <property name="title">
             <string>Dielectric constant</string>
@@ -270,7 +756,6 @@
             </property>
             <property name="font">
                 <font>
-                    <bold>0</bold>
                 </font>
             </property>
             <property name="text">
@@ -300,7 +785,6 @@
             </property>
             <property name="font">
                 <font>
-                    <bold>0</bold>
                 </font>
             </property>
             <property name="text">
@@ -308,638 +792,185 @@
             </property>
         </widget>
     </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>reset_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>360</x>
-                <y>383</y>
-                <width>169</width>
-                <height>32</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Reset</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>close_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>11</x>
-                <y>383</y>
-                <width>169</width>
-                <height>32</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>&amp;Close</string>
-        </property>
-        <property name="accel">
-            <string>Alt+C</string>
-        </property>
-        <property name="default">
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>cancel_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>186</x>
-                <y>383</y>
-                <width>168</width>
-                <height>32</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Cancel</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </widget>
     <widget class="QGroupBox">
         <property name="name">
-            <cstring>AmberFF_Options</cstring>
+            <cstring>check_options</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>1</x>
-                <y>145</y>
-                <width>548</width>
-                <height>230</height>
+                <x>217</x>
+                <y>40</y>
+                <width>424</width>
+                <height>106</height>
             </rect>
         </property>
         <property name="minimumSize">
             <size>
-                <width>520</width>
+                <width>330</width>
                 <height>0</height>
             </size>
         </property>
-        <property name="font">
-            <font>
-                <bold>1</bold>
-            </font>
-        </property>
         <property name="title">
-            <string>Amber Options</string>
+            <string>Charge and type assignment</string>
         </property>
         <property name="alignment">
             <set>AlignHCenter</set>
         </property>
-        <widget class="QLabel">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>vdw_cutoff_label</cstring>
+                <cstring>layout58</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>19</x>
-                    <y>43</y>
-                    <width>260</width>
-                    <height>23</height>
+                    <x>7</x>
+                    <y>20</y>
+                    <width>180</width>
+                    <height>56</height>
+                </rect>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="spacing">
+                    <number>2</number>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>assign_typenames_checkBox</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>165</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Assign Typenames</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>assign_charges_checkBox</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>140</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Assign Charges</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>assign_types_checkBox</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>8</x>
+                    <y>79</y>
+                    <width>165</width>
+                    <height>21</height>
                 </rect>
             </property>
             <property name="minimumSize">
                 <size>
-                    <width>260</width>
+                    <width>140</width>
                     <height>0</height>
                 </size>
             </property>
             <property name="font">
                 <font>
-                    <bold>0</bold>
                 </font>
             </property>
             <property name="text">
-                <string>VDW_CUTOFF</string>
+                <string>Assign Types</string>
             </property>
-            <property name="buddy" stdset="0">
-                <cstring>vdw_cutoff_line_edit</cstring>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>electrostatic_cutoff_label</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>19</x>
-                    <y>103</y>
-                    <width>260</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>260</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>ELECTROSTATIC_CUTOFF</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>electrostatic_cuton_label</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>19</x>
-                    <y>133</y>
-                    <width>260</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>260</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>ELECTROSTATIC_CUTON</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>scaling_electrostatic_1_4_label</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>19</x>
-                    <y>163</y>
-                    <width>260</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>260</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>SCALING_ELECTROSTATIC_1_4</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>scaling_vdw_1_4</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>19</x>
-                    <y>193</y>
-                    <width>260</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>260</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>SCALING_VDW_1_4</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>electrostatic_cutoff_line_edit</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>379</x>
-                    <y>103</y>
-                    <width>130</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>15.0</string>
-            </property>
-            <property name="alignment">
-                <set>AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>scaling_vdw_1_4_line_edit</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>379</x>
-                    <y>193</y>
-                    <width>130</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>2.0</string>
-            </property>
-            <property name="alignment">
-                <set>AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>vdw_cuton_line_edit</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>379</x>
-                    <y>73</y>
-                    <width>130</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>13.0</string>
-            </property>
-            <property name="alignment">
-                <set>AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>vdw_cutoff_line_edit</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>379</x>
-                    <y>43</y>
-                    <width>130</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>50</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>250</width>
-                    <height>32767</height>
-                </size>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>15.0</string>
-            </property>
-            <property name="frame">
+            <property name="checked">
                 <bool>true</bool>
             </property>
-            <property name="echoMode">
-                <enum>Normal</enum>
-            </property>
-            <property name="alignment">
-                <set>AlignRight</set>
-            </property>
         </widget>
-        <widget class="QLineEdit">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>scaling_electrostatic_1_4_line_edit</cstring>
+                <cstring>layout57</cstring>
             </property>
             <property name="geometry">
                 <rect>
-                    <x>379</x>
-                    <y>163</y>
-                    <width>130</width>
-                    <height>23</height>
+                    <x>206</x>
+                    <y>20</y>
+                    <width>211</width>
+                    <height>56</height>
                 </rect>
             </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>2.0</string>
-            </property>
-            <property name="alignment">
-                <set>AlignRight</set>
-            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <property name="spacing">
+                    <number>2</number>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>overwrite_typenames_checkBox</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>155</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Overwrite Typenames</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>overwrite_charges_checkBox</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>155</width>
+                            <height>0</height>
+                        </size>
+                    </property>
+                    <property name="font">
+                        <font>
+                        </font>
+                    </property>
+                    <property name="text">
+                        <string>Overwrite Charges</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                </widget>
+            </vbox>
         </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>electrostatic_cuton_line_edit</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>379</x>
-                    <y>133</y>
-                    <width>130</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>13.0</string>
-            </property>
-            <property name="alignment">
-                <set>AlignRight</set>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>vdw_cuton_label</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>19</x>
-                    <y>73</y>
-                    <width>260</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>260</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>VDW_CUTON</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>nonbonded_cutoff_label</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>19</x>
-                    <y>13</y>
-                    <width>260</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>260</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>NONBONDED_CUTOFF</string>
-            </property>
-            <property name="buddy" stdset="0">
-                <cstring>nonbonded_cutoff_line_edit</cstring>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>nonbonded_cutoff_line_edit</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>379</x>
-                    <y>13</y>
-                    <width>130</width>
-                    <height>23</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>50</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="maximumSize">
-                <size>
-                    <width>250</width>
-                    <height>32767</height>
-                </size>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="focusPolicy">
-                <enum>StrongFocus</enum>
-            </property>
-            <property name="text">
-                <string>20.0</string>
-            </property>
-            <property name="maxLength">
-                <number>32767</number>
-            </property>
-            <property name="frame">
-                <bool>true</bool>
-            </property>
-            <property name="echoMode">
-                <enum>Normal</enum>
-            </property>
-            <property name="alignment">
-                <set>AlignRight</set>
-            </property>
-        </widget>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>Label_10</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>3</x>
-                <y>5</y>
-                <width>110</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>110</width>
-                <height>29</height>
-            </size>
-        </property>
-        <property name="backgroundMode">
-            <enum>PaletteBackground</enum>
-        </property>
-        <property name="font">
-            <font>
-            </font>
-        </property>
-        <property name="focusPolicy">
-            <enum>NoFocus</enum>
-        </property>
-        <property name="lineWidth">
-            <number>1</number>
-        </property>
-        <property name="text">
-            <string>Parameter file</string>
-        </property>
-        <property name="textFormat">
-            <enum>AutoText</enum>
-        </property>
-        <property name="alignment">
-            <set>AlignVCenter|AlignRight</set>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>parameter_file_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>119</x>
-                <y>8</y>
-                <width>341</width>
-                <height>23</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>150</width>
-                <height>23</height>
-            </size>
-        </property>
-        <property name="backgroundMode">
-            <enum>PaletteBase</enum>
-        </property>
-        <property name="font">
-            <font>
-            </font>
-        </property>
-        <property name="focusPolicy">
-            <enum>StrongFocus</enum>
-        </property>
-        <property name="text">
-            <string>Amber/amber96.ini</string>
-        </property>
-        <property name="maxLength">
-            <number>32767</number>
-        </property>
-        <property name="frame">
-            <bool>true</bool>
-        </property>
-        <property name="echoMode">
-            <enum>Normal</enum>
-        </property>
-        <property name="alignment">
-            <set>AlignRight</set>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>browse_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>466</x>
-                <y>5</y>
-                <width>82</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>30</height>
-            </size>
-        </property>
-        <property name="backgroundMode">
-            <enum>PaletteButton</enum>
-        </property>
-        <property name="font">
-            <font>
-            </font>
-        </property>
-        <property name="focusPolicy">
-            <enum>TabFocus</enum>
-        </property>
-        <property name="text">
-            <string>Browse</string>
-        </property>
-        <property name="autoDefault">
-            <bool>true</bool>
-        </property>
     </widget>
 </widget>
 <connections>
