@@ -1,4 +1,4 @@
-// $Id: randomCoilShiftProcessor.h,v 1.1 2000/09/19 13:34:59 oliver Exp $
+// $Id: randomCoilShiftProcessor.h,v 1.2 2000/09/21 13:49:31 oliver Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #	include<BALL/NMR/shiftModule.h>
@@ -26,47 +26,65 @@ namespace BALL
 {
 		
 
-	/**	adding random coil shifts to Hydrogens
+	/**	Random coil shift assignment processor
 	*/
 	class RandomCoilShiftProcessor
 		:	public ShiftModule
 	{
 		public:
 		
+    BALL_CREATE(RandomCoilShiftProcessor)
+
+    /** @name Enums and Constants
+    */
+    //@{
+
+    /** A symbolic name for the random coil contribution to the chemical shift
+        @see ShiftModule::PROPERTY__SHIFT
+    */
+    static const char* PROPERTY__RANDOMCOIL_SHIFT;
+    //@}
+ 
 		/**@name	Constructors and Destructors
 		*/
 		//@{
 
 		/**	Default constructor.
 		*/
-		RandomCoilShiftProcessor() throw();
+		RandomCoilShiftProcessor() 
+			throw();
+		
+		/**	Copy constructor.
+		*/
+		RandomCoilShiftProcessor(const RandomCoilShiftProcessor& processor) 
+			throw();
 		
 		/**	Destructor
 		*/
-		virtual ~RandomCoilShiftProcessor() throw();
+		virtual ~RandomCoilShiftProcessor() 
+			throw();
 		
 		//@}
 
+
+		/**	@name Accessors
+		*/
+		//@{
+
+		/**	Initialize the module.
+				This method fails if not \Ref{Parameters} object was assigned
+				or the parameter file does not contain the proper section ({\tt RandomCoilShifts}).
+				If it terminates correctly, the modules is valid.
+				@see isValid
+		*/
+		virtual void init()
+			throw();
+		//@}
 		
 		/**@name	Processor specific functions.
 		*/
 		//@{
 		
-		/**	Start method.
-			A StringHashMap of floats is built and named {\tt rc\_table\_}
-			A file called "random.dat" is opened ,it contains the randomcoilshift date for
-			every residue´s atoms. The random coil shift is stored in {\tt rc\_table\_}
-			under [residue_name:atom_name].
-
-		*/
-		virtual bool start() throw();
-		
-		/**	Finish method.
-			nothing is done here
-			
-		*/
-		virtual bool finish() throw();
-
 		/**	Application method
 			if current object is a PDBAtom of kind Hydrogen its random coil shift has to be looked up
 			in {\tt rc\_table}.
@@ -75,9 +93,6 @@ namespace BALL
 			chemical shift.
 			If this entry is not found the random coil shift is set to 1000 and added as well to the
 			Hydrogens chemical shift,to mark that Hydrogen not to have a random coil shift table entry.
-	 
-			
-			
 		*/
 		virtual Processor::Result operator () (Composite& composite) throw();
 		//@}
@@ -85,12 +100,9 @@ namespace BALL
 
 		protected:
 
-		StringHashMap<float>		rc_table_;
-		std::list<PDBAtom*>			proton_list_;	
-		String									ini_filename_;
-		Parameters							parameters_;
-		ParameterSection				parameter_section_;
-		std::vector<Expression>	expressions_;
+		/**	The hash map containing the atom names and the random coil shifts.
+		*/
+		StringHashMap<float>		shift_map_;
 	};
 
 } // namespace BALL
