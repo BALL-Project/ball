@@ -1,4 +1,4 @@
-// $Id: MolmecSupport_bench.C,v 1.1.2.2 2002/06/06 00:37:03 oliver Exp $
+// $Id: MolmecSupport_bench.C,v 1.1.2.3 2002/06/06 21:56:05 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 using namespace BALL;
 
 // args: benchmark name (without '"'), reference time in seconds, CVS ID string
-START_BENCHMARK(MolmecSupport, 10.0, "$Id: MolmecSupport_bench.C,v 1.1.2.2 2002/06/06 00:37:03 oliver Exp $")
+START_BENCHMARK(MolmecSupport, 10.0, "$Id: MolmecSupport_bench.C,v 1.1.2.3 2002/06/06 21:56:05 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -28,7 +28,7 @@ ff.setup(S);
 
 ForceField::PairVector pair_vector;
 pair_vector.reserve(2000000);
-START_SECTION(calculateNonBondedAtomPairs(type = HASH_GRID), 1.0)
+START_SECTION(calculateNonBondedAtomPairs(type = HASH_GRID, periodic_boundary = true), 0.4)
 	START_TIMER
 		MolmecSupport::calculateNonBondedAtomPairs
 			(pair_vector, ff.getAtoms(), ff.periodic_boundary.getBox(),
@@ -37,11 +37,29 @@ START_SECTION(calculateNonBondedAtomPairs(type = HASH_GRID), 1.0)
 END_SECTION
 
 pair_vector.clear();
-START_SECTION(calculateNonBondedAtomPairs(type = BRUTE_FORCE), 1.0)
+START_SECTION(calculateNonBondedAtomPairs(type = BRUTE_FORCE, periodic_boundary = true), 0.4)
 	START_TIMER
 		MolmecSupport::calculateNonBondedAtomPairs
 			(pair_vector, ff.getAtoms(), ff.periodic_boundary.getBox(),
 			 10.0, true, MolmecSupport::BRUTE_FORCE);
+	STOP_TIMER
+END_SECTION
+
+pair_vector.clear();
+START_SECTION(calculateNonBondedAtomPairs(type = HASH_GRID, periodic_boundary = false), 0.1)
+	START_TIMER
+		MolmecSupport::calculateNonBondedAtomPairs
+			(pair_vector, ff.getAtoms(), ff.periodic_boundary.getBox(),
+			 10.0, false, MolmecSupport::HASH_GRID);
+	STOP_TIMER
+END_SECTION
+
+pair_vector.clear();
+START_SECTION(calculateNonBondedAtomPairs(type = BRUTE_FORCE, periodic_boundary = false), 0.1)
+	START_TIMER
+		MolmecSupport::calculateNonBondedAtomPairs
+			(pair_vector, ff.getAtoms(), ff.periodic_boundary.getBox(),
+			 10.0, false, MolmecSupport::BRUTE_FORCE);
 	STOP_TIMER
 END_SECTION
 
