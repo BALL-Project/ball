@@ -1,4 +1,4 @@
-// $Id: conjugateGradient.C,v 1.4 1999/12/30 20:30:44 oliver Exp $
+// $Id: conjugateGradient.C,v 1.5 2000/01/04 22:55:42 pmueller Exp $
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
@@ -819,12 +819,6 @@ namespace BALL
        best_step = step_length_;
        best_lambda = 0; 
 
-       bool first_lambda = false; 
-
-       double lambda_first; 
-       double f_first, dir_grad_first;
-
-
        // We have now determined an interval and a first "optimal" lambda where the 
        // function value becomes minimal.
        // Now check if the corresponding function value is alright. If not, determine
@@ -859,16 +853,6 @@ namespace BALL
            tmp_grad_norm_2 += tmp_gradient[i] * tmp_gradient[i]; 
            tmp_dir_grad += tmp_gradient[i] * search_direction_[i];
            }
-
-        if(first_lambda == false)
-          {
-          // this is the first lambda for this interval
-          lambda_first = lambda_test;
-          f_first = f_tmp;
-          dir_grad_first = tmp_dir_grad; 
-
-          first_lambda = true; 
-          }
 
          // multiply by -1 because tmp_gradient is actually the negative gradient 
          tmp_dir_grad *= -1.0 * inv_search_dir_norm_;  
