@@ -65,10 +65,11 @@ EXECUTABLES = \
 	Protein_test\
 	PTE_test\
 	Quaternion_test\
+	RadialDistributionFunction_test\
 	RDFIntegrator_test\
 	RDFParameter_test\
 	RDFSection_test\
-	RadialDistributionFunction_test\
+	RegularData1D_test\
 	RegularExpression_test\
 	Residue_test\
 	ResourceFile_test\
