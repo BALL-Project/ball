@@ -1,4 +1,4 @@
-// $Id: options.h,v 1.4 2000/02/17 00:30:38 oliver Exp $
+// $Id: options.h,v 1.5 2000/07/11 08:31:26 oliver Exp $
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -46,7 +46,7 @@ namespace BALL
 		/**	Maximum length for each entry (key + value): 1024 byte.
 				@memo
 		*/
-		static const int MaxEntryLength = 1024;
+		static const Size MAX_ENTRY_LENGTH = 1024;
 
 		//@}
 
