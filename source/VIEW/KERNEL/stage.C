@@ -388,7 +388,7 @@ Vector3 Stage::calculateRelativeCoordinates(Vector3 pos)
 	du.normalize();
 	du *= d;
 
-	pos -= camera_.getLookAtPosition();
+	pos -= camera_.getViewPoint();
 
 	// calculate the planes
 	const Plane3 plane_rv(dr, dr);
@@ -416,7 +416,7 @@ Vector3 Stage::calculateAbsoluteCoordinates(Vector3 pos)
 	Vector3 dr(camera_.getRightVector());
 	dr.normalize();
 
-	return camera_.getLookAtPosition() + 
+	return camera_.getViewPoint() + 
 		(pos.x * dr + 
 		 pos.y * du + 
 		 pos.z * dv);
