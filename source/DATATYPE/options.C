@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.8 2000/03/17 13:17:00 oliver Exp $ 
+// $Id: options.C,v 1.9 2000/07/11 08:32:24 oliver Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -187,7 +187,7 @@ namespace BALL
 
 	void Options::setInteger(const String& key, const long value)
 	{
-		static char buffer[MaxEntryLength + 1];
+		static char buffer[MAX_ENTRY_LENGTH + 1];
 
 		sprintf(buffer, "%ld", value);
 					
@@ -196,7 +196,7 @@ namespace BALL
 
 	void Options::setReal(const String& key, const double value)
 	{
-		char buffer[MaxEntryLength + 1];
+		char buffer[MAX_ENTRY_LENGTH + 1];
 					
 		sprintf(buffer, "%f", value);
 					
@@ -205,7 +205,7 @@ namespace BALL
 
 	void Options::setVector(const String& key, const Vector3& value)
 	{
-		char buffer[MaxEntryLength + 1];
+		char buffer[MAX_ENTRY_LENGTH + 1];
 
 		sprintf(buffer, "(%f %f %f)", value.x, value.y, value.z);
 
@@ -299,9 +299,9 @@ namespace BALL
 		if (!infile)
 			return false;
 
-		char		buffer[MaxEntryLength + 1];
+		char		buffer[MAX_ENTRY_LENGTH + 1];
 		String	s, key;
-		while (infile.getline(buffer, MaxEntryLength))
+		while (infile.getline(buffer, MAX_ENTRY_LENGTH))
 		{
 			if ((buffer[0] != '#') && (buffer[0] != '!') && (buffer[0] != ';')) 
 			{
