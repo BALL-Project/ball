@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideDialog.C,v 1.5 2003/11/12 09:36:43 bender Exp $
+// $Id: peptideDialog.C,v 1.6 2004/05/10 09:38:50 amoll Exp $
 //
 #include <iostream>
 
@@ -21,7 +21,8 @@ namespace BALL
 		PeptideDialog::PeptideDialog( QWidget* parent,  const char* name, WFlags fl )
 		 : PeptideDialogData( parent, name, fl ),
 			 Peptides::PeptideBuilder(),
-			 protein_(0)
+			 protein_(0),
+			 fragment_db_(0)
 		{
 			show();
 		}
@@ -50,7 +51,7 @@ namespace BALL
 		void PeptideDialog::close_pressed()
 		{
 			protein_ = 0;
-			if (sequence->text() != "")
+			if (sequence->text() != "" && fragment_db_ != 0)
 			{
 				protein_ = construct();
 			}
@@ -178,6 +179,18 @@ namespace BALL
 			return sequence->text().ascii();
 		}
 
-	} // namespace VIEW
 
+		void PeptideDialog::setFragmentDB(const FragmentDB* db)
+			throw()
+		{
+			fragment_db_ = (FragmentDB*) db;
+		}
+
+		const FragmentDB* PeptideDialog::getFragmentDB() const
+			throw()
+		{
+			return fragment_db_;
+		}
+
+	} // namespace VIEW
 } // namespace BALL
