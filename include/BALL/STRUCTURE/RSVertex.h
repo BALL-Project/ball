@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSVertex.h,v 1.21 2002/02/27 12:19:42 sturm Exp $
+// $Id: RSVertex.h,v 1.22 2002/04/18 18:28:18 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -177,52 +177,52 @@ namespace BALL
 		/** Set the HashSet of RSEdges the RSVertex belongs to.
 				@param	edges	the new RSEdge HashSet
 		*/
-		void setEdges(HashSet<TRSEdge<T>*> edges)
-			throw();
+		//void setEdges(HashSet<TRSEdge<T>*> edges)
+		//	throw();
 
 		/** Insert a new edge into the HashSet of RSEdges the RSVertex belongs to.
 				@param	edge	a pointer to the new RSEdge
 		*/
-		void pushEdge(TRSEdge<T>* edge)
-			throw();
+		//void pushEdge(TRSEdge<T>* edge)
+		//	throw();
 
 		/** Delete a edge from the HashSet of RSEdges the RSVertex belongs to.
 				@param	edge	a pointer to the RSEdge to delete
 		*/
-		void deleteEdge(TRSEdge<T>* edge)
-			throw();
+		//void deleteEdge(TRSEdge<T>* edge)
+		//	throw();
 
 		/** Return the HashSet of RSEdges the RSVertex belongs to.
 				@return	HashSet<TRSEdge<T>*>	the HashSet of RSEdges the RSVertex	
 								belongs to
 		*/
-		HashSet<TRSEdge<T>*> getEdges() const
-			throw();
+		//HashSet<TRSEdge<T>*> getEdges() const
+		//	throw();
 
 		/** Set the HashSet of RSFaces the RSVertex belongs to.
 				@param	faces	the new RSFace HashSet
 		*/
-		void setFaces(HashSet<TRSFace<T>*> faces)
-			throw();
+		//void setFaces(HashSet<TRSFace<T>*> faces)
+		//	throw();
 
 		/** Insert a new face into the HashSet of RSFaces the RSVertex belongs to.
 				@param	face	a pointer to the new RSFace
 		*/
-		void pushFace(TRSFace<T>* face)
-			throw();
+		//void pushFace(TRSFace<T>* face)
+		//	throw();
 
 		/** Delete a face from the HashSet of RSFaces the RSVertex belongs to.
 				@param	edge	a pointer to the RSFace to delete
 		*/
-		void deleteFace(TRSFace<T>* face)
- 			throw();
+		//void deleteFace(TRSFace<T>* face)
+ 		//	throw();
 
 		/** Return the HashSet of RFSaces the RSVertex belongs to.
 				@return	HashSet<TRSFace<T>*>	the HashSet of RSFaces the RSVertex	
 								belongs to
 		*/
-		HashSet<TRSFace<T>*> getFaces() const
-			throw();
+		//HashSet<TRSFace<T>*> getFaces() const
+		//	throw();
 
 		/** Join two vertices if they are similar.
 				All edges and faces of the given RSVertex are inserted.
@@ -266,7 +266,8 @@ namespace BALL
 				@return	bool	{\bf true} if the atoms are equal,	
 											{\bf false} otherwise
 		*/
-		bool similar(const TRSVertex<T>& rsvertex) const
+		virtual bool operator *= (const TRSVertex<T>& rsvertex) const
+		//bool similar(const TRSVertex<T>& rsvertex) const
 			throw();
 
 		/**	Test if the vertex is meber of a given RSFace.
@@ -296,10 +297,10 @@ namespace BALL
 
 		/*_ The RSEdges the RSVetex belongs to
 		*/
-		HashSet<TRSEdge<T>*> edges_;
+		//HashSet<TRSEdge<T>*> edges_;
 		/*_ The RSFaces the RSVetex belongs to
 		*/
-		HashSet<TRSFace<T>*> faces_;
+		//HashSet<TRSFace<T>*> faces_;
 		/*_ The index of the atom represented by the RSVertex
 		*/
 		Index atom_;
@@ -355,8 +356,8 @@ namespace BALL
 	TRSVertex<T>::TRSVertex()
 		throw()
 		:	GraphVertex< TRSEdge<T>,TRSFace<T> >(),
-			edges_(),
-			faces_(),
+			//edges_(),
+			//faces_(),
 			atom_(-1)
 	{
 	}
@@ -366,14 +367,14 @@ namespace BALL
 	TRSVertex<T>::TRSVertex(const TRSVertex<T>& rsvertex, bool deep)
 		throw()
 		:	GraphVertex< TRSEdge<T>,TRSFace<T> >(rsvertex,deep),
-			edges_(),
-			faces_(),
+			//edges_(),
+			//faces_(),
 			atom_(rsvertex.atom_)
 	{
 		if (deep)
 		{
-			edges_ = rsvertex.edges_;
-			faces_ = rsvertex.faces_;
+			//edges_ = rsvertex.edges_;
+			//faces_ = rsvertex.faces_;
 		}
 	}
 
@@ -382,8 +383,8 @@ namespace BALL
 	TRSVertex<T>::TRSVertex(Index a)
 		throw()
 		:	GraphVertex< TRSEdge<T>,TRSFace<T> >(),
-			edges_(),
-			faces_(),
+			//edges_(),
+			//faces_(),
 			atom_(a)
 	{
 	}
@@ -395,12 +396,13 @@ namespace BALL
 			const HashSet<TRSFace<T>*>& faces,
 			Index i)
 		throw()
-		:	GraphVertex< TRSEdge<T>,TRSFace<T> >(),
-			edges_(edges),
-			faces_(faces),
+		//:	GraphVertex< TRSEdge<T>,TRSFace<T> >(),
+		:	GraphVertex< TRSEdge<T>,TRSFace<T> >(edges,faces,index),
+			//edges_(edges),
+			//faces_(faces),
 			atom_(atom)
 	{
-		index_ = i;
+		//index_ = i;
 	}
 
 
@@ -455,7 +457,7 @@ namespace BALL
 	}
 
 
-	template <typename T>
+	/*template <typename T>
 	void TRSVertex<T>::setEdges(HashSet<TRSEdge<T>*> edges)
 		throw()
 	{
@@ -516,28 +518,32 @@ namespace BALL
 		throw()
 	{
 		return faces_;
-	}
+	}*/
 
 
 	template <typename T>
 	bool TRSVertex<T>::join(const TRSVertex<T>& rsvertex)
 		throw()
 	{
-		if (atom_ != rsvertex.atom_)
+		//if (*this *= rsvertex)
+		if (atom_ == rsvertex.atom_)
+		{
+			typename HashSet<TRSEdge<T>*>::ConstIterator e;
+			for (e = rsvertex.edges_.begin(); e != rsvertex.edges_.end(); e++)
+			{
+				edges_.insert(*e);
+			}
+			typename HashSet<TRSFace<T>*>::ConstIterator f;
+			for (f = rsvertex.faces_.begin(); f != rsvertex.faces_.end(); f++)
+			{
+				faces_.insert(*f);
+			}
+			return true;
+		}
+		else
 		{
 			return false;
 		}
-		typename HashSet<TRSEdge<T>*>::ConstIterator e;
-		for (e = rsvertex.edges_.begin(); e != rsvertex.edges_.end(); e++)
-		{
-			edges_.insert(*e);
-		}
-		typename HashSet<TRSFace<T>*>::ConstIterator f;
-		for (f = rsvertex.faces_.begin(); f != rsvertex.faces_.end(); f++)
-		{
-			faces_.insert(*f);
-		}
-		return true;
 	}
 
 
@@ -614,9 +620,11 @@ namespace BALL
 
 
 	template <typename T>
-	bool TRSVertex<T>::similar(const TRSVertex<T>& rsvertex) const
+	bool TRSVertex<T>::operator *= (const TRSVertex<T>& rsvertex) const
+	//bool TRSVertex<T>::similar(const TRSVertex<T>& rsvertex) const
 		throw()
 	{
+cout << "RSVertex";
 		return (atom_ == rsvertex.atom_);
 	}
 
