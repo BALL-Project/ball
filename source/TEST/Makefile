@@ -15,6 +15,7 @@ EXECUTABLES = \
 	Angle_test\
 	Atom_test\
 	AtomicContactEnergy_test\
+	AtomVector_test\
 	BitVector_test\
 	Bond_test\
 	BaseFragment_test\
@@ -26,6 +27,7 @@ EXECUTABLES = \
 	EnergyMinimizer_test\
 	Fragment_test\
 	FragmentDB_test\
+	Gradient_test\
 	HashMap_test\
 	HashSet_test\
 	KernelPredicate_test\
@@ -74,6 +76,9 @@ Angle_test:	Angle_test.o
 Atom_test:	Atom_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
+AtomVector_test:	AtomVector_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
 AtomicContactEnergy_test:	AtomicContactEnergy_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
@@ -111,6 +116,9 @@ Fragment_test:	Fragment_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 FragmentDB_test:	FragmentDB_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+Gradient_test:	Gradient_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 HashMap_test:	HashMap_test.o
