@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.32.2.2 2004/05/14 12:58:41 amoll Exp $
+// $Id: representation.C,v 1.32.2.3 2004/05/22 17:01:51 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -247,7 +247,7 @@ namespace BALL
 #endif
 
 			// no need to update hidden representations
-			if (hasProperty(PROPERTY__HIDDEN)) 
+			if (hasProperty(PROPERTY__HIDDEN) && mc != 0) 
 			{
 				needs_update_ = true;
 				// update of GeometricControl, also if Representation is hidden
@@ -280,8 +280,8 @@ namespace BALL
 			thread_->setRebuild(rebuild);
 			thread_->start();
 
-			//bool mc_was_muteable = mc->compositesAreMuteable();
 			mc->setCompositesMuteable(false);
+			
 			
 			Position pos = 3;
 			String dots;
@@ -299,8 +299,9 @@ namespace BALL
 					pos = 3;
 					dots = "...";
 				}
-				
+			
 				mc->setStatusbarText("Creating " + getModelName() + " Model " + dots);
+				
 				thread_->wait(500); 
 			}
 
@@ -316,7 +317,6 @@ namespace BALL
 
 			mc->insert(*this);
  			mc->setStatusbarText("");
-
 #endif
 		}
 
