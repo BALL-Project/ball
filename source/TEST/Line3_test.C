@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Line3_test.C,v 1.15 2003/06/09 22:40:52 oliver Exp $
+// $Id: Line3_test.C,v 1.16 2003/06/10 14:49:26 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -11,7 +11,7 @@
 #	include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(Line3, "$Id: Line3_test.C,v 1.15 2003/06/09 22:40:52 oliver Exp $")
+START_TEST(Line3, "$Id: Line3_test.C,v 1.16 2003/06/10 14:49:26 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -181,23 +181,48 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 RESULT
 
 CHECK(TLine3(const TLine3& line) throw())
-  // ???
+	Line3 line2(line);
+	TEST_EQUAL(line2, line)
 RESULT
 
 CHECK(TLine3& operator = (const TLine3& line) throw())
-  // ???
+	Line3 line2 = line;
+	TEST_EQUAL(line2, line)
 RESULT
 
 CHECK(void clear() throw())
-  // ???
+	v1 = Vector3(0, 1, 2);
+	v2 = Vector3(3, 4, 5);
+	line = Line3(v1, v2, Line3::FORM__PARAMETER);
+	line.clear();
+	Line3 line2;
+	TEST_EQUAL(line, line2)
 RESULT
 
 CHECK(void get(TVector3<T>& point, TVector3<T>& vector, Form form = FORM__PARAMETER) const throw())
-  // ???
+	v1 = Vector3(0, 1, 2);
+	v2 = Vector3(3, 4, 5);
+	line = Line3(v1, v2, Line3::FORM__PARAMETER);
+	Vector3 a,b;
+	line.get(a, b, Line3::FORM__PARAMETER);
+	TEST_EQUAL(a, v1)
+	TEST_EQUAL(b, v2)
+
+	v1 = Vector3(0, 1, 2);
+	v2 = Vector3(3, 4, 5);
+	line = Line3(v1, v2, Line3::FORM__TWO_POINTS);
+	line.get(a, b, Line3::FORM__TWO_POINTS);
+	TEST_EQUAL(a, v1)
+	TEST_EQUAL(b, v2)
 RESULT
 
 CHECK(void set(const TLine3& line) throw())
-  // ???
+	v1 = Vector3(0, 1, 2);
+	v2 = Vector3(3, 4, 5);
+	line = Line3(v1, v2, Line3::FORM__PARAMETER);
+	Line3 line2;
+	line2.set(line);
+	TEST_EQUAL(line2, line)
 RESULT
 
 
