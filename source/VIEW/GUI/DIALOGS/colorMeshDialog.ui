@@ -16,6 +16,20 @@
         </rect>
     </property>
     <property stdset="1">
+        <name>minimumSize</name>
+        <size>
+            <width>413</width>
+            <height>263</height>
+        </size>
+    </property>
+    <property stdset="1">
+        <name>maximumSize</name>
+        <size>
+            <width>413</width>
+            <height>263</height>
+        </size>
+    </property>
+    <property stdset="1">
         <name>caption</name>
         <string>Form1</string>
     </property>
@@ -155,8 +169,8 @@
                     <rect>
                         <x>10</x>
                         <y>40</y>
-                        <width>390</width>
-                        <height>26</height>
+                        <width>380</width>
+                        <height>28</height>
                     </rect>
                 </property>
             </widget>
@@ -171,202 +185,6 @@
                 <name>title</name>
                 <string>by color</string>
             </attribute>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel5</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>10</x>
-                        <y>100</y>
-                        <width>59</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>alpha:</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel2</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>10</x>
-                        <y>10</y>
-                        <width>30</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>red:</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel3</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>8</x>
-                        <y>42</y>
-                        <width>59</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>green:</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel4</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>10</x>
-                        <y>70</y>
-                        <width>57</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>blue:</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel10</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>160</x>
-                        <y>20</y>
-                        <width>66</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Choose:</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QSpinBox</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>alpha_box</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>60</x>
-                        <y>100</y>
-                        <width>50</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>maxValue</name>
-                    <number>255</number>
-                </property>
-                <property stdset="1">
-                    <name>value</name>
-                    <number>255</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QSpinBox</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>blue_box</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>60</x>
-                        <y>70</y>
-                        <width>50</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>maxValue</name>
-                    <number>255</number>
-                </property>
-                <property stdset="1">
-                    <name>value</name>
-                    <number>0</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QSpinBox</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>green_box</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>60</x>
-                        <y>40</y>
-                        <width>50</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>maxValue</name>
-                    <number>255</number>
-                </property>
-                <property stdset="1">
-                    <name>value</name>
-                    <number>255</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QSpinBox</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>red_box</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>60</x>
-                        <y>10</y>
-                        <width>50</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>maxValue</name>
-                    <number>255</number>
-                </property>
-                <property stdset="1">
-                    <name>value</name>
-                    <number>255</number>
-                </property>
-            </widget>
             <widget>
                 <class>QPushButton</class>
                 <property stdset="1">
@@ -608,6 +426,202 @@
                     <string></string>
                 </property>
             </widget>
+            <widget>
+                <class>QSpinBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>green_box</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>80</x>
+                        <y>40</y>
+                        <width>50</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>maxValue</name>
+                    <number>255</number>
+                </property>
+                <property stdset="1">
+                    <name>value</name>
+                    <number>255</number>
+                </property>
+            </widget>
+            <widget>
+                <class>QSpinBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>red_box</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>80</x>
+                        <y>10</y>
+                        <width>50</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>maxValue</name>
+                    <number>255</number>
+                </property>
+                <property stdset="1">
+                    <name>value</name>
+                    <number>255</number>
+                </property>
+            </widget>
+            <widget>
+                <class>QSpinBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>alpha_box</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>80</x>
+                        <y>100</y>
+                        <width>50</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>maxValue</name>
+                    <number>255</number>
+                </property>
+                <property stdset="1">
+                    <name>value</name>
+                    <number>255</number>
+                </property>
+            </widget>
+            <widget>
+                <class>QSpinBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>blue_box</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>80</x>
+                        <y>70</y>
+                        <width>50</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>maxValue</name>
+                    <number>255</number>
+                </property>
+                <property stdset="1">
+                    <name>value</name>
+                    <number>0</number>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TextLabel4</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>10</x>
+                        <y>70</y>
+                        <width>57</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>blue:</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TextLabel5</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>10</x>
+                        <y>100</y>
+                        <width>59</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>alpha:</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TextLabel2</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>60</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>red:</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TextLabel3</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>8</x>
+                        <y>42</y>
+                        <width>59</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>green:</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TextLabel10</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>160</x>
+                        <y>20</y>
+                        <width>80</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Choose:</string>
+                </property>
+            </widget>
         </widget>
         <widget>
             <class>QWidget</class>
@@ -619,66 +633,6 @@
                 <name>title</name>
                 <string>ColorMap</string>
             </attribute>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel7</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>10</x>
-                        <y>20</y>
-                        <width>100</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Number of levels:</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel8</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>180</x>
-                        <y>20</y>
-                        <width>30</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Min:</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QLabel</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>TextLabel9</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>280</x>
-                        <y>20</y>
-                        <width>30</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>Max:</string>
-                </property>
-            </widget>
             <widget>
                 <class>QLabel</class>
                 <property stdset="1">
@@ -1744,66 +1698,6 @@
                 </property>
             </widget>
             <widget>
-                <class>QLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>max_box</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>310</x>
-                        <y>20</y>
-                        <width>50</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>1.0</string>
-                </property>
-            </widget>
-            <widget>
-                <class>QSpinBox</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>levels_box</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>110</x>
-                        <y>20</y>
-                        <width>50</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>value</name>
-                    <number>3</number>
-                </property>
-            </widget>
-            <widget>
-                <class>QLineEdit</class>
-                <property stdset="1">
-                    <name>name</name>
-                    <cstring>min_box</cstring>
-                </property>
-                <property stdset="1">
-                    <name>geometry</name>
-                    <rect>
-                        <x>210</x>
-                        <y>20</y>
-                        <width>50</width>
-                        <height>20</height>
-                    </rect>
-                </property>
-                <property stdset="1">
-                    <name>text</name>
-                    <string>-1.0</string>
-                </property>
-            </widget>
-            <widget>
                 <class>QPushButton</class>
                 <property stdset="1">
                     <name>name</name>
@@ -2062,6 +1956,126 @@
                 <property stdset="1">
                     <name>text</name>
                     <string></string>
+                </property>
+            </widget>
+            <widget>
+                <class>QSpinBox</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>levels_box</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>120</x>
+                        <y>20</y>
+                        <width>50</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>value</name>
+                    <number>3</number>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TextLabel7</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>10</x>
+                        <y>20</y>
+                        <width>110</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Number of levels:</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QLineEdit</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>max_box</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>340</x>
+                        <y>20</y>
+                        <width>50</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>1.0</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TextLabel9</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>300</x>
+                        <y>20</y>
+                        <width>40</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Max:</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QLineEdit</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>min_box</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>230</x>
+                        <y>20</y>
+                        <width>50</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>-1.0</string>
+                </property>
+            </widget>
+            <widget>
+                <class>QLabel</class>
+                <property stdset="1">
+                    <name>name</name>
+                    <cstring>TextLabel8</cstring>
+                </property>
+                <property stdset="1">
+                    <name>geometry</name>
+                    <rect>
+                        <x>190</x>
+                        <y>20</y>
+                        <width>40</width>
+                        <height>20</height>
+                    </rect>
+                </property>
+                <property stdset="1">
+                    <name>text</name>
+                    <string>Min:</string>
                 </property>
             </widget>
         </widget>

@@ -1,12 +1,12 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'colorMeshDialog.ui'
 **
-** Created: Fri Nov 29 19:06:01 2002
+** Created: Tue Dec 10 18:04:05 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
-#include <BALL/VIEW/GUI/DIALOGS/colorMeshDialogData.h>
+#include <BALL/VIEW/GUI/DIALOGS/colorMeshDialog.h>
 
 #include <qlabel.h>
 #include <qlineedit.h>
@@ -32,6 +32,8 @@ ColorMeshDialogData::ColorMeshDialogData( QWidget* parent,  const char* name, bo
     if ( !name )
 	setName( "ColorMeshDialogData" );
     resize( 413, 263 ); 
+    setMinimumSize( QSize( 413, 263 ) );
+    setMaximumSize( QSize( 413, 263 ) );
     setCaption( tr( "Form1" ) );
 
     apply_button = new QPushButton( this, "apply_button" );
@@ -61,50 +63,10 @@ ColorMeshDialogData::ColorMeshDialogData( QWidget* parent,  const char* name, bo
     browse_button->setText( tr( "Browse" ) );
 
     location_edit = new QLineEdit( by_file, "location_edit" );
-    location_edit->setGeometry( QRect( 10, 40, 390, 26 ) ); 
+    location_edit->setGeometry( QRect( 10, 40, 380, 28 ) ); 
     surface_tab->insertTab( by_file, tr( "by file" ) );
 
     by_color = new QWidget( surface_tab, "by_color" );
-
-    TextLabel5 = new QLabel( by_color, "TextLabel5" );
-    TextLabel5->setGeometry( QRect( 10, 100, 59, 20 ) ); 
-    TextLabel5->setText( tr( "alpha:" ) );
-
-    TextLabel2 = new QLabel( by_color, "TextLabel2" );
-    TextLabel2->setGeometry( QRect( 10, 10, 30, 20 ) ); 
-    TextLabel2->setText( tr( "red:" ) );
-
-    TextLabel3 = new QLabel( by_color, "TextLabel3" );
-    TextLabel3->setGeometry( QRect( 8, 42, 59, 20 ) ); 
-    TextLabel3->setText( tr( "green:" ) );
-
-    TextLabel4 = new QLabel( by_color, "TextLabel4" );
-    TextLabel4->setGeometry( QRect( 10, 70, 57, 20 ) ); 
-    TextLabel4->setText( tr( "blue:" ) );
-
-    TextLabel10 = new QLabel( by_color, "TextLabel10" );
-    TextLabel10->setGeometry( QRect( 160, 20, 66, 20 ) ); 
-    TextLabel10->setText( tr( "Choose:" ) );
-
-    alpha_box = new QSpinBox( by_color, "alpha_box" );
-    alpha_box->setGeometry( QRect( 60, 100, 50, 20 ) ); 
-    alpha_box->setMaxValue( 255 );
-    alpha_box->setValue( 255 );
-
-    blue_box = new QSpinBox( by_color, "blue_box" );
-    blue_box->setGeometry( QRect( 60, 70, 50, 20 ) ); 
-    blue_box->setMaxValue( 255 );
-    blue_box->setValue( 0 );
-
-    green_box = new QSpinBox( by_color, "green_box" );
-    green_box->setGeometry( QRect( 60, 40, 50, 20 ) ); 
-    green_box->setMaxValue( 255 );
-    green_box->setValue( 255 );
-
-    red_box = new QSpinBox( by_color, "red_box" );
-    red_box->setGeometry( QRect( 60, 10, 50, 20 ) ); 
-    red_box->setMaxValue( 255 );
-    red_box->setValue( 255 );
 
     choose_button = new QPushButton( by_color, "choose_button" );
     choose_button->setGeometry( QRect( 160, 40, 220, 80 ) ); 
@@ -157,21 +119,49 @@ ColorMeshDialogData::ColorMeshDialogData( QWidget* parent,  const char* name, bo
     pal.setDisabled( cg );
     choose_button->setPalette( pal );
     choose_button->setText( tr( "" ) );
+
+    green_box = new QSpinBox( by_color, "green_box" );
+    green_box->setGeometry( QRect( 80, 40, 50, 20 ) ); 
+    green_box->setMaxValue( 255 );
+    green_box->setValue( 255 );
+
+    red_box = new QSpinBox( by_color, "red_box" );
+    red_box->setGeometry( QRect( 80, 10, 50, 20 ) ); 
+    red_box->setMaxValue( 255 );
+    red_box->setValue( 255 );
+
+    alpha_box = new QSpinBox( by_color, "alpha_box" );
+    alpha_box->setGeometry( QRect( 80, 100, 50, 20 ) ); 
+    alpha_box->setMaxValue( 255 );
+    alpha_box->setValue( 255 );
+
+    blue_box = new QSpinBox( by_color, "blue_box" );
+    blue_box->setGeometry( QRect( 80, 70, 50, 20 ) ); 
+    blue_box->setMaxValue( 255 );
+    blue_box->setValue( 0 );
+
+    TextLabel4 = new QLabel( by_color, "TextLabel4" );
+    TextLabel4->setGeometry( QRect( 10, 70, 57, 20 ) ); 
+    TextLabel4->setText( tr( "blue:" ) );
+
+    TextLabel5 = new QLabel( by_color, "TextLabel5" );
+    TextLabel5->setGeometry( QRect( 10, 100, 59, 20 ) ); 
+    TextLabel5->setText( tr( "alpha:" ) );
+
+    TextLabel2 = new QLabel( by_color, "TextLabel2" );
+    TextLabel2->setGeometry( QRect( 10, 10, 60, 20 ) ); 
+    TextLabel2->setText( tr( "red:" ) );
+
+    TextLabel3 = new QLabel( by_color, "TextLabel3" );
+    TextLabel3->setGeometry( QRect( 8, 42, 59, 20 ) ); 
+    TextLabel3->setText( tr( "green:" ) );
+
+    TextLabel10 = new QLabel( by_color, "TextLabel10" );
+    TextLabel10->setGeometry( QRect( 160, 20, 80, 20 ) ); 
+    TextLabel10->setText( tr( "Choose:" ) );
     surface_tab->insertTab( by_color, tr( "by color" ) );
 
     colormap_tab = new QWidget( surface_tab, "colormap_tab" );
-
-    TextLabel7 = new QLabel( colormap_tab, "TextLabel7" );
-    TextLabel7->setGeometry( QRect( 10, 20, 100, 20 ) ); 
-    TextLabel7->setText( tr( "Number of levels:" ) );
-
-    TextLabel8 = new QLabel( colormap_tab, "TextLabel8" );
-    TextLabel8->setGeometry( QRect( 180, 20, 30, 20 ) ); 
-    TextLabel8->setText( tr( "Min:" ) );
-
-    TextLabel9 = new QLabel( colormap_tab, "TextLabel9" );
-    TextLabel9->setGeometry( QRect( 280, 20, 30, 20 ) ); 
-    TextLabel9->setText( tr( "Max:" ) );
 
     TextLabel14_3 = new QLabel( colormap_tab, "TextLabel14_3" );
     TextLabel14_3->setGeometry( QRect( 32, 58, 40, 20 ) ); 
@@ -393,18 +383,6 @@ ColorMeshDialogData::ColorMeshDialogData( QWidget* parent,  const char* name, bo
     max_max_button->setPalette( pal );
     max_max_button->setText( tr( "" ) );
 
-    max_box = new QLineEdit( colormap_tab, "max_box" );
-    max_box->setGeometry( QRect( 310, 20, 50, 20 ) ); 
-    max_box->setText( tr( "1.0" ) );
-
-    levels_box = new QSpinBox( colormap_tab, "levels_box" );
-    levels_box->setGeometry( QRect( 110, 20, 50, 20 ) ); 
-    levels_box->setValue( 3 );
-
-    min_box = new QLineEdit( colormap_tab, "min_box" );
-    min_box->setGeometry( QRect( 210, 20, 50, 20 ) ); 
-    min_box->setText( tr( "-1.0" ) );
-
     min_min_button = new QPushButton( colormap_tab, "min_min_button" );
     min_min_button->setGeometry( QRect( 10, 80, 70, 32 ) ); 
     cg.setColor( QColorGroup::Foreground, black );
@@ -458,6 +436,30 @@ ColorMeshDialogData::ColorMeshDialogData( QWidget* parent,  const char* name, bo
     gradient_label = new QLabel( colormap_tab, "gradient_label" );
     gradient_label->setGeometry( QRect( 20, 130, 381, 21 ) ); 
     gradient_label->setText( tr( "" ) );
+
+    levels_box = new QSpinBox( colormap_tab, "levels_box" );
+    levels_box->setGeometry( QRect( 120, 20, 50, 20 ) ); 
+    levels_box->setValue( 3 );
+
+    TextLabel7 = new QLabel( colormap_tab, "TextLabel7" );
+    TextLabel7->setGeometry( QRect( 10, 20, 110, 20 ) ); 
+    TextLabel7->setText( tr( "Number of levels:" ) );
+
+    max_box = new QLineEdit( colormap_tab, "max_box" );
+    max_box->setGeometry( QRect( 340, 20, 50, 20 ) ); 
+    max_box->setText( tr( "1.0" ) );
+
+    TextLabel9 = new QLabel( colormap_tab, "TextLabel9" );
+    TextLabel9->setGeometry( QRect( 300, 20, 40, 20 ) ); 
+    TextLabel9->setText( tr( "Max:" ) );
+
+    min_box = new QLineEdit( colormap_tab, "min_box" );
+    min_box->setGeometry( QRect( 230, 20, 50, 20 ) ); 
+    min_box->setText( tr( "-1.0" ) );
+
+    TextLabel8 = new QLabel( colormap_tab, "TextLabel8" );
+    TextLabel8->setGeometry( QRect( 190, 20, 40, 20 ) ); 
+    TextLabel8->setText( tr( "Min:" ) );
     surface_tab->insertTab( colormap_tab, tr( "ColorMap" ) );
 
     // signals and slots connections
