@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.h,v 1.2 2003/08/26 16:07:13 amoll Exp $
+// $Id: control.h,v 1.3 2003/08/27 16:33:24 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_CONTROL_H
 #define BALL_VIEW_WIDGETS_CONTROL_H
@@ -96,6 +96,8 @@ namespace BALL
 				// prevent use of default cstr
 				SelectableListViewItem();
 			};
+
+			friend class SelectableListViewItem;
 
 			/** @name Macros.
 		  */
