@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.91.2.2 2005/01/13 23:04:22 amoll Exp $
+// $Id: molecularControl.C,v 1.91.2.3 2005/01/14 14:27:14 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -797,7 +797,7 @@ void MolecularControl::cut()
 	HashSet<Composite*>::Iterator roots_it = roots.begin();
 	for (roots_it = roots.begin(); roots_it != roots.end(); roots_it++)
 	{
-		CompositeMessage* ccmessage = new CompositeMessage(**roots_it, CompositeMessage::CHANGED_COMPOSITE);
+		CompositeMessage* ccmessage = new CompositeMessage(**roots_it, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
 		notify_(ccmessage);
 	}
 }
