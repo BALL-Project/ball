@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.19 2003/08/29 09:33:19 amoll Exp $
+# $Id: Makefile,v 1.20 2003/09/01 07:32:35 oliver Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -148,3 +148,9 @@ preferences_moc.C: $(HEADER_DIR)/preferences.h
 	$(MOC) $(HEADER_DIR)/preferences.h -o $@
 
 depend: $(UIC_SOURCES) $(MOC_SOURCES)
+
+default_clean: clean_uic
+
+clean_uic:
+	@echo "Cleaning UIC files in $(UIC_DIR)..."
+	@$(RM) -f $(UIC_DIR)/*.h
