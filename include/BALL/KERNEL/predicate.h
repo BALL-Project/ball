@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.16 2003/07/01 16:45:28 amoll Exp $
+// $Id: predicate.h,v 1.17 2003/07/01 18:14:59 oliver Exp $
 
 #ifndef BALL_KERNEL_PREDICATE_H
 #define BALL_KERNEL_PREDICATE_H
@@ -12,6 +12,10 @@
 
 #ifndef BALL_CONCEPT_PREDICATE_H
 #	include <BALL/CONCEPT/predicate.h>
+#endif
+
+#ifndef BALL_CONCEPT_COMPOSITE_H
+#	include <BALL/CONCEPT/composite.h>
 #endif
 
 namespace BALL 
@@ -41,7 +45,6 @@ namespace BALL
 	*/
 	//@{
 	
-	class Composite;
 
 #ifndef BALL_KERNEL_PREDICATE_TYPE
 #define BALL_KERNEL_PREDICATE_TYPE
