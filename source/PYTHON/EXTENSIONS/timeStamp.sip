@@ -1,4 +1,4 @@
-// $Id: timeStamp.sip,v 1.3 2001/12/27 00:25:44 oliver Exp $
+// $Id: timeStamp.sip,v 1.4 2001/12/27 11:47:19 oliver Exp $
 
 class PreciseTime
 {
@@ -16,8 +16,8 @@ class PreciseTime
   void set(long /secs/, long /usecs/) throw();
   void set(const PreciseTime& /time/) throw();
   // const PreciseTime& operator = (const PreciseTime& /time/) throw();
-	//  bool operator < (const PreciseTime& /time/) const throw();
-	//  bool operator > (const PreciseTime& /time/) const throw();
+	bool operator < (const PreciseTime& /time/) const throw();
+	bool operator > (const PreciseTime& /time/) const throw();
  	bool operator == (const PreciseTime& /time/) const throw();
   long getSeconds() const throw();
   long getMicroSeconds() const throw();
@@ -79,5 +79,5 @@ class TimeStamp
 %End
 };
 
- // std::ostream& operator << (std::ostream& os, const PreciseTime& time);
- // std::ostream& operator << (std::ostream& os, const TimeStamp& stamp);
+// std::ostream& operator << (std::ostream& os, const PreciseTime& time);
+// std::ostream& operator << (std::ostream& os, const TimeStamp& stamp);

@@ -1,5 +1,5 @@
 
-// $Id: plane3.sip,v 1.2 2001/12/27 00:25:43 oliver Exp $
+// $Id: plane3.sip,v 1.3 2001/12/27 11:47:18 oliver Exp $
 class Plane3
 {
 %HeaderCode
@@ -24,7 +24,7 @@ class Plane3
   void normalize();
   void hessify();
   bool operator == (const Plane3& /plane/) const;
-  // bool operator != (const Plane3& /plane/) const;
+  bool operator != (const Plane3& /plane/) const;
   bool has(const Vector3& /point/) const;
   bool has(const Line3& /line/) const;
   bool isValid() const;

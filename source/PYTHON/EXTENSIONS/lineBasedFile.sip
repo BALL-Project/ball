@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.sip,v 1.4 2001/12/21 11:47:04 oliver Exp $
+// $Id: lineBasedFile.sip,v 1.5 2001/12/27 11:47:18 oliver Exp $
 
 
 class LineBasedFile
@@ -21,7 +21,7 @@ class LineBasedFile
 								throw();
 
 				bool operator == (const LineBasedFile& /f/) throw();
-				//bool operator != (const LineBasedFile& /f/) throw();
+				bool operator != (const LineBasedFile& /f/) throw();
 
 				//const LineBasedFile& operator = (const LineBasedFile& /file/)
 				//				throw();

@@ -1,4 +1,4 @@
-// $Id: regExp.sip,v 1.2 2001/12/27 00:25:44 oliver Exp $
+// $Id: regExp.sip,v 1.3 2001/12/27 11:47:18 oliver Exp $
 
 class RegularExpression
 {
@@ -61,13 +61,13 @@ class RegularExpression
   //  const char** found_substring_to = 0, int execute_flags = 0) const;
   bool isEmpty() const;
   bool operator == (const RegularExpression& /regular_expression/) const;
-  //bool operator != (const RegularExpression& regular_expression) const;
-  //bool operator < (const RegularExpression& regular_expression) const;
-  //bool operator <= (const RegularExpression& regular_expression) const;
-  //bool operator >= (const RegularExpression& regular_expression) const;
-  //bool operator > (const RegularExpression& regular_expression) const;
+  bool operator != (const RegularExpression& /regular_expression/) const;
+  bool operator < (const RegularExpression& /regular_expression/) const;
+  bool operator <= (const RegularExpression& /regular_expression/) const;
+  bool operator >= (const RegularExpression& /regular_expression/) const;
+  bool operator > (const RegularExpression& /regular_expression/) const;
   virtual bool isValid() const throw();
   // virtual void dump(::std::ostream& s = ::std::cout, Size depth = 0) const;
-  // friend ::std::ostream& operator << (::std::ostream& s, const RegularExpression& regular_expression);
-  // friend ::std::istream& operator >> (::std::istream& s, RegularExpression& regular_expression);
+  // friend ::std::ostream& operator << (::std::ostream& s, const RegularExpression& /regular_expression/);
+  // friend ::std::istream& operator >> (::std::istream& s, RegularExpression& /regular_expression/);
 };

@@ -1,4 +1,4 @@
-// $Id: regularData3D.sip,v 1.1 2001/09/03 16:53:16 oliver Exp $
+// $Id: regularData3D.sip,v 1.2 2001/12/27 11:47:18 oliver Exp $
 class RegularData3D 
 {
 %HeaderCode
@@ -70,8 +70,8 @@ class RegularData3D
 	//	throw(OutOfGrid);
 	// float* getData(const Vector3& /r/) throw(OutOfGrid);
 	// float* getData(const Position /position/) throw(OutOfGrid);
-	// float& operator[](const Position /position/) throw(OutOfGrid);
-	// float& operator[](const Vector3& /vector/) throw(OutOfGrid);
+	float operator [] (const Position /position/) throw(OutOfGrid);
+	float operator [] (const Vector3& /vector/) throw(OutOfGrid);
 	Vector3 getGridCoordinates(const Position /i/, const Position /j/, const
 			Position /k/) const
 		throw(OutOfGrid);
@@ -100,5 +100,5 @@ class RegularData3D
 	float getInterpolatedValue(const Vector3& /vector/) const 
 		throw(OutOfGrid);
 	bool operator == (const RegularData3D& /grid/) const throw();
-	// bool operator != (const RegularData3D& grid) const throw();
+	bool operator != (const RegularData3D& /grid/) const throw();
 };

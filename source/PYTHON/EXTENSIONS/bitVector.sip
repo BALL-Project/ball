@@ -21,8 +21,8 @@ class Bit
   virtual void clear() throw();
   bool operator == (const Bit& /bit/) const throw();
   bool operator == (bool /bit/) const throw(NullPointer);
-	// bool operator != (const Bit& bit) const throw();
-  // bool operator != (bool bit) const throw(NullPointer);
+	bool operator != (const Bit& /bit/) const throw();
+  bool operator != (bool /bit/) const throw(NullPointer);
 };
 
 class BitVector
@@ -96,7 +96,7 @@ class BitVector
 	BitVector& operator ^= (const BitVector& /bit_vector/) throw(OutOfMemory);
 	BitVector operator ~ () throw(OutOfMemory);
 	bool operator == (const BitVector& /bit_vector/) const throw();
-	// bool operator != (const BitVector& /bit_vector/) const throw();
+	bool operator != (const BitVector& /bit_vector/) const throw();
 	bool isAnyBit(bool /value/, Index /first/ = 0, Index /last/ = -1) const
 		throw(IndexUnderflow, IndexOverflow);
 	bool isEveryBit(bool /value/, Index /first/ = 0, Index /last/ = -1) const

@@ -1,4 +1,4 @@
-// $Id: string.sip,v 1.3 2001/12/27 00:25:44 oliver Exp $
+// $Id: string.sip,v 1.4 2001/12/27 11:47:18 oliver Exp $
 
 class Substring
 {
@@ -24,19 +24,19 @@ class Substring
   // };
   Substring();
   Substring(const Substring& /substring/, bool /deep/ = true);
-  Substring(const String& /string/, Index /from/ = 0, Size /len/ = string::npos);
+  Substring(const String& /string/, Index /from/ = 0, Size /len/ = String::EndPos);
   ~Substring();
   void destroy();
   // operator String() const;
   String toString() const;
-  Substring& bind(const String& /string/, Index /from/ = 0, Size /len/ = string::npos);
-  Substring& bind(const Substring& /substring/, Index /from/ = 0, Size /len/ = string::npos);
+  Substring& bind(const String& /string/, Index /from/ = 0, Size /len/ = String::EndPos);
+  Substring& bind(const Substring& /substring/, Index /from/ = 0, Size /len/ = String::EndPos);
   void unbind();
   String* getBoundString();
   const String* getBoundString() const;
   void set(const String& /string/);
   void set(const Substring& /s/);
-  void set(const char* /char_ptr/, Size /size/ = string::npos);
+  void set(const char* /char_ptr/, Size /size/ = String::EndPos);
   // Substring& operator = (const String& string);
   // Substring& operator = (const Substring& substring);
   // Substring& operator = (const char* char_ptr);
@@ -52,15 +52,15 @@ class Substring
   bool isBound() const;
   bool isEmpty() const;
   bool operator == (const Substring& /substring/) const;
-  // bool operator != (const Substring& substring) const;
+  bool operator != (const Substring& /substring/) const;
   bool operator == (const String& /string/) const;
-  // bool operator != (const String& string) const;
+  bool operator != (const String& /string/) const;
   // friend bool operator == (const String& string, const Substring& substring);
   // friend bool operator != (const String& string, const Substring& substring);
   bool operator == (const char* /char_ptr/) const;
-  // bool operator != (const char* char_ptr) const;
+  bool operator != (const char* /char_ptr/) const;
   bool operator == (char /c/) const;
-  // bool operator != (char c) const;
+  bool operator != (char /c/) const;
   // friend ::std::ostream& operator << (::std::ostream& s, const Substring& substring);
   bool isValid() const;
   // void dump(::std::ostream& s = ::std::cout, Size depth = 0) const;
@@ -78,19 +78,19 @@ class String
    CASE_SENSITIVE   = 0, 
    CASE_INSENSITIVE = 1 
   };
-  static const char* CHARACTER_CLASS__ASCII_ALPHA;
-  static const char* CHARACTER_CLASS__ASCII_ALPHANUMERIC;
-  static const char* CHARACTER_CLASS__ASCII_LOWER;
-  static const char* CHARACTER_CLASS__ASCII_UPPER;
-  static const char* CHARACTER_CLASS__ASCII_NUMERIC;
-  static const char* CHARACTER_CLASS__WHITESPACE;
+  const char* CHARACTER_CLASS__ASCII_ALPHA;
+  const char* CHARACTER_CLASS__ASCII_ALPHANUMERIC;
+  const char* CHARACTER_CLASS__ASCII_LOWER;
+  const char* CHARACTER_CLASS__ASCII_UPPER;
+  const char* CHARACTER_CLASS__ASCII_NUMERIC;
+  const char* CHARACTER_CLASS__WHITESPACE;
 
   String();
 
   String(const String& /string/);
   // String(const string& string);
 
-  String(const String& /s/, Index /from/, Size /len/ = string::npos)
+  String(const String& /s/, Index /from/, Size /len/ = String::EndPos)
 		throw(NullPointer, IndexOverflow, IndexUnderflow);
 
 	String(const char* /char_ptr/)
@@ -114,8 +114,8 @@ class String
   String(double /d/);
   ~String();
   void destroy();
-  void set(const String& /string/, Index /from/ = 0, Size /len/ = string::npos);
-  void set(const char* /char_ptr/, Index /from/ = 0, Size /len/ = string::npos);
+  void set(const String& /string/, Index /from/ = 0, Size /len/ = String::EndPos);
+  void set(const char* /char_ptr/, Index /from/ = 0, Size /len/ = String::EndPos);
   // void set(Size /buffer_size/, const char *format, ...);
   // void set(std::strstream& s);
   // void set(char /c/, Size /len/ = 1);
@@ -128,7 +128,7 @@ class String
   // void set(unsigned long ul);
   //void set(float /f/);
   //void set(double /d/);
-  // void get(char* char_ptr, Index from = 0, Size len = string::npos) const;
+  // void get(char* char_ptr, Index from = 0, Size len = String::EndPos) const;
   // String& operator = (const String& s);
   // String& operator = (const char* pc);
   // String& operator = (std::strstream& s);
@@ -155,10 +155,10 @@ class String
   // unsigned long toUnsignedLong() const;
   float toFloat() const;
   double toDouble() const;
-  void toLower(Index /from/ = 0, Size /len/ = string::npos);
-  void toUpper(Index /from/ = 0, Size /len/ = string::npos);
-  Substring getSubstring(Index /from/ = 0, Size /len/ = string::npos) const; 
-  Substring operator () (Index /from/, Size /len/ = string::npos) const; 
+  void toLower(Index /from/ = 0, Size /len/ = String::EndPos);
+  void toUpper(Index /from/ = 0, Size /len/ = String::EndPos);
+  Substring getSubstring(Index /from/ = 0, Size /len/ = String::EndPos) const; 
+  Substring operator () (Index /from/, Size /len/ = String::EndPos) const; 
   Substring before(const String& /s/, Index /from/ = 0) const;
   Substring through(const String& /s/, Index /from/ = 0) const;
   Substring from(const String& /s/, Index /from/ = 0) const;
@@ -175,11 +175,11 @@ class String
   Substring instr(const String& /pattern/, Index /from/ = 0) const;
   // String operator + (const string& /string/) const;
   String operator + (const char* /char_ptr/) const;
-  //String operator + (char /c/) const;
+  String operator + (char /c/) const;
   // friend String operator + (const char* char_ptr, const String& s);
   // friend String operator + (char c, const String& s);
   void swap(String& /s/);
-  String& reverse(Index /from/ = 0, Size /len/ = string::npos);
+  String& reverse(Index /from/ = 0, Size /len/ = String::EndPos);
   Index substitute(const String& /to_replace/, const String& /replacing/);
   bool has(char /c/) const;
   bool hasSubstring(const String& /s/, Index /from/ = 0) const;
@@ -191,46 +191,46 @@ class String
   bool isDigit() const;
   bool isSpace() const;
   bool isWhitespace() const;
-  // static bool isAlpha(char /c/);
-  // static bool isAlnum(char /c/);
-  // static bool isDigit(char /c/);
-  // static bool isSpace(char /c/);
-  // static bool isWhitespace(char /c/);
+  bool isAlpha(char /c/);
+  bool isAlnum(char /c/);
+  bool isDigit(char /c/);
+  bool isSpace(char /c/);
+  bool isWhitespace(char /c/);
   int compare(const String& /string/, Index /from/ = 0) const;
   int compare(const String& /string/, Index /from/, Size /len/) const;
   int compare(const char* /char_ptr/, Index /from/ = 0) const;
   int compare(const char* /char_ptr/, Index /from/, Size /len/) const;
   int compare(char /c/, Index /from/ = 0) const;
   bool operator == (const String& /string/) const;
-  // bool operator != (const String& string) const;
-  // bool operator < (const String& string) const;
-  // bool operator <= (const String& string) const;
-  // bool operator >= (const String& string) const;
-  // bool operator > (const String& string) const;
-  // friend bool operator == (const char* char_ptr, const String& string);
-  // friend bool operator != (const char* char_ptr, const String& string);
-  // friend bool operator < (const char* char_ptr, const String& string);
-  // friend bool operator <= (const char* char_ptr, const String& string);
-  // friend bool operator > (const char* char_ptr, const String& string);
-  // friend bool operator >= (const char* char_ptr, const String& string);
+  bool operator != (const String& /string/) const;
+  bool operator < (const String& /string/) const;
+  bool operator <= (const String& /string/) const;
+  bool operator >= (const String& /string/) const;
+  bool operator > (const String& /string/) const;
+  // friend bool operator == (const char* char_ptr, const String& /string/);
+  // friend bool operator != (const char* char_ptr, const String& /string/);
+  // friend bool operator < (const char* char_ptr, const String& /string/);
+  // friend bool operator <= (const char* char_ptr, const String& /string/);
+  // friend bool operator > (const char* char_ptr, const String& /string/);
+  // friend bool operator >= (const char* char_ptr, const String& /string/);
   bool operator == (const char* /char_ptr/) const;
-  // bool operator != (const char* char_ptr) const;
-  // bool operator < (const char* char_ptr) const;
-  // bool operator <= (const char* char_ptr) const;
-  // bool operator > (const char* char_ptr) const;
-  // bool operator >= (const char* char_ptr) const;
-  // friend bool operator == (char c, const String& string);
-  // friend bool operator != (char c, const String& string);
-  // friend bool operator < (char c, const String& string);
-  // friend bool operator <= (char c, const String& string);
-  // friend bool operator > (char c, const String& string);
-  // friend bool operator >= (char c, const String& string);
+  bool operator != (const char* /char_ptr/) const;
+  bool operator < (const char* /char_ptr/) const;
+  bool operator <= (const char* /char_ptr/) const;
+  bool operator > (const char* /char_ptr/) const;
+  bool operator >= (const char* /char_ptr/) const;
+  // friend bool operator == (char c, const String& /string/);
+  // friend bool operator != (char c, const String& /string/);
+  // friend bool operator < (char c, const String& /string/);
+  // friend bool operator <= (char c, const String& /string/);
+  // friend bool operator > (char c, const String& /string/);
+  // friend bool operator >= (char c, const String& /string/);
   bool operator == (char /c/) const;
-  // bool operator != (char c) const;
-  // bool operator < (char c) const;
-  // bool operator <= (char c) const;
-  // bool operator > (char c) const;
-  // bool operator >= (char c) const;
+  bool operator != (char /c/) const;
+  bool operator < (char /c/) const;
+  bool operator <= (char /c/) const;
+  bool operator > (char /c/) const;
+  bool operator >= (char /c/) const;
   bool isValid() const;
   // void dump(::std::ostream& s = ::std::cout, Size depth = 0) const;
   // ::std::istream& getline(::std::istream& s = ::std::cin, char delimiter = '\n');

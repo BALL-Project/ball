@@ -1,4 +1,4 @@
-// $Id: surface.sip,v 1.2 2001/12/27 00:25:44 oliver Exp $
+// $Id: surface.sip,v 1.3 2001/12/27 11:47:18 oliver Exp $
 
 class Surface
 {
@@ -24,7 +24,7 @@ class Surface
   void readMSMSFile(const String& /vert_filename/, const String& /face_filename/);
   float getArea() const;
   bool operator == (const Surface& /box/) const;
-  // bool operator != (const Surface& box) const;
+  bool operator != (const Surface& /box/) const;
   bool isValid() const;
   // vector<Vector3>  vertex;
   // vector<Vector3>  normal;

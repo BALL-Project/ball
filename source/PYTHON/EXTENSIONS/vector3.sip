@@ -1,4 +1,4 @@
-// $Id: vector3.sip,v 1.2 2001/12/22 16:39:16 oliver Exp $
+// $Id: vector3.sip,v 1.3 2001/12/27 11:47:19 oliver Exp $
 
 class Vector3
  : PersistentObject
@@ -53,7 +53,7 @@ class Vector3
    (const Vector3& /a/, const Vector3& /b/, const Vector3& /c/);
   static float getTripleProduct (const Vector3& /a/, const Vector3& /b/, const Vector3& /c/);
   bool operator == (const Vector3& /vector/) const;
-  // bool operator != (const Vector3& /vector/) const;
+  bool operator != (const Vector3& /vector/) const;
   bool isZero() const;
   bool isOrthogonalTo(Vector3& /vector/) const;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;

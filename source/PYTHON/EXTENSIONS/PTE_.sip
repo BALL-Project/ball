@@ -1,4 +1,4 @@
-// $Id: PTE_.sip,v 1.1 2001/12/27 00:25:43 oliver Exp $
+// $Id: PTE_.sip,v 1.2 2001/12/27 11:47:18 oliver Exp $
 
 class Element
   : PropertyManager
@@ -45,11 +45,11 @@ class Element
    void setElectronegativity(float);
    float getElectronegativity() const;
    bool operator == (const Element&) const;
-	 //bool operator !=(const Element&) const;
-   //bool operator <(const Element&) const;
-   //bool operator <=(const Element&) const;
-   //bool operator >=(const Element&) const;
-   //bool operator >(const Element&) const;
+	 bool operator !=(const Element&) const;
+   bool operator <(const Element&) const;
+   bool operator <=(const Element&) const;
+   bool operator >=(const Element&) const;
+   bool operator >(const Element&) const;
    //friend ostream& operator << (ostream& s, const Element&);
    bool isUnknown() const;
 
@@ -68,10 +68,10 @@ class PTE_
 	static Element& getElement(const String&);
 	Element& operator [](const String&);
 	const Element& operator [](const String&) const;
-	// Element &operator [](Element::Name);
-	// const Element& operator [](Element::Name) const;
-	// Element &operator [](Element::Symbol);
-	// const Element& operator [](Element::Symbol) const;
+	// Element& operator [] (Element::Name);
+	// const Element& operator [] (Element::Name) const;
+	// Element &operator [] (Element::Symbol);
+	// const Element& operator [] (Element::Symbol) const;
 	Element& operator [] (Index /index/);
 	const Element& operator [] (Index /index/) const;
 	// static bool apply(UnaryProcessor<Element>& applicator);

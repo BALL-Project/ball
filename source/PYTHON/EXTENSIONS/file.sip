@@ -1,4 +1,4 @@
-// $Id: file.sip,v 1.4 2001/12/27 00:25:43 oliver Exp $
+// $Id: file.sip,v 1.5 2001/12/27 11:47:18 oliver Exp $
 
 class std__openmode
 {
@@ -74,7 +74,7 @@ class File
   bool renameTo(const String&);
   bool truncate(int) const;
   bool operator == (const File& /file/) const;
-  // bool operator != (const File& /file/) const;
+  bool operator != (const File& /file/) const;
   bool isOpen() const;
   bool isClosed() const;
   bool isAccessible() const;

@@ -1,4 +1,4 @@
-// $Id: matrix44.sip,v 1.2 2001/12/27 00:25:43 oliver Exp $
+// $Id: matrix44.sip,v 1.3 2001/12/27 11:47:18 oliver Exp $
 
 class Matrix4x4
 {
@@ -102,7 +102,7 @@ class Matrix4x4
   void setRotation(const Angle& /phi/, const Vector3& /axis/);
   void setRotation(const Angle& /phi/, const Vector4& /axis/);
   bool operator == (const Matrix4x4& /m/) const; 
-  // bool operator != (const Matrix4x4& /m/) const;
+  bool operator != (const Matrix4x4& /m/) const;
   bool isIdentity() const;
   bool isRegular() const;
   bool isSingular() const;

@@ -1,4 +1,4 @@
-// $Id: vector2.sip,v 1.2 2001/12/22 16:39:16 oliver Exp $
+// $Id: vector2.sip,v 1.3 2001/12/27 11:47:19 oliver Exp $
 
 //Vector2 operator * (float scalar, const Vector2& vector)
 //  throw();
@@ -98,8 +98,8 @@ class Vector2
 
 	bool operator == (const Vector2& /vector/) const
 		throw();
-	//bool operator != (const Vector2& /vector/) const
-	//	throw();
+	bool operator != (const Vector2& /vector/) const
+		throw();
 	bool isZero() const
 		throw();
 	bool isOrthogonalTo(Vector2& /vector/) const

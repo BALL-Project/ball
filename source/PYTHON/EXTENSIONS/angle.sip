@@ -1,4 +1,4 @@
-// $Id: angle.sip,v 1.2 2001/12/22 16:39:14 oliver Exp $
+// $Id: angle.sip,v 1.3 2001/12/27 11:47:18 oliver Exp $
 
 class Angle
 {
@@ -46,12 +46,12 @@ class Angle
   Angle& operator /= (float /val/);
   Angle operator / (const Angle& /val/);
   bool operator == (const Angle& /angle/) const;
-  // bool operator != (const Angle& /angle/) const;
-  // bool operator < (const Angle& /angle/) const;
-  // bool operator < (float /val/) const;
-  // bool operator <= (const Angle& /angle/) const;
-  // bool operator >= (const Angle& /angle/) const;
-  // bool operator > (const Angle& /angle/) const;
+  bool operator != (const Angle& /angle/) const;
+  bool operator < (const Angle& /angle/) const;
+  bool operator < (float /val/) const;
+  bool operator <= (const Angle& /angle/) const;
+  bool operator >= (const Angle& /angle/) const;
+  bool operator > (const Angle& /angle/) const;
   bool isEquivalent(Angle /angle/) const;
   bool isValid () const;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;

@@ -1,4 +1,4 @@
-// $Id: vector4.sip,v 1.1 2001/09/03 16:53:18 oliver Exp $
+// $Id: vector4.sip,v 1.2 2001/12/27 11:47:19 oliver Exp $
 
 class Vector4
 {
@@ -43,7 +43,7 @@ class Vector4
   float getDistance(const Vector4& /vector/) const;
   float getSquareDistance(const Vector4& /vector/) const;
   bool operator == (const Vector4& /vector/) const;
-  // bool operator != (const Vector4& /vector/) const;
+  bool operator != (const Vector4& /vector/) const;
   bool isOrthogonalTo(Vector4& /vector/) const;
   bool isValid() const;
   // void dump(std::ostream& s = std::cout, Size depth = 0) const;

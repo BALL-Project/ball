@@ -1,4 +1,4 @@
-// $Id: regularData2D.sip,v 1.1 2001/09/03 16:53:15 oliver Exp $
+// $Id: regularData2D.sip,v 1.2 2001/12/27 11:47:18 oliver Exp $
 
 
 typedef float GridDataType;
@@ -75,8 +75,8 @@ class RegularData2D
 	//	throw(OutOfGrid);
 	//GridDataType getData(const Position /position/) 
 	//	throw(OutOfGrid);
-	//GridDataType operator [] (const Position /position/) 
-	//	throw(OutOfGrid);
+	GridDataType operator [] (const Position /position/) 
+		throw(OutOfGrid);
 
 	GridDataType operator [] (const Vector2& /vector/) 
 		throw(OutOfGrid);
@@ -107,6 +107,6 @@ class RegularData2D
 	GridDataType getMinValue() const throw();
 	void rescale(float /minValue/, float /maxValue/) throw();
 	bool operator == (const RegularData2D& /grid/) const throw();
-	//bool operator != (const RegularData2D& /grid/) const throw();
+	bool operator != (const RegularData2D& /grid/) const throw();
 	//float* data;
 };
