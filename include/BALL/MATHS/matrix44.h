@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.15 2000/03/14 00:47:28 amoll Exp $
+// $Id: matrix44.h,v 1.16 2000/03/14 09:03:41 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -9,8 +9,6 @@
 
 #include <math.h>
 #include <iostream>
-
-#include <iostream.h>
 #include <stdlib.h>
 
 #ifndef BALL_MATHS_ANGLE_H
@@ -301,7 +299,7 @@ namespace BALL
 				@param max_diff the allowed maximum between two values
 				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
 		*/
-		bool TMatrix4x4<T>::isEqual(const TMatrix4x4<T>& m, const T& maxDiff) const;
+		bool isEqual(const TMatrix4x4& m, const T max_diff = (T)Constants::EPSILON) const;
 
 
 		/** Get the diagonal of the matrix
@@ -316,7 +314,7 @@ namespace BALL
 				@exception IndexOverflow if {\tt col ||row > 3}
 				@return T& a reference to the cell
 		*/
-		T& operator ()(Index row, Index col);
+		T& operator () (Index row, Index col);
 
 		/** Constant access operator of a cell
 				@param row the number of the row (0-3)
@@ -1169,7 +1167,7 @@ namespace BALL
 	}
 
 	template <class T>
-	bool TMatrix4x4<T>::isEqual(const TMatrix4x4<T>& m, const T& maxDiff) const
+	bool TMatrix4x4<T>::isEqual(const TMatrix4x4<T>& m, T max_diff) const
 	{
 		for (int i=0; i<4; i++ )
 		{
