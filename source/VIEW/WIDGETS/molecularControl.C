@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.44 2004/02/24 14:29:50 amoll Exp $
+// $Id: molecularControl.C,v 1.45 2004/02/27 23:28:06 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -200,10 +200,28 @@ bool MolecularControl::reactToMessages_(Message* message)
 				return false;
 
 			case CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL:
-				removeInvalidItems_(composite_to_item_[composite_message->getComposite()]);
-				updateListViewItem_(0, *composite_message->getComposite());
+			{
+				List<Composite*> open_items;
+				QListViewItemIterator it(listview);
+				for (; it.current(); ++it)
+				{
+					if (it.current()->isOpen())
+					{
+						open_items.push_back(((SelectableListViewItem*)*it)->getComposite());
+					}
+				}
+
+				removeComposite(composite_message->getComposite()->getRoot());
+ 				addComposite(composite_message->getComposite()->getRoot());
+
+				List<Composite*>::Iterator lit = open_items.begin();
+				for (; lit != open_items.end(); lit++)
+				{
+					composite_to_item_[*lit]->setOpen(true);
+				}
+
 				return true;
-				
+			}
 			case CompositeMessage::SELECTED_COMPOSITE:
 			case CompositeMessage::DESELECTED_COMPOSITE:
 				updateListViewItem_(0, *composite_message->getComposite());
@@ -261,18 +279,6 @@ void MolecularControl::buildContextMenu(Composite& composite)
 
 	// -----------------------------------> AtomContainer
 	bool atom_container_selected = RTTI::isKindOf<AtomContainer>(composite);
-
-	bool system_selected = true;
-	/*
-	List<Composite*>::Iterator it = selected_.begin();	
-	for (; it != selected_.end(); it++)
-	{
-		if (!RTTI::isKindOf<System>(**it)) system_selected = false;
-		break;
-	}
-	*/
-
-	context_menu_.setItemEnabled(OBJECT__COPY, system_selected);
 
 	bool allow_id_change = one_item && RTTI::isKindOf<Residue>(**selected_.begin());
 	context_menu_.insertItem("Change ID", this, SLOT(changeID()), 0, CHANGEID);
@@ -842,6 +848,7 @@ void MolecularControl::select()
 	}
 }
 
+
 void MolecularControl::deselect()
 {
 	// copy list, because selection could change
@@ -853,6 +860,7 @@ void MolecularControl::deselect()
 		selectedComposite_(*it, false);
 	}	
 }
+
 
 void MolecularControl::move()
 {
@@ -922,40 +930,6 @@ MolecularControl::SelectableListViewItem*
 	return new_item;
 }
 
-// this method might seem strange, but it is needed to remove listview items for composites,
-// which were removed from a parent composite and the MolecularControl was notified about this
-// with a CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL. The simpler method
-// would be to rebuild the tree from scratch, but this is annoying for the user.
-// So just let this code prevail, it works ;)
-void MolecularControl::removeInvalidItems_(SelectableListViewItem* parent)
-	throw()
-{
-	Composite& composite = *parent->getComposite();
-	QListViewItemIterator it(parent);
-	for (; it.current(); ++it)
-	{
-		Composite& child = *(((SelectableListViewItem*)(*it))->getComposite());
-		bool found = false;
-		for (Position p = 0; p < composite.getDegree(); p++)
-		{
-			if (composite.getChild(p) == &child)
-			{
-				found = true;
-				break;
-			}
-		}
-
-		if (!found)
-		{
-			delete *it;
-			composite_to_item_.erase(&child);		
-			break;
-		}
-
-		removeInvalidItems_((SelectableListViewItem*)*it);
-	} 
-}
-
 
 void MolecularControl::updateListViewItem_(SelectableListViewItem* parent, Composite& composite)
 	throw()
@@ -978,6 +952,7 @@ void MolecularControl::updateListViewItem_(SelectableListViewItem* parent, Compo
 	// find the ListViewItem belonging to the composite
 	recurseUpdate_(composite_to_item_[&composite], composite);
 }
+
 
 MolecularInformation& MolecularControl::getInformationVisitor_()
 	throw()

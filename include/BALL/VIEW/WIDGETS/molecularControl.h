@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.26 2004/02/26 08:41:47 anhi Exp $
+// $Id: molecularControl.h,v 1.27 2004/02/27 23:29:29 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -44,33 +44,20 @@ namespace BALL
 			///
 			enum MolecularMenuEntries
 			{
-				/// show DisplayPropertiesDialog
-				CREATE_REPRESENTATION_MODE = 1,
 				/// create a new Representation
 				CREATE_REPRESENTATION,
-				OBJECT__CUT,
-				OBJECT__COPY,
-				OBJECT__PASTE,
-				OBJECT__DELETE,
 				OBJECT__MOVE,
 				SELECT,
 				DESELECT,
 
 				/// Center camera on one Composite (done in MolecularProperites)
 				CAMERA__CENTER,
-				/// Build bonds (done in MolecularProperites)
-				BONDS__BUILD,
-				BONDS__REMOVE,
-				/// Check the residues (done in MolecularProperites)
-				RESIDUE__CHECK,
 				/// Show a dialog with the atom properties
 				ATOM__PROPERTIES,
+				///
+				COUNT__ITEMS,
 				/// Show a dialog with the bond properties
 				BOND__PROPERTIES,
-				/// Count residues, atoms and bonds
-				COUNT__ITEMS,
-				/// show the filename form which the Composite was loaded
-				SHOW__FILENAME,
 				/// Collapse all QListViewItem
 				COLLAPSE_ALL,
 				/// Expand all QListViewItem
@@ -461,10 +448,6 @@ namespace BALL
 			void updateListViewItem_(SelectableListViewItem* item, Composite& composite)
 				throw();
 
-			//_
-			void removeInvalidItems_(SelectableListViewItem* parent)
-				throw();
-			
 			//@} 
 			/** @name Protected member variables 
 			*/ 
