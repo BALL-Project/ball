@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.3 2003/08/26 18:35:36 amoll Exp $
+// $Id: displayProperties.C,v 1.4 2003/08/29 15:24:58 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -42,7 +42,8 @@ namespace BALL
 				precision_(DRAWING_PRECISION_HIGH),
 				mode_(DRAWING_MODE_SOLID),
 				coloring_method_(COLORING_ELEMENT),
-				model_type_(MODEL_BALL_AND_STICK)
+				model_type_(MODEL_BALL_AND_STICK),
+				rep_(0)
 		{
 			// register the widget with the MainControl
 			ModularWidget::registerWidget(this);
@@ -134,7 +135,7 @@ namespace BALL
 			(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
 			id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
-																				 SLOT(openDialog()), CTRL+Key_I);   
+																				 SLOT(createRepresentation()), CTRL+Key_I);   
 		}
 
 
@@ -142,7 +143,7 @@ namespace BALL
 			throw()
 		{
 			main_control.removeMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, 
-																											SLOT(openDialog()), CTRL+Key_I);   
+																											SLOT(createRepresentation()), CTRL+Key_I);   
 		}
 
 
@@ -153,15 +154,28 @@ namespace BALL
 		}
 
 
-		void DisplayProperties::openDialog()
+		void DisplayProperties::createRepresentation()
 		{
+			rep_ = 0;
+			setCaption("create Representation");
 			coloring_method_combobox->setCurrentItem(coloring_method_);
 			precision_combobox->setCurrentItem(precision_);
 			model_type_combobox->setCurrentItem(model_type_);
+			apply_button->setEnabled(getMainControl()->getControlSelection().size());
 			show();
 			raise();
 		}
 
+		void DisplayProperties::modifyRepresentation()
+		{
+			setCaption("modify Representation");
+			coloring_method_combobox->setCurrentItem(coloring_method_);
+			precision_combobox->setCurrentItem(precision_);
+			model_type_combobox->setCurrentItem(model_type_);
+			apply_button->setEnabled(true);
+			show();
+			raise();
+		}
 
 		void DisplayProperties::selectPrecision(int index)
 		{
@@ -353,7 +367,14 @@ namespace BALL
 
 			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
 			Representation* rep = 0;
-			rep = new Representation(model_type_, precision_, mode_);
+			if (rep_ == 0)
+			{
+				rep = new Representation(model_type_, precision_, mode_);
+			}
+			else 
+			{
+				rep = rep_;
+			}
 
 			model_processor->setColorProcessor(color_processor);
 			model_connector_.setModelType(model_type_);
@@ -363,20 +384,30 @@ namespace BALL
 			{
 				rep->setProperty(Representation::PROPERTY__TRANSPARENT_BLENDING);
 			}
-			pm.insert(*rep);
-
-			if (composite != 0)
-			{
-				rep->getComposites().insert(composite);
+			
+			if (!rep_) 
+			{	
+				pm.insert(*rep);
+				
+				if (composite != 0)
+				{
+					rep->getComposites().insert(composite);
+				}
+				else
+				{
+					List<Composite*>& selection = getMainControl()->getControlSelection();
+					List<Composite*>::Iterator it = selection.begin();
+					for (; it != selection.end(); it++)
+					{
+						rep->getComposites().insert(*it);
+					}
+				}
 			}
 			else
 			{
-				List<Composite*>& selection = getMainControl()->getControlSelection();
-				List<Composite*>::Iterator it = selection.begin();
-				for (; it != selection.end(); it++)
-				{
-					rep->getComposites().insert(*it);
-				}
+				rep_->setModelType(model_type_);
+				rep_->setDrawingPrecision(precision_);
+				rep_->setDrawingMode(mode_);
 			}
 
 			rep->update();
@@ -392,7 +423,14 @@ namespace BALL
 
 			RepresentationMessage* message = new RepresentationMessage;
 			message->setDeletable(true);
-			message->setType(RepresentationMessage::ADD);
+			if (!rep_)
+			{
+				message->setType(RepresentationMessage::ADD);
+			}
+			else
+			{
+				message->setType(RepresentationMessage::UPDATE);
+			}
 			message->setRepresentation(rep);
 			notify_(message);
 		}

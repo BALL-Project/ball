@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.3 2003/08/26 18:35:32 amoll Exp $
+// $Id: displayProperties.h,v 1.4 2003/08/29 15:25:09 amoll Exp $
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
 #define BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -24,6 +24,8 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+class Representation;
 
 /// Exception to be thrown if invalid option is given for a modelprocessor
 class InvalidOption: public Exception::GeneralException
@@ -75,10 +77,11 @@ class DisplayProperties
 		public ModularWidget
 {
 	Q_OBJECT
-	BALL_EMBEDDABLE(DisplayProperties)
 		
 	public:
 	
+	BALL_EMBEDDABLE(DisplayProperties)
+
 	/**	@name	Constructors and Destructors
 	*/	
 	//@{
@@ -213,6 +216,9 @@ class DisplayProperties
 	*/
 	virtual void checkMenu(MainControl& main_control)
 			throw();
+
+	void setRepresentation(Representation* rep)
+		throw() {rep_ = rep;}
 		
 	public slots:
 			
@@ -226,7 +232,10 @@ class DisplayProperties
 			Calls show and raise from QDialog class.
 			See documentation of QT-library for information concerning QDialog widgets.
 	*/
-	void openDialog();
+	void createRepresentation();
+
+	///
+	void modifyRepresentation();
 		
 	protected slots:
 			
@@ -316,6 +325,9 @@ class DisplayProperties
 	Index 			mode_;
 	Index 			coloring_method_;
 	Index 			model_type_;
+
+	// used by GeometricControl to modify existing representation
+	Representation* rep_;
 
 	ColorRGBA 	custom_color_;
 	

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.2 2003/08/26 16:07:02 amoll Exp $
+// $Id: geometricControl.C,v 1.3 2003/08/29 15:25:51 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -10,6 +10,7 @@
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/atomContainer.h>
+#include <BALL/VIEW/DIALOGS/displayProperties.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 
@@ -100,6 +101,10 @@ void GeometricControl::removeRepresentation(Representation& rep)
 void GeometricControl::updateRepresentation(Representation& rep)
 	throw()
 {
+	removeRepresentation(rep);
+	addRepresentation(rep);
+	return;
+
 	QListViewItem* item = representation_to_item_[&rep]; 
 	if (item == 0) return;
 	
@@ -148,6 +153,13 @@ void GeometricControl::buildContextMenu(Representation& rep)
 	throw()
 {
 	insertContextMenuEntry("Delete", this, SLOT(deleteRepresentation_()));
+	DisplayProperties* display_properties_dialog = (DisplayProperties*) DisplayProperties::getInstance(0);
+
+	if (display_properties_dialog != 0)
+	{
+		display_properties_dialog->setRepresentation(&rep);
+		insertContextMenuEntry("Properties", display_properties_dialog, SLOT(openDialog2()));	
+	}
 
 	// This is used to provide the coloring for meshes...
 	if (rep.getModelName() == "Surface" &&
@@ -159,7 +171,7 @@ void GeometricControl::buildContextMenu(Representation& rep)
 		}
 		colorMeshDlg_->setMesh(*(Mesh*)*(rep.getGeometricObjects().begin()));
 		colorMeshDlg_->setRepresentation(rep);
-		insertContextMenuEntry("Properties", colorMeshDlg_, SLOT(show()));	
+		insertContextMenuEntry("Color Surface", colorMeshDlg_, SLOT(show()));	
 	}
 }
 
