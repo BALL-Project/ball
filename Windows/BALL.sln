@@ -1,26 +1,36 @@
-Microsoft Visual Studio Solution File, Format Version 7.00
+Microsoft Visual Studio Solution File, Format Version 8.00
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libBALL", "Libs\libBALL\libBALL.vcproj", "{98714B1B-8ADD-418B-BF10-404EAA830356}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libView", "Libs\libVIEW\libVIEW.vcproj", "{D22286C8-99CD-4416-A394-ACB3346751BE}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "molview", "Applications\molview\molview.vcproj", "{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Tests", "Tests\Tests.vcproj", "{253B8927-6644-43B8-A48F-847A4D338C59}"
+	ProjectSection(ProjectDependencies) = postProject
+		{98714B1B-8ADD-418B-BF10-404EAA830356} = {98714B1B-8ADD-418B-BF10-404EAA830356}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Benchmarks", "Benchmarks\Benchmarks.vcproj", "{253B8927-6644-43B8-A48F-847A4D338C59}"
+	ProjectSection(ProjectDependencies) = postProject
+		{98714B1B-8ADD-418B-BF10-404EAA830356} = {98714B1B-8ADD-418B-BF10-404EAA830356}
+	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Python Module", "Libs\Python Module\Python Module.vcproj", "{0B89FAB2-C97D-4A9D-BA5E-1A5E9A74995F}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
-		ConfigName.0 = Debug
-		ConfigName.1 = Python
-		ConfigName.2 = Python Multithreaded
-		ConfigName.3 = Release
-	EndGlobalSection
-	GlobalSection(ProjectDependencies) = postSolution
-		{253B8927-6644-43B8-A48F-847A4D338C59}.0 = {98714B1B-8ADD-418B-BF10-404EAA830356}
-		{253B8927-6644-43B8-A48F-847A4D338C59}.0 = {98714B1B-8ADD-418B-BF10-404EAA830356}
+		Debug = Debug
+		Python = Python
+		Python Multithreaded = Python Multithreaded
+		Release = Release
 	EndGlobalSection
 	GlobalSection(ProjectConfiguration) = postSolution
 		{98714B1B-8ADD-418B-BF10-404EAA830356}.Debug.ActiveCfg = Debug|Win32
@@ -43,8 +53,8 @@ Global
 		{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}.Debug.Build.0 = Debug|Win32
 		{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}.Python.ActiveCfg = Python|Win32
 		{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}.Python.Build.0 = Python|Win32
-		{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}.Python Multithreaded.ActiveCfg = Python Multithreaded|Win32
-		{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}.Python Multithreaded.Build.0 = Python Multithreaded|Win32
+		{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}.Python Multithreaded.ActiveCfg = Release|Win32
+		{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}.Python Multithreaded.Build.0 = Release|Win32
 		{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}.Release.ActiveCfg = Release|Win32
 		{BCFF90FA-28B4-43EB-88BA-6BB7339AA1DC}.Release.Build.0 = Release|Win32
 		{253B8927-6644-43B8-A48F-847A4D338C59}.Debug.ActiveCfg = Debug|Win32
