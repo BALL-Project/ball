@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.sip,v 1.1 2003/11/15 10:59:06 oliver Exp $
+// $Id: geometricObject.sip,v 1.1.2.1 2004/05/19 13:18:57 amoll Exp $
 //
 
 class GeometricObject
@@ -17,7 +17,6 @@ class GeometricObject
   // GeometricObject& operator = (const GeometricObject& object) throw();
   GeometricObject() throw();
   GeometricObject(const GeometricObject& /object/) throw();
-  String getTypeName() const throw();
   String& getName() throw();
   bool hasName() const throw();
   bool isValid() const throw();
