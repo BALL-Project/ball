@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.48 2004/02/18 09:56:40 oliver Exp $
+// $Id: file.C,v 1.49 2004/02/20 09:15:05 oliver Exp $
 //
 
 #include <BALL/SYSTEM/file.h>
@@ -53,7 +53,10 @@ namespace BALL
 
 	void TransformationManager::registerTransformation(const String& pattern, const String& command)
 	{
-		transformation_methods_.insert(std::pair<String, String>(pattern, command));
+		if (!pattern.empty())
+		{
+			transformation_methods_.insert(std::pair<String, String>(pattern, command));	
+		}
 	}
 	
 	void TransformationManager::unregisterTransformation(const String& pattern)
