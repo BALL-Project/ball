@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.23 2004/01/16 15:26:38 amoll Exp $
+// $Id: displayProperties.h,v 1.24 2004/01/16 16:34:13 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -74,6 +74,10 @@ namespace BALL
 			*/
 			DisplayProperties(QWidget *parent = NULL, const char* name = NULL)
 				throw();
+
+			/// Copy constructor just implemented for Python Interface, dont use it! 
+			DisplayProperties(const DisplayProperties& dp)
+			 throw();
 
 			/** Destructor
 			*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.59 2004/01/13 16:03:57 amoll Exp $
+// $Id: displayProperties.C,v 1.60 2004/01/16 16:34:17 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -71,6 +71,12 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 	}
 }
 
+DisplayProperties::DisplayProperties(const DisplayProperties& /*dp*/)
+	throw()
+	: DisplayPropertiesData(),
+		ModularWidget(*this)
+{
+}
 
 DisplayProperties::~DisplayProperties()
 	throw()
