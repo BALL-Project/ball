@@ -1,7 +1,8 @@
-// $Id: defaultProcessors.C,v 1.11 2000/07/03 11:14:51 oliver Exp $
+// $Id: defaultProcessors.C,v 1.12 2001/04/29 23:57:55 oliver Exp $
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
 
+#include <BALL/COMMON/limits.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -9,7 +10,6 @@
 #include <BALL/KERNEL/residue.h>
 #include <stdio.h>
 #include <math.h>
-#include <values.h>
 
 using namespace std;
 

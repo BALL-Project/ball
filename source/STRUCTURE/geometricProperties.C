@@ -1,13 +1,13 @@
-// $Id: geometricProperties.C,v 1.11 2000/12/21 16:20:15 amoll Exp $
+// $Id: geometricProperties.C,v 1.12 2001/04/29 23:57:56 oliver Exp $
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
+#include <BALL/COMMON/limits.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/fragment.h>
 #include <BALL/KERNEL/residue.h>
 #include <stdio.h>
 #include <math.h>
-#include <values.h>
 
 namespace BALL 
 {
@@ -15,16 +15,16 @@ namespace BALL
 	bool BoundingBoxProcessor::start()
 		throw()
 	{
-		lower_.set(FLT_MAX, FLT_MAX, FLT_MAX);
-		upper_.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
+		lower_.set(Limits<float>::max(), Limits<float>::max(), Limits<float>::max());
+		upper_.set(-Limits<float>::max(), -Limits<float>::max(), -Limits<float>::max());
 		return true;
 	}
 
 	bool BoundingBoxProcessor::finish()
 		throw()
 	{
-		if ((lower_.x == FLT_MAX) && (lower_.y == FLT_MAX) && (lower_.z == FLT_MAX)
-				&& (upper_.x == -FLT_MAX) && (upper_.y == -FLT_MAX) && (upper_.z == -FLT_MAX))
+		if ((lower_.x == Limits<float>::max()) && (lower_.y == Limits<float>::max()) && (lower_.z == Limits<float>::max())
+				&& (upper_.x == -Limits<float>::max()) && (upper_.y == -Limits<float>::max()) && (upper_.z == -Limits<float>::max()))
 		{
 			lower_.set(0, 0, 0);
 			upper_.set(0, 0, 0);
