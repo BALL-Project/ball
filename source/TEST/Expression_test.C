@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.21 2002/01/10 14:43:50 anker Exp $
+// $Id: Expression_test.C,v 1.22 2002/01/10 14:44:38 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.21 2002/01/10 14:43:50 anker Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.22 2002/01/10 14:44:38 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -689,7 +689,6 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	{
 		counter = 0;
 		e.setExpression(exp_iterator->first);
-		Log.info() << exp_iterator->first << endl;
 		for (AtomIterator it = S.beginAtom(); +it; ++it)
 		{
 			if (e.operator () (*it)) counter++;
