@@ -1,4 +1,4 @@
-// $Id: INIFile_test.C,v 1.15 2001/05/10 19:35:52 amoll Exp $
+// $Id: INIFile_test.C,v 1.16 2001/08/19 09:39:35 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.15 2001/05/10 19:35:52 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.16 2001/08/19 09:39:35 amoll Exp $")
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
@@ -460,10 +460,10 @@ CHECK(INIFile::isValid(Line_iterator))
 	TEST_EQUAL(ini.isValid(it), false)
 RESULT
 
-CHECK(INIFile::isValid(Section_iterator))
+CHECK(INIFile::isValid(SectionIterator))
 	INIFile ini("data/INIFile_test.ini");
 	ini.read();
-	INIFile::Section_iterator it;
+	INIFile::SectionIterator it;
 	TEST_EQUAL(ini.isValid(it), true)
 
 	it = ini.getSection(0);
