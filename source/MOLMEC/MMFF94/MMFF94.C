@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.12 2005/04/04 14:07:16 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.13 2005/04/04 17:00:28 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -37,9 +37,9 @@ namespace BALL
 		setName("MMFF94");
 
 		// create the component list
-//      insertComponent(new MMFF94Stretch(*this));
+      insertComponent(new MMFF94Stretch(*this));
      		insertComponent(new MMFF94Bend(*this));
-//         		insertComponent(new MMFF94StretchBend(*this));
+         		insertComponent(new MMFF94StretchBend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 	}

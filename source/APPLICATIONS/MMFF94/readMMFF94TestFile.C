@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: readMMFF94TestFile.C,v 1.1.2.16 2005/04/04 14:55:20 amoll Exp $
+// $Id: readMMFF94TestFile.C,v 1.1.2.17 2005/04/04 17:00:32 amoll Exp $
 //
 // A small program for adding hydrogens to a PDB file (which usually comes
 // without hydrogen information) and minimizing all hydrogens by means of a
@@ -225,7 +225,7 @@ bool testStretchBend(MMFF94& mmff, const String& filename, bool compare)
 
 			if (found != 2) continue;
 
-			float deltae = std::fabs(energy1 - s.energy);
+//   			float deltae = std::fabs(energy1 - s.energy);
 
 			sort(constants.begin(), constants.end());
 			sort(constants_ours.begin(), constants_ours.end());
@@ -364,6 +364,8 @@ int runtests(const vector<String>& filenames)
 	MMFF94 mmff;
 
 	vector<String> not_ok;
+	vector<String> rings_wrong;
+	vector<String> aromatic_rings_wrong;
 	Size ok = 0;
 	for (Position pos = 0; pos < filenames.size(); pos++)
 	{
@@ -384,27 +386,60 @@ int runtests(const vector<String>& filenames)
 
 		mmff.updateEnergy();
 
+		String rings_file_name(dir +FileSystem::PATH_SEPARATOR + filenames[pos] + ".rings");
+		LineBasedFile ring_file(rings_file_name);
+		ring_file.readLine();
+		Size nr_rings = ring_file.getLine().toUnsignedInt();
+		ring_file.readLine();
+		Size nr_aromatic_rings = ring_file.getLine().toUnsignedInt();
+
+		bool wrong_rings = false;
+		if (mmff.getRings().size() != nr_rings)
+		{
+			Log.error() << "Got " << mmff.getRings().size() << "          rings, was " << nr_rings << std::endl;
+			rings_wrong.push_back(filenames[pos]);
+			wrong_rings = true;
+		}
+
+		if (mmff.getAromaticRings().size() != nr_aromatic_rings)
+		{
+			Log.error() << "Got " << mmff.getAromaticRings().size() << " aromatic rings, was " << nr_aromatic_rings << std::endl;
+			aromatic_rings_wrong.push_back(filenames[pos]);
+			wrong_rings = true;
+		}
+
 		bool result = true;
 //          		if (testStretch(mmff, filenames[pos], true)) ok++;
-    result = testBend(mmff, filenames[pos], true);
-//    		testBend(mmff, filenames[pos], false);
-//   		if (testStretchBend(mmff, filenames[pos], true)) ok++;
+//       result = testBend(mmff, filenames[pos], true);
+//      		testBend(mmff, filenames[pos], false);
+  		result &= testStretchBend(mmff, filenames[pos], true);
 
-		
 
-		if (!result) not_ok.push_back(filenames[pos]);
-		else ok++;
+		if (result) ok++;
+		else if (!wrong_rings) not_ok.push_back(filenames[pos]);
 	}
 
 	Log.info() << "Tested " << filenames.size() << " files, " << ok << " files ok" << std::endl;
 
-	Log.info() << "Test failed for: " << std::endl;;
-
+	Log.info() << "Tests failed (and rings were correct) for: " << std::endl;;
 	for (Position pos = 0; pos < not_ok.size(); pos++)
 	{
 		Log.info() << not_ok[pos] << " ";
 	}
+	Log.info() << std::endl;
 
+	Log.info() << "Wrong rings for: " << std::endl;;
+	for (Position pos = 0; pos < rings_wrong.size(); pos++)
+	{
+		Log.info() << rings_wrong[pos] << " ";
+	}
+	Log.info() << std::endl;
+
+	Log.info() << "Wrong aromatic rings for: " << std::endl;;
+	for (Position pos = 0; pos < aromatic_rings_wrong.size(); pos++)
+	{
+		Log.info() << aromatic_rings_wrong[pos] << " ";
+	}
 	Log.info() << std::endl;
 		
 	return 0;

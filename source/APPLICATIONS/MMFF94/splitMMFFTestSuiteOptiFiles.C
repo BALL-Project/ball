@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.5 2005/03/31 14:52:45 amoll Exp $
+// $Id: splitMMFFTestSuiteOptiFiles.C,v 1.1.2.6 2005/04/04 16:56:40 amoll Exp $
 //
 // A small program for spliting the Optimol log file from the MMFF94 test suite
 // into smaller files, which are better to handle for parsing 
@@ -14,6 +14,7 @@
 #include <BALL/SYSTEM/fileSystem.h>
 #include <BALL/FORMAT/lineBasedFile.h>
 #include <BALL/SYSTEM/file.h>
+#include <BALL/DATATYPE/hashSet.h>
 
 
 using namespace std;
@@ -61,6 +62,44 @@ int main(int argc, char** argv)
 				infile.getLine().hasSubstring("New Structure Name"))
 		{
 			file_name = infile.getLine().after(": ");
+
+			infile.skipLines(1);
+
+			Size nr_rings = 0;
+			Size nr_aromatic_rings = 0;
+
+			HashSet<String> lines;
+
+			while (!infile.getLine().hasSubstring("ENTER A LIST SUBCOMMAND OR"))
+			{
+				vector<String> fields;
+				infile.getLine().split(fields);
+
+				if (infile.getLine().hasSuffix("SUBRINGS"))
+				{
+				 	if (lines.has(infile.getLine()))
+					{
+						while (infile.getLine() != "") infile.readLine();
+						infile.skipLines(2);
+						continue;
+					}
+					nr_rings += fields[3].toUnsignedShort();
+					lines.insert(infile.getLine());
+				}
+
+				if (infile.getLine().hasSuffix("AROMATIC"))
+				{
+					nr_aromatic_rings++;
+				}
+
+				infile.readLine();
+			}
+
+			File rings_file(dir + FileSystem::PATH_SEPARATOR + file_name + ".rings", std::ios::out);
+			rings_file << nr_rings << std::endl;
+			rings_file << nr_aromatic_rings << std::endl;
+			rings_file.close();
+
 			while (!infile.getLine().hasSubstring("ATOM NAME"))
 			{
 				infile.readLine();
