@@ -11,13 +11,13 @@ namespace BALL
  
     CanvasWidget::PixmapItem::PixmapItem(QCanvas* canvas, const QPixmap& pixmap)
       : QCanvasRectangle(canvas),
-	pixmap_(pixmap)
+				pixmap_(pixmap)
     {
     }
 
     CanvasWidget::PixmapItem::PixmapItem(const CanvasWidget::PixmapItem& pixitem)
       : QCanvasRectangle((QCanvasRectangle)pixitem),
-	pixmap_(pixitem.pixmap_)
+				pixmap_(pixitem.pixmap_)
     {
     }
 
@@ -41,11 +41,11 @@ namespace BALL
     CanvasWidget::CanvasWidget(QWidget *parent, int x, int y, 
 			       const char* name, WFlags f)
       : QCanvasView(parent, name, f),
-				canvas_(0,0),//800, 600),
+				canvas_(0,0),  //Constructs a QCanvas that is w pixels wide and h pixels high
 				x_(x),
 				y_(y)
     {
-      setCanvas(&canvas_);
+      setCanvas(&canvas_);  //Sets the QCanvas upon which the canvas item is to be drawn to c. 
     }
 
     //Destructor
@@ -53,13 +53,19 @@ namespace BALL
     {
 	// we are responsible for destrucing the items
       for (int i=0; i<(int)objects_.size(); i++)
-	{
-		if (objects_[i] != 0)
-			delete (objects_[i]);
-	}
-     
+			{
+				if (objects_[i] != 0)
+					delete (objects_[i]);
+			}
     }
-   
+		
+ 		//get/set methods
+    const QCanvas& CanvasWidget::getCanvas()
+			throw()
+		{
+			return canvas_;
+		}
+		
     
     //methods:
     void CanvasWidget::showObjects()
@@ -67,8 +73,7 @@ namespace BALL
     {
       for(int i=0; i<(int)objects_.size(); i++)
       {
-//	objects_[i].move(0,0);
-	objects_[i]->show();
+				objects_[i]->show();
       }
     }
     
@@ -76,7 +81,6 @@ namespace BALL
     void CanvasWidget::zoomIn()
       throw()
     {
-Log.info() << "ZoomIn" << std::endl;
       QWMatrix m = this->worldMatrix();
       m.scale(2.0,2.0);
       this->setWorldMatrix(m);
@@ -106,23 +110,27 @@ Log.info() << "ZoomIn" << std::endl;
       float yfactor = 1.;
       QWMatrix m  = worldMatrix();
 
-      int conWidth  = viewport()->width();  //content of scrollview
-      int conHeight = viewport()->height(); //content of scrollview
+			// in order to prevend rounding errors we minimize the dividend
+			// -> subtract 5	
+      int conWidth  = viewport()->width()-15;  //content of scrollview
+      int conHeight = viewport()->height()-15; //content of scrollview
 
       int visHeight = canvas_.height();  // height of canvas
       int visWidth  = canvas_.width();   // width of canvas
-
 
       if((visWidth !=0.) && (visHeight!=0.))
       {
       	xfactor = (float)conWidth/(float)visWidth;
 				yfactor = (float)conHeight/(float)visHeight;
       }
+
+		  //originally we have a 3x3 matrix
+			//m.m12 and m.m21 are the old matrixvalues
+			//m.dx and m.dy are the old translation values	
 			QWMatrix m2(xfactor, m.m12(), m.m21(), yfactor, m.dx(), m.dy());
-Log.info() << xfactor << " " << yfactor << std::endl;
+
       setWorldMatrix(m2);
     }
-
 
   }// End of namespace VIEW
 }//End of namespae BALL

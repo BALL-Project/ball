@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.6 2004/01/13 12:41:01 anhi Exp $
+// $Id: regularData1DWidget.C,v 1.7 2004/01/26 16:16:45 anne Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
@@ -26,7 +26,6 @@ namespace BALL
 			 //	 height_(0),//400), 
 			 //	 line_style_(true)
 		{
-			std::cout <<"constructoraufruf!" << std::endl;
 		}
 
 		//Copyconstructor
@@ -91,7 +90,7 @@ namespace BALL
 
 			// resize the canvas to fit the data
 			canvas_.resize(5*(data_.size()+2), height_+10);
-			resizeContents(canvas_.width(), canvas_.height());
+//			resizeContents(canvas_.width(), canvas_.height());
 			int x_new;
 			int y_new;
 			int x_old = 5;
@@ -108,12 +107,12 @@ namespace BALL
 				ql = new QCanvasLine(&canvas_);
 				ql->setPoints(x_old, y_old, x_new, y_new);
 				objects_.push_back(dynamic_cast<QCanvasItem*> (ql));
-				ql->show();
+			//	ql->show();
 
 				x_old = x_new;
 				y_old = y_new;
 			}
-
+/*
 			//add the x-axis
 				ql = new QCanvasLine(&canvas_);
 				int startx = 5;
@@ -123,18 +122,18 @@ namespace BALL
 				
 				ql->setPoints(startx, starty, endx, endy);
 				objects_.push_back(dynamic_cast<QCanvasItem*> (ql));
-				
+	*/			
 			 //QCanvasPolygon* =qp;
 			 
 			//add the y-axis	
-				ql = new QCanvasLine(&canvas_);
+		/*		ql = new QCanvasLine(&canvas_);
 				startx = 0;
 				starty = height_+5 - (int)round(((0-min)/dif_min)*5);
 				endx   = data_.size()*5;
 				endy   = height_+5 - (int)round(((data_[endx]-min)/dif_min)*5);
 				ql->setPoints(startx, starty, endx, endy);
 				objects_.push_back(dynamic_cast<QCanvasItem*> (ql));
-			}
+	*/		}
 
 
 	}//end of namespace VIEW

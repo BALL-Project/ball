@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.C,v 1.4 2004/01/13 12:41:01 anhi Exp $
+// $Id: regularData2DWidget.C,v 1.5 2004/01/26 16:16:45 anne Exp $
 //
 
-#include <BALL/VIEW/WIDGETS/regularData2DWidget.h>
+#include <BALL/VIEW/WIDGETS/regularData2DWidget.h> 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <qpointarray.h>
 #include <qpainter.h>
@@ -26,7 +26,6 @@ namespace BALL
 			 //	 height_(0),//400), 
 			 //	 line_style_(true)
 		{
-			std::cout <<"constructoraufruf!" << std::endl;
 		}
 
 		//Copyconstructor
@@ -61,20 +60,19 @@ namespace BALL
 			
 			ColorRGBA colorList[3];
 			ColorTable color_table_;  //Colortabel BALL
-			colorList[0] = ColorRGBA(1,0,0,1);
-			colorList[1] = ColorRGBA(0,1,0,1);
-			colorList[2] = ColorRGBA(0,0,1,1);
+			colorList[0] = ColorRGBA(1.,0.,0.,1.);
+			colorList[1] = ColorRGBA(0.,1.,0.,1.);
+			colorList[2] = ColorRGBA(0.,0.,1.,1.);
 
 			color_table_.setBaseColors(colorList, 3);
 			color_table_.setNumberOfColors(53);
-			color_table_.setRange(0,1);
+			color_table_.setRange(-1,1);
 			color_table_.createTable();
 			
 			Position x, y;
 			QPainter paint;     //Painter
 			QColor pCol;        //QTColor
 			ColorRGBA mapcolor; //Ball Color
-			PixmapItem* pixItem = new PixmapItem;
 			
 			// determine the minimal and maximal values in data_
 			float min; 
@@ -97,23 +95,24 @@ namespace BALL
 				}
 			}			
 			
-			Size max_x, max_y;
+			Size max_x, max_y; //maximal number of Lines and Columns
 
-			max_x = data_.getMaxXIndex();
-			max_y = data_.getMaxYIndex();
+			max_x = data_.getSize().x;
+			max_y = data_.getSize().y;
 
 			// Draw the points
-			QPixmap& pixmap = pixItem->getPixmap();
+			QPixmap pixmap;// = pixItem->getPixmap();
 
 			pixmap.resize(max_x, max_y);
 
 			pixmap.fill();           // delete the old picture
-			paint.begin(pixmap);         // set the Painter 
+			paint.begin(&pixmap);         // set the Painter 
 
 			for (y=0; y<=max_y; y++) 
 			{
 				for (x=0; x<=max_x; x++) 
 				{
+					//get the QTColor from BallColor
 					mapcolor = color_table_.map(data_[x + y*max_x]);
 					pCol = QColor(mapcolor.getRed(), mapcolor.getGreen(), mapcolor.getBlue());
 
@@ -125,7 +124,8 @@ namespace BALL
 
 			paint.end();
 			//put the pixmapItem into objects
-			objects_.push_back(dynamic_cast<QCanvasItem*> (&pixmap); 
+			PixmapItem* pixItem = new PixmapItem(&canvas_, pixmap);
+			objects_.push_back(dynamic_cast<QCanvasItem*> (pixItem)); 
 		
 			// resize the canvas to fit the data
 			canvas_.resize(max_x, max_y);

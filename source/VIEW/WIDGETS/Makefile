@@ -18,8 +18,13 @@ CPP_SOURCES=\
 	molecularProperties.C\
 	canvasWidget.C\
 	dockableRegularData1DWidget.C\
+	dockableRegularData2DWidget.C\
 	scene.C\
+	regularData2DWidget.C\
 	regularData1DWidget.C
+
+
+
 
 PYTHON_CPP_SOURCES=\
 	pyWidget.C
@@ -34,8 +39,11 @@ MOC_SOURCES=\
 	molecularProperties_moc.C\
 	scene_moc.C\
 	dockableRegularData1DWidget_moc.C\
+	dockableRegularData2DWidget_moc.C\
 	canvasWidget_moc.C\
-	regularData1DWidget_moc.C
+	regularData1DWidget_moc.C\
+	regularData2DWidget_moc.C
+
 
 
 PYTHON_MOC_SOURCES=\
@@ -78,11 +86,17 @@ dockableRegularData1DWidget_moc.C:	$(HEADER_DIR)/dockableRegularData1DWidget.h
 regularData1DWidget_moc.C:	$(HEADER_DIR)/regularData1DWidget.h
 	$(MOC) $(HEADER_DIR)/regularData1DWidget.h -o $@
 
-canvasWidget_moc.C:	$(HEADER_DIR)/canvasWidget.h
-	$(MOC) $(HEADER_DIR)/canvasWidget.h -o $@
+dockableRegularData2DWidget_moc.C:	$(HEADER_DIR)/dockableRegularData2DWidget.h
+	$(MOC) $(HEADER_DIR)/dockableRegularData2DWidget.h -o $@
 
 regularData2DWidget_moc.C:	$(HEADER_DIR)/regularData2DWidget.h
 	$(MOC) $(HEADER_DIR)/regularData2DWidget.h -o $@
+
+canvasWidget_moc.C:	$(HEADER_DIR)/canvasWidget.h
+	$(MOC) $(HEADER_DIR)/canvasWidget.h -o $@
+
+#regularData2DWidget_moc.C:	$(HEADER_DIR)/regularData2DWidget.h
+#	$(MOC) $(HEADER_DIR)/regularData2DWidget.h -o $@
 
 datasetControl_moc.C:	$(HEADER_DIR)/datasetControl.h
 	$(MOC) $(HEADER_DIR)/datasetControl.h -o $@
