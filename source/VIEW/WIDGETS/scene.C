@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.111 2004/07/20 22:28:27 amoll Exp $
+// $Id: scene.C,v 1.112 2004/07/20 23:56:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -194,10 +194,6 @@ namespace BALL
 			if (rebuild_displaylists)
 			{
 				renderView_(REBUILD_DISPLAY_LISTS);
-			}
-			else
-			{
-				renderView_(DISPLAY_LISTS_RENDERING);
 			}
 
 			update_running_ = false;
