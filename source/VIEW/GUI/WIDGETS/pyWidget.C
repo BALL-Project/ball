@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.8 2002/02/27 12:25:20 sturm Exp $
+// $Id: pyWidget.C,v 1.9 2002/03/12 16:14:30 anker Exp $
 
 
 #include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
@@ -230,6 +230,10 @@ void PyWidget::parseLine_()
 	if (line.length() > 4)
 	{
 		line = line.mid(4);
+	}
+	else
+	{
+		line = "";
 	}
 	if (multi_line_mode_ == true)
 	{
