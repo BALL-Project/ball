@@ -119,6 +119,7 @@ namespace BALL
 	void Expression::registerStandardPredicates_()
 	{
 		using namespace RTTI;
+		create_methods_.insert("true", TruePredicate::createDefault);
 		create_methods_.insert("name", AtomNamePredicate::createDefault);
 		create_methods_.insert("type", AtomTypePredicate::createDefault);
 		create_methods_.insert("element", ElementPredicate::createDefault);
