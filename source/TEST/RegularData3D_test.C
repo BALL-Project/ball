@@ -1,9 +1,9 @@
-// $Id: RegularData3D_test.C,v 1.4.4.4 2002/12/06 15:29:09 oliver Exp $
+// $Id: RegularData3D_test.C,v 1.4.4.5 2002/12/10 18:48:30 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.4.4.4 2002/12/06 15:29:09 oliver Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.4.4.5 2002/12/10 18:48:30 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -29,6 +29,7 @@ CHECK(RegularData3D<T>(float, float, float, float, float, float, Size, Size, Siz
 															11, 11, 11);
 	TEST_NOT_EQUAL(grid, 0)
 	TEST_EQUAL(grid->getSize(), 1331)
+	TEST_EQUAL(*grid, RegularData3D(0.0, 0.0, 0.0, 10.0, 10.0, 10.0, 11, 11, 11))
 	delete grid;
 RESULT
 
@@ -54,16 +55,25 @@ RESULT
 
 RegularData3D g(0.0, 0.0, 0.0, 10.0, 10.0, 10.0,	11, 11, 11);
 
-CHECK(set(const RegularData3D<T>& grid))
+CHECK(resize())
 	RegularData3D g1;
-	g1.set(g);
-	TEST_EQUAL(g1.getSize(), 1331)
+	Vector3 lower(0.0, 21, -79.4);
+	Vector3 upper(1.0, 23, -78.6);
+	TVector3<Size> nogp(3, 4, 5);
+
+	g1.resize(lower, upper, nogp);
+
+	TEST_EQUAL(g1.getSize(), 60)
+	TEST_EQUAL(g1.getOrigin(), lower)
+	TEST_EQUAL(g1.getDimension(), upper - lower)
+
 RESULT
 
 CHECK(operator = (const RegularData3D<T>& grid))
 	RegularData3D g1;
 	g1 = g;
 	TEST_EQUAL(g1.getSize(), 1331)
+	TEST_EQUAL((g1 == g), true)
 RESULT
 
 CHECK(dump())
