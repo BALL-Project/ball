@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Nucleotide_test.C,v 1.12 2002/12/12 11:34:42 oliver Exp $
+// $Id: Nucleotide_test.C,v 1.13 2003/06/30 16:29:51 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.12 2002/12/12 11:34:42 oliver Exp $")
+START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.13 2003/06/30 16:29:51 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -25,16 +25,16 @@ String filename;
 NEW_TMP_FILE(filename)
 
 Nucleotide*	n;
-CHECK(Nucleotide())
+CHECK(Nucleotide() throw())
 	n = new Nucleotide;
 	TEST_NOT_EQUAL(n, 0)
 RESULT
 
-CHECK(~Nucleotide())
+CHECK(~Nucleotide() throw())
 	delete n;
 RESULT
 
-CHECK(Nucleotide(Nucleotide&, bool))
+CHECK(Nucleotide(const Nucleotide& nucleotide, bool deep = true) throw())
 	Nucleotide* n1 = new Nucleotide;
 	n1->setName("testname");
 	Atom a(PTE[Element::HELIUM],"a");
@@ -57,9 +57,7 @@ CHECK(Nucleotide(Nucleotide&, bool))
 	delete n1;
 RESULT
 
-CHECK(Nucleotide(const String& name,
-			  			const String& id = BALL_Nucleotide_DEFAULT_ID,
-							char insertion_code = BALL_Nucleotide_DEFAULT_INSERTION_CODE))
+CHECK(Nucleotide(const String& name, const String& id = BALL_NUCLEOTIDE_DEFAULT_ID, char insertion_code = BALL_NUCLEOTIDE_DEFAULT_INSERTION_CODE) throw())
 	Nucleotide* n1 = new Nucleotide("n1", "id", 'i');
 	TEST_NOT_EQUAL(n1, 0)
 	if (n1 != 0)
@@ -80,7 +78,7 @@ CHECK(Nucleotide(const String& name,
 	}
 RESULT
 
-CHECK(Nucleotide::clear())
+CHECK(void clear() throw())
 	Nucleotide n("n1", "id", 'c');
 	Atom a(PTE[Element::HELIUM],"a");
 	n.insert(a);
@@ -93,7 +91,7 @@ CHECK(Nucleotide::clear())
 	TEST_EQUAL(c.getNucleotide(0), &n)
 RESULT
 
-CHECK(Nucleotide::destroy())
+CHECK(void destroy() throw())
 	Nucleotide n("n1", "id", 'c');
 	Atom a(PTE[Element::HELIUM],"a");
 	n.insert(a);
@@ -106,7 +104,7 @@ CHECK(Nucleotide::destroy())
 	TEST_EQUAL(c.getNucleotide(0), 0)
 RESULT
 
-CHECK(Nucleotide::set(const Nucleotide& Nucleotide, bool deep = true))
+CHECK(void set(const Nucleotide& nucleotide, bool deep = true) throw())
 	Nucleotide n1("n1");
 	Atom a(PTE[Element::HELIUM],"a");
 	n1.insert(a);
@@ -120,7 +118,7 @@ CHECK(Nucleotide::set(const Nucleotide& Nucleotide, bool deep = true))
 	TEST_EQUAL(n2.countAtoms(), 1)
 RESULT
 
-CHECK(Nucleotide::Nucleotide& operator = (const Nucleotide& Nucleotide))
+CHECK(Nucleotide& operator = (const Nucleotide& nucleotide) throw())
 	Nucleotide n1("n1");
 	Atom a(PTE[Element::HELIUM],"a");
 	n1.insert(a);
@@ -130,7 +128,7 @@ CHECK(Nucleotide::Nucleotide& operator = (const Nucleotide& Nucleotide))
 	TEST_EQUAL(n2.countAtoms(), 1)
 RESULT
 
-CHECK(Nucleotide::get(Nucleotide& Nucleotide, bool deep = true) const )
+CHECK(void get(Nucleotide& nucleotide, bool deep = true) const throw())
 	Nucleotide n1("n1");
 	Atom a(PTE[Element::HELIUM],"a");
 	n1.insert(a);
@@ -144,7 +142,7 @@ CHECK(Nucleotide::get(Nucleotide& Nucleotide, bool deep = true) const )
 	TEST_EQUAL(n2.countAtoms(), 1)
 RESULT
 
-CHECK(Nucleotide::swap(Nucleotide& Nucleotide))
+CHECK(void swap(Nucleotide& nucleotide) throw())
 	Nucleotide n1("n1");
 	Nucleotide n2("n2");
 	Atom a1(PTE[Element::HELIUM],"a");
@@ -158,7 +156,7 @@ CHECK(Nucleotide::swap(Nucleotide& Nucleotide))
 	TEST_EQUAL(n2.getAtom(0), &a1)
 RESULT
 
-CHECK(Nucleotide::getNucleicAcid())
+CHECK(NucleicAcid* getNucleicAcid() throw())
 	Nucleotide n1("n1");
 	TEST_EQUAL(n1.getNucleicAcid(), 0)
 	NucleicAcid c;
@@ -167,14 +165,14 @@ CHECK(Nucleotide::getNucleicAcid())
 	TEST_EQUAL(c.getName(), "c")
 RESULT
 
-CHECK(Nucleotide::getNucleicAcid() const )
+CHECK(const NucleicAcid* getNucleicAcid() const throw())
 	Nucleotide n1("n1");
 	NucleicAcid c;
 	c.insert(n1);
 	TEST_EQUAL(n1.getNucleicAcid(), &c)
 RESULT
 
-CHECK(Nucleotide::getAtom(Position position))
+CHECK([EXTRA]Nucleotide::getAtom(Position position))
 	Nucleotide n1("n1");
 	TEST_EQUAL(n1.getAtom(0), 0)
 	Atom a1(PTE[Element::HELIUM],"a");
@@ -183,7 +181,7 @@ CHECK(Nucleotide::getAtom(Position position))
 	TEST_EQUAL(a1.getName(), "a1")
 RESULT
 
-CHECK(Nucleotide::getAtom(Position position) const )
+CHECK([EXTRA]Nucleotide::getAtom(Position position) const )
 	Nucleotide n1("n1");
 	TEST_EQUAL(n1.getAtom(0), 0)
 	Atom a1(PTE[Element::HELIUM],"a1");
@@ -191,7 +189,7 @@ CHECK(Nucleotide::getAtom(Position position) const )
 	TEST_EQUAL(n1.getAtom(0), &a1)
 RESULT
 
-CHECK(Nucleotide::setID(const String& id))
+CHECK(void setID(const String& id) throw())
 	Nucleotide n1("x");
 	TEST_EQUAL(n1.getID(), "")
 	n1.setID("");
@@ -200,7 +198,7 @@ CHECK(Nucleotide::setID(const String& id))
 	TEST_EQUAL(n1.getID(), "n1")
 RESULT
 
-CHECK(Nucleotide::getID() const )
+CHECK(const String& getID() const throw())
 	Nucleotide n1("x");
 	TEST_EQUAL(n1.getID(), "")
 	n1.setID("");
@@ -209,21 +207,21 @@ CHECK(Nucleotide::getID() const )
 	TEST_EQUAL(n1.getID(), "n1")
 RESULT
 
-CHECK(Nucleotide::setInsertionCode(char insertion_code))
+CHECK(void setInsertionCode(char insertion_code) throw())
 	Nucleotide n1('x');
 	TEST_EQUAL(n1.getInsertionCode(), ' ')
 	n1.setInsertionCode('r');
 	TEST_EQUAL(n1.getInsertionCode(), 'r')
 RESULT
 
-CHECK(Nucleotide::getInsertionCode() const )
+CHECK(char getInsertionCode() const throw())
 	Nucleotide n1('x');
 	TEST_EQUAL(n1.getInsertionCode(), ' ')
 	n1.setInsertionCode('r');
 	TEST_EQUAL(n1.getInsertionCode(), 'r')
 RESULT
 
-CHECK(Nucleotide::countAtoms() const )
+CHECK([EXTRA]Nucleotide::countAtoms() const )
 	Nucleotide n1('x');
 	Atom a(PTE[Element::HELIUM],"a");
 	TEST_EQUAL(n1.countAtoms(), 0)
@@ -231,7 +229,7 @@ CHECK(Nucleotide::countAtoms() const )
 	TEST_EQUAL(n1.countAtoms(), 1)
 RESULT
 
-CHECK(Nucleotide::prepend(Atom& atom))
+CHECK([EXTRA]Nucleotide::prepend(Atom& atom))
 	Nucleotide n1('x');
 	Atom a1(PTE[Element::HELIUM],"a1");
 	Atom a2(PTE[Element::HELIUM],"a2");
@@ -241,7 +239,7 @@ CHECK(Nucleotide::prepend(Atom& atom))
 	TEST_EQUAL(n1.getAtom(1), &a1)
 RESULT
 
-CHECK(Nucleotide::append(Atom& atom))
+CHECK([EXTRA]Nucleotide::append(Atom& atom))
 	Nucleotide n1('x');
 	Atom a1(PTE[Element::HELIUM],"a1");
 	Atom a2(PTE[Element::HELIUM],"a2");
@@ -251,7 +249,7 @@ CHECK(Nucleotide::append(Atom& atom))
 	TEST_EQUAL(n1.getAtom(1), &a2)
 RESULT
 
-CHECK(Nucleotide::insert(Atom& atom))
+CHECK([EXTRA]Nucleotide::insert(Atom& atom))
 	Nucleotide n1('x');
 	Atom a1(PTE[Element::HELIUM],"a1");
 	Atom a2(PTE[Element::HELIUM],"a2");
@@ -261,7 +259,7 @@ CHECK(Nucleotide::insert(Atom& atom))
 	TEST_EQUAL(n1.getAtom(1), &a2)
 RESULT
 
-CHECK(Nucleotide::insertBefore(Atom& atom, Composite& before))
+CHECK([EXTRA]Nucleotide::insertBefore(Atom& atom, Composite& before))
 	Nucleotide n1('x');
 	Atom a1(PTE[Element::HELIUM],"a1");
 	Atom a2(PTE[Element::HELIUM],"a2");
@@ -274,7 +272,7 @@ CHECK(Nucleotide::insertBefore(Atom& atom, Composite& before))
 	TEST_EQUAL(n1.getAtom(2), &a2)
 RESULT
 
-CHECK(Nucleotide::insertAfter(Atom& atom, Composite& after))
+CHECK([EXTRA]Nucleotide::insertAfter(Atom& atom, Composite& after))
 	Nucleotide n1('x');
 	Atom a1(PTE[Element::HELIUM],"a1");
 	Atom a2(PTE[Element::HELIUM],"a2");
@@ -287,7 +285,7 @@ CHECK(Nucleotide::insertAfter(Atom& atom, Composite& after))
 	TEST_EQUAL(n1.getAtom(2), &a3)
 RESULT
 
-CHECK(Nucleotide::remove(Atom& atom))
+CHECK([EXTRA]Nucleotide::remove(Atom& atom))
 	Nucleotide n1('x');
 	Atom a1(PTE[Element::HELIUM],"a1");
 	Atom a2(PTE[Element::HELIUM],"a2");
@@ -300,7 +298,7 @@ CHECK(Nucleotide::remove(Atom& atom))
 	TEST_EQUAL(n1.getAtom(1), &a3)
 RESULT
 
-CHECK(Nucleotide::spliceBefore(Nucleotide& Nucleotide))
+CHECK(void spliceBefore(Nucleotide& nucleotide) throw())
 	Nucleotide n1('x');
 	Nucleotide n2('x');
 	Atom a1(PTE[Element::HELIUM],"a1");
@@ -312,7 +310,7 @@ CHECK(Nucleotide::spliceBefore(Nucleotide& Nucleotide))
 	TEST_EQUAL(n1.getAtom(1), &a1)
 RESULT
 
-CHECK(Nucleotide::spliceAfter(Nucleotide& Nucleotide))
+CHECK(void spliceAfter(Nucleotide& nucleotide) throw())
 	Nucleotide n1('x');
 	Nucleotide n2('x');
 	Atom a1(PTE[Element::HELIUM],"a1");
@@ -324,7 +322,7 @@ CHECK(Nucleotide::spliceAfter(Nucleotide& Nucleotide))
 	TEST_EQUAL(n1.getAtom(1), &a2)
 RESULT
 
-CHECK(Nucleotide::splice(Nucleotide& Nucleotide))
+CHECK(void splice(Nucleotide& nucleotide) throw())
 	Nucleotide n1('x');
 	Nucleotide n2('x');
 	Atom a1(PTE[Element::HELIUM],"a1");
@@ -336,7 +334,7 @@ CHECK(Nucleotide::splice(Nucleotide& Nucleotide))
 	TEST_EQUAL(n1.getAtom(1), &a1)
 RESULT
 
-CHECK(Nucleotide::isTerminal() const )
+CHECK(bool isTerminal() const throw())
 	Nucleotide n1('x');
 	TEST_EQUAL(n1.isTerminal(), false)
 	NucleicAcid c1;
@@ -350,7 +348,7 @@ CHECK(Nucleotide::isTerminal() const )
 	TEST_EQUAL(n1.isTerminal(), false)
 RESULT
 
-CHECK(Nucleotide::is3Prime() const )
+CHECK(bool is3Prime() const throw())
 	Nucleotide n1('x');
 	TEST_EQUAL(n1.is3Prime(), false)
 	NucleicAcid c1;
@@ -364,7 +362,7 @@ CHECK(Nucleotide::is3Prime() const )
 	TEST_EQUAL(n1.is3Prime(), false)
 RESULT
 
-CHECK(Nucleotide::is5Prime() const )
+CHECK(bool is5Prime() const throw())
 	Nucleotide n1('x');
 	TEST_EQUAL(n1.is5Prime(), false)
 	NucleicAcid c1;
@@ -378,14 +376,14 @@ CHECK(Nucleotide::is5Prime() const )
 	TEST_EQUAL(n1.is5Prime(), false)
 RESULT
 
-CHECK(Nucleotide::isValid() const )
+CHECK(bool isValid() const throw())
 	Nucleotide n("n1", "id", 'i');
 	TEST_EQUAL(n.isValid(), true)
 	n.setName("");
 	TEST_EQUAL(n.isValid(), true)
 RESULT
 
-CHECK(Nucleotide::dump(std::ostream& s = std::cout, Size depth = 0) const )
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	Nucleotide n1("n1", "test", 'X');
 	Atom a1(PTE[Element::HELIUM],"a1");
 	n1.insert(a1);
@@ -400,7 +398,7 @@ using namespace RTTI;
 pm.registerClass(getStreamName<Nucleotide>(), Nucleotide::createDefault);
 pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 NEW_TMP_FILE(filename)
-CHECK(persistentWrite(PersistenceManager&, String, bool))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Nucleotide* f1= new Nucleotide("name1");
 	Atom* f2 = new Atom();
@@ -415,7 +413,7 @@ CHECK(persistentWrite(PersistenceManager&, String, bool))
 	delete f1;
 RESULT
 
-CHECK(persistentRead(PersistenceManager&))
+CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();
@@ -436,7 +434,7 @@ CHECK(persistentRead(PersistenceManager&))
 	}
 RESULT
 
-CHECK(operator ==)
+CHECK(bool operator == (const Nucleotide& nucleotide) const throw())
 	Nucleotide b1;
 	Nucleotide b2;
 	TEST_EQUAL(b1 == b2, false)
@@ -444,6 +442,32 @@ CHECK(operator ==)
 	TEST_EQUAL(b1 == b1, true)
 RESULT
 
+CHECK(bool operator != (const Nucleotide& nucleotide) const throw())
+	Nucleotide b1;
+	Nucleotide b2;
+	TEST_EQUAL(b1 != b2, true)
+	b1 = b2;
+	TEST_EQUAL(b1 != b1, false)
+RESULT
+
+CHECK(BALL_CREATE_DEEP(Nucleotide))
+	Nucleotide n1("n1", "test", 'X');
+	Atom a1(PTE[Element::HELIUM],"a1");
+	n1.insert(a1);
+	Nucleotide* n = (Nucleotide*) n1.create(false, true);
+	TEST_EQUAL(n->getName(), "")
+	TEST_EQUAL(n->getID(), BALL_NUCLEOTIDE_DEFAULT_ID)
+	TEST_EQUAL(n->getInsertionCode(), BALL_NUCLEOTIDE_DEFAULT_INSERTION_CODE)
+	TEST_EQUAL(n->countAtoms(), 0)
+	delete n;
+	n = (Nucleotide*) n1.create(true, false);
+	TEST_EQUAL(n->getName(), "n1")
+	TEST_EQUAL(n->getID(), "test")
+	TEST_EQUAL(n->getInsertionCode(), 'X')
+	TEST_EQUAL(n->countAtoms(), 1)
+	TEST_EQUAL(n->getAtom(0)->getName(), "a1")
+	delete n;
+RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST
