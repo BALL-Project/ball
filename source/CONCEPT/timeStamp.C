@@ -1,4 +1,4 @@
-// $Id: timeStamp.C,v 1.16 2001/05/17 01:30:49 oliver Exp $
+// $Id: timeStamp.C,v 1.17 2002/01/04 19:52:08 oliver Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 
@@ -72,8 +72,8 @@ namespace BALL
 		time_t secs = (time_t)time.getSeconds();
 		static char buf[128];
 		strftime(buf, 127, "%Y%m%d%H%M%S", localtime(&secs));
-		
-		return os << buf << "." << usecs.after(".");
+
+		return os << buf << "." << (usecs.has('.') ? usecs.after(".").toString().c_str() : "0");
 	}
 
   ostream& operator << (ostream& os, const TimeStamp& stamp)

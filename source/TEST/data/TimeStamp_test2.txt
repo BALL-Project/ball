@@ -1,4 +1,4 @@
 STORABLE BALL::PreciseTime  time_ 
   BALL::Size secs_ = 12345678 
-  BALL::Size usecs_ = 23456789 
+  BALL::Size usecs_ = 456789 
 END_STORABLE
