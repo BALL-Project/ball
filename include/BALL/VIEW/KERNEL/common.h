@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.7 2003/10/05 16:30:30 amoll Exp $
+// $Id: common.h,v 1.8 2003/10/15 14:21:47 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -15,161 +15,162 @@ namespace BALL
 {
 	namespace VIEW
 	{
-		/** @name General enumerations, methods and typedefs
-				These predefined types are used in VIEW for portability and
-				comprehensibility.
-				 \ingroup ViewKernelOther
-		*/
-		//@{
-		
-		/// 
-		extern bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS;
 
-		/** SceneHandle type.
-				Use this type to represent <b>scene handles</b>. Scene handles are used
-				for the non-ambiguous identification of scenes.
-		*/
-		typedef unsigned long    SceneHandle;      
+/** @name General enumerations, methods and typedefs
+		These predefined types are used in VIEW for portability and
+		comprehensibility.
+		 \ingroup ViewKernelOther
+*/
+//@{
 
+/// global variable, which defines, if DockWidgets are shown with a Label
+extern bool BALL_VIEW_DOCKWINDOWS_SHOW_LABELS;
 
-		/**	The default port for the VIEW server.
-				Default port is 20000.
-				\see  Server
-		*/
-		#define VIEW_DEFAULT_PORT 20000
-
-		/** Command enums.
-				These enums specify the commands the server is able
-				to understand (at the moment).
-				\see  Server
-				\see  Client
-		*/
-		enum Command
-		{
-			/// unknown command.
-			COMMAND__UNKOWN              = 0,
-
-			/// sent command. This command will be used for indicating a new object that is about to be received
-			COMMAND__SEND_OBJECT         = 1,
-
-			/// next free command.
-			NUMBER_OF_COMMANDS
-		};	
+/** SceneHandle type.
+		Use this type to represent <b>scene handles</b>. Scene handles are used
+		for the non-ambiguous identification of scenes.
+*/
+typedef unsigned long    SceneHandle;      
 
 
-		/// Drawing Modes
-		enum DrawingMode
-		{
-			///
-			DRAWING_MODE_DOTS = 0,
+/**	The default port for the VIEW server.
+		Default port is 20000.
+		\see  Server
+*/
+#define VIEW_DEFAULT_PORT 20000
 
-			///
-			DRAWING_MODE_WIREFRAME,
+/** Command enums.
+		These enums specify the commands the server is able
+		to understand (at the moment).
+		\see  Server
+		\see  Client
+*/
+enum Command
+{
+	/// unknown command.
+	COMMAND__UNKOWN              = 0,
 
-			///
-			DRAWING_MODE_SOLID
-		};
+	/// sent command. This command will be used for indicating a new object that is about to be received
+	COMMAND__SEND_OBJECT         = 1,
 
-		// Number of drawing modes
-		#define BALL_VIEW_MAXIMAL_DRAWING_MODE 3
-
-		
-		/// Drawing Precisions
-		enum DrawingPrecision
-		{
-			///
-			DRAWING_PRECISION_LOW = 0,
-
-			///
-			DRAWING_PRECISION_MEDIUM,
-
-			///
-			DRAWING_PRECISION_HIGH,
-
-			///
-			DRAWING_PRECISION_ULTRA
-		};
-
-		/// Number of drawing precisions
-		#define BALL_VIEW_MAXIMAL_DRAWING_PRECISION 4
-
-		
-		/// MAXIMAL_DRAWING_PRECISION * MAXIMAL_DRAWING_MODE
-		#define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE  12  
-
-    
-		/** This properties define the available models.
-		 		Add new model entries before MODEL_LABEL if you want them to show up 
-				in the DisplayProperties dialog!
-		*/
-		enum ModelTypes
-		{
-			/// unkown property
-			MODEL_UNKNOWN = -1,
-			
-			/// defines the property for the model: Lines
-			MODEL_LINES = 0,
-
-			/// defines the property for the model: Stick
-			MODEL_STICK,
-
-			/// defines the property for the model: Ball and Stick
-			MODEL_BALL_AND_STICK,
-			
-			/// defines the property for the model: Van der Waals
-			MODEL_VDW,
-
-			/// defines the property for the model: solvent-excluded surface
-			MODEL_SE_SURFACE,
-
-			/// defines the property for the model: solvent-accessible surface
-			MODEL_SA_SURFACE,
-
-			/// defines the property for the model: Backbone
-			MODEL_BACKBONE,
-
-			/// defines the property for the model: Cartoon
-			MODEL_CARTOON,
-
-			/// defines the property for the model: H-Bonds
-			MODEL_HBONDS,
-			
-			/// defines the property for the model: Label
-			MODEL_LABEL,
-
-			/// defines the property for the model: contour surface
-			MODEL_CONTOUR_SURFACE
-		};
+	/// next free command.
+	NUMBER_OF_COMMANDS
+};	
 
 
-		/// Coloring Methods
-		enum ColoringMethod
-		{
-			///
-			COLORING_ELEMENT          = 0,
+/// Drawing Modes
+enum DrawingMode
+{
+	///
+	DRAWING_MODE_DOTS = 0,
 
-			///
-			COLORING_RESIDUE_TYPE,
+	///
+	DRAWING_MODE_WIREFRAME,
 
-			///
-			COLORING_RESIDUE_NAME,
+	///
+	DRAWING_MODE_SOLID
+};
 
-			///
-			COLORING_ATOM_CHARGE,
+// Number of drawing modes
+#define BALL_VIEW_MAXIMAL_DRAWING_MODE 3
 
-			///
-			COLORING_DISTANCE,
 
-			///
-			COLORING_CUSTOM
-		};
+/// Drawing Precisions
+enum DrawingPrecision
+{
+	///
+	DRAWING_PRECISION_LOW = 0,
 
-		String getModelName(ModelTypes type) 
-			throw();
+	///
+	DRAWING_PRECISION_MEDIUM,
 
-		//@}
+	///
+	DRAWING_PRECISION_HIGH,
 
-	} // namespace VIEW
-} // namespace BALL
+	///
+	DRAWING_PRECISION_ULTRA
+};
 
+/// Number of drawing precisions
+#define BALL_VIEW_MAXIMAL_DRAWING_PRECISION 4
+
+
+/// MAXIMAL_DRAWING_PRECISION * MAXIMAL_DRAWING_MODE
+#define BALL_VIEW_MAXIMAL_DISPLAY_LIST_OBJECT_SIZE  12  
+
+
+/** This properties define the available models.
+		Add new model entries before MODEL_LABEL if you want them to show up 
+		in the DisplayProperties dialog!
+*/
+enum ModelTypes
+{
+	/// unkown property
+	MODEL_UNKNOWN = -1,
+	
+	/// defines the property for the model: Lines
+	MODEL_LINES = 0,
+
+	/// defines the property for the model: Stick
+	MODEL_STICK,
+
+	/// defines the property for the model: Ball and Stick
+	MODEL_BALL_AND_STICK,
+	
+	/// defines the property for the model: Van der Waals
+	MODEL_VDW,
+
+	/// defines the property for the model: solvent-excluded surface
+	MODEL_SE_SURFACE,
+
+	/// defines the property for the model: solvent-accessible surface
+	MODEL_SA_SURFACE,
+
+	/// defines the property for the model: Backbone
+	MODEL_BACKBONE,
+
+	/// defines the property for the model: Cartoon
+	MODEL_CARTOON,
+
+	/// defines the property for the model: H-Bonds
+	MODEL_HBONDS,
+	
+	/// defines the property for the model: Label
+	MODEL_LABEL,
+
+	/// defines the property for the model: contour surface
+	MODEL_CONTOUR_SURFACE
+};
+
+
+/** Coloring Methods
+		Add new coloring methods before COLORING_CUSTOM
+*/
+enum ColoringMethod
+{
+	///
+	COLORING_ELEMENT          = 0,
+
+	///
+	COLORING_RESIDUE_NUMBER,
+
+	///
+	COLORING_RESIDUE_NAME,
+
+	///
+	COLORING_ATOM_CHARGE,
+
+	///
+	COLORING_DISTANCE,
+
+	///
+	COLORING_CUSTOM
+};
+
+String getModelName(ModelTypes type) 
+	throw();
+
+//@}
+
+} } //namespaces
 #endif // BALL_VIEW_KERNEL_COMMON_H
