@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.92 2004/11/09 21:35:24 amoll Exp $
+// $Id: displayProperties.C,v 1.93 2004/11/10 15:07:18 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -442,36 +442,27 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 	apply_button->setEnabled(false);
 	rep->update(rebuild_representation);
 	apply_button->setEnabled(true);
-	setStatusbarText("Done.");
 
-	// no refocus, if a representation already exists
-	bool focus = (getMainControl()->getPrimitiveManager().getRepresentations().size() == 1 && rep_ == 0);
-
-#ifndef BALL_QT_HAS_THREADS	
-	setStatusbarText("drawing representation...");
-	RepresentationMessage* message = new RepresentationMessage;
 	if (rep_ == 0)
 	{
-		message->setType(RepresentationMessage::ADD);
+		getMainControl()->insert(*rep);
+		// no refocus, if a this is not the only Representation
+		if ((getMainControl()->getPrimitiveManager().getRepresentations().size() == 1) && 
+				composites.size() > 0)
+		{
+			getMainControl()->insert(*rep);
+			CompositeMessage* ccmessage = new CompositeMessage;
+			ccmessage->setComposite(**composites.begin());
+			ccmessage->setType(CompositeMessage::CENTER_CAMERA);
+			notify_(ccmessage);
+		}
 	}
 	else
 	{
-		message->setType(RepresentationMessage::UPDATE);
+		getMainControl()->update(*rep);
 	}
-	message->setRepresentation(*rep);
-	notify_(message);
-#endif
-
-	if (focus && composites.size() > 0)
-	{
-		CompositeMessage* ccmessage = new CompositeMessage;
-		ccmessage->setComposite(**composites.begin());
-		ccmessage->setType(CompositeMessage::CENTER_CAMERA);
-		notify_(ccmessage);
-	}
-
+	
 	advanced_options_modified_ = false;
-	setStatusbarText("finished drawing");
 	return rep;
 }
 
