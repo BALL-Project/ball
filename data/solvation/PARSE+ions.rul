@@ -1,5 +1,5 @@
 #
-# $Id: PARSE+ions.rul,v 1.1 2004/04/15 13:28:29 anker Exp $
+# $Id: PARSE+ions.rul,v 1.2 2004/04/28 15:33:47 anker Exp $
 # 
 #  PARSE rule set -- charge and radius assignment rules based on the 
 #  parameters developed by 
@@ -211,7 +211,19 @@
 
 [ChargeRules:Ca]
 ; Ca ions
- 2.0 = true()
+ 2.0 = numberOfBonds(0)
+
+[ChargeRules:Mn]
+; Mn ions
+ 2.0 = numberOfBonds(0)
+
+[ChargeRules:Mg]
+; Mg ions
+ 2.0 = numberOfBonds(0)
+
+[ChargeRules:Cl]
+; Cl ions
+-1.0 = numberOfBonds(0)
 
 ; This default charge should make it easy to find unassigned charges
 [ChargeRules:*]
