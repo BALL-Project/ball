@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.24 2004/01/16 16:34:13 amoll Exp $
+// $Id: displayProperties.h,v 1.25 2004/01/16 17:12:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -65,11 +65,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Sets the combo box of the coloring method to the ElementColorProcessor.
-					This combo box as well as the others can be set differently according to saved
-					preferences. See fetchPreferences.
-					Calls registerWidget.
-					\see        fetchPreferences
+					Calls ModularWidget::registerWidget and ModularWidget::fetchPreferences().
 					\see        ModularWidget
 			*/
 			DisplayProperties(QWidget *parent = NULL, const char* name = NULL)
@@ -110,20 +106,18 @@ namespace BALL
 			*/ 
 			//@{
 			
-			/** Fetches the preferences (the position, the custom color, the model, the drawing 
-					precision, the drawing mode and the coloring method from the	INIFile <b>inifile</b>.
-					This method will be called inside the method show() from the class MainControl.
+			/** Fetches the preferences (the position, custom color, model, drawing 
+					precision, drawing mode and the coloring method from the INIFile.
+					This method will be called inside MainControl::show().
 					\param  inifile the INIFile that contains the needed information 
 					\see    writePreferences
-					\see    MainControl
 			*/
 			virtual void fetchPreferences(INIFile &inifile)
 					throw();
 				
-			/** Writes the preferences (the position, the custom color, the model, the drawing 
-					precision, the drawing mode and the coloring method to the	INIFile <b> inifile.
-					This method will be called inside the method aboutToExit from the class
-					MainControl.
+			/** Writes the preferences (the position, custom color, model, drawing 
+					precision, drawing mode and the coloring method to the INIFile.
+					This method will be called inside MainControl::aboutToExit()
 					\param  inifile the INIFile to be written into
 					\see    fetchPreferences
 			*/
@@ -184,7 +178,7 @@ namespace BALL
 			//@{
 
 			/** Starts the dialog.
-					Calls raise from QDialog class.
+					Calls QDialog::raise().
 			*/
 			void show();
 
