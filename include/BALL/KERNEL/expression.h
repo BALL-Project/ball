@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.3 2000/05/20 13:34:44 oliver Exp $
+// $Id: expression.h,v 1.4 2000/05/24 15:12:21 anker Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -81,7 +81,6 @@ namespace BALL
 
 		// BAUSTELLE
 		// BALL_CREATE_NODEEP(ExpressionTree)
-
 
 		/**	@name	Type Definitions
 		*/
