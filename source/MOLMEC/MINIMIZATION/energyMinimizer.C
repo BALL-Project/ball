@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.C,v 1.8 2000/03/26 12:58:13 oliver Exp $
+// $Id: energyMinimizer.C,v 1.9 2000/04/25 14:43:18 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/COMMON/limits.h>
@@ -31,7 +31,7 @@ namespace BALL
 	Size EnergyMinimizer::Default::MAXIMAL_NUMBER_OF_ITERATIONS = 1000;
 	Size EnergyMinimizer::Default::ENERGY_OUTPUT_FREQUENCY = 50;
 	Size EnergyMinimizer::Default::SNAPSHOT_FREQUENCY = Limits<Size>::max();
-  Size EnergyMinimizer::Default::MAX_SAME_ENERGY = 5; 
+  Size EnergyMinimizer::Default::MAX_SAME_ENERGY = 20; 
 	Size EnergyMinimizer::Default::NUMBER_OF_ITERATION = 0;              // start number 
 	float EnergyMinimizer::Default::ENERGY_DIFFERENCE_BOUND = 1e-2;      // in kJ/mol
   float EnergyMinimizer::Default::MAX_GRADIENT = 0.01;                 // in kJ/(mol A) 
@@ -209,32 +209,32 @@ BAUSTELLE
 
   // Set explicitly the option max_gradient_
   void  EnergyMinimizer::setMaxGradient(float max_gradient)
-    {
+  {
     max_gradient_ = max_gradient;
-    }
+  }
 
 
   // Get the current value of the maximum gradient bound
   float EnergyMinimizer::getMaxGradient() const
-    {
+	{
     return max_gradient_;
-    }
+  }
 
 
   // Set explicitly the number of iterations for detecting convergence due
   // to invariant energy 
   void  EnergyMinimizer::setMaxSameEnergy(Size number)
-    {
+	{
     max_same_energy_ = number;
-    }
+	}
 
   // Get the value of max_same_energy, i.e. the number
   // of iterations after which the algorithm is stopped when the
   // energy remains constant
   Size  EnergyMinimizer::getMaxSameEnergy() const
-    {
+	{
     return max_same_energy_;
-    }
+	}
 
 
 
@@ -277,7 +277,6 @@ BAUSTELLE
 	// setup methods
 	bool EnergyMinimizer::setup(ForceField& force_field)
 	{
-
     // Default: no snapshot manager available 
     snapshot_ptr_ = 0;
 
@@ -288,47 +287,43 @@ BAUSTELLE
 
 		if (!valid_)
 		{
-			Log.error() << "The force field of the energy minimizer is not valid! " 
+			Log.error() << "EnergyMinimizer: The force field of the energy minimizer is not valid! " 
 									<< "Check the definition and initialization of the force field! " << endl;
 			return valid_;
 		}
 
-
 		// Check options
+		maximal_number_of_iterations_ = (Size)options.setDefaultInteger
+			(EnergyMinimizer::Option::MAXIMAL_NUMBER_OF_ITERATIONS, 
+			 (long)EnergyMinimizer::Default::MAXIMAL_NUMBER_OF_ITERATIONS);
 
-		options.setDefaultInteger(EnergyMinimizer::Option::MAXIMAL_NUMBER_OF_ITERATIONS, 
-                               (long)EnergyMinimizer::Default::MAXIMAL_NUMBER_OF_ITERATIONS);
-		maximal_number_of_iterations_ = (Size)(options.getInteger(EnergyMinimizer::Option::MAXIMAL_NUMBER_OF_ITERATIONS));
+		energy_output_frequency_ = (Size)options.setDefaultInteger
+			(EnergyMinimizer::Option::ENERGY_OUTPUT_FREQUENCY, 
+			 (long)EnergyMinimizer::Default::ENERGY_OUTPUT_FREQUENCY);
 
-		options.setDefaultInteger(EnergyMinimizer::Option::ENERGY_OUTPUT_FREQUENCY, 
-                               (long)EnergyMinimizer::Default::ENERGY_OUTPUT_FREQUENCY);
-		energy_output_frequency_ = (Size)(options.getInteger(EnergyMinimizer::Option::ENERGY_OUTPUT_FREQUENCY));
+		snapshot_frequency_ = (Size)options.setDefaultInteger
+			(EnergyMinimizer::Option::SNAPSHOT_FREQUENCY, 
+			 (long)EnergyMinimizer::Default::SNAPSHOT_FREQUENCY);
 
-		options.setDefaultInteger(EnergyMinimizer::Option::SNAPSHOT_FREQUENCY, 
-                               (long)EnergyMinimizer::Default::SNAPSHOT_FREQUENCY);
-		snapshot_frequency_ = (Size)(options.getInteger(EnergyMinimizer::Option::SNAPSHOT_FREQUENCY));
+		number_of_iteration_ = (Size)options.setDefaultInteger
+			(EnergyMinimizer::Option::NUMBER_OF_ITERATION, 
+			 (long)EnergyMinimizer::Default::NUMBER_OF_ITERATION);
 
-		options.setDefaultInteger(EnergyMinimizer::Option::NUMBER_OF_ITERATION, 
-                               (long)EnergyMinimizer::Default::NUMBER_OF_ITERATION);
-		number_of_iteration_ = (Size)(options.getInteger(EnergyMinimizer::Option::NUMBER_OF_ITERATION));
+    max_same_energy_ = (Size)options.setDefaultInteger
+			(EnergyMinimizer::Option::MAX_SAME_ENERGY, 
+			 (long) EnergyMinimizer::Default::MAX_SAME_ENERGY);
 
+		energy_difference_bound_ = options.setDefaultReal
+			(EnergyMinimizer::Option::ENERGY_DIFFERENCE_BOUND, 
+			 EnergyMinimizer::Default::ENERGY_DIFFERENCE_BOUND);
 
-    options.setDefaultInteger(EnergyMinimizer::Option::MAX_SAME_ENERGY, 
-                                  (long) EnergyMinimizer::Default::MAX_SAME_ENERGY);
-    max_same_energy_ = (Size) options.getInteger(EnergyMinimizer::Option::MAX_SAME_ENERGY);
+    max_gradient_ = options.setDefaultReal
+			(EnergyMinimizer::Option::MAX_GRADIENT,
+			 EnergyMinimizer::Default::MAX_GRADIENT);
 
-		options.setDefaultReal(EnergyMinimizer::Option::ENERGY_DIFFERENCE_BOUND, 
-                                          EnergyMinimizer::Default::ENERGY_DIFFERENCE_BOUND);
-		energy_difference_bound_ = options.getReal(EnergyMinimizer::Option::ENERGY_DIFFERENCE_BOUND);
-
-    options.setDefaultReal(EnergyMinimizer::Option::MAX_GRADIENT,
-                                             EnergyMinimizer::Default::MAX_GRADIENT);
-    max_gradient_ = options.getReal(EnergyMinimizer::Option::MAX_GRADIENT);
-
-
-		options.setDefaultReal(EnergyMinimizer::Option::MAXIMAL_SHIFT, 
-                                          EnergyMinimizer::Default::MAXIMAL_SHIFT);
-		maximal_shift_ = options.getReal(EnergyMinimizer::Option::MAXIMAL_SHIFT);
+		maximal_shift_ = options.setDefaultReal
+			(EnergyMinimizer::Option::MAXIMAL_SHIFT, 
+			 EnergyMinimizer::Default::MAXIMAL_SHIFT);
 
     energy_update_counter_ = 0; 
     force_update_counter_ = 0; 
@@ -337,7 +332,7 @@ BAUSTELLE
 		valid_ = specificSetup();
 		if (!valid_) 
 		{
-			Log.error() << "Energy minimizer specificSetup failed!" << endl;
+			Log.error() << "EnergyMinimizer::specificSetup: setup  failed!" << endl;
 			return valid_;
 		}
 
@@ -352,7 +347,7 @@ BAUSTELLE
     bool result = setup(force_field);
 
     // set a pointer to the indicated snapshot manager
-    if(ssm->isValid())
+    if (ssm->isValid())
 		{
       snapshot_ptr_ = ssm; 
 		}
@@ -389,10 +384,9 @@ BAUSTELLE
 		return true;
 	}
 
-	/*	The minimizer optimizes the energy of the system bound to the force field.
-			The function is virtual.
-	*/
-
+	//	The minimizer optimizes the energy of the system bound to the force field.
+	//	The function is virtual.
+	//
 	bool EnergyMinimizer::minimize(Size /* steps */, bool /* restart */)
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
@@ -443,9 +437,10 @@ BAUSTELLE
 
 	bool EnergyMinimizer::isConverged() const
 	{
-		return ((current_grad_.rms <= max_gradient_ 
-						 || (same_energy_counter_ >= max_same_energy_)
-						 || (fabs(old_energy_ - initial_energy_) < energy_difference_bound_)));
+		bool converged = ((current_grad_.rms <= max_gradient_)
+											|| (same_energy_counter_ >= max_same_energy_)
+											|| (fabs(old_energy_ - initial_energy_) < energy_difference_bound_));
+		return converged;
 	}
 
 	void EnergyMinimizer::printEnergy() const
@@ -486,8 +481,8 @@ BAUSTELLE
 			printEnergy();
 		}
 
-		// check if there is much difference between the previous solution and the
-		// new one
+		// check whether there the new energy and the old energy differ
+		// significantly
 		if (fabs(initial_energy_ - old_energy_) < energy_difference_bound_)
 		{
 			// count if there is the same energy between last iteration and
