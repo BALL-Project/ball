@@ -2,6 +2,8 @@
 #include <BALL/COMMON/MD5Hash.h>
 #include <assert.h>
 
+#include <assert.h>
+
 // Original copyright notice
 /////////////////////////////////////////////////////////////////////////
 // Implementation file for MD5 class

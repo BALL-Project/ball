@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFileDetails.C,v 1.10 2005/02/23 11:34:17 oliver Exp $
+// $Id: PDBFileDetails.C,v 1.11 2005/02/24 14:50:18 oliver Exp $
 //
 
 // This file contains the more or less implementation specific portion of PDBFile.
@@ -1254,6 +1254,14 @@ namespace BALL
 		{
 			atom_info.current_residue = structure.atoms[0].residue;
 			atom_info.current_chain = structure.atoms[0].chain;
+			if (atom_info.current_residue != 0)
+			{
+				strncpy(atom_info.residue_name, atom_info.current_residue->getName().c_str(), 4);
+			}
+			if ((atom_info.current_chain != 0) && (atom_info.current_chain->getName() != ""))
+			{
+				atom_info.chain_id = atom_info.current_chain->getName()[0];
+			}
 		}
 		atom_map_.clear(); // here, we store the indices of the atoms. This is required to
   										 // resolve connectivities later on.
@@ -1689,18 +1697,6 @@ namespace BALL
 	void PDBFile::writeBookKeepingSection_
 		(const PDB::Structure& /* structure */, const PDBInfo& /* info */)
 	{
-		Log.info() << "BookKeeping: " 
-    << book_keeping_.remark_records << " "
-    << book_keeping_.helix_records << " "
-    << book_keeping_.sheet_records << " "
-    << book_keeping_.turn_records << " "
-    << book_keeping_.site_records << " "
-    << book_keeping_.coordinate_transformation_records << " "
-    << book_keeping_.atomic_coordinate_records << " "
-    << book_keeping_.ter_records << " "
-    << book_keeping_.conect_records << " "
-    << book_keeping_.seqres_records << std::endl;
-		
 		// ---- MASTER ----
 		// Write bookkeeping information about the number of records of each type.
 		writeRecord_(PDB::RECORD_TYPE__MASTER,
