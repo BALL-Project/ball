@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.26 2001/12/07 00:45:56 oliver Exp $
+// $Id: classTest.h,v 1.27 2001/12/11 11:59:11 oliver Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -337,8 +337,18 @@ int main(int argc, char **argv)\
 		@param	filename String will contain the filename on completion of the macro
 */
 #define NEW_TMP_FILE(filename)\
-	::BALL::File::createTemporaryFilename(filename);\
-	TEST::tmp_file_list.push_back(filename);\
+					::BALL::File::createTemporaryFilename(filename);\
+					TEST::tmp_file_list.push_back(filename);\
+					if (TEST::verbose > 1)\
+					{\
+						if (!TEST::newline) \
+						{\
+							TEST::newline = true;\
+							std::cout << std::endl;\
+						}\
+						std::cout << "  creating new temporary file '" << filename << " (line " << __LINE__ << ")" << std::endl;\
+					}\
+	
 	
 	
 /**	Floating point equality macro.
