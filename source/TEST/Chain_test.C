@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Chain_test.C,v 1.17 2003/07/03 12:33:04 amoll Exp $
+// $Id: Chain_test.C,v 1.18 2004/02/25 10:40:28 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -15,7 +16,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.17 2003/07/03 12:33:04 amoll Exp $")
+START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.18 2004/02/25 10:40:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -575,11 +576,11 @@ CHECK(BALL_CREATE_DEEP(Chain))
 	Residue r1("r1");
 	c1.insert(r1);
 
-	Chain c2;
-	c2 = *(Chain*) c1.create(false, true);
-	TEST_EQUAL(c2.countResidues(), 0)
-	c2 = *(Chain*) c1.create(true, false);
-	TEST_EQUAL(c2.countResidues(), 1)
+	Chain* c2 = (Chain*) c1.create(false, true);
+	TEST_EQUAL(c2->countResidues(), 0)
+	delete c2;
+	c2 = (Chain*) c1.create(true, false);
+	TEST_EQUAL(c2->countResidues(), 1)
 RESULT
 
 CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(SecondaryStructure) (Residue)(PDBAtom))

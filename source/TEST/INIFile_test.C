@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile_test.C,v 1.25 2003/07/11 09:28:02 amoll Exp $
+// $Id: INIFile_test.C,v 1.26 2004/02/25 10:40:28 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -29,7 +29,7 @@ class MyItemCollector
 };
 
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.25 2003/07/11 09:28:02 amoll Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.26 2004/02/25 10:40:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -526,7 +526,10 @@ CHECK(BALL_CREATE(IteratorTraits_))
 	TEST_NOT_EQUAL(it2, 0)
 	TEST_EQUAL(+*it2, true)
 	TEST_EQUAL(**it2, "[Section1]")
-	it2 = (INIFile::LineIterator*) unbound.create();
+	delete it2;
+	it2 = (INIFile::LineIterator*)unbound.create();
+	TEST_NOT_EQUAL(it2, 0)
+	delete it2;
 RESULT
 
 CHECK(IteratorTraits_& getSectionNextLine())

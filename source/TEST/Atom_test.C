@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Atom_test.C,v 1.22 2004/02/24 08:14:49 anker Exp $
+// $Id: Atom_test.C,v 1.23 2004/02/25 10:40:28 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -18,7 +18,7 @@
 #include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.22 2004/02/24 08:14:49 anker Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.23 2004/02/25 10:40:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -27,8 +27,8 @@ using namespace BALL;
 
 Atom* atom;
 CHECK(Atom() throw())
-atom = new Atom;
-TEST_NOT_EQUAL(atom, 0)
+	atom = new Atom;
+	TEST_NOT_EQUAL(atom, 0)
 RESULT
 
 CHECK(void setCharge(float charge) throw())
@@ -304,7 +304,8 @@ CHECK(void get(Atom& atom, bool deep = true) const throw())
 	TEST_NOT_EQUAL(atom2->getAttributePtr(), atom->getAttributePtr())
 	TEST_NOT_EQUAL(atom2->getAttributePtr()->ptr, atom->getAttributePtr()->ptr)
 RESULT
-
+delete atom2;
+atom2 = 0;
 
 Atom*	atom3;
 Atom*	atom4;
@@ -338,7 +339,8 @@ CHECK(void swap(Atom& atom) throw())
 	TEST_EQUAL(atom3->getForce(), atom2->getForce())
 	TEST_EQUAL(atom3->getType(), atom2->getType())
 	TEST_EQUAL(atom3->countBonds(), atom2->countBonds())	
-	delete atom2;
+	delete atom2;	
+	atom2 = 0;
 RESULT
 
 Atom atomx;
@@ -365,7 +367,7 @@ CHECK(Molecule* getMolecule() throw())
 	TEST_EQUAL(molecule.getName(), "asdff")
 RESULT
 
-Bond*		bond;
+Bond*	bond;
 CHECK(Bond* createBond(Atom& atom) throw())
 	atom->createBond(*atom3);
 	atom3->getBond(*atom);
@@ -388,6 +390,7 @@ CHECK(bool destroyBond(const Atom& atom) throw())
 	TEST_EQUAL(atom4->countBonds(), 0)
 	TEST_EQUAL(atom4->getBond(*atom), 0)
 RESULT
+bond = 0;
 			
 CHECK(void destroyBonds() throw())
 	atom->createBond(*atom4);
@@ -466,9 +469,15 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 			TEST_EQUAL(pers_atom->getType(), atom->getType())
 			TEST_EQUAL(pers_atom->countBonds(), atom->countBonds())
 			TEST_NOT_EQUAL(pers_atom->getHandle(), atom->getHandle())
+			pers_atom = 0;
 		}
+		delete ptr;
+		ptr = 0;
 	}
+	ptr = 0;
 RESULT
+delete atom;
+atom = 0;
 
 CHECK(bool operator == (const Atom& atom) const throw())
 	Atom a1;
@@ -501,7 +510,6 @@ CHECK(static Position compact(const AtomIndexList& indices) throw(Exception::Out
 	{
 		atoms.push_back(new Atom);
 		atoms.back()->setType(i);
-
 		atoms.push_back(new Atom);
 		atoms.back()->setType(i + 1);
 		block.push_back(atoms.back()->getIndex());
@@ -519,9 +527,15 @@ CHECK(static Position compact(const AtomIndexList& indices) throw(Exception::Out
 		TEST_EQUAL((*ptr_it)->getIndex() < (first_pos + block.size()), true)
 		STATUS((*ptr_it)->getType() << " - " << (*ptr_it)->getIndex())
 	}
+	std::list<Atom*>::iterator it = atoms.begin();
+	for (; it != atoms.end(); ++it)
+	{
+		delete *it;
+	}
 RESULT
 delete atom3;
 delete atom4;
+
 
 CHECK([EXTRA] bond iteration)
 	Atom* a1 = new Atom;
@@ -560,10 +574,11 @@ CHECK([EXTRA] bond iteration)
 	it = a1->beginBond();
 	TEST_EQUAL(+it, false)
 	TEST_EQUAL(it == a1->endBond(), true)
+	delete a1;
 RESULT
 
 CHECK(Bond* cloneBond(Bond& bond, Atom& atom) throw())
-	Atom a,b,c;
+	Atom a, b, c;
 	Bond bond("",a,b);
 	TEST_EQUAL(a.cloneBond(bond, b), &bond)
 	Bond* bond2 = a.cloneBond(bond,c);

@@ -1,12 +1,11 @@
 #
-# $Id: Makefile.lst,v 1.9 2004/02/24 08:19:42 oliver Exp $
+# $Id: Makefile.lst,v 1.10 2004/02/25 10:40:29 oliver Exp $
 #
 
 XDR_DEPENDENT_EXECUTABLES=\
 	XDRPersistenceManager_test$(EXEEXT)
 
 VIEW_DEPENDENT_EXECUTABLES=\
-	PrimitiveManager_test$(EXEEXT)
 
 EXECUTABLES_BASIC =	\
 	ClassTest_test$(EXEEXT)\

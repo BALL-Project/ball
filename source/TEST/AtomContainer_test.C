@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomContainer_test.C,v 1.10 2003/06/24 15:08:27 amoll Exp $
+// $Id: AtomContainer_test.C,v 1.11 2004/02/25 10:40:28 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 #include <algorithm>
 #include "ItemCollector.h"
 
-START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.10 2003/06/24 15:08:27 amoll Exp $")
+START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.11 2004/02/25 10:40:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -800,11 +800,15 @@ CHECK([EXTRA] beginAtom()/endAtom())
 RESULT
 
 CHECK(BALL_CREATE_DEEP(AtomContainer))
-	AtomContainer a = *(AtomContainer*) ac1.create(false, false);
+	AtomContainer* a_ptr = (AtomContainer*)ac1.create(false, false);
+	AtomContainer a = *a_ptr;
+	delete a_ptr;
 	AtomContainer empty;
 	TEST_EQUAL(a.countAtoms(), 0)
 	TEST_EQUAL(a.getName(), "ac1")
-	a = *(AtomContainer*) ac1.create();
+	a_ptr = (AtomContainer*) ac1.create();
+	a = *a_ptr;
+	delete a_ptr;
 	TEST_EQUAL(a.countAtoms(), 2)
 	TEST_EQUAL(a.getName(), "ac1")
 RESULT

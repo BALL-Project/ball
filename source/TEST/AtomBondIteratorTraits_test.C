@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomBondIteratorTraits_test.C,v 1.2 2004/02/23 20:39:19 anker Exp $
+// $Id: AtomBondIteratorTraits_test.C,v 1.3 2004/02/25 10:40:27 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -15,17 +15,21 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Atom, "$Id: AtomBondIteratorTraits_test.C,v 1.2 2004/02/23 20:39:19 anker Exp $")
+START_TEST(Atom, "$Id: AtomBondIteratorTraits_test.C,v 1.3 2004/02/25 10:40:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
+Atom::BondIteratorTraits* bit_ptr = 0;
 CHECK(Atom::BondIteratorTraits() throw())
-	Atom::BondIteratorTraits* bit_ptr;
 	bit_ptr = new Atom::BondIteratorTraits;
 	TEST_NOT_EQUAL(bit_ptr, 0)
+RESULT
+
+CHECK(Atom::~BondIteratorTraits() throw())
+	delete bit_ptr;
 RESULT
 
 CHECK(Atom::BondIteratorTraits(const Atom& atom) throw())

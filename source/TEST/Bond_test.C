@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Bond_test.C,v 1.32 2003/06/28 19:18:36 oliver Exp $
+// $Id: Bond_test.C,v 1.33 2004/02/25 10:40:28 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.32 2003/06/28 19:18:36 oliver Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.33 2004/02/25 10:40:28 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -456,11 +456,9 @@ CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralExcept
 		}
 		TEST_EQUAL(f1->getName(), "name1")
 		delete f1;
+		ptr = 0;
+		f1 = 0;
 	} 
-	else 
-	{
-		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
 RESULT
 
 CHECK(bool operator == (const Bond& bond) const throw())
@@ -490,15 +488,19 @@ RESULT
 CHECK(BALL_CREATE_DEEP(Bond))
 	Atom a1, a2, a3;
 	Bond b1("test", a1, a2);
-	Bond b2 = *(Bond*)b1.create(false, true);
+	Bond* b_ptr = (Bond*)b1.create(false, true);
+	Bond b2 = *b_ptr;
 	Bond empty;
 	TEST_EQUAL(b2.getName(), "")
 	TEST_EQUAL(b2.getFirstAtom(), 0)
 	TEST_EQUAL(b2.getSecondAtom(), 0)
-	b2 = *(Bond*) b1.create();
+	delete b_ptr;
+	b_ptr = (Bond*) b1.create();
+	b2 = *b_ptr;
 	TEST_EQUAL(b2.getName(), "test")
 	TEST_EQUAL(b2.getFirstAtom(), &a1)
 	TEST_EQUAL(b2.getSecondAtom(), &a2)
+	delete b_ptr;
 RESULT
 
 CHECK(NotBound(const char* file, int line) throw())

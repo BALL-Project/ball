@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: File_test.C,v 1.45 2004/02/18 09:56:41 oliver Exp $
+// $Id: File_test.C,v 1.46 2004/02/25 10:40:28 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -21,7 +21,7 @@ using namespace std;
 #	define sleep(a) _sleep(1000 * a)
 #endif
 
-START_TEST(File, "$Id: File_test.C,v 1.45 2004/02/18 09:56:41 oliver Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.46 2004/02/25 10:40:28 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
@@ -649,10 +649,14 @@ RESULT
 
 // BinaryFileAdaptor
 
+BinaryFileAdaptor<float>* bfa = 0;
 CHECK(BinaryFileAdaptor() throw())
-	BinaryFileAdaptor<float>* bfa = 0;
 	bfa = new BinaryFileAdaptor<float>;
 	TEST_NOT_EQUAL(bfa, 0)
+RESULT
+
+CHECK(~BinaryFileAdaptor())
+	delete bfa;
 RESULT
 
 CHECK(BinaryFileAdaptor(const T& data) throw())

@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.211 2003/08/26 09:18:30 oliver Exp $
+# $Id: Makefile,v 1.212 2004/02/25 10:40:29 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -13,11 +13,9 @@ DIRECTORY=TEST
 # of the executable name!
 include Makefile.lst
 
-EXECUTABLES_VIEW = \
-	PrimitiveManager_test\
-	Stage_test
 
 EXECUTABLES = \
+	$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	$(EXECUTABLES_BASIC)\
 	$(EXECUTABLES_SYSTEM)\
 	$(EXECUTABLES_MATHS)\
@@ -30,11 +28,8 @@ EXECUTABLES = \
 	$(EXECUTABLES_ENERGY)\
 	$(EXECUTABLES_STRUCTURE)\
 	$(EXECUTABLES_QSAR)\
-	$(EXECUTABLES_SOLVATION)\
-	$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
-	$(BALL_HAS_VIEW:true=$(VIEW_DEPENDENT_EXECUTABLES))
+	$(EXECUTABLES_SOLVATION)
  
-
 # default target
 all:	$(EXECUTABLES)
 
