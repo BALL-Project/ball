@@ -1,4 +1,4 @@
-// $Id: AtomContainer_test.C,v 1.4 2001/06/26 19:34:56 amoll Exp $
+// $Id: AtomContainer_test.C,v 1.5 2001/07/04 00:14:18 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 
 #include <algorithm>
 
-START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.4 2001/06/26 19:34:56 amoll Exp $")
+START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.5 2001/07/04 00:14:18 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -310,39 +310,6 @@ CHECK(swap(AtomContainer&))
 	TEST_EQUAL(ac1.getAtomContainer(0), &ac2)
 	TEST_EQUAL(ac3.getName(), "ac3")
 	TEST_EQUAL(ac3.getAtomContainer(0), &ac4)
-RESULT
-
-CHECK(getMolecule())
-	AtomContainer ac1("ac1");
-	Molecule* ptr;
-	ptr = ac1.getMolecule();
-	TEST_EQUAL(ptr, 0)
-	Molecule m;
-	m.insert(ac1);
-	ptr = ac1.getMolecule();
-	TEST_EQUAL(ptr, &m)
-	m.remove(ac1);
-	AtomContainer ac2;
-	ac2.insert(ac1);
-	m.insert(ac2);
-	ptr = ac1.getMolecule();
-	TEST_EQUAL(ptr, &m)
-	ptr = ac2.getMolecule();
-	TEST_EQUAL(ptr, &m)
-RESULT
-
-CHECK(getMolecule() const)
-	AtomContainer ac1("ac1");
-	TEST_EQUAL(ac1.getMolecule(), 0)
-	Molecule m;
-	m.insert(ac1);
-	TEST_EQUAL(ac1.getMolecule(), &m)
-	m.remove(ac1);
-	AtomContainer ac2;
-	ac2.insert(ac1);
-	m.insert(ac2);
-	TEST_EQUAL(ac2.getMolecule(), &m)
-	TEST_EQUAL(ac1.getMolecule(), &m)
 RESULT
 
 CHECK(getSuperAtomContainer())
