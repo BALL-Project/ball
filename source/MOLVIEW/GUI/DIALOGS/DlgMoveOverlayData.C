@@ -26,7 +26,6 @@ DlgMoveOverlayData::DlgMoveOverlayData(QWidget *parent, const char *name)
     qtarch_PushButton_1->setMaximumSize(32767, 32767);
     qtarch_PushButton_1->setFocusPolicy(QWidget::TabFocus);
     qtarch_PushButton_1->setBackgroundMode(QWidget::PaletteButton);
-    qtarch_PushButton_1->setBackgroundOrigin( QWidget::WidgetOrigin );
     qtarch_PushButton_1->setText( "Up" );
     qtarch_PushButton_1->setAutoRepeat( FALSE );
     qtarch_PushButton_1->setToggleButton( FALSE );
@@ -40,7 +39,6 @@ DlgMoveOverlayData::DlgMoveOverlayData(QWidget *parent, const char *name)
     qtarch_PushButton_2->setMaximumSize(32767, 32767);
     qtarch_PushButton_2->setFocusPolicy(QWidget::TabFocus);
     qtarch_PushButton_2->setBackgroundMode(QWidget::PaletteButton);
-    qtarch_PushButton_2->setBackgroundOrigin( QWidget::WidgetOrigin );
     qtarch_PushButton_2->setText( "Left" );
     qtarch_PushButton_2->setAutoRepeat( FALSE );
     qtarch_PushButton_2->setToggleButton( FALSE );
@@ -54,7 +52,6 @@ DlgMoveOverlayData::DlgMoveOverlayData(QWidget *parent, const char *name)
     qtarch_PushButton_3->setMaximumSize(32767, 32767);
     qtarch_PushButton_3->setFocusPolicy(QWidget::TabFocus);
     qtarch_PushButton_3->setBackgroundMode(QWidget::PaletteButton);
-    qtarch_PushButton_3->setBackgroundOrigin( QWidget::WidgetOrigin );
     qtarch_PushButton_3->setText( "Right" );
     qtarch_PushButton_3->setAutoRepeat( FALSE );
     qtarch_PushButton_3->setToggleButton( FALSE );
@@ -68,7 +65,6 @@ DlgMoveOverlayData::DlgMoveOverlayData(QWidget *parent, const char *name)
     qtarch_PushButton_4->setMaximumSize(32767, 32767);
     qtarch_PushButton_4->setFocusPolicy(QWidget::TabFocus);
     qtarch_PushButton_4->setBackgroundMode(QWidget::PaletteButton);
-    qtarch_PushButton_4->setBackgroundOrigin( QWidget::WidgetOrigin );
     qtarch_PushButton_4->setText( "Down" );
     qtarch_PushButton_4->setAutoRepeat( FALSE );
     qtarch_PushButton_4->setToggleButton( FALSE );
@@ -82,7 +78,6 @@ DlgMoveOverlayData::DlgMoveOverlayData(QWidget *parent, const char *name)
     qtarch_Label_1->setMaximumSize(32767, 32767);
     qtarch_Label_1->setFocusPolicy(QWidget::NoFocus);
     qtarch_Label_1->setBackgroundMode(QWidget::PaletteBackground);
-    qtarch_Label_1->setBackgroundOrigin( QWidget::WidgetOrigin );
     qtarch_Label_1->setFrameStyle( 0 );
     qtarch_Label_1->setLineWidth( 1 );
     qtarch_Label_1->setMidLineWidth( 0 );
@@ -98,7 +93,6 @@ DlgMoveOverlayData::DlgMoveOverlayData(QWidget *parent, const char *name)
     qtarch_PushButton_5->setMaximumSize(32767, 32767);
     qtarch_PushButton_5->setFocusPolicy(QWidget::TabFocus);
     qtarch_PushButton_5->setBackgroundMode(QWidget::PaletteButton);
-    qtarch_PushButton_5->setBackgroundOrigin( QWidget::WidgetOrigin );
     qtarch_PushButton_5->setText( "OK" );
     qtarch_PushButton_5->setAutoRepeat( FALSE );
     qtarch_PushButton_5->setToggleButton( FALSE );
