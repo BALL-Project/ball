@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.3 2001/12/22 14:14:04 oliver Exp $
+// $Id: BALL.sip,v 1.4 2001/12/27 00:25:43 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -7,6 +7,10 @@
 //
 
 %Module BALL
+
+%Include versions.sip
+%Include copying.sip
+
 // COMMON
 %Include constants.sip
 // %Include create.sip
@@ -97,7 +101,7 @@
 // atomIterator.h // not needed
 %Include PDBAtom.sip
 // PDBAtomIterator.h // not needed
-%Include PTE.sip
+%Include PTE_.sip
 %Include bond.sip 
 // bondIterator.h // not needed
 %Include chain.sip
@@ -233,6 +237,9 @@
 %Include pyNucleotideList.sip
 %Include pyNucleicAcidList.sip
 
+// QSAR
+//%Include descriptor.sip
+//%Include simpleDescriptors.sip
 
 // SOLVATION
 // %Include molecularSurfaceGrid.sip // ??
