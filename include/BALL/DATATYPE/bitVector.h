@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.7 2000/06/28 20:26:37 oliver Exp $
+// $Id: bitVector.h,v 1.8 2000/07/22 10:41:12 amoll Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -62,7 +62,7 @@ namespace BALL
 		*/
 		//@{
 		
-		/**
+		/** Casting operator from Bit to bool.
 		*/
 		operator bool() const;
 		//@}
@@ -71,11 +71,13 @@ namespace BALL
 		*/
 		//@{
 		
-		/**
+		/** Assignment operator.
+				Assign the bool value from a Bit to this instance
 		*/
 		Bit& operator = (const Bit& bit);
 
-		/**
+		/** Assignment operator.
+				Assign a bool value to this instance
 		*/
 		Bit& operator = (bool bit);
 		//@}
@@ -84,19 +86,23 @@ namespace BALL
 		*/
 		//@{
 
-		/**
+		/** Equality operator.
+				Test if two instances have the same bool value
 		*/
 		bool operator == (const Bit& bit) const;
 
-		/**
+		/** Equality operator.
+				Test if this instance has the given bool value
 		*/
 		bool operator == (bool bit) const;
 
-		/**
+		/** Inequality operator.
+				Test if two instances have different bool values
 		*/
 		bool operator != (const Bit& bit) const;
 
-		/**
+		/** Inequality operator.
+				Test if this instance has not the given bool value
 		*/
 		bool operator != (bool bit) const;
 		//@}
@@ -113,6 +119,11 @@ namespace BALL
 
 
 	/**	Bit vector class 
+			In this class negative indices can be used.
+			-1 is interpreted as the last element and so on.
+			Some functions resize the instance if a index greater than the
+			size of the instance is given.
+			Other functions throw exception in this case.
 	*/
 	class BitVector
 	{
@@ -163,95 +174,153 @@ namespace BALL
 		/**	@name	Assignment */
 		//@{
 
-		///
+		/// Assignment from an other BitVector instance.
 		void set(const BitVector& bit_vector, bool deep = true);
 
-		///
+		/** Assignment from a char string.
+				If a char is different from '0', it is interpreted as true.
+		*/
 		void set(const char* bit_string);
 
-		///
+		/// Assignment from an other BitVector instance.
 		BitVector& operator = (const BitVector& bit_vector);
 
-		///
+		/** Assignment from a char string.
+				If a char is different from '0', it is interpreted as true.
+		*/
 		BitVector& operator = (const char *bit_string);
 
-		///
+		/// Assignment to an other BitVector.
 		void get(BitVector& bitvector, bool deep = true) const;
 
-		///
+		/// Swapping of two BitVector instances.
 		void swap(BitVector& bitvector);
 		//@}
 
 		/**	@name	Accessors */
 		//@{
 
-		///
+		/** Return a sub-BitVector.
+				A new BitVector is created an filled with elements of this instance.
+				@param first, the index of the first element to be copied
+				@param last, the index of the last element to be copied
+				@return BitVector a partial copy of this instance
+		*/
 		BitVector operator () (Index first,Index last) const;
 
-		///
+		/** Set the size of this instance.
+				@param size the new size
+				@param keep ???????????
+		*/
 		void setSize(Size size, bool keep = true);
 
-		///
+		/**	Return the size of this instance.
+		*/
 		Size getSize() const;
 
-		///
+		/** Count a given bool value in this instance.
+				@param value the value to be counted
+				@return Size the number of the given value
+		*/
 		Size countValue(bool value) const;
 
-		///
+		/** Get the max index.
+				This is the last accessible value.
+		*/
+		// ?????????? unnoetig?
 		Index getMaxIndex() const;
 	
-		///
+		/** Return a muteable pointer to the values of this instance.
+				@return unsigned char*	a muteable pointer to the values of this instance
+		*/
 		BlockType* getBitSet();
 
-		///
+		/** Return a constant pointer to the values of this instance.
+				@return unsigned char*	a constant pointer to the values of this instance
+		*/
 		const BlockType* getBitSet() const;
 
-		///
+		/**	Random access to the components.
+				If the given index is greater than the size of this instance, this BitVector
+				is increased to the given index.
+				@return Bit a Bit pointing to the given element of this instance
+		*/
 		Bit operator []	(Index index);
 	
-		///
+		/**	Constant random access to the components.
+				If the given index is greater than the size of this instance an exception is thrown.
+				@return bool the value of the given index
+		*/
 		bool operator [] (Index index) const;
 
-		///
+		/** Set the given Bit.
+				The element at the given position is set to the given value.
+				If the given index is greater than the size of this instance, this BitVector
+				is increased to the given index.
+				@param index the index of the element
+				@param value the value to be set
+		*/
 		void setBit(Index index, bool value = true);
 
-		///
-		bool getBit(Index index) const;
-
-		///
+		/** Get the value of an element.
+				If the given index is greater than the size of this instance, this BitVector
+				is increased to the given index.
+				@param index the index of the element
+				@return bool the value of the element
+		*/
 		bool getBit(Index index);
 
-		///
+		/** Get the value of an element.
+				If the given index is greater than the size of this instance an exception is thrown.
+				@param index the index of the element
+				@return bool the value of the element
+		*/
+		bool getBit(Index index) const;
+
+		/** Toggle the value of an element.
+				If the given index is greater than the size of this instance an exception is thrown.
+				@param index the index of the element
+		*/
 		void toggleBit(Index index);
 
-		///
+		/** Fill a part of this instance with a given value.
+				If a given index is greater than the size of this instance an exception is thrown.
+				@param value the value to be set
+				@param first the starting position
+				@param last the last element to be filled
+		*/
 		void fill(bool value = true, Index first = 0 , Index last = -1);
 
-		///
+		/** Toggle the values of a part of this instance.
+				If a given index is greater than the size of this instance an exception is thrown.
+				@param value the value to be set
+				@param first the starting position
+				@param last the last element to be filled
+		*/
 		void toggle(Index first = 0, Index last = -1);
 
-		///
+		/// ?????????????
 		void setUnsignedChar(unsigned char bit_pattern);
 
-		///
+		/// ?????????????/
 		unsigned char getUnsignedChar() const;
 
-		///
+		/// ?????????????/
 		void setUnsignedShort(unsigned short bit_pattern);
 
-		///
+		/// ?????????????/
 		unsigned short getUnsignedShort() const;
 
-		///
+		/// ?????????????/
 		void setUnsignedInt(unsigned int bit_pattern);
 
-		///
+		/// ?????????????/
 		unsigned int getUnsignedInt() const;
 
-		///
+		/// ?????????????/
 		void setUnsignedLong(unsigned long bit_pattern);
 
-		///
+		/// ?????????????/
 		unsigned long getUnsignedLong() const;
 
 		///
@@ -288,16 +357,25 @@ namespace BALL
 		/**	@name	Predicates */
 		//@{
 
-		///
+		/// Equality operator
 		bool operator == (const BitVector& bit_vector) const;
 
-		///
+		/// Inequality operator
 		bool operator != (const BitVector& bit_vector) const;
 
-		///
+		/** Test if any bit in a given range has the given value.
+				@param value the value to look for
+				@param first the index to start searching
+				@param last the index to stop searching
+		*/
+		// ?????? besser rueckgabewert index mit dem 1. auftreten des wertes
 		bool isAnyBit(bool value, Index first = 0, Index last = -1) const;
 
-		///
+		/** Test if every bit in a given range has the given value
+				@param value the value to look for
+				@param first the index to start searching
+				@param last the index to stop searching
+		*/
 		bool isEveryBit(bool value, Index first = 0, Index last = -1) const;
 
 		//@}
@@ -306,7 +384,8 @@ namespace BALL
 		/**	@name	Debugging and Diagnostics */
 		//@{
 
-		///
+		/** Test if this instance is valid.
+		*/
 		bool isValid() const;
 		//@}
 
@@ -314,16 +393,24 @@ namespace BALL
 		/**	@name	Storers */
 		//@{
 
-		///
+		/**	Input- Operator.
+				Reads the values of of type {\em bool} from an istream.
+		*/
 		friend std::istream& operator >> (std::istream& s, BitVector& bit_vector);
 
-		///
+		/**	Output- Operator.
+				Writes the values of type {\em bool} to an ostream.
+		*/
 		friend std::ostream& operator << (std::ostream& s, const BitVector& bit_vector);
 
-		///
+		/**	Read the values of of type {\em bool} from an istream.
+		*/
+		//????? wirklich notwendig? read <======> Input- Operator ???????
 		virtual void read(std::istream& s);
 
-		///
+		/**	Write the values of of type {\em bool} to an ostream.
+		*/
+		//????? wirklich notwendig? write <======> Output- Operator ???????
 		virtual void write(std::ostream& s) const;
 
 		/**	Storable write method.
