@@ -1,4 +1,4 @@
-// $Id: johnsonBoveyShiftProcessor.h,v 1.2 2000/09/21 13:53:01 amoll Exp $
+// $Id: johnsonBoveyShiftProcessor.h,v 1.3 2000/09/22 12:08:09 oliver Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -29,10 +29,6 @@
 namespace BALL 
 {
 		
-	/**@name	Johnson Bovey Model
-	*/
-	//@{		
-
 	/**	Shift assignment processor implementing Johnson Bovey theory.
 	*/
 	class JohnsonBoveyShiftProcessor
@@ -40,12 +36,13 @@ namespace BALL
 	{
 		public:
 
+    BALL_CREATE(JohnsonBoveyShiftProcessor)
+
 		/**	@name	Type definitions
 		*/
 		//@{
 		struct Ring
     {
-			Size						number_of_atoms;
 			float						radius;
 			Size						electrons;
 			vector<String>	atom_names;
@@ -53,6 +50,16 @@ namespace BALL
   
 		//@}
 		
+    /** @name Enums and Constants
+    */
+    //@{
+
+    /** A symbolic name for the ring current contribution to the chemical shift
+        @see ShiftModule::PROPERTY__SHIFT
+    */
+    static const char* PROPERTY__RING_CURRENT_SHIFT;
+    //@}
+ 
 		/**@name	Constructors and Destructors
 		*/
 		//@{
@@ -89,11 +96,8 @@ namespace BALL
 		//@{
 		/**
 		*/
-		const String& getFilename() const throw();
-
-		/**
-		*/
-		void setFilename(const String& filename) throw();
+		virtual void init() 
+			throw();
 		//@}
 
 		protected:
@@ -102,9 +106,6 @@ namespace BALL
 		std::list<PDBAtom*>			atom_list_;	
 		std::list<Residue*>			aromat_list_;
 		String**								asrings_;
-		String									ini_filename_;
-		Parameters							parameters_;
-		ParameterSection				parameter_section_;
 		StringHashMap<Ring>			rings_;
 		StringHashMap<Position>	residues_with_rings_;
 		vector<Expression>			expressions_;
@@ -114,7 +115,5 @@ namespace BALL
 		float legendreEllipticalIntegral1_(float, float);	// Legendre elliptical Integral of 1st kind
 		float legendreEllipticalIntegral2_(float, float);	// Legendre elliptical Integral of 2nd kind
 	};
-
-	//@}
 
 } // namespace BALL 
