@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.C,v 1.20 2002/12/17 16:40:43 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.21 2003/04/22 15:31:44 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -180,28 +180,6 @@ namespace BALL
 		non_bonded_.clear();
 		is_torsion_.clear();
 		number_of_1_4_ = 0;
-		cut_off_ = 0.0;
-		cut_off_vdw_ = 0.0;
-		cut_on_vdw_ = 0.0;
-		cut_off_electrostatic_ = 0.0;
-		cut_on_electrostatic_ = 0.0;
-		cut_off_solvation_ = 0.0;
-		cut_on_solvation_ = 0.0;
-		inverse_difference_off_on_vdw_3_  = 0.0;
-		inverse_difference_off_on_solvation_3_  = 0.0;
-		inverse_difference_off_on_electrostatic_3_  = 0.0;
-		scaling_vdw_1_4_ = 0.0;
-		scaling_electrostatic_1_4_ = 0.0;
-		use_dist_depend_dielectric_ = false;
-		// algorithm_type_.clear();
-		van_der_waals_parameters_.clear();
-		van_der_waals_parameters_14_.clear();
-		solvation_parameters_.clear();
-		solvation_.clear();
-		use_solvation_component_ = false;
-
-		// ?????: missing OCI
-		// ForceFieldComponent::clear();
 	}
 
 
@@ -244,9 +222,6 @@ namespace BALL
 			return false;
 		}
 
-		// clear everything
-		clear();
- 
 		// create a shorthand for the options
 		Options& options = getForceField()->options;
 
@@ -279,76 +254,76 @@ namespace BALL
 					<< "cannot find section LennardJones14" << endl;
 				return false;
 			}
+		}
 
-			// check for options defined in the nonbonded section			
-			// the cut off for the pair lists
-			if (van_der_waals_parameters_.options.has("CUTNB"))
-			{    
-				cut_off_ = van_der_waals_parameters_.options.getReal("CUTNB");
-				cut_off_ = options.setDefaultReal(CharmmFF::Option::NONBONDED_CUTOFF, cut_off_);
-			}
+		// check for options defined in the nonbonded section			
+		// the cut off for the pair lists
+		if (van_der_waals_parameters_.options.has("CUTNB"))
+		{    
+			cut_off_ = van_der_waals_parameters_.options.getReal("CUTNB");
+			cut_off_ = options.setDefaultReal(CharmmFF::Option::NONBONDED_CUTOFF, cut_off_);
+		}
 
-			// the cut on for the switching fct.
-			if (van_der_waals_parameters_.options.has("CTONNB"))
+		// the cut on for the switching fct.
+		if (van_der_waals_parameters_.options.has("CTONNB"))
+		{
+			cut_on_vdw_ = van_der_waals_parameters_.options.getReal("CTONNB");
+			cut_on_electrostatic_ = cut_on_vdw_;
+			cut_on_solvation_ = cut_on_vdw_;
+
+			// user defined values override the parameters from the file
+			cut_on_vdw_ = options.setDefaultReal(CharmmFF::Option::VDW_CUTON, cut_on_vdw_);
+			cut_on_solvation_ = options.setDefaultReal(CharmmFF::Option::SOLVATION_CUTON, cut_on_solvation_);
+			cut_on_electrostatic_ = options.setDefaultReal(CharmmFF::Option::ELECTROSTATIC_CUTON, cut_on_electrostatic_);
+		}
+		
+		// the cut off for the switching fct.
+		if (van_der_waals_parameters_.options.has("CTOFNB"))
+		{
+			cut_off_electrostatic_ = van_der_waals_parameters_.options.getReal("CTOFNB");
+			cut_off_vdw_ = cut_off_electrostatic_;
+			cut_off_solvation_ = cut_off_electrostatic_;
+			
+			// user defined values override the parameters from the file
+			cut_off_vdw_ = options.setDefaultReal(CharmmFF::Option::VDW_CUTOFF, cut_off_vdw_);
+			cut_off_solvation_ = options.setDefaultReal(CharmmFF::Option::SOLVATION_CUTOFF, cut_off_solvation_);
+			cut_off_electrostatic_ = options.setDefaultReal(CharmmFF::Option::ELECTROSTATIC_CUTOFF, cut_off_electrostatic_);
+		}
+
+		// electrostatic 1-4 scaling factor
+		if (van_der_waals_parameters_.options.has("E14FAC"))
+		{
+			// user defined options override the options from the file
+			scaling_electrostatic_1_4_ = van_der_waals_parameters_.options.getReal("E14FAC");
+			scaling_electrostatic_1_4_ = options.setDefaultReal(CharmmFF::Option::SCALING_ELECTROSTATIC_1_4, scaling_electrostatic_1_4_);
+		}
+
+		// electrostatic 1-4 scaling factor
+		if (van_der_waals_parameters_.options.has("ATOM"))
+		{
+			// the ATOM option either takes CDIEL or RDIEL as an argument
+			// meaning constant DC or distance-dependent DC
+			String value = van_der_waals_parameters_.options["ATOM"];
+			if ((value != "CDIEL") && (value != "RDIEL"))
 			{
-				cut_on_vdw_ = van_der_waals_parameters_.options.getReal("CTONNB");
-				cut_on_electrostatic_ = cut_on_vdw_;
-				cut_on_solvation_ = cut_on_vdw_;
-
-				// user defined values override the parameters from the file
-				cut_on_vdw_ = options.setDefaultReal(CharmmFF::Option::VDW_CUTON, cut_on_vdw_);
-				cut_on_solvation_ = options.setDefaultReal(CharmmFF::Option::SOLVATION_CUTON, cut_on_solvation_);
-				cut_on_electrostatic_ = options.setDefaultReal(CharmmFF::Option::ELECTROSTATIC_CUTON, cut_on_electrostatic_);
+				Log.warn() << "CharmmNonBonded::setup(): "
+					<< "unknown CHARMM argument for ATOM: " << value 
+					<< "   - using distance dependent electrostatics." << endl;
 			}
 			
-			// the cut off for the switching fct.
-			if (van_der_waals_parameters_.options.has("CTOFNB"))
+			if (value == "CDIEL")
 			{
-				cut_off_electrostatic_ = van_der_waals_parameters_.options.getReal("CTOFNB");
-				cut_off_vdw_ = cut_off_electrostatic_;
-				cut_off_solvation_ = cut_off_electrostatic_;
-				
-				// user defined values override the parameters from the file
-				cut_off_vdw_ = options.setDefaultReal(CharmmFF::Option::VDW_CUTOFF, cut_off_vdw_);
-				cut_off_solvation_ = options.setDefaultReal(CharmmFF::Option::SOLVATION_CUTOFF, cut_off_solvation_);
-				cut_off_electrostatic_ = options.setDefaultReal(CharmmFF::Option::ELECTROSTATIC_CUTOFF, cut_off_electrostatic_);
+				use_dist_depend_dielectric_ = false;
+			} 
+			else 
+			{
+				use_dist_depend_dielectric_ = true;
 			}
 
-			// electrostatic 1-4 scaling factor
-			if (van_der_waals_parameters_.options.has("E14FAC"))
-			{
-				// user defined options override the options from the file
-				scaling_electrostatic_1_4_ = van_der_waals_parameters_.options.getReal("E14FAC");
-				scaling_electrostatic_1_4_ = options.setDefaultReal(CharmmFF::Option::SCALING_ELECTROSTATIC_1_4, scaling_electrostatic_1_4_);
-			}
-
-			// electrostatic 1-4 scaling factor
-			if (van_der_waals_parameters_.options.has("ATOM"))
-			{
-				// the ATOM option either takes CDIEL or RDIEL as an argument
-				// meaning constant DC or distance-dependent DC
-				String value = van_der_waals_parameters_.options["ATOM"];
-				if ((value != "CDIEL") && (value != "RDIEL"))
-				{
-					Log.warn() << "CharmmNonBonded::setup(): "
-						<< "unknown CHARMM argument for ATOM: " << value 
-						<< "   - using distance dependent electrostatics." << endl;
-				}
-				
-				if (value == "CDIEL")
-				{
-					use_dist_depend_dielectric_ = false;
-				} 
-				else 
-				{
-					use_dist_depend_dielectric_ = true;
-				}
-
-				// user defined options ovverride the options read from the file
-				use_dist_depend_dielectric_ = options.setDefaultBool
-					(CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC, 
-					 use_dist_depend_dielectric_);
-			}
+			// user defined options ovverride the options read from the file
+			use_dist_depend_dielectric_ = options.setDefaultBool
+				(CharmmFF::Option::DISTANCE_DEPENDENT_DIELECTRIC, 
+				 use_dist_depend_dielectric_);
 		}
 
 		// extract the solvation parameters if possible
@@ -450,7 +425,7 @@ namespace BALL
 		}
 		if (inverse_difference_off_on_solvation_3_ <= 0.0)
 		{
-			Log.warn() << "CharmmNonBonded::setup: solvation cuton value should be smaller than cutoff. Switching function disabled." << endl;
+			Log.warn() << "CharmmNonBonded::setup: solvation cuton value should be smaller than cutoff. Switching function disabled." << std::endl;
 			cut_on_solvation_ = cut_off_solvation_ + 1.0;
 		}
 		else
@@ -469,10 +444,10 @@ namespace BALL
 																								 cut_off_, force_field_->periodic_boundary.isEnabled(), 
 																								 algorithm_type_); 
 
-		// Reserve space for non-bonded vector
+		// Reserve space for non-bonded vector.
 		non_bonded_.reserve(number_of_non_bonded_interactions + (Size)(number_of_non_bonded_interactions / 5));
 
-		// Build the vector "non_bonded_" with the atom pairs and parameters
+		// Build the vector "non_bonded_" with the atom pairs and parameters.
 		buildVectorOfNonBondedAtomPairs(atom_pair_vector);
 
 		// initialize vector of parameter structures
@@ -502,7 +477,7 @@ namespace BALL
 	// Build a vector of non-bonded atom pairs with the vdw parameters 
 	// The vector starts with 1-4 interactions
 	void CharmmNonBonded::buildVectorOfNonBondedAtomPairs
-		(const vector< pair<Atom*, Atom*> >& atom_vector)
+		(const vector<pair<Atom*, Atom*> >& atom_vector)
 		throw()
 	{
 		// throw away the old rubbish
@@ -520,14 +495,14 @@ namespace BALL
 		is_torsion_.reserve(atom_vector.size());
 
 		// Iterate over all atom pairs in atom_vector and test if the atoms build a torsion
-		vector< pair <Atom*, Atom*> >::const_iterator pair_it = atom_vector.begin();
+		std::vector<pair <Atom*, Atom*> >::const_iterator pair_it = atom_vector.begin();
 
 		for ( ; pair_it != atom_vector.end(); ++pair_it) 
 		{
 			is_torsion_.push_back(pair_it->first->isVicinal(*pair_it->second));
 		}
 
-		vector< bool >::iterator bool_it = is_torsion_.begin(); 
+		vector<bool>::iterator bool_it = is_torsion_.begin(); 
 		LennardJones::Data tmp;
 		Atom*	atom1;
 		Atom* atom2;
