@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glPrimitiveManager.C,v 1.11 2002/12/17 15:43:48 amoll Exp $
+// $Id: glPrimitiveManager.C,v 1.12 2002/12/17 16:06:51 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 #include <BALL/VIEW/GUI/KERNEL/glQuadricObject.h>
@@ -130,7 +130,7 @@ namespace BALL
 		GLDisplayList& GLSphereDisplayLists_::operator () (unsigned int drawing_mode, unsigned int drawing_precision)
 			throw(GLSphereDisplayLists_::WrongModes)
 		{
-			if (drawing_mode >= 3 || drawing_precision >= 5)
+			if (drawing_mode >= 3 || drawing_precision >= 4)
 			{
 				throw WrongModes(__FILE__, __LINE__, drawing_mode, drawing_precision);
 			}
@@ -340,7 +340,7 @@ namespace BALL
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
 			throw(GLTubeDisplayLists_::WrongModes)
 		{
-			if (drawing_mode >= 3 || drawing_precision >= 5)
+			if (drawing_mode >= 3 || drawing_precision >= 4)
 			{
 				throw WrongModes(__FILE__, __LINE__, drawing_mode, drawing_precision);
 			}
@@ -501,7 +501,7 @@ namespace BALL
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
 			throw(GLSimpleBoxDisplayLists_::WrongModes)
 		{
-			if (drawing_mode >= 3 || drawing_precision >= 5)
+			if (drawing_mode >= 3 || drawing_precision >= 4)
 			{
 				throw WrongModes(__FILE__, __LINE__, drawing_mode, drawing_precision);
 			}
