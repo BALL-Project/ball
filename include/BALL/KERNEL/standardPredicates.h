@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.41 2003/08/28 08:26:24 oliver Exp $
+// $Id: standardPredicates.h,v 1.42 2003/08/28 12:25:04 anker Exp $
 //
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
@@ -737,7 +737,7 @@ namespace BALL
 
 			/*_ Needed for realising parsing of loops (or links).
 			*/
-			HashMap<char, pair<CTPNode*, CTPNode*> > link_map_;
+			HashMap<char, std::pair<CTPNode*, CTPNode*> > link_map_;
 
 			/*_ Needed for realising parsing of loops (or links).
 			*/
