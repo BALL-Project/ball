@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.34 2003/05/08 18:20:18 anhi Exp $
+// $Id: regularData1D.h,v 1.35 2003/05/19 09:17:33 sneumann Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -484,7 +484,7 @@ namespace BALL
 	ValueType TRegularData1D<ValueType>::getInterpolatedValue(const CoordinateType& x) const
 		throw(Exception::OutOfGrid)
 	{
-		if ((r < origin_) || (r > (origin_ + dimension_)))
+		if ((x < origin_) || (x > (origin_ + dimension_)))
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
@@ -496,7 +496,7 @@ namespace BALL
 	const ValueType& TRegularData1D<ValueType>::getClosestValue(const CoordinateType& x) const
 		throw(Exception::OutOfGrid)
 	{
-		if ((r < origin_) || (r > (origin_ + dimension_)))
+		if ((x < origin_) || (x > (origin_ + dimension_)))
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
@@ -511,7 +511,7 @@ namespace BALL
 	ValueType& TRegularData1D<ValueType>::getClosestValue(const CoordinateType& x)
 		throw(Exception::OutOfGrid)
 	{
-		if ((r < origin_) || (r > (origin_ + dimension_)))
+		if ((x < origin_) || (x > (origin_ + dimension_)))
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
