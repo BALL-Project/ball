@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.h,v 1.2 1999/10/01 12:52:51 oliver Exp $ 
+// $Id: poissonBoltzmann.h,v 1.3 1999/11/30 19:47:45 oliver Exp $ 
 // Finite Difference Poisson Boltzmann Solver
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H
@@ -294,7 +294,7 @@ namespace BALL
 			/**	Boundary condition zero: boundary points have zero potential.
 					A Potential of zero is assigned to all points on the
 					grid boundary.
-					This is the sinmplest and least accurate method. It's use is
+					This is the simplest and least accurate method. It's use is
 					not recommended.
 			*/
 			static const char* ZERO;
