@@ -1,4 +1,4 @@
-// $Id: shiftModule.h,v 1.7 2000/09/20 11:12:56 oliver Exp $
+// $Id: shiftModule.h,v 1.8 2000/09/21 13:41:16 oliver Exp $
 
 #ifndef BALL_NMR_SHIFTMODULE_H
 #define BALL_NMR_SHIFTMODULE_H
@@ -121,7 +121,11 @@ namespace BALL
 		const String& getName() const
 			throw();
 
-		/**	Set the parameters
+		/**	Set the parameters.
+				After the assignment, the state of the module is \emph{invalid},
+				so it is required to run \Ref{init}.
+				@param parameters the new parameters
+				@see	isValid
 		*/
 		void setParameters(Parameters& parameters)
 			throw();
@@ -135,16 +139,59 @@ namespace BALL
 				Use this method to implement the extraction and initialization of
 				the module's parameters.
 				\Ref{init} is called by \Ref{ShiftModel} as soon as the \Ref{ShiftModule}
-				is constructed and parameters and name are assigned.
+				is constructed and parameters and name are assigned.\\
+
+				All implementations in derived classes should set the \Ref{valid_} flag
+				to {\bf true} if the initialization was successful and to {\bf false} otherwise.
 		*/
 		virtual void init() 
 			throw();
 		//@}
+
+		/**	@name Processor related methods
+		*/
+		//@{
+		/**	Start method.
+				This method aborts, if the module is not correctly initialized.
+				@see isValid
+		*/
+		virtual bool start() 
+			throw();
+
+		/**	Finish method.
+				This method aborts, if the module is not correctly initialized.
+				@see isValid
+		*/
+		virtual bool finish() 
+			throw();
+		//@}
+
+		/**	@name	Predicates
+		*/
+		//@{
+		/**	Return the module state.
+				The module is valid if \Ref{init} was executed successfully.
+				@return the module state
+		*/
+		bool isValid() const
+			throw();
+		//@}
+
 		protected:
 
+		/**	The module name
+		*/
 		String			module_name_;		
 
+		/**	A pointer to the modules parameters
+		*/
 		Parameters*	parameters_;
+
+		/**	The module's validity flag.
+				This flag should indicate that the modules was correctly
+				initialized (using \Ref{init}).
+		*/
+		bool valid_;
 	};
 	//@}
 
