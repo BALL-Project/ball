@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.31 2002/12/20 19:10:22 oliver Exp $
+// $Id: PDBFile.C,v 1.32 2003/02/08 15:56:32 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -1408,43 +1408,66 @@ namespace BALL
 
 	void  PDBFile::postprocessHelices_()
 	{
-		ResidueMap::Iterator initial;
-		ResidueMap::Iterator terminal;
 		QuadrupleList::iterator res_it = helix_list_.begin();
 		SecStrucList::iterator helix_it = new_helix_secstruc_list_.begin();
 		
-		for (; res_it != helix_list_.end(); ++res_it, ++helix_it)
+		for (; (res_it != helix_list_.end()) && (helix_it != new_helix_secstruc_list_.end()); 
+				 ++res_it, ++helix_it)
 		{
-			initial = residue_map_.find(*res_it);
-			++res_it;
-			terminal = residue_map_.find(*res_it);
-		
-			// This is to catch those cases where initial comes after terminal in the
-			// residue sequence.
-			// We first swap initial and terminal. Then we walk along the chain begining
-			// with the old initial (which is now terminal), and if we encounter the old
-			// terminal (which is now initial) on the way, then we swap the residues
-			// again.
-			ResidueMap::Iterator dummy = initial;
-			initial = terminal;
-			terminal = dummy;
-			
-			for (;dummy != residue_map_.end(); ++dummy)
+			// Check whether the two residues exist in the structure
+			// (i.e. a residue has been constructed).
+			if (!residue_map_.has(*res_it))
 			{
-				if (dummy == initial)
-				{
-					initial = terminal;
-					terminal = dummy;
-					break;
-				}
+				delete *helix_it;
+				++res_it;
+				continue;
 			}
+			Residue* initial(residue_map_[*res_it]);
+				
+			++res_it;
 
-			if (!(initial != residue_map_.end() && terminal != residue_map_.end()
-						&& initial->second->getChain() == terminal->second->getChain()
-						&& (Composite::insertParent(*(*helix_it), *initial->second, *terminal->second, false) == true)))
+			// Find the last residue. Caveat: under strange circumstances,
+			// res_it mitght be invalid, so test for it first.
+			if ((res_it == helix_list_.end()) || !residue_map_.has(*res_it))
+			{
+				delete *helix_it;
+				continue;
+			}
+			Residue* terminal(residue_map_[*res_it]);
+
+			// Delete the constructed helix object if
+			// it was not valid and could not be inserted correctly.
+			// Otherwise, responsability for the memory is taken over by
+			// the System/Chain/Protein it is contained in.
+			bool delete_helix = true;
+			if ((initial->getParent() == terminal->getParent())
+					&& (initial->getParent() != 0))
+			{
+				const Residue* ptr = initial;
+				while (ptr != 0 && ptr != terminal) 
+				{
+					ptr = dynamic_cast<const Residue*>(ptr->getNext(RTTI::getDefault<Residue>()));
+				}
+				if (ptr == 0)
+				{
+					std::swap(initial, terminal);
+				}
+				ptr = initial;
+				while (ptr != 0 && ptr != terminal)
+				{
+					ptr = dynamic_cast<const Residue*>(ptr->getNext(RTTI::getDefault<Residue>()));
+				}
+				if (ptr == 0)
+				{
+					continue;
+				}
+				
+				delete_helix = !Composite::insertParent(**helix_it, *initial, *terminal, false);
+			}
+			if (delete_helix == true)
 			{
 				delete (*helix_it);
-			}
+			}			
 		}
 	}
 
