@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.C,v 1.42 2003/07/03 13:30:38 oliver Exp $
+// $Id: file.C,v 1.43 2003/07/06 16:17:49 amoll Exp $
 //
 
 #include <BALL/SYSTEM/file.h>
@@ -384,18 +384,28 @@ namespace BALL
 	}
 
 	Size File::getSize()
-		throw()
+		throw(Exception::FileNotFound)
 	{
 		if (!is_open_)
 		{
-			if (open(name_, open_mode_) == false)
+			// dont open the file with File::OUT here, or it might get overwritten
+			if (!open(name_, File::IN))
 			{
-				return 0;
+				throw Exception::FileNotFound(__FILE__, __LINE__, name_);
 			}		
+			((std::fstream*)this)->seekg(0, std::ios::end);
+			Size size = (Size)((std::fstream*)this)->tellg();
+			close();
+			return size;
 		}
+
+		// store old position in file
 		std::streampos old_position = ((std::fstream*)this)->tellg();
+		// get filesize
 		((std::fstream*)this)->seekg(0, std::ios::end);
 		Size size = (Size)((Size)((std::fstream*)this)->tellg() - old_position);
+
+		// reset in file to old position
 		((std::fstream*)this)->seekg(old_position);
 		
 		return size;
