@@ -1,4 +1,4 @@
-// $Id: EFShiftProcessor.h,v 1.6 2001/02/01 18:14:00 amoll Exp $
+// $Id: EFShiftProcessor.h,v 1.7 2001/02/02 18:00:51 amoll Exp $
 
 #ifndef BALL_NMR_EFSHIFTPROCESSOR_H
 #define BALL_NMR_EFSHIFTPROCESSOR_H
@@ -112,7 +112,7 @@ namespace BALL
 				\Ref{effector_list_}.
 				The chemical shift induced by the electric field effect is calculated as
 				\begin{equation}
-					\delta_{EF} = \varepsilon_1 E_z + \varepsilon_2 * E^2
+					\delta_{EF} = \varepsilon_1 * E_z + \varepsilon_2 * E^2
 				\end{equation}
 				where constants $\varepsilon_1$ and $\varpesilon_2$ are read
 				from the parameter file (section "ElectricFieldEffect").

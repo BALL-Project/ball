@@ -1,4 +1,4 @@
-// $Id: haighMallionShiftProcessor.h,v 1.5 2000/09/26 19:26:46 oliver Exp $
+// $Id: haighMallionShiftProcessor.h,v 1.6 2001/02/02 18:00:51 amoll Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -67,7 +67,7 @@ namespace BALL
 				a right handed system between the plane's normal vector and the difference vectors from the projection
 				to the two bond's atoms.
 				Next the protons distances to the actual two bond's atoms are calculated and stored in a_eins and a_zwei.
-				Then ts is calculated : ts = f * (1/a_eins^3 + 1/a_zwei) with f is the actual tringle area.
+				Then ts is calculated : $ ts = f * (1/a_eins^3 + 1/a_zwei) $ with f is the actual tringle area.
 				For every bond of the ring this partial sum is calculated , added and stored in gs.
 				Just some constant factor B and the chemical shift using Haigh Mallions Model is done.
 				Important note:
