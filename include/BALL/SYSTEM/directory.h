@@ -1,4 +1,4 @@
-// $Id: directory.h,v 1.13.4.2 2002/11/30 10:31:59 oliver Exp $
+// $Id: directory.h,v 1.13.4.3 2002/11/30 12:49:15 oliver Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -21,6 +21,12 @@
 
 #ifdef BALL_HAS_DIRENT_H
 #	include <dirent.h>
+#endif
+#ifdef BALL_HAS_UNISTD_H
+#	include <unistd.h>
+#endif
+#ifdef BALL_HAS_SYS_STAT_H
+#	include <sys/stat.h>
 #endif
 #ifdef BALL_HAS_DIRECT_H
 #	include <direct.h>

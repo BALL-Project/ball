@@ -1569,6 +1569,18 @@ AC_DEFUN(CF_CHECK_SYS_TIME_H, [
 ])
 
 dnl
+dnl   Check whether sys/stat.h does really exist.
+dnl
+AC_DEFUN(CF_CHECK_SYS_STAT_H, [
+	AC_CHECK_HEADERS(sys/stat.h,
+			[BALL_HAS_SYS_STAT_H=true],
+			[BALL_HAS_SYS_STAT_H=false])
+	if test ${BALL_HAS_SYS_STAT_H} = true ; then
+		AC_DEFINE(BALL_HAS_SYS_STAT_H,)
+	fi
+])
+
+dnl
 dnl   Check whether sys/times.h does really exist.
 dnl
 AC_DEFUN(CF_CHECK_SYS_TIMES_H, [
