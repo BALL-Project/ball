@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.34.2.3 2005/01/13 12:43:43 amoll Exp $
+// $Id: primitiveManager.C,v 1.34.2.5 2005/01/28 15:15:54 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -203,6 +203,13 @@ List<Representation*> PrimitiveManager::removedComposite(const Composite& compos
 			if (&composite == *composite_it ||
 					composite.isAncestorOf(**composite_it))
 			{
+				if ((*rep_it)->getComposites().size() > 1)
+				{
+					(*rep_it)->getComposites().erase(*composite_it);
+					update_(**rep_it);
+					break;
+				}
+
 				removed_representations.push_back(*rep_it);
 				break;
 			}
