@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.25 2001/05/17 01:30:49 oliver Exp $
+// $Id: property.C,v 1.26 2001/06/14 00:31:12 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -226,7 +226,7 @@ namespace BALL
 		return true;
 	}
   
-	void PropertyManager::set(const PropertyManager& property_manager, bool /* deep */)
+	void PropertyManager::set(const PropertyManager& property_manager)
 		throw()
 	{
 		bitvector_ = property_manager.bitvector_;
