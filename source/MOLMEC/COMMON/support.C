@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.30.4.5 2002/06/09 14:24:34 oliver Exp $
+// $Id: support.C,v 1.30.4.6 2002/12/11 14:24:05 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -135,7 +135,7 @@ namespace BALL
 			// we enlarge the box by some constant to be sure not to run into
 			// numerical problems
 			HashGrid3<Atom*> grid(lower - Vector3(0.1),
-					upper - lower + Vector3(0.2), distance);
+					upper - lower + Vector3(0.2F), distance);
 
 			// Iterators and hash box pointer for the grid search
 			HashGridBox3<Atom*>* hbox;

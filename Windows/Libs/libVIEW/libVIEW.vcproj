@@ -286,9 +286,6 @@
 						RelativePath="..\..\..\source\VIEW\GUI\WIDGETS\control.C">
 					</File>
 					<File
-						RelativePath="..\..\..\source\VIEW\GUI\WIDGETS\events.C">
-					</File>
-					<File
 						RelativePath="..\..\..\source\VIEW\GUI\WIDGETS\mainControlPreferences.C">
 					</File>
 					<File

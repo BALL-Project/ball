@@ -1,4 +1,4 @@
-// $Id: anisotropyShiftProcessor.C,v 1.10 2002/01/10 01:32:29 oliver Exp $
+// $Id: anisotropyShiftProcessor.C,v 1.10.4.1 2002/12/11 14:24:06 oliver Exp $
 
 #include <BALL/NMR/anisotropyShiftProcessor.h>
 
@@ -164,7 +164,7 @@ namespace BALL
 						vy /= vy.getLength();
 						Vector3 vx = vz % vy;
 						vx /= vx.getLength();
-						const Vector3 cen = c_pos + (vz * 1.1);
+						const Vector3 cen = c_pos + (vz * 1.1F);
 						const Vector3 v1 = patom->getPosition() - cen;
 						const Vector3 v2 = v1 % vy;
 						const Vector3 v3 = v2 % vx;
