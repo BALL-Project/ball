@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.13 2000/07/25 13:36:11 amoll Exp $
+// $Id: bitVector.h,v 1.14 2000/07/25 14:06:19 amoll Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -293,37 +293,61 @@ namespace BALL
 		*/
 		void toggle(Index first = 0, Index last = -1);
 
-		/// ???
+		/** Set a unsigned char as the bit pattern.
+				For example: 22 => 00010110.
+				@param bit_pattern the new pattern.
+		*/
 		void setUnsignedChar(unsigned char bit_pattern);
 
-		/// ???/
+		/** Get the bit pattern as unsigned char.
+				For example: 00010110 => 22.
+				@return unsigned char the bit-pattern
+		*/
 		unsigned char getUnsignedChar() const;
 
-		/// ???/
+		/** Set a unsigned short as the bit pattern.
+				@see setUnsignedChar
+		*/
 		void setUnsignedShort(unsigned short bit_pattern);
 
-		/// ???/
+		/** Get the bit pattern as unsigned short.
+				@see getUnsignedChar
+		*/
 		unsigned short getUnsignedShort() const;
 
-		/// ???/
+		/** Set a unsigned int as the bit pattern.
+				@see setUnsignedChar
+		*/
 		void setUnsignedInt(unsigned int bit_pattern);
 
-		/// ???/
+		/** Get the bit pattern as unsigned int.
+				@see getUnsignedChar
+		*/
 		unsigned int getUnsignedInt() const;
 
-		/// ???/
+		/** Set a unsigned long as the bit pattern.
+				@see setUnsignedChar
+		*/
 		void setUnsignedLong(unsigned long bit_pattern);
 
-		/// ???/
+		/** Get the bit pattern as unsigned long.
+				@see getUnsignedChar
+		*/
 		unsigned long getUnsignedLong() const;
 
-		///
+		/** Compute {\em this or bit_vector}.
+				The result is saved in this instance.
+		*/
 		void bitwiseOr(const BitVector& bit_vector);
 
-		///
+		/** Compute {\em this xor bit_vector}.
+				The result is saved in this instance.
+		*/
 		void bitwiseXor(const BitVector& bit_vector);
 
-		///
+		/** Compute {\em this and bit_vector}.
+				The result is saved in this instance.
+		*/
 		void bitwiseAnd(const BitVector& bit_vector);
 
 		/** Or Operator.
