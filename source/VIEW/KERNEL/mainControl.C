@@ -1,15 +1,22 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.11 2003/09/20 15:37:16 amoll Exp $
+// $Id: mainControl.C,v 1.12 2003/09/20 15:51:06 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/geometricObject.h>
 #include <BALL/VIEW/KERNEL/modularWidget.h>
+#include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
-#include <BALL/VIEW/KERNEL/message.h>
+
+#include <BALL/VIEW/WIDGETS/control.h>
+#include <BALL/VIEW/WIDGETS/pyWidget.h>
+#include <BALL/VIEW/WIDGETS/logView.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/WIDGETS/geometricControl.h>
+
 
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/forEach.h>
@@ -22,15 +29,10 @@
 #include <qpopupmenu.h>
 #include <qstatusbar.h>
 #include <qlabel.h>
+#include <qtooltip.h>
 
 #include <algorithm> // sort
 
-
-#include <BALL/VIEW/WIDGETS/control.h>
-#include <BALL/VIEW/WIDGETS/pyWidget.h>
-#include <BALL/VIEW/WIDGETS/logView.h>
-#include <BALL/VIEW/WIDGETS/scene.h>
-#include <BALL/VIEW/WIDGETS/geometricControl.h>
 
 using std::istream;
 using std::ostream;
@@ -64,6 +66,9 @@ MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 
 	connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
 	connect(menuBar(),	SIGNAL(highlighted(int)), this, SLOT(menuItemHighlighted(int)));
+
+	QToolTip::setWakeUpDelay(500);
+	QToolTip::setGloballyEnabled(true);
 }
 
 MainControl::MainControl(const MainControl& main_control)
