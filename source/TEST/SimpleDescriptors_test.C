@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SimpleDescriptors_test.C,v 1.4 2004/05/11 07:28:24 oliver Exp $
+// $Id: SimpleDescriptors_test.C,v 1.5 2004/11/04 06:24:42 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -748,7 +748,7 @@ CHECK(SizeOfSSSR)
 	SizeOfSSSR ss;
 	S.apply(ss);
 
-	double results[] = {1, 1, 1, 1, 1, 3, 0, 1, 2};
+	double results[] = {1, 1, 1, 1, 1, 3, 0, 1, 3};
 	for (Size i=0;i!=limit;++i)
 	{
 		molecule = S.getMolecule(i);
