@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.3 2003/11/25 02:09:47 amoll Exp $
+// $Id: representation.sip,v 1.4 2003/12/02 15:58:30 amoll Exp $
 //
 
 class Representation
@@ -11,6 +11,9 @@ class Representation
 	#include <BALL/VIEW/KERNEL/representation.h>
 	using namespace BALL;
 	using namespace BALL::VIEW;
+
+	//typedef Representation::GeometricObjectList GeometricObjectList;
+	//typedef Representation::CompositeSet 				CompositeSet;
 %End
   public:
 	// BALL_CREATE(Representation);
@@ -21,13 +24,13 @@ class Representation
 	// CompositesIterator begin() throw();
 	// CompositesIterator end() throw();
 	// GeometricObjectList& getGeometricObjects() throw();
-//	ColoringMethod getColoringMethod() const throw();
-	Index getDrawingMode() const throw();
-	Index getDrawingPrecision() const throw();
-//	Index getModelType() const throw();
+	ColoringMethod getColoringMethod() const throw();
+ 	DrawingMode getDrawingMode() const throw();
+	DrawingPrecision getDrawingPrecision() const throw();
+	ModelType getModelType() const throw();
 	ModelProcessor* getModelProcessor() throw();
 	Representation() throw();
-//	Representation(Index /model_type/, Index /drawing_precision/, Index /drawing_mode/) throw();
+	Representation(ModelType /model_type/, DrawingPrecision /drawing_precision/, DrawingMode /drawing_mode/) throw();
 	// Representation(const CompositeSet& /composites/, ModelProcessor* /rep_processor/) throw();
 	// Representation(const GeometricObjectList& /object_list/) throw();
 	Representation(const Representation& /representation/) throw();
@@ -44,11 +47,11 @@ class Representation
 	//	void dump(std::ostream& s, Size depth) const throw();
 	void insert(GeometricObject& /object/) throw();
 	void setColorProcessor(ColorProcessor* /processor/) throw();
-//	void setColoringMethod(ColoringMethod /type/) throw();
-	void setDrawingMode(Index /mode/) throw();
-	void setDrawingPrecision(Index /precision/) throw();
+	void setColoringMethod(ColoringMethod /type/) throw();
+	void setDrawingMode(DrawingMode /mode/) throw();
+	void setDrawingPrecision(DrawingPrecision /precision/) throw();
 	void setModelProcessor(ModelProcessor* /processor/) throw();
-//	void setModelType(Index /type/) throw();
+	void setModelType(ModelType /type/) throw();
 	void setSurfaceDrawingPrecision(float /precision/) throw();
 	void setTransparency(Size /value/) throw();
 	void update(bool /rebuild/) throw();
