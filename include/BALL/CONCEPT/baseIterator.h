@@ -1,4 +1,4 @@
-// $Id: baseIterator.h,v 1.17.4.1 2002/11/29 21:30:10 oliver Exp $
+// $Id: baseIterator.h,v 1.17.4.2 2002/11/30 11:05:56 oliver Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -540,7 +540,7 @@ namespace BALL
 	
 		/**	Default constructor
 		*/
-		BaseIterator(const BaseIterator &iterator)
+		BaseIterator(const BaseIterator& iterator)
 			throw()
 			:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
 		{
@@ -550,7 +550,10 @@ namespace BALL
 		/**	Default constructor
 		*/
 		BaseIterator(const ConstBaseIterator<Container, DataType, Position, Traits> &iterator)
-			throw();
+			throw()
+			:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
+		{
+		}
 
 		//@}
 		/**	@name	Accessors
