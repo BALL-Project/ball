@@ -1,4 +1,4 @@
-// $Id: molecularProperties.h,v 1.5 2001/05/13 14:55:25 hekl Exp $
+// $Id: molecularProperties.h,v 1.6 2001/07/06 14:28:42 aubertin Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
@@ -57,9 +57,9 @@ namespace BALL
 				graphical representation by the \Ref{DisplayProperties} dialog.
 				See \Ref{onNotify} for information concerning the conversion mechanism.
 				@memo    MolecularProperties class (BALL MOLVIEW gui widgets framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 14:55:25 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/06 14:28:42 $
 		*/
 		class MolecularProperties: public QWidget, public ModularWidget
 		{
@@ -70,7 +70,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new molecularProperties.
+					Constructs new molecularProperties.
 					Calls \Ref{registerWidget}.
 					@param      parent the parent widget of {\em *this} molecularProperties (See documentation of QT-library for information concerning widgets)
 					@param      name the name of {\em *this} molecularProperties (See documentation of QT-library for information concerning widgets)
