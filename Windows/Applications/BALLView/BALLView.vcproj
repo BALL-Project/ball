@@ -412,18 +412,6 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="resource.h">
-			</File>
-			<File
-				RelativePath="resource1.h">
-			</File>
-			<File
-				RelativePath="resource2.h">
-			</File>
-			<File
-				RelativePath="resource3.h">
-			</File>
-			<File
 				RelativePath="..\..\..\source\APPLICATIONS\BALLVIEW\threads.h">
 			</File>
 		</Filter>
@@ -515,9 +503,6 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName).C&quot; -impl &quot;$(InputDi
 		</Filter>
 		<File
 			RelativePath="ballview.ico">
-		</File>
-		<File
-			RelativePath="icon1.ico">
 		</File>
 	</Files>
 	<Globals>
