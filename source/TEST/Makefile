@@ -70,6 +70,7 @@ EXECUTABLES = \
 	PTE_test\
 	Quaternion_test\
 	RadialDistributionFunction_test\
+	RandomCoilShiftProcessor_test\
 	RDFIntegrator_test\
 	RDFParameter_test\
 	RDFSection_test\
