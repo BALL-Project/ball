@@ -93,32 +93,32 @@ namespace BALL
 					
 				protected:
 							
-				/**
-				nested class Compare_ 
-				This class is needed for the sorting of the table;
-				the rows of the table should be sorted by a certain column
-      */
-      class Compare_
-			{
-				public:
+					/**
+					nested class Compare_ 
+					This class is needed for the sorting of the table;
+					the rows of the table should be sorted by a certain column
+      		*/	
+      		class Compare_
+					{
+						public:
 
-					// constructor
-					Compare_() throw()
-					{}
+							// constructor
+							Compare_() throw()
+							{}
 					
-					Compare_(int index) throw()
-					{ index_ = index; }
+							Compare_(int index) throw()
+							{ index_ = index; }
 		
-					// destructor
-					~Compare_() throw()
-					{}
+							// destructor
+							~Compare_() throw()
+							{}
 					
-					// Operator ()
-					bool operator() (const vector<float> a, const vector<float> b) const
-						{ return a[index_] < b[index_]; }
+							// Operator ()
+							bool operator() (const vector<float> a, const vector<float> b) const
+								{ return a[index_] < b[index_]; }
 					
-					int index_;
-			};
+							int index_;
+					};
 				
 					
 				private:

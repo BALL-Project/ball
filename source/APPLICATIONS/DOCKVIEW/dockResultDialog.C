@@ -1,4 +1,4 @@
-// $Id: dockResultDialog.C,v 1.1.2.7 2005/03/24 15:50:26 haid Exp $
+// $Id: dockResultDialog.C,v 1.1.2.8 2005/03/29 11:53:00 haid Exp $
 //
 
 #include <qtable.h>
@@ -102,10 +102,10 @@ namespace BALL
 				result_table->adjustColumn(j);
 			}
 			
+			//sort by score column
+			sortTable(1);
 			
 			//adjust table/dialog size
-			//QSize recommended_size = result_table->sizeHint();
-			//result_table->resize(recommended_size);
 			result_table->adjustSize();
 			adjustSize();
 			

@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.8.2.4 2005/03/17 14:03:02 haid Exp $
+# $Id: Makefile,v 1.1.2.8.2.5 2005/03/29 11:52:59 haid Exp $
 #
 
 EXECUTABLE=DOCKView
@@ -26,6 +26,7 @@ CPP_SOURCES=\
 	geometricFitDialogData.C\
 	dockProgressDialogData.C\
 	dockResultDialogData.C\
+	dockResults.C\
 	icons.C\
 	main.C\
 	mainframe.C
