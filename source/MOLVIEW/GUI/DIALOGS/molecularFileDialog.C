@@ -1,4 +1,4 @@
-// $Id: molecularFileDialog.C,v 1.7 2002/12/15 01:21:55 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.8 2002/12/15 14:03:19 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
@@ -204,24 +204,7 @@ namespace BALL
 				return false;
 			}
 
-			// writing info to log
-			Log.info() << "> read " << system->countAtoms() << " atoms from PDB file \"" << filename << "\"" << std::endl;
-
-			if (system->getName() == "")
-			{
-				system->setName(system_name);
-			}
-
-			// notify main window
-			NewCompositeMessage new_message;
-			new_message.setComposite(system);
-			new_message.setCompositeName(system_name);
-			notify_(new_message);
-
-			// notify main window
-			setStatusbarText("");
-
-			return true;
+			return finish_(filename, system_name, system);
 		}
 
 
@@ -274,23 +257,7 @@ namespace BALL
 				system->Composite::appendChild(*simple_box);
 			}
 
-			// writing info to log
-			Log.info() << "> read " << system->countAtoms() << " atoms from HIN file \"" << filename << "\"" << std::endl;
-
-
-			if (system->getName() == "")
-			{
-				system->setName(system_name);
-			}
-
-			// notify tree of a new composite
-			NewCompositeMessage new_message;
-			new_message.setComposite(system);
-			new_message.setCompositeName(system_name);
-			notify_(new_message);
-
-			setStatusbarText("");
-			return true;
+			return finish_(filename, system_name, system);
 		}
 
 
@@ -316,22 +283,7 @@ namespace BALL
 				return false;
 			}
 
-			// writing info to log
-			Log.info() << "> read " << system->countAtoms() << " atoms from MOL file \"" << filename<< "\"" << std::endl;
-
-			if (system->getName() == "")
-			{
-				system->setName(system_name);
-			}
-
-			// notify tree of a new composite
-			NewCompositeMessage new_message;
-			new_message.setComposite(system);
-			new_message.setCompositeName(system_name);
-			notify_(new_message);
-
-			setStatusbarText("");
-			return true;
+			return finish_(filename, system_name, system);
 		}
 
 
@@ -357,8 +309,15 @@ namespace BALL
 				return false;
 			}
 
+			return finish_(filename, system_name, system);
+		}
+		
+
+		bool MolecularFileDialog::finish_(const String& filename, const String& system_name, System* system)
+			throw()
+		{
 			// writing info to log
-			Log.info() << "> read " << system->countAtoms() << " atoms from MOL2 file \"" << filename<< "\"" << std::endl;
+			Log.info() << "> read " << system->countAtoms() << " atoms from file \"" << filename<< "\"" << std::endl;
 
 			if (system->getName() == "")
 			{
@@ -366,9 +325,10 @@ namespace BALL
 			}
 
 			// notify tree of a new composite
-			NewCompositeMessage new_message;
-			new_message.setComposite(system);
-			new_message.setCompositeName(system_name);
+			NewCompositeMessage* new_message = new NewCompositeMessage;
+			new_message->setDeletable(true);
+			new_message->setComposite(system);
+			new_message->setCompositeName(system_name);
 			notify_(new_message);
 
 			setStatusbarText("");
