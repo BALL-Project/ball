@@ -10,6 +10,9 @@
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
+#include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h>
+#include <BALL/MOLVIEW/GUI/DIALOGS/openMOL2File.h>
+#include <BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h>
 
 #include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h>
 
@@ -28,8 +31,6 @@ Mainframe::Mainframe
 		display_properties_(0),
 		minimization_dialog_(0),
 		label_properties_(0),
-		open_hin_file_(0),
-		open_pdb_file_(0),
 		molecular_properties_(0),
 		server_(0),
 		GL_object_collector_(),
@@ -53,8 +54,8 @@ Mainframe::Mainframe
 	// ---------------------
 	// Logstream setup -----
 	// ---------------------
-
-	Log.remove(std::cout);
+  //BAUSTELLE
+	//Log.remove(std::cout);
 
 	// ---------------------
 	// create widgets ------
@@ -82,11 +83,9 @@ Mainframe::Mainframe
 	label_properties_ = new LabelProperties(this);
 	CHECK_PTR(label_properties_);
 
-	open_hin_file_ = new OpenHINFile(this);
-	CHECK_PTR(open_hin_file_);
-
-	open_pdb_file_ = new OpenPDBFile(this);
-	CHECK_PTR(open_pdb_file_);
+	CHECK_PTR(new OpenHINFile(this));
+	CHECK_PTR(new OpenMOL2File(this));
+	CHECK_PTR(new OpenPDBFile(this));
 
 	molecular_properties_ = new MolecularProperties(this);
 	CHECK_PTR(molecular_properties_);

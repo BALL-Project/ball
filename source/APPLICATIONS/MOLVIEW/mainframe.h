@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.28 2001/05/13 16:36:31 hekl Exp $
+// $Id: mainframe.h,v 1.29 2001/08/16 00:54:38 oliver Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -59,14 +59,6 @@
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 # include <BALL/MOLVIEW/GUI/WIDGETS/molecularProperties.h>
-#endif
-
-#ifndef BALL_MOLVIEW_GUI_WIDGETS_OPENHINFILE_H
-# include <BALL/MOLVIEW/GUI/DIALOGS/openHINFile.h>
-#endif
-
-#ifndef BALL_MOLVIEW_GUI_WIDGETS_OPENPDBFILE_H
-# include <BALL/MOLVIEW/GUI/DIALOGS/openPDBFile.h>
 #endif
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
@@ -163,8 +155,6 @@ class Mainframe
 	DisplayProperties*    display_properties_;
 	DlgAmberMinimization*	minimization_dialog_;
 	LabelProperties*	    label_properties_;
-	OpenHINFile*					open_hin_file_;
-	OpenPDBFile*					open_pdb_file_;
 	MolecularProperties*  molecular_properties_;
 	Server*   						server_;
 
