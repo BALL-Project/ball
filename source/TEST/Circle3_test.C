@@ -1,4 +1,4 @@
-// $Id: Circle3_test.C,v 1.4 2000/07/26 16:49:47 amoll Exp $
+// $Id: Circle3_test.C,v 1.5 2000/09/01 11:14:59 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Circle3_test.C,v 1.4 2000/07/26 16:49:47 amoll Exp $")
+START_TEST(class_name, "$Id: Circle3_test.C,v 1.5 2000/09/01 11:14:59 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -25,13 +25,13 @@ CHECK(TCircle3::BALL_CREATE(TCircle3<T>))
 	Vector3 v0;
 	Circle3 c(v1, v2, 5);
 	Circle3* c_ptr = (Circle3*)c.create(false, true);
-	TEST_REAL_EQUAL(c_ptr->p == v0, true)
-	TEST_REAL_EQUAL(c_ptr->n == v0, true)
+	TEST_EQUAL(c_ptr->p == v0, true)
+	TEST_EQUAL(c_ptr->n == v0, true)
 	delete c_ptr;
 	c_ptr = (Circle3*)c.create();
-	TEST_REAL_EQUAL(c_ptr->p == v1, true)
-	TEST_REAL_EQUAL(c_ptr->n == v2, true)
-	TEST_REAL_EQUAL(c_ptr->radius == 5.0, true)
+	TEST_EQUAL(c_ptr->p == v1, true)
+	TEST_EQUAL(c_ptr->n == v2, true)
+	TEST_EQUAL(c_ptr->radius == 5.0, true)
 	delete c_ptr;
 RESULT
 
@@ -61,7 +61,7 @@ CHECK(TCircle3::TCircle3(const TVector3<T>& point, const TVector3<T>& normal, co
 	c.get(v1, v2, radian2);
 	TEST_EQUAL(v1, p)
 	TEST_EQUAL(v2, n)
-	TEST_REAL_EQUAL(radian, radian2)
+	TEST_EQUAL(radian, radian2)
 RESULT
 
 CHECK(TCircle3::bool operator == (const TCircle3& circle) const )
