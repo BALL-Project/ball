@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.143 2001/05/22 15:42:06 oliver Exp $
+#  $Id: configure,v 1.144 2001/06/14 00:28:36 oliver Exp $
 
 
 ##################################################
@@ -3476,7 +3476,7 @@ fi
 rm -fr conftest*
 fi
 
-if test ${BALL_ENDIAN_TEST+set} != set ; then
+if test "${BALL_ENDIAN_TEST+set}" != set ; then
 	echo "$ac_t""<cannot determine>" 1>&6
 	echo "$ac_t""" 1>&6
 	{ echo "configure: error: Cannot determine endianness of machine." 1>&2; exit 1; }
