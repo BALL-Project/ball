@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TextPersistenceManager_test.C,v 1.15 2004/11/05 11:49:02 amoll Exp $
+// $Id: TextPersistenceManager_test.C,v 1.16 2004/11/05 14:23:53 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.15 2004/11/05 11:49:02 amoll Exp $")
+START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.16 2004/11/05 14:23:53 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -53,6 +53,7 @@ CHECK(TextPersistenceManager::TextPersistenceManager(istream& is))
 	is.close();
 	TEST_NOT_EQUAL(po, 0)
 	TEST_EQUAL(RTTI::isKindOf<Composite>(*po), true)
+	delete po;
 RESULT
 
 
