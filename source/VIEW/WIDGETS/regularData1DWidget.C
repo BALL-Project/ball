@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.4 2003/12/19 14:36:25 anne Exp $
+// $Id: regularData1DWidget.C,v 1.5 2003/12/19 19:47:09 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
@@ -58,9 +58,10 @@ namespace BALL
 			if (data_.size() == 0) return;
 
 			// find the data min and max
-			float min=numeric_limits<float>::max(), max=numeric_limits<float>::min();
-			float dif_min=min;
-			float old=min; //last point
+			float min = std::numeric_limits<float>::max();
+			float max = std::numeric_limits<float>::min();
+			float dif_min = min;
+			float old = min; //last point
 
 			for (int i=0; i<(int)data_.size(); i++)
 			{

@@ -1,11 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-<<<<<<< regularData1DWidget.h
-// $Id: regularData1DWidget.h,v 1.5 2003/12/19 14:40:27 anne Exp $
-=======
-// $Id: regularData1DWidget.h,v 1.5 2003/12/19 14:40:27 anne Exp $
->>>>>>> 1.4
+// $Id: regularData1DWidget.h,v 1.6 2003/12/19 19:47:09 oliver Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
