@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.9 2002/04/09 12:01:09 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.10 2002/04/10 16:43:45 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -134,7 +134,7 @@ namespace BALL
 		if (ligand == receptor_) ligand = system->getMolecule(1);
 		
 		BoundingBoxProcessor bb_proc;
-		receptor_->apply(bb_proc);
+		system->apply(bb_proc);
 
     Options& options = force_field->options;
 
@@ -155,18 +155,26 @@ namespace BALL
 		// this grid is needed to find out whether an atom of the ligand is
 		// bound to the protein
 		grid_ = new HashGrid3<const Atom*>
-			(bb_proc.getLower(), bb_proc.getUpper(), grid_spacing_);
-		AtomConstIterator atom_it = receptor_->beginAtom();
+			(bb_proc.getLower() - Vector3(1.0),
+			 bb_proc.getUpper() - bb_proc.getLower() + Vector3(1.0),
+			 grid_spacing_);
+
+		HashGridBox3<const Atom*>* box;
+		AtomConstIterator atom_it = system->beginAtom();
 		for (; +atom_it; ++atom_it)
 		{
 			grid_->insert(atom_it->getPosition(), &*atom_it);
 		}
 
+
+		// define the bondlengths for the bond guessing algorithm
+
 		StringHashMap< pair<float, float> > bondlengths;
 
-		// ????
-		// This is not nice
+		// ?????
+		// This is not nice and should be done using an INIFile
 		pair<float, float> tmp;
+
 		// we need shorter bondlenghts for C-C and C-N
 		// tmp = pair<float, float>(1.54, 1.55);
 		tmp = pair<float, float>(1.52, 1.55);
@@ -663,13 +671,14 @@ namespace BALL
 		Vector3 position = atom->getPosition();
 		float dist, bind_distance;
 
-		const HashGridBox3<const Atom*>* box = grid_->getBox(position);
+		HashGridBox3<const Atom*>* box = grid_->getBox(position);
 		HashGridBox3<const Atom*>::ConstBoxIterator box_it;
 		HashGridBox3<const Atom*>::ConstDataIterator data_it;
 
 		if (box == 0)
 		{
-			cerr << "got an empty box!" << endl;
+			Log.error() << "FresnoRotation::updateFrozenBonds_(): "
+				<< "got an empty box for position " << position << endl;
 		}
 		else
 		{
