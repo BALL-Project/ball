@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.38 2003/06/19 13:16:54 oliver Exp $
+// $Id: bond.h,v 1.39 2003/07/01 16:45:27 amoll Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #	include <BALL/CONCEPT/property.h>
@@ -21,11 +17,6 @@
 #ifndef BALL_CONCEPT_ATOMCONTAINER_H
 #	include <BALL/KERNEL/atomContainer.h>
 #endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
-#endif
-
 
 #define BALL_BOND_DEFAULT_FIRST_ATOM    0
 #define BALL_BOND_DEFAULT_SECOND_ATOM   0

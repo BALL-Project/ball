@@ -1,15 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: iterator.h,v 1.23 2003/06/19 13:09:55 oliver Exp $
+// $Id: iterator.h,v 1.24 2003/07/01 16:45:28 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
 #	include <BALL/CONCEPT/bidirectionalIterator.h>

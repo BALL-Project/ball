@@ -1,18 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.C,v 1.15 2003/06/19 13:24:02 oliver Exp $
+// $Id: atomContainer.C,v 1.16 2003/07/01 16:45:11 amoll Exp $
 //
 
 #include <BALL/KERNEL/atomContainer.h>
-
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/global.h>
-#include <BALL/KERNEL/molecule.h>
-
-using namespace std;
 
 namespace BALL 
 {

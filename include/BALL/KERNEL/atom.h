@@ -1,15 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.58 2003/06/29 12:31:18 oliver Exp $
+// $Id: atom.h,v 1.59 2003/07/01 16:45:27 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -21,14 +17,6 @@
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
 #	include <BALL/CONCEPT/randomAccessIterator.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
-#endif
-
-#ifndef BALL_CONCEPT_PROCESSOR_H
-#	include <BALL/CONCEPT/processor.h>
 #endif
 
 #ifndef BALL_MATHS_VECTOR3_H

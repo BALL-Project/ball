@@ -1,13 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.C,v 1.31 2003/06/19 13:24:02 oliver Exp $
+// $Id: bond.C,v 1.32 2003/07/01 16:45:11 amoll Exp $
 
 #include <BALL/KERNEL/bond.h>
-#include <BALL/KERNEL/system.h>
-#include <BALL/KERNEL/atomContainer.h>
-
-using namespace std;
 
 namespace BALL 
 {

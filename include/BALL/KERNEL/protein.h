@@ -1,18 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: protein.h,v 1.27 2003/06/19 13:16:55 oliver Exp $ 
+// $Id: protein.h,v 1.28 2003/07/01 16:45:29 amoll Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_CHAIN_H
-#	include <BALL/KERNEL/chain.h>
-#endif
 
 #ifndef BALL_KERNEL_CHAINITERATOR_H
 #	include <BALL/KERNEL/chainIterator.h>
@@ -21,19 +13,6 @@
 #ifndef BALL_KERNEL_MOLECULE_H
 #	include <BALL/KERNEL/molecule.h>
 #endif
-
-#ifndef BALL_KERNEL_PDBATOM_H
-#	include <BALL/KERNEL/PDBAtom.h>
-#endif
-
-#ifndef BALL_KERNEL_RESIDUE_H
-#	include <BALL/KERNEL/residue.h>
-#endif
-
-#ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
-#	include <BALL/KERNEL/secondaryStructure.h>
-#endif
-
 
 #define BALL_PROTEIN_DEFAULT_ID   ""
 

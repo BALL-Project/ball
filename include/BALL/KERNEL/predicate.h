@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.15 2003/03/26 13:56:33 anhi Exp $
+// $Id: predicate.h,v 1.16 2003/07/01 16:45:28 amoll Exp $
 
 #ifndef BALL_KERNEL_PREDICATE_H
 #define BALL_KERNEL_PREDICATE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_COMMON_RTTI_H
 #	include <BALL/COMMON/rtti.h>

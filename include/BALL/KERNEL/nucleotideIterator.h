@@ -1,26 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotideIterator.h,v 1.10 2003/06/19 13:09:55 oliver Exp $
+// $Id: nucleotideIterator.h,v 1.11 2003/07/01 16:45:28 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_NUCLEOTIDEITERATOR_H
 #define BALL_KERNEL_NUCLEOTIDEITERATOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_NUCLEOTIDE_H
-#	include <BALL/KERNEL/nucleotide.h>
-#endif
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #	include <BALL/KERNEL/iterator.h>
 #endif
 
 #ifndef BALL_KERNEL_PREDICATE_H
-#	include <BALL/KERNEL/predicate.h>
+# include <BALL/KERNEL/predicate.h>
 #endif
 
 namespace BALL 

@@ -1,31 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.h,v 1.24 2003/06/26 14:22:14 amoll Exp $
+// $Id: atomContainer.h,v 1.25 2003/07/01 16:45:27 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_CONCEPT_COMPOSITE_H
-#	include <BALL/CONCEPT/composite.h>
-#endif
-
-#ifndef BALL_CONCEPT_PROPERTY_H
-#	include <BALL/CONCEPT/property.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
-#endif
-
-#ifndef BALL_CONCEPT_PROCESSOR_H
-#	include <BALL/CONCEPT/processor.h>
-#endif
 
 #ifndef BALL_KERNEL_ATOMITERATOR_H
 #	include <BALL/KERNEL/atomIterator.h>
@@ -40,7 +20,6 @@
 
 namespace BALL 
 {
-	class Atom;
 	class Molecule;
 
 	/**	Atom Container Base Class.
@@ -70,8 +49,6 @@ namespace BALL
 		};
 
 		//@}
-
-
 		/**	@name Constructors and Destructors 
 		*/
 		//@{
@@ -114,7 +91,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	@name	Persistence 
 		*/
 		//@{
@@ -166,8 +142,8 @@ namespace BALL
 		*/
 		void swap(AtomContainer& atom_container)
 			throw();
-		//@}
 
+		//@}
 		/** @name Predicates
 		*/
 		//@{

@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.35 2003/04/02 12:01:06 anker Exp $
+// $Id: standardPredicates.h,v 1.36 2003/07/01 16:45:29 amoll Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #	include <BALL/DATATYPE/stringHashMap.h>
@@ -16,10 +12,6 @@
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #	include <BALL/DATATYPE/hashSet.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
 #endif
 
 #ifndef BALL_KERNEL_BOND_H
@@ -33,6 +25,8 @@
 
 namespace BALL 
 {
+	class Atom;
+
 	/**	@name	Predefined Predicates. 
 			<b>Note:</b> These predicates do not provide the OCI.
 			@see ExpressionPredicate

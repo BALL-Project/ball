@@ -1,26 +1,15 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.C,v 1.41 2003/06/19 13:24:03 oliver Exp $
+// $Id: expression.C,v 1.42 2003/07/01 16:45:11 amoll Exp $
 //
 
 #include <BALL/KERNEL/expression.h>
-#include <BALL/KERNEL/expressionParser.h>
 #include <BALL/KERNEL/standardPredicates.h>
-
-#include <BALL/CONCEPT/selectable.h>
 #include <BALL/CONCEPT/factory.h>
-#include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/PTE.h>
-#include <BALL/KERNEL/residue.h>
-#include <BALL/KERNEL/nucleotide.h>
-#include <BALL/KERNEL/bond.h>
-
-using namespace std;
 
 namespace BALL 
 {
-
 	// Expression class, frontend to ExpressionTree
 
 	Expression::Expression() 

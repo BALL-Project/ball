@@ -1,27 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selector.h,v 1.24 2003/06/19 13:16:55 oliver Exp $
+// $Id: selector.h,v 1.25 2003/07/01 16:45:29 amoll Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRINGHASHMAP_H
-#	include <BALL/DATATYPE/stringHashMap.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
 #ifndef BALL_KERNEL_EXPRESSION_H
 #	include <BALL/KERNEL/expression.h>
 #endif
-
 
 namespace BALL 
 {

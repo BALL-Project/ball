@@ -1,12 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionParser.C,v 1.5 2003/06/30 13:54:29 amoll Exp $
+// $Id: expressionParser.C,v 1.6 2003/07/01 16:45:11 amoll Exp $
 
 #include <BALL/KERNEL/expressionParser.h>
-#include <BALL/KERNEL/PTE.h>
-
-#include <algorithm>
+//#include <algorithm>
 
 // defined in the lexer (expressionParserLexer.l)
 extern void ExpressionParser_initBuffer(const char* buf);

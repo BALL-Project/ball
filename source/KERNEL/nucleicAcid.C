@@ -1,13 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcid.C,v 1.15 2003/06/19 13:24:03 oliver Exp $
+// $Id: nucleicAcid.C,v 1.16 2003/07/01 16:45:11 amoll Exp $
 //
 
 #include <BALL/KERNEL/nucleicAcid.h>
-#include <BALL/KERNEL/global.h>
-
-using namespace std;
 
 namespace BALL 
 {

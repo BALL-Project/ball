@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcid.h,v 1.30 2003/06/19 13:16:54 oliver Exp $ 
+// $Id: nucleicAcid.h,v 1.31 2003/07/01 16:45:28 amoll Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #	include <BALL/KERNEL/molecule.h>
@@ -22,8 +18,6 @@
 
 namespace BALL 
 {
-	class Nucleotide;
-
 	/**	Nucleic acid class.
 			 \par
 			

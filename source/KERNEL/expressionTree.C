@@ -1,12 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionTree.C,v 1.10 2003/06/19 13:24:03 oliver Exp $
+// $Id: expressionTree.C,v 1.11 2003/07/01 16:45:11 amoll Exp $
 //
 
 #include <BALL/KERNEL/expressionTree.h>
-
-using namespace ::std;
 
 namespace BALL
 {

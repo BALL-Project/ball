@@ -1,13 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.C,v 1.15 2003/06/19 13:24:03 oliver Exp $
+// $Id: molecule.C,v 1.16 2003/07/01 16:45:11 amoll Exp $
 //
 
 #include <BALL/KERNEL/molecule.h>
 #include <BALL/KERNEL/system.h>
-
-using namespace std;
 
 namespace BALL 
 {

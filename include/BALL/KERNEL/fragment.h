@@ -1,21 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragment.h,v 1.24 2003/06/19 13:16:54 oliver Exp $
+// $Id: fragment.h,v 1.25 2003/07/01 16:45:28 amoll Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #	include <BALL/KERNEL/atomContainer.h>
-#endif
-
-#ifndef BALL_KERNEL_FRAGMENTITERATOR_H
-#	include <BALL/KERNEL/fragmentIterator.h>
 #endif
 
 namespace BALL 

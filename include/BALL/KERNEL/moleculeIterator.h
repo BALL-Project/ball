@@ -1,26 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeIterator.h,v 1.11 2003/06/19 13:09:55 oliver Exp $
+// $Id: moleculeIterator.h,v 1.12 2003/07/01 16:45:28 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_MOLECULEITERATOR_H
 #define BALL_KERNEL_MOLECULEITERATOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_MOLECULE_H
-#	include <BALL/KERNEL/molecule.h>
-#endif
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #	include <BALL/KERNEL/iterator.h>
 #endif
 
 #ifndef BALL_KERNEL_PREDICATE_H
-#	include <BALL/KERNEL/predicate.h>
+# include <BALL/KERNEL/predicate.h>
 #endif
 
 namespace BALL 

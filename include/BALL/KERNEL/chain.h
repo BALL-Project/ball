@@ -1,21 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.h,v 1.33 2003/06/19 13:16:54 oliver Exp $
+// $Id: chain.h,v 1.34 2003/07/01 16:45:27 amoll Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_KERNEL_RESIDUE_H
 #	include <BALL/KERNEL/residue.h>
-#endif
-
-#ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
-#	include <BALL/KERNEL/secondaryStructure.h>
 #endif
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H

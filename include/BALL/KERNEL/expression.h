@@ -1,25 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.h,v 1.27 2003/06/19 13:16:54 oliver Exp $
+// $Id: expression.h,v 1.28 2003/07/01 16:45:27 amoll Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #	include <BALL/DATATYPE/stringHashMap.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_EXPRESSIONTREE_H
-#	include <BALL/KERNEL/expressionTree.h>
 #endif
 
 #ifndef BALL_KERNEL_EXPRESSIONPARSER_H
@@ -28,6 +16,9 @@
 
 namespace BALL 
 {
+	class Atom;
+	class ExpressionTree;
+	
 	/** Expression class. 
 			This class provides a frontend to ExpressionTree.	 \par
 			Expressions may be built from the following modules:  \par

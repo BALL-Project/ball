@@ -1,15 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.19 2003/06/19 13:09:54 oliver Exp $
+// $Id: global.h,v 1.20 2003/07/01 16:45:28 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_KERNEL_ATOM_H
 #	include <BALL/KERNEL/atom.h>
@@ -17,10 +13,6 @@
 
 #ifndef BALL_KERNEL_BOND_H
 #	include <BALL/KERNEL/bond.h>
-#endif
-
-#ifndef BALL_KERNEL_RESIDUE_H
-#	include <BALL/KERNEL/residue.h>
 #endif
 
 namespace BALL 

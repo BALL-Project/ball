@@ -1,18 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selector.C,v 1.25 2003/06/19 13:24:03 oliver Exp $
+// $Id: selector.C,v 1.26 2003/07/01 16:45:12 amoll Exp $
 
 #include <BALL/KERNEL/selector.h>
-
-#include <BALL/CONCEPT/selectable.h>
 #include <BALL/KERNEL/atom.h>
-#include <BALL/KERNEL/PTE.h>
-#include <BALL/KERNEL/residue.h>
-#include <BALL/KERNEL/nucleotide.h>
-#include <BALL/KERNEL/bond.h>
-
-using namespace std;
 
 namespace BALL 
 {

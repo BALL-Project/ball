@@ -1,19 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainerIterator.h,v 1.18 2003/06/26 15:56:32 anker Exp $ 
+// $Id: atomContainerIterator.h,v 1.19 2003/07/01 16:45:27 amoll Exp $ 
 //
 
 #ifndef BALL_KERNEL_ATOMCONTAINERITERATOR_H
 #define BALL_KERNEL_ATOMCONTAINERITERATOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOMCONTAINER_H
-#	include <BALL/KERNEL/atomContainer.h>
-#endif
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #	include <BALL/KERNEL/iterator.h>

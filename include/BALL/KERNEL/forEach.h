@@ -1,14 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forEach.h,v 1.13 2003/03/26 14:16:46 anhi Exp $
+// $Id: forEach.h,v 1.14 2003/07/01 16:45:28 amoll Exp $
 
 #ifndef BALL_KERNEL_FOREACH_H
 #define BALL_KERNEL_FOREACH_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 /** @name Convenient iteration macros
 * 	 \ingroup KernelMiscellaneous 

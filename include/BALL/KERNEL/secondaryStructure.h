@@ -1,18 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructure.h,v 1.34 2003/06/19 13:16:55 oliver Exp $
+// $Id: secondaryStructure.h,v 1.35 2003/07/01 16:45:29 amoll Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_KERNEL_PDBATOM_H
-#	include <BALL/KERNEL/PDBAtom.h>
-#endif
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #	include <BALL/KERNEL/residue.h>
@@ -22,10 +14,12 @@
 #	include <BALL/KERNEL/residueIterator.h>
 #endif
 
+#ifndef BALL_KERNEL_ATOMCONTAINER_H
+# include <BALL/KERNEL/atomContainer.h>
+#endif
+
 namespace BALL 
 {
-	class Protein;
-
 	/**	Secondary structure class.
 			This class is used to represent secondary structure elements
 			of protein chains.
@@ -48,10 +42,10 @@ namespace BALL
 		*/
 		enum Property
 		{
-			PROPERTY__HELIX       = Fragment::NUMBER_OF_PROPERTIES + 1,
-			PROPERTY__RANDOM_COIL = Fragment::NUMBER_OF_PROPERTIES + 2,
-			PROPERTY__STRAND      = Fragment::NUMBER_OF_PROPERTIES + 3,
-			PROPERTY__TURN        = Fragment::NUMBER_OF_PROPERTIES + 4,
+			PROPERTY__HELIX       = Residue::NUMBER_OF_PROPERTIES + 1,
+			PROPERTY__RANDOM_COIL = Residue::NUMBER_OF_PROPERTIES + 2,
+			PROPERTY__STRAND      = Residue::NUMBER_OF_PROPERTIES + 3,
+			PROPERTY__TURN        = Residue::NUMBER_OF_PROPERTIES + 4,
 
 			NUMBER_OF_PROPERTIES
 		};

@@ -1,37 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.h,v 1.32 2003/06/19 13:16:55 oliver Exp $
+// $Id: system.h,v 1.33 2003/07/01 16:45:29 amoll Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_KERNEL_ATOM_H
 #	include <BALL/KERNEL/atomIterator.h>
-#endif
-
-#ifndef BALL_KERNEL_MOLECULE_H
-#	include <BALL/KERNEL/molecule.h>
 #endif
 
 #ifndef BALL_KERNEL_MOLECULEITERATOR_H
 #	include <BALL/KERNEL/moleculeIterator.h>
 #endif
 
-#ifndef BALL_KERNEL_PROTEIN_H
-#	include <BALL/KERNEL/protein.h>
-#endif
-
 #ifndef BALL_KERNEL_PROTEINITERATOR_H
 #	include <BALL/KERNEL/proteinIterator.h>
-#endif
-
-#ifndef BALL_KERNEL_NUCLEICACID_H
-#	include <BALL/KERNEL/nucleicAcid.h>
 #endif
 
 #ifndef BALL_KERNEL_NUCLEICACIDITERATOR_H
@@ -46,8 +30,6 @@
 
 namespace BALL 
 {
-	class Molecule;
-
 	/** System class.
 			This class is used to represent a system, i.e., a collection
 			of molecules. \par

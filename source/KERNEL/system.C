@@ -1,16 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.C,v 1.24 2003/06/19 13:24:03 oliver Exp $
+// $Id: system.C,v 1.25 2003/07/01 16:45:12 amoll Exp $
 
 #include <BALL/KERNEL/system.h>
-
-#include <BALL/KERNEL/global.h>
-#include <BALL/KERNEL/molecule.h>
-#include <BALL/KERNEL/fragment.h>
-#include <BALL/KERNEL/protein.h>
-
-using namespace std;
 
 namespace BALL 
 {

@@ -1,11 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.49 2003/06/04 15:32:14 anker Exp $
+// $Id: standardPredicates.C,v 1.50 2003/07/01 16:45:12 amoll Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
-#include <BALL/CONCEPT/selectable.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
@@ -16,11 +15,7 @@
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/bond.h>
 
-#include <algorithm>
-
 // #define DEBUG
-
-using namespace std;
 
 namespace BALL 
 {

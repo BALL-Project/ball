@@ -1,21 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residue.h,v 1.37 2003/06/19 13:16:55 oliver Exp $
+// $Id: residue.h,v 1.38 2003/07/01 16:45:29 amoll Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_KERNEL_FRAGMENT_H
 #	include <BALL/KERNEL/fragment.h>
-#endif
-
-#ifndef BALL_KERNEL_PDBATOM_H
-#	include <BALL/KERNEL/PDBAtom.h>
 #endif
 
 #ifndef BALL_KERNEL_PDBATOMITERATOR_H
