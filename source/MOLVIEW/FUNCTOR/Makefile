@@ -10,6 +10,7 @@ CPP_SOURCES=\
 	geometricObjectSelector.C\
 	lineModel.C\
 	molecularInformation.C\
+	molecularFilter.C\
 	removeModel.C\
 	standardColorCalculator.C\
 	surfaceModel.C\
