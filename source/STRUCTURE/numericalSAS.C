@@ -1,4 +1,4 @@
-// $Id: numericalSAS.C,v 1.21 2001/06/05 15:53:30 anker Exp $
+// $Id: numericalSAS.C,v 1.22 2002/02/10 08:41:34 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -6,7 +6,9 @@
 #include <BALL/KERNEL/atomContainer.h>
 #include <BALL/MATHS/surface.h>
 
-#include <values.h>
+#ifdef BALL_INCLUDE_VALUES
+# include <values.h>
+#endif
 
 using namespace std;
 

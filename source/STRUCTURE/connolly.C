@@ -1,7 +1,10 @@
-// $Id: connolly.C,v 1.8 2001/05/10 13:53:19 oliver Exp $
+// $Id: connolly.C,v 1.9 2002/02/10 08:41:34 oliver Exp $
 
 #include <math.h>
-#include <values.h> // required for M_PI on some systems
+#ifdef BALL_INCLUDE_VALUES
+# include <values.h> // required for M_PI on some systems
+#endif
+
 #include <algorithm>
 #include <iostream>
 
