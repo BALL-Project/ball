@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.27 2001/12/11 11:59:11 oliver Exp $
+// $Id: classTest.h,v 1.28 2001/12/18 01:15:35 oliver Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -346,7 +346,7 @@ int main(int argc, char **argv)\
 							TEST::newline = true;\
 							std::cout << std::endl;\
 						}\
-						std::cout << "  creating new temporary file '" << filename << " (line " << __LINE__ << ")" << std::endl;\
+						std::cout << "  creating new temporary file '" << filename << "' (line " << __LINE__ << ")" << std::endl;\
 					}\
 	
 	
