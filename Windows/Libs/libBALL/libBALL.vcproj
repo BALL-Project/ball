@@ -27,7 +27,7 @@
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
-				WarningLevel="1"
+				WarningLevel="2"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="4"
 				CompileAs="2"
@@ -328,6 +328,9 @@
 							Name="VCCLCompilerTool"
 							CompileAs="2"/>
 					</FileConfiguration>
+				</File>
+				<File
+					RelativePath="..\..\..\source\DATATYPE\contourSurface.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\DATATYPE\hashGrid.C">

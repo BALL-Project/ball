@@ -1,4 +1,4 @@
-// $Id: molecularFileDialog.C,v 1.1.2.2 2002/12/10 23:08:29 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.1.2.3 2002/12/11 11:17:45 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
@@ -157,6 +157,7 @@ namespace BALL
 		bool MolecularFileDialog::readPDBFile(String filename, String system_name)
 			throw()
 		{
+
 			// open a PDB File
 			setStatusbarText("reading PDB file...");
 

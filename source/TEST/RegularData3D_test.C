@@ -1,9 +1,9 @@
-// $Id: RegularData3D_test.C,v 1.4.4.5 2002/12/10 18:48:30 anker Exp $
+// $Id: RegularData3D_test.C,v 1.4.4.6 2002/12/11 11:17:45 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.4.4.5 2002/12/10 18:48:30 anker Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.4.4.6 2002/12/11 11:17:45 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -394,6 +394,7 @@ CHECK(operator << (ostream& os, const RegularData3D&))
 	STATUS(9)
 	for (Position i = 0; i < data.getSize(); i++)
 	{
+		STATUS(i)
 		TEST_REAL_EQUAL(data[i], in_data[i])
 	}
 RESULT

@@ -1,4 +1,4 @@
-// $Id: haighMallionShiftProcessor.C,v 1.12 2001/12/30 13:28:52 sturm Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.12.4.1 2002/12/11 11:17:45 oliver Exp $
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -12,7 +12,7 @@ namespace BALL
 
   const char* HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT = "RingCurrentShift[HM]";
 
-	const float HaighMallionShiftProcessor::B_ = 5.455e-6;					//Konstante in iBG(r)
+	const float HaighMallionShiftProcessor::B_ = 5.455e-6F;					//Konstante in iBG(r)
 	const float cut_off2 = 225.0; // cut off: nuclei that are further than 15A away from the center
 																// of a ring are no affected by this ring (cut of is squared for efficiency)
 
@@ -135,29 +135,29 @@ namespace BALL
 				// (different for each aromatic residue and relative to benzene = 1.0)
 				float intensity_factor = 1.0;
 
-				if (residue.getName()=="TRP")
+				if (residue.getName() == "TRP")
 				{
 					zaehler = 0;
 					number_of_rings = 2;
-					intensity_factor = 1.05;
+					intensity_factor = 1.05F;
 				}
-				if (residue.getName()=="PHE")
+				if (residue.getName() == "PHE")
 				{
 					zaehler = 1;
 					number_of_rings = 1;
-					intensity_factor = 1.05;
+					intensity_factor = 1.05F;
 				}
 				if (residue.getName()=="TYR")
 				{
 					zaehler = 2; 
 					number_of_rings = 1; 
-					intensity_factor = 0.92;
+					intensity_factor = 0.92F;
 				}
 				if (residue.getName()=="HIS")
 				{
 					zaehler = 3; 
 					number_of_rings = 1; 
-					intensity_factor = 0.43;
+					intensity_factor = 0.43F;
 				}
 
 				Position number_of_ring_atoms = 0;
@@ -166,7 +166,7 @@ namespace BALL
 				{
 					if ((number_of_rings == 1) && (residue.getName() == "TRP"))	
 					{
-						intensity_factor = 1.04;
+						intensity_factor = 1.04F;
 					}
 
 					//Aufbau von vector_feld
@@ -203,7 +203,7 @@ namespace BALL
 						{
 							center += ring_positions[pos];
 						}
-						center /= number_of_ring_atoms;
+						center /= (float)number_of_ring_atoms;
 					
 						// if the center of the ring is within the cut off,
 						// perform the shift calculation

@@ -1,11 +1,11 @@
-// $Id: Path_test.C,v 1.4.4.1 2002/05/28 16:34:31 oliver Exp $
+// $Id: Path_test.C,v 1.4.4.2 2002/12/11 11:17:45 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/path.h>
 ///////////////////////////
 
-START_TEST(Path, "$Id: Path_test.C,v 1.4.4.1 2002/05/28 16:34:31 oliver Exp $")
+START_TEST(Path, "$Id: Path_test.C,v 1.4.4.2 2002/12/11 11:17:45 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -39,9 +39,11 @@ CHECK(getDefaultDataPath())
 RESULT
 
 CHECK(find(const string& name))
-	TEST_EQUAL(p.find("Path_test.C"), "Path_test.C");	// <<<<<<<<<
-	TEST_EQUAL(p.find("/TEST/Path_test.C"), "Path_test.C");	// <<<<<<<<<
-	TEST_EQUAL(p.find("/xxx/Path_test.C"), "Path_test.C");	// <<<<<<<<<
+	TEST_NOT_EQUAL(p.find("framgents/Fragments.db"), "")
+	TEST_NOT_EQUAL(p.find("Fragments.db"), "")
+	TEST_EQUAL(p.find("Path_test.C"), "Path_test.C");
+	TEST_EQUAL(p.find("/TEST/Path_test.C"), "Path_test.C");	
+	TEST_EQUAL(p.find("/xxx/Path_test.C"), "Path_test.C");
 	TEST_EQUAL(p.find("Path_testX.C"), "");
 RESULT
 

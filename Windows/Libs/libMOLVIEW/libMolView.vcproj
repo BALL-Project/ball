@@ -26,7 +26,7 @@
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
-				WarningLevel="0"
+				WarningLevel="1"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="4"
 				CompileAs="2"/>
@@ -184,10 +184,10 @@
 					Name="DIALOGS"
 					Filter="">
 					<File
-						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\atomSettings.C">
+						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\atomProperties.C">
 					</File>
 					<File
-						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\atomSettingsData.C">
+						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\atomPropertiesData.C">
 					</File>
 					<File
 						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\contourSurfaceDialog.C">
@@ -206,6 +206,9 @@
 					</File>
 					<File
 						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\labelPropertiesData.C">
+					</File>
+					<File
+						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\molecularFileDialog.C">
 					</File>
 					<File
 						RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\openBruker1DFile.C">
@@ -312,10 +315,16 @@
 				Name="MOC Files"
 				Filter="">
 				<File
-					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomSettingsData_moc.C">
+					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData_moc.C">
 				</File>
 				<File
-					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomSettings_moc.C">
+					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomProperties_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialog_moc.C">
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayPropertiesData_moc.C">
@@ -328,6 +337,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\labelProperties_moc.C">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\molecularFileDialog_moc.C">
 				</File>
 			</Filter>
 		</Filter>
@@ -413,40 +425,50 @@
 					Name="DIALOGS"
 					Filter="">
 					<File
-						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\DlgMoveOverlay.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\DlgMoveOverlayData.h">
-					</File>
-					<File
-						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomSettings.h">
+						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomProperties.h">
 						<FileConfiguration
 							Name="Debug|Win32">
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
 					<File
-						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomSettingsData.h">
+						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\atomPropertiesData.h">
 						<FileConfiguration
 							Name="Debug|Win32">
 							<Tool
 								Name="VCCustomBuildTool"
 								Description="Running MOC on $(InputFileName)"
-								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
-"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;"
 								Outputs="$(InputDir)$(InputName)_moc.C"/>
 						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialog.h">
+						<FileConfiguration
+							Name="Debug|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\contourSurfaceDialogData.h">
+						<FileConfiguration
+							Name="Debug|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
 					</File>
 					<File
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\displayProperties.h">
@@ -486,6 +508,18 @@
 					</File>
 					<File
 						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\labelPropertiesData.h">
+						<FileConfiguration
+							Name="Debug|Win32">
+							<Tool
+								Name="VCCustomBuildTool"
+								Description="Running MOC on $(InputFileName)"
+								CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"
+								Outputs="$(InputDir)$(InputName)_moc.C"/>
+						</FileConfiguration>
+					</File>
+					<File
+						RelativePath="..\..\..\include\BALL\MOLVIEW\GUI\DIALOGS\molecularFileDialog.h">
 						<FileConfiguration
 							Name="Debug|Win32">
 							<Tool
@@ -616,6 +650,12 @@
 		<Filter
 			Name="Ressourcendateien"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			<File
+				RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\atomProperties.ui">
+			</File>
+			<File
+				RelativePath="..\..\..\source\MOLVIEW\GUI\DIALOGS\displayProperties.ui">
+			</File>
 		</Filter>
 	</Files>
 	<Globals>

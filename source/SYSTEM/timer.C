@@ -1,4 +1,4 @@
-// $Id: timer.C,v 1.7.4.8 2002/12/10 10:48:40 crauser Exp $
+// $Id: timer.C,v 1.7.4.9 2002/12/11 11:17:45 oliver Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -106,7 +106,7 @@ namespace BALL
 
 			last_secs_  = tms.QuadPart / cpu_speed_;
 			
-			last_usecs_ = (double)(tms.QuadPart - (last_secs_*cpu_speed_))/(double)(cpu_speed_)*1000000.0;
+			last_usecs_ = (long)((double)(tms.QuadPart - (last_secs_*cpu_speed_)) / (double)(cpu_speed_) * 1000000.0);
 			//last_user_time_ = timeval / clock_speed_;
 			//last_system_time_ = 0;
 			last_user_time_ = user_time.QuadPart/10;
@@ -158,7 +158,7 @@ namespace BALL
 
 			long secs_to_add = tms.QuadPart/cpu_speed_;
 			current_secs_ += secs_to_add -last_secs_;
-			long usecs_to_add = (double)(tms.QuadPart - secs_to_add*cpu_speed_) /(double)(cpu_speed_)*1000000.0;
+			long usecs_to_add = (long)((double)(tms.QuadPart - secs_to_add*cpu_speed_) /(double)(cpu_speed_) * 1000000.0);
 			current_usecs_ += usecs_to_add -last_usecs_;
 			//current_user_time_  += timeval / clock_speed_ - last_user_time_;
 			//last_system_time_ = 0;
@@ -232,7 +232,7 @@ namespace BALL
 				{
 					long secs_to_add = tms.QuadPart/cpu_speed_;
 					elapsed_seconds = current_secs_ + secs_to_add - last_secs_;
-					long usecs_to_add = (double)(tms.QuadPart - secs_to_add*cpu_speed_) /(double)(cpu_speed_)*1000000.0;
+					long usecs_to_add = (long)((double)(tms.QuadPart - secs_to_add*cpu_speed_) /(double)(cpu_speed_) * 1000000.0);
 					micro_useconds  = current_secs_ + usecs_to_add - last_usecs_;
 				}
 			#else

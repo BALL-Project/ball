@@ -26,7 +26,7 @@
 				RuntimeLibrary="1"
 				RuntimeTypeInfo="TRUE"
 				UsePrecompiledHeader="0"
-				WarningLevel="0"
+				WarningLevel="1"
 				Detect64BitPortabilityProblems="TRUE"
 				DebugInformationFormat="4"
 				CompileAs="2"/>
@@ -352,12 +352,6 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\message.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\KERNEL\normal.C">
-				</File>
-				<File
-					RelativePath="..\..\..\source\VIEW\KERNEL\radius.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\VIEW\KERNEL\vertex1.C">
@@ -702,6 +696,27 @@
 			<Filter
 				Name="PRIMITIV"
 				Filter="">
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIV\label.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIV\line.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIV\mesh.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIV\point.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIV\simpleBox.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIV\sphere.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\VIEW\PRIMITIV\tube.h">
+				</File>
 			</Filter>
 			<Filter
 				Name="COMMON"
@@ -714,6 +729,16 @@
 		<Filter
 			Name="Ressourcendateien"
 			Filter="rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe">
+			<File
+				RelativePath="..\..\..\source\VIEW\GUI\DIALOGS\colorMeshDialog.ui">
+				<FileConfiguration
+					Name="Debug|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="$(QTDIR)\bin\uic &quot;$(InputPath)&quot; -o &quot;$(InputDir)$(InputName)_moc.C&quot;
+"/>
+				</FileConfiguration>
+			</File>
 		</Filter>
 	</Files>
 	<Globals>
