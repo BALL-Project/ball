@@ -162,7 +162,7 @@ void DownloadPDBFile::threadedDownload_(const String& url)
 	thread_->start();
 	while (thread_->running())
 	{
-		qApp->processEvents(100);
+		qApp->processEvents();
 		try
 		{
 			setStatusbarText("Downloaded: " + String(File::getSize(thread_->getFilename())));
@@ -216,11 +216,12 @@ void DownloadPDBFile::slotDownload()
 		catch(...) {}
 #endif
 
-		Log.info() << "> read " << system->countAtoms() << " atoms from URL \"" << filename<< "\"" << std::endl;
+		setStatusbarText(String("read ") + String(system->countAtoms()) + " atoms from URL \"" + filename + "\"", true);
 		if (system->countAtoms() == 0)
 		{
 			delete system;
-			setStatusbarText("Could not fetch the given PDBFile");
+			show();
+			setStatusbarText("Could not fetch the given PDBFile", true);
 			return;
 		}
 
@@ -240,7 +241,7 @@ void DownloadPDBFile::slotDownload()
 	}
 	catch(...)
 	{
-		Log.info() << "> download PDB file failed." << std::endl;
+		setStatusbarText("download PDB file failed", true);
 		delete system;
 	}
 }
@@ -385,6 +386,7 @@ void DownloadPDBFile::abort()
 void DownloadPDBFile::downloadStarted_()
 	throw()
 {
+	hide();
 	aborted_ = false;
 	setStatusbarText("Started download, please wait...");
 	button_abort->setEnabled(true);
