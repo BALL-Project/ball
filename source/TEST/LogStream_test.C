@@ -1,20 +1,21 @@
-// $Id: LogStream_test.C,v 1.2 2000/05/24 00:47:14 amoll Exp $
+// $Id: LogStream_test.C,v 1.3 2000/05/24 09:48:48 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/COMMON/logStream.h>
 #include <sys/time.h>
-#	include <BALL/MATHS/common.h>
+#include <BALL/MATHS/common.h>
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: LogStream_test.C,v 1.2 2000/05/24 00:47:14 amoll Exp $")
+START_TEST(class_name, "$Id: LogStream_test.C,v 1.3 2000/05/24 09:48:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
+using namespace std;
 
 LogStream* l1 = new LogStream();
 LogStream* l2 = new LogStream(true);
