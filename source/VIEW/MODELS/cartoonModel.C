@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.10 2004/12/28 17:44:48 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.11 2004/12/29 17:41:57 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -89,7 +89,7 @@ void AddCartoonModel::clear_()
 
 
 void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
-	throw(Exception::OutOfMemory)
+	throw()
 {
 	// we want to compute the spline ourselves for better smoothing properties
 	vector<Vector3> 			spline_backup 				= spline_points_;
@@ -286,7 +286,6 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 	last_points[3] = last_points[2] - normal * arrow_height_;
 
 	Mesh* mesh = new Mesh;
-	if (mesh == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Mesh));
 	mesh->colorList.clear();
 	mesh->colorList.push_back(ColorRGBA(0.0, 1.0, 1.0, 1.0));
 	mesh->setComposite(ss.getResidue(0));
@@ -398,7 +397,7 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 
 // ---------------------------------------------------------------------
 void AddCartoonModel::drawHelix_(SecondaryStructure& ss)
-	throw(Exception::OutOfMemory)
+	throw()
 {
 	Atom* first = 0;
 	Atom* last = 0;
@@ -421,8 +420,6 @@ void AddCartoonModel::drawHelix_(SecondaryStructure& ss)
 	{
 		// build tube connection to the last point
 		Tube* tube = new Tube;
-		if (!tube) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
-		
 		tube->setRadius(tube_radius_);
 		tube->setVertex1(last_point_);
 		tube->setVertex2(first->getPosition());
@@ -431,10 +428,15 @@ void AddCartoonModel::drawHelix_(SecondaryStructure& ss)
 
 		// create sphere for the point
 		Sphere* sphere = new Sphere;
-		if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
-
 		sphere->setRadius(tube_radius_);
 		sphere->setPosition(last_point_);
+		sphere->setComposite(first);
+		geometric_objects_.push_back(sphere);
+		
+		// create sphere for the point
+		sphere = new Sphere;
+		sphere->setRadius(tube_radius_);
+		sphere->setPosition(first->getPosition());
 		sphere->setComposite(first);
 		geometric_objects_.push_back(sphere);
 	}
@@ -460,12 +462,10 @@ void AddCartoonModel::drawHelix_(SecondaryStructure& ss)
 		
 	// add a disc at the beginning and the end of the cylinder to close it
 	Disc* disc = new Disc( Circle3(first->getPosition(), -normal, helix_radius_));
-	if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
 	disc->setComposite(first);
 	geometric_objects_.push_back(disc);
 
 	disc = new Disc(Circle3(last_pos, normal, helix_radius_));
-	if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
 	disc->setComposite(last);
 	geometric_objects_.push_back(disc);
 
@@ -503,7 +503,7 @@ void AddCartoonModel::drawHelix_(SecondaryStructure& ss)
 	calculateTangentialVectors_();
 	createSplineSegment_(spline_vector_[p2 - 1], spline_vector_[p2]);
 
-	last_point_ = spline_vector_[p2].getVector();
+	last_point_ = last->getPosition();
 	have_start_point_ = true;
 }
 
@@ -613,8 +613,6 @@ void AddCartoonModel::drawTube_(SecondaryStructure& ss)
 
 	buildGraphicalRepresentation_(spline_vector_position_ * interpolation_steps_, 
 																										max * interpolation_steps_);
-
-	have_start_point_ = false;
 }
 
 
