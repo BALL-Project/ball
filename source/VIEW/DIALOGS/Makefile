@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.36 2004/02/28 14:11:42 amoll Exp $
+# $Id: Makefile,v 1.36.2.1 2004/05/07 15:56:56 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -46,7 +46,6 @@ CPP_SOURCES=\
 	molecularDynamicsDialog.C\
 	molecularDynamicsDialogData.C\
 	molecularFileDialog.C\
-	openBruker1DFile.C\
 	parsedFunctionDialog.C\
 	parsedFunctionDialogData.C\
 	peptideDialog.C\
@@ -99,7 +98,6 @@ MOC_SOURCES=\
 	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
 	molecularDynamicsDialogData_moc.C\
-	openBruker1DFile_moc.C\
 	parsedFunctionDialog_moc.C\
 	parsedFunctionDialogData_moc.C\
 	peptideDialog_moc.C\
