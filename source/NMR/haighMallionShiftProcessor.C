@@ -1,4 +1,4 @@
-// $Id: haighMallionShiftProcessor.C,v 1.3 2000/09/20 18:31:24 amoll Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.4 2000/09/21 09:46:03 oliver Exp $
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -7,11 +7,9 @@
 namespace BALL 
 {
 
-	const float big_loop_radius_		= 1.39e-10;
-	const float little_loop_radius_ = 1.182e-10;
-	const Size aromatic_electrons6_ = 3;
-	const Size aromatic_electrons5_ = 3;
-	const float B = 5.455e-6;					//Konstante in IBG(r)
+	const float HaighMallionShiftProcessor::big_loop_radius_		= 1.39e-10;
+	const float HaighMallionShiftProcessor::little_loop_radius_ = 1.182e-10;
+	const float HaighMallionShiftProcessor::B_ = 5.455e-6;					//Konstante in IBG(r)
 
 	float getLambda(const Vector3& v1, const Vector3& v2)
 	{
@@ -262,7 +260,7 @@ namespace BALL
 						sum += f *( (1 / (a_eins * a_eins * a_eins)) + (1 / (a_zwei * a_zwei * a_zwei)) );
 					}
 
-					shift += sum * B; // zaehle aktuellen chemicalshift zum Gesamtwert dazu
+					shift += sum * B_; // zaehle aktuellen chemicalshift zum Gesamtwert dazu
 					
 					vzaehler = 0;
 					numberOfRings--;
@@ -317,4 +315,4 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-} // namespace Ball
+} // namespace BALL
