@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.55 2003/07/03 13:41:05 amoll Exp $
+// $Id: file.h,v 1.56 2003/07/06 16:18:16 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -325,7 +325,7 @@ namespace BALL
 				@return Size the size of the file
 		*/
 		Size getSize()
-			throw();
+			throw(Exception::FileNotFound);
 
 		/**	Return the size of a given file.
 				@return Size the size of the file
