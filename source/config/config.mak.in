@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# RCS ID: $Id: config.mak.in,v 1.16 2001/05/22 15:42:11 oliver Exp $
+# RCS ID: $Id: config.mak.in,v 1.17 2001/10/11 00:35:17 oliver Exp $
 #
 # author:    $author$
 # date:      $date$
@@ -37,7 +37,8 @@ CP	=@CP@
 MV	=@MV@
 # unix command strip, used to strip away unused stuff from object files
 STRIP	=@STRIP@
-
+# the echo command (on some platforms with an additional -e to expand '\n')
+ECHO=@ECHO_COMMAND@
 
 OS	     =@OS@
 # name of your OS

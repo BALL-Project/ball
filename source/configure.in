@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.4 2001/10/03 14:37:02 oliver Exp $
+dnl    $Id: configure.in,v 1.5 2001/10/11 00:35:16 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -431,6 +431,20 @@ AC_MSG_PATH_PROG(UNAME,uname)
 AC_MSG_PATH_PROG(CUT,cut)
 AC_MSG_PATH_PROG(TR,tr)
 AC_MSG_PATH_PROG(AR,ar)
+
+dnl
+dnl   check whether "echo" understands "-n" (required on some
+dnl   platforms to expand '\n')
+dnl
+AC_MSG_CHECKING(whether echo accepts -e)
+if `echo -e "\n" >/dev/null 2>&1` ; then
+	ECHO_COMMAND="echo -e"
+	AC_MSG_RESULT(yes)
+else
+	ECHO_COMMAND="echo"
+	AC_MSG_RESULT(no)
+fi
+AC_SUBST(ECHO_COMMAND)
 
 dnl
 dnl    determine OS and architecture and all this stuff
@@ -2672,7 +2686,7 @@ if test "${USE_BALLVIEW}" = true ; then
 					FILE* f = fopen("qt.version", "w");
 					fprintf(f, "%s\n", qVersion());
 					fclose(f);
-					exit(0);
+					return 0;
 				}
 			], 
 			QT_VERSION_OK=1,
