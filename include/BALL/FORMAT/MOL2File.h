@@ -1,4 +1,4 @@
-// $Id: MOL2File.h,v 1.3 2000/05/15 19:14:43 oliver Exp $
+// $Id: MOL2File.h,v 1.4 2000/05/23 05:45:33 oliver Exp $
 
 #ifndef BALL_FORMAT_MOL2FILE_H
 #define BALL_FORMAT_MOL2FILE_H
@@ -11,12 +11,15 @@
 #	include <BALL/SYSTEM/file.h>
 #endif
 
-#ifndef BALL_KERNEL_SYSTEM_H
-# include <BALL/KERNEL/system.h>
+#ifndef BALL_MATHS_VECTOR3_H
+#	include <BALL/MATHS/vector3.h>
 #endif
 
 namespace BALL 
 {
+
+	class Atom;
+	class System;
 
 	/**	SYBYL MOL2 file class.
 			This class is used to read and write SYBYL MOL2 files (Tripos).
@@ -89,41 +92,49 @@ namespace BALL
 
 		protected:
 		
-		virtual String readAtomSection_();
+		void readAtomSection_();
 
-		virtual String readBondSection_();
+		void readBondSection_();
 
-		virtual String readMoleculeSection_();
+		void  readMoleculeSection_();
 
-		virtual String readSetSection_();
+		void readSetSection_();
 
-		virtual String readSubstructureSection_();
+		void readSubstructureSection_();
+
+		String getSybylType_(const Atom& atom) const;
+
+		bool nextLine_();
+		
+		void clear_();
+		
+		void buildAdd(System& system);
 
 		struct AtomStruct
 		{
-			String	name;
-			Vector3	position;
-			String	type;
-			int			substructure;
-			String	substructure_name;
-			float		charge;
+			String		name;
+			Vector3		position;
+			String		type;
+			Position	substructure;
+			String		substructure_name;
+			float			charge;
 		};
 
 		struct BondStruct
 		{
-			int			atom1;
-			int			atom2;
-			String	type;
+			Position	atom1;
+			Position	atom2;
+			String		type;
 		};
 
 		struct MoleculeStruct
 		{
 			String			name;
-			int					number_of_atoms;
-			int					number_of_bonds;
-			int					number_of_substructures;
-			int					number_of_features;
-			int					number_of_sets;
+			Size				number_of_atoms;
+			Size				number_of_bonds;
+			Size				number_of_substructures;
+			Size				number_of_features;
+			Size				number_of_sets;
 			String			type;
 			String			charge_type;
 			String			comment;
@@ -135,19 +146,19 @@ namespace BALL
 			String			type;
 			String			subtype;
 			String			comment;
-			int					number_of_members;
+			Size				number_of_members;
 			vector<int>	members;
 		};
 		
 		struct SubstructureStruct
 		{
 			String			name;
-			int					root_atom;
+			Size				root_atom;
 			String			substructure_type;
-			int					dictionary_type;
+			Size				dictionary_type;
 			String			chain;
 			String			sub_type;
-			int					inter_bonds;
+			Size				inter_bonds;
 			String			comment;
 		};
 
@@ -155,13 +166,13 @@ namespace BALL
 		vector<AtomStruct>					atoms_;
 		vector<BondStruct>					bonds_;
 		vector<SetStruct>						sets_;
-		vector<MoleculeStruct>			molecules_;
 		vector<SubstructureStruct>	substructures_;
+		MoleculeStruct							molecule_;
 
 		Size	number_of_lines_;
 		static const Size MAX_LENGTH_;
 		char buffer_[4096];
-	
+		String line_;
 	};
 
 } // namespace BALL
