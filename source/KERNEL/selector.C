@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.5 2000/01/10 20:04:10 oliver Exp $
+// $Id: selector.C,v 1.6 2000/01/10 21:24:55 oliver Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -680,7 +680,7 @@ namespace BALL
 
 	bool BackBonePredicate::operator () (const Composite& composite) const
 	{
-		if (RTTI::isKindOF<Atom>(composite))
+		if (RTTI::isKindOf<Atom>(composite))
 		{
 			if (composite.hasAncestor<Residue>())
 			{
