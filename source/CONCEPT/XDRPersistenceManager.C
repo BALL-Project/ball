@@ -1,8 +1,12 @@
-// $Id: XDRPersistenceManager.C,v 1.14 2000/12/13 19:02:26 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.15 2000/12/14 19:34:24 oliver Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
+#include <rpc/types.h>
+#include <rpc/xdr.h>
+
 // #define BALL_DEBUG_PERSISTENCE
+
 
 using namespace std;
 
@@ -539,8 +543,8 @@ namespace BALL
 
 	void XDRPersistenceManager::put(const PointerSizeInt ptr)
 	{
-		u_long ptr_ptr = ptr;
-		xdr_u_long(&xdr_out_, &ptr_ptr);
+		BALL_XDR_UINT64_TYPE* p = (BALL_XDR_UINT64_TYPE*)&ptr;
+		xdr_u_hyper(&xdr_out_, p);
 
 #		ifdef BALL_DEBUG_PERSISTENCE
 			Log.info() << "XDRPersistenceManager: put(PointerSizeInt = " << ptr << ")" << endl;
@@ -636,7 +640,8 @@ namespace BALL
 
 	void XDRPersistenceManager::get(PointerSizeInt& ptr)
 	{
-		xdr_u_long(&xdr_in_, (u_long*)&ptr);
+		BALL_XDR_UINT64_TYPE* p = (BALL_XDR_UINT64_TYPE*)&ptr;
+		xdr_u_hyper(&xdr_in_, p);
 
 #		ifdef BALL_DEBUG_PERSISTENCE
 		Log.info() << "XDRPersistenceManager: get ptr: " << hex << ptr << endl;
