@@ -55,7 +55,7 @@ List                                /           /
 Options                             X           /       isValid
 Quadruple                           /           /
 RegularData1D                       /           X
-RegularData2D                       X           Z
+RegularData2D                       X           /				BAUSTELLE: mathematical formulars correct?
 RegularData3D                       /           /
 RegularExpression                   D           /
 String                              D           X
@@ -109,7 +109,6 @@ ConstReverseRandomAccessIterator    DI          Z
 ReverseBidirectionalIterator        DI          Z
 ConstReverseBidirectionalIterator   DI          Z
 Selectable                          /           /
-Singleton                           DI          Z
 TextPersistenceManager              EI          Z
 TimeStamp                           /           X
 PreciseTime                         /           X
@@ -137,7 +136,7 @@ resourceEntry                       E,          X
 GenericMolFile                      I,          /
 GenericPDBFile                      DEI,        Z
 HinFile                             EIX,        X
-INIFile                             EI,         X
+INIFile                             /         	/
 LineBasedFile                       /           /
       LineBasedFileError            I           Z
 MOL2File                            DEI,        X
@@ -217,14 +216,14 @@ TLine3                              /           /
 TMatrix4x4                          /           /
 PiecewiseFunction                   IX          X
 PiecewisePolynomial                 IX          X
-RombergIntegrator                   X           Z         cout
+RombergIntegrator                   /           Z  
 TPlane3                             /           /
 TQuaternion                         /           /
 TSphere3                            /           /
 TSurface                            X           Z    
 TVector3                            /           /
 TVector4                            /           /
-Function                            IX          X
+Function                            I           /
 NumericalIntegrator                 ?           Z
 ------------------------MOLMEC----------------------------------------------
                         ---------AMBER-----
@@ -241,7 +240,8 @@ CharmmStretch                       DEI         Z
 CharmmTorsion                       DEIX        Z
 CharmmNonBonded                     DEI         Z
                         --------COMMON-----
-AtomVector                          EI          Z
+AtomVector                          DEI         Z       problem in docu with "using keyword"
+	AtomConstVector										DEI					Z
 AssignTypeProcessor                 DEI         Z
             AssignTypeNameProcessor
 ChargeRuleProcessor                 DEI         Z
@@ -446,7 +446,7 @@ SockAddr                            DEI         Z
 SocketBuf                           DEI         Z
 SockInetAddr                        DEI         Z
 SockInetBuf                         DEI         Z
-Timer                               EI          /
+Timer                               I           /
 -------------------------VIEW-----------------------------------------------
                         -------DATATYPE----
 ColorUnitHue                        DEI         Z
