@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peak.h,v 1.16 2003/03/26 13:08:18 sturm Exp $
+// $Id: peak.h,v 1.17 2003/05/08 09:00:58 sneumann Exp $
 
 #ifndef BALL_NMR_PEAK_H
 #define BALL_NMR_PEAK_H
@@ -219,7 +219,7 @@ namespace BALL
 	{
 		position_ = peak.position_;
 		width_ = peak.width_;
-		intensity_ = peak.intensity;
+		intensity_ = peak.intensity_;
 		atom_ = peak.atom_;
 	}
 
