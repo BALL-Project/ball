@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.26 2000/10/16 19:55:20 oliver Exp $
+// $Id: fragmentDB.C,v 1.27 2000/10/20 10:36:38 amoll Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -87,27 +87,22 @@ namespace BALL
 
 				ResourceFile*	file;
 				ResourceEntry* tree_entry;
-					
-				file = new ResourceFile(value_fields[0]);
+
+				// search in the standard fragment DB file
+				Path path;
+				String filename = path.find(value_fields[0]);
+				if (filename == "")
+				{
+					throw Exception::FileNotFound(__FILE__, __LINE__, value_fields[0]);
+				}
+
+				file = new ResourceFile(filename.c_str());
 				if (!file->isValid())
 				{
-					// search in the standard fragment DB file
-					Path path;
-					String filename = path.find(value_fields[0]);
-
-					if (filename == "")
-					{
-						throw Exception::FileNotFound(__FILE__, __LINE__, value_fields[0]);
-					}
-
-					file = new ResourceFile(filename.c_str());
-					if (!file->isValid())
-					{
-						Log.error() << "FragmentDB: cannot open include file " << value_fields[0] << endl;
-						delete file;
-						return false;
-					}
-				} 
+					Log.error() << "FragmentDB: cannot open include file " << value_fields[0] << endl;
+					delete file;
+					return false;
+				}
 					
 				tree_entry = file->getRoot().getEntry(value_fields[1]);
 				if (tree_entry == 0)
