@@ -1,4 +1,4 @@
-// $Id: Vector2_test.C,v 1.2 2001/05/31 21:56:44 amoll Exp $
+// $Id: Vector2_test.C,v 1.3 2001/05/31 22:37:23 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(TVector2, "$Id: Vector2_test.C,v 1.2 2001/05/31 21:56:44 amoll Exp $")
+START_TEST(TVector2, "$Id: Vector2_test.C,v 1.3 2001/05/31 22:37:23 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -279,16 +279,16 @@ RESULT
 CHECK(TVector2 operator % (const TVector2& vector) const)
 	// BAUSTELLE: werte
  	v1 = Vector2(1.0, 2.0);
-	v2 = Vector2(4.0, 5.0);
+	v2 = Vector2(-1.0, -2.0);
 	v  = v1 % v2;
-	TEST_REAL_EQUAL(v[0], -3.0)
-	TEST_REAL_EQUAL(v[1], 3.0)
+	TEST_REAL_EQUAL(v[0], 0.0)
+	TEST_REAL_EQUAL(v[1], 0.0)
 	
  	v1 = Vector2(0.0, 2.0);
 	v2 = Vector2(4.0, 0.0);
 	v  = v1 % v2;
-	TEST_REAL_EQUAL(v[0], 0.0)
-	TEST_REAL_EQUAL(v[1], 0.0)
+	TEST_REAL_EQUAL(v[0], -8.0)
+	TEST_REAL_EQUAL(v[1], 8.0)
 RESULT
 
 CHECK(TVector2 operator %= (const TVector2& vector))
