@@ -1,4 +1,4 @@
-// $Id: Residue_test.C,v 1.13 2000/05/31 14:54:57 amoll Exp $
+// $Id: Residue_test.C,v 1.14 2000/06/26 10:44:08 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 #include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.13 2000/05/31 14:54:57 amoll Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.14 2000/06/26 10:44:08 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -180,6 +180,8 @@ CHECK(Residue::getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const )
 	TEST_EQUAL(r1.getFullName(Residue::ADD_VARIANT_EXTENSIONS), "r1-CS")
 	c.remove(r2);
 	TEST_EQUAL(r2.getFullName(Residue::ADD_VARIANT_EXTENSIONS), "r2")	
+	r2.setID("112");
+	TEST_EQUAL(r2.getFullName(Residue::ADD_VARIANT_EXTENSIONS), "r2112")	
 RESULT
 
 CHECK(Residue::hasTorsionPhi() const )
