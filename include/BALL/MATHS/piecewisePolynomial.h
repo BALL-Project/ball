@@ -1,4 +1,4 @@
-// $Id: piecewisePolynomial.h,v 1.3 2000/09/22 16:31:37 anker Exp $
+// $Id: piecewisePolynomial.h,v 1.4 2000/10/18 13:55:46 anker Exp $
 
 #ifndef BALL_MATHS_PPOLYNOMIAL_H
 #define BALL_MATHS_PPOLYNOMIAL_H
@@ -38,52 +38,61 @@ namespace BALL
 		//@{
 
 		/** Default constructor */
-		PiecewisePolynomial();
+		PiecewisePolynomial() throw();
 
 		/** Copy constructor */
-		PiecewisePolynomial(const PiecewisePolynomial& polynomial);
+		PiecewisePolynomial(const PiecewisePolynomial& polynomial) throw();
 
 		/** Detailed Constructor.
 			This constructor does {\bf not} check sanity of the arguments 
 		 */
 		PiecewisePolynomial(Size degree, const std::vector<Interval>& intervals,
-				const std::vector<Coefficients>& coefficients);
+				const std::vector<Coefficients>& coefficients) throw();
 
 		/** Destructor */
-		virtual ~PiecewisePolynomial();
-
-		/** Destroy method */
-		virtual void destroy();
-
-		/** Clear method */
-		virtual void clear();
+		virtual ~PiecewisePolynomial() throw();
 
 		//@}
 
 
-		/** */
-		void set(const PiecewisePolynomial& poly);
+		/** @name Assignment */
+		//@{
 
-		/** */
-		void set(Size degree, const std::vector<Interval>& intervals,
-			const std::vector<Coefficients>& coeffs);
-		
-		/** */
-		PiecewisePolynomial& operator = (const PiecewisePolynomial& poly);
+		/** Assignment operator */
+		const PiecewisePolynomial& operator = (const PiecewisePolynomial& poly)
+			throw();
+
+		/** Clear method */
+		virtual void clear() throw();
+
+		//@}
 
 
 		/** @name Accessors
 		*/
 		//@{
 
+		/** Set the instance manually */
+		void set(Size degree, const std::vector<Interval>& intervals,
+			const std::vector<Coefficients>& coeffs) throw();
+
 		/// set the degree of the polynomial
-		void setDegree(Size degree);
+		void setDegree(Size degree) throw();
 
 		/// get the degree of the polynomial
-		Size getDegree() const;
+		Size getDegree() const throw();
 
 		/// compute the value of the PiecewisePolynomial at a given x
-		virtual double operator() (double x) const;
+		virtual double operator() (double x) const throw();
+
+		//@}
+
+
+		/** @name Predicates */
+		//@{
+
+		/** Equality operator */
+		bool operator == (const PiecewisePolynomial& poly) const throw();
 
 		//@}
 
@@ -92,12 +101,14 @@ namespace BALL
 		//@{
 
 		/** 	Dumps the whole content of the object */
-		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const
+			throw();
 
 		//@}
 
 		protected:
 
+		/*_ The degree of the polynomial */
 		Size degree_;
 
 	};

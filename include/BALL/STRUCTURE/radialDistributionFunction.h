@@ -1,4 +1,4 @@
-// $Id: radialDistributionFunction.h,v 1.4 2000/09/25 16:29:10 anker Exp $
+// $Id: radialDistributionFunction.h,v 1.5 2000/10/18 13:55:49 anker Exp $
 
 #ifndef BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
 #define BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
@@ -17,9 +17,8 @@ namespace BALL
 		such a function is a piecewise polynomial obtained by smoothing spline
 		fit from molecular dynamics simulation.
 		\\
-		{\bf Definition:} \{URL:BALL/.../RadialDistributionFunction.h}
+		{\bf Definition:} \{URL:BALL/STRUCTURE/RadialDistributionFunction.h}
 	 */
-	
 	class RadialDistributionFunction 
 	{
 
@@ -28,27 +27,23 @@ namespace BALL
 		
 		BALL_CREATE(RadialDistributionFunction)
 
-		/** @name Constructors and Destructors 
+		/** @name Constructors and Destructor 
 		 */
 		//@{
 
 		/// Default constructor
-		RadialDistributionFunction();
+		RadialDistributionFunction() throw();
 
 		/// Copy constructor
-		RadialDistributionFunction(const RadialDistributionFunction& rdf);
+		RadialDistributionFunction(const RadialDistributionFunction& rdf)
+			throw();
 
 		/// Detailed constructor
-		RadialDistributionFunction(const PiecewisePolynomial& polynomial);
+		RadialDistributionFunction(const PiecewisePolynomial& polynomial)
+			throw();
 		
 		/// Destructor
-		virtual ~RadialDistributionFunction();
-
-		///
-		void clear();
-
-		///
-		void destroy();
+		virtual ~RadialDistributionFunction() throw();
 
 		//@}
 
@@ -56,12 +51,12 @@ namespace BALL
 		/** @name Assignment */
 		//@{
 
-		/** */
-		void set(const RadialDistributionFunction& rdf);
-
-		/** */
+		/** Assignment operator */
 		const RadialDistributionFunction& operator = 
-			(const RadialDistributionFunction& rdf);
+			(const RadialDistributionFunction& rdf) throw();
+
+		/// Clear function
+		virtual void clear() throw();
 
 		//@}
 
@@ -71,16 +66,16 @@ namespace BALL
 		//@{
 
 		/** Set the representing PiecewisePolynomial */
-		void setRepresentation(const PiecewisePolynomial& polynomial);
+		void setRepresentation(const PiecewisePolynomial& polynomial) throw();
 
 		/** Get the representation of the RDF */
-		PiecewisePolynomial getRepresentation() const;
+		const PiecewisePolynomial& getRepresentation() const throw();
 
 		/** Get the range of the representing function */
-		Interval getRange() const;
+		const Interval& getRange() const throw();
 
 		/** compute the value of the distribution function at a given x */
-		virtual double operator () (double x) const;
+		virtual double operator () (double x) const throw();
 
 		//@}
 
@@ -89,10 +84,13 @@ namespace BALL
 		//@{
 
 		/** Check, whether a given x is in the range of the RDF. */
-		bool isInRange(double x) const;
+		bool isInRange(double x) const throw();
 
 		/** check validity */
-		bool isValid() const;
+		bool isValid() const throw();
+
+		/** Equality operator */
+		bool operator == (const RadialDistributionFunction& rdf) const throw();
 
 		//@}
 
@@ -101,14 +99,17 @@ namespace BALL
 		//@{
 
 		/** 	Dumps the whole content of the object */
-		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const
+			throw();
 
 		//@}
 
 
 		protected:
 
+		/*_ The representation of the RDF */
 		PiecewisePolynomial representation_;
+		/*_ The valid flag */
 		bool valid_;
 
 	};

@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.C,v 1.4 2000/09/22 16:25:24 anker Exp $
+// $Id: piecewiseFunction.C,v 1.5 2000/10/18 13:55:51 anker Exp $
 
 #include <BALL/MATHS/piecewiseFunction.h>
 
@@ -7,57 +7,50 @@ using namespace std;
 namespace BALL
 {
 
-	PiecewiseFunction::PiecewiseFunction()
+	PiecewiseFunction::PiecewiseFunction() throw()
 		:	intervals_(0),
-			coefficients_(0)
+			coefficients_(0),
+			valid_(false)
 	{
 	}
 
 
 	PiecewiseFunction::PiecewiseFunction(const PiecewiseFunction& function)
+		throw() 
 		:	intervals_(function.intervals_),
-			coefficients_(function.coefficients_)
+			coefficients_(function.coefficients_),
+			valid_(function.valid_)
 	{
 	}
 
 
 	PiecewiseFunction::PiecewiseFunction(const std::vector<Interval>& intervals,
-			const std::vector<Coefficients>& coeffs)
+			const std::vector<Coefficients>& coeffs) throw()
 		:	intervals_(intervals),
 			coefficients_(coeffs)
 	{
+		valid_ = isValid();
 	}
 
 
-	PiecewiseFunction::~PiecewiseFunction()
+	PiecewiseFunction::~PiecewiseFunction() throw()
 	{
-		destroy();
+		clear();
+
+		valid_ = false;
 	}
 
 
-	void PiecewiseFunction::clear()
+	void PiecewiseFunction::clear() throw()
 	{
 		intervals_.clear();
 		coefficients_.clear();
-	}
-
-
-	void PiecewiseFunction::destroy()
-	{
-		clear();
-	}
-
-
-	void PiecewiseFunction::set(const PiecewiseFunction& function)
-	{
-		intervals_ = function.intervals_;
-		coefficients_ = function.coefficients_;
-		valid_ = function.valid_;
+		valid_ = false;
 	}
 
 
 	void PiecewiseFunction::set(const std::vector<Interval>& intervals,
-		const std::vector<Coefficients>& coeffs)
+		const std::vector<Coefficients>& coeffs) throw()
 	{
 		intervals_ = intervals;
 		coefficients_ = coeffs;
@@ -66,26 +59,32 @@ namespace BALL
 
 
 	PiecewiseFunction& PiecewiseFunction::operator = 
-		(const PiecewiseFunction& function)
+		(const PiecewiseFunction& function) throw()
 	{
-		set(function);
+		intervals_ = function.intervals_;
+		coefficients_ = function.coefficients_;
+		valid_ = function.valid_;
+
 		return *this;
 	}
 
 
-	void PiecewiseFunction::setIntervals(const std::vector<Interval>& intervals)
+	void PiecewiseFunction::setIntervals(const std::vector<Interval>& intervals) 
+		throw()
 	{
 		intervals_ = intervals;
+		valid_ - isValid();
 	}
 
 
 	const std::vector<Interval>& PiecewiseFunction::getIntervals() const
+		throw()
 	{
 		return intervals_;
 	}
 
 
-	const Interval& PiecewiseFunction::getInterval(double x) const
+	const Interval& PiecewiseFunction::getInterval(double x) const throw()
 	{
 		Position index = getIntervalIndex(x);
 		if (index == INVALID_POSITION)
@@ -100,6 +99,7 @@ namespace BALL
 
 
 	const Interval& PiecewiseFunction::getInterval(Position index) const
+		throw()
 	{
 		if (intervals_.size() == 0)
 		{
@@ -119,7 +119,8 @@ namespace BALL
 		}
 	}
 
-	Position PiecewiseFunction::getIntervalIndex(double x) const
+
+	Position PiecewiseFunction::getIntervalIndex(double x) const throw()
 	{
 		if (!isInRange(x))
 		{
@@ -141,7 +142,8 @@ namespace BALL
 		return false;
 	}
 
-	Interval PiecewiseFunction::getRange() const
+
+	Interval PiecewiseFunction::getRange() const throw()
 	{
 		// as this is a local variable, the return value is not a const ref
 		Interval tmp;
@@ -159,12 +161,17 @@ namespace BALL
 		return tmp;
 	}
 
-	void PiecewiseFunction::setCoefficients(const std::vector<Coefficients>& coefficients)
+
+	void PiecewiseFunction::setCoefficients
+		(const std::vector<Coefficients>& coefficients) throw()
 	{
 		coefficients_ = coefficients;
+		valid_ = isValid();
 	}
 
-	const std::vector<Coefficients>& PiecewiseFunction::getCoefficients() const
+
+	const std::vector<Coefficients>& PiecewiseFunction::getCoefficients()
+		const throw() 
 	{
 		if (coefficients_.size() == 0)
 		{
@@ -176,6 +183,7 @@ namespace BALL
 
 
 	const Coefficients& PiecewiseFunction::getCoefficients(double x) const
+		throw()
 	{
 		if (coefficients_.size() == 0)
 		{
@@ -194,7 +202,9 @@ namespace BALL
 		}
 	}
 
-	const Coefficients& PiecewiseFunction::getCoefficients(Position index) const
+
+	const Coefficients& PiecewiseFunction::getCoefficients(Position index)
+		const throw()
 	{
 		if (coefficients_.size() == 0)
 		{
@@ -214,7 +224,8 @@ namespace BALL
 		}
 	}
 
-	bool PiecewiseFunction::isValid() const
+
+	bool PiecewiseFunction::isValid() const throw()
 	{
 
 		// BAUSTELLE: ist das vollständig?
@@ -256,14 +267,16 @@ namespace BALL
 		return true;
 	}
 
-	double PiecewiseFunction::operator() (double /* x */) const
+
+	double PiecewiseFunction::operator() (double /* x */) const throw()
 	{
 		Log.error() << "PiecewiseFunction::operator(): "
 			<< "This function shouldn't be called!" << endl;
 		return 0.0;
 	}
 
-	bool PiecewiseFunction::isInRange(double x) const
+
+	bool PiecewiseFunction::isInRange(double x) const throw()
 	{
 		Interval range = getRange();
 		if ((x >= range.first) && (x < range.second))
@@ -277,7 +290,16 @@ namespace BALL
 	}
 
 
+	bool PiecewiseFunction::operator == (const PiecewiseFunction& function)
+		const throw()
+	{
+		return ((intervals_ == function.intervals_)
+			&& (coefficients_ == function.coefficients_));
+	}
+
+
 	void PiecewiseFunction::dump(ostream& stream, Size /* depth */) const
+		throw()
 	{
 		if (!isValid())
 		{

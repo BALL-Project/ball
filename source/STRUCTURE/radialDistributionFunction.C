@@ -1,4 +1,4 @@
-// $Id: radialDistributionFunction.C,v 1.6 2000/09/25 16:32:34 anker Exp $
+// $Id: radialDistributionFunction.C,v 1.7 2000/10/18 13:55:53 anker Exp $
 
 #include <BALL/STRUCTURE/radialDistributionFunction.h>
 
@@ -7,100 +7,102 @@ using namespace std;
 namespace BALL
 {
 
-	RadialDistributionFunction::RadialDistributionFunction()
+	RadialDistributionFunction::RadialDistributionFunction() throw()
 		:	representation_(),
 			valid_(false)
 	{
 	}
 
 
-	RadialDistributionFunction::RadialDistributionFunction
-		(const RadialDistributionFunction& rdf)
+	RadialDistributionFunction::RadialDistributionFunction 
+		(const RadialDistributionFunction& rdf) throw()
 		:	representation_(rdf.representation_),
 			valid_(rdf.valid_)
 	{
 	}
 
 
-	RadialDistributionFunction::RadialDistributionFunction(const PiecewisePolynomial& polynomial)
+	RadialDistributionFunction::RadialDistributionFunction
+		(const PiecewisePolynomial& polynomial) throw()
 		:	representation_(polynomial)
 	{
 		valid_ = representation_.isValid();
 	}
 
 
-	RadialDistributionFunction::~RadialDistributionFunction()
+	RadialDistributionFunction::~RadialDistributionFunction() throw()
 	{
-		destroy();
-	}
+		clear();
 
-
-	void RadialDistributionFunction::clear()
-	{
-		representation_.clear();
 		valid_ = false;
 	}
 
 
-	void RadialDistributionFunction::destroy()
+	void RadialDistributionFunction::clear() throw()
 	{
-		clear();
-	}
+		representation_.clear();
 
-
-	void RadialDistributionFunction::set(const RadialDistributionFunction& rdf)
-	{
-		representation_.set(rdf.representation_);
-		valid_ = representation_.isValid();
+		valid_ = false;
 	}
-	
 
 	const RadialDistributionFunction& RadialDistributionFunction::operator =
-		(const RadialDistributionFunction& rdf)
+		(const RadialDistributionFunction& rdf) throw()
 	{
-		set(rdf);
+		representation_ = rdf.representation_;
+		valid_ = rdf.valid_;
+
 		return *this;
 	}
 
 
-	void RadialDistributionFunction::setRepresentation(const PiecewisePolynomial& polynomial)
+	void RadialDistributionFunction::setRepresentation
+		(const PiecewisePolynomial& polynomial) throw()
 	{
 		representation_ = polynomial;
 		valid_ = polynomial.isValid();
 	}
 
 
-	PiecewisePolynomial RadialDistributionFunction::getRepresentation() const
+	const PiecewisePolynomial& RadialDistributionFunction::getRepresentation() 
+		const throw()
 	{
 		return representation_;
 	}
 
 
-	Interval RadialDistributionFunction::getRange() const
+	const Interval& RadialDistributionFunction::getRange() const throw()
 	{
 		return representation_.getRange();
 	}
 
 
-	double RadialDistributionFunction::operator () (double x) const
+	double RadialDistributionFunction::operator () (double x) const throw()
 	{
 		return representation_.operator () (x);
 	}
 
-	bool RadialDistributionFunction::isInRange(double x) const
+
+	bool RadialDistributionFunction::isInRange(double x) const throw()
 	{
 		return representation_.isInRange(x);
 	}
 
 
-	bool RadialDistributionFunction::isValid() const
+	bool RadialDistributionFunction::operator == 
+		(const RadialDistributionFunction& rdf) const throw()
 	{
-		// BAUSTELLE
-		return representation_.isValid();
+		return (representation_ == rdf.representation_);
+	}
+
+
+	bool RadialDistributionFunction::isValid() const throw()
+	{
+		return valid_;
 	}
 
 	
-	void RadialDistributionFunction::dump(ostream& stream, Size /* depth */) const
+	void RadialDistributionFunction::dump(ostream& stream, Size /* depth */)
+		const throw()
 	{
 		representation_.dump(stream);
 	}

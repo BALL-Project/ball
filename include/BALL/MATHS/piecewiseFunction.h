@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.h,v 1.2 2000/09/22 16:31:37 anker Exp $
+// $Id: piecewiseFunction.h,v 1.3 2000/10/18 13:55:46 anker Exp $
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
@@ -36,47 +36,41 @@ namespace BALL
 		vector.
 		{\bf Definition:} \URL{BALL/MATHS/piecewiseFunction.h}
 	 */
-	
 	class PiecewiseFunction
 	{
 		public:
 
-		// BALL_CREATE_DEEP(PiecewiseFunction);
+		BALL_CREATE(PiecewiseFunction)
 
 		/** @name Constructors and Destructors */
 		//@{
 
 		/** Default constructor */
-		PiecewiseFunction();
+		PiecewiseFunction() throw();
 
 		/** Copy constructor */
-		PiecewiseFunction(const PiecewiseFunction& function);
+		PiecewiseFunction(const PiecewiseFunction& function) throw();
 
 		/** Detailed constructor */
 		PiecewiseFunction(const std::vector<Interval>& intervals, 
-			const std::vector<Coefficients>& coeffs);
+			const std::vector<Coefficients>& coeffs) throw();
 
 		/** Destructor */
-		virtual ~PiecewiseFunction();
-
-		/** Clear function */
-		void clear();
-
-		/** Destroy function */
-		void destroy();
+		virtual ~PiecewiseFunction() throw();
 
 		//@}
 
 
-		/** */ 
-		void set(const PiecewiseFunction& function);
+		/** @name Assignemnt */
+		//@{
 
-		/** */
-		void set(const std::vector<Interval>& intervals,
-				const std::vector<Coefficients>& coeffs);
+		/** Assignemnt operator */
+		PiecewiseFunction& operator = (const PiecewiseFunction& function) throw();
 
-		/** */
-		PiecewiseFunction& operator = (const PiecewiseFunction& function);
+		/** Clear function */
+		void clear() throw();
+
+		//@}
 
 
 		/** @name Accessors */
@@ -86,40 +80,44 @@ namespace BALL
 			Note that this method does {\bg not} check the definition of the
 			intervals for sanity.
 		 */
-		void setIntervals(const std::vector<Interval>& intervals);
+		void setIntervals(const std::vector<Interval>& intervals) throw();
 
 		/** Get all the intervals */
-		const std::vector<Interval>& getIntervals() const;
+		const std::vector<Interval>& getIntervals() const throw();
 
 		/** Get the interval a given x belongs to */
-		const Interval& getInterval(double x) const;
+		const Interval& getInterval(double x) const throw();
 
 		/** Get interval limits by index */
-		const Interval& getInterval(Position index) const;
+		const Interval& getInterval(Position index) const throw();
 
 		/** Get the interval index for a given x */
-		Position getIntervalIndex(double x) const;
+		Position getIntervalIndex(double x) const throw();
 
 		/** Return the range of the definition */
-		Interval getRange() const;
+		Interval getRange() const throw();
 
 		/** Set the coefficients.
 			Note that this method does {\bf not} check the vector of coefficients
 			for sanity.
 		 */
-		void setCoefficients(const vector<Coefficients>& coefficients);
+		void setCoefficients(const vector<Coefficients>& coefficients) throw();
 
 		/** */
-		const std::vector<Coefficients>& getCoefficients() const;
+		const std::vector<Coefficients>& getCoefficients() const throw();
 
 		/** Get the coefficients for a given x */
-		const Coefficients& getCoefficients(double x) const;
+		const Coefficients& getCoefficients(double x) const throw();
 
 		/** get coefficients from index */
-		const Coefficients& getCoefficients(Position index) const;
+		const Coefficients& getCoefficients(Position index) const throw();
 		
 		/** compute the value of the piecewise function ata given x */
-		virtual double operator () (double x) const;
+		virtual double operator () (double x) const throw();
+
+		/** */
+		void set(const std::vector<Interval>& intervals,
+				const std::vector<Coefficients>& coeffs) throw();
 
 		//@}
 
@@ -128,24 +126,31 @@ namespace BALL
 		//@{
 
 		/** Check whether a given x is in the range of definition */
-		bool isInRange(double x) const;
+		bool isInRange(double x) const throw();
 
 		/** check validity of the definition of a piecewise function */
-		virtual bool isValid() const;
+		virtual bool isValid() const throw();
+
+		/** Equality operator */
+		bool operator == (const PiecewiseFunction& function) const throw();
 
 		//@}
+
 
 		/** @name Debugging and Diagnostics */
 		//@{
 
 		/** 	Dumps the whole content of the object */
-		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const throw();
 
 		//@}
 
+
 		protected:
 
+		/*_ This vector contains the intervals of the representation */
 		std::vector<Interval> intervals_;
+		/*_ This vector stores the coefficients for each interval */
 		std::vector<Coefficients> coefficients_;
 
 		bool valid_;
