@@ -1,4 +1,4 @@
-// $Id: microCanonicalMD.h,v 1.12 2001/07/11 23:59:32 amoll Exp $
+// $Id: microCanonicalMD.h,v 1.13 2001/08/24 01:34:01 oliver Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_MICROCANONICALMD_H   
@@ -150,7 +150,7 @@ namespace BALL
          restart = true means that the counting of iterations is
                    continued from the previous run. 
     */
-    virtual void simulateIterations(Size number,bool restart = false);
+    virtual void simulateIterations(Size number, bool restart = false);
 
     /**  This method does the actual simulation stuff. 
          It runs for the indicated time in picoseconds . 
