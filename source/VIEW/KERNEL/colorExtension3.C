@@ -1,4 +1,4 @@
-// $Id: colorExtension3.C,v 1.6 2001/02/04 16:14:27 hekl Exp $
+// $Id: colorExtension3.C,v 1.7 2001/05/13 14:28:37 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/colorExtension3.h>
 
@@ -12,6 +12,7 @@ namespace BALL
 
 
 		ColorExtension3::ColorExtension3()
+			throw()
 			:	ColorExtension2(),
 				color3_()
 		{
@@ -19,12 +20,14 @@ namespace BALL
 
 		ColorExtension3::ColorExtension3
 			(const ColorExtension3& color_extension)
+			throw()
 			:	ColorExtension2(color_extension),
 				color3_(color_extension.color3_)
 		{
 		}
 
 		ColorExtension3::~ColorExtension3()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this << " of class " 
@@ -35,24 +38,28 @@ namespace BALL
 		}
 
 		void ColorExtension3::clear()
+			throw()
 		{
 			ColorExtension2::clear();
 			color3_.clear();
 		}
 
 		void ColorExtension3::destroy()
+			throw()
 		{
 		}
 
 		void ColorExtension3::set
 			(const ColorExtension3& color_extension)
+			throw()
 		{
 			ColorExtension2::set(color_extension);
 
 			color3_.set(color_extension.color3_);
 		}
 
-		ColorExtension3& ColorExtension3::operator = (const ColorExtension3& color_extension)
+		const ColorExtension3& ColorExtension3::operator = (const ColorExtension3& color_extension)
+			throw()
 		{
 			set(color_extension);
 
@@ -61,11 +68,13 @@ namespace BALL
 
 		void ColorExtension3::get
 			(ColorExtension3& color_extension) const
+			throw()
 		{
 			color_extension.set(*this);
 		}
 
 		void ColorExtension3::swap(ColorExtension3& color_extension)
+			throw()
 		{
 			ColorExtension2::swap(color_extension);
 
@@ -73,6 +82,7 @@ namespace BALL
 		}
 
 		void ColorExtension3::dump(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -88,11 +98,13 @@ namespace BALL
 		}
 
 		void ColorExtension3::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void ColorExtension3::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

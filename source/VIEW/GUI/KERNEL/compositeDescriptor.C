@@ -1,4 +1,4 @@
-// $Id: compositeDescriptor.C,v 1.3 2001/02/04 16:14:26 hekl Exp $
+// $I: compositeDescriptor.C,v 1.3 2001/02/04 16:14:26 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/compositeDescriptor.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		CompositeDescriptor::CompositeDescriptor()
+			throw()
 			:	name_("unkown"),
 				name_ptr_(&name_),
 				center_(0.0, 0.0, 0.0),
@@ -29,6 +30,7 @@ namespace BALL
 			
 		CompositeDescriptor::CompositeDescriptor
 			(const CompositeDescriptor& composite_descriptor, bool deep)
+			throw()
 			:	name_(composite_descriptor.name_),
 				center_(composite_descriptor.center_),
 				quaternion_(composite_descriptor.quaternion_),
@@ -63,6 +65,7 @@ namespace BALL
 		}
 
 		CompositeDescriptor::~CompositeDescriptor()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this << " of class " 
@@ -73,6 +76,7 @@ namespace BALL
 		}
 
 		void CompositeDescriptor::clear()
+			throw()
 		{
 			// clear all entities
 			HashMap<GLPrimitiveManager *, GLEntityDescriptor *>::Iterator entity_iterator;
@@ -95,6 +99,7 @@ namespace BALL
 		}
 			
 		void CompositeDescriptor::destroy()
+			throw()
 		{
 			clear();
 
@@ -150,6 +155,7 @@ namespace BALL
 			
 		void CompositeDescriptor::set
 			(CompositeDescriptor& composite_descriptor, bool deep)
+			throw()
 		{
 			destroy();
 
@@ -179,8 +185,9 @@ namespace BALL
 			}
 		}
 
-		CompositeDescriptor& CompositeDescriptor::operator =
+		const CompositeDescriptor& CompositeDescriptor::operator =
 			(CompositeDescriptor& composite_descriptor)
+			throw()
 		{
 			set(composite_descriptor);
 
@@ -189,17 +196,20 @@ namespace BALL
 
 		void CompositeDescriptor::get
 			(CompositeDescriptor& composite_descriptor, bool deep)
+			throw()
 		{
 			composite_descriptor.set(*this, deep);
 		}
 
 		void CompositeDescriptor::swap
 			(CompositeDescriptor&  /* composite_descriptor */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void CompositeDescriptor::update()
+			throw()
 		{
 			// update entities
 			EntityHashMap::Iterator entity_it;
@@ -220,6 +230,7 @@ namespace BALL
 		}
 
 		void CompositeDescriptor::compileEntity(GLEntityDescriptor* entity)
+			throw()
 		{
 			// first a primitiveManager and a object collector must be registered
 			if (primitive_manager_ == 0
@@ -368,6 +379,7 @@ namespace BALL
 		}
 
 		void CompositeDescriptor::drawEntity(bool dynamic)
+			throw()
 		{
 			GLEntityDescriptor* entity = 0;
 
@@ -445,6 +457,7 @@ namespace BALL
 		}
 
 		void CompositeDescriptor::drawDirect(bool dynamic, bool with_names)
+			throw()
 		{
 			if (primitive_manager_ == 0
 					|| object_collector_ == 0)
@@ -604,6 +617,7 @@ namespace BALL
 		}
 
 		bool CompositeDescriptor::isValid() const
+			throw()
 		{
 			list<CompositeDescriptor*>::const_iterator it = shallow_copies_.begin();
 
@@ -620,6 +634,7 @@ namespace BALL
 
 		void CompositeDescriptor::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 
@@ -654,11 +669,13 @@ namespace BALL
 		}
 
 		void CompositeDescriptor::read(istream &/* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void CompositeDescriptor::write(ostream &/*s*/) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

@@ -1,4 +1,4 @@
-// $Id: objectCreator.C,v 1.2 2001/01/26 01:37:33 amoll Exp $
+// $Id: objectCreator.C,v 1.3 2001/05/13 14:28:36 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/objectCreator.h>
 
@@ -11,22 +11,15 @@ namespace BALL
 	{
   
 		ObjectCreator::ObjectCreator()
+				throw()
 			:
 			init_(false),
-			pm_(),
-			address_array_((int)RANGE__ADDRESS, -1)
-		{
-		}
-
-		ObjectCreator::ObjectCreator(const ObjectCreator &objectCreator, bool /* deep */)
-			:
-			init_(false),
-			pm_(objectCreator.pm_),
-			address_array_(objectCreator.address_array_)
+			pm_()
 		{
 		}
 
 		ObjectCreator::~ObjectCreator()
+				throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -37,69 +30,28 @@ namespace BALL
 		}
 
 		void ObjectCreator::clear()
+				throw()
 		{
 		}
 
 		void ObjectCreator::destroy()
+				throw()
 		{
-			clear();
-		}
-
-		void ObjectCreator::setValue(int address, int value)
-    {
-			#ifdef BALL_VIEW_DEBUG
-					
-			if (address < 0 
-					|| address > RANGE__ADDRESS)
-			{
-				throw InvalidRange(__FILE__, __LINE__);
-			}
-				
-			#endif
-
-			address_array_[address] = value;
-		}
-		
-		int ObjectCreator::getValue(int address)
-    {
-			#ifdef BALL_VIEW_DEBUG
-					
-			if (address < 0 
-					|| address > RANGE__ADDRESS)
-			{
-				throw InvalidRange(__FILE__, __LINE__);
-			}
-				
-			#endif
-
-			return address_array_[address];
-		}
-
-		bool ObjectCreator::hasValue(int address, int value)
-    {
-			#ifdef BALL_VIEW_DEBUG
-					
-			if (address < 0 
-					|| address > RANGE__ADDRESS)
-			{
-				throw InvalidRange(__FILE__, __LINE__);
-			}
-				
-			#endif
-
-			return (address_array_[address] == value);
 		}
 
  	  void ObjectCreator::initPersistenceManager(TextPersistenceManager & /* pm */)
+				throw()
     {
     }
 
 	  Composite *ObjectCreator::convertObject(PersistentObject & /* po */)
+				throw()
     {
 			return (Composite *)0;
     }
 
 	  Composite *ObjectCreator::operator() (IOStreamSocket &iostream_socket)
+				throw()
     {
 			// initialize the PersistenceManager only one times
 			if (init_ == false)
@@ -117,28 +69,14 @@ namespace BALL
 			return convertObject(*po);
     }
 
-		bool ObjectCreator::isValid() const
-		{
-			return true;
-		}
-
-		void ObjectCreator::dump
-			(ostream& s, Size depth) const
-		{
-			BALL_DUMP_STREAM_PREFIX(s);
-			
-			BALL_DUMP_DEPTH(s, depth);
-			BALL_DUMP_HEADER(s, this, this);
-
-			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
 		void ObjectCreator::read(istream & /* s */)
+				throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void ObjectCreator::write(ostream & /* s */) const
+				throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

@@ -1,4 +1,4 @@
-// $Id: events.C,v 1.1 2000/09/23 13:28:38 hekl Exp $
+// $Id: events.C,v 1.2 2001/05/13 14:26:25 hekl Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/events.h>
 
@@ -10,6 +10,13 @@ namespace BALL
 	namespace VIEW
 	{
 
+	  Events::EventCombinationNotAllowed::EventCombinationNotAllowed
+		  (const char* file, int line)
+			throw()
+			: Exception::GeneralException(file, line, string("EventCombinationNotAllowed"), string("combination of events of different scene object is not allowed."))
+		{
+    }
+  
 		BALL_VIEW_IMPLEMENT_NOTIFY_FUNCTION_FOR_EVENT_CLASS(RotateSystem)
 		BALL_VIEW_IMPLEMENT_NOTIFY_FUNCTION_FOR_EVENT_CLASS(ZoomSystem)
 		BALL_VIEW_IMPLEMENT_NOTIFY_FUNCTION_FOR_EVENT_CLASS(TranslateSystem)
@@ -230,7 +237,7 @@ namespace BALL
 			 ShiftKeyPressed,
 			 MouseRightButtonReleasedShiftKeyPressedControlKeyPressed)
 
-
+			/*
 		Events::Events()
 			:	ShiftKeyPressed(this),
 				ShiftKeyPressedMouseMoved(this),
@@ -287,8 +294,10 @@ namespace BALL
 				scene_(0)
 		{
 		}
+			*/
 
 		Events::Events(Scene* scene)
+			throw()
 			:	ShiftKeyPressed(this),
 				ShiftKeyPressedMouseMoved(this),
 				ControlKeyPressed(this),
@@ -344,72 +353,33 @@ namespace BALL
 				scene_(scene)
 		{
 		}
-			
-		Events::Events(const Events&  /* events */, bool /* deep */)
+
+		/*			
+		Events::Events(const Events&  events, bool deep)
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
+	  */
 
 		Events::~Events()
+			throw()
 		{
-			clear();
+			destroy();
 		}
 
 		void Events::clear()
+			throw()
 		{
 		}
 			
 		void Events::destroy()
+			throw()
 		{
-			clear();
 		}
 			
-		void Events::set(const Events&  /* events */, bool /* deep */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);			
-		}
-
-		Events& Events::operator = (const Events& events)
-		{
-			set(events);
-
-			return *this;
-		}
-
-		void Events::get(Events& events, bool deep) const
-		{
-			events.set(*this, deep);
-		}
-
-		void Events::swap(Events&  /* events */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);			
-		}
-
-		bool Events::isValid() const
-		{
-			return true;
-		}
-
 		Scene* Events::getScene()
 		{
 			return scene_;
-		}
-
-		void Events::dump
-			(ostream& /* s */, Size /* depth */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);			
-		}
-
-		void Events::read(istream & /* s */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void Events::write(ostream & /* s */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

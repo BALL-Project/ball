@@ -1,4 +1,4 @@
-// $Id: glObjectCollector.C,v 1.1 2000/09/23 13:28:32 hekl Exp $
+// $Id: glObjectCollector.C,v 1.2 2001/05/13 14:28:36 hekl Exp $
 
 #include <BALL/VIEW/GUI/FUNCTOR/glObjectCollector.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		GLObjectCollector::GLObjectCollector()
+			throw()
 			:	UnaryProcessor<Composite>(),
 				composite_(0),
 				static_list_(),
@@ -24,22 +25,8 @@ namespace BALL
 		{
 		}
 
-		GLObjectCollector::GLObjectCollector
-			(const GLObjectCollector& GL_object_collector, bool /* deep */)
-			:	UnaryProcessor<Composite>(GL_object_collector),
-				composite_(0),
-				static_list_(),
-				static_always_front_list_(),
-				static_wireframe_list_(),
-				static_wireframe_always_front_list_(),
-				dynamic_list_(),
-				dynamic_always_front_list_(),
-				transparent_list_(),
-				transparent_always_front_list_()
-		{
-		}
-
 		GLObjectCollector::~GLObjectCollector()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -50,6 +37,7 @@ namespace BALL
 		}
 
 		void GLObjectCollector::clear()
+			throw()
 		{
 			static_list_.clear();
 			static_always_front_list_.clear();
@@ -62,37 +50,12 @@ namespace BALL
 		}
 
 		void GLObjectCollector::destroy()
-		{
-			composite_ = 0;
-
-			clear();
-		}
-
-		void GLObjectCollector::set
-			(const GLObjectCollector&  /* GL_object_collector */, bool /* deep */)
-		{
-			clear();
-		}
-
-		GLObjectCollector& GLObjectCollector::operator =
-			(const GLObjectCollector& GL_object_collector)
-		{
-			set(GL_object_collector);
-
-			return *this;
-		}
-
-		void GLObjectCollector::get
-			(GLObjectCollector& GL_object_collector, bool deep) const
-		{
-			GL_object_collector.set(*this, deep);
-		}
-
-		void GLObjectCollector::swap(GLObjectCollector&  /* GL_object_collector */)
+			throw()
 		{
 		}
 
 		bool GLObjectCollector::start()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG_PROCESSORS
 				cout << "start collect process ..." << endl;
@@ -104,6 +67,7 @@ namespace BALL
 		}
 				
 		bool GLObjectCollector::finish()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG_PROCESSORS
 				cerr << "finished collect process ..." << endl;
@@ -122,6 +86,7 @@ namespace BALL
 				
 		Processor::Result GLObjectCollector::operator()
 			(Composite& composite)
+			throw()
 		{
 			if (RTTI::isKindOf<GLObject>(composite) == false)
 			{
@@ -140,6 +105,11 @@ namespace BALL
 			}
 
 			GLObject* GL_object = (GLObject*)RTTI::castTo<GLObject>(composite);
+
+			if (GL_object == 0)
+			{
+				return Processor::CONTINUE;
+			}
 
 			#ifdef BALL_VIEW_DEBUG_PROCESSORS
 				geometric_object->dump(cout);
@@ -240,13 +210,9 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		bool GLObjectCollector::isValid() const
-		{
-			return true;
-		}
-
 		void GLObjectCollector::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -273,16 +239,6 @@ namespace BALL
 					 << transparent_list_.size() << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void GLObjectCollector::read(istream & /* s */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void GLObjectCollector::write(ostream & /* s */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

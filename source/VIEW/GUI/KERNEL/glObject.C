@@ -1,4 +1,4 @@
-// $Id: glObject.C,v 1.3 2001/02/04 16:14:26 hekl Exp $
+// $Id: glObject.C,v 1.4 2001/05/13 14:28:36 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glObject.h>
 
@@ -11,16 +11,19 @@ namespace BALL
 	{
 
 		GLObject::GLObject()
+			throw()
 			:	GL_primitive_manager_(NULL)
 		{
 		}
 
 		GLObject::GLObject(const GLObject& GL_object)
+			throw()
 			:	GL_primitive_manager_(GL_object.GL_primitive_manager_)
 		{
 		}
 
 		GLObject::~GLObject()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -31,20 +34,24 @@ namespace BALL
 		}
 
 		void GLObject::clear()
+			throw()
 		{
 			GL_primitive_manager_ = 0;
 		}
 
 		void GLObject::destroy()
+			throw()
 		{
 		}
 
 		void GLObject::set(const GLObject& GL_object)
+			throw()
 		{
 			GL_primitive_manager_ = GL_object.GL_primitive_manager_;
 		}
 
-		GLObject& GLObject::operator = (const GLObject& GL_object)
+		const GLObject& GLObject::operator = (const GLObject& GL_object)
+			throw()
 		{
 			set(GL_object);
 
@@ -52,11 +59,13 @@ namespace BALL
 		}
 
 		void GLObject::get(GLObject& GL_object) const
+			throw()
 		{
 			GL_object.set(*this);
 		}
 
 		void GLObject::swap(GLObject& GL_object)
+			throw()
 		{
 			GLPrimitiveManager *temp = GL_primitive_manager_;
 			GL_primitive_manager_ = GL_object.GL_primitive_manager_;
@@ -64,6 +73,7 @@ namespace BALL
 		}
 
 		bool GLObject::isValid() const
+			throw()
 		{
 			if (GL_primitive_manager_ != 0)
 			{
@@ -75,6 +85,7 @@ namespace BALL
 
 		void GLObject::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -88,26 +99,31 @@ namespace BALL
 		}
 				
 		void GLObject::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void GLObject::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		bool GLObject::draw(bool /* with_names */)
+			throw()
 		{
 			return true;
 		}
 
 		bool GLObject::drawUserDefined()
+			throw()
 		{
 			return true;
 		}
 
 		bool GLObject::extract()
+			throw()
 		{
 			return true;
 		}

@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.6 2001/01/26 01:37:35 amoll Exp $
+// $Id: control.C,v 1.7 2001/05/13 14:26:25 hekl Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <qpopupmenu.h>
@@ -14,6 +14,7 @@ namespace BALL
 
 Control::Control
   (QWidget* parent, const char* name)
+	throw()
 		:	QListView(parent, name),
 			ModularWidget(name),
 			cut_id_(-1),
@@ -57,9 +58,26 @@ Control::Control
 Control::~Control()
 	throw()
 {
+  #ifdef BALL_VIEW_DEBUG
+	  cout << "Destructing object " << (void *)this 
+				 << " of class " << RTTI::getName<Control>() << endl;
+  #endif 
+		
+	destroy();
+}
+
+void Control::clear()
+	throw()
+{
+}
+
+void Control::destroy()
+	throw()
+{
 }
 
 void Control::initializeWidget(MainControl& main_control)
+	throw()
 {
 	cut_id_ 
 		= main_control.insertMenuEntry
@@ -79,6 +97,7 @@ void Control::initializeWidget(MainControl& main_control)
 }
 
 void Control::finalizeWidget(MainControl& main_control)
+	throw()
 {
 	main_control.removeMenuEntry(MainControl::EDIT, "&Cut", this, SLOT(cut()), CTRL+Key_C);
 	main_control.removeMenuEntry(MainControl::EDIT, "C&opy", this, SLOT(copy()), CTRL+Key_O);
@@ -87,11 +106,13 @@ void Control::finalizeWidget(MainControl& main_control)
 }
 
 void Control::checkMenu(MainControl& /* main_control */)
+	throw()
 {
 }
 
 bool Control::addComposite
   (Composite* composite, QString* own_name)
+	throw()
 {
 	if (composite == 0)
 	{
@@ -119,19 +140,22 @@ bool Control::addComposite
 }
 
 bool Control::removeComposite(Composite* composite)
+	throw()
 {
 	QListViewItem* item = findListViewItem_(composite);
 	if (item != 0)
 	{
 		delete item;
 		updateContents();
+		return true;
 	}
 
-	return true;
+	return false;
 }
 
 bool Control::updateComposite
   (Composite* composite)
+	throw()
 {
 	if (composite == 0)
 	{
@@ -148,6 +172,7 @@ bool Control::updateComposite
 }
 
 void Control::onNotify(Message *message)
+	throw()
 {
 	// react accordingly to the given message
 	if (reactToMessages_(message))
@@ -159,6 +184,7 @@ void Control::onNotify(Message *message)
 }
 
 void Control::buildContextMenu(Composite* composite, QListViewItem* item)
+	throw()
 {
 	if (RTTI::isKindOf<GeometricObject>(*composite))
 	{
@@ -170,6 +196,7 @@ void Control::buildContextMenu(Composite* composite, QListViewItem* item)
 void Control::insertContextMenuEntry
   (const String& name, const QObject* receiver, 
 	 const char* slot, int accel, int entry_ID)
+	throw()
 {
 	context_menu_.insertItem(name.c_str(), receiver, slot, accel, entry_ID);
 }
@@ -203,11 +230,13 @@ void Control::sentSelection()
 }
 
 Information& Control::getInformationVisitor_()
+	throw()
 {
 	return information_;
 }
 
 void Control::recurseGeneration_(QListViewItem* item, Composite* composite)
+	throw()
 {
 	// we iterate over all children and recurse
 	Composite::ChildCompositeIterator it = composite->beginChildComposite();
@@ -218,6 +247,7 @@ void Control::recurseGeneration_(QListViewItem* item, Composite* composite)
 }
 
 bool Control::recurseUpdate_(QListViewItem* item, Composite* composite)
+	throw()
 {
 	bool tree_updated = false;
 
@@ -232,6 +262,7 @@ bool Control::recurseUpdate_(QListViewItem* item, Composite* composite)
 }
 
 void Control::filterSelection_(Filter& filter)
+	throw()
 {
 	selected_.clear();
 
@@ -285,6 +316,7 @@ void Control::filterSelection_(Filter& filter)
 }
 
 bool Control::reactToMessages_(Message* message)
+	throw()
 {
 	bool update = false;
 
@@ -314,6 +346,7 @@ bool Control::reactToMessages_(Message* message)
 }
 
 QListViewItem* Control::getRoot_(QListViewItem* item)
+	throw()
 {
 	QListViewItem* parent = item;
 
@@ -326,6 +359,7 @@ QListViewItem* Control::getRoot_(QListViewItem* item)
 }
 
 QString Control::getName_(QListViewItem* item)
+	throw()
 {
 	if (item == 0)
 	{
@@ -336,11 +370,13 @@ QString Control::getName_(QListViewItem* item)
 }
 
 QString Control::getRootName_(QListViewItem* item)
+	throw()
 {
 	return getName_(getRoot_(item));
 }
 
 QString Control::getTypeName_(QListViewItem* item)
+	throw()
 {
 	if (item == 0)
 	{
@@ -351,11 +387,13 @@ QString Control::getTypeName_(QListViewItem* item)
 }
 
 QString Control::getRootTypeName_(QListViewItem* item)
+	throw()
 {
 	return getTypeName_(getRoot_(item));
 }
 
 Composite* Control::getCompositeAddress_(QListViewItem* item)
+	throw()
 {
 	if (item == 0)
 	{
@@ -377,6 +415,7 @@ Composite* Control::getCompositeAddress_(QListViewItem* item)
 
 void Control::generateListViewItem_
   (QListViewItem* item, Composite* composite, QString* default_name)
+	throw()
 {
 	if (composite == 0)
 	{
@@ -435,6 +474,7 @@ void Control::generateListViewItem_
 
 bool Control::updateListViewItem_
   (QListViewItem* item, Composite* composite, QString* /* default_name */)
+	throw()
 {
 	// was the tree updated ?
 	bool tree_updated = false;
@@ -462,6 +502,7 @@ bool Control::updateListViewItem_
 }
 
 QListViewItem* Control::findListViewItem_(Composite* composite)
+	throw()
 {
 	QString address;
 	address.sprintf("%ld", (((unsigned long)((void *)composite))));
@@ -483,8 +524,9 @@ QListViewItem* Control::findListViewItem_(Composite* composite)
 
 void Control::cut()
 {
-	const List<Composite*> *selection = &getSelection();
-	if (selection->size() == 0)
+	const List<Composite*> selection = getSelection();
+
+	if (selection.size() == 0)
 	{
 		return;
 	}
@@ -493,7 +535,7 @@ void Control::cut()
 
 	// notify the main window
 	WindowMessage *window_message = new WindowMessage;
-	message.sprintf("cutting %d objects ...", selection->size());
+	message.sprintf("cutting %d objects ...", selection.size());
 	window_message->setStatusBar(message.ascii());
 	window_message->setDeletable(true);
 	notify_(window_message);
@@ -512,9 +554,12 @@ void Control::cut()
 
 	// remove all system composites from the tree and from the scene
 	// but do not delete them from memory
-	List<Composite*>::ConstIterator list_it = selection->begin();	
-	for (; list_it != selection->end(); ++list_it)
+	List<Composite*>::ConstIterator list_it = selection.begin();	
+	for (; list_it != selection.end(); ++list_it)
 	{
+		if (*list_it == 0)
+			continue;
+
 		// only if selected composite equals root => remove composite from tree and mainControl
 		if (*list_it == &((*list_it)->getRoot()))
 		{
@@ -549,8 +594,8 @@ void Control::cut()
 
 void Control::copy()
 {
-	const List<Composite*> *selection = &getSelection();
-	if (selection->size() == 0)
+	const List<Composite*> selection = getSelection();
+	if (selection.size() == 0)
 	{
 		return;
 	}
@@ -559,7 +604,7 @@ void Control::copy()
 
 	// notify the main window
 	WindowMessage *window_message = new WindowMessage;
-	message.sprintf("copying %d objects ...", selection->size());
+	message.sprintf("copying %d objects ...", selection.size());
 	window_message->setStatusBar(message.ascii());
 	window_message->setDeletable(true);
 	notify_(window_message);
@@ -577,8 +622,8 @@ void Control::copy()
 	}
 
 	// copy the selected composites into the copy_list_
-	List<Composite*>::ConstIterator list_it = selection->begin();	
-	for (; list_it != selection->end(); ++list_it)
+	List<Composite*>::ConstIterator list_it = selection.begin();	
+	for (; list_it != selection.end(); ++list_it)
 	{
 		// insert deep clone of the composite into the cut list
 		copy_list_.push_back((Composite*)(*list_it)->create());

@@ -14,6 +14,7 @@ namespace BALL
 	{
 
 		ServerPreferences::ServerPreferences(QWidget* parent, const char* name)
+			throw()
 			: QWidget(parent, name, 0)
 		{
 			QLabel *qtarch_Label_1 = new QLabel(this, "Label_1");
@@ -82,10 +83,28 @@ namespace BALL
 		}
 
 		ServerPreferences::~ServerPreferences()
+			throw()
 		{
+			#ifdef BALL_VIEW_DEBUG
+				cout << "Destructing object " << (void *)this 
+					<< " of class " << RTTI::getName<ServerPreferences>() << endl;
+			#endif 
+
+			destroy();
 		}
 		
+		void ServerPreferences::clear()
+			throw()
+		{
+		}
+
+		void ServerPreferences::destroy()
+			throw()
+		{
+		}
+
 		void ServerPreferences::writePreferences(INIFile& inifile)
+			throw()
 		{
 			// retrieve the network settings from the dialog
 			bool server_status = server_status_->isChecked();
@@ -102,6 +121,7 @@ namespace BALL
 		}
 
 		void ServerPreferences::fetchPreferences(INIFile& inifile)
+			throw()
 		{
 			bool server_status = true;
 			int port = VIEW_DEFAULT_PORT;
@@ -125,11 +145,13 @@ namespace BALL
 		}
 		
 		int ServerPreferences::getPort()
+			throw()
 		{
 			return String(port_->text()).toInt();
 		}
 		
 		bool ServerPreferences::getServerStatus()
+			throw()
 		{
 			return server_status_->isChecked();
 		}

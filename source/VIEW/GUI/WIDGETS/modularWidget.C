@@ -1,4 +1,4 @@
-// $Id: modularWidget.C,v 1.4 2001/02/11 13:06:32 hekl Exp $
+// $Id: modularWidget.C,v 1.5 2001/05/13 14:26:25 hekl Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 
@@ -6,93 +6,116 @@
 
 using namespace std;
 
-ModularWidget::ModularWidget(const char* name)
-	: Embeddable(),
-		ConnectionObject()
+namespace BALL
 {
-	if (name != 0)
+  namespace VIEW
 	{
-		setIdentifier(name);
-	}
-}
 
-ModularWidget::ModularWidget(const ModularWidget& widget)
-	: Embeddable(widget),
-		ConnectionObject(widget)
-{
-}
-
-ModularWidget::~ModularWidget()
-	throw()
-{
-	cerr << "destructing ModularWidget at " << this << endl;
-
-	// do not function because the mainControl is already destroyed
-	// at this time => moved to maincontrol
-	/* 
-	QObject* object = dynamic_cast<QObject*>(this);
-	if (object != 0)
-	{
-		MainControl* mc = MainControl::getMainControl(object);
-		if (mc != 0)
+		ModularWidget::ModularWidget(const char* name)
+			throw()
+			: Embeddable(),
+				ConnectionObject()
 		{
-			writePreferences(mc->getINIFile());
-			finalizePreferencesTab(*(mc->getPreferences()));
-			finalizeWidget(*mc);
-			mc->removeModularWidget(this);
+			if (name != 0)
+			{
+				setIdentifier(name);
+			}
 		}
-	}
-
-	*/
-}
-
-void ModularWidget::registerWidget(ModularWidget* mwidget)
-{
-	cerr << "registering ModularWidget at " << mwidget << endl;
-	QObject* object = dynamic_cast<QObject*>(mwidget);
-	if (object != 0)
-	{
-		MainControl* mc = MainControl::getMainControl(object);
-		if (mc != 0)
+		
+		ModularWidget::ModularWidget(const ModularWidget& widget)
+			throw()
+			: Embeddable(widget),
+				ConnectionObject(widget)
 		{
-			mc->addModularWidget(mwidget);
-			cerr << "ModularWidget::registered: " <<mwidget << endl;
 		}
-		else 
+		
+		ModularWidget::~ModularWidget()
+			throw()
 		{
-			cerr << "ModularWidget::ModularWidget: widget is not in a MainControl object!" << endl;
+      #ifdef BALL_VIEW_DEBUG
+			  cout << "Destructing object " << (void *)this 
+						 << " of class " << RTTI::getName<ModularWidget>() << endl;
+      #endif 
+				
+			destroy();
 		}
-	}
-}
 
-void ModularWidget::initializeWidget(MainControl& /* main_control */)
-{
-}
+		void ModularWidget::clear()
+			throw()
+		{
+		}
 
-void ModularWidget::finalizeWidget(MainControl& /* main_control */)
-{
-}
+		void ModularWidget::destroy()
+			throw()
+		{
+		}
 
-void ModularWidget::checkMenu(MainControl& /* main_control */)
-{
-}
+		void ModularWidget::registerWidget(ModularWidget* mwidget)
+			throw()
+		{
+      #ifdef BALL_VIEW_DEBUG
+  			cerr << "registering ModularWidget at " << mwidget << endl;
+			#endif
 
-void ModularWidget::initializePreferencesTab(Preferences & /* preferences */)
-{
-}
+			QObject* object = dynamic_cast<QObject*>(mwidget);
+			if (object != 0)
+			{
+				MainControl* mc = MainControl::getMainControl(object);
+				if (mc != 0)
+				{
+					mc->addModularWidget(mwidget);
 
-void ModularWidget::finalizePreferencesTab(Preferences & /* preferences */)
-{
-}
+          #ifdef BALL_VIEW_DEBUG
+						cerr << "ModularWidget::registered: " <<mwidget << endl;
+					#endif
+				}
+				else 
+				{
+					cerr << "ModularWidget::ModularWidget: widget is not in a MainControl object!" << endl;
+				}
+			}
+		}
 
-void ModularWidget::applyPreferences(Preferences & /* preferences */)
-{
-}
+		void ModularWidget::initializeWidget(MainControl& /* main_control */)
+			throw()
+		{
+		}
+		
+		void ModularWidget::finalizeWidget(MainControl& /* main_control */)
+			throw()
+		{
+		}
+		
+		void ModularWidget::checkMenu(MainControl& /* main_control */)
+			throw()
+		{
+		}
+		
+		void ModularWidget::initializePreferencesTab(Preferences & /* preferences */)
+			throw()
+		{
+		}
+		
+		void ModularWidget::finalizePreferencesTab(Preferences & /* preferences */)
+			throw()
+		{
+		}
+		
+		void ModularWidget::applyPreferences(Preferences & /* preferences */)
+			throw()
+		{
+		}
+		
+		void ModularWidget::fetchPreferences(INIFile & /* inifile */)
+			throw()
+		{
+		}
+		
+		void ModularWidget::writePreferences(INIFile & /* inifile */)
+			throw()
+		{
+		}
 
-void ModularWidget::fetchPreferences(INIFile & /* inifile */)
-{
-}
+	} // namespace VIEW
 
-void ModularWidget::writePreferences(INIFile & /* inifile */)
-{
-}
+} // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: normal.C,v 1.5 2001/02/04 16:14:27 hekl Exp $
+// $Id: normal.C,v 1.6 2001/05/13 14:28:38 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/normal.h>
 
@@ -11,16 +11,19 @@ namespace BALL
 	{
 
 		NormalVector::NormalVector()
+			throw()
 			:	normal_(1.0, 0.0, 0.0)
 		{
 		}
 
 		NormalVector::NormalVector(const NormalVector& n)
+			throw()
 			:	normal_(n.normal_)
 		{
 		}
 
 		NormalVector::~NormalVector()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -31,20 +34,24 @@ namespace BALL
 		}
 
 		void NormalVector::clear()
+			throw()
 		{
 			normal_.set(1.0, 0.0, 0.0);
 		}
 
 		void NormalVector::destroy()
+			throw()
 		{
 		}
 
 		void NormalVector::set(const NormalVector& n)
+			throw()
 		{
 			normal_ = n.normal_;
 		}
 
-		NormalVector& NormalVector::operator = (const NormalVector& n)
+		const NormalVector& NormalVector::operator = (const NormalVector& n)
+			throw()
 		{
 			set(n);
 
@@ -52,22 +59,26 @@ namespace BALL
 		}
 
 		void NormalVector::get(NormalVector& n) const
+			throw()
 		{
 			n.set(*this);
 		}
 
 		void NormalVector::swap(NormalVector& n)
+			throw()
 		{
 			normal_.swap(n.normal_);
 		}
 
 		bool NormalVector::isValid() const
+			throw()
 		{
 			return normal_.isValid();
 		}
 
 		void NormalVector::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -83,6 +94,7 @@ namespace BALL
 		void 
 		NormalVector::read
 			(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
@@ -90,6 +102,7 @@ namespace BALL
 		void 
 		NormalVector::write
 			(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

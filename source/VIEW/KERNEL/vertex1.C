@@ -1,4 +1,4 @@
-// $Id: vertex1.C,v 1.9 2001/02/04 16:14:27 hekl Exp $
+// $Id: vertex1.C,v 1.10 2001/05/13 14:28:38 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/vertex1.h>
 
@@ -11,18 +11,21 @@ namespace BALL
 	{
 
 		Vertex::Vertex()
+			throw()
 			:	vertex1_(),
 				vertex1_ptr_(&vertex1_)
 		{
 		}
 
 		Vertex::Vertex(const Vertex& v)
+			throw()
 			:	vertex1_(v.vertex1_),
 				vertex1_ptr_(v.vertex1_ptr_)
 		{
 		}
 
 		Vertex::~Vertex()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<Vertex>() << endl;
@@ -32,22 +35,26 @@ namespace BALL
 		}
 
 		void Vertex::clear()
+			throw()
 		{
 			vertex1_.set(0.0);
 			vertex1_ptr_ = &vertex1_;
 		}
 
 		void Vertex::destroy()
+			throw()
 		{
 		}
 
 		void Vertex::set(const Vertex& v)
+			throw()
 		{
 			vertex1_.set(v.vertex1_);
 			vertex1_ptr_ = v.vertex1_ptr_;
 		}
 
-		Vertex& Vertex::operator = (const Vertex& v)
+		const Vertex& Vertex::operator = (const Vertex& v)
+			throw()
 		{
 			set(v);
 
@@ -55,11 +62,13 @@ namespace BALL
 		}
 
 		void Vertex::get(Vertex& v) const
+			throw()
 		{
 			v.set(*this);
 		}
 
 		void Vertex::swap(Vertex& v)
+			throw()
 		{
 			Vector3 *tmp_vector = vertex1_ptr_;
 
@@ -87,11 +96,13 @@ namespace BALL
 		}
 
 		bool Vertex::isValid() const
+			throw()
 		{
 			return vertex1_.isValid();
 		}
 
 		void Vertex::dump(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -108,11 +119,13 @@ namespace BALL
 		}
 
 		void Vertex::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void Vertex::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

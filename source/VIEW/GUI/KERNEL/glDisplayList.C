@@ -1,4 +1,4 @@
-// $Id: glDisplayList.C,v 1.3 2001/02/11 13:06:31 hekl Exp $
+// $Id: glDisplayList.C,v 1.4 2001/05/13 14:28:36 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glDisplayList.h>
 #include <BALL/COMMON/exception.h>
@@ -16,27 +16,32 @@ namespace BALL
 
 
 		GLDisplayList::NestedDisplayList::NestedDisplayList(const char* file, int line)
+			throw()
 			:	Exception::GeneralException(file, line, string("NestedDisplayList"), string("display list definition inside another is not allowed."))
 		{
 		}
 
 		GLDisplayList::NoDisplayListAvailable::NoDisplayListAvailable(const char* file, int line)
+			throw()
 			:	Exception::GeneralException(file, line, string("NoDisplayListAvailable"), string("memory allocation for display list failed."))
 		{
 		}
 
 		GLDisplayList::DisplayListRedeclaration::DisplayListRedeclaration(const char* file, int line)
+			throw()
 			:	Exception::GeneralException(file, line, string("DisplayListRedeclaration"), string("display list already defined."))
 		{
 		}
 
 		GLDisplayList::GLDisplayList()
+			throw()
 			:	compile_(true),
 				GL_list_(0)
 		{
 		}
 
 		GLDisplayList::~GLDisplayList()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -47,11 +52,13 @@ namespace BALL
 		}
 
 		void GLDisplayList::clear()
+			throw()
 		{
 			compile_ = true;
 		}
 
 		void GLDisplayList::destroy()
+			throw()
 		{
 			if (GL_list_ != 0)
 			{
@@ -62,6 +69,7 @@ namespace BALL
 		}
 
 		void GLDisplayList::startDefinition()
+			throw(NestedDisplayList, NoDisplayListAvailable, DisplayListRedeclaration)
 		{
 			if (GL_list_ == 0)
 			{
@@ -98,11 +106,13 @@ namespace BALL
 		}
 
 		void GLDisplayList::endDefinition()
+			throw()
 		{
 			glEndList();
 		}
 
 		void GLDisplayList::draw()
+			throw()
 		{
 			if (GL_list_ != 0)
 			{
@@ -111,12 +121,14 @@ namespace BALL
 		}
 
 		bool GLDisplayList::isValid() const
+			throw()
 		{
 			return (GL_list_ != 0);
 		}
 
 		void GLDisplayList::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -138,11 +150,13 @@ namespace BALL
 		}
 
 		void GLDisplayList::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 		 
 		void GLDisplayList::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

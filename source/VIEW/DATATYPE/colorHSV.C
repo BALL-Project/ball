@@ -1,4 +1,4 @@
-// $Id: colorHSV.C,v 1.1 2001/02/04 16:14:25 hekl Exp $
+// $Id: colorHSV.C,v 1.2 2001/05/13 14:28:34 hekl Exp $
 
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		ColorHSV::ColorHSV()
+			throw()
 			:	hue_(),
 				saturation_(),
 				value_()
@@ -18,6 +19,7 @@ namespace BALL
 		}
 
 		ColorHSV::ColorHSV(const ColorHSV& color_HSV)
+			throw()
 			:	hue_(color_HSV.hue_),
 				saturation_(color_HSV.saturation_),
 				value_(color_HSV.value_)
@@ -25,16 +27,19 @@ namespace BALL
 		}
 
 		ColorHSV::ColorHSV(const ColorRGBA& color)
+			throw()
 		{
 			calculateHSV_(color.red_, color.green_, color.blue_);
 		}
 
 		ColorHSV::ColorHSV(const char* char_ptr)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToHSV_(String(char_ptr));
 		}
 
 		ColorHSV::ColorHSV(const String& s)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToHSV_(s);
 		}
@@ -43,6 +48,7 @@ namespace BALL
 			(const ColorUnitHue& hue,
 			 const ColorUnit& saturation,
 			 const ColorUnit& value)
+			throw()
 			:	hue_(hue),
 				saturation_(saturation),
 				value_(value)
@@ -50,6 +56,7 @@ namespace BALL
 		}
 
 		ColorHSV::~ColorHSV()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 			cout << "Destructing object " << (void *)this << " of class " 
@@ -60,6 +67,7 @@ namespace BALL
 		}
 
 		void ColorHSV::clear()
+			throw()
 		{
 			hue_ = (float)0;
 			saturation_ = (float)0;
@@ -67,11 +75,13 @@ namespace BALL
 		}
 
 		void ColorHSV::destroy()
+			throw()
 		{
 			clear();
 		}
 
 		ColorHSV::operator String() const
+			throw()
 		{
 			char temp[10];
 
@@ -85,13 +95,15 @@ namespace BALL
 
 		void ColorHSV::set
 			(const ColorHSV& color_HSV)
+			throw()
 		{
 			hue_ = color_HSV.hue_;
 			saturation_ = color_HSV.saturation_;
 			value_ = color_HSV.value_;
 		}
 
-		ColorHSV& ColorHSV::operator = (const ColorHSV& color_HSV)
+		const ColorHSV& ColorHSV::operator = (const ColorHSV& color_HSV)
+			throw()
 		{
 			set(color_HSV);
 
@@ -99,16 +111,19 @@ namespace BALL
 		}
 
 		void ColorHSV::get(ColorHSV& color_HSV) const
+			throw()
 		{
 			color_HSV.set(*this);
 		}
 
 		void ColorHSV::set(const ColorRGBA& color)
+			throw()
 		{
 			calculateHSV_(color.red_, color.green_, color.blue_);
 		}
 
-		ColorHSV& ColorHSV::operator = (const ColorRGBA& color)
+		const ColorHSV& ColorHSV::operator = (const ColorRGBA& color)
+			throw()
 		{
 			set(color);
 
@@ -116,16 +131,19 @@ namespace BALL
 		}
 
 		void ColorHSV::get(ColorRGBA& color) const
+			throw()
 		{
 		 color.set(*this);
 		}
 
 		void ColorHSV::set(const char* char_ptr)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToHSV_(String(char_ptr));
 		}
 
-		ColorHSV& ColorHSV::operator = (const char* char_ptr)
+		const ColorHSV& ColorHSV::operator = (const char* char_ptr)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(char_ptr);
 
@@ -133,6 +151,7 @@ namespace BALL
 		}
 
 		void ColorHSV::get(char* char_ptr) const
+			throw()
 		{
 			sprintf(char_ptr, "%x%x%x",
 							(short)hue_, (unsigned char)saturation_,
@@ -140,11 +159,13 @@ namespace BALL
 		}
 
 		void ColorHSV::set(const String& s)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToHSV_(s);
 		}
 
-		ColorHSV& ColorHSV::operator = (const String& s)
+		const ColorHSV& ColorHSV::operator = (const String& s)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(s);
 
@@ -152,6 +173,7 @@ namespace BALL
 		}
 
 		void ColorHSV::get(String& s) const
+			throw()
 		{
 			char temp[10];
 
@@ -163,6 +185,7 @@ namespace BALL
 		}
 
 		void ColorHSV::swap(ColorHSV& color_HSV)
+			throw()
 		{
 			hue_.swap(color_HSV.hue_);
 			saturation_.swap(color_HSV.saturation_);
@@ -171,6 +194,7 @@ namespace BALL
 
 		void ColorHSV::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -188,11 +212,13 @@ namespace BALL
 		}
 
 		void ColorHSV::read(istream& /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void ColorHSV::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
@@ -222,6 +248,7 @@ namespace BALL
 			(const ColorUnit red,
 			 const ColorUnit green,
 			 const ColorUnit blue)
+			throw()
 		{
 			int tmp_red = (int)red;
 			int tmp_green = (int)green;
@@ -300,6 +327,7 @@ namespace BALL
 
 		void ColorHSV::calculateRGB_
 			(ColorUnit& red, ColorUnit& green, ColorUnit& blue) const
+			throw()
 		{
 			red = green = blue = value_; 
 
@@ -367,6 +395,7 @@ namespace BALL
 		}
 
 		void ColorHSV::stringToHSV_(const String& s)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			int length = (int)s.size();
 

@@ -1,7 +1,6 @@
-// $Id: colorUnitHue.C,v 1.5 2001/02/04 16:14:26 hekl Exp $
+// $Id: colorUnitHue.C,v 1.6 2001/05/13 14:28:35 hekl Exp $
 
 #include <BALL/VIEW/DATATYPE/colorUnitHue.h>
-#include <BALL/VIEW/DATATYPE/colorUnit.h>
 #include <stdio.h>
 
 using namespace std;
@@ -13,153 +12,131 @@ namespace BALL
 	{
 
 		ColorUnitHue::ColorUnitHue()
+			throw()
 			:	value_((float)0)
 		{
 		}
 
 		ColorUnitHue::ColorUnitHue
 			(const ColorUnitHue& color_h_unit)
+			throw()
 			:	value_(color_h_unit.value_)
 		{
 		}
 
 		ColorUnitHue::ColorUnitHue(const char* char_ptr)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(char_ptr);
 		}
 
 		ColorUnitHue::ColorUnitHue(const String& is)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(is.c_str());
 		}
 
 		ColorUnitHue::ColorUnitHue(const short s)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-
 			if ((s < 0) || (s > 360))
 			{
 				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
-				
-			#endif
 
 			value_ = (float)s / (float)360;
 		}
 
 		ColorUnitHue::ColorUnitHue(const unsigned short s)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if (s > 360)
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
- 				
-			#endif
 
 			value_ = (float)s / (float)360;
 		}
 
 		ColorUnitHue::ColorUnitHue(const int i)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if ((i < 0) || (i > 360))
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
- 				
-			#endif
 
 			value_ = (float)i / (float)360;
 		}
 
 		ColorUnitHue::ColorUnitHue(const unsigned int i)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if (i > 360)
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
- 				
-			#endif
 
 			value_ = (float)i / (float)360;
 		}
 
 		ColorUnitHue::ColorUnitHue(const long l)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if ((l < 0) || (l > 360))
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
- 				
-			#endif
 
 			value_ = (float)l / (float)360;
 		}
 
 		ColorUnitHue::ColorUnitHue(const unsigned long l)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if (l > 360)
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
-				
-			#endif
 
 			value_ = (float)l / (float)360;
 		}
 
 		ColorUnitHue::ColorUnitHue(const float f)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
-      if ((f < 0.0) || (s > 1.0))
+      if ((f < 0.0) || (f > 1.0))
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
-				
-			#endif
 
 			value_ = f;
 		}
 
 		ColorUnitHue::ColorUnitHue(const double d)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if ((d < 0.0) || (d > 1.0))
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
- 				
-			#endif
 
 			value_ = (float)d;
 		}
 
 		ColorUnitHue::ColorUnitHue(const long double ld)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if ((ld < 0.0) || (ld > 1.0))
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
  				
-			#endif
-
 			value_ = (float)ld;
 		}
 
 		ColorUnitHue::~ColorUnitHue()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this << " of class " << RTTI::getName<ColHUnit>() << endl;
@@ -169,22 +146,26 @@ namespace BALL
 		}
 
 		void ColorUnitHue::clear()
+			throw()
 		{
 			value_ = (float)0;
 		}
 
 		void ColorUnitHue::destroy()
+			throw()
 		{
 		}
 
 		void ColorUnitHue::set
 			(const ColorUnitHue& color_h_unit)
+			throw()
 		{
 			value_ = color_h_unit.value_;
 		}
 
-		ColorUnitHue& ColorUnitHue::operator =
+		const ColorUnitHue& ColorUnitHue::operator =
 			(const ColorUnitHue& color_h_unit)
+			throw()
 		{
 			set(color_h_unit);
 
@@ -193,16 +174,19 @@ namespace BALL
 
 		void ColorUnitHue::get
 			(ColorUnitHue& color_h_unit) const
+			throw()
 		{
 			color_h_unit.set(*this);
 		}
 
 		void ColorUnitHue::set(const char* char_ptr)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(char_ptr);
 		}
 
-		ColorUnitHue& ColorUnitHue::operator = (const char* char_ptr)
+		const ColorUnitHue& ColorUnitHue::operator = (const char* char_ptr)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(char_ptr);
 
@@ -210,16 +194,19 @@ namespace BALL
 		}
 			
 		void ColorUnitHue::get(char* char_ptr) const
+			throw()
 		{
 			sprintf(char_ptr, "%x", (unsigned char)(value_ * 255.0));
 		}
 
 		void ColorUnitHue::set(const String& s)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			value_ = hexToFloat_(s.c_str());
 		}
 
-		ColorUnitHue& ColorUnitHue::operator = (const String& s)
+		const ColorUnitHue& ColorUnitHue::operator = (const String& s)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(s);
 
@@ -227,6 +214,7 @@ namespace BALL
 		}
 			
 		void ColorUnitHue::get(String& s) const
+			throw()
 		{
 			char temp[6];
 
@@ -236,21 +224,19 @@ namespace BALL
 		}
 
 		void ColorUnitHue::set(const short s)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if ((s < 0) || (s > 360))
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
- 				
-			#endif
 
 			value_ = (float)s / (float)360;
 		}
 
-		ColorUnitHue& ColorUnitHue::operator =
+		const ColorUnitHue& ColorUnitHue::operator =
 			(const short s)
+			throw(Exception::InvalidRange)
 		{
 			set(s);
 
@@ -258,25 +244,24 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(short& s) const
+			throw()
 		{
 			s = (short)(value_ * 360.0);
 		}
 
 		void ColorUnitHue::set(const unsigned short s)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if (s > 360)
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
- 				
-			#endif
 
 			value_ = (float)s / (float)360;
 		}
 
-		ColorUnitHue& ColorUnitHue::operator = (const unsigned short s)
+		const ColorUnitHue& ColorUnitHue::operator = (const unsigned short s)
+			throw(Exception::InvalidRange)
 		{
 			set(s);
 
@@ -284,25 +269,24 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(unsigned short& s) const
+			throw()
 		{
 			s = (unsigned short)(value_ * 360.0);
 		}
 
 		void ColorUnitHue::set(const int i)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if ((i < 0) || (i > 360))
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
- 				
-			#endif
 
 			value_ = (float)i / (float)360;
 		}
 
-		ColorUnitHue& ColorUnitHue::operator = (const int i)
+		const ColorUnitHue& ColorUnitHue::operator = (const int i)
+			throw(Exception::InvalidRange)
 		{
 			set(i);
 
@@ -310,25 +294,24 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(int& i) const
+			throw()
 		{
 			i = (int)(value_ * 360.0);
 		}
 
 		void ColorUnitHue::set(const unsigned int i)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if (i > 360)
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
- 				
-			#endif
 
 			value_ = (float)i / (float)360;
 		}
 
-		ColorUnitHue& ColorUnitHue::operator = (const unsigned int i)
+		const ColorUnitHue& ColorUnitHue::operator = (const unsigned int i)
+			throw(Exception::InvalidRange)
 		{
 			set(i);
 
@@ -336,25 +319,24 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(unsigned int& i) const
+			throw()
 		{
 			i = (unsigned int)(value_ * 360.0);
 		}
 
 		void ColorUnitHue::set(const long l)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if ((l < 0) || (l > 360))
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
- 				
-			#endif
 
 			value_ = (float)l / (float)360;
 		}
 
-		ColorUnitHue& ColorUnitHue::operator = (const long l)
+		const ColorUnitHue& ColorUnitHue::operator = (const long l)
+			throw(Exception::InvalidRange)
 		{
 			set(l);
 
@@ -362,25 +344,24 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(long& l) const
+			throw()
 		{
 			l = (long)(value_ * 360.0);
 		}
 
 		void ColorUnitHue::set(const unsigned long l)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if (l > 360)
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
- 				
-			#endif
 
 			value_ = (float)l / (float)360;
 		}
 
-		ColorUnitHue& ColorUnitHue::operator = (const unsigned long l)
+		const ColorUnitHue& ColorUnitHue::operator = (const unsigned long l)
+			throw(Exception::InvalidRange)
 		{
 			set(l);
 
@@ -388,25 +369,24 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(unsigned long& l) const
+			throw()
 		{
 			l = (unsigned long)(value_ * 360.0);
 		}
 
 		void ColorUnitHue::set(const float f)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if ((f < 0.0) || (f > 1.0))
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
- 				
-			#endif
 
 			value_ = f;
 		}
 
-		ColorUnitHue& ColorUnitHue::operator = (const float f)
+		const ColorUnitHue& ColorUnitHue::operator = (const float f)
+			throw(Exception::InvalidRange)
 		{
 			set(f);
 
@@ -414,25 +394,24 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(float& f) const
+			throw()
 		{
 			f = (float)(value_ * 360.0);
 		}
 
 		void ColorUnitHue::set(const double d)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if ((d < 0.0) || (d > 1.0))
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
- 				
-			#endif
 
 			value_ = (float)d;
 		}
 
-		ColorUnitHue& ColorUnitHue::operator = (const double d)
+		const ColorUnitHue& ColorUnitHue::operator = (const double d)
+			throw(Exception::InvalidRange)
 		{
 			set(d);
 
@@ -440,25 +419,24 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(double& d) const
+			throw()
 		{
 			d = (double)(value_ * 360.0);
 		}
 
 		void ColorUnitHue::set(const long double ld)
+			throw(Exception::InvalidRange)
 		{
-			#ifdef BALL_VIEW_DEBUG
-					
       if ((ld < 0.0) || (ld > 1.0))
       {
         throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
 			}
- 				
-			#endif
 
 			value_ = (float)ld;
 		}
 
-		ColorUnitHue& ColorUnitHue::operator = (const long double ld)
+		const ColorUnitHue& ColorUnitHue::operator = (const long double ld)
+			throw(Exception::InvalidRange)
 		{
 			set(ld);
 
@@ -466,11 +444,13 @@ namespace BALL
 		}
 
 		void ColorUnitHue::get(long double& ld) const
+			throw()
 		{
 			ld = (long double)(value_ * 360.0);
 		}
 				
 		void ColorUnitHue::swap(ColorUnitHue& color_h_unit)
+			throw()
 		{
 			float temp = value_;
 			value_ = color_h_unit.value_;
@@ -479,6 +459,7 @@ namespace BALL
 
 		void ColorUnitHue::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -492,17 +473,18 @@ namespace BALL
 		}
 
 		void ColorUnitHue::read(istream& /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void ColorUnitHue::write(ostream& /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		istream& operator >>
-			(istream& s, ColorUnitHue& color_h_unit)
+		istream& operator >> (istream& s, ColorUnitHue& color_h_unit)
 		{
 			s >> color_h_unit.value_;
 
@@ -517,6 +499,7 @@ namespace BALL
 		}
 
 		float ColorUnitHue::hexToFloat_(const char* char_ptr)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)		
 		{
 			int number = 0;
 

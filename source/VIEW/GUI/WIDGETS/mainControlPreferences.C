@@ -17,6 +17,7 @@ namespace BALL
 	{
 
 		MainControlPreferences::MainControlPreferences(QWidget* parent, const char* name)
+			throw()
 			: QWidget(parent, name, 0)
 		{
 			QVButtonGroup *qtarch_VButtonGroup_1 = new QVButtonGroup(this, "VButtonGroup_1");
@@ -101,10 +102,28 @@ namespace BALL
 		}
 		
 		MainControlPreferences::~MainControlPreferences()
+			throw()
 		{
+			#ifdef BALL_VIEW_DEBUG
+				cout << "Destructing object " << (void *)this 
+					<< " of class " << RTTI::getName<MainControlPreferences>() << endl;
+			#endif 
+
+			destroy();
 		}
 		
+		void MainControlPreferences::clear()
+			throw()
+		{
+		}
+
+		void MainControlPreferences::destroy()
+			throw()
+		{
+		}
+
 		QStyle* MainControlPreferences::getStyle()
+			throw()
 		{
 			QStyle* new_style = 0;
 			if (is_platinum_style->isChecked())
@@ -128,6 +147,7 @@ namespace BALL
 		}
 		
 		void MainControlPreferences::fetchPreferences(INIFile& inifile)
+			throw()
 		{
 			String style = "platinum";
 			if (inifile.hasEntry("WINDOWS", "style"))
@@ -154,6 +174,7 @@ namespace BALL
 		}
 		
 		void MainControlPreferences::writePreferences(INIFile& inifile)
+			throw()
 		{
 			String style = "platinum";
 			if (is_platinum_style->isChecked())

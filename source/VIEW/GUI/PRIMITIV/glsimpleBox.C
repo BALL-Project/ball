@@ -1,4 +1,4 @@
-// $Id: glsimpleBox.C,v 1.4 2001/02/04 16:14:26 hekl Exp $
+// $Id: glsimpleBox.C,v 1.5 2001/05/13 14:28:37 hekl Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glsimpleBox.h>
 #include <GL/gl.h>
@@ -11,18 +11,21 @@ namespace BALL
 	{
 
 		GLSimpleBox::GLSimpleBox()
+			throw()
 			:	SimpleBox(),
 				GLObject()
 		{
 		}
 
 		GLSimpleBox::GLSimpleBox(const GLSimpleBox& simpleBox, bool deep)
+			throw()
 			:	SimpleBox(simpleBox, deep),
 				GLObject(simpleBox)
 		{
 		}
 
 		GLSimpleBox::GLSimpleBox(const GeometricObject& geometric_object)
+			throw()
 			:	SimpleBox(geometric_object),
 				GLObject()
 		{
@@ -53,7 +56,35 @@ namespace BALL
 			GLObject::destroy();
 		}
 
+		void GLSimpleBox::set(const GLSimpleBox& simpleBox, bool deep)
+			throw()
+		{
+			SimpleBox::set(simpleBox, deep);
+			GLObject::set(simpleBox);
+		}
+
+		const GLSimpleBox& GLSimpleBox::operator = (const GLSimpleBox& simpleBox)
+			throw()
+		{
+			set(simpleBox);
+			return *this;
+		}
+
+		void GLSimpleBox::get(GLSimpleBox& simpleBox, bool deep) const
+			throw()
+		{
+			simpleBox.set(*this, deep);
+		}
+
+		void GLSimpleBox::swap(GLSimpleBox& simpleBox)
+			throw()
+		{
+			SimpleBox::swap(simpleBox);
+			GLObject::swap(simpleBox);
+		}
+
 		bool GLSimpleBox::draw(bool with_names)
+			throw()
 		{
 			if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN) == true)
 			{
@@ -62,17 +93,17 @@ namespace BALL
 
 			if (isSelected() == false)
 			{
-				glColor4ub((unsigned char)getColor().red(),
-									 (unsigned char)getColor().green(),
-									 (unsigned char)getColor().blue(),
-									 (unsigned char)getColor().alpha());
+				glColor4ub((unsigned char)getColor().getRed(),
+									 (unsigned char)getColor().getGreen(),
+									 (unsigned char)getColor().getBlue(),
+									 (unsigned char)getColor().getAlpha());
 			}
 			else
 			{
-				glColor4ub((unsigned char)getSelectedColor().red(),
-									 (unsigned char)getSelectedColor().green(),
-									 (unsigned char)getSelectedColor().blue(),
-									 (unsigned char)getSelectedColor().alpha());
+				glColor4ub((unsigned char)getSelectedColor().getRed(),
+									 (unsigned char)getSelectedColor().getGreen(),
+									 (unsigned char)getSelectedColor().getBlue(),
+									 (unsigned char)getSelectedColor().getAlpha());
 			}
 
 			if (with_names)
@@ -103,6 +134,7 @@ namespace BALL
 		}
 
 		bool GLSimpleBox::drawUserDefined()
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

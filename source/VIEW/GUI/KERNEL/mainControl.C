@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.13 2001/02/11 13:06:32 hekl Exp $
+// $Id: mainControl.C,v 1.14 2001/05/13 14:28:36 hekl Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -32,6 +32,7 @@ namespace BALL
     }
   
 		MainControl::MainControl(QWidget* parent, const char* name, String inifile)
+			throw()
 			:	QMainWindow(parent, name),
 				composite_map_(),
 				descriptor_map_(),
@@ -59,6 +60,7 @@ namespace BALL
 		}
 
 		QPopupMenu* MainControl::initPopupMenu(int ID)
+			throw()
 		{
 			QPopupMenu* menu = 0;
 			QMenuItem* item = menuBar()->findItem(ID);
@@ -144,7 +146,9 @@ namespace BALL
 
 		void MainControl::show()
 		{
-			cerr << "MainControl::show()  list.size() = " << modular_widgets_.size() << endl;
+			#ifdef BALL_VIEW_DEBUG
+        cerr << "MainControl::show()  list.size() = " << modular_widgets_.size() << endl;
+			#endif
 
 			// create own preferences dialog
 			preferences_dialog_ = new Preferences(this);
@@ -267,6 +271,7 @@ namespace BALL
 		}
 
 		bool MainControl::remove(const Composite& composite, bool sent_message)
+			throw()
 		{
 			ListIteratorHashMap::Iterator map_iterator 
 				= composite_map_.find((void*)&composite);
@@ -305,6 +310,7 @@ namespace BALL
 		}
 
 		bool MainControl::remove(const CompositeDescriptor& composite_descriptor)
+			throw()
 		{
 			ListIteratorHashMap::Iterator map_iterator 
 				= descriptor_map_.find((void*)&composite_descriptor);
@@ -326,6 +332,7 @@ namespace BALL
 		}
 
 		bool MainControl::setName(const Composite& composite, const String& s)
+			throw()
 		{
 			ListIteratorHashMap::Iterator map_iterator = 
 				composite_map_.find((void*)&composite);
@@ -341,6 +348,7 @@ namespace BALL
 		}
 
 		String* MainControl::getName(const Composite& composite)
+			throw()
 		{
 			ListIteratorHashMap::Iterator map_iterator = 
 				composite_map_.find((void*)&composite);
@@ -354,6 +362,7 @@ namespace BALL
 		}
 
 		CompositeDescriptor* MainControl::getDescriptor(const String& name)
+			throw()
 		{
 			list<CompositeDescriptor *>::iterator it = descriptors_.begin();
 
@@ -369,6 +378,7 @@ namespace BALL
 		}
 
 		bool MainControl::setCenter(const Composite& composite, const Vector3& v)
+			throw()
 		{
 			ListIteratorHashMap::Iterator map_iterator =
 				composite_map_.find((void*)&composite);
@@ -384,6 +394,7 @@ namespace BALL
 		}
 
 		Vector3* MainControl::getCenter(const Composite& composite)
+			throw()
 		{
 			ListIteratorHashMap::Iterator map_iterator =
 				composite_map_.find((void*)&composite);
@@ -397,6 +408,7 @@ namespace BALL
 		}
 
 		CompositeDescriptor* MainControl::getDescriptor(const Vector3& center)
+			throw()
 		{
 			list<CompositeDescriptor *>::iterator it = descriptors_.begin();
 
@@ -412,6 +424,7 @@ namespace BALL
 		}
 
 		bool MainControl::update(const Composite& composite)
+			throw()
 		{
 			ListIteratorHashMap::Iterator map_iterator =
 				composite_map_.find((void*)&composite);
@@ -427,6 +440,7 @@ namespace BALL
 		}
 
 		void MainControl::updateAll()
+			throw()
 		{
 			list<CompositeDescriptor *>::iterator it = descriptors_.begin();
 
@@ -447,6 +461,7 @@ namespace BALL
 		void MainControl::insert
 		  (Composite* composite, const String& name,
 			 const Vector3& center)
+			throw()
 		{
 			if (composite == 0)
 			{
@@ -482,6 +497,7 @@ namespace BALL
  		}	
 
 		void MainControl::onNotify(Message *message)
+			throw()
     {
 			if (RTTI::isKindOf<WindowMessage>(*message))
 			{
@@ -515,12 +531,14 @@ namespace BALL
     }
 
 		bool MainControl::isInserted(const Composite& composite) const
+			throw()
 		{
 			return (composite_map_.find((void*)&composite)
 							!= composite_map_.end());
 		}
 
 		bool MainControl::isInserted(const CompositeDescriptor& composite_descriptor) const
+			throw()
 		{
 			return (descriptor_map_.find((void*)&composite_descriptor)
 							!= descriptor_map_.end());
@@ -574,6 +592,7 @@ namespace BALL
 
 		CompositeDescriptor*  MainControl::insert_
 			(const Composite& composite, const String& s, const Vector3& v)
+			throw()
 		{
 			if (composite_map_.has((void *)&composite) == true)
 			{
@@ -602,6 +621,7 @@ namespace BALL
 
 		CompositeDescriptor* MainControl::insert_
 			(CompositeDescriptor& composite_descriptor, bool deep)
+			throw()
 		{
 			if (descriptor_map_.has((void*)&composite_descriptor) == true && deep == false)
 			{
@@ -626,6 +646,7 @@ namespace BALL
 
 		// VIEW automatic module registration
 		MainControl* MainControl::getMainControl(const QObject* object)
+			throw()
 		{
 			QObject* parent = object->parent();
 			while ((parent != 0) && (parent->parent() != 0))
@@ -656,6 +677,7 @@ namespace BALL
 
     int MainControl::insertMenuEntry
 			(int ID, const String& name, const QObject* receiver, const char* slot, int accel, int entry_ID)
+			throw()
 		{
 			QMenuBar* menu_bar = menuBar();
 			if (menu_bar != 0)
@@ -685,6 +707,7 @@ namespace BALL
 		}
 		
 		void MainControl::insertPopupMenuSeparator(int ID)
+			throw()
 		{
 			QMenuBar* menu_bar = menuBar();
 			if (menu_bar != 0)
@@ -708,11 +731,13 @@ namespace BALL
 			(int /* ID */, const String& /* name */, 
 			 const QObject* /* receiver */, const char* /* slot */, 
 			 int /* accel */, int /* entry_ID */)
+			throw()
 		{
 			// BAUSTELLE
 		}
 
 		void MainControl::initializePreferencesTab(Preferences &preferences)
+			throw()
 		{
 			main_control_preferences_ = new MainControlPreferences();
 			CHECK_PTR(main_control_preferences_);
@@ -721,6 +746,7 @@ namespace BALL
  		}
 
 		void MainControl::finalizePreferencesTab(Preferences &preferences)
+			throw()
 		{
 			if (main_control_preferences_ != 0)
 			{
@@ -732,6 +758,7 @@ namespace BALL
 		}
 
 		void MainControl::applyPreferences(Preferences & /* preferences */)
+			throw()
 		{
 			if (main_control_preferences_ != 0)
 			{
@@ -741,6 +768,7 @@ namespace BALL
 		}
 
 		void MainControl::fetchPreferences(INIFile &inifile)
+			throw()
 		{
 			// 
 			// the geometry of the main window
@@ -775,6 +803,7 @@ namespace BALL
 		}
 
 		void MainControl::writePreferences(INIFile &inifile)
+			throw()
 		{
 			//	
 			// the main window position
@@ -796,12 +825,14 @@ namespace BALL
 		}
 
 		void MainControl::addModularWidget(ModularWidget* widget)
+			throw()
 		{
 			cerr << "MainControl::addModularWidget(" << widget << ")" << endl;
 			modular_widgets_.push_back(widget);
 		}
 
 		void MainControl::removeModularWidget(ModularWidget* widget)
+			throw()
 		{
 			cerr << "MainControl::removeModularWidget(" << widget << ")" << endl;
 			modular_widgets_.remove(widget);

@@ -1,4 +1,4 @@
-// $Id: geometricCollector.C,v 1.1 2000/06/04 17:52:50 hekl Exp $
+// $Id: geometricCollector.C,v 1.2 2001/05/13 14:28:35 hekl Exp $
 
 #include <BALL/VIEW/FUNCTOR/geometricCollector.h>
 
@@ -11,21 +11,16 @@ namespace BALL
 	{
 
 		GeometricCollector::GeometricCollector()
+			throw()
 			:	UnaryProcessor<Composite>(),
 				only_selected_objects_(false),
 				collection_()
 		{
-		}
-
-		GeometricCollector::GeometricCollector
-		  (const GeometricCollector& collector, bool /* deep */)
-			:	UnaryProcessor<Composite>(collector),
-				only_selected_objects_(collector.only_selected_objects_),
-				collection_()
-		{
+			clear();
 		}
 
 		GeometricCollector::~GeometricCollector()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -36,41 +31,19 @@ namespace BALL
 		}
 
 		void GeometricCollector::clear()
+			throw()
 		{
 			collection_.clear();
+			only_selected_objects_ = false;
 		}
 
 		void GeometricCollector::destroy()
-		{
-			only_selected_objects_ = false;
-			collection_.clear(); 
-		}
-
-		void GeometricCollector::set
-			(const GeometricCollector&  /* collector */, bool /* deep */)
-		{
-			clear();
-		}
-
-		GeometricCollector& GeometricCollector::operator =
-			(const GeometricCollector& collector)
-		{
-			set(collector);
-
-			return *this;
-		}
-
-		void GeometricCollector::get
-			(GeometricCollector& collector, bool deep) const
-		{
-			collector.set(*this, deep);
-		}
-
-		void GeometricCollector::swap(GeometricCollector&  /* collector */)
+			throw()
 		{
 		}
 
 		bool GeometricCollector::start()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG_PROCESSORS
 				cout << "start collect process ..." << endl;
@@ -82,6 +55,7 @@ namespace BALL
 		}
 				
 		bool GeometricCollector::finish()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG_PROCESSORS
 				cout << "finished collect process ..." << endl;
@@ -92,6 +66,7 @@ namespace BALL
 				
 		Processor::Result GeometricCollector::operator()
 			(Composite& composite)
+			throw()
 		{
 			if (RTTI::isKindOf<GeometricObject>(composite) == false)
 			{
@@ -123,13 +98,9 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		bool GeometricCollector::isValid() const
-		{
-			return true;
-		}
-
 		void GeometricCollector::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -144,16 +115,6 @@ namespace BALL
 				<< ((only_selected_objects_ == true) ? "yes" : "no") << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
-		}
-
-		void GeometricCollector::read(istream & /* s */)
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
-		void GeometricCollector::write(ostream & /* s */) const
-		{
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

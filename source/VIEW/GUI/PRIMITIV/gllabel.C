@@ -1,4 +1,4 @@
-// $Id: gllabel.C,v 1.4 2001/02/04 16:14:26 hekl Exp $
+// $Id: gllabel.C,v 1.5 2001/05/13 14:28:37 hekl Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
 #include <GL/gl.h>
@@ -14,6 +14,7 @@ namespace BALL
 	{
 
 		GLLabel::GLLabel()
+			throw()
 			:	Label(),
 				GLObject(),
 				actual_font_("helvetica"),
@@ -26,6 +27,7 @@ namespace BALL
 		}
 
 		GLLabel::GLLabel(const GLLabel& label, bool deep)
+			throw()
 			:	Label(label, deep),
 				GLObject(label),
 				actual_font_(label.actual_font_),
@@ -44,6 +46,7 @@ namespace BALL
 		}
 
 		GLLabel::GLLabel(const GeometricObject& geometric_object)
+			throw()
 			:	Label(geometric_object),
 				GLObject(),
 				actual_font_("helvetica"),
@@ -136,6 +139,7 @@ namespace BALL
 		}
 
 		bool GLLabel::draw(bool with_names)
+			throw()
 		{
 			if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN) == true)
 			{
@@ -144,17 +148,17 @@ namespace BALL
 
 			if (isSelected() == false)
 			{
-				glColor4ub((unsigned char)getColor().red(),
-									 (unsigned char)getColor().green(),
-									 (unsigned char)getColor().blue(),
-									 (unsigned char)getColor().alpha());
+				glColor4ub((unsigned char)getColor().getRed(),
+									 (unsigned char)getColor().getGreen(),
+									 (unsigned char)getColor().getBlue(),
+									 (unsigned char)getColor().getAlpha());
 			}
 			else
 			{
-				glColor4ub((unsigned char)getSelectedColor().red(),
-									 (unsigned char)getSelectedColor().green(),
-									 (unsigned char)getSelectedColor().blue(),
-									 (unsigned char)getSelectedColor().alpha());
+				glColor4ub((unsigned char)getSelectedColor().getRed(),
+									 (unsigned char)getSelectedColor().getGreen(),
+									 (unsigned char)getSelectedColor().getBlue(),
+									 (unsigned char)getSelectedColor().getAlpha());
 			}
 
 			if (with_names)

@@ -1,4 +1,4 @@
-// $Id: fileDialog.C,v 1.3 2000/12/21 17:03:45 amoll Exp $
+// $Id: fileDialog.C,v 1.4 2001/05/13 14:28:35 hekl Exp $
 
 #include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
  
@@ -11,6 +11,7 @@ namespace BALL
 	namespace VIEW
 	{
 	  FileDialog::FileDialog(string header, QFileDialog::Mode mode, QWidget* parent, const char* name)
+			throw()
 			:	QFileDialog(parent, name, TRUE),
 				ModularWidget(),
 				dir_path_(),
@@ -30,17 +31,17 @@ namespace BALL
 				cout << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<FileDialog>() << endl;
 			#endif 
+
+			destroy();
 		}
 
-		void FileDialog::initializeWidget(MainControl& /* main_control */)
+		void FileDialog::clear()
+			throw()
 		{
 		}
 
-		void FileDialog::finalizeWidget(MainControl& /* main_control */)
-		{
-		}
-		
-		void FileDialog::checkMenu(MainControl& /* main_control */)
+		void FileDialog::destroy()
+			throw()
 		{
 		}
 
@@ -63,6 +64,7 @@ namespace BALL
 		}
   
 		void FileDialog::openFile_()
+			throw()
     {
     }
 

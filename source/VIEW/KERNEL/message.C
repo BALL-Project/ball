@@ -1,4 +1,4 @@
-// $Id: message.C,v 1.3 2001/02/04 16:14:27 hekl Exp $
+// $Id: message.C,v 1.4 2001/05/13 14:28:38 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		Message::Message()
+			throw()
 			:
 			connection_object_(0),
 		  deletable_(false)
@@ -18,6 +19,7 @@ namespace BALL
 		}
 
 		Message::Message(const Message& message)
+			throw()
 			:
 			connection_object_(message.connection_object_),
 		  deletable_(message.deletable_)
@@ -25,6 +27,7 @@ namespace BALL
 		}
 
 		Message::~Message()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -33,6 +36,7 @@ namespace BALL
 		}
 
 		CompositeMessage::CompositeMessage()
+			throw()
 			:
 			Message(),
 			composite_(0),
@@ -41,6 +45,7 @@ namespace BALL
 		}
 
 		CompositeMessage::CompositeMessage(const CompositeMessage& message)
+			throw()
 			:
 			Message(message),
 			composite_(message.composite_),
@@ -49,6 +54,7 @@ namespace BALL
 		}
 
 		CompositeMessage::~CompositeMessage()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -57,18 +63,21 @@ namespace BALL
 		}
 
 		NewCompositeMessage::NewCompositeMessage()
+			throw()
 			:
 			CompositeMessage()
 		{
 		}
 
 		NewCompositeMessage::NewCompositeMessage(const CompositeMessage& message)
+			throw()
 			:
 			CompositeMessage(message)
 		{
 		}
 
 		NewCompositeMessage::~NewCompositeMessage()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -77,18 +86,21 @@ namespace BALL
 		}
 
 		RemovedCompositeMessage::RemovedCompositeMessage()
+			throw()
 			:
 			CompositeMessage()
 		{
 		}
 
 		RemovedCompositeMessage::RemovedCompositeMessage(const CompositeMessage& message)
+			throw()
 			:
 			CompositeMessage(message)
 		{
 		}
 
 		RemovedCompositeMessage::~RemovedCompositeMessage()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -97,18 +109,21 @@ namespace BALL
 		}
 
 		ChangedCompositeMessage::ChangedCompositeMessage()
+			throw()
 			:
 			CompositeMessage()
 		{
 		}
 
 	  ChangedCompositeMessage::ChangedCompositeMessage(const CompositeMessage& message)
+			throw()
 			:
 			CompositeMessage(message)
 		{
 		}
 
 		ChangedCompositeMessage::~ChangedCompositeMessage()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -117,18 +132,21 @@ namespace BALL
 		}
 		/*
 		DisplayMessage::DisplayMessage()
+			throw()
 			:
 			CompositeMessage()
 		{
 		}
 
 		DisplayMessage::DisplayMessage(const DisplayMessage& message)
+			throw()
 			:
 			CompositeMessage(message)
 		{
 		}
 
 		DisplayMessage::~DisplayMessage()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -137,6 +155,7 @@ namespace BALL
 		}
 		*/
 		SceneMessage::SceneMessage()
+			throw()
 			:
 			Message(),
 			update_only_(false),
@@ -146,6 +165,7 @@ namespace BALL
 		}
 
 		SceneMessage::SceneMessage(const SceneMessage& message)
+			throw()
 			:
 			Message(message),
 			update_only_(message.update_only_),
@@ -155,6 +175,7 @@ namespace BALL
 		}
 
 		SceneMessage::~SceneMessage()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -163,6 +184,7 @@ namespace BALL
 		}
 
 		WindowMessage::WindowMessage()
+			throw()
 			:
 			Message(),
 			status_bar_()
@@ -170,6 +192,7 @@ namespace BALL
 		}
 
 		WindowMessage::WindowMessage(const WindowMessage& message)
+			throw()
 			:
 			Message(message),
 			status_bar_(message.status_bar_)
@@ -177,6 +200,7 @@ namespace BALL
 		}
 
 		WindowMessage::~WindowMessage()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -185,6 +209,7 @@ namespace BALL
 		}
 
 		SelectionMessage::SelectionMessage()
+			throw()
 			:
 			Message(),
 			selection_()
@@ -192,6 +217,7 @@ namespace BALL
 		}
 
 		SelectionMessage::SelectionMessage(const SelectionMessage& message)
+			throw()
 			:
 			Message(message),
 			selection_(message.selection_)
@@ -199,6 +225,7 @@ namespace BALL
 		}
 
 		SelectionMessage::~SelectionMessage()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -208,18 +235,21 @@ namespace BALL
 
 
 		GeometricObjectSelectionMessage::GeometricObjectSelectionMessage()
+			throw()
 			:
 			SelectionMessage()
 		{
 		}
 
 		GeometricObjectSelectionMessage::GeometricObjectSelectionMessage(const SelectionMessage& message)
+			throw()
 			:
 			SelectionMessage(message)
 		{
 		}
 
 		GeometricObjectSelectionMessage::~GeometricObjectSelectionMessage()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 

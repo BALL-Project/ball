@@ -1,4 +1,4 @@
-// $Id: glQuadricObject.C,v 1.3 2001/02/11 13:06:32 hekl Exp $
+// $Id: glQuadricObject.C,v 1.4 2001/05/13 14:28:36 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glQuadricObject.h>
 #include <BALL/COMMON/exception.h>
@@ -38,6 +38,7 @@ namespace BALL
 		GLQuadricObject::GLQuadricObject
 			(int draw_style, int normals, int orientation,
 			 bool generate_texture_coordinates)
+			throw()
 			:	GLU_quadric_obj_(0)
 		{
 			setDrawStyle(draw_style);
@@ -48,6 +49,7 @@ namespace BALL
 
 		GLQuadricObject::GLQuadricObject
 			(const GLQuadricObject& GL_quadric_object)
+			throw()
 			:	draw_style_(GL_quadric_object.draw_style_),
 				normals_(GL_quadric_object.normals_),
 				orientation_(GL_quadric_object.orientation_),
@@ -57,6 +59,7 @@ namespace BALL
 		}
 
 		GLQuadricObject::~GLQuadricObject()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -67,6 +70,7 @@ namespace BALL
 		}
 
 		void GLQuadricObject::clear()
+			throw()
 		{
 			draw_style_ = GLU_FILL;
 			normals_ = GLU_FLAT;
@@ -75,6 +79,7 @@ namespace BALL
 		}
 
 		void GLQuadricObject::destroy()
+			throw()
 		{
 			if (GLU_quadric_obj_ != 0)
 			{
@@ -86,6 +91,7 @@ namespace BALL
 
 		void GLQuadricObject::set
 			(const GLQuadricObject& GL_quadric_object)
+			throw()
 		{
 			draw_style_ = GL_quadric_object.draw_style_;
 			normals_ = GL_quadric_object.normals_;
@@ -93,8 +99,9 @@ namespace BALL
 			generate_texture_coordinates_ = GL_quadric_object.generate_texture_coordinates_;
 		}
 
-		GLQuadricObject& GLQuadricObject::operator =
+		const GLQuadricObject& GLQuadricObject::operator =
 			(const GLQuadricObject& GL_quadric_object)
+			throw()
 		{
 			set(GL_quadric_object);
 
@@ -103,11 +110,13 @@ namespace BALL
 
 		void GLQuadricObject::get
 			(GLQuadricObject& GL_quadric_object) const
+			throw()
 		{
 			GL_quadric_object.set(*this);
 		}
 
 		void GLQuadricObject::swap(GLQuadricObject& GL_quadric_object)
+			throw()
 		{
 			int i = draw_style_;
 			draw_style_ = GL_quadric_object.draw_style_;
@@ -127,7 +136,7 @@ namespace BALL
 		}
 
 		void GLQuadricObject::setDrawStyle(int style)
-			throw()
+			throw(WrongDrawingStyle)
 		{
 			if (style != GLU_FILL
 					&& style != GLU_LINE
@@ -141,7 +150,7 @@ namespace BALL
 		}
 
 		void GLQuadricObject::setOrientation(int orientation)
-			throw()
+			throw(WrongOrientationStyle)
 		{
 			if (orientation != GLU_INSIDE
 					&& orientation != GLU_OUTSIDE)
@@ -153,12 +162,13 @@ namespace BALL
 		}
 
 		void GLQuadricObject::setTextureCoordinateGeneration(bool generate)
+			throw()
 		{
 			generate_texture_coordinates_ = generate;
 		}
 
 		void GLQuadricObject::setNormals(int normals)
-			throw()
+			throw(WrongNormalStyle)
 		{
 			if (normals != GLU_NONE
 					&& normals != GLU_FLAT
@@ -173,7 +183,7 @@ namespace BALL
 		void GLQuadricObject::drawPartialDisk
 			(GLdouble inner_radius, GLdouble outer_radius,
 			 int slices, int rings, GLdouble start_angle, GLdouble sweep_angle)
-			throw()
+			throw(NoQuadricObjectAvailable)
 		{
 			create_();
 
@@ -184,7 +194,7 @@ namespace BALL
 		void GLQuadricObject::drawDisk
 			(GLdouble inner_radius, GLdouble outer_radius,
 			 int slices, int rings)
-			throw()
+			throw(NoQuadricObjectAvailable)
 		{
 			create_();
 
@@ -194,7 +204,7 @@ namespace BALL
 		void GLQuadricObject::drawCylinder
 			(GLdouble base_radius, GLdouble top_radius, GLdouble height,
 			 int slices, int stacks)
-			throw()
+			throw(NoQuadricObjectAvailable)
 		{
 			create_();
 
@@ -203,18 +213,20 @@ namespace BALL
 
 		void GLQuadricObject::drawSphere
 			(GLdouble radius, int slices, int stacks)
-			throw()
+			throw(NoQuadricObjectAvailable)
 		{
 			create_();
 			gluSphere(GLU_quadric_obj_, radius, slices, stacks);
 		}
 
 		bool GLQuadricObject::isValid() const
+			throw()
 		{
 			return (GLU_quadric_obj_ != 0);
 		}
 
 		void GLQuadricObject::dump(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -308,7 +320,7 @@ namespace BALL
 		}
 
 		void GLQuadricObject::create_()
-			throw()
+			throw(NoQuadricObjectAvailable)
 		{
 			if (GLU_quadric_obj_ == 0)
 			{

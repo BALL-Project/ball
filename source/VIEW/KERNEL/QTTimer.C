@@ -1,4 +1,4 @@
-// $Id: QTTimer.C,v 1.9 2001/02/04 16:14:27 hekl Exp $
+// $Id: QTTimer.C,v 1.10 2001/05/13 14:28:37 hekl Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
@@ -14,11 +14,13 @@ namespace BALL
 	{
 
 		QTTimer::NoValidInterval::NoValidInterval(const char* file, int line, const string& data)
+				throw()
 			:	Exception::GeneralException(file, line, string("NoValidInterval"), string("not a valid interval: ") + data)
 		{
 		}
 
 		QTTimer::QTTimer(QObject* parent, const char* name)
+				throw()
 			:	QObject(parent, name),
 			  timer_id_(0),
 				interval_(100),
@@ -28,6 +30,7 @@ namespace BALL
 		}
 
 		QTTimer::QTTimer(const QTTimer &timer, QObject* parent, const char* name)
+				throw()
 			:	QObject(parent, name),
 			  timer_id_(0),
 				interval_(timer.interval_),
@@ -37,6 +40,7 @@ namespace BALL
 		}
 
 		QTTimer::~QTTimer()
+				throw()
 		{
 #ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -47,6 +51,7 @@ namespace BALL
 		}
 
 		void QTTimer::clear()
+				throw()
 		{
 			stopTimer();
 
@@ -55,11 +60,13 @@ namespace BALL
 		}
 
 		void QTTimer::destroy()
+				throw()
 		{
 			stopTimer();
 		}
 
 		void QTTimer::set(const QTTimer& timer)
+				throw()
 		{
 			stopTimer();
 
@@ -67,7 +74,8 @@ namespace BALL
 			interval_ = timer.interval_;
 		}
 
-		QTTimer& QTTimer::operator =(const QTTimer& timer)
+		const QTTimer& QTTimer::operator =(const QTTimer& timer)
+				throw()
 		{
 			set(timer);
 
@@ -75,11 +83,13 @@ namespace BALL
 		}
 
 		void QTTimer::get(QTTimer& timer) const
+				throw()
 		{
 			timer.set(*this);
 		}
 
 		void QTTimer::swap(QTTimer& timer)
+				throw()
 		{
 			stopTimer();
 			timer.stopTimer();
@@ -90,6 +100,7 @@ namespace BALL
 		}
 
 		void QTTimer::setInterval(int interval)
+				throw(NoValidInterval)
 		{
 			if (interval <= 0)
 			{
@@ -103,6 +114,7 @@ namespace BALL
 		}
 
 		void QTTimer::timer()
+				throw()
 		{
 			return;
 		}
@@ -121,6 +133,7 @@ namespace BALL
 		}
 
 		void QTTimer::dump(ostream& s, Size depth) const
+				throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -139,11 +152,13 @@ namespace BALL
 		}
 
 		void QTTimer::read(istream & /* s */)
+				throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void QTTimer::write(ostream & /* s */) const
+				throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

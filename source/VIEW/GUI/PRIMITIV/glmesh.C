@@ -1,4 +1,4 @@
-// $Id: glmesh.C,v 1.4 2001/02/04 16:14:26 hekl Exp $
+// $Id: glmesh.C,v 1.5 2001/05/13 14:28:37 hekl Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glmesh.h>
 #include <GL/gl.h>
@@ -11,18 +11,21 @@ namespace BALL
 	{
 
 		GLMesh::GLMesh()
+			throw()
 			:	Mesh(),
 				GLObject()
 		{
 		}
 
 		GLMesh::GLMesh(const GLMesh& mesh, bool deep)
+			throw()
 			:	Mesh(mesh, deep),
 				GLObject(mesh)
 		{
 		}
 
 		GLMesh::GLMesh(const GeometricObject& geometric_object)
+			throw()
 			:	Mesh(geometric_object),
 				GLObject()
 		{
@@ -53,7 +56,35 @@ namespace BALL
 			GLObject::destroy();
 		}
 
+		void GLMesh::set(const GLMesh& mesh, bool deep)
+			throw()
+		{
+			Mesh::set(mesh, deep);
+			GLObject::set(mesh);
+		}
+
+		const GLMesh& GLMesh::operator = (const GLMesh& mesh)
+			throw()
+		{
+			set(mesh);
+			return *this;
+		}
+
+		void GLMesh::get(GLMesh& mesh, bool deep) const
+			throw()
+		{
+			mesh.set(*this, deep);
+		}
+
+		void GLMesh::swap(GLMesh& mesh)
+			throw()
+		{
+			Mesh::swap(mesh);
+			GLObject::swap(mesh);
+		}
+
 		bool GLMesh::draw(bool with_names)
+			throw()
 		{
 			if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN) == true)
 			{
@@ -62,17 +93,17 @@ namespace BALL
 
 			if (isSelected() == false)
 			{
-				glColor4ub((unsigned char)getColor().red(),
-									 (unsigned char)getColor().green(),
-									 (unsigned char)getColor().blue(),
-									 (unsigned char)getColor().alpha());
+				glColor4ub((unsigned char)getColor().getRed(),
+									 (unsigned char)getColor().getGreen(),
+									 (unsigned char)getColor().getBlue(),
+									 (unsigned char)getColor().getAlpha());
 			}
 			else
 			{
-				glColor4ub((unsigned char)getSelectedColor().red(),
-									 (unsigned char)getSelectedColor().green(),
-									 (unsigned char)getSelectedColor().blue(),
-									 (unsigned char)getSelectedColor().alpha());
+				glColor4ub((unsigned char)getSelectedColor().getRed(),
+									 (unsigned char)getSelectedColor().getGreen(),
+									 (unsigned char)getSelectedColor().getBlue(),
+									 (unsigned char)getSelectedColor().getAlpha());
 			}
 
 			if (with_names)
@@ -172,6 +203,7 @@ namespace BALL
 		}
 
 		bool GLMesh::drawUserDefined()
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

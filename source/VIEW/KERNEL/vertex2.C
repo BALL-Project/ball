@@ -1,4 +1,4 @@
-// $Id: vertex2.C,v 1.8 2001/02/04 16:14:28 hekl Exp $
+// $Id: vertex2.C,v 1.9 2001/05/13 14:28:38 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/vertex2.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		Vertex2::Vertex2()
+			throw()
 			:	vertex1_(),
 				vertex2_(),
 				vertex1_ptr_(&vertex1_),
@@ -19,6 +20,7 @@ namespace BALL
 		}
 
 		Vertex2::Vertex2(const Vertex2& v)
+			throw()
 			:	vertex1_(v.vertex1_),
 				vertex2_(v.vertex2_)
 		{
@@ -27,6 +29,7 @@ namespace BALL
 		}
 
 		Vertex2::~Vertex2()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -37,6 +40,7 @@ namespace BALL
 		}
 
 		void Vertex2::clear()
+			throw()
 		{
 			vertex1_.set(0.0);
 			vertex2_.set(0.0);
@@ -45,10 +49,12 @@ namespace BALL
 		}
 
 		void Vertex2::destroy()
+			throw()
 		{
 		}
 
 		void Vertex2::set(const Vertex2& v)
+			throw()
 		{
 			vertex1_.set(v.vertex1_);
 			vertex2_.set(v.vertex2_);
@@ -57,7 +63,8 @@ namespace BALL
 			vertex2_ptr_ = v.vertex2_ptr_;
 		}
 
-		Vertex2& Vertex2::operator = (const Vertex2& v)
+		const Vertex2& Vertex2::operator = (const Vertex2& v)
+			throw()
 		{
 			set(v);
 
@@ -65,11 +72,13 @@ namespace BALL
 		}
 
 		void Vertex2::get(Vertex2& v) const
+			throw()
 		{
 			v.set(*this);
 		}
 
 		void Vertex2::swap(Vertex2& v)
+			throw()
 		{
 			Vector3 *temp_vector_ptr = vertex1_ptr_;
 
@@ -120,12 +129,14 @@ namespace BALL
 		}
 
 		bool Vertex2::isValid() const
+			throw()
 		{
 			return (vertex1_.isValid() &&
 							vertex2_.isValid() );
 		}
 
 		void Vertex2::dump(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -148,11 +159,13 @@ namespace BALL
 		}
 
 		void Vertex2::read(istream& /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void Vertex2::write(ostream& /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

@@ -1,4 +1,4 @@
-// $Id: glPrimitiveManager.C,v 1.3 2001/02/11 13:06:32 hekl Exp $
+// $Id: glPrimitiveManager.C,v 1.4 2001/05/13 14:28:36 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 
@@ -13,27 +13,32 @@ namespace BALL
 	{
 
 		GLDisplayListObject_::NoGLDisplayListsAvailable::NoGLDisplayListsAvailable(const char* file, int line)
+			throw()
 			:	Exception::GeneralException(file, line, string("NoGLDisplayListsAvailable"), string("memory allocation for display lists failed"))
 		{
 		}
 
 		GLDisplayListObject_::WrongModes::WrongModes(const char* file, int line)
+			throw()
 			:	Exception::GeneralException(file, line, string("WrongModes"), string("the drawing precision or the drawing mode are not allowed."))
 		{
 		}
 
 
 		GLDisplayListObject_::GLDisplayListObject_()
+			throw()
 		{
 		}
 
 		GLDisplayListObject_::~GLDisplayListObject_()
+			throw()
 		{
 		}
 
 		const GLDisplayList& 
 		GLDisplayListObject_::operator ()
 			(unsigned int drawing_mode, unsigned int drawing_precision) const
+			throw()
 		{
 			return ((GLDisplayListObject_ *)this)->operator()
 								(drawing_mode, drawing_precision);
@@ -85,11 +90,13 @@ namespace BALL
 		};
 
 		GLSphereDisplayLists_::GLSphereDisplayLists_()
+			throw()
 			:	GL_display_list_(0)
 		{
 		}
 
 		GLSphereDisplayLists_::~GLSphereDisplayLists_()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -100,6 +107,7 @@ namespace BALL
 		}
 
 		void GLSphereDisplayLists_::destroy()
+			throw()
 		{
 			if (GL_display_list_ != 0)
 			{
@@ -110,6 +118,7 @@ namespace BALL
 		}
 
 		void GLSphereDisplayLists_::init()
+			throw(NoGLDisplayListsAvailable)
 		{
 			if (GL_display_list_ == 0)
 			{
@@ -126,6 +135,7 @@ namespace BALL
 
 		GLDisplayList& GLSphereDisplayLists_::operator ()
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
+			throw(WrongModes)
 		{
 			if (drawing_mode >= 3
 					|| drawing_precision >= 4)
@@ -137,6 +147,7 @@ namespace BALL
 		}
 
 		bool GLSphereDisplayLists_::isValid() const
+			throw()
 		{
 			if (GL_display_list_ != 0)
 			{
@@ -156,6 +167,7 @@ namespace BALL
 
 		void GLSphereDisplayLists_::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -171,6 +183,7 @@ namespace BALL
 		}
 
 		void GLSphereDisplayLists_::create_()
+			throw()
 		{
 			// building point display list
 			GL_display_list_[0 * 4 + 0].startDefinition();
@@ -234,6 +247,7 @@ namespace BALL
 		}
 
 		void GLSphereDisplayLists_::buildDottedSphere_(int precisioni)
+			throw()
 		{
 			Vector3 v1;
 			Vector3 v2;
@@ -263,6 +277,7 @@ namespace BALL
 
 		void GLSphereDisplayLists_::drawPoint_
 			(Vector3& v)
+			throw()
 		{
 			/*
 			glNormal3f((GLfloat)v[0], (GLfloat)v[1], (GLfloat)v[2]);
@@ -272,6 +287,7 @@ namespace BALL
 
 		void GLSphereDisplayLists_::subdivideTriangle_
 			(Vector3& v1, Vector3& v2, Vector3& v3, int precision)
+			throw()
 		{
 			if (precision == 0)
 			{
@@ -309,11 +325,13 @@ namespace BALL
 
 
 		GLTubeDisplayLists_::GLTubeDisplayLists_()
+			throw()
 			:	GL_display_list_(0)
 		{
 		}
 
 		GLTubeDisplayLists_::~GLTubeDisplayLists_()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -324,6 +342,7 @@ namespace BALL
 		}
 
 		void GLTubeDisplayLists_::destroy()
+			throw()
 		{
 			if (GL_display_list_ != 0)
 			{
@@ -334,6 +353,7 @@ namespace BALL
 		}
 
 		void GLTubeDisplayLists_::init()
+			throw(NoGLDisplayListsAvailable)
 		{
 			if (GL_display_list_ == 0)
 			{
@@ -351,6 +371,7 @@ namespace BALL
 
 		GLDisplayList& GLTubeDisplayLists_::operator ()
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
+			throw(WrongModes)
 		{
 			if (drawing_mode >= 3
 					|| drawing_precision >= 4)
@@ -362,6 +383,7 @@ namespace BALL
 		}
 
 		bool GLTubeDisplayLists_::isValid() const
+			throw()
 		{
 			if (GL_display_list_ != 0)
 			{
@@ -381,6 +403,7 @@ namespace BALL
 
 		void GLTubeDisplayLists_::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -396,6 +419,7 @@ namespace BALL
 		}
 
 		void GLTubeDisplayLists_::create_()
+			throw()
 		{
 			// create quadric object
 			GLQuadricObject GL_quadric_object;
@@ -465,11 +489,13 @@ namespace BALL
 
 
 		GLSimpleBoxDisplayLists_::GLSimpleBoxDisplayLists_()
+			throw()
 			:	GL_display_list_(0)
 		{
 		}
 
 		GLSimpleBoxDisplayLists_::~GLSimpleBoxDisplayLists_()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -480,6 +506,7 @@ namespace BALL
 		}
 
 		void GLSimpleBoxDisplayLists_::destroy()
+			throw()
 		{
 			if (GL_display_list_ != 0)
 			{
@@ -490,6 +517,7 @@ namespace BALL
 		}
 
 		void GLSimpleBoxDisplayLists_::init()
+			throw(NoGLDisplayListsAvailable)
 		{
 			if (GL_display_list_ == 0)
 			{
@@ -507,6 +535,7 @@ namespace BALL
 
 		GLDisplayList& GLSimpleBoxDisplayLists_::operator ()
 			 (unsigned int drawing_mode, unsigned int drawing_precision)
+			throw(WrongModes)
 		{
 			if (drawing_mode >= 3
 					|| drawing_precision >= 4)
@@ -518,6 +547,7 @@ namespace BALL
 		}
 
 		bool GLSimpleBoxDisplayLists_::isValid() const
+			throw()
 		{
 			if (GL_display_list_ != 0)
 			{
@@ -537,6 +567,7 @@ namespace BALL
 
 		void GLSimpleBoxDisplayLists_::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -552,6 +583,7 @@ namespace BALL
 		}
 
 		void GLSimpleBoxDisplayLists_::create_()
+			throw()
 		{
 			// building point display list
 			GL_display_list_[0 * 4 + 0].startDefinition();
@@ -607,6 +639,7 @@ namespace BALL
 		}
 
 		void GLSimpleBoxDisplayLists_::createLineBox_()
+			throw()
 		{
 			glBegin(GL_LINES);
 			
@@ -650,6 +683,7 @@ namespace BALL
 		}
 
 		void GLSimpleBoxDisplayLists_::createDotBox_()
+			throw()
 		{
 			glBegin(GL_POINTS);
 			
@@ -667,6 +701,7 @@ namespace BALL
 		}
 
 		void GLSimpleBoxDisplayLists_::createSolidBox_()
+			throw()
 		{
 			glBegin(GL_QUADS);
 
@@ -719,6 +754,7 @@ namespace BALL
 
 
 		GLPrimitiveManager::GLPrimitiveManager()
+			throw()
 			:	Sphere(),
 				Tube(),
 				SimpleBox(),
@@ -729,6 +765,7 @@ namespace BALL
 		}
 		 
 		GLPrimitiveManager::~GLPrimitiveManager()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -739,6 +776,7 @@ namespace BALL
 		}
 
 		void GLPrimitiveManager::destroy()
+			throw()
 		{
 			Sphere.destroy();
 			Tube.destroy();
@@ -748,6 +786,7 @@ namespace BALL
 		}
 
 		void GLPrimitiveManager::init()
+			throw()
 		{
 			Sphere.init();
 			Tube.init();
@@ -755,6 +794,7 @@ namespace BALL
 		}
 		
 		void GLPrimitiveManager::clearNames()
+			throw()
 		{
 			name_to_object_.clear();
 			object_to_name_.clear();
@@ -763,6 +803,7 @@ namespace BALL
 		}
 
 		GLPrimitiveManager::Name GLPrimitiveManager::getName(const GeometricObject& object)
+			throw()
 		{
 			GeometricObject* obj = const_cast<GeometricObject*>(&object);
 
@@ -782,6 +823,7 @@ namespace BALL
 		}
 
 		GeometricObject* GLPrimitiveManager::getObject(GLPrimitiveManager::Name name) const
+			throw()
 		{
 			if (!name_to_object_.has(name))
 			{
@@ -794,6 +836,7 @@ namespace BALL
 		}
 
 		bool GLPrimitiveManager::isValid() const
+			throw()
 		{
 			return (Sphere.isValid() &&
 					    Tube.isValid()   &&
@@ -801,6 +844,7 @@ namespace BALL
 		}
 
 		void GLPrimitiveManager::dump(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -815,11 +859,13 @@ namespace BALL
 		}
 
 		void GLPrimitiveManager::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void GLPrimitiveManager::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

@@ -1,4 +1,4 @@
-// $Id: radius.C,v 1.6 2001/02/04 16:14:27 hekl Exp $
+// $Id: radius.C,v 1.7 2001/05/13 14:28:38 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/radius.h>
 #include <BALL/COMMON/exception.h>
@@ -11,17 +11,20 @@ namespace BALL
 	{
 
 		Radius::Radius()
+			throw()
 			:	radius_((Real)1)
 		{
 		}
 
 		Radius::Radius
 			(const Radius& radius)
+			throw()
 			:	radius_(radius.radius_)
 		{
 		}
 
 		Radius::~Radius()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -32,20 +35,24 @@ namespace BALL
 		}
 
 		void Radius::clear()
+			throw()
 		{
 			radius_ = (Real)1;
 		}
 
 		void Radius::destroy()
+			throw()
 		{
 		}
 
 		void Radius::set(const Radius& radius)
+			throw()
 		{
 			radius_ = radius.radius_;
 		}
 
-		Radius& Radius::operator = (const Radius& radius)
+		const Radius& Radius::operator = (const Radius& radius)
+			throw()
 		{
 			set(radius);
 
@@ -53,11 +60,13 @@ namespace BALL
 		}
 
 		void Radius::get(Radius& radius) const
+			throw()
 		{
 			radius.set(*this);
 		}
 
 		void Radius::swap(Radius& radius)
+			throw()
 		{
 			Real temp = radius_;
 
@@ -67,6 +76,7 @@ namespace BALL
 		}
 
 		void Radius::dump(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -80,11 +90,13 @@ namespace BALL
 		}
 
 		void Radius::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void Radius::write(ostream&  /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

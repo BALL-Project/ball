@@ -1,4 +1,4 @@
-// $Id: scene.C,v 1.4 2001/01/26 00:45:03 amoll Exp $
+// $Id: scene.C,v 1.5 2001/05/13 14:26:25 hekl Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 
@@ -27,8 +27,9 @@ namespace BALL
 		// --------------------------------------------------------------------------
 		// ---- Scene Constructors --------------------------------------------------
 		// --------------------------------------------------------------------------
-
+		/*
 		Scene::Scene()
+			throw()
 			:	QGLWidget(),
 				ModularWidget("<Scene>"),
 				events(),
@@ -56,9 +57,10 @@ namespace BALL
 				up_()
 		{
 		}
-
+		*/
 		Scene::Scene
 			(QWidget* parent_widget, const char* name, WFlags w_flags)
+			throw()
 			:	QGLWidget(parent_widget, name, 0, w_flags),
 				ModularWidget(name),
 				events(this),
@@ -122,8 +124,9 @@ namespace BALL
 		}
 
 		Scene::Scene
-			(const Scene& scene, bool /* deep */, QWidget* parent_widget,
+			(const Scene& scene, QWidget* parent_widget,
 			 const char* name, WFlags w_flags)
+			throw()
 			:	QGLWidget(parent_widget, name, 0, w_flags),
 				ModularWidget(scene),
 				events(this),
@@ -194,7 +197,7 @@ namespace BALL
 					<< " of class " << RTTI::getName<Scene>() << endl;
 			#endif 
 
-			clear();
+			destroy();
 		}
 
 		void Scene::clear()
@@ -223,7 +226,13 @@ namespace BALL
 			up_ = Vector3(0,0,0);
 		}
 			
-		void Scene::set(const Scene& scene, bool /* deep */)
+		void Scene::destroy()
+			throw()
+		{
+		}
+
+		void Scene::set(const Scene& scene)
+			throw()
 		{
 			GL_object_collector_ = scene.GL_object_collector_;
 
@@ -248,7 +257,7 @@ namespace BALL
 			up_ = scene.up_;
 		}
 
-		bool Scene::update(bool rebuild_displaylists)
+		void Scene::update(bool rebuild_displaylists)
 			throw(MainControlMissing)
 		{
 			// rebuild displaylists
@@ -278,11 +287,10 @@ namespace BALL
 			}
 
 			updateGL();
-
-			return true;
 		}
 
 		void Scene::onNotify(Message *message)
+			throw()
 		{
 			if (RTTI::isKindOf<SceneMessage>(*message))
 			{
@@ -299,22 +307,17 @@ namespace BALL
 		}
 
 		const Scene& Scene::operator = (const Scene& scene)
+			throw()
 		{
 			set(scene);
 			return *this;
 		}
 
-		void Scene::get(Scene& scene, bool deep) const
+		void Scene::get(Scene& scene) const
+			throw()
 		{
-			scene.set(*this, deep);
+			scene.set(*this);
 		}
-
-		void Scene::swap(Scene& /* scene */)
-		{
-			// BAUSTELLE
-			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
-		}
-
 
 		bool Scene::isValid() const
 			throw()
@@ -741,7 +744,7 @@ namespace BALL
 		void Scene::rotateMode_()
 		{
 			rotate_mode_ = true;
-			setRenderMode(Scene::RENDER_MODE__COMPILE);
+			setRenderMode_(Scene::RENDER_MODE__COMPILE);
 	
 			// unpicking mode controls
 			NotificationUnregister
@@ -780,7 +783,7 @@ namespace BALL
 		void Scene::pickingMode_()
 		{
 			rotate_mode_ = false;
-			setRenderMode(Scene::RENDER_MODE__DO_NOT_COMPILE);
+			setRenderMode_(Scene::RENDER_MODE__DO_NOT_COMPILE);
 			
 			// unrotation mode controls
 			NotificationUnregister
@@ -866,6 +869,11 @@ namespace BALL
 			
 			MainControl *main_control = RTTI::castTo<MainControl>(*object);
 
+			if (main_control == 0)
+			{
+				throw ::BALL::VIEW::Scene::MainControlMissing(__FILE__, __LINE__, "");
+			}
+			
 			// draw the system
 			for (descriptor_iterator = main_control->getDescriptorList().begin();
 					 descriptor_iterator != main_control->getDescriptorList().end(); 
@@ -987,7 +995,8 @@ namespace BALL
 		void Scene::zoomSystem_(Scene *scene)
 		{
 			Vector3 view = getViewPointPosition();
-			Vector3 look_at = getLastLookAtPosition();
+			//			Vector3 look_at = getLastLookAtPosition_();
+			Vector3 look_at = getLookAtPosition();
 
 			Real distance = view.getDistance(look_at);
 
@@ -1114,8 +1123,6 @@ namespace BALL
 			initViewVectors_();
 			setCamera_();
 
-			glEnable(GL_LIGHTING);
-			glEnable(GL_LIGHT0);
 			glFrontFace(GL_CCW);
 			glCullFace(GL_BACK);
 			glEnable(GL_CULL_FACE);
@@ -1125,32 +1132,29 @@ namespace BALL
 			glEnable(GL_DEPTH_TEST);
 			glDepthFunc(GL_LEQUAL);
 			glClearDepth(200.0);
+			glShadeModel(GL_SMOOTH);
 		 
 			GLfloat diff[] = {1.0, 1.0, 1.0, 1.0};
 			GLfloat shin[] = {50.0};
-
-			GLfloat pos[]  = {0,0,1000,0};
+			GLfloat pos[]  = {0,0,10000,0};
 
 			glMaterialfv(GL_FRONT, GL_SPECULAR, diff);
 			glMaterialfv(GL_FRONT, GL_SHININESS, shin);
 			glMaterialfv(GL_FRONT, GL_DIFFUSE, diff);
+			glLightfv(GL_LIGHT0, GL_POSITION, pos);
 
 			glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
 			glEnable(GL_LIGHTING);
 			glEnable(GL_LIGHT0);
-
-			glLightfv(GL_LIGHT0, GL_POSITION, pos);
-			
-			glShadeModel(GL_SMOOTH);
 			
 			open_gl_initialized_ = true;
 		}
 
 		Vector3 Scene::translateObjectXY_(const Real distance)
 		{
-			Vector3 right = getRightVector();
-			Vector3 up = getUpVector();
+			Vector3 right = getRightVector_();
+			Vector3 up = getUpVector_();
 
 			right *= ((x_window_pos_old_ - x_window_pos_new_) 
 								/ (Real)width_) * (1.4 * distance) * 2.0 * x_scale_;
@@ -1165,7 +1169,7 @@ namespace BALL
 		{
 			Real delta_y = y_window_pos_new_ - y_window_pos_old_;
 			
-			return (delta_y / (float)height_ * distance) * getZoomVector();  
+			return (delta_y / (float)height_ * distance) * getZoomVector_();  
 		}
 
 		Vector3 Scene::calculateRotatedVector_(const Vector3& v, const Quaternion& q)
@@ -1198,14 +1202,14 @@ namespace BALL
 			}
 			else
 			{
-				Vector3 a = (Vector3)(getRightVector()) * right1
-									+ (Vector3)getUpVector() * up1
-									+ (Vector3)getZoomVector() 
+				Vector3 a = (Vector3)(getRightVector_()) * right1
+									+ (Vector3)getUpVector_() * up1
+									+ (Vector3)getZoomVector_() 
 										* sphereproject_(0.8, right1, up1);
 
-				Vector3 b = (Vector3)getRightVector() * right2
-									+ (Vector3)getUpVector() * up2
-									+ (Vector3)getZoomVector() 
+				Vector3 b = (Vector3)getRightVector_() * right2
+									+ (Vector3)getUpVector_() * up2
+									+ (Vector3)getZoomVector_() 
 										* sphereproject_(0.8, right2, up2);
 
 				Vector3 cross = a % b;
@@ -1310,9 +1314,9 @@ namespace BALL
 								(GLfloat)(getLookAtPosition().x), 
 								(GLfloat)(getLookAtPosition().y),
 								(GLfloat)(getLookAtPosition().z),
-								(GLfloat)(getLookUpVector().x),
-								(GLfloat)(getLookUpVector().y),
-								(GLfloat)(getLookUpVector().z));
+								(GLfloat)(getLookUpVector_().x),
+								(GLfloat)(getLookUpVector_().y),
+								(GLfloat)(getLookUpVector_().z));
 			
 			glMatrixMode(GL_MODELVIEW);
 			
@@ -1525,9 +1529,9 @@ namespace BALL
 									(GLfloat)(getLookAtPosition().x), 
 									(GLfloat)(getLookAtPosition().y),
 									(GLfloat)(getLookAtPosition().z),
-									(GLfloat)(getLookUpVector().x),
-									(GLfloat)(getLookUpVector().y),
-									(GLfloat)(getLookUpVector().z));
+									(GLfloat)(getLookUpVector_().x),
+									(GLfloat)(getLookUpVector_().y),
+									(GLfloat)(getLookUpVector_().z));
 
 				glMatrixMode(GL_MODELVIEW);
 			}
@@ -1546,6 +1550,7 @@ namespace BALL
 		}
 
 		void Scene::initializeWidget(MainControl& main_control)
+			throw()
 		{
 			(main_control.initPopupMenu(MainControl::DISPLAY))->setCheckable(true);
 
@@ -1559,6 +1564,7 @@ namespace BALL
 		}
 
 		void Scene::finalizeWidget(MainControl& main_control)
+			throw()
 		{
 			main_control.removeMenuEntry
 				(MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
@@ -1568,6 +1574,7 @@ namespace BALL
 		}
 
 		void Scene::checkMenu(MainControl& main_control)
+			throw()
 		{
 			(main_control.menuBar())->setItemChecked(rotate_id_, (rotate_mode_ == true));
 			(main_control.menuBar())->setItemChecked(picking_id_, (rotate_mode_ == false));		

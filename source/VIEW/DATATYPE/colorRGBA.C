@@ -1,4 +1,4 @@
-// $Id: colorRGBA.C,v 1.1 2001/02/04 16:14:25 hekl Exp $
+// $Id: colorRGBA.C,v 1.2 2001/05/13 14:28:35 hekl Exp $
 
 #include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #include <BALL/VIEW/DATATYPE/colorHSV.h>
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		ColorRGBA::ColorRGBA()
+			throw()
 			:	red_(),
 				green_(),
 				blue_(),
@@ -19,6 +20,7 @@ namespace BALL
 		}
 
 		ColorRGBA::ColorRGBA(const ColorRGBA& color)
+			throw()
 			:	red_(color.red_),
 				green_(color.green_),
 				blue_(color.blue_),
@@ -27,17 +29,20 @@ namespace BALL
 		}
 		 
 		ColorRGBA::ColorRGBA(const ColorHSV& color_HSV)
+			throw()
 			:	alpha_((float)1)
 		{
 			color_HSV.calculateRGB_(red_, green_, blue_);
 		}
 		 
 		ColorRGBA::ColorRGBA(const char *char_ptr)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToRGBA_(String(char_ptr));
 		}
 		 
 		ColorRGBA::ColorRGBA(const String &s)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToRGBA_(s);
 		}
@@ -45,6 +50,7 @@ namespace BALL
 		ColorRGBA::ColorRGBA
 			(const ColorUnit& red, const ColorUnit& green,
 			 const ColorUnit& blue, const ColorUnit& alpha)
+			throw()
 			:	red_(red),
 				green_(green),
 				blue_(blue),
@@ -53,6 +59,7 @@ namespace BALL
 		}
 		 
 		ColorRGBA::~ColorRGBA()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 			cout << "Destructing object " << (void *)this << " of class " 
@@ -63,16 +70,19 @@ namespace BALL
 		}
 
 		void ColorRGBA::clear()
+			throw()
 		{
 			red_ = green_ = blue_ = (float)0;
 			alpha_ = ((float)1);
 		}
 
 		void ColorRGBA::destroy()
+			throw()
 		{
 		}
 
 		ColorRGBA::operator String() const
+			throw()
 		{
 			char temp[10];
 
@@ -84,6 +94,7 @@ namespace BALL
 		}
 
 		void ColorRGBA::set(const ColorRGBA& color)
+			throw()
 		{
 			red_ = color.red_;
 			green_ = color.green_;
@@ -91,7 +102,8 @@ namespace BALL
 			alpha_ = color.alpha_;
 		}
 
-		ColorRGBA& ColorRGBA::operator = (const ColorRGBA& color)
+		const ColorRGBA& ColorRGBA::operator = (const ColorRGBA& color)
+			throw()
 		{
 			set(color);
 
@@ -99,18 +111,21 @@ namespace BALL
 		}
 
 		void ColorRGBA::get(ColorRGBA& color) const
+			throw()
 		{
 		 color.set(*this);
 		}
 
 		void ColorRGBA::set(const ColorHSV& color_HSV)
+			throw()
 		{
 			color_HSV.calculateRGB_(red_, green_, blue_);
 
 			alpha_ = (float)1;
 		}
 
-		ColorRGBA& ColorRGBA::operator = (const ColorHSV& color_HSV)
+		const ColorRGBA& ColorRGBA::operator = (const ColorHSV& color_HSV)
+			throw()
 		{
 			set(color_HSV);
 
@@ -118,16 +133,19 @@ namespace BALL
 		}
 
 		void ColorRGBA::get(ColorHSV& color_HSV) const
+			throw()
 		{
 			color_HSV.set(*this);
 		}
 
 		void ColorRGBA::set(const char* char_ptr)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToRGBA_(String(char_ptr));
 		}
 
-		ColorRGBA& ColorRGBA::operator = (const char* char_ptr)
+		const ColorRGBA& ColorRGBA::operator = (const char* char_ptr)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(char_ptr);
 
@@ -135,6 +153,7 @@ namespace BALL
 		}
 
 		void ColorRGBA::get(char *char_ptr) const
+			throw()
 		{
 			sprintf(char_ptr, "%x%x%x%x",
 				(unsigned char)red_, (unsigned char)green_,
@@ -143,11 +162,13 @@ namespace BALL
 
 		void ColorRGBA::set
 			(const String& s)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			stringToRGBA_(s);
 		}
 
-		ColorRGBA& ColorRGBA::operator = (const String& s)
+		const ColorRGBA& ColorRGBA::operator = (const String& s)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			set(s);
 
@@ -155,6 +176,7 @@ namespace BALL
 		}
 
 		void ColorRGBA::get(String& s) const
+			throw()
 		{
 			char temp[10];
 
@@ -166,6 +188,7 @@ namespace BALL
 		}
 
 		void ColorRGBA::swap(ColorRGBA& color)
+			throw()
 		{
 			red_.swap(color.red_);
 			green_.swap(color.green_);
@@ -175,6 +198,7 @@ namespace BALL
 
 		void ColorRGBA::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -193,11 +217,13 @@ namespace BALL
 		}
 
 		void ColorRGBA::read(istream& /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void ColorRGBA::write(ostream&  /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
@@ -225,6 +251,7 @@ namespace BALL
 		}
 
 		void ColorRGBA::stringToRGBA_(const String& s)
+			throw(Exception::InvalidRange, ColorUnit::NotInHexFormat)
 		{
 			int length = (int)s.size();
 

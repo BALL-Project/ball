@@ -1,4 +1,4 @@
-// $Id: glEntityDescriptor.C,v 1.3 2001/02/11 13:06:31 hekl Exp $
+// $Id: glEntityDescriptor.C,v 1.4 2001/05/13 14:28:36 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glEntityDescriptor.h>
 #include <BALL/COMMON/exception.h>
@@ -12,6 +12,7 @@ namespace BALL
 	{
 
 		GLEntityDescriptor::GLEntityDescriptor()
+			throw()
 			:	static_display_list_(),
 				static_always_front_display_list_(),
 				static_wireframe_display_list_(),
@@ -26,6 +27,7 @@ namespace BALL
 			
 
 		GLEntityDescriptor::~GLEntityDescriptor()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this << " of class " 
@@ -36,6 +38,7 @@ namespace BALL
 		}
 
 		void GLEntityDescriptor::clear()
+			throw()
 		{
 			static_display_list_.destroy();
 			static_always_front_display_list_.destroy();
@@ -50,10 +53,12 @@ namespace BALL
 		}
 
 		void GLEntityDescriptor::destroy()
+			throw()
 		{
 		}
 
 		bool GLEntityDescriptor::isValid() const
+			throw()
 		{
 			return (static_display_list_.isValid()
 										&& static_always_front_display_list_.isValid()
@@ -67,6 +72,7 @@ namespace BALL
 
 		void GLEntityDescriptor::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 
@@ -86,11 +92,13 @@ namespace BALL
 		}
 
 		void GLEntityDescriptor::read(istream &/* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void GLEntityDescriptor::write(ostream &/*s*/) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

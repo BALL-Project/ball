@@ -7,17 +7,18 @@ namespace BALL
 	namespace VIEW
 	{
 
-		Preferences::Preferences(QWidget* parent, const char* name)
+		Preferences::Preferences(QWidget* parent, const char* name, int width, int height)
+			throw()
 			:	QTabDialog(parent, name, FALSE, 208),
 				number_of_tabs_(0)
 		{
 			setApplyButton();
 			setCancelButton();
-			setOKButton();
+			//			setOKButton();
 			
-			resize(400,300);
-			setMinimumSize(400, 300);
-			setMaximumSize(400, 300);
+			resize(width,height);
+			setMinimumSize(width, height);
+			setMaximumSize(width, height);
 
 			connect(this,
 							SIGNAL(cancelButtonPressed()),
@@ -25,27 +26,48 @@ namespace BALL
 		}
 		
 		Preferences::~Preferences()
+			throw()
 		{
+			#ifdef BALL_VIEW_DEBUG
+				cout << "Destructing object " << (void *)this 
+					<< " of class " << RTTI::getName<Preferences>() << endl;
+			#endif 
+
+			destroy();
 		}
 		
+		void Preferences::clear()
+			throw()
+		{
+		}
+
+		void Preferences::destroy()
+			throw()
+		{
+		}
+
 		bool Preferences::hasTabs()
+			throw()
 		{
 			return (number_of_tabs_ > 0);
 		}
 
 		void Preferences::insertTab(QWidget *child, const QString &name)
+			throw()
 		{
 			++number_of_tabs_;
 			addTab(child, name);
 		}
 		
 		void Preferences::removeTab(QWidget *child)
+			throw()
 		{
 			--number_of_tabs_;
 			removePage(child);
 		}
 		
 		void Preferences::fetchPreferences(INIFile& inifile)
+			throw()
 		{
 			// 
 			// the geometry of the preferences window
@@ -66,6 +88,7 @@ namespace BALL
 		}
 		
 		void Preferences::writePreferences(INIFile& inifile)
+			throw()
 		{
 			//	
 			// the display window position

@@ -10,6 +10,7 @@ namespace BALL
 	{
 
 		ConnectionObject::ConnectionObject()
+			throw()
 			:
 			processing_message_queue_(false),
 			message_queue_(),
@@ -19,6 +20,7 @@ namespace BALL
 		}
 
 		ConnectionObject::~ConnectionObject()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -29,6 +31,7 @@ namespace BALL
 		}
 
 		void ConnectionObject::clear()
+			throw()
 		{
 			// clear the message queue
 			List<Message*>::Iterator message_iterator;
@@ -68,12 +71,14 @@ namespace BALL
 		}
 
 		void ConnectionObject::destroy()
+			throw()
 		{
 			clear();
 		}
 
   	void ConnectionObject::registerConnectionObject
 		  (ConnectionObject &object)
+			throw()
     {
 			// register only once
 			if (isConnectionObjectRegistered(object))
@@ -88,6 +93,7 @@ namespace BALL
 
 		void ConnectionObject::unregisterConnectionObject
 		  (ConnectionObject &object)
+			throw()
     {
 			// search object in list
 			// if inserted cut connection between them
@@ -118,6 +124,7 @@ namespace BALL
 
 	  bool ConnectionObject::isConnectionObjectRegistered
 		  (const ConnectionObject &object)
+			throw()
     {
 			// search object in list
 			// if already inserted return true
@@ -138,6 +145,7 @@ namespace BALL
 		}
 
 		ConnectionObject *ConnectionObject::getRoot()
+			throw()
     {
 			ConnectionObject *object = this;
 
@@ -150,10 +158,12 @@ namespace BALL
     }
 
 	  void ConnectionObject::onNotify(Message * /* message */)
+			throw()
     {
     } 
 
 		bool ConnectionObject::isValid() const
+			throw()
 		{
 			// check all children if parent will be ´this´
 			List<ConnectionObject*>::ConstIterator list_iterator;
@@ -184,6 +194,7 @@ namespace BALL
 
 		void ConnectionObject::dump
 			(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -203,16 +214,19 @@ namespace BALL
 		}
 				
 		void ConnectionObject::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void ConnectionObject::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void ConnectionObject::notify_(Message *message)
+			throw()
     {
 			ConnectionObject *object = getRoot();
 
@@ -222,6 +236,7 @@ namespace BALL
 		}
 
 		void ConnectionObject::notify_(Message &message)
+			throw()
     {
 			ConnectionObject *object = getRoot();
 
@@ -231,6 +246,7 @@ namespace BALL
 		}
 
 		void ConnectionObject::onNotify_(Message* message)
+			throw()
     {
 			// insert Message into queue (last position)
 			message_queue_.push_back(message);

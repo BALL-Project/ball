@@ -1,4 +1,4 @@
-// $Id: client.C,v 1.8 2001/02/04 16:14:27 hekl Exp $
+// $Id: client.C,v 1.9 2001/05/13 14:28:37 hekl Exp $
 
 #include <BALL/VIEW/KERNEL/client.h>
 
@@ -10,8 +10,21 @@ namespace BALL
 	namespace VIEW
 	{
 
+		Client::InvalidClient::InvalidClient(const char* file, int line)
+				throw()
+			:	Exception::GeneralException(file, line, string("InvalidClient"), string("client not valid!"))
+		{
+		}
+
+		Client::NoPersistentObject::NoPersistentObject(const char* file, int line)
+				throw()
+			:	Exception::GeneralException(file, line, string("NoPersistentObject"), string("object is not a persistent object!"))
+		{
+		}
+
 
 		Client::Client()
+			throw()
 			:	host_(),
 				port_(VIEW_DEFAULT_PORT),
 				pm_()
@@ -19,12 +32,14 @@ namespace BALL
 		}
 
 		Client::Client(const String& host, int port)
+			throw()
 			:	pm_()
 		{
 			connect(host, port);
 		}
 
 		Client::~Client()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -35,34 +50,34 @@ namespace BALL
 		}
 
 		void Client::clear()
+			throw()
 		{
 		}
 
 		void Client::destroy()
+			throw()
 		{
 		}
 
 		void Client::connect(const String& host, int port)
+			throw()
 		{
 			host_ = host;
 			port_ = port;
 		}
 
 	  void Client::insert(Composite &composite)
+			throw(InvalidClient, NoPersistentObject)
     {
-			#ifdef BALL_VIEW_DEBUG
-					
 			if (!isValid())
 			{
 				throw InvalidClient(__FILE__, __LINE__);
 			}	
 				
-			if (!RTTI::isKindOf<PersistentObject*>(&composite))
+			if (!RTTI::isKindOf<PersistentObject>(composite))
 			{
 				throw NoPersistentObject(__FILE__, __LINE__);
 			}
-
-			#endif
 
 			IOStreamSocket iostream_socket;	
 			iostream_socket->connect(host_.c_str(), port_);
@@ -153,11 +168,13 @@ namespace BALL
 		*/
 
 		bool Client::isValid() const
+			throw()
 		{
 			return (host_ != "" && port_ != 0);
 		}
 
 		void Client::dump(ostream& s, Size depth) const
+			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 			
@@ -174,11 +191,13 @@ namespace BALL
 		}
 
 		void Client::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void Client::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

@@ -3,8 +3,7 @@ DIRECTORY=VIEW/GUI/FUNCTOR
 THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
-	glObjectCollector.C\
-	objectProcessor.C
+	glObjectCollector.C
 
 include ../../../common.mak
 include .Dependencies

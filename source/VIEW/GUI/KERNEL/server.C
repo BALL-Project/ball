@@ -1,4 +1,4 @@
-// $Id: server.C,v 1.4 2001/02/04 16:14:26 hekl Exp $
+// $Id: server.C,v 1.5 2001/05/13 14:28:36 hekl Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/server.h>
 #include <BALL/COMMON/logStream.h>
@@ -38,7 +38,14 @@ namespace BALL
         "   ..o          "
 		};        
   
+		Server::NotCompositeObject::NotCompositeObject(const char* file, int line)
+			throw()
+			:	Exception::GeneralException(file, line, string("NotCompositeObject"), string("received an non composite object!"))
+		{
+		}
+
 		Server::Server(QWidget* parent, const char* name)
+				throw()
 			:	QTTimer(parent, name),
 				ModularWidget(name),
 				object_creator_(0),
@@ -52,7 +59,7 @@ namespace BALL
 			// register ModularWidget
 			registerWidget(this);
 			
-			deregisterObjectCreator();
+			unregisterObjectCreator();
 		}
 
 		Server::~Server()
@@ -63,7 +70,7 @@ namespace BALL
 					<< " of class " << RTTI::getName<Server>() << endl;
 			#endif 
 
-			clear();
+			destroy();
 		}
 
 		void Server::clear()
@@ -73,8 +80,16 @@ namespace BALL
 			ConnectionObject::clear();
 		}
 
+		void Server::destroy()
+			throw()
+		{
+			QTTimer::destroy();
+			ConnectionObject::destroy();
+		}
+
 		// initializes a new socket and starts the timer
 		void Server::activate()
+				throw()
 		{
 			static SockInetBuf sock_inet_buf(SocketBuf::sock_stream);
 			
@@ -106,6 +121,7 @@ namespace BALL
 		}
 
 		void Server::deactivate()
+				throw()
 		{
 			if (isTimerEnabled())
 			{
@@ -116,16 +132,19 @@ namespace BALL
 		}
 			
 		int Server::getPort() const
+				throw()
 		{
 			return port_;
 		}
 		
 		void Server::setPort(const int port)
+				throw()
 		{
 			port_ = port;
 		}
 		
 		void Server::initializeWidget(MainControl& main_control)
+				throw()
 		{
 			server_icon_ = new QLabel(main_control.statusBar());
 			main_control.statusBar()->addWidget(server_icon_, 1, TRUE );
@@ -137,16 +156,19 @@ namespace BALL
  		}
 
 		void Server::finalizeWidget(MainControl& main_control)
+				throw()
 		{
 			main_control.statusBar()->removeWidget(server_icon_);	
 			delete server_icon_;
 		}
 			
 		void Server::checkMenu(MainControl& /* main_control */)
+				throw()
 		{
 		}
 
 		void Server::initializePreferencesTab(Preferences &preferences)
+				throw()
 		{
 			server_preferences_ = new ServerPreferences();
 			CHECK_PTR(server_preferences_);
@@ -155,6 +177,7 @@ namespace BALL
 		}
 
 		void Server::finalizePreferencesTab(Preferences &preferences)
+				throw()
 		{
 			if (server_preferences_ != 0)
 			{
@@ -166,6 +189,7 @@ namespace BALL
 		}
 		
 		void Server::applyPreferences(Preferences & /* preferences */)
+				throw()
 		{
 			if (server_preferences_ != 0)
 			{
@@ -206,6 +230,7 @@ namespace BALL
 		}
 		
 		void Server::fetchPreferences(INIFile &inifile)
+				throw()
 		{
 			// the default preferences tab (if existent)
 			if (server_preferences_ != 0)
@@ -215,6 +240,7 @@ namespace BALL
 		}
 		
 		void Server::writePreferences(INIFile &inifile)
+				throw()
 		{
 			// the default preferences tab (if existent)
 			if (server_preferences_ != 0)
@@ -257,6 +283,7 @@ namespace BALL
 
 		// main event loop
 	  void Server::timer()
+				throw(NotCompositeObject)
 		{
 			unsigned int command;
 
@@ -279,18 +306,6 @@ namespace BALL
 					sendObject(iostream_socket);
 				break;
 
-  			case COMMAND__SET_CREATOR_VALUE:
-					setCreatorValue(iostream_socket);
-				break;
-
-  			case COMMAND__GET_CREATOR_VALUE:
-					getCreatorValue(iostream_socket);
-				break;
-
-  			case COMMAND__HAS_CREATOR_VALUE:
-					hasCreatorValue(iostream_socket);
-				break;
-
    			default:
 					Log.info() << "Server: unkown command." << endl;
 					break;
@@ -298,6 +313,7 @@ namespace BALL
 		}
 
 	  void Server::sendObject(IOStreamSocket &iostream_socket)
+				throw(NotCompositeObject)
     {
 			Log.info() << "Server: receiving object ... " << endl;
 
@@ -313,14 +329,10 @@ namespace BALL
 			// use specified object creator for inserting the object in the scene
 			new_composite_ptr = object_creator_->operator()(iostream_socket);
 
-			#ifdef BALL_VIEW_DEBUG
-					
-			if (!isValid())
+			if (new_composite_ptr == 0)
 			{
-				throw CompositePointerIsNull(__FILE__, __LINE__);
+				throw NotCompositeObject(__FILE__, __LINE__);
 			}
-				
-			#endif	
 
 			received_composite_ = new_composite_ptr;
 
@@ -357,6 +369,7 @@ namespace BALL
 					Log.info() << "> Server: error deleting old composite!" << endl;
 				}
 			}
+			/*
 			else // composite is new
  			{
 	 			// insert into hashmap
@@ -369,56 +382,18 @@ namespace BALL
 				
 				notify_(new_message);
 			}		
+			*/
+			
+			// insert into hashmap
+			composite_hashmap_.
+				insert(CompositeHashMap::ValueType(object_handle, new_composite_ptr));
+ 			
+			// notify main window
+			NewCompositeMessage new_message;
+			new_message.setComposite(*new_composite_ptr);
+			
+			notify_(new_message);
     }
-
-	  void Server::setCreatorValue(IOStreamSocket &iostream_socket)
-    {
-			Log.info() << "Server: setting ObjectCreator value... " << flush;
-			
-			int address;
-			int value;
-			
-			iostream_socket >> address;
-			iostream_socket >> value;
-			
-			object_creator_->setValue(address, value);
-			
-			Log.info() << "finished." << endl;
-    }
- 
-	  void Server::getCreatorValue(IOStreamSocket &iostream_socket)
-    {
-			Log.info() << "Server: getting ObjectCreator value... " << flush;
-
-			int value;
-			int address;
-			
-			iostream_socket >> address;
-			
-			value = object_creator_->getValue(address);
-
-			iostream_socket << value << endl;
-			
-			Log.info() << "finished." << endl;
-		}
-
-	  void Server::hasCreatorValue(IOStreamSocket &iostream_socket)
-    {
-			Log.info() << "Server: has ObjectCreator value... " << flush;
-
-			int value;
-			int address;
-			bool has_value;
-			
-			iostream_socket >> address;
-			iostream_socket >> value;
-			
-			has_value = object_creator_->hasValue(address, value);
-
-			iostream_socket << has_value << endl;
-			
-			Log.info() << "finished." << endl;
-		}
 
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

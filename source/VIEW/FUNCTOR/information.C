@@ -1,4 +1,4 @@
-// $Id: information.C,v 1.2 2000/12/12 16:18:42 oliver Exp $
+// $Id: information.C,v 1.3 2001/05/13 14:28:35 hekl Exp $
 
 #include <BALL/VIEW/FUNCTOR/information.h>
 
@@ -11,17 +11,10 @@ namespace BALL
 	{
 
 		Information::Information()
+			throw()
 			:	Visitor<Composite>()
 		{
-		}
-
-		Information::Information
-			(const Information& info, bool /* deep */)
-			:	Visitor<Composite>(info),
-				name_("unkown"),
-				type_name_("unkown type"),
-				type_(TYPE__UNKNOWN)
-		{
+			clear();
 		}
 
 		Information::~Information()
@@ -46,71 +39,14 @@ namespace BALL
 		void Information::destroy()
 			throw()
 		{
-			clear();
-		}
-
-		void Information::set
-			(const Information& info,
-			 bool /* deep */)
-		{
-			name_ = info.name_;
-			type_name_ = info.type_name_;
-			type_ = info.type_;
-		}
-
-		Information& 	Information::operator =
-			(const Information& info)
-		{
-			set(info);
-
-			return *this;
-		}
-
-		void Information::get
-			(Information& info, bool deep) const
-		{
-			info.set(*this, deep);
-		}
-
-		void Information::swap
-			(Information& info)
-		{
-			name_.swap(info.name_);
-			type_name_.swap(info.type_name_);
-
-			Type temp = type_;
-			type_ = info.type_;
-			info.type_ = temp;
 		}
 
 		void Information::visit(Composite& composite)
+			throw()
 		{
 			getType_(composite);
 			getTypeName_(composite);
 			getName_(composite);
-		}
-
-		bool Information::isValid() const
-		{
-			return true;
-		}
-
-		void Information::dump
-			(ostream& s, Size depth) const
-			throw()
-		{
-			BALL_DUMP_STREAM_PREFIX(s);
-			
-			BALL_DUMP_DEPTH(s, depth);
-			BALL_DUMP_HEADER(s, this, this);
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "name: " << name_ << endl;
-					
-			BALL_DUMP_DEPTH(s, depth);
-			s << "type_name: " << type_name_ << endl;
-					
-			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
 	  void Information::getType_(Composite& composite)

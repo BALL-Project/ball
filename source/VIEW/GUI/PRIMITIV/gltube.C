@@ -1,4 +1,4 @@
-// $Id: gltube.C,v 1.4 2001/02/04 16:14:26 hekl Exp $
+// $Id: gltube.C,v 1.5 2001/05/13 14:28:37 hekl Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/gltube.h>
 #include <GL/gl.h>
@@ -10,18 +10,21 @@ namespace BALL
 	{
 
 		GLTube::GLTube()
+			throw()
 			:	Tube(),
 				GLObject()
 		{
 		}
 
 		GLTube::GLTube(const GLTube& GL_tube, bool deep)
+			throw()
 			:	Tube(GL_tube, deep),
 				GLObject(GL_tube)
 		{
 		}
 
 		GLTube::GLTube(const GeometricObject& geometric_object)
+			throw()
 			:	Tube(geometric_object),
 				GLObject()
 		{
@@ -52,7 +55,35 @@ namespace BALL
 			GLObject::destroy();
 		}
 
+		void GLTube::set(const GLTube& tube, bool deep)
+			throw()
+		{
+			Tube::set(tube, deep);
+			GLObject::set(tube);
+		}
+
+		const GLTube& GLTube::operator = (const GLTube& tube)
+			throw()
+		{
+			set(tube);
+			return *this;
+		}
+
+		void GLTube::get(GLTube& tube, bool deep) const
+			throw()
+		{
+			tube.set(*this, deep);
+		}
+
+		void GLTube::swap(GLTube& tube)
+			throw()
+		{
+			Tube::swap(tube);
+			GLObject::swap(tube);
+		}
+
 		bool GLTube::draw(bool with_names)
+			throw()
 		{
 			if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN) == true)
 			{
@@ -61,17 +92,17 @@ namespace BALL
 
 			if (isSelected() == false)
 			{
-				glColor4ub((unsigned char)getColor().red(),
-									 (unsigned char)getColor().green(),
-									 (unsigned char)getColor().blue(),
-									 (unsigned char)getColor().alpha());
+				glColor4ub((unsigned char)getColor().getRed(),
+									 (unsigned char)getColor().getGreen(),
+									 (unsigned char)getColor().getBlue(),
+									 (unsigned char)getColor().getAlpha());
 			}
 			else
 			{
-				glColor4ub((unsigned char)getSelectedColor().red(),
-									 (unsigned char)getSelectedColor().green(),
-									 (unsigned char)getSelectedColor().blue(),
-									 (unsigned char)getSelectedColor().alpha());
+				glColor4ub((unsigned char)getSelectedColor().getRed(),
+									 (unsigned char)getSelectedColor().getGreen(),
+									 (unsigned char)getSelectedColor().getBlue(),
+									 (unsigned char)getSelectedColor().getAlpha());
 			}
 
 			if (with_names)
@@ -117,6 +148,7 @@ namespace BALL
 		}
 
 		bool GLTube::drawUserDefined()
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}

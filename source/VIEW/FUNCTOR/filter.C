@@ -1,4 +1,4 @@
-// $Id: filter.C,v 1.2 2000/12/12 16:18:42 oliver Exp $
+// $Id: filter.C,v 1.3 2001/05/13 14:28:35 hekl Exp $
 
 #include <BALL/VIEW/FUNCTOR/filter.h>
 
@@ -11,6 +11,7 @@ namespace BALL
 	{
 
 		Filter::Filter()
+				throw()
 			:	Visitor<Composite>(),
 				object_passed_(false)
 		{
@@ -36,31 +37,12 @@ namespace BALL
 		void Filter::destroy()
 			throw()
 		{
-			clear();
 		}
 
 		void Filter::visit(Composite& composite)
-		{
-			object_passed_ = RTTI::isKindOf<GeometricObject>(composite);
-		}
-
-		bool Filter::isValid() const
-		{
-			return true;
-		}
-
-		void Filter::dump
-			(ostream& s, Size depth) const
 			throw()
 		{
-			BALL_DUMP_STREAM_PREFIX(s);
-			
-			BALL_DUMP_DEPTH(s, depth);
-			BALL_DUMP_HEADER(s, this, this);
-
-			s << "object passed: " << ((object_passed_ == true) ? "yes": "no") << endl;
-
-			BALL_DUMP_STREAM_SUFFIX(s);
+			object_passed_ = RTTI::isKindOf<GeometricObject>(composite);
 		}
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS

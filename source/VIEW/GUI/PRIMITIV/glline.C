@@ -1,4 +1,4 @@
-// $Id: glline.C,v 1.4 2001/02/04 16:14:26 hekl Exp $
+// $Id: glline.C,v 1.5 2001/05/13 14:28:37 hekl Exp $
 
 #include <BALL/VIEW/GUI/PRIMITIV/glline.h>
 #include <GL/gl.h>
@@ -55,7 +55,35 @@ namespace BALL
 			GLObject::destroy();
 		}
 
+		void GLLine::set(const GLLine& line, bool deep)
+			throw()
+		{
+			Line::set(line, deep);
+			GLObject::set(line);
+		}
+
+		const GLLine& GLLine::operator = (const GLLine& line)
+			throw()
+		{
+			set(line);
+			return *this;
+		}
+
+		void GLLine::get(GLLine& line, bool deep) const
+			throw()
+		{
+			line.set(*this, deep);
+		}
+
+		void GLLine::swap(GLLine& line)
+			throw()
+		{
+			Line::swap(line);
+			GLObject::swap(line);
+		}
+
 		bool GLLine::draw(bool with_names)
+			throw()
 		{
 			if (hasProperty(GeometricObject::PROPERTY__OBJECT_HIDDEN) == true)
 			{
@@ -64,17 +92,17 @@ namespace BALL
 
 			if (isSelected() == false)
 			{
-				glColor4ub((unsigned char)getColor().red(),
-									 (unsigned char)getColor().green(),
-									 (unsigned char)getColor().blue(),
-									 (unsigned char)getColor().alpha());
+				glColor4ub((unsigned char)getColor().getRed(),
+									 (unsigned char)getColor().getGreen(),
+									 (unsigned char)getColor().getBlue(),
+									 (unsigned char)getColor().getAlpha());
 			}
 			else
 			{
-				glColor4ub((unsigned char)getSelectedColor().red(),
-									 (unsigned char)getSelectedColor().green(),
-									 (unsigned char)getSelectedColor().blue(),
-									 (unsigned char)getSelectedColor().alpha());
+				glColor4ub((unsigned char)getSelectedColor().getRed(),
+									 (unsigned char)getSelectedColor().getGreen(),
+									 (unsigned char)getSelectedColor().getBlue(),
+									 (unsigned char)getSelectedColor().getAlpha());
 			}
 
 			if (with_names)

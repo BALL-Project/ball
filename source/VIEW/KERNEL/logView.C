@@ -12,6 +12,7 @@ namespace BALL
 	{
   
 		LogView::LogView(QWidget *parent, const char *name)
+			throw()
 			:	NotificationTarget<LogStreamNotifier>(),
 			  QMultiLineEdit(parent, name),
 				history_string_(),
@@ -24,6 +25,7 @@ namespace BALL
 		}
 
 		LogView::LogView(const LogView& view)
+			throw()
 			:	NotificationTarget<LogStreamNotifier>(),
 			  QMultiLineEdit(),
 				history_string_(view.history_string_),
@@ -36,6 +38,7 @@ namespace BALL
 		}
 
 		LogView::~LogView()
+			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
@@ -48,24 +51,29 @@ namespace BALL
 		}
 		
 		void LogView::clear()
+			throw()
 		{
 		}
 
 		void LogView::destroy()
+			throw()
 		{
 		}
 
 		void LogView::read(istream & /* s */)
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 		void LogView::write(ostream & /* s */) const
+			throw()
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
 	  bool LogView::onNotify(LogStreamNotifier& /* source */)
+			throw()
 		{
 			string line;
 			
