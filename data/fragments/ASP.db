@@ -1,100 +1,80 @@
-(ASP
-  (Names
-		(Aspartate)
-		(Aspartat)
-		(Asp)
-		(D)
-  )
-  (Atoms
-    (N N 0.1006113 1.231053 -0.1065504)
-    (3H H 0.7826706 1.919109 0.1901606)
-    (CA C -0.6776782 1.854581 -1.196471)
-    (HA H -0.140641 1.67647 -2.129506)
-    (C C -0.7684437 3.377808 -1.00658)
-    (O O -0.1755398 3.814352 0.008837678)
-    (CB C -2.059715 1.201639 -1.304611)
-    (1HB H -1.947421 0.1437317 -1.541582)
-    (2HB H -2.583309 1.296861 -0.3531539)
-    (CG C -2.895658 1.868856 -2.384729)
-    (OD1 O -2.861295 1.365629 -3.526181)
-    (OD2 O -3.508188 2.905267 -2.052321)
-    (OXT O -0.9198192 4.048685 -2.051676)
-    (1H H -0.5109496 1.02733 0.6709606)
-    (2H H 0.5472904 0.3836241 -0.4264945)
-  )
-  (Bonds
-    (1 3H N)
-    (2 CA N)
-    (3 HA CA)
-    (4 C CA)
-    (5 O C)
-    (6 CB CA)
-    (7 1HB CB)
-    (8 2HB CB)
-    (9 CG CB)
-    (10 OD1 CG)
-    (11 OD2 CG)
-    (12 OXT C)
-    (13 1H N)
-    (14 2H N)
-  )
-  (Connections
-    (N-term N C-term 1.33 0.5) 
-    (C-term C N-term 1.33 0.5)
-  )
- 	(Properties
-		(AMINO_ACID)
-	)
-	(Variants
-		(Default
-			(Delete
-				(OXT)
-			  (1H)
-			  (2H)
-			)
-		  (Rename
-			  (3H H)
-			)
-			(addh 4
-				(H N CA C x )
-				(HA CA N C CB )
-				(1HB CB CA CG OD1 )
-				(2HB CB CA CG OD1 )
-			)
-		)
-	  (ASP-N
-		  (Delete
-			  (OXT)
-			)
-		  (Properties
-			  (N_TERMINAL)
-      )
-			(addh 4
-				(H N CA C x )
-				(HA CA N C CB )
-				(1HB CB CA CG OD1 )
-				(2HB CB CA CG OD1 )
-			)
-		)
-		(ASP-C
-		  (Delete
-				(1H)
-				(2H)
-			)
-		  (Rename
-				(3H H)
-			)
-      (Properties
-				(C_TERMINAL)
-			)
-			(addh 6
-				(HA CA N C CB )
-				(1HB CB CA CG OD1 )
-				(2HB CB CA CG OD1 )
-        (1H N CA C O)
-        (2H N CA C O)
-        (3H N CA C O)
-			)
-		)
-	)
-)
+<node>ASP
+ <node>Names
+ <node>Aspartate</node>
+ <node>Aspartat</node>
+ <node>Asp</node>
+ <node>D</node>
+ </node>
+ <node>Atoms
+ <node>N<value>N 0.1006113 1.231053 -0.1065504</value></node>
+ <node>3H<value>H 0.7826706 1.919109 0.1901606</value></node>
+ <node>CA<value>C -0.6776782 1.854581 -1.196471</value></node>
+ <node>HA<value>H -0.140641 1.67647 -2.129506</value></node>
+ <node>C<value>C -0.7684437 3.377808 -1.00658</value></node>
+ <node>O<value>O -0.1755398 3.814352 0.008837678</value></node>
+ <node>CB<value>C -2.059715 1.201639 -1.304611</value></node>
+ <node>1HB<value>H -1.947421 0.1437317 -1.541582</value></node>
+ <node>2HB<value>H -2.583309 1.296861 -0.3531539</value></node>
+ <node>CG<value>C -2.895658 1.868856 -2.384729</value></node>
+ <node>OD1<value>O -2.861295 1.365629 -3.526181</value></node>
+ <node>OD2<value>O -3.508188 2.905267 -2.052321</value></node>
+ <node>OXT<value>O -0.9198192 4.048685 -2.051676</value></node>
+ <node>1H<value>H -0.5109496 1.02733 0.6709606</value></node>
+ <node>2H<value>H 0.5472904 0.3836241 -0.4264945</value></node>
+ </node>
+ <node>Bonds
+ <node>1<value>3H N</value></node>
+ <node>2<value>CA N</value></node>
+ <node>3<value>HA CA</value></node>
+ <node>4<value>C CA</value></node>
+ <node>5<value>O C</value></node>
+ <node>6<value>CB CA</value></node>
+ <node>7<value>1HB CB</value></node>
+ <node>8<value>2HB CB</value></node>
+ <node>9<value>CG CB</value></node>
+ <node>10<value>OD1 CG</value></node>
+ <node>11<value>OD2 CG</value></node>
+ <node>12<value>OXT C</value></node>
+ <node>13<value>1H N</value></node>
+ <node>14<value>2H N</value></node>
+ </node>
+ <node>Connections
+ <node>N-term<value>N C-term 1.33 0.5</value></node> 
+ <node>C-term<value>C N-term 1.33 0.5</value></node>
+ </node>
+ <node>Properties
+ <node>AMINO_ACID</node>
+ </node>
+ <node>Variants
+ <node>Default
+ <node>Delete
+ <node>OXT</node>
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ </node>
+ <node>ASP-N
+ <node>Delete
+ <node>OXT</node>
+ </node>
+ <node>Properties
+ <node>N_TERMINAL</node>
+ </node>
+ </node>
+ <node>ASP-C
+ <node>Delete
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ <node>Properties
+ <node>C_TERMINAL</node>
+ </node>
+ </node>
+ </node>
+</node>

@@ -1,659 +1,659 @@
-(Names
-  (Discover PDB
-		(?:H1 ?:1H)
-		(?:H2 ?:2H)
-		(?:H3 ?:3H)
-    (ALA:N ALA:N)
-    (ALA:HN ALA:H)
-    (ALA:CA ALA:CA)
-    (ALA:HA ALA:HA)
-    (ALA:CB ALA:CB)
-    (ALA:HB1 ALA:1HB)
-    (ALA:HB2 ALA:2HB)
-    (ALA:HB3 ALA:3HB)
-    (ALA:C ALA:C)
-    (ALA:O ALA:O)
-    (ARG:N ARG:N)
-    (ARG:HN ARG:H)
-    (ARG:CA ARG:CA)
-    (ARG:HA ARG:HA)
-    (ARG:CB ARG:CB)
-    (ARG:HB1 ARG:1HB)
-    (ARG:HB2 ARG:2HB)
-    (ARG:CG ARG:CG)
-    (ARG:HG1 ARG:1HG)
-    (ARG:HG2 ARG:2HG)
-    (ARG:CD ARG:CD)
-    (ARG:HD1 ARG:1HD)
-    (ARG:HD2 ARG:2HD)
-    (ARG:NE ARG:NE)
-    (ARG:HE ARG:HE)
-    (ARG:CZ ARG:CZ)
-    (ARG:NH1 ARG:NH1)
-    (ARG:HH11 ARG:1HH1)
-    (ARG:HH12 ARG:2HH1)
-    (ARG:NH2 ARG:NH2)
-    (ARG:HH21 ARG:1HH2)
-    (ARG:HH22 ARG:2HH2)
-    (ARG:C ARG:C)
-    (ARG:O ARG:O)
-    (ASN:N ASN:N)
-    (ASN:HN ASN:H)
-    (ASN:CA ASN:CA)
-    (ASN:HA ASN:HA)
-    (ASN:CB ASN:CB)
-    (ASN:HB1 ASN:1HB)
-    (ASN:HB2 ASN:2HB)
-    (ASN:CG ASN:CG)
-    (ASN:OD1 ASN:OD1)
-    (ASN:ND2 ASN:ND2)
-    (ASN:HD21 ASN:1HD2)
-    (ASN:HD22 ASN:2HD2)
-    (ASN:C ASN:C)
-    (ASN:O ASN:O)
-    (ASP:N ASP:N)
-    (ASP:HN ASP:H)
-    (ASP:CA ASP:CA)
-    (ASP:HA ASP:HA)
-    (ASP:CB ASP:CB)
-    (ASP:HB1 ASP:1HB)
-    (ASP:HB2 ASP:2HB)
-    (ASP:CG ASP:CG)
-    (ASP:OD1 ASP:OD1)
-    (ASP:OD2 ASP:OD2)
-    (ASP:C ASP:C)
-    (ASP:O ASP:O)
-    (CYS:N CYS:N)
-    (CYS:HN CYS:H)
-    (CYS:CA CYS:CA)
-    (CYS:HA CYS:HA)
-    (CYS:CB CYS:CB)
-    (CYS:HB1 CYS:1HB)
-    (CYS:HB2 CYS:2HB)
-    (CYS:SG CYS:SG)
-    (CYS:HG CYS:HG)
-    (CYS:C CYS:C)
-    (CYS:O CYS:O)
-    (GLU:N GLU:N)
-    (GLU:HN GLU:H)
-    (GLU:CA GLU:CA)
-    (GLU:HA GLU:HA)
-    (GLU:CB GLU:CB)
-    (GLU:HB1 GLU:1HB)
-    (GLU:HB2 GLU:2HB)
-    (GLU:CG GLU:CG)
-    (GLU:HG1 GLU:1HG)
-    (GLU:HG2 GLU:2HG)
-    (GLU:CD GLU:CD)
-    (GLU:OE1 GLU:OE1)
-    (GLU:OE2 GLU:OE2)
-    (GLU:C GLU:C)
-    (GLU:O GLU:O)
-    (GLN:N GLN:N)
-    (GLN:HN GLN:H)
-    (GLN:CA GLN:CA)
-    (GLN:HA GLN:HA)
-    (GLN:CB GLN:CB)
-    (GLN:HB1 GLN:1HB)
-    (GLN:HB2 GLN:2HB)
-    (GLN:CG GLN:CG)
-    (GLN:HG1 GLN:1HG)
-    (GLN:HG2 GLN:2HG)
-    (GLN:CD GLN:CD)
-    (GLN:OE1 GLN:OE1)
-    (GLN:NE2 GLN:NE2)
-    (GLN:HE21 GLN:1HE2)
-    (GLN:HE22 GLN:2HE2)
-    (GLN:C GLN:C)
-    (GLN:O GLN:O)
-    (GLY:N GLY:N)
-    (GLY:HN GLY:H)
-    (GLY:CA GLY:CA)
-    (GLY:HA1 GLY:1HA)
-    (GLY:HA2 GLY:2HA)
-    (GLY:C GLY:C)
-    (GLY:O GLY:O)
-    (HIS:N HIS:N)
-    (HIS:HN HIS:H)
-    (HIS:CA HIS:CA)
-    (HIS:HA HIS:HA)
-    (HIS:CB HIS:CB)
-    (HIS:HB1 HIS:1HB)
-    (HIS:HB2 HIS:2HB)
-    (HIS:CG HIS:CG)
-    (HIS:ND1 HIS:ND1)
-    (HIS:HD1 HIS:HD1)
-    (HIS:CE1 HIS:CE1)
-    (HIS:HE1 HIS:HE1)
-    (HIS:NE2 HIS:NE2)
-    (HIS:HE2 HIS:HE2)
-    (HIS:CD2 HIS:CD2)
-    (HIS:HD2 HIS:HD2)
-    (HIS:C HIS:C)
-    (HIS:O HIS:O)
-    (ILE:N ILE:N)
-    (ILE:HN ILE:H)
-    (ILE:CA ILE:CA)
-    (ILE:HA ILE:HA)
-    (ILE:CB ILE:CB)
-    (ILE:HB ILE:HB)
-    (ILE:CG2 ILE:CG2)
-    (ILE:HG21 ILE:1HG2)
-    (ILE:HG22 ILE:2HG2)
-    (ILE:HG23 ILE:3HG2)
-    (ILE:CG1 ILE:CG1)
-    (ILE:HG11 ILE:1HG1)
-    (ILE:HG12 ILE:2HG1)
-    (ILE:CD1 ILE:CD1)
-    (ILE:HD11 ILE:1HD1)
-    (ILE:HD12 ILE:2HD1)
-    (ILE:HD13 ILE:3HD1)
-    (ILE:C ILE:C)
-    (ILE:O ILE:O)
-    (LEU:N LEU:N)
-    (LEU:HN LEU:H)
-    (LEU:CA LEU:CA)
-    (LEU:HA LEU:HA)
-    (LEU:CB LEU:CB)
-    (LEU:HB1 LEU:1HB)
-    (LEU:HB2 LEU:2HB)
-    (LEU:CG LEU:CG)
-    (LEU:HG LEU:HG)
-    (LEU:CD1 LEU:CD1)
-    (LEU:HD11 LEU:1HD1)
-    (LEU:HD12 LEU:2HD1)
-    (LEU:HD13 LEU:3HD1)
-    (LEU:CD2 LEU:CD2)
-    (LEU:HD21 LEU:1HD2)
-    (LEU:HD22 LEU:2HD2)
-    (LEU:HD23 LEU:3HD2)
-    (LEU:C LEU:C)
-    (LEU:O LEU:O)
-    (LYS:N LYS:N)
-    (LYS:HN LYS:H)
-    (LYS:CA LYS:CA)
-    (LYS:HA LYS:HA)
-    (LYS:CB LYS:CB)
-    (LYS:HB1 LYS:1HB)
-    (LYS:HB2 LYS:2HB)
-    (LYS:CG LYS:CG)
-    (LYS:HG1 LYS:1HG)
-    (LYS:HG2 LYS:2HG)
-    (LYS:CD LYS:CD)
-    (LYS:HD1 LYS:1HD)
-    (LYS:HD2 LYS:2HD)
-    (LYS:CE LYS:CE)
-    (LYS:HE1 LYS:1HE)
-    (LYS:HE2 LYS:2HE)
-    (LYS:NZ LYS:NZ)
-    (LYS:HZ1 LYS:1HZ)
-    (LYS:HZ2 LYS:2HZ)
-    (LYS:HZ3 LYS:3HZ)
-    (LYS:C LYS:C)
-    (LYS:O LYS:O)
-    (MET:N MET:N)
-    (MET:HN MET:H)
-    (MET:CA MET:CA)
-    (MET:HA MET:HA)
-    (MET:CB MET:CB)
-    (MET:HB1 MET:1HB)
-    (MET:HB2 MET:2HB)
-    (MET:CG MET:CG)
-    (MET:HG1 MET:1HG)
-    (MET:HG2 MET:2HG)
-    (MET:SD MET:SD)
-    (MET:CE MET:CE)
-    (MET:HE1 MET:1HE)
-    (MET:HE2 MET:2HE)
-    (MET:HE3 MET:3HE)
-    (MET:C MET:C)
-    (MET:O MET:O)
-    (PHE:N PHE:N)
-    (PHE:HN PHE:H)
-    (PHE:CA PHE:CA)
-    (PHE:HA PHE:HA)
-    (PHE:CB PHE:CB)
-    (PHE:HB1 PHE:1HB)
-    (PHE:HB2 PHE:2HB)
-    (PHE:CG PHE:CG)
-    (PHE:CD1 PHE:CD1)
-    (PHE:HD1 PHE:HD1)
-    (PHE:CE1 PHE:CE1)
-    (PHE:HE1 PHE:HE1)
-    (PHE:CZ PHE:CZ)
-    (PHE:HZ PHE:HZ)
-    (PHE:CE2 PHE:CE2)
-    (PHE:HE2 PHE:HE2)
-    (PHE:CD2 PHE:CD2)
-    (PHE:HD2 PHE:HD2)
-    (PHE:C PHE:C)
-    (PHE:O PHE:O)
-    (PRO:N PRO:N)
-    (PRO:CA PRO:CA)
-    (PRO:HA PRO:HA)
-    (PRO:CD PRO:CD)
-    (PRO:HD1 PRO:1HD)
-    (PRO:HD2 PRO:2HD)
-    (PRO:CG PRO:CG)
-    (PRO:HG1 PRO:1HG)
-    (PRO:HG2 PRO:2HG)
-    (PRO:CB PRO:CB)
-    (PRO:HB1 PRO:1HB)
-    (PRO:HB2 PRO:2HB)
-    (PRO:C PRO:C)
-    (PRO:O PRO:O)
-    (SER:N SER:N)
-    (SER:HN SER:H)
-    (SER:CA SER:CA)
-    (SER:HA SER:HA)
-    (SER:CB SER:CB)
-    (SER:HB1 SER:1HB)
-    (SER:HB2 SER:2HB)
-    (SER:OG SER:OG)
-    (SER:HG SER:HG)
-    (SER:C SER:C)
-    (SER:O SER:O)
-    (THR:N THR:N)
-    (THR:HN THR:H)
-    (THR:CA THR:CA)
-    (THR:HA THR:HA)
-    (THR:CB THR:CB)
-    (THR:HB THR:HB)
-    (THR:CG2 THR:CG2)
-    (THR:HG21 THR:1HG2)
-    (THR:HG22 THR:2HG2)
-    (THR:HG23 THR:3HG2)
-    (THR:OG1 THR:OG1)
-    (THR:HG1 THR:HG1)
-    (THR:C THR:C)
-    (THR:O THR:O)
-    (TRP:N TRP:N)
-    (TRP:HN TRP:H)
-    (TRP:CA TRP:CA)
-    (TRP:HA TRP:HA)
-    (TRP:CB TRP:CB)
-    (TRP:HB1 TRP:1HB)
-    (TRP:HB2 TRP:2HB)
-    (TRP:CG TRP:CG)
-    (TRP:CD1 TRP:CD1)
-    (TRP:HD1 TRP:HD1)
-    (TRP:NE1 TRP:NE1)
-    (TRP:HE1 TRP:HE1)
-    (TRP:CE2 TRP:CE2)
-    (TRP:CZ2 TRP:CZ2)
-    (TRP:HZ2 TRP:HZ2)
-    (TRP:CH2 TRP:CH2)
-    (TRP:HH2 TRP:HH2)
-    (TRP:CZ3 TRP:CZ3)
-    (TRP:HZ3 TRP:HZ3)
-    (TRP:CE3 TRP:CE3)
-    (TRP:HE3 TRP:HE3)
-    (TRP:CD2 TRP:CD2)
-    (TRP:C TRP:C)
-    (TRP:O TRP:O)
-    (TYR:N TYR:N)
-    (TYR:HN TYR:H)
-    (TYR:CA TYR:CA)
-    (TYR:HA TYR:HA)
-    (TYR:CB TYR:CB)
-    (TYR:HB1 TYR:1HB)
-    (TYR:HB2 TYR:2HB)
-    (TYR:CG TYR:CG)
-    (TYR:CD1 TYR:CD1)
-    (TYR:HD1 TYR:HD1)
-    (TYR:CE1 TYR:CE1)
-    (TYR:HE1 TYR:HE1)
-    (TYR:CZ TYR:CZ)
-    (TYR:OH TYR:OH)
-    (TYR:HH TYR:HH)
-    (TYR:CE2 TYR:CE2)
-    (TYR:HE2 TYR:HE2)
-    (TYR:CD2 TYR:CD2)
-    (TYR:HD2 TYR:HD2)
-    (TYR:C TYR:C)
-    (TYR:O TYR:O)
-    (VAL:N VAL:N)
-    (VAL:HN VAL:H)
-    (VAL:CA VAL:CA)
-    (VAL:HA VAL:HA)
-    (VAL:CB VAL:CB)
-    (VAL:HB VAL:HB)
-    (VAL:CG1 VAL:CG1)
-    (VAL:HG11 VAL:1HG1)
-    (VAL:HG12 VAL:2HG1)
-    (VAL:HG13 VAL:3HG1)
-    (VAL:CG2 VAL:CG2)
-    (VAL:HG21 VAL:1HG2)
-    (VAL:HG22 VAL:2HG2)
-    (VAL:HG23 VAL:3HG2)
-    (VAL:C VAL:C)
-    (VAL:O VAL:O)
-  )
-  (Amber PDB
-    (ALA:N ALA:N)
-    (ALA:H ALA:H)
-    (ALA:CA ALA:CA)
-    (ALA:HA ALA:HA)
-    (ALA:CB ALA:CB)
-    (ALA:HB1 ALA:1HB)
-    (ALA:HB2 ALA:2HB)
-    (ALA:HB3 ALA:3HB)
-    (ALA:C ALA:C)
-    (ALA:O ALA:O)
-    (ARG:N ARG:N)
-    (ARG:H ARG:H)
-    (ARG:CA ARG:CA)
-    (ARG:HA ARG:HA)
-    (ARG:CB ARG:CB)
-    (ARG:HB2 ARG:1HB)
-    (ARG:HB3 ARG:2HB)
-    (ARG:CG ARG:CG)
-    (ARG:HG2 ARG:1HG)
-    (ARG:HG3 ARG:2HG)
-    (ARG:CD ARG:CD)
-    (ARG:HD2 ARG:1HD)
-    (ARG:HD3 ARG:2HD)
-    (ARG:NE ARG:NE)
-    (ARG:HE ARG:HE)
-    (ARG:CZ ARG:CZ)
-    (ARG:NH1 ARG:NH1)
-    (ARG:HH11 ARG:1HH1)
-    (ARG:HH12 ARG:2HH1)
-    (ARG:NH2 ARG:NH2)
-    (ARG:HH21 ARG:1HH2)
-    (ARG:HH22 ARG:2HH2)
-    (ARG:C ARG:C)
-    (ARG:O ARG:O)
-    (ASN:N ASN:N)
-    (ASN:H ASN:H)
-    (ASN:CA ASN:CA)
-    (ASN:HA ASN:HA)
-    (ASN:CB ASN:CB)
-    (ASN:HB2 ASN:1HB)
-    (ASN:HB3 ASN:2HB)
-    (ASN:CG ASN:CG)
-    (ASN:OD1 ASN:OD1)
-    (ASN:ND2 ASN:ND2)
-    (ASN:HD21 ASN:1HD2)
-    (ASN:HD22 ASN:2HD2)
-    (ASN:C ASN:C)
-    (ASN:O ASN:O)
-    (ASP:N ASP:N)
-    (ASP:H ASP:H)
-    (ASP:CA ASP:CA)
-    (ASP:HA ASP:HA)
-    (ASP:CB ASP:CB)
-    (ASP:HB2 ASP:1HB)
-    (ASP:HB3 ASP:2HB)
-    (ASP:CG ASP:CG)
-    (ASP:OD1 ASP:OD1)
-    (ASP:OD2 ASP:OD2)
-    (ASP:C ASP:C)
-    (ASP:O ASP:O)
-    (CYS:N CYS:N)
-    (CYS:H CYS:H)
-    (CYS:CA CYS:CA)
-    (CYS:HA CYS:HA)
-    (CYS:CB CYS:CB)
-    (CYS:HB2 CYS:1HB)
-    (CYS:HB3 CYS:2HB)
-    (CYS:SG CYS:SG)
-    (CYS:HG CYS:HG)
-    (CYS:C CYS:C)
-    (CYS:O CYS:O)
-    (GLU:N GLU:N)
-    (GLU:H GLU:H)
-    (GLU:CA GLU:CA)
-    (GLU:HA GLU:HA)
-    (GLU:CB GLU:CB)
-    (GLU:HB2 GLU:1HB)
-    (GLU:HB3 GLU:2HB)
-    (GLU:CG GLU:CG)
-    (GLU:HG2 GLU:1HG)
-    (GLU:HG3 GLU:2HG)
-    (GLU:CD GLU:CD)
-    (GLU:OE1 GLU:OE1)
-    (GLU:OE2 GLU:OE2)
-    (GLU:C GLU:C)
-    (GLU:O GLU:O)
-    (GLN:N GLN:N)
-    (GLN:H GLN:H)
-    (GLN:CA GLN:CA)
-    (GLN:HA GLN:HA)
-    (GLN:CB GLN:CB)
-    (GLN:HB2 GLN:1HB)
-    (GLN:HB3 GLN:2HB)
-    (GLN:CG GLN:CG)
-    (GLN:HG2 GLN:1HG)
-    (GLN:HG3 GLN:2HG)
-    (GLN:CD GLN:CD)
-    (GLN:OE1 GLN:OE1)
-    (GLN:NE2 GLN:NE2)
-    (GLN:HE21 GLN:1HE2)
-    (GLN:HE22 GLN:2HE2)
-    (GLN:C GLN:C)
-    (GLN:O GLN:O)
-    (GLY:N GLY:N)
-    (GLY:H GLY:H)
-    (GLY:CA GLY:CA)
-    (GLY:HA2 GLY:1HA)
-    (GLY:HA3 GLY:2HA)
-    (GLY:C GLY:C)
-    (GLY:O GLY:O)
-    (HIS:N HIS:N)
-    (HIS:H HIS:H)
-    (HIS:CA HIS:CA)
-    (HIS:HA HIS:HA)
-    (HIS:CB HIS:CB)
-    (HIS:HB2 HIS:1HB)
-    (HIS:HB3 HIS:2HB)
-    (HIS:CG HIS:CG)
-    (HIS:ND1 HIS:ND1)
-    (HIS:HD1 HIS:HD1)
-    (HIS:CE1 HIS:CE1)
-    (HIS:HE1 HIS:HE1)
-    (HIS:NE2 HIS:NE2)
-    (HIS:HE2 HIS:HE2)
-    (HIS:CD2 HIS:CD2)
-    (HIS:HD2 HIS:HD2)
-    (HIS:C HIS:C)
-    (HIS:O HIS:O)
-    (ILE:N ILE:N)
-    (ILE:H ILE:H)
-    (ILE:CA ILE:CA)
-    (ILE:HA ILE:HA)
-    (ILE:CB ILE:CB)
-    (ILE:HB ILE:HB)
-    (ILE:CG2 ILE:CG2)
-    (ILE:HG21 ILE:1HG2)
-    (ILE:HG22 ILE:2HG2)
-    (ILE:HG23 ILE:3HG2)
-    (ILE:CG1 ILE:CG1)
-    (ILE:HG12 ILE:1HG1)
-    (ILE:HG13 ILE:2HG1)
-    (ILE:CD1 ILE:CD1)
-    (ILE:HD11 ILE:1HD1)
-    (ILE:HD12 ILE:2HD1)
-    (ILE:HD13 ILE:3HD1)
-    (ILE:C ILE:C)
-    (ILE:O ILE:O)
-    (LEU:N LEU:N)
-    (LEU:H LEU:H)
-    (LEU:CA LEU:CA)
-    (LEU:HA LEU:HA)
-    (LEU:CB LEU:CB)
-    (LEU:HB2 LEU:1HB)
-    (LEU:HB3 LEU:2HB)
-    (LEU:CG LEU:CG)
-    (LEU:HG LEU:HG)
-    (LEU:CD1 LEU:CD1)
-    (LEU:HD11 LEU:1HD1)
-    (LEU:HD12 LEU:2HD1)
-    (LEU:HD13 LEU:3HD1)
-    (LEU:CD2 LEU:CD2)
-    (LEU:HD21 LEU:1HD2)
-    (LEU:HD22 LEU:2HD2)
-    (LEU:HD23 LEU:3HD2)
-    (LEU:C LEU:C)
-    (LEU:O LEU:O)
-    (LYS:N LYS:N)
-    (LYS:H LYS:H)
-    (LYS:CA LYS:CA)
-    (LYS:HA LYS:HA)
-    (LYS:CB LYS:CB)
-    (LYS:HB2 LYS:1HB)
-    (LYS:HB3 LYS:2HB)
-    (LYS:CG LYS:CG)
-    (LYS:HG2 LYS:1HG)
-    (LYS:HG3 LYS:2HG)
-    (LYS:CD LYS:CD)
-    (LYS:HD2 LYS:1HD)
-    (LYS:HD3 LYS:2HD)
-    (LYS:CE LYS:CE)
-    (LYS:HE2 LYS:1HE)
-    (LYS:HE3 LYS:2HE)
-    (LYS:NZ LYS:NZ)
-    (LYS:HZ1 LYS:1HZ)
-    (LYS:HZ2 LYS:2HZ)
-    (LYS:HZ3 LYS:3HZ)
-    (LYS:C LYS:C)
-    (LYS:O LYS:O)
-    (MET:N MET:N)
-    (MET:H MET:H)
-    (MET:CA MET:CA)
-    (MET:HA MET:HA)
-    (MET:CB MET:CB)
-    (MET:HB2 MET:1HB)
-    (MET:HB3 MET:2HB)
-    (MET:CG MET:CG)
-    (MET:HG2 MET:1HG)
-    (MET:HG3 MET:2HG)
-    (MET:SD MET:SD)
-    (MET:CE MET:CE)
-    (MET:HE1 MET:1HE)
-    (MET:HE2 MET:2HE)
-    (MET:HE3 MET:3HE)
-    (MET:C MET:C)
-    (MET:O MET:O)
-    (PHE:N PHE:N)
-    (PHE:H PHE:H)
-    (PHE:CA PHE:CA)
-    (PHE:HA PHE:HA)
-    (PHE:CB PHE:CB)
-    (PHE:HB2 PHE:1HB)
-    (PHE:HB3 PHE:2HB)
-    (PHE:CG PHE:CG)
-    (PHE:CD1 PHE:CD1)
-    (PHE:HD1 PHE:HD1)
-    (PHE:CE1 PHE:CE1)
-    (PHE:HE1 PHE:HE1)
-    (PHE:CZ PHE:CZ)
-    (PHE:HZ PHE:HZ)
-    (PHE:CE2 PHE:CE2)
-    (PHE:HE2 PHE:HE2)
-    (PHE:CD2 PHE:CD2)
-    (PHE:HD2 PHE:HD2)
-    (PHE:C PHE:C)
-    (PHE:O PHE:O)
-    (PRO:N PRO:N)
-    (PRO:CA PRO:CA)
-    (PRO:HA PRO:HA)
-    (PRO:CD PRO:CD)
-    (PRO:HD2 PRO:1HD)
-    (PRO:HD3 PRO:2HD)
-    (PRO:CG PRO:CG)
-    (PRO:HG2 PRO:1HG)
-    (PRO:HG3 PRO:2HG)
-    (PRO:CB PRO:CB)
-    (PRO:HB2 PRO:1HB)
-    (PRO:HB3 PRO:2HB)
-    (PRO:C PRO:C)
-    (PRO:O PRO:O)
-    (SER:N SER:N)
-    (SER:H SER:H)
-    (SER:CA SER:CA)
-    (SER:HA SER:HA)
-    (SER:CB SER:CB)
-    (SER:HB2 SER:1HB)
-    (SER:HB3 SER:2HB)
-    (SER:OG SER:OG)
-    (SER:HG SER:HG)
-    (SER:C SER:C)
-    (SER:O SER:O)
-    (THR:N THR:N)
-    (THR:H THR:H)
-    (THR:CA THR:CA)
-    (THR:HA THR:HA)
-    (THR:CB THR:CB)
-    (THR:HB THR:HB)
-    (THR:CG2 THR:CG2)
-    (THR:HG21 THR:1HG2)
-    (THR:HG22 THR:2HG2)
-    (THR:HG23 THR:3HG2)
-    (THR:OG1 THR:OG1)
-    (THR:HG1 THR:HG1)
-    (THR:C THR:C)
-    (THR:O THR:O)
-    (TRP:N TRP:N)
-    (TRP:H TRP:H)
-    (TRP:CA TRP:CA)
-    (TRP:HA TRP:HA)
-    (TRP:CB TRP:CB)
-    (TRP:HB2 TRP:1HB)
-    (TRP:HB3 TRP:2HB)
-    (TRP:CG TRP:CG)
-    (TRP:CD1 TRP:CD1)
-    (TRP:HD1 TRP:HD1)
-    (TRP:NE1 TRP:NE1)
-    (TRP:HE1 TRP:HE1)
-    (TRP:CE2 TRP:CE2)
-    (TRP:CZ2 TRP:CZ2)
-    (TRP:HZ2 TRP:HZ2)
-    (TRP:CH2 TRP:CH2)
-    (TRP:HH2 TRP:HH2)
-    (TRP:CZ3 TRP:CZ3)
-    (TRP:HZ3 TRP:HZ3)
-    (TRP:CE3 TRP:CE3)
-    (TRP:HE3 TRP:HE3)
-    (TRP:CD2 TRP:CD2)
-    (TRP:C TRP:C)
-    (TRP:O TRP:O)
-    (TYR:N TYR:N)
-    (TYR:H TYR:H)
-    (TYR:CA TYR:CA)
-    (TYR:HA TYR:HA)
-    (TYR:CB TYR:CB)
-    (TYR:HB2 TYR:1HB)
-    (TYR:HB3 TYR:2HB)
-    (TYR:CG TYR:CG)
-    (TYR:CD1 TYR:CD1)
-    (TYR:HD1 TYR:HD1)
-    (TYR:CE1 TYR:CE1)
-    (TYR:HE1 TYR:HE1)
-    (TYR:CZ TYR:CZ)
-    (TYR:OH TYR:OH)
-    (TYR:HH TYR:HH)
-    (TYR:CE2 TYR:CE2)
-    (TYR:HE2 TYR:HE2)
-    (TYR:CD2 TYR:CD2)
-    (TYR:HD2 TYR:HD2)
-    (TYR:C TYR:C)
-    (TYR:O TYR:O)
-    (VAL:N VAL:N)
-    (VAL:H VAL:H)
-    (VAL:CA VAL:CA)
-    (VAL:HA VAL:HA)
-    (VAL:CB VAL:CB)
-    (VAL:HB VAL:HB)
-    (VAL:CG1 VAL:CG1)
-    (VAL:HG11 VAL:1HG1)
-    (VAL:HG12 VAL:2HG1)
-    (VAL:HG13 VAL:3HG1)
-    (VAL:CG2 VAL:CG2)
-    (VAL:HG21 VAL:1HG2)
-    (VAL:HG22 VAL:2HG2)
-    (VAL:HG23 VAL:3HG2)
-    (VAL:C VAL:C)
-    (VAL:O VAL:O)
-  )
-)
+<node>Names
+ <node>Discover PDB
+ <node>?:H1<value>?:1H</value></node>
+ <node>?:H2<value>?:2H</value></node>
+ <node>?:H3<value>?:3H</value></node>
+ <node>ALA:N<value>ALA:N</value></node>
+ <node>ALA:HN<value>ALA:H</value></node>
+ <node>ALA:CA<value>ALA:CA</value></node>
+ <node>ALA:HA<value>ALA:HA</value></node>
+ <node>ALA:CB<value>ALA:CB</value></node>
+ <node>ALA:HB1<value>ALA:1HB</value></node>
+ <node>ALA:HB2<value>ALA:2HB</value></node>
+ <node>ALA:HB3<value>ALA:3HB</value></node>
+ <node>ALA:C<value>ALA:C</value></node>
+ <node>ALA:O<value>ALA:O</value></node>
+ <node>ARG:N<value>ARG:N</value></node>
+ <node>ARG:HN<value>ARG:H</value></node>
+ <node>ARG:CA<value>ARG:CA</value></node>
+ <node>ARG:HA<value>ARG:HA</value></node>
+ <node>ARG:CB<value>ARG:CB</value></node>
+ <node>ARG:HB1<value>ARG:1HB</value></node>
+ <node>ARG:HB2<value>ARG:2HB</value></node>
+ <node>ARG:CG<value>ARG:CG</value></node>
+ <node>ARG:HG1<value>ARG:1HG</value></node>
+ <node>ARG:HG2<value>ARG:2HG</value></node>
+ <node>ARG:CD<value>ARG:CD</value></node>
+ <node>ARG:HD1<value>ARG:1HD</value></node>
+ <node>ARG:HD2<value>ARG:2HD</value></node>
+ <node>ARG:NE<value>ARG:NE</value></node>
+ <node>ARG:HE<value>ARG:HE</value></node>
+ <node>ARG:CZ<value>ARG:CZ</value></node>
+ <node>ARG:NH1<value>ARG:NH1</value></node>
+ <node>ARG:HH11<value>ARG:1HH1</value></node>
+ <node>ARG:HH12<value>ARG:2HH1</value></node>
+ <node>ARG:NH2<value>ARG:NH2</value></node>
+ <node>ARG:HH21<value>ARG:1HH2</value></node>
+ <node>ARG:HH22<value>ARG:2HH2</value></node>
+ <node>ARG:C<value>ARG:C</value></node>
+ <node>ARG:O<value>ARG:O</value></node>
+ <node>ASN:N<value>ASN:N</value></node>
+ <node>ASN:HN<value>ASN:H</value></node>
+ <node>ASN:CA<value>ASN:CA</value></node>
+ <node>ASN:HA<value>ASN:HA</value></node>
+ <node>ASN:CB<value>ASN:CB</value></node>
+ <node>ASN:HB1<value>ASN:1HB</value></node>
+ <node>ASN:HB2<value>ASN:2HB</value></node>
+ <node>ASN:CG<value>ASN:CG</value></node>
+ <node>ASN:OD1<value>ASN:OD1</value></node>
+ <node>ASN:ND2<value>ASN:ND2</value></node>
+ <node>ASN:HD21<value>ASN:1HD2</value></node>
+ <node>ASN:HD22<value>ASN:2HD2</value></node>
+ <node>ASN:C<value>ASN:C</value></node>
+ <node>ASN:O<value>ASN:O</value></node>
+ <node>ASP:N<value>ASP:N</value></node>
+ <node>ASP:HN<value>ASP:H</value></node>
+ <node>ASP:CA<value>ASP:CA</value></node>
+ <node>ASP:HA<value>ASP:HA</value></node>
+ <node>ASP:CB<value>ASP:CB</value></node>
+ <node>ASP:HB1<value>ASP:1HB</value></node>
+ <node>ASP:HB2<value>ASP:2HB</value></node>
+ <node>ASP:CG<value>ASP:CG</value></node>
+ <node>ASP:OD1<value>ASP:OD1</value></node>
+ <node>ASP:OD2<value>ASP:OD2</value></node>
+ <node>ASP:C<value>ASP:C</value></node>
+ <node>ASP:O<value>ASP:O</value></node>
+ <node>CYS:N<value>CYS:N</value></node>
+ <node>CYS:HN<value>CYS:H</value></node>
+ <node>CYS:CA<value>CYS:CA</value></node>
+ <node>CYS:HA<value>CYS:HA</value></node>
+ <node>CYS:CB<value>CYS:CB</value></node>
+ <node>CYS:HB1<value>CYS:1HB</value></node>
+ <node>CYS:HB2<value>CYS:2HB</value></node>
+ <node>CYS:SG<value>CYS:SG</value></node>
+ <node>CYS:HG<value>CYS:HG</value></node>
+ <node>CYS:C<value>CYS:C</value></node>
+ <node>CYS:O<value>CYS:O</value></node>
+ <node>GLU:N<value>GLU:N</value></node>
+ <node>GLU:HN<value>GLU:H</value></node>
+ <node>GLU:CA<value>GLU:CA</value></node>
+ <node>GLU:HA<value>GLU:HA</value></node>
+ <node>GLU:CB<value>GLU:CB</value></node>
+ <node>GLU:HB1<value>GLU:1HB</value></node>
+ <node>GLU:HB2<value>GLU:2HB</value></node>
+ <node>GLU:CG<value>GLU:CG</value></node>
+ <node>GLU:HG1<value>GLU:1HG</value></node>
+ <node>GLU:HG2<value>GLU:2HG</value></node>
+ <node>GLU:CD<value>GLU:CD</value></node>
+ <node>GLU:OE1<value>GLU:OE1</value></node>
+ <node>GLU:OE2<value>GLU:OE2</value></node>
+ <node>GLU:C<value>GLU:C</value></node>
+ <node>GLU:O<value>GLU:O</value></node>
+ <node>GLN:N<value>GLN:N</value></node>
+ <node>GLN:HN<value>GLN:H</value></node>
+ <node>GLN:CA<value>GLN:CA</value></node>
+ <node>GLN:HA<value>GLN:HA</value></node>
+ <node>GLN:CB<value>GLN:CB</value></node>
+ <node>GLN:HB1<value>GLN:1HB</value></node>
+ <node>GLN:HB2<value>GLN:2HB</value></node>
+ <node>GLN:CG<value>GLN:CG</value></node>
+ <node>GLN:HG1<value>GLN:1HG</value></node>
+ <node>GLN:HG2<value>GLN:2HG</value></node>
+ <node>GLN:CD<value>GLN:CD</value></node>
+ <node>GLN:OE1<value>GLN:OE1</value></node>
+ <node>GLN:NE2<value>GLN:NE2</value></node>
+ <node>GLN:HE21<value>GLN:1HE2</value></node>
+ <node>GLN:HE22<value>GLN:2HE2</value></node>
+ <node>GLN:C<value>GLN:C</value></node>
+ <node>GLN:O<value>GLN:O</value></node>
+ <node>GLY:N<value>GLY:N</value></node>
+ <node>GLY:HN<value>GLY:H</value></node>
+ <node>GLY:CA<value>GLY:CA</value></node>
+ <node>GLY:HA1<value>GLY:1HA</value></node>
+ <node>GLY:HA2<value>GLY:2HA</value></node>
+ <node>GLY:C<value>GLY:C</value></node>
+ <node>GLY:O<value>GLY:O</value></node>
+ <node>HIS:N<value>HIS:N</value></node>
+ <node>HIS:HN<value>HIS:H</value></node>
+ <node>HIS:CA<value>HIS:CA</value></node>
+ <node>HIS:HA<value>HIS:HA</value></node>
+ <node>HIS:CB<value>HIS:CB</value></node>
+ <node>HIS:HB1<value>HIS:1HB</value></node>
+ <node>HIS:HB2<value>HIS:2HB</value></node>
+ <node>HIS:CG<value>HIS:CG</value></node>
+ <node>HIS:ND1<value>HIS:ND1</value></node>
+ <node>HIS:HD1<value>HIS:HD1</value></node>
+ <node>HIS:CE1<value>HIS:CE1</value></node>
+ <node>HIS:HE1<value>HIS:HE1</value></node>
+ <node>HIS:NE2<value>HIS:NE2</value></node>
+ <node>HIS:HE2<value>HIS:HE2</value></node>
+ <node>HIS:CD2<value>HIS:CD2</value></node>
+ <node>HIS:HD2<value>HIS:HD2</value></node>
+ <node>HIS:C<value>HIS:C</value></node>
+ <node>HIS:O<value>HIS:O</value></node>
+ <node>ILE:N<value>ILE:N</value></node>
+ <node>ILE:HN<value>ILE:H</value></node>
+ <node>ILE:CA<value>ILE:CA</value></node>
+ <node>ILE:HA<value>ILE:HA</value></node>
+ <node>ILE:CB<value>ILE:CB</value></node>
+ <node>ILE:HB<value>ILE:HB</value></node>
+ <node>ILE:CG2<value>ILE:CG2</value></node>
+ <node>ILE:HG21<value>ILE:1HG2</value></node>
+ <node>ILE:HG22<value>ILE:2HG2</value></node>
+ <node>ILE:HG23<value>ILE:3HG2</value></node>
+ <node>ILE:CG1<value>ILE:CG1</value></node>
+ <node>ILE:HG11<value>ILE:1HG1</value></node>
+ <node>ILE:HG12<value>ILE:2HG1</value></node>
+ <node>ILE:CD1<value>ILE:CD1</value></node>
+ <node>ILE:HD11<value>ILE:1HD1</value></node>
+ <node>ILE:HD12<value>ILE:2HD1</value></node>
+ <node>ILE:HD13<value>ILE:3HD1</value></node>
+ <node>ILE:C<value>ILE:C</value></node>
+ <node>ILE:O<value>ILE:O</value></node>
+ <node>LEU:N<value>LEU:N</value></node>
+ <node>LEU:HN<value>LEU:H</value></node>
+ <node>LEU:CA<value>LEU:CA</value></node>
+ <node>LEU:HA<value>LEU:HA</value></node>
+ <node>LEU:CB<value>LEU:CB</value></node>
+ <node>LEU:HB1<value>LEU:1HB</value></node>
+ <node>LEU:HB2<value>LEU:2HB</value></node>
+ <node>LEU:CG<value>LEU:CG</value></node>
+ <node>LEU:HG<value>LEU:HG</value></node>
+ <node>LEU:CD1<value>LEU:CD1</value></node>
+ <node>LEU:HD11<value>LEU:1HD1</value></node>
+ <node>LEU:HD12<value>LEU:2HD1</value></node>
+ <node>LEU:HD13<value>LEU:3HD1</value></node>
+ <node>LEU:CD2<value>LEU:CD2</value></node>
+ <node>LEU:HD21<value>LEU:1HD2</value></node>
+ <node>LEU:HD22<value>LEU:2HD2</value></node>
+ <node>LEU:HD23<value>LEU:3HD2</value></node>
+ <node>LEU:C<value>LEU:C</value></node>
+ <node>LEU:O<value>LEU:O</value></node>
+ <node>LYS:N<value>LYS:N</value></node>
+ <node>LYS:HN<value>LYS:H</value></node>
+ <node>LYS:CA<value>LYS:CA</value></node>
+ <node>LYS:HA<value>LYS:HA</value></node>
+ <node>LYS:CB<value>LYS:CB</value></node>
+ <node>LYS:HB1<value>LYS:1HB</value></node>
+ <node>LYS:HB2<value>LYS:2HB</value></node>
+ <node>LYS:CG<value>LYS:CG</value></node>
+ <node>LYS:HG1<value>LYS:1HG</value></node>
+ <node>LYS:HG2<value>LYS:2HG</value></node>
+ <node>LYS:CD<value>LYS:CD</value></node>
+ <node>LYS:HD1<value>LYS:1HD</value></node>
+ <node>LYS:HD2<value>LYS:2HD</value></node>
+ <node>LYS:CE<value>LYS:CE</value></node>
+ <node>LYS:HE1<value>LYS:1HE</value></node>
+ <node>LYS:HE2<value>LYS:2HE</value></node>
+ <node>LYS:NZ<value>LYS:NZ</value></node>
+ <node>LYS:HZ1<value>LYS:1HZ</value></node>
+ <node>LYS:HZ2<value>LYS:2HZ</value></node>
+ <node>LYS:HZ3<value>LYS:3HZ</value></node>
+ <node>LYS:C<value>LYS:C</value></node>
+ <node>LYS:O<value>LYS:O</value></node>
+ <node>MET:N<value>MET:N</value></node>
+ <node>MET:HN<value>MET:H</value></node>
+ <node>MET:CA<value>MET:CA</value></node>
+ <node>MET:HA<value>MET:HA</value></node>
+ <node>MET:CB<value>MET:CB</value></node>
+ <node>MET:HB1<value>MET:1HB</value></node>
+ <node>MET:HB2<value>MET:2HB</value></node>
+ <node>MET:CG<value>MET:CG</value></node>
+ <node>MET:HG1<value>MET:1HG</value></node>
+ <node>MET:HG2<value>MET:2HG</value></node>
+ <node>MET:SD<value>MET:SD</value></node>
+ <node>MET:CE<value>MET:CE</value></node>
+ <node>MET:HE1<value>MET:1HE</value></node>
+ <node>MET:HE2<value>MET:2HE</value></node>
+ <node>MET:HE3<value>MET:3HE</value></node>
+ <node>MET:C<value>MET:C</value></node>
+ <node>MET:O<value>MET:O</value></node>
+ <node>PHE:N<value>PHE:N</value></node>
+ <node>PHE:HN<value>PHE:H</value></node>
+ <node>PHE:CA<value>PHE:CA</value></node>
+ <node>PHE:HA<value>PHE:HA</value></node>
+ <node>PHE:CB<value>PHE:CB</value></node>
+ <node>PHE:HB1<value>PHE:1HB</value></node>
+ <node>PHE:HB2<value>PHE:2HB</value></node>
+ <node>PHE:CG<value>PHE:CG</value></node>
+ <node>PHE:CD1<value>PHE:CD1</value></node>
+ <node>PHE:HD1<value>PHE:HD1</value></node>
+ <node>PHE:CE1<value>PHE:CE1</value></node>
+ <node>PHE:HE1<value>PHE:HE1</value></node>
+ <node>PHE:CZ<value>PHE:CZ</value></node>
+ <node>PHE:HZ<value>PHE:HZ</value></node>
+ <node>PHE:CE2<value>PHE:CE2</value></node>
+ <node>PHE:HE2<value>PHE:HE2</value></node>
+ <node>PHE:CD2<value>PHE:CD2</value></node>
+ <node>PHE:HD2<value>PHE:HD2</value></node>
+ <node>PHE:C<value>PHE:C</value></node>
+ <node>PHE:O<value>PHE:O</value></node>
+ <node>PRO:N<value>PRO:N</value></node>
+ <node>PRO:CA<value>PRO:CA</value></node>
+ <node>PRO:HA<value>PRO:HA</value></node>
+ <node>PRO:CD<value>PRO:CD</value></node>
+ <node>PRO:HD1<value>PRO:1HD</value></node>
+ <node>PRO:HD2<value>PRO:2HD</value></node>
+ <node>PRO:CG<value>PRO:CG</value></node>
+ <node>PRO:HG1<value>PRO:1HG</value></node>
+ <node>PRO:HG2<value>PRO:2HG</value></node>
+ <node>PRO:CB<value>PRO:CB</value></node>
+ <node>PRO:HB1<value>PRO:1HB</value></node>
+ <node>PRO:HB2<value>PRO:2HB</value></node>
+ <node>PRO:C<value>PRO:C</value></node>
+ <node>PRO:O<value>PRO:O</value></node>
+ <node>SER:N<value>SER:N</value></node>
+ <node>SER:HN<value>SER:H</value></node>
+ <node>SER:CA<value>SER:CA</value></node>
+ <node>SER:HA<value>SER:HA</value></node>
+ <node>SER:CB<value>SER:CB</value></node>
+ <node>SER:HB1<value>SER:1HB</value></node>
+ <node>SER:HB2<value>SER:2HB</value></node>
+ <node>SER:OG<value>SER:OG</value></node>
+ <node>SER:HG<value>SER:HG</value></node>
+ <node>SER:C<value>SER:C</value></node>
+ <node>SER:O<value>SER:O</value></node>
+ <node>THR:N<value>THR:N</value></node>
+ <node>THR:HN<value>THR:H</value></node>
+ <node>THR:CA<value>THR:CA</value></node>
+ <node>THR:HA<value>THR:HA</value></node>
+ <node>THR:CB<value>THR:CB</value></node>
+ <node>THR:HB<value>THR:HB</value></node>
+ <node>THR:CG2<value>THR:CG2</value></node>
+ <node>THR:HG21<value>THR:1HG2</value></node>
+ <node>THR:HG22<value>THR:2HG2</value></node>
+ <node>THR:HG23<value>THR:3HG2</value></node>
+ <node>THR:OG1<value>THR:OG1</value></node>
+ <node>THR:HG1<value>THR:HG1</value></node>
+ <node>THR:C<value>THR:C</value></node>
+ <node>THR:O<value>THR:O</value></node>
+ <node>TRP:N<value>TRP:N</value></node>
+ <node>TRP:HN<value>TRP:H</value></node>
+ <node>TRP:CA<value>TRP:CA</value></node>
+ <node>TRP:HA<value>TRP:HA</value></node>
+ <node>TRP:CB<value>TRP:CB</value></node>
+ <node>TRP:HB1<value>TRP:1HB</value></node>
+ <node>TRP:HB2<value>TRP:2HB</value></node>
+ <node>TRP:CG<value>TRP:CG</value></node>
+ <node>TRP:CD1<value>TRP:CD1</value></node>
+ <node>TRP:HD1<value>TRP:HD1</value></node>
+ <node>TRP:NE1<value>TRP:NE1</value></node>
+ <node>TRP:HE1<value>TRP:HE1</value></node>
+ <node>TRP:CE2<value>TRP:CE2</value></node>
+ <node>TRP:CZ2<value>TRP:CZ2</value></node>
+ <node>TRP:HZ2<value>TRP:HZ2</value></node>
+ <node>TRP:CH2<value>TRP:CH2</value></node>
+ <node>TRP:HH2<value>TRP:HH2</value></node>
+ <node>TRP:CZ3<value>TRP:CZ3</value></node>
+ <node>TRP:HZ3<value>TRP:HZ3</value></node>
+ <node>TRP:CE3<value>TRP:CE3</value></node>
+ <node>TRP:HE3<value>TRP:HE3</value></node>
+ <node>TRP:CD2<value>TRP:CD2</value></node>
+ <node>TRP:C<value>TRP:C</value></node>
+ <node>TRP:O<value>TRP:O</value></node>
+ <node>TYR:N<value>TYR:N</value></node>
+ <node>TYR:HN<value>TYR:H</value></node>
+ <node>TYR:CA<value>TYR:CA</value></node>
+ <node>TYR:HA<value>TYR:HA</value></node>
+ <node>TYR:CB<value>TYR:CB</value></node>
+ <node>TYR:HB1<value>TYR:1HB</value></node>
+ <node>TYR:HB2<value>TYR:2HB</value></node>
+ <node>TYR:CG<value>TYR:CG</value></node>
+ <node>TYR:CD1<value>TYR:CD1</value></node>
+ <node>TYR:HD1<value>TYR:HD1</value></node>
+ <node>TYR:CE1<value>TYR:CE1</value></node>
+ <node>TYR:HE1<value>TYR:HE1</value></node>
+ <node>TYR:CZ<value>TYR:CZ</value></node>
+ <node>TYR:OH<value>TYR:OH</value></node>
+ <node>TYR:HH<value>TYR:HH</value></node>
+ <node>TYR:CE2<value>TYR:CE2</value></node>
+ <node>TYR:HE2<value>TYR:HE2</value></node>
+ <node>TYR:CD2<value>TYR:CD2</value></node>
+ <node>TYR:HD2<value>TYR:HD2</value></node>
+ <node>TYR:C<value>TYR:C</value></node>
+ <node>TYR:O<value>TYR:O</value></node>
+ <node>VAL:N<value>VAL:N</value></node>
+ <node>VAL:HN<value>VAL:H</value></node>
+ <node>VAL:CA<value>VAL:CA</value></node>
+ <node>VAL:HA<value>VAL:HA</value></node>
+ <node>VAL:CB<value>VAL:CB</value></node>
+ <node>VAL:HB<value>VAL:HB</value></node>
+ <node>VAL:CG1<value>VAL:CG1</value></node>
+ <node>VAL:HG11<value>VAL:1HG1</value></node>
+ <node>VAL:HG12<value>VAL:2HG1</value></node>
+ <node>VAL:HG13<value>VAL:3HG1</value></node>
+ <node>VAL:CG2<value>VAL:CG2</value></node>
+ <node>VAL:HG21<value>VAL:1HG2</value></node>
+ <node>VAL:HG22<value>VAL:2HG2</value></node>
+ <node>VAL:HG23<value>VAL:3HG2</value></node>
+ <node>VAL:C<value>VAL:C</value></node>
+ <node>VAL:O<value>VAL:O</value></node>
+ </node>
+ <node>Amber PDB
+ <node>ALA:N<value>ALA:N</value></node>
+ <node>ALA:H<value>ALA:H</value></node>
+ <node>ALA:CA<value>ALA:CA</value></node>
+ <node>ALA:HA<value>ALA:HA</value></node>
+ <node>ALA:CB<value>ALA:CB</value></node>
+ <node>ALA:HB1<value>ALA:1HB</value></node>
+ <node>ALA:HB2<value>ALA:2HB</value></node>
+ <node>ALA:HB3<value>ALA:3HB</value></node>
+ <node>ALA:C<value>ALA:C</value></node>
+ <node>ALA:O<value>ALA:O</value></node>
+ <node>ARG:N<value>ARG:N</value></node>
+ <node>ARG:H<value>ARG:H</value></node>
+ <node>ARG:CA<value>ARG:CA</value></node>
+ <node>ARG:HA<value>ARG:HA</value></node>
+ <node>ARG:CB<value>ARG:CB</value></node>
+ <node>ARG:HB2<value>ARG:1HB</value></node>
+ <node>ARG:HB3<value>ARG:2HB</value></node>
+ <node>ARG:CG<value>ARG:CG</value></node>
+ <node>ARG:HG2<value>ARG:1HG</value></node>
+ <node>ARG:HG3<value>ARG:2HG</value></node>
+ <node>ARG:CD<value>ARG:CD</value></node>
+ <node>ARG:HD2<value>ARG:1HD</value></node>
+ <node>ARG:HD3<value>ARG:2HD</value></node>
+ <node>ARG:NE<value>ARG:NE</value></node>
+ <node>ARG:HE<value>ARG:HE</value></node>
+ <node>ARG:CZ<value>ARG:CZ</value></node>
+ <node>ARG:NH1<value>ARG:NH1</value></node>
+ <node>ARG:HH11<value>ARG:1HH1</value></node>
+ <node>ARG:HH12<value>ARG:2HH1</value></node>
+ <node>ARG:NH2<value>ARG:NH2</value></node>
+ <node>ARG:HH21<value>ARG:1HH2</value></node>
+ <node>ARG:HH22<value>ARG:2HH2</value></node>
+ <node>ARG:C<value>ARG:C</value></node>
+ <node>ARG:O<value>ARG:O</value></node>
+ <node>ASN:N<value>ASN:N</value></node>
+ <node>ASN:H<value>ASN:H</value></node>
+ <node>ASN:CA<value>ASN:CA</value></node>
+ <node>ASN:HA<value>ASN:HA</value></node>
+ <node>ASN:CB<value>ASN:CB</value></node>
+ <node>ASN:HB2<value>ASN:1HB</value></node>
+ <node>ASN:HB3<value>ASN:2HB</value></node>
+ <node>ASN:CG<value>ASN:CG</value></node>
+ <node>ASN:OD1<value>ASN:OD1</value></node>
+ <node>ASN:ND2<value>ASN:ND2</value></node>
+ <node>ASN:HD21<value>ASN:1HD2</value></node>
+ <node>ASN:HD22<value>ASN:2HD2</value></node>
+ <node>ASN:C<value>ASN:C</value></node>
+ <node>ASN:O<value>ASN:O</value></node>
+ <node>ASP:N<value>ASP:N</value></node>
+ <node>ASP:H<value>ASP:H</value></node>
+ <node>ASP:CA<value>ASP:CA</value></node>
+ <node>ASP:HA<value>ASP:HA</value></node>
+ <node>ASP:CB<value>ASP:CB</value></node>
+ <node>ASP:HB2<value>ASP:1HB</value></node>
+ <node>ASP:HB3<value>ASP:2HB</value></node>
+ <node>ASP:CG<value>ASP:CG</value></node>
+ <node>ASP:OD1<value>ASP:OD1</value></node>
+ <node>ASP:OD2<value>ASP:OD2</value></node>
+ <node>ASP:C<value>ASP:C</value></node>
+ <node>ASP:O<value>ASP:O</value></node>
+ <node>CYS:N<value>CYS:N</value></node>
+ <node>CYS:H<value>CYS:H</value></node>
+ <node>CYS:CA<value>CYS:CA</value></node>
+ <node>CYS:HA<value>CYS:HA</value></node>
+ <node>CYS:CB<value>CYS:CB</value></node>
+ <node>CYS:HB2<value>CYS:1HB</value></node>
+ <node>CYS:HB3<value>CYS:2HB</value></node>
+ <node>CYS:SG<value>CYS:SG</value></node>
+ <node>CYS:HG<value>CYS:HG</value></node>
+ <node>CYS:C<value>CYS:C</value></node>
+ <node>CYS:O<value>CYS:O</value></node>
+ <node>GLU:N<value>GLU:N</value></node>
+ <node>GLU:H<value>GLU:H</value></node>
+ <node>GLU:CA<value>GLU:CA</value></node>
+ <node>GLU:HA<value>GLU:HA</value></node>
+ <node>GLU:CB<value>GLU:CB</value></node>
+ <node>GLU:HB2<value>GLU:1HB</value></node>
+ <node>GLU:HB3<value>GLU:2HB</value></node>
+ <node>GLU:CG<value>GLU:CG</value></node>
+ <node>GLU:HG2<value>GLU:1HG</value></node>
+ <node>GLU:HG3<value>GLU:2HG</value></node>
+ <node>GLU:CD<value>GLU:CD</value></node>
+ <node>GLU:OE1<value>GLU:OE1</value></node>
+ <node>GLU:OE2<value>GLU:OE2</value></node>
+ <node>GLU:C<value>GLU:C</value></node>
+ <node>GLU:O<value>GLU:O</value></node>
+ <node>GLN:N<value>GLN:N</value></node>
+ <node>GLN:H<value>GLN:H</value></node>
+ <node>GLN:CA<value>GLN:CA</value></node>
+ <node>GLN:HA<value>GLN:HA</value></node>
+ <node>GLN:CB<value>GLN:CB</value></node>
+ <node>GLN:HB2<value>GLN:1HB</value></node>
+ <node>GLN:HB3<value>GLN:2HB</value></node>
+ <node>GLN:CG<value>GLN:CG</value></node>
+ <node>GLN:HG2<value>GLN:1HG</value></node>
+ <node>GLN:HG3<value>GLN:2HG</value></node>
+ <node>GLN:CD<value>GLN:CD</value></node>
+ <node>GLN:OE1<value>GLN:OE1</value></node>
+ <node>GLN:NE2<value>GLN:NE2</value></node>
+ <node>GLN:HE21<value>GLN:1HE2</value></node>
+ <node>GLN:HE22<value>GLN:2HE2</value></node>
+ <node>GLN:C<value>GLN:C</value></node>
+ <node>GLN:O<value>GLN:O</value></node>
+ <node>GLY:N<value>GLY:N</value></node>
+ <node>GLY:H<value>GLY:H</value></node>
+ <node>GLY:CA<value>GLY:CA</value></node>
+ <node>GLY:HA2<value>GLY:1HA</value></node>
+ <node>GLY:HA3<value>GLY:2HA</value></node>
+ <node>GLY:C<value>GLY:C</value></node>
+ <node>GLY:O<value>GLY:O</value></node>
+ <node>HIS:N<value>HIS:N</value></node>
+ <node>HIS:H<value>HIS:H</value></node>
+ <node>HIS:CA<value>HIS:CA</value></node>
+ <node>HIS:HA<value>HIS:HA</value></node>
+ <node>HIS:CB<value>HIS:CB</value></node>
+ <node>HIS:HB2<value>HIS:1HB</value></node>
+ <node>HIS:HB3<value>HIS:2HB</value></node>
+ <node>HIS:CG<value>HIS:CG</value></node>
+ <node>HIS:ND1<value>HIS:ND1</value></node>
+ <node>HIS:HD1<value>HIS:HD1</value></node>
+ <node>HIS:CE1<value>HIS:CE1</value></node>
+ <node>HIS:HE1<value>HIS:HE1</value></node>
+ <node>HIS:NE2<value>HIS:NE2</value></node>
+ <node>HIS:HE2<value>HIS:HE2</value></node>
+ <node>HIS:CD2<value>HIS:CD2</value></node>
+ <node>HIS:HD2<value>HIS:HD2</value></node>
+ <node>HIS:C<value>HIS:C</value></node>
+ <node>HIS:O<value>HIS:O</value></node>
+ <node>ILE:N<value>ILE:N</value></node>
+ <node>ILE:H<value>ILE:H</value></node>
+ <node>ILE:CA<value>ILE:CA</value></node>
+ <node>ILE:HA<value>ILE:HA</value></node>
+ <node>ILE:CB<value>ILE:CB</value></node>
+ <node>ILE:HB<value>ILE:HB</value></node>
+ <node>ILE:CG2<value>ILE:CG2</value></node>
+ <node>ILE:HG21<value>ILE:1HG2</value></node>
+ <node>ILE:HG22<value>ILE:2HG2</value></node>
+ <node>ILE:HG23<value>ILE:3HG2</value></node>
+ <node>ILE:CG1<value>ILE:CG1</value></node>
+ <node>ILE:HG12<value>ILE:1HG1</value></node>
+ <node>ILE:HG13<value>ILE:2HG1</value></node>
+ <node>ILE:CD1<value>ILE:CD1</value></node>
+ <node>ILE:HD11<value>ILE:1HD1</value></node>
+ <node>ILE:HD12<value>ILE:2HD1</value></node>
+ <node>ILE:HD13<value>ILE:3HD1</value></node>
+ <node>ILE:C<value>ILE:C</value></node>
+ <node>ILE:O<value>ILE:O</value></node>
+ <node>LEU:N<value>LEU:N</value></node>
+ <node>LEU:H<value>LEU:H</value></node>
+ <node>LEU:CA<value>LEU:CA</value></node>
+ <node>LEU:HA<value>LEU:HA</value></node>
+ <node>LEU:CB<value>LEU:CB</value></node>
+ <node>LEU:HB2<value>LEU:1HB</value></node>
+ <node>LEU:HB3<value>LEU:2HB</value></node>
+ <node>LEU:CG<value>LEU:CG</value></node>
+ <node>LEU:HG<value>LEU:HG</value></node>
+ <node>LEU:CD1<value>LEU:CD1</value></node>
+ <node>LEU:HD11<value>LEU:1HD1</value></node>
+ <node>LEU:HD12<value>LEU:2HD1</value></node>
+ <node>LEU:HD13<value>LEU:3HD1</value></node>
+ <node>LEU:CD2<value>LEU:CD2</value></node>
+ <node>LEU:HD21<value>LEU:1HD2</value></node>
+ <node>LEU:HD22<value>LEU:2HD2</value></node>
+ <node>LEU:HD23<value>LEU:3HD2</value></node>
+ <node>LEU:C<value>LEU:C</value></node>
+ <node>LEU:O<value>LEU:O</value></node>
+ <node>LYS:N<value>LYS:N</value></node>
+ <node>LYS:H<value>LYS:H</value></node>
+ <node>LYS:CA<value>LYS:CA</value></node>
+ <node>LYS:HA<value>LYS:HA</value></node>
+ <node>LYS:CB<value>LYS:CB</value></node>
+ <node>LYS:HB2<value>LYS:1HB</value></node>
+ <node>LYS:HB3<value>LYS:2HB</value></node>
+ <node>LYS:CG<value>LYS:CG</value></node>
+ <node>LYS:HG2<value>LYS:1HG</value></node>
+ <node>LYS:HG3<value>LYS:2HG</value></node>
+ <node>LYS:CD<value>LYS:CD</value></node>
+ <node>LYS:HD2<value>LYS:1HD</value></node>
+ <node>LYS:HD3<value>LYS:2HD</value></node>
+ <node>LYS:CE<value>LYS:CE</value></node>
+ <node>LYS:HE2<value>LYS:1HE</value></node>
+ <node>LYS:HE3<value>LYS:2HE</value></node>
+ <node>LYS:NZ<value>LYS:NZ</value></node>
+ <node>LYS:HZ1<value>LYS:1HZ</value></node>
+ <node>LYS:HZ2<value>LYS:2HZ</value></node>
+ <node>LYS:HZ3<value>LYS:3HZ</value></node>
+ <node>LYS:C<value>LYS:C</value></node>
+ <node>LYS:O<value>LYS:O</value></node>
+ <node>MET:N<value>MET:N</value></node>
+ <node>MET:H<value>MET:H</value></node>
+ <node>MET:CA<value>MET:CA</value></node>
+ <node>MET:HA<value>MET:HA</value></node>
+ <node>MET:CB<value>MET:CB</value></node>
+ <node>MET:HB2<value>MET:1HB</value></node>
+ <node>MET:HB3<value>MET:2HB</value></node>
+ <node>MET:CG<value>MET:CG</value></node>
+ <node>MET:HG2<value>MET:1HG</value></node>
+ <node>MET:HG3<value>MET:2HG</value></node>
+ <node>MET:SD<value>MET:SD</value></node>
+ <node>MET:CE<value>MET:CE</value></node>
+ <node>MET:HE1<value>MET:1HE</value></node>
+ <node>MET:HE2<value>MET:2HE</value></node>
+ <node>MET:HE3<value>MET:3HE</value></node>
+ <node>MET:C<value>MET:C</value></node>
+ <node>MET:O<value>MET:O</value></node>
+ <node>PHE:N<value>PHE:N</value></node>
+ <node>PHE:H<value>PHE:H</value></node>
+ <node>PHE:CA<value>PHE:CA</value></node>
+ <node>PHE:HA<value>PHE:HA</value></node>
+ <node>PHE:CB<value>PHE:CB</value></node>
+ <node>PHE:HB2<value>PHE:1HB</value></node>
+ <node>PHE:HB3<value>PHE:2HB</value></node>
+ <node>PHE:CG<value>PHE:CG</value></node>
+ <node>PHE:CD1<value>PHE:CD1</value></node>
+ <node>PHE:HD1<value>PHE:HD1</value></node>
+ <node>PHE:CE1<value>PHE:CE1</value></node>
+ <node>PHE:HE1<value>PHE:HE1</value></node>
+ <node>PHE:CZ<value>PHE:CZ</value></node>
+ <node>PHE:HZ<value>PHE:HZ</value></node>
+ <node>PHE:CE2<value>PHE:CE2</value></node>
+ <node>PHE:HE2<value>PHE:HE2</value></node>
+ <node>PHE:CD2<value>PHE:CD2</value></node>
+ <node>PHE:HD2<value>PHE:HD2</value></node>
+ <node>PHE:C<value>PHE:C</value></node>
+ <node>PHE:O<value>PHE:O</value></node>
+ <node>PRO:N<value>PRO:N</value></node>
+ <node>PRO:CA<value>PRO:CA</value></node>
+ <node>PRO:HA<value>PRO:HA</value></node>
+ <node>PRO:CD<value>PRO:CD</value></node>
+ <node>PRO:HD2<value>PRO:1HD</value></node>
+ <node>PRO:HD3<value>PRO:2HD</value></node>
+ <node>PRO:CG<value>PRO:CG</value></node>
+ <node>PRO:HG2<value>PRO:1HG</value></node>
+ <node>PRO:HG3<value>PRO:2HG</value></node>
+ <node>PRO:CB<value>PRO:CB</value></node>
+ <node>PRO:HB2<value>PRO:1HB</value></node>
+ <node>PRO:HB3<value>PRO:2HB</value></node>
+ <node>PRO:C<value>PRO:C</value></node>
+ <node>PRO:O<value>PRO:O</value></node>
+ <node>SER:N<value>SER:N</value></node>
+ <node>SER:H<value>SER:H</value></node>
+ <node>SER:CA<value>SER:CA</value></node>
+ <node>SER:HA<value>SER:HA</value></node>
+ <node>SER:CB<value>SER:CB</value></node>
+ <node>SER:HB2<value>SER:1HB</value></node>
+ <node>SER:HB3<value>SER:2HB</value></node>
+ <node>SER:OG<value>SER:OG</value></node>
+ <node>SER:HG<value>SER:HG</value></node>
+ <node>SER:C<value>SER:C</value></node>
+ <node>SER:O<value>SER:O</value></node>
+ <node>THR:N<value>THR:N</value></node>
+ <node>THR:H<value>THR:H</value></node>
+ <node>THR:CA<value>THR:CA</value></node>
+ <node>THR:HA<value>THR:HA</value></node>
+ <node>THR:CB<value>THR:CB</value></node>
+ <node>THR:HB<value>THR:HB</value></node>
+ <node>THR:CG2<value>THR:CG2</value></node>
+ <node>THR:HG21<value>THR:1HG2</value></node>
+ <node>THR:HG22<value>THR:2HG2</value></node>
+ <node>THR:HG23<value>THR:3HG2</value></node>
+ <node>THR:OG1<value>THR:OG1</value></node>
+ <node>THR:HG1<value>THR:HG1</value></node>
+ <node>THR:C<value>THR:C</value></node>
+ <node>THR:O<value>THR:O</value></node>
+ <node>TRP:N<value>TRP:N</value></node>
+ <node>TRP:H<value>TRP:H</value></node>
+ <node>TRP:CA<value>TRP:CA</value></node>
+ <node>TRP:HA<value>TRP:HA</value></node>
+ <node>TRP:CB<value>TRP:CB</value></node>
+ <node>TRP:HB2<value>TRP:1HB</value></node>
+ <node>TRP:HB3<value>TRP:2HB</value></node>
+ <node>TRP:CG<value>TRP:CG</value></node>
+ <node>TRP:CD1<value>TRP:CD1</value></node>
+ <node>TRP:HD1<value>TRP:HD1</value></node>
+ <node>TRP:NE1<value>TRP:NE1</value></node>
+ <node>TRP:HE1<value>TRP:HE1</value></node>
+ <node>TRP:CE2<value>TRP:CE2</value></node>
+ <node>TRP:CZ2<value>TRP:CZ2</value></node>
+ <node>TRP:HZ2<value>TRP:HZ2</value></node>
+ <node>TRP:CH2<value>TRP:CH2</value></node>
+ <node>TRP:HH2<value>TRP:HH2</value></node>
+ <node>TRP:CZ3<value>TRP:CZ3</value></node>
+ <node>TRP:HZ3<value>TRP:HZ3</value></node>
+ <node>TRP:CE3<value>TRP:CE3</value></node>
+ <node>TRP:HE3<value>TRP:HE3</value></node>
+ <node>TRP:CD2<value>TRP:CD2</value></node>
+ <node>TRP:C<value>TRP:C</value></node>
+ <node>TRP:O<value>TRP:O</value></node>
+ <node>TYR:N<value>TYR:N</value></node>
+ <node>TYR:H<value>TYR:H</value></node>
+ <node>TYR:CA<value>TYR:CA</value></node>
+ <node>TYR:HA<value>TYR:HA</value></node>
+ <node>TYR:CB<value>TYR:CB</value></node>
+ <node>TYR:HB2<value>TYR:1HB</value></node>
+ <node>TYR:HB3<value>TYR:2HB</value></node>
+ <node>TYR:CG<value>TYR:CG</value></node>
+ <node>TYR:CD1<value>TYR:CD1</value></node>
+ <node>TYR:HD1<value>TYR:HD1</value></node>
+ <node>TYR:CE1<value>TYR:CE1</value></node>
+ <node>TYR:HE1<value>TYR:HE1</value></node>
+ <node>TYR:CZ<value>TYR:CZ</value></node>
+ <node>TYR:OH<value>TYR:OH</value></node>
+ <node>TYR:HH<value>TYR:HH</value></node>
+ <node>TYR:CE2<value>TYR:CE2</value></node>
+ <node>TYR:HE2<value>TYR:HE2</value></node>
+ <node>TYR:CD2<value>TYR:CD2</value></node>
+ <node>TYR:HD2<value>TYR:HD2</value></node>
+ <node>TYR:C<value>TYR:C</value></node>
+ <node>TYR:O<value>TYR:O</value></node>
+ <node>VAL:N<value>VAL:N</value></node>
+ <node>VAL:H<value>VAL:H</value></node>
+ <node>VAL:CA<value>VAL:CA</value></node>
+ <node>VAL:HA<value>VAL:HA</value></node>
+ <node>VAL:CB<value>VAL:CB</value></node>
+ <node>VAL:HB<value>VAL:HB</value></node>
+ <node>VAL:CG1<value>VAL:CG1</value></node>
+ <node>VAL:HG11<value>VAL:1HG1</value></node>
+ <node>VAL:HG12<value>VAL:2HG1</value></node>
+ <node>VAL:HG13<value>VAL:3HG1</value></node>
+ <node>VAL:CG2<value>VAL:CG2</value></node>
+ <node>VAL:HG21<value>VAL:1HG2</value></node>
+ <node>VAL:HG22<value>VAL:2HG2</value></node>
+ <node>VAL:HG23<value>VAL:3HG2</value></node>
+ <node>VAL:C<value>VAL:C</value></node>
+ <node>VAL:O<value>VAL:O</value></node>
+ </node>
+</node>

@@ -1,132 +1,97 @@
-(PHE
-  (Names
-		(Phenylalanine)
-		(Phenylalanin)
-		(Phe)
-		(F)
-  )
-  (Atoms
-    (N N 0.1341407 1.351202 -0.07911759)
-    (3H H 0.803193 2.035005 0.2534044)
-    (CA C -0.7211604 2.001838 -1.087341)
-    (HA H -0.07892336 2.270821 -1.926756)
-    (C C -1.300131 3.307535 -0.5325462)
-    (O O -0.4477309 4.171679 -0.229457)
-    (CB C -1.791856 1.027805 -1.599674)
-    (1HB H -1.28636 0.160502 -2.026756)
-    (2HB H -2.380364 0.6727667 -0.7525354)
-    (CG C -2.70873 1.607533 -2.661208)
-    (CD1 C -4.074711 1.815559 -2.387768)
-    (HD1 H -4.496757 1.527902 -1.435336)
-    (CD2 C -2.185439 1.971959 -3.916095)
-    (HD2 H -1.142983 1.801105 -4.144545)
-    (CE1 C -4.90709 2.399215 -3.358655)
-    (HE1 H -5.955226 2.557371 -3.147432)
-    (CE2 C -3.019025 2.554821 -4.88633)
-    (HE2 H -2.61471 2.832835 -5.84938)
-    (CZ C -4.379117 2.771946 -4.606688)
-    (HZ H -5.020426 3.217529 -5.354036)
-    (1H H -0.4341985 1.034029 0.6931909)
-    (2H H 0.6169096 0.5661594 -0.4922875)
-    (OXT O -2.460581 3.26509 -0.06804343)
-  )
-  (Bonds
-    (1 3H N)
-    (2 CA N)
-    (3 HA CA)
-    (4 C CA)
-    (5 O C)
-    (6 CB CA)
-    (7 1HB CB)
-    (8 2HB CB)
-    (9 CG CB)
-    (10 CD1 CG)
-    (11 HD1 CD1)
-    (12 CD2 CG)
-    (13 HD2 CD2)
-    (14 CE1 CD1)
-    (15 HE1 CE1)
-    (16 CE2 CD2)
-    (17 HE2 CE2)
-    (18 CZ CE1)
-    (19 CZ CE2)
-    (20 HZ CZ)
-    (21 1H N)
-    (22 2H N)
-    (23 OXT C)
-  )
-  (Connections
-    (N-term N C-term 1.33 0.5)
-    (C-term C N-term 1.33 0.5)
-  )
- 	(Properties
-		(AMINO_ACID)
-	)
-	(Variants
-		(Default
-			(Delete
-				(OXT)
-			  (1H)
-			  (2H)
-			)
-		  (Rename
-			  (3H H)
-			)
-			(addh 9
-				(H N CA C x )
-				(HA CA N C CB )
-				(1HB CB CA N C )
-				(2HB CB CA N C )
-				(HD1 CD1 CG CE1 CZ )
-				(HD2 CD2 CG CE2 CZ )
-				(HE1 CE1 CZ CD1 CG )
-				(HE2 CE2 CZ CD2 CG )
-				(HZ CZ CE1 CE2 CD1 )
-			)
-		)
-		(PHE-C
-		  (Delete
-				(1H)
-				(2H)
-			)
-		  (Rename
-				(3H H)
-			)
-      (Properties
-				(C_TERMINAL)
-			)
-			(addh 9
-				(H N CA C x )
-				(HA CA N C CB )
-				(1HB CB CA N C )
-				(2HB CB CA N C )
-				(HD1 CD1 CG CE1 CZ )
-				(HD2 CD2 CG CE2 CZ )
-				(HE1 CE1 CZ CD1 CG )
-				(HE2 CE2 CZ CD2 CG )
-				(HZ CZ CE1 CE2 CD1 )
-			)
-		)
-	  (PHE-N
-		  (Delete
-			  (OXT)
-			)
-		  (Properties
-			  (N_TERMINAL)
-      )
-			(addh 11
-				(HA CA N C CB )
-				(1HB CB CA N C )
-				(2HB CB CA N C )
-				(HD1 CD1 CG CE1 CZ )
-				(HD2 CD2 CG CE2 CZ )
-				(HE1 CE1 CZ CD1 CG )
-				(HE2 CE2 CZ CD2 CG )
-				(HZ CZ CE1 CE2 CD1 )
-        (1H N CA C O)
-        (2H N CA C O)
-        (3H N CA C O)
-			)
-		)
-	)
-)
+<node>PHE
+ <node>Names
+ <node>Phenylalanine</node>
+ <node>Phenylalanin</node>
+ <node>Phe</node>
+ <node>F</node>
+ </node>
+ <node>Atoms
+ <node>N<value>N 0.1341407 1.351202 -0.07911759</value></node>
+ <node>3H<value>H 0.803193 2.035005 0.2534044</value></node>
+ <node>CA<value>C -0.7211604 2.001838 -1.087341</value></node>
+ <node>HA<value>H -0.07892336 2.270821 -1.926756</value></node>
+ <node>C<value>C -1.300131 3.307535 -0.5325462</value></node>
+ <node>O<value>O -0.4477309 4.171679 -0.229457</value></node>
+ <node>CB<value>C -1.791856 1.027805 -1.599674</value></node>
+ <node>1HB<value>H -1.28636 0.160502 -2.026756</value></node>
+ <node>2HB<value>H -2.380364 0.6727667 -0.7525354</value></node>
+ <node>CG<value>C -2.70873 1.607533 -2.661208</value></node>
+ <node>CD1<value>C -4.074711 1.815559 -2.387768</value></node>
+ <node>HD1<value>H -4.496757 1.527902 -1.435336</value></node>
+ <node>CD2<value>C -2.185439 1.971959 -3.916095</value></node>
+ <node>HD2<value>H -1.142983 1.801105 -4.144545</value></node>
+ <node>CE1<value>C -4.90709 2.399215 -3.358655</value></node>
+ <node>HE1<value>H -5.955226 2.557371 -3.147432</value></node>
+ <node>CE2<value>C -3.019025 2.554821 -4.88633</value></node>
+ <node>HE2<value>H -2.61471 2.832835 -5.84938</value></node>
+ <node>CZ<value>C -4.379117 2.771946 -4.606688</value></node>
+ <node>HZ<value>H -5.020426 3.217529 -5.354036</value></node>
+ <node>1H<value>H -0.4341985 1.034029 0.6931909</value></node>
+ <node>2H<value>H 0.6169096 0.5661594 -0.4922875</value></node>
+ <node>OXT<value>O -2.460581 3.26509 -0.06804343</value></node>
+ </node>
+ <node>Bonds
+ <node>1<value>3H N</value></node>
+ <node>2<value>CA N</value></node>
+ <node>3<value>HA CA</value></node>
+ <node>4<value>C CA</value></node>
+ <node>5<value>O C</value></node>
+ <node>6<value>CB CA</value></node>
+ <node>7<value>1HB CB</value></node>
+ <node>8<value>2HB CB</value></node>
+ <node>9<value>CG CB</value></node>
+ <node>10<value>CD1 CG</value></node>
+ <node>11<value>HD1 CD1</value></node>
+ <node>12<value>CD2 CG</value></node>
+ <node>13<value>HD2 CD2</value></node>
+ <node>14<value>CE1 CD1</value></node>
+ <node>15<value>HE1 CE1</value></node>
+ <node>16<value>CE2 CD2</value></node>
+ <node>17<value>HE2 CE2</value></node>
+ <node>18<value>CZ CE1</value></node>
+ <node>19<value>CZ CE2</value></node>
+ <node>20<value>HZ CZ</value></node>
+ <node>21<value>1H N</value></node>
+ <node>22<value>2H N</value></node>
+ <node>23<value>OXT C</value></node>
+ </node>
+ <node>Connections
+ <node>N-term<value>N C-term 1.33 0.5</value></node>
+ <node>C-term<value>C N-term 1.33 0.5</value></node>
+ </node>
+ <node>Properties
+ <node>AMINO_ACID</node>
+ </node>
+ <node>Variants
+ <node>Default
+ <node>Delete
+ <node>OXT</node>
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ </node>
+ <node>PHE-C
+ <node>Delete
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ <node>Properties
+ <node>C_TERMINAL</node>
+ </node>
+ </node>
+ <node>PHE-N
+ <node>Delete
+ <node>OXT</node>
+ </node>
+ <node>Properties
+ <node>N_TERMINAL</node>
+ </node>
+ </node>
+ </node>
+</node>

@@ -1,101 +1,78 @@
-(SER
-  (Names
-		(Serine)
-		(Serin)
-		(Ser)
-		(S)
-  )
-  (Atoms
-    (N N 0.1130663 1.226434 -0.1468897)
-    (3H H 0.8968111 1.837972 0.05464922)
-    (CA C -0.7048293 1.905604 -1.168307)
-    (HA H -0.2017423 1.780946 -2.128185)
-    (C C -0.7701361 3.410257 -0.8778276)
-    (O O 0.1488766 3.858471 -0.1539113)
-    (CB C -2.088618 1.24965 -1.250489)
-    (1HB H -1.956628 0.1725609 -1.368818)
-    (2HB H -2.637483 1.435655 -0.3253672)
-    (OG O -2.817839 1.744102 -2.356831)
-    (HG H -3.648096 1.264079 -2.429246)
-    (OXT O -1.487331 4.10633 -1.629405)
-    (1H H -0.4311985 1.10388 0.6950446)
-    (2H H 0.4303224 0.3296314 -0.4862972)
-  )
-  (Bonds
-    (1 3H N)
-    (2 CA N)
-    (3 HA CA)
-    (4 C CA)
-    (5 O C)
-    (6 CB CA)
-    (7 1HB CB)
-    (8 2HB CB)
-    (9 OG CB)
-    (10 HG OG)
-    (11 OXT C)
-    (12 1H N)
-    (13 2H N)
-  )
-  (Connections
-    (N-term N C-term 1.33 0.5)
-    (C-term C N-term 1.33 0.5)
-  )
- 	(Properties
-		(AMINO_ACID)
-	)
-	(Variants
-		(Default
-			(Delete
-				(OXT)
-			  (1H)
-			  (2H)
-			)
-		  (Rename
-			  (3H H)
-			)
-			(addh 5
-				(H N CA C x )
-				(HA CA N C CB )
-				(1HB CB CA OG N )
-				(2HB CB CA OG N )
-				(HG OG CB CA N )
-			)
-		)
-	  (SER-N
-		  (Delete
-			  (OXT)
-			)
-		  (Properties
-			  (N_TERMINAL)
-      )
-			(addh 5
-				(H N CA C x )
-				(HA CA N C CB )
-				(1HB CB CA OG N )
-				(2HB CB CA OG N )
-				(HG OG CB CA N )
-			)
-		)
-		(SER-C
-		  (Delete
-				(1H)
-				(2H)
-			)
-		  (Rename
-				(3H H)
-				)
-      (Properties
-				(C_TERMINAL)
-			)
-			(addh 7
-				(HA CA N C CB )
-				(1HB CB CA OG N )
-				(2HB CB CA OG N )
-				(HG OG CB CA N )
-        (1H N CA C O)
-        (2H N CA C O)
-        (3H N CA C O)
-			)
-		)
-	)
-)
+<node>SER
+ <node>Names
+ <node>Serine</node>
+ <node>Serin</node>
+ <node>Ser</node>
+ <node>S</node>
+ </node>
+ <node>Atoms
+ <node>N<value>N 0.1130663 1.226434 -0.1468897</value></node>
+ <node>3H<value>H 0.8968111 1.837972 0.05464922</value></node>
+ <node>CA<value>C -0.7048293 1.905604 -1.168307</value></node>
+ <node>HA<value>H -0.2017423 1.780946 -2.128185</value></node>
+ <node>C<value>C -0.7701361 3.410257 -0.8778276</value></node>
+ <node>O<value>O 0.1488766 3.858471 -0.1539113</value></node>
+ <node>CB<value>C -2.088618 1.24965 -1.250489</value></node>
+ <node>1HB<value>H -1.956628 0.1725609 -1.368818</value></node>
+ <node>2HB<value>H -2.637483 1.435655 -0.3253672</value></node>
+ <node>OG<value>O -2.817839 1.744102 -2.356831</value></node>
+ <node>HG<value>H -3.648096 1.264079 -2.429246</value></node>
+ <node>OXT<value>O -1.487331 4.10633 -1.629405</value></node>
+ <node>1H<value>H -0.4311985 1.10388 0.6950446</value></node>
+ <node>2H<value>H 0.4303224 0.3296314 -0.4862972</value></node>
+ </node>
+ <node>Bonds
+ <node>1<value>3H N</value></node>
+ <node>2<value>CA N</value></node>
+ <node>3<value>HA CA</value></node>
+ <node>4<value>C CA</value></node>
+ <node>5<value>O C</value></node>
+ <node>6<value>CB CA</value></node>
+ <node>7<value>1HB CB</value></node>
+ <node>8<value>2HB CB</value></node>
+ <node>9<value>OG CB</value></node>
+ <node>10<value>HG OG</value></node>
+ <node>11<value>OXT C</value></node>
+ <node>12<value>1H N</value></node>
+ <node>13<value>2H N</value></node>
+ </node>
+ <node>Connections
+ <node>N-term<value>N C-term 1.33 0.5</value></node>
+ <node>C-term<value>C N-term 1.33 0.5</value></node>
+ </node>
+ <node>Properties
+ <node>AMINO_ACID</node>
+ </node>
+ <node>Variants
+ <node>Default
+ <node>Delete
+ <node>OXT</node>
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ </node>
+ <node>SER-N
+ <node>Delete
+ <node>OXT</node>
+ </node>
+ <node>Properties
+ <node>N_TERMINAL</node>
+ </node>
+ </node>
+ <node>SER-C
+ <node>Delete
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ <node>Properties
+ <node>C_TERMINAL</node>
+ </node>
+ </node>
+ </node>
+</node>

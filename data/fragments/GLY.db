@@ -1,87 +1,70 @@
-(GLY
-  (Names
-		(Glycine)
-		(Glycin)
-		(Gly)
-		(G)
-  )
-  (Atoms
-    (N N 0.09000722 1.216287 -0.1108443)
-    (3H H 0.8807056 1.803007 0.1270226)
-    (CA C -0.6332095 1.869306 -1.215941)
-    (1HA H -0.02850649 1.801736 -2.120623)
-    (2HA H -1.579168 1.352425 -1.380715)
-    (C C -0.8818576 3.344497 -0.910938)
-    (O O 0.06351577 3.962237 -0.3713815)
-    (1H H -0.5183882 1.138782 0.691625)
-    (2H H 0.4027565 0.2984461 -0.3934918)
-    (OXT O -1.901015 3.866009 -1.413833)
-  )
-  (Bonds
-    (1 3H N)
-    (2 CA N)
-    (3 1HA CA)
-    (4 2HA CA)
-    (5 C CA)
-    (6 O C)
-    (7 1H N)
-    (8 2H N)
-    (9 OXT C)
-  )
-  (Connections
-    (N-term N C-term 1.33 0.5)
-    (C-term C N-term 1.33 0.5)
-  )
- 	(Properties
-		(AMINO_ACID)
-	)
-	(Variants
-		(Default
-			(Delete
-				(OXT)
-			  (1H)
-			  (2H)
-			)
-		  (Rename
-			  (3H H)
-			)
-			(addh 3
-				(H N CA C x )
-				(1HA CA N C O )
-				(2HA CA N C O )
-			)
-		)
-		(GLY-C
-		  (Delete
-				(1H)
-				(2H)
-			)
-		  (Rename
-				(3H H)
-			)
-      (Properties
-				(C_TERMINAL)
-			)
-			(addh 3
-				(H N CA C x )
-				(1HA CA N C O )
-				(2HA CA N C O )
-			)
-		)
-	  (GLY-N
-		  (Delete
-			  (OXT)
-			)
-		  (Properties
-			  (N_TERMINAL)
-      )
-			(addh 5
-				(1HA CA N C O )
-				(2HA CA N C O )
-        (1H N CA C O)
-        (2H N CA C O)
-        (3H N CA C O)
-			)
-		)
-	)
-)
+<node>GLY
+ <node>Names
+ <node>Glycine</node>
+ <node>Glycin</node>
+ <node>Gly</node>
+ <node>G</node>
+ </node>
+ <node>Atoms
+ <node>N<value>N 0.09000722 1.216287 -0.1108443</value></node>
+ <node>3H<value>H 0.8807056 1.803007 0.1270226</value></node>
+ <node>CA<value>C -0.6332095 1.869306 -1.215941</value></node>
+ <node>1HA<value>H -0.02850649 1.801736 -2.120623</value></node>
+ <node>2HA<value>H -1.579168 1.352425 -1.380715</value></node>
+ <node>C<value>C -0.8818576 3.344497 -0.910938</value></node>
+ <node>O<value>O 0.06351577 3.962237 -0.3713815</value></node>
+ <node>1H<value>H -0.5183882 1.138782 0.691625</value></node>
+ <node>2H<value>H 0.4027565 0.2984461 -0.3934918</value></node>
+ <node>OXT<value>O -1.901015 3.866009 -1.413833</value></node>
+ </node>
+ <node>Bonds
+ <node>1<value>3H N</value></node>
+ <node>2<value>CA N</value></node>
+ <node>3<value>1HA CA</value></node>
+ <node>4<value>2HA CA</value></node>
+ <node>5<value>C CA</value></node>
+ <node>6<value>O C</value></node>
+ <node>7<value>1H N</value></node>
+ <node>8<value>2H N</value></node>
+ <node>9<value>OXT C</value></node>
+ </node>
+ <node>Connections
+ <node>N-term<value>N C-term 1.33 0.5</value></node>
+ <node>C-term<value>C N-term 1.33 0.5</value></node>
+ </node>
+ <node>Properties
+ <node>AMINO_ACID</node>
+ </node>
+ <node>Variants
+ <node>Default
+ <node>Delete
+ <node>OXT</node>
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ </node>
+ <node>GLY-C
+ <node>Delete
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ <node>Properties
+ <node>C_TERMINAL</node>
+ </node>
+ </node>
+ <node>GLY-N
+ <node>Delete
+ <node>OXT</node>
+ </node>
+ <node>Properties
+ <node>N_TERMINAL</node>
+ </node>
+ </node>
+ </node>
+</node>

@@ -1,151 +1,104 @@
-(ARG
-  (Names
-		(Arginine)
-		(Arginin)
-		(Arg)
-		(R)
-  )
-  (Atoms
-    (N N 0.04658213 1.228698 -0.008203848)
-    (3H H 1.029144 1.468065 -0.01885969)
-    (CA C -0.651675 1.900984 -1.120636)
-    (HA H -0.1560273 1.589999 -2.041618)
-    (C C -0.5384113 3.425156 -1.007164)
-    (O O -0.4560871 4.056512 -2.083366)
-    (CB C -2.115081 1.438444 -1.186192)
-    (1HB H -2.126043 0.3475202 -1.20068)
-    (2HB H -2.643967 1.778842 -0.2945162)
-    (CG C -2.829752 1.953359 -2.443151)
-    (1HG H -2.889884 3.042607 -2.412891)
-    (2HG H -2.25911 1.654155 -3.324525)
-    (CD C -4.246704 1.376451 -2.533151)
-    (1HD H -4.174877 0.2870844 -2.574071)
-    (2HD H -4.797596 1.672022 -1.637285)
-    (NE N -4.940577 1.875193 -3.731703)
-    (HE H -4.414851 2.512341 -4.314554)
-    (CZ C -6.193176 1.546153 -4.088384)
-    (NH1 N -6.900425 0.7030471 -3.327994)
-    (1HH1 H -6.480561 0.3232263 -2.492691)
-    (2HH1 H -7.843661 0.4323652 -3.563007)
-    (NH2 N -6.730267 2.060851 -5.200565)
-    (1HH2 H -6.201764 2.698435 -5.778988)
-    (2HH2 H -7.669785 1.826959 -5.486362)
-    (OXT O -0.796168 3.930999 0.1074273)
-    (1H H -0.3621705 1.521632 0.867786)
-    (2H H -0.05222332 0.2284002 -0.1067282)
-  )
-  (Bonds
-    (1 3H N)
-    (2 CA N)
-    (3 HA CA)
-    (4 C CA)
-    (5 O C)
-    (6 CB CA)
-    (7 1HB CB)
-    (8 2HB CB)
-    (9 CG CB)
-    (10 1HG CG)
-    (11 2HG CG)
-    (12 CD CG)
-    (13 1HD CD)
-    (14 2HD CD)
-    (15 NE CD)
-    (16 HE NE)
-    (17 CZ NE)
-    (18 NH1 CZ)
-    (19 1HH1 NH1)
-    (20 2HH1 NH1)
-    (21 NH2 CZ)
-    (22 1HH2 NH2)
-    (23 2HH2 NH2)
-    (24 OXT C)
-    (25 1H N)
-    (26 2H N)
-  )
-  (Connections
-    (N-term N C-term 1.33 0.5)
-    (C-term C N-term 1.33 0.5)
-  )
-	(Properties 
-		(AMINO_ACID)
-	)
-	(Variants
-		(Default
-			(Delete
-				(OXT)
-			  (1H)
-			  (2H)
-			)
-		  (Rename
-			  (3H H)
-			)
-			(addh 13
-				(H N CA C x )
-				(HA CA N C CB )
-				(1HB CB CA CG CD )
-				(2HB CB CA CG CD )
-				(1HG CG CB CD NE )
-				(2HG CG CB CD NE )
-				(1HD CD CG NE CZ )
-				(2HD CD CG NE CZ )
-				(HE NE CD CZ CG )
-				(1HH1 NH1 CZ NE NH2 ) 
-				(2HH1 NH1 CZ NE NH2 )
-				(1HH2 NH2 CZ NE NH1 )
-				(2HH2 NH2 CZ NE NH1 )
-			)
-		)
-		(ARG-C
-		  (Delete
-				(1H)
-				(2H)
-			)
-		  (Rename
-				(3H H)
-			)
-      (Properties
-				(C_TERMINAL)
-			)
-			(addh 13
-				(H N CA C x )
-				(HA CA N C CB )
-				(1HB CB CA CG CD )
-				(2HB CB CA CG CD )
-				(1HG CG CB CD NE )
-				(2HG CG CB CD NE )
-				(1HD CD CG NE CZ )
-				(2HD CD CG NE CZ )
-				(HE NE CD CZ CG )
-				(1HH1 NH1 CZ NE NH2 ) 
-				(2HH1 NH1 CZ NE NH2 )
-				(1HH2 NH2 CZ NE NH1 )
-				(2HH2 NH2 CZ NE NH1 )
-			)
-		)
-	  (ARG-N
-		  (Delete
-			  (OXT)
-			)
-		  (Properties
-			  (N_TERMINAL)
-      )
-			(addh 15
-				(HA CA N C CB )
-				(1HB CB CA CG CD )
-				(2HB CB CA CG CD )
-				(1HG CG CB CD NE )
-				(2HG CG CB CD NE )
-				(1HD CD CG NE CZ )
-				(2HD CD CG NE CZ )
-				(HE NE CD CZ CG )
-				(1HH1 NH1 CZ NE NH2 ) 
-				(2HH1 NH1 CZ NE NH2 )
-				(1HH2 NH2 CZ NE NH1 )
-				(2HH2 NH2 CZ NE NH1 )
-        (1H N CA C O)
-        (2H N CA C O)
-        (3H N CA C O)
-			)
-		)
-	)
-)
+<node>ARG
+ <node>Names
+ <node>Arginine</node>
+ <node>Arginin</node>
+ <node>Arg</node>
+ <node>R</node>
+ </node>
+ <node>Atoms
+ <node>N<value>N 0.04658213 1.228698 -0.008203848</value></node>
+ <node>3H<value>H 1.029144 1.468065 -0.01885969</value></node>
+ <node>CA<value>C -0.651675 1.900984 -1.120636</value></node>
+ <node>HA<value>H -0.1560273 1.589999 -2.041618</value></node>
+ <node>C<value>C -0.5384113 3.425156 -1.007164</value></node>
+ <node>O<value>O -0.4560871 4.056512 -2.083366</value></node>
+ <node>CB<value>C -2.115081 1.438444 -1.186192</value></node>
+ <node>1HB<value>H -2.126043 0.3475202 -1.20068</value></node>
+ <node>2HB<value>H -2.643967 1.778842 -0.2945162</value></node>
+ <node>CG<value>C -2.829752 1.953359 -2.443151</value></node>
+ <node>1HG<value>H -2.889884 3.042607 -2.412891</value></node>
+ <node>2HG<value>H -2.25911 1.654155 -3.324525</value></node>
+ <node>CD<value>C -4.246704 1.376451 -2.533151</value></node>
+ <node>1HD<value>H -4.174877 0.2870844 -2.574071</value></node>
+ <node>2HD<value>H -4.797596 1.672022 -1.637285</value></node>
+ <node>NE<value>N -4.940577 1.875193 -3.731703</value></node>
+ <node>HE<value>H -4.414851 2.512341 -4.314554</value></node>
+ <node>CZ<value>C -6.193176 1.546153 -4.088384</value></node>
+ <node>NH1<value>N -6.900425 0.7030471 -3.327994</value></node>
+ <node>1HH1<value>H -6.480561 0.3232263 -2.492691</value></node>
+ <node>2HH1<value>H -7.843661 0.4323652 -3.563007</value></node>
+ <node>NH2<value>N -6.730267 2.060851 -5.200565</value></node>
+ <node>1HH2<value>H -6.201764 2.698435 -5.778988</value></node>
+ <node>2HH2<value>H -7.669785 1.826959 -5.486362</value></node>
+ <node>OXT<value>O -0.796168 3.930999 0.1074273</value></node>
+ <node>1H<value>H -0.3621705 1.521632 0.867786</value></node>
+ <node>2H<value>H -0.05222332 0.2284002 -0.1067282</value></node>
+ </node>
+ <node>Bonds
+ <node>1<value>3H N</value></node>
+ <node>2<value>CA N</value></node>
+ <node>3<value>HA CA</value></node>
+ <node>4<value>C CA</value></node>
+ <node>5<value>O C</value></node>
+ <node>6<value>CB CA</value></node>
+ <node>7<value>1HB CB</value></node>
+ <node>8<value>2HB CB</value></node>
+ <node>9<value>CG CB</value></node>
+ <node>10<value>1HG CG</value></node>
+ <node>11<value>2HG CG</value></node>
+ <node>12<value>CD CG</value></node>
+ <node>13<value>1HD CD</value></node>
+ <node>14<value>2HD CD</value></node>
+ <node>15<value>NE CD</value></node>
+ <node>16<value>HE NE</value></node>
+ <node>17<value>CZ NE</value></node>
+ <node>18<value>NH1 CZ</value></node>
+ <node>19<value>1HH1 NH1</value></node>
+ <node>20<value>2HH1 NH1</value></node>
+ <node>21<value>NH2 CZ</value></node>
+ <node>22<value>1HH2 NH2</value></node>
+ <node>23<value>2HH2 NH2</value></node>
+ <node>24<value>OXT C</value></node>
+ <node>25<value>1H N</value></node>
+ <node>26<value>2H N</value></node>
+ </node>
+ <node>Connections
+ <node>N-term<value>N C-term 1.33 0.5</value></node>
+ <node>C-term<value>C N-term 1.33 0.5</value></node>
+ </node>
+ <node>Properties 
+ <node>AMINO_ACID</node>
+ </node>
+ <node>Variants
+ <node>Default
+ <node>Delete
+ <node>OXT</node>
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ </node>
+ <node>ARG-C
+ <node>Delete
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ <node>Properties
+ <node>C_TERMINAL</node>
+ </node>
+ </node>
+ <node>ARG-N
+ <node>Delete
+ <node>OXT</node>
+ </node>
+ <node>Properties
+ <node>N_TERMINAL</node>
+ </node>
+ </node>
+ </node>
+</node>

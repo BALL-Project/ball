@@ -1,123 +1,88 @@
-(VAL
-  (Names
-		(Valine)
-		(Valin)
-		(Val)
-		(V)
-  )
-  (Atoms
-    (N N 0.08111785 1.2013 -0.133711)
-    (3H H 0.9032491 1.762717 0.06032801)
-    (CA C -0.698245 1.931722 -1.152099)
-    (HA H -0.2125321 1.7346 -2.108571)
-    (C C -0.5967644 3.443358 -0.9052255)
-    (O O 0.3370198 3.799585 -0.1501447)
-    (CB C -2.141793 1.389981 -1.219405)
-    (HB H -2.073082 0.3006792 -1.23859)
-    (CG1 C -2.976131 1.780723 0.008393872)
-    (1HG1 H -3.953726 1.301327 -0.05053521)
-    (2HG1 H -2.483032 1.448739 0.9220271)
-    (3HG1 H -3.118463 2.860577 0.05077193)
-    (CG2 C -2.878923 1.800528 -2.501579)
-    (1HG2 H -3.809818 1.237256 -2.575363)
-    (2HG2 H -3.122159 2.862025 -2.496346)
-    (3HG2 H -2.266089 1.572718 -3.374182)
-    (OXT O -1.142181 4.189281 -1.746952)
-    (1H H -0.4588342 1.115157 0.7148547)
-    (2H H 0.3376986 0.2854735 -0.4735033)
-  )
-  (Bonds
-    (1 3H N)
-    (2 CA N)
-    (3 HA CA)
-    (4 C CA)
-    (5 O C)
-    (6 CB CA)
-    (7 HB CB)
-    (8 CG1 CB)
-    (9 1HG1 CG1)
-    (10 2HG1 CG1)
-    (11 3HG1 CG1)
-    (12 CG2 CB)
-    (13 1HG2 CG2)
-    (14 2HG2 CG2)
-    (15 3HG2 CG2)
-    (16 OXT C)
-    (17 1H N)
-    (18 2H N)
-  )
-  (Connections
-    (N-term N C-term 1.33 0.5)
-    (C-term C N-term 1.33 0.5)
-  )
- 	(Properties
-		(AMINO_ACID)
-	)
-	(Variants
-		(Default
-			(Delete
-				(OXT)
-			  (1H)
-			  (2H)
-			)
-		  (Rename
-			  (3H H)
-			)
-			(addh 9
-				(H N CA C x )
-				(HA CA N C CB )
-				(HB CB CA CG1 CG2 )
-				(1HG1 CG1 CB CG2 CA )
-				(2HG1 CG1 CB CG2 CA )
-				(3HG1 CG1 CB CG2 CA )
-				(1HG2 CG2 CB CG1 CA )
-				(2HG2 CG2 CB CG1 CA )
-				(3HG2 CG2 CB CG1 CA )
-			)
-		)
-		(VAL-C
-		  (Delete
-				(1H)
-				(2H)
-			)
-		  (Rename
-				(3H H)
-			)
-      (Properties
-				(C_TERMINAL)
-			)
-			(addh 9
-				(H N CA C x )
-				(HA CA N C CB )
-				(HB CB CA CG1 CG2 )
-				(1HG1 CG1 CB CG2 CA )
-				(2HG1 CG1 CB CG2 CA )
-				(3HG1 CG1 CB CG2 CA )
-				(1HG2 CG2 CB CG1 CA )
-				(2HG2 CG2 CB CG1 CA )
-				(3HG2 CG2 CB CG1 CA )
-			)
-		)
-	  (VAL-N
-		  (Delete
-			  (OXT)
-			)
-		  (Properties
-			  (N_TERMINAL)
-      )
-			(addh 11
-				(HA CA N C CB )
-				(HB CB CA CG1 CG2 )
-				(1HG1 CG1 CB CG2 CA )
-				(2HG1 CG1 CB CG2 CA )
-				(3HG1 CG1 CB CG2 CA )
-				(1HG2 CG2 CB CG1 CA )
-				(2HG2 CG2 CB CG1 CA )
-				(3HG2 CG2 CB CG1 CA )
-        (1H N CA C O)
-        (2H N CA C O)
-        (3H N CA C O)
-			)
-		)
-	)
-)
+<node>VAL
+ <node>Names
+ <node>Valine</node>
+ <node>Valin</node>
+ <node>Val</node>
+ <node>V</node>
+ </node>
+ <node>Atoms
+ <node>N<value>N 0.08111785 1.2013 -0.133711</value></node>
+ <node>3H<value>H 0.9032491 1.762717 0.06032801</value></node>
+ <node>CA<value>C -0.698245 1.931722 -1.152099</value></node>
+ <node>HA<value>H -0.2125321 1.7346 -2.108571</value></node>
+ <node>C<value>C -0.5967644 3.443358 -0.9052255</value></node>
+ <node>O<value>O 0.3370198 3.799585 -0.1501447</value></node>
+ <node>CB<value>C -2.141793 1.389981 -1.219405</value></node>
+ <node>HB<value>H -2.073082 0.3006792 -1.23859</value></node>
+ <node>CG1<value>C -2.976131 1.780723 0.008393872</value></node>
+ <node>1HG1<value>H -3.953726 1.301327 -0.05053521</value></node>
+ <node>2HG1<value>H -2.483032 1.448739 0.9220271</value></node>
+ <node>3HG1<value>H -3.118463 2.860577 0.05077193</value></node>
+ <node>CG2<value>C -2.878923 1.800528 -2.501579</value></node>
+ <node>1HG2<value>H -3.809818 1.237256 -2.575363</value></node>
+ <node>2HG2<value>H -3.122159 2.862025 -2.496346</value></node>
+ <node>3HG2<value>H -2.266089 1.572718 -3.374182</value></node>
+ <node>OXT<value>O -1.142181 4.189281 -1.746952</value></node>
+ <node>1H<value>H -0.4588342 1.115157 0.7148547</value></node>
+ <node>2H<value>H 0.3376986 0.2854735 -0.4735033</value></node>
+ </node>
+ <node>Bonds
+ <node>1<value>3H N</value></node>
+ <node>2<value>CA N</value></node>
+ <node>3<value>HA CA</value></node>
+ <node>4<value>C CA</value></node>
+ <node>5<value>O C</value></node>
+ <node>6<value>CB CA</value></node>
+ <node>7<value>HB CB</value></node>
+ <node>8<value>CG1 CB</value></node>
+ <node>9<value>1HG1 CG1</value></node>
+ <node>10<value>2HG1 CG1</value></node>
+ <node>11<value>3HG1 CG1</value></node>
+ <node>12<value>CG2 CB</value></node>
+ <node>13<value>1HG2 CG2</value></node>
+ <node>14<value>2HG2 CG2</value></node>
+ <node>15<value>3HG2 CG2</value></node>
+ <node>16<value>OXT C</value></node>
+ <node>17<value>1H N</value></node>
+ <node>18<value>2H N</value></node>
+ </node>
+ <node>Connections
+ <node>N-term<value>N C-term 1.33 0.5</value></node>
+ <node>C-term<value>C N-term 1.33 0.5</value></node>
+ </node>
+ <node>Properties
+ <node>AMINO_ACID</node>
+ </node>
+ <node>Variants
+ <node>Default
+ <node>Delete
+ <node>OXT</node>
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ </node>
+ <node>VAL-C
+ <node>Delete
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ <node>Properties
+ <node>C_TERMINAL</node>
+ </node>
+ </node>
+ <node>VAL-N
+ <node>Delete
+ <node>OXT</node>
+ </node>
+ <node>Properties
+ <node>N_TERMINAL</node>
+ </node>
+ </node>
+ </node>
+</node>

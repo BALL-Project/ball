@@ -1,134 +1,99 @@
-(TYR
-  (Names
-		(Tyrosine)
-		(Tyrosin)
-		(Tyr)
-		(Y)
-  )
-  (Atoms
-    (N N 0.0892698 1.397582 0.01951128)
-    (3H H 0.7468582 2.066645 0.3997705)
-    (CA C -0.7022205 2.069859 -1.026261)
-    (HA H -0.008099081 2.359834 -1.816127)
-    (C C -1.325588 3.357111 -0.4775957)
-    (O O -0.5109698 4.260831 -0.1874116)
-    (CB C -1.734457 1.10693 -1.63201)
-    (1HB H -1.201299 0.2395796 -2.0242)
-    (2HB H -2.395853 0.7504926 -0.8408001)
-    (CG C -2.557806 1.696825 -2.76258)
-    (CD1 C -3.932589 1.947373 -2.588092)
-    (HD1 H -4.418424 1.704676 -1.654011)
-    (CD2 C -1.942974 2.007092 -3.98996)
-    (HD2 H -0.8916094 1.806731 -4.138027)
-    (CE1 C -4.68326 2.520281 -3.629397)
-    (HE1 H -5.736402 2.710342 -3.483602)
-    (CE2 C -2.6951 2.579179 -5.030118)
-    (HE2 H -2.222162 2.818849 -5.971263)
-    (CZ C -4.063968 2.83503 -4.851168)
-    (OH O -4.785331 3.388967 -5.865766)
-    (HH H -5.709894 3.51796 -5.645833)
-    (OXT O -2.492483 3.282188 -0.03387626)
-    (1H H -0.5246789 1.074702 0.7536617)
-    (2H H 0.5865244 0.613409 -0.3778604)
-  )
-  (Bonds
-    (1 3H N)
-    (2 CA N)
-    (3 HA CA)
-    (4 C CA)
-    (5 O C)
-    (6 CB CA)
-    (7 1HB CB)
-    (8 2HB CB)
-    (9 CG CB)
-    (10 CD1 CG)
-    (11 HD1 CD1)
-    (12 CD2 CG)
-    (13 HD2 CD2)
-    (14 CE1 CD1)
-    (15 HE1 CE1)
-    (16 CE2 CD2)
-    (17 HE2 CE2)
-    (18 CZ CE1)
-    (19 CZ CE2)
-    (20 OH CZ)
-    (21 HH OH)
-    (22 OXT C)
-    (23 1H N)
-    (24 2H N)
-  )
-  (Connections
-    (N-term N C-term 1.33 0.5)
-    (C-term C N-term 1.33 0.5)
-  )
- 	(Properties
-		(AMINO_ACID)
-	)
-	(Variants
-		(Default
-			(Delete
-				(OXT)
-			  (1H)
-			  (2H)
-			)
-		  (Rename
-			  (3H H)
-			)
-			(addh 9
-				(H N CA C x )
-				(HA CA N C CB )
-				(1HB CB CA N C )
-				(2HB CB CA N C )
-				(HD1 CD1 CG CE1 CB )
-				(HD2 CD2 CG CE2 CB )
-				(HE1 CE1 CD1 CZ CG )
-				(HE2 CE2 CD2 CZ CG )
-				(HH OH CE1 CE2 CG )
-			)  	
-		)
-		(TYR-C
-		  (Delete
-				(1H)
-				(2H)
-			)
-		  (Rename
-				(3H H)
-			)
-      (Properties
-				(C_TERMINAL)
-			)
-			(addh 9
-				(H N CA C x )
-				(HA CA N C CB )
-				(1HB CB CA N C )
-				(2HB CB CA N C )
-				(HD1 CD1 CG CE1 CB )
-				(HD2 CD2 CG CE2 CB )
-				(HE1 CE1 CD1 CZ CG )
-				(HE2 CE2 CD2 CZ CG )
-				(HH OH CE1 CE2 CG )
-			)  	
-		)
-	  (TYR-N
-		  (Delete
-			  (OXT)
-			)
-		  (Properties
-			  (N_TERMINAL)
-      )
-			(addh 11
-				(HA CA N C CB )
-				(1HB CB CA N C )
-				(2HB CB CA N C )
-				(HD1 CD1 CG CE1 CB )
-				(HD2 CD2 CG CE2 CB )
-				(HE1 CE1 CD1 CZ CG )
-				(HE2 CE2 CD2 CZ CG )
-				(HH OH CE1 CE2 CG )
-        (1H N CA C O)
-        (2H N CA C O)
-        (3H N CA C O)
-			)  	
-		)
-	)
-)
+<node>TYR
+ <node>Names
+ <node>Tyrosine</node>
+ <node>Tyrosin</node>
+ <node>Tyr</node>
+ <node>Y</node>
+ </node>
+ <node>Atoms
+ <node>N<value>N 0.0892698 1.397582 0.01951128</value></node>
+ <node>3H<value>H 0.7468582 2.066645 0.3997705</value></node>
+ <node>CA<value>C -0.7022205 2.069859 -1.026261</value></node>
+ <node>HA<value>H -0.008099081 2.359834 -1.816127</value></node>
+ <node>C<value>C -1.325588 3.357111 -0.4775957</value></node>
+ <node>O<value>O -0.5109698 4.260831 -0.1874116</value></node>
+ <node>CB<value>C -1.734457 1.10693 -1.63201</value></node>
+ <node>1HB<value>H -1.201299 0.2395796 -2.0242</value></node>
+ <node>2HB<value>H -2.395853 0.7504926 -0.8408001</value></node>
+ <node>CG<value>C -2.557806 1.696825 -2.76258</value></node>
+ <node>CD1<value>C -3.932589 1.947373 -2.588092</value></node>
+ <node>HD1<value>H -4.418424 1.704676 -1.654011</value></node>
+ <node>CD2<value>C -1.942974 2.007092 -3.98996</value></node>
+ <node>HD2<value>H -0.8916094 1.806731 -4.138027</value></node>
+ <node>CE1<value>C -4.68326 2.520281 -3.629397</value></node>
+ <node>HE1<value>H -5.736402 2.710342 -3.483602</value></node>
+ <node>CE2<value>C -2.6951 2.579179 -5.030118</value></node>
+ <node>HE2<value>H -2.222162 2.818849 -5.971263</value></node>
+ <node>CZ<value>C -4.063968 2.83503 -4.851168</value></node>
+ <node>OH<value>O -4.785331 3.388967 -5.865766</value></node>
+ <node>HH<value>H -5.709894 3.51796 -5.645833</value></node>
+ <node>OXT<value>O -2.492483 3.282188 -0.03387626</value></node>
+ <node>1H<value>H -0.5246789 1.074702 0.7536617</value></node>
+ <node>2H<value>H 0.5865244 0.613409 -0.3778604</value></node>
+ </node>
+ <node>Bonds
+ <node>1<value>3H N</value></node>
+ <node>2<value>CA N</value></node>
+ <node>3<value>HA CA</value></node>
+ <node>4<value>C CA</value></node>
+ <node>5<value>O C</value></node>
+ <node>6<value>CB CA</value></node>
+ <node>7<value>1HB CB</value></node>
+ <node>8<value>2HB CB</value></node>
+ <node>9<value>CG CB</value></node>
+ <node>10<value>CD1 CG</value></node>
+ <node>11<value>HD1 CD1</value></node>
+ <node>12<value>CD2 CG</value></node>
+ <node>13<value>HD2 CD2</value></node>
+ <node>14<value>CE1 CD1</value></node>
+ <node>15<value>HE1 CE1</value></node>
+ <node>16<value>CE2 CD2</value></node>
+ <node>17<value>HE2 CE2</value></node>
+ <node>18<value>CZ CE1</value></node>
+ <node>19<value>CZ CE2</value></node>
+ <node>20<value>OH CZ</value></node>
+ <node>21<value>HH OH</value></node>
+ <node>22<value>OXT C</value></node>
+ <node>23<value>1H N</value></node>
+ <node>24<value>2H N</value></node>
+ </node>
+ <node>Connections
+ <node>N-term<value>N C-term 1.33 0.5</value></node>
+ <node>C-term<value>C N-term 1.33 0.5</value></node>
+ </node>
+ <node>Properties
+ <node>AMINO_ACID</node>
+ </node>
+ <node>Variants
+ <node>Default
+ <node>Delete
+ <node>OXT</node>
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ </node>
+ <node>TYR-C
+ <node>Delete
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ <node>Properties
+ <node>C_TERMINAL</node>
+ </node>
+ </node>
+ <node>TYR-N
+ <node>Delete
+ <node>OXT</node>
+ </node>
+ <node>Properties
+ <node>N_TERMINAL</node>
+ </node>
+ </node>
+ </node>
+</node>

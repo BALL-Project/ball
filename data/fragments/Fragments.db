@@ -1,29 +1,29 @@
-(Fragments
-  (#include:ALA fragments/ALA.db:/ALA)
-  (#include:ARG fragments/ARG.db:/ARG)
-  (#include:ASP fragments/ASP.db:/ASP)
-  (#include:ASN fragments/ASN.db:/ASN)
-  (#include:CYS fragments/CYS.db:/CYS)
-  (#include:GLN fragments/GLN.db:/GLN)
-  (#include:GLU fragments/GLU.db:/GLU)
-  (#include:GLY fragments/GLY.db:/GLY)
-  (#include:HIS fragments/HIS.db:/HIS)
-  (#include:ILE fragments/ILE.db:/ILE)
-  (#include:LEU fragments/LEU.db:/LEU)
-  (#include:LYS fragments/LYS.db:/LYS)
-  (#include:MET fragments/MET.db:/MET)
-  (#include:PHE fragments/PHE.db:/PHE)
-  (#include:PRO fragments/PRO.db:/PRO)
-  (#include:SER fragments/SER.db:/SER)
-  (#include:THR fragments/THR.db:/THR)
-  (#include:TRP fragments/TRP.db:/TRP)
-  (#include:TYR fragments/TYR.db:/TYR)
-  (#include:VAL fragments/VAL.db:/VAL)
-)
-(Names
-	(#include:Discover fragments/Names.Discover.db:/Discover)
-	(#include:Amber fragments/Names.Amber.db:/Amber)
-)
-(Defaults
-	(Naming PDB)
-)
+<node>Fragments
+ <node>#include:ALA<value>fragments/ALA.db:/ALA</value></node>
+ <node>#include:ARG<value>fragments/ARG.db:/ARG</value></node>
+ <node>#include:ASP<value>fragments/ASP.db:/ASP</value></node>
+ <node>#include:ASN<value>fragments/ASN.db:/ASN</value></node>
+ <node>#include:CYS<value>fragments/CYS.db:/CYS</value></node>
+ <node>#include:GLN<value>fragments/GLN.db:/GLN</value></node>
+ <node>#include:GLU<value>fragments/GLU.db:/GLU</value></node>
+ <node>#include:GLY<value>fragments/GLY.db:/GLY</value></node>
+ <node>#include:HIS<value>fragments/HIS.db:/HIS</value></node>
+ <node>#include:ILE<value>fragments/ILE.db:/ILE</value></node>
+ <node>#include:LEU<value>fragments/LEU.db:/LEU</value></node>
+ <node>#include:LYS<value>fragments/LYS.db:/LYS</value></node>
+ <node>#include:MET<value>fragments/MET.db:/MET</value></node>
+ <node>#include:PHE<value>fragments/PHE.db:/PHE</value></node>
+ <node>#include:PRO<value>fragments/PRO.db:/PRO</value></node>
+ <node>#include:SER<value>fragments/SER.db:/SER</value></node>
+ <node>#include:THR<value>fragments/THR.db:/THR</value></node>
+ <node>#include:TRP<value>fragments/TRP.db:/TRP</value></node>
+ <node>#include:TYR<value>fragments/TYR.db:/TYR</value></node>
+ <node>#include:VAL<value>fragments/VAL.db:/VAL</value></node>
+</node>
+<node>Names
+ <node>#include:Discover<value>fragments/Names.Discover.db:/Discover</value></node>
+ <node>#include:Amber<value>fragments/Names.Amber.db:/Amber</value></node>
+</node>
+<node>Defaults
+ <node>Naming<value>PDB</value></node>
+</node>

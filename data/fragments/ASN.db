@@ -1,110 +1,84 @@
-(ASN
-  (Names
-		(Asparagine)
-		(Asparagin)
-		(Asn)
-		(N)
-  )
-  (Atoms
-    (N N -0.01239826 1.297873 -0.0455736)
-    (3H H 0.8807231 1.768826 0.03701005)
-    (CA C -0.7474616 1.91653 -1.164926)
-    (HA H -0.1937652 1.691628 -2.077897)
-    (C C -0.757567 3.441771 -1.010304)
-    (O O 0.3769885 3.962902 -0.9276295)
-    (CB C -2.149851 1.302218 -1.30196)
-    (1HB H -2.042859 0.2235991 -1.423685)
-    (2HB H -2.723301 1.490943 -0.3934487)
-    (CG C -2.91901 1.84635 -2.50453)
-    (OD1 O -2.442698 2.721974 -3.218464)
-    (ND2 N -4.125435 1.339006 -2.736042)
-    (1HD2 H -4.50376 0.6180301 -2.140929)
-    (2HD2 H -4.647904 1.686222 -3.525954)
-    (1H H -0.5352049 1.417775 0.8102037)
-    (2H H 0.1272759 0.3139404 -0.2256562)
-    (OXT O -1.806735 3.963976 -0.572751)
-  )
-  (Bonds
-    (1 3H N)
-    (2 CA N)
-    (3 HA CA)
-    (4 C CA)
-    (5 O C)
-    (6 CB CA)
-    (7 1HB CB)
-    (8 2HB CB)
-    (9 CG CB)
-    (10 OD1 CG)
-    (11 ND2 CG)
-    (12 1HD2 ND2)
-    (13 2HD2 ND2)
-    (14 1H N)
-    (15 2H N)
-    (16 OXT C)
-  )
-  (Connections
-    (N-term N C-term 1.33 0.5)
-    (C-term C N-term 1.33 0.5)
-  )
- 	(Properties
-		(AMINO_ACID)
-	)
-	(Variants
-		(Default
-			(Delete
-				(OXT)
-			  (1H)
-			  (2H)
-			)
-		  (Rename
-			  (3H H)
-			)
-			(addh 6
-				(H N CA C x )
-				(HA CA N C CB )
-				(1HB CB CA CG OD1 )
-				(2HB CB CA CG OD1 )
-				(1HD2 ND2 OD1 CB CA )
-				(2HD2 ND2 OD1 CB CA )
-			)
-		)
-		(ASN-C
-		  (Delete
-				(1H)
-				(2H)
-			)
-		  (Rename
-				(3H H)
-			)
-      (Properties
-				(C_TERMINAL)
-			)
-			(addh 6
-				(H N CA C x )
-				(HA CA N C CB )
-				(1HB CB CA CG OD1 )
-				(2HB CB CA CG OD1 )
-				(1HD2 ND2 OD1 CB CA )
-				(2HD2 ND2 OD1 CB CA )
-			)
-		)
-	  (ASN-N
-		  (Delete
-			  (OXT)
-			)
-		  (Properties
-			  (N_TERMINAL)
-      )
-			(addh 8
-				(HA CA N C CB )
-				(1HB CB CA CG OD1 )
-				(2HB CB CA CG OD1 )
-				(1HD2 ND2 OD1 CB CA )
-				(2HD2 ND2 OD1 CB CA )
-        (1H N CA C O)
-        (2H N CA C O)
-        (3H N CA C O)
-			)
-		)
-	)
-)
+<node>ASN
+ <node>Names
+ <node>Asparagine</node>
+ <node>Asparagin</node>
+ <node>Asn</node>
+ <node>N</node>
+ </node>
+ <node>Atoms
+ <node>N<value>N -0.01239826 1.297873 -0.0455736</value></node>
+ <node>3H<value>H 0.8807231 1.768826 0.03701005</value></node>
+ <node>CA<value>C -0.7474616 1.91653 -1.164926</value></node>
+ <node>HA<value>H -0.1937652 1.691628 -2.077897</value></node>
+ <node>C<value>C -0.757567 3.441771 -1.010304</value></node>
+ <node>O<value>O 0.3769885 3.962902 -0.9276295</value></node>
+ <node>CB<value>C -2.149851 1.302218 -1.30196</value></node>
+ <node>1HB<value>H -2.042859 0.2235991 -1.423685</value></node>
+ <node>2HB<value>H -2.723301 1.490943 -0.3934487</value></node>
+ <node>CG<value>C -2.91901 1.84635 -2.50453</value></node>
+ <node>OD1<value>O -2.442698 2.721974 -3.218464</value></node>
+ <node>ND2<value>N -4.125435 1.339006 -2.736042</value></node>
+ <node>1HD2<value>H -4.50376 0.6180301 -2.140929</value></node>
+ <node>2HD2<value>H -4.647904 1.686222 -3.525954</value></node>
+ <node>1H<value>H -0.5352049 1.417775 0.8102037</value></node>
+ <node>2H<value>H 0.1272759 0.3139404 -0.2256562</value></node>
+ <node>OXT<value>O -1.806735 3.963976 -0.572751</value></node>
+ </node>
+ <node>Bonds
+ <node>1<value>3H N</value></node>
+ <node>2<value>CA N</value></node>
+ <node>3<value>HA CA</value></node>
+ <node>4<value>C CA</value></node>
+ <node>5<value>O C</value></node>
+ <node>6<value>CB CA</value></node>
+ <node>7<value>1HB CB</value></node>
+ <node>8<value>2HB CB</value></node>
+ <node>9<value>CG CB</value></node>
+ <node>10<value>OD1 CG</value></node>
+ <node>11<value>ND2 CG</value></node>
+ <node>12<value>1HD2 ND2</value></node>
+ <node>13<value>2HD2 ND2</value></node>
+ <node>14<value>1H N</value></node>
+ <node>15<value>2H N</value></node>
+ <node>16<value>OXT C</value></node>
+ </node>
+ <node>Connections
+ <node>N-term<value>N C-term 1.33 0.5</value></node>
+ <node>C-term<value>C N-term 1.33 0.5</value></node>
+ </node>
+ <node>Properties
+ <node>AMINO_ACID</node>
+ </node>
+ <node>Variants
+ <node>Default
+ <node>Delete
+ <node>OXT</node>
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ </node>
+ <node>ASN-C
+ <node>Delete
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ <node>Properties
+ <node>C_TERMINAL</node>
+ </node>
+ </node>
+ <node>ASN-N
+ <node>Delete
+ <node>OXT</node>
+ </node>
+ <node>Properties
+ <node>N_TERMINAL</node>
+ </node>
+ </node>
+ </node>
+</node>

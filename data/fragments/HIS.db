@@ -1,125 +1,93 @@
-(HIS
-  (Names
-		(Histidine)
-		(Histidin)
-		(His)
-		(H)
-  )
-  (Atoms
-    (N N 0.2528806 1.616447 -0.2212145)
-    (3H H 0.7991534 2.328624 0.245802)
-    (CA C -0.9251888 2.215651 -0.8776516)
-    (HA H -0.5465931 2.966134 -1.573552)
-    (C C -1.833067 2.919479 0.1419996)
-    (O O -2.654072 3.735267 -0.3389743)
-    (CB C -1.677425 1.144471 -1.688265)
-    (1HB H -0.9314069 0.53022 -2.195623)
-    (2HB H -2.228334 0.4977131 -1.00345)
-    (CG C -2.625881 1.668474 -2.74672)
-    (ND1 N -3.385668 2.821612 -2.671887)
-    (HD1 H -3.38348 3.467654 -1.88095)
-    (CD2 C -2.893428 1.068907 -3.947961)
-    (HD2 H -2.46763 0.1453506 -4.317409)
-    (CE1 C -4.09971 2.924621 -3.807559)
-    (HE1 H -4.788648 3.724259 -4.045286)
-    (NE2 N -3.815619 1.869323 -4.597533)
-    (HE2 H -4.210977 1.69118 -5.511979)
-    (1H H -0.05550323 0.9331897 0.4557269)
-    (2H H 0.827899 1.162407 -0.9164186)
-    (OXT O -1.921441 2.400639 1.276749)
-  )
-  (Bonds
-    (1 3H N)
-    (2 CA N)
-    (3 HA CA)
-    (4 C CA)
-    (5 O C)
-    (6 CB CA)
-    (7 1HB CB)
-    (8 2HB CB)
-    (9 CG CB)
-    (10 ND1 CG)
-    (11 HD1 ND1)
-    (12 CD2 CG)
-    (13 HD2 CD2)
-    (14 CE1 ND1)
-    (15 HE1 CE1)
-    (16 NE2 CE1)
-    (17 NE2 CD2)
-    (18 HE2 NE2)
-    (19 1H N)
-    (20 2H N)
-    (21 OXT C)
-  )
-  (Connections
-    (N-term N C-term 1.33 0.5)
-    (C-term C N-term 1.33 0.5)
-  )
- 	(Properties
-		(AMINO_ACID)
-	)
-	(Variants
-		(Default
-			(Delete
-				(OXT)
-			  (1H)
-			  (2H)
-			)
-		  (Rename
-			  (3H H)
-			)
-			(addh 8
-				(H N CA C x )
-				(HA CA N C CB )
-				(1HB CB CA N C )
-				(2HB CB CA N C )
-				(HD1 ND1 CG CE1 CB )
-				(HD2 CD2 CG NE2 CB )
-				(HE1 CE1 ND1 NE2 CG )
-				(HE2 NE2 CD2 CE1 CG )
-			)
-		)
-		(HIS-C
-		  (Delete
-				(1H)
-				(2H)
-			)
-		  (Rename
-				(3H H)
-			)
-      (Properties
-				(C_TERMINAL)
-			)
-			(addh 8
-				(H N CA C x )
-				(HA CA N C CB )
-				(1HB CB CA N C )
-				(2HB CB CA N C )
-				(HD1 ND1 CG CE1 CB )
-				(HD2 CD2 CG NE2 CB )
-				(HE1 CE1 ND1 NE2 CG )
-				(HE2 NE2 CD2 CE1 CG )
-			)
-		)
-	  (HIS-N
-		  (Delete
-			  (OXT)
-			)
-		  (Properties
-			  (N_TERMINAL)
-      )
-			(addh 10
-				(HA CA N C CB )
-				(1HB CB CA N C )
-				(2HB CB CA N C )
-				(HD1 ND1 CG CE1 CB )
-				(HD2 CD2 CG NE2 CB )
-				(HE1 CE1 ND1 NE2 CG )
-				(HE2 NE2 CD2 CE1 CG )
-        (1H N CA C O)
-        (2H N CA C O)
-        (3H N CA C O)
-			)
-		)
-	)
-)
+<node>HIS
+ <node>Names
+ <node>Histidine</node>
+ <node>Histidin</node>
+ <node>His</node>
+ <node>H</node>
+ </node>
+ <node>Atoms
+ <node>N<value>N 0.2528806 1.616447 -0.2212145</value></node>
+ <node>3H<value>H 0.7991534 2.328624 0.245802</value></node>
+ <node>CA<value>C -0.9251888 2.215651 -0.8776516</value></node>
+ <node>HA<value>H -0.5465931 2.966134 -1.573552</value></node>
+ <node>C<value>C -1.833067 2.919479 0.1419996</value></node>
+ <node>O<value>O -2.654072 3.735267 -0.3389743</value></node>
+ <node>CB<value>C -1.677425 1.144471 -1.688265</value></node>
+ <node>1HB<value>H -0.9314069 0.53022 -2.195623</value></node>
+ <node>2HB<value>H -2.228334 0.4977131 -1.00345</value></node>
+ <node>CG<value>C -2.625881 1.668474 -2.74672</value></node>
+ <node>ND1<value>N -3.385668 2.821612 -2.671887</value></node>
+ <node>HD1<value>H -3.38348 3.467654 -1.88095</value></node>
+ <node>CD2<value>C -2.893428 1.068907 -3.947961</value></node>
+ <node>HD2<value>H -2.46763 0.1453506 -4.317409</value></node>
+ <node>CE1<value>C -4.09971 2.924621 -3.807559</value></node>
+ <node>HE1<value>H -4.788648 3.724259 -4.045286</value></node>
+ <node>NE2<value>N -3.815619 1.869323 -4.597533</value></node>
+ <node>HE2<value>H -4.210977 1.69118 -5.511979</value></node>
+ <node>1H<value>H -0.05550323 0.9331897 0.4557269</value></node>
+ <node>2H<value>H 0.827899 1.162407 -0.9164186</value></node>
+ <node>OXT<value>O -1.921441 2.400639 1.276749</value></node>
+ </node>
+ <node>Bonds
+ <node>1<value>3H N</value></node>
+ <node>2<value>CA N</value></node>
+ <node>3<value>HA CA</value></node>
+ <node>4<value>C CA</value></node>
+ <node>5<value>O C</value></node>
+ <node>6<value>CB CA</value></node>
+ <node>7<value>1HB CB</value></node>
+ <node>8<value>2HB CB</value></node>
+ <node>9<value>CG CB</value></node>
+ <node>10<value>ND1 CG</value></node>
+ <node>11<value>HD1 ND1</value></node>
+ <node>12<value>CD2 CG</value></node>
+ <node>13<value>HD2 CD2</value></node>
+ <node>14<value>CE1 ND1</value></node>
+ <node>15<value>HE1 CE1</value></node>
+ <node>16<value>NE2 CE1</value></node>
+ <node>17<value>NE2 CD2</value></node>
+ <node>18<value>HE2 NE2</value></node>
+ <node>19<value>1H N</value></node>
+ <node>20<value>2H N</value></node>
+ <node>21<value>OXT C</value></node>
+ </node>
+ <node>Connections
+ <node>N-term<value>N C-term 1.33 0.5</value></node>
+ <node>C-term<value>C N-term 1.33 0.5</value></node>
+ </node>
+ <node>Properties
+ <node>AMINO_ACID</node>
+ </node>
+ <node>Variants
+ <node>Default
+ <node>Delete
+ <node>OXT</node>
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ </node>
+ <node>HIS-C
+ <node>Delete
+ <node>1H</node>
+ <node>2H</node>
+ </node>
+ <node>Rename
+ <node>3H<value>H</value></node>
+ </node>
+ <node>Properties
+ <node>C_TERMINAL</node>
+ </node>
+ </node>
+ <node>HIS-N
+ <node>Delete
+ <node>OXT</node>
+ </node>
+ <node>Properties
+ <node>N_TERMINAL</node>
+ </node>
+ </node>
+ </node>
+</node>
