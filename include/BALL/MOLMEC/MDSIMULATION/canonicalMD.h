@@ -1,4 +1,4 @@
-// $Id: canonicalMD.h,v 1.10 2001/01/24 12:24:11 amoll Exp $
+// $Id: canonicalMD.h,v 1.11 2001/01/26 02:26:41 amoll Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   

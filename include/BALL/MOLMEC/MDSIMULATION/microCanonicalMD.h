@@ -1,4 +1,4 @@
-// $Id: microCanonicalMD.h,v 1.7 2001/01/24 12:24:12 amoll Exp $
+// $Id: microCanonicalMD.h,v 1.8 2001/01/26 02:26:41 amoll Exp $
 // Microcanonical MD: A class for doing molecular dynamics simulations      
 // according to the principle of a microcanonical ensemble (NVE), i.e., 
 // the total energy of the system is kept constant.

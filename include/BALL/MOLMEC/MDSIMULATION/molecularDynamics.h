@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.h,v 1.12 2001/01/24 12:25:50 amoll Exp $
+// $Id: molecularDynamics.h,v 1.13 2001/01/26 02:26:42 amoll Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
