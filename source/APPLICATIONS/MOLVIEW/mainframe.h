@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.52 2003/09/19 18:43:22 amoll Exp $
+// $Id: mainframe.h,v 1.53 2003/10/05 21:08:04 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -127,7 +127,7 @@ namespace BALL
 			MENU_FDPB,
 
 			MENU_FULLSCREEN,
-			MENU_OPEN_SURFACE_DIALOG,
+			MENU_CONTOUR_SURFACE,
 
 			MENU__HELP_ABOUT
 		};
@@ -164,7 +164,7 @@ namespace BALL
 		void calculateAmberEnergy();
 		void amberMinimization();
 		void amberMDSimulation();
-		void computeSurface();
+		void computeIsoContourSurface();
 		void buildPeptide();
 		void calculateHBonds();
 		void stopSimulation();
