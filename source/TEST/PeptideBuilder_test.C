@@ -1,18 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PeptideBuilder_test.C,v 1.7 2004/02/13 17:00:22 anhi Exp $
+// $Id: PeptideBuilder_test.C,v 1.7.2.1 2004/05/10 13:19:40 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/STRUCTURE/peptideBuilder.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
 #include <vector>
 
 ///////////////////////////
 
-START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.7 2004/02/13 17:00:22 anhi Exp $")
+START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.7.2.1 2004/05/10 13:19:40 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -151,8 +152,13 @@ CHECK(PeptideBuilder(const std::vector<AminoAcidDescriptor>& sequence))
   TEST_NOT_EQUAL(pb3, 0)
 RESULT
 
+FragmentDB db("");
+pb->setFragmentDB(&db);
+pb3->setFragmentDB(&db);
+
 CHECK(construct())
 	Protein *prot=pb->construct();
+	TEST_NOT_EQUAL(prot, 0)
 	ResidueIterator resIt;
   resIt = prot->beginResidue();
 
@@ -173,8 +179,10 @@ CHECK(construct())
 	TEST_EQUAL(resIt->getName(), "VAL")
   TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(-77., false));
 	TEST_REAL_EQUAL(resIt->getTorsionPsi(), Angle(0, false));
+	delete prot;
 	
 	prot = pb3->construct();
+	TEST_NOT_EQUAL(prot, 0)
   resIt = prot->beginResidue();
 		
 	TEST_EQUAL(resIt->getName(), "GLY")
@@ -186,10 +194,12 @@ CHECK(construct())
 	TEST_REAL_EQUAL(resIt->getTorsionPsi(), Angle(0,false));
 
 	PeptideBuilder pb4;
+	pb4.setFragmentDB(&db);
 	pb4.addAminoAcid("PRO");
 	pb4.addAminoAcid("PRO", Angle(-12., false), Angle(42, false));
 	pb4.addAminoAcid("PRO", Angle(28, false), Angle(33, false));
 
+	delete prot;
 	prot = pb4.construct();
 	
   resIt = prot->beginResidue();
@@ -205,6 +215,8 @@ CHECK(construct())
 	TEST_EQUAL(resIt->getName(), "PRO")
 	TEST_REAL_EQUAL(resIt->getTorsionPhi(), Angle(28,false));
   TEST_EQUAL(resIt->getTorsionPsi(), 0);
+
+	delete prot;
 RESULT
 
 //empty sequence
