@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.24 2004/07/15 14:01:49 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.25 2004/07/27 12:46:29 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -79,11 +79,6 @@ namespace BALL
 				// construct a name for the system(the filename without the dir path)
 				openFile((*it).ascii());
 			}
-
-			if (files.size() > 0) 
-			{
-				setWorkingDirFromFilename_((*files.begin()).ascii());
-			}
 		}
 
 
@@ -99,7 +94,7 @@ namespace BALL
 #endif
 			Position p = file.split(fields, seperators.c_str()) -1;
 			String filename = fields[p];				
-			setWorkingDir(file.getSubstring(0, file.size() - (filename.size() + 1)));
+			setWorkingDirFromFilename_(file);
 			String extension = fields[filename.split(fields, ".") -1];
 			filename = filename.getSubstring(0, filename.size() - (extension.size() + 1));
 			return openFile(file, extension, filename);

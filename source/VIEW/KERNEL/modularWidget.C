@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.10 2004/07/03 12:09:30 amoll Exp $
+// $Id: modularWidget.C,v 1.11 2004/07/27 12:46:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -197,6 +197,7 @@ void ModularWidget::setWorkingDirFromFilename_(String filename)
 #endif
 	vector<String> fields;
 	Position p = filename.split(fields, seperators.c_str()) -1;
+	if (p == 0) return;
 	String suffix = fields[p];				
 	setWorkingDir(filename.getSubstring(0, filename.size() - (suffix.size() + 1)));
 }

@@ -27,10 +27,12 @@ fixed:
 - PeptideDialog: deletion of sequence
 - problem with normals in Cartoon model
 - issue with restoring window's geometry on X11 (still buggy on some X-Servers)
+- restoring of working dir
 
 changed:
 - inside of surfaces gets now correctly drawn
 - increased OpenGL performance 
+- .BALLView config files are now always stored in the users homedir
 - Scene Preferences
 - GeometricObjects no longe have names
 - removed Information Processor for GeometricObjects

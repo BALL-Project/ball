@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.52 2004/07/27 11:55:36 amoll Exp $
+// $Id: mainControl.h,v 1.53 2004/07/27 12:45:06 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -823,6 +823,8 @@ namespace BALL
 					removeModularWidget.
 			*/
 			List<ModularWidget*>				modular_widgets_;
+
+			private:
 
 			HashMap<Index, String>      menu_entries_hints_;
 

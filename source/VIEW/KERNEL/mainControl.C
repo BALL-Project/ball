@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.99 2004/07/27 12:44:11 amoll Exp $
+// $Id: mainControl.C,v 1.100 2004/07/27 12:46:16 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -105,7 +105,12 @@ namespace BALL
 				home_dir = getenv("HOMEPATH");
 			}
 
-			preferences_.setFilename(String(home_dir) + String(FileSystem::PATH_SEPARATOR) + inifile);
+			if (home_dir != 0)
+			{
+				inifile = String(home_dir) + String(FileSystem::PATH_SEPARATOR) + inifile;
+			}
+
+			preferences_.setFilename(inifile);
 			setup_();
 		}
 
