@@ -1,4 +1,4 @@
-dnl		$Id: aclocal.m4,v 1.26 2003/05/21 15:48:57 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.27 2003/05/27 06:39:21 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -871,7 +871,14 @@ AC_DEFUN(CF_COMPAQ_OPTIONS, [
 	if test "${CXX_VERSION_2}" -lt 3 ; then
 	  CXXFLAGS="${CXXFLAGS} -ieee"
 	else
-	  CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
+		if test "${CXX_VERSION_2}" -ge 5 ; then
+			dnl
+			dnl  Starting with cxx 6.5, we had some trouble with
+      dnl  floating point accuracy -- that should take care of it.
+		  CXXFLAGS="${CXXFLAGS} -mieee -nopure_cname"
+		else
+		  CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
+		fi
 	fi
 
   LIB_CXXFLAGS="${LIB_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
