@@ -1,4 +1,4 @@
-// $Id: geometricObject.h,v 1.19.4.1 2002/10/30 13:07:51 amoll Exp $
+// $Id: geometricObject.h,v 1.19.4.2 2002/11/15 16:34:11 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -295,80 +295,6 @@ namespace BALL
 			void setProperty(Property property)
 				throw();
 
-			/** Change the selected color of {\em *this} geometricObject.
-					If the geometric object is selected not its own color will be used but
-					the color given with this method.
-					In a newly created geometricObject the selected color will be set to the default
-					color yellow (1.0, 1.0, 0.0, 1.0).
-					@param       color the new select color of {\em *this} geometricObject
-					@see         getSelectedColor
-					@see         ColorRGBA
-			*/
-			void setSelectedColor(const ColorRGBA& color)
-				throw();
-			
-			/** Change the selected color of {\em *this} geometricObject.
-					If the geometric object is selected not its own color will be used but
-					the color given with this method.
-					In a newly created geometricObject the selected color will be set to the default
-					color yellow (1.0, 1.0, 0.0, 1.0).
-					@param       red the new red component of the selected color of {\em *this} geometricObject
-					@param       green the new green component of the selected color of {\em *this} geometricObject
-					@param       blue the new blue component of the selected color of {\em *this} geometricObject
-					@param       alpha the new alpha component of the selected color of {\em *this} geometricObject (Default=255)
-					@see         getSelectedColor
-					@see         ColorRGBA
-					@see         ColorUnit
-			*/
-			void setSelectedColor(const ColorUnit& red, const ColorUnit& green,
-										 				const ColorUnit& blue, const ColorUnit& alpha = 255)
-				throw();
-			
-			/** Non-mutable inspection of the selected color.
-					Access the constant reference of the selected color of {\em *this} geometricObject.
-					See \Ref{ColorRGBA} for further information concerning the color.
-					@return      ColorRGBA& constant reference to the selected color of {\em *this} geometricObject
-					@see         getSelectedColor
-					@see         ColorRGBA
-			*/
-			const ColorRGBA& getSelectedColor() const
-				throw();
-
-			/** Inspection of the selected color.
-					Access the selected color of {\em *this} geometricObject by using \Ref{ColorRGBA}.
-					@param       color the colorRGBA receiving the selected color of {\em *this} geometricObject.
-					@see         setSelectedColor
-					@see         ColorRGBA
-			*/
-			void getSelectedColor(ColorRGBA& color) const
-				throw();
-
-			/** Inspection of the selected color components including the alpha component.
-					Access the red, green, blue and alpha components of the selected color
-					of {\em *this} geometricObject by using \Ref{ColorUnit}'s.
-					@param      red the colorUnit receiving the red component of the selected color of {\em *this} geometricObject
-					@param      green the colorUnit receiving the green component of the selected color of {\em *this} geometricObject
-					@param      blue the colorUnit receiving the blue component of the selected color of {\em *this} geometricObject
-					@param      alpha the colorUnit receiving the alpha component of the selected color of {\em *this} geometricObject
-					@see        setSelectedColor
-					@see        ColorUnit
-			*/
-			void getSelectedColor(ColorUnit& red, ColorUnit& green, ColorUnit& blue, ColorUnit& alpha) const
-				throw();
-
-			/** Inspection of the selected color components without the alpha component.
-					Access only the red, green and blue components of the selected color
-					of {\em *this} geometricObject by using \Ref{ColorUnit}'s.
-					@param      red the colorUnit receiving the red component of the selected color of {\em *this} geometricObject
-					@param      green the colorUnit receiving the green component of the selected color of {\em *this} geometricObject
-					@param      blue the colorUnit receiving the blue component of the selected color of {\em *this} geometricObject
-					@param      alpha the colorUnit receiving the alpha component of the selected color of {\em *this} geometricObject
-					@see        setSelectedColor
-					@see        ColorUnit
-			*/
-			void getSelectedColor(ColorUnit& red, ColorUnit& green, ColorUnit& blue) const
-				throw();
-			
 			/** Change the name of {\em *this} geometricObject.
 					Change the name of {\em *this} geometricObject to the name
 					represented by the parameter {\em name}.
@@ -500,9 +426,6 @@ namespace BALL
 			void clear_()
 				throw();
 		
-			/* color of the selected object */
-			ColorRGBA selected_color_;
-
 			/* name of the geometric object */
 			String name_;
 		};
