@@ -251,6 +251,7 @@ bool FDPBDialog::calculate()
 	RegularData3DMessage* message = new RegularData3DMessage(RegularData3DMessage::NEW); 
 	message->setRegularData3D(fdpb_.phi_grid);
 	message->setComposite(system_);
+	message->setCompositeName("FDPB_" + system_->getName());
 	notify_(message);
 	fdpb_.phi_grid = 0;
 	system_ = 0;
