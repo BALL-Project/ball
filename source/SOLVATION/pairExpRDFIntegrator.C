@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.C,v 1.13 2000/11/06 18:07:37 anker Exp $
+// $Id: pairExpRDFIntegrator.C,v 1.14 2000/12/01 15:13:30 anker Exp $
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 
@@ -303,9 +303,8 @@ namespace BALL
 	bool PairExpRDFIntegrator::operator == 
 		(const PairExpRDFIntegrator& integrator) const throw()
 	{
-		// return (RDFIntegrator::operator == (integrator)
-		//	&& (alpha_ == integrator.alpha_)
-		return ((alpha_ == integrator.alpha_)
+		return (RDFIntegrator::operator == (integrator)
+			&& (alpha_ == integrator.alpha_)
 			&& (C1_ == integrator.C1_)
 			&& (C2_ == integrator.C2_)
 			&& (R_ij_o_ == integrator.R_ij_o_)
