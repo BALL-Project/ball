@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.19 2001/05/18 16:48:39 anker Exp $
+// $Id: socket.h,v 1.20 2001/05/18 16:54:01 anker Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -621,13 +621,17 @@ namespace BALL
 #	define BALL_IOSTREAM iostream
 #endif
 
-	/**	
+	/**	Input stream from a socket
+			{\bf Definition:} \URL{BALL/SYSTEM/socket.h}
 	*/
 	class ISockStream
 		: public std::istream 
 	{
+		// BAUSTELLE:
+		// should this really be protected here?
 		protected:
 
+		//_
 		ISockStream()
 			: BALL_IOS(0),
 				BALL_ISTREAM(0)
@@ -635,36 +639,91 @@ namespace BALL
 		}
 
 		public:
+
+		// BAUSTELLE
+		// /KM/usr1/anker/BALL/include/BALL/SYSTEM/socket.h: In method
+		// `BALL::ISockStream::ISockStream(const BALL::ISockStream &)':
+		// /opt/gnu/lib/gcc-lib/i686-pc-linux-gnu/2.95.3/../../../../include/g++-3/streambuf.h:128:
+		// `ios::ios(const ios &)' is private
+		// /KM/usr1/anker/BALL/include/BALL/SYSTEM/socket.h:643: within this
+		// context
+		// BALL_CREATE(ISockStream)
 						
+		/** @name Constructors and destructor
+		*/
+		//@{
+
+		/// Detailed constructur
 		ISockStream(SocketBuf* sb)
-			: BALL_IOS(sb),
-				BALL_ISTREAM(sb)
-		{
-			if (rdbuf() == 0)
-			{
-				throw Exception::NullPointer(__FILE__, __LINE__);
-			}
-		}
+			throw(Exception::NullPointer);
 
-		~ISockStream();
+		/// Destructor
+		~ISockStream()
+			throw();
 							
+		//@}
+		/** @name BAUSTELLE: Accessors 
+		*/
+		//@{
 
-		SocketBuf* rdbuf() 
-		{ 
-			return (SocketBuf*)BALL_ISTREAM::rdbuf(); 
-		}
+		/// 
+		SocketBuf* rdbuf()
+			throw();
 
-		SocketBuf* operator -> () 
-		{ 
-			return rdbuf(); 
-		}
+		///
+		SocketBuf* operator -> ()
+			throw();
+
+		//@}
 	};
 
-	/**	
+
+	BALL_INLINE
+	ISockStream::ISockStream(SocketBuf* socket_buf)
+		throw(Exception::NullPointer)
+		: BALL_IOS(socket_buf),
+			BALL_ISTREAM(socket_buf)
+	{
+		if (rdbuf() == 0)
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+	}
+
+
+	BALL_INLINE
+	ISockStream::~ISockStream()
+		throw()
+	{
+		delete rdbuf();
+		init(0);
+	}
+
+
+	BALL_INLINE
+	SocketBuf* ISockStream::rdbuf() 
+		throw()
+	{ 
+		return (SocketBuf*) BALL_ISTREAM::rdbuf(); 
+	}
+
+
+	BALL_INLINE
+	SocketBuf* ISockStream::operator -> () 
+		throw()
+	{ 
+		return rdbuf(); 
+	}
+
+
+	/**	Output stream from a socket.
+			{\bf Definition:} \URL{BALL/SYSTEM/socket.h}
 	*/
 	class OSockStream
 		: public std::ostream 
 	{
+		// BAUSTELLE:
+		// see above
 		protected:
 
 		OSockStream()
@@ -675,54 +734,95 @@ namespace BALL
 
 		public:
 
+		// BAUSTELLE
+		// see above
+		// BALL_CREATE(OSockStream)
+
 		/**	@name	Constructors and Destructors 
 		*/
 		//@{
 
-		///
-		OSockStream(SocketBuf* sb)
-			: BALL_IOS(sb),
-				BALL_OSTREAM(sb)
-		{
-			if (rdbuf() == 0)
-			{
-				throw Exception::NullPointer(__FILE__, __LINE__);
-			}
-		}
+		/// Detailed constructur
+		OSockStream(SocketBuf* socket_buf)
+			throw(Exception::NullPointer);
 
 		/// Destructor
-		virtual ~OSockStream();
+		virtual ~OSockStream()
+			throw();
 
 		//@}
 		/**	@name	Miscellaneous 
 		*/
 		//@{
-		///
-		SocketBuf* rdbuf() 
-		{ 
-			return(SocketBuf*)BALL_OSTREAM::rdbuf(); 
-		}
 
 		///
-		SocketBuf* operator -> () 
-		{ 
-			return rdbuf(); 
-		}
+		SocketBuf* rdbuf()
+			throw();
+
+		///
+		SocketBuf* operator -> ()
+			throw();
 
 		//@}
 	};
 
-	/**	
+
+	BALL_INLINE
+	OSockStream::OSockStream(SocketBuf* socket_buf)
+		throw(Exception::NullPointer)
+		: BALL_IOS(socket_buf),
+			BALL_OSTREAM(socket_buf)
+	{
+		if (rdbuf() == 0)
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+	}
+
+
+	BALL_INLINE
+	OSockStream::~OSockStream()
+		throw()
+	{
+		delete rdbuf();
+		init(0);
+	}
+
+
+	BALL_INLINE
+	SocketBuf* OSockStream::rdbuf() 
+		throw()
+	{ 
+		return (SocketBuf*) BALL_OSTREAM::rdbuf(); 
+	}
+
+
+	BALL_INLINE
+	SocketBuf* OSockStream::operator -> () 
+		throw()
+	{ 
+		return rdbuf(); 
+	}
+
+
+	/**	INET socket address.
+			{\bf Definition:} \URL{BALL/SYSTEM/socket.h}
 	*/
 	class SockInetAddr
 		: public SockAddr, 
 			public sockaddr_in 
 	{
+
 		protected:
 
-		void setport (const String& service_name, const String& protocol_name= "tcp");
+		//_
+		void setport_(const String& service_name, 
+				const String& protocol_name= "tcp")
+			throw();
 
-		void setaddr (const String& hostname);
+		//_
+		void setaddr_(const String& hostname)
+			throw();
 
 
 		public:
@@ -732,38 +832,45 @@ namespace BALL
 		//@{
 
 		/// Default constructor
-		SockInetAddr();
+		SockInetAddr()
+			throw();
 
-		/// Creates a SockInetAddr object from an unsigned int (containing the IP address) and a port number
-		SockInetAddr(unsigned long addr, int port_no = 0);
+		/** Creates a SockInetAddr object from an unsigned int (containing the
+				IP address) and a port number
+		*/
+		SockInetAddr(unsigned long addr, int port_no = 0)
+			throw();
 
 		/// Creates a SockInetAddr object from a given hostname and port number
-		SockInetAddr(const String& host_name, int port_no = 0);
+		SockInetAddr(const String& host_name, int port_no = 0)
+			throw();
 
 		/// 
-		SockInetAddr(unsigned long addr, const String& service_name, const String& protocol_name = "tcp");
+		SockInetAddr(unsigned long addr, const String& service_name,
+				const String& protocol_name = "tcp")
+			throw();
 
 		///
-		SockInetAddr(const String& host_name, const String& service_name, const String& protocol_name = "tcp");
+		SockInetAddr(const String& host_name, const String& service_name,
+				const String& protocol_name = "tcp")
+			throw();
 
 		///
-		SockInetAddr(const SockInetAddr& sina);    
+		SockInetAddr(const SockInetAddr& sina)
+			throw();
 
 		/// Destructor
 		~SockInetAddr() 
-		{
-		}
+			throw();
 
 		//@}
 		/**	@name	Converters 
 		*/
 		//@{
 
-		///
-		operator void* () const 
-		{ 
-			return (sockaddr_in*)this; 
-		}
+		/// Convert a SockInetAddr to void*.
+		operator void* () const
+			throw();
 
 		//@}
 		/**	@name	Accessors 
@@ -771,42 +878,84 @@ namespace BALL
 		//@{
 
 		///
-		int getSize() const 
-		{ 
-			return sizeof (sockaddr_in); 
-		}
+		int getSize() const
+			throw();
 
 		///
 		int getFamily() const 
-		{ 
-			return sin_family; 
-		}
+			throw();
 	
 		///
 		sockaddr* getAddr() const 
-		{
-			return (sockaddr*)((sockaddr_in*)this); 
-		}
+			throw();
 			
 		///
-		int	getPort() const;
+		int	getPort() const
+			throw();
 
 		///
-		const String&	getHostname() const;
+		const String&	getHostname() const
+			throw();
 
 		//@}
 	};
 
-	/**	
+
+	BALL_INLINE
+	SockInetAddr::~SockInetAddr()
+		throw()
+	{
+	}
+
+	
+	BALL_INLINE
+	SockInetAddr::operator void* () const
+		throw()
+	{
+		return (sockaddr_in*)this; 
+	}
+
+
+	BALL_INLINE
+	int SockInetAddr::getSize() const 
+		throw()
+	{ 
+		return sizeof (sockaddr_in); 
+	}
+
+
+	BALL_INLINE
+	int SockInetAddr::getFamily() const 
+		throw()
+	{ 
+		return sin_family; 
+	}
+
+
+	BALL_INLINE
+	sockaddr* SockInetAddr::getAddr() const 
+		throw()
+	{
+		return (sockaddr*)((sockaddr_in*)this); 
+	}
+
+
+	/**	INET socket buffer.
+			{\bf Definition:} \URL{BALL/SYSTEM/socket.h}
 	*/
 	class SockInetBuf
 		: public SocketBuf 
 	{
+
 		protected:
 
-		SockInetBuf& operator = (const SocketBuf& si); // needs to be fixed
+		// needs to be fixed
+		SockInetBuf& operator = (const SocketBuf& si)
+			throw();
 
-		SockInetBuf& operator = (const SockInetBuf& si); // needs fixing
+		// needs fixing
+		SockInetBuf& operator = (const SockInetBuf& si)
+			throw();
 
 		public:
 
@@ -821,47 +970,55 @@ namespace BALL
 		};
 
 		//@}
-		/**	@name	Constructors and Destructors 
+		/**	@name	Constructors and Destructor
 		*/
 		//@{
 
-		///
-		SockInetBuf(const SocketBuf& si)
-			: SocketBuf(si) 
-		{
-		}
+		/// Detailed constructor
+		SockInetBuf(const SocketBuf& socket_buf)
+			throw();
 
-		///
-		SockInetBuf(const SockInetBuf& si)
-			: SocketBuf (si) 
-		{
-		}
+		/// Detailed constructor
+		SockInetBuf(const SockInetBuf& socket_inet_buf)
+			throw();
+
+		/// Detailed constructor
+		SockInetBuf(SocketBuf::type type, int proto = 0)
+			throw();
+		
+		/// Destructor
+		~SockInetBuf()
+			throw();
 
 		//@}
 
 		///
-		SockInetBuf(SocketBuf::type ty, int proto = 0);
+		SocketBuf* open(SocketBuf::type, int proto=0)
+			throw();
 		
 		///
-		SocketBuf* open(SocketBuf::type, int proto=0);
+		SockInetAddr localaddr() const
+			throw();
+
+		///
+		int localport() const
+			throw();
+
+		///
+		const String& localhost() const
+			throw();
 		
 		///
-		SockInetAddr localaddr() const;
+		SockInetAddr peeraddr() const
+			throw();
 
 		///
-		int localport() const;
+		int	peerport() const
+			throw();
 
 		///
-		const String& localhost() const;
-		
-		///
-		SockInetAddr peeraddr() const;
-
-		///
-		int	peerport() const;
-
-		///
-		const String&	peerhost() const;
+		const String&	peerhost() const
+			throw();
 
 
 		/**	@name	Binding 
@@ -869,25 +1026,32 @@ namespace BALL
 		//@{
 
 		///
-		int bind_until_success(int portno);
+		int bind_until_success(int portno)
+			throw();
 
 		///
-		virtual int	bind(SockAddr& sa);
+		virtual int	bind(SockAddr& sa)
+			throw();
 
 		///
-		int	bind();
+		int	bind()
+			throw();
 
 		///
-		int	bind(unsigned long addr, int port_no = 0);
+		int	bind(unsigned long addr, int port_no = 0)
+			throw();
 
 		///
-		int	bind(const String& host_name, int port_no = 0);
+		int	bind(const String& host_name, int port_no = 0)
+			throw();
 
 		///
-		int	bind(unsigned long addr, const String& service_name, const String& protocol_name = "tcp");
+		int	bind(unsigned long addr, const String& service_name, const String& protocol_name = "tcp")
+			throw();
 
 		///
-		int	bind(const String& host_name, const String& service_name, const String& protocol_name = "tcp");
+		int	bind(const String& host_name, const String& service_name, const String& protocol_name = "tcp")
+			throw();
 
 		//@}
 		/**	@name	Connecting 
@@ -895,22 +1059,51 @@ namespace BALL
 		//@{
 
 		///
-		virtual int	connect(SockAddr& sa);
+		virtual int	connect(SockAddr& sa)
+			throw();
 
 		///
-		int connect(unsigned long addr, int port_no = 0);
+		int connect(unsigned long addr, int port_no = 0)
+			throw();
 
 		///
-		int connect(const String& host_name, int port_no = 0);
+		int connect(const String& host_name, int port_no = 0)
+			throw();
 
 		///
-		int connect(unsigned long addr, const String& service_name,  const String& protocol_name = "tcp");
+		int connect(unsigned long addr, const String& service_name,  const String& protocol_name = "tcp")
+			throw();
 
 		///
-		int connect (const String& host_name, const String& service_name, const String& protocol_name = "tcp");
+		int connect (const String& host_name, const String& service_name, const String& protocol_name = "tcp")
+			throw();
 
 		//@}
 	};
+
+
+	BALL_INLINE
+	SockInetBuf::SockInetBuf(const SocketBuf& socket_buf)
+		throw()
+		: SocketBuf(socket_buf) 
+	{
+	}
+
+
+	BALL_INLINE
+	SockInetBuf::SockInetBuf(const SockInetBuf& socket_inet_buf)
+		throw()
+		: SocketBuf (socket_inet_buf) 
+	{
+	}
+
+
+	BALL_INLINE
+	SockInetBuf::~SockInetBuf()
+		throw()
+	{
+	}
+
 
 	/**	
 	*/
@@ -944,7 +1137,8 @@ namespace BALL
 		}
 		
 		/// Destructor
-		virtual ~IOSockStream();
+		virtual ~IOSockStream()
+			throw();
 		//@}
 
 		/**	@name	Miscellaneous 
@@ -978,13 +1172,16 @@ namespace BALL
 		//@{
 
 		///
-		IOStreamSocket(const SocketBuf& sb);
+		IOStreamSocket(const SocketBuf& sb)	
+			throw();
 				
 		///
-		IOStreamSocket(SocketBuf::type ty=SocketBuf::sock_stream, int proto = 0);
+		IOStreamSocket(SocketBuf::type ty=SocketBuf::sock_stream, int proto = 0)
+			throw();
 		
 		/// Destructor 
-		virtual ~IOStreamSocket();
+		virtual ~IOStreamSocket()
+			throw();
 
 		//@}
 		/**	@name	Miscellaneous 

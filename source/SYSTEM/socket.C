@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.22 2001/05/18 16:48:41 anker Exp $
+// $Id: socket.C,v 1.23 2001/05/18 16:54:04 anker Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -850,33 +850,27 @@ namespace BALL
 		return old;
 	}
 
-	ISockStream::~ISockStream()
-	{
-		delete rdbuf();
-		init(0);
-	}
-
-	OSockStream::~OSockStream()
-	{
-		delete rdbuf();
-		init(0);
-	}
 
 	IOSockStream::~IOSockStream()
+		throw()
 	{
 		delete rdbuf();
 		init(0);
 	}
 
+
 	SockInetAddr::SockInetAddr() 
+		throw()
 	{
 		sin_family = SockInetBuf::af_inet;
 		sin_addr.s_addr = htonl(INADDR_ANY);
 		sin_port = 0;
 	}
 
+
 	// addr and port_no are in host byte order
 	SockInetAddr::SockInetAddr(unsigned long addr, int port_no)
+		throw()
 	{
 		if (addr == 0)
 		{
@@ -890,28 +884,39 @@ namespace BALL
 		sin_port = htons(port_no);
 	}
 
+
 	// addr is in host byte order
-	SockInetAddr::SockInetAddr(unsigned long addr, const String& sn, const String& pn)
+	SockInetAddr::SockInetAddr(unsigned long addr, const String& service_name,
+			const String& protocol_name)
+		throw()
 	{
 		sin_family = SockInetBuf::af_inet;
-		sin_addr.s_addr = (unsigned int)htonl(addr); // Added by cgay@cs.uoregon.edu May 29, 1993
-		setport(sn, pn);
+		// next line added by cgay@cs.uoregon.edu May 29, 1993
+		sin_addr.s_addr = (unsigned int)htonl(addr); 
+		setport_(service_name, protocol_name);
 	}
+
 
 	// port_no is in host byte order
 	SockInetAddr::SockInetAddr(const String& host_name, int port_no)
+		throw()
 	{
-		setaddr(host_name);
+		setaddr_(host_name);
 		sin_port = htons(port_no);
 	}
 
-	SockInetAddr::SockInetAddr(const String& hn, const String& sn, const String& pn)
+
+	SockInetAddr::SockInetAddr(const String& host_name,
+			const String& service_name, const String& protocol_name)
+		throw()
 	{
-		setaddr(hn);
-		setport(sn, pn);
+		setaddr_(host_name);
+		setport_(service_name, protocol_name);
 	}
 
+
 	SockInetAddr::SockInetAddr(const SockInetAddr& sina)
+		throw()
 		: SockAddr(sina)
 	{
 		sin_family = SockInetBuf::af_inet;
@@ -919,8 +924,10 @@ namespace BALL
 		sin_port = sina.sin_port;
 	}   
 
-	void SockInetAddr::setport
-		(const String& service_name, const String& protocol_name)
+
+	void SockInetAddr::setport_(const String& service_name,
+			const String& protocol_name)
+		throw()
 	{
 		servent* sp = getservbyname(service_name.c_str(), protocol_name.c_str());
 		if (sp == 0) 
@@ -932,12 +939,16 @@ namespace BALL
 		sin_port = sp->s_port;
 	}
 
+
 	int SockInetAddr::getPort() const
+		throw()
 	{
 		return ntohs (sin_port);
 	}
 
-	void SockInetAddr::setaddr(const String& host_name)
+
+	void SockInetAddr::setaddr_(const String& host_name)
+		throw()
 	{
 		if ((int)(sin_addr.s_addr = inet_addr(host_name.c_str())) == -1) 
 		{
@@ -955,7 +966,9 @@ namespace BALL
 		}
 	}
 
+	
 	const String& SockInetAddr::getHostname() const
+		throw()
 	{
 		static String hostname;
 		static char buf[256];
@@ -992,31 +1005,41 @@ namespace BALL
 		return hostname;
 	}
 
-	SockInetBuf::SockInetBuf(SocketBuf::type ty, int proto)
-		: SocketBuf(af_inet, ty, proto)
+
+	SockInetBuf::SockInetBuf(SocketBuf::type type, int proto)
+		throw()
+		: SocketBuf(af_inet, type, proto)
 	{
 	}
 
-	SockInetBuf& SockInetBuf::operator = (const SocketBuf& si)
+
+	SockInetBuf& SockInetBuf::operator = (const SocketBuf& socket_buf)
+		throw()
 	{
-		this->SocketBuf::operator = (si);
+		this->SocketBuf::operator = (socket_buf);
 		return *this;
 		
 	}
 
-	SockInetBuf& SockInetBuf::operator = (const SockInetBuf& si)
+
+	SockInetBuf& SockInetBuf::operator = (const SockInetBuf& socket_inet_buf)
+		throw()
 	{
-		this->SocketBuf::operator = (si);
+		this->SocketBuf::operator = (socket_inet_buf);
 		return *this;
 	}
 
-	SocketBuf* SockInetBuf::open(SocketBuf::type st, int proto)
+
+	SocketBuf* SockInetBuf::open(SocketBuf::type socket_type, int proto)
+		throw()
 	{
-		*this = SockInetBuf(st, proto);
+		*this = SockInetBuf(socket_type, proto);
 		return this;
 	}
 
+
 	SockInetAddr SockInetBuf::localaddr() const
+		throw()
 	{
 		SockInetAddr sin;
 		BALL_SOCKLEN_TYPE len = sin.getSize();
@@ -1028,7 +1051,9 @@ namespace BALL
 		return sin;
 	}
 
+
 	int SockInetBuf::localport() const
+		throw()
 	{
 		SockInetAddr sin = localaddr();
 		if (sin.getFamily() != af_inet) 
@@ -1039,7 +1064,9 @@ namespace BALL
 		return sin.getPort();
 	}
 
+
 	const String& SockInetBuf::localhost() const
+		throw()
 	{
 		static String empty;
 		SockInetAddr sin = localaddr();
@@ -1053,6 +1080,7 @@ namespace BALL
 
 
 	SockInetAddr SockInetBuf::peeraddr() const
+		throw()
 	{
 		SockInetAddr sin;
 		BALL_SOCKLEN_TYPE len = sin.getSize();
@@ -1064,7 +1092,9 @@ namespace BALL
 		return sin;
 	}
 
+
 	int SockInetBuf::peerport() const
+		throw()
 	{
 		SockInetAddr sin = peeraddr();
 		if (sin.getFamily() != af_inet) 
@@ -1075,7 +1105,9 @@ namespace BALL
 		return sin.getPort();
 	}
 
+
 	const String& SockInetBuf::peerhost() const
+		throw()
 	{
 		static String empty;
 		SockInetAddr sin = peeraddr();
@@ -1087,13 +1119,15 @@ namespace BALL
 		return sin.getHostname();
 	}
 
+
 	// a. bind to (INADDR_ANY, portno)
 	// b. if success return 0
 	// c. if failure and errno is EADDRINUSE, portno++ and go to step a.
 	// d. return errno.
 	int SockInetBuf::bind_until_success(int portno)
+		throw()
 	{
-		for (;;) 
+		while(true)
 		{
 			SockInetAddr sa((unsigned long) INADDR_ANY, portno++);
 			int eno = bind (sa);
@@ -1109,12 +1143,15 @@ namespace BALL
 		}
 	}
 
+
 	int SockInetBuf::bind(SockAddr& sa)
+		throw()
 	{
 		return SocketBuf::bind(sa);
 	}
 
 	int SockInetBuf::bind()
+		throw()
 	{
 		SockInetAddr sa;
 		return bind(sa);
@@ -1122,6 +1159,7 @@ namespace BALL
 
 	// address and portno are in host byte order
 	int SockInetBuf::bind(unsigned long addr, int port_no)
+		throw()
 	{
 		SockInetAddr sa(addr, port_no);
 
@@ -1129,6 +1167,7 @@ namespace BALL
 	}
 
 	int SockInetBuf::bind(const String& host_name, int port_no)
+		throw()
 	{
 		SockInetAddr sa (host_name, port_no);
 
@@ -1136,6 +1175,7 @@ namespace BALL
 	}
 
 	int SockInetBuf::bind (unsigned long addr, const String& service_name, const String& protocol_name)
+		throw()
 	{
 		SockInetAddr sa (addr, service_name, protocol_name);
 
@@ -1143,6 +1183,7 @@ namespace BALL
 	}
 
 	int SockInetBuf::bind (const String& host_name, const String& service_name, const String& protocol_name)
+		throw()
 	{
 		SockInetAddr sa(host_name, service_name, protocol_name);
 
@@ -1150,12 +1191,14 @@ namespace BALL
 	}
 
 	int SockInetBuf::connect(SockAddr& sa)
+		throw()
 	{
 		return SocketBuf::connect (sa);
 	}
 
 	// address and portno are in host byte order
 	int SockInetBuf::connect(unsigned long addr, int port_no)
+		throw()
 	{
 		SockInetAddr sa (addr, port_no);
 
@@ -1163,6 +1206,7 @@ namespace BALL
 	}
 
 	int SockInetBuf::connect(const String& host_name, int port_no)
+		throw()
 	{
 		SockInetAddr sa (host_name, port_no);
 
@@ -1170,6 +1214,7 @@ namespace BALL
 	}
 
 	int SockInetBuf::connect (unsigned long addr, const String& service_name, const String& protocol_name)
+		throw()
 	{
 		SockInetAddr sa (addr, service_name, protocol_name);
 
@@ -1177,6 +1222,7 @@ namespace BALL
 	}
 
 	int SockInetBuf::connect (const String& host_name, const String& service_name, const String& protocol_name)
+		throw()
 	{
 		SockInetAddr sa (host_name, service_name, protocol_name);
 
@@ -1184,6 +1230,7 @@ namespace BALL
 	}
 
 	IOStreamSocket::IOStreamSocket(SocketBuf::type ty, int proto)
+		throw()
 		:	IOSockStream(new SockInetBuf(ty, proto))
 	{
 		if (rdbuf() == 0)
@@ -1193,6 +1240,7 @@ namespace BALL
 	}
 
 	IOStreamSocket::IOStreamSocket(const SocketBuf& sb)
+		throw()
 		: IOSockStream(new SockInetBuf(sb))
 	{
 		if (rdbuf() == 0)
@@ -1202,6 +1250,7 @@ namespace BALL
 	}
 
 	IOStreamSocket::~IOStreamSocket()
+		throw()
 	{
 		delete rdbuf();
 		init(0);
