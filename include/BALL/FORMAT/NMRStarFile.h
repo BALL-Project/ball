@@ -114,6 +114,8 @@ namespace BALL
 	{
 		public:
 
+			BALL_CREATE(NMRStarFile)
+
 			/** Standard constructor
 			*/
 			NMRStarFile()
@@ -130,6 +132,9 @@ namespace BALL
 			NMRStarFile(const String& file_name)
 				throw(Exception::FileNotFound);
 
+			/** Clear the object.
+			*/
+			void clear() throw();
 
 			/** Get the maiximum number of atoms in all shift sets
 			*/
@@ -141,7 +146,17 @@ namespace BALL
 			const std::vector<NMRAtomDataSet*>& getData()
 				const throw();
 
-			NMRStarFile& operator = (const NMRStarFile& f)  throw();
+			/** Assignment operator
+			*/
+			const NMRStarFile& operator = (const NMRStarFile& f)  throw();
+
+			/** Equality operator
+			*/
+			bool operator == (const NMRStarFile& f)  throw();
+
+			/** Inequality operator
+			*/
+			bool operator != (const NMRStarFile& f)  throw();
 
 			enum ReferenceMethod
 			{
@@ -167,11 +182,11 @@ namespace BALL
 
 			/// function to extract the data from a chemical shift line
 			NMRAtomData* processShiftLine_()
-				throw(LineBasedFileError);
+				throw(LineBasedFile::LineBasedFileError);
 
 			/// reads the number of chemical shifts
 			void readEntryInformation_()
-				throw(LineBasedFileError, Exception::InvalidFormat);
+				throw(LineBasedFile::LineBasedFileError, Exception::InvalidFormat);
 
 			/// reads the molecular system name
 			void readMolSystem_()
@@ -187,7 +202,7 @@ namespace BALL
 
 			/// reads the shift datas
 			void readShifts_()
-				throw (LineBasedFileError);
+				throw (LineBasedFile::LineBasedFileError);
 
 			/// initialize the referenceOptions
 			static void initializeReferenceOptions_()
