@@ -1,4 +1,4 @@
-// $Id: backbone.C,v 1.3 2001/01/26 01:37:14 amoll Exp $
+// $Id: backbone.C,v 1.4 2001/01/26 02:27:06 amoll Exp $
 
 #include <BALL/MOLVIEW/PRIMITIV/backbone.h>
 
@@ -116,7 +116,7 @@ namespace BALL
 		bool Backbone::isValid() const
 			throw()
 		{
-			return (GeometricObject::isValid();
+			return GeometricObject::isValid();
 		}
 
 		void Backbone::dump(ostream& s, Size depth) const
