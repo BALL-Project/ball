@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.18 2002/01/28 00:08:40 oliver Exp $
+dnl    $Id: configure.in,v 1.19 2002/02/12 01:35:35 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -169,7 +169,7 @@ fi
 # Python.h and libsip.a
 if test "$with_python" != "" -a "$with_python" != "no" -o "$enable_python" = yes ; then
 	PYTHON_SUPPORT=true
-	if test "${with_python}" != "" ; then
+	if test "${with_python}" != "" -a "${with_python}" != "yes" ; then
 		PYTHON_EXE=${with_python}
 	else
 		PYTHON_EXE=python
@@ -2675,7 +2675,7 @@ if test "${USE_BALLVIEW}" = true ; then
 				AC_MSG_RESULT(Cannot link against libGL/GLU - disabling visualization support!)
 				AC_MSG_RESULT(Please specify the path to OpenGL libraries using --with-opengl-libs=DIR)
 				AC_MSG_RESULT()
-				USE_BALLVIEW=false
+				AC_MSG_ERROR(Aborted)
 			else
 				AC_MSG_RESULT(yes)
 			fi
@@ -2732,7 +2732,7 @@ if test "${USE_BALLVIEW}" = true ; then
 			AC_MSG_RESULT(Cannot link against libMesaGL/GLU - disabling visualization support!)
 			AC_MSG_RESULT(Please specify the path to libMesaGL using --with-opengl-libs=DIR)
 			AC_MSG_RESULT()
-			USE_BALLVIEW=false
+			AC_MSG_ERROR(Aborted.)
 		else
 			AC_MSG_RESULT(yes)
 			OPENGL_LIBOPTS="${OPENGL_LIBPATHOPT} ${OPENGL_LIBS}"
@@ -2776,7 +2776,7 @@ if test "${USE_BALLVIEW}" = true ; then
 		AC_MSG_RESULT([If QT is installed, please specify the path to the library])
 		AC_MSG_RESULT([using the option --with-qt-libs=DIR])
 		AC_MSG_RESULT()
-		USE_BALLVIEW=false
+		AC_MSG_ERROR(Aborted.)
 	else
 		AC_MSG_RESULT(yes)
 		
@@ -2938,12 +2938,12 @@ if test "${PYTHON_SUPPORT}" = true ; then
 	if test "`basename ${PYTHON_EXE}`" = "${PYTHON_EXE}" ; then 
 		AC_PATH_PROG(PYTHON_EXECUTABLE, ${PYTHON_EXE})
 	else
-		PYTHON_EXECUTABLE=${PYTHON_EXE}
+		PYTHON_EXECUTABLE="${PYTHON_EXE}"
 	fi
  
 	if test "${PYTHON_EXECUTABLE}" = "" ; then
 		AC_MSG_RESULT()
-		AC_MSG_RESULT([Could not find Python interpreter ]${with_python})
+		AC_MSG_RESULT([Could not find Python interpreter ]${PYTHON_EXCUTABLE})
 		AC_MSG_RESULT([Please use --with-python=EXE to specify its location.])
     AC_MSG_ERROR(Aborted)
 	fi
