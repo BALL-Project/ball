@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.48 2004/05/27 19:49:40 oliver Exp $
+// $Id: standardPredicates.h,v 1.49 2004/11/07 14:44:09 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
@@ -752,6 +752,9 @@ namespace BALL
 			*/
 			CTPNode* parse_()
 				throw();
+
+			// Clean up nodes created if parse_ exits with a parse error.
+			void cleanUpNodes_(std::vector<CTPNode*>& all_nodes);
 
 			/*_
 			*/

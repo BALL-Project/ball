@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewiseFunction.C,v 1.11 2002/02/27 12:21:27 sturm Exp $
+// $Id: piecewiseFunction.C,v 1.12 2004/11/07 14:44:15 oliver Exp $
 
 #include <BALL/MATHS/piecewiseFunction.h>
 
@@ -195,15 +195,11 @@ namespace BALL
 		// ?????: ist das vollständig?
 		if ((coefficients_.size() == 0) || (intervals_.size() == 0))
 		{
-			Log.error() << "PiecewiseFunction::isValid(): "
-				<< "No coefficients and/or intervals defined." << endl;
 			return false;
 		}
 
 		if (intervals_.size() != coefficients_.size())
 		{
-			Log.error() << "PiecewiseFunction::isValid(): "
-				<< "Number of intervals and coefficients do not match" << endl;
 			return false;
 		}
 
@@ -211,9 +207,6 @@ namespace BALL
 		{
 			if (intervals_[k].first >= intervals_[k].second)
 			{
-				Log.error() << "PiecewiseFunction::isValid(): "
-					<< "First limit of an interval has to be smaller than second limit" 
-					<< endl;
 				return false;
 			}
 		}
@@ -222,8 +215,6 @@ namespace BALL
 		{
 			if (intervals_[k-1].second != intervals_[k].first)
 			{
-				Log.error() << "PiecewiseFunction::isValid(): "
-					<< "Intervals are not continuous" << endl;
 				return false;
 			}
 		}
@@ -234,8 +225,6 @@ namespace BALL
 
 	double PiecewiseFunction::operator() (double /* x */) const throw()
 	{
-		Log.error() << "PiecewiseFunction::operator(): "
-			<< "This function shouldn't be called!" << endl;
 		return 0.0;
 	}
 

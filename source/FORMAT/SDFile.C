@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.C,v 1.10 2004/05/27 19:49:58 oliver Exp $
+// $Id: SDFile.C,v 1.11 2004/11/07 14:44:14 oliver Exp $
 //
 
 #include <BALL/FORMAT/SDFile.h>
@@ -107,8 +107,8 @@ namespace BALL
 			// Keep the memory tidy.
 			if (molecule != 0)
 			{
-				molecule->destroy();
 				delete molecule;
+				molecule = 0;
 			}
 
 			// Rethrow the exception.

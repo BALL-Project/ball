@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LogStream_test.C,v 1.20 2004/04/22 10:08:20 oliver Exp $
+// $Id: LogStream_test.C,v 1.21 2004/11/07 14:44:16 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(LogStream, "$Id: LogStream_test.C,v 1.20 2004/04/22 10:08:20 oliver Exp $")
+START_TEST(LogStream, "$Id: LogStream_test.C,v 1.21 2004/11/07 14:44:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -75,9 +75,9 @@ RESULT
 
 CHECK(setLevel(int level))
 	LogStream l1(new LogStreamBuf);
-	l1 << "TEST1" <<endl;
+	l1 << "TEST1" << endl;
 	l1.setLevel(99);
-	l1 << "TEST2" <<endl;
+	l1 << "TEST2" << endl;
 	TEST_EQUAL(l1.getLineLevel(0), 0)
 	TEST_EQUAL(l1.getLineLevel(1), 99)
 RESULT

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.37 2004/11/07 08:25:35 oliver Exp $
+// $Id: logStream.C,v 1.38 2004/11/07 14:44:14 oliver Exp $
 //
 
 #include <limits>
@@ -77,8 +77,10 @@ namespace BALL
 
 				if (line_end >= pptr()) 
 				{
-					// copy the incomplete line to the incomplete_line_ buffer
-					strncpy(&(buf[0]), line_start, line_end - line_start + 1);
+					// Copy the incomplete line to the incomplete_line_ buffer
+					size_t length = line_end - line_start + 1;
+					length = std::max(length, (size_t)(BUFFER_LENGTH - 1));
+					strncpy(&(buf[0]), line_start, length);
 					buf[line_end - line_start] = '\0';
 					incomplete_line_ += &(buf[0]);
 

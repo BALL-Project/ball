@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Expression_test.C,v 1.39 2004/02/23 20:41:06 anker Exp $
+// $Id: Expression_test.C,v 1.40 2004/11/07 14:44:15 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -22,7 +22,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.39 2004/02/23 20:41:06 anker Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.40 2004/11/07 14:44:15 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -93,14 +93,6 @@ CHECK(bool operator == (const Expression& expression) const throw())
 	Expression e1;
 	Expression e2;
 	bool test = (e1 == e2);
-	TEST_EQUAL(test, true)
-
-	e1.registerPredicate(mickey_predicate_string, MickeyPredicate::createDefault);
-	test = (e1 == e2);
-	TEST_NOT_EQUAL(test, true)
-
-	e2.registerPredicate(mickey_predicate_string, MickeyPredicate::createDefault);
-	test = (e1 == e2);
 	TEST_EQUAL(test, true)
 RESULT
 

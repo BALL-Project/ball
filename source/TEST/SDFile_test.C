@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile_test.C,v 1.7 2002/12/12 11:34:44 oliver Exp $
+// $Id: SDFile_test.C,v 1.8 2004/11/07 14:44:16 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -18,7 +18,7 @@
 
 ///////////////////////////
 
-START_TEST(SDFile, "$Id: SDFile_test.C,v 1.7 2002/12/12 11:34:44 oliver Exp $")
+START_TEST(SDFile, "$Id: SDFile_test.C,v 1.8 2004/11/07 14:44:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -45,6 +45,7 @@ CHECK(Molecule* SDFile::read())
 	ABORT_IF(molecule == 0)
 	TEST_EQUAL(molecule->countAtoms(), 39)
 	TEST_EQUAL(molecule->countBonds(), 42)
+	delete molecule;
 RESULT
 
 CHECK(SDFile::read(System& system))

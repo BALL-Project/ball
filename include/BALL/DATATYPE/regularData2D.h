@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.39 2004/03/07 01:06:06 amoll Exp $
+// $Id: regularData2D.h,v 1.40 2004/11/07 14:44:08 oliver Exp $
 //
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
@@ -996,7 +996,10 @@ namespace BALL
 		throw(Exception::FileNotFound)
 	{
 		File outfile(filename, std::ios::out|std::ios::binary);
-		if (!outfile.isValid()) throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+		if (!outfile.isValid()) 
+		{
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+		}
 
 		BinaryFileAdaptor<BlockValueType> adapt_block;
 		BinaryFileAdaptor<ValueType>			adapt_single;
@@ -1028,7 +1031,7 @@ namespace BALL
 		{
 			adapt_block.setData(* (BlockValueType*)&(data_[window_pos]));
 			outfile << adapt_block;
-			window_pos+=1024;
+			window_pos += 1024;
 		}
 
 		// now we have to write the remaining data one by one

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.h,v 1.33 2004/05/27 19:49:46 oliver Exp $
+// $Id: fragmentDB.h,v 1.34 2004/11/07 14:44:09 oliver Exp $
 //
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
@@ -50,6 +50,8 @@ namespace BALL
 		class AddHydrogensProcessor;
 		friend class FragmentDB::AddHydrogensProcessor;
 
+		BALL_CREATE_DEEP(FragmentDB)
+	
 		/**	@name	Enums 
 		*/
 		//@{
@@ -72,9 +74,9 @@ namespace BALL
 		/**	Type definition for the fragment type 
 		*/
 		typedef short Type;
+		/** A hash map used to convert one atom naming convention to another */
+		typedef StringHashMap<String>	NameMap;
 
-		BALL_CREATE_DEEP(FragmentDB)
-	
 		//@}
 		/**	@name	Exceptions
 		*/
@@ -215,9 +217,10 @@ namespace BALL
 
 		/**	Return a hash map containing all naming maps.
 		*/
-		StringHashMap<StringHashMap<String>*>&	getNamingStandards();
+		StringHashMap<NameMap>&	getNamingStandards();
 
 		//@}
+
 		/**@name	Debugging and diagnostics 
 		*/
 		//@{
@@ -277,7 +280,7 @@ namespace BALL
 
 			/**	Try to match a name in one of the maps
 			*/
-			bool matchName(String&  res_name, String&  atom_name, const StringHashMap<String>* map) const;
+			bool matchName(String& res_name, String& atom_name, const NameMap& map) const;
 	 
 			//@}
 			/**@name	Processor specific methods
@@ -417,8 +420,7 @@ namespace BALL
 			/**	Build a connection between two atoms, if possible
 			*/
 			bool buildConnection_(Connection& con1, Connection& con2);
-			
-
+		
 			/**	A pointer to the fragment database 
 			*/
 			FragmentDB*			fragment_db_;
@@ -501,6 +503,9 @@ namespace BALL
 
 		//_@}
 
+		/** Add a new fragment pointer to the database (while parsing) */
+		Position addNewFragment_(Residue* fragment);
+
 		/*_	Expands all include directives in the resource file.
 				This method calls expandFirst_ until it returns true.	
 		*/
@@ -512,21 +517,29 @@ namespace BALL
 		bool expandFirst_(ResourceEntry& root_entry)
 			throw(Exception::FileNotFound);
 
+		// The status of the FragmentDB
 		bool						valid_;
 
+		// The filename of the master fragment file.
 		String 					filename_;
 
+		// The naming standard we default to.
 		String					default_standard_;
 
+		// An array containing all allocated residues.
 		std::vector<Residue*>						fragments_;
 
-		StringHashMap<String>						name_to_path_;
+		// Maps a fragment name back to a path in the database
+		NameMap													name_to_path_;
 
-		StringHashMap<Residue*>					name_to_frag_pointer_;
+		// Maps a fragment name back to the array index in fragments_
+		StringHashMap<Position>					name_to_frag_index_;
 
-		StringHashMap<list<Residue*> >	name_to_variants_;
+		// Maps all variants of a specific fragment back to array indices.
+		StringHashMap<list<Position> >	name_to_variants_;
 
-		StringHashMap<StringHashMap<String>*>	standards_;
+		// Contains the naming standards as a nested map.
+		StringHashMap<NameMap>					standards_;
 	};
   
 } // namespace BALL 

@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.55 2004/11/05 10:05:05 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.56 2004/11/07 14:44:09 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -4455,5 +4455,19 @@ AC_DEFUN(CF_VALGRIND, [
 	dnl
 	AC_PATH_PROG(VALGRIND, valgrind, valgrind)
 	AC_SUBST(VALGRIND, $VALGRIND)
-	AC_SUBST(VALGRIND_OPTS, "-v --leak-check=yes --leak-resolution=high")
+	AC_MSG_CHECKING(valgrind version)
+
+	VALGRIND_VERSION=`${VALGRIND} --version | tr -d "a-zA-Z-_" 2>&1`
+  VALGRIND_VERS_NUM=`echo ${VALGRIND_VERSION}| ${CUT} -d\  -f1`
+  VALGRIND_VERS_MAJOR=`echo ${VALGRIND_VERS_NUM} | ${CUT} -d. -f1`
+  VALGRIND_VERS_MINOR=`echo ${VALGRIND_VERS_NUM} | ${CUT} -d. -f2`
+  VALGRIND_VERS_MINOR_MINOR=`echo ${VALGRIND_VERS_NUM} | ${CUT} -d. -f3`
+	AC_MSG_RESULT(${VALGRIND_VERSION} (${VALGRIND_VERS_MAJOR}.${VALGRIND_VERS_MINOR}))	
+	
+
+	if test "${VALGRIND_VERS_MAJOR}" = "2" -a "${VALGRIND_VERS_MINOR}" -gt "0" ; then 
+	 	AC_SUBST(VALGRIND_OPTS, "--tool=memcheck  --num-callers=20 --show-below-main=yes -v --leak-check=yes --leak-resolution=high --show-reachable=yes")
+	else
+		AC_SUBST(VALGRIND_OPTS, "-v --leak-check=yes --leak-resolution=high")
+	fi
 ])

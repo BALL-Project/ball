@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.C,v 1.46 2004/02/07 19:35:05 amoll Exp $
+// $Id: expression.C,v 1.47 2004/11/07 14:44:15 oliver Exp $
 //
 
 #include <BALL/KERNEL/expression.h>
@@ -55,11 +55,6 @@ namespace BALL
 	void Expression::clear()
 		throw()
 	{
-		create_methods_.clear();
-		// clear() has to make a default constructed instance out of this, so
-		// the standard predicates have to be rebuilt.
-		registerStandardPredicates_();
-
 		delete expression_tree_;
 		expression_tree_ = 0;
 		expression_string_ = "<not initialized>";
@@ -93,27 +88,19 @@ namespace BALL
 			// pointers only if they are default constructed, so a consistency
 			// check might be useful (the string should be empty; maybe later)
 
-			return ((create_methods_ == expression.create_methods_)
-					&& (expression_string_ == expression.expression_string_));
+			return (expression_string_ == expression.expression_string_);
 		}
 		else
 		{
 			if ((expression_tree_ == 0) || (expression.expression_tree_ == 0))
 			{
-
 				// one of the pointers is NULL. The instances cannot be equal.
-
 				return false;
-
 			}
 			else
 			{
-
-			// compare everything.
-
-			return ((create_methods_ == expression.create_methods_)
-					&& (*expression_tree_ == *expression.expression_tree_)
-					&& (expression_string_ == expression.expression_string_));
+				return ((*expression_tree_ == *expression.expression_tree_)
+								&& (expression_string_ == expression.expression_string_));
 			}
 		}
 	}
@@ -168,8 +155,8 @@ namespace BALL
 		if (expression_tree_ != 0)
 		{
 			delete expression_tree_;
+			expression_tree_ = 0;
 		}
-		expression_tree_ = 0;
 
 		// remember the expression
 		expression_string_ = expression_string;

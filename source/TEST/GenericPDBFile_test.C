@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GenericPDBFile_test.C,v 1.5 2003/09/03 12:31:44 oliver Exp $
+// $Id: GenericPDBFile_test.C,v 1.6 2004/11/07 14:44:15 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -13,7 +13,7 @@
 #include <BALL/DATATYPE/options.h>
 ///////////////////////////
 
-START_TEST(GenericPDBFile, "$Id: GenericPDBFile_test.C,v 1.5 2003/09/03 12:31:44 oliver Exp $")
+START_TEST(GenericPDBFile, "$Id: GenericPDBFile_test.C,v 1.6 2004/11/07 14:44:15 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -126,7 +126,7 @@ CHECK(bool readRecordANISOU(PDB::Integer serial_number, PDB::Atom atom_name, PDB
 	TEST_EQUAL(empty.readRecordANISOU(my_int, my_atom, my_character, my_residue_name, my_character, my_int, my_achar, my_int, my_int, my_int, my_int, my_int, my_int, my_lstring4, my_lstring2, my_lstring2), true)
 RESULT
 
-PDB::Real my_real3;
+PDB::Real my_real3 = 0;
 CHECK(bool readRecordATOM(PDB::Integer serial_number, PDB::Atom atom_name, PDB::Character alternate_location_indicator, PDB::ResidueName residue_name, PDB::Character chain_ID, PDB::Integer residue_sequence_number, PDB::AChar insertion_code, PDB::Real orthogonal_vector[3], PDB::Real occupancy, PDB::Real temperature_factor, PDB::LString4 segment_ID, PDB::LString2 element_symbol, PDB::LString2 charge))
 	TEST_EQUAL(empty.readRecordATOM(my_int, my_atom, my_character, my_residue_name, my_character, my_int, my_achar, &my_real3, my_real, my_real, my_lstring4, my_lstring2, my_lstring2), true)
 RESULT
@@ -212,9 +212,9 @@ CHECK(bool readRecordHET(PDB::LString3 het_ID, PDB::Character chain_ID, PDB::Int
   TEST_EQUAL(empty.readRecordHET(my_string3, my_character, my_int, my_achar, my_int, my_string), true)
 RESULT
 
-PDB::ResidueName my_name;
-PDB::LString4 my_string4;
-PDB::LString2 my_string2;
+PDB::ResidueName my_name = "   ";
+PDB::LString4 my_string4 = "    ";
+PDB::LString2 my_string2 = "  ";
 CHECK(bool readRecordHETATM(PDB::Integer serial_number, PDB::Atom atom_name, PDB::Character alternate_location_indicator, PDB::ResidueName residue_name, PDB::Character chain_ID, PDB::Integer residue_sequence_number, PDB::AChar insertion_code, PDB::Real orthogonal_vector[3], PDB::Real occupancy, PDB::Real temperature_factor, PDB::LString4 segment_ID, PDB::LString2 element_symbol, PDB::LString2 charge))
   TEST_EQUAL(empty.readRecordHETATM(my_int, my_atom, my_character, my_name, my_character, my_int, my_achar, &my_real3, my_real, my_real, my_string4, my_string2, my_string2), true)
 RESULT

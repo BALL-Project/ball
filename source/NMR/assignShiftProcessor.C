@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assignShiftProcessor.C,v 1.28 2004/05/27 19:49:59 oliver Exp $
+// $Id: assignShiftProcessor.C,v 1.29 2004/11/07 14:44:15 oliver Exp $
 //
 
 #include <BALL/NMR/assignShiftProcessor.h>
@@ -49,7 +49,7 @@ namespace BALL
 			return false;
 		}
 
-		StringHashMap<String>* map = fragment_db_->getNamingStandards()["Star-PDB"];
+		StringHashMap<String>& map = fragment_db_->getNamingStandards()["Star-PDB"];
 
 		// ---------------------read translate table ------------------------
 		Path path;
@@ -81,10 +81,7 @@ namespace BALL
 			String residue_name = atom_data_[atom_pos].residue_label;
 			String atom_name    = atom_data_[atom_pos].atom_name;
 			bool normalized = false;
-			if (map != 0)
-			{
-				normalized = fragment_db_->normalize_names.matchName(residue_name, atom_name, map);
-			}
+			normalized = fragment_db_->normalize_names.matchName(residue_name, atom_name, map);
 
 			const String entry(residue_name + ":" + atom_name);
 

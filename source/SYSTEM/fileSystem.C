@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileSystem.C,v 1.19 2003/08/26 09:18:29 oliver Exp $
+// $Id: fileSystem.C,v 1.20 2004/11/07 14:44:15 oliver Exp $
 //
 
 #include <BALL/SYSTEM/fileSystem.h>
@@ -158,16 +158,17 @@ namespace BALL
 
 		char c = path[index];
 		path[index] = 0;
-		struct passwd *passwd = ::getpwnam(&path[1]);
-		if(passwd == 0)
+		struct passwd* passwd_ptr = ::getpwnam(&path[1]);
+		if (passwd_ptr == 0)
 		{ 
 			return;                                 
 		}
 		path[index] = c;
 		
-		String buffer(passwd->pw_dir);
+		String buffer(passwd_ptr->pw_dir);
 		buffer.append(path.c_str() + index);
 		buffer.swap(path);
+		endpwent();
 
 #else // Windows implementation
 		Index index = (Index)path.find_first_not_of(FileSystem::PATH_SEPARATOR, 1);

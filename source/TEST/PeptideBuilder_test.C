@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PeptideBuilder_test.C,v 1.9 2004/05/27 19:50:01 oliver Exp $
+// $Id: PeptideBuilder_test.C,v 1.10 2004/11/07 14:44:16 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.9 2004/05/27 19:50:01 oliver Exp $")
+START_TEST(PeptideBuilder, "$Id: PeptideBuilder_test.C,v 1.10 2004/11/07 14:44:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -157,8 +157,8 @@ FragmentDB db("");
 pb->setFragmentDB(&db);
 pb3->setFragmentDB(&db);
 
-CHECK(construct())
-	Protein *prot=pb->construct();
+CHECK(Protein* construct())
+	Protein* prot = pb->construct();
 	TEST_NOT_EQUAL(prot, 0)
 	ResidueIterator resIt;
   resIt = prot->beginResidue();
@@ -222,8 +222,9 @@ RESULT
 
 //empty sequence
 CHECK(construct())
-	pb->construct();
-  TEST_NOT_EQUAL(pb, 0)
+	Protein* prot = pb->construct();
+  TEST_NOT_EQUAL(prot, 0)
+	delete prot;
 RESULT
 
 PeptideBuilder* pb4=0;

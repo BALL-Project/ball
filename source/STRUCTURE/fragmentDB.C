@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.61 2004/11/07 08:25:36 oliver Exp $
+// $Id: fragmentDB.C,v 1.62 2004/11/07 14:44:15 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -20,9 +20,15 @@
 				- dynamic import of databases
 */
 
+//#define BALL_DEBUG_FRAGMENTDB
+
+#ifdef BALL_DEBUG_FRAGMENTDB
+# define DEBUG(a) Log.info() << a << std::endl;
+#else
+# define DEBUG(a)
+#endif
+
 #define FRAGMENT_DB_INCLUDE_TAG "#include:"
-#undef DEBUG
-//#define DEBUG
 
 using namespace std;
 
@@ -43,12 +49,12 @@ namespace BALL
 		while (expanded_one)
 		{
 			expanded_one = false;
-			ResourceEntry::Iterator entry_iterator;
-			for (entry_iterator = ++root_entry.begin(); +entry_iterator && !expanded_one; ++entry_iterator)
+			ResourceEntry::Iterator entry_it;
+			for (entry_it = ++root_entry.begin(); +entry_it && !expanded_one; ++entry_it)
 			{
-				if (entry_iterator->getKey().hasPrefix(FRAGMENT_DB_INCLUDE_TAG))
+				if (entry_it->getKey().hasPrefix(FRAGMENT_DB_INCLUDE_TAG))
 				{
-					expandFirst_(*entry_iterator);
+					expandFirst_(*entry_it);
 					expanded_one = true;
 					break;
 				}
@@ -116,6 +122,12 @@ namespace BALL
 		return true;
 	}
 
+	Position FragmentDB::addNewFragment_(Residue* fragment)
+	{
+		fragments_.push_back(fragment);
+		return fragments_.size() - 1;
+	}
+
 	// default constructor
 	FragmentDB::FragmentDB()
 		: tree(0),
@@ -174,28 +186,19 @@ namespace BALL
 			tree = 0;
 		}
 
+		// Delete all hash maps.
 		name_to_path_.destroy();
-		name_to_frag_pointer_.destroy();
-		for (StringHashMap<list<Residue*> >::Iterator hm_it = name_to_variants_.begin();
-				 +hm_it; ++hm_it)
-		{
-			for (list<Residue*>::iterator it = hm_it->second.begin();
-					 it != hm_it->second.end(); ++it)
-			{
-				delete *it;
-				*it = 0;
-			}
-		}
+		name_to_frag_index_.destroy();
 		name_to_variants_.destroy();
-		fragments_.clear();
-		
-		// Delete the individual hash maps created in init()
-		StringHashMap<StringHashMap<String>*>::Iterator it(standards_.begin());
-		for (; it != standards_.end(); ++it)
-		{
-			delete it->second;
-		}
 		standards_.clear();
+		// Delete all fragments.
+		for (std::vector<Residue*>::iterator it = fragments_.begin();
+				 it != fragments_.end(); ++it)
+		{
+			delete *it;
+			*it = 0;
+		}
+		fragments_.clear();		
 	}
 
 	void FragmentDB::setFilename(const String& filename)
@@ -242,7 +245,7 @@ namespace BALL
 		ResourceEntry* entry = tree->findChild(path);
 		entry = tree->findChild("");
 			
-		if (entry != 0)
+		if (entry!= 0)
 		{
 			if (entry->getValue() == "residue")
 			{
@@ -265,16 +268,16 @@ namespace BALL
 
 	void FragmentDB::parseAtoms_(ResourceEntry& entry, Fragment& fragment)
 	{
-		ResourceEntry::Iterator	entry_iterator;
+		ResourceEntry::Iterator	entry_it;
 
-		for (entry_iterator = ++entry.begin(); +entry_iterator; ++entry_iterator)
+		for (entry_it = ++entry.begin(); +entry_it; ++entry_it)
 		{
-			if ((*entry_iterator).getDepth() == entry.getDepth() + 1)
+			if (entry_it->getDepth() == entry.getDepth() + 1)
 			{
-				if ((*entry_iterator).getValue().countFields(" ") != 4)
+				if (entry_it->getValue().countFields(" ") != 4)
 				{
-					Log.error() << "FragmentDB: wrong entry for atom " << (*entry_iterator).getKey() 
-							 << ": " << (*entry_iterator).getValue() << endl;
+					Log.error() << "FragmentDB: wrong entry for atom " << entry_it->getKey() 
+							 << ": " << entry_it->getValue() << endl;
 				} 
 				else 
 				{
@@ -282,12 +285,12 @@ namespace BALL
 					Atom*	atom = new Atom;
 								
 					// ...set its name and insert it into the fragment.
-					atom->setName(entry_iterator->getKey());
+					atom->setName(entry_it->getKey());
 					fragment.insert(*atom);
 		
 					// Now extract element and position (x, y, z) from the string.
 					String		s[4];
-					entry_iterator->getValue().split(s, BALL_SIZEOF_ARRAY(s), " ");
+					entry_it->getValue().split(s, BALL_SIZEOF_ARRAY(s), " ");
 					Vector3	r(s[1].toFloat(), s[2].toFloat(), s[3].toFloat());
 		
 					// and assign its values to the atom
@@ -301,31 +304,31 @@ namespace BALL
 	void FragmentDB::parseBonds_(ResourceEntry& entry, Fragment& fragment)
 	{
 
-		ResourceEntry::Iterator	entry_iterator;
+		ResourceEntry::Iterator	entry_it;
 
-		for (entry_iterator = ++entry.begin(); +entry_iterator; ++entry_iterator)
+		for (entry_it = ++entry.begin(); +entry_it; ++entry_it)
 		{
-			if ((*entry_iterator).getDepth() == entry.getDepth() + 1)
+			if (entry_it->getDepth() == entry.getDepth() + 1)
 			{
 				// check whether the fragment contains both bonds
 				Atom*	atom1 = 0;
 				Atom*	atom2 = 0;
-				AtomIterator	atom_iterator;
+				AtomIterator	atom_it;
 				
 				// first field contains a serial number, field 2 the first atom, field 3 the second atom
 				// and the third field (optional) the bond type (s[ingle], d[ouble], a[romatic])
 				String fields[3];
-				entry_iterator->getValue().split(fields, 3);
+				entry_it->getValue().split(fields, 3);
 		
-				for (atom_iterator = fragment.beginAtom(); +atom_iterator; ++atom_iterator)
+				for (atom_it = fragment.beginAtom(); +atom_it; ++atom_it)
 				{
-					if (atom_iterator->getName() == fields[0])
+					if (atom_it->getName() == fields[0])
 					{
-						atom1 = &(*atom_iterator);
+						atom1 = &*atom_it;
 					}
-					if (atom_iterator->getName() == fields[1])
+					if (atom_it->getName() == fields[1])
 					{
-						atom2 = &(*atom_iterator);
+						atom2 = &*atom_it;
 					}
 				}
 		
@@ -334,7 +337,7 @@ namespace BALL
 					// if at least on of the atoms doesn`t exist: complain about it
 					Log.error() << "FragmentDB: Bond to a non-existing atom: " 
 											<< fields[0] << "-" << fields[1] 
-											<< " (in " << entry_iterator->getPath() << ")" << endl;
+											<< " (in " << entry_it->getPath() << ")" << endl;
 				} 
 				else	
 				{
@@ -344,7 +347,7 @@ namespace BALL
 						Log.error() << "FragmentDB: too many bonds - cannot create bond: " 
 												<< atom1->getName() << "-" << atom2->getName()
 												<< " in fragment " << fragment.getName() 
-												<< " (in " << entry_iterator->getPath() << ")" << endl;
+												<< " (in " << entry_it->getPath() << ")" << endl;
 					} 
 					else 
 					{
@@ -372,7 +375,7 @@ namespace BALL
 										bond->setOrder(Bond::ORDER__SINGLE); break;
 									default:
 										Log.error() << "FragmentDB::parseBonds_: unknown bond type " 
-																<< fields[2] << " (in " << entry_iterator->getPath() << ")" << endl;
+																<< fields[2] << " (in " << entry_it->getPath() << ")" << endl;
 								}
 							}
 						}
@@ -386,27 +389,29 @@ namespace BALL
 	void FragmentDB::parseDelete_(ResourceEntry& entry, Fragment& fragment)
 	{
 
-		ResourceEntry::Iterator	entry_iterator;
+		ResourceEntry::Iterator	entry_it;
 
-		for (entry_iterator = ++entry.begin(); +entry_iterator; ++entry_iterator)
+		for (entry_it = ++entry.begin(); +entry_it; ++entry_it)
 		{
-			if ((*entry_iterator).getDepth() == entry.getDepth() + 1)
+			if (entry_it->getDepth() == entry.getDepth() + 1)
 			{
 				// check whether the fragment contains both bonds
-				AtomIterator	atom_iterator;
+				AtomIterator	atom_it;
 				Atom*				atom = 0;
 		
-				for (atom_iterator = fragment.beginAtom(); +atom_iterator; ++atom_iterator)
+				for (atom_it = fragment.beginAtom(); +atom_it; ++atom_it)
 				{
-					if ((*atom_iterator).getName() == (*entry_iterator).getKey())
-						atom = &(*atom_iterator);
+					if (atom_it->getName() == entry_it->getKey())
+					{
+						atom = &*atom_it;
+					}
 				}
 		
 				if (atom == 0)
 				{
 					// if the atom to be deleted doesn`t exist - complain about it!
 					Log.error() << "FragmentDB: cannot delete non-existing atom: "
-																			<< (*entry_iterator).getKey() << endl;
+																			<< entry_it->getKey() << endl;
 				} 
 				else 
 				{
@@ -422,32 +427,34 @@ namespace BALL
 	void FragmentDB::parseRename_(ResourceEntry& entry, Fragment& fragment)
 	{
 
-		ResourceEntry::Iterator	entry_iterator;
+		ResourceEntry::Iterator	entry_it;
 
-		for (entry_iterator = ++entry.begin(); +entry_iterator; ++entry_iterator)
+		for (entry_it = ++entry.begin(); +entry_it; ++entry_it)
 		{
-			if ((*entry_iterator).getDepth() == entry.getDepth() + 1)
+			if (entry_it->getDepth() == entry.getDepth() + 1)
 			{
 				// check whether the fragment contains both bonds
-				AtomIterator	atom_iterator;
+				AtomIterator	atom_it;
 				Atom*				atom = 0;
 		
-				for (atom_iterator = fragment.beginAtom(); +atom_iterator; ++atom_iterator)
+				for (atom_it = fragment.beginAtom(); +atom_it; ++atom_it)
 				{
-					if ((*atom_iterator).getName() == (*entry_iterator).getKey())
-						atom = &(*atom_iterator);
+					if (atom_it->getName() == entry_it->getKey())
+					{
+						atom = &*atom_it;
+					}
 				}
 		
 				if (atom == 0)
 				{
 					// if the atom to be renamed doesn`t exist - complain about it!
 					Log.error() << "FragmentDB: cannot rename non-existing atom: "
-																			<< (*entry_iterator).getKey() << endl;
+																			<< entry_it->getKey() << endl;
 				} 
 				else 
 				{
 					// otherwise rename the atom
-					atom->setName((*entry_iterator).getValue());
+					atom->setName(entry_it->getValue());
 				}
 			}
 		}
@@ -464,17 +471,17 @@ namespace BALL
 
 	void FragmentDB::parseProperties_(ResourceEntry&  entry, PropertyManager& property_man)
 	{
-		ResourceEntry::Iterator	entry_iterator;
+		ResourceEntry::Iterator	entry_it;
 		String property;
 		bool invert = false;
 
-		for (entry_iterator = ++entry.begin(); +entry_iterator; ++entry_iterator)
+		for (entry_it = ++entry.begin(); +entry_it; ++entry_it)
 		{
-			if ((*entry_iterator).getDepth() == entry.getDepth() + 1)
+			if (entry_it->getDepth() == entry.getDepth() + 1)
 			{
 				// Check for the most important properties: all those defined
 				// in Residue::PROPERTIES
-				property = entry_iterator->getKey();
+				property = entry_it->getKey();
 				property.toUpper();
 				if (property[0] == '!')
 				{
@@ -587,26 +594,26 @@ namespace BALL
 			throw NoFragmentNode(__FILE__, __LINE__, filename_);
 		}
 		
-		ResourceEntry::Iterator	frag_entry_iterator;
-		ResourceEntry::Iterator	entry_iterator;
-		for (frag_entry_iterator = ++(tree->getEntry("/Fragments")->begin()); 
-				 +frag_entry_iterator; ++frag_entry_iterator)
+		ResourceEntry::Iterator	frag_entry_it;
+		ResourceEntry::Iterator	entry_it;
+		for (frag_entry_it = ++(tree->getEntry("/Fragments")->begin()); 
+				 +frag_entry_it; ++frag_entry_it)
 		{
-			if (frag_entry_iterator->getDepth() == 2)
+			if (frag_entry_it->getDepth() == 2)
 			{
 				// create a new fragment and assign its name
 				// 
 				Residue* fragment = new Residue;
-				fragment->setName(frag_entry_iterator->getKey());
+				fragment->setName(frag_entry_it->getKey());
 
-				String fragment_name = (*frag_entry_iterator).getKey();
+				String fragment_name = (*frag_entry_it).getKey();
 						
 				// insert the fragment name into the corresponding lists
-				fragments_.push_back(fragment);
+				Position fragment_index = addNewFragment_(fragment);
 				name_to_path_[fragment_name] = "/Fragments/" + fragment_name;
 		
 				// if there are no atoms in the database, something went wrong
-				entry = frag_entry_iterator->getEntry("Atoms");
+				entry = frag_entry_it->getEntry("Atoms");
 				if (entry == 0)
 				{
 					Log.error() << "FragmentDB: cannot find Atoms entry for " 
@@ -621,7 +628,7 @@ namespace BALL
 				// now find all the bonds for the fragment and create them
 				// Fragments without bonds are legal, so we don`t complain but
 				// continue
-				entry = frag_entry_iterator->getEntry("Bonds");
+				entry = frag_entry_it->getEntry("Bonds");
 				if (entry != 0)
 				{
 					parseBonds_(*entry, *fragment);
@@ -632,7 +639,7 @@ namespace BALL
 				// Each variant entry may also contain additional properties
 				// or reset properties by specifying a "!" in front of the property
 				// name
-				entry = frag_entry_iterator->getEntry("Properties");
+				entry = frag_entry_it->getEntry("Properties");
 				if (entry != 0)
 				{
 					parseProperties_(*entry, *dynamic_cast<PropertyManager*>(fragment));
@@ -640,83 +647,83 @@ namespace BALL
 
 				// check for all aliases (given in the Names section of the db-file)
 				// and insert them into the corresponding hash maps
-				ResourceEntry::Iterator entry_iterator;
-				entry = frag_entry_iterator->getEntry("Names");
+				ResourceEntry::Iterator entry_it;
+				entry = frag_entry_it->getEntry("Names");
 				if (entry != 0)
 				{
 					String path = "/Fragments/" + fragment_name;
-					for (entry_iterator = ++entry->begin(); +entry_iterator; ++entry_iterator)
+					for (entry_it = ++entry->begin(); +entry_it; ++entry_it)
 					{
-						name_to_path_[(*entry_iterator).getKey()] = path;
-						name_to_frag_pointer_[(*entry_iterator).getKey()] = fragment;
+						name_to_path_[entry_it->getKey()] = path;
+						name_to_frag_index_[entry_it->getKey()] = fragment_index;
 					}
 				}
 
 				// check for possible variants of this residue type
 				// (keyword Variants)
-				entry = frag_entry_iterator->getEntry("Variants");
+				entry = frag_entry_it->getEntry("Variants");
 				if (entry != 0)
 				{
-					ResourceEntry::Iterator variant_iterator;
-					Residue* original_fragment = new Residue(*fragment);
+					ResourceEntry::Iterator variant_it;
+					Residue& original_fragment(*fragment);
 
-					for (variant_iterator = ++entry->begin(); +variant_iterator; ++variant_iterator)
+					for (variant_it = ++entry->begin(); +variant_it; ++variant_it)
 					{	
-						if ((*variant_iterator).getDepth() == entry->getDepth() + 1)
+						if (variant_it->getDepth() == entry->getDepth() + 1)
 						{
-							String variant_name = variant_iterator->getKey();
+							String variant_name = variant_it->getKey();
 							Residue*	variant;
 							if (variant_name == "Default")
 							{
-								variant = new Residue(*original_fragment);
+								variant = new Residue(original_fragment);
+								Position index = addNewFragment_(variant);
 									
-								// make sure that the default fragment is the first in the list
+								// Make sure that the default fragment is the first in the list
 								// just to ensure it is selected, if other fragments fit
-								// equally well from their properties
-								name_to_variants_[fragment_name].push_front(variant);
-								name_to_frag_pointer_[fragment_name] = variant;
-								name_to_path_[fragment_name] = "/Fragments/" 
-																		+ fragment_name + "/Variants/" + variant_name;
+								// equally well from their properties.
+								name_to_variants_[fragment_name].push_back(index);
+								name_to_frag_index_[fragment_name] = index;
+								name_to_path_[fragment_name] = "/Fragments/" + fragment_name + "/Variants/" + variant_name;
 							} 
 							else 
 							{
-								variant = new Residue(*original_fragment);
+								variant = new Residue(original_fragment);
 								variant->setName(variant_name);
+								Position index = addNewFragment_(variant);
 
-								fragments_.push_back(variant);
-								name_to_frag_pointer_[variant_name] = variant;
-								name_to_variants_[fragment_name].push_back(variant);
-								name_to_path_[variant_name] = "/Fragments/" 
-									+ fragment_name + "/Variants/" + variant_name;
+								name_to_frag_index_[variant_name] = index;
+								name_to_variants_[fragment_name].push_back(index);
+								name_to_path_[variant_name] = "/Fragments/" + fragment_name + "/Variants/" + variant_name;
 							}
 
 							// Remember all variants of a certain fragment in a list.
 							// This list is accessed via a hash map. It is required to 
 							// determine the correct variant from given properties
 							// (see getReferenceFragment(Fragment&), parseProperties_).
-							for (entry_iterator = (*variant_iterator).begin(); +entry_iterator; ++entry_iterator)
+							for (entry_it = variant_it->begin(); +entry_it; ++entry_it)
 							{
-								if ((*entry_iterator).getDepth() == entry->getDepth() + 2)
+								if (entry_it->getDepth() == entry->getDepth() + 2)
 								{
-									if ((*entry_iterator).getKey() == "Atoms")
+									const String& key = entry_it->getKey();
+									if (key == "Atoms")
 									{
-										parseAtoms_(*entry_iterator, *variant);
+										parseAtoms_(*entry_it, *variant);
 									}
-									else if ((*entry_iterator).getKey() == "Bonds")
+									else if (key == "Bonds")
 									{
-										parseBonds_(*entry_iterator, *variant);
+										parseBonds_(*entry_it, *variant);
 									}
-									else if ((*entry_iterator).getKey() == "Rename")
+									else if (key == "Rename")
 									{
-										parseRename_(*entry_iterator, *variant);
+										parseRename_(*entry_it, *variant);
 									}
-									else if ((*entry_iterator).getKey() == "Delete")
+									else if (key == "Delete")
 									{
-										parseDelete_(*entry_iterator, *variant);
+										parseDelete_(*entry_it, *variant);
 									}
-									else if ((*entry_iterator).getKey() == "Properties")
+									else if (key == "Properties")
 									{
-										parseProperties_(*entry_iterator, *dynamic_cast<PropertyManager*>(variant));
+										parseProperties_(*entry_it, *dynamic_cast<PropertyManager*>(variant));
 									}
 								}
 							}
@@ -730,22 +737,23 @@ namespace BALL
 		entry = tree->getEntry("/Names");
 		if (entry != 0)
 		{
-			for (entry_iterator = ++entry->begin(); +entry_iterator; ++entry_iterator)
+			for (entry_it = ++entry->begin(); +entry_it; ++entry_it)
 			{
-				if (entry_iterator->getDepth() == 2)
+				if (entry_it->getDepth() == 2)
 				{
-					StringHashMap<String>* name_map_to;
-					StringHashMap<String>* name_map_from;
-					name_map_to = new StringHashMap<String>;
-					name_map_from = new StringHashMap<String>;
-					standards_[(*entry_iterator).getKey() + "-" + (*entry_iterator).getValue()] = name_map_to;
-					standards_[(*entry_iterator).getValue() + "-" + (*entry_iterator).getKey()] = name_map_from;
+					// Create empty hash maps for both directions (to and from the standard).
+					StringHashMap<String> map;
+					standards_[entry_it->getKey() + "-" + entry_it->getValue()] = StringHashMap<String>();
+					standards_[entry_it->getValue() + "-" + entry_it->getKey()] = StringHashMap<String>();
+					StringHashMap<String>& name_map_to = standards_[entry_it->getKey() + "-" + entry_it->getValue()];
+					StringHashMap<String>& name_map_from = standards_[entry_it->getValue() + "-" + entry_it->getKey()];
 					
+					// Fill those maps.
 					ResourceEntry::Iterator	alias_iterator;
-					for (alias_iterator = ++entry_iterator->begin(); +alias_iterator; ++alias_iterator)
+					for (alias_iterator = ++entry_it->begin(); +alias_iterator; ++alias_iterator)
 					{
-						(*name_map_to)[alias_iterator->getKey()] = alias_iterator->getValue();
-						(*name_map_from)[alias_iterator->getValue()] = alias_iterator->getKey();
+						name_map_to[alias_iterator->getKey()] = alias_iterator->getValue();
+						name_map_from[alias_iterator->getValue()] = alias_iterator->getKey();
 					}
 				}
 			}
@@ -780,9 +788,9 @@ namespace BALL
 					
 	const Fragment* FragmentDB::getFragment(const String& fragment_name) const
 	{
-		if (name_to_frag_pointer_.has(fragment_name))
+		if (name_to_frag_index_.has(fragment_name))
 		{
-			return (*name_to_frag_pointer_.find(fragment_name)).second;
+			return fragments_[name_to_frag_index_[fragment_name]];
 		} 
 		else	
 		{
@@ -888,12 +896,10 @@ namespace BALL
 					additional_properties.setBit(Nucleotide::PROPERTY__5_PRIME);
 				}
 			}
-#ifdef DEBUG
 			else
 			{
-				Log.info() << " neither residue nor nucleotide!" << std::endl;
+				DEBUG(" neither residue nor nucleotide!")
 			}
-#endif
 		}
 	
 		Fragment* variant = 0;
@@ -905,31 +911,27 @@ namespace BALL
 		Index best_number_of_properties = -1;
 		Index best_property_difference = 10000;
 
-		// iterate over all variants and compare properties
-		std::list<Residue*> variant_list = name_to_variants_[fragment.getName()];
-		std::list<Residue*>::const_iterator it = variant_list.begin();
+		// Iterate over all variants of the fragment and compare the properties.
+		const std::list<Position>& variant_list = name_to_variants_[fragment.getName()];
+		std::list<Position>::const_iterator it = variant_list.begin();
 		for (; it != variant_list.end(); ++it)
 		{
 			// determine how many properties both have in common
 			// by ANDing both bitvectors and counting ones
 			BitVector props = fragment.getBitVector();
 			props |= additional_properties;
-			property_difference = (int)abs((int)props.countValue(true) 
-													- (int)(*it)->getBitVector().countValue(true));
-#ifdef DEBUG
-			Log.info() << " props = " << props << "  bv = " << (*it)->getBitVector() << "   add = " << additional_properties << std::endl;
-#endif
-			props &= (*it)->getBitVector();
+			property_difference = (int)abs((int)props.countValue(true) - (int)fragments_[*it]->getBitVector().countValue(true));
+			DEBUG(" props = " << props << "  bv = " << (*it)->getBitVector() << "   add = " << additional_properties)
+
+			props &= fragments_[*it]->getBitVector();
 			number_of_properties = (int)props.countValue(true);
-#ifdef DEBUG
-			Log.info() << " considering variant " << (*it)->getName() << ". # properties: " << number_of_properties << std::endl;
-#endif
+			DEBUG(" considering variant " << (*it)->getName() << ". # properties: " << number_of_properties)
 
 			if ((number_of_properties > best_number_of_properties)
 					|| ((number_of_properties == best_number_of_properties) 
 							&& (property_difference < best_property_difference)))
 			{
-				variant = (*it);
+				variant = fragments_[*it];
 				best_number_of_properties = number_of_properties;
 				best_property_difference = property_difference;
 			}
@@ -940,9 +942,9 @@ namespace BALL
 
 	const Residue* FragmentDB::getResidue(const String& fragment_name) const 
 	{
-		if (name_to_frag_pointer_.has(fragment_name))
+		if (name_to_frag_index_.has(fragment_name))
 		{
-			return (*name_to_frag_pointer_.find(fragment_name)).second;
+			return fragments_[name_to_frag_index_[fragment_name]];
 		} 
 		else 
 		{
@@ -982,7 +984,7 @@ namespace BALL
 		return naming_standard_;
 	}
 
-	StringHashMap<StringHashMap<String>*>& FragmentDB::getNamingStandards() 
+	StringHashMap<StringHashMap<String> >& FragmentDB::getNamingStandards() 
 	{
 		return standards_;
 	}
@@ -1003,8 +1005,7 @@ namespace BALL
 
 	// match an RES/ATOM pair in a map
 	bool FragmentDB::NormalizeNamesProcessor::matchName
-		(String&	res_name, String&	atom_name,
-		 const StringHashMap<String>*	map) const
+		(String& res_name, String&	atom_name, const FragmentDB::NameMap&	map) const
 	{
 		String	match_name;	
 		String	s[2];
@@ -1015,9 +1016,9 @@ namespace BALL
 		r_name = res_name;
 		r_name.trim();
 		match_name = r_name + ":*";
-		if (map->has(match_name)) 
+		if (map.has(match_name)) 
 		{
-			(*map->find(match_name)).second.split(s, 2, ":");
+			map[match_name].split(s, 2, ":");
 			r_name = s[0];
 		}
 
@@ -1026,9 +1027,9 @@ namespace BALL
 
 		// first, try to match exactly
 		match_name = r_name + ":" + a_name;
-		if (map->has(match_name))
+		if (map.has(match_name))
 		{
-			(*map->find(match_name)).second.split(s, 2, ":");
+			map[match_name].split(s, 2, ":");
 			a_name = s[1];
 			r_name = s[0];
 			hit = true;
@@ -1037,14 +1038,13 @@ namespace BALL
 		{
 			// second, try wildcard match for residue names
 			match_name = "*:" + a_name;
-			if (map->has(match_name))
+			if (map.has(match_name))
 			{
-				(*map->find(match_name)).second.split(s, 2, ":");
+				map[match_name].split(s, 2, ":");
 				a_name = s[1];
 				hit = true;
 			}
 		}
-
 
 		res_name = r_name;
 		atom_name = a_name;
@@ -1060,10 +1060,10 @@ namespace BALL
 
 		String map_name = "-" + naming_standard_;
 
-		StringHashMap<StringHashMap<String>*>	table;
+		StringHashMap<NameMap>	table;
 		table = fragment_db_->getNamingStandards();
 
-		StringHashMap<StringHashMap<String>*>::Iterator it;
+		StringHashMap<NameMap>::Iterator it;
 
 		StringHashMap<Index> usable_maps;
 
@@ -1079,8 +1079,8 @@ namespace BALL
 				
 		list<Fragment*>::iterator	frag_it;				
 		AtomIterator										atom_it;
-		StringHashMap<String>*					map;
 		StringHashMap<Index>::Iterator	map_iterator;
+		NameMap*												map = 0;
 		String													match_name;
 		String													atom_name;
 		String													res_name;
@@ -1090,7 +1090,7 @@ namespace BALL
 		for (map_iterator = usable_maps.begin(); !(map_iterator == usable_maps.end()); ++map_iterator)
 		{
 			hit_counter = 0;
-			map = (*table.find((*map_iterator).first)).second;
+			map = &table[map_iterator->first];
 			for (frag_it = fragments_.begin(); frag_it != fragments_.end(); ++frag_it)
 			{
 				// determine the fragment name
@@ -1125,28 +1125,28 @@ namespace BALL
 
 					// first, try to match exactly
 					match_name = res_name + res_name_suffix;
-					if (matchName(match_name, atom_name, map))
+					if (matchName(match_name, atom_name, *map))
 					{
 						hit_counter++;
 					} 
 					else 
 					{
 						// try to match non-terminal residues
-						if (matchName(res_name, atom_name, map))
+						if (matchName(res_name, atom_name, *map))
 						{
 							hit_counter++;
 						} 
 						else 
 						{
 							match_name = "*" + res_name_suffix;
-							if (matchName(match_name, atom_name, map))
+							if (matchName(match_name, atom_name, *map))
 							{
 								hit_counter++;
 							} 
 							else 
 							{
 								match_name = "*";
-								if (matchName(match_name, atom_name, map))
+								if (matchName(match_name, atom_name, *map))
 								{
 									hit_counter++;
 								}
@@ -1178,7 +1178,7 @@ namespace BALL
 		// first, get the map
 		if (table.find(map_name) != table.end())
 		{
-			map = (*table.find(map_name)).second;
+			map = &table[map_name];
 		} 
 		else 
 		{
@@ -1220,44 +1220,44 @@ namespace BALL
 				for (atom_it = (*frag_it)->beginAtom(); +atom_it; ++atom_it)
 				{
 					// get the atom name
-					atom_name = (*atom_it).getName();
+					atom_name = atom_it->getName();
 
 					// first, try to match exactly
 					match_name = res_name + res_name_suffix;
-					if (matchName(match_name, atom_name, map))
+					if (matchName(match_name, atom_name, *map))
 					{
 						// OK, got it. Change the names
-						(*atom_it).setName(atom_name);
-						(*atom_it).getFragment()->setName(res_name);
+						atom_it->setName(atom_name);
+						atom_it->getFragment()->setName(res_name);
 					} 
 					else 
 					{
 						// second, try to match non-terminal residues exactly
 						match_name = res_name;
-						if (matchName(match_name, atom_name, map))
+						if (matchName(match_name, atom_name, *map))
 						{
 							// OK, got it. Change the names
-							(*atom_it).setName(atom_name);
-							(*atom_it).getFragment()->setName(res_name);
+							atom_it->setName(atom_name);
+							atom_it->getFragment()->setName(res_name);
 						}
 						else 
 						{
 							// try wildcard match for residue names
 							match_name = "*" + res_name_suffix;
-							if (matchName(match_name, atom_name, map))
+							if (matchName(match_name, atom_name, *map))
 							{
 								// OK, got it. Change names
-								(*atom_it).setName(atom_name);
-								(*atom_it).getFragment()->setName(res_name);
+								atom_it->setName(atom_name);
+								atom_it->getFragment()->setName(res_name);
 							} 
 							else 
 							{
 								// last alternative: try wildcard with unmodified name
 								match_name = "*";
-								if (matchName(match_name, atom_name, map))
+								if (matchName(match_name, atom_name, *map))
 								{
-									(*atom_it).setName(atom_name);
-									(*atom_it).getFragment()->setName(res_name);
+									atom_it->setName(atom_name);
+									atom_it->getFragment()->setName(res_name);
 								}
 							}
 						}
@@ -1401,10 +1401,8 @@ namespace BALL
 		// get the fragment`s name
 		String	name = fragment.getName();
 		
-#ifdef DEBUG
-		Log.info() << "FragmentDB::BuildBondsProcessor: building bonds for " 
-							 << fragment.getName() << " from template " << tplate.getName() << std::endl;
-#endif
+		DEBUG("FragmentDB::BuildBondsProcessor: building bonds for " 
+							 << fragment.getName() << " from template " << tplate.getName())
 
 		Size bond_count = 0;
 		AtomConstIterator				tmp_it1;
@@ -1429,12 +1427,10 @@ namespace BALL
 		for (catom_it = tplate.beginAtom(); +catom_it; ++catom_it)
 		{
 			atom_name = catom_it->getName().trim();
-#ifdef DEBUG
 			if (template_names.has(atom_name))
 			{
-				Log.warn() << "FragmentDB::BuildBondsProcessor: duplicate atom name in template " << tplate.getName() << std::endl;
+				DEBUG("FragmentDB::BuildBondsProcessor: duplicate atom name in template " << tplate.getName())
 			}
-#endif
 			template_names.insert(atom_name, &*catom_it);
 		}
 
@@ -1697,11 +1693,11 @@ namespace BALL
 
 		if (name_to_variants_.has(name))
 		{
-			list<Residue*>::const_iterator it = name_to_variants_[name].begin();
-			list<Residue*>::const_iterator end_it = name_to_variants_[name].end();
+			list<Position>::const_iterator it = name_to_variants_[name].begin();
+			list<Position>::const_iterator end_it = name_to_variants_[name].end();
 			for (; it != end_it; it++)
 			{
-				names.push_back((*it)->getName());
+				names.push_back(fragments_[*it]->getName());
 			}
 		}
 
