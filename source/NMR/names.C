@@ -1,4 +1,4 @@
-// $Id: names.C,v 1.1 2000/07/03 20:02:23 oliver Exp $
+// $Id: names.C,v 1.2 2000/08/28 16:08:53 oliver Exp $
 
 #include<BALL/NMR/names.h>
 
@@ -14,29 +14,32 @@
 using namespace std;
 
 
-namespace BALL {
+namespace BALL
+{
 
-ShiftNames::ShiftNames()
-	{}
-ShiftNames::~ShiftNames()
-	{}
-	
-ShiftModule* ShiftNames::get_module(String module_name)
-		{
+	ShiftNames::ShiftNames ()
+	{
+	}
+	ShiftNames::~ShiftNames ()
+	{
+	}
+
+	ShiftModule *ShiftNames::get_module (String module_name)
+	{
 		//hier werden die Klassennamen der Module mit entsprechenden Strings identifiziert:
-		
-		if (module_name=="JB") return (new JohnsonBoveyShift);
-		else
-		if (module_name=="HM") return (new HaighMallionShift);
-		else
-		if (module_name=="LEF") return (new LEFShift);
-		else
-		if (module_name=="ANISO") return (new AnIsoShift);
-		else
-		if (module_name=="RC") return (new RandomCoilShift);
-		else 
-			return NULL;
-		}
 
-} // namespace Ball
- 	
+		if (module_name == "JB")
+			return (new JohnsonBoveyShift);
+		else if (module_name == "HM")
+			return (new HaighMallionShift);
+		else if (module_name == "LEF")
+			return (new LEFShift);
+		else if (module_name == "ANISO")
+			return (new AnIsoShift);
+		else if (module_name == "RC")
+			return (new RandomCoilShift);
+		else
+			return NULL;
+	}
+
+}																// namespace Ball
