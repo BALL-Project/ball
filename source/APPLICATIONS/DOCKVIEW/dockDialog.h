@@ -26,27 +26,33 @@
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_RADIUSRULEPROCESSOR_H
- #include <BALL/MOLMEC/COMMON/radiusRuleProcessor.h>
+# include <BALL/MOLMEC/COMMON/radiusRuleProcessor.h>
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_CHARGERULEPROCESSOR_H
- #include <BALL/MOLMEC/COMMON/chargeRuleProcessor.h>
+# include <BALL/MOLMEC/COMMON/chargeRuleProcessor.h>
 #endif
 
 #ifndef BALL_STRUCTURE_DEFAULTPROCESSORS_H
- #include <BALL/STRUCTURE/defaultProcessors.h>
+# include <BALL/STRUCTURE/defaultProcessors.h>
 #endif
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
- #include <BALL/STRUCTURE/fragmentDB.h>
+# include <BALL/STRUCTURE/fragmentDB.h>
 #endif
 
 #ifndef BALL_DATATYPE_OPTIONS_H
- #include <BALL/DATATYPE/options.h>
+# include <BALL/DATATYPE/options.h>
 #endif
 
-//#include "DockingAlgorithm.h"
-#include "geometricFit.h"
+#ifndef BALL_MOLMEC_DOCKING_DOCKINGALGORITHM_H
+# include <BALL/MOLMEC/DOCKING/dockingAlgorithm.h>
+#endif
+
+#ifndef BALL_MOLMEC_DOCKING_GEOMETRICFIT_H
+# include <BALL/MOLMEC/DOCKING/geometricFit.h>
+#endif 
+
 #include "dockDialogData.h"
 
 namespace BALL
@@ -184,7 +190,7 @@ namespace BALL
 					System* docking_partner2_;
 				
 					//options for the docking algorithm
-					Options 	options_;
+					Options options_;
 					//Docking::DockingAlgorithm docking_;
 					
 					//menu entry id

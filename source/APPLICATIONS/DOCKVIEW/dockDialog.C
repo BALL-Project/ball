@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.12 2005/02/09 13:37:37 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.13 2005/02/10 12:16:47 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -51,6 +51,9 @@ namespace BALL
 			registerObject_(systems2);
 			registerObject_(algorithms);
 			registerObject_(rank_functions);
+			registerObject_(best_num);
+			registerObject_(verbosity);
+			registerObject_(traject_file);
 			registerObject_(radii_data_lineedit);
 			registerObject_(radii_rules_lineedit);
 			registerObject_(charges_data_lineedit);
@@ -60,6 +63,7 @@ namespace BALL
 			registerObject_(assign_radii);
 			registerObject_(build_bonds);
 			registerObject_(add_hydrogens);
+
 		
 			//build HashMap for advanced option dialogs
 			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
@@ -114,6 +118,20 @@ namespace BALL
 			main_control.removeMenuEntry(MainControl::DISPLAY, "&Docking", this,
 																	 SLOT(show()), CTRL+Key_D);
 		}   
+		
+		/// Read the preferences from a INIFile
+		void DockDialog::fetchPreferences(INIFile& file)
+			throw()
+		{
+			PreferencesEntry::readPreferenceEntries(file);
+		}
+		
+		/// Write the preferences to a INIFile
+		void DockDialog::writePreferences(INIFile& file)
+			throw()
+		{
+			PreferencesEntry::writePreferenceEntries(file);
+		}
 		
 		void DockDialog::checkMenu (MainControl& main_control)
 			throw()
@@ -215,20 +233,6 @@ namespace BALL
 			DockDialogData::show();
 		}
 		
-		/// Read the preferences from a INIFile
-		void DockDialog::fetchPreferences(INIFile& file)
-			throw()
-		{
-			PreferencesEntry::readPreferenceEntries(file);
-		}
-		
-		/// Write the preferences to a INIFile
-		void DockDialog::writePreferences(INIFile& file)
-			throw()
-		{
-			PreferencesEntry::writePreferenceEntries(file);
-		}
-		
 		/// Reset the dialog to the standard values
 		void DockDialog::reset()
 			throw()
@@ -243,6 +247,10 @@ namespace BALL
 				
 				//options
 				best_num->setText("100");
+				verbosity->setText("1");
+				
+				//trajectories
+				traject_file->setText("trajectories.dcd");
 			}
 			
 			if (tab_pages->currentPageIndex() == 1)
@@ -286,75 +294,24 @@ namespace BALL
 		{
 			// get options user has chosen
 			applyValues_();
+			
 			// before docking, apply processors, e.g. add hydrogens
 			applyProcessors_();
+			
+			System* partner1 = new System(*docking_partner1_);
+			System* partner2 = new System(*docking_partner2_);
+			
 			//setup docking
-			//docking_.setup(*docking_partner1_,*docking_partner2_,options_);
+			GeometricFit geo_fit(*partner1, *partner2, options_);
 			
-			
-			GeometricFit geo_fit(*docking_partner1_,*docking_partner2_);
-   
-			geo_fit.options = options_;
-
 			// keep the larger protein in System A and the smaller one in System B
-			if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms() )
+			if (partner1->countAtoms() < partner2->countAtoms())
 			{
 				// swap the systems
-				docking_partner1_->swap(*docking_partner2_);
+				partner1->swap(*partner2);
 			}
-  
-
-			///////////////////////////
-  ///////////////////////////
-  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-  // here we do some change to the protein, 
-  // so that we can verify whether the docking is ok.
-  ///////////////////////////////
-  
-			//chgpos(docking_partner2_, Vector3(rot_x, rot_y, rot_z), 
-			//Vector3(trs_x, trs_y, trs_z) );
-   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-   
-	/*		Log << "the rmsd before docking = " 
-       << calcRMSD(pro_sys_a, pro_sys_b, ref_pro_sys_a, ref_pro_sys_b ) 
-       << endl;
-   
-   // echo the parameters
-	 Options geo_opt = geo_fit.options;
-
-   cout << "-----Parameters-----" << endl;
-   cout << "NEAR_RADIUS       = " << NEAR_RADIUS       
-		 		<< "|||" << geo_opt[GeometricFit::Option::NEAR_RADIUS] << endl;
-   cout << "GRID_SPACING      = " << GRID_SPACING      
-		 		<< "|||" << geo_opt[GeometricFit::Option::GRID_SPACING] << endl;
-   cout << "GRID_SIZE         = " << GRID_SIZE         
-		    << "|||" << geo_opt[GeometricFit::Option::GRID_SIZE] << endl;
-   cout << "SURFACE_THICKNESS = " << SURFACE_THICKNESS 
-		 		<< "|||" << geo_opt[GeometricFit::Option::SURFACE_THICKNESS] << endl;
-   cout << "DEGREE_INTERVAL   = " << DEGREE_INTERVAL   
-		 		<< "|||" << geo_opt[GeometricFit::Option::DEGREE_INTERVAL] << endl;
-   cout << "TOP_N             = " << TOP_N             
-		 		<< "|||" << geo_opt[GeometricFit::Option::TOP_N] << endl;
-   cout << "BEST_NUM          = " << BEST_NUM          
-		 		<< "|||" << geo_opt[GeometricFit::Option::BEST_NUM] << endl;
-   cout << endl;
-   cout << "------System A------" << endl;
-   cout << "PDB File name a   = " << PDB_file_name_a   << endl;
-   cout << "Chain name        = " << CHAIN_A           << endl;
-   cout << "residue number    = " << pro_sys_a.countResidues() << endl;
-   cout << "atom number       = " << pro_sys_a.countAtoms()    << endl;
-   cout << endl;
-   cout << "------System B------" << endl;
-   cout << "PDB File name b   = " << PDB_file_name_b   << endl;  
-   cout << "Chain name        = " << CHAIN_B           << endl;
-   cout << "residue number    = " << pro_sys_b.countResidues() << endl;
-   cout << "atom number       = " << pro_sys_b.countAtoms()    << endl;
-   cout << endl;
-   */
-   
-			geo_fit.geometricRecognition(*docking_partner1_, *docking_partner2_);
-																		//*docking_partner1_, *docking_partner2_, 
-																		//SURFACE_TYPE );
+			
+			geo_fit.start();
 			
 			Log.info() << "End of calculate" << std::endl;
 			return true;

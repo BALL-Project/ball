@@ -17,7 +17,10 @@
 #include <BALL/DATATYPE/options.h>
 #endif
 
-#include "geometricFit.h"
+#ifndef BALL_MOLMEC_DOCKING_GEOMETRICFIT_H
+# include <BALL/MOLMEC/DOCKING/geometricFit.h>
+#endif
+
 #include "geometricFitDialogData.h"
 
 namespace BALL

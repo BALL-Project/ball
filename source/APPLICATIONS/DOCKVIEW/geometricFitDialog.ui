@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>350</width>
-            <height>284</height>
+            <width>438</width>
+            <height>313</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -22,8 +22,8 @@
     </property>
     <property name="maximumSize">
         <size>
-            <width>350</width>
-            <height>290</height>
+            <width>450</width>
+            <height>350</height>
         </size>
     </property>
     <property name="caption">
@@ -33,6 +33,28 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
+        <widget class="QPushButton" row="1" column="1">
+            <property name="name">
+                <cstring>cancel_button</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>7</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>90</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="text">
+                <string>Cancel</string>
+            </property>
+        </widget>
         <widget class="QPushButton" row="1" column="0">
             <property name="name">
                 <cstring>ok_button</cstring>
@@ -56,28 +78,6 @@
             </property>
             <property name="default">
                 <bool>true</bool>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="1" column="1">
-            <property name="name">
-                <cstring>cancel_button</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>7</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>90</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="text">
-                <string>Cancel</string>
             </property>
         </widget>
         <widget class="QPushButton" row="1" column="2">
@@ -113,6 +113,61 @@
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
+                <widget class="QLabel" row="4" column="0">
+                    <property name="name">
+                        <cstring>near_radius_label</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>near radius</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="3" column="0">
+                    <property name="name">
+                        <cstring>inside_value_1_label_2</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>penalty value 2</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="0" column="1">
+                    <property name="name">
+                        <cstring>surface_thickness</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>135</width>
+                            <height>23</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>130</width>
+                            <height>23</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>1.0</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignRight</set>
+                    </property>
+                </widget>
                 <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>sur_thick_label</cstring>
@@ -129,13 +184,153 @@
                         <string>surface thickness</string>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="0" column="1">
+                <widget class="QLabel" row="5" column="0">
                     <property name="name">
-                        <cstring>surface_thickness</cstring>
+                        <cstring>deg_interval_label</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>degree interval for rotation</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="6" column="0">
+                    <property name="name">
+                        <cstring>peak_num_label</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>number of peaks for each rotation</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox" row="7" column="1">
+                    <item>
+                        <property name="text">
+                            <string>Connolly</string>
+                        </property>
+                    </item>
+                    <item>
+                        <property name="text">
+                            <string>van der Waals</string>
+                        </property>
+                    </item>
+                    <property name="name">
+                        <cstring>surface_type</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
                     </property>
                     <property name="minimumSize">
                         <size>
-                            <width>40</width>
+                            <width>135</width>
+                            <height>23</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>130</width>
+                            <height>23</height>
+                        </size>
+                    </property>
+                    <property name="acceptDrops">
+                        <bool>false</bool>
+                    </property>
+                    <property name="autoMask">
+                        <bool>false</bool>
+                    </property>
+                    <property name="currentItem">
+                        <number>0</number>
+                    </property>
+                    <property name="insertionPolicy">
+                        <enum>AtTop</enum>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="7" column="0">
+                    <property name="name">
+                        <cstring>surface_type_label</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>200</width>
+                            <height>32767</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>surface type</string>
+                    </property>
+                </widget>
+                <widget class="QLabel" row="2" column="0">
+                    <property name="name">
+                        <cstring>inside_value_1_label</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>7</hsizetype>
+                            <vsizetype>5</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>penalty value 1</string>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="2" column="1">
+                    <property name="name">
+                        <cstring>penalty_value1</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>135</width>
+                            <height>23</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>130</width>
+                            <height>23</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>-15</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="3" column="1">
+                    <property name="name">
+                        <cstring>penalty_value2</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>135</width>
                             <height>23</height>
                         </size>
                     </property>
@@ -146,7 +341,99 @@
                         </size>
                     </property>
                     <property name="text">
+                        <string>1</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="1" column="1">
+                    <property name="name">
+                        <cstring>grid_spacing</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>135</width>
+                            <height>23</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>130</width>
+                            <height>23</height>
+                        </size>
+                    </property>
+                    <property name="text">
                         <string>1.0</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="4" column="1">
+                    <property name="name">
+                        <cstring>near_radius</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>135</width>
+                            <height>23</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>80</width>
+                            <height>23</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>1.8</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="5" column="1">
+                    <property name="name">
+                        <cstring>deg_interval</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>135</width>
+                            <height>23</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>80</width>
+                            <height>23</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>20</string>
+                    </property>
+                    <property name="alignment">
+                        <set>AlignRight</set>
+                    </property>
+                </widget>
+                <widget class="QLineEdit" row="6" column="1">
+                    <property name="name">
+                        <cstring>peak_num</cstring>
+                    </property>
+                    <property name="minimumSize">
+                        <size>
+                            <width>135</width>
+                            <height>23</height>
+                        </size>
+                    </property>
+                    <property name="maximumSize">
+                        <size>
+                            <width>80</width>
+                            <height>23</height>
+                        </size>
+                    </property>
+                    <property name="text">
+                        <string>3</string>
                     </property>
                     <property name="alignment">
                         <set>AlignRight</set>
@@ -166,224 +453,6 @@
                     </property>
                     <property name="text">
                         <string>grid spacing</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="1" column="1">
-                    <property name="name">
-                        <cstring>grid_spacing</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>40</width>
-                            <height>23</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>80</width>
-                            <height>23</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>1.0</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignRight</set>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="2" column="0">
-                    <property name="name">
-                        <cstring>inside_value_1_label</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>inside value 1</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="2" column="1">
-                    <property name="name">
-                        <cstring>inside_value1</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>40</width>
-                            <height>23</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>80</width>
-                            <height>23</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>-15</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignRight</set>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="3" column="0">
-                    <property name="name">
-                        <cstring>inside_value_1_label_2</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>inside value 2</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="3" column="1">
-                    <property name="name">
-                        <cstring>inside_value2</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>40</width>
-                            <height>23</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>80</width>
-                            <height>23</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>1</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignRight</set>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="5" column="0">
-                    <property name="name">
-                        <cstring>deg_interval_label</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>degree interval for rotation</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="5" column="1">
-                    <property name="name">
-                        <cstring>deg_interval</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>40</width>
-                            <height>23</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>80</width>
-                            <height>23</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>20</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignRight</set>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="4" column="0">
-                    <property name="name">
-                        <cstring>near_radius_label</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>near radius</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="4" column="1">
-                    <property name="name">
-                        <cstring>near_radius</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>40</width>
-                            <height>23</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>80</width>
-                            <height>23</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>1.8</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignRight</set>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="6" column="0">
-                    <property name="name">
-                        <cstring>peak_num_label</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>7</hsizetype>
-                            <vsizetype>5</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="text">
-                        <string>number of peaks for each rotation</string>
-                    </property>
-                </widget>
-                <widget class="QLineEdit" row="6" column="1">
-                    <property name="name">
-                        <cstring>peak_num</cstring>
-                    </property>
-                    <property name="minimumSize">
-                        <size>
-                            <width>40</width>
-                            <height>23</height>
-                        </size>
-                    </property>
-                    <property name="maximumSize">
-                        <size>
-                            <width>80</width>
-                            <height>23</height>
-                        </size>
-                    </property>
-                    <property name="text">
-                        <string>3</string>
-                    </property>
-                    <property name="alignment">
-                        <set>AlignRight</set>
                     </property>
                 </widget>
             </grid>
@@ -413,8 +482,8 @@
 <tabstops>
     <tabstop>surface_thickness</tabstop>
     <tabstop>grid_spacing</tabstop>
-    <tabstop>inside_value1</tabstop>
-    <tabstop>inside_value2</tabstop>
+    <tabstop>penalty_value1</tabstop>
+    <tabstop>penalty_value2</tabstop>
     <tabstop>near_radius</tabstop>
     <tabstop>deg_interval</tabstop>
     <tabstop>peak_num</tabstop>

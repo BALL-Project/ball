@@ -1,11 +1,12 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.6 2005/02/09 13:37:37 haid Exp $
+# $Id: Makefile,v 1.1.2.7 2005/02/10 12:16:47 haid Exp $
 #
 
 EXECUTABLE=DOCKView
 DIRECTORY=APPLICATIONS/DOCKVIEW
+BALLDIR=/home/student/haid/BALL
 
 all:	$(EXECUTABLE)
 
@@ -14,7 +15,7 @@ clean:	default_clean
 include ../../common.mak
 include .Dependencies
 
-BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES) -I ./DOCKING
+BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES) 
 
 CPP_SOURCES=\
 	aboutDialog.C\
@@ -43,7 +44,7 @@ UIC_FILES=\
 	geometricFitDialogData.h
 
 DOCKView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS) DOCKING/DockingAlgorithm.o DOCKING/geometricFit.o DOCKING/fitmol.o DOCKING/MVector3.o DOCKING/MSuperpose.o DOCKING/MNumerics.o
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS) $(BALLDIR)/source/MOLMEC/DOCKING/dockingAlgorithm.o $(BALLDIR)/source/MOLMEC/DOCKING/geometricFit.o $(BALLDIR)/source/MOLMEC/DOCKING/fitmol.o $(BALLDIR)/source/MOLMEC/DOCKING/MVector3.o $(BALLDIR)/source/MOLMEC/DOCKING/MSuperpose.o $(BALLDIR)/source/MOLMEC/DOCKING/MNumerics.o
 
 depend: $(UIC_FILES) $(MOC_SOURCES)
 

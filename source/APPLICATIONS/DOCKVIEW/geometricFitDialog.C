@@ -1,6 +1,7 @@
 #include "geometricFitDialog.h"
 
 #include <qlineedit.h>
+#include <qcombobox.h>
 
 namespace BALL
 {
@@ -25,11 +26,12 @@ namespace BALL
 				setINIFileSectionName("GEOMETRIC_FIT_OPTIONS");
 				registerObject_(surface_thickness);
 				registerObject_(grid_spacing);
-				registerObject_(inside_value1);
-				registerObject_(inside_value2);
+				registerObject_(penalty_value1);
+				registerObject_(penalty_value2);
 				registerObject_(near_radius);
 				registerObject_(deg_interval);
 				registerObject_(peak_num);
+				registerObject_(surface_type);
 		
 				hide();
 			}
@@ -66,11 +68,12 @@ namespace BALL
 		{
     	surface_thickness->setText("1.0");
     	grid_spacing->setText("1.0"); 
-    	inside_value1->setText("-15");
-    	inside_value2->setText("1");
+    	penalty_value1->setText("-15");
+    	penalty_value2->setText("1");
     	deg_interval->setText("20");
     	near_radius->setText("1.8");
     	peak_num->setText("3");
+			surface_type->setCurrentText("Connolly");
 		}
 		
 		/// Set options
@@ -82,6 +85,14 @@ namespace BALL
 			options[GeometricFit::Option::SURFACE_THICKNESS] = String(surface_thickness->text().ascii()).toFloat();
 			options[GeometricFit::Option::DEGREE_INTERVAL] = String(deg_interval->text().ascii()).toDouble();
 			options[GeometricFit::Option::TOP_N] = String(peak_num->text().ascii()).toInt();
+			if(surface_type->currentText() == "Connolly")
+			{
+				options[GeometricFit::Option::SURFACE_TYPE] = GeometricFit::CONNOLLY;
+			}
+			else
+			{
+				options[GeometricFit::Option::SURFACE_TYPE] = GeometricFit::VAN_DER_WAALS;
+			}
 		}
 	
 	// ------------------------- SLOTS ------------------------------------------------
