@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.2 2004/02/02 17:12:59 amoll Exp $
+// $Id: molecularStructure.C,v 1.3 2004/02/04 12:18:43 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -28,6 +28,8 @@
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
+
+#undef BALL_QT_HAS_THREADS
 
 #ifdef BALL_QT_HAS_THREADS
 #	include <BALL/VIEW/KERNEL/threads.h>
@@ -909,19 +911,18 @@ namespace BALL
 
 			QString message;
 			message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A",
-											minimizer->getNumberOfIterations(), amber->getEnergy(), amber->getRMSGradient());
+											minimizer->getNumberOfIterations(), amber.getEnergy(), amber.getRMSGradient());
 			setStatusbarText(String(message.ascii()));
 		}
 
 		Log.info() << endl << "minimization terminated." << endl << endl;
 		printAmberResults();
-		Log.info() << "final RMS gadient    : " << amber->getRMSGradient() << " kJ/(mol A)   after "
+		Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after "
 							 << minimizer->getNumberOfIterations() << " iterations" << endl << endl;
-		setStatusbarText("Total AMBER energy: " + String(amber->getEnergy()) + " kJ/mol.");
+		setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kJ/mol.");
 
 		// clean up
 		delete minimizer;
-		delete amber;
 	#endif
 	}
 
@@ -1019,14 +1020,14 @@ namespace BALL
 		
 		SnapShotManager manager(amber.getSystem(), &amber, dcd);
 		manager.setFlushToDiskFrequency(10);
-		while (mds->getNumberOfIterations() < md_dialog_->getNumberOfSteps())
+		while (mds->getNumberOfIterations() < md_dialog_.getNumberOfSteps())
 		{
 			mds->simulateIterations(steps, true);
-			MainControl::update(*system);
-			if (md_dialog_->saveImages()) 
+			getMainControl()->update(*system);
+			if (md_dialog_.saveImages()) 
 			{
-				Scene* scene= (Scene*) Scene::getInstance(0);
-				scene->exportPNG();
+				SceneMessage* msg = new SceneMessage(SceneMessage::EXPORT_PNG);
+				notify_(msg);
 			}
 			
 			if (dcd != 0) 
@@ -1036,17 +1037,17 @@ namespace BALL
 
 			QString message;
 			message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
-											mds->getNumberOfIterations(), amber->getEnergy(), amber->getRMSGradient());
+											mds->getNumberOfIterations(), amber.getEnergy(), amber.getRMSGradient());
 			setStatusbarText(String(message.ascii()));
 		}
 
 		if (dcd) manager.flushToDisk();
 
 		Log.info() << std::endl << "simulation terminated." << std::endl << endl;
-		molecular_properties_->printAmberResults();
-		Log.info() << "final RMS gadient    : " << amber->getRMSGradient() << " kJ/(mol A)   after " 
+		printAmberResults();
+		Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after " 
 							 << mds->getNumberOfIterations() << " iterations" << endl << endl;
-		setStatusbarText("Total AMBER energy: " + String(amber->getEnergy()) + " kJ/mol.");
+		setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kJ/mol.");
 
 		// clean up
 		delete mds;
@@ -1055,15 +1056,13 @@ namespace BALL
 		{
 			dcd->close();
 			delete dcd;
-			dcd = new DCDFile(md_dialog_->getDCDFile(), File::IN);
+			dcd = new DCDFile(md_dialog_.getDCDFile(), File::IN);
 
 			NewTrajectoryMessage* message = new NewTrajectoryMessage;
-			message->setComposite(*amber->getSystem());
+			message->setComposite(*amber.getSystem());
 			message->setTrajectoryFile(*dcd);
 			notify_(message);
 		}
-
-		delete amber;
 	#endif
 	}
 
