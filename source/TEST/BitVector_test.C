@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.23 2001/10/11 00:28:35 oliver Exp $
+// $Id: BitVector_test.C,v 1.24 2001/12/11 12:07:16 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.23 2001/10/11 00:28:35 oliver Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.24 2001/12/11 12:07:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -29,13 +29,11 @@ RESULT
 CHECK(BitVector::getSize() const)
 	BitVector bv;
 	TEST_EQUAL(bv.getSize(), 0)
-	TEST_EQUAL(bv.getBit(0), false)
 RESULT
 
 CHECK(BitVector::BitVector(Size))
 	BitVector bv0((Size)0);
 	TEST_EQUAL(bv0.getSize(), 0)
-	TEST_EQUAL(bv0.getBit(0), false)
 
 	BitVector bv1(1);
 	TEST_EQUAL(bv1.getSize(), 1)
@@ -59,7 +57,26 @@ CHECK(BitVector::BitVector(const BitVector&, bool))
 	TEST_EQUAL(bv9.getSize(), 9)
 	TEST_EQUAL(bv9_2.getBit(0), true)
 	TEST_EQUAL(bv9_2.getBit(1), false)
+	TEST_EQUAL(bv9_2.getBit(2), false)
+	TEST_EQUAL(bv9_2.getBit(3), false)
+	TEST_EQUAL(bv9_2.getBit(4), false)
+	TEST_EQUAL(bv9_2.getBit(5), false)
+	TEST_EQUAL(bv9_2.getBit(6), false)
+	TEST_EQUAL(bv9_2.getBit(7), false)
 	TEST_EQUAL(bv9_2.getBit(8), true)
+
+	BitVector bv9_3 = BitVector(bv9, false);
+	TEST_EQUAL(bv9_2.getSize(), 9)
+	TEST_EQUAL(bv9.getSize(), 9)
+	TEST_EQUAL(bv9_2.getBit(0), false)
+	TEST_EQUAL(bv9_2.getBit(1), false)
+	TEST_EQUAL(bv9_2.getBit(2), false)
+	TEST_EQUAL(bv9_2.getBit(3), false)
+	TEST_EQUAL(bv9_2.getBit(4), false)
+	TEST_EQUAL(bv9_2.getBit(5), false)
+	TEST_EQUAL(bv9_2.getBit(6), false)
+	TEST_EQUAL(bv9_2.getBit(7), false)
+	TEST_EQUAL(bv9_2.getBit(8), false)	
 RESULT
 
 CHECK(BitVector::BitVector(const char*))
@@ -67,9 +84,17 @@ CHECK(BitVector::BitVector(const char*))
 	BitVector bv9_2 = BitVector(c);
 	TEST_EQUAL(bv9_2.getSize(), 9)
 	TEST_EQUAL(bv9_2.getBit(0), true)
-	TEST_EQUAL(bv9_2.getBit(1), false)
+	TEST_EQUAL(bv9_2.getBit(1), true)
 	TEST_EQUAL(bv9_2.getBit(2), false)
+	TEST_EQUAL(bv9_2.getBit(3), true)
+	TEST_EQUAL(bv9_2.getBit(4), false)
+	TEST_EQUAL(bv9_2.getBit(5), true)
+	TEST_EQUAL(bv9_2.getBit(6), false)
+	TEST_EQUAL(bv9_2.getBit(7), false)
 	TEST_EQUAL(bv9_2.getBit(8), true)
+
+	BitVector empty("");
+	TEST_EQUAL(empty.getSize(), 0)
 RESULT
 
 CHECK(BitVector::clear())
@@ -77,11 +102,7 @@ CHECK(BitVector::clear())
 	bv9.setBit(8, true);
 	TEST_EQUAL(bv9.getSize(), 9)
 	bv9.clear();
-	TEST_EQUAL(bv9.getBit(0), false)
-	TEST_EQUAL(bv9.getBit(8), false)
-	bv9.setBit(0, true);
-	bv9.setBit(8, true);
-	TEST_EQUAL(bv9.getSize(), 9)
+	TEST_EQUAL(bv9.getSize(), 0)
 RESULT
 
 CHECK(BitVector::set(const BitVector&, bool))
@@ -91,6 +112,13 @@ CHECK(BitVector::set(const BitVector&, bool))
 	TEST_EQUAL(bv9_2.getBit(0), true)
 	TEST_EQUAL(bv9_2.getBit(1), false)
 	TEST_EQUAL(bv9_2.getBit(8), true)
+
+	BitVector bv9_3;
+	bv9_2.set(bv9, false);
+	TEST_EQUAL(bv9_2.getSize(), 9)
+	TEST_EQUAL(bv9_2.getBit(0), false)
+	TEST_EQUAL(bv9_2.getBit(1), false)
+	TEST_EQUAL(bv9_2.getBit(8), false)
 RESULT
 
 CHECK(BitVector::set(const char*))
@@ -99,9 +127,18 @@ CHECK(BitVector::set(const char*))
 	bv9_2.set(c);
 	TEST_EQUAL(bv9_2.getSize(), 9)
 	TEST_EQUAL(bv9_2.getBit(0), true)
-	TEST_EQUAL(bv9_2.getBit(1), false)
+	TEST_EQUAL(bv9_2.getBit(1), true)
 	TEST_EQUAL(bv9_2.getBit(2), false)
+	TEST_EQUAL(bv9_2.getBit(3), true)
+	TEST_EQUAL(bv9_2.getBit(4), false)
+	TEST_EQUAL(bv9_2.getBit(5), true)
+	TEST_EQUAL(bv9_2.getBit(6), false)
+	TEST_EQUAL(bv9_2.getBit(7), false)
 	TEST_EQUAL(bv9_2.getBit(8), true)
+
+	BitVector bv9_3;
+	bv9_3.set("");
+	TEST_EQUAL(bv9_3.getSize(), 0)
 RESULT
 
 CHECK(BitVector::BitVector& operator = (const BitVector&))
@@ -119,7 +156,13 @@ CHECK(BitVector::BitVector& operator = (const char*))
 	bv9_2 = c;
 	TEST_EQUAL(bv9_2.getSize(), 9)
 	TEST_EQUAL(bv9_2.getBit(0), true)
-	TEST_EQUAL(bv9_2.getBit(1), false)
+	TEST_EQUAL(bv9_2.getBit(1), true)
+	TEST_EQUAL(bv9_2.getBit(2), false)
+	TEST_EQUAL(bv9_2.getBit(3), true)
+	TEST_EQUAL(bv9_2.getBit(4), false)
+	TEST_EQUAL(bv9_2.getBit(5), true)
+	TEST_EQUAL(bv9_2.getBit(6), false)
+	TEST_EQUAL(bv9_2.getBit(7), false)
 	TEST_EQUAL(bv9_2.getBit(8), true)
 RESULT
 
@@ -159,6 +202,13 @@ RESULT
 CHECK(BitVector::countValue(bool) const)
 	TEST_EQUAL(bv10.countValue(true), 4)
 	TEST_EQUAL(bv10.countValue(false), 6)
+	BitVector bv;
+	TEST_EQUAL(bv.countValue(true), 0)
+	TEST_EQUAL(bv.countValue(false), 0)
+	bv.setBit(5);
+	TEST_EQUAL(bv.getSize(), 6)
+	TEST_EQUAL(bv.countValue(true), 1)
+	TEST_EQUAL(bv.countValue(false), 5)
 RESULT
 
 CHECK(BitVector::getBitSet())
@@ -343,22 +393,70 @@ CHECK(BitVector::bitwiseAnd(const BitVector&))
 RESULT
 
 CHECK(BitVector::operator | (const BitVector&))
-	erg = b4 | b3;
-	TEST_EQUAL(erg.getBit(0), true)
-	TEST_EQUAL(erg.getBit(1), true)
-	TEST_EQUAL(erg.getBit(2), false)
-	TEST_EQUAL(erg.getBit(3), true)
-	TEST_EQUAL(erg.getSize(), 4)
+	BitVector b11("100");
+	BitVector b12("100000");
+	STATUS("b11 = " << b11)
+	STATUS("b12 = " << b12)
+	erg = b11 | b12;
+	STATUS("erg = " << erg)
+	TEST_EQUAL(erg.getSize(), 6)
+	TEST_EQUAL(erg.getBit(0), false)
+	TEST_EQUAL(erg.getBit(1), false)
+	TEST_EQUAL(erg.getBit(2), true)
+	TEST_EQUAL(erg.getBit(3), false)
+	TEST_EQUAL(erg.getBit(4), false)
+	TEST_EQUAL(erg.getBit(5), true)
+	BitVector b13("100000");
+	BitVector b14("100");
+	STATUS("b13 = " << b13)
+	STATUS("b14 = " << b14)
+	erg = b13 | b14;
+	STATUS("erg = " << erg)
+	TEST_EQUAL(erg.getSize(), 6)
+	TEST_EQUAL(erg.getBit(0), false)
+	TEST_EQUAL(erg.getBit(1), false)
+	TEST_EQUAL(erg.getBit(2), true)
+	TEST_EQUAL(erg.getBit(3), false)
+	TEST_EQUAL(erg.getBit(4), false)
+	TEST_EQUAL(erg.getBit(5), true)
 RESULT
 
 CHECK(BitVector::operator |= (const BitVector&))
-	erg = b4;
-	erg |= b3;
-	TEST_EQUAL(erg.getBit(0), true)
-	TEST_EQUAL(erg.getBit(1), true)
-	TEST_EQUAL(erg.getBit(2), false)
-	TEST_EQUAL(erg.getBit(3), true)
-	TEST_EQUAL(erg.getSize(), 4)
+	BitVector b11("1010101010");
+	BitVector b12(     "10000");
+	STATUS("b11 = " << b11)
+	//STATUS("b12 = " << b12)
+	b11 |= b12;
+	STATUS("b11 |= b12 = " << b11)
+	TEST_EQUAL(b11.getSize(), 10)
+	TEST_EQUAL(b11.getBit(0), false)
+	TEST_EQUAL(b11.getBit(1), true)
+	TEST_EQUAL(b11.getBit(2), false)
+	TEST_EQUAL(b11.getBit(3), true)
+	TEST_EQUAL(b11.getBit(4), true)
+	TEST_EQUAL(b11.getBit(5), true)
+	TEST_EQUAL(b11.getBit(6), false)
+	TEST_EQUAL(b11.getBit(7), true)
+	TEST_EQUAL(b11.getBit(8), false)
+	TEST_EQUAL(b11.getBit(9), true)
+
+	BitVector b14("1010101010");
+	BitVector b13(     "10000");
+	STATUS("b13 = " << b13)
+	STATUS("b14 = " << b14)
+	b13 |= b14;
+	STATUS("b13 |= b14 = " << b13)
+	TEST_EQUAL(b13.getSize(), 10)
+	TEST_EQUAL(b13.getBit(0), false)
+	TEST_EQUAL(b13.getBit(1), true)
+	TEST_EQUAL(b13.getBit(2), false)
+	TEST_EQUAL(b13.getBit(3), true)
+	TEST_EQUAL(b13.getBit(4), true)
+	TEST_EQUAL(b13.getBit(5), true)
+	TEST_EQUAL(b13.getBit(6), false)
+	TEST_EQUAL(b13.getBit(7), true)
+	TEST_EQUAL(b13.getBit(8), false)
+	TEST_EQUAL(b13.getBit(9), true)
 RESULT
 
 CHECK(BitVector::operator & (const BitVector&))
@@ -464,9 +562,12 @@ using std::ofstream;
 using std::ios;
 String filename;
 TextPersistenceManager	pm;
+STATUS("after TPM")
 using namespace RTTI;
 BitVector bv4(4);
+STATUS("after ctor")
 bv4.setBit(2, true);
+STATUS("after setBit()")
 
 CHECK(BitVector::operator >> (istream&, BitVector&))
 	std::ifstream instr("data/BitVector_test.txt");
@@ -536,12 +637,68 @@ CHECK(BitVector::setSize())
 	BitVector b(8);
 	b.setBit(3);
 	TEST_EQUAL(b.getSize(), 8)
+	TEST_EQUAL(b.getBit(0), false)
+	TEST_EQUAL(b.getBit(1), false)
+	TEST_EQUAL(b.getBit(2), false)
+	TEST_EQUAL(b.getBit(3), true)
+	TEST_EQUAL(b.getBit(4), false)
+	TEST_EQUAL(b.getBit(5), false)
+	TEST_EQUAL(b.getBit(6), false)
+	TEST_EQUAL(b.getBit(7), false)
 	b.setSize(24, true);
 	TEST_EQUAL(b.getSize(), 24)
+	TEST_EQUAL(b.getBit(0), false)
+	TEST_EQUAL(b.getBit(1), false)
+	TEST_EQUAL(b.getBit(2), false)
+	TEST_EQUAL(b.getBit(3), true)
+	TEST_EQUAL(b.getBit(4), false)
+	TEST_EQUAL(b.getBit(5), false)
+	TEST_EQUAL(b.getBit(6), false)
+	TEST_EQUAL(b.getBit(7), false)
+	TEST_EQUAL(b.getBit(8), false)
+	TEST_EQUAL(b.getBit(9), false)
+	TEST_EQUAL(b.getBit(10), false)
+	TEST_EQUAL(b.getBit(11), false)
+	TEST_EQUAL(b.getBit(12), false)
+	TEST_EQUAL(b.getBit(13), false)
+	TEST_EQUAL(b.getBit(14), false)
+	TEST_EQUAL(b.getBit(15), false)
+	TEST_EQUAL(b.getBit(16), false)
+	TEST_EQUAL(b.getBit(17), false)
+	TEST_EQUAL(b.getBit(18), false)
+	TEST_EQUAL(b.getBit(19), false)
+	TEST_EQUAL(b.getBit(20), false)
+	TEST_EQUAL(b.getBit(21), false)
+	TEST_EQUAL(b.getBit(22), false)
+	TEST_EQUAL(b.getBit(23), false)
 	b.setSize(24, false);
 	TEST_EQUAL(b.getSize(), 24)
 	b.setSize(0, false);
-	TEST_EQUAL(b.getSize(), 0)
+	TEST_EQUAL(b.getBit(0), false)
+	TEST_EQUAL(b.getBit(1), false)
+	TEST_EQUAL(b.getBit(2), false)
+	TEST_EQUAL(b.getBit(3), false)
+	TEST_EQUAL(b.getBit(4), false)
+	TEST_EQUAL(b.getBit(5), false)
+	TEST_EQUAL(b.getBit(6), false)
+	TEST_EQUAL(b.getBit(7), false)
+	TEST_EQUAL(b.getBit(8), false)
+	TEST_EQUAL(b.getBit(9), false)
+	TEST_EQUAL(b.getBit(10), false)
+	TEST_EQUAL(b.getBit(11), false)
+	TEST_EQUAL(b.getBit(12), false)
+	TEST_EQUAL(b.getBit(13), false)
+	TEST_EQUAL(b.getBit(14), false)
+	TEST_EQUAL(b.getBit(15), false)
+	TEST_EQUAL(b.getBit(16), false)
+	TEST_EQUAL(b.getBit(17), false)
+	TEST_EQUAL(b.getBit(18), false)
+	TEST_EQUAL(b.getBit(19), false)
+	TEST_EQUAL(b.getBit(20), false)
+	TEST_EQUAL(b.getBit(21), false)
+	TEST_EQUAL(b.getBit(22), false)
+	TEST_EQUAL(b.getBit(23), false)
+	TEST_EQUAL(b.getSize(), 24)
 RESULT
 
 
@@ -575,11 +732,6 @@ CHECK(Bit(BitVector* bitvector, Index index = 0))
 	TEST_EQUAL(b7, true)
 	Bit b8(bv, 1);
 	TEST_EQUAL(b8, true)
-
-	Bit b99(bv, 99);
-	b99 = true;
-	TEST_EQUAL(bv->getSize(), 100)
-	TEST_EQUAL(b99, true)
 
 	BitVector* bvp = 0;
 	TEST_EXCEPTION(Exception::NullPointer, Bit cb(bvp, 0))
