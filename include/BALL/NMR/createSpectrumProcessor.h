@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.h,v 1.12 2001/08/16 00:44:19 oliver Exp $
+// $Id: createSpectrumProcessor.h,v 1.13 2001/09/28 14:44:25 amoll Exp $
 
 #ifndef BALL_NMR_CREATESPECTRUMPROCESSOR_H
 #define BALL_NMR_CREATESPECTRUMPROCESSOR_H
@@ -35,10 +35,10 @@ namespace BALL
 {
 	class Atom;
 
-	/**	Processor creates {\tt peaklist_}. 
+	/**	Processor creates peaklist_. 
 			Each atom´s chemical shift will create a new peak.
 			Thist peak´s {\tt atomlist_} will contain the corresponding atom. \\
-			{\bf Definition}\URL{BALL/NMR/createSpectrumProcessor.h}
+			{\bf Definition} \URL{BALL/NMR/createSpectrumProcessor.h}
 	*/
 	class CreateSpectrumProcessor
 		:	public ShiftModule
@@ -48,13 +48,14 @@ namespace BALL
 		/**	Constants
 		*/
 		//@{	
+		
 		/// Name of the section containing ignored atoms in the config file
 		static const String IGNORE_SECTION_NAME;
 
 		/// Name of the section containing averaged atoms in the config file
 		static const String AVERAGE_SECTION_NAME;
+		
 		//@}
-
 		/** @name	Constructors and Destructors
 		*/
 		//@{
@@ -75,17 +76,14 @@ namespace BALL
 			throw();
 		
 		//@}
-
-
 		/** @name	Processor related methods
 		*/
-
 		//@{
 
 		/**	Init method.
 				Read the contents of a specified INI file containing
 				information on ignored and averaged atoms.
-				The default filename is {\tt "NMR/StandardSpectrum.ini"} 
+				The default filename is {\tt NMR/StandardSpectrum.ini} 
 				in the BALL data path.
 				@exception FileNotFound if the INI file does not exist
 				@exception ParseError if the contents of the file could not be parsed
@@ -108,7 +106,6 @@ namespace BALL
 		const PeakList1D& getPeakList() const;
 		
 		//@}
-
 		/**	@name Accessors
 		*/
 		//@{
@@ -143,6 +140,7 @@ namespace BALL
 
 		const String& getExpression() const
 			throw();
+
 		//@}
 
 		protected:
@@ -164,7 +162,7 @@ namespace BALL
 			position, and height are taken from each individual peak of the 
 			peak list. Each point in the \Ref{RegularData1D} array is assigned
 			the sum of all Lorentzians centered at the peak positions:
-			\begin{equation*}
+			\begin{equation}
 					S(\delta) = \sum_{i} \frac{h_i}{w_i (\delta_i-\delta)^2},
 			\end{equation}
 			where $\delta$ is the shift coordinate and each peak is defined
