@@ -84,6 +84,9 @@ Mainframe::Mainframe
 	minimization_dialog_ = new DlgAmberMinimization(this);
 	CHECK_PTR(minimization_dialog_);
 
+	surface_dialog_ = new ContourSurfaceDialog(this);
+	CHECK_PTR(surface_dialog_);
+
 	label_properties_ = new LabelProperties(this);
 	CHECK_PTR(label_properties_);
 
@@ -127,6 +130,7 @@ Mainframe::Mainframe
 	insertMenuEntry(MainControl::BUILD, "Calculate AMBER &Energy", this, SLOT(calculateAmberEnergy()), CTRL+Key_U, MENU__BUILD_AMBER_ENERGY);
 	insertMenuEntry(MainControl::BUILD, "Perform Energy &Minimization", this, SLOT(amberMinimization()), CTRL+Key_W, MENU__BUILD_AMBER_MINIMIZATION);
 	insertMenuEntry(MainControl::BUILD, "Perform MD &Simulation", this, SLOT(amberMDSimulation()), CTRL+Key_S, MENU__BUILD_AMBER_MDSIMULATION);
+  insertMenuEntry(MainControl::DISPLAY, "Contour Surface", this,  SLOT(computeSurface()), CTRL+Key_S,MENU__DISPLAY_OPEN_SURFACE_DIALOG);
 			
 	// Help-Menu -------------------------------------------------------------------
 
@@ -317,6 +321,70 @@ void Mainframe::calculateAmberEnergy()
 
 	statusBar()->message(message, 5000);
 	QWidget::update();
+}
+
+void Mainframe::computeSurface()
+{
+	System *system = new System();
+
+	// execute the surface dialog
+	// and abort if cancel is clicked
+	int result = surface_dialog_->exec();
+	if (result == 0)
+	{
+		return;
+	}
+	RegularData3D rd;
+	File f(surface_dialog_->getLoadName());
+	f>>rd;
+	ContourSurface cs(surface_dialog_->threshold_->text().toFloat());
+	cs.createContourSurface(rd); 
+	GLMesh *mesh = new GLMesh();
+	*static_cast<Surface*>(mesh) = (Surface) cs;
+	//mesh->PropertyManager::set(*this);
+	mesh->setName(String("TestSurface"));
+	system->getRoot().appendChild(*mesh);
+
+	insert(system);
+
+	NewCompositeMessage ncm;
+	ncm.setComposite(system);
+	notify_(ncm);
+
+	/*NewMolecularMessage nmm;
+	nmm.setComposite(system);
+	notify_(nmm);
+*/
+
+	// notify tree of the changes
+	ChangedMolecularMessage changed_message; 
+	changed_message.setComposite(system);
+
+	notify_(changed_message);
+	// calculate center of the new composite
+	SceneMessage *scene_message = new SceneMessage;
+	GeometricCenterProcessor center;
+	system->apply(center);        
+
+	scene_message->setCameraLookAt(center.getCenter());
+
+	Vector3 view_point = center.getCenter();
+	view_point.z = view_point.z + 5;
+	scene_message->setCameraViewPoint(view_point);
+
+	// notify scene to perform an update and set the camera to the new object
+	notify_(scene_message);
+
+	SceneMessage sc;
+	sc.updateOnly();
+	notify_(sc);
+
+	WindowMessage wm;
+	notify_(wm);
+
+	MainControl::update(*system);
+	QWidget::update();
+
 }
 
 void Mainframe::amberMinimization()
