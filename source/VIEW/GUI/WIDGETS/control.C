@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.C,v 1.10 2002/12/12 11:43:25 oliver Exp $
+// $Id: control.C,v 1.11 2002/12/12 14:51:35 oliver Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <BALL/KERNEL/atom.h>
@@ -230,23 +230,6 @@ namespace BALL
 				String entry = String("erase ") + getTypeName_(item).ascii();
 				insertContextMenuEntry(entry, this, SLOT(eraseGeometricObject()));
 			}
-		<<<<<<< control.C
-
-			// This is used to provide the coloring for meshes...
-			if (RTTI::isKindOf<Mesh>(*composite))
-			{	
-				if (colorMeshDlg_)
-				{
-					delete colorMeshDlg_;
-					colorMeshDlg_ = 0;
-				}
-				colorMeshDlg_ = new ColorMeshDialog();
-				
-				colorMeshDlg_->comp = composite;
-				colorMeshDlg_->mesh = (Mesh*)RTTI::castTo<Mesh>(*composite);
-				insertContextMenuEntry("Color mesh", colorMeshDlg_, SLOT(show()));	
-			}
-		=======
 
 			// This is used to provide the coloring for meshes...
 			if (RTTI::isKindOf<Mesh>(*composite))
@@ -259,7 +242,6 @@ namespace BALL
 				colorMeshDlg_->mesh = (Mesh*)RTTI::castTo<Mesh>(*composite);
 				insertContextMenuEntry("Color mesh", colorMeshDlg_, SLOT(show()));	
 			}
-		>>>>>>> 1.7.4.16
 		}
 
 		void Control::insertContextMenuEntry(const String& name, const QObject* receiver, const char* slot, int entry_ID, int accel)

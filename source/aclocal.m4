@@ -2965,6 +2965,32 @@ AC_DEFUN(CF_BALLVIEW, [
 		fi
 	fi
 
+	dnl
+	dnl	try to find the UIC (QT user interface compiler)
+	dnl It is usually installed in ${QTDIR}/bin/uic
+	dnl
+	if test "${USE_BALLVIEW}" = true ; then
+		if test "${UIC}" = uic ; then
+			if test "${QTDIR}" != "" ; then
+				UIC=${QTDIR}/bin/uic
+			fi
+		fi
+
+		dnl
+		dnl  try to find that damned uic
+		dnl
+		AC_PATH_PROG(UIC,uic,uic)
+		if test "${UIC}" = uic ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT([Could not find the QT User Interface Compiler (uic)!])
+			AC_MSG_RESULT([You might run into trouble if you want to compile MolVIEW.])
+			AC_MSG_RESULT([Please include the correct path to uic into your])
+			AC_MSG_RESULT([PATH environment variable or specify the path to uic])
+			AC_MSG_RESULT([using the option --with-uic=PATH to rerun configure.])
+			AC_MSG_RESULT()
+		fi
+	fi
+
 	if test "${USE_BALLVIEW}" = "true" ; then
 		LIBBALLVIEW="libVIEW.a libMOLVIEW.a"
 		BALLVIEW="VIEW MOLVIEW"

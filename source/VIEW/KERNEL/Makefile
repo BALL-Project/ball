@@ -12,9 +12,7 @@ CPP_SOURCES=\
 	connectionObject.C\
 	geometricObject.C\
 	message.C\
-	normal.C\
 	QTTimer.C\
-	radius.C\
 	logView.C\
 	vertex1.C\
 	vertex2.C

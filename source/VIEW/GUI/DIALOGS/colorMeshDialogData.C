@@ -1,12 +1,12 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'colorMeshDialog.ui'
 **
-** Created: Tue Dec 10 18:04:05 2002
+** Created: Thu Dec 12 15:26:41 2002
 **      by:  The User Interface Compiler (uic)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
-#include <BALL/VIEW/GUI/DIALOGS/colorMeshDialog.h>
+#include "/var/tmp/oliver/MAIN/BALL/include/BALL/VIEW/GUI/DIALOGS/colorMeshDialogData.h"
 
 #include <qlabel.h>
 #include <qlineedit.h>

@@ -310,7 +310,7 @@ ac_includes_default="\
 #endif"
 
 ac_default_prefix=`cd ..; pwd`
-ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PAGER LN_S UNAME CUT TR AR CP RM MV LN SED FIND DIFF TAIL GREP EGREP CAT ECHO_COMMAND ECHO OSMAJOR OS OSREV BINFMT BINFMT_PATH ARCHITECTURE SHARED_LIB_SUFFIX CXXPATH CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXCPP BALL_HAS_XDR LEX LEXLIB LEX_OUTPUT_ROOT YACC BALL_HAS_FLEX_YACC BALL_HAS_FFTW BALL_HAS_FFTW_H MOC SIP SIP_LIB SIP_INCLUDES PYTHON_INCLUDES PYTHON_SUPPORT PYTHON_LIBS PYTHON_EXECUTABLE BALL_PATH BALL_INCLUDES CXX_MAKEDEPEND MAKEDEP_CXX_OPTS MAKEDEP_CXX_SUFFIX DEPENDENCY_GREPS CC ADD_CXXFLAGS LIB_CXXFLAGS NONLIB_CXXFLAGS HAS_GPLUSPLUS STD_CPP_INCLUDES MAKEDEP_OPTS BALL_TYPENAME BINFMT_INDEX BALLVIEW_LIBS OPENGL_LIBOPTS OPENGL_LIBPATH QT_LIBOPTS QT_LIBPATH X11_LIBOPTS X11_LIBPATH X11_LIBS BALL_LIBS DEFINES CXXFLAGS_D CXXFLAGS_O CPP_MODE_FLAGS CPP_MODE_FLAGS_NO_OPTIMIZATION AROPTS DYNAR DYNAROPTS ADDITIONAL_COMMENTS USE_BALLVIEW BALLVIEW_PLATFORM BALLVIEW_INCLUDES LIBBALLVIEW TEMPLATE_DIR SUBDIRS LIBOBJS LTLIBOBJS'
+ac_subst_vars='SHELL PATH_SEPARATOR PACKAGE_NAME PACKAGE_TARNAME PACKAGE_VERSION PACKAGE_STRING PACKAGE_BUGREPORT exec_prefix prefix program_transform_name bindir sbindir libexecdir datadir sysconfdir sharedstatedir localstatedir libdir includedir oldincludedir infodir mandir build_alias host_alias target_alias DEFS ECHO_C ECHO_N ECHO_T LIBS PAGER LN_S UNAME CUT TR AR CP RM MV LN SED FIND DIFF TAIL GREP EGREP CAT ECHO_COMMAND ECHO OSMAJOR OS OSREV BINFMT BINFMT_PATH ARCHITECTURE SHARED_LIB_SUFFIX CXXPATH CXX CXXFLAGS LDFLAGS CPPFLAGS ac_ct_CXX EXEEXT OBJEXT CXXCPP BALL_HAS_XDR LEX LEXLIB LEX_OUTPUT_ROOT YACC BALL_HAS_FLEX_YACC BALL_HAS_FFTW BALL_HAS_FFTW_H MOC UIC SIP SIP_LIB SIP_INCLUDES PYTHON_INCLUDES PYTHON_SUPPORT PYTHON_LIBS PYTHON_EXECUTABLE BALL_PATH BALL_INCLUDES CXX_MAKEDEPEND MAKEDEP_CXX_OPTS MAKEDEP_CXX_SUFFIX DEPENDENCY_GREPS CC ADD_CXXFLAGS LIB_CXXFLAGS NONLIB_CXXFLAGS HAS_GPLUSPLUS STD_CPP_INCLUDES MAKEDEP_OPTS BALL_TYPENAME BINFMT_INDEX BALLVIEW_LIBS OPENGL_LIBOPTS OPENGL_LIBPATH QT_LIBOPTS QT_LIBPATH X11_LIBOPTS X11_LIBPATH X11_LIBS BALL_LIBS DEFINES CXXFLAGS_D CXXFLAGS_O CPP_MODE_FLAGS CPP_MODE_FLAGS_NO_OPTIMIZATION AROPTS DYNAR DYNAROPTS ADDITIONAL_COMMENTS USE_BALLVIEW BALLVIEW_PLATFORM BALLVIEW_INCLUDES LIBBALLVIEW TEMPLATE_DIR SUBDIRS LIBOBJS LTLIBOBJS'
 ac_subst_files=''
 
 # Initialize some variables set by options.
@@ -16785,6 +16785,71 @@ echo "${ECHO_T}" >&6
 		fi
 	fi
 
+					if test "${USE_BALLVIEW}" = true ; then
+		if test "${UIC}" = uic ; then
+			if test "${QTDIR}" != "" ; then
+				UIC=${QTDIR}/bin/uic
+			fi
+		fi
+
+								# Extract the first word of "uic", so it can be a program name with args.
+set dummy uic; ac_word=$2
+echo "$as_me:$LINENO: checking for $ac_word" >&5
+echo $ECHO_N "checking for $ac_word... $ECHO_C" >&6
+if test "${ac_cv_path_UIC+set}" = set; then
+  echo $ECHO_N "(cached) $ECHO_C" >&6
+else
+  case $UIC in
+  [\\/]* | ?:[\\/]*)
+  ac_cv_path_UIC="$UIC" # Let the user override the test with a path.
+  ;;
+  *)
+  as_save_IFS=$IFS; IFS=$PATH_SEPARATOR
+for as_dir in $PATH
+do
+  IFS=$as_save_IFS
+  test -z "$as_dir" && as_dir=.
+  for ac_exec_ext in '' $ac_executable_extensions; do
+  if $as_executable_p "$as_dir/$ac_word$ac_exec_ext"; then
+    ac_cv_path_UIC="$as_dir/$ac_word$ac_exec_ext"
+    echo "$as_me:$LINENO: found $as_dir/$ac_word$ac_exec_ext" >&5
+    break 2
+  fi
+done
+done
+
+  test -z "$ac_cv_path_UIC" && ac_cv_path_UIC="uic"
+  ;;
+esac
+fi
+UIC=$ac_cv_path_UIC
+
+if test -n "$UIC"; then
+  echo "$as_me:$LINENO: result: $UIC" >&5
+echo "${ECHO_T}$UIC" >&6
+else
+  echo "$as_me:$LINENO: result: no" >&5
+echo "${ECHO_T}no" >&6
+fi
+
+		if test "${UIC}" = uic ; then
+			echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+			echo "$as_me:$LINENO: result: Could not find the QT User Interface Compiler (uic)!" >&5
+echo "${ECHO_T}Could not find the QT User Interface Compiler (uic)!" >&6
+			echo "$as_me:$LINENO: result: You might run into trouble if you want to compile MolVIEW." >&5
+echo "${ECHO_T}You might run into trouble if you want to compile MolVIEW." >&6
+			echo "$as_me:$LINENO: result: Please include the correct path to uic into your" >&5
+echo "${ECHO_T}Please include the correct path to uic into your" >&6
+			echo "$as_me:$LINENO: result: PATH environment variable or specify the path to uic" >&5
+echo "${ECHO_T}PATH environment variable or specify the path to uic" >&6
+			echo "$as_me:$LINENO: result: using the option --with-uic=PATH to rerun configure." >&5
+echo "${ECHO_T}using the option --with-uic=PATH to rerun configure." >&6
+			echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+		fi
+	fi
+
 	if test "${USE_BALLVIEW}" = "true" ; then
 		LIBBALLVIEW="libVIEW.a libMOLVIEW.a"
 		BALLVIEW="VIEW MOLVIEW"
@@ -17307,7 +17372,7 @@ SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SOLV
 
 BINFMT_PATH=""
 
-                    ac_config_files="$ac_config_files config.mak.tmp:config/config.mak.in common.mak.tmp:config/common.mak.in"
+                    ac_config_files="$ac_config_files config.mak:config/config.mak.in common.mak:config/common.mak.in"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -17831,8 +17896,8 @@ for ac_config_target in $ac_config_targets
 do
   case "$ac_config_target" in
   # Handling of arguments.
-  "config.mak.tmp" ) CONFIG_FILES="$CONFIG_FILES config.mak.tmp:config/config.mak.in" ;;
-  "common.mak.tmp" ) CONFIG_FILES="$CONFIG_FILES common.mak.tmp:config/common.mak.in" ;;
+  "config.mak" ) CONFIG_FILES="$CONFIG_FILES config.mak:config/config.mak.in" ;;
+  "common.mak" ) CONFIG_FILES="$CONFIG_FILES common.mak:config/common.mak.in" ;;
   "config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS config.h:config/config.h.in" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -17962,6 +18027,7 @@ s,@BALL_HAS_FLEX_YACC@,$BALL_HAS_FLEX_YACC,;t t
 s,@BALL_HAS_FFTW@,$BALL_HAS_FFTW,;t t
 s,@BALL_HAS_FFTW_H@,$BALL_HAS_FFTW_H,;t t
 s,@MOC@,$MOC,;t t
+s,@UIC@,$UIC,;t t
 s,@SIP@,$SIP,;t t
 s,@SIP_LIB@,$SIP_LIB,;t t
 s,@SIP_INCLUDES@,$SIP_INCLUDES,;t t
@@ -18463,7 +18529,7 @@ if test "$no_create" != yes; then
 fi
 
 
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                ac_config_files="$ac_config_files Makefile Make.rules COMMON/Makefile CONCEPT/Makefile DATATYPE/Makefile ENERGY/Makefile FORMAT/Makefile KERNEL/Makefile MATHS/Makefile MOLMEC/Makefile MOLMEC/AMBER/Makefile MOLMEC/CHARMM/Makefile MOLMEC/COMMON/Makefile MOLMEC/MDSIMULATION/Makefile MOLMEC/MINIMIZATION/Makefile MOLMEC/PARAMETER/Makefile NMR/Makefile QSAR/Makefile SOLVATION/Makefile STRUCTURE/Makefile SYSTEM/Makefile VIEW/Makefile VIEW/DATATYPE/Makefile VIEW/FUNCTOR/Makefile VIEW/GUI/Makefile VIEW/GUI/DIALOGS/Makefile VIEW/GUI/FUNCTOR/Makefile VIEW/GUI/KERNEL/Makefile VIEW/GUI/PRIMITIV/Makefile VIEW/GUI/WIDGETS/Makefile VIEW/KERNEL/Makefile VIEW/PRIMITIV/Makefile MOLVIEW/Makefile MOLVIEW/COMMON/Makefile MOLVIEW/FUNCTOR/Makefile MOLVIEW/GUI/Makefile MOLVIEW/GUI/DIALOGS/Makefile MOLVIEW/GUI/FUNCTOR/Makefile MOLVIEW/GUI/KERNEL/Makefile MOLVIEW/GUI/PRIMITIV/Makefile MOLVIEW/GUI/WIDGETS/Makefile MOLVIEW/KERNEL/Makefile MOLVIEW/PRIMITIV/Makefile TUTORIAL/Makefile EXAMPLES/Makefile BENCHMARKS/Makefile TEST/Makefile APPLICATIONS/MOLVIEW/Makefile"
+          ac_config_files="$ac_config_files Makefile:config/Makefile.in"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -18987,56 +19053,9 @@ for ac_config_target in $ac_config_targets
 do
   case "$ac_config_target" in
   # Handling of arguments.
-  "config.mak.tmp" ) CONFIG_FILES="$CONFIG_FILES config.mak.tmp:config/config.mak.in" ;;
-  "common.mak.tmp" ) CONFIG_FILES="$CONFIG_FILES common.mak.tmp:config/common.mak.in" ;;
-  "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile" ;;
-  "Make.rules" ) CONFIG_FILES="$CONFIG_FILES Make.rules" ;;
-  "COMMON/Makefile" ) CONFIG_FILES="$CONFIG_FILES COMMON/Makefile" ;;
-  "CONCEPT/Makefile" ) CONFIG_FILES="$CONFIG_FILES CONCEPT/Makefile" ;;
-  "DATATYPE/Makefile" ) CONFIG_FILES="$CONFIG_FILES DATATYPE/Makefile" ;;
-  "ENERGY/Makefile" ) CONFIG_FILES="$CONFIG_FILES ENERGY/Makefile" ;;
-  "FORMAT/Makefile" ) CONFIG_FILES="$CONFIG_FILES FORMAT/Makefile" ;;
-  "KERNEL/Makefile" ) CONFIG_FILES="$CONFIG_FILES KERNEL/Makefile" ;;
-  "MATHS/Makefile" ) CONFIG_FILES="$CONFIG_FILES MATHS/Makefile" ;;
-  "MOLMEC/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLMEC/Makefile" ;;
-  "MOLMEC/AMBER/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLMEC/AMBER/Makefile" ;;
-  "MOLMEC/CHARMM/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLMEC/CHARMM/Makefile" ;;
-  "MOLMEC/COMMON/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLMEC/COMMON/Makefile" ;;
-  "MOLMEC/MDSIMULATION/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLMEC/MDSIMULATION/Makefile" ;;
-  "MOLMEC/MINIMIZATION/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLMEC/MINIMIZATION/Makefile" ;;
-  "MOLMEC/PARAMETER/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLMEC/PARAMETER/Makefile" ;;
-  "NMR/Makefile" ) CONFIG_FILES="$CONFIG_FILES NMR/Makefile" ;;
-  "QSAR/Makefile" ) CONFIG_FILES="$CONFIG_FILES QSAR/Makefile" ;;
-  "SOLVATION/Makefile" ) CONFIG_FILES="$CONFIG_FILES SOLVATION/Makefile" ;;
-  "STRUCTURE/Makefile" ) CONFIG_FILES="$CONFIG_FILES STRUCTURE/Makefile" ;;
-  "SYSTEM/Makefile" ) CONFIG_FILES="$CONFIG_FILES SYSTEM/Makefile" ;;
-  "VIEW/Makefile" ) CONFIG_FILES="$CONFIG_FILES VIEW/Makefile" ;;
-  "VIEW/DATATYPE/Makefile" ) CONFIG_FILES="$CONFIG_FILES VIEW/DATATYPE/Makefile" ;;
-  "VIEW/FUNCTOR/Makefile" ) CONFIG_FILES="$CONFIG_FILES VIEW/FUNCTOR/Makefile" ;;
-  "VIEW/GUI/Makefile" ) CONFIG_FILES="$CONFIG_FILES VIEW/GUI/Makefile" ;;
-  "VIEW/GUI/DIALOGS/Makefile" ) CONFIG_FILES="$CONFIG_FILES VIEW/GUI/DIALOGS/Makefile" ;;
-  "VIEW/GUI/FUNCTOR/Makefile" ) CONFIG_FILES="$CONFIG_FILES VIEW/GUI/FUNCTOR/Makefile" ;;
-  "VIEW/GUI/KERNEL/Makefile" ) CONFIG_FILES="$CONFIG_FILES VIEW/GUI/KERNEL/Makefile" ;;
-  "VIEW/GUI/PRIMITIV/Makefile" ) CONFIG_FILES="$CONFIG_FILES VIEW/GUI/PRIMITIV/Makefile" ;;
-  "VIEW/GUI/WIDGETS/Makefile" ) CONFIG_FILES="$CONFIG_FILES VIEW/GUI/WIDGETS/Makefile" ;;
-  "VIEW/KERNEL/Makefile" ) CONFIG_FILES="$CONFIG_FILES VIEW/KERNEL/Makefile" ;;
-  "VIEW/PRIMITIV/Makefile" ) CONFIG_FILES="$CONFIG_FILES VIEW/PRIMITIV/Makefile" ;;
-  "MOLVIEW/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLVIEW/Makefile" ;;
-  "MOLVIEW/COMMON/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLVIEW/COMMON/Makefile" ;;
-  "MOLVIEW/FUNCTOR/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLVIEW/FUNCTOR/Makefile" ;;
-  "MOLVIEW/GUI/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLVIEW/GUI/Makefile" ;;
-  "MOLVIEW/GUI/DIALOGS/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLVIEW/GUI/DIALOGS/Makefile" ;;
-  "MOLVIEW/GUI/FUNCTOR/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLVIEW/GUI/FUNCTOR/Makefile" ;;
-  "MOLVIEW/GUI/KERNEL/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLVIEW/GUI/KERNEL/Makefile" ;;
-  "MOLVIEW/GUI/PRIMITIV/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLVIEW/GUI/PRIMITIV/Makefile" ;;
-  "MOLVIEW/GUI/WIDGETS/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLVIEW/GUI/WIDGETS/Makefile" ;;
-  "MOLVIEW/KERNEL/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLVIEW/KERNEL/Makefile" ;;
-  "MOLVIEW/PRIMITIV/Makefile" ) CONFIG_FILES="$CONFIG_FILES MOLVIEW/PRIMITIV/Makefile" ;;
-  "TUTORIAL/Makefile" ) CONFIG_FILES="$CONFIG_FILES TUTORIAL/Makefile" ;;
-  "EXAMPLES/Makefile" ) CONFIG_FILES="$CONFIG_FILES EXAMPLES/Makefile" ;;
-  "BENCHMARKS/Makefile" ) CONFIG_FILES="$CONFIG_FILES BENCHMARKS/Makefile" ;;
-  "TEST/Makefile" ) CONFIG_FILES="$CONFIG_FILES TEST/Makefile" ;;
-  "APPLICATIONS/MOLVIEW/Makefile" ) CONFIG_FILES="$CONFIG_FILES APPLICATIONS/MOLVIEW/Makefile" ;;
+  "config.mak" ) CONFIG_FILES="$CONFIG_FILES config.mak:config/config.mak.in" ;;
+  "common.mak" ) CONFIG_FILES="$CONFIG_FILES common.mak:config/common.mak.in" ;;
+  "Makefile" ) CONFIG_FILES="$CONFIG_FILES Makefile:config/Makefile.in" ;;
   "config.h" ) CONFIG_HEADERS="$CONFIG_HEADERS config.h:config/config.h.in" ;;
   *) { { echo "$as_me:$LINENO: error: invalid argument: $ac_config_target" >&5
 echo "$as_me: error: invalid argument: $ac_config_target" >&2;}
@@ -19166,6 +19185,7 @@ s,@BALL_HAS_FLEX_YACC@,$BALL_HAS_FLEX_YACC,;t t
 s,@BALL_HAS_FFTW@,$BALL_HAS_FFTW,;t t
 s,@BALL_HAS_FFTW_H@,$BALL_HAS_FFTW_H,;t t
 s,@MOC@,$MOC,;t t
+s,@UIC@,$UIC,;t t
 s,@SIP@,$SIP,;t t
 s,@SIP_LIB@,$SIP_LIB,;t t
 s,@SIP_INCLUDES@,$SIP_INCLUDES,;t t

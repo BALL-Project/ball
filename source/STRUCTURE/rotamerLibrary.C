@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.C,v 1.19 2002/12/12 11:07:20 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.20 2002/12/12 14:51:35 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
@@ -527,9 +527,6 @@ namespace BALL
 		// Initiate Transformation Processor
 		TransformationProcessor proc;
 
-		// Initiate Instance of StructureMapper
-		StructureMapper mapper;
-
 		// Compute transformation that moves the torsion atoms into normal position
 		Vector3 a1(atom_name_map_[moveable[0]]->getPosition());
 		Vector3 a2(atom_name_map_[moveable[1]]->getPosition());
@@ -538,11 +535,9 @@ namespace BALL
 		Vector3	v1(0.0,0.0,0.0);
 		Vector3 v2(1.0,0.0,0.0);
 		Vector3 v3(0.0,1.0,0.0);
-<<<<<<< rotamerLibrary.C
+
 		Matrix4x4 M = StructureMapper::matchPoints(a2, a3, a1, v1, v2, v3);
-=======
-		Matrix4x4 M = mapper.matchPoints(a2, a3, a1, v1, v2, v3);
->>>>>>> 1.16.4.3
+
 		// Apply this transformation to all atoms of the residue
 		proc.setTransformation(M);
 		side_chain_.apply(proc); 
@@ -677,15 +672,8 @@ namespace BALL
 		// Initiate transformation processor
 		TransformationProcessor proc;
 
-		// Initiate structure mapper
-		StructureMapper	mapper;
-
 		// Calculate the transformation
-<<<<<<< rotamerLibrary.C
 		Matrix4x4 M = StructureMapper::matchPoints(a1,a2,a3,z1,z2,z3);
-=======
-		Matrix4x4 M = mapper.matchPoints(a1,a2,a3,z1,z2,z3);
->>>>>>> 1.16.4.3
 	
 		// Apply the transformation to side_chain
 		proc.setTransformation(M);
