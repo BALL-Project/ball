@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.6 2000/04/17 13:49:32 amoll Exp $
+// $Id: bond.C,v 1.7 2000/05/29 08:18:17 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 
@@ -53,12 +53,12 @@ namespace BALL
 
 	Bond* Bond::createBond(Bond& bond, Atom& first, Atom& second)
 	{
-		if ((Size)first.number_of_bonds_ > (Size)Atom::MAX_NUMBER_OF_BONDS)
+		if ((Size)first.number_of_bonds_ >= (Size)Atom::MAX_NUMBER_OF_BONDS)
 		{
 			throw TooManyBonds(__FILE__, __LINE__);
 		}
 		
-		if ((Size)second.number_of_bonds_ > (Size)Atom::MAX_NUMBER_OF_BONDS)
+		if ((Size)second.number_of_bonds_ >= (Size)Atom::MAX_NUMBER_OF_BONDS)
 		{
 			throw TooManyBonds(__FILE__, __LINE__);
 		}
