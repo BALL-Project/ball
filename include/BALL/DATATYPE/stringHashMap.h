@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stringHashMap.h,v 1.22 2003/05/08 09:13:01 sneumann Exp $
+// $Id: stringHashMap.h,v 1.23 2003/06/27 11:39:00 oliver Exp $
+//
 
 #ifndef BALL_DATATYPE_STRINGHASHMAP_H
 #define BALL_DATATYPE_STRINGHASHMAP_H
@@ -39,7 +40,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_DEEP(StringHashMap)
+		BALL_CREATE(StringHashMap)
 
 		/**	@name Type Definitions
 		*/
@@ -73,9 +74,8 @@ namespace BALL
 		/** Copy constructor.
 				Create a copy of an existing hash map.
 				@param	map the hash map to be copied
-				@param	deep ignored
 		*/
-		StringHashMap(const StringHashMap& map, bool /* deep = true */)
+		StringHashMap(const StringHashMap& map)
 			throw()
 			: HashMap<String, Value>(map)
 		{
@@ -106,9 +106,8 @@ namespace BALL
 		/** Assign a hash map from another.
 				Create a copy of a hash map.
 				@param	hash_map	the map to be copied
-				@param	deep ignored
 		*/
-    void set(const StringHashMap& hash_map, bool /* deep */ = true)
+    void set(const StringHashMap& hash_map)
 			throw()
 		{
 			HashMap<String, Value>::clear();
@@ -130,10 +129,10 @@ namespace BALL
 		}
 			
 		/// Assigns the content of a hash map to another
-    void get(StringHashMap& hash_map, bool deep = true) const
+    void get(StringHashMap& hash_map) const
 			throw()
 		{
-			hash_map.set(*this, deep);
+			hash_map.set(*this);
 		}
 
 		/// Swaps the contents of two hash maps
