@@ -62,7 +62,7 @@ An overview of these options can also be obtained by executing "configure --help
 
   --x-libraries=DIR       X library files are in DIR
 
-  --enable-optimization   optimize the library for speed. Omit debug info.!
+  --enable-optimization   optimize the library for speed. Remove debug info.
 
   --disable-debuginfo     remove -g from the compiler flags (omit debug information)
 
@@ -150,7 +150,7 @@ If you installed the shared libraries that are searched by ld by default, it is 
 necessary to set the LD_LIBRARY_PATH.
 
 
-2.3) Testing the library
+2.4) Testing the library
 ------------------------
 
 BALL provides an extensive suite of test programs to ensure the correctness of the code
@@ -169,7 +169,7 @@ If this happens, please let us know by mailing the files specified by in the out
 of "make test" to one of the developers - this helps use to improve the library.
 
 
-2.4) Building applications
+2.5) Building applications
 --------------------------
 
 BALL provides some short example applications in BALL/source/EXAMPLES as well as the powerful
@@ -184,4 +184,4 @@ and libMOLVIEW.so), the qt libraries (libqt.so, libqgl.so), and the OpenGL/Mesa 
 (libGL.so, libGLU.so).
 
 --------------------------------------------------------------------
-document revision: $Id: INSTALLATION,v 1.4 2000/01/18 16:15:59 oliver Exp $
+document revision: $Id: INSTALLATION,v 1.5 2000/01/19 18:28:33 oliver Exp $
