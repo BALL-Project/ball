@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.7 2001/05/23 15:28:58 anker Exp $
+// $Id: kernel.doc,v 1.8 2001/05/24 14:51:34 anker Exp $
 
 /**@name	Kernel
 		This chapter contains all relevant information on 
@@ -11,8 +11,8 @@
   //@Include: chain.h
   //@Include: fragment.h
   //@Include: molecule.h
-	//@Inlcude:	nucleicAcid.h
-	//@Inlcude:	nucleotide.h
+	//@Include:	nucleicAcid.h
+	//@Include:	nucleotide.h
   //@Include: PDBAtom.h
   //@Include: protein.h
   //@Include: residue.h
