@@ -1,4 +1,4 @@
-// $Id: anisotropyShiftProcessor.C,v 1.4 2000/09/20 13:42:13 amoll Exp $
+// $Id: anisotropyShiftProcessor.C,v 1.5 2000/09/22 12:05:31 oliver Exp $
 
 #include<BALL/NMR/anisotropyShiftProcessor.h>
 
@@ -21,9 +21,19 @@ namespace BALL
 	{
 	}
 
+	void AnisotropyShiftProcessor::init()
+		throw()
+	{
+		valid_ = true;
+	}
+
 	bool AnisotropyShiftProcessor::finish()
 		throw()
 	{
+		if (!isValid())
+		{
+			return false;
+		}
 		if (proton_list_.size() == 0)
 		{
 			return true;
@@ -183,7 +193,7 @@ namespace BALL
 		return true;
 	}
 
-	Processor::Result AnisotropyShiftProcessor::operator()(Composite& composite)
+	Processor::Result AnisotropyShiftProcessor::operator () (Composite& composite)
 		throw()
 	{
 		// hier werden alle Effektorbindungen gesammelt( C=O ) und in eff_list_ gespeichert.
@@ -271,4 +281,4 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-}	// namespace Ball
+}	// namespace BALL
