@@ -3,7 +3,8 @@ false = 0
 true = 1
 
 import sys
-sys.path.append("/home/oliver/BALL/lib/Linux-i386-g++_3.0.2")
+import traceback
+sys.path.append("..")
 
 from BALL import *
 
@@ -87,6 +88,9 @@ class Status:
 	def setPrecision(self, x):
 		self.precision = x
 
+	def getLineNo(self):
+		return traceback.extract_stack()[0][1]
+
 status = Status()
 
 def START_TEST(name, id):
@@ -102,7 +106,7 @@ def RESULT():
 	status.result()
 
 def TEST_EQUAL(a, b):
-	msg = 'TEST_EQUAL: expected ' + str(b) + ', got ' + str(a)
+	msg = 'line ' + str(status.getLineNo()) + ': TEST_EQUAL: expected ' + str(b) + ', got ' + str(a)
 	if (a == b):
 		status.passTest(msg)
 	else:
@@ -120,7 +124,7 @@ def PRECISION(x):
 
 def TEST_REAL_EQUAL(a, b):
 	difference = abs(a - b)
-	msg = 'TEST_REAL_EQUAL: expected ' + str(b) + ', got ' + str(a) + ' (difference was ' + str(difference) + ', precision was ' + str(status.getPrecision()) + ')'
+	msg = 'line ' + str(status.getLineNo()) + ': TEST_REAL_EQUAL: expected ' + str(b) + ', got ' + str(a) + ' (difference was ' + str(difference) + ', precision was ' + str(status.getPrecision()) + ')'
 	if (abs(a - b) < status.getPrecision()):
 		status.passTest(msg)
 	else:
