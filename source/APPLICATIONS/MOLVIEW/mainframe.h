@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.4 2000/01/10 15:28:23 oliver Exp $
+// $Id: mainframe.h,v 1.5 2000/01/10 20:35:57 hekl Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -108,7 +108,7 @@ class Mainframe
 
 		void about();
 
-		void updateEditMenuFromSelection(bool selected__bool, bool residue__bool);
+		void updateEditMenuFromSelection(bool selected__bool);
 		void updateEditMenuFromCutOrCopy(bool copied__bool);
     
   protected:
