@@ -1,4 +1,4 @@
-// $Id: contourLine.h,v 1.3 2000/12/04 16:07:52 anhi Exp $
+// $Id: contourLine.h,v 1.4 2000/12/08 08:54:56 oliver Exp $
 
 #ifndef BALL_DATATYPE_CONTOURLINE_H
 #define BALL_DATATYPE_CONTOURLINE_H
@@ -136,10 +136,10 @@ namespace BALL
       void resetCounter();
 
       //      private:
-        T height_;
-	VectorType data_;
-	VectorType::iterator it_;
-	Position index_;
+      T height_;
+			VectorType data_;
+			typename VectorType::iterator it_;
+			Position index_;
     };
 
     /**    Default type
