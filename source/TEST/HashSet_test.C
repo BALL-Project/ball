@@ -1,4 +1,4 @@
-// $Id: HashSet_test.C,v 1.2 2000/09/04 09:15:51 amoll Exp $
+// $Id: HashSet_test.C,v 1.3 2000/09/04 12:47:21 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -24,7 +24,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.2 2000/09/04 09:15:51 amoll Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.3 2000/09/04 12:47:21 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -49,7 +49,7 @@ CHECK(HashSet::getSize())
 	TEST_EQUAL(hs.getSize(), 0)
 RESULT
 
-CHECK(HashSet::HashSet(const HashSet&, bool))
+CHECK(HashSet::HashSet(const HashSet&))
 	HashSet<int> hs;
 	hs.insert(0);
 	hs.insert(1);
@@ -59,7 +59,10 @@ CHECK(HashSet::HashSet(const HashSet&, bool))
 	set_ptr = new HashSet<int>(hs);
 	TEST_NOT_EQUAL(set_ptr, 0)
 	TEST_EQUAL(set_ptr->getSize(), 3)
-	TEST_EQUAL((hs.find(1) == hs.end()-2), true)
+	TEST_EQUAL(set_ptr->has(0), true)
+	TEST_EQUAL(set_ptr->has(1), true)
+	TEST_EQUAL(set_ptr->has(2), true)
+	TEST_EQUAL(set_ptr->has(3), false)
 RESULT
 
 CHECK(HashSet::clear())
@@ -216,11 +219,11 @@ CHECK(HashSet::erase(const ValueType& entry))
 RESULT
 
 CHECK(HashSet::erase(Iterator first, Iterator last))
-// BAUSTELLE not yet implemented
+	// BAUSTELLE
 RESULT
 
 CHECK(HashSet::erase(Iterator first, Iterator last))
-// BAUSTELLE not yet implemented
+	// BAUSTELLE not yet implemented
 RESULT
 
 CHECK(HashSet::host(Visitor<int>&))
