@@ -1,0 +1,15 @@
+// $Id: rendering.doc,v 1.1 2003/09/04 20:15:24 amoll Exp $
+
+/**	\defgroup View Rendering
+		\ingroup Visualization
+		The VIEW libary currently contains two methods for rendering 
+		visualisations:<br> 
+		The obviously most import is the OPENGL renderer which provides 
+		hardware acceleration.
+		It is used e.g. used in the Scene in the molview application.<br>
+		In addition it is possible to export a representation into POVRay format.
+		This enables high quality rendering of single images e.g. for high resolution
+		images in publications. <br>
+		If you want to add support for a new type of rendering, create a new derived 
+		Renderer class.<br>
+*/
