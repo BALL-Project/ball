@@ -12,6 +12,7 @@ EXECUTABLES = \
 	AmberFF_test\
 	AnalyticalSES_test\
 	Atom_test\
+	AtomicContactEnergy_test\
 	BitVector_test\
 	Bond_test\
 	BaseFragment_test\
@@ -53,6 +54,9 @@ AnalyticalSES_test:	AnalyticalSES_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Atom_test:	Atom_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+AtomicContactEnergy_test:	AtomicContactEnergy_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 BaseFragment_test:	BaseFragment_test.o
