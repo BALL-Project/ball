@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.30 2000/09/19 19:13:12 oliver Exp $
+// $Id: string.C,v 1.31 2000/10/28 21:55:18 amoll Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -154,7 +154,9 @@ namespace BALL
 		if (empty == true)
 		{
 			ptr = (void*)new String;
-		} else {
+		} 
+		else 
+		{
 			ptr = (void*)new String(*this);
 		}
 
@@ -323,7 +325,6 @@ namespace BALL
 	void String::set(strstream& s)
 	{
 		s << ends;
-
 		char* char_ptr = s.str();
 		assign(char_ptr);
 	}
@@ -390,7 +391,9 @@ namespace BALL
 		Size index = find_first_not_of(CHARACTER_CLASS__WHITESPACE);
 		
 		if (size() == 0)
+		{
 			return true;
+		}
 
 		if (index != npos)
 		{
@@ -408,7 +411,6 @@ namespace BALL
 
 		return false;
 	}
-
 	 
 	short String::toShort() const
 		throw(Exception::InvalidFormat)
@@ -430,7 +432,6 @@ namespace BALL
 
 		return (short)i;
 	}
-
 	 
 	unsigned short String::toUnsignedShort() const
 		throw(Exception::InvalidFormat)
@@ -582,7 +583,9 @@ namespace BALL
 		char* char_ptr = const_cast<char*>(c_str()) + from;
 
 		for (; index < (Index)(from + len); index++, char_ptr++)
+		{
 			*char_ptr = tolower(*char_ptr);
+		}
 	}
 
 	void String::toUpper(Index from, Size len)
@@ -594,7 +597,9 @@ namespace BALL
 		char *char_ptr = const_cast<char*>(c_str()) + from;
 
 		for(; index < (Index)(from + len); index++, char_ptr++)
+		{
 			*char_ptr = toupper(*char_ptr);
+		}
 	}
 
 	Size String::countFields(const char* delimiters) const
@@ -795,7 +800,9 @@ namespace BALL
 					if (current_char >= end)
 					{
 						*from_and_next_field = (Index)npos;
-					} else {
+					}
+					else 
+					{
 						*from_and_next_field = (Index)(current_char - c_str());
 					}
 				}
@@ -1050,7 +1057,9 @@ namespace BALL
 		{
 			// delete the whitespace characters on the right hand side
 			erase(index + 1);
-		} else {
+		}
+		else 
+		{
 			// if nothing was found, the string might contain only whitespaces!
 			String trimmed(trimmed_chars);
 			if (trimmed.has((*this)[size() - 1]))
@@ -1084,25 +1093,27 @@ namespace BALL
 	bool String::hasPrefix(const String& s) const
 	{
 		if (s.size() > size())
+		{
 			return false;
-
+		}
 		if (s.size() == 0)
+		{
 			return true;
+		}
 
-		/*int result = 0;
-		result = memcmp(c_str(), s.c_str(), s.size());
-
-		return (bool)(result == 0);*/
 		return (memcmp(c_str(), s.c_str(), s.size()) == 0);
 	}
 
 	bool String::hasSuffix(const String& s) const
 	{
 		if (s.size() > size())
+		{
 			return false;
-
+		}
 		if (s.size() == 0)
+		{
 			return true;
+		}
 
 		int result = memcmp(c_str() + size() - s.size(), s.c_str(), s.size());
 
@@ -1137,7 +1148,6 @@ namespace BALL
 
 		if (len > 1)
 		{
-
 			char* forward_ptr = const_cast<char*>(c_str()) + from;
 			char* backward_ptr = const_cast<char*>(c_str()) + from + len - 1;
 			char temp = 0;
@@ -1180,7 +1190,9 @@ namespace BALL
 					break;
 				}
 			}
-		} else {
+		}
+		else 
+		{
 			result = strncmp(c_str() + from, s.c_str(), newlen);
 		}
 
@@ -1221,7 +1233,9 @@ namespace BALL
 				}
 			}
 			
-		} else {
+		}
+		else 
+		{
 			result = strncmp(c_str() + from, s.c_str(), newlen);
 		}
 
@@ -1237,12 +1251,16 @@ namespace BALL
 		throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
 		if (char_ptr == 0)
+		{
 			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
 		
 		validateRange_(from, len);
 
 		if ((c_str() + from) == char_ptr)
+		{
 			return 0;
+		}
 	
 		Size newlen = strlen(char_ptr);
 		
@@ -1264,8 +1282,9 @@ namespace BALL
 				}
 			}
 			
-		} else {
-
+		}
+		else 
+		{
 			result = strncmp(c_str() + from, char_ptr, newlen);
 		}
 
@@ -1333,7 +1352,9 @@ namespace BALL
 				}
 			}
 			
-		} else {
+		} 
+		else 
+		{
 			result = strncmp(c_str() + from, char_ptr, newlen);
 		}
 

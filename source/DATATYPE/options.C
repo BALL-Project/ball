@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.16 2000/10/25 19:27:14 oliver Exp $ 
+// $Id: options.C,v 1.17 2000/10/28 21:55:18 amoll Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -20,13 +20,11 @@ namespace BALL
 
 	const Size Options::MAX_ENTRY_LENGTH = 1024;
 
-
 	Options::Options()
 		:	StringHashMap<String>(),
 			name_("")
 	{
 	}
-
 
 	Options::Options(const Options& options, bool deep)
 		:	StringHashMap<String>(options, deep),
@@ -34,11 +32,9 @@ namespace BALL
 	{
 	}
 
-
 	Options::~Options()
 	{
 	}
-
 
 	bool Options::isReal(const String& key) const
 	{
@@ -59,7 +55,6 @@ namespace BALL
 		return (errno == 0) && (endptr != value.c_str());
 	}
 
-
 	bool Options::isVector(const String& key) const 
 	{
 		// if the key does not exist - then the nonexistent value	
@@ -79,7 +74,6 @@ namespace BALL
 		return false;
 	}
 
-
 	bool Options::isBool(const String& key) const
 	{
 		String s = get(key);
@@ -89,13 +83,11 @@ namespace BALL
 		s.toLower();
 		return (s.compare("true") == 0 || s.compare("false") == 0);
 	}
-
 	
 	bool Options::isSet(const String& key) const
 	{
 		return (StringHashMap<String>::find(key) != StringHashMap<String>::end());
 	}
-
 	
 	bool Options::isInteger(const String& key) const 
 	{
@@ -105,8 +97,9 @@ namespace BALL
 		// if it cannot be read as a floating point number
 		// it cannot be an integer
 		if (!isReal(key))
+		{
 			return false;
-					
+		}			
 		
 		// check wheter it is an integer
 		long_value = ::atol(get(key).c_str());
@@ -220,27 +213,21 @@ namespace BALL
 	void Options::setInteger(const String& key, const long value)
 	{
 		static char buffer[MAX_ENTRY_LENGTH + 1];
-
-		sprintf(buffer, "%ld", value);
-					
+		sprintf(buffer, "%ld", value);			
 		set(key, &(buffer[0]));
 	}
 
 	void Options::setReal(const String& key, const double value)
 	{
 		char buffer[MAX_ENTRY_LENGTH + 1];
-					
 		sprintf(buffer, "%f", value);
-					
 		set(key, buffer);
 	}
 
 	void Options::setVector(const String& key, const Vector3& value)
 	{
 		char buffer[MAX_ENTRY_LENGTH + 1];
-
 		sprintf(buffer, "(%f %f %f)", value.x, value.y, value.z);
-
 		set(key, buffer);
 	}
 

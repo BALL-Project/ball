@@ -1,4 +1,4 @@
-// $Id: regExp.C,v 1.10 2000/10/20 16:30:24 oliver Exp $ 
+// $Id: regExp.C,v 1.11 2000/10/28 21:55:18 amoll Exp $ 
 
 #include <BALL/DATATYPE/regExp.h>
 
@@ -166,9 +166,8 @@ namespace BALL
 
 		if (regexec(&regex_, text.c_str() + from, (size_t)20, regmatch, execute_flags) == 0)
 		{
-			found.bind
-				(text, from + (Index)regmatch[0].rm_so, 
-				 (Index)(regmatch[0].rm_eo - (Index)regmatch[0].rm_so));
+			found.bind(text, from + (Index)regmatch[0].rm_so, 
+								 (Index)(regmatch[0].rm_eo - (Index)regmatch[0].rm_so));
 
 			return true;
 		}

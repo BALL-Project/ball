@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.17 2000/10/17 10:15:50 oliver Exp $
+// $Id: bitVector.C,v 1.18 2000/10/28 21:55:17 amoll Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 #include <BALL/MATHS/common.h>
@@ -389,9 +389,12 @@ namespace BALL
 			
 			block_size = block_size_;
 		} 
-		else if (block_size_ > bit_vector.block_size_)
+		else 
 		{
-			block_size = bit_vector.block_size_;
+			if (block_size_ > bit_vector.block_size_)
+			{
+				block_size = bit_vector.block_size_;
+			}
 		}
 
 		BlockType *source = bit_vector.bitset_;
@@ -419,9 +422,12 @@ namespace BALL
 			
 			block_size = block_size_;
 		}
-		else if (block_size_ > bit_vector.block_size_)
+		else 
 		{
-			block_size = bit_vector.block_size_;
+			if (block_size_ > bit_vector.block_size_)
+			{
+				block_size = bit_vector.block_size_;
+			}
 		}
 
 		BlockType *source = bit_vector.bitset_;
@@ -449,9 +455,12 @@ namespace BALL
 			
 			block_size = block_size_;
 		}
-		else if (block_size_ > bit_vector.block_size_)
+		else 
 		{
-			block_size = bit_vector.block_size_;
+			if (block_size_ > bit_vector.block_size_)
+			{
+				block_size = bit_vector.block_size_;
+			}
 		}
 
 		BlockType *source = bit_vector.bitset_;
@@ -472,13 +481,17 @@ namespace BALL
 	bool BitVector::operator == (const BitVector& bit_vector) const
 	{
 		if (size_ != bit_vector.size_)
+		{
 			return false;
+		}
 
 		Index	i;
 		for (i = 0; i < (Index)size_; i++) 
 		{
 			if ((*this)[i] != bit_vector[i])
+			{
 				return false;
+			}
 		}
 	 
 		return true;
@@ -489,9 +502,13 @@ namespace BALL
 		validateRange_(first, last);
 
 		Index	i;
-		for (i = first; i <= last; i++) 
+		for (i = first; i <= last; i++)
+		{
 			if ((*this)[i] == bit)
+			{
 				return true;
+			}
+		}
 	 
 		return false;
 	}
@@ -502,8 +519,12 @@ namespace BALL
 
 		Index	i;
 		for (i = first; i <= last ; i++)
+		{
 			if ((*this)[i] != bit)
+			{
 				return false;
+			}
+		}
 
 		return true;
 	}
@@ -534,7 +555,9 @@ namespace BALL
 			s.get(c);
 
 			if (c != '0') 
+			{
 				setBit(i);
+			}
 		}
 	}
 
@@ -546,7 +569,9 @@ namespace BALL
 			if (getBit(i) == true)
 			{
 				s << '1';
-			} else {
+			}
+			else 
+			{
 				s << '0';
 			}
 		}
@@ -559,7 +584,9 @@ namespace BALL
 		Size size = 0;
 		
 		if (!pm.readPrimitive(size, "size"))
+		{
 			return false;
+		}
 			
 		setSize(size, false);
 		size--;
@@ -587,10 +614,14 @@ namespace BALL
 	Index BitVector::block_(Index index)
 	{
 		if (index < 0)
+		{
 			index = (Index)size_ - index + 1;
+		}
 
 		if (index < 0)
+		{
 			throw Exception::IndexUnderflow(__FILE__, __LINE__);
+		}
 		
 		if ((Size)index >= size_)
 		{
@@ -641,7 +672,9 @@ namespace BALL
 			delete [] bitset_;	
 			bitset_ = tmp;
 
-		} else {
+		} 
+		else 
+		{
 
 			delete [] bitset_;
 
