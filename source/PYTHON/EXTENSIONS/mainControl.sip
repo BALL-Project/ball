@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.sip,v 1.16 2004/10/07 15:24:28 amoll Exp $
+// $Id: mainControl.sip,v 1.17 2004/11/12 14:49:54 amoll Exp $
 //
 
 class MainControl
@@ -44,7 +44,23 @@ class MainControl
 	PrimitiveManager& getPrimitiveManager() throw();
 	// QPopupMenu* initPopupMenu(int /ID/) throw();
 	System* getSelectedSystem() throw();
-	bool compositesAreMuteable();
+
+	bool compositesAreLocked() throw();
+	bool lockCompositesFor(ModularWidget*) throw();
+	bool unlockCompositesFor(ModularWidget*) throw();
+	ModularWidget* getLockingWidget() throw();
+	bool updateOfRepresentationRunning() throw();
+	bool stopedSimulation();
+	void setDeleteEntryEnabled(bool) throw();
+	String getWorkingDir() const throw();
+	void setWorkingDir(const String&) throw();
+	void enableLoggingToFile() throw();
+	void disableLoggingToFile() throw();
+	void setLoggingFilename(const String&) throw();
+	const String& getLoggingFilename() const throw();
+	void moveItems(const Matrix4x4&) throw();
+	virtual void openFile(const String&) throw();
+	
 	bool updateRepresentationsOf(const Composite& /composite/, bool /rebuild/ = true, bool = false) throw();
 	const FragmentDB& getFragmentDB() const throw();
 	PyCompositeList getSelection() const throw();
@@ -76,7 +92,6 @@ class MainControl
 
 	void deselectCompositeRecursive(Composite* /composite/, bool /first_call/ = false) throw();
 	void selectCompositeRecursive(Composite* /composite/, bool /first_call/ = false) throw();
-	void setCompositesMuteable(bool /state/);
 	void printSelectionInfos() throw();
 
 	// void onNotify(Message* /message/) throw();
