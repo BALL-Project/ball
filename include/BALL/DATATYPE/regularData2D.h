@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.30 2003/05/08 18:03:08 anhi Exp $
+// $Id: regularData2D.h,v 1.31 2003/05/08 18:20:19 anhi Exp $
 //
 
 #ifndef BALL_DATATYPE_TREGULARDATA2D_H
@@ -380,7 +380,10 @@ namespace BALL
 
 		/// The dimensions in grid points
 		IndexType size_;
-	};
+
+		/// The block data type for reading and writing binary data
+		typedef struct { ValueType bt[1024]; } BlockValueType;
+};
 
 	/**	Default type
 	*/

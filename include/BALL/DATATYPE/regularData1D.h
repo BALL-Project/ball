@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.33 2003/05/08 18:03:07 anhi Exp $
+// $Id: regularData1D.h,v 1.34 2003/05/08 18:20:18 anhi Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -306,6 +306,9 @@ namespace BALL
 		
 		///	The data
 		VectorType			data_;
+
+		/// The block data type for reading and writing binary data
+		typedef struct { ValueType bt[1024]; } BlockValueType;
 	};
 
 	/**	Default type
