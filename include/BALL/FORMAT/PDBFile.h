@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: PDBFile.h,v 1.2 1999/09/26 17:16:20 oliver Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -62,10 +62,15 @@ namespace BALL
 		/// Default Constructor
 		PDBFile();
 
-		/// Detailled constructor
-		PDBFile(const String& filename);
+		/** Detailled constructor.
+				The file named {\tt filename} is opened. By default, the file is
+				opened for reading. To open it for writing, use {\tt open\_mode = ios::out}.
+				@param	filename the name of the file to open
+				@param	open_mode the file mode
+		*/
+		PDBFile(const String& filename, int open_mode = ios::in);
 
-		/// Destructors
+		/// Destructor
 		virtual ~PDBFile();
 
 		//@}
