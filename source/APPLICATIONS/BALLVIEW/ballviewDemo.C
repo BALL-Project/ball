@@ -19,9 +19,7 @@ namespace BALL
 BALLViewDemo::BALLViewDemo(QWidget* parent, const char* name)
 	throw()
 	:	BALLViewDemoData( parent, name ),
-		ModularWidget(name),
-		first_selection_(true),
-		step_(0)
+		ModularWidget(name)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new BALLViewDemo " << this << std::endl;
@@ -59,7 +57,6 @@ void BALLViewDemo::show()
 
 void BALLViewDemo::next()
 {
-	step_ ++;
 	QWizard::next();
 	nextButton()->setEnabled(false);
 }
@@ -96,24 +93,17 @@ void BALLViewDemo::onNotify(Message *message)
 	{
 		if (RTTI::isKindOf<ControlSelectionMessage>(*message))
 		{
-			if (first_selection_) 
-			{
-				first_selection_ = false;
-				return;
-			}
-
 			ControlSelectionMessage* msg = RTTI::castTo<ControlSelectionMessage>(*message);
 
 			nextButton()->setEnabled(msg->getSelection().size() == 1 &&
 															 RTTI::isKindOf<System>(**msg->getSelection().begin()));
+		}
 	}
 
 	else if (title == "Molecular Dynamics Simulation")
 	{
-Log.error() << "#~~#   9 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		if (RTTI::isKindOf<NewTrajectoryMessage>(*message))
 		{
-Log.error() << "#~~#   10 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			enableNextStep_();
 		}
 	}
@@ -154,11 +144,6 @@ Log.error() << "#~~#   10 "             << " "  << __FILE__ << "  " << __LINE__<
 			enableNextStep_();
 		}
 	}
-
-
-
-
-	} // switch
-}
+} // onNotify
 
 } } // namespaces
