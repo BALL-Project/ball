@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.50 2003/06/12 18:07:21 oliver Exp $
+// $Id: composite.h,v 1.51 2003/06/19 13:07:34 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
@@ -219,15 +219,13 @@ namespace BALL
 				@param	deep a <tt>bool</tt> deciding whether the assignment will be
 								deep or shallow.
 		*/
-		void set(const Composite& composite, bool deep = true)
-			throw();
+		void set(const Composite& composite, bool deep = true) throw();
 
 		/**	Assignment operator.
 				@param	composite the Composite tree to assign from
 				@return	a const reference to <b>this</b>
 		*/
-		Composite& operator = (const Composite& composite)
-			throw();
+		Composite& operator = (const Composite& composite) throw();
 
 		/**	Assignment of a tree to another.
 				Create a deep (<tt>deep</tt> = <b>true</b>) or shallow copy of a composite
@@ -235,43 +233,37 @@ namespace BALL
 				@param	composite the composite to assign the copy to
 				@param	deep <b>true</b> for a deep copy
 		*/
-		void get(Composite& composite, bool deep = true) const
-			throw();
+		void get(Composite& composite, bool deep = true) const throw();
 
 		/**	Return the degree of the node.
 				This method returns the number of children of a composite object.
 				@return Size the number of children
 		*/
-		Size getDegree() const
-			throw();
+		Size getDegree() const throw();
 
 		/**	Count the number of nodes fulfilling a predicate in this subtree.
 				@param	predicate the predicate
 				@return Size the number of nodes in the subtree satisfying the predicate
 		*/
-		Size count(const KernelPredicateType& predicate) const
-			throw();
+		Size count(const KernelPredicateType& predicate) const throw();
 
 		/**	Count the number of descendants.
 				@return Size the number of descendants of this node
 		*/
-		Size countDescendants() const
-			throw();
+		Size countDescendants() const throw();
 
 		/** Get the length of the path between two composite objects.
 				If no path exists <tt>INVALID_SIZE</tt> is returned.
 				@param composite the second object
 				@return Size the size of the path
 		*/
-		Size getPathLength(const Composite& composite) const
-			throw();
+		Size getPathLength(const Composite& composite) const throw();
 
 		/** Get the depth of this item in its tree.
 				The depth of a root item is 0.
 				@return Size the depth
 		*/
-		Size getDepth() const
-			throw();
+		Size getDepth() const throw();
 
 		/** Get the height of this item in its tree.
 				The hight of a leaf is 0.
@@ -283,14 +275,12 @@ namespace BALL
 		/** Get the root of this item.
 				@return Composite& the root
 		*/
-		Composite& getRoot()
-			throw();
+		Composite& getRoot() throw();
 
 		/** Get a const reference to the root of this item.
 				@return Composite& the root
 		*/
-		const Composite& getRoot() const
-			throw();
+		const Composite& getRoot() const throw();
 
 		/** Get the lowest common ancestor of this item with an other.
 				If no common ancestor exists 0 is returned.
@@ -325,8 +315,7 @@ namespace BALL
 								tree
 		*/
 		template <typename T>
-		const T* getAncestor(const T& /* dummy */) const
-			throw();
+		const T* getAncestor(const T& /* dummy */) const throw();
 
 		/**	Find the nearest previous composite of type T.
 				This method walks backward in the tree from composite to composite and
@@ -336,8 +325,7 @@ namespace BALL
 								the tree
 		*/
 		template <typename T>
-		T* getPrevious(const T& /* dummy */)
-			throw();
+		T* getPrevious(const T& /* dummy */) throw();
 
 		/**	Find the nearest previous composite of type T (const method).
 				This method walks backward in the tree from composite to composite and
@@ -347,8 +335,7 @@ namespace BALL
 								the tree
 		*/
 		template <typename T>
-		const T* getPrevious(const T& dummy) const
-			throw();
+		const T* getPrevious(const T& dummy) const throw();
 
 		/**	Find the next composite of type T.
 				This method walks backward in the tree from composite to composite and
@@ -358,8 +345,7 @@ namespace BALL
 								the tree
 		*/
 		template <typename T>
-		T* getNext(const T& /* dummy */)
-			throw();
+		T* getNext(const T& /* dummy */) throw();
 
 		/**	Find the next composite of type T (const method).
 				This method walks backward in the tree from composite to composite and
@@ -369,20 +355,17 @@ namespace BALL
 								the tree
 		*/
 		template <typename T>
-		const T* getNext(const T& dummy) const
-			throw();
+		const T* getNext(const T& dummy) const throw();
 
 		/**	Return the composite's parent.
 				@return a pointer to the parent composite or 0 if no parent exists
 		*/
-		Composite* getParent()
-			throw();
+		Composite* getParent() throw();
 
 		/**	Return the composite's parent (const method).
 				@return a pointer to the parent composite or 0 if no parent exists
 		*/
-		const Composite* getParent() const
-			throw();
+		const Composite* getParent() const throw();
 
 		/**	Return the {\em index}th child of this composite.
 				If no such child exists, 0 is returned.
@@ -390,8 +373,7 @@ namespace BALL
 				@param	index the index of the child to return
 				@return	a pointer to the child or 0 if there is no such child.
 		*/
-		Composite* getChild(Index index)
-			throw();
+		Composite* getChild(Index index) throw();
 	
 		/**	Return a const pointer to the {\em index}th child of this composite.
 				If no such child exists, 0 is returned.
@@ -399,8 +381,7 @@ namespace BALL
 				@param	index the index of the child to return
 				@return	a const pointer to the child or 0 if there is no such child.
 		*/
-		const Composite* getChild(Index index) const
-			throw();
+		const Composite* getChild(Index index) const throw();
 	
 		/**	Return a pointer to the sibling index positions from this composite.
 				A pointer to the sibling <tt>index</tt> positions to the right (for
@@ -410,8 +391,7 @@ namespace BALL
 				@param index the index of the sibling
 				@return	a pointer to the child or 0 if there is no such sibling.
 		*/
-		Composite* getSibling(Index index)
-			throw();
+		Composite* getSibling(Index index) throw();
 
 		/**	Return a const pointer to the sibling index positions from this composite.
 				A pointer to the sibling <tt>index</tt> positions to the right (for
@@ -421,44 +401,37 @@ namespace BALL
 				@param index the index of the sibling
 				@return	a const pointer to the child or 0 if there is no such sibling.
 		*/
-		const Composite* getSibling(Index index) const
-			throw();
+		const Composite* getSibling(Index index) const throw();
 
 		/**	Return a pointer to the first child.
 				@return a pointer to the first child or 0 if there is no child.
 		*/
-		Composite* getFirstChild()
-			throw();
+		Composite* getFirstChild() throw();
 
 		/**	Return a const pointer to the first child.
 				@return a const pointer to the first child or 0 if there is no child.
 		*/
-		const Composite* getFirstChild() const
-			throw();
+		const Composite* getFirstChild() const throw();
 
 		/**	Return a pointer to the last child.
 				@return a  pointer to the last child or 0 if there is no child.
 		*/
-		Composite* getLastChild()
-			throw();
+		Composite* getLastChild() throw();
 
 		/**	Return a const pointer to the last child.
 				@return a const pointer to the last child or 0 if there is no child.
 		*/
-		const Composite* getLastChild() const
-			throw();
+		const Composite* getLastChild() const throw();
 			
 		/**	Return the time of last modification
 				@return the last modification time
 		*/
-		const PreciseTime& getModificationTime() const 
-			throw();
+		const PreciseTime& getModificationTime() const throw();
 
 		/**	Return the time of last change of selection.
 				@return the last time of change of selection
 		*/
-		const PreciseTime& getSelectionTime() const 
-			throw();
+		const PreciseTime& getSelectionTime() const throw();
 
 		/**	Modify a time stamp.
 				Update one or both of the two time stamps with the
@@ -469,31 +442,14 @@ namespace BALL
 				selection status changes.
 				@param stamp the time stamp type 
 		*/
-		void stamp(StampType stamp = BOTH) 
-			throw();
+		void stamp(StampType stamp = BOTH) throw();
 			
-		/**	Expand a collapsed composite.
-				Only expanded composite subtrees are iterated.
-				@see collapse
-		*/
-		void expand()
-			throw();
-
-		/**	Collapse a composite.
-				Collapsed composite subtrees are ignored by iterators.
-				This is usefull for accelerating an iteration process.
-				@see expand
-		*/
-		void collapse()
-			throw();
-
 		/**	Insert a composite as the first child of this composite.
 				Updates the modification time stamp.
 				@see stamp
 				@param	composite the composite to be inserted
 		*/
-		void prependChild(Composite& composite)
-			throw();
+		void prependChild(Composite& composite) throw();
 
 		/**	Insert a composite as the last child of this composite.
 				Updates the modification time stamp. <b>Note</b> that this method
@@ -502,8 +458,7 @@ namespace BALL
 				@see stamp
 				@param	composite the composite to be inserted
 		*/
-		void appendChild(Composite& composite)
-			throw();
+		void appendChild(Composite& composite) throw();
 
 		/**	Insert a new parent node.
 				This method is used to combine a range of nodes into a single
@@ -537,8 +492,7 @@ namespace BALL
 				@see stamp
 				@param	composite the node to be inserted in the tree before <tt>this</tt>
 		*/
-		void insertBefore(Composite& composite)
-			throw();
+		void insertBefore(Composite& composite) throw();
 
 		/**	Insert a node after this node.
 				This method inserts <tt>composite</tt> after <tt>this</tt> node, if {\tt
@@ -549,8 +503,7 @@ namespace BALL
 				@see stamp
 				@param	composite the node to be inserted in the tree after of <tt>this</tt>
 		*/
-		void insertAfter(Composite& composite)
-			throw();
+		void insertAfter(Composite& composite) throw();
 
 		/**	Prepend all children of <tt>composite</tt> to the children of this
 				composite.  The method does nothing, if <tt>composite</tt> is
@@ -560,8 +513,7 @@ namespace BALL
 				@see stamp
 				@param the composite to be spliced
 		*/
-		void spliceBefore(Composite& composite)
-			throw();
+		void spliceBefore(Composite& composite) throw();
 
 		/**	Append all children of <tt>composite</tt> to the children of this
 				composite.  The method does nothing, if <tt>composite</tt> is
@@ -571,8 +523,7 @@ namespace BALL
 				@see stamp
 				@param composite the composite to be spliced
 		*/
-		void spliceAfter(Composite& composite)
-			throw();
+		void spliceAfter(Composite& composite) throw();
 
 		/**	Insert the children of composite into this composite.
 				The children of <tt>composite</tt> are inserted at the position of 
@@ -583,8 +534,7 @@ namespace BALL
 				@see stamp
 				@param composite the composite to be spliced
 		*/
-		void splice(Composite& composite)
-			throw();
+		void splice(Composite& composite) throw();
 
 		/**	Remove a child from its parent.
 				<tt>child</tt> is only removed, if it is a true child of <tt>this</tt>.
@@ -594,8 +544,7 @@ namespace BALL
 				@param child the child to remove
 				@return false if child could not be removed
 		*/
-		bool removeChild(Composite& child)
-			throw();
+		bool removeChild(Composite& child) throw();
 
 		/** This instance and its subtree is removed form its tree and 
 				replaced by <tt>composite</tt> and its subtree.
@@ -605,8 +554,7 @@ namespace BALL
 				@see stamp
 				@param	composite the composite which will be inserted
 		*/
-		void replace(Composite& composite)
-			throw();
+		void replace(Composite& composite) throw();
 
 		/**	Swap the contents of two composites.
 				 \par
@@ -616,8 +564,7 @@ namespace BALL
 				@param	composite the composite with which the contents will be
 								swapped
 		*/
-		void swap(Composite& composite)
-			throw();
+		void swap(Composite& composite) throw();
 
 		/**	Select a composite.
 				This method selects the composite and all the composites therein.
@@ -627,8 +574,7 @@ namespace BALL
 				root composite) as well. The time stamps of descendants that
 				changed their selection state are update, too.
 		*/	
-		virtual void select()
-			throw();
+		virtual void select() throw();
 
 		/**	Deselect a composite.
 				This method deselects the composite and all the composites therein.
@@ -638,10 +584,9 @@ namespace BALL
 				root composite) as well. The time stamps of descendants that
 				changed their selection state are update, too.
 		*/	
-		virtual void deselect()
-			throw();
-
+		virtual void deselect() throw();
 		//@}
+
 		/**	@name	Predicates */
 		//@{
 
@@ -651,149 +596,113 @@ namespace BALL
 				@see Object::operator ==
 				@param	composite the composite against which equality will be tested
 		*/
-		bool operator == (const Composite& composite) const
-			throw();
+		bool operator == (const Composite& composite) const throw();
 
 		/**	Inequality operator.
 				@see operator ==
-		*/
+B		*/
 		bool operator != (const Composite& composite) const
 			throw();
 
-		/** Test if instance is expanded.
-				@see expand
-		*/
-		bool isExpanded() const
-			throw();
-		
-		/** Test if instance is collapsed.
-				@see collapse
-		*/
-		bool isCollapsed() const
-			throw();
-	
 		/**	Return true if the node does not contain children.
 				@return bool <b>true</b> if <tt>number_of_children_ == 0</tt>
 		*/
-		bool isEmpty() const
-			throw();
+		bool isEmpty() const throw();
 
 		/**	Return true if the node has no parent.
 				@return bool <b>true</b> if <tt>parent_ == 0</tt>
 		*/
-		bool isRoot() const
-			throw();
+		bool isRoot() const throw();
 	
 		/** Return true if the node is root of composite.
 		*/
-		bool isRootOf(const Composite& composite) const
-			throw();
+		bool isRootOf(const Composite& composite) const throw();
 	
 		/** Return true if the node is not the root or a leaf.
 		*/
-		bool isInterior() const
-			throw();
+		bool isInterior() const throw();
 	
 		/** Return true if the node has a child.
 		*/
-		bool hasChild() const
-			throw();
+		bool hasChild() const throw();
 	
 		/** Return true if the node has the parent <tt>composite</tt>.
 		*/
-		bool isChildOf(const Composite& composite) const
-			throw();
+		bool isChildOf(const Composite& composite) const throw();
 	
 		/** Return true if the node is the first child of its parent.
 		*/
-		bool isFirstChild() const
-			throw();
+		bool isFirstChild() const throw();
 	
 		/** Return true if the node is the first child of <tt>composite</tt>.
 		*/
-		bool isFirstChildOf(const Composite& composite) const
-			throw();
+		bool isFirstChildOf(const Composite& composite) const throw();
 	
 		/** Return true if the node is the last child of its parent.
 		*/
-		bool isLastChild() const
-			throw();
+		bool isLastChild() const throw();
 	
 		/** Return true if the node is the last child of <tt>composite</tt>.
 		*/
-		bool isLastChildOf(const Composite& composite) const
-			throw();
+		bool isLastChildOf(const Composite& composite) const throw();
 	
 		/** Return true if the node has a parent.
 		*/
-		bool hasParent() const
-			throw();
+		bool hasParent() const throw();
 
 		/** Return true if the node is the parent of <tt>composite</tt>.
 		*/
-		bool isParentOf(const Composite& composite) const
-			throw();
+		bool isParentOf(const Composite& composite) const throw();
 
 		/** Return true if the node has a sibling.
 				(Its parent has other childs.)
 		*/
-		bool hasSibling() const
-			throw();
+		bool hasSibling() const throw();
 			
 		/** Return true if the node is a sibling of <tt>composite</tt>.
 		*/
-		bool isSiblingOf(const Composite& composite) const
-			throw();
+		bool isSiblingOf(const Composite& composite) const throw();
 			
 		/** Return true if the node has a previous sibling.
 				(Its parent has a child before this.)
 		*/
-		bool hasPreviousSibling() const
-			throw();
+		bool hasPreviousSibling() const throw();
 	
 		/** Return true if the node is a previous sibling of <tt>composite</tt>.
 		*/
-		bool isPreviousSiblingOf(const Composite& composite) const
-			throw();
+		bool isPreviousSiblingOf(const Composite& composite) const throw();
 	
 		/** Return true if the node has a previous sibling.
 				(Its parent has a child after this.)
 		*/
-		bool hasNextSibling() const
-			throw();
+		bool hasNextSibling() const throw();
 
 		/** Return true if the node is a next sibling of <tt>composite</tt>.
 		*/
-		bool isNextSiblingOf(const Composite& composite) const
-			throw();
+		bool isNextSiblingOf(const Composite& composite) const throw();
 		
 		/** Return true if the node is a descendent of <tt>composite</tt>.
 		*/
-		bool isDescendantOf(const Composite& composite) const
-			throw();
+		bool isDescendantOf(const Composite& composite) const throw();
 
 		/** Return true if the node has a ancestor of the same type as dummy.
 		*/
 		template <typename T>
-		bool hasAncestor(const T& dummy ) const
-			throw();
+		bool hasAncestor(const T& dummy) const	throw();
 
 		/** Return true if the node has composite as descendent.
 		*/
-		bool isAncestorOf(const Composite& composite) const
-			throw();
+		bool isAncestorOf(const Composite& composite) const	throw();
 
 		/** Return true if the node has composite as ancestor or
 				composite is ancestor of this node.
 		*/
-		bool isRelatedWith(const Composite& composite) const
-			throw();
+		bool isRelatedWith(const Composite& composite) const throw();
 	
 		/** Return true if composite is homomorph to this node.
 				(The subtrees of the two instances have to be of the same form.)
 		*/
-		bool isHomomorph(const Composite& composite) const
-			throw();
+		bool isHomomorph(const Composite& composite) const throw();
 
 		/**	Return true if any descendant is selected.
 				This method does not check all nodes recursively. Instead, on each
@@ -804,8 +713,7 @@ namespace BALL
 				 \par
 				@return bool <b>true</b> if any node in the subtree is selected
 		*/
-		bool containsSelection() const
-			throw();
+		bool containsSelection() const throw();
 		//@}
 
 		/**	@name	Debugging and Diagnostics */
@@ -813,8 +721,7 @@ namespace BALL
 		/** Test if the subtree with this node as root is valid.
 				(The structure of the subtree has to be valid.)
 		*/
-		virtual bool isValid() const
-			throw();
+		virtual bool isValid() const throw();
 
 		/** Dump the constent of this instance to an ostream.
 				@param	s the stream to which we will dump
@@ -931,7 +838,7 @@ namespace BALL
 			BALL_INLINE
 			AncestorIteratorTraits(const Composite& composite)
 				throw()
-				:	bound_((Composite *)&composite),
+				:	bound_(const_cast<Composite*>(&composite)),
 					ancestor_(0)
 			{
 			}
@@ -959,7 +866,7 @@ namespace BALL
 
 			BALL_INLINE	bool isSingular() const	throw()	{	return (bound_ == 0);	}
 
-			BALL_INLINE	Composite*& getPosition()	throw()	{	return ancestor_;	}
+			BALL_INLINE	Composite* getPosition()	throw()	{	return ancestor_;	}
 
 			BALL_INLINE	Composite* const& getPosition() const	throw() {	return ancestor_;	}
 
@@ -993,7 +900,7 @@ namespace BALL
 
 		friend class AncestorIteratorTraits;
 
-		typedef ForwardIterator <Composite, Composite, Composite *, AncestorIteratorTraits>
+		typedef ForwardIterator <Composite, Composite, Composite*, AncestorIteratorTraits>
 			AncestorIterator;
 
 		AncestorIterator beginAncestor() throw()
@@ -1006,7 +913,7 @@ namespace BALL
 			return AncestorIterator::end(*this);
 		}
 
-		typedef ConstForwardIterator<Composite, Composite, Composite *, AncestorIteratorTraits>
+		typedef ConstForwardIterator<Composite, Composite, Composite*, AncestorIteratorTraits>
 			AncestorConstIterator;
 
 		AncestorConstIterator beginAncestor() const throw()
@@ -1058,7 +965,7 @@ namespace BALL
 
 			BALL_INLINE bool isSingular() const throw()	{ return (bound_ == 0);	}
 
-			BALL_INLINE Composite*& getPosition() throw()	{ return child_; }
+			BALL_INLINE Composite* getPosition() throw()	{ return child_; }
 
 			BALL_INLINE Composite* const& getPosition() const	throw()	{ return child_; }
 
@@ -1092,7 +999,18 @@ namespace BALL
 
 			BALL_INLINE void forward() throw() {	child_ = child_->next_;	}
 
-			BALL_INLINE void backward()	throw()	{	if (isEnd()) { child_ = bound_->last_child_; } else  { child_ = child_->previous_; }	}
+			BALL_INLINE void backward()	throw()	
+			{		
+				if (child_ == 0) 
+				{ 
+					// Allow decrementation for past-the-end iterators
+					child_ = bound_->last_child_; 
+				}
+				else  
+				{ 
+					child_ = child_->previous_; 
+				}	
+			}
 
 			private:
 
@@ -1162,96 +1080,11 @@ namespace BALL
 			return ChildCompositeConstReverseIterator(beginChildComposite());
 		}
 
-		class CompositeIteratorPosition
-		{
-			friend class Composite;
-
-			public:
-
-			CompositeIteratorPosition()
-				throw()
-				:	empty_stack_(0),
-					stack_(0),
-					current_(0),
-					continue_(false),
-					traversing_forward_(true)
-			{
-			}
-
-			CompositeIteratorPosition(const CompositeIteratorPosition& position)
-				throw()
-				:	empty_stack_(position.empty_stack_),
-					stack_(position.stack_),
-					current_(position.current_),
-					continue_(position.continue_),
-					traversing_forward_(position.traversing_forward_)
-			{
-			}
-
-			Composite* getCurrent()
-				throw()
-			{
-				return current_;
-			}
-		
-			const Composite* getCurrent() const
-				throw()
-			{
-				return current_;
-			}
-
-			void clear()
-				throw()
-			{
-				empty_stack_ = stack_ = current_ = 0;
-	
-				continue_ = false;
-				traversing_forward_ = true;
-			}
-
-			const CompositeIteratorPosition& operator = (const CompositeIteratorPosition& position)
-				throw()
-			{
-				if (this != &position)
-				{
-					empty_stack_ = position.empty_stack_;
-					stack_ = position.stack_;
-					current_ = position.current_;
-					continue_ = position.continue_;
-					traversing_forward_ = position.traversing_forward_;
-				}
-			
-				return *this;
-			}
-
-			bool operator == (const Composite::CompositeIteratorPosition& position) const
-				throw()
-			{
-				return (current_ == position.current_);
-			}
-
-			bool operator != (const Composite::CompositeIteratorPosition& position) const
-				throw()
-			{
-				return (current_ != position.current_);
-			}
-
-			private:
-
-			Composite* empty_stack_;
-			Composite* stack_;
-			Composite* current_;
-			bool continue_;
-			bool traversing_forward_;
-		};
-
-
-
 		class CompositeIteratorTraits
 		{
 			public:
 
-			CompositeIteratorTraits()
+			BALL_INLINE CompositeIteratorTraits()
 				throw()
 				:	bound_(0),
 					position_()
@@ -1260,7 +1093,7 @@ namespace BALL
 		
 			CompositeIteratorTraits(const Composite& composite)
 				throw()
-				:	bound_((Composite*)&composite),
+				:	bound_(const_cast<Composite*>(&composite)),
 					position_()
 			{
 			}
@@ -1271,15 +1104,15 @@ namespace BALL
 					position_(traits.position_)
 			{
 			}
+
+			BALL_INLINE ~CompositeIteratorTraits() throw() {}
 		
-			BALL_INLINE 
-			bool isValid() const throw()
-			{
-				return ((bound_ != 0)	&& (position_.getCurrent() != 0));
+			BALL_INLINE bool isValid() const throw() 
+			{ 
+				return ((bound_ != 0) && (position_ != 0)); 
 			}
 
-			BALL_INLINE 
-			const CompositeIteratorTraits& operator = (const CompositeIteratorTraits& traits) throw()
+			BALL_INLINE CompositeIteratorTraits& operator = (const CompositeIteratorTraits& traits) throw()
 			{
 				bound_ = traits.bound_;
 				position_ = traits.position_;
@@ -1292,82 +1125,83 @@ namespace BALL
 		
 			BALL_INLINE bool isSingular() const	throw()	{	return (bound_ == 0);	}
 		
-			BALL_INLINE CompositeIteratorPosition& getPosition() throw() { return position_;	}
+			BALL_INLINE Composite* getPosition() throw() { return position_;	}
+			
+			BALL_INLINE void setPosition(Composite* position) throw() { position_ = position; }
 
-			BALL_INLINE const CompositeIteratorPosition& getPosition() const throw() { return position_; }
+			BALL_INLINE const Composite* getPosition() const throw() { return position_; }
 
-			BALL_INLINE Composite& getData() throw() { return *(position_.getCurrent()); }
+			BALL_INLINE Composite& getData() throw() { return *position_; }
 
-			BALL_INLINE const Composite& getData() const throw() { return *(position_.getCurrent()); }
+			BALL_INLINE const Composite& getData() const throw() { return *position_; }
 
-			BALL_INLINE bool operator == (const CompositeIteratorTraits& traits) const throw() { return (position_	== traits.position_); }
+			BALL_INLINE bool operator == (const CompositeIteratorTraits& traits) const throw() 
+			{ 
+				return (position_ == traits.position_); 
+			}
 		
-			BALL_INLINE bool operator != (const CompositeIteratorTraits& traits) const throw() { return (position_ != traits.position_); }
+			BALL_INLINE bool operator != (const CompositeIteratorTraits& traits) const throw() 
+			{	
+				return !(position_ == traits.position_); 
+			}
 		
 			BALL_INLINE void invalidate() throw()	
 			{ 
 				bound_ = 0;	
-				position_.clear();
+				position_ = 0;
 			}
 
 			BALL_INLINE void toBegin() throw()
 			{
-				Composite::setCurrentPreorderIteratorPosition
-					(Composite::getFirstPreorderIteratorPosition(*bound_), position_, false);
+				position_ = bound_;
 			}
 
 			BALL_INLINE bool isBegin() const throw()
 			{
-				return (position_.getCurrent() == &Composite::getFirstPreorderIteratorPosition(*bound_));
+				return (position_ == bound_);
 			}
 
 			BALL_INLINE void toEnd() throw() 
 			{
-				toRBegin();
-				forward();
+				position_ = 0;
 			}
 
 			BALL_INLINE bool isEnd() const throw()
 			{
-				return (position_.getCurrent() == 0);
+				return (position_ == 0);
 			}
 
 			BALL_INLINE void toRBegin() throw()
 			{
-				Composite::setLastPreorderIteratorPosition(*bound_, position_,false);
+				if (bound_ != 0)
+				{
+					position_ = findPreviousPosition(0);
+				}
 			}
 
 			BALL_INLINE bool isRBegin() const throw()
 			{
-				return (position_.getCurrent() == &Composite::getLastPreorderIteratorPosition(*bound_)); 
+				return (position_ == findPreviousPosition(0));
 			}
 		
 			BALL_INLINE void toREnd() throw()
-			{
-				Composite::setCurrentPreorderIteratorPosition(*bound_, position_, false);
-				backward();	
+			{	
+				position_ = bound_;
 			}
 
 			BALL_INLINE bool isREnd() const throw()
 			{
-				return (position_.getCurrent() == 0);
+				return (position_ == bound_);
 			}
 		
 			BALL_INLINE void forward() throw()
 			{
-				bound_->getNextPreorderIteratorPosition(position_);
+				position_ = findNextPosition(position_);
 			}
 
 			BALL_INLINE void backward()	throw()
 			{
-				if (!isEnd())
-				{
-					bound_->getPreviousPreorderIteratorPosition(position_);
-				}
-				else
-				{
-					Composite::setLastPreorderIteratorPosition(*bound_, position_, false);
-				}
+				position_ = findPreviousPosition(position_);
 			}
 
 			protected:
@@ -1376,19 +1210,115 @@ namespace BALL
 			Composite* bound_;
 
 			/// The current iterator position
-			CompositeIteratorPosition	position_;
+			Composite* position_;
+
+			Composite* findPreviousPosition(Composite* p) const
+			{
+				// If we are at the root of the iterator, the 
+				// decrementing it results in an invalid iterator
+				// (past-the-end).
+				if (p == bound_)
+				{
+					return 0;
+				}
+				// If we decrement a past-the-end-iterator, we
+				// start at the root and "fall down" on the right
+				// hand side following the last_child_ pointers
+				// until we hit bottom.
+				else if (p == 0)
+				{
+					if (bound_->last_child_ == 0)
+					{
+						return bound_;
+					}
+					else
+					{
+						p = bound_->last_child_;
+					}
+					while (p->last_child_ != 0)
+					{
+						p = p->last_child_;
+					}
+				}
+				// Normally, we just grab the guy to the
+				// left in the doubly-linked child list.
+				else if (p->previous_ != 0)
+				{
+					p = p->previous_;
+
+					// If the guy to the left hast children,
+					// we do the drop on the rigth again.
+					while (p->last_child_ != 0)
+					{
+						p = p->last_child_;
+					}
+				}
+				// Finally, if we can't go down and we can't go 
+				// left, we have to go upwards.
+				else if (p != bound_)
+				{
+					p = p->parent_;
+				}
+
+				return p;
+			}
+
+			Composite* findNextPosition(Composite* p) const
+			{
+				// If we are in a past-the-end position, we stay put.
+				if (p == 0)
+				{
+					return 0;
+				}
+				// Otherwise, we try the first child. If there's one,
+				// that's our next position.
+				else if (p->first_child_ != 0)
+				{
+					p = p->first_child_;
+				}
+				// Otherwise, we try to walk to the right at the current level.
+				else if (p->next_ != 0)
+				{
+					p = p->next_;
+				}
+				// If that doesn't work out, we'll have to climb up again.
+				// Now, we either revisit a node we have already been to,
+				// or we are trying to climb up *beyond* our iteration root
+				// (bound_). In the latter case, we return a past-the-end-iterator (0).
+				else
+				{
+					// If we could not walk left or right and we are at the root
+					// again, then we are done with the iteration (this is the case
+					// if bound_ is a leaf node).
+					if (p == bound_)
+					{
+						return 0;
+					}
+					while (p->next_ == 0)
+					{
+						p = p->parent_;
+						if ((p == bound_) || (p == 0))
+						{
+							return 0;
+						}
+					}
+					p = p->next_;
+				}
+					
+				return p;
+			}
 		};
 
 		friend class CompositeIteratorTraits;
 
-		typedef BidirectionalIterator<Composite, Composite, CompositeIteratorPosition, CompositeIteratorTraits>
+		typedef BidirectionalIterator<Composite, Composite, Composite*, CompositeIteratorTraits>
 			CompositeIterator;
 
 		CompositeIterator beginComposite() throw() { return CompositeIterator::begin(*this); }
 
 		CompositeIterator endComposite() throw() { return CompositeIterator::end(*this); }
 
-		typedef ConstBidirectionalIterator<Composite, Composite, CompositeIteratorPosition, CompositeIteratorTraits>
+		typedef ConstBidirectionalIterator<Composite, Composite, Composite*, CompositeIteratorTraits>
 			CompositeConstIterator;
 
 		CompositeConstIterator beginComposite() const throw() 
@@ -1427,152 +1357,16 @@ namespace BALL
 			return CompositeConstReverseIterator(beginComposite());
 		}
 
-
-
-		class SubcompositeIteratorTraits
-			: public CompositeIteratorTraits
-		{
-			public:
-
-			BALL_INLINE SubcompositeIteratorTraits() throw()
-				:	CompositeIteratorTraits()
-			{
-			}
-		
-			SubcompositeIteratorTraits(const Composite& composite) throw()
-				:	CompositeIteratorTraits(composite)
-			{
-			}
-		
-			BALL_INLINE SubcompositeIteratorTraits(const SubcompositeIteratorTraits& traits)
-				throw()
-				:	CompositeIteratorTraits(traits)
-			{
-			}
-
-			BALL_INLINE void toBegin() throw()
-			{
-				Composite::setCurrentPreorderIteratorPosition(Composite::getFirstPreorderIteratorPosition(*bound_), position_, true);
-			}
-
-			BALL_INLINE void toEnd() throw()
-			{
-				toRBegin();
-				forward();
-			}
-
-			BALL_INLINE void toRBegin()	throw()
-			{
-				Composite::setLastPreorderIteratorPosition(*bound_, position_, true);
-			}
-
-			BALL_INLINE void toREnd()	throw()
-			{
-				Composite::setCurrentPreorderIteratorPosition(*bound_, position_, true);
-				backward();
-			}
-		};
-
-		friend class SubcompositeIteratorTraits;
-
-		typedef BidirectionalIterator<Composite, Composite, CompositeIteratorPosition, SubcompositeIteratorTraits>
-			SubcompositeIterator;
-
-		SubcompositeIterator beginSubcomposite() throw()
-		{
-			return SubcompositeIterator::begin(*this);
-		}
-
-		SubcompositeIterator endSubcomposite() throw()
-		{
-			return SubcompositeIterator::end(*this);
-		}
-
-		typedef ConstBidirectionalIterator<Composite, Composite, CompositeIteratorPosition, SubcompositeIteratorTraits>
-			SubcompositeConstIterator;
-
-		SubcompositeConstIterator beginSubcomposite() const throw()
-		{
-			return SubcompositeConstIterator::begin(*this);
-		}
-
-		SubcompositeConstIterator endSubcomposite() const throw()
-		{
-			return SubcompositeConstIterator::end(*this);
-		}
-
-
-
-		typedef std::reverse_iterator<SubcompositeIterator>	SubcompositeReverseIterator;
-
-		SubcompositeReverseIterator rbeginSubcomposite() throw()
-		{
-			return SubcompositeReverseIterator(endSubcomposite());
-		}
-			
-
-		SubcompositeReverseIterator rendSubcomposite() throw()
-		{
-			return SubcompositeReverseIterator(beginSubcomposite());
-		}
-
-
-
-		typedef std::reverse_iterator<SubcompositeConstIterator> SubcompositeConstReverseIterator;
-
-		SubcompositeConstReverseIterator rbeginSubcomposite() const throw()
-		{
-			return SubcompositeConstReverseIterator(endSubcomposite());
-		}
-
-		SubcompositeConstReverseIterator rendSubcomposite() const throw()
-		{
-			return SubcompositeConstReverseIterator(beginSubcomposite());
-		}
-
 		private:
 		
-		enum Property_
-		{
-			PROPERTY__COLLAPSED_ = 1
-		};
-
-		Size getHeight_(Size size, Size& max_height) const
-			throw();
+		///
+		Size getHeight_(Size size, Size& max_height) const throw();
 	
+		///
 		Size countDescendants_() const throw();
 
+		///
 		void clone_(Composite& parent, Composite& stack) const throw();
-
-		// traverse forward, valid for composites and subcomposites
-		static Composite* setCurrentPreorderIteratorPosition
-			(Composite& composite, CompositeIteratorPosition& position, bool subcomposite)
-				throw();
-		
-		// get first iterator, valid for composites and subcomposites
-		static Composite& getFirstPreorderIteratorPosition(Composite& composite)
-			throw();
-	
-		// get last iterator, valid for composites only
-		static Composite& getLastPreorderIteratorPosition(Composite& composite)
-			throw();
-		
-		// set last iterator, valid for composites and subcomposites
-		static Composite& setLastPreorderIteratorPosition
-			(Composite& composite, CompositeIteratorPosition& position, bool subcomposite)
-				throw();
-		
-		// get next iterator, valid for composites and subcomposites
-		Composite* getNextPreorderIteratorPosition(CompositeIteratorPosition& position)	throw();
-
-		// get previous iterator, valid for composites and subcomposites
-		Composite* getPreviousPreorderIteratorPosition(CompositeIteratorPosition& position)	throw();
-
-		static Composite* setCurrentPreorderForward_
-			(Composite& composite, CompositeIteratorPosition& position, bool subcomposite)	throw();
-
-		static Composite* setCurrentPreorderBackward_
-			(Composite& composite, CompositeIteratorPosition& position, bool subcomposite) throw();
 
 		template <typename T>
 		bool applyLevelNostart_(UnaryProcessor<T>& processor, long level)
@@ -1627,8 +1421,7 @@ namespace BALL
 
 		Processor::Result result;
 
-		for (Composite* composite = parent_;
-				 composite != 0; composite = composite->parent_)
+		for (Composite* composite = parent_; composite != 0; composite = composite->parent_)
 		{
 			T* t_ptr;
 			if ((t_ptr = dynamic_cast<T*>(composite)) != 0)
@@ -1657,19 +1450,16 @@ namespace BALL
 	{
 		Processor::Result result = Processor::CONTINUE;
 
-		if (!isCollapsed())
+		for (Composite* composite = first_child_;
+				 composite != 0; composite = composite->next_)
 		{
-			for (Composite* composite = first_child_;
-					 composite != 0; composite = composite->next_)
+			T* t_ptr;
+			if ((t_ptr = dynamic_cast<T*>(composite)) != 0)
 			{
-				T* t_ptr;
-				if ((t_ptr = dynamic_cast<T*>(composite)) != 0)
+				result = processor(*t_ptr);
+				if (result <= Processor::BREAK)
 				{
-					result = processor(*t_ptr);
-					if (result <= Processor::BREAK)
-					{
-						break;
-					}
+					break;
 				}
 			}
 		}
@@ -1688,11 +1478,6 @@ namespace BALL
 	bool Composite::applyDescendantPreorderNostart_(UnaryProcessor<T>& processor)
 		throw(Exception::GeneralException)
 	{
-		if (isCollapsed() == true)
-		{
-			return true;
-		}
-
 		Processor::Result result;
 
 		for (Composite* composite = first_child_;
@@ -1729,11 +1514,6 @@ namespace BALL
 	bool Composite::applyDescendantPostorderNostart_(UnaryProcessor<T>& processor)
 		throw(Exception::GeneralException)
 	{
-		if (isCollapsed() == true)
-		{
-			return true;
-		}
-
 		Processor::Result result;
 
 		for (Composite* composite = first_child_;
@@ -1918,12 +1698,10 @@ namespace BALL
 		throw()
 	{
 		// create an iterator bound to the root of the subtree
-		SubcompositeIterator it(getRoot().endSubcomposite());
+		CompositeIterator it(getRoot().endComposite());
 
 		// set its position to the current composite
-		Composite::setCurrentPreorderIteratorPosition
-			(Composite::getFirstPreorderIteratorPosition(*this), it.getTraits().getPosition(), false);
-
+		it.getTraits().setPosition(this);
 
 		// walk back until we find something	
 		// or we cannot walk any further
@@ -1963,11 +1741,10 @@ namespace BALL
 		throw()
 	{
 		// create an iterator bound to the root of the subtree
-		SubcompositeIterator it(getRoot().beginSubcomposite());
+		CompositeIterator it(getRoot().beginComposite());
 
 		// set its position to the current composite
-		Composite::setCurrentPreorderIteratorPosition
-			(Composite::getFirstPreorderIteratorPosition(*this), it.getTraits().getPosition(), false);
+		it.getTraits().setPosition(this);
 
 		// walk forward until we find something	
 		// or we cannot walk any further

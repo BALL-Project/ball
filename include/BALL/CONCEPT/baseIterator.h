@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseIterator.h,v 1.30 2003/06/11 16:09:22 oliver Exp $
+// $Id: baseIterator.h,v 1.31 2003/06/19 13:07:34 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
@@ -86,10 +86,13 @@ namespace BALL
 		*/
 		//@{
 		///	Default constructor
-		BALL_INLINE BaseIterator()	throw() {}
+		BALL_INLINE BaseIterator() throw() {}
 	
 		///	Copy constructor
-		BaseIterator(const BaseIterator& iterator) throw();
+		BALL_INLINE BaseIterator(const BaseIterator& iterator) throw()
+			:	traits_(iterator.traits_)
+		{
+		}
 
 		///	Destructor.
 		BALL_INLINE ~BaseIterator() throw() {}
@@ -103,8 +106,12 @@ namespace BALL
 				Assigns the contents of an iterator to another iterator.
 				@param	iterator the iterator to be copied
 		*/
-		BaseIterator& operator = (const BaseIterator<Container, DataType, Position, Traits>& iterator) throw();
-
+		BALL_INLINE BaseIterator& operator = (const BaseIterator& iterator) throw()
+		{
+			traits_ = iterator.traits_;
+			return *this;
+		}
+			
 		///	Swap two iterators
 		BALL_INLINE void swap(BaseIterator& iterator) throw() { std::swap(traits_, iterator.traits_); }
 		//@}
@@ -114,7 +121,7 @@ namespace BALL
 		//@{
 
 		/// Invalidate the iterator.
-		void invalidate() throw() { traits_.invalidate(); }
+		BALL_INLINE void invalidate() throw() { traits_.invalidate(); }
 
 		/// Set the traits
 		BALL_INLINE void setTraits(const Traits& traits) throw() { traits_ = traits; }
@@ -137,13 +144,14 @@ namespace BALL
 				This method returns the position of the iterator. Note that
 				Position is a template within this context and not the BALL datatype.
 		*/
-		operator const Position& () const	throw();
+		BALL_INLINE operator const Position& () const throw() { return traits_.getPosition(); }
 
 		/// Convert an iterator to its Datatype by returning a reference to the current data.
-		reference operator * () const throw() { return (reference)traits_.getData(); }
+		BALL_INLINE reference operator * () const throw() { return (reference)traits_.getData(); }
 
 		/// Return a pointer to the current data.
-		pointer operator -> () const throw() { return (pointer)&traits_.getData(); }
+		BALL_INLINE pointer operator -> () const throw() { return (pointer)&traits_.getData(); }
+		//@}
 
 		/**	@name	Predicates
 		*/
@@ -178,7 +186,10 @@ namespace BALL
 		/** Constructor.
 				Protected to allow instantiation and use in derived classes only.
 		*/
-		BaseIterator(const Container& container) throw();
+		BALL_INLINE BaseIterator(const Container& container) throw()
+			:	traits_(container)
+		{
+		}
 
 		private:
 
@@ -186,43 +197,6 @@ namespace BALL
 		Traits traits_;
 	};
 
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BaseIterator<Container, DataType, Position, Traits>::BaseIterator(const BaseIterator& iterator) throw()
-	{
-		traits_ = iterator.traits_;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BaseIterator<Container, DataType, Position, Traits>& 
-		BaseIterator<Container, DataType, Position, Traits>::operator = 
-		(const BaseIterator<Container, DataType, Position, Traits>& iterator)
-		throw()
-	{
-		// avoid self assignment
-		if (this != &iterator)
-		{
-			traits_ = iterator.traits_;
-		}
-
-		return *this;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BALL_INLINE
-	BaseIterator<Container, DataType, Position, Traits>::operator const Position& () const
-		throw()
-	{
-		return traits_.getPosition();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BALL_INLINE
-	BaseIterator<Container, DataType, Position, Traits>::BaseIterator(const Container& container)
-		throw()
-		:	traits_(container)
-	{
-	}
 
 } // namespace BALL
 

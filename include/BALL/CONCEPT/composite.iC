@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.iC,v 1.20 2003/06/12 15:42:22 oliver Exp $
+// $Id: composite.iC,v 1.21 2003/06/19 13:07:34 oliver Exp $
 //
 
 BALL_INLINE 
@@ -115,34 +115,6 @@ const PreciseTime& Composite::getSelectionTime() const
 	throw()
 {
   return selection_stamp_.getTime();
-}
-
-BALL_INLINE 
-void Composite::expand()
-	throw()
-{
-  BALL_BIT_CLEAR(properties_, PROPERTY__COLLAPSED_);
-}
-
-BALL_INLINE 
-void Composite::collapse()
-	throw()
-{
-  BALL_BIT_SET(properties_, PROPERTY__COLLAPSED_);
-}
-
-BALL_INLINE 
-bool Composite::isExpanded() const
-	throw()
-{
-  return (BALL_BIT_IS_CLEARED(properties_, PROPERTY__COLLAPSED_) != 0);
-}
-
-BALL_INLINE 
-bool Composite::isCollapsed() const
-	throw()
-{
-  return (BALL_BIT_IS_SET(properties_, PROPERTY__COLLAPSED_) != 0);
 }
 
 BALL_INLINE 
