@@ -7,6 +7,7 @@ CPP_SOURCES=\
 	forceField.C\
 	forceFieldComponent.C\
 	periodicBoundary.C\
+	snapShot.C\
 	support.C
 
 include ../../common.mak
