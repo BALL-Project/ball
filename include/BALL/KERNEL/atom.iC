@@ -1,4 +1,4 @@
-// $Id: atom.iC,v 1.9 2000/12/16 21:29:02 amoll Exp $
+// $Id: atom.iC,v 1.10 2001/06/27 01:33:11 oliver Exp $
 
 	BALL_INLINE
   void Atom::setElement(const Element& element)
@@ -26,13 +26,6 @@
 		throw()
   {
     return charge_;
-	}
-
-	BALL_INLINE
-	String& Atom::getName()
-		throw()
-	{
-		return name_;
 	}
 
 	BALL_INLINE
