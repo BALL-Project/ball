@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.2 1999/09/03 08:09:00 len Exp $
+// $Id: forceField.C,v 1.3 1999/09/03 14:05:02 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -382,6 +382,19 @@ namespace BALL
 			return 0;
 
 		return components_[index];
+	}
+
+	ForceFieldComponent* ForceField::getComponent(const String& name) const
+	{
+		for (Size i = 0; i < components_.size(); ++i)
+		{
+			if (components_[i]->getName() == name)
+			{
+				return components_[i];
+			}
+		}
+
+		return 0;
 	}
 
 	
