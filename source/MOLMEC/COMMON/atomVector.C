@@ -1,4 +1,4 @@
-// $Id: atomVector.C,v 1.5 2001/07/15 11:17:45 amoll Exp $
+// $Id: atomVector.C,v 1.6 2001/07/16 11:17:31 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/atomVector.h>
@@ -133,4 +133,14 @@ namespace BALL
 		}
 	}
 
+	void AtomVector::resize(Size new_size)
+	{
+		Size old_size = size();
+		::std::vector<Atom*>::resize(new_size);
+		for (Position p = old_size; p < new_size; p++)
+		{
+			(*this)[p] = 0;
+		}
+	}
+	
 } // namespace BALL
