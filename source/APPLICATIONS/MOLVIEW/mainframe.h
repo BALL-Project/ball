@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.15 2000/05/16 21:11:20 hekl Exp $
+// $Id: mainframe.h,v 1.16 2000/05/28 17:30:04 hekl Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -118,6 +118,9 @@ class Mainframe
 		MENU__DISPLAY_OPEN_PREFERENCES_DIALOG,
 		MENU__DISPLAY_CENTER_CAMERA,
 
+		MENU__CONTROL_ROTATE_MODE,
+		MENU__CONTROL_PICKING_MODE,
+
 		MENU__HELP_ABOUT
 	};
 
@@ -153,6 +156,10 @@ class Mainframe
 	void clearClipboard();
 	void select();
 	void deselect();
+
+	// Control menu
+	void rotateMode();
+	void pickingMode();
 
 	// Build menu
 	void checkResidue();
@@ -209,6 +216,8 @@ class Mainframe
 
 	QLabel*						server_icon_;
 	QLabel*						tool_box_;
+
+	bool rotate_mode_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

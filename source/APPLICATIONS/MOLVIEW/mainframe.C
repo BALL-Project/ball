@@ -43,7 +43,8 @@ Mainframe::Mainframe
 		selection_(),
 		copy_list_(),
 		server_icon_(0),
-		tool_box_(0)
+		tool_box_(0),
+		rotate_mode_(true)
 {
 	// ---------------------
 	// setup main window
@@ -241,6 +242,19 @@ Mainframe::Mainframe
 	display_menu->insertItem("Focus C&amera", this, SLOT(centerCamera()), CTRL+Key_A, MENU__DISPLAY_CENTER_CAMERA);
 	display_menu->setItemEnabled(MENU__DISPLAY_CENTER_CAMERA, FALSE);
 
+	// Control -Menu ------------------------------------------------------------------
+
+	QPopupMenu* control_menu = new QPopupMenu(this);
+	CHECK_PTR(control_menu);
+	popup_menus_.push_back(control_menu);
+	control_menu->setCheckable(TRUE);
+
+	control_menu->insertItem("&Rotate Mode", this, SLOT(rotateMode()), CTRL+Key_R, MENU__CONTROL_ROTATE_MODE);
+	control_menu->insertItem("&Picking Mode", this, SLOT(pickingMode()), CTRL+Key_P, MENU__CONTROL_PICKING_MODE);
+
+	control_menu->setItemEnabled(MENU__CONTROL_ROTATE_MODE, TRUE);
+	control_menu->setItemEnabled(MENU__CONTROL_PICKING_MODE, TRUE);
+
 	// Help-Menu -------------------------------------------------------------------
 
 	QPopupMenu* help_menu = new QPopupMenu(this);
@@ -253,6 +267,7 @@ Mainframe::Mainframe
 
 	menuBar()->insertItem("&File", file_menu);
 	menuBar()->insertItem("&Edit", edit_menu_);
+	menuBar()->insertItem("&Control", control_menu);
 	menuBar()->insertItem("&Build", build_menu);
 	menuBar()->insertItem("&Display", display_menu);
 	menuBar()->insertSeparator();
@@ -264,6 +279,10 @@ Mainframe::Mainframe
 	// ---------------------
 
 	connect(display_menu,
+					SIGNAL(aboutToShow()),
+					this,
+					SLOT(checkMenuEntries()));
+	connect(control_menu,
 					SIGNAL(aboutToShow()),
 					this,
 					SLOT(checkMenuEntries()));
@@ -385,6 +404,10 @@ void Mainframe::checkMenuEntries()
 													 display_properties_->isVisible());
 	menuBar()->setItemChecked(MENU__DISPLAY_OPEN_PREFERENCES_DIALOG, 
 													 preferences_dialog_->isVisible());
+
+	// set the checkboxes for scene controlling
+	menuBar()->setItemChecked(MENU__CONTROL_ROTATE_MODE, ((rotate_mode_ == true) ? TRUE : FALSE));
+	menuBar()->setItemChecked(MENU__CONTROL_PICKING_MODE, ((rotate_mode_ == false) ? TRUE : FALSE ));
 
 	// check for paste-slot: enable only if copy_list_ not empty
 	menuBar()->setItemEnabled
@@ -658,6 +681,46 @@ void Mainframe::deselect()
 
 	statusBar()->clear();
 	QWidget::update();
+}
+
+void Mainframe::rotateMode()
+{
+	rotate_mode_ = true;
+	
+	NotificationUnregister
+		(scene_->events.MouseLeftButtonPressed);
+	
+	NotificationUnregister
+		(scene_->events.MouseLeftButtonPressed & scene_->events.MouseMoved);
+	
+	NotificationUnregister
+		(scene_->events.MouseLeftButtonReleased);
+
+
+	NotificationRegister
+		(scene_->events.MouseLeftButtonPressed & scene_->events.MouseMoved,
+		 scene_->events.RotateSystem);
+}
+
+void Mainframe::pickingMode()
+{
+	rotate_mode_ = false;
+
+	NotificationUnregister
+		(scene_->events.MouseLeftButtonPressed & scene_->events.MouseMoved);
+
+
+	NotificationRegister
+		(scene_->events.MouseLeftButtonPressed,
+		 scene_->events.SelectionPressed);
+	
+	NotificationRegister
+		(scene_->events.MouseLeftButtonPressed & scene_->events.MouseMoved, 
+		 scene_->events.SelectionPressedMoved);
+	
+	NotificationRegister
+		(scene_->events.MouseLeftButtonReleased, 
+		 scene_->events.SelectionReleased);
 }
 
 void Mainframe::checkResidue()
