@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.10 2003/09/18 12:51:43 amoll Exp $
+// $Id: message.C,v 1.11 2003/09/18 19:10:08 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -230,12 +230,6 @@ RegularData3DMessage::RegularData3DMessage(Type type)
 		data_(0)
 {
 	setType(type);
-}
-
-void RegularData3DMessage::setRegularData3D(const RegularData3D& data)
-	throw()
-{
-	data_ = (RegularData3D*)&data;
 }
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

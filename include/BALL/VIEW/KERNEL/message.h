@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.28 2003/09/18 13:07:27 amoll Exp $
+// $Id: message.h,v 1.29 2003/09/18 19:10:33 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -655,7 +655,9 @@ class RegularData3DMessage
 			///
 			REMOVE,
 			///
-			UPDATE
+			UPDATE,
+			///
+			SELECTED
 		};
 		
 		///
@@ -663,8 +665,8 @@ class RegularData3DMessage
 			throw();
 
 		///
-		void setRegularData3D(const RegularData3D& data)
-			throw();
+		void setRegularData3D(RegularData3D* data)
+			throw() { data_ = data;}
 
 		///
 		RegularData3D* getRegularData3D()
