@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.10 2003/10/04 15:18:55 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.11 2003/10/15 13:47:20 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -54,7 +54,7 @@ namespace BALL
 			String hint("Open a PDB, HIN, MOL or MOL2 file");
 			main_control.insertMenuEntry(MainControl::FILE_OPEN, "&Structure", (QObject *)this, 
 																	 SLOT(readFile()), CTRL+Key_O, -1, hint);
-			hint = "One System has to be selected to save it as PDB, HIN, MOL or MOL2 file";
+			hint = "Save a system as PDB, HIN, MOL or MOL2 file (1 System has to be selected)";
 			save_id_ = main_control.insertMenuEntry(MainControl::FILE, "&Save Structure", (QObject *)this, 
 																	 SLOT(writeFile()), CTRL+Key_S, -1, hint);
 
@@ -221,7 +221,6 @@ namespace BALL
 			
 			if (filename == "/" || filename == "\\") 
 			{
-				setStatusbarText("");	
 				return false;
 			}
 
@@ -255,7 +254,6 @@ namespace BALL
 			}
 		
 			Log.info() << "> " << system.countAtoms() << " atoms written to file \"" << filename << "\"" << std::endl;
-			setStatusbarText("");
 
 			return true;
 		}
@@ -487,7 +485,6 @@ namespace BALL
 			new_message->setType(CompositeMessage::NEW_COMPOSITE);
 			notify_(new_message);
 
-			setStatusbarText("");
 			return true;
 		}
 
