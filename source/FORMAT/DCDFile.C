@@ -1,4 +1,4 @@
-// $Id: DCDFile.C,v 1.16 2001/09/06 14:55:02 anker Exp $
+// $Id: DCDFile.C,v 1.17 2001/09/11 12:28:28 anker Exp $
 
 #include <BALL/FORMAT/DCDFile.h>
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -94,6 +94,19 @@ namespace BALL
 	{
 		return swap_bytes_;
 	}
+
+
+	/*
+	bool DCDFile::open(const String& name, File::OpenMode open_mode)
+		throw()
+	{
+		if ((open_mode & File::OUT) == 1)
+		{
+			// if this file is to be overwritten, write a default header.
+			writeHeader();
+		}
+	}
+	*/
 
 
 	bool DCDFile::hasVelocities() const
@@ -648,7 +661,7 @@ namespace BALL
 	}
 
 
-	bool DCDFile::flushToDisk(const ::std::vector<SnapShot> buffer)
+	bool DCDFile::flushToDisk(const ::std::vector<SnapShot>& buffer)
 		throw()
 	{
 		::std::vector<SnapShot>::const_iterator it = buffer.begin();
@@ -660,6 +673,7 @@ namespace BALL
 		// snapshot manager is set up or at some similar place. the question is
 		// how much information has to be replicated at which place in the
 		// code.
+		// we should think about something like updateHeader().
 		header_.number_of_atoms = it->getNumberOfAtoms();
 
 		// write the header

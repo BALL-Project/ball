@@ -1,4 +1,4 @@
-// $Id: DCDFile.h,v 1.12 2001/05/07 09:29:27 anker Exp $
+// $Id: DCDFile.h,v 1.13 2001/09/11 12:28:31 anker Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -215,7 +215,8 @@ namespace BALL
 		/** open a DCDFile
 		*/
 		/*
-		virtual bool open(const String& name, File::OpenMode open_mode)
+		virtual bool open(const String& name,
+				File::OpenMode open_mode = File::OUT)
 			throw();
 		*/
 
@@ -238,8 +239,9 @@ namespace BALL
 
 		// BAUSTELLE:
 		// should append() also write the header? what is more intuitive?
-		/** Append a SnapShot to an existing file
-				@param buffer the list os SnapShots we want to save
+		/** Append a SnapShot to an existing file. {\bf Note} that this method
+				does {\bf not} update the header. 
+				@param snapshot the snapshot we want to save
 				@return true, if writing was successful
 		*/
 		virtual bool append(const SnapShot& snapshot)
@@ -254,7 +256,7 @@ namespace BALL
 
 		/**
 		*/
-		virtual bool flushToDisk(const ::std::vector<SnapShot> buffer)
+		virtual bool flushToDisk(const ::std::vector<SnapShot>& buffer)
 			throw();
 		//@}
 		/// @name Accessors 
