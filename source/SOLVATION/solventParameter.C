@@ -1,4 +1,4 @@
-// $Id: solventParameter.C,v 1.6 2001/08/21 11:21:42 aubertin Exp $
+// $Id: solventParameter.C,v 1.7 2001/08/22 10:30:31 sturm Exp $
 
 #include <BALL/SOLVATION/solventParameter.h>
 
@@ -153,7 +153,7 @@ namespace BALL
 				}
 				else
 				{
-					Log.error() << "SolventParameter::extractSection(): " << "Cannot assign atom type." << endl;
+					Log.warn() << "SolventParameter::extractSection(): " << "Cannot assign atom type." << endl;
 				}
 			}
 			// build descriptor 
