@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.34 2002/12/12 16:03:02 oliver Exp $
+# $Id: Makefile,v 1.35 2002/12/16 18:01:36 oliver Exp $
 
 EXECUTABLE=molview
 DIRECTORY=APPLICATIONS/MOLVIEW
@@ -35,7 +35,7 @@ MOC_SOURCES=\
 
 SPECIAL_OBJECTS=
 
-molview:	$(OBJECTS) $(SPECIAL_OBJECTS)
+molview:	$(OBJECTS)	$(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALLVIEW_LIBS) $(PYTHON_LIBS)
 
 example: example02.o 
