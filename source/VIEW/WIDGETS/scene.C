@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.58 2004/05/21 12:07:46 amoll Exp $
+// $Id: scene.C,v 1.59 2004/05/24 09:22:36 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -40,7 +40,7 @@ namespace BALL
 		#define  ROTATE_FACTOR    11
 		#define  TRANSLATE_FACTOR 6 
 
- 		QGLFormat Scene::gl_format_(QGL::DepthBuffer | QGL::StereoBuffers);
+	  QGLFormat Scene::gl_format_(QGL::DepthBuffer | QGL::StereoBuffers);
 
 		Scene::Scene()
 			throw()
@@ -302,42 +302,37 @@ namespace BALL
 			//abort if GL was not yet initialised
 			if (!gl_renderer_.hasStage()) return;
 
-			if (gl_renderer_.isInStereoMode())
-			{
-				glDrawBuffer(GL_BACK_LEFT);
-			}
-
+			glDrawBuffer(GL_BACK_LEFT);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glPushMatrix();
-
-			Vector3 view_point, diff;
-			if (gl_renderer_.isInStereoMode())
+			if (!gl_renderer_.isInStereoMode())
 			{
-				view_point = stage_->getCamera().getViewPoint();
-				diff = stage_->getCamera().getRightVector();
-				diff.normalize();
-				// distance between the eyepoints
-				diff = diff * stage_->getEyeDistance();  
-				stage_->getCamera().setViewPoint(view_point - diff);
-				gl_renderer_.updateCamera();
+				renderRepresentations_(mode);
+				glPopMatrix();
+
+				return;
 			}
+
+			Vector3 old_view_point = stage_->getCamera().getViewPoint();
+			
+			// distance between the eyepoints
+			Vector3	diff = stage_->getCamera().getRightVector();
+			diff.normalize();
+			diff = diff * stage_->getEyeDistance();  
+			stage_->getCamera().setViewPoint(old_view_point - diff);
+			gl_renderer_.updateCamera();
 
 			renderRepresentations_(mode);
 			glPopMatrix();
 
-			if (!gl_renderer_.isInStereoMode())
-			{
-				return;
-			}
-
 			glDrawBuffer(GL_BACK_RIGHT);
 			glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 			glPushMatrix();
-			stage_->getCamera().setViewPoint(view_point + (diff * 2));
+			stage_->getCamera().setViewPoint(old_view_point + (diff * 2));
 			gl_renderer_.updateCamera();
 			renderRepresentations_(DISPLAY_LISTS_RENDERING);
 			glPopMatrix();
-			stage_->getCamera().setViewPoint(view_point);
+			stage_->getCamera().setViewPoint(old_view_point);
 		}
 
 
