@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.14 2001/01/26 15:01:36 anker Exp $
+// $Id: support.C,v 1.15 2001/01/29 17:36:03 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/KERNEL/atom.h>
@@ -23,10 +23,10 @@ namespace BALL
 			 PairListAlgorithmType type)
 		{
 
-			// determine lower and upper corner of the hash grid that contains the box 
-			// plus "distance" many units on each side
-			Vector3 lower(Limits<float>::max(), Limits<float>::max(), Limits<float>::max());
-			Vector3 upper(Limits<float>::min(), Limits<float>::min(), Limits<float>::min());
+			// determine lower and upper corner of the hash grid that contains
+			// the box plus "distance" many units on each side
+			Vector3 lower(Limits<float>::max());
+			Vector3 upper(Limits<float>::min());
 
 			// Iterators for the atom vector
 			AtomVector::ConstIterator atom_it;
@@ -46,19 +46,24 @@ namespace BALL
 
 			if (atom_vector.size() == 0)
 			{
-				Log.warn() << " calculateNonBondedAtomPairs: atom_vector is empty " << endl;
+				Log.warn() << "calculateNonBondedAtomPairs: atom_vector is empty " 
+					<< endl;
 				return 0;
 			}
 
-			// Test if periodic boundary is enabled or not
+			// Test if periodic boundary is enabled or not and calculate the box
+			// size accordingly
 
 			if (periodic_boundary_enabled) 
 			{
-				// calculate the size of the box
+				// Just take the box that was given as argument...
 				period_x = box.getWidth();
 				period_y = box.getHeight();
 				period_z = box.getDepth(); 
 			
+				// ... and add at least distance to each coordinate to gain a box
+				// that contains enough neighbouring boxes.
+
 				if (distance < period_x) 
 				{
 					lower.x = box.a.x - distance;
@@ -94,7 +99,9 @@ namespace BALL
 			} 
 			else  
 			{
-				for (atom_it = atom_vector.begin(); atom_it != atom_vector.end(); ++atom_it)	
+				// we know nothing about the box, so we have to calculate it on our
+				// own by looking at the position of every atom in atom_vector
+				for (atom_it = atom_vector.begin(); +atom_it; ++atom_it)	
 				{
 					position = (*atom_it)->getPosition();
 					if (position.x < lower.x) lower.x = position.x;
@@ -120,15 +127,14 @@ namespace BALL
 			double  squared_distance = distance * distance;
 
 			// initialize the hash grid
-			HashGrid3<Atom*>	grid(lower - Vector3(0.1), upper - lower + Vector3(0.2), distance);
+			HashGrid3<Atom*> grid(lower - Vector3(0.1),
+					upper - lower + Vector3(0.2), distance);
 			HashGridBox3<Atom*>* hbox;
 
 			// Iterators and hash box pointer for the grid search
 			HashGridBox3<Atom*>::BoxIterator box_it;
 			HashGridBox3<Atom*>::DataIterator data_it;
 	
-			// Test if periodic boundary is enabled or not
-
 			if (periodic_boundary_enabled) 
 			{
 				// Calculate the half periods for determining the minimal image
@@ -136,34 +142,57 @@ namespace BALL
 				double half_period_y = period_y * 0.5;
 				double half_period_z = period_z * 0.5;
 
-				// Check what kind of algorithm should be used for determining the neighbours
+				// Check what kind of algorithm should be used for determining the
+				// neighbours
 
 				if (type == BRUTE_FORCE) 
 				{
-					// Brute force algorithm
+					// Brute force algorithm:
+					//
 
-					for ( atom_it = atom_vector.begin(); atom_it != atom_vector.end() ; ++atom_it) 
+					for (atom_it = atom_vector.begin(); +atom_it; ++atom_it) 
 					{
 						position = (*atom_it)->getPosition();
-						for (atom_it2 = atom_it, atom_it2++; atom_it2 != atom_vector.end(); ++atom_it2) 
+						for (atom_it2 = atom_it, atom_it2++; +atom_it2; ++atom_it2) 
 						{
 							new_position = position;
 							difference = position - (*atom_it2)->getPosition();
 
 							if (difference.x < -half_period_x) 
+							{
 								new_position.x += period_x;
-							else if (difference.x > half_period_x)
-								new_position.x -= period_x;
+							}
+							else 
+							{
+								if (difference.x > half_period_x)
+								{
+									new_position.x -= period_x;
+								}
+							}
 
 							if (difference.y < -half_period_y) 
+							{
 								new_position.y += period_y;
-							else if (difference.y > half_period_y)
-								new_position.y -= period_y;
+							}
+							else 
+							{
+								if (difference.y > half_period_y)
+								{
+									new_position.y -= period_y;
+								}
+							}
 
 							if (difference.z < -half_period_z) 
+							{
 								new_position.z += period_z;
-							else if (difference.z > half_period_z)
-								new_position.z -= period_z;
+							}
+							else 
+							{
+								if (difference.z > half_period_z)
+								{
+									new_position.z -= period_z;
+								}
+							}
 
 							if ((new_position.getSquareDistance((*atom_it2)->getPosition())) <= squared_distance) 
 							{
@@ -175,15 +204,18 @@ namespace BALL
 				} 
 				else 
 				{ 
-					// Use a hash grid with box length "distance" to determine all neigboured atom pairs
+					// Use a hash grid with box length "distance" to determine all
+					// neigboured atom pairs
 
-					for (atom_it = atom_vector.begin() ; atom_it != atom_vector.end() ; ++atom_it) 
+					for (atom_it = atom_vector.begin(); +atom_it; ++atom_it) 
 					{
 						position = (*atom_it)->getPosition();
 
-						// Search all neighbor atoms of "atom_it" that are stored in the hash grid
+						// Search all neighbor atoms of "atom_it" that are stored in
+						// the hash grid
 
-						// Calculate the 27 images of the atom and determine their neighbours
+						// Calculate the 27 images of the atom and determine their
+						// neighbours
 
 						for (short x = -1; x < 2 ; x++) 
 						{
@@ -204,10 +236,13 @@ namespace BALL
 											{
 
 												difference = new_position - (*data_it)->getPosition();
-												if (difference.x > -half_period_x && difference.x <= half_period_x &&
-														difference.y > -half_period_y && difference.y <= half_period_y &&
-														difference.z > -half_period_z && difference.z <= half_period_z &&
-														difference.getSquareLength() <= squared_distance) 
+												if ((difference.x > -half_period_x) 
+													&& (difference.x <= half_period_x) 
+													&& (difference.y > -half_period_y) 
+													&& (difference.y <= half_period_y)
+													&& (difference.z > -half_period_z) 
+													&& (difference.z <= half_period_z) 
+													&& (difference.getSquareLength() <= squared_distance))
 												{
 													pair_vector.push_back(pair<Atom*, Atom*>(*atom_it, *data_it));
 													counter++;
@@ -230,7 +265,7 @@ namespace BALL
 				if (type == BRUTE_FORCE) 
 				{
 					// Brute force algorithm
-					for (Size atom_index_a = 0 ; atom_index_a < (atom_vector.size() - 1) ; ++atom_index_a) 
+					for (Size atom_index_a = 0; atom_index_a < (atom_vector.size() - 1); ++atom_index_a) 
 					{
 						position = atom_vector[atom_index_a]->getPosition();
 						for (Size atom_index_b = atom_index_a + 1; atom_index_b < atom_vector.size(); ++atom_index_b) 
@@ -248,13 +283,16 @@ namespace BALL
 				} 
 				else 
 				{  	
-					// Use a hash grid with box length "distance" to determine all neigboured atom pairs
+					// Use a hash grid with box length "distance" to determine all
+					// neigboured atom pairs
 
-					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end() ; ++atom_it) 
+					for (atom_it = atom_vector.begin(); +atom_it; ++atom_it) 
 					{
 						position = (*atom_it)->getPosition();
 
-						// Search all neighbor atoms of "atom_it" that are stored in the hash grid
+						// Search all neighbor atoms of "atom_it" that are stored in
+						// the hash grid
+
 						hbox = grid.getBox(position);
 						if (hbox != 0)
 						{
@@ -320,10 +358,10 @@ namespace BALL
 			Size reject_counter = 0;
 
 			AtomIterator atom_it = solvent.beginAtom();
-			if (atom_it != solvent.endAtom())
+			if (+atom_it)
 			{
 				old_molecule = atom_it->getMolecule();
-				for (	; +atom_it; ++atom_it) 
+				for (; +atom_it; ++atom_it) 
 				{
 					// Test if a new molecule is reached and if the old can be inserted
 					// into the solute system
@@ -351,10 +389,6 @@ namespace BALL
 								// DEBUG
 								else
 								{
-									Log.info() << "Not adding molecule containing "
-										<< old_molecule->beginAtom()->getFullName()
-										<< " (center of gravity = " << center_of_gravity
-										<< ")" << endl;
 									reject_counter++;
 								}
 							}
@@ -395,20 +429,51 @@ namespace BALL
 								if ((position.getSquareDistance((*data_it)->getPosition())) 
 										< square_distance)
 								{
-									// DEBUG
-									Log.info() << "Not adding molecule containing " 
-										<< (*data_it)->getFullName() << " (distance)" << endl;
 									add = false;
 								}
 							}
 						}
 					}
 				}	
+				if (add == true) 
+				{
+					if ((atom_counter > 0) && (mass != 0)) 
+					{
+						center_of_gravity /= mass;
+						if ((center_of_gravity.x >= box.a.x) 
+								&& (center_of_gravity.x <= box.b.x)
+								&& (center_of_gravity.y >= box.a.y) 
+								&& (center_of_gravity.y <= box.b.y) 
+								&& (center_of_gravity.z >= box.a.z) 
+								&& (center_of_gravity.z <= box.b.z)) 
+						{
+							// copy the solvent molecule and insert it into
+							// the solute system 
+							Molecule* solvent_molecule = new Molecule(*old_molecule);
+							system.insert(*solvent_molecule);
+							mol_counter++;
+						}
+						// DEBUG
+						else
+						{
+							reject_counter++;
+						}
+					}
+				}
+				// DEBUG
+				else
+				{
+					reject_counter++;
+				}
 			}
 
 			// DEBUG
+			/*
 			Log.info() << "Number of rejected molecules = " << reject_counter 
 				<< endl;
+			Log.info() << "Number of inserted molecules = " << mol_counter 
+				<< endl;
+			*/
 			// return the number of processed solvent molecules
 			return mol_counter;
 		}
@@ -494,15 +559,12 @@ namespace BALL
 				{
 					for (atom_it = mol_it->beginAtom(); +atom_it; ++atom_it)
 					{
-						Log.info() << "MolmecSupport::adaptWaterBox(): "
-							<< "translating atom " << atom_it->getFullName()
-							<< " by " << translation << endl;
 						atom_it->setPosition(atom_it->getPosition() + translation);
 					}
 				}
 				mol_count++;
 			} // iteration over molecules
-			Log.info() << "processed " << mol_count << " molecules" << endl;
+			Log.info() << "processed " << mol_count << " solvent molecules" << endl;
 		}
 
 
