@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.53 2003/03/26 15:59:20 anhi Exp $
+// $Id: atom.h,v 1.54 2003/05/25 21:38:01 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -1100,7 +1101,12 @@ namespace BALL
 
 		
 		///
-		typedef std::vector<StaticAtomAttributes> AttributeVector;
+		class AttributeVector
+			:	public std::vector<StaticAtomAttributes>
+		{
+			public:
+			~AttributeVector() throw();
+		};
 
 		///
 		typedef std::list<Atom*> AtomPtrList;
