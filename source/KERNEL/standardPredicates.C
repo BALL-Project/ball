@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.30.4.1 2002/05/16 01:29:43 oliver Exp $
+// $Id: standardPredicates.C,v 1.30.4.2 2002/05/23 23:54:17 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -993,7 +993,7 @@ namespace BALL
 		}
 		else if (s.hasPrefix("="))
 		{
-			result = (fabs(crg - s.after("=").toString().toFloat() < Constants::EPSILON));
+			result = (fabs(crg - s.after("=").toString().toFloat()) < Constants::EPSILON);
 		}
 		else					
 		{
