@@ -1,4 +1,4 @@
-// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.6 2000/11/28 17:31:33 anker Exp $
+// $Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.7 2000/12/01 15:18:56 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.6 2000/11/28 17:31:33 anker Exp $")
+START_TEST(class_name, "$Id: Pair6_12InteractionEnergyProcessor_test.C,v 1.7 2000/12/01 15:18:56 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -127,7 +127,7 @@ CHECK(Pair6_12InteractionEnergyProcessor::finish())
 	"data/6_12-test.rdf.ini");
 	S.apply(proc);
 	val = proc.getEnergy();
-	TEST_REAL_EQUAL(val, -6.027207050)
+	TEST_REAL_EQUAL(val, -7.62216)
 
 	// BAUSTELLE: USE_RDF=true geht trotz nicht gesetzten Dateinamens!!!
 	// Was ist mit dem default? Exception?
