@@ -1,4 +1,4 @@
-// $Id: config.h.in,v 1.25 2001/06/21 02:37:59 oliver Exp $ 
+// $Id: config.h.in,v 1.26 2001/07/05 17:58:07 oliver Exp $ 
 
 #ifndef BALL_CONFIG_CONFIG_H
 #define BALL_CONFIG_CONFIG_H
@@ -47,11 +47,6 @@
 // used in COMMON/namespace.h to cause the inclusion of COMMON/memory.h
 #undef BALL_LOG_MEMORY
 #define BALL_LOG_MEMORY_FILE "memory.log"
-
-// undef this symbol to disable the usage
-// of the ObjectManager (refer to the documentation
-// for details)
-#define BALL_SUPPORT_OBJECT_MANAGER
 
 // define architecture
 #undef BALL_ARCH_SPARC
