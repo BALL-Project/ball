@@ -27,8 +27,8 @@ namespace BALL
 		/**	Dialog for creating labels.
 				The class LabelDialog is a dialog for appending to a selection of 
 				molecular objects a label which text and color can be changed.
-				The class  \link MolecularControl MolecularControl \endlink  is responsible for creating such a selection.
-				If this dialog is used, it should be created with  \link MainControl MainControl \endlink  as parent.
+				The class  MolecularControl is responsible for creating such a selection.
+				If this dialog is used, it should be created with  MainControl as parent.
 				The class LabelDialogData contains the definition of the layout of
 				this dialog and is therefore not necessary for understanding.  \par
     		\ingroup  ViewDialogs
@@ -47,11 +47,8 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new labelDialog.
 					Calls  \link registerWidget registerWidget \endlink .
-					@param      parent the parent widget of {\em *this} labelDialog 
-					@param      name the name of {\em *this} labelDialog
-					@return     LabelDialog new constructed labelDialog
+					@param      parent the parent widget 
 					@see        QDialog
 					@see        ModularWidget
 			*/
@@ -64,7 +61,6 @@ namespace BALL
 			//@{
 
 			/** Destructor.
-					Default destruction of {\em *this} labelDialog.
 			*/
 			virtual ~LabelDialog()
 				throw();
@@ -75,14 +71,10 @@ namespace BALL
 			//@{
 
 			/** Message handling method.
-					Handles messages sent by other registered  \link ConnectionObject ConnectionObject \endlink  objects.
-					Catches only  \link MolecularSelectionMessage MolecularSelectionMessage \endlink  objects.
+					Catches only ControlSelectionMessage from MolecularControl.
 					If such a message is catched the apply button will be enabled and labels
 					can be appended onto the selection.
 					@param message the pointer to the message that should be processed
-					@see   MolecularSelectionMessage
-					@see   ConnectionObject
-					@see   Message
 		  */
 			virtual void onNotify(Message *message)
 				throw();
@@ -92,32 +84,23 @@ namespace BALL
 			*/
 			//@{
 			
-			/** Fetches the preferences.
-					Fetches the preferences (the position and the selected color of {\em *this}
-					labelDialog) from the	 \link INIFile INIFile \endlink  {\em inifile}.
-					@param  inifile the  \link INIFile INIFile \endlink  that contains the needed information for {\em *this} labelDialog
+			/** Fetches the preferences (the position and the selected color of {\em *this}
+					labelDialog) from the	 INIFile.
 					@see    writePreferences
 			*/
 			virtual void fetchPreferences(INIFile &inifile)
 				throw();
 			
-			/** Writes the preferences.
-					Writes the preferences (the position and the selected color of {\em *this}
-					labelDialog) to the	 \link INIFile INIFile \endlink  {\em inifile}.
-					This method will be called inside the method  \link aboutToExit aboutToExit \endlink  from the class
-					 \link MainControl MainControl \endlink .
-					@param  inifile the  \link INIFile INIFile \endlink  to be written into
+			/** Writes the preferences (the position and the selected color) to the	INIFile.
+					This method will be called inside the method  MainControl::aboutToExit 
 					@see    fetchPreferences
 			*/
 			virtual void writePreferences(INIFile &inifile)
 				throw();
 				
-			/**	Initializes the widget.
-					Initializes the popup menu {\em Display} with its checkable submenu 
-					{\em Label Dialog} and connects it to the method  \link openDialog openDialog \endlink .
-					This method is called automatically	immediately before the main application 
-					is started. 
-					@param main_control the  \link MainControl MainControl \endlink  object to be initialized with {\em *this} labelDialog
+			/**	Initializes the popup menu {\em Display} with its checkable submenu {\em Add Label}; 
+					This method is called automatically	immediately before the main application is started. 
+					@param main_control the  MainControl object to be initialized 
 					@see   openDialog
 					@see   finalizeWidget
 					@see   insertMenuEntry
@@ -125,12 +108,9 @@ namespace BALL
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
 			
-			/**	Removes the widget.
-					Removes the checkable submenu {\em Label Dialog} from the popup menu
-					{\em Display}	and cuts the connection to the method  \link openDialog openDialog \endlink .
-					This method will be called by  \link aboutToExit aboutToExit \endlink  from the  \link MainControl MainControl \endlink 
-					object.
-					@param main_control the  \link MainControl MainControl \endlink  object to be finalized with {\em *this} labelDialog
+			/**	Removes the checkable submenu {\em Label Dialog} from the popup menu {\em Display}.
+					This method will be called by  MainControl::aboutToExit.
+					@param main_control the  MainControl to be finalized 
 					@see   initializeWidget
 					@see   removeMenuEntry
 					@see   aboutToExit
@@ -158,25 +138,14 @@ namespace BALL
 			protected slots:
 							
 			/** Indicates the apply button was pressed.
-					Appends a  \link GLLabel GLLabel \endlink  with the specified text and color
-					to the geometric center of the objects in the selection. 
-					Sents the message  \link ChangedCompositeMessage ChangedCompositeMessage \endlink ,  \link SceneMessage SceneMessage \endlink 
-					and  \link WindowMessage WindowMessage \endlink  to inform other  \link ConnectionObject ConnectionObject \endlink  about the change
-					in the  \link Composite Composite \endlink  objects in the selection.
-					@see  onNotify
-					@see  Composite
+			 		Creates a new Representation with the Label and notifies the widgets.
 					@see  GeometricCenterProcessor
-					@see  GLLabel
-					@see  ChangedCompositeMessage
+					@see  RepresentationMessage
 					@see  SceneMessage
-					@see  WindowMessage
 			*/
 			virtual void accept();
 			
-			/** Opens the edit color dialog.
-					Opens the dialog for editing the color in which the text of the label
-					should be drawn.
-					Opens a  \link QColorDialog QColorDialog \endlink  from the QT-library.
+			/** Opens the dialog to select the color for the label text.
 					See documentation of QT-library for information concerning QColorDialog widgets.
 			 */ 
 			virtual void editColor();
