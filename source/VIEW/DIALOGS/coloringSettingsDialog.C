@@ -6,6 +6,7 @@
 
 #include <qpainter.h>
 #include <qtabwidget.h>
+#include <qcolordialog.h>
 
 namespace BALL
 {
@@ -14,17 +15,27 @@ namespace BALL
 
 QColorTableItem::QColorTableItem(QTable *t, EditType et, const ColorRGBA& color)
 	: QTableItem(t,et,""),
-		color_(color)
+		color_rgba_(color)
 { 
 }
 
 void QColorTableItem::paint(QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected)
 {
   QColorGroup g( cg );
-	g.setColor( QColorGroup::Base, QColor (color_.getRed(), color_.getGreen(), color_.getBlue()));
+	g.setColor( QColorGroup::Base, QColor (color_rgba_.getRed(), color_rgba_.getGreen(), color_rgba_.getBlue()));
   QTableItem::paint( p, g, cr, selected );
 }
 
+void QColorTableItem::setContentFromEditor( QWidget* )
+{
+}
+
+QWidget* QColorTableItem::createEditor() const
+{
+	return 0;
+}
+
+// ==============================================================================================
 QColorTable::QColorTable(QWidget* parent) 
 	: QTable(parent) 
 {
@@ -39,7 +50,7 @@ void QColorTable::initTable()
 	vector<String>::iterator name_it = names_.begin();
 }
 
-void QColorTable::setNamesName(const String& name)
+void QColorTable::setNamesTitle(const String& name)
 {
   horizontalHeader()->setLabel(0, name.c_str());
 }
@@ -52,20 +63,30 @@ void QColorTable::setContent(const vector<String>& names, const vector<ColorRGBA
   setNumRows(colors_.size());
 	for (Position p = 0; p < names_.size(); p++)
 	{
-    QColorTableItem* c2 = new QColorTableItem(this, QTableItem::Never, colors_[p]);
+    QColorTableItem* c2 = new QColorTableItem(this, QTableItem::WhenCurrent, colors_[p]);
     setText(p, 0, names_[p].c_str());
     setItem(p, 1, c2 );
 	}
 }
 
+QWidget* QColorTable::beginEdit(int row, int col, bool replace)
+{
+	if (col == 0) return 0;
+	QColor color = QColorDialog::getColor();
+	if (!color.isValid()) return 0;
 
+	((QColorTableItem*)item(row,col))->setColor(
+		ColorRGBA((Size)color.red(),(Size) color.green(),(Size) color.blue(),(Size) 255));
+	updateCell(row, col);
+	return 0;
+}
+				
 // =========================================================================================
 ColoringSettingsDialog::ColoringSettingsDialog( QWidget* parent,  const char* name, WFlags fl )
     : ColoringSettingsDialogData( parent, name, fl )
 {
-	element_table_ = new QColorTable(tabs->page(1));
+	element_table_ = new QColorTable(tabs->page(0));
 	setDefaults();
-	show();
 }
 
 void ColoringSettingsDialog::writePreferences(INIFile& file)
@@ -84,11 +105,14 @@ void ColoringSettingsDialog::setDefaults()
 	vector<String> 		names;
 	vector<ColorRGBA> colors;
 	ElementColorProcessor elp;
-	for (Position p = 0; p < 112; p++)
+	const HashMap<Position, ColorRGBA>& color_hash_map = elp.getColorMap();
+
+	for (Position p = 0; p < 111; p++)
 	{
 		names.push_back(PTE.getElement(p).getName());
-		colors.push_back(ColorRGBA(255,0,0));
+		colors.push_back(color_hash_map[p]);
 	}
+	element_table_->setNamesTitle("Element");
 	element_table_->setContent(names, colors);
 }
 

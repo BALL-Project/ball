@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: coloringSettingsDialog.h,v 1.2 2003/11/19 02:09:07 amoll Exp $
+// $Id: coloringSettingsDialog.h,v 1.3 2003/11/19 03:44:55 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORINGSETTINGSDIALOG_H
@@ -38,9 +38,16 @@ namespace BALL
 		{
 		public:
 				QColorTableItem(QTable* t, EditType et, const ColorRGBA& color);
+				
 				void paint( QPainter *p, const QColorGroup &cg, const QRect &cr, bool selected );
+				
+				QWidget *createEditor() const;
+				
+				void setContentFromEditor( QWidget *w );
+
+				void setColor(ColorRGBA color) { color_rgba_ = color;}
 		protected:
-				ColorRGBA color_;
+				ColorRGBA color_rgba_;
 		};
 
 
@@ -50,12 +57,12 @@ namespace BALL
 
 		public:
 				QColorTable(QWidget* parent = 0);
-				void setNamesName(const String& string);
+				void setNamesTitle(const String& string);
 				void setContent(const vector<String>& names, const vector<ColorRGBA>& colors);
 
 		private slots:
 				void recalcSum( int row, int col ){};
-
+				QWidget* beginEdit(int row, int col, bool replace);
 		private:
 				void initTable();
 				vector<ColorRGBA> colors_;
