@@ -1,15 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile_test.C,v 1.14 2003/07/03 13:20:04 amoll Exp $
+// $Id: DCDFile_test.C,v 1.15 2003/07/03 15:47:04 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/DCDFile.h>
+#include <BALL/FORMAT/PDBFile.h>
+#include <BALL/MOLMEC/COMMON/snapShotManager.h>
+#include <BALL/MOLMEC/COMMON/snapShot.h>
+#include <BALL/MOLMEC/AMBER/amber.h>
 ///////////////////////////
 
-START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.14 2003/07/03 13:20:04 amoll Exp $")
+START_TEST(DCDFile, "$Id: DCDFile_test.C,v 1.15 2003/07/03 15:47:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -87,6 +91,22 @@ RESULT
 // init() is called every time an object is constructed, so we won't have a
 // dedicated test here. There is no reasonable way to test it, anyway.
 
+String filename;
+System system;
+CHECK([EXTRA] full test)
+	PDBFile pfile("data/DCDFile_test.pdb");
+	pfile.read(system);
+	AmberFF amberFF;
+	NEW_TMP_FILE(filename);
+	DCDFile dcd(filename, File::OUT);
+	Options options;
+	SnapShotManager ssm(&system, &amberFF, options, &dcd, true);
+	ssm.takeSnapShot();
+	system.getAtom(0)->setPosition(Vector3(0,0,1111));
+	ssm.takeSnapShot();
+	ssm.flushToDisk();
+RESULT
+
 CHECK(bool readHeader() throw())
   DCDFile one(dcd_test_file, std::ios::in);
 	bool test = one.readHeader();
@@ -94,6 +114,10 @@ CHECK(bool readHeader() throw())
 	one.close();
 	DCDFile two("data/INIFile_test.ini", std::ios::in);
 	test = two.readHeader();
+	TEST_EQUAL(test, false)
+
+	DCDFile three(filename);
+	test = three.readHeader();
 	TEST_EQUAL(test, false)
 RESULT
 
@@ -140,7 +164,15 @@ RESULT
 
 
 CHECK(bool read(SnapShot& snapshot) throw())
-  //?????
+	DCDFile dcd(filename);
+	SnapShot ss;
+	TEST_EQUAL(dcd.read(ss), true)
+	ss.applySnapShot(system);
+	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(11.936, 104.294, 10.149))
+	TEST_EQUAL(dcd.read(ss), true)
+	ss.applySnapShot(system);
+	TEST_EQUAL(system.getAtom(0)->getPosition(), Vector3(0,0,1111))
+	TEST_EQUAL(dcd.read(ss), false)
 RESULT
 
 
@@ -149,27 +181,35 @@ CHECK(bool flushToDisk(const std::vector<SnapShot>& buffer) throw())
 RESULT
 
 CHECK(BALL_CREATE(DCDFile))
+  //?????
 RESULT
 
 CHECK(bool hasVelocities() const throw())
+  //?????
 RESULT
 
 CHECK(bool init() throw())
+  //?????
 RESULT
 
 CHECK(bool isSwappingBytes() const throw())
+  //?????
 RESULT
 
 CHECK(bool open(const String& name, File::OpenMode open_mode = std::ios::in) throw())
+  //?????
 RESULT
 
 CHECK(bool seekAndWriteHeader() throw())
+  //?????
 RESULT
 
 CHECK(void disableVelocityStorage() throw())
+  //?????
 RESULT
 
 CHECK(void enableVelocityStorage() throw())
+  //?????
 RESULT
 
 /////////////////////////////////////////////////////////////
