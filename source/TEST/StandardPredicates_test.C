@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: StandardPredicates_test.C,v 1.26 2003/04/01 14:36:16 anker Exp $
+// $Id: StandardPredicates_test.C,v 1.27 2003/04/02 12:01:11 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -19,7 +19,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.26 2003/04/01 14:36:16 anker Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.27 2003/04/02 12:01:11 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -314,6 +314,10 @@ CHECK(InRingPredicate::operator () (const Atom& atom) const )
 	in6Ring.setArgument("6");
 	InRingPredicate in9Ring;
 	in9Ring.setArgument("9");
+
+	RingFinder find_5_ring(5);
+	RingFinder find_6_ring(6);
+	RingFinder find_9_ring(9);
 	
 	AtomIterator it = S.beginAtom();
 	for (Size i=1; +it; ++it, ++i)
@@ -333,11 +337,13 @@ CHECK(InRingPredicate::operator () (const Atom& atom) const )
 			case 14:
 			case 16:
 				TEST_EQUAL(in5Ring(*it), true)
-				TEST_EQUAL(in5Ring.getRingAtoms().size(), 5);
+				TEST_EQUAL(find_5_ring(*it), true)
+				TEST_EQUAL(find_5_ring.getRingAtoms().size(), 5);
 				break;
 			default:
 				TEST_EQUAL(in5Ring(*it), false)
-				TEST_NOT_EQUAL(in5Ring.getRingAtoms().size(), 5);
+				TEST_EQUAL(find_5_ring(*it), false)
+				TEST_NOT_EQUAL(find_5_ring.getRingAtoms().size(), 5);
 		}
 		switch (i) 
 		{
@@ -348,11 +354,13 @@ CHECK(InRingPredicate::operator () (const Atom& atom) const )
 			case 21:
 			case 23:
 				TEST_EQUAL(in6Ring(*it), true)
-				TEST_EQUAL(in6Ring.getRingAtoms().size(), 6);
+				TEST_EQUAL(find_6_ring(*it), true)
+				TEST_EQUAL(find_6_ring.getRingAtoms().size(), 6);
 				break;
 			default:
 				TEST_EQUAL(in6Ring(*it), false)
-				TEST_NOT_EQUAL(in6Ring.getRingAtoms().size(), 6);
+				TEST_EQUAL(find_6_ring(*it), false)
+				TEST_NOT_EQUAL(find_6_ring.getRingAtoms().size(), 6);
 		}
 		switch (i) 
 		{
@@ -367,12 +375,14 @@ CHECK(InRingPredicate::operator () (const Atom& atom) const )
 			case 23:
 				TEST_EQUAL(inRing(*it), true)
 				TEST_EQUAL(in9Ring(*it), true)
-				TEST_EQUAL(in9Ring.getRingAtoms().size(), 9);
+				TEST_EQUAL(find_9_ring(*it), true)
+				TEST_EQUAL(find_9_ring.getRingAtoms().size(), 9);
 				break;
 			default:
 				TEST_EQUAL(inRing(*it), false)
 				TEST_EQUAL(in9Ring(*it), false)
-				TEST_NOT_EQUAL(in9Ring.getRingAtoms().size(), 9);
+				TEST_EQUAL(find_9_ring(*it), false)
+				TEST_NOT_EQUAL(find_9_ring.getRingAtoms().size(), 9);
 		}
 	}
 RESULT
@@ -1001,7 +1011,7 @@ CHECK(AxialPredicate::operator () (const Atom& atom) )
 RESULT
 
 CHECK(Conformation4C1Predicate::operator () (const Atom& atom) )
-	Conformation4C1Predicate is4C1;
+	Conformation4C1Predicate is_4C1;
 
 	AtomIterator it = S.beginAtom();
 	for (Size i=1; +it; ++it, ++i)
@@ -1022,13 +1032,14 @@ CHECK(Conformation4C1Predicate::operator () (const Atom& atom) )
 			case 27:
 			case 28:
 			case 33:
-				TEST_EQUAL(is4C1(*it), true)
+				TEST_EQUAL(is_4C1(*it), true)
 				break;
 			default:
-				TEST_EQUAL(is4C1(*it), false)
+				TEST_EQUAL(is_4C1(*it), false)
 		}
 	}
 RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

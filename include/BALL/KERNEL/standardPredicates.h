@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.34 2003/04/01 14:36:14 anker Exp $
+// $Id: standardPredicates.h,v 1.35 2003/04/02 12:01:06 anker Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -352,36 +352,9 @@ namespace BALL
 					@param atom the atom to test
 					@return true, if the predicate is true, false otherwise
 			*/
-			virtual bool operator () (const Atom& atom)
+			virtual bool operator () (const Atom& atom) const
 				throw();
 
-			/** Depth first search for finding rings.
-			*/
-			bool dfs(const Atom& atom, const Atom& first_atom, 
-					const Size limit, const bool exact, 
-					HashSet<const Bond*>& visited, std::vector<const Atom*>& atoms) const
-				throw();
-
-			/** Return the vector of ring atoms
-			*/
-			const HashSet<const Bond*>& getVisitedBonds() const
-				throw();
-
-			/** Return the vector of ring atoms
-			*/
-			const std::vector<const Atom*>& getRingAtoms() const
-				throw();
-
-		private:
-
-			/*_
-			*/
-			HashSet<const Bond*> visited_bonds_;
-
-			/*_
-			*/
-			std::vector<const Atom*> ring_atoms_;
-				
 	};
 
 
@@ -900,6 +873,80 @@ namespace BALL
 		*/
 		virtual bool operator () (const Atom& atom) const
 			throw();
+	};
+
+	/** Helper class for all predicates that need ring information.
+	*/
+	class RingFinder
+	{
+		public:
+
+			// BALL_CREATE(RingFinder)
+
+			/// Default constructor
+			RingFinder()
+				throw();
+
+			/** Detailed constructor. Initialize this instance with the size of
+					the ring we want to find. Default setting is 0 which means that
+					any ring size will match.
+			*/
+			RingFinder(Size n)
+				throw();
+
+			/// Destructor
+			~RingFinder()
+				throw();
+
+			/** Return true, if atom is in a ring.
+			*/
+			bool operator () (const Atom& atom)
+				throw();
+
+			/** Depth first search for finding rings.
+			*/
+			bool dfs(const Atom& atom, const Size limit)
+				throw();
+
+			/** Set the ring size we want to find. Ring sizes below 3 will always
+					return false, except if the size is set to 0, then any ring size
+					will match. 
+			*/
+			void setRingSize(Size n)
+				throw();
+
+			/** Return the hashset containing all visited bonds.
+			*/
+			const HashSet<const Bond*>& getVisitedBonds() const
+				throw();
+
+			/** Return the vector of ring atoms.
+			*/
+			const std::vector<const Atom*>& getRingAtoms() const
+				throw();
+
+		private:
+
+			/**
+			*/
+			const Atom* first_atom_;
+			
+			/**
+			*/
+			Size n_;
+
+			/**
+			*/
+			bool exact_;
+
+			/*_
+			*/
+			HashSet<const Bond*> visited_bonds_;
+
+			/*_
+			*/
+			std::vector<const Atom*> ring_atoms_;
+
 	};
 
 	//@}	

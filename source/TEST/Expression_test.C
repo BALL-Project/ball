@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Expression_test.C,v 1.32 2003/04/01 14:36:15 anker Exp $
+// $Id: Expression_test.C,v 1.33 2003/04/02 12:01:11 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -21,7 +21,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.32 2003/04/01 14:36:15 anker Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.33 2003/04/02 12:01:11 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -492,6 +492,7 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	test_expressions.insert(pair<String, Size>("(!element(C))", 54));
 	test_expressions.insert(pair<String, Size>("!(!element(C))", 22));
 	test_expressions.insert(pair<String, Size>("element(H) OR (name(CA) AND chain(A))", 40));
+	test_expressions.insert(pair<String, Size>("inRing()", 10));
 
 	Expression e;
 	Size counter;

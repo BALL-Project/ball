@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.44 2003/04/01 14:36:15 anker Exp $
+// $Id: standardPredicates.C,v 1.45 2003/04/02 12:01:09 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -215,84 +215,13 @@ namespace BALL
 	InRingPredicate::~InRingPredicate()
 		throw()
 	{
-		ring_atoms_.clear();
 	}
 
-	bool InRingPredicate::dfs(const Atom& atom, const Atom& first_atom,
-			const Size limit, const bool exact, HashSet<const Bond*>& visited,
-			vector<const Atom*>& atoms) const
-		throw()
-	{
-		// the following recursive function performs an ad-hoc dfs and returns
-		// true, if a ring was found and false otherwise.
-
-		if (exact == true)
-		{
-			if (limit == 0) 
-			{
-				if (atom == first_atom) 
-				{
-					// Found first atom at limit
-					return true;
-				}
-				else
-				{
-					// Reached limit without finding the first atom
-					return false;
-				}
-			}
-		}
-		else
-		{
-			if ((atom == first_atom) && (visited.size() > 0))
-			{
-				return true;
-			}
-			if (limit == 0)
-			{
-				return false;
-			}
-		}
-
-		Size i;
-		const Bond* bond;
-		Atom* descend;
-
-		// Now iterate over all Bonds an store the visited bonds.
-
-		for (i = 0; i < atom.countBonds(); ++i)
-		{
-			bond = atom.getBond(i);
-			if (!visited.has(bond))
-			{
-				descend = bond->getPartner(atom);
-				visited.insert(bond);
-				if (dfs(*descend, first_atom, limit-1, exact, visited, atoms) == true)
-				{
-					// DEBUG
-					// cout << "Pushing back " << atom.getFullName() << endl;
-					// /DEBUG
-					atoms.push_back(&atom);
-					return true;
-				}
-				else
-				{
-					visited.erase(bond);
-				}
-			}
-		}
-		// No partner matched
-		return false;
-	}
-
-
-	bool InRingPredicate::operator () (const Atom& atom)
+	bool InRingPredicate::operator () (const Atom& atom) const
 		throw()
 	{
 		// the size of the ring to be found
 		int n;
-		// do we search a ring of a certain number of members or just a ring?
-		bool exact = true;
 
 		if (argument_.size() == 1)
 		{
@@ -316,8 +245,7 @@ namespace BALL
 		{
 			if (argument_ == "")
 			{
-				n = 99;
-				exact = false;
+				n = 0;
 			}
 			else
 			{
@@ -330,9 +258,9 @@ namespace BALL
 		// if the atom does not have bonds, we cannot find any rings.
 		if (atom.countBonds() > 0)
 		{
-			visited_bonds_.clear();
-			ring_atoms_.clear();
-			if (dfs(atom, atom, n, exact, visited_bonds_, ring_atoms_) == true)
+			RingFinder find_my_ring(n);
+
+			if (find_my_ring(atom) == true)
 			{
 				return true;
 			}
@@ -347,19 +275,6 @@ namespace BALL
 		}
 
 	}
-
-	const HashSet<const Bond*>& InRingPredicate::getVisitedBonds() const
-		throw()
-	{
-		return visited_bonds_;
-	}
-
-	const vector<const Atom*>& InRingPredicate::getRingAtoms() const
-		throw()
-	{
-		return ring_atoms_;
-	}
-
 
 	bool DoubleBondsPredicate::operator () (const Atom& atom) const
 		throw()
@@ -1525,7 +1440,7 @@ namespace BALL
 		}
 
 		// make sure we are in a 5 or 6 memebered ring.
-		InRingPredicate in_ring;
+		RingFinder in_ring;
 		if (!in_ring(atom) == true)
 		{
 #ifdef DEBUG
@@ -1658,7 +1573,7 @@ namespace BALL
 	bool Conformation4C1Predicate::operator () (const Atom& atom) const
 		throw()
 	{
-		InRingPredicate in_6_ring(6);
+		RingFinder in_6_ring(6);
 		if (!in_6_ring(atom))
 		{
 			// if we are not in a six-membered ring, the predicate doesn't make
@@ -1735,5 +1650,145 @@ namespace BALL
 			return(true);
 		}
 	}
+
+
+	RingFinder::RingFinder()
+		throw()
+		: first_atom_(0),
+			n_(0),
+			exact_(true),
+			visited_bonds_(),
+			ring_atoms_()
+	{
+	}
+
+	RingFinder::RingFinder(Size n)
+		throw()
+		: first_atom_(0),
+			n_(n),
+			exact_(true),
+			visited_bonds_(),
+			ring_atoms_()
+	{
+	}
+
+	RingFinder::~RingFinder()
+		throw()
+	{
+	}
+
+	bool RingFinder::operator () (const Atom& atom)
+		throw()
+	{
+		exact_ = true;
+
+		// do we search a ring of a certain number of members or just a ring?
+		if (n_ == 0)
+		{
+			n_ = 99;
+			exact_ = false;
+		}
+		else
+		{
+			if (n_ < 3) 
+			{
+				// there are no rings with less than three atoms
+				return false;
+			}
+		}
+
+		first_atom_ = &atom;
+		visited_bonds_.clear();
+		ring_atoms_.clear();
+
+		bool result = dfs(atom, n_);
+
+		return(result);
+	}
+
+	bool RingFinder::dfs(const Atom& atom, const Size limit)
+		throw()
+	{
+		// the following recursive function performs an ad-hoc dfs and returns
+		// true, if a ring was found and false otherwise.
+
+		if (exact_ == true)
+		{
+			if (limit == 0) 
+			{
+				if (atom == *first_atom_) 
+				{
+					// Found first atom at limit
+					return true;
+				}
+				else
+				{
+					// Reached limit without finding the first atom
+					return false;
+				}
+			}
+		}
+		else
+		{
+			if ((atom == *first_atom_) && (visited_bonds_.size() > 0))
+			{
+				return true;
+			}
+			if (limit == 0)
+			{
+				return false;
+			}
+		}
+
+		Size i;
+		const Bond* bond;
+		Atom* descend;
+
+		// Now iterate over all Bonds an store the visited bonds.
+
+		for (i = 0; i < atom.countBonds(); ++i)
+		{
+			bond = atom.getBond(i);
+			if (!visited_bonds_.has(bond))
+			{
+				descend = bond->getPartner(atom);
+				visited_bonds_.insert(bond);
+				if (dfs(*descend, limit-1) == true)
+				{
+#ifdef DEBUG
+					cout << "Pushing back " << atom.getFullName() << endl;
+#endif
+					ring_atoms_.push_back(&atom);
+					return true;
+				}
+				else
+				{
+					visited_bonds_.erase(bond);
+				}
+			}
+		}
+		// No partner matched
+		return false;
+	}
+
+	void RingFinder::setRingSize(Size n)
+		throw()
+	{
+		n_ = n;
+	}
+
+	const HashSet<const Bond*>& RingFinder::getVisitedBonds() const
+		throw()
+	{
+		return visited_bonds_;
+	}
+
+	const vector<const Atom*>& RingFinder::getRingAtoms() const
+		throw()
+	{
+		return ring_atoms_;
+	}
+
+
 
 } // namespace BALL
