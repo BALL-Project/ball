@@ -1,14 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MathsCommon_test.C,v 1.7 2002/02/27 12:24:38 sturm Exp $
+// $Id: MathsCommon_test.C,v 1.8 2003/04/17 06:04:41 oliver Exp $
+
+// reordered due to trouble with Darwin (isnan header clash)
+
+///////////////////////////
+
+#include <BALL/MATHS/common.h>
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
-#include <BALL/MATHS/common.h>
-///////////////////////////
 
-START_TEST(MathsCommon, "$Id: MathsCommon_test.C,v 1.7 2002/02/27 12:24:38 sturm Exp $")
+START_TEST(MathsCommon, "$Id: MathsCommon_test.C,v 1.8 2003/04/17 06:04:41 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

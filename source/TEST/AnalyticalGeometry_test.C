@@ -1,10 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AnalyticalGeometry_test.C,v 1.27 2002/02/27 12:24:21 sturm Exp $
-#include <BALL/CONCEPT/classTest.h>
+// $Id: AnalyticalGeometry_test.C,v 1.28 2003/04/17 06:04:41 oliver Exp $
 
 ///////////////////////////
+
+#include <BALL/MATHS/common.h>
+#include <BALL/MATHS/analyticalGeometry.h>
+
 #include <BALL/common.h>
 #include <BALL/MATHS/angle.h>
 #include <BALL/MATHS/circle3.h>
@@ -12,10 +15,13 @@
 #include <BALL/MATHS/plane3.h>
 #include <BALL/MATHS/sphere3.h>
 #include <BALL/MATHS/vector3.h>
-#include <BALL/MATHS/analyticalGeometry.h>
+
+// reordered due to Darwin isnan problem (header clash)
+#include <BALL/CONCEPT/classTest.h>
+
 ///////////////////////////
 
-START_TEST(AnalyticalGeometry, "$Id: AnalyticalGeometry_test.C,v 1.27 2002/02/27 12:24:21 sturm Exp $")
+START_TEST(AnalyticalGeometry, "$Id: AnalyticalGeometry_test.C,v 1.28 2003/04/17 06:04:41 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
