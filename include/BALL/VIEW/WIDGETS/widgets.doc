@@ -1,4 +1,4 @@
-// $Id: widgets.doc,v 1.2.2.1 2004/05/19 13:13:46 amoll Exp $
+// $Id: widgets.doc,v 1.2.2.2 2004/05/19 13:16:06 amoll Exp $
 
 /**	\defgroup ViewWidgets Modular Widgets
 		\ingroup Visualisation
@@ -11,8 +11,6 @@
 		- \link BALL::VIEW::DatasetControl Control of trajectories and grids\endlink
 		- \link BALL::VIEW::LogView Logviews \endlink
 		- \link BALL::VIEW::PyWidget Interface to the Python interpreter \endlink
-		- \link BALL::VIEW::RegularData1DWidget Plotting of onedimensional data \endlink
-		- \link BALL::VIEW::RegularData2DWidget Plotting of  twodimensional data \endlink
 
 		<br>
 		Other widgets are easy to implement (See documentation of \link BALL::VIEW::ModularWidget ModularWidget\endlink ).
