@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.23 2001/02/26 00:21:48 amoll Exp $
+// $Id: bond.h,v 1.24 2001/06/27 01:42:16 oliver Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -35,27 +35,26 @@ namespace BALL
 	class Fragment;
 	class System;
 
-	/** The bond class of the kernel framework.
-			{\bf Framework:} BALL/KERNEL\\
-			{\bf Definition:} \URL{BALL/KERNEL/bond.h}\\
-			{\bf Concept:} association\\
-			An instance of Bond represents a chemical connectivity ("bond")
-			between two \Ref{Atom} instances ("first atom" and "second atom").
-			During each runtime instance of a program a bond is unique and identified by a \Ref{Object::Handle}.
+	/** Bond class.
+			An instance of Bond represents a bond between two atoms.
 			Bond equality is defined as bond identity.
-			A linear ordering of bonds is defined as the linear order of the \Ref{Object::Handle}'s.
-			There can exist only one bond between a first and a second atom that is shared by both of them.
-			For the sake of maintainability the first atom "owns" the bond thus the bond is existentially dependent on the first atom
-			whilst the second atom "owes" the bond from the first atom.
-			Bonds and atoms define an implict molecular graph.
+			A linear ordering of bonds is defined as the linear order of the \Ref{Object::Handle}s.
+			There can be only one bond between two atoms (double, triple, etc. bonds are represented
+			using just one bond and an appropriate value for the bond order attribute, see \Ref{setBondOrder}).
+			\\
+			The "first" and "second" atom are assigned in a unique way: the first atom is always
+			the atom with the lower \Ref{Handle} thant the second atom.
+			\\
 			The "state" of a bond is defined by its attributes:
 			\begin{itemize}
-				\item "first bonding (bond-owning) atom" (\Ref{Bond::first_})
-				\item "second bonding (bond-owing) atom" (\Ref{Bond::second_})
+				\item "first atom" (\Ref{Bond::first_})
+				\item "second atom" (\Ref{Bond::second_})
 				\item "bond name" (\Ref{Bond::name_})
 				\item "bond order" (\Ref{Bond::bond_order_})
 				\item "bond type" (\Ref{Bond::bond_type_})
 			\end{itemize}
+			\\
+			{\bf Definition:} \URL{BALL/KERNEL/bond.h}\\
 	*/
 	class Bond
 		: public Composite,
@@ -84,14 +83,14 @@ namespace BALL
 				throw();
 		};
 
-		/**	Not bounded to two atoms.
-				This exception may be thrown by \Ref{getLength} if this instance is not bounded.
+		/**	Not bound to two atoms.
+				This exception may be thrown by \Ref{getLength} if this instance is not bound.
 		*/
-		class NotBounded
+		class NotBound
 			:	public	Exception::GeneralException
 		{
 			public:
-			NotBounded(const char* file, int line)
+			NotBound(const char* file, int line)
 				throw();
 		};
 
@@ -114,7 +113,7 @@ namespace BALL
 		*/
 		enum BondOrder
 		{
-			///
+			/// Default value
 			ORDER__UNKNOWN        = 0,
 			///
 			ORDER__SINGLE         = 1,
@@ -130,11 +129,13 @@ namespace BALL
 			NUMBER_OF_BOND_ORDERS
 		};
 			
-		/**	Predefined constants for the bond type 
+		/**	Predefined constants for the bond type.
+				Those are just defined for convenience but they are not
+				used right now.
 		*/
 		enum BondType
 		{
-			///
+			/// 
 			TYPE__UNKNOWN           = 0,
 			///
 			TYPE__COVALENT          = 1,
@@ -152,11 +153,11 @@ namespace BALL
 		};
 
 		/** Predefined properties.
-				Enumeration of all properties that are used by the BALL kernel.
+				Enumeration of all properties that are used by Bond.
 		*/
 		enum Property
 		{
-			NUMBER_OF_PROPERTIES
+			NUMBER_OF_PROPERTIES = 0
 		};
 		//@}  
 
@@ -167,57 +168,51 @@ namespace BALL
 		/** Default constructor.
 				The state of this bond is:
 				\begin{itemize}
-					\item bond has no connectivity with first atom (=0)
-					\item bond has no connectivity with second atom (=0)
+					\item bond has no first atom (=0)
+					\item bond has no second atom (=0)
 					\item bond name is the empty string (="")
 					\item bond order is unknown (=\Ref{Bond::ORDER__UNKNOWN})
 					\item bond type is unknown (=\Ref{Bond::TYPE__UNKNOWN})
 				\end{itemize}
-				@return    Bond - new constructed bond
 		*/
 		Bond()
 			throw();
 
 		/** Copy constructor.
 				Calls \Ref{Bond::createBond}.
-				The state of this bond is initialized to the state of bond.\\
-				{\bf Note:} Deep copying of bonds make no sense, the parameter {\bf deep} is therefore
-				ignored.
-				The use of this method is not recommended because it may result in inconcistencies
-				of the whole system. It is used for backup only.
-				@param			 bond the bond to be copied (cloned)
-				@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em bond}
-				@return      Bond - new constructed bond cloned from {\em bond}
+				The state of this bond is initialized to the state of bond.
+				\\
+				{\bf Note:} Deep copying of bonds makes no sense, the parameter {\tt deep} is therefore
+				ignored. The use of this method is not recommended because it may result in inconcistencies
+				of the whole the kernel data structure. This if for internal use only!
+				@param			 bond the bond to be copied
+				@param       deep ignored
 				@see         createBond
 		*/
 		Bond(const Bond& bond, bool deep = true)
 			throw();
 	
-		/** Detailed state initializing constructor.
+		/** Detailed constructor.
+				Calls \Ref{createBond} to create a new bond between the two atoms
 				@param       name name of the constructed bond
 				@param       first first atom of the constructed bond
 				@param       second second atom of the constructed bond
 				@param       order order of the constructed bond
 				@param       type type of the constructed bond
-				@return      Bond - new constructed bond
-				@see clear
+				@exception TooManyBonds if one of the atom already possesses \Ref{Atom::MAX_NUMBER_OF_BONDS} bonds.
 		*/
-		 Bond(const String& name, Atom& first, Atom& second, Order order = BALL_BOND_DEFAULT_ORDER,
+		Bond(const String& name, Atom& first, Atom& second, Order order = BALL_BOND_DEFAULT_ORDER,
 				 Type type = BALL_BOND_DEFAULT_TYPE)
-			throw();
+			throw(TooManyBonds);
 
-		/** Global bond creation.
-				Connect {\em first} to {\em second} via a bond.
-				The state of bond is:
-				\begin{itemize}
-					\item bond has connectivity with first atom (={\em first})
-					\item bond has connectivity with second atom (={\em second})
-				\end{itemize}
-				@param 	bond the instantiated bond that connects the first atom {\em first} 
-								to the second atom {\em second}
+		/** Create a bond.
+				Connect the two atoms {\tt first} and {\tt second} via a bond.
+				@param 	bond the instantiated bond that connects the first atom {\tt first} 
+								to the second atom {\tt second}
 				@param 	first the first atom of the bond
 				@param 	second the second atom of the bond
-				@return Bond* {\em this}
+				@return Bond* {\tt this}
+				@exception TooManyBonds if one of the atom already possesses \Ref{Atom::MAX_NUMBER_OF_BONDS} bonds.
 		*/
 		static Bond* createBond(Bond& bond, Atom& first, Atom& second)
 			throw(TooManyBonds);
@@ -258,25 +253,30 @@ namespace BALL
 		*/
 		//@{
 	
-		/**	Writes a Bond object to a persistent stream.
+		/**	Write a bond to a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
 			throw();
 
-		/**	Reads a Bond object from a persistent stream.
+		/**	Read a bond from a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentRead(PersistenceManager& pm)
 			throw();
 
 		/**	Finalize the deserialization.
-				Bond might have to swap {\tt first_} and {\tt second_}.
+				Bond might have to swap {\tt first_} and {\tt second_} to ensure
+				the correct order (see \Ref{Bond}).
 		*/
 		void finalize()
 			throw();
 
 		//@}
+
+		/**	@name Predicates
+		*/
+		//@{
 		/**	Equality operator.
 				@see Object::operator ==
 		*/
@@ -288,64 +288,63 @@ namespace BALL
 		*/
 		bool operator != (const Bond& bond) const
 			throw();
+		//@}
 
 		/** @name Assignment methods 
 		*/
 		//@{
 	
 		/** Assignment operator.
-				The assignment is either deep or shallow (default).
-				Calls \Ref{Bond::set}.
-				The state of this bond is initialized to the state of bond.\\
-				{\bf Note:} Deep copying of bonds is not supported.
-				The use of this method is not recommended because it may result in inconcistencies
-				of the whole system. It is used for backup only.
-				@param  bond the bond to be copied (cloned)
+				Assign a deep copy (on the level of \Ref{Composite}).
+				
+				{\bf Note:} The use of this method is not recommended because it may result in inconcistencies
+				of the whole system. This is for internal use only.
+				@param  bond the bond to be copied
 				@return Bond - this bond
 				@see    Bond::set
 		*/
 		const Bond& operator = (const Bond& bond)
 			throw();
 
-		/** Swapping of bonds.
-				@param bond the bond {\em *this} is being swapped with
+		/** Swap the contents of two bonds
+				@param bond the bond {\tt this} is being swapped with
 				@see   Bond::Bond
 		*/
 		void swap(Bond& bond)
 			throw();
 	
 		//@}
-		/** @name Accessors: inspectors and mutators 
+
+		/** @name Accessors
 		*/
 		//@{ 
 
-		/** Set the first Atom.
+		/** Set the first atom.
+				This method does not ensure the correct order of atoms 
+				(see \Ref{Bond}), so its use is recommended for internal purposes only.
 				@param atom the atom to set
 		*/
 		void setFirstAtom(Atom* atom)
 			throw();
 	
-		/** Mutable inspection of the first bond atom.
-				The pointer is 0 if no first atom is connected to this bond.\\
-				{\bf Note:} No corresponding mutator Bond::setFirstAtom exists to provide consistency 
-										of the bond tables in the atoms.
-				@return      Atom* -
-										 mutable pointer to the first atom that is connected to this bond,
-										 0 if no first atom exists
-				@see         Bond::getSecondAtom
-		*/
-		Atom* getFirstAtom()
-			throw();
-	 
-		/** Constant inspection of the first bond atom.
-				The pointer is 0 if no first atom is connected to this bond.\\
-				@return      Atom* - constant pointer to the first atom that is 
-										 connected to this bond, 0 if no first atom exists
-				@see         Bond::getSecondAtom
+		/** Return a pointer to the first atom.
 		*/
 		const Atom* getFirstAtom() const
 			throw();
 	 
+		/** Set the second atom.
+				This method does not ensure the correct order of atoms 
+				(see \Ref{Bond}), so its use is recommended for internal purposes only.
+				@param atom the atom to set
+		*/
+		void setSecondAtom(Atom* atom)
+			throw();
+	
+		/** Return a pointer to the second atom.
+		*/
+		const Atom* getSecondAtom() const
+			throw();
+
 		/**	Return the partner atom of an atom.
 				If the given {\tt atom} is part of this bond, the other atom
 				of the bond is returned. 0 is returned if {\tt atom} is not
@@ -356,111 +355,59 @@ namespace BALL
 		Atom* getPartner(const Atom& atom) const
 			throw();
 
-		/** Set the second Atom.
-				@param atom the atom to set
-		*/
-		void setSecondAtom(Atom* atom)
-			throw();
-	
-		/** Mutable inspection of the second bond atom.
-				The pointer is 0 if no second atom is connected to this bond.
-				@return      Atom* - mutable pointer to the second atom that 
-										 is connected to this bond, 0 if no second atom exists
-				@see         Bond::getFirstAtom
-		*/
-		Atom* getSecondAtom()
-			throw();
-	 
-		/** Constant inspection of the second bond atom.
-				The pointer is 0 if no second atom is connected to this bond.
-				@return      Atom* - constant pointer to the second atom that is
-										 connected to this bond, 0 if no second atom exists
-				@see         Bond::getFirstAtom
-		*/
-		const Atom* getSecondAtom() const
-			throw();
-
-		/** Change the bond's name.
+		/** Set the name.
 				@param name the new name of this bond
-				@see         Bond::getName
 		*/
 		void setName(const String& name)
 			throw();
 
-		/** Constant inspection of the bond's name.
-				@return      String& - constant reference to the name of this bond
-				@see         Bond::setName
+		/** Return the name.
+				@return      String - constant reference to the name of this bond
 		*/
 		const String& getName() const
 			throw();
 
-		/** Change the bond's order.
+		/** Set the bond order.
 				@param       bond_order the new order of this bond
-				@see         Bond::getOrder
 		*/
 		void setOrder(Order bond_order)
 			throw();
 	
-		/** Constant inspection of the bond's order.
-				@return      Order - copy of the order of this bond
-				@see         Bond::setOrder
+		/** Return the bond order.
+				@return      Order the order of the bond
 		*/
 		Order getOrder() const
 			throw();
 	
-		/** Change the bond's type.
-				@param       bond_type the new type of this bond
-				@see         Bond::getType
+		/** Set the bond type
+				@param       bond_type the new type
 		*/
 		void setType(Type bond_type)
 			throw();
 	
-		/** Constant inspection of the bond's type.
-				@return      Type - copy of the type of this bond
-				@see         Bond::setType
+		/** Return the bond type
+				@return      Type - the bond type
 		*/
 		Type getType() const
 			throw();
 	
-		/** Constant inspection of the bond's length.
-				@exception NotBounded if the bond has not two atoms
-				@return      Real - copy of the length of this bond
+		/** Return the bond length
+				@exception NotBound if the bond has not two atoms
+				@return      float - the distance between the two atoms
 		*/
-		Real getLength() const
-			throw(NotBounded);
+		float getLength() const
+			throw(NotBound);
 
-		/** Global mutable inspection of a bond.
-				Access the bond that might connect the atom {\em first} with the atom {\em second}.
-				If no such bond exists 0 is returned. The order of atoms may be arbitrary. Calls \Ref{Atom::getBond}.
-				@return      Bond* -
-										 mutable pointer to the bond connecting the atom {\em first} and {\em second}, 
-										 0 if no such bond exists
-				@see         Atom::getBond
-		*/
-		static Bond* getBond(Atom& first, Atom& second)
-			throw();
-
-		/** Mutable inspection of the bound atom.
-				It is tested, if this bond connects the two atoms.
-				If this is true a pointer to the bound atom is returned.
-				@param			 atom , its partner is looked for
-				@return      mutable pointer to the bound atom, 
-										 0 if the atom has no bound atom
-		*/
-		Atom* getBoundAtom(const Atom& atom)
-			throw();
-
-		/** Constant inspection of the bound atom.
-				It is tested, if this bond connects the two atoms.
-				if this is true a pointer to the bound atom is returned.
-				@param			 atom , its partner is looked for
-				@return      constant pointer to the bound atom, 
-										 0 if the atom has no bound atom
+		/** Return the partner of the atom in this bond.
+				@param			 atom an atom
+				@return      Atom a constant pointer to the atom,
+										 0 if the atom is not part of the bond
 		*/
 		const Atom* getBoundAtom(const Atom& atom) const
 			throw();
 
 		//@}
+
 		/** @name Predicates 
 		*/
 		//@{ 
@@ -504,17 +451,6 @@ namespace BALL
 		bool isInterBondOf(const AtomContainer& atom_container) const
 			throw();
 
-		/** Request for the intermolecular bonding of this bond within {\em system}.
-				Query, if this bond connects its two atoms within the common parent {\em system} instance.
-				Calls \Ref{Composite::isDescendantOf}.
-				@param 	system the queried parent system.
-				@return	bool - {\tt true} if this bond is intermolecular, 
-											 {\tt false} otherwise
-				@see    Composite::isDescendantOf
-		*/
-		bool isInterBondOf(const System& system) const
-			throw();
-
 		/**	Request for the intramolecular bonding of this bond.
 				Query, if this bond connects its two atoms within a common parent \Ref{Composite} instance.
 				If both atoms have no roots, the result is true.
@@ -537,18 +473,8 @@ namespace BALL
 		bool isIntraBondOf(const AtomContainer& atom_container) const
 			throw();
 
-		/** Request for the intramolecular bonding of this bond within {\em system}.
-				Query, if this bond connects its two atoms within the common parent {\em system} instance.
-				Calls \Ref{Composite::isDescendantOf}.
-				@param 	system the queried parent system.
-				@return bool - {\tt true} if this bond is intramolecular, 
-											 {\tt false} otherwise
-				@see    Composite::isDescendantOf
-		*/
-		bool isIntraBondOf(const System& system) const
-			throw();
-
 		//@}
+
 		/** @name Debuggers and diagnostics 
 		*/
 		//@{ 
@@ -572,29 +498,34 @@ namespace BALL
 		//@}
 
 		protected:
-		
+
+		/**	@name Atributes
+		*/
+		//@{
+
+		// First atom of the bond (bond owner)
+		Atom*		first_;
+
+		// Second atom
+		Atom*		second_;
+
+		// Bond name
+		String	name_;
+
+		// Bond order
+		Order		bond_order_;
+
+		// Bond type
+		Type		bond_type_;
+		//@}
+
 		private:
 
-			void arrangeBonds_()
-				throw();
+		void arrangeBonds_() 
+			throw();
 
-			void clear_()
-				throw();
-
-			//_ first atom of the bond (bond owner)
-			Atom*		first_;
-
-			//_ second atom
-			Atom*		second_;
-
-			//_ bond name
-			String	name_;
-
-			//_ bond order
-			Order		bond_order_;
-
-			//_ bond type
-			Type		bond_type_;
+		void clear_()
+			throw();
 	};
 
 } // namespace BALL
