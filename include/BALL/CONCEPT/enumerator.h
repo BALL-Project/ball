@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: enumerator.h,v 1.30 2003/05/22 15:11:26 oliver Exp $
+// $Id: enumerator.h,v 1.31 2003/06/25 09:53:01 anker Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -101,6 +101,8 @@ namespace BALL
 		const EnumeratorIndex& operator = (Position index)
 			throw(Exception::IndexOverflow);
 
+		/** Assignment operator for a variant list.
+		*/
 		template <typename Variant, typename VariantIterator>
 		const EnumeratorIndex& operator = (const std::list<std::pair<VariantIterator, std::vector<Variant> > >& variant_list)
 			throw();
