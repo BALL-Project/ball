@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.14.2.3 2004/12/21 14:44:45 amoll Exp $
+// $Id: backboneModel.h,v 1.14.2.4 2004/12/22 23:34:26 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -19,7 +19,7 @@ namespace BALL
 {
 	class Atom;
 	class Composite;
-	class AtomContainer;
+	class Residue;
 
 	namespace VIEW
 	{
@@ -152,7 +152,7 @@ namespace BALL
 			void buildGraphicalRepresentation_(Size start = 0, Size end = 0)
 				throw(Exception::OutOfMemory);
 
-			void collectAtoms_(const AtomContainer& ai)
+			void collectAtoms_(Residue& residue)
 				throw();
 
 			//_
@@ -176,6 +176,9 @@ namespace BALL
 			Composite* last_parent_;
 			//_
 			float tube_radius_;
+
+			//_
+			Size 	interpolation_steps_;
 		};
 
 	} // namespace VIEW

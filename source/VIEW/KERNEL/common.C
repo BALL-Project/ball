@@ -249,4 +249,23 @@ String createTemporaryFilename()
 	return filename;
 }
 	
+
+Vector3 getNormal(const Vector3& v)
+	throw()
+{
+	Vector3 n = v % Vector3(1,0,0);
+	if (Maths::isZero(n.getSquareLength())) 
+	{ 
+		n = v % Vector3(0,1,0);
+		if (Maths::isZero(n.getSquareLength())) 
+		{
+			n = v % Vector3(0,0,1);
+		}
+	}
+	n.normalize();
+
+	return n;
+}
+
+
 } } //namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.32 2004/12/10 18:07:39 amoll Exp $
+// $Id: common.h,v 1.32.2.1 2004/12/22 23:29:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -330,6 +330,10 @@ namespace BALL
 
 		/// Create a temporary filename in the users home dir
 		String createTemporaryFilename()
+			throw();
+
+		///
+		Vector3 getNormal(const Vector3& v)
 			throw();
 		
 		//@}
