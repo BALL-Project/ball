@@ -1,6 +1,6 @@
 // $Id:
 
-#include <BALL/VIEW/KERNEL/timerTextView.h>
+#include <BALL/VIEW/KERNEL/logView.h>
 
 using namespace std;
 
@@ -10,7 +10,7 @@ namespace BALL
 	namespace VIEW
 	{
   
-		TimerTextView::TimerTextView(QWidget *parent, const char *name)
+		LogView::LogView(QWidget *parent, const char *name)
 			:	NotificationTarget<LogStreamNotifier>(),
 			  QMultiLineEdit(parent, name),
 				history_string_(),
@@ -20,7 +20,7 @@ namespace BALL
 			Log.insertNotification(strstream_, *this);
 		}
 
-		TimerTextView::TimerTextView(const TimerTextView& view, bool deep)
+		LogView::LogView(const LogView& view, bool deep)
 			:	NotificationTarget<LogStreamNotifier>(),
 			  QMultiLineEdit(),
 				history_string_(view.history_string_),
@@ -30,11 +30,11 @@ namespace BALL
 			Log.insertNotification(strstream_, *this);
 		}
 
-		TimerTextView::~TimerTextView()
+		LogView::~LogView()
 		{
 			#ifdef BALL_VIEW_DEBUG
 				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<TimerTextView>() << endl;
+					<< " of class " << RTTI::getName<LogView>() << endl;
 			#endif 
 
 			Log.remove(strstream_);
@@ -42,21 +42,21 @@ namespace BALL
 			destroy();
 		}
 
-		void TimerTextView::clear()
+		void LogView::clear()
 		{
 		}
 
-		void TimerTextView::destroy()
+		void LogView::destroy()
 		{
 			clear();
 		}
 
-		bool TimerTextView::isValid() const
+		bool LogView::isValid() const
 		{
 			return (bool)(true);
 		}
 
-		void TimerTextView::dump
+		void LogView::dump
 			(ostream& s, Size depth) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
@@ -67,17 +67,17 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
 
-		void TimerTextView::read(istream & /* s */)
+		void LogView::read(istream & /* s */)
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-		void TimerTextView::write(ostream & /* s */) const
+		void LogView::write(ostream & /* s */) const
 		{
 			throw ::BALL::Exception::NotImplemented(__FILE__, __LINE__);
 		}
 
-	  bool TimerTextView::onNotify(LogStreamNotifier &source)
+	  bool LogView::onNotify(LogStreamNotifier &source)
 		{
 			string line;
 			
@@ -108,7 +108,7 @@ namespace BALL
 
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/KERNEL/timerTextView.iC>
+#			include <BALL/VIEW/KERNEL/logView.iC>
 #		endif 
 
 	} // namespace VIEW
