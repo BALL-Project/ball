@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.9 2004/02/09 13:53:20 amoll Exp $
+// $Id: molecularStructure.C,v 1.10 2004/02/10 15:51:36 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -64,13 +64,14 @@ namespace BALL
 		center_camera_id_ = main_control.insertMenuEntry(MainControl::DISPLAY_VIEWPOINT, "&Focus Camera", this, 
 																											SLOT(centerCamera()), CTRL+Key_F, -1, hint);
 
+		minimization_dialog_.setAmberDialog(&amber_dialog_);
+		md_dialog_.setAmberDialog(&amber_dialog_);
+
 		// Build Menu -------------------------------------------------------------------
 		hint = "To assign charges, one System has to be selected.";
 		assign_charges_id_ = insertMenuEntry(MainControl::BUILD, "Assign Char&ges", this, SLOT(assignCharges()),
 										CTRL+Key_G, -1 , hint);
-		hint = "To assign H-bonds, one System has to be selected.";
-		calculate_hbonds_id_ = insertMenuEntry(MainControl::BUILD, "Calculate H-Bonds", this, SLOT(calculateHBonds()),
-										CTRL+Key_9, -1, hint);
+
 		build_peptide_id_ = insertMenuEntry(MainControl::BUILD, "Build Peptide", this, SLOT(buildPeptide()), ALT+Key_P, 
 										-1, "Build a peptide from selected amino acids.");
 
@@ -86,10 +87,7 @@ namespace BALL
 		check_structure_id_ = insertMenuEntry(MainControl::BUILD, "Chec&k Structure", this, 
 																											SLOT(checkResidue()), CTRL+Key_K, -1, hint);
 		
-		hint = "Recalculate the secondary structure for a structure.";
-		calculate_ss_id_ = insertMenuEntry(MainControl::BUILD, "Calculate Secondary Structure", this,
-																								 SLOT(calculateSecondaryStructure()), ALT+Key_2, -1, hint);
-		
+	
 		hint = "Select a molecular object to see its position in the scene or to mark it for a simulation";
 		select_id_ = insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), ALT+Key_S, -1, hint);   
 		
@@ -113,10 +111,6 @@ namespace BALL
 															SLOT(showForceFieldOptions()), 0, MainControl::MOLECULARMECHANICS +14, hint);
 
 		// Tools Menu -------------------------------------------------------------------
-		hint = "Create a grid with the distance to the geometric center of a structure.";
-		create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS_CREATE_GRID, 
-																				"&Distance Grid", this, SLOT(createGridFromDistance()), 0, -1, hint);   
-
 		getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
 		hint = "Map two proteins.";
 		map_proteins_id_ = insertMenuEntry(MainControl::TOOLS, "&Map two Proteins", this, SLOT(mapProteins()), 0, -1, hint);
@@ -124,8 +118,21 @@ namespace BALL
 		hint = "Calculate RMSD for two Molecules or Fragments of Molecules.";
 		calculate_RMSD_id_ = insertMenuEntry(MainControl::TOOLS, "&Calculate RMSD", this, SLOT(calculateRMSD()), 0, -1, hint);
 
-		minimization_dialog_.setAmberDialog(&amber_dialog_);
-		md_dialog_.setAmberDialog(&amber_dialog_);
+		getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
+
+		hint = "Recalculate the secondary structure for a structure.";
+		calculate_ss_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate Secondary Structure", this,
+																								 SLOT(calculateSecondaryStructure()), ALT+Key_2, -1, hint);
+
+		hint = "To assign H-bonds, one System has to be selected.";
+		calculate_hbonds_id_ = insertMenuEntry(MainControl::TOOLS, "Calculate H-Bonds", this, SLOT(calculateHBonds()),
+										CTRL+Key_9, -1, hint);
+
+		getMainControl()->insertPopupMenuSeparator(MainControl::TOOLS);
+
+		hint = "Create a grid with the distance to the geometric center of a structure.";
+		create_distance_grid_id_ = insertMenuEntry(MainControl::TOOLS, 
+																				"&Distance Grid", this, SLOT(createGridFromDistance()), 0, -1, hint);   
 	}
 
 	MolecularStructure::~MolecularStructure()

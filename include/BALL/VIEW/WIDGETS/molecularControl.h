@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.19 2004/02/09 13:51:27 amoll Exp $
+// $Id: molecularControl.h,v 1.20 2004/02/10 15:51:35 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -51,6 +51,7 @@ namespace BALL
 				OBJECT__CUT,
 				OBJECT__COPY,
 				OBJECT__PASTE,
+				OBJECT__DELETE,
 				OBJECT__MOVE,
 				SELECT,
 				DESELECT,
@@ -329,7 +330,7 @@ namespace BALL
 
 			/// Overloaded from GenericControl, calls cut
 			virtual void deleteCurrentItems()
-				throw() {cut();}
+				throw();
 
 			/// Connected to the clear selection button
 			virtual void clearSelector();
@@ -481,6 +482,9 @@ namespace BALL
 			*/
 			int paste_id_;
 
+			///
+			int delete_id_;
+
 			/** Clipboard id.
 					This variable is provided for access to the clipboard menu. With the help of
 					this variable the clipboard menu can be enabled or disabled in the 
@@ -522,7 +526,8 @@ namespace BALL
 
 			ModelType 			selected_model_;
 			ColoringMethod  selected_coloring_method_;
-
+			// let cut know to delete the entries, set by deleteCurrentItems()
+			bool 						was_delete_;
 			//@}
 		};
 

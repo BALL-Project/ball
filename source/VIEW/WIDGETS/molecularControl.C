@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.39 2004/02/09 13:51:17 amoll Exp $
+// $Id: molecularControl.C,v 1.40 2004/02/10 15:51:35 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -80,7 +80,8 @@ MolecularControl::MolecularControl(QWidget* parent, const char* name)
 			context_menu_(this),
 			model_menu_(this),
 			context_composite_(0),
-			transformation_dialog_(0)
+			transformation_dialog_(0),
+			was_delete_(false)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new MolecularControl " << this << std::endl;
@@ -167,9 +168,10 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	// check for clearClipboard-slot: enable only if copy_list_ not empty
 	menuBar()->setItemEnabled(clipboard_id_, copy_list_filled);
 
-	// check for cut-slot 
+	// check for cut and delete slot 
 	bool list_filled = (selected_.size() != 0 && main_control.compositesAreMuteable());
 	menuBar()->setItemEnabled(cut_id_, list_filled);
+	menuBar()->setItemEnabled(delete_id_, list_filled);
 
 
 	// check for copy-slot 
@@ -258,6 +260,7 @@ void MolecularControl::buildContextMenu(Composite& composite)
 	context_menu_.insertItem("Cut", this, SLOT(cut()), 0, OBJECT__CUT);
 	context_menu_.insertItem("Copy", this, SLOT(copy()), 0, OBJECT__COPY);
 	context_menu_.insertItem("Paste", this, SLOT(paste()), 0, OBJECT__PASTE);
+	context_menu_.insertItem("Paste", this, SLOT(deleteItems()), 0, OBJECT__DELETE);
 
 	context_menu_.insertItem("Rename", this, SLOT(rename()), 0, RENAME);
 	context_menu_.setItemEnabled(RENAME, composites_muteable && composites_muteable && one_item);
@@ -267,6 +270,7 @@ void MolecularControl::buildContextMenu(Composite& composite)
 	context_menu_.setItemEnabled(OBJECT__CUT, composites_muteable);
 	context_menu_.setItemEnabled(OBJECT__PASTE, getCopyList_().size() > 0 && composites_muteable);
 	context_menu_.setItemEnabled(OBJECT__MOVE, composites_muteable);
+	context_menu_.setItemEnabled(OBJECT__DELETE, composites_muteable);
 	context_menu_.insertSeparator();
 
 	context_menu_.insertItem("Select", this, SLOT(select()), 0, SELECT);
@@ -512,9 +516,10 @@ void MolecularControl::initializeWidget(MainControl& main_control)
 {
 	String hint;
 	main_control.insertPopupMenuSeparator(MainControl::EDIT);
-	cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cut", this, SLOT(cut()), CTRL+Key_X);
+	cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cu&t", this, SLOT(cut()), CTRL+Key_X);
 	copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Copy", this, SLOT(copy()), CTRL+Key_C);
-	paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Paste", this, SLOT(paste()), CTRL+Key_V);
+	paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Paste", this, SLOT(paste()), CTRL+Key_V);
+	delete_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Delete", this, SLOT(deleteCurrentItems()), 0);
 	main_control.insertPopupMenuSeparator(MainControl::EDIT);
 	hint = "Clear the items in the clipboard";
 	clipboard_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Clear Clipboard", this, 
@@ -529,6 +534,7 @@ void MolecularControl::finalizeWidget(MainControl& main_control)
 	main_control.removeMenuEntry(MainControl::EDIT, "Cut", this, SLOT(cut()), CTRL+Key_X);
 	main_control.removeMenuEntry(MainControl::EDIT, "&Copy", this, SLOT(copy()), CTRL+Key_C);
 	main_control.removeMenuEntry(MainControl::EDIT, "Paste", this, SLOT(paste()), CTRL+Key_V);
+	main_control.removeMenuEntry(MainControl::EDIT, "&Delete", this, SLOT(deleteCurrentItems()), 0);
 	main_control.removeMenuEntry(MainControl::EDIT, "Clear Clipboard", this, SLOT(clearClipboard()));
 	GenericControl::finalizeWidget(main_control);
 }
@@ -695,7 +701,7 @@ void MolecularControl::cut()
 	{
 		getMainControl()->deselectCompositeRecursive(*it, false);
 
-		if (RTTI::isKindOf<System>(**it)) 
+		if (RTTI::isKindOf<System>(**it) && !was_delete_) 
 		{
 			// insert deep clone of the composite into the cut list
 			copy_list_.push_back((System*)(*it)->create());
@@ -1186,5 +1192,13 @@ void MolecularControl::clearSelector()
 	getMainControl()->clearSelection();
 }
 
+
+void MolecularControl::deleteCurrentItems()
+	throw()
+{
+	was_delete_ = true;
+	cut();
+	was_delete_ = false;
+}
 
 } } // namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.61 2004/02/10 15:35:35 amoll Exp $
+// $Id: mainControl.C,v 1.62 2004/02/10 15:52:26 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -250,6 +250,7 @@ void MainControl::show()
 		return;
 	}
 
+	connect(initPopupMenu(MainControl::EDIT), SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
 	connect(initPopupMenu(MainControl::BUILD), SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
 	connect(initPopupMenu(MainControl::TOOLS), SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
 	connect(initPopupMenu(MainControl::MOLECULARMECHANICS), SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
