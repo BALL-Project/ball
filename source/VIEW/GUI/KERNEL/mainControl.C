@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.37 2002/12/18 23:44:09 amoll Exp $
+// $Id: mainControl.C,v 1.38 2003/07/21 07:59:57 amoll Exp $
 
 // this is required for QMenuItem
 //#define iNCLUDE_MENUITEM_DEy
@@ -45,7 +45,8 @@ namespace BALL
 				descriptors_(),
 				main_control_preferences_(0),
 				preferences_dialog_(0),
-				preferences_id_(-1)
+				preferences_id_(-1),
+				composites_muteable_(true)
 		{
 			// read the preferences
 			preferences_.setFilename(inifile);
@@ -67,7 +68,8 @@ namespace BALL
 				descriptors_(),
 				main_control_preferences_(0),
 				preferences_dialog_(0),
-				preferences_id_(-1)
+				preferences_id_(-1),
+				composites_muteable_(true)
 		{
 		}
 		
@@ -159,6 +161,13 @@ namespace BALL
 			#ifdef BALL_VIEW_DEBUG
         Log.info() << "MainControl::show()  list.size() = " << modular_widgets_.size() << endl;
 			#endif
+
+			// prevent multiple inserting of menu entries, by calls of showFullScreen(), ...
+			if (preferences_id_ != -1) 
+			{
+				QMainWindow::show();
+				return;
+			}
 
 			// create own preferences dialog
 			preferences_dialog_ = new Preferences(this);

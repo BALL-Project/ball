@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: control.C,v 1.20 2003/06/30 19:14:45 oliver Exp $
+// $Id: control.C,v 1.21 2003/07/21 07:59:58 amoll Exp $
 //
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
@@ -582,8 +582,12 @@ void Control::cut()
 	// remove composite representation from tree
 	Size nr_of_items = removeRecursiveComposite(system);
 			
+	/*
 	GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
 	notify_(message);
+	*/
+	selected_.clear();
+	sentSelection();
 
 	// update scene
 	SceneMessage *scene_message = new SceneMessage;
@@ -591,7 +595,7 @@ void Control::cut()
 	scene_message->setDeletable(true);
 	notify_(scene_message);
 
-	setStatusbarText("Deleted " + String(nr_of_items) + " items.");
+	setStatusbarText("Deleted the items.");
 }
 
 void Control::copy()

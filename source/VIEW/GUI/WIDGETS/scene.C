@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.11 2003/01/14 17:46:13 oliver Exp $
+// $Id: scene.C,v 1.12 2003/07/21 07:59:58 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 #include <BALL/VIEW/GUI/FUNCTOR/externalRenderer.h>
@@ -47,7 +47,9 @@ namespace BALL
 				last_look_at_position_(0,0,0),
 				look_up_(),
 				right_(),
-				up_()
+				up_(),
+				update_running_(false),
+				screenshot_nr_(10000)
 		{
 		}
 
@@ -77,7 +79,9 @@ namespace BALL
 				last_look_at_position_(0,0,0),
 				look_up_(),
 				right_(),
-				up_()
+				up_(),
+				update_running_(false),
+				screenshot_nr_(10000)
 		{
 			events.RotateSystem.registerRotateSystem(&BALL::VIEW::Scene::rotateSystem_);
 			events.TranslateSystem.registerTranslateSystem(&BALL::VIEW::Scene::translateSystem_);
@@ -214,6 +218,9 @@ namespace BALL
 		void Scene::update(bool rebuild_displaylists)
 			throw(MainControlMissing)
 		{
+			if (update_running_) return;
+			update_running_ = true;
+
 			// rebuild displaylists
 			if (rebuild_displaylists)
 			{
@@ -236,6 +243,7 @@ namespace BALL
 			}
 
 			updateGL();
+			update_running_ = false;
 		}
 
 		void Scene::onNotify(Message *message)
@@ -1387,6 +1395,9 @@ namespace BALL
 			
 			picking_id_ = main_control.insertMenuEntry(
 										 	MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P);		
+
+			main_control.insertMenuEntry(
+				MainControl::FILE, "Export PNG", this, SLOT(exportPNG()), ALT+Key_P);
 		}
 
 		void Scene::finalizeWidget(MainControl& main_control)
@@ -1394,6 +1405,8 @@ namespace BALL
 		{
 			main_control.removeMenuEntry(MainControl::DISPLAY, "&Rotate Mode", this, SLOT(rotateMode_()), CTRL+Key_R);
 			main_control.removeMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P);		
+
+			main_control.removeMenuEntry(MainControl::FILE, "Export PNG", this, SLOT(exportPNG()), ALT+Key_P);		
 		}
 
 		void Scene::checkMenu(MainControl& main_control)
@@ -1403,10 +1416,27 @@ namespace BALL
 			(main_control.menuBar())->setItemChecked(picking_id_, (!rotate_mode_));		
 		}
 
+	void Scene::customEvent( QCustomEvent * e )
+	{
+		if ( e->type() == 65432 ) {  // It must be a SceneUpdateEvent
+			update(true);
+		}
+	}
+
+	void Scene::exportPNG()
+	{
+		QPixmap pix = QPixmap::grabWindow(this->winId());
+		String filename = String("molview_screenshot" + String(screenshot_nr_) +".png");
+		bool result = pix.save(filename.c_str(), "PNG");
+		screenshot_nr_ ++;
+
+		if (result) setStatusbarText("Saved screenshot to " + filename);
+		else 				setStatusbarText("Could not save screenshot to " + filename);
+	}
+
 #		ifdef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/VIEW/GUI/WIDGETS/scene.iC>
 #		endif
 
 	} // namespace VIEW
-
 } // namespace BALL
