@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.51 2004/01/14 14:55:33 amoll Exp $
+// $Id: mainControl.C,v 1.52 2004/01/14 16:20:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -734,7 +734,9 @@ void MainControl::selectComposites_(GeometricObjectSelectionMessage& message)
 	HashSet<Composite*>::Iterator it = roots.begin();
 	for(; it != roots.end(); it++)
 	{
-		updateRepresentationsOf(**it, false);
+		//faster, but doesnt always work:
+		//updateRepresentationsOf(**it, false);
+		updateRepresentationsOf(**it, true, true);
 	}
 
 	#ifdef BALL_DEBUG_VIEW
@@ -1106,7 +1108,10 @@ void MainControl::clearSelection()
 	for (; it != getCompositeManager().end(); it++)
 	{
 		deselectCompositeRecursive(*it);
-		updateRepresentationsOf(**it, false);
+		// faster, but doesnt always work:
+//	 	updateRepresentationsOf(**it, false);
+		
+		updateRepresentationsOf(**it, true, true);
 	}
 
  	getSelection().clear();
