@@ -1,4 +1,4 @@
-// $Id: timeStamp.C,v 1.1 2000/08/28 11:44:36 oliver Exp $
+// $Id: timeStamp.C,v 1.2 2000/08/28 13:27:02 oliver Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -86,6 +86,18 @@ namespace BALL
 		return t;
 	}
 
+	long Time::getSeconds() const throw()
+	{
+		return secs_;
+	}
+	
+	long Time::getMicroSeconds() const throw()
+	{
+		return usecs_;
+	}
+	
+	const Time Time::ZERO;
+
  
 	TimeStamp::TimeStamp()
 		:	time_(Time::now())
@@ -136,6 +148,19 @@ namespace BALL
 	{
 		return time_;
 	}
+
+
+	void TimeStamp::write(PersistenceManager& pm) const
+  {
+		pm.writeStorableObject(time_, "time_");
+	}
+
+	bool TimeStamp::read(PersistenceManager& pm)
+	{
+		return pm.readStorableObject(time_, "time_");
+	}
+
+
 
   ostream& operator << (ostream& os, const Time& time)
 	{
