@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FragmentDB_test.C,v 1.9 2002/02/27 12:24:32 sturm Exp $
+// $Id: FragmentDB_test.C,v 1.10 2003/05/21 14:40:07 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -17,7 +17,7 @@
 using namespace BALL;
 ///////////////////////////
 
-START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.9 2002/02/27 12:24:32 sturm Exp $")
+START_TEST(Fragment, "$Id: FragmentDB_test.C,v 1.10 2003/05/21 14:40:07 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -31,7 +31,8 @@ CHECK(getResidue(const String&))
 		TEST_EQUAL(res->isNTerminal(), false)
 		TEST_EQUAL(res->isCTerminal(), false)
 	}
-	
+
+	ABORT_IF(res == 0)
 	// check the atoms
 	AtomConstIterator atom_it = res->beginAtom();
 	Position i = 0;
@@ -102,6 +103,7 @@ CHECK(getResidue(const String&))
 RESULT
 
 CHECK(FragmentDB::BuildBondsProcessor::operator () )
+	ABORT_IF(db.getResidue("GLY") == 0)
 	Residue res(*db.getResidue("GLY"));
 	
 	AtomIterator atom_it = res.beginAtom();
