@@ -1,4 +1,4 @@
-// $Id: hashGrid.h,v 1.4 1999/09/07 16:20:27 oliver Exp $
+// $Id: hashGrid.h,v 1.5 1999/09/13 10:49:26 oliver Exp $
 
 #ifndef BALL_DATATYPE_HASHGRID_H
 #define BALL_DATATYPE_HASHGRID_H
@@ -1534,15 +1534,15 @@ namespace BALL {
 		return size;
 	}
 
-	BALL_INLINE 
 	template <class Item>
+	BALL_INLINE 
 	Size HashGrid3<Item>::getSize() const
 	{
 		return (dimension_x_ * dimension_y_ * dimension_z_);
 	}
 
-	BALL_INLINE 
 	template <class Item>
+	BALL_INLINE 
 	Vector3& HashGrid3<Item>::getOrigin()
 	{
 		return origin_;
