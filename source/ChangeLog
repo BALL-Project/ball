@@ -1,0 +1,23 @@
+0.95a: 03.04.2000
+		New:
+			- tutorial (at least a beginning)
+			- support for Tru64 Unix with Compaq C++ 6.2
+			- complete rewrite of the energy minimization part
+      - switching functions added for CHARMM and AMBER
+      - new architecture with better modularity for MolVIEW
+      - new website 
+      - license terms
+
+		Simplified Handling of torsion angles 
+		
+		Nearly complete tests and documentation for all mathematical classes
+		
+		Better testing.
+		
+		Hundreds of pages of documentation added for the Reference Manual.
+
+		Minor improvements here and there.
+
+
+0.9a: 18.01.2000
+		First public alpha release
