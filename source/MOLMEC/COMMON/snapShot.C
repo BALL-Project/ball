@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.14 2000/12/15 17:19:31 anker Exp $
+// $Id: snapShot.C,v 1.15 2000/12/19 13:31:39 anker Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -69,12 +69,12 @@ namespace BALL
 		total_length_ = data_length_ + sizeof (number_of_atoms_) + sizeof (valid_) 
 			+ sizeof (index_) + sizeof (data_length_) + sizeof (total_length_);
 
-		// BAUSTELLE: Warum nicht resize?
-		atom_positions_.reserve(number);
-		atom_velocities_.reserve(number);
-		atom_forces_.reserve(number);
-		potential_energy_ = 0;
-		kinetic_energy_ = 0;
+		// BAUSTELLE: Warum nicht resize? Hier stand vorher reserve.
+		atom_positions_.resize(number);
+		atom_velocities_.resize(number);
+		atom_forces_.resize(number);
+		potential_energy_ = 0.0;
+		kinetic_energy_ = 0.0;
 	}
 
 
@@ -264,7 +264,7 @@ namespace BALL
 			snapshot_counter_(0),
 			number_of_atoms_(0),
 			snapshot_list_(0),
-			trajectory_file_(),
+			trajectory_file_(0),
 			flush_to_disk_frequency_(0),
 			valid_(false)
 	{
@@ -284,7 +284,7 @@ namespace BALL
 	// then be appended to the file.
 	SnapShotManager::SnapShotManager
 		(const System* my_system, const ForceField* my_forcefield, 
-		 const String& my_snapshot_file, bool overwrite)
+		 TrajectoryFile* file, bool /* overwrite */)
 		throw()
 		: options(),
 			system_ptr_(my_system),
@@ -292,15 +292,16 @@ namespace BALL
 			snapshot_counter_(0),
 			number_of_atoms_(0),
 			snapshot_list_(0),
-			trajectory_file_(),
+			trajectory_file_(file),
 			flush_to_disk_frequency_(0),
+			buffer_counter_(0),
 			valid_(false)
 	{
 		options.setDefaultInteger(SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY,
 				SnapShotManager::Default::FLUSH_TO_DISK_FREQUENCY);
 
 		// call the setup method
-		valid_ = setup(my_snapshot_file);
+		valid_ = setup();
 	}
 
 
@@ -315,8 +316,8 @@ namespace BALL
 	// appended to the file. 
 	SnapShotManager::SnapShotManager 
 		(const System* my_system, const ForceField* my_forcefield, 
-		 const Options& my_options, const String& my_snapshot_file,
-		 bool overwrite)
+		 const Options& my_options, TrajectoryFile* file,
+		 bool /* overwrite */)
 		throw()
 		: options(my_options),
 			system_ptr_(my_system),
@@ -324,12 +325,13 @@ namespace BALL
 			snapshot_counter_(0),
 			number_of_atoms_(0),
 			snapshot_list_(0),
-			trajectory_file_(),
+			trajectory_file_(file),
 			flush_to_disk_frequency_(0),
+			buffer_counter_(0),
 			valid_(false)
 	{
 		// simply call the setup method
-		valid_ = setup(my_snapshot_file);
+		valid_ = setup();
 	}
 
 
@@ -348,7 +350,8 @@ namespace BALL
 			number_of_atoms_(manager.number_of_atoms_),
 			snapshot_list_(manager.snapshot_list_),
 			trajectory_file_(manager.trajectory_file_),
-			// flush_to_disk_frequency_(manager.flush_to_disk_frequency_),
+			flush_to_disk_frequency_(manager.flush_to_disk_frequency_),
+			buffer_counter_(0),
 			valid_(manager.valid_)
 	{
 	}
@@ -377,6 +380,7 @@ namespace BALL
 		snapshot_list_ = manager.snapshot_list_;
 		trajectory_file_ = manager.trajectory_file_;
 		flush_to_disk_frequency_ = manager.flush_to_disk_frequency_;
+		buffer_counter_ = manager.buffer_counter_;
 		valid_ = manager.valid_;
 
 		return *this;
@@ -386,8 +390,8 @@ namespace BALL
 	void SnapShotManager::clear()
 		throw()
 	{
-		// close the file, i. e. write all unwritten data
 		// BAUSTELLE
+		flushToDisk();
 
 		// now bring the instance to initial state
 		options.clear();
@@ -396,15 +400,23 @@ namespace BALL
 		snapshot_counter_ = 0;
 		number_of_atoms_ = 0;
 		snapshot_list_.clear();
-		trajectory_file_.clear();
+		trajectory_file_->clear();
 		flush_to_disk_frequency_ = 
 			options.getInteger(SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY);
+		buffer_counter_ = 0;
 		valid_ = false;
 	}
 
 
+	bool SnapShotManager::isValid() const
+		throw()
+	{
+		return valid_;
+	}
+
+
 	// The setup method does the actual preparations
-	bool SnapShotManager::setup(const String& my_snapshot_file)
+	bool SnapShotManager::setup()
 		throw()
 	{
 
@@ -427,24 +439,21 @@ namespace BALL
 			return false;
 		}
 
+		// first get the options
+		flush_to_disk_frequency_ =
+			options.getInteger(SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY);
+
 		// if there was already snapshot data, clear it.
 		// clear() does too much... Should I rewrite setup()? Or do I believe,
 		// that setup is called _only_ in a constructor?
 		snapshot_list_.clear();
-		trajectory_file_.clear();
-
-		// local variables
-		bool result;
+		snapshot_list_.resize(flush_to_disk_frequency_);
 
 		// the number of atoms in the system
 		number_of_atoms_ = system_ptr_->countAtoms();
 
 		// we start out with zero snapshots 
 		snapshot_counter_ = 0;
-
-		// 
-		// BAUSTELLE 
-		if (trajectory_file_.open(my_snapshot_file.c_str()));
 
 		return true;
 
@@ -578,6 +587,8 @@ namespace BALL
 	{
 
 		// create a new Snapshot-Object
+		SnapShot snapshot(number_of_atoms_);
+		/*
 		SnapShot* snapshot_ptr = new SnapShot(number_of_atoms_);
 
 		if (snapshot_ptr == 0)
@@ -588,6 +599,7 @@ namespace BALL
 			throw Exception::OutOfMemory(__FILE__, __LINE__);
 			return;
 		}
+		*/
 
 		// store all current positions, forces, velocities in the
 		// snapshot object
@@ -597,32 +609,46 @@ namespace BALL
 		// This is the data section of the snapshot object 
 		for (Size i = 0; +atom_it; ++atom_it, ++i)
 		{
-			snapshot_ptr->atom_positions_[i] = atom_it->getPosition();
-			snapshot_ptr->atom_velocities_[i] = atom_it->getVelocity();
-			snapshot_ptr->atom_forces_[i] = atom_it->getForce();
+			// snapshot_ptr->atom_positions_[i] = atom_it->getPosition();
+			// snapshot_ptr->atom_velocities_[i] = atom_it->getVelocity();
+			// snapshot_ptr->atom_forces_[i] = atom_it->getForce();
+			snapshot.atom_positions_[i] = atom_it->getPosition();
+			snapshot.atom_velocities_[i] = atom_it->getVelocity();
+			snapshot.atom_forces_[i] = atom_it->getForce();
 		}
 
 		// store the potential energies      
-		snapshot_ptr->potential_energy_ = force_field_ptr_->getEnergy();
+		// snapshot_ptr->potential_energy_ = force_field_ptr_->getEnergy();
+		snapshot.potential_energy_ = force_field_ptr_->getEnergy();
 
 		// store the kinetic energy of all selected atoms in the system 
 		// the current value must be calculated as it is not provided by
 		// the force field 
-		snapshot_ptr->kinetic_energy_ = calculateKineticEnergy_();
+		// snapshot_ptr->kinetic_energy_ = calculateKineticEnergy_();
+		snapshot.kinetic_energy_ = calculateKineticEnergy_();
 
 		// These items are the admininistrative data 
 		// First store the index of this snapshot. SnapShots are counted
 		// starting with 1. 
-		snapshot_ptr->index_ = snapshot_counter_ + 1;
+		// snapshot_ptr->index_ = snapshot_counter_ + 1;
+		snapshot.index_ = snapshot_counter_ + 1;
 
 		// One more snapshot. Add it to the current list of snapshots
-		snapshot_list_.push_back(*snapshot_ptr);
+		// snapshot_list_.push_back(*snapshot_ptr);
+		snapshot_list_[buffer_counter_] = snapshot;
 		snapshot_counter_++;
+		buffer_counter_++;
 
-		if (snapshot_list_.size() >= flush_to_disk_frequency_)
+		// We _could_ use pushback() and size() to determine when toflush the
+		// buffers, but this is faster. 
+		if (buffer_counter_ >= flush_to_disk_frequency_)
 		{
 			// write all snapshots to disk in order to prevent memory overflow
 			flushToDisk();
+			snapshot_list_.clear();
+			// BAUSTELLE is that REALLY necessary?
+			snapshot_list_.resize(flush_to_disk_frequency_);
+			buffer_counter_ = 0;
 		}
 	}	// end of SnapShotManager::takeSnapShot() 
 
@@ -632,19 +658,36 @@ namespace BALL
 		throw()
 	{
 		// if no snapshots are in main memory, then there is nothing to do
-		if (snapshot_list_.size() == 0 || valid_ == false)
+		// if (snapshot_list_.size() == 0 || valid_ == false)
+		if (snapshot_list_.size() == 0)
 		{
 			Log.info() << "SnapShotManager::flushToDisk(): "
 				<< "nothing to do." << endl;
 			return;
 		}
 
-		// append the data to the trajectory file
-		trajectory_file_.append(*this);
+		trajectory_file_->reopen(File::IN | File::BINARY);
+		// trajectory_file_->readHeader();
 
-		// clear the snapshot list
-		snapshot_list_.clear();
+		trajectory_file_->updateHeader(*this);
+
+		trajectory_file_->reopen(File::OUT | File::BINARY);
+		trajectory_file_->writeHeader();
+
+		trajectory_file_->reopen(File::APP | File::BINARY);
+		for (Size i = 0; i < buffer_counter_; ++i)
+		{
+			trajectory_file_->append(snapshot_list_[i]);
+		}
+		trajectory_file_->close();
 
 	}	// end of SnapShotManager::flushToDisk()
+
+
+	Size SnapShotManager::getNumberOfSnapShots() const 
+		throw()
+	{
+		return snapshot_counter_;
+	} 
 
 }	// end of namespace BALL
