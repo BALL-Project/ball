@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.12 2001/07/17 00:25:36 oliver Exp $
+// $Id: Expression_test.C,v 1.13 2001/07/17 09:32:13 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,6 +10,8 @@
 #include <BALL/KERNEL/standardPredicates.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/FORMAT/HINFile.h>
+#include <BALL/FORMAT/PDBFile.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
 #include <list>
 
 /////////////////
@@ -18,7 +20,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.12 2001/07/17 00:25:36 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.13 2001/07/17 09:32:13 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -459,13 +461,21 @@ CHECK(SyntaxTree::begin() throw())
 	TEST_NOT_EQUAL(test, true)
 
 	// BAUSTELLE
-	// this leads to an illegal instruction (SIGILL), I don't know why. (the
-	// same happens for the next three tests.)
-	// st.children = children;
+	// Still a persistent Illegal Instruction (SIGILL).
+	// 
+	// st.children.push_back(&child1);
+	// st.children.push_back(&child2);
+	// st.children.push_back(&child3);
+	// test_it = st.begin();
+	// Log.info() << "*test_it: " << *test_it << endl;
+	// Log.info() << "*children.begin(): " << *children.begin() << endl;
+	// Log.info() << "*st.children.begin(): " << *st.children.begin() << endl;
+	// SyntaxTree* ptr1 = *test_it;
+	// SyntaxTree* ptr2 = *children.begin();
 	// test = (*test_it == *children.begin());
+	// test = (ptr1 == ptr2);
 	// TEST_EQUAL(test, true)
 RESULT
-
 
 CHECK(SyntaxTree::end() throw())
 	SyntaxTree child1;
@@ -665,9 +675,14 @@ RESULT
 
 
 CHECK(Expression::bool operator () (const Atom& atom) const  throw())
-	HINFile file("data/Expression_test.hin");
+	// HINFile file("data/Expression_test.hin");
+	PDBFile file("data/1HHG.pdb");
 	System S;
 	file.read(S);
+	file.close();
+	FragmentDB db;
+	S.apply(db.add_hydrogens);
+
 	HashMap<String, Size> test_expressions;
 	test_expressions.insert(pair<String, Size>("true()", 6));
 	test_expressions.insert(pair<String, Size>("false()", 0));
@@ -679,6 +694,10 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	test_expressions.insert(pair<String, Size>("element(O)", 1));
 	test_expressions.insert(pair<String, Size>("element(C)", 1));
 	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 4));
+	test_expressions.insert(pair<String, Size>("element(H) OR (chain(A) AND element(OXT))", 0));
+	test_expressions.insert(pair<String, Size>("element(H) OR element(OXT)", 0));
+	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND element(O))", 0));
+	test_expressions.insert(pair<String, Size>("name(OXT) AND element(O)", 0));
 
 	Expression e;
 	Size counter;
@@ -687,6 +706,7 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	{
 		counter = 0;
 		e.setExpression(exp_iterator->first);
+		STATUS(e.getExpressionString())
 		for (AtomIterator it = S.beginAtom(); +it; ++it)
 		{
 			if (e.operator () (*it)) counter++;
