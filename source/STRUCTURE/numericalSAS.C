@@ -1,4 +1,4 @@
-// $Id: numericalSAS.C,v 1.8 2000/05/31 00:10:13 oliver Exp $
+// $Id: numericalSAS.C,v 1.9 2000/05/31 22:55:06 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -14,7 +14,7 @@ namespace BALL
 {
 
 	// forward
-	int nsc_(double*, double*, int, int, int, double*, double**, double*, double**, int*);
+	int nsc_(double*, double*, int, int, int, double*, double**, double*, double**, int*, int**);
 
 	void calculateNumericalSASAtomAreas
 		(HashMap<Atom*,float>& atom_areas,
@@ -58,12 +58,14 @@ namespace BALL
 		// these two array won't get out
 		double* internal_atom_areas = 0;
 		double* internal_surface_dots = 0;
+		int*		internal_atom_dots = 0;
 
 		// call nsc
 		nsc_(coordinates, radii, (int)atoms.size(),
 				 (int)number_of_dots, FLAG_ATOM_AREA, 
 				 &area, &internal_atom_areas, &volume, 
-				 &internal_surface_dots, &number_of_surface_dots);
+				 &internal_surface_dots, &number_of_surface_dots, 
+				 &internal_atom_dots);
 
 
 		// clear the hash map
@@ -84,6 +86,10 @@ namespace BALL
 		if (internal_surface_dots != 0)
 		{
 			free(internal_surface_dots);
+		}
+		if (internal_atom_dots != 0)
+		{
+			free(internal_atom_dots);
 		}
 
 		// free the input fields
@@ -130,15 +136,16 @@ namespace BALL
 
 		double area;
 		double volume;
-		int number_of_surface_dots;
-		double* atom_areas = 0;
-		double* surface_dots = 0;
+		int			number_of_surface_dots;
+		double*	atom_areas = 0;
+		double*	surface_dots = 0;
+		int*		atom_dots = 0;
 
 		// call nsc
 		nsc_(coordinates, radii, (int)atoms.size(),
 				 number_of_dots, FLAG_ATOM_AREA, 
 				 &area, &atom_areas, &volume, 
-				 &surface_dots, &number_of_surface_dots);
+				 &surface_dots, &number_of_surface_dots, &atom_dots);
 
 		// free arrays (if created)
 		if (atom_areas != 0)
@@ -148,6 +155,10 @@ namespace BALL
 		if (surface_dots != 0)
 		{
 			free(surface_dots);
+		}
+		if (atom_dots != 0)
+		{
+			free(atom_dots);
 		}
 
 		// free the input fields
@@ -269,26 +280,30 @@ typedef double * point_double;
 #define MINIMUM(A, B)  (((A) < (B) ? (A) : (B)))
 
 
-#define ASIN safe_asin
-	double safe_asin(double f) {
-		if ( (fabs(f) < 1.00) ) return( asin(f) );
+	double asin_safe(double f) 
+	{
+		if ( (fabs(f) < 1.00) ) 
+		{
+			return( asin(f) );
+		}
 		if ( (fabs(f) - 1.00)  <= DP_TOL ) 
 		{
-			NSC_WARNING << "ASIN : invalid argument" << f << endl;
+			NSC_WARNING << "calculateNumericalSASArea: invalid argument" << f << endl;
 		}
 		return(M_PI_2);
-		}
+	}
 
 #define CALLOC(n, size) mycalloc(__FILE__,__LINE__, n, size)
-	void * mycalloc(const char * filename, const int linenr,
-									size_t nelem, size_t elsize) {
-		int * ip;
-		ip = (int *) calloc(nelem, elsize);
-		if(ip == NULL)
+		void* mycalloc(const char * filename, const int linenr,
+									 size_t nelem, size_t elsize) 
 		{
-			NSC_ERROR << "CALLOC : failed in file " << filename << " at line " << linenr << endl;
-		}
-		return(ip);
+			int * ip;
+			ip = (int *) calloc(nelem, elsize);
+			if(ip == NULL)
+			{
+				NSC_ERROR << "calculateNumericalSASAreaCALLOC : failed in file " << filename << " at line " << linenr << endl;
+			}
+			return(ip);
 		}
 
 #define REALLOC(ptr, size) myrealloc(__FILE__,__LINE__,  ptr, size)
@@ -307,10 +322,11 @@ typedef double * point_double;
 	/* routines for dot distributions on the surface of the unit sphere */
 	double rg, rh;
 
-	void icosaeder_vertices(double *xus) {
+	void icosaeder_vertices(double *xus) 
+	{
 		rh = sqrt(1.-2.*cos(TORAD(72.)))/(1.-cos(TORAD(72.)));
 		rg = cos(TORAD(72.))/(1.-cos(TORAD(72.)));
-	/* icosaeder vertices */
+		/* icosaeder vertices */
 		xus[ 0] = 0.;                  xus[ 1] = 0.;                  xus[ 2] = 1.;
 		xus[ 3] = rh*cos(TORAD(72.));  xus[ 4] = rh*sin(TORAD(72.));  xus[ 5] = rg;
 		xus[ 6] = rh*cos(TORAD(144.)); xus[ 7] = rh*sin(TORAD(144.)); xus[ 8] = rg;
@@ -323,7 +339,7 @@ typedef double * point_double;
 		xus[27] = rh*cos(TORAD(252.)); xus[28] = rh*sin(TORAD(252.)); xus[29] = -rg;
 		xus[30] = rh*cos(TORAD(324.)); xus[31] = rh*sin(TORAD(324.)); xus[32] = -rg;
 		xus[33] = 0.;                  xus[34] = 0.;                  xus[35] = -1.;
-		}
+	}
 
 
 	void divarc(double x1, double y1, double z1,
@@ -353,7 +369,7 @@ typedef double * point_double;
 			NSC_ERROR << "divarc: vector 2 of sq.length " << d2 << endl;
 		}
 
-		phi = ASIN(dd/sqrt(d1*d2));
+		phi = asin_safe(dd/sqrt(d1*d2));
 		phi = phi*((double)div1)/((double)div2);
 		sphi = sin(phi); cphi = cos(phi);
 		s  = (x1*xd+y1*yd+z1*zd)/dd;
@@ -365,9 +381,10 @@ typedef double * point_double;
 		*xr = x/dd; *yr = y/dd; *zr = z/dd;
 		}
 
-	int ico_dot_arc(int densit) { /* densit...required dots per unit sphere */
-	/* dot distribution on a unit sphere based on an icosaeder *
-	 * great circle average refining of icosahedral face       */
+	int ico_dot_arc(int densit) 
+	{ /* densit...required dots per unit sphere */
+		/* dot distribution on a unit sphere based on an icosaeder *
+		 * great circle average refining of icosahedral face       */
 
 		int i, j, k, tl, tl2, tn, tess;
 		double a, d, x, y, z, x2, y2, z2, x3, y3, z3;
@@ -375,7 +392,7 @@ typedef double * point_double;
 			xjk, yjk, zjk, xkj, ykj, zkj;
 		point_double xus=NULL;
 
-	/* calculate tessalation level */
+		/* calculate tessalation level */
 		a = sqrt((((double) densit)-2.)/10.);
 		tess = (int) ceil(a);
 		n_dot = 10*tess*tess+2;
@@ -389,105 +406,116 @@ typedef double * point_double;
 		xpunsp = xus;
 		icosaeder_vertices(xus);
 
-		if (tess > 1) {
+		if (tess > 1) 
+		{
 			tn = 12;
 			a = rh*rh*2.*(1.-cos(TORAD(72.)));
-	/* calculate tessalation of icosaeder edges */
-			for (i=0; i<11; i++) {
-				for (j=i+1; j<12; j++) {
+			/* calculate tessalation of icosaeder edges */
+			for (i = 0; i < 11; i++) 
+			{
+				for (j=i+1; j < 12; j++) 
+				{
 					x = xus[3*i]-xus[3*j];
-					y = xus[1+3*i]-xus[1+3*j]; z = xus[2+3*i]-xus[2+3*j];
+					y = xus[1+3*i]-xus[1+3*j]; 
+					z = xus[2+3*i]-xus[2+3*j];
 					d = x*x+y*y+z*z;
 					if (fabs(a-d) > DP_TOL) continue;
-					for (tl=1; tl<tess; tl++) {
+					for (tl=1; tl<tess; tl++) 
+					{
 						if (tn >= n_dot) 
 						{ 
 							NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
 						}
 						divarc(xus[3*i], xus[1+3*i], xus[2+3*i],
 									 xus[3*j], xus[1+3*j], xus[2+3*j],
-							tl, tess, &xus[3*tn], &xus[1+3*tn], &xus[2+3*tn]);
-						tn++;
-						}
+									 tl, tess, &xus[3*tn], &xus[1+3*tn], &xus[2+3*tn]);
+							tn++;
 					}
 				}
-	/* calculate tessalation of icosaeder faces */
-			for (i=0; i<10; i++) {
-				for (j=i+1; j<11; j++) {
+			}
+			/* calculate tessalation of icosaeder faces */
+			for (i = 0; i < 10; i++) 
+			{
+				for (j=i+1; j < 11; j++) 
+				{
 					x = xus[3*i]-xus[3*j];
-					y = xus[1+3*i]-xus[1+3*j]; z = xus[2+3*i]-xus[2+3*j];
+					y = xus[1+3*i]-xus[1+3*j]; 
+					z = xus[2+3*i]-xus[2+3*j];
 					d = x*x+y*y+z*z;
 					if (fabs(a-d) > DP_TOL) continue;
 
-					for (k=j+1; k<12; k++) {
+					for (k=j+1; k < 12; k++) 
+					{
 						x = xus[3*i]-xus[3*k];
-						y = xus[1+3*i]-xus[1+3*k]; z = xus[2+3*i]-xus[2+3*k];
+						y = xus[1+3*i]-xus[1+3*k]; 
+						z = xus[2+3*i]-xus[2+3*k];
 						d = x*x+y*y+z*z;
 						if (fabs(a-d) > DP_TOL) continue;
 						x = xus[3*j]-xus[3*k];
-						y = xus[1+3*j]-xus[1+3*k]; z = xus[2+3*j]-xus[2+3*k];
+						y = xus[1+3*j]-xus[1+3*k]; 
+						z = xus[2+3*j]-xus[2+3*k];
 						d = x*x+y*y+z*z;
 						if (fabs(a-d) > DP_TOL) continue;
-						for (tl=1; tl<tess-1; tl++) {
+						for (tl=1; tl<tess-1; tl++) 
+						{
 							divarc(xus[3*j], xus[1+3*j], xus[2+3*j],
 										 xus[3*i], xus[1+3*i], xus[2+3*i],
-								tl, tess, &xji, &yji, &zji);
+										 tl, tess, &xji, &yji, &zji);
 							divarc(xus[3*k], xus[1+3*k], xus[2+3*k],
 										 xus[3*i], xus[1+3*i], xus[2+3*i],
-								tl, tess, &xki, &yki, &zki);
+										 tl, tess, &xki, &yki, &zki);
 
-							for (tl2=1; tl2<tess-tl; tl2++) {
+							for (tl2=1; tl2<tess-tl; tl2++) 
+							{
 								divarc(xus[3*i], xus[1+3*i], xus[2+3*i],
 											 xus[3*j], xus[1+3*j], xus[2+3*j],
-									tl2, tess, &xij, &yij, &zij);
+											 tl2, tess, &xij, &yij, &zij);
 								divarc(xus[3*k], xus[1+3*k], xus[2+3*k],
 											 xus[3*j], xus[1+3*j], xus[2+3*j],
-									tl2, tess, &xkj, &ykj, &zkj);
+											 tl2, tess, &xkj, &ykj, &zkj);
 								divarc(xus[3*i], xus[1+3*i], xus[2+3*i],
 											 xus[3*k], xus[1+3*k], xus[2+3*k],
-									tess-tl-tl2, tess, &xik, &yik, &zik);
+											 tess-tl-tl2, tess, &xik, &yik, &zik);
 								divarc(xus[3*j], xus[1+3*j], xus[2+3*j],
 											 xus[3*k], xus[1+3*k], xus[2+3*k],
-									tess-tl-tl2, tess, &xjk, &yjk, &zjk);
+											 tess-tl-tl2, tess, &xjk, &yjk, &zjk);
 								if (tn >= n_dot)
 								{
 									NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
 								}
-								divarc(xki, yki, zki, xji, yji, zji, tl2, tess-tl,
-									&x, &y, &z);
-								divarc(xkj, ykj, zkj, xij, yij, zij, tl, tess-tl2,
-									&x2, &y2, &z2);
-								divarc(xjk, yjk, zjk, xik, yik, zik, tl, tl+tl2,
-									&x3, &y3, &z3);
+								divarc(xki, yki, zki, xji, yji, zji, tl2, tess-tl, &x, &y, &z);
+								divarc(xkj, ykj, zkj, xij, yij, zij, tl, tess-tl2, &x2, &y2, &z2);
+								divarc(xjk, yjk, zjk, xik, yik, zik, tl, tl+tl2, &x3, &y3, &z3);
 								x = x+x2+x3; y = y+y2+y3; z = z+z2+z3;
 								d = sqrt(x*x+y*y+z*z);
 								xus[3*tn] = x/d;
 								xus[1+3*tn] = y/d;
 								xus[2+3*tn] = z/d;
 								tn++;
-								}		/* cycle tl2 */
-							}		/* cycle tl */
-						}		/* cycle k */
-					}		/* cycle j */
-				}			/* cycle i */
+							}		/* cycle tl2 */
+						}		/* cycle tl */
+					}		/* cycle k */
+				}		/* cycle j */
+			}			/* cycle i */
 			if (n_dot != tn) 
 			{
 				NSC_ERROR << "ico_dot: n_dot(" << n_dot << ") and tn(" << tn << ") differ" << endl;
 			}
 		}		/* end of if (tess > 1) */
-	return n_dot;
+		return n_dot;
 	}		/* end of routine ico_dot_arc */
 
-	int ico_dot_dod(int densit) { /* densit...required dots per unit sphere */
-	/* dot distribution on a unit sphere based on an icosaeder *
-	 * great circle average refining of icosahedral face       */
+	int ico_dot_dod(int densit) 
+	{ /* densit...required dots per unit sphere */
+		/* dot distribution on a unit sphere based on an icosaeder *
+		 * great circle average refining of icosahedral face       */
 
 		int i, j, k, tl, tl2, tn, tess, j1, j2;
 		double a, d, x, y, z, x2, y2, z2, x3, y3, z3, ai_d, adod;
 		double xij, yij, zij, xji, yji, zji, xik, yik, zik, xki, yki, zki,
-			xjk, yjk, zjk, xkj, ykj, zkj;
+					 xjk, yjk, zjk, xkj, ykj, zkj;
 		point_double xus=NULL;
-	/* calculate tesselation level */
+		/* calculate tesselation level */
 		a = sqrt((((double) densit)-2.)/30.);
 		tess = MAXIMUM((int) ceil(a), 1);
 		n_dot = 30*tess*tess+2;
@@ -502,22 +530,29 @@ typedef double * point_double;
 		icosaeder_vertices(xus);
 
 		tn=12;
-	/* square of the edge of an icosaeder */
-			a = rh*rh*2.*(1.-cos(TORAD(72.)));
-	/* dodecaeder vertices */
-		for (i=0; i<10; i++) {
-			for (j=i+1; j<11; j++) {
+		/* square of the edge of an icosaeder */
+		a = rh*rh*2.*(1.-cos(TORAD(72.)));
+
+		/* dodecaeder vertices */
+		for (i = 0; i < 10; i++) 
+		{
+			for (j=i+1; j < 11; j++) 
+			{
 				x = xus[3*i]-xus[3*j];
-				y = xus[1+3*i]-xus[1+3*j]; z = xus[2+3*i]-xus[2+3*j];
+				y = xus[1+3*i]-xus[1+3*j]; 
+				z = xus[2+3*i]-xus[2+3*j];
 				d = x*x+y*y+z*z;
 				if (fabs(a-d) > DP_TOL) continue;
-				for (k=j+1; k<12; k++) {
+				for (k=j+1; k < 12; k++) 
+				{
 					x = xus[3*i]-xus[3*k];
-					y = xus[1+3*i]-xus[1+3*k]; z = xus[2+3*i]-xus[2+3*k];
+					y = xus[1+3*i]-xus[1+3*k]; 
+					z = xus[2+3*i]-xus[2+3*k];
 					d = x*x+y*y+z*z;
 					if (fabs(a-d) > DP_TOL) continue;
 					x = xus[3*j]-xus[3*k];
-					y = xus[1+3*j]-xus[1+3*k]; z = xus[2+3*j]-xus[2+3*k];
+					y = xus[1+3*j]-xus[1+3*k]; 
+					z = xus[2+3*j]-xus[2+3*k];
 					d = x*x+y*y+z*z;
 					if (fabs(a-d) > DP_TOL) continue;
 					x = xus[  3*i]+xus[  3*j]+xus[  3*k];
@@ -526,116 +561,140 @@ typedef double * point_double;
 					d = sqrt(x*x+y*y+z*z);
 					xus[3*tn]=x/d; xus[1+3*tn]=y/d; xus[2+3*tn]=z/d;
 					tn++;
-					}
 				}
 			}
+		}
 
-		if (tess > 1) {
+		if (tess > 1) 
+		{
 			tn = 32;
-	/* square of the edge of an dodecaeder */
+			/* square of the edge of an dodecaeder */
 			adod = 4.*(cos(TORAD(108.))-cos(TORAD(120.)))/(1.-cos(TORAD(120.)));
-	/* square of the distance of two adjacent vertices of ico- and dodecaeder */
+			/* square of the distance of two adjacent vertices of ico- and dodecaeder */
 			ai_d = 2.*(1.-sqrt(1.-a/3.));
 
-	/* calculate tessalation of mixed edges */
-			for (i=0; i<31; i++) {
+			/* calculate tessalation of mixed edges */
+			for (i = 0; i < 31; i++) 
+			{
 				j1 = 12; j2 = 32; a = ai_d;
-				if (i>=12) { j1=i+1; a = adod; }
-				for (j=j1; j<j2; j++) {
+				if (i>=12) 
+				{ 
+					j1=i+1; a = adod; 
+				}
+				for (j=j1; j < j2; j++) 
+				{
 					x = xus[3*i]-xus[3*j];
-					y = xus[1+3*i]-xus[1+3*j]; z = xus[2+3*i]-xus[2+3*j];
+					y = xus[1+3*i]-xus[1+3*j]; 
+					z = xus[2+3*i]-xus[2+3*j];
 					d = x*x+y*y+z*z;
 					if (fabs(a-d) > DP_TOL) continue;
-					for (tl=1; tl<tess; tl++) {
+					for (tl=1; tl<tess; tl++) 
+					{
 						if (tn >= n_dot) 
 						{
 							NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
 						}
 						divarc(xus[3*i], xus[1+3*i], xus[2+3*i],
 									 xus[3*j], xus[1+3*j], xus[2+3*j],
-							tl, tess, &xus[3*tn], &xus[1+3*tn], &xus[2+3*tn]);
+									 tl, tess, &xus[3*tn], &xus[1+3*tn], &xus[2+3*tn]);
 						tn++;
-						}
 					}
 				}
-	/* calculate tessalation of pentakisdodecahedron faces */
-			for (i=0; i<12; i++) {
-				for (j=12; j<31; j++) {
+			}
+			/* calculate tessalation of pentakisdodecahedron faces */
+			for (i = 0; i < 12; i++) 
+			{
+				for (j=12; j < 31; j++) 
+				{
 					x = xus[3*i]-xus[3*j];
-					y = xus[1+3*i]-xus[1+3*j]; z = xus[2+3*i]-xus[2+3*j];
+					y = xus[1+3*i]-xus[1+3*j]; 
+					z = xus[2+3*i]-xus[2+3*j];
 					d = x*x+y*y+z*z;
 					if (fabs(ai_d-d) > DP_TOL) continue;
 
-					for (k=j+1; k<32; k++) {
+					for (k=j+1; k < 32; k++) 
+					{
 						x = xus[3*i]-xus[3*k];
-						y = xus[1+3*i]-xus[1+3*k]; z = xus[2+3*i]-xus[2+3*k];
+						y = xus[1+3*i]-xus[1+3*k]; 
+						z = xus[2+3*i]-xus[2+3*k];
 						d = x*x+y*y+z*z;
 						if (fabs(ai_d-d) > DP_TOL) continue;
 						x = xus[3*j]-xus[3*k];
-						y = xus[1+3*j]-xus[1+3*k]; z = xus[2+3*j]-xus[2+3*k];
+						y = xus[1+3*j]-xus[1+3*k]; 
+						z = xus[2+3*j]-xus[2+3*k];
 						d = x*x+y*y+z*z;
 						if (fabs(adod-d) > DP_TOL) continue;
-						for (tl=1; tl<tess-1; tl++) {
+						for (tl=1; tl<tess-1; tl++) 
+						{
 							divarc(xus[3*j], xus[1+3*j], xus[2+3*j],
 										 xus[3*i], xus[1+3*i], xus[2+3*i],
-								tl, tess, &xji, &yji, &zji);
+										 tl, tess, &xji, &yji, &zji);
 							divarc(xus[3*k], xus[1+3*k], xus[2+3*k],
 										 xus[3*i], xus[1+3*i], xus[2+3*i],
-								tl, tess, &xki, &yki, &zki);
+										 tl, tess, &xki, &yki, &zki);
 
-							for (tl2=1; tl2<tess-tl; tl2++) {
+							for (tl2=1; tl2<tess-tl; tl2++) 
+							{
 								divarc(xus[3*i], xus[1+3*i], xus[2+3*i],
 											 xus[3*j], xus[1+3*j], xus[2+3*j],
-									tl2, tess, &xij, &yij, &zij);
+											 tl2, tess, &xij, &yij, &zij);
 								divarc(xus[3*k], xus[1+3*k], xus[2+3*k],
 											 xus[3*j], xus[1+3*j], xus[2+3*j],
-									tl2, tess, &xkj, &ykj, &zkj);
+											 tl2, tess, &xkj, &ykj, &zkj);
 								divarc(xus[3*i], xus[1+3*i], xus[2+3*i],
 											 xus[3*k], xus[1+3*k], xus[2+3*k],
-									tess-tl-tl2, tess, &xik, &yik, &zik);
+											 tess-tl-tl2, tess, &xik, &yik, &zik);
 								divarc(xus[3*j], xus[1+3*j], xus[2+3*j],
 											 xus[3*k], xus[1+3*k], xus[2+3*k],
-									tess-tl-tl2, tess, &xjk, &yjk, &zjk);
+											 tess-tl-tl2, tess, &xjk, &yjk, &zjk);
 								if (tn >= n_dot) 
 								{
 									NSC_ERROR << "ico_dot: tn exceeds dimension of xus" << endl;
 								}
-								divarc(xki, yki, zki, xji, yji, zji, tl2, tess-tl,
-									&x, &y, &z);
-								divarc(xkj, ykj, zkj, xij, yij, zij, tl, tess-tl2,
-									&x2, &y2, &z2);
-								divarc(xjk, yjk, zjk, xik, yik, zik, tl, tl+tl2,
-									&x3, &y3, &z3);
-								x = x+x2+x3; y = y+y2+y3; z = z+z2+z3;
+								divarc(xki, yki, zki, xji, yji, zji, tl2, tess-tl, &x, &y, &z);
+								divarc(xkj, ykj, zkj, xij, yij, zij, tl, tess-tl2, &x2, &y2, &z2);
+								divarc(xjk, yjk, zjk, xik, yik, zik, tl, tl+tl2, &x3, &y3, &z3);
+								x = x+x2+x3; 
+								y = y+y2+y3; 
+								z = z+z2+z3;
 								d = sqrt(x*x+y*y+z*z);
 								xus[3*tn] = x/d;
 								xus[1+3*tn] = y/d;
 								xus[2+3*tn] = z/d;
 								tn++;
-								}		/* cycle tl2 */
-							}		/* cycle tl */
-						}		/* cycle k */
-					}		/* cycle j */
-				}			/* cycle i */
+							}		/* cycle tl2 */
+						}		/* cycle tl */
+					}		/* cycle k */
+				}		/* cycle j */
+			}			/* cycle i */
 			if (n_dot != tn) 
 			{
 				NSC_ERROR << "ico_dot: n_dot(" << n_dot << ") and tn(" << tn << ") differ" << endl;
 			}
-			}		/* end of if (tess > 1) */
+		}		/* end of if (tess > 1) */
+		
 		return n_dot;
-		}		/* end of routine ico_dot_dod */
+	}		/* end of routine ico_dot_dod */
 
-	int unsp_type(int densit) {
+	int unsp_type(int densit) 
+	{
 		int i1, i2;
 		i1 = 1;
 		while (10*i1*i1+2 < densit) i1++;
 		i2 = 1;
 		while (30*i2*i2+2 < densit) i2++;
-		if (10*i1*i1-2 < 30*i2*i2-2) return UNSP_ICO_ARC;
-		else return UNSP_ICO_DOD;
+		if (10*i1*i1-2 < 30*i2*i2-2)
+		{
+			return UNSP_ICO_ARC;
 		}
+		else
+		{
+			return UNSP_ICO_DOD;
+		}
+	}
 
-	int make_unsp(int densit, int mode, int * num_dot, int cubus) {
+	int make_unsp(int densit, int mode, int * num_dot, int cubus) 
+	{
 		int ndot, ico_cube_cb, i, j, k, l, ijk, tn, tl, tl2;
 		point_double xus;
 		point_int    work;
@@ -690,9 +749,9 @@ typedef double * point_double;
 
 	/* reordering of the coordinate array in accordance with box number */
 		tn=0;
-		for (i=0; i<ico_cube; i++) {
-			for (j=0; j<ico_cube; j++) {
-				for (k=0; k<ico_cube; k++) {
+		for (i = 0; i < ico_cube; i++) {
+			for (j = 0; j < ico_cube; j++) {
+				for (k=0; k < ico_cube; k++) {
 					tl=0;
 					tl2 = tn;
 					ijk = i+ico_cube*j+ico_cube*ico_cube*k;
@@ -715,17 +774,23 @@ typedef double * point_double;
 		}
 
 
-	typedef struct _stwknb {
+	class Neighbour 
+	{
+		public:
 		double x;
 		double y;
 		double z;
 		double dot;
-		} Neighb;
+	};
 
+	// add: parameter atom_dots: array containing the number of dots	
+	// for each atom. The dots are ordererd in the number of the atoms
+	// If the first atom gets 123 dots, the dot coordinates of the 
+	// second atom start at index 123 * 3 in lidots   [OK - 31.05.2000]
 	int nsc_
 		(double* co, double* radius, int nat, int densit, int mode,
 		 double* value_of_area, double** at_area, double* value_of_vol,
-		 double** lidots, int* nu_dots) 
+		 double** lidots, int* nu_dots, int** atom_dot_ptr) 
 	{
 
 		int iat, i, ii, iii, ix, iy, iz, ixe, ixs, iye, iys, ize, izs, i_ac;
@@ -734,12 +799,13 @@ typedef double * point_double;
 		int l;
 		int maxnei, nnei, last, maxdots;
 		point_int wkdot=NULL, wkbox=NULL, wkat1=NULL, wkatm=NULL;
-		Neighb  *wknb, *ctnb;
+		Neighbour  *wknb, *ctnb;
 		int iii1, iii2, iiat, lfnr, i_at, j_at;
 		double dx, dy, dz, dd, ai, aisq, ajsq, aj, as, a;
 		double xi, yi, zi, xs=0., ys=0., zs=0.;
 		double dotarea, area, vol=0.;
 		point_double xus, dots=NULL, atom_area=NULL;
+		int* atom_dots = 0;
 
 		int    nxbox, nybox, nzbox, nxy, nxyz;
 		double xmin, ymin, zmin, xmax, ymax, zmax, ra2max, d, *pco;
@@ -772,7 +838,8 @@ typedef double * point_double;
 		if (mode & FLAG_DOTS) 
 		{
 			maxdots = 3 *n_dot * nat / 10;
-			dots = (double *) CALLOC(maxdots, sizeof(double));
+			dots = (double*) CALLOC(maxdots, sizeof(double));
+			atom_dots = (int*) CALLOC(nat, sizeof(int));
 			lfnr=0;
 		}
 		if (mode & FLAG_ATOM_AREA) 
@@ -854,7 +921,7 @@ typedef double * point_double;
 		}
 
 		maxnei = MINIMUM(nat, 27*j);
-		wknb = (Neighb *) CALLOC(maxnei, sizeof(Neighb));
+		wknb = (Neighbour *) CALLOC(maxnei, sizeof(Neighbour));
 		for (iat = 0; iat < nat; iat++) 
 		{
 			wkatm[--wkbox[wkat1[iat]]] = iat;
@@ -957,7 +1024,7 @@ typedef double * point_double;
 										xus[1+3*l]*(wknb+last)->y+
 										xus[2+3*l]*(wknb+last)->z <= (wknb+last)->dot) 
 								{
-									for (j=0; j<nnei; j++) 
+									for (j = 0; j < nnei; j++) 
 									{
 										if (xus[3*l]*(wknb+j)->x+xus[1+3*l]*(wknb+j)->y+
 												xus[2+3*l]*(wknb+j)->z > (wknb+j)->dot) 
@@ -990,32 +1057,36 @@ typedef double * point_double;
 						}
 						if (mode & FLAG_DOTS) 
 						{
-							for (l=0; l<n_dot; l++) 
+							int this_atom_dots = lfnr;
+							for (l = 0; l < n_dot; l++) 
 							{
 								if (wkdot[l]) 
 								{
 									lfnr++;
-									if (maxdots <= 3*lfnr+1) 
+									if (maxdots <= 3 * lfnr + 1) 
 									{
-										maxdots = maxdots+n_dot*3;
-										dots = (double *) REALLOC(dots, maxdots*sizeof(double));
+										maxdots = maxdots + n_dot * 3;
+										dots = (double*) REALLOC(dots, maxdots * sizeof(double));
 									}
-									dots[3*lfnr-3] = ai*xus[3*l]+xi;
-									dots[3*lfnr-2] = ai*xus[1+3*l]+yi;
-									dots[3*lfnr-1] = ai*xus[2+3*l]+zi;
+									dots[3 * lfnr - 3] = ai * xus[3 * l] + xi;
+									dots[3 * lfnr - 2] = ai * xus[1 + 3 * l] + yi;
+									dots[3 * lfnr - 1] = ai * xus[2 + 3 * l] + zi;
 								}
 							}
+							atom_dots[i_at] = lfnr - this_atom_dots;
 						}
 						if (mode & FLAG_VOLUME) 
 						{
-							dx=0.; dy=0.; dz=0.;
-							for (l=0; l<n_dot; l++) 
+							dx = 0.; 
+							dy = 0.; 
+							dz = 0.;
+							for (l = 0; l < n_dot; l++) 
 							{
 								if (wkdot[l]) 
 								{
-									dx=dx+xus[3*l];
-									dy=dy+xus[1+3*l];
-									dz	=dz+xus[2+3*l];
+									dx = dx + xus[3 * l];
+									dy = dy + xus[1 + 3 * l];
+									dz = dz + xus[2 + 3 * l];
 								}
 							}
 							vol = vol+aisq*(dx*(xi-xs)+dy*(yi-ys)+dz*(zi-zs)+ai* (double) i_ac);
@@ -1036,6 +1107,7 @@ typedef double * point_double;
 		{
 			*nu_dots = lfnr;
 			*lidots = dots;
+			*atom_dot_ptr = atom_dots;
 		}
 		if (mode & FLAG_ATOM_AREA) 
 		{
