@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.21 2004/11/09 15:34:09 amoll Exp $
+// $Id: PDBFile_test.C,v 1.22 2004/11/23 21:11:08 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.21 2004/11/09 15:34:09 amoll Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.22 2004/11/23 21:11:08 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -293,7 +293,7 @@ CHECK([EXTRA] strange_things)
 	((AtomContainer*)&s)->insert(a);
 	String name;
 	NEW_TMP_FILE(name);
-	PDBFile f(name, File::OUT);
+	PDBFile f(name, std::ios::out);
 	f << s;
 RESULT
 
