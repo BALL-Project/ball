@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.9 2001/04/04 18:43:47 anker Exp $
+// $Id: amberNonBonded.C,v 1.10 2001/05/16 01:43:36 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -18,7 +18,7 @@ namespace BALL
 		:	ForceFieldComponent()
 	{	
 		// set component name
-		setName( "Amber NonBonded" );
+		setName("Amber NonBonded");
 	}
 
 
@@ -27,31 +27,28 @@ namespace BALL
 		:	ForceFieldComponent(force_field)
 	{
 		// set component name
-		setName( "Amber NonBonded" );
+		setName("Amber NonBonded");
 	}
 
 
 	// copy constructor
 	AmberNonBonded::AmberNonBonded(const AmberNonBonded&	component, bool clone_deep)
-		:	ForceFieldComponent(component, clone_deep)
+		:	ForceFieldComponent(component, clone_deep),
+			non_bonded_(component.non_bonded_),
+			number_of_1_4_(component.number_of_1_4_),
+			electrostatic_energy_(component.electrostatic_energy_),
+			vdw_energy_(component.vdw_energy_),
+			algorithm_type_(component.algorithm_type_),
+			cut_off_(component.cut_off_),
+			cut_on_electrostatic_(component.cut_on_electrostatic_),
+			cut_off_electrostatic_(component.cut_off_electrostatic_),
+			cut_off_vdw_(component.cut_off_vdw_),
+			cut_on_vdw_(component.cut_on_vdw_),
+			inverse_distance_off_on_vdw_3_(component.inverse_distance_off_on_vdw_3_),
+			inverse_distance_off_on_electrostatic_3_(component.inverse_distance_off_on_electrostatic_3_),
+			scaling_vdw_1_4_(component.scaling_vdw_1_4_),
+			scaling_electrostatic_1_4_(component.scaling_electrostatic_1_4_)
 	{
-		non_bonded_ = component.non_bonded_;
-		number_of_1_4_ = component.number_of_1_4_;
-
-		electrostatic_energy_ = component.electrostatic_energy_;
-		vdw_energy_ = component.vdw_energy_;
-		algorithm_type_ = component.algorithm_type_;
-
-		cut_off_ = component.cut_off_;
-		cut_on_electrostatic_ = component.cut_on_electrostatic_;
-		cut_off_electrostatic_ = component.cut_off_electrostatic_;
-		cut_off_vdw_ = component.cut_off_vdw_;
-		cut_on_vdw_ = component.cut_on_vdw_;
-		inverse_distance_off_on_vdw_3_ = component.inverse_distance_off_on_vdw_3_;
-		inverse_distance_off_on_electrostatic_3_ = component.inverse_distance_off_on_electrostatic_3_;
-
-		scaling_vdw_1_4_ = component.scaling_vdw_1_4_;
-		scaling_electrostatic_1_4_ = component.scaling_electrostatic_1_4_;
 	}
 
 
@@ -96,9 +93,15 @@ namespace BALL
 			 cut_off_, force_field_->periodic_boundary.isEnabled(), 
 			 algorithm_type_); 
 
+		if (getForceField()->getSystem()->containsSelection())
+		{
+			// eliminate all those pairs where none of the two atoms is selected
+			Size number_of_selected_pairs = MolmecSupport::sortNonBondedAtomPairsAfterSelection(atom_pair_vector);
+			atom_pair_vector.resize(number_of_selected_pairs);
+		}
+
 		// Build the vector "non_bonded_" with the atom pairs and parameters
-		buildVectorOfNonBondedAtomPairs(atom_pair_vector, van_der_waals_,
-				hydrogen_bond_);
+		buildVectorOfNonBondedAtomPairs(atom_pair_vector, van_der_waals_, hydrogen_bond_);
 	}
 
 	// setup the internal datastructures for the component
