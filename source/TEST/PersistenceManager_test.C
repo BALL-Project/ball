@@ -1,4 +1,4 @@
-// $Id: PersistenceManager_test.C,v 1.1 2001/05/30 15:11:19 anker Exp $
+// $Id: PersistenceManager_test.C,v 1.2 2001/06/14 11:59:24 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -29,7 +29,8 @@ namespace BALL
 		{
 		}
 
-		~PersistenceTest()
+		virtual ~PersistenceTest()
+			throw()
 		{
 		}
 
@@ -243,7 +244,7 @@ namespace BALL
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PersistenceManager_test.C,v 1.1 2001/05/30 15:11:19 anker Exp $")
+START_TEST(class_name, "$Id: PersistenceManager_test.C,v 1.2 2001/06/14 11:59:24 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
