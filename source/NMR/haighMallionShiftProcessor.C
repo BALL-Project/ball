@@ -1,7 +1,8 @@
-// $Id: haighMallionShiftProcessor.C,v 1.6 2000/09/24 13:24:32 oliver Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.7 2000/09/25 14:11:05 oliver Exp $
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
+#include <BALL/FORMAT/parameterSection.h>
 #include <BALL/KERNEL/PTE.h>
 
 using namespace std;
@@ -11,8 +12,6 @@ namespace BALL
 
   const char* HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT = "RingCurrentShift[HM]";
 
-	const float HaighMallionShiftProcessor::big_loop_radius_		= 1.39e-10;
-	const float HaighMallionShiftProcessor::little_loop_radius_ = 1.182e-10;
 	const float HaighMallionShiftProcessor::B_ = 5.455e-6;					//Konstante in IBG(r)
 	const float cut_off2 = 225.0; // cut off: nuclei that are further than 15A away from the center
 																// of a ring are no affected by this ring (cut of is squared for efficiency)
@@ -52,48 +51,61 @@ namespace BALL
 	void HaighMallionShiftProcessor::init()
 		throw()
 	{
+		valid_ = false;
+		if (parameters_ == 0)
+		{
+			return;
+		}
+
+		ParameterSection parameter_section;
+		parameter_section.extractSection(*parameters_, "HaighMallionRingCurrent");
+		// BAUSTELLE: ALLE Parameter muessen eingelesen werden!
+
+
+		// BAUSTELLE: diese C-Arrays verschwinden! 
+		//		Und END-Marker wird es auch nicht mehr geben!
 		asrings_ = new String*[4];
 		
-		asrings_[0]=new String[13];
+		asrings_[0] = new String[13];
 		
-		asrings_[0][0]="TRP";
-		asrings_[0][1]="CG";
-		asrings_[0][2]="CD2";
-		asrings_[0][3]="CE2";
-		asrings_[0][4]="NE1";
-		asrings_[0][5]="CD1";
-		asrings_[0][6]="NULL";
-		asrings_[0][7]="CD2";
-		asrings_[0][8]="CZ2";
-		asrings_[0][9]="CZ3";
-		asrings_[0][10]="CE3";
-		asrings_[0][11]="CH2";
-		asrings_[0][12]="CE2";
+		asrings_[0][0]  = "TRP";
+		asrings_[0][1]  = "CG";
+		asrings_[0][2]  = "CD1";
+		asrings_[0][3]  = "NE1";
+		asrings_[0][4]  = "CE2";
+		asrings_[0][5]  = "CD2";
+		asrings_[0][6]  = "NULL";
+		asrings_[0][7]  = "CE2";
+		asrings_[0][8]  = "CD2";
+		asrings_[0][9]  = "CE3";
+		asrings_[0][10] = "CZ3";
+		asrings_[0][11] = "CH2";
+		asrings_[0][12] = "CZ2";
 		
-		asrings_[1]=new String[7];
+		asrings_[1] = new String[7];
 		
 		asrings_[1][0]="PHE";
 		asrings_[1][1]="CG";
-		asrings_[1][2]="CD2";
-		asrings_[1][3]="CE2";
+		asrings_[1][2]="CD1";
+		asrings_[1][3]="CE1";
 		asrings_[1][4]="CZ";
-		asrings_[1][5]="CE1";
-		asrings_[1][6]="CD1";
+		asrings_[1][5]="CE2";
+		asrings_[1][6]="CD2";
 		
-		asrings_[2]=new String[7];
+		asrings_[2] = new String[7];
 		
 		asrings_[2][0]="TYR";
 		asrings_[2][1]="CG";
-		asrings_[2][2]="CD2";
-		asrings_[2][3]="CE2";
+		asrings_[2][2]="CD1";
+		asrings_[2][3]="CE1";
 		asrings_[2][4]="CZ";
-		asrings_[2][5]="CE1";
-		asrings_[2][6]="CD1";
+		asrings_[2][5]="CE2";
+		asrings_[2][6]="CD2";
 		
-		asrings_[3]=new String[7];
+		asrings_[3] = new String[7];
 		
 		asrings_[3][0]="HIS";
-		asrings_[3][1]="CB";
+		asrings_[3][1]="CG";
 		asrings_[3][2]="CD2";
 		asrings_[3][3]="NE2";
 		asrings_[3][4]="CE1";
@@ -127,7 +139,6 @@ namespace BALL
 		Vector3* ring_positions = new Vector3[6];
 
 		Size zaehler, number_of_rings;
-		float radius;
 		for (list<PDBAtom*>::iterator proton_iter = proton_list_.begin();
 				 proton_iter != proton_list_.end(); ++proton_iter)
 		{
@@ -135,43 +146,53 @@ namespace BALL
 			for (list<Residue*>::iterator arom_iter = aromat_list_.begin();
 					 arom_iter != aromat_list_.end(); ++arom_iter)
 			{
+				// consider the HN and Halpha protons in the same residue only				
 				const Residue& residue = *(*arom_iter);
 				if (((*proton_iter)->getResidue() == &residue)
 						&& ((*proton_iter)->getName() != "HA") 
-						&& ((*proton_iter)->getName() != "HA"))
+						&& ((*proton_iter)->getName() != "H"))
 				{
 					continue;
 				}
+
+				// the intensity factor i in  \delta = i B G(r)
+				// (different for each aromatic residue and relative to benzene = 1.0)
+				float intensity_factor = 1.0;
 
 				if (residue.getName()=="TRP")
 				{
 					zaehler = 0;
 					number_of_rings = 2;
-					radius = big_loop_radius_;
+					intensity_factor = 1.05;
 				}
 				if (residue.getName()=="PHE")
 				{
 					zaehler = 1;
 					number_of_rings = 1;
-					radius = big_loop_radius_;
+					intensity_factor = 1.05;
 				}
 				if (residue.getName()=="TYR")
 				{
 					zaehler = 2; 
 					number_of_rings = 1; 
-					radius = little_loop_radius_;
+					intensity_factor = 0.92;
 				}
 				if (residue.getName()=="HIS")
 				{
 					zaehler = 3; 
 					number_of_rings = 1; 
-					radius = little_loop_radius_;
+					intensity_factor = 0.43;
 				}
 
 				Position number_of_ring_atoms = 0;
 				Position hilf = 0;
-				while(number_of_rings) // for all rings in the amino acid
+				while (number_of_rings) // for all rings in the amino acid
 				{
+					if ((number_of_rings == 1) && (residue.getName() == "TRP"))	
+					{
+						intensity_factor = 1.04;
+					}
+
 					//Aufbau von _vector_feld
 					for(Position pos = hilf; pos < hilf + 6; pos++ )
 					{
@@ -188,35 +209,26 @@ namespace BALL
 							{
 								ring_positions[number_of_ring_atoms] = (*atom_iter).getPosition();
 								number_of_ring_atoms++ ;
-								Log.info() << "ring atom #" << number_of_ring_atoms << ":  " << atom_iter->getName() << endl;
-								break;	// gefunden
+								break;
 							}	
 						}
 					}
 				
-					// _vector_feld ist bestimmt und number_of_ring_atoms zeigt hinter letzten gueltigen vector
+					// BAUSTELLE: check for missing ring atoms!
 				
-					// bestimme den Mittelpunkt
-				
+					// determine the ring center				
 					Vector3 center;
-					
 					for (Position pos = 0; pos < number_of_ring_atoms; pos++)
 					{
 						center += ring_positions[pos];
 					}
 					center /= number_of_ring_atoms;
-					Log.info() << "center: " << center << endl;
 				
 					// if the center of the ring is within the cut off,
 					// perform the shift calculation
-
-					float sum = 0;
 					Vector3 nucleus_pos = (*proton_iter)->getPosition();					
 					if (nucleus_pos.getSquareDistance(center) <= cut_off2)
 					{
-						Log.info() << "  proton: " << nucleus_pos << endl;
-						Log.info() << "  distance: " << nucleus_pos.getDistance(center) << endl;
-
 						// determine the normal vector of the ring plane
 						Vector3 normal;
 						for (Position pos = 0; pos < number_of_ring_atoms; pos++)
@@ -224,77 +236,45 @@ namespace BALL
 							const Vector3& left  = ring_positions[(pos + 0) % (number_of_ring_atoms)];
 							const Vector3& middle  = ring_positions[(pos + 1) % (number_of_ring_atoms)];
 							const Vector3& right = ring_positions[(pos + 2) % (number_of_ring_atoms)];
-							normal += (middle - left) % (middle - right);  
+							normal += (middle - right) % (middle - left);  
 						}
 						// normalize the normal vector to unit length
 						normal.normalize(); 
-						Log.info() << "normal: " << normal << endl;
-					
-						// determine the ring area
-						const Vector3 ein_vector(ring_positions[5] - ring_positions[1]);
-						Vector3 v(ring_positions[1] - ring_positions[2]);
-						float ring_area = (ring_positions[0] - ring_positions[1]) * (ring_positions[5] - ring_positions[1]);
-						ring_area += ein_vector.getLength() * v.getLength();
-					
-						
-						// berechne Projektion des Protons auf die Ringebene
-						float a = normal * nucleus_pos - normal * center;
-						Vector3 v_ring;
 
-						if (a < 0) 
+						// determine the sign of the normal
+						float normal_sign = 1.0;
+						
+						Vector3 d1 = ring_positions[0] - center;
+						Vector3 d2 = ring_positions[1] - center;
+						Vector3 vp = d1 % d2;
+						if ((vp * normal) > 0.0)
 						{
-							v_ring = nucleus_pos - a * normal;
+							normal_sign = -1.0;
 						}
-						else 
-						{
-							v_ring= nucleus_pos + a * normal;
-						}
-					
-						// Schleife ueber alle Bindungen des Rings
+						
+						// loop over all ring bonds
+						float sum = 0;
 						for (Position pos = 0; pos < number_of_ring_atoms; pos++ )
 						{
-							const Vector3& eins = ring_positions[(pos + 0) % (number_of_ring_atoms)];
-							const Vector3& zwei = ring_positions[(pos + 1) % (number_of_ring_atoms)];
-						
-							// berechne Abstand von Proton zu eins und zwei
-							Vector3 ein_vector = nucleus_pos - eins;
-							float a_eins = (ein_vector.getLength() / radius) * 1e-10;
-							ein_vector = nucleus_pos - zwei;
-							float a_zwei = (ein_vector.getLength() / radius) * 1e-10;
-							Log.info() << "hm: " << eins - nucleus_pos << zwei - nucleus_pos << normal << endl;
-						
-							// berechne Flaecheninhalt des 3Ecks aus eins,zwei,v_ring
-							Vector3 eins_zwei(eins - zwei);
-						
-							Vector3 n0 = normal % eins_zwei;
-							n0.normalize();
-						
-							float h = (n0 * v_ring  -  n0 * zwei);
-							if (h < 0)
-							{
-								h = -h;
-							}
-						
-							float f = 0.5 * h * eins_zwei.getLength() / ring_area;
-						
-							// bestimme das Vorzeichen der Dreiecksflaeche
-							if (getLambda((v_ring - eins) % (v_ring - zwei), normal) > 0)
-							{
-								f *= -1; 
-								Log.info() << "  inverting sign" << endl;
-							}
-						
-							// addiere gesamtsumme	
-							sum += f *( (1 / (a_eins * a_eins * a_eins)) + (1 / (a_zwei * a_zwei * a_zwei)) );
+							// determine the contributions of one ring bond
+							Vector3 r_1 = ring_positions[(pos + 0) % (number_of_ring_atoms)] - nucleus_pos;
+							Vector3 r_2 = ring_positions[(pos + 1) % (number_of_ring_atoms)] - nucleus_pos;
 
-							Log.info() << "HM contribution: " << f*( (1 / (a_eins * a_eins * a_eins)) + (1 / (a_zwei * a_zwei * a_zwei)) ) << endl;
-		
+							//          <r_1, (r_2 x n)>   /    1              1    \
+							// value =  ---------------- * |---------   +  ---------|
+							//	               2           \ |r_1|^3        |r_2|^3 /
+							float value  = r_1 * (r_2 % normal) 
+										* 0.5 * (1.0 / (r_1.getSquareLength() * r_1.getLength()) 
+														 +  1.0 / (r_2.getSquareLength() * r_2.getLength()));
+							
+							// add the contributions of this ring
+							sum += value;
 						}
+
+						// add up all contributions
+						shift +=  intensity_factor * B_ * normal_sign * sum;
 					}
 
-					Log.info() << "  ring contribution: " << sum *B_ << " (sum = " << sum << ")" << endl;
-					shift += sum * B_; // zaehle aktuellen chemicalshift zum Gesamtwert dazu
-					
 					number_of_ring_atoms = 0;
 					number_of_rings--;
 					hilf = 6; // fuer den naechsten schleifendurchlauf
@@ -307,7 +287,6 @@ namespace BALL
 			shift += hshift;
 			(*proton_iter)->setProperty(ShiftModule::PROPERTY__SHIFT, shift);
 			(*proton_iter)->setProperty(PROPERTY__RING_CURRENT_SHIFT, hshift);			
-			Log.info() << "  SHIFT: " << hshift << endl;
 		}
 				
 		return true;
