@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.36 2001/08/01 01:04:13 oliver Exp $
+// $Id: HINFile.C,v 1.37 2001/09/28 08:38:06 anker Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -224,8 +224,12 @@ namespace BALL
 		*(File*)this << ";" << endl;
 		*(File*)this << "forcefield AMBER" << endl;
 
-		// BAUSTELLE: insert system temperature here
+		// BAUSTELLE: 
+		// insert system temperature here
 		*(File*)this << "sys 0" << endl;
+
+		// BAUSTELLE:
+		// insert the periodic box size (if any)
 		
 		Size atom_count = 0;
 		Size atom_offset = 0;
