@@ -1,4 +1,4 @@
-// $Id: SDFile_test.C,v 1.3 2002/01/12 01:59:49 oliver Exp $
+// $Id: SDFile_test.C,v 1.4 2002/01/12 12:19:56 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(SDFile, "$Id: SDFile_test.C,v 1.3 2002/01/12 01:59:49 oliver Exp $")
+START_TEST(SDFile, "$Id: SDFile_test.C,v 1.4 2002/01/12 12:19:56 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -179,9 +179,9 @@ RESULT
 
 CHECK(enableAtoms() throw())
   SDFile f;
-	open("data/SDFile_test1.sdf");
-	f.enableAtoms();
+	f.open("data/SDFile_test1.sdf");
 	f.disableAtoms();
+	f.enableAtoms();
 	System S;
 	f >> S;
 	f.close();

@@ -1,11 +1,11 @@
-// $Id: ResourceFile_test.C,v 1.15 2002/01/12 01:59:49 oliver Exp $
+// $Id: ResourceFile_test.C,v 1.16 2002/01/12 12:19:56 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/resourceFile.h>
 ///////////////////////////
 
-START_TEST(ResourceFile, "$Id: ResourceFile_test.C,v 1.15 2002/01/12 01:59:49 oliver Exp $")
+START_TEST(ResourceFile, "$Id: ResourceFile_test.C,v 1.16 2002/01/12 12:19:56 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -116,7 +116,7 @@ CHECK(ResourceEntry::getChild(Poition Index) const)
 	R.insertChild(T);
 	R.insertChild(U);
 	R.insertChild(V);
-	const ResourceEntry& const_R(R)
+	const ResourceEntry& const_R(R);
 	TEST_EQUAL(const_R.getChild(0), &S);
 	TEST_EQUAL(const_R.getChild(1), &T);
 	TEST_EQUAL(const_R.getChild(2), &U);
@@ -296,10 +296,10 @@ CHECK(ResourceEntry::getEntry(const String& key_path))
 	R.insertChild(T);
 	R.insertChild(U);
 	U.insertChild(V);
-	TEST_EQUAL(R.getEntry("TEST2/TEST4/TEST5"), &V)
-	TEST_EQUAL(R.getEntry("TEST3"), &T)
-	TEST_EQUAL(R.getEntry("TEST2/TEST4"), &U)
 	TEST_EQUAL(R.getEntry("TEST2"), &S)
+	TEST_EQUAL(R.getEntry("TEST3"), &T)
+	TEST_EQUAL(R.getEntry("TEST4"), &U)
+	TEST_EQUAL(R.getEntry("TEST4/TEST5"), &V)
 	TEST_EQUAL(R.getEntry("TEST2/TEST6"), 0)
 RESULT
 

@@ -1,10 +1,10 @@
-// $Id: autoDeletable.iC,v 1.5 2002/01/12 01:59:48 oliver Exp $
+// $Id: autoDeletable.iC,v 1.6 2002/01/12 12:19:55 oliver Exp $
 
 BALL_INLINE 
 AutoDeletable::AutoDeletable()
 	throw()
 {
-	if ((void*)this == last_ptr_)
+	if (this == last_ptr_)
 	{
 		// if it has been created using it's own
 		// new operator, it should be on the heap
@@ -17,7 +17,6 @@ AutoDeletable::AutoDeletable()
 		// array - we can't delete it automatically
 		enabled_ = false;
 	}
-	::std::cout << "AutoDeletable:DC: this = " << (void*)this << " / last = " << (void*)last_ptr_ << " enabled = " << enabled_ << ::std::endl;
 }
 
 BALL_INLINE 
@@ -40,7 +39,6 @@ AutoDeletable::AutoDeletable(const AutoDeletable&, bool /* deep */)
 		// array - we can't delete it automatically
 		enabled_ = false;
 	}
-	::std::cout << "AutoDeletable:CC: this = " << (void*)this << " / last = " << (void*)last_ptr_ << " enabled = " << enabled_ << ::std::endl;
 }
 
 BALL_INLINE 

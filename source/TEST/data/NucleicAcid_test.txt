@@ -1,6 +1,6 @@
 /Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
 /Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
-/  handle: 45
+/  handle: [0-9][0-9]
   auto-deletable: 0
 /Object: [0-9a-fx]+ is instance of class: [0-9A-Z]*
   selected: 0

@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.34 2001/07/15 16:14:04 oliver Exp $
+// $Id: composite.h,v 1.35 2002/01/12 12:19:55 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -71,7 +71,6 @@ namespace BALL
 	*/
 	class Composite
 		: public PersistentObject,
-			public Object,
 			public Selectable
 	{
 		public:

@@ -1,7 +1,11 @@
-// $Id: persistentObject.h,v 1.6 2001/07/15 16:14:05 oliver Exp $
+// $Id: persistentObject.h,v 1.7 2002/01/12 12:19:55 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENTOBJECT_H
 #define BALL_CONCEPT_PERSISTENTOBJECT_H
+
+#ifndef BALL_CONCEPT_OBJECT_H
+#	include <BALL/CONCEPT/object.h>
+#endif
 
 namespace BALL 
 {
@@ -18,6 +22,7 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/CONCEPT/persistentObject.h}
 	*/
 	class PersistentObject
+		:	public Object
 	{	
 		public:
 
@@ -30,6 +35,7 @@ namespace BALL
 		*/
 		PersistentObject() 
 			throw()
+			:	Object()
 		{
 		}
 		

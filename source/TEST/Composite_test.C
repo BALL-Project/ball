@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.27 2002/01/12 01:59:49 oliver Exp $
+// $Id: Composite_test.C,v 1.28 2002/01/12 12:19:55 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,27 +25,12 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.27 2002/01/12 01:59:49 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.28 2002/01/12 12:19:55 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-Composite* c_ptr = new Composite;
-std::cout << (void*)c_ptr << std::endl;
-std::cout << (void*)dynamic_cast<AutoDeletable*>(c_ptr) << std::endl;
-std::cout << (void*)dynamic_cast<Object*>(c_ptr) << std::endl;
-std::cout << (void*)dynamic_cast<PersistentObject*>(c_ptr) << std::endl;
-std::cout << (void*)dynamic_cast<Selectable*>(c_ptr) << std::endl;
-
-/*
-for (Size i = 0; i < 1e8; i++)
-{
-	c_ptr = new Composite;
-	c_ptr->appendChild(*new Composite);
-	if (!(i % 50000)) { std::cout << i << std::endl; }
-	delete c_ptr;
-}
-
+Composite* c_ptr = 0;
 CHECK(Composite())
 	c_ptr = new Composite;
 	TEST_NOT_EQUAL(c_ptr, 0)
@@ -1313,14 +1298,14 @@ RESULT
 
 CHECK(memory leaks...)
 	Composite* ptr = 0;
-	for (Size i = 0; i < 1e8; i++)
+	for (Size i = 0; i < 1e6; i++)
 	{
 		ptr = new Composite;
 		if (!(i % 1000)) { STATUS("constructed " << i  << " composites.") }
 		delete ptr;
 	}
 RESULT
-*/
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

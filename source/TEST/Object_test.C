@@ -1,4 +1,4 @@
-// $Id: Object_test.C,v 1.8 2001/12/31 19:05:54 oliver Exp $
+// $Id: Object_test.C,v 1.9 2002/01/12 12:19:56 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(Object, "$Id: Object_test.C,v 1.8 2001/12/31 19:05:54 oliver Exp $")
+START_TEST(Object, "$Id: Object_test.C,v 1.9 2002/01/12 12:19:56 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -17,12 +17,20 @@ using namespace BALL;
 
 // tests for class Object::
 
-Object* ptr;
-
+Object* ptr = 0;
+Object* ptr2 = 0;
 CHECK(Object::Object() throw())
 	ptr = new Object;
+	Handle h = ptr->getHandle();
 	TEST_NOT_EQUAL(ptr, 0)
-	TEST_EQUAL(ptr->getHandle(), 0)
+	ptr2 = new Object;
+	TEST_EQUAL(ptr2->getHandle() - h, 1)
+RESULT
+
+
+CHECK(Object::~Object() throw())
+	delete ptr;
+	delete ptr2;
 RESULT
 
 
@@ -33,11 +41,6 @@ CHECK(Object::Object(const Object& object, bool deep = true) throw())
 	TEST_EQUAL(test, true)
 	test = (object1 == object2);
 	TEST_NOT_EQUAL(test, true)
-RESULT
-
-
-CHECK(Object::~Object() throw())
-	delete ptr;
 RESULT
 
 

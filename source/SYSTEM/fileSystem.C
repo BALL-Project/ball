@@ -1,4 +1,4 @@
-// $Id: fileSystem.C,v 1.11 2002/01/03 01:54:45 oliver Exp $
+// $Id: fileSystem.C,v 1.12 2002/01/12 12:19:55 oliver Exp $
 
 #include <BALL/SYSTEM/fileSystem.h>
 
@@ -117,7 +117,6 @@ namespace BALL
 				else
 				{
 					// replace the '~' by the user's home dir (from $HOME)
-					Size size = (Size)strlen(user_dir);
 					path.replace(0, 1, user_dir);
 				}
 			}

@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.32 2002/01/12 01:59:48 oliver Exp $
+// $Id: composite.C,v 1.33 2002/01/12 12:19:55 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -17,7 +17,6 @@ namespace BALL
 	Composite::Composite()
 		throw()
 		:	PersistentObject(),
-			Object(),
 			Selectable(),
 			number_of_children_(0),
 			parent_(0),
@@ -38,7 +37,6 @@ namespace BALL
 	Composite::Composite(const Composite& composite, bool deep)
 			throw()
 		:	PersistentObject(composite),
-			Object(composite),
 			Selectable(composite),
 			number_of_children_(0),
 			parent_(0),
@@ -1181,7 +1179,6 @@ namespace BALL
 			{
 				composite_ptr->previous_ = composite_ptr->next_ = composite_ptr->parent_ = 0;
 				composite_ptr->clear();
-				std::cout << "Composite is not auto deletable!" << std::endl;
 			}
 			
 			composite_ptr = next_ptr;
