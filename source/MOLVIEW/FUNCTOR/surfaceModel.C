@@ -1,4 +1,4 @@
-// $Id: surfaceModel.C,v 1.9 2001/07/15 21:01:00 oliver Exp $
+// $Id: surfaceModel.C,v 1.10 2001/08/01 01:45:50 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -80,7 +80,6 @@ namespace BALL
 				start_composite_->host(molecular_information);
 
 				mesh->PropertyManager::set(*this);
-				// mesh->readMSMSFile("/KM/usr/oliver/test.surf.vert.large", "/KM/usr/oliver/test.surf.face.large");
 
 				System* system = dynamic_cast<System*>(start_composite_);
 				if (system != 0)
