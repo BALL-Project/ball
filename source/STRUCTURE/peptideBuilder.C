@@ -207,17 +207,19 @@ namespace BALL
 				// 		- the last residue was proline
 				String type = (i-1)->getType();
 				type.toUpper();
+
+				// first special case: last residue was proline
 				if (type == "PRO")
 				{
-					is_proline_ = true;
-					
 					// in this case, the second torsion angle is fixed to -80 degrees
 					(i-1)->setPsi(Angle(-80.,false));
 				}
-				else
-				{
-					is_proline_ = false;
-				}
+
+				// second special case: this residue is a proline
+				type = i->getType();
+				type.toUpper();
+
+				is_proline_ = (type == "PRO") ? true : false;
 				
 				Residue* residue2 = createResidue_(i->getType(), id);
 					
@@ -344,6 +346,7 @@ namespace BALL
 			{
 				if (current > (float)(Constants::PI+1e-2) )
 				{
+				  // is this line really correct???
 					current = Angle(-120. * 120. * Constants::PI / 180.) - current;
 					rotaxis = (NN_C_axis % NN_NCA_axis).normalize();
 				} 
