@@ -17,27 +17,29 @@ namespace BALL
 		LogView::LogView(QWidget *parent, const char *name)
 			throw()
 			:	NotificationTarget<LogStreamNotifier>(),
-			  QMultiLineEdit(parent, name),
+			  QTextEdit(parent, name),
 				history_string_(),
 				strstream_()
 		{
 			Log.insert(strstream_);
 			Log.insertNotification(strstream_, *this);
 			setReadOnly(TRUE);
-			setAutoUpdate(TRUE);
+//			setAutoUpdate(TRUE);
+			setTextFormat(PlainText);
 		}
 
 		LogView::LogView(const LogView& view)
 			throw()
 			:	NotificationTarget<LogStreamNotifier>(),
-			  QMultiLineEdit(),
+			  QTextEdit(),
 				history_string_(view.history_string_),
 				strstream_()
 		{
 			Log.insert(strstream_);
 			Log.insertNotification(strstream_, *this);
 			setReadOnly(TRUE);
-			setAutoUpdate(TRUE);
+			//setAutoUpdate(TRUE);
+			setTextFormat(PlainText);
 		}
 
 		LogView::~LogView()
@@ -79,8 +81,9 @@ namespace BALL
 				history_string_ += QString(line.c_str());
 
 				setText(history_string_);
-				//setCursorPosition(numLines(), 0);
-				//repaint();
+//				setCursorPosition(numLines(), 0);
+				scrollToBottom();
+				repaint();
 
 				qApp->processEvents();
 			}

@@ -24,8 +24,8 @@
 #	include <qstring.h>
 #endif
 
-#ifndef QMULTILINEEDIT_H
-# include <qmultilineedit.h>
+#ifndef QTEXTEDIT_H
+# include <qtextedit.h>
 #endif
 
 #ifndef BALL_CONCEPT_NOTIFICATION_h
@@ -45,7 +45,7 @@ namespace BALL
 				The class LogView records all messages sent to the  \link Log Log \endlink  object and
 				displays them as a text history. The class is derived from 
 				{\em NotificationTarget<LogStreamNotifier>} that provides the connection
-				to the  \link Log Log \endlink  object. The class  \link QMultiLineEdit QMultiLineEdit \endlink  from the 
+				to the  \link Log Log \endlink  object. The class  \link QTextEdit QTextEdit \endlink  from the 
 				qt - library is responsible for the visualization of the text history.
 				Use the class LogView as a widget. There are no initializations necessary.
 				Just create this widget as a child widgets of your application and it will
@@ -54,7 +54,7 @@ namespace BALL
 		*/
 		class LogView
 			: public NotificationTarget<LogStreamNotifier>,
-			  public QMultiLineEdit
+			  public QTextEdit
 		{
 			public:
 
