@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.7 2003/10/20 10:44:00 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.8 2003/10/20 13:26:31 amoll Exp $
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/residue.h>
+#include <BALL/KERNEL/forEach.h>
 
 namespace BALL
 {
@@ -353,9 +354,9 @@ AtomDistanceColorProcessor::AtomDistanceColorProcessor()
 	throw()
 	: ColorProcessor(),
 		atom_2_distance_(),
-		distance_((float)20),
-		null_distance_color_("FF0000FF"),
-		full_distance_color_("00FF00FF")
+		distance_((float)10),
+		null_distance_color_("FFFF00FF"),
+		full_distance_color_("0000FFFF")
 {
 }
 
@@ -422,9 +423,6 @@ ColorRGBA AtomDistanceColorProcessor::getColor(const Composite* composite)
 
 	float distance = distance_;
 
-	if (distance != distance_) 
-Log.error() << "#~~#   7" << std::endl;
-
 	// atom in hashmap ?
 	if (it != atom_2_distance_.end())
 	{
@@ -444,9 +442,6 @@ Log.error() << "#~~#   7" << std::endl;
 	float green2 = full_distance_color_.getGreen();
 	float blue2  = full_distance_color_.getBlue();
 
-	if (distance != distance_) 
-Log.error() << "#~~#   8" << std::endl;
-
 	return ColorRGBA(red1 + (distance * (red2 - red1)) 			/ distance_,
 									 green1 + (distance * (green2 - green1)) 	/ distance_,
 									 blue1 + (distance * (blue2 - blue1)) 		/ distance_);
@@ -455,7 +450,6 @@ Log.error() << "#~~#   8" << std::endl;
 bool AtomDistanceColorProcessor::finish()
 	throw()
 {
-Log.error() << "#~~#   4" << std::endl;
 	calculateDistances();
 	GeometricObjectList::Iterator it = list_.begin();
 	for(; it != list_.end(); it++)
@@ -468,12 +462,43 @@ Log.error() << "#~~#   4" << std::endl;
 Processor::Result AtomDistanceColorProcessor::operator() (GeometricObject*& object)
 	throw()
 {
+	if (RTTI::isKindOf<Mesh>(*object))
+	{
+		if (!atom_grid_created_)  
+		{ 
+			createAtomGrid_();
+		}
+		CompositeSet::ConstIterator it = composites_->begin();
+		for(; it != composites_->end(); it++)
+		{
+			if (RTTI::isKindOf<AtomContainer>(**it))
+			{
+				AtomIterator ait;
+				AtomContainer* acont = (AtomContainer*)(*it);
+				BALL_FOREACH_ATOM(*acont, ait)
+				{
+					addAtom(*ait);
+				}
+			}
+			else if (RTTI::isKindOf<Atom>(**it))
+			{
+				const Atom* atom = dynamic_cast<const Atom*> (*it);
+				addAtom(*atom);
+			}
+		}
+
+		list_.push_back(object);
+
+		return Processor::CONTINUE;
+	}
+
 	if (object->getComposite() == 0 ||
 			!RTTI::isKindOf<Atom>(*object->getComposite()))
 	{
 		return ColorProcessor::operator () (object);
 	}
 
+	list_.push_back(object);
 	addAtom(*dynamic_cast<const Atom*>(object->getComposite()));
 	return Processor::CONTINUE;
 }
