@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.49 2004/11/07 14:44:09 oliver Exp $
+// $Id: standardPredicates.h,v 1.50 2004/11/17 16:00:42 anker Exp $
 //
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
@@ -487,7 +487,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 	{
 
-		private:
+		public:
 
 			class CTPNode
 			{
@@ -525,11 +525,6 @@ namespace BALL
 					/*
 					*/
 					virtual void destroy()
-						throw();
-
-					/*
-					*/
-					virtual void clear()
 						throw();
 
 					/*
@@ -641,7 +636,7 @@ namespace BALL
 
 					/*
 					 */
-					const HashSet<const CTPNode*>& getLinkSet() const
+					const HashSet<CTPNode*>& getLinkSet() const
 						throw();
 
 
@@ -673,7 +668,7 @@ namespace BALL
 
 					/*
 					 */
-					HashSet<const CTPNode*> link_set_;
+					HashSet<CTPNode*> link_set_;
 
 					/*
 					*/
@@ -712,6 +707,9 @@ namespace BALL
 				throw();
 
 			virtual ~ConnectedToPredicate()
+				throw();
+
+			virtual void clear()
 				throw();
 
 			/** Evaluate the predicate for the atom <tt>atom</tt>.
