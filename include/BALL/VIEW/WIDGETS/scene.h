@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.17 2004/02/13 17:36:00 anhi Exp $
+// $Id: scene.h,v 1.18 2004/02/18 18:19:08 anhi Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -83,8 +83,6 @@ namespace BALL
 			//@} 
 			
 
-			//@} 
-			
 			/** @name Enums */ 
 			//@{
 			

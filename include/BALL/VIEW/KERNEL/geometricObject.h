@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.32 2003/09/04 23:14:11 amoll Exp $
+// $Id: geometricObject.h,v 1.33 2004/02/18 18:19:06 anhi Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -69,7 +69,6 @@ namespace BALL
 			virtual void clear()
 				throw();
 
-			//@} 
 			/**	@name	Assignment methods 
 			 */ 
 			//@{
@@ -144,7 +143,9 @@ namespace BALL
 			virtual String getTypeName() const
 				throw() {return "GeometricObject";}
 							
-			//@} /**	@name	debuggers and diagnostics */ //@{
+			//@} 
+			/**	@name	debuggers and diagnostics */ 
+			//@{
 
 			/** Internal state and consistency self-validation.
 					Initiate self-validation of the internal state and data structure consistencies

@@ -43,6 +43,7 @@ namespace BALL
 			///
 			virtual ~DockWidget() throw() {}
 			
+			//@{
 			/** Insert a widget with the content of the window.
 			 */
 			void setGuest(QWidget& guest);

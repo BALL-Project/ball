@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line3.h,v 1.42 2003/08/26 08:04:21 oliver Exp $
+// $Id: line3.h,v 1.43 2004/02/18 18:19:04 anhi Exp $
 //
 
 #ifndef BALL_MATHS_LINE3_H
@@ -385,8 +385,6 @@ namespace BALL
 	}
 	//@}
 	
-	//@}
-
 } // namespace BALL
 
 #endif // BALL_MATHS_LINE3_H

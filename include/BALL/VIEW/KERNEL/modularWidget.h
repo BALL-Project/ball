@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.10 2004/02/02 17:12:50 amoll Exp $
+// $Id: modularWidget.h,v 1.11 2004/02/18 18:19:06 anhi Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -249,7 +249,6 @@ namespace BALL
 
 			//_ should the widget be visible, if no config file entry exists?
 			bool default_visible_;
-			//@}			
 		}; 
   
 	} // namespace VIEW

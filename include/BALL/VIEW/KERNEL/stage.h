@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.5 2003/12/15 01:43:53 amoll Exp $
+// $Id: stage.h,v 1.6 2004/02/18 18:19:07 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -458,7 +458,6 @@ namespace BALL
 			bool 								show_coordinate_system_;
 		};
 
-		//@}
 
 	} // namespace VIEW
 } // namespace BALL

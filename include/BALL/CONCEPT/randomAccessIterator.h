@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: randomAccessIterator.h,v 1.28 2003/08/26 08:04:09 oliver Exp $ 
+// $Id: randomAccessIterator.h,v 1.29 2004/02/18 18:19:02 anhi Exp $ 
 //
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
@@ -417,8 +417,6 @@ namespace BALL
 		iterator.toREnd();
 		return iterator;
 	}
-
-	//@}
 
 	/**	@name	Generic Random Access Iterator Classes.
 			 \par

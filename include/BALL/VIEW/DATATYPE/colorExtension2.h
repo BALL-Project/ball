@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorExtension2.h,v 1.4 2003/12/15 02:58:51 amoll Exp $
+// $Id: colorExtension2.h,v 1.5 2004/02/18 18:19:06 anhi Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLOREXTENSION2_H
 #define BALL_VIEW_DATATYPE_COLOREXTENSION2_H
@@ -126,7 +126,9 @@ namespace BALL
 			void getColor2(ColorRGBA& color) const
 				throw();
 
-			//@} /**	@name	debuggers and diagnostics */	//@{
+			//@} 
+			/**	@name	debuggers and diagnostics */	
+			//@{
 
 			/** Internal value dump.
 					Dump the current state of this colorExtension2 to 

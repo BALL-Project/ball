@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSFace.h,v 1.30 2003/08/26 08:04:50 oliver Exp $
+// $Id: RSFace.h,v 1.31 2004/02/18 18:19:06 anhi Exp $
 //
 
 #ifndef BALL_STRUCTURE_RSFACE_H
@@ -294,7 +294,6 @@ namespace BALL
 
 	//@}
 
-   /** @} */
 } // namespace BALL
 
 #endif // BALL_STRUCTURE_RSFACE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: information.h,v 1.3 2003/09/04 23:14:11 amoll Exp $
+// $Id: information.h,v 1.4 2004/02/18 18:19:06 anhi Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_INFORMATION_H
@@ -90,7 +90,9 @@ namespace BALL
 			virtual void clear()
 				throw();
 
-			//@} /**	@name	Accessors: inspectors and mutators */ //@{
+			//@} 
+			/**	@name	Accessors: inspectors and mutators */ 
+			//@{
 
 			/** Returns the type of the given GeometricObject.
 					If the given GeometricObject is of any kind that is defined by the 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.40 2003/08/26 08:04:20 oliver Exp $
+// $Id: angle.h,v 1.41 2004/02/18 18:19:03 anhi Exp $
 //
 
 #ifndef BALL_MATHS_ANGLE_H
@@ -853,7 +853,6 @@ namespace BALL
 
 	//@}
 	//@}
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_MATHS_ANGLE_H

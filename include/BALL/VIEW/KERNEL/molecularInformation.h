@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularInformation.h,v 1.3 2003/09/04 23:14:12 amoll Exp $
+// $Id: molecularInformation.h,v 1.4 2004/02/18 18:19:07 anhi Exp $
 
 #ifndef BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
 #define BALL_VIEW_KERNEL_MOLECULARINFORMATION_H
@@ -81,7 +81,9 @@ namespace BALL
 			virtual void clear()
 				throw();
 
-			//@} /**	@name	Accessors: inspectors and mutators */ //@{
+			//@} 
+			/**	@name	Accessors: inspectors and mutators */ 
+			//@{
 
 			/** Return the type of the given composite.
 					If the given Composite is of any kind that is defined by the 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: plane3.h,v 1.33 2003/08/26 08:04:22 oliver Exp $
+// $Id: plane3.h,v 1.34 2004/02/18 18:19:04 anhi Exp $
 //
 
 #ifndef BALL_MATHS_PLANE3_H
@@ -406,7 +406,6 @@ namespace BALL
 	*/
 	typedef TPlane3<float> Plane3;
 	
-	//@}
 } // namespace BALL
 
 #endif // BALL_MATHS_PLANE3_H

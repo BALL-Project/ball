@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.h,v 1.51 2003/08/26 08:04:12 oliver Exp $
+// $Id: string.h,v 1.52 2004/02/18 18:19:03 anhi Exp $
 //
 
 #ifndef BALL_DATATYPE_STRING_H
@@ -1301,7 +1301,6 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/DATATYPE/string.iC>
 #	endif
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_DATATYPE_STRING_H

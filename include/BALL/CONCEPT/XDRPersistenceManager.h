@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager.h,v 1.21 2003/08/26 08:04:06 oliver Exp $
+// $Id: XDRPersistenceManager.h,v 1.22 2004/02/18 18:19:01 anhi Exp $
 //
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -359,7 +359,6 @@ namespace BALL
 		XDR		xdr_out_;
 		
 	};
-	/** @} */
 
 } // namespace BALL
 

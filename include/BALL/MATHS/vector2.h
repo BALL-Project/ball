@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.h,v 1.17 2003/08/26 08:04:22 oliver Exp $
+// $Id: vector2.h,v 1.18 2004/02/18 18:19:04 anhi Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR2_H
@@ -883,7 +883,6 @@ namespace BALL
 		return s;
 	}
 
-	//@}
 }// namespace BALL
 
 #endif // BALL_MATHS_VECTOR2_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: steepestDescent.h,v 1.18 2003/08/26 08:04:27 oliver Exp $
+// $Id: steepestDescent.h,v 1.19 2004/02/18 18:19:05 anhi Exp $
 //
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
@@ -42,37 +42,6 @@ namespace BALL
 	{
 
 		public:
-
-		/**	@name	Options definitions
-		*/
-		//@{
-
-		/**  Options names
-		*/
-		struct Option
-		{
-			/**	Constant for the maximum of steps in an iteration
-			*/
-			static const char* MAX_STEPS;
-
-			/**	String constant for the maximum RMS gradient needed for convergence
-			*/
-			static const char* MAX_GRADIENT;
-
-    };
-
-		struct Default
-		{
-			/**	Default value for the maximum of steps in an iteration
-			*/
-			static Size MAX_STEPS;
-
-			/**	Default value for the maximum RMS gradient (termination condition)
-			*/
-			static float MAX_GRADIENT;
-		};
-
-		//@}
 
 		/**	@name	Constructors and Destructors	
 		*/

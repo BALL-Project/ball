@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleBox3.h,v 1.3 2003/08/19 20:07:47 oliver Exp $
+// $Id: simpleBox3.h,v 1.4 2004/02/18 18:19:04 anhi Exp $
 //
 
 #ifndef BALL_MATHS_SIMPLEBOX3_H
@@ -638,8 +638,6 @@ namespace BALL
 	/**	Default three-dimensional box class of type {\bf float}
 	*/
 	typedef TSimpleBox3<float> SimpleBox3;
-
-	//@}
 
 } // namespace BALL
 

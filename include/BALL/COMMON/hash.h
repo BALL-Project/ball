@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hash.h,v 1.20 2003/09/03 12:31:42 oliver Exp $
+// $Id: hash.h,v 1.21 2004/02/18 18:19:01 anhi Exp $
 //
 
 #ifndef BALL_COMMON_HASH_H
@@ -97,6 +97,7 @@ namespace BALL
 
 	//@}
 		
+	//@{
 	/**	Calculate the next prime number.
 			This method returns the first prime number that is 
 			greater or equal to the number given as the argument.

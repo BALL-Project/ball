@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: resourceFile.h,v 1.23 2003/08/26 08:04:15 oliver Exp $
+// $Id: resourceFile.h,v 1.24 2004/02/18 18:19:03 anhi Exp $
 //
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
@@ -817,8 +817,6 @@ namespace BALL
 
 		Entry root_;
 	};
-
-	//@}
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/FORMAT/resourceFile.iC>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: support.h,v 1.24 2003/08/26 08:04:26 oliver Exp $
+// $Id: support.h,v 1.25 2004/02/18 18:19:05 anhi Exp $
 //
 
 
@@ -144,8 +144,6 @@ namespace BALL
     Size computeTorsions
 			(const AtomIteratorType& start, const AtomIteratorType& end,
 			 std::vector<TorsionType>& torsions, bool use_selection = false);
-    //@}
-
 
 
 		// 

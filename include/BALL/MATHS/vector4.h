@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.h,v 1.46 2003/08/26 08:04:23 oliver Exp $
+// $Id: vector4.h,v 1.47 2004/02/18 18:19:05 anhi Exp $
 //
 
 #ifndef BALL_MATHS_VECTOR4_H
@@ -977,7 +977,6 @@ namespace BALL
 	}
 	//@}
 	//@}
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_MATHS_VECTOR4_H

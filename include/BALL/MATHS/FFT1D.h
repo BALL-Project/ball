@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT1D.h,v 1.9 2003/08/26 08:04:20 oliver Exp $
+// $Id: FFT1D.h,v 1.10 2004/02/18 18:19:03 anhi Exp $
 //
 
 #ifndef BALL_MATHS_FFT1D_H
@@ -20,7 +20,7 @@
 #endif
 
 #include <math.h>
-#include <fftw.h>
+#include <fftw3.h>
 
 namespace BALL
 {
@@ -37,7 +37,7 @@ namespace BALL
 			S/FFT1D.h
 	 */
 	class FFT1D 
-		: public TRegularData1D<FFTW_COMPLEX>
+		: public TRegularData1D<Complex>
 	{
 		public:
 
@@ -185,13 +185,13 @@ namespace BALL
 		/** Access the data at the grid position closest to {\em pos}.
 			This function returns the "raw" data at that position.
 		 */
-		FFTW_COMPLEX& operator [] (const double pos)
+		Complex& operator [] (const double pos)
 			throw(Exception::OutOfGrid);
 
 		/** Access the data at the grid position closest to {\em pos}.
 				This function returns the "raw" data at that position.
 			*/
-		const FFTW_COMPLEX& operator [] (const double pos) const
+		const Complex& operator [] (const double pos) const
 			throw(Exception::OutOfGrid);
 		
 		/** Compute the phase factor.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.h,v 1.12 2004/02/11 12:52:52 amoll Exp $
+// $Id: geometricControl.h,v 1.13 2004/02/18 18:19:07 anhi Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
 #define BALL_VIEW_WIDGETS_GEOMETRICCONTROL_H
@@ -111,7 +111,8 @@ namespace BALL
 			virtual void clear()
 				throw() {};
 
-			//@} /**	@name	Accessors: inspectors and mutators */ //@{
+			//@} /**	@name	Accessors: inspectors and mutators */ 
+			//@{
 
 			/** Insert a Representation.
 			*/
@@ -189,7 +190,9 @@ namespace BALL
 
 		  protected slots:
 			
-			//@} /** @name Protected members */ //@{
+			//@} 
+			///** @name Protected members */ 
+			//@{
 
 			/*_ Controlling method for context menus.
 					Calls buildContextMenu for the Representation object belonging
