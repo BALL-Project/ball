@@ -62,7 +62,7 @@ class AmberMinimizationDialog
 		void setEnergyDifference(double energy_difference);
 	
 		///
-		const String& getFilename() const;
+		String getFilename() const;
 		
 		///
 		void setFilename(const String& filename);
