@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>SnapshotVisualisationDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -7,7 +7,7 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>4</y>
+            <y>0</y>
             <width>390</width>
             <height>340</height>
         </rect>
@@ -985,12 +985,6 @@
     </connection>
     <connection>
         <sender>snapShotSlider</sender>
-        <signal>sliderMoved(int)</signal>
-        <receiver>SnapshotVisualisationDialogData</receiver>
-        <slot>sliderMovedToPos()</slot>
-    </connection>
-    <connection>
-        <sender>snapShotSlider</sender>
         <signal>valueChanged(int)</signal>
         <receiver>SnapshotVisualisationDialogData</receiver>
         <slot>sliderMovedToPos()</slot>
@@ -1050,6 +1044,9 @@
     <tabstop>numberOfSnapshots</tabstop>
     <tabstop>currentSnapshot</tabstop>
 </tabstops>
+<includes>
+    <include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
+</includes>
 <slots>
     <slot>firstSnapshotClicked()</slot>
     <slot>hundredBackwardClicked()</slot>
@@ -1068,9 +1065,6 @@
     <slot>checkRock()</slot>
     <slot>checkNoLoop()</slot>
 </slots>
-<includes>
-	<include location="global" impldecl="in declaration">BALL/COMMON/global.h</include>
-</includes>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

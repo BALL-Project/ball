@@ -30,9 +30,11 @@ fixed:
 - AtomDistanceColorProcessor
 - PeptideDialog: deletion of sequence
 - problem with normals in Cartoon model
+- doubled performance of SnapShot Visualisation
 - issue with restoring window's geometry on X11 (still buggy on some X-Servers)
 - restoring of working dir
 - MDS dialog: switching off storing to trajectory file
+- Scene: mouse sensitivity was adjusted
 - now show correctly number of added bonds
 
 changed:
