@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.23 2001/09/04 01:14:20 oliver Exp $
+// $Id: regularData1D.h,v 1.23.4.1 2002/08/16 13:24:00 anhi Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -55,7 +55,12 @@ namespace BALL
 		*/
 		TRegularData1D(const TRegularData1D& data)
 			throw();
-
+	
+		/** Detailed constructor.
+		 */
+		TRegularData1D(double lower, double upper, double spacing)
+			throw(Exception::OutOfMemory);
+		
 		/** Detailled constructor.
 				If the values for upper and lower boundaries dont match,
 				they are swapped.
@@ -109,7 +114,12 @@ namespace BALL
 		/**	@name	Accessors
 		*/
 		//@{	
-			
+		
+		/** Returns a pointer to the grid contents closest to a given position.
+		 */
+		T* getData(const double r)
+			throw(Exception::OutOfGrid);
+		
 		/**	Constant random access operator.
 				@exception IndexOverflow if {\tt index} is out of range
 		*/	
@@ -121,6 +131,11 @@ namespace BALL
 		*/	
 		T& operator [] (Position index)
 			throw(Exception::IndexOverflow);
+			
+		/** Returns the linearly interpolated value of the surrounding two grid points.
+		 */
+		T getInterpolatedValue(const double r) const
+			throw(Exception::OutOfGrid);
 			
 		/**	Return the number of values
 		*/
@@ -196,9 +211,13 @@ namespace BALL
 		*/
 		double			upper_;
 
+		/** The spacing
+		 */
+		double    spacing_;
+		
 		/**	The data
 		*/
-		VectorType	data_;
+		VectorType	 data_;
 	};
 
 	/**	Default type
@@ -208,9 +227,6 @@ namespace BALL
 	template <typename T>
 	TRegularData1D<T>::TRegularData1D()
 		throw()
-		: lower_(T()),
-		  upper_(T()),
-			data_(VectorType())
 	{
 	}
 
@@ -229,6 +245,16 @@ namespace BALL
 	{
 	}
 
+	template <typename T>
+	TRegularData1D<T>::TRegularData1D(double lower, double upper, double spacing)
+		throw(Exception::OutOfMemory)
+		: lower_(lower),
+			upper_(upper),
+			spacing_(spacing),
+			data_((Position) ((upper_-lower_)/spacing_))
+	{
+	}
+			
 	template <typename T>
 	TRegularData1D<T>::TRegularData1D(const VectorType& data, double lower, double upper)
 		throw()
@@ -298,6 +324,18 @@ namespace BALL
 						upper_ == data.upper_ &&
 						 data_ == data.data_    );
 	}
+
+	template <typename T>
+	BALL_INLINE
+	T* TRegularData1D<T>::getData(const double r)
+		throw(Exception::OutOfGrid)
+	{
+		double step = (upper_ - lower_)/data_.size();
+		Position index = (Position) (r-lower_)/step;
+		
+		if (index >= data_.size())
+		return (*this)[(Position) (r-lower_)/step];
+	}
 	
 	template <typename T>
 	BALL_INLINE
@@ -323,8 +361,37 @@ namespace BALL
 		}
 		
 		return data_[index];
-	}	
+	}
 
+	template <typename T>
+	BALL_INLINE
+	T TRegularData1D<T>::getInterpolatedValue(const double r) const
+		throw(Exception::OutOfGrid)
+	{
+		if ((r < lower_) || (r > upper_))
+		{
+			throw Exception::OutOfGrid(__FILE__, __LINE__);
+		}
+
+		double h    = r - lower_;
+		double step = (upper_ - lower_)/data_.size();
+		double mod  = fmod(r,step);
+		
+		if (mod == 0) // we are on the grid
+		{
+			return (*this)[(Position) h/step];
+		}
+		else
+		{
+			Position before = floor(h/step);
+			Position after  = ceil(h/step);
+
+			double t = (h - before*step)/(step);
+
+			return (1.-t)*(*this)[before] + t*(*this)[after];
+		}
+	}
+			
 	template <typename T>
 	BALL_INLINE
 	Size TRegularData1D<T>::getSize() const
