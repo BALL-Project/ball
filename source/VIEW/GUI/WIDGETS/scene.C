@@ -1,4 +1,4 @@
-// $Id: scene.C,v 1.6.4.3 2002/11/01 17:10:43 amoll Exp $
+// $Id: scene.C,v 1.6.4.4 2002/11/03 12:58:03 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/scene.h>
 #include <BALL/VIEW/GUI/FUNCTOR/externalRenderer.h>
@@ -11,7 +11,6 @@
 using std::endl;
 using std::ostream;
 using std::istream;
-using std::cerr;
 
 namespace BALL
 {
@@ -366,7 +365,7 @@ namespace BALL
 		{
 			if (!format().rgba())
 			{
-				cerr << "no rgba mode for OpenGL available." << endl;
+				Log.error() << "no rgba mode for OpenGL available." << endl;
 			}
 
 			glFrontFace(GL_CCW);
