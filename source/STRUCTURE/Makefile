@@ -49,7 +49,8 @@ CPP_SOURCES= \
 	trianglePoint.C\
 	triangulatedSAS.C\
 	triangulatedSES.C\
-	triangulatedSurface.C
+	triangulatedSurface.C\
+	HBondProcessor.C
 
 PARSER_PREFIX=SmilesParser
 
