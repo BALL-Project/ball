@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.43 2004/07/10 16:39:21 amoll Exp $
+// $Id: representation.C,v 1.44 2004/07/22 16:22:06 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -504,6 +504,7 @@ namespace BALL
 			String result;
 			if (getModelType() == MODEL_CLIPPING_PLANE)
 			{
+				result+= "CP:";
 				result+= String(getProperty("AX").getFloat()) + " ";
 				result+= String(getProperty("BY").getFloat()) + " ";
 				result+= String(getProperty("CZ").getFloat()) + " ";
@@ -541,6 +542,20 @@ namespace BALL
 
 			result.trimRight(",");
 			result += "]";
+
+			if (color_processor_ != 0)
+			{
+				result += "|";
+				String temp;
+				result += color_processor_->getDefaultColor();
+				result += "|";
+			}
+
+			if (hasProperty("PROPERTY__HIDDEN"))
+			{
+				result += "H";
+			}
+
 			return result;
 		}
 

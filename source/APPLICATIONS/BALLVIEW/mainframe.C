@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.19 2004/07/22 14:47:54 amoll Exp $
+// $Id: mainframe.C,v 1.20 2004/07/22 16:22:11 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -447,18 +447,18 @@ namespace BALL
 				String data_string = in.getValue("BALLVIEW_PROJECT", "Representation" + String(p));
 
 				vector<String> string_vector;
-				// split of information of system number
-				Size split_size = data_string.split(string_vector, ";");
-				Position system_pos = string_vector[0].toUnsignedInt();
-				if (split_size == 2)
-				{
-					data_string = string_vector[1];
-				}
+				Size split_size;
 
-				// split off between representation settings and composite numbers
-				split_size = data_string.split(string_vector, "[]");
-				if (split_size == 1) 
+				// Representation0=1;3 2 2 6.500000 0 0 [2]|Color|H
+				// 								 ^ 																	System Number
+				// 								         ^            							Model Settings
+				// 								         							 ^            Composites numbers
+				// 								         							     ^        Custom Color
+				// 								         							     			^   Hidden Flag
+
+				if (data_string.hasPrefix("CP:")) 
 				{
+					data_string = data_string.after("CP:");
 					// we have a clipping plane
 					split_size = data_string.split(string_vector);
 					if (split_size != 4) continue;
@@ -474,15 +474,24 @@ namespace BALL
 					continue;
 				}
 
+				// split off information of system number
+				split_size = data_string.split(string_vector, ";");
+				Position system_pos = string_vector[0].toUnsignedInt();
+
+				// split off between representation settings and composite numbers
+				data_string = string_vector[1];
+				vector<String> string_vector2;
+				data_string.split(string_vector2, "[]");
+				data_string = string_vector2[0];
 				display_properties_->getSettingsFromString(data_string);
 
 				// Composite positions
-				data_string = string_vector[1];
-				data_string.split(string_vector, ",");
+				data_string = string_vector2[1];
+				data_string.split(string_vector2, ",");
 				HashSet<Position> hash_set;
-				for (Position p = 0; p < string_vector.size(); p++)
+				for (Position p = 0; p < string_vector2.size(); p++)
 				{
-					hash_set.insert(string_vector[p].toUnsignedInt());
+					hash_set.insert(string_vector2[p].toUnsignedInt());
 				}
 
 				Position pos = getCompositeManager().getNumberOfComposites() - 1;
@@ -497,6 +506,15 @@ namespace BALL
 					setStatusbarText("Error while reading project file! Aborting...");
 					Log.error() << "Error while reading project file! Aborting..." << std::endl;
 					continue;
+				}
+
+				data_string = string_vector[1];
+				if (data_string.has('|'))
+				{
+					data_string.split(string_vector2, "|");
+					ColorRGBA color;
+					color = string_vector2[1];
+					display_properties_->setCustomColor(color);
 				}
 
 				getSelection().clear();
