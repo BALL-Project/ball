@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.19 2000/09/01 13:49:23 oliver Exp $
+// $Id: circle3.h,v 1.20 2000/09/02 19:46:12 oliver Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -287,10 +287,7 @@ namespace BALL
 	std::istream& operator >> (std::istream& s, TCircle3<T>& circle)
 	{
 		  char c;
-			for(int i=0; i<7; i++)
-			{
-				s >> c;
-			}
+			s >> c;
 			s >> circle.p >> circle.n >> circle.radius;
 			s >> c;
 			return s;
