@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.6 2000/01/10 15:50:58 oliver Exp $
+// $Id: string.h,v 1.7 2000/01/28 10:55:17 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -20,11 +20,6 @@
 #endif
 #ifndef BALL_COMMON_DEBUG_H
 #	include <BALL/COMMON/debug.h>
-#endif
-
-// for SGI CC/STL implementation
-#ifndef __GNUC__
-#	pragma set woff 1375
 #endif
 
 #include <string>
@@ -973,11 +968,6 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/DATATYPE/string.iC>
 #	endif
-
-// for SGI CC
-#ifndef __GNUC__
-#	pragma reset woff 1375
-#endif
 
 } // namespace BALL
 

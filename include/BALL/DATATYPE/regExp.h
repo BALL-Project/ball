@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.3 2000/01/10 15:50:58 oliver Exp $
+// $Id: regExp.h,v 1.4 2000/01/28 10:55:17 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -9,12 +9,12 @@
 
 // BAUSTELLE
 // for SGI CC: turn of warnings #1174: function "regcomp" was declared but never referenced
-#ifndef __GNUC__
+#if !defined(__GNUC__) && !defined(__KAI__) && defined(IRIX)
 #	pragma set woff 1174
 #endif
 #include <sys/types.h>
 #include <regex.h>
-#ifndef __GNUC__
+#if !defined(__GNUC__) && !defined(__KAI__) && defined(IRIX)
 #	pragma reset woff 1174
 #endif
 
