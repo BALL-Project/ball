@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.11 2003/09/04 23:14:11 amoll Exp $
+// $Id: kernel.doc,v 1.12 2003/12/15 01:35:35 amoll Exp $
 
 /** \defgroup ViewKernel Kernel classes
 		\ingroup Visualisation
@@ -37,6 +37,10 @@
 		 interface definition all primitives must have.
 		 The other classes manage the GeometricObjects.
  */
+
+/** \defgroup ViewKernelStage Setup of the Stage, Camera and LightSources
+ 		\ingroup ViewKernel
+*/
 
 /** \defgroup ViewKernelOther Other classes
  		\ingroup ViewKernel

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.3 2003/12/15 01:11:52 amoll Exp $
+// $Id: stage.h,v 1.4 2003/12/15 01:36:01 amoll Exp $
 
 #ifndef BALL_VIEW_KERNEL_STAGE_H
 #define BALL_VIEW_KERNEL_STAGE_H
@@ -35,7 +35,7 @@ namespace BALL
 	namespace VIEW
 	{
 		/** @name Classes to setup a stage for viewing
-				 \ingroup ViewKernelOther
+				 \ingroup ViewKernelStage
 		*/
 		//@{
 	
@@ -211,6 +211,7 @@ namespace BALL
 				
 
 		/** Camera with viewpoint, a look at point and an up-vector.
+				\ingroup ViewKernelOther
 		 */
 		class Camera
 		{
@@ -337,6 +338,7 @@ namespace BALL
 	
 		/** A Stage has a Camera, LightSources and a background color.
 		 		Also a flag can be set, so that a coordinate system will be shown.
+				\ingroup ViewKernelOther
 		*/
 		class Stage
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.17 2003/12/15 01:14:47 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.18 2003/12/15 01:38:14 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -62,7 +62,9 @@ namespace BALL
 		};
 
 
-		/// 
+		/**
+				\ingroup  ViewModels
+		*/
 		class ResidueNumberColorProcessor
 			: public ColorProcessor
 		{
@@ -392,7 +394,9 @@ namespace BALL
 		};
 
 
-		/// Coloring by the temperature factor of atoms from a PDBFile
+		/** Coloring by the temperature factor of atoms from a PDBFile
+				\ingroup  ViewModels
+		*/
 		class TemperatureFactorColorProcessor
 			: public InterpolateColorProcessor
 		{
@@ -406,7 +410,9 @@ namespace BALL
 		};
 
 		
-		/// Coloring by the occupancy of atoms from a PDBFile
+		/** Coloring by the occupancy of atoms from a PDBFile
+				\ingroup  ViewModels
+		*/
 		class OccupancyColorProcessor
 			: public InterpolateColorProcessor
 		{
@@ -419,7 +425,10 @@ namespace BALL
 			virtual ColorRGBA getColor(const Composite* composite);
 		};
 
-		/// Coloring by the secondary structure, a Composite is in
+
+		/** Coloring by the secondary structure, a Composite is in
+				\ingroup  ViewModels
+		*/
 		class SecondaryStructureColorProcessor
 			: public ColorProcessor
 		{

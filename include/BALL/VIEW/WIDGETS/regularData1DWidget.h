@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.h,v 1.3 2003/09/04 23:14:15 amoll Exp $
+// $Id: regularData1DWidget.h,v 1.4 2003/12/15 01:27:24 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGET_REGULARDATA1DWIDGET_H
@@ -69,7 +69,7 @@ namespace BALL
 
 
 		/** Widget used to display one-dimensional data.
-		 \ingroup ViewGuiWidgets
+		 \ingroup ViewWidgets
 		 */
 		class RegularData1DWidget
 			: public QScrollView,

@@ -19,6 +19,7 @@ namespace BALL
 				Insert the widget with the main content as member with setGuest().
 				This class is very generic, to understand its concept better, have a look at the
 				implementation in LogView.
+				\ingroup ViewWidgets
 		*/
 		class DockWidget
 			: public QDockWindow,

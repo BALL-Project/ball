@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.C,v 1.6 2003/10/27 16:55:45 amoll Exp $
+// $Id: modelProcessor.C,v 1.7 2003/12/15 01:24:19 amoll Exp $
 
 #include <BALL/VIEW/MODELS/modelProcessor.h>
 #include <BALL/VIEW/KERNEL/common.h>
@@ -43,21 +43,6 @@ void ModelProcessor::clear()
 	geometric_objects_.clear();
 	drawing_precision_ = DRAWING_PRECISION_HIGH;
 	surface_drawing_precision_ = -1;
-}
-
-bool ModelProcessor::start()
-{
-	return true;
-}
-
-bool ModelProcessor::finish()
-{
-	return true;
-}
-
-Processor::Result ModelProcessor::operator() (Composite& /*composite*/)
-{
-	return Processor::CONTINUE;
 }
 
 } }

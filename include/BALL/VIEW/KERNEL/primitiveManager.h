@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.4 2003/12/05 23:53:53 amoll Exp $
+// $Id: primitiveManager.h,v 1.5 2003/12/15 01:26:25 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -151,4 +151,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_GUI_KERNEL_PRIMITIVEMANAGER_H
+#endif // BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H

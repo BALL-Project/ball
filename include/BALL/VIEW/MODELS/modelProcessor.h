@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.7 2003/10/27 16:55:44 amoll Exp $
+// $Id: modelProcessor.h,v 1.8 2003/12/15 01:24:29 amoll Exp $
 //
 
-#ifndef BALL_VIEW_GUI_MODELS_ModelProcessor_H
-#define BALL_VIEW_GUI_MODELS_ModelProcessor_H
+#ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
+#define BALL_VIEW_MODELS_MODELPROCESSOR_H
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -49,15 +49,6 @@ namespace BALL
 				///
 				virtual void clear()
 					throw();
-
-				///
-				virtual bool start();
-
-				///
-				virtual bool finish();
-
-				///
-				virtual Processor::Result operator() (Composite& composite);
 
 				///
 				virtual bool isValid() const
@@ -106,4 +97,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_GUI_MODELS_BASEMODEL_H 
+#endif // BALL_VIEW_MODELS_MODELPROCESSOR_H
