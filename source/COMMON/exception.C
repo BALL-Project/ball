@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.13 2000/08/09 09:18:50 amoll Exp $
+// $Id: exception.C,v 1.14 2000/09/01 10:15:29 anker Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -187,7 +187,7 @@ namespace BALL
 
 			DEF_EXCEPTION(NotImplemented, "this method has not been implemented yet. Feel free to complain about it!")
 
-			DEF_EXCEPTION(IllegalTreeOperation, "a illegal tree operation was requested")
+			DEF_EXCEPTION(IllegalTreeOperation, "an illegal tree operation was requested")
 
 			DEF_EXCEPTION(BufferOverflow, "the maximum buffersize has been reached")
 
