@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.h,v 1.2 2000/01/18 12:59:33 oliver Exp $
+// $Id: standardColorCalculator.h,v 1.3 2000/01/19 17:54:03 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
@@ -94,7 +94,9 @@ namespace BALL
 
 			virtual void visit(Atom& atom);
 
-			virtual void visit(Composite& composite){};
+			virtual void visit(Composite& composite) 
+			{
+			};
 			//@}
 
 			protected:
