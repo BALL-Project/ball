@@ -1,4 +1,4 @@
-// $Id: Box3_test.C,v 1.5 2000/03/08 18:29:20 amoll Exp $
+// $Id: Box3_test.C,v 1.6 2000/04/18 21:12:33 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Box3_test.C,v 1.5 2000/03/08 18:29:20 amoll Exp $")
+START_TEST(class_name, "$Id: Box3_test.C,v 1.6 2000/04/18 21:12:33 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -222,11 +222,11 @@ RESULT
 //line 
 CHECK(std::istream& operator >> (std::istream& s, TBox3<T>& Box3))
 	std::ifstream instr("data/Box3_test2.txt");
-	Box3 v(10, 20, 30, 40, 50, 60);
-	instr >> v;
+	Box3 b(10, 20, 30, 40, 50, 60);
+	instr >> b;
 	instr.close();
-	Box3 v1(1, 2, 3, 4, 5, 6);
-	TEST_EQUAL(v, v1)
+	Box3 b1(1, 2, 3, 4, 5, 6);
+	TEST_EQUAL(b, b1)
 RESULT
 
 

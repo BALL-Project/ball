@@ -1,4 +1,4 @@
-// $Id: Line3_test.C,v 1.3 2000/02/27 18:12:15 amoll Exp $
+// $Id: Line3_test.C,v 1.4 2000/04/18 21:12:33 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Line3_test.C,v 1.3 2000/02/27 18:12:15 amoll Exp $")
+START_TEST(class_name, "$Id: Line3_test.C,v 1.4 2000/04/18 21:12:33 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -168,9 +168,7 @@ RESULT
 //line294: method std::istream& operator >> (std::istream &s, TLine3& line)
 CHECK(std::istream& operator >> (std::istream& s, TLine3<T>& line))
 	std::ifstream instr("data/Line_test2.txt");
-	v1 = Vector3(0, 0, 0);
-	v2 = Vector3(0, 0, 0);
-	line = Line3(v1, v2, Line3::FORM__PARAMETER);
+	line = Line3();
 	instr >> line;
 	instr.close();
 	v3 = Vector3(0, 1, 2);
