@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.h,v 1.1.2.5 2005/01/19 13:00:05 amoll Exp $
+// $Id: vertexBuffer.h,v 1.1.2.6 2005/01/19 13:15:09 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_VERTEXBUFFER_H
 #define BALL_VIEW_RENDERING_VERTEXBUFFER_H
@@ -22,12 +22,14 @@ namespace BALL
 		class GLRenderer;
 
 		/** Wrapper class to draw BALLView Mesh instances with OpenGL vertex buffer objects.
-				Vertex Buffer Objects are an OpenGL extensions available since version 1.5.
-				See http://oss.sgi.com/projects/ogl-sample/registry/EXT/pixel_buffer_object.txt \\
+				Vertex Buffer Objects are an OpenGL extension available since OpenGL version 1.5.
+				\par
+				See http://oss.sgi.com/projects/ogl-sample/registry/EXT/pixel_buffer_object.txt 
+				\par
 				Vertex Buffer Objects can drasticaly increase drawing speed for triangulated surfaces
-				(up to 5 fold!) compared with OpenGL display lists.
+				(up to 5 fold) compared with OpenGL display lists.
 				To ensure a maximum of platform independence we use method pointers in the source file.
-				These must be initialises by calling MeshBuffer::initGL() (See below).
+				These must be initialised by calling MeshBuffer::initGL() (See below).
 				\ingroup ViewRendering
 		*/
 		class BALL_EXPORT MeshBuffer
@@ -45,7 +47,7 @@ namespace BALL
 			///
 			~MeshBuffer();
 
-			/** Initialsie the GL methods needed.
+			/** Initialise the GL needed methods.
 			    Call this method one time after having a valid GL context (e.g. in GLRenderer::init).
 			*/
 			static bool initGL();
