@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondModel.C,v 1.9 2004/10/22 21:27:00 amoll Exp $
+// $Id: HBondModel.C,v 1.9.2.1 2005/01/10 12:43:53 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/HBondModel.h>
@@ -35,8 +35,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.info() << "Destructing object " << (void *)this 
-									 << " of class " << RTTI::getName<HBondModelProcessor>() << std::endl;
+				Log.info() << "Destructing object " << this << " of class HBondModelProcessor" << endl;
 			#endif 
 		}
 
@@ -51,6 +50,7 @@ namespace BALL
 			throw()
 		{
 			AtomBondModelBaseProcessor::set(model);
+			radius_ = model.radius_;
 		}
 
 		const HBondModelProcessor &HBondModelProcessor::operator = (const HBondModelProcessor& model)
@@ -59,13 +59,6 @@ namespace BALL
 			set(model);
 			return *this;
 		}
-
-		void HBondModelProcessor::swap(HBondModelProcessor& model)
-			throw()
-		{
-			AtomBondModelBaseProcessor::swap(model);
-		}
-
 				
 		Processor::Result HBondModelProcessor::operator() (Composite& composite)
 		{
@@ -75,58 +68,51 @@ namespace BALL
 			}
 
 			Atom *atom = RTTI::castTo<Atom>(composite); 
-			Bond* bond = 0;
 
-			for (Position p = 0; p < atom->countBonds(); p++)
+			Atom::BondIterator bit = atom->beginBond();
+			for (; +bit; ++bit)
 			{
-				if (atom->getBond(p)->getType() == Bond::TYPE__HYDROGEN)
+				if (bit->getType() == Bond::TYPE__HYDROGEN)
 				{
-					bond = atom->getBond(p);
-					break;
+					const Atom* partner = bit->getPartner(*atom);
+
+					// only one visualisation for a bond!
+					if (partner == 0  || partner < atom )
+					{
+						return Processor::CONTINUE;
+					}
+
+					// generate tubes
+					const Vector3 v = partner->getPosition() - atom->getPosition();
+					Vector3 last = atom->getPosition() + v / 4.5;
+					for (Position p = 0; p < 3; p++)
+					{
+						Tube *tube = new Tube;
+						if (tube == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
+											
+						tube->setRadius(radius_);
+						tube->setComposite(atom);
+						tube->setVertex1(last);
+						tube->setVertex2(last + (v / 8));
+						geometric_objects_.push_back(tube);
+
+						Disc* disc = new Disc(Circle3(last, -v, radius_));
+						if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
+						disc->setComposite(atom);
+						geometric_objects_.push_back(disc);
+
+						disc = new Disc(Circle3(last + (v / 8), v, radius_));
+						if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
+						disc->setComposite(atom);
+						geometric_objects_.push_back(disc);
+
+						last += (v /4);
+					}
 				}
-			}
-
-			if (bond == 0) return Processor::CONTINUE;
-
-			Atom* partner = bond->getPartner(*atom);
-
-			// only one visualisation for a bond!
-			if (partner == 0  ||
-					partner < atom )
-			{
-				return Processor::CONTINUE;
-			}
-
-			// generate tubes
-			Vector3 v = partner->getPosition() - atom->getPosition();
-			Vector3 last = atom->getPosition() + v / 4.5;
-			for (Position p = 0; p < 3; p++)
-			{
-				Tube *tube = new Tube;
-				if (tube == 0) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
-									
-				tube->setRadius(radius_);
-				tube->setComposite(atom);
-				tube->setVertex1(last);
-				tube->setVertex2(last + (v / 8));
-				geometric_objects_.push_back(tube);
-
-				Disc* disc = new Disc(Circle3(last, v, radius_));
-				if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
-				disc->setComposite(atom);
-				geometric_objects_.push_back(disc);
-
-				disc = new Disc(Circle3(last + (v / 8), v, radius_));
-				if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
-				disc->setComposite(atom);
-				geometric_objects_.push_back(disc);
-
-				last += (v /4);
 			}
 
 			return Processor::CONTINUE;
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL
