@@ -1,0 +1,13 @@
+BALL_INLINE
+void Sphere::setRadius(Real radius)
+	throw()
+{
+	radius_ = radius;
+}
+
+BALL_INLINE
+Real Sphere::getRadius() const
+	throw()
+{
+	return radius_;
+}
