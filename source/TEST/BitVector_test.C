@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.2 1999/12/19 17:15:24 oliver Exp $
+// $Id: BitVector_test.C,v 1.3 2000/06/28 20:22:38 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.2 1999/12/19 17:15:24 oliver Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.3 2000/06/28 20:22:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -15,247 +15,243 @@ START_TEST(BitVector, "$Id: BitVector_test.C,v 1.2 1999/12/19 17:15:24 oliver Ex
 using namespace BALL;
 
 BitVector* bv_ptr;
-CHECK(BitVector::BitVector())
-bv_ptr = new BitVector;
-TEST_NOT_EQUAL(bv_ptr, 0)
+	CHECK(BitVector::BitVector())
+	bv_ptr = new BitVector;
+	TEST_NOT_EQUAL(bv_ptr, 0)
 RESULT
 
 CHECK(BitVector::~BitVector())
-delete bv_ptr;
+	delete bv_ptr;
 RESULT
 
 CHECK(BitVector::getSize() const)
-BitVector bv;
-TEST_EQUAL(bv.getSize(), BitVector::BlockSize)
+	BitVector bv;
+	TEST_EQUAL(bv.getSize(), BitVector::BlockSize)
 RESULT
 
 CHECK(BitVector::BitVector(Size))
-BitVector bv1(1);
-TEST_EQUAL(bv1.getSize(), 1)
-BitVector bv2(2);
-TEST_EQUAL(bv2.getSize(), 2)
-BitVector bv9(9);
-TEST_EQUAL(bv9.getSize(), 9)
-BitVector bv129(129);
-TEST_EQUAL(bv129.getSize(), 129)
-BitVector bv20000(20000);
-TEST_EQUAL(bv20000.getSize(), 20000)
-TEST_EXCEPTION(Exception::InvalidRange,BitVector bv0((Size)0);)
+	BitVector bv1(1);
+	TEST_EQUAL(bv1.getSize(), 1)
+	BitVector bv2(2);
+	TEST_EQUAL(bv2.getSize(), 2)
+	BitVector bv9(9);
+	TEST_EQUAL(bv9.getSize(), 9)
+	BitVector bv129(129);
+	TEST_EQUAL(bv129.getSize(), 129)
+	BitVector bv20000(20000);
+	TEST_EQUAL(bv20000.getSize(), 20000)
+	TEST_EXCEPTION(Exception::InvalidRange,BitVector bv0((Size)0);)
 RESULT
 
 CHECK(BitVector::BitVector(const BitVector&, bool))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::BitVector(const char*))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::clear())
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 
 CHECK(BitVector::set(const BitVector&, bool))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::set(const char*))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::BitVector& operator = (const BitVector&))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::BitVector& operator = (const char*))
-// BAUSTELLE
-RESULT
-
-CHECK(BitVector::get(BitVector&, bool) const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::swap(BitVector&))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::operator () (Index,Index) const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::countValue(bool) const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::getMaxIndex() const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::getBitSet())
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::getBitSet() const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::operator [] (Index))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::operator [] (Index) const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::get(char*, Size, Index, Index) const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::setBit(Index, bool))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::getBit(Index) const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::getBit(Index))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::toggleBit(Index))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::fill(bool, Index, Index))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::toggle(Index, Index))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::setUnsignedChar(unsigned char))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::getUnsignedChar() const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::setUnsignedShort(unsigned short))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
  
 CHECK(BitVector::setUnsignedInt(unsigned int bit_pattern))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::getUnsignedInt() const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::setUnsignedLong(unsigned long))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::getUnsignedLong() const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::or(const BitVector&))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::xor(const BitVector&))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::and(const BitVector&))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::operator | (const BitVector&))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::operator |= (const BitVector&))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::operator & (const BitVector&))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::operator &= (const BitVector&))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::operator ^ (const BitVector&))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::operator ^= (const BitVector&))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::operator ~ ())
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::operator == (const BitVector&) const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::operator != (const BitVector&) const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::isAnyBit(bool value, Index first = 0, Index last = -1) const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::isEveryBit(bool, Index, Index) const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
  
 CHECK(BitVector::isValid() const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::operator >> (istream&, BitVector&))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
  
 CHECK(BitVector::operator << (ostream&, const BitVector&))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::read(istream&))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::write(ostream&) const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::write(PersistenceManager&) const)
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::read(PersistenceManager&))
-// BAUSTELLE
+	// BAUSTELLE
 RESULT
 
 CHECK(BitVector::setSize())
-BitVector b(8);
-b.setBit(3);
-TEST_EQUAL(b.getSize(), 8)
-b.setSize(24, true);
-TEST_EQUAL(b.getSize(), 24)
-b.setSize(24, false);
-TEST_EQUAL(b.getSize(), 24)
+	BitVector b(8);
+	b.setBit(3);
+	TEST_EQUAL(b.getSize(), 8)
+	b.setSize(24, true);
+	TEST_EQUAL(b.getSize(), 24)
+	b.setSize(24, false);
+	TEST_EQUAL(b.getSize(), 24)
 RESULT
 
 ///////////////////////////////////////////////////
