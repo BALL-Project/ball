@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.140 2001/05/14 00:08:21 oliver Exp $
+#  $Id: configure,v 1.141 2001/05/15 12:30:42 oliver Exp $
 
 
 ##################################################
@@ -2507,8 +2507,8 @@ EOF
 		DEF_BOOL=true
 		AR="${CXX}"
 		DYNAR="${CXX}"
-		AROPTS="${AROPTS} -xar -KPIC -pto -o"
-		DYNAROPTS="${DYNAROPTS} -G -KPIC -pto -o"
+		AROPTS="${AROPTS} -xar -KPIC -o"
+		DYNAROPTS="${DYNAROPTS} -G -KPIC -o"
 		CXX_MAKEDEPEND="${CXX}"
 		MAKEDEP_CXX_OPTS="-xM1"
 		MAKEDEP_CXX_SUFFIX=" >.Dependencies"
@@ -2517,7 +2517,7 @@ EOF
 #define BALL_NO_INLINE_FUNCTIONS 
 EOF
 
-		CXXFLAGS="${CXXFLAGS} -pto -KPIC"
+		CXXFLAGS="${CXXFLAGS} -KPIC"
 		CXXFLAGS_O="${CXXFLAGS_O} -xO3 -xtarget=native"
 		CXXFLAGS_D="${CXXFLAGS_D}"
 		CXXFLAGS_DI="${CXXFLAGS_DI} -g"
@@ -3426,8 +3426,8 @@ EOF
 
 
 
-echo $ac_n "checking little/big endian architecture""... $ac_c" 1>&6
-echo "configure:3330: checking little/big endian architecture" >&5
+echo $ac_n "checking for byte order""... $ac_c" 1>&6
+echo "configure:3330: checking for byte order" >&5
 if test "$cross_compiling" = yes; then
   DUMMY=0
 
