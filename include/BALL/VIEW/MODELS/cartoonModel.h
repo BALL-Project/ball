@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.26.2.9 2005/01/12 16:44:56 amoll Exp $
+// $Id: cartoonModel.h,v 1.26.2.10 2005/01/24 13:29:24 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -142,6 +142,22 @@ namespace BALL
 			///
 			bool drawDNAAsLadderModel()
 				throw() { return draw_DNA_as_ladder_;}
+
+			///
+			void enableRibbons(bool state)
+				throw() { draw_ribbon_ = state;}
+
+			///
+			bool ribbonsEnabled() const
+				throw() {return draw_ribbon_;}
+			
+			///
+			void enableTwoColors(bool state)
+				throw() { use_two_colors_ = state;}
+
+			///
+			bool twoColorsEnabled() const
+				throw() {return use_two_colors_;}
 
 			//@}
 

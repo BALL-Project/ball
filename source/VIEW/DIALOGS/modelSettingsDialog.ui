@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ModelSettingsDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -34,7 +34,7 @@
         <property name="geometry">
             <rect>
                 <x>-1</x>
-                <y>0</y>
+                <y>1</y>
                 <width>553</width>
                 <height>372</height>
             </rect>
@@ -932,7 +932,7 @@
                     <rect>
                         <x>7</x>
                         <y>6</y>
-                        <width>314</width>
+                        <width>539</width>
                         <height>183</height>
                     </rect>
                 </property>
@@ -942,562 +942,483 @@
                 <property name="alignment">
                     <set>AlignHCenter</set>
                 </property>
-                <widget class="QFrame">
+                <widget class="QLayoutWidget">
                     <property name="name">
-                        <cstring>frame3_2_3_2_2_2_2_2_3</cstring>
+                        <cstring>layout5</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>2</x>
-                            <y>100</y>
-                            <width>298</width>
-                            <height>41</height>
+                            <x>6</x>
+                            <y>16</y>
+                            <width>280</width>
+                            <height>167</height>
                         </rect>
                     </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Raised</enum>
-                    </property>
-                    <widget class="QLabel">
+                    <vbox>
                         <property name="name">
-                            <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_3</cstring>
+                            <cstring>unnamed</cstring>
                         </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>12</x>
-                                <y>14</y>
-                                <width>120</width>
-                                <height>16</height>
-                            </rect>
+                        <property name="spacing">
+                            <number>5</number>
                         </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>120</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>120</width>
-                                <height>32767</height>
-                            </size>
-                        </property>
-                        <property name="text">
-                            <string>arrow width</string>
-                        </property>
-                    </widget>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>cartoon_arrow_width_label</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>245</x>
-                                <y>9</y>
-                                <width>50</width>
-                                <height>25</height>
-                            </rect>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>50</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>35</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="frameShape">
-                            <enum>TabWidgetPanel</enum>
-                        </property>
-                        <property name="text">
-                            <string>99.9</string>
-                        </property>
-                        <property name="alignment">
-                            <set>AlignCenter</set>
-                        </property>
-                    </widget>
-                    <widget class="QSlider">
-                        <property name="name">
-                            <cstring>cartoon_arrow_width_slider</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>155</x>
-                                <y>11</y>
-                                <width>84</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="minValue">
-                            <number>1</number>
-                        </property>
-                        <property name="maxValue">
-                            <number>25</number>
-                        </property>
-                        <property name="value">
-                            <number>25</number>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="tickmarks">
-                            <enum>Above</enum>
-                        </property>
-                        <property name="tickInterval">
-                            <number>12</number>
-                        </property>
-                    </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout1</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1_2_2_2_2_3_2_2_2_4</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>120</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>120</width>
+                                            <height>32767</height>
+                                        </size>
+                                    </property>
+                                    <property name="text">
+                                        <string>tube radius</string>
+                                    </property>
+                                </widget>
+                                <widget class="QSlider">
+                                    <property name="name">
+                                        <cstring>cartoon_tube_radius_slider</cstring>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>84</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>84</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>25</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>25</number>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="tickmarks">
+                                        <enum>Above</enum>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>cartoon_tube_radius_label</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>25</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>35</width>
+                                            <height>25</height>
+                                        </size>
+                                    </property>
+                                    <property name="frameShape">
+                                        <enum>TabWidgetPanel</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>99.9</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>AlignCenter</set>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout2</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1_2_2_2_2_3_2_2_2_2_3</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>120</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>120</width>
+                                            <height>32767</height>
+                                        </size>
+                                    </property>
+                                    <property name="text">
+                                        <string>helix radius</string>
+                                    </property>
+                                </widget>
+                                <widget class="QSlider">
+                                    <property name="name">
+                                        <cstring>cartoon_helix_radius_slider</cstring>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>84</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>84</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>50</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>50</number>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="tickmarks">
+                                        <enum>Above</enum>
+                                    </property>
+                                    <property name="tickInterval">
+                                        <number>25</number>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>cartoon_helix_radius_label</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>25</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>35</width>
+                                            <height>25</height>
+                                        </size>
+                                    </property>
+                                    <property name="frameShape">
+                                        <enum>TabWidgetPanel</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>99.9</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>AlignCenter</set>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout3</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_3</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>120</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>120</width>
+                                            <height>32767</height>
+                                        </size>
+                                    </property>
+                                    <property name="text">
+                                        <string>arrow width</string>
+                                    </property>
+                                </widget>
+                                <widget class="QSlider">
+                                    <property name="name">
+                                        <cstring>cartoon_arrow_width_slider</cstring>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>84</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>84</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>25</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>25</number>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="tickmarks">
+                                        <enum>Above</enum>
+                                    </property>
+                                    <property name="tickInterval">
+                                        <number>12</number>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>cartoon_arrow_width_label</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>25</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>35</width>
+                                            <height>25</height>
+                                        </size>
+                                    </property>
+                                    <property name="frameShape">
+                                        <enum>TabWidgetPanel</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>99.9</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>AlignCenter</set>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout4</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2_2</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>120</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>120</width>
+                                            <height>32767</height>
+                                        </size>
+                                    </property>
+                                    <property name="text">
+                                        <string>arrow height</string>
+                                    </property>
+                                </widget>
+                                <widget class="QSlider">
+                                    <property name="name">
+                                        <cstring>cartoon_arrow_height_slider</cstring>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>84</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>84</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>25</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>25</number>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="tickmarks">
+                                        <enum>Above</enum>
+                                    </property>
+                                    <property name="tickInterval">
+                                        <number>12</number>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>cartoon_arrow_height_label</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>25</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>35</width>
+                                            <height>25</height>
+                                        </size>
+                                    </property>
+                                    <property name="frameShape">
+                                        <enum>TabWidgetPanel</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>99.9</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>AlignCenter</set>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
                 </widget>
-                <widget class="QFrame">
+                <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>frame3_2_3_2_2_2_4</cstring>
+                        <cstring>two_colored_ribbons</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>2</x>
-                            <y>18</y>
-                            <width>301</width>
-                            <height>41</height>
+                            <x>309</x>
+                            <y>47</y>
+                            <width>208</width>
+                            <height>21</height>
                         </rect>
                     </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
+                    <property name="text">
+                        <string>enable twocolored Ribbons</string>
                     </property>
-                    <property name="frameShadow">
-                        <enum>Raised</enum>
-                    </property>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>cartoon_tube_radius_label</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>245</x>
-                                <y>8</y>
-                                <width>50</width>
-                                <height>25</height>
-                            </rect>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>50</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>35</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="frameShape">
-                            <enum>TabWidgetPanel</enum>
-                        </property>
-                        <property name="text">
-                            <string>99.9</string>
-                        </property>
-                        <property name="alignment">
-                            <set>AlignCenter</set>
-                        </property>
-                    </widget>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>textLabel1_2_2_2_2_3_2_2_2_4</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>12</x>
-                                <y>14</y>
-                                <width>120</width>
-                                <height>16</height>
-                            </rect>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>120</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>120</width>
-                                <height>32767</height>
-                            </size>
-                        </property>
-                        <property name="text">
-                            <string>tube radius</string>
-                        </property>
-                    </widget>
-                    <widget class="QSlider">
-                        <property name="name">
-                            <cstring>cartoon_tube_radius_slider</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>155</x>
-                                <y>10</y>
-                                <width>84</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="minValue">
-                            <number>1</number>
-                        </property>
-                        <property name="maxValue">
-                            <number>25</number>
-                        </property>
-                        <property name="value">
-                            <number>25</number>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="tickmarks">
-                            <enum>Above</enum>
-                        </property>
-                    </widget>
                 </widget>
-                <widget class="QFrame">
+                <widget class="QCheckBox">
                     <property name="name">
-                        <cstring>frame3_2_3_2_2_2_2_3</cstring>
+                        <cstring>ribbons_enabled</cstring>
                     </property>
                     <property name="geometry">
                         <rect>
-                            <x>2</x>
-                            <y>59</y>
-                            <width>299</width>
-                            <height>41</height>
+                            <x>303</x>
+                            <y>24</y>
+                            <width>141</width>
+                            <height>21</height>
                         </rect>
                     </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
+                    <property name="text">
+                        <string>enable Ribbons</string>
                     </property>
-                    <property name="frameShadow">
-                        <enum>Raised</enum>
-                    </property>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>textLabel1_2_2_2_2_3_2_2_2_2_3</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>12</x>
-                                <y>14</y>
-                                <width>120</width>
-                                <height>16</height>
-                            </rect>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>120</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>120</width>
-                                <height>32767</height>
-                            </size>
-                        </property>
-                        <property name="text">
-                            <string>helix radius</string>
-                        </property>
-                    </widget>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>cartoon_helix_radius_label</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>245</x>
-                                <y>9</y>
-                                <width>50</width>
-                                <height>25</height>
-                            </rect>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>50</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>35</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="frameShape">
-                            <enum>TabWidgetPanel</enum>
-                        </property>
-                        <property name="text">
-                            <string>99.9</string>
-                        </property>
-                        <property name="alignment">
-                            <set>AlignCenter</set>
-                        </property>
-                    </widget>
-                    <widget class="QSlider">
-                        <property name="name">
-                            <cstring>cartoon_helix_radius_slider</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>155</x>
-                                <y>11</y>
-                                <width>84</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="minValue">
-                            <number>1</number>
-                        </property>
-                        <property name="maxValue">
-                            <number>50</number>
-                        </property>
-                        <property name="value">
-                            <number>50</number>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="tickmarks">
-                            <enum>Above</enum>
-                        </property>
-                        <property name="tickInterval">
-                            <number>25</number>
-                        </property>
-                    </widget>
-                </widget>
-                <widget class="QFrame">
-                    <property name="name">
-                        <cstring>frame3_2_3_2_2_2_2_2_2_2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>2</x>
-                            <y>141</y>
-                            <width>298</width>
-                            <height>39</height>
-                        </rect>
-                    </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Raised</enum>
-                    </property>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>cartoon_arrow_height_label</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>245</x>
-                                <y>9</y>
-                                <width>50</width>
-                                <height>25</height>
-                            </rect>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>50</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>35</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="frameShape">
-                            <enum>TabWidgetPanel</enum>
-                        </property>
-                        <property name="text">
-                            <string>99.9</string>
-                        </property>
-                        <property name="alignment">
-                            <set>AlignCenter</set>
-                        </property>
-                    </widget>
-                    <widget class="QSlider">
-                        <property name="name">
-                            <cstring>cartoon_arrow_height_slider</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>155</x>
-                                <y>11</y>
-                                <width>84</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="minValue">
-                            <number>1</number>
-                        </property>
-                        <property name="maxValue">
-                            <number>25</number>
-                        </property>
-                        <property name="value">
-                            <number>25</number>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="tickmarks">
-                            <enum>Above</enum>
-                        </property>
-                        <property name="tickInterval">
-                            <number>12</number>
-                        </property>
-                    </widget>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2_2</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>12</x>
-                                <y>11</y>
-                                <width>120</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>120</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>120</width>
-                                <height>32767</height>
-                            </size>
-                        </property>
-                        <property name="text">
-                            <string>arrow height</string>
-                        </property>
-                    </widget>
                 </widget>
             </widget>
             <widget class="QGroupBox">
@@ -1508,7 +1429,7 @@
                     <rect>
                         <x>7</x>
                         <y>192</y>
-                        <width>315</width>
+                        <width>300</width>
                         <height>178</height>
                     </rect>
                 </property>
@@ -1518,426 +1439,6 @@
                 <property name="alignment">
                     <set>AlignHCenter</set>
                 </property>
-                <widget class="QFrame">
-                    <property name="name">
-                        <cstring>frame3_2_3_2_2_2_2_2_2_2_2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>8</x>
-                            <y>55</y>
-                            <width>296</width>
-                            <height>41</height>
-                        </rect>
-                    </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Raised</enum>
-                    </property>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>cartoon_dna_helix_radius_label</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>240</x>
-                                <y>10</y>
-                                <width>50</width>
-                                <height>25</height>
-                            </rect>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>50</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>35</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="frameShape">
-                            <enum>TabWidgetPanel</enum>
-                        </property>
-                        <property name="text">
-                            <string>99.9</string>
-                        </property>
-                        <property name="alignment">
-                            <set>AlignCenter</set>
-                        </property>
-                    </widget>
-                    <widget class="QSlider">
-                        <property name="name">
-                            <cstring>cartoon_dna_helix_radius_slider</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>150</x>
-                                <y>12</y>
-                                <width>84</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="minValue">
-                            <number>2</number>
-                        </property>
-                        <property name="maxValue">
-                            <number>25</number>
-                        </property>
-                        <property name="value">
-                            <number>25</number>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="tickmarks">
-                            <enum>Above</enum>
-                        </property>
-                        <property name="tickInterval">
-                            <number>12</number>
-                        </property>
-                    </widget>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>9</x>
-                                <y>15</y>
-                                <width>140</width>
-                                <height>16</height>
-                            </rect>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>140</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>120</width>
-                                <height>32767</height>
-                            </size>
-                        </property>
-                        <property name="text">
-                            <string>helix backbone</string>
-                        </property>
-                    </widget>
-                </widget>
-                <widget class="QFrame">
-                    <property name="name">
-                        <cstring>frame3_2_3_2_2_2_2_2_2_2_2_3_2</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>9</x>
-                            <y>135</y>
-                            <width>294</width>
-                            <height>41</height>
-                        </rect>
-                    </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Raised</enum>
-                    </property>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>cartoon_dna_base_radius_label</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>239</x>
-                                <y>9</y>
-                                <width>50</width>
-                                <height>25</height>
-                            </rect>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>50</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>35</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="frameShape">
-                            <enum>TabWidgetPanel</enum>
-                        </property>
-                        <property name="text">
-                            <string>99.9</string>
-                        </property>
-                        <property name="alignment">
-                            <set>AlignCenter</set>
-                        </property>
-                    </widget>
-                    <widget class="QSlider">
-                        <property name="name">
-                            <cstring>cartoon_dna_base_radius_slider</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>149</x>
-                                <y>11</y>
-                                <width>84</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="minValue">
-                            <number>1</number>
-                        </property>
-                        <property name="maxValue">
-                            <number>15</number>
-                        </property>
-                        <property name="value">
-                            <number>15</number>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="tickmarks">
-                            <enum>Above</enum>
-                        </property>
-                        <property name="tickInterval">
-                            <number>12</number>
-                        </property>
-                    </widget>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2_5_2</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>8</x>
-                                <y>14</y>
-                                <width>120</width>
-                                <height>16</height>
-                            </rect>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>120</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>120</width>
-                                <height>32767</height>
-                            </size>
-                        </property>
-                        <property name="text">
-                            <string>base radius</string>
-                        </property>
-                    </widget>
-                </widget>
-                <widget class="QFrame">
-                    <property name="name">
-                        <cstring>frame3_2_3_2_2_2_2_2_2_2_2_3</cstring>
-                    </property>
-                    <property name="geometry">
-                        <rect>
-                            <x>8</x>
-                            <y>96</y>
-                            <width>294</width>
-                            <height>41</height>
-                        </rect>
-                    </property>
-                    <property name="frameShape">
-                        <enum>NoFrame</enum>
-                    </property>
-                    <property name="frameShadow">
-                        <enum>Raised</enum>
-                    </property>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2_5</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>8</x>
-                                <y>14</y>
-                                <width>120</width>
-                                <height>16</height>
-                            </rect>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>120</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>120</width>
-                                <height>32767</height>
-                            </size>
-                        </property>
-                        <property name="text">
-                            <string>helix step</string>
-                        </property>
-                    </widget>
-                    <widget class="QLabel">
-                        <property name="name">
-                            <cstring>cartoon_dna_ladder_radius_label</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>239</x>
-                                <y>9</y>
-                                <width>50</width>
-                                <height>25</height>
-                            </rect>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>0</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>50</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>35</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="frameShape">
-                            <enum>TabWidgetPanel</enum>
-                        </property>
-                        <property name="text">
-                            <string>99.9</string>
-                        </property>
-                        <property name="alignment">
-                            <set>AlignCenter</set>
-                        </property>
-                    </widget>
-                    <widget class="QSlider">
-                        <property name="name">
-                            <cstring>cartoon_dna_ladder_radius_slider</cstring>
-                        </property>
-                        <property name="geometry">
-                            <rect>
-                                <x>149</x>
-                                <y>11</y>
-                                <width>84</width>
-                                <height>21</height>
-                            </rect>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>84</width>
-                                <height>21</height>
-                            </size>
-                        </property>
-                        <property name="minValue">
-                            <number>5</number>
-                        </property>
-                        <property name="maxValue">
-                            <number>15</number>
-                        </property>
-                        <property name="value">
-                            <number>15</number>
-                        </property>
-                        <property name="orientation">
-                            <enum>Horizontal</enum>
-                        </property>
-                        <property name="tickmarks">
-                            <enum>Above</enum>
-                        </property>
-                        <property name="tickInterval">
-                            <number>12</number>
-                        </property>
-                    </widget>
-                </widget>
                 <widget class="QButtonGroup">
                     <property name="name">
                         <cstring>dna_cartoon_model_type</cstring>
@@ -2000,6 +1501,348 @@
                             <bool>true</bool>
                         </property>
                     </widget>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout11</cstring>
+                    </property>
+                    <property name="geometry">
+                        <rect>
+                            <x>6</x>
+                            <y>70</y>
+                            <width>280</width>
+                            <height>95</height>
+                        </rect>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <property name="spacing">
+                            <number>5</number>
+                        </property>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout6</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>120</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>120</width>
+                                            <height>32767</height>
+                                        </size>
+                                    </property>
+                                    <property name="text">
+                                        <string>helix backbone</string>
+                                    </property>
+                                </widget>
+                                <widget class="QSlider">
+                                    <property name="name">
+                                        <cstring>cartoon_dna_helix_radius_slider</cstring>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>84</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>84</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>2</number>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>25</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>25</number>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="tickmarks">
+                                        <enum>Above</enum>
+                                    </property>
+                                    <property name="tickInterval">
+                                        <number>12</number>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>cartoon_dna_helix_radius_label</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>25</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>35</width>
+                                            <height>25</height>
+                                        </size>
+                                    </property>
+                                    <property name="frameShape">
+                                        <enum>TabWidgetPanel</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>99.9</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>AlignCenter</set>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout9</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2_5</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>120</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>120</width>
+                                            <height>32767</height>
+                                        </size>
+                                    </property>
+                                    <property name="text">
+                                        <string>helix step</string>
+                                    </property>
+                                </widget>
+                                <widget class="QSlider">
+                                    <property name="name">
+                                        <cstring>cartoon_dna_ladder_radius_slider</cstring>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>84</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>84</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>5</number>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>15</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>15</number>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="tickmarks">
+                                        <enum>Above</enum>
+                                    </property>
+                                    <property name="tickInterval">
+                                        <number>12</number>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>cartoon_dna_ladder_radius_label</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>25</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>35</width>
+                                            <height>25</height>
+                                        </size>
+                                    </property>
+                                    <property name="frameShape">
+                                        <enum>TabWidgetPanel</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>99.9</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>AlignCenter</set>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                        <widget class="QLayoutWidget">
+                            <property name="name">
+                                <cstring>layout10</cstring>
+                            </property>
+                            <hbox>
+                                <property name="name">
+                                    <cstring>unnamed</cstring>
+                                </property>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>textLabel1_2_2_2_2_3_2_2_2_2_2_2_2_2_5_2</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>120</width>
+                                            <height>0</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>120</width>
+                                            <height>32767</height>
+                                        </size>
+                                    </property>
+                                    <property name="text">
+                                        <string>base radius</string>
+                                    </property>
+                                </widget>
+                                <widget class="QSlider">
+                                    <property name="name">
+                                        <cstring>cartoon_dna_base_radius_slider</cstring>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>84</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>84</width>
+                                            <height>21</height>
+                                        </size>
+                                    </property>
+                                    <property name="minValue">
+                                        <number>1</number>
+                                    </property>
+                                    <property name="maxValue">
+                                        <number>15</number>
+                                    </property>
+                                    <property name="value">
+                                        <number>15</number>
+                                    </property>
+                                    <property name="orientation">
+                                        <enum>Horizontal</enum>
+                                    </property>
+                                    <property name="tickmarks">
+                                        <enum>Above</enum>
+                                    </property>
+                                    <property name="tickInterval">
+                                        <number>12</number>
+                                    </property>
+                                </widget>
+                                <widget class="QLabel">
+                                    <property name="name">
+                                        <cstring>cartoon_dna_base_radius_label</cstring>
+                                    </property>
+                                    <property name="sizePolicy">
+                                        <sizepolicy>
+                                            <hsizetype>0</hsizetype>
+                                            <vsizetype>0</vsizetype>
+                                            <horstretch>0</horstretch>
+                                            <verstretch>0</verstretch>
+                                        </sizepolicy>
+                                    </property>
+                                    <property name="minimumSize">
+                                        <size>
+                                            <width>50</width>
+                                            <height>25</height>
+                                        </size>
+                                    </property>
+                                    <property name="maximumSize">
+                                        <size>
+                                            <width>35</width>
+                                            <height>25</height>
+                                        </size>
+                                    </property>
+                                    <property name="frameShape">
+                                        <enum>TabWidgetPanel</enum>
+                                    </property>
+                                    <property name="text">
+                                        <string>99.9</string>
+                                    </property>
+                                    <property name="alignment">
+                                        <set>AlignCenter</set>
+                                    </property>
+                                </widget>
+                            </hbox>
+                        </widget>
+                    </vbox>
                 </widget>
             </widget>
         </widget>
@@ -2518,16 +2361,16 @@
         <slot>forceScalingChanged()</slot>
     </connection>
     <connection>
-        <sender>cartoon_dna_base_radius_slider</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>ModelSettingsDialog</receiver>
-        <slot>cartoonDNABaseRadiusChanged()</slot>
-    </connection>
-    <connection>
         <sender>cartoon_dna_helix_radius_slider</sender>
         <signal>valueChanged(int)</signal>
         <receiver>ModelSettingsDialog</receiver>
         <slot>cartoonDNAHelixRadiusChanged()</slot>
+    </connection>
+    <connection>
+        <sender>cartoon_dna_base_radius_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ModelSettingsDialog</receiver>
+        <slot>cartoonDNABaseRadiusChanged()</slot>
     </connection>
     <connection>
         <sender>cartoon_dna_ladder_radius_slider</sender>
