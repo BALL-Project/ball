@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: materialSettings.h,v 1.1 2004/06/19 14:30:26 amoll Exp $
+// $Id: materialSettings.h,v 1.2 2004/09/28 12:00:53 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MATERIALSETTINGS_H
@@ -55,21 +55,20 @@ namespace BALL
 
 			public slots:
 
-			virtual void redChanged();
-			virtual void greenChanged();
-			virtual void blueChanged();
-			virtual void alphaChanged();
+			virtual void ambientChanged();
+			virtual void diffuseChanged();
+			virtual void specularChanged();
 			virtual void shininessChanged();
-			virtual void materialSelected(int button_id);
 
 			private:
 
 			void setValues_(const QSlider& slider, QLabel& label, Position pos);
 			void setValues_();
 
-			Scene* scene_;
-			float material_values_[3][4];
-			float shininess_;
+			void apply_(Index e, float value)
+				throw();
+
+			float material_values_[4];
 		};
 
 	}
