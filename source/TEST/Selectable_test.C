@@ -1,4 +1,4 @@
-// $Id: Selectable_test.C,v 1.5 2002/01/26 22:01:29 oliver Exp $
+// $Id: Selectable_test.C,v 1.5.4.1 2002/05/15 23:39:57 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(Selectable, "$Id: Selectable_test.C,v 1.5 2002/01/26 22:01:29 oliver Exp $")
+START_TEST(Selectable, "$Id: Selectable_test.C,v 1.5.4.1 2002/05/15 23:39:57 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -99,22 +99,6 @@ using std::ofstream;
 using std::ios;
 using namespace RTTI;
 TextPersistenceManager pm;
-
-CHECK(Selectable::friend::std::istream& operator >> (::std::istream& s, Selectable& selectable))
-	std::ifstream instr("data/Selectable_test.txt");
-	se2.clear();
-	instr >> se2;
-	instr.close();
-	TEST_EQUAL(se2.isSelected(), true)
-RESULT
-
-CHECK(Selectable::friend::std::ostream& operator << (::std::ostream& s, const Selectable& selectable))
-	NEW_TMP_FILE(filename)
-	std::ofstream outstr(filename.c_str(), File::OUT);
-	outstr << se;
-	outstr.close();
-	TEST_FILE_REGEXP(filename.c_str(), "data/Selectable_test.txt")
-RESULT
 
 CHECK(Selectable::read(PersistenceManager& pm))
 	ifstream  ifile("data/Selectable_test2.txt");
