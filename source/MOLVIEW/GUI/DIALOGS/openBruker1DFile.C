@@ -1,4 +1,4 @@
-// $Id: openBruker1DFile.C,v 1.3 2001/06/06 15:04:25 anker Exp $
+// $Id: openBruker1DFile.C,v 1.4 2001/08/01 01:46:39 oliver Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker1DFile.h>
 
@@ -74,7 +74,7 @@ namespace BALL
 
       // notify main window
       NewRegularData1DMessage new_message;
-      new_message.setComposite((Composite *)myfile->GetData());
+      new_message.setComposite((Composite *)myfile->getData());
       new_message.setCompositeName(mydir);
 
       notify_(new_message);
