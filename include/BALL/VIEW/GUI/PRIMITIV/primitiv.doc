@@ -1,9 +1,0 @@
-// $Id: primitiv.doc,v 1.4 2001/05/13 13:59:14 hekl Exp $
-
-		//@Include: gllabel.h
-		//@Include: glline.h
-		//@Include: glmesh.h
-		//@Include: glpoint.h
-		//@Include: glsimpleBox.h
-		//@Include: glsphere.h
-		//@Include: gltube.h

@@ -1,2 +1,0 @@
-/Object: [0-9a-fx]+ is instance of class: .*
-  value: 0.5

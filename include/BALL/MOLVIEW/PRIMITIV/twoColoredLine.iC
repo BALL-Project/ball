@@ -1,8 +1,0 @@
-// $Id: twoColoredLine.iC,v 1.4 2001/05/13 14:55:25 hekl Exp $
-
-BALL_INLINE
-Vector3 TwoColoredLine::getMiddleVertex()
-	throw()
-{
-  return (getVertex1() + (getVertex2() - getVertex1()) / 2.0);
-}

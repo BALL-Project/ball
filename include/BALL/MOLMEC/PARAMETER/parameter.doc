@@ -1,9 +1,0 @@
-// $Id: parameter.doc,v 1.2 2001/03/07 22:19:45 amoll Exp $
-
-/**	@name	Force Field Parameters
-*/
-//@{
-
-	//@Include: *.h
-
-//@}

@@ -1,3 +1,0 @@
-/Object: [x0-9a-f]* is instance of class: .*
-/  handle: [0-9]*
-  auto-deletable: 0

@@ -1,4 +1,0 @@
-/  bound String: [0-9a-z]+
-  from index: 1
-  to index: 4
-  string: BCDE
