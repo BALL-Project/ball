@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.17 2000/07/25 21:14:22 oliver Exp $
+// $Id: forceField.C,v 1.18 2000/10/16 20:03:18 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -19,13 +19,42 @@ namespace BALL
 			valid_(true),
 			name_("Force Field"),
 			number_of_movable_atoms_(0),
-			use_selection_(false)
+			use_selection_(false),
+			update_time_stamp_(),
+			setup_time_stamp_()
 	{
 	}
 
+	void ForceField::clear()
+		throw()
+	{
+		options.clear();
+		periodic_boundary.clear();
+
+		name_ = "Force Field";
+		energy_ = 0.0;
+		system_ = 0;
+		atoms_.clear();
+		number_of_movable_atoms_ = 0;
+		parameters_.clear();
+		use_selection_ = false;
+		valid_ = true;
+		
+		update_time_stamp_.clear();
+		setup_time_stamp_.clear();
+
+		// remove all force field components from the list after
+		// calling their destructors
+		vector<ForceFieldComponent*>::iterator  it;
+		for (it = components_.begin(); it != components_.end(); ++it)
+		{
+			delete (*it);
+		}
+		components_.clear();
+	}
 
 	// copy constructor 
-	ForceField::ForceField(const ForceField& force_field, bool /* deep */)
+	ForceField::ForceField(const ForceField& force_field)
 	{
 		// Copy the attributes
 		name_   = force_field.name_;
@@ -38,8 +67,9 @@ namespace BALL
 		periodic_boundary = force_field.periodic_boundary;
 		use_selection_ = force_field.use_selection_;
 		valid_ = force_field.valid_;
+		update_time_stamp_ = force_field.update_time_stamp_;
+		setup_time_stamp_ = force_field.setup_time_stamp_;
 
-		
 		// Copy the component vector
 		for (Size i = 0; i < force_field.components_.size(); i++) 
 		{
@@ -113,22 +143,13 @@ namespace BALL
 	// destructor
 	ForceField::~ForceField()
 	{
-		// clear pointers 
-
-		system_ = 0;
-
-		// remove all force field components from the list after
-		// calling their destructors
-		vector<ForceFieldComponent*>::iterator  it;
-		for (it = components_.begin(); it != components_.end(); ++it)
-		{
-			delete (*it);
-		}
-		components_.clear();
+		clear();
+		valid_ = false;
 	}
 		
 	// Is the force field valid
-	bool  ForceField::isValid()
+	bool ForceField::isValid()
+		throw()
 	{
 		return valid_;
 	}
@@ -185,6 +206,8 @@ namespace BALL
 			}
 		}
 
+		// remember the setup time
+		setup_time_stamp_.stamp();
 
 		// if the setup failed, our force field becomes invalid!
 		valid_ = success;
@@ -244,6 +267,17 @@ namespace BALL
 		name_ = name;
 	}
 
+	const TimeStamp& ForceField::getUpdateTime() const
+		throw()
+	{
+		return update_time_stamp_;
+	}
+
+	const TimeStamp& ForceField::getSetupTime() const
+		throw()
+	{
+		return setup_time_stamp_;
+	}
 
 	// Returns the number of atoms stored in the vector atoms_
 	Size ForceField::getNumberOfAtoms() const
@@ -366,7 +400,7 @@ namespace BALL
 	void ForceField::update()
 	{
 		// check for validity of the force field
-		if (!isValid())
+		if (!valid_)
 		{
 			return;
 		}
@@ -378,6 +412,9 @@ namespace BALL
 		{
 			(*it)->update();
 		}
+
+		// remember the time of the last update
+		update_time_stamp_.stamp();
 	}
 	
 
