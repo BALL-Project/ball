@@ -1,4 +1,4 @@
-// $Id: colorTable.h,v 1.3 1999/12/28 18:37:44 oliver Exp $
+// $Id: colorTable.h,v 1.3.4.1 2002/08/16 15:32:20 anhi Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORTABLE_H
 #define BALL_VIEW_DATATYPE_COLORTABLE_H
@@ -24,7 +24,8 @@ namespace BALL
 	namespace VIEW 
 	{
 
-		/**
+		/** This class is used to implement a color table that can be used to
+		 *  map a floating point value into a color.
 		*/
 		class ColorTable
 			: public vector<ColorRGBA>
@@ -38,32 +39,95 @@ namespace BALL
 			/**	Default constructor.
 					Create an empty instance of ColorTable.
 			*/
-			ColorTable();
+			ColorTable()
+				throw();
 
+			/** Alternative constructor.
+			 *  Create an instance of ColorTable.
+			 *  @param color_number The number of colors the table will contain.
+			 */
+			ColorTable(Size color_number)
+				throw();
+			
 			/**	Copy constructor.
 					Create a copy of a ColorTable object.
 					@param	color_table the color table to be copied
 					@param	deep ignored
 			*/
-			ColorTable(const ColorTable& color_table, bool deep = true);
+			ColorTable(const ColorTable& color_table, bool deep = true)
+				throw();
+
+			/** Detailed constructor.
+			 * 	@param size the number of elements in the color table
+			 * 	@param color an array of colors, used to initialize the table
+			 * 	@param alpha_blending decides whether the alpha channel should be interpolated between colors
+			*/
+			ColorTable(Size size, const ColorRGBA& color, bool alpha_blending=false)
+				throw();
 
 			/**
 			*/
-			ColorTable(Size size, const ColorRGBA& color);
+			ColorTable(const ColorTable& color_table, Index from, Index to, bool alpha_blending=false)
+				throw();
 
 			/**
 			*/
-			ColorTable(const ColorTable& color_table, Index from, Index to);
-
-			/**
-			*/
-			ColorTable(const ColorRGBA* color_array, Size array_size);
+			ColorTable(const ColorRGBA* color_array, Size array_size, bool alpha_blending=false)
+				throw();
 
 			/**	Destructor.
 			*/
-			virtual ~ColorTable();
+			virtual ~ColorTable()
+				throw();
 			//@}
+			
+			/** @name Accessors
+			 */
+			//@{
+			
+			/// Set the number of colors this table should contain after interpolation.
+			void setNumberOfColors(const Size color_number)
+				throw();
 
+			/// Return the number of elements in our color table.
+			const Size getNumberOfColors() const
+				throw();
+
+			/// Decides if we should interpolate the alpha channel as well
+			void setAlphaBlending(const bool blending)
+				throw();
+
+			/// Returns true if the alpha channel is interpolated between colors, false otherwise.
+			const	bool getAlphaBlending() const
+				throw();
+
+			/** Build the table, i.e. interpolate between the colors to obtain the desired number of colors. 
+			 *  Returns the actual size of the table after interpolation.
+			 */	
+			Size createTable()
+				throw();
+			
+			/** Sets the colors that are used for values below min and above max.
+			 */
+			void setMinMaxColors(ColorRGBA min, ColorRGBA max)
+				throw();
+
+			/** Sets the range used for the mapping.
+			 */
+			void setRange(float min, float max)
+				throw();
+		
+			/** Maps value into the color table.
+			 */
+			ColorRGBA& map(float value)
+				throw();
+
+			/** Maps value into the color table. (const method)
+			 */
+			const ColorRGBA& map(float value) const
+				throw();
+			
+			//@}
 			/**	@name	Debugging and Diagnostics
 			*/	
 			//@{
@@ -82,6 +146,12 @@ namespace BALL
 			virtual void write(std::ostream& s) const;
 			//@}
 
+			protected:
+				Index color_number_;
+				bool  alpha_blending_;
+				ColorRGBA min_color_, max_color_;
+				bool has_min_max_colors_;
+				float min_, max_;
 		};
 
 
