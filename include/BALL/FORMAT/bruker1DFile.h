@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.h,v 1.23 2003/07/03 11:36:39 amoll Exp $
+// $Id: bruker1DFile.h,v 1.24 2003/07/09 12:56:42 amoll Exp $
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
 #define BALL_FORMAT_BRUKER1DFILE_H
@@ -50,8 +50,6 @@ namespace BALL
 			throw();
 
 		//@}
-
-
 		/**	@name Accessors
 		*/
 		//@{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.h,v 1.11 2003/03/26 13:56:24 anhi Exp $
+// $Id: SDFile.h,v 1.12 2003/07/09 12:56:42 amoll Exp $
 
 #ifndef BALL_FORMAT_SDFILE_H
 #define BALL_FORMAT_SDFILE_H
@@ -12,10 +12,6 @@
 
 namespace BALL 
 {
-	class System;
-	class Atom;
-	class Molecule;
-
 	/**	MDL SD file class.
 			This class enables BALL to read and write MDL SD files. \par
 			A description of this file format (and the related  \link MOLFile MOLFile \endlink  
@@ -102,6 +98,7 @@ namespace BALL
 		//@}
 
 		protected:
+
 		/** Read the property block of an SD file.
 				The values are stored as named properties in the 
 				molecule read.

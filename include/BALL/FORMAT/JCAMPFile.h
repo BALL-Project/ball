@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.h,v 1.16 2003/07/03 11:36:38 amoll Exp $
+// $Id: JCAMPFile.h,v 1.17 2003/07/09 12:56:42 amoll Exp $
 //
 
 #ifndef BALL_FORMAT_JCAMPFILE_H
@@ -68,9 +68,8 @@ namespace BALL
 
 		/// A hash map containing the header entries
 		typedef StringHashMap<String> HeaderMap;
+
 		//@}
-
-
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -88,8 +87,8 @@ namespace BALL
 
 		///	Destructor.
 		virtual ~JCAMPFile() throw() {}
-		//@}
 
+		//@}
 		/** @name Accessors
 		 */
 		//@{
