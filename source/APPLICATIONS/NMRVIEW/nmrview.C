@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nmrview.C,v 1.4 2003/08/27 18:05:47 oliver Exp $
+// $Id: nmrview.C,v 1.5 2003/08/28 14:29:29 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -9,7 +9,6 @@
 #include <BALL/VIEW/WIDGETS/regularData2DWidget.h>
 
 using namespace BALL::VIEW;
-using namespace BALL::MOLVIEW;
 
 int main(int argc, char **argv)
 {
