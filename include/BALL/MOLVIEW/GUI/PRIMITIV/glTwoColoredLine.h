@@ -1,4 +1,4 @@
-// $Id: glTwoColoredLine.h,v 1.5 2001/05/27 10:29:28 hekl Exp $
+// $Id: glTwoColoredLine.h,v 1.6 2001/07/06 15:00:04 aubertin Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
@@ -30,15 +30,15 @@ namespace BALL
 				An instance of GLTwoColoredLine represents an instance of the geometric
 				visualization of a two colored "line".
 				The class GLTwoColoredLine is derived from the classes \Ref{TwoColoredLine} and
-				\Ref{GLObject}. Therefore the class glTwoColoredLine is the graphical extension
+				\Ref{GLObject}. Therefore the class GLTwoColoredLine is the graphical extension
 				of the geometrical definition of the class twoColoredLine.
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				twoColoredLine. OpenGL code is used for the visualization.
 				See these classes for further information.
 				@memo    GLTwoColoredLine class (BALL MOLVIEW gui primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/27 10:29:28 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/06 15:00:04 $
 		*/
 		class GLTwoColoredLine
 			: public TwoColoredLine,
@@ -51,7 +51,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new glTwoColoredLine.
+					Constructs new glTwoColoredLine.
 					@return      GLTwoColoredLine new constructed glTwoColoredLine
 					@see         TwoColoredLine
 					@see         GLObject
@@ -60,7 +60,7 @@ namespace BALL
 				throw();
 
 			/** Copy constructor with cloning facility.
-					Construct new glTwoColoredLine by copying the glTwoColoredLine 
+					Constructs new glTwoColoredLine by copying the glTwoColoredLine 
 					{\em GL_two_colored_line}.
 					The copy is either deep (default) or shallow.
 					@param       line the line to be copied (cloned)
@@ -73,7 +73,7 @@ namespace BALL
 				throw();
 
 			/** Copy constructor from geometricObject.
-					Construct new glTwoColoredLine by copying the internal values from
+					Constructs new glTwoColoredLine by copying the internal values from
 					\Ref{GeometricObject} {\em geometric_object}.
 					@param       geometric_object the \Ref{GeometricObject} which internal value should be copied
 					@return      GLTwoColoredLine new constructed glTwoColoredLine initialized from {\em geometric_object}
@@ -121,7 +121,7 @@ namespace BALL
 			//@{
 
 			/** Assignment.
-					Assign the glTwoColoredLine {\em gl_two_colored_line} to {\em *this}
+					Assigns the glTwoColoredLine {\em gl_two_colored_line} to {\em *this}
 					glTwoColoredLine.
 					The copy is either deep (default) or shallow.
 					The value of {\em *this} glTwoColoredLine is initialized to the value of 
@@ -140,7 +140,7 @@ namespace BALL
 				throw();
 
 			/** Assignment operator.
-					Assign the glTwoColoredLine {\em gl_two_colored_line} to {\em *this}
+					Assigns the glTwoColoredLine {\em gl_two_colored_line} to {\em *this}
 					glTwoColoredLine.	The copy is deep.
 					This method does not copy the structure of {\em gl_two_colored_line} into {\em *this}
 					glTwoColoredLine. 
@@ -158,7 +158,7 @@ namespace BALL
 				throw();
 
 			/** Copying with cloning facility.
-					Copy {\em *this} glTwoColoredLine to the glTwoColoredLine {\em gl_two_colored_line}.
+					Copies {\em *this} glTwoColoredLine to the glTwoColoredLine {\em gl_two_colored_line}.
 					The copy is either deep (default) or shallow.
 					This method does not copy the structure of {\em *this} glTwoColoredLine into
 					{\em gl_two_colored_line}. 
@@ -176,7 +176,7 @@ namespace BALL
 				throw();
 
 			/** Swapping of glTwoColoredLine's.
-					Swap the value of {\em *this} glTwoColoredLine with the glTwoColoredLine
+					Swaps the value of {\em *this} glTwoColoredLine with the glTwoColoredLine
 					{\em gl_two_colored_line}.
 					This method does not swap the structure of {\em gl_two_colored_line} with {\em *this}
 					glTwoColoredLine. 
@@ -200,7 +200,7 @@ namespace BALL
 			/** Creation of the graphical representation.
 					Overridden method from \Ref{GLObject}. Uses the geometrical properties
 					defined in class \Ref{TwoColoredLine} to create the graphical representation
-					of the line. This method is used internally from the render engine
+					of the line. This method is used internally by the render engine
 					of the \Ref{Scene}. Predefined shapes of lines from the class
 					\Ref{GLPrimitiveManager} are used for the variable drawing resolutions.
 					The parameter {\em with_names} indicates whether the openGL command 
