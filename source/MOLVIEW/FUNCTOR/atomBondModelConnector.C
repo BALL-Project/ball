@@ -1,23 +1,15 @@
-// $Id: atomBondModelConnector.C,v 1.5.4.1 2002/10/18 14:48:22 amoll Exp $
-
+// $Id: atomBondModelConnector.C,v 1.5.4.2 2002/10/26 18:20:50 amoll Exp $
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelConnector.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/KERNEL/bond.h>
 
 using namespace std;
 
 namespace BALL
 {
-
 	namespace MOLVIEW
 	{
-		/*
-    AtomBondModelConnector::MissingProperty::MissingProperty
-		  (const char* file, int line, const string& message)
-			throw()
-				: Exception::GeneralException(file, line, "MissingProperty", message)
-		{
-    }
-		*/
-
+				
 		AtomBondModelConnector::AtomBondModelConnector()
 			throw()
 			:	BaseModelConnector()
