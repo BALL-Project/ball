@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.10 2004/04/21 15:06:13 amoll Exp $
+// $Id: FDPBDialog.C,v 1.11 2004/05/14 10:23:45 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -249,6 +249,8 @@ namespace BALL
 				Log.error() << "No system given! Aborting..." << std::endl;
 				return false;
 			}
+
+			getMainControl()->setCompositesMuteable(false);
 			
 			applyValues_();
 			applyProcessors_();
@@ -261,6 +263,8 @@ namespace BALL
 			notify_(message);
 			fdpb_.phi_grid = 0;
 			system_ = 0;
+
+			getMainControl()->setCompositesMuteable(true);
 			return true;
 		}
 

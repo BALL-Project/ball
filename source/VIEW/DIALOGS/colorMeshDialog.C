@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.25 2004/05/13 17:17:34 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.26 2004/05/14 10:23:33 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -170,10 +170,10 @@ bool ColorMeshDialog::insertGrid_(RegularData3D& grid, const String& name)
 {
 	grid_list_.push_back(&grid);
 	grids->insertItem(name.c_str());
-	if (!grid_) grid_ = &grid;
-	if (!mesh_ || !mesh_->vertex.size()) return false;
+	if (grid_ == 0) grid_ = &grid;
+	if (mesh_ == 0 || !mesh_->vertex.size()) return false;
 
-	gridSelected();
+// 	gridSelected(); ????
 	return true;
 }
 
@@ -201,11 +201,15 @@ void ColorMeshDialog::removeGrid_(RegularData3D& grid)
 
 void ColorMeshDialog::gridSelected()
 {
+	if (mesh_ == 0 || rep_ == 0) return;
+
 	// prevent freezing, if clicking on representation, while
 	// an other is still rendering
-	if (!getMainControl()->compositesAreMuteable()) return;
-
-	if (mesh_ == 0) return;
+	if (!getMainControl()->compositesAreMuteable() ||
+	     rep_->updateRunning())
+	{
+		return;
+	}
 
 	if (grids->count() == 0 || grids->currentItem() == -1)
 	{
@@ -232,7 +236,6 @@ void ColorMeshDialog::gridSelected()
 	{
 		for(Position p = 0; p < mesh_->vertex.size(); p++)
 		{
-			mesh_->vertex[p];
 			float value = (*grid_)(mesh_->vertex[p]);
 
 			mid_value_ += value;
@@ -559,8 +562,8 @@ void ColorMeshDialog::setMesh(Mesh* mesh, Representation* rep)
 	{
 		grids->setCurrentItem(grids->count()-1);
 	}
-	gridSelected();
-	apply_button->setEnabled(grid_);
+// 	gridSelected() ; // ?????
+// 	apply_button->setEnabled(grid_ != 0);
 }
 
 void ColorMeshDialog::show()
