@@ -1,9 +1,9 @@
-// $Id: RegularData3D_test.C,v 1.4 2002/01/26 22:01:29 oliver Exp $
+// $Id: RegularData3D_test.C,v 1.4.4.1 2002/09/02 13:24:49 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.4 2002/01/26 22:01:29 oliver Exp $")
+START_TEST(RegularData3D, "$Id: RegularData3D_test.C,v 1.4.4.1 2002/09/02 13:24:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -332,6 +332,48 @@ CHECK(has()1/1)
 	TEST_EQUAL(h.has(v), false)
 RESULT
 
+
+
+CHECK(operator << (ostream& os, const RegularData3D&))
+	String filename;
+	NEW_TMP_FILE(filename)
+	
+	Vector3 lower(-1.0, -2.0, -3.0);
+	Vector3 upper(3.0, 2.0, 1.0);
+	TRegularData3D<float>	data(lower, upper, 0.5);
+	
+	// fill the grid with something meaning ful
+	for (Index i = 0; i < data.getSize(); i++, data[i] = (float)((float)i / data.getSize()));
+	
+	std::ofstream os(filename.c_str(), std::ios::out);
+	os << data;
+	os.close();
+
+	std::ifstream is(filename.c_str());
+	TRegularData3D<float> in_data;
+	is >> in_data;
+	is.close();
+
+	TEST_EQUAL(in_data.getSize(), data.getSize())
+	ABORT_IF(in_data.getSize() != data.getSize())
+	
+	TEST_REAL_EQUAL(data.getXSpacing(), in_data.getXSpacing())
+	TEST_REAL_EQUAL(data.getYSpacing(), in_data.getYSpacing())
+	TEST_REAL_EQUAL(data.getZSpacing(), in_data.getZSpacing())
+
+	TEST_REAL_EQUAL(data.getMinX(), in_data.getMinX())
+	TEST_REAL_EQUAL(data.getMinY(), in_data.getMinY())
+	TEST_REAL_EQUAL(data.getMinZ(), in_data.getMinZ())
+
+	TEST_REAL_EQUAL(data.getMaxX(), in_data.getMaxX())
+	TEST_REAL_EQUAL(data.getMaxY(), in_data.getMaxY())
+	TEST_REAL_EQUAL(data.getMaxZ(), in_data.getMaxZ())
+
+	for (Index i = 0; i < data.getSize(); i++)
+	{
+		TEST_REAL_EQUAL(data[i], in_data[i])
+	}
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

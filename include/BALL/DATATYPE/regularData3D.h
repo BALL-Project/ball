@@ -1,4 +1,4 @@
-// $Id: regularData3D.h,v 1.8.4.2 2002/09/02 07:54:43 oliver Exp $ 
+// $Id: regularData3D.h,v 1.8.4.3 2002/09/02 13:24:45 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -120,6 +120,7 @@ namespace BALL
 		virtual void clear() throw();
 
 		//@}
+
 		/**	@name Assignment
 		*/
 		//@{
@@ -265,7 +266,8 @@ namespace BALL
 				@param		position Position, the grid position
 				@see			getData
 		*/
-		GridDataType& operator[](Position position) throw(Exception::OutOfGrid);
+		GridDataType& operator [] (Position position) 
+			throw(Exception::OutOfGrid);
 
 		/**	Subscript operator.
 				Returns the data of the grid point nearest to the given
@@ -275,7 +277,8 @@ namespace BALL
 				@param		vector Vector3, a position in the grid
 				@see			getData
 		*/
-		GridDataType& operator[](const Vector3& vector) throw(Exception::OutOfGrid);
+		GridDataType& operator [] (const Vector3& vector) 
+			throw(Exception::OutOfGrid);
 
 		/**	Returns the exact coordinates of a grid point.	
 				@return		Vector3
@@ -297,13 +300,15 @@ namespace BALL
 				@exception OutOfGrid if the point is outside the grid
 				@param		r Vector3
 		*/
-		Vector3 getGridCoordinates(const Vector3& r) const throw(Exception::OutOfGrid);
+		Vector3 getGridCoordinates(const Vector3& r) const 
+			throw(Exception::OutOfGrid);
 
 		/**	Returns the exact coordinates of a grid point.	
 				@return		Vector3
 				@param		Position
 		*/
-		Vector3 getGridCoordinates(Position position) const throw(Exception::OutOfGrid);
+		Vector3 getGridCoordinates(Position position) const 
+			throw(Exception::OutOfGrid);
 
 		/**	Return the indices of the grid points of the enclosing box.
 				This method calculates the grid box that contains the given vector
@@ -474,13 +479,10 @@ namespace BALL
 	std::ostream& operator << (std::ostream& os, const TRegularData3D<T>& data) 
 		throw()
 	{
-		os << data.getOrigin() << std::endl;
-		os << data.getSize() << std::endl;
-		os << data.getSpacing() << std::endl;
-		os << data.getNumberOfPointsX() << std::endl;
-		os << data.getNumberOfPointsY() << std::endl;
-		os << data.getNumberOfPointsZ() << std::endl;
-		for (Position i = 0; i < number_of_grid_points_; i++)	
+		os << data.getMinX() << " " << data.getMinY() << " " << data.getMinZ() << std::endl;
+		os << data.getMaxX() << " " << data.getMaxY() << " " << data.getMaxZ() << std::endl;
+		os << data.getMaxXIndex() << " " << data.getMaxYIndex() << " " << data.getMaxZIndex() << std::endl;
+		for (Position i = 0; i < data.getSize(); i++)	
 		{
 			os << data.data[i] << std::endl;
 		}
@@ -488,15 +490,25 @@ namespace BALL
 	}
 
 	template <typename T>
-	std::ostream& operator << (std::ostream& os, TRegularData3D<T>& data) 
+	std::istream& operator >> (std::istream& is, TRegularData3D<T>& data) 
 		throw()
 	{
-		Vector3 v;
-		os >> v;
-		data.setOrigin(v);
-		os >> v;
+		Vector3 lower;
+		Vector3 upper;
+		TVector3<Size> size;
 
-		return os;
+		is >> lower.x >> lower.y >> lower.z;
+		is >> upper.x >> upper.y >> upper.z;
+		is >> size.x >> size.y >> size.z;
+
+		data.set(TRegularData3D<T>(lower, upper, size.x + 1, size.y + 1, size.z + 1));
+
+		for (Position i = 0; i < data.getSize(); i++)
+		{
+			is >> data[i];
+		}
+		
+		return is;
 	}
 	
 
@@ -741,7 +753,7 @@ namespace BALL
 	BALL_INLINE 
 	float TRegularData3D<GridDataType>::getMaxZ() const throw()
 	{
-		return upper_.x;
+		return upper_.z;
 	}
 
 	// getMax[x,y,z] returns the maximum possible coordinates for
