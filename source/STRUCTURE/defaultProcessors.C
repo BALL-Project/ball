@@ -1,4 +1,4 @@
-// $Id: defaultProcessors.C,v 1.10 2000/06/21 14:16:13 amoll Exp $
+// $Id: defaultProcessors.C,v 1.11 2000/07/03 11:14:51 oliver Exp $
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
 
@@ -197,6 +197,12 @@ namespace BALL
 		{
 			throw Exception::FileNotFound(__FILE__, __LINE__, filename);
 		}
+	}
+
+	 
+	String& AssignRadiusProcessor::getFilename()
+	{
+		return filename_;
 	}
 
 	 
