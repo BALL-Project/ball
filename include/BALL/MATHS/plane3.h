@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.16 2000/05/05 17:39:05 amoll Exp $
+// $Id: plane3.h,v 1.17 2000/06/20 10:55:25 oliver Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -103,7 +103,7 @@ namespace BALL
 		*/
 		TPlane3(const T& a, const T& b, const T& c, const T& d)
 		{
-			n = Vector3(a, b, c);
+			n = TVector3<T>(a, b, c);
 			if (a == 0 && b == 0 && c == 0)
 			{
 				throw Exception::DivisionByZero(__FILE__, __LINE__);			
@@ -111,7 +111,7 @@ namespace BALL
 			if (!Maths::isZero(a))
 			{
 				p.set(-d / a, 0, 0);
-			 }
+			}
 			else if (!Maths::isZero(b))
 			{
 				p.set(0, -d / b, 0);
