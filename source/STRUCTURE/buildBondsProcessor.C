@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.C,v 1.7.2.2 2005/03/16 13:42:47 amoll Exp $
+// $Id: buildBondsProcessor.C,v 1.7.2.3 2005/03/16 13:50:09 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
@@ -180,7 +180,6 @@ namespace BALL
 											!atom1.isBoundTo(**ait2))
 									{
 										Bond* const b = atom1.createBond(**ait2);
-										b->setOrder(Bond::ORDER__UNKNOWN);
 										num_bonds++;
 									}
 								}
