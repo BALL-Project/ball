@@ -20,7 +20,6 @@ LogView::LogView(QWidget *parent, const char *name)
 	: DockWidget(parent, name),
 		NotificationTarget<LogStreamNotifier>(),
 		text_edit_(new QTextEdit(this)),
-		history_string_(),
 		strstream_(),
 		output_running_(false)
 {
@@ -33,7 +32,6 @@ LogView::LogView(const LogView& view)
 	: DockWidget((QWidget*)view.getParent()),
 		NotificationTarget<LogStreamNotifier>(),
 		text_edit_(new QTextEdit(this)),
-		history_string_(view.history_string_),
 		strstream_(),
 		output_running_(false)
 {

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logView.h,v 1.7 2003/09/13 14:31:47 amoll Exp $
+// $Id: logView.h,v 1.8 2003/12/09 13:22:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_LOGVIEW_H
@@ -45,11 +45,11 @@ namespace BALL
 				The class LogView records all messages sent to the  \link Log Log \endlink  object and
 				displays them as a text history. The class is derived from 
 				<b> NotificationTarget<LogStreamNotifier></b> that provides the connection
-				to the  \link Log Log \endlink  object. The class  \link QTextEdit QTextEdit \endlink  from the 
+				to the  \link Log Log \endlink  object. The class  QTextEdit from the 
 				qt - library is responsible for the visualization of the text history.
 				Use the class LogView as a widget. There are no initializations necessary.
-				Just create this widget as a child widgets of your application and it will
-				record and show all messages sent to the  \link Log Log \endlink  object.
+				Just create this widget as a child widget of your application and it will
+				record and show all messages sent to the  Log object.
 				\ingroup ViewWidgets
 		*/
 		class LogView
@@ -67,23 +67,17 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new logView.
-					The text of this logView is empty. The contructor connects the own
+					The contructor connects the own
 					<b> stringstream</b> with the  \link Log Log \endlink  object. If a string is written into
 					 \link Log Log \endlink  this will be notified and the string will be displayed
 					by this logView. 
-					\return      LogView new constructed logView
 					\see         Log
 			*/
 			LogView(QWidget *parent = 0, const char *name = 0)
 				throw();
 
 			/** Copy constructor.
-					Construct new logView by copying the logView <b> view</b>.
 					The text of <b> view</b> will be copied into this logView.
-					\param       view the logView to be copied
-					\return      LogView new constructed logView copied from <b> view</b>
-					\see         LogView
 			*/
 			LogView(const LogView& view)
 				throw();
@@ -93,20 +87,14 @@ namespace BALL
 			//@{
 
 			/** Destructor.
-					Remove the connection between the  \link Log Log \endlink  object and this logView.
-					Calls  \link clear clear \endlink .
+					Calls  clear.
 			*/
 			virtual ~LogView()
 				throw();
 
 			//@}
-			/**	@name	Storers
-			*/	
-			//@{
 
-			/**	Setup the menu entries.
-					PyWidget creates an entry in Tools|Restart Python and connects
-					the entry to startInterpreter().
+			/**	Setup the menu entry in "Edit->Clear Logs".
 			*/
 			virtual void initializeWidget(MainControl& main_control)
 				throw();
@@ -120,8 +108,7 @@ namespace BALL
 
 			/** Overridden notify call.
 					Will be called by  \link Log Log \endlink  whenever a string is written to it.
-					That string will be added to the history string of this logView
-					and then displayed.
+					That string will then be displayed.
 					\param   source the notification source
 					\return  bool returns always <tt>true</tt>
 			*/
@@ -131,8 +118,6 @@ namespace BALL
 			private:
 
 			QTextEdit* text_edit_;
-
-			QString history_string_;
 
 			std::stringstream strstream_;
 
