@@ -1,4 +1,4 @@
-// $Id: color.h,v 1.5 2000/02/06 19:52:08 oliver Exp $
+// $Id: color.h,v 1.6 2000/02/16 19:16:29 oliver Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLOR_H
 #define BALL_VIEW_DATATYPE_COLOR_H
@@ -356,6 +356,7 @@ namespace BALL
 				*/
 				COMPONENT__VALUE       = 2
 			};
+			//@}
 
 			/**	@name	Constructors and Destructors
 			*/
