@@ -9,22 +9,21 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 
-
 namespace BALL
 {
 	namespace VIEW
 	{
 
-		advancedOptionsDialog::advancedOptionsDialog(QWidget* parent, const char* name)
-			:advancedOptions( parent, name )
+		AdvancedOptionsDialog::advancedOptionsDialog(QWidget* parent, const char* name)
+			:AdvancedOptions( parent, name )
 		{
 		}
 
-		advancedOptionsDialog::~advancedOptionsDialog()
+		AdvancedOptionsDialog::~AdvancedOptionsDialog()
 		{
 		}
 
-		void advancedOptionsDialog::browseParameterFiles()
+		void AdvancedOptionsDialog::browseParameterFiles()
 		{
 			// look up the full path of the parameter file
 			Path p;
@@ -42,7 +41,7 @@ namespace BALL
 			}
 		}
 
-		void advancedOptionsDialog::resetOptions()
+		void AdvancedOptionsDialog::resetOptions()
 		{
 			nonbonded_cutoff_line_edit->setText("20.000000");
 			vdw_cutoff_line_edit->setText("15.000000");
@@ -61,105 +60,105 @@ namespace BALL
 			overwrite_typenames_checkBox->setChecked(false);
 		}
 
-		const String& advancedOptionsDialog::getFilename() const
+		const String& AdvancedOptionsDialog::getFilename() const
 		{
 			static String filename;
 			filename = parameter_file_edit->text().ascii();
 			return filename;
 		}
 		
-		void advancedOptionsDialog::setFilename(const String& filename)
+		void AdvancedOptionsDialog::setFilename(const String& filename)
 		{
 			parameter_file_edit->setText(filename.c_str());
 			parameter_file_edit->update();
 		}
 /*//experimental
-		void advancedOptionsDialog::setNonbondedCutoff(float nonbonded_cutoff)
+		void AdvancedOptionsDialog::setNonbondedCutoff(float nonbonded_cutoff)
 		{
 			nonbonded_cutoff_line_edit->setText((String) nonbonded_cutoff);
 		}
 //experimtental
 */
-		bool advancedOptionsDialog::getUseDistanceDependentDC() const
+		bool AdvancedOptionsDialog::getUseDistanceDependentDC() const
 		{
 			return distance_button->isChecked();
 		}
 
-		float advancedOptionsDialog::getNonbondedCutoff()
+		float AdvancedOptionsDialog::getNonbondedCutoff()
 		{
 			QString nonbondcut = nonbonded_cutoff_line_edit->text().ascii();
 			float nonbond = nonbondcut.toFloat();
 			return nonbond;
 		}
 		
-		float advancedOptionsDialog::getVdwCutoff()
+		float AdvancedOptionsDialog::getVdwCutoff()
 		{
 			QString vdwcut = vdw_cutoff_line_edit->text().ascii();
 			float vdw = vdwcut.toFloat();
 			return vdw;
 		}
 		
-		float advancedOptionsDialog::getVdwCuton()
+		float AdvancedOptionsDialog::getVdwCuton()
 		{
 			QString vdwcut = vdw_cuton_line_edit->text().ascii();
 			float vdw = vdwcut.toFloat();
 			return vdw;
 		}
 		
-		float advancedOptionsDialog::getElectrostaticCutoff()
+		float AdvancedOptionsDialog::getElectrostaticCutoff()
 		{
 			QString elcut = electrostatic_cutoff_line_edit->text().ascii();
 			float el = elcut.toFloat();
 			return el;
 		}
 		
-		float advancedOptionsDialog::getElectrostaticCuton()
+		float AdvancedOptionsDialog::getElectrostaticCuton()
 		{
 			QString elcut = electrostatic_cuton_line_edit->text().ascii();
 			float el = elcut.toFloat();
 			return el;
 		}
 		
-		float advancedOptionsDialog::getScalingElectrostatic_1_4()
+		float AdvancedOptionsDialog::getScalingElectrostatic_1_4()
 		{
 			QString scaleel = scaling_electrostatic_1_4_line_edit->text().ascii();
 			float scale = scaleel.toFloat();
 			return scale;
 		}
 
-		float advancedOptionsDialog::getScalingVdw_1_4()
+		float AdvancedOptionsDialog::getScalingVdw_1_4()
 		{
 			QString scalevdw = scaling_vdw_1_4_line_edit->text().ascii();
 			float scale = scalevdw.toFloat();
 			return scale;
 		}
 		
-		bool advancedOptionsDialog::getAssignCharges()
+		bool AdvancedOptionsDialog::getAssignCharges()
 		{
 			return assign_charges_checkBox->isChecked();
 		}
 			
-		bool advancedOptionsDialog::getAssignTypenames()
+		bool AdvancedOptionsDialog::getAssignTypenames()
 		{
 			return assign_typenames_checkBox->isChecked();
 		}
 			
-		bool advancedOptionsDialog::getAssignTypes()
+		bool AdvancedOptionsDialog::getAssignTypes()
 		{
 			return assign_types_checkBox->isChecked();
 		}
 			
-		bool advancedOptionsDialog::getOverwriteCharges()
+		bool AdvancedOptionsDialog::getOverwriteCharges()
 		{
 			return overwrite_charges_checkBox->isChecked();
 		}
 			
-		bool advancedOptionsDialog::getOverwriteTypenames()
+		bool AdvancedOptionsDialog::getOverwriteTypenames()
 		{
 			return overwrite_typenames_checkBox->isChecked();
 		}
 		//function to restore previously changed options
-		void advancedOptionsDialog::setOptions(float nonbonded_cutoff, float vdw_cutoff, float vdw_cuton, float electrostatic_cutoff, float electrostatic_cuton,
+		void AdvancedOptionsDialog::setOptions(float nonbonded_cutoff, float vdw_cutoff, float vdw_cuton, float electrostatic_cutoff, float electrostatic_cuton,
 									    float scaling_electrostatic_1_4, float scaling_vdw_1_4, bool use_dddc, bool assign_charges,
 									    bool assign_typenames, bool assign_types, bool overwrite_charges, bool overwrite_typenames)
 		{
