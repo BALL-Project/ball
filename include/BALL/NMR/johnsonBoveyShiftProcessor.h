@@ -1,4 +1,4 @@
-// $Id: johnsonBoveyShiftProcessor.h,v 1.1 2000/09/19 13:34:59 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.h,v 1.2 2000/09/21 13:53:01 amoll Exp $
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -43,13 +43,13 @@ namespace BALL
 		/**	@name	Type definitions
 		*/
 		//@{
-		typedef struct
+		struct Ring
     {
 			Size						number_of_atoms;
 			float						radius;
 			Size						electrons;
 			vector<String>	atom_names;
-		} Ring;
+		} ;
   
 		//@}
 		
@@ -66,7 +66,6 @@ namespace BALL
 		virtual ~JohnsonBoveyShiftProcessor() throw();
 
 		//@}
-
 
 		/**@name	Processor specific functions.
 		*/
