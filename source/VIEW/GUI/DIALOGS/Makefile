@@ -10,7 +10,17 @@ CPP_SOURCES=\
 	colorMeshDialog.C\
 	colorMeshDialogData.C\
 	dlgMoveOverlay.C\
-	dlgMoveOverlayData.C
+	dlgMoveOverlayData.C\
+	mouseSensitivity.C\
+	mouseSensitivityData.C\
+	setCamera.C\
+	setCameraData.C\
+	lightSettings.C\
+	lightSettingsData.C\
+	stageSettings.C\
+	stageSettingsData.C\
+	pythonSettings.C\
+	pythonSettingsData.C
 
 MOC_SOURCES=\
 	fileDialog_moc.C\
@@ -18,7 +28,17 @@ MOC_SOURCES=\
 	colorMeshDialog_moc.C\
 	colorMeshDialogData_moc.C\
 	dlgMoveOverlay_moc.C\
-	dlgMoveOverlayData_moc.C
+	dlgMoveOverlayData_moc.C\
+	mouseSensitivity_moc.C\
+	mouseSensitivityData_moc.C\
+	setCamera_moc.C\
+	setCameraData_moc.C\
+	lightSettings_moc.C\
+	lightSettingsData_moc.C\
+	stageSettings_moc.C\
+	stageSettingsData_moc.C\
+	pythonSettings_moc.C\
+	pythonSettingsData_moc.C
 
 include ../../../common.mak
 include .Dependencies
@@ -43,8 +63,71 @@ colorMeshDialog_moc.C:	$(HEADER_DIR)/colorMeshDialog.h
 colorMeshDialogData_moc.C:	$(HEADER_DIR)/colorMeshDialogData.h
 	$(MOC) $< -o $@
 
+colorMeshDialogData.C:	$(HEADER_DIR)/colorMeshDialogData.h
+	$(UIC) -o $@ -impl $(HEADER_DIR)/colorMeshDialogData.h colorMeshDialog.ui
+
 $(HEADER_DIR)/colorMeshDialogData.h:	colorMeshDialog.ui
 	$(UIC) -o $@ colorMeshDialog.ui
 
-colorMeshDialogData.C:	$(HEADER_DIR)/colorMeshDialogData.h
-	$(UIC) -o $@ -impl $(HEADER_DIR)/colorMeshDialogData.h colorMeshDialog.ui
+mouseSensitivity_moc.C:	$(HEADER_DIR)/mouseSensitivity.h
+	$(MOC) $< -o $@
+
+mouseSensitivityData_moc.C:	$(HEADER_DIR)/mouseSensitivityData.h
+	$(MOC) $< -o $@
+
+$(HEADER_DIR)/mouseSensitivityData.h:	mouseSensitivityData.ui
+	$(UIC) -o $@ mouseSensitivityData.ui
+
+mouseSensitivityData.C:	$(HEADER_DIR)/mouseSensitivityData.h
+	$(UIC) -o $@ -impl $(HEADER_DIR)/mouseSensitivityData.h mouseSensitivityData.ui
+
+setCamera_moc.C:	$(HEADER_DIR)/setCamera.h
+	$(MOC) $< -o $@
+
+setCameraData_moc.C:	$(HEADER_DIR)/setCameraData.h
+	$(MOC) $< -o $@
+
+$(HEADER_DIR)/setCameraData.h:	setCameraData.ui
+	$(UIC) -o $@ setCameraData.ui
+
+setCameraData.C:	$(HEADER_DIR)/setCameraData.h
+	$(UIC) -o $@ -impl $(HEADER_DIR)/setCameraData.h setCameraData.ui
+
+
+lightSettings_moc.C:	$(HEADER_DIR)/lightSettings.h
+	$(MOC) $< -o $@
+
+lightSettingsData_moc.C:	$(HEADER_DIR)/lightSettingsData.h
+	$(MOC) $< -o $@
+
+$(HEADER_DIR)/lightSettingsData.h:	lightSettingsData.ui
+	$(UIC) -o $@ lightSettingsData.ui
+
+lightSettingsData.C:	$(HEADER_DIR)/lightSettingsData.h
+	$(UIC) -o $@ -impl $(HEADER_DIR)/lightSettingsData.h lightSettingsData.ui
+
+
+stageSettings_moc.C:	$(HEADER_DIR)/stageSettings.h
+	$(MOC) $< -o $@
+
+stageSettingsData_moc.C:	$(HEADER_DIR)/stageSettingsData.h
+	$(MOC) $< -o $@
+
+$(HEADER_DIR)/stageSettingsData.h:	stageSettingsData.ui
+	$(UIC) -o $@ stageSettingsData.ui
+
+stageSettingsData.C:	$(HEADER_DIR)/stageSettingsData.h
+	$(UIC) -o $@ -impl $(HEADER_DIR)/stageSettingsData.h stageSettingsData.ui
+
+
+pythonSettings_moc.C:	$(HEADER_DIR)/pythonSettings.h
+	$(MOC) $< -o $@
+
+pythonSettingsData_moc.C:	$(HEADER_DIR)/pythonSettingsData.h
+	$(MOC) $< -o $@
+
+$(HEADER_DIR)/pythonSettingsData.h:	pythonSettingsData.ui
+	$(UIC) -o $@ pythonSettingsData.ui
+
+pythonSettingsData.C:	$(HEADER_DIR)/pythonSettingsData.h
+	$(UIC) -o $@ -impl $(HEADER_DIR)/pythonSettingsData.h pythonSettingsData.ui
