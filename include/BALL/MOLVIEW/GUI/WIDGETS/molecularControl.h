@@ -1,4 +1,4 @@
-// $Id: molecularControl.h,v 1.1 2000/09/23 15:38:17 hekl Exp $
+// $Id: molecularControl.h,v 1.2 2000/10/22 15:29:23 hekl Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -33,15 +33,15 @@ using namespace BALL::VIEW;
 using namespace BALL::MOLVIEW;
 
 
-//namespace BALL
-//{
+namespace BALL
+{
 
-//	namespace MOLVIEW
-//	{
+	namespace MOLVIEW
+	{
 		/**
 		 */
 		class MolecularControl
-		: public Control
+		: public BALL::VIEW::Control
 		{			
 			Q_OBJECT
 			
@@ -66,6 +66,8 @@ using namespace BALL::MOLVIEW;
 			
 			// --- ACCESSORS: INSPECTORS and MUTATORS
 			
+			virtual void checkMenu(MainControl& main_control);
+
 		public slots:
 				
 			// override for distinguishing selected composites
@@ -108,8 +110,8 @@ using namespace BALL::MOLVIEW;
 #			include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.iC>
 #		endif
 
-//	} // namespace MOLVIEW
+	} // namespace MOLVIEW
 
-//} // namespace BALL
+} // namespace BALL
 
 #endif // BALL_MOLVIE_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H_
