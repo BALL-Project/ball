@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.16 2004/12/27 13:21:51 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.17 2004/12/27 13:48:23 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -273,7 +273,7 @@ namespace BALL
 			geometric_objects_.push_back(sphere);
 
 			// calculate the number of slides for the circle and the angle in between them
- 			float slides = 8.0 + drawing_precision_ * 8.0;
+ 			Size slides = (Size)(8.0 + drawing_precision_ * 8.0);
 			Angle slides_angle = Angle(360.0 / slides, false);
 
 			// direction vector of the two current spline points
@@ -334,6 +334,7 @@ namespace BALL
 			vector<Vector3>* dummy = 0;
 				
 			// create a new mesh with the points and triangles
+			// every residue get its own mesh to enable picking for the tube model
 			Mesh* mesh = new Mesh();
 			mesh->setComposite(atoms_of_spline_points_[start]->getParent());
 			geometric_objects_.push_back(mesh);
@@ -383,33 +384,73 @@ namespace BALL
 					mesh = new Mesh();
 					mesh->setComposite(atoms_of_spline_points_[p]->getParent());
 					geometric_objects_.push_back(mesh);
-				}
 
-				for (Position point_pos = 0; point_pos < slides; point_pos++)
+					// insert the vertices and normals of last points again
+					for (Position point_pos = 0; point_pos < slides; point_pos++)
+					{
+						mesh->vertex.push_back(last_point_ + (*last_points)[point_pos]);
+						mesh->vertex.push_back(			point  + (* new_points)[point_pos]);
+						mesh->vertex.push_back(last_point_ + (*last_points)[point_pos + 1]);
+						mesh->vertex.push_back(     point  + (* new_points)[point_pos + 1]);
+
+						mesh->normal.push_back((*last_points)[point_pos]);
+						mesh->normal.push_back((*new_points)[point_pos]);
+						mesh->normal.push_back((*last_points)[point_pos + 1]);
+						mesh->normal.push_back((*new_points)[point_pos + 1]);
+
+						const Size s = mesh->vertex.size() - 1;
+						t.v1 = s - 3; 	// last lower
+						t.v2 = s - 1;		// last upper
+						t.v3 = s;				// new  upper
+						mesh->triangle.push_back(t);
+
+						t.v1 = s;				// new upper
+						t.v2 = s - 2;   // new lower
+						t.v3 = s - 3;   // last lower
+						mesh->triangle.push_back(t);
+					}
+				}
+				else
 				{
-					mesh->vertex.push_back(last_point_ + (*last_points)[point_pos]);
-					mesh->vertex.push_back(			point  + (* new_points)[point_pos]);
-					mesh->vertex.push_back(last_point_ + (*last_points)[point_pos + 1]);
-					mesh->vertex.push_back(     point  + (* new_points)[point_pos + 1]);
+					// insert only the new points, the old ones are already stored in the mesh
+					//
+					// we have to differ if the last round was the first for this mesh.
+					// this is important for the number of vertices, which were added in the last round
+					// step is used to calculate the position of the vertices from the last round
+					Size step = 0;
+					if (mesh->vertex.size() > 2 * slides)
+					{
+						step = 2;
+					}
+					else
+					{
+						step = 4;
+					}
+					
+					for (Position point_pos = 0; point_pos < slides; point_pos++)
+					{
+						mesh->vertex.push_back(point  + (*new_points)[point_pos]);
+						mesh->vertex.push_back(point  + (*new_points)[point_pos + 1]);
 
-					mesh->normal.push_back((*last_points)[point_pos]);
-					mesh->normal.push_back((*new_points)[point_pos]);
-					mesh->normal.push_back((*last_points)[point_pos + 1]);
-					mesh->normal.push_back((*new_points)[point_pos + 1]);
+						mesh->normal.push_back((*new_points)[point_pos]);
+						mesh->normal.push_back((*new_points)[point_pos + 1]);
 
-					const Size s = mesh->vertex.size() -1;
-					t.v1 = s - 3;
-					t.v2 = s - 1;
-					t.v3 = s;
-					mesh->triangle.push_back(t);
+						const Size s_new = mesh->vertex.size() - 1;
+						const Size s_old = s_new - slides * step;
+						t.v1 = s_old;				// last lower
+						t.v2 = s_old + 1;		// last upper
+						t.v3 = s_new;				// new upper
+						mesh->triangle.push_back(t);
 
-					t.v1 = s;
-					t.v2 = s - 2;
-					t.v3 = s - 3;
-					mesh->triangle.push_back(t);
+						t.v1 = s_new;				// new upper
+						t.v2 = s_new - 1;		// new lower
+						t.v3 = s_old;				// last lower
+						mesh->triangle.push_back(t);
+					}
 				}
 
-				// swap between the two point vectors
+				// swap between the two point vectors to prevent copying the values from
+				// one vector to the other
 				dummy = new_points;
 				new_points  = last_points;
 				last_points = dummy;
@@ -418,10 +459,14 @@ namespace BALL
 				last_point_ = point;
 			}
 
-			geometric_objects_.push_back(mesh);
+			if (*geometric_objects_.rbegin() != mesh)
+			{
+				geometric_objects_.push_back(mesh);
+			}
+
 			have_start_point_ = true;
 			
-			// create sphere for the point
+			// create a sphere as an end cap for the point
 			sphere = new Sphere;
 			if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
 			sphere->setRadius(tube_radius_);
