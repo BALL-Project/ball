@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PTE_test.C,v 1.12 2003/07/01 13:06:24 amoll Exp $
+// $Id: PTE_test.C,v 1.13 2004/02/23 20:01:57 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 #include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(Element, "$Id: PTE_test.C,v 1.12 2003/07/01 13:06:24 amoll Exp $")
+START_TEST(Element, "$Id: PTE_test.C,v 1.13 2004/02/23 20:01:57 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -27,7 +27,6 @@ RESULT
 
 CHECK(~Element() throw())
 	delete e;
-  // ???
 RESULT
 
 CHECK(Element(const Element& element) throw())
@@ -225,11 +224,39 @@ CHECK(bool isUnknown() const throw())
 RESULT
 
 CHECK(BALL_CREATE(Element))
-  // ???
+  // Not to be tested
 RESULT
 
 CHECK(Element& operator = (const Element& element) throw())
-  // ???
+	Element rhs1("Aluminum", "Al", 13, 3, 13, 26.981539,  1.43,  1.25, 2.05, 1.61);
+
+	Element el;
+	el = rhs1;
+
+	TEST_EQUAL(el.getName(), "Aluminum")
+	TEST_EQUAL(el.getSymbol(), "Al")
+	TEST_EQUAL(el.getGroup(), 13)
+	TEST_EQUAL(el.getPeriod(), 3)
+	TEST_EQUAL(el.getAtomicNumber(), 13)
+	TEST_REAL_EQUAL(el.getAtomicWeight(), 26.9815390)
+	TEST_REAL_EQUAL(el.getAtomicRadius(), 1.43)
+	TEST_REAL_EQUAL(el.getCovalentRadius(), 1.25)
+	TEST_REAL_EQUAL(el.getVanDerWaalsRadius(), 2.05)
+	TEST_REAL_EQUAL(el.getElectronegativity(), 1.61)
+
+	Element rhs2("ALUMINUM", "lA", 31, 5, 26, 27.333333,  2.45,  7.89, 1.12, 3.67);
+	el = rhs2;
+
+	TEST_EQUAL(el.getName(), rhs2.getName())
+	TEST_EQUAL(el.getSymbol(), rhs2.getSymbol())
+	TEST_EQUAL(el.getGroup(), rhs2.getGroup())
+	TEST_EQUAL(el.getPeriod(), rhs2.getPeriod())
+	TEST_EQUAL(el.getAtomicNumber(), rhs2.getAtomicNumber())
+	TEST_EQUAL(el.getAtomicWeight(), rhs2.getAtomicWeight())
+	TEST_EQUAL(el.getAtomicRadius(), rhs2.getAtomicRadius())
+	TEST_EQUAL(el.getCovalentRadius(), rhs2.getCovalentRadius())
+	TEST_EQUAL(el.getVanDerWaalsRadius(), rhs2.getVanDerWaalsRadius())
+	TEST_EQUAL(el.getElectronegativity(), rhs2.getElectronegativity())
 RESULT
 
 String filename;
