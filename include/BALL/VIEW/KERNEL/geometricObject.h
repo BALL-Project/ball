@@ -1,4 +1,4 @@
-// $Id: geometricObject.h,v 1.17 2001/06/29 05:45:29 sturm Exp $
+// $Id: geometricObject.h,v 1.18 2001/07/09 17:27:56 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
 #define BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -64,8 +64,8 @@ namespace BALL
 				
 				@memo    GeometricObject class (BALL VIEW kernel framework)
 				@author  $Author: sturm $
-				@version $Revision: 1.17 $
-				@date    $Date: 2001/06/29 05:45:29 $
+				@version $Revision: 1.18 $
+				@date    $Date: 2001/07/09 17:27:56 $
 		*/
 		class GeometricObject
 			: public Composite,
@@ -437,10 +437,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the name of {\em *this} geometricObject.
-					Access the constant reference of the name of {\em *this} geometricObject.
-					@return      String& constant reference to the name of {\em *this} geometricObject
-					@see         setName
-					@see         hasName
+					For further information see \Ref{getName}.
 			*/
 			const String& getName() const
 				throw();
