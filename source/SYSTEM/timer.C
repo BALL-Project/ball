@@ -1,4 +1,4 @@
-// $Id: timer.C,v 1.3 2000/01/10 15:51:16 oliver Exp $
+// $Id: timer.C,v 1.4 2000/06/25 12:51:48 amoll Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -233,14 +233,6 @@ namespace BALL
 									&& current_usecs_ == timer.current_usecs_
 									&& current_user_time_ == timer.current_user_time_
 									&& current_system_time_ == timer.current_system_time_);
-	}
-
-	bool Timer::operator < (const Timer& timer) const
-	{
-		return (bool)(current_secs_ + last_secs_ < timer.current_secs_ + timer.last_secs_
-									&& current_usecs_ + last_usecs_ < timer.current_usecs_ + timer.last_usecs_
-									&& current_user_time_ + last_user_time_ < timer.current_user_time_ + timer.last_user_time_
-									&& current_system_time_ + last_system_time_ < timer.current_system_time_ + timer.last_system_time_);
 	}
 
 	void Timer::dump(ostream& s, Size depth) const
