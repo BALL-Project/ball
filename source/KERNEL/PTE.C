@@ -1,4 +1,4 @@
-// $Id: PTE.C,v 1.6 2000/12/10 20:09:43 oliver Exp $
+// $Id: PTE.C,v 1.7 2000/12/10 21:55:49 oliver Exp $
 
 #include <BALL/KERNEL/PTE.h>
 
@@ -457,7 +457,7 @@ namespace BALL
 	{
 	}
 
-	PTE_::PTE_(const PTE_& /* pte */)
+	PTE_::PTE_(const PTE_& pte)
 		:	PropertyManager(pte)
 	{
 		// no nonstatic members to copy
