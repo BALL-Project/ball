@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.89 2003/10/15 14:32:40 amoll Exp $
+// $Id: mainframe.C,v 1.90 2003/10/16 11:54:29 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -217,8 +217,8 @@ Log.error() << "new Mainframe " << this << std::endl;
 	//--------------------------------
 
 	// registering object generator
-//  MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
-//  server_->registerObjectCreator(*object_creator);
+  MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
+  server_->registerObjectCreator(*object_creator);
 
 	setStatusbarText("Ready.");
 }
