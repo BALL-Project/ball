@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.162 2005/02/13 17:25:52 amoll Exp $
+// $Id: scene.C,v 1.163 2005/02/14 13:24:25 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -632,7 +632,7 @@ namespace BALL
 		void Scene::render_(const Representation& rep, RenderMode mode)
 			throw()
 		{
-			if (rep.getGeometricObjects().size() == 0) return;
+			if (!rep.getGeometricObjects().size()) return;
 
 			switch (mode)
 			{
@@ -653,15 +653,20 @@ namespace BALL
 		void Scene::rotateSystem2_(Scene* /*scene*/)
 		{
 			if (current_mode_ != ROTATE__MODE ||
-					x_window_pos_old_ == x_window_pos_new_) return;
+					x_window_pos_old_ == x_window_pos_new_) 
+			{
+				return;
+			}
 
-			const float angle = (x_window_pos_new_ - x_window_pos_old_) * 
-													(mouse_sensitivity_ / (ROTATE_FACTOR * -30));
-				
-			Camera& camera = stage_->getCamera();
+			const Angle angle((x_window_pos_new_ - x_window_pos_old_) * 
+								  			(mouse_sensitivity_ / (ROTATE_FACTOR * -30)));
+
+			Camera camera(stage_->getCamera());
 			Matrix4x4 m;
-			m.setRotation(Angle(angle), camera.getViewVector());
+			m.setRotation(angle, camera.getViewVector());
+
 			camera.setLookUpVector(m * camera.getLookUpVector());
+			stage_->moveCameraTo(camera);
 			updateCamera_();
 		}
 
