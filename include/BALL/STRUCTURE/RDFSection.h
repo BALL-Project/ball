@@ -1,4 +1,4 @@
-// $Id: RDFSection.h,v 1.5 2000/10/30 00:19:26 amoll Exp $
+// $Id: RDFSection.h,v 1.6 2001/02/23 02:40:44 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RDFSECTION_H
 #define BALL_STRUCTURE_RDFSECTION_H
@@ -14,8 +14,7 @@
 namespace BALL
 {
 
-	/** Helper class for RDFParameter.
-			\\
+	/** Helper class for RDFParameter.	\\
 			{\bf Definition:} \URL{BALL/STRUCTURE/RDFSection.h}
 	 */
 	class RDFSection
@@ -25,7 +24,8 @@ namespace BALL
 
 		BALL_CREATE(RDFSection)
 
-		/** @name Enums */
+		/** @name Enums 
+		*/
 		//@{
 
 		enum Type
@@ -35,35 +35,37 @@ namespace BALL
 		};
 
 		//@}
-
-		/** @name Constructors and destructors */
+		/** @name Constructors and destructors 
+		*/
 		//@{
 
-		/** Default constructor */
+		/** Default constructor 
+		*/
 		RDFSection() throw();
 
-		/** Copy constructor */
+		/** Copy constructor 
+		*/
 		RDFSection(const RDFSection& rdf_section) throw();
 
-		/** Destructor */
+		/** Destructor 
+		*/
 		virtual ~RDFSection() throw();
 
 		//@}
-
-
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
 		/** */
 		const RDFSection& operator = (const RDFSection& rdf_section) throw();
 
-		/** Clear method */
+		/** Clear method 
+		*/
 		virtual void clear() throw();
 
 		//@}
-
-
-		/** @name Parameter extraction */
+		/** @name Parameter extraction 
+		*/
 		//@{
 
 		/** */
@@ -71,28 +73,28 @@ namespace BALL
 			throw();
 		
 		//@}
-		
-
-		/** @name Accessors */
+		/** @name Accessors 
+		*/
 		//@{
 
-		/** return the RDF created by extractSection() */
+		/** return the RDF created by extractSection() 
+		*/
 		const RadialDistributionFunction& getRDF() const throw();
 
 		//@}
-
-
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{
 
-		/** Equality operator */
+		/** Equality operator 
+		*/
 		bool operator == (const RDFSection& section) const throw();
 
 		//@}
 
 		protected:
 
-		/*_ The RDF that is to be read from a section*/
+		/*_ The RDF that is to be read from a section */
 		RadialDistributionFunction rdf_;
 	
 	};

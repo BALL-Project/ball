@@ -1,4 +1,4 @@
-// $Id: RSVertex.h,v 1.4 2000/12/07 14:57:44 strobel Exp $
+// $Id: RSVertex.h,v 1.5 2001/02/23 02:40:45 amoll Exp $
 
 #ifndef secure
 #define secure
@@ -30,10 +30,8 @@ namespace BALL
 	template <typename T>
 	class TRSEdge;
 
-	/** Generic RSVertex Class.
-			\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/RSVertex.h}
-			\\
+	/** Generic RSVertex Class.	\\
+			{\bf Definition:} \URL{BALL/STRUCTURE/RSVertex.h}	\\
 	*/
 	template <class T>
 	class TRSVertex
@@ -126,8 +124,8 @@ namespace BALL
 		{
 			atom_ = a; edges_ = edge_list; faces_ = face_list; index_ = i;
 		}
-		//@}
 
+		//@}
 		/**	@name	Accessors
 		*/
 		//@{
@@ -284,7 +282,6 @@ namespace BALL
 		}
 
 		//@}
-
 		/**	@name	Predicates
 		*/
 		//@{
@@ -485,8 +482,8 @@ namespace BALL
 			s << "])";
 			return s;
 		}
-	//@}
 
+	//@}
 
 	/**	The Default RSVertex Type.
 			If double precision is not needed, {\tt RSVertex<float>} should
@@ -495,32 +492,31 @@ namespace BALL
 	typedef TRSVertex<float> RSVertex;
 
 
-
-		/* debuging */
-		template <class T>
-		void RSVertexIsValid(const TRSVertex<T>& rsvertex, int line)
+	/* debuging */
+	template <class T>
+	void RSVertexIsValid(const TRSVertex<T>& rsvertex, int line)
+	{
+		HashSet<TRSEdge<T>*> edges;
+		edges = rsvertex.getEdges();
+		HashSet<TRSEdge<T>*>::Iterator e;
+		for (e = edges.begin(); e != edges.end(); e++)
 		{
-			HashSet<TRSEdge<T>*> edges;
-			edges = rsvertex.getEdges();
-			HashSet<TRSEdge<T>*>::Iterator e;
-			for (e = edges.begin(); e != edges.end(); e++)
+			if (*e == NULL)
 			{
-				if (*e == NULL)
-				{
-					throw Exception::GeneralException(__FILE__,line,"RSVertexNotValid","NULL-pointer in edge list");
-				}
-			}
-			HashSet<TRSFace<T>*> faces;
-			faces = rsvertex.getFaces();
-			HashSet<TRSFace<T>*>::Iterator f;
-			for (f = faces.begin(); f != faces.end(); f++)
-			{
-				if (*f == NULL)
-				{
-					throw Exception::GeneralException(__FILE__,line,"RSVertexNotValid","NULL-pointer in face list");
-				}
+				throw Exception::GeneralException(__FILE__,line,"RSVertexNotValid","NULL-pointer in edge list");
 			}
 		}
+		HashSet<TRSFace<T>*> faces;
+		faces = rsvertex.getFaces();
+		HashSet<TRSFace<T>*>::Iterator f;
+		for (f = faces.begin(); f != faces.end(); f++)
+		{
+			if (*f == NULL)
+			{
+				throw Exception::GeneralException(__FILE__,line,"RSVertexNotValid","NULL-pointer in face list");
+			}
+		}
+	}
 
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.10 2001/02/22 16:23:21 strobel Exp $
+// $Id: solventExcludedSurface.h,v 1.11 2001/02/23 02:40:45 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -32,10 +32,8 @@
 namespace BALL
 {
 
-	/** Generic SolventExcludedSurface Class.
-			\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/solventExcludedSurface.h}
-			\\
+	/** Generic SolventExcludedSurface Class.	\\
+			{\bf Definition:} \URL{BALL/STRUCTURE/solventExcludedSurface.h}	\\
 	*/
 	template <class T>
 	class TSolventExcludedSurface
@@ -173,8 +171,8 @@ namespace BALL
 					print << "ENDE\n";
 					#endif
 		}
-		//@}
 
+		//@}
 		/**	@name	Accessors
 		*/
 		//@{
@@ -558,81 +556,81 @@ namespace BALL
 	/**	Output- Operator
 			prints out a SolventExcludedSurface
 	*/
-		template <typename T>
-		std::ostream& operator << (std::ostream& s, TSolventExcludedSurface<T>& ses)
+	template <typename T>
+	std::ostream& operator << (std::ostream& s, TSolventExcludedSurface<T>& ses)
+	{
+		s << "Vertices:\n";
+		for (Position i = 0; i < ses.vertices.size(); i++)
 		{
-			s << "Vertices:\n";
-			for (Position i = 0; i < ses.vertices.size(); i++)
-			{
-				s << "  " << *ses.vertices[i] << "\n";
-			}
-			s << "Edges:\n";
-			for (Position i = 0; i < ses.edges.size(); i++)
-			{
-				if (ses.edges[i] != NULL)
-				{
-					s << "  " << *ses.edges[i] << "\n";
-				}
-				else
-				{
-					s << "  --\n";
-				}
-			}
-			s << "singular Edges:\n";
-			for (Position i = 0; i < ses.singular_edges.size(); i++)
-			{
-				if (ses.singular_edges[i] != NULL)
-				{
-					s << "  " << *ses.singular_edges[i] << "\n";
-				}
-				else
-				{
-					s << "  --\n";
-				}
-			}
-			s << "contact Faces:\n";
-			for (Position i = 0; i < ses.contact_faces.size(); i++)
-			{
-				if (ses.contact_faces[i] != NULL)
-				{
-					s << "  " << *ses.contact_faces[i] << "\n";
-				}
-				else
-				{
-					s << "  --\n";
-				}
-			}
-			s << "toric Faces:\n";
-			for (Position i = 0; i < ses.toric_faces.size(); i++)
-			{
-				if (ses.toric_faces[i] != NULL)
-				{
-					s << "  " << *ses.toric_faces[i] << "\n";
-				}
-				else
-				{
-					s << "  --\n";
-				}
-			}
-			//s << "singular toric Faces:\n";
-			//for (Position i = 0; i < ses.singular_toric_faces.size(); i++)
-			//{
-			//	s << "  " << *ses.singular_toric_faces[i] << "\n";
-			//}
-			s << "spheric Faces:\n";
-			for (Position i = 0; i < ses.spheric_faces.size(); i++)
-			{
-				if (ses.spheric_faces[i] != NULL)
-				{
-					s << "  " << *ses.spheric_faces[i] << "\n";
-				}
-				else
-				{
-					s << "  --\n";
-				}
-			}
-			return s;
+			s << "  " << *ses.vertices[i] << "\n";
 		}
+		s << "Edges:\n";
+		for (Position i = 0; i < ses.edges.size(); i++)
+		{
+			if (ses.edges[i] != NULL)
+			{
+				s << "  " << *ses.edges[i] << "\n";
+			}
+			else
+			{
+				s << "  --\n";
+			}
+		}
+		s << "singular Edges:\n";
+		for (Position i = 0; i < ses.singular_edges.size(); i++)
+		{
+			if (ses.singular_edges[i] != NULL)
+			{
+				s << "  " << *ses.singular_edges[i] << "\n";
+			}
+			else
+			{
+				s << "  --\n";
+			}
+		}
+		s << "contact Faces:\n";
+		for (Position i = 0; i < ses.contact_faces.size(); i++)
+		{
+			if (ses.contact_faces[i] != NULL)
+			{
+				s << "  " << *ses.contact_faces[i] << "\n";
+			}
+			else
+			{
+				s << "  --\n";
+			}
+		}
+		s << "toric Faces:\n";
+		for (Position i = 0; i < ses.toric_faces.size(); i++)
+		{
+			if (ses.toric_faces[i] != NULL)
+			{
+				s << "  " << *ses.toric_faces[i] << "\n";
+			}
+			else
+			{
+				s << "  --\n";
+			}
+		}
+		//s << "singular toric Faces:\n";
+		//for (Position i = 0; i < ses.singular_toric_faces.size(); i++)
+		//{
+		//	s << "  " << *ses.singular_toric_faces[i] << "\n";
+		//}
+		s << "spheric Faces:\n";
+		for (Position i = 0; i < ses.spheric_faces.size(); i++)
+		{
+			if (ses.spheric_faces[i] != NULL)
+			{
+				s << "  " << *ses.spheric_faces[i] << "\n";
+			}
+			else
+			{
+				s << "  --\n";
+			}
+		}
+		return s;
+	}
 
 
 	/**	The Default SolventExcludedSurface type.

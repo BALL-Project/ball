@@ -1,4 +1,4 @@
-// $Id: RDFParameter.h,v 1.5 2000/12/06 19:04:22 anker Exp $
+// $Id: RDFParameter.h,v 1.6 2001/02/23 02:40:44 amoll Exp $
 
 #ifndef BALL__RDFPARAMETER_H
 #define BALL__RDFPARAMETER_H
@@ -34,7 +34,8 @@ namespace BALL
 
 		BALL_CREATE(RDFParameter)
 
-		/** @name Constructors and destructors. */
+		/** @name Constructors and destructors. 
+		*/
 		//@{
 
 		/** Default constructor 
@@ -54,9 +55,8 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/** @name Assignment */
+		/** @name Assignment 
+		*/
 		//@{
 
 		/** Assignment operator 
@@ -72,16 +72,15 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/** @name Accessors */
+		/** @name Accessors 
+		*/
 		//@{
 
 		/** Get the index in dependance of atom types of solute and solvent
 				@param type_i the type of the solvent atom
 				@param type_j the type of the solute atom
 				@return the index of the respective RDF in the list built from the
-				RDFSections.
+								RDFSections.
 		*/
 		Position getIndex(Atom::Type type_i, Atom::Type type_j) const 
 			throw();
@@ -97,7 +96,7 @@ namespace BALL
 
 		/** Return a radial distribution function determined by index 
 				@param index the index of the radial distribution function in the
-				internal list
+							 internal list
 				@return the specified RDF
 		*/
 		const RadialDistributionFunction& getRDF(Position index) const 
@@ -114,7 +113,8 @@ namespace BALL
 				const String& section_name) 
 			throw();
 
-		/** @name Predicates */
+		/** @name Predicates 
+		*/
 		//@{
 
 		/** Find out, whether the parameter file contained a RDF for a special
@@ -122,12 +122,14 @@ namespace BALL
 				@param solvent_atom_type the type of the solvent atom
 				@param solute_atom_type the type of the solute atom
 				@return true, if there was a definition for this combination of
-				atom types
+								atom types
 		*/
 		bool hasRDF(Atom::Type solvent_atom_type,	Atom::Type solute_atom_type) 
 			const throw();
 
-		/** @see hasRDF */
+		/** hasParameters
+				@see hasRDF 
+		*/
 		bool hasParameters(Atom::Type solvent_atom_type,
 				Atom::Type solute_atom_type) const 
 			throw();

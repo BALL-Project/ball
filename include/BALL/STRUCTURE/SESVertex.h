@@ -1,4 +1,4 @@
-// $Id: SESVertex.h,v 1.5 2001/02/22 16:23:20 strobel Exp $
+// $Id: SESVertex.h,v 1.6 2001/02/23 02:40:45 amoll Exp $
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
 #define BALL_STRUCTURE_SESVERTEX_H
@@ -16,10 +16,8 @@
 namespace BALL
 {
 
-	/** Generic SESVertex Class.
-			\\
-      {\bf Definition:} \URL{BALL/STRUCTURE/SESVertex.h}
-      \\
+	/** Generic SESVertex Class.	\\
+      {\bf Definition:} \URL{BALL/STRUCTURE/SESVertex.h}  \\
 	*/
 	template <class T>
 	class TSESVertex
@@ -71,8 +69,8 @@ namespace BALL
 		virtual ~TSESVertex()
 		{
 		}
-		//@}
 
+		//@}
 		/**	@name	Assignment
 		*/
 		//@{
@@ -119,13 +117,11 @@ namespace BALL
 		}
 
 		//@}
-
 		/**	@name	Predicates
 		*/
 		//@{
 
 		//@}
-
 		/**	@name	Attributes
 		*/
 		//@{
@@ -156,35 +152,19 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator
-			reads in a TVector3 and a {\bf T} value : p, radius
-	*/
-/*
-	template <typename T>
-	std::istream& operator >> (std::istream& s, TSphere3<T>& sphere3)
-	{
-		char c;
-		for (int i=0; i<7 ; i++)
-		{
-			s >> c;
-		}
-		s >> sphere3.p >> sphere3.radius >> c;
-		return s;
-	}
-*/
+	// BAUSTELLE : Input-Operator
+	
 
 	/**	Output- Operator
 	*/
-
-		template <typename T>
-		std::ostream& operator << (std::ostream& s, const TSESVertex<T>& sesvertex)
-		{
-			return (s << "SESVERTEX" << sesvertex.index << "(" << sesvertex.p << ' ' << sesvertex.n << ' '
-															 << sesvertex.atom << ")");
-		}
+	template <typename T>
+	std::ostream& operator << (std::ostream& s, const TSESVertex<T>& sesvertex)
+	{
+		return (s << "SESVERTEX" << sesvertex.index << "(" << sesvertex.p << ' ' << sesvertex.n << ' '
+														 << sesvertex.atom << ")");
+	}
 
 	//@}
-
 
 	/**	The Default SESVertex Type.
 			If double precision is not needed, {\tt SESVertex<float>} should

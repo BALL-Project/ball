@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.7 2001/02/22 16:23:19 strobel Exp $
+// $Id: RSEdge.h,v 1.8 2001/02/23 02:40:44 amoll Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -28,10 +28,8 @@ namespace BALL
 	template <typename T>
 	class TRSVertex;
 
-	/** Generic RSEdge Class.
-			\\
-      {\bf Definition:} \URL{BALL/STRUCTURE/RSEdge.h}
-      \\
+	/** Generic RSEdge Class.	\\
+      {\bf Definition:} \URL{BALL/STRUCTURE/RSEdge.h}  \\
 	*/
 	template <class T>
 	class TRSEdge
@@ -111,12 +109,11 @@ namespace BALL
 		virtual ~TRSEdge()
 		{
 		}
-		//@}
 
+		//@}
 		/**	@name	Assignment
 		*/
 		//@{
-
 
 		/**	Assign from another RSEdge.
 				@param rsedge	the RSEdge object to assign from
@@ -166,7 +163,6 @@ namespace BALL
 			intersection_point0_ = intersection_point0; intersection_point1_ = intersection_point1;
 			singular_ = singular; index_ = index;
 		}
-
 
 		/**	@name	Accessors
 		*/
@@ -403,7 +399,7 @@ namespace BALL
 		/** Substitute a rsvertex by an other one.
 				@param old_vertex the vertex that has to be substituted
 				@param new_vertex the new vertex
-				@return bool, {\texbf true}, if the vertex can be substituted, {\textbf false} otherwise
+				@return bool, {\bf true}, if the vertex can be substituted, {\bf false} otherwise
 		*/
 		bool substituteVertex(TRSVertex<T>* old_vertex, TRSVertex<T>* new_vertex)
 		{
@@ -428,7 +424,7 @@ namespace BALL
 
 		/**	Equality operator.
 				@return bool, {\bf true} if all vertices and all faces are equal modulo order,
-				{\bf false} otherwise
+											{\bf false} otherwise
 		*/
 		bool operator == (const TRSEdge& rsedge) const
 		{
@@ -556,6 +552,7 @@ namespace BALL
 			}
 			return s;
 		}
+
 	//@}
 
 

@@ -1,4 +1,4 @@
-// $Id: RSFace.h,v 1.8 2001/02/22 16:23:19 strobel Exp $
+// $Id: RSFace.h,v 1.9 2001/02/23 02:40:45 amoll Exp $
 
 #ifndef secure
 #define secure
@@ -20,10 +20,8 @@ namespace BALL
 	template <typename T>
 	class TRSEdge;
 
-	/** Generic RSFace Class.
-			\\
-			{\bf Definition:} \URL{BALL/STRUCTURE/RSFace.h}
-			\\
+	/** Generic RSFace Class.	\\
+			{\bf Definition:} \URL{BALL/STRUCTURE/RSFace.h} \\
 	*/
 	template <class T>
 	class TRSFace
@@ -95,8 +93,8 @@ namespace BALL
 		virtual ~TRSFace()
 		{
 		}
-		//@}
 
+		//@}
 		/**	@name	Assignment
 		*/
 		//@{
@@ -260,7 +258,6 @@ namespace BALL
 		}
 
 		//@}
-
 		/**	@name	Accessors
 		*/
 		//@{
@@ -544,7 +541,6 @@ namespace BALL
 			return -1;
 		}
 
-
 		/** Return the third rsvertex of this rsface.
 				@param v1 the first vertex
 				@param v2 the second vertex
@@ -581,11 +577,10 @@ namespace BALL
 			}
 		}
 
-
 		/** Substitute a rsvertex by an other one.
 				@param old_vertex the vertex that has to be substituted
 				@param new_vertex the new vertex
-				@return bool, {\texbf true}, if the vertex can be substituted, {\textbf false} otherwise
+				@return bool, {\bf true}, if the vertex can be substituted, {\bf false} otherwise
 		*/
 		bool substituteVertex(TRSVertex<T>* old_vertex, TRSVertex<T>* new_vertex)
 		{
