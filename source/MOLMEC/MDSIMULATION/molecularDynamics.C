@@ -1,4 +1,4 @@
-// $Id: molecularDynamics.C,v 1.6 2000/07/18 08:29:57 oliver Exp $
+// $Id: molecularDynamics.C,v 1.7 2000/07/24 20:13:16 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
@@ -510,7 +510,7 @@ namespace BALL
 			// T = 2 * E_kin / (3 * #molecules * k_B)
 			// The factor 1e3 / AVOGADRO transforms it into K
 			current_temperature_ = 1e3 / Constants::AVOGADRO * 2 *
-				kinetic_energy_ / (3.0 * no_of_molecules * Constants::BOLTZMANN);
+			kinetic_energy_ / (3.0 * no_of_molecules * Constants::BOLTZMANN);
 		}
 		else
 		{
