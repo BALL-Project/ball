@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.22 2000/10/07 15:22:41 hekl Exp $
+// $Id: mainframe.h,v 1.23 2000/10/08 17:38:35 hekl Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -53,6 +53,10 @@
 # include <BALL/MOLVIEW/KERNEL/geometricConvertor.h>
 #endif
 
+#ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
+# include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
+#endif
+
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 # include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #endif
@@ -77,7 +81,6 @@
 # include <BALL/MOLVIEW/GUI/FUNCTOR/moleculeObjectProcessor.h>
 #endif  
 
-#include "DIALOGS/DlgDisplayProperties.h"
 #include "DIALOGS/DlgPreferences.h"
 #include "DIALOGS/DlgAmberMinimization.h"
 #include "DIALOGS/DlgLabelProperties.h"
@@ -191,7 +194,7 @@ class Mainframe
 
 	Scene*								scene_;
 	MolecularControl*			control_;
-	DlgDisplayProperties* display_properties_;
+	DisplayProperties*    display_properties_;
 	DlgPreferences*				preferences_dialog_;
 	DlgAmberMinimization*	minimization_dialog_;
 	DlgLabelProperties*	  label_properties_;

@@ -13,8 +13,6 @@ BALL_INCLUDES=$(BALLVIEW_INCLUDES) $(PYTHON_INCLUDES)
 CPP_SOURCES=\
 	DIALOGS/DlgAbout.C\
 	DIALOGS/DlgAboutData.C\
-	DIALOGS/DlgDisplayProperties.C\
-	DIALOGS/DlgDisplayPropertiesData.C\
 	DIALOGS/DlgAmberMinimization.C\
 	DIALOGS/DlgAmberMinimizationData.C\
 	DIALOGS/DlgLabelProperties.C\
@@ -34,8 +32,6 @@ CPP_SOURCES=\
 MOC_SOURCES=\
 	DIALOGS/DlgAbout_moc.C\
 	DIALOGS/DlgAboutData_moc.C\
-	DIALOGS/DlgDisplayProperties_moc.C\
-	DIALOGS/DlgDisplayPropertiesData_moc.C\
 	DIALOGS/DlgAmberMinimization_moc.C\
 	DIALOGS/DlgAmberMinimizationData_moc.C\
 	DIALOGS/DlgLabelProperties_moc.C\
@@ -53,6 +49,7 @@ MOC_SOURCES=\
 
 SPECIAL_OBJECTS=
 
+
 molview:	$(OBJECTS) $(SPECIAL_OBJECTS)
 	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALLVIEW_LIBS) $(PYTHON_LIBS)
 
@@ -61,12 +58,6 @@ DIALOGS/DlgAbout_moc.C:     DIALOGS/DlgAbout.h
 
 DIALOGS/DlgAboutData_moc.C: DIALOGS/DlgAboutData.h
 				$(MOC) DIALOGS/DlgAboutData.h -o $@
-
-DIALOGS/DlgDisplayProperties_moc.C:     DIALOGS/DlgDisplayProperties.h
-				$(MOC) DIALOGS/DlgDisplayProperties.h -o $@
-
-DIALOGS/DlgDisplayPropertiesData_moc.C: DIALOGS/DlgDisplayPropertiesData.h
-				$(MOC) DIALOGS/DlgDisplayPropertiesData.h -o $@
 
 DIALOGS/DlgPreferences_moc.C:     DIALOGS/DlgPreferences.h
 				$(MOC) DIALOGS/DlgPreferences.h -o $@

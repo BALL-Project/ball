@@ -79,7 +79,7 @@ Mainframe::Mainframe
 	scene_ = new Scene(hor_splitter_);
 	CHECK_PTR(scene_);
 
-	display_properties_ = new DlgDisplayProperties(this);
+	display_properties_ = new DisplayProperties(this);
 	CHECK_PTR(display_properties_);
 
 	preferences_dialog_ = new DlgPreferences(this);
