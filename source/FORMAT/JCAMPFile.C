@@ -1,20 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: JCAMPFile.C,v 1.13 2003/07/03 13:30:36 oliver Exp $
+// $Id: JCAMPFile.C,v 1.14 2003/07/11 15:27:36 amoll Exp $
 //
 
 #include <BALL/FORMAT/JCAMPFile.h>
 #include <BALL/DATATYPE/regularExpression.h>
-
-#include <iterator> 
 
 namespace BALL
 {
 
 	JCAMPFile::JCAMPFile( const String& name, OpenMode open_mode) 
 		throw(Exception::FileNotFound)
-		: LineBasedFile(name, open_mode), 
+		: LineBasedFile(name, open_mode, true), 
 			header_(),
 			entries_()
 	{
@@ -35,98 +33,109 @@ namespace BALL
 		header_.clear();
 		entries_.clear();
 
-		// First I try to read the title. Only parameters appearing *after* the
-		// title are used.
+		// First I try to read the title. 
+		// Only parameters appearing *after* the title are used.
 
-		// A regular expression matching the array declaration in JCAMP
-		static RegularExpression array("^##\\$([^=]+)= \\(0\\.\\.([1-9][0-9]*)\\)");
-		static RegularExpression regular("^##\\$([^=]+)= (.*)");
-		static RegularExpression header("^##([^=]+)= (.*)");
-		static std::vector<Substring> groups;
-		static JCAMPValue value;
+		// Expressions for the valid declarations in a JCAMPFile 
+		const RegularExpression array("^##\\$([^=]+)= \\(0\\.\\.([1-9][0-9]*)\\)");
+		const RegularExpression regular("^##\\$([^=]+)= (.*)");
+		const RegularExpression header("^##([^=]+)= (.*)");
+
+		std::vector<Substring> groups;
 
 		while (readLine())
 		{
-			if (getLine().hasPrefix("##$"))
+			JCAMPValue value;
+		
+			try
 			{
-
-				// Check whether the definition is an array.
-				if (array.find(getLine(), groups))
+				if (getLine().hasPrefix("##$"))
 				{
-					value.type = ARRAY;
-					value.numeric_value.clear();
 
-					static String key = groups[1];
-					Size number_of_values = groups[2].toString().toInt() + 1;
-					while (value.numeric_value.size() < number_of_values)
+					// Check whether the definition is an array.
+					if (array.find(getLine(), groups))
 					{
-						if (!readLine() || getLine().hasPrefix("#")) 
+						value.type = ARRAY;
+
+						static String key = groups[1];
+						Size number_of_values = groups[2].toString().toInt() + 1;
+						while (value.numeric_value.size() < number_of_values)
 						{
-							break;
+							if (!readLine() || getLine().hasPrefix("#")) 
+							{
+								break;
+							}
+							
+							static std::vector<String> fields;
+							getLine().split(fields);
+							for (Position i = 0; i < fields.size(); i++)
+							{
+								value.numeric_value.push_back(fields[i].toDouble());
+							}
 						}
 						
-						static std::vector<String> fields;
-						getLine().split(fields);
-						for (Position i = 0; i < fields.size(); i++)
+						// Store the entry only if the parsing was successful.
+						if (value.numeric_value.size() == number_of_values)
 						{
-							value.numeric_value.push_back(fields[i].toDouble());
+							entries_.insert(KeyValuePair(key, value));
 						}
+						else
+						{
+							throw Exception::ParseError(__FILE__, __LINE__, getName(), 
+																	String("Error parsing array entry on line ") 
+																	+ String(getLineNumber()) + String(" (number of values read:") 
+																	+ String(value.numeric_value.size())
+																	+ " - number of values expected: " + String(number_of_values) + ")");
+						}
+						
+						// next entry.
+						continue;
 					}
-					
-					// Store the entry only if the parsing was successful.
-					if (value.numeric_value.size() == number_of_values)
+					// =================== read non-array entry ===============================
+					else if (regular.find(getLine(), groups))
 					{
-						entries_.insert(KeyValuePair(key, value));
-					}
-					else
-					{
-						throw Exception::ParseError(__FILE__, __LINE__, getName(), String("Error parsing array entry on line ") 
-																				+ String(getLineNumber()) + String(" (number of values read:") + String(value.numeric_value.size())
-																				+ " - number of values expected: " + String(number_of_values) + ")");
-					}
-					
-					// next entry.
-					continue;
-				}
-				else if (regular.find(getLine(), groups))
-				{
-					// read non-array entry
-					if (groups[2].toString().isFloat())
-					{
-						value.numeric_value.resize(1);
-						value.type = NUMERIC;
-					}
-					else
-					{
-						value.string_value = groups[2];
-						value.numeric_value.resize(0);
-						value.type = STRING;
-					}
-					entries_.insert(KeyValuePair(groups[1], value));
+						// =================== read numeric entry ===============================
+						if (groups[2].toString().isFloat())
+						{
+							value.numeric_value.push_back(groups[2].toString().toFloat());
+							value.type = NUMERIC;
+						}
+						// =================== read string entry ================================
+						else
+						{
+							value.string_value = groups[2];
+							value.type = STRING;
+						}
+						entries_.insert(KeyValuePair(groups[1], value));
 
-					// next entry.
+						// next entry.
+						continue;
+					}
+				}
+				else if (header.find(getLine(), groups))
+				{
+					if (groups[1] == "END")
+					{
+						// Abort for the "##END=" entry.
+						break;
+					}
+					value.type = STRING;
+					value.string_value = groups[2];
+
+					// Insert the header entry into the header map
+					header_.insert(std::pair<String, String>(groups[1].toString(), groups[2].toString()));
+					// Next entry.
 					continue;
 				}
-			}
-			else if (header.find(getLine(), groups))
-			{
-				if (groups[1] == "END")
+				else if (getLine().hasPrefix("##END"))
 				{
-					// Abort for the "##END=" entry.
 					break;
 				}
-				value.type = STRING;
-				value.string_value = groups[2];
-				value.numeric_value.clear();
-
-				// Insert the header entry into the header map
-				header_.insert(std::pair<String, String>(groups[1].toString(), groups[2].toString()));
-				// Next entry.
-				continue;
 			}
-			else if (getLine().hasPrefix("##END"))
+			catch(Exception::InvalidFormat)
 			{
-				break;
+				Log.error() << "Could not convert string to number" << std::endl;
+				// throwing exception ParseError anyhow in next line
 			}
 
 			// We could not parse this line -- abort.
@@ -134,8 +143,14 @@ namespace BALL
 		};
 	}
 
-	void JCAMPFile::write()
+	bool JCAMPFile::write()
+		throw(File::CanNotWrite)
 	{
+		if (!isOpen() || getOpenMode() != File::OUT)
+		{
+			throw(File::CanNotWrite(__FILE__, __LINE__, name_));
+		}
+
 		HeaderMap::ConstIterator header_it(header_.begin());
 		for (; header_it != header_.end(); ++header_it)
 		{
@@ -180,43 +195,45 @@ namespace BALL
 					break;
 			}
 		}
+
+		return true;
 	}
 
-	double JCAMPFile::getDoubleValue(const String& name) const throw()
+	double JCAMPFile::getDoubleValue(const String& name) const 
+		throw(Exception::InvalidFormat)
 	{
-		if (entries_.has(name))
+		if (!entries_.has(name)) return 0.0;
+
+		const JCAMPValue& val(entries_[name]);
+		if (val.type == NUMERIC)
 		{
-			const JCAMPValue& val(entries_[name]);
-			if (val.type == NUMERIC)
-			{
-				return val.numeric_value[0];
-			}
-			else if (val.type == STRING)
-			{
-				return val.string_value.toDouble();
-			}
-			else if ((val.type == ARRAY) && (val.numeric_value.size() > 0))
-			{
-				return val.numeric_value[0];
-			}
+			return val.numeric_value[0];
+		}
+		else if (val.type == STRING)
+		{
+			return val.string_value.toDouble();
+		}
+		else if ((val.type == ARRAY) && (val.numeric_value.size() > 0))
+		{
+			return val.numeric_value[0];
 		}
 
 		return 0.0;
 	}
 
-	Index JCAMPFile::getIntValue(const String& name) const throw()
+	Index JCAMPFile::getIntValue(const String& name) const 
+		throw(Exception::InvalidFormat)
 	{
-		if (entries_.has(name))
+		if (!entries_.has(name)) return 0;
+
+		const JCAMPValue& val(entries_[name]);
+		if ((val.type == NUMERIC) || (val.type == STRING))
 		{
-			const JCAMPValue& val(entries_[name]);
-			if ((val.type == NUMERIC) || (val.type == STRING))
-			{
-				return (Index)val.string_value.toInt();
-			}
-			else if ((val.type == ARRAY) && (val.numeric_value.size() > 0))
-			{
-				return (Index)val.numeric_value[0];
-			}
+			return (Index)val.string_value.toInt();
+		}
+		else if ((val.type == ARRAY) && (val.numeric_value.size() > 0))
+		{
+			return (Index)val.numeric_value[0];
 		}
 
 		return 0;
