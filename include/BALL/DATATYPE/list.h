@@ -1,4 +1,4 @@
-// $Id: list.h,v 1.7 2000/10/05 08:26:10 oliver Exp $
+// $Id: list.h,v 1.8 2000/11/29 19:13:57 amoll Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -51,10 +51,12 @@ namespace BALL
 		/**	@name	Constructors and Destructors */
 		//@{
 
+		BALL_CREATE_DEEP(List)
+
 		/**	Default constructor.
 				Create an empty list.
 		*/
-		List()
+		List() throw()
 			: list<Value>()
 		{
 		}
@@ -64,7 +66,7 @@ namespace BALL
 				@param	map the list to be copied
 				@param	deep ignored
 		*/
-		List(const List& new_list, bool /* deep = true */)
+		List(const List& new_list, bool /* deep = true */) throw()
 			: list<Value>(new_list)
 		{
 		}
@@ -72,11 +74,18 @@ namespace BALL
 		/** Clear the list.
 				Remove all contents from the list.
 		*/
-		void destroy()
+		void destroy()  throw()
 		{
 			clear();
 		}
 	
+		/** Destructor
+		*/
+		virtual ~List() throw()
+		{
+			clear();
+		}
+
 		//@}
 
 		/**	@name	Assignment */
@@ -87,7 +96,7 @@ namespace BALL
 				@param	list	the map to be copied
 				@param	deep ignored
 		*/
-    void set(const List& list, bool /* deep */ = true)
+    void set(const List& list, bool /* deep */ = true) throw()
 		{
 			clear();
 
@@ -100,22 +109,21 @@ namespace BALL
 
 		/** Assign a list from another.
 		*/
-		List& operator = (const List& list)
+		const List& operator = (const List& list) throw()
 		{
 			set(list);
 			return *this;
 		}
 			
 		/// Assign the content of a list to another
-    void get(List& list, bool deep = true) const
+    void get(List& list, bool deep = true) const  throw()
 		{
 			list.set(*this, deep);
 		}
 
 		/// Swaps the contents of two lists
-    void swap(List& list)
+    void swap(List& list) throw()
 		{
-		//	swap(*this, list);
 			List<Value> temp;
 			temp.set(*this);
 			(*this).set(list);
@@ -130,7 +138,7 @@ namespace BALL
 		/** Return the size of the list.
 			@return Size the size of the list
 		*/
-		Size getSize() const
+		Size getSize() const throw()
 		{
 			return size();
 		}
@@ -140,7 +148,7 @@ namespace BALL
 			@param 	item the item to be removed
 			@return bool {\bf true} if the item was removed
 		 */
-		bool remove(const Value& item)
+		bool remove(const Value& item) throw()
 		{
 			Iterator it = begin();
 			for (; it != end(); ++it)
@@ -148,10 +156,10 @@ namespace BALL
 				if (*it == item)
 				{
 					erase(it);
-					return 1;
+					return true;
 				}
 			}
-			return 0;
+			return false;
 		}
 		
 		//@}
@@ -162,7 +170,7 @@ namespace BALL
 		/** Return true if the list is empty.
 				This method return {\bf true} if the list does not contain any entries.
 		*/
-		bool isEmpty() const
+		bool isEmpty() const throw()
 		{
 			return (size() == 0);
 		}
@@ -175,7 +183,7 @@ namespace BALL
 				Lists may be visited.
 				@param	visitor	the visitor
 		*/
-		void host(Visitor<List<Value> >& visitor)
+		void host(Visitor<List<Value> >& visitor) throw()
 		{
 			visitor.visit(*this);
 		}
@@ -189,7 +197,7 @@ namespace BALL
 				Applies the processor to each entry of the list.
 				@param processor the processor to be applied
 		*/
-		bool apply(UnaryProcessor<List<Value> >& processor)
+		bool apply(UnaryProcessor<List<Value> >& processor) throw()
 		{
 			if (processor.start() == false)
 			{
@@ -215,7 +223,37 @@ namespace BALL
 		}
 		//@}
 
-		
+		/** Equality operator.
+				Test if two instances have the same size and same items at the same positions.
+		*/
+		bool operator == (const List<Value>& list) const throw()
+		{
+			if (size() != list.size())
+			{
+				return false;
+			}
+
+			List<Value>::const_iterator this_it = begin();
+			List<Value>::const_iterator list_it = list.begin();
+
+			for (; this_it != end(); ++this_it)
+			{
+				if (!(*this_it == *list_it))
+				{
+					return false;
+				}
+				++list_it;
+			}
+			return true;	
+		}
+
+		/** Inequality operator.
+				Test if two instances differ in at least one element.
+		*/
+		bool operator != (const List<Value>& list) const throw()
+		{
+			return !(*this == list);
+		}
 
 	};
 
