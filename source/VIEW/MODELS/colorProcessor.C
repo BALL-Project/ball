@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.31.2.3 2005/01/12 20:49:47 amoll Exp $
+// $Id: colorProcessor.C,v 1.31.2.4 2005/01/12 22:10:27 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -54,6 +54,8 @@ namespace BALL
 			composites_ = 0;
 			clearAtomGrid();
 			selection_color_ = BALL_SELECTED_COLOR;
+			last_composite_of_grid_ = 0;
+			additional_grid_distance_ = 5.0;
 		}
 
 		void ColorProcessor::set(const ColorProcessor& cp)
@@ -92,9 +94,9 @@ namespace BALL
 		{
 			const Composite* composite = object->getComposite();
 
-			if (RTTI::isKindOf<Mesh> (*object))
+			Mesh* const mesh = dynamic_cast<Mesh*>(object);
+			if (mesh != 0)
 			{
-				Mesh* mesh = dynamic_cast<Mesh*>(object);
 				mesh->colorList.clear();
 				if (composite == &composite_to_be_ignored_for_colorprocessors_ ||
 						composites_ == 0)
@@ -103,31 +105,30 @@ namespace BALL
 					return Processor::CONTINUE;
 				}
 
-				if (!atom_grid_created_ || mesh->getComposite() != 0)
+				if (!atom_grid_created_ || 
+						(composite != 0 && last_composite_of_grid_ != composite))
 				{
 					createAtomGrid_(composite);
 				}
 
 				colorMeshFromGrid_(*mesh);
-
 				return Processor::CONTINUE;
 			}
 
-		
 			if (composite == 0 ||
 					composite == &composite_to_be_ignored_for_colorprocessors_)
 			{
 				object->setColor(default_color_); 
-				if (RTTI::isKindOf<ColorExtension2>(*object))
+				ColorExtension2* const two_colored = dynamic_cast<ColorExtension2*>(object);
+				if (two_colored != 0)
 				{
-					ColorExtension2* two_colored = dynamic_cast<ColorExtension2*>(object);
 					two_colored->setColor2(default_color_);
 				}
 				return Processor::CONTINUE;
 			}
 
-
-			if (!RTTI::isKindOf<ColorExtension2>(*object))
+			ColorExtension2* const two_colored = dynamic_cast<ColorExtension2*>(object);
+			if (two_colored == 0)
 			{
 				if (composite->isSelected())
 				{
@@ -135,16 +136,15 @@ namespace BALL
 				}
 				else
 				{
-					getColor(*object->getComposite(), object->getColor()); 
+					getColor(*composite, object->getColor()); 
 				}
 				return Processor::CONTINUE;
 			}
 
 			// ok, we have a two colored object
-			ColorExtension2* two_colored = dynamic_cast<ColorExtension2*>(object);
-			if (RTTI::isKindOf<Bond>(*composite))
+			const Bond* const bond = dynamic_cast<const Bond*>(composite);
+			if (bond != 0)
 			{
-				Bond* bond = (Bond*) composite;
 				const Atom* atom = bond->getFirstAtom();
 				if (!atom->isSelected())
 				{
@@ -185,6 +185,7 @@ namespace BALL
 		void ColorProcessor::createAtomGrid_(const Composite* from_mesh)
 			throw()
 		{
+Log.error() << "#~~#   1 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			atom_grid_.clear();
 			if (composites_ == 0 && from_mesh == 0)
 			{
@@ -244,9 +245,9 @@ namespace BALL
 			boxp.finish();
 
 			Vector3 diagonal = boxp.getUpper() - boxp.getLower();
-			atom_grid_ = AtomGrid(boxp.getLower() - Vector3(5, 5, 5), 
-														diagonal + Vector3(10, 10,10),
-														5.0); // spacing, increase this, it the grid consumes too much memory
+			atom_grid_ = AtomGrid(boxp.getLower() - Vector3(additional_grid_distance_),
+														diagonal + Vector3(2 * additional_grid_distance_),
+														5.0); // spacing, increase this, if the grid consumes too much memory
 		 
 			for (lit = atoms.begin(); lit != atoms.end(); lit++)
 			{
@@ -254,6 +255,7 @@ namespace BALL
 			}
 
 			atom_grid_created_ = true;
+			last_composite_of_grid_ = from_mesh;
 		}
 
 		void ColorProcessor::colorMeshFromGrid_(Mesh& mesh)
@@ -292,6 +294,7 @@ namespace BALL
 		void ColorProcessor::clearAtomGrid()
 			throw()
 		{
+Log.error() << "#~~#   2 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			atom_grid_.clear();
 			atom_grid_created_ = false;
 		}
