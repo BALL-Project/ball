@@ -1,4 +1,4 @@
-// $Id: fileSystem.C,v 1.10 2001/12/29 17:58:29 oliver Exp $
+// $Id: fileSystem.C,v 1.11 2002/01/03 01:54:45 oliver Exp $
 
 #include <BALL/SYSTEM/fileSystem.h>
 
@@ -93,6 +93,7 @@ namespace BALL
 		
 		if (index == 2)
 		{
+			// check for the user's name
 			const char* user_name = ::getenv("USER");
 
 			if (user_name != 0)
@@ -101,6 +102,24 @@ namespace BALL
 				size = (Size)strlen(user_name);
 				path.insert(1, user_name);
 				index += (Index)(size - 1);
+			}
+			else
+			{
+				// check for the user's home directory
+				const char* user_dir = ::getenv("HOME");
+
+				if (user_dir == 0)
+				{
+					Log.warn() << "FileSystem::expandTilde: unable to expand '~' to"
+					              "the user's home directory -- please set $USER or"
+												"$HOME in your environment!" << std::endl;
+				}
+				else
+				{
+					// replace the '~' by the user's home dir (from $HOME)
+					Size size = (Size)strlen(user_dir);
+					path.replace(0, 1, user_dir);
+				}
 			}
 		}
 		else if (index == INVALID_INDEX)
