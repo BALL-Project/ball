@@ -580,9 +580,18 @@ bool ColoringSettingsDialog::fetchPreference_(const INIFile& inifile, const Stri
 																						  ColorRGBA& color)
 	throw()
 {
-	if (!inifile.hasEntry("COLORING_OPTIONS", entry)) return false;
-	color = inifile.getValue("COLORING_OPTIONS", entry);
-	return true;
+	try
+	{
+		if (!inifile.hasEntry("COLORING_OPTIONS", entry)) return false;
+		color = inifile.getValue("COLORING_OPTIONS", entry);
+		return true;
+	}
+	catch(...)
+	{
+		Log.error() << "Could not read preferences for coloring from INIFile: ";
+		Log.error() << entry << std::endl; 
+	}
+	return false;
 }
 
 void ColoringSettingsDialog::writePreference_(INIFile& inifile, const String& entry, 
