@@ -1,4 +1,4 @@
-// $Id: modularWidget.h,v 1.10 2001/12/28 02:33:39 oliver Exp $
+// $Id: modularWidget.h,v 1.10.4.1 2002/10/29 13:21:18 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -152,8 +152,7 @@ namespace BALL
 			/**	Menu checking method.
 					This method is called by the method \Ref{checkMenus} from the
 					\Ref{MainControl} object before a popup menu is shown.
-					It should be used to update the state of menu entries (e.g. disable or enable
-					entries).
+					It should be used to update the state of menu entries (e.g. disable or enable entries).
 					@param main_control the \Ref{MainControl} object whose menus should be checked
 					@see   initializeWidget
 					@see   finalizeWidget
@@ -179,8 +178,7 @@ namespace BALL
 			
 			/**	Remove the preferences tab.
 					This method can remove a preferences widget (if created in 
-					\Ref{initializePreferencesTab})	from the \Ref{Preferences} dialog of 
-					the \Ref{MainControl}.
+					\Ref{initializePreferencesTab})	from the \Ref{Preferences} dialog of the \Ref{MainControl}.
 					This method is called automatically by the method \Ref{aboutToExit} from the
 					\Ref{MainControl} object at the end of the application.
 					@param  preferences the \Ref{Preferences} dialog of the \Ref{MainControl}

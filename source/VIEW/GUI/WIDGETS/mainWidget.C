@@ -1,13 +1,11 @@
-// $Id: mainWidget.C,v 1.1 2000/09/23 13:28:38 hekl Exp $
+// $Id: mainWidget.C,v 1.1.4.1 2002/10/29 13:20:46 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/mainWidget.h>
 
-using std::istream;
-using std::ostream;
+using std::endl;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 	  MainWidget::MainWidget(string options_filename, QWidget* parent, const char* name)
@@ -24,10 +22,5 @@ namespace BALL
 			#endif 
 		}
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/WIDGETS/mainWidget.iC>
-#		endif
-
 	} // namespace VIEW
-
 } // namespace BALL
