@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.33 2003/07/03 11:36:38 amoll Exp $
+// $Id: INIFile.h,v 1.34 2003/07/10 12:49:31 amoll Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -42,266 +42,8 @@ namespace BALL
 		};
 
 		class IteratorTraits_;
-		
-		class Section
-		{
-			public:
-
-			friend class INIFile;
-			friend class IteratorTraits_;
-
-			const String& getName() const
-			{
-				return name_;
-			}
-
-			bool operator == (const Section& section) const
-			{
-				return (name_		 == section.name_		&&
-								lines_	 == section.lines_);
-			}
-
-			protected:
-
-			// name of the section
-			String																	name_;
-
-			// all lines of the section
-			List<String>														lines_;
-
-			// hashmap with all keys
-			StringHashMap<List<String>::Iterator>		key_map_;
-		};
-
+		class Section;
 		typedef List<Section>::Iterator SectionIterator;
-	
-		class IteratorTraits_
-		{
-			friend class INIFile;
-
-			public:
-
-			BALL_CREATE(IteratorTraits_)
-
-			IteratorTraits_()
-				:	bound_(0),
-					section_(),
-					position_()
-					
-			{
-			}
-			
-			IteratorTraits_(List<Section>& list, 
-											SectionIterator section, 
-											List<String>::Iterator line)
-				:	bound_(&list),
-					section_(section),
-					position_(line)
-			{
-			}
-			
-			IteratorTraits_(const IteratorTraits_& traits)
-				:	bound_(traits.bound_),
-					section_(traits.section_),
-					position_(traits.position_)
-			{
-			}
-
-			virtual ~IteratorTraits_()
-			{
-			}
-			
-			const IteratorTraits_& operator = (const IteratorTraits_ &traits)
-			{
-				bound_		= traits.bound_;
-				section_  = traits.section_;
-				position_ = traits.position_;
-
-				return *this;
-			}
-
-			List<String>::Iterator getPosition()
-			{
-				return position_;
-			}
-
-			SectionIterator getSection()
-			{
-				return section_;
-			}
-		
-			const String& operator * () const
-			{
-				return *position_;
-			}
-
-			const String& operator -> () const
-			{
-				return *position_;
-			}
-				
-			IteratorTraits_& operator ++ ()
-			{
-				if (bound_ == 0)
-				{
-					return *this;
-				}
-
-				if (!isSectionLastLine())
-				{
-					position_++;
-
-					return *this;
-				}
-
-				section_++;
-
-				if (section_ == bound_->end())
-				{
-					return *this;
-				}
-
-				position_ = section_->lines_.begin();
-
-				return *this;
-			}
-
-			IteratorTraits_& operator -- ()
-			{
-				if (bound_ == 0)
-				{
-					return *this;
-				}
-
-				if (!isSectionFirstLine())
-				{
-					position_--;
-
-					return *this;
-				}
-
-				section_--;
-
-				if (section_ == bound_->begin())
-				{
-					return *this;
-				}
-
-				toSectionLastLine();
-
-				return *this;
-			}
-
-
-			IteratorTraits_& getSectionNextLine()
-			{
-				if (bound_ == 0)
-				{
-					return *this;
-				}
-
-				position_++;
-
-				return *this;
-			}
-
-			bool operator == (const IteratorTraits_& traits) const
-			{
-				return (bound_ == traits.bound_			&&
-								section_ == traits.section_ &&
-								position_ == traits.position_);
-			}
-
-			bool operator != (const IteratorTraits_& traits) const
-			{
-				return !(*this == traits);
-			}
-			
-			bool operator + () const
-			{
-				return (bound_ != 0 && 
-								section_ != bound_->end() &&
-								position_ != section_->lines_.end());
-			}
-
-			bool isValid() const
-			{
-				return (+ (*this));
-			}
-
-			void toSectionFirstLine()
-			{
-				position_ = section_->lines_.begin();
-			}
-
-			void toSectionLastLine()
-			{
-				List<String>::Iterator it = section_->lines_.end();
-				--it;
-				position_ = it;
-			}
-
-			void toSectionEnd()
-			{
-				position_ = section_->lines_.end();
-			}
-
-
-			bool isSectionLastLine() const
-			{
-				List<String>::Iterator it = section_->lines_.end();
-				it--;
-				return (position_ == it);
-			}				
-
-			bool isSectionFirstLine() const
-			{
-				return (position_ == section_->lines_.begin());
-			}
-
-			bool isSectionEnd() const
-			{
-				return (position_ == section_->lines_.end());
-			}
-
-			void toFirstLine()
-			{
-				section_->lines_.begin();
-				position_ = section_->lines_.begin();
-			}
-
-			void toLastLine()
-			{
-				toEnd();
-				--section_;
-				toSectionLastLine();
-			}
-
-			void toEnd()
-			{
-				section_->lines_.end();
-				toSectionEnd();
-			}
-
-
-			protected:
-
-			const List<Section>* getBound_() const
-			{
-				return bound_;
-			}
-
-			void setLine_(const String& line)
-			{
-				(*position_) = line;
-			}
-
-			private:
-
-			List<Section>*					bound_;
-			SectionIterator					section_;
-			List<String>::Iterator	position_;
-		};
 
 		/** An iterator for the lines in an INIFile.
 				With a LineIterator it is easy to iterator over all lines
@@ -337,12 +79,6 @@ namespace BALL
 		*/
 		virtual ~INIFile();
 
-		/**	Destroy the contents of the object.
-				<tt>Destroy</tt> calls <tt>clear</tt> and also resets
-				the filename to the empty string and invalidates the object.
-		*/
-		void destroy();
-
 		/**	Clear the internal datastructures.
 				<tt>Clear</tt> frees all allocated memory but retains the
 				filename set for the <tt>INIFile</tt> object.
@@ -350,7 +86,6 @@ namespace BALL
 		void clear();
 
 		//@}
-
 		/** @name	File I/O and related
 		*/
 		//@{
@@ -644,7 +379,7 @@ namespace BALL
 
 		/** Get checking mode for duplicate keys
 		*/
-		bool getDuplicateKeyCheck() const;
+		bool duplicateKeyCheckEnabled() const;
 
 
 		protected:
@@ -655,12 +390,281 @@ namespace BALL
 
 		String														filename_;	
 
-		// all sections, 0. section is "[HEADER]"
+		// all sections, 0. section is HEADER
 		List<Section>											sections_;
 
 		// hashmap with the section names  => index
 		StringHashMap<SectionIterator>		section_index_;
+
+		public:
+
+		///
+		class Section
+		{
+			public:
+
+			friend class INIFile;
+			friend class IteratorTraits_;
+
+			///
+			const String& getName() const
+			{
+				return name_;
+			}
+
+			///
+			bool operator == (const Section& section) const
+			{
+				return (name_		 == section.name_		&&
+								lines_	 == section.lines_);
+			}
+
+			protected:
+
+			// name of the section
+			String																	name_;
+
+			// all lines of the section
+			List<String>														lines_;
+
+			// hashmap with all keys
+			StringHashMap<List<String>::Iterator>		key_map_;
+		};
+
+	
+		class IteratorTraits_
+		{
+			friend class INIFile;
+
+			public:
+
+			BALL_CREATE(IteratorTraits_)
+
+			IteratorTraits_()
+				:	bound_(0),
+					section_(),
+					position_()
+					
+			{
+			}
+			
+			IteratorTraits_(List<Section>& list, 
+											SectionIterator section, 
+											List<String>::Iterator line)
+				:	bound_(&list),
+					section_(section),
+					position_(line)
+			{
+			}
+			
+			IteratorTraits_(const IteratorTraits_& traits)
+				:	bound_(traits.bound_),
+					section_(traits.section_),
+					position_(traits.position_)
+			{
+			}
+
+			virtual ~IteratorTraits_()
+			{
+			}
+			
+			const IteratorTraits_& operator = (const IteratorTraits_ &traits)
+			{
+				bound_		= traits.bound_;
+				section_  = traits.section_;
+				position_ = traits.position_;
+
+				return *this;
+			}
+
+			List<String>::Iterator getPosition()
+			{
+				return position_;
+			}
+
+			SectionIterator getSection()
+			{
+				return section_;
+			}
+		
+			const String& operator * () const
+			{
+				return *position_;
+			}
+
+			const String& operator -> () const
+			{
+				return *position_;
+			}
+				
+			IteratorTraits_& operator ++ ()
+			{
+				if (bound_ == 0)
+				{
+					return *this;
+				}
+
+				if (!isSectionLastLine())
+				{
+					position_++;
+
+					return *this;
+				}
+
+				section_++;
+
+				if (section_ == bound_->end())
+				{
+					return *this;
+				}
+
+				position_ = section_->lines_.begin();
+
+				return *this;
+			}
+
+			IteratorTraits_& operator -- ()
+			{
+				if (bound_ == 0)
+				{
+					return *this;
+				}
+
+				if (!isSectionFirstLine())
+				{
+					position_--;
+
+					return *this;
+				}
+
+				// if we are at the first line in the file, invalidate the iterator
+				if (section_ == bound_->begin())
+				{
+					position_ = section_->lines_.end();
+					return *this;
+				}
+
+				section_--;
+
+				toSectionLastLine();
+
+				return *this;
+			}
+
+
+			IteratorTraits_& getSectionNextLine()
+			{
+				if (bound_ == 0)
+				{
+					return *this;
+				}
+
+				position_++;
+
+				return *this;
+			}
+
+			bool operator == (const IteratorTraits_& traits) const
+			{
+				return (bound_ == traits.bound_			&&
+								section_ == traits.section_ &&
+								position_ == traits.position_);
+			}
+
+			bool operator != (const IteratorTraits_& traits) const
+			{
+				return !(*this == traits);
+			}
+			
+			bool operator + () const
+			{
+				return (bound_ != 0 && 
+								section_ != bound_->end() &&
+								position_ != section_->lines_.end());
+			}
+
+			bool isValid() const
+			{
+				return (+ (*this));
+			}
+
+			void toSectionFirstLine()
+			{
+				position_ = section_->lines_.begin();
+			}
+
+			void toSectionLastLine()
+			{
+				List<String>::Iterator it = section_->lines_.end();
+				--it;
+				position_ = it;
+			}
+
+			void toSectionEnd()
+			{
+				position_ = section_->lines_.end();
+			}
+
+
+			bool isSectionLastLine() const
+			{
+				List<String>::Iterator it = section_->lines_.end();
+				it--;
+				return (position_ == it);
+			}				
+
+			bool isSectionFirstLine() const
+			{
+				return (position_ == section_->lines_.begin());
+			}
+
+			bool isSectionEnd() const
+			{
+				return (position_ == section_->lines_.end());
+			}
+
+			void toFirstLine()
+			{
+				section_->lines_.begin();
+				position_ = section_->lines_.begin();
+			}
+
+			void toLastLine()
+			{
+				toEnd();
+				--section_;
+				toSectionLastLine();
+			}
+
+			void toEnd()
+			{
+				section_->lines_.end();
+				toSectionEnd();
+			}
+
+
+			protected:
+
+			const List<Section>* getBound_() const
+			{
+				return bound_;
+			}
+
+			void setLine_(const String& line)
+			{
+				(*position_) = line;
+			}
+
+			private:
+
+			List<Section>*					bound_;
+			SectionIterator					section_;
+			List<String>::Iterator	position_;
+		};
+
 	};
+
+
 } // namespace BALL
 
 #endif // BALL_FORMAT_INIFILE_H
