@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.h,v 1.1 2000/08/31 12:19:39 anker Exp $
+// $Id: piecewiseFunction.h,v 1.2 2000/09/22 16:31:37 anker Exp $
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
@@ -130,13 +130,16 @@ namespace BALL
 		/** Check whether a given x is in the range of definition */
 		bool isInRange(double x) const;
 
+		/** check validity of the definition of a piecewise function */
+		virtual bool isValid() const;
+
 		//@}
 
 		/** @name Debugging and Diagnostics */
 		//@{
 
-		/** check validity of the definition of a piecewise function */
-		virtual bool isValid() const;
+		/** 	Dumps the whole content of the object */
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}
 

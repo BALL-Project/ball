@@ -1,4 +1,4 @@
-// $Id: radialDistributionFunction.h,v 1.2 2000/08/31 21:15:47 oliver Exp $
+// $Id: radialDistributionFunction.h,v 1.3 2000/09/22 16:32:13 anker Exp $
 
 #ifndef BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
 #define BALL_STRUCTURE_RADIALDISTRIBUTIONFUNCTION_H
@@ -93,6 +93,15 @@ namespace BALL
 
 		/** check validity */
 		bool isValid();
+
+		//@}
+
+
+		/** Debugging and Diagnostics */
+		//@{
+
+		/** 	Dumps the whole content of the object */
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}
 

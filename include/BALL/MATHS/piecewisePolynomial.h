@@ -1,4 +1,4 @@
-// $Id: piecewisePolynomial.h,v 1.2 2000/08/31 20:47:43 oliver Exp $
+// $Id: piecewisePolynomial.h,v 1.3 2000/09/22 16:31:37 anker Exp $
 
 #ifndef BALL_MATHS_PPOLYNOMIAL_H
 #define BALL_MATHS_PPOLYNOMIAL_H
@@ -84,6 +84,15 @@ namespace BALL
 
 		/// compute the value of the PiecewisePolynomial at a given x
 		virtual double operator() (double x) const;
+
+		//@}
+
+
+		/** @name Debugging and Diagnostics */
+		//@{
+
+		/** 	Dumps the whole content of the object */
+		virtual void dump (std::ostream& s = std::cout, Size depth = 0) const;
 
 		//@}
 
