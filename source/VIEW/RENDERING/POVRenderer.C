@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.16 2004/06/28 15:40:29 amoll Exp $
+// $Id: POVRenderer.C,v 1.17 2004/07/16 14:03:13 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -33,23 +33,26 @@ namespace BALL
 		POVRenderer::POVRenderer()
 			throw()
 			: Renderer(),
-				outfile_()
+				outfile_(&std::cout),
+				human_readable_(true)
 		{
 		}
 
 		POVRenderer::POVRenderer(const POVRenderer& renderer)
 			throw()
 			: Renderer(renderer),
-				outfile_(renderer.outfile_)
+				outfile_(&std::cout),
+				human_readable_(renderer.human_readable_)
 		{
 		}
 
 
 		POVRenderer::POVRenderer(const String& name)
 			throw(Exception::FileNotFound)
-			: Renderer()
+			: Renderer(),
+				human_readable_(true)
 		{
-			outfile_.open(name, std::ios::out);
+			outfile_ = new File(name, std::ios::out);
 		}
 
 		POVRenderer::~POVRenderer()
@@ -59,19 +62,48 @@ namespace BALL
 				Log.info() << "Destructing object " << (void *)this 
 					<< " of class " << RTTI::getName<POVRenderer>() << std::endl;
 			#endif
+
+			if (outfile_ != 0 &&
+					RTTI::isKindOf<File>(*outfile_))
+			{
+				delete outfile_;
+			}
 		}
 
 		void POVRenderer::clear()
 			throw()
 		{
-			outfile_.clear();
+			if (outfile_ != 0 &&
+					RTTI::isKindOf<File>(*outfile_))
+			{
+				delete outfile_;
+			}
+
+			outfile_ = &std::cout;
+			human_readable_ = true;
 		}
 
 		void POVRenderer::setFileName(const String& name)
 			throw(Exception::FileNotFound)
 		{
-			outfile_.open(name, std::ios::out);
+			if (outfile_ == 0 ||
+					!RTTI::isKindOf<File>(*outfile_)) 
+			{
+				outfile_ = new File();
+			}
+			(*(File*)outfile_).open(name, std::ios::out);
 		}
+
+		void POVRenderer::setOstream(std::ostream& out_stream)
+		{
+			if (outfile_ != 0 &&
+					RTTI::isKindOf<File>(*outfile_)) 
+			{
+				delete outfile_;
+			}
+			outfile_ = &out_stream;
+		}
+
 
 		String POVRenderer::POVColorRGBA(const ColorRGBA& input)
 			throw()
@@ -141,47 +173,58 @@ namespace BALL
 		bool POVRenderer::init(const Stage& stage, float width, float height)
 			throw()
 		{
-			#ifdef BALL_VIEW_DEBUG_PROCESSORS
+			#ifdef BALL_VIEW_DEBUG
 				Log.info() << "Start the POVRender output..." << std::endl;
 			#endif
 
 			if (!Renderer::init(stage, width, height)) return false;
 
-			outfile_	<< "// POVRay file created by the BALL POVRenderer" 
-								<< std::endl << std::endl;
+			if (human_readable_)
+			{
+				(*outfile_)	<< "// POVRay file created by the BALL POVRenderer" 
+									<< std::endl << std::endl;
 
-			String filename = FileSystem::baseName(outfile_.getName());
-			outfile_ << "// Width of the original scene: " << width_ << std::endl;
-			outfile_ << "// Height of the original scene: " << height_ << std::endl;
-			outfile_ << "// To render this scene, call povray (available from www.povray.org) like this:\n//" << std::endl;
-			outfile_ << "// povray +I" << filename 
-							 << " +FN +O" << filename << ".png +QR +W" << width_ << " +H" << height_ << " -UV\n//" << std::endl;
-			outfile_ << "camera {" << std::setprecision(12) << std::endl;
-			outfile_ << "\tperspective" << std::endl;
-			outfile_ << "\tdirection <0.0, 0.0, -1.0>" << std::endl;
-			outfile_ << "\tright " << (double)width_ / (double)height_ << " * x" << std::endl;
-			outfile_ << "\tangle 83.0" << std::endl;
-			outfile_ << "\ttransform {" << std::endl;
-			outfile_ << "\t\tmatrix <" << std::endl;
+				(*outfile_) << "// Width of the original scene: " << width_ << std::endl;
+				(*outfile_) << "// Height of the original scene: " << height_ << std::endl;
+				(*outfile_) << "// To render this scene, call povray (available from www.povray.org) like this:\n//" << std::endl;
+
+				if (outfile_ != 0 &&
+						RTTI::isKindOf<File>(*outfile_))
+				{
+					String filename = FileSystem::baseName((*(File*)outfile_).getName());
+					(*outfile_) << "// povray +I" << filename 
+											 << " +FN +O" << filename << ".png +QR +W" << width_ << " +H" << height_ << " -UV\n//" << std::endl;
+				}
+			}
+			(*outfile_) << "camera {" << std::setprecision(12) << std::endl;
+			(*outfile_) << "\tperspective" << std::endl;
+			(*outfile_) << "\tdirection <0.0, 0.0, -1.0>" << std::endl;
+			(*outfile_) << "\tright " << (double)width_ / (double)height_ << " * x" << std::endl;
+			(*outfile_) << "\tangle 83.0" << std::endl;
+			(*outfile_) << "\ttransform {" << std::endl;
+			(*outfile_) << "\t\tmatrix <" << std::endl;
 
 			GLdouble m[16];	
 			glGetDoublev(GL_MODELVIEW_MATRIX, m);
 			
 			double norm = sqrt(m[0] * m[0] + m[1] * m[1] + m[2] * m[2]);
-			outfile_ << "\t\t" 
+			(*outfile_) << "\t\t" 
 							 << m[0] / norm << ",  " << m[1] / norm << ", " << m[2] / norm << "," << std::endl;
 			norm = sqrt(m[4] * m[4] + m[5] * m[5] + m[6] * m[6]);
-			outfile_ << "\t\t" << m[4] / norm << ",  " << m[5] / norm << ", " << m[6] / norm << "," << std::endl;
+			(*outfile_) << "\t\t" << m[4] / norm << ",  " << m[5] / norm << ", " << m[6] / norm << "," << std::endl;
 			norm = sqrt(m[8] * m[8] + m[9] * m[9] + m[10] * m[10]);
-			outfile_ << "\t\t" << m[8] / norm << ",  " << m[9] / norm << ", " << m[10] / norm << "," << std::endl;
-			outfile_ << "\t\t" << m[12] << ",  " << m[13] << ", " << m[14] << std::endl;
-		  outfile_ << "\t\t>" << std::endl;
-			outfile_ << "\tinverse }" << std::endl;
-			outfile_ << "}" << std::setprecision(6) << std::endl << std::endl;
+			(*outfile_) << "\t\t" << m[8] / norm << ",  " << m[9] / norm << ", " << m[10] / norm << "," << std::endl;
+			(*outfile_) << "\t\t" << m[12] << ",  " << m[13] << ", " << m[14] << std::endl;
+		  (*outfile_) << "\t\t>" << std::endl;
+			(*outfile_) << "\tinverse }" << std::endl;
+			(*outfile_) << "}" << std::setprecision(6) << std::endl << std::endl;
 				
 			//
-			outfile_ << "// look up: " << stage.getCamera().getLookUpVector() << std::endl;
-			outfile_ << "// look at: " << stage.getCamera().getLookAtPosition() << std::endl;
+			if (human_readable_)
+			{
+				(*outfile_) << "// look up: " << stage.getCamera().getLookUpVector() << std::endl;
+				(*outfile_) << "// look at: " << stage.getCamera().getLookAtPosition() << std::endl;
+			}
 
 			// Set the light sources
 			List<LightSource>::ConstIterator it = stage_->getLightSources().begin();
@@ -200,33 +243,33 @@ namespace BALL
 				
 				if (it->getType() == LightSource::AMBIENT)
 				{
-					outfile_ << "global_settings { ambient_light " << POVColorRGBA(light_col) << " }" << endl;
+					(*outfile_) << "global_settings { ambient_light " << POVColorRGBA(light_col) << " }" << endl;
 					continue;
 				}
 
-				outfile_ << "light_source { ";
-				outfile_ << POVVector3(it->getPosition()) << ", " << POVColorRGBA(light_col) << "}" << endl;
+				(*outfile_) << "light_source { ";
+				(*outfile_) << POVVector3(it->getPosition()) << ", " << POVColorRGBA(light_col) << "}" << endl;
 
 				// TODO: distinguish between directional / positional light sources
 			}
 			
 			// Add some global blurb for radiosity support
-			outfile_ << "global_settings { radiosity { brightness 0.6 } }" << std::endl;
+			(*outfile_) << "global_settings { radiosity { brightness 0.6 } }" << std::endl;
 			// Set the background color
-			outfile_ << "background { " << POVColorRGBA(stage_->getBackgroundColor()) << " }" << std::endl << std::endl;
+			(*outfile_) << "background { " << POVColorRGBA(stage_->getBackgroundColor()) << " }" << std::endl << std::endl;
 
 			// Define the finish we will use for our molecular objects (defining the molecular
 			// "material properties"
 			// TODO: allow for more than one finish in order to have seperate parameters for different objects
-			outfile_ << "#declare BALLFinish            		 = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
-			outfile_ << "#declare BALLFinishSphereSolid      = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
-			outfile_ << "#declare BALLFinishSphereTransp     = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
-			outfile_ << "#declare BALLFinishTubeSolid        = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
-			outfile_ << "#declare BALLFinishTubeTransp       = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
-			outfile_ << "#declare BALLFinishMesh             = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl << endl;
+			(*outfile_) << "#declare BALLFinish            		 = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
+			(*outfile_) << "#declare BALLFinishSphereSolid      = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
+			(*outfile_) << "#declare BALLFinishSphereTransp     = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
+			(*outfile_) << "#declare BALLFinishTubeSolid        = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
+			(*outfile_) << "#declare BALLFinishTubeTransp       = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
+			(*outfile_) << "#declare BALLFinishMesh             = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl << endl;
 			
 			// now begin the CSG union containing all the geometric objects
-			outfile_ << "union {" << endl;
+			(*outfile_) << "union {" << endl;
 
 			return true;
 		}
@@ -237,7 +280,7 @@ namespace BALL
 			vector<POVRendererClippingPlane>::iterator it = clipping_planes_.begin();
 			for (;it != clipping_planes_.end(); it++)
 			{
-				outfile_ << "  clipped_by{" << endl
+				(*outfile_) << "  clipped_by{" << endl
 								 << "   plane{< -"  // negate normal vector
 					       << (*it).normal.x << ", -" 
 					       << (*it).normal.y << ", -" 
@@ -246,8 +289,14 @@ namespace BALL
 								 << "  }" << endl
 								 << " }" << endl;
 			}
-			outfile_ << "}" << endl;
-			outfile_.close();
+			(*outfile_) << "}" << endl;
+
+
+			if (outfile_ != 0 &&
+					RTTI::isKindOf<File>(*outfile_))
+			{
+				(*(File*)outfile_).close();
+			}
 
 			clipping_planes_.clear();
 			return true;
@@ -273,14 +322,14 @@ namespace BALL
 			// and finally, its position
 			Vector3 position = sphere.getPosition();
 
-			// now write the information into the outfile_
-			outfile_ << "\tsphere {" << endl << "\t\t";
-			outfile_ << POVVector3(position) << ", ";
-			outfile_ << radius << endl;
-			//outfile_ <<"\t\ttexture {" << endl;
-			outfile_ << "\tpigment { " << POVColorRGBA(color) << " } " << endl;
-			outfile_ << "\t" << POVFinish("Sphere", color) << endl;
-			outfile_ << "\t}" << endl << endl;
+			// now write the information into the (*outfile_)
+			(*outfile_) << "\tsphere {" << endl << "\t\t";
+			(*outfile_) << POVVector3(position) << ", ";
+			(*outfile_) << radius << endl;
+			//(*outfile_) <<"\t\ttexture {" << endl;
+			(*outfile_) << "\tpigment { " << POVColorRGBA(color) << " } " << endl;
+			(*outfile_) << "\t" << POVFinish("Sphere", color) << endl;
+			(*outfile_) << "\t}" << endl << endl;
 		}
 
 		void POVRenderer::renderDisc_(const Disc& disc)
@@ -304,14 +353,14 @@ namespace BALL
 			disc.getCircle().get(position, normal, radius);
 			normal -= origin_;
 
-			// now write the information into the outfile_
-			outfile_ << "\tdisc {" << std::endl << "\t\t";
-			outfile_ << POVVector3(position) << ", ";
-			outfile_ << POVVector3(normal) << ", ";
-			outfile_ << radius << std::endl;
-			outfile_ << "\tpigment { " << POVColorRGBA(color) << " } " << std::endl;
-			outfile_ << "\t" << POVFinish("Tube", color) << endl; // We use the same finish as for tubes -> helices
-			outfile_ << "\t} " << std::endl << std::endl;
+			// now write the information into the (*outfile_)
+			(*outfile_) << "\tdisc {" << std::endl << "\t\t";
+			(*outfile_) << POVVector3(position) << ", ";
+			(*outfile_) << POVVector3(normal) << ", ";
+			(*outfile_) << radius << std::endl;
+			(*outfile_) << "\tpigment { " << POVColorRGBA(color) << " } " << std::endl;
+			(*outfile_) << "\t" << POVFinish("Tube", color) << endl; // We use the same finish as for tubes -> helices
+			(*outfile_) << "\t} " << std::endl << std::endl;
 		}
 
 		void POVRenderer::renderTube_(const Tube& tube)
@@ -335,14 +384,14 @@ namespace BALL
 			Vector3 base_point = tube.getVertex1();
 			Vector3  cap_point = tube.getVertex2();
 
-			// now write the information into the outfile_
-			outfile_ << "\tcylinder {" << endl;
-			outfile_ << "\t\t" << POVVector3(base_point) << ", ";
-			outfile_           << POVVector3( cap_point) << ", ";
-			outfile_           <<                 radius << std::endl;
-			outfile_ << "\tpigment { " << POVColorRGBA(color) << " } " << std::endl;
-			outfile_ << "\t" << POVFinish("Tube", color) << std::endl; 
-			outfile_ << "\t} " << std::endl;
+			// now write the information into the (*outfile_)
+			(*outfile_) << "\tcylinder {" << endl;
+			(*outfile_) << "\t\t" << POVVector3(base_point) << ", ";
+			(*outfile_)           << POVVector3( cap_point) << ", ";
+			(*outfile_)           <<                 radius << std::endl;
+			(*outfile_) << "\tpigment { " << POVColorRGBA(color) << " } " << std::endl;
+			(*outfile_) << "\t" << POVFinish("Tube", color) << std::endl; 
+			(*outfile_) << "\t} " << std::endl;
 		}	
 
 		void POVRenderer::renderTwoColoredTube_(const TwoColoredTube& tube)
@@ -371,29 +420,29 @@ namespace BALL
 			Vector3  cap_point = tube.getVertex2();
 			Vector3  mid_point = tube.getMiddleVertex();
 
-			// now write the information into the outfile_
-			outfile_ << "\tcylinder {" << endl;
-			outfile_ << "\t\t" << POVVector3(base_point) << ", ";
-			outfile_           << POVVector3( mid_point) << ", ";
-			outfile_           <<                 radius << endl;
-			outfile_ << "\tpigment { " << POVColorRGBA(color1) << " } " << endl;
-			outfile_ << "\t" << POVFinish("Tube", color1) << endl; 
-			outfile_ << "\t}" << endl << endl;
+			// now write the information into the (*outfile_)
+			(*outfile_) << "\tcylinder {" << endl;
+			(*outfile_) << "\t\t" << POVVector3(base_point) << ", ";
+			(*outfile_)           << POVVector3( mid_point) << ", ";
+			(*outfile_)           <<                 radius << endl;
+			(*outfile_) << "\tpigment { " << POVColorRGBA(color1) << " } " << endl;
+			(*outfile_) << "\t" << POVFinish("Tube", color1) << endl; 
+			(*outfile_) << "\t}" << endl << endl;
 			
-			outfile_ << "\tcylinder {" << endl;
-			outfile_ << "\t\t" << POVVector3(mid_point) << ", ";
-			outfile_           << POVVector3(cap_point) << ", ";
-			outfile_           <<                 radius << endl;
-			outfile_ << "\tpigment { " << POVColorRGBA(color2) << " } " << endl;
-			outfile_ << "\t" << POVFinish("Tube", color2) << endl; 
-			outfile_ << "\t}" << endl << endl;
+			(*outfile_) << "\tcylinder {" << endl;
+			(*outfile_) << "\t\t" << POVVector3(mid_point) << ", ";
+			(*outfile_)           << POVVector3(cap_point) << ", ";
+			(*outfile_)           <<                 radius << endl;
+			(*outfile_) << "\tpigment { " << POVColorRGBA(color2) << " } " << endl;
+			(*outfile_) << "\t" << POVFinish("Tube", color2) << endl; 
+			(*outfile_) << "\t}" << endl << endl;
 		}
 
 		void POVRenderer::renderMesh_(const Mesh& mesh)
 			throw()
 		{
 			// so we should let POVRay know...
-			outfile_ << "\tmesh {" << endl;
+			(*outfile_) << "\tmesh {" << endl;
 
 			ColorRGBA c1, c2, c3;
 			Surface::Triangle t;
@@ -425,22 +474,22 @@ namespace BALL
 					v3 = mesh.vertex[t.v3];
 					n3 = mesh.normal[t.v3] - origin_;
 
-					outfile_ << "\t\tsmooth_triangle {" << endl;
-					outfile_ << "\t\t\t#local BALLColor = texture { pigment { " << POVColorRGBA(c1) << " } }" << endl;
+					(*outfile_) << "\t\tsmooth_triangle {" << endl;
+					(*outfile_) << "\t\t\t#local BALLColor = texture { pigment { " << POVColorRGBA(c1) << " } }" << endl;
 
 
-					outfile_ << "\t\t\t" << POVVector3(v1) << ", ";
-					outfile_             << POVVector3(n1) << ", " << std::endl;
-					outfile_ << "\t\t\t" << POVVector3(v2) << ", ";
-					outfile_             << POVVector3(n2) << ", " << std::endl;
-					outfile_ << "\t\t\t" << POVVector3(v3) << ", ";
-					outfile_             << POVVector3(n3) << std::endl << std::endl;
+					(*outfile_) << "\t\t\t" << POVVector3(v1) << ", ";
+					(*outfile_)             << POVVector3(n1) << ", " << std::endl;
+					(*outfile_) << "\t\t\t" << POVVector3(v2) << ", ";
+					(*outfile_)             << POVVector3(n2) << ", " << std::endl;
+					(*outfile_) << "\t\t\t" << POVVector3(v3) << ", ";
+					(*outfile_)             << POVVector3(n3) << std::endl << std::endl;
 					
 
 					// And now the color. This is easy here, because we
 					// only have one color.
-					outfile_ <<"\t\t\ttexture { BALLColor }" << endl;
-					outfile_ << "\t\t}" << endl << endl;
+					(*outfile_) <<"\t\t\ttexture { BALLColor }" << endl;
+					(*outfile_) << "\t\t}" << endl << endl;
 				}
 			}
 			else
@@ -460,32 +509,32 @@ namespace BALL
 					n3 = mesh.normal[t.v3] - origin_;
 					c3 = mesh.colorList[t.v3];
 
-					outfile_ << "\t\tsmooth_triangle {" << std::endl;
-					outfile_ << "\t\t\t#local BALLColor1 = texture { pigment { " 
+					(*outfile_) << "\t\tsmooth_triangle {" << std::endl;
+					(*outfile_) << "\t\t\t#local BALLColor1 = texture { pigment { " 
 									 << POVColorRGBA(c1) << " } finish { BALLFinishMesh } }" << std::endl;
-					outfile_ << "\t\t\t#local BALLColor2 = texture { pigment { " 
+					(*outfile_) << "\t\t\t#local BALLColor2 = texture { pigment { " 
 									 << POVColorRGBA(c2) << " } finish { BALLFinishMesh } }" << std::endl;
-					outfile_ << "\t\t\t#local BALLColor3 = texture { pigment { " 
+					(*outfile_) << "\t\t\t#local BALLColor3 = texture { pigment { " 
 									 << POVColorRGBA(c3) << " } finish { BALLFinishMesh } }" << std::endl << std::endl;
 
-					outfile_ << "\t\t\t" << POVVector3(v1) << ", ";
-					outfile_             << POVVector3(n1) << ", " << std::endl;
-					outfile_ << "\t\t\t" << POVVector3(v2) << ", ";
-					outfile_             << POVVector3(n2) << ", " << std::endl;
-					outfile_ << "\t\t\t" << POVVector3(v3) << ", ";
-					outfile_             << POVVector3(n3) << std::endl << std::endl;
+					(*outfile_) << "\t\t\t" << POVVector3(v1) << ", ";
+					(*outfile_)             << POVVector3(n1) << ", " << std::endl;
+					(*outfile_) << "\t\t\t" << POVVector3(v2) << ", ";
+					(*outfile_)             << POVVector3(n2) << ", " << std::endl;
+					(*outfile_) << "\t\t\t" << POVVector3(v3) << ", ";
+					(*outfile_)             << POVVector3(n3) << std::endl << std::endl;
 
 					// And now the colors.
-					outfile_ <<"\t\t\ttexture_list {" << std::endl;
-					outfile_ << "\t\t\t\t\tBALLColor1 BALLColor2 BALLColor3" << std::endl;
-					outfile_ << "\t\t\t}" << std::endl;
-					outfile_ << "\t\t}" << std::endl << std::endl;
+					(*outfile_) <<"\t\t\ttexture_list {" << std::endl;
+					(*outfile_) << "\t\t\t\t\tBALLColor1 BALLColor2 BALLColor3" << std::endl;
+					(*outfile_) << "\t\t\t}" << std::endl;
+					(*outfile_) << "\t\t}" << std::endl << std::endl;
 				}
 			}
 
 			// now close the mesh
-			outfile_ << "\t\t finish { BALLFinishMesh }" << std::endl;
-			outfile_ << "\t}" << std::endl << std::endl;
+			(*outfile_) << "\t\t finish { BALLFinishMesh }" << std::endl;
+			(*outfile_) << "\t}" << std::endl << std::endl;
 		}
 
 		void POVRenderer::renderClippingPlane_(const Representation& rep)

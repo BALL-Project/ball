@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.h,v 1.6 2004/06/26 10:58:30 amoll Exp $
+// $Id: POVRenderer.h,v 1.7 2004/07/16 14:03:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_POVRENDERER_H
@@ -85,6 +85,18 @@ namespace BALL
 			void setFileName(const String& name)
 				throw(Exception::FileNotFound);
 
+			/// Set a stream as output device
+			void setOstream(std::ostream& out_stream);
+
+
+			/// 
+			void setHumanReadable(bool state)
+				throw() { human_readable_ = state;}
+
+			///
+			bool isHumanReadable() const
+				throw() { return human_readable_;}
+
 			/** Converts a ColorRGBA into a String in POVRay format.
 			 */
 			String POVColorRGBA(const ColorRGBA& input)
@@ -139,11 +151,12 @@ namespace BALL
 
 			protected:
 
-				File outfile_;
+				std::ostream* outfile_;
 
 				Vector3   origin_;
 				Matrix4x4 rotation_;
 				vector<POVRendererClippingPlane> clipping_planes_;
+				bool human_readable_;
 		};
   
 	} // namespace BALL
