@@ -1,8 +1,12 @@
 FILE=/tmp/mytmp-$USER
 FILE2=/tmp/mytmp-$USER2
+INCLUDE=$(echo `pwd` | sed -e "s/.*include\///" | sed -e "s/\//\\\\\//g")\\/$1
+
 check_test $1 \
  | sed -e "s/  '/  /" \
  | sed -e "s/'//" > $FILE
+
+CLASS=$(cat $FILE | sed -n -e '1p' | sed -e "s/(.*//" | sed -e "s/ //g")
 
 grep "ostream" $FILE | sed -e "s/^/\/\//" > $FILE2
 grep "operator = (" $FILE | sed -e "s/^/\/\//" >> $FILE2
@@ -10,14 +14,15 @@ grep "operator = (" $FILE | sed -e "s/^/\/\//" >> $FILE2
 cat $FILE 							|\
 sed "/ostream/d" 				|\
 sed "/operator = (/d"		|\
-sed -e "s/\/\*.*\*\///"	|\
-sed -e "s/ = .*,/,/"		|\
-sed -e "s/ = .*)/)/"		|\
-sed -e "s/ [a-z_0-9]*)/)/" | \
-sed -e "s/ [a-z_0-9]*,/,/" \
+sed -e "s/\/\*.*\*\///g"	|\
+sed -e "s/ = .*,/,/g"		|\
+sed -e "s/ = .*)/)/g"		|\
+sed -e "s/ [a-z_0-9]*)/)/g" | \
+sed -e "s/ [a-z_0-9]*,/,/g" \
 >> $FILE2
 
-cat $BALL_PATH/source/PYTHON/EXTENSIONS/skeleton.sip |  sed -n -e '1,13p'
+cat $BALL_PATH/source/PYTHON/EXTENSIONS/skeleton.sip | sed -n -e '1,14p' | sed -e "s/^class/class "$CLASS/ | sed -e "s/BALL\/.h/"$INCLUDE"/"
+exit
 cat $FILE2
 echo "};"
 
