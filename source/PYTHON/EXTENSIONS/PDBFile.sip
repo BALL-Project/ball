@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.sip,v 1.10 2005/02/11 15:27:13 oliver Exp $
+// $Id: PDBFile.sip,v 1.11 2005/02/25 13:22:39 amoll Exp $
 //
 
 class PDBFile
@@ -15,9 +15,9 @@ class PDBFile
 	// default open mode: READ
   PDBFile(const String&, OpenMode /openmode/ = std::ios::in) throw(FileNotFound);
 	~PDBFile() throw();
-  virtual void read(Protein& /protein/);
-  virtual void read(Molecule& /molecule/);
-  virtual void read(System& /system/);
+  virtual bool read(Protein& /protein/) throw (ParseError);
+  virtual bool read(Molecule& /molecule/) throw (ParseError);
+  virtual bool read(System& /system/) throw (ParseError);
   virtual bool write(const Protein& /protein/) throw(CannotWrite);
   virtual bool write(const Molecule& /protein/) throw(CannotWrite);
   virtual bool write(const System& /system/) throw(CannotWrite);
