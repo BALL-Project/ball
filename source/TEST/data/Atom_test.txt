@@ -1,0 +1,28 @@
+/Object: [0-9a-zA-Fx]* is instance of class: BALL::Atom
+/Object: [0-9a-zA-Fx]* is instance of class: BALL::Atom
+  handle: 156
+  auto-deletable: 0
+/Object: [0-9a-zA-Fx]* is instance of class: BALL::Atom
+  selected: 0
+/  parent: [0-9]
+/  first: [0-9]
+/  last: [0-9]
+/  previous: [0-9]
+/  next: [0-9]
+  number of children:0
+  contains_selection_:0
+  number of selected children:0
+  number of children containing selection:0
+  children:
+  element: Helium He 18 1 2 4.0026 1.28 0 1.22 0 
+  charge: 10.1
+  name: Atom1
+  type name: my_type_name
+  position: (1 2 3)
+  radius: 11.2
+  type: 65
+  velocity: (4 5 6)
+  force: (7 8 9)
+  number of bonds: 0
+  bonds: 
+
