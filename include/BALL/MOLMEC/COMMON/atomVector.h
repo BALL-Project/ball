@@ -1,4 +1,4 @@
-// $Id: atomVector.h,v 1.12 2001/07/15 11:17:06 amoll Exp $
+// $Id: atomVector.h,v 1.13 2001/07/16 11:18:11 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
 #define BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -144,7 +144,7 @@ namespace BALL
 		 *  If the vector is resized to to more elements, than are contained,
 		 *  it is filled with NullPointers.
 		*/
-		using ::std::vector<Atom*>::resize;
+		void resize(Size new_size);
 
     //@}
 		/**	@name	Iteration
@@ -160,8 +160,8 @@ namespace BALL
 		/**	Return an iterator, pointing behind the last atom pointer.
 		*/
 		//BAUSTELLE: GCC3 using std::vector<Atom*>::end;
-					iterator end()			 { return std::vector<Atom*>::end(); }
-		const_iterator end() const { return std::vector<Atom*>::end(); }
+					iterator end()			 { return ::std::vector<Atom*>::end(); }
+		const_iterator end() const { return ::std::vector<Atom*>::end(); }
 
 		//@}
 		
