@@ -1,4 +1,4 @@
-// $Id: options.C,v 1.7 2000/03/17 11:23:26 oliver Exp $ 
+// $Id: options.C,v 1.8 2000/03/17 13:17:00 oliver Exp $ 
 
 #include <BALL/DATATYPE/options.h>
 
@@ -140,7 +140,7 @@ namespace BALL
 		double x, y, z;
 		
 		// try to interpret the option as a vector
-		sscanf(get(key).c_str(), "(%lf %lf %lf)", &(h.x), &(h.y), &(h.z));
+		sscanf(get(key).c_str(), "(%lf %lf %lf)", &x, &y, &z);
 		h.x = x; 
 		h.y = y;
 		h.z = z;
