@@ -1,4 +1,4 @@
-// $Id: extractors.h,v 1.2 2000/06/27 13:07:23 oliver Exp $
+// $Id: extractors.h,v 1.3 2000/07/04 08:05:32 oliver Exp $
 
 #ifndef BALL_PYTHON_EXTRACTORS_H
 #define BALL_PYTHON_EXTRACTORS_H
@@ -10,6 +10,8 @@
 namespace BALL 
 {
 	class PyAtomList;
+	class PyBondList;
+	class PyBaseFragmentList;
 	class PyPDBAtomList;
 	class PyResidueList;
 	class PyFragmentList;
@@ -55,6 +57,23 @@ namespace BALL
 	/**	Extract all PDB atoms from a kernel data structure.
 	*/
 	PyPDBAtomList* PDBAtoms(const BaseFragment& fragment, bool selected_only = false);
+
+	/**	Extract all bonds from a kernel data structure.
+			This function extracts all bonds from the atoms contained in the base fragment.
+			If {\tt selected_only} is set to {\bf true}, only bonds are extracted where
+			both atoms are selected.
+	*/
+	PyBondList* bonds(const BaseFragment& fragment, bool selected_only = false);
+
+	/**	Extract all bonds from an atom.
+			This function returns all bonds of an atom.
+	*/
+	PyBondList* bonds(const Atom& atom);
+			
+
+	/**	Extract all base fragments from a kernel data structure.
+	*/
+	PyBaseFragmentList* baseFragments(const BaseFragment& fragment, bool selected_only = false);
 
 	/**	Extract all residues from a kernel data structure.
 	*/

@@ -1,0 +1,14 @@
+// $Id: python.doc,v 1.1 2000/07/04 08:05:35 oliver Exp $
+
+/**@name	Python extensions.
+	BALL provides classes for the extension of \URL[Python]{http://www.python.org},
+	an object oriented script language.
+	Since the language concepts of C++ and Python are rather dissimilar, several	
+	concepts had to be ported and modified. THis chapter describes the BALL classes
+	that implement these interface classes.
+	\\
+*/
+//@{
+
+  //@Include: *.h
+//@}
