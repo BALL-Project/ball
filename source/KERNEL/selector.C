@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.4 1999/12/30 18:05:34 oliver Exp $
+// $Id: selector.C,v 1.5 2000/01/10 20:04:10 oliver Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -678,18 +678,28 @@ namespace BALL
 	
 	// backbone predicate
 
-	bool BackBonePredicate::operator () (const Composite& /* composite */) const
+	bool BackBonePredicate::operator () (const Composite& composite) const
 	{
-		//BAUSTELLE
+		if (RTTI::isKindOF<Atom>(composite))
+		{
+			if (composite.hasAncestor<Residue>())
+			{
+				String name = RTTI::castTo<Atom>(composite);
+				if ((name == "C") || (name == "N") || (name == "CA") || (name == "O"))
+				{
+					return true;
+				}
+			}
+		}
+
 		return false;
 	}
 	
 	// nucleotide predicate
 
-	bool NucleotidePredicate::operator () (const Composite& /* composite */) const
+	bool NucleotidePredicate::operator () (const Composite& composite) const
 	{
-		//BAUSTELLE
-		return false;
+		return RTTI::isKindOf<Nucleotide>(composite);
 	}
 	
 } // namespace BALL
