@@ -1,13 +1,18 @@
-// $Id: molecularFileDialog.h,v 1.1.2.1 2002/12/06 18:55:08 anhi Exp $
+// $Id: molecularFileDialog.h,v 1.1.2.2 2002/12/10 23:08:44 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
 #define BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
 
-#include <qfiledialog.h>
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 # include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 #endif
+
+#ifndef BALL_VIEW_COMMON_GLOBAL_H
+# include <BALL/VIEW/COMMON/global.h>
+#endif
+
+#include <qfiledialog.h>
 
 namespace BALL
 {
@@ -31,7 +36,6 @@ namespace BALL
 
 			/** @name Constructors
 			 */
-
 			//@{
 
 			/** Default Constructor.
@@ -40,7 +44,7 @@ namespace BALL
 					@return			MolecularFileDialog new constructed MolecularFileDialog
 					@see				VIEW::ModularWidget
 			 */
-			MolecularFileDialog(QWidget *)
+			MolecularFileDialog(QWidget* parent)
 				throw();
 
 			//@}
@@ -60,7 +64,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Accessors: inspectors and mutators
 			 */
 			
@@ -104,16 +107,29 @@ namespace BALL
 					@see		WindowMessage
 					@see		ConnectionObject
 			 */
-			virtual void readFile()
-				throw();
+			virtual void readFile();
 
 			/** Write a molecular file.
 			 		This method takes a \Ref{System} and saves it into a molecular file, selected from a QFileDialog.
 					@param	system the \Ref{System} that is saved into a file
 			 */
-			virtual bool writeFile()
+			virtual bool writeFile();
+		
+			/** Read a PDB file
+			 */
+			bool readPDBFile(String filename, String system_name)
 				throw();
 		
+			/** Read a HIN file
+			 */
+			bool readHINFile(String filename, String system_name)
+				throw();
+		
+			/** Read a MOL2 file
+			 */
+			bool readMOL2File(String filename, String system_name)
+				throw();
+
 			//@}
 		};
 
