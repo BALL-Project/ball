@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.29 2001/04/27 00:23:06 amoll Exp $
+// $Id: HINFile.C,v 1.30 2001/05/06 20:37:33 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -491,7 +491,7 @@ namespace BALL
 					}
 					atom->setElement(PTE[line.getField(3)]);
 					// set the atom radius
-					atom->setRadius(PTE[line.getField(3)].getAtomicRadius());
+					atom->setRadius(PTE[line.getField(3)].getVanDerWaalsRadius());
 
 					if (line.getField(4) == "**")
 					{
