@@ -1,29 +1,19 @@
-# $Id: Makefile.am,v 1.1.2.1 2002/12/04 20:00:48 anhi Exp $
+# $Id: Makefile.am,v 1.1.2.2 2002/12/05 16:02:56 anhi Exp $
 
-EXECUTABLE=molview
+bin_PROGRAMS=molview
+SUBDIRS=
+
+CXXFLAGS+=$(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) 
+
 DIRECTORY=APPLICATIONS/MOLVIEW
 
-all:	$(EXECUTABLE)
-
 clean:	default_clean
-
-include ../../common.mak
-include .Dependencies
 
 # replace library-specific flags by application-
 # specific compiler flags
 LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
 
 BALL_INCLUDES+=$(BALLVIEW_INCLUDES) $(PYTHON_INCLUDES)
-
-CPP_SOURCES=\
-	DIALOGS/DlgAbout.C\
-	DIALOGS/DlgAboutData.C\
-	DIALOGS/DlgAmberMinimization.C\
-	DIALOGS/DlgAmberMinimizationData.C\
-	icons.C\
-	main.C\
-	mainframe.C\
 
 MOC_SOURCES=\
 	DIALOGS/DlgAbout_moc.C\
@@ -32,11 +22,22 @@ MOC_SOURCES=\
 	DIALOGS/DlgAmberMinimizationData_moc.C\
 	mainframe_moc.C
 
+molview_SOURCES=\
+	DIALOGS/DlgAbout.C\
+	DIALOGS/DlgAboutData.C\
+	DIALOGS/DlgAmberMinimization.C\
+	DIALOGS/DlgAmberMinimizationData.C\
+	icons.C\
+	main.C\
+	mainframe.C\
+	$(MOC_SOURCES)
+
+molview_LDADD=$(BALLVIEW_LIBS) $(PYTHON_LIBS)
 
 SPECIAL_OBJECTS=
 
-molview:	$(OBJECTS) $(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALLVIEW_LIBS) $(PYTHON_LIBS)
+#molview:	$(OBJECTS) $(SPECIAL_OBJECTS)
+#	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(BALLVIEW_LIBS) $(PYTHON_LIBS)
 
 DIALOGS/DlgAbout_moc.C:     DIALOGS/DlgAbout.h
 				$(MOC) DIALOGS/DlgAbout.h -o $@
