@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.24 2003/12/09 15:15:31 amoll Exp $
+// $Id: mainControl.C,v 1.25 2003/12/09 16:40:35 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -352,6 +352,8 @@ bool MainControl::remove_(Composite& composite)
 {
 	if (!composite_manager_.has(composite)) return false;
 	
+	Composite* root = 0;
+	if (composite.getRoot() != composite) root = &composite.getRoot();
 	composite_manager_.remove(composite);
 
 	// delete all representations containing the composite
@@ -365,13 +367,13 @@ bool MainControl::remove_(Composite& composite)
 		notify_(rr_message);
 	}
 
-	if (removed_representations.size() > 0) updateAllRepresentations();
+	if (root != 0) updateRepresentationsOf(*root, true, true);
 
 	return true;
 }
 
 // e.g. is called for root of items from picking, or for MolecularControl Selection
-bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebuild)
+bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebuild, bool force)
 	throw()
 {
 	if (!composite_manager_.has(composite)) return false;
@@ -386,7 +388,8 @@ bool MainControl::updateRepresentationsOf(const Composite& composite, bool rebui
 		if (rep->getModelType() == MODEL_SE_SURFACE ||
 				rep->getModelType() == MODEL_SA_SURFACE ||
 				rep->getModelType() == MODEL_BACKBONE 	||
-				rep->getModelType() == MODEL_CARTOON)
+				rep->getModelType() == MODEL_CARTOON    ||
+				force)
 		{
 			rep->update(rebuild);
 		}
@@ -1012,7 +1015,7 @@ bool MainControl::update(Composite& composite)
 	CompositeMessage* cm = new CompositeMessage(composite, 
 			CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
 	notify_(cm);
-	updateRepresentationsOf(composite.getRoot());
+	updateRepresentationsOf(composite.getRoot(), true, true);
 
 	return true;
 }
