@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.18 2004/11/24 13:32:07 amoll Exp $
+// $Id: modularWidget.C,v 1.19 2004/11/26 10:47:25 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -141,10 +141,10 @@ void ModularWidget::writePreferences(INIFile& inifile)
 	inifile.insertValue("WINDOWS", getIdentifier() + "::height", String(widget->height()));
 }
 
-void ModularWidget::setStatusbarText(String text)
+void ModularWidget::setStatusbarText(String text, bool important)
 	throw()
 {
-	getMainControl()->setStatusbarText(text);
+	getMainControl()->setStatusbarText(text, important);
 }
 
 MainControl* ModularWidget::getMainControl() const

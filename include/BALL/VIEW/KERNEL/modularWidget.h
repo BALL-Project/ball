@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.h,v 1.18 2004/11/09 15:55:04 amoll Exp $
+// $Id: modularWidget.h,v 1.19 2004/11/26 10:47:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
@@ -200,7 +200,7 @@ namespace BALL
 			 		<b>Note:</b> The ModularWidget must be registered to a MainControl.
 					Implemented for convenience.
 			 */
-			virtual void setStatusbarText(String text)
+			virtual void setStatusbarText(String text, bool important = false)
 				throw();
 
 			/** Return the MainControl of this ModularWidget
