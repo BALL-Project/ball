@@ -1,4 +1,4 @@
-// $Id: iterator.h,v 1.10 2001/07/15 20:39:41 oliver Exp $
+// $Id: iterator.h,v 1.11 2001/07/15 20:52:55 oliver Exp $
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H
@@ -189,6 +189,7 @@ namespace BALL
 		/**	Invalidate the iterator.
 				The iterator is separated from its container (\Ref{isSingular} is {\bf true} afterwards)
 				and its \Ref{SubCompositeIterator} is invalidated as well.
+		*/
 		void invalidate()
 			throw();
 
