@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.28 2001/12/18 01:15:35 oliver Exp $
+// $Id: classTest.h,v 1.29 2001/12/18 03:16:01 oliver Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -154,7 +154,7 @@ int main(int argc, char **argv)\
 		}\
   }\
 	/* catch BALL exceptions to retrieve additional information */\
-	catch (BALL::Exception::GeneralException e)\
+	catch (BALL::Exception::GeneralException& e)\
 	{\
 		TEST::this_test = false;\
 		TEST::test = false;\
@@ -168,6 +168,7 @@ int main(int argc, char **argv)\
 			if ((e.getLine() > 0) && (!(e.getFile() == "")))\
 				std::cout << " outside a subtest, which was thrown in line " << e.getLine() << " of file " << e.getFile();\
 			std::cout << " - unexpected!) " << std::endl;\
+			std::cout << "    (message is: " << e.getMessage() << ")" << std::endl;\
 		}\
   }\
 	/* catch all non-BALL exceptions */\
@@ -284,7 +285,7 @@ int main(int argc, char **argv)\
 			std::cout << " - unexpected!) " << std::endl;\
 		}\
   }\
-  catch (::BALL::Exception::GeneralException e)\
+  catch (::BALL::Exception::GeneralException& e)\
   {\
     TEST::this_test = false;\
     TEST::test = false;\
@@ -301,6 +302,7 @@ int main(int argc, char **argv)\
       if ((e.getLine() > 0) && (!(e.getFile() == "")))\
         std::cout << ", which was thrown in line " << e.getLine() << " of file " << e.getFile();\
       std::cout << " - unexpected!) " << std::endl;\
+			std::cout << "    (message is: " << e.getMessage() << ")" << std::endl;\
     }\
   }\
   catch (...)\
