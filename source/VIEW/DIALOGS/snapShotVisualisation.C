@@ -199,7 +199,7 @@ Size SnapshotVisualisationDialog::getEndSnapshot() const
 
 void SnapshotVisualisationDialog::sliderMovedToPos()
 {
-	currentSnapshot->setText((String) snapShotSlider->value());
+	currentSnapshot->setText(String(snapShotSlider->value()).c_str());
 	Position tmpnr = (currentSnapshot->text().toInt());	
 	
 	if (snap_shot_manager_->applySnapShot(tmpnr))
@@ -216,7 +216,7 @@ void SnapshotVisualisationDialog::sliderMovedToPos()
 void SnapshotVisualisationDialog::update_()
 {
   currentSnapshot->setText(tmp_);
-	
+	update();	
 	SceneMessage* new_message = new SceneMessage;
 	new_message->setType(SceneMessage::REBUILD_DISPLAY_LISTS);
 	notify_(new_message);
@@ -236,9 +236,9 @@ void SnapshotVisualisationDialog::setSnapShotManager(SnapShotManager* snapshot_m
 
 void SnapshotVisualisationDialog::snapShotInputTest()
 {
-	string startSnap = startSnapshot->text().ascii();
-	string endSnap = endSnapshot->text().ascii();
-	string valid_char = "0123456789";
+	String startSnap = startSnapshot->text().ascii();
+	String endSnap = endSnapshot->text().ascii();
+	String valid_char = "0123456789";
 	//test if input is valid
 	if(startSnap.size()!=0)
 	{
@@ -246,8 +246,9 @@ void SnapshotVisualisationDialog::snapShotInputTest()
 		{
 			if(valid_char.find(startSnap.substr(i,1)) == string::npos)
 			{
-				startSnap = startSnap.substr(0,(startSnap.size()-1)); //if written char is not a number, set string to old string
-				startSnapshot->setText(startSnap);
+				//if written char is not a number, set string to old string
+				startSnap = startSnap.substr(0,(startSnap.size()-1)); 
+				startSnapshot->setText(startSnap.c_str());
 				break;
 			}
 		}
@@ -258,8 +259,9 @@ void SnapshotVisualisationDialog::snapShotInputTest()
 		{
 			if(valid_char.find(endSnap.substr(i,1)) == string::npos)
 			{
-				endSnap = endSnap.substr(0,(endSnap.size()-1)); //if written char is not a number, set string to old string
-				endSnapshot->setText(endSnap);
+				//if written char is not a number, set string to old string
+				endSnap = endSnap.substr(0,(endSnap.size()-1)); 
+				endSnapshot->setText(endSnap.c_str());
 				break;
 			}
 		}
@@ -269,13 +271,18 @@ void SnapshotVisualisationDialog::snapShotInputTest()
 	String num_of_shots = numberOfSnapshots->text().ascii();
 	String num_of_startsnap = startSnapshot->text().ascii();
 	String num_of_endsnap = endSnapshot->text().ascii();
-	int num_shots = num_of_shots.toInt();
-	int num_startsnap = num_of_startsnap.toInt();
-	int num_endsnap = num_of_endsnap.toInt();
+	Size num_shots = num_of_shots.toInt();
+	Size num_startsnap = num_of_startsnap.toInt();
+	Size num_endsnap = num_of_endsnap.toInt();
 	if(num_startsnap > num_shots)
-		startSnapshot->setText(num_of_shots);
-	if(num_endsnap > num_shots)
-		endSnapshot->setText(num_of_shots);
+	{
+		startSnapshot->setText(num_of_shots.c_str()); 
+	}
+	
+	if(num_endsnap > num_shots) 
+	{
+		endSnapshot->setText(num_of_shots.c_str()); 
+	}
 }
 
 } } // namespace
