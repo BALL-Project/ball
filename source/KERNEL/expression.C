@@ -107,7 +107,7 @@ namespace BALL
 			}
 			else
 			{
-        Log.error() << "could not find predicate for expression " << t.expression << "(" << t.argument << ")" << endl;
+        Log.error() << "Expression::setExpression: could not find predicate for expression " << t.expression << "(" << t.argument << ")" << endl;
         root->setType(ExpressionTree::INVALID);
 			}
 
@@ -359,7 +359,7 @@ namespace BALL
     ex = s.find_first_of('(');
     if (ex == string::npos)
     {
-			Log.error() << "Need at least on opening bracket in expression {" << s << "}" << endl;
+			Log.error() << "Expression::setExpression: need at least on opening bracket in expression {" << s << "}" << endl;
       type = ExpressionTree::INVALID;
       return;
 		}
@@ -376,17 +376,17 @@ namespace BALL
 			}
 		}
 
-		if (bracket_count < 0)
-		{
-			type = ExpressionTree::INVALID;
-			Log.error() << "Didn't find closing ')' in expression: {" << s << "}" << endl;
-			return;
-		}
-
 		if (bracket_count > 0)
 		{
 			type = ExpressionTree::INVALID;
-			Log.error() << "Found too many closing ')' in expression: {" << s << "}" << endl;
+			Log.error() << "Expression::setExpression: didn't find closing ')' in expression: {" << s << "}" << endl;
+			return;
+		}
+
+		if (bracket_count < 0)
+		{
+			type = ExpressionTree::INVALID;
+			Log.error() << "Expression::setExpression: found too many closing ')' in expression: {" << s << "}" << endl;
 			return;
 		}
 
