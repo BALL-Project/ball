@@ -1,13 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.1 2005/03/17 13:48:25 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.2 2005/03/21 16:51:23 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/SYSTEM/path.h>
 
 using namespace std;
 
@@ -19,16 +20,16 @@ namespace BALL
 		:	ForceFieldComponent()
 	{	
 		// set component name
-		setName( "MMFF94 Stretch" );
+		setName("MMFF94 Stretch");
 	}
 
 
 	// constructor
 	MMFF94Stretch::MMFF94Stretch(ForceField& force_field)
-		 : 	ForceFieldComponent(force_field)
+		: ForceFieldComponent(force_field)
 	{
 		// set component name
-		setName( "MMFF94 Stretch" );
+		setName("MMFF94 Stretch");
 	}
 
 
@@ -54,24 +55,67 @@ namespace BALL
 			return false;
 		}
 
-		// throw away the old contents
-
-		MMFF94* MMFF94_force_field = dynamic_cast<MMFF94*>(force_field_);
-		if ((MMFF94_force_field == 0) || !MMFF94_force_field->hasInitializedParameters())
+		if (!parameters_.isInitialized())
 		{
-			bool result = true; // = stretch_parameters_.extractSection(getForceField()->getParameters(), "BondStretch");
+			Path    path;
+			String  filename(path.find("MMFF94/MMFFBOND.PAR"));
 
-			if (!result) 
+			if (filename == "") 
 			{
-				Log.error() << "cannot find section QuadraticBondStretch" << endl;
-				return false;
+				throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+			}
+
+			parameters_.readParameters(filename);
+		}
+
+		stretch_.clear();
+
+		bool use_selection = getForceField()->getUseSelection();
+
+		Stretch dummy_stretch;
+
+		AtomVector::ConstIterator atom_it = getForceField()->getAtoms().begin();
+//   		Atom::AttributeVector& attributes = Atom::getAttributes();
+		for ( ; atom_it != getForceField()->getAtoms().end(); ++atom_it)
+		{
+			for (Atom::BondIterator it = (*atom_it)->beginBond(); +it ; ++it) 
+			{
+				if (*atom_it != it->getFirstAtom()) continue;
+				
+				Bond&	bond = const_cast<Bond&>(*it);
+				if (bond.getType() == Bond::TYPE__HYDROGEN)
+				{	
+					// Ignore hydrogen bonds!
+					continue;
+				}
+
+				if (!use_selection ||
+						(use_selection && bond.getFirstAtom()->isSelected() && 
+															bond.getSecondAtom()->isSelected()))
+				{
+					const Atom::Type atom_type_A = bond.getFirstAtom()->getType();
+					const Atom::Type atom_type_B = bond.getSecondAtom()->getType();
+					if (!parameters_.getParameters(atom_type_A, atom_type_B, dummy_stretch.kb, dummy_stretch.r0))
+					{
+						getForceField()->error() << "cannot find stretch parameters for atom types " 
+								<< atom_type_A << " " << atom_type_B 
+								<< " (atoms are: " 
+								<< bond.getFirstAtom()->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << " " 
+								<< bond.getSecondAtom()->getFullName(Atom::ADD_VARIANT_EXTENSIONS_AND_ID) << ")" << std::endl;
+
+						getForceField()->getUnassignedAtoms().insert(bond.getFirstAtom());
+						getForceField()->getUnassignedAtoms().insert(bond.getSecondAtom());
+						continue;
+					}
+
+					dummy_stretch.atom1 = (Atom*) bond.getFirstAtom();
+					dummy_stretch.atom2 = (Atom*) bond.getSecondAtom();
+
+					stretch_.push_back(dummy_stretch);
+				}
 			}
 		}
 
-//   		QuadraticBondStretch::Values values;
-		bool use_selection = getForceField()->getUseSelection();
-		
-		// Everything went well.
 		return true;
 	}
 
@@ -88,7 +132,24 @@ namespace BALL
 		// initial energy is zero
 		energy_ = 0;
 
-		bool use_selection = getForceField()->getUseSelection();
+//   		bool use_selection = getForceField()->getUseSelection();
+
+		for (Size i = 0 ; i < stretch_.size(); i++)
+		{
+			const Vector3 direction(stretch_[i].atom1->getPosition() - stretch_[i].atom2->getPosition());
+			double distance = direction.getLength(); 
+			const float delta(::std::fabs(distance - stretch_[i].r0));
+			const float delta_2(delta * delta);
+
+			float eb_ij = 143.9325 * stretch_[i].kb / 2.0 * delta_2 *
+				            (1.0 + CUBIC_STRENGTH_CONSTANT * delta + 7.0 / 12.0 CUBIC_STRENGTH_CONSTANT * CUBIC_STRENGTH_CONSTANT * delta_2);
+
+			Log.info() << stretch_[i].atom1->getFullName() << " -> " 
+								 << stretch_[i].atom2->getFullName() << " : bond stretch energy " << eb_ij << std::endl;
+
+			energy_ += eb_ij;
+		}
+
 
 		return energy_;
 	}
@@ -101,7 +162,7 @@ namespace BALL
 			return;
 		}
 
-		bool use_selection = getForceField()->getUseSelection();
+//   		bool use_selection = getForceField()->getUseSelection();
 
 		/*
 		// iterate over all bonds, update the forces
