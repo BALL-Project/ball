@@ -20,6 +20,8 @@
 
 namespace BALL
 {
+  class System;
+
 	namespace VIEW
 	{
 		/**	Dialog for creating labels for a selection of molecular objects.
@@ -95,6 +97,7 @@ namespace BALL
 
 			List<Composite*> composites_;
 			RegularData3D* grid_;
+			System*  		 	 system_;
 		};
 
 } } // namespaces

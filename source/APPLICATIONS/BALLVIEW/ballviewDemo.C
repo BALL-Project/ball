@@ -13,6 +13,8 @@
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/DATATYPE/contourSurface.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/STRUCTURE/HBondProcessor.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -49,15 +51,15 @@ void BALLViewDemo::show()
 	DisplayProperties* dp = DisplayProperties::getInstance(0);
 	dp->setDrawingPrecision(DRAWING_PRECISION_HIGH);
 	dp->enableCreationForNewMolecules(false);
-	System* system = new System();
+	system_ = new System();
 
 	PDBFile file;
 	try
 	{
    		file.open("bpti.pdb");
 //   		file.open("AlaAla.pdb");
-		file >> *system;
-		getMainControl()->insert(*system, "demo");
+		file >> *system_;
+		getMainControl()->insert(*system_, "demo");
 	}
 	catch(...)
 	{
@@ -65,7 +67,7 @@ void BALLViewDemo::show()
 	}
 
 	composites_.clear();
-	composites_.push_back(system);
+	composites_.push_back(system_);
 	QDialog::show();
 	raise();
 }
@@ -86,10 +88,8 @@ void BALLViewDemo::onNotify(Message *message)
 
 	if (id == MODEL_HBONDS + 5)
 	{
-Log.error() << "#~~#   8 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 		if (RTTI::isKindOf<FinishedSimulationMessage>(*message))
 		{
-Log.error() << "#~~#   9 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 			nextStep_();
 		}
 		return;
@@ -151,11 +151,14 @@ CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_
 	}
 	else if (id == MODEL_HBONDS)
 	{
-		ControlSelectionMessage* csmsg = new ControlSelectionMessage();
-		csmsg->getSelection() = composites_;
-		notify_(csmsg);
+		system_->apply(getFragmentDB().add_hydrogens);
+		system_->apply(getFragmentDB().build_bonds);
+		HBondProcessor proc;
+		system_->apply(proc);
 
-		ms->addHydrogens();
+		CompositeMessage *change_message = 
+			new CompositeMessage(*system_, CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
+		notify_(change_message);
 
 		CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_, MODEL_STICK, COLORING_ELEMENT);
 		notify_(crmsg);
@@ -189,7 +192,8 @@ CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_
 
 		ms->chooseAmberFF();
 		ms->getMDSimulationDialog().setTimeStep(0.001);
-		ms->getMDSimulationDialog().setNumberOfSteps(50);
+//   		ms->getMDSimulationDialog().setNumberOfSteps(50);
+		ms->getMDSimulationDialog().setNumberOfSteps(10);
 		ms->MDSimulation(false);
 	}
 	else if (id == MODEL_HBONDS + 6) //FDPB
@@ -198,11 +202,46 @@ CreateRepresentationMessage* crmsg = new CreateRepresentationMessage(composites_
 		ms->getFDPBDialog()->okPressed();
 		disable_button = false;
 	}
-	else if (id == MODEL_HBONDS + 6) // ContourSurface
+	else if (id == MODEL_HBONDS + 7) // ContourSurface
 	{
 		ContourSurface cs(*grid_, 0.01);
 		Mesh* mesh = new Mesh;
 		mesh->Surface::operator = (static_cast<Surface&>(cs));
+
+		Vector3 center;
+		for (Position i = 0; i < mesh->vertex.size(); i++)
+		{
+			center += mesh->vertex[i];
+		}
+
+		center /= mesh->vertex.size();
+
+		Size nr_of_strange_normals = 0;
+		for (Position i = 0; i < mesh->normal.size(); i++)
+		{
+			if ((mesh->vertex[i] + mesh->normal[i]).getDistance(center) < (mesh->vertex[i] - mesh->normal[i]).getDistance(center))
+			{
+				nr_of_strange_normals ++;
+			}
+		}
+
+		if (nr_of_strange_normals > mesh->normal.size() / 2.0)
+		{
+			for (Position i = 0; i < mesh->normal.size(); i++)
+			{
+				mesh->normal[i] *= -1;
+			}
+		}
+
+		Stage stage = *Scene::getInstance(0)->getStage();
+		stage.clearLightSources();
+		LightSource ls;
+		ls.setPosition(Vector3(0,0,4000));
+		ls.setDirection(Vector3(0,0,0));
+		stage.addLightSource(ls);
+		SceneMessage* smsg = new SceneMessage(SceneMessage::UPDATE_CAMERA);
+		smsg->setStage(stage);
+		notify_(smsg);
 
 		// Create a new representation containing the contour surface.
 		Representation* rep = getMainControl()->getPrimitiveManager().createRepresentation();

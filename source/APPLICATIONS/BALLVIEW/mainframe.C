@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.51 2005/02/28 15:55:05 amoll Exp $
+// $Id: mainframe.C,v 1.52 2005/02/28 19:20:32 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -193,6 +193,17 @@ namespace BALL
 
 	void Mainframe::about()
 	{
+		Stage stage = *Scene::getInstance(0)->getStage();
+		stage.clearLightSources();
+		LightSource ls;
+		Camera& camera = stage.getCamera();
+		ls.setPosition(camera.getViewPoint() + camera.getLookUpVector() * 60);
+		ls.setDirection(camera.getLookAtPosition());
+		stage.addLightSource(ls);
+		SceneMessage* smsg = new SceneMessage(SceneMessage::UPDATE_CAMERA);
+		smsg->setStage(stage);
+		notify_(smsg);
+return;
 		// Display about dialog
 		AboutDialog about;
 		QString version = QString("QT ") + qVersion();

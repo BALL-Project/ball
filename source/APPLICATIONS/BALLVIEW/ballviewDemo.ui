@@ -627,7 +627,7 @@ This will take a second.
                                 </property>
                                 <property name="text">
                                     <string>&lt;blockquote&gt;
-Well this didn't change much, but now we create a Isocontour Surface with 
+Well this didn't change much, but now we can create a Isocontour Surface with 
 the data grid.
 &lt;/blockquote&gt;</string>
                                 </property>
