@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>440</width>
-            <height>313</height>
+            <height>315</height>
         </rect>
     </property>
     <property name="caption">
@@ -766,6 +766,9 @@
                 <width>100</width>
                 <height>32767</height>
             </size>
+        </property>
+        <property name="currentItem">
+            <number>0</number>
         </property>
     </widget>
 </widget>
