@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.C,v 1.5 2000/10/18 13:55:51 anker Exp $
+// $Id: piecewiseFunction.C,v 1.6 2000/10/18 15:28:53 anker Exp $
 
 #include <BALL/MATHS/piecewiseFunction.h>
 
@@ -73,7 +73,7 @@ namespace BALL
 		throw()
 	{
 		intervals_ = intervals;
-		valid_ - isValid();
+		valid_ = isValid();
 	}
 
 
