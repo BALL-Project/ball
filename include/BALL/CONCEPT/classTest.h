@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.41 2003/03/26 13:56:12 anhi Exp $
+// $Id: classTest.h,v 1.42 2003/03/26 14:11:13 anhi Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -20,51 +20,13 @@
 # include <strstream>
 #endif
 
-/**	@name	Class Black Box Testing
-		To provide a maximum reliability for all BALL classes, each class
-		provides its own test program to ensure that each class compiles
-		and behaves (at least basically) as intended.
-
-		The testprograms reside in the directory source/TEST, they may 
-		be built and executed by calling <b>make test</b>.
-
-		Each test program prints after execution either "PASSED" or "FAILED".
-		If any of the subtest contained in the test program fails, the whole 
-		test failed. The result of the test program can also be checked via its
-		exit code. An exit code of zero means "PASSED", non-zero exit code means 
-		"FAILED".
-
-		There are several macros defined to simplify the creation of a test program
-		and to provide a common interface.
-		Each test program consists of several subtests which usually test one
-		method or property of the class. Each of this subtests uses a series
-		of elementary tests to check the functionality of the method.
-
-		A number of elementary tests has been implemented that is sufficient
-		for most cases:
-			- \link TEST_EQUAL TEST_EQUAL \endlink 
-			- \link TEST_NOT_EQUAL TEST_NOT_EQUAL \endlink 
-			- \link TEST_REAL_EQUAL TEST_REAL_EQUAL \endlink 
-		A subtest is defined by calling the  \link CHECK CHECK \endlink  macro with the subtest name
-		as an argument. Then a series of calls to <b>TEST</b> macros follows,
-		mixed with standard BALL code (remember to include all neccessary header files).
-		The subtest is terminated by calling  \link RESULT RESULT \endlink .
-		Use the two macros  \link START_TEST START_TEST \endlink  and  \link END_TEST END_TEST \endlink  to generate a complete
-		test program.
-
-		To create a new test program, use the file 
-		<a href="../../source/BALL/TEST/Skeleton_test.C">source/TEST/Skeleton_test.C</a>
-		 \par
- 	 	\ingroup Concepts
-*/
-//@{
-
 /**	Define the precision for floating point comparisons.
 		The macro  \link CHECK_REAL_EQUAL CHECK_REAL_EQUAL \endlink  checks whether the floating point number returned by
 		the subtest is close to the expected result by comparing the absolute value
 		of the difference of the two values to <b>PRECISION</b>. \par
 		The default value is $10^{-6}$. It is possible to redefine precision in the
 		test program by calling this macro with the new value. \par
+		\ingroup ClassTest
 */
 #define PRECISION(a) \
 		TEST::precision = (a);
@@ -80,6 +42,7 @@
 		also closes the <tt>try</tt> block. This <tt>try</tt> block should never catch an exception! 
 		All exceptions that are thrown due to some malfunction in one of the member functions should be 
 		caught by the <tt>try</tt> block created by  \link CHECK CHECK \endlink  and  \link RESULT RESULT \endlink .
+		\ingroup ClassTest
 */
 #define START_TEST(class_name, version)\
 /* define a special namespace for all internal variables */\
@@ -137,6 +100,7 @@ int main(int argc, char **argv)\
 		This macro also closes the global <tt>try</tt> block opened by  \link START_TEST START_TEST \endlink 
  		and contains the related <tt>catch</tt> clauses. If an exception is caught here,
 		the test program fails.
+		\ingroup ClassTest
 */
 #define END_TEST \
 	/* global try block */\
@@ -218,6 +182,7 @@ int main(int argc, char **argv)\
 		the expected result of some command) use the  \link TEST_EXCEPTION TEST_EXCEPTION \endlink  macro.
 		The <tt>try</tt> block opened by CHECK is closed in  \link RESULT RESULT \endlink , so these two macros
 		have to be balanced.
+		\ingroup ClassTest
 */
 #define CHECK(test_name)  \
 	TEST::test = true;\
@@ -240,6 +205,7 @@ int main(int argc, char **argv)\
 		\begin{verbatim}
 		STATUS("just calculated x = " << setprecision(10) << x)
 		\end{verbatim}
+		\ingroup ClassTest
 */
 #define STATUS(message)\
 					if (TEST::verbose > 1)\
@@ -268,6 +234,7 @@ int main(int argc, char **argv)\
 		derived from GeneralException).	If this fails, it tries to catch any exception. 
 		After the exception is thrown, the execution will continue with the next subtest,
 		the current subtest will be marked as failed (as is the whole test program).
+		\ingroup ClassTest
 */
 #define RESULT \
 			break;\
@@ -343,6 +310,7 @@ int main(int argc, char **argv)\
 		its argument. The filename is created using  \link File::createTemporaryFilename File::createTemporaryFilename \endlink .
 		All temporary files are deleted if  \link END_TEST END_TEST \endlink  is called.
 		@param	filename String will contain the filename on completion of the macro
+		\ingroup ClassTest
 */
 #define NEW_TMP_FILE(filename)\
 					::BALL::File::createTemporaryFilename(filename);\
@@ -364,6 +332,7 @@ int main(int argc, char **argv)\
 		values <b>a</b> and <b>b</b> is less or equal to the value defined by  \link PRECISION PRECISION \endlink .
 		@param	a floating point value to test
 		@param  b expected value
+		\ingroup ClassTest
 */
 #define TEST_REAL_EQUAL(a,b)  \
 	TEST::this_test = BALL_REAL_EQUAL((a), (b), TEST::precision); \
@@ -390,6 +359,7 @@ int main(int argc, char **argv)\
 		argument types. \par
 		@param	a value/object to test
 		@param	b expected value
+		\ingroup ClassTest
 */
 #define TEST_EQUAL(a,b)  \
 	{\
@@ -416,6 +386,7 @@ int main(int argc, char **argv)\
 		#!((a) == (b))#. \par
 		@param	a value/object to test
 		@param	b forbidden value
+		\ingroup ClassTest
 */
 #define TEST_NOT_EQUAL(a,b)  \
 	{\
@@ -444,6 +415,7 @@ int main(int argc, char **argv)\
 		If no or a wrong exception occured, false is returned, otherwise true.
 		@param exception_type the exception-class
 		@param command any general C++ or BALL-specific command
+		\ingroup ClassTest
 */
 #define TEST_EXCEPTION(exception_type, command) \
 	{\
@@ -493,6 +465,7 @@ int main(int argc, char **argv)\
 /** Skip remainder of subtest.
     If the condition is not fulfilled, the remainder of the test is skipped.
     The status (whether it fails or passes) remains unchanged.
+		\ingroup ClassTest
 */
 #define ABORT_IF(condition) \
   if (condition) break;
@@ -502,6 +475,7 @@ int main(int argc, char **argv)\
 		against a template file <tt>templatename</tt>. Corresponding lines of the two files
 		have to be identical. 
 		@see TEST_FILE_REGEXP for more sophisticated comparisons
+		\ingroup ClassTest
 */
 #define TEST_FILE(filename, templatename) \
 	{\
@@ -597,6 +571,7 @@ int main(int argc, char **argv)\
 		Each line of the template file starting with <tt>``/''</tt> is considered to contain a regular
 		expression, which has to match the corresponding line in the input file. All other lines
 		of the input and the template file have to be identical.
+		\ingroup ClassTest
 */
 #define TEST_FILE_REGEXP(filename, templatename) \
 	{\
@@ -716,6 +691,7 @@ int main(int argc, char **argv)\
 		afterwards using the macro  \link COMPARE_OUTPUT COMPARE_OUTPUT \endlink .
 		Each <tt>CAPTURE_OUTPUT</tt> requires exactly one subsequent
 		 \link COMPARE_OUTPUT COMPARE_OUTPUT \endlink  macro.
+		\ingroup ClassTest
 */
 #ifdef BALL_HAS_SSTREAM
 #define CAPTURE_OUTPUT_LEVEL(level) \
@@ -743,6 +719,7 @@ int main(int argc, char **argv)\
 		afterwards using the macro  \link COMPARE_OUTPUT COMPARE_OUTPUT \endlink .
 		Each <tt>CAPTURE_OUTPUT</tt> requires exactly one subsequent
 		 \link COMPARE_OUTPUT COMPARE_OUTPUT \endlink  macro.
+		\ingroup ClassTest
 */
 #ifdef BALL_HAS_SSTREAM
 #define CAPTURE_OUTPUT_LEVEL_RANGE(minlevel, maxlevel) \
@@ -761,6 +738,7 @@ int main(int argc, char **argv)\
 #endif
 /**	Compare output made to the global logging facility.
 		@see CAPTURE_OUTPUT
+		\ingroup ClassTest
 */
 
 #ifdef BALL_HAS_SSTREAM
@@ -820,7 +798,3 @@ int main(int argc, char **argv)\
 		}\
 	}
 #endif	
-	
-	
-//@}
-

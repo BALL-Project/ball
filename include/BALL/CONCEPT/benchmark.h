@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: benchmark.h,v 1.11 2003/03/26 13:56:11 anhi Exp $
+// $Id: benchmark.h,v 1.12 2003/03/26 14:11:12 anhi Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -13,15 +13,9 @@
 
 #include <string>
 
-/**	@name	Benchmarking of classes.
-		<a href="../../source/BALL/BENCHMARKS/Skeleton_bench.C">source/BENCHMARKS/Skeleton_bench.C</a>
-		 \par
- 	 	\ingroup  Concepts
-*/
-//@{
-
 /**	Start a new benchmark section.
 		The argument weight determines the weighting factor of the section.
+		\ingroup Benchmark
 */
 #define START_SECTION(name, weight) \
 	BENCHMARK::section_time = BENCHMARK::timer.getCPUTime();\
@@ -30,6 +24,7 @@
 
 
 /**	End of a benchmark section.
+		\ingroup Benchmark
 */
 #define END_SECTION \
 	BENCHMARK::timer.stop();\
@@ -45,6 +40,7 @@
 
 /**	Status output.
 		Print debugging information if called with -v.
+		\ingroup Benchmark
 */
 #define STATUS(a) \
 	if (BENCHMARK::verbose > 0)\
@@ -59,6 +55,7 @@
 		 \link START_BENCHMARK START_BENCHMARK \endlink  macro.
 		All commands that are between the START_TIMER and the  \link STOP_TIMER STOP_TIMER \endlink 
 		command contribute to the overall running time of the benchmark.
+		\ingroup Benchmark
 */
 #define START_TIMER \
 	BENCHMARK::timer.start();\
@@ -70,6 +67,7 @@
 		 \link START_BENCHMARK START_BENCHMARK \endlink  and  \link START_TIMER START_TIMER \endlink  macros.
 		All commands that are between the START_TIMER and the  \link STOP_TIMER STOP_TIMER \endlink 
 		command contribute to the overall running time of the benchmark.
+		\ingroup Benchmark
 */
 #define STOP_TIMER \
 	BENCHMARK::timer.stop();
@@ -77,6 +75,7 @@
 /**	Program body for the benchmark.
 		The parameter <tt>weight</tt> determines the overall weight of
 		this test in the accumulated benchmark (BALLStones).
+		\ingroup Benchmark
 */
 #define START_BENCHMARK(class_name, overall_weight, version)\
 /* define a special namespace for all internal variables */\
@@ -121,6 +120,7 @@ int main(int argc, char **argv)\
 	try {\
 
 /**	End of the test program
+		\ingroup Benchmark
 */
 #define END_BENCHMARK \
 	/* global try block */\
@@ -176,6 +176,4 @@ int main(int argc, char **argv)\
 		return 0;\
 	}\
 }\
-
-//@}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.38 2003/03/26 13:08:11 sturm Exp $
+// $Id: exception.h,v 1.39 2003/03/26 14:11:12 anhi Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -22,7 +22,9 @@ namespace BALL
 
 	class String;
 
-	//@{
+	/** Exception
+	 		\ingroup Common	
+	 */
 	namespace Exception 
 	{
 		
@@ -487,9 +489,7 @@ namespace BALL
 		extern GlobalExceptionHandler globalHandler;
 
 	}
-	//@}
 		/**	Output operator for exceptions.
-				 \addtogroup  Common
 				All BALL exceptions can be printed to an arbitrary output stream.
 				Information written contains the exception class, the error message,
         and the location (file, line number). The following code block
@@ -505,6 +505,7 @@ namespace BALL
 					Log.error() << "caught exception: " << e << std::endl;
 				}
 				\end{verbatim}
+				 \ingroup Common
 		*/
 		std::ostream& operator << (std::ostream& os, const Exception::GeneralException& e);
 	
