@@ -1,4 +1,4 @@
-// $Id: triangulatedSurface.h,v 1.23 2001/12/08 17:10:39 strobel Exp $
+// $Id: triangulatedSurface.h,v 1.24 2002/01/07 18:05:08 strobel Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -1086,7 +1086,7 @@ namespace BALL
 			}
 		}
 		// delete all "isolated points" (points with no edge)
-		p = points_.begin();
+		/*p = points_.begin();
 		while (p != points_.end())
 		{
 			if ((*p)->edges_.size() == 0)
@@ -1108,7 +1108,7 @@ namespace BALL
 			{
 				p++;
 			}
-		}
+		}*/
 	}
 
 
