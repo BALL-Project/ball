@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.19 2000/03/30 19:50:56 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.20 2000/04/03 07:55:27 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -101,7 +101,9 @@ namespace BALL
 							- BALL_CELL(0,2) * BALL_CELL(1,1) * BALL_CELL(2,0) 
 							- BALL_CELL(0,0) * BALL_CELL(1,2) * BALL_CELL(2,1) 
 							- BALL_CELL(0,1) * BALL_CELL(1,0) * BALL_CELL(2,2)); 
-		} else {
+		} 
+		else 
+		{
 			return GetDeterminant_(m, dim);
 		}
 	}
@@ -285,7 +287,9 @@ namespace BALL
 			x1 = x2 = -b / (2 * a);
 
 			return 1;
-		} else {
+		} 
+		else 
+		{
 			x1 = (-b + sqrt_discriminant) / (2 * a);
 			x2 = (-b - sqrt_discriminant) / (2 * a);
 
@@ -391,14 +395,18 @@ namespace BALL
 				throw Exception::DivisionByZero(__FILE__, __LINE__);
 			}					
 			return ((a.d % (b.p - a.p)).getLength() / a.d.getLength());
-		} else {
+		} 
+		else 
+		{
 			T spat_product = TVector3<T>::getSpatProduct(a.d, b.d, b.p - a.p);
 
 			if (Maths::isNotZero(spat_product))
 			{ // invariant: windschiefe lines
 				
 				return (Maths::abs(spat_product) / cross_product_length);
-			} else { // invariant: intersecting lines
+			} 
+			else 
+			{ // invariant: intersecting lines
 
 				return 0;
 			}
@@ -538,7 +546,9 @@ namespace BALL
 		if (Maths::isZero(length_product))
 		{
 			return false;
-		} else {
+		} 
+		else 
+		{
 			intersection_angle = asin(Maths::abs(plane.n * Vector3) / sqrt(length_product));
 			
 			return true;
@@ -577,7 +587,9 @@ namespace BALL
 		if (Maths::isZero(length_product))
 		{
 			return false;
-		} else {
+		} 
+		else 
+		{
 			intersection_angle = asin(Maths::abs(plane.n * line.d) / sqrt(length_product));
 			
 			return true;
@@ -650,7 +662,9 @@ namespace BALL
 			point.set(a.p.x + a.d.x * c1, a.p.y + a.d.y * c1, a.p.z + a.d.z * c1);
 			
 			return true;
-		} else {
+		} 
+		else 
+		{
 			return false;
 		}
 	}
@@ -728,13 +742,19 @@ namespace BALL
 				if (SolveSystem2(ab, ac, -ad, bb, bc, -bd, x1, x2) == false)
 				{
 					return false;
-				} else {
+				} 
+				else 
+				{
 					p.set(0, x1, x2);
 				}
-			} else {
+			} 
+			else 
+			{
 				p.set(x1, 0, x2);
 			}
-		} else {
+		} 
+		else 
+		{
 			p.set(x1, x2, 0);
 		}
 
@@ -815,7 +835,9 @@ namespace BALL
 			intersection_circle.set(sphere.p + sphere.radius * Vector3, plane.n, 0);
 
 			return true;
-		} else {
+		} 
+		else 
+		{
 			TVector3<T> Vector3(plane.n);
 
 			Vector3.normalize();
