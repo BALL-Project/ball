@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.45 2002/12/22 14:51:56 anker Exp $
+// $Id: fragmentDB.C,v 1.46 2003/03/04 14:42:50 anker Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -1316,7 +1316,8 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-	Size FragmentDB::BuildBondsProcessor::buildFragmentBonds(Fragment& fragment) const
+	Size FragmentDB::BuildBondsProcessor::buildFragmentBonds(Fragment& fragment,
+			const Fragment& tplate) const
 	{
 		// abort immediately if no fragment DB is known
 		if (fragment_db_ == 0)
@@ -1327,22 +1328,15 @@ namespace BALL
 		// get the fragment`s name
 		String	name = fragment.getName();
 		
-		// check whether our DB knows the fragment and retrieve the template
-		const Fragment* tplate = fragment_db_->getReferenceFragment(fragment);
-		if (tplate == 0) 
-		{
-			return 0;
-		}
-		
 #ifdef DEBUG
 		Log.info() << "FragmentDB::BuildBondsProcessor: building bonds for " 
-							 << fragment.getName() << " from template " << tplate->getName() << std::endl;
+							 << fragment.getName() << " from template " << tplate.getName() << std::endl;
 #endif
 
 		Size bond_count = 0;
 		AtomConstIterator				tmp_it1;
 		Atom::BondConstIterator	tmp_it2;
-		BALL_FOREACH_BOND(*tplate, tmp_it1, tmp_it2)
+		BALL_FOREACH_BOND(tplate, tmp_it1, tmp_it2)
 		{
 			bond_count++;
 		}
@@ -1359,13 +1353,13 @@ namespace BALL
 		StringHashMap<const Atom*> template_names;
 
 		String atom_name;
-		for (catom_it = tplate->beginAtom(); +catom_it; ++catom_it)
+		for (catom_it = tplate.beginAtom(); +catom_it; ++catom_it)
 		{
 			atom_name = catom_it->getName().trim();
 #ifdef DEBUG
 			if (template_names.has(atom_name))
 			{
-				Log.warn() << "FragmentDB::BuildBondsProcessor: duplicate atom name in template " << tplate->getName() << std::endl;
+				Log.warn() << "FragmentDB::BuildBondsProcessor: duplicate atom name in template " << tplate.getName() << std::endl;
 			}
 #endif
 			template_names.insert(atom_name, &*catom_it);
@@ -1422,6 +1416,29 @@ namespace BALL
 
 		return bonds_built;
 	}
+
+
+	Size FragmentDB::BuildBondsProcessor::buildFragmentBonds(Fragment& fragment) const
+	{
+		// abort immediately if no fragment DB is known
+		if (fragment_db_ == 0)
+		{
+			return 0;
+		}
+
+		// get the fragment`s name
+		String	name = fragment.getName();
+		
+		// check whether our DB knows the fragment and retrieve the template
+		const Fragment* tplate = fragment_db_->getReferenceFragment(fragment);
+		if (tplate == 0) 
+		{
+			return 0;
+		}
+		
+		return buildFragmentBonds(fragment, *tplate);
+	}
+
 
 	Size FragmentDB::BuildBondsProcessor::buildInterFragmentBonds
 		(Fragment& first, Fragment& second) const

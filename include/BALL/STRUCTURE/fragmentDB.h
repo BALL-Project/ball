@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.h,v 1.20 2003/03/03 14:18:19 anhi Exp $
+// $Id: fragmentDB.h,v 1.21 2003/03/04 14:42:49 anker Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -388,6 +388,14 @@ namespace BALL
 					@return the number of bonds built
 			*/
 			Size buildFragmentBonds(Fragment& fragment) const;
+
+			/**	Build all bonds in a fragment according to a manually supplied
+					template.
+					This method builds all bonds that are contained
+					in manually provided template.
+					@return the number of bonds built
+			*/
+			Size buildFragmentBonds(Fragment& fragment, const Fragment& tplate) const;
 
 			/**	Build all possible bonds between two fragments.
 					This method builds all bonds that are allowed by
