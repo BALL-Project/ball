@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.12 2000/12/22 19:12:14 amoll Exp $
+// $Id: mainControl.h,v 1.13 2000/12/22 21:31:07 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -420,8 +420,7 @@ namespace BALL
 			//@{
 			/**	Initialize the modular widgets and display the main window.
 			*/
-			virtual void show()
-				throw(PreferencesError);
+			virtual void show();
 
 			/** Checks, enables or disables all the inserted menu entries
 					as the checkMenu-Function of the inserted ModularWidgets indicates.

@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.11 2000/12/22 19:12:16 amoll Exp $
+// $Id: mainControl.C,v 1.12 2000/12/22 21:31:11 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -156,7 +156,6 @@ namespace BALL
 		}
 
 		void MainControl::show()
-			throw(PreferencesError)
 		{
 			cerr << "MainControl::show()  list.size() = " << modular_widgets_.size() << endl;
 
