@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.13 2004/02/26 08:41:47 anhi Exp $
+// $Id: pyWidget.h,v 1.14 2004/04/19 12:51:54 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -124,7 +124,8 @@ namespace BALL
 			
 			virtual void paste();
 
-			void parseLine_();
+			bool parseLine_();
+			bool parseLine_(String line);
 
 			void appendToHistory_(const String& line);
 			

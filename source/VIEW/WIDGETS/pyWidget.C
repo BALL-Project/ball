@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.22 2004/04/19 12:51:50 amoll Exp $
+// $Id: pyWidget.C,v 1.23 2004/04/19 12:53:12 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -150,7 +150,7 @@ namespace BALL
 			// check for comments
 			String temp(line);
 			temp.trim();
-			if (temp.hasSuffix("#")) return true;
+			if (temp.hasPrefix("#")) return true;
 
 			history_position_ = history_.size();
 
