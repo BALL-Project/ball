@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.23 2001/06/30 14:50:31 amoll Exp $
+// $Id: exception.h,v 1.24 2001/07/10 16:29:38 anker Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -368,6 +368,17 @@ namespace BALL
 		{
 			public:
 			IllegalPosition(const char* file, int line, float x, float y, float z)
+				throw();
+		};
+
+		/**	Parse Error.
+				A given expression could not be parsed.
+		*/
+		class ParseError
+			: public GeneralException
+		{
+			public:
+			ParseError(const char* file, int line, const char* expression)
 				throw();
 		};
 
