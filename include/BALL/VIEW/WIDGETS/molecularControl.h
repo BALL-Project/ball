@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.39 2004/11/16 15:32:47 amoll Exp $
+// $Id: molecularControl.h,v 1.40 2004/11/23 17:27:10 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -307,7 +307,7 @@ namespace BALL
 			void deselect();
 
 			/// Move a composite
-			void move();
+			void moveItems();
 			
 			/// Collapse all QListViewItem
 			void collapseAll();

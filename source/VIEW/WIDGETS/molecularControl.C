@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.78 2004/11/16 15:32:43 amoll Exp $
+// $Id: molecularControl.C,v 1.79 2004/11/23 17:27:27 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -339,7 +339,7 @@ void MolecularControl::buildContextMenu(Composite& composite)
 	context_menu_.insertItem("Create Representation", &model_menu_, 0, CREATE_REPRESENTATION);
 	context_menu_.insertSeparator();
 
-	context_menu_.insertItem("Move", this, SLOT(move()), 0, OBJECT__MOVE);
+	context_menu_.insertItem("Move", this, SLOT(moveItems()), 0, OBJECT__MOVE);
 
 	context_menu_.insertItem("Select", this, SLOT(select()), 0, SELECT);
 	context_menu_.insertItem("Deselect", this, SLOT(deselect()), 0, DESELECT);
@@ -900,7 +900,7 @@ void MolecularControl::clearClipboard()
 }
 
 
-void MolecularControl::move()
+void MolecularControl::moveItems()
 {
 	select();
 	SceneMessage* msg = new SceneMessage(SceneMessage::ENTER_MOVE_MODE);
