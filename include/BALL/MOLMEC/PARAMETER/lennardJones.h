@@ -1,4 +1,4 @@
-// $Id: lennardJones.h,v 1.6 2000/02/14 22:42:40 oliver Exp $
+// $Id: lennardJones.h,v 1.7 2000/02/16 19:04:35 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_LENNARDJONES_H
@@ -19,18 +19,18 @@ namespace BALL
 			This section read parameters for a Lennard Jones potental (usually a 6-12 Potential).
 			Parameters may we given in three different formats (no mixing of formats is allowed).
 			\begin{itemize}
-				\item {\em A} and {\em B} are given directly (\ref{A_B_FORMAT})
-				\item well depth and minimum radii (\ref{EPSILON_R_FORMAT})
-				\item Slater--Kirkwood parameters (\ref{SLATER_KIRKWOOD_FORMAT})
+				\item {\em A} and {\em B} are given directly (\Ref{A_B_FORMAT})
+				\item well depth and minimum radii (\Ref{EPSILON_R_FORMAT})
+				\item Slater-Kirkwood parameters (\Ref{SLATER_KIRKWOOD_FORMAT})
 			\end{itemize}
 
-			If the Slater--Kirkwood format is used, the values for $A_{ij}$ and $B_{ij}$ are calculated
+			If the Slater-Kirkwood format is used, the values for $A_{ij}$ and $B_{ij}$ are calculated
 			as follows (see e.g. Brooks et al., J. Comput. Chem, 4(2):187-217 (1983))
-			\begin{*eqnarray}	
+			\[	
 				B_{ij} & = & \frac{3}{2} \left(\frac{1}{4 \pi \varepsilon_0}\right)^\frac{1}{2}
 						\frac{e \hbar \sqrt{m_e} \alpha_i \alpha_j}{\sqrt{\frac{\alpha_i}{N_i} + \sqrt{\frac{\alpha_j}{N_j}}}}\\
 				A_{ij} & = & \frac{1}2{} B_{ij} (R_i + R_j)^6
-			\end{*eqnarray}
+			\]
 	*/
 	class LennardJones 
 		:	public ParameterSection
