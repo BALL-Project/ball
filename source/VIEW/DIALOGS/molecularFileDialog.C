@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.17 2004/04/07 14:51:48 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.18 2004/04/14 15:16:32 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -93,6 +93,13 @@ namespace BALL
 			y_ = fd->y();
 			width_ = fd->width();
 			height_ = fd->height();
+
+			#ifdef BALL_PLATFORM_WINDOWS
+			// workaround for strange microsoft windows behaviour
+				x_+= 4;
+				y_+= 23;
+			#endif
+
 			working_dir_ = fd->dirPath();
 			if (!result_dialog == QDialog::Accepted) return;
 
