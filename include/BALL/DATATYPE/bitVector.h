@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.21 2001/02/06 21:27:44 amoll Exp $
+// $Id: bitVector.h,v 1.22 2001/02/07 08:40:36 amoll Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -44,10 +44,10 @@
 
 
 namespace BALL 
-
+{
 
 	class BitVector;
-	{
+
 	/**	Bit Class. This class represents a bit within a BitVector
 			@see BitVector. 
 			{\bf Definition:} \URL{BALL/DATATYPE/bitVector.h}
