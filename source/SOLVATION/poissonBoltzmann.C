@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.19 2000/07/05 22:27:17 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.20 2000/12/05 13:10:23 amoll Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -448,7 +448,7 @@ namespace BALL
 
 		// now, create a new grid containing the dielectric constant of each grid point
 		delete eps_grid;
-		eps_grid = new PointGrid<Vector3>(lower_, upper_, spacing_);
+		eps_grid = new RegularData3D<Vector3>(lower_, upper_, spacing_);
 
 		// check whether the grid is really cubic
 		if ((eps_grid->getMaxXIndex() != eps_grid->getMaxYIndex()) 
@@ -621,7 +621,7 @@ namespace BALL
 			}
 
 			// harmonic smoothing
-			PointGrid<Vector3> tmp_grid(*eps_grid);
+			RegularData3D<Vector3> tmp_grid(*eps_grid);
 
 			// loop variables;
 			Position x, y, z;
@@ -834,7 +834,7 @@ namespace BALL
 					
 		// create the grid
 		delete q_grid;
-		q_grid = new PointGrid<float>(lower_, upper_, spacing_);
+		q_grid = new RegularData3D<float>(lower_, upper_, spacing_);
 
 		// set every grid point to zero
 		Index i;
@@ -866,7 +866,7 @@ namespace BALL
 				// distribute the charge equally upon the eigth 
 				// closest gridpoints
 					
-				PointGrid<float>::GridIndex	grid_index;
+				RegularData3D<float>::GridIndex	grid_index;
 				long i;
 				for (i = 0; i < (long)(*atom_array).size(); i++)
 				{
@@ -917,7 +917,7 @@ namespace BALL
 				// distribute the charge uniform on each grid point
 				// inside the sphere given by an atom`s radius and position
 
-				PointGrid<float>::GridIndex		lower_grid_index, upper_grid_index;
+				RegularData3D<float>::GridIndex		lower_grid_index, upper_grid_index;
 
 				// the atom radius, and the squared atom radius
 				float atom_radius, atom_radius2;
@@ -1122,7 +1122,7 @@ namespace BALL
 
 		// create the grid
 		delete kappa_grid;
-		kappa_grid = new PointGrid<float>(lower_, upper_, spacing_);
+		kappa_grid = new RegularData3D<float>(lower_, upper_, spacing_);
 
 		// we don't need the SAS grid anymore
 		delete SAS_grid;
@@ -1166,7 +1166,7 @@ namespace BALL
 
 		// create the grid
 		delete phi_grid;
-		phi_grid = new PointGrid<float>(lower_, upper_, spacing_);
+		phi_grid = new RegularData3D<float>(lower_, upper_, spacing_);
 
 		// setting Phi to zero everywhere
 		Index i;
@@ -1983,7 +1983,7 @@ namespace BALL
 		// point is calculated to speed up the evaluation of the
 		// electrostatic energy
 
-		PointGrid<float>::GridIndex		grid_index;
+		RegularData3D<float>::GridIndex		grid_index;
 		for ( i = 0; i < atom_array->size(); i++)
 		{
 			grid_index = phi_grid->getIndex((*atom_array)[i].x, (*atom_array)[i].y, (*atom_array)[i].z);
@@ -2391,7 +2391,7 @@ namespace BALL
 				if (phi_grid->has(image_position))
 				{
 					phi_grid->getBoxIndices(image_position, llf, rlf, luf, ruf, llb, rlb, lub, rub);
-					PointGrid<float>::GridIndex grid_index = phi_grid->getIndex(image_position);
+					RegularData3D<float>::GridIndex grid_index = phi_grid->getIndex(image_position);
 					Size Nx = phi_grid->getMaxXIndex() + 1;
 					Size Nxy = (phi_grid->getMaxYIndex() + 1) * Nx;
 					Position idx = grid_index.x + grid_index.y * Nx + grid_index.z * Nxy;

@@ -1,4 +1,4 @@
-// $Id: molecularSurfaceGrid.C,v 1.6 2000/05/04 13:32:36 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.7 2000/12/05 13:10:23 amoll Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 
@@ -13,7 +13,7 @@ namespace BALL
 		return (int)(*(long*)a - *(long*)b);
 	}
 
-	PointGrid<char> *calculateSESGrid
+	RegularData3D<char> *calculateSESGrid
 		(const Vector3& lower, const Vector3& upper,
 		 const float spacing, const System& system, 
 		 const float probe_radius)
@@ -43,7 +43,7 @@ namespace BALL
 		float R_b, R_b2;
 
 		// the grid itself...
-		PointGrid<char>	*grid;
+		RegularData3D<char>	*grid;
 
 		// squared distance of any two vectors
 		float squared_distance;
@@ -53,7 +53,7 @@ namespace BALL
 
 		// indices used in between to calculated the bounding boxes of spheres in the grid
 		
-		PointGrid<char>::GridIndex upper_index, lower_index;
+		RegularData3D<char>::GridIndex upper_index, lower_index;
 
 
 		// pointer to grid data
@@ -69,7 +69,7 @@ namespace BALL
 
 		// First, create the grid...
 
-		grid = new PointGrid<char>(lower, upper, spacing);
+		grid = new RegularData3D<char>(lower, upper, spacing);
 		
 		if ((grid == 0) || (!grid->isValid()))
 		{
@@ -295,7 +295,7 @@ namespace BALL
 		return &(*grid);
 	}
 
-	PointGrid<char> *calculateSASGrid(
+	RegularData3D<char> *calculateSASGrid(
 				const Vector3 &lower, 
 				const Vector3 &upper,
 				const float spacing,
@@ -320,7 +320,7 @@ namespace BALL
 		float R_b, R_b2;
 
 		// the grid itself...
-		PointGrid<char>	*grid;
+		RegularData3D<char>	*grid;
 
 		// squared distance of any two vectors
 		float squared_distance;
@@ -329,7 +329,7 @@ namespace BALL
 
 
 		// indices used in between to calculated the bounding boxes of spheres in the grid
-		PointGrid<char>::GridIndex upper_index, lower_index;
+		RegularData3D<char>::GridIndex upper_index, lower_index;
 
 
 		// pointer to grid data
@@ -346,7 +346,7 @@ namespace BALL
 
 		// First, create the grid...
 
-		grid = new PointGrid<char>(lower, upper, spacing);
+		grid = new RegularData3D<char>(lower, upper, spacing);
 
 		if ((grid == 0) || !grid->isValid())
 		{
