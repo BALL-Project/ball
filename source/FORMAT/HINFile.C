@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.27 2001/01/24 11:52:07 anker Exp $
+// $Id: HINFile.C,v 1.28 2001/04/03 14:23:04 amoll Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -349,6 +349,17 @@ namespace BALL
 
 	void HINFile::read(System& system)
 	{
+		if (!isValid())
+		{
+			Log.error() << "HINFile is not valid, but was tried to be opened: " << getName() << endl;
+			return;
+		}
+		
+		if (!isOpen())
+		{
+			reopen();
+		}
+
 		// destroy the old contents of the system
 		system.destroy();
 		
@@ -374,6 +385,7 @@ namespace BALL
 		box_.a.set(0.0);
 		box_.b.set(0.0);
 		temperature_ = 0;
+
 
 		// define a macro to print an error message for the file (only once!)
 #		define ERROR_HEADER\
@@ -840,7 +852,6 @@ namespace BALL
 					box_.b.x = - box_.a.x;
 					box_.b.y = - box_.a.y;
 					box_.b.z = - box_.a.z;
-					
 					continue;
 				}
 					
