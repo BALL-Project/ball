@@ -1,7 +1,7 @@
 % -*- Mode: C++; tab-width: 2; -*-
 % vi: set ts=2:
 %
-% $Id: coding_style.tex,v 1.6 2004/02/23 13:45:30 oliver Exp $
+% $Id: coding_style.tex,v 1.7 2004/02/23 17:02:10 oliver Exp $
 %
                                                                                                                                                              
 \documentclass[a4paper,10pt]{article}
@@ -11,7 +11,7 @@
 \title{BALL coding conventions}
 \author{Oliver Kohlbacher}
 
-\date{$ $Revision: 1.6 $ $}
+\date{$ $Revision: 1.7 $ $}
 
 \newtheorem{example}{Example}
 
@@ -54,6 +54,7 @@ if (isValid(a))
   return 0;
 \end{verbatim}
 
+\noindent
 which might be changed to something like
 
 \begin{verbatim}
@@ -76,7 +77,7 @@ Each BALL class has to provide the following minimal interface:
 \begin{verbatim}
 	/** Class documentation... 
 	*/
-  class Test
+	class Test
   {
     public:
 
@@ -109,7 +110,7 @@ separated using underscores ``{\tt \_}''. If parts of the name are derived
 from common acronyms (e.g. PDB) they should be in upper case.\\
 Private or protected member variables of classes are suffixed by an
 underscore.\\
-No prefixing or suffixing is allowed too identify the variable type - this
+No prefixing or suffixing is allowed to identify the variable type - this
 leads to completely illegible documentation and overly long variable names.\\
 \begin{example}\hspace*{2mm}\\
 {\tt String PDB\_atom\_name;} (using an abbreviation)\\
@@ -130,7 +131,7 @@ protected types and classes in classes which are suffixed by an underscore.
 
 \subsection{File names}
 
-{\bf Header and source files should be named after the class the contain.}
+{\bf Header and source files should be named after the class they contain.}
 Each file should contain a single class only, although exceptions are possible
 for extreme light-weight classes. The file names start with a lower-case
 letter (for historical reasons). Hence, the file containing the {\tt
@@ -167,25 +168,25 @@ An example for a class documentation is given below.
 
 \subsection{Usage of groups in the documentation}
 
-In order to obtain a structured and comprehensible documentation methods are
+In order to obtain a structured and comprehensible documentation,  methods are
 grouped by their function. Each class usually uses one or more out of the
 following categories to group its methods:
 \begin{itemize}
 	\item {\bf Type Definitions:}\\
 		This group should contain all {\tt typedef}s (except for private or pretected
-		ones) of the class
+		ones) of the class.
 	\item {\bf Exceptions:}\\
-		All class specific exceptions are defined as nested classes in this group
+		All class specific exceptions are defined as nested classes in this group.
 	\item {\bf Enums:}\\
 		This group usually contains enums or constants defined via enums such as
-		properties
+		properties.
 	\item {\bf Constructors and Destructor:}\\
 		This group includes all constructors and destructors, as well as related
-		methods such as {\tt clear} or {\tt destroy}
+		methods such as {\tt clear} or {\tt destroy}.
 	\item {\bf Persistence:}\\
 		This group is present in each class derived from {\tt PersistentObject}
 		and always contains the two methods {\tt persistentWrite} and {\tt
-		persistentRead}
+		persistentRead}.
 	\item {\bf Converters:}\\
 		If an object should be convertible to another class, an explicit
 		converter should be defined inside this group.
@@ -193,7 +194,7 @@ following categories to group its methods:
 		Accessors are all the methods that access or modify attributes of the
 		class.
 	\item {\bf Predicates:}\\
-		Predicates are functions returning a boolean value. the names of
+		Predicates are functions returning a boolean value. The names of
 		predicates should start with {\tt is} or {\tt has} if applicable.
 		Comparison operators are also predicates and should appear inside
 		this group.
@@ -221,7 +222,7 @@ comments. Comments should be written in plain english and describe the
 functionality of the next few lines.
 
 To check whether a header or source file fulfils this requirement, use the
-script {\tt BALL/doc/tools/check\_coding}. Invoke {\tt check\_coding} with the
+script {\tt check\_coding} in \directory{source/config}. Invoke {\tt check\_coding} with the
 filename to check (or a list of files) and it will print the percentage of
 comments (including Doxygen comments) for each file.
 
@@ -236,7 +237,7 @@ or source file should start with this header:
   // -*- Mode: C++; tab-width: 2; -*-
   // vi: set ts=2:
   //
-  // $Id: coding_style.tex,v 1.6 2004/02/23 13:45:30 oliver Exp $
+  // $Id: coding_style.tex,v 1.7 2004/02/23 17:02:10 oliver Exp $
   //                                                                                                                                                             
 \end{verbatim}
 In non-C++ files (Makefiles, TeX-Files, etc.) the C++ comments are replaced
@@ -280,7 +281,7 @@ concepts that are responsible for the trouble:
 	\item void pointers
 \end{itemize}
 
-To start at the end, {\em void pointers} are easisest to handle: avoid them!
+To start at the end, {\em void pointers} are very simple to handle: avoid them!
 Pointers are only valid inside a single instance of a program, they have no
 meaning for a different instance or even another machine. Any code dealing
 with void pointers cannot be made persistent.
@@ -289,7 +290,7 @@ with void pointers cannot be made persistent.
 on the state of this variable. There is no general rule on how to handle these
 variables. However, in most cases everything works fine if you simply ignore
 them. The only case where a static member variable had to be considered when
-implementing object persistence for the BALL kernel classes was the internal
+implementing object persistence for the BALL kernel classes, was the internal
 counter of the class {\tt Object}. This counter is incremented by one for each
 instance of {\tt Object} created. It is used to uniquely identify objects and
 to define a linear order on these objects (this is the object's handle).
@@ -316,7 +317,7 @@ persistentRead} even in the implementation. The difference is that classes
 that are a model of storable cannot be read from a persistent stream if they
 are not part or base class of a persistent object. This is due to the fact
 that the persistence manager needs a well-defined interface to handle the
-objects he stores and retrieves and this interface is implemented in the class
+objects he stores and retrieves, and this interface is implemented in the class
 {\tt PersistentObject}. 
 
 \section{Testing}
@@ -337,8 +338,8 @@ these strange macros. This fixed format also enforces the writing of complete
 class tests. Usually a programmer writes a few lines of code to test the parts
 of the code he wrote for correctness. Of the methods tested after the
 introduction of the test macros, about a tenth of all functions/methods showed
-severe errors or after thorough testing. Most of these errors didn't occur an
-all platforms or didn't show up on trivial input.
+severe errors after thorough testing. Most of these errors did not occur an
+all platforms or did not show up on trivial input.
 
 Writing tests for {\em each} method of a class also ensures that each line is
 compiled. When using class templates the compiler only compiles the methods
