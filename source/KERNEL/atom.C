@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.C,v 1.40 2003/05/25 21:38:08 oliver Exp $
+// $Id: atom.C,v 1.41 2003/05/26 16:19:53 oliver Exp $
 //
 
 #include <BALL/KERNEL/atom.h>
@@ -424,7 +424,7 @@ namespace BALL
 	const Bond* Atom::getBond(const Atom &atom) const
 		throw()
 	{
-		return ((Atom *)this)->getBond(atom);
+		return ((Atom*)this)->getBond(atom);
 	}
 
 	Bond* Atom::createBond(Atom &atom)
