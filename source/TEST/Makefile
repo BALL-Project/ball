@@ -9,6 +9,7 @@ EXECUTABLES = \
 	Atom_test\
 	Bond_test\
 	BaseFragment_test\
+	ClassTest_test\
 	Composite_test\
 	Fragment_test\
 	FragmentDB_test\
@@ -46,6 +47,9 @@ BaseFragment_test:	BaseFragment_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Bond_test:	Bond_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+ClassTest_test:	ClassTest_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 Composite_test:	Composite_test.o
