@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.27 2000/10/20 10:36:38 amoll Exp $
+// $Id: fragmentDB.C,v 1.28 2000/10/20 14:38:01 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -96,7 +96,7 @@ namespace BALL
 					throw Exception::FileNotFound(__FILE__, __LINE__, value_fields[0]);
 				}
 
-				file = new ResourceFile(filename.c_str());
+				file = new ResourceFile(filename);
 				if (!file->isValid())
 				{
 					Log.error() << "FragmentDB: cannot open include file " << value_fields[0] << endl;
