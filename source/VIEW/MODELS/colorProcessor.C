@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.31.2.6 2005/01/12 23:30:04 amoll Exp $
+// $Id: colorProcessor.C,v 1.31.2.7 2005/01/12 23:54:48 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -246,15 +246,15 @@ namespace BALL
 			const Vector3 diagonal = boxp.getUpper() - boxp.getLower();
 			
 			// grid spacing, tradeoff between speed and memory consumption
-			float grid_spacing = 5.0;
+			float grid_spacing = 4.0;
 			if (diagonal.getSquareLength() < 5000)
 			{
-				grid_spacing = 2.0;
+				grid_spacing = 3.0;
 			} 
-			else if (diagonal.getSquareLength() > 10000)
+			else if (diagonal.getSquareLength() > 100000)
 			{
-				// well this will be really slow, but prevent locking machine by consuming all memory
-				grid_spacing = 9.0;
+				// well this will be slower, but prevent locking machine by consuming all memory
+				grid_spacing = 5.0;
 			}
 			
 			atom_grid_ = AtomGrid(boxp.getLower() - Vector3(additional_grid_distance_),
