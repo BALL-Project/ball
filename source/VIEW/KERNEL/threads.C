@@ -90,33 +90,43 @@ void SimulationThread::finish_()
 
 void EnergyMinimizerThread::run()
 {
-	if (minimizer_ == 0 ||
-			minimizer_->getForceField() == 0 || 
-			minimizer_->getForceField()->getSystem() == 0 ||
-			main_control_ == 0)
+	try
 	{
-		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
-	AmberFF& amber =*(AmberFF*)minimizer_->getForceField();
+		if (minimizer_ == 0 ||
+				minimizer_->getForceField() == 0 || 
+				minimizer_->getForceField()->getSystem() == 0 ||
+				main_control_ == 0)
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+		AmberFF& amber =*(AmberFF*)minimizer_->getForceField();
 
-	// iterate until done and refresh the screen every "steps" iterations
-	while (!main_control_->stopedSimulation() &&
-					minimizer_->getNumberOfIterations() < minimizer_->getMaxNumberOfIterations() &&
-				 !minimizer_->minimize(steps_between_updates_, true))
+		// iterate until done and refresh the screen every "steps" iterations
+		while (!main_control_->stopedSimulation() &&
+						minimizer_->getNumberOfIterations() < minimizer_->getMaxNumberOfIterations() &&
+					 !minimizer_->minimize(steps_between_updates_, true))
+		{
+			updateScene_();
+
+			QString message;
+			message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
+											minimizer_->getNumberOfIterations(), 
+											amber.getEnergy(), amber.getRMSGradient());
+			output_(message.ascii());
+		}
+
+		outputAmberResult_(amber);
+		output_("final RMS gadient    : " + String(amber.getRMSGradient()) + " kJ/(mol A)   after " 
+						+ String(minimizer_->getNumberOfIterations()) + " iterations\n");
+		finish_();
+	}
+	catch(Exception::GeneralException e)
 	{
-		updateScene_();
-
-		QString message;
-		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
-										minimizer_->getNumberOfIterations(), 
-										amber.getEnergy(), amber.getRMSGradient());
-		output_(message.ascii());
+		String txt = String("Calculation aborted because of throwed exception: ")
+									+ __FILE__ + " " + __LINE__ + " " + e.getMessage();
+		output_(txt);
+		finish_();
 	}
-
-	outputAmberResult_(amber);
-	output_("final RMS gadient    : " + String(amber.getRMSGradient()) + " kJ/(mol A)   after " 
-					+ String(minimizer_->getNumberOfIterations()) + " iterations\n");
-	finish_();
 }
 
 EnergyMinimizerThread::EnergyMinimizerThread()
@@ -146,46 +156,56 @@ void EnergyMinimizerThread::setEnergyMinimizer(EnergyMinimizer* minimizer)
 void MDSimulationThread::run()
 	throw(Exception::NullPointer)
 {
-	if (md_ == 0 ||
-			md_->getForceField() == 0 || 
-			md_->getForceField()->getSystem() == 0 || 
-			main_control_ == 0)
+	try
 	{
-		throw Exception::NullPointer(__FILE__, __LINE__);
-	}
-	AmberFF& amber =*(AmberFF*)md_->getForceField();
-
-	SnapShotManager manager(amber.getSystem(), &amber, dcd_file_);
-	manager.setFlushToDiskFrequency(10);
-	// iterate until done and refresh the screen every "steps" iterations
-	
-	while (md_->getNumberOfIterations() < steps_ &&
-				 !main_control_->stopedSimulation())
-	{
-		md_->simulateIterations(steps_between_updates_, true);
-		updateScene_();
-
-		QString message;
-		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
-										md_->getNumberOfIterations(), amber.getEnergy(),
-										amber.getRMSGradient());
-		output_(message.ascii());
-		
-		if (save_images_) 
+		if (md_ == 0 ||
+				md_->getForceField() == 0 || 
+				md_->getForceField()->getSystem() == 0 || 
+				main_control_ == 0)
 		{
-			Scene* scene= (Scene*) Scene::getInstance(0);
-			scene->exportPNG();
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+		AmberFF& amber =*(AmberFF*)md_->getForceField();
+
+		SnapShotManager manager(amber.getSystem(), &amber, dcd_file_);
+		manager.setFlushToDiskFrequency(10);
+		// iterate until done and refresh the screen every "steps" iterations
+		
+		while (md_->getNumberOfIterations() < steps_ &&
+					 !main_control_->stopedSimulation())
+		{
+			md_->simulateIterations(steps_between_updates_, true);
+			updateScene_();
+
+			QString message;
+			message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
+											md_->getNumberOfIterations(), amber.getEnergy(),
+											amber.getRMSGradient());
+			output_(message.ascii());
+			
+			if (save_images_) 
+			{
+				Scene* scene= (Scene*) Scene::getInstance(0);
+				scene->exportPNG();
+			}
+
+			if (dcd_file_) manager.takeSnapShot();
 		}
 
-		if (dcd_file_) manager.takeSnapShot();
+		if (dcd_file_) manager.flushToDisk();
+
+		outputAmberResult_(*(AmberFF*)md_->getForceField());
+		output_("final RMS gadient    : " + String(amber.getRMSGradient()) + " kJ/(mol A)   after " 
+						+ String(md_->getNumberOfIterations()) + " iterations\n");
+		finish_();
 	}
-
-	if (dcd_file_) manager.flushToDisk();
-
-	outputAmberResult_(*(AmberFF*)md_->getForceField());
-	output_("final RMS gadient    : " + String(amber.getRMSGradient()) + " kJ/(mol A)   after " 
-					+ String(md_->getNumberOfIterations()) + " iterations\n");
-	finish_();
+	catch(Exception::GeneralException e)
+	{
+		String txt = String("Calculation aborted because of throwed exception: ")
+									+ __FILE__ + " " + __LINE__ + " " + e.getMessage();
+		output_(txt);
+		finish_();
+	}
 }
 
 
