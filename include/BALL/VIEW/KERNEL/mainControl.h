@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.70.2.1 2004/12/27 14:54:55 amoll Exp $
+// $Id: mainControl.h,v 1.70.2.2 2005/01/13 13:12:00 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -246,11 +246,14 @@ namespace BALL
 				throw();
 
 			/** Update a Composite in all ModularWidget.
-			 		A CompositeMessage with type CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL is send and
+			 		This method differs wheter the composites hierarchy was changed or not.
+					The update is faster if the hierarchy is unchanged, because e.g. the
+					MolecularControl doesnt have to rebuild the ListViewItem tree.
+			 		A CompositeMessage with type CHANGED_COMPOSITE or CHANGED_COMPOSITE_HIERARCHY is send and
 					updateRepresentationsOf(composite) is called.
 					\return false if the CompositeManager doesnt contain the Composite
 			*/
-			bool update(Composite& composite)
+			bool update(Composite& composite, bool changed_hierarchy = true)
 				throw();
 
 			/** Insert a Composite and notify all ModularWidget.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.158.2.3 2005/01/13 12:20:11 amoll Exp $
+// $Id: mainControl.C,v 1.158.2.4 2005/01/13 13:09:06 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1296,13 +1296,15 @@ namespace BALL
 			BALL_DUMP_STREAM_SUFFIX(s);     
 		}
 
-		bool MainControl::update(Composite& composite)
+		bool MainControl::update(Composite& composite, bool changed_hierarchy)
 			throw()
 		{
 			if (!composite_manager_.has(composite)) return false;
 
 			CompositeMessage* cm = new CompositeMessage(composite, 
 					CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
+			if (!changed_hierarchy) cm->setType(CompositeMessage::CHANGED_COMPOSITE);
+
 			notify_(cm);
 			updateRepresentationsOf(composite.getRoot(), true, true);
 
@@ -1713,7 +1715,7 @@ namespace BALL
 			HashSet<Composite*>::Iterator rit = roots.begin();
 			for(; rit != roots.end(); rit++)
 			{
-				update(**rit);
+				update(**rit, false);
 			}
 		}
 
