@@ -30,8 +30,10 @@ fixed:
 - AtomDistanceColorProcessor
 - PeptideDialog: deletion of sequence
 - problem with normals in Cartoon model
-- doubled performance of SnapShot Visualisation
+- doubled performance of SnapShot visualisation, especially for large numbers of SnapShots
 - SnapShotVisualisation Dialog could cause core dump
+- DatasetControl could cause core dump, after deleting trajectory when 
+	SnapShotVisualisation Dialog was still open
 - issue with restoring window's geometry on X11 (still buggy on some X-Servers)
 - restoring of working dir
 - MDS dialog: switching off storing to trajectory file
@@ -48,3 +50,4 @@ changed:
 - disabled Server in BALLView by default
 - interface for the methods ModularWidget::applyPreferences, defaultPreferences, cancelPreferences
 - interface for the property "hidden" of Representation's
+- SnapShotVisualisation Dialog now loads all SnapShots into memory
