@@ -1,4 +1,4 @@
-// $Id: PDBAtom.C,v 1.4 1999/12/30 18:05:31 oliver Exp $
+// $Id: PDBAtom.C,v 1.5 2000/04/17 13:32:29 amoll Exp $
 
 #include <BALL/KERNEL/PDBAtom.h>
 
@@ -254,11 +254,6 @@ namespace BALL
 	float PDBAtom::getTemperatureFactor() const
 	{
 		return temperature_factor_;
-	}
-
-	bool PDBAtom::isValid() const
-	{ 
-		return Atom::isValid();
 	}
 
 	void PDBAtom::dump(ostream& s, Size depth) const

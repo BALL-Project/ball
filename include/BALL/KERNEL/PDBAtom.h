@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.5 2000/04/16 21:13:09 amoll Exp $
+// $Id: PDBAtom.h,v 1.6 2000/04/17 13:32:27 amoll Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -259,16 +259,6 @@ namespace BALL
 
 		/**	@name	Debugging and Diagnostics */
 		//@{
-
-		/** Internal state and consistency self-validation.
-				Initiate self-validation of the internal state and data structure consistencies of {\em *this} PDB-atom.
-				If the internal state of {\em *this} PDB-atom is correct (self-validated) and consistent {\tt true} is returned,
-				{\tt false} otherwise. 
-				@return			bool -
-										{\tt true} if the internal state of {\em *this} PDB-atom is correct (self-validated) and consistent,
-										{\tt false} otherwise
-		*/
-		virtual bool isValid() const;
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} PDB-atom to the output ostream {\em s} with dumping depth {\em depth}.
