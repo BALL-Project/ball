@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.2 2002/02/14 19:03:29 anker Exp $
+// $Id: fresno.h,v 1.1.2.3 2002/03/05 22:38:58 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -101,6 +101,7 @@ namespace BALL
 			/** Unknown type.
 			*/
 			UNKNOWN,
+
 			/** Lipophilic atom.
 					Defined as:
 					\begin{itemize}
