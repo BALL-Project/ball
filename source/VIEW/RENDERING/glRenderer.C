@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.25 2005/01/22 17:53:57 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.26 2005/01/23 09:01:40 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1309,6 +1309,7 @@ namespace BALL
 			// init name stack for 32000 objects
 			glGetIntegerv(GL_VIEWPORT, viewport);
 			glSelectBuffer(BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS, object_buffer_);
+			// uncoment this for debuging:
 			glRenderMode(GL_SELECT);
 			glInitNames();
 			glPushName(0);
@@ -1360,11 +1361,14 @@ namespace BALL
 				updateCamera();
 				return;
 			}
+
+			number_of_hits--;
 			
 			Position minimum_z_coord = UINT_MAX;
 			Position names;
 			Name nearest_name = 0;
 			Position* object_buffer_ptr = (Position*) object_buffer_;
+			GeometricObject* go = 0;
 
 			// collect only the nearest Object
 			if (width <= 3 && height <= 3) 
@@ -1372,43 +1376,37 @@ namespace BALL
 				Position z_coord;
 				
 				// find minimum z-coord
-				for (int index = 0; index < number_of_hits; ++index)
+				for (Index index = 0; index < number_of_hits; ++index)
 				{
 					names = *object_buffer_ptr;
 					++object_buffer_ptr;
 					z_coord = *object_buffer_ptr;
 					
-					++object_buffer_ptr;
-					++object_buffer_ptr;
+					object_buffer_ptr += 2;
 					
 					if (z_coord <= minimum_z_coord)
 					{
 						minimum_z_coord = z_coord;
-						nearest_name = (Name)*object_buffer_ptr;
+						nearest_name = *object_buffer_ptr;
 					}
 					
 					object_buffer_ptr += names;
 				}    
 				
-				GeometricObject* i = getObject(nearest_name);
-				if (i != 0) objects.push_back(i);
+				go = getObject(nearest_name);
+				if (go != 0) objects.push_back(go);
 			}
 			else // collect all objects that are in the picking area
 			{
-				for (int index = 0; index < number_of_hits; ++index)
+				for (Index index = 0; index < number_of_hits; ++index)
 				{
 					names = *object_buffer_ptr;
-					
-					++object_buffer_ptr;
-					++object_buffer_ptr;
-					++object_buffer_ptr;
-					
-					nearest_name = (Name)*object_buffer_ptr;
-					
+					object_buffer_ptr += 3;
+					nearest_name = *object_buffer_ptr;
 					object_buffer_ptr += names;
 
-					GeometricObject* i = getObject(nearest_name);
-					if (i != 0) objects.push_back(i);
+					go = getObject(nearest_name);
+					if (go != 0) objects.push_back(go);
 				}    
 			}
 
