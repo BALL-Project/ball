@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.20 2003/09/01 07:32:35 oliver Exp $
+# $Id: Makefile,v 1.21 2003/11/13 17:47:05 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -19,6 +19,8 @@ CPP_SOURCES=\
 	atomPropertiesData.C\
 	colorMeshDialog.C\
 	colorMeshDialogData.C\
+	coloringSettingsDialog.C\
+	coloringSettingsDialogData.C\
 	contourSurfaceDialog.C\
 	contourSurfaceDialogData.C\
 	displayProperties.C\
@@ -33,6 +35,8 @@ CPP_SOURCES=\
 	lightSettingsData.C\
 	mainControlPreferences.C\
 	mainControlPreferencesData.C\
+	modelSettingsDialog.C\
+	modelSettingsDialogData.C\
 	molecularDynamicsDialog.C\
 	molecularDynamicsDialogData.C\
 	molecularFileDialog.C\
@@ -62,6 +66,8 @@ MOC_SOURCES=\
 	amberMinimizationDialogData_moc.C\
 	atomProperties_moc.C\
 	atomPropertiesData_moc.C\
+	coloringSettingsDialog_moc.C\
+	coloringSettingsDialogData_moc.C\
 	colorMeshDialog_moc.C\
 	colorMeshDialogData_moc.C\
 	contourSurfaceDialog_moc.C\
@@ -78,6 +84,8 @@ MOC_SOURCES=\
 	lightSettingsData_moc.C\
 	mainControlPreferences_moc.C\
 	mainControlPreferencesData_moc.C\
+	modelSettingsDialog_moc.C\
+	modelSettingsDialogData_moc.C\
 	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
 	molecularDynamicsDialogData_moc.C\
@@ -105,6 +113,8 @@ MOC_SOURCES=\
 UIC_SOURCES=\
 	amberMinimizationDialogData.C\
 	atomPropertiesData.C\
+	coloringSettingsDialogData.C\
+	colorMeshDialogData.C\
 	colorMeshDialogData.C\
 	contourSurfaceDialogData.C\
 	displayPropertiesData.C\
@@ -112,6 +122,7 @@ UIC_SOURCES=\
 	labelDialogData.C\
 	lightSettingsData.C\
 	mainControlPreferencesData.C\
+	modelSettingsDialogData.C\
 	molecularDynamicsDialogData.C\
 	moveOverlayDialogData.C\
 	mouseSensitivityData.C\
