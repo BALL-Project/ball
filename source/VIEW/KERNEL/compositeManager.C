@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.C,v 1.7 2004/12/13 22:43:26 amoll Exp $
+// $Id: compositeManager.C,v 1.8 2004/12/16 16:24:19 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/compositeManager.h>
@@ -105,7 +105,7 @@ namespace BALL
 
 			if (to_delete)
 			{
-				composite.destroy();
+				delete &composite;
 			}
 			return true;
 		}
