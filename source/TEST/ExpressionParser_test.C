@@ -1,9 +1,8 @@
-// $Id: ExpressionParser_test.C,v 1.2 2002/01/27 05:48:32 oliver Exp $
+// $Id: ExpressionParser_test.C,v 1.3 2002/01/27 05:56:40 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-// insert includes here
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/expression.h>
@@ -19,10 +18,16 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(ExpressionParser, "$Id: ExpressionParser_test.C,v 1.2 2002/01/27 05:48:32 oliver Exp $")
+START_TEST(ExpressionParser, "$Id: ExpressionParser_test.C,v 1.3 2002/01/27 05:56:40 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
+
+CHECK(ExpressionParser::parse(const String& s))
+	ExpressionParser parser;
+	parser.parse("pases('(H2)') AND element('H'))");
+	parser.getSyntaxTree().dump();
+RESULT
 
 // tests for class SyntaxTree::
 
@@ -47,6 +52,7 @@ CHECK(SyntaxTree::~SyntaxTree() throw())
 	delete st_ptr;
 RESULT
 
+
 /*
 CHECK(SyntaxTree::SyntaxTree(const String& expression) throw())
 	String teststring("BALL teststring");
@@ -62,6 +68,7 @@ CHECK(SyntaxTree::SyntaxTree(const String& expression) throw())
 	TEST_EQUAL(test, true)
 RESULT
 */
+
 
 CHECK(SyntaxTree::begin() throw())
 	SyntaxTree* child1 = new SyntaxTree;
@@ -143,6 +150,7 @@ CHECK(SyntaxTree::end() const  throw())
 	bool test = (*test_it == child3);
 	TEST_EQUAL(test, true)
 RESULT
+
 
 /*
 CHECK(SyntaxTree::mergeLeft(SyntaxTree* tree) throw())
