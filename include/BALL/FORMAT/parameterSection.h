@@ -1,4 +1,4 @@
-// $Id: parameterSection.h,v 1.3 2000/02/17 00:30:40 oliver Exp $
+// $Id: parameterSection.h,v 1.4 2000/09/19 16:01:47 oliver Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -25,10 +25,17 @@ namespace BALL
 	{
 		public:
 
+		BALL_CREATE(ParameterSection)
+
+		/**	@name Enums
+		*/
+		//@{
+		///
 		enum 
 		{
 			MAX_FIELDS = 20
 		};
+		//@}
 
 		/**	@name	Constructors and Destructors
 		*/
