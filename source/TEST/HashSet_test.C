@@ -1,4 +1,4 @@
-// $Id: HashSet_test.C,v 1.7 2000/09/05 09:27:40 oliver Exp $
+// $Id: HashSet_test.C,v 1.8 2000/09/05 13:13:01 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.7 2000/09/05 09:27:40 oliver Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.8 2000/09/05 13:13:01 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -214,12 +214,40 @@ RESULT
 CHECK(HashSet::erase(const ValueType& entry))
 	HashSet<int> hs;
 	hs.insert(0);
-	hs.erase(0);
+	hs.insert(1);
+	hs.insert(2);
+	hs.insert(3);
+	Size res = hs.erase(0);
+	TEST_EQUAL(res, 1)
 	TEST_EQUAL(hs.has(0), false)
-	TEST_EQUAL(hs.getSize(), 0)
+	TEST_EQUAL(hs.has(1), true)
+	TEST_EQUAL(hs.has(2), true)
+	TEST_EQUAL(hs.has(3), true)
+	TEST_EQUAL(hs.getSize(), 3)
+	res = hs.erase(0);
+	TEST_EQUAL(res, 0)
+	TEST_EQUAL(hs.has(0), false)
+	TEST_EQUAL(hs.has(1), true)
+	TEST_EQUAL(hs.has(2), true)
+	TEST_EQUAL(hs.has(3), true)
+	TEST_EQUAL(hs.getSize(), 3)
+	res = hs.erase(4);
+	TEST_EQUAL(res, 0)
+	TEST_EQUAL(hs.has(0), false)
+	TEST_EQUAL(hs.has(1), true)
+	TEST_EQUAL(hs.has(2), true)
+	TEST_EQUAL(hs.has(3), true)
+	TEST_EQUAL(hs.getSize(), 3)
+	res = hs.erase(3);
+	TEST_EQUAL(res, 1)
+	TEST_EQUAL(hs.has(0), false)
+	TEST_EQUAL(hs.has(1), true)
+	TEST_EQUAL(hs.has(2), true)
+	TEST_EQUAL(hs.has(3), false)
+	TEST_EQUAL(hs.getSize(), 2)
 RESULT
 
-CHECK(HashSet::erase(Iterator first, Iterator last))/*
+CHECK(HashSet::erase(Iterator first, Iterator last))
 	HashSet<int> hs;
 	hs.insert(0);
 	hs.insert(1);
@@ -233,11 +261,33 @@ CHECK(HashSet::erase(Iterator first, Iterator last))/*
 	++it1;
 
 	hs.erase(it1, it2);
-	TEST_EQUAL(hs.has(0), true)
+	TEST_EQUAL(hs.has(0), false)
 	TEST_EQUAL(hs.has(2), true)
 	TEST_EQUAL(hs.has(3), true)
+	TEST_EQUAL(hs.has(1), true)
+	TEST_EQUAL(hs.getSize(), 3)
+
+	hs.erase(hs.begin(), hs.end());
+	TEST_EQUAL(hs.getSize(), 0)
+
+	hs.insert(0);
+	hs.insert(1);
+	hs.insert(2);
+	hs.insert(3);
+	TEST_EQUAL(hs.getSize(), 4)
+	it1 = hs.begin();
+	++it1;
+	++it1;
+	hs.erase(it1, hs.end());
+	TEST_EQUAL(hs.getSize(), 2)
+	TEST_EQUAL(hs.has(0), true)
 	TEST_EQUAL(hs.has(1), false)
-	TEST_EQUAL(hs.getSize(), 3)*/
+	TEST_EQUAL(hs.has(2), false)
+	TEST_EQUAL(hs.has(3), true)
+
+	HashSet<int> hs2;
+	TEST_EXCEPTION(Exception::IncompatibleIterators, hs.erase(hs.begin(), hs2.end()))
+	TEST_EXCEPTION(Exception::IncompatibleIterators, hs.erase(hs2.begin(), hs.end()))
 RESULT
 
 CHECK(HashSet::erase(Iterator pos))
