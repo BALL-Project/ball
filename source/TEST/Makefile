@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.195 2003/06/16 15:40:15 anker Exp $
+# $Id: Makefile,v 1.196 2003/06/19 10:45:52 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -87,6 +87,10 @@ EXECUTABLES_CONCEPTS = \
 	PropertyManager_test\
 	Composite_test1\
 	Composite_test2\
+	CompositeCompositeIteratorTraits_test\
+	CompositeChildcompositeIteratorTraits_test\
+	CompositeAncestorIteratorTraits_test\
+	CompositeIteratorTraits_test\
 	Embeddable_test
 
 EXECUTABLES_KERNEL = \
@@ -115,15 +119,14 @@ EXECUTABLES_KERNEL = \
 	ForEach_test\
 	GlobalKernel_test\
 	BaseIterator_test\
-	ConstForwardIterator_test
-
-EXECUTABLE_ITERATORS = \
+	ConstForwardIterator_test\
 	ForwardIterator_test\
 	ConstBidirectionalIterator_test\
 	BidirectionalIterator_test\
-	ConstRandomAccessIterator_test\
-	RandomAccessIterator_test\
 	AtomIterator_test
+
+#	ConstRandomAccessIterator_test\
+#	RandomAccessIterator_test\
 
 EXECUTABLES_MOLMEC = \
 	Gradient_test\

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Composite_test1.C,v 1.7 2003/06/12 15:42:24 oliver Exp $
+// $Id: Composite_test1.C,v 1.8 2003/06/19 10:45:51 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -30,7 +30,7 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test1.C,v 1.7 2003/06/12 15:42:24 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test1.C,v 1.8 2003/06/19 10:45:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -257,6 +257,8 @@ RESULT
 
 CHECK([EXTRA] Composite forward iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   b.appendChild(c);
   b.appendChild(d);
@@ -281,10 +283,33 @@ CHECK([EXTRA] Composite forward iteration)
 	sub_it++;
   TEST_EQUAL(+sub_it, false)
   TEST_EQUAL(sub_it == a.endComposite(), true)
+
+	// Iteration over an empty container
+	Composite f;
+	sub_it = f.beginComposite();
+	TEST_EQUAL(sub_it.isValid(), true)
+	TEST_EQUAL(&*sub_it, &f)
+	++sub_it;
+	TEST_EQUAL(sub_it.isValid(), false)
+	TEST_EQUAL(sub_it == f.endComposite(), true)
+	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
+
+	Composite g;
+	Composite h;
+	g.appendChild(h);
+	sub_it = h.beginComposite();
+	TEST_EQUAL(sub_it.isValid(), true)
+	TEST_EQUAL(&*sub_it, &h)
+	++sub_it;
+	TEST_EQUAL(sub_it.isValid(), false)
+	TEST_EQUAL(sub_it == h.endComposite(), true)
+	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
 RESULT
 
 CHECK([EXTRA] Composite forward const iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   b.appendChild(c);
   b.appendChild(d);
@@ -309,10 +334,33 @@ CHECK([EXTRA] Composite forward const iteration)
 	sub_it++;
   TEST_EQUAL(+sub_it, false)
   TEST_EQUAL(sub_it == a.endComposite(), true)
+
+	// Iteration over an empty container
+	Composite f;
+	sub_it = const_cast<const Composite&>(f).beginComposite();
+	TEST_EQUAL(sub_it.isValid(), true)
+	TEST_EQUAL(&*sub_it, &f)
+	++sub_it;
+	TEST_EQUAL(sub_it.isValid(), false)
+	TEST_EQUAL(sub_it == const_cast<const Composite&>(f).endComposite(), true)
+	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
+
+	Composite g;
+	Composite h;
+	g.appendChild(h);
+	sub_it = const_cast<const Composite&>(h).beginComposite();
+	TEST_EQUAL(sub_it.isValid(), true)
+	TEST_EQUAL(&*sub_it, &h)
+	++sub_it;
+	TEST_EQUAL(sub_it.isValid(), false)
+	TEST_EQUAL(sub_it == const_cast<const Composite&>(h).endComposite(), true)
+	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
 RESULT
 
 CHECK([EXTRA] Composite backward iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   b.appendChild(c);
   b.appendChild(d);
@@ -342,6 +390,8 @@ RESULT
 
 CHECK([EXTRA] Composite backward const iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   b.appendChild(c);
   b.appendChild(d);
@@ -371,6 +421,8 @@ RESULT
 
 CHECK([EXTRA] Composite forward reverse iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   b.appendChild(c);
   b.appendChild(d);
@@ -399,6 +451,8 @@ RESULT
 
 CHECK([EXTRA] Composite forward reverse const iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   b.appendChild(c);
   b.appendChild(d);
@@ -427,6 +481,8 @@ RESULT
 
 CHECK([EXTRA] Composite backward reverse iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   b.appendChild(c);
   b.appendChild(d);
@@ -455,6 +511,8 @@ RESULT
 
 CHECK([EXTRA] Composite backward reverse const iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   b.appendChild(c);
   b.appendChild(d);
@@ -526,6 +584,8 @@ RESULT
 
 CHECK([EXTRA] ChildComposite forward iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   a.appendChild(c);
   a.appendChild(d);
@@ -544,10 +604,27 @@ CHECK([EXTRA] ChildComposite forward iteration)
 	sub_it++;
   TEST_EQUAL(+sub_it, false)
   TEST_EQUAL(sub_it == a.endChildComposite(), true)
+
+	// Iteration over an empty container
+	Composite f;
+	sub_it = f.beginChildComposite();
+	TEST_EQUAL(sub_it.isValid(), false)
+	TEST_EQUAL(sub_it == f.endChildComposite(), true)
+	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
+
+	Composite g;
+	Composite h;
+	g.appendChild(h);
+	sub_it = h.beginChildComposite();
+	TEST_EQUAL(sub_it.isValid(), false)
+	TEST_EQUAL(sub_it == h.endChildComposite(), true)
+	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
 RESULT
 
 CHECK([EXTRA] ChildComposite forward const iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   a.appendChild(c);
   a.appendChild(d);
@@ -566,10 +643,27 @@ CHECK([EXTRA] ChildComposite forward const iteration)
 	sub_it++;
   TEST_EQUAL(+sub_it, false)
   TEST_EQUAL(sub_it == a.endChildComposite(), true)
+
+	// Iteration over an empty container
+	Composite f;
+	sub_it = const_cast<const Composite&>(f).beginChildComposite();
+	TEST_EQUAL(sub_it.isValid(), false)
+	TEST_EQUAL(sub_it == const_cast<const Composite&>(f).endChildComposite(), true)
+	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
+
+	Composite g;
+	Composite h;
+	g.appendChild(h);
+	sub_it = const_cast<const Composite&>(h).beginChildComposite();
+	TEST_EQUAL(sub_it.isValid(), false)
+	TEST_EQUAL(sub_it == const_cast<const Composite&>(h).endChildComposite(), true)
+	TEST_EXCEPTION(Exception::Precondition, ++sub_it)
 RESULT
 
 CHECK([EXTRA] ChildComposite backward iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   a.appendChild(c);
   a.appendChild(d);
@@ -593,6 +687,8 @@ RESULT
 
 CHECK([EXTRA] ChildComposite backward const iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   a.appendChild(c);
   a.appendChild(d);
@@ -616,6 +712,8 @@ RESULT
 
 CHECK([EXTRA] ChildComposite forward reverse iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   a.appendChild(c);
   a.appendChild(d);
@@ -638,6 +736,8 @@ RESULT
 
 CHECK([EXTRA] ChildComposite forward reverse const iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   a.appendChild(c);
   a.appendChild(d);
@@ -660,6 +760,8 @@ RESULT
 
 CHECK([EXTRA] ChildComposite backward reverse iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   a.appendChild(c);
   a.appendChild(d);
@@ -682,6 +784,8 @@ RESULT
 
 CHECK([EXTRA] ChildComposite backward reverse const iteration)
   Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
   a.appendChild(b);
   a.appendChild(c);
   a.appendChild(d);
@@ -738,6 +842,8 @@ RESULT
 
 CHECK(bool containsSelection() const throw())
 	Composite a, b, c, d, e;
+	Composite root;
+	root.appendChild(a);
 	a.appendChild(b);
 	b.appendChild(c);
 	b.appendChild(d);
@@ -757,6 +863,8 @@ RESULT
 
 CHECK(Size getPathLength(const Composite& composite) const throw())
 	Composite a, b, c, d, e, f;
+	Composite root;
+	root.appendChild(a);
 	a.appendChild(b);
 	b.appendChild(c);
 	b.appendChild(d);
@@ -778,256 +886,6 @@ CHECK(Size getPathLength(const Composite& composite) const throw())
 	TEST_EQUAL(e.getPathLength(b), 2)
 	TEST_EQUAL(a.getPathLength(f), INVALID_SIZE)
 	TEST_EQUAL(f.getPathLength(a), INVALID_SIZE)
-RESULT
-
-CHECK(SubcompositeIterator beginSubcomposite() throw())
-RESULT
-
-CHECK(SubcompositeIterator endSubcomposite() throw())
-RESULT
-
-CHECK(SubcompositeConstIterator beginSubcomposite() const throw())
-RESULT
-
-CHECK(SubcompositeConstIterator endSubcomposite() const throw())
-RESULT
-
-CHECK(SubcompositeReverseIterator rbeginSubcomposite() throw())
-RESULT
-
-CHECK(SubcompositeReverseIterator rendSubcomposite() throw())
-RESULT
-
-CHECK(SubcompositeConstReverseIterator rbeginSubcomposite() const throw())
-RESULT
-
-CHECK(SubcompositeConstReverseIterator rendSubcomposite() const throw())
-RESULT
-
-CHECK([EXTRA] Subcomposite forward iteration)
-  Composite a, b, c, d, e;
-  a.appendChild(b);
-  b.appendChild(c);
-  b.appendChild(d);
-  c.appendChild(e);
-	Composite::SubcompositeIterator sub_it;
-  TEST_EQUAL(+sub_it, false)
-  sub_it = a.beginSubcomposite();
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &a)
-	++sub_it;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &b)
-	sub_it++;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &c)
-	sub_it++;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &e)
-	sub_it++;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &d)
-	sub_it++;
-  TEST_EQUAL(+sub_it, false)
-  TEST_EQUAL(sub_it == a.endSubcomposite(), true)
-RESULT
-
-CHECK([EXTRA] Subcomposite forward const iteration)
-  Composite a, b, c, d, e;
-  a.appendChild(b);
-  b.appendChild(c);
-  b.appendChild(d);
-  c.appendChild(e);
-	Composite::SubcompositeConstIterator sub_it;
-  TEST_EQUAL(+sub_it, false)
-  sub_it = const_cast<const Composite&>(a).beginSubcomposite();
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &a)
-	++sub_it;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &b)
-	sub_it++;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &c)
-	sub_it++;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &e)
-	sub_it++;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &d)
-	sub_it++;
-  TEST_EQUAL(+sub_it, false)
-  TEST_EQUAL(sub_it == a.endSubcomposite(), true)
-RESULT
-
-CHECK([EXTRA] Subcomposite backward iteration)
-  Composite a, b, c, d, e;
-  a.appendChild(b);
-  b.appendChild(c);
-  b.appendChild(d);
-  c.appendChild(e);
-	Composite::SubcompositeIterator sub_it;
-  TEST_EQUAL(+sub_it, false)
-  sub_it = a.endSubcomposite();
-  TEST_EQUAL(sub_it.isValid(), false)
-	--sub_it;
-	TEST_EQUAL(sub_it.isValid(), true)
-  TEST_EQUAL(&*sub_it, &d)
-	--sub_it;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &e)
-	sub_it--;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &c)
-	sub_it--;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &b)
-	sub_it--;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &a)
-	sub_it--;
-  TEST_EQUAL(+sub_it, false)
-RESULT
-
-CHECK([EXTRA] Subcomposite backward const iteration)
-  Composite a, b, c, d, e;
-  a.appendChild(b);
-  b.appendChild(c);
-  b.appendChild(d);
-  c.appendChild(e);
-	Composite::SubcompositeConstIterator sub_it;
-  TEST_EQUAL(+sub_it, false)
-  sub_it = const_cast<const Composite&>(a).endSubcomposite();
-  TEST_EQUAL(sub_it.isValid(), false)
-	--sub_it;
-	TEST_EQUAL(sub_it.isValid(), true)
-  TEST_EQUAL(&*sub_it, &d)
-	--sub_it;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &e)
-	sub_it--;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &c)
-	sub_it--;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &b)
-	sub_it--;
-  TEST_EQUAL(+sub_it, true)
-  TEST_EQUAL(&*sub_it, &a)
-	sub_it--;
-  TEST_EQUAL(+sub_it, false)
-RESULT
-
-CHECK([EXTRA] Subcomposite forward reverse iteration)
-  Composite a, b, c, d, e;
-  a.appendChild(b);
-  b.appendChild(c);
-  b.appendChild(d);
-  c.appendChild(e);
-	Composite::SubcompositeReverseIterator sub_it;
-  TEST_EQUAL(sub_it.base().isValid(), false)
-  sub_it = a.rbeginSubcomposite();
-  TEST_EQUAL(sub_it.base().isValid(), false)
-  TEST_EQUAL(&*sub_it, &d)
-	++sub_it;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &e)
-	sub_it++;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &c)
-	sub_it++;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &b)
-	sub_it++;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &a)
-	sub_it++;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(sub_it == a.rendSubcomposite(), true)
-RESULT
-
-CHECK([EXTRA] Subcomposite forward reverse const iteration)
-  Composite a, b, c, d, e;
-  a.appendChild(b);
-  b.appendChild(c);
-  b.appendChild(d);
-  c.appendChild(e);
-	Composite::SubcompositeConstReverseIterator sub_it;
-  TEST_EQUAL(sub_it.base().isValid(), false)
-  sub_it = const_cast<const Composite&>(a).rbeginSubcomposite();
-  TEST_EQUAL(sub_it.base().isValid(), false)
-  TEST_EQUAL(&*sub_it, &d)
-	++sub_it;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &e)
-	sub_it++;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &c)
-	sub_it++;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &b)
-	sub_it++;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &a)
-	sub_it++;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(sub_it == const_cast<const Composite&>(a).rendSubcomposite(), true)
-RESULT
-
-CHECK([EXTRA] Subcomposite backward reverse iteration)
-  Composite a, b, c, d, e;
-  a.appendChild(b);
-  b.appendChild(c);
-  b.appendChild(d);
-  c.appendChild(e);
-	Composite::SubcompositeReverseIterator sub_it;
-  TEST_EQUAL(sub_it.base().isValid(), false)
-  sub_it = a.rendSubcomposite();
-  TEST_EQUAL(sub_it.base().isValid(), true)
-	--sub_it;
-	TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &a)
-	--sub_it;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &b)
-	sub_it--;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &c)
-	sub_it--;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &e)
-	sub_it--;
-  TEST_EQUAL(sub_it.base().isValid(), false)
-  TEST_EQUAL(&*sub_it, &d)
-	TEST_EQUAL(sub_it == a.rbeginSubcomposite(), true)
-RESULT
-
-CHECK([EXTRA] Subcomposite backward reverse const iteration)
-  Composite a, b, c, d, e;
-  a.appendChild(b);
-  b.appendChild(c);
-  b.appendChild(d);
-  c.appendChild(e);
-	Composite::SubcompositeConstReverseIterator sub_it;
-  TEST_EQUAL(sub_it.base().isValid(), false)
-  sub_it = const_cast<const Composite&>(a).rendSubcomposite();
-  TEST_EQUAL(sub_it.base().isValid(), true)
-	--sub_it;
-	TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &a)
-	--sub_it;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &b)
-	sub_it--;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &c)
-	sub_it--;
-  TEST_EQUAL(sub_it.base().isValid(), true)
-  TEST_EQUAL(&*sub_it, &e)
-	sub_it--;
-  TEST_EQUAL(sub_it.base().isValid(), false)
-  TEST_EQUAL(&*sub_it, &d)
-	TEST_EQUAL(sub_it == const_cast<const Composite&>(a).rbeginSubcomposite(), true)
 RESULT
 
 Composite a, b, c, d, e, f;

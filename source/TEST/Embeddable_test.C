@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Embeddable_test.C,v 1.4 2003/06/13 14:39:57 anker Exp $
+// $Id: Embeddable_test.C,v 1.5 2003/06/19 10:45:52 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -130,12 +132,15 @@ CHECK([EXTRA] getInstance(const String& identifier))
 	A a1;
 	a1.setIdentifier(String("One"));
 	A a2;
-	a1.setIdentifier(String("Two"));
+	a2.setIdentifier(String("Two"));
 	A a3;
-	a1.setIdentifier(String("Three"));
+	a3.setIdentifier(String("Three"));
 	a3.registerThis();
 	a2.registerThis();
 	a1.registerThis();
+	STATUS(" &a1 = " << &a1)
+	STATUS(" &a2 = " << &a2)
+	STATUS(" &a3 = " << &a3)
 	TEST_EQUAL(A::countInstances(), 3)
 	TEST_EQUAL(A::getInstance("Three"), &a3)
 	TEST_EQUAL(A::getInstance("Two"), &a2)

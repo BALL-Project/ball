@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ForwardIterator_test.C,v 1.1 2003/06/11 16:09:26 oliver Exp $
+// $Id: ForwardIterator_test.C,v 1.2 2003/06/19 10:45:52 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -354,9 +354,9 @@ class VectorIteratorTraits_
 	VectorIteratorPosition_  position_;
 };
 
-typedef BaseIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > MyIterator;
+typedef ForwardIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > MyIterator;
 
-START_TEST(RandomAccessIterator, "$Id: ForwardIterator_test.C,v 1.1 2003/06/11 16:09:26 oliver Exp $")
+START_TEST(ForwardIterator, "$Id: ForwardIterator_test.C,v 1.2 2003/06/19 10:45:52 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -364,13 +364,13 @@ START_TEST(RandomAccessIterator, "$Id: ForwardIterator_test.C,v 1.1 2003/06/11 1
 MyIterator* m_ptr;
 
 
-CHECK(BaseIterator() throw())
+CHECK(ForwardIterator() throw())
 	m_ptr = new MyIterator;
 	TEST_NOT_EQUAL(m_ptr, 0)
 	TEST_EQUAL(m_ptr->isValid(), false)
 RESULT
 
-CHECK(~BaseIterator() throw())
+CHECK(~ForwardIterator() throw())
  delete(m_ptr);
 RESULT
 
@@ -381,127 +381,15 @@ v.push_back((float)0.2);
 v.push_back((float)0.3);
 v.push_back((float)0.4);
 
-CHECK(BaseIterator(const Container& container))
-	MyIterator m;
-	m.getTraits().bindTo(v);
-	TEST_EQUAL(m.isValid(), true)
-	TEST_REAL_EQUAL(*m, 0.1)
-RESULT
-
 MyIterator m;
 m.getTraits().bindTo(v);
 MyIterator n;
 
-CHECK(BaseIterator& operator = (const BaseIterator<Container, DataType, Position, Traits>& iterator) throw())
+CHECK(ForwardIterator(const ForwardIterator& iterator) throw())
   // ???
 RESULT
 
-CHECK(BaseIterator(const BaseIterator& iterator) throw())
-  // ???
-RESULT
-
-CHECK(Traits& getTraits() throw())
-  // ???
-RESULT
-
-CHECK(const Traits& getTraits() const throw())
-	// ???
-RESULT
-
-CHECK(bool isSingular() const throw())
-	MyIterator i1;
-	TEST_EQUAL(i1.isSingular(), true)
-	i1.getTraits().bindTo(v);
-	TEST_EQUAL(i1.isSingular(), false)
-	i1.invalidate();
-	TEST_EQUAL(i1.isSingular(), true)
-RESULT
-
-CHECK(bool isValid() const throw())
-	MyIterator i1;
-	TEST_EQUAL(i1.isValid(), false)
-	i1.getTraits().bindTo(v);
-	TEST_EQUAL(i1.isValid(), true)
-	i1.invalidate();
-	TEST_EQUAL(i1.isValid(), false)
-RESULT
-
-CHECK(bool operator != (const BaseIterator& iterator) const throw())
-  // ???
-RESULT
-
-CHECK(bool operator + () const throw())
-	MyIterator i1;
-	TEST_EQUAL(+i1, false)
-	i1.getTraits().bindTo(v);
-	TEST_EQUAL(+i1, true)
-	i1.invalidate();
-	TEST_EQUAL(+i1, false)
-RESULT
-
-CHECK(bool operator - () const throw())
-	MyIterator i1;
-	TEST_EQUAL(-i1, true)
-	i1.getTraits().bindTo(v);
-	TEST_EQUAL(-i1, false)
-	i1.invalidate();
-	TEST_EQUAL(-i1, true)
-RESULT
-
-CHECK(bool operator == (const BaseIterator& iterator) const throw())
-  // ???
-RESULT
-
-CHECK(const Container* getContainer() const throw())
-	MyIterator i1;
-	TEST_EQUAL(i1.getContainer(), 0)
-	
-	MyIterator i2;
-	i2.getTraits().bindTo(v);
-	TEST_EQUAL(i2.getContainer(), &v)
-RESULT
-
-CHECK(operator const Position& () const throw())
-  // ???
-RESULT
-
-CHECK(pointer operator -> () const throw())
-	MyIterator i1;
-	i1.getTraits().bindTo(v);
-	TEST_EQUAL(*(i1.operator -> ()), v[0])
-RESULT
-
-CHECK(reference operator * () const throw())
-	MyIterator i1;
-	i1.getTraits().bindTo(v);
-	TEST_EQUAL(*i1, v[0])
-RESULT
-
-CHECK(void invalidate() throw())
-	MyIterator i1;
-	i1.getTraits().bindTo(v);
-	TEST_EQUAL(i1.isValid(), true)
-	TEST_EQUAL(i1.getContainer(), &v)
-	i1.invalidate();
-	TEST_EQUAL(i1.isValid(), false)
-	TEST_EQUAL(i1.getContainer(), 0)
-RESULT
-
-CHECK(void setTraits(const Traits& traits) throw())
-	MyIterator i1;
-	i1.getTraits().bindTo(v);
-	MyIterator i2;
-	TEST_EQUAL(i2.getTraits().getContainer(), 0)
-	i2.setTraits(i1.getTraits());
-	TEST_EQUAL(i2.getTraits().getContainer(), &v)
-
-	// Make sure we got our own copy!
-	i2.invalidate();
-	TEST_EQUAL(i2.getTraits().getContainer(), 0)
-	TEST_EQUAL(i1.getTraits().getContainer(), &v)
-RESULT
-
-CHECK(void swap(BaseIterator& iterator) throw())
+CHECK(void swap(ForwardIterator& iterator) throw())
 	std::vector<float> v1(5);
 	std::vector<float> v2(10);	
 	MyIterator i1;
@@ -515,7 +403,35 @@ CHECK(void swap(BaseIterator& iterator) throw())
 	TEST_EQUAL(i2.getContainer(), &v1)	
 RESULT
 
-CHECK(STL requirements for input iterator)
+CHECK(ForwardIterator operator ++ (int) throw(Exception::Precondition))
+  // ???
+RESULT
+
+CHECK(ForwardIterator& operator ++ () throw(Exception::Precondition))
+  // ???
+RESULT
+
+CHECK(ForwardIterator& operator = (const ForwardIterator& iterator) throw())
+  // ???
+RESULT
+
+CHECK(static ForwardIterator begin(const Container& container) throw(Exception::Precondition))
+  // ???
+RESULT
+
+CHECK(static ForwardIterator end(const Container& container) throw(Exception::Precondition))
+  // ???
+RESULT
+
+CHECK(pointer operator -> () const throw())
+ // ????
+RESULT
+
+CHECK(reference operator * () const throw())
+ // ????
+RESULT
+
+CHECK([EXTRA] STL requirements for forward iterator)
  // ????
 RESULT
 

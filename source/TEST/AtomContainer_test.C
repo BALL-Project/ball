@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AtomContainer_test.C,v 1.8 2002/12/12 11:34:39 oliver Exp $
+// $Id: AtomContainer_test.C,v 1.9 2003/06/19 10:45:50 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +14,7 @@
 
 #include <algorithm>
 
-START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.8 2002/12/12 11:34:39 oliver Exp $")
+START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.9 2003/06/19 10:45:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -26,31 +27,57 @@ NEW_TMP_FILE(filename)
 
 
 AtomContainer*	ac;
-CHECK(AtomContainer())
+CHECK(AtomContainer() throw())
 	ac = new AtomContainer;
 	TEST_NOT_EQUAL(ac, 0)
 RESULT
 
-CHECK(~AtomContainer())
+CHECK(~AtomContainer() throw())
 	delete ac;
 RESULT
 
-CHECK(setName(String&))
+CHECK(void setName(const String& name) throw())
 	ac = new AtomContainer;
 	ac->setName("testname");
 RESULT
 
-CHECK(getName())
+CHECK(const String& getName() const throw())
 	TEST_EQUAL(ac->getName(), "testname")
 	delete ac;
 RESULT
 
-CHECK(AtomContainer(AtomContainer&, bool))
+CHECK(AtomContainer(const AtomContainer& atom_container, bool deep = true) throw())
 	AtomContainer* ac1 = new AtomContainer;
 	ac1->setName("testname");
 	Atom a;
 	a.setName("a");
+	Atom b;
+	b.setName("b");
 	ac1->insert(a);
+	ac1->insert(b);
+	AtomIterator it(ac1->beginAtom());
+	TEST_EQUAL(it.isValid(), true)
+	TEST_EQUAL(&*it, &a)
+	TEST_EQUAL(it == ac1->endAtom(), false)
+	++it;
+	TEST_EQUAL(&*it, &b)
+	TEST_EQUAL(it == ac1->endAtom(), false)
+	++it;
+	TEST_EQUAL(it == ac1->endAtom(), true)
+	
+	AtomConstIterator atit(ac1->beginAtom());
+	for (; atit != ac1->endAtom(); ++atit)
+	{
+		TEST_EQUAL(atit.isValid(), true)
+		TEST_EQUAL(+atit, true)
+		TEST_EQUAL(atit.isEnd(), false)
+	}
+	TEST_EQUAL(atit.isValid(), false)
+	TEST_EQUAL(+atit, false)
+	TEST_EQUAL(atit.isEnd(), true)
+
+	TEST_EQUAL(ac1->countAtoms(), 2)
+	STATUS("cloning container with one atom")
 	AtomContainer* ac2 = new AtomContainer(*ac1, true);
 	TEST_NOT_EQUAL(ac2, 0)
 	if (ac2 != 0)
@@ -69,7 +96,7 @@ CHECK(AtomContainer(AtomContainer&, bool))
 	delete ac1;
 RESULT
 
-CHECK(AtomContainer(String&))
+CHECK(AtomContainer(const String& name) throw())
 	AtomContainer* ac1 = new AtomContainer("hello");
 	TEST_NOT_EQUAL(ac1, 0)
 	if (ac1 != 0)
@@ -79,20 +106,20 @@ CHECK(AtomContainer(String&))
 	}
 RESULT
 
-CHECK(insert(AtomContainer&))
+CHECK(void insert(AtomContainer& atom_container) throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	ac1.insert(ac2);
 RESULT
 
-CHECK(remove(AtomContainer&))
+CHECK(bool remove(AtomContainer& atom_container) throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	ac1.insert(ac2);
 	ac1.remove(ac2);
 RESULT
 
-CHECK(countAtomContainers())
+CHECK(Size countAtomContainers() const throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	TEST_EQUAL(ac1.countAtomContainers(), 0)
@@ -115,7 +142,7 @@ CHECK(countAtomContainers())
 	TEST_EQUAL(ac2.countAtomContainers(), 0)
 RESULT
 
-CHECK(getAtomContainer(Position))
+CHECK(AtomContainer* getAtomContainer(Position position) throw())
 	AtomContainer ac1("ac1");
 	AtomContainer ac2("ac2");
 	AtomContainer* ac3;
@@ -132,7 +159,7 @@ CHECK(getAtomContainer(Position))
 	TEST_EQUAL(ac3, 0)
 RESULT
 
-CHECK(getAtomContainer(Position) const)
+CHECK(const AtomContainer* getAtomContainer(Position position) const throw())
 	AtomContainer ac1("ac1");
 	AtomContainer ac2("ac2");
 	const AtomContainer* ac3;
@@ -149,7 +176,7 @@ CHECK(getAtomContainer(Position) const)
 	TEST_EQUAL(ac3, 0)
 RESULT
 
-CHECK(clear())
+CHECK(void clear() throw())
 	AtomContainer ac1("ac1");
 	AtomContainer ac2("ac2");
 	AtomContainer ac3("ac2");
@@ -163,7 +190,7 @@ CHECK(clear())
 	TEST_EQUAL(ac2.countAtomContainers(), 0)
 RESULT
 
-CHECK(destroy())
+CHECK(void destroy() throw())
 	AtomContainer ac1("ac1");
 	AtomContainer ac2("ac2");
 	AtomContainer ac3("ac2");
@@ -177,7 +204,7 @@ CHECK(destroy())
 	TEST_EQUAL(ac2.countAtomContainers(), 0)
 RESULT
 
-CHECK(clone(bool))
+CHECK([EXTRA] void* clone(bool deep = true) throw())
 	AtomContainer* ac1 = new AtomContainer;
 	Composite*	composite = (Composite*)ac1;
 	ac1->setName("hello");
@@ -220,7 +247,7 @@ TextPersistenceManager pm;
 using namespace RTTI;
 pm.registerClass(getStreamName<AtomContainer>(), AtomContainer::createDefault);
 NEW_TMP_FILE(filename)
-CHECK(persistentWrite(PersistenceManager&, String, bool))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	AtomContainer* f1 = new AtomContainer("name1");
 	AtomContainer* f2 = new AtomContainer("name2");
@@ -233,7 +260,7 @@ CHECK(persistentWrite(PersistenceManager&, String, bool))
 	delete f1;
 RESULT
 
-CHECK(persistentRead(PersistenceManager&))
+CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();
@@ -254,7 +281,7 @@ CHECK(persistentRead(PersistenceManager&))
 	}
 RESULT
 
-CHECK(set(AtomContainer&, bool))
+CHECK(void set(const AtomContainer& atom_container, bool deep = true) throw())
 	AtomContainer ac1("name1");
 	AtomContainer ac2;
 	ac1.insert(ac2);
@@ -268,7 +295,7 @@ CHECK(set(AtomContainer&, bool))
 	TEST_EQUAL(ac3.countAtomContainers(), 1);
 RESULT
 
-CHECK(operator = (AtomContainer&))
+CHECK(AtomContainer& operator = (const AtomContainer& atom_container) throw())
 	AtomContainer ac1("name1");
 	Atom a;
 	ac1.insert(a);
@@ -278,7 +305,7 @@ CHECK(operator = (AtomContainer&))
 	TEST_EQUAL(ac2.countAtoms(), 1);
 RESULT
 
-CHECK(get(AtomContainer&, bool))
+CHECK(void get(AtomContainer& atom_container, bool deep = true) const throw())
 	AtomContainer ac1("name1");
 	AtomContainer ac2;
 	ac1.insert(ac2);
@@ -292,7 +319,7 @@ CHECK(get(AtomContainer&, bool))
 	TEST_EQUAL(ac3.countAtomContainers(), 1);
 RESULT
 
-CHECK(swap(AtomContainer&))
+CHECK(void swap(AtomContainer& atom_container) throw())
 	AtomContainer ac1("ac1");
 	AtomContainer ac2("ac2");
 	AtomContainer ac3("ac3");
@@ -315,7 +342,7 @@ CHECK(swap(AtomContainer&))
 	TEST_EQUAL(ac3.getAtomContainer(0), &ac4)
 RESULT
 
-CHECK(getSuperAtomContainer())
+CHECK(AtomContainer* getSuperAtomContainer() throw())
 	AtomContainer ac1("ac1");
 	AtomContainer* ptr = ac1.getSuperAtomContainer();
 	TEST_EQUAL(ptr, 0)
@@ -329,7 +356,7 @@ CHECK(getSuperAtomContainer())
 	TEST_EQUAL(ptr, &ac1)
 RESULT
 
-CHECK(getSuperAtomContainer() const)
+CHECK(const AtomContainer* getSuperAtomContainer() const throw())
 	AtomContainer ac1("ac1");
 	const AtomContainer* ptr = ac1.getSuperAtomContainer();
 	TEST_EQUAL(ptr, 0)
@@ -343,20 +370,20 @@ CHECK(getSuperAtomContainer() const)
 	TEST_EQUAL(ptr, &ac1)
 RESULT
 
-CHECK(insert(Atom&))
+CHECK(void insert(Atom& atom) throw())
 	AtomContainer ac1;
 	Atom a;
 	ac1.insert(a);
 RESULT
 
-CHECK(remove(Atom&))
+CHECK(bool remove(Atom& atom) throw())
 	AtomContainer ac1;
 	Atom a;
 	ac1.insert(a);
 	ac1.remove(a);
 RESULT
 
-CHECK(getAtom(Position))
+CHECK(Atom* getAtom(Position position) throw())
 	AtomContainer ac1;
 	Atom a;
 	Atom* ptr = ac1.getAtom(0);
@@ -371,7 +398,7 @@ CHECK(getAtom(Position))
 	TEST_EQUAL(ptr, 0)
 RESULT
 
-CHECK(getAtom(Position) const)
+CHECK(const Atom* getAtom(Position position) const throw())
 	AtomContainer ac1;
 	Atom a;
 	TEST_EQUAL(ac1.getAtom(0), 0)
@@ -382,30 +409,62 @@ CHECK(getAtom(Position) const)
 	TEST_EQUAL(ac1.getAtom(24), 0)
 RESULT
 
-CHECK(countAtoms())
+CHECK(Size countAtoms() const throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	ac1.insert(ac2);
 	Atom a1;
 	Atom a2;
 	Atom a3;
+
+	STATUS("a1: " << &a1)
+	STATUS("a2: " << &a2)
+	STATUS("a3: " << &a3)
+
 	TEST_EQUAL(ac1.countAtoms(), 0)
 	TEST_EQUAL(ac2.countAtoms(), 0)
 	ac2.insert(a1);
 	TEST_EQUAL(ac1.countAtoms(), 1)
 	TEST_EQUAL(ac2.countAtoms(), 1)
 	ac1.insert(a2);
-	TEST_EQUAL(ac1.countAtoms(), 2)
+ 	TEST_EQUAL(ac1.countAtoms(), 2)
 	TEST_EQUAL(ac2.countAtoms(), 1)
+	STATUS("mutable iteration over ac1")
+	AtomIterator it1(ac1.beginAtom());
+	for (; +it1; ++it1)
+	{
+		STATUS("  - " << &*it1)
+	}
+	STATUS("const iteration over ac1")
+	AtomConstIterator it2(ac1.beginAtom());
+	for (; +it2; ++it2)
+	{
+		STATUS("  - " << &*it2)
+	}
+
+	STATUS("mutable iteration over ac2")
+	AtomIterator it3(ac2.beginAtom());
+	for (; +it3; ++it3)
+	{
+		STATUS("  - " << &*it3)
+	}
+	STATUS("const iteration over ac2")
+	AtomConstIterator it4(ac1.beginAtom());
+	for (; +it4; ++it4)
+	{
+		STATUS("  - " << &*it4)
+	}
+
 	ac2.insert(a3);
 	TEST_EQUAL(ac1.countAtoms(), 3)
 	TEST_EQUAL(ac2.countAtoms(), 2)
 	ac1.remove(ac2);
 	TEST_EQUAL(ac1.countAtoms(), 1)
 	TEST_EQUAL(ac2.countAtoms(), 2)
+
 RESULT
 
-CHECK(countBonds())
+CHECK(Size countBonds() const throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	Atom a1;
@@ -426,7 +485,7 @@ CHECK(countBonds())
 	TEST_EQUAL(ac2.countBonds(), 3);
 RESULT
 
-CHECK(countInterBonds())
+CHECK(Size countInterBonds() const throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	Atom a1;
@@ -446,7 +505,7 @@ CHECK(countInterBonds())
 	TEST_EQUAL(ac2.countInterBonds(), 1);
 RESULT
 
-CHECK(countIntraBonds())
+CHECK(Size countIntraBonds() const throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	Atom a1;
@@ -466,7 +525,7 @@ CHECK(countIntraBonds())
 	TEST_EQUAL(ac2.countIntraBonds(), 1);
 RESULT
 
-CHECK(prepend(Atom&))
+CHECK(void prepend(Atom& atom) throw())
 	AtomContainer ac1;
 	Atom a1;
 	Atom a2;
@@ -477,7 +536,7 @@ CHECK(prepend(Atom&))
 	TEST_EQUAL(ac1.getAtom(1), &a1)
 RESULT
 
-CHECK(insert(Atom&))
+CHECK(void insert(Atom& atom) throw())
 	AtomContainer ac1;
 	Atom a1;
 	Atom a2;
@@ -488,7 +547,7 @@ CHECK(insert(Atom&))
 	TEST_EQUAL(ac1.getAtom(1), &a2)
 RESULT
 
-CHECK(append(Atom&))
+CHECK(void append(Atom& atom) throw())
 	AtomContainer ac1;
 	Atom a1;
 	Atom a2;
@@ -498,7 +557,7 @@ CHECK(append(Atom&))
 	TEST_EQUAL(ac1.getAtom(1), &a2)
 RESULT
 
-CHECK(insertBefore(Atom&, Composite&))
+CHECK(void insertBefore(Atom& atom, Composite& before) throw())
 	AtomContainer ac1;
 	Atom a1;
 	Atom a2;
@@ -511,7 +570,7 @@ CHECK(insertBefore(Atom&, Composite&))
 	TEST_EQUAL(ac1.getAtom(2), &a2)
 RESULT
 
-CHECK(insertAfter(Atom&, Composite&))
+CHECK(void insertAfter(Atom& atom, Composite& after) throw())
 	AtomContainer ac1;
 	Atom a1;
 	Atom a2;
@@ -524,7 +583,7 @@ CHECK(insertAfter(Atom&, Composite&))
 	TEST_EQUAL(ac1.getAtom(2), &a2)
 RESULT
 
-CHECK(prepend(AtomContainer&))
+CHECK(void prepend(AtomContainer& atom_container) throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -534,7 +593,7 @@ CHECK(prepend(AtomContainer&))
 	TEST_EQUAL(ac1.getAtomContainer(0), &ac3)
 RESULT
 
-CHECK(append(AtomContainer&))
+CHECK(void append(AtomContainer& atom_container) throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -544,7 +603,7 @@ CHECK(append(AtomContainer&))
 	TEST_EQUAL(ac1.getAtomContainer(1), &ac3)
 RESULT
 
-CHECK(insertBefore(AtomContainer&, Composite&))
+CHECK(void insertBefore(AtomContainer& atom_container, Composite& before) throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -557,7 +616,7 @@ CHECK(insertBefore(AtomContainer&, Composite&))
 	TEST_EQUAL(ac1.getAtomContainer(2), &ac3)
 RESULT
 
-CHECK(insertAfter(AtomContainer&, Composite&))
+CHECK(void insertAfter(AtomContainer& atom_container, Composite& after) throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -570,7 +629,7 @@ CHECK(insertAfter(AtomContainer&, Composite&))
 	TEST_EQUAL(ac1.getAtomContainer(2), &ac3)
 RESULT
 
-CHECK(spliceBefore(AtomContainer&))
+CHECK(void spliceBefore(AtomContainer& atom_container) throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -586,7 +645,7 @@ CHECK(spliceBefore(AtomContainer&))
 	TEST_EQUAL(ac4.getAtomContainer(1), &ac3)
 RESULT
 
-CHECK(spliceAfter(AtomContainer&))
+CHECK(void spliceAfter(AtomContainer& atom_container) throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -602,7 +661,7 @@ CHECK(spliceAfter(AtomContainer&))
 	TEST_EQUAL(ac4.getAtomContainer(0), &ac3)
 RESULT
 
-CHECK(splice(AtomContainer&))
+CHECK(void splice(AtomContainer& atom_container) throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -624,7 +683,7 @@ CHECK(splice(AtomContainer&))
 	TEST_EQUAL(ac1.getAtomContainer(1), &ac2)
 RESULT
 
-CHECK(destroyBonds())
+CHECK(void destroyBonds() throw())
 	AtomContainer ac1;
 	Atom a1, a2, a3, a4;
 	a1.createBond(a2);
@@ -639,7 +698,7 @@ CHECK(destroyBonds())
 	TEST_EQUAL(a3.countBonds(), 1)	
 RESULT
 
-CHECK(isSubAtomContainerOf(AtomContainer&))
+CHECK(bool isSubAtomContainerOf(const AtomContainer& atom_container) const throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -651,7 +710,7 @@ CHECK(isSubAtomContainerOf(AtomContainer&))
 	TEST_EQUAL(ac3.isSubAtomContainerOf(ac1), true)	
 RESULT
 
-CHECK(isSuperAtomContainerOf(AtomContainer&))
+CHECK(bool isSuperAtomContainerOf(const AtomContainer& atom_container) const throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -664,7 +723,7 @@ CHECK(isSuperAtomContainerOf(AtomContainer&))
 	TEST_EQUAL(ac3.isSuperAtomContainerOf(ac1), false)	
 RESULT
 
-CHECK(isValid())
+CHECK(bool isValid() const throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	AtomContainer ac3;
@@ -683,7 +742,7 @@ CHECK(isValid())
 	TEST_EQUAL(ac3.isValid(), true)	
 RESULT
 
-CHECK(dump(ostream&, Size))
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	AtomContainer ac1;
 	AtomContainer ac2;
 	ac1.setName("BF1");
@@ -698,7 +757,7 @@ CHECK(dump(ostream&, Size))
 	TEST_FILE_REGEXP(filename.c_str(), "data/AtomContainer_test.txt")
 RESULT
 
-CHECK(operator ==)
+CHECK(bool operator == (const AtomContainer& atom_container) const throw())
 	AtomContainer c1, c2;
 	TEST_EQUAL(c1 == c2, false)
 
@@ -708,7 +767,7 @@ CHECK(operator ==)
 	TEST_EQUAL(c2 == c2, true)
 RESULT
 
-CHECK(operator !=)
+CHECK(bool operator != (const AtomContainer& atom_container) const throw())
 	AtomContainer c1, c2;
 	TEST_EQUAL(c1 != c2, true)
 
@@ -718,7 +777,7 @@ CHECK(operator !=)
 	TEST_EQUAL(c2 != c2, false)
 RESULT
 
-CHECK(beginAtom()/endAtom())
+CHECK([EXTRA] beginAtom()/endAtom())
 	AtomContainer ac1;
 	Atom a1;
 	a1.setName("A1");
@@ -732,6 +791,26 @@ CHECK(beginAtom()/endAtom())
 	TEST_EQUAL(vec[0].getName(), "A1")
 	TEST_EQUAL(vec[1].getName(), "A2")
 	TEST_EQUAL(vec[3].getName(), "")
+RESULT
+
+CHECK(BALL_CREATE_DEEP(AtomContainer))
+  // ???
+RESULT
+
+CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS (Atom)(AtomContainer))
+  // ???
+RESULT
+
+CHECK(bool applyInterBond(UnaryProcessor<Bond>& processor) throw())
+  // ???
+RESULT
+
+CHECK(bool applyIntraBond(UnaryProcessor<Bond>& processor) throw())
+  // ???
+RESULT
+
+CHECK(const Atom* getAtom(const String& name) const throw())
+  // ???
 RESULT
 
 /////////////////////////////////////////////////////////////

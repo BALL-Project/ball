@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Composite_test2.C,v 1.5 2003/06/12 15:42:24 oliver Exp $
+// $Id: Composite_test2.C,v 1.6 2003/06/19 10:45:51 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -30,7 +30,7 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test2.C,v 1.5 2003/06/12 15:42:24 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test2.C,v 1.6 2003/06/19 10:45:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -230,18 +230,6 @@ CHECK(const Composite* getLastChild() const throw())
 	TEST_EQUAL(c_e.getLastChild(), 0)
 RESULT
 
-CHECK(void expand() throw())
-	a.expand();
-	TEST_EQUAL(a.isExpanded(), true)
-RESULT
-
-CHECK(void collapse() throw())
-	a.collapse();
-	TEST_EQUAL(a.isCollapsed(), true)
-	a.expand();
-	TEST_EQUAL(a.isExpanded(), true)
-RESULT
-
 CHECK(static bool insertParent(Composite& parent, Composite& first, Composite& last, bool destroy_parent = true) throw())
 	{
 		Composite a, b, c, d, e, f, x;
@@ -420,21 +408,6 @@ CHECK(void swap(Composite& composite) throw())
 
 	TEST_EQUAL(c.getParent(), &b1)
 	TEST_EQUAL(c1.getParent(), &b)
-RESULT
-
-CHECK(bool isExpanded() const throw())
-	a.expand();
-	TEST_EQUAL(a.isExpanded(), true)
-	a.collapse();
-	TEST_EQUAL(a.isExpanded(), false)
-RESULT
-
-CHECK(bool isCollapsed() const throw())
-	a.expand();
-	TEST_EQUAL(a.isCollapsed(), false)
-	a.collapse();
-	TEST_EQUAL(a.isCollapsed(), true)
-	a.expand();
 RESULT
 
 CHECK(template<typename T> bool hasAncestor(const T& dummy ) const throw())

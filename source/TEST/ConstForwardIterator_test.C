@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConstForwardIterator_test.C,v 1.2 2003/06/12 18:07:23 oliver Exp $
+// $Id: ConstForwardIterator_test.C,v 1.3 2003/06/19 10:45:52 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -356,7 +356,7 @@ class VectorIteratorTraits_
 
 typedef ConstForwardIterator<vector<float>, float, VectorIteratorPosition_, VectorIteratorTraits_<float> > MyIterator;
 
-START_TEST(ConstForwardIterator, "$Id: ConstForwardIterator_test.C,v 1.2 2003/06/12 18:07:23 oliver Exp $")
+START_TEST(ConstForwardIterator, "$Id: ConstForwardIterator_test.C,v 1.3 2003/06/19 10:45:52 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -385,113 +385,8 @@ MyIterator m;
 m.getTraits().bindTo(v);
 MyIterator n;
 
-CHECK(ConstForwardIterator& operator = (const ConstForwardIterator<Container, DataType, Position, Traits>& iterator) throw())
-  // ???
-RESULT
-
 CHECK(ConstForwardIterator(const ConstForwardIterator& iterator) throw())
   // ???
-RESULT
-
-CHECK(Traits& getTraits() throw())
-  // ???
-RESULT
-
-CHECK(const Traits& getTraits() const throw())
-	// ???
-RESULT
-
-CHECK(bool isSingular() const throw())
-	MyIterator i1;
-	TEST_EQUAL(i1.isSingular(), true)
-	i1.getTraits().bindTo(v);
-	TEST_EQUAL(i1.isSingular(), false)
-	i1.invalidate();
-	TEST_EQUAL(i1.isSingular(), true)
-RESULT
-
-CHECK(bool isValid() const throw())
-	MyIterator i1;
-	TEST_EQUAL(i1.isValid(), false)
-	i1.getTraits().bindTo(v);
-	TEST_EQUAL(i1.isValid(), true)
-	i1.invalidate();
-	TEST_EQUAL(i1.isValid(), false)
-RESULT
-
-CHECK(bool operator != (const ConstForwardIterator& iterator) const throw())
-  // ???
-RESULT
-
-CHECK(bool operator + () const throw())
-	MyIterator i1;
-	TEST_EQUAL(+i1, false)
-	i1.getTraits().bindTo(v);
-	TEST_EQUAL(+i1, true)
-	i1.invalidate();
-	TEST_EQUAL(+i1, false)
-RESULT
-
-CHECK(bool operator - () const throw())
-	MyIterator i1;
-	TEST_EQUAL(-i1, true)
-	i1.getTraits().bindTo(v);
-	TEST_EQUAL(-i1, false)
-	i1.invalidate();
-	TEST_EQUAL(-i1, true)
-RESULT
-
-CHECK(bool operator == (const ConstForwardIterator& iterator) const throw())
-  // ???
-RESULT
-
-CHECK(const Container* getContainer() const throw())
-	MyIterator i1;
-	TEST_EQUAL(i1.getContainer(), 0)
-	
-	MyIterator i2;
-	i2.getTraits().bindTo(v);
-	TEST_EQUAL(i2.getContainer(), &v)
-RESULT
-
-CHECK(operator const Position& () const throw())
-  // ???
-RESULT
-
-CHECK(pointer operator -> () const throw())
-	MyIterator i1;
-	i1.getTraits().bindTo(v);
-	TEST_EQUAL(*(i1.operator -> ()), v[0])
-RESULT
-
-CHECK(reference operator * () const throw())
-	MyIterator i1;
-	i1.getTraits().bindTo(v);
-	TEST_EQUAL(*i1, v[0])
-RESULT
-
-CHECK(void invalidate() throw())
-	MyIterator i1;
-	i1.getTraits().bindTo(v);
-	TEST_EQUAL(i1.isValid(), true)
-	TEST_EQUAL(i1.getContainer(), &v)
-	i1.invalidate();
-	TEST_EQUAL(i1.isValid(), false)
-	TEST_EQUAL(i1.getContainer(), 0)
-RESULT
-
-CHECK(void setTraits(const Traits& traits) throw())
-	MyIterator i1;
-	i1.getTraits().bindTo(v);
-	MyIterator i2;
-	TEST_EQUAL(i2.getTraits().getContainer(), 0)
-	i2.setTraits(i1.getTraits());
-	TEST_EQUAL(i2.getTraits().getContainer(), &v)
-
-	// Make sure we got our own copy!
-	i2.invalidate();
-	TEST_EQUAL(i2.getTraits().getContainer(), 0)
-	TEST_EQUAL(i1.getTraits().getContainer(), &v)
 RESULT
 
 CHECK(void swap(ConstForwardIterator& iterator) throw())
@@ -508,15 +403,11 @@ CHECK(void swap(ConstForwardIterator& iterator) throw())
 	TEST_EQUAL(i2.getContainer(), &v1)	
 RESULT
 
-CHECK(ConstForwardIterator operator ++ (int) throw(Exception::InvalidIterator))
+CHECK(ConstForwardIterator operator ++ (int) throw(Exception::Precondition))
   // ???
 RESULT
 
-CHECK(ConstForwardIterator& operator ++ () throw(Exception::InvalidIterator))
-  // ???
-RESULT
-
-CHECK(ConstForwardIterator& operator = (const BaseIterator<Container, DataType, Position, Traits>& iterator) throw())
+CHECK(ConstForwardIterator& operator ++ () throw(Exception::Precondition))
   // ???
 RESULT
 
@@ -524,31 +415,27 @@ CHECK(ConstForwardIterator& operator = (const ConstForwardIterator& iterator) th
   // ???
 RESULT
 
-CHECK(ConstForwardIterator(const BaseIterator<Container, DataType, Position, Traits>& iterator) throw())
+CHECK(bool isBegin() const throw(Exception::Precondition))
   // ???
 RESULT
 
-CHECK(bool isBegin() const throw(Exception::InvalidIterator))
+CHECK(bool isEnd() const throw(Exception::Precondition))
   // ???
 RESULT
 
-CHECK(bool isEnd() const throw(Exception::InvalidIterator))
+CHECK(static ConstForwardIterator begin(const Container& container) throw(Exception::Precondition))
   // ???
 RESULT
 
-CHECK(static ConstForwardIterator begin(const Container& container) throw(Exception::InvalidIterator))
+CHECK(static ConstForwardIterator end(const Container& container) throw(Exception::Precondition))
   // ???
 RESULT
 
-CHECK(static ConstForwardIterator end(const Container& container) throw(Exception::InvalidIterator))
+CHECK(void toBegin() throw(Exception::Precondition))
   // ???
 RESULT
 
-CHECK(void toBegin() throw(Exception::InvalidIterator))
-  // ???
-RESULT
-
-CHECK(void toEnd() throw(Exception::InvalidIterator))
+CHECK(void toEnd() throw(Exception::Precondition))
   // ???
 RESULT
 

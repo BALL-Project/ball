@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Atom_test.C,v 1.16 2003/05/26 14:22:53 oliver Exp $
+// $Id: Atom_test.C,v 1.17 2003/06/19 10:45:50 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -14,14 +15,14 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.16 2003/05/26 14:22:53 oliver Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.17 2003/06/19 10:45:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-Atom*		atom;
+Atom* atom;
 CHECK(Atom())
 atom = new Atom;
 TEST_NOT_EQUAL(atom, 0)
@@ -470,6 +471,45 @@ CHECK(compact(const AtomIndexList& indices))
 RESULT
 delete atom3;
 delete atom4;
+
+CHECK([EXTRA] bond iteration)
+	Atom* a1 = new Atom;
+	Atom* a2 = new Atom;
+	Atom* a3 = new Atom;
+	Atom* a4 = new Atom;
+	a1->createBond(*a2);
+	a1->createBond(*a3);
+	a1->createBond(*a4);
+	TEST_EQUAL(a1->countBonds(), 3)
+	TEST_EQUAL(a2->countBonds(), 1)
+	TEST_EQUAL(a3->countBonds(), 1)
+	TEST_EQUAL(a4->countBonds(), 1)
+	ABORT_IF(a1->countBonds() != 3)
+	
+	Atom::BondIterator it(a1->beginBond());
+	TEST_EQUAL(+it, true)
+	TEST_EQUAL(&*it, a1->getBond(0))
+	++it;
+	TEST_EQUAL(+it, true)
+	TEST_EQUAL(&*it, a1->getBond(1))
+	++it;
+	TEST_EQUAL(+it, true)	
+	TEST_EQUAL(&*it, a1->getBond(2))
+	++it;
+	TEST_EQUAL(+it, false)	
+	TEST_EQUAL(it == a1->endBond(), true)
+
+	delete a1;
+	delete a2;
+	delete a3;
+	delete a4;
+
+	// Empty iteration
+	a1 = new Atom;
+	it = a1->beginBond();
+	TEST_EQUAL(+it, false)
+	TEST_EQUAL(it == a1->endBond(), true)
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

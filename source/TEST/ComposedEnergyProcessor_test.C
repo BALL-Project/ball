@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ComposedEnergyProcessor_test.C,v 1.7 2003/05/25 21:38:10 oliver Exp $
+// $Id: ComposedEnergyProcessor_test.C,v 1.8 2003/06/19 10:45:50 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(ComposedEnergyProcessor_test, "$Id: ComposedEnergyProcessor_test.C,v 1.7 2003/05/25 21:38:10 oliver Exp $")
+START_TEST(ComposedEnergyProcessor_test, "$Id: ComposedEnergyProcessor_test.C,v 1.8 2003/06/19 10:45:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -34,25 +35,25 @@ using namespace BALL;
     
 	virtual bool start() throw()
 	{
-		numberOfFragments = 0;
+		number_of_fragments = 0;
 		return true;
 	}
 	
   virtual Processor::Result operator () (AtomContainer& fragment) throw() 
   {
-    numberOfFragments += 1;
+    number_of_fragments += 1;
     EnergyProcessor::operator() (fragment);
     return BALL::Processor::CONTINUE;
   }
   
   virtual bool finish() throw() 
   {
-    energy_ = fragment_->countAtoms() * (numberOfFragments + change); 
+    energy_ = fragment_->countAtoms() * (number_of_fragments + change); 
     return true;
   }
 
   float change; 
-	float numberOfFragments;
+	float number_of_fragments;
 };
 
 
@@ -61,7 +62,7 @@ MyEnergyProcessor* pep2;
 System S;
 double result(0);
 
-CHECK(Preperations)
+CHECK(Preparations)
 	pep1 = new MyEnergyProcessor;
 	pep1->change = 1.0;
  	pep2 = new MyEnergyProcessor;
