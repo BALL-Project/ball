@@ -1,4 +1,4 @@
-// $Id: SESFace.h,v 1.12 2001/07/15 21:21:02 amoll Exp $
+// $Id: SESFace.h,v 1.13 2001/09/19 17:46:54 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SESFACE_H
 #define BALL_STRUCTURE_SESFACE_H
@@ -23,8 +23,10 @@ namespace BALL
 	template <typename T>
 	class TRSFace;
 
-	/** Generic SESFace Class. 
-			{\bf Definition:} \URL{BALL/STRUCTURE/SESFace.h} 
+	/** Generic SESFace Class.
+			\\
+			{\bf Definition:} \URL{BALL/STRUCTURE/SESFace.h}
+			\\
 	*/
 	template <class T>
 	class TSESFace
@@ -49,8 +51,8 @@ namespace BALL
 			TYPE_CONTACT = 2,
 			TYPE_TORIC_SINGULAR = 3
 		};
-
 		//@}
+
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
@@ -111,8 +113,8 @@ namespace BALL
 		virtual ~TSESFace()
 		{
 		}
-
 		//@}
+
 		/**	@name	Accessors
 		*/
 		//@{
@@ -244,7 +246,7 @@ namespace BALL
 			{
 				return;
 			}
-
+			//std::cout << *this << "\n";
 			if (singular == false)
 			{
 				TSESEdge<T>* edge0;
@@ -308,7 +310,7 @@ namespace BALL
 				TSESVertex<T>* p3;
 				TSESVertex<T>* p4;
 				TSESVertex<T>* p5;
-				Position i = 0;
+				Index i = 0;
 				while (edge[i]->type != 0)
 				{
 					i++;
@@ -324,7 +326,7 @@ namespace BALL
 				edge3 = edge[i];								// edge3 = second convex edge
 				p3 = edge3->vertex1;
 				p5 = edge3->vertex2;
-				for (i = 0; i < edge.size(); i++)
+				for (Position i = 0; i < edge.size(); i++)
 				{
 					if ((edge[i]->vertex1 == p0) && (edge[i] != edge0))
 					{
@@ -340,7 +342,7 @@ namespace BALL
 						}
 					}
 				}
-				for (i = 0; i < edge.size(); i++)
+				for (Position i = 0; i < edge.size(); i++)
 				{
 					if (((edge[i]->vertex1 == p1) && (edge[i]->vertex2 == p2)) ||
 							((edge[i]->vertex2 == p1) && (edge[i]->vertex1 == p2))		)
@@ -348,7 +350,7 @@ namespace BALL
 						edge2 = edge[i];
 					}
 				}
-				for (i = 0; i < edge.size(); i++)
+				for (Position i = 0; i < edge.size(); i++)
 				{
 					if ((edge[i]->vertex1 == p3) && (edge[i] != edge3))
 					{
@@ -364,7 +366,7 @@ namespace BALL
 						}
 					}
 				}
-				for (i = 0; i < edge.size(); i++)
+				for (Position i = 0; i < edge.size(); i++)
 				{
 					if (((edge[i]->vertex1 == p5) && (edge[i]->vertex2 == p4)) ||
 							((edge[i]->vertex2 == p5) && (edge[i]->vertex1 == p4))		)
@@ -374,12 +376,12 @@ namespace BALL
 				}
 				if (edge1->circle != edge4->circle)
 				{
-					TSESEdge<T>* temp = edge5;
+					TSESEdge<T>* temp_edge = edge5;
 					edge5 = edge4;
-					edge4 = temp;
-					TSESVertex<T>* tmp = p5;
+					edge4 = temp_edge;
+					TSESVertex<T>* temp_vertex = p5;
 					p5 = p3;
-					p3 = tmp;
+					p3 = temp_vertex;
 				}
 				edge[0] = edge0;
 				edge[1] = edge1;
@@ -394,9 +396,11 @@ namespace BALL
 				vertex[4] = p4;
 				vertex[5] = p5;
 			}
+			//std::cout << *this << "\n";
 		}
 
 		//@}
+
 		/**	@name	Predicates
 		*/
 		//@{
@@ -428,8 +432,8 @@ namespace BALL
 			}
 			return rsedge->isFree();
 		}
-
 		//@}
+
 		/**	@name	Attributes
 		*/
 		//@{
@@ -480,66 +484,81 @@ namespace BALL
 	*/
 	//@{
 
-	// BAUSTELLE : Input operator
-
-	/**	Output operator
+	/**	Input- Operator
+			reads in a TVector3 and a {\bf T} value : p, radius
 	*/
+/*
 	template <typename T>
-	std::ostream& operator << (std::ostream& s, const TSESFace<T>& sesface)
+	std::istream& operator >> (std::istream& s, TSphere3<T>& sphere3)
 	{
-		s << "SESFACE" << sesface.index << "("
-			<< (sesface.type == TSESFace<T>::TYPE_CONTACT ? "contact " :
-						 (sesface.type == TSESFace<T>::TYPE_SPHERIC ? "spheric " : "toric "));
-		if (sesface.rsvertex == NULL)
+		char c;
+		for (int i=0; i<7 ; i++)
 		{
-			s << "(nil) ";
+			s >> c;
 		}
-		else
+		s >> sphere3.p >> sphere3.radius >> c;
+		return s;
+	}
+*/
+
+	/**	Output- Operator
+	*/
+		template <typename T>
+		std::ostream& operator << (std::ostream& s, const TSESFace<T>& sesface)
 		{
-			s << "(" << sesface.rsvertex->getAtom() << ") ";
-		}
-		if (sesface.rsedge == NULL)
-		{
-			s << "(nil) ";
-		}
-		else
-		{
-			s << "(" << sesface.rsedge->getIndex() << ") ";
-		}
-		if (sesface.rsface == NULL)
-		{
-			s << "(nil) [";
-		}
-		else
-		{
-			s << "(" << sesface.rsface->getIndex() << ") [";
-		}
-		for (Position i = 0; i < sesface.vertex.size(); i++)
-		{
-			s << sesface.vertex[i]->index << ' ';
-		}
-		s << "] [";
-		for (Position i = 0; i < sesface.edge.size(); i++)
-		{
-			if (sesface.edge[i] == NULL)
+			s << "SESFACE" << sesface.index << "("
+				<< (sesface.type == TSESFace<T>::TYPE_CONTACT ? "contact " :
+							 (sesface.type == TSESFace<T>::TYPE_SPHERIC ? "spheric " : "toric "));
+			if (sesface.rsvertex == NULL)
 			{
 				s << "(nil) ";
 			}
 			else
 			{
-				s << sesface.edge[i]->index << ' ';
+				s << "(" << sesface.rsvertex->getAtom() << ") ";
 			}
-		}
-		s << "] [";
-		for (Position i = 0; i < sesface.orientation.size(); i++)
+			if (sesface.rsedge == NULL)
 			{
-				s << sesface.orientation[i] << ' ';
+				s << "(nil) ";
 			}
-		s << "])";
-		return s;
-	}
-
+			else
+			{
+				s << "(" << sesface.rsedge->getIndex() << ") ";
+			}
+			if (sesface.rsface == NULL)
+			{
+				s << "(nil) [";
+			}
+			else
+			{
+				s << "(" << sesface.rsface->getIndex() << ") [";
+			}
+			for (Position i = 0; i < sesface.vertex.size(); i++)
+			{
+				s << sesface.vertex[i]->index << ' ';
+			}
+			s << "] [";
+			for (Position i = 0; i < sesface.edge.size(); i++)
+			{
+				if (sesface.edge[i] == NULL)
+				{
+					s << "(nil) ";
+				}
+				else
+				{
+					s << sesface.edge[i]->index << ' ';
+				}
+			}
+			s << "] [";
+			for (Position i = 0; i < sesface.orientation.size(); i++)
+				{
+					s << sesface.orientation[i] << ' ';
+				}
+			s << "])";
+			return s;
+		}
 	//@}
+
 
 	/**	The Default SESFace Type.
 			If double precision is not needed, {\tt SESFace<float>} should
