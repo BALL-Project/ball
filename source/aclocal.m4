@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.52 2004/05/27 19:49:50 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.53 2004/10/30 09:07:21 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -3419,9 +3419,12 @@ AC_DEFUN(CF_PYTHON, [
 		SIP_VERS_NUM=`echo ${SIP_VERSION}| ${CUT} -d\  -f1`
 		SIP_VERS_MAJOR=`echo ${SIP_VERS_NUM} | ${CUT} -d. -f1`
 		SIP_VERS_MINOR=`echo ${SIP_VERS_NUM} | ${CUT} -d. -f2`
-		if test "${SIP_VERS_MAJOR}" -lt 4 ; then
+		SIP_VERS_MINOR_MINOR=`echo ${SIP_VERS_NUM} | ${CUT} -d. -f3`
+		if test "${SIP_VERS_MAJOR}" -lt 4 \
+				-o "${SIP_VERS_MAJOR}" = 4 -a "{SIP_VERS_MINOR}" -lt 1 \
+				-o "${SIP_VERS_MAJOR}" = 4 -a "{SIP_VERS_MINOR}" = 1 -a "${SIP_VERS_MINOR_MINOR}" -lt 1; then
 			AC_MSG_RESULT()
-			AC_MSG_RESULT(SIP release 4.0 or above required.)
+			AC_MSG_RESULT(SIP release 4.1.1 or above required.)
 			AC_MSG_RESULT(Your version: ${SIP_VERSION}")
 			AC_MSG_RESULT(Please upgrade or specify the location of the correct SIP using the)
 			AC_MSG_RESULT( --with-sip=PATH)

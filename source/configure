@@ -20225,11 +20225,14 @@ echo "$as_me: error: Aborted." >&2;}
 		SIP_VERS_NUM=`echo ${SIP_VERSION}| ${CUT} -d\  -f1`
 		SIP_VERS_MAJOR=`echo ${SIP_VERS_NUM} | ${CUT} -d. -f1`
 		SIP_VERS_MINOR=`echo ${SIP_VERS_NUM} | ${CUT} -d. -f2`
-		if test "${SIP_VERS_MAJOR}" -lt 4 ; then
+		SIP_VERS_MINOR_MINOR=`echo ${SIP_VERS_NUM} | ${CUT} -d. -f3`
+		if test "${SIP_VERS_MAJOR}" -lt 4 \
+				-o "${SIP_VERS_MAJOR}" = 4 -a "{SIP_VERS_MINOR}" -lt 1 \
+				-o "${SIP_VERS_MAJOR}" = 4 -a "{SIP_VERS_MINOR}" = 1 -a "${SIP_VERS_MINOR_MINOR}" -lt 1; then
 			echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-			echo "$as_me:$LINENO: result: SIP release 4.0 or above required." >&5
-echo "${ECHO_T}SIP release 4.0 or above required." >&6
+			echo "$as_me:$LINENO: result: SIP release 4.1.1 or above required." >&5
+echo "${ECHO_T}SIP release 4.1.1 or above required." >&6
 			echo "$as_me:$LINENO: result: Your version: ${SIP_VERSION}\"" >&5
 echo "${ECHO_T}Your version: ${SIP_VERSION}\"" >&6
 			echo "$as_me:$LINENO: result: Please upgrade or specify the location of the correct SIP using the" >&5
