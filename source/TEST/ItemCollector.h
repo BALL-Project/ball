@@ -10,7 +10,8 @@ using namespace BALL;
 		This class is used in several tests for container::apply() methods.
 */
 template<typename DataType>
-class ItemCollector	: public UnaryProcessor<DataType>
+class ItemCollector	
+	: public UnaryProcessor<DataType>
 {
 	public:
 
@@ -50,14 +51,11 @@ class ItemCollector	: public UnaryProcessor<DataType>
 		list_it_ = list_.begin();
 	}
 
-
-	protected:
-
 	/** Start the processor.
 			This method is called by the apply()-method
 			of the container-classes to be tested.
 	*/
-	bool start()
+	virtual bool start()
 	{
 		// clear the item list
 		list_.clear();
@@ -69,7 +67,7 @@ class ItemCollector	: public UnaryProcessor<DataType>
 			This method is called by the apply()-method
 			of the container-classes to be tested.
 	*/
-	bool finish()
+	virtual bool finish()
 	{
 		list_it_ = list_.begin();
 		return true;
@@ -79,12 +77,13 @@ class ItemCollector	: public UnaryProcessor<DataType>
 			This method is called by the apply()-method
 			of the container-classes to be tested.
 	*/
-	Processor::Result operator () (DataType& item)
+	virtual Processor::Result operator () (DataType& item)
 	{
 		list_.push_back(&item);
 		return Processor::CONTINUE;
 	}
 
+	protected:
 	List<DataType*>											list_;
 	typename List<DataType*>::iterator	list_it_;
 };
