@@ -1,4 +1,4 @@
-// $Id: lennardJones.C,v 1.10 2000/10/18 10:40:07 anker Exp $
+// $Id: lennardJones.C,v 1.11 2000/10/18 12:51:51 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -17,7 +17,7 @@ namespace BALL
 			Aij_(0),
 			Bij_(0),
 			is_defined_(0),
-			format_(),
+			format_(EPSILON_R_FORMAT),
 			names_()
 	{
 	}
@@ -52,7 +52,7 @@ namespace BALL
 		Aij_.clear();
 		Bij_.clear();
 		is_defined_.clear();
-		// format_.clear();
+		format_ = EPSILON_R_FORMAT;
 		names_.clear();
 
 		ParameterSection::clear();
@@ -107,7 +107,6 @@ namespace BALL
 		} 
 		else 
 		{
-
 			// format_ == A_B_FORMAT:				parameters are in A/B format
 			// format_ == EPSILON_R_FORMAT:	parameters are in epsilon/R format
 			// format_ == SLATER_KIRKWOOD_FORMAT:	parameters are in epsilon/R format
