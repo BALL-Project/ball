@@ -1,4 +1,4 @@
-// $Id: rtti.h,v 1.9 2000/05/21 19:38:59 amoll Exp $
+// $Id: rtti.h,v 1.10 2000/05/22 07:25:31 oliver Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -73,7 +73,7 @@ namespace BALL
 		}
 
 		/**	Return a void pointer to a new instance of the class.
-				Use this method to provide an easy factoy for objects of a certain class.
+				Use this method to provide an easy factory for objects of a certain class.
 				The main use of this function lies in object persistence. The \Ref{PersistenceManager}
 				needs a function for the dynamic creation of objects.
 		*/
