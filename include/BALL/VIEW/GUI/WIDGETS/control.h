@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.8 2001/07/09 19:13:08 sturm Exp $
+// $Id: control.h,v 1.9 2001/07/09 19:16:24 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -59,8 +59,8 @@ namespace BALL
 				will be shown in the structure view of {\em *this} control.
 				@memo    Control class (BALL VIEW gui widgets framework)
 				@author  $Author: sturm $
-				@version $Revision: 1.8 $
-				@date    $Date: 2001/07/09 19:13:08 $
+				@version $Revision: 1.9 $
+				@date    $Date: 2001/07/09 19:16:24 $
 		*/
 		class Control: public QListView, public ModularWidget
 		{
@@ -504,14 +504,7 @@ namespace BALL
 				throw();
 			
 			/** Non-mutable inspection of the copy list.
-					Access the constant reference of the copy list of {\em *this} control.
-					In this list all copied or cutted \Ref{Composite} objects are stored until
-					the method \Ref{clearClipboard} is called.
-					@return  List<Composite*>& a constant reference of the list of the copied \Ref{Composite} objects
-					@see     cut
-					@see     copy
-					@see     paste
-					@see     clearClipboard
+					For further information see \Ref{getCopyList_}.
 			*/
 			const List<Composite*>& getCopyList_() const
 				throw();
