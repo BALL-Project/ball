@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: aromaticityProcessor.C,v 1.1 2004/05/11 07:28:20 oliver Exp $
+// $Id: aromaticityProcessor.C,v 1.2 2004/07/12 19:49:45 amoll Exp $
 //
 
 #include <BALL/QSAR/aromaticityProcessor.h>
@@ -26,12 +26,12 @@ using namespace std;
 namespace BALL
 {
 	AromaticityProcessor::AromaticityProcessor()
-		:	UnaryProcessor<Molecule>()
+		:	UnaryProcessor<AtomContainer>()
 	{
 	}
 
 	AromaticityProcessor::AromaticityProcessor(const AromaticityProcessor& aro)
-		:	UnaryProcessor<Molecule>(aro)
+		:	UnaryProcessor<AtomContainer>(aro)
 	{
 	}
 
@@ -44,11 +44,11 @@ namespace BALL
 		return *this;
 	}
 
-	bool AromaticityProcessor::isValid(const Molecule& molecule)
+	bool AromaticityProcessor::isValid(const AtomContainer& ac)
 	{
 		static HashMap<Handle, PreciseTime> mod_times;
-		PreciseTime last_mod = molecule.getModificationTime();
-		Handle mol_handle = molecule.getHandle();
+		PreciseTime last_mod = ac.getModificationTime();
+		Handle mol_handle = ac.getHandle();
 		if (mod_times.has(mol_handle))
 		{
 			if (mod_times[mol_handle] == last_mod)
@@ -69,21 +69,21 @@ namespace BALL
 	}
 
 
-	Processor::Result AromaticityProcessor::operator () (Molecule& molecule)
+	Processor::Result AromaticityProcessor::operator () (AtomContainer& ac)
 	{
 		// we need a ring set if this is called via the processor (or directly with '()' )!
-		if (!isValid(molecule))
+		if (!isValid(ac))
 		{
 			RingPerceptionProcessor rpp;
 			vector<vector<Atom*> > sssr;
-			rpp.calculateSSSR(sssr, molecule);
-			aromatize(sssr, molecule);
+			rpp.calculateSSSR(sssr, ac);
+			aromatize(sssr, ac);
 		}
 		return Processor::CONTINUE;
 	}
 
 
-	void AromaticityProcessor::aromatize(vector<vector<Atom*> >& sssr_orig, Molecule& molecule)
+	void AromaticityProcessor::aromatize(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 	{
 		//cerr << "AromaticityProcessor::aromatize(vector<vector<Atom*> >& sssr_orig)";
 		vector<HashSet<Atom*> > sssr;
@@ -257,9 +257,9 @@ namespace BALL
 
 		// if aromatic bonds are set, i.e. from a fragment db we must set the 
 		// isAromatic property for the atoms, in most cases this is not necessary
-		AtomIterator a_it = molecule.beginAtom();
+		AtomIterator a_it = ac.beginAtom();
 		Atom::BondIterator b_it = a_it->beginBond();
-		BALL_FOREACH_BOND(molecule, a_it, b_it)
+		BALL_FOREACH_BOND(ac, a_it, b_it)
 		{
 			if (b_it->getOrder() == Bond::ORDER__AROMATIC)
 			{

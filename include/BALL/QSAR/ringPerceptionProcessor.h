@@ -18,7 +18,7 @@ namespace BALL
 			\\
 	*/
 	class RingPerceptionProcessor
-		:	public UnaryProcessor<Molecule>
+		:	public UnaryProcessor<AtomContainer>
 	{
 		public:
 
@@ -55,12 +55,12 @@ namespace BALL
 				æparam SSSR, vector of rings, where the rings are stored in vector<Atom*>
 				@param Molecule, the molecule from which the rings to be percepted
 		*/
-		Size calculateSSSR(vector<vector<Atom*> >& sssr, Molecule& molecule);
+		Size calculateSSSR(vector<vector<Atom*> >& sssr, AtomContainer& ac);
 		//@}
 		/** @name Processor-realted methods
 		*/
 		//@{
-		Processor::Result operator () (Molecule& molecule);
+		Processor::Result operator () (AtomContainer& ac);
 		//@}
 		
 		private:
@@ -80,7 +80,7 @@ namespace BALL
 				@param ring set
 				@param moelcule 
 		*/
-		void checkEdges_(HashSet<Atom*>& ring_set, Molecule& molecule);
+		void checkEdges_(HashSet<Atom*>& ring_set, AtomContainer& ac);
 		//@}
 	};
 } // namespace BALL

@@ -6,22 +6,19 @@
 #ifndef BALL_QSAR_AROMATICITYPROCESSOR_H
 #define BALL_QSAR_AROMATICITYPROCESSOR_H
 
-#ifndef BALL_KERNEL_MOLECULE_H
-#	include <BALL/KERNEL/molecule.h>
+#ifndef BALL_KERNEL_ATOMCONTAINER_H
+#	include <BALL/KERNEL/atomContainer.h>
 #endif
-
-//#include <queue>
 
 namespace BALL
 {
-	/**	Processor method to detect aromaticity of molecules. If it is called
+	/**	Processor method to detect aromaticity of AtomContainers. If it is called
 			as a processor with the operator (), the RingPerceptionProcessor is 
 			called before, to calculate a ring set. It can be called explicitely
 			with aromatize with a ringset as parameter.
-			\\
 	*/
 	class AromaticityProcessor
-		:	public UnaryProcessor<Molecule>
+		:	public UnaryProcessor<AtomContainer>
 	{
 		public:
 
@@ -41,31 +38,35 @@ namespace BALL
 		/** Destrcutor
 		*/
 		~AromaticityProcessor();
+
 		//@}
-	
 		/** @name Assignment
 		*/
 		//@{
+
 		/** Assignment operator
 		*/
 		AromaticityProcessor& operator = (const AromaticityProcessor& aro);
+
 		//@}
-	
 		/** @name Accessors
 		*/
 		//@{
+
 		/** Calculated the aromaticity of the molcule and sets the properties
 				"IsAromatic" for aromatic atoms, and Bond::ORDER__AROMATIC for 
 				bonds which are aromatic. 
 				@param SSSR ring set as vector<vector<Atom*> >, (vector of rings in vector<Atom*>)
 		*/
-  	void aromatize(vector<vector<Atom*> >& sssr, Molecule& molecule);
-		//@}
+  	void aromatize(vector<vector<Atom*> >& sssr, AtomContainer& ac);
 
+		//@}
 		/** @name Processor-related methods
 		*/
 		//@{
-		Processor::Result operator () (Molecule& molecule);
+		
+		///
+		Processor::Result operator () (AtomContainer& ac);
 		//@}
 
 
@@ -74,7 +75,7 @@ namespace BALL
 		/** @name Predicates
 		*/
 		//@{
-		bool isValid(const Molecule& molecule);
+		bool isValid(const AtomContainer& ac);
 		//@}
 
 

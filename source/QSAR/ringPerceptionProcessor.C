@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.1 2004/05/11 07:28:21 oliver Exp $
+// $Id: ringPerceptionProcessor.C,v 1.2 2004/07/12 19:49:46 amoll Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -28,12 +28,12 @@ using std::pair;
 namespace BALL
 {
 	RingPerceptionProcessor::RingPerceptionProcessor()
-		:	UnaryProcessor<Molecule>()
+		:	UnaryProcessor<AtomContainer>()
 	{
 	}
 
 	RingPerceptionProcessor::RingPerceptionProcessor(const RingPerceptionProcessor& rp)
-		:	UnaryProcessor<Molecule>(rp)
+		:	UnaryProcessor<AtomContainer>(rp)
 	{
 	}
 
@@ -46,24 +46,24 @@ namespace BALL
 	{
 	}
 
-	Processor::Result RingPerceptionProcessor::operator () (Molecule& molecule)
+	Processor::Result RingPerceptionProcessor::operator () (AtomContainer& AtomContainer)
 	{
 		vector<vector<Atom*> > sssr;
-		calculateSSSR(sssr, molecule);
+		calculateSSSR(sssr, AtomContainer);
 		return Processor::CONTINUE;
 	}
 
-	Size RingPerceptionProcessor::calculateSSSR(vector<vector<Atom*> >& sssr_orig, Molecule& orig_molecule)
+	Size RingPerceptionProcessor::calculateSSSR(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 	{
 		//cerr << "RingPerceptionProcessr::calculateSSSR(...)";
-		Molecule molecule;
-		molecule = orig_molecule; // the algorithm runs on a copy, bc bonds and maybe atoms are destroyed!
+		AtomContainer AtomContainer;
+		AtomContainer = ac; // the algorithm runs on a copy, bc bonds and maybe atoms are destroyed!
 
 		// mapping is needed because this algorithms works on a copy
 		HashMap<Atom*, Atom*> copy_to_orig;
-		AtomIterator orig = orig_molecule.beginAtom();
-		AtomIterator copy = molecule.beginAtom();
-		for (;orig!=orig_molecule.endAtom();++orig,++copy)
+		AtomIterator orig = ac.beginAtom();
+		AtomIterator copy = AtomContainer.beginAtom();
+		for (;orig!=ac.endAtom();++orig,++copy)
 		{
 			copy_to_orig.insert(make_pair(&(*copy),&(*orig)));
 		}
@@ -72,8 +72,8 @@ namespace BALL
 		HashSet<Atom*> trim_set; // herein are all the zero edge nodes
 		vector<HashSet<Atom*> > SSSR; // stores the rings 
 		
-		AtomIterator atom_it = molecule.beginAtom();
-		for (;atom_it!=molecule.endAtom();++atom_it)
+		AtomIterator atom_it = AtomContainer.beginAtom();
+		for (;atom_it!=AtomContainer.endAtom();++atom_it)
 		{
 			full_set.insert(&(*atom_it));
 		}
@@ -148,7 +148,7 @@ namespace BALL
 						{
 							// add ring_set ro sssr
 							SSSR.push_back(ring_set);
-							checkEdges_(ring_set, molecule);
+							checkEdges_(ring_set, AtomContainer);
 						}
 					}
 				}
@@ -193,7 +193,7 @@ namespace BALL
 		}
 		
 		// the atoms that are not participating a ring
-   	for (AtomIterator i=molecule.beginAtom();i!=molecule.endAtom();++i)
+   	for (AtomIterator i=AtomContainer.beginAtom();i!=AtomContainer.endAtom();++i)
 		{
 		  if (!i->hasProperty("InRing"))
 		  {
@@ -201,9 +201,9 @@ namespace BALL
 			}
 		}
 
-		AtomIterator a_it = molecule.beginAtom();
+		AtomIterator a_it = AtomContainer.beginAtom();
 		Atom::BondIterator b_it = a_it->beginBond();
-		BALL_FOREACH_BOND (molecule, a_it, b_it)
+		BALL_FOREACH_BOND (AtomContainer, a_it, b_it)
 		{
 			if (!b_it->hasProperty("InRing"))
 			{
@@ -279,7 +279,7 @@ namespace BALL
 
 
 
-	void RingPerceptionProcessor::checkEdges_(HashSet<Atom*>& ring_set, Molecule& molecule_orig)
+	void RingPerceptionProcessor::checkEdges_(HashSet<Atom*>& ring_set, AtomContainer& ac)
 	{
 		// Every node with degree 3 (which is a memeber of ring_set) is deleted testwise.
 		// Finally the node which produces the smalles ring is deleted.
@@ -292,14 +292,14 @@ namespace BALL
 		{
 			if ((*iter)->countBonds() == 3)
 			{
-				Molecule molecule = molecule_orig;
+				AtomContainer AtomContainer = ac;
 				
-				// mapping to switch between copy and orig molecule
+				// mapping to switch between copy and orig AtomContainer
 				HashMap<Atom*, Atom*> copy_to_orig;
 				HashMap<Atom*, Atom*> orig_to_copy;
-				AtomIterator copy = molecule.beginAtom();
-				AtomIterator orig = molecule_orig.beginAtom();
-				for (;orig!=molecule_orig.endAtom();++copy, ++orig)
+				AtomIterator copy = AtomContainer.beginAtom();
+				AtomIterator orig = ac.beginAtom();
+				for (;orig!=ac.endAtom();++copy, ++orig)
 				{
 					copy_to_orig.insert(make_pair(&(*copy),&(*orig)));
 					orig_to_copy.insert(make_pair(&(*orig),&(*copy)));
