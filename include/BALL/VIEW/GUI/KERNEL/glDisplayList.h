@@ -1,4 +1,4 @@
-// $Id: glDisplayList.h,v 1.6.4.3 2002/12/03 19:30:57 oliver Exp $
+// $Id: glDisplayList.h,v 1.6.4.4 2002/12/03 20:06:13 oliver Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
 #define BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
@@ -7,19 +7,7 @@
 #	include <BALL/common.h>
 #endif
 
-#ifdef BALL_COMPILER_MSVC
-#define APIENTRY    __stdcall
-#define CALLBACK __stdcall
-#define WINGDIAPI __declspec(dllimport) 
-#endif
-
-#include <GL/gl.h>
-
-#ifdef BALL_COMPILER_MSVC
-#undef APIENTRY
-#undef CALLBACK
-#undef WINGDIAPI
-#endif
+#include <qgl.h>
 
 namespace BALL
 {
