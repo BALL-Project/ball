@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.h,v 1.7 2000/09/28 13:37:51 anker Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.8 2000/09/28 17:32:56 anker Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
@@ -152,6 +152,8 @@ namespace BALL
 		private:
 
 		double numericallyIntegrateInterval(Interval interval) const;
+		double project(double x) const;
+		double unproject(double x) const;
 
 	};
 

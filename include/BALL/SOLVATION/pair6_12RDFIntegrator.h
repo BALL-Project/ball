@@ -1,4 +1,4 @@
-// $Id: pair6_12RDFIntegrator.h,v 1.1 2000/09/28 12:14:31 anker Exp $
+// $Id: pair6_12RDFIntegrator.h,v 1.2 2000/09/28 17:32:55 anker Exp $
 
 #ifndef BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIR6_12RDFINTEGRATOR_H
@@ -148,6 +148,8 @@ namespace BALL
 
 		double analyticallyIntegrateInterval(Interval interval,
 				Coefficients coeffs, Position index) const;
+		double project(double x) const;
+		double unproject(double x) const;
 
 	};
 
