@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.5 2000/11/02 18:23:14 oliver Exp $
+// $Id: regularData1D.h,v 1.6 2000/11/10 17:21:41 anhi Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -12,9 +12,9 @@
 namespace BALL
 {
 
-	/**	A class to store regularly spaced data.
+	/**	A class to store regularaly spaced data.
 			This class can is intended to hold regularly spaced, one-dimensional data sets.
-			It might be useful to hold data sets like spectra, or precomputed funciton values.
+			It might be useful to hold data sets like spectra, or precomputed function values.
 			\\
 			{\bf Definition:} \URL{BALL/DATATYPE/regularData1D.h}
 	*/
