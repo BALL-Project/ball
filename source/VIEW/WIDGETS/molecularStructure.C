@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.48 2004/05/27 19:50:03 oliver Exp $
+// $Id: molecularStructure.C,v 1.49 2004/06/04 12:44:27 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1128,11 +1128,11 @@ namespace BALL
 
 		void MolecularStructure::buildPeptide()
 		{
-			PeptideDialog* dialog = new PeptideDialog;
-			dialog->setFragmentDB(&getFragmentDB());
-			dialog->exec();
+			PeptideDialog dialog;
+			dialog.setFragmentDB(&getFragmentDB());
+			dialog.exec();
 
-			Protein* protein = dialog->getProtein();
+			Protein* protein = dialog.getProtein();
 			if (protein == 0) 
 			{
 				return;
@@ -1140,7 +1140,7 @@ namespace BALL
 
 			System* system = new System;
 			system->insert(*protein);
-			getMainControl()->insert(*system, dialog->getSequence());
+			getMainControl()->insert(*system, dialog.getSequence());
 		}
 
 		void MolecularStructure::showAmberForceFieldOptions()
