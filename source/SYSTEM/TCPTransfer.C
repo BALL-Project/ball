@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.6 2001/09/13 15:09:39 amoll Exp $
+// $Id: TCPTransfer.C,v 1.7 2001/09/15 14:50:41 amoll Exp $
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
@@ -94,12 +94,14 @@ TCPTransfer::Status TCPTransfer::transfer()
 {
 	if (protocol_ == FTP_PROTOCOL)
 	{
-		return getFTP_();
+		status_ =  getFTP_();
+		return status_;
 	}
 	
 	if (protocol_ == HTTP_PROTOCOL)
 	{
-		return getHTTP_();
+		status_ = getHTTP_();
+		return status_;
 	}
 
 	close(socket_);
@@ -212,14 +214,16 @@ TCPTransfer::Status TCPTransfer::getHTTP_()
 {
 	String query;
 	query  = "GET /" + file_address_ + " HTTP/1.0\n\r";
-	//BAUSTELLE basic authentification doesnt yet works
+	query += "Accept: */*\n\r";
+	query += "User-Agent: inet.c\n\r";
+	//BAUSTELLE basic authentification doesnt yet work
 	if (!login_.isEmpty() && !password_.isEmpty())
 	{
 		String auth(login_ + ":" + password_);
 		query += "Authorization: Basic "+ auth.encodeBase64() + "\n\r";
 	}
-	query += "Accept: */*\n\r";
-	query += "User-Agent: inet.c\n\r\n\r";
+	query += "\n\r";
+	
 	Status status = logon_(query);
 	if (status != NO_ERROR)
 	{
