@@ -1,4 +1,4 @@
-// $Id: TransformationManager_test.C,v 1.3 2001/12/29 17:58:29 oliver Exp $
+// $Id: TransformationManager_test.C,v 1.4 2001/12/30 00:09:43 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TransformationManager, "$Id: TransformationManager_test.C,v 1.3 2001/12/29 17:58:29 oliver Exp $")
+START_TEST(TransformationManager, "$Id: TransformationManager_test.C,v 1.4 2001/12/30 00:09:43 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -50,16 +50,66 @@ CHECK(TransformationManager::unregisterTransformation(const String& pattern))
 RESULT
 
 CHECK(TransformationManager::transform(const String& name))
+	// %s: full name 
+	String test_test(String("test") + FileSystem::PATH_SEPARATOR + "test.sfx");
 	TransformationManager tm;
 	tm.registerTransformation("", "%s %s");
-	TEST_EQUAL(tm.transform("test"), "test test")
+	TEST_EQUAL(tm.transform(test_test), test_test + " " + test_test)
 	TEST_EQUAL(tm.transform(" "), "   ")
 	TEST_EQUAL(tm.transform(""), " ")
+	// check whether we really avoid infinite recursion
+	//???TEST_EQUAL(tm.transform("%s-").hasPrefix("%s- %s- %s- "), true)
 	tm.unregisterTransformation("");
 	tm.registerTransformation("", "TEST");
-	TEST_EQUAL(tm.transform("test"), "TEST")
+	TEST_EQUAL(tm.transform(test_test), "TEST")
 	TEST_EQUAL(tm.transform(" "), "TEST")
 	TEST_EQUAL(tm.transform(""), "TEST")
+	tm.unregisterTransformation("");
+
+	// %p: path name
+	const String& PS = FileSystem::PATH_SEPARATOR;
+	tm.registerTransformation("", "AA%pAA%p");
+	TEST_EQUAL(tm.transform(test_test), String("AAtest") + PS + "AAtest" + PS)
+	TEST_EQUAL(tm.transform(" "), "AAAA")
+	TEST_EQUAL(tm.transform(""), "AAAA")
+	tm.unregisterTransformation("");
+
+	// %t: temporary file name
+	tm.registerTransformation("", "AA%tAA%t");
+	TEST_EQUAL(tm.transform(test_test).hasPrefix("AA"), true)
+	TEST_EQUAL(tm.transform(" ").hasPrefix("AA"), true)
+	TEST_EQUAL(tm.transform("").hasPrefix("AA"), true)
+	tm.unregisterTransformation("");
+
+ 	// %f: full name without last dot-separated suffix
+	tm.registerTransformation("", "A%fB%fC");
+	TEST_EQUAL(tm.transform(test_test), String("A") + test_test + "B" + test_test + "C")
+	TEST_EQUAL(tm.transform(" "), "A B C")
+	//??? TEST_EQUAL(tm.transform(""), "ABC")
+	tm.unregisterTransformation("");
+
+	// %f: full name without user-defined suffix
+	String test(PS + "test" + PS + PS + "TEST" + PS + "basename");
+	tm.registerTransformation("", "A%f[suffix]B%fC");
+	TEST_EQUAL(tm.transform(test_test + "suffix"), String("A") + test + "B" + test + "suffixC")
+	TEST_EQUAL(tm.transform(" suffix"), "A B suffixC")
+	TEST_EQUAL(tm.transform(""), "ABC")
+	tm.unregisterTransformation("");
+
+ 	// %b: base name without last dot-separated suffix
+	tm.registerTransformation("", "A%bB%bC");
+	TEST_EQUAL(tm.transform(test_test), String("A") + test_test + "B" + test_test + "C")
+	TEST_EQUAL(tm.transform(" "), "A B C")
+	TEST_EQUAL(tm.transform(""), "ABC")
+	tm.unregisterTransformation("");
+
+	// %b: base name without user-defined suffix
+	tm.registerTransformation("", "A%b[suffix]B%bC");
+	TEST_EQUAL(tm.transform(test_test + "suffix"), "AbasenameBbasenamesuffixC")
+	TEST_EQUAL(tm.transform(" suffix"), "A B suffixC")
+	TEST_EQUAL(tm.transform(""), "ABC")
+	tm.unregisterTransformation("");
+	
 RESULT
 
 /////////////////////////////////////////////////////////////

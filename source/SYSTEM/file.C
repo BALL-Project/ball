@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.22 2001/12/29 17:58:29 oliver Exp $
+// $Id: file.C,v 1.23 2001/12/30 00:09:43 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/TCPTransfer.h>
@@ -67,15 +67,24 @@ namespace BALL
 			// and "%f[suffix]" with the full filename without [suffix]
 			if (result.hasSubstring("%f["))
 			{
+				std::cout << "has substring %f[" << std::endl;
 				String full_name = name;
 				RegularExpression suffix_regexp("%f\\[[^\\]]\\]");
-				String suffix = suffix_regexp.match(result);
-				if (!suffix.empty())
-				{
-					full_name.substitute(suffix +"$", "");
-				}
+				Substring suffix_substring;
 				count = 0;
-				while ((result.substitute("%f\\[[^\\]]\\]", full_name) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
+				std::cout << "suffix_regexp.match: " << suffix_regexp.match(result) << std::endl;
+				while (suffix_regexp.find(result, suffix_substring) && (++count <= MAX_SUBSTITUTIONS))
+				{
+					String suffix = suffix_substring;
+					std::cout << "suffix = " << suffix << std::endl;
+					suffix = suffix(3, suffix.size() - 4);
+					std::cout << "substituting with user-defined prefix:" << name << "/" << suffix << std::endl;
+					if (!suffix.empty())
+					{
+						full_name.substitute(suffix, "");
+					}
+					suffix_substring = full_name;
+				}
 			}
 			if (result.hasSubstring("%f"))
 			{

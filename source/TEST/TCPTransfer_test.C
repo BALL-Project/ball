@@ -1,4 +1,4 @@
-// $Id: TCPTransfer_test.C,v 1.8 2001/12/13 12:57:25 amoll Exp $
+// $Id: TCPTransfer_test.C,v 1.9 2001/12/30 00:09:43 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -80,8 +80,11 @@ bool testNetwork()
 	return true;
 }
 
-/////////////////////////
-START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.8 2001/12/13 12:57:25 amoll Exp $")
+
+
+START_TEST(TCPTransfer, "$Id: TCPTransfer_test.C,v 1.9 2001/12/30 00:09:43 oliver Exp $")
+
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
@@ -105,6 +108,7 @@ CHECK(~TCPTransfer_test)
 RESULT
 
 CHECK(set(ofstream& file, const String& address))
+	ABORT_IF(!network)
 	TCPTransfer tcp_t;
 	ofstream out;
 	tcp_t.set(out, "http://postino.mpi-sb.mpg.de/index.html");
@@ -119,6 +123,7 @@ CHECK(set(ofstream& file, const String& address))
 RESULT
 
 CHECK(http)
+	ABORT_IF(!network)
 	String filename;
 	File::createTemporaryFilename(filename);
 	ofstream out(filename.c_str(), ::std::ios::out);
@@ -152,6 +157,7 @@ CHECK(http)
 RESULT
 
 CHECK(ftp)
+	ABORT_IF(!network)
   String filename;
 	File::createTemporaryFilename(filename);
 	ofstream out(filename.c_str(), ::std::ios::out);
