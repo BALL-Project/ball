@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.31 2004/09/27 15:29:15 oliver Exp $
+// $Id: colorProcessor.C,v 1.31.2.1 2004/12/27 17:44:18 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -460,5 +460,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
  } // namespace BALL
