@@ -1,4 +1,4 @@
-The BALL kernel data structures have been designed to moedl the problem 
+The BALL kernel data structures have been designed to model the problem 
 domain (\ie well-known biochemical entities) as closely as possible.
 Although some of the terms in biochemistry are rather fuzzy, there is a clear
 hierarchical relationship (Fig.~\ref{figure:problem-domain}).
@@ -18,7 +18,7 @@ of the kernel classes.
 
 \begin{figure}[tb]
   \centering\includegraphics[width=\textwidth]{problem-domain.eps}
-  \caption{A model of the biochemical problme domain. BALL tries to model
+  \caption{A model of the biochemical problem domain. BALL tries to model
 					these entities as closely as possible with its kernel classes.}
   \label{figure:problem-domain}
 \end{figure}
@@ -26,7 +26,7 @@ of the kernel classes.
 \begin{figure}[tb]
   \centering\includegraphics[width=\textwidth]{kernel-data-structures.eps}
   \caption{The BALL kernel classes consist of three main frameworks: the
-molecular framework, the protein framwork, and the nucleic acid framework.}
+molecular framework, the protein framework, and the nucleic acid framework.}
   \label{figure:kernel-frameworks}
 \end{figure}
 
@@ -47,7 +47,7 @@ framework and describes the structures encountered in proteins. Proteins are
 and proteins can be handled like molecules and stored along with them in
 systems. Proteins can often be decomposed into several chains. These chains in
 turn can contain secondary structure elements, which then contain residues.
-Residues usually describe the amino acids of a protein. THe sequence
+Residues usually describe the amino acids of a protein. The sequence
 information of a protein is encoded implicitly in the order of the tree: it
 can be obtained by reading all instances of \class{Residue} in the order they
 are contained in a protein. So the protein, the chains, and secondary
@@ -61,13 +61,13 @@ is known (\eg when read from PDB files), instances of
 \class{SecondaryStructure} are created to store it. Each secondary structure
 element contains a class {\eg helix, $\beta$-sheet) describing its type.
 
-\paragraph{The nucleic acid framwork} contains the classes \class{NucleicAcid}
+\paragraph{The nucleic acid framework} contains the classes \class{NucleicAcid}
 and \class{Nucleotide} and is used to represent structures of nucleic acids.
 Right now, we do not differentiate between DNA and RNA, so if you need these
 classes, we are eager to get your input on how to model DNA and RNA in a more
 detailed way -- currently do not have yet any application for it.
 
-By deriving all kernel classes from the commonn base class \class{Composite},
+By deriving all kernel classes from the common base class \class{Composite},
 they share all the features implemented there. The following section will
 briefly discuss some of these features.
 

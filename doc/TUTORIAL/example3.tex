@@ -19,7 +19,7 @@ from a PDB file as in the previous example:
 The file we chose to read here is the original file as obtained from
 the PDB, therefore it contains neither hydrogen atoms, nor bonds.
 The BALL class \class{FragmentDB} provides a convenient way to solve
-both problems. \class{FragmentDB} is an extensible database of residue
+both problems. \class{FragmentDB} is an extendible database of residue
 structures. By comparing the residues in the PDB file with the reference
 templates in the \class{FragmentDB}, we can identify the missing bonds
 and hydrogen atoms. A matching between atoms is computed based on the names,
@@ -37,7 +37,7 @@ can \member{apply}{} it to any given kernel data structure:
 \noindent
 Instantiating \class{FragmentDB} usually takes a few seconds to parse the
 fragment database and the naming conversion tables stored in
-\directory{BALL/dat/Fragments}. The resulting data may then be used by two
+\directory{BALL/data/Fragments}. The resulting data may then be used by two
 very handy processors: \member{add\_hydrogens}{} and \member{build\_bonds}{}.
 As their names suggest, those processors add the missing hydrogen atoms and
 rebuild missing bonds. We will now complete the BPTI protein by using those
@@ -83,15 +83,15 @@ from their optimal position in the given structure. We can relax those
 hydrogen positions using a molecular mechanics calculation.
 We will use the AMBER force field\cite{AMBER95} and optimize the hydrogen 
 positions while keeping the heavy atoms rigid. The AMBER force field is
-implemented in the \class{Amberamber} class. Instantiating a force field and
+implemented in the \class{AmberFF} class. Instantiating a force field and
 setting up a calculation is very simple:\index{AMBER force field}
 
 \begin{lstlisting}{}
-	Amberamber amber(S);
+	AmberFF amber(S);
 \end{lstlisting}
 
 \noindent
-This constructor call creates a new \class{Amberamber}, reads the parameter
+This constructor call creates a new \class{AmberFF}, reads the parameter
 file (the default one, \file{amber94.ini}, which corresponds to the AMBER
 file {\tt parm94.dat}), and the parameters suitable for the system.
 This particular instance of the force field is now {\em bound} to the 
