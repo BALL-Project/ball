@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.40 2002/01/05 03:59:09 oliver Exp $
+// $Id: string.C,v 1.40.4.1 2002/04/26 13:04:53 anhi Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -1225,6 +1225,7 @@ namespace BALL
 
 			for (; newlen > 0; ptr1++, ptr2++)
 			{
+				newlen--;
 				result = tolower(*ptr1) - tolower(*ptr2);
 
 				if (result != 0)
@@ -1295,6 +1296,7 @@ namespace BALL
 
 			for (; newlen > 0; ptr1++, ptr2++)
 			{
+				newlen--;
 				result = tolower(*ptr1) - tolower(*ptr2);
 
 				if (result != 0)
