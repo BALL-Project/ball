@@ -1,4 +1,4 @@
-// $Id: atomVector.C,v 1.3 2000/10/06 10:00:31 anker Exp $
+// $Id: atomVector.C,v 1.4 2001/06/27 02:02:24 oliver Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/atomVector.h>
@@ -67,7 +67,7 @@ namespace BALL
 			Atom* atom = const_cast<Atom*>(dynamic_cast<const Atom*>(&*it));
 			if (atom != 0)
 			{
-				// store this atom only if ot is selected or 
+				// store this atom only if it is selected or 
 				// selected_only == false
 				if (!selected_only || atom->isSelected())
 				{
