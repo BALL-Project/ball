@@ -1,9 +1,9 @@
-// $Id: PointGrid_test.C,v 1.7 2000/07/04 16:41:28 oliver Exp $
+// $Id: PointGrid_test.C,v 1.8 2000/07/04 16:45:42 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/pointGrid.h>
 
-START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.7 2000/07/04 16:41:28 oliver Exp $")
+START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.8 2000/07/04 16:45:42 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -15,12 +15,12 @@ String filename;
 using BALL::PointGrid;
 PointGrid<float>*	grid;
 
-CHECK(constructor/0)
+CHECK(PointGrid<T>())
 	grid = new PointGrid<float>();
 	TEST_NOT_EQUAL(grid, 0)
 RESULT
 
-CHECK(destructor)
+CHECK(~PointGrid<T>())
 	delete grid;
 RESULT
 
@@ -58,13 +58,13 @@ CHECK(set)
 	TEST_EQUAL(g1.getSize(), 1331)
 RESULT
 
-CHECK(operator =)
+CHECK(operator = ())
 	PointGrid<float> g1;
 	g1 = g;
 	TEST_EQUAL(g1.getSize(), 1331)
 RESULT
 
-CHECK(dump)
+CHECK(dump())
   String filename;
 	NEW_TMP_FILE(filename)
 	std::ofstream outfile(filename.c_str(), ios::out);
@@ -152,9 +152,6 @@ CHECK(getData/1/2)
 	lower = grid->getOrigin();
 	TEST_REAL_EQUAL(*(grid->getData(0)), 5.4321);
 	TEST_REAL_EQUAL(*(grid->getData(0)), *(grid->getData(lower)));
-	TEST_EXCEPTION(Exception::OutOfGrid, g.getData(9999))
-	lower.set(10.1, 0, 0);
-	TEST_EXCEPTION(Exception::OutOfGrid, g.getData(lower))
 RESULT
 
 CHECK(operator[]/1/2)
