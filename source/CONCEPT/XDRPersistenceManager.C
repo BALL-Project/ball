@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager.C,v 1.26 2004/11/05 10:04:39 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.27 2005/02/06 09:45:00 oliver Exp $
 //
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
@@ -519,7 +519,7 @@ namespace BALL
 		DEBUG("XDRPersistenceManager: put(DoubleReal = " << x << ")")
 	}
 
-	void XDRPersistenceManager::put(const PointerSizeUInt ptr)
+	void XDRPersistenceManager::put(const LongSize ptr)
 		throw()
 	{
 #   ifdef BALL_HAS_XDR_U_HYPER
@@ -616,7 +616,7 @@ namespace BALL
 		DEBUG("XDRPersistenceManager: read DoubleReal: " << x)
 	}
 
-	void XDRPersistenceManager::get(PointerSizeUInt& ptr)
+	void XDRPersistenceManager::get(LongSize& ptr)
 		throw()
 	{
 #   ifdef BALL_HAS_XDR_U_HYPER

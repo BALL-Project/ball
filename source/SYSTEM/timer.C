@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timer.C,v 1.15 2002/12/23 08:16:41 oliver Exp $
+// $Id: timer.C,v 1.16 2005/02/06 09:45:00 oliver Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -34,7 +34,7 @@ using std::ostream;
 namespace BALL 
 {
 
-	PointerSizeInt Timer::cpu_speed_ = 0L;
+	LongSize Timer::cpu_speed_ = 0L;
 
 	#ifdef BALL_COMPILER_MSVC
 		PointerSizeInt Timer::clock_speed_ = 0L;
@@ -222,8 +222,8 @@ namespace BALL
 	/************************************************************************/
 	double Timer::getClockTime() const
 	{
-		PointerSizeInt elapsed_seconds;
-		PointerSizeInt elapsed_useconds;
+		LongIndex elapsed_seconds;
+		LongIndex elapsed_useconds;
 
 		if (is_running_ == false)
 		{ 

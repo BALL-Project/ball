@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.158 2004/12/19 13:33:57 amoll Exp $
+// $Id: mainControl.C,v 1.159 2005/02/06 09:45:01 oliver Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1664,7 +1664,7 @@ namespace BALL
 			HashSet<Composite*> roots;
 
 			// rotation
-			if (m.m14 == 0 && m.m24 == 0 && m.m34 == 0)
+			if ((m.m14 == 0.0) && (m.m24 == 0.0) && (m.m34 == 0.0))
 			{
 				GeometricCenterProcessor center_processor;
 				Vector3 center;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: textPersistenceManager.h,v 1.19 2004/05/27 19:49:37 oliver Exp $
+// $Id: textPersistenceManager.h,v 1.20 2005/02/06 09:44:54 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
@@ -71,11 +71,11 @@ namespace BALL
 				<b>Example for a member object:</b>
 					<tt>BASEOBJECT BALL::Bond @ 2334208924 bond_</tt>
 		*/
-		virtual void writeHeader(const char* type_name, const char* name, PointerSizeUInt ptr);
+		virtual void writeHeader(const char* type_name, const char* name, LongSize ptr);
 
 		/**	Check for an an object header.
 		*/
-		virtual bool checkHeader(const char* type_name, const char* name, PointerSizeUInt& ptr);
+		virtual bool checkHeader(const char* type_name, const char* name, LongSize& ptr);
 
 		/**
 		*/
@@ -103,7 +103,7 @@ namespace BALL
 
 		/**	Get an (unknown) object header.
 		*/
-		virtual bool getObjectHeader(String& type_name, PointerSizeUInt& ptr);
+		virtual bool getObjectHeader(String& type_name, LongSize& ptr);
 
 		/**	Write a variable/member name.
 		*/
@@ -216,7 +216,7 @@ namespace BALL
 
 		/**	Write a 64-bit pointer to the output.
 		*/
-		virtual void put(const PointerSizeUInt p);
+		virtual void put(const LongSize p);
 		//@}
 
 		/**	@name	Get methods for primitive data types.
@@ -257,7 +257,7 @@ namespace BALL
 
 		/**	Read a pointer from the input stream.
 		*/
-		virtual void get(PointerSizeUInt& p);
+		virtual void get(LongSize& p);
 		//@}
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PersistenceManager_test.C,v 1.10 2003/06/16 16:39:23 anker Exp $
+// $Id: PersistenceManager_test.C,v 1.11 2005/02/06 09:45:01 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -42,12 +42,12 @@ namespace BALL
 		// Layer 0
 
 		void writeHeader(const char* /* type_name */, const char* /* name */,
-										 PointerSizeUInt /* ptr */)
+										 LongSize /* ptr */)
 		{
 		}
 
 		bool checkHeader(const char* /* type_name */, const char* /* name */,
-										 PointerSizeUInt& /* ptr */)
+										 LongSize& /* ptr */)
 		{
 			return true;
 		}
@@ -79,7 +79,7 @@ namespace BALL
 			return true;
 		}
 
-		bool getObjectHeader(String& /* type_name */, PointerSizeUInt& /* ptr */)
+		bool getObjectHeader(String& /* type_name */, LongSize& /* ptr */)
 		{
 			return true;
 		}
@@ -199,7 +199,7 @@ namespace BALL
 		{
 		}
 
-		void put(const PointerSizeUInt /* p */)
+		void put(const LongSize /* p */)
 		{
 		}
 
@@ -235,7 +235,7 @@ namespace BALL
 		{
 		}
 
-		void get(PointerSizeUInt& /* p */)
+		void get(LongSize& /* p */)
 		{
 		}
 
@@ -247,7 +247,7 @@ namespace BALL
 
 ///////////////////////////
 
-START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.10 2003/06/16 16:39:23 anker Exp $")
+START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.11 2005/02/06 09:45:01 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -425,7 +425,7 @@ CHECK(template<typename T> bool readObjectPointerArray(T** array, const char* na
   //?????
 RESULT
 
-CHECK(bool checkHeader(const char* type_name, const char* name, PointerSizeUInt& ptr))
+CHECK(bool checkHeader(const char* type_name, const char* name, LongSize& ptr))
   // ???
 RESULT
 
@@ -481,7 +481,7 @@ CHECK(bool checkTrailer(const char* name = 0))
   // ???
 RESULT
 
-CHECK(bool getObjectHeader(String& type_name, PointerSizeUInt& ptr))
+CHECK(bool getObjectHeader(String& type_name, LongSize& ptr))
   // ???
 RESULT
 
@@ -525,7 +525,7 @@ CHECK(void get(Index& s))
   // ???
 RESULT
 
-CHECK(void get(PointerSizeUInt& p))
+CHECK(void get(LongSize& p))
   // ???
 RESULT
 
@@ -569,7 +569,7 @@ CHECK(void put(const Index i))
   // ???
 RESULT
 
-CHECK(void put(const PointerSizeUInt p))
+CHECK(void put(const LongSize p))
   // ???
 RESULT
 
@@ -593,7 +593,7 @@ CHECK(void put(const string& s))
   // ???
 RESULT
 
-CHECK(void writeHeader(const char* type_name, const char* name, PointerSizeUInt ptr))
+CHECK(void writeHeader(const char* type_name, const char* name, LongSize ptr))
   // ???
 RESULT
 

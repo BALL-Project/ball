@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: timer.h,v 1.14 2003/08/26 08:04:56 oliver Exp $
+// $Id: timer.h,v 1.15 2005/02/06 09:44:54 oliver Exp $
 //
 
 #ifndef BALL_SYSTEM_TIMER_H
@@ -202,7 +202,7 @@ namespace BALL
 
 		private:
 
-		static PointerSizeInt cpu_speed_;
+		static LongSize cpu_speed_;
 
 		#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
 			static PointerSizeInt clock_speed_;
@@ -212,10 +212,10 @@ namespace BALL
 		bool is_running_;
 
 		// clock seconds value when the timer was last started 
-		PointerSizeInt last_secs_;	
+		LongSize last_secs_;	
 
 		// clock useconds value when the timer was last started 
-		PointerSizeInt last_usecs_;		
+		LongSize last_usecs_;		
 
 		// user time when the timer was last started 
 		clock_t last_user_time_;   
@@ -224,10 +224,10 @@ namespace BALL
 		clock_t last_system_time_; 
 		 
 		// current accumulated clock seconds 
-		PointerSizeInt current_secs_;		
+		LongSize current_secs_;		
 
 		// current accumulated clock useconds 
-		PointerSizeInt current_usecs_;		
+		LongSize current_usecs_;		
 		
 		// current accumulated user time 
 		clock_t current_user_time_;		

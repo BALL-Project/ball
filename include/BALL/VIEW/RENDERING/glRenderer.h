@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.27 2004/12/13 16:47:03 amoll Exp $
+// $Id: glRenderer.h,v 1.28 2005/02/06 09:44:54 oliver Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -229,7 +229,7 @@ namespace BALL
 			// protected:
 
 			///
-			inline virtual void render_(const GeometricObject* object)
+			virtual void render_(const GeometricObject* object)
 				throw();
 
 			///

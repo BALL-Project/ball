@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.C,v 1.22 2005/01/18 21:46:49 amoll Exp $
+// $Id: persistenceManager.C,v 1.23 2005/02/06 09:45:00 oliver Exp $
 //
 
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -263,8 +263,8 @@ namespace BALL
 		pointer_list_.clear();
 		object_in_.clear();
 		
-		String						type_name;
-		PointerSizeUInt		ptr;
+		String type_name;
+		LongSize ptr;
 
 		// prepare the input stream
 		initializeInputStream();
@@ -363,11 +363,11 @@ namespace BALL
 		return first_object;
 	}
 
-	void PersistenceManager::addPointerPair_(PointerSizeUInt old_ptr, void* new_ptr)
+	void PersistenceManager::addPointerPair_(LongSize old_ptr, void* new_ptr)
 		throw()
 	{
 		DEBUG("PersistenceManager: pointer pair (" << hex << old_ptr << "/" << new_ptr << ")")
-		pointer_map_.insert(pair<PointerSizeUInt, void*>(old_ptr, new_ptr));
+		pointer_map_.insert(std::make_pair(old_ptr, new_ptr));
 	}
 
 	void PersistenceManager::addNeededObjects_() 

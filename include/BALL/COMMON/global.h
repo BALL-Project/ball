@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.22 2005/01/29 18:01:56 oliver Exp $
+// $Id: global.h,v 1.23 2005/02/06 09:44:53 oliver Exp $
 //
 
 #ifndef BALL_COMMON_GLOBAL_H
@@ -182,24 +182,29 @@ namespace BALL
 	*/
 	typedef	unsigned char Byte;
 
-	/**	Pointer-sized unsigned int type.
+	/**	Long unsigned int type.
 			This type holds unsigned 64 bit integer numbers and is used to store pointers
 			in a portable fashion (for both 32-bit and 64-bit systems).
 			 \par
 			<b>Size:</b> 64 bit \par
 			<b>persistent</b>
 	*/
-	typedef BALL_ULONG64_TYPE PointerSizeUInt;
+	typedef BALL_ULONG64_TYPE LongSize;
 
-	/**	Pointer-sized signed int type.
+	/**	Long signed int type.
 			This type holds unsigned 64 bit numbers and is used to store pointers
 			in a portable fashion (for both 32-bit and 64-bit systems).
 			 \par
 			<b>Size:</b> 64 bit \par
 			<b>persistent</b>
 	*/
-	typedef BALL_LONG64_TYPE PointerSizeInt;
+	typedef BALL_LONG64_TYPE LongIndex;
 
+	/** Unsigned int with the same size as a pointer.
+			Used for internal conversion issues mostly.
+			<b>Size:</b> 32/64 bit (platform dependent)\par
+	*/
+	typedef BALL_POINTERSIZEUINT_TYPE PointerSizeUInt;
 	#else
 		// the ISO C99 definitions
 		typedef int32_t	Distance; 
@@ -216,8 +221,8 @@ namespace BALL
 		typedef uint32_t Property;
 		typedef int32_t ErrorCode;
 		typedef	uint8_t Byte;
-		typedef uint64_t PointerSizeInt;
-		typedef int64_t	 PointerSizeUInt;
+		typedef uint64_t LongIndex;
+		typedef int64_t	 LongSize;
 
 	#endif
 

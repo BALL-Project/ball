@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.60 2005/02/02 10:51:33 anhi Exp $
+dnl		$Id: aclocal.m4,v 1.61 2005/02/06 09:44:54 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -1523,7 +1523,7 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 	dnl
 	dnl   check for the size of int and pointers (may cause trouble on 64 bit architectures)
 	dnl   we define the type PointerInt (in COMMON/global.h) according to the macro
-	dnl   PROJECT[]_POINTERSIZE_INT (which is set here)
+	dnl   PROJECT[]_POINTERSIZE_UINT (which is set here)
 	dnl   We also define a 64 bit unsigned numeric type. All pointers that are read or written
 	dnl   in persistence-related methods use this type to ensure compatibility between 32 and
 	dnl   64bit PROJECT[] versions.
@@ -1586,7 +1586,7 @@ AC_DEFUN(CF_GET_TYPE_SIZES, [
 			CF_ERROR
 		fi
 	fi
-	AC_DEFINE_UNQUOTED(PROJECT[]_POINTERSIZEINT_TYPE, ${PROJECT[]_POINTER_TYPE})
+	AC_DEFINE_UNQUOTED(PROJECT[]_POINTERSIZEUINT_TYPE, ${PROJECT[]_POINTER_TYPE})
 
 	dnl
 	dnl define a (true) pointer size int for several conversion issues

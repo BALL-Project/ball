@@ -8507,7 +8507,7 @@ echo "$as_me: error: Aborted." >&2;}
 		fi
 	fi
 	cat >>confdefs.h <<_ACEOF
-#define BALL_POINTERSIZEINT_TYPE ${BALL_POINTER_TYPE}
+#define BALL_POINTERSIZEUINT_TYPE ${BALL_POINTER_TYPE}
 _ACEOF
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: persistenceManager.h,v 1.46 2004/02/23 17:26:01 anhi Exp $
+// $Id: persistenceManager.h,v 1.47 2005/02/06 09:44:54 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_PERSISTENCEMANAGER_H
@@ -427,7 +427,7 @@ namespace BALL
 				PersistenceManager.
 		*/
 		virtual void writeHeader(const char* type_name, const char* name,
-				PointerSizeUInt ptr) = 0;
+				LongSize ptr) = 0;
 
 		/**	Check an object header.
 				@param	type_name the stream name of the class to be read
@@ -439,10 +439,9 @@ namespace BALL
 				@return	ptr the pointer is set to the value read from the file
 		*/
 		virtual bool checkHeader(const char* type_name, const char* name,
-				PointerSizeUInt& ptr) = 0;
+				LongSize& ptr) = 0;
 
 		/** Write the trailer for an object. 
-				?????.
 				@param name the name of the object
 		*/
 		virtual void writeTrailer(const char* name = 0) = 0;
@@ -482,7 +481,7 @@ namespace BALL
 				type_name</tt> and the address of the object is read but not inserted
 				into the table.
 		*/
-		virtual bool getObjectHeader(String& type_name, PointerSizeUInt& ptr) = 0;
+		virtual bool getObjectHeader(String& type_name, LongSize& ptr) = 0;
 
 
 		/**	Write a variable/member name.
@@ -648,7 +647,7 @@ namespace BALL
 					Byte & unsigned & 8 \par
 					Index & signed & 32 \par
 					Size/Position & unsigned & 32 \par
-					PointerSizeUInt & unsigned & 64 \par
+					LongSize & unsigned & 64 \par
 					float & signed & 32 \par
 					double & signed & 64 \par
 					long double & signed & 128 \par
@@ -691,7 +690,7 @@ namespace BALL
 
 		/**	Write a pointer to the output.
 		*/
-		virtual void put(const PointerSizeUInt p) = 0;
+		virtual void put(const LongSize p) = 0;
 
 		//@}
 
@@ -733,7 +732,7 @@ namespace BALL
 
 		/**	Read a 64-bit pointer from the input stream.
 		*/
-		virtual void get(PointerSizeUInt& p) = 0;
+		virtual void get(LongSize& p) = 0;
 
 		//@}
 
@@ -747,7 +746,7 @@ namespace BALL
 
 		/*_
 		*/
-		void addPointerPair_(PointerSizeUInt old_ptr, void* new_ptr)
+		void addPointerPair_(LongSize old_ptr, void* new_ptr)
 			throw();
 				
 		/*_
@@ -770,11 +769,11 @@ namespace BALL
 		
 		/*_
 		*/
-		typedef	HashMap<PointerSizeUInt, void*>				PointerMap;
+		typedef	HashMap<LongSize, void*>				PointerMap;
 		
 		/*_
 		*/
-		typedef	std::list<std::pair<void**, PointerSizeUInt> >		PointerList;
+		typedef	std::list<std::pair<void**, LongSize> >		PointerList;
 
 		/*_
 		*/
@@ -791,7 +790,7 @@ namespace BALL
 		*/
 		ObjectList	object_out_needed_;
 
-		/*_ a map relating the pointers read from the stream (PointerSizeUInt)
+		/*_ a map relating the pointers read from the stream (LongSize)
 				with the pointers of the persistent objects that were created
 				dynamically
 		*/
@@ -817,7 +816,7 @@ namespace BALL
 			const char* name)
 		throw()
 	{
-		PointerSizeUInt ptr;
+		LongSize ptr;
 		return checkHeader(RTTI::getStreamName<T>(), name, ptr);
 	}
 
@@ -828,7 +827,7 @@ namespace BALL
 		throw()
 	{
 		object_out_.insert(object);
-		writeHeader(RTTI::getStreamName<T>(), name, (PointerSizeUInt)reinterpret_cast<BALL_POINTERSIZEINT_TYPE>(object));
+		writeHeader(RTTI::getStreamName<T>(), name, (LongSize)reinterpret_cast<PointerSizeUInt>(object));
 	}
 
 
@@ -885,7 +884,7 @@ namespace BALL
 		}
 
 		writeObjectPointerHeader(RTTI::getStreamName<T>(), name);
-		put((PointerSizeUInt)(BALL_POINTERSIZEINT_TYPE)object);
+		put(static_cast<LongSize>(reinterpret_cast<PointerSizeUInt>(object)));
 		writePrimitiveTrailer();
 	}
 
@@ -899,15 +898,15 @@ namespace BALL
 			return false;
 		}
 
-		PointerSizeUInt ptr;
+		LongSize ptr;
 		get(ptr);
 
 		if (ptr != 0)
 		{
-			pointer_list_.push_back(std::pair<void**, PointerSizeUInt>((void**)&object, ptr));
+			pointer_list_.push_back(std::make_pair((void**)&object, ptr));
 		}
 
-		object = (T*)(BALL_POINTERSIZEINT_TYPE)ptr;
+		object = reinterpret_cast<T*>(static_cast<PointerSizeUInt>(ptr));
 
 		return checkPrimitiveTrailer();
 	} 
@@ -924,7 +923,7 @@ namespace BALL
 		}
 
 		writeObjectReferenceHeader(RTTI::getStreamName<T>(), name);
-		put((PointerSizeUInt)(void*)&object);
+		put((LongSize)(void*)&object);
 		writePrimitiveTrailer();
 	} 
 
@@ -938,7 +937,7 @@ namespace BALL
 			return false;
 		}
 
-		PointerSizeUInt ptr;
+		LongSize ptr;
 		get(ptr);
 
 		// store a zero in the corresponding pointer
@@ -950,7 +949,7 @@ namespace BALL
 
 		if (ptr != 0);
 		{
-			pointer_list_.push_back(std::pair<void**, PointerSizeUInt>((void**)&object, ptr));
+			pointer_list_.push_back(std::make_pair((void**)&object, ptr));
 		}
 
 		return checkPrimitiveTrailer();
@@ -1005,7 +1004,7 @@ namespace BALL
 		for (Position i = 0; i < size; i++)
 		{
 			ptr = (PersistentObject*)arr[i];
-			put((PointerSizeUInt)(BALL_POINTERSIZEINT_TYPE)ptr);
+			put(static_cast<LongSize>(reinterpret_cast<PointerSizeUInt>(ptr)));
 			if (ptr != 0 && !object_out_.has(ptr))
 			{
 				object_out_needed_.push_back(ptr);
@@ -1026,17 +1025,17 @@ namespace BALL
 			return false;
 		}
 
-		PointerSizeUInt ptr;
+		LongSize ptr;
 		for (Position i = 0; i < size; i++) 
 		{
 			get(ptr);
 
 			if (ptr != 0)
 			{
-				pointer_list_.push_back(std::pair<void**, PointerSizeUInt>((void**)&(array[i]), ptr));
+				pointer_list_.push_back(std::make_pair((void**)&(array[i]), ptr));
 			}
 
-			array[i] = (T*)((BALL_POINTERSIZEINT_TYPE)ptr);
+			array[i] = reinterpret_cast<T*>(static_cast<PointerSizeUInt>(ptr));
 		}
 
 		return checkObjectPointerArrayTrailer();

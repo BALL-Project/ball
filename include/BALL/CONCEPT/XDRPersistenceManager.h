@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: XDRPersistenceManager.h,v 1.22 2004/02/18 18:19:01 anhi Exp $
+// $Id: XDRPersistenceManager.h,v 1.23 2005/02/06 09:44:53 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -294,7 +294,7 @@ namespace BALL
 
 		/**	Write a pointer to the output.
 		*/
-		virtual void put(const PointerSizeUInt p)
+		virtual void put(const LongSize p)
       throw();
 		//@}
 
@@ -344,7 +344,7 @@ namespace BALL
 
 		/**	Read a pointer from the input stream.
 		*/
-		virtual void get(PointerSizeUInt& p)
+		virtual void get(LongSize& p)
       throw();
 		//@}
 

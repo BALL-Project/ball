@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TextPersistenceManager_test.C,v 1.16 2004/11/05 14:23:53 amoll Exp $
+// $Id: TextPersistenceManager_test.C,v 1.17 2005/02/06 09:45:01 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.16 2004/11/05 14:23:53 amoll Exp $")
+START_TEST(TextPersistenceManager, "$Id: TextPersistenceManager_test.C,v 1.17 2005/02/06 09:45:01 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -84,7 +84,7 @@ CHECK(TextPersistenceManager::checkHeader(const char* type_name, const char* nam
 	ifstream is("data/TextPersistenceManager_test.checkHeader.txt");
 	TextPersistenceManager pm;
 	pm.setIstream(is);
-	PointerSizeUInt ptr;
+	LongSize ptr;
 	bool result = pm.checkHeader("TYPENAME1", "NAME", ptr);
 	TEST_EQUAL(result, true)
 	TEST_EQUAL(ptr, 12345678)
@@ -182,7 +182,7 @@ CHECK(TextPersistenceManager::getObjectHeader(String& type_name, LongPointerType
 	ifstream is("data/TextPersistenceManager_test.getObjectHeader.txt");
 	TextPersistenceManager pm;
 	pm.setIstream(is);
-	PointerSizeUInt ptr = 0;
+	LongSize ptr = 0;
 	String type_name = "none";
 	bool result = pm.getObjectHeader(type_name, ptr);
 	TEST_EQUAL(result, true)
@@ -623,8 +623,8 @@ CHECK(TextPersistenceManager::get(String& s))
 RESULT
 
 
-CHECK(TextPersistenceManager::get(PointerSizeUInt& p))
-	PointerSizeUInt p;
+CHECK(TextPersistenceManager::get(LongSize& p))
+	LongSize p;
 	pm.get(p);
 	TEST_EQUAL(p, 0)
 	pm.get(p);

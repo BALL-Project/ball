@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: client.C,v 1.16 2004/02/18 19:03:30 oliver Exp $
+// $Id: client.C,v 1.17 2005/02/06 09:45:01 oliver Exp $
 //
 
 #include <BALL/VIEW/KERNEL/client.h>
@@ -80,7 +80,7 @@ namespace BALL
 			iostream_socket->connect(host_.c_str(), port_);
 
 			iostream_socket << (Size)COMMAND__SEND_OBJECT << " ";
-			iostream_socket << (PointerSizeInt)(&composite) << endl;
+			iostream_socket << static_cast<LongSize>(reinterpret_cast<PointerSizeUInt>(&composite)) << endl;
 
 			pm_.setOstream(iostream_socket);
 			composite >> pm_;

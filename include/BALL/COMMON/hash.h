@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hash.h,v 1.21 2004/02/18 18:19:01 anhi Exp $
+// $Id: hash.h,v 1.22 2005/02/06 09:44:53 oliver Exp $
 //
 
 #ifndef BALL_COMMON_HASH_H
@@ -66,7 +66,7 @@ namespace BALL
 	template <typename T>
 	inline HashIndex Hash(const T& key) throw()
 	{
-		return static_cast<HashIndex>((BALL_POINTERSIZEINT_TYPE)key);
+		return static_cast<HashIndex>((PointerSizeUInt)key);
 	}
 
 	/** String hash function.

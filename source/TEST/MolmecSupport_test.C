@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MolmecSupport_test.C,v 1.5 2005/01/29 18:02:02 oliver Exp $
+// $Id: MolmecSupport_test.C,v 1.6 2005/02/06 09:45:01 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,12 +18,12 @@ namespace BALL
 	template <>
 	HashIndex Hash(const std::pair<Atom*, Atom*>& item) throw()
 	{
-		return Hash(static_cast<PointerSizeUInt>(reinterpret_cast<uint32_t>(item.first)) / 2
-								+ static_cast<PointerSizeUInt>(reinterpret_cast<uint32_t>(item.second)) / 2);
+		return Hash(static_cast<LongSize>(reinterpret_cast<PointerSizeUInt>(item.first)) / 2
+								+ static_cast<LongSize>(reinterpret_cast<PointerSizeUInt>(item.second)) / 2);
 	}
 }
 
-START_TEST(class_name, "$Id: MolmecSupport_test.C,v 1.5 2005/01/29 18:02:02 oliver Exp $")
+START_TEST(class_name, "$Id: MolmecSupport_test.C,v 1.6 2005/02/06 09:45:01 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bruker1DFile.C,v 1.20 2004/03/09 12:41:54 anhi Exp $
+// $Id: bruker1DFile.C,v 1.21 2005/02/06 09:45:00 oliver Exp $
 //
 
 #include <BALL/FORMAT/bruker1DFile.h>
@@ -63,7 +63,7 @@ namespace BALL
 	{
 	  char c[4];
 	  signed long int &numdum = *(signed long int*) (&c[0]);
-	  Position actpos=0;
+	  Position actpos = 0;
 	  File& f = static_cast<File&> (*this);
 	  bool littleEndian;
 	  
@@ -96,7 +96,7 @@ namespace BALL
 			}
 			
 		  f.get(c[0]); f.get(c[1]); f.get(c[2]); f.get(c[3]);
-		  if (pars_.getDoubleValue("BYTORDP") == 1) 
+		  if (pars_.getDoubleValue("BYTORDP") == 1.0L) 
 			{
 			 	if (littleEndian == false)
 			 	{ // conversion from little to big

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: config.h.in,v 1.44 2005/02/02 10:51:34 anhi Exp $ 
+// $Id: config.h.in,v 1.45 2005/02/06 09:45:01 oliver Exp $ 
 //
 
 #ifndef BALL_CONFIG_CONFIG_H
@@ -165,7 +165,7 @@
 #define BALL_INDEX_TYPE int
 
 // Defines an unsigned integer type of the same size as void*
-#define BALL_POINTERSIZEINT_TYPE int
+#define BALL_POINTERSIZEUINT_TYPE int
 
 // Define the template argument for friends of template classes:
 // either "" or "<>"

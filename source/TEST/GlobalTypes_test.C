@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GlobalTypes_test.C,v 1.4 2002/12/12 11:34:41 oliver Exp $
+// $Id: GlobalTypes_test.C,v 1.5 2005/02/06 09:45:01 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 // COMMON/global.h) have the correct size on all platforms.
 // This is required for portable persistence.
 
-START_TEST(sizes of the global data types, "$Id: GlobalTypes_test.C,v 1.4 2002/12/12 11:34:41 oliver Exp $")
+START_TEST(sizes of the global data types, "$Id: GlobalTypes_test.C,v 1.5 2005/02/06 09:45:01 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -72,7 +72,15 @@ CHECK(size of Byte)
 RESULT											
 
 CHECK(size of PointerSizeInt)
-	TEST_EQUAL(sizeof(PointerSizeInt), 8)
+	TEST_EQUAL(sizeof(LongSize), 8)
+RESULT
+
+CHECK(size of LongSize)
+	TEST_EQUAL(sizeof(LongSize), 8)
+RESULT
+
+CHECK(size of LongIndex)
+	TEST_EQUAL(sizeof(LongIndex), 8)
 RESULT
 
 /////////////////////////////////////////////////////////////
