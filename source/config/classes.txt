@@ -66,12 +66,12 @@ StringHashMap                       /           /
 TContour                            DE          Z
 TContourLine                        E           Z
 ------------------------CONCEPT---------------------------------------------
-BaseIterator                        DI          Z       clear fehlt, BALL_CREATE_DEEP
-ConstBaseIterator                   DI          Z
-BidirectionalIterator               I           Z
-ConstBidirectionalIterator          I           Z
-ForwardIterator                     DIX,        /
-ConstForwardIterator                DIX,        /
+BaseIterator                        (D)         Z       
+ConstBaseIterator                   (D)         Z
+BidirectionalIterator               /           Z
+ConstBidirectionalIterator          D           Z
+ForwardIterator                     (D)         /
+ConstForwardIterator                (D)         /
 
 AutoDeletable                       /           X       Interface so lassen!
 Callback                            DI,         Z
