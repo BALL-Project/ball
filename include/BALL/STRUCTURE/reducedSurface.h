@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.22 2001/07/15 19:49:51 oliver Exp $
+// $Id: reducedSurface.h,v 1.23 2001/07/15 20:07:00 oliver Exp $
 
 #ifndef BALL_STRUCTURE_REDUCEDSURFACE_H
 #define BALL_STRUCTURE_REDUCEDSURFACE_H
@@ -1152,12 +1152,13 @@ namespace BALL
 				{
 					clear();
 					indices = all_indices;
-							std::cerr << "\nProbeSphere berührt vier Atome, starte neu ...\n\n";
+							std::cerr << "\nProbeSphere in contact with FOUR atoms, restarting...\n";
 					compute();
 					return;
 				}
 				else
 				{
+					// BAUSTELLE: define exception!
 					throw;
 				}
 			}				
