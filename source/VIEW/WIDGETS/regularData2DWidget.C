@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.C,v 1.8 2004/06/10 17:59:28 amoll Exp $
+// $Id: regularData2DWidget.C,v 1.9 2004/06/10 20:34:39 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData2DWidget.h> 
@@ -60,60 +60,45 @@ void RegularData2DWidget::createPlot()
 	color_table_.setRange(-1,1);
 	color_table_.createTable();
 	
-	Position x, y;
-	QPainter paint;     
-	QColor pCol;        
-	ColorRGBA mapcolor; 
-	
 	// determine the minimal and maximal values in data_
-	float min; 
-	float max;
-
-	min = (*data_)[0];
-	max = (*data_)[0];
+	float min = (*data_)[0];
+	float max = (*data_)[0];
 
 	for (Position i=1; i < (*data_).size(); i++)
 	{
-		float cur = (*data_)[i];
-
-		if (cur < min)
-		{
-			min = cur;
-		}
-		if (cur > max)
-		{
-			max  = cur;
-		}
+		if      ((*data_)[i] < min) min = (*data_)[i];
+		else if ((*data_)[i] > max) max = (*data_)[i];
 	}			
 	
-	Size max_x, max_y; //maximal number of Lines and Columns
-
-	max_x = (*data_).getSize().x;
-	max_y = (*data_).getSize().y;
+	//maximal number of Lines and Columns
+	Size max_x = (*data_).getSize().x;
+	Size max_y = (*data_).getSize().y;
 
 	// Draw the points
-	QPixmap pixmap;// = pixItem->getPixmap();
-
+	QPixmap pixmap;								// = pixItem->getPixmap();
 	pixmap.resize(max_x, max_y);
-
-	pixmap.fill();           // delete the old picture
+	pixmap.fill();           			// delete the old picture
+	QPainter paint;     
 	paint.begin(&pixmap);         // set the Painter 
 
-	for (y=0; y<=max_y; y++) 
+	QColor pCol;        
+	for (Position y=0; y<=max_y; y++) 
 	{
-		for (x=0; x<=max_x; x++) 
+		for (Position x=0; x<=max_x; x++) 
 		{
 			//get the QTColor from BallColor
-			mapcolor = color_table_.map((*data_)[x + y*max_x]);
+			ColorRGBA mapcolor = color_table_.map((*data_)[x + y * max_x]);
 			pCol = QColor(mapcolor.getRed(), mapcolor.getGreen(), mapcolor.getBlue());
+Log.error() << "#~~#   " << (*data_)[x+y*max_x] << " "   
+					 << pCol  << " "   << __FILE__ << "  " << __LINE__<< std::endl;
 
 			paint.setPen(pCol);
 			paint.drawPoint(x, y);
 		}
 	}
 
-
 	paint.end();
+
 	//put the pixmapItem into objects
 	PixmapItem* pixItem = new PixmapItem(&canvas_, pixmap);
 	objects_.push_back(dynamic_cast<QCanvasItem*> (pixItem)); 
