@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.34 2004/06/02 14:24:07 amoll Exp $
+// $Id: scene.h,v 1.35 2004/06/03 11:17:18 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -513,6 +513,8 @@ namespace BALL
 
 			void changeEyeDistance_(Scene* scene);
 			void changeFocalDistance_(Scene* scene);
+
+			void processRotateModeMouseEvents_(QMouseEvent* e);
 
 			void rotateSystem_(Scene* scene);
 			void translateSystem_(Scene* scene);
