@@ -1311,9 +1311,9 @@ ac_compiler_gnu=$ac_cv_c_compiler_gnu
 
 
 
-          ac_config_headers="$ac_config_headers config.h:config/config.h.in"
+				          ac_config_headers="$ac_config_headers config.h:config/config.h.in"
 
-ac_ext=cc
+				ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -1380,22 +1380,22 @@ fi
 	fi
 
 
-# Check whether --enable-optimization or --disable-optimization was given.
+																				# Check whether --enable-optimization or --disable-optimization was given.
 if test "${enable_optimization+set}" = set; then
   enableval="$enable_optimization"
 
 fi;
-# Check whether --enable-debuginfo or --disable-debuginfo was given.
+				# Check whether --enable-debuginfo or --disable-debuginfo was given.
 if test "${enable_debuginfo+set}" = set; then
   enableval="$enable_debuginfo"
 
 fi;
-# Check whether --enable-VIEW or --disable-VIEW was given.
+				# Check whether --enable-VIEW or --disable-VIEW was given.
 if test "${enable_VIEW+set}" = set; then
   enableval="$enable_VIEW"
 
 fi;
-# Check whether --enable-64 or --disable-64 was given.
+				# Check whether --enable-64 or --disable-64 was given.
 if test "${enable_64+set}" = set; then
   enableval="$enable_64"
 
@@ -1490,7 +1490,7 @@ if test "${with_libxnet+set}" = set; then
   withval="$with_libxnet"
 
 fi;
-# Check whether --enable-python or --disable-python was given.
+				# Check whether --enable-python or --disable-python was given.
 if test "${enable_python+set}" = set; then
   enableval="$enable_python"
 
@@ -1543,7 +1543,7 @@ if test "${with_xdr+set}" = set; then
   withval="$with_xdr"
 
 fi;
-# Check whether --enable-fftw or --disable-fftw was given.
+				# Check whether --enable-fftw or --disable-fftw was given.
 if test "${enable_fftw+set}" = set; then
   enableval="$enable_fftw"
 
@@ -1560,166 +1560,166 @@ if test "${with_fftw_incl+set}" = set; then
   withval="$with_fftw_incl"
 
 fi;
-# Check whether --enable-double-cpx or --disable-double-cpx was given.
+				# Check whether --enable-double-cpx or --disable-double-cpx was given.
 if test "${enable_double_cpx+set}" = set; then
   enableval="$enable_double_cpx"
 
 fi;
 
-if test "$enable_optimization" = "no" ; then
-DEBUG=true
-else
-DEBUG=false
-fi
+																if test "$enable_optimization" = "no" ; then
+				DEBUG=true
+				else
+				DEBUG=false
+				fi
 
-if test "$enable_debuginfo" = "yes" ; then
-DEBUG_INFO=true
-else
-DEBUG_INFO=false
-fi
+				if test "$enable_debuginfo" = "yes" ; then
+				DEBUG_INFO=true
+				else
+				DEBUG_INFO=false
+				fi
 
-if test "$enable_64" = "yes" ; then
-BINFMT_64_BIT=true
-else
-BINFMT_64_BIT=false
-fi
+				if test "$enable_64" = "yes" ; then
+				BINFMT_64_BIT=true
+				else
+				BINFMT_64_BIT=false
+				fi
 
-if test "$with_compiler" != "" ; then
-CXX=$with_compiler
-fi
+				if test "$with_compiler" != "" ; then
+				CXX=$with_compiler
+				fi
 
-if test "$with_cxxflags" != "" ; then
-CXXFLAGS="${CXXFLAGS}`echo $with_cxxflags|tr , \  `"
-fi
+				if test "$with_cxxflags" != "" ; then
+				CXXFLAGS="${CXXFLAGS}`echo $with_cxxflags|tr , \  `"
+				fi
 
-if test "$with_ldflags" != "" ; then
-LDFLAGS="${LDFLAGS}`echo $with_ldflags|tr ,  \  `"
-fi
+				if test "$with_ldflags" != "" ; then
+				LDFLAGS="${LDFLAGS}`echo $with_ldflags|tr ,  \  `"
+				fi
 
-if test "$with_dynarflags" != "" ; then
-DYNAROPTS="${DYNAROPTS}`echo $with_dynarflags|tr ,  \  `"
-fi
+				if test "$with_dynarflags" != "" ; then
+				DYNAROPTS="${DYNAROPTS}`echo $with_dynarflags|tr ,  \  `"
+				fi
 
-if test "$with_arflags" != "" ; then
-AROPTS="${AROPTS}`echo $with_arflags|tr ,  \  `"
-fi
+				if test "$with_arflags" != "" ; then
+				AROPTS="${AROPTS}`echo $with_arflags|tr ,  \  `"
+				fi
 
-if test "$with_qt" != "" ; then
-QTDIR=$with_qt
-fi
-if test "$with_qt_incl" != "" ; then
-QT_INCPATH=$with_qt_incl
-fi
-if test "$with_qt_libs" != "" ; then
-QT_LIBPATH=$with_qt_libs
-fi
-if test "$with_qt_mt" = "yes" ; then
-USE_THREADSAFE_QT=true
-QT_MT_SUFFIX="-mt"
-else
-USE_THREADSAFE_QT=false
-QT_MT_SUFFIX=""
-fi
-if test "$with_opengl_incl" != "" ; then
-OPENGL_INCPATH=$with_opengl_incl
-fi
-if test "$with_opengl_libs" != "" ; then
-OPENGL_LIBPATH=$with_opengl_libs
-fi
+				if test "$with_qt" != "" ; then
+				QTDIR=$with_qt
+				fi
+				if test "$with_qt_incl" != "" ; then
+				QT_INCPATH=$with_qt_incl
+				fi
+				if test "$with_qt_libs" != "" ; then
+				QT_LIBPATH=$with_qt_libs
+				fi
+				if test "$with_qt_mt" = "yes" ; then
+				USE_THREADSAFE_QT=true
+				QT_MT_SUFFIX="-mt"
+				else
+				USE_THREADSAFE_QT=false
+				QT_MT_SUFFIX=""
+				fi
+				if test "$with_opengl_incl" != "" ; then
+				OPENGL_INCPATH=$with_opengl_incl
+				fi
+				if test "$with_opengl_libs" != "" ; then
+				OPENGL_LIBPATH=$with_opengl_libs
+				fi
 
-if test "$with_mesa" != "yes" ; then
-VIEW_PLATFORM=OpenGL
-else
-VIEW_PLATFORM=Mesa
-fi
+				if test "$with_mesa" != "yes" ; then
+				VIEW_PLATFORM=OpenGL
+				else
+				VIEW_PLATFORM=Mesa
+				fi
 
-if test "$with_moc" != "" ; then
-MOC=$with_moc
-else
-MOC=moc
-fi
+				if test "$with_moc" != "" ; then
+				MOC=$with_moc
+				else
+				MOC=moc
+				fi
 
-if test "$with_uic" != "" ; then
-UIC=$with_uic
-else
-UIC=uic
-fi
+				if test "$with_uic" != "" ; then
+				UIC=$with_uic
+				else
+				UIC=uic
+				fi
 
-if test "$with_libxnet" != "no" ; then
-USE_LIBXNET=true
-else
-USE_LIBXNET=false
-fi
+				if test "$with_libxnet" != "no" ; then
+				USE_LIBXNET=true
+				else
+				USE_LIBXNET=false
+				fi
 
-if test "$with_VIEW" = "no" -o "$enable_VIEW" = "no"; then
-USE_VIEW=false
-BALL_HAS_VIEW=""
-else
-USE_VIEW=true
-BALL_HAS_VIEW=true
-fi
+				if test "$with_VIEW" = "no" -o "$enable_VIEW" = "no"; then
+				USE_VIEW=false
+				BALL_HAS_VIEW=""
+				else
+				USE_VIEW=true
+				BALL_HAS_VIEW=true
+				fi
 
-if test "$with_xdr" = "no" ; then
-BALL_NO_XDR=true
-else
-BALL_NO_XDR=false
-fi
+				if test "$with_xdr" = "no" ; then
+				BALL_NO_XDR=true
+				else
+				BALL_NO_XDR=false
+				fi
 
-# use this switch to enable the python support
-# this also builds libBALLc.so and requires
-# Python.h and libsip.a
-if test "$with_python" != "" -a "$with_python" != "no" -o "$enable_python" = yes ; then
-PYTHON_SUPPORT=true
-if test "${with_python}" != "" -a "${with_python}" != "yes" ; then
-PYTHON_EXE=${with_python}
-else
-PYTHON_EXE=python
-fi
-else
-PYTHON_SUPPORT=
-fi
+				# use this switch to enable the python support
+				# this also builds libBALLc.so and requires
+				# Python.h and libsip.a
+				if test "$with_python" != "" -a "$with_python" != "no" -o "$enable_python" = yes ; then
+				PYTHON_SUPPORT=true
+				if test "${with_python}" != "" -a "${with_python}" != "yes" ; then
+				PYTHON_EXE=${with_python}
+				else
+				PYTHON_EXE=python
+				fi
+				else
+				PYTHON_SUPPORT=
+				fi
 
-# the path to the python includes (Python.h)
-PYTHON_INCLUDE_PATH=$with_python_incl
+				# the path to the python includes (Python.h)
+				PYTHON_INCLUDE_PATH=$with_python_incl
 
-# the path to the python library (libpython*.a)
-# and additional linker options (e.g. -ltermcap etc.)
-PYTHON_LIBPATH=$with_python_libs
-PYTHON_LDOPTS=$with_python_ldopts
-
-
-# the paths to the SIP library, header, and executable
-SIP_LIBPATH=$with_sip_lib
-SIP_INCLUDE_PATH=$with_sip_incl
-SIP=$with_sip
-
-# support for fftw (FFT lib)
-if test "$with_fftw" != "" -a "$with_fftw" != "no" -o "$enable_fftw" = yes ; then
-FFTW_SUPPORT=true
-if test "${with_fftw_lib}" != "" ; then
-FFTW_LIBPATH=${with_fftw_lib}
-else
-FFTW_LIBPATH=""
-fi
-FFTW_INCL=${with_fftw_incl}
-else
-FFTW_SUPPORT=
-fi
-
-# size of Complex type (if given)
-if test "$enable_double_cplx" = yes ; then
-FFTW_PRECISION=double
-else
-FFTW_PRECISION=float
-fi
+				# the path to the python library (libpython*.a)
+				# and additional linker options (e.g. -ltermcap etc.)
+				PYTHON_LIBPATH=$with_python_libs
+				PYTHON_LDOPTS=$with_python_ldopts
 
 
-BINFORMAT_FILE=config/binary_formats
-BALL_PATH=`cd ..; pwd`
+				# the paths to the SIP library, header, and executable
+				SIP_LIBPATH=$with_sip_lib
+				SIP_INCLUDE_PATH=$with_sip_incl
+				SIP=$with_sip
+
+				# support for fftw (FFT lib)
+				if test "$with_fftw" != "" -a "$with_fftw" != "no" -o "$enable_fftw" = yes ; then
+				FFTW_SUPPORT=true
+				if test "${with_fftw_lib}" != "" ; then
+				FFTW_LIBPATH=${with_fftw_lib}
+				else
+				FFTW_LIBPATH=""
+				fi
+				FFTW_INCL=${with_fftw_incl}
+				else
+				FFTW_SUPPORT=
+				fi
+
+				# size of Complex type (if given)
+				if test "$enable_double_cplx" = yes ; then
+				FFTW_PRECISION=double
+				else
+				FFTW_PRECISION=float
+				fi
+
+
+												BINFORMAT_FILE=config/binary_formats
+				BALL_PATH=`cd ..; pwd`
 
 
 
-echo "$as_me:$LINENO: checking whether ln -s works" >&5
+				echo "$as_me:$LINENO: checking whether ln -s works" >&5
 echo $ECHO_N "checking whether ln -s works... $ECHO_C" >&6
 LN_S=$as_ln_s
 if test "$LN_S" = "ln -s"; then
@@ -1801,11 +1801,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -1883,11 +1889,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -1965,11 +1977,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2047,11 +2065,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2129,11 +2153,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2211,11 +2241,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2293,11 +2329,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2375,11 +2417,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2457,11 +2505,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2539,11 +2593,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2621,11 +2681,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2703,11 +2769,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2785,11 +2857,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2867,11 +2945,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -2949,11 +3033,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -3066,11 +3156,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -3132,11 +3228,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -3303,11 +3405,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -3411,11 +3519,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -3439,8 +3553,8 @@ echo "$as_me: error: Aborted." >&2;}
 	done
 
 
-SAVE_CXXFLAGS="${CXXFLAGS}"
-ac_ext=cc
+																SAVE_CXXFLAGS="${CXXFLAGS}"
+				ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -3965,12 +4079,12 @@ ac_compiler_gnu=$ac_cv_cxx_compiler_gnu
 
 
 
-EXEEXT=$EXEEXT
+				EXEEXT=$EXEEXT
 
-CXXFLAGS="${SAVE_CXXFLAGS}"
+				CXXFLAGS="${SAVE_CXXFLAGS}"
 
-CXX_IDENTIFIED=false
-if test "${CXX_IDENTIFIED}" != true ; then
+																CXX_IDENTIFIED=false
+				if test "${CXX_IDENTIFIED}" != true ; then
 	echo "$as_me:$LINENO: checking for Intel C++ compiler" >&5
 echo $ECHO_N "checking for Intel C++ compiler... $ECHO_C" >&6
 	ICC=`${CXX} -V 2>&1 | ${SED} -n 1p | ${SED} "s/Intel(R) C++ Compiler.*/__INTELCC__/g" | ${EGREP} "^__INTELCC__$" | sed -n 1p`
@@ -3996,7 +4110,7 @@ _ACEOF
 echo "${ECHO_T}no" >&6
 	fi
   fi
-if test "${CXX_IDENTIFIED}" != true ; then
+				if test "${CXX_IDENTIFIED}" != true ; then
 	echo "$as_me:$LINENO: checking for GNU compiler" >&5
 echo $ECHO_N "checking for GNU compiler... $ECHO_C" >&6
 cat > /tmp/$$.conftest.c << EOF
@@ -4031,7 +4145,7 @@ echo "${ECHO_T}no" >&6
 	${RM} /tmp/$$.conftest.c
 
   fi
-if test "${CXX_IDENTIFIED}" != true ; then
+				if test "${CXX_IDENTIFIED}" != true ; then
 	echo "$as_me:$LINENO: checking for KAI C++ compiler" >&5
 echo $ECHO_N "checking for KAI C++ compiler... $ECHO_C" >&6
 	KAI=`${CXX} -v --version 2>&1 | sed "s/.*KAI.*/__KAI__/g" |sed "s/.*kai.*/__KAI__/g" | ${EGREP} "^__KAI__$" | sed -n 1p`
@@ -4057,7 +4171,7 @@ echo "${ECHO_T}no" >&6
 	fi
 
   fi
-if test "${CXX_IDENTIFIED}" != true ; then
+				if test "${CXX_IDENTIFIED}" != true ; then
 	echo "$as_me:$LINENO: checking for SUN WorkShop/Forte C++ compiler" >&5
 echo $ECHO_N "checking for SUN WorkShop/Forte C++ compiler... $ECHO_C" >&6
 	SUN_CXX=`${CXX} -V 2>&1 | ${EGREP} -e "(Sun)|(WorkShop)|(Forte)"`
@@ -4082,7 +4196,7 @@ _ACEOF
 echo "${ECHO_T}no" >&6
 	fi
   fi
-if test "${CXX_IDENTIFIED}" != true ; then
+				if test "${CXX_IDENTIFIED}" != true ; then
 	echo "$as_me:$LINENO: checking for SGI/MipsPro C++ compiler" >&5
 echo $ECHO_N "checking for SGI/MipsPro C++ compiler... $ECHO_C" >&6
 	SGI_CXX=`${CXX} -version -n32 2>&1 | ${GREP} "MIPSpro" | ${CUT} -d" " -f1`
@@ -4107,7 +4221,7 @@ _ACEOF
 echo "${ECHO_T}no" >&6
 	fi
   fi
-if test "${CXX_IDENTIFIED}" != true ; then
+				if test "${CXX_IDENTIFIED}" != true ; then
 	echo "$as_me:$LINENO: checking for Digital/Compaq C++ compiler" >&5
 echo $ECHO_N "checking for Digital/Compaq C++ compiler... $ECHO_C" >&6
 	DIGITAL_CXX=`${CXX} -V 2>/dev/null | ${GREP} "C++" | ${CUT} -d" " -f-2`
@@ -4134,11 +4248,11 @@ echo "${ECHO_T}no" >&6
 
   fi
 
-CXX_MAKEDEPEND="makedepend"
-MAKEDEP_CXX_OPTS="-f.Dependencies -D__cplusplus --"
+																CXX_MAKEDEPEND="makedepend"
+				MAKEDEP_CXX_OPTS="-f.Dependencies -D__cplusplus --"
 
-case "${CXX_NAME}" in
-g++ )
+																case "${CXX_NAME}" in
+				g++ )
 
 	echo "$as_me:$LINENO: checking compiler version" >&5
 echo $ECHO_N "checking compiler version... $ECHO_C" >&6
@@ -4218,11 +4332,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -4319,7 +4439,7 @@ echo "${ECHO_T}yes" >&6
     fi
   fi
  ;;
-KAI )
+				KAI )
 	echo "$as_me:$LINENO: checking compiler version" >&5
 echo $ECHO_N "checking compiler version... $ECHO_C" >&6
 	echo "int main(){}" > conftest.C
@@ -4393,7 +4513,7 @@ _ACEOF
     fi
   fi
  ;;
-Intel )
+				Intel )
 	echo "$as_me:$LINENO: checking compiler version" >&5
 echo $ECHO_N "checking compiler version... $ECHO_C" >&6
 	echo "int main(){}" > conftest.C
@@ -4446,7 +4566,7 @@ _ACEOF
       CXXFLAGS_D="${CXXFLAGS_D} -O0 -w1"
   CXXFLAGS_DI="${CXXFLAGS_DI} -g"
  ;;
-Compaq )
+				Compaq )
 		echo "$as_me:$LINENO: checking compiler version" >&5
 echo $ECHO_N "checking compiler version... $ECHO_C" >&6
 		echo "int main(){}" > conftest.C
@@ -4513,11 +4633,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -4554,7 +4680,7 @@ echo "$as_me: error: Aborted." >&2;}
     MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -std strict_ansi"
   fi
  ;;
-MIPSpro )
+				MIPSpro )
 		echo "$as_me:$LINENO: checking compiler version" >&5
 echo $ECHO_N "checking compiler version... $ECHO_C" >&6
 		CXX_VERSION_STRING=`${CXX} -n32 -version 2>&1 | ${EGREP} ersion`
@@ -4645,11 +4771,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -4717,7 +4849,7 @@ _ACEOF
 _ACEOF
 
  ;;
-SunCC )
+				SunCC )
 
 		echo "$as_me:$LINENO: checking compiler version for Sun C++" >&5
 echo $ECHO_N "checking compiler version for Sun C++... $ECHO_C" >&6
@@ -4799,11 +4931,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -4855,7 +4993,7 @@ _ACEOF
     CXXFLAGS_D="${CXXFLAGS_D}"
     CXXFLAGS_DI="${CXXFLAGS_DI} -g"
  ;;
-esac
+				esac
 
 
 	echo "$as_me:$LINENO: checking standardized compiler name" >&5
@@ -4913,12 +5051,12 @@ echo "${ECHO_T}disabled" >&6
 
 
 
-if test "$OS" = IRIX -o "$OS" = Solaris ; then
-INCLUDE_IEEEFP=true
-BALL_INCLUDE_IEEEFP=true
-fi
+																				if test "$OS" = IRIX -o "$OS" = Solaris ; then
+				INCLUDE_IEEEFP=true
+				BALL_INCLUDE_IEEEFP=true
+				fi
 
-ac_ext=cc
+												ac_ext=cc
 ac_cpp='$CXXCPP $CPPFLAGS'
 ac_compile='$CXX -c $CXXFLAGS $CPPFLAGS conftest.$ac_ext >&5'
 ac_link='$CXX -o conftest$ac_exeext $CXXFLAGS $CPPFLAGS $LDFLAGS conftest.$ac_ext $LIBS >&5'
@@ -5613,11 +5751,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -5921,11 +6065,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -5933,7 +6083,7 @@ echo "$as_me: error: Aborted." >&2;}
 	fi
 
 
-# On IRIX 5.3, sys/types and inttypes.h are conflicting.
+																								# On IRIX 5.3, sys/types and inttypes.h are conflicting.
 
 
 
@@ -8238,11 +8388,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -8286,11 +8442,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -8335,11 +8497,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -8392,11 +8560,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -8505,11 +8679,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -8558,11 +8738,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -8572,7 +8758,7 @@ echo "$as_me: error: Aborted." >&2;}
 	fi
 
 
-echo "$as_me:$LINENO: checking for size_t" >&5
+																echo "$as_me:$LINENO: checking for size_t" >&5
 echo $ECHO_N "checking for size_t... $ECHO_C" >&6
 if test "${ac_cv_type_size_t+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -8629,7 +8815,7 @@ _ACEOF
 
 fi
 
-echo "$as_me:$LINENO: checking whether time.h and sys/time.h may both be included" >&5
+				echo "$as_me:$LINENO: checking whether time.h and sys/time.h may both be included" >&5
 echo $ECHO_N "checking whether time.h and sys/time.h may both be included... $ECHO_C" >&6
 if test "${ac_cv_header_time+set}" = set; then
   echo $ECHO_N "(cached) $ECHO_C" >&6
@@ -9611,11 +9797,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -12840,11 +13032,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -14321,11 +14519,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -14494,11 +14698,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -14727,11 +14937,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -14997,11 +15213,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -15084,11 +15306,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -15251,11 +15479,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -15274,7 +15508,7 @@ _ACEOF
 	fi
 
 
-for ac_prog in flex lex
+																for ac_prog in flex lex
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -15517,7 +15751,7 @@ _ACEOF
 fi
 
 fi
-for ac_prog in 'bison -y' byacc
+				for ac_prog in 'bison -y' byacc
 do
   # Extract the first word of "$ac_prog", so it can be a program name with args.
 set dummy $ac_prog; ac_word=$2
@@ -15558,29 +15792,29 @@ fi
 done
 test -n "$YACC" || YACC="yacc"
 
-if test "${LEX}" != "flex" -o "${YACC}" = "" ; then
-BALL_HAS_FLEX_YACC=false
-cat >>confdefs.h <<\_ACEOF
+				if test "${LEX}" != "flex" -o "${YACC}" = "" ; then
+				BALL_HAS_FLEX_YACC=false
+				cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_FLEX_YACC false
 _ACEOF
 
-echo "$as_me:$LINENO: result: flex and yacc/bison required!" >&5
+				echo "$as_me:$LINENO: result: flex and yacc/bison required!" >&5
 echo "${ECHO_T}flex and yacc/bison required!" >&6
-echo "$as_me:$LINENO: result: Please install them from your closest GNU mirror." >&5
+				echo "$as_me:$LINENO: result: Please install them from your closest GNU mirror." >&5
 echo "${ECHO_T}Please install them from your closest GNU mirror." >&6
-echo "$as_me:$LINENO: result: " >&5
+				echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-{ { echo "$as_me:$LINENO: error: Aborted." >&5
+				{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
-else
-BALL_HAS_FLEX_YACC=true
-cat >>confdefs.h <<\_ACEOF
+				else
+				BALL_HAS_FLEX_YACC=true
+				cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_FLEX_YACC true
 _ACEOF
 
-LIBS="${LIBS}"
-fi
+				LIBS="${LIBS}"
+				fi
 
 
 
@@ -15781,11 +16015,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -15909,11 +16149,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -16018,11 +16264,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -16062,11 +16314,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -16167,11 +16425,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -16541,11 +16805,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -16667,11 +16937,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -16976,11 +17252,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -17101,11 +17383,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -17315,11 +17603,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -17633,11 +17927,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -17690,11 +17990,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -17761,11 +18067,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18175,11 +18487,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18321,11 +18639,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18509,11 +18833,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18620,11 +18950,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18670,11 +19006,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18765,11 +19107,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18813,11 +19161,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18863,11 +19217,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -18957,11 +19317,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19006,11 +19372,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19056,11 +19428,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19119,11 +19497,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19207,11 +19591,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19251,11 +19641,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19303,11 +19699,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19435,11 +19837,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19488,11 +19896,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19537,11 +19951,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19626,11 +20046,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19669,11 +20095,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19714,11 +20146,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19764,11 +20202,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19811,11 +20255,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -19939,11 +20389,17 @@ echo "${ECHO_T}information about your system setup and versions of compilers" >&
 echo "${ECHO_T}and other tools installed in your system." >&6
 	echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+
 	TARFILE=conf.diag.tar
 	if test -f $TARFILE ; then
 		${RM} $TARFILE ;
 	fi
-  tar cf $TARFILE configure configure.ac aclocal.m4 config.log
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
 	{ { echo "$as_me:$LINENO: error: Aborted." >&5
 echo "$as_me: error: Aborted." >&2;}
    { (exit 1); exit 1; }; }
@@ -20009,47 +20465,29 @@ fi
 
 
 
-BALL_INCLUDES="-I$BALL_PATH/include ${BALL_INCLUDES}"
+																BALL_INCLUDES="-I$BALL_PATH/include ${BALL_INCLUDES}"
 
-BINFMT="${BINFMT}-${CXX_NAME}"
-BINFMT_INDEX=""
+																BINFMT="${BINFMT}-${CXX_NAME}"
+				BINFMT_INDEX=""
 
-LIBS="${LIBS} -lm"
-VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
+				LIBS="${LIBS} -lm"
+				VIEW_LIBS="${VIEW_LIBS} ${QT_LIBOPTS} ${OPENGL_LIBOPTS} ${X11_LIBOPTS} ${LIBS}"
 
-BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
-if test "${USE_VIEW}" = true ; then
-VIEW_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
-VIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
-fi
+				BALL_LIBS="${BALL_LIBS} -L${BALL_PATH}/lib/${BINFMT} -lBALL ${LIBS}"
+				if test "${USE_VIEW}" = true ; then
+				VIEW_INCLUDES="${BALL_INCLUDES} ${VIEW_INCLUDES}"
+				VIEW_LIBS="-L${BALL_PATH}/lib/${BINFMT} -lVIEW -lBALL ${VIEW_LIBS}"
+				fi
 
-LDFLAGS="$LDFLAGS"
-LIBS="$BALL_LIBS"
-
-
-CXXFLAGS="$CXXFLAGS $DEFINES"
-
-if test "${HAS_GPLUSPLUS}" = false -a "${MAKEDEP_CXX_SUFFIX}" != "" ; then
-MAKEDEP_CXX_SUFFIX="|egrep \"(${BALL_PATH}|^[^/]*\$\$)\" ${MAKEDEP_CXX_SUFFIX}"
-fi
+				LDFLAGS="$LDFLAGS"
+				LIBS="$BALL_LIBS"
 
 
+																CXXFLAGS="$CXXFLAGS $DEFINES"
 
-
-
-
-
-
-
-MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} ${CXXFLAGS}"
-if test ${CXX_MAKEDEPEND} = "makedepend" ; then
-MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -- "
-fi
-
-
-
-
-               CC=CXX
+																																																				if test "${HAS_GPLUSPLUS}" = false -a "${MAKEDEP_CXX_SUFFIX}" != "" ; then
+				MAKEDEP_CXX_SUFFIX="|egrep \"(${BALL_PATH}|^[^/]*\$\$)\" ${MAKEDEP_CXX_SUFFIX}"
+				fi
 
 
 
@@ -20059,14 +20497,15 @@ fi
 
 
 
+				MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} ${CXXFLAGS}"
+				if test ${CXX_MAKEDEPEND} = "makedepend" ; then
+				MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -- "
+				fi
 
 
-if test "${AR}" = "no" ; then
-AR="ar"
-fi
-if test "${AROPTS}" = "" ; then
-AROPTS="cru"
-fi
+
+
+				               				CC=CXX
 
 
 
@@ -20078,48 +20517,65 @@ fi
 
 
 
-if test "${ADDITIONAL_COMMENTS}" = "" ; then
-	ADDITIONAL_COMMENTS=""
-fi
+				if test "${AR}" = "no" ; then
+				AR="ar"
+				fi
+				if test "${AROPTS}" = "" ; then
+				AROPTS="cru"
+				fi
 
 
 
 
 
-cat >>confdefs.h <<_ACEOF
+
+
+
+
+
+
+																																if test "${ADDITIONAL_COMMENTS}" = "" ; then
+					ADDITIONAL_COMMENTS=""
+				fi
+
+
+
+
+
+												cat >>confdefs.h <<_ACEOF
 #define BALL_PATH "${BALL_PATH}"
 _ACEOF
 
-cat >>confdefs.h <<_ACEOF
+				cat >>confdefs.h <<_ACEOF
 #define BALL_BINFMT "${BINFMT}"
 _ACEOF
 
 
-cat >>confdefs.h <<_ACEOF
+								cat >>confdefs.h <<_ACEOF
 #define BALL_NULL_TEMPLATE_ARGS ${BALL_NULL_TEMPLATE_ARGS}
 _ACEOF
 
 
-if test "$BALL_HAS_ANSI_IOSTREAM" = yes ; then
-	cat >>confdefs.h <<\_ACEOF
+								if test "$BALL_HAS_ANSI_IOSTREAM" = yes ; then
+					cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_ANSI_IOSTREAM 1
 _ACEOF
 
-fi
+				fi
 
-if test "$BALL_HAS_SSTREAM" = yes ; then
-	cat >>confdefs.h <<\_ACEOF
+								if test "$BALL_HAS_SSTREAM" = yes ; then
+					cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_SSTREAM 1
 _ACEOF
 
-fi
+				fi
 
 
 
 
-SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SOLVATION STRUCTURE SYSTEM ${VIEW} ${PYTHON}"
+				SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR QSAR SOLVATION STRUCTURE SYSTEM ${VIEW} ${PYTHON}"
 
-BINFMT_PATH=""
+				BINFMT_PATH=""
 
 
 
@@ -20175,7 +20631,7 @@ echo "${ECHO_T}enabled" >&6
 	fi
 
 
-                              ac_config_files="$ac_config_files config.mak.tmp:config/config.mak.in common.mak.tmp:config/common.mak.in Makefile.tmp:config/Makefile.in"
+																								                              ac_config_files="$ac_config_files config.mak.tmp:config/config.mak.in common.mak.tmp:config/common.mak.in Makefile.tmp:config/Makefile.in"
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
 # tests run on this system so they can be shared between configure
@@ -21387,19 +21843,43 @@ echo "${ECHO_T}creating shadow directories..." >&6
 
 
 
-echo "$as_me:$LINENO: result: " >&5
+				echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: " >&5
+				echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: Your Makefiles have been created. If everything went OK: just type" >&5
+				echo "$as_me:$LINENO: result: Your Makefiles have been created. If everything went OK: just type" >&5
 echo "${ECHO_T}Your Makefiles have been created. If everything went OK: just type" >&6
-echo "$as_me:$LINENO: result: " >&5
+				echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: make" >&5
+				echo "$as_me:$LINENO: result: make" >&5
 echo "${ECHO_T}make" >&6
-echo "$as_me:$LINENO: result: " >&5
+				echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
-echo "$as_me:$LINENO: result: to build BALL." >&5
+				echo "$as_me:$LINENO: result: to build BALL." >&5
 echo "${ECHO_T}to build BALL." >&6
-echo "$as_me:$LINENO: result: " >&5
+				echo "$as_me:$LINENO: result: " >&5
 echo "${ECHO_T}" >&6
+				echo "$as_me:$LINENO: result: If errors occur during the build, please file a bugreport" >&5
+echo "${ECHO_T}If errors occur during the build, please file a bugreport" >&6
+				echo "$as_me:$LINENO: result: or post to the mailing list. In both cases please include" >&5
+echo "${ECHO_T}or post to the mailing list. In both cases please include" >&6
+				echo "$as_me:$LINENO: result: the file conf.diag.tar located in the current directory." >&5
+echo "${ECHO_T}the file conf.diag.tar located in the current directory." >&6
+				echo "$as_me:$LINENO: result: This file contains the essential information on your platform" >&5
+echo "${ECHO_T}This file contains the essential information on your platform" >&6
+				echo "$as_me:$LINENO: result: and will allow us to assist with the debugging." >&5
+echo "${ECHO_T}and will allow us to assist with the debugging." >&6
+
+	TARFILE=conf.diag.tar
+	if test -f $TARFILE ; then
+		${RM} $TARFILE ;
+	fi
+	FILES="configure configure.ac aclocal.m4 config.log"
+	if test -f config.h ; then FILES="$FILES config.h" ; fi
+	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
+	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
+  tar cf $TARFILE $FILES
+
+				echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+
