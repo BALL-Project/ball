@@ -1,4 +1,4 @@
-// $Id: timeStamp.h,v 1.3 2000/08/30 19:58:00 oliver Exp $
+// $Id: timeStamp.h,v 1.4 2000/09/27 10:33:42 oliver Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -9,6 +9,10 @@
 
 #ifndef BALL_COMMON_CREATE_H
 #	include <BALL/COMMON/create.h>
+#endif
+
+#ifndef BALL_COMMON_DEBUG_H
+#	include <BALL/COMMON/debug.h>
 #endif
 
 #include <iostream>
