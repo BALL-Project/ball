@@ -111,12 +111,18 @@ namespace BALL
 
 			///
 			void angle_changed();
+			
+			///
+			void insert_seq();
 
 			protected:
 
 			void insert_(const String& aa)
 				throw();
 
+			//void insert_seq(int seq_size)
+			//	throw();
+				
 			void truncString_(String& data)
 				throw();
 

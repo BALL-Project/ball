@@ -1,8 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: peptideDialog.C,v 1.3 2003/08/28 13:23:12 oliver Exp $
+// $Id: peptideDialog.C,v 1.4 2003/11/05 09:25:46 bender Exp $
 //
+#include <iostream>
 
 #include <BALL/VIEW/DIALOGS/peptideDialog.h>
 #include <BALL/COMMON/logStream.h>
@@ -27,33 +28,15 @@ namespace BALL
 
 		void PeptideDialog::back_pressed()
 		{
+			//change sequence shown in line-edit
 			if (sequence_.size() > 1)
 			{
 				String old = sequence->text().ascii();
 				old = old.getSubstring(0, old.size()-1);
 				sequence->setText(old.c_str());
-				sequence_.pop_back();
 			}
-			else 
-			{
+			else
 				sequence->setText("");
-			}
-
-			if (sequence_.size() != 0)
-			{
-				Peptides::AminoAcidDescriptor& aad = sequence_[sequence_.size()-1];
-				String data = String(aad.getPhi().toDegree());
-				truncString_(data);
-				phi->setText(data.c_str());
-
-				data = String(aad.getPsi().toDegree());
-				truncString_(data);
-				psi->setText(data.c_str());
-
-				data = String(aad.getOmega().toDegree());
-				truncString_(data);
-				omega->setText(data.c_str());
-			}
 		}
 
 		void PeptideDialog::truncString_(String& data)
@@ -100,13 +83,79 @@ namespace BALL
 		void PeptideDialog::insert_(const String& aa)
 			throw()
 		{
-			Angle a_phi(String(phi->text().ascii()).toFloat(), false);
-			Angle a_psi(String(psi->text().ascii()).toFloat(), false);
-			Angle a_omega(String(omega->text().ascii()).toFloat(), false);
-			addAminoAcid(aa.c_str(), a_phi, a_psi, a_omega);
-			sequence->insert(aa.c_str());
+			String tmp = aa;
+			tmp.toUpper();
+
+			static const string all_amino_acids = "ACDEFGHIKLMNOPQRSTUVWY";
+			string new_aa="";
+			for (String::iterator it = tmp.begin(); it != tmp.end(); ++it)
+			{
+				if (all_amino_acids.find(*it) != string::npos)
+					new_aa.push_back(*it);
+			}
+			sequence->insert(new_aa.c_str());
 		}
 
+		void PeptideDialog::insert_seq()
+		{
+			String written_seq = sequence->text().ascii();
+			int written_seq_size = written_seq.size();
+			int sequence_size = sequence_.size();
+
+			String last_letter = *(written_seq.end()-1);
+			static const string all_amino_acids = "ACDEFGHIKLMNPQRSTVWY";
+			if (all_amino_acids.find(last_letter) == string::npos && written_seq_size != 0)
+			{
+				last_letter.toUpper();
+				if(written_seq > 1)
+					written_seq = written_seq.getSubstring(0, written_seq.size()-1);
+				else
+					written_seq = "";
+				static const string no_amino_acids = "BJOUXZ";
+				if (no_amino_acids.find(last_letter) != string::npos)
+				{
+					sequence->setText(written_seq.c_str());
+					return;
+				}
+				//delete last written letter and write it as upper case letter
+				written_seq = written_seq + last_letter;
+				sequence->setText(written_seq.c_str());
+				return;
+			}
+
+			// if written_seq > already built sequence => add amino acid
+			if (written_seq_size > sequence_size)
+			{
+					written_seq.toLower();
+					const String aa = *(written_seq.end()-1);
+					Angle a_phi(String(phi->text().ascii()).toFloat(), false);
+					Angle a_psi(String(psi->text().ascii()).toFloat(), false);
+					Angle a_omega(String(omega->text().ascii()).toFloat(), false);
+					addAminoAcid(aa.c_str(), a_phi, a_psi, a_omega);
+			}
+			//if written_seq < already built sequence => delete amino acid
+			if (written_seq_size < sequence_size)
+			{
+					sequence_.pop_back();
+					if (sequence_.size() != 0)
+					{
+						Peptides::AminoAcidDescriptor& aad = sequence_[sequence_.size()-1];
+						String data = String(aad.getPhi().toDegree());
+						truncString_(data);
+						phi->setText(data.c_str());
+
+						data = String(aad.getPsi().toDegree());
+						truncString_(data);
+						psi->setText(data.c_str());
+
+						data = String(aad.getOmega().toDegree());
+						truncString_(data);
+						omega->setText(data.c_str());
+					}
+			}
+			if (written_seq_size == sequence_size)
+				return;
+		}
 
 		String PeptideDialog::getSequence()
 			throw()
