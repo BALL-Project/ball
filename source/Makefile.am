@@ -1,4 +1,4 @@
-# $Id: Makefile.am,v 1.1.2.1 2002/12/04 20:02:14 anhi Exp $
+# $Id: Makefile.am,v 1.1.2.2 2002/12/05 10:41:55 anhi Exp $
 
 if USE_BALLVIEW
 VIEWPROG=BALLVIEW.objects # libVIEW
@@ -26,17 +26,17 @@ LIBS =
 BALL_objects_SOURCES=COMMON/.objects CONCEPT/.objects DATATYPE/.objects ENERGY/.objects FORMAT/.objects KERNEL/.objects MATHS/.objects MOLMEC/AMBER/.objects MOLMEC/CHARMM/.objects MOLMEC/COMMON/.objects MOLMEC/MDSIMULATION/.objects MOLMEC/MINIMIZATION/.objects MOLMEC/PARAMETER/.objects NMR/.objects QSAR/.objects SOLVATION/.objects STRUCTURE/.objects SYSTEM/.objects
 BALL_objects_LDFLAGS=
 BALL_objects_LDADD=
-BALL_objects_LINK=cat $(BALL_objects_SOURCES) > BALL.objects
+BALL_objects_LINK=@-cat $(BALL_objects_SOURCES) > BALL.objects
 
 BALLVIEW_objects_SOURCES=VIEW/DATATYPE/.objects VIEW/FUNCTOR/.objects VIEW/GUI/DIALOGS/.objects VIEW/GUI/FUNCTOR/.objects VIEW/GUI/KERNEL/.objects VIEW/GUI/PRIMITIV/.objects VIEW/GUI/WIDGETS/.objects VIEW/KERNEL/.objects VIEW/PRIMITIV/.objects
 BALLVIEW_objects_LDFLAGS=
 BALLVIEW_objects_LDADD=
-BALLVIEW_objects_LINK=cat $(BALLVIEW_objects_SOURCES) > BALLVIEW.objects
+BALLVIEW_objects_LINK=@-cat $(BALLVIEW_objects_SOURCES) > BALLVIEW.objects
 
 MOLVIEW_objects_SOURCES=MOLVIEW/COMMON/.objects MOLVIEW/FUNCTOR/.objects MOLVIEW/GUI/DIALOGS/.objects MOLVIEW/GUI/FUNCTOR/.objects MOLVIEW/GUI/KERNEL/.objects MOLVIEW/GUI/PRIMITIV/.objects MOLVIEW/GUI/WIDGETS/.objects MOLVIEW/KERNEL/.objects MOLVIEW/PRIMITIV/.objects
 MOLVIEW_objects_LDFLAGS=
 MOLVIEW_objects_LDADD=
-MOLVIEW_objects_LINK=cat $(MOLVIEW_objects_SOURCES) > MOLVIEW.objects
+MOLVIEW_objects_LINK=@-cat $(MOLVIEW_objects_SOURCES) > MOLVIEW.objects
 
 # Shared targets
 shared: cleanobjects all-recursive BALL.objects $(VIEWPROG) $(MOLVIEWPROG)
