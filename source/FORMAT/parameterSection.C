@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.9 2000/10/05 17:30:14 anker Exp $
+// $Id: parameterSection.C,v 1.10 2000/10/07 13:20:44 oliver Exp $
 //
 
 #include <BALL/FORMAT/parameterSection.h>
@@ -10,14 +10,16 @@ namespace BALL
 {
 
 	ParameterSection::ParameterSection()
+		:	section_name_(""),
+			format_line_(""),
+			section_entries_(),
+			variable_names_(),
+			entries_(0),
+			keys_(0),
+			number_of_variables_(0),
+			version_(0),
+			valid_(false)
 	{
-		number_of_variables_ = 0;
-
-		entries_ = 0;
-		version_ = 0;
-
-		
-		valid_ = false;
 	}
 
 	ParameterSection::~ParameterSection()
@@ -27,6 +29,10 @@ namespace BALL
 
 	void ParameterSection::clear()
 	{
+		// clear the section name
+		section_name_ = "";
+		format_line_ = "";
+
 		// destroy all hash maps
 		section_entries_.clear();
 		variable_names_.clear();
@@ -34,6 +40,9 @@ namespace BALL
 		// clear all allocated entries
 		delete [] entries_;
 		entries_ = 0;
+
+		// clear all keys
+		keys_.clear();
 
 		// delete the version array
 		delete [] version_;
@@ -46,6 +55,11 @@ namespace BALL
 		valid_ = false;
 	}
 
+	const String& ParameterSection::getSectionName() const
+		throw()
+	{
+		return section_name_;
+	}
 
 	bool ParameterSection::extractSection(Parameters& parameters, const String& section_name)
  	{
@@ -57,15 +71,15 @@ namespace BALL
 		// this instance should be valid only if extractSection didn`t fail
 		valid_ = false;
 
+		// store the section name
+		section_name_ = section_name;
+		
 		// check for the existence of the required section
 		if (!parameters.getParameterFile().hasSection(section_name))
 		{
 			return false;
 		}
 
-		// store the section name
-		section_name_ = section_name;
-		
 		// count non-comment lines only
 		int	number_of_lines = 0;
 		String line;
@@ -383,6 +397,11 @@ namespace BALL
 	const ParameterSection& ParameterSection::operator = 
 		(const ParameterSection& section)
 	{
+		// BAUSTELLE: Das geht so nicht: die C-arrays muessen
+		// neu allokiert werden und ihr Inhalt kopiert. So
+		// fuehrt das zuweisen nichtleerer Instanzen mit
+		// hoher Wahrscheinlichkeit zum Crash, da ein
+		// allokierter Speicherbereich mehrmals freigegeben wird [OK]
 		options = section.options;
 		section_name_ = section.section_name_;
 		format_line_ = section.format_line_;
@@ -406,9 +425,9 @@ namespace BALL
 
 	bool ParameterSection::operator == (const ParameterSection& parameter_section) const
 	{
-		// BAUSTELLE: Müssen options auch gleichsein, damit eine Instanz
-		// gleich einer anderen ist?
-		return ( (section_name_ == parameter_section.section_name_)
+		// BAUSTELLE: Vergleich der C-arrays geht so nicht! Daraus sollten wohl 
+		// besser Vektoren werden.... [OK]
+		return ((section_name_ == parameter_section.section_name_)
 				&& (format_line_ == parameter_section.format_line_)
 				&& (section_entries_ == parameter_section.section_entries_)
 				&& (variable_names_ == parameter_section.variable_names_)
