@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.24 2001/06/27 01:42:16 oliver Exp $
+// $Id: bond.h,v 1.25 2001/06/28 18:35:10 amoll Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -527,6 +527,10 @@ namespace BALL
 		void clear_()
 			throw();
 	};
+
+# ifndef BALL_NO_INLINE_FUNCTIONS
+#   include <BALL/KERNEL/bond.iC>
+# endif
 
 } // namespace BALL
 
