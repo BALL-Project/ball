@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>437</width>
-            <height>267</height>
+            <height>270</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -35,25 +35,6 @@
     <property name="caption">
         <string>MainControlPreferences</string>
     </property>
-    <widget class="QCheckBox">
-        <property name="name">
-            <cstring>show_labels</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>23</x>
-                <y>74</y>
-                <width>229</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>show labels in DockWindows</string>
-        </property>
-        <property name="checked">
-            <bool>true</bool>
-        </property>
-    </widget>
     <widget class="QLabel">
         <property name="name">
             <cstring>textLabel2</cstring>
@@ -89,6 +70,25 @@
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
             </sizepolicy>
+        </property>
+    </widget>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>show_labels</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>23</x>
+                <y>74</y>
+                <width>229</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>show labels in docked widgets</string>
+        </property>
+        <property name="checked">
+            <bool>true</bool>
         </property>
     </widget>
 </widget>

@@ -108,10 +108,10 @@
                     </size>
                 </property>
                 <property name="text">
-                    <string>&amp;OK</string>
+                    <string>&amp;Apply</string>
                 </property>
                 <property name="accel">
-                    <string></string>
+                    <string>Alt+A</string>
                 </property>
                 <property name="autoDefault">
                     <bool>true</bool>

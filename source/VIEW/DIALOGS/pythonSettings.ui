@@ -9,44 +9,12 @@
             <x>0</x>
             <y>0</y>
             <width>440</width>
-            <height>288</height>
+            <height>291</height>
         </rect>
     </property>
     <property name="caption">
         <string>PythonSettings</string>
     </property>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>choose_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>50</y>
-                <width>80</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Choose</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>clear_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>99</x>
-                <y>50</y>
-                <width>80</width>
-                <height>30</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Clear</string>
-        </property>
-    </widget>
     <widget class="QLineEdit">
         <property name="name">
             <cstring>script_edit</cstring>
@@ -95,6 +63,38 @@
         </property>
         <property name="text">
             <string>Startup script</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>clear_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>351</x>
+                <y>49</y>
+                <width>80</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Clear</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>choose_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>262</x>
+                <y>49</y>
+                <width>80</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Browse</string>
         </property>
     </widget>
 </widget>

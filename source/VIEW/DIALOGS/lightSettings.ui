@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>439</width>
-            <height>272</height>
+            <height>275</height>
         </rect>
     </property>
     <property name="maximumSize">
@@ -246,69 +246,6 @@
             </property>
         </widget>
     </widget>
-    <widget class="QButtonGroup">
-        <property name="name">
-            <cstring>relative_to_camera</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>130</x>
-                <y>163</y>
-                <width>161</width>
-                <height>67</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Position of Camera</string>
-        </property>
-        <property name="exclusive">
-            <bool>true</bool>
-        </property>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>not_relative</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>41</y>
-                    <width>120</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>static</string>
-            </property>
-            <property name="buttonGroupId">
-                <number>0</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>keep lightsource static</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>relative</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>19</y>
-                    <width>140</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>relative to camera</string>
-            </property>
-            <property name="buttonGroupId">
-                <number>1</number>
-            </property>
-            <property name="toolTip" stdset="0">
-                <string>keep lightsource relative to camera</string>
-            </property>
-        </widget>
-    </widget>
     <widget class="QGroupBox">
         <property name="name">
             <cstring>Color</cstring>
@@ -498,6 +435,69 @@
         <property name="toolTip" stdset="0">
             <string>remove a light</string>
         </property>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>relative_to_camera</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>130</x>
+                <y>163</y>
+                <width>161</width>
+                <height>67</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Position of light source</string>
+        </property>
+        <property name="exclusive">
+            <bool>true</bool>
+        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>not_relative</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>41</y>
+                    <width>120</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>static</string>
+            </property>
+            <property name="buttonGroupId">
+                <number>0</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>keep lightsource static</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>relative</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>19</y>
+                    <width>140</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>relative to camera</string>
+            </property>
+            <property name="buttonGroupId">
+                <number>1</number>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>keep lightsource relative to camera</string>
+            </property>
+        </widget>
     </widget>
 </widget>
 <connections>
