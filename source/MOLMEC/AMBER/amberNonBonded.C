@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.2 2000/08/01 17:53:36 oliver Exp $
+// $Id: amberNonBonded.C,v 1.3 2000/08/01 21:41:40 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -86,11 +86,11 @@ namespace BALL
 
 		// Calculate all non bonded atom pairs
 		ForceField::PairVector atom_pair_vector;
-		Size number_of_non_bonded_interactions = MolmecSupport::calculateNonBondedAtomPairs
-																								(atom_pair_vector, getForceField()->getAtoms(), 
-																								 getForceField()->periodic_boundary.getBox(),
-																								 cut_off_, force_field_->periodic_boundary.isEnabled(), 
-																								 algorithm_type_); 
+		MolmecSupport::calculateNonBondedAtomPairs
+			(atom_pair_vector, getForceField()->getAtoms(), 
+			 getForceField()->periodic_boundary.getBox(),
+			 cut_off_, force_field_->periodic_boundary.isEnabled(), 
+			 algorithm_type_); 
 
 		// Build the vector "non_bonded_" with the atom pairs and parameters
 		buildVectorOfNonBondedAtomPairs(atom_pair_vector, van_der_waals_, hydrogen_bond_);
@@ -365,8 +365,9 @@ namespace BALL
 
 	BALL_INLINE
 	void AMBERcalculateMinimumImage
-    (Vector3& difference, const Vector3& period,  const Vector3& half_period)
+    (Vector3& difference, const Vector3& period)
   {
+		Vector3 half_period(period * 0.5);
 		// difference.x -= period.x * (float)(long)(difference.x / period.x);
 		// difference.y -= period.y * (float)(long)(difference.y / period.y);
 		// difference.z -= period.z * (float)(long)(difference.z / period.z);
