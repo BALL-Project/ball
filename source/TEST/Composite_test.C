@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.6 1999/09/27 13:16:37 oliver Exp $
+// $Id: Composite_test.C,v 1.7 1999/12/28 18:14:27 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 using namespace BALL;
 ///////////////////////////
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.6 1999/09/27 13:16:37 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.7 1999/12/28 18:14:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -238,7 +238,7 @@ composite.select();
 String filename;
 CHECK(persistentWrite(TextPersistenceManager&, String&, bool))
 NEW_TMP_FILE(filename)
-ofstream  ofile(filename.c_str(), ios::out);
+std::ofstream  ofile(filename.c_str(), std::ios::out);
 pm.setOstream(ofile);
 pm.registerClass(RTTI<Composite>::getStreamName(), RTTI<Composite>::getNew);
 composite >> pm;
@@ -246,7 +246,7 @@ ofile.close();
 RESULT
 
 CHECK(persistentRead(TextPersistenceManager()))
-ifstream  ifile(filename.c_str());
+std::ifstream  ifile(filename.c_str());
 pm.setIstream(ifile);
 PersistentObject* ptr;
 ptr = pm.readObject();

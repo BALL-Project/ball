@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.3 1999/11/26 16:47:39 oliver Exp $
+// $Id: BaseFragment_test.C,v 1.4 1999/12/28 18:14:27 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 ///////////////////////////
 
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.3 1999/11/26 16:47:39 oliver Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.4 1999/12/28 18:14:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -212,7 +212,7 @@ pm.registerClass(RTTI<Atom>::getStreamName(), RTTI<Atom>::getNew);
 String filename;
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-ofstream	ofile(filename.c_str(), ios::out);
+std::ofstream	ofile(filename.c_str(), std::ios::out);
 BaseFragment* bf1 = new BaseFragment("name1");
 BaseFragment* bf2 = new BaseFragment("name2");
 bf1->insert(*bf2);
@@ -223,7 +223,7 @@ delete bf1;
 RESULT
 
 CHECK(persistentRead(PersistenceManager&))
-ifstream	ifile(filename.c_str());
+std::ifstream	ifile(filename.c_str());
 pm.setIstream(ifile);
 PersistentObject*	ptr = pm.readObject();
 TEST_NOT_EQUAL(ptr, 0)

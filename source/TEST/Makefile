@@ -17,6 +17,8 @@ EXECUTABLES = \
 	EnergyMinimizer_test\
 	Fragment_test\
 	FragmentDB_test\
+	HashMap_test\
+	HashSet_test\
 	KernelPredicate_test\
 	Limits_test\
 	List_test\
@@ -73,6 +75,12 @@ Fragment_test:	Fragment_test.o
 FragmentDB_test:	FragmentDB_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
+HashMap_test:	HashMap_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+HashSet_test:	HashSet_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
 KernelPredicate_test:	KernelPredicate_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
@@ -127,7 +135,7 @@ TransformationApplicator_test:	TransformationApplicator_test.o
 
 
 clean:	default_clean
-	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	core a.out $(EXECUTABLES)
+	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
 
 String_test.o:	String_test.C
 	$(CXX) $(CPPFLAGS) $(ADD_CPPFLAGS) $(CPP_MODE_FLAGS_NO_OPTIMIZATION) $(BALL_CPPFLAGS) $(BALL_INCLUDES) -c $*.C -o $@

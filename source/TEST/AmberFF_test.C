@@ -1,4 +1,4 @@
-// $Id: AmberFF_test.C,v 1.4 1999/09/19 20:55:47 oliver Exp $
+// $Id: AmberFF_test.C,v 1.5 1999/12/28 18:14:26 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,14 +6,12 @@
 #include <BALL/FORMAT/HINFile.h>
 ///////////////////////////
 
-START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.4 1999/09/19 20:55:47 oliver Exp $")
+START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.5 1999/12/28 18:14:26 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
-
-Log.insert(cerr);
 
 AmberFF* amber;
 CHECK(AmberFF())
