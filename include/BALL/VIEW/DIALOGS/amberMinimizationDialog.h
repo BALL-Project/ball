@@ -22,9 +22,10 @@ class AmberMinimizationDialog
 	: public AmberMinimizationDialogData
 {
     Q_OBJECT
-		bool use_dddc;
+		bool use_dddc, assign_charges, assign_typenames, assign_types, overwrite_charges, overwrite_typenames;
 		String ini;
-		
+		float 	nonbonded_cutoff, vdw_cutoff, vdw_cuton, electrostatic_cutoff, electrostatic_cuton,
+			scaling_electrostatic_1_4, scaling_vdw_1_4;
 		public:
 
 		///
@@ -39,6 +40,42 @@ class AmberMinimizationDialog
 		///
 		void readPreferences(const INIFile& inifile);
 
+		///
+		float getNonbondedCutoff() const;
+		
+		///
+		float getVdwCutoff() const;
+		
+		///
+		float getVdwCuton() const;
+		
+		///
+		float getElectrostaticCutoff() const;
+		
+		///
+		float getElectrostaticCuton() const;
+		
+		///
+		float getScalingElectrostatic_1_4() const;
+		
+		///
+		float getScalingVdw_1_4() const;
+
+		///
+		bool getAssignCharges() const;
+
+		///
+		bool getAssignTypenames() const;
+
+		///
+		bool getAssignTypes() const;
+
+		///
+		bool getOverwriteCharges() const;
+
+		///
+		bool getOverwriteTypenames() const;
+		
 		///
 		Size getMaxIterations() const;
 
@@ -83,6 +120,7 @@ class AmberMinimizationDialog
 	
 		///
 		void advancedOptions();
+		
 		protected slots:
     virtual void browseParameterFiles();
 };

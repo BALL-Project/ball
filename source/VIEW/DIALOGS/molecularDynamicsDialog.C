@@ -18,8 +18,20 @@ namespace BALL
 MolecularDynamicsDialog::MolecularDynamicsDialog(QWidget* parent, const char* name)
 	:	MolecularDynamicsDialogData( parent, name )
 {
-	usedddc = false;
+	use_dddc = false;
+	assign_charges = true;
+	assign_typenames = true;
+	assign_types = true;
+	overwrite_charges = true;
+	overwrite_typenames = false;
 	ini = "Amber/amber96.ini";
+	nonbonded_cutoff = 20.0;
+	vdw_cutoff = 15.0;
+	vdw_cuton = 13.0;
+	electrostatic_cutoff =15.0;
+	electrostatic_cuton = 13.0;
+	scaling_electrostatic_1_4 = 2.0;
+	scaling_vdw_1_4 = 2.0;
 }
 
 MolecularDynamicsDialog::~MolecularDynamicsDialog()
@@ -53,7 +65,21 @@ void MolecularDynamicsDialog::writePreferences(INIFile& inifile) const
 	inifile.insertValue("MDSIMULATION", "NumberOfSteps", getNumberOfSteps());
 	inifile.insertValue("MDSIMULATION", "Timestep", getTimeStep());
 	inifile.insertValue("MDSIMULATION", "Temperature", getTemperature());
-
+	
+	inifile.insertValue("MDSIMULATION","NONBONDED_CUTOFF",nonbonded_cutoff);
+	inifile.insertValue("MDSIMULATION","VDW_CUTOFF",vdw_cutoff);
+	inifile.insertValue("MDSIMULATION","VDW_CUTON",vdw_cuton);
+	inifile.insertValue("MDSIMULATION","ELECTROSTATIC_CUTOFF",electrostatic_cutoff);
+	inifile.insertValue("MDSIMULATION","ELECTROSTATIC_CUTON",electrostatic_cuton);
+	inifile.insertValue("MDSIMULATION","SCALING_ELECTROSTATIC_1_4",scaling_electrostatic_1_4);
+	inifile.insertValue("MDSIMULATION","SCALING_VDW_1_4",scaling_vdw_1_4);
+	
+	inifile.insertValue("MDSIMULATION","ASSIGN_CHARGES",assign_charges);
+	inifile.insertValue("MDSIMULATION","ASSIGN_TYPENAMES",assign_typenames);
+	inifile.insertValue("MDSIMULATION","ASSIGN_TYPES",assign_types);
+	inifile.insertValue("MDSIMULATION","OVERWRITE_CHARGES",overwrite_charges);
+	inifile.insertValue("MDSIMULATION","OVERWRITE_TYPENAMES",overwrite_typenames);
+	
 	// the AMBER options
 	if (!inifile.hasSection("AMBER")) inifile.appendSection("AMBER");
 	inifile.insertValue("AMBER", "Filename", getFilename());
@@ -83,6 +109,65 @@ void MolecularDynamicsDialog::readPreferences(const INIFile& inifile)
 	{
 		 setTemperature(inifile.getValue("MDSIMULATION", "Temperature").toFloat());
 	}
+	
+	if(inifile.hasEntry("MDSIMULATION","NONBONDED_CUTOFF"))
+	{
+		nonbonded_cutoff = inifile.getValue("MDSIMULATION","NONBONDED_CUTOFF").toFloat();
+	}
+	
+	if(inifile.hasEntry("MDSIMULATION","VDW_CUTOFF"))
+	{
+		vdw_cutoff = inifile.getValue("MDSIMULATION","VDW_CUTOFF").toFloat();
+	}
+	
+	if(inifile.hasEntry("MDSIMULATION","VDW_CUTON"))
+	{
+		vdw_cuton = inifile.getValue("MDSIMULATION","VDW_CUTON").toFloat();
+	}
+	
+	if(inifile.hasEntry("MDSIMULATION","ELECTROSTATIC_CUTOFF"))
+	{
+		electrostatic_cutoff = inifile.getValue("MDSIMULATION","ELECTROSTATIC_CUTOFF").toFloat();
+	}
+	
+	if(inifile.hasEntry("MDSIMULATION","ELECTROSTATIC_CUTON"))
+	{
+		electrostatic_cuton = inifile.getValue("MDSIMULATION","ELECTROSTATIC_CUTON").toFloat();
+	}
+	if(inifile.hasEntry("MDSIMULATION","SCALING_ELECTROSTATIC_1_4"))
+	{
+		scaling_electrostatic_1_4 = inifile.getValue("MDSIMULATION","SCALING_ELECTROSTATIC_1_4").toFloat();
+	}
+	
+	if(inifile.hasEntry("MDSIMULATION","SCALING_VDW_1_4"))
+	{
+		scaling_vdw_1_4 = inifile.getValue("MDSIMULATION","SCALING_VDW_1_4").toFloat();
+	}
+	
+	if(inifile.hasEntry("MDSIMULATION","ASSIGN_CHARGES"))
+	{
+		assign_charges = inifile.getValue("MDSIMULATION","ASSIGN_CHARGES").toUnsignedInt() == 1;
+	}
+	
+	if(inifile.hasEntry("MDSIMULATION","ASSIGN_TYPENAMES"))
+	{
+		assign_typenames = inifile.getValue("MDSIMULATION","ASSIGN_TYPENAMES").toUnsignedInt() == 1;
+	}
+	
+	if(inifile.hasEntry("MDSIMULATION","ASSIGN_TYPES"))
+	{
+		assign_types = inifile.getValue("MDSIMULATION","ASSIGN_TYPES").toUnsignedInt() == 1;
+	}
+	
+	if(inifile.hasEntry("MDSIMULATION","OVERWRITE_CHARGES"))
+	{
+		overwrite_charges = inifile.getValue("MDSIMULATION","OVERWRITE_CHARGES").toUnsignedInt() == 1;
+	}
+	
+	if(inifile.hasEntry("MDSIMULATION","OVERWRITE_TYPENAMES"))
+	{
+		overwrite_typenames = inifile.getValue("MDSIMULATION","OVERWRITE_TYPENAMES").toUnsignedInt() == 1;
+	}
 
 	// the AMBER options
 	if (inifile.hasEntry("AMBER", "Filename"))
@@ -91,6 +176,75 @@ void MolecularDynamicsDialog::readPreferences(const INIFile& inifile)
 	}
 }
 
+float MolecularDynamicsDialog::getNonbondedCutoff() const
+{
+	return nonbonded_cutoff;
+}
+
+float MolecularDynamicsDialog::getVdwCutoff() const
+{
+	return vdw_cutoff;
+}
+
+float MolecularDynamicsDialog::getVdwCuton() const
+{
+	return vdw_cuton;
+}
+
+float MolecularDynamicsDialog::getElectrostaticCutoff() const
+{
+	return electrostatic_cutoff;
+}
+
+float MolecularDynamicsDialog::getElectrostaticCuton() const
+{
+	return electrostatic_cuton;
+}
+
+float MolecularDynamicsDialog::getScalingElectrostatic_1_4() const
+{
+	return scaling_electrostatic_1_4;;
+}
+
+float MolecularDynamicsDialog::getScalingVdw_1_4() const
+{
+	return scaling_vdw_1_4;;
+}
+
+bool MolecularDynamicsDialog::getAssignCharges() const
+{
+	return assign_charges;
+}
+
+bool MolecularDynamicsDialog::getAssignTypenames() const
+{
+	return assign_typenames;
+}
+
+bool MolecularDynamicsDialog::getAssignTypes() const
+{
+	return assign_types;
+}
+
+bool MolecularDynamicsDialog::getOverwriteCharges() const
+{
+	return overwrite_charges;
+}
+
+bool MolecularDynamicsDialog::getOverwriteTypenames() const
+{
+	return overwrite_typenames;
+}
+
+bool MolecularDynamicsDialog::getUseDistanceDependentDC() const
+{
+	return use_dddc;
+}
+
+void MolecularDynamicsDialog::setUseDistanceDependentDC(bool usedddc)
+{
+	use_dddc=usedddc;
+}
 
 float MolecularDynamicsDialog::getSimulationTime() const
 {
@@ -148,16 +302,6 @@ const String& MolecularDynamicsDialog::getFilename() const
 void MolecularDynamicsDialog::setFilename(const String& filename)
 {
 	ini = filename;
-}
-
-bool MolecularDynamicsDialog::getUseDistanceDependentDC() const
-{
-	return usedddc;
-}
-
-void MolecularDynamicsDialog::setUseDistanceDependentDC(bool use_dddc)
-{
-	usedddc=use_dddc;
 }
 
 bool MolecularDynamicsDialog::useMicroCanonical() const
@@ -223,6 +367,11 @@ Size MolecularDynamicsDialog::getStepsBetweenRefreshs() const
 void MolecularDynamicsDialog::advancedOptions()
 {
 	advancedOptionsDialog* dialog = new advancedOptionsDialog();
+	//restore previos changes  in dialog
+	dialog->setOptions( nonbonded_cutoff, vdw_cutoff, vdw_cuton, electrostatic_cutoff, electrostatic_cuton,
+				    scaling_electrostatic_1_4, scaling_vdw_1_4, use_dddc, assign_charges, assign_typenames,
+				    assign_types, overwrite_charges, overwrite_typenames);
+				    
 	if( dialog->exec() == QDialog::Accepted )
 	{
 		// set inifile to chosen file
@@ -230,8 +379,21 @@ void MolecularDynamicsDialog::advancedOptions()
 		ini = filename;
 		// show chosen amber-ini-file in line edit
 		parameter_file_edit->setText(filename);
-		// set use_dddc
-		usedddc = dialog->getUseDistanceDependentDC();
+		// set AmberFF Options
+		use_dddc = dialog->getUseDistanceDependentDC();
+		nonbonded_cutoff = dialog->getNonbondedCutoff();
+		vdw_cutoff = dialog->getVdwCutoff();
+		vdw_cuton = dialog->getVdwCuton();
+		electrostatic_cutoff = dialog->getElectrostaticCutoff();
+		electrostatic_cuton = dialog->getElectrostaticCuton();
+		scaling_electrostatic_1_4 = dialog->getScalingElectrostatic_1_4();
+		scaling_vdw_1_4 = dialog->getScalingVdw_1_4();
+		
+		assign_charges = dialog->getAssignCharges();
+		assign_typenames = dialog->getAssignTypenames();
+		assign_types = dialog->getAssignTypes();
+		overwrite_charges = dialog->getOverwriteCharges();
+		overwrite_typenames = dialog->getOverwriteTypenames();
 	}
 	delete dialog;
 }

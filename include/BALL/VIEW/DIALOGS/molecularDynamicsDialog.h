@@ -23,8 +23,10 @@ class MolecularDynamicsDialog
 {
     Q_OBJECT
 
-		bool usedddc;
+		bool use_dddc, assign_charges, assign_typenames, assign_types, overwrite_charges, overwrite_typenames;
 		String ini;
+		float 	nonbonded_cutoff, vdw_cutoff, vdw_cuton, electrostatic_cutoff, electrostatic_cuton,
+			scaling_electrostatic_1_4, scaling_vdw_1_4;
 		public:
 
 		///
@@ -40,6 +42,42 @@ class MolecularDynamicsDialog
 		void readPreferences(const INIFile& inifile);
 
 		///
+		float getNonbondedCutoff() const;
+		
+		///
+		float getVdwCutoff() const;
+		
+		///
+		float getVdwCuton() const;
+		
+		///
+		float getElectrostaticCutoff() const;
+		
+		///
+		float getElectrostaticCuton() const;
+		
+		///
+		float getScalingElectrostatic_1_4() const;
+		
+		///
+		float getScalingVdw_1_4() const;
+		
+		///
+		bool getAssignCharges() const;
+
+		///
+		bool getAssignTypenames() const;
+
+		///
+		bool getAssignTypes() const;
+
+		///
+		bool getOverwriteCharges() const;
+
+		///
+		bool getOverwriteTypenames() const;
+		
+		///
 		const String& getFilename() const;
 		
 		///
@@ -49,7 +87,7 @@ class MolecularDynamicsDialog
 		bool getUseDistanceDependentDC() const;
 		
 		///
-		void setUseDistanceDependentDC(bool use_dddc);
+		void setUseDistanceDependentDC(bool usedddc);
 
 		///
 		float getSimulationTime() const;

@@ -17,7 +17,19 @@ AmberMinimizationDialog::AmberMinimizationDialog(QWidget* parent, const char* na
 	:	AmberMinimizationDialogData( parent, name )
 {
 	use_dddc = false;
+	assign_charges = true;
+	assign_typenames = true;
+	assign_types = true;
+	overwrite_charges = true;
+	overwrite_typenames = false;
 	ini = "Amber/amber96.ini";
+	nonbonded_cutoff = 20.0;
+	vdw_cutoff = 15.0;
+	vdw_cuton = 13.0;
+	electrostatic_cutoff =15.0;
+	electrostatic_cuton = 13.0;
+	scaling_electrostatic_1_4 = 2.0;
+	scaling_vdw_1_4 = 2.0;
 }
 
 AmberMinimizationDialog::~AmberMinimizationDialog()
@@ -53,6 +65,22 @@ void AmberMinimizationDialog::writePreferences(INIFile& inifile) const
 	inifile.insertValue("MINIMIZATION", "UseCGMinimizer", getUseConjugateGradient());
 	inifile.insertValue("MINIMIZATION", "DistanceDependentDC", getUseDistanceDependentDC());
 
+//EXPERIMENTAL
+	inifile.insertValue("MINIMIZATION","NONBONDED_CUTOFF",nonbonded_cutoff);
+	inifile.insertValue("MINIMIZATION","VDW_CUTOFF",vdw_cutoff);
+	inifile.insertValue("MINIMIZATION","VDW_CUTON",vdw_cuton);
+	inifile.insertValue("MINIMIZATION","ELECTROSTATIC_CUTOFF",electrostatic_cutoff);
+	inifile.insertValue("MINIMIZATION","ELECTROSTATIC_CUTON",electrostatic_cuton);
+	inifile.insertValue("MINIMIZATION","SCALING_ELECTROSTATIC_1_4",scaling_electrostatic_1_4);
+	inifile.insertValue("MINIMIZATION","SCALING_VDW_1_4",scaling_vdw_1_4);
+	
+	inifile.insertValue("MINIMIZATION","ASSIGN_CHARGES",assign_charges);
+	inifile.insertValue("MINIMIZATION","ASSIGN_TYPENAMES",assign_typenames);
+	inifile.insertValue("MINIMIZATION","ASSIGN_TYPES",assign_types);
+	inifile.insertValue("MINIMIZATION","OVERWRITE_CHARGES",overwrite_charges);
+	inifile.insertValue("MINIMIZATION","OVERWRITE_TYPENAMES",overwrite_typenames);
+//EXPERIMENTAL ende
+
 	// the AMBER options
 	if (!inifile.hasSection("AMBER")) inifile.appendSection("AMBER");
 	inifile.insertValue("AMBER", "Filename", getFilename());
@@ -87,6 +115,68 @@ void AmberMinimizationDialog::readPreferences(const INIFile& inifile)
 		setUseDistanceDependentDC(inifile.getValue("MINIMIZATION", "DistanceDependentDC").toUnsignedInt() == 1);
 	}
 
+//EXPERIMENTAL
+	if(inifile.hasEntry("MINIMIZATION","NONBONDED_CUTOFF"))
+	{
+		nonbonded_cutoff = inifile.getValue("MINIMIZATION","NONBONDED_CUTOFF").toFloat();
+	}
+	
+	if(inifile.hasEntry("MINIMIZATION","VDW_CUTOFF"))
+	{
+		vdw_cutoff = inifile.getValue("MINIMIZATION","VDW_CUTOFF").toFloat();
+	}
+	
+	if(inifile.hasEntry("MINIMIZATION","VDW_CUTON"))
+	{
+		vdw_cuton = inifile.getValue("MINIMIZATION","VDW_CUTON").toFloat();
+	}
+	
+	if(inifile.hasEntry("MINIMIZATION","ELECTROSTATIC_CUTOFF"))
+	{
+		electrostatic_cutoff = inifile.getValue("MINIMIZATION","ELECTROSTATIC_CUTOFF").toFloat();
+	}
+	
+	if(inifile.hasEntry("MINIMIZATION","ELECTROSTATIC_CUTON"))
+	{
+		electrostatic_cuton = inifile.getValue("MINIMIZATION","ELECTROSTATIC_CUTON").toFloat();
+	}
+	if(inifile.hasEntry("MINIMIZATION","SCALING_ELECTROSTATIC_1_4"))
+	{
+		scaling_electrostatic_1_4 = inifile.getValue("MINIMIZATION","SCALING_ELECTROSTATIC_1_4").toFloat();
+	}
+	
+	if(inifile.hasEntry("MINIMIZATION","SCALING_VDW_1_4"))
+	{
+		scaling_vdw_1_4 = inifile.getValue("MINIMIZATION","SCALING_VDW_1_4").toFloat();
+	}
+	
+	if(inifile.hasEntry("MINIMIZATION","ASSIGN_CHARGES"))
+	{
+		assign_charges = inifile.getValue("MINIMIZATION","ASSIGN_CHARGES").toUnsignedInt();
+	}
+	
+	if(inifile.hasEntry("MINIMIZATION","ASSIGN_TYPENAMES"))
+	{
+		assign_typenames = inifile.getValue("MINIMIZATION","ASSIGN_TYPENAMES").toUnsignedInt();
+	}
+	
+	if(inifile.hasEntry("MINIMIZATION","ASSIGN_TYPES"))
+	{
+		assign_types = inifile.getValue("MINIMIZATION","ASSIGN_TYPES").toUnsignedInt();
+	}
+	
+	if(inifile.hasEntry("MINIMIZATION","OVERWRITE_CHARGES"))
+	{
+		overwrite_charges = inifile.getValue("MINIMIZATION","OVERWRITE_CHARGES").toUnsignedInt();
+	}
+	
+	if(inifile.hasEntry("MINIMIZATION","OVERWRITE_TYPENAMES"))
+	{
+		overwrite_typenames = inifile.getValue("MINIMIZATION","OVERWRITE_TYPENAMES").toUnsignedInt();
+	}
+	
+//EXPERIMENTAL ende
+
 	// the AMBER options
 	if (inifile.hasEntry("AMBER", "Filename"))
 	{
@@ -94,6 +184,75 @@ void AmberMinimizationDialog::readPreferences(const INIFile& inifile)
 	}
 }
 
+float AmberMinimizationDialog::getNonbondedCutoff() const
+{
+	return nonbonded_cutoff;
+}
+
+float AmberMinimizationDialog::getVdwCutoff() const
+{
+	return vdw_cutoff;
+}
+
+float AmberMinimizationDialog::getVdwCuton() const
+{
+	return vdw_cuton;
+}
+
+float AmberMinimizationDialog::getElectrostaticCutoff() const
+{
+	return electrostatic_cutoff;
+}
+
+float AmberMinimizationDialog::getElectrostaticCuton() const
+{
+	return electrostatic_cuton;
+}
+
+float AmberMinimizationDialog::getScalingElectrostatic_1_4() const
+{
+	return scaling_electrostatic_1_4;;
+}
+
+float AmberMinimizationDialog::getScalingVdw_1_4() const
+{
+	return scaling_vdw_1_4;;
+}
+
+bool AmberMinimizationDialog::getAssignCharges() const
+{
+	return assign_charges;
+}
+
+bool AmberMinimizationDialog::getAssignTypenames() const
+{
+	return assign_typenames;
+}
+
+bool AmberMinimizationDialog::getAssignTypes() const
+{
+	return assign_types;
+}
+
+bool AmberMinimizationDialog::getOverwriteCharges() const
+{
+	return overwrite_charges;
+}
+
+bool AmberMinimizationDialog::getOverwriteTypenames() const
+{
+	return overwrite_typenames;
+}
+
+bool AmberMinimizationDialog::getUseDistanceDependentDC() const
+{
+	return use_dddc;
+}
+
+void AmberMinimizationDialog::setUseDistanceDependentDC(bool usedddc)
+{
+	use_dddc=usedddc;
+}
 
 Size AmberMinimizationDialog::getMaxIterations() const	
 {
@@ -180,16 +339,6 @@ void AmberMinimizationDialog::setFilename(const String& filename)
 	ini = filename;
 }
 
-bool AmberMinimizationDialog::getUseDistanceDependentDC() const
-{
-	return use_dddc;
-}
-
-void AmberMinimizationDialog::setUseDistanceDependentDC(bool usedddc)
-{
-	use_dddc=usedddc;
-}
-
 bool AmberMinimizationDialog::getUseConjugateGradient() const
 {
 	return conjugate_button->isChecked();
@@ -203,6 +352,12 @@ void AmberMinimizationDialog::setUseConjugateGradient(bool use_CG)
 void AmberMinimizationDialog::advancedOptions()
 {
 	advancedOptionsDialog* dialog = new advancedOptionsDialog();
+	
+	//restore previos changes  in dialog
+	dialog->setOptions( nonbonded_cutoff, vdw_cutoff, vdw_cuton, electrostatic_cutoff, electrostatic_cuton,
+				    scaling_electrostatic_1_4, scaling_vdw_1_4, use_dddc, assign_charges, assign_typenames,
+				    assign_types, overwrite_charges, overwrite_typenames);
+				    
 	if(dialog->exec() == QDialog::Accepted )
 	{
 		// set inifile to chosen file
@@ -210,8 +365,22 @@ void AmberMinimizationDialog::advancedOptions()
 		ini = filename;
 		// show chosen amber-ini-file in line edit
 		parameter_file_edit->setText(filename);
-		// set use_dddc
+		// set AmberFF Options
 		use_dddc = dialog->getUseDistanceDependentDC();
+		nonbonded_cutoff = dialog->getNonbondedCutoff();
+		vdw_cutoff = dialog->getVdwCutoff();
+		vdw_cuton = dialog->getVdwCuton();
+		electrostatic_cutoff = dialog->getElectrostaticCutoff();
+		electrostatic_cuton = dialog->getElectrostaticCuton();
+		scaling_electrostatic_1_4 = dialog->getScalingElectrostatic_1_4();
+		scaling_vdw_1_4 = dialog->getScalingVdw_1_4();
+		
+		assign_charges = dialog->getAssignCharges();
+		assign_typenames = dialog->getAssignTypenames();
+		assign_types = dialog->getAssignTypes();
+		overwrite_charges = dialog->getOverwriteCharges();
+		overwrite_typenames = dialog->getOverwriteTypenames();
+		
 	}
 	delete dialog;
 }
