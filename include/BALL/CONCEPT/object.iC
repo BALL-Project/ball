@@ -1,4 +1,4 @@
-// $Id: object.iC,v 1.9 2001/05/28 11:51:15 anker Exp $
+// $Id: object.iC,v 1.10 2001/05/29 12:22:55 anker Exp $
 
 BALL_INLINE 
 Handle Object::getHandle () const
@@ -11,14 +11,15 @@ BALL_INLINE
 Handle Object::getNextHandle()
 	throw()
 {
-  return (Object::global_handle_ + 1);
+  return (Object::global_handle_);
 }
   
 BALL_INLINE 
 Handle Object::getNewHandle()
 	throw()
 {
-  return Object::global_handle_++;
+	Handle ret= Object::global_handle_++;
+  return ret;
 }
   
 BALL_INLINE 
