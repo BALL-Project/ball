@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.h,v 1.13 2001/02/28 01:17:12 amoll Exp $
+// $Id: lineBasedFile.h,v 1.14 2001/03/06 13:52:48 balltest Exp $
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
 
@@ -133,7 +133,8 @@ namespace BALL
 
 		/** Like search above, but stop search when coming to a line starting with stop
 		*/
-		bool search(const String& text, const String& stop, bool return_to_point)
+		bool search(const String& text, const String& stop, bool
+				return_to_point = false)
 			throw(LineBasedFile::LineBasedFileError);
 
 		/** Go to a given line.
