@@ -1,4 +1,4 @@
-// $Id: molecularControl.C,v 1.6.4.8 2002/12/02 21:03:58 amoll Exp $
+// $Id: molecularControl.C,v 1.6.4.9 2002/12/02 22:29:40 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
@@ -13,6 +13,8 @@ using std::endl;
 
 namespace BALL
 {
+	using namespace VIEW;
+
 	namespace MOLVIEW
 	{
 
