@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.C,v 1.4 2000/09/21 13:35:13 anker Exp $
+// $Id: pairExpInteractionEnergyProcessor.C,v 1.5 2000/09/22 16:29:06 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
@@ -240,7 +240,10 @@ namespace BALL
 
 		ForceFieldParameters fffparam(claverie_filename);
 		ClaverieParameter claverie_param;
-		Log.info() << "claverie_filename = " << claverie_filename << endl;
+		if (verbosity > 1)
+		{
+			Log.info() << "claverie_filename = " << claverie_filename << endl;
+		}
 		claverie_param.extractSection(fffparam, "ClaverieParameters");
 
 		// iterate over all different atom types in the solvent
@@ -252,7 +255,10 @@ namespace BALL
 				= solvent_descriptor.getAtomDescriptor(s);
 			type_i = solvent_atom.type;
 			R_s = solvent_atom.radius;
-			// Log.info() << "Radius of Solvent: " << R_s << endl;
+			if (verbosity > 2)
+			{
+				Log.info() << "Radius of Solvent: " << R_s << endl;
+			}
 
 			// now compute the surface for the integration
 
@@ -315,7 +321,10 @@ namespace BALL
 				type_j = ffparam.getAtomTypes().getType(solute_iterator->getTypeName());
 				atom_center = solute_iterator->getPosition();
 				R_j = solute_iterator->getRadius();
-				// Log.info() << "Radius of Solute: " << R_j << endl;
+				if (verbosity > 2)
+				{
+					Log.info() << "Radius of Solute: " << R_j << endl;
+				}
 
 				// compute the necessary pair potential parameters
 
@@ -385,28 +394,31 @@ namespace BALL
 								* ((r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
 
 							// DEBUG
-							/*
-							e_ij_D += rho * integrator.integrateToInf(r_k, alpha_, 0.0,
-									C2_, R_ij_o, k1, k2) 
-								* ((r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
-							e_ij_R += rho * integrator.integrateToInf(r_k, alpha_, C1_,
-									0.0, R_ij_o, k1, k2) 
-								* ((r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
+							if (verbosity > 0)
+							{
+								e_ij_D += rho * integrator.integrateToInf(r_k, alpha_, 0.0,
+										C2_, R_ij_o, k1, k2) 
+									* ((r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
+								e_ij_R += rho * integrator.integrateToInf(r_k, alpha_, C1_,
+										0.0, R_ij_o, k1, k2) 
+									* ((r_k_vec * n_k_vec)) / (r_k * r_k * r_k);
+							}
 
-							a_r_k = a * r_k;
-							I_disp += (r_k_vec * n_k_vec) / (3.0 * pow(r_k,6));
+							if (verbosity > 2)
+							{
+								a_r_k = a * r_k;
+								I_disp += (r_k_vec * n_k_vec) / (3.0 * pow(r_k,6));
 
-							I_rep += (r_k_vec * n_k_vec) * (exp(-a * r_k) *
-									((1.0 / a_r_k) + (2.0 / (a_r_k * a_r_k)) + 
-									 (2.0 / (a_r_k * a_r_k * a_r_k))));
+								I_rep += (r_k_vec * n_k_vec) * (exp(-a * r_k) *
+										((1.0 / a_r_k) + (2.0 / (a_r_k * a_r_k)) + 
+										 (2.0 / (a_r_k * a_r_k * a_r_k))));
 
-							Log.info() << "e_ij = " << e_ij << endl;
-							Log.info() << "Dis: " << e_ij_D << " " 
-								<< rho * - C2_ * K_ij_D * R_ij_o_6 * I_disp << endl;
-							Log.info() << "Rep: " << e_ij_R << " " 
-								<< rho * C1_ * K_ij_R * I_rep << endl;
-							*/
-
+								Log.info() << "e_ij = " << e_ij << endl;
+								Log.info() << "Dis: " << e_ij_D << " " 
+									<< rho * - C2_ * K_ij_D * R_ij_o_6 * I_disp << endl;
+								Log.info() << "Rep: " << e_ij_R << " " 
+									<< rho * C1_ * K_ij_R * I_rep << endl;
+							}
 						}
 						else
 						{
@@ -419,10 +431,11 @@ namespace BALL
 									((1.0 / a_r_k) + (2.0 / (a_r_k * a_r_k)) + 
 									 (2.0 / (a_r_k * a_r_k * a_r_k))));
 
-							// BAUSTELLE
-							e_ij_R = rho * C1_ * K_ij_R * I_rep;
-							e_ij_D = rho * - C2_ * K_ij_D * R_ij_o_6 * I_disp;
-
+							if (verbosity > 0)
+							{
+								e_ij_R = rho * C1_ * K_ij_R * I_rep;
+								e_ij_D = rho * - C2_ * K_ij_D * R_ij_o_6 * I_disp;
+							}
 							e_ij = rho * ( C1_ * K_ij_R * I_rep + C2_ * K_ij_D * R_ij_o_6
 									* I_disp);
 						}
@@ -440,8 +453,11 @@ namespace BALL
 
 			// E_x is the total energy contribution
 			E += solvent_atom.number_of_atoms * E_ij;
-			E_D += solvent_atom.number_of_atoms * E_ij_D;
-			E_R += solvent_atom.number_of_atoms * E_ij_R;
+			if (verbosity > 0)
+			{
+				E_D += solvent_atom.number_of_atoms * E_ij_D;
+				E_R += solvent_atom.number_of_atoms * E_ij_R;
+			}
 
 		} // solvent
 
@@ -451,7 +467,6 @@ namespace BALL
 				<< "Repulsion energy: " << E_R << " kcal/mol" << endl;
 		}
 
-		// energy_ = 4184 * (E_R + E_D);
 		energy_ = 4184 * E;
 		return true;
 	}
