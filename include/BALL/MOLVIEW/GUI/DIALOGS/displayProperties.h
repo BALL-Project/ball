@@ -11,6 +11,10 @@
 #	include <BALL/FORMAT/INIFile.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_LOGVIEW_H
+#	include <BALL/VIEW/KERNEL/logView.h>
+#endif
+
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 # include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 #endif
@@ -64,19 +68,21 @@ namespace BALL
 				 */
 				//@{
 				
-				/** set the preferences.
-						This dialog stores its preferences in an unique inifile, which must be already open
-						when given to this function.
-						@param inifile - the inifile
+				/** Fetch the widgets preferences from the inifile.
+						This method extracts the default values from the given
+						inifile.
+						This method is called automatically
+						immediately before the main application 
+						is started. It gets the widget's initial values from the inifile. 
 				*/
-				void setPreferences(INIFile& inifile) const;
+				virtual void fetchPreferences(INIFile &inifile);
 				
-				/** get the preferences.
-						Reads the preferences from the given inifile. As in the function above this inifile
-						must be open when given to this function.
-						@param inifile - the inifile
+				/** Writes the widgets preferences to the inifile.
+						This method is called by the widget's destructor.
+						It writes all needed values to the given inifile (as read from
+						the inifile in the fetchPreferences method).
 				*/
-				void getPreferences(const INIFile& inifile);
+				virtual void writePreferences(INIFile &inifile);
 				
 				/** receive and process messages sent to this dialog.
 						If a graphical representation is changed this dialog sents a message to the other
@@ -120,6 +126,27 @@ namespace BALL
 					/** @name Public slots
 					 */
 					//@{
+
+					/** All selected objects will be colored uniquely.
+					*/
+					void select();
+
+					/** The color of the selected objects will be turned to their previously
+							chosen color.
+					*/
+				  void deselect();
+
+					/** The camera will be focused to the center of the selected objects.
+					*/
+					void centerCamera();
+
+					/** Bonds will be created between the selected objects.
+					*/
+					void buildBonds();
+
+					/** Hydrogens will be added to the selected objects.
+					*/
+					void addHydrogens();
 					
 					/** open the dialog.
 					 */
@@ -128,6 +155,9 @@ namespace BALL
 				//@}
 				
 				protected slots:
+					
+					/** @name Protected slots
+					 */
 					
 				/** @name Protected slots
 				 */
@@ -158,6 +188,11 @@ namespace BALL
 				void setComboBoxIndex_(QComboBox* combo_box, QString& item_string);
 				
 				int id_;
+				int select_id_;
+				int deselect_id_;
+				int center_camera_id_;
+				int build_bonds_id_;
+				int add_hydrogens_id_;
 				
 				QString   model_string_;
 				QString   precision_string_;
