@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: complex.h,v 1.7 2002/09/05 13:27:41 anhi Exp $
+// $Id: complex.h,v 1.8 2002/09/10 06:08:16 oliver Exp $
 
 #ifndef BALL_MATHS_COMPLEX_H
 #define BALL_MATHS_COMPLEX_H
@@ -345,7 +345,7 @@ namespace BALL
 	BALL_INLINE
 	TComplex<T>::TComplex(const TComplex<T>& cpx) throw()
 		:	re(cpx.re),
-			im(cpx.re)
+			im(cpx.im)
 	{
 	}
 	
