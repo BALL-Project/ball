@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>ParsedFunctionDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>491</width>
-            <height>155</height>
+            <width>457</width>
+            <height>145</height>
         </rect>
     </property>
     <property name="caption">
@@ -24,9 +24,9 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>9</x>
-                <y>114</y>
-                <width>476</width>
+                <x>5</x>
+                <y>108</y>
+                <width>441</width>
                 <height>33</height>
             </rect>
         </property>
@@ -43,6 +43,12 @@
             <widget class="QPushButton">
                 <property name="name">
                     <cstring>buttonOk</cstring>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>30</height>
+                    </size>
                 </property>
                 <property name="text">
                     <string>&amp;OK</string>
@@ -61,6 +67,12 @@
                 <property name="name">
                     <cstring>buttonCancel</cstring>
                 </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>30</height>
+                    </size>
+                </property>
                 <property name="text">
                     <string>&amp;Cancel</string>
                 </property>
@@ -75,22 +87,25 @@
     </widget>
     <widget class="QGroupBox">
         <property name="name">
-            <cstring>groupBox1_2</cstring>
+            <cstring>groupBox1</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>16</x>
-                <y>56</y>
+                <x>-3</x>
+                <y>3</y>
                 <width>460</width>
                 <height>50</height>
             </rect>
         </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
         <property name="title">
-            <string>Y-axis</string>
+            <string>X-axis</string>
         </property>
         <widget class="QLineEdit">
             <property name="name">
-                <cstring>y_axis</cstring>
+                <cstring>x_axis</cstring>
             </property>
             <property name="geometry">
                 <rect>
@@ -104,22 +119,25 @@
     </widget>
     <widget class="QGroupBox">
         <property name="name">
-            <cstring>groupBox1</cstring>
+            <cstring>groupBox1_2</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>16</x>
-                <y>2</y>
+                <x>-2</x>
+                <y>57</y>
                 <width>460</width>
                 <height>50</height>
             </rect>
         </property>
+        <property name="frameShape">
+            <enum>NoFrame</enum>
+        </property>
         <property name="title">
-            <string>X-axis</string>
+            <string>Y-axis</string>
         </property>
         <widget class="QLineEdit">
             <property name="name">
-                <cstring>x_axis</cstring>
+                <cstring>y_axis</cstring>
             </property>
             <property name="geometry">
                 <rect>

@@ -9,28 +9,12 @@
             <x>0</x>
             <y>0</y>
             <width>440</width>
-            <height>279</height>
+            <height>282</height>
         </rect>
     </property>
     <property name="caption">
         <string>PythonSettings</string>
     </property>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>textLabel1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>0</y>
-                <width>80</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Startup script:</string>
-        </property>
-    </widget>
     <widget class="QLineEdit">
         <property name="name">
             <cstring>script_edit</cstring>
@@ -50,6 +34,22 @@
             <bool>true</bool>
         </property>
     </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>10</x>
+                <y>0</y>
+                <width>80</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Startup script</string>
+        </property>
+    </widget>
     <widget class="QPushButton">
         <property name="name">
             <cstring>choose_button</cstring>
@@ -58,8 +58,8 @@
             <rect>
                 <x>10</x>
                 <y>50</y>
-                <width>70</width>
-                <height>21</height>
+                <width>80</width>
+                <height>30</height>
             </rect>
         </property>
         <property name="text">
@@ -72,10 +72,10 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>90</x>
+                <x>99</x>
                 <y>50</y>
-                <width>70</width>
-                <height>21</height>
+                <width>80</width>
+                <height>30</height>
             </rect>
         </property>
         <property name="text">

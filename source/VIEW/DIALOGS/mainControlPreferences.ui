@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>437</width>
-            <height>261</height>
+            <height>264</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -35,34 +35,18 @@
     <property name="caption">
         <string>MainControlPreferences</string>
     </property>
-    <widget class="QGroupBox">
+    <widget class="QComboBox">
         <property name="name">
-            <cstring>GroupBox1</cstring>
+            <cstring>style_box_</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>20</x>
-                <y>10</y>
-                <width>401</width>
-                <height>51</height>
+                <x>24</x>
+                <y>28</y>
+                <width>381</width>
+                <height>21</height>
             </rect>
         </property>
-        <property name="title">
-            <string>GUI Style</string>
-        </property>
-        <widget class="QComboBox">
-            <property name="name">
-                <cstring>style_box_</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>20</y>
-                    <width>381</width>
-                    <height>21</height>
-                </rect>
-            </property>
-        </widget>
     </widget>
     <widget class="QCheckBox">
         <property name="name">
@@ -81,6 +65,22 @@
         </property>
         <property name="checked">
             <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>textLabel2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>24</x>
+                <y>10</y>
+                <width>101</width>
+                <height>16</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>GUI Style</string>
         </property>
     </widget>
 </widget>

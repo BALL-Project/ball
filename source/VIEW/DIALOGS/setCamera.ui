@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>SetCameraData</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,44 +9,12 @@
             <x>0</x>
             <y>0</y>
             <width>280</width>
-            <height>110</height>
+            <height>113</height>
         </rect>
     </property>
     <property name="caption">
         <string>Set Camera</string>
     </property>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel1</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>10</y>
-                <width>70</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>View point:</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel1_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>40</y>
-                <width>70</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Look at:</string>
-        </property>
-    </widget>
     <widget class="QLineEdit">
         <property name="name">
             <cstring>view_edit</cstring>
@@ -80,9 +48,9 @@
         <property name="geometry">
             <rect>
                 <x>40</x>
-                <y>80</y>
+                <y>76</y>
                 <width>82</width>
-                <height>26</height>
+                <height>30</height>
             </rect>
         </property>
         <property name="text">
@@ -96,13 +64,45 @@
         <property name="geometry">
             <rect>
                 <x>150</x>
-                <y>80</y>
+                <y>76</y>
                 <width>82</width>
-                <height>26</height>
+                <height>30</height>
             </rect>
         </property>
         <property name="text">
             <string>Cancel</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>8</x>
+                <y>40</y>
+                <width>72</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Look at</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>7</x>
+                <y>10</y>
+                <width>73</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>View point</string>
         </property>
     </widget>
 </widget>

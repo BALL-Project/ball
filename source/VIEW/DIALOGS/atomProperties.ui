@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.0" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>AtomPropertiesData</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>365</width>
-            <height>350</height>
+            <width>350</width>
+            <height>315</height>
         </rect>
     </property>
     <property name="caption">
@@ -17,50 +17,18 @@
     </property>
     <widget class="QLabel">
         <property name="name">
-            <cstring>TextLabel1</cstring>
+            <cstring>TextLabel2</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>10</x>
-                <y>10</y>
-                <width>70</width>
+                <x>4</x>
+                <y>35</y>
+                <width>76</width>
                 <height>21</height>
             </rect>
         </property>
         <property name="text">
-            <string>name:</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel4</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>160</y>
-                <width>70</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>charge:</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel8</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>130</y>
-                <width>70</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>radius:</string>
+            <string>type name</string>
         </property>
     </widget>
     <widget class="QLabel">
@@ -69,68 +37,14 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>10</x>
-                <y>100</y>
+                <x>4</x>
+                <y>95</y>
                 <width>70</width>
                 <height>21</height>
             </rect>
         </property>
         <property name="text">
-            <string>element:</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>apply_button</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>60</x>
-                <y>300</y>
-                <width>100</width>
-                <height>34</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>apply</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>close_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>210</x>
-                <y>300</y>
-                <width>100</width>
-                <height>34</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>cancel</string>
-        </property>
-        <property name="default">
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel6</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>250</y>
-                <width>70</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>force:</string>
+            <string>element</string>
         </property>
     </widget>
     <widget class="QLabel">
@@ -139,165 +53,30 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>10</x>
-                <y>220</y>
+                <x>4</x>
+                <y>215</y>
                 <width>70</width>
                 <height>21</height>
             </rect>
         </property>
         <property name="text">
-            <string>velocity:</string>
+            <string>velocity</string>
         </property>
     </widget>
     <widget class="QLabel">
         <property name="name">
-            <cstring>TextLabel7</cstring>
+            <cstring>TextLabel6</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>10</x>
-                <y>190</y>
-                <width>70</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="frameShape">
-            <enum>MShape</enum>
-        </property>
-        <property name="frameShadow">
-            <enum>MShadow</enum>
-        </property>
-        <property name="text">
-            <string>position:</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>40</y>
+                <x>4</x>
+                <y>245</y>
                 <width>70</width>
                 <height>21</height>
             </rect>
         </property>
         <property name="text">
-            <string>type name:</string>
-        </property>
-    </widget>
-    <widget class="QLabel">
-        <property name="name">
-            <cstring>TextLabel2_2</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>10</x>
-                <y>70</y>
-                <width>70</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>type:</string>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>name_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>90</x>
-                <y>10</y>
-                <width>260</width>
-                <height>21</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>type_name_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>90</x>
-                <y>40</y>
-                <width>260</width>
-                <height>21</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>type_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>90</x>
-                <y>70</y>
-                <width>260</width>
-                <height>21</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QComboBox">
-        <property name="name">
-            <cstring>element_box</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>90</x>
-                <y>100</y>
-                <width>260</width>
-                <height>21</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>radius_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>90</x>
-                <y>130</y>
-                <width>260</width>
-                <height>21</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>charge_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>90</x>
-                <y>160</y>
-                <width>260</width>
-                <height>21</height>
-            </rect>
-        </property>
-    </widget>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>position_edit</cstring>
-        </property>
-        <property name="enabled">
-            <bool>false</bool>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>90</x>
-                <y>190</y>
-                <width>260</width>
-                <height>21</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string></string>
+            <string>force</string>
         </property>
     </widget>
     <widget class="QLineEdit">
@@ -309,11 +88,33 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>90</x>
-                <y>220</y>
+                <x>84</x>
+                <y>215</y>
                 <width>260</width>
                 <height>21</height>
             </rect>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel7</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>4</x>
+                <y>185</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>MShape</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>MShadow</enum>
+        </property>
+        <property name="text">
+            <string>position</string>
         </property>
     </widget>
     <widget class="QLineEdit">
@@ -325,11 +126,210 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>90</x>
-                <y>250</y>
+                <x>84</x>
+                <y>245</y>
                 <width>260</width>
                 <height>21</height>
             </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>type_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>65</y>
+                <width>260</width>
+                <height>21</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>4</x>
+                <y>65</y>
+                <width>77</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>type</string>
+        </property>
+    </widget>
+    <widget class="QComboBox">
+        <property name="name">
+            <cstring>element_box</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>95</y>
+                <width>260</width>
+                <height>21</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>type_name_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>35</y>
+                <width>260</width>
+                <height>21</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel4</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>4</x>
+                <y>155</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>charge</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel8</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>4</x>
+                <y>125</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>radius</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>4</x>
+                <y>5</y>
+                <width>77</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>name</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>position_edit</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>185</y>
+                <width>260</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>charge_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>155</y>
+                <width>260</width>
+                <height>21</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>radius_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>125</y>
+                <width>260</width>
+                <height>21</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>name_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>5</y>
+                <width>260</width>
+                <height>21</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>close_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>186</x>
+                <y>280</y>
+                <width>120</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Cancel</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>apply_button</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>36</x>
+                <y>280</y>
+                <width>120</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Apply</string>
         </property>
     </widget>
 </widget>

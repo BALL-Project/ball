@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>519</width>
-            <height>79</height>
+            <height>82</height>
         </rect>
     </property>
     <property name="caption">
@@ -18,27 +18,6 @@
     <property name="sizeGripEnabled">
         <bool>false</bool>
     </property>
-    <widget class="QLineEdit">
-        <property name="name">
-            <cstring>line_edit</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>6</x>
-                <y>10</y>
-                <width>507</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <property name="sizePolicy">
-            <sizepolicy>
-                <hsizetype>0</hsizetype>
-                <vsizetype>0</vsizetype>
-                <horstretch>255</horstretch>
-                <verstretch>0</verstretch>
-            </sizepolicy>
-        </property>
-    </widget>
     <spacer>
         <property name="name">
             <cstring>Horizontal Spacing2</cstring>
@@ -91,28 +70,6 @@
     </spacer>
     <widget class="QPushButton">
         <property name="name">
-            <cstring>buttonCancel</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>434</x>
-                <y>47</y>
-                <width>82</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&amp;Cancel</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-        <property name="autoDefault">
-            <bool>true</bool>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
             <cstring>buttonOk</cstring>
         </property>
         <property name="geometry">
@@ -120,7 +77,7 @@
                 <x>346</x>
                 <y>47</y>
                 <width>82</width>
-                <height>26</height>
+                <height>30</height>
             </rect>
         </property>
         <property name="minimumSize">
@@ -144,14 +101,79 @@
     </widget>
     <widget class="QPushButton">
         <property name="name">
+            <cstring>buttonCancel</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>434</x>
+                <y>47</y>
+                <width>82</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>&amp;Cancel</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>buttonHelp</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>4</x>
+                <y>47</y>
+                <width>82</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>&amp;Help</string>
+        </property>
+        <property name="accel">
+            <string>F1</string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>line_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>6</x>
+                <y>10</y>
+                <width>507</width>
+                <height>26</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>255</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
             <cstring>clear_selection_button</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>183</x>
+                <x>179</x>
                 <y>48</y>
-                <width>96</width>
-                <height>26</height>
+                <width>100</width>
+                <height>30</height>
             </rect>
         </property>
         <property name="minimumSize">
@@ -171,28 +193,6 @@
         </property>
         <property name="default">
             <bool>false</bool>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>buttonHelp</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>4</x>
-                <y>47</y>
-                <width>82</width>
-                <height>26</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&amp;Help</string>
-        </property>
-        <property name="accel">
-            <string>F1</string>
-        </property>
-        <property name="autoDefault">
-            <bool>true</bool>
         </property>
     </widget>
 </widget>

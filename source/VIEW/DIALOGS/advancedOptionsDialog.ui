@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>AdvancedOptions</class>
 <widget class="QDialog">
     <property name="name">
@@ -9,69 +9,12 @@
             <x>0</x>
             <y>0</y>
             <width>549</width>
-            <height>473</height>
+            <height>467</height>
         </rect>
     </property>
     <property name="caption">
         <string>Advanced Options</string>
     </property>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>close_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>11</x>
-                <y>431</y>
-                <width>172</width>
-                <height>34</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>&amp;Close</string>
-        </property>
-        <property name="accel">
-            <string>Alt+C</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>reset_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>189</x>
-                <y>431</y>
-                <width>172</width>
-                <height>34</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Reset</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>cancel_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>367</x>
-                <y>431</y>
-                <width>172</width>
-                <height>34</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Cancel</string>
-        </property>
-        <property name="accel">
-            <string></string>
-        </property>
-    </widget>
     <widget class="QButtonGroup">
         <property name="name">
             <cstring>dielectric_group</cstring>
@@ -911,6 +854,66 @@
                 <set>AlignRight</set>
             </property>
         </widget>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>reset_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>189</x>
+                <y>431</y>
+                <width>172</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Reset</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cancel_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>367</x>
+                <y>431</y>
+                <width>172</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Cancel</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>close_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>11</x>
+                <y>431</y>
+                <width>172</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>&amp;Close</string>
+        </property>
+        <property name="accel">
+            <string>Alt+C</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
     </widget>
 </widget>
 <connections>

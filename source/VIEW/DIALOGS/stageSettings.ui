@@ -9,12 +9,28 @@
             <x>0</x>
             <y>0</y>
             <width>435</width>
-            <height>280</height>
+            <height>283</height>
         </rect>
     </property>
     <property name="caption">
         <string>StageSettings</string>
     </property>
+    <widget class="QCheckBox">
+        <property name="name">
+            <cstring>coordinate_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>5</x>
+                <y>162</y>
+                <width>181</width>
+                <height>20</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>Show coordinate system</string>
+        </property>
+    </widget>
     <widget class="QFrame">
         <property name="name">
             <cstring>Frame5</cstring>
@@ -24,7 +40,7 @@
                 <x>3</x>
                 <y>3</y>
                 <width>180</width>
-                <height>134</height>
+                <height>144</height>
             </rect>
         </property>
         <property name="frameShape">
@@ -33,43 +49,6 @@
         <property name="frameShadow">
             <enum>Sunken</enum>
         </property>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>TextLabel2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>9</x>
-                    <y>2</y>
-                    <width>141</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="font">
-                <font>
-                    <underline>1</underline>
-                </font>
-            </property>
-            <property name="text">
-                <string>Background color:</string>
-            </property>
-        </widget>
-        <widget class="QPushButton">
-            <property name="name">
-                <cstring>color_button</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>47</x>
-                    <y>106</y>
-                    <width>77</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Edit</string>
-            </property>
-        </widget>
         <widget class="QLabel">
             <property name="name">
                 <cstring>color_sample</cstring>
@@ -108,22 +87,45 @@
                 <string></string>
             </property>
         </widget>
-    </widget>
-    <widget class="QCheckBox">
-        <property name="name">
-            <cstring>coordinate_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>6</x>
-                <y>148</y>
-                <width>175</width>
-                <height>20</height>
-            </rect>
-        </property>
-        <property name="text">
-            <string>Show coordinate system</string>
-        </property>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>TextLabel2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>9</x>
+                    <y>2</y>
+                    <width>141</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="font">
+                <font>
+                </font>
+            </property>
+            <property name="text">
+                <string>Background color</string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>color_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>47</x>
+                    <y>106</y>
+                    <width>77</width>
+                    <height>30</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Edit</string>
+            </property>
+        </widget>
     </widget>
 </widget>
 <connections>

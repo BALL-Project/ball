@@ -307,175 +307,6 @@
             <string>Gly</string>
         </property>
     </widget>
-    <widget class="QButtonGroup">
-        <property name="name">
-            <cstring>angles_group</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>257</x>
-                <y>44</y>
-                <width>120</width>
-                <height>150</height>
-            </rect>
-        </property>
-        <property name="title">
-            <string>Angles</string>
-        </property>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel1_2</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>100</y>
-                    <width>30</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Psi:</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel1_3</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>120</y>
-                    <width>46</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Omega:</string>
-            </property>
-        </widget>
-        <widget class="QLabel">
-            <property name="name">
-                <cstring>textLabel1</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>80</y>
-                    <width>30</width>
-                    <height>20</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Phi:</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>phi</cstring>
-            </property>
-            <property name="enabled">
-                <bool>false</bool>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>60</x>
-                    <y>80</y>
-                    <width>50</width>
-                    <height>18</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>-47</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>psi</cstring>
-            </property>
-            <property name="enabled">
-                <bool>false</bool>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>60</x>
-                    <y>100</y>
-                    <width>50</width>
-                    <height>18</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>-58</string>
-            </property>
-        </widget>
-        <widget class="QLineEdit">
-            <property name="name">
-                <cstring>omega</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>60</x>
-                    <y>120</y>
-                    <width>50</width>
-                    <height>18</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>180</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>other</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>60</y>
-                    <width>92</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Other</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>beta</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>40</y>
-                    <width>92</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Beta sheet</string>
-            </property>
-        </widget>
-        <widget class="QRadioButton">
-            <property name="name">
-                <cstring>alpha</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>10</x>
-                    <y>20</y>
-                    <width>92</width>
-                    <height>16</height>
-                </rect>
-            </property>
-            <property name="text">
-                <string>Alpha helix</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
-    </widget>
     <widget class="QPushButton">
         <property name="name">
             <cstring>thr</cstring>
@@ -522,62 +353,6 @@
         </property>
         <property name="text">
             <string>Tyr</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>back_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>41</x>
-                <y>211</y>
-                <width>144</width>
-                <height>27</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>27</height>
-            </size>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>32767</width>
-                <height>27</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Back</string>
-        </property>
-    </widget>
-    <widget class="QPushButton">
-        <property name="name">
-            <cstring>close_button</cstring>
-        </property>
-        <property name="geometry">
-            <rect>
-                <x>191</x>
-                <y>211</y>
-                <width>144</width>
-                <height>27</height>
-            </rect>
-        </property>
-        <property name="minimumSize">
-            <size>
-                <width>0</width>
-                <height>27</height>
-            </size>
-        </property>
-        <property name="maximumSize">
-            <size>
-                <width>32767</width>
-                <height>27</height>
-            </size>
-        </property>
-        <property name="text">
-            <string>Build</string>
         </property>
     </widget>
     <widget class="QLineEdit">
@@ -851,6 +626,234 @@
         </property>
         <property name="readOnly">
             <bool>false</bool>
+        </property>
+    </widget>
+    <widget class="QButtonGroup">
+        <property name="name">
+            <cstring>angles_group</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>257</x>
+                <y>44</y>
+                <width>120</width>
+                <height>150</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>Angles</string>
+        </property>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>alpha</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>20</y>
+                    <width>100</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Alpha helix</string>
+            </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>beta</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>40</y>
+                    <width>100</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Beta sheet</string>
+            </property>
+        </widget>
+        <widget class="QRadioButton">
+            <property name="name">
+                <cstring>other</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>60</y>
+                    <width>102</width>
+                    <height>16</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Other</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>omega</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>63</x>
+                    <y>121</y>
+                    <width>50</width>
+                    <height>18</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>180</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>psi</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>63</x>
+                    <y>101</y>
+                    <width>50</width>
+                    <height>18</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>-58</string>
+            </property>
+        </widget>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>phi</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>63</x>
+                    <y>81</y>
+                    <width>50</width>
+                    <height>18</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>-47</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>120</y>
+                    <width>51</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Omega:</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>100</y>
+                    <width>41</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Psi:</string>
+            </property>
+        </widget>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>80</y>
+                    <width>40</width>
+                    <height>20</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>Phi:</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>back_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>42</x>
+                <y>208</y>
+                <width>144</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>32767</width>
+                <height>27</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Back</string>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>close_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>192</x>
+                <y>208</y>
+                <width>144</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>0</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>32767</width>
+                <height>27</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Build</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
         </property>
     </widget>
 </widget>

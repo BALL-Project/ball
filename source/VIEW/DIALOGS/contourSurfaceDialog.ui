@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>ContourSurfaceDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>463</width>
-            <height>107</height>
+            <width>458</width>
+            <height>104</height>
         </rect>
     </property>
     <property name="caption">
@@ -18,6 +18,35 @@
     <property name="sizeGripEnabled">
         <bool>false</bool>
     </property>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>groupBox1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>2</x>
+                <y>0</y>
+                <width>454</width>
+                <height>50</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>RegularData</string>
+        </property>
+        <widget class="QComboBox">
+            <property name="name">
+                <cstring>grids</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>9</x>
+                    <y>18</y>
+                    <width>438</width>
+                    <height>24</height>
+                </rect>
+            </property>
+        </widget>
+    </widget>
     <widget class="QGroupBox">
         <property name="name">
             <cstring>groupBox1_2</cstring>
@@ -53,92 +82,55 @@
             </property>
         </widget>
     </widget>
-    <widget class="QLayoutWidget">
+    <widget class="QPushButton">
         <property name="name">
-            <cstring>Layout1</cstring>
+            <cstring>buttonCancel</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>178</x>
-                <y>64</y>
-                <width>274</width>
-                <height>33</height>
+                <x>318</x>
+                <y>67</y>
+                <width>133</width>
+                <height>30</height>
             </rect>
         </property>
-        <hbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <property name="margin">
-                <number>0</number>
-            </property>
-            <property name="spacing">
-                <number>6</number>
-            </property>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>buttonOk</cstring>
-                </property>
-                <property name="enabled">
-                    <bool>false</bool>
-                </property>
-                <property name="text">
-                    <string>&amp;OK</string>
-                </property>
-                <property name="accel">
-                    <string></string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-                <property name="default">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>buttonCancel</cstring>
-                </property>
-                <property name="text">
-                    <string>&amp;Cancel</string>
-                </property>
-                <property name="accel">
-                    <string></string>
-                </property>
-                <property name="autoDefault">
-                    <bool>true</bool>
-                </property>
-            </widget>
-        </hbox>
+        <property name="text">
+            <string>&amp;Cancel</string>
+        </property>
+        <property name="accel">
+            <string></string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
     </widget>
-    <widget class="QGroupBox">
+    <widget class="QPushButton">
         <property name="name">
-            <cstring>groupBox1</cstring>
+            <cstring>buttonOk</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
         </property>
         <property name="geometry">
             <rect>
-                <x>2</x>
-                <y>0</y>
-                <width>454</width>
-                <height>50</height>
+                <x>179</x>
+                <y>67</y>
+                <width>133</width>
+                <height>30</height>
             </rect>
         </property>
-        <property name="title">
-            <string>RegularData</string>
+        <property name="text">
+            <string>&amp;OK</string>
         </property>
-        <widget class="QComboBox">
-            <property name="name">
-                <cstring>grids</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>9</x>
-                    <y>18</y>
-                    <width>438</width>
-                    <height>24</height>
-                </rect>
-            </property>
-        </widget>
+        <property name="accel">
+            <string></string>
+        </property>
+        <property name="autoDefault">
+            <bool>true</bool>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
     </widget>
 </widget>
 <connections>
