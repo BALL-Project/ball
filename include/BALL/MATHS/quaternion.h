@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.10 2000/03/07 10:20:31 oliver Exp $
+// $Id: quaternion.h,v 1.11 2000/03/07 10:45:38 oliver Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -241,9 +241,9 @@ namespace BALL
 	}
 
 	template <class T>
-	TQuaternion<T>::TQuaternion(const T& x, const T& y, const T& z, const T& angle)
+	TQuaternion<T>::TQuaternion(const T& x, const T& y, const T& z, const T& new_angle)
 	{
-		set(x, y, z, angle);
+		set(x, y, z, new_angle);
 	}
 
 	template <class T>
@@ -265,9 +265,9 @@ namespace BALL
 
 	template <class T>
 	BALL_INLINE 
-	void TQuaternion<T>::set(const TVector3<T>& axis, const T& angle)
+	void TQuaternion<T>::set(const TVector3<T>& axis, const T& new_angle)
 	{
-		set(axis.x, axis.y, axis.z, angle);
+		set(axis.x, axis.y, axis.z, new_angle);
 	}
 
 	template <class T>
