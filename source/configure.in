@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.13 2002/01/16 00:24:13 oliver Exp $
+dnl    $Id: configure.in,v 1.14 2002/01/26 21:37:21 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -438,7 +438,7 @@ dnl   platforms to expand '\n')
 dnl
 AC_MSG_CHECKING(whether echo accepts -e)
 if `echo -e "\n" >/dev/null 2>&1` ; then
-	if test "`echo -e 2>&1`" = "" ; then
+	if test "`echo -e 2>&1`" = "" -a "`echo -e OK`" = "OK" ; then
 		ECHO_COMMAND="echo -e"
 		AC_MSG_RESULT(yes)	
 	else
@@ -2204,18 +2204,21 @@ else
 fi
 
 dnl
-dnl		check whether LEX and YACC exist (for SMILES parser)
+dnl		check whether LEX and YACC exist (for SMILES, Expression parser)
 dnl
 AC_PROG_LEX
 AC_PROG_YACC
 if test "${LEX}" != "flex" -o "${YACC}" = "" ; then
 	BALL_HAS_FLEX_YACC=false
 	AC_DEFINE(BALL_HAS_FLEX_YACC, false)
-	AC_MSG_RESULT(flex and yacc/bison required! Disabling smiles parser.)
+	AC_MSG_RESULT(flex and yacc/bison required!)
+	AC_MSG_RESULT(Please install them from your closest GNU mirror.)	
+	AC_MSG_RESULT()
+	AC_MSG_ERROR(Aborted.)
 else
 	BALL_HAS_FLEX_YACC=true
 	AC_DEFINE(BALL_HAS_FLEX_YACC, true)
-	LIBS="${LIBS} ${LEXLIB}"
+	LIBS="${LIBS}"
 fi
 
 AC_SUBST(BALL_HAS_FLEX_YACC)

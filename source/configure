@@ -1726,7 +1726,7 @@ echo "$as_me: error: aborted" >&2;}
 echo "$as_me:$LINENO: checking whether echo accepts -e" >&5
 echo $ECHO_N "checking whether echo accepts -e... $ECHO_C" >&6
 if `echo -e "\n" >/dev/null 2>&1` ; then
-	if test "`echo -e 2>&1`" = "" ; then
+	if test "`echo -e 2>&1`" = "" -a "`echo -e OK`" = "OK" ; then
 		ECHO_COMMAND="echo -e"
 		echo "$as_me:$LINENO: result: yes" >&5
 echo "${ECHO_T}yes" >&6
@@ -9847,15 +9847,22 @@ if test "${LEX}" != "flex" -o "${YACC}" = "" ; then
 #define BALL_HAS_FLEX_YACC false
 _ACEOF
 
-	echo "$as_me:$LINENO: result: flex and yacc/bison required! Disabling smiles parser." >&5
-echo "${ECHO_T}flex and yacc/bison required! Disabling smiles parser." >&6
+	echo "$as_me:$LINENO: result: flex and yacc/bison required!" >&5
+echo "${ECHO_T}flex and yacc/bison required!" >&6
+	echo "$as_me:$LINENO: result: Please install them from your closest GNU mirror." >&5
+echo "${ECHO_T}Please install them from your closest GNU mirror." >&6
+	echo "$as_me:$LINENO: result: " >&5
+echo "${ECHO_T}" >&6
+	{ { echo "$as_me:$LINENO: error: Aborted." >&5
+echo "$as_me: error: Aborted." >&2;}
+   { (exit 1); exit 1; }; }
 else
 	BALL_HAS_FLEX_YACC=true
 	cat >>confdefs.h <<\_ACEOF
 #define BALL_HAS_FLEX_YACC true
 _ACEOF
 
-	LIBS="${LIBS} ${LEXLIB}"
+	LIBS="${LIBS}"
 fi
 
 if test "$BALL_INCLUDE_IEEEFP" = true ; then
