@@ -152,7 +152,6 @@ void ColoringSettingsDialog::fetchPreferences(const INIFile& file)
 {
 	if (!file.hasSection("COLORING_OPTIONS"))
 	{
-		//setDefaults();
 		return;
 	}
 
@@ -228,7 +227,7 @@ void ColoringSettingsDialog::setDefaults(bool all)
 
 	// =============================================================
 	// setting element colors
-	if (all || widget_stack->visibleWidget() == 0)
+	if (all || widget_stack->id(widget_stack->visibleWidget()) == 0)
 	{
 		// create a dummy processor to get the default values
 		ElementColorProcessor elp;
