@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FDPBDialog.C,v 1.16 2004/11/17 13:42:26 amoll Exp $
+// $Id: FDPBDialog.C,v 1.17 2004/12/02 01:58:30 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
@@ -71,8 +71,8 @@ namespace BALL
 
 		void FDPBDialog::okPressed()
 		{
-			calculate();
 			hide();
+			calculate();
 		}
 
 		void FDPBDialog::resetPressed()
