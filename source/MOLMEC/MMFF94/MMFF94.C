@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.C,v 1.1.2.7 2005/03/27 14:12:35 amoll Exp $
+// $Id: MMFF94.C,v 1.1.2.8 2005/03/28 12:26:49 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field class
 //
@@ -11,6 +11,7 @@
 #include <BALL/MOLMEC/MMFF94/MMFF94.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
+#include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94Torsion.h>
 #include <BALL/MOLMEC/MMFF94/MMFF94NonBonded.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -36,8 +37,9 @@ namespace BALL
 		setName("MMFF94");
 
 		// create the component list
-//      		insertComponent(new MMFF94Stretch(*this));
+      		insertComponent(new MMFF94Stretch(*this));
       		insertComponent(new MMFF94Bend(*this));
+      		insertComponent(new MMFF94StretchBend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 	}
@@ -49,8 +51,9 @@ namespace BALL
 			parameters_initialized_(false)
   {
 		// create the component list
-//      		insertComponent(new MMFF94Stretch(*this));
+insertComponent(new MMFF94Stretch(*this));
       		insertComponent(new MMFF94Bend(*this));
+      		insertComponent(new MMFF94StretchBend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 
@@ -73,8 +76,9 @@ namespace BALL
 			parameters_initialized_(false)
   {
 		// create the component list
-//      		insertComponent(new MMFF94Stretch(*this));
+insertComponent(new MMFF94Stretch(*this));
    		insertComponent(new MMFF94Bend(*this));
+      		insertComponent(new MMFF94StretchBend(*this));
 //   		insertComponent(new MMFF94Torsion(*this));
 //   		insertComponent(new MMFF94NonBonded(*this));
 

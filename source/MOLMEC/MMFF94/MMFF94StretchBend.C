@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94StretchBend.C,v 1.1.2.1 2005/03/28 00:43:38 amoll Exp $
+// $Id: MMFF94StretchBend.C,v 1.1.2.2 2005/03/28 12:26:50 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94StretchBend.h>
@@ -64,8 +64,22 @@ namespace BALL
 			return false;
 		}
 
+		if (!parameters_.isInitialized())
+		{
+			Path    path;
+			String  filename(path.find("MMFF94/MMFFSTBN.PAR"));
+
+			if (filename == "") 
+			{
+				throw Exception::FileNotFound(__FILE__, __LINE__, filename);
+			}
+
+			parameters_.readParameters(filename);
+		}
+
 		stretch_bends_.clear();
 		
+		// obtain the Stretch and Bend data from the MMFF94 force field
 		MMFF94& mmff = *(MMFF94*)getForceField();
 		const MMFF94Stretch& stretch = *(MMFF94Stretch*)mmff.getComponent("MMFF94 Stretch");
 		const MMFF94Bend& bend = 			 *(MMFF94Bend*)   mmff.getComponent("MMFF94 Bend");
@@ -73,11 +87,7 @@ namespace BALL
 		const vector<MMFF94Stretch::Stretch>& stretches = stretch.getStretches();
 		const vector<MMFF94Bend::Bend>& 			bends 		= bend.getBends();
 
-		/*
-		const MMFF94BondStretchBendParameters& stretch_bend_data = mmff.getStretchBendParameters();
-		MMFF94BondStretchBendParameters::StretchBendMap::ConstIterator StretchBend_it;
-*/
-		
+		// build up a lookup table for the stretch data
 		HashMap<long, Position> stretch_map;
 		for (Position stretch_pos = 0; stretch_pos < stretches.size(); stretch_pos++)
 		{
@@ -89,19 +99,28 @@ namespace BALL
 		// a working instance to put the current values in and push it back
 		StretchBend sb;
 
+		// get all needed data from the stretches and bends
+		
+		// iterator on the stretch search results
 		HashMap<long, Position>::Iterator stretch_it1, stretch_it2;
+		
+		// iterate over all bends and look for the corresponding bends in the lookup table
 		for (Position bend_pos = 0; bend_pos < bends.size(); bend_pos++)
 		{
+			// "Currently, stretch-bend interactions are omitted when the 
+			// i-j-k interaction corresponds to a linear bond angle."
+			if (bends[bend_pos].is_linear) continue;
+
 			sb.delta_theta = &bends[bend_pos].delta_theta;
 			sb.atom1 = 			  bends[bend_pos].atom1;
 			sb.atom2 = 			  bends[bend_pos].atom2;
 			sb.atom3 = 			  bends[bend_pos].atom3;
 			
-			// store delta_r for i->j
+			// find the i->j stretch
 			stretch_it1 = stretch_map.find(((long) sb.atom1->ptr) *
 																	   ((long) sb.atom2->ptr));
 			
-			// store delta_r for j->k
+			// find the j->k stretch
 			stretch_it2 = stretch_map.find(((long) sb.atom2->ptr) *
 																	   ((long) sb.atom3->ptr));
 
@@ -111,9 +130,11 @@ namespace BALL
 				continue;
 			}
 
+			// store delta_r for i->j
 			Position pos1 = stretch_it1->second;
 			sb.delta_r_ij = &stretches[pos1].delta_r;
 			
+			// store delta_r for j->k
 			Position pos2 = stretch_it2->second;
 			sb.delta_r_kj = &stretches[pos2].delta_r;
 
@@ -132,11 +153,13 @@ namespace BALL
 				continue;
 			}
 
+			// we are done for this bend
 			stretch_bends_.push_back(sb);
 		}
 
 		return true;
 	}
+
 
 	void MMFF94StretchBend::errorOccured_(const String& string, 
 																				const Atom& a1, const Atom& a2, const Atom& a3)
@@ -181,8 +204,10 @@ namespace BALL
 		}
 	}
 
+	/* "The stretch-bend types are defined in terms of the constituent bond types BTIJ 
+		 and BTJK and the angle type ATIJK as shown below:"
 
-	/* Stretch-Bend       Angle           ---- Bond Type ----
+	   Stretch-Bend       Angle           ---- Bond Type ----
 					 Type         Type            I-J             J-K
 	 -----------------------------------------------------------
 						0             0               0               0
