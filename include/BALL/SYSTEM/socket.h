@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.22 2001/06/06 22:26:56 amoll Exp $
+// $Id: socket.h,v 1.23 2001/06/07 20:13:53 anker Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -158,12 +158,6 @@ namespace BALL
 		//@}
 	};
 
-	BALL_INLINE
-	SockAddr::operator sockaddr* () const 
-		throw()
-	{ 
-		return getAddr(); 
-	}
 
 
 	/**	Socket buffer class.
@@ -563,50 +557,6 @@ namespace BALL
 
 	};
 
-	BALL_INLINE
-	SocketBuf::operator int() const 
-		throw()
-	{ 
-		return rep->sock; 
-	}
-
-
-	BALL_INLINE
-	SocketBuf* SocketBuf::open(type /* socket_type */, int /* proto */)
-		throw()
-	{
-		return 0;
-	}
-
-
-	BALL_INLINE
-	int SocketBuf::is_open() const
-		throw()
-	{ 
-		return (rep->sock >= 0);
-	}
-
-
-	BALL_INLINE
-	int SocketBuf::is_eof()
-		throw()
-	{ 
-		return (xflags() & _S_EOF_SEEN);
-	}
-
-	BALL_INLINE
-	_G_ssize_t SocketBuf::sys_read (char* buf, _G_ssize_t len)
-		throw()
-	{
-		return read(buf, (int) len);
-	}
-
-	BALL_INLINE
-	_G_ssize_t SocketBuf::sys_write (const void* buf, long len)
-		throw()
-	{
-		return write(buf, (int) len);
-	}
 
 #ifdef BALL_HAS_ANSI_IOSTREAM
 #	define BALL_IOS std::basic_ios<char>
@@ -677,43 +627,6 @@ namespace BALL
 	};
 
 
-	BALL_INLINE
-	ISockStream::ISockStream(SocketBuf* socket_buf)
-		throw(Exception::NullPointer)
-		: BALL_IOS(socket_buf),
-			BALL_ISTREAM(socket_buf)
-	{
-		if (rdbuf() == 0)
-		{
-			throw Exception::NullPointer(__FILE__, __LINE__);
-		}
-	}
-
-
-	BALL_INLINE
-	ISockStream::~ISockStream()
-		throw()
-	{
-		delete rdbuf();
-		init(0);
-	}
-
-
-	BALL_INLINE
-	SocketBuf* ISockStream::rdbuf() 
-		throw()
-	{ 
-		return (SocketBuf*) BALL_ISTREAM::rdbuf(); 
-	}
-
-
-	BALL_INLINE
-	SocketBuf* ISockStream::operator -> () 
-		throw()
-	{ 
-		return rdbuf(); 
-	}
-
 
 	/**	Output stream from a socket.
 			{\bf Definition:} \URL{BALL/SYSTEM/socket.h}
@@ -765,43 +678,6 @@ namespace BALL
 		//@}
 	};
 
-
-	BALL_INLINE
-	OSockStream::OSockStream(SocketBuf* socket_buf)
-		throw(Exception::NullPointer)
-		: BALL_IOS(socket_buf),
-			BALL_OSTREAM(socket_buf)
-	{
-		if (rdbuf() == 0)
-		{
-			throw Exception::NullPointer(__FILE__, __LINE__);
-		}
-	}
-
-
-	BALL_INLINE
-	OSockStream::~OSockStream()
-		throw()
-	{
-		delete rdbuf();
-		init(0);
-	}
-
-
-	BALL_INLINE
-	SocketBuf* OSockStream::rdbuf() 
-		throw()
-	{ 
-		return (SocketBuf*) BALL_OSTREAM::rdbuf(); 
-	}
-
-
-	BALL_INLINE
-	SocketBuf* OSockStream::operator -> () 
-		throw()
-	{ 
-		return rdbuf(); 
-	}
 
 
 	/**	INET socket address.
@@ -898,45 +774,6 @@ namespace BALL
 
 		//@}
 	};
-
-
-	BALL_INLINE
-	SockInetAddr::~SockInetAddr()
-		throw()
-	{
-	}
-
-	
-	BALL_INLINE
-	SockInetAddr::operator void* () const
-		throw()
-	{
-		return (sockaddr_in*)this; 
-	}
-
-
-	BALL_INLINE
-	int SockInetAddr::getSize() const 
-		throw()
-	{ 
-		return sizeof (sockaddr_in); 
-	}
-
-
-	BALL_INLINE
-	int SockInetAddr::getFamily() const 
-		throw()
-	{ 
-		return sin_family; 
-	}
-
-
-	BALL_INLINE
-	sockaddr* SockInetAddr::getAddr() const 
-		throw()
-	{
-		return (sockaddr*)((sockaddr_in*)this); 
-	}
 
 
 	/**	INET socket buffer.
@@ -1081,29 +918,6 @@ namespace BALL
 	};
 
 
-	BALL_INLINE
-	SockInetBuf::SockInetBuf(const SocketBuf& socket_buf)
-		throw()
-		: SocketBuf(socket_buf) 
-	{
-	}
-
-
-	BALL_INLINE
-	SockInetBuf::SockInetBuf(const SockInetBuf& socket_inet_buf)
-		throw()
-		: SocketBuf (socket_inet_buf) 
-	{
-	}
-
-
-	BALL_INLINE
-	SockInetBuf::~SockInetBuf()
-		throw()
-	{
-	}
-
-
 	/**	
 	*/
 	class IOSockStream
@@ -1205,6 +1019,10 @@ namespace BALL
 
 	//@}
 
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/SYSTEM/socket.iC>
+#	endif
+	
 } // namespace BALL
 
 #endif	// BALL_SYSTEM_SOCKET_H

@@ -1,4 +1,4 @@
-// $Id: socket.C,v 1.24 2001/05/18 17:02:00 anker Exp $
+// $Id: socket.C,v 1.25 2001/06/07 20:13:54 anker Exp $
 
 // ORIGINAL COPYRIGHT DISCLAIMER
 // /////////////////////////////
@@ -1255,5 +1255,9 @@ namespace BALL
 		delete rdbuf();
 		init(0);
 	}
+
+#	ifdef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/SYSTEM/socket.iC>
+#	endif
 
 } // namespace BALL
