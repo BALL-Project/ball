@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.56 2004/05/08 20:46:41 amoll Exp $
+// $Id: molecularControl.C,v 1.57 2004/06/13 21:59:07 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -45,6 +45,19 @@ MolecularControl::SelectableListViewItem::SelectableListViewItem(QListView* pare
 	setText(1, type);
 }
 
+void MolecularControl::SelectableListViewItem::setSelected(bool state)
+{
+	QCheckListItem::setSelected(state);
+	if (!state)
+	{
+		QListViewItem* child = firstChild();
+		while (child != 0)
+		{
+			child->setSelected(false);
+			child = child->nextSibling();
+		}
+	}
+}
 
 void MolecularControl::SelectableListViewItem::stateChange(bool state)
 	throw()

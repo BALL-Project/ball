@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.30 2004/03/13 12:49:24 amoll Exp $
+// $Id: molecularControl.h,v 1.31 2004/06/13 21:58:47 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -88,6 +88,12 @@ namespace BALL
 
 				/// Get the associated Composite pointer
 				Composite* getComposite() { return composite_;};
+
+ 				/** Overriden function, to deselect child items, if this item is deselected.
+				 		This is necessary because, when using the SHIFT-modifier in selection,
+						also the collapsed child items get selected.
+				*/
+				virtual void setSelected (bool state);
 
 				protected:
 
