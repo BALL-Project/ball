@@ -1,12 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.19 2003/11/25 12:00:20 amoll Exp $
+// $Id: molecularControl.C,v 1.20 2003/12/04 01:28:10 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/DIALOGS/atomProperties.h>
+#include <BALL/VIEW/DIALOGS/bondProperties.h>
 #include <BALL/VIEW/DIALOGS/transformationDialog.h>
 #include <BALL/KERNEL/system.h>
 #include <qmenubar.h>
@@ -238,6 +239,7 @@ void MolecularControl::buildContextMenu(Composite& composite)
 	if (RTTI::isKindOf<Atom>(composite))
 	{
 		context_menu_.insertItem("Properties", this, SLOT(atomProperties()), 0, ATOM__PROPERTIES);
+		context_menu_.insertItem("Show Bonds", this, SLOT(bondProperties()), 0, BOND__PROPERTIES);
 	}
 
 	context_menu_.insertSeparator();
@@ -255,6 +257,12 @@ void MolecularControl::atomProperties()
 	CompositeMessage* message = new CompositeMessage(
 			*context_composite_, CompositeMessage::CHANGED_COMPOSITE_AND_UPDATE_MOLECULAR_CONTROL);
 	notify_(message);
+}
+
+void MolecularControl::bondProperties()
+{
+	BondProperties bs((Atom*) context_composite_, this);
+	bs.exec();
 }
 	
 void MolecularControl::buildBonds()
