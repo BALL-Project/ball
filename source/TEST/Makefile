@@ -31,6 +31,7 @@ EXECUTABLES = \
 	Limits_test\
   Line3_test\
 	List_test\
+	Matrix44_test\
 	NumericalSAS_test\
 	Options_test\
 	PDBFile_test\
@@ -124,6 +125,9 @@ Line3_test:	Line3_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 List_test:	List_test.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+Matrix44_test:	Matrix44_test.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
 NucleicAcid_test:	NucleicAcid_test.o
