@@ -1,4 +1,4 @@
-// $Id: selector.h,v 1.7 2000/02/17 00:30:42 oliver Exp $
+// $Id: selector.h,v 1.8 2000/03/14 19:38:06 oliver Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -239,10 +239,14 @@ namespace BALL
 		/**	@name	Constructors and Destructors
 		*/
 		//@{
-		
+		BALL_CREATE_NODEEP(Selector)
 		/**	Default constructor.
 		*/
 		Selector();
+
+		/**	Copy constructor.
+		*/
+		Selector(const Selector& selector);
 
 		/**
 		*/
@@ -320,7 +324,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 	{
 		public:
-
+		BALL_CREATE_NODEEP(AtomNamePredicate)
 		virtual bool operator () (const Atom& atom) const;
 	};
 
@@ -330,7 +334,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 	{
 		public:
-
+		BALL_CREATE_NODEEP(AtomTypePredicate)
 		virtual bool operator () (const Atom& atom) const;
 	};
 
@@ -340,7 +344,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 	{
 		public:
-
+		BALL_CREATE_NODEEP(ElementPredicate)
 		virtual bool operator () (const Atom& atom) const;
 	};
 
@@ -350,7 +354,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 	{
 		public:
-
+		BALL_CREATE_NODEEP(ResiduePredicate)
 		virtual bool operator () (const Atom& atom) const;
 	};
 
@@ -360,7 +364,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 	{
 		public:
-
+		BALL_CREATE_NODEEP(ResidueIDPredicate)
 		virtual bool operator () (const Atom& atom) const;
 	};
 
@@ -370,7 +374,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 	{
 		public:
-
+		BALL_CREATE_NODEEP(ProteinPredicate)
 		virtual bool operator () (const Atom& atom) const;
 	};
 
@@ -380,7 +384,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 	{
 		public:
-
+		BALL_CREATE_NODEEP(ChainPredicate)
 		virtual bool operator () (const Atom& atom) const;
 	};
 
@@ -390,7 +394,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 	{
 		public:
-
+		BALL_CREATE_NODEEP(SecondaryStructurePredicate)
 		virtual bool operator () (const Atom& atom) const;
 	};
 
@@ -400,7 +404,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 	{
 		public:
-
+		BALL_CREATE_NODEEP(SolventPredicate)
 		virtual bool operator () (const Atom& atom) const;
 	};
 
@@ -410,7 +414,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 	{
 		public:
-
+		BALL_CREATE_NODEEP(MoleculePredicate)
 		virtual bool operator () (const Atom& atom) const;
 	};
 
@@ -420,7 +424,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 	{
 		public:
-
+		BALL_CREATE_NODEEP(BackBonePredicate)
 		virtual bool operator () (const Atom& atom) const;
 	};
 
@@ -431,7 +435,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 	{
 		public:
-
+		BALL_CREATE_NODEEP(NucleicAcidPredicate)
 		virtual bool operator () (const Atom& atom) const;
 	};
 
@@ -441,7 +445,7 @@ namespace BALL
 		:	public	ExpressionPredicate
 	{
 		public:
-
+		BALL_CREATE_NODEEP(NucleotidePredicate)
 		virtual bool operator () (const Atom& atom) const;
 	};
 

@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.9 2000/03/12 22:24:50 oliver Exp $
+// $Id: persistenceManager.h,v 1.10 2000/03/14 19:37:56 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -765,8 +765,8 @@ namespace BALL
 		//
 		ObjectList	object_in_;
 
-		std::ostream*	os;
-		std::istream*	is;
+		std::ostream*	ostr_;
+		std::istream*	istr_;
 	};
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.6 2000/02/17 00:30:38 oliver Exp $
+// $Id: property.h,v 1.7 2000/03/14 19:37:57 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -77,6 +77,7 @@ namespace BALL
 		*/
 		//@{
 
+		BALL_CREATE_NODEEP(NamedProperty)
 		/**	Standard constructor.
 				Creates an object of type NONE. Use this constructor to create
 				it properties with user defined names.
@@ -137,7 +138,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		NamedProperty(const NamedProperty&, bool deep = true);
+		NamedProperty(const NamedProperty&);
 
 		/**	Destructor .
 				The destructor destructs the contained data in the case of STRING-type 
