@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmEEF1.C,v 1.9 2002/02/27 12:21:38 sturm Exp $
+// $Id: charmmEEF1.C,v 1.10 2003/04/30 08:12:08 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/charmmEEF1.h>
@@ -16,6 +16,7 @@ namespace BALL
 	CharmmEEF1::CharmmEEF1() 
 		throw()
 		:	ParameterSection(),
+			number_of_atom_types_(0),
 			V_(0),
 			dG_ref_(0),
 			dG_free_(0),
@@ -30,6 +31,7 @@ namespace BALL
 
 	CharmmEEF1::CharmmEEF1(const CharmmEEF1& charmm_EEF1) throw()
 		:	ParameterSection(charmm_EEF1),
+			number_of_atom_types_(charmm_EEF1.number_of_atom_types_),
 			V_(0),
 			dG_ref_(0),
 			dG_free_(0),

@@ -1,8 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.h,v 1.17 2003/04/29 16:07:15 oliver Exp $
-// Molecular Mechanics: Charmm force field, bond stretch component
+// $Id: charmmNonBonded.h,v 1.18 2003/04/30 08:12:07 oliver Exp $
+//
+// Molecular Mechanics: Charmm force field, non-bonded component
+// (van der Waals, electrostatics, EEF1 solvation)
 
 #ifndef BALL_MOLMEC_CHARMM_NONBONDED_H
 #define BALL_MOLMEC_CHARMM_NONBONDED_H
@@ -33,7 +35,10 @@
 
 namespace BALL 
 {
-	/**	Charmm NonBonded (VdW + Electrostatic) component
+	/**	Charmm NonBonded component.
+		This force field component implements the non-bonded interactions
+		in the CHARMM force field: van-der-Waals interaction, electrostatics,
+		and solvation (in EEF1 only).
 			
     	\ingroup  CHARMM
 	*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: CharmmFF_test.C,v 1.10 2003/04/30 06:05:18 oliver Exp $
+// $Id: CharmmFF_test.C,v 1.11 2003/04/30 08:12:08 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -17,7 +17,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.10 2003/04/30 06:05:18 oliver Exp $")
+START_TEST(CharmmFF, "$Id: CharmmFF_test.C,v 1.11 2003/04/30 08:12:08 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -44,7 +44,6 @@ CHECK(specificSetup())
 	a.specificSetup();
 RESULT
 
-/*
 FragmentDB frag_db;
 {
 	// read the PDB file containing a single GLY
@@ -1137,7 +1136,6 @@ CHECK(CharmmTorsion::CharmmTorsion(const CharmmTorsion& ct))
 	CharmmTorsion ct;
 	CharmmTorsion ct2(ct);
 RESULT
-*/
 
 CHECK(void* CharmmNonBonded::create())
 	CharmmNonBonded cnb;
@@ -1152,28 +1150,8 @@ CHECK(void* CharmmNonBonded::create())
 	delete ffc_clone;
 	STATUS("deleted")
 	CharmmFF cff;
-	TEST_NOT_EQUAL(cff.getComponent("Charmm NonBonded"), 0)
+	TEST_NOT_EQUAL(cff.getComponent("CHARMM NonBonded"), 0)
 RESULT
-
-CHECK(Copying force field with a ForceFieldComponent)
-	ForceField ff;
-	ff.insertComponent(new ForceFieldComponent);
-	TEST_EQUAL(ff.countComponents(), 1)
-	ForceField* ff_ptr = new ForceField(ff);
-	TEST_EQUAL(ff_ptr->countComponents(), 1)
-	delete ff_ptr;
-RESULT
-
-/* ???
-CHECK(Copying force field with a CharmmNonBonded)
-	ForceField ff;
-	ff.insertComponent(new CharmmNonBonded);
-	TEST_EQUAL(ff.countComponents(), 1)
-	ForceField* ff_ptr = new ForceField(ff);
-	TEST_EQUAL(ff_ptr->countComponents(), 1)
-	delete ff_ptr;
-RESULT
-*/
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
