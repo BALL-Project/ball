@@ -1,11 +1,11 @@
-// $Id: LineBasedFile_test.C,v 1.5 2000/10/15 22:35:30 amoll Exp $
+// $Id: LineBasedFile_test.C,v 1.6 2000/10/16 15:11:53 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/lineBasedFile.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: LineBasedFile_test.C,v 1.5 2000/10/15 22:35:30 amoll Exp $")
+START_TEST(class_name, "$Id: LineBasedFile_test.C,v 1.6 2000/10/16 15:11:53 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -45,18 +45,25 @@ LineBasedFile fx;
 CHECK(LineBasedFile(const LineBasedFile& f) throw())
 	LineBasedFile f1("data/LineBasedFile_test.txt");
 	f1.readLine();
-	LineBasedFile f2(f1);
+	TEST_EQUAL(f1.getLine(), "line1")
+	f1.close();
 
+	LineBasedFile f2(f1);
 	TEST_EQUAL(f2.getLineNumber(), 1)
 	TEST_EQUAL(f2.getLine(), "line1")
+	f2.readLine();
+	TEST_EQUAL(f2.getLine(), "/0/ /1/ /2 2//3/")
 RESULT
 
 CHECK(LineBasedFile& operator = (const LineBasedFile& file) throw())
 	LineBasedFile f1("data/LineBasedFile_test.txt");
 	f1.readLine();
-	LineBasedFile f2(f1);
+	TEST_EQUAL(f1.getLine(), "line1")
+
+	LineBasedFile f2;
+	f2 = f1;/*
 	TEST_EQUAL(f2.getLineNumber(), 1)
-	TEST_EQUAL(f2.getLine(), "line1")
+	TEST_EQUAL(f2.getLine(), "line1")*/
 RESULT
 
 CHECK(clear() throw())
