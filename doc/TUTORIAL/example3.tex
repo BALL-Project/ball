@@ -83,15 +83,15 @@ from their optimal position in the given structure. We can relax those
 hydrogen positions using a molecular mechanics calculation.
 We will use the AMBER force field\cite{AMBER95} and optimize the hydrogen 
 positions while keeping the heavy atoms rigid. The AMBER force field is
-implemented in the \class{AmberFF} class. Instantiating a force field and
+implemented in the \class{Amberamber} class. Instantiating a force field and
 setting up a calculation is very simple:\index{AMBER force field}
 
 \begin{lstlisting}{}
-	AmberFF amber(S);
+	Amberamber amber(S);
 \end{lstlisting}
 
 \noindent
-This constructor call creates a new \class{AmberFF}, reads the parameter
+This constructor call creates a new \class{Amberamber}, reads the parameter
 file (the default one, \file{amber94.ini}, which corresponds to the AMBER
 file {\tt parm94.dat}), and the parameters suitable for the system.
 This particular instance of the force field is now {\em bound} to the 
@@ -134,12 +134,12 @@ energy minimizer instances are bound to the force field. Again, we can use a
 constructor to do most of the work:
 
 \begin{lstlisting}{}
-	ConjugateGradientMinimizer cgm(FF);
+	ConjugateGradientMinimizer cgm(amber);
 	cgm.setEnergyOutputFrequency(1);
 	cgm.setMaxGradient(5.0);
-	std::cout << "Minimizer options:" << std::endl 
-						<< cgm.options << std::endl;
-	cg.minimize(100);
+	std::cout << "Minimizer options:" << std::endl;
+	cgm.options.dump();
+	cgm.minimize(100);
 \end{lstlisting}
 
 \noindent
@@ -187,9 +187,9 @@ let the force field know that you want to set up a box with water around the
 current system:
 
 \begin{lstlisting}{}
-	FF.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
-	FF.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "true";
-	FF.setup()
+	amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
+	amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] = "true";
+	amber.setup(S);
 \end{lstlisting}
 
 \noindent
@@ -205,10 +205,11 @@ We can now instantiate the molecular dynamics object, set up a run at 300~K and
 perform a few  MD simulation steps:
 
 \begin{lstlisting}{}
-	CanonicalMD md(FF);
-	md.setTemperature(300);
+	CanonicalMD md(amber);
+	md.setReferenceTemperature(300);
 	md.simulate(10);
-	std::cout << "Simulation settings:" << md.options << std::endl;
+	std::cout << "Simulation settings:" << std::endl;
+	md.options.dump();
 \end{lstlisting}
 
 \noindent
