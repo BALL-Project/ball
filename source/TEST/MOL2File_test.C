@@ -1,4 +1,4 @@
-// $Id: MOL2File_test.C,v 1.2 2000/05/23 05:43:27 oliver Exp $
+// $Id: MOL2File_test.C,v 1.3 2000/05/23 14:18:46 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.2 2000/05/23 05:43:27 oliver Exp $")
+START_TEST(MOL2File, "$Id: MOL2File_test.C,v 1.3 2000/05/23 14:18:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -85,6 +85,7 @@ CHECK(MOL2File::write(const System& system))
 	NEW_TMP_FILE(filename)
 	MOL2File f(filename, std::ios::out);
 	f.write(S);
+	f.close();
 	
 	TEST_FILE(filename.c_str(), "data/MOL2File_test.mol2", true)
 RESULT
@@ -99,7 +100,37 @@ CHECK(MOL2File::MOL2File& operator >> (System& system))
 RESULT
 
 CHECK(MOL2File::MOL2File& operator << (const System& system))
-  //BAUSTELLE
+  Molecule* m = new Molecule;
+	m->setName("MOL");
+	System S;
+	S.setName("SYSTEM");
+	S.insert(*m);
+	Atom* a1 = new Atom();
+	Atom* a2 = new Atom();
+	m->insert(*a1);
+	m->insert(*a2);
+
+	a1->setName("A1");
+	a1->setElement(PTE[Element::N]);
+	a1->setCharge(0.5);
+	a1->setPosition(Vector3(0.1, 0.2, 0.3));
+
+	a2->setName("A2");
+	a2->setElement(PTE[Element::O]);
+	a2->setCharge(-0.5);
+	a2->setPosition(Vector3(0.5, 0.6, 0.7));
+	
+	a1->createBond(*a2);
+	a1->getBond(*a2)->setOrder(Bond::ORDER__DOUBLE);
+	
+
+	String filename;
+	NEW_TMP_FILE(filename)
+	MOL2File f(filename, std::ios::out);
+	f << write(S);	
+	f.close();
+	
+	TEST_FILE(filename.c_str(), "data/MOL2File_test.mol2", true)
 RESULT
 
 /////////////////////////////////////////////////////////////
