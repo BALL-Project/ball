@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.1.2.11 2002/12/01 13:40:47 oliver Exp $
+dnl    $Id: configure.ac,v 1.1.2.12 2002/12/04 19:59:01 anhi Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -6,7 +6,8 @@ dnl
 dnl    some initialization stuff...
 dnl 
 AC_INIT(BALL, 1.0, ball-bugs@bioinf.uni-sb.de)
-AC_CONFIG_HEADER([
+AM_INIT_AUTOMAKE(foreign)
+AM_CONFIG_HEADER([
 	config.h:config/config.h.in
 ])
 AC_LANG(C++)
@@ -219,12 +220,16 @@ CF_MSG_PATH_PROG(GREP,grep,no)
 CF_MSG_PATH_PROG(EGREP,egrep,no)
 CF_MSG_PATH_PROG(CAT,cat,no)
 
+AC_SUBST(MV)
+AC_SUBST(RM)
+
 dnl
 dnl 		Check whether the default shell (/bin/sh) understands "echo -e".
 dnl
 CF_CHECK_ECHO
 CF_CHECK_FIND
 
+AC_SUBST(ECHO)
 dnl
 dnl   	Determine OS and architecture and all this stuff.
 dnl
@@ -363,6 +368,7 @@ dnl
 dnl   Check for the XDR functions: their interface and the libraries they're hidden in.
 dnl			XDR is required for a portable, platform-independent data exchange.
 CF_CHECK_XDR
+AM_CONDITIONAL(BALL_HAS_XDR, test x$BALL_NO_XDR = xfalse)
 
 dnl
 dnl		We need Flex and Bison for a couple of parsers hideen in BALL (SMILES, Expression, ParsedFct)
@@ -394,7 +400,7 @@ dnl
 dnl FFTW -- Fastest Fourier Transform in the West
 dnl
 CF_CHECK_FFTW_SUPPORT
-
+AM_CONDITIONAL(BALL_HAS_FFTW, test x$BALL_HAS_FFTW = xtrue)
 
 
 
@@ -402,11 +408,13 @@ dnl
 dnl		BALLVIEW
 dnl
 CF_BALLVIEW
+AM_CONDITIONAL(USE_BALLVIEW, test x$USE_BALLVIEW = xtrue)
 
 dnl
 dnl		Python extension support
 dnl
 CF_PYTHON
+AM_CONDITIONAL(PYTHON_SUPPORT, test x$PYTHON_SUPPORT = xtrue)
 
 dnl
 dnl		include the default BALL include path
@@ -482,6 +490,8 @@ AC_SUBST(DEPENDENCY_GREPS)  dnl command line to remove non-BALL headers from the
 dnl         COMPILER
 
 AC_SUBST(CXX)               dnl C++ compiler (absolute path)
+CC=CXX
+AC_SUBST(CC)
 AC_SUBST(CXXFLAGS)          dnl C++ compiler flags
 AC_SUBST(ADD_CXXFLAGS)      dnl additional C++ compiler falgs (not passed on to makedepend)
 AC_SUBST(LIB_CXXFLAGS)			dnl C++ compiler flags used during compilation of the library only
@@ -605,21 +615,31 @@ else
 	BINFMT_PATH=""
 fi
 
-AC_OUTPUT([
-	Makefile.tmp:config/Makefile.in
-	config.mak.tmp:config/config.mak.in 
-	common.mak.tmp:config/common.mak.in 
-])
+dnl AC_OUTPUT([
+dnl 	Makefile.tmp:config/Makefile.in
+dnl 	config.mak.tmp:config/config.mak.in 
+dnl	common.mak.tmp:config/common.mak.in 
+dnl ])
 
-if test "${MULTI_BUILD}" = "true" ; then
-	${MV} Makefile.tmp ${BINFMT}/Makefile
-	${MV} common.mak.tmp ${BINFMT}/common.mak
-	${MV} config.mak.tmp ${BINFMT}/config.mak
-else 
-	${MV} Makefile.tmp Makefile
-	${MV} common.mak.tmp common.mak
-	${MV} config.mak.tmp config.mak
-fi
+dnl if test "${MULTI_BUILD}" = "true" ; then
+dnl 	${MV} Makefile.tmp ${BINFMT}/Makefile
+dnl 	${MV} common.mak.tmp ${BINFMT}/common.mak
+dnl 	${MV} config.mak.tmp ${BINFMT}/config.mak
+dnl else 
+dnl 	${MV} Makefile.tmp Makefile
+dnl 	${MV} common.mak.tmp common.mak
+dnl 	${MV} config.mak.tmp config.mak
+dnl fi
+
+AC_OUTPUT([Makefile COMMON/Makefile CONCEPT/Makefile DATATYPE/Makefile ENERGY/Makefile FORMAT/Makefile KERNEL/Makefile MATHS/Makefile \
+						MOLMEC/Makefile MOLMEC/AMBER/Makefile MOLMEC/CHARMM/Makefile MOLMEC/COMMON/Makefile MOLMEC/MDSIMULATION/Makefile \
+						MOLMEC/MINIMIZATION/Makefile MOLMEC/PARAMETER/Makefile NMR/Makefile QSAR/Makefile SOLVATION/Makefile STRUCTURE/Makefile \
+						SYSTEM/Makefile VIEW/Makefile VIEW/DATATYPE/Makefile VIEW/FUNCTOR/Makefile VIEW/GUI/Makefile VIEW/GUI/DIALOGS/Makefile \
+						VIEW/GUI/FUNCTOR/Makefile VIEW/GUI/KERNEL/Makefile VIEW/GUI/PRIMITIV/Makefile VIEW/GUI/WIDGETS/Makefile VIEW/KERNEL/Makefile \
+						VIEW/PRIMITIV/Makefile MOLVIEW/Makefile MOLVIEW/COMMON/Makefile MOLVIEW/FUNCTOR/Makefile MOLVIEW/GUI/Makefile \
+						MOLVIEW/GUI/DIALOGS/Makefile MOLVIEW/GUI/FUNCTOR/Makefile MOLVIEW/GUI/KERNEL/Makefile MOLVIEW/GUI/PRIMITIV/Makefile \
+						MOLVIEW/GUI/WIDGETS/Makefile MOLVIEW/KERNEL/Makefile MOLVIEW/PRIMITIV/Makefile TEST/Makefile TUTORIAL/Makefile EXAMPLES/Makefile])
+ 
 
 dnl
 dnl    copy config.h to the includes directory
