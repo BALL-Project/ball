@@ -1,10 +1,11 @@
-// $Id: pairExpInteractionEnergyProcessor.C,v 1.16 2002/01/15 02:00:55 oliver Exp $
+// $Id: pairExpInteractionEnergyProcessor.C,v 1.16.2.1 2002/11/19 01:32:19 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MATHS/surface.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
+#include <BALL/SYSTEM/path.h>
 
 #include <BALL/SOLVATION/pairExpInteractionEnergyProcessor.h>
 #include <BALL/SOLVATION/solventParameter.h>
@@ -44,12 +45,12 @@ namespace BALL
 	const double PairExpInteractionEnergyProcessor::Default::C2
 		= 0.214;
 	const char* PairExpInteractionEnergyProcessor::Default::CLAVERIE_FILENAME
-		= "claverie.ini";
+		= "solvation/Claverie-AMBER.ini";
 	const bool PairExpInteractionEnergyProcessor::Default::USE_RDF = false;
 	const char* PairExpInteractionEnergyProcessor::Default::RDF_FILENAME
-		= "rdf.ini";
+		= "solvation/RDF-AMBER.ini";
 	const char* PairExpInteractionEnergyProcessor::Default::SOLVENT_FILENAME
-		= "solvent.ini";
+		= "solvents/PCM-water.ini";
 	const Size PairExpInteractionEnergyProcessor::Default::SURFACE_TYPE
 		= SURFACE__SAS;
 	const char* PairExpInteractionEnergyProcessor::Default::SURFACE_FILENAME
@@ -137,14 +138,32 @@ namespace BALL
 		alpha_ = options.getReal(Option::ALPHA);
 		C1_ = options.getReal(Option::C1);
 		C2_ = options.getReal(Option::C2);
-		String claverie_filename = options.get(Option::CLAVERIE_FILENAME);
+		Path path;
+		String claverie_filename 
+			= path.find(options.get(Option::CLAVERIE_FILENAME));
+		if (claverie_filename == "")
+		{
+			claverie_filename = options.get(Option::CLAVERIE_FILENAME);
+		}
 		bool use_rdf = options.getBool(Option::USE_RDF);
 		// the file containing the rdf descriptions
-		String rdf_filename = options.get(Option::RDF_FILENAME);
+		String rdf_filename = path.find(options.get(Option::RDF_FILENAME));
+		if (rdf_filename == "")
+		{
+			rdf_filename = options.get(Option::RDF_FILENAME);
+		}
 		// the file contacining the solvent description
-		String solvent_filename = options.get(Option::SOLVENT_FILENAME);
+		String solvent_filename = path.find(options.get(Option::SOLVENT_FILENAME));
+		if (solvent_filename == "")
+		{
+			solvent_filename = options.get(Option::SOLVENT_FILENAME);
+		}
 		Size surface_type = (Size)options.getInteger(Option::SURFACE_TYPE);
-		String surface_filename = options.get(Option::SURFACE_FILENAME);
+		String surface_filename = path.find(options.get(Option::SURFACE_FILENAME));
+		if (surface_filename == "")
+		{
+			surface_filename = options.get(Option::SURFACE_FILENAME);
+		}
 
 		// define the solvent
 		ForceFieldParameters ffparam(solvent_filename);

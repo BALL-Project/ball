@@ -1,7 +1,8 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.16 2002/01/15 02:00:55 oliver Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.16.2.1 2002/11/19 01:32:19 anker Exp $
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/KERNEL/residue.h>
 #include <BALL/MATHS/surface.h>
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -23,6 +24,8 @@ namespace BALL
 		= "rdf_filename";
 	const char* Pair6_12InteractionEnergyProcessor::Option::SOLVENT_FILENAME
 		= "solvent_filename";
+	const char* Pair6_12InteractionEnergyProcessor::Option::LJ_FILENAME
+		= "lj_flename";
 	const char* Pair6_12InteractionEnergyProcessor::Option::SURFACE_TYPE
 		= "surface_type";
 	const char* Pair6_12InteractionEnergyProcessor::Option::SURFACE_FILENAME
@@ -32,9 +35,11 @@ namespace BALL
 	const Size Pair6_12InteractionEnergyProcessor::Default::VERBOSITY = 1;
 	const bool Pair6_12InteractionEnergyProcessor::Default::USE_RDF = false;
 	const char* Pair6_12InteractionEnergyProcessor::Default::RDF_FILENAME
-		= "data/solvation/RDF-AMBER.ini";
+		= "solvation/RDF-AMBER.ini";
 	const char* Pair6_12InteractionEnergyProcessor::Default::SOLVENT_FILENAME
-		= "data/solvents/PCM-water.ini";
+		= "solvents/PCM-water.ini";
+	const char* Pair6_12InteractionEnergyProcessor::Default::LJ_FILENAME
+		= "Amber/amber94.ini";
 	const Size Pair6_12InteractionEnergyProcessor::Default::SURFACE_TYPE
 		= SURFACE__SAS;
 	const char* Pair6_12InteractionEnergyProcessor::Default::SURFACE_FILENAME
@@ -52,6 +57,7 @@ namespace BALL
 		options.setDefaultInteger(Option::USE_RDF, Default::USE_RDF);
 		options.setDefault(Option::RDF_FILENAME, Default::RDF_FILENAME);
 		options.setDefault(Option::SOLVENT_FILENAME, Default::SOLVENT_FILENAME);
+		options.setDefault(Option::LJ_FILENAME, Default::LJ_FILENAME);
 		options.setDefault(Option::SURFACE_TYPE, Default::SURFACE_TYPE);
 		options.setDefault(Option::SURFACE_FILENAME, Default::SURFACE_FILENAME);
 	}
@@ -185,6 +191,11 @@ namespace BALL
 		{
 			solvent_filename = options.get(Option::SOLVENT_FILENAME);
 		}
+		String lj_filename = path.find(options.get(Option::LJ_FILENAME));
+		if (lj_filename == "")
+		{
+			lj_filename = options.get(Option::LJ_FILENAME);
+		}
 		Size surface_type = (Size)options.getInteger(Option::SURFACE_TYPE);
 		String surface_filename = options.get(Option::SURFACE_FILENAME);
 
@@ -241,8 +252,14 @@ namespace BALL
 			}
 		}
 
+		ForceFieldParameters ljparam(lj_filename);
 		LennardJones lennard_jones;
-		lennard_jones.extractSection(ffparam, "LennardJones");
+		if (lennard_jones.extractSection(ljparam, "LennardJones") == false)
+		{
+			Log.error() << "Pair6_12InteractionEnergyProcessor::finish(): "
+				<< "Cannot read Lennard-Jones parameters." << endl;
+			return 0.0;
+		}
 
 		// iterate over all different atom types in the solvent
 
@@ -389,6 +406,8 @@ namespace BALL
 					// DEBUG
 					Log.error() << "TYPENAME = " << solute_iterator->getTypeName() << endl;
 					Log.error() << "FULLNAME = " << solute_iterator->getFullName() << endl;
+					Log.error() << "RESIDUE ID = " << solute_iterator->getResidue()->getID() << endl;
+					// /DEBUG
 					return false;
 				}
 
@@ -398,11 +417,12 @@ namespace BALL
 				// DEBUG
 				if (verbosity > 9)
 				{
-					Log.info() << "A_ij (" << solute_iterator->getElement().getSymbol() <<
-						"," << solvent_atom.element_symbol << "): " << A_ij << endl;
-					Log.info() << "B_ij (" << solute_iterator->getElement().getSymbol() <<
-						"," << solvent_atom.element_symbol << "): " << B_ij << endl;
+					Log.info() << "A_ij (" << solute_iterator->getElement().getSymbol() 
+						<< "," << solvent_atom.element_symbol << "): " << A_ij << endl;
+					Log.info() << "B_ij (" << solute_iterator->getElement().getSymbol() 
+						<< "," << solvent_atom.element_symbol << "): " << B_ij << endl;
 				}
+				// /DEBUG
 
 
 				// iterate over all surface points

@@ -1,4 +1,4 @@
-// $Id: solventParameter.C,v 1.8 2001/12/30 13:28:55 sturm Exp $
+// $Id: solventParameter.C,v 1.8.2.1 2002/11/19 01:32:20 anker Exp $
 
 #include <BALL/SOLVATION/solventParameter.h>
 
@@ -79,20 +79,20 @@ namespace BALL
 		return solvent_descriptor_;
 	}
 
-        const String& SolventParameter::getSolventName() const throw()
+	const String& SolventParameter::getSolventName() const throw()
 	{
-	        return name_;
+		return name_;
 	}
 
-        const std::vector<SolventAtomDescriptor>& SolventParameter::getSolventDescription() const throw()
-        {
-                return solvent_atoms_;
-        }  
+	const std::vector<SolventAtomDescriptor>& SolventParameter::getSolventDescription() const throw()
+	{
+		return solvent_atoms_;
+	}  
 
-        const float& SolventParameter::getSolventDensity() const throw()
-        {
-                return number_density_;
-        }
+	const float& SolventParameter::getSolventDensity() const throw()
+	{
+		return number_density_;
+	}
 
 	bool SolventParameter::extractSection(ForceFieldParameters& parameters,
 			const String& section_name) throw()
@@ -106,10 +106,12 @@ namespace BALL
 		// extract the basis information
 		ParameterSection::extractSection(parameters, section_name);
 
-		// check whether all variables we need are defined, terminate otherwi
-		if (!hasVariable("radius") || !hasVariable("number_of_atoms") || !hasVariable("element_symbol"))
+		// check whether all variables we need are defined, terminate otherwise
+		if (!hasVariable("radius") || !hasVariable("number_of_atoms") 
+				|| !hasVariable("element_symbol"))
 		{
-			Log.error() << "SolventParameter::extractSection(): Variable missing." << endl;
+			Log.error() << "SolventParameter::extractSection(): "
+				<< "Variable missing." << endl;
 			return false;
 		}
 		else
@@ -120,7 +122,8 @@ namespace BALL
 			}
 			else
 			{
-				Log.warn() << "SolventParameter::extractSection(): no name given." << endl;
+				Log.warn() << "SolventParameter::extractSection(): "
+					<< "no name given." << endl;
 			}
 
 			if (options.has("number_density"))
@@ -129,7 +132,8 @@ namespace BALL
 			}
 			else
 			{
-				Log.warn() << "SolventParameter::extractSection(): " << "no number density given." << endl;
+				Log.warn() << "SolventParameter::extractSection(): " 
+					<< "no number density given." << endl;
 			}
 
 			AtomTypes& atom_types = parameters.getAtomTypes();         
@@ -149,15 +153,18 @@ namespace BALL
 					solvent_atoms_[i].type = atom_types.getType(type_name);
 					solvent_atoms_[i].element_symbol = getValue(i, index_element_symbol);
 					solvent_atoms_[i].radius = getValue(i, index_radius).toFloat();
-					solvent_atoms_[i].number_of_atoms = getValue(i, index_number_of_atoms).toInt();
+					solvent_atoms_[i].number_of_atoms 
+						= getValue(i, index_number_of_atoms).toInt();
 				}
 				else
 				{
-					Log.warn() << "SolventParameter::extractSection(): " << "Cannot assign atom type." << endl;
+					Log.warn() << "SolventParameter::extractSection(): " 
+						<< "Cannot assign atom type." << endl;
 				}
 			}
 			// build descriptor 
-			solvent_descriptor_ = SolventDescriptor(name_, number_density_, solvent_atoms_);
+			solvent_descriptor_ 
+				= SolventDescriptor(name_, number_density_, solvent_atoms_);
 
 			return true;
 		}
