@@ -1,4 +1,4 @@
-// $Id: bond.C,v 1.5 1999/12/30 18:05:32 oliver Exp $
+// $Id: bond.C,v 1.6 2000/04/17 13:49:32 amoll Exp $
 
 #include <BALL/KERNEL/bond.h>
 
@@ -260,11 +260,6 @@ namespace BALL
 	void Bond::setName(const String& name)
 	{
 		name_ = name;
-	}
-
-	String& Bond::getName()
-	{
-		return name_;
 	}
 
 	const String& Bond::getName() const

@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.8 2000/04/13 23:05:46 amoll Exp $
+// $Id: bond.h,v 1.9 2000/04/17 13:49:35 amoll Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -62,8 +62,8 @@ namespace BALL
 			
 			@memo    Bond class (BALL kernel framework)
 			@author  $Author: amoll $
-			@version $Revision: 1.8 $
-			@date    $Date: 2000/04/13 23:05:46 $
+			@version $Revision: 1.9 $
+			@date    $Date: 2000/04/17 13:49:35 $
 	*/
 	class Bond
 		: public Composite,
@@ -425,13 +425,6 @@ namespace BALL
 			*/
 			void setName(const String& name);
 
-			/** Mutable inspection of the bond's name.
-					Access a mutable reference to the name of {\em *this} bond.
-
-					@return  String& - mutable reference to the name of {\em *this} bond
-					@see     Bond::setName
-			*/
-			String& getName();
 
 			/** Constant inspection of the bond's name.
 					Access a constant reference to the name of {\em *this} bond.
