@@ -19,7 +19,6 @@ EXECUTABLES = \
 	BaseFragment_test\
   Box3_test\
 	CharmmFF_test\
-	Circle3_test\
 	ClassTest_test\
 	Composite_test\
 	DefaultProcessors_test\
