@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.37 2001/12/29 01:07:05 oliver Exp $
+// $Id: file.h,v 1.38 2001/12/29 17:58:29 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -73,6 +73,25 @@ namespace BALL
 		
 		/// Find a transformation matching a given file name
 		String findTransformation(const String& name) const;
+
+		/** Apply a suitable transformation to the string.
+				This first calls \Ref{findTransformation} to determine the
+				command string that should be applied. The {\tt name} argument
+				is then replaced with the contents of the matching command in the 
+				TransformationManager's map. The following rules apply (in that order):
+				\begin{itemize}
+					\item {\tt %s} is replaced by the full content of {\tt name}
+					\item {\tt %f} is replaced by the full content of {\tt name}, without any file type suffix (i.e. anything after
+								the last dot in the filename is removed)
+					\item {\tt %f[suffix]} is replaced by the previous content of {\tt name} without the {\tt suffix}
+					\item {\tt %b} and {\tt %b[suffix]) like {\tt %f} and {\tt %f[suffix]}, except that the
+								path is removed as well, so it is only the {\em base name} of the file
+					\item {\tt %p} the path to the file
+					\item {\tt %t} a temporary file name (all occurences of {\tt %t} are replace with the same file name for
+												the same invocation of \Ref{transform}, but different file names on subsequent invocations)
+				\end{itemize}
+		*/
+		String transform(const String& name);
 		//@}
 
 		protected:
@@ -420,11 +439,17 @@ namespace BALL
 		*/
 		//@{
 
-		/**	Access the TransformationManager.
+		/**	Mutable access the TransformationManager.
 				\Ref{File} defines a static instance of \Ref{TransformationManager} to
 				handle on-the-fly conversions of files (e.g. compression, charset conversion, etc.).
 		*/
 		TransformationManager& getTransformationManager();
+
+		/**	Constant access to the TransformationManager.
+				\Ref{File} defines a static instance of \Ref{TransformationManager} to
+				handle on-the-fly conversions of files (e.g. compression, charset conversion, etc.).
+		*/
+		const TransformationManager& getTransformationManager() const;
 		
 		/**
 		*/
@@ -437,9 +462,11 @@ namespace BALL
 		/**
 		*/
 		static bool isTransformationEnabled(Transformation transformation);
+
 		/**	
 		*/
 		static void registerTransformation(const String& pattern, const String& exec);
+
 		/**	
 		*/
 		static void unregisterTransformation(const String& pattern);
@@ -560,8 +587,9 @@ namespace BALL
 		OpenMode	open_mode_;
 		bool			is_open_;
 		bool			is_temporary_;
-		static TransformationManager transformation_manager_;
-		static Size	transformation_methods_;
+
+		static TransformationManager	transformation_manager_;
+		static Size										transformation_methods_;
 	};
 
 
@@ -570,6 +598,9 @@ namespace BALL
 			streams. This is done by reading the member {\tt data} as a byte stream
 			through an explicit cast and utilizing the stream read() and write() 
 			functions.\\
+			{\bf Caveat:} This concept relies on the C++ memory layout and thus 
+			is highly non-portable!
+			\\
 			{\bf Definition:} \URL{BALL/SYSTEM/file.h} 
 	*/
 	template <typename T>
@@ -588,8 +619,8 @@ namespace BALL
 		/// Detailed constructor
 		BinaryFileAdaptor(const T& data)
 			throw();
-
 		//@}
+
 		///@name Accessors
 		//@{
 
@@ -617,7 +648,6 @@ namespace BALL
 
 		//_ The member data.
 		T data_;
-
 	};
 
 	template <typename T>

@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.21 2001/12/29 01:07:05 oliver Exp $
+// $Id: file.C,v 1.22 2001/12/29 17:58:29 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/TCPTransfer.h>
@@ -10,6 +10,10 @@ using std::ifstream;
 using std::ofstream;
 using std::streampos;
 using std::endl;
+
+// maximum number of substitutions performed in TransformationManager::transform()
+// (in order to avoid infinite recursion)
+#define MAX_SUBSTITUTIONS 10
 
 namespace BALL 
 {
@@ -50,12 +54,73 @@ namespace BALL
 		return "";
 	}
 
+	String TransformationManager::transform(const String& name)
+	{
+		String result = findTransformation(name);
+		if (!result.empty())
+		{
+			// substitute "%s" with the full file name
+			Size count = 0;
+			while ((result.substitute("%s", name) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
+
+			// substitute "%f" with the full name without the last file suffix (after and including the last ".")
+			// and "%f[suffix]" with the full filename without [suffix]
+			if (result.hasSubstring("%f["))
+			{
+				String full_name = name;
+				RegularExpression suffix_regexp("%f\\[[^\\]]\\]");
+				String suffix = suffix_regexp.match(result);
+				if (!suffix.empty())
+				{
+					full_name.substitute(suffix +"$", "");
+				}
+				count = 0;
+				while ((result.substitute("%f\\[[^\\]]\\]", full_name) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
+			}
+			if (result.hasSubstring("%f"))
+			{
+				String full_name = name;
+				String suffix = name(name.find_last_of("."));
+				if (!suffix.empty())
+				{
+					full_name.substitute(suffix +"$", "");
+				}
+				count = 0;
+				while ((result.substitute("%f", full_name) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
+			}
+			// substitute "%f" with the full name without the last file suffix (after and including the last ".")
+			// and "%f[suffix]" with the full filename without [suffix]
+			if (result.hasSubstring("%b"))
+			{
+				if (result.hasSubstring("%b["))
+				{
+				}
+				String base_name = FileSystem::baseName(name);
+			}
+
+			// "%p" with the path to the file
+			count = 0;
+			while ((result.substitute("%p", FileSystem::path(name)) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
+
+			// "%t" with a temporary file name
+			if (result.hasSubstring("%t"))
+			{
+				String tmp_file;
+				File::createTemporaryFilename(tmp_file);
+				count = 0;
+				while ((result.substitute("%t", tmp_file) != String::EndPos) && (++count <= MAX_SUBSTITUTIONS));
+			}
+		}
+
+		return result;
+	}
+	
 	TransformationManager File::transformation_manager_;
 
 
 
 	const String File::TRANSFORMATION_EXEC_PREFIX = "exec:";
-	const String File::TRANSFORMATION_FILE_PREFIX = "exec:";
+	const String File::TRANSFORMATION_FILE_PREFIX = "file:";
 	const String File::TRANSFORMATION_HTTP_PREFIX = "http://";
 	const String File::TRANSFORMATION_FTP_PREFIX  = "ftp://";
 
@@ -128,6 +193,16 @@ namespace BALL
 		// we are reading files
 		if (open_mode == IN)
 		{
+			// check
+			String transformation_command = transformation_manager_.findTransformation(name_);
+			if (transformation_command != "")
+			{
+				if (BALL_BIT_IS_CLEARED(transformation_methods_, File::TRANSFORMATION__FILTER))
+				{		
+					throw Exception::FileNotFound(__FILE__, __LINE__, name_ + " (using " + transformation_command + ")");
+				}
+				name_ = transformation_manager_.transform(name_);
+			}
 
 			// check for the FTP and HTTP transformation prefix
 			if (name_.hasPrefix(TRANSFORMATION_FTP_PREFIX) ||
@@ -180,42 +255,6 @@ namespace BALL
 				if (!File::isAccessible(name_))
 				{
 					throw Exception::FileNotFound(__FILE__, __LINE__, name_);
-				}
-
-				// check
-				String transformation_command = transformation_manager_.findTransformation(name_);
-				if (transformation_command != "")
-				{
-					if (BALL_BIT_IS_CLEARED(transformation_methods_, File::TRANSFORMATION__FILTER))
-					{
-						throw Exception::FileNotFound(__FILE__, __LINE__, name_ + " (using " + transformation_command + ")");
-					}
-					String tmp_file;
-					createTemporaryFilename(tmp_file);
-
-					// substitute all occurences of "%s" with the source filename 
-					while (transformation_command.substitute("%s", name_) != String::EndPos);
-					
-					String command = String("exec ");
-
-					// substitute %d with the destination (the temporary file)
-          // and redirect the output (unix filter style) if no destination is given
-					if (transformation_command.substitute("%d", tmp_file) != String::EndPos)
-					{
-						while (transformation_command.substitute("%d", tmp_file) != String::EndPos);
-						command += transformation_command + " " + tmp_file;;
-					}
-					else
-					{
-						command += transformation_command + " >" + tmp_file;
-					}
-
-					// execute the transformation command
-					system(command.c_str());
-
-					// remember we have a temporary file
-					name_ = tmp_file;
-					is_temporary_ = true;
 				}
 			}	
 		}
@@ -407,6 +446,41 @@ namespace BALL
 								}
 
 		return false;
+	}
+
+	TransformationManager& File::getTransformationManager()
+	{
+		return transformation_manager_;
+	}
+    
+	const TransformationManager& File::getTransformationManager() const
+	{
+		return transformation_manager_;
+	}
+    
+	void File::enableTransformation(File::Transformation transformation)
+	{
+		transformation_methods_ |= transformation;
+	}
+
+	void File::disableTransformation(Transformation transformation)
+	{
+		transformation_methods_ &= ~transformation;
+	}
+
+	bool File::isTransformationEnabled(Transformation transformation)
+	{
+		return ((transformation_methods_ & transformation) != 0);
+	}
+
+	void File::registerTransformation(const String& pattern, const String& exec)
+	{
+		transformation_manager_.registerTransformation(pattern, exec);
+	}
+
+	void File::unregisterTransformation(const String& pattern)
+	{
+		transformation_manager_.unregisterTransformation(pattern);
 	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS

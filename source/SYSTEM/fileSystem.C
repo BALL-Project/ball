@@ -1,4 +1,4 @@
-// $Id: fileSystem.C,v 1.9 2001/08/18 18:34:36 oliver Exp $
+// $Id: fileSystem.C,v 1.10 2001/12/29 17:58:29 oliver Exp $
 
 #include <BALL/SYSTEM/fileSystem.h>
 
@@ -122,6 +122,39 @@ namespace BALL
 		buffer.swap(path);
 		
 		return;
+	}
+
+	String FileSystem::baseName(const String& filename)
+	{
+		Position idx = filename.find_last_of(PATH_SEPARATOR);
+		if (idx != String::EndPos)
+		{
+			if ((idx + 1)< filename.size())
+			{
+				return filename(idx + 1);
+			}
+			else
+			{
+				return "";
+			}
+		}
+		else
+		{
+			return filename;
+		}
+	}
+
+	String FileSystem::path(const String& filename)
+	{
+		Position idx = filename.find_last_of(PATH_SEPARATOR);
+		if (idx != String::EndPos)
+		{
+			return filename(0, idx + 1);
+		}
+		else
+		{
+			return "";
+		}
 	}
 
 } // namespace BALL

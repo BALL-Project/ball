@@ -1,23 +1,20 @@
-// $Id: BinaryFileAdaptor_test.C,v 1.2 2001/07/15 17:32:38 amoll Exp $
+// $Id: BinaryFileAdaptor_test.C,v 1.3 2001/12/29 17:58:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-// insert includes here
 #include <BALL/SYSTEM/file.h>
 
 ///////////////////////////
 
-START_TEST(BinaryFileAdaptor, "$Id: BinaryFileAdaptor_test.C,v 1.2 2001/07/15 17:32:38 amoll Exp $")
+START_TEST(BinaryFileAdaptor, "$Id: BinaryFileAdaptor_test.C,v 1.3 2001/12/29 17:58:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-///  insert tests for each member function here         
-///
-	
+//??? Implementation missing!	
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

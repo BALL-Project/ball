@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.9 2001/10/29 19:59:38 amoll Exp $
+// $Id: TCPTransfer.C,v 1.10 2001/12/29 17:58:29 oliver Exp $
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
@@ -556,7 +556,7 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		return status_;
 	}
 	
-	//================================================ password
+	//============ password ======================================
 	// if password is empty try a common type email-address as password
 	if (password_.isEmpty())
 	{
@@ -587,7 +587,7 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		return status_;
 	}
 
-	//================================================ opening passive connection
+	//========== opening passive connection ====================
 		
 	setBlock_(socket_, false);
 	timer.reset();

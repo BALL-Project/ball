@@ -1,4 +1,4 @@
-// $Id: fileSystem.h,v 1.4 2001/07/31 00:45:05 oliver Exp $
+// $Id: fileSystem.h,v 1.5 2001/12/29 17:58:29 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILESYSTEM_H
 #define BALL_SYSTEM_FILESYSTEM_H
@@ -83,6 +83,17 @@ namespace BALL
 		static void canonizePath(String& path)
 			throw();
 
+		/** Return the base name of a file.
+				This strips the path from the filename, i.e. everything
+				before and including the last occurence of \Ref{PATH_SEPARATOR}.
+		*/
+		static String baseName(const String& filename);
+
+		/** Return the path to a file.
+				This method returns the path to a file, i.e. everything up to
+				and including the last occurence of \Ref{PATH_SEPARATOR}.
+		*/
+		static String path(const String& filename);
 		//@}
 
 		private:

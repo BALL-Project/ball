@@ -1,4 +1,4 @@
-// $Id: file.iC,v 1.15 2001/07/16 10:36:49 anker Exp $
+// $Id: file.iC,v 1.16 2001/12/29 17:58:29 oliver Exp $
 
 BALL_INLINE 
 void File::clear()
@@ -178,30 +178,29 @@ const File& File::operator = (const File& file)
 }
 
 BALL_INLINE 
-bool File::isValid() 
-	const	throw()
+bool File::isValid() const	
+	throw()
 {
-  return ( getName() != "" && 
-					 ((File *)this)->::std::fstream::good() );
+  return (getName() != "" && ((File*)this)->std::fstream::good() );
 }
 
 BALL_INLINE 
-bool File::isOpen() 
-	const	throw()
+bool File::isOpen()	const	
+	throw()
 {
   return is_open_;
 }
 
 BALL_INLINE 
-bool File::isClosed()
-	const	throw()
+bool File::isClosed() const	
+	throw()
 {
   return !is_open_;
 }
 
 BALL_INLINE 
-bool File::isCanonized()
-	const throw (Exception::FileNotFound)
+bool File::isCanonized() const 
+	throw (Exception::FileNotFound)
 {
   String canonized_name(name_);
 
@@ -220,8 +219,8 @@ bool File::isReadable(String name)
 }
 
 BALL_INLINE 
-bool File::isReadable()
-	const throw (Exception::FileNotFound)
+bool File::isReadable() const 
+	throw (Exception::FileNotFound)
 {
   return File::isReadable(name_);
 }
@@ -267,7 +266,7 @@ Size File::getSize(String name)
 }
 
 BALL_INLINE
-::std::fstream& File::getFileStream()
+std::fstream& File::getFileStream()
 {
   return *this;
 }

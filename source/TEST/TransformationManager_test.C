@@ -1,4 +1,4 @@
-// $Id: TransformationManager_test.C,v 1.2 2001/12/29 03:09:30 oliver Exp $
+// $Id: TransformationManager_test.C,v 1.3 2001/12/29 17:58:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(TransformationManager, "$Id: TransformationManager_test.C,v 1.2 2001/12/29 03:09:30 oliver Exp $")
+START_TEST(TransformationManager, "$Id: TransformationManager_test.C,v 1.3 2001/12/29 17:58:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -47,6 +47,19 @@ CHECK(TransformationManager::unregisterTransformation(const String& pattern))
 	TEST_EQUAL(tm.findTransformation("asd"), "")
 	TEST_EQUAL(tm.findTransformation("ascasc"), "")
 	TEST_EQUAL(tm.findTransformation("asd.gz"), "")
+RESULT
+
+CHECK(TransformationManager::transform(const String& name))
+	TransformationManager tm;
+	tm.registerTransformation("", "%s %s");
+	TEST_EQUAL(tm.transform("test"), "test test")
+	TEST_EQUAL(tm.transform(" "), "   ")
+	TEST_EQUAL(tm.transform(""), " ")
+	tm.unregisterTransformation("");
+	tm.registerTransformation("", "TEST");
+	TEST_EQUAL(tm.transform("test"), "TEST")
+	TEST_EQUAL(tm.transform(" "), "TEST")
+	TEST_EQUAL(tm.transform(""), "TEST")
 RESULT
 
 /////////////////////////////////////////////////////////////
