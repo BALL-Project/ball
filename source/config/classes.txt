@@ -53,8 +53,7 @@ HashSet                             DX          /       store methods
       IteratorTraits_
 List                                /           /
 Options                             /           /
-Quadruple                           /           Z
-OrderedQuadruple                    /           Z
+Quadruple                           /           X       operators >=, <=
 RegularData1D                       /           Z
 RegularData2D                       /           Z
 RegularData3D                       /           /
@@ -65,60 +64,64 @@ Substring                           D           /
       InvalidSubstring
 StringHashMap                       /           /
 ------------------------CONCEPT---------------------------------------------
-AutoDeletable                       EI,         X
-BaseIterator                        EI,         Z     clear fehlt, BALL_CREATE_DEEP
-ConstBaseIterator                   EI,         Z
-BidirectionalIterator               EI          Z
-ConstBidirectionalIterator          EI          Z
-Callback                            DEI,        Z
+BaseIterator                        I,          Z     clear fehlt, BALL_CREATE_DEEP
+ConstBaseIterator                   I,          Z
+BidirectionalIterator               I           Z
+ConstBidirectionalIterator          I           Z
+ForwardIterator                     DIX,        /
+ConstForwardIterator                DIX,        /
+
+AutoDeletable                       I,          X
+Callback                            DI,         Z
 Classtest                           /           /
-Comparator                          DEI         Z
-Composite                           DEI,        /     operator = nicht const referenz
-      AncestorIteratorTraits_       DEI         Z
-      ChildCompositeIteratorTraits_ DEI         Z
-      CompositeIteratorPosition_    DEI         Z
-      CompositeIteratorTraits_      DEI         Z
-      SubcompositeIteratorTraits_   DEI         Z
-Embeddable                          EI,         X
-EnumeratorIndex                     EIX,        X
-      IncompatibleIndex             EI,         X
-Enumerator                          EIX,        X
-      IteratorTraits_               EIX,        X
-ForwardIterator                     DEIX,       /
-ConstForwardIterator                DEIX,       /
-NamedProperty                       EI          /
-PropertyManager                     EI          X
-NotificationManager_                DEI,        Z
-NotificationTarget_                 DEI         Z
-NotificationSource_                 DEI         Z
-NotificationSlot_                   DEI         Z
-NotificationTarget                  DEI         Z
-NotificationTarget1                 DEI         Z
-NotificationTarget2                 DEI         Z
-Object                              DEI,        Z
-ObjectManager                       DEI         Z
-      IteratorTraits_               DEI         Z
-PersistenceManager                  EI          Z
-PersistentObject                    EI          Z
-RandomAccessIterator                DEI         Z
-ConstRandomAccessIterator           DEI         Z
-ReverseRandomAccessIterator         DEI         Z
-ConstReverseRandomAccessIterator    DEI         Z
-ReverseBidirectionalIterator        DEI         Z
-ConstReverseBidirectionalIterator   DEI         Z
-Selectable                          EI          /
-Singleton                           DEI         Z
+Comparator                          D           Z
+Composite                           D,          /
+      AncestorIteratorTraits_       DI          Z
+      ChildCompositeIteratorTraits_ DI          Z
+      CompositeIteratorPosition_    DI          Z
+      CompositeIteratorTraits_      DI          Z
+      SubcompositeIteratorTraits_   DI          Z
+Embeddable                          I,          X
+EnumeratorIndex                     IX,         X
+      IncompatibleIndex             I,          X
+Enumerator                          IX,         X
+      IteratorTraits_               IX,         X
+NamedProperty                       /           /
+PropertyManager                     /           X
+
+NotificationManager_                DI,         Z
+NotificationTarget_                 DI          Z
+NotificationSource_                 DI          Z
+NotificationSlot_                   DI          Z
+NotificationTarget                  DI          Z
+NotificationTarget1                 DI          Z
+NotificationTarget2                 DI          Z
+
+Object                              DI,         Z
+ObjectManager                       DI          Z
+      IteratorTraits_               DI          Z
+PersistenceManager                  I           Z
+PersistentObject                    I           Z
+RandomAccessIterator                DI          Z
+ConstRandomAccessIterator           DI          Z
+ReverseRandomAccessIterator         DI          Z
+ConstReverseRandomAccessIterator    DI          Z
+ReverseBidirectionalIterator        DI          Z
+ConstReverseBidirectionalIterator   DI          Z
+Selectable                          /           /
+Singleton                           DI          Z
 TextPersistenceManager              EI          Z
-Time                                EI          X
-TimeStamp                           EI          X
+Time                                /           X
+TimeStamp                           /           X
+Visitor                             DI          Z
+XDRPersistenceManager               I           Z
+
 UnaryFunctor                        D,          /
 BinaryFunctor                       D,          /
-UnaryPredicate                      DEI         Z
-BinaryPredicate                     DEI         Z
-UnaryProcessor                      DEI         Z
-BinaryProcessor                     DEI         Z
-Visitor                             DEI         Z
-XDRPersistenceManager               EI          Z
+UnaryPredicate                      DI          Z
+BinaryPredicate                     DI          Z
+UnaryProcessor                      DI          Z
+BinaryProcessor                     DI          Z
 ------------------------ENERGY----------------------------------------------
 (atomicContactEnergy)               E           /
 ComposedEnergyProcessor             /           Z
@@ -144,41 +147,41 @@ ParameterSection                    I,          X
 PDBFile                             DEI,        X
 XYZFile                             DEI,        /
 ------------------------KERNEL----------------------------------------------
-Atom                                EIX         /           read, write fehlt
+Atom                                DIX         /           read, write fehlt
             BondIteratorTraits_     DEI         Z
-AtomContainer                       EIX         /           read, write fehlt
+AtomContainer                       IX          /           read, write fehlt
 AtomContainerIteratorTraits_        EI          Z
 AtomIteratorTraits_                 EI          Z
-Bond                                EI          /
-            TooManyBonds            EI          Z
-Chain                               EIX         /           read, write fehlt
+Bond                                I           /
+            TooManyBonds            I           Z
+Chain                               IX          /           read, write fehlt
 ChainIteratorTraits_                EI
 CompositeIteratorTraits_            EI          Z
 Expression                          EIX
 ExpressionPredicate                 EIX
 ExpressionTree                      EIX         
 SyntaxTree                          EI
-Fragment                            EIX         /           read, write fehlt
+Fragment                            IX          /           read, write fehlt
 FragmentIteratorTraits_             EI          Z
-Element                             EI          /
-PTE_                                EI          /
-KernelPredicate                     EI          /
-Molecule                            EIX         /           read, write fehlt
+Element                             I           /
+PTE_                                I           /
+KernelPredicate                     I           /
+Molecule                            IX          /           read, write fehlt
 MoleculeIteratorTraits_             EI          Z
-NucleicAcid                         EIX         /           read, write fehlt
+NucleicAcid                         IX          /           read, write fehlt
 NucleicAcidIteratorTraits_          EI          Z
-Nucleotide                          EIX         /           read, write fehlt
+Nucleotide                          IX          /           read, write fehlt
 NucleotideIteratorTraits_           EI          Z
-PDBAtom                             EI          Z
+PDBAtom                             I           Z
 PDBAtomIteratorTraits_              EI          Z
-Protein                             EIX         /           read, write fehlt
+Protein                             IX          /           read, write fehlt
 ProteinIteratorTraits_              EI          Z
-Residue                             EIX         /           read, write fehlt
+Residue                             IX          /           read, write fehlt
 ResidueIteratorTraits_              EI          Z
-SecondaryStructure                  EIX         /           read, write fehlt
+SecondaryStructure                  IX          /           read, write fehlt
 SecondaryStructureIteratorTraits_   EI          Z
 Selector                            EI
-System                              EIX         /
+System                              IX          /           read, write fehlt
 
  AromaticBondsPredicate             EI          /
  AtomNamePredicate                  EI          /
@@ -206,19 +209,19 @@ System                              EIX         /
  TripleBondsPredicate               EI          /
  TruePredicate                      EI          /
 ------------------------MATHS-----------------------------------------------
-TAngle                              EI          /
-TBox3                               EI          /
-TCircle3                            EI          /
-TLine3                              EI          /
-TMatrix4x4                          EI          /
+TAngle                              I           /
+TBox3                               I           /
+TCircle3                            I           /
+TLine3                              I           /
+TMatrix4x4                          I           /
 PiecewiseFunction                   I           X
 PiecewisePolynomial                 I           X
-TPlane3                             EI          /
-TQuaternion                         EI          /
-TSphere3                            EI          /
-TSurface                            DEIX        Z    
-TVector3                            EI          /
-TVector4                            EI          /
+TPlane3                             I           /
+TQuaternion                         I           /
+TSphere3                            I           /
+TSurface                            IX          Z    
+TVector3                            I           /
+TVector4                            I           /
 ------------------------MOLMEC----------------------------------------------
                         ---------AMBER-----
 amberBend                           DEI         Z
@@ -383,7 +386,7 @@ ClearRadiusProcessor                EI          Z
 (connolly)                          DEIX        /           der code ist furchtbar!
 BoundingBoxProcessor                EI          Z
 FragmentDistanceCollector           EI          Z
-GeometricCenterProcessor            EI          Z
+GeometricCenterProcessor            IX          Z	    angle-calculation should be done somewhere else, exception
 
 FragmentDB                          EI          X               
             NoFragmentNode          EI          Z
