@@ -1,4 +1,4 @@
-// $Id: molecularControl.h,v 1.7.4.5 2002/11/28 21:14:26 amoll Exp $
+// $Id: molecularControl.h,v 1.7.4.6 2002/11/29 00:59:36 amoll Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -119,13 +119,13 @@ namespace BALL
 			*/
 			virtual void sentSelection();
 
-			//@}
-		
+			/** Atom properties dialog requested */
+			void atomProperties()
+				throw();
 
-		signals:
-			
 		protected:
 
+			//@}
 			/** @name Internal creation and message handling
 			*/
 			//@{
@@ -178,8 +178,6 @@ namespace BALL
 				throw();
 			//@}
 			
-			void atomProperties_(Atom* atom)
-				throw();
 
 		private:
 			
