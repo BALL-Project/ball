@@ -1,4 +1,4 @@
-// $Id: reverseBidirectionalIterator.h,v 1.7 2001/06/29 14:12:31 anker Exp $
+// $Id: reverseBidirectionalIterator.h,v 1.8 2001/07/05 14:09:43 amoll Exp $
 
 #ifndef BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
@@ -19,7 +19,6 @@ namespace BALL
 {
 
 	/**	@name Generic Reverse Bidirectional Iterator Classes.
-			\\
 			{\bf Definition:} \URL{BALL/CONCEPT/reverseBidirectionalIterator.h}
 	*/
 	//@{
@@ -140,21 +139,24 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ReverseBidirectionalIterator<Container, DataType, Position, Traits>::ReverseBidirectionalIterator(const ReverseBidirectionalIterator &iterator)
+	ReverseBidirectionalIterator<Container, DataType, Position, Traits>
+	::ReverseBidirectionalIterator(const ReverseBidirectionalIterator &iterator)
 		throw()
 		:	BidirectionalIterator<Container, DataType, Position, Traits>(iterator)
 	{
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ReverseBidirectionalIterator<Container, DataType, Position, Traits>::ReverseBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
+	ReverseBidirectionalIterator<Container, DataType, Position, Traits>
+	::ReverseBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
 		throw()
 		:	BidirectionalIterator<Container, DataType, Position, Traits>(iterator)
 	{	
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ReverseBidirectionalIterator<Container, DataType, Position, Traits>::~ReverseBidirectionalIterator()
+	ReverseBidirectionalIterator<Container, DataType, Position, Traits>
+	::~ReverseBidirectionalIterator()
 		throw()
 	{
 	}
@@ -230,7 +232,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ReverseBidirectionalIterator<Container, DataType, Position, Traits>& ReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator ++ ()
+	ReverseBidirectionalIterator<Container, DataType, Position, Traits>& 
+		ReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator ++ ()
 		throw(Exception::InvalidIterator)
 	{
 		BidirectionalIterator<Container, DataType, Position, Traits>::operator--();
@@ -238,7 +241,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ReverseBidirectionalIterator<Container, DataType, Position, Traits> ReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator ++ (int)
+	ReverseBidirectionalIterator<Container, DataType, Position, Traits> 
+		ReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator ++ (int)
 		throw(Exception::InvalidIterator)
 	{
 		ReverseBidirectionalIterator iterator(*this);
@@ -247,7 +251,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ReverseBidirectionalIterator<Container, DataType, Position, Traits>& ReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator -- ()
+	ReverseBidirectionalIterator<Container, DataType, Position, Traits>& 
+		ReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator -- ()
 		throw(Exception::InvalidIterator)
 	{
 		BidirectionalIterator<Container, DataType, Position, Traits>::operator++();
@@ -255,7 +260,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ReverseBidirectionalIterator<Container, DataType, Position, Traits> ReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator -- (int)
+	ReverseBidirectionalIterator<Container, DataType, Position, Traits> 
+		ReverseBidirectionalIterator<Container, DataType, Position, Traits>::operator -- (int)
 		throw(Exception::InvalidIterator)
 	{
 		ReverseBidirectionalIterator iterator(*this);
@@ -264,7 +270,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ReverseBidirectionalIterator<Container, DataType, Position, Traits> ReverseBidirectionalIterator<Container, DataType, Position, Traits>::begin(const Container &container)
+	ReverseBidirectionalIterator<Container, DataType, Position, Traits> 
+		ReverseBidirectionalIterator<Container, DataType, Position, Traits>::begin(const Container &container)
 		throw(Exception::InvalidIterator)
 	{
 		ReverseBidirectionalIterator iterator(container);
@@ -273,7 +280,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ReverseBidirectionalIterator<Container, DataType, Position, Traits> ReverseBidirectionalIterator<Container, DataType, Position, Traits>::end(const Container &container)
+	ReverseBidirectionalIterator<Container, DataType, Position, Traits> 
+		ReverseBidirectionalIterator<Container, DataType, Position, Traits>::end(const Container &container)
 		throw(Exception::InvalidIterator)
 	{
 		ReverseBidirectionalIterator iterator(container);
@@ -282,7 +290,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ReverseBidirectionalIterator<Container, DataType, Position, Traits> ReverseBidirectionalIterator<Container, DataType, Position, Traits>::rbegin(const Container &container)
+	ReverseBidirectionalIterator<Container, DataType, Position, Traits> 
+		ReverseBidirectionalIterator<Container, DataType, Position, Traits>::rbegin(const Container &container)
 		throw(Exception::InvalidIterator)
 	{
 		ReverseBidirectionalIterator iterator(container);
@@ -291,7 +300,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ReverseBidirectionalIterator<Container, DataType, Position, Traits> ReverseBidirectionalIterator<Container, DataType, Position, Traits>::rend(const Container &container)
+	ReverseBidirectionalIterator<Container, DataType, Position, Traits> 
+		ReverseBidirectionalIterator<Container, DataType, Position, Traits>::rend(const Container &container)
 		throw(Exception::InvalidIterator)
 	{
 		ReverseBidirectionalIterator iterator(container);
@@ -300,7 +310,8 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ReverseBidirectionalIterator<Container, DataType, Position, Traits>::ReverseBidirectionalIterator(const Container &container)
+	ReverseBidirectionalIterator<Container, DataType, Position, Traits>
+	::ReverseBidirectionalIterator(const Container &container)
 		throw()
 		: BidirectionalIterator<Container, DataType, Position, Traits>(container)
 	{
