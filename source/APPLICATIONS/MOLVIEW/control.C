@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.11 2000/01/15 19:08:49 oliver Exp $
+// $Id: control.C,v 1.12 2000/01/16 12:46:24 oliver Exp $
 
 #include "control.h"
 
@@ -43,9 +43,6 @@ bool Control::addComposite
 	{
 		name = *own_name;
 	}
-
-	// status text
-	Log.info() << "> generating tree representation ... ";
 
 	// generate ListViewItem and insert it into the ListView
 	genListViewItem_(0, composite, &name);

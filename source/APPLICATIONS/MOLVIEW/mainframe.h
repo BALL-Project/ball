@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.8 2000/01/15 19:08:49 oliver Exp $
+// $Id: mainframe.h,v 1.9 2000/01/16 12:46:29 oliver Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -65,8 +65,8 @@
 
 
 #include "control.h"
-#include "DlgDisplayProperties.h"
-#include "DlgPreferences.h"
+#include "DIALOGS/DlgDisplayProperties.h"
+#include "DIALOGS/DlgPreferences.h"
 
 using namespace BALL;
 using namespace BALL::VIEW;
