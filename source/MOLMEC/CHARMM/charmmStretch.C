@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmStretch.C,v 1.10 2003/08/26 09:17:52 oliver Exp $
+// $Id: charmmStretch.C,v 1.11 2004/12/17 15:29:37 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmStretch.h>
@@ -16,9 +16,9 @@ namespace BALL
 
 	// default constructor
 	CharmmStretch::CharmmStretch()
-		:	ForceFieldComponent(),
-			stretch_(0),
-			number_of_stretches_(0)
+	 : ForceFieldComponent(),
+		 stretch_(0),
+		 number_of_stretches_(0)
 	{	
 		// set component name
 		setName("CHARMM Stretch");
@@ -27,9 +27,9 @@ namespace BALL
 
 	// constructor
 	CharmmStretch::CharmmStretch(ForceField& force_field)
-		 : 	ForceFieldComponent(force_field),
-				stretch_(0),
-				number_of_stretches_(0)
+	 : ForceFieldComponent(force_field),
+		 stretch_(0),
+		 number_of_stretches_(0)
 	{
 		// set component name
 		setName("CHARMM Stretch");
@@ -154,6 +154,15 @@ namespace BALL
 															 << stretch_[i].atom2->ptr->getFullName() << " (types are "
 															 << force_field_->getParameters().getAtomTypes().getTypeName(atom_type_A) << "-" 
 															 << force_field_->getParameters().getAtomTypes().getTypeName(atom_type_B) << ")" << endl;
+
+										getForceField()->getUnassignedAtoms().insert(bond.getFirstAtom());
+										getForceField()->getUnassignedAtoms().insert(bond.getSecondAtom());
+										if (getForceField()->getNumberOfUnassignedAtoms() > 
+												getForceField()->getMaximumUnassignedAtoms())
+										{
+											return false;
+										}
+
 										// we don`t want to get any force or energy component
 										// from this stretch
 										values.k = 0.0;

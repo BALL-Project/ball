@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: templates.h,v 1.13 2003/08/26 08:04:28 oliver Exp $
+// $Id: templates.h,v 1.14 2004/12/17 15:29:22 amoll Exp $
 //
 
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
@@ -17,10 +17,17 @@
 #	include <BALL/KERNEL/system.h>
 #endif
 
+#ifndef BALL_DATATYPE_HASHSET_H
+# include <BALL/DATATYPE/hashset.h>
+#endif
+
+#include <BALL/KERNEL/atom.h>
+
 namespace BALL 
 {
+	class Atom;
+
 	/**	Force Field Residue Template Class.	
-			
     	\ingroup  MolmecParameters
 	*/
 	class Templates 
@@ -97,6 +104,23 @@ namespace BALL
 		*/
 		Templates& operator = (const Templates& templates);
 
+		/** Set the number of atoms, for which the assignment can
+		    fail, until the assign() methods aborts and return false.
+				By default, there is no limit set.
+		*/
+		void setMaximumUnassignedAtoms(Size nr);
+
+		/** Get the number of atoms, for which the assignment can
+		    fail, until the assign() methods aborts and return false.
+		*/
+		Size getMaximumUnassignedAtoms() const;
+
+		/// Get the number of atoms, for which the assignment failed.
+		Size getNumberOfUnassignedAtoms() const;
+
+		/// Get the atoms, for which the assignment failed.
+		HashSet<const Atom*>& getUnassignedAtoms();
+
 		//@}
 
 		protected:
@@ -108,6 +132,12 @@ namespace BALL
 		/*_	Contains the atom type names for each residue/atom combination
 		*/
 		StringHashMap<String>	type_names_;
+
+		//_ Atoms, for which the assignment fails
+		HashSet<const Atom*> unassigned_atoms_;
+
+		//_ max number of unassigned atoms
+		Size max_number_unassigned_atoms_;
 	};
 } // namespace BALL
 

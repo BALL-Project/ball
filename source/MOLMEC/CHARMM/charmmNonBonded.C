@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.C,v 1.26 2003/08/26 09:17:52 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.27 2004/12/17 15:29:37 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
@@ -218,8 +218,7 @@ namespace BALL
 	{
 		if (getForceField() == 0) 
 		{
-			Log.error() << "CharmmNonBonded::setup(): "
-				<< "component not bound to a force field" << endl;
+			Log.error() << "CharmmNonBonded::setup(): component not bound to a force field" << endl;
 			return false;
 		}
 
@@ -241,8 +240,7 @@ namespace BALL
 
 			if (result == false) 
 			{	
-				Log.error() << "CharmmNonBonded::setup(): "
-					<< "cannot find section LennardJones" << endl;
+				Log.error() << "CharmmNonBonded::setup(): cannot find section LennardJones" << endl;
 				return false;
 			}
 
@@ -251,8 +249,7 @@ namespace BALL
 
 			if (result == false) 
 			{	
-				Log.error() << "CharmmNonBonded::setup(): "
-					<< "cannot find section LennardJones14" << endl;
+				Log.error() << "CharmmNonBonded::setup(): cannot find section LennardJones14" << endl;
 				return false;
 			}
 		}
@@ -307,9 +304,8 @@ namespace BALL
 			String value = van_der_waals_parameters_.options["ATOM"];
 			if ((value != "CDIEL") && (value != "RDIEL"))
 			{
-				Log.warn() << "CharmmNonBonded::setup(): "
-					<< "unknown CHARMM argument for ATOM: " << value 
-					<< "   - using distance dependent electrostatics." << endl;
+				Log.warn() << "CharmmNonBonded::setup(): unknown CHARMM argument for ATOM: " << value 
+										<< "   - using distance dependent electrostatics." << endl;
 			}
 			
 			if (value == "CDIEL")
@@ -450,6 +446,11 @@ namespace BALL
 
 		// Build the vector "non_bonded_" with the atom pairs and parameters.
 		buildVectorOfNonBondedAtomPairs(atom_pair_vector);
+		if (getForceField()->getNumberOfUnassignedAtoms() > 
+				getForceField()->getMaximumUnassignedAtoms())
+		{
+			return false;
+		}
 
 		// initialize vector of parameter structures
 
@@ -463,9 +464,7 @@ namespace BALL
 				{
 					Log.warn() << "CharmmNonBonded::setup(): "
 						<< "no solvation parameters for atom type "
-						<< i << " (" 
-						<< getForceField()->getParameters().getAtomTypes().getTypeName(i) 
-						<< ")" << endl;
+						<< i << " (" << getForceField()->getParameters().getAtomTypes().getTypeName(i) << ")" << endl;
 				}
 			} 
 		}
@@ -477,8 +476,7 @@ namespace BALL
 
 	// Build a vector of non-bonded atom pairs with the vdw parameters 
 	// The vector starts with 1-4 interactions
-	void CharmmNonBonded::buildVectorOfNonBondedAtomPairs
-		(const vector<pair<Atom*, Atom*> >& atom_vector)
+	void CharmmNonBonded::buildVectorOfNonBondedAtomPairs(const vector<pair<Atom*, Atom*> >& atom_vector)
 		throw()
 	{
 		// throw away the old rubbish
@@ -586,6 +584,14 @@ namespace BALL
 
 					tmp.values.A = 0;
 					tmp.values.B = 0;
+
+					getForceField()->getUnassignedAtoms().insert(atom1);
+					getForceField()->getUnassignedAtoms().insert(atom2);
+					if (getForceField()->getNumberOfUnassignedAtoms() > 
+							getForceField()->getMaximumUnassignedAtoms())
+					{
+						return;
+					}
 				}
 
 				non_bonded_.push_back(tmp);
@@ -595,8 +601,7 @@ namespace BALL
 
 
 	BALL_INLINE 
-	void CHARMMcalculateMinimumImage
-		(Vector3& difference, Vector3& period, Vector3& half_period)
+	void CHARMMcalculateMinimumImage(Vector3& difference, Vector3& period, Vector3& half_period)
 		throw()
 	{
 		if (difference.x < -half_period.x) 

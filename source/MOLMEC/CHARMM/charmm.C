@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.C,v 1.20 2004/02/19 20:27:55 amoll Exp $
+// $Id: charmm.C,v 1.21 2004/12/17 15:29:36 amoll Exp $
 //
 
 // Molecular Mechanics: Charmm force field class
@@ -51,7 +51,7 @@ namespace BALL
 	const float CharmmFF::Default::ELECTROSTATIC_CUTON = 7.0;
 	const float CharmmFF::Default::SCALING_ELECTROSTATIC_1_4 = 2.0;
 	const float CharmmFF::Default::SCALING_VDW_1_4 = 1.0;
-	  const bool  CharmmFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = true;
+  const bool  CharmmFF::Default::DISTANCE_DEPENDENT_DIELECTRIC = true;
 	const bool	CharmmFF::Default::ASSIGN_CHARGES = true;
 	const bool	CharmmFF::Default::ASSIGN_TYPENAMES = true;
 	const bool	CharmmFF::Default::ASSIGN_TYPES = true;
@@ -221,6 +221,7 @@ namespace BALL
 		if (assign_charges || assign_type_names || remove_hydrogens)
 		{
 			Templates templates;
+			templates.setMaximumUnassignedAtoms(max_number_unassigned_atoms_);
 			templates.extractSection(parameters_, "ChargesAndTypeNames");
 			
 			// remove all hydrogens bound to extended atom types
@@ -264,7 +265,7 @@ namespace BALL
 						delete *hydrogen_it;
 					}
 					Log.info() << "CharmmFF::setup: deleted " << atoms_to_delete.size() 
-						<< " hydrogen atoms (using CHARMM united atoms instead)." << endl;
+										 << " hydrogen atoms (using CHARMM united atoms instead)." << endl;
 						
 					// tell the ForceField class to recalculate the atoms_ vector
 					// because we deleted things!
@@ -287,6 +288,17 @@ namespace BALL
 					templates.assignCharges(*getSystem(), overwrite_charges);
 				}
 			}
+
+			HashSet<const Atom*>::ConstIterator it = templates.getUnassignedAtoms().begin();
+			for (; it != templates.getUnassignedAtoms().end(); it++)
+			{
+			  getUnassignedAtoms().insert(*it);
+			}
+	
+			if (getNumberOfUnassignedAtoms() > getMaximumUnassignedAtoms())
+			{
+				return false;
+			}
 		}
 
 		// assign the types (type names should have been set already)
@@ -294,9 +306,26 @@ namespace BALL
 		{
 			// convert the type names to types
 			AssignTypeProcessor type_proc(parameters_.getAtomTypes());
+			type_proc.setMaximumUnassignedAtoms(max_number_unassigned_atoms_);
 			getSystem()->apply(type_proc);			
+
+			HashSet<const Atom*>::ConstIterator it = type_proc.getUnassignedAtoms().begin();
+			for (; it != type_proc.getUnassignedAtoms().end(); it++)
+			{
+			  getUnassignedAtoms().insert(*it);
+			}
+
+			if (getNumberOfUnassignedAtoms() > getMaximumUnassignedAtoms())
+			{
+				return false;
+			}
 		}
-		
+
+		if (getNumberOfUnassignedAtoms() > getMaximumUnassignedAtoms())
+		{
+			return false;
+		}
+	
 		return true;
 	}
 

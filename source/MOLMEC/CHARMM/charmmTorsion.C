@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmTorsion.C,v 1.11 2003/08/26 09:17:52 oliver Exp $
+// $Id: charmmTorsion.C,v 1.12 2004/12/17 15:29:37 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmTorsion.h>
@@ -296,6 +296,16 @@ namespace BALL
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a2) << "-"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a3) << "-"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a4) << endl;
+
+												getForceField()->getUnassignedAtoms().insert(a1);
+												getForceField()->getUnassignedAtoms().insert(a2);
+												getForceField()->getUnassignedAtoms().insert(a3);
+												getForceField()->getUnassignedAtoms().insert(a4);
+												if (getForceField()->getNumberOfUnassignedAtoms() > 
+														getForceField()->getMaximumUnassignedAtoms())
+												{
+													return false;
+												}
 										}
 									}
 								} 

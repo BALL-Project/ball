@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assignTypes.C,v 1.14 2002/12/12 10:41:53 oliver Exp $
+// $Id: assignTypes.C,v 1.15 2004/12/17 15:29:37 amoll Exp $
 
 #include <BALL/MOLMEC/COMMON/assignTypes.h>
 
@@ -9,14 +9,42 @@
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/fragment.h>
+#include <BALL/COMMON/limits.h>
 
 using namespace std;
 
 namespace BALL 
 {
 
-	AssignTypeNameProcessor::AssignTypeNameProcessor
-		(const String& filename, bool overwrite)
+	AssignBaseProcessor::AssignBaseProcessor()
+		: UnaryProcessor<Atom>(),
+			unassigned_atoms_(),
+			max_number_unassigned_atoms_()
+	{
+	}
+
+	void AssignBaseProcessor::setMaximumUnassignedAtoms(Size nr)
+	{
+		max_number_unassigned_atoms_ = nr;
+	}
+	
+	Size AssignBaseProcessor::getMaximumUnassignedAtoms() const
+	{
+		return max_number_unassigned_atoms_;
+	}
+
+	Size AssignBaseProcessor::getNumberOfUnassignedAtoms() const
+	{
+		return unassigned_atoms_.size();
+	}
+
+	HashSet<const Atom*>& AssignBaseProcessor::getUnassignedAtoms()
+	{
+		return unassigned_atoms_;
+	}
+
+
+	AssignTypeNameProcessor::AssignTypeNameProcessor(const String& filename, bool overwrite)
 		:	overwrite_(overwrite)
 	{
 		Path path;
@@ -46,8 +74,7 @@ namespace BALL
 
 	Processor::Result	AssignTypeNameProcessor::operator () (Atom& atom)
 	{
-		// if the atom type shall be overwritten or the type is not yet assigned:
-		// assign it
+		// if the atom type shall be overwritten or the type is not yet assigned: assign it
 		if (overwrite_ || atom.getTypeName() == BALL_ATOM_DEFAULT_TYPE_NAME)
 		{
 			// retrieve the full atom name
@@ -78,7 +105,9 @@ namespace BALL
 					{	
 						// we could not assign a type name - complain!
 						Log.warn() << "AssignTypeNameProcessor: could not assign type name for atom " 
-								<< atom.getFullName(Atom::NO_VARIANT_EXTENSIONS) << endl;
+											 << atom.getFullName(Atom::NO_VARIANT_EXTENSIONS) << endl;
+						unassigned_atoms_.insert(&atom);
+						if (unassigned_atoms_.size() > max_number_unassigned_atoms_) return Processor::ABORT;
 					}
 				}
 			}
@@ -87,8 +116,7 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-	AssignTypeProcessor::AssignTypeProcessor
-		(const AtomTypes& atom_types)
+	AssignTypeProcessor::AssignTypeProcessor(const AtomTypes& atom_types)
 	{
 		atom_types_ = atom_types;
 	}
@@ -99,6 +127,8 @@ namespace BALL
 		if (type == Atom::UNKNOWN_TYPE)
 		{
 			Log.warn() << "AssignTypeProcessor: could not assign atom type for " << atom.getTypeName() << endl;
+			unassigned_atoms_.insert(&atom);
+			if (unassigned_atoms_.size() > max_number_unassigned_atoms_) return Processor::ABORT;
 		} 
 		else 
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmImproperTorsion.C,v 1.11 2003/08/26 09:17:51 oliver Exp $
+// $Id: charmmImproperTorsion.C,v 1.12 2004/12/17 15:29:37 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
@@ -278,6 +278,16 @@ namespace BALL
 					if (a4 != 0) Log.warn() << " a4 = " << a4->getFullName();
 					Log.warn() << endl;
 
+					if (a1 != 0) getForceField()->getUnassignedAtoms().insert(a1);
+					if (a2 != 0) getForceField()->getUnassignedAtoms().insert(a2);
+					if (a3 != 0) getForceField()->getUnassignedAtoms().insert(a3);
+					if (a4 != 0) getForceField()->getUnassignedAtoms().insert(a4);
+					
+					if (getForceField()->getNumberOfUnassignedAtoms() > 
+							getForceField()->getMaximumUnassignedAtoms())
+					{
+						return false;
+					}
 				} 
 				else 
 				{
@@ -358,6 +368,16 @@ namespace BALL
 												 << a3->getTypeName() << "/" 
 												 << a4->getTypeName()												
 												 << ")" << endl;
+
+							getForceField()->getUnassignedAtoms().insert(a1);
+							getForceField()->getUnassignedAtoms().insert(a2);
+							getForceField()->getUnassignedAtoms().insert(a3);
+							getForceField()->getUnassignedAtoms().insert(a4);
+							if (getForceField()->getNumberOfUnassignedAtoms() > 
+									getForceField()->getMaximumUnassignedAtoms())
+							{
+								return false;
+							}
 						}
 					}
 				}

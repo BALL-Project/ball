@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.35 2004/11/07 19:54:59 oliver Exp $
+// $Id: forceField.C,v 1.36 2004/12/17 15:29:37 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -10,6 +10,7 @@
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/COMMON/limits.h>
 
 using namespace std;
 
@@ -30,7 +31,9 @@ namespace BALL
 			use_selection_(false),
 			selection_enabled_(true),
 			update_time_stamp_(),
-			setup_time_stamp_()
+			setup_time_stamp_(),
+			unassigned_atoms_(),
+			max_number_unassigned_atoms_(Limits<Size>::max())
 	{
 	}
 
@@ -61,6 +64,9 @@ namespace BALL
 			delete (*it);
 		}
 		components_.clear();
+
+		unassigned_atoms_.clear();
+		max_number_unassigned_atoms_ = Limits<Size>::max();
 	}
 
 	// copy constructor 
@@ -77,7 +83,8 @@ namespace BALL
 			use_selection_(force_field.use_selection_),
 			selection_enabled_(force_field.selection_enabled_),
 			update_time_stamp_(force_field.update_time_stamp_),
-			setup_time_stamp_(force_field.setup_time_stamp_)
+			setup_time_stamp_(force_field.setup_time_stamp_),
+			max_number_unassigned_atoms_(force_field.max_number_unassigned_atoms_)
 	{
 		// Copy the component vector and its components.
 		for (Size i = 0; i < force_field.components_.size(); i++) 
@@ -105,6 +112,7 @@ namespace BALL
 			use_selection_ = force_field.use_selection_;
 			selection_enabled_ = force_field.selection_enabled_;
 			valid_ = force_field.valid_;
+			max_number_unassigned_atoms_ = force_field.max_number_unassigned_atoms_;
 
 			Size i;
 			for (i = 0; i < components_.size(); i++) 
@@ -136,7 +144,9 @@ namespace BALL
 			use_selection_(false),
 			selection_enabled_(true),
 			update_time_stamp_(),
-			setup_time_stamp_()
+			setup_time_stamp_(),
+			unassigned_atoms_(),
+			max_number_unassigned_atoms_(Limits<Size>::max())
 	{
 		bool result = setup(system);
 
@@ -161,7 +171,9 @@ namespace BALL
 			use_selection_(false),
 			selection_enabled_(true),
 			update_time_stamp_(),
-			setup_time_stamp_()
+			setup_time_stamp_(),
+			unassigned_atoms_(),
+			max_number_unassigned_atoms_(Limits<Size>::max())
 	{
 		bool result = setup(system, new_options);
 
@@ -190,6 +202,8 @@ namespace BALL
 	// setup methods
 	bool ForceField::setup(System& system)
 	{
+		unassigned_atoms_.clear();
+
 		// store the specified system
 		system_ = &system;
 
@@ -615,6 +629,27 @@ namespace BALL
 
 		return 0;
 	}
+
+	void ForceField::setMaximumUnassignedAtoms(Size nr)
+	{
+		max_number_unassigned_atoms_ = nr;
+	}
+	
+	Size ForceField::getMaximumUnassignedAtoms() const
+	{
+		return max_number_unassigned_atoms_;
+	}
+
+	Size ForceField::getNumberOfUnassignedAtoms() const
+	{
+		return unassigned_atoms_.size();
+	}
+
+	HashSet<const Atom*>& ForceField::getUnassignedAtoms()
+	{
+		return unassigned_atoms_;
+	}
+
 
 # ifdef BALL_NO_INLINE_FUNCTIONS
 #   include <BALL/MOLMEC/COMMON/forceField.iC>

@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: templates.C,v 1.14 2002/02/27 12:21:45 sturm Exp $
+// $Id: templates.C,v 1.15 2004/12/17 15:29:38 amoll Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
 #include <BALL/KERNEL/residue.h>
+#include <BALL/COMMON/limits.h>
 
 using namespace std;
 
@@ -13,13 +14,17 @@ namespace BALL
 {
 
 	Templates::Templates()
-		: ParameterSection()
+		: ParameterSection(),
+			unassigned_atoms_(),
+			max_number_unassigned_atoms_(Limits<Size>::max())
 	{
 	}
 
 
 	Templates::Templates(const Templates& templates, bool /* deep */)
-		: ParameterSection(templates)
+		: ParameterSection(templates),
+			unassigned_atoms_(),
+			max_number_unassigned_atoms_(templates.max_number_unassigned_atoms_)
 	{
 		charges_ = templates.charges_;
 		type_names_ = templates.type_names_;
@@ -32,6 +37,8 @@ namespace BALL
 		type_names_.clear();
 
 		ParameterSection::clear();
+		unassigned_atoms_.clear();
+		max_number_unassigned_atoms_ = Limits<Size>::max();
 	}
 
 
@@ -44,6 +51,7 @@ namespace BALL
 	{
 		charges_.set(templates.charges_);
 		type_names_.set(templates.type_names_);
+		max_number_unassigned_atoms_ = templates.max_number_unassigned_atoms_;
 
 		return *this;
 	}
@@ -120,6 +128,8 @@ namespace BALL
 	
 	void Templates::assign(System& system, bool overwrite_existing_type_names, bool overwrite_non_zero_charges) const
 	{
+ 		(const_cast<Templates*>(this))->unassigned_atoms_.clear();
+
 		// iterate over all atoms
 		AtomIterator it = system.beginAtom();
 		for (; +it; ++it)
@@ -153,6 +163,11 @@ namespace BALL
 						else
 						{
 							Log.warn() << "Templates::assign: cannot assign charge for atom " << name << endl;
+							(const_cast<Templates*>(this))-> getUnassignedAtoms().insert(&*it);
+  						if (getNumberOfUnassignedAtoms() > getMaximumUnassignedAtoms())
+							{
+								return;
+							}
 						}
 					}
 					// Reset the name to avoid influence on the type assignment.
@@ -197,6 +212,8 @@ namespace BALL
 
 	void Templates::assignTypeNames(System& system, bool overwrite_existing_type_names) const
 	{
+ 		(const_cast<Templates*>(this))->unassigned_atoms_.clear();
+
 		// iterate over all atoms
 		AtomIterator it = system.beginAtom();
 		for (; +it; ++it)
@@ -232,6 +249,11 @@ namespace BALL
 						else 
 						{
 							Log.warn() << "Templates::assignTypeNames: cannot assign type name for atom " << it->getFullName() << endl;
+							(const_cast<Templates*>(this))-> getUnassignedAtoms().insert(&*it);
+  						if (getNumberOfUnassignedAtoms() > getMaximumUnassignedAtoms())
+							{
+								return;
+							}
 						}
 					}
 				}
@@ -242,6 +264,8 @@ namespace BALL
 
 	void Templates::assignCharges(System& system, bool overwrite_non_zero_charges) const
 	{
+ 		(const_cast<Templates*>(this))->unassigned_atoms_.clear();
+
 		// iterate over all atoms
 		AtomIterator it = system.beginAtom();
 		for (; +it; ++it)
@@ -277,11 +301,37 @@ namespace BALL
 						else 
 						{
 							Log.warn() << "Templates::assignCharges: cannot assign charge for atom " << it->getFullName() << endl;
+							(const_cast<Templates*>(this))-> getUnassignedAtoms().insert(&*it);
+  						if (getNumberOfUnassignedAtoms() > getMaximumUnassignedAtoms())
+							{
+								return;
+							}
 						}
 					}
 				}
 			}
 		}	
+	}
+
+
+	void Templates::setMaximumUnassignedAtoms(Size nr)
+	{
+		max_number_unassigned_atoms_ = nr;
+	}
+	
+	Size Templates::getMaximumUnassignedAtoms() const
+	{
+		return max_number_unassigned_atoms_;
+	}
+
+	Size Templates::getNumberOfUnassignedAtoms() const
+	{
+		return unassigned_atoms_.size();
+	}
+
+	HashSet<const Atom*>& Templates::getUnassignedAtoms()
+	{
+		return unassigned_atoms_;
 	}
 
 } // namespace BALL
