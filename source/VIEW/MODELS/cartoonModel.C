@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.41 2004/09/13 11:11:56 amoll Exp $
+// $Id: cartoonModel.C,v 1.42 2004/09/13 16:53:29 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 
@@ -10,6 +10,8 @@
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
+#include <BALL/VIEW/PRIMITIVES/line.h>
+#include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/chain.h>
@@ -971,65 +973,49 @@ namespace BALL
 
 			if (sa1 == 0) return;
 
-			// ------------------------------------
-			// create first half of first side side
-			v1 = sa1->getPosition() - sa2->getPosition();
-			Vector3 normal2 = v1 % normal;
+			TwoColoredTube* tube = new TwoColoredTube;
+			if (sa1->getBond(*sa2)->getFirstAtom() == sa1)
+			{
+				tube->setVertex1(sa1->getPosition());
+				tube->setVertex2(sa2->getPosition());
+			}
+			else
+			{
+				tube->setVertex1(sa2->getPosition());
+				tube->setVertex2(sa1->getPosition());
+			}
+			tube->setRadius(0.1);
+			tube->setComposite(sa1->getBond(*sa2));
+			geometric_objects_.push_back(tube);
 
-			Vector3 ul = sa1->getPosition() + normal;
-			Vector3 ur = sa2->getPosition() + normal;
-			Vector3 ll = sa1->getPosition() - normal;
-			Vector3 lr = sa2->getPosition() - normal;
+			Sphere* s1 = new Sphere;
+			s1->setPosition(sa1->getPosition());
+			s1->setRadius(0.1);
+			s1->setComposite(sa1);
+			geometric_objects_.push_back(s1);
 
-			vertices.push_back(ul);
-			vertices.push_back(ur);
-			vertices.push_back(lr);
-			vertices.push_back(ll);
-			normals.push_back(normal2);
-			normals.push_back(normal2);
-			normals.push_back(normal2);
-			normals.push_back(normal2);
-
-			t.v1 = vertices.size() - 4;
-			t.v2 = vertices.size() - 2;
-			t.v3 = vertices.size() - 1;
-			triangles.push_back(t);
-
-			// create second half of first side side
-			t.v1 = vertices.size() - 4;
-			t.v2 = vertices.size() - 3;
-			t.v3 = vertices.size() - 2;
-			triangles.push_back(t);
+			s1 = new Sphere;
+			s1->setPosition(sa2->getPosition());
+			s1->setRadius(0.1);
+			s1->setComposite(sa2);
+			geometric_objects_.push_back(s1);
 
 			if (sa3 == 0) return;
 
-			// ------------------------------------
-			// create first half of second side side
-			v1 = sa3->getPosition() - sa2->getPosition();
-			Vector3 normal3 = v1 % normal;
-
-			Vector3 ur2 = sa3->getPosition() + normal;
-			Vector3 lr2 = sa3->getPosition() - normal;
-			vertices.push_back(ur);
-			vertices.push_back(lr);
-			vertices.push_back(ur2);
-			vertices.push_back(lr2);
-
-			normals.push_back(normal3);
-			normals.push_back(normal3);
-			normals.push_back(normal3);
-			normals.push_back(normal3);
-
-			t.v1 = vertices.size() - 4;
-			t.v2 = vertices.size() - 3;
-			t.v3 = vertices.size() - 1;
-			triangles.push_back(t);
-
-			// create second half of second side side
-			t.v1 = vertices.size() - 4;
-			t.v2 = vertices.size() - 1;
-			t.v3 = vertices.size() - 2;
-			triangles.push_back(t);
+			tube = new TwoColoredTube;
+			if (sa2->getBond(*sa3)->getFirstAtom() == sa2)
+			{
+				tube->setVertex1(sa2->getPosition());
+				tube->setVertex2(sa3->getPosition());
+			}
+			else
+			{
+				tube->setVertex1(sa3->getPosition());
+				tube->setVertex2(sa2->getPosition());
+			}
+			tube->setRadius(0.1);
+			tube->setComposite(sa2->getBond(*sa3));
+			geometric_objects_.push_back(tube);
 		}
 
 
@@ -1046,15 +1032,30 @@ namespace BALL
 				geometric_objects_.push_back(mesh);
 
 				Vector3 connection_point;
+				Vector3 hbond_connection_point;
 				Atom* atoms[9];
 				for (Position p = 0; p < 9; p++) atoms[p] = 0;
 
+				vector<Atom*> hbond_atoms;
 
 				if (r->getName() == "A" ||
 						r->getName() == "G")
 				{
-					String atom_names[9] = {"N9", "C4", "N3", "C2", "N1", "C6", "C5", "N7", "C8"};
-					if (!assignNucleotideAtoms_(*r, 9, atom_names, atoms)) continue;
+					if (r->getName() == "A")
+					{
+						String atom_names[10] = {"N9", "C4", "N3", "C2", "N1", "C6", "C5", "N7", "C8", "N6"};
+						if (!assignNucleotideAtoms_(*r, 10, atom_names, atoms)) continue;
+						hbond_atoms.push_back(atoms[4]);
+						hbond_atoms.push_back(atoms[9]);
+					}
+					else
+					{
+						String atom_names[11] = {"N9", "C4", "N3", "C2", "N1", "C6", "C5", "N7", "C8", "O6", "N2"};
+						if (!assignNucleotideAtoms_(*r, 11, atom_names, atoms)) continue;
+						hbond_atoms.push_back(atoms[9]);
+						hbond_atoms.push_back(atoms[4]);
+						hbond_atoms.push_back(atoms[10]);
+					}
 
 					connection_point = atoms[0]->getPosition();
 					createTriangle_(*mesh, *atoms[1], *atoms[0], *atoms[8], atoms[1], atoms[0], atoms[8]); 	// C4,N9,C8
@@ -1064,30 +1065,44 @@ namespace BALL
 					createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[4], atoms[1], atoms[2], 0); 				// C4,N3,N1
 					createTriangle_(*mesh, *atoms[1], *atoms[4], *atoms[5], atoms[4], atoms[5], 0); 				// C4,N1,C6
 					createTriangle_(*mesh, *atoms[1], *atoms[5], *atoms[6], atoms[5], atoms[6], 0); 				// C4,C6,C5
+					hbond_connection_point = atoms[4]->getPosition();
+
+					Sphere* s = new Sphere;
+					s->setComposite(atoms[8]);
+					s->setRadius(0.1);
+					s->setPosition(atoms[8]->getPosition());
+					geometric_objects_.push_back(s);
 				}
 				// -------------------------------------------------
 				else if (r->getName() == "C")
 				{
-					String atom_names[9] = {"N1", "C2", "N3", "C4", "C5", "C6", "", "", ""};
-					if (!assignNucleotideAtoms_(*r, 6, atom_names, atoms)) continue;
+					String atom_names[9] = {"N1", "C2", "N3", "C4", "C5", "C6", "N4", "O2", ""};
+					if (!assignNucleotideAtoms_(*r, 8, atom_names, atoms)) continue;
 
 					connection_point = atoms[0]->getPosition();
 					createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[3], atoms[1], atoms[2], atoms[3]); 	// C2,N3,C4
 					createTriangle_(*mesh, *atoms[0], *atoms[1], *atoms[3], atoms[0], atoms[1], 0); 			  // N1,C2,C4
 					createTriangle_(*mesh, *atoms[0], *atoms[3], *atoms[4], atoms[3], atoms[4], 0); 				// N1,C4,C5
 					createTriangle_(*mesh, *atoms[0], *atoms[5], *atoms[4], atoms[0], atoms[5], atoms[4]); 	// N1,C6,C5
+					hbond_connection_point = atoms[2]->getPosition();
+					hbond_atoms.push_back(atoms[6]);
+					hbond_atoms.push_back(atoms[2]);
+					hbond_atoms.push_back(atoms[7]);
 				}
 				// -------------------------------------------------
 				else if (r->getName() == "T")
 				{
-					String atom_names[9] = {"C2", "N3", "C4", "C5", "C6", "N1", "", "", ""};
-					if (!assignNucleotideAtoms_(*r, 6, atom_names, atoms)) continue;
+					String atom_names[9] = {"C2", "N3", "C4", "C5", "C6", "N1", "O4", "", ""};
+					if (!assignNucleotideAtoms_(*r, 7, atom_names, atoms)) continue;
 
 					connection_point = atoms[5]->getPosition();
 					createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[3], atoms[1], atoms[2], atoms[3]); 	// N3,C4,C5
 					createTriangle_(*mesh, *atoms[0], *atoms[1], *atoms[3], atoms[0], atoms[1], 0); 			  // C2,N3,C5
 					createTriangle_(*mesh, *atoms[0], *atoms[3], *atoms[4], atoms[3], atoms[4], 0); 				// C2,C5,C6
 					createTriangle_(*mesh, *atoms[0], *atoms[5], *atoms[4], atoms[0], atoms[5], atoms[4]); 	// C2,N1,C6
+					hbond_connection_point = atoms[5]->getPosition();
+					hbond_atoms.push_back(atoms[1]);
+					hbond_atoms.push_back(atoms[6]);
 				}
 				else
 				{
@@ -1114,13 +1129,50 @@ namespace BALL
 				{
 					Tube* tube = new Tube;
 					tube->setComposite(r);
-					Vector3 v = connection_point - *old_spline_point;
-					Vector3 vn = v.normalize();
-					vn *= 0.1;
-					tube->setVertex1(connection_point + vn);
+					tube->setVertex1(connection_point);
 					tube->setVertex2(*old_spline_point);
 					tube->setRadius(0.1);
 					geometric_objects_.push_back(tube);
+				}
+
+				for (Position p = 0; p < hbond_atoms.size(); p++)
+				{
+					Atom* a1 = hbond_atoms[p];
+					AtomBondIterator bit = a1->beginBond();
+					for (; +bit; ++bit)
+					{
+						if ((*bit).getType() == Bond::TYPE__HYDROGEN)
+						{
+							Atom* a2 = (*bit).getPartner(*a1);
+							Line* line = new Line;
+							line->setVertex1(a1->getPosition());
+							line->setVertex2(a2->getPosition());
+							line->setComposite(&*bit);
+							geometric_objects_.push_back(line);
+						}
+						else
+						{
+							if (a1->getName() == "N3" ||
+									(a1->getName() == "N1" && r->getName() == "G"))
+							{
+								continue;
+							}
+							
+							Atom* a2 = (*bit).getPartner(*a1);
+							Sphere* s = new Sphere;
+							s->setComposite(a1);
+							s->setPosition(a1->getPosition());
+							s->setRadius(0.1);
+							geometric_objects_.push_back(s);
+
+							TwoColoredTube* tube= new TwoColoredTube;
+							tube->setVertex2(a1->getPosition());
+							tube->setVertex1(a2->getPosition());
+							tube->setRadius(0.1);
+							tube->setComposite(&*bit);
+							geometric_objects_.push_back(tube);
+						}
+					}
 				}
 
 				// done for Residue r

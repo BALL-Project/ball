@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.20 2004/09/10 14:41:05 amoll Exp $
+// $Id: cartoonModel.h,v 1.22 2004/09/13 17:12:38 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -164,6 +164,9 @@ namespace BALL
 			void createTriangle_(Mesh& mesh, const Atom& a1, const Atom& a2, const Atom& a3,
 																			 const Atom* sa1, const Atom* sa2, const Atom* sa3)
  				throw();
+
+			bool assignNucleotideAtoms_(Residue& r, Size nr_atoms, String atom_names[10], Atom* atoms[10])
+				throw();
 
 			Composite* last_chain_;
 
