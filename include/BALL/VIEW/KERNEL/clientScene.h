@@ -1,4 +1,4 @@
-// $Id: clientScene.h,v 1.1 1999/08/26 07:53:15 oliver Exp $
+// $Id: clientScene.h,v 1.3 1999/12/19 17:19:26 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENTSCENE_H
 #define BALL_VIEW_KERNEL_CLIENTSCENE_H
@@ -99,7 +99,20 @@ namespace BALL
 
 			void insert(Composite &composite);
 
-			void update();
+			bool update(bool rebuild_displaylists = false);
+
+			void setCreatorValue(int address, int value);
+
+			int getCreatorValue(int address);
+
+			bool hasCreatorValue(int address, int value);
+
+			void setProcessorValue(int address, int value);
+
+			int getProcessorValue(int address);
+
+			bool hasProcessorValue(int address, int value);
+
 			//@}
 
 			/**	@name	Debugging and Diagnostics
