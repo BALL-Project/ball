@@ -31,21 +31,21 @@ can \member{apply}{} it to any given kernel data structure:
 
 \begin{lstlisting}{}
 	FragmentDB db;
-	S.apply(db.normalize_names);
+	S.apply(db.normalize\_names);
 \end{lstlisting}
 
 \noindent
 Instantiating \class{FragmentDB} usually takes a few seconds to parse the
 fragment database and the naming conversion tables stored in
 \directory{BALL/data/Fragments}. The resulting data may then be used by two
-very handy processors: add_hydrogens and build_bonds.
+very handy processors: add\_hydrogens and build\_bonds.
 As their names suggest, those processors add the missing hydrogen atoms and
 rebuild missing bonds. We will now add the missing atoms and bonds of BPTI 
 through simple application of the two processors:
 
 \begin{lstlisting}{}
-	S.apply(db.add_hydrogens);
-	S.apply(db.build_bonds);
+	S.apply(db.add\_hydrogens);
+	S.apply(db.build\_bonds);
 \end{lstlisting}
 \index{adding hydrogens}
 \index{building bonds}
@@ -120,8 +120,8 @@ for which the expression evaluates to true. In our case, the expression
 \index{selecting atoms}
 
 \begin{lstlisting}{}
-	Selector hydrogen_selector("element(H)");
-	S.apply(hydrogen_selector);
+	Selector hydrogen\_selector("element(H)");
+	S.apply(hydrogen\_selector);
 \end{lstlisting}
 
 \noindent
@@ -186,9 +186,9 @@ let the force field know that you want to set up a box with water around the
 current system:
 
 \begin{lstlisting}{}
-	amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] 
+	amber.options[PeriodicBoundary::Option::PERIODIC\_BOX\_ENABLED] 
 			= true;
-	amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ADD_SOLVENT] 
+	amber.options[PeriodicBoundary::Option::PERIODIC\_BOX\_ADD\_SOLVENT] 
 			= true;
 	amber.setup(S);
 \end{lstlisting}
