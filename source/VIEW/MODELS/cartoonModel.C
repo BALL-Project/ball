@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.33 2004/09/08 13:57:05 amoll Exp $
+// $Id: cartoonModel.C,v 1.34 2004/09/08 14:30:58 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 
@@ -9,6 +9,7 @@
 #include <BALL/VIEW/PRIMITIVES/disc.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/chain.h>
@@ -186,12 +187,24 @@ namespace BALL
 				tube->setRadius(tube_radius_);
 				geometric_objects_.push_back(tube);
 
+				Sphere* sphere1 = new Sphere;
+				sphere1->setPosition(base_atom->getPosition() -v);
+				sphere1->setRadius(tube_radius_);
+				sphere1->setComposite(r);
+				geometric_objects_.push_back(sphere1);
+
 				Tube* tube2 = new Tube;
 				tube2->setVertex1(partner_base->getPosition());
 				tube2->setVertex2(partner_base->getPosition() + v);
 				tube2->setComposite(partner);
 				tube2->setRadius(tube_radius_);
 				geometric_objects_.push_back(tube2);
+
+				Sphere* sphere2 = new Sphere;
+				sphere2->setPosition(partner_base->getPosition() + v);
+				sphere2->setRadius(tube_radius_);
+				sphere2->setComposite(partner);
+				geometric_objects_.push_back(sphere2);
 			}
 
 			have_start_point_ = false;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.17 2004/09/04 01:50:47 amoll Exp $
+// $Id: cartoonModel.h,v 1.18 2004/09/08 14:31:34 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -15,6 +15,7 @@ namespace BALL
 {
 	class SecondaryStructure;
 	class AtomContainer;
+	class Residue;
 
 	namespace VIEW
 	{
@@ -147,6 +148,8 @@ namespace BALL
 											 Position& last_vertices,
 											 Mesh& mesh);
 
+			void calculateComplementaryBases_(const Composite& composite) throw();
+
 			Composite* last_chain_;
 
 			SplinePoint last_spline_point_;
@@ -157,6 +160,8 @@ namespace BALL
 			float helix_radius_;
 			float arrow_width_;
 			float arrow_height_;
+
+			HashMap<Residue*, Residue*> complementary_bases_;
 	};
 
 	} // namespace VIEW
