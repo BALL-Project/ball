@@ -1,0 +1,792 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>ModelSettingsDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>ModelSettingsDialog</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>441</width>
+            <height>280</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>ModelSettingsDialog</string>
+    </property>
+    <widget class="QTabWidget">
+        <property name="name">
+            <cstring>cartoon_tube_radius</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>0</x>
+                <y>0</y>
+                <width>450</width>
+                <height>280</height>
+            </rect>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>280</width>
+                <height>0</height>
+            </size>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>700</width>
+                <height>400</height>
+            </size>
+        </property>
+        <property name="tabPosition">
+            <enum>Top</enum>
+        </property>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>TabPage</cstring>
+            </property>
+            <attribute name="title">
+                <string>Stick</string>
+            </attribute>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>11</y>
+                        <width>86</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>cylinder radius:</string>
+                </property>
+            </widget>
+            <spacer>
+                <property name="name">
+                    <cstring>spacer1_2_2</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>40</width>
+                        <height>16</height>
+                    </size>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>103</x>
+                        <y>18</y>
+                        <width>40</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+            </spacer>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>stick_radius</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>149</x>
+                        <y>11</y>
+                        <width>50</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>50</width>
+                        <height>22</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>30</width>
+                        <height>32767</height>
+                    </size>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>tab</cstring>
+            </property>
+            <attribute name="title">
+                <string>Ball &amp;&amp; Stick</string>
+            </attribute>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>11</y>
+                        <width>86</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>cylinder radius:</string>
+                </property>
+            </widget>
+            <spacer>
+                <property name="name">
+                    <cstring>spacer1_2</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>40</width>
+                        <height>16</height>
+                    </size>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>103</x>
+                        <y>18</y>
+                        <width>40</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+            </spacer>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>ball_stick_cylinder_radius</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>149</x>
+                        <y>11</y>
+                        <width>50</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>50</width>
+                        <height>22</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>30</width>
+                        <height>32767</height>
+                    </size>
+                </property>
+            </widget>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>41</y>
+                        <width>79</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>sphere radius:</string>
+                </property>
+            </widget>
+            <spacer>
+                <property name="name">
+                    <cstring>spacer1</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>47</width>
+                        <height>16</height>
+                    </size>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>96</x>
+                        <y>48</y>
+                        <width>47</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+            </spacer>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>ball_stick_sphere_radius</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>149</x>
+                        <y>41</y>
+                        <width>50</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>50</width>
+                        <height>22</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>30</width>
+                        <height>32767</height>
+                    </size>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>TabPage</cstring>
+            </property>
+            <attribute name="title">
+                <string>VDW</string>
+            </attribute>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2_5</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>11</y>
+                        <width>72</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>radius factor:</string>
+                </property>
+            </widget>
+            <spacer>
+                <property name="name">
+                    <cstring>spacer1_5</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>54</width>
+                        <height>16</height>
+                    </size>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>89</x>
+                        <y>18</y>
+                        <width>54</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+            </spacer>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>vdw_radius_factor</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>149</x>
+                        <y>11</y>
+                        <width>50</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>50</width>
+                        <height>22</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>30</width>
+                        <height>32767</height>
+                    </size>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>tab</cstring>
+            </property>
+            <attribute name="title">
+                <string>Surface</string>
+            </attribute>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>9</y>
+                        <width>73</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>probe radius:</string>
+                </property>
+            </widget>
+            <spacer>
+                <property name="name">
+                    <cstring>spacer1_3</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>53</width>
+                        <height>16</height>
+                    </size>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>90</x>
+                        <y>16</y>
+                        <width>53</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+            </spacer>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>surface_probe_radius</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>149</x>
+                        <y>9</y>
+                        <width>50</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>50</width>
+                        <height>22</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>30</width>
+                        <height>32767</height>
+                    </size>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>tab</cstring>
+            </property>
+            <attribute name="title">
+                <string>Tube</string>
+            </attribute>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2_4</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>9</y>
+                        <width>37</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>radius:</string>
+                </property>
+            </widget>
+            <spacer>
+                <property name="name">
+                    <cstring>spacer1_4</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>89</width>
+                        <height>16</height>
+                    </size>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>54</x>
+                        <y>16</y>
+                        <width>89</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+            </spacer>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>lineEdit1_4</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>149</x>
+                        <y>9</y>
+                        <width>50</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>50</width>
+                        <height>22</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>30</width>
+                        <height>32767</height>
+                    </size>
+                </property>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>tab</cstring>
+            </property>
+            <attribute name="title">
+                <string>Cartoon</string>
+            </attribute>
+            <widget class="QLayoutWidget">
+                <property name="name">
+                    <cstring>layout13</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>10</x>
+                        <y>10</y>
+                        <width>194</width>
+                        <height>124</height>
+                    </rect>
+                </property>
+                <vbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout6_3_2</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1_2_4_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>tube radius:</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer1_4_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>45</width>
+                                        <height>7</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QLineEdit">
+                                <property name="name">
+                                    <cstring>lineEdit1_4_2</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>50</width>
+                                        <height>22</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>30</width>
+                                        <height>32767</height>
+                                    </size>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout6_3_2_2</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1_2_4_2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>sphere radius:</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer1_4_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>45</width>
+                                        <height>7</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QLineEdit">
+                                <property name="name">
+                                    <cstring>cartoon_sphere_radius</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>50</width>
+                                        <height>22</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>30</width>
+                                        <height>32767</height>
+                                    </size>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout6_3_2_2_2</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1_2_4_2_2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>arrow width</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer1_4_2_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>45</width>
+                                        <height>7</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QLineEdit">
+                                <property name="name">
+                                    <cstring>cartoon_arrow_width</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>50</width>
+                                        <height>22</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>30</width>
+                                        <height>32767</height>
+                                    </size>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                    <widget class="QLayoutWidget">
+                        <property name="name">
+                            <cstring>layout6_3_2_2_2_2</cstring>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1_2_4_2_2_2_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>arrow height</string>
+                                </property>
+                            </widget>
+                            <spacer>
+                                <property name="name">
+                                    <cstring>spacer1_4_2_2_2_2</cstring>
+                                </property>
+                                <property name="orientation">
+                                    <enum>Horizontal</enum>
+                                </property>
+                                <property name="sizeType">
+                                    <enum>Expanding</enum>
+                                </property>
+                                <property name="sizeHint">
+                                    <size>
+                                        <width>45</width>
+                                        <height>7</height>
+                                    </size>
+                                </property>
+                            </spacer>
+                            <widget class="QLineEdit">
+                                <property name="name">
+                                    <cstring>cartoon_arrow_height</cstring>
+                                </property>
+                                <property name="minimumSize">
+                                    <size>
+                                        <width>50</width>
+                                        <height>22</height>
+                                    </size>
+                                </property>
+                                <property name="maximumSize">
+                                    <size>
+                                        <width>30</width>
+                                        <height>32767</height>
+                                    </size>
+                                </property>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </vbox>
+            </widget>
+        </widget>
+        <widget class="QWidget">
+            <property name="name">
+                <cstring>TabPage</cstring>
+            </property>
+            <attribute name="title">
+                <string>H-Bonds</string>
+            </attribute>
+            <widget class="QLabel">
+                <property name="name">
+                    <cstring>textLabel1_2_2_3</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>11</x>
+                        <y>11</y>
+                        <width>86</width>
+                        <height>24</height>
+                    </rect>
+                </property>
+                <property name="text">
+                    <string>cylinder radius:</string>
+                </property>
+            </widget>
+            <spacer>
+                <property name="name">
+                    <cstring>spacer1_2_3</cstring>
+                </property>
+                <property name="orientation">
+                    <enum>Horizontal</enum>
+                </property>
+                <property name="sizeType">
+                    <enum>Expanding</enum>
+                </property>
+                <property name="sizeHint">
+                    <size>
+                        <width>40</width>
+                        <height>16</height>
+                    </size>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>103</x>
+                        <y>19</y>
+                        <width>40</width>
+                        <height>16</height>
+                    </rect>
+                </property>
+            </spacer>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>hbonds_radius</cstring>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>149</x>
+                        <y>12</y>
+                        <width>50</width>
+                        <height>22</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>50</width>
+                        <height>22</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>30</width>
+                        <height>32767</height>
+                    </size>
+                </property>
+            </widget>
+        </widget>
+    </widget>
+</widget>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
