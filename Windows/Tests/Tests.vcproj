@@ -18,11 +18,11 @@
 			<Tool
 				Name="VCNMakeTool"
 				BuildCommandLine="cd ..\..\source\TEST
-nmake /F $(ProjectDir)\Makefile.win"
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot;"
 				ReBuildCommandLine="cd ..\..\source\TEST
 del *.obj
 del *.exe
-nmake /F $(ProjectDir)\Makefile.win"
+nmake /F &quot;$(ProjectDir)\Makefile.win&quot;"
 				CleanCommandLine="cd ..\..\source\TEST
 del *.obj
 del *.exe"

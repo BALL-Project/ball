@@ -1,4 +1,4 @@
-// $Id: Atom_test.C,v 1.10.4.1 2002/06/05 00:29:01 oliver Exp $
+// $Id: Atom_test.C,v 1.10.4.2 2002/12/06 13:25:38 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.10.4.1 2002/06/05 00:29:01 oliver Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.10.4.2 2002/12/06 13:25:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -366,7 +366,7 @@ using std::ofstream;
 using std::ios;
 CHECK(persistentWrite(TextPersistenceManager&, String&, bool))
 	NEW_TMP_FILE(filename)
-	ofstream	ofile(filename.c_str(), File::OUT);
+	ofstream	ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
 	using namespace RTTI;
 	pm.registerClass(getStreamName<Composite>(), Composite::createDefault);

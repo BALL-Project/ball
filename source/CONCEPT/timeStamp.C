@@ -1,4 +1,4 @@
-// $Id: timeStamp.C,v 1.17.4.4 2002/12/05 16:47:36 crauser Exp $
+// $Id: timeStamp.C,v 1.17.4.5 2002/12/06 13:25:38 oliver Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
 
@@ -40,6 +40,10 @@ namespace BALL
 		ticks=time.ticks;
 #endif
 	}
+
+#ifdef BALL_HAS_WINDOWS_PERFORMANCE_COUNTER
+	long PreciseTime::ticks;
+#endif
 
 	TimeStamp::TimeStamp()
 		throw()

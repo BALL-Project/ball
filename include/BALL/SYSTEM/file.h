@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.39.4.4 2002/12/03 10:08:49 oliver Exp $
+// $Id: file.h,v 1.39.4.5 2002/12/06 13:25:38 oliver Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -19,31 +19,35 @@
 #	include <BALL/SYSTEM/fileSystem.h>
 #endif
 
+#include <iostream>
 #include <fstream>
 #include <stdlib.h>			// 'getenv'
 #include <sys/types.h>
 #include <sys/stat.h>		// 'stat', 'lstat'
 #include <stdio.h>			// 'rename'
-
-#ifdef BALL_COMPILER_MSVC
-#	include <fcntl.h>
-#	include <sys/types.h>
-#	include <sys/stat.h>
-#	include <stdio.h>
-#	include <io.h>
-	// Define the missing symbols from <unistd.h>,
-	// which M$, in its infinite wisdom, was unable to provide.
-#	define F_OK 0
-#	define W_OK 2
-#	define R_OK 4
-#endif
+#include <map>
 
 
 #ifdef BALL_HAS_UNISTD_H
 #	include <unistd.h>			// 'access', 'rename', 'truncate'
 #endif
 
-#include <map>
+#ifdef BALL_COMPILER_MSVC
+#	include <fcntl.h>
+#	include <io.h>
+	// Define the missing symbols from <unistd.h>,
+	// which M$, in its infinite wisdom, was unable to provide.
+#	define F_OK 0
+#	define W_OK 2
+#	define R_OK 4
+#	ifdef IN
+#		undef IN
+#	endif
+#	ifdef	OUT
+#		undef OUT
+#	endif
+#endif
+
 
 namespace BALL 
 {
@@ -138,22 +142,24 @@ namespace BALL
 		//@}
 
 
+
+
 		/**	@name	Constants
 		*/
 		//@{
 
 		/// Open for input (default)
-		static const OpenMode IN;
+		static const OpenMode IN = std::ios::in;
 		/// Open for output
-		static const OpenMode OUT;
+		static const OpenMode OUT = std::ios::out;
 		/// Append. Seek to end before each write operation
-		static const OpenMode APP;
+		static const OpenMode APP = std::ios::app;
 		/// Binary mode
-		static const OpenMode BINARY;
+		static const OpenMode BINARY = std::ios::binary;
 		/// Seek to end directly after opening.
-		static const OpenMode ATE;
+		static const OpenMode ATE =  std::ios::ate;
 		/// Truncate an existing file.
-		static const OpenMode TRUNC;
+		static const OpenMode TRUNC = std::ios::trunc;
 		//@}
 
 		/**	@name	Enums

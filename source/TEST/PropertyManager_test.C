@@ -1,4 +1,4 @@
-// $Id: PropertyManager_test.C,v 1.19.4.3 2002/05/23 01:36:36 oliver Exp $
+// $Id: PropertyManager_test.C,v 1.19.4.4 2002/12/06 13:25:38 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.19.4.3 2002/05/23 01:36:36 oliver Exp $")
+START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.19.4.4 2002/12/06 13:25:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -141,7 +141,7 @@ pm.registerClass(getStreamName<NamedProperty>(), getNew<NamedProperty>);
 
 CHECK(NamedProperty::persistentWrite(PersistenceManager& pm, const char* name = "") const )
 	NEW_TMP_FILE(filename)
-	ofstream  ofile(filename.c_str(), File::OUT);
+	ofstream  ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
 	*np >> pm;
 	ofile.close();	
@@ -588,7 +588,7 @@ CHECK(PropertyManager::write(PersistenceManager& pm) const )
   m.setProperty("PROP8");
   m.setProperty(0);
   m.setProperty(2);
-	ofstream  ofile(filename.c_str(), File::OUT);
+	ofstream  ofile(filename.c_str(), std::ios::out);
 	pm.setOstream(ofile);
 	m.write(pm);
 	ofile.close();	
@@ -631,7 +631,7 @@ RESULT
 
 CHECK(PropertyManager::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	NEW_TMP_FILE(filename)
-	std::ofstream outstr(filename.c_str(), File::OUT);
+	std::ofstream outstr(filename.c_str(), std::ios::out);
 	m.dump(outstr); 
 	TEST_FILE_REGEXP(filename.c_str(), "data/PropertyManager_test/PropertyManager_test_dump.txt")
 RESULT

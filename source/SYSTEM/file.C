@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.33.4.2 2002/12/01 21:45:23 oliver Exp $
+// $Id: file.C,v 1.33.4.3 2002/12/06 13:25:38 oliver Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/TCPTransfer.h>
@@ -26,21 +26,6 @@ using std::endl;
 
 namespace BALL 
 {
-
-
-			/// Open for input (default)
-		
-	const File::OpenMode File::IN = std::ios::in;
-		/// Open for output
-	const File::OpenMode File::OUT = std::ios::out;
-		/// Append. Seek to end before each write operation
-	const File::OpenMode File::APP = std::ios::app;
-		/// Binary mode
-	const File::OpenMode File::BINARY = std::ios::binary;
-		/// Seek to end directly after opening.
-	const File::OpenMode File::ATE = std::ios::ate;
-		/// Truncate an existing file.
-	const File::OpenMode File::TRUNC = std::ios::trunc;
 
 	TransformationManager::TransformationManager()
 	{
