@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineSearch.h,v 1.16 2003/03/17 10:20:26 anhi Exp $
+// $Id: lineSearch.h,v 1.17 2003/03/26 13:56:42 anhi Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_LINESEARCH_H
@@ -13,9 +13,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  MolmecEnergyMinimizer
-     *  @{
-     */
 	class EnergyMinimizer;
 
 	/**	Basic line search class.
@@ -23,6 +20,7 @@ namespace BALL
 			the energy of a system along a given direction using	
 			cubic interpolation.  \par
 			
+    	\ingroup  MolmecEnergyMinimizer
 	*/
 	class LineSearch
 	{
@@ -158,7 +156,6 @@ namespace BALL
 		double initial_energy_;
 		double step_;
 	};
-     /** @} */
 } // namespace BALL
 
 #endif // BALL_MOLMEC_MINIMIZATION/LINESEARCH_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.h,v 1.48 2003/03/14 11:48:56 sturm Exp $
+// $Id: string.h,v 1.49 2003/03/26 13:56:20 anhi Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -43,19 +43,18 @@ using std::string;
 
 namespace BALL 
 {
-    /**  \addtogroup  Miscellaneous
-     *  @{
-     */
 	// forward declaration
 	class Substring;
 
-	/**	@name	String
+	/**	\defgroup String String
 			An improved version of STL string.
-			
+    	
+			\ingroup  DatatypeMiscellaneous
 	*/
 	//@{
 				
 	/**	Extended String class.
+			\ingroup String
 	*/
  	class String
 		: public string
@@ -977,6 +976,7 @@ namespace BALL
 			is defined by a start and end index. It can be used like a String (with several
 			restrictions) but only affects the given range of the string it is bount to. \par
 			
+			\ingroup String
 	*/
 	class Substring
 	{

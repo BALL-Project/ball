@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ruleEvaluator.h,v 1.13 2003/03/14 11:49:25 sturm Exp $
+// $Id: ruleEvaluator.h,v 1.14 2003/03/26 13:56:40 anhi Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULEEVALUATOR_H
@@ -20,9 +20,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  MolmecAssignment
-     *  @{
-     */
 	class INIFile;
 
 	/**	Rule evaluator class.
@@ -32,6 +29,8 @@ namespace BALL
 			They are defined in an INIFile.  \par
 			
 			@see RuleProcessor
+
+    	\ingroup  MolmecAssignment
 	*/
 	class RuleEvaluator
 	{
@@ -149,7 +148,6 @@ namespace BALL
 		bool			valid_;
 		
 	};
-     /** @} */
 } // namespace BALL
 
 

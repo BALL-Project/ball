@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.3 2003/03/03 14:18:09 anhi Exp $
+// $Id: primitiveManager.h,v 1.4 2003/03/26 13:56:55 anhi Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_PRIMITIVEMANAGER_H
 #define BALL_MOLVIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -16,10 +16,8 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewKernel
-     *  @{
-     */
 		/** PrimitiveManager
+    		\ingroup  MolviewKernel
 		*/
 		class PrimitiveManager
 		{
@@ -48,7 +46,6 @@ namespace BALL
 		
 			private:
 		};
-  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

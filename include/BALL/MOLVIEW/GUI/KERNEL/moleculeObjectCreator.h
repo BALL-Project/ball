@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeObjectCreator.h,v 1.10 2003/03/14 11:49:41 sturm Exp $
+// $Id: moleculeObjectCreator.h,v 1.11 2003/03/26 13:56:53 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
 #define BALL_MOLVIEW_GUI_KERNEL_MOLECULEOBJECTCREATOR_H
@@ -43,9 +43,6 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewGui
-     *  @{
-     */
 		using VIEW::ObjectCreator;
 
 		/** MoleculeObjectCreator class.
@@ -58,6 +55,7 @@ namespace BALL
 				This class is used by the class  \link Server Server \endlink  to convert incoming
 				 \link PersistentObject PersistentObject \endlink  objects to  \link Composite Composite \endlink  objects.  \par
 				
+    		\ingroup  MolviewGui
 		*/
 		class MoleculeObjectCreator: public ObjectCreator
 		{
@@ -134,7 +132,6 @@ namespace BALL
 				throw();
 			//@}
 		};
-     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

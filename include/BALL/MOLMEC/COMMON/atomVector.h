@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomVector.h,v 1.19 2003/03/14 11:49:23 sturm Exp $
+// $Id: atomVector.h,v 1.20 2003/03/26 13:56:38 anhi Exp $
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
 #define BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -16,9 +16,6 @@
 
 namespace BALL 
 { 
-    /**  \addtogroup  MolmecCommon
-     *  @{
-     */	
 	class Gradient;
 	class Atom;
 	class Composite;
@@ -26,6 +23,7 @@ namespace BALL
 	/**	Atom vector class.
 			This class is used to store atom pointers.  \par
 			
+    	\ingroup MolmecCommon
 	*/
 	class AtomVector
 		:	private ::std::vector<Atom*>
@@ -176,8 +174,6 @@ namespace BALL
 		*/
 		std::vector<Vector3>	saved_position_;
   };
-
-     /** @} */
 } // end of namespace BALL
 
 #endif // BALL_MOLMEC_MINIMIZATION_GRADIENT_H 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalSAS.h,v 1.22 2003/03/03 14:18:20 anhi Exp $
+// $Id: numericalSAS.h,v 1.23 2003/03/26 13:56:57 anhi Exp $
 
 #ifndef BALL_STRUCTURE_NUMERICALSAS_H
 #define BALL_STRUCTURE_NUMERICALSAS_H
@@ -20,9 +20,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Surface
-     *  @{
-     */
 	class Atom;
 	class AtomContainer;
 	template <typename Key, typename T>
@@ -34,7 +31,11 @@ namespace BALL
 			numerical Integration of Surface Area and Volume and to Dot
 			Surface Contouring of Molecular Assemblies", J. Comput. Chem. (1995),
 			{\em 15}, 273-284).
+	
+			\ingroup Surface
+			@{
 	*/
+
 	
 	/** Calculate the solvent accessible surface area numerically.
 			This method returns the total 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: canonicalMD.h,v 1.21 2003/03/14 11:49:27 sturm Exp $
+// $Id: canonicalMD.h,v 1.22 2003/03/26 13:56:41 anhi Exp $
 
 #ifndef BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
 #define BALL_MOLMEC_MDSIMULATION_CANONICALMD_H   
@@ -52,9 +52,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  MDSimulation
-     *  @{
-     */
 	/** A MD simulation in the canoncial ensemble.
 			A class for doing molecular dynamics simulations      
 			according to the principle of a canonical ensemble (NVT), i.e., 
@@ -65,6 +62,7 @@ namespace BALL
 			true canonical system. In particular, the heat capacity 
 			cannot be calculated!	 \par
 			
+    	\ingroup  MDSimulation
 	*/
   class CanonicalMD 
 		: public MolecularDynamics
@@ -216,7 +214,6 @@ namespace BALL
     //_@} 
 
     };  // end of class CanonicalMD  
-     /** @} */
   } // end of namespace BALL 
 
 #endif // BALL_MOLMEC_MDSIMULATION_CANONICALMD_H

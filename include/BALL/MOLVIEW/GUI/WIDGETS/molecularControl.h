@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.15 2003/03/14 11:49:42 sturm Exp $
+// $Id: molecularControl.h,v 1.16 2003/03/26 13:56:54 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
@@ -26,9 +26,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewGuiWidgets
-     *  @{
-     */
 		using VIEW::Control;
 
 		/**	The MolecularControl class.
@@ -41,6 +38,7 @@ namespace BALL
 				is reimplemented to work on molecular objects instead of  \link GeometricObject GeometricObject \endlink 
 				objects.  \par
 				
+    		\ingroup  MolviewGuiWidgets
 		*/
 		class MolecularControl
 			: public VIEW::Control
@@ -226,7 +224,6 @@ namespace BALL
 			// tests wether a composite holds the criterias
 			MolecularFilter molecular_filter_;
 		};
-     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chain.h,v 1.30 2003/03/14 11:49:06 sturm Exp $
+// $Id: chain.h,v 1.31 2003/03/26 13:56:29 anhi Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -27,9 +27,6 @@
 
 namespace BALL 
 {
-	 /**  \addtogroup  Kernel
-     *  @{
-     */
 	class Protein;
 
 	/** Protein chain class.
@@ -37,6 +34,7 @@ namespace BALL
 			Chains can contain  \link SecondaryStructure SecondaryStructure \endlink s or  \link Residue Residue \endlink s.
 			 \par
 			
+	 		\ingroup  Kernel
 	*/
 	class Chain
 		: public AtomContainer
@@ -443,7 +441,6 @@ namespace BALL
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer)
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_CHAIN_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: typenameRuleProcessor.h,v 1.9 2003/03/14 11:49:26 sturm Exp $
+// $Id: typenameRuleProcessor.h,v 1.10 2003/03/26 13:56:41 anhi Exp $
 // Molecular Mechanics: rule-based assignment of typenames 
 
 #ifndef BALL_MOLMEC_COMMON_TYPENAMERULEPROCESSOR_H
@@ -13,11 +13,9 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  MolmecAssignment
-     *  @{
-     */
 	/**	Typename Rule Processor.
 			
+    	\ingroup  MolmecAssignment
 	*/
 	class TypenameRuleProcessor
 		:	public RuleProcessor
@@ -58,7 +56,6 @@ namespace BALL
 		//@}
 
 	};
-     /** @} */
 } // namespace BALL
 
 

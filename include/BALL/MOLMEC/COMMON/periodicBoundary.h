@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: periodicBoundary.h,v 1.18 2003/03/14 11:49:24 sturm Exp $
+// $Id: periodicBoundary.h,v 1.19 2003/03/26 13:56:39 anhi Exp $
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
 #define BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -20,9 +20,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  MolmecCommon
-     *  @{
-     */	
 	class ForceField;
 
 	class PeriodicBoundary;
@@ -31,6 +28,7 @@ namespace BALL
 			Molecular Mechanics: class representing periodic boundary conditions.
 			 \par
 			
+    	\ingroup  MolmecCommon
 	*/
 	class PeriodicBoundary
 	{
@@ -267,7 +265,6 @@ namespace BALL
 		//_@}
 
 	};
-     /** @} */
 } // namespace BALL
 
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backbone.h,v 1.14 2003/03/14 11:49:44 sturm Exp $
+// $Id: backbone.h,v 1.15 2003/03/26 13:56:55 anhi Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_BACKBONE_H
 #define BALL_MOLVIEW_PRIMITIV_BACKBONE_H
@@ -44,9 +44,6 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewPrimitives
-     *  @{
-     */
 		/** Backbone class.
 				An instance of Backbone represents a graphical representation of a spline
 				path through a list of given  \link Atom Atom \endlink  objects. The spline path
@@ -59,6 +56,7 @@ namespace BALL
 				See this class for further information concerning
 				interface and additional methods.  \par
 				
+    		\ingroup MolviewPrimitives
 		*/
 		class Backbone
 			: public GeometricObject
@@ -374,7 +372,6 @@ namespace BALL
 #		ifndef BALL_NO_INLINE_FUNCTIONS
 #			include <BALL/MOLVIEW/PRIMITIV/backbone.iC>
 #		endif
-  /** @} */		
 	} // namespace MOLVIEW
 
 } // namespace BALL

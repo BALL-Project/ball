@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragment.h,v 1.21 2003/03/14 11:49:08 sturm Exp $
+// $Id: fragment.h,v 1.22 2003/03/26 13:56:30 anhi Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -20,13 +20,11 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Kernel
-     *  @{
-     */
 	/**	Fragment class.
 			Fragments are used to represent parts of molecules (for example functional
 			groups, monomers in larger polymers). \par
 			
+    	\ingroup  Kernel
 	*/
 	class Fragment
 		: public AtomContainer
@@ -130,7 +128,6 @@ namespace BALL
 
 		//@}
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_FRAGMENT_H

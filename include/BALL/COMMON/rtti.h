@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rtti.h,v 1.21 2003/03/03 14:17:33 anhi Exp $
+// $Id: rtti.h,v 1.22 2003/03/26 13:56:10 anhi Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -17,10 +17,6 @@ using std::string;
 
 namespace BALL 
 {
-
-	/**  \addtogroup  Common
-	 * 	@{
-	 */
 
 #	ifdef	__GNUC__
 	// EGCS produces a nearly unreadable name mangling that requires 
@@ -38,10 +34,12 @@ namespace BALL
 			This function is needed for object persistence.
 			@param	t the <tt>type_info</tt> structure as returned by <tt>typeid</tt>
 			@return	string the coverted class name
+			
+			\ingroup Common
 	*/ 
 	string streamClassName(const std::type_info& t);
 
-	/**	@name Simplified RunTime Type Identification.
+	/**	Simplified RunTime Type Identification.
 			ANSI C++ provides support for runtime type identification (RTTI). However, the support
 			is very basic. The template functions of the RTTI namespace  provide a more 
 			readable support for RTTI. It defines
@@ -60,9 +58,9 @@ namespace BALL
 					// this is only a molecule...
 				}
 			\end{verbatim}
+	
+			\ingroup Common
 	*/
-	//@{
-
 	namespace RTTI
 	{
 
@@ -228,11 +226,8 @@ namespace BALL
 			T		t;
 			return (typeid(u) == typeid(t));
 		}
-	//@}
-
 	} // namespace RTTI
 
-	/** @} */
 } // namespace BALL
 
 #endif // BALL_COMMON_RTTI_H

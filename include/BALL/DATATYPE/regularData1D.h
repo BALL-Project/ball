@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.29 2003/03/14 11:48:55 sturm Exp $
+// $Id: regularData1D.h,v 1.30 2003/03/26 13:56:19 anhi Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -14,10 +14,6 @@
 
 namespace BALL
 {
-	/**  \addtogroup  RegularData
-	 *  @{
-	 */
-
 	/**	A class to store regularaly spaced data.
 			This class can is intended to hold regularly spaced, one-dimensional data sets.
 			It might be useful to hold data sets like spectra, or precomputed function values. \par
@@ -26,6 +22,7 @@ namespace BALL
 			(i.e., using operator [] and iterators).
 			 \par
 			
+			\ingroup  RegularData
 	*/
 	template <typename T>
 	class TRegularData1D
@@ -550,7 +547,6 @@ namespace BALL
 		upper_ = upper;
 	}
 
-	/** @} */
 } // namespace BALL
 
 #endif // BALL_DATATYPE_REGULARDATA1D_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleicAcidIterator.h,v 1.5 2003/03/03 14:17:48 anhi Exp $
+// $Id: nucleicAcidIterator.h,v 1.6 2003/03/26 13:56:32 anhi Exp $
 
 #ifndef BALL_KERNEL_NUCLEICACIDITERATOR_H
 #define BALL_KERNEL_NUCLEICACIDITERATOR_H
@@ -24,11 +24,12 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  KernelIterators
-     *  @{
-     */
 	class NucleicAcid;
 
+	/** NucleicAcidIteratorTraits_
+	
+			\ingroup  KernelIterators
+	*/
 	class NucleicAcidIteratorTraits_
 		: public CompositeIteratorTraits_
 	{
@@ -82,7 +83,6 @@ namespace BALL
 	typedef ConstReverseBidirectionalIterator
 		<Composite, NucleicAcid, Composite::SubcompositeIterator, NucleicAcidIteratorTraits_>
 		NucleicAcidConstReverseIterator;
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_NUCLEICACIDITERATOR_H

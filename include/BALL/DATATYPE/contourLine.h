@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourLine.h,v 1.12 2003/03/14 11:48:53 sturm Exp $
+// $Id: contourLine.h,v 1.13 2003/03/26 13:56:17 anhi Exp $
 
 #ifndef BALL_DATATYPE_CONTOURLINE_H
 #define BALL_DATATYPE_CONTOURLINE_H
@@ -18,9 +18,6 @@
 
 namespace BALL
 {
-    /**  \addtogroup  Miscellaneous
-     *  @{
-     */
   // First I define some macros needed for the marching cube-algorithm. 
 	// The names come from the number associated with the different corners of the square.
   #define INTERPOL12 { \
@@ -66,7 +63,7 @@ namespace BALL
 
 
   /** This class is intended to store a single contour line generated from a RegularData2D - class.
-      
+      \ingroup DatatypeMiscellaneous   
   */
   template <typename T>  
   class TContourLine
@@ -328,6 +325,5 @@ namespace BALL
       it_ = data_.begin();
       index_ = 0;
     }
-  /** @} */
 }
 #endif

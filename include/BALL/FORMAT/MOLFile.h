@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.h,v 1.9 2003/03/14 11:48:59 sturm Exp $
+// $Id: MOLFile.h,v 1.10 2003/03/26 13:56:23 anhi Exp $
 
 #ifndef BALL_FORMAT_MOLFILE_H
 #define BALL_FORMAT_MOLFILE_H
@@ -16,9 +16,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  StructureFormats
-     *  @{
-     */
 	class System;
 	class Atom;
 	class Molecule;
@@ -26,6 +23,7 @@ namespace BALL
 	/**	MDL MOL file class.
 			This class enables BALL to read and write MDL MOL files.  \par
 			
+    	\ingroup  StructureFormats
 	*/
 	class MOLFile
 		: public GenericMolFile
@@ -209,7 +207,6 @@ namespace BALL
 		/// Write a line of the bond block 
 		void writeBondLine_(const BondStruct& bond);
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_MOLFILE_H

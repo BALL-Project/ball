@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.23 2003/03/24 09:29:36 oliver Exp $ 
+// $Id: conjugateGradient.h,v 1.24 2003/03/26 13:56:42 anhi Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -53,12 +53,11 @@
 
 namespace BALL 
 { 
-    /**  \addtogroup  MolmecEnergyMinimizer
-     *  @{
-     */
 	/**	Conjugate gradient (CG) minimizer. 
 			
 			A conjugate gradient minimizer for geometry optimisation.
+    	
+			\ingroup  MolmecEnergyMinimizer
 	*/
   class ConjugateGradientMinimizer 
 		: public EnergyMinimizer
@@ -259,7 +258,6 @@ namespace BALL
     //@}
 
 	};
-     /** @} */
 } // end of namespace BALL
 
 #endif // BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 

@@ -31,9 +31,6 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewDialogs
-     *  @{
-     */
 		/**	The LabelProperties class.
 				The class LabelProperties is a dialog for appending to a selection of 
 				molecular objects a label which text and color can be changed.
@@ -42,6 +39,7 @@ namespace BALL
 				The class LabelPropertiesData contains the definition of the layout of
 				this dialog and is therefore not necessary for understanding.  \par
 				
+    		\ingroup  MolviewDialogs
 		*/
 		class LabelProperties : 
 			public LabelPropertiesData,
@@ -225,7 +223,6 @@ namespace BALL
 			ColorRGBA custom_color_;
 			List<Composite*> selection_;
 		};
-     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selectable.h,v 1.15 2003/03/14 11:48:51 sturm Exp $
+// $Id: selectable.h,v 1.16 2003/03/26 13:56:15 anhi Exp $
 
 #ifndef BALL_CONCEPT_SELECTABLE_H
 #define BALL_CONCEPT_SELECTABLE_H
@@ -30,7 +30,7 @@ namespace BALL
 			 \par
 			
 			 \par
-			 \addtogroup  Concepts
+			 \ingroup  Concepts
 	*/
 	class Selectable
 	{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: comparator.h,v 1.10 2003/03/14 11:48:47 sturm Exp $
+// $Id: comparator.h,v 1.11 2003/03/26 13:56:12 anhi Exp $
 
 #ifndef BALL_CONCEPT_COMPARATOR_H
 #define BALL_CONCEPT_COMPARATOR_H
@@ -16,7 +16,7 @@ namespace BALL
 	/**	Generic Comparator Class.
 			It is used as a baseclass, providing a common interface.
 			
-	* 	 \addtogroup  Concepts
+	 	 \ingroup Concepts
 	*/
 	template <typename T>
 	class Comparator

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.h,v 1.19 2003/03/14 11:49:05 sturm Exp $
+// $Id: atomContainer.h,v 1.20 2003/03/26 13:56:28 anhi Exp $
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -39,9 +39,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Miscellaneous
-     *  @{
-     */
 	class Atom;
 	class Molecule;
 
@@ -50,6 +47,7 @@ namespace BALL
 			of all kernel classes containing atoms.
 			 \par
 			
+    	\ingroup  Miscellaneous
 	*/
 	class AtomContainer
 		: public Composite,
@@ -478,7 +476,6 @@ namespace BALL
 		String  name_;
 
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_ATOMCONTAINER_H

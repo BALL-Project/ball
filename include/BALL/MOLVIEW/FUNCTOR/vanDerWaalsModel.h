@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.h,v 1.17 2003/03/14 11:49:37 sturm Exp $
+// $Id: vanDerWaalsModel.h,v 1.18 2003/03/26 13:56:49 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
@@ -18,9 +18,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewFunctorsModels
-     *  @{
-     */
 		using VIEW::Sphere;
 
 		/** AddVanDerWaalsModel class.
@@ -30,6 +27,7 @@ namespace BALL
 				The derived class  \link AddGLVanDerWaalsModel AddGLVanDerWaalsModel \endlink  uses the primitives with openGL implementation.
 				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL documentation. \par
 				
+   			\ingroup  MolviewFunctorsModels
 		*/
 		class AddVanDerWaalsModel: public AtomBondModelBaseProcessor
 		{
@@ -192,7 +190,6 @@ namespace BALL
 			virtual Sphere* createSphere_();
 			//@}
 		};
-  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

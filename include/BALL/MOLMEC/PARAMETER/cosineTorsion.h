@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cosineTorsion.h,v 1.14 2003/03/14 11:49:29 sturm Exp $
+// $Id: cosineTorsion.h,v 1.15 2003/03/26 13:56:43 anhi Exp $
  
 #ifndef BALL_MOLMEC_PARAMETER_COSINETORSION_H
 #define BALL_MOLMEC_PARAMETER_COSINETORSION_H
@@ -16,13 +16,12 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  MolmecParameters
-     *  @{
-     */		
 	/** Cosine Torsion. 
 			
 			Molecular Mechanics Parameter: class describing the parameter
 			section required for torsions using a cosine type potential function.
+    	
+			\ingroup  MolmecParameters
 	*/
 	class CosineTorsion 
 		:	public ParameterSection
@@ -205,7 +204,6 @@ namespace BALL
 		
 		HashMap<Size, Size>		torsion_hash_map_;
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_MOLMEC_PARAMETER_COSINETORSION_H

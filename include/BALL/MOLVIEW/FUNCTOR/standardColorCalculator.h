@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorCalculator.h,v 1.17 2003/03/14 11:49:36 sturm Exp $
+// $Id: standardColorCalculator.h,v 1.18 2003/03/26 13:56:49 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
@@ -18,9 +18,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  ColorCalculators
-     *  @{
-     */			
 		/** ElementColorCalculator class.
 				The class ElementColorCalculator is derived from the class  \link ColorCalculator ColorCalculator \endlink .
 				It is used for calculating element colors of a given  \link Atom Atom \endlink  object.
@@ -29,6 +26,7 @@ namespace BALL
 				This colorCalculator can be set in the class  \link DisplayProperties DisplayProperties \endlink 
 				to color an entire object in its element colors.  \par
 				
+    		\ingroup  ColorCalculators
 		*/
 		class ElementColorCalculator
 			: public ColorCalculator
@@ -651,7 +649,6 @@ namespace BALL
 #			ifndef BALL_NO_INLINE_FUNCTIONS
 #				include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.iC>
 #			endif
-  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

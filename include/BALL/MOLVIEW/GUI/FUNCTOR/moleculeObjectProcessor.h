@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeObjectProcessor.h,v 1.4 2002/02/27 12:19:22 sturm Exp $
+// $Id: moleculeObjectProcessor.h,v 1.5 2003/03/26 13:56:53 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEOBJECTPROCESSOR_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEOBJECTPROCESSOR_H
@@ -83,7 +83,8 @@ namespace BALL
 
 		using VIEW::ObjectProcessor;
 
-		/**
+		/** MoleculeObjectProcessor
+		 		\ingroup MolviewGuiFunctor
 		*/
 		class MoleculeObjectProcessor
 			: public ObjectProcessor

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.h,v 1.30 2003/03/14 11:49:11 sturm Exp $
+// $Id: standardPredicates.h,v 1.31 2003/03/26 13:56:34 anhi Exp $
 
 #ifndef BALL_KERNEL_STANDARDPREDICATES_H
 #define BALL_KERNEL_STANDARDPREDICATES_H
@@ -33,13 +33,11 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Predicates
-     *  @{
-     */
 	/**	@name	Predefined Predicates. 
 			<b>Note:</b> These predicates do not provide the OCI.
 			@see ExpressionPredicate
 			
+    	\ingroup  Predicates
 	*/
 	//@{
 
@@ -831,7 +829,6 @@ namespace BALL
 	};
 
 	//@}	
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_STANDARDPREDICATES_H

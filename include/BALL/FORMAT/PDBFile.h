@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.h,v 1.24 2003/03/14 11:49:00 sturm Exp $
+// $Id: PDBFile.h,v 1.25 2003/03/26 13:56:23 anhi Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -38,8 +38,8 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  StructureFormats
-     *  @{
+    /** Hash 
+		 * \ingroup  StructureFormats
      */
 	inline
 	HashIndex Hash(const Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar>& quadruple)
@@ -48,6 +48,9 @@ namespace BALL
 		return (Index)quadruple.third;
 	}
 
+	/** Operator <<
+	 		\ingroup StructureFormats
+	*/
 	inline
 	std::ostream& operator << (std::ostream& s, const Quadruple<String,PDB::Character,PDB::Integer,PDB::AChar>& /* q */)
 	{
@@ -58,6 +61,7 @@ namespace BALL
 	/**	PDB file class.
 			 \par
 			
+		 \ingroup  StructureFormats
 	*/
 	class PDBFile
 		: public GenericPDBFile
@@ -291,7 +295,6 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/FORMAT/PDBFile.iC>
 #	endif
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_PDBFILE_H

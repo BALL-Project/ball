@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: embeddable.h,v 1.11 2003/03/14 11:48:47 sturm Exp $
+// $Id: embeddable.h,v 1.12 2003/03/26 13:56:12 anhi Exp $
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
 #define BALL_CONCEPT_EMBEDDABLE_H
@@ -43,7 +43,7 @@ namespace BALL
 			@see PyInterpreter
 			@see MainControl
 			@see ModularWidget
-	* 	 \addtogroup  Concepts
+	 	 \ingroup  Concepts
 	*/
 	class Embeddable
 	{

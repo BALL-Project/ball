@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glTwoColoredTube.h,v 1.12 2003/03/14 11:49:42 sturm Exp $
+// $Id: glTwoColoredTube.h,v 1.13 2003/03/26 13:56:54 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
@@ -18,9 +18,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewGuiPrimitves
-     *  @{
-     */
 		using VIEW::GLObject;
 		
 		/** GLTwoColoredTube class.
@@ -33,6 +30,7 @@ namespace BALL
 				twoColoredTube. OpenGL code is used for the visualization.
 				See these classes for further information.  \par
 				
+    		\ingroup  MolviewGuiPrimitves
 		*/
 		class GLTwoColoredTube
 			: public TwoColoredTube,
@@ -225,7 +223,6 @@ namespace BALL
 				(const Vector3& vertex_1, const Vector3& vertex_2,
 				 const Vector3& rotation_axis, const Real angle);
 		};
-     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

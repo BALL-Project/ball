@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: notification.h,v 1.17 2003/03/14 11:48:48 sturm Exp $
+// $Id: notification.h,v 1.18 2003/03/26 13:56:13 anhi Exp $
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H
@@ -18,9 +18,6 @@
 
 namespace BALL 
 {
-	/**  \addtogroup  Concepts
-	 *	@{
-	 */
 
 	/**	@name	Notification Management.
 			Using the notification management, objects may exchange data and notify
@@ -28,6 +25,7 @@ namespace BALL
 			signal/slot mechanism of QT).
 			 \par
 			
+			\ingroup  Concepts
 	*/
 	//@{
 	
@@ -590,7 +588,6 @@ namespace BALL
 	}
 
 	//@}
-	/** @} */
 } // namespace BALL
 
 #endif // BALL_CONCEPT_NOTIFICATION_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.h,v 1.24 2003/03/14 11:49:23 sturm Exp $
+// $Id: forceField.h,v 1.25 2003/03/26 13:56:38 anhi Exp $
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
 #define BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -42,9 +42,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  MolmecCommon
-     *  @{
-     */	
 	class ForceFieldComponent;
 
 	/**	Force field class.
@@ -82,6 +79,7 @@ namespace BALL
 			 \link getForces getForces \endlink  returns a pointer to an array containing the forces
 			for each atom. \par
 			
+    	\ingroup  MolmecCommon
 	*/
 	class ForceField
 	{
@@ -386,7 +384,6 @@ namespace BALL
 
 		//_@}
 	};
-     /** @} */
 } // namespace BALL
 
 #endif // BALL_MOLMEC_COMMON_FORCEFIELD_H

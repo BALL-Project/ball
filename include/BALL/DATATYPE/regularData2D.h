@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2D.h,v 1.25 2003/03/14 11:48:55 sturm Exp $
+// $Id: regularData2D.h,v 1.26 2003/03/26 13:56:19 anhi Exp $
 
 #ifndef BALL_DATATYPE_TRegularData2D_H
 #define BALL_DATATYPE_TRegularData2D_H
@@ -15,15 +15,12 @@
 
 namespace BALL 
 {
-	/**  \addtogroup  RegularData
-	 * 	@{
-	 */
-
 	/**	Simple 2D grid class.
 			This class represents a two-dimensional array. 
 			An instance of GridDataType will be created
 			for each point of the grid upon instantiation of TRegularData2D. \par
 			
+			\ingroup  RegularData
 	*/
 	template <typename GridDataType>
 	class TRegularData2D 
@@ -1188,7 +1185,6 @@ namespace BALL
 	{
 		return !(*this == grid);
 	}
-	/** @} */
  } // namespace BALL
 
 #endif // BALL_DATATYPE_TRegularData2D_H

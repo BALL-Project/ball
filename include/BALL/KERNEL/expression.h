@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expression.h,v 1.25 2003/03/14 11:49:06 sturm Exp $
+// $Id: expression.h,v 1.26 2003/03/26 13:56:29 anhi Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -28,9 +28,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Predicates
-     *  @{
-     */
 	/** Expression class. 
 			This class provides a frontend to ExpressionTree.	 \par
 			Expressions may be built from the following modules:  \par
@@ -43,6 +40,8 @@ namespace BALL
 			pair must exist which encloses the argument of a predicate. Empty arguments are allowed.
 			
 			@see ExpressionTree
+
+    	\ingroup  Predicates
 	*/
 	class Expression
 	{
@@ -197,7 +196,6 @@ namespace BALL
 
 		//@}
 	};
-  /** @} */
 }	
 
 #endif // BALL_KERNEL_EXPRESSION_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: options.h,v 1.18 2003/03/14 11:48:55 sturm Exp $
+// $Id: options.h,v 1.19 2003/03/26 13:56:18 anhi Exp $
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -24,9 +24,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  GenericHash
-     *  @{
-     */
 	/**		Options class.
 				This object is intended to store options for complex
 				method calls. These options are stored as key/value pairs
@@ -37,6 +34,7 @@ namespace BALL
 				and retrieved from a file.  This simplifies the handling of such
 				complex parameter sets. \par
 				
+    		\ingroup  Generic
 	*/
 	class Options
 		: public StringHashMap<String> 
@@ -342,7 +340,6 @@ namespace BALL
 		String		name_;
 
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_DATATYPE_OPTIONS_H

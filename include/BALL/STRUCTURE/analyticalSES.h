@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalSES.h,v 1.12 2003/03/03 14:18:19 anhi Exp $
+// $Id: analyticalSES.h,v 1.13 2003/03/26 13:56:57 anhi Exp $
 
 #ifndef BALL_STRUCTURE_ANALYTICALSES_H
 #define BALL_STRUCTURE_ANALYTICALSES_H
@@ -12,9 +12,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Surface
-     *  @{
-     */
 	// forward declarations
 	class Atom;
 	class AtomContainer;
@@ -27,6 +24,8 @@ namespace BALL
 			@param	fragment the kernel object containing the atoms
 			@param	probe_radius the probe radius used for the SAS
 			@return the SES area in $\AA^2$
+    	
+			\ingroup  Surface
 	*/
 	float calculateSESAtomAreas
 		(const AtomContainer& fragment, HashMap<const Atom*,float>& atom_areas, float probe_radius = 1.5);
@@ -37,6 +36,8 @@ namespace BALL
 			@param	fragment the kernel object containing the atoms
 			@param	probe_radius the probe radius used for the SAS
 			@return the SES area in $\AA^2$
+
+			\ingroup  Surface
 	*/
 	float calculateSESArea
 		(const AtomContainer& fragment, float probe_radius = 1.5);
@@ -47,10 +48,11 @@ namespace BALL
 			@param	fragment the kernel object containing the atoms
 			@param	probe_radius the probe radius used for the SAS
 			@return the volume in $\AA^3$
+
+			\ingroup  Surface
 	*/
 	float calculateSESVolume
 		(const AtomContainer& fragment, float probe_radius = 1.5);
-   /** @} */
 } // namespace BALL
 
 #endif // BALL_STRUCTURE_ANALYTICALSES_H

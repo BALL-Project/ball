@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: protein.h,v 1.24 2003/03/14 11:49:10 sturm Exp $ 
+// $Id: protein.h,v 1.25 2003/03/26 13:56:33 anhi Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -39,15 +39,13 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Kernel
-     *  @{
-     */
 	/**	Protein Class.
 			This class is used to represent proteins.
 			A protein may contain several  \link Chain Chain \endlink ,  \link SecondaryStructure SecondaryStructure \endlink ,
 			and  \link Residue Residue \endlink .
 			 \par
 			
+    	\ingroup  Kernel
 	*/
 	class Protein
 		: public Molecule
@@ -358,7 +356,6 @@ namespace BALL
 
 		String id_;
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_PROTEIN_H

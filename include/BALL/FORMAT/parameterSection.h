@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: parameterSection.h,v 1.21 2003/03/14 11:49:02 sturm Exp $
+// $Id: parameterSection.h,v 1.22 2003/03/26 13:56:26 anhi Exp $
 // Format: general  parameter section class
 
 #ifndef BALL_FORMAT_PARAMETERSECTION_H
@@ -17,9 +17,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  General
-     *  @{
-     */
 	class Parameters;
 
 	/**	General Parameter Section Class.
@@ -39,6 +36,7 @@ namespace BALL
 			Each value line may contain version information, indicated by a variable 
 			definition named "ver"; thus only the latest version will be version will be accessed.
 			
+    	\ingroup  General
 	*/
 	class ParameterSection 
 	{
@@ -241,7 +239,6 @@ namespace BALL
 		bool		valid_;
 
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_PARAMETERSECTION_H

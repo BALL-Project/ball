@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: trajectoryFile.h,v 1.16 2003/03/14 11:49:03 sturm Exp $
+// $Id: trajectoryFile.h,v 1.17 2003/03/26 13:56:26 anhi Exp $
 
 #ifndef BALL_FORMAT_TRAJECTORYFILE_H
 #define BALL_FORMAT_TRAJECTORYFILE_H
@@ -20,9 +20,6 @@
 
 namespace BALL
 {
-    /**  \addtogroup  MDFormats
-     *  @{
-     */
 	class SnapShot;
 	class SnapShotManager;
 
@@ -31,6 +28,7 @@ namespace BALL
 			would not make too much sense to create yet-another-trajectory-format.
 			This class will be specialized by actual formats, like DCD.	 \par
 			
+    	\ingroup  MDFormats
 	*/
 	class TrajectoryFile
 		:	public File
@@ -152,7 +150,6 @@ namespace BALL
 		//@}
 		
 	};
-  /** @} */
 } // namespace BALL
 
 #endif //  BALL_FORMAT_TRAJECTORYFILE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extendedProperty.h,v 1.13 2003/03/14 11:49:43 sturm Exp $
+// $Id: extendedProperty.h,v 1.14 2003/03/26 13:56:54 anhi Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
 #define BALL_MOLVIEW_KERNEL_EXTENDEDPROPERTY_H
@@ -14,9 +14,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewKernel
-     *  @{
-     */
 		/** ExtendedPropertyManager class.
 				The class ExtendedPropertyManager overrides the  \link setProperty setProperty \endlink  method
 				from the class  \link PropertyManager PropertyManager \endlink . That is necessary because there are
@@ -28,6 +25,7 @@ namespace BALL
 				This class will be used by the class  \link BaseModelProcessor BaseModelProcessor \endlink , so that all
 				derived processors can make use of the properties.  \par
 				
+    		\ingroup MolviewKernel
 		*/
 		class ExtendedPropertyManager: public PropertyManager
 		{
@@ -93,7 +91,6 @@ namespace BALL
 				throw();
 			//@}
 		};
-  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

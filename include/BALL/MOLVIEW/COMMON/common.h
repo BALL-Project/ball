@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.18 2003/03/03 14:18:01 anhi Exp $
+// $Id: common.h,v 1.19 2003/03/26 13:56:45 anhi Exp $
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #define BALL_MOLVIEW_COMMON_COMMON_H
@@ -23,9 +23,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewCommon
-     *  @{
-     */
 		//		struct GeometricObject
 		//		{
 			/** Predefined properties.
@@ -33,6 +30,8 @@ namespace BALL
 					This properties define the models available in MOLVIEW.
 					This enumeration is an extension of the property in the  \link GeometricObject GeometricObject \endlink 
 					class.
+    
+					\ingroup  MolviewCommon
 			*/
 			enum Property
 			{
@@ -61,7 +60,6 @@ namespace BALL
 				NUMBER_OF_PROPERTIES
 			};
 			//		};
-  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

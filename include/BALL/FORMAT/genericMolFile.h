@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.h,v 1.17 2003/03/14 11:49:01 sturm Exp $
+// $Id: genericMolFile.h,v 1.18 2003/03/26 13:56:25 anhi Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -12,9 +12,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  StructureFormats
-     *  @{
-     */
 	class Atom;
 	class System;
 	class Molecule;
@@ -55,6 +52,7 @@ namespace BALL
 			to parse that kind of format.
 			 \par
 			
+    	\ingroup  StructureFormats
 	*/
 	class GenericMolFile
 		: public LineBasedFile
@@ -184,7 +182,6 @@ namespace BALL
 		virtual GenericMolFile& operator << (const Molecule& molecule);
 		//@}
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_GENERICMOLFILE_H

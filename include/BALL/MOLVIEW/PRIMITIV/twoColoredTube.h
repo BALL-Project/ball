@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.h,v 1.15 2003/03/14 11:49:45 sturm Exp $
+// $Id: twoColoredTube.h,v 1.16 2003/03/26 13:56:56 anhi Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
@@ -26,9 +26,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewPrimitives
-     *  @{
-     */
 		using VIEW::GeometricObject;
 		using VIEW::ColorExtension2;
 		using VIEW::Vertex2;
@@ -52,6 +49,7 @@ namespace BALL
 				See these classes for further information concerning
 				interface and additional methods.  \par
 				
+    		\ingroup MolviewPrimitives
 		*/
 		class TwoColoredTube
 			: public GeometricObject,
@@ -298,7 +296,6 @@ namespace BALL
 	#ifndef BALL_NO_INLINE_FUNCTIONS
 	# include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.iC>
 	#endif
-  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: datatype.doc,v 1.15 2003/02/25 10:32:22 anhi Exp $
+// $Id: datatype.doc,v 1.16 2003/03/26 13:56:17 anhi Exp $
 
 /** \defgroup Datatype General datastructures
 		\ingroup Foundation
@@ -14,6 +14,6 @@
 	*   \ingroup Datatype
 	*/
 
-	/**	\defgroup Miscellaneous Miscellaneous
+	/**	\defgroup DatatypeMiscellaneous Miscellaneous
 	 * 	\ingroup Datatype
 	 */

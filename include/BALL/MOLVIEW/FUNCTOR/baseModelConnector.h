@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseModelConnector.h,v 1.11 2003/03/14 11:49:34 sturm Exp $
+// $Id: baseModelConnector.h,v 1.12 2003/03/26 13:56:47 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
@@ -27,9 +27,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewFunctorsBase
-     *  @{
-     */		
 		/** BaseModelConnector class.
 				The class BaseModelConnector is derived from  \link Visitor Visitor \endlink  and
 				 \link PropertyManager PropertyManager \endlink . It contains therefore the visitor interface
@@ -46,6 +43,7 @@ namespace BALL
 				This class has access to the class  \link FindGeometricObjects FindGeometricObjects \endlink  and the class 
 				 \link ColorCalculator ColorCalculator \endlink .  \par
 				
+    		\ingroup  MolviewFunctorsBase
 		*/
 		class BaseModelConnector
 			: public Visitor<Composite>,
@@ -271,7 +269,6 @@ namespace BALL
 #			ifndef BALL_NO_INLINE_FUNCTIONS
 #				include <BALL/MOLVIEW/FUNCTOR/baseModelConnector.iC>
 #			endif
-  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

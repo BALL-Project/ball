@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: predicate.h,v 1.14 2003/03/14 11:49:10 sturm Exp $
+// $Id: predicate.h,v 1.15 2003/03/26 13:56:33 anhi Exp $
 
 #ifndef BALL_KERNEL_PREDICATE_H
 #define BALL_KERNEL_PREDICATE_H
@@ -20,10 +20,7 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Predicates
-     *  @{
-     */
-	/**	@name	Kernel predicates
+	/**	@name	KernelPredicates Kernel predicates
 			This chapter describes a set of unary predicates acting on  \link Composites Composites \endlink , that
 			can be used to identify the class type of a composite at runtime. \par
 			This predicates are functionally similar to the  \link RTTI:isKindOf RTTI:isKindOf \endlink  function.
@@ -43,6 +40,8 @@ namespace BALL
 			
 			@see	UnaryPredicate
 			@see	RTTI	
+    
+			\ingroup  Predicates
 	*/
 	//@{
 	
@@ -73,7 +72,6 @@ namespace BALL
 	}
 
 	//@}
-  /** @} */
 } // namespace BALL
 
 

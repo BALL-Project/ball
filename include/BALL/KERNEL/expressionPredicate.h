@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionPredicate.h,v 1.8 2003/03/14 11:49:07 sturm Exp $
+// $Id: expressionPredicate.h,v 1.9 2003/03/26 13:56:30 anhi Exp $
 
 #ifndef BALL_KERNEL_EXPRESSIONPREDICATE_H
 #define BALL_KERNEL_EXPRESSIONPREDICATE_H
@@ -12,15 +12,14 @@
 
 namespace BALL
 {
-    /**  \addtogroup  Predicates
-     *  @{
-     */
 	/** ExpressionPredicate. 
 			The base class for all kernel predicates (defined in BALL/KERNEL/standardPredicates.h
 			and used by  \link Expression Expression \endlink . You have to derive your own predicate classes from 
 			this class if you want to use (and register) them with  \link Expression Expression \endlink .
 			 \par
 			@see Expression
+    	
+			\ingroup  Predicates
 	*/
 	class ExpressionPredicate
 		:	public UnaryPredicate<Atom>
@@ -112,7 +111,6 @@ namespace BALL
 		 */
 		String argument_;
 	};
-  /** @} */
 }
 
 #endif // BALL_KERNEL_EXPRESSIONPREDICATE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: removeModel.h,v 1.16 2003/03/14 11:49:36 sturm Exp $
+// $Id: removeModel.h,v 1.17 2003/03/26 13:56:48 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
@@ -14,9 +14,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewFunctorsModels
-     *  @{
-     */
 		/** RemoveModel class.
 				The class RemoveModel is a processor that is responsible for removing models.
 				It is started on a  \link Composite Composite \endlink  object and removes all geometric primitives
@@ -25,6 +22,7 @@ namespace BALL
 				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL
 				documentation.  \par
 				
+    		\ingroup  MolviewFunctorsModels
 		*/
 		class RemoveModel: 
 			public AtomBondModelBaseProcessor,
@@ -163,7 +161,6 @@ namespace BALL
 
 			private:
 		};
-  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

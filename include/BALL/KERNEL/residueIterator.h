@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueIterator.h,v 1.6 2003/03/03 14:17:49 anhi Exp $
+// $Id: residueIterator.h,v 1.7 2003/03/26 13:56:34 anhi Exp $
 
 #ifndef BALL_KERNEL_RESIDUEITERATOR_H
 #define BALL_KERNEL_RESIDUEITERATOR_H
@@ -24,9 +24,10 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  KernelIterators
-     *  @{
-     */
+	/** ResidueIteratorTraits_
+    
+			\ingroup  KernelIterators
+	*/
 	class ResidueIteratorTraits_
 		: public CompositeIteratorTraits_
 	{
@@ -80,7 +81,6 @@ namespace BALL
 	typedef ConstReverseBidirectionalIterator
 		<Composite, Residue, Composite::SubcompositeIterator, ResidueIteratorTraits_>
 		ResidueConstReverseIterator;
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_RESIDUEITERATOR_H

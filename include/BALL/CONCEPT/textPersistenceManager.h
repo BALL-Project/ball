@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: textPersistenceManager.h,v 1.14 2003/03/03 14:17:38 anhi Exp $
+// $Id: textPersistenceManager.h,v 1.15 2003/03/26 13:56:15 anhi Exp $
 
 #ifndef BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
@@ -13,10 +13,6 @@
 namespace BALL 
 {
 
-	/**  \addtogroup  Persistence
-	 *	@{
-	 */
-
 	/**	Text-format-based persistence manager.
 			This class implements a persistnece manager that reads and writes
 			its objects in a human-readable text format.
@@ -24,6 +20,8 @@ namespace BALL
 			comprehensible - the ideal format to debug persistence-related programs.
 			For production use, the XDRPersistenceManager is preferred.
 			@see	XDRPersistenceManager
+			
+			\ingroup  Persistence
 	*/
 	class TextPersistenceManager
 		:	public PersistenceManager
@@ -289,7 +287,6 @@ namespace BALL
 		Size indent_depth_;
 
 	};
-	/** @} */
 } // namespace BALL
 
 #endif // BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H

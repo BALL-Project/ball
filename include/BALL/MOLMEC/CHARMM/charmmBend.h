@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmBend.h,v 1.11 2003/03/14 11:49:21 sturm Exp $
+// $Id: charmmBend.h,v 1.12 2003/03/26 13:56:36 anhi Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMBEND_H
@@ -25,11 +25,9 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  CHARMM
-     *  @{
-     */
 	/**	Charmm bond stretch component
 			
+    	\ingroup  CHARMM
 	*/
 	class CharmmBend 
 		: public ForceFieldComponent
@@ -95,7 +93,6 @@ namespace BALL
 		//_@}
 	 
 	};
-     /** @} */
 } // namespace BALL
 
 #endif // BALL_MOLMEC_CHARMM_CHARMMBEND_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.h,v 1.16 2003/03/14 11:49:33 sturm Exp $
+// $Id: ballAndStickModel.h,v 1.17 2003/03/26 13:56:46 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
@@ -28,9 +28,6 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewFunctorsModels
-     *  @{
-     */
 		using VIEW::Sphere;
 		using VIEW::Tube;
 
@@ -46,7 +43,8 @@ namespace BALL
 				openGL implementation.
 				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL
 				documentation.  \par
-				
+    		
+				\ingroup  MolviewFunctorsModels
 		*/
 		class AddBallAndStickModel: public AtomBondModelBaseProcessor
 		{

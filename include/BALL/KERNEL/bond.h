@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.h,v 1.35 2003/03/14 11:49:05 sturm Exp $
+// $Id: bond.h,v 1.36 2003/03/26 13:56:28 anhi Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -36,9 +36,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Kernel
-     *  @{
-     */
 	class Atom;
 	class Fragment;
 	class System;
@@ -61,7 +58,7 @@ namespace BALL
 				- "bond order" ( \link Bond::bond_order_ Bond::bond_order_ \endlink )
 				- "bond type" ( \link Bond::bond_type_ Bond::bond_type_ \endlink )
 			
-			
+    	\ingroup  Kernel
 	*/
 	class Bond
 		: public Composite,
@@ -540,7 +537,6 @@ namespace BALL
 # ifndef BALL_NO_INLINE_FUNCTIONS
 #   include <BALL/KERNEL/bond.iC>
 # endif
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_BOND_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glBackbone.h,v 1.13 2003/03/14 11:49:41 sturm Exp $
+// $Id: glBackbone.h,v 1.14 2003/03/26 13:56:53 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
@@ -33,9 +33,6 @@ namespace BALL
 
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewGuiPrimitves
-     *  @{
-     */
 		/** GlBackbone class.
 				An instance of GLBackbone represents an instance of the geometric
 				visualization of a  \link Backbone Backbone \endlink .
@@ -46,6 +43,7 @@ namespace BALL
 				backbone. OpenGL code is used for the visualization.
 				See these classes for further information.  \par
 				
+    		\ingroup  MolviewGuiPrimitves
 		*/
 		class GLBackbone
 			: public Backbone,
@@ -236,7 +234,6 @@ namespace BALL
 			//_
 			virtual Line* createLine_();		
 		};
-     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

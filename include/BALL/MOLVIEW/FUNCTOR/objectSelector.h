@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: objectSelector.h,v 1.9 2003/03/14 11:49:36 sturm Exp $
+// $Id: objectSelector.h,v 1.10 2003/03/26 13:56:48 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
@@ -14,9 +14,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewFunctorsModels
-     *  @{
-     */
 		/** ObjectSelector class.
 				The class ObjectSelector is responsible for selecting
 				 \link GeometricObject GeometricObject \endlink  objects. The method  \link Selectable::select Selectable::select \endlink  or 
@@ -27,6 +24,8 @@ namespace BALL
 				documentation.  \par
 				
 				@see  Selectable
+    		
+				\ingroup  MolviewFunctorsModels
 		*/
 		class ObjectSelector: public UnaryProcessor<Composite>
 		{
@@ -76,7 +75,6 @@ namespace BALL
 			virtual Processor::Result operator() (Composite& composite)
 				throw();
 		};
-  /** @} */		
 	} // namespace MOLVIEW
 } // namespace BALL
 

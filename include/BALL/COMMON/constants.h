@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: constants.h,v 1.12 2003/03/14 11:48:43 sturm Exp $
+// $Id: constants.h,v 1.13 2003/03/26 13:56:09 anhi Exp $
 
 #ifndef BALL_COMMON_CONSTANTS_H
 #define BALL_COMMON_CONSTANTS_H
@@ -20,15 +20,10 @@ namespace BALL
 			<tt>using namespace BALL::Constants;  \par
 			float my_pi = PI;</tt>
 			
-	* 	 \addtogroup  Common
+	  	\ingroup Common
 	*/
 	namespace Constants 
 	{
-
-		/**  \addtogroup  Common
-		 *  @{
-		 */
-
 		/**	@name	Mathematical constants.
 		*/
 		//@{
@@ -196,9 +191,6 @@ namespace BALL
 		extern const double	CAL_PER_JOULE;
 
 		//@}
-
-	//@}
-
 	}
 }
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.9 2003/03/14 11:48:53 sturm Exp $
+// $Id: contourSurface.h,v 1.10 2003/03/26 13:56:17 anhi Exp $
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
 #define BALL_DATATYPE_CONTOURSURFACE_H
@@ -34,9 +34,6 @@
 
 namespace BALL
 {
-    /**  \addtogroup  Miscellaneous
-     *  @{
-     */
 	typedef std::pair<Position, Position> KeyType;
 
 
@@ -184,7 +181,7 @@ static int corner_rotation[NUM_CUBE_ROTATIONS][NUM_CUBE_VERTICES] = {
 	
 
   /** This class is intended to store a single contour surface generated from a RegularData3D - class.
-      
+    	\ingroup  DatatypeMiscellaneous
   */
   template <typename T>  
   class TContourSurface 

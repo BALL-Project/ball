@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionParser.h,v 1.7 2003/03/14 11:49:07 sturm Exp $
+// $Id: expressionParser.h,v 1.8 2003/03/26 13:56:29 anhi Exp $
 
 #ifndef BALL_KERNEL_EXPRESSIONPARSER_H
 #define BALL_KERNEL_EXPRESSIONPARSER_H
@@ -29,11 +29,12 @@
 namespace BALL 
 {
 
-	/** @name	Expression Parser.
+	/** Expression Parser.
 			A simple parser for BALL kernel expressions. It reads a string and constructs
 			a syntax tree from the boolean expressions contained therein.
 			 \par
 			
+			\ingroup Kernel
 	*/
 	class ExpressionParser
 	{
@@ -206,7 +207,6 @@ namespace BALL
 		SyntaxTree*								syntax_tree_;
 		static ExpressionParser*	current_parser_;
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_EXPRESSIONPARSER_H

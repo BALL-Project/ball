@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.43 2003/03/17 09:52:32 oliver Exp $
+// $Id: composite.h,v 1.44 2003/03/26 13:56:12 anhi Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -53,9 +53,6 @@
 ///
 namespace BALL 
 {
-   /**  \addtogroup  Kernel      
-				@{      
-	*/
 	/**	Composite Class.
 			This class implements a variant of the composite design pattern. A
 			Composite may contain an arbitrary number of other composites, thus
@@ -75,6 +72,7 @@ namespace BALL
 			Composites are persistent objects. 
 			 \par
 			
+   		\ingroup Concepts 
 	*/
 	class Composite
 		: public PersistentObject,
@@ -2289,8 +2287,6 @@ namespace BALL
 	{
 		return (getAncestor(dummy) != 0);	
 	}
-
-	/**	@} */
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/CONCEPT/composite.iC>

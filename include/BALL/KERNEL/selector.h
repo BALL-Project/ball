@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selector.h,v 1.22 2003/03/14 11:49:11 sturm Exp $
+// $Id: selector.h,v 1.23 2003/03/26 13:56:34 anhi Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -25,14 +25,11 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Predicates
-     *  @{
-     */
-	/**	@name	Kernel Object Selection.
+	/**	Kernel Object Selection.
 			These classes allow the convenient selection of kernel objects. \par
 			
+    	\ingroup  Predicates
 	*/
-	//@{
 	class Selector
 		:	public UnaryProcessor<Composite>
 	{
@@ -139,8 +136,6 @@ namespace BALL
 		Size				number_of_selected_atoms_;
 		Expression	expression_;
 	};
-	//@}
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_SELECTOR_H

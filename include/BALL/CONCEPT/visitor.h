@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: visitor.h,v 1.10 2003/03/14 11:48:52 sturm Exp $
+// $Id: visitor.h,v 1.11 2003/03/26 13:56:16 anhi Exp $
 
 #ifndef BALL_CONCEPT_VISITOR_H
 #define BALL_CONCEPT_VISITOR_H
@@ -16,7 +16,7 @@ namespace BALL
 	/**	Generic Visitor Class.
 			This class implements the visitor design pattern.
 			
-			 \addtogroup  Concepts
+			\ingroup  Concepts
 	*/
 	template <typename Host>
 	class Visitor

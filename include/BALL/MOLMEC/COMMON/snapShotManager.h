@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.h,v 1.11 2003/03/14 11:49:26 sturm Exp $
+// $Id: snapShotManager.h,v 1.12 2003/03/26 13:56:40 anhi Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
 #define BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -36,15 +36,13 @@
 
 namespace BALL
 {
-    /**  \addtogroup  MolmecCommon
-     *  @{
-     */	
 	class TrajectoryFile;
 
   /**	Snapshot management for MD simulations.
 			This class manages a list of single snapshot objects.
 			Snapshots are numbered starting with 1.	 \par
 			
+    	\ingroup  MolmecCommon
 	*/
   class SnapShotManager
   {
@@ -307,7 +305,6 @@ namespace BALL
     //_@}
 
 	}; // end of class SnapshotManager 
-     /** @} */
 }
 
 #endif //  BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H

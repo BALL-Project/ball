@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: classTest.h,v 1.40 2003/03/14 11:48:46 sturm Exp $
+// $Id: classTest.h,v 1.41 2003/03/26 13:56:12 anhi Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -55,7 +55,7 @@
 		To create a new test program, use the file 
 		<a href="../../source/BALL/TEST/Skeleton_test.C">source/TEST/Skeleton_test.C</a>
 		 \par
-* 	 \addtogroup  Concepts
+ 	 	\ingroup Concepts
 */
 //@{
 

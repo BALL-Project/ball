@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: INIFile.h,v 1.31 2003/03/14 11:48:58 sturm Exp $
+// $Id: INIFile.h,v 1.32 2003/03/26 13:56:22 anhi Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -24,14 +24,13 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  General
-     *  @{
-     */
 	class INIFile;
 
 	/**	INIFile.
 			This class provides support to read and evaluate
 			the contents of Windows-style INI files. \par
+    	
+			\ingroup  General
 	*/
 	class INIFile
 	{
@@ -666,7 +665,6 @@ namespace BALL
 		// hashmap with the section names  => index
 		StringHashMap<SectionIterator>		section_index_;
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_INIFILE_H

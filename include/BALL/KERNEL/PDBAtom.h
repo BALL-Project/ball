@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtom.h,v 1.27 2003/03/14 11:49:03 sturm Exp $
+// $Id: PDBAtom.h,v 1.28 2003/03/26 13:56:27 anhi Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -24,9 +24,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Kernel
-     *  @{
-     */
 	class Chain;
 	class Protein;
 	class Residue;
@@ -40,6 +37,8 @@ namespace BALL
 			 \par
 			
 			@see PDBFile
+    	
+			\ingroup  Kernel
 	*/
 	class PDBAtom
 		: public Atom
@@ -351,7 +350,6 @@ namespace BALL
 		float temperature_factor_;
 
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_PDBATOM_H

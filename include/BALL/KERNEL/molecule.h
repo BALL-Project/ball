@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecule.h,v 1.26 2003/03/14 11:49:09 sturm Exp $
+// $Id: molecule.h,v 1.27 2003/03/26 13:56:31 anhi Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -20,14 +20,12 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Kernel
-     *  @{
-     */
 	class System;
 
 	/**	Molecule class.
 			Used to represent general molecules without specific properties. \par
 			
+   		\ingroup  Kernel
 	*/
 	class Molecule
 		: public AtomContainer
@@ -302,7 +300,6 @@ namespace BALL
 		bool isSubAtomContainerOf(const AtomContainer& atom_container) const
 			throw();
 	};
-  /** @} */
 } // namespace BALL 
 
 #endif // BALL_KERNEL_MOLECULE_H

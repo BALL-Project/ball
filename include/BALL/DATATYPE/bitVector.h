@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bitVector.h,v 1.35 2003/03/14 11:48:52 sturm Exp $
+// $Id: bitVector.h,v 1.36 2003/03/26 13:56:16 anhi Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -33,14 +33,12 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Miscellaneous
-     *  @{
-     */
 	class BitVector;
 
 	/**	Bit Class. This class represents a bit within a BitVector.
 			
 			@see BitVector. 
+    	\ingroup  DatatypeMiscellaneous
 	*/
 	class Bit
 	{
@@ -173,6 +171,8 @@ namespace BALL
 			Some functions resize the instance if a index greater than the
 			size of the instance is given.
 			Other functions throw exception in this case.
+
+    	\ingroup  DatatypeMiscellaneous
 	*/
 	class BitVector
 	{
@@ -575,7 +575,6 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/DATATYPE/bitVector.iC>
 #	endif
-  /** @} */
 } //namespace BALL
 
 

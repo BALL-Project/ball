@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: templates.h,v 1.11 2003/03/14 11:49:32 sturm Exp $
+// $Id: templates.h,v 1.12 2003/03/26 13:56:45 anhi Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
 
 #ifndef BALL_MOLMEC_PARAMETER_TEMPLATES_H
@@ -17,11 +17,9 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  MolmecParameters
-     *  @{
-     */		
 	/**	Force Field Residue Template Class.	
 			
+    	\ingroup  MolmecParameters
 	*/
 	class Templates 
 		:	public ParameterSection
@@ -109,7 +107,6 @@ namespace BALL
 		*/
 		StringHashMap<String>	type_names_;
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_MOLMEC_PARAMETER_TEMPLATES_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: system.h,v 1.29 2003/03/14 11:49:12 sturm Exp $
+// $Id: system.h,v 1.30 2003/03/26 13:56:35 anhi Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -46,15 +46,13 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Kernel
-     *  @{
-     */
 	class Molecule;
 
 	/** System class.
 			This class is used to represent a system, i.e., a collection
 			of molecules. \par
 			
+    	\ingroup  Kernel
 	*/
 	class System
 		: public AtomContainer
@@ -290,7 +288,6 @@ namespace BALL
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(NucleicAcid)
 
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_KERNEL_SYSTEM_H

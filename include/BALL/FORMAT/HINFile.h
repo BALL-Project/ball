@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.h,v 1.24 2003/03/14 11:48:58 sturm Exp $
+// $Id: HINFile.h,v 1.25 2003/03/26 13:56:22 anhi Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -16,12 +16,10 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  StructureFormats
-     *  @{
-     */
 	/**	HyperChem file class.
 			This class enables BALL to read and write HyperChem HIN files.  \par
 			
+    	\ingroup  StructureFormats
 	*/
 	class HINFile
 		: public GenericMolFile
@@ -122,7 +120,6 @@ namespace BALL
 	
 		void writeAtom_(const Atom& atom, Size number, Size atom_offset);
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_HINFILE_H

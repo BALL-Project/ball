@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.51 2003/03/14 11:49:04 sturm Exp $
+// $Id: atom.h,v 1.52 2003/03/26 13:56:27 anhi Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -47,9 +47,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Kernel
-     *  @{
-     */
 	class Bond;
 	class Element;
 	class Fragment;
@@ -95,6 +92,8 @@ namespace BALL
 			@see Bond
 			@see Molecule
 			@see AtomContainer
+    
+			\ingroup  Kernel
 	*/
 	class Atom
 		: public Composite,
@@ -1179,7 +1178,6 @@ namespace BALL
 # ifndef BALL_NO_INLINE_FUNCTIONS
 #   include <BALL/KERNEL/atom.iC>
 # endif
-  /** @} */
 } // namespace BALL
 
 #ifndef BALL_KERNEL_BONDITERATOR_H

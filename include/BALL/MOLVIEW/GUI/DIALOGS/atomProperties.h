@@ -13,9 +13,10 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewDialogs
-     *  @{
-     */
+
+/** AtomProperties
+    \ingroup  MolviewDialogs
+*/
 class AtomProperties : public AtomPropertiesData
 { 
 	Q_OBJECT
@@ -32,7 +33,6 @@ public slots:
 private:
 	Atom* atom_;
 };
-     /** @} */
 	}
 }
 

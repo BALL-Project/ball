@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glTwoColoredLine.h,v 1.13 2003/03/14 11:49:41 sturm Exp $
+// $Id: glTwoColoredLine.h,v 1.14 2003/03/26 13:56:53 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
@@ -18,9 +18,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewGuiPrimitves
-     *  @{
-     */
 		using VIEW::GLObject;
 		
 		/** GLTwoColoredLine class.
@@ -33,6 +30,7 @@ namespace BALL
 				twoColoredLine. OpenGL code is used for the visualization.
 				See these classes for further information.  \par
 				
+    		\ingroup  MolviewGuiPrimitves
 		*/
 		class GLTwoColoredLine
 			: public TwoColoredLine,
@@ -219,7 +217,6 @@ namespace BALL
 
 			//@}
 		};
-     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

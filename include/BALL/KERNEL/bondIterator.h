@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bondIterator.h,v 1.6 2003/03/03 14:17:46 anhi Exp $
+// $Id: bondIterator.h,v 1.7 2003/03/26 13:56:29 anhi Exp $
 
 #ifndef BALL_KERNEL_BONDITERATOR_H
 #define BALL_KERNEL_BONDITERATOR_H
@@ -16,10 +16,8 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  KernelIterators
-     *  @{
-     */
 	/** @name Typedefs for the various BondIterators
+    	\ingroup  KernelIterators
 	*/
 	//@{
 
@@ -40,7 +38,6 @@ namespace BALL
 	typedef Atom::BondConstReverseIterator 	AtomBondConstReverseIterator;
 
 	//@}
-  /** @} */
 }
 
 #endif // BALL_KERNEL_BONDITERATOR_H

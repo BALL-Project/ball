@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.h,v 1.10 2003/03/14 11:49:00 sturm Exp $
+// $Id: SDFile.h,v 1.11 2003/03/26 13:56:24 anhi Exp $
 
 #ifndef BALL_FORMAT_SDFILE_H
 #define BALL_FORMAT_SDFILE_H
@@ -12,9 +12,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  StructureFormats
-     *  @{
-     */
 	class System;
 	class Atom;
 	class Molecule;
@@ -25,6 +22,7 @@ namespace BALL
 			format) can be obtained from the MDL webpage http://www.mdli.com
 			 \par
 			
+    	\ingroup  StructureFormats
 	*/
 	class SDFile
 		: public MOLFile
@@ -120,7 +118,6 @@ namespace BALL
 		*/
 		bool read_atoms_;
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_SDFILE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chainIterator.h,v 1.14 2003/03/14 11:49:06 sturm Exp $
+// $Id: chainIterator.h,v 1.15 2003/03/26 13:56:29 anhi Exp $
 
 #ifndef BALL_KERNEL_CHAINITERATOR_H
 #define BALL_KERNEL_CHAINITERATOR_H
@@ -24,11 +24,9 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  KernelIterators
-     *  @{
-     */
 	/** Traits class for the various ChainIterators.
 			
+    	\ingroup  KernelIterators
 	*/
 	class ChainIteratorTraits_
 		: public CompositeIteratorTraits_
@@ -94,6 +92,7 @@ namespace BALL
 
 
 	/** @name Iterator type definitions for the various ChainIterators
+    	\ingroup  KernelIterators
 	*/
 	//@{
 
@@ -122,7 +121,6 @@ namespace BALL
 		ChainConstReverseIterator;
 	
 	//@}
-  /** @} */
 } // namespace BALL 
 
 #endif // BALL_KERNEL_CHAINITERATOR_H

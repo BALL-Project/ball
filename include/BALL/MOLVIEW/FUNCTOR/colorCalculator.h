@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorCalculator.h,v 1.15 2003/03/14 11:49:34 sturm Exp $
+// $Id: colorCalculator.h,v 1.16 2003/03/26 13:56:47 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
@@ -26,9 +26,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  ColorCalculators
-     *  @{
-     */							
 		using VIEW::ColorTable;
 		using VIEW::ColorRGBA;
 		
@@ -43,6 +40,7 @@ namespace BALL
 				This class and their derived classes will be used by the model processors to
 				calculate a color for each  \link Atom Atom \endlink  object they process.  \par
 				
+    		\ingroup  ColorCalculators
 		*/
 		class ColorCalculator
 			: public Visitor<Atom>,
@@ -342,7 +340,6 @@ namespace BALL
 #			ifndef BALL_NO_INLINE_FUNCTIONS
 #				include <BALL/MOLVIEW/FUNCTOR/colorCalculator.iC>
 #			endif
-  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

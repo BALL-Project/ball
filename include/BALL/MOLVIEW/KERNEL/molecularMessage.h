@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularMessage.h,v 1.13 2003/03/14 11:49:44 sturm Exp $
+// $Id: molecularMessage.h,v 1.14 2003/03/26 13:56:55 anhi Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
 #define BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
@@ -19,9 +19,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewKernel
-     *  @{
-     */
 		/** NewMolecularMessage class.
 				The class NewMolecularMessage is responsible for making known a new molecular
 				structure in the  \link ConnectionObject ConnectionObject \endlink  tree. This message will be converted
@@ -35,6 +32,7 @@ namespace BALL
 				accepting  \link NewCompositeMessage NewCompositeMessage \endlink  object would also accept 
 				 \link NewMolecularMessage NewMolecularMessage \endlink  objects and that is not allowed.  \par
 				
+    		\ingroup  MolviewKernel
 		*/
 		class NewMolecularMessage: public CompositeMessage
 		{
@@ -249,7 +247,6 @@ namespace BALL
 			private:
 		};
 
-  /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

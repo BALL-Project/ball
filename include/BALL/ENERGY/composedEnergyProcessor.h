@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composedEnergyProcessor.h,v 1.9 2003/03/03 14:17:41 anhi Exp $
+// $Id: composedEnergyProcessor.h,v 1.10 2003/03/26 13:56:21 anhi Exp $
 
 #ifndef BALL_ENERGY_COMPOSEDENERGYPROCESSOR
 #define BALL_ENERGY_COMPOSEDENERGYPROCESSOR
@@ -20,19 +20,20 @@
 
 namespace BALL
 {
-    /**  \addtogroup  Energy
-     *  @{
-     */
+	
+	/** EnergyProcessorList
+	 		\ingroup Energy
+	*/
+	typedef List<EnergyProcessor*> EnergyProcessorList;
+
 	/** A class for composed energy calculations.
 			Most energies are compositions of several energy contributions. To model
 			this in a convenient way this class is intended to calculate and sum a
 			given list of energy contributions.
 			@see EnergyProcessor
-	*/
-
-	///
-	typedef List<EnergyProcessor*> EnergyProcessorList;
-
+    	
+			\ingroup  Energy
+	 */	
 	class ComposedEnergyProcessor
 		: public EnergyProcessor
 	{
@@ -127,6 +128,5 @@ namespace BALL
 		void checkValidity() throw();
 
 	};
-  /** @} */
 } // namespace BALL
 #endif //  BALL_ENERGY_COMPOSEDENERGYPROCESSOR

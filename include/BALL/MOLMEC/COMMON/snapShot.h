@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShot.h,v 1.23 2003/03/14 11:49:25 sturm Exp $
+// $Id: snapShot.h,v 1.24 2003/03/26 13:56:40 anhi Exp $
 
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
@@ -27,14 +27,12 @@
 
 namespace BALL
 {
-    /**  \addtogroup  MolmecCommon
-     *  @{
-     */	
 	/** SnapShot class, containing the actual data of one single snapshot.
 			It consists of the posistions, velocities and forces for each atom
 			along with kinetic and potential energy of selected atoms. It is used
 			by the  \link SnapShotManager SnapShotManager \endlink .  \par
 			
+    	\ingroup  MolmecCommon
 	*/
   class SnapShot
   {
@@ -256,7 +254,6 @@ namespace BALL
 	/// Input stream operator for SnapShots
 	::std::istream& operator >> (::std::istream& is, SnapShot& ss);
 
-     /** @} */
 } // end of namespace BALL  
 
 #endif // BALL_MOLMEC_COMMON_SNAPSHOT_H

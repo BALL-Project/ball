@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NMRStarFile.h,v 1.24 2003/03/14 11:48:59 sturm Exp $
+// $Id: NMRStarFile.h,v 1.25 2003/03/26 13:56:23 anhi Exp $
 
 #ifndef BALL_NMR_READ_STAR_H
 #define BALL_NMR_READ_STAR_H
@@ -18,12 +18,10 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  NMRFileFormats
-     *  @{
-     */
-	/** @name Data classes and structures.
+	/** name Data classes and structures.
 			These classes represent the data extracted from NMR-Star-Files.
 			
+    	\ingroup  NMRFileFormats
 	*/
 	//@{
 
@@ -291,7 +289,6 @@ namespace BALL
 	};
 
 	//@}
-  /** @} */
 } // Namespace BALL
 
 #endif // BALL_NMR_READ_STAR_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: list.h,v 1.19 2003/03/14 11:48:54 sturm Exp $
+// $Id: list.h,v 1.20 2003/03/26 13:56:18 anhi Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -22,12 +22,10 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Miscellaneous
-     *  @{
-     */	
 	/** Extended list object.
 		This object is an improved version of the STL list class
 		
+    \ingroup  DatatypeMiscellaneous
 	*/
  	template <typename Value>
 	class List
@@ -173,7 +171,7 @@ namespace BALL
 		}
 
 		//@}
-		/**	@name	Miscellaneous */
+		/**	@name	DatatypeMiscellaneous */
 		//@{
 
 		/**	Visitor host method.
@@ -249,7 +247,6 @@ namespace BALL
 	{
 		visitor.visit(*this);
 	}
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_DATATYPE_LIST_H

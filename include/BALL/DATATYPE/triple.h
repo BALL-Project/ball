@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: triple.h,v 1.6 2003/03/03 14:17:41 anhi Exp $
+// $Id: triple.h,v 1.7 2003/03/26 13:56:20 anhi Exp $
 
 #ifndef BALL_DATATYPE_TRIPLE_H
 #define BALL_DATATYPE_TRIPLE_H
@@ -12,13 +12,12 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Miscellaneous
-     *  @{
-     */
 	/**	Triple Class.
 			This template class is used to represent triples of arbitrary types
 			(like the STL type <tt>pair</tt>).
 			@see Quadruple
+    	
+			\ingroup  DatatypeMiscellaneous
 	*/
 	template <typename T1, typename T2, typename T3>
 	class Triple
@@ -270,7 +269,6 @@ namespace BALL
 						|| ((first == triple.first)	&& (second > triple.second))	
 						|| ((first == triple.first)	&& (second == triple.second) && (third > triple.third)));
 	}
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_DATATYPE_TRIPLE_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.9 2003/03/14 11:49:38 sturm Exp $
+// $Id: molecularFileDialog.h,v 1.10 2003/03/26 13:56:50 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
 #define BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
@@ -21,9 +21,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewDialogs
-     *  @{
-     */
 		/** MolecularFileDialog class.
 		 		This class is used to read or write Molecular files in one of several
 				file formats. Currently, PDB, HIN and MOL2 are supported.
@@ -32,6 +29,7 @@ namespace BALL
 				supported file formats.
 				This class is derived from  \link VIEW::ModularWidget VIEW::ModularWidget \endlink .
 				
+   			\ingroup  MolviewDialogs
 		 */
 		class MolecularFileDialog
 			: public QWidget,
@@ -169,7 +167,6 @@ namespace BALL
 				throw();
 
 		};
-     /** @} */
 	} // namespace MOLVIEW
 
 }	// namespace BALL

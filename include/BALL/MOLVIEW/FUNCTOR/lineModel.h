@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.h,v 1.15 2003/03/14 11:49:35 sturm Exp $
+// $Id: lineModel.h,v 1.16 2003/03/26 13:56:47 anhi Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
@@ -26,9 +26,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewFunctorsModels
-     *  @{
-     */
 		using VIEW::Point;
 		using VIEW::Line;
 
@@ -39,6 +36,7 @@ namespace BALL
 				The derived class  \link AddGLLineModel AddGLLineModel \endlink  uses the primitives with openGL implementation.
 				For information about the processor concept see  \link Processor Processor \endlink  in tbe BALL documentation. \par
 				
+    		\ingroup  MolviewFunctorsModels
 		*/
 		class AddLineModel: public AtomBondModelBaseProcessor
 		{
@@ -237,7 +235,6 @@ namespace BALL
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/MOLVIEW/FUNCTOR/lineModel.iC>
 #	endif
-  /** @} */
 	} // namespace MOLVIEW
 
 } // namspace BALL

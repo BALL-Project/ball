@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: factory.h,v 1.7 2003/03/14 11:48:48 sturm Exp $
+// $Id: factory.h,v 1.8 2003/03/26 13:56:13 anhi Exp $
 
 #ifndef BALL_CONCEPT_FACTORY_H
 #define BALL_CONCEPT_FACTORY_H
@@ -19,7 +19,7 @@ namespace BALL
 			was parameterized with.
 			 \par
 			
-	* 	 \addtogroup  Concepts
+	 	 \ingroup  Concepts
 	*/
 	template <typename T>
 	class Factory

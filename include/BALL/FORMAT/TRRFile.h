@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: TRRFile.h,v 1.9 2003/03/14 11:49:00 sturm Exp $
+// $Id: TRRFile.h,v 1.10 2003/03/26 13:56:24 anhi Exp $
 
 #ifndef BALL_FORMAT_TRRFILE_H
 #define BALL_FORMAT_TRRFILE_H
@@ -12,15 +12,13 @@
 
 namespace BALL
 {
-    /**  \addtogroup  MDFormats
-     *  @{
-     */
 	/** TRR Trajectory file format. This class enables BALL to read and write
 			TRR	files. The format stems from the gromacs molecular dynamics
 			program. This format is portable.	 \par
 			In a TRR-file, each timestep is preceded by a header. The header
 			is handled by the nested TRRHeader class.  \par
 			
+    	\ingroup  MDFormats
 	*/
 	class TRRFile
 	  :	public TrajectoryFile
@@ -331,7 +329,6 @@ namespace BALL
 		// nanometers
 		Vector3 box1_, box2_, box3_;
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_FORMAT_TRRFILE_H 

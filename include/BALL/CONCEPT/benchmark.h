@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: benchmark.h,v 1.10 2003/03/14 11:48:46 sturm Exp $
+// $Id: benchmark.h,v 1.11 2003/03/26 13:56:11 anhi Exp $
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
@@ -16,7 +16,7 @@
 /**	@name	Benchmarking of classes.
 		<a href="../../source/BALL/BENCHMARKS/Skeleton_bench.C">source/BENCHMARKS/Skeleton_bench.C</a>
 		 \par
-* 	 \addtogroup  Concepts
+ 	 	\ingroup  Concepts
 */
 //@{
 

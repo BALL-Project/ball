@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeGLObjectCollector.h,v 1.10 2003/03/03 14:18:07 anhi Exp $
+// $Id: moleculeGLObjectCollector.h,v 1.11 2003/03/26 13:56:52 anhi Exp $
 
 #ifndef BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
 #define BALL_MOLVIEW_GUI_FUNCTOR_MOLECULEGLOBJECTCOLLECTOR_H
@@ -14,9 +14,6 @@ namespace BALL
 {
 	namespace MOLVIEW
 	{
-    /**  \addtogroup  MolviewGuiFunctor
-     *  @{
-     */
 		using VIEW::GLObjectCollector;
 
 		/** MoleculeGLObjectCollector class.
@@ -30,6 +27,8 @@ namespace BALL
 				for proper rendering.
 				See  \link GLObjectCollector GLObjectCollector \endlink  for further information about collecting  \link GLObject GLObject \endlink  objects. \par
 				<b>Defintion:</b> BALL/MOLVIEW/GUI/FUNCTOR/moleculeGLObjectCollector.h
+    		
+				\ingroup  MolviewGuiFunctor
 		*/
 		class MoleculeGLObjectCollector: public GLObjectCollector
 		{
@@ -76,7 +75,6 @@ namespace BALL
 				throw();
 			//@}
 		};
-     /** @} */
 	} // namespace MOLVIEW
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: expressionTree.h,v 1.7 2003/03/14 11:49:07 sturm Exp $
+// $Id: expressionTree.h,v 1.8 2003/03/26 13:56:30 anhi Exp $
 
 #ifndef BALL_KERNEL_EXPRESSIONTREE_H
 #define BALL_KERNEL_EXPRESSIONTREE_H
@@ -19,7 +19,7 @@ namespace BALL
 			 \par
 			
 			@see Expression
-		 	 \addtogroup  Kernel
+		 	\ingroup  Kernel
 	*/
 	class ExpressionTree
 	{

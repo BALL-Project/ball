@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lennardJones.h,v 1.24 2003/03/14 11:49:30 sturm Exp $
+// $Id: lennardJones.h,v 1.25 2003/03/26 13:56:44 anhi Exp $
 
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
@@ -18,9 +18,6 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  MolmecParameters
-     *  @{
-     */		
 	/**	Lennard Jones parameter section.
 			This section reads parameters for a Lennard Jones potental (usually a
 			6-12 Potential). Parameters may be given in three different formats
@@ -41,6 +38,7 @@ namespace BALL
 			\f]
 			 \par
 			
+    	\ingroup  MolmecParameters
 	*/
 	class LennardJones 
 		:	public ParameterSection
@@ -170,7 +168,6 @@ namespace BALL
 			
 		std::vector<String>		names_;
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_MOLMEC_PARAMETER_LENNARDJONES_H

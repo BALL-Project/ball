@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: simpleDescriptors.h,v 1.8 2003/03/03 14:18:15 anhi Exp $
+// $Id: simpleDescriptors.h,v 1.9 2003/03/26 13:56:56 anhi Exp $
 
 #ifndef BALL_QSAR_SIMPLEDESCRIPTORS_H
 #define BALL_QSAR_SIMPLEDESCRIPTORS_H
@@ -13,10 +13,8 @@
 namespace BALL
 {
 
-    /**  \addtogroup  MolecularDescriptors
-     *  @{
-     */	
 	/**	Descriptor returning the molecular mass of a molecule
+    	\ingroup MolecularDescriptors
 	*/
 	class MolecularMass
 		:	public Descriptor
@@ -27,6 +25,7 @@ namespace BALL
 	};
 
 	/**	Descriptor returning the number of bonds of a molecule.
+    	\ingroup MolecularDescriptors
 	*/
 	class NumberOfBonds
 		:	public Descriptor
@@ -42,6 +41,7 @@ namespace BALL
 			(\Ref{NumericalSAS). It is the sum of all surface elements
 			that are either caused by a nitrogen, an oxygen, or a hydrogen
 			bound to them. Value is in $\AA^2$.
+    	\ingroup MolecularDescriptors
 	*/
 	class PolarSurfaceArea
 		:	public Descriptor
@@ -50,7 +50,6 @@ namespace BALL
 		PolarSurfaceArea();
 		virtual double compute(const Molecule& molecule);
 	};
-  /** @} */
 } // namespace BALL
 
 #endif // BALL_QSAR_SIMPLEDESCRIPTORS_H
