@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.14 2001/01/31 05:47:27 oliver Exp $
+# $Id: Makefile,v 1.15 2001/05/22 15:44:57 oliver Exp $
 #========================
 # BALL/EXAMPLES Makefile
 #========================
@@ -11,7 +11,7 @@ all:	$(EXECUTABLES)
 include ../common.mak
 
 # remove the library specific flags
-BALL_CXXFLAGS=
+LIB_CXXFLAGS = $(NONLIB_CXXFLAGS)
 
 clean:	default_clean
 	@-$(RM) $(EXECUTABLES) *.o 2>/dev/null

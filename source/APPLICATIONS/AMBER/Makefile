@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.1 2000/06/10 11:23:18 oliver Exp $
+# $Id: Makefile,v 1.2 2001/05/22 15:44:54 oliver Exp $
 # Makefile for AMBER Application
 #
 
@@ -19,6 +19,10 @@ SOURCES=\
 	files.C
 
 CPP_SOURCES=$(SOURCES)
+
+# replace library-specific flags by application-
+# specific compiler flags
+LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
 
 SPECIAL_OBJECTS=
 

@@ -172,7 +172,9 @@ include ../common.mak
 include .Dependencies
 
 # remove the library specific flags
-BALL_CXXFLAGS=
+# and replace them by the aplication specific
+# flags
+LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
 
 # do not optimize tests (reduces compile time drastically)
 CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION)

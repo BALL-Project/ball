@@ -15,7 +15,7 @@ include ../common.mak
 include .Dependencies
 
 # remove the library specific flags
-BALL_CXXFLAGS=
+LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
 
 .o:
 	$(CXX) $(CXXFLAGS) $*.o $(LDFLAGS) -o $@ $(LIBS)

@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.29 2000/12/09 12:55:55 oliver Exp $
+# $Id: Makefile,v 1.30 2001/05/22 15:44:57 oliver Exp $
 
 EXECUTABLE=molview
 DIRECTORY=APPLICATIONS/MOLVIEW
@@ -9,6 +9,10 @@ clean:	default_clean
 
 include ../../common.mak
 include .Dependencies
+
+# replace library-specific flags by application-
+# specific compiler flags
+LIB_CXXFLAGS=$(NONLIB_CXXFLAGS)
 
 BALL_INCLUDES=$(BALLVIEW_INCLUDES) $(PYTHON_INCLUDES)
 
