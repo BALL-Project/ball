@@ -1,4 +1,4 @@
-// $Id: files.C,v 1.4 2000/06/27 14:53:33 oliver Exp $
+// $Id: files.C,v 1.5 2001/07/17 12:48:40 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>
@@ -89,7 +89,7 @@ void SingleFile::readHIN(const String& file)
 	} 
 	else 
 	{
-		hin_file >> system;
+		hin_file >> S;
 	}
 	hin_file.close();
 }
@@ -105,7 +105,7 @@ void SingleFile::write() const
 		} 
 		else 
 		{
-			hin_file << system;
+			hin_file << S;
 		}
 	}
 	else 
@@ -287,7 +287,7 @@ void readSystemFromHINFile(const String& filename, System& system)
 	buildBonds(PDB_files.back().getSystem());
 
 	// insert into the system
-	PDB_files.back().moveTo(S);
+	PDB_files.back().moveTo(system);
 }
 
 void readHINFile(const String& filename)
