@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: kernel.doc,v 1.2 1999/09/17 11:16:26 oliver Exp $
 
 /**@name	Kernel
 		This chapter contains all relevant information on 
@@ -11,10 +11,8 @@
   //@Include: baseFragment.h
   //@Include: bond.h
   //@Include: chain.h
-  //@Include: defaultProcessors.h
   //@Include: forEach.h
   //@Include: fragment.h
-  //@Include: fragmentDB.h
   //@Include: global.h
   //@Include: iterator.h
   //@Include: molecule.h
