@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.23 2004/04/28 15:37:19 anker Exp $
+// $Id: fresno.C,v 1.1.2.24 2005/01/30 14:00:21 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -89,7 +89,7 @@ namespace BALL
 		float return_value;
 
 		// DEBUG
-		cout << "l = " << lower_ << " u = " << upper_ << " x = " << x << endl;
+		// cout << "l = " << lower_ << " u = " << upper_ << " x = " << x << endl;
 		// /DEBUG
 
 		if (x < 0.0)
@@ -208,6 +208,7 @@ namespace BALL
 	const char* FresnoFF::Option::METAL_R1 = "metal_r1";
 	const char* FresnoFF::Option::METAL_R2 = "metal_r2";
 	const char* FresnoFF::Option::DESOLV_METHOD = "desolvation_method";
+	const char* FresnoFF::Option::DESOLV_GB = "use_gb";
 	const char* FresnoFF::Option::DESOLV_AVG = "desolvation_averaging";
 	const char* FresnoFF::Option::DESOLV_FOCUS_GRID_AROUND_LIGAND 
 		= "desolv_focus_grid_around_ligand";
@@ -227,6 +228,8 @@ namespace BALL
 		= "atom_types_file";
 	const char* FresnoFF::Option::BASE_FUNCTION_TYPE
 		= "base_function_type";
+	const char* FresnoFF::Option::GB_SCALING_FILE
+		= "gb_scaling_file";
 
 
 	// const float FresnoFF::Default::CONST = -33.614;
@@ -265,6 +268,7 @@ namespace BALL
 	const float FresnoFF::Default::METAL_R1 = 2.2;
 	const float FresnoFF::Default::METAL_R2 = 2.6;
 	const Size FresnoFF::Default::DESOLV_METHOD = 0;
+	const bool FresnoFF::Default::DESOLV_GB = false;
 	const Size FresnoFF::Default::DESOLV_AVG = 0;
 	const bool FresnoFF::Default::DESOLV_FOCUS_GRID_AROUND_LIGAND = true;
 	const float FresnoFF::Default::PROBE_RADIUS = 0;
@@ -282,6 +286,8 @@ namespace BALL
 		= "Amber/amber94.types";
 	const Size FresnoFF::Default::BASE_FUNCTION_TYPE
 		= BASE_FUNCTION_TYPE__LINEAR;
+	const String FresnoFF::Default::GB_SCALING_FILE
+		= "gb_scaling.ini";
 
 	void FresnoFF::registerComponents_()
 		throw()
@@ -294,7 +300,7 @@ namespace BALL
 		insertComponent(new FresnoRotation(*this));
 		insertComponent(new FresnoDesolvation(*this));
 		insertComponent(new ChemScoreMetal(*this));
-		insertComponent(new CharmmNonBonded(*this));
+		// insertComponent(new CharmmNonBonded(*this));
 		insertComponent(new FresnoNonPolar(*this));
 		insertComponent(new FresnoRingStacking(*this));
 	}
