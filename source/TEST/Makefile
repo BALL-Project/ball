@@ -16,7 +16,6 @@ EXECUTABLES_MATHS = \
 	AnalyticalGeometry_test\
 	Angle_test\
 	Vector2_test\
-	Vector3_test\
 	Vector4_test\
 	Quaternion_test\
 	Matrix44_test\
@@ -44,7 +43,6 @@ EXECUTABLES_SYSTEM = \
 	TransformationManager_test
 
 EXECUTABLES_DATATYPES = \
-	String_test\
 	BitVector_test\
 	List_test\
 	Hash_test\
@@ -53,6 +51,7 @@ EXECUTABLES_DATATYPES = \
 	HashSet_test\
 	HashGrid3_test\
 	Options_test\
+	String_test\
 	Triple_test\
 	Quadruple_test\
 	RegularData1D_test\
@@ -155,6 +154,7 @@ EXECUTABLES_STRUCTURE = \
 	RDFIntegrator_test\
 	RDFParameter_test\
 	RDFSection_test\
+	ReconstructFragmentProcessor_test\
 	SmilesParser_test\
 	StructureMapper_test\
 	TransformationApplicator_test\
@@ -264,4 +264,10 @@ solvation_test:	$(EXECUTABLES_SOLVATION)
 
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
+
+AmberFF_test: AmberFF_test.o ../MOLMEC/AMBER/amberNonBonded.o
+	$(CXX) $(CXXFLAGS) AmberFF_test.o ../MOLMEC/AMBER/amberNonBonded.o $(LDFLAGS) -o $@ $(LIBS)
+
+ReconstructFragmentProcessor_test: ReconstructFragmentProcessor_test.o ../STRUCTURE/reconstructFragmentProcessor.o ../FORMAT/HINFile.o
+	$(CXX) $(CXXFLAGS) ReconstructFragmentProcessor_test.o ../STRUCTURE/reconstructFragmentProcessor.o ../FORMAT/HINFile.o $(LDFLAGS) -o $@ $(LIBS)
 
