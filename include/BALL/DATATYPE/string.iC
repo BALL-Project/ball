@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.26 2000/12/07 21:31:57 amoll Exp $
+// $Id: string.iC,v 1.27 2000/12/08 08:59:42 oliver Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -46,10 +46,12 @@ bool Substring::operator == (const char* char_ptr) const
 	{
 		throw UnboundSubstring(__FILE__, __LINE__);
 	}
+
 	if (char_ptr == 0)
 	{
 		throw Exception::NullPointer(__FILE__, __LINE__);
 	}
+
 	// to prevent compiler warning:
 	if ((signed)strlen(char_ptr) != (to_ - from_ +1))
 	{
@@ -107,7 +109,7 @@ void Substring::unbind()
 	throw()
 {
   bound_ = 0;
-  from_ = to_ = (Index)string::npos;
+  from_ = to_ = (Index)String::EndPos;
 }
 
 BALL_INLINE 
@@ -209,7 +211,7 @@ void Substring::set(const char* char_ptr, Size size)
 		throw Exception::SizeUnderflow(__FILE__, __LINE__);
 	}
 
-	if (size == string::npos)
+	if (size == String::EndPos)
 	{
 		bound_->replace(from_, to_ - from_ + 1, string(char_ptr));
 	}
@@ -314,7 +316,7 @@ char& Substring::operator [] (Index index)
     throw UnboundSubstring(__FILE__, __LINE__);
 	}
  
-	Size len = string::npos;
+	Size len = String::EndPos;
 	validateRange_(index, len);
 
   return (*bound_)[from_ + index];
@@ -329,7 +331,7 @@ char Substring::operator [] (Index index) const
     throw UnboundSubstring(__FILE__, __LINE__);
 	}
  
-	Size len = string::npos;
+	Size len = String::EndPos;
 	validateRange_(index, len);
 
   return (*bound_)[from_ + index];
@@ -534,15 +536,17 @@ BALL_INLINE
 Substring String::before(const String& s, Index from) const
 	throw()
 {
-	Position found = npos;
+	Position found = EndPos;
 	if (s != "")
 	{
-		found = find(s, from);
+		found = (Position)find(s, from);
 	}
-	if (found == 0 || found == npos) 
+
+	if (found == 0 || found == EndPos) 
 	{
 		return Substring(*this, 0, 0);
 	}
+
 	return getSubstring(0, found);
 }
 
@@ -550,18 +554,18 @@ BALL_INLINE
 Substring String::through (const String& s, Index from) const
 	throw()
 {
-	Position found = npos;
+	Position found = EndPos;
 	if (s != "")
 	{
-		found = find(s, from); 
+		found = (Position)find(s, from); 
 	}
 
-	if (found == npos) 
+	if (found == EndPos) 
 	{
 		return Substring(*this, 0, 0);
 	}
 
-  return getSubstring(0, found + s.size());
+  return getSubstring(0, found + (Size)s.size());
 }
 
 BALL_INLINE 
@@ -573,9 +577,9 @@ Substring String::from(const String& s, Index from) const
 		return getSubstring(0);
 	}
 
-  Size found = find(s, from); 
+  Size found = (Size)find(s, from); 
 
-	if (found == npos)
+	if (found == EndPos)
 	{
 		return Substring(*this, -1, 0);
 	}
@@ -592,9 +596,9 @@ Substring String::after(const String& s, Index from) const
 		return getSubstring(0);
 	}
 
-  Position found = find(s, from); 
+  Position found = (Position)find(s, from); 
 
-	if ((found == npos) || (found + s.size() >= size()))
+	if ((found == EndPos) || (found + s.size() >= size()))
 	{
 		return Substring(*this, -1, 0);
 	}
@@ -618,6 +622,7 @@ String& String::truncate(Size max_size)
 	{
     resize(max_size);
 	}
+
 	return *this;
 }
 
@@ -625,10 +630,11 @@ BALL_INLINE
 Substring String::left(Size len) const
 	throw()
 {
-	if (len > size())
+	if (len > (Size)size())
 	{
-		len = size();
+		len = (Size)size();
 	}
+
   return Substring(*this, 0, len);
 }
 
@@ -637,11 +643,12 @@ Substring String::right(Size len) const
 	throw()
 {
 	// to save calls to size()
-	Size s = size();
+	Size s = (Size)size();
 	if (len > s) 
 	{
 		len = s;
 	}
+
 	Index from = (Index)s - (Index)len;
 
 	if (len > 0) 
@@ -667,11 +674,11 @@ BALL_INLINE
 Substring String::instr(const String& patterns, Index from) const
 	throw()
 {
-  Size found = find(patterns, from); 
+  Size found = (Size)find(patterns, from); 
 
-  return (found == npos)
+  return (found == EndPos)
          ? Substring(*this, 0, 0)
-         : Substring(*this, (Index)found, patterns.size());
+         : Substring(*this, (Index)found, (Size)patterns.size());
 }
 
 BALL_INLINE 
@@ -719,7 +726,7 @@ BALL_INLINE
 bool String::has(char c) const
 	throw()
 {
-  return ((c != 0) && (find(c, 0) != npos));
+  return ((c != 0) && (find(c, 0) != EndPos));
 }
 
 BALL_INLINE 
@@ -730,7 +737,8 @@ bool String::hasSubstring(const String& s, Index from) const
 	{
 		return true;
 	}
-  return (find(s, from) != npos);
+
+  return (find(s, from) != EndPos);
 }
 
 BALL_INLINE 
