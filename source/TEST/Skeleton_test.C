@@ -1,14 +1,19 @@
-// $Id: Skeleton_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: Skeleton_test.C,v 1.2 1999/12/01 13:24:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
+
 // insert includes here
+
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Skeleton_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $")
+START_TEST(class_name, "$Id: Skeleton_test.C,v 1.2 1999/12/01 13:24:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
+
+using namespace BALL;
+
 ///  insert tests for each member function here         
 ///
 	
@@ -19,6 +24,7 @@ TEST_EQUAL(0,0)				// each test should be one of the macros (see above):
 											//   TEST_REAL_EQUAL(expression1, expression2)
 											//   TEST_NOT_EQUAL(expression1, expression2)
                       //   TEST_EXCEPTION(exception_class, expression)
+                      //   TEST_FILE(infile, templatefile, use_regexps)
 
 RESULT								// prints the result for the test
 											// and updates the global variable
