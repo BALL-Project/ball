@@ -103,7 +103,8 @@ class test:
 			'//',
 			'// $Id:')
 		#compare first 4 lines with tab info lines
-		while self.linenr < 3: 
+		self.linenr = self.linenr + 1
+		while self.linenr < 4: 
 			self.linenr = self.linenr + 1
 			self.lastline = self.line
 			self.line = self.f.readline()
