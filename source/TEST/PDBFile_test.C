@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.7 2002/12/12 11:34:43 oliver Exp $
+// $Id: PDBFile_test.C,v 1.8 2002/12/13 12:44:24 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.7 2002/12/12 11:34:43 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.8 2002/12/13 12:44:24 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -30,6 +30,69 @@ delete pdb_file;
 RESULT
 
 CHECK(PDBFile::read(System&))
+RESULT
+
+CHECK(PDBFile::selectModel())
+	PDBFile f("data/PDBFile_test_models.pdb");
+	System s;
+	f.read(s);
+	TEST_EQUAL(s.countAtoms(), 1)
+	s.clear();
+	f.selectModel(2);
+	f.read(s);
+	TEST_EQUAL(s.countAtoms(), 2)
+	s.clear();
+	f.selectModel(3);
+	f.read(s);
+	TEST_EQUAL(s.countAtoms(), 3)
+	s.clear();
+	f.selectModel(4);
+	f.read(s);
+	TEST_EQUAL(s.countAtoms(), 0)
+	s.clear();
+	f.selectModel(0);
+	f.read(s);
+	TEST_EQUAL(s.countAtoms(), 6)
+	s.clear();
+	f.options.setInteger(GenericPDBFile::Option::CHOOSE_MODEL, 0);
+	f.read(s);
+	TEST_EQUAL(s.countAtoms(), 6)
+	s.clear();
+	f.options.setInteger(GenericPDBFile::Option::CHOOSE_MODEL, 1);
+	f.read(s);
+	TEST_EQUAL(s.countAtoms(), 1)
+	s.clear();
+	f.options.setInteger(GenericPDBFile::Option::CHOOSE_MODEL, 2);
+	f.read(s);
+	TEST_EQUAL(s.countAtoms(), 2)
+	s.clear();
+	f.options.setInteger(GenericPDBFile::Option::CHOOSE_MODEL, 3);
+	f.read(s);
+	TEST_EQUAL(s.countAtoms(), 3)
+	s.clear();
+	f.options.setInteger(GenericPDBFile::Option::CHOOSE_MODEL, 4);
+	f.read(s);
+	TEST_EQUAL(s.countAtoms(), 0)
+
+	PDBFile g("data/PDBFile_test_no_model.pdb");
+	s.clear();
+	g.read(s);
+	TEST_EQUAL(s.countAtoms(), 3)
+	s.clear();
+	g.selectModel(1);
+	g.read(s);
+	TEST_EQUAL(s.countAtoms(), 3)
+	s.clear();
+	g.selectModel(0);
+	g.read(s);
+	TEST_EQUAL(s.countAtoms(), 3)
+	s.clear();
+	g.selectModel(2);
+	g.read(s);
+	TEST_EQUAL(s.countAtoms(), 0)
+RESULT
+
+CHECK(PDBFile strict line checking)
 RESULT
 
 CHECK(PDBFile::write(System&))

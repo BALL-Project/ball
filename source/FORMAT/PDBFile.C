@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.28 2002/12/12 10:19:13 oliver Exp $
+// $Id: PDBFile.C,v 1.29 2002/12/13 12:44:15 anker Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -19,7 +19,8 @@ namespace BALL
 {
 
 	PDBFile::PDBFile()
-		:	PDB_atom_map_(),
+		:	GenericPDBFile(),
+			PDB_atom_map_(),
 			residue_map_(),
 			ssbond_list_(),
 			helix_list_(),
@@ -65,7 +66,8 @@ namespace BALL
 
 	PDBFile::PDBFile(const String& filename, File::OpenMode open_mode)
 		throw(Exception::FileNotFound)
-		:	PDB_atom_map_(),
+		:	GenericPDBFile(),
+			PDB_atom_map_(),
 			residue_map_(),
 			ssbond_list_(),
 			helix_list_(),

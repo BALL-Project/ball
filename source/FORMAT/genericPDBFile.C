@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericPDBFile.C,v 1.19 2002/02/27 12:21:19 sturm Exp $
+// $Id: genericPDBFile.C,v 1.20 2002/12/13 12:44:15 anker Exp $
 
 #include <BALL/FORMAT/genericPDBFile.h>
 
@@ -13,6 +13,7 @@ using namespace std;
 
 namespace BALL 
 {
+
 
 	extern "C" int GenericPDBFileRecordNameComparator_
 		(const void* a_ptr, const void* b_ptr)
@@ -80,37 +81,57 @@ namespace BALL
 	};
 
 
+	// options and defaults for the GenericPDBFile class
+
+	const char* GenericPDBFile::Option::VERBOSITY = "verbosity";
+	const char* GenericPDBFile::Option::STRICT_LINE_CHECKING 
+		= "strict_line_checking";
+	const char* GenericPDBFile::Option::CHOOSE_MODEL = "choose_model";
+
+	const int GenericPDBFile::Default::VERBOSITY = 0;
+	const bool GenericPDBFile::Default::STRICT_LINE_CHECKING = false;
+	const int GenericPDBFile::Default::CHOOSE_MODEL = 1;
+
+
 	GenericPDBFile::GenericPDBFile()
-		:	current_model_(INVALID_INDEX),
-			selected_model_(0),
+		:	verbosity_(0),
+			strict_line_checking_(false),
+			current_model_(INVALID_INDEX),
+			selected_model_(1),
 			current_record_(INVALID_INDEX),
 			record_fields_(0),
 			current_record_type_(PDB::RECORD_TYPE__UNKNOWN)
 	{
-		compare_record_type_format_.record_type = PDB::RECORD_TYPE__UNKNOWN;
-		memcpy(const_cast<char*>(compare_record_type_format_.string), const_cast<char*>("      "), 7);
-		compare_record_type_format_.format_string = "";
+		init_();
+	}
 
-		memset(line_buffer_, 0, sizeof(line_buffer_));
-		memset(&record_UNKNOWN, 0, sizeof(PDB::RecordUNKNOWN));
+	GenericPDBFile::GenericPDBFile(const Options& new_options)
+		:	verbosity_(0),
+			strict_line_checking_(false),
+			current_model_(INVALID_INDEX),
+			selected_model_(1),
+			current_record_(INVALID_INDEX),
+			record_fields_(0),
+			current_record_type_(PDB::RECORD_TYPE__UNKNOWN)
+	{
+		options = new_options;
+		init_();
 	}
 
 	GenericPDBFile::GenericPDBFile(const GenericPDBFile& file)
 		throw()
 		:	File(),
 			PropertyManager(file),
+			verbosity_(0),
+			strict_line_checking_(false),
 			current_model_(INVALID_INDEX),
-			selected_model_(0),
+			selected_model_(1),
 			current_record_(INVALID_INDEX),
 			record_fields_(0),
 			current_record_type_(PDB::RECORD_TYPE__UNKNOWN)
 	{
-		compare_record_type_format_.record_type = PDB::RECORD_TYPE__UNKNOWN;
-		memcpy(const_cast<char*>(compare_record_type_format_.string), const_cast<char*>("      "), 7);
-		compare_record_type_format_.format_string = "";
-
-		memset(line_buffer_, 0, sizeof(line_buffer_));
-		memset(&record_UNKNOWN, 0, sizeof(PDB::RecordUNKNOWN));
+		options = file.options;
+		init_();
 	}
 
 	GenericPDBFile::~GenericPDBFile()
@@ -241,6 +262,10 @@ namespace BALL
 		seekg(0, ios::beg);
 		current_record_ = -1;
 
+		// initialize the model as model 1 to prevent reading nothing if the
+		// model specifier is missing.
+		current_model_ = 1;
+
 		return readNextRecord(read_values);
 	}
 		
@@ -256,15 +281,17 @@ namespace BALL
 
 		Size size = (Size)gcount();
 		
-#		ifdef BALL_STRICT_PDB_LINE_IMPORT
-		
-		if (size <= PDB::SIZE_OF_PDB_RECORD_LINE)
-		{ 
-			return readInvalidRecord(line_buffer_);
+		// The PDB format description says: "Each line in the PDB entry file
+		// consists of 80 columns." 
+		// ????? perhaps we should solve this via a private member.
+		if (options.getBool(Option::STRICT_LINE_CHECKING) == true)
+		{
+			if (size <= PDB::SIZE_OF_PDB_RECORD_LINE)
+			{ 
+				return readInvalidRecord(line_buffer_);
+			}
 		}
 			
-#	endif
-
 		++current_record_;
 
 		return readLine
@@ -275,6 +302,11 @@ namespace BALL
 
 	bool GenericPDBFile::readRecords()
 	{
+		// Selecting models only makes sense when reading a whole file, so
+		// select the model only if reading *all* records.
+		int desired_model = options.getInteger(Option::CHOOSE_MODEL);
+		selectModel(desired_model);
+
 		if (readFirstRecord(true) == false)
 		{
 			return false;
@@ -2246,6 +2278,26 @@ namespace BALL
 		record_fields_ = 0;
 		//  current_record_type_ = PDB::RECORD_TYPE__UNKNOWN;
 	}
+
+	void GenericPDBFile::init_()
+		throw()
+	{
+		// set a default for the current record type
+		compare_record_type_format_.record_type = PDB::RECORD_TYPE__UNKNOWN;
+
+		// initialize the buffer for record type comparison
+		memcpy(const_cast<char*>(compare_record_type_format_.string),
+				const_cast<char*>("      "), 7);
+		compare_record_type_format_.format_string = "";
+
+		// initialize buffers with zero
+		memset(line_buffer_, 0, sizeof(line_buffer_));
+		memset(&record_UNKNOWN, 0, sizeof(PDB::RecordUNKNOWN));
+
+		// set defaults
+		options.setDefaultInteger(Option::CHOOSE_MODEL, Default::CHOOSE_MODEL);
+	}
+
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/FORMAT/genericPDBFile.iC>

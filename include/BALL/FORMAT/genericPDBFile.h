@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericPDBFile.h,v 1.16 2002/12/12 23:41:21 anker Exp $
+// $Id: genericPDBFile.h,v 1.17 2002/12/13 12:44:07 anker Exp $
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
 #define BALL_FORMAT_GENERICPDBFILE_H
@@ -950,10 +950,11 @@ namespace BALL
 			*/
 			static const char* STRICT_LINE_CHECKING;
 			
-			/** Choose a model. [Not yet implemented]
+			/** Choose a model. 
 					If a PDB file contains several models, choose the model you want
 					to have read via this option. Default is the first model
-					appearing, denoted by Index -1.
+					appearing, denoted by Index 0. If you want to read all models,
+					choose index -1.
 					@see		Default::CHOOSE_MODEL
 					@param	model	integer
 			*/
@@ -978,7 +979,7 @@ namespace BALL
 			static const bool STRICT_LINE_CHECKING;
 
 			/** Default model to read from file.
-					-1 - read the first model from the file
+					0 - read the first model from the file
 					@see	Option::CHOOSE_MODEL
 			*/
 			static const Index CHOOSE_MODEL;
@@ -997,7 +998,10 @@ namespace BALL
 		/// Default constructor.
 		GenericPDBFile();
 
-		/// Copy cosntructor
+		/// Construct with options.
+		GenericPDBFile(const Options& new_options);
+
+		/// Copy constructor
 		GenericPDBFile(const GenericPDBFile& file)
 			throw();
 		
@@ -1014,14 +1018,17 @@ namespace BALL
 		virtual void clear(int state = 0);
 		//@}
 
-		/** @name Accoessors.
+		/** @name Accessors.
 		*/
 		//@{
 
 		/// Returns the version number this PDB file reader is able to read.
 		virtual float getVersion() const;
 
-		/// Selects one of multiple models for reading.
+		/** Selects one of multiple models for reading. Default behaviour is
+				reading model 1. If a file does not contain a MODEL specifier, all
+				coordinates will be assigned to model 1.
+		*/
 		void selectModel(Index index);
 
 		/// Selects all models for reading.
@@ -1532,6 +1539,18 @@ namespace BALL
 
 		//_
 		GenericPDBFile& operator = (const GenericPDBFile& generic_PDB_file);
+
+		/*_ A helper function for initializing certain data structures. Used by
+				constructors.
+		*/
+		void init_()
+			throw();
+
+		//_
+		int verbosity_;
+
+		//_
+		bool strict_line_checking_;
 
 		//_ 
 		Index current_model_;
