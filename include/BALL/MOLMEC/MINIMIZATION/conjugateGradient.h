@@ -1,13 +1,15 @@
-// $Id: conjugateGradient.h,v 1.1 1999/12/17 18:37:29 pmueller Exp $ 
+// $Id: conjugateGradient.h,v 1.2 1999/12/19 17:18:27 oliver Exp $ 
 // A conjugate gradient minimizer for geometry optimisation
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 
-#include <ieeefp.h> 
-
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
+#endif
+
+#ifdef BALL_INCLUDE_IEEEFP
+#	include <ieeefp.h> 
 #endif
 
 #ifndef BALL_KERNEL_SYSTEM_H
@@ -37,6 +39,7 @@
 #ifndef	BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
 #	include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #endif
+
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
 #       include <BALL/MOLMEC/COMMON/snapShot.h>
 #endif
