@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.C,v 1.8 2000/10/24 21:38:50 amoll Exp $
+// $Id: XDRPersistenceManager.C,v 1.9 2000/10/29 22:31:59 oliver Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
@@ -8,6 +8,29 @@ using namespace std;
 
 namespace BALL 
 {
+
+	extern "C" int XDRReadStream_(void*, char*, int)
+	{
+		// BAUSTELLE: need to read something from the istream
+		return 0;
+	}
+
+	extern "C" int XDRWriteStream_(void*, char*, int)
+	{
+		// BAUSTELLE: need to write something to the ostream
+		return 0;
+	}
+
+	extern "C" int XDRError_(void*, char*, int)
+	{
+		Log.error() << "XDRPersistenceManager: error wrong access mode fro XDR stream." << endl;
+
+		return 0;
+	}
+
+	const Size XDRPersistenceManager::STREAM_HEADER = 0xDEADBEEF;
+	const Size XDRPersistenceManager::STREAM_TRAILER = 0x0000FFFF;
+	
 
 	XDRPersistenceManager::XDRPersistenceManager()
 		:	PersistenceManager()
@@ -44,7 +67,11 @@ namespace BALL
 
 	void XDRPersistenceManager::writeStreamHeader()
 	{
-		ostr_->put('S');
+		xdrrec_create(&xdr_in_, 0, 0, 0, XDRReadStream_, XDRError_);
+		xdrrec_create(&xdr_out_, 0, 0, 0, XDRError_, XDRWriteStream_);
+		xdr_in_.x_op = XDR_DECODE;
+		xdr_out_.x_op = XDR_ENCODE;
+		put(STREAM_HEADER);
 	}
 
 	bool XDRPersistenceManager::checkStreamHeader()
@@ -53,15 +80,26 @@ namespace BALL
 			Log.info() << "entering checkStreamHeader()" << endl;
 #		endif
 
-		char c;
-		istr_->get(c);
+		// skip to the next/first XDR record
+		xdrrec_skiprecord(&xdr_in_);
 
-		return (c == 'S');
+		Size header;
+		get(header);
+
+		bool result = ((xdr_u_int(&xdr_in_, &header) == 1) 
+									 && (header == STREAM_HEADER));
+
+		// destroy the XDR streams
+		xdr_destroy(&xdr_in_);
+		xdr_destroy(&xdr_out_);
+
+		return result;
 	}
 
 	void XDRPersistenceManager::writeStreamTrailer()
 	{
-		ostr_->put('X');
+		put(STREAM_TRAILER);
+		xdrrec_endofrecord(&xdr_out_, 1);
 	}
 
 	bool XDRPersistenceManager::checkStreamTrailer()
@@ -70,10 +108,10 @@ namespace BALL
 			Log.info() << "entering checkStreamTrailer()" << endl;
 #		endif
 
-		char c;
-		istr_->get(c);
+		Size trailer;
+		get(trailer);
 
-		return (c == 'X');
+		return (trailer == STREAM_TRAILER);
 	}
 
 #	ifdef BALL_DEBUG_PERSISTENCE
@@ -275,109 +313,179 @@ namespace BALL
 	/// Layer 0: primitive put methods
 	void XDRPersistenceManager::put(const char c)
 	{
-		ostr_->put((unsigned char)c);
+		char* char_ptr = const_cast<char*>(&c);
+		xdr_char(&xdr_out_, char_ptr);
 	}
 
 	void XDRPersistenceManager::put(const unsigned char c)
 	{
-		ostr_->put((unsigned char)c);
+		unsigned char* char_ptr = const_cast<unsigned char*>(&c);
+		xdr_u_char(&xdr_out_, char_ptr);
 	}
 
 	void XDRPersistenceManager::put(const bool b)
 	{		
-		ostr_->put(b ? (unsigned char)1 : (unsigned char)0);
+		char c = b ? (char)1 : (char)0;
+		xdr_char(&xdr_out_, &c);
 	}
 
-#define BALL_DEFINE_NUMBER_PUT(type)\
-	void XDRPersistenceManager::put(const type i)\
-	{\
-		const unsigned char*	ptr = (const unsigned char*)&i;\
-		for (unsigned short j = 0; j < sizeof(i); ++j)\
-		{\
-			ostr_->put((unsigned char)*ptr++);\
-		}\
-	}\
+	void XDRPersistenceManager::put(const short i)
+	{
+		short* short_ptr = const_cast<short*>(&i);
+		xdr_short(&xdr_out_, short_ptr);
+	}
 
-	BALL_DEFINE_NUMBER_PUT(short)
-	BALL_DEFINE_NUMBER_PUT(unsigned short)
-	BALL_DEFINE_NUMBER_PUT(int)
-	BALL_DEFINE_NUMBER_PUT(unsigned int)
-	BALL_DEFINE_NUMBER_PUT(long)
-	BALL_DEFINE_NUMBER_PUT(unsigned long)
+	void XDRPersistenceManager::put(const unsigned short i)
+	{
+		unsigned short* short_ptr = const_cast<unsigned short*>(&i);
+		xdr_u_short(&xdr_out_, short_ptr);
+	}
+
+	void XDRPersistenceManager::put(const int i)
+	{
+		int* int_ptr = const_cast<int*>(&i);
+		xdr_int(&xdr_out_, int_ptr);
+	}
+
+	void XDRPersistenceManager::put(const unsigned int i)
+	{
+		unsigned int* int_ptr = const_cast<unsigned int*>(&i);
+		xdr_u_int(&xdr_out_, int_ptr);
+	}
+
+	void XDRPersistenceManager::put(const long i)
+	{
+		long* long_ptr = const_cast<long*>(&i);
+		xdr_long(&xdr_out_, long_ptr);
+	}
+
+	void XDRPersistenceManager::put(const unsigned long i)
+	{
+		unsigned long* long_ptr = const_cast<unsigned long*>(&i);
+		xdr_u_long(&xdr_out_, long_ptr);
+	}
+
 #ifndef BALL_64BIT_ARCHITECTURE
-	BALL_DEFINE_NUMBER_PUT(long long)
-	BALL_DEFINE_NUMBER_PUT(unsigned long long)
+	void XDRPersistenceManager::put(const long long i)
+	{
+		long long* long_ptr = const_cast<long long*>(&i);
+		xdr_longlong_t(&xdr_out_, long_ptr);
+	}
+
+	void XDRPersistenceManager::put(const unsigned long long i)
+	{
+		unsigned long long* long_ptr = const_cast<unsigned long long*>(&i);
+		xdr_u_longlong_t(&xdr_out_, long_ptr);
+	}
 #endif
-	BALL_DEFINE_NUMBER_PUT(float)
-	BALL_DEFINE_NUMBER_PUT(double)
-	BALL_DEFINE_NUMBER_PUT(void*)
+
+	
+	void XDRPersistenceManager::put(const float x)
+	{
+		float* float_ptr = const_cast<float*>(&x);
+		xdr_float(&xdr_out_, float_ptr);
+	}
+
+	void XDRPersistenceManager::put(const double x)
+	{
+		double* double_ptr = const_cast<double*>(&x);
+		xdr_double(&xdr_out_, double_ptr);
+	}
+
+	void XDRPersistenceManager::put(const void* ptr)
+	{
+		long ptr_long = (long)ptr;
+		xdr_long(&xdr_out_, &ptr_long);
+	}
 
 	void XDRPersistenceManager::put(const string& s)
 	{
-		const unsigned char* ptr = (unsigned char*)s.c_str();
-
-		do
-		{
-			ostr_->put(*ptr);
-		}	while (*ptr++ != (unsigned char)0);
+		char* ptr = const_cast<char*>(s.c_str());
+		xdr_string(&xdr_out_, &ptr, s.size());
 	}
 
 	void XDRPersistenceManager::get(char& c)
 	{
-		char tmp;
-		istr_->get(tmp);
-		c = tmp;
+		xdr_char(&xdr_in_, &c);
 	}
 
 	void XDRPersistenceManager::get(unsigned char& c)
 	{
-		char& c_ref = (char&)c;
-		istr_->get(c_ref);
+		xdr_u_char(&xdr_in_, &c);
 	}
 
 	void XDRPersistenceManager::get(bool& b)
 	{
 		char c;
-		istr_->get(c);
+		xdr_char(&xdr_in_, &c);
 		b = (c == (char)1);
 	}
 
 	void XDRPersistenceManager::get(string& s)
 	{
-		static char buf[1024];
+		static char buf[65536];
 		char* ptr = &(buf[0]);
-		
-		do
-		{
-			istr_->get(*ptr);
-		} while (*ptr++ != (char)0);
-
-		s.assign((char*)&buf[0]);
+		xdr_string(&xdr_in_, &ptr, 65535);
+		s = ptr;
 	}
 
-#define BALL_DEFINE_NUMBER_GET(type)\
-	void XDRPersistenceManager::get(type& i)\
-	{\
-		char* ptr = (char*)&i;\
-		for (unsigned short j = 0; j < sizeof(i); ++j)\
-		{\
-			istr_->get(*ptr++);\
-		}\
-	}\
+	void XDRPersistenceManager::get(short& s)
+	{
+		xdr_short(&xdr_in_, &s);
+	}
 
+	void XDRPersistenceManager::get(unsigned short& s)
+	{
+		xdr_u_short(&xdr_in_, &s);
+	}
 
-	BALL_DEFINE_NUMBER_GET(short)
-	BALL_DEFINE_NUMBER_GET(unsigned short)
-	BALL_DEFINE_NUMBER_GET(int)
-	BALL_DEFINE_NUMBER_GET(unsigned int)
-	BALL_DEFINE_NUMBER_GET(long)
-	BALL_DEFINE_NUMBER_GET(unsigned long)
+	void XDRPersistenceManager::get(int& s)
+	{
+		xdr_int(&xdr_in_, &s);
+	}
+
+	void XDRPersistenceManager::get(unsigned int& s)
+	{
+		xdr_u_int(&xdr_in_, &s);
+	}
+
+	void XDRPersistenceManager::get(long& s)
+	{
+		xdr_long(&xdr_in_, &s);
+	}
+
+	void XDRPersistenceManager::get(unsigned long& s)
+	{
+		xdr_u_long(&xdr_in_, &s);
+	}
+
 #ifndef BALL_64BIT_ARCHITECTURE
-	BALL_DEFINE_NUMBER_GET(long long)
-	BALL_DEFINE_NUMBER_GET(unsigned long long)
+	void XDRPersistenceManager::get(long long& s)
+	{
+		xdr_longlong_t(&xdr_in_, &s);
+	}
+
+	void XDRPersistenceManager::get(unsigned long long& s)
+	{
+		xdr_u_longlong_t(&xdr_in_, &s);
+	}
 #endif
-	BALL_DEFINE_NUMBER_GET(float)
-	BALL_DEFINE_NUMBER_GET(double)	
-	BALL_DEFINE_NUMBER_GET(void*)
+
+	void XDRPersistenceManager::get(float& x)
+	{
+		xdr_float(&xdr_in_, &x);
+	}
+
+	void XDRPersistenceManager::get(double& x)
+	{
+		xdr_double(&xdr_in_, &x);
+	}
+
+	void XDRPersistenceManager::get(void*& ptr)
+	{
+		long ptr_long;
+		xdr_long(&xdr_in_, &ptr_long);
+		ptr = (void*)ptr_long;
+	}
 
 } // namespace BALL
