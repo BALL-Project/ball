@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.35 2004/02/05 14:45:21 amoll Exp $
+// $Id: scene.C,v 1.36 2004/02/06 13:42:17 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -18,7 +18,8 @@
 
 #include <qpainter.h>
 #include <qmenubar.h>
-#include <qpixmap.h>
+// #include <qpixmap.h>
+#include <qimage.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
 #include <qcursor.h>
@@ -1487,9 +1488,16 @@ void Scene::selectionPressedMoved_(Scene* /* scene */)
 }
 void Scene::exportPNG()
 {
-	QPixmap pix = QPixmap::grabWindow(this->winId());
+// old way to do this: to be removed after testing (now 7.2.2004) ????
+//  	QPixmap pix = QPixmap::grabWindow(this->winId());
+//  	pix.loadFromData(pixels, width()*height());
+
+	makeCurrent();
+	QImage image = grabFrameBuffer();
+
 	String filename = String("molview_screenshot" + String(screenshot_nr_) +".png");
-	bool result = pix.save(filename.c_str(), "PNG");
+// 	bool result = pix.save(filename.c_str(), "PNG");
+	bool result = image.save(filename.c_str(), "PNG");
 	screenshot_nr_ ++;
 
 	if (result) setStatusbarText("Saved screenshot to " + filename);
