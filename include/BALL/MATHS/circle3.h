@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.14 2000/04/03 21:21:58 amoll Exp $
+// $Id: circle3.h,v 1.15 2000/04/18 13:57:05 oliver Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -296,15 +296,20 @@ namespace BALL
 			return s;
 	}
 
-	/**	Output- Operator
-			prints out two TVector3 and a {\bf T} value: p, n. radius
+	/**	Output  Operator
+			Writes the values of {\tt p}, {\tt n}, and {\tt radius} to an 
+			output stream. The three values are separated by spaces and enclosed in brackets.\\
+			{\bf Example:}\\
+			{\tt ((0 0 0) (1 2 1) 3.5)}
+			@see TVector3::operator<<
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TCircle3<T>& circle)
 	{
-			return (s << "CIRCLE(" << circle.p 
-								<< " " << circle.n
-								<< " " << circle.radius << ")");
+			return s << '(' << circle.p 
+							 << ' ' << circle.n
+							 << ' ' << circle.radius 
+							 << ')';
 	}
 	//@}
 	//@}

@@ -1,4 +1,4 @@
-// $Id: quaternion.h,v 1.14 2000/04/03 21:21:59 amoll Exp $
+// $Id: quaternion.h,v 1.15 2000/04/18 13:57:06 oliver Exp $
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -510,10 +510,17 @@ namespace BALL
 		return s;
 	}
 
+	/**	Output Operator.
+			Write the values of the quaternion to an output stream.
+			The values of {\tt i}, {\tt j}, {\tt k}, and {\tt angle} are written to
+			an output stream. They are enclose in brackets.\\
+			{\bf Example:}\\
+			{\tt (0.32 0.45 0.12 1.0)}
+	*/	
 	template <class T>
 	std::ostream& operator << (std::ostream& s, const TQuaternion<T>& q)
 	{
-		s << "QUATERNION(" << q.i << ' ' << q.j << ' '
+		s << '(' << q.i << ' ' << q.j << ' '
 				 << q.k << ' ' << q.angle << ')';
 
 		return s;

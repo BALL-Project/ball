@@ -1,4 +1,4 @@
-// $Id: angle.h,v 1.21 2000/04/04 21:29:22 oliver Exp $
+// $Id: angle.h,v 1.22 2000/04/18 13:57:04 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -229,7 +229,7 @@ namespace BALL
 				@param val the value to substract
 				@return TAngle, {\tt *this}
 		*/
-		TAngle &operator -= (const T& val);
+		TAngle& operator -= (const T& val);
 
 		/**	Subtraction an angle from this 
 				angle and return the result.
@@ -720,12 +720,14 @@ namespace BALL
 	}
 
 	/**	Output- Operator
-			prints a {\bf T} out: value
+			Writes the value of the angle to an output stream.
+			The stream operator {\tt operator <<} has to be defined
+			for the template parameter {\tt T}.
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TAngle<T>& angle)
 	{
-		s << "ANGLE(" << angle.value << ')';
+		s << angle.value;
 
 		return s;
 	}

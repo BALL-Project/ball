@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.22 2000/04/03 21:21:59 amoll Exp $
+// $Id: vector4.h,v 1.23 2000/04/18 13:57:08 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -822,13 +822,16 @@ namespace BALL
 		return s;
 	}
 
-	/**	Output- Operator
-			prints out four {\bf T} : x, y, z, h
+	/**	Output Operator
+			Write the four components of the vector to an output stream.
+			The values are enclosed by brackets.\\
+			{\bf Example:}\\
+			{\tt (0.1 2.0 0 1)}
 	*/
 	template <class T>
 	std::ostream& operator << (std::ostream& s, const TVector4<T>& v)
 	{
-		s << "VECTOR4(" <<v.x << ' ' << v.y << ' ' << v.z << ' ' << v.h << ')';
+		s << '(' <<v.x << ' ' << v.y << ' ' << v.z << ' ' << v.h << ')';
 		
 		return s;
 	}

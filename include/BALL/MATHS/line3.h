@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.17 2000/04/03 21:21:58 amoll Exp $
+// $Id: line3.h,v 1.18 2000/04/18 13:57:05 oliver Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -329,12 +329,16 @@ namespace BALL
 	}
 
 	/**	Output-Operator
-			writes the two public attrobutes {\tt d} and {\tt p} to an {\tt ostream}
+			Writes the two public attributes {\tt d} and {\tt p} to an output stream.
+			The values of the two vectors are enclosed in brackets.\\
+			{\bf Example:}\\
+			{\tt ((0 0 0) (1 2 1))}
+			@see TVector3::operator<<
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TLine3<T>& line)
 	{
-		return (s << "LINE(" << line.p << ' ' << line.d << ')');
+		return s << '(' << line.p << ' ' << line.d << ')');
 	}
 	//@}
 

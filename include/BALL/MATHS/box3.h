@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.13 2000/04/03 21:21:58 amoll Exp $
+// $Id: box3.h,v 1.14 2000/04/18 13:57:04 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -448,13 +448,18 @@ namespace BALL
 		return s;
 	}
 
-	/**	Input- Operator
-			prints out two TVector3: a, b
+	/**	Output Operator
+			Writes the two coordinates of the box to an output stream.
+			The first vector is prefixed by a left bracket, the second 
+			vector is followed by a closing bracket.\\
+			{\bf Example:}\\
+			{\tt ((0 1 2) (7.5 3.4 10))}\\
+			@see TVector3::operator<<
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TBox3<T>& box)
 	{
-		return (s << "Box3(" << box.a << ' ' << box.b << ')');
+		return s << "(" << box.a << ' ' << box.b << ')';
 	}
 	//@}
 

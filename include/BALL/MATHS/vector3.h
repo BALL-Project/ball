@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.31 2000/04/03 21:21:59 amoll Exp $
+// $Id: vector3.h,v 1.32 2000/04/18 13:57:08 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -1050,7 +1050,7 @@ namespace BALL
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TVector3<T>& v)
 	{
-		s << "VECTOR3(" << v.x << ' ' << v.y << ' ' << v.z << ')';
+		s << "(" << v.x << ' ' << v.y << ' ' << v.z << ')';
 
 		return s;
 	}

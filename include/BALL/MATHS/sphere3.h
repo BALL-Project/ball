@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.12 2000/04/03 21:21:59 amoll Exp $
+// $Id: sphere3.h,v 1.13 2000/04/18 13:57:07 oliver Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -262,13 +262,16 @@ namespace BALL
 		return s;
 	}
 
-	/**	Output- Operator
-			prints out a TVector3 and a {\bf T} value : p, radius
+	/**	Output Operator.
+			Write the contentsp of {\tt p} and {\tt radius} to an output stream.
+			The values are enclose in brackets.\\
+			{\bf Example:}\\
+			{\tt ((0 1 1.5) 0.4)}
 	*/
 	template <typename T>
 	std::ostream& operator << (std::ostream& s, const TSphere3<T>& sphere3)
 	{
-		return (s << "SPHERE(" << sphere3.p << ' ' << sphere3.radius << ")");
+		return (s << '(' << sphere3.p << ' ' << sphere3.radius << ')';
 	}
 	//@}
 
