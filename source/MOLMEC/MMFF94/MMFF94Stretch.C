@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Stretch.C,v 1.1.2.2 2005/03/21 16:51:23 amoll Exp $
+// $Id: MMFF94Stretch.C,v 1.1.2.3 2005/03/21 16:51:58 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Stretch.h>
@@ -142,7 +142,7 @@ namespace BALL
 			const float delta_2(delta * delta);
 
 			float eb_ij = 143.9325 * stretch_[i].kb / 2.0 * delta_2 *
-				            (1.0 + CUBIC_STRENGTH_CONSTANT * delta + 7.0 / 12.0 CUBIC_STRENGTH_CONSTANT * CUBIC_STRENGTH_CONSTANT * delta_2);
+				            (1.0 + CUBIC_STRENGTH_CONSTANT * delta + 7.0 / 12.0 * CUBIC_STRENGTH_CONSTANT * CUBIC_STRENGTH_CONSTANT * delta_2);
 
 			Log.info() << stretch_[i].atom1->getFullName() << " -> " 
 								 << stretch_[i].atom2->getFullName() << " : bond stretch energy " << eb_ij << std::endl;
