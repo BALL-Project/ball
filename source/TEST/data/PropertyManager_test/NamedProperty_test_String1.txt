@@ -1,0 +1,8 @@
+START
+OBJECT BALL::NamedProperty @ 134874904 -
+  int type_ = 5 
+  basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 test4 
+  BALL::String data_.s = 5 titel 
+END_OBJECT
+END
+END

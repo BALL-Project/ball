@@ -1,0 +1,7 @@
+START
+/OBJECT BALL::NamedProperty @ [0-9]+ -
+  int type_ = 7 
+  basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 test3 
+END_OBJECT
+END
+END

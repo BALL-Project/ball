@@ -1,0 +1,10 @@
+Object: 0xbffff6a0 is instance of class: PropertyManager
+3 101 
+(PROP1BOOL: 1)
+(PROP2INT: -12345)
+(PROP3UNSIGNED_INT: 12345)
+(PROP4FLOAT: 1.2345)
+(PROP5DOUBLE: 2.345)
+(PROP6STRING: "test")
+(PROP7OBJECT: 0xbffff6c8)
+(PROP8NONE: )

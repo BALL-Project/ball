@@ -1,0 +1,51 @@
+START
+OBJECT BALL::NamedProperty @ 134858904 -
+  int type_ = 6 
+  basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 5 test2 
+  BALL::PersistentObject * data_.object  18446744072635807036 
+END_OBJECT
+END
+START
+OBJECT BALL::Protein @ 18446744072635807036 -
+  BASEOBJECT BALL::Molecule @ 18446744072635807036 -
+    BASEOBJECT BALL::AtomContainer @ 18446744072635807036 -
+      BASEOBJECT BALL::Composite @ 18446744072635807036 -
+        STORABLE BALL::Selectable  Selectable 
+          bool selected_ = FALSE 
+        END_STORABLE
+        unsigned_int number_of_children_ = 0 
+        BALL::Composite * parent_  0 
+        BALL::Composite * previous_  0 
+        BALL::Composite * next_  0 
+        BALL::Composite * first_child_  0 
+        BALL::Composite * last_child_  0 
+        unsigned_char properties_ = 0 
+        bool contains_selection_ = FALSE 
+        unsigned_int number_of_selected_children_ = 0 
+        unsigned_int number_of_children_containing_selection_ = 0 
+        STORABLE BALL::TimeStamp  selection_stamp_ 
+          STORABLE BALL::Time  time_ 
+            long secs_ = 967731152 
+            long usecs_ = 692859 
+          END_STORABLE
+        END_STORABLE
+        STORABLE BALL::TimeStamp  modification_stamp_ 
+          STORABLE BALL::Time  time_ 
+            long secs_ = 967731152 
+            long usecs_ = 692862 
+          END_STORABLE
+        END_STORABLE
+      END_BASEOBJECT
+      STORABLE BALL::PropertyManager  PropertyManager 
+        STORABLE BALL::BitVector  bitvector_ 
+          unsigned_int size = 0 
+        END_STORABLE
+        unsigned_int size = 0 
+      END_STORABLE
+      BALL::String name_ = 8 PROTEIN1 
+    END_BASEOBJECT
+  END_BASEOBJECT
+  BALL::String id_ = 0  
+END_OBJECT
+END
+END

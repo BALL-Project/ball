@@ -1,0 +1,8 @@
+START
+OBJECT BALL::NamedProperty @ 134873544 -
+  int type_ = 3 
+  basic_string<char,string_char_traits<char>,__default_alloc_template<bool,i>> name_ = 4 test 
+  float data_.f = -99.9 
+END_OBJECT
+END
+END

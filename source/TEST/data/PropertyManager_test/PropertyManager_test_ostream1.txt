@@ -1,0 +1,27 @@
+3 101 
+8
+0
+PROP1
+1
+1
+PROP2
+-12345
+2
+PROP3
+12345
+3
+PROP4
+1.2345
+4
+PROP5
+2.345
+5
+PROP6
+test
+6
+PROP7
+/BALL::PersistentObject .*
+
+7
+PROP8
+
