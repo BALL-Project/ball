@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: label.sip,v 1.2 2003/11/29 15:53:35 amoll Exp $
+// $Id: label.sip,v 1.3 2004/05/19 13:19:06 amoll Exp $
 //
 
 class Label 
@@ -19,7 +19,6 @@ class Label
   Label() throw();
   Label(const Label&) throw();
   String getText() const throw();
-  String getTypeName() const throw();
   bool isValid() const throw();
   void clear() throw();
   void set(const Label&) throw();
