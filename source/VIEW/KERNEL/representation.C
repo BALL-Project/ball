@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.28 2004/03/05 12:39:43 amoll Exp $
+// $Id: representation.C,v 1.29 2004/04/15 12:10:24 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -281,7 +281,7 @@ namespace BALL
 				thread_->wait(500); 
 			}
 
-			mc->setStatusbarText("Drawing...");
+//			mc->setStatusbarText(" Drawing...");
 			mc->setCompositesMuteable(true);
 			
  			if (mc->getPrimitiveManager().has(*this))
