@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.26 2004/11/09 15:56:09 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.27 2004/12/07 15:46:14 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -116,7 +116,7 @@ namespace BALL
 
 			if (!ok || filename == "/" || filename == "\\") 
 			{
-				Log.error() << "Could not open file " << filename << std::endl;
+				setStatusbarText("Could not open file " + filename, true);
 				return 0;
 			}
 
@@ -143,7 +143,7 @@ namespace BALL
 			}
 			else
 			{
-				Log.error() << "Unknown filetype: " << filetype << std::endl;
+				setStatusbarText(String("Unknown filetype: ") + filetype, true);
 			}
 
 			return 0;
@@ -157,7 +157,7 @@ namespace BALL
 
 			if (selection.size() != 1 || !RTTI::isKindOf<System> (**selection.begin()))
 			{
-				Log.error() << "Not a single system selected! Aborting writing..." << std::endl;
+				setStatusbarText("Not a single system selected! Aborting writing...", true);
 				return false;
 			}
 
@@ -208,7 +208,7 @@ namespace BALL
 			}
 			else
 			{
-				setStatusbarText("Unknown file format, please set the file extension accordingly to type, aborting...");
+				setStatusbarText("Unknown file format, please set the file extension accordingly to type, aborting...", true);
 				return false;
 			}
 
@@ -217,9 +217,7 @@ namespace BALL
 				return false;
 			}
 		
-			Log.info() << "> " << system.countAtoms() << " atoms written to file \"" 
-							   << filename << "\"" << std::endl;
-			setStatusbarText("Finished writing.");
+			setStatusbarText(String(system.countAtoms()) + " atoms written to file \"" + filename + "\"", true);
 			return true;
 		}
 
@@ -234,7 +232,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.info() << "> write PDB file failed." << std::endl;
+				setStatusbarText("Writing of PDB file failed!", true);
 				return false;
 			}
 
@@ -253,7 +251,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.info() << "> write HIN file failed." << std::endl;
+				setStatusbarText("Writing of HIN file failed!", true);
 				return false;
 			}
 
@@ -272,7 +270,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.info() << "> write MOL file failed." << std::endl;
+				setStatusbarText("Writing of MOL file failed!", true);
 				return false;
 			}
 
@@ -291,7 +289,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.info() << "> write MOL2 file failed." << std::endl;
+				setStatusbarText("Writing of MOL2 file failed!", true);
 				return false;
 			}
 
@@ -302,7 +300,7 @@ namespace BALL
 		System* MolecularFileDialog::readPDBFile(String filename, String system_name)
 			throw()
 		{
-			setStatusbarText("reading PDB file...");
+			setStatusbarText("reading PDB file...", true);
 
 			System* system = new System();
 
@@ -314,7 +312,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.info() << "> read PDB file failed." << std::endl;
+				setStatusbarText("Reading of PDB file failed!", true);
 				delete system;
 				return false;
 			}
@@ -330,7 +328,7 @@ namespace BALL
 			bool has_periodic_boundary = false;
 			SimpleBox3 bounding_box;
 
-			setStatusbarText("reading HIN file...");
+			setStatusbarText("reading HIN file...", true);
 
 			System* system = new System();
 
@@ -347,7 +345,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.info() << "> read HIN file failed." << std::endl;
+				setStatusbarText("Reading of HIN file failed!", true);
 				delete system;
 
 				return false;
@@ -380,7 +378,7 @@ namespace BALL
 		System* MolecularFileDialog::readMOLFile(String filename, String system_name)
 			throw()
 		{
-			setStatusbarText("reading MOL file...");
+			setStatusbarText("reading MOL file...", true);
 
 			System* system = new System();
 
@@ -392,7 +390,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.info() << "> read MOL file failed." << std::endl;
+				setStatusbarText("Reading of MOL file failed!", true);
 				delete system;
 				return false;
 			}
@@ -405,7 +403,7 @@ namespace BALL
 		System* MolecularFileDialog::readMOL2File(String filename, String system_name)
 			throw()
 		{
-			setStatusbarText("reading MOL2 file...");
+			setStatusbarText("reading MOL2 file...", true);
 
 			System* system = new System();
 
@@ -417,7 +415,7 @@ namespace BALL
 			}
 			catch(...)
 			{
-				Log.info() << "> read MOL2 file failed." << std::endl;
+				setStatusbarText("Reading of MOL2 file failed!", true);
 				delete system;
 				return false;
 			}
@@ -431,7 +429,7 @@ namespace BALL
 			throw()
 		{
 			// writing info to log
-			Log.info() << "> read " << system->countAtoms() << " atoms from file \"" << filename<< "\"" << std::endl;
+			setStatusbarText(String("Read ") + String(system->countAtoms()) + " atoms from file \"" + filename + "\"", true);
 
 			if (system->getName() == "")
 			{
