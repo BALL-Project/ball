@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.8 2000/07/12 19:36:45 oliver Exp $
+// $Id: File_test.C,v 1.9 2000/10/19 20:00:45 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: File_test.C,v 1.8 2000/07/12 19:36:45 oliver Exp $")
+START_TEST(class_name, "$Id: File_test.C,v 1.9 2000/10/19 20:00:45 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -38,6 +38,9 @@ RESULT
 CHECK(File(const String& name, OpenMode open_mode = File::IN))
 	File f("data/File_test.txt");
 	TEST_EQUAL(f.getSize(), 100)
+
+	TEST_EXCEPTION(Exception::FileNotFound, File f2(""))
+	TEST_EXCEPTION(Exception::FileNotFound, File f2("sdffsdf"))
 RESULT
 
 File f("data/File_test.txt");
@@ -45,6 +48,9 @@ File f("data/File_test.txt");
 CHECK(File(const File& file))
 	File f1(f);
 	TEST_EQUAL(f1 == f, true)
+
+	File f2;
+	TEST_EXCEPTION(Exception::FileNotFound, File f3(f2))
 RESULT
 
 CHECK(close())
@@ -58,6 +64,9 @@ CHECK(open(const String& name, OpenMode open_mode = File::IN))
 	f.open("data/File_test.txt");
 	TEST_EQUAL(f.isOpen(), true)
 	TEST_EQUAL(f.getSize(), 100)
+
+	File f1(f);
+	TEST_EXCEPTION(Exception::FileNotFound, f1.open(""))
 RESULT
 
 CHECK(reopen())
@@ -79,8 +88,7 @@ RESULT
 
 CHECK(static getSize(String filename))
 	TEST_EQUAL(f.getSize("data/File_test.txt"), 100)
-	f.remove("XXX");
-	TEST_EQUAL(f.getSize("XXX"), 0)
+	TEST_EXCEPTION(Exception::FileNotFound, f.getSize("XXX"))
 RESULT
 
 CHECK(int getOpenMode() const)
@@ -117,6 +125,9 @@ CHECK(copy(String source_name, String destination_name, Size buffer_size = 4096)
 	TEST_EQUAL(f.getSize(), 100)
 	TEST_EQUAL(f.getSize("XXX"), 100)
 	f.remove("XXX");
+
+	TEST_EQUAL(f.copy("", "X"), false)
+	TEST_EQUAL(f.copy("data/File_test.txt", ""), false)
 RESULT
 
 CHECK(copyTo(const String& destination_name, Size buffer_size = 4096))
@@ -127,6 +138,8 @@ CHECK(copyTo(const String& destination_name, Size buffer_size = 4096))
 	TEST_EQUAL(f.getSize(), 100)
 	TEST_EQUAL(f.getSize("XXX"), 100)
 	f.remove("XXX");
+
+	TEST_EQUAL(f.copyTo(""), false)
 RESULT
 
 CHECK(move(const String& source_name, const String& destination_name))
@@ -143,6 +156,10 @@ CHECK(move(const String& source_name, const String& destination_name))
 	f.copyTo("XXX");
 	TEST_EQUAL(f.move("XXX", "YYY"), true)
 	TEST_EQUAL(f.getSize(), 100)
+
+	TEST_EQUAL(f.move("YYY", ""), false)
+	TEST_EQUAL(f.move("", "XXX"), false)
+
 	f.remove("XXX");
 	f.remove("YYY");
 RESULT
@@ -157,6 +174,8 @@ CHECK(moveTo(const String& destination_name))
 	TEST_EQUAL(f1.moveTo("YYY"), false)
 	TEST_EQUAL(f1.isAccessible(), true)
 	TEST_EQUAL(f.getSize("YYY"), 100)
+
+	TEST_EQUAL(f1.moveTo(""), false)
 RESULT
 
 CHECK(remove(String name))
@@ -166,6 +185,7 @@ CHECK(remove(String name))
 RESULT
 
 CHECK(remove())
+	f.copyTo("XXX");
 	File f1 = File("XXX");
 	f1.remove();
 	TEST_EQUAL(f1.isAccessible(), false)
@@ -181,6 +201,9 @@ CHECK(rename(String old_path, String new_path))
 	f1.remove();
 	TEST_EQUAL(f.getSize(), 100)
 	f.remove("YYY");
+
+	TEST_EXCEPTION(Exception::FileNotFound, f1.rename("", "XXX"))
+	TEST_EXCEPTION(Exception::FileNotFound, f1.rename("XXX", ""))
 RESULT
 
 CHECK(renameTo(const String& new_path))
@@ -202,6 +225,8 @@ CHECK(truncate(String path, Size size = 0))
 	TEST_EQUAL(f1.truncate("XXX", 0), true)
 	TEST_EQUAL(f1.getSize(), 0)
 	f1.remove();
+
+	TEST_EXCEPTION(Exception::FileNotFound, f1.truncate("", 50))
 RESULT
 
 CHECK(truncate(Size size = 0))
@@ -280,7 +305,7 @@ CHECK(isCanonized())
 	File f4("data/../data/File_test.txt");
 	TEST_EQUAL(f4.isValid(), true)
 	TEST_EQUAL(f4.isCanonized(), true)
-
+/*
 	File f5("./data/File_test.txt");
 	TEST_EQUAL(f5.isValid(), true)
 	TEST_EQUAL(f5.isCanonized(), true)
@@ -290,7 +315,7 @@ CHECK(isCanonized())
 	TEST_EQUAL(f6.isCanonized(), true)
 
 	File f7("~/File_test.txt");
-	TEST_EQUAL(f7.isCanonized(), true)
+	TEST_EQUAL(f7.isCanonized(), true)*/
 RESULT
 
 CHECK(isReadable(String name))
@@ -325,8 +350,10 @@ RESULT
 
 CHECK(isValid())
 	TEST_EQUAL(f.isValid(), true)	
-	File f1("XXX");
-	TEST_EQUAL(f1.isValid(), false)	
+
+	File f1;
+	TEST_EXCEPTION(Exception::FileNotFound, f1 = File("XXX"))
+	TEST_EQUAL(f1.isValid(), true)	
 RESULT
 
 /////////////////////////////////////////////////////////////
