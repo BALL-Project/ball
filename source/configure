@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.116 2000/09/02 19:51:24 oliver Exp $
+#  $Id: configure,v 1.117 2000/09/27 07:50:25 oliver Exp $
 
 
 ##################################################
@@ -2341,7 +2341,7 @@ if test "${COMPILER_DONE}" != true ; then
 			CXXFLAGS="$CXXFLAGS -64 -LANG:std"
 			DYNAROPTS="-64 ${DYNAROPTS}"
 			CXXFLAGS_O="${CXXFLAGS_O} -O3 -OPT:Olimit_opt=on -multigot -G 5"
-			CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,1110,1209"
+			CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,3333,1110,1209"
 			CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 			LDFLAGS="$LDFLAGS -64 -LANG:std"
 			cat >> confdefs.h <<\EOF
@@ -2354,7 +2354,7 @@ EOF
 			CXXFLAGS="$CXXFLAGS -n32 -LANG:std"
 			DYNAROPTS="-n32 ${DYNAROPTS}"
 			CXXFLAGS_O="${CXXFLAGS_O} -O3 -OPT:Olimit_opt=on -multigot -G 5"
-			CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,1110,1209"
+			CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,3333,1110,1209"
 			CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 			LDFLAGS="$LDFLAGS -n32 -LANG:std"
 			cat >> confdefs.h <<\EOF
