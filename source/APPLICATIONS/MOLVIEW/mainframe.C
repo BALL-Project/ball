@@ -112,9 +112,6 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 		py_widget->startInterpreter();
 	#endif
 
-	QLabel* message_label = new QLabel(tr("Ready."), statusBar());
-	statusBar()->addWidget(message_label, 20);
-
 	// ---------------------
 	// Scene setup ---------
 	// ---------------------
@@ -163,6 +160,8 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
   // registering object generator
   MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
   server_->registerObjectCreator(*object_creator);
+
+	setStatusbarText("Ready.");
 }
 
 Mainframe::~Mainframe()
@@ -236,13 +235,12 @@ void Mainframe::calculateAmberEnergy()
 	System* system = getSelectedSystem();
 	if (system == 0)
 	{
-		statusBar()->message("to calculate AMBER energies, one system has to be selected");
+		setStatusbarText("to calculate AMBER energies, one system has to be selected");
 		return;
 	}
 
 	// set up the AMBER force field
-	statusBar()->message("setting up force field...");
-	QWidget::update();
+	setStatusbarText("setting up force field...");
 
 	AmberFF amber;
 	amber.options[AmberFF::Option::ASSIGN_TYPES] = "true";
@@ -261,8 +259,7 @@ void Mainframe::calculateAmberEnergy()
 	}
 
 	// calculate the energy
-	statusBar()->message("calculating energy...");
-	QWidget::update();
+	setStatusbarText("calculating energy...");
 
 	amber.updateEnergy();
 
@@ -275,11 +272,8 @@ void Mainframe::calculateAmberEnergy()
 	Log.info() << " - torsion           : " << amber.getTorsionEnergy() << " kJ/mol" << endl;
 	Log.info() << "---------------------------------------" << endl;
 	Log.info() << "  total energy       : " << amber.getEnergy() << " kJ/mol" << endl;
-	QString message;
-	message.sprintf("Total AMBER energy: %f kJ/mol.", amber.getEnergy());
 
-	statusBar()->message(message, 5000);
-	QWidget::update();
+	setStatusbarText("Total AMBER energy: %f kJ/mol." + String(amber.getEnergy()));
 }
 
 void Mainframe::computeSurface()
@@ -358,9 +352,8 @@ void Mainframe::amberMinimization()
 	}
 	
 	// set up the AMBER force field
-	statusBar()->message("setting up force field...");
-	statusBar()->update();
-	QWidget::update();
+	setStatusbarText("setting up force field...");
+
 	AmberFF amber;
   amber.options[AmberFF::Option::ASSIGN_TYPES] = "true";
   amber.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
@@ -377,10 +370,9 @@ void Mainframe::amberMinimization()
 	}
 
 	// calculate the energy
-	statusBar()->message("starting minimization...");
-	statusBar()->update();
-	amber.updateEnergy();
+	setStatusbarText("starting minimization...");
 
+	amber.updateEnergy();
 
 	EnergyMinimizer* minimizer;
 	if (minimization_dialog_->getUseConjugateGradient())
@@ -413,18 +405,18 @@ void Mainframe::amberMinimization()
 	{
     MainControl::update(system->getRoot());
 
+		// update scene
+		SceneMessage scene_message;
+		scene_message.updateOnly();
+		notify_(scene_message);
+
 		QString message;
 		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
 										minimizer->getNumberOfIteration(),
 										amber.getEnergy(),
 										amber.getRMSGradient());
-		// update scene
-		SceneMessage scene_message;
-		scene_message.updateOnly();
-		notify_(scene_message);
-		QWidget::update();
-		statusBar()->message(message);
-		statusBar()->update();
+
+		setStatusbarText(String(message));
  	}
 
 	Log.info() << endl << "minimization terminated." << endl << endl;
@@ -445,9 +437,7 @@ void Mainframe::amberMinimization()
 	// clean up
 	delete minimizer;
 
-	QString message;
-	message.sprintf("Total AMBER energy: %f kJ/mol.", amber.getEnergy());
-	statusBar()->message(message, 5000);
+	setStatusbarText("Total AMBER energy: %f kJ/mol." + String(amber.getEnergy()));
 }
 
 void Mainframe::amberMDSimulation()
@@ -465,9 +455,8 @@ void Mainframe::amberMDSimulation()
 	//}
 	
 	// set up the AMBER force field
-	statusBar()->message("setting up force field...");
-	statusBar()->update();
-	QWidget::update();
+	setStatusbarText("setting up force field...");
+
 	AmberFF amber;
   amber.options[AmberFF::Option::ASSIGN_TYPES] = "true";
   amber.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
@@ -484,10 +473,9 @@ void Mainframe::amberMDSimulation()
 	}
 
 	// calculate the energy
-	statusBar()->message("starting simulation...");
-	statusBar()->update();
-	amber.updateEnergy();
+	setStatusbarText("starting simulation...");
 
+	amber.updateEnergy();
 
 	MolecularDynamics* mds = new CanonicalMD;
 	
@@ -518,18 +506,17 @@ void Mainframe::amberMDSimulation()
 		mds->simulateIterations(steps, true);
     MainControl::update(system->getRoot());
 
+		// update scene
+		SceneMessage scene_message;
+		scene_message.updateOnly();
+		notify_(scene_message);
+
 		QString message;
 		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
 										mds->getNumberOfIteration(),
 										amber.getEnergy(),
 										amber.getRMSGradient());
-		// update scene
-		SceneMessage scene_message;
-		scene_message.updateOnly();
-		notify_(scene_message);
-		QWidget::update();
-		statusBar()->message(message);
-		statusBar()->update();
+		setStatusbarText(String(message));
  	}
 	Log.info() << std::endl << "simulation terminated." << std::endl << endl;
 
@@ -549,9 +536,7 @@ void Mainframe::amberMDSimulation()
 	// clean up
 	delete mds;
 
-	QString message;
-	message.sprintf("Total AMBER energy: %f kJ/mol.", amber.getEnergy());
-	statusBar()->message(message, 5000);
+	setStatusbarText("Total AMBER energy: " + String(amber.getEnergy()) + " kj/mol.");
 }
 
 void Mainframe::about()
@@ -559,7 +544,7 @@ void Mainframe::about()
 	DlgAbout about_box;
 	about_box.exec();
 
-	statusBar()->message("MolVIEW V1.0", 1500);
+	setStatusbarText("MolVIEW V1.0");
 }
 
 void Mainframe::fetchPreferences(INIFile& inifile)

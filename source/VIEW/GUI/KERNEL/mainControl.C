@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.30 2002/12/16 16:08:28 amoll Exp $
+// $Id: mainControl.C,v 1.31 2002/12/17 13:36:42 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -40,11 +40,14 @@ namespace BALL
 				descriptors_(),
 				main_control_preferences_(0),
 				preferences_dialog_(0),
-				preferences_id_(-1)
+				preferences_id_(-1),
+				message_label_(new QLabel("" , statusBar()))
 		{
 			// read the preferences
 			preferences_.setFilename(inifile);
 			preferences_.read();
+
+			statusBar()->addWidget(message_label_, 20);
 
 			connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
 		}
@@ -520,9 +523,7 @@ namespace BALL
 			else if (RTTI::isKindOf<WindowMessage>(*message))
 			{
 				WindowMessage *window_message = RTTI::castTo<WindowMessage>(*message);
-				statusBar()->message(window_message->getStatusBar().c_str());
-				
-				QWidget::update();
+				setStatusbarText(window_message->getStatusBar().c_str());	
 			}
     }
 
@@ -841,6 +842,7 @@ namespace BALL
 				NewSelectionMessage* new_message = new NewSelectionMessage;
 				new_message->setDeletable(true);
 				notify_(new_message);
+				setStatusbarText("Selected " + String(nr) + " items.");
 				#ifdef BALL_DEBUG_VIEW
 					Log.info() << "Selected " + String(nr) + " items."<< std::endl;
 				#endif
@@ -869,7 +871,6 @@ namespace BALL
 												 String(atom.getPosition().y) + "|" +
 												 String(atom.getPosition().z) + ")" + "  Charge: " + 
 												 String(atom.getCharge()));
-			Log.error() << "KKKKKKKKKKKKK" << std::endl;
 			}
 			else if (nr_of_atoms == 2)
 			{
@@ -909,7 +910,7 @@ namespace BALL
 			}
 			else
 			{
-				setStatusbarText("Selected " + String(nr) + " atoms.");
+				setStatusbarText("Selected " + String(nr) + " items.");
 			}
 
 			NewSelectionMessage* new_message = new NewSelectionMessage;
@@ -1055,7 +1056,7 @@ namespace BALL
 		void MainControl::setStatusbarText(const String& text)
 			throw()
 		{
-			statusBar()->message(text.c_str());
+			message_label_->setText(text.c_str());
 			QWidget::update();
 		}
 
