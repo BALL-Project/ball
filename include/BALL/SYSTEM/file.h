@@ -1,18 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.h,v 1.54 2003/07/03 10:57:02 amoll Exp $
+// $Id: file.h,v 1.55 2003/07/03 13:41:05 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
-
-#ifndef BALL_COMMON_H
-//#	include <BALL/common.h>
-#endif
-
-#ifndef BALL_DATATYPE_REGEXP_H
-//#	include <BALL/DATATYPE/regularExpression.h>
-#endif
 
 #ifndef BALL_DATATYPE_STRING_H
 #	include <BALL/DATATYPE/string.h>
@@ -39,7 +31,6 @@
 #include <fstream>
 #include <sys/types.h>
 #include <map>
-
 
 #ifdef BALL_HAS_UNISTD_H
 #	include <unistd.h>			// 'access', 'rename', 'truncate'
