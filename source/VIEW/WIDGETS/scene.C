@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.156.2.13 2005/01/24 00:08:33 amoll Exp $
+// $Id: scene.C,v 1.156.2.14 2005/01/24 01:10:52 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1039,6 +1039,9 @@ namespace BALL
 			inifile.insertValue("EXPORT", "POVNR", String(pov_nr_));
 			inifile.insertValue("EXPORT", "PNGNR", String(screenshot_nr_));
 			writeLights_(inifile);
+
+			inifile.appendSection("OPENGL");
+			inifile.insertValue("OPENGL", "UseVertexBuffers", String(gl_renderer_.vertexBuffersEnabled()));
 		}
 
 
@@ -1113,6 +1116,11 @@ logString(String("#~~#   2 ") + String( )                        + "            
 			readLights_(inifile);
 			light_settings_->updateFromStage();
 			stage_settings_->updateFromStage();
+
+			if (inifile.hasEntry("OPENGL", "UseVertexBuffers"))
+			{
+				gl_renderer_.enableVertexBuffers((inifile.getValue("OPENGL", "UseVertexBuffers")).toBool());
+			}
 
 			applyPreferences();
 		}
