@@ -1,4 +1,4 @@
-// $Id: regularData2DWidget.C,v 1.21 2001/06/06 14:14:46 anhi Exp $
+// $Id: regularData2DWidget.C,v 1.22 2001/06/06 15:08:33 anker Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
 
@@ -73,8 +73,11 @@ NewRegularData2DMessage::~NewRegularData2DMessage()
   #endif
 }
 
+// BAUSTELLE
+// WRepaintNoErase seems to dependent on a different QT version.
+
 RegularData2DWidget::RegularData2DWidget(int lx_, int ly_, double min, double max, QWidget *parent) 
-  : QScrollView(parent, "RegularData2DWidget", WRepaintNoErase|WResizeNoErase|WNorthWestGravity), 
+  : QScrollView(parent, "RegularData2DWidget", WResizeNoErase|WNorthWestGravity), 
 		ModularWidget("RegularData2DWidget"), 
 		legend_last_x_(0),
 		legend_last_y_(0),
