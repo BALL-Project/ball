@@ -1,4 +1,4 @@
-// $Id: property.iC,v 1.24 2001/12/13 01:49:55 oliver Exp $
+// $Id: property.iC,v 1.25 2001/12/18 01:16:12 oliver Exp $
 
 using namespace std;
 
@@ -378,6 +378,28 @@ Size PropertyManager::countProperties() const
 	throw()
 {
   return ((Size)bitvector_.getSize() + (Size)named_properties_.size());
+}
+
+BALL_INLINE
+const NamedProperty& PropertyManager::getNamedProperty(Position index) const
+	throw(Exception::IndexOverflow)
+{
+	if (index >= named_properties_.size())
+	{
+		throw Exception::IndexOverflow(__FILE__, __LINE__, index, named_properties_.size());
+	}
+	return named_properties_[index];
+}
+
+BALL_INLINE
+NamedProperty& PropertyManager::getNamedProperty(Position index)
+	throw(Exception::IndexOverflow)
+{
+	if (index >= named_properties_.size())
+	{
+		throw Exception::IndexOverflow(__FILE__, __LINE__, index, named_properties_.size());
+	}
+	return named_properties_[index];
 }
 
 BALL_INLINE 

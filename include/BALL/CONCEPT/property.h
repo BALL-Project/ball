@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.24 2001/07/18 09:19:41 amoll Exp $
+// $Id: property.h,v 1.25 2001/12/18 01:16:12 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -474,6 +474,7 @@ namespace BALL
 			throw();
 	
 		//@}
+
 		/**	@name	Handling named properties 
 				PropertyManager contains an vector of \Ref{NamedProperty} objects.
 				Each of the NamedProeprty objects has to have a {\em unique} name.
@@ -482,6 +483,16 @@ namespace BALL
 				existing object is destructed prior to the insertion of the new object.
 		*/
 		//@{
+
+		/**	Non-mutable access to a named property by its index.
+		*/
+		const NamedProperty& getNamedProperty(Position index) const
+			throw(Exception::IndexOverflow);
+
+		/**	Mutable access to a named property by its index.
+		*/
+		NamedProperty& getNamedProperty(Position index)
+			throw(Exception::IndexOverflow);
 
 		/**	Set a named property.
 				This method adds a new named property to the property manager's 
@@ -594,8 +605,8 @@ namespace BALL
 		*/
 		Size countNamedProperties() const
 			throw();
-
 		//@}
+
 		/**	@name	Predicates 
 		*/
 		//@{
@@ -620,6 +631,8 @@ namespace BALL
 			throw();
 
 		//@}
+
+
 		/**	@name	Storers */
 		//@{
 
