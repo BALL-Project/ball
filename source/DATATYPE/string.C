@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.20 2000/06/28 20:23:09 oliver Exp $
+// $Id: string.C,v 1.21 2000/07/14 14:42:29 amoll Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -85,6 +85,11 @@ namespace BALL
 
 	void Substring::dump(ostream& s, Size depth) const
 	{
+		if (bound_ == 0)
+		{
+			throw UnboundSubstring(__FILE__, __LINE__);
+		}
+
 		BALL_DUMP_STREAM_PREFIX(s);
 
 		BALL_DUMP_DEPTH(s, depth);
@@ -366,7 +371,6 @@ namespace BALL
 		*char_ptr = '\0';
 	}
  
-
 	bool String::toBool() const
 	{
 		Size index = find_first_not_of(CHARACTER_CLASS__WHITESPACE);
@@ -622,18 +626,14 @@ namespace BALL
 	String operator + (const char* char_ptr, const String& s)
 	{
 		String result(char_ptr);
-
 		result.append(s);
-
 		return result;
 	}
 
 	String operator + (char c, const String& s)
 	{
 		String result(c);
-
 		result.append(s);
-
 		return result;
 	}
 
@@ -650,11 +650,11 @@ namespace BALL
 		if (s.size() == 0)
 			return true;
 
-		int result = 0;
-
+		/*int result = 0;
 		result = memcmp(c_str(), s.c_str(), s.size());
 
-		return (bool)(result == 0);
+		return (bool)(result == 0);*/
+		return (memcmp(c_str(), s.c_str(), s.size()) == 0);
 	}
 
 	bool String::hasSuffix(const String& s) const
