@@ -1,4 +1,4 @@
-// $Id: resourceFile.h,v 1.2 1999/10/30 12:53:25 oliver Exp $
+// $Id: resourceFile.h,v 1.3 1999/12/28 18:46:31 oliver Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -237,6 +237,7 @@ namespace BALL
 		/**	
 		*/
 		const ResourceEntry* findEntry(const String& key) const;
+		//@}
 
 		/**	@name	Attributes
 		*/

@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.3 1999/12/04 18:34:20 oliver Exp $
+// $Id: plane3.h,v 1.4 1999/12/28 18:49:46 oliver Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -206,7 +206,7 @@ namespace BALL
 		}
 
 		///
-		void dump(ostream& s = cout, unsigned long depth = 0) const
+		void dump(std::ostream& s = std::cout, Size depth = 0) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 
@@ -227,13 +227,13 @@ namespace BALL
 		//@{
 
 		///
-		friend istream& operator >> (istream& s, TPlane3& plane)
+		friend std::istream& operator >> (std::istream& s, TPlane3& plane)
 		{
 			return (s >> "PLANE(" >> plane.p >> ", " >> plane.n >> ")");
 		}
 
 		///
-		friend ostream& operator << (ostream& s, const TPlane3& plane)
+		friend std::ostream& operator << (std::ostream& s, const TPlane3& plane)
 		{
 			return (s << plane.p  << plane.n);
 		}

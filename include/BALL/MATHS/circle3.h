@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.3 1999/12/04 18:34:19 oliver Exp $
+// $Id: circle3.h,v 1.4 1999/12/28 18:48:09 oliver Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -178,7 +178,7 @@ namespace BALL {
 		}
 
 		///
-		void dump(ostream& s = cout, unsigned long depth = 0) const
+		void dump(std::ostream& s = std::cout, Size depth = 0) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 	
@@ -202,13 +202,13 @@ namespace BALL {
 		//@{
 
 		///
-		friend istream& operator >> (istream& s, TCircle3 &)
+		friend std::istream& operator >> (std::istream& s, TCircle3 &)
 		{
 			return (s >> circle.p >> circle.n  >> circle.radius);
 		}
 
 		///
-		friend ostream& operator << (ostream& s,const TCircle3& circle)
+		friend std::ostream& operator << (std::ostream& s,const TCircle3& circle)
 		{
 			return (s << "CIRCLE(" << circle.p 
 								<< ", " << circle.n

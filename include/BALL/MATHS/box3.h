@@ -1,4 +1,4 @@
-// $Id: box3.h,v 1.2 1999/12/04 18:34:19 oliver Exp $
+// $Id: box3.h,v 1.3 1999/12/28 18:47:56 oliver Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -11,7 +11,8 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	Generic Three-dimensional Box.
 			This class describes a three-dimensional box with edges parallel
@@ -121,7 +122,7 @@ namespace BALL {
 		bool isValid() const;
 
 		///
-		void dump(ostream& s = cout, unsigned long depth = 0) const;
+		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
 
@@ -344,7 +345,7 @@ namespace BALL {
 	}
 
 	template <class T>
-	void TBox3<T>::dump(ostream& s, unsigned long depth) const
+	void TBox3<T>::dump(std::ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 		

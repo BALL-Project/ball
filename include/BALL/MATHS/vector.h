@@ -1,4 +1,4 @@
-// $Id: vector.h,v 1.1 1999/08/26 07:53:18 oliver Exp $
+// $Id: vector.h,v 1.2 1999/12/28 18:49:46 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR_H
 #define BALL_MATHS_VECTOR_H
@@ -7,7 +7,8 @@
 #	include <BALL/CONFIG/config.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/* Not documented - used in the implementation of Vector4 only!
 	*/

@@ -1,9 +1,9 @@
-// $Id: genericPDBFile.iC,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: genericPDBFile.iC,v 1.2 1999/12/28 18:46:30 oliver Exp $
 
 BALL_INLINE 
 void GenericPDBFile::clear(int state)
 {
-  fstream::clear(state);
+  std::fstream::clear(state);
 }
   
 BALL_INLINE 

@@ -1,4 +1,4 @@
-// $Id: snapShot.h,v 1.3 1999/12/27 15:02:37 pmueller Exp $
+// $Id: snapShot.h,v 1.4 1999/12/28 18:50:38 oliver Exp $
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
 // They can be used to obtain snapshots from an MD simulation or an energy 
@@ -93,11 +93,11 @@ namespace BALL
     //@{
     /** The output operator << for output streams 
     */
-    friend fstream &operator<<(fstream & os, const SnapShot &  snap_shot); 
+    friend std::fstream& operator<<(std::fstream& os, const SnapShot&  snap_shot); 
 
     /** The  input operator >> for reading a snapshot object from a file
     */
-    friend fstream &operator>>(fstream &in, SnapShot &snap_shot);
+    friend std::fstream& operator>>(std::fstream& in, SnapShot& snap_shot);
     //@}
 
     /** @name Assignments and operators

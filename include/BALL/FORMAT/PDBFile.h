@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.4 1999/12/17 14:28:36 oliver Exp $
+// $Id: PDBFile.h,v 1.5 1999/12/28 18:46:29 oliver Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -43,7 +43,7 @@ namespace BALL
 	}
 
 	inline
-	ostream& operator << (ostream& s, const OrderedQuadruple<String,PDB::Character,PDB::Integer,PDB::AChar>& /* q */)
+	std::ostream& operator << (std::ostream& s, const OrderedQuadruple<String,PDB::Character,PDB::Integer,PDB::AChar>& /* q */)
 	{
 		return s;
 	}
@@ -64,11 +64,11 @@ namespace BALL
 
 		/** Detailled constructor.
 				The file named {\tt filename} is opened. By default, the file is
-				opened for reading. To open it for writing, use {\tt open\_mode = ios::out}.
+				opened for reading. To open it for writing, use {\tt open\_mode = std::ios::out}.
 				@param	filename the name of the file to open
 				@param	open_mode the file mode
 		*/
-		PDBFile(const String& filename, File::OpenMode open_mode = ios::in);
+		PDBFile(const String& filename, File::OpenMode open_mode = std::ios::in);
 
 		/// Destructor
 		virtual ~PDBFile();

@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.3 1999/12/04 18:34:20 oliver Exp $
+// $Id: line3.h,v 1.4 1999/12/28 18:48:24 oliver Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -213,7 +213,7 @@ namespace BALL {
 		}
 
 		///
-		void dump(ostream& s = cout, unsigned long depth = 0) const
+		void dump(std::ostream& s = std::cout, Size depth = 0) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 
@@ -235,13 +235,13 @@ namespace BALL {
 		//@{
 
 		///
-		friend istream& operator >> (istream &s, TLine3& line)
+		friend std::istream& operator >> (std::istream &s, TLine3& line)
 		{
 			return (s >> line.p >> line.d);
 		}
 
 		///
-		friend ostream& operator << (ostream& s, const TLine3& line)
+		friend std::ostream& operator << (std::ostream& s, const TLine3& line)
 		{
 			return (s << line.p << line.d);
 		}

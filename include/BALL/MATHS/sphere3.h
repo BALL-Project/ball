@@ -1,4 +1,4 @@
-// $Id: sphere3.h,v 1.3 1999/12/04 18:34:21 oliver Exp $
+// $Id: sphere3.h,v 1.4 1999/12/28 18:49:46 oliver Exp $
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -171,7 +171,7 @@ namespace BALL
 		}
 
 		///
-		void dump(ostream& s = cout, unsigned long depth = 0) const
+		void dump(std::ostream& s = std::cout, Size depth = 0) const
 		{
 			BALL_DUMP_STREAM_PREFIX(s);
 
@@ -192,13 +192,13 @@ namespace BALL
 		//@{
 
 		///
-		friend istream &operator >> (istream& s, TSphere3& sphere3)
+		friend std::istream& operator >> (std::istream& s, TSphere3& sphere3)
 		{
 			return (s >> sphere3.p >> sphere3.radius);
 		}
 
 		///
-		friend ostream &operator << (ostream& s, const TSphere3& sphere3)
+		friend std::ostream& operator << (std::ostream& s, const TSphere3& sphere3)
 		{
 			return (s << "SPHERE(" << sphere3.p << ", " << sphere3.radius << ")");
 		}
