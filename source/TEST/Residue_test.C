@@ -1,4 +1,4 @@
-// $Id: Residue_test.C,v 1.4 2000/05/15 10:52:44 oliver Exp $
+// $Id: Residue_test.C,v 1.5 2000/05/15 21:01:08 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,16 +8,16 @@
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/PDBAtom.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
+#include <BALL/FORMAT/HINFile.h>
+#include <BALL/MATHS/common.h>
 ///////////////////////////
 
-START_TEST(Residue, "$Id: Residue_test.C,v 1.4 2000/05/15 10:52:44 oliver Exp $")
+START_TEST(Residue, "$Id: Residue_test.C,v 1.5 2000/05/15 21:01:08 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
-using namespace std;
-
 String filename;
 NEW_TMP_FILE(filename)
 
@@ -71,8 +71,8 @@ CHECK(Residue(const String& name,
 	if (r2 != 0)
 	{
 		TEST_EQUAL(r2->getName(), "r1")
-		//TEST_EQUAL(r2->getID(), Residue::BALL_RESIDUE_DEFAULT_ID)
-		//TEST_EQUAL(r2->getInsertionCode(), Residue::BALL_RESIDUE_DEFAULT_INSERTION_CODE)
+		TEST_EQUAL(r2->getID(), "")
+		TEST_EQUAL(r2->getInsertionCode(), ' ')
 		delete r2;
 	}
 RESULT
@@ -86,8 +86,8 @@ CHECK(Residue::clear())
 	c.insert(r);
 	r.clear();
 	TEST_EQUAL(r.countPDBAtoms(), 0)
-	//TEST_EQUAL(r.getID(), Residue::BALL_RESIDUE_DEFAULT_ID)
-	//TEST_EQUAL(r.getInsertionCode(), Residue::BALL_RESIDUE_DEFAULT_INSERTION_CODE)
+	TEST_EQUAL(r.getID(), "")
+	TEST_EQUAL(r.getInsertionCode(), ' ')
 	TEST_EQUAL(c.getResidue(0), &r)
 RESULT
 
@@ -99,8 +99,8 @@ CHECK(Residue::destroy())
 	c.insert(r);
 	r.destroy();
 	TEST_EQUAL(r.countPDBAtoms(), 0)
-	//TEST_EQUAL(r.getID(), Residue::BALL_RESIDUE_DEFAULT_ID)
-	//TEST_EQUAL(r.getInsertionCode(), Residue::BALL_RESIDUE_DEFAULT_INSERTION_CODE)
+	TEST_EQUAL(r.getID(), "")
+	TEST_EQUAL(r.getInsertionCode(), ' ')
 	TEST_EQUAL(c.getResidue(0), 0)
 RESULT
 
@@ -178,19 +178,63 @@ CHECK(Residue::getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const )
 RESULT
 
 CHECK(Residue::hasTorsionPhi() const )
-  //BAUSTELLE
+	Residue r;
+	TEST_EQUAL(r.hasTorsionPhi(), false)	
+	Chain c;
+	c.insert(r);
+	TEST_EQUAL(r.hasTorsionPhi(), false)	
+	Residue r2;
+	c.insert(r2);
+	TEST_EQUAL(r.hasTorsionPhi(), true)
+	Residue r3;
+	c.append(r3);
+	TEST_EQUAL(r.hasTorsionPhi(), true)
+	Residue r4;
+	c.prepend(r4);
+	TEST_EQUAL(r.hasTorsionPhi(), true)
 RESULT
 
 CHECK(Residue::getTorsionPhi() const )
-  //BAUSTELLE
+	HINFile infile("data/AlaGlySer.hin");
+	System s;
+	infile >> s;
+	TEST_EQUAL(s.countResidues(), 3)
+	ResidueIterator res_it = s.beginResidue();
+	TEST_EQUAL(res_it->getTorsionPhi(), 0)
+	res_it++;
+	TEST_EQUAL(Maths::isNear((double)res_it->getTorsionPhi().value, 3.14159, 0.00001), true)
+	res_it++;
+	TEST_EQUAL(Maths::isNear((double)res_it->getTorsionPhi().value, -3.1411, 0.00001), true)
 RESULT
 
 CHECK(Residue::hasTorsionPsi() const )
-  //BAUSTELLE
+	Residue r;
+	TEST_EQUAL(r.hasTorsionPhi(), false)	
+	Chain c;
+	c.insert(r);
+	TEST_EQUAL(r.hasTorsionPhi(), false)	
+	Residue r2;
+	c.insert(r2);
+	TEST_EQUAL(r.hasTorsionPhi(), true)
+	Residue r3;
+	c.prepend(r3);
+	TEST_EQUAL(r.hasTorsionPhi(), true)
+	Residue r4;
+	c.append(r4);
+	TEST_EQUAL(r.hasTorsionPhi(), true)
 RESULT
 
 CHECK(Residue::getTorsionPsi() const )
-  //BAUSTELLE
+	HINFile infile("data/AlaGlySer.hin");
+	System s;
+	infile >> s;
+	TEST_EQUAL(s.countResidues(), 3)
+	ResidueIterator res_it = s.beginResidue();
+	TEST_EQUAL(Maths::isNear((double)res_it->getTorsionPsi().value, -3.12846, 0.00001), true)
+	res_it++;
+	TEST_EQUAL(Maths::isNear((double)res_it->getTorsionPsi().value, 3.14099, 0.00001), true)
+	res_it++;
+	TEST_EQUAL(res_it->getTorsionPsi(), 0)
 RESULT
 
 CHECK(Residue::getProtein())
