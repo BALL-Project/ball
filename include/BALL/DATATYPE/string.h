@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.7 2000/01/28 10:55:17 oliver Exp $
+// $Id: string.h,v 1.8 2000/01/28 16:39:23 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -30,7 +30,7 @@
 #include <strstream>
 #include <iostream>
 
-using ::std::string;
+using std::string;
 
 namespace BALL 
 {
