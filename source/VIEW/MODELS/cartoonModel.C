@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.35 2004/09/10 13:28:29 amoll Exp $
+// $Id: cartoonModel.C,v 1.36 2004/09/10 13:52:54 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 
@@ -940,7 +940,8 @@ namespace BALL
 			Vector3 v1 = p1 - p2;
 			Vector3 v2 = p3 - p2;
 			Vector3 normal = v1 % v2;
-			normal *= d;
+			normal.normalize();
+			normal *= -d;
 
 			vertices.push_back(p1 + normal);
 			vertices.push_back(p2 + normal);
@@ -959,9 +960,9 @@ namespace BALL
 			vertices.push_back(p1 - normal);
 			vertices.push_back(p2 - normal);
 			vertices.push_back(p3 - normal);
-			normals.push_back(-normal);
-			normals.push_back(-normal);
-			normals.push_back(-normal);
+			normals.push_back(normal);
+			normals.push_back(normal);
+			normals.push_back(normal);
 
 			t.v1 = vertices.size() - 3;
 			t.v2 = vertices.size() - 2;
@@ -973,7 +974,7 @@ namespace BALL
 			// ------------------------------------
 			// create first half of first side side
 			v1 = sa1->getPosition() - sa2->getPosition();
-			Vector3 normal2 = v1 % Vector3(1,0,0);
+			Vector3 normal2 = v1 % normal;
 
 			Vector3 ul = sa1->getPosition() + normal;
 			Vector3 ur = sa2->getPosition() + normal;
@@ -989,14 +990,12 @@ namespace BALL
 			normals.push_back(normal2);
 			normals.push_back(normal2);
 
-			// ul ll lr
 			t.v1 = vertices.size() - 4;
-			t.v2 = vertices.size() - 1;
-			t.v3 = vertices.size() - 2;
+			t.v2 = vertices.size() - 2;
+			t.v3 = vertices.size() - 1;
 			triangles.push_back(t);
 
 			// create second half of first side side
-			// ul ur lr
 			t.v1 = vertices.size() - 4;
 			t.v2 = vertices.size() - 3;
 			t.v3 = vertices.size() - 2;
@@ -1006,8 +1005,8 @@ namespace BALL
 
 			// ------------------------------------
 			// create first half of second side side
-			v1 = sa2->getPosition() - sa3->getPosition();
-			Vector3 normal3 = v1 % Vector3(1,0,0);
+			v1 = sa3->getPosition() - sa2->getPosition();
+			Vector3 normal3 = v1 % normal;
 
 			Vector3 ur2 = sa3->getPosition() + normal;
 			Vector3 lr2 = sa3->getPosition() - normal;
@@ -1021,17 +1020,15 @@ namespace BALL
 			normals.push_back(normal3);
 			normals.push_back(normal3);
 
-			// ur lr lr2
 			t.v1 = vertices.size() - 4;
 			t.v2 = vertices.size() - 3;
 			t.v3 = vertices.size() - 1;
 			triangles.push_back(t);
 
 			// create second half of second side side
-			// ur ur2 lr2
 			t.v1 = vertices.size() - 4;
-			t.v2 = vertices.size() - 2;
-			t.v3 = vertices.size() - 1;
+			t.v2 = vertices.size() - 1;
+			t.v3 = vertices.size() - 2;
 			triangles.push_back(t);
 		}
 
@@ -1083,14 +1080,12 @@ namespace BALL
 					if (error) continue;
 
 					createTriangle_(*mesh, *atoms[1], *atoms[0], *atoms[8], atoms[1], atoms[0], atoms[8]); // C4,N9,C8
-					/*
-					createTriangle_(*mesh, *atoms[1], *atoms[6], *atoms[8], 0, 0, 0); 											// C4,C5,C8
+					createTriangle_(*mesh, *atoms[6], *atoms[1], *atoms[8], 0, 0, 0); 											// C5,C4,C8
 					createTriangle_(*mesh, *atoms[6], *atoms[7], *atoms[8], atoms[6], atoms[7], atoms[8]); // C5,N7,C8
 					createTriangle_(*mesh, *atoms[2], *atoms[3], *atoms[4], atoms[2], atoms[3], atoms[4]); // N3,C2,N1
 					createTriangle_(*mesh, *atoms[1], *atoms[2], *atoms[4], atoms[1], atoms[2], 0); 				// C4,N3,N1
 					createTriangle_(*mesh, *atoms[1], *atoms[4], *atoms[5], atoms[4], atoms[5], 0); 				// C4,N1,C6
 					createTriangle_(*mesh, *atoms[1], *atoms[5], *atoms[6], atoms[5], atoms[6], 0); 				// C4,C6,C5
-					*/
 					// we are done for A + G
 					continue;
 				}
