@@ -1,4 +1,4 @@
-// $Id: genericMolFile.h,v 1.9 2001/12/21 11:47:04 oliver Exp $
+// $Id: genericMolFile.h,v 1.10 2002/01/11 13:26:11 amoll Exp $
 
 #ifndef BALL_FORMAT_GENERICMOLFILE_H
 #define BALL_FORMAT_GENERICMOLFILE_H
@@ -122,7 +122,7 @@ namespace BALL
 				The default implementation calls \Ref{read()}
 				until {\bf false} is returned and adds the molecules read to 
 				the system.
-				@return {\bf true} if anything could be read
+				@return true if anything could be read
 				@exception Exception::ParseError if the file could not be parsed while reading a molecule
 		*/
 		virtual bool read(System&	system)

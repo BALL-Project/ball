@@ -1,4 +1,4 @@
-// $Id: lineBasedFile.h,v 1.18 2001/12/20 02:35:32 oliver Exp $
+// $Id: lineBasedFile.h,v 1.19 2002/01/11 13:26:11 amoll Exp $
 
 #ifndef BALL_FORMAT_LINEBASEDFILE_H
 #define BALL_FORMAT_LINEBASEDFILE_H
@@ -118,7 +118,7 @@ namespace BALL
 				Search starts at the current line and ends at the end of the file 
 				(no wrap around).
 				@param return_to_start if set to {\bf true}, the current line is reset to its value prior to the invocation
-				@return {\bf true} if line could be found
+				@return true if line could be found
 		*/
 		bool search(const String& text, bool return_to_start = false)
 			throw(Exception::ParseError);

@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.38 2001/12/29 17:58:29 oliver Exp $
+// $Id: file.h,v 1.39 2002/01/11 13:26:25 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -84,7 +84,7 @@ namespace BALL
 					\item {\tt %f} is replaced by the full content of {\tt name}, without any file type suffix (i.e. anything after
 								the last dot in the filename is removed)
 					\item {\tt %f[suffix]} is replaced by the previous content of {\tt name} without the {\tt suffix}
-					\item {\tt %b} and {\tt %b[suffix]) like {\tt %f} and {\tt %f[suffix]}, except that the
+					\item {\tt %b} and {\tt %b[suffix]} like {\tt %f} and {\tt %f[suffix]}, except that the
 								path is removed as well, so it is only the {\em base name} of the file
 					\item {\tt %p} the path to the file
 					\item {\tt %t} a temporary file name (all occurences of {\tt %t} are replace with the same file name for
