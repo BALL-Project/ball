@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.19 2004/12/09 12:58:46 amoll Exp $
+// $Id: primitiveManager.h,v 1.20 2005/02/16 17:10:04 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -184,6 +184,9 @@ namespace BALL
 					(Only used in Multithreaded code.)
 			*/
 			QWaitCondition& getUpdateWaitCondition() { return update_finished_;}
+
+			///
+			QWaitCondition& getDrawingWaitCondition() { return drawing_finished_;}
 			#endif
 
 			/** Used by SimulationThread to notify the PrimitiveManager of
@@ -205,6 +208,12 @@ namespace BALL
 			///
 			bool usesMultithreading()
 				throw();
+
+			///
+			HashSet<Representation*>& getRepresentationsBeeingUpdated();
+
+			///
+			HashSet<Representation*>& getRepresentationsBeeingDrawn();
 			
 			protected:
 
@@ -239,12 +248,16 @@ namespace BALL
 			static UpdateRepresentationThread thread_;
 			static QMutex 										mutex_;
 			QWaitCondition 										update_finished_;
+			QWaitCondition 										drawing_finished_;
 			#endif
 
 			MainControl* 	main_control_;
 			bool 					update_running_;
 			bool 					update_pending_;
 			bool 					multi_threading_mode_;
+
+			HashSet<Representation*> currently_drawing_;
+			HashSet<Representation*> currently_updateing_;
 		};
 
 	} // namespace VIEW

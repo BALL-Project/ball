@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.h,v 1.2 2005/02/06 20:57:06 oliver Exp $
+// $Id: vertexBuffer.h,v 1.3 2005/02/16 17:10:05 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_VERTEXBUFFER_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
 #	include <BALL/VIEW/KERNEL/common.h>
+#endif
+
+#ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
+#	include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
 
 namespace BALL
@@ -87,11 +91,15 @@ namespace BALL
 			
 			protected:
 			
-			const Mesh* mesh_;
-			Buffer buffer_;
-			bool filled_;
-			static GLRenderer* gl_renderer_;
-			bool busy_;
+			const Mesh* 				mesh_;
+ 			Buffer 							buffer_;
+			bool 								filled_;
+			static GLRenderer* 	gl_renderer_;
+			bool 								busy_;
+			bool 								multiple_colors_;
+			ColorRGBA 					color_;
+			Size 								vertices_;
+			Size 								triangles_;
 		};
 
 	} // namespace VIEW

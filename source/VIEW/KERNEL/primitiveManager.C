@@ -1,7 +1,7 @@
 //   // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.35 2005/02/06 20:57:09 oliver Exp $
+// $Id: primitiveManager.C,v 1.36 2005/02/16 17:09:59 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -417,4 +417,15 @@ bool PrimitiveManager::usesMultithreading()
 	return multi_threading_mode_;
 }
 			
+
+HashSet<Representation*>& PrimitiveManager::getRepresentationsBeeingUpdated()
+{
+	return currently_updateing_;
+}
+
+HashSet<Representation*>& PrimitiveManager::getRepresentationsBeeingDrawn()
+{
+	return currently_drawing_;
+}
+
 } } // namespaces

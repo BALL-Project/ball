@@ -145,8 +145,19 @@ namespace BALL
 		void UpdateRepresentationThread::run()
 		{
 			if (rep_ == 0) return;
+			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+			while (pm.getRepresentationsBeeingDrawn().has(rep_))
+			{
+logString(String("#~~#   2 ") + String( )                        + "             " + __FILE__ + "  " + String(__LINE__));
+				pm.getUpdateWaitCondition().wait(100);
+			}
+
+			pm.getRepresentationsBeeingUpdated().insert(rep_);
+				
  			rep_->update_();
 			rep_ = 0;
+			pm.getRepresentationsBeeingUpdated().erase(rep_);
+
 			FinishedRepresentionUpdateEvent* se = new FinishedRepresentionUpdateEvent;
 			qApp->postEvent(getMainControl(), se);
 		}

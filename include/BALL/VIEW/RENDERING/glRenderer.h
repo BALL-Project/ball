@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.30 2005/02/14 14:58:47 amoll Exp $
+// $Id: glRenderer.h,v 1.31 2005/02/16 17:10:04 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -409,10 +409,6 @@ namespace BALL
 			void setColorRGBA_(const ColorRGBA& color)
 				throw();
 
-			//_
-			void renderMeshWithVertexArray_(const Mesh& mesh)
-				throw();
-
 			///
 			DrawingMode 					drawing_mode_;
 
@@ -439,12 +435,12 @@ namespace BALL
 			typedef HashMap<const GeometricObject*, Name> NameHashMap;
 			typedef HashMap<Name, const GeometricObject*> GeometricObjectHashMap;
 			typedef HashMap<const Representation*, GLDisplayList*> DisplayListHashMap;
-			typedef HashMap<const Mesh*, MeshBuffer*> MeshBufferHashMap;
+			typedef HashMap<const Representation*, vector<MeshBuffer*> > MeshBufferHashMap;
 
 			GeometricObjectHashMap	name_to_object_;
 			NameHashMap							object_to_name_;
 			DisplayListHashMap 			display_lists_;
-			MeshBufferHashMap 			mesh_to_buffer_;
+			MeshBufferHashMap 			rep_to_buffers_;
 			Name 										all_names_;
 			GLuint 									object_buffer_[BALL_GLRENDERER_PICKING_NUMBER_OF_MAX_OBJECTS];
 			Vector3 								normal_vector_;

@@ -4,6 +4,7 @@
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/stage.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 
 #include <qpushbutton.h>
 #include <qlabel.h>
@@ -83,9 +84,27 @@ void StageSettings::apply()
 	}
 
 	Scene::setShowLightSources(show_lights_->isChecked());
-
 	Scene::setAnimationSmoothness(((float)animation_smoothness->value()) / 10.0);
-	((Scene*)Scene::getInstance(0))->getGLRenderer().enableVertexBuffers(use_vertex_buffers->isChecked());
+
+	// use vertex buffers ?
+	bool use_buffer = use_vertex_buffers->isChecked();
+	GLRenderer& renderer = ((Scene*)Scene::getInstance(0))->getGLRenderer();
+
+ 	if (use_buffer != renderer.vertexBuffersEnabled())
+	{
+		getMainControl()->setStatusbarText("Because of change in usage of vertex buffer, all Representations have to be deleted!", true);
+		// remove representations
+		PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+		Size nr = pm.getNumberOfRepresentations();
+		list<Representation*> reps = pm.getRepresentations();
+		for (Position p = 0; p < nr; p++)
+		{
+			getMainControl()->remove(**reps.begin());
+			reps.pop_front();
+		}
+	}
+
+	renderer.enableVertexBuffers(use_buffer);
 }
 
 

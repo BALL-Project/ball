@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vertexBuffer.C,v 1.3 2005/02/08 06:09:30 oliver Exp $
+// $Id: vertexBuffer.C,v 1.4 2005/02/16 17:10:00 amoll Exp $
 
 // prevent typedef clash under Linux
 #define QT_CLEAN_NAMESPACE
@@ -90,7 +90,11 @@ MeshBuffer::MeshBuffer()
 : mesh_(0),
 	buffer_(),
 	filled_(false),
-	busy_(false)
+	busy_(false),
+	multiple_colors_(false),
+	color_("0000FF"),
+	vertices_(0),
+	triangles_(0)
 {
 	buffer_[0] = buffer_[1] = buffer_[2] = buffer_[3] = 0;
 }
@@ -99,7 +103,9 @@ MeshBuffer::MeshBuffer(const MeshBuffer& mesh_buffer)
 : mesh_(mesh_buffer.mesh_),
 	buffer_(),
 	filled_(false),
-	busy_(false)
+	busy_(false),
+	multiple_colors_(false),
+	color_("0000FF")
 {
 	buffer_[0] = buffer_[1] = buffer_[2] = buffer_[3] = 0;
 }
@@ -121,8 +127,8 @@ bool MeshBuffer::initialize()
 
 	clearBuffer();
 
-	Size nr_vertices = mesh_->vertex.size();
-	Size nr_triangles = mesh_->triangle.size();
+	vertices_  = mesh_->vertex.size();
+	triangles_ = mesh_->triangle.size();
 	
 	// colors, normals, indices, vertex
 	// Get valid Names
@@ -131,9 +137,9 @@ bool MeshBuffer::initialize()
 	////////////////////////////////////////////////////////////
 	/// upload colors, normals and vertices
 	////////////////////////////////////////////////////////////
-	float* data = new float[nr_vertices * 4];
+	float* data = new float[vertices_ * 4];
 	if (data == 0) return false;
-	for (Size index = 0; index < nr_vertices; ++index)
+	for (Size index = 0; index < vertices_; ++index)
 	{
 		const Size start = index * 3;
 		data[start] = mesh_->vertex[index].x;
@@ -142,9 +148,9 @@ bool MeshBuffer::initialize()
 	}
 
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[0]);
-	glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * nr_vertices * 3, data, GL_STATIC_DRAW_ARB);
+	glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * vertices_ * 3, data, GL_STATIC_DRAW_ARB);
 
-	for (Size index = 0; index < nr_vertices; ++index)
+	for (Size index = 0; index < vertices_; ++index)
 	{
 		const Size start = index * 3;
 		data[start] = mesh_->normal[index].x;
@@ -153,11 +159,12 @@ bool MeshBuffer::initialize()
 	}
 
 	glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[1]);
-	glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * nr_vertices * 3, data, GL_STATIC_DRAW_ARB);
+	glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * vertices_ * 3, data, GL_STATIC_DRAW_ARB);
 
 	if (mesh_->colorList.size() > 1)
 	{
-		for (Size index = 0; index < nr_vertices; ++index)
+		multiple_colors_ = true;
+		for (Size index = 0; index < vertices_; ++index)
 		{
 			const Size start = index * 4;
 			data[start] = (float) mesh_->colorList[index].getRed();
@@ -167,7 +174,15 @@ bool MeshBuffer::initialize()
 		}
 
 		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[2]);
-		glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * nr_vertices * 4, data, GL_STATIC_DRAW_ARB);
+		glBufferDataARB(GL_ARRAY_BUFFER_ARB, sizeof(float) * vertices_ * 4, data, GL_STATIC_DRAW_ARB);
+	}
+	else
+	{
+		multiple_colors_ = false;
+		if (mesh_->colorList.size() == 1)
+		{
+			color_ = mesh_->colorList[0];
+		}
 	}
 
 	delete[] data;
@@ -175,9 +190,9 @@ bool MeshBuffer::initialize()
 	////////////////////////////////////////////////////////////
 	/// upload triangle indices
 	////////////////////////////////////////////////////////////
-	unsigned int* indices = new unsigned int[nr_triangles * 3];
+	unsigned int* indices = new unsigned int[triangles_ * 3];
 	if (indices == 0) return false;
-	for (Size index = 0; index < nr_triangles; ++index)
+	for (Size index = 0; index < triangles_; ++index)
 	{
 		const Size start = index * 3;
 		indices[start] = mesh_->triangle[index].v1;
@@ -186,7 +201,7 @@ bool MeshBuffer::initialize()
 	}
 
 	glBindBufferARB(GL_ELEMENT_ARRAY_BUFFER_ARB, buffer_[3]);
-	glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, sizeof(unsigned int) * nr_triangles * 3, 
+	glBufferDataARB(GL_ELEMENT_ARRAY_BUFFER_ARB, sizeof(unsigned int) * triangles_ * 3, 
 									indices, GL_STATIC_DRAW_ARB);
 	delete[] indices;
 
@@ -241,7 +256,7 @@ bool MeshBuffer::draw()
 	glIndexPointer(GL_UNSIGNED_INT, 0, 0);
 
 	// colors
-	if (mesh_->colorList.size() > 1)
+	if (multiple_colors_)
 	{
 		glEnableClientState(GL_COLOR_ARRAY);
 		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[2]);
@@ -249,16 +264,7 @@ bool MeshBuffer::draw()
 	}
 	else
 	{
-		if (mesh_->colorList.size() == 1)
-		{
-			const ColorRGBA& color = mesh_->colorList[0];
-			glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-		}
-		else
-		{
-			ColorRGBA color("0000FF");
-			glColor4ub(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha());
-		}
+		glColor4ub(color_.getRed(), color_.getGreen(), color_.getBlue(), color_.getAlpha());
 	}
 
 
@@ -272,7 +278,7 @@ bool MeshBuffer::draw()
 		glBindBufferARB(GL_ARRAY_BUFFER_ARB, buffer_[1]);
 		glNormalPointer(GL_FLOAT, 0, 0);
 
-		glDrawElements(GL_TRIANGLES, mesh_->triangle.size() * 3, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_TRIANGLES, triangles_ * 3, GL_UNSIGNED_INT, 0);
 		glDisableClientState(GL_NORMAL_ARRAY);
 	}
 	else if (drawing_mode == DRAWING_MODE_WIREFRAME)
@@ -281,7 +287,7 @@ bool MeshBuffer::draw()
 	}
 	else // dots
 	{
-		glDrawElements(GL_POINTS, mesh_->vertex.size() * 3, GL_UNSIGNED_INT, 0);
+		glDrawElements(GL_POINTS, vertices_ * 3, GL_UNSIGNED_INT, 0);
 	}
 
 	////////////////////////////////////////////////////////////

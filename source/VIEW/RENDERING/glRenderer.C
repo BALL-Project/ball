@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.62 2005/02/14 14:58:50 amoll Exp $
+// $Id: glRenderer.C,v 1.63 2005/02/16 17:10:00 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -339,12 +339,24 @@ t.start();
 		if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 		{
 			clearVertexBuffersFor(*(Representation*)&rep);
+			
+			// prevent copying the pointers of the buffers later...
+			rep_to_buffers_[&rep] = vector<MeshBuffer*>();
+			
+			vector<MeshBuffer*>& buffers = rep_to_buffers_.find(&rep)->second;
+
 			const List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
-			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
-			for (; it != geometric_objects.end(); it++)
+			List<GeometricObject*>::ConstIterator git = geometric_objects.begin();
+			for (; git != geometric_objects.end(); git++)
 			{
-				const Mesh* const mesh = dynamic_cast<Mesh*>(*it);
-				if (mesh != 0) renderMesh_(*mesh);
+				const Mesh* const mesh = dynamic_cast<Mesh*>(*git);
+				if (mesh != 0) 
+				{
+					MeshBuffer* buffer = new MeshBuffer;
+					buffer->setMesh(*mesh);
+					buffer->initialize();
+					buffers.push_back(buffer);
+				}
 			}
 		}
 
@@ -415,42 +427,41 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 		}
 		else // drawing for picking directly
 		{
-			if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
-			{
-				initDrawingMeshes_();
-				MeshBuffer::setGLRenderer(this);
-				// we have to draw from the vertex buffer objects
-				for (; it != geometric_objects.end(); it++)
-				{
-					glLoadName(getName(**it));
-					const Mesh* const mesh = dynamic_cast<Mesh*>(*it);
-					if (mesh == 0)
-					{
-						render_(*it);
-					}
-					else
-					{
-						MeshBufferHashMap::Iterator it = mesh_to_buffer_.find(mesh);
-						if (it == mesh_to_buffer_.end())
-						{
-							renderMesh_(*mesh);
-							mesh_to_buffer_[mesh]->draw();
-						}
-						else
-						{
-							it->second->draw();
-						}
-					}
-				}
-				finishDrawingMeshes_();
-			}
-			else
+			if (!use_vertex_buffer_ || drawing_mode_ == DRAWING_MODE_WIREFRAME)
 			{
 				// render everything with names from glLoadName
 				for (; it != geometric_objects.end(); it++)
 				{
 					glLoadName(getName(**it));
 					render_(*it);
+				}
+			}
+			else // render directly with buffers
+			{
+				for (; it != geometric_objects.end(); it++)
+				{
+					glLoadName(getName(**it));
+					if (dynamic_cast<Mesh*>(*it) == 0)
+					{
+						render_(*it);
+					}
+				}
+			
+				MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&representation);
+				if (vit != rep_to_buffers_.end())
+				{
+					initDrawingMeshes_();
+					MeshBuffer::setGLRenderer(this);
+					vector<MeshBuffer*>& buffers = vit->second;
+
+					vector<MeshBuffer*>::iterator bit = buffers.begin();
+					for (; bit != buffers.end(); bit++)
+					{
+						glLoadName(getName(*(*bit)->getMesh()));
+						(*bit)->draw();
+					}
+
+					finishDrawingMeshes_();
 				}
 			}
 		}
@@ -770,7 +781,7 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 	void GLRenderer::renderMesh_(const Mesh& mesh)
 		throw()
 	{
-		if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME) renderMeshWithVertexArray_(mesh);
+		if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME) return;
 		initDrawingMeshes_();
 
 		// If we have only one color for the whole mesh, this can
@@ -914,21 +925,6 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 		}
 
 		glEnable(GL_CULL_FACE);
-	}
-
-	void GLRenderer::renderMeshWithVertexArray_(const Mesh& mesh)
-		throw()
-	{
-		if (mesh_to_buffer_.has(&mesh)) 
-		{
-			mesh_to_buffer_[&mesh]->initialize();
-			return;
-		}
-
-		MeshBuffer* buffer = new MeshBuffer;
-		buffer->setMesh(mesh);
-		buffer->initialize();
-		mesh_to_buffer_[&mesh] = buffer;
 	}
 
 	GLubyte* GLRenderer::generateBitmapFromText_(const String& text, int& width, int& height) const
@@ -1573,22 +1569,18 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 	void GLRenderer::clearVertexBuffersFor(Representation& rep)
 		throw()
 	{
-		List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
-		List<GeometricObject*>::Iterator it = geometric_objects.begin();
-		for (; it != geometric_objects.end(); it++)
+		MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&rep);
+		if (vit == rep_to_buffers_.end()) return;
+
+		vector<MeshBuffer*>& meshes = vit->second;
+		vector<MeshBuffer*>::iterator bit = meshes.begin();
+		for (; bit != meshes.end(); bit++)
 		{
-			Mesh* mesh = dynamic_cast<Mesh*>(*it);
-			if (mesh == 0) continue;
-
-			HashMap<const Mesh*, MeshBuffer*>::Iterator hit = mesh_to_buffer_.find(mesh);
-
-			if (hit != mesh_to_buffer_.end())
-			{
-				MeshBuffer* buffer = hit->second;
-				delete buffer;
-				mesh_to_buffer_.erase(hit);
-			}
+			delete *bit;
 		}
+
+		meshes.clear();
+		rep_to_buffers_.erase(vit);
 	}
 
 	void GLRenderer::drawBuffered(const Representation& rep)
@@ -1599,23 +1591,21 @@ logString("OpenGL rendering time: " + String(t.getCPUTime()));
 		// if we have vertex buffers for this Representation, draw them
 		if (use_vertex_buffer_ && drawing_mode_ != DRAWING_MODE_WIREFRAME)
 		{
-			initDrawingMeshes_();
-			MeshBuffer::setGLRenderer(this);
-			const List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
-			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
-			for (; it != geometric_objects.end(); it++)
+			MeshBufferHashMap::Iterator vit = rep_to_buffers_.find(&rep);
+			if (vit != rep_to_buffers_.end())
 			{
-				const Mesh* const mesh = dynamic_cast<Mesh*>(*it);
-				if (mesh == 0) continue;
+				initDrawingMeshes_();
+				MeshBuffer::setGLRenderer(this);
+				vector<MeshBuffer*>& buffers = vit->second;
 
-				const HashMap<const Mesh*, MeshBuffer*>::Iterator hit = mesh_to_buffer_.find(mesh);
-
-				if (hit != mesh_to_buffer_.end())
+				vector<MeshBuffer*>::iterator bit = buffers.begin();
+				for (; bit != buffers.end(); bit++)
 				{
-					hit->second->draw();
+					(*bit)->draw();
 				}
+
+				finishDrawingMeshes_();
 			}
-			finishDrawingMeshes_();
 		}
 
 		// if we have a displaylist for this Representation, draw it

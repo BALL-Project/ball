@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.163 2005/02/14 13:24:25 amoll Exp $
+// $Id: scene.C,v 1.164 2005/02/16 17:10:00 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -629,25 +629,41 @@ namespace BALL
 		}
 
 
-		void Scene::render_(const Representation& rep, RenderMode mode)
+		void Scene::render_(const Representation& repr, RenderMode mode)
 			throw()
 		{
-			if (!rep.getGeometricObjects().size()) return;
-
-			switch (mode)
+			if (mode == DISPLAY_LISTS_RENDERING)
 			{
-				case DISPLAY_LISTS_RENDERING:
-					gl_renderer_.drawBuffered(rep);
-					break;
-
-				case REBUILD_DISPLAY_LISTS:
-					gl_renderer_.bufferRepresentation(rep);
-					break;
-
-				case DIRECT_RENDERING:
-					gl_renderer_.render(rep);
-					break;
+				gl_renderer_.drawBuffered(repr);
+				return;
 			}
+
+#ifdef BALL_QT_HAS_THREADS
+			PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
+			HashSet<Representation*>& reps_drawn = pm.getRepresentationsBeeingDrawn();
+			Representation* rep = (Representation*)& repr;
+
+			while (pm.getRepresentationsBeeingUpdated().has(rep))
+			{
+				pm.getUpdateWaitCondition().wait(100);
+			}
+
+			reps_drawn.insert(rep);
+#endif
+
+			if (mode == REBUILD_DISPLAY_LISTS)
+			{
+				gl_renderer_.bufferRepresentation(repr);
+			}
+			else //	DIRECT_RENDERING:
+			{
+				gl_renderer_.render(repr);
+			}
+
+#ifdef BALL_QT_HAS_THREADS
+			reps_drawn.erase(rep);
+			pm.getUpdateWaitCondition().wakeAll();
+#endif
 		}
 
 		void Scene::rotateSystem2_(Scene* /*scene*/)
