@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.39 2004/09/10 14:33:21 amoll Exp $
+// $Id: cartoonModel.C,v 1.40 2004/09/13 10:52:35 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 
@@ -1036,6 +1036,7 @@ namespace BALL
 		void AddCartoonModel::drawWatsonCrickModel_(const SecondaryStructure& ss)
 			throw()
 		{
+			vector<Vector3>::iterator old_spline_point = spline_.begin();
 			Position nr_of_residues = ss.countResidues();
 			for (Position pos = 0; pos < nr_of_residues; pos++)
 			{
@@ -1154,20 +1155,24 @@ namespace BALL
 					createTriangle_(*mesh, *atoms[0], *atoms[5], *atoms[4], atoms[0], atoms[5], atoms[4]); 	// C2,N1,C6
 					// we are done for T
 				}
+				else
+				{
+					// unknown base, abort for this Residue
+					continue;
+				}
 
 				// --------------------------------------------
 				// draw connection to backbone
 				// --------------------------------------------
 				float distance = 256;
-				Vector3 base;
-				vector<Vector3>::iterator sit = spline_.begin();
+				vector<Vector3>::iterator sit = old_spline_point;
 				for (; sit != spline_.end(); sit++)
 				{
 					float new_distance = ((*sit) - connection_point).getSquareLength();
-					if (new_distance < distance && distance > 0.1)
+					if (new_distance < distance)
 					{
 						distance = new_distance;
-						base = (*sit);
+						old_spline_point = sit;
 					}
 				}
 
@@ -1175,11 +1180,11 @@ namespace BALL
 				{
 					Tube* tube = new Tube;
 					tube->setComposite(r);
-					Vector3 v = connection_point - base;
+					Vector3 v = connection_point - *old_spline_point;
 					Vector3 vn = v.normalize();
 					vn *= 0.1;
 					tube->setVertex1(connection_point + vn);
-					tube->setVertex2(base);
+					tube->setVertex2(*old_spline_point);
 					tube->setRadius(0.1);
 					geometric_objects_.push_back(tube);
 				}
