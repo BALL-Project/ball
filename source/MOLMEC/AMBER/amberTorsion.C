@@ -1,11 +1,11 @@
-// $Id: amberTorsion.C,v 1.3 1999/09/01 13:38:33 oliver Exp $
+// $Id: amberTorsion.C,v 1.4 1999/09/01 13:39:05 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
-
+    
 #include <algorithm>
 
 namespace BALL 
