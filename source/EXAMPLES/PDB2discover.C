@@ -1,7 +1,7 @@
-// $Id: PDB2discover.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: PDB2discover.C,v 1.2 1999/09/17 11:17:24 oliver Exp $
 
 #include <BALL/common.h>
-#include <BALL/KERNEL/fragmentDB.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/FORMAT/PDBFile.h>
 
 int main(int argc, char** argv) 
