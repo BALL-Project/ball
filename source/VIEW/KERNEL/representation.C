@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.60 2004/12/14 16:36:03 amoll Exp $
+// $Id: representation.C,v 1.60.2.1 2005/01/13 00:11:41 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -12,7 +12,7 @@
 #include <BALL/KERNEL/atom.h>
 #include <BALL/SYSTEM/timer.h>
 
-// #define BALL_BENCHMARKING
+#define BALL_BENCHMARKING
 
 namespace BALL
 {
@@ -309,7 +309,7 @@ namespace BALL
 			}
 
 #ifdef BALL_BENCHMARKING
-			Log.info() << "Calculating Representation time: " << t.getCPUTime() << std::endl;
+			logString("Calculating Representation time: " + String(t.getCPUTime()));
 			t.stop();
 #endif
 
