@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.37 2001/07/29 17:24:39 oliver Exp $
+// $Id: string.h,v 1.38 2001/08/18 14:27:00 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -630,11 +630,14 @@ namespace BALL
 		String& reverse(Index from = 0, Size len = EndPos)
 			throw(Exception::IndexUnderflow, Exception::IndexOverflow);
 
-		/// Substitutes the first occurence of {\bf to_replace} by the content of {\bf replacing}
-		Index substitute(const String& to_replace, const String& replacing)
+		/** Substitute the first occurence of {\bf to_replace} by the content of {\bf replacing}.
+				@return the first position of the substitution or \Ref{EndPos} if {\bf to_replace} is not found
+		*/
+		Size substitute(const String& to_replace, const String& replacing)
 			throw();
 
 		//@}
+
 		/**	@name	Predicates 
 		*/
 		//@{

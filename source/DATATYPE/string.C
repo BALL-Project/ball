@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.37 2001/05/17 17:45:26 oliver Exp $
+// $Id: string.C,v 1.38 2001/08/18 14:27:00 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -45,7 +45,7 @@ namespace BALL
 	const char* String::CHARACTER_CLASS__WHITESPACE = " \n\t\r\f\v";
 	const char* String::CHARACTER_CLASS__QUOTES = "\"";
 
-	const Size String::EndPos = (Size)-1;
+	const Size String::EndPos = Limits<Size>::max();
 
 	String::CompareMode String::compare_mode_ = String::CASE_SENSITIVE;
 
@@ -1360,7 +1360,7 @@ namespace BALL
 		BALL_DUMP_STREAM_SUFFIX(s);
 	}
 
-	Index String::substitute(const String& to_replace, const String& replacing)
+	Size String::substitute(const String& to_replace, const String& replacing)
 		throw()
 	{
 		Size replaced_size = (Size)to_replace.size();
@@ -1376,7 +1376,7 @@ namespace BALL
 			replace(found, replaced_size, replacing);
 		}
 
-		return (Index)found;
+		return ((found == string::npos) ? EndPos : (Size)found);
 	}
  
 
