@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: file.sip,v 1.14 2003/10/31 23:15:49 oliver Exp $
+// $Id: file.sip,v 1.15 2003/11/12 18:20:28 oliver Exp $
 //
 
 class std__openmode
@@ -9,7 +9,7 @@ class std__openmode
 %TypeHeaderCode
 	#include <BALL/SYSTEM/file.h>
 	using namespace BALL;
-	typedef std::ios::openmode std__openmode;
+	typedef File::OpenMode std__openmode;
 %End
 	public:
 };
@@ -42,7 +42,6 @@ class File
 	const File::OpenMode BALL_File__TRUNC = File::TRUNC;
 %End
   public:
-	typedef std__openmode OpenMode;
 	enum {
 		IN = BALL_File__IN,
 		OUT = BALL_File__OUT,
@@ -54,17 +53,17 @@ class File
 
   File();
 	// default open mode: IN
-  File(const String&, File::OpenMode /openmode/ = std::ios::in);
+  File(const String&, OpenMode /openmode/ = std::ios::in);
   File(const File& /filename/);
   ~File();
 	// default open mode: IN
-  bool open(const String&, File::OpenMode /openmode/ = std::ios::in);
+  bool open(const String&, OpenMode /openmode/ = std::ios::in);
 
   bool reopen();
   void close();
   const String& getName() const;
   Size getSize();
-  File::OpenMode getOpenMode() const;
+  OpenMode getOpenMode() const;
   // int getType() const;
   // std::fstream& getFileStream();
   bool copyTo(const String&);

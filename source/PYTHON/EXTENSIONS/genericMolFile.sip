@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericMolFile.sip,v 1.9 2003/11/01 09:27:37 oliver Exp $
+// $Id: genericMolFile.sip,v 1.10 2003/11/12 18:20:28 oliver Exp $
 //
 
 class GenericMolFile
@@ -18,7 +18,7 @@ class GenericMolFile
 	GenericMolFile()
 					throw();
 
-	GenericMolFile(String& /filename/, File::OpenMode /open_mode/ = std::ios::in)
+	GenericMolFile(String& /filename/, OpenMode /open_mode/ = std::ios::in)
 					throw(FileNotFound);
 
 	GenericMolFile(const GenericMolFile& /file/);

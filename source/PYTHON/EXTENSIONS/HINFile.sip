@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.sip,v 1.12 2003/11/01 09:27:35 oliver Exp $
+// $Id: HINFile.sip,v 1.13 2003/11/12 18:20:27 oliver Exp $
 //
 
 class HINFile
@@ -14,7 +14,7 @@ class HINFile
   public:
   HINFile();
 	// default open mode is "IN"
-  HINFile(String&, File::OpenMode /openmode/ = std::ios::in) throw(FileNotFound);
+  HINFile(String&, OpenMode /openmode/ = std::ios::in) throw(FileNotFound);
 	~HINFile() throw();
 
   virtual bool write(const System& /system/) throw(CannotWrite);

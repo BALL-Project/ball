@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineBasedFile.sip,v 1.10 2003/10/29 22:54:41 oliver Exp $
+// $Id: lineBasedFile.sip,v 1.11 2003/11/12 18:20:28 oliver Exp $
 //
 
 class LineBasedFile
@@ -16,7 +16,7 @@ class LineBasedFile
 
 				LineBasedFile()
 								throw();
-				LineBasedFile(const String& /filename/, File::OpenMode /open_mode/ = std::ios::in)
+				LineBasedFile(const String& /filename/, OpenMode /open_mode/ = std::ios::in)
 								throw(FileNotFound);
 				LineBasedFile(const LineBasedFile& /f/)
 								throw(FileNotFound);

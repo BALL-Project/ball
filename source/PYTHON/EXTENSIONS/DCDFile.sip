@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.sip,v 1.6 2003/10/29 22:54:34 oliver Exp $
+// $Id: DCDFile.sip,v 1.7 2003/11/12 18:20:27 oliver Exp $
 //
 
 class DCDFile
@@ -19,7 +19,7 @@ class DCDFile
 								throw();
 				DCDFile(const DCDFile& /file/)
 								throw(FileNotFound);
-				DCDFile(const String& /name/, File::OpenMode /open_mode/ = std::ios::in)
+				DCDFile(const String& /name/, OpenMode /open_mode/ = std::ios::in)
 								throw();
 				~DCDFile()
 								throw();

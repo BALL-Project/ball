@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: string.sip,v 1.13 2003/11/01 09:27:40 oliver Exp $
+// $Id: string.sip,v 1.14 2003/11/12 18:20:29 oliver Exp $
 //
 
 class Substring
@@ -253,6 +253,18 @@ class String
 
 
   SIP_PYOBJECT __str__();
+%MethodCode
+	if (sipCpp == 0)
+	{
+		sipRes = PyString_FromString("");
+	}
+	else
+	{
+		sipRes = PyString_FromString(sipCpp->c_str());
+	}
+%End
+
+SIP_PYOBJECT __repr__();
 %MethodCode
 	if (sipCpp == 0)
 	{

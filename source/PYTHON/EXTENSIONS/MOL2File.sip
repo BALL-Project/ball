@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOL2File.sip,v 1.8 2003/10/31 23:15:48 oliver Exp $
+// $Id: MOL2File.sip,v 1.9 2003/11/12 18:20:27 oliver Exp $
 //
 
 class MOL2File
@@ -14,7 +14,7 @@ class MOL2File
 %End
   public:
   MOL2File();
-  MOL2File(const String&, File::OpenMode /openmode/ = std::ios::in)
+  MOL2File(const String&, OpenMode /openmode/ = std::ios::in)
 		throw(FileNotFound);
   ~MOL2File()
 		throw();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.sip,v 1.8 2003/10/31 23:15:48 oliver Exp $
+// $Id: PDBFile.sip,v 1.9 2003/11/12 18:20:28 oliver Exp $
 //
 
 class PDBFile
@@ -14,7 +14,7 @@ class PDBFile
   public:
   PDBFile();
 	// default open mode: READ
-  PDBFile(const String&, File::OpenMode /openmode/ = std::ios::in)
+  PDBFile(const String&, OpenMode /openmode/ = std::ios::in)
 		throw(FileNotFound);
 	~PDBFile() 
 		throw();

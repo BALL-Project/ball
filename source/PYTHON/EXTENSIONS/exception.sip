@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.sip,v 1.4 2003/10/29 22:08:39 oliver Exp $
+// $Id: exception.sip,v 1.5 2003/11/12 18:20:28 oliver Exp $
 //
 
 class GeneralException 
@@ -28,6 +28,21 @@ class GeneralException
 	const char* getMessage() const;
 	int getLine() const;
 	const char* getFile() const;
+
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
+
 };  
 
 
@@ -41,7 +56,21 @@ class IndexUnderflow
 %End
   public:
   IndexUnderflow(const char* /file/, int /line/, Index /index/ = 0, Size /size/ = 0);
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
 };
+
 class SizeUnderflow 
   : GeneralException
 {
@@ -52,7 +81,23 @@ class SizeUnderflow
 %End
   public:
   SizeUnderflow(const char* /file/, int /line/, Size /size/ = 0);
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
+
 };
+
+
 class IndexOverflow 
   : GeneralException
 {
@@ -63,6 +108,19 @@ class IndexOverflow
 %End
 	public:
 	IndexOverflow(const char* /file/, int /line/, Index /index/ = 0, Size /size/ = 0);
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
 };
 
 class InvalidRange 
@@ -75,6 +133,19 @@ class InvalidRange
 %End
 	public:
 	InvalidRange(const char* /file/, int /line/);
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
 };
 
 class InvalidFormat 
@@ -87,6 +158,19 @@ class InvalidFormat
 %End
 	public:
 	InvalidFormat(const char* /file/, int /line/, const String& /format/);
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
 };
 
 class IllegalSelfOperation
@@ -99,6 +183,19 @@ class IllegalSelfOperation
 %End
 	public:
 	IllegalSelfOperation(const char* /file/, int /line/);
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
 };
 
 class NullPointer 
@@ -111,6 +208,19 @@ class NullPointer
 %End
 	public:
 	NullPointer(const char* /file/, int /line/);
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
 };
 
 class InvalidIterator
@@ -123,6 +233,19 @@ class InvalidIterator
 %End
 	public:
 	InvalidIterator(const char* /file/, int /line/);
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
 };
 
 class IncompatibleIterators
@@ -135,6 +258,19 @@ class IncompatibleIterators
 %End
 	public:
 	IncompatibleIterators(const char* /file/, int /line/);
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
 };
 
 class NotImplemented
@@ -147,6 +283,19 @@ class NotImplemented
 %End
 	public:
 	NotImplemented(const char* /file/, int /line/);
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
 };
 
 class OutOfMemory
@@ -160,6 +309,19 @@ class OutOfMemory
 	public:
 	OutOfMemory(const char* /file/, int /line/, Size /size/ = 0);
 	~OutOfMemory() throw();
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
 };
 
 class OutOfGrid
@@ -173,6 +335,19 @@ class OutOfGrid
 	public:
 	OutOfGrid(const char* /file/, int /line/)
     throw();
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
 };
 
   
@@ -186,6 +361,19 @@ class BufferOverflow
 %End
 	public:
 	BufferOverflow(const char* /file/, int /line/);
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
 };
 
 class DivisionByZero 
@@ -198,6 +386,19 @@ class DivisionByZero
 %End
 	public:
 	DivisionByZero(const char* /file/, int /line/);
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
 };
 
 class FileNotFound 
@@ -211,6 +412,19 @@ class FileNotFound
   public:
   FileNotFound(const char* /file/, int /line/, const String& /filename/);
   String getFilename() const;
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
 };
 
 class ParseError
@@ -225,6 +439,19 @@ class ParseError
 	ParseError(const char* /file/, int /line/, const String& /expression/,
  	  				 const String& /message/)
 							throw();
+ 	SIP_PYOBJECT __repr__();
+%MethodCode
+  if (sipCpp == 0)
+  {
+    sipRes = PyString_FromString("");
+  }
+  else
+  {
+    sipRes = PyString_FromString(String(String(sipCpp->getName())
+					+ " in line " + String(sipCpp->getLine()) + " of "
+          + String(sipCpp->getFile()) + ": " + String(sipCpp->getMessage())).c_str());
+  }
+%End
 };
 
 

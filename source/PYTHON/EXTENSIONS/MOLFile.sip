@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MOLFile.sip,v 1.7 2003/10/31 23:15:48 oliver Exp $
+// $Id: MOLFile.sip,v 1.8 2003/11/12 18:20:28 oliver Exp $
 //
 
 class MOLFile
@@ -14,7 +14,7 @@ class MOLFile
   public:
   MOLFile();
 	// default open mode is "IN"
-  MOLFile(String&, File::OpenMode /openmode/ = std::ios::in)
+  MOLFile(String&, OpenMode /openmode/ = std::ios::in)
 		throw(FileNotFound);
 	~MOLFile() throw();
 

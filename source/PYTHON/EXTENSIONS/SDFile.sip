@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: SDFile.sip,v 1.8 2003/10/31 23:15:48 oliver Exp $
+// $Id: SDFile.sip,v 1.9 2003/11/12 18:20:28 oliver Exp $
 //
 
 class SDFile
@@ -14,7 +14,7 @@ class SDFile
   public:
   SDFile();
 	// default open mode is "IN"
-  SDFile(String&, File::OpenMode /openmode/ = std::ios::in)	throw(FileNotFound);
+  SDFile(String&, OpenMode /openmode/ = std::ios::in)	throw(FileNotFound);
 	~SDFile()	throw();
 
   virtual bool write(const System& /system/) throw(CannotWrite);
