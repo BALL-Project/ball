@@ -1,0 +1,12 @@
+// $Id: gui.doc,v 1.1 2000/10/05 08:35:43 oliver Exp $
+
+/**@name	MOLVIEW/GUI
+		@nonames
+*/
+//@{
+	//@Include: DIALOGS/dialogs.doc
+	//@Include: FUNCTOR/functor.doc
+	//@Include: KERNEL/kernel.doc
+	//@Include: PRIMITIV/primitiv.doc
+	//@Include: WIDGETS/widgets.doc
+//@}

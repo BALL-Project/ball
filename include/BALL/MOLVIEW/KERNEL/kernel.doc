@@ -1,0 +1,8 @@
+// $Id: kernel.doc,v 1.1 2000/10/05 08:35:45 oliver Exp $
+
+/**@name	MOLVIEW/KERNEL
+		@nonames
+*/
+//@{
+	//@Include: *.h
+//@}

@@ -1,0 +1,8 @@
+// $Id: primitiv.doc,v 1.1 2000/10/05 08:35:44 oliver Exp $
+
+/**@name	MOLVIEW/GUI/PRIMITIV
+		@nonames
+*/
+//@{
+	//@Include: *.h
+//@}
