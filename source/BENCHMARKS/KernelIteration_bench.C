@@ -1,4 +1,4 @@
-// $Id: KernelIteration_bench.C,v 1.1 2001/06/24 16:25:59 oliver Exp $
+// $Id: KernelIteration_bench.C,v 1.2 2001/07/12 01:22:34 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(KernelIteration, 10.5, "$Id: KernelIteration_bench.C,v 1.1 2001/06/24 16:25:59 oliver Exp $")
+START_BENCHMARK(KernelIteration, 1.0, "$Id: KernelIteration_bench.C,v 1.2 2001/07/12 01:22:34 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

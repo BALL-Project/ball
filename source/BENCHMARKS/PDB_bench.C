@@ -1,4 +1,4 @@
-// $Id: PDB_bench.C,v 1.1 2001/06/24 16:25:59 oliver Exp $
+// $Id: PDB_bench.C,v 1.2 2001/07/12 01:22:34 oliver Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 using namespace BALL;
 
-START_BENCHMARK(PDBFile, 10.0, "$Id: PDB_bench.C,v 1.1 2001/06/24 16:25:59 oliver Exp $")
+START_BENCHMARK(PDBFile, 1.0, "$Id: PDB_bench.C,v 1.2 2001/07/12 01:22:34 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
