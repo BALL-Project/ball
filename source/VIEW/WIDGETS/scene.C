@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.46 2004/03/31 09:59:51 anne Exp $
+// $Id: scene.C,v 1.47 2004/03/31 12:27:25 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -18,13 +18,11 @@
 #include <qpainter.h>
 #include <qmenubar.h>
 #include <qimage.h>
-#include <qpopupmenu.h>
 #include <qmenubar.h>
 #include <qcursor.h>
 
 
 using std::endl;
-using std::ostream;
 using std::istream;
 
 namespace BALL
@@ -34,12 +32,11 @@ namespace BALL
 
 		// ###############CONSTRUCTORS,DESTRUCTORS,CLEAR###################
 
-		float Scene::mouse_sensitivity_ = 5;
-
 		// values for mouse-sensitivity 
-#define  ZOOM_FACTOR 			7 //5
-#define  ROTATE_FACTOR    11 //8
-#define  TRANSLATE_FACTOR 6 // 4
+		float Scene::mouse_sensitivity_ = 5;
+		#define  ZOOM_FACTOR 			7
+		#define  ROTATE_FACTOR    11
+		#define  TRANSLATE_FACTOR 6 
 
 		Scene::Scene()
 			throw()
@@ -84,8 +81,6 @@ namespace BALL
 #ifdef BALL_VIEW_DEBUG
 			Log.error() << "new Scene (2) " << this << std::endl;
 #endif
-
-			Log.error() << "asda"<< std::endl;
 			// the widget with the MainControl
 			registerWidget(this);
 			gl_renderer_.setSize(600, 600);
@@ -158,7 +153,7 @@ namespace BALL
 				return (getParent() != 0 && system_origin_.isValid());
 			}
 
-		void Scene::dump(ostream& s, Size depth) const
+		void Scene::dump(std::ostream& s, Size depth) const
 			throw()
 			{
 				BALL_DUMP_STREAM_PREFIX(s);
@@ -789,16 +784,6 @@ namespace BALL
 				readLights_(inifile);
 				light_settings_->updateFromStage();
 				stage_settings_->updateFromStage();
-
-				// building of coordinate system doesnt work at this point,
-				// so no reading of this option from the inifile
-				/*
-					 if (inifile.hasEntry("STAGE", "ShowCoordinateSystem"))
-					 {
-					 stage_->showCoordinateSystem(inifile.getValue("STAGE", "ShowCoordinateSystem").toUnsignedInt());
-					 }
-					 if (stage_->coordinateSystemEnabled()) createCoordinateSystem_();
-				 */
 			}
 
 
@@ -1015,11 +1000,7 @@ namespace BALL
 				hint = "Switch to picking mode, e.g. to identify singe atoms or groups";
 				picking_id_ = main_control.insertMenuEntry(
 						MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode_()), CTRL+Key_P, -1, hint);
-				/*	
-						hint = "Switch to edit mode";
-						edit_id_ =	main_control.insertMenuEntry(
-						MainControl::DISPLAY, "&Edit Mode", this, SLOT(editMode_()), CTRL+Key_E, -1, hint);
-				 */
+
 				main_control.insertPopupMenuSeparator(MainControl::DISPLAY);
 
 				// 	stereo_id_ = main_control.insertMenuEntry(
@@ -1316,46 +1297,54 @@ namespace BALL
 
 		void Scene::switchShowWidget()
 			throw()
+		{
+			if (window_menu_entry_id_ == -1) return;
+
+			if (!getMainControl()) 
 			{
-				if (window_menu_entry_id_ == -1) return;
-
-				if (!getMainControl()) 
-				{
-					Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
-					return;
-				}
-
-				QMenuBar* menu = getMainControl()->menuBar();
-				if (menu->isItemChecked(window_menu_entry_id_))
-				{
-					hide();
-					menu->setItemChecked(window_menu_entry_id_, false);
-				}
-				else
-				{
-					show();
-					menu->setItemChecked(window_menu_entry_id_, true);
-				}
+				Log.error() << "Problem in " << __FILE__ << __LINE__ << std::endl;
+				return;
 			}
+
+			QMenuBar* menu = getMainControl()->menuBar();
+			if (menu->isItemChecked(window_menu_entry_id_))
+			{
+				hide();
+				menu->setItemChecked(window_menu_entry_id_, false);
+			}
+			else
+			{
+				show();
+				menu->setItemChecked(window_menu_entry_id_, true);
+			}
+		}
 
 
 		void Scene::switchStereo()
 			throw()
+		{
+			GLboolean enabled = false;
+			glGetBooleanv(GL_STEREO, &enabled);
+			if (!enabled)
 			{
-				QMenuBar* menu = getMainControl()->menuBar();
-				bool stereo;
-				if (menu->isItemChecked(stereo_id_))
-				{
-					stereo = false;
-				}
-				else
-				{
-					stereo = true;
-				}
-
-				menu->setItemChecked(stereo_id_, stereo);
-				gl_renderer_.setStereoMode(stereo);
-				update();
+				Log.error() << "No Stereo mode capability in driver" << std::endl;
+				return;
 			}
 
-	} }// namespaces
+			QMenuBar* menu = getMainControl()->menuBar();
+			bool stereo;
+			if (menu->isItemChecked(stereo_id_))
+			{
+				stereo = false;
+			}
+			else
+			{
+				stereo = true;
+			}
+
+			menu->setItemChecked(stereo_id_, stereo);
+			gl_renderer_.setStereoMode(stereo);
+			update();
+		}
+
+} }// namespaces
