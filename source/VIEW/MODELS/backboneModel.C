@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.37 2005/01/18 22:09:25 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.38 2005/01/19 00:10:56 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -307,7 +307,7 @@ namespace BALL
 			sphere->setRadius(tube_radius_);
 			sphere->setPosition(spline_points_[start]);
 			sphere->setComposite(atoms_of_spline_points_[start]);
-			geometric_objects_.push_back(sphere);
+ 			geometric_objects_.push_back(sphere);
 
 			// calculate the number of slides for the circle and the angle in between them
  			Size slides = (Size)(8.0 + drawing_precision_ * 8.0);
@@ -474,7 +474,7 @@ namespace BALL
 			tube->setVertex2(spline_points_[end]);
 			tube->setComposite(atoms_of_spline_points_[end]);
 			tube->setRadius(tube_radius_);
-			geometric_objects_.push_back(tube);
+ 			geometric_objects_.push_back(tube);
 			
 			// create a sphere as an end cap for the point
 			sphere = new Sphere;
