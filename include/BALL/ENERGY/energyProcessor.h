@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyProcessor.h,v 1.14 2003/03/26 16:11:55 anhi Exp $
+// $Id: energyProcessor.h,v 1.15 2003/08/20 12:18:28 anker Exp $
 
 #ifndef BALL_ENERGY_ENERGYPROCESSOR_H
 #define BALL_ENERGY_ENERGYPROCESSOR_H
@@ -55,10 +55,12 @@ namespace BALL
 		*/
 		//@{
 
-		/** */
+		/** Assignment operator.
+		 */ 
 		const EnergyProcessor& operator = (const EnergyProcessor& proc) throw();
 
-		/** */
+		/** Clear method.
+		 */
 		virtual void clear() throw();
 
 		//@}
@@ -88,11 +90,11 @@ namespace BALL
 		*/
 		//@{
 
-		/** Validity 
+		/** Validity.
 		*/
 		bool isValid() const throw();
 
-		/** Equality operator 
+		/** Equality operator.
 		*/
 		bool operator == (const EnergyProcessor& proc) const throw();
 
