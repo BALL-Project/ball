@@ -1,0 +1,22 @@
+// $Id: rotamerLibrary.iC,v 1.2 1999/08/27 12:10:09 oliver Exp $
+
+// rotamer iterator - begin()/end() methods
+ResidueRotamerSet::Iterator ResidueRotamerSet::begin()
+{
+	return rotamers_.begin();
+}
+
+ResidueRotamerSet::ConstIterator ResidueRotamerSet::begin() const
+{
+	return rotamers_.begin();
+}
+
+ResidueRotamerSet::Iterator ResidueRotamerSet::end()
+{
+	return rotamers_.end();
+}
+
+ResidueRotamerSet::ConstIterator ResidueRotamerSet::end() const
+{
+	return rotamers_.end();
+}
