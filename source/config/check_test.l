@@ -1,5 +1,5 @@
 %{
-	// $Id: check_test.l,v 1.1 2003/06/09 14:17:13 oliver Exp $
+	// $Id: check_test.l,v 1.2 2003/06/09 21:19:31 oliver Exp $
 	// C++ scanner
 
 	#define YY_NO_UNPUT 
@@ -45,7 +45,32 @@
 		return tmp;
 	}
 
-#define RULE if(debug) cerr << "<" << __LINE__ << "/" << line << "/'" << esc(yytext) << "'>" << endl;
+	string esc(const std::string& s)
+	{
+		const char* ptr = s.c_str();
+		string tmp;
+
+		while (*ptr != '\0')
+		{
+			if (*ptr == '\n')
+			{
+				tmp += "\\n";
+			}
+			else if (*ptr == '\t')
+			{
+				tmp += "\\t";
+			}
+			else 
+			{
+				tmp += *ptr;
+			}
+			++ptr;
+		}
+		
+		return tmp;
+	}
+
+#define RULE if(debug) cerr << "<" << __LINE__ << "/" << line << "/'" << esc(yytext) << "' -- name= " << name << "  type= " << type << "  args= " << args << "'>" << endl;
 
 #define GOTO(a) \
 	if (debug) cerr << "Line " << line << ": <" << __LINE__ << "> -> "#a << "  (name= " << name << "  type= " << type << "  args= " << args << "  yytext= " << yytext << ")" << endl;\
@@ -249,6 +274,7 @@
 
 %x	NextSemi
 %x	FindMembers
+%x  Create
 %x	EnumMembers
 %x  TypeDef
 %x	FindMembersSuffix
@@ -334,10 +360,13 @@
 					GOSUB(Comment);
 }
 
-<EnumMembers>[ \t\n]*"}" {RULE		
+<EnumMembers>[ \t\n]*"};" {RULE		
 		countLine();
 		popType();
 		popPath();
+		name.erase();
+		type.erase();
+		args.erase();
 		GOTO(FindMembers);
 }
 
@@ -351,6 +380,32 @@
 		type.erase();
 		name.erase();
 		countLine();
+	}
+
+<Create>")"	{RULE
+		test_set.insert(name + args + ")");
+		type.erase();
+		name.erase();
+		args.erase();
+		GOTO(FindMembers);
+	}
+
+<Create>. {RULE
+		args += yytext;
+	}
+	
+<FindMembers>"BALL_CREATE_DEEP"	{RULE
+		name = yytext;
+		args.erase();
+		type.erase();
+		GOTO(Create);
+	}
+
+<FindMembers>"BALL_CREATE" {RULE
+		name = yytext;
+		args.erase();
+		type.erase();
+		GOTO(Create);
 	}
 
 <FindMembers>[ \t]*"protected"[ \t\n]*":"[ \t\n]* {RULE
@@ -436,7 +491,10 @@
 
 <FindMembers>"operator"/[^a-z_A-Z0-9]	{RULE
 		// operator definition
-		name += " ";
+		if (name != "")
+		{
+			name += " ";
+		}
 		name += yytext;
 		GOTO(Operator);
 	}
@@ -461,8 +519,8 @@
 		// Normal name
 		if (!name.empty())
 		{
+			if (!type.empty() && ((name[0] != '&') && (name[0] != '*'))) type += " ";
 			type += name;
-			type += " ";
 		}
 		name = yytext;
 	}
@@ -504,8 +562,8 @@
 
 <FindMembers>^[ \t]*"#"			{RULE
 		countLine();
-					GOTO(SkipCPP);
-					}
+		GOTO(SkipCPP);
+	}
 
 <SkipCPP>.
 <SkipCPP>"\\"[ \t]*"\n"	{RULE
@@ -592,17 +650,22 @@
 	}
 
 <FindMembers>"<"	{RULE
+		if (!type.empty() && ((name[0] != '&') && (name[0] != '*'))) type += " ";
+		type += name;
+		name.erase();
 		sharp_count++;
 		skip_return = FindMembers;
+		type += "<";
 		GOTO(Sharp);
 	}
 
 <Sharp>">"	{RULE
+		type += yytext;
 		if(--sharp_count <= 0) GOTO(skip_return);
 	}
 
 <Sharp>"<"	{RULE
-					type += *yytext;
+					type += yytext;
 					sharp_count++;
 					}
 
@@ -752,6 +815,7 @@
 					args.erase(args.length() - 1, 1);
 				}
 									 
+				if (!type.empty()) type += " ";
 				test_set.insert(type + name + args);
 			}
 			else	
@@ -877,7 +941,10 @@
 		{
 			print("found struct" , yytext);
 		}
-		type += ' ';
+		if (!type.empty())
+		{
+			type += " ";
+		}
 		type += name;
 		name = yytext;
 		pushPath(name);
@@ -1047,20 +1114,22 @@ int main(int argc, char** argv)
     return 3; 																																					
 	}
 
-	if (argc > 2)
+	infile = fopen(argv[1], "r");
+	if (infile)
 	{
-		infile = fopen(argv[1], "r");
-		if (infile)
-		{
-			yyin = infile;
-		}
+		yyin = infile;
+	}
+	else
+	{
+		cerr << "Cannot open file " << argv[1] << "!" << endl;
+		return 4;
 	}
 
 	bool create_test_bodies = false;
 	bool print_all_methods = false;
 
 	// We have a class specified as well.
-	for (int i = 3; i < argc; ++i)
+	for (int i = 2; i < argc; ++i)
 	{
 		if (!strcmp(argv[i], "-c"))
 		{
@@ -1074,14 +1143,14 @@ int main(int argc, char** argv)
 		{
 			print_all_methods = true;
 		}
-		else if (argv[i][0] != '-')
+		else if ((argv[i][0] != '-') && (i > 2))
 		{
 			test_class = argv[i];
 		}
-		else
+		else if ((i > 2) && (argv[i][0] == '-'))
 		{
 			cerr << "unknown command line option: " << argv[i] << endl;
-			return(1);
+			return 1;
 		}
 	}
 		
@@ -1090,13 +1159,9 @@ int main(int argc, char** argv)
 	yylex();
 
 	// Parse the test file.
-	if (argv[2] != "-c")	
+	if ((argc > 2) && (argv[2] != "-c"))	
 	{
 		parseTestFile(argv[2]);
-	}
-	else	
-	{
-		create_test_bodies = true;
 	}
 	
 	set<string> missing;
@@ -1110,11 +1175,11 @@ int main(int argc, char** argv)
 		set_difference(test_set.begin(), test_set.end(),
 									 tests_found.begin(), tests_found.end(),
 									 inserter(missing, missing.begin()));
-		if (missing.empty())
+		if (missing.empty() && (argc > 2))
 		{
 			cout << argv[2] << " is up to date" << endl;
 		}
-		else	
+		else if (argc > 2)
 		{
 			cout << "Methods missing in " << argv[2] << endl;
 		}
@@ -1132,7 +1197,7 @@ int main(int argc, char** argv)
 		}
 		else	
 		{
-			cout << "  " << *it << endl;
+			cout << "  '" << esc(*it) << "'" << endl;
 		}
 	}
 
