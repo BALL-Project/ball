@@ -1,4 +1,4 @@
-// $Id: file.C,v 1.32 2002/01/10 11:37:38 oliver Exp $
+// $Id: file.C,v 1.33 2002/01/17 23:01:15 amoll Exp $
 
 #include <BALL/SYSTEM/file.h>
 #include <BALL/SYSTEM/TCPTransfer.h>
@@ -248,7 +248,7 @@ namespace BALL
 				{
 					TCPTransfer tcp_t(os, name_);
 				}
-				catch(TCPTransfer::TransferFailed& exception)
+				catch(TCPTransfer::TransferFailed exception)
 				{
 					throw Exception::FileNotFound(__FILE__, __LINE__, 
 									String(" from network transfer, which failed, ") + exception.getMessage());
