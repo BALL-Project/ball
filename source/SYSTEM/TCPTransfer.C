@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.18.4.2 2002/08/23 07:45:04 oliver Exp $
+// $Id: TCPTransfer.C,v 1.18.4.3 2002/08/23 07:45:31 oliver Exp $
 
 // workaround for Solaris -- this should be caught by configure -- OK / 15.01.2002
 #define BSD_COMP
@@ -839,7 +839,6 @@ TCPTransfer::Status TCPTransfer::getFTP_()
 		{
 			sleep(1);
 			countdown--;
-			buffer_[0] = '\0';
 		}
 		else
 		{
