@@ -8,6 +8,7 @@
 ****************************************************************************/
 #include <BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h>
 
+#include <BALL/SYSTEM/path.h>
 #include <qframe.h>
 #include <qlabel.h>
 #include <qlineedit.h>
