@@ -1,4 +1,4 @@
-// $Id: JohnsonBoveyShiftProcessor_test.C,v 1.5 2000/10/18 13:41:39 oliver Exp $
+// $Id: JohnsonBoveyShiftProcessor_test.C,v 1.6 2001/05/18 02:28:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 
 ///////////////////////////
 
-START_TEST(JohnsonBoveyShiftProcessor, "$Id: JohnsonBoveyShiftProcessor_test.C,v 1.5 2000/10/18 13:41:39 oliver Exp $")
+START_TEST(JohnsonBoveyShiftProcessor, "$Id: JohnsonBoveyShiftProcessor_test.C,v 1.6 2001/05/18 02:28:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -108,7 +108,7 @@ CHECK(chemical shifts/with rings)
 		infile >> name >> shift;
 		rc_shifts.insert(name, shift);
 	}
-	TEST_EQUAL(rc_shifts.size(), 80)
+	TEST_EQUAL(rc_shifts.size(), 160)
 
 	JohnsonBoveyShiftProcessor sp;
 	sp.setParameters(parameters);
@@ -139,61 +139,9 @@ CHECK(chemical shifts/with rings)
 				}
 			}
 		}
-		TEST_EQUAL(i, 80)
+		TEST_EQUAL(i, 160)
 	}	
 RESULT
-
-
-f.open("data/JohnsonBoveyShiftProcessor_test3.hin");
-f >> S;
-PDBFile outf("test.pdb", File::OUT);
-outf << S;
-outf.close();
-CHECK(chemical shifts/with rings)
-	StringHashMap<float> rc_shifts;
-	ifstream infile("data/JohnsonBoveyShiftProcessor_test3.dat");
-	String name;
-	float shift;
-	while (infile.good())
-	{
-		infile >> name >> shift;
-		rc_shifts.insert(name, shift);
-	}
-	TEST_EQUAL(rc_shifts.size(), 80)
-
-	JohnsonBoveyShiftProcessor sp;
-	sp.setParameters(parameters);
-	sp.init();
-	TEST_EQUAL(sp.isValid(), true)
-	TEST_EQUAL(S.countAtoms(), 328)
-	
-	if (S.countAtoms() == 328)
-	{
-		S.apply(sp);
-
-		AtomIterator atom_it = S.beginAtom();
-		Position i = 0;
-		for (; +atom_it; ++atom_it)
-		{
-			if (atom_it->hasProperty(JohnsonBoveyShiftProcessor::PROPERTY__RING_CURRENT_SHIFT))
-			{
-				shift = atom_it->getProperty(JohnsonBoveyShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat();
-				if (shift != 0)
-				{
-					STATUS("shift of " << atom_it->getFullName() << ": " << shift)
-					TEST_EQUAL(rc_shifts.has(atom_it->getFullName()), true)
-					if (rc_shifts.has(atom_it->getFullName()))
-					{
-						TEST_REAL_EQUAL(shift, rc_shifts[atom_it->getFullName()])
-						i++;
-					}
-				}
-			}
-		}
-		TEST_EQUAL(i, 80)
-	}	
-RESULT
-
 
 
 /////////////////////////////////////////////////////////////
