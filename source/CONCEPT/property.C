@@ -1,4 +1,4 @@
-// $Id: property.C,v 1.6 2000/03/16 11:57:03 oliver Exp $
+// $Id: property.C,v 1.7 2000/05/01 21:36:41 oliver Exp $
 
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -324,6 +324,21 @@ namespace BALL
 	void PropertyManager::setProperty(const string& name, unsigned int value)
 	{
 		setProperty(NamedProperty(name, value));
+	}
+
+	void PropertyManager::setProperty(const string& name, int value)
+	{
+		setProperty(NamedProperty(name, value));
+	}
+
+	void PropertyManager::setProperty(const string& name, const string& value)
+	{
+		setProperty(NamedProperty(name, const_cast<string&>(value)));
+	}
+
+	void PropertyManager::setProperty(const string& name, const PersistentObject& value)
+	{
+		setProperty(NamedProperty(name, const_cast<PersistentObject&>(value)));
 	}
 
 	const NamedProperty& PropertyManager::getProperty(const string& name) const

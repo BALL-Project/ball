@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Mainframe meta object code from reading C++ file 'mainframe.h'
 **
-** Created: Mon Apr 3 09:16:22 2000
-**      by: The Qt Meta Object Compiler ($Revision: 1.12 $)
+** Created: Sun Apr 30 19:20:48 2000
+**      by: The Qt Meta Object Compiler ($Revision: 1.13 $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/

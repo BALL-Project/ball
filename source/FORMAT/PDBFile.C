@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.12 2000/03/28 15:32:57 oliver Exp $
+// $Id: PDBFile.C,v 1.13 2000/05/01 21:36:41 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -34,6 +34,29 @@ namespace BALL
 			residue_sequence_number_(-1),
 			insertion_code_(0)
 	{
+	}
+
+	PDBFile::PDBFile(const PDBFile& PDB_file)
+		:	GenericPDBFile(),
+			PDB_atom_map_(),
+			residue_map_(),
+			ssbond_list_(),
+			helix_list_(),
+			sheet_list_(),
+			turn_list_(),
+			new_helix_secstruc_list_(),
+			new_sheet_secstruc_list_(),
+			new_turn_secstruc_list_(),
+			current_protein_(0),
+			current_chain_(0),
+			current_residue_(0),
+			current_PDB_atom_(0),
+			residue_name_(),
+			chain_ID_(0),
+			residue_sequence_number_(-1),
+			insertion_code_(0)
+	{
+		name_ = PDB_file.getName();
 	}
 
 	PDBFile::PDBFile(const String& filename, File::OpenMode open_mode)

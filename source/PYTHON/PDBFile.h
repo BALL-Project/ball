@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.8 2000/05/01 21:36:40 oliver Exp $
+// $Id: PDBFile.h,v 1.1 2000/05/01 21:36:44 oliver Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -43,7 +43,7 @@ namespace BALL
 	}
 
 	inline
-	std::ostream& operator << (std::ostream& s, const OrderedQuadruple<String,PDB::Character,PDB::Integer,PDB::AChar>& /* q */)
+	ostream& operator << (ostream& s, const OrderedQuadruple<String,PDB::Character,PDB::Integer,PDB::AChar>& /* q */)
 	{
 		return s;
 	}
@@ -62,28 +62,22 @@ namespace BALL
 		/// Default Constructor
 		PDBFile();
 
-		/** Copy Constructor.
-				Create a new PDBFile object refering to the same
-				filename (if already set).
-		*/
-		PDBFile(const PDBFile& PDB_file);
-
 		/** Detailled constructor.
 				The file named {\tt filename} is opened. By default, the file is
-				opened for reading. To open it for writing, use {\tt open_mode = std::ios::out}.
+				opened for reading. To open it for writing, use {\tt open\_mode = ios::out}.
 				@param	filename the name of the file to open
 				@param	open_mode the file mode
 		*/
-		PDBFile(const String& filename, File::OpenMode open_mode = std::ios::in);
+		PDBFile(const String& filename, File::OpenMode open_mode = ios::in);
 
 		/// Destructor
 		virtual ~PDBFile();
 
 		//@}
 
-		virtual bool readUnknownRecord(const char* line);
+		virtual bool readUnknownRecord(char* line);
 
-		virtual bool readInvalidRecord(const char* line);
+		virtual bool readInvalidRecord(char* line);
 
 		virtual bool readRecordATOM
 			(PDB::Integer serial_number,
@@ -172,37 +166,26 @@ namespace BALL
 			 PDB::RecordTURN::TerminalResidue& terminal_residue,
 			 PDB::PDBString comment);
 
-		/**	@name	Reading and Writing Files */
-		//@{
-
 		virtual void read(Protein& protein);
 
-		/**
-		*/
 		virtual void read(System& system);
 
 		PDBFile& operator >> (Protein& protein);
 
-		/**
-		*/
 		PDBFile& operator >> (System& system);
 
 		virtual void write(const Molecule& molecule);
 
     virtual void write(const Protein& protein);
 
-		/**
-		*/
 		virtual void write(const System& system);
 
-		PDBFile& operator << (const Molecule& molecule);
+		PDBFile &operator << (const Molecule& molecule);
   
     PDBFile& operator << (const Protein& protein);
 		
-		/**
-		*/
 		PDBFile& operator << (const System& system);
-		//@}
+
 
 
 		protected:
@@ -212,6 +195,8 @@ namespace BALL
 
 
 		private:
+
+		PDBFile(const PDBFile& PDB_file);
 
 		PDBFile& operator = (const PDBFile& PDB_file);
 
