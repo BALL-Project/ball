@@ -1,4 +1,4 @@
-// $Id: Nucleotide_test.C,v 1.1 2000/05/10 19:03:01 amoll Exp $
+// $Id: Nucleotide_test.C,v 1.2 2000/05/11 23:56:33 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 ///////////////////////////
 
 
-START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.1 2000/05/10 19:03:01 amoll Exp $")
+START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.2 2000/05/11 23:56:33 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -70,12 +70,11 @@ CHECK(Nucleotide(const String& name,
 	if (n2 != 0)
 	{
 		TEST_EQUAL(n2->getName(), "n1")
-		//TEST_EQUAL(n2->getID(), Nucleotide::BALL_Nucleotide_DEFAULT_ID)
-		//TEST_EQUAL(n2->getInsertionCode(), Nucleotide::BALL_Nucleotide_DEFAULT_INSERTION_CODE)
+		TEST_EQUAL(n2->getID(), "")
+		TEST_EQUAL(n2->getInsertionCode(), ' ')
 		delete n2;
 	}
 RESULT
-
 
 CHECK(Nucleotide::clear())
 	Nucleotide n("n1", "id", 'c');
@@ -85,9 +84,9 @@ CHECK(Nucleotide::clear())
 	c.insert(n);
 	n.clear();
 	TEST_EQUAL(n.countAtoms(), 0)
-	//TEST_EQUAL(n.getID(), Nucleotide::BALL_Nucleotide_DEFAULT_ID)
-	//TEST_EQUAL(n.getInsertionCode(), Nucleotide::BALL_Nucleotide_DEFAULT_INSERTION_CODE)
-	//TEST_EQUAL(c.getNucleotide(0), &n)
+	TEST_EQUAL(n.getID(), "")
+	TEST_EQUAL(n.getInsertionCode(), ' ')
+	TEST_EQUAL(c.getNucleotide(0), &n)
 RESULT
 
 CHECK(Nucleotide::destroy())
@@ -98,9 +97,9 @@ CHECK(Nucleotide::destroy())
 	c.insert(n);
 	n.destroy();
 	TEST_EQUAL(n.countAtoms(), 0)
-	//TEST_EQUAL(n.getID(), Nucleotide::BALL_Nucleotide_DEFAULT_ID)
-	//TEST_EQUAL(n.getInsertionCode(), Nucleotide::BALL_Nucleotide_DEFAULT_INSERTION_CODE)
-	//TEST_EQUAL(c.getNucleotide(0), 0)
+	TEST_EQUAL(n.getID(), "")
+	TEST_EQUAL(n.getInsertionCode(), ' ')
+	TEST_EQUAL(c.getNucleotide(0), 0)
 RESULT
 
 CHECK(Nucleotide::set(const Nucleotide& Nucleotide, bool deep = true))
@@ -333,7 +332,7 @@ CHECK(Nucleotide::splice(Nucleotide& Nucleotide))
 	TEST_EQUAL(n1.getAtom(1), &a1)
 RESULT
 
-CHECK(Nucleotide::isTerminal() const )/*
+CHECK(Nucleotide::isTerminal() const )
 	Nucleotide n1('x');
 	TEST_EQUAL(n1.isTerminal(), false)
 	NucleicAcid c1;
@@ -344,10 +343,10 @@ CHECK(Nucleotide::isTerminal() const )/*
 	c1.append(n2);
 	TEST_EQUAL(n1.isTerminal(), true)
 	c1.prepend(n3);
-	TEST_EQUAL(n1.isTerminal(), false)*/
+	TEST_EQUAL(n1.isTerminal(), false)
 RESULT
 
-CHECK(Nucleotide::is3Prime() const )/*
+CHECK(Nucleotide::is3Prime() const )
 	Nucleotide n1('x');
 	TEST_EQUAL(n1.is3Prime(), false)
 	NucleicAcid c1;
@@ -358,10 +357,10 @@ CHECK(Nucleotide::is3Prime() const )/*
 	c1.append(n2);
 	TEST_EQUAL(n1.is3Prime(), true)
 	c1.prepend(n3);
-	TEST_EQUAL(n1.is3Prime(), false)*/
+	TEST_EQUAL(n1.is3Prime(), false)
 RESULT
 
-CHECK(Nucleotide::is5Prime() const )/*
+CHECK(Nucleotide::is5Prime() const )
 	Nucleotide n1('x');
 	TEST_EQUAL(n1.is5Prime(), false)
 	NucleicAcid c1;
@@ -372,7 +371,7 @@ CHECK(Nucleotide::is5Prime() const )/*
 	c1.prepend(n3);
 	TEST_EQUAL(n1.is5Prime(), true)
 	c1.append(n2);
-	TEST_EQUAL(n1.is5Prime(), false)*/
+	TEST_EQUAL(n1.is5Prime(), false)
 RESULT
 
 CHECK(Nucleotide::isValid() const )
