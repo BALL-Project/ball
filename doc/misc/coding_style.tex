@@ -1,20 +1,36 @@
+% -*- Mode: C++; tab-width: 2; -*-
+% vi: set ts=2:
+%
+% $Id: coding_style.tex,v 1.2 2003/10/31 12:18:47 oliver Exp $
+%
+                                                                                                                                                             
 \documentclass[a4]{article}
+\usepackage{a4wide}
+\usepackage{times}
+
 \title{BALL coding conventions}
-\author{Oliver Kohlbacher}
+\author{}
+\date{$Id: coding_style.tex,v 1.2 2003/10/31 12:18:47 oliver Exp $}
 
 \newtheorem{example}{Example}
 
 \begin{document}
 \maketitle
+
+
 \section{General}
 
 \subsection{Formatting}
 
-All BALL files use a tab width of two. Use the command {\tt set tabstop=2} in
-{\bf vi} or {\tt set-variable tab-width 2} if you are using {\bf emacs}.
+{\bf All BALL files use a tab width of two.} Use the command {\tt set tabstop=2} in
+{\tt vi} or {\tt set-variable tab-width 2} if you are using {\tt emacs}. The
+standard file header should automatically set these values for {\tt vi} or
+{\tt emacs} (see below).
 
-Matching pairs of opening and closing curly braces should be set to the same
-column:
+\noindent
+{\bf Matching pairs of opening and closing curly braces should be set to the same
+column.}
+
 \begin{verbatim}
 while (continue == true)
 {
@@ -71,7 +87,7 @@ Each Ball class has to provide the following minimal interface:
     Test();
 
     // copy ctor 
-    Test(const Test& test, bool clone_deep = true);
+    Test(const Test& test);
 
     // destructor 
     virtual ~Test();
@@ -170,16 +186,18 @@ objects he stores and retrieves and this interface is implemented in the class
 
 \section{Naming conventions}
 
+
+
 \subsection{Variable names}
 
-Variable names are all lower case letters. Distinguished parts of the name are
+{\bf Variable names are all lower case letters.} Distinguished parts of the name are
 separated using underscores ``{\tt \_}''. If parts of the name are derived
 from common acronyms (e.g. PDB) they should be in upper case.\\
 Private or protected member variables of classes are suffixed by an
 underscore.\\
 No prefixing or suffixing is allowed too identify the variable type - this
 leads to completely illegible documentation and overly long variable names.\\
-\begin{example}
+\begin{example}\hspace*{2mm}\\
 {\tt String PDB\_atom\_name;} (using an abbreviation)\\
 {\tt int counter\_;} (private class member)\\
 {\tt bool is\_found;} (ordinary variable)
@@ -187,19 +205,27 @@ leads to completely illegible documentation and overly long variable names.\\
 
 \subsection{Class names/type names}
 
-Class names and type names always start with a capital letter. Different parts
+{\bf Class names and type names always start with a capital letter.} Different parts
 of the name are separated by capital letters at the beginning of the word. No
 underscores are allowed in type names and class names, except for the names of
 protected types and classes in classes which are suffixed by an underscore.
-\begin{example}
+\begin{example}\hspace*{2mm}\\
 {\tt class PDBFile}\\
 {\tt class ForwardIteratorTraits\_} (private nested class definition)\\
 \end{example}
 
+\subsection{File names}
+
+{\bf Header and source files should be named after the class the contain.}
+Each file should contain a single class only, although exceptions are possible
+for extreme light-weight classes. The file names start with a lower-case
+letter (for historical reasons). Hence, the file containing the {\tt
+AtomContainer} class would be named {\tt atomContainer.C}.
+
 \subsection{Function names/method names}
 
-Function names (including class method names) always start with a lower case
-letter. Parts of the name are separated using capital letters (as are types
+{\bf Function names (including class method names) always start with a lower case
+letter.} Parts of the name are separated using capital letters (as are types
 and class names). No underscores are allowed in type names and class names,
 except for the names of protected types and classes in classes which are
 suffixed by an underscore. The argument of {\tt void} functions is omitted in
@@ -210,7 +236,7 @@ The variable names used in the declaration have to be the same as in the
 definition. They should be as short as possible, but nevertheless
 comprehensible.  If arguments are not used in the implementation of the
 function, they have to be commented out (to avoid compiler warnings).
-\begin{example}
+\begin{example}\hspace*{2mm}\\
 {\tt int countAtoms()}\\
 {\tt bool isBondedTo(const Atom\& atom)}\\
 {\tt bool doSomething(int i, String\& /* name */)}
@@ -218,9 +244,9 @@ function, they have to be commented out (to avoid compiler warnings).
 
 \section{Documentation}
 
-\subsection{DOC++}
-Each BALL class hast to be documented using DOC++. The documentation is
-inserted in DOC++ format in the header file where the class is defined.
+\subsection{Doxygen}
+{\bf Each BALL class has to be documented using Doxygen.} The documentation is
+inserted in Doxygen format in the header file where the class is defined.
 Documentation includes the description of the class, of each method, type
 declaration, enum declaration, each constant, and each member variable.
 An example for a class documentation is given below. 
@@ -239,7 +265,7 @@ following categories to group its methods:
 	\item {\bf Enums:}\\
 		This group usually contains enums or constants defined via enums such as
 		properties
-	\item {\bf Constructors and Destructors:}\\
+	\item {\bf Constructors and Destructor:}\\
 		This group includes all constructors and destructors, as well as related
 		methods such as {\tt clear} or {\tt destroy}
 	\item {\bf Persistence:}\\
@@ -260,10 +286,6 @@ following categories to group its methods:
 	\item {\bf Debugging and Diagnostics:}\\
 		This group should contain all methods used for the debugging of the class
 		(for example the {\tt dump} methods).
-	\item {\bf Storers:}\\
-		Storers are {\tt operator << (ostream\&)}, {\tt operator >> (istream\&)},
-		or the {\tt read} and {\tt write} methods of objects that are e model of
-		storable.
 	\item {\bf Attributes:}\\	
 		This group should contain all public class attributes. Protected and
 		private attributes should be documented in the corresponding groups
@@ -276,18 +298,6 @@ where other section headings are more intuitive. However, if any of the above
 sections apply, they should be used. The sections should also appear in this
 order.
 
-
-\subsection{Documenting protected and private members}
-
-Documentation for private members and methods should not appear in the
-official documentation. However, it should be available upon special request
-for developers. They should therefor be documented as all methods and
-variables, too. THe only difference is that the are documented using a
-slightly different comment syntax. Instead of the DOC++ comment {\tt /**}
-private members are documented using {\tt /*\_}. The group command {\tt //@\{}
-is replaced by {\tt //\_@\{}.\\
-
-
 \subsection{Commenting code}
 
 The code for each .C file has to be commented. Each piece of code in BALL has
@@ -299,25 +309,25 @@ functionality of the next few lines.
 To check whether a header or source file fulfils this requirement, use the
 script {\tt BALL/doc/tools/check\_coding}. Invoke {\tt check\_coding} with the
 filename to check (or a list of files) and it will print the percentage of
-comments (including DOC++ comments) for each file.
+comments (including Doxygen comments) for each file.
 
-
-\subsection{Revision control}
-
-BALL uses the Revision Control System (RCS) to handle different version of the
-source files. For easier identification, each BALL source file starts with the
-revision control ID string in a comment. Any new BALL header or source file
-should start with this line:
+\subsection{Standard header}
+                                                                                                                                                             
+{\bf OpenMS uses the Concurrent Version System (CVS)} to manage different
+version of the
+source files. For easier identification, {\bf each OpenMS source file starts
+with a header containing the CVS ID string in a comment.}ny new OpenMS header
+or source file
+should start with this header:
 \begin{verbatim}
-	// $Id: coding_style.tex,v 1.1 2003/10/29 16:37:08 oliver Exp $
+  // -*- Mode: C++; tab-width: 2; -*-
+  // vi: set ts=2:
+  //
+  // $Id: coding_style.tex,v 1.2 2003/10/31 12:18:47 oliver Exp $
+  //                                                                                                                                                             
 \end{verbatim}
-On the first check-in of this file (for example using {\tt ci -l
-<filename>}) this string is expanded to the full RCS ID:
-\begin{verbatim}
-	// $Id: coding_style.tex,v 1.1 2003/10/29 16:37:08 oliver Exp $ 
-\end{verbatim}
-
-
+In non-C++ files (Makefiles, TeX-Files, etc.) the C++ comments are replaced
+by the respective comment characters (e.g. ``\#'' for Makefiles).
 \section{Testing}
 
 \subsection{General}
@@ -370,7 +380,7 @@ severe errors or after thorough testing. Most of these errors didn't occur an
 all platforms or didn't show up on trivial input.
 
 Writing tests for {\em each} method of a class also ensures that each line is
-compiled. WHen using class templates the compiler only compiles the methods
+compiled. When using class templates the compiler only compiles the methods
 called. Thus it is possible that a code segment contains syntactical errors
 but the compiler accepts the code happily -- he simply ignores most of the
 code. This is quickly discovered in a complete test of all methods. The same
