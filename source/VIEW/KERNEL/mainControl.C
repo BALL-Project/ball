@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.71 2004/03/13 12:52:06 amoll Exp $
+// $Id: mainControl.C,v 1.72 2004/03/16 19:27:56 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -734,6 +734,13 @@ void MainControl::fetchPreferences(INIFile &inifile)
 	{
 		w = inifile.getValue("WINDOWS", "Main::width").toInt();
 	}
+
+#ifdef BALL_PLATFORM_WINDOWS
+	// workaround for strange microsoft windows behaviour
+	x_pos += 4;
+	y_pos += 23;
+#endif
+	
 	setGeometry(x_pos, y_pos, w, h);
 	
 	// the default preferences tab (if existent)
