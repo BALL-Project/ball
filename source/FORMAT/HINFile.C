@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.23 2000/08/30 19:58:30 oliver Exp $
+// $Id: HINFile.C,v 1.24 2000/10/17 10:14:53 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -904,7 +904,7 @@ namespace BALL
 					// heavy atom it is bound to
 					if (it->countBonds() > 0)
 					{
-						float charge = it->getCharge() / it->countBonds();
+						float charge = it->getCharge() / (float)it->countBonds();
 						for (Atom::BondIterator bond_it = it->beginBond(); +bond_it; ++bond_it)
 						{
 							Atom* partner = bond_it->getPartner(*it);
