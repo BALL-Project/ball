@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: object.h,v 1.22 2003/03/26 15:59:17 anhi Exp $ 
+// $Id: object.h,v 1.23 2003/06/11 08:08:48 oliver Exp $ 
+//
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
@@ -16,10 +17,6 @@
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
 #	include <BALL/CONCEPT/bidirectionalIterator.h>
-#endif
-
-#ifndef BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
-#	include <BALL/CONCEPT/reverseBidirectionalIterator.h>
 #endif
 
 namespace BALL 

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.45 2003/03/26 15:59:16 anhi Exp $
+// $Id: composite.h,v 1.46 2003/06/11 08:08:48 oliver Exp $
+//
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -20,14 +21,6 @@
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
 #	include <BALL/CONCEPT/bidirectionalIterator.h>
-#endif
-
-#ifndef BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
-#	include <BALL/CONCEPT/reverseBidirectionalIterator.h>
-#endif
-
-#ifndef BALL_CONCEPT_FORWARDITERATOR_H
-#	include <BALL/CONCEPT/forwardIterator.h>
 #endif
 
 #ifndef BALL_CONCEPT_OBJECT_H
@@ -72,7 +65,7 @@ namespace BALL
 			Composites are persistent objects. 
 			 \par
 			
-   		\ingroup ConceptsMiscellaneous 
+			\ingroup ConceptsMiscellaneous 
 	*/
 	class Composite
 		: public PersistentObject,
@@ -1319,39 +1312,31 @@ namespace BALL
 
 
 
-		typedef ReverseBidirectionalIterator<Composite, Composite, Composite *, ChildCompositeIteratorTraits_>
-			ChildCompositeReverseIterator;
+		typedef std::reverse_iterator<ChildCompositeIterator> ChildCompositeReverseIterator;
 
-		ChildCompositeReverseIterator rbeginChildComposite()
-			throw()
+		ChildCompositeReverseIterator rbeginChildComposite() throw()
 		{
-			return ChildCompositeReverseIterator::begin(*this);
+			return ChildCompositeReverseIterator(endChildComposite());
 		}
 
-		ChildCompositeReverseIterator rendChildComposite()
-			throw()
+		ChildCompositeReverseIterator rendChildComposite() throw()
 		{
-			return ChildCompositeReverseIterator::end(*this);
+			return ChildCompositeReverseIterator(beginChildComposite());
 		}
 
 
 
-		typedef ConstReverseBidirectionalIterator<Composite, Composite, Composite *, ChildCompositeIteratorTraits_>
-			ChildCompositeConstReverseIterator;
+		typedef std::reverse_iterator<ChildCompositeConstIterator> ChildCompositeConstReverseIterator;
 
-		ChildCompositeConstReverseIterator rbeginChildComposite() const
-			throw()
+		ChildCompositeConstReverseIterator rbeginChildComposite() const throw()
 		{
-			return ChildCompositeConstReverseIterator::begin(*this);
+			return ChildCompositeConstReverseIterator(endChildComposite());
 		}
 
-		ChildCompositeConstReverseIterator rendChildComposite() const
-			throw()
+		ChildCompositeConstReverseIterator rendChildComposite() const throw()
 		{
-			return ChildCompositeConstReverseIterator::end(*this);
+			return ChildCompositeConstReverseIterator(beginChildComposite());
 		}
-
-
 
 		class CompositeIteratorPosition_
 		{
@@ -1591,16 +1576,21 @@ namespace BALL
 				return (position_.getCurrent() == 0);
 			}
 		
-			void forward()
-				throw()
+			void forward() throw()
 			{
 				bound_->getNextPreorderIteratorPosition_(position_);
 			}
 
-			void backward()
-				throw()
+			void backward()	throw()
 			{
-				bound_->getPreviousPreorderIteratorPosition_(position_);
+				if (!isEnd())
+				{
+					bound_->getPreviousPreorderIteratorPosition_(position_);
+				}
+				else
+				{
+					Composite::setLastPreorderIteratorPosition_(*bound_, position_, false);
+				}
 			}
 
 
@@ -1651,36 +1641,30 @@ namespace BALL
 
 
 
-		typedef ReverseBidirectionalIterator<Composite, Composite, CompositeIteratorPosition_, CompositeIteratorTraits_>
-			CompositeReverseIterator;
+		typedef std::reverse_iterator<CompositeIterator> CompositeReverseIterator;
 
-		CompositeReverseIterator rbeginComposite()
-			throw()
+		CompositeReverseIterator rbeginComposite() throw()
 		{
-			return CompositeReverseIterator::begin(*this);
+			return CompositeReverseIterator(endComposite());
 		}
 
-		CompositeReverseIterator rendComposite()
-			throw()
+		CompositeReverseIterator rendComposite() throw()
 		{
-			return CompositeReverseIterator::end(*this);
+			return CompositeReverseIterator(beginComposite());
 		}
 
 
 
-		typedef ConstReverseBidirectionalIterator<Composite, Composite, CompositeIteratorPosition_,CompositeIteratorTraits_>
-			CompositeConstReverseIterator;
+		typedef std::reverse_iterator<CompositeConstIterator> CompositeConstReverseIterator;
 
-		CompositeConstReverseIterator rbeginComposite() const
-			throw()
+		CompositeConstReverseIterator rbeginComposite() const throw()
 		{
-			return CompositeConstReverseIterator::begin(*this);
+			return CompositeConstReverseIterator(endComposite());
 		}
 
-		CompositeConstReverseIterator rendComposite() const
-			throw()
+		CompositeConstReverseIterator rendComposite() const throw()
 		{
-			return CompositeConstReverseIterator::end(*this);
+			return CompositeConstReverseIterator(beginComposite());
 		}
 
 
@@ -1774,37 +1758,31 @@ namespace BALL
 
 
 
-		typedef ReverseBidirectionalIterator<Composite, Composite, CompositeIteratorPosition_, SubcompositeIteratorTraits_>
-			SubcompositeReverseIterator;
+		typedef std::reverse_iterator<SubcompositeIterator>	SubcompositeReverseIterator;
 
-		SubcompositeReverseIterator rbeginSubcomposite()
-			throw()
+		SubcompositeReverseIterator rbeginSubcomposite() throw()
 		{
-			return SubcompositeReverseIterator::begin(*this);
+			return SubcompositeReverseIterator(endSubcomposite());
 		}
 			
 
-		SubcompositeReverseIterator rendSubcomposite()
-			throw()
+		SubcompositeReverseIterator rendSubcomposite() throw()
 		{
-			return SubcompositeReverseIterator::end(*this);
+			return SubcompositeReverseIterator(beginSubcomposite());
 		}
 
 
 
-		typedef ConstReverseBidirectionalIterator<Composite, Composite, CompositeIteratorPosition_, SubcompositeIteratorTraits_>
-			SubcompositeConstReverseIterator;
+		typedef std::reverse_iterator<SubcompositeConstIterator> SubcompositeConstReverseIterator;
 
-		SubcompositeConstReverseIterator rbeginSubcomposite() const
-			throw()
+		SubcompositeConstReverseIterator rbeginSubcomposite() const throw()
 		{
-			return SubcompositeConstReverseIterator::begin(*this);
+			return SubcompositeConstReverseIterator(endSubcomposite());
 		}
 
-		SubcompositeConstReverseIterator rendSubcomposite() const
-			throw()
+		SubcompositeConstReverseIterator rendSubcomposite() const throw()
 		{
-			return SubcompositeConstReverseIterator::end(*this);
+			return SubcompositeConstReverseIterator(beginSubcomposite());
 		}
 
 		private:
@@ -1842,20 +1820,16 @@ namespace BALL
 				throw();
 		
 		// get next iterator, valid for composites and subcomposites
-		Composite* getNextPreorderIteratorPosition_(CompositeIteratorPosition_& position)
-			throw();
+		Composite* getNextPreorderIteratorPosition_(CompositeIteratorPosition_& position)	throw();
 
 		// get previous iterator, valid for composites and subcomposites
-		Composite* getPreviousPreorderIteratorPosition_(CompositeIteratorPosition_& position)
-			throw();
+		Composite* getPreviousPreorderIteratorPosition_(CompositeIteratorPosition_& position)	throw();
 
 		static Composite* setCurrentPreorderForward_
-			(Composite& composite, CompositeIteratorPosition_& position, bool subcomposite)
-				throw();
+			(Composite& composite, CompositeIteratorPosition_& position, bool subcomposite)	throw();
 
 		static Composite* setCurrentPreorderBackward_
-			(Composite& composite, CompositeIteratorPosition_& position, bool subcomposite)
-				throw();
+			(Composite& composite, CompositeIteratorPosition_& position, bool subcomposite) throw();
 
 		template <typename T>
 		bool applyLevelNostart_(UnaryProcessor<T>& processor, long level)
@@ -1902,17 +1876,17 @@ namespace BALL
 	template <typename T>
 	bool Composite::applyAncestor(UnaryProcessor<T>& processor)
 		throw(Exception::GeneralException)
-  {
-    if (processor.start() == false)
+	{
+		if (processor.start() == false)
 		{
 			return false;
 		}
 
-    Processor::Result result;
+		Processor::Result result;
 
-    for (Composite* composite = parent_;
-         composite != 0; composite = composite->parent_)
-    {
+		for (Composite* composite = parent_;
+				 composite != 0; composite = composite->parent_)
+		{
 			T* t_ptr;
 			if ((t_ptr = dynamic_cast<T*>(composite)) != 0)
 			{	
@@ -1924,24 +1898,24 @@ namespace BALL
 			}
 		}
 
-    return processor.finish();
+		return processor.finish();
 	}
 	
 	template <typename T>
 	bool Composite::applyChild(UnaryProcessor<T>& processor)
 		throw(Exception::GeneralException)
-  {
-    return processor.start() && applyChildNostart_(processor) && processor.finish();
+	{
+		return processor.start() && applyChildNostart_(processor) && processor.finish();
 	}
 
 	template <typename T>
-  bool Composite::applyChildNostart_(UnaryProcessor<T>& processor)
+	bool Composite::applyChildNostart_(UnaryProcessor<T>& processor)
 		throw(Exception::GeneralException)
-  {
-    Processor::Result result = Processor::CONTINUE;
+	{
+		Processor::Result result = Processor::CONTINUE;
 
-    if (!isCollapsed())
-    {
+		if (!isCollapsed())
+		{
 			for (Composite* composite = first_child_;
 					 composite != 0; composite = composite->next_)
 			{
@@ -1957,30 +1931,30 @@ namespace BALL
 			}
 		}
 
-    return (result >= Processor::BREAK);
+		return (result >= Processor::BREAK);
 	}
  
 	template <typename T>
-  bool Composite::applyDescendantPreorder(UnaryProcessor<T>& processor)
+	bool Composite::applyDescendantPreorder(UnaryProcessor<T>& processor)
 		throw(Exception::GeneralException)
-  {
-    return processor.start() && applyDescendantPreorderNostart_(processor) && processor.finish();
+	{
+		return processor.start() && applyDescendantPreorderNostart_(processor) && processor.finish();
 	}
 
 	template <typename T>
-  bool Composite::applyDescendantPreorderNostart_(UnaryProcessor<T>& processor)
+	bool Composite::applyDescendantPreorderNostart_(UnaryProcessor<T>& processor)
 		throw(Exception::GeneralException)
-  {
-    if (isCollapsed() == true)
-    {
-      return true;
+	{
+		if (isCollapsed() == true)
+		{
+			return true;
 		}
 
-    Processor::Result result;
+		Processor::Result result;
 
-    for (Composite* composite = first_child_;
-         composite != 0; composite = composite->next_)
-    {
+		for (Composite* composite = first_child_;
+				 composite != 0; composite = composite->next_)
+		{
 			T* t_ptr;
 			if ((t_ptr = dynamic_cast<T*>(composite)) != 0)
 			{	
@@ -1992,45 +1966,45 @@ namespace BALL
 				}
 			}
 
-      if (composite->first_child_ != 0  && composite->applyDescendantPreorderNostart_(processor) == false)
+			if (composite->first_child_ != 0  && composite->applyDescendantPreorderNostart_(processor) == false)
 			{
-        return false;
+				return false;
 			}
 		}
 
-    return true;
+		return true;
 	}
 
 	template <typename T>
-  bool Composite::applyDescendantPostorder(UnaryProcessor<T>& processor)
+	bool Composite::applyDescendantPostorder(UnaryProcessor<T>& processor)
 		throw(Exception::GeneralException)
-  {
-    return processor.start() && applyDescendantPostorderNostart_(processor) && processor.finish();
+	{
+		return processor.start() && applyDescendantPostorderNostart_(processor) && processor.finish();
 	}
 
 	template <typename T>
-  bool Composite::applyDescendantPostorderNostart_(UnaryProcessor<T>& processor)
+	bool Composite::applyDescendantPostorderNostart_(UnaryProcessor<T>& processor)
 		throw(Exception::GeneralException)
-  {
-    if (isCollapsed() == true)
-    {
-      return true;
+	{
+		if (isCollapsed() == true)
+		{
+			return true;
 		}
 
-    Processor::Result result;
+		Processor::Result result;
 
-    for (Composite* composite = first_child_;
-         composite != 0; composite = composite->next_)
-    {
-      if (composite->first_child_ != 0 && 
+		for (Composite* composite = first_child_;
+				 composite != 0; composite = composite->next_)
+		{
+			if (composite->first_child_ != 0 && 
 					composite->applyDescendantPostorderNostart_(processor) == false)
 			{
-        return false;
+				return false;
 			}
 
 			T* t_ptr = dynamic_cast<T*>(composite);
-      if (t_ptr != 0)
-      {
+			if (t_ptr != 0)
+			{
 				result = processor(*t_ptr);
 
 				if (result <= Processor::BREAK)
@@ -2040,42 +2014,42 @@ namespace BALL
 			}
 		}
 
-    return true;
+		return true;
 	}
 
-  template <typename T>  
-  bool Composite::applyPostorder(UnaryProcessor<T>& processor)
+	template <typename T>  
+	bool Composite::applyPostorder(UnaryProcessor<T>& processor)
 		throw(Exception::GeneralException)
-  { 
-    if (!processor.start() || !applyDescendantPostorderNostart_(processor))
-    {
+	{ 
+		if (!processor.start() || !applyDescendantPostorderNostart_(processor))
+		{
 			return false;
-    }
+		}
 
-    T* t_ptr = dynamic_cast<T*>(this);
+		T* t_ptr = dynamic_cast<T*>(this);
 
-    return (t_ptr != 0													  && 
+		return (t_ptr != 0													  && 
 						processor(*t_ptr) >= Processor::BREAK && 
 						processor.finish()											);
-  }
-
-	template <typename T>
-  bool Composite::applyLevel(UnaryProcessor<T>& processor, long level)
-		throw(Exception::GeneralException)
-  {
-    return processor.start() && applyLevelNostart_(processor, level) && processor.finish();
 	}
 
 	template <typename T>
-  bool Composite::applyLevelNostart_(UnaryProcessor<T>& processor, long level)
+	bool Composite::applyLevel(UnaryProcessor<T>& processor, long level)
 		throw(Exception::GeneralException)
-  {
-    if (level == 0)
-    {
+	{
+		return processor.start() && applyLevelNostart_(processor, level) && processor.finish();
+	}
+
+	template <typename T>
+	bool Composite::applyLevelNostart_(UnaryProcessor<T>& processor, long level)
+		throw(Exception::GeneralException)
+	{
+		if (level == 0)
+		{
 			T* t_ptr = dynamic_cast<T*>(this);
-      if (t_ptr != 0)
-      {
-       Processor::Result result = processor(*t_ptr);
+			if (t_ptr != 0)
+			{
+			 Processor::Result result = processor(*t_ptr);
 
 				if (result <= Processor::BREAK)
 				{
@@ -2083,7 +2057,7 @@ namespace BALL
 				}
 			}
 		}
-    else 
+		else 
 		{
 			if (--level == 0)
 			{
@@ -2104,7 +2078,7 @@ namespace BALL
 				}
 			}
 		}
-    return true;
+		return true;
 	}
 
 	template <typename T>
@@ -2114,8 +2088,8 @@ namespace BALL
 		Processor::Result result;
 		bool return_value;
 		T* t_ptr = dynamic_cast<T*>(this);
-    if (t_ptr != 0)
-    {
+		if (t_ptr != 0)
+		{
 			result = processor(*t_ptr);
 	
 			if (result <= Processor::BREAK)
@@ -2201,7 +2175,7 @@ namespace BALL
 		throw()
 	{
 		// create an iterator bound to the root of the subtree
-		SubcompositeReverseIterator it(getRoot().rbeginSubcomposite());
+		SubcompositeIterator it(getRoot().endSubcomposite());
 
 		// set its position to the current composite
 		Composite::setCurrentPreorderIteratorPosition_
@@ -2210,12 +2184,14 @@ namespace BALL
 
 		// walk back until we find something	
 		// or we cannot walk any further
-		do 
+		if (+it)
 		{
-			it++;
-		} 
-		while (it.isValid() && !RTTI::isKindOf<T>(*it));
-
+			do 
+			{
+				--it;
+			} 
+			while (+it && !RTTI::isKindOf<T>(*it));
+		}
 
 		// return a NULL pointer if nothing was found
 		Composite* ptr = 0;
