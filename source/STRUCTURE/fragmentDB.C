@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.63 2005/02/21 16:45:30 amoll Exp $
+// $Id: fragmentDB.C,v 1.64 2005/03/11 15:39:01 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -727,22 +727,21 @@ namespace BALL
 		{
 			for (entry_it = ++entry->begin(); +entry_it; ++entry_it)
 			{
-				if (entry_it->getDepth() == 2)
+				if (entry_it->getDepth() != 2) continue;
+				
+				// Create empty hash maps for both directions (to and from the standard).
+				StringHashMap<String> map;
+				standards_[entry_it->getKey() + "-" + entry_it->getValue()] = StringHashMap<String>();
+				standards_[entry_it->getValue() + "-" + entry_it->getKey()] = StringHashMap<String>();
+				StringHashMap<String>& name_map_to = standards_[entry_it->getKey() + "-" + entry_it->getValue()];
+				StringHashMap<String>& name_map_from = standards_[entry_it->getValue() + "-" + entry_it->getKey()];
+				
+				// Fill those maps.
+				ResourceEntry::Iterator	alias_iterator(++entry_it->begin());
+				for (; +alias_iterator; ++alias_iterator)
 				{
-					// Create empty hash maps for both directions (to and from the standard).
-					StringHashMap<String> map;
-					standards_[entry_it->getKey() + "-" + entry_it->getValue()] = StringHashMap<String>();
-					standards_[entry_it->getValue() + "-" + entry_it->getKey()] = StringHashMap<String>();
-					StringHashMap<String>& name_map_to = standards_[entry_it->getKey() + "-" + entry_it->getValue()];
-					StringHashMap<String>& name_map_from = standards_[entry_it->getValue() + "-" + entry_it->getKey()];
-					
-					// Fill those maps.
-					ResourceEntry::Iterator	alias_iterator;
-					for (alias_iterator = ++entry_it->begin(); +alias_iterator; ++alias_iterator)
-					{
-						name_map_to[alias_iterator->getKey()] = alias_iterator->getValue();
-						name_map_from[alias_iterator->getValue()] = alias_iterator->getKey();
-					}
+					name_map_to[alias_iterator->getKey()] = alias_iterator->getValue();
+					name_map_from[alias_iterator->getValue()] = alias_iterator->getKey();
 				}
 			}
 		}
@@ -769,23 +768,22 @@ namespace BALL
 		return;
 	}
 
+
 	const String& FragmentDB::getDefaultNamingStandard() const 
 	{
 		return default_standard_;
 	}
-					
+	
+	
 	const Fragment* FragmentDB::getFragment(const String& fragment_name) const
 	{
-		if (name_to_frag_index_.has(fragment_name))
-		{
-			return fragments_[name_to_frag_index_[fragment_name]];
-		} 
-		else	
-		{
-			return 0;		
-		}
+		const StringHashMap<Position>::ConstIterator to_find = name_to_frag_index_.find(fragment_name);
+		if (!+to_find) return 0;
+		
+		return fragments_[to_find->second];
 	}
 
+	
 	Fragment* FragmentDB::getFragmentCopy(const String& fragment_name) const
 	{
 		const Fragment* ref_fragment = getFragment(fragment_name);
@@ -837,10 +835,8 @@ namespace BALL
 	{
 		// if there are no variants, return the default fragment
 		String s(fragment.getName());
-		if (!name_to_variants_.has(s))
-		{
-			return 0;
-		}
+		if (!name_to_variants_.has(s)) return 0;
+
 		if (name_to_variants_[fragment.getName()].size() == 1)
 		{
 			return getFragment(s);
@@ -928,18 +924,37 @@ namespace BALL
 		return variant;
 	}
 
+
 	const Residue* FragmentDB::getResidue(const String& fragment_name) const 
 	{
-		if (name_to_frag_index_.has(fragment_name))
-		{
-			return fragments_[name_to_frag_index_[fragment_name]];
-		} 
-		else 
-		{
-			return 0;		
-		}
+		const StringHashMap<Position>::ConstIterator to_find = name_to_frag_index_.find(fragment_name);
+		if (!+to_find) return 0;
+		
+		return fragments_[(*to_find).second];
 	}
 
+	
+	list<String> FragmentDB::getVariantNames(const String& name) const
+	{
+		list<String> names;
+
+		StringHashMap<list<Position> >::ConstIterator to_find = name_to_variants_.find(name);
+		if (!+to_find) return names;
+		
+		list<Position>::const_iterator it = (*to_find).second.begin();
+		const list<Position>::const_iterator end_it = (*to_find).second.end();
+
+		for (; it != end_it; it++)
+		{
+			names.push_back(fragments_[*it]->getName());
+		}
+
+		return names;
+	}
+ 
+	/////////////////////////////////////////////////////////////////////
+	// NormalizeNamesProcessor	
+	/////////////////////////////////////////////////////////////////////
 	FragmentDB::NormalizeNamesProcessor::NormalizeNamesProcessor() 
 		: UnaryProcessor<Fragment>() 
 	{
@@ -992,32 +1007,35 @@ namespace BALL
 
 
 	// match an RES/ATOM pair in a map
-	bool FragmentDB::NormalizeNamesProcessor::matchName
-		(String& res_name, String&	atom_name, const FragmentDB::NameMap&	map) const
+	bool FragmentDB::NormalizeNamesProcessor::matchName(String& res_name, String&	atom_name, const FragmentDB::NameMap&	map) const
 	{
-		String	match_name;	
-		String	s[2];
-		String	r_name;	// residue name (non const)
-		String	a_name; // atom name (non const)
-		bool		hit = false;
-
-		r_name = res_name;
+		// residue name (non const)
+		String r_name(res_name);
 		r_name.trim();
-		match_name = r_name + ":*";
-		if (map.has(match_name)) 
+
+		String	s[2];
+
+		NameMap::ConstIterator it;
+		String match_name(r_name + ":*");
+		it = map.find(match_name);
+		if (+it)
 		{
-			map[match_name].split(s, 2, ":");
+			map[it->second].split(s, 2, ":");
 			r_name = s[0];
 		}
-
-		a_name = atom_name;
+		
+		// atom name (non const)
+		String a_name(atom_name);
 		a_name.trim();
+
+		bool hit = false;
 
 		// first, try to match exactly
 		match_name = r_name + ":" + a_name;
-		if (map.has(match_name))
+		it = map.find(match_name);
+		if (+it)
 		{
-			map[match_name].split(s, 2, ":");
+			map[it->second].split(s, 2, ":");
 			a_name = s[1];
 			r_name = s[0];
 			hit = true;
@@ -1026,9 +1044,10 @@ namespace BALL
 		{
 			// second, try wildcard match for residue names
 			match_name = "*:" + a_name;
-			if (map.has(match_name))
+			it = map.find(match_name);
+			if (+it)
 			{
-				map[match_name].split(s, 2, ":");
+				map[it->second].split(s, 2, ":");
 				a_name = s[1];
 				hit = true;
 			}
@@ -1086,21 +1105,11 @@ namespace BALL
 
 				// determine whether the fragment is an amino acid
 				// if it is: determine the correct name for N-,C-terminal AA
-				if (RTTI::isKindOf<Residue>(*(*frag_it))) 
+				Residue* const residue = RTTI::castTo<Residue>(**frag_it);
+				if (residue != 0)
 				{
-					Residue*	residue;	
-					residue = RTTI::castTo<Residue>(*(*frag_it));
-					if (residue->isCTerminal())
-					{
-						res_name_suffix = "-C";
-					} 
-					else 
-					{
-						if (residue->isNTerminal())
-						{
-							res_name_suffix = "-N";
-						}				
-					}
+					if 			(residue->isCTerminal()) res_name_suffix = "-C";
+					else if (residue->isNTerminal()) res_name_suffix = "-N";
 				} 
 				else 
 				{
@@ -1113,34 +1122,24 @@ namespace BALL
 
 					// first, try to match exactly
 					match_name = res_name + res_name_suffix;
-					if (matchName(match_name, atom_name, *map))
-					{
-						hit_counter++;
-					} 
-					else 
+					if (!matchName(match_name, atom_name, *map))
 					{
 						// try to match non-terminal residues
-						if (matchName(res_name, atom_name, *map))
-						{
-							hit_counter++;
-						} 
-						else 
+						if (!matchName(res_name, atom_name, *map))
 						{
 							match_name = "*" + res_name_suffix;
-							if (matchName(match_name, atom_name, *map))
-							{
-								hit_counter++;
-							} 
-							else 
+							if (!matchName(match_name, atom_name, *map))
 							{
 								match_name = "*";
-								if (matchName(match_name, atom_name, *map))
+								if (!matchName(match_name, atom_name, *map))
 								{
-									hit_counter++;
+									continue;
 								}
 							}
 						}
 					}
+
+					hit_counter++;
 				}
 			}
 
@@ -1184,20 +1183,11 @@ namespace BALL
 
 				// determine whether the fragment is an amino acid
 				// if it is: determine the correct name for N-,C-terminal AA
-				if (RTTI::isKindOf<Residue>(*(*frag_it))) 
+				Residue* const residue = RTTI::castTo<Residue>(**frag_it);
+				if (residue != 0)
 				{
-					Residue*	residue = RTTI::castTo<Residue>(*(*frag_it));
-					if (residue->isCTerminal())
-					{
-						res_name_suffix = "-C";
-					}		
-					else 
-					{
-						if (residue->isNTerminal())
-						{
-							res_name_suffix = "-N";
-						}				
-					}
+					if 			(residue->isCTerminal()) res_name_suffix = "-C";
+					else if (residue->isNTerminal()) res_name_suffix = "-N";
 				} 
 				else 
 				{
@@ -1212,61 +1202,44 @@ namespace BALL
 
 					// first, try to match exactly
 					match_name = res_name + res_name_suffix;
-					if (matchName(match_name, atom_name, *map))
-					{
-						// OK, got it. Change the names
-						atom_it->setName(atom_name);
-						atom_it->getFragment()->setName(res_name);
-					} 
-					else 
+					if (!matchName(match_name, atom_name, *map))
 					{
 						// second, try to match non-terminal residues exactly
-						match_name = res_name;
-						if (matchName(match_name, atom_name, *map))
-						{
-							// OK, got it. Change the names
-							atom_it->setName(atom_name);
-							atom_it->getFragment()->setName(res_name);
-						}
-						else 
+						if (!matchName(res_name, atom_name, *map))
 						{
 							// try wildcard match for residue names
 							match_name = "*" + res_name_suffix;
-							if (matchName(match_name, atom_name, *map))
-							{
-								// OK, got it. Change names
-								atom_it->setName(atom_name);
-								atom_it->getFragment()->setName(res_name);
-							} 
-							else 
+							if (!matchName(match_name, atom_name, *map))
 							{
 								// last alternative: try wildcard with unmodified name
 								match_name = "*";
-								if (matchName(match_name, atom_name, *map))
+								if (!matchName(match_name, atom_name, *map))
 								{
-									atom_it->setName(atom_name);
-									atom_it->getFragment()->setName(res_name);
+									continue;
 								}
 							}
 						}
 					}
+
+					atom_it->setName(atom_name);
+					atom_it->getFragment()->setName(res_name);
 				}
 			}
 		}
 
 		// if we couldn't find an appropriate table, complain about it!
-		if ((number_of_tables == 0) || (max_hits < 0))
+		if (number_of_tables == 0 || max_hits < 0)
 		{
 			Log.error() << "FragmentDB: cannot locate an appropriate name conversion table!" << endl;
 			return false;
 		}
 
-		// else:
 		return true;
 	}
 
-
+	/////////////////////////////////////////////////////////////////////
 	//	BuildBondsProcessor
+	/////////////////////////////////////////////////////////////////////
 
 	FragmentDB::BuildBondsProcessor::BuildBondsProcessor()
 		:	fragment_db_(0),
@@ -1314,8 +1287,7 @@ namespace BALL
 				{
 					if ((it1->atom != 0) && (it2->atom != 0))
 					{
-						bool built = buildConnection_(*it1, *it2);
-						if (built)
+						if (buildConnection_(*it1, *it2))
 						{
 							// Remember we built a bond
 							bonds_built_++;
@@ -1330,40 +1302,48 @@ namespace BALL
 
 		// Clear the connection list
 		connections_.clear();
-
 		return true;
 	}
 
-	bool FragmentDB::BuildBondsProcessor::buildConnection_(FragmentDB::BuildBondsProcessor::Connection& con1, FragmentDB::BuildBondsProcessor::Connection& con2)
-	{
-		if ((con1.type_name == con2.connect_to) && (con1.connect_to == con2.type_name))
-		{
-			// if the two connection types match,
-			// check for distance condition and the two atoms
-			float distance = con1.atom->getPosition().getDistance(con2.atom->getPosition());
-			if ((fabs(con1.dist - distance) <= con1.delta) && (fabs(con2.dist - distance) <= con2.delta))
-			{
-				// create the bond only if it does not exist
-				if (!con1.atom->isBoundTo(*con2.atom))
-				{
-					// create the bond
-					Bond* bond = con1.atom->createBond(*con2.atom);
 
-					if (bond != 0)
-					{
-						bond->setOrder(con1.order);
-						if (con1.order != con2.order)
-						{
-							Log.warn() << "FragmentDB::BuildBondsProcessor: inconsistent bond orders for connection between " << con1.atom->getFullName() << " and " << con2.atom->getFullName() << std::endl;
-						}
-						return true;
-					}
-				}
+	bool FragmentDB::BuildBondsProcessor::buildConnection_(FragmentDB::BuildBondsProcessor::Connection& con1, 
+																												 FragmentDB::BuildBondsProcessor::Connection& con2)
+	{
+		if (con1.type_name != con2.connect_to || 
+				con1.connect_to != con2.type_name)
+		{
+			return false;
+		}
+
+		// if the two connection types match,
+		// check for distance condition and the two atoms
+		const float distance = con1.atom->getPosition().getDistance(con2.atom->getPosition());
+		if (fabs(con1.dist - distance) > con1.delta || 
+			  fabs(con2.dist - distance) > con2.delta)
+		{
+			return false;
+		}
+
+		// create the bond only if it does not exist
+		if (con1.atom->isBoundTo(*con2.atom)) return false;
+		
+		// create the bond
+		Bond* const bond = con1.atom->createBond(*con2.atom);
+
+		if (bond != 0)
+		{
+			bond->setOrder(con1.order);
+			if (con1.order != con2.order)
+			{
+				Log.warn() << "FragmentDB::BuildBondsProcessor: inconsistent bond orders for connection between " 
+									 << con1.atom->getFullName() << " and " << con2.atom->getFullName() << std::endl;
 			}
+			return true;
 		}
 		
 		return false;
 	}
+
 
 	Processor::Result FragmentDB::BuildBondsProcessor::operator () (Fragment& fragment)
 	{
@@ -1377,96 +1357,82 @@ namespace BALL
 		return Processor::CONTINUE;
 	}
 
-	Size FragmentDB::BuildBondsProcessor::buildFragmentBonds(Fragment& fragment,
-			const Fragment& tplate) const
+
+	Size FragmentDB::BuildBondsProcessor::buildFragmentBonds(Fragment& fragment, const Fragment& tplate) const
 	{
 		// abort immediately if no fragment DB is known
-		if (fragment_db_ == 0)
-		{
-			return 0;
-		}
+		if (fragment_db_ == 0) return 0;
 
-		// get the fragment`s name
-		String	name = fragment.getName();
-		
 		DEBUG("FragmentDB::BuildBondsProcessor: building bonds for " 
 							 << fragment.getName() << " from template " << tplate.getName())
 
-		Size bond_count = 0;
-		AtomConstIterator				tmp_it1;
-		Atom::BondConstIterator	tmp_it2;
-		BALL_FOREACH_BOND(tplate, tmp_it1, tmp_it2)
-		{
-			bond_count++;
-		}
-
-		// iterate over all atoms in the tplate
-		AtomConstIterator				catom_it;
-		AtomIterator						frag_atom_it;
-		Atom::BondConstIterator	tplate_bond_it;
-		Atom*										partner;
-
-		// count the counds we build...
-		Size bonds_built = 0;
-
 		StringHashMap<const Atom*> template_names;
 
-		String atom_name;
-		for (catom_it = tplate.beginAtom(); +catom_it; ++catom_it)
+		for (AtomConstIterator catom_it = tplate.beginAtom(); +catom_it; ++catom_it)
 		{
-			atom_name = catom_it->getName().trim();
+			const String atom_name = catom_it->getName().trim();
+#ifdef BALL_DEBUG_FRAGMENTDB
 			if (template_names.has(atom_name))
 			{
 				DEBUG("FragmentDB::BuildBondsProcessor: duplicate atom name in template " << tplate.getName())
 			}
+#endif
 			template_names.insert(atom_name, &*catom_it);
 		}
+		
+		// count the counds we build...
+		Size bonds_built = 0;
+		
+		// iterate over all atoms in the tplate
+		Atom::BondConstIterator	tplate_bond_it;
 
 		// iterate over all fragment atoms 
-		for (frag_atom_it = fragment.beginAtom(); +frag_atom_it; ++frag_atom_it) 
+		for (AtomIterator frag_atom_it = fragment.beginAtom(); +frag_atom_it; ++frag_atom_it) 
 		{
-			atom_name = frag_atom_it->getName().trim();
-			if (template_names.has(atom_name)) 
+			const String atom_name = frag_atom_it->getName().trim();
+			const StringHashMap<const Atom*>::Iterator to_find = template_names.find(atom_name);
+			if (!+to_find) continue;
+			
+			const Atom* tplate_atom = (*to_find).second;
+
+			// we found two matching atoms. Great! Now check their bonds..
+			// iterate over all bonds of the template
+			for (tplate_bond_it = tplate_atom->beginBond(); +tplate_bond_it; ++tplate_bond_it) 
 			{
-				const Atom* tplate_atom = template_names[atom_name];
+				const Atom* partner = tplate_bond_it->getPartner(*tplate_atom);
+				// if we found the bond partner, create the new bond
+				if (partner == 0) continue;
+			
+				const String name = partner->getName();
 
-				// we found two matching atoms. Great! Now check their bonds..
-				// iterate over all bonds of the template
-				for (tplate_bond_it = tplate_atom->beginBond(); +tplate_bond_it; ++tplate_bond_it) 
+				// look in the fragment for the correct partner of the current bond in the template
+				AtomIterator second_frag_it(fragment.beginAtom());
+				for (; +second_frag_it; ++second_frag_it) 
 				{
-					partner = tplate_bond_it->getPartner(*tplate_atom);
-					// if we found the bond partner, create the new bond
-					if (partner != 0) 
+					if (second_frag_it->getName().trim() != name) continue;
+				
+					// ok, we found the correct partner atom
+					// does the bond already exists?
+					Bond* bond = second_frag_it->getBond(*frag_atom_it);
+					if (bond == 0)
 					{
-						name = partner->getName();
-						AtomIterator	second_frag_it;
-						for (second_frag_it = fragment.beginAtom(); +second_frag_it; ++second_frag_it) 
-						{
-							if (second_frag_it->getName().trim() == name) 
-							{
-								Bond* bond = second_frag_it->getBond(*frag_atom_it);
-								if (bond == 0)
-								{
-									// if the bond did not yet exist, create it											
-									bond = frag_atom_it->createBond(*second_frag_it);
-								}
-
-								// assign the correct bond order, name, and type
-								// (even if the bond exists -- to correct PDB CONECT entries)
-								if (bond != 0)
-								{
-									// assign the bond type and order
-									bond->setOrder(tplate_bond_it->getOrder());
-									bond->setType(tplate_bond_it->getType());
-									bond->setName(tplate_bond_it->getName());
-
-									// count this bond 
-									bonds_built++;
-								}
-								break;
-							}
-						}
+						// no, so create it											
+						bond = frag_atom_it->createBond(*second_frag_it);
 					}
+
+					// assign the correct bond order, name, and type
+					// (even if the bond exists -- to correct PDB CONECT entries)
+					if (bond != 0)
+					{
+						// assign the bond type and order
+						bond->setOrder(tplate_bond_it->getOrder());
+						bond->setType(tplate_bond_it->getType());
+						bond->setName(tplate_bond_it->getName());
+
+						// count this bond 
+						bonds_built++;
+					}
+					break;
 				}
 			}
 		}
@@ -1478,40 +1444,25 @@ namespace BALL
 	Size FragmentDB::BuildBondsProcessor::buildFragmentBonds(Fragment& fragment) const
 	{
 		// abort immediately if no fragment DB is known
-		if (fragment_db_ == 0)
-		{
-			return 0;
-		}
+		if (fragment_db_ == 0) return 0;
 
-		// get the fragment`s name
-		String	name = fragment.getName();
-		
 		// check whether our DB knows the fragment and retrieve the template
-		const Fragment* tplate = fragment_db_->getReferenceFragment(fragment);
-		if (tplate == 0) 
-		{
-			return 0;
-		}
+		const Fragment* const tplate = fragment_db_->getReferenceFragment(fragment);
+		if (tplate == 0) return 0;
 		
 		return buildFragmentBonds(fragment, *tplate);
 	}
 
 	void FragmentDB::BuildBondsProcessor::storeConnections_(Fragment& fragment)
 	{
-		if (fragment_db_ == 0)
-		{
-			return;
-		}
+		if (fragment_db_ == 0) return;
 
-		String name(fragment.getName());
+		const ResourceEntry* first_entry = 
+			fragment_db_->tree->getEntry("/Fragments/" + fragment.getName() + "/Connections");
 
-		ResourceEntry* first_entry = fragment_db_->tree->getEntry("/Fragments/" + name + "/Connections");
-		if (first_entry == 0)
-		{
-			return;
-		}
+		if (first_entry == 0) return;
 
-		ResourceEntry::Iterator	it1 = first_entry->begin();
+		ResourceEntry::ConstIterator	it1 = first_entry->begin();
 		ResourceEntry::Iterator	it2;
 		for (++it1; +it1; ++it1)
 		{
@@ -1554,14 +1505,10 @@ namespace BALL
 				// set the bond order
 				switch (s[2][0])
 				{
-					case 's':
-						conn.order = Bond::ORDER__SINGLE; break;
-					case 'd':
-						conn.order = Bond::ORDER__DOUBLE; break;
-					case 't':
-						conn.order = Bond::ORDER__TRIPLE; break;
-					case 'a':
-						conn.order = Bond::ORDER__AROMATIC; break;
+					case 's': conn.order = Bond::ORDER__SINGLE; break;
+					case 'd': conn.order = Bond::ORDER__DOUBLE; break;
+					case 't': conn.order = Bond::ORDER__TRIPLE; break;
+					case 'a': conn.order = Bond::ORDER__AROMATIC; break;
 					default:
 						Log.warn() << "FragmentDB::BuildBondsProcessor: unknown bond order " 
 											 << s[2] << " (in " << first_entry->getPath() << ")" << std::endl;
@@ -1572,36 +1519,23 @@ namespace BALL
 		}
 	}
 
-	Size FragmentDB::BuildBondsProcessor::buildInterFragmentBonds
-		(Fragment& first, Fragment& second) const
+
+	Size FragmentDB::BuildBondsProcessor::buildInterFragmentBonds(Fragment& first, Fragment& second) const
 	{
-		if (fragment_db_ == 0)
-		{
-			return 0;
-		}
+		if (fragment_db_ == 0) return 0;
 
-		String first_name(first.getName());
-		String second_name(second.getName());
+		const ResourceEntry* const first_entry = fragment_db_->tree->getEntry("/Fragments/" + first.getName() + "/Connections");
+		if (first_entry == 0) return 0;
 
-		ResourceEntry*	first_entry = fragment_db_->tree->getEntry("/Fragments/" + first_name + "/Connections");
-		if (first_entry == 0)
-		{
-			return 0;
-		}
-
-		ResourceEntry* second_entry = fragment_db_->tree->getEntry("/Fragments/" + second_name + "/Connections");
-		if (second_entry == 0)
-		{
-			return 0;
-		}
+		const ResourceEntry* const second_entry = fragment_db_->tree->getEntry("/Fragments/" + second.getName() + "/Connections");
+		if (second_entry == 0) return 0;
 
 		// count the bonds we build
 		Size bonds_built = 0;
 
-		String	s1[6];
-		String	s2[6];
-		ResourceEntry::Iterator	it1 = first_entry->begin();
-		ResourceEntry::Iterator	it2;
+		String s1[6], s2[6];
+		ResourceEntry::ConstIterator	it1 = first_entry->begin();
+		ResourceEntry::ConstIterator	it2;
 		for (++it1; +it1; ++it1)
 		{
 			// split the fields of the "Connections" entry.
@@ -1625,49 +1559,43 @@ namespace BALL
 			// matches any connection type of the second fragment
 			for (it2 = second_entry->begin(), ++it2; +it2; ++it2)
 			{
-				// if the two connection types match,
-				// check for distance condition and the two atoms
-				if (it2->getKey() == s1[1])
+				// do the two connection types match?
+				if (it2->getKey() != s1[1]) continue;
+			
+				it2->getValue().split(s2, 6);
+				Atom* const a1 = first.getAtom(s1[0]);
+				Atom* const a2 = second.getAtom(s2[0]);
+				// break if not the two atoms were found
+				if (a1 == 0 || a2 == 0) continue;
+			
+				// check the distance conditions for both Connection data sets
+				const double distance = a1->getPosition().getDistance(a2->getPosition());
+				if ((fabs(distance - s1[3].toFloat()) >= s1[4].toFloat()) ||
+						(fabs(distance - s2[3].toFloat()) >= s2[4].toFloat()))
 				{
-					it2->getValue().split(s2, 6);
-					Atom* a1 = first.getAtom(s1[0]);
-					Atom* a2 = second.getAtom(s2[0]);
-					if ((a1 != 0) && (a2 != 0))
-					{
-						// check the distance conditions for both Connection data sets
-						double distance = a1->getPosition().getDistance(a2->getPosition());
-						if ((fabs(distance - s1[3].toFloat()) < s1[4].toFloat())
-								&& (fabs(distance - s2[3].toFloat()) < s2[4].toFloat()))
-						{
-							// create the bond only if it does not exist
-							if (!a1->isBoundTo(*a2))
-							{
-								Bond* bond = a1->createBond(*a2);
-								// create the bond
-								if (bond != 0)
-								{
-									// count the bond
-									bonds_built++;
+					continue;
+				}
 
-									// set the bond order
-									switch (s1[2][0])
-									{
-										case 's':
-											bond->setOrder(Bond::ORDER__SINGLE); break;
-										case 'd':
-											bond->setOrder(Bond::ORDER__DOUBLE); break;
-										case 't':
-											bond->setOrder(Bond::ORDER__TRIPLE); break;
-										case 'a':
-											bond->setOrder(Bond::ORDER__AROMATIC); break;
-										default:
-											Log.warn() << "FragmentDB::BuildBondsProcessor: unknown bond order " 
-																 << s1[2] << " (in " << first_entry->getPath() << ")" << endl;
-									}
-								}
-							}
-						}
-					}
+				// create the bond only if it does not exist
+				if (a1->isBoundTo(*a2)) continue;
+			
+				// create the bond
+				Bond* const bond = a1->createBond(*a2);
+				if (bond == 0) continue;
+			
+				// count the bond
+				bonds_built++;
+
+				// set the bond order
+				switch (s1[2][0])
+				{
+					case 's': bond->setOrder(Bond::ORDER__SINGLE); break;
+					case 'd': bond->setOrder(Bond::ORDER__DOUBLE); break;
+					case 't': bond->setOrder(Bond::ORDER__TRIPLE); break;
+					case 'a': bond->setOrder(Bond::ORDER__AROMATIC); break;
+					default:
+						Log.warn() << "FragmentDB::BuildBondsProcessor: unknown bond order " 
+											 << s1[2] << " (in " << first_entry->getPath() << ")" << endl;
 				}
 			}
 		}
@@ -1675,22 +1603,6 @@ namespace BALL
 		return bonds_built;
 	}
 
-	list<String> FragmentDB::getVariantNames(const String& name) const
-	{
-		list<String> names;
 
-		if (name_to_variants_.has(name))
-		{
-			list<Position>::const_iterator it = name_to_variants_[name].begin();
-			list<Position>::const_iterator end_it = name_to_variants_[name].end();
-			for (; it != end_it; it++)
-			{
-				names.push_back(fragments_[*it]->getName());
-			}
-		}
-
-		return names;
-	}
- 
 
 } // namespace BALL
