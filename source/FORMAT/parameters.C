@@ -1,4 +1,4 @@
-// $Id: parameters.C,v 1.1 2000/02/14 22:47:10 oliver Exp $
+// $Id: parameters.C,v 1.2 2000/09/18 12:15:31 oliver Exp $
 //
 
 #include <BALL/FORMAT/parameters.h>
@@ -20,11 +20,16 @@ namespace BALL
 
 	Parameters::~Parameters()
 	{
+		clear();
+	}
+
+
+	Parameters::clear()
+	{
 		// clean up everything
 		INI_file_.destroy();
 		valid_ = false;
 	}
-
 
 	const String& Parameters::getFilename() const 
 	{

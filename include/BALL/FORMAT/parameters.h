@@ -1,4 +1,4 @@
-// $Id: parameters.h,v 1.2 2000/02/17 00:30:40 oliver Exp $
+// $Id: parameters.h,v 1.3 2000/09/18 12:15:28 oliver Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_FORMAT_PARAMETERS_H
@@ -46,9 +46,14 @@ namespace BALL
 		*/
 		virtual ~Parameters();
 
+		/**	Clear method.
+		*/
+		virtual void clear();
+
 		//@}
 
-		/**@name	Accessors 	*/
+		/**@name	Accessors 	
+		*/
 		//@{
 
 		/**	Sets the filename for the INI file.
