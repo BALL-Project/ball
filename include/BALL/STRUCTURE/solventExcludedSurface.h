@@ -1,4 +1,4 @@
-// $Id: solventExcludedSurface.h,v 1.6 2000/12/07 15:02:34 strobel Exp $
+// $Id: solventExcludedSurface.h,v 1.7 2000/12/08 05:48:27 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
@@ -78,7 +78,8 @@ namespace BALL
 			print << pre << "SolventExcludedSurface(reducedSurface)\n";
 			pre += "  ";
 			#endif
-			vector< TRSVertex<T>* > rs_vertices(reduced_surface->getVertices());
+
+			vector<TRSVertex<T>*> rs_vertices(reduced_surface->getVertices());
 			for (Position i = 0; i < rs_vertices.size(); i++)
 			{
 				if (rs_vertices[i] != NULL)
@@ -96,7 +97,7 @@ namespace BALL
 					contact_faces.push_back(NULL);
 				}
 			}
-			vector< TRSEdge<T>* > rs_edges(reduced_surface->getEdges());
+			vector<TRSEdge<T>*> rs_edges(reduced_surface->getEdges());
 			for (Position i = 0; i < rs_edges.size(); i++)
 			{
 				TSESFace<T>* face = new TSESFace<T>();

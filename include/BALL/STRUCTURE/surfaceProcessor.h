@@ -1,4 +1,4 @@
-// $Id: surfaceProcessor.h,v 1.5 2000/12/07 15:06:27 strobel Exp $
+// $Id: surfaceProcessor.h,v 1.6 2000/12/08 05:48:28 oliver Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -68,20 +68,21 @@ namespace BALL
 	{
 		double old_epsilon = Constants::EPSILON;
 		Constants::EPSILON = 1e-4;
-				cout << "probe radius:    "; cin >> probe_radius_;
+				// cout << "probe radius:    "; cin >> probe_radius_;
+				probe_radius_ = 1.4;
 				spheres_.clear();
 				char* filename;
 				string name;
-				cout << "xyzr-file:       "; cin >> name;
+				std::cout << "xyzr-file:       "; std::cin >> name;
 				filename = (char*)malloc(sizeof(char)*(name.size()+1));
 				for (Position i = 0; i < name.size(); i++)
 				{
 					filename[i] = name[i];
 				}
 				filename[name.size()] = '\0';
-				cout << filename << "\n";
+				std::cout << filename << "\n";
 				float std_radius;
-				cout << "standart radius: "; cin >> std_radius;
+				std::cout << "standart radius: "; std::cin >> std_radius;
 				std::ifstream input(filename);
 				Position size;
 				input >> size;
@@ -98,10 +99,10 @@ namespace BALL
 						spheres_.push_back(Sphere3(Vector3(x,y,z),std_radius));
 					}
 				}
-				cerr << "initialising reduced surface ...\n";
+				std::cerr << "initialising reduced surface ...\n";
 
 		ReducedSurface* rs = new ReducedSurface(spheres_,probe_radius_);
-				cerr << "... ok\ncomputing reduced surface ...\n";
+				std::cerr << "... ok\ncomputing reduced surface ...\n";
 		rs->compute();
 				std::ofstream rsfile("ReducedSurface.log");
 				rsfile << *rs;
@@ -135,29 +136,29 @@ namespace BALL
 					surface_.normal[triangle.v3] += rs->getFace(t)->getNormal();
 					surface_.triangle.push_back(triangle);
 				}*/
-				cerr << "... ok\ninitialising solvent excluded surface ...\n";
+				std::cerr << "... ok\ninitialising solvent excluded surface ...\n";
 		SolventExcludedSurface* ses = new SolventExcludedSurface(rs);
-				cerr << "... ok\ncomputing solvent excluded surface ...\n";
+				std::cerr << "... ok\ncomputing solvent excluded surface ...\n";
 		ses->get(rs);
 				std::ofstream sesfile("SolventExcludedSurface.log");
 				sesfile << *ses;
 				sesfile.close();
-				cerr << "... ok\ntreating singularities ...\n";
+				std::cerr << "... ok\ntreating singularities ...\n";
 		//TreatSingularities(ses,probe_radius_);
 				density_ = 0.25;
-				cerr << "... ok\ntriangulating surface ...\n";
+				std::cerr << "... ok\ntriangulating surface ...\n";
 		TriangulatedSurface* surface = Triangulate(ses,rs,density_);
-				cerr << "... ok\n";
+				std::cerr << "... ok\n";
 				//cout << *surface;
-				cerr << "exporting surface ...\n";
+				std::cerr << "exporting surface ...\n";
 		surface_ = surface->exportSurface();
-				cerr << "... ok\ndeleting surface ...\n";
+				std::cerr << "... ok\ndeleting surface ...\n";
 		delete surface;
-				cerr << "... ok\ndeleting solvent excluded surface ...\n";
+				std::cerr << "... ok\ndeleting solvent excluded surface ...\n";
 		delete ses;
-				cerr << "... ok\ndeleting reduced surface ...\n";
+				std::cerr << "... ok\ndeleting reduced surface ...\n";
 		delete rs;
-				cerr << "... ok\n";
+				std::cerr << "... ok\n";
 		Constants::EPSILON = old_epsilon;
 		return true;
 	}

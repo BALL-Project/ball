@@ -1,4 +1,4 @@
-// $Id: triangulation.h,v 1.8 2000/12/07 15:06:53 strobel Exp $
+// $Id: triangulation.h,v 1.9 2000/12/08 05:48:28 oliver Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATION_H
 #define BALL_STRUCTURE_TRIANGULATION_H
@@ -108,14 +108,14 @@ namespace BALL
 		}
 		for (Position i = 0; i < triangulated_contact_faces.size(); i++)
 		{
-cout << "c" << i << "\n";
+std::cout << "c" << i << "\n";
 			*surface += (*triangulated_contact_faces[i]);
 			TVector3<T> center(rs->getSphere(ses->contact_faces[i]->rsvertex->getAtom()).p);
 			Sew(contact_borders[i],contact_contours[i],toric_borders,center,true,surface);
 		}
 		for (Position i = 0; i < triangulated_spheric_faces.size(); i++)
 		{
-cout << "s" << i << "\n";
+std::cout << "s" << i << "\n";
 			*surface += (*triangulated_spheric_faces[i]);
 			TVector3<T> center(ses->spheric_faces[i]->rsface->getCenter());
 			Sew(spheric_borders[i],spheric_contours[i],toric_borders,center,false,surface);
@@ -187,57 +187,57 @@ std::ofstream print("Toric.log");
 		{
 			// should never happen
 		}
-cout << *face << ":\n";
-cout << "  rsedge: " << *face->rsedge << "\n";
-cout << "  point0: " << *p0 << "\n";
-cout << "  point1: " << *p1 << "\n";
-cout << "  point2: " << *p2 << "\n";
-cout << "  point3: " << *p3 << "\n";
-cout << "  edge0:  " << *edge0 << "\n";
-cout << "  edge1:  " << *edge1 << "\n";
-cout << "  edge2:  " << *edge2 << "\n";
-cout << "  edge3:  " << *edge3 << "\n";
+std::cout << *face << ":\n";
+std::cout << "  rsedge: " << *face->rsedge << "\n";
+std::cout << "  point0: " << *p0 << "\n";
+std::cout << "  point1: " << *p1 << "\n";
+std::cout << "  point2: " << *p2 << "\n";
+std::cout << "  point3: " << *p3 << "\n";
+std::cout << "  edge0:  " << *edge0 << "\n";
+std::cout << "  edge1:  " << *edge1 << "\n";
+std::cout << "  edge2:  " << *edge2 << "\n";
+std::cout << "  edge3:  " << *edge3 << "\n";
 		Size number_of_segments = (int)Maths::round(face->rsedge->getPhi().toRadian()*edge3->circle.radius/size);
 		if (number_of_segments == 0)
 		{
 			number_of_segments++;
 		}
-cout << "number_of_segments: " << number_of_segments << "\n";
+std::cout << "number_of_segments: " << number_of_segments << "\n";
 		TAngle<T> psi(face->rsedge->getPhi().toRadian()/number_of_segments,true);
 		vector< TVector3<T> > edge3_segments;
 		vector< TVector3<T> > edge1_segments;
 		TVector3<T> normal((p0->p-edge3->circle.p)%(p3->p-edge3->circle.p));
-cout << "berechne Drechachse ... ";
+std::cout << "berechne Drechachse ... ";
 		if (Maths::isGreater(face->rsedge->getPhi().toRadian(),Constants::PI))
 		{
 			normal.negate();
-cout << "negiert ... ";
+std::cout << "negiert ... ";
 		}
-cout << normal << "\n";
+std::cout << normal << "\n";
 		TCircle3<T> circle3(edge3->circle.p,normal,edge3->circle.radius);
 		TCircle3<T> circle1(edge1->circle.p,normal,edge1->circle.radius);
-cout << "partitioniere edge3:\n";
+std::cout << "partitioniere edge3:\n";
 		edge3_segments = PartitionOfCircle(circle3,p0->p,psi,number_of_segments);
 		edge3_segments.pop_back();
 		edge3_segments.push_back(p3->p);
 for (Position i = 0; i < edge3_segments.size(); i++)
-cout << "  " << edge3_segments[i] << (circle3.has(edge3_segments[i],true) ? " ... true\n" : " ... false\n");
-cout << "partitioniere edge1:\n";
+std::cout << "  " << edge3_segments[i] << (circle3.has(edge3_segments[i],true) ? " ... true\n" : " ... false\n");
+std::cout << "partitioniere edge1:\n";
 		edge1_segments = PartitionOfCircle(circle1,p1->p,psi,number_of_segments);
 		edge1_segments.pop_back();
 		edge1_segments.push_back(p2->p);
 for (Position i = 0; i < edge1_segments.size(); i++)
-cout << "  " << edge1_segments[i] << (circle1.has(edge1_segments[i],true) ? " ... true\n" : " ... false\n");
+std::cout << "  " << edge1_segments[i] << (circle1.has(edge1_segments[i],true) ? " ... true\n" : " ... false\n");
 		TCircle3<T> center_circle(face->rsedge->getCenterOfTorus(),
 															normal,
 															face->rsedge->getMajorRadiusOfTorus());
 		vector< TVector3<T> > centers;
-cout << "berechne Mittelpunkte:\n";
+std::cout << "berechne Mittelpunkte:\n";
 		centers = PartitionOfCircle(center_circle,edge0->circle.p,psi,number_of_segments);
 		centers.pop_back();
 		centers.push_back(edge2->circle.p);
 for (Position i = 0; i < centers.size(); i++)
-cout << "  " << centers[i] << (center_circle.has(centers[i],true) ? " ... true\n" : " ... false\n");
+std::cout << "  " << centers[i] << (center_circle.has(centers[i],true) ? " ... true\n" : " ... false\n");
 		BuildTriangles(face,edge0,edge1,edge2,edge3,centers,edge1_segments,edge3_segments,
 									 radius_of_probe,size,surface,border);
 		bool swap = false;
@@ -794,11 +794,11 @@ print << "  Dreieck" << triangles.size() << ": " << offset+i << ", " << i << ", 
 			throw Exception::GeneralException(__FILE__,__LINE__,"can't sew faces","no edge in contour");
 		}
 		std::list< TTriangulatedSurface<T>::Point* > contour_out;
-cout << "$1\n";
+std::cout << "$1\n";
 		GetContour(border,edge_contours,contour_out);
-cout << "$2\n";
+std::cout << "$2\n";
 		std::list< TTriangulatedSurface<T>::Point* > contour_in;
-cout << "$3\n";
+std::cout << "$3\n";
 		SortContour(contour,contour_out.front(),*(++(contour_out.begin())),contour_in,(T)0);
 /*				Molecule* molecule = new Molecule;
 				std::list< TTriangulatedSurface<T>::Point* >::iterator it;
@@ -839,13 +839,13 @@ cout << "$3\n";
 				System* system = new System;
 				system->insert(*molecule);
 				String file;
-				cout << "output-file: ";
+				std::cout << "output-file: ";
 				cin >> file;
 				HINFile output(file,ios::out);
 				output << *system;
 				output.close();
 				delete system;*/
-cout << "$4\n";
+std::cout << "$4\n";
 		std::list< TTriangulatedSurface<T>::Triangle* >::iterator old_last = surface->triangles.end();
 		old_last--;
 		std::list< TTriangulatedSurface<T>::Point* >::iterator in = contour_in.begin();
@@ -955,7 +955,7 @@ cout << "$4\n";
 		 typename TTriangulatedSurface<T>::Point* point1, typename TTriangulatedSurface<T>::Point* point2,
  		 std::list< typename TTriangulatedSurface<T>::Point* >& contour, const T& /*dummy*/)
 	{
-				cout << border.size() << "\n";
+				std::cout << border.size() << "\n";
 		std::set< TTriangulatedSurface<T>::Edge* > border_;
 		border_.insert(border.begin(),border.end());
 		//	find the first point: the closest point to point1
@@ -977,7 +977,7 @@ cout << "$4\n";
 			}
 		}
 		contour.push_back(first);
-				cout << "found first\n";
+				std::cout << "found first\n";
 		//	find the second point: the neighbour of the first wich is closest to point2
 		std::set< TTriangulatedSurface<T>::Point* > candidates;
 		std::list<TTriangulatedSurface<T>::Edge*>::iterator e;
@@ -1001,7 +1001,7 @@ cout << "$4\n";
 			second = *(--candidates.end());
 		}
 		contour.push_back(second);
-				cout << "found second\n";
+				std::cout << "found second\n";
 		TTriangulatedSurface<T>::Edge* last_edge;
 		for (e = first->edge.begin(); e != first->edge.end(); e++)
 		{
@@ -1013,7 +1013,7 @@ cout << "$4\n";
 			}
 		}
 		//	now complete the contour
-				cout << "found first edge\n";
+				std::cout << "found first edge\n";
 		while (border_.size() > 0)
 		{
 			TTriangulatedSurface<T>::Point* last_point = contour.back();
@@ -1038,7 +1038,7 @@ cout << "$4\n";
 			}
 			border_.erase(next_edge);
 			last_edge = next_edge;
-					cout << "found next edge \n";
+					std::cout << "found next edge \n";
 		}
 		TTriangulatedSurface<T>::Point* last = *contour.begin();
 		contour.remove(last);
