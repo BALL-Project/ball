@@ -1,39 +1,105 @@
-// $Id: DefaultProcessors_test.C,v 1.1 2000/02/16 19:23:03 oliver Exp $
+// $Id: DefaultProcessors_test.C,v 1.2 2000/02/18 13:10:05 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-// insert includes here
+#include <BALL/STRUCTURE/defaultProcessors.h>
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: DefaultProcessors_test.C,v 1.1 2000/02/16 19:23:03 oliver Exp $")
+START_TEST(class_name, "$Id: DefaultProcessors_test.C,v 1.2 2000/02/18 13:10:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-///  insert tests for each member function here         
-///
-	
-CHECK("testname")			// a string describing the tested function
+// tests for class ClearChargeProcessor::
 
-TEST_EQUAL(0,0)				// each test should be one of the macros (see above): 
-											//   TEST_EQUAL(expression1, expression2)
-											//   TEST_REAL_EQUAL(expression1, expression2)
-											//   TEST_NOT_EQUAL(expression1, expression2)
-                      //   TEST_EXCEPTION(exception_class, expression)
-                      //   TEST_FILE(infile, templatefile, use_regexps)
+CHECK(ClearChargeProcessor::Processor::Result operator()(Atom& atom))
+  //BAUSTELLE
+RESULT
 
-RESULT								// prints the result for the test
-											// and updates the global variable
-											// OK. If any test fails, OK is set
-											// to false and the whole test suite
-											// will terminate with FAILURE and exit
-											// code 1. Otherwise it terminates
-											// with OK and 0.
-											
+
+// tests for class ClearRadiusProcessor::
+
+CHECK(ClearRadiusProcessor::Processor::Result operator()(Atom& atom))
+  //BAUSTELLE
+RESULT
+
+
+// tests for class AssignRadiusProcessor::
+
+CHECK(AssignRadiusProcessor::AssignRadiusProcessor())
+  //BAUSTELLE
+RESULT
+
+
+CHECK(AssignRadiusProcessor::AssignRadiusProcessor(const String& filename))
+  //BAUSTELLE
+RESULT
+
+
+CHECK(AssignRadiusProcessor::start())
+  //BAUSTELLE
+RESULT
+
+
+CHECK(AssignRadiusProcessor::finish())
+  //BAUSTELLE
+RESULT
+
+
+CHECK(AssignRadiusProcessor::Processor::Result operator()(Atom& atom))
+  //BAUSTELLE
+RESULT
+
+
+CHECK(AssignRadiusProcessor::setFilename(const String& filename))
+  //BAUSTELLE
+RESULT
+
+
+CHECK(AssignRadiusProcessor::getFilename())
+  //BAUSTELLE
+RESULT
+
+
+CHECK(AssignRadiusProcessor::getNumberOfAssignments())
+  //BAUSTELLE
+RESULT
+
+
+CHECK(AssignRadiusProcessor::getNumberOfErrors())
+  //BAUSTELLE
+RESULT
+
+
+// tests for class AssignChargeProcessor::
+
+CHECK(AssignChargeProcessor::AssignChargeProcessor())
+  //BAUSTELLE
+RESULT
+
+
+CHECK(AssignChargeProcessor::AssignChargeProcessor(const String& filename))
+  //BAUSTELLE
+RESULT
+
+
+CHECK(AssignChargeProcessor::start())
+  //BAUSTELLE
+RESULT
+
+
+CHECK(AssignChargeProcessor::Processor::Result operator () (Atom& atom))
+  //BAUSTELLE
+RESULT
+
+
+CHECK(AssignChargeProcessor::getTotalCharge())
+  //BAUSTELLE
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
