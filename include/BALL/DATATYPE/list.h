@@ -1,4 +1,4 @@
-// $Id: list.h,v 1.10 2001/05/22 15:39:16 oliver Exp $
+// $Id: list.h,v 1.11 2001/06/21 02:10:51 oliver Exp $
 
 #ifndef BALL_DATATYPE_LIST_H
 #define BALL_DATATYPE_LIST_H
@@ -41,10 +41,14 @@ namespace BALL
 		/**	Iterator type.
 		*/
 		typedef typename list<Value>::iterator Iterator;
+		// for STL compatibility
+		typedef typename list<Value>::iterator iterator;
 
 		/**	Constant iterator type.
 		*/
 		typedef typename list<Value>::const_iterator ConstIterator;
+		// for STL compatibility
+		typedef typename list<Value>::const_iterator const_iterator;
 
 		//@}
 
@@ -100,7 +104,7 @@ namespace BALL
 		{
 			clear();
 
-			const_iterator it = list.begin();
+			ConstIterator it = list.begin();
 			for ( ; it != list.end(); ++it)
 			{
 				push_back(const_cast<Value&>(*it));
@@ -230,8 +234,8 @@ namespace BALL
 				return false;
 			}
 
-			List<Value>::const_iterator this_it = begin();
-			List<Value>::const_iterator list_it = list.begin();
+			List<Value>::ConstIterator this_it = begin();
+			List<Value>::ConstIterator list_it = list.begin();
 
 			for (; this_it != end(); ++this_it)
 			{
