@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Quaternion_test.C,v 1.15 2003/06/09 22:40:53 oliver Exp $
+// $Id: Quaternion_test.C,v 1.16 2003/06/10 23:15:44 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 #include <BALL/MATHS/quaternion.h>
 ///////////////////////////
 
-START_TEST(Quaternion, "$Id: Quaternion_test.C,v 1.15 2003/06/09 22:40:53 oliver Exp $")
+START_TEST(Quaternion, "$Id: Quaternion_test.C,v 1.16 2003/06/10 23:15:44 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -269,11 +269,20 @@ CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 RESULT		
 
 CHECK(void clear() throw())
-  // ???
+	q1.set(1.0, 2.0, 3.0, 4.0);
+	q1.clear();
+	Quaternion q;
+	TEST_EQUAL(q1 == q, true)
 RESULT
 
 CHECK(void swap(TQuaternion& q) throw())
-  // ???
+	q1.set(1.0, 2.0, 3.0, 4.0);
+	Quaternion q12(q1);
+	q.set(10, 20, 30, 40);
+	Quaternion q2(q);
+	q.swap(q1);
+	TEST_EQUAL(q, q12)
+	TEST_EQUAL(q1, q2)
 RESULT
 
 /////////////////////////////////////////////////////////////
