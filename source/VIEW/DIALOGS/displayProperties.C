@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.49 2003/12/04 09:50:55 amoll Exp $
+// $Id: displayProperties.C,v 1.50 2003/12/09 12:36:09 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -312,7 +312,9 @@ void DisplayProperties::onNotify(Message *message)
 		CompositeMessage *composite_message = RTTI::castTo<CompositeMessage>(*message);
 		if (composite_message->getType() != CompositeMessage::NEW_MOLECULE) return;
 		// generate graphical representation
-		createRepresentation_(composite_message->getComposite());
+		List<Composite*> clist;
+		clist.push_back(composite_message->getComposite());
+		createRepresentation_(clist);
 		return;
 	}
 
@@ -363,7 +365,7 @@ void DisplayProperties::onNotify(Message *message)
 		model_type_combobox->setCurrentItem(crm->getModelType());
 		coloring_method_combobox->setCurrentItem(crm->getColoringMethod());
 		createRepresentationMode();
-		createRepresentation_(*crm->getComposites().begin());
+		createRepresentation_(crm->getComposites());
 	}
 }
 
@@ -377,7 +379,7 @@ void DisplayProperties::applyButtonClicked()
 	}
 
 	setStatusbarText("building model...");
-	createRepresentation_();
+	createRepresentation_(getMainControl()->getControlSelection());
 	setStatusbarText("drawing representation...");
 
 	// update scene
@@ -406,10 +408,10 @@ void DisplayProperties::editSelectionColor()
 // Model Processor methods
 // ------------------------------------------------------------------------
 
-void DisplayProperties::createRepresentation_(const Composite* composite)
+void DisplayProperties::createRepresentation_(const List<Composite*>& composites)
 	throw(InvalidOption)
 {
-	ModelProcessor* model_processor;
+	ModelProcessor* model_processor = 0;
 
 	switch (model_type_combobox->currentItem())
 	{
@@ -475,7 +477,7 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 			throw(InvalidOption(__FILE__, __LINE__, model_type_combobox->currentItem()));
 	}
 
-	ColorProcessor* color_processor;
+	ColorProcessor* color_processor = 0;
 
 	switch(coloring_method_combobox->currentItem())
 	{
@@ -577,18 +579,10 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 	{	
 		pm.insert(*rep);
 		
-		if (composite != 0)
+		List<Composite*>::ConstIterator it = composites.begin();
+		for (; it != composites.end(); it++)
 		{
-			rep->getComposites().insert(composite);
-		}
-		else
-		{
-			List<Composite*>& selection = getMainControl()->getControlSelection();
-			List<Composite*>::Iterator it = selection.begin();
-			for (; it != selection.end(); it++)
-			{
-				rep->getComposites().insert(*it);
-			}
+			rep->getComposites().insert(*it);
 		}
 	}
 	else
@@ -624,10 +618,10 @@ void DisplayProperties::createRepresentation_(const Composite* composite)
 	message->setRepresentation(rep);
 	notify_(message);
 
-	if (focus)
+	if (focus && composites.size() > 0)
 	{
 		CompositeMessage* ccmessage = new CompositeMessage;
-		ccmessage->setComposite(composite);
+		ccmessage->setComposite(*composites.begin());
 		ccmessage->setType(CompositeMessage::CENTER_CAMERA);
 		notify_(ccmessage);
 	}

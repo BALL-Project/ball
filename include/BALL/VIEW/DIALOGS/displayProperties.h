@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.21 2003/11/21 01:22:21 amoll Exp $
+// $Id: displayProperties.h,v 1.22 2003/12/09 12:36:19 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -259,12 +259,12 @@ namespace BALL
 			void checkDrawingPrecision_()
 				throw();
 
-			/*_ Create the new representation for the selection in the MolecularControl.
+			/*_ Create the new representation for the selection in the MolecularControl or for a given List of Composites.
 					Called by onNotify() after receiving CompositeMessage::NEW_MOLECULE and by applyButtonClicked().
 					To insert a new type of model, this is the only method in DisplayProperties you have to
 					change (See also VIEW/KERNEL/common.h).
 			*/
-			virtual void createRepresentation_(const Composite* composite = 0)
+			virtual void createRepresentation_(const List<Composite*>& composites)
 				throw(InvalidOption);
 
 			//_ Read a inifile entry and set the accoring attribut and ComboBox.
