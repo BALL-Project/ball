@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashGrid.h,v 1.39 2004/10/28 14:45:49 amoll Exp $
+// $Id: hashGrid.h,v 1.40 2005/01/26 14:06:15 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_HASHGRID_H
@@ -1287,6 +1287,15 @@ namespace BALL
 		const Item* getClosestItem(const Vector3& point, Size distance) const
 			throw();
 
+		/** Calculate the minimum required spacing to build a HashGrid3 with the given size
+				and less than the given memory consumption.
+				@param memory the amount of memory in bytes
+				@param size   the diagonal of the grid
+				@return the minimal needed spacing
+		*/
+		static float calculateMinSpacing(float memory, const Vector3& size)
+			throw();
+
 		//@}
 		/**	@name	External Iterators 
 		*/
@@ -1892,13 +1901,13 @@ namespace BALL
 				for (Index zi = -(Index)dist; zi <= (Index)dist; zi++)
 				{
 					// iterate over all data items
-					const HashGridBox3<Item>* box_ptr = getBox(x+xi, y+yi, z+zi);	
+					const HashGridBox3<Item>* const box_ptr = getBox(x+xi, y+yi, z+zi);	
 					if (box_ptr != 0 && !box_ptr->isEmpty())
 					{
 						typename HashGridBox3<Item>::ConstDataIterator hit = box_ptr->beginData();
 						for (;hit != box_ptr->endData(); hit++)
 						{
-							float new_dist = ((*hit)->getPosition() - point).getSquareLength();
+							const float new_dist = ((*hit)->getPosition() - point).getSquareLength();
 							if (new_dist < distance)
 							{
 								item = &*hit;
@@ -1911,6 +1920,17 @@ namespace BALL
 		}
 
 		return item;
+	}
+
+	template <typename Item>
+	BALL_INLINE
+	float HashGrid3<Item>::calculateMinSpacing(float memory, const Vector3& size)
+		throw()
+	{
+		Size memory_for_box = sizeof(HashGridBox3<Item>) + sizeof(HashGridBox3<Item>*);
+		Size nr_boxes = (Size) floor(memory / memory_for_box);
+
+		return pow((size.x * size.y * size.z) / nr_boxes, 1.0 / 3.0);
 	}
 
 	template <typename Item>
