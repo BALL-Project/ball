@@ -1,0 +1,185 @@
+<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<class>ContourSurfaceDialogData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>ContourSurfaceDialogData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>463</width>
+            <height>164</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>ContourSurface</string>
+    </property>
+    <property name="sizeGripEnabled">
+        <bool>false</bool>
+    </property>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>groupBox1_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>2</x>
+                <y>61</y>
+                <width>177</width>
+                <height>55</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>threshold</string>
+        </property>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>threshold</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>10</x>
+                    <y>18</y>
+                    <width>160</width>
+                    <height>28</height>
+                </rect>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QGroupBox">
+        <property name="name">
+            <cstring>groupBox1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>2</x>
+                <y>0</y>
+                <width>454</width>
+                <height>55</height>
+            </rect>
+        </property>
+        <property name="title">
+            <string>RegularData file</string>
+        </property>
+        <widget class="QLineEdit">
+            <property name="name">
+                <cstring>filename</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>9</x>
+                    <y>17</y>
+                    <width>354</width>
+                    <height>28</height>
+                </rect>
+            </property>
+        </widget>
+        <widget class="QPushButton">
+            <property name="name">
+                <cstring>browse_button</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>366</x>
+                    <y>17</y>
+                    <width>82</width>
+                    <height>28</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>browse</string>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QLayoutWidget">
+        <property name="name">
+            <cstring>Layout1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>4</x>
+                <y>123</y>
+                <width>454</width>
+                <height>33</height>
+            </rect>
+        </property>
+        <hbox>
+            <property name="name">
+                <cstring>unnamed</cstring>
+            </property>
+            <property name="margin">
+                <number>0</number>
+            </property>
+            <property name="spacing">
+                <number>6</number>
+            </property>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>buttonOk</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
+                <property name="text">
+                    <string>&amp;OK</string>
+                </property>
+                <property name="accel">
+                    <string></string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+                <property name="default">
+                    <bool>true</bool>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>buttonCancel</cstring>
+                </property>
+                <property name="text">
+                    <string>&amp;Cancel</string>
+                </property>
+                <property name="accel">
+                    <string></string>
+                </property>
+                <property name="autoDefault">
+                    <bool>true</bool>
+                </property>
+            </widget>
+        </hbox>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>buttonCancel</sender>
+        <signal>clicked()</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>reject()</slot>
+    </connection>
+    <connection>
+        <sender>buttonOk</sender>
+        <signal>clicked()</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>accept()</slot>
+    </connection>
+    <connection>
+        <sender>filename</sender>
+        <signal>textChanged(const QString&amp;)</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>fileNameChanged()</slot>
+    </connection>
+    <connection>
+        <sender>browse_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ContourSurfaceDialogData</receiver>
+        <slot>browseFiles()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>browseFiles()</slot>
+    <slot>fileNameChanged()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
