@@ -1,6 +1,7 @@
-// $Id: HINFile.C,v 1.9 2000/01/11 20:15:35 oliver Exp $
+// $Id: HINFile.C,v 1.10 2000/01/13 22:28:06 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
+#include <BALL/CONCEPT/composite.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/atom.h>
@@ -245,7 +246,8 @@ namespace BALL
 			{
 				// counter for the residues
 				Atom* this_atom = atom_vector[*comp_it];
-				Residue* this_residue = this_atom->getAncestor<Residue>();
+					
+				Residue* this_residue = this_atom->Composite::getAncestor(RTTI::getDefault<Residue>());
 				if (this_residue != current_residue)
 				{
 					if (current_residue != 0)

@@ -1,4 +1,4 @@
-// $Id: PDBFile.C,v 1.9 2000/01/11 20:15:36 oliver Exp $
+// $Id: PDBFile.C,v 1.10 2000/01/13 22:28:06 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -7,6 +7,7 @@
 #include <BALL/KERNEL/PSE.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/CONCEPT/composite.h>
 #include <BALL/COMMON/logStream.h>
 
 using namespace std;
@@ -813,8 +814,8 @@ namespace BALL
 
 			BALL_FOREACH_BOND(*protein, atom_it, bond_it)
 			{
-				residue[0] = (*bond_it).getFirstAtom()->getAncestor<Residue>();
-				residue[1] = (*bond_it).getSecondAtom()->getAncestor<Residue>();
+				residue[0] = (*bond_it).getFirstAtom()->getAncestor(RTTI::getDefault<Residue>());
+				residue[1] = (*bond_it).getSecondAtom()->getAncestor(RTTI::getDefault<Residue>());
 
 				if (residue[0] == 0 || residue[1] == 0
 						|| residue[0] == residue[1]
@@ -1019,7 +1020,7 @@ namespace BALL
 							PDB_atom_name[4] = '\0';
 							strcpy(element_symbol, current_atom->getElement().getSymbol().c_str());
 						
-							current_fragment = current_atom->getAncestor<Fragment>();
+							current_fragment = current_atom->getAncestor(RTTI::getDefault<Fragment>());
 							if (current_fragment != 0)
 							{
 								current_fragment->getName().get(PDB_residue_name[0], 0, 3);
@@ -1084,7 +1085,7 @@ namespace BALL
       PDB_atom_name[4] = '\0';
       strcpy(element_symbol, current_atom->getElement().getSymbol().c_str());
       
-      current_fragment = current_atom->getAncestor<Fragment>();
+      current_fragment = current_atom->getAncestor(RTTI::getDefault<Fragment>());
       if (current_fragment != 0)
       {
 				current_fragment->getName().get(PDB_residue_name[0], 0, 4);
@@ -1366,7 +1367,7 @@ namespace BALL
 		
 					if (*protein_res_it == *initial_residue)
 					{
-						for (; !protein_res_it.isEnd() && (*protein_res_it).hasAncestor<SecondaryStructure>();
+						for (; !protein_res_it.isEnd() && (*protein_res_it).hasAncestor(RTTI::getDefault<SecondaryStructure>());
 								 ++protein_res_it)
 						{	
 							if (*protein_res_it == *terminal_residue)
@@ -1388,7 +1389,7 @@ namespace BALL
 
 							for (; !protein_res_it.isEnd(); ++protein_res_it)
 							{
-								if ((*protein_res_it).hasAncestor<SecondaryStructure>())
+								if ((*protein_res_it).hasAncestor(RTTI::getDefault<SecondaryStructure>()))
 								{
 									--protein_res_it;
 
@@ -1447,13 +1448,13 @@ namespace BALL
 					 !protein_res_it.isEnd(); ++protein_res_it)
 			{
 				if ((*protein_res_it).hasProperty(Residue::PROPERTY__AMINO_ACID) == true
-						&& (*protein_res_it).Composite::hasAncestor<SecondaryStructure>() == false)
+						&& (*protein_res_it).Composite::hasAncestor(RTTI::getDefault<SecondaryStructure>()) == false)
 				{
 					terminal_residue = initial_residue = &(*protein_res_it);
 		
 					for (; !protein_res_it.isEnd()
 							 && (*protein_res_it).hasProperty(Residue::PROPERTY__AMINO_ACID) == true
-							 && (*protein_res_it).hasAncestor<SecondaryStructure>() == false;
+							 && (*protein_res_it).hasAncestor(RTTI::getDefault<SecondaryStructure>()) == false;
 							 ++protein_res_it)
 					{
 						terminal_residue = &(*protein_res_it);
