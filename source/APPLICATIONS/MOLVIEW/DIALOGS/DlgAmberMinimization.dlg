@@ -12,20 +12,20 @@ Dialog {
 }
 WidgetLayout {
 InitialPos {-1 -1}
-Size {480 270}
+Size {510 330}
 MinSize {0 0}
 MaxSize {32767 32767}
 Grid {10}
 TextTranslated {TRUE}
 
 GroupBox {
-		Title {minimziation algorithm}
+		Title {minimization algorithm}
 		Alignment {AlignHCenter}
 		Style {49}
 		LineWidth {1}
 		MidLineWidth {0}
 		FrameMargin {0}
-		Rect {20 120 210 90}
+		Rect {20 120 230 90}
 		Name {GroupBox_2}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -216,7 +216,7 @@ LineEdit {
 		PalettePropagation {SameFont}
 }
 Label {
-		Text {kJ/mol A}
+		Text {kJ/(mol A)}
 		Alignment {AlignLeft|AlignVCenter|ExpandTabs}
 		AutoResize {FALSE}
 		Margin {0}
@@ -224,7 +224,7 @@ Label {
 		LineWidth {1}
 		MidLineWidth {0}
 		FrameMargin {0}
-		Rect {410 80 60 30}
+		Rect {410 80 70 30}
 		Name {Label_7}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
@@ -247,7 +247,7 @@ PushButton {
 		Text {&Start}
 		AutoRepeat {FALSE}
 		AutoResize {FALSE}
-		Rect {100 230 100 30}
+		Rect {100 280 100 30}
 		Name {PushButton_8}
 		Signal {[Protected]  clicked --> accept  ()}
 		MinimumSize {0 0}
@@ -271,9 +271,142 @@ PushButton {
 		Text {Cancel}
 		AutoRepeat {FALSE}
 		AutoResize {FALSE}
-		Rect {270 230 100 30}
+		Rect {270 280 100 30}
 		Name {PushButton_9}
 		Signal {[Protected]  clicked --> reject  ()}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteButton}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+VButtonGroup {
+		Exclusive {FALSE}
+		Title {dielectric constant}
+		Alignment {AlignHCenter}
+		Style {49}
+		LineWidth {1}
+		MidLineWidth {0}
+		FrameMargin {0}
+		Rect {270 120 220 90}
+		Name {VButtonGroup_1}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {NoFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+RadioButton {
+		Checked {TRUE}
+		Text {constant}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {290 140 100 30}
+		Name {RadioButton_11}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+RadioButton {
+		Checked {FALSE}
+		Text {distance dependent}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {290 170 170 30}
+		Name {RadioButton_12}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+LineEdit {
+		Text {}
+		EchoMode {Normal}
+		MaxLength {32767}
+		FrameShown {TRUE}
+		Alignment {AlignLeft}
+		Rect {120 230 280 30}
+		Name {LineEdit_5}
+		Variable {parameter_file_edit_}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {StrongFocus}
+		BackgroundMode {PaletteBase}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+Label {
+		Text {parameter file}
+		Alignment {AlignLeft|AlignVCenter|ExpandTabs}
+		AutoResize {FALSE}
+		Margin {0}
+		Style {0}
+		LineWidth {1}
+		MidLineWidth {0}
+		FrameMargin {0}
+		Rect {20 230 90 30}
+		Name {Label_10}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {NoFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+PushButton {
+		ToggleButton {FALSE}
+		Default {FALSE}
+		AutoDefault {TRUE}
+		IsMenuButton {FALSE}
+		Text {Browse}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {410 230 80 30}
+		Name {PushButton_10}
+		Signal {[Protected]  clicked --> browseParameterFiles  ()}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
 		BackgroundPixmap {}

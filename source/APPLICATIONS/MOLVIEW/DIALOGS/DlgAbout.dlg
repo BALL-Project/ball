@@ -20,7 +20,7 @@ Grid {10}
 TextTranslated {FALSE}
 
 Label {
-		Text {MOLVIEW V 0.9 alpha}
+		Text {MOLVIEW V 0.95 alpha}
 		Alignment {AlignHCenter|AlignVCenter|ExpandTabs}
 		AutoResize {FALSE}
 		Margin {0}
@@ -28,7 +28,7 @@ Label {
 		LineWidth {1}
 		MidLineWidth {0}
 		FrameMargin {0}
-		Rect {27 5 305 52}
+		Rect {19 5 322 52}
 		Name {Label_4}
 		Palette {0 12632256 15527148 8421504 10526884 16711680 16777215 12632256 14474460 0 0 0 0 16777215 8421504 12632256 15527148 8421504 10526884 8421504 12632256 12632256 14474460 8421504 8421504 0 8421504 12632256 0 12632256 15527148 8421504 10526884 0 16777215 12632256 14474460 0 0 0 0 16777215}
 		Font {"linotype-helvetica" 24 50 0 0 0 0 5 0}
@@ -53,7 +53,7 @@ PushButton {
 		Text {O&K}
 		AutoRepeat {FALSE}
 		AutoResize {TRUE}
-		Rect {150 334 59 30}
+		Rect {151 334 58 29}
 		Name {PushButton_4}
 		Signal {[Protected]  pressed --> accept  ()}
 		MinimumSize {0 0}
