@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.18.2.3 2004/12/30 19:49:14 amoll Exp $
+// $Id: POVRenderer.C,v 1.18.2.4 2004/12/30 19:55:35 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -532,8 +532,7 @@ namespace BALL
 					out << "<";
 					out << mesh.triangle[i].v1 << ", ";
 					out << mesh.triangle[i].v2 << ", ";
-					out << mesh.triangle[i].v3;
-					out << ">, " << endl;
+					out << mesh.triangle[i].v3 << ">, ";
 					// color index
 					mesh.colorList[mesh.triangle[i].v1].get(color_temp);
 					out << colors[color_temp] << ", ";
@@ -549,6 +548,7 @@ namespace BALL
 		}
 				
 
+		/* old way of rendering meshes, to be removed, if new one works (30.12.2004)
 		void POVRenderer::renderMesh2_(const Mesh& mesh)
 			throw()
 		{
@@ -644,6 +644,7 @@ namespace BALL
 			(*outfile_) << "\t\t finish { BALLFinishMesh }" << std::endl;
 			(*outfile_) << "\t}" << std::endl << std::endl;
 		}
+	*/
 
 		void POVRenderer::renderClippingPlane_(const Representation& rep)
 			throw()
