@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.36 2004/12/17 15:29:37 amoll Exp $
+// $Id: forceField.C,v 1.37 2004/12/22 16:02:26 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -33,7 +33,7 @@ namespace BALL
 			update_time_stamp_(),
 			setup_time_stamp_(),
 			unassigned_atoms_(),
-			max_number_unassigned_atoms_(Limits<Size>::max())
+			max_number_of_errors_(Limits<Size>::max())
 	{
 	}
 
@@ -66,7 +66,7 @@ namespace BALL
 		components_.clear();
 
 		unassigned_atoms_.clear();
-		max_number_unassigned_atoms_ = Limits<Size>::max();
+		max_number_of_errors_= Limits<Size>::max();
 	}
 
 	// copy constructor 
@@ -84,7 +84,7 @@ namespace BALL
 			selection_enabled_(force_field.selection_enabled_),
 			update_time_stamp_(force_field.update_time_stamp_),
 			setup_time_stamp_(force_field.setup_time_stamp_),
-			max_number_unassigned_atoms_(force_field.max_number_unassigned_atoms_)
+			max_number_of_errors_(force_field.max_number_of_errors_)
 	{
 		// Copy the component vector and its components.
 		for (Size i = 0; i < force_field.components_.size(); i++) 
@@ -112,7 +112,7 @@ namespace BALL
 			use_selection_ = force_field.use_selection_;
 			selection_enabled_ = force_field.selection_enabled_;
 			valid_ = force_field.valid_;
-			max_number_unassigned_atoms_ = force_field.max_number_unassigned_atoms_;
+			max_number_of_errors_= force_field.max_number_of_errors_;
 
 			Size i;
 			for (i = 0; i < components_.size(); i++) 
@@ -146,7 +146,7 @@ namespace BALL
 			update_time_stamp_(),
 			setup_time_stamp_(),
 			unassigned_atoms_(),
-			max_number_unassigned_atoms_(Limits<Size>::max())
+			max_number_of_errors_(Limits<Size>::max())
 	{
 		bool result = setup(system);
 
@@ -173,7 +173,7 @@ namespace BALL
 			update_time_stamp_(),
 			setup_time_stamp_(),
 			unassigned_atoms_(),
-			max_number_unassigned_atoms_(Limits<Size>::max())
+			max_number_of_errors_(Limits<Size>::max())
 	{
 		bool result = setup(system, new_options);
 
@@ -533,6 +533,7 @@ namespace BALL
 	}
 
 	void ForceField::update()
+		throw(ForceField::TooManyErrors)
 	{
 		// check for validity of the force field
 		if (!valid_)
@@ -630,19 +631,14 @@ namespace BALL
 		return 0;
 	}
 
-	void ForceField::setMaximumUnassignedAtoms(Size nr)
+	void ForceField::setMaximumNumberOfErrors(Size nr)
 	{
-		max_number_unassigned_atoms_ = nr;
+		max_number_of_errors_= nr;
 	}
 	
-	Size ForceField::getMaximumUnassignedAtoms() const
+	Size ForceField::getMaximumNumberOfErrors() const
 	{
-		return max_number_unassigned_atoms_;
-	}
-
-	Size ForceField::getNumberOfUnassignedAtoms() const
-	{
-		return unassigned_atoms_.size();
+		return max_number_of_errors_;
 	}
 
 	HashSet<const Atom*>& ForceField::getUnassignedAtoms()
@@ -650,6 +646,20 @@ namespace BALL
 		return unassigned_atoms_;
 	}
 
+	std::ostream& ForceField::error() throw(ForceField::TooManyErrors)
+	{
+		number_of_errors_++;
+		if (number_of_errors_ > max_number_of_errors_)
+		{
+			throw TooManyErrors(__FILE__, __LINE__);
+		}
+		return Log.error();
+	 } 
+
+	ForceField::TooManyErrors::TooManyErrors(const char* file, int line)
+		: Exception::GeneralException(file, line)
+	{
+	}
 
 # ifdef BALL_NO_INLINE_FUNCTIONS
 #   include <BALL/MOLMEC/COMMON/forceField.iC>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmTorsion.C,v 1.12 2004/12/17 15:29:37 amoll Exp $
+// $Id: charmmTorsion.C,v 1.13 2004/12/22 16:02:26 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmTorsion.h>
@@ -291,7 +291,7 @@ namespace BALL
 										} 
 										else 
 										{
-											Log.warn() << "CharmmTorsion::setup: cannot find torsion parameters for:"
+											getForceField()->error() << "CharmmTorsion::setup: cannot find torsion parameters for:"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a1) << "-"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a2) << "-"
 												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a3) << "-"
@@ -301,11 +301,6 @@ namespace BALL
 												getForceField()->getUnassignedAtoms().insert(a2);
 												getForceField()->getUnassignedAtoms().insert(a3);
 												getForceField()->getUnassignedAtoms().insert(a4);
-												if (getForceField()->getNumberOfUnassignedAtoms() > 
-														getForceField()->getMaximumUnassignedAtoms())
-												{
-													return false;
-												}
 										}
 									}
 								} 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmNonBonded.C,v 1.27 2004/12/17 15:29:37 amoll Exp $
+// $Id: charmmNonBonded.C,v 1.28 2004/12/22 16:02:26 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
@@ -214,7 +214,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool CharmmNonBonded::setup()
-		throw()
+		throw(ForceField::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{
@@ -446,11 +446,6 @@ namespace BALL
 
 		// Build the vector "non_bonded_" with the atom pairs and parameters.
 		buildVectorOfNonBondedAtomPairs(atom_pair_vector);
-		if (getForceField()->getNumberOfUnassignedAtoms() > 
-				getForceField()->getMaximumUnassignedAtoms())
-		{
-			return false;
-		}
 
 		// initialize vector of parameter structures
 
@@ -577,7 +572,7 @@ namespace BALL
 
 				if (!van_der_waals_parameters_.assignParameters(tmp.values, type_atom1, type_atom2)) 
 				{
-					Log.error() << "CharmmNonBonded::setup: cannot find Lennard Jones parameters for:"
+					getForceField()->error()<< "CharmmNonBonded::setup: cannot find Lennard Jones parameters for:"
 						<< getForceField()->getParameters().getAtomTypes().getTypeName(type_atom1) << "-"
 						<< getForceField()->getParameters().getAtomTypes().getTypeName(type_atom2) 
 						<< " (" << atom1->getFullName() << "-" << atom2->getFullName() << ")" << endl;
@@ -587,11 +582,6 @@ namespace BALL
 
 					getForceField()->getUnassignedAtoms().insert(atom1);
 					getForceField()->getUnassignedAtoms().insert(atom2);
-					if (getForceField()->getNumberOfUnassignedAtoms() > 
-							getForceField()->getMaximumUnassignedAtoms())
-					{
-						return;
-					}
 				}
 
 				non_bonded_.push_back(tmp);

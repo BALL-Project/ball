@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmImproperTorsion.C,v 1.12 2004/12/17 15:29:37 amoll Exp $
+// $Id: charmmImproperTorsion.C,v 1.13 2004/12/22 16:02:25 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmImproperTorsion.h>
@@ -54,6 +54,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool CharmmImproperTorsion::setup()
+		throw(ForceField::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{
@@ -267,7 +268,7 @@ namespace BALL
 				// warn the user 
 				if ((a1 == 0) || (a2 == 0) || (a3 == 0) || (a4 == 0))
 				{
-					Log.warn() << "CharmmImproperTorsion::setup: could not find improper torsion for " << torsion.residue_name 
+					getForceField()->error() << "CharmmImproperTorsion::setup: could not find improper torsion for " << torsion.residue_name 
 										 << ":" << torsion.atom_name_A << "-" << torsion.atom_name_B << "-" << torsion.atom_name_C
 										 << "-" << torsion.atom_name_D << endl;
 					Log.warn() << "  Atoms found: ";
@@ -282,12 +283,6 @@ namespace BALL
 					if (a2 != 0) getForceField()->getUnassignedAtoms().insert(a2);
 					if (a3 != 0) getForceField()->getUnassignedAtoms().insert(a3);
 					if (a4 != 0) getForceField()->getUnassignedAtoms().insert(a4);
-					
-					if (getForceField()->getNumberOfUnassignedAtoms() > 
-							getForceField()->getMaximumUnassignedAtoms())
-					{
-						return false;
-					}
 				} 
 				else 
 				{
@@ -355,7 +350,7 @@ namespace BALL
 						} 
 						else 
 						{
-							Log.warn() << "CharmmImproperTorsion::setup: "
+							getForceField()->error() << "CharmmImproperTorsion::setup: "
 												 << "no parameters for improper " 
 												 << torsion.residue_name << "/" 
 												 << torsion.atom_name_A << "/" 
@@ -373,11 +368,6 @@ namespace BALL
 							getForceField()->getUnassignedAtoms().insert(a2);
 							getForceField()->getUnassignedAtoms().insert(a3);
 							getForceField()->getUnassignedAtoms().insert(a4);
-							if (getForceField()->getNumberOfUnassignedAtoms() > 
-									getForceField()->getMaximumUnassignedAtoms())
-							{
-								return false;
-							}
 						}
 					}
 				}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.h,v 1.30 2004/12/17 15:29:18 amoll Exp $
+// $Id: forceField.h,v 1.31 2004/12/22 16:01:57 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -87,6 +87,14 @@ namespace BALL
 		public:
 
 		friend class ForceFieldComponent;
+
+		/// A Special Exception, if too many errors are encountered
+		class TooManyErrors : public Exception::GeneralException
+		{
+			public:
+				///
+				TooManyErrors(const char* file, int line);
+		};
 
 		/**	@name	Type Definitions
 		*/
@@ -179,15 +187,12 @@ namespace BALL
 		    fail, until the setup() methods aborts and return false.
 				By default, there is no limit set.
 		*/
-		void setMaximumUnassignedAtoms(Size nr);
+		void setMaximumNumberOfErrors(Size nr);
 
 		/** Get the number of atoms, for which the setup of the forcefield can
 		    fail, until the setup() methods aborts and return false.
 		*/
-		Size getMaximumUnassignedAtoms() const;
-
-		/// Get the number of atoms, for which the force field setup failed.
-		Size getNumberOfUnassignedAtoms() const;
+		Size getMaximumNumberOfErrors() const;
 
 		/// Get the atoms, for which the force field setup failed.
 		HashSet<const Atom*>& getUnassignedAtoms();
@@ -340,13 +345,17 @@ namespace BALL
 				The default implementation calls  \link ForceFieldComponent::update ForceFieldComponent::update \endlink  for
 				each component in the force field.
 		*/
-		virtual void update();
+		virtual void update()
+			throw(ForceField::TooManyErrors);
 
 		/** Get the current results in String form
 		 		(Generic function to be overloaded in derived classes.)
 		*/
 		virtual String getResults() const
 			throw() { return "undefined";}
+
+		//_ Report an error and increase the error counter
+		std::ostream& error() throw(TooManyErrors);
 
 		//@}
 		/**	@name	Public Attributes
@@ -364,7 +373,6 @@ namespace BALL
 		//@}
 
 		protected:
-
 		/*_	Collect all atoms into the atoms_ vector.
 		*/
 		void collectAtoms_(const System& system);
@@ -429,7 +437,9 @@ namespace BALL
 		HashSet<const Atom*> unassigned_atoms_;
 
 		//_ max number of unassigned atoms
-		Size max_number_unassigned_atoms_;
+		Size max_number_of_errors_;
+
+		Size number_of_errors_;
 
 		//_@}
 	};

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmStretch.C,v 1.11 2004/12/17 15:29:37 amoll Exp $
+// $Id: charmmStretch.C,v 1.12 2004/12/22 16:02:26 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmStretch.h>
@@ -61,6 +61,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool CharmmStretch::setup()
+		throw(ForceField::TooManyErrors)
 	{
 		if (getForceField() == 0) 
 		{
@@ -149,7 +150,7 @@ namespace BALL
 								{
 									if (!stretch_parameters_.assignParameters(values, Atom::ANY_TYPE, Atom::ANY_TYPE))
 									{
-										Log.warn() << "cannot find stretch parameters for atoms " 
+										getForceField()->error() << "cannot find stretch parameters for atoms " 
 															 << stretch_[i].atom1->ptr->getFullName() << " and " 
 															 << stretch_[i].atom2->ptr->getFullName() << " (types are "
 															 << force_field_->getParameters().getAtomTypes().getTypeName(atom_type_A) << "-" 
@@ -157,11 +158,6 @@ namespace BALL
 
 										getForceField()->getUnassignedAtoms().insert(bond.getFirstAtom());
 										getForceField()->getUnassignedAtoms().insert(bond.getSecondAtom());
-										if (getForceField()->getNumberOfUnassignedAtoms() > 
-												getForceField()->getMaximumUnassignedAtoms())
-										{
-											return false;
-										}
 
 										// we don`t want to get any force or energy component
 										// from this stretch

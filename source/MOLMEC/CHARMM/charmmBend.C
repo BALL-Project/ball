@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmBend.C,v 1.10 2004/12/17 15:29:37 amoll Exp $
+// $Id: charmmBend.C,v 1.11 2004/12/22 16:02:25 amoll Exp $
 //
 
 #include <BALL/MOLMEC/CHARMM/charmmBend.h>
@@ -47,6 +47,7 @@ namespace BALL
 
 	// setup the internal datastructures for the component
 	bool CharmmBend::setup()
+		throw(ForceField::TooManyErrors)
 	{
 		// clear old bends:
 		bend_.clear();
@@ -104,7 +105,7 @@ namespace BALL
 						QuadraticAngleBend::Values values;
 						if (!bend_parameters_.assignParameters(values, atom_type_a1, atom_type_a2, atom_type_a3))
 						{
-							Log.warn() << "cannot find bend parameters for atoms "
+							getForceField()->error() << "cannot find bend parameters for atoms "
 								<< this_bend.atom1->ptr->getFullName() << ", " << this_bend.atom2->ptr->getFullName() 
 								<< ", and " << this_bend.atom3->ptr->getFullName() << " (types are " 
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
@@ -114,11 +115,6 @@ namespace BALL
 							getForceField()->getUnassignedAtoms().insert(it2->getPartner(**atom_it));
 							getForceField()->getUnassignedAtoms().insert((const Atom*)&*atom_it);
 							getForceField()->getUnassignedAtoms().insert(it1->getPartner(**atom_it));
-							if (getForceField()->getNumberOfUnassignedAtoms() > 
-									getForceField()->getMaximumUnassignedAtoms())
-							{
-								return false;
-							}
 							// this stretch will not cause energies or forces
 							values.k = 0.0;
 							values.theta0 = 0.0;
