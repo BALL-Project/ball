@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.9 2000/01/09 23:29:13 oliver Exp $
+// $Id: fragmentDB.C,v 1.10 2000/01/09 23:51:44 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -38,8 +38,6 @@ namespace BALL
 
 	bool FragmentDB::expandFirst_(ResourceEntry& root_entry, int depth)
 	{
-		cerr << "expandFirst(root_entry[" << root_entry.getKey() << "/" 
-		     << root_entry.getValue() << "], depth[" << depth <<"])" << endl;
 		if (!root_entry.getKey().hasPrefix(FRAGMENT_DB_INCLUDE_TAG))
 		{
 			ResourceEntry::Iterator	entry_iterator;
@@ -75,7 +73,6 @@ namespace BALL
 				return false;
 
 			} else {
-
 				key.split(key_fields, 2, ":");
 				value.split(value_fields, 2, ":");
 					
@@ -92,14 +89,14 @@ namespace BALL
 				{
 					// search in the standard fragment DB file
 					Path path;
-					String filename = path.find(filename);
+					String filename = path.find(value_fields[0]);
 
 					if (filename == "")
 					{
 						throw Exception::FileNotFound(__FILE__, __LINE__, value_fields[0]);
 					}
 
-					file = new ResourceFile(value_fields[0]);
+					file = new ResourceFile(filename.c_str());
 					if (!file->isValid())
 					{
 						Log.error() << "FragmentDB: cannot open include file " << value_fields[0] << endl;
@@ -256,7 +253,7 @@ namespace BALL
 			{
 				if ((*entry_iterator).getValue().countFields(" ") != 4)
 				{
-					Log.error() << "Wrong entry for atom " << (*entry_iterator).getKey() 
+					Log.error() << "FragmentDB: wrong entry for atom " << (*entry_iterator).getKey() 
 							 << ": " << (*entry_iterator).getValue() << endl;
 				} else {
 					// create a new atom...
@@ -316,14 +313,14 @@ namespace BALL
 				if ((atom1 == 0) || (atom2 == 0))
 				{
 					// if at least on of the atoms doesn`t exist: complain about it
-					Log.error() << "Bond to a non-existing atom: " 
+					Log.error() << "FragmentDB: Bond to a non-existing atom: " 
 																			<< fields[0] << "-"
 																			<< fields[1] << endl;
 				} else {
 					// otherwise create the bond, if valences free
 					if ((atom1->countBonds() > 7) || (atom2->countBonds() > 7))
 					{
-						Log.error() << "Too many bonds - cannot create bond: " 
+						Log.error() << "FragmentDB: too many bonds - cannot create bond: " 
 																				<< atom1->getName() << "-" << atom2->getName()
 																				<< " in fragment " << fragment.getName() << endl;
 					} else {
@@ -357,7 +354,7 @@ namespace BALL
 				if (atom == 0)
 				{
 					// if the atom to be deleted doesn`t exist - complain about it!
-					Log.error() << "Cannot delete non-existing atom: "
+					Log.error() << "FragmentDB: cannot delete non-existing atom: "
 																			<< (*entry_iterator).getKey() << endl;
 				} else {
 					// otherwise delete the atom
@@ -391,7 +388,7 @@ namespace BALL
 				if (atom == 0)
 				{
 					// if the atom to be renamed doesn`t exist - complain about it!
-					Log.error() << "Cannot rename non-existing atom: "
+					Log.error() << "FragmentDB: cannot rename non-existing atom: "
 																			<< (*entry_iterator).getKey() << endl;
 				} else {
 					// otherwise rename the atom
@@ -541,7 +538,7 @@ namespace BALL
 				entry = (*frag_entry_iterator).getEntry("Atoms");
 				if (entry == 0)
 				{
-					Log.error() << "Cannot find Atoms entry for " 
+					Log.error() << "FragmentDB: cannot find Atoms entry for " 
 						<< fragment_name << endl;
 					return;
 				} else {
@@ -1077,7 +1074,7 @@ namespace BALL
 
 		// if we couldn't find an appropriate table, complain about it!
 		if ((number_of_tables == 0) || (max_hits < 0)){
-			Log.error() << "cannot locate an appropriate name conversion table!" << endl;
+			Log.error() << "FragmentDB: cannot locate an appropriate name conversion table!" << endl;
 			return false;
 		}
 
@@ -1394,7 +1391,7 @@ namespace BALL
 		} 
 		catch (Bond::TooManyBonds)
 		{
-			Log.error() << "Cannot create bond between "
+			Log.error() << "FragmentDB: cannot create bond between "
 				<< atom_name << " and " << bindungs_atom->getName() << ": too many bonds!" << endl;
 		}
 
@@ -1481,7 +1478,7 @@ namespace BALL
 			const Fragment* tmp = fragment_db_->getReferenceFragment(*residue_);
 			if (tmp == 0)
 			{
-				Log.level(LogStream::WARNING) << "couldn't find reference fragment for " << residue_->getName() << endl;
+				Log.warn() << "FragmentDB::AddHydrogensProcesor: couldn't find reference fragment for " << residue_->getName() << endl;
 				return Processor::CONTINUE;
 			}
 			if (tmp != 0)
