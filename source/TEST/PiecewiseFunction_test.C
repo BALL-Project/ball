@@ -1,26 +1,23 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PiecewiseFunction_test.C,v 1.7 2002/02/27 12:24:46 sturm Exp $
+// $Id: PiecewiseFunction_test.C,v 1.8 2003/06/09 22:40:53 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-// insert includes here
 #include <BALL/MATHS/piecewiseFunction.h>
 
 ///////////////////////////
 
-START_TEST(PiecewiseFunction, "$Id: PiecewiseFunction_test.C,v 1.7 2002/02/27 12:24:46 sturm Exp $")
+START_TEST(PiecewiseFunction, "$Id: PiecewiseFunction_test.C,v 1.8 2003/06/09 22:40:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
-
-///  insert tests for each member function here         
-///
-	
 
 Coefficients coef;
 vector<Coefficients> coefs;
@@ -47,16 +44,16 @@ intervals.push_back(Interval(2.0, 3.0));
 
 PiecewiseFunction* pointer;
 
-CHECK(PiecewiseFunction::PiecewiseFunction())
+CHECK(PiecewiseFunction() throw())
 	pointer = new PiecewiseFunction;
 	TEST_NOT_EQUAL(pointer, 0)
 RESULT
 
-CHECK(PiecewiseFunction::~PiecewiseFunction())
+CHECK(~PiecewiseFunction() throw())
 	delete pointer;
 RESULT
 
-CHECK(PiecewiseFunction::PiecewiseFunction(const PiecewiseFunction& function))
+CHECK(PiecewiseFunction(const PiecewiseFunction& function) throw())
 	// ?????
 	PiecewiseFunction PWF;
 	PWF.setIntervals(intervals);
@@ -64,7 +61,7 @@ CHECK(PiecewiseFunction::PiecewiseFunction(const PiecewiseFunction& function))
 	TEST_EQUAL(PWF2.getIntervals().size(), PWF.getIntervals().size())
 RESULT
 
-CHECK(PiecewiseFunction::PiecewiseFunction(const std::vector<Interval>& intervals, const std::vector<Coefficients>& coeffs))
+CHECK(PiecewiseFunction(const std::vector<Interval>& intervals, const std::vector<Coefficients>& coeffs) throw())
 	PiecewiseFunction PWF2(intervals, coefs);
 	// Unter der Annahme, daÿ operator== für std::vector definiert ist und
 	// funktioniert.
@@ -78,7 +75,7 @@ CHECK(PiecewiseFunction::PiecewiseFunction(const std::vector<Interval>& interval
 RESULT
 
 
-CHECK(PiecewiseFunction::clear())
+CHECK(void clear() throw())
 	PiecewiseFunction PWF2(intervals, coefs);
 	PWF2.clear();
 	std::vector<Interval> i2 = PWF2.getIntervals();
@@ -88,7 +85,7 @@ CHECK(PiecewiseFunction::clear())
 RESULT
 
 
-CHECK(PiecewiseFunction::set(const std::vector<Interval>& intervals, const std::vector<Coefficients>& coeffs))
+CHECK(void set(const std::vector<Interval>& intervals, const std::vector<Coefficients>& coeffs) throw())
 	PiecewiseFunction PWF2;
 	PWF2.set(intervals, coefs);
 	bool test = (PWF2.getIntervals() == intervals);
@@ -101,7 +98,7 @@ CHECK(PiecewiseFunction::set(const std::vector<Interval>& intervals, const std::
 RESULT
 
 
-CHECK(PiecewiseFunction::PiecewiseFunction& operator = (const PiecewiseFunction& function))
+CHECK(PiecewiseFunction& operator = (const PiecewiseFunction& function) throw())
 	PiecewiseFunction PWF2;
 	PiecewiseFunction PWF3;
 	PWF2 = PWF3;
@@ -112,7 +109,7 @@ CHECK(PiecewiseFunction::PiecewiseFunction& operator = (const PiecewiseFunction&
 RESULT
 
 
-CHECK(PiecewiseFunction::setIntervals(const std::vector<Interval>& intervals))
+CHECK(void setIntervals(const std::vector<Interval>& intervals) throw())
 	PiecewiseFunction PWF2;
 	PWF2.setIntervals(intervals);
 	bool test = (PWF2.getIntervals() == intervals);  
@@ -120,7 +117,7 @@ CHECK(PiecewiseFunction::setIntervals(const std::vector<Interval>& intervals))
 RESULT
 
 
-CHECK(PiecewiseFunction::getInterval(double x) const )
+CHECK(const Interval& getInterval(double x) const throw(Exception::OutOfRange))
 	PiecewiseFunction PWF2(intervals, coefs);
 	TEST_REAL_EQUAL(PWF2.getInterval(0.5).first, 0.0)
 	TEST_REAL_EQUAL(PWF2.getInterval(0.5).second, 1.0)
@@ -129,7 +126,7 @@ CHECK(PiecewiseFunction::getInterval(double x) const )
 RESULT
 
 
-CHECK(PiecewiseFunction::getInterval(Position index) const )
+CHECK(const Interval& getInterval(Position index) const throw(Exception::IndexOverflow))
 	PiecewiseFunction PWF2(intervals, coefs);
 	Position index = 1;
 	TEST_REAL_EQUAL(PWF2.getInterval(index).first, 1.0)
@@ -137,13 +134,13 @@ CHECK(PiecewiseFunction::getInterval(Position index) const )
 RESULT
 
 
-CHECK(PiecewiseFunction::getIntervalIndex(double x) const )
+CHECK(Position getIntervalIndex(double x) const throw(Exception::OutOfRange))
 	PiecewiseFunction PWF2(intervals, coefs);
 	TEST_EQUAL(PWF2.getIntervalIndex(0.5), 0)
 RESULT
 
 
-CHECK(PiecewiseFunction::getRange() const )
+CHECK(const Interval& getRange() const throw())
 	PiecewiseFunction PWF2(intervals, coefs);
 	Interval val = PWF2.getRange();
 	TEST_REAL_EQUAL(val.first, 0.0)
@@ -151,7 +148,7 @@ CHECK(PiecewiseFunction::getRange() const )
 RESULT
 
 
-CHECK(PiecewiseFunction::setCoefficients(const vector<Coefficients>& coefficients))
+CHECK(void setCoefficients(const vector<Coefficients>& coefficients) throw())
 	PiecewiseFunction PWF2;
 	PWF2.setCoefficients(coefs);
 	bool test = (PWF2.getCoefficients() == coefs);
@@ -160,20 +157,19 @@ CHECK(PiecewiseFunction::setCoefficients(const vector<Coefficients>& coefficient
 RESULT
 
 
-CHECK(PiecewiseFunction::getCoefficients(double x) const )
-	/*
+CHECK(const Coefficients& getCoefficients(double x) const throw(Exception::OutOfRange))
 	PiecewiseFunction PWF2;
 	PWF2.setCoefficients(coefs);
-	bool test = (PWF2.getCoefficients(0.5) == RTTI::getDefault<Coefficients>);
+	Coefficients cf;
+	bool test = (PWF2.getCoefficients(0.5) == cf);
 	TEST_EQUAL(test, true)
 	PWF2.setIntervals(intervals);
 	test = (PWF2.getCoefficients(0.5) == coefs[0]);
 	// ?????: false
-	*/
 RESULT
 
 
-CHECK(PiecewiseFunction::getCoefficients(Position index) const )
+CHECK(const Coefficients& getCoefficients(Position index) const throw(Exception::IndexOverflow))
 	PiecewiseFunction PWF2;
 	PWF2.setCoefficients(coefs);
 	Position index = 0;
@@ -183,27 +179,44 @@ CHECK(PiecewiseFunction::getCoefficients(Position index) const )
 RESULT
 
 
-CHECK(PiecewiseFunction::double operator () (double x) const )
+CHECK(double operator () (double x) const throw())
   //?????: Quasi abstrakt.
 RESULT
 
 
-CHECK(PiecewiseFunction::isInRange(double x) const )
+CHECK(bool isInRange(double x) const throw())
 	PiecewiseFunction PWF2(intervals, coefs);
 	TEST_EQUAL(PWF2.isInRange(2.5), true)
 	TEST_EQUAL(PWF2.isInRange(6.5), false)
 RESULT
 
 
-CHECK(PiecewiseFunction::isValid() const )
+CHECK(bool isValid() const throw())
 	PiecewiseFunction PWF2;
 	TEST_EQUAL(PWF2.isValid(), false)
 	PWF2 = PiecewiseFunction(intervals, coefs);
 	TEST_EQUAL(PWF2.isValid(), true);
 RESULT
 
+CHECK(BALL_CREATE(PiecewiseFunction))
+  // ???
+RESULT
 
+CHECK(bool operator == (const PiecewiseFunction& function) const throw())
+  // ???
+RESULT
 
+CHECK(const std::vector<Coefficients>& getCoefficients() const throw())
+  // ???
+RESULT
+
+CHECK(const std::vector<Interval>& getIntervals() const throw())
+  // ???
+RESULT
+
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
+  // ???
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

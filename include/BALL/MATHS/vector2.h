@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector2.h,v 1.14 2003/03/26 09:31:59 sturm Exp $
+// $Id: vector2.h,v 1.15 2003/06/09 22:40:49 oliver Exp $
+//
 
 #ifndef BALL_MATHS_VECTOR2_H
 #define BALL_MATHS_VECTOR2_H
@@ -170,14 +171,14 @@ namespace BALL
 				Assign the vector components from another vector.
 				@param v the vector to assign from
 		**/
-		const TVector2& operator = (const TVector2& v)
+		TVector2& operator = (const TVector2& v)
 			throw();
 
 		/** Assignment operator.
 				Assign a constant value to the two vector components.
 				@param value the constant to assign to x, y
 		**/
-		const TVector2& operator = (const T& value)
+		TVector2& operator = (const T& value)
 			throw();
 
 		/**	Array assignment operator.
@@ -185,7 +186,7 @@ namespace BALL
 				@param	ptr the array
 				@exception	NullPointer if <tt>ptr == 0</tt>
 		*/
-		const TVector2& operator = (const T* ptr)
+		TVector2& operator = (const T* ptr)
 			throw(Exception::NullPointer);
 
 		/**	Return the length of the vector.
@@ -331,7 +332,7 @@ namespace BALL
 
 		/**	Return the distance to another vector.
 		*/
-		T getDistance(const TVector2& Vector2) const
+		T getDistance(const TVector2& vector) const
 			throw();
 
 		/**	Return the squared distance to another vector.
@@ -515,7 +516,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	const TVector2<T>& TVector2<T>::operator = (const TVector2<T>& vector)
+	TVector2<T>& TVector2<T>::operator = (const TVector2<T>& vector)
 		throw()
 	{
 		x = vector.x;
@@ -525,8 +526,23 @@ namespace BALL
 	}
 
 	template <typename T>
+	BALL_INLINE 
+	TVector2<T>& TVector2<T>::operator = (const T* ptr)
+		throw(Exception::NullPointer)
+	{
+		if (ptr == 0)
+		{
+			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
+		x = *ptr++;;
+		y = *ptr;;
+
+		return *this;
+	}
+
+	template <typename T>
 	BALL_INLINE
-	const TVector2<T>& TVector2<T>::operator = (const T& value)
+	TVector2<T>& TVector2<T>::operator = (const T& value)
 		throw()
 	{
 		x = value;

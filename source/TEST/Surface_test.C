@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Surface_test.C,v 1.5 2002/02/27 12:24:59 sturm Exp $
+// $Id: Surface_test.C,v 1.6 2003/06/09 22:40:54 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(Surface, "$Id: Surface_test.C,v 1.5 2002/02/27 12:24:59 sturm Exp $")
+START_TEST(Surface, "$Id: Surface_test.C,v 1.6 2003/06/09 22:40:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -18,12 +20,12 @@ START_TEST(Surface, "$Id: Surface_test.C,v 1.5 2002/02/27 12:24:59 sturm Exp $")
 using namespace BALL;
 
 Surface* surf_ptr = 0;
-CHECK(Surface()	throw())
+CHECK(TSurface() throw())
 	surf_ptr = new Surface;
 	TEST_NOT_EQUAL(surf_ptr, 0)
 RESULT
 
-CHECK(~Surface() throw())
+CHECK(~TSurface() throw())
 	delete surf_ptr;
 RESULT
 
@@ -42,7 +44,7 @@ CHECK(Size getNumberOfNormals() const throw())
 	TEST_EQUAL(s.getNumberOfNormals(), 0)
 RESULT
 
-CHECK(void pushBackTriangle(const Triangle& t) throw())
+CHECK(void pushBackTriangle(const Triangle& triangle) throw())
 	Surface s;
 	TEST_EQUAL(s.getNumberOfTriangles(), 0)
 	Surface::Triangle t1;
@@ -113,7 +115,7 @@ CHECK(Triangle& getTriangle(Position index) throw())
 	TEST_EQUAL(s.getTriangle(1).v3, 31)
 RESULT
 
-CHECK(void pushBackVertex(const Vector3& v) throw())
+CHECK(void pushBackVertex(const Vertex& vertex) throw())
 	Surface s;
 	TEST_EQUAL(s.getNumberOfNormals(), 0)
 	Surface::Vertex v1;
@@ -124,7 +126,7 @@ CHECK(void pushBackVertex(const Vector3& v) throw())
 	TEST_EQUAL(s.getNumberOfVertices(), 2)
 RESULT
 
-CHECK(void pushBackNormal(const Vector3& n) throw())
+CHECK(void pushBackNormal(const Normal& n) throw())
 	Surface s;
 	TEST_EQUAL(s.getNumberOfNormals(), 0)
 	Surface::Normal v1;
@@ -135,7 +137,7 @@ CHECK(void pushBackNormal(const Vector3& n) throw())
 	TEST_EQUAL(s.getNumberOfNormals(), 2)
 RESULT
 
-CHECK(Vector3& getVertex(Position index) throw())
+CHECK(Vertex& getVertex(Position index) throw())
 	Surface s;
 	Surface::Vertex v1(1.0, 2.0, 3.0);
 	s.pushBackVertex(v1);
@@ -146,7 +148,7 @@ CHECK(Vector3& getVertex(Position index) throw())
 	TEST_EQUAL(s.getVertex(1), v2)
 RESULT
 
-CHECK(const Vector3& getVertex(Position index) const throw())
+CHECK(const Vertex& getVertex(Position index) const throw())
 	Surface s;
 	Surface::Vertex v1(1.0, 2.0, 3.0);
 	s.pushBackVertex(v1);
@@ -158,7 +160,7 @@ CHECK(const Vector3& getVertex(Position index) const throw())
 	TEST_EQUAL(c_s.getVertex(1), v2)
 RESULT
 
-CHECK(Vector3& getNormal(Position index) throw())
+CHECK(Normal& getNormal(Position index) throw())
 	Surface s;
 	Surface::Normal v1(1.0, 2.0, 3.0);
 	s.pushBackNormal(v1);
@@ -169,7 +171,7 @@ CHECK(Vector3& getNormal(Position index) throw())
 	TEST_EQUAL(s.getNormal(1), v2)
 RESULT
 
-CHECK(const Vector3& getNormal(Position index) const throw())
+CHECK(const Normal& getNormal(Position index) const throw())
 	Surface s;
 	Surface::Normal v1(1.0, 2.0, 3.0);
 	s.pushBackNormal(v1);
@@ -327,7 +329,7 @@ CHECK(Surface(const Surface& surface)	throw())
 	}
 RESULT
 
-CHECK(void set(const Surface& surface) throw())
+CHECK(void set(const TSurface& surface) throw())
 	Surface s2;
 	s2.set(s);
 
@@ -354,7 +356,7 @@ CHECK(void set(const Surface& surface) throw())
 	}
 RESULT
 
-CHECK(const Surface& operator = (const Surface& box) throw())
+CHECK(TSurface& operator = (const TSurface& surface) throw())
 	Surface s2;
 	s2 = s;
 
@@ -381,7 +383,7 @@ CHECK(const Surface& operator = (const Surface& box) throw())
 	}
 RESULT
 
-CHECK(void get(Surface& surface) const throw())
+CHECK(void get(TSurface& surface) const throw())
 	Surface s2;
 	s.get(s2);
 
@@ -463,7 +465,7 @@ CHECK(float getArea() const throw())
 	TEST_REAL_EQUAL(s.getArea(), area)
 RESULT
 
-CHECK(bool operator == (const Surface& surface) const throw())
+CHECK(bool operator == (const TSurface& surface) const throw())
 	Surface s2(s);
 	bool result = (s2 == s);
 	TEST_EQUAL(result, true)
@@ -505,7 +507,7 @@ CHECK(bool operator == (const Surface& surface) const throw())
 	TEST_EQUAL(result, true)
 RESULT
 
-CHECK(bool operator != (const Surface& surface) const throw())
+CHECK(bool operator != (const TSurface& surface) const throw())
 	Surface s2(s);
 	bool result = (s2 != s);
 	TEST_EQUAL(result, false)
@@ -545,6 +547,22 @@ CHECK(bool operator != (const Surface& surface) const throw())
 	TEST_EQUAL(result, false)
 	result = (s4 != s3);
 	TEST_EQUAL(result, false)
+RESULT
+
+CHECK(BALL_CREATE(TSurface))
+  // ???
+RESULT
+
+CHECK(TSurface(const TSurface& surface) throw())
+  // ???
+RESULT
+
+CHECK(bool operator != (const Triangle& triangle) const throw())
+  // ???
+RESULT
+
+CHECK(bool operator == (const Triangle& triangle) const throw())
+  // ???
 RESULT
 
 /////////////////////////////////////////////////////////////

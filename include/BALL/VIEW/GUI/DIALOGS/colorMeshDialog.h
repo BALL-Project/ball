@@ -16,10 +16,6 @@
 # include <BALL/VIEW/PRIMITIV/mesh.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
-# include <BALL/VIEW/GUI/KERNEL/representation.h>
-#endif
-
 #ifndef BALL_DATATYPE_REGULARDATA3D
 # include <BALL/DATATYPE/regularData3D.h>
 #endif 

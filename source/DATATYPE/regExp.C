@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regExp.C,v 1.15 2002/02/27 12:21:12 sturm Exp $ 
+// $Id: regExp.C,v 1.16 2003/06/09 22:40:51 oliver Exp $ 
 
 #include <BALL/DATATYPE/regExp.h>
 
@@ -35,7 +35,7 @@ namespace BALL
 	}
 
 	RegularExpression::RegularExpression 
-		(const RegularExpression& regular_expression, bool /* deep */)throw()
+		(const RegularExpression& regular_expression)throw()
 		:	pattern_(regular_expression.pattern_),
 			valid_pattern_(false)
 	{

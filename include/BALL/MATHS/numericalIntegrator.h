@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: numericalIntegrator.h,v 1.13 2003/03/26 09:31:57 sturm Exp $
+// $Id: numericalIntegrator.h,v 1.14 2003/06/09 22:40:48 oliver Exp $
 
 #ifndef BALL_MATHS_NUMERICALINTEGRATOR_H
 #define BALL_MATHS_NUMERICALINTEGRATOR_H
@@ -46,7 +46,7 @@ namespace BALL
 		//@{
 
 		/// Assignment operator
-		const NumericalIntegrator& operator = (const NumericalIntegrator& nint)
+		NumericalIntegrator& operator = (const NumericalIntegrator& nint)
 			throw();
 
 		//@}
@@ -71,17 +71,15 @@ namespace BALL
 		void setFunction(const Function& function)
 			throw();
 
-		/** get the function to be integrated
-				@return a mutable reference to the actual function
-		*/
-		Function& getFunction()
-			throw();
-
 		/** Get the function to be integrated (const version).
 				@return a const reference to the actual function
 		*/
-		const Function& getFunction() const
-			throw();
+		const Function& getFunction() const	throw() { return function_; }
+
+		/** Get the function to be integrated (const version).
+				@return a mutable reference to the actual function
+		*/
+		Function& getFunction()	throw() { return function_; }
 
 		/** Get the value of the function at position {\em x}
 				@param x the position at which <tt>function\_</tt> is to be evaluated
@@ -137,7 +135,7 @@ namespace BALL
 
 	template<typename Function, typename DataType>
 	BALL_INLINE
-	const NumericalIntegrator<Function, DataType>&
+	NumericalIntegrator<Function, DataType>&
 	NumericalIntegrator<Function, DataType>::operator =
 	(const NumericalIntegrator<Function, DataType>& nint)
 		throw()
@@ -149,30 +147,10 @@ namespace BALL
 
 	template<typename Function, typename DataType>
 	BALL_INLINE
-	void NumericalIntegrator<Function, DataType>::setFunction
-	(const Function& function)
+	void NumericalIntegrator<Function, DataType>::setFunction(const Function& function)
 		throw()
 	{	
 		function_ = function;
-	}
-
-
-	template<typename Function, typename DataType>
-	BALL_INLINE
-	Function& NumericalIntegrator<Function, DataType>::getFunction()
-		throw()
-	{
-		return function_;
-	}
-
-
-	template<typename Function, typename DataType>
-	BALL_INLINE
-	const Function& NumericalIntegrator<Function, DataType>::getFunction()
-	const
-		throw()
-	{
-		return function_;
 	}
 
 

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Matrix44_test.C,v 1.19 2002/12/12 11:34:42 oliver Exp $
+// $Id: Matrix44_test.C,v 1.20 2003/06/09 22:40:52 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -14,7 +15,7 @@
 #include <math.h>
 ///////////////////////////
 
-START_TEST(Matrix44, "$Id: Matrix44_test.C,v 1.19 2002/12/12 11:34:42 oliver Exp $")
+START_TEST(Matrix44, "$Id: Matrix44_test.C,v 1.20 2003/06/09 22:40:52 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -28,7 +29,7 @@ using std::ios;
 PRECISION(5e-4)
 Constants::EPSILON = TEST::precision;
 
-CHECK(TMatrix4x4::BALL_CREATE(TMatrix4x4))
+CHECK(BALL_CREATE(TMatrix4x4))
 	Matrix4x4 m(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0);
 	Matrix4x4* m_ptr = (Matrix4x4*)m.create(false, true);
 	TEST_REAL_EQUAL(m_ptr->m11, 0.0)
@@ -68,23 +69,19 @@ CHECK(TMatrix4x4::BALL_CREATE(TMatrix4x4))
 	delete m_ptr;
 RESULT
 
-CHECK(TMatrix4x4::TMatrix4x4())
+CHECK(TMatrix4x4() throw())
   Matrix4x4* m;
 	m = new Matrix4x4();
 	TEST_NOT_EQUAL(m, 0)
 RESULT
 
-CHECK(~TMatrix4x4();)
+CHECK(~TMatrix4x4() throw())
   Matrix4x4* m;
 	m = new Matrix4x4();
 	delete m;
 RESULT		
 
-CHECK(TMatrix4x4::TMatrix4x4
-			(const T& m11, const T& m12, const T& m13, const T& m14, 
-			 const T& m21, const T& m22, const T& m23, const T& m24, 
-			 const T& m31, const T& m32, const T& m33, const T& m34, 
-			 const T& m41, const T& m42, const T& m43, const T& m44))
+CHECK(TMatrix4x4(const T& m11, const T& m12, const T& m13, const T& m14, const T& m21, const T& m22, const T& m23, const T& m24, const T& m31, const T& m32, const T& m33, const T& m34, const T& m41, const T& m42, const T& m43, const T& m44) throw())
   Matrix4x4 m(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0);
 	TEST_REAL_EQUAL(m.m11, 1.0)
 	TEST_REAL_EQUAL(m.m12, 2.0)
@@ -110,19 +107,19 @@ const Vector4 v(1.0, 2.0, 3.0, 4.0), v1(5.0, 6.0, 7.0, 8.0), v2(9.0, 10.0, 11.0,
 Vector4 vx, vy;
 const Angle a = Angle(1.0, true);
 
-CHECK(TMatrix4x4::bool operator == (const TMatrix4x4& matrix) const )
+CHECK(bool operator == (const TMatrix4x4& m) const throw())
   Matrix4x4 m1(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0);
 	TEST_EQUAL(m == m1 , true)
   m1 = Matrix4x4(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.1);
 	TEST_EQUAL(m == m1 , false)
 RESULT
 
-CHECK(TMatrix4x4::TMatrix4x4(const TMatrix4x4& m ,bool deep = true))
+CHECK(TMatrix4x4(const TMatrix4x4& m) throw())
 	m1 = Matrix4x4(m);
 	TEST_EQUAL(m == m1 , true)
 RESULT
 
-CHECK(TMatrix4x4(const T* ptr);)
+CHECK(TMatrix4x4(const T* ptr) throw(Exception::NullPointer))
 	float arr[16];
 	for (int i = 0; i <16; i++ )
 	{
@@ -133,7 +130,7 @@ CHECK(TMatrix4x4(const T* ptr);)
 	TEST_EXCEPTION(Exception::NullPointer, m1 = Matrix4x4((float*)0))
 RESULT
 
-CHECK(TMatrix4x4(const T ptr[4][4]))
+CHECK(TMatrix4x4(const T ptr[4][4]) throw(Exception::NullPointer))
 	float v[4][4];
 	int pos = 1;
 	for (int i=0; i<4; i++ )
@@ -149,13 +146,12 @@ CHECK(TMatrix4x4(const T ptr[4][4]))
 	TEST_EXCEPTION(Exception::NullPointer, m1 = Matrix4x4((float*)0))
 RESULT
 
-CHECK(TMatrix4x4(const TVector4<T>& col1, const TVector4<T>& col2,
-		 const TVector4<T>& col3,const TVector4<T>& col4))
+CHECK(TMatrix4x4(const TVector4<T>& col1, const TVector4<T>& col2, const TVector4<T>& col3, const TVector4<T>& col4) throw())
 	m1 = Matrix4x4(v, v1, v2, v3);
 	TEST_EQUAL(m == m1 , true)
 RESULT
 
-CHECK(set( const T* ptr))
+CHECK(void set(const T* ptr) throw(Exception::NullPointer))
 	m1 = Matrix4x4();
 	float arr[15];
 	for (int i = 0; i <16; i++ )
@@ -167,7 +163,7 @@ CHECK(set( const T* ptr))
 	TEST_EXCEPTION(Exception::NullPointer, m1.set((float*)0))
 RESULT
 
-CHECK(set( const T ptr[4][4]))
+CHECK(void set(const T ptr[4][4]) throw(Exception::NullPointer))
 	m1 = Matrix4x4();
 	float v[4][4];
 	int pos = 1;
@@ -184,31 +180,25 @@ CHECK(set( const T ptr[4][4]))
 	TEST_EXCEPTION(Exception::NullPointer, m1.set((float*)0))
 RESULT
 
-CHECK(set(const TMatrix4x4& m, bool deep = true))
+CHECK(void set(const TMatrix4x4& m) throw())
 	m1 = Matrix4x4();
 	m1.set(m);
 	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
-CHECK(set
-			(const TVector4<T>& col1, const TVector4<T>& col2,
-			 const TVector4<T>& col3, const TVector4<T>& col4))
+CHECK(void set(const TVector4<T>& col1, const TVector4<T>& col2, const TVector4<T>& col3, const TVector4<T>& col4) throw())
 	m1 = Matrix4x4();
 	m1.set(v, v1, v2, v3);
 	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
-CHECK(set
-			(const T& m11, const T& m12, const T& m13, const T& m14, 
-			 const T& m21, const T& m22, const T& m23, const T& m24, 
-			 const T& m31, const T& m32, const T& m33, const T& m34, 
-			 const T& m41, const T& m42, const T& m43, const T& m44))
+CHECK(void set(const T& m11, const T& m12, const T& m13, const T& m14, const T& m21, const T& m22, const T& m23, const T& m24, const T& m31, const T& m32, const T& m33, const T& m34, const T& m41, const T& m42, const T& m43, const T& m44) throw())
 	m1 = Matrix4x4();
 	m1.set(1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0, 11.0, 12.0, 13.0, 14.0, 15.0, 16.0);
 	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
-CHECK(operator = ( const T* ptr))
+CHECK(TMatrix4x4& operator = (const T* ptr) throw(Exception::NullPointer))
 	m1 = Matrix4x4();
 	float arr[16];
 	for (int i = 0; i <16; i++ )
@@ -219,7 +209,7 @@ CHECK(operator = ( const T* ptr))
 	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
-CHECK(operator = ( const T ptr[4][4]))
+CHECK(TMatrix4x4& operator = (const T ptr[4][4]) throw(Exception::NullPointer))
 	m1 = Matrix4x4();
 	float v[4][4];
 	int pos = 1;
@@ -236,12 +226,12 @@ CHECK(operator = ( const T ptr[4][4]))
 	TEST_EXCEPTION(Exception::NullPointer, m1 =((float*)0))
 RESULT
 
-CHECK(operator = (const TMatrix4x4& m))
+CHECK(TMatrix4x4& operator = (const TMatrix4x4& m) throw())
 	m1 = m;
 	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
-CHECK(get(T* ptr) const)
+CHECK(void get(T* ptr) const throw(Exception::NullPointer))
 	m1 = Matrix4x4();
 	float arr[16];
 	m.get(arr);
@@ -250,7 +240,7 @@ CHECK(get(T* ptr) const)
 	TEST_EXCEPTION(Exception::NullPointer, m1.get((float*)0))
 RESULT
 
-CHECK(get(T* ptr[4][4]) const)
+CHECK(void get(T ptr[4][4]) const throw(Exception::NullPointer))
 	m1 = Matrix4x4();
 	float arr[4][4];
 	m.get(arr);
@@ -259,15 +249,13 @@ CHECK(get(T* ptr[4][4]) const)
 	TEST_EXCEPTION(Exception::NullPointer, m1.get((float*)0))
 RESULT
 
-CHECK(get(TMatrix4x4& m, bool deep = true) const)
+CHECK(void get(TMatrix4x4& m) const throw())
 	m1 = Matrix4x4();
 	m.get(m1);
 	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
-CHECK(get
-			(TVector4<T>& col1, TVector4<T>& col2,
-			 TVector4<T>& col3, TVector4<T>& col4) const)
+CHECK(void get(TVector4<T>& col1, TVector4<T>& col2, TVector4<T>& col3, TVector4<T>& col4) const throw())
 	Vector4 z1, z2, z3, z4;
 	m1 = Matrix4x4();
 	m.get(z1, z2, z3, z4);
@@ -275,11 +263,7 @@ CHECK(get
 	TEST_EQUAL(m1, m)
 RESULT
 
-CHECK(get
-			(T& m11, T& m12, T& m13, T& m14, 
-			 T& m21, T& m22, T& m23, T& m24, 
-			 T& m31, T& m32, T& m33, T& m34, 
-			 T& m41, T& m42, T& m43, T& m44) const)
+CHECK(void get(T& m11, T& m12, T& m13, T& m14, T& m21, T& m22, T& m23, T& m24, T& m31, T& m32, T& m33, T& m34, T& m41, T& m42, T& m43, T& m44) const throw())
 	m1 = Matrix4x4();
 	float a[16];
 	m.get(a[0], a[1], a[2], a[3], a[4], a[5], a[6], a[7], a[8],
@@ -288,7 +272,7 @@ CHECK(get
 	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
-CHECK(swap(TMatrix4x4& m))
+CHECK(void swap(TMatrix4x4& m) throw())
 	m1 = Matrix4x4(m);
 	m2 = Matrix4x4(1.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 	m3 = m2;
@@ -297,50 +281,56 @@ CHECK(swap(TMatrix4x4& m))
 	TEST_EQUAL(m3.isEqual(m1), true)
 RESULT
 
-CHECK(TMatrix4x4::getTrace() const )
+CHECK(T getTrace() const throw())
 	TEST_EQUAL(m.getTrace(), 34.0)
 RESULT
 
-CHECK(static const TMatrix4x4& getZero())
+CHECK(static const TMatrix4x4& getZero() throw())
 	const Matrix4x4 c = m1.getZero();
 	m1 = Matrix4x4();
 	m1.m11 = m1.m22 = m1.m33 = m1.m44 = 0;
 	TEST_EQUAL(m1.isEqual(c), true)
 RESULT
 
-CHECK(const TMatrix4x4<T>& TMatrix4x4::setIdentity())
-	const Matrix4x4 c = m1.getIdentity();
+CHECK(static const TMatrix4x4& getIdentity() throw())
+	const Matrix4x4 c = m1.getIdentity(); //??? set instead of get?
 	m2 = Matrix4x4(1.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 	TEST_EQUAL(c.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::setIdentity())
+CHECK(void setIdentity() throw())
 	m1.setIdentity();
 	m2 = Matrix4x4(1.0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1);
 	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::set(const T& t = (T)1))
+CHECK(void clear() throw())
+	m1.clear();
+	m2 = Matrix4x4(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0);
+	TEST_EQUAL(m1.isEqual(m2), true)
+RESULT
+
+CHECK(void set(const T& t = (T)1) throw())
 	m1.set(2.0);
 	m2 = Matrix4x4(2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0, 2.0);
 	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::transpose())
+CHECK(void transpose() throw())
 	m1 = Matrix4x4(m);
 	m1.transpose();
 	m2 = Matrix4x4(1.0, 5.0, 9.0, 13.0, 2.0, 6.0, 10.0, 14.0, 3.0, 7.0, 11.0, 15.0, 4.0, 8.0, 12.0, 16.0);
 	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::getRow(Position row))
+CHECK(TVector4<T> getRow(Position row) const throw(Exception::IndexOverflow))
 	m1 = Matrix4x4(m);
 	vx = m1.getRow(0);
 	TEST_EQUAL(vx , v)
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.getRow(4))
 RESULT
 
-CHECK(TMatrix4x4::getColumn(Position col))
+CHECK(TVector4<T> getColumn(Position col) const throw(Exception::IndexOverflow))
 	m1 = Matrix4x4(m);
 	vx = m1.getColumn(0);
 	vy = Vector4(1.0, 5.0, 9.0, 13.0);
@@ -348,7 +338,7 @@ CHECK(TMatrix4x4::getColumn(Position col))
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.getColumn(4))
 RESULT
 
-CHECK(TMatrix4x4::setColumn(Position row, TVector4<T> row_value))
+CHECK(void setRow(Position row, const TVector4<T>& row_value) throw(Exception::IndexOverflow))
 	Vector4 x(0.1, 0.2, 0.3, 0.4);
 	m1 = Matrix4x4(m);
 	m1.setRow(0, x);
@@ -358,7 +348,7 @@ CHECK(TMatrix4x4::setColumn(Position row, TVector4<T> row_value))
 RESULT
 
 
-CHECK(TMatrix4x4::setColumn(Position col, TVector4<T> col_value))
+CHECK(void setColumn(Position col, const TVector4<T>& col_value) throw(Exception::IndexOverflow))
 	Vector4 x(0.1, 0.2, 0.3, 0.4);
 	m1 = Matrix4x4(m);
 	m1.setColumn(0, x);
@@ -367,13 +357,13 @@ CHECK(TMatrix4x4::setColumn(Position col, TVector4<T> col_value))
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.setColumn(4, vx))
 RESULT
 
-CHECK(TMatrix4x4::getDiagonal() const )
+CHECK(TVector4<T> getDiagonal() const throw())
 	vx = m.getDiagonal();
 	vy = Vector4(1.0, 6.0, 11.0, 16.0);
 	TEST_EQUAL(vx , vy)
 RESULT
 
-CHECK(TMatrix4x4::T& operator () (Position row, Position col))
+CHECK(const T& operator () (Position row, Position col) const throw(Exception::IndexOverflow))
 	const Matrix4x4& c_m1 = const_cast<const Matrix4x4&>(m1);
 	TEST_REAL_EQUAL(c_m1(0, 0), m1.m11)
 	TEST_REAL_EQUAL(c_m1(0, 1), m1.m12)
@@ -398,7 +388,7 @@ CHECK(TMatrix4x4::T& operator () (Position row, Position col))
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.m22 = c_m1(1, Limits<Position>::max()))
 RESULT
 
-CHECK(TMatrix4x4::T& operator () (Position row, Position col) const )
+CHECK(T& operator () (Position row, Position col) throw(Exception::IndexOverflow))
 	TEST_REAL_EQUAL(m1(0, 0), m1.m11)
 	TEST_REAL_EQUAL(m1(0, 1), m1.m12)
 	TEST_REAL_EQUAL(m1(0, 2), m1.m13)
@@ -422,31 +412,31 @@ CHECK(TMatrix4x4::T& operator () (Position row, Position col) const )
 	TEST_EXCEPTION(Exception::IndexOverflow, m1(1, Limits<Position>::max()))
 RESULT
 
-CHECK(const T& TMatrxi44<T>::operator [] (Position index) const)
+CHECK(const T& operator [] (Position position) const throw(Exception::IndexOverflow))
 	const Matrix4x4& c_m1 = const_cast<const Matrix4x4&>(m1);
-	TEST_REAL_EQUAL(c_m1[0] , m1.m11)
-	TEST_REAL_EQUAL(c_m1[1] , m1.m12)
-	TEST_REAL_EQUAL(c_m1[2] , m1.m13)
-	TEST_REAL_EQUAL(c_m1[3] , m1.m14)
-	TEST_REAL_EQUAL(c_m1[4] , m1.m21)
-	TEST_REAL_EQUAL(c_m1[5] , m1.m22)
-	TEST_REAL_EQUAL(c_m1[6] , m1.m23)
-	TEST_REAL_EQUAL(c_m1[7] , m1.m24)
-	TEST_REAL_EQUAL(c_m1[8] , m1.m31)
-	TEST_REAL_EQUAL(c_m1[9] , m1.m32)
-	TEST_REAL_EQUAL(c_m1[10] , m1.m33)
-	TEST_REAL_EQUAL(c_m1[11] , m1.m34)
-	TEST_REAL_EQUAL(c_m1[12] , m1.m41)
-	TEST_REAL_EQUAL(c_m1[13] , m1.m42)
-	TEST_REAL_EQUAL(c_m1[14] , m1.m43)
-	TEST_REAL_EQUAL(c_m1[15] , m1.m44)
+	TEST_REAL_EQUAL(c_m1[0], m1.m11)
+	TEST_REAL_EQUAL(c_m1[1], m1.m12)
+	TEST_REAL_EQUAL(c_m1[2], m1.m13)
+	TEST_REAL_EQUAL(c_m1[3], m1.m14)
+	TEST_REAL_EQUAL(c_m1[4], m1.m21)
+	TEST_REAL_EQUAL(c_m1[5], m1.m22)
+	TEST_REAL_EQUAL(c_m1[6], m1.m23)
+	TEST_REAL_EQUAL(c_m1[7], m1.m24)
+	TEST_REAL_EQUAL(c_m1[8], m1.m31)
+	TEST_REAL_EQUAL(c_m1[9], m1.m32)
+	TEST_REAL_EQUAL(c_m1[10], m1.m33)
+	TEST_REAL_EQUAL(c_m1[11], m1.m34)
+	TEST_REAL_EQUAL(c_m1[12], m1.m41)
+	TEST_REAL_EQUAL(c_m1[13], m1.m42)
+	TEST_REAL_EQUAL(c_m1[14], m1.m43)
+	TEST_REAL_EQUAL(c_m1[15], m1.m44)
 
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.m44 = c_m1[16])
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.m44 = c_m1[Limits<Position>::max()])
 RESULT
 
 
-CHECK( T& TMatrxi44<T>::operator [] (Position index))
+CHECK(T& operator [] (Position position) throw(Exception::IndexOverflow))
 	TEST_REAL_EQUAL(m1[0] , m1.m11)
 	TEST_REAL_EQUAL(m1[1] , m1.m12)
 	TEST_REAL_EQUAL(m1[2] , m1.m13)
@@ -468,63 +458,63 @@ CHECK( T& TMatrxi44<T>::operator [] (Position index))
 	TEST_EXCEPTION(Exception::IndexOverflow, m1.m44 = m1[Limits<Position>::max()])
 RESULT
 
-CHECK(TMatrix4x4::TMatrix4x4 operator + () const )
+CHECK(TMatrix4x4 operator + () const throw())
 	m1 = Matrix4x4(m);
 	TEST_EQUAL(m1.isEqual( + m), true)
 RESULT
 
-CHECK(TMatrix4x4::TMatrix4x4 operator - () const )
+CHECK(TMatrix4x4 operator - () const throw())
 	m1 = Matrix4x4(-1.0, -2.0, -3.0, -4.0, -5.0, -6.0, -7.0, -8.0, -9.0, -10.0, -11.0, -12.0, -13.0, -14.0, -15.0, -16.0);
 	TEST_EQUAL(m1.isEqual(- m), true)
 RESULT
 
-CHECK(TMatrix4x4::TMatrix4x4 operator + (const TMatrix4x4& m) const )
+CHECK(TMatrix4x4 operator + (const TMatrix4x4& m) const throw())
 	m1 = Matrix4x4() + m;
 	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
-CHECK(TMatrix4x4::TMatrix4x4& operator += (const TMatrix4x4& m))
+CHECK(TMatrix4x4& operator += (const TMatrix4x4& m) throw())
 	m1 = Matrix4x4();
 	m1 += m;
 	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
-CHECK(TMatrix4x4::TMatrix4x4 operator - (const TMatrix4x4& m) const )
+CHECK(TMatrix4x4 operator - (const TMatrix4x4& m) const throw())
 	m1 = Matrix4x4() - m;
 	TEST_EQUAL(m1.isEqual(-m), true)
 RESULT
 
-CHECK(TMatrix4x4::TMatrix4x4& operator -= (const TMatrix4x4& m))
+CHECK(TMatrix4x4& operator -= (const TMatrix4x4& m) throw())
 	m1 = Matrix4x4();
 	m1 -= m;
 	TEST_EQUAL(m1.isEqual(-m), true)
 RESULT
 
-CHECK(TMatrix4x4::TMatrix4x4 operator * (const T& scalar) const )
+CHECK(TMatrix4x4 operator * (const T& scalar) const throw())
 	m1 = Matrix4x4(m) * (-1.0);
 	TEST_EQUAL(m1.isEqual(-m), true)
 RESULT
 
-CHECK(TMatrix4x4::TMatrix4x4& operator *= (const T& scalar))
+CHECK(TMatrix4x4& operator *= (const T& scalar) throw())
 	m1 = Matrix4x4(m);
 	m1 *= (-1.0);
 	TEST_EQUAL(m1.isEqual(-m), true)
 RESULT
 
-CHECK(TMatrix4x4::TMatrix4x4 operator / (const T& scalar) const )
+CHECK(TMatrix4x4 operator / (const T& scalar) const throw(Exception::DivisionByZero))
 	m1 = Matrix4x4(m) / (-1.0);
 	TEST_EQUAL(m1.isEqual(-m), true)
 	TEST_EXCEPTION(Exception::DivisionByZero, m1 / 0)
 RESULT
 
-CHECK(TMatrix4x4::TMatrix4x4& operator /= (const T& scalar))
+CHECK(TMatrix4x4& operator /= (const T& scalar) throw(Exception::DivisionByZero))
 	m1 = Matrix4x4(m);
 	m1 /= (-1.0);
 	TEST_EQUAL(m1.isEqual(-m), true)
 	TEST_EXCEPTION(Exception::DivisionByZero, m1 /= 0)
 RESULT
 
-CHECK(TMatrix4x4::TMatrix4x4 operator * (const TMatrix4x4& m) const )
+CHECK(TMatrix4x4 operator * (const TMatrix4x4& m) const throw())
 	m1 = Matrix4x4(11.0, 51.0, 91.0, 131.0, 21.0, 61.0, 101.0, 
 								 141.0, 31.0, 71.0, 111.0, 151.0, 41.0, 81.0, 121.0, 161.0);
 	m2 = Matrix4x4(
@@ -551,7 +541,7 @@ CHECK(TMatrix4x4::TMatrix4x4 operator * (const TMatrix4x4& m) const )
 	TEST_EQUAL(m3.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::TMatrix4x4& operator *= (const TMatrix4x4& m))
+CHECK(TMatrix4x4& operator *= (const TMatrix4x4& m) throw())
 	m1 = Matrix4x4(11.0, 51.0, 91.0, 131.0, 21.0, 61.0, 101.0, 
 								 141.0, 31.0, 71.0, 111.0, 151.0, 41.0, 81.0, 121.0, 161.0);
 	m3 = m1 * m;
@@ -559,7 +549,7 @@ CHECK(TMatrix4x4::TMatrix4x4& operator *= (const TMatrix4x4& m))
 	TEST_EQUAL(m3.isEqual(m1), true)
 RESULT
 
-CHECK(TMatrix4x4::TVector4 operator * (const TVector4<T> &) const )
+CHECK(TVector4<T> operator * (const TVector4<T>& vector) const throw())
 	Vector4 v(1.0, 2.0, 3.0, 4.0);
 	vx = Vector4
 			(m.m11 * v.x + m.m12 * v.y + m.m13 * v.z + m.m14 * v.h,
@@ -570,7 +560,7 @@ CHECK(TMatrix4x4::TVector4 operator * (const TVector4<T> &) const )
 	TEST_EQUAL(vy , vx)
 RESULT
 
-CHECK(TMatrix4x4::invert(TMatrix4x4& inverse) const )
+CHECK(bool invert(TMatrix4x4& inverse) const throw())
 	bool bool1;
 	Matrix4x4 e;
 	e.setIdentity();
@@ -582,7 +572,7 @@ CHECK(TMatrix4x4::invert(TMatrix4x4& inverse) const )
 	TEST_EQUAL(m3.isEqual(e), true)
 RESULT
 
-CHECK(TMatrix4x4::invert())
+CHECK(bool invert() throw())
 	bool bool1;
 	Matrix4x4 e;
 	e.setIdentity();
@@ -595,7 +585,7 @@ CHECK(TMatrix4x4::invert())
 	TEST_EQUAL(bool1 , true)
 RESULT
 
-CHECK(TMatrix4x4::getDeterminant() const )
+CHECK(T getDeterminant() const throw())
 	float d1, d2, d3;
 	Vector4 v1, v2, v3, v4;
 	m1 = Matrix4x4(1.0, 2.1, 3.1, 0.2, 5.0, 6.0 ,0.0, 
@@ -645,7 +635,7 @@ CHECK(TMatrix4x4::getDeterminant() const )
 	TEST_EQUAL(Maths::isNear(d1 * d2, d3, d3 / 100), true)
 RESULT
 
-CHECK(TMatrix4x4::translate(const T &x, const T &y, const T &z))
+CHECK(void translate(const T &x, const T &y, const T &z) throw())
 	float x = 2.0, y = 3.0, z = 4.0;
 	m1 = Matrix4x4(m);
 	m1.m14 += m1.m11 * x + m1.m12 * y + m1.m13 * z;
@@ -660,7 +650,7 @@ CHECK(TMatrix4x4::translate(const T &x, const T &y, const T &z))
 	TEST_EQUAL(m.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::translate(const TVector3<T>& v))
+CHECK(void translate(const TVector3<T>& v) throw())
 	Vector3 v(2.0, 3.0, 4.0);
 	m1 = Matrix4x4(m);
 	m1.m14 += m1.m11 * v.x + m1.m12 * v.y + m1.m13 * v.z;
@@ -675,7 +665,7 @@ CHECK(TMatrix4x4::translate(const TVector3<T>& v))
 	TEST_EQUAL(m.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::setTranslation(const T& x, const T& y, const T& z))
+CHECK(void setTranslation(const T& x, const T& y, const T& z) throw())
 	float x = 2.0, y = 3.0, z = 4.0;
 	m1.set(9.0);
 	m1.setTranslation(x, y, z);
@@ -691,28 +681,28 @@ CHECK(TMatrix4x4::setTranslation(const T& x, const T& y, const T& z))
 	TEST_REAL_EQUAL(m1.m34 , z)
 RESULT
 
-CHECK(TMatrix4x4::setTranslation(const TVector3<T>& v))
+CHECK(void setTranslation(const TVector3<T>& v) throw())
 	Vector3 v(2.0, 3.0, 4.0);
 	m1.setTranslation(v);
 	m2.setTranslation(2.0, 3.0, 4.0);
 	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::scale(const T& x_scale, const T& y_scale, const T& z_scale))
+CHECK(void scale(const T& x_scale, const T& y_scale, const T& z_scale) throw())
 	m1 = Matrix4x4(m);
 	m1.scale(2.0, 4.0, 5.0);
 	m1.scale(0.5, 0.25, 0.2);
 	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
-CHECK(TMatrix4x4::scale(const T& scale))
+CHECK(void scale(const T& scale) throw())
 	m1 = Matrix4x4(m);
 	m1.scale(2.0);
 	m1.scale(0.5);
 	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
-CHECK(TMatrix4x4::scale(const TVector3<T>& v))
+CHECK(void scale(const TVector3<T>& v) throw())
 	Vector3 v(2.0, 4.0, 5.0);
 	m1 = Matrix4x4(m);
 	m1.scale(v);
@@ -721,7 +711,7 @@ CHECK(TMatrix4x4::scale(const TVector3<T>& v))
 	TEST_EQUAL(m1.isEqual(m), true)
 RESULT
 
-CHECK(TMatrix4x4::setScale(const T& x_scale, const T& y_scale, const T& z_scale))
+CHECK(void setScale(const T& x_scale, const T& y_scale, const T& z_scale) throw())
 	m1 = Matrix4x4(m);
 	m1.setScale(2.0, 3.0, 4.0);
 	float x = m1.m12 * m1.m13 * m1.m14 * m1.m21 * m1.m23 * m1.m24 *
@@ -733,7 +723,7 @@ CHECK(TMatrix4x4::setScale(const T& x_scale, const T& y_scale, const T& z_scale)
 	TEST_REAL_EQUAL(m1.m44, 1.0)
 RESULT
 
-CHECK(TMatrix4x4::setScale(const T& scale))
+CHECK(void setScale(const T& scale) throw())
 	m1 = Matrix4x4(m);
 	m1.setScale(2.0);
 	float x = m1.m12 * m1.m13 * m1.m14 * m1.m21 * m1.m23 * m1.m24 *
@@ -745,7 +735,7 @@ CHECK(TMatrix4x4::setScale(const T& scale))
 	TEST_REAL_EQUAL(m1.m44, 1.0)
 RESULT
 
-CHECK(TMatrix4x4::setScale(const TVector3<T> &))
+CHECK(void setScale(const TVector3<T>& v) throw())
 	m1 = Matrix4x4(m);
 	Vector3 v(2.0, 3.0, 4.0);
 	m1.setScale(v);
@@ -758,7 +748,7 @@ CHECK(TMatrix4x4::setScale(const TVector3<T> &))
 	TEST_REAL_EQUAL(m1.m44, 1.0)
 RESULT
 
-CHECK(TMatrix4x4::setRotationX(const Angle& phi))
+CHECK(void setRotationX(const TAngle<T>& phi) throw())
 	m1.setRotationX(a);
 	float x = m1.m12 * m1.m13 * m1.m14 * m1.m21 * m1.m24 * m1.m31 * m1.m34 * m1.m41 * m1.m42 * m1.m43;
 	TEST_REAL_EQUAL(x, 0)
@@ -770,7 +760,7 @@ CHECK(TMatrix4x4::setRotationX(const Angle& phi))
 	TEST_REAL_EQUAL(m1.m23, -m1.m32)
 RESULT
 
-CHECK(TMatrix4x4::rotateX(const Angle& phi))
+CHECK(void rotateX(const TAngle<T>& phi) throw())
 	m1 = Matrix4x4(m);
 	m2 = Matrix4x4(m);
 	m3.setRotationX(a);
@@ -779,7 +769,7 @@ CHECK(TMatrix4x4::rotateX(const Angle& phi))
 	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::setRotationY(const Angle& phi))
+CHECK(void setRotationY(const TAngle<T>& phi) throw())
 	m1.setRotationY(a);
 	float x =	m1.m12 * m1.m14 * m1.m21 * m1.m23 * m1.m24 * m1.m32 * m1.m34 * m1.m41 * m1.m42 * m1.m43; 
 	TEST_REAL_EQUAL(x, 0)
@@ -791,7 +781,7 @@ CHECK(TMatrix4x4::setRotationY(const Angle& phi))
 	TEST_REAL_EQUAL(m1.m31, -m1.m13)
 RESULT
 
-CHECK(TMatrix4x4::rotateY(const Angle &phi))
+CHECK(void rotateY(const TAngle<T>& phi) throw())
 	m1 = Matrix4x4(m);
 	m2 = Matrix4x4(m);
 	m3.setRotationY(a);
@@ -800,7 +790,7 @@ CHECK(TMatrix4x4::rotateY(const Angle &phi))
 	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::setRotationZ(const Angle &phi))
+CHECK(void setRotationZ(const TAngle<T>& phi) throw())
 	m1.setRotationZ(a);
 	float x =	m1.m13 * m1.m14 * m1.m23 * m1.m24 * m1.m31 * m1.m32 * m1.m34 * m1.m41 * m1.m42 * m1.m43 ; 
 	TEST_REAL_EQUAL(x, 0)
@@ -812,7 +802,7 @@ CHECK(TMatrix4x4::setRotationZ(const Angle &phi))
 	TEST_REAL_EQUAL(m1.m12, -m1.m21)
 RESULT
 
-CHECK(TMatrix4x4::rotateZ(const Angle& phi))
+CHECK(void rotateZ(const TAngle<T>& phi) throw())
 	m1 = Matrix4x4(m);
 	m2 = Matrix4x4(m);
 	m3.setRotationZ(a);
@@ -821,7 +811,7 @@ CHECK(TMatrix4x4::rotateZ(const Angle& phi))
 	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::rotate(const Angle& phi, const T& axis_x, const T& axis_y, const T& axis_z))
+CHECK(void rotate(const TAngle<T>& phi, const T& axis_x, const T& axis_y, const T& axis_z) throw())
 	m2 = m1 = Matrix4x4(m);
 	Angle b = Angle(Constants::PI * 2);
 	Angle a = Angle(0);
@@ -830,7 +820,7 @@ CHECK(TMatrix4x4::rotate(const Angle& phi, const T& axis_x, const T& axis_y, con
 	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::rotate(const Angle& phi, const TVector3<T>& axis))
+CHECK(void rotate(const TAngle<T>& phi, const TVector3<T>& axis) throw())
 	Vector3 v(2.0, 3.0, 4.0);
 	m1 = Matrix4x4(m);
 	m2 = Matrix4x4(m);
@@ -839,7 +829,7 @@ CHECK(TMatrix4x4::rotate(const Angle& phi, const TVector3<T>& axis))
 	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::rotate(const Angle& phi, const TVector4<T>& axis))
+CHECK(void rotate(const TAngle<T>& phi, const TVector4<T>& axis) throw())
 	Vector4 v(2.0, 3.0, 4.0, 5.0);
 	m1 = Matrix4x4(m);
 	m2 = Matrix4x4(m);
@@ -848,7 +838,7 @@ CHECK(TMatrix4x4::rotate(const Angle& phi, const TVector4<T>& axis))
 	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::setRotation(const Angle& phi, const T& axis_x, const T& axis_y, const T& axis_z))
+CHECK(void setRotation(const TAngle<T>& phi, const T& axis_x, const T& axis_y, const T& axis_z) throw())
 	m1.m12 = m1.m13 = m1.m14 = m1.m21 = m1.m23 = m1.m24 = 
 	m1.m31 = m1.m32 = m1.m34 = m1.m41 = m1.m42 = m1.m43 = 0.0;
 	m1.m11 = m1.m22 = m1.m33 = m1.m44 = 1.0;
@@ -857,7 +847,7 @@ CHECK(TMatrix4x4::setRotation(const Angle& phi, const T& axis_x, const T& axis_y
 	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::setRotation(const Angle& phi, const TVector3<T>& axis))
+CHECK(void setRotation(const TAngle<T>& phi, const TVector3<T>& axis) throw())
 	Vector3 v(2.0, 3.0, 4.0);
 	m1.m12 = m1.m13 = m1.m14 = m1.m21 = m1.m23 = m1.m24 = 
 	m1.m31 = m1.m32 = m1.m34 = m1.m41 = m1.m42 = m1.m43 = 0.0;
@@ -867,7 +857,7 @@ CHECK(TMatrix4x4::setRotation(const Angle& phi, const TVector3<T>& axis))
 	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::setRotation(const Angle& phi, const TVector4<T>& axis))
+CHECK(void setRotation(const TAngle<T>& phi, const TVector4<T>& axis) throw())
 	Vector4 v4(2.0, 3.0, 4.0, 1.1);
 	m2.setRotation(a, v4);
 	Vector3 v3(2.0, 3.0, 4.0);
@@ -875,21 +865,21 @@ CHECK(TMatrix4x4::setRotation(const Angle& phi, const TVector4<T>& axis))
 	TEST_EQUAL(m1.isEqual(m2), true)
 RESULT
 
-CHECK(TMatrix4x4::bool operator != (const TMatrix4x4& m) const )
+CHECK(bool operator != (const TMatrix4x4& m) const throw())
 	m1 = Matrix4x4(m);
 	TEST_EQUAL(m1 != m, false)
 	m1.m11 = 12.12;
 	TEST_EQUAL(m1 != m, true)
 RESULT
 
-CHECK(TMatrix4x4::isIdentity() const )
+CHECK(bool isIdentity() const throw())
 	m1.setIdentity();
 	TEST_EQUAL(m1.isIdentity(), true)
 	m1.m12 = 12.12;
 	TEST_EQUAL(m1.isIdentity(), false)
 RESULT
 
-CHECK(TMatrix4x4::isRegular() const )
+CHECK(bool isRegular() const throw())
 	m1 = Matrix4x4(m);
 	TEST_EQUAL(m1.isRegular(), false)
 	m1 = Matrix4x4(1.0, 2.1, 3.1, 0.2, 5.0, 6.0 ,0.0, 
@@ -897,7 +887,7 @@ CHECK(TMatrix4x4::isRegular() const )
 	TEST_EQUAL(m1.isRegular(), true)
 RESULT
 
-CHECK(TMatrix4x4::isSingular() const )
+CHECK(bool isSingular() const throw())
 	m1 = Matrix4x4(m);
 	TEST_EQUAL(m1.isSingular(), true)
 	m1 = Matrix4x4(1.0, 2.1, 3.1, 0.2, 5.0, 6.0 ,0.0, 
@@ -905,46 +895,46 @@ CHECK(TMatrix4x4::isSingular() const )
 	TEST_EQUAL(m1.isSingular(), false)
 RESULT
 
-CHECK(TMatrix4x4::isSymmetric() const )
+CHECK(bool isSymmetric() const throw())
 	m1 = Matrix4x4(0.0, 2.0, 3.0, 4.0, 2.0, 0.0, 5.0, 6.0, 3.0, 5.0, 0.0, 7.0, 4.0, 6.0, 7.0, 0.0);
 	TEST_EQUAL(m1.isSymmetric(), true)
 	m1.m12 = 12.12;
 	TEST_EQUAL(m1.isSymmetric(), false)
 RESULT
 
-CHECK(TMatrix4x4::isLowerTriangular() const )
+CHECK(bool isLowerTriangular() const throw())
 	m1 = Matrix4x4(1.0, 0.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 1.0);
 	TEST_EQUAL(m1.isLowerTriangular(), true)
 	m1.m12 = 1;
 	TEST_EQUAL(m1.isLowerTriangular(), false)
 RESULT
 
-CHECK(TMatrix4x4::isUpperTriangular() const )
+CHECK(bool isUpperTriangular() const throw())
 	m1 = Matrix4x4(1.0, 1.0, 1.0, 1.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0, 1.0, 0.0, 0.0, 0.0, 1.0);
 	TEST_EQUAL(m1.isUpperTriangular(), true)
 	m1.m32 = 1;
 	TEST_EQUAL(m1.isUpperTriangular(), false)
 RESULT
 
-CHECK(TMatrix4x4::isDiagonal() const )
+CHECK(bool isDiagonal() const throw())
 	m1 = Matrix4x4(1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 1.0);
 	TEST_EQUAL(m1.isDiagonal(), true)
 	m1.m32 = 1;
 	TEST_EQUAL(m1.isDiagonal(), false)
 RESULT
 
-CHECK(TMatrix4x4::isEqual(TMatrix4x4<T>& m, T maxDiff) const )
+CHECK(bool isEqual(const TMatrix4x4& m) const throw())
 	m1 = Matrix4x4(m);
 	TEST_EQUAL(m1.isEqual(m), true)
 		m1.m41 = 12.12;
 	TEST_EQUAL(m1.isEqual(m), false)
 RESULT
 
-CHECK(TMatrix4x4::isValid() const )
+CHECK(bool isValid() const throw())
 	TEST_EQUAL(m1.isValid(), true)
 RESULT
 
-CHECK(TMatrix4x4::dump(std::ostream& s = std::cout, Size depth = 0) const )
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
   String filename;
 	NEW_TMP_FILE(filename)
 	std::ofstream outfile(filename.c_str(), std::ios::out);

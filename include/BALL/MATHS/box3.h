@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box3.h,v 1.37 2003/03/14 11:49:13 sturm Exp $
+// $Id: box3.h,v 1.38 2003/06/09 22:40:48 oliver Exp $
+//
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -124,7 +125,7 @@ namespace BALL
 				Assign the box components from another instance of TBox3.
 				@param box the TBox3 to assign from
 		**/
-		const TBox3& operator = (const TBox3& box)
+		TBox3& operator = (const TBox3& box)
 			throw();
 
 		/**	Assign to another instance of TBox3.
@@ -335,7 +336,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	const TBox3<T>& TBox3<T>::operator = (const TBox3<T> &box)
+	TBox3<T>& TBox3<T>::operator = (const TBox3<T> &box)
 		throw()
 	{
 		set(box);

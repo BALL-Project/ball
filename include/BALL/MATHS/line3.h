@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: line3.h,v 1.40 2003/03/26 09:31:56 sturm Exp $
+// $Id: line3.h,v 1.41 2003/06/09 22:40:48 oliver Exp $
+//
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -41,7 +42,6 @@ namespace BALL
 	/**	Generic Line in Three-Dimensional Space.
 			 \par
       S/line3.h
-			 \par
 	*/
 	template <typename T>
 	class TLine3
@@ -183,7 +183,7 @@ namespace BALL
 				Assign the components from another instance of line.
 				@param line the vector to assign from
 		**/
-		const TLine3& operator = (const TLine3& line)
+		TLine3& operator = (const TLine3& line)
 			throw()
 		{
 			p = line.p;
@@ -196,8 +196,7 @@ namespace BALL
 				Assigns the vector components to another vector.
 				@param line	the line to be assigned to
 		*/
-		void get(TLine3& line)
-			throw()
+		void get(TLine3& line) const throw()
 		{
 			line.p = p;
 			line.d = d;
@@ -249,7 +248,7 @@ namespace BALL
 		/**	Equality operator.
 				@return bool, <b>true</b> if both components are equal, <b>false</b> otherwise
 		*/
-		bool operator ==(const TLine3& line) const
+		bool operator == (const TLine3& line) const
 			throw()
 		{
 			return (p == line.p && d == line.d);

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Line3_test.C,v 1.14 2003/05/23 06:47:51 oliver Exp $
+// $Id: Line3_test.C,v 1.15 2003/06/09 22:40:52 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +11,7 @@
 #	include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(Line3, "$Id: Line3_test.C,v 1.14 2003/05/23 06:47:51 oliver Exp $")
+START_TEST(Line3, "$Id: Line3_test.C,v 1.15 2003/06/09 22:40:52 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,7 +23,7 @@ Vector3 v1, v2, v3, v4;
 
 String filename;
 
-CHECK(TLine3::BALL_CREATE(TLine3<T>))
+CHECK(BALL_CREATE(TLine3<T>))
 	v1 = Vector3(0, 1, 2);
 	v2 = Vector3(3, 4, 5);
 	Line3 v(v1, v2);
@@ -37,19 +38,18 @@ CHECK(TLine3::BALL_CREATE(TLine3<T>))
 RESULT
 
 Line3* line3_ptr = 0;
-CHECK(TLine3::TLine3())
+CHECK(TLine3() throw())
 	line3_ptr = new Line3;
 	TEST_NOT_EQUAL(line3_ptr, 0)
 RESULT
 
-CHECK(TLine3::~TLine3())
+CHECK(~TLine3() throw())
 	delete line3_ptr;
 RESULT
 
 Line3 line, line1, line2, line3;
 
-CHECK(TLine3(const TVector3<T>& point, const TVector3<T>& vector, 
-					 Form form = FORM__PARAMETER))
+CHECK(TLine3(const TVector3<T>& point, const TVector3<T>& vector, Form form = FORM__PARAMETER) throw())
 	v1 = Vector3(0, 1, 2);
 	v2 = Vector3(3, 4, 5);
 	line = Line3(v1, v2, Line3::FORM__PARAMETER);
@@ -65,7 +65,7 @@ CHECK(TLine3(const TVector3<T>& point, const TVector3<T>& vector,
 	TEST_EQUAL(v2, v4)
 RESULT
 
-CHECK(bool operator ==(const TLine3& line) const )
+CHECK(bool operator == (const TLine3& line) const throw())
 	v1 = Vector3(0, 1, 2);
 	v2 = Vector3(0, 4, 2);
 	line2 = Line3(v1, v2, Line3::FORM__PARAMETER);
@@ -76,7 +76,7 @@ CHECK(bool operator ==(const TLine3& line) const )
 	TEST_EQUAL(line == line2, false)
 RESULT
 
-CHECK(TLine3::swap(TLine3& line))
+CHECK(void swap(TLine3& line) throw())
 	v1 = Vector3(0, 1, 2);
 	v2 = Vector3(3, 4, 5);
 	v3 = Vector3(6, 7, 8);
@@ -92,7 +92,7 @@ CHECK(TLine3::swap(TLine3& line))
 	TEST_EQUAL(line, line3)
 RESULT
 
-CHECK(TLine3::set(const TVector3<T>& point, const TVector3<T>& vector, Form form = FORM__PARAMETER))
+CHECK(void set(const TVector3<T>& point, const TVector3<T>& vector, Form form = FORM__PARAMETER) throw())
 	v1 = Vector3(0, 1, 2);
 	v2 = Vector3(3, 4, 5);
 	line = Line3(v1, v2, Line3::FORM__PARAMETER);
@@ -103,7 +103,7 @@ CHECK(TLine3::set(const TVector3<T>& point, const TVector3<T>& vector, Form form
 	TEST_EQUAL(line, line2)
 RESULT
 
-CHECK(TLine3::get(TLine3& line, bool /* deep */ = true) const )
+CHECK(void get(TLine3& line) const throw())
 	v1 = Vector3(0, 1, 2);
 	v2 = Vector3(3, 4, 5);
 	line = Line3(v1, v2, Line3::FORM__PARAMETER);
@@ -111,7 +111,7 @@ CHECK(TLine3::get(TLine3& line, bool /* deep */ = true) const )
 	TEST_EQUAL(line, line2)
 RESULT
 
-CHECK(normalize())
+CHECK(void normalize() throw())
 	v1 = Vector3(0, 0, 0);
 	v2 = Vector3(4, 9, 16);
 	line = Line3(v1, v2, Line3::FORM__PARAMETER);
@@ -121,7 +121,7 @@ CHECK(normalize())
 	TEST_EQUAL(v2, v4)
 RESULT
 
-CHECK(bool operator != (const TLine3& line) const )
+CHECK(bool operator != (const TLine3& line) const throw())
 	v1 = Vector3(0, 1, 2);
 	v2 = Vector3(0, 3, 2);
 	line  = Line3(v1, v2, Line3::FORM__PARAMETER);
@@ -132,7 +132,7 @@ CHECK(bool operator != (const TLine3& line) const )
 	TEST_EQUAL(line != line2, true)
 RESULT
 
-CHECK(has(const TVector3<T>& point) const )
+CHECK(bool has(const TVector3<T>& point) const throw())
 	v1 = Vector3(0, 0, 0);
 	v2 = Vector3(4, 4, 4);
 	line = Line3(v1, v2, Line3::FORM__TWO_POINTS);
@@ -142,7 +142,7 @@ CHECK(has(const TVector3<T>& point) const )
 	TEST_EQUAL(line.has(v1), false)
 RESULT
 
-CHECK(isValid() const)
+CHECK(bool isValid() const throw())
 	TEST_EQUAL(line.isValid(), true)
 RESULT
 
@@ -168,7 +168,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TLine3<T>& line))
 	TEST_FILE(filename.c_str(), "data/Line_test2.txt")
 RESULT
 
-CHECK(TAngle::dump(std::ostream& s = std::cout, Size depth = 0) const )
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	v1 = Vector3(0, 1, 2);
 	v2 = Vector3(3, 4, 5);
 	line = Line3(v1, v2, Line3::FORM__PARAMETER);
@@ -179,6 +179,27 @@ CHECK(TAngle::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Line_test.txt")
 RESULT
+
+CHECK(TLine3(const TLine3& line) throw())
+  // ???
+RESULT
+
+CHECK(TLine3& operator = (const TLine3& line) throw())
+  // ???
+RESULT
+
+CHECK(void clear() throw())
+  // ???
+RESULT
+
+CHECK(void get(TVector3<T>& point, TVector3<T>& vector, Form form = FORM__PARAMETER) const throw())
+  // ???
+RESULT
+
+CHECK(void set(const TLine3& line) throw())
+  // ???
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

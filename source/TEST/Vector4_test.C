@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Vector4_test.C,v 1.28 2003/05/22 21:57:22 oliver Exp $
+// $Id: Vector4_test.C,v 1.29 2003/06/09 22:40:54 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +10,7 @@
 #include <BALL/MATHS/vector4.h>
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.28 2003/05/22 21:57:22 oliver Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.29 2003/06/09 22:40:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,16 +23,16 @@ using std::ofstream;
 using std::ios;
 
 Vector4* vector4_ptr = 0;
-CHECK(TVector4();)
+CHECK(TVector4() throw())
 	vector4_ptr = new Vector4;
 	TEST_NOT_EQUAL(vector4_ptr, 0)
 RESULT								
 
-CHECK(~TVector4();)
+CHECK(~TVector4() throw())
 	delete vector4_ptr;
 RESULT		
 
-CHECK(clear())
+CHECK(void clear() throw())
 	Vector4 v1(1, 2, 3, 4);
 	Vector4 v2;
 	v2.set(0, 0, 0,0 );
@@ -43,7 +44,7 @@ Vector4 v;
 Vector4 v1;
 Vector4 v2;
 
-CHECK(TVector4::T& operator [] (Index index) const)
+CHECK(const T& operator [] (Position position) const throw(Exception::IndexOverflow))
 	v = Vector4(1.0, 2.0, 3.0, 4.0);
 	TEST_EQUAL(v[0], 1)
 	TEST_EQUAL(v[1], 2.0)
@@ -53,7 +54,7 @@ CHECK(TVector4::T& operator [] (Index index) const)
 	TEST_EXCEPTION(Exception::IndexOverflow,  v[4])
 RESULT
 
-CHECK(TVector4(const T* ptr);)
+CHECK(TVector4(const T* ptr) throw(Exception::NullPointer))
 	float arr[4];
 	arr[0] = 1;
 	arr[1] = 2;
@@ -67,7 +68,7 @@ CHECK(TVector4(const T* ptr);)
 	TEST_EXCEPTION(Exception::NullPointer, v = Vector4((float*)0))
 RESULT
 
-CHECK(TVector4(const T& scalar);)
+CHECK(TVector4(const T& value) throw())
 	v = Vector4(1.23456);
 	TEST_REAL_EQUAL(v[0], 1.23456)
 	TEST_REAL_EQUAL(v[1], 1.23456)
@@ -75,7 +76,7 @@ CHECK(TVector4(const T& scalar);)
 	TEST_REAL_EQUAL(v[3], 1.23456)
 RESULT
 
-CHECK(TVector4(const T& x, const T& y, const T& z, const T& h = (T)1);)
+CHECK(TVector4(const T& x, const T& y, const T& z, const T& h = (T)1) throw())
 	v = Vector4(1, 2, 3, 4);
 	TEST_EQUAL(v[0], 1)
 	TEST_EQUAL(v[1], 2)
@@ -88,7 +89,7 @@ CHECK(TVector4(const T& x, const T& y, const T& z, const T& h = (T)1);)
 	TEST_EQUAL(v[3], 1)
 RESULT
 
-CHECK(TVector4(const TVector4& vector, bool deep = true);)
+CHECK(TVector4(const TVector4& vector) throw())
 	v2 = Vector4(1, 2, 3, 4);
 	v  = Vector4(v2);
 	TEST_EQUAL(v[0], 1)
@@ -117,7 +118,7 @@ CHECK(TVector4 operator - (const TVector4<T>& a, const TVector4<T>& b))
 	TEST_EQUAL(v[3], 1)
 RESULT
 
-CHECK(TVector4 operator * (const TVector4<T>& a, const TVector4<T>& b))
+CHECK(TVector4 operator * (const TVector4<T>& b) throw())
  	v1 = Vector4(2, 2, 2, 2);
 	v2 = Vector4(1, 2, 3, 4);
 	v  = v1 - v2;
@@ -148,7 +149,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TVector4<T>& vector))
 	TEST_FILE(filename.c_str(), "data/Vector4_test2.txt")
 RESULT
 
-CHECK(TVector4::BALL_CREATE(TVector4<T>))
+CHECK(BALL_CREATE(TVector4<T>))
 	Vector4 v(1, 2, 3, 4);
 	Vector4* v_ptr = (Vector4*)v.create(false, true);
 	TEST_REAL_EQUAL(v_ptr->x, 0.0)
@@ -164,7 +165,7 @@ CHECK(TVector4::BALL_CREATE(TVector4<T>))
 	delete v_ptr;
 RESULT
 
-CHECK(TVector4::getLength() const )
+CHECK(T getLength() const throw())
 	v = Vector4(4, 9, 16, 25);
 	float result = sqrt(4.0 * 4.0 + 9.0 * 9.0 + 16.0 * 16.0 + 25.0 * 25.0);
 	TEST_REAL_EQUAL(v.getLength(), result)
@@ -172,14 +173,14 @@ CHECK(TVector4::getLength() const )
 	TEST_REAL_EQUAL(v.getLength(), 0)
 RESULT
 
-CHECK(TVector4::getSquareLength() const )
+CHECK(T getSquareLength() const throw())
 	v = Vector4(1, 2, 3, 4);
 	TEST_REAL_EQUAL(v.getSquareLength(), 30)
 	v = Vector4(0, 0, 0, 0);
 	TEST_REAL_EQUAL(v.getSquareLength(), 0)
 RESULT
 
-CHECK(TVector4::normalize())
+CHECK(TVector4& normalize() throw(Exception::DivisionByZero))
 	v = Vector4(4, 9, 16, 25);
 	v.normalize();
 	TEST_REAL_EQUAL(v[0], 4/31.273)
@@ -190,21 +191,21 @@ CHECK(TVector4::normalize())
 	TEST_EXCEPTION(Exception::DivisionByZero, v.normalize())
 RESULT
 
-CHECK(TVector4::getZero())
+CHECK(static const TVector4& getZero() throw())
 	TEST_EQUAL(Vector4::getZero().x, 0)
 	TEST_EQUAL(Vector4::getZero().y, 0)
 	TEST_EQUAL(Vector4::getZero().z, 0)
 	TEST_EQUAL(Vector4::getZero().h, 0)
 RESULT
 
-CHECK(TVector4::getUnit())
+CHECK(static const TVector4& getUnit() throw())
 	TEST_EQUAL(Vector4::getUnit().x, 1)
 	TEST_EQUAL(Vector4::getUnit().y, 1)
 	TEST_EQUAL(Vector4::getUnit().z, 1)
 	TEST_EQUAL(Vector4::getUnit().h, 1)
 RESULT
 
-CHECK(TVector4::set(const T& value = (T)1))
+CHECK(void set(const T& value = (T)1) throw())
 	v = Vector4(2,2,2,2);
 	v.set();
 	TEST_EQUAL(v[0], 1)
@@ -219,7 +220,7 @@ CHECK(TVector4::set(const T& value = (T)1))
 	TEST_EQUAL(v[3], 3)
 RESULT
 
-CHECK(operator = (T value))
+CHECK(TVector4& operator = (T value) throw())
 	v = 1.1;
 	TEST_REAL_EQUAL(v.x, (float) 1.1)
 	TEST_REAL_EQUAL(v.y, (float) 1.1)
@@ -227,7 +228,7 @@ CHECK(operator = (T value))
 	TEST_REAL_EQUAL(v.h, (float) 1.1)
 RESULT
 
-CHECK(TVector4::T& operator [] (Index index) )
+CHECK(T& operator [] (Position position) throw(Exception::IndexOverflow))
 	v = Vector4(1, 2, 3, 4);
 	v[0]=5;	v[1]=6;
 	v[2]=7;	v[3]=8;
@@ -239,7 +240,7 @@ CHECK(TVector4::T& operator [] (Index index) )
 	TEST_EXCEPTION(Exception::IndexOverflow, v[4] = 5)
 RESULT
 
-CHECK(TVector4::TVector4 operator + () const )
+CHECK(TVector4 operator + () const throw())
 	v2 = Vector4(1, 2, 3, 4);
 	v = + v2;
 	TEST_EQUAL(v[0], 1)
@@ -248,7 +249,7 @@ CHECK(TVector4::TVector4 operator + () const )
 	TEST_EQUAL(v[3], 4)
 RESULT
 
-CHECK(TVector4::TVector4 operator - () const )
+CHECK(TVector4 operator - () const throw())
 	v2 = Vector4(1, 2, 3, 4);
 	v = + v2;
 	TEST_EQUAL(v[0], 1)
@@ -257,7 +258,7 @@ CHECK(TVector4::TVector4 operator - () const )
 	TEST_EQUAL(v[3], 4)
 RESULT
 
-CHECK(TVector4::TVector4& operator += (const TVector4& vector))
+CHECK(TVector4& operator += (const TVector4& vector) throw())
 	v2 = Vector4(1, 2 ,3, 4);
 	v  = Vector4(1, 2, 3, 4);
 	v += v2;
@@ -267,7 +268,7 @@ CHECK(TVector4::TVector4& operator += (const TVector4& vector))
 	TEST_EQUAL(v[3], 8)
 RESULT
 
-CHECK(TVector4::TVector4& operator -= (const TVector4& vector))
+CHECK(TVector4& operator -= (const TVector4& vector) throw())
 	v2 = Vector4(1, 2, 3, 4);
 	v  = Vector4(4, 3, 2, 1);
 	v -= v2;
@@ -277,7 +278,7 @@ CHECK(TVector4::TVector4& operator -= (const TVector4& vector))
 	TEST_REAL_EQUAL(v[3], -3)
 RESULT
 
-CHECK(TVector4::TVector4 operator * (const T& scalar))
+CHECK(TVector4 operator * (const T& scalar) throw())
 	v  = Vector4(1, 2, 3, 4);
 	v = v * 2;
 	TEST_EQUAL(v[0], 2)
@@ -286,7 +287,7 @@ CHECK(TVector4::TVector4 operator * (const T& scalar))
 	TEST_EQUAL(v[3], 8)
 RESULT
 
-CHECK(TVector4::TVector4& operator *= (const T& scalar))
+CHECK(TVector4& operator *= (const T& scalar) throw())
 	v  = Vector4(1, 2, 3, 4);
 	v *= 2;
 	TEST_EQUAL(v[0], 2)
@@ -295,7 +296,7 @@ CHECK(TVector4::TVector4& operator *= (const T& scalar))
 	TEST_EQUAL(v[3], 8)
 RESULT
 
-CHECK(TVector4::TVector4 operator / (const T& scalar))
+CHECK(TVector4 operator / (const T& scalar) throw(Exception::DivisionByZero))
 	v  = Vector4(1, 2, 3, 4);
 	v = v / 0.5;
 	TEST_EQUAL(v[0], 2)
@@ -305,7 +306,7 @@ CHECK(TVector4::TVector4 operator / (const T& scalar))
 	TEST_EXCEPTION(Exception::DivisionByZero, v = v / 0)
 RESULT
 
-CHECK(TVector4::TVector4& operator /= (const T& scalar))
+CHECK(TVector4& operator /= (const T& scalar) throw(Exception::DivisionByZero))
 	v  = Vector4(1, 2, 3, 4);
 	v /= 0.5;
 	TEST_EQUAL(v[0], 2)
@@ -315,25 +316,25 @@ CHECK(TVector4::TVector4& operator /= (const T& scalar))
 	TEST_EXCEPTION(Exception::DivisionByZero, v /= 0)
 RESULT
 
-CHECK(TVector4::T operator * (const TVector4& vector) const )
+CHECK(T operator * (const TVector4& vector) const throw())
 	v2 = Vector4(1, 2, 3, 4);
 	v  = Vector4(1, 2, 3, 4);
 	TEST_REAL_EQUAL(v * v2 , 30.0)
 RESULT
 
-CHECK(TVector4::getDistance(const TVector4& vector) const )
+CHECK(T getDistance(const TVector4& vector) const throw())
 	v2 = Vector4(1, 2, 3, 4);
 	v  = Vector4(0, 1, 2, 3);
 	TEST_REAL_EQUAL(v.getDistance(v2) , 2)
 RESULT
 
-CHECK(TVector4::getSquareDistance(const TVector4& vector) const )
+CHECK(T getSquareDistance(const TVector4& vector) const throw())
 	v2 = Vector4(1, 2, 3, 4);
 	v  = Vector4(0, 1, 2, 3);
 	TEST_REAL_EQUAL(v.getSquareDistance(v2) , 4)
 RESULT
 
-CHECK(TVector4::bool operator == (const TVector4& vector) const )
+CHECK(bool operator == (const TVector4& vector) const throw())
 	v2 = Vector4(1, 2, 3, 4);
 	v  = Vector4(1, 2, 3, 3);
 	TEST_EQUAL(v == v2 , false)
@@ -341,7 +342,7 @@ CHECK(TVector4::bool operator == (const TVector4& vector) const )
 	TEST_EQUAL(v == v2 , true)
 RESULT
 
-CHECK(TVector4::bool operator != (const TVector4& vector) const )
+CHECK(bool operator != (const TVector4& vector) const throw())
 	v2 = Vector4(1, 2, 3, 4);
 	v  = Vector4(1, 2, 3, 3);
 	TEST_EQUAL(v != v2 , true)
@@ -349,7 +350,7 @@ CHECK(TVector4::bool operator != (const TVector4& vector) const )
 	TEST_EQUAL(v != v2 , false)
 RESULT
 
-CHECK(TVector4::isOrthogonalTo(TVector4& vector) const )
+CHECK(bool isOrthogonalTo(TVector4& vector) const throw())
 	v2 = Vector4(1, 0, 3, 0);
 	v  = Vector4(0, 2, 0, 3);
 	TEST_EQUAL(v.isOrthogonalTo(v2) , true)
@@ -357,12 +358,12 @@ CHECK(TVector4::isOrthogonalTo(TVector4& vector) const )
 	TEST_EQUAL(v.isOrthogonalTo(v2) , false)
 RESULT
 
-CHECK(TVector4::isValid() const )
+CHECK(bool isValid() const throw())
 	v  = Vector4(0,2,0,3);
 	TEST_EQUAL(v.isValid(), true)
 RESULT
 
-CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	Vector4 v(1.2, 2.3, 3.4, 4.5);
   String filename;
 	NEW_TMP_FILE(filename)
@@ -372,7 +373,7 @@ CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	TEST_FILE_REGEXP(filename.c_str(), "data/Vector4_test.txt")
 RESULT
 
-CHECK(TVector4<T>::set(const T* ptr))
+CHECK(void set(const T* ptr) throw(Exception::NullPointer))
 	float arr[4];
 	arr[0] = 1;
 	arr[1] = 2;
@@ -384,16 +385,24 @@ CHECK(TVector4<T>::set(const T* ptr))
 	TEST_EQUAL(v[1], 2)
 	TEST_EQUAL(v[2], 3)
 	TEST_EQUAL(v[3], 4)
+	TEST_EXCEPTION(Exception::NullPointer, v.set((float*)0))
 RESULT
 
-CHECK(TVector4::set(const T& x, const T& y, const T& z, const T& h))
-	v = Vector4();
+CHECK(void set(const T& rx, const T& ry, const T& rz, const T& rh = (T)1) throw())
+	v.clear();
 	v.set(1,2,3,4);
 	v2 = Vector4(1,2,3,4);
 	TEST_EQUAL(v2, v)
 RESULT
 
-CHECK(TVector4::operator = (const T* ptr))
+CHECK(void set(const TVector4& vector) throw())
+	v2 = Vector4(1,2,3,4);
+	v.clear();
+	v.set(v2);
+	TEST_EQUAL(v2, v)
+RESULT
+
+CHECK(TVector4& operator = (const T* ptr) throw(Exception::NullPointer))
 	float arr[4];
 	arr[0] = 1;
 	arr[1] = 2;
@@ -405,14 +414,14 @@ CHECK(TVector4::operator = (const T* ptr))
 	TEST_EQUAL(v2, v)
 RESULT
 
-CHECK(TVector4<T>& TVector4<T>::operator = (const TVector4<T>& v))
+CHECK(TVector4& operator = (const TVector4& vector) throw())
 	v2 = Vector4(1,2,3,4);
 	v  = Vector4();
 	v = v2;
 	TEST_EQUAL(v2, v)
 RESULT
 
-CHECK(TVector4::get(T* ptr) const )
+CHECK(void get(T* ptr) const throw(Exception::NullPointer))
 	float arr[4];
 	v = Vector4(1,2,3,4);
 	v.get(arr);
@@ -420,9 +429,10 @@ CHECK(TVector4::get(T* ptr) const )
 	TEST_EQUAL(arr[1], 2)
 	TEST_EQUAL(arr[2], 3)
 	TEST_EQUAL(arr[3], 4)
+	TEST_EXCEPTION(Exception::NullPointer, v.get((float*)0))
 RESULT
 
-CHECK(TVector4::get(T& rx, T& ry, T& rz, T& rh) const)
+CHECK(void get(T& rx, T& ry, T& rz, T& rh) const throw())
 	float a,b,c,d;
 	v = Vector4(1,2,3,4);
 	v.get(a,b,c,d);
@@ -432,14 +442,14 @@ CHECK(TVector4::get(T& rx, T& ry, T& rz, T& rh) const)
 	TEST_EQUAL(d, 4)
 RESULT
 
-CHECK(TVector4::get(TVector4<T>& v, bool deep) const )
+CHECK(void get(TVector4& vector) const throw())
 	v2 = Vector4(1,2,3,4);
 	v  = Vector4();
 	v.get(v2);
 	TEST_EQUAL(v2, v)
 RESULT
 
-CHECK(TVector4<T>::swap(TVector4<T>& v))
+CHECK(void swap(TVector4& vector) throw())
 	v  = Vector4(1, 2, 3, 4);
 	Vector4 u(4, 3, 2, 1);
 	v2 = u;
@@ -449,7 +459,7 @@ CHECK(TVector4<T>::swap(TVector4<T>& v))
 	TEST_EQUAL(u, u2)
 RESULT
 
-CHECK(TVector4::dump(std::ostream& s = std::cout, Size depth = 0) const )
+CHECK(dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	Vector4 v(1.2, 2.3, 3.4, 4.5);
   String filename;
 	NEW_TMP_FILE(filename)

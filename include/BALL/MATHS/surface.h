@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surface.h,v 1.23 2003/03/26 09:31:59 sturm Exp $
+// $Id: surface.h,v 1.24 2003/06/09 22:40:49 oliver Exp $
+//
 
 #ifndef BALL_MATHS_SURFACE_H
 #define BALL_MATHS_SURFACE_H
@@ -25,10 +26,8 @@ namespace BALL
 			Each tringle is represented by three indices to vertices (as
 			described by the  \link TSurface::Triangle TSurface::Triangle \endlink ). Each of the vertices has
 			a position and possibly a normal vector associated.
-			 \par
-			
-			 \par
-	\ingroup GeometricObjects
+			\par
+			\ingroup GeometricObjects
 	*/
 	template <typename T>
 	class TSurface
@@ -37,7 +36,7 @@ namespace BALL
 
 		BALL_CREATE(TSurface)
 
-		/**	@name	Type Definitions
+		/**	@name	Type definitions
 		*/
 		//@{
 
@@ -91,15 +90,15 @@ namespace BALL
 		//@{
 
 		///
-		void set(const TSurface& box)
+		void set(const TSurface& surface)
 			throw();
 
 		///
-		const TSurface& operator = (const TSurface& box)
+		TSurface& operator = (const TSurface& surface)
 			throw();
 
 		///
-		void get(TSurface& box) const
+		void get(TSurface& surface) const
 			throw();
 
 		///
@@ -188,7 +187,7 @@ namespace BALL
 		void resizeNormals(Size size);
 
 		/// Add a normal
-		void pushBackNormal(const Normal& position)
+		void pushBackNormal(const Normal& n)
 			throw();
 
 		//@}
@@ -261,7 +260,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	const TSurface<T>& TSurface<T>::operator = (const TSurface<T>& surface)
+	TSurface<T>& TSurface<T>::operator = (const TSurface<T>& surface)
 		throw()
 	{
 		vertex = surface.vertex;

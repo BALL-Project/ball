@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere3.h,v 1.32 2003/03/26 09:31:58 sturm Exp $
+// $Id: sphere3.h,v 1.33 2003/06/09 22:40:49 oliver Exp $
+//
 
 #ifndef BALL_MATHS_SPHERE3_H
 #define BALL_MATHS_SPHERE3_H
@@ -59,12 +60,12 @@ namespace BALL
 
 		/**	Copy constructor.
 				Create a new Sphere3 object from another.
-				@param sphere3 the Sphere3 object to be copied
+				@param sphere the Sphere3 object to be copied
 		*/	
-		TSphere3(const TSphere3& sphere3)
+		TSphere3(const TSphere3& sphere)
 			throw()
-			: p(sphere3.p),
-				radius(sphere3.radius)
+			: p(sphere.p),
+				radius(sphere.radius)
 		{
 		}
 
@@ -95,22 +96,22 @@ namespace BALL
 		//@{
 
 		/**	Swap the contents of two instances of Sphere3.
-				@param	sphere3 the Sphere3 to swap contents with
+				@param	sphere the Sphere3 to swap contents with
 		*/
-		void swap(TSphere3& sphere3)
+		void swap(TSphere3& sphere)
 			throw()
 		{
 			TVector3<T> temp_point(p);
-			p = sphere3.p;
-			sphere3.p = temp_point;
+			p = sphere.p;
+			sphere.p = temp_point;
 
 			T temp = radius;
-			radius = sphere3.radius;
-			sphere3.radius = temp;
+			radius = sphere.radius;
+			sphere.radius = temp;
 		}
 
 		/**	Assign from another instance of Sphere3.
-				@param sphere3	the Sphere3 object to assign from
+				@param sphere	the Sphere3 object to assign from
 		*/
 		void set(const TSphere3& sphere)
 			throw()
@@ -121,48 +122,48 @@ namespace BALL
 
 		/**	Assign from a point and a radius.
 				@param point the point to assign from
-				@param rhs the radius to assign from
+				@param r the radius to assign from
 
 		*/
-		void set(const TVector3<T>& point, const T& rhs)
+		void set(const TVector3<T>& point, const T& r)
 			throw()
 		{
 			p = point;
-			radius = rhs;
+			radius = r;
 		}
 
 		/**	Assignment operator.
 				Assign the components from another instance of Sphere.
-				@param sphere3 the sphere to assign from
+				@param sphere the sphere to assign from
 		**/
-		const TSphere3& operator = (const TSphere3& sphere3)
+		TSphere3& operator = (const TSphere3& sphere)
 			throw()
 		{
-			p = sphere3.p;
-			radius = sphere3.radius;
+			p = sphere.p;
+			radius = sphere.radius;
 			return *this;
 		}
 
 		/**	Assign to another instance of Sphere.
 				Assigns the components to another Sphere.
-				@param sphere3	the sphere to be assigned to
+				@param sphere	the sphere to be assigned to
 		*/
-		void get(TSphere3& sphere3) const
+		void get(TSphere3& sphere) const
 			throw()
 		{
-			sphere3.p = p;
-			sphere3.radius = radius;
+			sphere.p = p;
+			sphere.radius = radius;
 		}
 
 		/**	Assign to an instance of Vector3 and a variable of type <tt>T</tt>.
 				@param	point the point component
-				@param	rhs the radius component
+				@param	r the radius component
 		*/
-		void get(TVector3<T>& point, T& rhs) const
+		void get(TVector3<T>& point, T& r) const
 			throw()
 		{
 			point = p;
-			rhs = radius;
+			r = radius;
 		}
 
 		//@}
@@ -173,19 +174,19 @@ namespace BALL
 		/**	Equality operator.
 				@return bool, <b>true</b> if all components are equal, <b>false</b> otherwise
 		*/
-		bool operator == (const TSphere3& sphere3) const
+		bool operator == (const TSphere3& sphere) const
 			throw()
 		{
-			return (p == sphere3.p && Maths::isEqual(radius, sphere3.radius));
+			return (p == sphere.p && Maths::isEqual(radius, sphere.radius));
 		}
 
 		/**	Inequality operator.
 				@return bool, <b>true</b> if the two Sphere3 differ in at least one component, <b>false</b> otherwise
 		*/
-		bool operator != (const TSphere3& sphere3) const
+		bool operator != (const TSphere3& sphere) const
 			throw()
 		{
-			return (p != sphere3.p || Maths::isNotEqual(radius, sphere3.radius));
+			return (p != sphere.p || Maths::isNotEqual(radius, sphere.radius));
 		}
 
 		/**	Test whether a given point is a member of the Sphere.
@@ -277,11 +278,11 @@ namespace BALL
 			Reads in an instance of TVector3 and a <b>T</b> value : p, radius.
 	*/
 	template <typename T>
-	std::istream& operator >> (std::istream& s, TSphere3<T>& sphere3)
+	std::istream& operator >> (std::istream& s, TSphere3<T>& sphere)
 		throw()
 	{
 		char c;
-		s >> c >> sphere3.p >> sphere3.radius >> c;
+		s >> c >> sphere.p >> sphere.radius >> c;
 		return s;
 	}
 
@@ -292,16 +293,16 @@ namespace BALL
 			<tt>((0 1 1.5) 0.4)</tt>
 	*/
 	template <typename T>
-	std::ostream& operator << (std::ostream& s, const TSphere3<T>& sphere3)
+	std::ostream& operator << (std::ostream& s, const TSphere3<T>& sphere)
 		throw()
 	{
-		s << '(' << sphere3.p << ' ' << sphere3.radius << ')';
+		s << '(' << sphere.p << ' ' << sphere.radius << ')';
 		return s;
 	}
 
 	//@}
 
-	/**	The Default TSphere3 Type.
+	/**	The default sphere type.
 			If double precision is not needed, <tt>TSphere3<float></tt> should
 			be used. It is predefined as <tt>Sphere3</tt> for convenience.
 	*/

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: circle3.h,v 1.35 2003/03/14 11:49:14 sturm Exp $
+// $Id: circle3.h,v 1.36 2003/06/09 22:40:48 oliver Exp $
+//
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -166,7 +167,7 @@ namespace BALL
 				Assign the components from another circle.
 				@param circle the circle to assign from
 		**/
-		const TCircle3& operator = (const TCircle3& circle)
+		TCircle3& operator = (const TCircle3& circle)
 			throw()
 		{
 			p = circle.p;

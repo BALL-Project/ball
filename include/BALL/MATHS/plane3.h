@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: plane3.h,v 1.31 2003/03/26 09:31:57 sturm Exp $
+// $Id: plane3.h,v 1.32 2003/06/09 22:40:49 oliver Exp $
+//
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -161,16 +162,15 @@ namespace BALL
 		//@{
 
 		///
-		void swap(TPlane3 &plane)
-			throw()
+		void swap(TPlane3& plane)	throw()
 		{
 			TVector3<T> temp_point(p);
 			p = plane.p;
 			plane.p = temp_point;
 
-			TVector3<T> temp_vector(n);
+			temp_point = n;
 			n = plane.n;
-			plane.n = temp_vector;
+			plane.n = temp_point;
 		}
 
 		/**	Swap the contents of two instances of planes.
@@ -211,7 +211,7 @@ namespace BALL
 				Assign the components from another instance of plane.
 				@param plane the plane to assign from
 		**/
-		const TPlane3& operator = (const TPlane3 &plane)
+		TPlane3& operator = (const TPlane3& plane)
 			throw()
 		{
 			p = plane.p;

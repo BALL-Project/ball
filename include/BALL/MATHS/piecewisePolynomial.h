@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewisePolynomial.h,v 1.15 2003/03/26 09:31:57 sturm Exp $
+// $Id: piecewisePolynomial.h,v 1.16 2003/06/09 22:40:49 oliver Exp $
+//
 
 #ifndef BALL_MATHS_PPOLYNOMIAL_H
 #define BALL_MATHS_PPOLYNOMIAL_H
@@ -63,7 +64,7 @@ namespace BALL
 
 		/** Assignment operator 
 		*/
-		const PiecewisePolynomial& operator = (const PiecewisePolynomial& poly)
+		PiecewisePolynomial& operator = (const PiecewisePolynomial& poly)
 			throw();
 
 		/** Clear method 
@@ -87,7 +88,7 @@ namespace BALL
 		Size getDegree() const throw();
 
 		/// compute the value of the PiecewisePolynomial at a given x
-		virtual double operator() (double x) const throw();
+		virtual double operator () (double x) const throw();
 
 		//@}
 		/** @name Predicates 

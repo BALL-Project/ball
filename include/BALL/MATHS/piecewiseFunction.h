@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewiseFunction.h,v 1.18 2003/03/26 09:31:57 sturm Exp $
+// $Id: piecewiseFunction.h,v 1.19 2003/06/09 22:40:49 oliver Exp $
+//
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularExpression_test.C,v 1.13 2003/05/25 21:38:11 oliver Exp $
+// $Id: RegularExpression_test.C,v 1.14 2003/06/09 22:40:53 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.13 2003/05/25 21:38:11 oliver Exp $")
+START_TEST(RegularExpression, "$Id: RegularExpression_test.C,v 1.14 2003/06/09 22:40:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -24,16 +24,20 @@ using std::ios;
 
 RegularExpression* re;
 
-CHECK(RegularExpression())
+CHECK(RegularExpression() throw())
 	re = new RegularExpression();
 	TEST_NOT_EQUAL(re, 0)
 RESULT
 
-CHECK(~RegularExpression())
+CHECK(~RegularExpression() throw())
 	delete re;
 RESULT
 
-CHECK(RegularExpression(const String& pattern, bool wildcard_pattern = false))
+CHECK(BALL_CREATE(RegularExpression))
+	// ????
+RESULT
+
+CHECK(RegularExpression(const String& pattern, bool wildcard_pattern = false) throw())
 	re = new RegularExpression("abc");
 	TEST_NOT_EQUAL(re, 0)
 	if (re != 0)
@@ -46,7 +50,7 @@ RESULT
 RegularExpression re1("abc");
 RegularExpression re2("abc");
 
-CHECK(RegularExpression(const RegularExpression& regular_expression, bool deep = true))
+CHECK(RegularExpression(const RegularExpression& regular_expression) throw())
 	re = new RegularExpression(re1);
 	TEST_NOT_EQUAL(re, 0)
 	if (re != 0)
@@ -56,45 +60,45 @@ CHECK(RegularExpression(const RegularExpression& regular_expression, bool deep =
 	delete re;	
 RESULT
 
-CHECK(clear)
+CHECK(void clear() throw())
 	re1.clear();
 	TEST_EQUAL(re1.getPattern(), "");
 RESULT
 
-CHECK(destroy)
+CHECK(void destroy() throw())
 	re2.clear();
 	TEST_EQUAL(re2.getPattern(), "");
 RESULT
 
-CHECK(RegularExpression::set(const String& pattern, bool wildcard_pattern = false))
+CHECK(void set(const String& pattern, bool wildcard_pattern = false) throw())
 	re1.set("abc*d", true);
 	TEST_EQUAL(re1.getPattern(), "abc.*d");
 	re1.set("abc", true);
 	TEST_EQUAL(re1.getPattern(), "abc");
 RESULT
 
-CHECK(RegularExpression::set(const RegularExpression& regular_expression, bool deep = true))
+CHECK(void set(const RegularExpression& regular_expression) throw())
 	re2.set(re1);
 	TEST_EQUAL(re2.getPattern(), "abc");
 RESULT
 
-CHECK(RegularExpression::get(RegularExpression& regular_expression, bool deep = true) const )
+CHECK(void get(RegularExpression& regular_expression) const throw())
 	re2.clear();
 	re1.get(re2);
 	TEST_EQUAL(re2.getPattern(), "abc");
 RESULT
 
-CHECK(RegularExpression::operator = (const RegularExpression& expression) const )
+CHECK(RegularExpression& operator = (const RegularExpression& expression) throw())
 	re2.clear();
 	re2 = re1;
 	TEST_EQUAL(re2.getPattern(), "abc");
 RESULT
 
-CHECK(RegularExpression::getPattern() const )
+CHECK(const String& getPattern() const throw())
 	TEST_EQUAL(re2.getPattern(), "abc");
 RESULT
 
-CHECK(RegularExpression::countSubexpressions() const )
+CHECK(Size countSubexpressions() const throw())
 	TEST_EQUAL(re2.countSubexpressions(), 0);
 	TEST_EQUAL(re2.isValid(), true)
 	re2.set("([A-Z]+[0-9]+).*([0-9])");
@@ -102,7 +106,7 @@ CHECK(RegularExpression::countSubexpressions() const )
 	TEST_EQUAL(re2.countSubexpressions(), 2);
 RESULT
 
-CHECK(RegularExpression::match(const char* text, const char* pattern, int compile_flags = 0 | REG_EXTENDED | REG_NOSUB, int execute_flags = 0 ))
+CHECK(static bool match(const char* text, const char* pattern, int compile_flags = 0 | REG_EXTENDED | REG_NOSUB, int execute_flags = 0) throw(Exception::NullPointer))
 	char* c = 0;
 	TEST_EXCEPTION(Exception::NullPointer, RegularExpression::match(c, "a*bd"))
 	TEST_EXCEPTION(Exception::NullPointer, RegularExpression::match("a*bd", c))
@@ -118,7 +122,7 @@ CHECK(RegularExpression::match(const char* text, const char* pattern, int compil
 	TEST_EQUAL(RegularExpression::match("abbcbbd", "a[BC]+d"), false)
 RESULT
 
-CHECK(RegularExpression::match(const String& text, Index from = 0, int execute_flags = 0 ) const )
+CHECK(bool match(const String& text, Index from = 0, int execute_flags = 0) const throw(Exception::NullPointer, Exception::IndexUnderflow, Exception::IndexOverflow))
 	re2.set("a[bc]+d");
 	String s = "abbcbbd";
 	TEST_EQUAL(re2.isValid(), true)
@@ -129,7 +133,7 @@ CHECK(RegularExpression::match(const String& text, Index from = 0, int execute_f
 	TEST_EQUAL(re2.match(s), true)
 RESULT
 
-CHECK(RegularExpression::match(const Substring& text, Index from = 0, int execute_flags = 0) const )
+CHECK(bool match(const Substring& text, Index from = 0, int execute_flags = 0) const throw(Substring::InvalidSubstring, Exception::IndexUnderflow, Exception::IndexOverflow))
 	re2.set("a[bc]+d");
 	String s = "abbcbbd";
 	Substring ss;
@@ -138,12 +142,12 @@ CHECK(RegularExpression::match(const Substring& text, Index from = 0, int execut
 	TEST_EQUAL(re2.match(ss, 1, 0), false)
 RESULT
 
-CHECK(RegularExpression::match(const char* text, int execute_flags = 0) const )
+CHECK(bool match(const char* text, int execute_flags = 0) const throw(Exception::NullPointer))
 	const char* s = "abbcbbd";
 	TEST_EQUAL(re2.match(s), true)
 RESULT
 
-CHECK(RegularExpression::find(const String& text, Substring& found, Index from = 0, int execute_flags = 0) const )
+CHECK(bool find(const String& text, Substring& found, Index from = 0, int execute_flags = 0) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
 	Substring sub;
 	String text("1234ABC123");
 	RegularExpression re("[A-Z]+");
@@ -156,7 +160,7 @@ CHECK(RegularExpression::find(const String& text, Substring& found, Index from =
 	TEST_EQUAL(text, "1234123")
 RESULT
 
-CHECK(RegularExpression::find(const String& text, vector<Substring>& subexpressions, Index from = 0, int execute_flags = 0) const )
+CHECK(bool find(const String& text, vector<Substring>& subexpressions, Index from = 0, int execute_flags = 0) const throw(Exception::IndexUnderflow, Exception::IndexOverflow))
 	re2.set("(bb).*(bd)");
 	String s = "abbcbbd";
 	vector<Substring> ss;
@@ -175,14 +179,14 @@ CHECK(RegularExpression::find(const String& text, vector<Substring>& subexpressi
 RESULT
 
 
-CHECK(RegularExpression::isEmpty() const )
+CHECK(bool isEmpty() const throw())
 	re2.set("abc");
 	TEST_EQUAL(re2.isEmpty(), false)
 	re2.set("");
 	TEST_EQUAL(re2.isEmpty(), true)
 RESULT
 
-CHECK(RegularExpression::bool operator == (const RegularExpression& regular_expression) const )
+CHECK(bool operator == (const RegularExpression& regular_expression) const throw())
 	re2.set("abc");
 	re1.set("abc");
 	TEST_EQUAL(re2 == re1, true)
@@ -190,19 +194,19 @@ CHECK(RegularExpression::bool operator == (const RegularExpression& regular_expr
 	TEST_EQUAL(re2 == re1, false)
 RESULT
 
-CHECK(RegularExpression::bool operator != (const RegularExpression& regular_expression) const )
+CHECK(bool operator != (const RegularExpression& regular_expression) const throw())
 	TEST_EQUAL(re2 != re1, true)
 	re2.set("abc");
 	TEST_EQUAL(re2 != re1, false)
 RESULT
 
-CHECK(RegularExpression::bool operator < (const RegularExpression& regular_expression) const )
+CHECK(bool operator < (const RegularExpression& regular_expression) const throw())
 	TEST_EQUAL(re2 < re1, false)
 	re2.set("abb");
 	TEST_EQUAL(re2 < re1, true)
 RESULT
 
-CHECK(RegularExpression::bool operator <= (const RegularExpression& regular_expression) const )
+CHECK(bool operator <= (const RegularExpression& regular_expression) const throw())
 	TEST_EQUAL(re2 <= re1, true)
 	re2.set(re1);
 	TEST_EQUAL(re2 <= re1, true)
@@ -210,7 +214,7 @@ CHECK(RegularExpression::bool operator <= (const RegularExpression& regular_expr
 	TEST_EQUAL(re2 <= re1, false)
 RESULT
 
-CHECK(RegularExpression::bool operator >= (const RegularExpression& regular_expression) const )
+CHECK(bool operator >= (const RegularExpression& regular_expression) const throw())
 	TEST_EQUAL(re2 >= re1, true)
 	re2.set(re1);
 	TEST_EQUAL(re2 >= re1, true)
@@ -218,18 +222,18 @@ CHECK(RegularExpression::bool operator >= (const RegularExpression& regular_expr
 	TEST_EQUAL(re2 >= re1, false)
 RESULT
 
-CHECK(RegularExpression::bool operator > (const RegularExpression& regular_expression) const )
+CHECK(bool operator > (const RegularExpression& regular_expression) const throw())
 	TEST_EQUAL(re2 > re1, false)
 	re2.set("abd");
 	TEST_EQUAL(re2 > re1, true)
 RESULT
 
-CHECK(RegularExpression::isValid() const )
+CHECK(bool isValid() const throw())
 	re2.set("abc");
 	TEST_EQUAL(re2.isValid(), true)
 RESULT
 
-CHECK(RegularExpression::dump(::std::ostream& s = ::std::cout, Size depth = 0) const )
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	re2.set("[A-Z]+");
 	NEW_TMP_FILE(filename)
 	std::ofstream outfile(filename.c_str(), std::ios::out);
@@ -238,7 +242,7 @@ CHECK(RegularExpression::dump(::std::ostream& s = ::std::cout, Size depth = 0) c
 	TEST_FILE(filename.c_str(), "data/Regular_Expression.txt")
 RESULT
 
-CHECK(RegularExpression::friend::std::ostream& operator << (::std::ostream& s, const RegularExpression& regular_expression))
+CHECK(friend std::ostream& operator << (std::ostream& s, const RegularExpression& regular_expression) throw())
 	NEW_TMP_FILE(filename)
 	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << re2;
@@ -246,7 +250,7 @@ CHECK(RegularExpression::friend::std::ostream& operator << (::std::ostream& s, c
 	TEST_FILE(filename.c_str(), "data/Regular_Expression2.txt")
 RESULT
 
-CHECK(RegularExpression::friend::std::istream& operator >> (::std::istream& s, RegularExpression& regular_expression))
+CHECK(friend std::istream& operator >> (std::istream& s, RegularExpression& regular_expression) throw())
 	std::ifstream instr("data/Regular_Expression2.txt");
 	re2.clear();
 	instr >> re2;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: angle.h,v 1.37 2003/03/14 11:49:13 sturm Exp $
+// $Id: angle.h,v 1.38 2003/06/09 22:40:48 oliver Exp $
 
 #ifndef BALL_MATHS_ANGLE_H
 #define BALL_MATHS_ANGLE_H
@@ -146,7 +146,7 @@ namespace BALL
 
 		/**	Assignment operator
 		*/
-		const TAngle& operator = (const TAngle& angle)
+		TAngle& operator = (const TAngle& angle)
 			throw();
 
 		/**	Assignment operator for floats.
@@ -154,7 +154,7 @@ namespace BALL
 				The assigned value has to be in radians!
 				@param	new_value the new value
 		*/
-		const TAngle& operator = (const T& new_value)
+		TAngle& operator = (const T& new_value)
 			throw();
 
 		/**	Assign the value to another angle.
@@ -249,7 +249,7 @@ namespace BALL
 				@param angle the angle to add
 				@return TAngle, the new angle
 		*/
-		TAngle operator +	(const TAngle& angle)
+		TAngle operator + (const TAngle& angle)
 			throw();
 
 		/**	Substraction operator.
@@ -284,7 +284,7 @@ namespace BALL
 				@param val the value to multiply by
 				@return TAngle, {\em *this}
 		*/
-		TAngle& operator *=	(const T& val)
+		TAngle& operator *= (const T& val)
 			throw();
 
 		/**	Division operator.
@@ -298,14 +298,14 @@ namespace BALL
 				@param val the angle to divide by
 				@return TAngle, {\em *this}
 		*/
-		TAngle& operator /=	(const T& val)
+		TAngle& operator /= (const T& val)
 			throw(Exception::DivisionByZero);
 
 		/**	Divide this angle by a value.
 				@param val the angle to divide by
 				@return TAngle, the new angle
 		*/
-		TAngle operator /	(const TAngle& val)
+		TAngle operator / (const TAngle& val)
 			throw(Exception::DivisionByZero);
 
 		//@}
@@ -337,7 +337,7 @@ namespace BALL
 				@param angle the angle to compare with
 				@return bool, <b>true</b> if {\em *this} angle is smaller than <tt>value</tt>
 		*/
-		bool operator <	(const TAngle& angle) const
+		bool operator < (const TAngle& angle) const
 			throw();
 
 		/**	Is less operator.
@@ -346,7 +346,7 @@ namespace BALL
 				@param val the value to compare with
 				@return bool, <b>true</b> if {\em *this} angle is smaller than <tt>value</tt>
 		*/
-		bool operator <	(const T& val) const
+		bool operator < (const T& val) const
 			throw();
 
 		/**	Is less or equal operator.
@@ -364,7 +364,7 @@ namespace BALL
 				@param angle the angle to compare with
 				@return bool, <b>true</b> if {\em *this} angle is greater or equal than <tt>value</tt>
 		*/
-		bool operator >=	(const TAngle& angle) const
+		bool operator >= (const TAngle& angle) const
 			throw();
 
 		/**	Is greater operator.
@@ -467,7 +467,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	const TAngle<T>& TAngle<T>::operator = (const TAngle& angle)
+	TAngle<T>& TAngle<T>::operator = (const TAngle& angle)
 		throw()
 	{
 		value = angle.value;
@@ -475,7 +475,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	const TAngle<T>& TAngle<T>::operator = (const T& new_value)
+	TAngle<T>& TAngle<T>::operator = (const T& new_value)
 		throw()
 	{
 		value = new_value;
@@ -607,7 +607,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	TAngle<T> TAngle<T>::operator +	(const TAngle& angle) 
+	TAngle<T> TAngle<T>::operator + (const TAngle& angle) 
 		throw()
 	{
 		return TAngle(value + angle.value);
@@ -645,7 +645,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	TAngle<T>& TAngle<T>::operator *=	(const T& val) 
+	TAngle<T>& TAngle<T>::operator *= (const T& val) 
 		throw()
 	{
 		value *= val;
@@ -666,7 +666,7 @@ namespace BALL
 
 
 	template <typename T>
-	TAngle<T>& TAngle<T>::operator /=	(const T& val) 
+	TAngle<T>& TAngle<T>::operator /= (const T& val) 
 		throw(Exception::DivisionByZero)
 	{
 		if (val == 0)
@@ -680,7 +680,7 @@ namespace BALL
 
 
 	template <typename T>
-	TAngle<T> TAngle<T>::operator /	(const TAngle<T>& val) 
+	TAngle<T> TAngle<T>::operator / (const TAngle<T>& val) 
 		throw(Exception::DivisionByZero)
 	{
 		if (val.value == 0)
@@ -706,14 +706,14 @@ namespace BALL
 	}
 
 	template <typename T>
-	bool TAngle<T>::operator <	(const TAngle& angle) const	
+	bool TAngle<T>::operator < (const TAngle& angle) const	
 		throw()
 	{
 		return Maths::isLess(value, angle.value);
 	}
 
 	template <typename T>
-	bool TAngle<T>::operator <	(const T& val) const 
+	bool TAngle<T>::operator < (const T& val) const 
 		throw()
 	{
 		return Maths::isLess(value, val);
@@ -727,7 +727,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	bool TAngle<T>::operator >=	(const TAngle& angle) const 
+	bool TAngle<T>::operator >= (const TAngle& angle) const 
 		throw()
 	{
 		return Maths::isGreaterOrEqual(value, angle.value);

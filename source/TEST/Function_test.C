@@ -1,17 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Function_test.C,v 1.8 2002/02/27 12:24:32 sturm Exp $
+// $Id: Function_test.C,v 1.9 2003/06/09 22:40:52 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-// insert includes here
 #include <BALL/MATHS/function.h>
 
 ///////////////////////////
 
-START_TEST(Function, "$Id: Function_test.C,v 1.8 2002/02/27 12:24:32 sturm Exp $")
+START_TEST(Function, "$Id: Function_test.C,v 1.9 2003/06/09 22:40:52 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -81,16 +82,16 @@ RESULT
 
 Addition<float, float>* add_ptr;
 
-CHECK(Addition::Addition())
+CHECK(Addition() throw())
 	add_ptr = new Addition<float, float>;
 	TEST_NOT_EQUAL(add_ptr, 0)
 RESULT
 
-CHECK(Addition::~Addition())
+CHECK(~Addition() throw())
 	delete add_ptr;
 RESULT
 
-CHECK(Addition::Addition(const Addition& add))
+CHECK(Addition(const Addition& add) throw())
 	Addition<float, float> add1;
 	add1.setFirst(3.0);
 	add1.setSecond(0.1415);
@@ -99,7 +100,7 @@ CHECK(Addition::Addition(const Addition& add))
 	TEST_REAL_EQUAL(add1.getSecond(), add2.getSecond())
 RESULT
 
-CHECK(Addition::operator = (const Addition& add))
+CHECK(Addition operator = (const Addition& add) throw())
 	Addition<float, float> add1;
 	add1.setFirst(3.0);
 	add1.setSecond(0.1415);
@@ -108,7 +109,7 @@ CHECK(Addition::operator = (const Addition& add))
 	TEST_REAL_EQUAL(add1.getSecond(), add2.getSecond())
 RESULT
 
-CHECK(Addition::operator == (const Addition& add))
+CHECK(bool operator == (const Addition& add) throw())
 	Addition<MutableConstant<>, MutableConstant<> > add1;
 	add1.getFirst().setConstant(3.0);
 	add1.getSecond().setConstant(0.1415);
@@ -121,14 +122,14 @@ CHECK(Addition::operator == (const Addition& add))
 	TEST_EQUAL(test, true)
 RESULT
 
-CHECK(Addition::operator () ())
+CHECK(operator () ())
 	Addition<MutableConstant<>, MutableConstant<> > add1;
 	add1.getFirst().setConstant(3.0);
 	add1.getSecond().setConstant(0.1415);
 	TEST_REAL_EQUAL(add1(6789.535481), 3.1415)
 RESULT
 
-CHECK(Addition::getFirst())
+CHECK(getFirst())
 	MutableConstant<> c1(3.0);
 	Addition<MutableConstant<>, MutableConstant<> > add1;
 	add1.setFirst(c1);
@@ -137,7 +138,7 @@ CHECK(Addition::getFirst())
 	TEST_EQUAL(test, true);
 RESULT
 
-CHECK(Addition::setFirst())
+CHECK(setFirst())
 	MutableConstant<> c1(3.0);
 	Addition<MutableConstant<>, MutableConstant<> > add1;
 	add1.setFirst(c1);
@@ -146,7 +147,7 @@ CHECK(Addition::setFirst())
 	TEST_EQUAL(test, true);
 RESULT
 
-CHECK(Addition::getSecond())
+CHECK(getSecond())
 	MutableConstant<> c2(0.1415);
 	Addition<MutableConstant<>, MutableConstant<> > add1;
 	add1.setSecond(c2);
@@ -155,7 +156,7 @@ CHECK(Addition::getSecond())
 	TEST_EQUAL(test, true);
 RESULT
 
-CHECK(Addition::setSecond())
+CHECK(setSecond())
 	MutableConstant<> c2(3.0);
 	Addition<MutableConstant<>, MutableConstant<> > add1;
 	add1.setSecond(c2);

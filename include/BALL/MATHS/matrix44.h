@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: matrix44.h,v 1.44 2003/03/26 09:31:57 sturm Exp $
+// $Id: matrix44.h,v 1.45 2003/06/09 22:40:48 oliver Exp $
+//
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -150,7 +151,7 @@ namespace BALL
 				@param ptr the array to construct from
 				@exception NullPointer if <tt>ptr == 0</tt>
 		*/
-		void set( const T* ptr)
+		void set(const T* ptr)
 			throw(Exception::NullPointer);
 
 		/**	Assign from the first sixteen elements.
@@ -192,21 +193,21 @@ namespace BALL
 				Assign the components from the first 16 values assigned by <tt>ptr</tt>.
 				@param ptr the array to construct from
 		**/
-		const TMatrix4x4& operator = ( const T* ptr)
+		TMatrix4x4& operator = (const T* ptr)
 			throw(Exception::NullPointer);
 
 		/**	Assignment operator.
 				Assign the components from the first 16 values assigned by <tt>ptr</tt>.
 				@param ptr the array to construct from
 		**/
-		const TMatrix4x4& operator = (const T ptr[4][4])
+		TMatrix4x4& operator = (const T ptr[4][4])
 			throw(Exception::NullPointer);
 
 		/**	Assignment operator.
 				Assign the components from another instance of TMatrix4x4.
 				@param TMatrix4x4 the TMatrix4x4 to assign from
 		**/
-		const TMatrix4x4& operator = (const TMatrix4x4& m)
+		TMatrix4x4& operator = (const TMatrix4x4& m)
 			throw();
 
 		/**	Assign to an array.
@@ -326,7 +327,7 @@ namespace BALL
 				@param row_value the new value of the row
 				@exception IndexOverflow if <tt>row > 3</tt>
 		*/
-		void setRow(Position row, const TVector4<T> row_value)
+		void setRow(Position row, const TVector4<T>& row_value)
 			throw(Exception::IndexOverflow);
 
 		/** Set a column of the matrix.
@@ -334,7 +335,7 @@ namespace BALL
 				@param col_value the new value of the col
 				@exception IndexOverflow if <tt>col > 3</tt>
 		*/
-		void setColumn(Position col, const TVector4<T> col_value)
+		void setColumn(Position col, const TVector4<T>& col_value)
 			throw(Exception::IndexOverflow);
 
 		/** Test whether two matrices are equal.
@@ -376,13 +377,13 @@ namespace BALL
 				are returned rows first, i.e., in the following order: <tt>m11</tt>, <tt>m12</tt>, <tt>m13</tt>...
 				
 		*/
-		const T& operator [] (Position index) const
+		const T& operator [] (Position position) const
 			throw(Exception::IndexOverflow);
 
 		/**	Mutable random access operator.
 				@see operator[]
 		*/
-		T& operator [] (Position index)
+		T& operator [] (Position position)
 			throw(Exception::IndexOverflow);
 
 		/**	Positive sign.
@@ -472,7 +473,7 @@ namespace BALL
 		/**	Multiplication by an instance of type {\em TVector4}.
 				@return TMatrix4x4&, {\em *this}
 		*/
-		TVector4<T> operator * (const TVector4<T> &) const
+		TVector4<T> operator * (const TVector4<T>& vector) const
 			throw();
 
 		/**	Invert the matrix.
@@ -569,37 +570,37 @@ namespace BALL
 		/**	Rotate the matrix around the x axis.
 				@param phi the rotation angle
 		*/
-		void rotateX(const Angle& phi)
+		void rotateX(const TAngle<T>& phi)
 			throw();
 
 		/**	Set the matrix to a x rotation matrix.
 				@param phi the rotation angle
 		*/
-		void setRotationX(const Angle& phi)
+		void setRotationX(const TAngle<T>& phi)
 			throw();
 
 		/**	Rotate the matrix around the y axis.
 				@param phi the rotation angle
 		*/
-		void rotateY(const Angle& phi)
+		void rotateY(const TAngle<T>& phi)
 			throw();
 
 		/**	Set the matrix to a y rotation matrix.
 				@param phi the rotation angle
 		*/
-		void setRotationY(const Angle& phi)
+		void setRotationY(const TAngle<T>& phi)
 			throw();
 
 		/**	Rotate the matrix around the z axis.
 				@param phi the rotation angle
 		*/
-		void rotateZ(const Angle &phi)
+		void rotateZ(const TAngle<T>& phi)
 			throw();
 
 		/**	Set the matrix to a z rotation matrix.
 				@param phi the rotation angle
 		*/
-		void setRotationZ(const Angle &phi)
+		void setRotationZ(const TAngle<T>& phi)
 			throw();
 
 		/** Rotate the matrix around a given axis.
@@ -608,21 +609,21 @@ namespace BALL
 				@param axis_y the y component of the axis
 				@param axis_z the z component of the axis
 		*/
-		void rotate(const Angle& phi, const T& axis_x, const T& axis_y, const T& axis_z)
+		void rotate(const TAngle<T>& phi, const T& axis_x, const T& axis_y, const T& axis_z)
 			throw();
 
 		/** Rotate the matrix around a given axis.
 				@param phi the rotation angle
 				@param axis the axis vector
 		*/
-		void rotate(const Angle& phi, const TVector3<T>& axis)
+		void rotate(const TAngle<T>& phi, const TVector3<T>& axis)
 			throw();
 
 		/** Rotate the matrix around a given axis.
 				@param phi the rotation angle
 				@param axis the axis vector, the fourth component of the vector is ignored
 		*/
-		void rotate(const Angle& phi, const TVector4<T>& axis)
+		void rotate(const TAngle<T>& phi, const TVector4<T>& axis)
 			throw();
 
 		/**	Set the matrix to a rotation matrix.
@@ -631,21 +632,21 @@ namespace BALL
 				@param axis_y the y component of the axis
 				@param axis_z the z component of the axis				
 		*/
-		void setRotation(const Angle& phi, const T& axis_x, const T& axis_y, const T& axis_z)
+		void setRotation(const TAngle<T>& phi, const T& axis_x, const T& axis_y, const T& axis_z)
 			throw();
 
 		/**	Set the matrix to a rotation matrix.
 				@param phi the rotation angle
 				@param axis the axis vector
 		*/
-		void setRotation(const Angle& phi, const TVector3<T>& axis)
+		void setRotation(const TAngle<T>& phi, const TVector3<T>& axis)
 			throw();
 
 		/**	Set the matrix to a rotation matrix.
 				@param phi the rotation angle
 				@param axis the axis vector, the fourth component of the vector is ignored
 		*/
-		void setRotation(const Angle& phi, const TVector4<T>& axis)
+		void setRotation(const TAngle<T>& phi, const TVector4<T>& axis)
 			throw();
 
 		//@}
@@ -1081,7 +1082,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	const TMatrix4x4<T>& TMatrix4x4<T>::operator = (const T* ptr)
+	TMatrix4x4<T>& TMatrix4x4<T>::operator = (const T* ptr)
 		throw(Exception::NullPointer)
 	{
 		set(ptr);
@@ -1090,7 +1091,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	const TMatrix4x4<T>& TMatrix4x4<T>::operator = (const T array_ptr[4][4])
+	TMatrix4x4<T>& TMatrix4x4<T>::operator = (const T array_ptr[4][4])
 		throw(Exception::NullPointer)
 	{
 		set(array_ptr);
@@ -1099,7 +1100,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	const TMatrix4x4<T>& TMatrix4x4<T>::operator = (const TMatrix4x4<T>& m)
+	TMatrix4x4<T>& TMatrix4x4<T>::operator = (const TMatrix4x4<T>& m)
 		throw()
 	{
 		set(m);
@@ -1356,7 +1357,7 @@ namespace BALL
 
 
 	template <typename T>
-	void TMatrix4x4<T>::setRow(Position row, const TVector4<T> row_value)
+	void TMatrix4x4<T>::setRow(Position row, const TVector4<T>& row_value)
 		throw(Exception::IndexOverflow)
 	{
 		if (row > 3)
@@ -1374,7 +1375,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	void TMatrix4x4<T>::setColumn(Position col, const TVector4<T> col_value)
+	void TMatrix4x4<T>::setColumn(Position col, const TVector4<T>& col_value)
 		throw(Exception::IndexOverflow)
 	{
 		if (col > 3)
@@ -1443,26 +1444,26 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	const T& TMatrix4x4<T>::operator [] (Position index) const
+	const T& TMatrix4x4<T>::operator [] (Position position) const
 		throw(Exception::IndexOverflow)
 	{
-		if (index > 15)
+		if (position > 15)
 		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__, index, 15);
+			throw Exception::IndexOverflow(__FILE__, __LINE__, position, 15);
 		}
-		return *comp_ptr_[index];
+		return *comp_ptr_[position];
 	}
 
 	template <typename T>
 	BALL_INLINE
-	T& TMatrix4x4<T>::operator [] (Position index)
+	T& TMatrix4x4<T>::operator [] (Position position)
 		throw(Exception::IndexOverflow)
 	{
-		if (index > 15)
+		if (position > 15)
 		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__, index, 15);
+			throw Exception::IndexOverflow(__FILE__, __LINE__, position, 15);
 		}
-		return *comp_ptr_[index];
+		return *comp_ptr_[position];
 	}
 
 	template <typename T>
@@ -2000,7 +2001,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	void TMatrix4x4<T>::rotateX(const Angle& phi)
+	void TMatrix4x4<T>::rotateX(const TAngle<T>& phi)
 		throw()
 	{
 		TMatrix4x4<T> rotation;
@@ -2010,7 +2011,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	void TMatrix4x4<T>::setRotationX(const Angle& phi)
+	void TMatrix4x4<T>::setRotationX(const TAngle<T>& phi)
 		throw()
 	{
 		m11 = m44 = 1;
@@ -2027,7 +2028,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	void TMatrix4x4<T>::rotateY(const Angle& phi)
+	void TMatrix4x4<T>::rotateY(const TAngle<T>& phi)
 		throw()
 	{
 		TMatrix4x4<T> rotation;
@@ -2037,7 +2038,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	void TMatrix4x4<T>::setRotationY(const Angle& phi)
+	void TMatrix4x4<T>::setRotationY(const TAngle<T>& phi)
 		throw()
 	{
 		m22 = m44 = 1;
@@ -2054,7 +2055,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	void TMatrix4x4<T>::rotateZ(const Angle& phi)
+	void TMatrix4x4<T>::rotateZ(const TAngle<T>& phi)
 		throw()
 	{
 		TMatrix4x4<T> rotation;
@@ -2064,7 +2065,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	void TMatrix4x4<T>::setRotationZ(const Angle& phi)
+	void TMatrix4x4<T>::setRotationZ(const TAngle<T>& phi)
 		throw()
 	{
 		m33 = m44 = 1;
@@ -2078,7 +2079,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	void TMatrix4x4<T>::rotate(const Angle& phi, const TVector3<T>& v)
+	void TMatrix4x4<T>::rotate(const TAngle<T>& phi, const TVector3<T>& v)
 		throw()
 	{
 		rotate(phi, v.x, v.y, v.z);
@@ -2086,7 +2087,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	void TMatrix4x4<T>::rotate(const Angle& phi, const TVector4<T>& v)
+	void TMatrix4x4<T>::rotate(const TAngle<T>& phi, const TVector4<T>& v)
 		throw()
 	{
 		rotate(phi, v.x, v.y, v.z);
@@ -2149,7 +2150,7 @@ namespace BALL
 	//  the expected result.
 
 	template <typename T>
-	void TMatrix4x4<T>::rotate(const Angle& phi, const T& ax, const T& ay, const T& az)
+	void TMatrix4x4<T>::rotate(const TAngle<T>& phi, const T& ax, const T& ay, const T& az)
 		throw()
 	{
 		T xx, yy, zz, xy, yz, zx, xs, ys, zs, one_c;
@@ -2206,7 +2207,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	void TMatrix4x4<T>::setRotation(const Angle& phi, const T& x, const T& y, const T& z)
+	void TMatrix4x4<T>::setRotation(const TAngle<T>& phi, const T& x, const T& y, const T& z)
 		throw()
 	{
 		m12 = m13 = m14 = m21 = m23 = m24 = m31 = m32 = m34 = m41 = m42 = m43 = 0;
@@ -2216,7 +2217,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	void TMatrix4x4<T>::setRotation(const Angle& phi, const TVector3<T>& v)
+	void TMatrix4x4<T>::setRotation(const TAngle<T>& phi, const TVector3<T>& v)
 		throw()
 	{
 		m12 = m13 = m14 = m21 = m23 = m24 = m31 = m32 = m34 = m41 = m42 = m43 = 0;
@@ -2226,7 +2227,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	void TMatrix4x4<T>::setRotation(const Angle& phi, const TVector4<T>& v)
+	void TMatrix4x4<T>::setRotation(const TAngle<T>& phi, const TVector4<T>& v)
 		throw()
 	{
 		m12 = m13 = m14 = m21 = m23 = m24 = m31 = m32 = m34 = m41 = m42 = m43 = 0;

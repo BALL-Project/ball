@@ -1,19 +1,18 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PiecewisePolynomial_test.C,v 1.9 2003/05/23 10:26:04 oliver Exp $
+// $Id: PiecewisePolynomial_test.C,v 1.10 2003/06/09 22:40:53 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
-// insert includes here
 #include <BALL/MATHS/piecewisePolynomial.h>
 
 ///////////////////////////
 
-START_TEST(PiecewisePolynomial, "$Id: PiecewisePolynomial_test.C,v 1.9 2003/05/23 10:26:04 oliver Exp $")
+START_TEST(PiecewisePolynomial, "$Id: PiecewisePolynomial_test.C,v 1.10 2003/06/09 22:40:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -49,16 +48,16 @@ intervals.push_back(Interval(2.0, 3.0));
 
 PiecewisePolynomial* poly;
 
-CHECK(PiecewisePolynomial::PiecewisePolynomial())
+CHECK(PiecewisePolynomial() throw())
 	poly = new PiecewisePolynomial;
 	TEST_NOT_EQUAL(poly, 0)
 RESULT
 
-CHECK(PiecewisePolynomial::~PiecewisePolynomial())
+CHECK(~PiecewisePolynomial() throw())
 	delete poly;
 RESULT
 
-CHECK(PiecewisePolynomial::PiecewisePolynomial(const PiecewisePolynomial& function))
+CHECK(PiecewisePolynomial(const PiecewisePolynomial& polynomial) throw())
 	poly = new PiecewisePolynomial(4, intervals, coefs);
 	PiecewisePolynomial poly2(*poly);
 	TEST_EQUAL(poly2.getDegree(), poly->getDegree())
@@ -69,7 +68,7 @@ CHECK(PiecewisePolynomial::PiecewisePolynomial(const PiecewisePolynomial& functi
 	delete poly;
 RESULT
 
-CHECK(PiecewisePolynomial::PiecewisePolynomial(Size degree, const std::vector<Interval>& intervals, const std::vector<Coefficients>& coeffs))
+CHECK(PiecewisePolynomial(Size degree, const std::vector<Interval>& intervals, const std::vector<Coefficients>& coefficients) throw())
 	PiecewisePolynomial poly2(4, intervals, coefs);
 	TEST_EQUAL(poly2.getDegree(), 4);
 	bool test = (poly2.getIntervals() == intervals);
@@ -83,7 +82,7 @@ CHECK(PiecewisePolynomial::PiecewisePolynomial(Size degree, const std::vector<In
 RESULT
 
 
-CHECK(PiecewisePolynomial::clear())
+CHECK(void clear() throw())
 	PiecewisePolynomial poly2(4, intervals, coefs);
 	poly2.clear();
 	std::vector<Interval> i2 = poly2.getIntervals();
@@ -98,22 +97,7 @@ CHECK(PiecewisePolynomial::clear())
 RESULT
 
 
-CHECK(PiecewisePolynomial::destroy())
-	PiecewisePolynomial poly2(4, intervals, coefs);
-	poly2.clear();
-	std::vector<Interval> i2 = poly2.getIntervals();
-	std::vector<Interval> i3;
-	bool test = (i2 == i3);
-	TEST_EQUAL(test, true);
-	std::vector<Coefficients> c2 = poly2.getCoefficients();
-	std::vector<Coefficients> c3;
-	test = (c2 == c3);
-	TEST_EQUAL(test, true);
-	// ?????: Spezialfälle
-RESULT
-
-
-CHECK(PiecewisePolynomial::set(Size degree, const std::vector<Interval>& intervals, const std::vector<Coefficients>& coeffs))
+CHECK(void set(Size degree, const std::vector<Interval>& intervals, const std::vector<Coefficients>& coeffs) throw())
 	PiecewisePolynomial poly2;
 	poly2.set(4, intervals, coefs);
 	TEST_EQUAL(poly2.getDegree(), 4)
@@ -128,7 +112,7 @@ CHECK(PiecewisePolynomial::set(Size degree, const std::vector<Interval>& interva
 RESULT
 
 
-CHECK(PiecewisePolynomial::PiecewisePolynomial& operator = (const PiecewisePolynomial& function))
+CHECK(PiecewisePolynomial& operator = (const PiecewisePolynomial& poly) throw())
 	PiecewisePolynomial poly2;
 	PiecewisePolynomial poly3;
 	poly2 = poly3;
@@ -140,7 +124,7 @@ CHECK(PiecewisePolynomial::PiecewisePolynomial& operator = (const PiecewisePolyn
 RESULT
 
 
-CHECK(PiecewisePolynomial::setDegree(Size degree))
+CHECK(void setDegree(Size degree) throw())
 	PiecewisePolynomial poly2;
 	TEST_EQUAL(poly2.getDegree(), 0)
 	poly2.setDegree(3);
@@ -148,7 +132,7 @@ CHECK(PiecewisePolynomial::setDegree(Size degree))
 RESULT
 
 
-CHECK(PiecewisePolynomial::getDegree() const )
+CHECK(Size getDegree() const throw())
 	PiecewisePolynomial poly2;
 	TEST_EQUAL(poly2.getDegree(), 0)
 	poly2.set(4, intervals, coefs);
@@ -156,7 +140,7 @@ CHECK(PiecewisePolynomial::getDegree() const )
 RESULT
 
 
-CHECK(PiecewisePolynomial::setIntervals(const std::vector<Interval>& intervals))
+CHECK(setIntervals(const std::vector<Interval>& intervals))
 	PiecewisePolynomial poly2;
 	poly2.setIntervals(intervals);
 	bool test = (poly2.getIntervals() == intervals);  
@@ -164,7 +148,7 @@ CHECK(PiecewisePolynomial::setIntervals(const std::vector<Interval>& intervals))
 RESULT
 
 
-CHECK(PiecewisePolynomial::getInterval(double x) const )
+CHECK(getInterval(double x) const throw())
 	PiecewisePolynomial poly2(4, intervals, coefs);
 	TEST_REAL_EQUAL(poly2.getInterval(0.5).first, 0.0)
 	TEST_REAL_EQUAL(poly2.getInterval(0.5).second, 1.0)
@@ -173,7 +157,7 @@ CHECK(PiecewisePolynomial::getInterval(double x) const )
 RESULT
 
 
-CHECK(PiecewisePolynomial::getInterval(Position index) const )
+CHECK(getInterval(Position index) const throw())
 	PiecewisePolynomial poly2(4, intervals, coefs);
 	Position index = 1;
 	TEST_REAL_EQUAL(poly2.getInterval(index).first, 1.0)
@@ -181,13 +165,13 @@ CHECK(PiecewisePolynomial::getInterval(Position index) const )
 RESULT
 
 
-CHECK(PiecewisePolynomial::getIntervalIndex(double x) const )
+CHECK(getIntervalIndex(double x) const throw())
 	PiecewisePolynomial poly2(4, intervals, coefs);
 	TEST_EQUAL(poly2.getIntervalIndex(0.5), 0)
 RESULT
 
 
-CHECK(PiecewisePolynomial::getRange() const )
+CHECK(getRange() const throw())
 	PiecewisePolynomial poly2(4, intervals, coefs);
 	Interval val = poly2.getRange();
 	TEST_REAL_EQUAL(val.first, 0.0)
@@ -195,7 +179,7 @@ CHECK(PiecewisePolynomial::getRange() const )
 RESULT
 
 
-CHECK(PiecewisePolynomial::setCoefficients(const vector<Coefficients>& coefficients))
+CHECK(setCoefficients(const vector<Coefficients>& coefficients))
 	PiecewisePolynomial poly2;
 	poly2.setCoefficients(coefs);
 	bool test = (poly2.getCoefficients() == coefs);
@@ -204,7 +188,7 @@ CHECK(PiecewisePolynomial::setCoefficients(const vector<Coefficients>& coefficie
 RESULT
 
 
-CHECK(PiecewisePolynomial::getCoefficients(double x) const )
+CHECK(getCoefficients(double x) const throw())
 	PiecewisePolynomial poly2;
 	poly2.setCoefficients(coefs);
 	TEST_EXCEPTION(Exception::OutOfRange, poly2.getCoefficients(0.5))
@@ -215,7 +199,7 @@ CHECK(PiecewisePolynomial::getCoefficients(double x) const )
 RESULT
 
 
-CHECK(PiecewisePolynomial::getCoefficients(Position index) const )
+CHECK(getCoefficients(Position index) const throw())
 	PiecewisePolynomial poly2;
 	poly2.setCoefficients(coefs);
 	Position index = 0;
@@ -225,7 +209,7 @@ CHECK(PiecewisePolynomial::getCoefficients(Position index) const )
 RESULT
 
 
-CHECK(PiecewisePolynomial::double operator () (double x) const )
+CHECK(double operator () (double x) const throw())
   //?????
 	PiecewisePolynomial poly2(4, intervals, coefs);
 	TEST_REAL_EQUAL(poly2(0.5), 0.0)
@@ -236,22 +220,31 @@ CHECK(PiecewisePolynomial::double operator () (double x) const )
 RESULT
 
 
-CHECK(PiecewisePolynomial::isInRange(double x) const )
+CHECK(isInRange(double x) const throw())
 	PiecewisePolynomial poly2(4, intervals, coefs);
 	TEST_EQUAL(poly2.isInRange(2.5), true)
 	TEST_EQUAL(poly2.isInRange(6.5), false)
 RESULT
 
 
-CHECK(PiecewisePolynomial::isValid() const )
+CHECK(isValid() const throw())
 	PiecewisePolynomial poly2;
 	TEST_EQUAL(poly2.isValid(), false)
 	poly2 = PiecewisePolynomial(4, intervals, coefs);
 	TEST_EQUAL(poly2.isValid(), true);
 RESULT
 
+CHECK(BALL_CREATE(PiecewisePolynomial))
+  // ???
+RESULT
 
+CHECK(bool operator == (const PiecewisePolynomial& poly) const throw())
+  // ???
+RESULT
 
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
+  // ???
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

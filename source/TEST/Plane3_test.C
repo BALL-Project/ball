@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Plane3_test.C,v 1.14 2003/05/22 21:57:21 oliver Exp $
+// $Id: Plane3_test.C,v 1.15 2003/06/09 22:40:53 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +12,7 @@
 #include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(Plane3, "$Id: Plane3_test.C,v 1.14 2003/05/22 21:57:21 oliver Exp $")
+START_TEST(Plane3, "$Id: Plane3_test.C,v 1.15 2003/06/09 22:40:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -26,7 +27,7 @@ String filename;
 using std::ofstream;
 using std::ios;
 
-CHECK(TPlane3::BALL_CREATE(TPlane3<T>))
+CHECK(BALL_CREATE(TPlane3<T>))
 	v0 = Vector3();
 	v1 = Vector3(1, 2, 3);
 	v2 = Vector3(4, 5, 6);
@@ -42,16 +43,16 @@ CHECK(TPlane3::BALL_CREATE(TPlane3<T>))
 RESULT
 
 Plane3* plane3_ptr = 0;
-CHECK(TPlane3();)
+CHECK(TPlane3() throw())
 	plane3_ptr = new Plane3;
 	TEST_NOT_EQUAL(plane3_ptr, 0)
 RESULT		
 
-CHECK(~TPlane3();)
+CHECK(~TPlane3() throw())
 	delete plane3_ptr;
 RESULT		
 
-CHECK(TPlane3::bool operator == (const TPlane3& plane) const )
+CHECK(bool operator == (const TPlane3& plane) const throw())
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
 	v3 = Vector3(1.0, 2.0, 3.0);
@@ -64,7 +65,7 @@ CHECK(TPlane3::bool operator == (const TPlane3& plane) const )
 	TEST_EQUAL(p == p2 , true)
 RESULT
 
-CHECK(TPlane3::::bool operator != (const TPlane3& plane) const )
+CHECK(bool operator != (const TPlane3& plane) const throw())
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
 	v3 = Vector3(1.0, 2.0, 3.0);
@@ -77,7 +78,7 @@ CHECK(TPlane3::::bool operator != (const TPlane3& plane) const )
 	TEST_EQUAL(p != p2 , false)
 RESULT
 
-CHECK(TPlane3::void get(TPlane3 &plane, bool /* deep */ = true) const)
+CHECK(void get(TPlane3& plane) const throw())
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
 	v3 = Vector3(1.0, 2.0, 3.0);
@@ -88,7 +89,7 @@ CHECK(TPlane3::void get(TPlane3 &plane, bool /* deep */ = true) const)
 	TEST_EQUAL(p, p2)
 RESULT
 
-CHECK(TPlane3::void set(TPlane3 &plane, bool /* deep */ = true) const)
+CHECK(void set(const TPlane3& plane) throw())
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
 	v3 = Vector3(1.0, 2.0, 3.0);
@@ -99,7 +100,7 @@ CHECK(TPlane3::void set(TPlane3 &plane, bool /* deep */ = true) const)
 	TEST_EQUAL(p, p2)
 RESULT
 
-CHECK(TPlane3::void set(const TPlane3<T>& point, const TPlane3<T>& normal))
+CHECK(void set(const TVector3<T>& point, const TVector3<T>& normal) throw())
 	v3 = Vector3(1.0, 2.0, 3.0);
 	v4 = Vector3(4.0, 5.0, 5.0);
 	p = Plane3();
@@ -108,7 +109,7 @@ CHECK(TPlane3::void set(const TPlane3<T>& point, const TPlane3<T>& normal))
 	TEST_EQUAL(p, p2)
 RESULT
 
-CHECK(TPlane3::TPlane3& operator = (const TPlane3 &plane))
+CHECK(TPlane3& operator = (const TPlane3& plane) throw())
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
 	v3 = Vector3(1.0, 2.0, 3.0);
@@ -118,7 +119,7 @@ CHECK(TPlane3::TPlane3& operator = (const TPlane3 &plane))
 	TEST_EQUAL(p, p2)
 RESULT
 
-CHECK(TPlane3::void get(TVector3<T>& point, TVector3<T>& normal) const)
+CHECK(void get(TVector3<T>& point, TVector3<T>& normal) const throw())
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
 	v3 = Vector3(1.0, 2.0, 3.0);
@@ -129,7 +130,7 @@ CHECK(TPlane3::void get(TVector3<T>& point, TVector3<T>& normal) const)
 	TEST_EQUAL(v2, v4)
 RESULT
 
-CHECK(TPlane3::bool has(const TVector3<T>& point) const)
+CHECK(bool has(const TVector3<T>& point) const throw())
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
 	p = Plane3(v1, v2);
@@ -139,7 +140,7 @@ CHECK(TPlane3::bool has(const TVector3<T>& point) const)
 	TEST_EQUAL(p.has(v4), false)
 RESULT
 
-CHECK(TPlane3::bool has(const TLine3<T>& line) const)
+CHECK(bool has(const TLine3<T>& line) const throw())
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(0, 0, 0);
 	Line3 l = Line3(v1, v2);
@@ -153,7 +154,7 @@ CHECK(TPlane3::bool has(const TLine3<T>& line) const)
 	TEST_EQUAL(p.has(l), false)
 RESULT
 
-CHECK(TPlane3<T>::swap(TPlane3<T>& plane))
+CHECK(void swap(TPlane3& plane) throw())
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
 	v3 = Vector3(10.0, 20.0, 30.0);
@@ -167,7 +168,7 @@ CHECK(TPlane3<T>::swap(TPlane3<T>& plane))
 	TEST_EQUAL(p2.n, v2)
 RESULT
 
-CHECK(TPlane3::normalize())
+CHECK(void normalize() throw(Exception::DivisionByZero))
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 9.0, 16.0);
 	p = Plane3(v1, v2);
@@ -181,7 +182,7 @@ CHECK(TPlane3::normalize())
 	TEST_EXCEPTION(Exception::DivisionByZero, p.normalize())
 RESULT
 
-CHECK(hessify())
+CHECK(void hessify() throw())
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 9.0, 16.0);
 	p = Plane3(v1, v2);
@@ -193,7 +194,7 @@ CHECK(hessify())
 	TEST_EQUAL(p.p, v1)
 RESULT
 
-CHECK(isValid() const )
+CHECK(bool isValid() const throw())
 	TEST_EQUAL(p.isValid(), true)
 RESULT
 
@@ -219,7 +220,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane))
 	TEST_FILE(filename.c_str(), "data/Plane3_test2.txt")
 RESULT
 
-CHECK(TPlane3::dump(std::ostream& s = std::cout, Size depth = 0) const )
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	v1 = Vector3(1.0, 2.0, 3.0);
 	v2 = Vector3(4.0, 5.0, 6.0);
 	p = Plane3(v1, v2);
@@ -230,6 +231,31 @@ CHECK(TPlane3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Plane3_test.txt")
 RESULT
+
+CHECK(TPlane3(const T& a, const T& b, const T& c, const T& d) throw(Exception::DivisionByZero))
+  // ???
+RESULT
+
+CHECK(TPlane3(const TPlane3& plane) throw())
+  // ???
+RESULT
+
+CHECK(TPlane3(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c) throw())
+  // ???
+RESULT
+
+CHECK(TPlane3(const TVector3<T>& point, const TVector3<T>& normal) throw())
+  // ???
+RESULT
+
+CHECK(void clear() throw())
+  // ???
+RESULT
+
+CHECK(void set(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c) throw())
+  // ???
+RESULT
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

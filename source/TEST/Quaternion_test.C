@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Quaternion_test.C,v 1.14 2003/05/23 06:47:52 oliver Exp $
+// $Id: Quaternion_test.C,v 1.15 2003/06/09 22:40:53 oliver Exp $
+//
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +12,7 @@
 #include <BALL/MATHS/quaternion.h>
 ///////////////////////////
 
-START_TEST(Quaternion, "$Id: Quaternion_test.C,v 1.14 2003/05/23 06:47:52 oliver Exp $")
+START_TEST(Quaternion, "$Id: Quaternion_test.C,v 1.15 2003/06/09 22:40:53 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -25,7 +26,7 @@ using std::ofstream;
 using std::ios;
 PRECISION(1E-4)
 
-CHECK(TQuaternion::BALL_CREATE(TQuaternion<T>))
+CHECK(BALL_CREATE(TQuaternion<T>))
 	Quaternion q(v, 4.0);
 	Quaternion* q_ptr = (Quaternion*)q.create(false, true);
 	TEST_REAL_EQUAL(q_ptr->i, 0)
@@ -42,19 +43,19 @@ CHECK(TQuaternion::BALL_CREATE(TQuaternion<T>))
 RESULT
 
 Quaternion* q_ptr = 0;
-CHECK(TQuaternion();)
+CHECK(TQuaternion() throw())
 	q_ptr = new Quaternion();
 	TEST_NOT_EQUAL(q_ptr, 0)
 RESULT		
 
-CHECK(~TQuaternion();)
+CHECK(~TQuaternion() throw())
 	delete q_ptr;
 RESULT	
 
 Quaternion q, q1, q2;
 float i = 0.24302, j = 2 * i, k = 3 * i, angle = -0.416147; 
 
-CHECK(TQuaternion(const TVector3<T>& axis, const T &angle))
+CHECK(TQuaternion(const TVector3<T>& axis, const T& new_angle) throw())
 	q = Quaternion(v, 4.0);
 	TEST_REAL_EQUAL(q.i, i)
 	TEST_REAL_EQUAL(q.j, j)
@@ -62,7 +63,7 @@ CHECK(TQuaternion(const TVector3<T>& axis, const T &angle))
 	TEST_REAL_EQUAL(q.angle, angle)
 RESULT	
 
-CHECK(TQuaternion(const TQuaternion& q, bool deep = true))
+CHECK(TQuaternion(const TQuaternion& q) throw())
 	q = Quaternion(v, 4.0);
 	q1 = Quaternion(q);
 	TEST_REAL_EQUAL(q1.i, i)
@@ -71,7 +72,7 @@ CHECK(TQuaternion(const TQuaternion& q, bool deep = true))
 	TEST_REAL_EQUAL(q1.angle, angle)
 RESULT	
 
-CHECK(TQuaternion(const T& x, const T& y, const T& z, const T& angle))
+CHECK(TQuaternion(const T& x, const T& y, const T& z, const T& new_angle) throw())
 	q1 = Quaternion(1.0, 2.0, 3.0, 4.0);
 	TEST_REAL_EQUAL(q1.i, i)
 	TEST_REAL_EQUAL(q1.j, j)
@@ -79,11 +80,11 @@ CHECK(TQuaternion(const T& x, const T& y, const T& z, const T& angle))
 	TEST_REAL_EQUAL(q1.angle, angle)
 RESULT	
 
-CHECK(TQuaternion::getAngle() const )
+CHECK(T getAngle() const throw())
 	TEST_REAL_EQUAL(q.getAngle(), (2.0 * atan2(sqrt(i * i + j * j + k * k), angle)) )
 RESULT
 
-CHECK(TQuaternion::getAxis())
+CHECK(TVector3<T> getAxis() throw(Exception::DivisionByZero))
 	Vector3 v2 = Vector3(i, j, k), v3;
 	v2.normalize();
 	v3 = q.getAxis();
@@ -93,7 +94,7 @@ CHECK(TQuaternion::getAxis())
 	TEST_EXCEPTION(Exception::DivisionByZero, q1.getAxis())
 RESULT
 
-CHECK(TQuaternion::getRotationMatrix(TMatrix4x4<T>& m) const )
+CHECK(TMatrix4x4<T>& getRotationMatrix(TMatrix4x4<T>& m) const throw())
 	Matrix4x4	m, m2;
 	m.set((1.0 - 2.0 * (j * j + k * k)), 
 			 (2.0 * (i * j - k * angle)), 
@@ -127,7 +128,7 @@ CHECK(TQuaternion::getRotationMatrix(TMatrix4x4<T>& m) const )
 	TEST_REAL_EQUAL(m2.m44, m.m44);
 RESULT
 
-CHECK(TQuaternion::TQuaternion operator - () const )
+CHECK(TQuaternion operator - () const throw())
 	float tmp = 1 / ::sqrt(angle * angle + i * i + j * j + k * k);
 	q2 = -q;
 	q1 = Quaternion(-i * tmp, -j * tmp, -k * tmp,	angle * tmp);
@@ -141,13 +142,13 @@ CHECK(TQuaternion::TQuaternion operator - () const )
 	TEST_EQUAL(-q1, q2);
 RESULT	
 
-CHECK(TQuaternion::getInverse() const )
+CHECK(TQuaternion getInverse() const throw())
 	q1 = -Quaternion(q);
 	q2 = q.getInverse();
 	TEST_EQUAL(q2, q1)
 RESULT
 
-CHECK(TQuaternion::getConjugate() const )
+CHECK(TQuaternion getConjugate() const throw())
 	q1 = q.getConjugate();
 	TEST_REAL_EQUAL(q1.i, -i)
 	TEST_REAL_EQUAL(q1.j, -j)
@@ -155,14 +156,14 @@ CHECK(TQuaternion::getConjugate() const )
 	TEST_REAL_EQUAL(q1.angle, angle)
 RESULT
 
-CHECK(TQuaternion::bool operator == (const TQuaternion& q) const )
+CHECK(bool operator == (const TQuaternion& q) const throw())
 	q1 = Quaternion(q);
 	TEST_EQUAL(q1 == q, true)
 	q1 = Quaternion(v, 4.1);
 	TEST_EQUAL(q1 == q, false)
 RESULT	
 
-CHECK(TQuaternion::TQuaternion& operator += (const TQuaternion& q))
+CHECK(TQuaternion& operator += (const TQuaternion& q) throw())
   q1 = Quaternion();
 	q1 += q;
 	TEST_REAL_EQUAL(q1.i, i)
@@ -171,7 +172,7 @@ CHECK(TQuaternion::TQuaternion& operator += (const TQuaternion& q))
 	TEST_REAL_EQUAL(q1.angle, angle)
 RESULT	
 
-CHECK(TQuaternion::TQuaternion& operator -= (const TQuaternion& q))
+CHECK(TQuaternion& operator -= (const TQuaternion& q) throw())
 	q1 = q2 = Quaternion();
   q1 += - q;
 	q2 -= q;
@@ -181,42 +182,42 @@ CHECK(TQuaternion::TQuaternion& operator -= (const TQuaternion& q))
 	TEST_REAL_EQUAL(q1.angle, q2.angle)
 RESULT	
 
-CHECK(TQuaternion::bool operator != (const TQuaternion& q) const )
+CHECK(bool operator != (const TQuaternion& q) const throw())
 	q1 = Quaternion(q);
 	TEST_EQUAL(q1 != q, false)
 	q1 = Quaternion(v, 4.1);
 	TEST_EQUAL(q1 != q, true)
 RESULT	
 
-CHECK(TQuaternion::set(const TVector3<T>& axis, const T& angle))
+CHECK(void set(const TVector3<T>& axis, const T& new_angle) throw())
 	q1 = Quaternion();
 	q1.set(v, 4.0);
 	TEST_EQUAL(q1, q)
 RESULT	
 
-CHECK(TQuaternion::set(const TQuaternion<T>& q, bool /* deep */))
+CHECK(void set(const TQuaternion& q) throw())
 	q1 = Quaternion();
 	q1.set(q);
 	TEST_EQUAL(q1, q)
 RESULT	
 
-CHECK(TQuaternion::set(const T& x, const T& y, const T& z, const T& phi))
+CHECK(void set(const T& x, const T& y, const T& z, const T& new_angle) throw())
 	q1.set(1.0, 2.0, 3.0, 4.0);
  TEST_EQUAL(q1 == q, true)
 RESULT
 
-CHECK(TQuaternion::get(TQuaternion<T>& q, bool deep))
+CHECK(void get(TQuaternion& q) const throw())
 	q.get(q1);
 	TEST_EQUAL(q1, q)
 RESULT	
 
-CHECK(TQuaternion::operator = (const TQuaternion<T>& q))
+CHECK(TQuaternion& operator = (const TQuaternion& q) throw())
 	q1 = Quaternion();
 	q1 = q;
 	TEST_EQUAL(q1 == q, true)
 RESULT	
 
-CHECK(TQuaternion::setIdentity())
+CHECK(void setIdentity() throw())
   q1.setIdentity();
   TEST_EQUAL(q1.i, 0)
   TEST_EQUAL(q1.j, 0)
@@ -258,7 +259,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TQuaternion<T>& q))
 	TEST_FILE_REGEXP(filename.c_str(), "data/Quaternion_test3.txt")
 RESULT
 
-CHECK(TQuaternion::dump(std::ostream& s, Size depth) const )
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
   String filename;
 	NEW_TMP_FILE(filename)
 	std::ofstream outfile(filename.c_str(), std::ios::out);
@@ -266,6 +267,14 @@ CHECK(TQuaternion::dump(std::ostream& s, Size depth) const )
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Quaternion_test.txt")
 RESULT		
+
+CHECK(void clear() throw())
+  // ???
+RESULT
+
+CHECK(void swap(TQuaternion& q) throw())
+  // ???
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: quaternion.h,v 1.35 2003/03/26 09:31:58 sturm Exp $
+// $Id: quaternion.h,v 1.36 2003/06/09 22:40:49 oliver Exp $
+//
 
 #ifndef BALL_MATHS_QUATERNION_H
 #define BALL_MATHS_QUATERNION_H
@@ -116,7 +117,7 @@ namespace BALL
 		/**	Assign from another TQuaternion.
 				@param q the TQuaternion object to assign from
 		*/
-		const TQuaternion& operator = (const TQuaternion& q)
+		TQuaternion& operator = (const TQuaternion& q)
 			throw();
 
 		/**	Assign to another TQuaternion.
@@ -343,7 +344,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	const TQuaternion<T>& TQuaternion<T>::operator = (const TQuaternion<T>& q)
+	TQuaternion<T>& TQuaternion<T>::operator = (const TQuaternion<T>& q)
 		throw()
 	{
 		set(q);

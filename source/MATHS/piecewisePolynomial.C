@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: piecewisePolynomial.C,v 1.7 2002/02/27 12:21:28 sturm Exp $
+// $Id: piecewisePolynomial.C,v 1.8 2003/06/09 22:40:51 oliver Exp $
 
 #include <BALL/MATHS/piecewisePolynomial.h>
 
@@ -57,7 +57,7 @@ namespace BALL
 	}
 
 
-	const PiecewisePolynomial& PiecewisePolynomial::operator =
+	PiecewisePolynomial& PiecewisePolynomial::operator =
 		(const PiecewisePolynomial& poly) throw()
 	{
 		PiecewiseFunction::operator = (poly);

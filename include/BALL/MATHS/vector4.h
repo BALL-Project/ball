@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector4.h,v 1.44 2003/03/14 11:49:19 sturm Exp $
+// $Id: vector4.h,v 1.45 2003/06/09 22:40:49 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -166,21 +166,21 @@ namespace BALL
 				@param	ptr the array
 				@exception	NullPointer if <tt>ptr == 0</tt>
 		*/
-		const TVector4& operator = (const T* ptr)
+		TVector4& operator = (const T* ptr)
       throw(Exception::NullPointer);
 
 		/**	Assignment operator.
 				Assign the vector components from another vector.
 				@param vector the vector to assign from
 		**/
-		const TVector4& operator = (const TVector4& vector)
+		TVector4& operator = (const TVector4& vector)
       throw();
 
 		/** Assignment operator.
 		    Assign a constant value to all four vector components.
 			  @param value the constant to assign to x, y, z, h
 		*/
-		const TVector4& operator = (T value)
+		TVector4& operator = (T value)
 			throw();
 
 		/**	Assign to an array.
@@ -530,7 +530,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	const TVector4<T>& TVector4<T>::operator = (const T* ptr)
+	TVector4<T>& TVector4<T>::operator = (const T* ptr)
 		throw(Exception::NullPointer)
 	{
 		if (ptr == 0)
@@ -547,7 +547,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	const TVector4<T>& TVector4<T>::operator = (const TVector4<T>& v)
+	TVector4<T>& TVector4<T>::operator = (const TVector4<T>& v)
 		throw()
 	{
 		x = v.x;
@@ -560,7 +560,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	const TVector4<T>& TVector4<T>::operator = (T value)
+	TVector4<T>& TVector4<T>::operator = (T value)
 		throw()
 	{
 		x = value;
@@ -671,7 +671,7 @@ namespace BALL
 	const TVector4<T>& TVector4<T>::getZero()
 		throw()
 	{
-		static TVector4<T> null4(0, 0, 0, 0);
+		static const TVector4<T> null4(0, 0, 0, 0);
 		return null4;
 	}
 
@@ -680,7 +680,7 @@ namespace BALL
 	const TVector4<T>& TVector4<T>::getUnit()
 		throw()
 	{
-		static TVector4<T> unit_vector(1, 1, 1, 1);
+		static const TVector4<T> unit_vector(1, 1, 1, 1);
 		return unit_vector;
 	}
 

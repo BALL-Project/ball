@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vector3.h,v 1.64 2003/03/26 09:31:59 sturm Exp $
+// $Id: vector3.h,v 1.65 2003/06/09 22:40:49 oliver Exp $
+//
 
 #ifndef BALL_MATHS_VECTOR3_H
 #define BALL_MATHS_VECTOR3_H
@@ -126,7 +127,7 @@ namespace BALL
 				Create a TVector3 object and set its coordinates to 
 				the point described by the three spherical polar coordinates
 				<tt>r</tt> (radius), <tt>phi</tt> (azimuth), and <tt>theta</tt> (co-latitude).
-				@see set(const T& r, const TAngle<T>& phi, const TAngle<T> &theta)
+				@see set(const T& r, const TAngle<T>& phi, const TAngle<T>& theta)
 				@param r the radius
 				@param phi the azimuth 
 				@param theta the co-latitude
@@ -199,21 +200,21 @@ namespace BALL
 				@param	phi the azimuth
 				@param	theta	the co-latitude
 		*/
-		void set(const T& r, const TAngle<T>& phi, const TAngle<T> &theta)
+		void set(const T& r, const TAngle<T>& phi, const TAngle<T>& theta)
 			throw();
 
 		/**	Assignment operator.
 				Assign the vector components from another vector.
 				@param v the vector to assign from
 		**/
-		const TVector3& operator = (const TVector3& v)
+		TVector3& operator = (const TVector3& v)
 			throw();
 
 		/**	Assignment operator.
 				Assign a constant value to all three vector components.
 				@param value the constant to assign to x, y, z
 		**/
-		const TVector3& operator = (T value)
+		TVector3& operator = (T value)
 			throw();
 
 		/**	Array assignment operator.
@@ -221,7 +222,7 @@ namespace BALL
 				@param	ptr the array
 				@exception	NullPointer if <tt>ptr == 0</tt>
 		*/
-		const TVector3& operator = (const T* ptr)
+		TVector3& operator = (const T* ptr)
 			throw(Exception::NullPointer);
 
 		/**	Assign to an array.
@@ -418,7 +419,7 @@ namespace BALL
 
 		/**	Return the distance to another vector.
 		*/
-		T getDistance(const TVector3& vector3) const
+		T getDistance(const TVector3& vector) const
 			throw();
 
 		/**	Return the squared distance to another vector.
@@ -722,7 +723,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE
-	const TVector3<T>& TVector3<T>::operator = (const T* ptr)
+	TVector3<T>& TVector3<T>::operator = (const T* ptr)
 		throw(Exception::NullPointer)
 	{
 		if (ptr == 0)
@@ -739,7 +740,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	const TVector3<T>& TVector3<T>::operator = (const TVector3<T>& vector)
+	TVector3<T>& TVector3<T>::operator = (const TVector3<T>& vector)
 		throw()
 	{
 		x = vector.x;
@@ -751,7 +752,7 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE 
-	const TVector3<T>& TVector3<T>::operator = (T value)
+	TVector3<T>& TVector3<T>::operator = (T value)
 		throw()
 	{
 		x = y = z = value;
