@@ -1,4 +1,4 @@
-// $Id: atomBondModelBaseProcessor.h,v 1.4 2001/05/13 16:32:06 hekl Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.5 2001/07/02 09:30:13 anker Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
@@ -46,31 +46,34 @@ namespace BALL
 
 		/** AtomBondModelBaseProcessor class.
 				{\bf Framework:} BALL/MOLVIEW/FUNCTOR\\
-				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h}\\ \\
-				The class AtomBondModelBaseProcessor is the base class for all models
-				whose structure is somewhat orientated after the \Ref{Atom} and \Ref{Bond}
-				structure (e.g. the model {\em Ball And Stick} has the geometric primitives
-				appended to the \Ref{Atom} and \Ref{Bond} objects).
-				Because it is difficult the create the connecting model between two models
-				this class has helper methods to make the generation process of the above
-				described models easier.
-				All \Ref{Atom} objects that are processed to build the new model can be inserted
-				into {\em *this} atomBondModelBaseProcessor so that the \Ref{finish} method
-				can call the method \Ref{buildBondModels_} so that all \Ref{Bond} objects
-				that can be reached from the inserted \Ref{Atom} objects can get their
-				connecting models. This is achieved by the class \Ref{BaseModelConnector} and
-				its derived classes.
+				{\bf Definition:} \URL{BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h} 
+				\\
+				The class AtomBondModelBaseProcessor is the base class for all
+				models whose structure is somewhat orientated after the \Ref{Atom}
+				and \Ref{Bond} structure (e.g. the model {\em Ball And Stick} has
+				the geometric primitives appended to the \Ref{Atom} and \Ref{Bond}
+				objects). Because it is difficult the create the connecting model
+				between two models this class has helper methods to make the
+				generation process of the above described models easier. All
+				\Ref{Atom} objects that are processed to build the new model can be
+				inserted into {\em *this} atomBondModelBaseProcessor so that the
+				\Ref{finish} method can call the method \Ref{buildBondModels_} so
+				that all \Ref{Bond} objects that can be reached from the inserted
+				\Ref{Atom} objects can get their connecting models. This is
+				achieved by the class \Ref{BaseModelConnector} and its derived
+				classes.
 				@see     finish
 				@see     buildBondModels_
 				@see     BaseModelConnector
 				@see     Atom
 				@see     Bond
 				@memo    AtomBondModelBaseProcessor class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 16:32:06 $
+				@author  $Author: anker $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/07/02 09:30:13 $
 		*/
-		class AtomBondModelBaseProcessor:	public BaseModelProcessor
+		class AtomBondModelBaseProcessor
+			:	public BaseModelProcessor
 		{
 			public:
 
@@ -88,8 +91,8 @@ namespace BALL
 				throw();
 
 			/** Copy constructor.
-					Construct new atomBondModelBaseProcessor by copying the atomBondModelBaseProcessor
-					{\em baseProcessor}.
+					Construct new atomBondModelBaseProcessor by copying the
+					atomBondModelBaseProcessor {\em baseProcessor}.
 					@param       baseProcessor the atomBondModelBaseProcessor to be copied
 					@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em baseProcessor}
 					@return      AtomBondModelBaseProcessor new constructed atomBondModelBaseProcessor copied from {\em baseProcessor}
