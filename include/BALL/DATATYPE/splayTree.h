@@ -1,4 +1,4 @@
-// $Id: splayTree.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: splayTree.h,v 1.2 2000/01/10 15:50:58 oliver Exp $
 
 #ifndef BALL_DATATYPE_SPLAYTREE_H
 #define BALL_DATATYPE_SPLAYTREE_H
@@ -19,8 +19,11 @@
 #	include <BALL/DATATYPE/binarySearchTree.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
+	/** Splay Tree Class.
+	*/
 	class SplayTree 
 	{
 		public:

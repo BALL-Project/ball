@@ -1,4 +1,4 @@
-// $Id: string.h,v 1.5 1999/12/17 11:19:01 oliver Exp $
+// $Id: string.h,v 1.6 2000/01/10 15:50:58 oliver Exp $
 
 #ifndef BALL_DATATYPE_STRING_H
 #define BALL_DATATYPE_STRING_H
@@ -276,7 +276,7 @@ namespace BALL
 		bool isValid() const;
 
 		///	Dumps the substring object (including the values of its private memebers)
-		void dump(::std::ostream& s = ::std::cout, unsigned long depth = 0) const;
+		void dump(::std::ostream& s = ::std::cout, Size depth = 0) const;
 		//@}
 		
 		protected:
@@ -923,7 +923,7 @@ namespace BALL
 		bool isValid() const;
 
 		///
-		void dump(::std::ostream& s = ::std::cout, unsigned long depth = 0) const;
+		void dump(::std::ostream& s = ::std::cout, Size depth = 0) const;
 
 		//@}			
 

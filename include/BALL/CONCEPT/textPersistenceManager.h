@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.h,v 1.1 1999/08/26 07:53:17 oliver Exp $
+// $Id: textPersistenceManager.h,v 1.2 2000/01/10 15:50:56 oliver Exp $
 
 #ifndef BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_TEXTPERSISTENCEMANAGER_H
@@ -7,7 +7,8 @@
 #	include <BALL/CONCEPT/persistenceManager.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	Text-format-based persistence manager.
 			This class implements a persistnece manager that reads and writes

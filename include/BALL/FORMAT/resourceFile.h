@@ -1,4 +1,4 @@
-// $Id: resourceFile.h,v 1.3 1999/12/28 18:46:31 oliver Exp $
+// $Id: resourceFile.h,v 1.4 2000/01/10 15:51:00 oliver Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -285,7 +285,7 @@ namespace BALL
 		bool isValid() const;
 		/**	
 		*/
-		void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
+		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
 
@@ -735,7 +735,7 @@ namespace BALL
 
 		/**	
 		*/
-		void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
+		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
 
@@ -798,7 +798,7 @@ namespace BALL
 
 		ResourceFile& operator = (const ResourceFile& file);
 
-		static void save_(File& file, const Entry* entry, unsigned long& depth);
+		static void save_(File& file, const Entry* entry, Size& depth);
 
 		bool validateSyntax_();
 

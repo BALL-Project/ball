@@ -1,4 +1,4 @@
-// $Id: memory.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: memory.h,v 1.2 2000/01/10 15:50:54 oliver Exp $
 
 #ifndef BALL_COMMON_MEMORY_H
 #define BALL_COMMON_MEMORY_H
@@ -10,7 +10,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	Memory manager
 	*/

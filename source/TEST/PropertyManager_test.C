@@ -1,11 +1,11 @@
-// $Id: PropertyManager_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $
+// $Id: PropertyManager_test.C,v 1.2 2000/01/10 15:51:17 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/CONCEPT/property.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.1 1999/08/26 08:02:36 oliver Exp $")
+START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.2 2000/01/10 15:51:17 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -93,5 +93,5 @@ END_TEST
 
 // SECTION: Debugging and Diagnostics
   bool isValid() const;
-  void dump(ostream& s = cout, unsigned long depth = 0) const;
+  void dump(ostream& s = cout, Size depth = 0) const;
 */

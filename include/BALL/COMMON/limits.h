@@ -1,4 +1,4 @@
-// $Id: limits.h,v 1.1 1999/08/26 07:53:14 oliver Exp $
+// $Id: limits.h,v 1.2 2000/01/10 15:50:53 oliver Exp $
 
 #ifndef BALL_COMMON_LIMITS_H
 #define BALL_COMMON_LIMITS_H
@@ -10,7 +10,8 @@
 #endif
 
 
-namespace BALL {
+namespace BALL 
+{
 	
 
 	/**	Numeric limits class.

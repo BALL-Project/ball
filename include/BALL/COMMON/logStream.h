@@ -1,4 +1,4 @@
-// $Id: logStream.h,v 1.5 2000/01/08 20:41:19 hekl Exp $
+// $Id: logStream.h,v 1.6 2000/01/10 15:50:53 oliver Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -13,10 +13,6 @@
 
 #ifndef BALL_COMMON_DEBUG_H
 #	include <BALL/COMMON/debug.h>
-#endif
-
-#ifndef BALL_CONCEPT_NOTIFICATION_H
-#	include <BALL/CONCEPT/notification.h>
 #endif
 
 #include <sys/time.h>
@@ -58,8 +54,13 @@ namespace BALL
 	*/
 	//@{
 
+	// forward declarations
 	class LogStream;
 
+	template <typename T>
+	class NotificationTarget;
+
+	
 	class LogStreamNotifier
 	{
 		public:

@@ -1,4 +1,4 @@
-// $Id: singleton.h,v 1.2 1999/12/04 18:34:12 oliver Exp $
+// $Id: singleton.h,v 1.3 2000/01/10 15:50:56 oliver Exp $
 
 #ifndef BALL_CONCEPT_SINGLETON_H
 #define BALL_CONCEPT_SINGLETON_H
@@ -7,7 +7,8 @@
 #	include <BALL/common.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	
 	/**	Generic Singleton Class.

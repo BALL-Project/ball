@@ -1,11 +1,12 @@
-// $Id: predicate.h,v 1.1 1999/08/26 07:53:17 oliver Exp $
+// $Id: predicate.h,v 1.2 2000/01/10 15:50:55 oliver Exp $
 
 #ifndef BALL_CONCEPT_PREDICATE_H
 #define BALL_CONCEPT_PREDICATE_H
 
 #include <functional>
 
-namespace BALL {
+namespace BALL 
+{
 	
 	using std::unary_function;
 	using std::binary_function;

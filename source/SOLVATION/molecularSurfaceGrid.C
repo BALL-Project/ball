@@ -1,10 +1,11 @@
-// $Id: molecularSurfaceGrid.C,v 1.3 1999/12/29 01:39:58 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.4 2000/01/10 15:51:14 oliver Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 
 #include <BALL/KERNEL/forEach.h>
 
-namespace BALL {
+namespace BALL 
+{
 
 	// needed for quicksort (below)
 	int compareLong_(const void* a, const void* b){

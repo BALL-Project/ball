@@ -1,4 +1,4 @@
-// $Id: distanceCoulomb.h,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: distanceCoulomb.h,v 1.2 2000/01/10 15:50:59 oliver Exp $
 
 #ifndef BALL_ENERGY_DISTANCE_COULOMB_H
 #define BALL_ENERGY_DISTANCE_COULOMB_H
@@ -11,7 +11,8 @@
 #	include <BALL/KERNEL/system.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	Returns the electrostatic (self) energy of a molecular system.
 			Units are kJ/mol. Charges have to be assigned to each atom prior to a call

@@ -1,11 +1,11 @@
-// $Id: NucleicAcid_test.C,v 1.1 1999/12/01 13:24:55 oliver Exp $
+// $Id: NucleicAcid_test.C,v 1.2 2000/01/10 15:51:17 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/KERNEL/nucleicAcid.h>
 ///////////////////////////
 
-START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.1 1999/12/01 13:24:55 oliver Exp $")
+START_TEST(NucleicAcid, "$Id: NucleicAcid_test.C,v 1.2 2000/01/10 15:51:17 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -94,7 +94,7 @@ CHECK(NucleicAcid::isValid())
 //BAUSTELLE
 RESULT
 
-CHECK(NucleicAcid::dump(ostream&, unsigned long))
+CHECK(NucleicAcid::dump(ostream&, Size))
 //BAUSTELLE
 RESULT
 

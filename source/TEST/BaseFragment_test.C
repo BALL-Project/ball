@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.5 1999/12/30 18:05:42 oliver Exp $
+// $Id: BaseFragment_test.C,v 1.6 2000/01/10 15:51:16 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 ///////////////////////////
 
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.5 1999/12/30 18:05:42 oliver Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.6 2000/01/10 15:51:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -548,7 +548,7 @@ CHECK(isValid())
 //BAUSTELLE
 RESULT
 
-CHECK(dump(ostream&,unsigned long))
+CHECK(dump(ostream&, Size))
 //BAUSTELLE
 RESULT
 

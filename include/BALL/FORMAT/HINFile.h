@@ -1,4 +1,4 @@
-// $Id: HINFile.h,v 1.2 1999/12/04 18:34:15 oliver Exp $
+// $Id: HINFile.h,v 1.3 2000/01/10 15:50:59 oliver Exp $
 
 #ifndef BALL_FORMAT_HINFILE_H
 #define BALL_FORMAT_HINFILE_H
@@ -27,7 +27,8 @@
 # include <BALL/MATHS/box3.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	HyperChem file class.
 			This class enables BALL to read and write HyperChem HIN files.

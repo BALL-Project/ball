@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.10 2000/01/03 15:18:31 oliver Exp $
+// $Id: forceField.C,v 1.11 2000/01/10 15:51:12 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -293,7 +293,7 @@ namespace BALL
 		{
 			sum += (*it)->getForce().getSquareLength();
 		}
-		sum = sqrt(sum/(3 * atoms_.size()));
+		sum = sqrt(sum/(3 * (float)atoms_.size()));
 		sum *= Constants::AVOGADRO / 1e13;
 		return(sum);
 	}

@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.2 1999/10/30 12:53:24 oliver Exp $
+// $Id: regExp.h,v 1.3 2000/01/10 15:50:58 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -258,7 +258,7 @@ namespace BALL
 
 		/**	
 		*/
-		virtual void dump(::std::ostream& s = ::std::cout, unsigned long depth = 0) const;
+		virtual void dump(::std::ostream& s = ::std::cout, Size depth = 0) const;
 		//@}
 
 		/**	@name Storeres

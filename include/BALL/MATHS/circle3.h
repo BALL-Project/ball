@@ -1,4 +1,4 @@
-// $Id: circle3.h,v 1.4 1999/12/28 18:48:09 oliver Exp $
+// $Id: circle3.h,v 1.5 2000/01/10 15:51:02 oliver Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -23,7 +23,8 @@
 #endif
 
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	Generic Circle in Three-Dimensional Space.
       {\bf Definition:} \URL{BALL/MATHS/.h}

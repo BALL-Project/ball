@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.2 1999/10/30 12:53:38 oliver Exp $
+// $Id: Bond_test.C,v 1.3 2000/01/10 15:51:16 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/CONCEPT/persistenceManager.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.2 1999/10/30 12:53:38 oliver Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.3 2000/01/10 15:51:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -229,7 +229,7 @@ CHECK(isValid())
 //BAUSTELLE
 RESULT
 
-CHECK(dump(ostream&, unsigned long))
+CHECK(dump(ostream&, Size))
 //BAUSTELLE
 RESULT
 

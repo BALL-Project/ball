@@ -1,4 +1,4 @@
-// $Id: redBlackTree.h,v 1.2 1999/12/04 18:34:14 oliver Exp $
+// $Id: redBlackTree.h,v 1.3 2000/01/10 15:50:58 oliver Exp $
 
 #ifndef BALL_DATATYPE_REDBLACKTREE_H
 #define BALL_DATATYPE_REDBLACKTREE_H
@@ -19,7 +19,8 @@
 #	include <BALL/DATATYPE/binarySearchTree.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	template<class DataType>
 	class TRBTree: public TBSTree<DataType>

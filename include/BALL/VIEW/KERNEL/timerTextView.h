@@ -21,6 +21,8 @@
 #	include <qtextview.h>
 #endif
 
+#include <qmultilineedit.h>
+
 #ifndef BALL_CONCEPT_NOTIFICATION_h
 # include <BALL/CONCEPT/notification.h>
 #endif
@@ -34,7 +36,7 @@ namespace BALL
 
 		class TimerTextView
 			: public NotificationTarget<LogStreamNotifier>,
-			  public QTextView
+			  public QMultiLineEdit
 		{
 			public:
 

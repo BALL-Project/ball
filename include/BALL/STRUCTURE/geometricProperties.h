@@ -1,4 +1,4 @@
-// $Id: geometricProperties.h,v 1.3 1999/12/04 18:34:25 oliver Exp $
+// $Id: geometricProperties.h,v 1.4 2000/01/10 15:51:07 oliver Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -35,7 +35,8 @@
 
 using std::vector;
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	@name	Geometric property processors
 			@nonames

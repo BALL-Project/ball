@@ -1,4 +1,4 @@
-// $Id: comparator.h,v 1.1 1999/08/26 07:53:16 oliver Exp $
+// $Id: comparator.h,v 1.2 2000/01/10 15:50:55 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPARATOR_H
 #define BALL_CONCEPT_COMPARATOR_H
@@ -7,7 +7,8 @@
 #	include <BALL/common.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	Generic Comparator Class.
 			{\bf Definition:} \URL{BALL/CONCEPT/comparator.h}

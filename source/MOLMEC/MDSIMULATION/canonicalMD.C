@@ -1,4 +1,4 @@
-// $Id: canonicalMD.C,v 1.2 1999/12/30 18:14:56 pmueller Exp $
+// $Id: canonicalMD.C,v 1.3 2000/01/10 15:51:13 oliver Exp $
 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h> 
 
@@ -259,11 +259,11 @@ namespace BALL
        Log.level(LogStream::INFORMATION) 
                << "CanonicalMD simulation System has potential energy "
                << current_energy << " at time " 
-               << current_time_ + iteration * time_step_ << endl; 
+               << current_time_ + (float)iteration * time_step_ << endl; 
        Log.level(LogStream::INFORMATION) 
                << "CanonicalMD simulation System has temperature  "
                << current_temperature_ << " at time " 
-               << current_time_ + iteration * time_step_ << endl; 
+               << current_time_ + (float)iteration * time_step_ << endl; 
        }
 
       // The new velocities calculated a few lines further below will be
@@ -343,7 +343,7 @@ namespace BALL
 
 
      // The simulation is finished. Update the current time and temperature  
-     current_time_ += iterations * time_step_; 
+     current_time_ += (float)iterations * time_step_; 
 
      force_field_ptr_->updateEnergy();
      updateInstantaneousTemperature(); 

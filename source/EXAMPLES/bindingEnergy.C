@@ -1,11 +1,13 @@
-// $Id: bindingEnergy.C,v 1.1 2000/01/06 21:34:16 oliver Exp $
+// $Id: bindingEnergy.C,v 1.2 2000/01/10 15:51:11 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/ENERGY/atomicContactEnergy.h>
+#include <BALL/ENERGY/coulomb.h>
 #include <BALL/FORMAT/PDBFile.h>
 
 using namespace BALL;
+using namespace std;
 
 int main(int argc, char** argv)
 {
@@ -50,6 +52,7 @@ int main(int argc, char** argv)
 	A.apply(*db.buildBonds);
 	B.apply(*db.normalizeNames);
 	B.apply(*db.buildBonds);
+	
 
 	// calculate the atomic contact energies of A and B
 	float ACE_A = calculateACE(A);
@@ -57,21 +60,35 @@ int main(int argc, char** argv)
 	
 	// calculate the electrostatic energies of A and B
 	AmberFF amber;
+	amber.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
+	amber.options[AmberFF::Option::OVERWRITE_CHARGES] = "true";
 	amber.setup(A);
 	amber.updateEnergy();
 	float ES_A = amber.getESEnergy();
+	float C_A = calculateCoulomb(A);
 	amber.setup(B);
 	amber.updateEnergy();
 	float ES_B = amber.getESEnergy();
+	float C_B = calculateCoulomb(B);
 
 	// finally, join the to systems into a single system
+	cout << "atoms in A:  " << A.countAtoms() << endl;
+	cout << "atoms in B:  " << B.countAtoms() << endl;
 	A.splice(B);
+	cout << "final atoms: " << A.countAtoms() << endl;
 	float ACE_AB = calculateACE(A);
 	amber.setup(A);
 	amber.updateEnergy();
 	float ES_AB = amber.getESEnergy();
+	float C_AB = calculateCoulomb(A);
 	
 	// print the resulting energies
+	cout << "ES energy of A: " << ES_A << endl;
+	cout << "ES energy of B: " << ES_B << endl;
+	cout << "ES energy of AB:" << ES_AB << endl;
+	cout << "C energy of A: " << C_A << endl;
+	cout << "C energy of B: " << C_B << endl;
+	cout << "C energy of AB:" << C_AB << endl;
 	cout << "change in atomic contact energy on binding:   " 
        << (ACE_AB - ACE_A - ACE_B) << " kJ/mol" << endl;
 	cout << "change in electrostatic energy on binding:    " 

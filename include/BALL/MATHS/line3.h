@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.4 1999/12/28 18:48:24 oliver Exp $
+// $Id: line3.h,v 1.5 2000/01/10 15:51:02 oliver Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -22,7 +22,8 @@
 #	include <BALL/MATHS/vector3.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	Generic Line in Three-Dimensional Space.
       {\bf Definition:} \URL{BALL/MATHS/.h}

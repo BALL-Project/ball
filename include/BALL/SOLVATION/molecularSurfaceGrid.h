@@ -1,4 +1,4 @@
-// $Id: molecularSurfaceGrid.h,v 1.1 1999/08/26 07:53:20 oliver Exp $
+// $Id: molecularSurfaceGrid.h,v 1.2 2000/01/10 15:51:06 oliver Exp $
 
 #ifndef BALL_SOLVATION_MOLECULARSURFACEGRID_H
 #define BALL_SOLVATION_MOLECULARSURFACEGRID_H
@@ -19,7 +19,8 @@
 #	include <BALL/DATATYPE/pointGrid.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	PointGrid<char>* calculateSESGrid(const Vector3& lower, 
 														const Vector3& upper, 

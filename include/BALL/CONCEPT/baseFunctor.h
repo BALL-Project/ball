@@ -1,9 +1,10 @@
-// $Id: baseFunctor.h,v 1.1 1999/08/26 07:53:17 oliver Exp $
+// $Id: baseFunctor.h,v 1.2 2000/01/10 15:50:55 oliver Exp $
 
 #ifndef BALL_CONCEPT_BASEFUNCTOR_H
 #define BALL_CONCEPT_BASEFUNCTOR_H
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	@name Generic Functors.
 			{\bf Definition:} \URL{BALL/CONCEPT/baseFunctor.h}

@@ -1,4 +1,4 @@
-// $Id: fragmentDB.h,v 1.3 1999/12/28 21:29:22 oliver Exp $
+// $Id: fragmentDB.h,v 1.4 2000/01/10 15:51:07 oliver Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -31,7 +31,8 @@
 #endif
 
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	FragmentDB - fragment database class.
 			The fragment database is used to store commonly

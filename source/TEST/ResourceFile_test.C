@@ -1,11 +1,11 @@
-// $Id: ResourceFile_test.C,v 1.5 1999/11/26 16:47:39 oliver Exp $
+// $Id: ResourceFile_test.C,v 1.6 2000/01/10 15:51:17 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/FORMAT/resourceFile.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.5 1999/11/26 16:47:39 oliver Exp $")
+START_TEST(class_name, "$Id: ResourceFile_test.C,v 1.6 2000/01/10 15:51:17 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -383,7 +383,7 @@ CHECK(ResourceEntry::isValid() const)
 //BAUSTELLE
 RESULT
 
-CHECK(ResourceEntry::dump(std::ostream&, unsigned long) const)
+CHECK(ResourceEntry::dump(std::ostream&, Size) const)
 //BAUSTELLE
 RESULT
 
@@ -488,7 +488,7 @@ CHECK(ResourceFile::isValid() const)
 //BAUSTELLE
 RESULT
 
-CHECK(ResourceFile::dump(std::ostream, unsigned long depth) const)
+CHECK(ResourceFile::dump(std::ostream, Size depth) const)
 //BAUSTELLE
 RESULT
 

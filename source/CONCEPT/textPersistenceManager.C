@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.C,v 1.3 1999/12/28 18:19:41 oliver Exp $
+// $Id: textPersistenceManager.C,v 1.4 2000/01/10 15:51:10 oliver Exp $
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
@@ -491,7 +491,7 @@ namespace BALL
 
 	void TextPersistenceManager::get(void*& p)
 	{
-		unsigned int i;
+		PointerInt i;
 		*is >> i;
 		p = (void*)i;
 	}

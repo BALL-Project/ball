@@ -1,4 +1,4 @@
-// $Id: residueChecker.h,v 1.2 1999/12/19 17:37:11 oliver Exp $
+// $Id: residueChecker.h,v 1.3 2000/01/10 15:51:07 oliver Exp $
 
 
 #ifndef BALL_STRUCTURE_RESIDUECHECKER_H
@@ -49,6 +49,18 @@ namespace BALL
 		virtual ~ResidueChecker();
 		//@}
 
+		/**	@name	Predicates
+		*/
+		//@{
+
+		/**	Return true if the last application did not produce any warning.
+				The getStatus method may be called after applying the ResidueChecker 
+				to a kernel object. 
+				@return bool {\bf true} if no warnings occured, {\bf false} otherwise
+		*/
+		bool getStatus() const;
+		//@}
+
 		/**	Processor related methods
 		*/
 		//@{
@@ -69,6 +81,7 @@ namespace BALL
 		protected:
 
 		FragmentDB*	fragment_db_;
+		bool				status_;
 	}; 
 					
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: residueChecker.C,v 1.5 1999/12/28 18:17:12 oliver Exp $
+// $Id: residueChecker.C,v 1.6 2000/01/10 15:51:15 oliver Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
@@ -12,26 +12,35 @@ namespace BALL
 {
 
 	ResidueChecker::ResidueChecker()
-		:	fragment_db_(0)
+		:	fragment_db_(0),
+			status_(true)
 	{
 	}
 	
 	ResidueChecker::ResidueChecker(FragmentDB& fragment_db)
-		:	fragment_db_(&fragment_db)
+		:	fragment_db_(&fragment_db),
+			status_(true)
 	{
 	}
 	
-	ResidueChecker::ResidueChecker(const ResidueChecker& /* residue_checker */, bool /* deep */)
+	ResidueChecker::ResidueChecker(const ResidueChecker& residue_checker , bool /* deep */)
+		:	fragment_db_(residue_checker.fragment_db_),
+			status_(residue_checker.status_)
 	{
-		// BAUSTELLE
 	}
 
 	ResidueChecker::~ResidueChecker()
 	{
 	}
 
+	bool ResidueChecker::getStatus() const
+	{
+		return status_;
+	}
+	
 	bool ResidueChecker::start()
 	{
+		status_ = true;
 		return true;
 	}
 	
@@ -61,11 +70,13 @@ namespace BALL
 		if (total_charge < -2.0)
 		{
 			Log.warn() << "ResidueChecker: in residue " << res_name << ": total charge of " << total_charge << " is too negative." << endl;
+			status_ = false;
 		}
 
 		if (total_charge > 2.0)
 		{
 			Log.warn() << "ResidueChecker: in residue " << res_name << ": total charge of " << total_charge << " is too positive." << endl;
+			status_ = false;
 		}
 
 		// check for integrality of charges
@@ -73,6 +84,7 @@ namespace BALL
 		if (tmp > 0.05)
 		{
 			Log.warn() << "ResidueChecker: in residue " << res_name << ": residue total charge of " << total_charge << " is not integral." << endl;
+			status_ = false;
 		}
 
 		// if a fragment data base is defined, check for completeness
@@ -83,6 +95,7 @@ namespace BALL
 			if (reference == 0)
 			{
 				Log.warn() << "ResidueChecker: didn't find a reference fragment for " << res_name << endl;
+				status_ = false;	
 			} else {
 				// first, check for completeness
 				HashSet<String> reference_names;
@@ -98,6 +111,7 @@ namespace BALL
 						reference_names.erase(atom_it->getName());
 					} else {
 						Log.warn() << "ResidueChecker: did not find atom " << atom_it->getName() << " of " << res_name  << " in the reference residue " << reference->getName() << endl;
+						status_ = false;
 					}
 				}
 				if (reference_names.size() > 0)
@@ -110,6 +124,7 @@ namespace BALL
 					}
 					Log.warn() << endl;
 				}
+				status_ = false;
 
 				// check bond lengths (should be within +/- 15% of reference values)
 				Atom::BondIterator bond_it;
@@ -140,6 +155,7 @@ namespace BALL
 						{
 							Log.warn() << "ResidueChecker: in residue " << res_name << ": atom distance suspect: " 
 												 << distance << " A instead of " << bond_it->getLength() << " A" << endl;
+							status_ = false;
 						}
 					}
 				}

@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.2 1999/12/04 18:34:15 oliver Exp $
+// $Id: INIFile.h,v 1.3 2000/01/10 15:51:00 oliver Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -13,7 +13,8 @@
 
 #include <vector>
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	INIFile.
 			This class provides support to read and evaluate

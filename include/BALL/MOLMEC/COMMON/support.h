@@ -1,4 +1,4 @@
-// $Id: support.h,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: support.h,v 1.2 2000/01/10 15:51:04 oliver Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -17,12 +17,14 @@
 
 #include <vector>
 
-namespace BALL {
+namespace BALL 
+{
 
 	class Atom;
 	class System;
 
-	namespace MolmecSupport {
+	namespace MolmecSupport 
+	{
 		
 		using std::pair;
 			

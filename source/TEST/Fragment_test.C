@@ -1,4 +1,4 @@
-// $Id: Fragment_test.C,v 1.2 1999/12/04 18:34:34 oliver Exp $
+// $Id: Fragment_test.C,v 1.3 2000/01/10 15:51:17 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 #include <BALL/KERNEL/fragment.h>
@@ -6,7 +6,7 @@
 
 using namespace BALL;
 
-START_TEST(Fragment, "$Id: Fragment_test.C,v 1.2 1999/12/04 18:34:34 oliver Exp $")
+START_TEST(Fragment, "$Id: Fragment_test.C,v 1.3 2000/01/10 15:51:17 oliver Exp $")
 
 
 
@@ -56,7 +56,7 @@ RESULT
 
 	virtual void dump
 		(ostream &s = cout,
-		 unsigned long depth = 0) const;
+		 Size depth = 0) const;
 
 	virtual void read
 		(istream &s);

@@ -1,9 +1,9 @@
-// $Id: ClassTest_test.C,v 1.1 1999/11/26 16:47:01 oliver Exp $
+// $Id: ClassTest_test.C,v 1.2 2000/01/10 15:51:16 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 using namespace BALL;
 
-START_TEST(ClassTest, "$Id: ClassTest_test.C,v 1.1 1999/11/26 16:47:01 oliver Exp $")
+START_TEST(ClassTest, "$Id: ClassTest_test.C,v 1.2 2000/01/10 15:51:16 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -32,12 +32,10 @@ RESULT
 CHECK(TEST_EQUAL(a, b))
 TEST_EQUAL(1.0, 1.0)
 TEST_EQUAL('A', 'A')
-TEST_EQUAL("abc", "abc")
 RESULT
 
 CHECK(TEST_NOT_EQUAL(a, b))
 TEST_NOT_EQUAL(0, 1)
-TEST_NOT_EQUAL("abc", "bcd")
 TEST_NOT_EQUAL('A', 'B')
 RESULT
 

@@ -1,4 +1,4 @@
-// $Id: timer.C,v 1.2 1999/10/30 12:53:38 oliver Exp $
+// $Id: timer.C,v 1.3 2000/01/10 15:51:16 oliver Exp $
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -243,7 +243,7 @@ namespace BALL
 									&& current_system_time_ + last_system_time_ < timer.current_system_time_ + timer.last_system_time_);
 	}
 
-	void Timer::dump(ostream& s, unsigned long depth) const
+	void Timer::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 

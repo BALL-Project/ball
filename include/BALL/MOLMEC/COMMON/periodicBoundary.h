@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.h,v 1.3 1999/12/04 18:34:23 oliver Exp $
+// $Id: periodicBoundary.h,v 1.4 2000/01/10 15:51:04 oliver Exp $
 // Molecular Mechanics: class representing periodic boundary conditions
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -16,7 +16,8 @@
 #	include <BALL/MATHS/box3.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	class ForceField;
 

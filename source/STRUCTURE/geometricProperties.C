@@ -1,4 +1,4 @@
-// $Id: geometricProperties.C,v 1.4 1999/12/30 18:05:41 oliver Exp $
+// $Id: geometricProperties.C,v 1.5 2000/01/10 15:51:15 oliver Exp $
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -9,7 +9,8 @@
 #include <math.h>
 #include <values.h>
 
-namespace BALL {
+namespace BALL 
+{
 
 	bool BoundingBoxProcessor::start()
 	{

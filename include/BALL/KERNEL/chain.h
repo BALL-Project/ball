@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.3 1999/12/28 18:38:44 oliver Exp $
+// $Id: chain.h,v 1.4 2000/01/10 15:51:01 oliver Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -22,7 +22,8 @@
 
 #define BALL_CHAIN_DEFAULT_NAME   ' '
 
-namespace BALL {
+namespace BALL 
+{
 	
 	class Protein;
 

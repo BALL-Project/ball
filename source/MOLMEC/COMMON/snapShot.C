@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.4 2000/01/08 12:22:28 oliver Exp $
+// $Id: snapShot.C,v 1.5 2000/01/10 15:51:12 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
 #include <BALL/CONCEPT/XDRPersistenceManager.h> 
@@ -430,7 +430,7 @@ namespace BALL
       {
       fstream output_file; 
 
-      Size position; 
+      Index position; 
 
 
       // try to open the file in update mode
@@ -803,7 +803,7 @@ namespace BALL
       SnapShot tmp;                 
 
       // first look in main memory
-      int pos = index - snapshot_counter_ + snapshot_list_.size() - 1; 
+      Size pos = index - snapshot_counter_ + snapshot_list_.size() - 1; 
 
       if(pos >= 0 && pos < (int) snapshot_list_.size())
         {

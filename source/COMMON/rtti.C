@@ -1,10 +1,11 @@
-// $Id: rtti.C,v 1.1 1999/08/26 08:02:33 oliver Exp $
+// $Id: rtti.C,v 1.2 2000/01/10 15:51:09 oliver Exp $
 
 #include <BALL/COMMON/rtti.h>
 #include <typeinfo>
 
 
-namespace BALL {
+namespace BALL 
+{
 
 	string streamClassName(const std::type_info& t)
 	{

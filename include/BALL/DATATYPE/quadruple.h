@@ -1,4 +1,4 @@
-// $Id: quadruple.h,v 1.1 1999/08/26 07:53:13 oliver Exp $
+// $Id: quadruple.h,v 1.2 2000/01/10 15:50:57 oliver Exp $
 
 #ifndef BALL_DATATYPE_QUADRUPLE_H
 #define BALL_DATATYPE_QUADRUPLE_H
@@ -7,7 +7,8 @@
 #	include <BALL/common.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	Quadruple Class.
 			This template class is used to represent quadruples of arbitrary types

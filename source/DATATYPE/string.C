@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.10 1999/12/19 19:19:22 oliver Exp $
+// $Id: string.C,v 1.11 2000/01/10 15:51:10 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 
@@ -58,7 +58,7 @@ namespace BALL
 	{
 	}
 
-	void Substring::dump(ostream& s, unsigned long depth) const
+	void Substring::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -950,7 +950,7 @@ namespace BALL
 		return s;
 	}
 
-	void String::dump(ostream &s, unsigned long depth) const
+	void String::dump(ostream &s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 

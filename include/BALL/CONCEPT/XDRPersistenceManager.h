@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.h,v 1.1 1999/08/26 07:53:16 oliver Exp $
+// $Id: XDRPersistenceManager.h,v 1.2 2000/01/10 15:50:54 oliver Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -7,7 +7,8 @@
 #	include <BALL/CONCEPT/persistenceManager.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	XDR-format-based persistence manager.
 			This class implements a persistnece manager that reads and writes

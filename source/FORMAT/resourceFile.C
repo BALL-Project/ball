@@ -1,4 +1,4 @@
-// $Id: resourceFile.C,v 1.5 1999/12/28 18:20:53 oliver Exp $
+// $Id: resourceFile.C,v 1.6 2000/01/10 15:51:12 oliver Exp $
 
 #include <BALL/FORMAT/resourceFile.h>
 
@@ -501,7 +501,7 @@ namespace BALL
 		return true;
 	}
 
-	void ResourceEntry::dump(ostream& s, unsigned long depth) const
+	void ResourceEntry::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -656,7 +656,7 @@ namespace BALL
 	{
 		File file(name.c_str(), ios::out | ios::trunc);
 		
-		unsigned long depth = 0;
+		Size depth = 0;
 		
 		if (entry.isEmpty() == false)
 			save_(file, &entry, depth);
@@ -669,7 +669,7 @@ namespace BALL
 		root_.destroy();
 	}
 
-	void ResourceFile::dump(ostream& s, unsigned long depth) const
+	void ResourceFile::dump(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s)
 
@@ -760,10 +760,10 @@ namespace BALL
 		return s;
 	}
 
-	void ResourceFile::save_(File& file, register const Entry* entry, unsigned long& depth)
+	void ResourceFile::save_(File& file, register const Entry* entry, Size& depth)
 	{
-		register unsigned long l = 0;
-		register const Entry *child_entry = 0;
+		Size l = 0;
+		const Entry *child_entry = 0;
 		
 		++depth;
 		
@@ -801,7 +801,7 @@ namespace BALL
 		}
 		
 		char c = 0;
-		unsigned long count_open_par = 0;
+		Size count_open_par = 0;
 		streampos old_pos = tellg();
 
 		while (good())

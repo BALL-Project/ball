@@ -1,4 +1,4 @@
-// $Id: autoDeletable.h,v 1.1 1999/08/26 07:53:16 oliver Exp $
+// $Id: autoDeletable.h,v 1.2 2000/01/10 15:50:54 oliver Exp $
 
 #ifndef BALL_CONCEPT_AUTODELETABLE_H
 #define BALL_CONCEPT_AUTODELETABLE_H
@@ -13,7 +13,8 @@
 
 #include <stdlib.h>
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	Auto-deletable concept.
 			This class allows the distinction between objects that may be

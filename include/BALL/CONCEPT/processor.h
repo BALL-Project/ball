@@ -1,4 +1,4 @@
-// $Id: processor.h,v 1.2 1999/12/04 18:34:11 oliver Exp $
+// $Id: processor.h,v 1.3 2000/01/10 15:50:56 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #define BALL_CONCEPT_PROCESSOR_H
@@ -11,7 +11,8 @@
 #	include <BALL/CONCEPT/baseFunctor.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	@name Processor Concept
 			{\bf Definition:} \URL{BALL/CONCEPT/processor.h}

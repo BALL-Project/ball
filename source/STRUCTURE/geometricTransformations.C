@@ -1,8 +1,9 @@
-// $Id: geometricTransformations.C,v 1.2 1999/12/04 18:34:33 oliver Exp $
+// $Id: geometricTransformations.C,v 1.3 2000/01/10 15:51:15 oliver Exp $
 
 #include <BALL/STRUCTURE/geometricTransformations.h>
 
-namespace BALL {
+namespace BALL 
+{
 
 	// TranslationProcessor
 	//=============================

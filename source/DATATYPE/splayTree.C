@@ -1,8 +1,9 @@
-// $Id: splayTree.C,v 1.1 1999/08/26 08:02:34 oliver Exp $
+// $Id: splayTree.C,v 1.2 2000/01/10 15:51:10 oliver Exp $
 
 #include <BALL/DATATYPE/splayTree.h>
 
-namespace BALL {
+namespace BALL 
+{
 
 	// The tree at parent_item is truncated on the left, (ie. a cut
 	// is made between parent_item and parent_item->left.) The cut tree (ie.

@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.4 1999/12/28 18:49:19 oliver Exp $
+// $Id: vector4.h,v 1.5 2000/01/10 15:51:03 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -234,7 +234,7 @@ namespace BALL
 		bool isValid() const;
 
 		///
-		void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
+		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
 
@@ -718,7 +718,7 @@ namespace BALL
 	}
 
 	template <class T>
-	void TVector4<T>::dump(std::ostream& s, unsigned long depth) const
+	void TVector4<T>::dump(std::ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 

@@ -12,26 +12,26 @@ namespace BALL
   
 		TimerTextView::TimerTextView(QWidget *parent, const char *name)
 			:	NotificationTarget<LogStreamNotifier>(),
-			  QTextView(parent, name),
+			  QMultiLineEdit(parent, name),
 				history_string_(),
 				strstream_()
 		{
 			Log.insert(strstream_);
 			Log.insertNotification(strstream_, *this);
 
-			setTextFormat(PlainText);
+			//			setTextFormat(PlainText);
 		}
 
 		TimerTextView::TimerTextView(const TimerTextView& view, bool deep)
 			:	NotificationTarget<LogStreamNotifier>(),
-			  QTextView(),
+			  QMultiLineEdit(),
 				history_string_(view.history_string_),
 				strstream_()
 		{
 			Log.insert(strstream_);
 			Log.insertNotification(strstream_, *this);
 
-			setTextFormat(PlainText);
+			//			setTextFormat(PlainText);
 		}
 
 		TimerTextView::~TimerTextView()
@@ -101,7 +101,7 @@ namespace BALL
 				history_string_ += QString(line.c_str());
 
 				setText(history_string_);
-				scrollBy(0, visibleHeight());
+				//	scrollBy(0, visibleHeight());
 				repaint();
 
 				qApp->processEvents();

@@ -1,4 +1,4 @@
-// $Id: quadraticBondStretch.h,v 1.2 1999/12/04 18:34:24 oliver Exp $
+// $Id: quadraticBondStretch.h,v 1.3 2000/01/10 15:51:06 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_QUADRATICBONDSTRETCH_H
@@ -12,7 +12,8 @@
 #	include <BALL/MOLMEC/PARAMETER/atomTypes.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 		
 	class FFPSQuadraticBondStretch 
 		:	public FFParameterSection

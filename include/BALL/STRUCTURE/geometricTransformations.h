@@ -1,4 +1,4 @@
-// $Id: geometricTransformations.h,v 1.2 1999/12/04 18:34:25 oliver Exp $
+// $Id: geometricTransformations.h,v 1.3 2000/01/10 15:51:07 oliver Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
 #define BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H
@@ -23,7 +23,8 @@
 #	include <BALL/CONCEPT/processor.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	@name	Geometric transformation applicators
 			@nonames

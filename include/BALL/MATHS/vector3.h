@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.7 2000/01/09 10:16:38 oliver Exp $
+// $Id: vector3.h,v 1.8 2000/01/10 15:51:02 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -501,7 +501,7 @@ namespace BALL
 		*/
 		//@{
 		///
-		void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
+		void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
 		///
 		bool isValid() const;
@@ -1058,7 +1058,7 @@ namespace BALL
 	}
 
 	template <class T>
-	void TVector3<T>::dump(std::ostream& s, unsigned long depth) const
+	void TVector3<T>::dump(std::ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 

@@ -1,9 +1,10 @@
-// $Id: forceFieldParameters.C,v 1.2 1999/12/04 18:34:32 oliver Exp $
+// $Id: forceFieldParameters.C,v 1.3 2000/01/10 15:51:14 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
 
-namespace BALL {
+namespace BALL 
+{
 
 	ForceFieldParameters::ForceFieldParameters()
 	{

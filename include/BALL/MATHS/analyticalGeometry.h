@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.1 1999/08/26 07:53:18 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.2 2000/01/10 15:51:02 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -38,7 +38,8 @@
 #define BALL_MATRIX_CELL(m,dim,row,col)   *((m) + (row) * (dim) + (col))
 #define BALL_CELL(x,y)                          *((m) + (y) * (dim) + (x))
 
-namespace BALL {
+namespace BALL 
+{
 
 	template <class T>
 	T GetDeterminant_(const T* m, Size dim)

@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.4 1999/12/28 18:38:43 oliver Exp $
+// $Id: atom.h,v 1.5 2000/01/10 15:51:01 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -42,7 +42,8 @@
 #define BALL_ATOM_DEFAULT_VELOCITY   0,0,0
 #define BALL_ATOM_DEFAULT_FORCE   		0,0,0
 
-namespace BALL {
+namespace BALL 
+{
 
 	class Bond;
 	class Element;
@@ -84,8 +85,8 @@ namespace BALL {
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.4 $
-			@date    $Date: 1999/12/28 18:38:43 $
+			@version $Revision: 1.5 $
+			@date    $Date: 2000/01/10 15:51:01 $
 	*/
 	class Atom
 		: public Composite,

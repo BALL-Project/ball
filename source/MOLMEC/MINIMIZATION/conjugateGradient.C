@@ -1,4 +1,4 @@
-// $Id: conjugateGradient.C,v 1.5 2000/01/04 22:55:42 pmueller Exp $
+// $Id: conjugateGradient.C,v 1.6 2000/01/10 15:51:13 oliver Exp $
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
@@ -208,7 +208,7 @@ namespace BALL
       }
 
     // No scaling with Avogadro/1e13 necessary because gradient is already scaled ... 
-    result = sqrt(result / (3 * no_of_atoms_));
+    result = sqrt(result / (3.0 * (float)no_of_atoms_));
 
     return result; 
     }

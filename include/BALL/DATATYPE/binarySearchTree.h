@@ -1,4 +1,4 @@
-// $Id: binarySearchTree.h,v 1.3 1999/12/30 20:30:39 oliver Exp $
+// $Id: binarySearchTree.h,v 1.4 2000/01/10 15:50:57 oliver Exp $
 
 #ifndef BALL_DATATYPE_BINARYSEARCHTREE_H
 #define BALL_DATATYPE_BINARYSEARCHTREE_H
@@ -935,7 +935,7 @@ namespace BALL
 
 		/**	
 		*/
-		virtual void dump(std::ostream& s = std::cout, unsigned long depth = 0) const;
+		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
 		/**		@name Internal Iterators
@@ -1417,7 +1417,7 @@ namespace BALL
 
 		bool isValid_(const TBSTreeItem<DataType>* parent, const TBSTreeItem<DataType>* child) const;
 
-		void dump_(std::ostream& s, unsigned long depth, const TBSTreeItem<DataType>* item) const;
+		void dump_(std::ostream& s, Size depth, const TBSTreeItem<DataType>* item) const;
 
 		TBSTreeItem<DataType>*				root_;
 		const Comparator<DataType>*		comparator_;
@@ -1891,7 +1891,7 @@ namespace BALL
 	}
 
 	template<typename DataType>
-	void TBSTree<DataType>::dump(std::ostream& s, unsigned long depth) const
+	void TBSTree<DataType>::dump(std::ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -2085,7 +2085,7 @@ namespace BALL
 
 	template <class DataType>
 	void TBSTree<DataType>::dump_
-		(std::ostream& s, unsigned long depth, const TBSTreeItem<DataType>* item) const
+		(std::ostream& s, Size depth, const TBSTreeItem<DataType>* item) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 

@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.6 1999/12/19 18:46:47 oliver Exp $
+// $Id: String_test.C,v 1.7 2000/01/10 15:51:18 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,7 +7,7 @@
 #include <string.h>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.6 1999/12/19 18:46:47 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.7 2000/01/10 15:51:18 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -1743,7 +1743,7 @@ s2 = new String;
 TEST_EQUAL(s2->isValid(), true)
 RESULT
 
-CHECK(String::dump(ostream&, unsigned long))
+CHECK(String::dump(ostream&, Size))
 String tmp_filename;
 NEW_TMP_FILE(tmp_filename)
 std::ofstream dump_stream(tmp_filename.c_str(), std::ios::out);

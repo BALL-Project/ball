@@ -1,4 +1,4 @@
-// $Id: iterator.h,v 1.2 1999/12/04 18:34:18 oliver Exp $
+// $Id: iterator.h,v 1.3 2000/01/10 15:51:01 oliver Exp $
 
 #ifndef BALL_KERNEL_ITERATOR_H
 #define BALL_KERNEL_ITERATOR_H
@@ -72,7 +72,8 @@ rend##Type## \
   return Type##ConstReverseIterator::end(*this); \
 }
 
-namespace BALL {
+namespace BALL 
+{
 
 	class CompositeIteratorTraits_
 	{

@@ -1,4 +1,4 @@
-// $Id: structureMapper.h,v 1.2 1999/12/04 18:34:25 oliver Exp $
+// $Id: structureMapper.h,v 1.3 2000/01/10 15:51:08 oliver Exp $
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
 #define BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -34,7 +34,8 @@
 #include <vector>
 #include <map>
 
-namespace BALL {
+namespace BALL 
+{
 
 	using std::vector;
 	using std::map;

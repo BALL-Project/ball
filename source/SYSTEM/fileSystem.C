@@ -1,11 +1,12 @@
-// $Id: fileSystem.C,v 1.2 1999/08/31 22:01:19 oliver Exp $
+// $Id: fileSystem.C,v 1.3 2000/01/10 15:51:15 oliver Exp $
 
 #include <BALL/SYSTEM/fileSystem.h>
 
 #include <BALL/DATATYPE/regExp.h>
 #include <pwd.h> // 'getpwnam'
 
-namespace BALL {
+namespace BALL 
+{
 
 	const char FileSystem::PATH_SEPARATOR = '/';
 	const char *const FileSystem::CURRENT_DIRECTORY = ".";

@@ -1,4 +1,4 @@
-// $Id: potential1210.h,v 1.2 1999/12/04 18:34:24 oliver Exp $
+// $Id: potential1210.h,v 1.3 2000/01/10 15:51:05 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_POTENTIAL1210_H
@@ -12,7 +12,8 @@
 #	include <BALL/MOLMEC/PARAMETER/atomTypes.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 		
 	class FFPSPotential1210 
 		:	public FFParameterSection

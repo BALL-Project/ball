@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.9 1999/12/30 20:30:41 oliver Exp $
+// $Id: energyMinimizer.h,v 1.10 2000/01/10 15:51:04 oliver Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -38,7 +38,8 @@
 
 #include <vector>
 
-namespace BALL {
+namespace BALL 
+{
 
 	class ForceField;
 

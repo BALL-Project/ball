@@ -1,4 +1,4 @@
-// $Id: assignTypes.h,v 1.2 1999/09/04 09:20:50 oliver Exp $
+// $Id: assignTypes.h,v 1.3 2000/01/10 15:51:03 oliver Exp $
 // Molecular Mechanics: atom type assignment
 
 #ifndef BALL_MOLMEC_COMMON_ASSIGNTYPES_H
@@ -14,7 +14,8 @@
 
 #include <vector>
 
-namespace BALL {
+namespace BALL 
+{
 	
 	class	AssignTypeProcessor
 		:	public UnaryProcessor<Atom>

@@ -1,4 +1,4 @@
-// $Id: regExp.C,v 1.3 1999/10/30 12:53:33 oliver Exp $ 
+// $Id: regExp.C,v 1.4 2000/01/10 15:51:10 oliver Exp $ 
 
 #include <BALL/DATATYPE/regExp.h>
 
@@ -433,7 +433,7 @@ namespace BALL
 	}
 
 	void RegularExpression::dump
-		(ostream& s, unsigned long depth) const
+		(ostream& s, Size depth) const
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 

@@ -1,4 +1,4 @@
-// $Id: PSE.h,v 1.3 1999/12/28 18:38:43 oliver Exp $
+// $Id: PSE.h,v 1.4 2000/01/10 15:51:00 oliver Exp $
 
 #ifndef BALL_KERNEL_PSE_H
 #define BALL_KERNEL_PSE_H
@@ -38,7 +38,8 @@
 #define BALL_ELEMENT_ELECTRONEGATIVITY_DEFAULT   0
 
 
-namespace BALL {
+namespace BALL 
+{
 
 
 	/**	Element class

@@ -1,4 +1,4 @@
-// $Id: steepestDescent.h,v 1.4 1999/12/28 11:43:31 pmueller Exp $
+// $Id: steepestDescent.h,v 1.5 2000/01/10 15:51:05 oliver Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
@@ -41,7 +41,8 @@
 #	include <BALL/MOLMEC/COMMON/snapShot.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	class SteepestDescentMinimizer 
 		:	public EnergyMinimizer	

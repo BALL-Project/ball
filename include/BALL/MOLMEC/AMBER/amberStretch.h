@@ -1,4 +1,4 @@
-// $Id: amberStretch.h,v 1.3 1999/12/04 18:34:22 oliver Exp $ 
+// $Id: amberStretch.h,v 1.4 2000/01/10 15:51:03 oliver Exp $ 
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_AMBERSTRETCH_H
@@ -20,7 +20,8 @@
 #	include <BALL/MOLMEC/PARAMETER/quadraticBondStretch.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	Amber bond stretch component
 	*/

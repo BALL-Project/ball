@@ -1,9 +1,10 @@
-// $Id: lineSearch.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: lineSearch.C,v 1.2 2000/01/10 15:51:13 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/COMMON/limits.h>
 
-namespace BALL {
+namespace BALL 
+{
 
 
 	float LineSearchMinimizer::Default::ALPHA = 1e-4;

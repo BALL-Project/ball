@@ -1,4 +1,4 @@
-// $Id: microCanonicalMD.C,v 1.2 1999/12/30 18:15:10 pmueller Exp $
+// $Id: microCanonicalMD.C,v 1.3 2000/01/10 15:51:13 oliver Exp $
 
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
 
@@ -244,12 +244,12 @@ namespace BALL
          Log.level(LogStream::INFORMATION) 
                << "Microcanonical MD simulation System has potential energy "
                << current_energy << " at time " 
-               << current_time_ + iteration * time_step_ << endl; 
+               << current_time_ + (float)iteration * time_step_ << endl; 
 
          Log.level(LogStream::INFORMATION)
                << "MicroCanonicalMD simulation System has temperature  "
                << current_temperature_ << " at time "
-               << current_time_ + iteration * time_step_ << endl;
+               << current_time_ + (float)iteration * time_step_ << endl;
          }
 
         // Calculate new atomic positions and new tentative velocities 
@@ -297,7 +297,7 @@ namespace BALL
        } // next iteration 
 
      // update the current time
-     current_time_ += iterations * time_step_; 
+     current_time_ += (float)iterations * time_step_; 
 
      // update the current temperature in the system
      force_field_ptr_->updateEnergy(); 

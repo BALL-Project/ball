@@ -1,8 +1,9 @@
-// $Id: autoDeletable.C,v 1.2 1999/12/04 18:34:26 oliver Exp $
+// $Id: autoDeletable.C,v 1.3 2000/01/10 15:51:09 oliver Exp $
 
 #include <BALL/CONCEPT/autoDeletable.h>
 
-namespace BALL {
+namespace BALL 
+{
 
 
 	AutoDeletable::AutoDeletable()
