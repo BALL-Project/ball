@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.6 2000/02/10 15:12:45 oliver Exp $
+// $Id: residue.C,v 1.7 2000/02/12 19:28:21 oliver Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -330,31 +330,37 @@ namespace BALL
 		insertion_code_ = BALL_RESIDUE_DEFAULT_INSERTION_CODE;
 	}
 
-	String Residue::getFullName() const
+	String Residue::getFullName(Residue::FullNameType type) const
 	{
+		// retrieve the residue name and remove blanks
 		String full_name = getName();
 		full_name.trim();
-		String suffix = "-";
-		if (isNTerminal()) 
-		{	
-			suffix = "-N";
-		}
-		if (isCTerminal()) 
+
+		// if the variant extension should be added, do so
+		if (type == ADD_VARIANT_EXTENSIONS)
 		{
-			suffix = "-C";
-		}
-		if (isCTerminal() && isNTerminal()) 
-		{
-			suffix = "-M";
-		}
-		if (hasProperty(Residue::PROPERTY__HAS_SSBOND)) 
-		{
-			suffix += "S";
-		}
-		
-		if (suffix != "-")
-		{
-			full_name += suffix;
+			String suffix = "-";
+			if (isNTerminal()) 
+			{	
+				suffix = "-N";
+			}
+			if (isCTerminal()) 
+			{
+				suffix = "-C";
+			}
+			if (isCTerminal() && isNTerminal()) 
+			{
+				suffix = "-M";
+			}
+			if (hasProperty(Residue::PROPERTY__HAS_SSBOND)) 
+			{
+				suffix += "S";
+			}
+			
+			if (suffix != "-")
+			{
+				full_name += suffix;
+			}
 		}
 
 		return full_name;

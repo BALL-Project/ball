@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.10 2000/02/10 15:12:29 oliver Exp $
+// $Id: atom.C,v 1.11 2000/02/12 19:28:21 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -279,7 +279,7 @@ namespace BALL
 		return name_;
 	}
 
-	String Atom::getFullName() const
+	String Atom::getFullName(Atom::FullNameType type) const
 	{
 		String parent_name;
 		// determine the parent`s name
@@ -299,7 +299,7 @@ namespace BALL
 				parent_name += ":";
 			}
 		} else {
-			parent_name = parent->getFullName() + ":";
+			parent_name = parent->getFullName((Residue::FullNameType)type) + ":";
 		}
 
 		// assemble the complete name

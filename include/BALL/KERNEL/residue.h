@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.5 2000/02/10 15:03:29 oliver Exp $
+// $Id: residue.h,v 1.6 2000/02/12 19:28:24 oliver Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -64,6 +64,18 @@ namespace BALL
 
 			///
 			NUMBER_OF_PROPERTIES
+		};
+
+		/**	Enum used to describe the kind of
+				name constructed by \Ref{getFullName}
+		*/
+		enum FullNameType
+		{
+			///
+			NO_VARIANT_EXTENSIONS,
+
+			///
+			ADD_VARIANT_EXTENSIONS
 		};
 		//@}
 
@@ -133,8 +145,11 @@ namespace BALL
 					\item {\tt [-]S} is added for CYS involved in a disulphide bridge
 					\item {\tt -M} is added for individual amino acids (C and N terminal)
 				\end{itemize}
+			@param	type if type is set to {\tt NO\_VARIANT\_EXTENSIONS},
+				the variant extension ({\tt -XX}) is omitted.
+			@return String the full fragment name
 		*/
-		String getFullName() const;
+		String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const;
 			
 		///
 		Protein* getProtein();

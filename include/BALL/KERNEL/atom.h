@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.8 2000/02/10 15:03:14 oliver Exp $
+// $Id: atom.h,v 1.9 2000/02/12 19:28:23 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -44,7 +44,6 @@
 
 namespace BALL 
 {
-
 	class Bond;
 	class Element;
 	class Fragment;
@@ -84,8 +83,8 @@ namespace BALL
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.8 $
-			@date    $Date: 2000/02/10 15:03:14 $
+			@version $Revision: 1.9 $
+			@date    $Date: 2000/02/12 19:28:23 $
 	*/
 	class Atom
 		: public Composite,
@@ -133,6 +132,14 @@ namespace BALL
 			enum Property
 			{
 				NUMBER_OF_PROPERTIES
+			};
+				
+			/**	The type of name used for getFullName
+			*/
+			enum FullNameType 
+			{
+				NO_VARIANT_EXTENSIONS,
+				ADD_VARIANT_EXTENSIONS
 			};
 			//@}  
 
@@ -472,7 +479,7 @@ namespace BALL
 					If the atom is not contained in a residue, the name if the parent fragment 
 					is taken instead of	the residue name. If there is no parent fragment, name of the parent molecule ist taken.
 					If the atom is not contained in any superstructure, getFullname returns getName.
-
+					@param	type if type is set to {\tt Atom::NO\_VARIANT\_EXTENSIONS}, the variant extension ({\tt -XX}) is omitted
 					@return      {\bf const String\&}
 							\begin{itemize}
 								\item <residue>:<atom>  -- if contained in a residue
@@ -485,7 +492,7 @@ namespace BALL
 								\item <molecule>:atom -- for atoms contained in a molecule, but not in a fragment
 							\end{itemize}
 			*/
-			String getFullName() const;
+			String getFullName(FullNameType type = ADD_VARIANT_EXTENSIONS) const;
 
 			/** Change of the atom's position vector.
 					Change the position vector of {\em *this} atom to {\em position}.
