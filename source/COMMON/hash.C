@@ -1,4 +1,4 @@
-// $Id: hash.C,v 1.2 1999/10/30 12:53:30 oliver Exp $
+// $Id: hash.C,v 1.3 1999/12/28 18:26:29 oliver Exp $
 
 #include <BALL/COMMON/hash.h>
 
@@ -132,6 +132,35 @@ namespace BALL
 		}
 
 		return (Index)l;
+	}
+
+
+  HashIndex getNextPrime(HashIndex l)
+  {
+    if (l <= 3)
+		{
+      return 3;
+		}
+
+    if ((l & 0x1L) == 0)
+		{
+      l++;
+		}
+
+    HashIndex sqr = (long) sqrt((double)l) + 1;
+    HashIndex div = 0;
+
+    for (;;)
+    {
+      for (div = 3; (div <= sqr) && ((l % div) != 0); div += 2);
+
+      if (div > sqr)
+			{
+        return l;
+			}
+
+      l += 2;
+		}
 	}
 
 } // namespace BALL
