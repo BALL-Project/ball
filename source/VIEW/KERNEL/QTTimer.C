@@ -1,4 +1,4 @@
-// $Id: QTTimer.C,v 1.7 2000/07/18 08:30:03 oliver Exp $
+// $Id: QTTimer.C,v 1.8 2000/11/12 15:23:15 hekl Exp $
 
 
 #include <BALL/VIEW/KERNEL/QTTimer.h>
@@ -12,18 +12,10 @@ namespace BALL
 	namespace VIEW
 	{
 
-		QTTimer::QTTimer()
-			:	timer_id_(0),
+		QTTimer::QTTimer(QObject* parent, const char* name)
+			:	QObject(parent, name),
+			  timer_id_(0),
 				intervall_(100),
-				timer_enabled_(false),
-				timer_running_(false)
-		{
-		}
-
-		QTTimer::QTTimer(const QTTimer& timer, bool /* deep */)
-			:	QObject(),
-				timer_id_(0),
-				intervall_(timer.intervall_),
 				timer_enabled_(false),
 				timer_running_(false)
 		{
