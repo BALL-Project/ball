@@ -1,4 +1,4 @@
-// $Id: glTwoColoredTube.h,v 1.4 2001/05/13 14:55:25 hekl Exp $
+// $Id: glTwoColoredTube.h,v 1.5 2001/07/06 15:06:32 aubertin Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDTUBE_H
@@ -30,15 +30,15 @@ namespace BALL
 				An instance of GLTwoColoredTube represents an instance of the geometric
 				visualization of a two colored "tube".
 				The class GLTwoColoredTube is derived from the classes \Ref{TwoColoredTube} and
-				\Ref{GLObject}. Therefore the class glTwoColoredTube is the graphical extension
+				\Ref{GLObject}. Therefore the class GLTwoColoredTube is the graphical extension
 				of the geometrical definition of the class twoColoredTube.
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				twoColoredTube. OpenGL code is used for the visualization.
 				See these classes for further information.
 				@memo    GLTwoColoredTube class (BALL MOLVIEW gui primitiv framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 14:55:25 $
+				@author  $Author: aubertin $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/07/06 15:06:32 $
 		*/
 		class GLTwoColoredTube
 			: public TwoColoredTube,
@@ -51,7 +51,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Construct new glTwoColoredTube.
+					Constructs new glTwoColoredTube.
 					@return      GLTwoColoredTube new constructed glTwoColoredTube
 					@see         TwoColoredTube
 					@see         GLObject
@@ -60,7 +60,7 @@ namespace BALL
 				throw();
 
 			/** Copy constructor with cloning facility.
-					Construct new glTwoColoredTube by copying the glTwoColoredTube 
+					Constructs new glTwoColoredTube by copying the glTwoColoredTube 
 					{\em GL_two_colored_tube}.
 					The copy is either deep (default) or shallow.
 					@param       tube the tube to be copied (cloned)
@@ -73,7 +73,7 @@ namespace BALL
 				throw();
 
 			/** Copy constructor from geometricObject.
-					Construct new glTwoColoredTube by copying the internal values from
+					Constructs new glTwoColoredTube by copying the internal values from
 					\Ref{GeometricObject} {\em geometric_object}.
 					@param       geometric_object the \Ref{GeometricObject} which internal value should be copied
 					@return      GLTwoColoredTube new constructed glTwoColoredTube initialized from {\em geometric_object}
@@ -122,7 +122,7 @@ namespace BALL
 			//@{
 
 			/** Assignment.
-					Assign the glTwoColoredTube {\em gl_two_colored_tube} to {\em *this}
+					Assigns the glTwoColoredTube {\em gl_two_colored_tube} to {\em *this}
 					glTwoColoredTube.
 					The copy is either deep (default) or shallow.
 					The value of {\em *this} glTwoColoredTube is initialized to the value of 
@@ -141,7 +141,7 @@ namespace BALL
 				throw();
 
 			/** Assignment operator.
-					Assign the glTwoColoredTube {\em gl_two_colored_tube} to {\em *this}
+					Assigns the glTwoColoredTube {\em gl_two_colored_tube} to {\em *this}
 					glTwoColoredTube.	The copy is deep.
 					This method does not copy the structure of {\em gl_two_colored_tube} into {\em *this}
 					glTwoColoredTube. 
@@ -159,7 +159,7 @@ namespace BALL
 				throw();
 
 			/** Copying with cloning facility.
-					Copy {\em *this} glTwoColoredTube to the glTwoColoredTube {\em gl_two_colored_tube}.
+					Copies {\em *this} glTwoColoredTube to the glTwoColoredTube {\em gl_two_colored_tube}.
 					The copy is either deep (default) or shallow.
 					This method does not copy the structure of {\em *this} glTwoColoredTube into
 					{\em gl_two_colored_tube}. 
@@ -177,7 +177,7 @@ namespace BALL
 				throw();
 
 			/** Swapping of glTwoColoredTube's.
-					Swap the value of {\em *this} glTwoColoredTube with the glTwoColoredTube
+					Swaps the value of {\em *this} glTwoColoredTube with the glTwoColoredTube
 					{\em gl_two_colored_tube}.
 					This method does not swap the structure of {\em gl_two_colored_tube} with {\em *this}
 					glTwoColoredTube. 
@@ -200,7 +200,7 @@ namespace BALL
 			/** Creation of the graphical representation.
 					Overridden method from \Ref{GLObject}. Uses the geometrical properties
 					defined in class \Ref{TwoColoredTube} to create the graphical representation
-					of the twoColoredTube. This method is used internally from the render engine
+					of the twoColoredTube. This method is used internally by the render engine
 					of the \Ref{Scene}. Predefined shapes of tube objects from the class
 					\Ref{GLPrimitiveManager} are used for the variable drawing resolutions.
 					The parameter {\em with_names} indicates whether the openGL command 
