@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.12 2000/03/14 19:28:12 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.13 2000/05/02 08:16:57 anker Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -1732,13 +1732,13 @@ namespace BALL
 				}
 		
 		charged_black_points = new long[number_of_charged_black_points];
-		if (T == 0)
+		if (charged_black_points == 0)
 		{
 			throw Exception::OutOfMemory(__FILE__, __LINE__, number_of_charged_black_points * sizeof(long));
 		}
 
 		charged_white_points = new long[number_of_charged_white_points];
-		if (T == 0)
+		if (charged_white_points == 0)
 		{
 			throw Exception::OutOfMemory(__FILE__, __LINE__, number_of_charged_white_points * sizeof(long));
 		}
