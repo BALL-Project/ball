@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.17 1999/12/22 18:09:25 oliver Exp $
+dnl    $Id: configure.in,v 1.18 1999/12/28 18:27:48 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -883,7 +883,7 @@ else
 
 			AC_DEFINE(SOLARIS,)
 
-			TEMPLATE_DIR="Templates.DB"
+			TEMPLATE_DIR="SunWS_cache"
 			DEF_BOOL=true
 			NO_ARROW_OPERATOR="true"
 			AR="${CXX}"
