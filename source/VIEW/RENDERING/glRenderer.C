@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.18 2005/01/17 23:54:11 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.19 2005/01/18 15:07:40 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -50,11 +50,13 @@ namespace BALL
 				last_color_(&dummy_color_),
 				stereo_(NO_STEREO),
 				render_mode_(RENDER_MODE_UNDEFINED),
- 				use_vertex_buffer_(false)
+ 				use_vertex_buffer_(false),
+				picking_mode_(false)
 		{
 #ifdef GL_ARB_vertex_buffer_object
 			use_vertex_buffer_ = true;
 #endif
+//   			use_vertex_buffer_ = false;
 		}
 
 		GLRenderer::~GLRenderer()
@@ -157,6 +159,11 @@ namespace BALL
 			createSpheres_();
 			createTubes_();
 			createBoxes_();
+
+			if (!isExtensionSupported("GL_ARB_vertex_buffer_object"))
+			{
+				use_vertex_buffer_ = false;
+			}
 
 			return true;
 		}
@@ -276,22 +283,6 @@ namespace BALL
 				clearVertexBuffersFor(*(Representation*)&rep);
 			}
 
-			if (display_lists_.size() + mesh_to_buffer_.size() < 2)
-			{
-				// we can use a faster approach
-				name_to_object_.clear();
-				object_to_name_.clear();
-			}
-			else
-			{
-				List<GeometricObject*>::ConstIterator it = rep.getGeometricObjects().begin();
-				for (; it != rep.getGeometricObjects().end(); it++)
-				{
-					name_to_object_.erase(object_to_name_[*it]);
-					object_to_name_.erase(*it);
-				}
-			}
-
 			DisplayListHashMap::Iterator hit = display_lists_.find(&rep);
 			if (hit == display_lists_.end()) return;
 			delete hit->second;
@@ -301,8 +292,6 @@ namespace BALL
 		void GLRenderer::bufferRepresentation(const Representation& rep)
 			throw()
 		{
-Log.error() << "rebuild list " << std::endl;
-
 #ifdef BALL_BENCHMARKING
 	Timer t;
 	t.start();
@@ -322,17 +311,16 @@ Log.error() << "rebuild list " << std::endl;
 			display_list->useCompileMode();
 
 			display_list->startDefinition();
-			render(rep);
+			render(rep, true);
 			display_list->endDefinition();
 
-			if (vertexBuffersEnabled())
+			if (use_vertex_buffer_)
 			{
 				clearVertexBuffersFor(*(Representation*)&rep);
 				const List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
 				List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
 				for (; it != geometric_objects.end(); it++)
 				{
-					glLoadName(getName(**it));
 					const Mesh* const mesh = dynamic_cast<Mesh*>(*it);
 					if (mesh != 0) renderMesh_(*mesh);
 				}
@@ -345,9 +333,12 @@ Log.error() << "rebuild list " << std::endl;
 		}
 
 
-		bool GLRenderer::render(const Representation& representation)
+		bool GLRenderer::render(const Representation& representation, bool for_display_list)
 			throw()
 		{
+			last_color_ = &dummy_color_;
+			glColor4ub(dummy_color_.getRed(), dummy_color_.getGreen(), dummy_color_.getBlue(), dummy_color_.getAlpha());
+
 			if (representation.isHidden()) return true;
 
 			if (!representation.isValid())
@@ -372,27 +363,58 @@ Log.error() << "rebuild list " << std::endl;
 			// accelerate things a little by calling getGeometricObjects() only once
 			const List<GeometricObject*>& geometric_objects = representation.getGeometricObjects();
 			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
-			if (use_vertex_buffer_)
+			if (for_display_list)
 			{
-				for (; it != geometric_objects.end(); it++)
+				if (use_vertex_buffer_)
 				{
-					glLoadName(getName(**it));
-
-					const Mesh* const mesh = dynamic_cast<Mesh*>(*it);
-					if (mesh == 0) render_(*it);
+					// draw everything except of meshes, these are put into vertex buffer objects in bufferRepresentation()
+					for (; it != geometric_objects.end(); it++)
+					{
+						const Mesh* const mesh = dynamic_cast<Mesh*>(*it);
+						if (mesh == 0) render_(*it);
+					}
+				}
+				else
+				{
+					// render everything
+					for (; it != geometric_objects.end(); it++)
+					{
+						render_(*it);
+					}
 				}
 			}
-			else
+			else // drawing for picking directly
 			{
-				for (; it != geometric_objects.end(); it++)
+				if (use_vertex_buffer_)
 				{
-					glLoadName(getName(**it));
-					render_(*it);
+					// we have to draw from the vertex buffer objects
+					for (; it != geometric_objects.end(); it++)
+					{
+						glLoadName(getName(**it));
+						const Mesh* const mesh = dynamic_cast<Mesh*>(*it);
+						if (mesh == 0)
+						{
+							render_(*it);
+						}
+						else
+						{
+							renderMesh_(*mesh);
+							mesh_to_buffer_[mesh]->draw();
+						}
+					}
+				}
+				else
+				{
+					// render everything with names from glLoadName
+					for (; it != geometric_objects.end(); it++)
+					{
+						glLoadName(getName(**it));
+						render_(*it);
+					}
 				}
 			}
 
 			glFlush();
-
 			return true;
 		}
 
@@ -677,7 +699,9 @@ Log.error() << "rebuild list " << std::endl;
 			{	
 				if (mesh.colorList.size() == 0)
 				{
-					glColor4ub(255,255,255,255);
+					dummy_color_.set(255,255,255,255);
+					last_color_ = &dummy_color_;
+					glColor4ub(dummy_color_.getRed(), dummy_color_.getGreen(), dummy_color_.getBlue(), dummy_color_.getAlpha());
 				}
 				else
 				{
@@ -840,7 +864,6 @@ Log.error() << "rebuild list " << std::endl;
 			MeshBuffer* buffer = new MeshBuffer;
 			buffer->setMesh(mesh);
 			buffer->initialize();
- 			buffer->draw();
 			mesh_to_buffer_[&mesh] = buffer;
 		}
 
@@ -1464,7 +1487,7 @@ Log.error() << "rebuild list " << std::endl;
 		
 		bool GLRenderer::enableVertexBuffers(bool state)
 		{
-			#ifdef GL_ARB_vertex_buffer_object
+			#ifndef GL_ARB_vertex_buffer_object
  				use_vertex_buffer_ = false;
 				return false;
 			#endif
@@ -1501,7 +1524,6 @@ Log.error() << "rebuild list " << std::endl;
 			// if we have vertex buffers for this Representation, draw them
 			if (use_vertex_buffer_)
 			{
-	Log.error() << "drawvertex" << std::endl;
 				const List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
 				List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
 				for (; it != geometric_objects.end(); it++)
@@ -1522,9 +1544,21 @@ Log.error() << "rebuild list " << std::endl;
 			DisplayListHashMap::Iterator dit = display_lists_.find(&rep);
 			if (dit != display_lists_.end())
 			{
-	Log.error() << "drawlislistt" << std::endl;
 				dit->second->draw();
 			}
+		}
+
+		void GLRenderer::enterPickingMode()
+		{
+			picking_mode_ = true;
+		}
+
+		void GLRenderer::exitPickingMode()
+		{
+			picking_mode_ = false;
+			object_to_name_.clear();
+			name_to_object_.clear();
+			all_names_ = 0;
 		}
 
 

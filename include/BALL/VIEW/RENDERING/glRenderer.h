@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.27.2.10 2005/01/17 23:55:03 amoll Exp $
+// $Id: glRenderer.h,v 1.27.2.11 2005/01/18 15:08:06 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -168,6 +168,12 @@ namespace BALL
 			void pickObjects2(List<GeometricObject*>& objects, int width, int height)
 				throw();
 
+			///
+			void enterPickingMode();
+
+			///
+			void exitPickingMode();
+
 			/**
 			 */
 			void setSize(float width, float height)
@@ -233,7 +239,7 @@ namespace BALL
 				throw();
 			
 			///
-			virtual bool render(const Representation& representation)
+			virtual bool render(const Representation& representation, bool for_display_list = false)
 				throw();
 
 			/** Test if a given opengl extension is supported by the current driver.
@@ -425,6 +431,7 @@ namespace BALL
 			StereoMode stereo_;
 			RenderMode render_mode_;
 			bool use_vertex_buffer_;
+			bool picking_mode_;
 		};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

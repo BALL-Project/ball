@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.156.2.8 2005/01/18 00:06:51 amoll Exp $
+// $Id: scene.C,v 1.156.2.9 2005/01/18 15:08:23 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -259,7 +259,6 @@ namespace BALL
 			{
 				RepresentationMessage* rm = RTTI::castTo<RepresentationMessage>(*message);
 				Representation* rep = rm->getRepresentation();
-				content_changed_ = true;
 				switch (rm->getType())
 				{
  					case RepresentationMessage::ADD:
@@ -278,6 +277,8 @@ namespace BALL
 					default:
 						break;
 				}
+
+				content_changed_ = true;
 
 				update(false);
 				return;
@@ -352,7 +353,7 @@ namespace BALL
 
 		void Scene::paintGL()
 		{
- 			if (!content_changed_) return;
+//    			if (!content_changed_) return;
 #ifdef BALL_BENCHMARKING
 	Timer t;
 	t.start();
@@ -1778,6 +1779,7 @@ namespace BALL
 		{
 			if (current_mode_ == ROTATE__MODE) return;
 			
+			gl_renderer_.exitPickingMode();
 			last_mode_ = current_mode_;
 			current_mode_ = ROTATE__MODE;		
 			setCursor(QCursor(Qt::SizeAllCursor));
@@ -1790,6 +1792,7 @@ namespace BALL
 		{
 			if (current_mode_ == PICKING__MODE) return;
 			
+			gl_renderer_.enterPickingMode();
 			last_mode_ = current_mode_;
 			current_mode_ = PICKING__MODE;
 			setCursor(QCursor(Qt::CrossCursor));
@@ -1802,6 +1805,7 @@ namespace BALL
 		{
 			if (current_mode_ == MOVE__MODE) return;
 			
+			gl_renderer_.exitPickingMode();
 			last_mode_ = current_mode_;
 			current_mode_ = MOVE__MODE;
 			setCursor(QCursor(Qt::PointingHandCursor));
