@@ -1,4 +1,4 @@
-// $Id: PSE.h,v 1.4 2000/01/10 15:51:00 oliver Exp $
+// $Id: PSE.h,v 1.5 2000/01/17 13:10:37 oliver Exp $
 
 #ifndef BALL_KERNEL_PSE_H
 #define BALL_KERNEL_PSE_H
@@ -645,12 +645,8 @@ namespace BALL
 
 			//@}
 
-		protected:
-		 
-		private:
-
 			///
-			struct SymbolToElement_
+			struct SymbolToElement
 			{
 				///
 				const char* symbol;
@@ -659,14 +655,13 @@ namespace BALL
 				Element* 		element;
 			};
 
-			///
-			static int compare_(const SymbolToElement_* a, const SymbolToElement_* b);
+		private:
 
 			///
 			static Element element_[];
 
 			///
-			static SymbolToElement_ symbol_to_element_[];
+			static SymbolToElement symbol_to_element_[];
 
 			///
 			static Element* atomic_number_to_element_[];

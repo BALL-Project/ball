@@ -1,4 +1,4 @@
-// $Id: PSE.C,v 1.5 2000/01/17 09:42:05 oliver Exp $
+// $Id: PSE.C,v 1.6 2000/01/17 13:10:51 oliver Exp $
 
 #include <BALL/KERNEL/PSE.h>
 
@@ -14,8 +14,8 @@ namespace BALL
 {
 
 	extern "C" int PSEcompare_
-		(const PSE_::SymbolToElement_* a,
-		 const PSE_::SymbolToElement_* b)
+		(const PSE_::SymbolToElement* a,
+		 const PSE_::SymbolToElement* b)
 	{
 		return strcmp(a->symbol, b->symbol);
 	}
@@ -143,7 +143,7 @@ namespace BALL
 		Element("Zirconium",               "Zr",         4,    5,      40,      91.224,     1.6,   1.45, 0.0,  1.3)
 	};
 
-	PSE_::SymbolToElement_ PSE_::symbol_to_element_[] = 
+	PSE_::SymbolToElement PSE_::symbol_to_element_[] = 
 	{
 		{"AC",  &PSE_::element_[Element::ACTINIUM]},
 		{"AG",  &PSE_::element_[Element::SILVER]},
@@ -479,7 +479,7 @@ namespace BALL
 		}
 
 		char symbol_buffer[] = { '\0', '\0', '\0', '\0' };
-		SymbolToElement_ compare = { symbol_buffer };
+		SymbolToElement compare = { symbol_buffer };
 		
 		if (symbol.size() == 1){
 			symbol_buffer[0] = toupper(symbol[0]);
@@ -492,12 +492,12 @@ namespace BALL
 			symbol_buffer[2] = toupper(symbol[2]);
 		};
 
-		SymbolToElement_* result = (SymbolToElement_ *)::bsearch 
+		SymbolToElement* result = (SymbolToElement*)::bsearch 
 			((const void *)&compare, 
 			 (const void *)symbol_to_element_, 
 			 Element::NUMBER_OF_ELEMENTS, 
-			 sizeof(SymbolToElement_), 
-			 (ComparatorType)compare_);
+			 sizeof(SymbolToElement), 
+			 (ComparatorType)PSEcompare_);
 		
 		if (result == 0)
 		{
