@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.104 2000/07/17 21:24:18 oliver Exp $
+dnl    $Id: configure.in,v 1.105 2000/07/18 23:12:49 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2349,6 +2349,12 @@ if test "${PYTHON_SUPPORT}" = true ; then
 	fi
 fi
 
+if test "${PYTHON_SUPPORT}" = true ; then
+	PYTHON=PYTHON
+else
+	PYTHON=
+fi
+
 BALL_INCLUDES="-I$BALL_PATH/include"
 
 dnl
@@ -2550,7 +2556,6 @@ AC_SUBST(ADDITIONAL_COMMENTS)
 dnl	    BALLVIEW
 
 AC_SUBST(USE_BALLVIEW)				dnl bool: use ballview (default=true)
-AC_SUBST(BALLVIEW)						dnl if USE_BALLVIEW=true, BALLVIEW. "" otherwise. Used in config.mak
 AC_SUBST(BALLVIEW_PLATFORM)		dnl Mesa or OpenGL
 AC_SUBST(BALLVIEW_INCLUDES)		dnl BALLVIEW includes
 AC_SUBST(LIBBALLVIEW)					dnl static library name
@@ -2580,7 +2585,7 @@ dnl
 dnl    create files
 dnl
 
-SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR SOLVATION STRUCTURE SYSTEM ${BALLVIEW}"
+SUBDIRS="COMMON CONCEPT DATATYPE ENERGY FORMAT KERNEL MATHS MOLMEC NMR SOLVATION STRUCTURE SYSTEM ${BALLVIEW} ${PYTHON}"
 AC_SUBST(SUBDIRS)
 
 if test "${MULTI_BUILD}" = "true" ; then
