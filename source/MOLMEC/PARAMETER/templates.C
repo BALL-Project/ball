@@ -1,4 +1,4 @@
-// $Id: templates.C,v 1.11 2000/10/18 10:40:07 anker Exp $
+// $Id: templates.C,v 1.12 2001/08/01 23:43:41 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
@@ -113,10 +113,6 @@ namespace BALL
 	
 	void Templates::assign(System& system, bool overwrite_existing_type_names, bool overwrite_non_zero_charges) const
 	{
-		// remember the current parent to avoid
-		// the recalculation of the parent`s name
-		String		parent_name(":");
-
 		// iterate over all atoms
 		AtomIterator it = system.beginAtom();
 		for (; +it; ++it)
@@ -130,7 +126,30 @@ namespace BALL
 				} 
 				else 
 				{
-					Log.warn() << "Templates::assign: cannot assign charge for atom " << name << endl;
+					// If we could not find the name with the variant extension 
+					// (e.g. ALA-C), try the short name (ALA) instead.
+					name = it->getFullName(Atom::NO_VARIANT_EXTENSIONS);
+					if (charges_.has(name))
+					{
+						it->setCharge(charges_[name]);
+					} 
+					else 
+					{					
+						// try a final wildcard match
+						name = "*:" + it->getName();
+						name.trim();
+						if (charges_.has(name))
+						{
+							// assign the charge
+							it->setCharge(charges_[name]);
+						} 
+						else
+						{
+							Log.warn() << "Templates::assign: cannot assign charge for atom " << name << endl;
+						}
+					}
+					// Reset the name to avoid influence on the type assignment.
+					name = it->getFullName();
 				}
 			}
 			if (overwrite_existing_type_names || (it->getTypeName() == BALL_ATOM_DEFAULT_TYPE_NAME))
@@ -138,13 +157,35 @@ namespace BALL
 				if (type_names_.has(name))
 				{
 					it->setTypeName(type_names_[name]);
-				} else {
-					Log.warn() << "Templates::assign: cannot assign type name for atom " << name << endl;
+				} 
+				else
+				{
+					// If we could not find the name with the variant extension 
+					// (e.g. ALA-C), try the short name (ALA) instead.
+					name = it->getFullName(Atom::NO_VARIANT_EXTENSIONS);
+					if (type_names_.has(name))
+					{
+						it->setTypeName(type_names_[name]);
+					} 
+					else 
+					{					
+						// try a final wildcard match
+						name = "*:" + it->getName();
+						name.trim();
+						if (type_names_.has(name))
+						{
+							// assign the charge
+							it->setTypeName(type_names_[name]);
+						} 
+						else
+						{
+							Log.warn() << "Templates::assign: cannot assign type name for atom " << name << endl;
+						}
+					}
 				}
 			}
 		}	
 	}
-
 
 
 	void Templates::assignTypeNames(System& system, bool overwrite_existing_type_names) const
@@ -161,14 +202,18 @@ namespace BALL
 				{	
 					// assign the charge
 					it->setCharge(charges_[name]);
-				} else {
+				} 
+				else 
+				{
 					// try the residue name without variant extension
 					name = it->getFullName(Atom::NO_VARIANT_EXTENSIONS);
 					if (charges_.has(name))
 					{	
 						// assign the charge
 						it->setCharge(charges_[name]);
-					} else {
+					} 
+					else 
+					{
 						// try a final wildcard match
 						name = "*:" + it->getName();
 						name.trim();
@@ -176,7 +221,9 @@ namespace BALL
 						{
 							// assign the charge
 							it->setCharge(charges_[name]);
-						} else {
+						} 
+						else 
+						{
 							Log.warn() << "Templates::assignTypeNames: cannot assign type name for atom " << it->getFullName() << endl;
 						}
 					}
