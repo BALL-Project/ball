@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager_test.C,v 1.2 2000/11/01 09:20:55 oliver Exp $
+// $Id: XDRPersistenceManager_test.C,v 1.3 2000/12/14 19:36:04 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.2 2000/11/01 09:20:55 oliver Exp $")
+START_TEST(XDRPersistenceManager, "$Id: XDRPersistenceManager_test.C,v 1.3 2000/12/14 19:36:04 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -19,6 +19,8 @@ using namespace std;
 CHECK(XDRPersistenceManager::XDRPersistenceManager())
   //BAUSTELLE
 RESULT
+
+
 
 
 String filename;
@@ -182,154 +184,200 @@ CHECK(XDRPersistenceManager::checkObjectPointerArrayTrailer())
 RESULT
 
 
+NEW_TMP_FILE(filename)
+std::ofstream outfile(filename.c_str(), std::ios::out);
+
+XDRPersistenceManager pm;
+pm.setOstream(outfile);
+pm.initializeOutputStream();
+pm.writeStreamHeader();
 CHECK(XDRPersistenceManager::put(const char c))
-  //BAUSTELLE
+	pm.put((char)0);
+	pm.put((char)85);
+	pm.put((char)-86);
+	pm.put((char)-1);
 RESULT
 
 
-CHECK(XDRPersistenceManager::put(const unsigned char c))
-  //BAUSTELLE
+CHECK(XDRPersistenceManager::put(const Byte b))
+	pm.put((Byte)0);
+	pm.put((Byte)85);
+	pm.put((Byte)170);
+	pm.put((Byte)255);
 RESULT
 
 
-CHECK(XDRPersistenceManager::put(const short s))
-  //BAUSTELLE
+CHECK(XDRPersistenceManager::put(const Index i))
+	pm.put((Index)0);
+	pm.put((Index)-1);
+	pm.put((Index)0xAA55CC33);
+	pm.put((Index)0xCC33AA55);
 RESULT
 
 
-CHECK(XDRPersistenceManager::put(const unsigned short s))
-  //BAUSTELLE
-RESULT
-
-
-CHECK(XDRPersistenceManager::put(const int s))
-  //BAUSTELLE
-RESULT
-
-
-CHECK(XDRPersistenceManager::put(const unsigned int s))
-  //BAUSTELLE
-RESULT
-
-
-CHECK(XDRPersistenceManager::put(const long s))
-  //BAUSTELLE
-RESULT
-
-
-CHECK(XDRPersistenceManager::put(const unsigned long s))
-  //BAUSTELLE
-RESULT
-
-
-CHECK(XDRPersistenceManager::put(const long long s))
-  //BAUSTELLE
-RESULT
-
-
-CHECK(XDRPersistenceManager::put(const unsigned long long s))
-  //BAUSTELLE
+CHECK(XDRPersistenceManager::put(const Size s))
+	pm.put((Size)0);
+	pm.put((Size)0xAA55CC33);
+	pm.put((Size)0xCC33AA55);
+	pm.put((Size)0xFFFFFFFF);
 RESULT
 
 
 CHECK(XDRPersistenceManager::put(const bool b))
-  //BAUSTELLE
+	pm.put(true);
+	pm.put(false);
 RESULT
 
 
-CHECK(XDRPersistenceManager::put(const float f))
-  //BAUSTELLE
+CHECK(XDRPersistenceManager::put(const Real x))
+  pm.put((Real)0.0);
+	pm.put((Real)1.234567);
+	pm.put((Real)-9.87654e37);
 RESULT
 
 
-CHECK(XDRPersistenceManager::put(const double d))
-  //BAUSTELLE
+CHECK(XDRPersistenceManager::put(const DoubleReal x))
+  pm.put((DoubleReal)0.0);
+	pm.put((DoubleReal)1.234567);
+	pm.put((DoubleReal)-9.87654e300);
 RESULT
 
 
 CHECK(XDRPersistenceManager::put(const string& s))
-  //BAUSTELLE
+  pm.put(String(""));
+	pm.put(String("ABCDEFGHIJKLMNOPQRSTUVWxyz"));
 RESULT
 
 
-CHECK(XDRPersistenceManager::put(const void* p))
-  //BAUSTELLE
+PointerSizeInt psi1 = 0x01234567;
+psi1 <<= 32;
+psi1 += 0xFEDCBA98;
+PointerSizeInt psi2 = 0xFEDCBA98;
+psi2 <<= 32;
+psi2 += 0x01234567;
+
+CHECK(XDRPersistenceManager::put(const PointerSizeInt p))
+	pm.put((PointerSizeInt)0);
+	pm.put(psi1);
+	pm.put(psi2);
 RESULT
 
+pm.writeStreamTrailer();
+pm.finalizeOutputStream();
+outfile.close();
+
+std::ifstream infile(filename.c_str());
+pm.setIstream(infile);
+pm.initializeInputStream();
+pm.checkStreamHeader();
 
 CHECK(XDRPersistenceManager::get(char& c))
-  //BAUSTELLE
+	char c;
+	pm.get(c);
+	TEST_EQUAL((Index)c, 0)
+	pm.get(c);
+	TEST_EQUAL((Index)c, 85)
+	pm.get(c);
+	TEST_EQUAL((Index)c, -86)
+	pm.get(c);
+	TEST_EQUAL((Index)c, -1)
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(unsigned char& c))
-  //BAUSTELLE
+CHECK(XDRPersistenceManager::get(Byte& c))
+	Byte c;
+	pm.get(c);
+	TEST_EQUAL((Size)c, 0)
+	pm.get(c);
+	TEST_EQUAL((Size)c, 85)
+	pm.get(c);
+	TEST_EQUAL((Size)c, 170)
+	pm.get(c);
+	TEST_EQUAL((Size)c, 255)
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(short& s))
-  //BAUSTELLE
+CHECK(XDRPersistenceManager::get(Index& s))
+	Index i;
+	pm.get(i);
+	TEST_EQUAL(i, (Index)0)
+	pm.get(i);
+	TEST_EQUAL(i, (Index)-1)
+	pm.get(i);
+	TEST_EQUAL(i, (Index)0xAA55CC33)
+	pm.get(i);
+	TEST_EQUAL(i, (Index)0xCC33AA55)
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(unsigned short& s))
-  //BAUSTELLE
+CHECK(XDRPersistenceManager::get(Size& s))
+	Size s;
+	pm.get(s);
+	TEST_EQUAL(s, (Size)0)
+	pm.get(s);
+	TEST_EQUAL(s, (Size)0xAA55CC33)
+	pm.get(s);
+	TEST_EQUAL(s, (Size)0xCC33AA55)
+	pm.get(s);
+	TEST_EQUAL(s, (Size)0xFFFFFFFF)
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(int& s))
-  //BAUSTELLE
+CHECK(XDRPersistenceManager::get(bool& s))
+  bool b;
+	pm.get(b);
+	TEST_EQUAL(b, true)
+	pm.get(b);
+	TEST_EQUAL(b, false)
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(unsigned int& s))
-  //BAUSTELLE
+CHECK(XDRPersistenceManager::get(Real& x))
+	Real x;
+	pm.get(x);
+  TEST_REAL_EQUAL(x, (Real)0.0)
+	pm.get(x);
+  TEST_REAL_EQUAL(x, (Real)1.234567)
+	pm.get(x);
+  TEST_REAL_EQUAL(x, (Real)-9.87654e37)
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(long& s))
-  //BAUSTELLE
+CHECK(XDRPersistenceManager::get(DoubleReal& s))
+	DoubleReal x;
+	pm.get(x);
+  TEST_REAL_EQUAL(x, (DoubleReal)0.0)
+	pm.get(x);
+  TEST_REAL_EQUAL(x, (DoubleReal)1.234567)
+	pm.get(x);
+  TEST_REAL_EQUAL(x, (DoubleReal)-9.87654e300)
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(unsigned long& s))
-  //BAUSTELLE
+CHECK(XDRPersistenceManager::get(String& s))
+	String s;
+	pm.get(s);
+	TEST_EQUAL(s, "")
+	pm.get(s);
+	TEST_EQUAL(s, "ABCDEFGHIJKLMNOPQRSTUVWxyz")
 RESULT
 
 
-CHECK(XDRPersistenceManager::get(long long& s))
-  //BAUSTELLE
+CHECK(XDRPersistenceManager::get(PointerSizeInt& p))
+	PointerSizeInt p;
+	pm.get(p);
+	TEST_EQUAL(p, 0)
+	pm.get(p);
+	TEST_EQUAL(p, psi1)
+	cout << p - psi1 << endl;
+	pm.get(p);
+	TEST_EQUAL(p, psi2)
+	cout << p - psi2 << endl;
 RESULT
 
-
-CHECK(XDRPersistenceManager::get(unsigned long long& s))
-  //BAUSTELLE
-RESULT
-
-
-CHECK(XDRPersistenceManager::get(bool& b))
-  //BAUSTELLE
-RESULT
-
-
-CHECK(XDRPersistenceManager::get(float& f))
-  //BAUSTELLE
-RESULT
-
-
-CHECK(XDRPersistenceManager::get(double& d))
-  //BAUSTELLE
-RESULT
-
-
-CHECK(XDRPersistenceManager::get(string& s))
-  //BAUSTELLE
-RESULT
-
-
-CHECK(XDRPersistenceManager::get(void*& p))
-  //BAUSTELLE
-RESULT
+pm.checkStreamTrailer();
+pm.finalizeInputStream();
+infile.close();
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
