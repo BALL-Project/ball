@@ -1,4 +1,4 @@
-// $Id: singleton.h,v 1.4 2000/07/16 19:27:46 oliver Exp $
+// $Id: singleton.h,v 1.5 2000/12/19 12:50:50 amoll Exp $
 
 #ifndef BALL_CONCEPT_SINGLETON_H
 #define BALL_CONCEPT_SINGLETON_H
@@ -26,47 +26,60 @@ namespace BALL
 		/**
 		*/
 		~Singleton()
+			throw()
 		{
 			--countReferences_();
 		}
 		//@}
 
-		static Size countReferences();
+		static Size countReferences()
+			throw();
 
-		T* operator -> ();
+		T* operator -> ()
+			throw();
 
-		const T* operator -> () const;
+		const T* operator -> () const
+			throw();
 
-		T& getExemplary();
+		T& getExemplary()
+			throw();
 
-		const T& getExemplary() const;
-	
-		operator T & ();
+		const T& getExemplary() const
+			throw();
 
-		operator T * ();
+		operator T & ()
+			throw();
+
+		operator T * ()
+			throw();
 
 		protected:
 
 		Singleton()
+			throw()
 		{
 			++countReferences_();
 		}
 
-		Singleton& operator = (const Singleton &);
+		const Singleton& operator = (const Singleton &)
+			throw();
 
 		private:
 
-		static Size &countReferences_();
+		static Size &countReferences_()
+			throw();
 	};
 
 	template <class T>
 	inline Size Singleton<T>::countReferences()
+		throw()
 	{
 		return countReferences_();
 	}
 
 	template <class T> 
 	T* Singleton<T>::operator -> ()
+		throw()
 	{
 		static T* exemplary = 0;
 		
@@ -80,39 +93,44 @@ namespace BALL
 
 	template <class T>
 	inline const T*  Singleton<T>::operator -> () const
+		throw()
 	{
 		return ((Singleton *)this)->operator->();
 	}
 
 	template <class T>
 	inline T& Singleton<T>::getExemplary()
+		throw()
 	{
 		return *operator->();
 	}
 
 	template <class T> 
 	inline const T& Singleton<T>::getExemplary() const
+		throw()
 	{
 		return ((Singleton *)this)->operator->();
 	}
 		
 	template <class T>
 	inline Singleton<T>::operator T& ()
+		throw()
 	{
 		return *operator->();
 	}
 
 	template <class T>
 	inline Singleton<T>::operator T * ()
+		throw()
 	{
 		return operator->();
 	}
 
 	template <class T>
 	Size& Singleton<T>::countReferences_()
+		throw()
 	{
 		static Size references = 0;
-		
 		return references;
 	}
 

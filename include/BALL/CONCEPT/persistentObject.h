@@ -1,4 +1,4 @@
-// $Id: persistentObject.h,v 1.3 2000/08/26 14:58:15 amoll Exp $
+// $Id: persistentObject.h,v 1.4 2000/12/19 12:50:49 amoll Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENTOBJECT_H
 #define BALL_CONCEPT_PERSISTENTOBJECT_H
@@ -26,6 +26,7 @@ namespace BALL
 				The default constructor has no functionality.
 		*/
 		PersistentObject() 
+			throw()
 		{
 		}
 		
@@ -33,6 +34,7 @@ namespace BALL
 				The destructor has no functionality.
 		*/
 		virtual ~PersistentObject() 
+			throw()
 		{
 		}
 		//@}
@@ -50,7 +52,8 @@ namespace BALL
 				@param	pm	the persistence manager
 				@return the persistence manager (for chaining multiple output operations)
 		*/
-		PersistenceManager& operator >> (PersistenceManager& pm) const;
+		PersistenceManager& operator >> (PersistenceManager& pm) const
+			throw();
 
 		/**	Serialize the object.
 				This method serializes the object by calls to Layer 1 methods of \Ref{PersistenceManager}.
@@ -60,7 +63,8 @@ namespace BALL
 				@param	pm the persistence manager
 				@param	name the name of the object (0 for writing base classes)
 		*/
-		virtual void persistentWrite(PersistenceManager& pm, const char* name = "") const;
+		virtual void persistentWrite(PersistenceManager& pm, const char* name = "") const
+			throw();
 
 		/**	Deserialize the object.
 				This method reads the contents of an persistent object into an (already existing!)
@@ -72,7 +76,8 @@ namespace BALL
 				to dynamically create the object).
 				@param pm the PersistenceManager
 		*/
-		virtual void persistentRead(PersistenceManager& pm);
+		virtual void persistentRead(PersistenceManager& pm)
+			throw();
 
 		/**	Finalize the deserialization.
 				This method is called for all objects after their pointers have been demangled.
@@ -81,6 +86,7 @@ namespace BALL
 				atoms. It is usually left unimplemented.
 		*/
 		virtual void finalize()
+			throw()
 		{
 		}
 		//@}

@@ -1,4 +1,4 @@
-// $Id: object.h,v 1.8 2000/12/11 21:12:49 oliver Exp $ 
+// $Id: object.h,v 1.9 2000/12/19 12:50:49 amoll Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
@@ -42,10 +42,12 @@ namespace BALL
 		//@{
 
 		/// Default constructor.
-		Object();
+		Object()
+			throw();
  
 		/// Copy constructor
-		Object(const Object& object, bool deep = true);
+		Object(const Object& object, bool deep = true)
+			throw();
  
 		/// Destructor
 		virtual ~Object()
@@ -65,76 +67,94 @@ namespace BALL
 		/**	@name	Handle Management */
 		//@{
 		///
-		Handle getHandle() const;
+		Handle getHandle() const
+			throw();
 	
 		///
-		static Handle getNextHandle();
+		static Handle getNextHandle()
+			throw();
 	
 		///
-		static Handle getNewHandle();
+		static Handle getNewHandle()
+			throw();
 		//@}
 	
-	
-
 		/**	@name Comparison operators */
 		//@{
 		///
-		virtual bool operator == (const Object& object) const;
+		virtual bool operator == (const Object& object) const
+			throw();
 
 		///
-		bool operator != (const Object& object) const;
+		bool operator != (const Object& object) const
+			throw();
 
 		///
-		virtual bool operator < (const Object& object) const;
+		virtual bool operator < (const Object& object) const
+			throw();
 
 		///
-		bool operator <= (const Object& object) const;
+		bool operator <= (const Object& object) const
+			throw();
 
 		///
-		bool operator >= (const Object& object) const;
+		bool operator >= (const Object& object) const
+			throw();
 
 		///
-		bool operator > (const Object& object) const;
+		bool operator > (const Object& object) const
+			throw();
 
 		///
-		int compare(const Object& object) const;
+		int compare(const Object& object) const
+			throw();
 		//@}
 
 		/**	@name	I/O operations */
 		//@{
 
 		///
-		virtual void read(::std::istream& s);
+		virtual void read(::std::istream& s)
+			throw();
 
 		///
-		virtual void write(::std::ostream& s) const;
+		virtual void write(::std::ostream& s) const
+			throw();
 
 		///
-		friend ::std::istream& operator >> (::std::istream& s, Object& object);
+		friend ::std::istream& operator >> (::std::istream& s, Object& object)
+			throw();
 
 		///
-		friend ::std::ostream& operator << (::std::ostream& s, const Object& object);
+		friend ::std::ostream& operator << (::std::ostream& s, const Object& object)
+			throw();
 		//@}
 	
 		
 		/**	@name Debugging and Diagnostics */
 		//@{
 		///
-		virtual bool isValid() const;
+		virtual bool isValid() const
+			throw();
 
 		///
-		virtual void dump(::std::ostream& s = std::cout, Size depth = 0) const;
+		virtual void dump(::std::ostream& s = std::cout, Size depth = 0) const
+			throw();
 		//@}
 
 #		ifdef BALL_SUPPORT_OBJECT_MANAGER
 
-		Object* getPrevious();
+		Object* getPrevious()
+			throw();
 		
-		const Object* getPrevious() const;
+		const Object* getPrevious() const
+			throw();
 		
-		Object* getNext();
+		Object* getNext()
+			throw();
 		
-		const Object* getNext() const;
+		const Object* getNext() const
+			throw();
 
 #		endif // BALL_SUPPORT_OBJECT_MANAGER
 		
@@ -142,7 +162,7 @@ namespace BALL
 
 		private:
 
-		Handle handle_;
+		Handle				handle_;
 		static Handle global_handle_;
 
 #		ifdef BALL_SUPPORT_OBJECT_MANAGER
@@ -165,30 +185,37 @@ namespace BALL
 			//@{
 
 			///
-			static void insert(Object& object);
+			static void insert(Object& object)
+				throw();
 		
 			///
-			static void remove(Object& object);
+			static void remove(Object& object)
+				throw();
 			//@}
 		
 			/**	@name	Obejct Statistics */
 			//@{
 	
 			/// Returns the number of object insertions
-			static Size countInsertions();
+			static Size countInsertions()
+				throw();
 
 			/// Returns the number of pbject removals
-			static Size countRemovals();
+			static Size countRemovals()
+				throw();
 
 			/// Returns the number of obejct updates
-			static Size countUpdates();
+			static Size countUpdates()
+				throw();
 
 			/// Returns the total number of registered objects
-			static Size countObjects();
+			static Size countObjects()
+				throw();
 
 			/// Returns the total number of registered objects of a certain kind
 			template <typename U>
 			Size countObjects(const U& u)
+				throw()
 			{
 				Size count = 0;
 
@@ -207,10 +234,12 @@ namespace BALL
 			/**	@name	Debugging and Diagnostics */
 			//@{
 			///
-			static bool isValid();
+			static bool isValid()
+				throw();
 
 			///
-			static void dump(::std::ostream& s = std::cout, Size depth = 0);
+			static void dump(::std::ostream& s = std::cout, Size depth = 0)
+				throw();
 			//@}
 
 			typedef Object* IteratorPosition;
@@ -222,132 +251,157 @@ namespace BALL
 				BALL_CREATE_DEEP(IteratorTraits_)
 
 				IteratorTraits_()
+					throw()
 					:	bound_(0),
 						position_(0)
 				{
 				}
 			
 				IteratorTraits_(const ObjectManager& objectManager)
+					throw()
 					:	bound_((ObjectManager *)&objectManager),
 						position_(0)
 				{
 				}
 				
 				IteratorTraits_(const IteratorTraits_& traits, bool /* deep */ = true)
+					throw()
 					:	bound_(traits.bound_),
 						position_(traits.position_)
 				{
 				}
 			
-				IteratorTraits_& operator = (const IteratorTraits_& traits)
+				const IteratorTraits_& operator = (const IteratorTraits_& traits)
+					throw()
 				{
 					bound_ = traits.bound_;
 					position_ = traits.position_;
 					return *this;
 				}
 
-				ObjectManager *getContainer()
+				ObjectManager* getContainer()
+					throw()
 				{
 					return bound_;
 				}
 
-				const ObjectManager *getContainer() const
+				const ObjectManager* getContainer() const
+					throw()
 				{
 					return bound_;
 				}
 
 				bool isSingular() const
+					throw()
 				{
-					return (bool)(bound_ == 0);
+					return (bound_ == 0);
 				}
 			
 				IteratorPosition& getPosition()
+					throw()
 				{	
 					return position_;
 				}
 
 				const IteratorPosition& getPosition() const
+					throw()
 				{
 					return position_;
 				}
 
 				bool operator == (const IteratorTraits_& traits) const
+					throw()
 				{
-					return (bool)(position_ == traits.position_);
+					return (position_ == traits.position_);
 				}
 
 				bool operator !=(const IteratorTraits_& traits) const
+					throw()
 				{
-					return (bool)(position_ != traits.position_);
+					return (position_ != traits.position_);
 				}
 			
 				bool isValid() const
+					throw()
 				{
-					return (bool)(bound_ != 0 && position_ != 0);
+					return (bound_ != 0 && position_ != 0);
 				}
 
 				void invalidate()
+					throw()
 				{
 					bound_ = 0;
 					position_ = 0;
 				}
 
 				void toBegin()
+					throw()
 				{
 					position_ = bound_->first_;
 				}
 
 				bool isBegin() const
+					throw()
 				{
-					return (bool)(position_ == bound_->first_);
+					return (position_ == bound_->first_);
 				}
 
 				void toEnd()
+					throw()
 				{
 					position_ = 0;
 				}
 
 				bool isEnd() const
+					throw()
 				{
-					return (bool)(position_ == 0);
+					return (position_ == 0);
 				}
 
 				Object& getData()
+					throw()
 				{
 					return *position_;
 				}
 
 				const Object& getData() const
+					throw()
 				{
 					return *position_;
 				}
 
 				void forward()
+					throw()
 				{	
 					position_ = position_->getNext();
 				}
 
 				void toRBegin()
+					throw()
 				{
 					position_ = bound_->last_;
 				}
 
 				bool isRBegin() const
+					throw()
 				{
-					return (bool)(position_ == bound_->last_);
+					return (position_ == bound_->last_);
 				}
 
 				void toREnd()
+					throw()
 				{
 					position_ = 0;
 				}
 
 				bool isREnd() const
+					throw()
 				{
-					return (bool)(position_ == 0);
+					return (position_ == 0);
 				}
 
 				void backward()
+					throw()
 				{
 					position_ = position_->getPrevious();
 				}
@@ -365,12 +419,14 @@ namespace BALL
 			typedef BidirectionalIterator<ObjectManager, Object, Object *, IteratorTraits_> ObjectIterator;
 
 			static ObjectIterator begin()
+				throw()
 			{
 				ObjectManager object_manager;
 				return ObjectIterator::begin(object_manager);
 			}
 
 			static ObjectIterator end()
+				throw()
 			{
 				ObjectManager object_manager;
 				return ObjectIterator::end(object_manager);
@@ -381,12 +437,14 @@ namespace BALL
 			typedef ReverseBidirectionalIterator<ObjectManager, Object, Object *, IteratorTraits_> ReverseObjectIterator;
 
 			static ReverseObjectIterator rbegin()
+				throw()
 			{
 				ObjectManager object_manager;
 				return ReverseObjectIterator::begin(object_manager);
 			}
 
 			static ReverseObjectIterator rend()
+				throw()
 			{
 				ObjectManager object_manager;
 				return ReverseObjectIterator::end(object_manager);
@@ -397,6 +455,7 @@ namespace BALL
 		private:
 
 			ObjectManager()
+				throw()
 			{
 			}
 

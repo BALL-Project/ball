@@ -1,4 +1,4 @@
-// $Id: embeddable.C,v 1.5 2000/10/24 21:38:50 amoll Exp $
+// $Id: embeddable.C,v 1.6 2000/12/19 12:51:05 amoll Exp $
 
 #include <BALL/CONCEPT/embeddable.h>
 
@@ -7,16 +7,19 @@ using namespace std;
 namespace BALL
 {
 	Embeddable::Embeddable(const String& identifier)
+		throw()
 		:	identifier_(identifier)
 	{
 	}
 	
 	Embeddable::Embeddable(const Embeddable& embeddable)
+		throw()
 		:	identifier_(embeddable.identifier_)
 	{
 	}
 	
 	Embeddable::~Embeddable()
+		throw()
 	{
 		// make sure destructed instances are securely unregistered
 		unregisterInstance_(this);
@@ -24,11 +27,13 @@ namespace BALL
 	}
 
 	const String& Embeddable::getIdentifier() const
+		throw()
 	{
 		return identifier_;
 	}
 
 	void Embeddable::setIdentifier(const String& identifier)
+		throw()
 	{
 		identifier_ = identifier;
 	}

@@ -1,4 +1,4 @@
-// $Id: predicate.h,v 1.5 2000/06/07 22:19:46 oliver Exp $
+// $Id: predicate.h,v 1.6 2000/12/19 12:50:54 amoll Exp $
 
 #ifndef BALL_KERNEL_PREDICATE_H
 #define BALL_KERNEL_PREDICATE_H
@@ -58,11 +58,13 @@ namespace BALL
 		public:
 
 		/// Constant virtual RTTI evaluation operator
-		virtual bool operator () (const Composite& composite) const;
+		virtual bool operator () (const Composite& composite) const
+			throw();
 	};
 
 	template <class T>
 	bool KernelPredicate<T>::operator () (const Composite& composite) const
+		throw()
 	{
 		return RTTI::isKindOf<T>(composite);
 	}

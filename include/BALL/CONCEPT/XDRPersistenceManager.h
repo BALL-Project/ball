@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.h,v 1.13 2000/12/12 16:18:08 oliver Exp $
+// $Id: XDRPersistenceManager.h,v 1.14 2000/12/19 12:50:48 amoll Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -49,19 +49,23 @@ namespace BALL
 		
 		/**	Default constructor.
 		*/
-		XDRPersistenceManager();
+		XDRPersistenceManager()
+      throw();
 
 		/**	Detailed constructor with an input stream
 		*/
-		XDRPersistenceManager(std::istream& is);
+		XDRPersistenceManager(std::istream& is)
+      throw();
 
 		/**	Detailed constructor with an output stream
 		*/
-		XDRPersistenceManager(std::ostream& os);
+		XDRPersistenceManager(std::ostream& os)
+      throw();
 
 		/**	Detailed constructor with an input stream and an output stream.
 		*/
-		XDRPersistenceManager(std::istream& is, std::ostream& os);
+		XDRPersistenceManager(std::istream& is, std::ostream& os)
+      throw();
 		//@}
 		
 		/**	@name	Layer 0 methods
@@ -72,139 +76,170 @@ namespace BALL
 				This method stores \Ref{OBJECT_HEADER} as an int value to mark the
 				start of an object (using {\tt xdr_int}).
 		*/
-		virtual void writeHeader(const char* type_name, const char* name, PointerSizeInt ptr);
+		virtual void writeHeader(const char* type_name, const char* name, PointerSizeInt ptr)
+      throw();
 
 		/**	Check for an object header.
 				This method reads an int form the input stream (using {\tt xdr_int}) and
 				returns {\bf true} if the value read equals \Ref{OBJECT_HEADER}.
 		*/
-		virtual bool checkHeader(const char* type_name, const char* name, PointerSizeInt& ptr);
+		virtual bool checkHeader(const char* type_name, const char* name, PointerSizeInt& ptr)
+      throw();
 
 		/** Write an object trailer.
 				This method stores \Ref{OBJECT_TRAILER} as an int value to mark the
 				start of an object (using {\tt xdr_int}).
 		*/
-		virtual void writeTrailer(const char* name = 0);
+		virtual void writeTrailer(const char* name = 0)
+      throw();
 
 		/**	Check for an object trailer.
 				This method reads an int form the input stream (using {\tt xdr_int}) and
 				returns {\bf true} if the value read equals \Ref{OBJECT_TRAILER}.
 		*/
-		virtual bool checkTrailer(const char* name = 0);
+		virtual bool checkTrailer(const char* name = 0)
+      throw();
 
 		/**	Write a start marker to the output stream.
 		*/
-		virtual void writeStreamHeader();
+		virtual void writeStreamHeader()
+      throw();
 
 		/**	Write an end marker to the output stream.
 		*/
-		virtual void writeStreamTrailer();
+		virtual void writeStreamTrailer()
+      throw();
 
 		/**	Check for the start marker in the input stream.
 		*/
-		virtual bool checkStreamHeader();
+		virtual bool checkStreamHeader()
+      throw();
 
 		/**	Check for the end marker in the output stream.
 		*/
-		virtual bool checkStreamTrailer();
+		virtual bool checkStreamTrailer()
+      throw();
 
 		/**	Get an (unknown) object header.
 		*/
-		virtual bool getObjectHeader(String& type_name, PointerSizeInt& ptr);
+		virtual bool getObjectHeader(String& type_name, PointerSizeInt& ptr)
+      throw();
 
 		/**	Write a variable/member name.
 		*/
-		virtual void writeName(const char* name);
+		virtual void writeName(const char* name)
+      throw();
 
 		/** Check for variable/member name.
 		*/
-		virtual bool checkName(const char* name);
+		virtual bool checkName(const char* name)
+      throw();
 
 		/**	Write storable object header.
 		*/
-		virtual void writeStorableHeader(const char* type_name, const char* name);
+		virtual void writeStorableHeader(const char* type_name, const char* name)
+      throw();
 			
 		/**	Check for storable object header.
 		*/
-		virtual bool checkStorableHeader(const char* type_name, const char* name);
+		virtual bool checkStorableHeader(const char* type_name, const char* name)
+      throw();
 
 		/**	Write type header and name for a primitive type.
 		*/
-		virtual void writePrimitiveHeader(const char* type_name, const char* name);
+		virtual void writePrimitiveHeader(const char* type_name, const char* name)
+      throw();
 
 		/**	Check for a type header and name for a primitive type.
 		*/
-		virtual bool checkPrimitiveHeader(const char* type_name, const char* name);
+		virtual bool checkPrimitiveHeader(const char* type_name, const char* name)
+      throw();
 
 		/**	Write storable object trailer.
 		*/
-		virtual void writeStorableTrailer();
+		virtual void writeStorableTrailer()
+      throw();
 			
 		/**	Check for storable object trailer.
 		*/
-		virtual bool checkStorableTrailer();
+		virtual bool checkStorableTrailer()
+      throw();
 
 		/**	Write the trailer for a primitive type.
 		*/
-		virtual void writePrimitiveTrailer();
+		virtual void writePrimitiveTrailer()
+      throw();
 
 		/**	Check the trailer of a primitive type.
 		*/
-		virtual bool checkPrimitiveTrailer();
+		virtual bool checkPrimitiveTrailer()
+      throw();
 
 		/**	Write header for a pointer to a PersistentObject.
 		*/
-		virtual void writeObjectPointerHeader(const char* type_name, const char* name);
+		virtual void writeObjectPointerHeader(const char* type_name, const char* name)
+      throw();
 
 		/**	Check for header for a pointer to a PersistentObject.
 		*/
-		virtual bool checkObjectPointerHeader(const char* type_name, const char* name);
+		virtual bool checkObjectPointerHeader(const char* type_name, const char* name)
+      throw();
 
 		/**	Write header for a reference to a PersistentObject.
 		*/
-		virtual void writeObjectReferenceHeader(const char* type_name, const char* name);
+		virtual void writeObjectReferenceHeader(const char* type_name, const char* name)
+      throw();
 
 		/**	Check for header for a reference to a PersistentObject.
 		*/
-		virtual bool checkObjectReferenceHeader(const char* type_name, const char* name);
+		virtual bool checkObjectReferenceHeader(const char* type_name, const char* name)
+      throw();
 
 		/**	Write header for an array of pointers to PersistentObjects.
 		*/
-		virtual void writeObjectPointerArrayHeader(const char* type_name, const char* name, Size size);
+		virtual void writeObjectPointerArrayHeader(const char* type_name, const char* name, Size size)
+      throw();
 
 		/**	Check for header for an array of pointers to PersistentObjects.
 		*/
-		virtual bool checkObjectPointerArrayHeader(const char* type_name, const char* name, Size& size);
+		virtual bool checkObjectPointerArrayHeader(const char* type_name, const char* name, Size& size)
+      throw();
 
 		/**	Write trailer for an array of pointers to PersistentObjects.
 		*/
-		virtual void writeObjectPointerArrayTrailer();
+		virtual void writeObjectPointerArrayTrailer()
+      throw();
 
 		/**	Check for trailer for an array of pointers to PersistentObjects.
 		*/
-		virtual bool checkObjectPointerArrayTrailer();
+		virtual bool checkObjectPointerArrayTrailer()
+      throw();
 
 		/**	Prepare the stream for output.
 				This method creates an XDR output stream (using xdrrec_create) and
 				prepares it for output.
 		*/
-		virtual void initializeOutputStream();
+		virtual void initializeOutputStream()
+      throw();
 
 		/**	Prepare the stream for closing.
 				This method destroys the XDR output stream (using xdr_destroy).
 		*/
-		virtual void finalizeOutputStream();
+		virtual void finalizeOutputStream()
+      throw();
 
 		/**	Prepare the stream for output.
 				This method creates an XDR output stream (using xdrrec_create) and
 				prepares it for output.
 		*/
-		virtual void initializeInputStream();
+		virtual void initializeInputStream()
+      throw();
 
 		/**	Prepare the stream for closing.
 				This method destroys the XDR output stream (using xdr_destroy).
 		*/
-		virtual void finalizeInputStream();
+		virtual void finalizeInputStream()
+      throw();
 
 		//@}
 
@@ -214,39 +249,48 @@ namespace BALL
 		
 		/**	Write a signed char to the output stream.
 		*/
-		virtual void put(const char c);
+		virtual void put(const char c)
+      throw();
 
 		/**	Write a single byte the output stream.
 		*/
-		virtual void put(const Byte b);
+		virtual void put(const Byte b)
+      throw();
 
 		/**	Write an Index to the output stream.
 		*/
-		virtual void put(const Index i);
+		virtual void put(const Index i)
+      throw();
 
 		/**	Write a Size or a Position to the output stream.
 		*/
-		virtual void put(const Size s);
+		virtual void put(const Size s)
+      throw();
 
 		/**	Write a boolean value to the output stream.
 		*/
-		virtual void put(const bool b);
+		virtual void put(const bool b)
+      throw();
 
 		/**	Write a single precision floating point number to the output stream.
 		*/
-		virtual void put(const Real f);
+		virtual void put(const Real f)
+      throw();
 
 		/**	Write a double precision floating point number to the output stream.
 		*/
-		virtual void put(const DoubleReal d);
+		virtual void put(const DoubleReal d)
+      throw();
 
 		/**	Write a string to the output.
 		*/
-		virtual void put(const string& s);
+		virtual void put(const string& s)
+      throw();
 
 		/**	Write a pointer to the output.
 		*/
-		virtual void put(const PointerSizeInt p);
+		virtual void put(const PointerSizeInt p)
+      throw();
 		//@}
 
 		/**	@name	Get methods for primitive data types.
@@ -255,39 +299,48 @@ namespace BALL
 
 		/**	Read a signed char from the input stream.
 		*/
-		virtual void get(char& c);
+		virtual void get(char& c)
+      throw();
 
 		/**	Read a single byte from the input stream.
 		*/
-		virtual void get(Byte& c);
+		virtual void get(Byte& c)
+      throw();
 
 		/**	Read an Index from the input stream.
 		*/
-		virtual void get(Index& s);
+		virtual void get(Index& s)
+      throw();
 
 		/**	Read a Size or a Position from the input stream.
 		*/
-		virtual void get(Size& s);
+		virtual void get(Size& s)
+      throw();
 
 		/**	Read a boolean value from the input stream.
 		*/
-		virtual void get(bool& b);
+		virtual void get(bool& b)
+      throw();
 
 		/**	Read a single precision floating point number from the input stream.
 		*/
-		virtual void get(Real& f);
+		virtual void get(Real& f)
+      throw();
 
 		/**	Read a double precision floating point number from the input stream.
 		*/
-		virtual void get(DoubleReal& d);
+		virtual void get(DoubleReal& d)
+      throw();
 
 		/**	Read a string from the output stream.
 		*/
-		virtual void get(string& s);
+		virtual void get(string& s)
+      throw();
 
 		/**	Read a pointer from the input stream.
 		*/
-		virtual void get(PointerSizeInt& p);
+		virtual void get(PointerSizeInt& p)
+      throw();
 		//@}
 
 		private:

@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.18 2000/10/29 21:25:47 amoll Exp $
+// $Id: selector.C,v 1.19 2000/12/19 12:51:09 amoll Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -15,32 +15,38 @@ namespace BALL
 {
 	
 	Selector::Selector()
+		throw()
 		:	number_of_selected_atoms_(0)
 	{
 	}
 	
 	Selector::Selector(const String& expression_string)
+		throw()
 		:	number_of_selected_atoms_(0),
 			expression_(expression_string)
 	{
 	}
 
 	Selector::Selector(const Selector& selector)
+		throw()
 		:	UnaryProcessor<Composite>(),
 			number_of_selected_atoms_(selector.number_of_selected_atoms_)
 	{
 	}
 
 	Selector::~Selector()
+		throw()
 	{
 	}
 
 	Size Selector::getNumberOfSelectedAtoms() const
+		throw()
 	{
 		return number_of_selected_atoms_;
 	}
 
 	bool Selector::start() 
+		throw()
 	{
 		// reset the number of selected atoms
 		number_of_selected_atoms_ = 0;
@@ -50,6 +56,7 @@ namespace BALL
 	}
 
   Processor::Result Selector::operator () (Composite& composite)
+		throw()
   {
 		// if the composite is an atom, we apply the expression tree...
 		if (RTTI::isKindOf<Atom>(composite))

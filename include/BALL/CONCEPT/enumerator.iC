@@ -1,7 +1,8 @@
-// $Id: enumerator.iC,v 1.1 2000/06/14 14:45:35 anker Exp $
+// $Id: enumerator.iC,v 1.2 2000/12/19 12:50:49 amoll Exp $
 
 BALL_INLINE
 const vector<Size>& EnumeratorIndex::getModulus() const
+	throw()
 {
 	return modulus_;
 }

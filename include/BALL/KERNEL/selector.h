@@ -1,4 +1,4 @@
-// $Id: selector.h,v 1.12 2000/08/30 19:58:11 oliver Exp $
+// $Id: selector.h,v 1.13 2000/12/19 12:50:54 amoll Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -42,19 +42,23 @@ namespace BALL
 		BALL_CREATE(Selector)
 		/**	Default constructor.
 		*/
-		Selector();
+		Selector()
+			throw();
 
 		/**	Copy constructor.
 		*/
-		Selector(const Selector& selector);
+		Selector(const Selector& selector)
+			throw();
 
 		/** Construct a Selector with a string.
 		*/
-		Selector(const String& expression_string);
+		Selector(const String& expression_string)
+			throw();
 
 		/** Destructor.
 		*/
-		virtual ~Selector();
+		virtual ~Selector()
+			throw();
 		//@}
 
 		/**	@name	Processor related methods
@@ -62,13 +66,15 @@ namespace BALL
 		//@{
 		/**
 		*/
-		virtual Processor::Result operator () (Composite& composite);
+		virtual Processor::Result operator () (Composite& composite)
+			throw();
 		
 		/**	Processor start method.
 				This method is needed to reset the internal counter for the number of
 				selected atoms.
 		*/
-		virtual bool start();
+		virtual bool start()
+			throw();
 		//@}
 
 		/**	@name	Accessors
@@ -77,7 +83,8 @@ namespace BALL
 
 		/**	Return the number of atoms selected during the last application.
 		*/
-		Size getNumberOfSelectedAtoms() const;
+		Size getNumberOfSelectedAtoms() const
+			throw();
 				
 		//@}
 			

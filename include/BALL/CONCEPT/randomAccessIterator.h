@@ -1,4 +1,4 @@
-// $Id: randomAccessIterator.h,v 1.3 2000/01/03 15:15:34 oliver Exp $ 
+// $Id: randomAccessIterator.h,v 1.4 2000/12/19 12:50:50 amoll Exp $ 
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
 #define BALL_CONCEPT_RANDOMACCESSITERATOR_H
@@ -38,6 +38,7 @@ namespace BALL
 		/**
 		*/
 		RandomAccessIterator()
+			throw()
 			:	BaseIterator<Container, DataType, Position, Traits>()
 		{
 		}
@@ -45,6 +46,7 @@ namespace BALL
 		/**
 		*/
 		RandomAccessIterator(const RandomAccessIterator &iterator)
+			throw()
 			:	BaseIterator<Container, DataType, Position, Traits>(iterator)
 		{
 		}
@@ -52,95 +54,126 @@ namespace BALL
 		/**
 		*/
 		RandomAccessIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
+			throw()
 			:	BaseIterator<Container, DataType, Position, Traits>(iterator)
 		{
 		}
 		//@}
 
 		bool operator + () const
+			throw()
 		{
 			return traits_ptr_->isValid();
 		}
 
 		bool operator - () const
+			throw()
 		{
-			return (bool)(traits_ptr_->isValid() == false);
+			return (traits_ptr_->isValid() == false);
 		}
 
 		void toBegin()
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			traits_ptr_->toBegin();
 		}
 
 		bool isBegin() const
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			return traits_ptr_->isBegin();
 		}
 
 		void toEnd()
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			traits_ptr_->toEnd();
 		}
 
 		bool isEnd() const
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			return traits_ptr_->isEnd();
 		}
 
 		void toRBegin()
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			traits_ptr_->toRBegin();
 		}
 
 		bool isRBegin() const
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			return traits_ptr_->isRBegin();
 		}
 
 		void toREnd()
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			traits_ptr_->toREnd();
 		}
 
 		bool isREnd() const
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			return traits_ptr_->isREnd();
 		}
 
 		RandomAccessIterator &operator ++ ()
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			traits_ptr_->forward();
 			return *this;
 		}
 
 		RandomAccessIterator operator ++ (int)
+			throw(Exception::InvalidIterator)
 		{
 			RandomAccessIterator iterator(*this);
 			++(*this);
@@ -148,15 +181,19 @@ namespace BALL
 		}
 
 		RandomAccessIterator &operator -- ()
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			traits_ptr_->backward();
 			return *this;
 		}
 
 		RandomAccessIterator operator -- (int)
+			throw(Exception::InvalidIterator)
 		{
 			RandomAccessIterator iterator(*this);
 			--(*this);
@@ -164,36 +201,49 @@ namespace BALL
 		}
 
 		RandomAccessIterator &operator += (Distance distance)
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			if (distance < (Distance)0)
+			{
 				return (*this -= -distance);
+			}
 
 			traits_ptr_->forward(distance);
 			return *this;
 		}
 
 		RandomAccessIterator &operator -= (Distance distance)
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			if (distance < (Distance)0)
+			{
 				return (*this += -distance);
+			}
 
 			if (traits_ptr_->isEnd() == true)
 			{
 				traits_ptr_->toRBegin();
 				traits_ptr_->backward(distance - 1);
-			} else {
+			}
+			else 
+			{
 				traits_ptr_->backward(distance);
 			}
 			return *this;
 		}
 
 		RandomAccessIterator operator + (Distance distance) const
+			throw(Exception::InvalidIterator)
 		{
 			RandomAccessIterator iterator(*this);
 			return (iterator += distance);
@@ -201,12 +251,14 @@ namespace BALL
 
 		friend RandomAccessIterator operator +
 			(Distance distance, const RandomAccessIterator &iterator)
+			throw(Exception::InvalidIterator)
 		{
 			RandomAccessIterator tmp_iterator(iterator);
 			return (tmp_iterator += distance);
 		}
 
 		RandomAccessIterator operator - (Distance distance) const
+			throw(Exception::InvalidIterator)
 		{
 			RandomAccessIterator iterator(*this);
 			return (iterator -= distance);
@@ -214,151 +266,221 @@ namespace BALL
 
 		friend Distance operator -
 			(const RandomAccessIterator &a, const RandomAccessIterator &b)
+			throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 		{
 			if (!a.traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (!b.traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (a.traits_ptr_->getContainer() != b.traits_ptr_->getContainer())
+			{
 				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
- 
-			return a.traits_ptr_->getDistance
-				 (*(b.traits_ptr_));
+			}
+			return a.traits_ptr_->getDistance(*(b.traits_ptr_));
 		}
 
 		bool operator < (const RandomAccessIterator &iterator) const
+			throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (!iterator.traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+			{
 				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
+			}
 
-			return (bool)(*traits_ptr_ < *iterator.traits_ptr_);
+			return (*traits_ptr_ < *iterator.traits_ptr_);
 		}
 
 		bool operator <= (const RandomAccessIterator &iterator) const
+			throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (!iterator.traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+			{
 				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
+			}
 
-			return (bool)!(*iterator.traits_ptr_ < *traits_ptr_);
+			return !(*iterator.traits_ptr_ < *traits_ptr_);
 		}
 
 		bool operator >= (const RandomAccessIterator &iterator) const
+			throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (!iterator.traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+			{
 				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
+			}
 
-			return (bool)!(*traits_ptr_ < *iterator.traits_ptr_);
+			return !(*traits_ptr_ < *iterator.traits_ptr_);
 		}
 
 		bool operator > (const RandomAccessIterator &iterator) const
+			throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (!iterator.traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+			{
 				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
+			}
 
-			return (bool)(*iterator.traits_ptr_ < *traits_ptr_);
+			return (*iterator.traits_ptr_ < *traits_ptr_);
 		}
 
 		DataType* findFirst(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			for(traits_ptr_->toBegin(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
+			{
 				if (predicate((const DataType &)traits_ptr_->getData()) == true)
+				{
 					return (DataType *)&(traits_ptr_->getData());
+				}
+			}
 
 			return 0;
 		}
 	
 		const DataType* findFirst(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return ((RandomAccessIterator *)this)->findFirst(predicate);
 		}
 
 		DataType* findLast(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			for(traits_ptr_->toRBegin(); traits_ptr_->isREnd() == false; traits_ptr_->backward())
+			{
 				if (predicate((const DataType &)traits_ptr_->getData()) == true)
+				{
 					return (DataType *)&(traits_ptr_->getData());
+				}
+			}
 
 			return 0;
 		}
 	
 		const DataType* findLast(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return ((RandomAccessIterator *)this)->findLast(predicate);
 		}
 
 		DataType* findNext(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+			}
 			for(traits_ptr_->forward(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
+			{
 				if (predicate((const DataType &)traits_ptr_->getData()) == true)
+				{
 					return (DataType *)&(traits_ptr_->getData());
+				}
+			}
 
 			return 0;
 		}
 	
 		const DataType* findNext(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return ((RandomAccessIterator *)this)->findNext(predicate);
 		}
 
 		DataType* findPrevious(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			for(traits_ptr_->backward(); traits_ptr_->isREnd() == false; traits_ptr_->backward())
+			{
 				if (predicate((const DataType &)traits_ptr_->getData()) == true)
+				{
 					return (DataType *)&(traits_ptr_->getData());
-
+				}
+			}
 			return 0;
 		}
 	
 		const DataType* findPrevious(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return ((RandomAccessIterator *)this)->findPrevious(predicate);
 		}
 
 		DataType &operator [] (Index index)
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			return (DataType &)traits_ptr_->getData(index);
 		}
 
 		const DataType &operator [] (Index index) const
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			return (const DataType &)traits_ptr_->getData(index);
 		}
 
 		static RandomAccessIterator begin(const Container& container)
+			throw(Exception::InvalidIterator)
 		{
 			RandomAccessIterator iterator(container);
 			iterator.toBegin();
@@ -366,6 +488,7 @@ namespace BALL
 		}
 
 		static RandomAccessIterator end(const Container& container)
+			throw(Exception::InvalidIterator)
 		{
 			RandomAccessIterator iterator(container);
 			iterator.toEnd();
@@ -373,6 +496,7 @@ namespace BALL
 		}
 
 		static RandomAccessIterator rbegin(const Container& container)
+			throw(Exception::InvalidIterator)
 		{
 			RandomAccessIterator iterator(container);
 			iterator.toRBegin();
@@ -380,6 +504,7 @@ namespace BALL
 		}
 
 		static RandomAccessIterator rend(const Container& container)
+			throw(Exception::InvalidIterator)
 		{
 			RandomAccessIterator iterator(container);
 			iterator.toREnd();
@@ -389,6 +514,7 @@ namespace BALL
 		protected:
 
 		RandomAccessIterator(const Container& container)
+			throw()
 			:	BaseIterator<Container, DataType, Position, Traits>(container)
 		{
 		}
@@ -411,6 +537,7 @@ namespace BALL
 		/**
 		*/
 		ConstRandomAccessIterator()
+			throw()
 			:	ConstBaseIterator<Container, DataType, Position, Traits>()
 		{
 		}
@@ -418,6 +545,7 @@ namespace BALL
 		/**
 		*/
 		ConstRandomAccessIterator(const ConstRandomAccessIterator &iterator)
+			throw()
 			:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
 		{
 		}
@@ -425,95 +553,119 @@ namespace BALL
 		/**
 		*/
 		ConstRandomAccessIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
+			throw()
 			:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
 		{
 		}
 		//@}
 
 		bool operator + () const
+			throw()
 		{
 			return traits_ptr_->isValid();
 		}
 
 		bool operator - () const
+			throw()
 		{
-			return (bool)(traits_ptr_->isValid() == false);
+			return (traits_ptr_->isValid() == false);
 		}
 
 		void toBegin()
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+			}
 			traits_ptr_->toBegin();
 		}
 
 		bool isBegin() const
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
- 
+			}
 			return traits_ptr_->isBegin();
 		}
 
 		void toEnd()
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
- 
+ 			}
 			traits_ptr_->toEnd();
 		}
 
 		bool isEnd() const
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+			}
 			return traits_ptr_->isEnd();
 		}
 
 		void toRBegin()
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+			}
 			traits_ptr_->toRBegin();
 		}
 
 		bool isRBegin() const
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			return traits_ptr_->isRBegin();
 		}
 
 		void toREnd()
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}	
 
 			traits_ptr_->toREnd();
 		}
 
 		bool isREnd() const
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+			}
 			return traits_ptr_->isREnd();
 		}
 
 		ConstRandomAccessIterator &operator ++ ()
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+			}
 			traits_ptr_->forward();
 			return *this;
 		}
 
 		ConstRandomAccessIterator operator ++ (int)
+			throw(Exception::InvalidIterator)
 		{
 			ConstRandomAccessIterator iterator(*this);
 			++(*this);
@@ -521,15 +673,18 @@ namespace BALL
 		}
 
 		ConstRandomAccessIterator &operator -- ()
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+			}
 			traits_ptr_->backward();
 			return *this;
 		}
 
 		ConstRandomAccessIterator operator -- (int)
+			throw(Exception::InvalidIterator)
 		{
 			ConstRandomAccessIterator iterator(*this);
 			--(*this);
@@ -537,36 +692,45 @@ namespace BALL
 		}
 
 		ConstRandomAccessIterator &operator += (Distance distance)
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+			}
 			if (distance < (Distance)0)
+			{
 				return (*this -= -distance);
-
+			}
 			traits_ptr_->forward(distance);
 			return *this;
 		}
 
 		ConstRandomAccessIterator &operator -= (Distance distance)
+			throw(Exception::InvalidIterator)
 		{
 			if (traits_ptr_->isSingular())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
-	
+			}
 			if (distance < (Distance)0)
+			{
 				return (*this += -distance);
-
+			}
 			if (traits_ptr_->isEnd() == true)
 			{
 				traits_ptr_->toRBegin();
 				traits_ptr_->backward(distance - 1);
-			} else {
+			}
+			else 
+			{
 				traits_ptr_->backward(distance);
 			}
 			return *this;
 		}
 
 		ConstRandomAccessIterator operator + (Distance distance) const
+			throw(Exception::InvalidIterator)
 		{
 			ConstRandomAccessIterator iterator(*this);
 			return (iterator += distance);
@@ -574,12 +738,14 @@ namespace BALL
 
 		friend ConstRandomAccessIterator operator +
 			(Distance distance, const ConstRandomAccessIterator &iterator)
+			throw(Exception::InvalidIterator)
 		{
 			ConstRandomAccessIterator tmp_iterator(iterator);
 			return (tmp_iterator += distance);
 		}
 
 		ConstRandomAccessIterator operator - (Distance distance) const
+			throw(Exception::InvalidIterator)
 		{
 			ConstRandomAccessIterator iterator(*this);
 			return (iterator -= distance);
@@ -587,142 +753,203 @@ namespace BALL
 
 		friend Distance operator -
 			(const ConstRandomAccessIterator &a, const ConstRandomAccessIterator &b)
+			throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 		{
 			if (!a.traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (!b.traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (a.traits_ptr_->getContainer() != b.traits_ptr_->getContainer())
+			{
 				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
-
+			}
 			return a.traits_ptr_->getDistance(*(b.traits_ptr_));
 		}
 
 		bool operator < (const ConstRandomAccessIterator &iterator) const
+			throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (!iterator.traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);				
+			}
 			if (traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+			{
 				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
+			}
 
-			return (bool)(*traits_ptr_ < *iterator.traits_ptr_);
+			return (*traits_ptr_ < *iterator.traits_ptr_);
 		}
 
 		bool operator <= (const ConstRandomAccessIterator &iterator) const
+			throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (!iterator.traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+			{
 				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
-
-			return (bool)!(*iterator.traits_ptr_ < *traits_ptr_);
+			}
+			return !(*iterator.traits_ptr_ < *traits_ptr_);
 		}
 
 		bool operator >= (const ConstRandomAccessIterator &iterator) const
+			throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (!iterator.traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+			{
 				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
+			}
 
-			return (bool)!(*traits_ptr_ < *iterator.traits_ptr_);
+			return !(*traits_ptr_ < *iterator.traits_ptr_);
 		}
 
 		bool operator > (const ConstRandomAccessIterator &iterator) const
+			throw(Exception::InvalidIterator, Exception::IncompatibleIterators)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (!iterator.traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 			if (traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+			{
 				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
+			}
 
-			return (bool)(*iterator.traits_ptr_ < *traits_ptr_);
+			return (*iterator.traits_ptr_ < *traits_ptr_);
 		}
 
 		const DataType* findFirst(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+			}
 			for(traits_ptr_->toBegin(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
+			{
 				if (predicate((const DataType &)traits_ptr_->getData()) == true)
+				{
 					return (const DataType *)&(traits_ptr_->getData());
-
+				}
+			}
 			return 0;
 		}
 	
 		const DataType* findFirst(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return ((ConstRandomAccessIterator *)this)->findFirst(predicate);
 		}
 
 		const DataType* findLast(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+			}
 			for(traits_ptr_->toRBegin(); traits_ptr_->isREnd() == false; traits_ptr_->backward())
+			{
 				if (predicate((const DataType &)traits_ptr_->getData()) == true)
+				{
 					return (const DataType *)&(traits_ptr_->getData());
-
+				}
+			}
 			return 0;
 		}
 	
 		const DataType* findLast(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return ((ConstRandomAccessIterator *)this)->findLast(predicate);
 		}
 
 		const DataType* findNext(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+			}
 			for(traits_ptr_->forward(); traits_ptr_->isEnd() == false; traits_ptr_->forward())
+			{
 				if (predicate((const DataType &)traits_ptr_->getData()) == true)
+				{
 					return (const DataType *)&(traits_ptr_->getData());
-
+				}
+			}
 			return 0;
 		}
 	
 		const DataType* findNext(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return ((ConstRandomAccessIterator *)this)->findNext(predicate);
 		}
 
 		const DataType* findPrevious(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
-
+			}
 			for(traits_ptr_->backward(); traits_ptr_->isREnd() == false; traits_ptr_->backward())
+			{
 				if (predicate((const DataType &)traits_ptr_->getData()) == true)
+				{
 					return (const DataType *)&(traits_ptr_->getData());
-
+				}
+			}
 			return 0;
 		}
 	
 		const DataType* findPrevious(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return ((ConstRandomAccessIterator *)this)->findPrevious(predicate);
 		}
 
 		const DataType &operator [] (Index index) const
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			return (const DataType &)traits_ptr_->getData(index);
 		}
 
 		static ConstRandomAccessIterator begin(const Container& container)
+			throw(Exception::InvalidIterator)
 		{
 			ConstRandomAccessIterator iterator(container);
 			iterator.toBegin();
@@ -730,6 +957,7 @@ namespace BALL
 		}
 
 		static ConstRandomAccessIterator end(const Container& container)
+			throw(Exception::InvalidIterator)
 		{
 			ConstRandomAccessIterator iterator(container);
 			iterator.toEnd();
@@ -737,6 +965,7 @@ namespace BALL
 		}
 
 		static ConstRandomAccessIterator rbegin(const Container& container)
+			throw(Exception::InvalidIterator)
 		{
 			ConstRandomAccessIterator iterator(container);
 			iterator.toRBegin();
@@ -744,6 +973,7 @@ namespace BALL
 		}
 
 		static ConstRandomAccessIterator rend(const Container& container)
+			throw(Exception::InvalidIterator)
 		{
 			ConstRandomAccessIterator iterator(container);
 			iterator.toREnd();
@@ -753,6 +983,7 @@ namespace BALL
 		protected:
 
 		ConstRandomAccessIterator(const Container& container)
+			throw()
 			:	ConstBaseIterator<Container, DataType, Position, Traits>(container)
 		{
 		}

@@ -1,4 +1,4 @@
-// $Id: embeddable.h,v 1.4 2000/07/18 21:24:58 oliver Exp $
+// $Id: embeddable.h,v 1.5 2000/12/19 12:50:48 amoll Exp $
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
 #define BALL_CONCEPT_EMBEDDABLE_H
@@ -57,15 +57,18 @@ namespace BALL
 
 		/**	Default constructor
 		*/
-		Embeddable(const String& identifier = "<Embeddable>");
+		Embeddable(const String& identifier = "<Embeddable>")
+			throw();
 		
 		/**	Copy constructor
 		*/
-		Embeddable(const Embeddable& embeddable);
+		Embeddable(const Embeddable& embeddable)
+			throw();
 		
 		/**
 		*/
-		virtual ~Embeddable();
+		virtual ~Embeddable()
+			throw();
 		//@}
 
 		/**	@name	Accessors
@@ -74,15 +77,18 @@ namespace BALL
 
 		/**	Return the instance identifier
 		*/
-		void setIdentifier(const String& identifier);
+		void setIdentifier(const String& identifier)
+			throw();
 
 		/**	Assign a new identifier
 		*/
-		const String& getIdentifier() const;
+		const String& getIdentifier() const
+			throw();
 
 		/**	Unregister the instance.
 		*/
-		void unregisterThis() throw();
+		void unregisterThis()
+			throw();
 
 		/**	Register the instance.
 				DO NOT IMPLEMENT THIS METHOD! It is automatically implemented
@@ -90,32 +96,38 @@ namespace BALL
 				definition.
 				@see getInstanceList
 		*/
-		virtual void registerThis() throw();	
+		virtual void registerThis()
+			throw();	
 
 		//@}
 			
 		protected:
 		/**
 		*/
-		static void registerInstance_(const std::type_info& type, Embeddable* instance) throw();
+		static void registerInstance_(const std::type_info& type, Embeddable* instance)
+			throw();
 		/**
 		*/
-		static void unregisterInstance_(Embeddable* instance) throw();
+		static void unregisterInstance_(Embeddable* instance)
+			throw();
 		
 		/**	Return the number of instances of a certain type
 		*/
-		static Size countInstances_(const std::type_info& type) throw ();
+		static Size countInstances_(const std::type_info& type)
+			throw();
 
 		/**	Return an instance of a registered type by its index.
 				If the index is out of bounds or the position is
 				invalid, a null pointer is returned 
 		*/
-		static Embeddable* getInstance_(const std::type_info& type, Position index) throw();
+		static Embeddable* getInstance_(const std::type_info& type, Position index)
+			throw();
 
 		/**	Return an instance of a registered type by its identifier.
 				If the identifier does not exist, a null pointer is returned 
 		*/
-		static Embeddable* getInstance_(const std::type_info& type, const String& identifier) throw();
+		static Embeddable* getInstance_(const std::type_info& type, const String& identifier)
+			throw();
 
 
 		private:

@@ -1,19 +1,22 @@
-// $Id: object.iC,v 1.6 2000/12/11 21:13:05 oliver Exp $
+// $Id: object.iC,v 1.7 2000/12/19 12:50:49 amoll Exp $
 
 BALL_INLINE 
 Handle Object::getHandle () const
+	throw()
 {
   return handle_;
 }
   
 BALL_INLINE 
 Handle Object::getNextHandle()
+	throw()
 {
   return (Object::global_handle_ + 1);
 }
   
 BALL_INLINE 
 Handle Object::getNewHandle()
+	throw()
 {
   return Object::global_handle_++;
 }
@@ -32,42 +35,49 @@ void Object::destroy()
   
 BALL_INLINE 
 bool Object::operator == (const Object &object) const
+	throw()
 {
   return (RTTI::isKindOf<Object>(object) && (handle_ == object.handle_));
 }
 
 BALL_INLINE 
 bool Object::operator != (const Object &object) const
+	throw()
 {
   return !(*this == object);
 }
 
 BALL_INLINE 
 bool Object::operator < (const Object &object) const
+	throw()
 {
   return (RTTI::isKindOf<Object>(object) && (handle_ < object.handle_));
 }
 
 BALL_INLINE 
 bool Object::operator <= (const Object &object) const
+	throw()
 {
   return !(object < *this);
 }
 
 BALL_INLINE 
 bool Object::operator >= (const Object &object) const
+	throw()
 {
   return !(*this < object);
 }
 
 BALL_INLINE 
 bool Object::operator > (const Object &object) const
+	throw()
 {
   return (object < *this);
 }
 
 BALL_INLINE 
 int Object::compare(const Object & object) const
+	throw()
 {
   if (*this == object)
   {
@@ -85,18 +95,21 @@ int Object::compare(const Object & object) const
 
 BALL_INLINE
 bool Object::isValid() const
+	throw()
 {
   return true;
 }
 
 BALL_INLINE 
 void Object::read(::std::istream& /* s */)
+	throw()
 {
 	throw Exception::NotImplemented(__FILE__, __LINE__);
 }
 
 BALL_INLINE 
 void Object::write(::std::ostream& /* s */) const
+	throw()
 {
   throw Exception::NotImplemented(__FILE__, __LINE__);
 }
@@ -107,25 +120,28 @@ void Object::write(::std::ostream& /* s */) const
 
 BALL_INLINE 
 Size ObjectManager::countInsertions()
+	throw()
 {
   return number_of_insertions_;
 }
 
 BALL_INLINE 
 Size ObjectManager::countRemovals()
+	throw()
 {
   return number_of_removals_;
 }
 
 BALL_INLINE 
 Size ObjectManager::countUpdates()
+	throw()
 {
-  return (number_of_insertions_
-	  + number_of_removals_);
+  return (number_of_insertions_ + number_of_removals_);
 }
 
 BALL_INLINE 
 Size ObjectManager::countObjects()
+	throw()
 {
   return number_of_objects_;
 }

@@ -1,4 +1,4 @@
-// $Id: predicate.h,v 1.2 2000/01/10 15:50:55 oliver Exp $
+// $Id: predicate.h,v 1.3 2000/12/19 12:50:49 amoll Exp $
 
 #ifndef BALL_CONCEPT_PREDICATE_H
 #define BALL_CONCEPT_PREDICATE_H
@@ -26,6 +26,7 @@ namespace BALL
 
 		///
 		virtual bool operator() (const T& /* x */) const
+			throw()
 		{
 			return true;
 		}
@@ -41,6 +42,7 @@ namespace BALL
 
 		///
 		virtual bool operator() (const T1& x, const T2& y) const
+			throw()
 		{
 			return true;
 		}

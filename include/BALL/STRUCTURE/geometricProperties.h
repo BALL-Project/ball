@@ -1,4 +1,4 @@
-// $Id: geometricProperties.h,v 1.9 2000/10/30 00:19:27 amoll Exp $
+// $Id: geometricProperties.h,v 1.10 2000/12/19 12:50:59 amoll Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -84,15 +84,18 @@ namespace BALL
 			
 		/**
 		*/
-		virtual bool start();
+		virtual bool start()
+			throw();
 
 		/**
 		*/
-		virtual bool finish();
+		virtual bool finish()
+			throw();
 
 		/**
 		*/
-		virtual Processor::Result operator () (Atom& atom);
+		virtual Processor::Result operator () (Atom& atom)
+			throw();
 		//@}
 
 		/**	@name Accessors
@@ -100,15 +103,18 @@ namespace BALL
 		//@{
 		/** Return the bounding box
 		*/
-		Box3 getBox() const;
+		Box3 getBox() const
+			throw();
 
 		/**	Returns the lower corner of the bounding box
 		*/
-		const Vector3& getLower() const;
+		const Vector3& getLower() const
+			throw();
 
 		/**	Returns the upper corner of the bounding box
 		*/
-		const Vector3& getUpper() const;
+		const Vector3& getUpper() const
+			throw();
 		//@}
 			
 		private:
@@ -139,15 +145,18 @@ namespace BALL
 
 		/**
 		*/
-		virtual bool start();
+		virtual bool start()
+			throw();
 
 		/**
 		*/
-		virtual bool finish();
+		virtual bool finish()
+			throw();
 
 		/**
 		*/
-		virtual Processor::Result operator()(Atom& atom);
+		virtual Processor::Result operator()(Atom& atom)
+			throw();
 		//@}
 
 		/**@name	Accessors
@@ -155,7 +164,8 @@ namespace BALL
 		//@{
 		/**	Returns the center of the object
 		*/
-		Vector3& getCenter();
+		Vector3& getCenter()
+			throw();
 		//@}
 
 		private:
@@ -192,20 +202,28 @@ namespace BALL
 
 		/**	Default constructor
 		*/
-		FragmentDistanceCollector();
+		FragmentDistanceCollector()
+			throw();
 
 		/**	Constructor.
 				Creates a new collector and sets the reference composite/
 				@param	composite the reference composite
 		*/
-		FragmentDistanceCollector(const Composite& composite);
+		FragmentDistanceCollector(const Composite& composite)
+			throw();
 
 		/**	Constructor.
 				Creates a new collector and sets the reference composite and the distance.
 				@param	composite the reference composite
 				@param	distance the maximum distance between any two atoms
 		*/
-		FragmentDistanceCollector(const Composite& composite, float distance);
+		FragmentDistanceCollector(const Composite& composite, float distance)
+			throw();
+			
+		virtual ~FragmentDistanceCollector()
+			throw()
+		{}	
+			
 		//@}
 
 		/**	@name	Processor related methods
@@ -214,15 +232,18 @@ namespace BALL
 
 		/**
 		*/
-		virtual bool start();
+		virtual bool start()
+			throw();
 
 		/**
 		*/
-		virtual bool finish();
+		virtual bool finish()
+			throw();
 
 		/**
 		*/
-		virtual Processor::Result operator()(Composite& composite);
+		virtual Processor::Result operator()(Composite& composite)
+			throw();
 		//@}
 		
 		/**	@name Accessors
@@ -231,27 +252,32 @@ namespace BALL
 		/**	Returns the number of molecular fragments found
 				@return	the number of fragments in the array
 		*/
-		Size getNumberOfFragments();
+		Size getNumberOfFragments()
+			throw();
 
 		/**	Sets the reference composite
 				@param	composite the new reference composite
 		*/
-		void setComposite(const Composite& composite);
+		void setComposite(const Composite& composite)
+			throw();
 
 		/**	Gets the reference composite
 				@return a const pointer to the reference composite
 		*/
-		const Composite* getComposite() const;
+		const Composite* getComposite() const
+			throw();
 
 		/**	Gets the maximum distance
 				@return the maximum distance
 		*/
-		float getDistance() const;
+		float getDistance() const
+			throw();
 		
 		/**	Sets the maximum distance
 				@param	distance the new maximum distance 
 		*/
-		void setDistance(float distance);
+		void setDistance(float distance)
+			throw();
 		//@}
 		
 
@@ -277,11 +303,13 @@ namespace BALL
 		
 	/**	Calculate the torsion angle between four atoms
 	*/
-	Angle calculateTorsionAngle(const Atom& a1, const Atom& a2, const Atom& a3, const Atom& a4);
+	Angle calculateTorsionAngle(const Atom& a1, const Atom& a2, const Atom& a3, const Atom& a4)
+		throw(Exception::DivisionByZero);
 
 	/**	Calculate the bond angle between three atoms
 	*/
-	Angle calculateBondAngle(const Atom& a1, const Atom& a2, const Atom& a3);
+	Angle calculateBondAngle(const Atom& a1, const Atom& a2, const Atom& a3)
+		throw(Exception::DivisionByZero);
 	//@}
 
 } // namespace BALL

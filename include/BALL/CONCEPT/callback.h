@@ -1,4 +1,4 @@
-// $Id: callback.h,v 1.2 1999/12/04 14:12:24 oliver Exp $
+// $Id: callback.h,v 1.3 2000/12/19 12:50:48 amoll Exp $
 
 #ifndef BALL_CONCEPT_CALLBACK_H
 #define BALL_CONCEPT_CALLBACK_H
@@ -24,12 +24,14 @@ namespace BALL
 		/**	Default constructor
 		*/
 		Callback()
+			throw()
 		{
 		}
 
 		/**	Destructor
 		*/
 		virtual ~Callback()
+		  throw()
 		{
 		}
 		//@}
@@ -37,6 +39,7 @@ namespace BALL
 		/**
 		*/
 		virtual bool operator ()()
+
 		{
 			return true;
 		}

@@ -1,4 +1,4 @@
-// $Id: enumerator.C,v 1.6 2000/10/17 10:15:38 oliver Exp $
+// $Id: enumerator.C,v 1.7 2000/12/19 12:51:05 amoll Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/CONCEPT/enumerator.h>
@@ -8,6 +8,7 @@ namespace BALL
 {
 
 	EnumeratorIndex::EnumeratorIndex()
+		throw()
 		: vector<Position>(),
 			modulus_(),
 			base_multipliers_()
@@ -15,17 +16,20 @@ namespace BALL
 	}
 
 	EnumeratorIndex::~EnumeratorIndex()
+		throw()
 	{
 	}
 
 	EnumeratorIndex::IncompatibleIndex::IncompatibleIndex
 		(const char* /* file */, int /* line */)
+		throw()
 	{
 		// BAUSTELLE
 	}
 
 
 	EnumeratorIndex& EnumeratorIndex::operator ++ ()
+		throw(Exception::IndexOverflow)
 	{
 		Index i;
 		bool add_one = true;
@@ -50,6 +54,7 @@ namespace BALL
 
 
 	EnumeratorIndex& EnumeratorIndex::operator -- () 
+		throw(Exception::IndexUnderflow)
 	{
 		Index i;
 		bool sub_one = true;
@@ -76,6 +81,7 @@ namespace BALL
 
 
 	void EnumeratorIndex::set(Position index)
+		throw()
 	{	
 		for (Position i = 0; i < size(); ++i)
 		{
@@ -86,6 +92,7 @@ namespace BALL
 
 
 	bool operator == (const EnumeratorIndex& x, const EnumeratorIndex& y)
+		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (x.getModulus() != y.getModulus())
 		{
@@ -96,6 +103,7 @@ namespace BALL
 	}
 
 	bool operator != (const EnumeratorIndex& x, const EnumeratorIndex& y)
+		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (x.getModulus() != y.getModulus())
 		{
@@ -106,6 +114,7 @@ namespace BALL
 	}
 
 	bool operator < (const EnumeratorIndex& x, const EnumeratorIndex& y)
+		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (x.getModulus() != y.getModulus())
 		{
@@ -116,6 +125,7 @@ namespace BALL
 	}
 
 	bool operator > (const EnumeratorIndex& x, const EnumeratorIndex& y)
+		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (x.getModulus() != y.getModulus())
 		{
@@ -126,6 +136,7 @@ namespace BALL
 	}
 
 	bool operator <= (const EnumeratorIndex& x, const EnumeratorIndex& y)
+		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (x.getModulus() != y.getModulus())
 		{
@@ -136,6 +147,7 @@ namespace BALL
 	}
 
 	bool operator >= (const EnumeratorIndex& x, const EnumeratorIndex& y)
+		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (x.getModulus() != y.getModulus())
 		{

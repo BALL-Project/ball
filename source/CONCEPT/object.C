@@ -1,4 +1,4 @@
-// $Id: object.C,v 1.6 2000/12/11 21:15:14 oliver Exp $
+// $Id: object.C,v 1.7 2000/12/19 12:51:06 amoll Exp $
 
 #include <BALL/CONCEPT/object.h>
 
@@ -28,26 +28,31 @@ namespace BALL
 	// in object.h
 
 	Object* Object::getPrevious()
+		throw()
 	{
 		return previous_;
 	}
 			
 	const Object* Object::getPrevious() const
+		throw()
 	{
 		return previous_;
 	}
 			
 	Object* Object::getNext()
+		throw()
 	{
 		return next_;
 	}
 			
 	const Object* Object::getNext() const
+		throw()
 	{
 		return next_;
 	}
 
 	Object::Object()
+		throw()
 		:	AutoDeletable(),
 			handle_(Object::global_handle_++)
 	{
@@ -60,6 +65,7 @@ namespace BALL
 	}
 
 	Object::Object(const Object&, bool)
+		throw()
 		:	AutoDeletable(),
 			handle_(Object::global_handle_++)
 	{
@@ -81,7 +87,8 @@ namespace BALL
 #		endif // BALL_SUPPORT_OBJECT_MANAGER
 	}
 
-	void	Object::dump(ostream& s, Size depth) const
+	void Object::dump(ostream& s, Size depth) const
+		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 
@@ -98,16 +105,16 @@ namespace BALL
 	}
 
 	istream& operator >> (istream &s, Object &object)
+		throw()
 	{
 		object.read(s);
-
 		return s;
 	}
 
 	ostream& operator << (ostream &s, const Object &object)
+		throw()
 	{
 		object.write(s);
-
 		return s;
 	}
 
@@ -116,14 +123,16 @@ namespace BALL
 #	ifdef BALL_SUPPORT_OBJECT_MANAGER
 
 	void ObjectManager::insert(Object &object)
+		throw()
 	{
 		if (first_ == 0)
 		{
 			first_ = last_ = &object;
 			object.previous_ = object.next_ = 0;
 
-		} else {
-
+		} 
+		else 
+		{
 			object.previous_ = last_;
 			object.next_ = 0;
 
@@ -135,6 +144,7 @@ namespace BALL
 	}
 		
 	void ObjectManager::remove(Object &object)
+		throw()
 	{
 		if (first_ == &object)
 		{
@@ -167,6 +177,7 @@ namespace BALL
 	}
 
 	bool ObjectManager::isValid()
+		throw()
 	{
 		Size size = 0;
 		ObjectIterator object_it;
@@ -190,6 +201,7 @@ namespace BALL
 	}
 
 	void ObjectManager::dump (ostream& s, Size depth)
+		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);
 

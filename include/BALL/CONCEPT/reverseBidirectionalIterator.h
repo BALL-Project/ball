@@ -1,4 +1,4 @@
-// $Id: reverseBidirectionalIterator.h,v 1.4 2000/03/23 10:44:13 oliver Exp $
+// $Id: reverseBidirectionalIterator.h,v 1.5 2000/12/19 12:50:50 amoll Exp $
 
 #ifndef BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_REVERSEBIDIRECTIONALITERATOR_H
@@ -38,6 +38,7 @@ namespace BALL
 		/**
 		*/
 		ReverseBidirectionalIterator()
+			throw()
 			:	BidirectionalIterator<Container, DataType, Position, Traits>()
 		{
 		}
@@ -45,6 +46,7 @@ namespace BALL
 		/**
 		*/
 		ReverseBidirectionalIterator(const ReverseBidirectionalIterator &iterator)
+			throw()
 			:	BidirectionalIterator<Container, DataType, Position, Traits>(iterator)
 		{
 		}
@@ -52,68 +54,81 @@ namespace BALL
 		/**
 		*/
 		ReverseBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
+			throw()
 			:	BidirectionalIterator<Container, DataType, Position, Traits>(iterator)
 		{	
 		}
 		//@}
 
 		bool operator + () const
+			throw()
 		{
 			return traits_ptr_->isValid();
 		}
 
 		bool operator - () const
+			throw()
 		{
-			return (bool)(traits_ptr_->isValid() == false);
+			return (traits_ptr_->isValid() == false);
 		}
 
 		void toBegin()
+			throw(Exception::InvalidIterator)
 		{
 			BidirectionalIterator<Container, DataType, Position, Traits>::toRBegin();
 		}
 
 		bool isBegin() const
+			throw(Exception::InvalidIterator)
 		{
 			return BidirectionalIterator<Container, DataType, Position, Traits>::isRBegin();
 		}
 
 		void toEnd()
+			throw(Exception::InvalidIterator)
 		{
 			BidirectionalIterator<Container, DataType, Position, Traits>::toREnd();
 		}
 
 		bool isEnd() const
+			throw(Exception::InvalidIterator)
 		{
 			return BidirectionalIterator<Container, DataType, Position, Traits>::isREnd();
 		}
 
 		void toRBegin()
+			throw(Exception::InvalidIterator)
 		{
 			BidirectionalIterator<Container, DataType, Position, Traits>::toBegin();
 		}
 
 		bool isRBegin() const
+			throw(Exception::InvalidIterator)
 		{
 			return BidirectionalIterator<Container, DataType, Position, Traits>::isBegin();
 		}
 
 		void toREnd()
+			throw(Exception::InvalidIterator)
 		{
 			BidirectionalIterator<Container, DataType, Position, Traits>::toEnd();
 		}
 
 		bool isREnd() const
+			throw(Exception::InvalidIterator)
 		{
 			return BidirectionalIterator<Container, DataType, Position, Traits>::isEnd();
 		}
 
 		ReverseBidirectionalIterator &operator ++ ()
+			throw(Exception::InvalidIterator)
 		{
 			BidirectionalIterator<Container, DataType, Position, Traits>::operator--();
 			return *this;
 		}
 
 		ReverseBidirectionalIterator operator ++ (int)
+			throw(Exception::InvalidIterator)
 		{
 			ReverseBidirectionalIterator iterator(*this);
 			BidirectionalIterator<Container, DataType, Position, Traits>::operator--();
@@ -121,12 +136,14 @@ namespace BALL
 		}
 
 		ReverseBidirectionalIterator &operator -- ()
+			throw(Exception::InvalidIterator)
 		{
 			BidirectionalIterator<Container, DataType, Position, Traits>::operator++();
 			return *this;
 		}
 
 		ReverseBidirectionalIterator operator -- (int)
+			throw(Exception::InvalidIterator)
 		{
 			ReverseBidirectionalIterator iterator(*this);
 			BidirectionalIterator<Container, DataType, Position, Traits>::operator++();
@@ -134,46 +151,55 @@ namespace BALL
 		}
 
 		DataType *findFirst(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			return (DataType *)BidirectionalIterator<Container, DataType, Position, Traits>::findLast(predicate);
 		}
 
 		const DataType *findFirst(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return (const DataType *)BidirectionalIterator<Container, DataType, Position, Traits>::findLast(predicate);
 		}
 
 		DataType *findLast(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			return (DataType *)BidirectionalIterator<Container, DataType, Position, Traits>::findFirst(predicate);
 		}
 	
 		const DataType *findLast(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return (const DataType *)BidirectionalIterator<Container, DataType, Position, Traits>::findFirst(predicate);
 		}
 
 		DataType *findPrevious(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			return (DataType *)BidirectionalIterator<Container, DataType, Position, Traits>::findNext(predicate);
 		}
 
 		const DataType *findPrevious(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return (const DataType *)BidirectionalIterator<Container, DataType, Position, Traits>::findNext(predicate);
 		}
 
 		DataType *findNext(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			return (DataType *)BidirectionalIterator<Container, DataType, Position, Traits>::findPrevious(predicate);
 		}
 	
 		const DataType *findNext(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return (const DataType *)BidirectionalIterator<Container, DataType, Position, Traits>::findPrevious(predicate);
 		}
 
 		static ReverseBidirectionalIterator begin(const Container &container)
+			throw(Exception::InvalidIterator)
 		{
 			ReverseBidirectionalIterator iterator(container);
 			iterator.toBegin();
@@ -181,6 +207,7 @@ namespace BALL
 		}
 
 		static ReverseBidirectionalIterator end(const Container &container)
+			throw(Exception::InvalidIterator)
 		{
 			ReverseBidirectionalIterator iterator(container);
 			iterator.toEnd();
@@ -188,6 +215,7 @@ namespace BALL
 		}
 
 		static ReverseBidirectionalIterator rbegin(const Container &container)
+			throw(Exception::InvalidIterator)
 		{
 			ReverseBidirectionalIterator iterator(container);
 			iterator.toRBegin();
@@ -195,6 +223,7 @@ namespace BALL
 		}
 
 		static ReverseBidirectionalIterator rend(const Container &container)
+			throw(Exception::InvalidIterator)
 		{
 			ReverseBidirectionalIterator iterator(container);
 			iterator.toREnd();
@@ -204,6 +233,7 @@ namespace BALL
 		protected:
 
 		ReverseBidirectionalIterator(const Container &container)
+			throw()
 			: BidirectionalIterator<Container, DataType, Position, Traits>(container)
 		{
 		}
@@ -226,6 +256,7 @@ namespace BALL
 		/**
 		*/
 		ConstReverseBidirectionalIterator()
+			throw()
 			:	ConstBidirectionalIterator<Container, DataType, Position, Traits>()
 		{
 		}
@@ -233,6 +264,7 @@ namespace BALL
 		/**
 		*/
 		ConstReverseBidirectionalIterator(const ConstReverseBidirectionalIterator &iterator)
+			throw()
 			: ConstBidirectionalIterator<Container, DataType, Position, Traits>(iterator)
 		{
 		}
@@ -240,68 +272,81 @@ namespace BALL
 		/**
 		*/
 		ConstReverseBidirectionalIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
+			throw()
 			:	ConstBidirectionalIterator<Container, DataType, Position, Traits>(iterator)
 		{
 		}
 		//@}
 
 		bool operator + () const
+			throw()
 		{
 			return traits_ptr_->isValid();
 		}
 
 		bool operator - () const
+			throw()
 		{
-			return (bool)(traits_ptr_->isValid() == false);
+			return (traits_ptr_->isValid() == false);
 		}
 
 		void toBegin()
+			throw(Exception::InvalidIterator)
 		{
 			ConstBidirectionalIterator<Container, DataType, Position, Traits>::toRBegin();
 		}
 
 		bool isBegin() const
+			throw(Exception::InvalidIterator)
 		{
 			return ConstBidirectionalIterator<Container, DataType, Position, Traits>::isRBegin();
 		}
 
 		void toEnd()
+			throw(Exception::InvalidIterator)
 		{
 			ConstBidirectionalIterator<Container, DataType, Position, Traits>::toREnd();
 		}
 
 		bool isEnd() const
+			throw(Exception::InvalidIterator)
 		{
 			return ConstBidirectionalIterator<Container, DataType, Position, Traits>::isREnd();
 		}
 
 		void toRBegin()
+			throw(Exception::InvalidIterator)
 		{
 			ConstBidirectionalIterator<Container, DataType, Position, Traits>::toBegin();
 		}
 
 		bool isRBegin() const
+			throw(Exception::InvalidIterator)
 		{
 			return ConstBidirectionalIterator<Container, DataType, Position, Traits>::isBegin();
 		}
 
 		void toREnd()
+			throw(Exception::InvalidIterator)
 		{
 			ConstBidirectionalIterator<Container, DataType, Position, Traits>::toEnd();
 		}
 
 		bool isREnd() const
+			throw(Exception::InvalidIterator)
 		{
 			return ConstBidirectionalIterator<Container, DataType, Position, Traits>::isEnd();
 		}
 
 		ConstReverseBidirectionalIterator &operator ++ ()
+			throw(Exception::InvalidIterator)
 		{
 			ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator--();
 			return *this;
 		}
 
 		ConstReverseBidirectionalIterator operator ++ (int)
+			throw(Exception::InvalidIterator)
 		{
 			ConstReverseBidirectionalIterator iterator(*this);
 			ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator--();
@@ -309,12 +354,14 @@ namespace BALL
 		}
 
 		ConstReverseBidirectionalIterator &operator -- ()
+			throw(Exception::InvalidIterator)
 		{
 			ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator++();
 			return *this;
 		}
 
 		ConstReverseBidirectionalIterator operator -- (int)
+			throw(Exception::InvalidIterator)
 		{
 			ConstReverseBidirectionalIterator iterator(*this);
 			ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator++();
@@ -322,46 +369,55 @@ namespace BALL
 		}
 
 		const DataType *findFirst(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			return (DataType *)ConstBidirectionalIterator<Container, DataType, Position, Traits>::findLast(predicate);
 		}
 
 		const DataType *findFirst(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return (const DataType *)ConstBidirectionalIterator<Container, DataType, Position, Traits>::findLast(predicate);
 		}
 
 		const DataType *findLast(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			return (DataType *)ConstBidirectionalIterator<Container, DataType, Position, Traits>::findFirst(predicate);
 		}
 	
 		const DataType *findLast(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return (const DataType *)ConstBidirectionalIterator<Container, DataType, Position, Traits>::findFirst(predicate);
 		}
 
 		const DataType *findPrevious(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			return (DataType *)ConstBidirectionalIterator<Container, DataType, Position, Traits>::findNext(predicate);
 		}
 
 		const DataType *findPrevious(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return (const DataType *)ConstBidirectionalIterator<Container, DataType, Position, Traits>::findNext(predicate);
 		}
 
 		const DataType *findNext(const UnaryPredicate<DataType> &predicate)
+			throw(Exception::InvalidIterator)
 		{
 			return (DataType *)ConstBidirectionalIterator<Container, DataType, Position, Traits>::findPrevious(predicate);
 		}
 	
 		const DataType *findNext(const UnaryPredicate<DataType> &predicate) const
+			throw(Exception::InvalidIterator)
 		{
 			return (const DataType *)ConstBidirectionalIterator<Container, DataType, Position, Traits>::findPrevious(predicate);
 		}
 
 		static ConstReverseBidirectionalIterator begin(const Container &container)
+			throw(Exception::InvalidIterator)
 		{
 			ConstReverseBidirectionalIterator iterator(container);
 			iterator.toBegin();
@@ -369,6 +425,7 @@ namespace BALL
 		}
 
 		static ConstReverseBidirectionalIterator end(const Container &container)
+			throw(Exception::InvalidIterator)
 		{
 			ConstReverseBidirectionalIterator iterator(container);
 			iterator.toEnd();
@@ -376,6 +433,7 @@ namespace BALL
 		}
 
 		static ConstReverseBidirectionalIterator rbegin(const Container &container)
+			throw(Exception::InvalidIterator)
 		{
 			ConstReverseBidirectionalIterator iterator(container);
 			iterator.toRBegin();
@@ -383,6 +441,7 @@ namespace BALL
 		}
 
 		static ConstReverseBidirectionalIterator rend(const Container &container)
+			throw(Exception::InvalidIterator)
 		{
 			ConstReverseBidirectionalIterator iterator(container);
 			iterator.toREnd();
@@ -392,6 +451,7 @@ namespace BALL
 		protected:
 
 		ConstReverseBidirectionalIterator(const Container &container)
+			throw()
 			:	ConstBidirectionalIterator<Container, DataType, Position, Traits>(container)
 		{
 		}

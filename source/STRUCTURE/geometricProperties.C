@@ -1,4 +1,4 @@
-// $Id: geometricProperties.C,v 1.9 2000/10/30 00:19:59 amoll Exp $
+// $Id: geometricProperties.C,v 1.10 2000/12/19 12:51:12 amoll Exp $
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -13,6 +13,7 @@ namespace BALL
 {
 
 	bool BoundingBoxProcessor::start()
+		throw()
 	{
 		lower_.set(FLT_MAX, FLT_MAX, FLT_MAX);
 		upper_.set(-FLT_MAX, -FLT_MAX, -FLT_MAX);
@@ -20,6 +21,7 @@ namespace BALL
 	}
 
 	bool BoundingBoxProcessor::finish()
+		throw()
 	{
 		if ((lower_.x == FLT_MAX) && (lower_.y == FLT_MAX) && (lower_.z == FLT_MAX)
 				&& (upper_.x == -FLT_MAX) && (upper_.y == -FLT_MAX) && (upper_.z == -FLT_MAX))
@@ -34,6 +36,7 @@ namespace BALL
 
 
 	Processor::Result BoundingBoxProcessor::operator()(Atom& atom)
+		throw()
 	{
 
 		if (lower_.x > atom.getPosition().x) 
@@ -70,16 +73,19 @@ namespace BALL
 	}
 
 	Box3 BoundingBoxProcessor::getBox() const
+		throw()
 	{
 		return Box3(lower_, upper_);
 	}
 
 	const Vector3& BoundingBoxProcessor::getLower() const
+		throw()
 	{
 		return lower_;
 	}
 
 	const Vector3& BoundingBoxProcessor::getUpper() const
+		throw()
 	{
 		return upper_;
 	}
@@ -87,6 +93,7 @@ namespace BALL
 
 	//  GeometricCenterProcessor
 	bool GeometricCenterProcessor::start()
+		throw()
 	{
 		center_.set(0, 0, 0);
 		n_ = 0;
@@ -95,6 +102,7 @@ namespace BALL
 	}
 
 	bool GeometricCenterProcessor::finish()
+		throw()
 	{
 		if (n_ != 0)
 		{
@@ -105,6 +113,7 @@ namespace BALL
 	}
 
 	Processor::Result GeometricCenterProcessor::operator()(Atom& atom)
+		throw()
 	{
 		center_ += atom.getPosition();
 		n_++;
@@ -113,6 +122,7 @@ namespace BALL
 	}
 
 	Vector3& GeometricCenterProcessor::getCenter()
+		throw()
 	{
 		return center_;
 	}
@@ -122,23 +132,27 @@ namespace BALL
 
 	// default constructor
 	FragmentDistanceCollector::FragmentDistanceCollector() 
+		throw()
 		:	reference_composite_(0)
 	{
 	}
 
 	FragmentDistanceCollector::FragmentDistanceCollector(const Composite& composite) 
+		throw()
 		:	reference_composite_(&composite),
 			squared_distance_(0)
 	{
 	}
 
 	FragmentDistanceCollector::FragmentDistanceCollector(const Composite& composite,float distance) 
+		throw()
 		:	reference_composite_(&composite),
 			squared_distance_(distance * distance)
 	{
 	}
 
 	bool FragmentDistanceCollector::start()
+		throw()
 	{
 		// clear the array containing the collected fragments
 		fragments.clear();
@@ -154,16 +168,19 @@ namespace BALL
 	}
 
 	float FragmentDistanceCollector::getDistance() const
+		throw()
 	{
 		return sqrt(squared_distance_);
 	}
 
 	void FragmentDistanceCollector::setDistance(float distance)
+		throw()
 	{
 		squared_distance_ = distance * distance;
 	}
 
 	bool FragmentDistanceCollector::finish()
+		throw()
 	{
 		bool                                collect_it = false;
 		AtomIterator                        atom_iterator2;
@@ -237,6 +254,7 @@ namespace BALL
 	}
 
 	Processor::Result FragmentDistanceCollector::operator()(Composite& composite)
+		throw()
 	{
 		
 		if (RTTI::isKindOf<Fragment>(composite))
@@ -249,22 +267,26 @@ namespace BALL
 	}
 
 	Size FragmentDistanceCollector::getNumberOfFragments()
+		throw()
 	{
 		return fragments.size();
 	}
 
 	void FragmentDistanceCollector::setComposite(const Composite& composite)
+		throw()
 	{
 		reference_composite_ = &composite;
 	}
 
 	const Composite* FragmentDistanceCollector::getComposite() const
+		throw()
 	{
 		return reference_composite_;
 	}
 
   // Calculate the torsion angle between four atoms
   Angle calculateTorsionAngle(const Atom& a1, const Atom& a2, const Atom& a3, const Atom& a4)
+		throw(Exception::DivisionByZero)
 	{
 		Vector3 a12(a2.getPosition() - a1.getPosition());
 		Vector3 a23(a3.getPosition() - a2.getPosition());
@@ -272,6 +294,13 @@ namespace BALL
 
 		Vector3 n12(a12 % a23);
 		Vector3 n34(a23 % a34);
+
+		if (n12 == Vector3::getZero() ||
+				n34 == Vector3::getZero())
+		{
+			throw(Exception::DivisionByZero(__FILE__, __LINE__));
+		}
+
 		n12.normalize();
 		n34.normalize();
 
@@ -299,7 +328,15 @@ namespace BALL
 
   // Calculate the bond angle between three atoms
   Angle calculateBondAngle(const Atom& a1, const Atom& a2, const Atom& a3)
+		throw(Exception::DivisionByZero)
 	{
+		// two atoms can't have the same position
+		if (a1.getPosition() == a2.getPosition() ||
+				a3.getPosition() == a2.getPosition())
+		{
+			throw(Exception::DivisionByZero(__FILE__, __LINE__));
+		}
+
 		Vector3 a12(a2.getPosition() - a1.getPosition());
 		Vector3 a23(a3.getPosition() - a2.getPosition());
 
