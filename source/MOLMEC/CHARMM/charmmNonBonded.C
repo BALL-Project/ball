@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.C,v 1.13 2001/06/27 10:41:50 oliver Exp $
+// $Id: charmmNonBonded.C,v 1.14 2001/07/05 14:06:22 oliver Exp $
 
 #include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -1004,7 +1004,7 @@ namespace BALL
 			if (!use_selection)
 			{
 				it->atom1->getForce() += force;
-				it->atom2->getForce() += force;
+				it->atom2->getForce() -= force;
 			} 
 			else 
 			{
