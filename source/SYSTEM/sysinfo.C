@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.10 2005/02/28 20:20:31 oliver Exp $
+// $Id: sysinfo.C,v 1.11 2005/03/01 07:33:10 oliver Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>
 
-#ifdef BALL_HAS_SYSINFO
+#ifdef BALL_HAS_SYS_SYSINFO_H
 #	include <sys/sysinfo.h>
 #	include <BALL/SYSTEM/file.h>
 #else
@@ -24,18 +24,17 @@ namespace BALL
 	namespace SysInfo
 	{
 
+
+#ifdef BALL_HAS_SYS_SYSINFO_H
+
 		LongIndex getAvailableMemory()
 		{
 			LongIndex mem = getFreeMemory();
-#ifndef BALL_PLATFORM_WINDOWS
-			mem += getBufferedMemory();
-#endif
 			return mem;
 		}
 
 		LongIndex getFreeMemory()
 		{
-#ifdef BALL_HAS_SYSINFO
 			struct sysinfo info;
 			LongIndex result = sysinfo(&info);
 			if (result == -1) 
@@ -43,20 +42,10 @@ namespace BALL
 				return result;
 			}
 			return info.freeram * info.mem_unit;
-#else
-#	ifdef BALL_PLATFORM_WINDOWS
-			MEMORYSTATUSEX statex;
-			GlobalMemoryStatusEx (&statex);
-			return static_cast<LongIndex>(statex.ullAvailPhys);
-#	else
-			return -1;
-#	endif
-#endif
 		}
 
 		LongIndex getTotalMemory()
 		{
-#ifdef BALL_HAS_SYSINFO
 			struct sysinfo info;
 			LongIndex result = sysinfo(&info);
 			if (result == -1) 
@@ -64,82 +53,124 @@ namespace BALL
 				return result;
 			}
 			return info.totalram * info.mem_unit;
-#else
-#	ifdef BALL_PLATFORM_WINDOWS
- 			MEMORYSTATUSEX statex;
-			GlobalMemoryStatusEx (&statex);
-			return static_cast<LongIndex>(statex.ullTotalPhys);
-#	else
-			return -1;
-#endif
-#endif
 		}
 
 		LongIndex getBufferedMemory()
 		{
-#ifdef BALL_HAS_SYSINFO
 			struct sysinfo info;
 			LongIndex result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.bufferram * info.mem_unit;
-#else
-#	ifdef BALL_PLATFORM_WINDOWS
-			return -1;
-#	else
-			return -1;
-#	endif
-#endif
 		}
 
 		Time getUptime()
 		{
-#ifdef BALL_HAS_SYSINFO
 			struct sysinfo info;
 			LongIndex result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.uptime;
-#else
-#	ifdef BALL_PLATFORM_WINDOWS
-			return -1;
-#	else
-			return -1;
-#	endif
-#endif
 		}
 
 		Index getNumberOfProcessors()
 		{
-#ifdef BALL_HAS_SYSINFO
 			return get_nprocs();
-#else
-#	ifdef BALL_PLATFORM_WINDOWS
-			SYSTEM_INFO sysinfo;
-			GetSystemInfo(&sysinfo);
-			return sysinfo.dwNumberOfProcessors;
-#	else
-			return -1;
-#	endif
-#endif
 		}
 
 
 		LongIndex getFreeSwapSpace()
 		{
-#ifdef BALL_HAS_SYSINFO
 			struct sysinfo info;
 			LongIndex result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.freeswap * info.mem_unit;
+		}
 #else
-#	ifdef BALL_PLATFORM_WINDOWS
+#ifdef BALL_PLATFORM_WINDOWS
+
+		LongIndex getAvailableMemory()
+		{
+			return getFreememory();
+		}
+
+		LongIndex getFreeMemory()
+		{
+			MEMORYSTATUSEX statex;
+			GlobalMemoryStatusEx (&statex);
+			return static_cast<LongIndex>(statex.ullAvailPhys);
+		}
+
+		LongIndex getTotalMemory()
+		{
+ 			MEMORYSTATUSEX statex;
+			GlobalMemoryStatusEx (&statex);
+			return static_cast<LongIndex>(statex.ullTotalPhys);
+		}
+
+		LongIndex getBufferedMemory()
+		{
+			return 0;
+		}
+
+		Time getUptime()
+		{
+			return -1;
+		}
+
+		Index getNumberOfProcessors()
+		{
+			SYSTEM_INFO sysinfo;
+			GetSystemInfo(&sysinfo);
+			return sysinfo.dwNumberOfProcessors;
+		}
+
+		LongIndex getFreeSwapSpace()
+		{
  			MEMORYSTATUSEX statex;
 			GlobalMemoryStatusEx (&statex);
 			return (LongIndex) statex.ullAvailPageFile;
-#	else
-			return -1;
-#	endif
-#endif
 		}
+
+#else // We have no idea how to retrieve that information on this
+			// platform, so we just return -1 everywhere
+
+		LongIndex getAvailableMemory()
+		{
+			LongIndex mem = getFreeMemory();
+			return mem;
+		}
+
+		LongIndex getFreeMemory()
+		{
+			return -1;
+		}
+
+		LongIndex getTotalMemory()
+		{
+			return -1;
+		}
+
+		LongIndex getBufferedMemory()
+		{
+			return -1;
+		}
+
+		Time getUptime()
+		{
+			return -1;
+		}
+
+		Index getNumberOfProcessors()
+		{
+			return -1;
+		}
+
+		LongIndex getFreeSwapSpace()
+		{
+			return -1;
+		}
+
+#endif
+#endif
 
 	} // namespace SysInfo
 

@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl $Id: configure.ac,v 1.20 2005/02/02 10:51:33 anhi Exp $
+dnl $Id: configure.ac,v 1.21 2005/03/01 07:33:10 oliver Exp $
 dnl
 dnl
 
@@ -408,6 +408,7 @@ CF_CHECK_SYS_TYPES_H
 CF_CHECK_SYS_IOCTL_H
 CF_CHECK_SYS_SOCKET_H
 CF_CHECK_SYS_PARAM_H
+CF_CHECK_SYS_SYSINFO_H
 CF_CHECK_NETINET_IN_H
 CF_CHECK_NETDB_H
 CF_CHECK_ARPA_INET_H

@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.66 2005/02/28 20:22:21 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.67 2005/03/01 07:33:03 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -1926,6 +1926,18 @@ AC_DEFUN(CF_CHECK_ARPA_INET_H, [
 			[PROJECT[]_HAS_ARPA_INET_H=false])
 	if test ${PROJECT[]_HAS_ARPA_INET_H} = true ; then
 		AC_DEFINE(PROJECT[]_HAS_ARPA_INET_H,)
+	fi
+])
+
+dnl
+dnl   Check whether sys/sysinfo.h does exist.
+dnl
+AC_DEFUN(CF_CHECK_SYS_SYSINFO_H, [
+	AC_CHECK_HEADERS(sys/sysinfo.h,
+			[PROJECT[]_HAS_SYS_SYSINFO_H=true],
+			[PROJECT[]_HAS_SYS_SYSINFO_H=false])
+	if test ${PROJECT[]_HAS_SYS_SYSINFO_H} = true ; then
+		AC_DEFINE(PROJECT[]_HAS_SYS_SYSINFO_H,)
 	fi
 ])
 

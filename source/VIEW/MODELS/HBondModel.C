@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondModel.C,v 1.10 2005/02/06 20:57:10 oliver Exp $
+// $Id: HBondModel.C,v 1.11 2005/03/01 07:33:10 oliver Exp $
 //
 
 #include <BALL/VIEW/MODELS/HBondModel.h>
@@ -72,15 +72,10 @@ namespace BALL
 			Atom::BondIterator bit = atom->beginBond();
 			for (; +bit; ++bit)
 			{
-				if (bit->getType() == Bond::TYPE__HYDROGEN)
+				// Consider each bond just once (first atom!) and only those which are real H bonds.
+				if ((bit->getFirstAtom() == atom) && (bit->getType() == Bond::TYPE__HYDROGEN))
 				{
 					const Atom* partner = bit->getPartner(*atom);
-
-					// only one visualisation for a bond!
-					if (partner == 0  || partner < atom )
-					{
-						return Processor::CONTINUE;
-					}
 
 					// generate tubes
 					const Vector3 v = partner->getPosition() - atom->getPosition();
@@ -93,7 +88,7 @@ namespace BALL
 						tube->setRadius(radius_);
 						tube->setComposite(atom);
 						tube->setVertex1(last);
-						tube->setVertex2(last + (v / 8));
+						tube->setVertex2(last + (v / 8.));
 						geometric_objects_.push_back(tube);
 
 						Disc* disc = new Disc(Circle3(last, -v, radius_));
@@ -106,7 +101,7 @@ namespace BALL
 						disc->setComposite(atom);
 						geometric_objects_.push_back(disc);
 
-						last += (v /4);
+						last += (v /4.);
 					}
 				}
 			}
@@ -115,4 +110,5 @@ namespace BALL
 		}
 
 	} // namespace VIEW
+
 } // namespace BALL
