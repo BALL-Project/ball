@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: contourSurface.h,v 1.17 2004/03/07 01:10:25 amoll Exp $
+// $Id: contourSurface.h,v 1.18 2004/10/19 12:17:44 amoll Exp $
 //
 
 #ifndef BALL_DATATYPE_CONTOURSURFACE_H
@@ -376,6 +376,35 @@ namespace BALL
 			}
 			catch (...)
 			{
+			}
+		}
+
+
+		// fix for the cases, where all normals of the surface are in the wrong direction
+		// calculate center of surface and count normals, which show to the center of the surface,
+		// if this are more than the normals in opposite direction, flip all normals
+		Vector3 center;
+		for (Position i = 0; i < vertex.size(); i++)
+		{
+			center += vertex[i];
+		}
+
+		center /= vertex.size();
+
+		Size nr_of_strange_normals = 0;
+		for (Position i = 0; i < normal.size(); i++)
+		{
+			if ((vertex[i] + normal[i]).getDistance(center) < (vertex[i] - normal[i]).getDistance(center))
+			{
+				nr_of_strange_normals ++;
+			}
+		}
+
+		if (nr_of_strange_normals > normal.size() / 2.0)
+		{
+			for (Position i = 0; i < normal.size(); i++)
+			{
+				normal[i] *= -1;
 			}
 		}
 
