@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.22 2001/01/21 21:09:39 amoll Exp $
+// $Id: exception.h,v 1.23 2001/06/30 14:50:31 amoll Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -361,7 +361,7 @@ namespace BALL
 		};
 
 		/**	File not found.
-				A given file could not be found.
+				A given position in three dimensional is invalid.
 		*/
 		class IllegalPosition 
 			: public GeneralException
