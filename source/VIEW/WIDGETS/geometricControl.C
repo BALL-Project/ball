@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.45 2004/06/25 14:37:08 amoll Exp $
+// $Id: geometricControl.C,v 1.46 2004/07/23 12:43:03 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -121,15 +121,12 @@ namespace BALL
 		void GeometricControl::updateRepresentation(Representation& rep)
 			throw()
 		{
-			QListViewItem* item = representation_to_item_[&rep]; 
+			SelectableListViewItem* item = (SelectableListViewItem*) representation_to_item_[&rep]; 
 			if (item == 0) return;
 
 			// prevent flickering in GeometricControl, e.g. while a simulation is running
-			bool changed_content = false;
-			String new_text;
-
-			new_text = getRepresentationName_(rep);
-			changed_content = item->text(0).ascii() != new_text;
+			String new_text = getRepresentationName_(rep);
+			bool changed_content = item->text(0).ascii() != new_text;
 			if (changed_content) item->setText(0, new_text.c_str());
 
 			new_text = rep.getColoringName();
@@ -139,6 +136,12 @@ namespace BALL
 			new_text = rep.getProperties();
 			changed_content |= item->text(2).ascii() != new_text;
 			if (changed_content) item->setText(2, new_text.c_str());
+
+			if (rep.hasProperty(Representation::PROPERTY__HIDDEN) == item->isOn())
+			{
+				changed_content = true;
+				item->setOn(!rep.hasProperty(Representation::PROPERTY__HIDDEN));
+			}
 
 			if (changed_content) listview->triggerUpdate();
 		}
@@ -183,7 +186,7 @@ namespace BALL
 					return;
 
 				default:
-					Log.error() << "Unknown Type of Representation in " << __FILE__ << __LINE__ << std::endl;
+					Log.error() << "Unknown Type of RepresentationMessage in " << __FILE__ << __LINE__ << std::endl;
 			}
 		}
 

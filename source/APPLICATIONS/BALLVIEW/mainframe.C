@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.21 2004/07/22 16:32:35 amoll Exp $
+// $Id: mainframe.C,v 1.22 2004/07/23 12:41:40 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -298,12 +298,6 @@ namespace BALL
 	void Mainframe::saveBALLViewProjectFile()
 		throw()
 	{
-		if (getSelectedSystem() == 0)
-		{
-			setStatusbarText("Exactly one System has to be selected! Aborting...");
-			return;
-		}
-
 		QString result = QFileDialog::getSaveFileName(
 				getWorkingDir().c_str(), "*.bvp", 0, "Select a BALLView project file");
 		if (result.isEmpty())
@@ -525,7 +519,7 @@ namespace BALL
 			
 				display_properties_->applyButtonClicked();
 
-				if (string_vector2.size() == 3 && string_vector[2].has('H'))
+				if (string_vector2.size() == 3 && string_vector2[2].has('H'))
 				{
 					Representation* rep = 0;
 					PrimitiveManager::RepresentationsIterator pit = getPrimitiveManager().begin();
@@ -534,10 +528,13 @@ namespace BALL
 						rep = *pit;
 					}
 
-Log.error() << "#~~#   6 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
 					rep->setProperty(Representation::PROPERTY__HIDDEN);
-					RepresentationMessage* msg = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
-					notify_(msg);
+					rep->update(false);
+
+#ifndef BALL_QT_HAS_THREADS
+			 		RepresentationMessage* msg = new RepresentationMessage(*rep, RepresentationMessage::UPDATE);
+ 					notify_(msg);
+#endif
 				}
 			}
 		}
