@@ -1,4 +1,4 @@
-// $Id: lennardJones.C,v 1.7 2000/02/15 18:10:59 oliver Exp $
+// $Id: lennardJones.C,v 1.8 2000/09/22 16:25:34 anker Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -41,6 +41,7 @@ namespace BALL
 	{
 		return ParameterSection::extractSection(parameters, section_name);
 	}
+
 	bool LennardJones::extractSection
 		(ForceFieldParameters& parameters, const String& section_name)
 	{
@@ -62,7 +63,9 @@ namespace BALL
 
 			return false;
 
-		} else {
+		} 
+		else 
+		{
 
 			// format_ == A_B_FORMAT:				parameters are in A/B format
 			// format_ == EPSILON_R_FORMAT:	parameters are in epsilon/R format
