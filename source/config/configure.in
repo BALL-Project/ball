@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.121 2000/12/19 22:09:54 oliver Exp $
+dnl    $Id: configure.in,v 1.122 2000/12/23 15:38:59 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -53,6 +53,7 @@ AC_ARG_WITH(arflags,           [  --with-arflags=FLAGS    add FLAGS to the flags
 AC_ARG_WITH(dynarflags,        [  --with-dynarflags=FLAGS add FLAGS to the flags for the creation of the shared libraries])
 AC_ARG_WITH(qt-incl,           [  --with-qt-incl=DIR      QT header files are in DIR])
 AC_ARG_WITH(qt-libs,           [  --with-qt-libs=DIR      QT libraries are in DIR])
+AC_ARG_WITH(qt-mt,             [  --with-threadsafe-qt    use a threadsafe version of the QT lib (libqt-mt)])
 AC_ARG_WITH(moc,               [  --with-moc=MOC          use MOC as the absolute path to the QT meta object compiler (moc)])
 AC_ARG_WITH(opengl-incl,       [  --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL])
 AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL])
@@ -113,7 +114,13 @@ fi
 if test "$with_qt_libs" != "" ; then
 	QT_LIBPATH=$with_qt_libs
 fi
-
+if test "$with-qt-mt" != "yes" ; then
+	USE_THREADSAFE_QT=true
+	QT_MT_SUFFIX="-mt"
+else
+	USE_THREADSAFE_QT=false
+	QT_MT_SUFFIX=""
+fi
 if test "$with_opengl_incl" != "" ; then
 	OPENGL_INCPATH=$with_opengl_incl
 fi
@@ -1857,64 +1864,104 @@ else
 	AC_MSG_RESULT((void*, void*, unsigned int))
 fi
 
-AC_MSG_CHECKING(for 64-bit XDR type (for xdr_u_hyper))
-BALL_U_QUAD_TYPE=""
+
+dnl
+dnl  check whether there is a function to store 64bit
+dnl  unsigned ints (xdr_u_hyper)
+dnl
+AC_MSG_CHECKING(for xdr_u_hyper function)
+BALL_HAS_XDR_U_HYPER=false
 AC_TRY_COMPILE(
 	[
 		#include <rpc/types.h>
 		#include <rpc/xdr.h>
 	],
-	[	u_quad_t   q;
-		XDR xdrs;
-	  xdr_u_hyper(&xdrs, &q);
+	  xdr_u_hyper(0, 0);
 	],
+	BALL_HAS_XDR_U_HYPER=true)	
+
+if test "${BALL_HAS_XDR_U_HYPER}" = "true" ; then
+	AC_MSG_RESULT(found)
+
+	AC_MSG_CHECKING(for 64-bit XDR type (for xdr_u_hyper))
+	BALL_U_QUAD_TYPE=""
+	AC_TRY_COMPILE(
+		[
+			#include <rpc/types.h>
+			#include <rpc/xdr.h>
+		],
+		[	u_quad_t   q;
+			XDR xdrs;
+	 	 xdr_u_hyper(&xdrs, &q);
+		],
 	BALL_U_QUAD_TYPE=u_quad_t)	
-if test "${BALL_U_QUAD_TYPE}" = "" ; then
-	AC_TRY_COMPILE(
-		[
-			#include <rpc/types.h>
-			#include <rpc/xdr.h>
-		],
-		[	u_longlong_t   q;
-			XDR xdrs;
-			xdr_u_hyper(&xdrs, &q);
-		],
-		BALL_U_QUAD_TYPE=u_longlong_t)	
-fi
+	if test "${BALL_U_QUAD_TYPE}" = "" ; then
+		AC_TRY_COMPILE(
+			[
+				#include <rpc/types.h>
+				#include <rpc/xdr.h>
+			],
+			[	u_longlong_t   q;
+				XDR xdrs;
+				xdr_u_hyper(&xdrs, &q);
+			],
+			BALL_U_QUAD_TYPE=u_longlong_t)	
+	fi
 
-if test "${BALL_U_QUAD_TYPE}" = "" ; then
-	AC_TRY_COMPILE(
-		[
-			#include <rpc/types.h>
-			#include <rpc/xdr.h>
-		],
-		[	unsigned long long int  q;
-			XDR xdrs;
-			xdr_u_hyper(&xdrs, &q);
-		],
-		BALL_U_QUAD_TYPE="unsigned long long int")	
-fi
+	if test "${BALL_U_QUAD_TYPE}" = "" ; then
+		AC_TRY_COMPILE(
+			[
+				#include <rpc/types.h>
+				#include <rpc/xdr.h>
+			],
+			[	unsigned long long int  q;
+				XDR xdrs;
+				xdr_u_hyper(&xdrs, &q);
+			],
+			BALL_U_QUAD_TYPE="unsigned long long int")	
+	fi
 
-if test "${BALL_U_QUAD_TYPE}" = "" ; then
-	AC_TRY_COMPILE(
-		[
-			#include <rpc/types.h>
-			#include <rpc/xdr.h>
-		],
-		[	__uint64_t  q;
-			XDR xdrs;
-			xdr_u_hyper(&xdrs, &q);
-		],
-		BALL_U_QUAD_TYPE=__uint64_t)	
-fi
-if test "${BALL_U_QUAD_TYPE}" = "" ; then
-	AC_MSG_RESULT(Could not identify an appropriate type for xdr_u_hyper.)
-	AC_MSG_ERROR(Aborted.)
-fi
+	if test "${BALL_U_QUAD_TYPE}" = "" ; then
+		AC_TRY_COMPILE(
+			[
+				#include <rpc/types.h>
+				#include <rpc/xdr.h>
+			],
+			[	__uint64_t  q;
+				XDR xdrs;
+				xdr_u_hyper(&xdrs, &q);
+			],
+			BALL_U_QUAD_TYPE=__uint64_t)	
+	fi
+	if test "${BALL_U_QUAD_TYPE}" = "" ; then
+		AC_MSG_RESULT(Could not identify an appropriate type for xdr_u_hyper.)
+		AC_MSG_ERROR(Aborted.)
+	fi
 
-AC_MSG_RESULT(${BALL_U_QUAD_TYPE})
-AC_DEFINE_UNQUOTED(BALL_XDR_UINT64_TYPE, ${BALL_U_QUAD_TYPE})
-
+	AC_MSG_RESULT(${BALL_U_QUAD_TYPE})
+	AC_DEFINE_UNQUOTED(BALL_XDR_UINT64_TYPE, ${BALL_U_QUAD_TYPE})
+	AC_DEFINE(BALL_HAS_XDR_U_HYPER)
+else
+	dnl
+	dnl	we do not have xdr_u_hyper, so BALL has to use two 
+	dnl	calls to xdr_u_int instead. 
+	dnl	However, we have to identify whether the system supports
+	dnl	64bit unsigned types at all
+	dnl	
+		AC_TRY_COMPILE(
+			[
+			],
+			[	
+				unsigned long long int  q = 1234567890123456789LL;
+			],
+			BALL_U_QUAD_TYPE="unsigned long long int")	
+		if test "${BALL_U_QUAD_TYPE}" = "" ; then
+			AC_MSG_RESULT(Could not identify an 64 bit unsigned type (long long).)
+			AC_MSG_ERROR(aborted)
+		fi
+		AC_DEFINE_UNQUOTED(BALL_XDR_UINT64_TYPE, ${BALL_U_QUAD_TYPE})
+		AC_MSG_RESULT(unsigned long long int)
+fi
 dnl
 dnl Define appropriate symbols in config.h.
 dnl The symbols are used in CONCEPT/XDRPersistenceManager.C only.
@@ -2124,11 +2171,11 @@ if test "${USE_BALLVIEW}" = true ; then
 				AC_MSG_RESULT((${QT_INCPATH}))	
 			fi
 
-			AC_MSG_CHECKING(for libqt)
+			AC_MSG_CHECKING(for libqt${QT_MT_SUFFIX})
 			if test "${QTDIR}" != "" ; then
-				AC_FIND_LIB(QT_LIBPATH,libqt,${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
+				AC_FIND_LIB(QT_LIBPATH,libqt${QT_MT_SUFFIX},${QTDIR}/lib ${QTDIR}/lib/${BINFMT} ${BALL_PATH}/contrib/qt/include)
 			else
-				AC_FIND_LIB(QT_LIBPATH,libqt,${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
+				AC_FIND_LIB(QT_LIBPATH,libqt${QT_MT_SUFFIX},${BALL_PATH}/contrib/qt/lib ${BALL_PATH}/contrib/qt/lib/${BINFMT})
 			fi
 
 			if test "${QT_LIBPATH}" = "" ; then
@@ -2138,10 +2185,12 @@ if test "${USE_BALLVIEW}" = true ; then
 				AC_MSG_RESULT([by passing the option --with-qt-libs=DIR to configure.])
 				AC_MSG_RESULT([You may also set the environment variable QTDIR to the correct])
 				AC_MSG_RESULT([path - configure will recognize this, too.])
+				AC_MSG_RESULT([If the QT library was built with thread support enabled (liqt-mt])
+				AC_MSG_RESULT([instead of libqt), please specify the option --with-threadsafe-qt.])
 				AC_MSG_RESULT([The QT package can be found under the following URL:])
 				AC_MSG_RESULT(  http://www.troll.no/qt)
 				AC_MSG_RESULT()
-				AC_MSG_RESULT([Building of the visualization component BALLVIEW was disabled!])
+				AC_MSG_ERROR(Aborted.)
 			else
 				AC_MSG_RESULT((${QT_LIBPATH}))	
 			fi
@@ -2375,12 +2424,12 @@ if test "${USE_BALLVIEW}" = true ; then
 fi
 if test "${USE_BALLVIEW}" = true ; then
 	if test "${QT_LIBPATH}" != "/usr/lib" ; then
-		QTQGL_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt"
-		QT_LIBOPTS="-L${QT_LIBPATH} -lqt"
+		QTQGL_LIBOPTS="-L${QT_LIBPATH} -lqgl -lqt${QT_MT_SUFFIX}"
+		QT_LIBOPTS="-L${QT_LIBPATH} -lqt${QT_MT_SUFFIX}"
 	else 
 		QT_LIBPATH=""
-		QTQGL_LIBOPTS="-lqgl -lqt"
-		QT_LIBOPTS="-lqt"
+		QTQGL_LIBOPTS="-lqgl -lqt${QT_MT_SUFFIX}"
+		QT_LIBOPTS="-lqt${QT_MT_SUFFIX}"
 	fi
 fi
 if test "${USE_BALLVIEW}" = true ; then

@@ -102,6 +102,10 @@
 #undef BALL_XDRREC_CREATE_VOID_CHAR_INT
 #undef BALL_XDRREC_CREATE_CHAR_CHAR_INT
 
+// some platforms (e.g. Debian 2.1) do not provide xdr_u_hyper, so we 
+// need a workaround for this
+#undef BALL_HAS_XDR_U_HYPER 
+
 // on some systems, we do not have regex.h, so we have to use regexp.h
 #undef BALL_USE_REGEXP_H
 
