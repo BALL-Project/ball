@@ -90,7 +90,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt330.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libview.lib libball.lib"
+				AdditionalDependencies="imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt323.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libview.lib libball.lib"
 				OutputFile="$(OutDir)/BALLView.exe"
 				LinkIncremental="2"
 				SuppressStartupBanner="TRUE"
@@ -182,7 +182,7 @@
 			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
-				AdditionalOptions="/D &quot;BALL_QT_HAS_THREADS&quot; /win32icon:ballview.ico"
+				AdditionalOptions="/D &quot;BALL_QT_HAS_THREADS&quot; "
 				Optimization="3"
 				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
@@ -209,10 +209,10 @@
 			<Tool
 				Name="VCLinkerTool"
 				AdditionalDependencies="$(SIPDir)\libs\python23.lib imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt323.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libBall.lib libview.lib"
-				OutputFile="c:\BALLView\BALLView.exe"
+				OutputFile="$(ProjectDir)BALLView.exe"
 				LinkIncremental="0"
 				SuppressStartupBanner="TRUE"
-				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;C:\BALLView"
+				AdditionalLibraryDirectories="&quot;$(QTDIR)\lib&quot;;&quot;$(ProjectDir)..\..\Libs&quot;"
 				IgnoreAllDefaultLibraries="FALSE"
 				IgnoreDefaultLibraryNames=""
 				GenerateDebugInformation="FALSE"

@@ -20,7 +20,7 @@
 				Name="VCCLCompilerTool"
 				Optimization="0"
 				InlineFunctionExpansion="0"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;,&quot;C:\Programme\Qt\3.3.0b1\include&quot;,&quot;C:\Programme\Qt\3.3.0b1\mkspecs\win32-msvc.net&quot;;$(SIPDIR)/include"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;"
 				PreprocessorDefinitions="WIN32;_DEBUG;_WINDOWS;_USRDLL;LIBBALL_EXPORTS"
 				MinimalRebuild="TRUE"
 				BasicRuntimeChecks="3"
@@ -38,8 +38,7 @@
 			<Tool
 				Name="VCLibrarianTool"
 				AdditionalDependencies=" qt-mt330.lib qtmain.lib"
-				OutputFile="$(ProjectDir)..\..\..\lib\$(ProjectName).lib"
-				AdditionalLibraryDirectories=" C:\Programme\Qt\3.3.0b1\lib"/>
+				OutputFile="$(ProjectDir)..\..\..\lib\$(ProjectName).lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -71,7 +70,7 @@
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
 				OptimizeForWindowsApplication="TRUE"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;,&quot;C:\Programme\Qt\3.3.0b1\include&quot;,&quot;C:\Programme\Qt\3.3.0b1\mkspecs\win32-msvc.net&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;LIBBALL_EXPORTS;YY_NEVER_INTERACTIVE"
 				StringPooling="TRUE"
 				MinimalRebuild="FALSE"
@@ -124,7 +123,7 @@
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
 				OptimizeForWindowsApplication="TRUE"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;,&quot;C:\Programme\Qt\3.3.0b1\include&quot;,&quot;C:\Programme\Qt\3.3.0b1\mkspecs\win32-msvc.net&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;,&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;LIBBALL_EXPORTS;YY_NEVER_INTERACTIVE"
 				StringPooling="TRUE"
 				MinimalRebuild="FALSE"
@@ -178,7 +177,7 @@
 				OmitFramePointers="TRUE"
 				OptimizeForProcessor="2"
 				OptimizeForWindowsApplication="TRUE"
-				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;,&quot;C:\Programme\Qt\3.3.0b1\include&quot;,&quot;C:\Programme\Qt\3.3.0b1\mkspecs\win32-msvc.net&quot;"
+				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\oncrpc&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;LIBBALL_EXPORTS;YY_NEVER_INTERACTIVE"
 				StringPooling="TRUE"
 				MinimalRebuild="FALSE"
@@ -197,7 +196,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="c:\BALLView\$(ProjectName).lib"/>
+				OutputFile="&quot;$(ProjectDir)..\$(ProjectName).lib&quot;"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -1188,7 +1187,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running flex on $(InputFileName)"
-							CommandLine="&quot;$(ProjectDir)..\..\Contrib\bin\flex&quot; -PExpressionParser -o&quot;$(InputDir)expressionParserLexer.C&quot; &quot;$(InputPath)&quot;
+							CommandLine="&quot;$(ProjectDir)..\..\Contrib\flex\bin\flex&quot; -PExpressionParser -o&quot;$(InputDir)expressionParserLexer.C&quot; &quot;$(InputPath)&quot;
 "
 							Outputs="$(InputDir)expressionParserLexer.C"/>
 					</FileConfiguration>
@@ -1230,7 +1229,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running bison on $(InputFileName)"
-							CommandLine="$(SolutionDir)\Contrib\bin\bison -y -p ExpressionParser -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)expressionParserParser.C&quot;
+							CommandLine="$(SolutionDir)\Contrib\bison\bin\bison -y -p ExpressionParser -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)expressionParserParser.C&quot;
 "
 							Outputs="$(InputDir)expressionParserParser.C"/>
 					</FileConfiguration>
@@ -1474,7 +1473,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running flex on $(InputFileName)"
-							CommandLine="&quot;$(ProjectDir)..\..\Contrib\bin\flex&quot; -PparsedFunction -o&quot;$(InputDir)parsedFunctionLexer.C&quot; &quot;$(InputPath)&quot;
+							CommandLine="&quot;$(ProjectDir)..\..\Contrib\flex\bin\flex&quot; -PparsedFunction -o&quot;$(InputDir)parsedFunctionLexer.C&quot; &quot;$(InputPath)&quot;
 "
 							Outputs="$(InputDir)parsedFunctionLexer.C"/>
 					</FileConfiguration>
@@ -1522,7 +1521,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running bison on $(InputFileName)"
-							CommandLine="$(SolutionDir)\Contrib\bin\bison -y -p parsedFunction -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)parsedFunctionParser.C&quot;
+							CommandLine="$(SolutionDir)\Contrib\bison\bin\bison -y -p parsedFunction -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)parsedFunctionParser.C&quot;
 "
 							Outputs="$(InputDir)parsedFunctionParser.C;$(InputDir)parsedFunctionParser.h"/>
 					</FileConfiguration>
@@ -1845,10 +1844,40 @@
 				Name="QSAR"
 				Filter="">
 				<File
+					RelativePath="..\..\..\source\QSAR\aromaticityProcessor.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\QSAR\connectivityBase.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\QSAR\connectivityDescriptors.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\QSAR\descriptor.C">
 				</File>
 				<File
+					RelativePath="..\..\..\source\QSAR\partialChargeBase.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\QSAR\partialChargeDescriptors.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\QSAR\partialChargeProcessor.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\QSAR\ringPerceptionProcessor.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\QSAR\simpleBase.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\QSAR\simpleDescriptors.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\QSAR\surfaceBase.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\QSAR\surfaceDescriptors.C">
 				</File>
 			</Filter>
 			<Filter
@@ -2100,7 +2129,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running flex on $(InputFileName)"
-							CommandLine="&quot;$(ProjectDir)..\..\Contrib\bin\flex&quot; -PSmilesParser -o&quot;$(InputDir)smilesParserLexer.C&quot; &quot;$(InputPath)&quot;
+							CommandLine="&quot;$(ProjectDir)..\..\Contrib\flex\bin\flex&quot; -PSmilesParser -o&quot;$(InputDir)smilesParserLexer.C&quot; &quot;$(InputPath)&quot;
 "
 							Outputs="$(InputDir)smilesParserLexer.C"/>
 					</FileConfiguration>
@@ -2148,7 +2177,7 @@
 						<Tool
 							Name="VCCustomBuildTool"
 							Description="running bison on $(InputFileName)"
-							CommandLine="$(SolutionDir)\Contrib\bin\bison -y -p SmilesParser -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)smilesParserParser.C&quot;
+							CommandLine="$(SolutionDir)\Contrib\bison\bin\bison -y -p SmilesParser -d &quot;$(InputPath)&quot; -o &quot;$(InputDir)smilesParserParser.C&quot;
 "
 							Outputs="$(InputDir)smilesParserParser.C;$(InputDir)smilesParserParser.h"/>
 					</FileConfiguration>
@@ -2255,13 +2284,13 @@
 						Name="Python|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="&quot;$(SIPDIR)\include&quot;"/>
+							AdditionalIncludeDirectories=""/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Python Multithreaded|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="&quot;$(SIPDIR)\include&quot;"/>
+							AdditionalIncludeDirectories=""/>
 					</FileConfiguration>
 				</File>
 			</Filter>
@@ -2987,10 +3016,40 @@
 				Name="QSAR"
 				Filter="">
 				<File
+					RelativePath="..\..\..\include\BALL\QSAR\aromaticityProcessor.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\QSAR\connectivityBase.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\QSAR\connectivityDescriptors.h">
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\QSAR\descriptor.h">
 				</File>
 				<File
+					RelativePath="..\..\..\include\BALL\QSAR\partialChargeBase.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\QSAR\partialChargeDescriptors.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\QSAR\partialChargeProcessor.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\QSAR\ringPerceptionProcessor.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\QSAR\simpleBase.h">
+				</File>
+				<File
 					RelativePath="..\..\..\include\BALL\QSAR\simpleDescriptors.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\QSAR\surfaceBase.h">
+				</File>
+				<File
+					RelativePath="..\..\..\include\BALL\QSAR\surfaceDescriptors.h">
 				</File>
 			</Filter>
 			<Filter
@@ -3212,15 +3271,7 @@
 			Name="WIN"
 			Filter="">
 			<File
-				RelativePath="$(ProjectDir)\..\..\Contrib\regex-0.12\regex.c">
-				<FileConfiguration
-					Name="Debug|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions="HAVE_STRING_H;__STDC__;REGEX_MALLOC"
-						WarningLevel="0"
-						CompileAs="1"/>
-				</FileConfiguration>
+				RelativePath="..\..\Contrib\regex-0.12\regex.c">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -3228,23 +3279,6 @@
 						PreprocessorDefinitions="HAVE_STRING_H;__STDC__;REGEX_MALLOC"
 						CompileAs="1"/>
 				</FileConfiguration>
-				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions="HAVE_STRING_H;__STDC__;REGEX_MALLOC"
-						CompileAs="1"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Python Multithreaded|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						PreprocessorDefinitions="HAVE_STRING_H;__STDC__;REGEX_MALLOC"
-						CompileAs="1"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="$(ProjectDir)..\..\Contrib\regex-0.12\regex.h">
 			</File>
 			<File
 				RelativePath="unistd.h">
@@ -3253,9 +3287,6 @@
 		<Filter
 			Name="Libs"
 			Filter="">
-			<File
-				RelativePath="..\..\Contrib\flex-2.5.4\MISC\MSVC\bin\release\flexlib.lib">
-			</File>
 		</Filter>
 	</Files>
 	<Globals>
