@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.114 2000/10/21 09:29:46 oliver Exp $
+dnl    $Id: configure.in,v 1.115 2000/11/02 18:27:02 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1493,8 +1493,8 @@ dnl   in persistence-related methods use this type to ensure compatibility betwe
 dnl   64bit BALL versions.
 dnl	  missing: usage of the result of AC_TYPE_SIZE_T
 dnl
-AC_CHECK_SIZEOF(int, 4)
 AC_CHECK_SIZEOF(char, 4)
+AC_CHECK_SIZEOF(int, 4)
 AC_CHECK_SIZEOF(long, 4)
 AC_CHECK_SIZEOF(long long, 8)
 AC_CHECK_SIZEOF(size_t, 4)
@@ -1509,8 +1509,8 @@ SIZEOF_UINT=$ac_cv_sizeof_int
 SIZEOF_ULONG=$ac_cv_sizeof_long
 SIZEOF_ULONGLONG=$ac_cv_sizeof_long_long
 
-AC_DEFINE_UNQUOTED(BALL_INT_SIZE, ${SIZEOF_INT})
 AC_DEFINE_UNQUOTED(BALL_CHAR_SIZE, ${SIZEOF_CHAR})
+AC_DEFINE_UNQUOTED(BALL_INT_SIZE, ${SIZEOF_INT})
 AC_DEFINE_UNQUOTED(BALL_LONG_SIZE, ${SIZEOF_LONG})
 AC_DEFINE_UNQUOTED(BALL_SIZE_T_SIZE, ${SIZEOF_SIZE_T})
 AC_DEFINE_UNQUOTED(BALL_POINTER_SIZE, ${SIZEOF_VOID_P})
@@ -1764,6 +1764,122 @@ fi
 
 AC_DEFINE_UNQUOTED(BALL_SOCKLEN_TYPE, ${BALL_SOCKLEN_TYPE})
 
+
+dnl
+dnl   check for the XDR functions: their interface and the libraries they're hidden in.
+dnl
+AC_CHECK_HEADER(rpc/types.h, HAS_RPC_TYPES_H=true, HAS_RPC_TYPES_H=false)
+if test "${HAS_RPC_TYPES_H}" = false ; then
+	AC_MSG_RESULT()
+	AC_MSG_RESULT([Cannot find RPC headers (rpc/types.h).])
+	AC_MSG_RESULT()
+	AC_MSG_ERROR(Aborted.)
+fi
+
+AC_CHECK_HEADER(rpc/xdr.h, HAS_XDR_H=true, HAS_XDR_H=false)
+if test "${HAS_XDR_H}" = false ; then
+	AC_MSG_RESULT()
+	AC_MSG_RESULT([Cannot find XDR headers (rpc/xdr.h).])
+	AC_MSG_RESULT()
+	AC_MSG_ERROR(Aborted.)
+fi
+
+AC_MSG_CHECKING(arg types for xdrrec_create)
+AC_TRY_COMPILE(
+		[
+			#include <rpc/types.h>
+			#include <rpc/xdr.h>
+			extern "C" int dummy(void*, void*, unsigned int) {}
+			void foo(){ 
+				XDR xdrs;
+				xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+			}
+		],
+		[	
+		],
+		BALL_XDRREC_VOID_VOID_UINT=true,
+		BALL_XDRREC_VOID_VOID_UINT=false
+)
+if test "${BALL_XDRREC_VOID_VOID_UINT}" = false ; then
+	AC_TRY_COMPILE(
+			[
+				#include <rpc/types.h>
+				#include <rpc/xdr.h>
+				extern "C" int dummy(void*, char*, int) {}
+				void foo(){ 
+					XDR xdrs;
+					xdrrec_create(&xdrs, 0, 0, 0, dummy, dummy);
+				}
+			],
+			[	
+			],
+			BALL_XDRREC_VOID_CHAR_INT=true,
+			BALL_XDRREC_VOID_CHAR_INT=false
+	)
+	if test "${BALL_XDRREC_VOID_CHAR_INT}" = true ; then
+		AC_MSG_RESULT((void*, char*, int))
+	else
+		AC_MSG_RESULT(not found!)
+		AC_MSG_ERROR(Aborted)
+	fi
+else
+	AC_MSG_RESULT((void*, void*, unsigned int))
+fi
+
+dnl
+dnl define an appropriate symbol in config.h
+dnl
+if test "${BALL_XDRREC_VOID_CHAR_INT}" ; then
+	AC_DEFINE(BALL_XDRREC_CREATE_VOID_CHAR_INT)
+fi
+
+dnl
+dnl		Try to guess the library required for the XDR stuff.
+dnl   It is often in libc, but Solaris hides it in libnsl.
+dnl
+AC_MSG_CHECKING(for XDR symbols in libc)
+AC_TRY_LINK([
+		#include <rpc/types.h>
+		#include <rpc/xdr.h>
+	],
+	[
+		XDR xdrs;
+		int i;
+		xdr_int(&xdrs, &i);
+	],
+	XDR_IN_LIBC=true
+)
+if test "${XDR_IN_LIBC}" != true ; then
+	AC_MSG_RESULT(not found!)
+	AC_MSG_CHECKING(for XDR symbols in libnsl)
+
+	SAVE_LIBS=${LIBS}
+	LIBS="-lnsl ${LIBS}"
+	AC_TRY_LINK([
+			#include <rpc/types.h>
+			#include <rpc/xdr.h>
+		],
+		[
+			XDR xdrs;
+			int i;
+			xdr_int(&xdrs, &i);
+		],
+		XDR_IN_LIBNSL=true
+	)
+	if test "${XDR_IN_LIBNSL}" = true ; then
+		AC_MSG_RESULT(yes)
+	else
+		AC_MSG_RESULT(no)
+		AC_MSG_RESULT()
+		AC_MSG_RESULT(Did not find XDR symbols in libc or libnsl.)
+		AC_MSG_ERROR(Aborted.)
+	fi
+else
+	dnl
+	dnl	XDR symbols are in libc.
+	dnl
+	AC_MSG_RESULT(yes)
+fi
 
 dnl
 dnl   check whether ieeefp.h does really exist
