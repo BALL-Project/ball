@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.10 2003/10/28 00:23:17 amoll Exp $
+// $Id: representation.C,v 1.11 2003/11/03 00:27:49 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -19,6 +19,7 @@ namespace BALL
 				: PropertyManager(),
 					drawing_mode_(DRAWING_MODE_SOLID),
 					drawing_precision_(DRAWING_PRECISION_HIGH),
+					surface_drawing_precision_(-1),
 					transparency_(0),
 					model_type_(MODEL_UNKNOWN),
 					coloring_type_(COLORING_UNKNOWN),
@@ -44,6 +45,7 @@ namespace BALL
 				: PropertyManager(),
 					drawing_mode_(drawing_mode),
 					drawing_precision_(drawing_precision),
+					surface_drawing_precision_(-1),
 					model_type_(model_type),
 					transparency_(0),
 					model_processor_(0),
@@ -60,6 +62,7 @@ namespace BALL
 			:	PropertyManager(),
 				drawing_mode_(DRAWING_MODE_SOLID),
 				drawing_precision_(DRAWING_PRECISION_HIGH),
+				surface_drawing_precision_(-1),
 				transparency_(0),
 				model_processor_(model_processor),
 				color_processor_(0),
@@ -78,6 +81,7 @@ namespace BALL
 			model_type_ = representation.model_type_;
 			coloring_type_ = representation.coloring_type_;
 			transparency_ = representation.transparency_;
+			surface_drawing_precision_ = representation.surface_drawing_precision_;
 
 			PropertyManager::operator = (representation);
 
@@ -140,6 +144,7 @@ namespace BALL
 			model_type_ = MODEL_UNKNOWN;
 			coloring_type_ = COLORING_UNKNOWN;
 			transparency_ = 0;
+			surface_drawing_precision_ = -1;
 		}
 
 		
@@ -261,6 +266,7 @@ namespace BALL
 			if (model_processor_ != 0) 
 			{
 				model_processor_->setDrawingPrecision(drawing_precision_);
+				model_processor_->setSurfaceDrawingPrecision(surface_drawing_precision_);
 			}
 		}
 
