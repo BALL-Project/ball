@@ -1,11 +1,7 @@
-// $Id: compositeDescriptor.h,v 1.9 2001/07/16 14:49:30 amoll Exp $
+// $Id: compositeDescriptor.h,v 1.9.4.1 2002/10/25 23:33:10 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #	include <BALL/CONCEPT/composite.h>
@@ -17,10 +13,6 @@
 
 #ifndef BALL_DATATYPE_LIST_H
 #	include <BALL/DATATYPE/list.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_MATHS_ANGLE_H
@@ -47,10 +39,8 @@
 #	include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 #endif
 
-
 namespace BALL
 {
-	
 	namespace VIEW
 	{
 

@@ -1,20 +1,14 @@
-// $Id: glEntityDescriptor.h,v 1.9 2001/07/16 14:49:30 amoll Exp $
+// $Id: glEntityDescriptor.h,v 1.9.4.1 2002/10/25 23:33:11 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_GLENTITYDESCRIPTOR_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLDISPLAYLIST_H
 #	include <BALL/VIEW/GUI/KERNEL/glDisplayList.h>
 #endif
 
-
 namespace BALL
 {
-	
 	namespace VIEW
 	{
 
@@ -76,7 +70,6 @@ namespace BALL
 				throw();
 			
 			//@}
-
 			/** @name Destructors
 			*/
 			//@{
@@ -104,8 +97,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -130,7 +123,7 @@ namespace BALL
 					Access the mutable pointer of the static always front display list of
 					{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					@return      GLDisplayList* mutable pointer to the static always front display list of {\em *this} glEntityDescriptor
+					@return      GLDisplayList* mutable pointer to the static always front display list 
 					@see         GLDisplayList
 			*/
 			GLDisplayList* getStaticAlwaysFrontDisplayList()
@@ -162,7 +155,7 @@ namespace BALL
 					Access the mutable pointer of the static wireframe always front display
 					list of	{\em *this} glEntityDescriptor. This method will be 
 					called internally by \Ref{CompositeDescriptor}.
-					@return      GLDisplayList* mutable pointer to the static wireframe always front display list of {\em *this} glEntityDescriptor
+					@return      GLDisplayList* mutable pointer to the static wireframe always front display list 
 					@see         GLDisplayList
 			*/
 			GLDisplayList* getStaticWireframeAlwaysFrontDisplayList()
@@ -257,8 +250,8 @@ namespace BALL
 			*/
 			void cancelUpdate()
 				throw();
- 			//@}
 
+ 			//@}
 			/**	@name	Predicates
 			*/
 			//@{
@@ -271,8 +264,8 @@ namespace BALL
 			*/
 			bool needUpdate() const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -285,7 +278,7 @@ namespace BALL
 					{\em *this} glEntityDescriptor is valid if all internal display lists
 					are valid.
 					Calls \Ref{GLDisplayList::isValid}
-					@return			bool {\tt true} if the internal state of {\em *this} glEntityDescriptor is correct (self-validated) and consistent, {\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} glEntityDescriptor is correct
 			*/
 			virtual bool isValid() const
 				throw();
@@ -300,8 +293,8 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Storers
 			*/
 			//@{

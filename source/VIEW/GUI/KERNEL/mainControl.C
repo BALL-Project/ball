@@ -1,13 +1,12 @@
-// $Id: mainControl.C,v 1.22 2002/01/16 02:59:38 oliver Exp $
+// $Id: mainControl.C,v 1.22.4.1 2002/10/25 23:32:45 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
 
 #include <BALL/VIEW/GUI/KERNEL/mainControl.h>
 #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
-#include <BALL/VIEW/GUI/WIDGETS/scene.h>
 
-#include <qmenudata.h>
+#include <qapplication.h>
 #include <qwidget.h>
 #include <qmenubar.h>
 #include <qpopupmenu.h>
@@ -16,12 +15,9 @@
 using std::istream;
 using std::ostream;
 using std::endl;
-using std::cerr;
-using std::cout;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 
@@ -66,8 +62,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<MainControl>() << endl;
+				Log.info() << "Destructing object " << (void *)this << " of class " << RTTI::getName<MainControl>() << endl;
 			#endif 
 
 			destroy();
@@ -162,7 +157,7 @@ namespace BALL
 		void MainControl::show()
 		{
 			#ifdef BALL_VIEW_DEBUG
-        cerr << "MainControl::show()  list.size() = " << modular_widgets_.size() << endl;
+        Log.info() << "MainControl::show()  list.size() = " << modular_widgets_.size() << endl;
 			#endif
 
 			// create own preferences dialog
@@ -852,7 +847,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_DEBUG_VIEW
-				cerr << "MainControl::removeModularWidget(" << widget << ")" << endl;
+				Log.info() << "MainControl::removeModularWidget(" << widget << ")" << endl;
 			#endif
 			modular_widgets_.remove(widget);
 		}

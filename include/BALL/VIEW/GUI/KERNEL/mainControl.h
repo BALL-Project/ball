@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.20 2001/12/28 02:33:39 oliver Exp $
+// $Id: mainControl.h,v 1.20.4.1 2002/10/25 23:33:12 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -17,10 +17,6 @@
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #	include <BALL/DATATYPE/hashMap.h>
-#endif
-
-#ifndef BALL_DATATYPE_STRING_H
-#	include <BALL/DATATYPE/string.h>
 #endif
 
 #ifndef BALL_FORMAT_INIFILE_H
@@ -51,29 +47,19 @@
 #	include <BALL/DATATYPE/list.h>
 #endif
 
-#include <qapplication.h>
 #include <qobject.h>
 #include <qwidget.h>
 #include <qmainwindow.h>
 
-//using namespace std;
-//using namespace BALL;
-//using namespace BALL::VIEW;
-
-
-//class ModularWidget;
-
 namespace BALL
 {
-
 	namespace VIEW
 	{
 		class ModularWidget;
 
 		/**	MainControl class.
 				{\bf Caveat:} Due to a peculiarity of the QT Meta Object Compiler (MOC)
-				you have to specify the full namsespace qualified name of this classes
-				when deriving from it.
+				you have to specify the full namsespace qualified name of this classes when deriving from it.
 				So don't use {\tt class foo : public MainControl {};} but 
 				{\tt class foo : public BALL::VIEW::MainControl {};} instead. \\ \\
 				The class MainControl is a container for the \Ref{CompositeDescriptor} and the
@@ -223,13 +209,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
 
-			/**	@name	Assignment
-			*/
-			//@{
 			//@}
-
 			/**	@name	Accessors
 			*/
 			//@{
@@ -253,10 +234,7 @@ namespace BALL
 					@see    String
 					@see    Vector3
 			*/
-			void insert
-				(Composite* composite,
-				 const String& name = "unkown",
-				 const Vector3& center = Vector3(0,0,0))
+			void insert(Composite* composite, const String& name = "unkown", const Vector3& center = Vector3(0,0,0))
 				throw();
 
 			/** Insert a new composite (without deletion).
@@ -279,8 +257,7 @@ namespace BALL
 					@see    String
 					@see    Vector3
 			*/
-      CompositeDescriptor* insert
-        (const Composite& composite,
+      CompositeDescriptor* insert(const Composite& composite,
          const String& name = "unkown",
 				 const Vector3& center = Vector3(0,0,0))
 				throw();
@@ -295,7 +272,8 @@ namespace BALL
 					If {\em composite_descriptor} is already inserted and a shallow copy
 					should be made {\tt 0} will be returned.
 					@param composite_descriptor the new \Ref{CompositeDescriptor} to be inserted into {\em *this} mainControl
-					@param deep if {\tt true} then a deep (default) copy of {\em composite_descriptor} is made, {\tt false} a shallow copy is made
+					@param deep if {\tt true} then a deep (default) copy of {\em composite_descriptor} is made, 
+										{\tt false} a shallow copy is made
 					@return CompositeDescriptor* mutable pointer to the new created \Ref{CompositeDescriptor}
 					@see    Composite
 					@see    CompositeDescriptor
@@ -309,7 +287,8 @@ namespace BALL
 					children of {\em *this} mainControl. See \Ref{ConnectionObject} for
 					information concerning message queuing and responding.
 					@param  composite the \Ref{Composite} to be removed from {\em *this} mainControl
-					@param  sent_message if set to {\tt true} {\em *this} mainControl sents a \Ref{RemoveCompositeMessage} through the \Ref{ConnectionObject} tree
+					@param  sent_message if set to {\tt true} {\em *this} mainControl sents a \Ref{RemoveCompositeMessage} 
+										through the \Ref{ConnectionObject} tree
 					@return bool {\tt true} the \Ref{Composite} was successfully removed, {\tt false} otherwise
 					@see    insert
 					@see    Composite
@@ -336,7 +315,8 @@ namespace BALL
 					\Ref{Composite} {\em composite}. If {\em composite} is not inserted into
 					{\em *this} mainControl then {\tt 0} is returned.
 					@param   composite the inserted \Ref{Composite} whose \Ref{CompositeDescriptor} should be returned
-					@return  CompositeDescriptor* mutable pointer to \Ref{CompositeDescriptor}, {\tt 0} if {\em composite} is not inserted into {\em *this} mainControl
+					@return  CompositeDescriptor* mutable pointer to \Ref{CompositeDescriptor}, {\tt 0} if {\em composite} 
+										is not inserted into {\em *this} mainControl
 					@see     insert
 					@see     Composite
 					@see     CompositeDescriptor
@@ -354,7 +334,8 @@ namespace BALL
 					Access a mutable reference to the list of \Ref{CompositeDescriptor} objects
 					of {\em *this} mainControl. Empty if {\em *this} mainControl has no objects
 					yet.			
-					@return List<CompositeDescriptor*>& mutable reference to the list of \Ref{CompositeDescriptor} objects of {\em *this} mainControl
+					@return List<CompositeDescriptor*>& mutable reference to the list of \Ref{CompositeDescriptor} objects 
+										of {\em *this} mainControl
 					@see     insert
 					@see     getDescriptor
 					@see     CompositeDescriptor
@@ -372,7 +353,8 @@ namespace BALL
 					Change the name of {\em composite} to {\em name}.					
 					@param  composite the \Ref{Composite} whose name will be changed
 					@param  name the new name
-					@return bool {\tt true} if {\em composite} is inserted in {\em *this} mainControl and the assignment was successful, {\tt false} otherwise
+					@return bool {\tt true} if {\em composite} is inserted in {\em *this} mainControl and the 
+										assignment was successful, {\tt false} otherwise
 					@see    getName
 					@see    insert
 					@see    Composite
@@ -383,14 +365,12 @@ namespace BALL
 
 			/** Mutable inspection of the name.
 					Access a mutable pointer to the name of {\em composite}. If the 
-					{\em composite} is not inserted into {\em *this} mainControl then {\tt 0}
-					is returned.
+					{\em composite} is not inserted into {\em *this} mainControl then {\tt 0} is returned.
 					@param   composite the \Ref{Composite} whose name should be retrieved
 					@return  String* mutable pointer to the name ({\tt 0} if no such composite is inserted)
 					@see     setName
 					@see     insert
 					@see     Composite
-					@see     String
 			*/
 			String* getName(const Composite& composite)
 				throw();
@@ -408,12 +388,12 @@ namespace BALL
 					If more such names are available then the first found 
 					\Ref{CompositeDescriptor} with this {\em name} will be returned.
 					@param   name the name whose \Ref{CompositeDescriptor} should be retrieved
-					@return  CompositeDescriptor* mutable pointer to the \Ref{CompositeDescriptor} ({\tt 0} if no such \Ref{Composite} with such a name exists)
+					@return  CompositeDescriptor* mutable pointer to the \Ref{CompositeDescriptor} 
+										({\tt 0} if no such \Ref{Composite} with such a name exists)
 					@see     setName
 					@see     insert
 					@see     Composite
 					@see     CompositeDescriptor
-					@see     String
 			*/
 			CompositeDescriptor* getDescriptor(const String& name)
 				throw();
@@ -429,7 +409,8 @@ namespace BALL
 					to the \Ref{Vector3} {\em v}.
 					@param  composite the \Ref{Composite} whose center vector should be changed
 					@param  v the \Ref{Vector3} that is the new center vector
-					@return bool {\tt true} if {\em composite} is inserted in {\em *this} mainControl and the assignment was successful, {\tt false} otherwise
+					@return bool {\tt true} if {\em composite} is inserted in {\em *this} mainControl and the assignment 
+										was successful, {\tt false} otherwise
 					@see    getCenter
 					@see    insert
 					@see    Composite
@@ -464,7 +445,8 @@ namespace BALL
 					If more such center \Ref{Vector3} are available then the first found 
 					\Ref{CompositeDescriptor} with this {\em center} vector will be returned.
 					@param   center the center \Ref{Vector3} whose \Ref{CompositeDescriptor} should be retrieved
-					@return  CompositeDescriptor* mutable pointer to the \Ref{CompositeDescriptor} ({\tt 0} if no such \Ref{Composite} with such a center vector exists)
+					@return  CompositeDescriptor* mutable pointer to the \Ref{CompositeDescriptor} 
+										({\tt 0} if no such \Ref{Composite} with such a center vector exists)
 					@see     setCenter
 					@see     insert
 					@see     Composite
@@ -536,8 +518,8 @@ namespace BALL
 		  */
 			virtual void onNotify(Message *message)
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Predicates
 			*/
 			//@{
@@ -559,10 +541,10 @@ namespace BALL
 			*/
 			bool isInserted(const CompositeDescriptor& compositeDescriptor) const
 				throw();
-			//@}
 
 			public slots:
 
+			//@}
 			/** @name Public slots
 			*/
 			//@{
@@ -658,10 +640,10 @@ namespace BALL
 					@see   INIFile::write
 			*/
 			virtual void aboutToExit();
-			//@}
 
 			public:
 			
+			//@}
 			/**	@name	Automatic module registration, menu construction and preferences handling.
 			*/
 			//@{
@@ -834,18 +816,19 @@ namespace BALL
 			*/
 			void removeModularWidget(ModularWidget* widget)
 				throw();
+
 			//@}
-			
 			/**	@name	Debugging and Diagnostics
 			*/
 			//@{
+
 			/** Internal state and consistency self-validation.
 					Initiate self-validation of the internal state and data structure consistencies
 					of {\em *this} mainControl.
 					If the internal state of {\em *this} mainControl is correct (self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise.
 					Calls \Ref{CompositeDescriptor::isValid}
-					@return			bool {\tt true} if the internal state of {\em *this} mainControl is correct (self-validated) and consistent, {\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} mainControl is correct
 			*/
 			virtual bool isValid() const
 				throw();
@@ -859,8 +842,8 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
+							
 			//@}
-
 			/**	@name	Storers
 			*/
 			//@{
@@ -881,10 +864,9 @@ namespace BALL
 			*/
 			virtual void write(std::ostream& s) const
 				throw();
+							
 			//@}
 			
-			protected:
-
 			private:
 
 			/**	Create a unique item ID.
@@ -922,9 +904,9 @@ namespace BALL
 			List<ModularWidget*>	modular_widgets_;
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/KERNEL/mainControl.iC>
-#		endif 
+#ifndef BALL_NO_INLINE_FUNCTIONS
+#	include <BALL/VIEW/GUI/KERNEL/mainControl.iC>
+#endif 
 
 		} // namespace VIEW
 

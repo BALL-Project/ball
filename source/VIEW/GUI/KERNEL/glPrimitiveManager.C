@@ -1,14 +1,16 @@
-// $Id: glPrimitiveManager.C,v 1.7.4.2 2002/10/18 14:47:45 amoll Exp $
+// $Id: glPrimitiveManager.C,v 1.7.4.3 2002/10/25 23:32:45 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
+#include <BALL/VIEW/GUI/KERNEL/glQuadricObject.h>
 
 #include <math.h>
 
-using namespace std;
+using std::endl;
+using std::ostream;
+using std::istream;
 
 namespace BALL
 {
-
 	namespace VIEW
 	{
 

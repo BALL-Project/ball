@@ -1,7 +1,6 @@
-// $Id: server.C,v 1.6 2001/05/13 16:29:09 hekl Exp $
+// $Id: server.C,v 1.6.4.1 2002/10/25 23:32:45 amoll Exp $
 
 #include <BALL/VIEW/GUI/KERNEL/server.h>
-#include <BALL/COMMON/logStream.h>
 
 #include <qstatusbar.h>
 #include <qpixmap.h>
@@ -12,7 +11,6 @@ using namespace std;
 
 namespace BALL
 {
-  
 	namespace VIEW
 	{
 		const char* Server::mini_ray_xpm_[] =

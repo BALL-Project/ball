@@ -1,27 +1,16 @@
-// $Id: glObject.h,v 1.8 2001/07/16 14:49:30 amoll Exp $
+// $Id: glObject.h,v 1.8.4.1 2002/10/25 23:33:11 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLOBJECT_H
 #define BALL_VIEW_GUI_KERNEL_GLOBJECT_H
-
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLPRIMITIVEMANAGER_H
 #	include <BALL/VIEW/GUI/KERNEL/glPrimitiveManager.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#	include <BALL/VIEW/KERNEL/geometricObject.h>
-#endif
-
-
 namespace BALL
 {
-
 	namespace VIEW
 	{
-
 		class CompositeDescriptor;
 		
 		/** GLObject class.
