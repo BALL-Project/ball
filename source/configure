@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.141 2001/05/15 12:30:42 oliver Exp $
+#  $Id: configure,v 1.142 2001/05/16 15:04:37 oliver Exp $
 
 
 ##################################################
@@ -2518,7 +2518,7 @@ EOF
 EOF
 
 		CXXFLAGS="${CXXFLAGS} -KPIC"
-		CXXFLAGS_O="${CXXFLAGS_O} -xO3 -xtarget=native"
+		CXXFLAGS_O="${CXXFLAGS_O} -xO5"
 		CXXFLAGS_D="${CXXFLAGS_D}"
 		CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 	fi

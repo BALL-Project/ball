@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.135 2001/05/15 12:30:38 oliver Exp $
+dnl    $Id: configure.in,v 1.136 2001/05/16 15:04:34 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1248,7 +1248,7 @@ if test "${COMPILER_DONE}" != true ; then
 
 		AC_DEFINE(BALL_NO_INLINE_FUNCTIONS,)
 		CXXFLAGS="${CXXFLAGS} -KPIC"
-		CXXFLAGS_O="${CXXFLAGS_O} -xO3 -xtarget=native"
+		CXXFLAGS_O="${CXXFLAGS_O} -xO5"
 		CXXFLAGS_D="${CXXFLAGS_D}"
 		CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 	fi
