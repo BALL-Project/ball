@@ -1,4 +1,4 @@
-// $Id: enumerator.C,v 1.1 2000/06/14 14:45:42 anker Exp $
+// $Id: enumerator.C,v 1.2 2000/06/15 20:49:17 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/CONCEPT/enumerator.h>
@@ -66,7 +66,7 @@ EnumeratorIndex& EnumeratorIndex::operator -- ()
 
 void EnumeratorIndex::set(Position index)
 {	
-	for (Index i = 0; i < size(); ++i)
+	for (Position i = 0; i < size(); ++i)
 	{
 		operator[](i) = index / base_multipliers_[i];
 		index -= base_multipliers_[i] * operator[](i);
