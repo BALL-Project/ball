@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.iC,v 1.9 2003/12/15 11:53:46 amoll Exp $
+// $Id: message.iC,v 1.10 2003/12/20 15:58:21 amoll Exp $
 
 BALL_INLINE
 void Message::setSender(const ConnectionObject* object)
@@ -66,14 +66,14 @@ const String& CompositeMessage::getCompositeName() const
 }
 	
 BALL_INLINE
-void SelectionMessage::setSelection(const List<Composite*>& selection)
+void GenericSelectionMessage::setSelection(const List<Composite*>& selection)
 	throw()
 {
 	selection_ = selection;
 }
 
 BALL_INLINE
-const List<Composite*>& SelectionMessage::getSelection() const
+const List<Composite*>& GenericSelectionMessage::getSelection() const
 	throw()
 {
 	return selection_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.55 2003/12/19 13:12:05 amoll Exp $
+// $Id: displayProperties.C,v 1.56 2003/12/20 15:57:38 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -535,7 +535,6 @@ void DisplayProperties::createRepresentation_(const List<Composite*>& composites
 	color_processor->setDefaultColor(custom_color_);
 
 	bool rebuild_representation = false;
-	PrimitiveManager& pm = getMainControl()->getPrimitiveManager();
 	Representation* rep = 0;
 	if (rep_ == 0)
 	{

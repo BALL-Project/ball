@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.38 2003/12/15 11:53:46 amoll Exp $
+// $Id: message.h,v 1.39 2003/12/20 15:58:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -329,12 +329,12 @@ class SceneMessage: public Message
 };
 
 
-/** SelectionMessage class.
-		SelectionMessage is a container for Composite objects that are somehow selected.
+/** GenericSelectionMessage class.
+		GenericSelectionMessage is a container for Composite objects that are somehow selected.
 		It will be sent by existing ConnectionObject objects that collect
 		Composites objects for a certain purpose.
 */
-class SelectionMessage: public Message
+class GenericSelectionMessage: public Message
 {
 	public:
 
@@ -343,20 +343,20 @@ class SelectionMessage: public Message
 	//@{
 
 	/** Default Constructor.
-			The state of this selectionMessage is set to:
+			The state is set to:
 				-  composite list - empty
 	*/
-	SelectionMessage()
+	GenericSelectionMessage()
 		throw();
 
 	/** Copy constructor.
 	*/
-	SelectionMessage(const SelectionMessage& message)
+	GenericSelectionMessage(const GenericSelectionMessage& message)
 		throw();
 
 	/** Destructor.
 	*/
-	virtual ~SelectionMessage()
+	virtual ~GenericSelectionMessage()
 		throw();
 					
 	//@}
@@ -382,12 +382,19 @@ class SelectionMessage: public Message
 	List<Composite*> selection_;
 };
 
+///
+class SelectionMessage: public GenericSelectionMessage
+{
+	public:
+		SelectionMessage()
+			throw();
+};
 
 /** Used to inform MainControl of selection in MolecularControl (not the one of the checkboxes!) \par
 		Send by MolecularControl.\par
 		Caught by MainControl.
  */
-class ControlSelectionMessage: public SelectionMessage
+class ControlSelectionMessage: public GenericSelectionMessage
 {
 	public:
 	ControlSelectionMessage()

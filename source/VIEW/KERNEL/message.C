@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.16 2003/12/10 17:16:53 amoll Exp $
+// $Id: message.C,v 1.17 2003/12/20 15:57:55 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -114,21 +114,21 @@ void SceneMessage::setType(SceneMessageType type)
 }
 
 
-SelectionMessage::SelectionMessage()
+GenericSelectionMessage::GenericSelectionMessage()
 	throw()
 	: Message(),
 		selection_()
 {
 }
 
-SelectionMessage::SelectionMessage(const SelectionMessage& message)
+GenericSelectionMessage::GenericSelectionMessage(const GenericSelectionMessage& message)
 	throw()
 	: Message(message),
 		selection_(message.selection_)
 {
 }
 
-SelectionMessage::~SelectionMessage()
+GenericSelectionMessage::~GenericSelectionMessage()
 	throw()
 {
 }
@@ -154,7 +154,7 @@ GeometricObjectSelectionMessage::~GeometricObjectSelectionMessage()
 
 ControlSelectionMessage::ControlSelectionMessage()
 	throw()
-	: SelectionMessage()
+	: GenericSelectionMessage()
 {
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new ControlSelectionMessage" << std::endl;
@@ -259,6 +259,11 @@ CreateRepresentationMessage::CreateRepresentationMessage(const List<Composite*>&
 		coloring_method_(coloring_method)
 {
 }
+
+SelectionMessage::SelectionMessage()
+	throw()
+	: GenericSelectionMessage()
+{}
 		
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
