@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceFieldParameters.C,v 1.11 2003/01/31 15:39:25 anhi Exp $
+// $Id: forceFieldParameters.C,v 1.12 2003/07/10 12:50:55 amoll Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/forceFieldParameters.h>
@@ -46,8 +46,7 @@ namespace BALL
 		throw()
 	{
 		// clean up everything
-		// ?????: This should call INIFile::clear()
-		INI_file_.destroy();
+		INI_file_.clear();
 		valid_ = false;
 	}
 
