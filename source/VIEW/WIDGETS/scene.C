@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.67 2004/06/03 16:31:47 amoll Exp $
+// $Id: scene.C,v 1.68 2004/06/03 17:05:25 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1479,10 +1479,10 @@ Log.error() << "#~~#   3 "  << scene_message->getType()  << __FILE__ << "  " << 
 			{
 				last_pos_ = pos();
 				hide();
-// 				showNormal();  // to be removed (today 3.6.2004) ?????
+ 				showNormal(); // needed on windows
 				reparent(NULL, Qt::WType_TopLevel, QPoint(0, 0));
 				showFullScreen();
-//  				setGeometry(qApp->desktop()->screenGeometry());
+//  				setGeometry(qApp->desktop()->screenGeometry());// to be removed (today 3.6.2004) ?????
 				stereo = true;
 				show();
 			}
