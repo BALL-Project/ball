@@ -1,4 +1,4 @@
-// $Id: amberTorsion.C,v 1.5 1999/09/03 07:20:22 oliver Exp $
+// $Id: amberTorsion.C,v 1.6 1999/09/03 07:49:21 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
@@ -135,6 +135,13 @@ namespace BALL
 										tmp.atom2 = a2;
 										tmp.atom3 = a3;
 										tmp.atom4 = a4;
+
+										cerr << "TORSION: " << a1->getName() << "-" << a2->getName() << "-" << a3->getName() << "-" << a4->getName();
+										cerr << " (types: " << force_field_->getParameters().getAtomTypes().getTypeName(type_a1) << "-"
+												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a2) << "-"
+												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a3) << "-"
+												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a4) << ")" << endl;
+
 
 										bool found = false;
 
@@ -285,6 +292,12 @@ namespace BALL
 
 									bool found = false;
 
+										cerr << "IMPTORS: " << a1->getName() << "-" << a2->getName() << "-" << a3->getName() << "-" << a4->getName();
+										cerr << " (types: " << force_field_->getParameters().getAtomTypes().getTypeName(type_a1) << "-"
+												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a2) << "-"
+												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a3) << "-"
+												<< force_field_->getParameters().getAtomTypes().getTypeName(type_a4) << ")" << endl;
+
 									if (improper_parameters.hasParameters(type_a1, type_a2, type_a3, type_a4)) 
 									{
 										improper_parameters.assignParameters(values, type_a1, type_a2, type_a3, type_a4);
@@ -306,6 +319,7 @@ namespace BALL
 	
 										found = true;
 									}
+									found = false; // BAUSTELLE
 									if (found)	
 									{
 										for (int j = 0; j < values.n; j++) 
@@ -344,6 +358,7 @@ namespace BALL
 
 		for ( ; it != torsion_.end(); it++) 
 		{
+			cout << "TORSION: " << it->atom1->getName() << "-" << it->atom2->getName() << "-" << it->atom3->getName() << "-" << it->atom4->getName() << endl;
 			if ( getForceField()->getUseSelection() == false ||
 					( getForceField()->getUseSelection() == true &&
 					(it->atom1->isSelected() || it->atom2->isSelected() || it->atom3->isSelected() || it->atom4->isSelected())))

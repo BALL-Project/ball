@@ -1,4 +1,4 @@
-// $Id: amberBend.C,v 1.1 1999/08/26 08:02:44 oliver Exp $
+// $Id: amberBend.C,v 1.2 1999/09/03 07:49:20 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
 #include <BALL/KERNEL/atom.h>
@@ -65,44 +65,50 @@ namespace BALL
 		Atom::BondIterator it1;
 		Atom::BondIterator it2;
 		FFPSQuadraticAngleBend::QuadraticAngleBend	this_bend;
-		for (int i = 0 ; atom_it != getForceField()->getAtoms().end(); ++atom_it, ++i) 
+		for ( ; atom_it != getForceField()->getAtoms().end(); ++atom_it) 
 		{
 			for (it2 = (*atom_it)->beginBond(); +it2 ; ++it2) 
 			{
-				for (it1 = it2, ++it1; +it1 ; ++it1 , i++) 
+				for (it1 = it2, ++it1; +it1 ; ++it1 ) 
 				{
+				
 					this_bend.atom1 = (*it2).getPartner(**atom_it);
 					this_bend.atom2 = *atom_it;
 					this_bend.atom3 = (*it1).getPartner(**atom_it);
 
-					Atom::Type atom_type_a1 = this_bend.atom1->getType();
-					Atom::Type atom_type_a2 = this_bend.atom2->getType();
-					Atom::Type atom_type_a3 = this_bend.atom3->getType();
+					if (getForceField()->getUseSelection() == false ||
+					   (getForceField()->getUseSelection() == true && 
+					   (this_bend.atom1->isSelected() && this_bend.atom2->isSelected() && this_bend.atom3->isSelected())))
+					{ 
 
-					FFPSQuadraticAngleBend::Values values;
+						Atom::Type atom_type_a1 = this_bend.atom1->getType();
+						Atom::Type atom_type_a2 = this_bend.atom2->getType();
+						Atom::Type atom_type_a3 = this_bend.atom3->getType();
 
-					if (bend_parameters.hasParameters(atom_type_a1, atom_type_a2, atom_type_a3))
-					{
-						bend_parameters.assignParameters(values, atom_type_a1, atom_type_a2, atom_type_a3);
+						FFPSQuadraticAngleBend::Values values;
+
+						if (bend_parameters.hasParameters(atom_type_a1, atom_type_a2, atom_type_a3))
+						{
+							bend_parameters.assignParameters(values, atom_type_a1, atom_type_a2, atom_type_a3);
+						}
+						else if (bend_parameters.hasParameters(atom_type_a3, atom_type_a2, atom_type_a1))
+						{
+							bend_parameters.assignParameters(values, atom_type_a3, atom_type_a2, atom_type_a1);
+						}
+						else 
+						{
+							Log.level(LogStream::ERROR) << "cannot find bend parameters for atom types:"
+								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
+								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
+								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) << endl;
+
+							values.k = 0.0;
+							values.theta0 = 0.0;
+						}
+
+						this_bend.values = values;
+						bend_.push_back(this_bend);
 					}
-					else if (bend_parameters.hasParameters(atom_type_a3, atom_type_a2, atom_type_a1))
-					{
-						bend_parameters.assignParameters(values, atom_type_a3, atom_type_a2, atom_type_a1);
-					}
-					else 
-					{
-						Log.level(LogStream::ERROR) << "cannot find bend parameters for atom types:"
-							<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
-							<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
-							<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) << endl;
-
-						values.k = 0.0;
-						values.theta0 = 0.0;
-					}
-
-					this_bend.values = values;
-					bend_.push_back(this_bend);
-
 				}
 			}
 		}
@@ -119,44 +125,52 @@ namespace BALL
 
 		for (Size i = 0 ; i < bend_.size() ; i++) 
 		{
-			Vector3 v1 = bend_[i].atom1->getPosition() - bend_[i].atom2->getPosition();
-			length = v1.getLength();
 
-			if (length == 0) 
+			if (getForceField()->getUseSelection() == false ||
+					(getForceField()->getUseSelection() == true  &&
+					(bend_[i].atom1->isSelected() || bend_[i].atom2->isSelected() || bend_[i].atom3->isSelected())))
 			{
-				continue;
-			}
 
-			float inverse_length = 1 / length;
-			v1 *= inverse_length;
-			Vector3 v2 = bend_[i].atom3->getPosition() - bend_[i].atom2->getPosition();
-			length = v2.getLength();
+				Vector3 v1 = bend_[i].atom1->getPosition() - bend_[i].atom2->getPosition();
+				length = v1.getLength();
 
-			if (length == 0) 
-			{
-				continue;
-			}
+				if (length == 0) 
+				{
+					continue;
+				}
 
-			inverse_length = 1/length;
-			v2 *= inverse_length;
+				float inverse_length = 1 / length;
+				v1 *= inverse_length;
+				Vector3 v2 = bend_[i].atom3->getPosition() - bend_[i].atom2->getPosition();
+				length = v2.getLength();
 
-			float costheta = v1 * v2;
-			float theta;
-			if (costheta > 1.0) 
-			{	
-				theta = 0.0;
-			}
-			else if (costheta < -1.0) 
-			{
-				theta = Constants::PI;
-			}
-			else 
-			{
-				theta = acos(costheta);
-			}
+				if (length == 0) 
+				{
+					continue;
+				}
+
+				inverse_length = 1/length;
+				v2 *= inverse_length;
+
+				float costheta = v1 * v2;
+				float theta;
+				if (costheta > 1.0) 
+				{	
+					theta = 0.0;
+				}
+				else if (costheta < -1.0) 
+				{
+					theta = Constants::PI;
+				}
+				else 
+				{
+					theta = acos(costheta);
+				}
 			
 
-			energy_ += bend_[i].values.k * (theta - bend_[i].values.theta0) * (theta - bend_[i].values.theta0);
+				energy_ += bend_[i].values.k * (theta - bend_[i].values.theta0) * (theta - bend_[i].values.theta0);
+			}
+
 		}
 
 		return energy_;
@@ -170,59 +184,81 @@ namespace BALL
 
 		for (Size i = 0; i < bend_.size(); i++) 
 		{
-
-			// Calculate the vector between atom1 and atom2,
-			// test if the vector has length larger than 0 and normalize it
-
-			Vector3 v1 = bend_[i].atom1->getPosition() - bend_[i].atom2->getPosition();
-			length = v1.getLength();
-			if (length == 0) continue;
-			float inverse_length_v1 = 1/length;
-			v1 *= inverse_length_v1 ;
-
-			// Calculate the vector between atom3 and atom2,
-			// test if the vector has length larger than 0 and normalize it
-
-			Vector3 v2 = bend_[i].atom3->getPosition() - bend_[i].atom2->getPosition();
-			length = v2.getLength();
-			if (length == 0) continue;
-			float inverse_length_v2 = 1/length;
-			v2 *= inverse_length_v2;
-
-			// Calculate the cos of theta and then theta
-			float costheta = v1 * v2;
-			float theta;
-			if (costheta > 1.0) theta = 0.0;
-			else if (costheta < -1.0) theta = Constants::PI;
-			else theta = acos(costheta);
-
-			// unit conversion: kJ/(mol A) -> N
-			// kJ -> J: 1e3
-			// A -> m : 1e10
-			// J/mol -> mol: Avogadro
-			float factor = 1e13 / Constants::AVOGADRO * 2 * bend_[i].values.k * (theta - bend_[i].values.theta0);
-
-			// Calculate the cross product of v1 and v2, test if it has length unequal 0,
-			// and normalize it.
-
-			Vector3 cross = v1 % v2;
-			if ((length = cross.getLength()) != 0) 
+			if (getForceField()->getUseSelection() == false ||
+					(getForceField()->getUseSelection()  == true  &&
+					(bend_[i].atom1->isSelected() || bend_[i].atom2->isSelected() || bend_[i].atom3->isSelected())))
 			{
-				cross *= (1/length);
-			} else {
-				continue;
+
+				// Calculate the vector between atom1 and atom2,
+				// test if the vector has length larger than 0 and normalize it
+
+				Vector3 v1 = bend_[i].atom1->getPosition() - bend_[i].atom2->getPosition();
+				length = v1.getLength();
+				if (length == 0) continue;
+				float inverse_length_v1 = 1/length;
+				v1 *= inverse_length_v1 ;
+
+				// Calculate the vector between atom3 and atom2,
+				// test if the vector has length larger than 0 and normalize it
+
+				Vector3 v2 = bend_[i].atom3->getPosition() - bend_[i].atom2->getPosition();
+				length = v2.getLength();
+				if (length == 0) continue;
+				float inverse_length_v2 = 1/length;
+				v2 *= inverse_length_v2;
+
+				// Calculate the cos of theta and then theta
+				float costheta = v1 * v2;
+				float theta;
+				if (costheta > 1.0) theta = 0.0;
+				else if (costheta < -1.0) theta = Constants::PI;
+				else theta = acos(costheta);
+
+				// unit conversion: kJ/(mol A) -> N
+				// kJ -> J: 1e3
+				// A -> m : 1e10
+				// J/mol -> mol: Avogadro
+				float factor = 1e13 / Constants::AVOGADRO * 2 * bend_[i].values.k * (theta - bend_[i].values.theta0);
+
+				// Calculate the cross product of v1 and v2, test if it has length unequal 0,
+				// and normalize it.
+
+				Vector3 cross = v1 % v2;
+				if ((length = cross.getLength()) != 0) 
+				{
+					cross *= (1/length);
+				} else {
+					continue;
+				}
+
+				Vector3 n1 = v1 % cross;
+				Vector3 n2 = v2 % cross; 
+				n1 *= factor * inverse_length_v1;
+				n2 *= factor * inverse_length_v2;
+
+				if (getForceField()->getUseSelection() == false)
+				{
+					bend_[i].atom1->getForce() -= n1;
+					bend_[i].atom2->getForce() += n1;
+					bend_[i].atom2->getForce() -= n2;
+					bend_[i].atom3->getForce() += n2;
+				} else {
+					if (bend_[i].atom1->isSelected()) 
+					{
+						bend_[i].atom1->getForce() -= n1;
+					}
+	
+					if (bend_[i].atom2->isSelected())
+					{
+						bend_[i].atom2->getForce() += n1;
+						bend_[i].atom2->getForce() -= n2;
+					}
+					if (bend_[i].atom3->isSelected())
+					{
+						bend_[i].atom3->getForce() += n2;
+					}
+				}
 			}
-
-			Vector3 n1 = v1 % cross;
-			Vector3 n2 = v2 % cross; 
-			n1 *= factor * inverse_length_v1;
-			n2 *= factor * inverse_length_v2;
-
-			bend_[i].atom1->getForce() -= n1;
-			bend_[i].atom2->getForce() += n1;
-			bend_[i].atom2->getForce() -= n2;
-			bend_[i].atom3->getForce() += n2;
-
 		}
 	}
 

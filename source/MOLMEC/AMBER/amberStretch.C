@@ -1,4 +1,4 @@
-// $Id: amberStretch.C,v 1.1 1999/08/26 08:02:44 oliver Exp $
+// $Id: amberStretch.C,v 1.2 1999/09/03 07:49:21 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
 
@@ -76,11 +76,23 @@ namespace BALL
 
 		// and memorize the number of stretches
 		number_of_stretches_ = 0;
-		AtomIterator atom_iterator;
 		Atom::BondIterator bond_iterator;
-		BALL_FOREACH_BOND(*getForceField()->getSystem(), atom_iterator, bond_iterator)
+
+		vector<Atom*>::const_iterator atom_it = getForceField()->getAtoms().begin();
+		for (; atom_it != getForceField()->getAtoms().end(); ++atom_it)
 		{
-			number_of_stretches_++;
+			for (bond_iterator = (*atom_it)->beginBond(); +bond_iterator; ++bond_iterator)
+			{
+				if ( getForceField()->getUseSelection() == false ||
+				    (getForceField()->getUseSelection() == true &&
+				    ((*bond_iterator).getFirstAtom()->isSelected() && (*bond_iterator).getSecondAtom()->isSelected())))
+				{
+					if ((*bond_iterator).getPartner(**atom_it) == (*bond_iterator).getSecondAtom())
+					{
+						number_of_stretches_++;
+					}
+				}
+			}
 		}
 
 
@@ -105,7 +117,7 @@ namespace BALL
 		FFPSQuadraticBondStretch::Values values;
 
 		// retrieve all stretch parameters
-		vector<Atom*>::const_iterator atom_it = getForceField()->getAtoms().begin();
+		atom_it = getForceField()->getAtoms().begin();
 		Size i = 0;
 		for ( ; atom_it != getForceField()->getAtoms().end(); ++atom_it)
 		{
@@ -115,33 +127,39 @@ namespace BALL
 					
 					Bond&	bond = const_cast<Bond&>(*it);
 
-					Atom::Type atom_type_A = bond.getFirstAtom()->getType();
-					Atom::Type atom_type_B = bond.getSecondAtom()->getType();
-			
-					stretch_[i].atom1 = bond.getFirstAtom();
-					stretch_[i].atom2 = bond.getSecondAtom();
-			
-					// Pay attention to the symmetric database input
-					if ( stretch_parameters.hasParameters(atom_type_A, atom_type_B)) {
-						stretch_parameters.assignParameters(values, atom_type_A, atom_type_B);
-					} else if (stretch_parameters.hasParameters(atom_type_A, Atom::ANY_TYPE)) {
-						stretch_parameters.assignParameters(values, atom_type_A, Atom::ANY_TYPE);
-					} else if (stretch_parameters.hasParameters(Atom::ANY_TYPE, atom_type_B)) {
-						stretch_parameters.assignParameters(values, Atom::ANY_TYPE, atom_type_B); 
-					} else if (stretch_parameters.hasParameters(Atom::ANY_TYPE, Atom::ANY_TYPE)) {
-						stretch_parameters.assignParameters(values,Atom::ANY_TYPE, Atom::ANY_TYPE);
-					} else {
-						Log.level(LogStream::ERROR) << "cannot find stretch parameters for atom types " 
-							<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_A) << "-" 
-							<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_B) << endl;
+					if (getForceField()->getUseSelection() == false ||
+					   (getForceField()->getUseSelection() == true && 
+					   (bond.getFirstAtom()->isSelected() && bond.getSecondAtom()->isSelected())))
+					{
 
-						// we don't want to get any force or energy component
-						// from this stretch
-						values.k = 0.0;
-						values.r0 = 1.0;	
+						Atom::Type atom_type_A = bond.getFirstAtom()->getType();
+						Atom::Type atom_type_B = bond.getSecondAtom()->getType();
+			
+						stretch_[i].atom1 = bond.getFirstAtom();
+						stretch_[i].atom2 = bond.getSecondAtom();
+			
+						// Pay attention to the symmetric database input
+						if ( stretch_parameters.hasParameters(atom_type_A, atom_type_B)) {
+							stretch_parameters.assignParameters(values, atom_type_A, atom_type_B);
+						} else if (stretch_parameters.hasParameters(atom_type_A, Atom::ANY_TYPE)) {
+							stretch_parameters.assignParameters(values, atom_type_A, Atom::ANY_TYPE);
+						} else if (stretch_parameters.hasParameters(Atom::ANY_TYPE, atom_type_B)) {
+							stretch_parameters.assignParameters(values, Atom::ANY_TYPE, atom_type_B); 
+						} else if (stretch_parameters.hasParameters(Atom::ANY_TYPE, Atom::ANY_TYPE)) {
+							stretch_parameters.assignParameters(values,Atom::ANY_TYPE, Atom::ANY_TYPE);
+						} else {
+							Log.level(LogStream::ERROR) << "cannot find stretch parameters for atom types " 
+								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_A) << "-" 
+								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_B) << endl;
+
+							// we don't want to get any force or energy component
+							// from this stretch
+							values.k = 0.0;
+							values.r0 = 1.0;	
+						}
+						stretch_[i].values = values;
+						i++;
 					}
-					stretch_[i].values = values;
-					i++;
  				}
 			}
 		}
@@ -160,9 +178,14 @@ namespace BALL
 		// iterate over all bonds, sum up the energies
 		for (Size i = 0; i < number_of_stretches_; i++)
 		{
-			float distance = (stretch_[i].atom1->getPosition()).getDistance(stretch_[i].atom2->getPosition());
-			energy_ += stretch_[i].values.k * (distance - stretch_[i].values.r0) * (distance - stretch_[i].values.r0);
-			
+			if (getForceField()->getUseSelection() == false ||
+			   (getForceField()->getUseSelection() == true && 
+			   (stretch_[i].atom1->isSelected() || stretch_[i].atom2->isSelected())))
+			{
+				float distance = (stretch_[i].atom1->getPosition()).getDistance(stretch_[i].atom2->getPosition());
+				energy_ += stretch_[i].values.k * (distance - stretch_[i].values.r0) * (distance - stretch_[i].values.r0);
+
+			}
 		}
 		
 		return energy_;
@@ -175,20 +198,37 @@ namespace BALL
 		// iterate over all bonds, update the forces
 		for (Size i = 0 ; i < number_of_stretches_; i++)
 		{
-
-			Vector3 direction(stretch_[i].atom1->getPosition() - stretch_[i].atom2->getPosition());
-			float distance = direction.getLength(); 
-
-			if (distance != 0) 
+			if (getForceField()->getUseSelection() == false ||
+			   (getForceField()->getUseSelection() == true && 
+			   (stretch_[i].atom1->isSelected() || stretch_[i].atom2->isSelected())))
 			{
-				// unit conversion: from kJ/(mol A) -> N
-				//   kJ -> J: 1e3
-				//   A  -> m: 1e10
-				//   J/mol -> J: Avogadro
-				direction *= 1e13 / Constants::AVOGADRO * 2 * stretch_[i].values.k * (distance - stretch_[i].values.r0)/distance;
 
-				stretch_[i].atom1->setForce(stretch_[i].atom1->getForce() - direction);
-				stretch_[i].atom2->setForce(stretch_[i].atom2->getForce() + direction);
+				Vector3 direction(stretch_[i].atom1->getPosition() - stretch_[i].atom2->getPosition());
+				float distance = direction.getLength(); 
+
+				if (distance != 0) 
+				{
+					// unit conversion: from kJ/(mol A) -> N
+					//   kJ -> J: 1e3
+					//   A  -> m: 1e10
+					//   J/mol -> J: Avogadro
+					direction *= 1e13 / Constants::AVOGADRO * 2 * stretch_[i].values.k * (distance - stretch_[i].values.r0)/distance;
+
+					if (getForceField()->getUseSelection() == false)
+					{
+						stretch_[i].atom1->setForce(stretch_[i].atom1->getForce() - direction);
+						stretch_[i].atom2->setForce(stretch_[i].atom2->getForce() + direction);
+					} else {
+						if (stretch_[i].atom1->isSelected())
+						{
+							stretch_[i].atom1->setForce(stretch_[i].atom1->getForce() - direction);
+						}
+						if (stretch_[i].atom2->isSelected())
+						{
+							stretch_[i].atom2->setForce(stretch_[i].atom2->getForce() + direction);
+						}
+					}
+				}
 			}
 		}                                                                                                          
 	}
