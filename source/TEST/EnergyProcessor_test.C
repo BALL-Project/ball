@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EnergyProcessor_test.C,v 1.8 2002/12/12 11:34:40 oliver Exp $
+// $Id: EnergyProcessor_test.C,v 1.9 2003/05/23 06:47:51 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/ENERGY/energyProcessor.h>
 ///////////////////////////
 
-START_TEST(EnergyProcessor, "$Id: EnergyProcessor_test.C,v 1.8 2002/12/12 11:34:40 oliver Exp $")
+START_TEST(EnergyProcessor, "$Id: EnergyProcessor_test.C,v 1.9 2003/05/23 06:47:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -54,11 +54,13 @@ System S;
 f >> S;
 
 
+EnergyProcessor* ep_ptr = 0;
 CHECK(EnergyProcessor::EnergyProcessor())
-	EnergyProcessor* ep = new EnergyProcessor;
-	TEST_NOT_EQUAL(ep, 0)
-	TEST_EQUAL(ep->isValid(), true)
-	TEST_REAL_EQUAL(ep->getEnergy(), 0)
+	ep_ptr = new EnergyProcessor;
+	TEST_NOT_EQUAL(ep_ptr, 0)
+	TEST_EQUAL(ep_ptr->isValid(), true)
+	TEST_REAL_EQUAL(ep_ptr->getEnergy(), 0)
+	delete ep_ptr;
 RESULT
 
 EnergyProcessor ep;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Box3_test.C,v 1.19 2002/12/12 11:34:39 oliver Exp $
+// $Id: Box3_test.C,v 1.20 2003/05/23 06:47:50 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 #	include <BALL/MATHS/vector3.h>
 ///////////////////////////
 
-START_TEST(Box3, "$Id: Box3_test.C,v 1.19 2002/12/12 11:34:39 oliver Exp $")
+START_TEST(Box3, "$Id: Box3_test.C,v 1.20 2003/05/23 06:47:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -32,10 +32,14 @@ CHECK(TVector3::BALL_CREATE(TBox3<T>))
 	delete v_ptr;
 RESULT
 
+Box3* box3_ptr = 0;
 CHECK(TBox3::TBox3())
-  Box3* box;
-	box = new Box3();
-	TEST_NOT_EQUAL(box, 0)
+	box3_ptr = new Box3;
+	TEST_NOT_EQUAL(box3_ptr, 0)
+RESULT
+
+CHECK(TBox3::~TBox3())
+	delete box3_ptr;
 RESULT
 
 Box3 box, box2;

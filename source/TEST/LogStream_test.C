@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: LogStream_test.C,v 1.18 2002/12/12 11:34:41 oliver Exp $
+// $Id: LogStream_test.C,v 1.19 2003/05/23 06:47:51 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -14,7 +14,7 @@
 #include <BALL/CONCEPT/notification.h>
 ///////////////////////////
 
-START_TEST(LogStream, "$Id: LogStream_test.C,v 1.18 2002/12/12 11:34:41 oliver Exp $")
+START_TEST(LogStream, "$Id: LogStream_test.C,v 1.19 2003/05/23 06:47:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -38,18 +38,14 @@ class TestTarget
 String filename;
 
 LogStream* l1;
-LogStream* l2;
 
-CHECK(LogStream(bool associate_stdio = false))
-	l1 = new LogStream();
-	l2 = new LogStream(true);
+CHECK(LogStream(LogStreamBuf*, bool, bool))
+	l1 = new LogStream(new LogStreamBuf);
 	TEST_NOT_EQUAL(l1, 0)
-	TEST_NOT_EQUAL(l2, 0)
 RESULT
 
 CHECK(~LogStream())
 	delete l1;
-	delete l2;
 RESULT
 
 CHECK(LogStream(LogStreamBuf* buf))
@@ -66,17 +62,17 @@ CHECK(LogStream(LogStreamBuf* buf))
 RESULT
 
 CHECK(rdbuf())
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	TEST_NOT_EQUAL(l1.rdbuf(), 0)
 RESULT
 
 CHECK(operator -> ())
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	l1->sync();
 RESULT
 
 CHECK(setLevel(int level))
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	l1 << "TEST1" <<endl;
 	l1.setLevel(99);
 	l1 << "TEST2" <<endl;
@@ -85,14 +81,14 @@ CHECK(setLevel(int level))
 RESULT
 
 CHECK(l1.getLevel())
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	TEST_EQUAL(l1.getLevel(), 0)
 	l1.setLevel(99);
 	TEST_EQUAL(l1.getLevel(), 99)
 RESULT
 
 CHECK(level(int n))
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	l1.level(99) << "TEST" <<endl;
 	TEST_EQUAL(l1.getNumberOfLines(), 1)
 	TEST_EQUAL(l1.getLineText(0), "TEST")
@@ -100,7 +96,7 @@ CHECK(level(int n))
 RESULT
 
 CHECK(info(int n = 0))
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	l1.info() << "TEST" <<endl;
 	TEST_EQUAL(l1.getNumberOfLines(), 1)
 	TEST_EQUAL(l1.getLineText(0), "TEST")
@@ -110,7 +106,7 @@ CHECK(info(int n = 0))
 RESULT
 
 CHECK(error(int n = 0))
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	l1.error() << "TEST" <<endl;
 	TEST_EQUAL(l1.getNumberOfLines(), 1)
 	TEST_EQUAL(l1.getLineText(0), "TEST")
@@ -120,7 +116,7 @@ CHECK(error(int n = 0))
 RESULT
 
 CHECK(warn(int n = 0))
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	l1.warn() << "TEST" <<endl;
 	TEST_EQUAL(l1.getNumberOfLines(), 1)
 	TEST_EQUAL(l1.getLineText(0), "TEST")
@@ -131,7 +127,7 @@ RESULT
 
 CHECK(insert(std::ostream& s, int min_level = LogStreamBuf::MIN_LEVEL, int max_level = LogStreamBuf::MAX_LEVEL))
 	NEW_TMP_FILE(filename)
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	ofstream s(filename.c_str(), std::ios::out);
 	l1.insert(s, 99, 99);
 	l1.level(98) << "X" << endl;
@@ -143,7 +139,7 @@ CHECK(insert(std::ostream& s, int min_level = LogStreamBuf::MIN_LEVEL, int max_l
 RESULT
 
 CHECK(remove(std::ostream& s))
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	ofstream s;
 	l1.insert(s);
 	l1.remove(s);
@@ -152,7 +148,7 @@ CHECK(remove(std::ostream& s))
 RESULT
 
 CHECK(insertNotification(const std::ostream& s, const Target& target))
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	TestTarget target;
 	ofstream os;
 	l1.insert(os);
@@ -164,7 +160,7 @@ CHECK(insertNotification(const std::ostream& s, const Target& target))
 RESULT
 
 CHECK(removeNotification(const std::ostream& s))
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	TestTarget target;
 	ofstream os;
 	l1.insert(os);
@@ -182,7 +178,7 @@ RESULT
 
 CHECK(setMinLevel(const std::ostream& s, int min_level))
 	NEW_TMP_FILE(filename)
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	ofstream s(filename.c_str(), std::ios::out);
 	l1.insert(s, 0);
 	l1.setMinLevel(s, 98);
@@ -195,7 +191,7 @@ RESULT
 
 CHECK(setMaxLevel(const std::ostream& s, int max_level))
 	NEW_TMP_FILE(filename)
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	ofstream s(filename.c_str(), std::ios::out);
 	l1.insert(s, 0);
 	l1.setMaxLevel(s, 98);
@@ -208,7 +204,7 @@ RESULT
 
 CHECK(setPrefix(const std::ostream& s, const string& prefix))
 	NEW_TMP_FILE(filename)
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	ofstream s(filename.c_str(), std::ios::out);;
 	l1.insert(s, 0);
 	l1.setPrefix(s, "%l"); //loglevel
@@ -236,27 +232,27 @@ CHECK(setPrefix(const std::ostream& s, const string& prefix))
 RESULT
 
 CHECK(clear())
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	l1.error() << "TEST" <<endl;
 	l1.clear();
 	TEST_EQUAL(l1.getNumberOfLines(), 0)
 RESULT
 
 CHECK(getNumberOfLines(int min_level = LogStreamBuf::MIN_LEVEL, int max_level = LogStreamBuf::MAX_LEVEL))
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	TEST_EQUAL(l1.getNumberOfLines(), 0)
 	l1.error() << "TEST" <<endl;
 	TEST_EQUAL(l1.getNumberOfLines(), 1)
 RESULT
 
 CHECK(getLineText(Index index))
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	l1.error() << "TEST" <<endl;
 	TEST_EQUAL(l1.getLineText(0), "TEST")
 RESULT
 
 CHECK(getLineTime(Index index))
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	Time timer;
   timer = time(NULL);
 	l1.error() << "TEST" <<endl;
@@ -265,14 +261,14 @@ CHECK(getLineTime(Index index))
 RESULT
 
 CHECK(getLineLevel(Index index))
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	l1.level(99) << "TEST" <<endl;
 	TEST_EQUAL(l1.getLineLevel(0), 99)
 RESULT
 
 CHECK(filterLines(const int min_level = LogStreamBuf::MIN_LEVEL, const int max_level = LogStreamBuf::MAX_LEVEL,
 									const Time earliest = 0, const Time latest = LogStreamBuf::MAX_TIME, const string& s = ""))
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
   using std::list;													
 	list<int>	liste;
 
@@ -310,9 +306,10 @@ RESULT
 
 // test for a minimum string length for output
 CHECK(Output length)
-	LogStream l1;
+	LogStream l1(new LogStreamBuf);
 	l1	<< "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" << endl;
 RESULT
+
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 END_TEST

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Atom_test.C,v 1.14 2003/05/22 21:57:20 oliver Exp $
+// $Id: Atom_test.C,v 1.15 2003/05/23 06:47:50 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -14,7 +14,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(Atom, "$Id: Atom_test.C,v 1.14 2003/05/22 21:57:20 oliver Exp $")
+START_TEST(Atom, "$Id: Atom_test.C,v 1.15 2003/05/23 06:47:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -294,7 +294,8 @@ CHECK(swap(Atom&))
 	TEST_EQUAL(atom3->getVelocity(), atom2->getVelocity())
 	TEST_EQUAL(atom3->getForce(), atom2->getForce())
 	TEST_EQUAL(atom3->getType(), atom2->getType())
-	TEST_EQUAL(atom3->countBonds(), atom2->countBonds())
+	TEST_EQUAL(atom3->countBonds(), atom2->countBonds())	
+	delete atom2;
 RESULT
 
 Molecule*				molecule;

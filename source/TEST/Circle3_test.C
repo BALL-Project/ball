@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Circle3_test.C,v 1.10 2002/12/12 11:34:39 oliver Exp $
+// $Id: Circle3_test.C,v 1.11 2003/05/23 06:47:50 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(Circle3, "$Id: Circle3_test.C,v 1.10 2002/12/12 11:34:39 oliver Exp $")
+START_TEST(Circle3, "$Id: Circle3_test.C,v 1.11 2003/05/23 06:47:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -39,16 +39,14 @@ CHECK(TCircle3::BALL_CREATE(TCircle3<T>))
 	delete c_ptr;
 RESULT
 
+Circle3* circle3_ptr = 0;
 CHECK(TCircle3::TCircle3())
-  Circle3* c;
-	c = new Circle3();
-	TEST_NOT_EQUAL(c, 0)
+	circle3_ptr = new Circle3;
+	TEST_NOT_EQUAL(circle3_ptr, 0)
 RESULT
 
 CHECK(~TCircle();)
-  Circle3* c;
-	c = new Circle3();
-	delete c;
+	delete circle3_ptr;
 RESULT	
 
 Circle3 c, c2;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashSet_test.C,v 1.15 2003/04/09 08:39:29 oliver Exp $
+// $Id: HashSet_test.C,v 1.16 2003/05/23 06:47:51 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -46,7 +46,7 @@ class MyVisitor
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.15 2003/04/09 08:39:29 oliver Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.16 2003/05/23 06:47:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -77,14 +77,12 @@ CHECK(HashSet::HashSet(const HashSet&))
 	hs.insert(1);
 	hs.insert(2);
 
-	HashSet<int>* set_ptr;
-	set_ptr = new HashSet<int>(hs);
-	TEST_NOT_EQUAL(set_ptr, 0)
-	TEST_EQUAL(set_ptr->getSize(), 3)
-	TEST_EQUAL(set_ptr->has(0), true)
-	TEST_EQUAL(set_ptr->has(1), true)
-	TEST_EQUAL(set_ptr->has(2), true)
-	TEST_EQUAL(set_ptr->has(3), false)
+	HashSet<int> nhs(hs);
+	TEST_EQUAL(nhs.getSize(), 3)
+	TEST_EQUAL(nhs.has(0), true)
+	TEST_EQUAL(nhs.has(1), true)
+	TEST_EQUAL(nhs.has(2), true)
+	TEST_EQUAL(nhs.has(3), false)
 RESULT
 
 CHECK(HashSet::clear())

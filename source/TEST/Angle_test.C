@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Angle_test.C,v 1.20 2003/04/04 10:25:21 oliver Exp $
+// $Id: Angle_test.C,v 1.21 2003/05/23 06:47:50 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -9,7 +9,7 @@
 #	include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(Angle, "$Id: Angle_test.C,v 1.20 2003/04/04 10:25:21 oliver Exp $")
+START_TEST(Angle, "$Id: Angle_test.C,v 1.21 2003/05/23 06:47:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,16 +22,14 @@ using std::ofstream;
 using std::ios;
 PRECISION(1E-5)
 
+Angle* angle_ptr = 0;
 CHECK(TAngle::TAngle())
-  Angle* a;
-	a = new Angle();
-	TEST_NOT_EQUAL(0, a)
+	angle_ptr = new Angle;
+	TEST_NOT_EQUAL(angle_ptr, 0)
 RESULT
 
 CHECK(~TAngle();)
-  Angle* a;
-	a = new Angle();
-	delete a;
+	delete angle_ptr;
 RESULT		
 
 CHECK(TAngle::TAngle(const T& new_value, bool radian))

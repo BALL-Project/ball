@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Quaternion_test.C,v 1.13 2002/12/12 11:34:43 oliver Exp $
+// $Id: Quaternion_test.C,v 1.14 2003/05/23 06:47:52 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <BALL/MATHS/quaternion.h>
 ///////////////////////////
 
-START_TEST(Quaternion, "$Id: Quaternion_test.C,v 1.13 2002/12/12 11:34:43 oliver Exp $")
+START_TEST(Quaternion, "$Id: Quaternion_test.C,v 1.14 2003/05/23 06:47:52 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -41,16 +41,14 @@ CHECK(TQuaternion::BALL_CREATE(TQuaternion<T>))
 	delete q_ptr;
 RESULT
 
+Quaternion* q_ptr = 0;
 CHECK(TQuaternion();)
-  Quaternion* p;
-	p = new Quaternion();
-	TEST_NOT_EQUAL(p, 0)
+	q_ptr = new Quaternion();
+	TEST_NOT_EQUAL(q_ptr, 0)
 RESULT		
 
 CHECK(~TQuaternion();)
-  Quaternion* p;
-	p = new Quaternion();
-	delete p;
+	delete q_ptr;
 RESULT	
 
 Quaternion q, q1, q2;

@@ -1,7 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DefaultProcessors_test.C,v 1.7 2003/01/22 17:16:58 anker Exp $
+// $Id: DefaultProcessors_test.C,v 1.8 2003/05/23 06:47:50 oliver Exp $
+//
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +12,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(DefaultProcessors, "$Id: DefaultProcessors_test.C,v 1.7 2003/01/22 17:16:58 anker Exp $")
+START_TEST(DefaultProcessors, "$Id: DefaultProcessors_test.C,v 1.8 2003/05/23 06:47:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -41,11 +43,10 @@ RESULT
 // tests for class AssignRadiusProcessor::
 
 CHECK(AssignRadiusProcessor::AssignRadiusProcessor())
-	AssignRadiusProcessor* arp = new AssignRadiusProcessor;
-	TEST_NOT_EQUAL(arp, 0)
-	TEST_EQUAL(arp->getNumberOfAssignments(), 0)
-	TEST_EQUAL(arp->getNumberOfErrors(), 0)
-	TEST_EQUAL(arp->getFilename(), "")
+	AssignRadiusProcessor arp;
+	TEST_EQUAL(arp.getNumberOfAssignments(), 0)
+	TEST_EQUAL(arp.getNumberOfErrors(), 0)
+	TEST_EQUAL(arp.getFilename(), "")
 RESULT
 
 
@@ -135,9 +136,8 @@ RESULT
 // tests for class AssignChargeProcessor::
 
 CHECK(AssignChargeProcessor::AssignChargeProcessor())
-  AssignChargeProcessor* acp = new AssignChargeProcessor;
-	TEST_NOT_EQUAL(acp, 0)
-	TEST_REAL_EQUAL(acp->getTotalCharge(), 0)
+  AssignChargeProcessor acp;
+	TEST_REAL_EQUAL(acp.getTotalCharge(), 0)
 RESULT
 
 

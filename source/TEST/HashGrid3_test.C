@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashGrid3_test.C,v 1.12 2002/02/27 12:24:34 sturm Exp $
+// $Id: HashGrid3_test.C,v 1.13 2003/05/23 06:47:51 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.12 2002/02/27 12:24:34 sturm Exp $")
+START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.13 2003/05/23 06:47:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -274,10 +274,14 @@ RESULT
 
 // tests for class HashGridBox3::BoxIteratorTraits_::
 
-HashGridBox3<int>::BoxIteratorTraits_* it_tr_ptr;
+HashGridBox3<int>::BoxIteratorTraits_* it_tr_ptr = 0;
 CHECK(HashGridBox3::BoxIteratorTraits_::BoxIteratorTraits_() throw())
 	it_tr_ptr = new HashGridBox3<int>::BoxIteratorTraits_;
 	TEST_NOT_EQUAL(it_tr_ptr, 0)
+RESULT
+
+CHECK(HashGridBox3::BoxIteratorTraits_::~BoxIteratorTraits_() throw())
+	delete it_tr_ptr;
 RESULT
 
 

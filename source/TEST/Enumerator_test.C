@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Enumerator_test.C,v 1.13 2002/12/12 11:34:40 oliver Exp $
+// $Id: Enumerator_test.C,v 1.14 2003/05/23 06:47:51 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -17,7 +17,7 @@ void char_assign(char& c1, const char& c2)
 	c1 = c2;
 }
 
-START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.13 2002/12/12 11:34:40 oliver Exp $")
+START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.14 2003/05/23 06:47:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -52,6 +52,7 @@ Enumerator<String, String::iterator, char>::SiteList variant_list;
 CHECK(EnumeratorIndex::EnumeratorIndex(const list<pair<VariantIterator, vector<Variant> > >& variant_list))
   enumerator_index_ptr = new EnumeratorIndex(variant_list);
   TEST_NOT_EQUAL(enumerator_index_ptr, 0)
+	delete enumerator_index_ptr;
 RESULT
 
 CHECK(Size EnumeratorIndex::getSize() const)

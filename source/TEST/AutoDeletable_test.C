@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AutoDeletable_test.C,v 1.4 2003/03/14 12:29:51 oliver Exp $
+// $Id: AutoDeletable_test.C,v 1.5 2003/05/23 06:47:50 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -17,7 +17,7 @@ class A
 {
 };
 
-START_TEST(AutoDeletable, "$Id: AutoDeletable_test.C,v 1.4 2003/03/14 12:29:51 oliver Exp $")
+START_TEST(AutoDeletable, "$Id: AutoDeletable_test.C,v 1.5 2003/05/23 06:47:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -32,9 +32,7 @@ CHECK(AutoDeletable::void* operator new(size_t size) throw())
 RESULT
 
 A a;
-a_ptr = new A;
 A array[12];
-array_ptr = new A[12];
 
 CHECK(AutoDeletable::~AutoDeletable())
 	delete a_ptr;

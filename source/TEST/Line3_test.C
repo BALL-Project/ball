@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Line3_test.C,v 1.13 2002/12/12 11:34:41 oliver Exp $
+// $Id: Line3_test.C,v 1.14 2003/05/23 06:47:51 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 #	include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(Line3, "$Id: Line3_test.C,v 1.13 2002/12/12 11:34:41 oliver Exp $")
+START_TEST(Line3, "$Id: Line3_test.C,v 1.14 2003/05/23 06:47:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -36,16 +36,14 @@ CHECK(TLine3::BALL_CREATE(TLine3<T>))
 	delete v_ptr;
 RESULT
 
+Line3* line3_ptr = 0;
 CHECK(TLine3::TLine3())
-  Line3* line;
-	line = new Line3();
-	TEST_NOT_EQUAL(line, 0)
+	line3_ptr = new Line3;
+	TEST_NOT_EQUAL(line3_ptr, 0)
 RESULT
 
 CHECK(TLine3::~TLine3())
-  Line3* line;
-	line = new Line3();
-	delete line;
+	delete line3_ptr;
 RESULT
 
 Line3 line, line1, line2, line3;

@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Options_test.C,v 1.6 2002/12/12 11:34:43 oliver Exp $
+// $Id: Options_test.C,v 1.7 2003/05/23 06:47:51 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/options.h>
 
-START_TEST(Options, "$Id: Options_test.C,v 1.6 2002/12/12 11:34:43 oliver Exp $")
+START_TEST(Options, "$Id: Options_test.C,v 1.7 2003/05/23 06:47:51 oliver Exp $")
 
 using BALL::Options;
 using BALL::Vector3;
@@ -181,6 +181,8 @@ CHECK(dump)
 	outfile.close();
 	TEST_FILE_REGEXP(filename.c_str(), "data/Options_test.txt")
 RESULT
+delete options;
+delete options2;
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: String_test2.C,v 1.4 2003/01/14 21:57:49 oliver Exp $
+// $Id: String_test2.C,v 1.5 2003/05/23 06:47:52 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test2.C,v 1.4 2003/01/14 21:57:49 oliver Exp $")
+START_TEST(String,"$Id: String_test2.C,v 1.5 2003/05/23 06:47:52 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -19,8 +19,6 @@ START_TEST(String,"$Id: String_test2.C,v 1.4 2003/01/14 21:57:49 oliver Exp $")
 using namespace BALL;
 using std::string;
 
-String* s;	
-String* s2;
 String empty;
 String non_empty("Hallo");
 String hall("Hall");
