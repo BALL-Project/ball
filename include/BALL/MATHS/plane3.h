@@ -1,4 +1,4 @@
-// $Id: plane3.h,v 1.7 2000/02/16 17:25:31 oliver Exp $
+// $Id: plane3.h,v 1.8 2000/02/28 02:58:54 amoll Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -31,8 +31,8 @@ namespace BALL
 
 	/**	Threedimensional plane.
       {\bf Definition:} \URL{BALL/MATHS/.h}
-      \\
- 	*/
+			A plane is defined by a point and its normal.
+	*/
 	template <class T>
 	class TPlane3
 	{
@@ -44,36 +44,53 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Default constructor.
+				This method creates a new TPlane3 object. The two components
+				are initialized to {\tt (T)0}.
+		*/
 		TPlane3()
 			:	p(),
 				n()
 		{
 		}
 
-		///
+		/**	Copy constructor.
+				Create a new TPlane3 object from another.
+				@param plane the TPlane3 object to be copied
+				@param bool ignored - just for interface consistency
+		*/	
 		TPlane3(const TPlane3& plane, bool /* deep */ = true)
 			:	p(plane.p),
 				n(plane.n)
 		{
 		}
 
-		///
+		/**	Detailled constructor.
+				Create a new TPlane3 object from a point and the normal.
+				@param	point assigned to {\tt p}
+				@param	normal assigned to {\tt n}
+		*/
 		TPlane3(const TVector3<T>& point, const TVector3<T>& normal)
 			:	p(point),
 				n(normal)
 		{
 		}
 
-		///
+		/**	Detailled constructor.
+				Create a new TPlane3 object from three points.
+				@param	a assigned to {\tt p}
+				@param	a, b, c are used to calculate the normal {\tt n}
+		*/
 		TPlane3(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c)
 			:	p(a),
 				n((a - b) % (b - c))
 		{
 		}
 
-		///
-		virtual ~TPlane3()
+		/**	Destructor.	
+				Destructs the TPlane3 object. As there are no dynamic
+				data structures, nothing happens.
+		*/			virtual ~TPlane3()
 		{
 		}
 		//@}
@@ -94,21 +111,30 @@ namespace BALL
 			plane.n = temp_vector;
 		}
 
-		///
+		/**	Swap the contents of two planes.
+				@param	vector the plane to swap contents with
+				@param bool ignored - just for interface consistency
+		*/
 		void set(const TPlane3& plane, bool /* deep */ = true)
 		{
 			p = plane.p;
 			n = plane.n;
 		}
 
-		///
+		/**	Assign from a point and a normal.
+				@param	point the new point
+				@param	normal the new normal
+		*/
 		void set(const TVector3<T>& point, const TVector3<T>& normal)
 		{
 			p = point;
 			n = normal;
 		}
 
-		///
+		/**	Assignment operator.
+				Assign the components from another plane.
+				@param plane the plane to assign from
+		**/
 		TPlane3& operator = (const TPlane3 &plane)
 		{
 			p = plane.p;
@@ -117,14 +143,22 @@ namespace BALL
 			return *this;
 		}
 
-		///
+		/**	Assign to another Plane3.
+				Assigns the components to another plane.
+				@param plane the plane to be asigned to
+				@param deep ignored
+		*/
 		void get(TPlane3 &plane, bool /* deep */ = true) const
 		{
 			plane.p = p;
 			plane.n = n;
 		}
 
-		///
+		/**	Assign to a point and a normal.
+				@param point the point to be asigned to
+				@param normal the normal to be asigned to
+				@param deep ignored
+		*/
 		void get(TVector3<T>& point, TVector3<T>& normal) const
 		{
 			point = p;
@@ -136,7 +170,11 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Normalize the the normal of the plane.
+				The normal is scaled with its length:
+				$\{x|y|z\} *= \sqrt{x^2 + y^2 + z^2}$.
+				@exception DivisionByZero if the length of the normal is 0
+		*/
 		void normalize()
 		{
 			T length = n.getLength();
@@ -149,7 +187,11 @@ namespace BALL
 			n /= length;
 		}
 
-		/**
+		/**	Hessify the plane.
+				The normal is scaled with its length:
+				$\{x|y|z\} *= \sqrt{x^2 + y^2 + z^2}$.
+				If the dot product of the point with the normal
+				is less then zero, the normal is negated.
 		*/
 		void hessify()
 		{
@@ -166,25 +208,35 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Equality operator.
+				@return bool, {\bf true} if all components are equal, {\bf false} otherwise
+		*/
 		bool operator == (const TPlane3& plane) const
 		{
 			return (bool)(p == plane.p && n == plane.n);
 		}
 
-		///
+		/**	Inequality operator.
+				@return bool, {\bf false} if all components are equal, {\bf true} otherwise
+		*/
 		bool operator != (const TPlane3& plane) const
 		{
 			return (bool)(p != plane.p || n != plane.n);
 		}
 
-		///
+		/**	Test if a given point is a member of the plane.
+				@param point the point to be tested
+				@return bool, {\bf true} or {\bf false}
+		*/
 		bool has(const TVector3<T>& point) const
 		{
 			return Maths::isZero(n * (point - p));
 		}
 
-		///
+		/**	Test if a given line is a member of the plane.
+				@param line the line to be tested
+				@return bool, {\bf true} or {\bf false}
+		*/
 		bool has(const TLine3<T>& line) const
 		{
 			return (bool)(Maths::isZero(n * line.d) && has(line.p));
@@ -195,7 +247,10 @@ namespace BALL
 		*/
 		//@{
 
-		///
+		/**	Test if instance is valid.
+				always retruns true
+				@return bool {\bf true}
+		*/
 		bool isValid() const
 		{
 			return true;
@@ -238,15 +293,18 @@ namespace BALL
 		/**	@name	Attributes
 		*/
 		//@{
-		/// point
+		/**	the point
+		*/
 		TVector3<T> p;
 
-		/// normal
+		/**	the normal
+		*/
 		TVector3<T> n;
 		//@}
 	};
 
-	///
+	/**	Default plane class of type {\bf float}
+	*/
 	typedef TPlane3<float> Plane3;
 
 } // namespace BALL
