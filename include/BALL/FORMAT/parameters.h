@@ -1,4 +1,4 @@
-// $Id: parameters.h,v 1.4 2000/09/18 14:35:23 oliver Exp $
+// $Id: parameters.h,v 1.5 2000/10/05 17:29:41 anker Exp $
 // Molecular Mechanics: general force field parameter class
 
 #ifndef BALL_FORMAT_PARAMETERS_H
@@ -54,13 +54,15 @@ namespace BALL
 
 		//@}
 
-		/**	@name	Assignment
-		*/
+
+		/**	@name	Assignment */
 		//@{
-		/**	Assignment operator
-		*/
+
+		/**	Assignment operator */
 		const Parameters& operator = (const Parameters& parameters);
+
 		//@}
+
 
 		/**@name	Accessors 	
 		*/
@@ -93,6 +95,9 @@ namespace BALL
 				@return bool - {\tt valid_ && parameter_file_.isValid()}
 		*/
 		virtual bool isValid() const;
+
+		/** Equality operator */
+		bool operator == (const Parameters& parameters) const;
 		//@}
 
 		protected:

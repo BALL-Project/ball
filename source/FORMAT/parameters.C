@@ -1,4 +1,4 @@
-// $Id: parameters.C,v 1.6 2000/09/19 19:45:43 oliver Exp $
+// $Id: parameters.C,v 1.7 2000/10/05 17:29:43 anker Exp $
 //
 
 #include <BALL/FORMAT/parameters.h>
@@ -80,5 +80,13 @@ namespace BALL
 	{
 		return (valid_ && INI_file_.isValid());
 	}
+
+
+	bool Parameters::operator == (const Parameters& parameters) const
+	{
+		return ((valid_ == parameters.valid_) 
+				&& (INI_file_ == parameters.INI_file_));
+	}
+
 
 } // namespace BALL

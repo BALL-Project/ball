@@ -1,4 +1,4 @@
-// $Id: INIFile.h,v 1.6 2000/02/17 00:30:40 oliver Exp $
+// $Id: INIFile.h,v 1.7 2000/10/05 17:28:09 anker Exp $
 
 #ifndef BALL_FORMAT_INIFILE_H
 #define BALL_FORMAT_INIFILE_H
@@ -234,6 +234,14 @@ namespace BALL
 								\end{itemize}
 		*/	
 		bool setValue(const String& section, const String& key, const String& value);
+
+		//@}
+
+		/** @name Predicates */
+		//@{
+
+		/** Equality operator */
+		bool operator == (const INIFile& inifile) const;
 
 		//@}
 

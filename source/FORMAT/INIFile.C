@@ -1,4 +1,4 @@
-// $Id: INIFile.C,v 1.8 2000/01/28 16:36:35 oliver Exp $
+// $Id: INIFile.C,v 1.9 2000/10/05 17:28:11 anker Exp $
 
 #include <BALL/FORMAT/INIFile.h>
 
@@ -407,6 +407,21 @@ namespace BALL
 
 		// return the value
 		return match_name;
+	}
+
+
+	bool INIFile::operator == (const INIFile& inifile) const
+	{
+		return ((valid_ == inifile.valid_)
+		&& (filename_ == inifile.filename_)
+		&& (section_names_ == inifile.section_names_)
+		&& (lines_ == inifile.lines_)
+		&& (line_section_index_ == inifile.line_section_index_)
+		&& (section_start_== inifile.section_start_)
+		&& (section_end_ == inifile.section_end_)
+		&& (section_index_ == inifile.section_index_)
+		&& (section_key_map_ == inifile.section_key_map_)
+		&& (original_number_of_lines_ == inifile.original_number_of_lines_));
 	}
 
 } // namespace BALL
