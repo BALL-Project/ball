@@ -1,4 +1,4 @@
-// $Id: extractors.h,v 1.1 2000/06/27 07:44:08 oliver Exp $
+// $Id: extractors.h,v 1.2 2000/06/27 13:07:23 oliver Exp $
 
 #ifndef BALL_PYTHON_EXTRACTORS_H
 #define BALL_PYTHON_EXTRACTORS_H
@@ -17,6 +17,9 @@ namespace BALL
 	class PyProteinList;
 	class PySecondaryStructureList;
 	class PyChainList;
+	class PyNucleotideList;
+	class PyNucleicAcidList;
+	class BaseFragment;
 
 	/**	Extraction functions for external iteration.
 			The following set of functions can by used from python to
@@ -76,6 +79,14 @@ namespace BALL
 	/**	Extract all chains from a kernel data structure.
 	*/
 	PyChainList* chains(const BaseFragment& fragment, bool selected_only = false);
+
+	/**	Extract all nucleic acids from a kernel data structure.
+	*/
+	PyNucleicAcidList* nucleicAcids(const BaseFragment& fragment, bool selected_only = false);
+
+	/**	Extract all nucleotides from a kernel data structure.
+	*/
+	PyNucleotideList* nucleotides(const BaseFragment& fragment, bool selected_only = false);
 
 	//@}
 } // namespace BALL

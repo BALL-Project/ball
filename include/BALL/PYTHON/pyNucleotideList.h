@@ -1,7 +1,7 @@
-// $Id: pyResidueList.h,v 1.2 2000/06/27 13:07:25 oliver Exp $
+// $Id: pyNucleotideList.h,v 1.1 2000/06/27 13:07:24 oliver Exp $
 
-#ifndef BALL_PYTHON_PYRESIDUELIST_H
-#define BALL_PYTHON_PYRESIDUELIST_H
+#ifndef BALL_PYTHON_PYNUCLEOTIDELIST_H
+#define BALL_PYTHON_PYNUCLEOTIDELIST_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -13,37 +13,37 @@
 
 namespace BALL 
 {
-	class Residue;
+	class Nucleotide;
 	class BaseFragment;
 	
 	/**
 	*/
-	class PyResidueList
-		:	public List<Residue*>
+	class PyNucleotideList
+		:	public List<Nucleotide*>
 	{
 		public:
 
-		BALL_CREATE_NODEEP(PyResidueList)
+		BALL_CREATE_NODEEP(PyNucleotideList)
 
 		/**	@name	Type Definitions
 		*/
 		//@{
 
-		/**	Residue* type
+		/**	Nucleotide* type
 		*/
-		typedef Residue* ValueType;
+		typedef Nucleotide* ValueType;
 
 		/**	Pointer type
 		*/
-		typedef Residue** PointerType;
+		typedef Nucleotide** PointerType;
 
 		/**	Iterator type.
 		*/
-		typedef List<Residue*>::iterator Iterator;
+		typedef List<Nucleotide*>::iterator Iterator;
 
 		/**	Constant iterator type.
 		*/
-		typedef List<Residue*>::const_iterator ConstIterator;
+		typedef List<Nucleotide*>::const_iterator ConstIterator;
 
 		//@}
 
@@ -53,24 +53,24 @@ namespace BALL
 		/**	Default constructor.
 				Create an empty list.
 		*/
-		PyResidueList();
+		PyNucleotideList();
 
 		/** Copy constructor.
 				Create a copy of an existing list.
 				@param	map the list to be copied
 				@param	deep ignored
 		*/
-		PyResidueList(const PyResidueList& new_list);
+		PyNucleotideList(const PyNucleotideList& new_list);
 			
 		/**	Construct from a BaseFragment
-				This constructor creates an PyResidueList object from
-				all residues of a \Ref{BaseFragment} object.
+				This constructor creates an PyNucleotideList object from
+				all nucleotides of a \Ref{BaseFragment} object.
 		*/
-		PyResidueList(const BaseFragment& fragment, bool selected_only = false);
+		PyNucleotideList(const BaseFragment& fragment, bool selected_only = false);
 
 		/**	Destructor
 		*/
-		virtual ~PyResidueList();
+		virtual ~PyNucleotideList();
 		//@}
 
 		/**	@name Assignment
@@ -84,4 +84,4 @@ namespace BALL
 
 } // namespace BALL
 
-#endif // BALL_PYTHON_PYRESIDUELIST_H
+#endif // BALL_PYTHON_PYNUCLEOTIDELIST_H

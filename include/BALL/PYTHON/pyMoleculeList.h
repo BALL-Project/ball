@@ -1,4 +1,4 @@
-// $Id: pyMoleculeList.h,v 1.1 2000/06/27 07:44:10 oliver Exp $
+// $Id: pyMoleculeList.h,v 1.2 2000/06/27 13:07:23 oliver Exp $
 
 #ifndef BALL_PYTHON_PYMOLECULELIST_H
 #define BALL_PYTHON_PYMOLECULELIST_H
@@ -14,7 +14,7 @@
 namespace BALL 
 {
 	class Molecule;
-	class BaseMolecule;
+	class BaseFragment;
 	
 	/**
 	*/
@@ -62,11 +62,11 @@ namespace BALL
 		*/
 		PyMoleculeList(const PyMoleculeList& new_list);
 			
-		/**	Construct from a BaseMolecule
+		/**	Construct from a BaseFragment
 				This constructor creates an PyMoleculeList object from
-				all atoms of a \Ref{BaseMolecule} object.
+				all atoms of a \Ref{BaseFragment} object.
 		*/
-		PyMoleculeList(const BaseMolecule& fragment, bool selected_only = false);
+		PyMoleculeList(const BaseFragment& fragment, bool selected_only = false);
 
 		/**	Destructor
 		*/
@@ -78,7 +78,7 @@ namespace BALL
 		//@{
 		/**
 		*/
-		void set(const BaseMolecule& fragment, bool selected_only = false);
+		void set(const BaseFragment& fragment, bool selected_only = false);
 		//@}
 	};
 
