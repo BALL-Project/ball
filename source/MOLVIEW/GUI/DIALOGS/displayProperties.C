@@ -1,4 +1,4 @@
-// $Id: displayProperties.C,v 1.13.4.8 2002/11/07 14:34:08 amoll Exp $
+// $Id: displayProperties.C,v 1.13.4.9 2002/11/09 20:55:35 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
@@ -58,6 +58,7 @@ namespace BALL
 				remove_model_static_(),
 				remove_model_dynamic_(),
 				selector_(),
+				deselector_(),
 				
 				static_base_model_pointer_(0),
 				dynamic_base_model_pointer_(0),
@@ -173,21 +174,24 @@ namespace BALL
 			id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, SLOT(openDialog()), CTRL+Key_I);   
 			select_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), CTRL+Key_S);   
 			deselect_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), CTRL+Key_D);   
-			center_camera_id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "Focus C&amera", this, SLOT(centerCamera()), CTRL+Key_A);
-			build_bonds_id_ = main_control.insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, SLOT(buildBonds()), CTRL+Key_B);
-			add_hydrogens_id_ = main_control.insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, SLOT(addHydrogens()), CTRL+Key_H);
+			center_camera_id_ = main_control.insertMenuEntry(MainControl::DISPLAY, "Focus C&amera", this, 
+																											 SLOT(centerCamera()), CTRL+Key_A);
+			build_bonds_id_ = main_control.insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
+																										 SLOT(buildBonds()), CTRL+Key_B);
+			add_hydrogens_id_ = main_control.insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
+																											 SLOT(addHydrogens()), CTRL+Key_H);
 		}
 
 
 		void DisplayProperties::finalizeWidget(MainControl& main_control)
 			throw()
 		{
-			main_control.removeMenuEntry (MainControl::DISPLAY, "D&isplay Properties", this, SLOT(openDialog()), CTRL+Key_I);   
-			main_control.removeMenuEntry (MainControl::EDIT, "&Select", this, SLOT(select()), CTRL+Key_S);   
-			main_control.removeMenuEntry (MainControl::EDIT, "&Deselect", this, SLOT(deselect()), CTRL+Key_D);   
-			main_control.removeMenuEntry (MainControl::DISPLAY, "Focus C&amera", this, SLOT(centerCamera()), CTRL+Key_A);
-			main_control.removeMenuEntry (MainControl::BUILD, "&Build Bonds", this, SLOT(buildBonds()), CTRL+Key_B);
-			main_control.removeMenuEntry (MainControl::BUILD, "Add &Hydrogens", this, SLOT(addHydrogens()), CTRL+Key_H);
+			main_control.removeMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this, SLOT(openDialog()), CTRL+Key_I);   
+			main_control.removeMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), CTRL+Key_S);   
+			main_control.removeMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), CTRL+Key_D);   
+			main_control.removeMenuEntry(MainControl::DISPLAY, "Focus C&amera", this, SLOT(centerCamera()), CTRL+Key_A);
+			main_control.removeMenuEntry(MainControl::BUILD, "&Build Bonds", this, SLOT(buildBonds()), CTRL+Key_B);
+			main_control.removeMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, SLOT(addHydrogens()), CTRL+Key_H);
 		}
 
 
@@ -316,7 +320,6 @@ namespace BALL
 			else if (string == "by atom distance")
 			{
 				setColorCalculator_(distance_color_calculator_);
-				
 				distance_coloring_ = true;
 			}
 			else if (string == "custom")
@@ -360,6 +363,15 @@ namespace BALL
 				default:
 					throw(InvalidOption(__FILE__, __LINE__, values));
 			}
+		}
+
+		void DisplayProperties::setStatusbarText_(String text)
+			throw()
+		{
+			WindowMessage *window_message = new WindowMessage;
+			window_message->setStatusBar(text);
+			window_message->setDeletable(true);
+			notify_(window_message);
 		}
 
 //////////////////////////////////////////////////////////////////////////////////////////
@@ -411,7 +423,7 @@ namespace BALL
 				selection_.clear();
 			}
 
-			// disable apply button, if selection is empty
+			// disable apply button if selection is empty
 			if (selection_.empty())
 			{
 				apply_button_->setEnabled(false);
@@ -431,18 +443,12 @@ namespace BALL
 			}
 
 			// notify the main window
-			WindowMessage *window_message = new WindowMessage;
-			QString message;
-			message.sprintf("selecting %d objects...", selection_.size());
-			window_message->setStatusBar(message.ascii());
-			window_message->setDeletable(true);
-			notify_(window_message);
+			setStatusbarText_("selecting " + String(selection_.size()) + " objects...");
 
 			int value_static = getValue_(ADDRESS__STATIC_MODEL);
 			int value_dynamic = getValue_(ADDRESS__DYNAMIC_MODEL);
 
-			setValue_(ADDRESS__STATIC_MODEL, VALUE__SELECT);
-			setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__SELECT);
+			selector_.clear();
 
 			// copy list because the selection_ list can change after a changemessage event
 			List<Composite*> temp_selection_ = selection_;
@@ -450,12 +456,10 @@ namespace BALL
 			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
 			ChangedCompositeMessage *change_message = new ChangedCompositeMessage;
 			change_message->setDeletable(false);
-			setupStaticProcessor_();
-			setupDynamicProcessor_();
 			for (; list_it != temp_selection_.end(); ++list_it)
 			{
-				applyOn_(**list_it);
-				
+				(*list_it)->apply(selector_);
+
 				// mark composite for update
 				change_message->setComposite((*list_it));
 				notify_(change_message);
@@ -471,11 +475,7 @@ namespace BALL
 			scene_message->setDeletable(true);
 			notify_(scene_message);
 
-			// notify the main window
-			WindowMessage *window_message_2 = new WindowMessage;
-			window_message_2->setStatusBar("");
-			window_message_2->setDeletable(true);
-			notify_(window_message_2);
+			setStatusbarText_("");
 		}
 
 
@@ -487,31 +487,22 @@ namespace BALL
 			}
 
 			// notify the main window
-			WindowMessage *window_message = new WindowMessage;
-			QString message;
-			message.sprintf("deselecting %d objects...", selection_.size());
-			window_message->setStatusBar(message.ascii());
-			window_message->setDeletable(true);
-			notify_(window_message);
+			setStatusbarText_("deselecting " + String(selection_.size()) + "objects...");
 
 			int value_static = getValue_(ADDRESS__STATIC_MODEL);
 			int value_dynamic = getValue_(ADDRESS__DYNAMIC_MODEL);
 
-			setValue_(ADDRESS__STATIC_MODEL, VALUE__DESELECT);
-			setValue_(ADDRESS__DYNAMIC_MODEL, VALUE__DESELECT);
-						
+			deselector_.clear();
+
 			// copy list because the selection_ list can change after a changemessage event
 			List<Composite*> temp_selection_ = selection_;
 
 			List<Composite*>::ConstIterator list_it = temp_selection_.begin();	
 			ChangedCompositeMessage* change_message = new ChangedCompositeMessage;
 			change_message->setDeletable(false);
-			setupStaticProcessor_();
-			setupDynamicProcessor_();
 			for (; list_it != temp_selection_.end(); ++list_it)
 			{
-				applyOn_(**list_it);
-
+				(*list_it)->apply(deselector_);
 				// mark composite for update
 				change_message->setComposite((*list_it));
 				notify_(change_message);
@@ -527,11 +518,7 @@ namespace BALL
 			scene_message->setDeletable(true);
 			notify_(scene_message);
 
-			// notify the main window
-			WindowMessage *window_message_2 = new WindowMessage;
-			window_message_2->setStatusBar("");
-			window_message_2->setDeletable(true);
-			notify_(window_message_2);
+			setStatusbarText_("");
 		}
 
 
@@ -551,7 +538,7 @@ namespace BALL
 			SceneMessage *scene_message = new SceneMessage;
 			scene_message->setCameraLookAt(view_point);
 
-			view_point.z = view_point.z + getViewDistance_();
+			view_point.z += getViewDistance_();
 			scene_message->setCameraViewPoint(view_point);
 			scene_message->setDeletable(true);
 			notify_(scene_message);
@@ -566,12 +553,7 @@ namespace BALL
 			}
 
 			// notify the main window
-			WindowMessage *window_message = new WindowMessage;
-			QString message;
-			message.sprintf("building bonds ...");
-			window_message->setStatusBar(message.ascii());
-			window_message->setDeletable(true);
-			notify_(window_message);
+			setStatusbarText_("building bonds ...");
 
 			// copy list because the selection_ list can change after a changemessage event
 			List<Composite*> temp_selection_ = selection_;
@@ -600,11 +582,7 @@ namespace BALL
 			scene_message->setDeletable(true);
 			notify_(scene_message);
 
-			// notify the main window
-			WindowMessage *window_message_2 = new WindowMessage;
-			window_message_2->setStatusBar("");
-			window_message_2->setDeletable(true);
-			notify_(window_message_2);
+			setStatusbarText_("");
 
 			Log.info() << "Added " << number_of_bonds << " bonds." << std::endl;
 		}
@@ -657,11 +635,7 @@ namespace BALL
 			scene_message->setDeletable(true);
 			notify_(scene_message);
 
-			// notify the main window
-			WindowMessage *window_message_2 = new WindowMessage;
-			window_message_2->setStatusBar("");
-			window_message_2->setDeletable(true);
-			notify_(window_message_2);
+			setStatusbarText_("");
 		}
 
 
@@ -717,9 +691,7 @@ namespace BALL
 			scene_message.updateOnly();
 			notify_(scene_message);
 			
-			// clear status bar
-			WindowMessage window_message;
-			notify_(window_message);
+			setStatusbarText_("");
 		}
 
 
@@ -752,7 +724,6 @@ namespace BALL
 				if (combo_box->text(index) == item_string)
 				{
 					combo_box->setCurrentItem(index);
-
 					found = true;
 				}
 			}
@@ -816,16 +787,6 @@ namespace BALL
 
 				case VALUE__MODEL_REMOVE:
 					static_base_model_pointer_ = &remove_model_static_;
-					break;
-
-				case VALUE__SELECT:
-					selector_.select();
-					static_base_model_pointer_ = &selector_;
-					break;
-
-				case VALUE__DESELECT:
-					selector_.deselect();
-					static_base_model_pointer_ = &selector_;
 					break;
 
 				default:
@@ -915,16 +876,6 @@ namespace BALL
 					
 				case VALUE__MODEL_REMOVE:
 					dynamic_base_model_pointer_ = &remove_model_dynamic_;
-					break;
-
-				case VALUE__SELECT:
-					selector_.select();
-					dynamic_base_model_pointer_ = &selector_;
-					break;
-
-				case VALUE__DESELECT:
-					selector_.deselect();
-					dynamic_base_model_pointer_ = &selector_;
 					break;
 
 				default:
@@ -1024,8 +975,6 @@ namespace BALL
 			
 			return false;
 		}
-
-
 
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
