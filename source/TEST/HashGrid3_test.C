@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashGrid3_test.C,v 1.15 2003/06/17 12:50:21 amoll Exp $
+// $Id: HashGrid3_test.C,v 1.16 2003/06/19 19:57:02 oliver Exp $
 //
 // This line is for testing purposes. Remove me.
 //
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.15 2003/06/17 12:50:21 amoll Exp $")
+START_TEST(HashGrid, "$Id: HashGrid3_test.C,v 1.16 2003/06/19 19:57:02 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -23,7 +23,7 @@ using namespace BALL;
 
 // tests for class HashGridBox3::
 
-HashGridBox3<int>* hbox3;
+HashGridBox3<int>* hbox3 = 0;
 
 CHECK(HashGrid3() throw())
 	hbox3 = new HashGridBox3<int>;
@@ -31,14 +31,13 @@ CHECK(HashGrid3() throw())
 RESULT
 
 
+CHECK(~HashGridBox3() throw())
+	delete hbox3;
+RESULT
+
 CHECK(HashGrid3(const HashGrid3& grid, bool deep = true) throw())
   // ?????
 	// uses set(), which isn't implemented
-RESULT
-
-
-CHECK(~HashGridBox3() throw())
-	delete hbox3;
 RESULT
 
 
@@ -291,6 +290,11 @@ HashGrid3<int>* hg_ptr;
 CHECK(HashGridBox3() throw())
 	hg_ptr = new HashGrid3<int>;
 	TEST_NOT_EQUAL(hg_ptr, 0)
+RESULT
+
+
+CHECK(~HashGrid3() throw())
+	delete hg_ptr;
 RESULT
 
 
@@ -607,10 +611,6 @@ CHECK(void toBegin() throw())
 RESULT
 
 CHECK(void toEnd() throw())
-  // ???
-RESULT
-
-CHECK(~HashGrid3() throw())
   // ???
 RESULT
 
