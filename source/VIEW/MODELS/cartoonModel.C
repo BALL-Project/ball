@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.13 2003/11/25 14:19:55 amoll Exp $
+// $Id: cartoonModel.C,v 1.14 2003/11/25 17:39:27 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -400,16 +400,13 @@ namespace BALL
 			{
 				if (it->getName()=="C")
 				{
-					if (!first) first = &*it;	
+					if (first == 0) first = &*it;	
 					last = &*it;
 					catoms.push_back(&*it);
 				}
 			}
 
-			if (catoms.size() == 0)
-			{
-				return;
-			}
+			if (catoms.size() == 0) return;
 
 			List<const Atom*>::ConstIterator lit = catoms.begin();
 			lit++;
@@ -417,12 +414,14 @@ namespace BALL
 
 			// calcluate slices for the helix cylinder according to the C-atoms
 			Vector3 last_pos = first->getPosition();
-			for (Position p = 1; lit != catoms.end(); p++)
+			Vector3 diff = (normal / (catoms.size() ));
+
+			for (Position p = 0; p < catoms.size() -1; p++)
 			{
 				Tube* tube = new Tube;
 				tube->setRadius(helix_radius_);
 				tube->setVertex1(last_pos);
-				last_pos += (normal / (catoms.size() -1));
+				last_pos += diff;
 				tube->setVertex2(last_pos);
 				tube->setComposite(*lit);
 				geometric_objects_.push_back(tube);
@@ -435,7 +434,7 @@ namespace BALL
 			disc->setComposite(first);
 			geometric_objects_.push_back(disc);
 
-			disc = new Disc(Circle3(last->getPosition(), normal, helix_radius_));
+			disc = new Disc(Circle3(last_pos, normal, helix_radius_));
 			if (!disc) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Disc));
 			disc->setComposite(last);
 			geometric_objects_.push_back(disc);
@@ -465,13 +464,27 @@ namespace BALL
 				createSplineSegment_(spline_vector_[p1-1], spline_vector_[p1]);
 			}
 
-			if (p2 == 0 || p2 == spline_vector_.size()) return;
+			if (p2 == 0 || p2 == spline_vector_.size()-1) return;
 
-			spline_vector_[p2].setTangentialVector(normal);
+			spline_vector_[p2-2].setVector(last_pos-diff);
+			spline_vector_[p2-2].setTangentialVector(normal);
 			
- 			last_point_ = spline_vector_[p2].getVector(); 
- 			have_start_point_ = true; 
+			spline_vector_[p2-1].setVector(last_pos);
+			spline_vector_[p2-1].setTangentialVector(normal);
+
+			calculateTangentialVectors_();
+			createSplineSegment_(spline_vector_[p2-1], spline_vector_[p2]);
+
+			spline_.clear();
+			spline_.push_back(spline_vector_[0].getVector());
 			
+			for (Position i=1; i<spline_vector_.size(); i++)
+			{
+				createSplineSegment2_(spline_vector_[i-1], spline_vector_[i]);
+			}
+			
+ 			last_point_ = spline_vector_[p2].getVector();
+			have_start_point_ = true;
 		}
 
 				
