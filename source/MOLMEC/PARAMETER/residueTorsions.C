@@ -1,4 +1,4 @@
-// $Id: residueTorsions.C,v 1.1 2000/02/06 19:59:21 oliver Exp $
+// $Id: residueTorsions.C,v 1.2 2000/02/10 15:16:57 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/residueTorsions.h>
@@ -51,7 +51,6 @@ namespace BALL
 			// insert the torsions 
 			torsions_[residue].push_back(ResidueTorsion(residue, key.getField(1), key.getField(2), key.getField(3), key.getField(4)));
 			all_torsions_.insert(key);
-			Log.info() << "inserting " << key << endl;
 		}
 
 		return true;

@@ -1,4 +1,4 @@
-// $Id: templates.C,v 1.4 1999/12/28 17:52:38 oliver Exp $
+// $Id: templates.C,v 1.5 2000/02/10 15:16:57 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/templates.h>
@@ -124,44 +124,7 @@ namespace BALL
 		AtomIterator it = system.beginAtom();
 		for (; +it; ++it)
 		{
-			// determine the parent`s name
-			if (it->getFragment() != parent)
-			{
-				parent = it->getFragment();
-				if (parent == 0)
-				{
-					parent_name = ":";
-				} else {
-					parent_name = parent->getName().trim();
-					Residue* res = dynamic_cast<Residue*>(parent);
-					// if the parent fragment is a residue, determine its properties
-					if (res != 0)
-					{
-						String suffix = "-";
-						if (res->isNTerminal())
-						{
-							suffix = "-N";
-						}
-						if (res->isCTerminal())
-						{
-							suffix = "-C";
-						}
-						if (res->hasProperty(Residue::PROPERTY__HAS_SSBOND))
-						{
-							suffix += "S";
-						}
-						
-						if (suffix != "-")
-						{
-							parent_name += suffix;
-						}
-					}
-					
-					parent_name += ":";
-				}
-			}
-
-			String name(parent_name + it->getName().trim());
+			String name(it->getFullName());
 			if (overwrite_non_zero_charges || (it->getCharge() == 0.0))
 			{
 				if (charges_.has(name))

@@ -1,4 +1,4 @@
-// $Id: lennardJones.C,v 1.4 1999/12/28 17:52:37 oliver Exp $
+// $Id: lennardJones.C,v 1.5 2000/02/10 15:16:56 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/lennardJones.h>
@@ -51,7 +51,7 @@ namespace BALL
 		if ((!hasVariable("A") || !hasVariable("B"))
 				&& (!hasVariable("epsilon") || !hasVariable("R")))
 		{
-			Log.level(LogStream::ERROR) << "Lennard Jones parameter section requires two variable columns:"		
+			Log.error() << "Lennard Jones parameter section requires two variable columns:"		
 				<< "A/B or epsilon/R" << endl;
 
 			return false;
@@ -60,12 +60,24 @@ namespace BALL
 
 			// format_ == A_B_FORMAT:				parameters are in A/B format
 			// format_ == EPSILON_R_FORMAT:	parameters are in epsilon/R format
+			// format_ == SLATER_KIRKWOOD_FORMAT:	parameters are in epsilon/R format
 			if (hasVariable("epsilon") && hasVariable("R"))
 			{
 				format_ = EPSILON_R_FORMAT;
-			} else {
+			} 
+			else if (hasVariable("A") && hasVariable("B"))
+			{
 				format_ = A_B_FORMAT;
 			}		
+			else if (hasVariable("alpha") && hasVariable("N") && hasVariable("R"))
+			{
+				// BAUSTELLE
+				format_ = SLATER_KIRKWOOD_FORMAT;
+				Log.error() << "FFPSLennardJones::extractSection: Slater Kirkwood format not yet supported!" << endl;
+
+				return false;
+			}
+							 
 		}
 
 		// build a two dimensional array of the atom types
@@ -93,7 +105,14 @@ namespace BALL
 		{
 			index_A = getColumnIndex("A");
 			index_B = getColumnIndex("B");
-		} else {
+		} 
+		else if (format_ == EPSILON_R_FORMAT) 
+		{
+			index_A = getColumnIndex("epsilon");
+			index_B = getColumnIndex("R");
+		}
+		else if (format_ == SLATER_KIRKWOOD_FORMAT) 
+		{
 			index_A = getColumnIndex("epsilon");
 			index_B = getColumnIndex("R");
 		}
@@ -157,8 +176,22 @@ namespace BALL
 				A_[atom_type] = A;
 				B_[atom_type] = B;
 
+				// check for the sign of the parameters: they have to be positive!
+				if ((A < 0) || (B < 0))
+				{
+					if (format_ == EPSILON_R_FORMAT)
+					{
+						Log.warn() << "VdW parameter may not be negative: type = " << atom_type << " (" << key << "), eps = " << A 
+											 << ", r = " << B << endl;
+					} else {
+						Log.warn() << "VdW parameter may not be negative: type = " << atom_type << " (" << key << "), A = " << A 
+											 << ", B = " << B << endl;
+					}
+				}
+
 			} else {
-				Log.level(LogStream::WARNING) << "unknown atom type in Lennard Jones parameters: " << key << "   i = " << i << endl;
+
+				Log.warn() << "unknown atom type in Lennard Jones parameters: " << key << "   i = " << i << endl;
 			}
 		}
 
@@ -197,7 +230,7 @@ namespace BALL
 					Bij_[index] = 0.0;
 					Aij_[sym_index] = 0.0;
 					Bij_[sym_index] = 0.0;
-				}
+				}				
 			}
 		}
 
@@ -238,7 +271,7 @@ namespace BALL
 		{
 			parameters.A = Aij_[I * number_of_atom_types_ + J];
 			parameters.B = Bij_[I * number_of_atom_types_ + J];
-
+			
 			return true;
 		}
 

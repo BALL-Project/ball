@@ -1,4 +1,4 @@
-// $Id: quadraticImproperTorsion.C,v 1.1 2000/02/06 19:59:22 oliver Exp $
+// $Id: quadraticImproperTorsion.C,v 1.2 2000/02/10 15:16:56 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/quadraticImproperTorsion.h>
@@ -66,9 +66,9 @@ namespace BALL
 		float factor_phase = 1.0;
 		if (options.has("unit_phase"))
 		{
-			if (options["unit_phase"] == "rad")
+			if (options["unit_phase"] == "deg")
 			{	
-				factor_phase = 180.0 / Constants::PI;
+				factor_phase = Constants::PI / 180.0;
 			}
 		}
 
