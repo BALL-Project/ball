@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 2; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.47 2004/02/25 17:18:41 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.48 2004/02/26 15:05:25 sneumann Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -903,7 +903,7 @@ AC_DEFUN(CF_COMPAQ_OPTIONS, [
 			dnl
 			dnl  Starting with cxx 6.5, we had some trouble with
       dnl  floating point accuracy -- that should take care of it.
-		  CXXFLAGS="${CXXFLAGS} -mieee -nopure_cname"
+		  CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
 		else
 		  CXXFLAGS="${CXXFLAGS} -ieee -nopure_cname"
 		fi
