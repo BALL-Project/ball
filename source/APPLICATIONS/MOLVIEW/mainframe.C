@@ -91,10 +91,10 @@ Mainframe::Mainframe
 	label_properties_ = new DlgLabelProperties(this);
 	CHECK_PTR(label_properties_);
 
-	open_hin_file_ = new OpenHINFile();
+	open_hin_file_ = new OpenHINFile(this);
 	CHECK_PTR(open_hin_file_);
 
-	open_pdb_file_ = new OpenPDBFile();
+	open_pdb_file_ = new OpenPDBFile(this);
 	CHECK_PTR(open_pdb_file_);
 
 	molecular_properties_ = new MolecularProperties();
@@ -142,7 +142,7 @@ Mainframe::Mainframe
 	// Dialogs setup ---------
 	// ---------------------
 
-	display_properties_->setObjectProcessor(object_processor_);
+	display_properties_->registerObjectProcessor(object_processor_);
 	display_properties_->getPreferences(preferences_);
 	preferences_dialog_->getPreferences(preferences_);
 	minimization_dialog_->getPreferences(preferences_);
@@ -187,19 +187,7 @@ Mainframe::Mainframe
 
 	// File-Menu -------------------------------------------------------------------
 
-	QPopupMenu* files_menu = new QPopupMenu(this);
-	CHECK_PTR(files_menu);
-	popup_menus_.push_back(files_menu);
-
-	QPopupMenu* export_menu = new QPopupMenu(this);
-	CHECK_PTR(export_menu);
-	popup_menus_.push_back(export_menu);
-	
-
-	initPopupMenu(MainControl::FILE)->insertItem("&Import File", files_menu, CTRL+Key_I);
 	insertMenuEntry(MainControl::FILE, "E&xit", qApp, SLOT(quit()), CTRL+Key_X);
-	files_menu->insertItem("&PDB File", this, SLOT(importPDB()), CTRL+Key_P, MENU__OPEN_FILE_PDB);
-	files_menu->insertItem("&HIN File", this, SLOT(importHIN()), CTRL+Key_H, MENU__OPEN_FILE_HIN);
 
 	// Edit-Menu -------------------------------------------------------------------
 	
@@ -221,13 +209,9 @@ Mainframe::Mainframe
 			
 
   // Display Menu -------------------------------------------------------------------
-	initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
-	insertMenuEntry(MainControl::DISPLAY, "D&isplay Properties", this,
-									SLOT(openDisplayPropertiesDialog()), CTRL+Key_I, MENU__DISPLAY_OPEN_DISPLAY_PROPERTIES_DIALOG);   
 	insertMenuEntry(MainControl::DISPLAY, "&Preferences", this, 
 									SLOT(openPreferencesDialog()), CTRL+Key_I, MENU__DISPLAY_OPEN_PREFERENCES_DIALOG);
 	insertMenuEntry(MainControl::DISPLAY, "Focus C&amera", this, SLOT(centerCamera()), CTRL+Key_A, MENU__DISPLAY_CENTER_CAMERA);
-	insertMenuEntry(MainControl::DISPLAY, "&Label", this, SLOT(insertLabel()), CTRL+Key_L, MENU__INSERT_LABEL);
 
 	insertMenuEntry(MainControl::DISPLAY, "&Move Mode", this, SLOT(rotateMode()), CTRL+Key_R, MENU__CONTROL_ROTATE_MODE);
 	insertMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode()), CTRL+Key_P, MENU__CONTROL_PICKING_MODE);
@@ -279,10 +263,6 @@ Mainframe::Mainframe
 	checkServer();
 
 	// building internal connection ------------------------------------------------
-	registerConnectionObject(*display_properties_);
-	registerConnectionObject(*label_properties_);
-	registerConnectionObject(*open_hin_file_);
-	registerConnectionObject(*open_pdb_file_);
 	registerConnectionObject(*molecular_properties_);
 	registerConnectionObject(*server_);
 	registerConnectionObject(*geometric_convertor_);
@@ -363,14 +343,11 @@ void Mainframe::checkMenuEntries()
 	menuBar()->setItemEnabled(MENU__BUILD_ASSIGN_CHARGES, selected);
 	menuBar()->setItemEnabled(MENU__BUILD_CHECK_RESIDUE, selected);
 	menuBar()->setItemEnabled(MENU__BUILD_BUILD_BONDS, selected);
-	//	menuBar()->setItemEnabled(MENU__INSERT_LABEL, selected);
 	
 	// these menu points for single items only
 	menuBar()->setItemEnabled(MENU__DISPLAY_CENTER_CAMERA, selected && (number_of_selected_objects == 1));
 
 	// set the checkboxes for the non-modal dialogs
-	menuBar()->setItemChecked(MENU__DISPLAY_OPEN_DISPLAY_PROPERTIES_DIALOG, 
-													 display_properties_->isVisible());
 	menuBar()->setItemChecked(MENU__DISPLAY_OPEN_PREFERENCES_DIALOG, 
 													 preferences_dialog_->isVisible());
 
@@ -415,16 +392,6 @@ void Mainframe::checkMenuEntries()
 
 	menuBar()->setItemEnabled(MENU__BUILD_AMBER_MINIMIZATION, 
 														(all_systems && (number_of_selected_objects == 1)));
-}
-
-void Mainframe::importHIN()
-{
-	open_hin_file_->exec();
-}
-
-void Mainframe::importPDB()
-{
-	open_pdb_file_->exec();
 }
 
 void Mainframe::cut()
@@ -650,12 +617,6 @@ void Mainframe::deselect()
 
 	statusBar()->clear();
 	QWidget::update();
-}
-
-void Mainframe::insertLabel()
-{
-	label_properties_->show();
-	label_properties_->raise();
 }
 
 void Mainframe::rotateMode()
@@ -1024,12 +985,6 @@ void Mainframe::amberMinimization()
 	statusBar()->message(message, 5000);
 }
 
-void Mainframe::openDisplayPropertiesDialog()
-{
-	display_properties_->show();
-	display_properties_->raise();
-}
-          
 void Mainframe::openPreferencesDialog()
 {
 	preferences_dialog_->show();

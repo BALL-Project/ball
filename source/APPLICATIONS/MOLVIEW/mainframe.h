@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.21 2000/09/24 14:20:07 oliver Exp $
+// $Id: mainframe.h,v 1.22 2000/10/07 15:22:41 hekl Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -152,11 +152,6 @@ class Mainframe
 	// (connected to aboutToShow())
 	void checkMenuEntries();
 
-	// active the menu entries
-	// File menu
-	void importHIN();
-	void importPDB();
-
 	// Edit menu
 	void cut();
 	void copy();
@@ -164,9 +159,6 @@ class Mainframe
 	void clearClipboard();
 	void select();
 	void deselect();
-
-	// insert menu
-	void insertLabel();
 
 	// Control menu
 	void rotateMode();
@@ -181,7 +173,6 @@ class Mainframe
 	void amberMinimization();
 
 	// Display menu
-	void openDisplayPropertiesDialog();
 	void openPreferencesDialog();
 	void centerCamera();
 
