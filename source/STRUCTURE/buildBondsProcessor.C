@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.C,v 1.7 2005/03/14 16:20:33 amoll Exp $
+// $Id: buildBondsProcessor.C,v 1.7.2.1 2005/03/16 13:26:05 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/buildBondsProcessor.h>
@@ -9,16 +9,12 @@
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/bond.h>
-#include <BALL/DATATYPE/hashSet.h>
 #include <BALL/DATATYPE/hashGrid.h>
 #include <BALL/COMMON/limits.h>
 #include <BALL/SYSTEM/path.h>
-#include <BALL/MATHS/common.h>
 #include <BALL/FORMAT/resourceFile.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
 #include <BALL/QSAR/ringPerceptionProcessor.h>
-
-#include <cmath>
 
 using namespace std;
 
