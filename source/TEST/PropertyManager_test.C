@@ -1,13 +1,15 @@
-// $Id: PropertyManager_test.C,v 1.8 2000/08/24 20:54:31 amoll Exp $
+// $Id: PropertyManager_test.C,v 1.9 2000/08/25 20:09:58 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/CONCEPT/property.h>
 #include <BALL/CONCEPT/persistenceManager.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
+#include <BALL/KERNEL/protein.h>
+
 ///////////////////////////
 
-START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.8 2000/08/24 20:54:31 amoll Exp $")
+START_TEST(class_name, "$Id: PropertyManager_test.C,v 1.9 2000/08/25 20:09:58 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -128,33 +130,40 @@ CHECK(NamedProperty::persistentWrite(PersistenceManager& pm, const char* name = 
 	NEW_TMP_FILE(filename)
 	ofstream  ofile(filename.c_str(), File::OUT);
 	pm.setOstream(ofile);
-	pm.registerClass(getStreamName<NamedProperty>(), NamedProperty::createDefault);
-	*np >> pm;
+	np->persistentWrite(pm, "TEST");
 	ofile.close();	
 	TEST_FILE(filename.c_str(), "data/NamedProperty_test.txt", true)
+	delete np;
+
+	Protein protein("PROTEIN1");
+	np = new NamedProperty("test2", protein);
+	NEW_TMP_FILE(filename)
+	ofile.open(filename.c_str());
+	pm.setOstream(ofile);
+	np->persistentWrite(pm, "TEST");
+	ofile.close();	
+	TEST_FILE(filename.c_str(), "data/NamedProperty_test0.txt", true)
 RESULT
 
 CHECK(NamedProperty::persistentRead(PersistenceManager& pm))
-	float x = -99.9;
-	NamedProperty* np3 = 0;
-	ifstream  ifile(filename.c_str());
+	NamedProperty* np;
+	ifstream  ifile("data/NamedProperty_test.txt");
 	pm.setIstream(ifile);
-	PersistentObject* ptr;
-	ptr = pm.readObject();
+	np->persistentRead(pm);
+	TEST_NOT_EQUAL(np, 0)
+	TEST_EQUAL(np->getType(), NamedProperty::FLOAT)
+	TEST_EQUAL(np->getName(), "test")
+	TEST_REAL_EQUAL(np->getFloat(), -99.9)
 	ifile.close();
-	TEST_NOT_EQUAL(ptr, 0)
-	if (ptr != 0)
-	{
-		TEST_EQUAL(isKindOf<NamedProperty>(*ptr), true)
-		if (isKindOf<NamedProperty>(*ptr))
-		{
-			np3 = castTo<NamedProperty>(*ptr);
-		}
-	}
-	TEST_NOT_EQUAL(np3, 0)
-	TEST_EQUAL(np3->getType(), NamedProperty::FLOAT)
-	TEST_EQUAL(np3->getName(), "test")
-	TEST_REAL_EQUAL(np3->getFloat(), x)
+	delete np;
+
+	ifile.open("data/NamedProperty_test0.txt");
+	pm.setIstream(ifile);
+	np->persistentRead(pm);
+	TEST_NOT_EQUAL(np, 0)
+	TEST_EQUAL(np->getType(), NamedProperty::OBJECT)
+	TEST_EQUAL(np->getName(), "test2")
+	TEST_NOT_EQUAL(np->getObject(), 0)
 	ifile.close();
 RESULT
 
@@ -197,13 +206,14 @@ RESULT
 CHECK(friend std::ostream& operator << (std::ostream& s, const NamedProperty& property))
 	PersistentObject po;
 	string str("test");
+	Protein protein("PROTEIN1");
 	NamedProperty np1("NP1", true);
 	NamedProperty np2("NP2", (int)-1234);
 	NamedProperty np3("NP3", (unsigned int) 2345);
 	NamedProperty np4("NP4", (float) 1.234);
 	NamedProperty np5("NP5", (double) 2.34);
 	NamedProperty np6("NP6", str);
-	NamedProperty np7("NP7", po);
+	NamedProperty np7("NP7", protein);
 	NamedProperty np8("NP8");
 
 	NEW_TMP_FILE(filename)
