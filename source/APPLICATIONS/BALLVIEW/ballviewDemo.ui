@@ -284,8 +284,6 @@ molecule: the molecule is considered as a union of Van-der-Waals
 spheres, over which a water molecule is rolled. The points where
 the surface of the water touches the surface of one Van-der-Waals
 sphere of the molecule compose the SES.
-&lt;br&gt;&lt;br&gt;
-Next we will calculate a Solvent Accesible Surface, this will take a moment.
 &lt;/blockquote&gt;</string>
                                 </property>
                                 <property name="alignment">
@@ -300,44 +298,6 @@ Next we will calculate a Solvent Accesible Surface, this will take a moment.
                         </property>
                         <attribute name="id">
                             <number>6</number>
-                        </attribute>
-                        <grid>
-                            <property name="name">
-                                <cstring>unnamed</cstring>
-                            </property>
-                            <widget class="QLabel" row="0" column="0">
-                                <property name="name">
-                                    <cstring>textLabel3_2_2_4_2</cstring>
-                                </property>
-                                <property name="sizePolicy">
-                                    <sizepolicy>
-                                        <hsizetype>7</hsizetype>
-                                        <vsizetype>7</vsizetype>
-                                        <horstretch>0</horstretch>
-                                        <verstretch>0</verstretch>
-                                    </sizepolicy>
-                                </property>
-                                <property name="text">
-                                    <string>&lt;blockquote&gt;
-The Solvent Accessible Surface (SAS), shown in this example, is
-conceptually similar to the SES. For its definition, we use the same process
-as for the SES, but use the &lt;it&gt;center&lt;/it&gt; of the probing water molecule
-rather than its surface.
-
-&lt;/blockquote&gt;</string>
-                                </property>
-                                <property name="alignment">
-                                    <set>WordBreak|AlignJustify|AlignTop</set>
-                                </property>
-                            </widget>
-                        </grid>
-                    </widget>
-                    <widget class="QWidget">
-                        <property name="name">
-                            <cstring>WStackPage</cstring>
-                        </property>
-                        <attribute name="id">
-                            <number>7</number>
                         </attribute>
                         <grid>
                             <property name="name">
@@ -380,7 +340,7 @@ as a thread in space, the &lt;it&gt;backbone&lt;/it&gt; of the protein.
                             <cstring>WStackPage</cstring>
                         </property>
                         <attribute name="id">
-                            <number>8</number>
+                            <number>7</number>
                         </attribute>
                         <grid>
                             <property name="name">
@@ -417,7 +377,7 @@ computed and visualized in a &lt;it&gt;Cartoon&lt;/it&gt; like fashion.
                             <cstring>WStackPage</cstring>
                         </property>
                         <attribute name="id">
-                            <number>9</number>
+                            <number>8</number>
                         </attribute>
                         <grid>
                             <property name="name">
@@ -454,7 +414,7 @@ bonds.
                             <cstring>WStackPage</cstring>
                         </property>
                         <attribute name="id">
-                            <number>10</number>
+                            <number>9</number>
                         </attribute>
                         <grid>
                             <property name="name">
@@ -501,7 +461,7 @@ can be changed in the preferences dialog.
                             <cstring>WStackPage</cstring>
                         </property>
                         <attribute name="id">
-                            <number>11</number>
+                            <number>10</number>
                         </attribute>
                         <grid>
                             <property name="name">
@@ -537,7 +497,7 @@ are colored in blue, strands in red, and everything else in green.
                             <cstring>WStackPage</cstring>
                         </property>
                         <attribute name="id">
-                            <number>12</number>
+                            <number>11</number>
                         </attribute>
                         <grid>
                             <property name="name">
@@ -574,7 +534,7 @@ of the molecule to blue at its end in the default coloring settings.
                             <cstring>WStackPage</cstring>
                         </property>
                         <attribute name="id">
-                            <number>13</number>
+                            <number>12</number>
                         </attribute>
                         <grid>
                             <property name="name">
@@ -620,7 +580,7 @@ Don't worry if the MD Simulation takes a moment to start.
                             <cstring>WStackPage</cstring>
                         </property>
                         <attribute name="id">
-                            <number>14</number>
+                            <number>13</number>
                         </attribute>
                         <grid>
                             <property name="name">
@@ -660,7 +620,7 @@ this might take a moment.
                             <cstring>WStackPage</cstring>
                         </property>
                         <attribute name="id">
-                            <number>15</number>
+                            <number>14</number>
                         </attribute>
                         <grid>
                             <property name="name">
@@ -698,7 +658,7 @@ according to the electrostatic potential.
                             <cstring>WStackPage</cstring>
                         </property>
                         <attribute name="id">
-                            <number>16</number>
+                            <number>15</number>
                         </attribute>
                         <grid>
                             <property name="name">

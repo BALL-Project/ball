@@ -67,6 +67,7 @@ void BALLViewDemo::show()
 		file_name += FileSystem::PATH_SEPARATOR;
 		file_name += String("structures");
 		file_name += FileSystem::PATH_SEPARATOR;
+		file_name += "bpti.pdb";
 		MolecularFileDialog* dialog = MolecularFileDialog::getInstance(0);
 		system_ = dialog->openFile(file_name);
 	}
