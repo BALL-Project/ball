@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.h,v 1.4 2003/11/21 01:22:21 amoll Exp $
+// $Id: lightSettings.h,v 1.5 2004/02/18 23:30:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_LIGHTSETTINGS_H
@@ -24,7 +24,7 @@ namespace BALL
 		class Stage;
 		class Scene;
 
-		/** Dialog for setting the lighting.
+		/** Dialog for setting the lighting, which is added to the Preferences.
 		 		This dialog allows the control of the lighting of a scene.
 				Lights can be added, removed and adjusted. Also a standard value
 				to reset the lighting can be stored.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.h,v 1.7 2003/10/15 14:19:02 amoll Exp $
+// $Id: mainControlPreferences.h,v 1.8 2004/02/18 23:30:54 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MAINCONTROLPREFERENCES_H
@@ -62,7 +62,7 @@ class MainControlPreferences
 	QStyle* getStyle()
 		throw();
 
-	/// Inspection, wheter the name labels in the controls should be enabled.
+	/// Inspection, wheter the name labels in the GenericControl instances should be enabled.
 	bool showLabelsEnabled() const
 		throw();
 	

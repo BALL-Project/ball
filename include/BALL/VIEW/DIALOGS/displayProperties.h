@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.26 2004/01/18 21:55:32 oliver Exp $
+// $Id: displayProperties.h,v 1.27 2004/02/18 23:27:33 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -31,7 +31,9 @@ namespace BALL
 
 		/**	Dialog for creating and changing representations.
 				for a selection of molecular objects.
-				The class MolecularControl is responsible for creating such a selection.
+				It can create a new Representation for a selection of Composites from the 
+				MolecularControl. If a Representation is selected in the GeometricControl, it
+				can be modified with this dialog.
 				With the help of various combo boxes it is possible to customize the look of
 				the graphical visualization (the model, the drawing precision, the drawing mode,
 				the coloring method and the custom color).
@@ -56,6 +58,7 @@ namespace BALL
 			{
 				public:
 
+					///
 					InvalidOption(const char* file, int line, int option)
 						throw();
 			};
@@ -65,8 +68,7 @@ namespace BALL
 			//@{
 
 			/** Default Constructor.
-					Calls ModularWidget::registerWidget and ModularWidget::fetchPreferences().
-					\see        ModularWidget
+					Calls ModularWidget::registerWidget.
 			*/
 			DisplayProperties(QWidget *parent = NULL, const char* name = NULL)
 				throw();
@@ -87,14 +89,12 @@ namespace BALL
 
 			/** Message handling method.
 					Handles messages sent by other registered ConnectionObject objects.
-					Catches NewMolecularMessage and MolecularSelectionMessage.
-					If NewMolecularMessage is catched the chosen graphical visualization
+					If a CompositeMessage with type NEW_MOLECULE is catched,
+					the chosen graphical visualization
 					will be applied to the Composite object and the follwing Message
 					objects will be sent through the ConnectionObject tree:
-						- CompositeMessage
-						- ShowDisplayPropertiesMessage
-						- RepresentationMessage 
-						- ControlSelectionMessage
+						- CompositeMessage with type CENTER_CAMERA
+						- RepresentationMessage with type NEW
 					\par
 					\param message the pointer to the message that should be processed
 			*/
@@ -124,9 +124,8 @@ namespace BALL
 			virtual void writePreferences(INIFile &inifile)
 					throw();
 				
-			/**	Initialize the popup menu <b>Display</b> with the submenu
-					<b>Display Properties</b>.
-					This menu entry opens the dialog.
+			/**	Initialize the popup menu <b>Display</b> with the entry
+					<b>Display Properties</b>, which opens the dialog.
 					This method is called automatically	immediately before the main application is started
 					by MainControl::show()
 					\param main_control the MainControl object to be initialized 
