@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.123 2004/02/12 16:18:57 amoll Exp $
+// $Id: mainframe.C,v 1.124 2004/02/12 16:21:09 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -181,17 +181,14 @@ namespace BALL
 
 	void Mainframe::exportPOVRay()
 	{
-		QFileDialog *fd = new QFileDialog(this, "", true);
-		fd->setMode(QFileDialog::AnyFile);
-		fd->setCaption("Export POVRay File");
-		fd->setViewMode(QFileDialog::Detail);
+		QFileDialog fd(this, "", true);
+		fd.setMode(QFileDialog::AnyFile);
+		fd.setCaption("Export POVRay File");
+		fd.setViewMode(QFileDialog::Detail);
 
-		if (!fd->exec()== QDialog::Accepted) return;
+		if (!fd.exec()== QDialog::Accepted) return;
 
-		String filename(fd->selectedFile().ascii());
-		delete fd;
-
-		POVRenderer pr(filename);
+		POVRenderer pr(fd.selectedFile().ascii());
 		scene_->exportScene(pr);
 	}
 
