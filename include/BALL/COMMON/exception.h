@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.16 2000/10/03 02:01:13 amoll Exp $
+// $Id: exception.h,v 1.17 2000/10/03 18:56:17 amoll Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -316,7 +316,8 @@ namespace BALL
 			friend class ReadFile;
 
 			public:
-			ReadFileError(const string& message = "", const string& line = "", int line_nr = -1);
+			ReadFileError(const char* file, int line, const string& message = "",
+										const string& line_contents = "", int file_line = -1);
 		};
 
 		/**

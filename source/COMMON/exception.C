@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.15 2000/10/03 02:01:26 amoll Exp $
+// $Id: exception.C,v 1.16 2000/10/03 18:56:13 amoll Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -173,16 +173,17 @@ namespace BALL
 				globalHandler.setMessage(message_);
 			}
 		
-			ReadFileError::ReadFileError(const string& message = "", const string& line = "", int line_nr = -1)
-				: GeneralException(__FILE__, __LINE__, "ReadFileError", "")
+			ReadFileError::ReadFileError(const char* file, int line, const string& message = "",
+																	 const string& line_contents = "", int file_line = -1)
+				: GeneralException(file, line, "ReadFileError", "")
 			{
 				message_ = message;
 				message_ += "; last read line number = ";
-				char* c = new char(20);
-				//itoa(line_nr, c, 10);
-				//message_ += c;
+				char buf[40];
+				sprintf(buf, "%i", line);
+				message_ += buf;
 				message_ += "\n contents of line: \n";
-				message_ += line;
+				message_ += line_contents;
 
 				globalHandler.setMessage(message_);
 			}
