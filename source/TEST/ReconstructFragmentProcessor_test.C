@@ -1,4 +1,4 @@
-// $Id: ReconstructFragmentProcessor_test.C,v 1.1.2.1 2002/05/12 13:42:31 oliver Exp $
+// $Id: ReconstructFragmentProcessor_test.C,v 1.1.2.2 2002/05/12 13:44:27 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(ReconstructFragmentProcessor, "$Id: ReconstructFragmentProcessor_test.C,v 1.1.2.1 2002/05/12 13:42:31 oliver Exp $")
+START_TEST(ReconstructFragmentProcessor, "$Id: ReconstructFragmentProcessor_test.C,v 1.1.2.2 2002/05/12 13:44:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -83,11 +83,6 @@ CHECK(ReconstructFragmentProcessor::operator ())
 	S.apply(rfp);
 	TEST_EQUAL(rfp.getNumberOfInsertedAtoms(), 4)
 	TEST_EQUAL(S.countAtoms(), 31)
-
-	HINFile f2("test.hin", File::OUT);
-	f2 << S;
-
-
 RESULT
 
 /////////////////////////////////////////////////////////////
