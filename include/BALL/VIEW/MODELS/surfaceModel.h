@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.h,v 1.7 2003/11/13 19:30:42 amoll Exp $
+// $Id: surfaceModel.h,v 1.8 2003/12/12 15:20:48 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_SURFACEMODEL_H
@@ -59,24 +59,20 @@ namespace BALL
 				throw();
 
 			//@} 
-
-			/**	@name Accessors */	
+			/**	@name Accessors 
+			*/	
 			//{
+			
 			/// Return the surface type (SES/SAS)
 			SurfaceProcessor::SurfaceType getType() const { return type_; }
+			
 			/// Set the surface type (SES/SAS)
 			void setType(SurfaceProcessor::SurfaceType type) { type_ = type; }
+			
 			//}
 			/**	@name Processor specific methods 
 			*/ 
 			//@{
-			
-			/** Start method.
-					Clears all internal structures.
-					Calls ModelProcessor::start.
-					\return bool true if the start was successful
-			*/
-			virtual bool start();
 			
 			/** Finish method.
 					This method will be internally called from the processor mechanism when the processor
@@ -97,7 +93,6 @@ namespace BALL
 			virtual Processor::Result operator() (Composite& composite);
 
 			//@} 
-
 			/**	@name	debuggers and diagnostics 
 			*/ 
 			//@{
@@ -119,12 +114,7 @@ namespace BALL
 			float getProbeRadius() const
 				throw() { return probe_radius_;}
 			
-
 		  private:
-
-			bool 							get_composite_;
-
-			Composite* 				start_composite_;
 
 			HashSet<Atom*> 		atoms_;
 

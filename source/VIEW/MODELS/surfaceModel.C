@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: surfaceModel.C,v 1.7 2003/11/13 19:30:51 amoll Exp $
+// $Id: surfaceModel.C,v 1.8 2003/12/12 15:20:46 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/surfaceModel.h>
@@ -22,8 +22,6 @@ namespace BALL
 		AddSurfaceModel::AddSurfaceModel()
 			throw()
 			: ModelProcessor(),
-				get_composite_(true),
-				start_composite_(0),
 				type_(SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE),
 				probe_radius_(1.5)
 		{
@@ -32,8 +30,6 @@ namespace BALL
 		AddSurfaceModel::AddSurfaceModel(const AddSurfaceModel& add_surface)
 			throw()
 			:	ModelProcessor(add_surface),
-				get_composite_(true),
-				start_composite_(0),
 				type_(add_surface.type_),
 				probe_radius_(add_surface.probe_radius_)
 		{
@@ -52,30 +48,14 @@ namespace BALL
 			throw()
 		{
 			ModelProcessor::clear();
-			get_composite_ = true;
-			start_composite_ = 0;
 			type_ = SurfaceProcessor::SOLVENT_EXCLUDED_SURFACE;
 		}
 
-		bool AddSurfaceModel::start()
-		{
-			get_composite_ = true;
-			start_composite_ = 0;
-			return ModelProcessor::start();
-		}
-				
 		bool AddSurfaceModel::finish()
 		{
-			// return if no composite found
-			if (start_composite_ == 0)  return false;
-			
 			Mesh* mesh = new Mesh;
 
 			if (mesh == 0) throw Exception::OutOfMemory(__FILE__, __LINE__, sizeof(Mesh));
-
-			// get info from the start composite
-			MolecularInformation molecular_information;
-			start_composite_->host(molecular_information);
 
 			SurfaceProcessor sp;
 			sp.setType(getType());
@@ -135,26 +115,12 @@ namespace BALL
 			// Compute the surface
 			sp.finish();
 			*static_cast<Surface*>(mesh) = sp.getSurface();
-		
-			mesh->setName(String("Surface of ")
-										+ molecular_information.getTypeName() 
-										+ String(" (")
-										+ molecular_information.getName()
-										+ String(")"));
-
-
 			geometric_objects_.push_back(mesh);
 			return true;
 		}
 				
 		Processor::Result AddSurfaceModel::operator () (Composite& composite)
 		{
-			// take first composite, surface will be inserted to it later
-			if (get_composite_)
-			{
-				start_composite_ = &composite;
-				get_composite_ = false;
-			}
 			if (RTTI::isKindOf<AtomContainer>(composite)) 
 			{
 				AtomIterator it;
@@ -186,5 +152,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL
