@@ -1,4 +1,4 @@
-// $Id: parameterSection.C,v 1.10 2000/10/07 13:20:44 oliver Exp $
+// $Id: parameterSection.C,v 1.11 2000/10/17 17:17:24 anker Exp $
 //
 
 #include <BALL/FORMAT/parameterSection.h>
@@ -9,7 +9,7 @@ using namespace std;
 namespace BALL 
 {
 
-	ParameterSection::ParameterSection()
+	ParameterSection::ParameterSection() throw()
 		:	section_name_(""),
 			format_line_(""),
 			section_entries_(),
@@ -22,12 +22,29 @@ namespace BALL
 	{
 	}
 
-	ParameterSection::~ParameterSection()
+
+	ParameterSection::ParameterSection(const ParameterSection& parameter_section) 
+		throw()
+		:	section_name_(parameter_section.section_name_),
+			format_line_(parameter_section.format_line_),
+			section_entries_(parameter_section.section_entries_),
+			variable_names_(parameter_section.variable_names_),
+			entries_(parameter_section.entries_),
+			keys_(parameter_section.keys_),
+			number_of_variables_(parameter_section.number_of_variables_),
+			version_(parameter_section.version_),
+			valid_(parameter_section.valid_)
+	{
+	}
+
+
+	ParameterSection::~ParameterSection() throw()
 	{
 		clear();
 	}
 
-	void ParameterSection::clear()
+
+	void ParameterSection::clear() throw()
 	{
 		// clear the section name
 		section_name_ = "";
@@ -38,15 +55,13 @@ namespace BALL
 		variable_names_.clear();
 
 		// clear all allocated entries
-		delete [] entries_;
-		entries_ = 0;
+		entries_.clear();
 
 		// clear all keys
 		keys_.clear();
 
 		// delete the version array
-		delete [] version_;
-		version_ = 0;
+		version_.clear();
 
 		// clear the number of entries/variables
 		number_of_variables_ = 0;
@@ -55,13 +70,16 @@ namespace BALL
 		valid_ = false;
 	}
 
+
 	const String& ParameterSection::getSectionName() const
 		throw()
 	{
 		return section_name_;
 	}
 
-	bool ParameterSection::extractSection(Parameters& parameters, const String& section_name)
+
+	bool ParameterSection::extractSection(Parameters& parameters, 
+			const String& section_name) throw()
  	{
 		if (!parameters.isValid())
 		{
@@ -194,7 +212,8 @@ namespace BALL
 		}
 
 		// allocate space for all entries
-		entries_ = new String[number_of_lines * number_of_variables];
+		entries_.clear();
+		entries_.resize(number_of_lines * number_of_variables);
 		
 		// clear all former contest of the keys_ array
 		keys_.clear();
@@ -308,16 +327,18 @@ namespace BALL
 	}
 
 	bool ParameterSection::has(const String& key, const String& variable) const 
+		throw()
 	{
 		return section_entries_.has(key) && variable_names_.has(variable);
 	}
 
-	bool ParameterSection::has(const String& key) const
+	bool ParameterSection::has(const String& key) const throw()
 	{
 		return section_entries_.has(key);
 	}
 
-	const String& ParameterSection::getValue(const String& key, const String& variable) const 
+	const String& ParameterSection::getValue(const String& key,	 
+			const String& variable) const throw()
 	{
 		// define a dummy value returned, if a undefined key/variable
 		// pair is requested
@@ -333,7 +354,8 @@ namespace BALL
 		return entries_[section_entries_[key] * number_of_variables_ + variable_names_[variable]];
 	}
 		
-	const String& ParameterSection::getValue(Size key_index, Size variable_index) const
+	const String& ParameterSection::getValue(Size key_index, 
+			Size variable_index) const throw()
 	{
 		// define a dummy value returned, if a undefined key/variable
 		// pair is requested
@@ -352,7 +374,7 @@ namespace BALL
 		}
 	}
 		
-	const String& ParameterSection::getKey(Position key_index) const 
+	const String& ParameterSection::getKey(Position key_index) const throw()
 	{
 		// define a dummy value returned, if an undefined key/variable
 		// pair is requested
@@ -367,23 +389,24 @@ namespace BALL
 		// return the value
 		return keys_[key_index];
 	}
-		
-	Size ParameterSection::getNumberOfKeys() const 
+
+	Size ParameterSection::getNumberOfKeys() const throw()
 	{
 		return keys_.size();
 	}
 
-	Size ParameterSection::getNumberOfVariables() const 
+	Size ParameterSection::getNumberOfVariables() const throw()
 	{
 		return number_of_variables_;
 	}
 
-	bool ParameterSection::hasVariable(const String& variable) const 
+	bool ParameterSection::hasVariable(const String& variable) const throw()
 	{
 		return variable_names_.has(variable);
 	}
 
-	Position ParameterSection::getColumnIndex(const String& variable) const 
+	Position ParameterSection::getColumnIndex(const String& variable) const
+		throw()
 	{
 		if (variable_names_.has(variable))
 		{
@@ -395,13 +418,8 @@ namespace BALL
 
 
 	const ParameterSection& ParameterSection::operator = 
-		(const ParameterSection& section)
+		(const ParameterSection& section) throw()
 	{
-		// BAUSTELLE: Das geht so nicht: die C-arrays muessen
-		// neu allokiert werden und ihr Inhalt kopiert. So
-		// fuehrt das zuweisen nichtleerer Instanzen mit
-		// hoher Wahrscheinlichkeit zum Crash, da ein
-		// allokierter Speicherbereich mehrmals freigegeben wird [OK]
 		options = section.options;
 		section_name_ = section.section_name_;
 		format_line_ = section.format_line_;
@@ -417,17 +435,17 @@ namespace BALL
 	}
 
 
-	bool ParameterSection::isValid() const
+	bool ParameterSection::isValid() const throw()
 	{
 		return valid_;
 	}
 
 
-	bool ParameterSection::operator == (const ParameterSection& parameter_section) const
+	bool ParameterSection::operator == (const ParameterSection& parameter_section)
+		const throw()
 	{
-		// BAUSTELLE: Vergleich der C-arrays geht so nicht! Daraus sollten wohl 
-		// besser Vektoren werden.... [OK]
-		return ((section_name_ == parameter_section.section_name_)
+		return ( (options == parameter_section.options)
+				&& (section_name_ == parameter_section.section_name_)
 				&& (format_line_ == parameter_section.format_line_)
 				&& (section_entries_ == parameter_section.section_entries_)
 				&& (variable_names_ == parameter_section.variable_names_)
