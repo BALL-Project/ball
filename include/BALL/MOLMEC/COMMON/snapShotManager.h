@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: snapShotManager.h,v 1.15 2003/08/26 08:04:25 oliver Exp $
+// $Id: snapShotManager.h,v 1.16 2003/09/01 22:35:41 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOTMANAGER_H
@@ -234,6 +234,9 @@ namespace BALL
     /// This method writes all snapshots taken so far to hard disk
     virtual void flushToDisk()
 			throw();
+
+		Size getNumberOfSnapShotsInBuffer()
+			throw() { return  snapshot_buffer_.size();}
 
     //@}
     /// @name Public Attributes
