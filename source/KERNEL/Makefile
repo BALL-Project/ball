@@ -14,7 +14,7 @@ CPP_SOURCES=\
 	nucleotide.C\
 	PDBAtom.C\
 	protein.C\
-	PSE.C\
+	PTE.C\
 	residue.C\
 	secondaryStructure.C\
 	selector.C\
