@@ -1,4 +1,4 @@
-// $Id: lennardJones.h,v 1.3 2000/01/10 15:51:05 oliver Exp $
+// $Id: lennardJones.h,v 1.4 2000/02/10 15:05:14 oliver Exp $
 // Molecular Mechanics Parameter: class describing the atom type section of a parameter file
  
 #ifndef BALL_MOLMEC_PARAMETER_LENNARDJONES_H
@@ -15,17 +15,46 @@
 namespace BALL 
 {
 		
+	/**	Lennard Jones parameter section.
+			This section read parameters for a Lennard Jones potental (usually a 6-12 Potential).
+			Parameters may we given in three different formats (no mixing of formats is allowed).
+			\begin{itemize}
+				\item {\em A} and {\em B} are given directly (\ref{A_B_FORMAT})
+				\item well depth and minimum radii (\ref{EPSILON_R_FORMAT})
+				\item Slater--Kirkwood parameters (\ref{SLATER_KIRKWOOD_FORMAT})
+			\end{itemize}
+
+			If the Slater--Kirkwood format is used, the values for $A_{ij}$ and $B_{ij}$ are calculated
+			as follows (see e.g. Brooks et al., J. Comput. Chem, 4(2):187-217 (1983))
+			\begin{*eqnarray}	
+				B_{ij} & = & \frac{3}{2} \left(\frac{1}{4 \pi \varepsilon_0}\right)^\frac{1}{2}
+						\frac{e \hbar \sqrt{m_e} \alpha_i \alpha_j}{\sqrt{\frac{\alpha_i}{N_i} + \sqrt{\frac{\alpha_j}{N_j}}}}\\
+				A_{ij} & = & \frac{1}2{} B_{ij} (R_i + R_j)^6
+			\end{*eqnarray}
+	*/
 	class FFPSLennardJones 
 		:	public FFParameterSection
 	{
 		public:
 
+		
+		/**	@name	Enums
+		*/
+		//@{
 		enum FormatType
 		{
 			A_B_FORMAT,
-			EPSILON_R_FORMAT
+			EPSILON_R_FORMAT,
+			SLATER_KIRKWOOD_FORMAT
 		};
+		//@}
 
+		/**	@name	Type definitions
+		*/
+		//@{
+
+		/**
+		*/
 		struct Values 
 		{
 			float A;
@@ -38,7 +67,11 @@ namespace BALL
 			Atom*		atom2;
 			Values	values;
 		};
+		//@}
 
+		/**	@name	Constructors and Destructors
+		*/
+		//@{
 
 		/**	Default constructor.
 		*/
@@ -51,6 +84,7 @@ namespace BALL
 		/**	Destroy method.
 		*/
 		virtual void destroy();
+		//@}
 		
 		/**	Reads a parameter section from an INI file.
 				This method reads the section given in section\_name from ini\_file,
@@ -81,6 +115,8 @@ namespace BALL
 		float*								A_;
 		
 		float*								B_;
+
+		float*								N_;
 
 		float*								Aij_;
 		
