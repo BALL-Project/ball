@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.9 2000/02/06 19:56:51 oliver Exp $
+// $Id: atom.C,v 1.10 2000/02/10 15:12:29 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -299,28 +299,7 @@ namespace BALL
 				parent_name += ":";
 			}
 		} else {
-			parent_name = parent->getName();
-			parent_name.trim();
-			String suffix = "-";
-			if (parent->isNTerminal())
-			{
-				suffix = "-N";
-			}
-			if (parent->isCTerminal())
-			{
-				suffix = "-C";
-			}
-			if (parent->hasProperty(Residue::PROPERTY__HAS_SSBOND))
-			{
-				suffix += "S";
-			}
-
-			if (suffix != "-")
-			{
-				parent_name += suffix;
-			}
-
-			parent_name += ":";
+			parent_name = parent->getFullName() + ":";
 		}
 
 		// assemble the complete name
