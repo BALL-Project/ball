@@ -1,14 +1,49 @@
-// $Id: function.h,v 1.1 2000/12/06 19:04:51 anker Exp $
+// $Id: function.h,v 1.2 2000/12/18 12:20:17 anker Exp $
 
 #ifndef BALL_MATHS_FUNCTION_H
 #define BALL_MATHS_FUNCTION_H
 
+#include <BALL/common.h>
 #include <BALL/COMMON/exception.h>
 
 namespace BALL
 {
 
-	/** Constant function class.
+	/** Constant function class. This function represents a constant that is
+			already known at compile time.
+			\\
+			{\bf Definition:} \URL{BALL/MATHS/function.h}
+	*/
+	template <float constant_template>
+	class ConstantFunction
+	{
+		public:
+
+		BALL_CREATE(ConstantFunction)
+
+
+		/** @name Function realization
+		*/
+		//@{
+
+		/** Evaluation of this subterm
+				@param x the point where to evaluate
+				@return the function value
+		*/
+		BALL_INLINE
+		float operator () (float /* x */)
+			throw()
+		{
+			return constant_template;
+		}
+
+		//@}
+
+	};
+
+
+	/** Constant function class. This class represents constants that are not
+			known at compile time but must be set at running time.
 			\\
 			{\bf Definition:} \URL{BALL/MATHS/function.h}
 	*/
@@ -55,11 +90,6 @@ namespace BALL
 		const MutableConstant<DataType>& operator = (const MutableConstant<DataType>& constant)
 			throw();
 
-		/** Clear method
-		*/
-		virtual void clear()
-			throw();
-
 		//@}
 
 
@@ -84,7 +114,7 @@ namespace BALL
 				@return the function value
 		*/
 		BALL_INLINE
-		DataType operator () (DataType x)
+		DataType operator () (DataType /* x */)
 			throw()
 		{
 			return constant_;
@@ -169,11 +199,6 @@ namespace BALL
 		const Addition<First, Second, DataType>& operator = (const Addition<First, Second, DataType>& addition)
 			throw();
 
-		/** Clear method
-		*/
-		virtual void clear()
-			throw();
-
 		//@}
 
 
@@ -223,7 +248,7 @@ namespace BALL
 		/** get the first argument of the addition
 				@return a const reference to the first argument
 		*/
-		const First& getFirst()
+		First& getFirst()
 			throw()
 		{
 			return first_;
@@ -241,7 +266,7 @@ namespace BALL
 		/** get the first argument of the addition
 				@return a const reference to the first argument
 		*/
-		const Second& getSecond()
+		Second& getSecond()
 			throw()
 		{
 			return second_;
@@ -305,11 +330,6 @@ namespace BALL
 		const Subtraction<First, Second, DataType>& operator = (const Subtraction<First, Second, DataType>& subtraction)
 			throw();
 
-		/** Clear method
-		*/
-		virtual void clear()
-			throw();
-
 		//@}
 
 
@@ -359,7 +379,7 @@ namespace BALL
 		/** get the first argument of the subtraction
 				@return a const reference to the first argument
 		*/
-		const First& getFirst()
+		First& getFirst()
 			throw()
 		{
 			return first_;
@@ -377,7 +397,7 @@ namespace BALL
 		/** get the first argument of the subtraction
 				@return a const reference to the first argument
 		*/
-		const Second& getSecond()
+		Second& getSecond()
 			throw()
 		{
 			return second_;
@@ -441,11 +461,6 @@ namespace BALL
 		const Product<First, Second, DataType>& operator = (const Product<First, Second, DataType>& product)
 			throw();
 
-		/** Clear method
-		*/
-		virtual void clear()
-			throw();
-
 		//@}
 
 
@@ -495,7 +510,7 @@ namespace BALL
 		/** get the first argument of the product
 				@return a const reference to the first argument
 		*/
-		const First& getFirst()
+		First& getFirst()
 			throw()
 		{
 			return first_;
@@ -513,7 +528,7 @@ namespace BALL
 		/** get the first argument of the product
 				@return a const reference to the first argument
 		*/
-		const Second& getSecond()
+		Second& getSecond()
 			throw()
 		{
 			return second_;
@@ -577,11 +592,6 @@ namespace BALL
 		const Division<First, Second, DataType>& operator = (const Division<First, Second, DataType>& division)
 			throw();
 
-		/** Clear method
-		*/
-		virtual void clear()
-			throw();
-
 		//@}
 
 
@@ -639,7 +649,7 @@ namespace BALL
 		/** get the first argument of the division
 				@return a const reference to the first argument
 		*/
-		const First& getFirst()
+		First& getFirst()
 			throw()
 		{
 			return first_;
@@ -657,7 +667,7 @@ namespace BALL
 		/** get the first argument of the division
 				@return a const reference to the first argument
 		*/
-		const Second& getSecond()
+		Second& getSecond()
 			throw()
 		{
 			return second_;
@@ -719,11 +729,6 @@ namespace BALL
 		/** Assignment operator
 		*/
 		const Reciprocal<Function, DataType>& operator = (const Reciprocal<Function, DataType>& reciprocal)
-			throw();
-
-		/** Clear method
-		*/
-		virtual void clear()
 			throw();
 
 		//@}
@@ -843,11 +848,6 @@ namespace BALL
 		const SquareFunction<Function, DataType>& operator = (const SquareFunction<Function, DataType>& square)
 			throw();
 
-		/** Clear method
-		*/
-		virtual void clear()
-			throw();
-
 		//@}
 
 
@@ -956,11 +956,6 @@ namespace BALL
 		/** Assignment operator
 		*/
 		const CubicFunction<Function, DataType>& operator = (const CubicFunction<Function, DataType>& cubic)
-			throw();
-
-		/** Clear method
-		*/
-		virtual void clear()
 			throw();
 
 		//@}
@@ -1073,11 +1068,6 @@ namespace BALL
 		const MutablePower<Function, DataType>& operator = (const MutablePower<Function, DataType>& power)
 			throw();
 
-		/** Clear method
-		*/
-		virtual void clear()
-			throw();
-
 		//@}
 
 
@@ -1150,6 +1140,7 @@ namespace BALL
 
 
 	template <typename DataType>
+	BALL_INLINE
 	MutableConstant<DataType>::MutableConstant()
 		throw()
 		: constant_(0)
@@ -1157,6 +1148,7 @@ namespace BALL
 	}
 
 	template <typename DataType>
+	BALL_INLINE
 	MutableConstant<DataType>::MutableConstant(const MutableConstant& constant)
 		throw()
 		: constant_(constant.constant_)
@@ -1164,29 +1156,32 @@ namespace BALL
 	}
 
 	template <typename DataType>
-	MutableConstant<DataType>::~MutableConstant()
+	BALL_INLINE
+	MutableConstant<DataType>::MutableConstant(DataType constant)
 		throw()
+		: constant_(constant)
 	{
-		clear();
 	}
 
 	template <typename DataType>
+	BALL_INLINE
+	MutableConstant<DataType>::~MutableConstant()
+		throw()
+	{
+	}
+
+	template <typename DataType>
+	BALL_INLINE
 	const MutableConstant<DataType>& MutableConstant<DataType>::operator = 
 		(const MutableConstant<DataType>& constant)
 		throw()
 	{
-		constant_ = constant;
+		constant_ = constant.constant_;
 		return *this;
 	}
 
 	template <typename DataType>
-	void MutableConstant<DataType>::clear()
-		throw()
-	{
-		constant_ = 0;
-	}
-
-	template <typename DataType>
+	BALL_INLINE
 	bool MutableConstant<DataType>::operator == 
 		(const MutableConstant<DataType>& constant) const
 		throw()
@@ -1196,6 +1191,7 @@ namespace BALL
 
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	Addition<First, Second, DataType>::Addition()
 		throw()
 		:	first_(),
@@ -1204,6 +1200,7 @@ namespace BALL
 	}
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	Addition<First, Second, DataType>::Addition(const Addition& addition)
 		throw()
 		:	first_(addition.first_),
@@ -1212,13 +1209,14 @@ namespace BALL
 	}
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	Addition<First, Second, DataType>::~Addition()
 		throw()
 	{
-		clear();
 	}
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	const Addition<First, Second, DataType>& Addition<First, Second, DataType>::operator = (const Addition<First, Second, DataType>& addition)
 		throw()
 	{
@@ -1228,14 +1226,7 @@ namespace BALL
 	}
 
 	template <typename First, typename Second, typename DataType>
-	void Addition<First, Second, DataType>::clear() 
-		throw()
-	{
-		first_.clear();
-		second_.clear();
-	}
-
-	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	bool Addition<First, Second, DataType>::operator == (const Addition<First, Second, DataType>& addition) const
 		throw()
 	{
@@ -1244,6 +1235,7 @@ namespace BALL
 
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	Subtraction<First, Second, DataType>::Subtraction()
 		throw()
 		:	first_(),
@@ -1252,6 +1244,7 @@ namespace BALL
 	}
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	Subtraction<First, Second, DataType>::Subtraction(const Subtraction& subtraction)
 		throw()
 		:	first_(subtraction.first_),
@@ -1260,13 +1253,14 @@ namespace BALL
 	}
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	Subtraction<First, Second, DataType>::~Subtraction()
 		throw()
 	{
-		clear();
 	}
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	const Subtraction<First, Second, DataType>& Subtraction<First, Second, DataType>::operator = (const Subtraction<First, Second, DataType>& subtraction)
 		throw()
 	{
@@ -1276,14 +1270,7 @@ namespace BALL
 	}
 
 	template <typename First, typename Second, typename DataType>
-	void Subtraction<First, Second, DataType>::clear() 
-		throw()
-	{
-		first_.clear();
-		second_.clear();
-	}
-
-	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	bool Subtraction<First, Second, DataType>::operator == (const Subtraction<First, Second, DataType>& subtraction) const
 		throw()
 	{
@@ -1292,6 +1279,7 @@ namespace BALL
 
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	Product<First, Second, DataType>::Product()
 		throw()
 		:	first_(),
@@ -1300,6 +1288,7 @@ namespace BALL
 	}
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	Product<First, Second, DataType>::Product(const Product& product)
 		throw()
 		:	first_(product.first_),
@@ -1308,13 +1297,14 @@ namespace BALL
 	}
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	Product<First, Second, DataType>::~Product()
 		throw()
 	{
-		clear();
 	}
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	const Product<First, Second, DataType>& Product<First, Second, DataType>::operator = (const Product<First, Second, DataType>& product)
 		throw()
 	{
@@ -1324,14 +1314,7 @@ namespace BALL
 	}
 
 	template <typename First, typename Second, typename DataType>
-	void Product<First, Second, DataType>::clear() 
-		throw()
-	{
-		first_.clear();
-		second_.clear();
-	}
-
-	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	bool Product<First, Second, DataType>::operator == (const Product<First, Second, DataType>& product) const
 		throw()
 	{
@@ -1340,6 +1323,7 @@ namespace BALL
 
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	Division<First, Second, DataType>::Division()
 		throw()
 		:	first_(),
@@ -1348,6 +1332,7 @@ namespace BALL
 	}
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	Division<First, Second, DataType>::Division(const Division& division)
 		throw()
 		:	first_(division.first_),
@@ -1356,13 +1341,14 @@ namespace BALL
 	}
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	Division<First, Second, DataType>::~Division()
 		throw()
 	{
-		clear();
 	}
 
 	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	const Division<First, Second, DataType>& Division<First, Second, DataType>::operator = (const Division<First, Second, DataType>& division)
 		throw()
 	{
@@ -1372,14 +1358,7 @@ namespace BALL
 	}
 
 	template <typename First, typename Second, typename DataType>
-	void Division<First, Second, DataType>::clear() 
-		throw()
-	{
-		first_.clear();
-		second_.clear();
-	}
-
-	template <typename First, typename Second, typename DataType>
+	BALL_INLINE
 	bool Division<First, Second, DataType>::operator == (const Division<First, Second, DataType>& division) const
 		throw()
 	{
@@ -1388,6 +1367,7 @@ namespace BALL
 
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	SquareFunction<Function, DataType>::SquareFunction()
 		throw()
 		: function_(0)
@@ -1395,6 +1375,7 @@ namespace BALL
 	}
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	SquareFunction<Function, DataType>::SquareFunction(const SquareFunction& square)
 		throw()
 		: function_(square.function_)
@@ -1402,13 +1383,14 @@ namespace BALL
 	}
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	SquareFunction<Function, DataType>::~SquareFunction()
 		throw()
 	{
-		clear();
 	}
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	const SquareFunction<Function, DataType>& SquareFunction<Function, DataType>::operator = (const SquareFunction<Function, DataType>& square)
 		throw()
 	{
@@ -1417,13 +1399,7 @@ namespace BALL
 	}
 
 	template <typename Function, typename DataType>
-	void SquareFunction<Function, DataType>::clear()
-		throw()
-	{
-		function_ = 0;
-	}
-
-	template <typename Function, typename DataType>
+	BALL_INLINE
 	bool SquareFunction<Function, DataType>::operator == (const SquareFunction& square) const
 		throw()
 	{
@@ -1432,6 +1408,7 @@ namespace BALL
 
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	CubicFunction<Function, DataType>::CubicFunction()
 		throw()
 		: function_(0)
@@ -1439,6 +1416,7 @@ namespace BALL
 	}
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	CubicFunction<Function, DataType>::CubicFunction(const CubicFunction& cubic)
 		throw()
 		: function_(cubic.function_)
@@ -1446,13 +1424,14 @@ namespace BALL
 	}
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	CubicFunction<Function, DataType>::~CubicFunction()
 		throw()
 	{
-		clear();
 	}
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	const CubicFunction<Function, DataType>& CubicFunction<Function, DataType>::operator = (const CubicFunction<Function, DataType>& cubic)
 		throw()
 	{
@@ -1461,13 +1440,7 @@ namespace BALL
 	}
 
 	template <typename Function, typename DataType>
-	void CubicFunction<Function, DataType>::clear()
-		throw()
-	{
-		function.clear();
-	}
-
-	template <typename Function, typename DataType>
+	BALL_INLINE
 	bool CubicFunction<Function, DataType>::operator == (const CubicFunction& cubic) const
 		throw()
 	{
@@ -1476,6 +1449,7 @@ namespace BALL
 
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	Reciprocal<Function, DataType>::Reciprocal()
 		throw()
 		: function_(0)
@@ -1483,6 +1457,7 @@ namespace BALL
 	}
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	Reciprocal<Function, DataType>::Reciprocal(const Reciprocal& reciprocal)
 		throw()
 		: function_(reciprocal.function_)
@@ -1490,13 +1465,14 @@ namespace BALL
 	}
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	Reciprocal<Function, DataType>::~Reciprocal()
 		throw()
 	{
-		clear();
 	}
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	const Reciprocal<Function, DataType>& Reciprocal<Function, DataType>::operator = (const Reciprocal<Function, DataType>& reciprocal)
 		throw()
 	{
@@ -1505,13 +1481,7 @@ namespace BALL
 	}
 
 	template <typename Function, typename DataType>
-	void Reciprocal<Function, DataType>::clear()
-		throw()
-	{
-		function_.clear();
-	}
-
-	template <typename Function, typename DataType>
+	BALL_INLINE
 	bool Reciprocal<Function, DataType>::operator == (const Reciprocal& reciprocal) const 
 		throw()
 	{
@@ -1520,6 +1490,7 @@ namespace BALL
 
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	MutablePower<Function, DataType>::MutablePower()
 		throw()
 		: exponent_(0)
@@ -1527,6 +1498,7 @@ namespace BALL
 	}
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	MutablePower<Function, DataType>::MutablePower(const MutablePower& power)
 		throw()
 		: exponent_(power.exponent_)
@@ -1534,13 +1506,14 @@ namespace BALL
 	}
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	MutablePower<Function, DataType>::~MutablePower()
 		throw()
 	{
-		clear();
 	}
 
 	template <typename Function, typename DataType>
+	BALL_INLINE
 	const MutablePower<Function, DataType>& MutablePower<Function, DataType>::operator = (const MutablePower& power)
 		throw()
 	{
@@ -1550,13 +1523,7 @@ namespace BALL
 	}
 
 	template <typename Function, typename DataType>
-	void MutablePower<Function, DataType>::clear()
-		throw()
-	{
-		exponent_ = 0;
-	}
-
-	template <typename Function, typename DataType>
+	BALL_INLINE
 	bool MutablePower<Function, DataType>::operator == (const MutablePower& power) const 
 		throw()
 	{
