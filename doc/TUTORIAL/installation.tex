@@ -28,7 +28,7 @@ The usage of GNU {\tt make} is recommended, although BALL will also build with
 other versions of {\tt make}. It is available from \URL{ftp://ftp.gnu.org/gnu/}
 and easy to install.
 
-The compilation of the visualization component BALLVIEW also requires
+The compilation of the visualization component VIEW also requires
 the QT library (version 3.0.6) which is available from
 \URL{http://www.troll.no/qt}/.
 
@@ -100,8 +100,8 @@ An overview of these options can also be obtained by executing "{\tt configure
 
   \option{--enable-debuginfo}&             create debug information\\\vspace{3mm}
 
-  \option{--disable-BALLVIEW}&             disable the compilation of BALLVIEW, the visualization
-                                           component\\\vspace{3mm}
+  \option{--disable-VIEW}&                 disable the compilation of the visualization
+                                           classes\\\vspace{3mm}
 
   \option{--enable-64}&                    build 64 bit objects (if allowed
                                            by the compiler)\\\vspace{3mm}
@@ -190,13 +190,13 @@ usually not required.\\\vspace{3mm}
 %\caption{options for {\tt configure}}
 %\label{table:options}
 
-For example, to compile BALL without the visualization component BALLVIEW,
+For example, to compile BALL without the visualization component,
 specify 
 \begin{lstlisting}{}
-  configure --disable-BALLVIEW
+  configure --disable-VIEW
 \end{lstlisting}
 
-To include BALLVIEW using the QT installation in /opt/qt/lib and /opt/qt/include, specify
+To compile the visualization classes using the QT installation in /opt/qt/lib and /opt/qt/include, specify
 
 \begin{lstlisting}{}
   configure --with-qt-libs=/opt/qt/lib 
@@ -216,20 +216,19 @@ like this:
 \subsection{Building the Libraries}
 
 After the successful termination of configure, issuing "make" will build the
-shared libraries. Three different libraries will be built:
+shared libraries. Two different libraries will be built:
 \begin{center}
 	\begin{tabular}{ll}
   	\file{libBALL.so}&     the main BALL library\\
-  	\file{libVIEW.so}&     the visualization component BALLVIEW\\
-	  \file{libMOLVIEW.so}&  the molecule--related part of BALLVIEW\\
+  	\file{libVIEW.so}&     the visualization classes\\
 	\end{tabular}
 \end{center}
 
-The latter two libraries are not built if "\option{--disable-BALLVIEW}" is specified or configure
+The latter two libraries are not built if "\option{--disable-VIEW}" is specified or configure
 cannot find X libraries, OpenGL libraries, or QT libraries (and the respective headers).
 
 It is also possible (although not recommended) to build the corresponding static libraries
-\file{libBALL.a}, \file{libVIEW.a}, and \file{libMOLVIEW.a} using "{\tt make
+\file{libBALL.a} and \file{libVIEW.a} using "{\tt make
 staticlibs}". Please note that statically linked binaries are huge.
 
 \subsection{Installing the Libraries}
