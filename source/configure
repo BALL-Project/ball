@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.113 2000/07/18 23:13:39 oliver Exp $
+#  $Id: configure,v 1.114 2000/08/30 20:00:02 oliver Exp $
 
 
 ##################################################
@@ -6004,7 +6004,7 @@ rm -f conftest*
 		echo "$ac_t""no" 1>&6
 		echo "$ac_t""" 1>&6
 		echo "$ac_t""Cannot link against libqgl/qt - disabling support for visualization!" 1>&6
-		echo "$ac_t""If qt is installed" 1>&6
+		echo "$ac_t""If QT is installed, please specify the path to the library" 1>&6
 		echo "$ac_t""using the option --with-qt-libs=DIR" 1>&6
 		echo "$ac_t""" 1>&6
 		USE_BALLVIEW=false
