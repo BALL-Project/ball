@@ -1,5 +1,6 @@
-// $Id: microCanonicalMD.C,v 1.4 2000/03/26 12:57:47 oliver Exp $
+// $Id: microCanonicalMD.C,v 1.5 2000/05/10 08:40:03 pmueller Exp $
 
+// BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
 
 namespace BALL
@@ -40,6 +41,18 @@ MicroCanonicalMD::MicroCanonicalMD (ForceField & myforcefield, SnapShotManager *
 	{
 		// Nothing to do 
 	}
+
+
+  // Choose a new time step. This means that the pre-factors must be
+  // computed anew
+  void MicroCanonicalMD::setTimeStep(double time)
+  {
+	// call the corresponding method in the base class
+	MolecularDynamics::setTimeStep(time);
+
+  // calculate the new factors 
+	MicroCanonicalMD::calculateFactors(); 
+  }
 
 	// This method does the general setup. 
 	bool MicroCanonicalMD::setup (ForceField & myforcefield, SnapShotManager * ssm)
@@ -98,7 +111,7 @@ MicroCanonicalMD::MicroCanonicalMD (ForceField & myforcefield, SnapShotManager *
 			mass_factor_.push_back (item);
 		}
 
-	}															// end of ' calculateFactors' 
+	}	// end of ' calculateFactors' 
 
 
 	// This method performs additional setup preparations in addition 
@@ -131,8 +144,9 @@ MicroCanonicalMD::MicroCanonicalMD (ForceField & myforcefield, SnapShotManager *
 	}
 
 	// This method does the actual simulation stuff
-	// It runs for the number of iterations currently stored in
-	// 'number_of_iterations_' 
+	// It runs for up to getMaximalNumberOfIterations() if the starting iteration is 0.          
+  // restart=true means that the counting of iterations is started with the end
+  // value of the previous run 
 	void MicroCanonicalMD::simulate (bool restart)
 	{
 		simulateIterations (maximal_number_of_iterations_, restart);
@@ -140,12 +154,14 @@ MicroCanonicalMD::MicroCanonicalMD (ForceField & myforcefield, SnapShotManager *
 
 
 	// This method does the actual simulation stuff
-	// It runs for the indicated simulation time in picoseconds 
+	// It runs for the indicated simulation time in picoseconds. 
+  // restart=true means that the counting of iterations is started with the end
+  // value of the previous run 
 	void MicroCanonicalMD::simulateTime (double simulation_time, bool restart)
 	{
 		Size number;
 
-		// determine the number  of iterations and call 'simulate'
+		// determine the number  of iterations and call 'simulateIterations'
 		if (valid_)
 		{
 			number = static_cast < Size > (simulation_time / time_step_);
@@ -156,8 +172,8 @@ MicroCanonicalMD::MicroCanonicalMD (ForceField & myforcefield, SnapShotManager *
 
 	// This method does the actual simulation stuff
 	// It runs for the indicated number of iterations           
-
-	// Restart feature is not used at the moment!
+  // restart=true means that the counting of iterations is started with the end
+  // value of the previous run
 	void MicroCanonicalMD::simulateIterations (Size iterations, bool restart)
 	{
 		// local variables
@@ -171,6 +187,21 @@ MicroCanonicalMD::MicroCanonicalMD (ForceField & myforcefield, SnapShotManager *
 	  vector < Atom * >::iterator atom_it;
 	  vector < Aux_Factors >::iterator factor_it;
 
+    if(restart == false)
+      {
+      // reset the current number of iteration and the simulation time  to the values given
+      // in the options 
+      number_of_iteration_  = options.getInteger(MolecularDynamics::Option::NUMBER_OF_ITERATION);
+      current_time_ = options.getReal(MolecularDynamics::Option::CURRENT_TIME);
+      }
+    else
+     {
+     // the values from the last simulation run are used; increase by one to start in the
+     // next iteration 
+     number_of_iteration_++; 
+     }
+
+     
 
 		// determine the largest value for the iteration counter 
 	  max_number = number_of_iteration_ + iterations;
@@ -207,7 +238,7 @@ MicroCanonicalMD::MicroCanonicalMD (ForceField & myforcefield, SnapShotManager *
 		force_field_ptr_->updateForces();
 
 // DEBUG
-		force_field_ptr_->updateEnergy();	// nur fuer debugging
+		force_field_ptr_->updateEnergy();	// only done for debugging purposes 
 
 
 
@@ -235,11 +266,19 @@ MicroCanonicalMD::MicroCanonicalMD (ForceField & myforcefield, SnapShotManager *
 
 				Log.level (LogStream::INFORMATION)
 					<< "Microcanonical MD simulation System has potential energy "
-					<< current_energy << " at time " << current_time_ + (double) iteration *time_step_ << endl;
+					<< current_energy << " kJ/mol at time " << current_time_ + (double) iteration *time_step_ << " ps " << endl;
+
 
 				Log.level (LogStream::INFORMATION)
-					<< "MicroCanonicalMD simulation System has temperature  "
-					<< current_temperature_ << " at time " << current_time_ + (double) iteration *time_step_ << endl;
+					<< "Microcanonical MD simulation System has kinetic energy "
+					<< kinetic_energy_ << " kJ/mol at time " << current_time_ + (double) iteration *time_step_ << " ps " << endl;
+
+        
+         /* BAUSTELLE  Temperatur ausgeben? 
+				Log.level (LogStream::INFORMATION)
+					<< "MicroCanonical MD simulation System has temperature  "
+					<< current_temperature_ << " K at time " << current_time_ + (double) iteration *time_step_ << " ps " << endl;
+                                 */       
 			}
 
 			// Calculate new atomic positions and new tentative velocities 
@@ -281,6 +320,9 @@ MicroCanonicalMD::MicroCanonicalMD (ForceField & myforcefield, SnapShotManager *
 
 		// update the current time
 		current_time_ += (double) iterations *time_step_;
+
+    // set the current iteration
+    number_of_iteration_ = iteration - 1; 
 
 		// update the current temperature in the system
 		force_field_ptr_->updateEnergy();

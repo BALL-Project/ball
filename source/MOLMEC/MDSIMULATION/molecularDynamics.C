@@ -1,6 +1,8 @@
-// $Id: molecularDynamics.C,v 1.3 2000/03/26 12:57:47 oliver Exp $
+// $Id: molecularDynamics.C,v 1.4 2000/05/10 08:39:03 pmueller Exp $
 
+// BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
+
 
 namespace BALL
 {
@@ -9,6 +11,7 @@ namespace BALL
 
 	// Definition of default values and options
 	const char *MolecularDynamics::Option::MAXIMAL_NUMBER_OF_ITERATIONS = "maximal_number_of_iterations";
+  const char *MolecularDynamics::Option::MAXIMAL_SIMULATION_TIME = "maximal_simulation_time";
 
 	const char *MolecularDynamics::Option::NUMBER_OF_ITERATION = "number_of_iteration";
 
@@ -21,15 +24,20 @@ namespace BALL
 	const char *MolecularDynamics::Option::REFERENCE_TEMPERATURE = "reference_temperature";
 
 	const char *MolecularDynamics::Option::BATH_RELAXATION_TIME = "bath_relaxation_time";
+
 	const char *MolecularDynamics::Option::CURRENT_TIME = "current_time";
+
+
 
 	const int MolecularDynamics::Default::MAXIMAL_NUMBER_OF_ITERATIONS = 10000;
 
-	const int MolecularDynamics::Default::NUMBER_OF_ITERATION = 0;
+  const double MolecularDynamics::Default::MAXIMAL_SIMULATION_TIME = 5;  // product of maxNoIterations and time step 
 
-	const int MolecularDynamics::Default::ENERGY_OUTPUT_FREQUENCY = 50;
+	const int MolecularDynamics::Default::NUMBER_OF_ITERATION = 0;        // index of start iteration 
 
-	const int MolecularDynamics::Default::SNAPSHOT_FREQUENCY = 50;
+	const int MolecularDynamics::Default::ENERGY_OUTPUT_FREQUENCY = 500;
+
+	const int MolecularDynamics::Default::SNAPSHOT_FREQUENCY = 500;
 
 	const double MolecularDynamics::Default::TIME_STEP = 0.0005;
 
@@ -37,7 +45,7 @@ namespace BALL
 
 	const double MolecularDynamics::Default::BATH_RELAXATION_TIME = 0.2;
 
-	const double MolecularDynamics::Default::CURRENT_TIME = 0.0;
+	const double MolecularDynamics::Default::CURRENT_TIME = 0.0;          // start time 
 
 
 
@@ -187,6 +195,11 @@ namespace BALL
 															 MolecularDynamics::Default::MAXIMAL_NUMBER_OF_ITERATIONS);
 		maximal_number_of_iterations_ = options.getInteger (MolecularDynamics::Option::MAXIMAL_NUMBER_OF_ITERATIONS);
 
+    // An equivalent formulation by time
+		options.setDefaultReal (MolecularDynamics::Option::MAXIMAL_SIMULATION_TIME,     
+															 MolecularDynamics::Default::MAXIMAL_SIMULATION_TIME);
+
+
 		// The start value for the iteration number 
 		options.setDefaultInteger (MolecularDynamics::Option::NUMBER_OF_ITERATION,
 															 MolecularDynamics::Default::NUMBER_OF_ITERATION);
@@ -232,9 +245,14 @@ namespace BALL
 
 
 	// This method allows us to set the current number of iteration for the MD simulation
+  // The corresponding time is set as well. 
 	void MolecularDynamics::setNumberOfIteration (Size number)
 	{
 		number_of_iteration_ = number;
+    current_time_ = number * time_step_; 
+
+    options[MolecularDynamics::Option::NUMBER_OF_ITERATION] = number;
+    options[MolecularDynamics::Option::CURRENT_TIME] = current_time_; 
 	}
 
 	// This method allows us to get the current number of iteration for the MD simulation
@@ -243,10 +261,13 @@ namespace BALL
 		return number_of_iteration_;
 	}
 
+
 	// This method sets the maximal number of iterations to be simulated 
 	void MolecularDynamics::setMaximalNumberOfIterations (Size maximum)
 	{
 		maximal_number_of_iterations_ = maximum;
+
+    options[MolecularDynamics::Option::MAXIMAL_NUMBER_OF_ITERATIONS] = maximum;
 	}
 
 	// This method gets the maximal number of iterations to be simulated 
@@ -255,18 +276,65 @@ namespace BALL
 		return maximal_number_of_iterations_;
 	}
 
+	// This method sets the maximal simulation time in picoseconds. 
+	void MolecularDynamics::setMaximalSimulationTime(double maximum)
+	{
+		maximal_number_of_iterations_ = (Size) (maximum / time_step_);
+
+    options[MolecularDynamics::Option::MAXIMAL_NUMBER_OF_ITERATIONS] = maximal_number_of_iterations_; 
+
+    double time = maximal_number_of_iterations_ * time_step_; 
+    options[MolecularDynamics::Option::MAXIMAL_SIMULATION_TIME] = time; 
+	}
+
+	// This method gets the maximal simulation time                        
+	double MolecularDynamics::getMaximalSimulationTime () const
+	{
+		return maximal_number_of_iterations_ * time_step_;
+	}
+
+  // This method sets the time step for the numerical integration
+  void MolecularDynamics::setTimeStep(double step)
+  {
+	  if(step > 0)
+		 {
+	   time_step_ = step; 
+   
+     options[MolecularDynamics::Option::TIME_STEP] = time_step_; 
+		 }
+	 else
+	  {
+		Log.level (LogStream::WARNING) << "Assigning a time step of zero is not allowed. "
+				<< "Using old value." << endl;
+		}
+  }
+
+  // This method gets the time step for the numerical integration
+  double MolecularDynamics::getTimeStep() const 
+  {
+	  return time_step_; 
+  }
+
 
 	// This method allows us to reset the reference temperature 
 	// without doing a full setup again 
 	void MolecularDynamics::setReferenceTemperature (double temperature)
 	{
 		reference_temperature_ = temperature;
+
+    options[MolecularDynamics::Option::REFERENCE_TEMPERATURE] = reference_temperature_; 
 	}
 
 	// This methods resets the current time 
+  // The difference between the maximal simulation time and current time is
+  // being simulated. 
 	void MolecularDynamics::setCurrentTime (double time)
 	{
 		current_time_ = time;
+		number_of_iteration_ = (Size) (time / time_step_);
+
+    options[MolecularDynamics::Option::CURRENT_TIME] = current_time_; 
+    options[MolecularDynamics::Option::NUMBER_OF_ITERATION] = number_of_iteration_; 
 	}
 
 	// This method allows us to reset the output frequency for 
@@ -274,18 +342,25 @@ namespace BALL
 	void MolecularDynamics::setEnergyOutputFrequency (Size number)
 	{
 		if (number > 0)
+      {
 			energy_output_frequency_ = number;
+      options[MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY] = number; 
+      }
 		else
 			Log.level (LogStream::WARNING) << "Assigning an energy_output_frequency of zero is not allowed. "
 				<< "Using old value." << endl;
 	}
+
 
 	// This method allows us to reset the frequency of taking snapshots 
 	// of the system
 	void MolecularDynamics::setSnapShotFrequency (Size number)
 	{
 		if (number > 0)
+		  {
 			snapshot_frequency_ = number;
+      options[MolecularDynamics::Option::SNAPSHOT_FREQUENCY] = snapshot_frequency_; 
+		  }
 		else
 			Log.level (LogStream::WARNING) << "Assigning a snapshot_frequency_ of zero is not allowed. "
 				<< "Using old value." << endl;

@@ -1,5 +1,6 @@
-// $Id: canonicalMD.C,v 1.4 2000/03/26 12:57:46 oliver Exp $
+// $Id: canonicalMD.C,v 1.5 2000/05/10 08:40:39 pmueller Exp $
 
+// BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
 
 namespace BALL
@@ -82,6 +83,30 @@ CanonicalMD::CanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):Mole
 
 	}
 
+  // Choose a new time step. This means that all pre-factors must be
+  // recomputed.
+	void CanonicalMD::setTimeStep(double time)
+	  {
+		MolecularDynamics::setTimeStep(time);
+
+		// calculate the new factors
+		calculateFactors();
+		}
+ 
+  // This method allows us to set the coupling to a thermal bath 
+  void CanonicalMD::setBathRelaxationTime(double time)
+       {
+       bath_relaxation_time_ = time;
+       options[MolecularDynamics::Option::BATH_RELAXATION_TIME] = time;
+       }
+                                           
+  // This method allows us to get the current value for the bath 
+  // relaxation time (coupling to an external heat bath) 
+  double CanonicalMD::getBathRelaxationTime() const
+      {       
+      return bath_relaxation_time_;
+      }       
+
 
 
 	// This method calculates certain factors that are needed
@@ -148,8 +173,9 @@ CanonicalMD::CanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):Mole
 	}
 
 	// This method does the actual simulation stuff
-	// It runs for the number of iterations currently stored in
-	// 'number_of_iterations_' 
+  // It runs for getMaximalNumberOfIterations() iterations. 
+  // restart=true means that the counting of iterations is started with the end
+  // value of the previous run
 	void CanonicalMD::simulate (bool restart)
 	{
 		simulateIterations (maximal_number_of_iterations_, restart);
@@ -157,7 +183,9 @@ CanonicalMD::CanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):Mole
 
 
 	// This method does the actual simulation stuff
-	// It runs for the indicated simulation time in picoseconds 
+	// It runs for the indicated simulation time in picoseconds. 
+  // restart=true means that the counting of iterations is started with the end
+  // value of the previous run
 	void CanonicalMD::simulateTime (double simulation_time, bool restart)
 	{
 		Size number;
@@ -173,7 +201,8 @@ CanonicalMD::CanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):Mole
 
 	// This method does the actual simulation stuff
 	// It runs for the indicated number of iterations           
-	// Restart feature is not used at the moment!
+  // restart=true means that the counting of iterations is started with the end
+  // value of the previous run
 	void CanonicalMD::simulateIterations (Size iterations, bool restart)
 	{
 		// local variables
@@ -185,8 +214,23 @@ CanonicalMD::CanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):Mole
 		Size force_update_freq;
 		Size iteration;
 
-		  vector < Atom * >::iterator atom_it;
-		  vector < Aux_Factors >::iterator factor_it;
+	  vector < Atom * >::iterator atom_it;
+	  vector < Aux_Factors >::iterator factor_it;
+
+    if(restart == false)
+      {
+      // reset the current number of iteration and the simulation time  to the values given
+      // in the options
+      number_of_iteration_  = options.getInteger(MolecularDynamics::Option::NUMBER_OF_ITERATION);
+      current_time_ = options.getReal(MolecularDynamics::Option::CURRENT_TIME);
+      }
+    else
+     {
+     // the values from the last simulation run are used; increase by one to start in the
+     // next iteration
+     number_of_iteration_++;
+     }
+
 
 		// determine the largest value for the iteration counter
 		  max_number = number_of_iteration_ + iterations;
@@ -247,11 +291,11 @@ CanonicalMD::CanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):Mole
 				updateInstantaneousTemperature ();
 
 				Log.level (LogStream::INFORMATION)
-					<< "CanonicalMD simulation System has potential energy "
-					<< current_energy << " at time " << current_time_ + (double) iteration *time_step_ << endl;
+					<< "Canonical MD simulation System has potential energy "
+					<< current_energy << " kJ/mol at time " << current_time_ + (double) iteration *time_step_ << " ps" << endl;
 				Log.level (LogStream::INFORMATION)
-					<< "CanonicalMD simulation System has temperature  "
-					<< current_temperature_ << " at time " << current_time_ + (double) iteration *time_step_ << endl;
+					<< "Canonical MD simulation System has temperature  "
+					<< current_temperature_ << " at time " << current_time_ + (double) iteration *time_step_ << " ps " << endl;
 			}
 
 			// The new velocities calculated a few lines further below will be
@@ -323,6 +367,7 @@ CanonicalMD::CanonicalMD (ForceField & myforcefield, SnapShotManager * ssm):Mole
 
 		// The simulation is finished. Update the current time and temperature  
 		current_time_ += (double) iterations *time_step_;
+    number_of_iteration_ = iteration - 1; 
 
 		force_field_ptr_->updateEnergy ();
 		updateInstantaneousTemperature ();
