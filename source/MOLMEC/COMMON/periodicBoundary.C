@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.C,v 1.12 2000/07/25 21:14:22 oliver Exp $
+// $Id: periodicBoundary.C,v 1.13 2000/10/16 20:02:08 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/periodicBoundary.h>
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -49,7 +49,7 @@ namespace BALL
 	}
 
 	// Copy Constructor
-	PeriodicBoundary::PeriodicBoundary(const PeriodicBoundary& periodic_boundary, bool /* clone_deep */)
+	PeriodicBoundary::PeriodicBoundary(const PeriodicBoundary& periodic_boundary)
 		: options(periodic_boundary.options), 
 			force_field_(periodic_boundary.force_field_), 
 			enabled_(periodic_boundary.enabled_),
@@ -58,24 +58,39 @@ namespace BALL
 	{
 	}
 
+	// Clear method
+	void PeriodicBoundary::clear()
+		throw()
+	{
+		options = 0;
+		force_field_ = 0;
+		enabled_ = false;
+		box_.clear();
+		molecules_.clear();
+	}
+
 	// Destructor
 	PeriodicBoundary::~PeriodicBoundary()
 	{
+		clear();
 	}
 
 	// assignment operator
 	PeriodicBoundary& PeriodicBoundary::operator = (const PeriodicBoundary& periodic_boundary)
 	{
-		force_field_	= periodic_boundary.force_field_;
-		enabled_	= periodic_boundary.enabled_;
-		options		= periodic_boundary.options;
-		box_		= periodic_boundary.box_;
-		molecules_	= periodic_boundary.molecules_;
+		// avoid self assignment
+		if (&periodic_boundary != this)
+		{
+			force_field_	= periodic_boundary.force_field_;
+			enabled_	= periodic_boundary.enabled_;
+			options		= periodic_boundary.options;
+			box_		= periodic_boundary.box_;
+			molecules_	= periodic_boundary.molecules_;
+		}
 
 		return *this;
 	}
  
-
 	// Accessor for enabling periodic boundary
 	void PeriodicBoundary::enable()
 	{

@@ -1,4 +1,4 @@
-// $Id: amber.h,v 1.8 2000/08/30 19:58:15 oliver Exp $ 
+// $Id: amber.h,v 1.9 2000/10/16 19:59:10 oliver Exp $ 
 // Molecular Mechanics: Amber force field class
 
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
@@ -162,7 +162,7 @@ namespace BALL
 		//@{
 
 
-		BALL_CREATE_DEEP(AmberFF)
+		BALL_CREATE(AmberFF)
 
 
 		/**	Default constructor.
@@ -179,12 +179,29 @@ namespace BALL
  
 		/**	Copy constructor
 		*/
-		AmberFF(const AmberFF& force_field, bool clone_deep = true);
+		AmberFF(const AmberFF& force_field);
 
 		/**	Destructor.
 		*/
 		virtual ~AmberFF();
 
+		//@}
+
+		/**	Assignment
+		*/
+		//@{
+
+		/**	Assignment operator
+		*/
+		const AmberFF& operator = (const AmberFF& force_field)
+			throw();
+
+		/**	Clear method
+		*/
+		virtual void clear()
+			throw();
+
+			
 		//@}
 
 		/**	@name	Setup Methods

@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.17 2000/06/30 05:56:08 oliver Exp $
+// $Id: amber.C,v 1.18 2000/10/16 19:57:15 oliver Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -110,8 +110,8 @@ namespace BALL
 	}
  
 	// copy constructor  
-	AmberFF::AmberFF(const AmberFF& force_field, bool clone_deep)
-		:	ForceField( force_field, clone_deep),
+	AmberFF::AmberFF(const AmberFF& force_field)
+		:	ForceField(force_field),
 			filename_(force_field.filename_),
 			parameters_initialized_(false)
 	{
@@ -120,6 +120,28 @@ namespace BALL
 	// destructor 
 	AmberFF::~AmberFF()
 	{
+	}
+
+	void AmberFF::clear()
+		throw()
+	{
+		ForceField::clear();
+		filename_ = Default::FILENAME;
+		parameters_initialized_ = false;
+	}
+
+	const AmberFF& AmberFF::operator = (const AmberFF& force_field)
+		throw()
+	{
+		// avoid self assignment
+		if (&force_field != this)
+		{
+			ForceField::operator = (force_field);
+			filename_ = force_field.filename_;
+			parameters_initialized_ = force_field.parameters_initialized_;
+		}
+		
+		return *this;
 	}
 
 	// force field specific setup method BAUSTELLE

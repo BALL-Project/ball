@@ -1,4 +1,4 @@
-// $Id: charmm.h,v 1.3 2000/08/30 19:58:16 oliver Exp $
+// $Id: charmm.h,v 1.4 2000/10/16 19:59:10 oliver Exp $
 // Molecular Mechanics: CHARMM force field class
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMM_H
@@ -182,7 +182,7 @@ namespace BALL
 		//@{
 
 
-		BALL_CREATE_DEEP(CharmmFF)
+		BALL_CREATE(CharmmFF)
 
 
 		/**	Default constructor.
@@ -199,12 +199,27 @@ namespace BALL
  
 		/**	Copy constructor
 		*/
-		CharmmFF(const CharmmFF& force_field, bool clone_deep = true);
+		CharmmFF(const CharmmFF& force_field);
 
 		/**	Destructor.
 		*/
 		virtual ~CharmmFF();
 
+		//@}
+
+		/**	@name Assignment
+		*/
+		//@{
+			
+		/**	Assignment operator
+		*/
+		const CharmmFF& operator = (const CharmmFF& force_field)
+			throw();
+			
+		/**	Clear method	
+		*/
+		virtual void clear()
+			throw();
 		//@}
 
 		/**	@name	Setup Methods

@@ -1,4 +1,4 @@
-// $Id: charmm.C,v 1.10 2000/08/07 17:28:57 oliver Exp $
+// $Id: charmm.C,v 1.11 2000/10/16 19:57:34 oliver Exp $
 // Molecular Mechanics: Charmm force field class
 
 #include <BALL/MOLMEC/CHARMM/charmm.h>
@@ -120,8 +120,8 @@ namespace BALL
 	}
  
 	// copy constructor  
-	CharmmFF::CharmmFF(const CharmmFF& force_field, bool clone_deep)
-		:	ForceField( force_field, clone_deep),
+	CharmmFF::CharmmFF(const CharmmFF& force_field)
+		:	ForceField(force_field),
 			filename_(force_field.filename_)
 	{
 	}
@@ -129,6 +129,25 @@ namespace BALL
 	// destructor 
 	CharmmFF::~CharmmFF()
 	{
+	}
+
+	void CharmmFF::clear()
+		throw()
+	{
+		ForceField::clear();
+		filename_ = Default::FILENAME;
+	}
+
+	const CharmmFF& CharmmFF::operator = (const CharmmFF& force_field)
+		throw()
+	{
+		if (&force_field != this)
+		{
+			ForceField::operator = (*this);
+			filename_ = force_field.filename_;
+		}
+
+		return *this;
 	}
 
 	// force field specific setup method
