@@ -1,4 +1,4 @@
-// $Id: kernel.doc,v 1.16 2003/02/25 10:32:25 anhi Exp $
+// $Id: kernel.doc,v 1.17 2003/03/26 14:16:47 anhi Exp $
 
 /** \defgroup Kernel Kernel Classes
 		\ingroup Foundation
@@ -15,7 +15,7 @@
 			Iterators for KERNEL classes
 	*/
 
-	/**	\defgroup Miscellaneous Miscellaneous
+	/**	\defgroup KernelMiscellaneous Miscellaneous
 			\ingroup Kernel
 			Further classes and functions related to the kernel classes
 	*/

@@ -1,7 +1,7 @@
 
 // vi: set ts=2:
 //
-// $Id: PTE.h,v 1.22 2003/03/26 13:56:27 anhi Exp $
+// $Id: PTE.h,v 1.23 2003/03/26 14:16:45 anhi Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -39,7 +39,7 @@
 
 namespace BALL 
 {
-	/**	@name	Periodic Table of Elements
+	/**	\defgroup PTE Periodic Table of Elements
 			These classes represent elements and the periodic table of elements.
 			The  \link Element Element \endlink  class is used to describe common properties of atoms
 			(e.g., mass, nuclear charge, element symbol). Elements can be retrieved
@@ -49,12 +49,12 @@ namespace BALL
 			@see Atom::setElement
 			@see Atom::getElement
     	
-			\ingroup  Miscellaneous
+			\ingroup  KernelMiscellaneous
 	*/
 	//@{
 
 	/**	Element class.
-			\ingroup Miscellaneous	
+			\ingroup KernelMiscellaneous	
 	*/
 	class Element
 		: public PropertyManager
@@ -850,11 +850,11 @@ namespace BALL
 	};
 
 
-	/**	@memo	Global static instance of the periodic table.
+	/**	Global static instance of the periodic table.
+			\ingroup KernelMiscellaneous
 	*/
 	extern PTE_ PTE;
 
-	//@}
 
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

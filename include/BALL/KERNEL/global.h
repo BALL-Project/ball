@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.16 2003/03/26 13:56:31 anhi Exp $
+// $Id: global.h,v 1.17 2003/03/26 14:16:46 anhi Exp $
 
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H
@@ -58,7 +58,7 @@ namespace BALL
 			@param atom_container	the atom_container containing the bonds
 			@param cloned a deep copy of <b>atom_container</b>
     	
-			\ingroup  Miscellaneous
+			\ingroup  KernelMiscellaneous
 	*/
 	template <class AtomContainerType>
 	void cloneBonds(const AtomContainerType& atom_container, AtomContainerType& cloned)
@@ -119,7 +119,7 @@ namespace BALL
 			
 			@see	cloneBonds
 
-			\ingroup  Miscellaneous
+			\ingroup  KernelMiscellaneous
 	*/
 	extern bool clone_bonds;
 } // namespace BALL  

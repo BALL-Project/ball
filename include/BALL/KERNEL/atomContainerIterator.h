@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainerIterator.h,v 1.12 2003/03/26 13:56:28 anhi Exp $ 
+// $Id: atomContainerIterator.h,v 1.13 2003/03/26 14:16:46 anhi Exp $ 
 
 #ifndef BALL_KERNEL_ATOMCONTAINERITERATOR_H
 #define BALL_KERNEL_ATOMCONTAINERITERATOR_H
@@ -28,7 +28,7 @@ namespace BALL
 
 	/** Traits class for the AtomContainerIterators.
 			
-    	\ingroup  Miscellaneous
+    	\ingroup  KernelMiscellaneous
 	*/
 	class AtomContainerIteratorTraits_
 		: public CompositeIteratorTraits_
@@ -96,7 +96,7 @@ namespace BALL
 
 
 	/** @name Iterator type definitions for the various AtomContainerIterators.
-    	\ingroup  Miscellaneous
+    	\ingroup  KernelMiscellaneous
 	*/
 	//@{
 
