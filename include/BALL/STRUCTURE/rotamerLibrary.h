@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: rotamerLibrary.h,v 1.25 2003/04/01 21:18:04 oliver Exp $
+// $Id: rotamerLibrary.h,v 1.26 2003/04/04 11:55:10 oliver Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -51,7 +51,8 @@ namespace BALL
 
 		/**	Constructor
 		*/
-		Rotamer(float new_P, float new_chi1, float new_chi2, float new_chi3, float new_chi4);
+		Rotamer(float new_P, float new_chi1, float new_chi2 = 0.0, 
+						float new_chi3 = 0.0, float new_chi4 = 0.0);
 
 		//@}
 
@@ -100,8 +101,10 @@ namespace BALL
 
 		///
 		typedef vector<Rotamer>::const_iterator	ConstIterator;
+		typedef vector<Rotamer>::const_iterator	const_iterator;
 		///
 		typedef vector<Rotamer>::iterator				Iterator;
+		typedef vector<Rotamer>::iterator				iterator;
 
 		//@}
 
@@ -109,7 +112,7 @@ namespace BALL
 		*/
 		//@{
 
-		BALL_CREATE_DEEP(ResidueRotamerSet)
+		BALL_CREATE(ResidueRotamerSet)
 
 		/**	Default constructor.
 		*/
@@ -117,7 +120,7 @@ namespace BALL
 
 		/** Copy constructor
 		*/
-		ResidueRotamerSet(const ResidueRotamerSet& rotamer_set, bool deep = true);
+		ResidueRotamerSet(const ResidueRotamerSet& rotamer_set);
 
 		/**	Detailed constructor
 		*/
@@ -168,9 +171,18 @@ namespace BALL
 		*/
 		const String& getName() const; 
 
-		/**
+		/** Return a mutable reference to the residue.
 		*/
 		Residue& getResidue(); 
+
+		/** Return a non-mutable reference to the residue.
+		*/
+		const Residue& getResidue() const; 
+
+		/** Reset the side-chain conformation.
+				This method resets the side-chain atoms to their initial positions.
+		*/
+		void resetResidue(); 
 
 		/** Find out if the class instance is valid
 		*/
@@ -180,17 +192,21 @@ namespace BALL
 		*/
 		Size getNumberOfRotamers() const;
 
-		/**	Return the number of valid torsions
+		/**	Return the number of valid torsions in the side chain.
+				The number returned is between zero and four.
 		*/
 		Size getNumberOfTorsions() const;
 
-		/**	Set the number of valid torsions
+		/**	Set the number of valid torsions for this side chain.
+				\exception Exception::IndexOverflow if the number of torsions is above four.
 		*/
-		void setNumberOfTorsions(Size number_of_torsions);
+		void setNumberOfTorsions(Size number_of_torsions)
+			throw(Exception::IndexOverflow);
 
 		/**	Random access operator for single rotamers.
 		*/
-		Rotamer& operator [] (Position index);
+		Rotamer& operator [] (Position index)
+			throw(Exception::IndexOverflow);
 		//@}
 
 		/**	@name	Rotamer Assignment
@@ -232,9 +248,12 @@ namespace BALL
 		
 		protected:
 
-		/** Determines all movable atoms 
+		/** Determines all movable atoms.
+				This method walks along the bonds starting at <tt>a</tt> and adds them
+				to the <tt>movable</tt> vector. Atoms whose names are contained in <tt>assigned_atoms</tt>
+				are ignored.
 		*/
-		void addMovable_(vector<String>& movable, Atom& a); 
+		void addMovable_(vector<String>& movable, Atom& a, const HashSet<String>& assigned_atoms); 
 
 		/** Set the torsion angles
 		*/
@@ -282,7 +301,7 @@ namespace BALL
 
 		/**	Original atom coordinates of side_chain_
 		*/
-		vector<Vector3>				original_coordinates_;
+		vector<Vector3>	original_coordinates_;
 	};
 
 	/** Rotamer Library Class.
@@ -295,7 +314,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_DEEP(RotamerLibrary)
+		BALL_CREATE(RotamerLibrary)
 
 		/**	@name	Constructors and Destructors
 		*/
@@ -311,7 +330,7 @@ namespace BALL
 
 		/**	Copy constructor
 		*/
-		RotamerLibrary(const RotamerLibrary& library, bool deep = true);
+		RotamerLibrary(const RotamerLibrary& library);
 
 		/**	Destructor
 		*/
