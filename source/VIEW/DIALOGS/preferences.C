@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.C,v 1.15 2004/10/21 13:00:04 amoll Exp $
+// $Id: preferences.C,v 1.16 2004/10/21 13:53:35 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/preferences.h>
@@ -97,7 +97,7 @@ namespace BALL
 			if (!entries_.has(child)) return;
 
 			QWidget* widget = (dynamic_cast<QWidget*>(child));
-			entries_listview->removeItem(widget_to_item_[widget]);
+			removeItem_(widget_to_item_[widget], true);
 			widget_stack->removeWidget(widget);
 			entries_.erase(child);
 			delete child;
@@ -216,6 +216,19 @@ namespace BALL
 			{
 				item_to_entry_[item->parent()]->setDefaultValues();
 			}
+		}
+
+		void Preferences::removeItem_(QListViewItem* item, bool update)
+			throw()
+		{
+			while (item->firstChild() != 0)
+			{
+				removeItem_(item->firstChild(), false);
+			}
+
+			delete item;
+
+			if (update) entries_listview->triggerUpdate();
 		}
 
 	} // namespace VIEW

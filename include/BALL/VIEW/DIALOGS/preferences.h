@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: preferences.h,v 1.15 2004/10/18 14:41:31 amoll Exp $
+// $Id: preferences.h,v 1.16 2004/10/21 13:53:37 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_PREFERENCES_H
@@ -136,6 +136,8 @@ namespace BALL
 
 			protected:
 
+			void removeItem_(QListViewItem* item, bool update)
+				throw();
 
 			HashSet<PreferencesEntry*> entries_;
 			HashMap<QListViewItem*, QWidget*> item_to_widget_;
