@@ -1,10 +1,10 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.1 2000/07/18 21:29:11 oliver Exp $
+# $Id: Makefile,v 1.2 2000/07/18 23:27:07 oliver Exp $
 #
 
-include /KM/usr/oliver/BALL/source/${BALL_BINFMT}/config.mak
+include ../../../../config.mak
 
 sip:
 	@echo "running SIP..."
