@@ -27,6 +27,7 @@ fixed:
 - export of PNGs could result in strange problems e.g. with empty images
 - it was possible to delete molecular entities while simulation was running -> core dump
 - its now possible to create transparent wireframe and dot models
+- AtomDistanceColorProcessor
 - PeptideDialog: deletion of sequence
 - problem with normals in Cartoon model
 - issue with restoring window's geometry on X11 (still buggy on some X-Servers)

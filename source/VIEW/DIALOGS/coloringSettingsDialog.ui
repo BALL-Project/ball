@@ -7980,6 +7980,24 @@
         <slot>firstResidueColorPressed()</slot>
     </connection>
     <connection>
+        <sender>force_max_color_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ColoringSettingsDialog</receiver>
+        <slot>forceMaxColorPressed()</slot>
+    </connection>
+    <connection>
+        <sender>force_max_value_slider</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>ColoringSettingsDialog</receiver>
+        <slot>forceMaxValueChanged()</slot>
+    </connection>
+    <connection>
+        <sender>force_min_color_button</sender>
+        <signal>clicked()</signal>
+        <receiver>ColoringSettingsDialog</receiver>
+        <slot>forceMinColorPressed()</slot>
+    </connection>
+    <connection>
         <sender>helix_color_button</sender>
         <signal>clicked()</signal>
         <receiver>ColoringSettingsDialog</receiver>
@@ -8082,22 +8100,10 @@
         <slot>unassignedTFColorPressed()</slot>
     </connection>
     <connection>
-        <sender>force_max_color_button</sender>
+        <sender>null_distance_button</sender>
         <signal>clicked()</signal>
         <receiver>ColoringSettingsDialog</receiver>
-        <slot>forceMaxColorPressed()</slot>
-    </connection>
-    <connection>
-        <sender>force_min_color_button</sender>
-        <signal>clicked()</signal>
-        <receiver>ColoringSettingsDialog</receiver>
-        <slot>forceMinColorPressed()</slot>
-    </connection>
-    <connection>
-        <sender>force_max_value_slider</sender>
-        <signal>valueChanged(int)</signal>
-        <receiver>ColoringSettingsDialog</receiver>
-        <slot>forceMaxValueChanged()</slot>
+        <slot>nullDistanceColorPressed()</slot>
     </connection>
 </connections>
 <includes>

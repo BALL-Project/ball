@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.33 2004/08/25 13:04:01 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.34 2004/08/25 15:28:43 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -499,17 +499,17 @@ namespace BALL
 
 		ColorRGBA AtomDistanceColorProcessor::getColor(const Composite* composite)
 		{
-			if (composite == 0) return default_color_;
+			if (composite == 0 ||
+			    !RTTI::isKindOf<Atom>(*composite))
+			{
+				ColorRGBA result(default_color_);
+				default_color_.setAlpha(255 - transparency_);
+			}
 
 			// hide selected items?
 			if (show_selected_ && composite->isSelected())
 			{
 				return BALL_SELECTED_COLOR;
-			}
-
-			if (!RTTI::isKindOf<Atom>(*composite))
-			{
-				return default_color_;
 			}
 
 			AtomDistanceHashMap::Iterator it = atom_2_distance_.find((Atom*)composite);
@@ -538,7 +538,7 @@ namespace BALL
 			return ColorRGBA(red1 + (distance * (red2 - red1)) 			/ distance_,
 											 green1 + (distance * (green2 - green1)) 	/ distance_,
 											 blue1 + (distance * (blue2 - blue1)) 		/ distance_,
-											 transparency_);
+											 255 - transparency_);
 		}
 
 		bool AtomDistanceColorProcessor::finish()
