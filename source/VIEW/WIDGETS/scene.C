@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.156.2.14 2005/01/24 01:10:52 amoll Exp $
+// $Id: scene.C,v 1.156.2.15 2005/02/01 13:40:38 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1212,7 +1212,7 @@ logString(String("#~~#   2 ") + String( )                        + "            
 				GLfloat color[4] = {0.0, 0.0, 0.0, 0.4};
 				glFogfv(GL_FOG_COLOR, color);
 				glFogf(GL_FOG_START, 2.0);
-				glFogf(GL_FOG_END, 401 - stage_->getFogIntensity());
+				glFogf(GL_FOG_END, 420 - stage_->getFogIntensity());
 				glFogi(GL_FOG_MODE, GL_LINEAR);
 			}
 
