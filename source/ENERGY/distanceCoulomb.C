@@ -1,4 +1,4 @@
-// $Id: distanceCoulomb.C,v 1.1 2000/09/05 14:29:17 oliver Exp $
+// $Id: distanceCoulomb.C,v 1.2 2001/06/05 15:50:08 anker Exp $
 
 #include <BALL/ENERGY/distanceCoulomb.h>
 
@@ -21,8 +21,8 @@ namespace BALL
 		E = 0;
 
 
-		AtomIterator	atom_iterator1;
-		AtomIterator	atom_iterator2;
+		AtomConstIterator	atom_iterator1;
+		AtomConstIterator	atom_iterator2;
 
 		BALL_FOREACH_ATOM_PAIR(atoms, atom_iterator1, atom_iterator2)
 		{
