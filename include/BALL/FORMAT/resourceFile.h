@@ -1,4 +1,4 @@
-// $Id: resourceFile.h,v 1.4 2000/01/10 15:51:00 oliver Exp $
+// $Id: resourceFile.h,v 1.5 2000/06/30 05:54:27 oliver Exp $
 
 #ifndef BALL_FORMAT_RESOURCEFILE_H
 #define BALL_FORMAT_RESOURCEFILE_H
@@ -625,9 +625,13 @@ namespace BALL
 		*/
 		ResourceFile();
 
-		/**	
+		/**	Detailed constructor.
 		*/
 		ResourceFile(const String& name);
+
+		/**	Copy constructor
+		*/
+		ResourceFile(const ResourceFile& file);
 
 		/**	Destructor
 		*/
@@ -793,8 +797,6 @@ namespace BALL
 
 
 		private:
-
-		ResourceFile(const ResourceFile& file);
 
 		ResourceFile& operator = (const ResourceFile& file);
 
