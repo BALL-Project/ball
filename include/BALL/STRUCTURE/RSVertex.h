@@ -1,4 +1,4 @@
-// $Id: RSVertex.h,v 1.17 2001/09/19 22:21:54 amoll Exp $
+// $Id: RSVertex.h,v 1.18 2001/11/08 16:46:03 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSVERTEX_H
 #define BALL_STRUCTURE_RSVERTEX_H
@@ -20,6 +20,18 @@ namespace BALL
 	template <typename T>
 	class TReducedSurface;
 
+	template <typename T>
+	class TSolventExcludedSurface;
+
+	template <typename T>
+	class TSESEdge;
+
+	template <typename T>
+	class TSESFace;
+
+	template <typename T>
+	class TSESVertex;
+
 	/** Generic RSVertex Class.	
 			{\bf Definition:} \URL{BALL/STRUCTURE/RSVertex.h}	
 	*/
@@ -33,11 +45,19 @@ namespace BALL
 					\item class TReducedSurface<T>
 					\item class TRSEdge<T>
 					\item class TRSFace<T>
+					\item class TSolventExcludedSurface<T>;
+					\item class TSESFace<T>
+					\item class TSESEdge<T>
+					\item class TSESVertex<T>
 				\end{itemize}
 		*/
 		friend class TReducedSurface<T>;
 		friend class TRSEdge<T>;
 		friend class TRSFace<T>;
+		friend class TSolventExcludedSurface<T>;
+		friend class TSESFace<T>;
+		friend class TSESEdge<T>;
+		friend class TSESVertex<T>;
 
 		BALL_CREATE(TRSVertex)
 
@@ -54,9 +74,8 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new RSVertex object from another.
 				@param	rsvertex	the RSVertex object to be copied
-				@param	deep		the edges and faces are setten to NULL, if deep is	
-												false, otherwise they are copied, too	
-												(with deep = false)
+				@param	deep		if deep = false, all pointers are set to NULL (default). Otherwise the new	
+												RSVertex object is linked to the neighbours of the old RSVertex object.
 		*/
 		TRSVertex(const TRSVertex<T>& rsvertex, bool deep = false)
 			throw();
@@ -94,9 +113,8 @@ namespace BALL
 
 		/**	Assign from another RSVertex.
 				@param rsvertex	the RSVertex object to assign from
-				@param	deep		the edges and faces are setten to NULL, if deep is	
-												false, otherwise they are copied, too	
-												(with deep = false)
+				@param	deep		if deep = false, all pointers are set to NULL (default). Otherwise the	
+												RSVertex object is linked to the neighbours of the RSVertex object to be copied.
 		*/
 		void set(const TRSVertex<T>& rsvertex, bool deep = false)
 			throw();
@@ -343,20 +361,8 @@ namespace BALL
 	{
 		if (deep)
 		{
-			TRSEdge<T>* edge;
-			typename HashSet<TRSEdge<T>*>::ConstIterator e;
-			for (e = rsvertex.edges_.begin(); e != rsvertex.edges_.end(); e++)
-			{
-				edge = new TRSEdge<T>(**e,false);
-				edges_.insert(edge);
-			}
-			TRSFace<T>* face;
-			typename HashSet<TRSFace<T>*>::ConstIterator f;
-			for (f = rsvertex.faces_.begin(); f != rsvertex.faces_.end(); f++)
-			{
-				face = new TRSFace<T>(**f,false);
-				faces_.insert(face);
-			}
+			edges_ = rsvertex.edges_;
+			faces_ = rsvertex.faces_;
 		}
 	}
 
@@ -400,20 +406,8 @@ namespace BALL
 		atom_ = rsvertex.atom_;
 		if (deep)
 		{
-			TRSEdge<T>* edge;
-			typename HashSet<TRSEdge<T>*>::ConstIterator e;
-			for (e = rsvertex.edges_.begin(); e != rsvertex.edges_.end(); e++)
-			{
-				edge = new TRSEdge<T>(**e,false);
-				edges_.insert(edge);
-			}
-			TRSFace<T>* face;
-			typename HashSet<TRSFace<T>*>::ConstIterator f;
-			for (f = rsvertex.faces_.begin(); f != rsvertex.faces_.end(); f++)
-			{
-				face = new TRSFace<T>(**f,false);
-				faces_.insert(face);
-			}
+			edges_ = rsvertex.edges_;
+			faces_ = rsvertex.faces_;
 		}
 		index_ = rsvertex.index_;
 	}
