@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.11 2005/02/01 13:12:33 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.12 2005/02/09 13:37:37 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -121,7 +121,7 @@ namespace BALL
 			CompositeManager& composite_manager = main_control.getCompositeManager();
 			
 			//iterate over all composites; get to know if there are systems
-			HashSet<Composite*>::iterator composite_it = composite_manager.begin();
+			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();
 
 			int num_systems = 0;
 			for(; +composite_it; ++composite_it)
@@ -145,7 +145,7 @@ namespace BALL
 			CompositeManager& composite_manager = main_control->getCompositeManager();
 			
 			//iterate over all composites; add systems to list
-			HashSet<Composite*>::iterator composite_it = composite_manager.begin();
+			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();
 			
 			//selection lists for systems should be empty
 			systems1->clear();
@@ -289,7 +289,73 @@ namespace BALL
 			// before docking, apply processors, e.g. add hydrogens
 			applyProcessors_();
 			//setup docking
-			docking_.setup(*docking_partner1_,*docking_partner2_,options_);
+			//docking_.setup(*docking_partner1_,*docking_partner2_,options_);
+			
+			
+			GeometricFit geo_fit(*docking_partner1_,*docking_partner2_);
+   
+			geo_fit.options = options_;
+
+			// keep the larger protein in System A and the smaller one in System B
+			if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms() )
+			{
+				// swap the systems
+				docking_partner1_->swap(*docking_partner2_);
+			}
+  
+
+			///////////////////////////
+  ///////////////////////////
+  // !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  // here we do some change to the protein, 
+  // so that we can verify whether the docking is ok.
+  ///////////////////////////////
+  
+			//chgpos(docking_partner2_, Vector3(rot_x, rot_y, rot_z), 
+			//Vector3(trs_x, trs_y, trs_z) );
+   //!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+   
+	/*		Log << "the rmsd before docking = " 
+       << calcRMSD(pro_sys_a, pro_sys_b, ref_pro_sys_a, ref_pro_sys_b ) 
+       << endl;
+   
+   // echo the parameters
+	 Options geo_opt = geo_fit.options;
+
+   cout << "-----Parameters-----" << endl;
+   cout << "NEAR_RADIUS       = " << NEAR_RADIUS       
+		 		<< "|||" << geo_opt[GeometricFit::Option::NEAR_RADIUS] << endl;
+   cout << "GRID_SPACING      = " << GRID_SPACING      
+		 		<< "|||" << geo_opt[GeometricFit::Option::GRID_SPACING] << endl;
+   cout << "GRID_SIZE         = " << GRID_SIZE         
+		    << "|||" << geo_opt[GeometricFit::Option::GRID_SIZE] << endl;
+   cout << "SURFACE_THICKNESS = " << SURFACE_THICKNESS 
+		 		<< "|||" << geo_opt[GeometricFit::Option::SURFACE_THICKNESS] << endl;
+   cout << "DEGREE_INTERVAL   = " << DEGREE_INTERVAL   
+		 		<< "|||" << geo_opt[GeometricFit::Option::DEGREE_INTERVAL] << endl;
+   cout << "TOP_N             = " << TOP_N             
+		 		<< "|||" << geo_opt[GeometricFit::Option::TOP_N] << endl;
+   cout << "BEST_NUM          = " << BEST_NUM          
+		 		<< "|||" << geo_opt[GeometricFit::Option::BEST_NUM] << endl;
+   cout << endl;
+   cout << "------System A------" << endl;
+   cout << "PDB File name a   = " << PDB_file_name_a   << endl;
+   cout << "Chain name        = " << CHAIN_A           << endl;
+   cout << "residue number    = " << pro_sys_a.countResidues() << endl;
+   cout << "atom number       = " << pro_sys_a.countAtoms()    << endl;
+   cout << endl;
+   cout << "------System B------" << endl;
+   cout << "PDB File name b   = " << PDB_file_name_b   << endl;  
+   cout << "Chain name        = " << CHAIN_B           << endl;
+   cout << "residue number    = " << pro_sys_b.countResidues() << endl;
+   cout << "atom number       = " << pro_sys_b.countAtoms()    << endl;
+   cout << endl;
+   */
+   
+			geo_fit.geometricRecognition(*docking_partner1_, *docking_partner2_);
+																		//*docking_partner1_, *docking_partner2_, 
+																		//SURFACE_TYPE );
+			
 			Log.info() << "End of calculate" << std::endl;
 			return true;
 		}
@@ -298,7 +364,28 @@ namespace BALL
 		void DockDialog::applyValues_()
 			throw()
 		{
+			// options for all docking algorithms
+			//options_[DockingAlgorithm::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
+			options_[GeometricFit::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
+			
+			// options for chosen algorithm
+			int index = algorithms->currentItem();
 		
+			switch(index)
+			{
+				case GEOMETRIC_FIT:
+					GeometricFitDialog* dialog = RTTI::castTo<GeometricFitDialog>(*(algorithm_dialogs_[index]));
+					dialog->setOptions(options_);
+					break;
+			}
+			
+			
+			Options::Iterator it = options_.begin();
+			for(; +it; ++it)
+			{
+				Log.info() << "Options:" << std::endl;
+				Log.info() << it->first << " : " << it->second << std::endl;
+			}
 		}
 		
 		/// apply the processors to the systems
@@ -479,6 +566,7 @@ namespace BALL
 					calculate();
 				}
 			}
+			//Log.error() << "Hallo!" << std::endl;
 		}
 		
 		///

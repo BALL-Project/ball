@@ -45,7 +45,8 @@
  #include <BALL/DATATYPE/options.h>
 #endif
 
-#include "dockingAlgorithm.h"
+//#include "DockingAlgorithm.h"
+#include "geometricFit.h"
 #include "dockDialogData.h"
 
 namespace BALL
@@ -184,7 +185,7 @@ namespace BALL
 				
 					//options for the docking algorithm
 					Options 	options_;
-					Docking::DockingAlgorithm docking_;
+					//Docking::DockingAlgorithm docking_;
 					
 					//menu entry id
 					int id_;

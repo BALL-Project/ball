@@ -401,7 +401,7 @@
         <sender>cancel_button</sender>
         <signal>clicked()</signal>
         <receiver>GeometricFitDialogData</receiver>
-        <slot>reject()</slot>
+        <slot>cancelPressed()</slot>
     </connection>
     <connection>
         <sender>reset_button</sender>
@@ -410,8 +410,21 @@
         <slot>resetPressed()</slot>
     </connection>
 </connections>
+<tabstops>
+    <tabstop>surface_thickness</tabstop>
+    <tabstop>grid_spacing</tabstop>
+    <tabstop>inside_value1</tabstop>
+    <tabstop>inside_value2</tabstop>
+    <tabstop>near_radius</tabstop>
+    <tabstop>deg_interval</tabstop>
+    <tabstop>peak_num</tabstop>
+    <tabstop>ok_button</tabstop>
+    <tabstop>cancel_button</tabstop>
+    <tabstop>reset_button</tabstop>
+</tabstops>
 <slots>
     <slot>resetPressed()</slot>
+    <slot>cancelPressed()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

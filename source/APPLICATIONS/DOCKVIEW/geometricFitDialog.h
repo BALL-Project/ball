@@ -13,6 +13,11 @@
 # include <BALL/VIEW/KERNEL/preferencesEntry.h>
 #endif
 
+#ifndef BALL_DATATYPE_OPTIONS_H
+#include <BALL/DATATYPE/options.h>
+#endif
+
+#include "geometricFit.h"
 #include "geometricFitDialogData.h"
 
 namespace BALL
@@ -47,12 +52,19 @@ namespace BALL
 				/// Reset the dialog to the standard values
 				void reset()
 					throw();
+				
+				/// Set options
+				void setOptions(Options& options)
+					throw();
 
 				public slots:
 				
 				//
 				virtual void resetPressed();
 					
+				//
+				virtual void cancelPressed();
+				
 				protected:
 					
 					

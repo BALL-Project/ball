@@ -72,6 +72,17 @@ namespace BALL
     	near_radius->setText("1.8");
     	peak_num->setText("3");
 		}
+		
+		/// Set options
+		void GeometricFitDialog::setOptions(Options& options)
+					throw()
+		{
+			options[GeometricFit::Option::NEAR_RADIUS] = String(near_radius->text().ascii()).toFloat();
+			options[GeometricFit::Option::GRID_SPACING] = String(grid_spacing->text().ascii()).toFloat();
+			options[GeometricFit::Option::SURFACE_THICKNESS] = String(surface_thickness->text().ascii()).toFloat();
+			options[GeometricFit::Option::DEGREE_INTERVAL] = String(deg_interval->text().ascii()).toDouble();
+			options[GeometricFit::Option::TOP_N] = String(peak_num->text().ascii()).toInt();
+		}
 	
 	// ------------------------- SLOTS ------------------------------------------------
 	// --------------------------------------------------------------------------------
@@ -80,6 +91,13 @@ namespace BALL
 		void GeometricFitDialog::resetPressed()
 		{
 			reset();
+		}
+		
+		//
+		void GeometricFitDialog::cancelPressed()
+		{
+			reset();
+			hide();
 		}
 		
 	} // namespace VIEW

@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.5 2005/01/25 16:36:36 leonhardt Exp $
+# $Id: Makefile,v 1.1.2.6 2005/02/09 13:37:37 haid Exp $
 #
 
 EXECUTABLE=DOCKView
@@ -14,13 +14,12 @@ clean:	default_clean
 include ../../common.mak
 include .Dependencies
 
-BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
+BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES) -I ./DOCKING
 
 CPP_SOURCES=\
 	aboutDialog.C\
 	dockDialog.C\
 	geometricFitDialog.C\
-	dockingAlgorithm.C\
 	dockDialogData.C\
 	geometricFitDialogData.C\
 	icons.C\
@@ -44,7 +43,7 @@ UIC_FILES=\
 	geometricFitDialogData.h
 
 DOCKView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS)
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS) DOCKING/DockingAlgorithm.o DOCKING/geometricFit.o DOCKING/fitmol.o DOCKING/MVector3.o DOCKING/MSuperpose.o DOCKING/MNumerics.o
 
 depend: $(UIC_FILES) $(MOC_SOURCES)
 
