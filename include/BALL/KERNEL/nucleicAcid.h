@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.h,v 1.7 2000/04/16 21:13:07 amoll Exp $ 
+// $Id: nucleicAcid.h,v 1.8 2000/04/25 16:52:26 amoll Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -90,7 +90,7 @@ namespace BALL
 		//@{
 
 		/** Assignment with cloning facility.
-				Assign the NucleicAcid {\em nucleic_acid} to {\em *this} NucleicAcid.
+				Assign the NucleicAcid {\em nucleic_acid} to {\em *this}.
 				The assignment is either deep or shallow (default).
 				@param  nucleic_acid the NucleicAcid to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em nucleic_acid}
@@ -115,19 +115,19 @@ namespace BALL
 		/**	@name Accessors */
 		//@{
 
-		/**	Retrieve a pointer to the Nucleotide at the 3'-end of the nucleic acid
+		/**	Retrieve a pointer to the Nucleotide at the 3'-end of {\em *this}
 		*/
 		Nucleotide* get3Prime();
 
-		/**	Retrieve a const pointer to the nucleotide at the 3'-end of the nucleic acid
+		/**	Retrieve a const pointer to the nucleotide at the 3'-end of {\em *this}
 		*/
 		const Nucleotide* get3Prime() const;
 
-		/**	Retrieve a pointer to the Nucleotide at the 5'-end of the nucleic acid
+		/**	Retrieve a pointer to the Nucleotide at the 5'-end of {\em *this}
 		*/
 		Nucleotide* get5Prime();
 
-		/**	Retrieve a const pointer to the Nucleotide at the 5'-end of the nucleic acid
+		/**	Retrieve a const pointer to the Nucleotide at the 5'-end of {\em *this}
 		*/
 		const Nucleotide* get5Prime() const;
 

@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.10 2000/04/17 20:39:38 oliver Exp $
+// $Id: chain.h,v 1.11 2000/04/25 16:52:25 amoll Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -81,7 +81,7 @@ namespace BALL
 		//@{
 
 		/** Assignment with cloning facility.
-				Assign the chain {\em base_fragment} to {\em *this} chain.
+				Assign the chain {\em chain} to {\em *this} chain.
 				The assignment is either deep or shallow (default).
 				@param  chain the chain to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em chain}

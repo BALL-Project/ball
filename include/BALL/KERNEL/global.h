@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.4 2000/03/30 10:16:06 oliver Exp $
+// $Id: global.h,v 1.5 2000/04/25 16:52:26 amoll Exp $
 
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H
@@ -24,7 +24,7 @@ namespace BALL
 
 	/**	Bond cloning method.
 			This template function implements the cloning of \Ref{Bond}s in AtomContainers.
-			As \Ref{Bond}s are not integrated in the Composite tree structure of kerenel objects,
+			As \Ref{Bond}s are not integrated in the Composite tree structure of kernel objects,
 			a simple deep cloning of a composite only copies all composites down to atoms. Bonds are not
 			included because they are not {\em children} of the atoms but stored in a bond array.
 			However, cloning of any kernel objects should naturally clone bonds, too. The implementation of

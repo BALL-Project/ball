@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.10 2000/04/17 14:03:17 amoll Exp $
+// $Id: residue.h,v 1.11 2000/04/25 16:52:26 amoll Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -118,20 +118,23 @@ namespace BALL
 
 		//@}
 
-
 		/**	@name	Assignment */
 		//@{
 
-		///	
+		/** Assignment with cloning facility.
+				The assignment is either deep or shallow (default).
+				@param  residue the Residue to be copied (cloned)
+				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em residue}
+		*/
 		void set(const Residue& residue, bool deep = true);
 
-		///	
+		/**	Assignment operator	*/
 		Residue &operator = (const Residue& residue);
 
-		///	
+		/**	Assign a Residue object from another */
 		void get(Residue& residue, bool deep = true) const;
 
-		///	
+		/**	Swap the contents of two NucleicAcid objects */
 		void swap(Residue& residue);
 	
 		//@}
@@ -169,64 +172,124 @@ namespace BALL
 		*/
 		Angle getTorsionPsi() const;		
 
-		///
+		/** Get a pointer to the parent protein.
+				The reference is 0 if {\em *this} residue does not have a parent protein.
+				@return  Protein* -
+								 mutable reference to the parent protein of {\em *this},
+		*/
 		Protein* getProtein();
 
-		///
+		/** Get a constant pointer to the parent protein.
+				The reference is 0 if {\em *this} residue does not have a parent protein.
+				@return  Protein* -
+								 constant reference to the parent protein of {\em *this},
+		*/
 		const Protein* getProtein() const;
 
-		///
+		/** Get a pointer to the parent chain.
+				The reference is 0 if {\em *this} residue does not have a parent chain.
+				@return  Chain* -
+								 mutable reference to the parent chain of {\em *this},
+		*/
 		Chain* getChain();
-		
-		///
+
+		/** Get a pointer to the parent chain.
+				The reference is 0 if {\em *this} residue does not have a parent chain.
+				@return  Chain* -
+								 constant reference to the parent chain of {\em *this},
+		*/
 		const Chain* getChain() const;
 
-		///
+		/** Get a pointer to a subaltern PDBAtom at a given position.
+				The reference is 0 if {\em *this} residue does not have a PDBAtom at this position.
+				@param   index the position of the subaltern PDBAtom
+				@exception IndexUnderflow if {\tt index < 0}
+				@return  PDBAtom* -
+								 mutable reference to the subaltern PDBAtom at positon {\em index} of {\em *this},
+		*/
 		PDBAtom* getPDBAtom(Index index);
 	
-		///
+		/** Get a pointer to a subaltern PDBAtom at a given position.
+				The reference is 0 if {\em *this} residue does not have a PDBAtom at this position.
+				@param   index the position of the subaltern PDBAtom
+				@exception IndexUnderflow if {\tt index < 0}
+				@return  PDBAtom* -
+								 constant reference to the subaltern PDBAtom at positon {\em index} of {\em *this},
+		*/
 		const PDBAtom* getPDBAtom(Index index) const;
 	
-		///
+		/**	Set the ID of the residue.
+				@param id the new ID
+		*/
 		void setID(const String& id);
 
-		///
+		/**	Retrieve the ID of the residue.
+				@return String the ID
+		*/
 		const String& getID() const;
 
-		///
+		/**	Set the insertion code of the residue.
+				@param insertion_code the new insertion code
+		*/
 		void setInsertionCode(char insertion_code);
 
-		///
+		/**	Get the insertion code of the residue.
+				@return  char the insertion code
+		*/
 		char getInsertionCode() const;
 
-		///
+		/**	Count the PDB-Atoms of this residue.
+				@return  Size the number of PDB-Atoms
+		*/
 		Size countPDBAtoms() const;
 
-		///
+		/** Prepend a PDB-Atom at position 0.
+				@param atom, the PDB-Atom to prepend
+		*/
 		void prepend(PDBAtom& atom);
 
-		///
+		/** Append a PDB-Atom at the last position.
+				@param atom, the PDB-Atom to append
+		*/
 		void append(PDBAtom& atom);
 
-		///
+		/** Insert a PDB-Atom at the last position.
+				@param atom, the PDB-Atom to append
+		*/
 		void insert(PDBAtom& atom);
 
-		///
+		/** Insert a PDB-Atom before a given {\em Comosite} object.
+				@param atom, the PDB-Atom to insert
+				@param before, the {\em Comosite} object to insert before
+		*/
 		void insertBefore(PDBAtom& atom, Composite& before);
 
-		///
+		/** Insert a PDB-Atom after a given {\em Comosite} object.
+				@param atom, the PDB-Atom to insert
+				@param after, the {\em Comosite} object to insert after
+		*/
 		void insertAfter(PDBAtom& atom, Composite& after);
 
-		///
+		/** Remove a PDB-Atom.
+				@param atom, the PDB-Atom to remove
+		*/
 		bool remove(PDBAtom& atom);
 
-		///
+		/**	Cut all children of {\tt residue} and prepend them before the children of {\em *this}.
+				@param residue the residue to access
+		*/
 		void spliceBefore(Residue& residue);
 
-		///
+		/**	Cut all children of {\tt residue} and prepend them after the children of {\em *this}.
+				@param residue the residue to access
+		*/
 		void spliceAfter(Residue& residue);
 
-		///
+		/**	Move the children of {\tt residue} into {\em *this}.
+				The children of {\tt residue} are inserted at its position if
+				it is a child of {\tt this}.
+				Otherwise the children are inserted using \Ref{spliceBefore}.
+		*/
 		void splice(Residue& residue);
 
 		//@}
@@ -236,16 +299,24 @@ namespace BALL
 		/**	@name	Predicates */
 		//@{
 
-		///
+		/** Test if this residue is an amino acid
+				return bool
+		*/
 		bool isAminoAcid() const;
 	
-		///
+		/** Test if this residue is terminal
+				return bool
+		*/
 		bool isTerminal() const;
 	
-		///
+		/** Test if this residue is N-terminal
+				return bool
+		*/
 		bool isNTerminal() const;
 	
-		///
+		/** Test if this residue is C-terminal
+				return bool
+		*/
 		bool isCTerminal() const;
 
 		//@}
@@ -254,10 +325,20 @@ namespace BALL
 		/**	@name	Debugging and Diagnostics */
 		//@{
 
-		///
+		/** Internal state and consistency self-validation.
+				Initiate self-validation of the internal state and data structure consistencies of {\em *this}.
+				@return			bool -
+										{\tt true} if the internal state of {\em *this} is correct (self-validated) and consistent,
+										{\tt false} otherwise
+		*/
 		virtual bool isValid() const;
 
-		///
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} to the output ostream {\em s} with dumping depth {\em depth}.
+	
+				@param	s output stream where to output the internal state of {\em *this}
+				@param  depth the dumping depth
+		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 

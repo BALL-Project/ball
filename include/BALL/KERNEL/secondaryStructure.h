@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.7 2000/04/16 20:23:53 amoll Exp $
+// $Id: secondaryStructure.h,v 1.8 2000/04/25 16:52:27 amoll Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -92,7 +92,7 @@ namespace BALL
 		//@{
 
 		/** Assignment with cloning facility.
-				Assign the SecondaryStructure {\em secondary_structure} to {\em *this} SecondaryStructure.
+				Assign {\em secondary_structure} to {\em *this}.
 				The assignment is either deep or shallow (default).
 				@param  secondary_structure the SecondaryStructure to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em secondary_structure}
@@ -100,7 +100,7 @@ namespace BALL
 		void set(const SecondaryStructure& secondary_structure, bool deep = true);
 
 		/** Assignment operator.
-				Assign the SecondaryStructure {\em secondary_structure} to {\em *this} secondary_structure.
+				Assign {\em secondary_structure} to {\em *this}.
 				The assignment is either deep or shallow (default).
 				@param   secondary_structure the SecondaryStructure to be copied (cloned)
 				@return  secondary_structure& - {\em *this} SecondaryStructure
@@ -109,16 +109,16 @@ namespace BALL
 		SecondaryStructure &operator =(const SecondaryStructure& secondary_structure);
 
 		/** Copying with cloning facility.
-				Copy {\em *this} SecondaryStructure to the SecondaryStructure {\em secondary_structure}.
+				Copy {\em *this} to {\em secondary_structure}.
 				The assignment is either deep or shallow (default).
 				@param  secondary_structure the SecondaryStructure to be assigned to
 				@see    secondary_structure::set
 		*/
 		void get(SecondaryStructure& secondary_structure, bool deep = true) const;
 
-		/** Swapping of SecondaryStructure.
-				Swap the states of {\em *this} SecondaryStructure with the SecondaryStructure {\em secondary_structure}.
-				@param  secondary_structure the SecondaryStructure {\em *this} SecondaryStructure is being swapped with
+		/** Swapping of two secondary structures.
+				Swap the states of {\em *this} with {\em secondary_structure}.
+				@param  secondary_structure to swap with {\em *this}
 		*/
 		void swap(SecondaryStructure& secondary_structure);
 
@@ -143,21 +143,21 @@ namespace BALL
 		const Protein* getProtein() const;
 
 		/** Get a pointer to the parent chain.
-				The reference is 0 if {\em *this} SecondaryStructure does not have a parent chain.
+				The reference is 0 if {\em *this} does not have a parent chain.
 				@return  Protein* -
 								 mutable reference to the parent chain of {\em *this} SecondaryStructure,
 		*/
 		Chain* getChain();
 
 		/** Get a pointer to the parent chain.
-				The reference is 0 if {\em *this} SecondaryStructure does not have a parent chain.
+				The reference is 0 if {\em *this} does not have a parent chain.
 				@return  Protein* -
 								 constant reference to the parent chain of {\em *this} SecondaryStructure,
 		*/
 		const Chain* getChain() const;
 
 		/** Get a pointer to a child Residue at a given position.
-				The reference is 0 if {\em *this} residue does not have a Residue at the given position.
+				The reference is 0 if {\em *this} does not have a Residue at the given position.
 				@param   index the position of the child Residue
 				@exception IndexUnderflow if {\tt index < 0}
 				@return  Residue* -
@@ -166,7 +166,7 @@ namespace BALL
 		Residue* getResidue(Index index);
 	
 		/** Get a pointer to a child Residue at a given position.
-				The reference is 0 if {\em *this} residue does not have a Residue at the given position.
+				The reference is 0 if {\em *this} does not have a Residue at the given position.
 				@param   index the position of the child Residue
 				@exception IndexUnderflow if {\tt index < 0}
 				@return  Residue* -
@@ -175,7 +175,7 @@ namespace BALL
 		const Residue* getResidue(Index index) const;
 
 		/** Get a pointer to the N-terminal Residue.
-				The reference is 0 if {\em *this} residue does not have a Residue at the given position.
+				The reference is 0 if {\em *this} does not have a Residue at the given position.
 
 				@return  Residue* -
 								 mutable reference to the N-terminal Residue
@@ -183,7 +183,7 @@ namespace BALL
 		Residue* getNTerminal();
 	
 		/** Get a pointer to the N-terminal Residue.
-				The reference is 0 if {\em *this} residue does not have a Residue at the given position.
+				The reference is 0 if {\em *this} does not have a Residue at the given position.
 
 				@return  Residue* -
 								 constant reference to the N-terminal Residue
@@ -191,7 +191,7 @@ namespace BALL
 		const Residue* getNTerminal() const;
 
 		/** Get a pointer to the C-terminal Residue.
-				The reference is 0 if {\em *this} residue does not have a Residue at the given position.
+				The reference is 0 if {\em *this} does not have a Residue at the given position.
 
 				@return  Residue* -
 								 mutable reference to the C-terminal Residue
@@ -199,7 +199,7 @@ namespace BALL
 		Residue* getCTerminal();
 	
 		/** Get a pointer to the C-terminal Residue.
-				The reference is 0 if {\em *this} residue does not have a Residue at the given position.
+				The reference is 0 if {\em *this} does not have a Residue at the given position.
 
 				@return  Residue* -
 								 constant reference to the C-terminal Residue
@@ -211,7 +211,7 @@ namespace BALL
 				@param   index the position of the child PDBAtom
 				@exception IndexUnderflow if {\tt index < 0}
 				@return  PDBAtom* -
-								 constant reference to the child PDBAtom at positon {\em index} of {\em *this} residue,
+								 constant reference to the child PDBAtom at positon {\em index} of {\em *this},
 		*/
 		PDBAtom* getPDBAtom(Index index);
 	
@@ -220,7 +220,7 @@ namespace BALL
 				@param   index the position of the child PDBAtom
 				@exception IndexUnderflow if {\tt index < 0}
 				@return  PDBAtom* -
-								 mutable reference to the child PDBAtom at positon {\em index} of {\em *this} residue,
+								 mutable reference to the child PDBAtom at positon {\em index} of {\em *this},
 		*/
 		const PDBAtom* getPDBAtom(Index index) const;
 	
@@ -266,19 +266,19 @@ namespace BALL
 		*/
 		bool remove(Residue& residue);
 
-		/**	Cut all children of {\tt secondary_structure} and prepend them before the children of this SecondaryStructure.
+		/**	Cut all children of {\tt secondary_structure} and prepend them before the children of {\em *this}.
 				@param secondary_structure the SecondaryStructure to access
 		*/
 		void spliceBefore(SecondaryStructure& secondary_structure);
 
-		/**	Cut all children of {\tt secondary_structure} and append them after the children of this SecondaryStructure.
+		/**	Cut all children of {\tt secondary_structure} and append them after the children of {\em *this}.
 				@param secondary_structure the SecondaryStructure to access
 		*/
 		void spliceAfter(SecondaryStructure& secondary_structure);
 
-		/**	Move the children of {\tt secondary_structure} into this SecondaryStructure.
+		/**	Move the children of {\tt secondary_structure} into {\em *this}.
 				The children of {\tt secondary_structure} are inserted at the position of 
-				{\tt secondary_structure} if {\tt secondary_structure} is a child of {\tt this}.
+				{\tt secondary_structure} if it is a child of {\tt this}.
 				Otherwise the children are inserted using \Ref{spliceBefore}.
 		*/
 		void splice(SecondaryStructure& secondary_structure);
@@ -288,19 +288,17 @@ namespace BALL
 		//@{
 	
 		/** Internal state and consistency self-validation.
-				Initiate self-validation of the internal state and data structure consistencies of {\em *this} SecondaryStructure.
-				If the internal state of {\em *this} SecondaryStructure is correct (self-validated) and consistent {\tt true} is returned,
-				{\tt false} otherwise. 
+				Initiate self-validation of the internal state and data structure consistencies of {\em *this}.
 				@return			bool -
-										{\tt true} if the internal state of {\em *this} SecondaryStructure is correct (self-validated) and consistent,
+										{\tt true} if the internal state of {\em *this} is correct (self-validated) and consistent,
 										{\tt false} otherwise
 		*/
 		virtual bool isValid() const;
 
 		/** Internal state dump.
-				Dump the current internal state of {\em *this} SecondaryStructure to the output ostream {\em s} with dumping depth {\em depth}.
+				Dump the current internal state of {\em *this} to the output ostream {\em s} with dumping depth {\em depth}.
 	
-				@param	s output stream where to output the internal state of {\em *this} SecondaryStructure
+				@param	s output stream where to output the internal state of {\em *this}
 				@param  depth the dumping depth
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
@@ -309,18 +307,18 @@ namespace BALL
 		/** @name STORERS */
 
 		/* Persistent stream input and state restorage.
-				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this} SecondaryStructure.
+				Read persistent bond data from the input stream {\em s} and restore the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.
-				@param  s input stream from where to restore the internal state of {\em *this} SecondaryStructure
+				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
 		virtual void read(std::istream& s);
 
 		/* Persistent stream output and state storage.
-				Write persistent bond data to the output stream {\em s} and store the state of {\em *this} SecondaryStructure.
+				Write persistent bond data to the output stream {\em s} and store the state of {\em *this}.
 				\\
 				{\bf Note:} Not yet implemented.	
-				@param  s input stream from where to restore the internal state of {\em *this} SecondaryStructure
+				@param  s input stream from where to restore the internal state of {\em *this}
 		*/
 		virtual void write(std::ostream& s) const;
 
@@ -360,7 +358,6 @@ namespace BALL
 
 		void insert(BaseFragment &base_fragment);
 			
-
 		void insertBefore(BaseFragment &base_fragment, Composite &before);
 
 		void insertAfter(BaseFragment &base_fragment, Composite &after);

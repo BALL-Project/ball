@@ -1,4 +1,4 @@
-// $Id: molecule.h,v 1.8 2000/04/17 13:59:15 amoll Exp $
+// $Id: molecule.h,v 1.9 2000/04/25 16:52:26 amoll Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -82,20 +82,20 @@ namespace BALL
 		/**	@name	Assignment */
 		//@{
 
-		/**	Assign from another Molecule.
+		/**	Assign from an other Molecule.
 				@param molecule	the Molecule object to assign from
 				@param deep
 		*/
 		void set(const Molecule& molecule, bool deep = true);
 
 		/**	Assignment operator.
-				Assign the components from another Molecule.
+				Assign the components from an other Molecule.
 				@param molecule the Molecule to assign from
 		**/
 		Molecule& operator = (const Molecule& molecule);
 
 		/**	Assign to another Molecule.
-				Assigns the components to another Molecule.
+				Assigns the components to an other Molecule.
 				@param molecule	the Molecule to be assigned to
 				@param deep
 		*/
@@ -137,13 +137,13 @@ namespace BALL
 		*/
 		void insert(Atom& atom);
 
-		/** Insert an atom before an given {\em Comosite} object.
+		/** Insert an atom before a given {\em Comosite} object.
 				@param atom, the atom to insert
 				@param before, the {\em Comosite} object to insert before
 		*/
 		void insertBefore(Atom& atom, Composite& before);
 
-		/** Insert an atom after an given {\em Comosite} object.
+		/** Insert an atom after a given {\em Comosite} object.
 				@param atom, the atom to insert
 				@param after, the {\em Comosite} object to insert after
 		*/
@@ -159,7 +159,7 @@ namespace BALL
 		*/
 		void prepend(BaseFragment& base_fragment);
 
-		/** Insert a BaseFragment as the last child of the instance
+		/** Append a BaseFragment as the last child of the instance
 				@param base_fragment the BaseFragment to add
 		*/
 		void append(BaseFragment& base_fragment);

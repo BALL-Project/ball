@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.19 2000/04/25 14:02:43 amoll Exp $
+// $Id: atom.h,v 1.20 2000/04/25 16:52:24 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -83,8 +83,8 @@ namespace BALL
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: amoll $
-			@version $Revision: 1.19 $
-			@date    $Date: 2000/04/25 14:02:43 $
+			@version $Revision: 1.20 $
+			@date    $Date: 2000/04/25 16:52:24 $
 	*/
 	class Atom
 		: public Composite,
@@ -374,7 +374,7 @@ namespace BALL
 			/** Constant inspection of the atom's charge.
 					Access the charge of {\em *this} atom.
 
-					@return      float - copy of the the charge of {\em *this} atom
+					@return      float - copy of the charge of {\em *this} atom
 					@see         Atom::setCharge
 			*/
 			float getCharge() const;
@@ -521,7 +521,7 @@ namespace BALL
 			/** Constant inspection of the atom's radius.
 					Access the radius of {\em *this} atom.
 
-					@return      float - copy of the the radius of {\em *this} atom
+					@return      float - copy of the radius of {\em *this} atom
 					@see         Atom::setRadius
 			*/
 			float getRadius() const;
@@ -537,7 +537,7 @@ namespace BALL
 			/** Constant inspection of the atom's type.
 					Access the type of {\em *this} atom.
 
-					@return      Type - copy of the the type of {\em *this} atom
+					@return      Type - copy of the type of {\em *this} atom
 					@see         Atom::setType
 			*/
 			Type getType() const;
@@ -761,7 +761,7 @@ namespace BALL
 			bool isBonded() const;
 
 			/**	True if the two atoms are geminal.
-					Two atoms are geminal if they do not share common bond but
+					Two atoms are geminal if they do not share a common bond but
 					both have a bond to a third atom. For example the two hydrogen atoms
 					in water are geminal. 
 					@param	atom the second atom
@@ -799,31 +799,30 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 
-		
 			//@}
 
 			/** @name Storers */
 			//@{ 
 
 			/* Persistent stream input and state restorage.
-					Read persistent bond data from the input stream {\em s} and restore the state of {\em *this} atom.
-					Virtually called by \Ref{Object::operator >>}.\\
-					\\
-					{\bf Note:} Not yet implemented.
-		
-					@param  s input stream from where to restore the internal state of {\em *this} atom
-					@see    Object::operator >>
+				 Read persistent bond data from the input stream {\em s} and restore the state of {\em *this} atom.
+				 Virtually called by \Ref{Object::operator >>}.\\
+				 \\
+				 {\bf Note:} Not yet implemented.
+
+				 @param  s input stream from where to restore the internal state of {\em *this} atom
+				 @see    Object::operator >>
 			*/
 			virtual void read(std::istream& s);
 
 			/* Persistent stream output and state storage.
-					Write persistent bond data to the output stream {\em s} and store the state of {\em *this} atom.
-					Virtually called by \Ref{Object::operator <<}.\\
-					\\
-					{\bf Note:} Not yet implemented.
-		
-					@param  s input stream from where to restore the internal state of {\em *this} atom
-					@see         Object::operator <<
+  			 Write persistent bond data to the output stream {\em s} and store the state of {\em *this} atom.
+				 Virtually called by \Ref{Object::operator <<}.\\
+				 \\
+				 {\bf Note:} Not yet implemented.
+		 
+				 @param  s input stream from where to restore the internal state of {\em *this} atom
+				 @see         Object::operator <<
 			*/
 			virtual void write(std::ostream& s) const;
 
@@ -841,6 +840,7 @@ namespace BALL
 											 {\tt false} otherwise
 			*/
 			bool applyBonds(UnaryProcessor<Bond>& processor);
+
 			//@}
 
 			/** @name External iterators */
@@ -1067,8 +1067,6 @@ namespace BALL
 				return BondIterator::end(*this);
 			}
 
-
-
 			/** Constant random access iterator for bonds.
 			*/
 			typedef ConstRandomAccessIterator
@@ -1100,8 +1098,6 @@ namespace BALL
 			{
 				return BondConstIterator::end(*this);
 			}
-
-
 		
 			/** Reverse random access iterator for bonds.
 			*/
@@ -1118,8 +1114,6 @@ namespace BALL
 			{
 				return BondReverseIterator::end(*this);
 			}
-
-
 
 			/** Constant reverse random access iterator for bonds.
 			*/

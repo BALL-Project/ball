@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.6 2000/04/17 13:32:27 amoll Exp $
+// $Id: PDBAtom.h,v 1.7 2000/04/25 16:52:26 amoll Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -27,7 +27,7 @@ namespace BALL
 	class Residue;
 
 	/** Atom class with additional attributes.
-			This class is represents atoms read from PDB files.
+			This class represents atoms read from PDB files.
 			It contains additional attributes to hold the crystallographic properties
 			of atoms from a PDB file (e.g., temperature factor, occupancy).\\
 			{\bf Definition:}\URL{BALL/KERNEL/PDBAtom.h}

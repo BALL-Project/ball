@@ -1,4 +1,4 @@
-// $Id: forEach.h,v 1.3 2000/04/14 13:35:07 amoll Exp $
+// $Id: forEach.h,v 1.4 2000/04/25 16:52:25 amoll Exp $
 
 #ifndef BALL_KERNEL_FOREACH_H
 #define BALL_KERNEL_FOREACH_H
@@ -32,7 +32,6 @@ for (molecule_iterator = (molecule_container).beginMolecule(); \
      !molecule_iterator.isEnd(); ++molecule_iterator)
 
 
-      
 /** Fragment iterator macro.
     Convenience macro for easy iteration over all fragments of {\em fragment_container}.\\
 
@@ -52,7 +51,6 @@ for (molecule_iterator = (molecule_container).beginMolecule(); \
 #define BALL_FOREACH_FRAGMENT(fragment_container, fragment_iterator) \
 for (fragment_iterator = (fragment_container).beginFragment(); \
      !fragment_iterator.isEnd(); ++fragment_iterator)
-
 
 
 /** BaseFragment iterator macro.
@@ -76,7 +74,6 @@ for (base_fragment_iterator = (base_fragment_container).beginBaseFragment(); \
      !base_fragment_iterator.isEnd(); ++base_fragment_iterator)
 
 
-
 /** Atom iterator macro.
     Convenience macro for easy iteration over all atoms of {\em atom_container}.
 
@@ -96,7 +93,6 @@ for (base_fragment_iterator = (base_fragment_container).beginBaseFragment(); \
 #define BALL_FOREACH_ATOM(atom_container, atom_iterator) \
 for (atom_iterator = (atom_container).beginAtom(); \
      !atom_iterator.isEnd(); ++atom_iterator)
-
 
 
 /** Atom bond iterator macro.
@@ -121,7 +117,6 @@ for (bond_iterator = (bond_container).beginBond(); \
      !bond_iterator.isEnd(); ++bond_iterator)
 
 
-
 /** Atom pair iterator macro.
     Convenience macro for easy iteration over all atom pairs of {\em atom_container}.\\
 
@@ -144,7 +139,6 @@ for (first_atom_iterator = (atom_container).beginAtom(); \
   for (second_atom_iterator = (atom_container).beginAtom(); \
        !second_atom_iterator.isEnd(); ++second_atom_iterator) \
     if ((*first_atom_iterator) < (*second_atom_iterator))
-
 
 
 /** Bond iterator macro.
@@ -174,7 +168,6 @@ for (atom_iterator = (atom_container).beginAtom(); \
     if ((*bond_iterator).getFirstAtom() == &(*atom_iterator) \
 				|| !(atom_container).isAncestorOf(*(*bond_iterator).getFirstAtom()))
 
-      
 
 /** Intermolecular bond iterator macro.
     Convenience macro for easy iteration over all intermolecular bonds of {\em atom_container} that is also a bond-container.\\
@@ -205,7 +198,6 @@ for (atom_iterator = (atom_container).beginAtom(); \
 				 || !(atom_container).isAncestorOf(*(*bond_iterator).getFirstAtom()))
 
 
-
 /** Intramolecular bond iterator macro.
     Convenience macro for easy iteration over all intramolecular (internal) bonds of {\em atom_container} that is also a bond-container.\\
 
@@ -233,7 +225,6 @@ for (atom_iterator = (atom_container).beginAtom(); \
     if ((*bond_iterator).getFirstAtom() == &(*atom_iterator) \
 				&& (atom_container).isAncestorOf(*(*bond_iterator).getSecondAtom()))
 
-
       
 /** Protein iterator macro.
     Convenience macro for easy iteration over all proteins of {\em protein_container}.\\
@@ -256,7 +247,6 @@ for (protein_iterator = (protein_container).beginProtein(); \
      !protein_iterator.isEnd(); ++protein_iterator)
 
 
-      
 /** Chain iterator macro.
     Convenience macro for easy iteration over all chains of {\em chain_container}.\\
 
@@ -278,7 +268,6 @@ for (chain_iterator = (chain_container).beginChain(); \
      !chain_iterator.isEnd(); ++chain_iterator)
 
 
-      
 /** SecondaryStructure iterator macro.
     Convenience macro for easy iteration over all secondary structures of {\em secondary_structure_container}.\\
 
@@ -300,7 +289,6 @@ for (secondary_structure_iterator = (secondary_structure_container).beginSeconda
      !secondary_structure_iterator.isEnd(); ++secondary_structure_iterator)
 
 
-  
 /** Residue iterator macro.
     Convenience macro for easy iteration over all residues of {\em residue_container}.\\
 
@@ -321,7 +309,6 @@ for (secondary_structure_iterator = (secondary_structure_container).beginSeconda
 for (residue_iterator = (residue_container).beginResidue(); \
      !residue_iterator.isEnd(); \
      ++residue_iterator)
-
 
 
 /** PDBAtom iterator macro.

@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.9 2000/04/17 13:49:35 amoll Exp $
+// $Id: bond.h,v 1.10 2000/04/25 16:52:25 amoll Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -62,8 +62,8 @@ namespace BALL
 			
 			@memo    Bond class (BALL kernel framework)
 			@author  $Author: amoll $
-			@version $Revision: 1.9 $
-			@date    $Date: 2000/04/17 13:49:35 $
+			@version $Revision: 1.10 $
+			@date    $Date: 2000/04/25 16:52:25 $
 	*/
 	class Bond
 		: public Composite,
@@ -156,7 +156,6 @@ namespace BALL
 		};
 		//@}  
 
-		
 		/** @name Constructors and Destructors */
 		//@{
 
@@ -182,8 +181,8 @@ namespace BALL
 				\\
 				{\bf Note:} Deep copying of bonds make no sense, the parameter {\bf deep} is therefore
 				ignored.
-				The use of this method is not recommended because it may result in inconcistencies of the whole system.
-				It is used for backup only.
+				The use of this method is not recommended because it may result in inconcistencies
+				of the whole system. It is used for backup only.
 
 				@param  bond the bond to be copied (cloned)
 				@param       deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em bond}
@@ -221,7 +220,8 @@ namespace BALL
 					\item bond has connectivity with second atom (={\em second})
 				\end{itemize}
 
-				@param 	bond the instantiated bond that connects the first atom {\em first} to the second atom {\em second}
+				@param 	bond the instantiated bond that connects the first atom {\em first}
+								to the second atom {\em second}
 				@param 	first the first atom of the bond
 				@param 	second the second atom of the bond
 				@return Bond* - bond that connects the first atom {\em first} with the second atom {\em second}
@@ -248,8 +248,8 @@ namespace BALL
 		virtual void clear();
 
 		/** Explicit destructor.
-				Destroy {\em *this} bond explicitly without releasing its heap memory thus {\em *this} bond may exist further.
-				Calls \Ref{Bond::clear}.
+				Destroy {\em *this} bond explicitly without releasing its heap memory thus
+				{\em *this} bond may exist further.	Calls \Ref{Bond::clear}.
 				Set the state of {\em *this} bond to the default values. 
 				The state of {\em *this} bond is:
 				\begin{itemize}
@@ -292,8 +292,8 @@ namespace BALL
 				The state of {\em *this} bond is initialized to the state of the bond {\em bond}.\\
 				\\
 				{\bf Note:} Deep copying of bonds is not supported.
-				The use of this method is not recommended because it may result in inconcistencies of the whole system.
-				It is used for backup only.
+				The use of this method is not recommended because it may result in inconcistencies
+				of the whole system. It is used for backup only.
 
 				@param bond the bond to be copied (cloned)
 				@param deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em bond}
@@ -307,8 +307,8 @@ namespace BALL
 				The state of {\em *this} bond is initialized to the state of the bond {\em bond}.\\
 				\\
 				{\bf Note:} Deep copying of bonds is not supported.
-				The use of this method is not recommended because it may result in inconcistencies of the whole system.
-				It is used for backup only.
+				The use of this method is not recommended because it may result in inconcistencies
+				of the whole system. It is used for backup only.
 
 				@param  bond the bond to be copied (cloned)
 				@return Bond - {\em *this} bond
@@ -323,8 +323,8 @@ namespace BALL
 				The state of the bond {\em bond} is initialized to the state of {\em *this} bond.\\
 				\\
 				{\bf Note:} Deep copying of bonds is not supported.
-				The use of this method is not recommended because it may result in inconcistencies of the whole system.
-				It is used for backup only.
+				The use of this method is not recommended because it may result in inconcistencies 
+				of the whole system. It is used for backup only.
 
 				@param bond the bond to be assigned to
 				@see   Bond::set
@@ -353,8 +353,8 @@ namespace BALL
 					Access a mutable reference to the first atom of {\em *this} bond.
 					The reference is 0 if no first atom is connected to {\em *this} bond.\\
 					\\
-					{\bf Note:} No corresponding mutator Bond::setFirstAtom exists to provide consistency of the bond tables in the atoms.
-
+					{\bf Note:} No corresponding mutator Bond::setFirstAtom exists to provide consistency 
+											of the bond tables in the atoms.
 
 					@return      Atom* -
 											 mutable reference to the first atom that is connected to {\em *this} bond,
@@ -367,7 +367,8 @@ namespace BALL
 					Access a constant reference to the first atom of {\em *this} bond.
 					The reference is 0 if no first atom is connected to {\em *this} bond.\\
 					\\
-					{\bf Note:} No corresponding mutator Bond::setFirstAtom exists to provide consistency of the bond tables in the atoms.
+					{\bf Note:} No corresponding mutator Bond::setFirstAtom exists to provide consistency 
+											of the bond tables in the atoms.
 
 					@return      Atom* - 
 											 constant reference to the first atom that is connected to {\em *this} bond,
@@ -394,7 +395,8 @@ namespace BALL
 					Access a mutable reference to the second atom of {\em *this} bond.
 					The reference is 0 if no second atom is connected to {\em *this} bond.\\
 					\\
-					{\bf Note:} No corresponding mutator Bond::setSecondAtom exists to provide consistency of the bond tables in the atoms.
+					{\bf Note:} No corresponding mutator Bond::setSecondAtom exists to provide consistency
+											of the bond tables in the atoms.
 
 					@return      Atom* - 
 											 mutable reference to the second atom that is connected to {\em *this} bond,
@@ -407,7 +409,8 @@ namespace BALL
 					Access a constant reference to the second atom of {\em *this} bond.
 					The reference is 0 if no second atom is connected to {\em *this} bond.\\
 					\\
-					{\bf Note:} No corresponding mutator Bond::setSecondAtom exists to provide consistency of the bond tables in the atoms.
+					{\bf Note:} No corresponding mutator Bond::setSecondAtom exists to provide consistency
+											of the bond tables in the atoms.
 
 					@return      Atom* -
 											 constant reference to the second atom that is connected to {\em *this} bond,
@@ -415,7 +418,6 @@ namespace BALL
 					@see         Bond::getFirstAtom
 			*/
 			const Atom* getSecondAtom() const;
-				
 
 			/** Change of the bond's name.
 					Change the name of {\em *this} bond to {\em name}.
@@ -424,7 +426,6 @@ namespace BALL
 					@see         Bond::getName
 			*/
 			void setName(const String& name);
-
 
 			/** Constant inspection of the bond's name.
 					Access a constant reference to the name of {\em *this} bond.
@@ -445,7 +446,7 @@ namespace BALL
 			/** Constant inspection of the bond's order.
 					Access the order of {\em *this} bond.
 
-					@return      Order - copy of the the order of {\em *this} bond
+					@return      Order - copy of the order of {\em *this} bond
 					@see         Bond::setOrder
 			*/
 			Order getOrder() const;
@@ -461,7 +462,7 @@ namespace BALL
 			/** Constant inspection of the bond's type.
 					Access the type of {\em *this} bond.
 
-					@return      Type - copy of the the type of {\em *this} bond
+					@return      Type - copy of the type of {\em *this} bond
 					@see         Bond::setType
 			*/
 			Type getType() const;
@@ -469,7 +470,7 @@ namespace BALL
 			/** Constant inspection of the bond's length.
 					Access the length of {\em *this} bond.
 					@exception NullPointer if the bond has not two atoms
-					@return      Real - copy of the the length of {\em *this} bond
+					@return      Real - copy of the length of {\em *this} bond
 			*/
 			Real getLength() const;
 
@@ -484,10 +485,22 @@ namespace BALL
 			*/
 			static Bond* getBond(Atom& first, Atom& second);
 
-			// UNDOCUMENTED, yet: BAUSTELLE
+			/** Mutable inspection of the bonded atom
+					It is tested, if {\em *this} bond connects the two atoms.
+					if this is true a pointer to the bonded atom is returned.
+					@param			 atom , its partner is looked for
+					@return      mutable reference to the bonded atom
+											 0 if the atom has no bonded atom
+			*/
 			Atom* getBondedAtomOf(const Atom& atom);
 
-			// UNDOCUMENTED, yet: BAUSTELLE
+			/** Constant inspection of the bonded atom
+					It is tested, if {\em *this} bond connects the two atoms.
+					if this is true a pointer to the bonded atom is returned.
+					@param			 atom , its partner is looked for
+					@return      constant reference to the bonded atom
+											 0 if the atom has no bonded atom
+			*/
 			const Atom* getBondedAtomOf(const Atom& atom) const;
 
 			//@}
@@ -602,16 +615,18 @@ namespace BALL
 
 			/** Internal state and consistency self-validation.
 					Initiate self-validation of the internal state and data structure consistencies of {\em *this} bond.
-					If the internal state of {\em *this} bond is correct (self-validated) and consistent {\tt true} is returned, {\tt false} otherwise. 
+					If the internal state of {\em *this} bond is correct (self-validated) and consistent {\tt true} 
+					is returned,{\tt false} otherwise. 
 		
 					@return      bool -
-											 {\tt true} if the internal state of {\em *this} bond is correct (self-validated) and consistent,
-											 {\tt false} otherwise
+											 {\tt true} if the internal state of {\em *this} bond is correct (self-validated)
+											 and consistent, {\tt false} otherwise
 			*/
 			virtual bool isValid() const;
 
 			/** Internal state dump.
-					Dump the current internal state of {\em *this} bond to the output ostream {\em s} with dumping depth {\em depth}.
+					Dump the current internal state of {\em *this} bond to the output ostream {\em s}
+					with dumping depth {\em depth}.
 		
 					@param	s output stream where to output the internal state of {\em *this} bond
 					@param  depth the dumping depth

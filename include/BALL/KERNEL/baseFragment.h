@@ -1,4 +1,4 @@
-// $Id: baseFragment.h,v 1.14 2000/04/25 14:02:44 amoll Exp $
+// $Id: baseFragment.h,v 1.16 2000/04/26 13:05:41 amoll Exp $
 
 #ifndef BALL_KERNEL_BASEFRAGMENT_H
 #define BALL_KERNEL_BASEFRAGMENT_H
@@ -151,7 +151,6 @@ namespace BALL
 		*/
 		void setName(const String& name);
 
-
     /** Mutable inspection of the BaseFragment's name.
     Access a mutable reference to the name of {\em *this} BaseFragment.
 	  @return  String& - mutable reference to the name of {\em *this} BaseFragment
@@ -171,7 +170,7 @@ namespace BALL
 				The reference is 0 if {\em *this} BaseFragment does not have a parent molecule.\\
 				\\
 				{\bf Note:} No corresponding mutator BaseFragment::setMolecule exists to
-				consider design of contract - an BaseFragment may not insert into a molecule,
+				consider design of contract - a BaseFragment may not insert into a molecule,
 				it must be inserted via the molecule.
 				@return  Molecule* -
 								 mutable reference to the parent molecule of {\em *this} BaseFragment,
@@ -184,7 +183,7 @@ namespace BALL
 				The reference is 0 if {\em *this} BaseFragment does not have a parent molecule.\\
 				\\
 				{\bf Note:} No corresponding mutator BaseFragment::setMolecule exists to
-				consider design of contract - an BaseFragment may not insert into a molecule,
+				consider design of contract - a BaseFragment may not insert into a molecule,
 				it must be inserted via the molecule.
 				@return  Molecule* -
 								 constant reference to the parent molecule of {\em *this} BaseFragment,
@@ -225,7 +224,7 @@ namespace BALL
 		const BaseFragment* getBaseFragment(Index index) const;
 	
 		/** Get a pointer to a subaltern atom at a given position.
-				The reference is 0 if {\em *this} BaseFragment does not have a atom at the given position.
+				The reference is 0 if {\em *this} BaseFragment does not have an atom at the given position.
 				@param   index the position of the subaltern atom
 				@exception IndexUnderflow if {\tt index < 0}
 				@return  Atom* -
@@ -234,7 +233,7 @@ namespace BALL
 		Atom* getAtom(Index index);
 	
 		/** Get a pointer to a subaltern atom at a given position.
-				The reference is 0 if {\em *this} BaseFragment does not have a atom at the given position.
+				The reference is 0 if {\em *this} BaseFragment does not have an atom at the given position.
 				@param   index the position of the subaltern atom
 				@exception IndexUnderflow if {\tt index < 0}
 				@return  Atom* -
@@ -243,7 +242,7 @@ namespace BALL
 		const Atom* getAtom(Index index) const;
 	
 		/** Get a pointer to a subaltern atom with the name {\em name}.
-				The reference is 0 if {\em *this} BaseFragment does not have a atom with this name.
+				The reference is 0 if {\em *this} BaseFragment does not have an atom with this name.
 				@param   name the name of the subaltern atom
 				@return  Atom* -
 								 mutable reference to the subaltern atom with the name {\em name} of {\em *this} BaseFragment,
@@ -251,7 +250,7 @@ namespace BALL
 		Atom* getAtom(const String& name);
 	
 		/** Get a pointer to a subaltern atom with the name {\em name}.
-				The reference is 0 if {\em *this} BaseFragment does not have a atom with this name.
+				The reference is 0 if {\em *this} BaseFragment does not have an atom with this name.
 				@param   name the name of the subaltern atom
 				@return  Atom* -
 								 constant reference to the subaltern atom with the name {\em name} of {\em *this} BaseFragment,
@@ -298,13 +297,13 @@ namespace BALL
 		*/
 		void insert(Atom& atom);
 
-		/** Insert an atom before an given {\em Comosite} object.
+		/** Insert an atom before a given {\em Comosite} object.
 				@param atom, the atom to insert
 				@param before, the {\em Comosite} object to insert before
 		*/
 		void insertBefore(Atom& atom, Composite& before);
 
-		/** Insert an atom after an given {\em Comosite} object.
+		/** Insert an atom after a given {\em Comosite} object.
 				@param atom, the atom to insert
 				@param after, the {\em Comosite} object to insert after
 		*/
@@ -361,12 +360,11 @@ namespace BALL
 
 		/** Remove a BaseFragment
 				@param base_fragment the BaseFragment to remove
-				@return false if composite could not be removed
+				@return false if base_fragment could not be removed
 		*/
 		bool remove(BaseFragment& base_fragment);
 
 		//@}
-
 
 		/**	@name	Miscellaneous */
 		//@{
@@ -377,7 +375,6 @@ namespace BALL
 
 		//@}
 	
-
 		/**	@name	Predicates */
 		//@{
 
@@ -439,6 +436,7 @@ namespace BALL
 		/**	@name	Internal Iteration
 		*/
 		//@{
+
 		///	Apply to all bonds inside this BaseFragment
 		bool applyIntraBond(UnaryProcessor<Bond>& processor);
 

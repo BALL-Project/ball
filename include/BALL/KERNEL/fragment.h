@@ -1,4 +1,4 @@
-// $Id: fragment.h,v 1.4 2000/04/17 13:51:24 amoll Exp $
+// $Id: fragment.h,v 1.5 2000/04/25 16:52:25 amoll Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -46,16 +46,16 @@ namespace BALL
 		/**	@name	Constructors and Destructors */
 		//@{
 
-		///
+		/** Default constructor */
 		Fragment();
 	
-		///
+		/** Copy constructor */
 		Fragment(const Fragment& fragment, bool deep = true);
 	
-		///
+		/** Constructor */
 		Fragment(const String& name);
 
-		///
+		/** Destructor */
 		virtual ~Fragment();
 
 		//@}
@@ -74,7 +74,12 @@ namespace BALL
 		/**	@name	Assignment */
 		//@{
 
-		///
+		/** Assignment operator.
+				Assign the Fragment {\em fragment} to {\em *this} fragment.
+				The assignment is either deep or shallow (default).
+				@param   fragment the Fragment to be copied (cloned)
+				@return  Fragment& - {\em *this} Fragment
+		*/
 		Fragment& operator = (const Fragment& fragment);
 
 		//@}
@@ -83,7 +88,13 @@ namespace BALL
 		/**	@name	Debugging and Diagnostics */
 		//@{
 
-		///
+		/** Internal state dump.
+				Dump the current internal state of {\em *this} Fragment to the output ostream 
+				{\em s} with dumping depth {\em depth}.
+	
+				@param   s - output stream where to output the internal state of {\em *this} Fragment
+				@param   depth - the dumping depth
+		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
