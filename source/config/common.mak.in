@@ -1,8 +1,8 @@
 # 
-# $Id: common.mak.in,v 1.1 1999/08/26 08:02:33 oliver Exp $
+# $Id: common.mak.in,v 1.2 1999/08/26 11:00:18 oliver Exp $
 #
 
-include @BALL_PATH@/source/@BINFMT@/config.mak
+include @BALL_PATH@/source@BINFMT_PATH@/config.mak
 
 OBJECTS 	= $(CPP_SOURCES:.C=.o)
 
@@ -17,13 +17,13 @@ default_clean:
 
 collectlib:	default
 	@echo "collecting objects from $(DIRECTORY)..."
-	@for i in $(OBJECTS); do echo $(DIRECTORY)/$$i >>@BALL_PATH@/source/@BINFMT@/$(THISLIB).objects ; done
+	@for i in $(OBJECTS); do echo $(DIRECTORY)/$$i >>@BALL_PATH@/source@BINFMT_PATH@/$(THISLIB).objects ; done
 
 
 depend:
 	@echo "creating dependencies for $(DIRECTORY)..."
 	@echo "" > .Dependencies
 	@@CXX_MAKEDEPEND@ @MAKEDEP_CXX_OPTS@ $(CPP_SOURCES) $(STD_CPP_INCLUDES) $(BALL_INCLUDES) @MAKEDEP_CXX_SUFFIX@
-	@echo "include @BALL_PATH@/source/@BINFMT@/$(DIRECTORY)/.Dependencies" >> @BALL_PATH@/source/@BINFMT@/.Dependencies
+	@echo "include @BALL_PATH@/source@BINFMT_PATH@/$(DIRECTORY)/.Dependencies" >> @BALL_PATH@/source@BINFMT_PATH@/.Dependencies
 
-include @BALL_PATH@/source/@BINFMT@/.Dependencies
+include @BALL_PATH@/source/@BINFMT_PATH@/.Dependencies
