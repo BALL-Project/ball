@@ -14,8 +14,9 @@
 
 namespace BALL
 {
-	/**	Generic .
-			\\
+	/**	Processor, which marks all atoms and bonds in a ring structure with the
+	    Composite Property "InRing".
+			calculateSSSR() can also compute the number of rings found.
 	*/
 	class RingPerceptionProcessor
 		:	public UnaryProcessor<AtomContainer>
@@ -38,28 +39,32 @@ namespace BALL
 		/** Destructor
 		*/
 		~RingPerceptionProcessor();
-		//@}
 
+		//@}
 		/** @name Assignment
 		*/
 		//@{
+
 		/** Assignment operator
 		*/
 		RingPerceptionProcessor& operator = (const RingPerceptionProcessor& rp);
-		//@}
 
+		//@}
 		/** @name Accessors
 		*/
 		//@{
+
 		/** Method to get a smallest set of smallest rings (SSSR) from a molecule.
-				æparam SSSR, vector of rings, where the rings are stored in vector<Atom*>
-				@param Molecule, the molecule from which the rings to be percepted
+				@param SSSR, vector of rings, where the rings are stored in vector<Atom*>
+				@param AtomContiner, from which AtomContainer the rings are to be percepted
 		*/
 		Size calculateSSSR(vector<vector<Atom*> >& sssr, AtomContainer& ac);
+
 		//@}
 		/** @name Processor-realted methods
 		*/
 		//@{
+
 		Processor::Result operator () (AtomContainer& ac);
 		//@}
 		
@@ -68,19 +73,17 @@ namespace BALL
 		/*_ @name Accessors
 		*/
 		//@{
+
 		/*_ Method that return the smallest ring which atom n participates
 				@param atom from which the search is started
 				@param ring set in which the found ring is stored (if any)
 		*/
 		Size getRing_(Atom* n, HashSet<Atom*>& ring_set);
 
-		/*_ Method that deletes a atom from a molecular graph which has only
-				nodes of degree three (or higher). That ring which leads to the smallest
-				ring when deleted is deleted.
-				@param ring set
-				@param moelcule 
+		/*_ The atom which is part of the smallest ring is deleted.
+				@param ring_set atoms to test
 		*/
-		void checkEdges_(HashSet<Atom*>& ring_set, AtomContainer& ac);
+		void checkEdges_(HashSet<Atom*>& ring_set);
 		//@}
 	};
 } // namespace BALL
