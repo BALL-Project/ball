@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.2 1999/08/31 22:01:16 oliver Exp $
+// $Id: atom.C,v 1.3 1999/09/05 09:02:56 oliver Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -28,7 +28,7 @@ namespace BALL
 	{
 	}
 		
-	Atom::Atom(const Atom &atom, bool deep)
+	Atom::Atom(const Atom& atom, bool deep)
 		:	Composite(atom, deep),
 			PropertyManager(atom, deep),
 			Selectable(atom, deep),
