@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.95.2.1 2005/01/12 23:00:01 amoll Exp $
+// $Id: displayProperties.C,v 1.95.2.2 2005/01/14 12:50:02 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -452,7 +452,9 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 			rep->getComposites().insert(*it);
 		}
 
-		getMainControl()->insert(*rep);
+		// this is not straight forward, but we have to prevent a second rendering run in the Scene...
+		// the insertion into the PrimitiveManager is needed to allow the Representation::update
+		getMainControl()->getPrimitiveManager().insert(*rep, false);
 	}
 
 	apply_button->setEnabled(false);
@@ -461,6 +463,10 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 
 	if (new_representation)
 	{
+		// now we can add the Representation to the GeometricControl
+		RepresentationMessage* rm = new RepresentationMessage(*rep, RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL);
+		notify_(rm);
+
 		// no refocus, if a this is not the only Representation
 		if ((getMainControl()->getPrimitiveManager().getRepresentations().size() < 2) && 
 				composites.size() > 0)

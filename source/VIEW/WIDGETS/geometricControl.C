@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.72.2.3 2005/01/13 23:55:39 amoll Exp $
+// $Id: geometricControl.C,v 1.72.2.4 2005/01/14 12:53:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -196,6 +196,7 @@ namespace BALL
 					return;
 
 				case RepresentationMessage::ADD:
+				case RepresentationMessage::ADD_TO_GEOMETRIC_CONTROL:
 					addRepresentation(*rep);
 					return;
 			
