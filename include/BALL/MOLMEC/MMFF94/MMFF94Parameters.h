@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.h,v 1.1.2.7 2005/03/31 13:45:29 amoll Exp $ 
+// $Id: MMFF94Parameters.h,v 1.1.2.8 2005/04/02 13:51:14 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -27,7 +27,46 @@ namespace BALL
 	/// hold the maximum number of MMFF94 atom types + 1 (wildcard)
 	extern Size MMFF94_number_atom_types;
 
-	///
+	/**	MMFF94 equivalences for atom types (see MMFFDEF.PAR)
+      \ingroup  MMFF94
+	*/
+	class MMFF94AtomTypeEquivalences
+	{
+		public: 
+
+		///
+		MMFF94AtomTypeEquivalences();
+
+		///
+		MMFF94AtomTypeEquivalences(const MMFF94AtomTypeEquivalences& to_copy);
+
+		///
+		~MMFF94AtomTypeEquivalences();
+		
+		///
+		bool readParameters(const String& filename);
+		
+		/** Get an equivalence atom type for the given atom type.
+		 		@param number between 1 and 4, 4 is the most general equivalence
+				@return Index -1 if no equivalence found
+		*/
+		Index getEquivalence(Position original, Position number) const;
+
+		///
+		bool isInitialized() { return is_initialized_;}
+
+		protected:
+
+		vector<vector<Position> > equivalences_;
+		vector<String> 	 names_;
+		vector<bool> 	 	 exists_;
+
+		bool is_initialized_;
+	};
+	
+
+	/** Class to store the values of an atom type from MMFFPROP.PAR
+	*/
 	struct MMFF94AtomTypeData
 	{
 		///
@@ -61,7 +100,7 @@ namespace BALL
 	};
 
 
-	/**	MMFF94 parameters for bond stretching
+	/**	MMFF94 parameters for atom types (see MMFFPROP.PAR)
       \ingroup  MMFF94
 	*/
 	class MMFF94AtomTypesContainer
@@ -96,7 +135,7 @@ namespace BALL
 
 	/////////////////////////////////////////////////////////////////////////////
 	
-	/**	MMFF94 parameters for bond stretching
+	/**	MMFF94 parameters for bond stretching (see MMFFBOND.PAR)
       \ingroup  MMFF94
 	*/
 	class MMFF94StretchParameters
@@ -178,7 +217,7 @@ namespace BALL
 
 ///////////////////////////////////////////////////////////////////////////
 
-	/**	MMFF94 parameters for bond bending
+	/**	MMFF94 parameters for bond bending (see MMFFANG.PAR)
       \ingroup  MMFF94
 	*/
 	class MMFF94BendParameters
@@ -249,7 +288,7 @@ namespace BALL
 ////////////////////////////////////////////////////////////////////
 
 	
-	/**	MMFF94 parameters for stretch-bend interactions
+	/**	MMFF94 parameters for stretch-bend interactions (see MMFFSTBN.PAR)
       \ingroup  MMFF94
 	*/
 	class MMFF94StretchBendParameters
@@ -323,4 +362,4 @@ namespace BALL
 
 } // namespace BALL
 
-#endif // BALL_MOLMEC_MMFF94_H
+#endif // BALL_MOLMEC_MMFF94_MMFF94PARAMETERS_H

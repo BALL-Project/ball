@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94.h,v 1.1.2.4 2005/03/31 13:45:28 amoll Exp $ 
+// $Id: MMFF94.h,v 1.1.2.5 2005/04/02 13:51:13 amoll Exp $ 
 //
 
 // Molecular Mechanics: MMFF94 force field class
@@ -178,6 +178,12 @@ namespace BALL
 		
 		///
 		const vector<HashSet<Atom*> >& getAromaticRings() const { return aromatic_rings_;}
+		
+		///
+		bool isInOneAromaticRing(const Bond& bond) const;
+		
+		///
+		bool assignMMFF94BondType(Bond& bond) const;
 
 		///
 		const vector<MMFF94AtomTypeData>& getAtomTypes() const { return atom_types_.getAtomTypes();}
@@ -186,10 +192,7 @@ namespace BALL
  		const MMFF94StretchParameters& getStretchParameters() const { return bond_parameters_;}
 
 		///
-		bool assignMMFF94BondType(Bond& bond) const;
-
-		///
-		bool isInOneAromaticRing(const Bond& bond) const;
+		const MMFF94AtomTypeEquivalences & getEquivalences() const { return equivalences_;}
 
 		//@}
 
@@ -200,7 +203,8 @@ namespace BALL
 			
 		String											folder_;
 		MMFF94AtomTypesContainer 		atom_types_;
-		MMFF94StretchParameters bond_parameters_;
+		MMFF94StretchParameters 		bond_parameters_;
+		MMFF94AtomTypeEquivalences  equivalences_;
 		vector<HashSet<Atom*> > 		rings_;
 		vector<HashSet<Atom*> > 		aromatic_rings_;
 		bool												parameters_initialized_;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Bend.C,v 1.1.2.12 2005/04/01 15:29:58 amoll Exp $
+// $Id: MMFF94Bend.C,v 1.1.2.13 2005/04/02 13:51:00 amoll Exp $
 //
 
 #include <BALL/MOLMEC/MMFF94/MMFF94Bend.h>
@@ -13,7 +13,7 @@
 
 #include <math.h>
 
-  #define BALL_DEBUG_MMFF
+//     #define BALL_DEBUG_MMFF
 
 using namespace std;
 
@@ -84,6 +84,7 @@ namespace BALL
 		Bend this_bend;
 
 		const vector<MMFF94AtomTypeData>& atom_types = ((MMFF94*)getForceField())->getAtomTypes();
+		const MMFF94AtomTypeEquivalences& equivalences = ((MMFF94*)getForceField())->getEquivalences();
 
 		vector<Atom*>::const_iterator	atom_it = getForceField()->getAtoms().begin();
 		Atom::BondIterator it1;
@@ -118,28 +119,57 @@ namespace BALL
 																				*this_bend.atom2->ptr,
 																				*this_bend.atom3->ptr);
 
-					// check for parameters
-					if (!parameters_.getParameters(this_bend.ATIJK, atom_type_a1, atom_type_a2, atom_type_a3, this_bend.ka, this_bend.theta0) &&
-							// try wildcard matching
-						  !parameters_.getParameters(this_bend.ATIJK, 0, 						atom_type_a2, 0, 						this_bend.ka, this_bend.theta0)) 
+					// check for parameters in a step down procedure
+					// full parameters
+					if (parameters_.getParameters(this_bend.ATIJK, 
+																			  atom_type_a1, 
+																				atom_type_a2, 
+																				atom_type_a3, 
+																				this_bend.ka, this_bend.theta0)
+						// we ignore the step 1-1-1, as it is currently superflous
+						|| // 2-2-2
+						parameters_.getParameters(this_bend.ATIJK, 
+																			equivalences.getEquivalence(atom_type_a1, 2),
+																			equivalences.getEquivalence(atom_type_a2, 2),
+																			equivalences.getEquivalence(atom_type_a3, 2),
+																			this_bend.ka, this_bend.theta0)
+						|| // 3-2-3
+						parameters_.getParameters(this_bend.ATIJK, 
+																			equivalences.getEquivalence(atom_type_a1, 3),
+																			equivalences.getEquivalence(atom_type_a2, 2),
+																			equivalences.getEquivalence(atom_type_a3, 3),
+																			this_bend.ka, this_bend.theta0)
+						|| // 4-2-4
+						parameters_.getParameters(this_bend.ATIJK, 
+																			equivalences.getEquivalence(atom_type_a1, 4),
+																			equivalences.getEquivalence(atom_type_a2, 2),
+																			equivalences.getEquivalence(atom_type_a3, 4),
+																			this_bend.ka, this_bend.theta0)
+						|| // try full wildcard matching
+						parameters_.getParameters(this_bend.ATIJK, 
+																			0,
+																			equivalences.getEquivalence(atom_type_a1, 2),
+																			0,
+																			this_bend.ka, this_bend.theta0))
 					{
-						// complain if nothing was found
-						getForceField()->error() << "MMFF94Bend::setup: cannot find bend parameters for atom types:"
-																		 << atom_type_a1 << "-" << atom_type_a2 << "-" << atom_type_a3 << "bend " << this_bend.ATIJK
-																		 << " (atoms are: " << this_bend.atom1->ptr->getFullName() << "/" 
-																												<< this_bend.atom2->ptr->getFullName() << "/" 
-																												<< this_bend.atom3->ptr->getFullName() << ")" << endl;
+						this_bend.is_linear = atom_types[atom_type_a2].lin;
 
-						getForceField()->getUnassignedAtoms().insert(it2->getPartner(**atom_it));
-						getForceField()->getUnassignedAtoms().insert(*atom_it);
-						getForceField()->getUnassignedAtoms().insert(it1->getPartner(**atom_it));
+						// store the bend parameters otherwise
+						bends_.push_back(this_bend);
 						continue;
 					}
+					
+					// complain if nothing was found
+					getForceField()->error() << "MMFF94Bend::setup: cannot find bend parameters for atom types:"
+																	 << atom_type_a1 << "-" << atom_type_a2 << "-" << atom_type_a3 
+																	 << "bend " << this_bend.ATIJK
+																	 << " (atoms are: " << this_bend.atom1->ptr->getFullName() << "/" 
+																	 << this_bend.atom2->ptr->getFullName() << "/" 
+																	 << this_bend.atom3->ptr->getFullName() << ")" << endl;
 
-					this_bend.is_linear = atom_types[atom_type_a2].lin;
-
-					// store the bend parameters otherwise
-					bends_.push_back(this_bend);
+					getForceField()->getUnassignedAtoms().insert(it2->getPartner(**atom_it));
+					getForceField()->getUnassignedAtoms().insert(*atom_it);
+					getForceField()->getUnassignedAtoms().insert(it1->getPartner(**atom_it));
 				}
 			}
 		}

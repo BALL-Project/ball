@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: MMFF94Parameters.C,v 1.1.2.13 2005/04/01 15:29:58 amoll Exp $
+// $Id: MMFF94Parameters.C,v 1.1.2.14 2005/04/02 13:51:00 amoll Exp $
 //
 // Molecular Mechanics: MMFF94 force field parameters 
 //
@@ -18,6 +18,115 @@ namespace BALL
 {
 
 	Size MMFF94_number_atom_types = 100;
+
+
+	MMFF94AtomTypeEquivalences::MMFF94AtomTypeEquivalences()
+		: is_initialized_(false)
+	{
+	}
+
+	MMFF94AtomTypeEquivalences::~MMFF94AtomTypeEquivalences()
+	{
+		equivalences_.clear();
+		names_.clear();
+		exists_.clear();
+	}
+
+
+	MMFF94AtomTypeEquivalences::MMFF94AtomTypeEquivalences(const MMFF94AtomTypeEquivalences& to_copy)
+	{
+		equivalences_ = to_copy.equivalences_;
+		names_ = to_copy.names_;
+		exists_ = to_copy.exists_;
+	}
+
+	bool MMFF94AtomTypeEquivalences::readParameters(const String& filename)
+	{
+		equivalences_.clear();
+		names_.clear();
+		exists_.clear();
+
+		LineBasedFile infile(filename);
+		vector<String> fields;
+
+		equivalences_.resize(MMFF94_number_atom_types);
+		names_.resize(MMFF94_number_atom_types);
+		exists_.resize(MMFF94_number_atom_types);
+
+		for (Position pos = 0; pos < MMFF94_number_atom_types; pos++)
+		{
+			exists_[pos] = false;
+		}
+
+		try
+		{
+			while (infile.readLine())
+			{
+				// comments
+				if (infile.getLine().hasPrefix("*") || infile.getLine().hasPrefix("$")) 
+				{
+					continue;
+				}
+				
+				if (infile.getLine().split(fields) < 7)
+				{
+					Log.error() << "Error in " << __FILE__ << " " << __LINE__ << " : " 
+										  << filename << " Not 7 fields in one line " 
+											<< infile.getLine() << std::endl;
+					return false;
+				}
+
+				Position primary = fields[1].toUnsignedInt();
+				
+				// shouldnt happen, but just to be sure
+				if (primary >= exists_.size())
+				{
+					names_.resize(primary + 10);
+					exists_.resize(primary + 10);
+					equivalences_.resize(primary + 10);
+				}
+
+				// ok, get the data
+				names_[primary] = fields[0];
+				equivalences_[primary].resize(4);
+
+				equivalences_[primary][0] = fields[2].toUnsignedInt();
+				equivalences_[primary][1] = fields[3].toUnsignedInt();
+				equivalences_[primary][2] = fields[4].toUnsignedInt();
+				equivalences_[primary][3] = fields[5].toUnsignedInt();
+
+				exists_[primary] = true;
+			}
+		}
+		catch(...)
+		{
+			Log.error() << "Error while parsing line " << infile.readLine() << std::endl;
+			Log.error() << " in File " << filename << std::endl;
+			infile.close();
+			return false;
+		}
+
+
+		is_initialized_ = true;
+		return true;
+	}
+
+
+	Index MMFF94AtomTypeEquivalences::getEquivalence(Position original, Position number) const
+	{
+		if (original >= equivalences_.size() || !exists_[original] ||
+				number < 1 || number > 4) 
+		{
+			return -1;
+		}
+
+		return equivalences_[original][number - 1];
+	}
+
+
+	///////////////////////////////////////////////////////////
+	///////////////////////////////////////////////////////////
+	
 
 	MMFF94AtomTypeData::MMFF94AtomTypeData()
 		: aspec(0),
@@ -54,7 +163,7 @@ namespace BALL
 		LineBasedFile infile(filename);
 		vector<String> fields;
 
-		data_.resize(99);
+		data_.resize(MMFF94_number_atom_types);
 
 		try
 		{
