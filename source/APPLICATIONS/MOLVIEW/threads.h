@@ -1,11 +1,11 @@
 #ifndef BALL_APPLICATIONS_MOLVIEW_THREADS_H
 #define BALL_APPLICATIONS_MOLVIEW_THREADS_H
 
-#ifdef BALL_QT_HAS_THREADS
-
 #ifndef BALL_COMMON_H
 	#include <BALL/common.h>
 #endif
+
+#ifdef BALL_QT_HAS_THREADS
 
 #ifndef BALL_DATATYPE_STRING_H
  #include <BALL/DATATYPE/string.h>

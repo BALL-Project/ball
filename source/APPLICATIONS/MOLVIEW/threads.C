@@ -1,7 +1,7 @@
 // Do nothing, if no thread support
-#ifdef BALL_QT_HAS_THREADS
 
 #include "threads.h"
+#ifdef BALL_QT_HAS_THREADS
 #include "mainframe.h"
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
@@ -11,7 +11,6 @@
 namespace BALL
 {
 	using namespace VIEW;
-
 
 SimulationThread::SimulationThread()
 	: QThread(),
