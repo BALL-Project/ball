@@ -1,4 +1,4 @@
-// $Id: baseIterator.h,v 1.8 2001/05/30 22:27:41 oliver Exp $
+// $Id: baseIterator.h,v 1.9 2001/06/05 15:37:35 anker Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -28,15 +28,15 @@ namespace BALL
 			provide the full STL iterator interface, but also offer additional
 			features.
 				
-			An important difference exists for the iterators of the kernel objects. 
-			For most kernel onjects, multiple iterators exist. Therefore, we could
-			not simply use {\tt begin()} and {\tt end()} like in STL, but we
-			introduced specialized methods like \Ref{AtomContainer::beginAtom} and
-			\Ref{AtomContainer::endAtom}. For similar reasons, the iterators for
-			kernel classes are not implemented as nested classes of the respective kernel
-			classes, but as independent classes to avoid code replication.
-			An exception is \Ref{Atom::BondIterator}, which is relevant to \Ref{Atom} 
-			alone.
+			An important difference exists for the iterators of the kernel
+			objects.  For most kernel onjects, multiple iterators exist.
+			Therefore, we could not simply use {\tt begin()} and {\tt end()} like
+			in STL, but we introduced specialized methods like
+			\Ref{AtomContainer::beginAtom} and \Ref{AtomContainer::endAtom}. For
+			similar reasons, the iterators for kernel classes are not implemented
+			as nested classes of the respective kernel classes, but as
+			independent classes to avoid code replication. An exception is
+			\Ref{Atom::BondIterator}, which is relevant to \Ref{Atom} alone.
 
 			Each BALL iterator can be bound to a container, so once the iteration
 			has started, it "knows" about the end() of the container.
@@ -56,12 +56,12 @@ namespace BALL
 			\\
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	class BaseIterator
+	class ConstBaseIterator
 	{
 
 		public:
 
-		BALL_CREATE(BaseIterator)
+		BALL_CREATE(ConstBaseIterator)
 
 		/**	@name Typedefs.
 				The names of these typedefs deviate from the usual
@@ -94,20 +94,20 @@ namespace BALL
 		/**	Default constructor.
 				This constructor creates a new iterator and registers it.
 		*/
-		BaseIterator()
+		ConstBaseIterator()
 			throw();
 	
 		/**	Copy constructor.
 				This constructor creates a new iterator from an existing one.
 				@param iterator the iterator to be copied
 		*/
-		BaseIterator(const BaseIterator& iterator, bool /* deep */ = true)
+		ConstBaseIterator(const ConstBaseIterator& iterator, bool /* deep */ = true)
 			throw();
 
 		/**	Destructor.
 				Deregisters and destructs the iterator.
 		*/
-		virtual ~BaseIterator()
+		virtual ~ConstBaseIterator()
 			throw();
 
 		//@}
@@ -120,14 +120,14 @@ namespace BALL
 				Assigns the contents of an iterator to another iterator.
 				@param	iterator the iterator to be copied
 		*/
-		const BaseIterator& operator = (const BaseIterator &iterator)
+		const ConstBaseIterator& operator = (const ConstBaseIterator &iterator)
 			throw();
 
 		/**	Swap two iterators.
 				This method swaps the contents of two iterators of the same
 				type.
 		*/
-		void swap(BaseIterator &iterator)
+		void swap(ConstBaseIterator &iterator)
 			throw();
 
 		//@}
@@ -136,17 +136,20 @@ namespace BALL
 		*/
 		//@{
 
-		/** Return the total number of iterators of that type currently instantiated.
+		/** Return the total number of iterators of that type currently
+				instantiated.
 		*/
 		static Size countIterators()
 			throw();
 
-		/**	Return the number of iterators of that type currently bound to a container.
+		/**	Return the number of iterators of that type currently bound to a
+				container.
 		*/
 		static Size countIterators(const Container& container)
 			throw();
 
-		/** Return the number of iterators of that type currently pointing to a certain position of a given container.
+		/** Return the number of iterators of that type currently pointing to a
+				certain position of a given container.
 		*/
 		static Size countIterators(const Container& container,
 				const Position& position)
@@ -162,19 +165,9 @@ namespace BALL
 		void setTraits(const Traits& iterator_traits)
 			throw();
 
-		/** Get a mutable reference to the traits of this iterator.
-		*/
-		Traits& getTraits()
-			throw();
-
 		/** Get a constant reference to the traits of this iterator.
 		*/
 		const Traits& getTraits() const
-			throw();
-
-		/** Get a pointer to the container of this iterator.
-		*/
-		Container* getContainer()
 			throw();
 
 		/** Get a constant pointer to the container of this iterator.
@@ -193,27 +186,16 @@ namespace BALL
 				Position is a template within this context and not the BALL data
 				type.
 		*/
-		operator Position& ()
+		operator const Position& () const
 			throw();
 
 		/** Convert an iterator to its Datatype by returning a reference to 
-				the current data.
-		*/
-		DataType& operator * ()
-			throw(Exception::InvalidIterator);
-
-		/** Convert an iterator to its Datatype by returning a const reference to 
 				the current data.
 		*/
 		const DataType& operator * () const
 			throw(Exception::InvalidIterator);
 
 		/** Return a pointer to the current data.
-		*/
-		DataType* operator -> ()
-			throw(Exception::InvalidIterator);
-
-		/** Return a const pointer to the data the iterator is pointing at.
 		*/
 		const DataType* operator -> () const
 			throw(Exception::InvalidIterator);
@@ -227,13 +209,13 @@ namespace BALL
 		/** Equality operator.
 				@return {\bf true} if both iterators point to the same item.
 		*/
-		bool operator == (const BaseIterator& iterator) const
+		bool operator == (const ConstBaseIterator& iterator) const
 			throw(Exception::IncompatibleIterators);
 
 		/** Inequality operator. 
 				@see operator ==
 		*/
-		bool operator != (const BaseIterator &iterator) const
+		bool operator != (const ConstBaseIterator &iterator) const
 			throw();
 
 		/** Singularity predicate.
@@ -257,11 +239,11 @@ namespace BALL
 
 		/*_
 		*/
-		BaseIterator(const Container& container)
+		ConstBaseIterator(const Container& container)
 			throw();
 
 		//_
-		static BaseIterator*& getFirstIterator_();
+		static ConstBaseIterator*& getFirstIterator_();
 
 		//_
 		static Size& countIterators_();
@@ -279,10 +261,10 @@ namespace BALL
 		Traits*					traits_ptr_;
 
 		///
-		BaseIterator* 	previous_;
+		ConstBaseIterator* 	previous_;
 
 		///
-		BaseIterator* 	next_;
+		ConstBaseIterator* 	next_;
 
 
 	};
@@ -291,10 +273,10 @@ namespace BALL
 	// method implementations
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	BaseIterator<Container, DataType, Position, Traits>::BaseIterator()
+	ConstBaseIterator<Container, DataType, Position, Traits>::ConstBaseIterator()
 		throw()
 		:	previous_(0),
-			next_(BaseIterator::getFirstIterator_())
+			next_(ConstBaseIterator::getFirstIterator_())
 	{
 		traits_ptr_ = &traits_;
 
@@ -303,15 +285,15 @@ namespace BALL
 			next_->previous_ = this;
 		}
 
-		BaseIterator::getFirstIterator_() = this;
-		++BaseIterator::countIterators_();
+		ConstBaseIterator::getFirstIterator_() = this;
+		++ConstBaseIterator::countIterators_();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	BaseIterator<Container, DataType, Position, Traits>::BaseIterator(const BaseIterator& iterator, bool /* deep */ = true)
+	ConstBaseIterator<Container, DataType, Position, Traits>::ConstBaseIterator(const ConstBaseIterator& iterator, bool /* deep */ = true)
 		throw()
 		:	previous_(0),
-			next_(BaseIterator::getFirstIterator_())
+			next_(ConstBaseIterator::getFirstIterator_())
 	{
 		traits_ptr_ = &traits_;
 		*traits_ptr_ = *(iterator.traits_ptr_);
@@ -321,18 +303,18 @@ namespace BALL
 			next_->previous_ = this;
 		}
 
-		BaseIterator::getFirstIterator_() = this;
-		++BaseIterator::countIterators_();
+		ConstBaseIterator::getFirstIterator_() = this;
+		++ConstBaseIterator::countIterators_();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	BaseIterator<Container, DataType, Position, Traits>::~BaseIterator()
+	ConstBaseIterator<Container, DataType, Position, Traits>::~ConstBaseIterator()
 		throw()
 	{
 
-		if (BaseIterator::getFirstIterator_() == this)
+		if (ConstBaseIterator::getFirstIterator_() == this)
 		{
-			BaseIterator::getFirstIterator_() = next_;
+			ConstBaseIterator::getFirstIterator_() = next_;
 		}
 
 		if (previous_ != 0)
@@ -345,11 +327,11 @@ namespace BALL
 			next_->previous_ = previous_;
 		}
 
-		--BaseIterator::countIterators_();
+		--ConstBaseIterator::countIterators_();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	const BaseIterator<Container, DataType, Position, Traits>& BaseIterator<Container, DataType, Position, Traits>::operator = (const BaseIterator<Container, DataType, Position, Traits>& iterator)
+	const ConstBaseIterator<Container, DataType, Position, Traits>& ConstBaseIterator<Container, DataType, Position, Traits>::operator = (const ConstBaseIterator<Container, DataType, Position, Traits>& iterator)
 		throw()
 	{
 		if (this != &iterator)
@@ -361,7 +343,7 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	void BaseIterator<Container, DataType, Position, Traits>::swap(BaseIterator &iterator)
+	void ConstBaseIterator<Container, DataType, Position, Traits>::swap(ConstBaseIterator &iterator)
 		throw()
 	{
 		Traits* tempiteratorTraits = traits_ptr_;
@@ -370,19 +352,19 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	Size BaseIterator<Container, DataType, Position, Traits>::countIterators()
+	Size ConstBaseIterator<Container, DataType, Position, Traits>::countIterators()
 		throw()
 	{
-		return BaseIterator::countIterators_();
+		return ConstBaseIterator::countIterators_();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	Size BaseIterator<Container, DataType, Position, Traits>::countIterators(const Container& container)
+	Size ConstBaseIterator<Container, DataType, Position, Traits>::countIterators(const Container& container)
 		throw()
 	{
 		Size size = 0;
 
-		for (BaseIterator* iterator = BaseIterator::getFirstIterator_(); 
+		for (ConstBaseIterator* iterator = ConstBaseIterator::getFirstIterator_(); 
 				 iterator != 0; iterator = iterator->next_)
 		{
 			if (iterator->traits_ptr_->getContainer() == &container)
@@ -395,12 +377,12 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	Size BaseIterator<Container, DataType, Position, Traits>::countIterators(const Container& container, const Position& position)
+	Size ConstBaseIterator<Container, DataType, Position, Traits>::countIterators(const Container& container, const Position& position)
 		throw()
 	{
 		Size size = 0;
 
-		for (BaseIterator *iterator = BaseIterator::getFirstIterator_();
+		for (ConstBaseIterator *iterator = ConstBaseIterator::getFirstIterator_();
 				 iterator != 0; iterator = iterator->next_)
 		{
 			if (iterator->traits_ptr_->getContainer() == &container
@@ -414,68 +396,42 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	void BaseIterator<Container, DataType, Position, Traits>::invalidate()
+	void ConstBaseIterator<Container, DataType, Position, Traits>::invalidate()
 		throw()
 	{
 		traits_ptr_->invalidate();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	void BaseIterator<Container, DataType, Position, Traits>::setTraits(const Traits &iteratorTraits)
+	void ConstBaseIterator<Container, DataType, Position, Traits>::setTraits(const Traits &iteratorTraits)
 		throw()
 	{
 		*traits_ptr_ = iteratorTraits;
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	Traits& BaseIterator<Container, DataType, Position, Traits>::getTraits()
+	const Traits& ConstBaseIterator<Container, DataType, Position, Traits>::getTraits() const
 		throw()
 	{
 		return *traits_ptr_;
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	const Traits& BaseIterator<Container, DataType, Position, Traits>::getTraits() const
-		throw()
-	{
-		return *traits_ptr_;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	Container* BaseIterator<Container, DataType, Position, Traits>::getContainer()
+	const Container* ConstBaseIterator<Container, DataType, Position, Traits>::getContainer() const 
 		throw()
 	{
 		return traits_ptr_->getContainer();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	const Container* BaseIterator<Container, DataType, Position, Traits>::getContainer() const
-		throw()
-	{
-		return traits_ptr_->getContainer();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BaseIterator<Container, DataType, Position, Traits>::operator Position& ()
+	ConstBaseIterator<Container, DataType, Position, Traits>::operator const Position& () const
 		throw()
 	{
 		return traits_ptr_->getPosition();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	DataType& BaseIterator<Container, DataType, Position, Traits>::operator * ()
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		return (DataType &)traits_ptr_->getData();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType& BaseIterator<Container, DataType, Position, Traits>::operator *() const
+	const DataType& ConstBaseIterator<Container, DataType, Position, Traits>::operator * () const
 		throw(Exception::InvalidIterator)
 	{
 		if (!traits_ptr_->isValid())
@@ -487,19 +443,7 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	DataType* BaseIterator<Container, DataType, Position, Traits>::operator -> ()
-		throw(Exception::InvalidIterator)
-	{
-		if (!traits_ptr_->isValid())
-		{
-			throw Exception::InvalidIterator(__FILE__, __LINE__);
-		}
-
-		return (DataType *)&(traits_ptr_->getData());
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* BaseIterator<Container, DataType, Position, Traits>::operator -> () const
+	const DataType* ConstBaseIterator<Container, DataType, Position, Traits>::operator -> () const
 		throw(Exception::InvalidIterator)
 	{
 		if (!traits_ptr_->isValid())
@@ -510,8 +454,9 @@ namespace BALL
 		return (const DataType *)&(traits_ptr_->getData());
 	}
 
+
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool BaseIterator<Container, DataType, Position, Traits>::operator == (const BaseIterator& iterator) const
+	bool ConstBaseIterator<Container, DataType, Position, Traits>::operator == (const ConstBaseIterator& iterator) const
 		throw(Exception::IncompatibleIterators)
 	{
 		if (traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
@@ -523,7 +468,7 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool BaseIterator<Container, DataType, Position, Traits>::operator != (const BaseIterator &iterator) const
+	bool ConstBaseIterator<Container, DataType, Position, Traits>::operator != (const ConstBaseIterator &iterator) const
 		throw()
 	{
 		if (traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
@@ -535,21 +480,21 @@ namespace BALL
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool BaseIterator<Container, DataType, Position, Traits>::isSingular() const
+	bool ConstBaseIterator<Container, DataType, Position, Traits>::isSingular() const
 		throw()
 	{
 		return traits_ptr_->isSingular();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	bool BaseIterator<Container, DataType, Position, Traits>::isValid() const
+	bool ConstBaseIterator<Container, DataType, Position, Traits>::isValid() const
 		throw()
 	{
 		return traits_ptr_->isValid();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	BaseIterator<Container, DataType, Position, Traits>::BaseIterator(const Container& container)
+	ConstBaseIterator<Container, DataType, Position, Traits>::ConstBaseIterator(const Container& container)
 		throw()
 		:	traits_(container),
 			previous_(0),
@@ -557,20 +502,20 @@ namespace BALL
 	{
 		traits_ptr_ = &traits_;
 
-		++BaseIterator::countIterators_();
+		++ConstBaseIterator::countIterators_();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	BaseIterator<Container, DataType, Position, Traits>*&
-	BaseIterator<Container, DataType, Position, Traits>::getFirstIterator_()
+	ConstBaseIterator<Container, DataType, Position, Traits>*&
+	ConstBaseIterator<Container, DataType, Position, Traits>::getFirstIterator_()
 	{
-		static BaseIterator* first = 0;
+		static ConstBaseIterator* first = 0;
 		
 		return first;
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	Size& BaseIterator<Container, DataType, Position, Traits>::countIterators_()
+	Size& ConstBaseIterator<Container, DataType, Position, Traits>::countIterators_()
 	{
 		static Size size = 0;
 		
@@ -584,8 +529,8 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/CONCEPT/baseIterator.h}
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	class ConstBaseIterator
-		: public BaseIterator<Container, DataType, Position, Traits>
+	class BaseIterator
+		: public ConstBaseIterator<Container, DataType, Position, Traits>
 	{
 		public:
 
@@ -595,17 +540,17 @@ namespace BALL
 
 		/**	Default constructor
 		*/
-		ConstBaseIterator()
+		BaseIterator()
 			throw();
 	
 		/**	Default constructor
 		*/
-		ConstBaseIterator(const ConstBaseIterator &iterator)
+		BaseIterator(const BaseIterator &iterator)
 			throw();
 
 		/**	Default constructor
 		*/
-		ConstBaseIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
+		BaseIterator(const ConstBaseIterator<Container, DataType, Position, Traits> &iterator)
 			throw();
 
 		//@}
@@ -616,27 +561,27 @@ namespace BALL
 
 		/**
 		*/
-		const Traits& getTraits()
+		Traits& getTraits() const
 			throw();
 
 		/**
 		*/
-		const Container* getContainer()
+		Container* getContainer() const
 			throw();
 
 		/**
 		*/
-		operator const Position&  ()
+		operator Position& () const
 			throw();
 
 		/**
 		*/
-		const DataType& operator * ()
+		DataType& operator * () const
 			throw(Exception::InvalidIterator);
 
 		/**
 		*/
-		const DataType* operator -> ()
+		DataType* operator -> () const
 			throw(Exception::InvalidIterator);
 		//@}
 
@@ -644,7 +589,7 @@ namespace BALL
 		protected:
 
 		//_
-		ConstBaseIterator(const Container& container)
+		BaseIterator(const Container& container)
 			throw();
 
 	};
@@ -652,49 +597,49 @@ namespace BALL
 	// method implementations
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBaseIterator<Container, DataType, Position, Traits>::ConstBaseIterator()
+	BaseIterator<Container, DataType, Position, Traits>::BaseIterator()
 		throw()
-		: BaseIterator<Container, DataType, Position, Traits>()
+		: ConstBaseIterator<Container, DataType, Position, Traits>()
 	{
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBaseIterator<Container, DataType, Position, Traits>::ConstBaseIterator(const ConstBaseIterator &iterator)
+	BaseIterator<Container, DataType, Position, Traits>::BaseIterator(const BaseIterator &iterator)
 		throw()
-		:	BaseIterator<Container,  DataType,  Position,  Traits>(iterator)
+		:	ConstBaseIterator<Container,  DataType,  Position,  Traits>(iterator)
 	{
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBaseIterator<Container, DataType, Position, Traits>::ConstBaseIterator(const BaseIterator<Container, DataType, Position, Traits> &iterator)
+	BaseIterator<Container, DataType, Position, Traits>::BaseIterator(const ConstBaseIterator<Container, DataType, Position, Traits> &iterator)
 		throw()
-		:	BaseIterator<Container, DataType, Position, Traits>(iterator)
+		:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
 	{
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	const Traits& ConstBaseIterator<Container, DataType, Position, Traits>::getTraits()
+	Traits& BaseIterator<Container, DataType, Position, Traits>::getTraits() const
 		throw()
 	{
 		return *traits_ptr_;
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	const Container* ConstBaseIterator<Container, DataType, Position, Traits>::getContainer()
+	Container* BaseIterator<Container, DataType, Position, Traits>::getContainer() const
 		throw()
 	{
 		return traits_ptr_->getContainer();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBaseIterator<Container, DataType, Position, Traits>::operator const Position&  ()
+	BaseIterator<Container, DataType, Position, Traits>::operator Position& () const 
 		throw()
 	{
 		return traits_ptr_->getPosition();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType& ConstBaseIterator<Container, DataType, Position, Traits>::operator * ()
+	DataType& BaseIterator<Container, DataType, Position, Traits>::operator * () const
 		throw(Exception::InvalidIterator)
 	{
 		if (!traits_ptr_->isValid())
@@ -702,11 +647,11 @@ namespace BALL
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return (const DataType &)traits_ptr_->getData();
+		return (DataType &)traits_ptr_->getData();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* ConstBaseIterator<Container, DataType, Position, Traits>::operator -> ()
+	DataType* BaseIterator<Container, DataType, Position, Traits>::operator -> () const
 		throw(Exception::InvalidIterator)
 	{
 		if (!traits_ptr_->isValid())
@@ -714,13 +659,13 @@ namespace BALL
 			throw Exception::InvalidIterator(__FILE__, __LINE__);
 		}
 
-		return (const DataType *)&(traits_ptr_->getData());
+		return (DataType *)&(traits_ptr_->getData());
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBaseIterator<Container, DataType, Position, Traits>::ConstBaseIterator(const Container& container)
+	BaseIterator<Container, DataType, Position, Traits>::BaseIterator(const Container& container)
 		throw()
-		:	BaseIterator<Container, DataType, Position, Traits>(container)
+		:	ConstBaseIterator<Container, DataType, Position, Traits>(container)
 	{
 	}
 
