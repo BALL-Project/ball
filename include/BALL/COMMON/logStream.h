@@ -1,4 +1,4 @@
-// $Id: logStream.h,v 1.13 2000/10/18 17:09:37 oliver Exp $
+// $Id: logStream.h,v 1.14 2001/02/04 23:51:56 amoll Exp $
 
 #ifndef BALL_COMMON_LOGSTREAM_H
 #define BALL_COMMON_LOGSTREAM_H
@@ -328,11 +328,11 @@ namespace BALL
 				It is valid unly until the next {\bf flush} or {\bf endl} is issued.\\
 				Use this command to log a single line with a certain log level.\\
 				{\bf Example:}
-\begin{verbatim}
-	log << "log message 1" << endl;
-	log.level(4) << "log message 2" << endl;
-	log << "log message 3" << endl;
-\end{verbatim}
+				\begin{verbatim}
+					log << "log message 1" << endl;
+					log.level(4) << "log message 2" << endl;
+					log << "log message 3" << endl;
+				\end{verbatim}
 				In this example, only the second message will be logged using level 4.
 				
 				@return	LogStream the log stream
@@ -341,19 +341,19 @@ namespace BALL
 		LogStream& level(int level);
 
 		/**	Log an information message.
-				This is method equivalent to \Ref{level}(LogStream::INFORMATION + n). 
+				This method is equivalent to \Ref{level}(LogStream::INFORMATION + n). 
 				@param	n the channel 
 		*/
 		LogStream& info(int n = 0);
 
 		/**	Log an error message.
-				This is method equivalent to \Ref{level}(LogStream::ERROR + n). 
+				This method is equivalent to \Ref{level}(LogStream::ERROR + n). 
 				@param	n the channel 
 		*/
 		LogStream& error(int n = 0);
 
 		/**	Log an information message.
-				This is method equivalent to \Ref{level}(LogStream::WARNING + n). 
+				This method is equivalent to \Ref{level}(LogStream::WARNING + n). 
 				@param	n the channel 
 		*/
 		LogStream& warn(int n = 0);
@@ -443,7 +443,7 @@ namespace BALL
 			
 		/** Clear the message buffer.
 				This method removes all stored messages from the 
-				messages buffer.
+				message buffer.
 		*/
 		void clear();
 	
@@ -453,8 +453,8 @@ namespace BALL
 				If the range is omitted, the total number of messages is
 				returned.
 				@return Size the number of lines matching the log level range
-				@param	min_level the minimum log level of the counted messages
-				@param	max_level the maximum log level of the counted messages
+				@param	min_level the minimum log level for the counted messages
+				@param	max_level the maximum log level for the counted messages
 		*/
 		Size getNumberOfLines
 			(int min_level = LogStreamBuf::MIN_LEVEL, 
@@ -463,7 +463,7 @@ namespace BALL
 		/**	Return the text of a specific line.
 				This method returns the content of a specific message without
 				time and level.
-				@return string the mesasge text
+				@return string the text of the message
 				@param	Index the index of the line
 		*/
 		string getLineText(const Index& index) const;
@@ -476,8 +476,8 @@ namespace BALL
 	
 		/**	Return the log level of a specific line.
 				If the given line does not exists, {\em -1} is returned.
-				@param index the index of the messages
-				@return int - the level
+				@param index the index of the message
+				@return int the level
 		*/
 		int getLineLevel(const Index& index) const;
 		
