@@ -1,4 +1,4 @@
-// $Id: randomCoilShiftProcessor.C,v 1.2 2000/09/19 13:34:28 oliver Exp $
+// $Id: randomCoilShiftProcessor.C,v 1.3 2000/09/21 13:49:04 oliver Exp $
 
 #include<BALL/NMR/randomCoilShiftProcessor.h>
 
@@ -6,120 +6,103 @@ using namespace std;
 
 namespace BALL
 {
-	//Konstruktor
+
+	const char* RandomCoilShiftProcessor::PROPERTY__RANDOMCOIL_SHIFT = "RandomCoilShift";
 
 	RandomCoilShiftProcessor::RandomCoilShiftProcessor()
 		throw()
 	{
-		ini_filename_="/KM/fopra/compbio/burch/BALL/source/NMR/dat/nmr.ini";
 	}
 
-		
-	//Destruktor
+	RandomCoilShiftProcessor::RandomCoilShiftProcessor(const RandomCoilShiftProcessor& processor)
+		throw()
+		:	ShiftModule(processor),
+			shift_map_(processor.shift_map_)
+	{
+	}
 
 	RandomCoilShiftProcessor::~RandomCoilShiftProcessor()
 		throw()
 	{
 	}
 
-
-	//StartFunktion
-
-	bool RandomCoilShiftProcessor::start()
+	void RandomCoilShiftProcessor::init()
 		throw()
 	{
-		// aufbau der ParameterSection ShiftData
-		
-		//cout << "RandomCoilShiftProcessor::start()" << endl;
-		
-		int number_of_keys;
-		int counter;
-		
-		parameters_.setFilename(ini_filename_);
-		
-		// einlesen der shift Atome und liste von expressions aufbauen
-		
-		parameter_section_.extractSection(parameters_, "RC-ShiftAtoms");
-		
-		number_of_keys = parameter_section_.getNumberOfKeys();
-		
-		expressions_.clear();
-		
-		Position description_column = parameter_section_.getColumnIndex("description");
-		
-		String description;
-		
-		for(counter=0;counter<number_of_keys;counter++)
+		// we assume the worst case: init fails -> valid_ = false
+		valid_ = false;
+
+
+		// make sure we have correct parameters
+		if (parameters_ == 0)
 		{
-			description = parameter_section_.getValue(counter,description_column);
-			while (description.has('_'))
-				description.substitute("_"," ");
-			//cout << description << endl;
-				
-			expressions_.push_back(Expression(description));
+			return;
 		}
-		
-		return true;
+
+		// extract the data from the correct section
+		ParameterSection parameter_section;
+		parameter_section.extractSection(*parameters_, "RandomCoilShifts");
+
+		// make sure the section contains the required columns
+		if (!parameter_section.hasVariable("shift"))
+		{
+			return;
+		}
+
+		// extract the random coil shifts from the parameter section
+		Position shift_column = parameter_section.getColumnIndex("shift");
+		for (Position i = 0; i < parameter_section.getNumberOfKeys(); i++)
+		{
+			shift_map_.insert(parameter_section.getKey(i), 
+												parameter_section.getValue(i, shift_column).toFloat());
+		}
+				
+		// initialization complete - mark the module as valid
+		valid_ = true;
+
+		return;
 	}
 
-	bool RandomCoilShiftProcessor::finish()
-		throw()
-	{ 
-		return true;
-	}
-
-	Processor::Result RandomCoilShiftProcessor::operator()(Composite&  object)
+	Processor::Result RandomCoilShiftProcessor::operator () (Composite& composite)
 		throw()
 	{
-		// lese aus der rc_table den entsprechenden Eintrag und addiere zum shift
-
-		//cout << "RandomCoilShiftProcessor::operator()" << endl;
-
-		parameter_section_.extractSection(parameters_,"RC-ShiftData");
-
-		float rc_shift;
-		String residue,atom,eintrag;
-		Position counter;
-		
-		if (RTTI::isKindOf<PDBAtom>(object))
+		Atom* atom_ptr = dynamic_cast<Atom*>(&composite);
+		if (atom_ptr != 0)
 		{
-			//cout  << endl << "Object is ProteinAtom";
-			PDBAtom* atom_ptr = RTTI::castTo<PDBAtom>(object);
-			
-			for(counter = 0; counter < expressions_.size(); counter++)
+			String full_name = atom_ptr->getFullName();
+			full_name.substitute(":", " ");
+			if (!shift_map_.has(full_name))
 			{
-				if (expressions_[counter](*atom_ptr))
+				full_name = atom_ptr->getFullName(Atom::NO_VARIANT_EXTENSIONS);	
+				full_name.substitute(":", " ");
+				if (!shift_map_.has(full_name))
 				{
-					residue = atom_ptr->getResidue()->getName();
-					atom= atom_ptr->getName();
-					eintrag=residue;
-					eintrag.append(" ");
-					eintrag.append(atom);
-					//cout << "suche nach :" <<eintrag << endl;
-					if (parameter_section_.has(eintrag))
-						{
-						//cout <<"Eintrag gefunden:"<<eintrag<<endl;
-						rc_shift=(parameter_section_.getValue(eintrag,"shift")).toFloat();
-						rc_shift*=-1;
-						//cout <<"Eintrag ist :"<<rc_shift << endl;
-						
-						float shift = atom_ptr->getProperty("chemical_shift").getFloat();
-						shift +=rc_shift;
-						atom_ptr->setProperty("chemical_shift", shift);
-						atom_ptr->setProperty("RC",rc_shift);
-						}
-						else 
-							{
-							atom_ptr->clearProperty("chemical_shift");
-							cout << "Eintrag nicht gefunden:"<<eintrag <<endl;
-							}		
-					//cout << endl <<"RC:Residue :"<<atom_ptr->getResidue()->getName()<<" Atom :"<<atom_ptr->getName()<< " chemical_shift :" << shift;
-				
+					full_name = "* " + atom_ptr->getName();
+					if (!shift_map_.has(full_name))
+					{
+						full_name = "";
 					}
 				}
 			}
-			return Processor::CONTINUE;
+
+			if (full_name != "")
+			{
+				// retrieve the random coil shift from the hash map
+				float delta_RC = shift_map_[full_name];
+
+				// add the random coil shift to the total shift value
+				float delta = atom_ptr->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+				delta += delta_RC;
+				atom_ptr->setProperty(ShiftModule::PROPERTY__SHIFT, delta);
+				
+				// store the random coil shift in the random coil shift property
+				atom_ptr->setProperty(RandomCoilShiftProcessor::PROPERTY__RANDOMCOIL_SHIFT, delta_RC);
+			}
 		}
+		
+		return Processor::CONTINUE;
+	}
+		
 
 }//namespace BALL
 
