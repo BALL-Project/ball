@@ -51,7 +51,7 @@ class ItemCollector	: public UnaryProcessor<DataType>
 	}
 
 
-	private:
+	protected:
 
 	/** Start the processor.
 			This method is called by the apply()-method
