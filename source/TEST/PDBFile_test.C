@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.8 2002/12/13 12:44:24 anker Exp $
+// $Id: PDBFile_test.C,v 1.9 2002/12/13 12:57:37 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.8 2002/12/13 12:44:24 anker Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.9 2002/12/13 12:57:37 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -93,6 +93,14 @@ CHECK(PDBFile::selectModel())
 RESULT
 
 CHECK(PDBFile strict line checking)
+	PDBFile f("data/PDBFile_test_line_checking.pdb");
+	System s;
+	f.read(s);
+	TEST_EQUAL(s.countAtoms(), 3)
+	s.clear();
+	f.options.setBool(GenericPDBFile::Option::STRICT_LINE_CHECKING, true);
+	f.read(s);
+	TEST_EQUAL(s.countAtoms(), 2)
 RESULT
 
 CHECK(PDBFile::write(System&))
