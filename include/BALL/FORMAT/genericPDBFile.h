@@ -1,4 +1,4 @@
-// $Id: genericPDBFile.h,v 1.4 2000/01/17 13:08:52 oliver Exp $
+// $Id: genericPDBFile.h,v 1.5 2000/10/20 18:08:50 oliver Exp $
 
 #ifndef BALL_FORMAT_GENERICPDBFILE_H
 #define BALL_FORMAT_GENERICPDBFILE_H
@@ -810,472 +810,472 @@ namespace BALL
 	{
 		public:
 
-			GenericPDBFile();
+		GenericPDBFile();
 
-			virtual ~GenericPDBFile();
+		virtual ~GenericPDBFile();
 
-			virtual void clear(int state = 0);
-		
-			virtual float getVersion() const;
+		virtual void clear(int state = 0);
+	
+		virtual float getVersion() const;
 
-			void selectModel(Index index);
+		void selectModel(Index index);
 
-			void selectAllModels();
+		void selectAllModels();
 
-			Index getSelectedModel() const;
+		Index getSelectedModel() const;
 
-			Index getCurrentModel() const;
+		Index getCurrentModel() const;
 
-			char* getRecordString();
-		
-			const char* getRecordString() const;
-		
-			Index getRecordNumber() const;
+		char* getRecordString();
+	
+		const char* getRecordString() const;
+	
+		Index getRecordNumber() const;
 
-			PDB::RecordType getRecordType() const;
+		PDB::RecordType getRecordType() const;
 
-			virtual const char* getAtomElementSymbol
-				(const PDB::Atom atom_name,
-				 PDB::Atom element_symbol);
-		
-			virtual const char* getAtomName
-				(const PDB::Atom atom_name);
-		
-			virtual char getAtomRemotenessIndicator
-				(const PDB::Atom atom_name);
-		
-			virtual short getAtomBranchDesignator
-				(const PDB::Atom atom_name);
-		
-			Size countRecordFields() const;
+		virtual const char* getAtomElementSymbol
+			(const PDB::Atom atom_name,
+			 PDB::Atom element_symbol);
+	
+		virtual const char* getAtomName
+			(const PDB::Atom atom_name);
+	
+		virtual char getAtomRemotenessIndicator
+			(const PDB::Atom atom_name);
+	
+		virtual short getAtomBranchDesignator
+			(const PDB::Atom atom_name);
+	
+		Size countRecordFields() const;
 
-			Size countRecord
-				(PDB::RecordType record_type,
-				 bool from_begin_of_file = true);
-		
-			Size countRecords
-				(bool from_begin_of_file = true);
-		
-			bool parseLine(const char* line, Size size, const char* format_string, ...);
+		Size countRecord
+			(PDB::RecordType record_type,
+			 bool from_begin_of_file = true);
+	
+		Size countRecords
+			(bool from_begin_of_file = true);
+	
+		bool parseLine(const char* line, Size size, const char* format_string, ...);
 
-			bool readLine(char* line, Size size, bool extract_values);
+		bool readLine(char* line, Size size, bool extract_values);
 
-			bool readFirstRecord(bool read_values = true);
-		
-			bool readNextRecord(bool read_values = true);
+		bool readFirstRecord(bool read_values = true);
+	
+		bool readNextRecord(bool read_values = true);
 
-			bool readRecords();
-		
-			virtual bool readUnknownRecord(const char* line);
-		
-			virtual bool readInvalidRecord(const char* line);
-		
-			virtual bool readRecordANISOU
-				(PDB::Integer serial_number,
-				 PDB::Atom atom_name,
-				 PDB::Character alternate_location_indicator,
-				 PDB::ResidueName residue_name,
-				 PDB::Character chain_ID,
-				 PDB::Integer residue_sequence_number,
-				 PDB::AChar insertion_code,
-				 PDB::Integer u11,
-				 PDB::Integer u22,
-				 PDB::Integer u33,
-				 PDB::Integer u12,
-				 PDB::Integer u13,
-				 PDB::Integer u23,
-				 PDB::LString4 segment_ID,
-				 PDB::LString2 element_symbol,
-				 PDB::LString2 charge);
+		bool readRecords();
+	
+		virtual bool readUnknownRecord(const char* line);
+	
+		virtual bool readInvalidRecord(const char* line);
+	
+		virtual bool readRecordANISOU
+			(PDB::Integer serial_number,
+			 PDB::Atom atom_name,
+			 PDB::Character alternate_location_indicator,
+			 PDB::ResidueName residue_name,
+			 PDB::Character chain_ID,
+			 PDB::Integer residue_sequence_number,
+			 PDB::AChar insertion_code,
+			 PDB::Integer u11,
+			 PDB::Integer u22,
+			 PDB::Integer u33,
+			 PDB::Integer u12,
+			 PDB::Integer u13,
+			 PDB::Integer u23,
+			 PDB::LString4 segment_ID,
+			 PDB::LString2 element_symbol,
+			 PDB::LString2 charge);
 
-			virtual bool readRecordATOM
-				(PDB::Integer serial_number,
-				 PDB::Atom atom_name,
-				 PDB::Character alternate_location_indicator,
-				 PDB::ResidueName residue_name,
-				 PDB::Character chain_ID,
-				 PDB::Integer residue_sequence_number,
-				 PDB::AChar insertion_code,
-				 PDB::Real orthogonal_vector[3],
-				 PDB::Real occupancy,
-				 PDB::Real temperature_factor,
-				 PDB::LString4 segment_ID,
-				 PDB::LString2 element_symbol,
-				 PDB::LString2 charge);
+		virtual bool readRecordATOM
+			(PDB::Integer serial_number,
+			 PDB::Atom atom_name,
+			 PDB::Character alternate_location_indicator,
+			 PDB::ResidueName residue_name,
+			 PDB::Character chain_ID,
+			 PDB::Integer residue_sequence_number,
+			 PDB::AChar insertion_code,
+			 PDB::Real orthogonal_vector[3],
+			 PDB::Real occupancy,
+			 PDB::Real temperature_factor,
+			 PDB::LString4 segment_ID,
+			 PDB::LString2 element_symbol,
+			 PDB::LString2 charge);
 
-			virtual bool readRecordAUTHOR
-				(PDB::Continuation continuation,
-				 PDB::PDBList authors);
+		virtual bool readRecordAUTHOR
+			(PDB::Continuation continuation,
+			 PDB::PDBList authors);
 
-			virtual bool readRecordCAVEAT
-				(PDB::Continuation continuation,
-				 PDB::IDcode entry_code,
-				 PDB::PDBString comment);
+		virtual bool readRecordCAVEAT
+			(PDB::Continuation continuation,
+			 PDB::IDcode entry_code,
+			 PDB::PDBString comment);
 
-			virtual bool readRecordCISPEP
-				(PDB::Integer record_serial_number,
-				 PDB::RecordCISPEP::CisPeptide cis_peptide[2],
-				 PDB::Integer specific_model_ID,
-				 PDB::Real angle_measure);
+		virtual bool readRecordCISPEP
+			(PDB::Integer record_serial_number,
+			 PDB::RecordCISPEP::CisPeptide cis_peptide[2],
+			 PDB::Integer specific_model_ID,
+			 PDB::Real angle_measure);
 
-			virtual bool readRecordCOMPND
-				(PDB::Continuation continuation,
-				 PDB::SpecificationList component_description);
-		
-			virtual bool readRecordCONECT
-				(PDB::Integer atom_serial_number,
-				 PDB::Integer bonded_atom_serial_number[4],
-				 PDB::Integer hydrogen_bonded_atom_serial_number[4],
-				 PDB::Integer salt_bridged_atom_serial_number[2]);
+		virtual bool readRecordCOMPND
+			(PDB::Continuation continuation,
+			 PDB::SpecificationList component_description);
+	
+		virtual bool readRecordCONECT
+			(PDB::Integer atom_serial_number,
+			 PDB::Integer bonded_atom_serial_number[4],
+			 PDB::Integer hydrogen_bonded_atom_serial_number[4],
+			 PDB::Integer salt_bridged_atom_serial_number[2]);
 
-			virtual bool readRecordCRYST1
-				(PDB::RecordCRYST1::UnitCell& unit_cell);
+		virtual bool readRecordCRYST1
+			(PDB::RecordCRYST1::UnitCell& unit_cell);
 
-			virtual bool readRecordDBREF
-				(PDB::IDcode entry_code,
-				 PDB::Character chain_ID,
-				 PDB::RecordDBREF::InitialSequence& initial_sequence,
-				 PDB::RecordDBREF::EndingSequence& ending_sequence,
-				 PDB::LString6 sequence_database_name,
-				 PDB::LString8 sequence_database_accession_code,
-				 PDB::LString12 sequence_database_ID_code,
-				 PDB::RecordDBREF::InitialDatabaseSegment& initial_database_segment,
-				 PDB::RecordDBREF::EndingDatabaseSegment& ending_database_segment);
+		virtual bool readRecordDBREF
+			(PDB::IDcode entry_code,
+			 PDB::Character chain_ID,
+			 PDB::RecordDBREF::InitialSequence& initial_sequence,
+			 PDB::RecordDBREF::EndingSequence& ending_sequence,
+			 PDB::LString6 sequence_database_name,
+			 PDB::LString8 sequence_database_accession_code,
+			 PDB::LString12 sequence_database_ID_code,
+			 PDB::RecordDBREF::InitialDatabaseSegment& initial_database_segment,
+			 PDB::RecordDBREF::EndingDatabaseSegment& ending_database_segment);
 
-			virtual bool readRecordEND();
-		
-			virtual bool readRecordENDMDL();
-		
-			virtual bool readRecordEXPDTA
-				(PDB::Continuation continuation,
-				 PDB::SList technique);
-		
-			virtual bool readRecordFORMUL
-				(PDB::Integer component_number,
-				 PDB::LString3 het_ID,
-				 PDB::Integer continuation_number,
-				 PDB::Character is_water,
-				 PDB::PDBString chemical_formula);
-		
-			virtual bool readRecordFTNOTE
-				(PDB::Integer number,
-				 PDB::PDBString text);
-		
-			virtual bool readRecordHEADER
-				(PDB::String40 classification,
-				 PDB::Date deposition_date,
-				 PDB::IDcode ID_code);
-		
-			virtual bool readRecordHELIX
-				(PDB::Integer serial_number,
-				 PDB::LString3 helix_ID,
-				 PDB::RecordHELIX::InitialResidue& initial_residue,
-				 PDB::RecordHELIX::TerminalResidue& terminal_residue,
-				 PDB::Integer helix_class,
-				 PDB::PDBString comment,
-				 PDB::Integer length);
-		
-			virtual bool readRecordHET
-				(PDB::LString3 het_ID,
-				 PDB::Character chain_ID,
-				 PDB::Integer sequence_number,
-				 PDB::AChar insertion_code,
-				 PDB::Integer number_of_HETATM_records,
-				 PDB::PDBString text);
-		
-			virtual bool readRecordHETATM
-				(PDB::Integer serial_number,
-				 PDB::Atom atom_name,
-				 PDB::Character alternate_location_indicator,
-				 PDB::ResidueName residue_name,
-				 PDB::Character chain_ID,
-				 PDB::Integer residue_sequence_number,
-				 PDB::AChar insertion_code,
-				 PDB::Real orthogonal_vector[3],
-				 PDB::Real occupancy,
-				 PDB::Real temperature_factor,
-				 PDB::LString4 segment_ID,
-				 PDB::LString2 element_symbol,
-				 PDB::LString2 charge);
-		
-			virtual bool readRecordHETNAM
-				(PDB::Continuation continuation,
-				 PDB::LString3 het_ID,
-				 PDB::PDBString chemical_name);
-		
-			virtual bool readRecordHYDBND
-				(PDB::RecordHYDBND::HydrogenPartnerAtom hydrogen_partner_atom[2],
-				 PDB::RecordHYDBND::HydrogenAtom& hydrogen_atom,
-				 PDB::SymmetryOperator first_non_hydrogen_atom,
-				 PDB::SymmetryOperator second_non_hydrogen_atom);
-		
-			virtual bool readRecordJRNL
-				(PDB::LString text);
-		
-			virtual bool readRecordKEYWDS
-				(PDB::Continuation continuation,
-				 PDB::PDBList keywords);
-		
-			virtual bool readRecordLINK
-				(PDB::RecordLINK::LinkPartner link_partner[2],
-				 PDB::SymmetryOperator first_atom,
-				 PDB::SymmetryOperator second_atom);
-		
-			virtual bool readRecordMASTER
-				(PDB::Integer number_of_REMARK_records,
-				 PDB::Integer zero,
-				 PDB::Integer number_of_HET_records,
-				 PDB::Integer number_of_HELIX_records,
-				 PDB::Integer number_of_SHEET_records,
-				 PDB::Integer number_of_TURN_records,
-				 PDB::Integer number_of_SITE_records,
-				 PDB::Integer number_of_ORIGX_SCALE_MTRIX_records,
-				 PDB::Integer number_of_ATOM_HETATM_records,
-				 PDB::Integer number_of_TER_records,
-				 PDB::Integer number_of_CONECT_records,
-				 PDB::Integer number_of_SEQRES_records);
-		
-			virtual bool readRecordMODEL
-				(PDB::Integer model_serial_number);
-		
-			virtual bool readRecordMODRES
-				(PDB::IDcode entry_code,
-				 PDB::ResidueName residue_name,
-				 PDB::Character chain_ID,
-				 PDB::Integer sequence_number,
-				 PDB::AChar insertion_code,
-				 PDB::ResidueName standardresidue_name,
-				 PDB::PDBString comment);
-		
-			virtual bool readRecordMTRIX1
-				(PDB::Integer serial_number,
-				 PDB::Real transformation_matrix[4],
-				 PDB::Integer is_given);
-		
-			virtual bool readRecordMTRIX2
-				(PDB::Integer serial_number,
-				 PDB::Real transformation_matrix[4],
-				 PDB::Integer is_given);
-		
-			virtual bool readRecordMTRIX3
-				(PDB::Integer serial_number,
-				 PDB::Real transformation_matrix[4],
-				 PDB::Integer is_given);
-		
-			virtual bool readRecordOBSLTE
-				(PDB::Continuation continuation,
-				 PDB::Date entry_replaced_date,
-				 PDB::IDcode entry_code,
-				 PDB::IDcode replacing_entry_code[8]);
-		
-			virtual bool readRecordORIGX1
-				(PDB::Real transformation_matrix[4]);
-		
-			virtual bool readRecordORIGX2
-				(PDB::Real transformation_matrix[4]);
-		
-			virtual bool readRecordORIGX3
-				(PDB::Real transformation_matrix[4]);
-		
-			virtual bool readRecordREMARK
-				(PDB::Integer remark_number,
-				 PDB::LString text);
-		
-			virtual bool readRecordREVDAT
-				(PDB::Integer modification_number,
-				 PDB::Continuation continuation,
-				 PDB::Date modification_date,
-				 PDB::String5 modification_ID,
-				 PDB::Integer modification_type,
-				 PDB::LString6 name_of_modified_record[4]);
+		virtual bool readRecordEND();
+	
+		virtual bool readRecordENDMDL();
+	
+		virtual bool readRecordEXPDTA
+			(PDB::Continuation continuation,
+			 PDB::SList technique);
+	
+		virtual bool readRecordFORMUL
+			(PDB::Integer component_number,
+			 PDB::LString3 het_ID,
+			 PDB::Integer continuation_number,
+			 PDB::Character is_water,
+			 PDB::PDBString chemical_formula);
+	
+		virtual bool readRecordFTNOTE
+			(PDB::Integer number,
+			 PDB::PDBString text);
+	
+		virtual bool readRecordHEADER
+			(PDB::String40 classification,
+			 PDB::Date deposition_date,
+			 PDB::IDcode ID_code);
+	
+		virtual bool readRecordHELIX
+			(PDB::Integer serial_number,
+			 PDB::LString3 helix_ID,
+			 PDB::RecordHELIX::InitialResidue& initial_residue,
+			 PDB::RecordHELIX::TerminalResidue& terminal_residue,
+			 PDB::Integer helix_class,
+			 PDB::PDBString comment,
+			 PDB::Integer length);
+	
+		virtual bool readRecordHET
+			(PDB::LString3 het_ID,
+			 PDB::Character chain_ID,
+			 PDB::Integer sequence_number,
+			 PDB::AChar insertion_code,
+			 PDB::Integer number_of_HETATM_records,
+			 PDB::PDBString text);
+	
+		virtual bool readRecordHETATM
+			(PDB::Integer serial_number,
+			 PDB::Atom atom_name,
+			 PDB::Character alternate_location_indicator,
+			 PDB::ResidueName residue_name,
+			 PDB::Character chain_ID,
+			 PDB::Integer residue_sequence_number,
+			 PDB::AChar insertion_code,
+			 PDB::Real orthogonal_vector[3],
+			 PDB::Real occupancy,
+			 PDB::Real temperature_factor,
+			 PDB::LString4 segment_ID,
+			 PDB::LString2 element_symbol,
+			 PDB::LString2 charge);
+	
+		virtual bool readRecordHETNAM
+			(PDB::Continuation continuation,
+			 PDB::LString3 het_ID,
+			 PDB::PDBString chemical_name);
+	
+		virtual bool readRecordHYDBND
+			(PDB::RecordHYDBND::HydrogenPartnerAtom hydrogen_partner_atom[2],
+			 PDB::RecordHYDBND::HydrogenAtom& hydrogen_atom,
+			 PDB::SymmetryOperator first_non_hydrogen_atom,
+			 PDB::SymmetryOperator second_non_hydrogen_atom);
+	
+		virtual bool readRecordJRNL
+			(PDB::LString text);
+	
+		virtual bool readRecordKEYWDS
+			(PDB::Continuation continuation,
+			 PDB::PDBList keywords);
+	
+		virtual bool readRecordLINK
+			(PDB::RecordLINK::LinkPartner link_partner[2],
+			 PDB::SymmetryOperator first_atom,
+			 PDB::SymmetryOperator second_atom);
+	
+		virtual bool readRecordMASTER
+			(PDB::Integer number_of_REMARK_records,
+			 PDB::Integer zero,
+			 PDB::Integer number_of_HET_records,
+			 PDB::Integer number_of_HELIX_records,
+			 PDB::Integer number_of_SHEET_records,
+			 PDB::Integer number_of_TURN_records,
+			 PDB::Integer number_of_SITE_records,
+			 PDB::Integer number_of_ORIGX_SCALE_MTRIX_records,
+			 PDB::Integer number_of_ATOM_HETATM_records,
+			 PDB::Integer number_of_TER_records,
+			 PDB::Integer number_of_CONECT_records,
+			 PDB::Integer number_of_SEQRES_records);
+	
+		virtual bool readRecordMODEL
+			(PDB::Integer model_serial_number);
+	
+		virtual bool readRecordMODRES
+			(PDB::IDcode entry_code,
+			 PDB::ResidueName residue_name,
+			 PDB::Character chain_ID,
+			 PDB::Integer sequence_number,
+			 PDB::AChar insertion_code,
+			 PDB::ResidueName standardresidue_name,
+			 PDB::PDBString comment);
+	
+		virtual bool readRecordMTRIX1
+			(PDB::Integer serial_number,
+			 PDB::Real transformation_matrix[4],
+			 PDB::Integer is_given);
+	
+		virtual bool readRecordMTRIX2
+			(PDB::Integer serial_number,
+			 PDB::Real transformation_matrix[4],
+			 PDB::Integer is_given);
+	
+		virtual bool readRecordMTRIX3
+			(PDB::Integer serial_number,
+			 PDB::Real transformation_matrix[4],
+			 PDB::Integer is_given);
+	
+		virtual bool readRecordOBSLTE
+			(PDB::Continuation continuation,
+			 PDB::Date entry_replaced_date,
+			 PDB::IDcode entry_code,
+			 PDB::IDcode replacing_entry_code[8]);
+	
+		virtual bool readRecordORIGX1
+			(PDB::Real transformation_matrix[4]);
+	
+		virtual bool readRecordORIGX2
+			(PDB::Real transformation_matrix[4]);
+	
+		virtual bool readRecordORIGX3
+			(PDB::Real transformation_matrix[4]);
+	
+		virtual bool readRecordREMARK
+			(PDB::Integer remark_number,
+			 PDB::LString text);
+	
+		virtual bool readRecordREVDAT
+			(PDB::Integer modification_number,
+			 PDB::Continuation continuation,
+			 PDB::Date modification_date,
+			 PDB::String5 modification_ID,
+			 PDB::Integer modification_type,
+			 PDB::LString6 name_of_modified_record[4]);
 
-			virtual bool readRecordSCALE1
-				(PDB::Real transformation_matrix[4]);
+		virtual bool readRecordSCALE1
+			(PDB::Real transformation_matrix[4]);
 
-			virtual bool readRecordSCALE2
-				(PDB::Real transformation_matrix[4]);
+		virtual bool readRecordSCALE2
+			(PDB::Real transformation_matrix[4]);
 
-			virtual bool readRecordSCALE3
-				(PDB::Real transformation_matrix[4]);
+		virtual bool readRecordSCALE3
+			(PDB::Real transformation_matrix[4]);
 
-			virtual bool readRecordSEQRES
-				(PDB::Integer serial_number,
-				 PDB::Character chain_ID,
-				 PDB::Integer number_of_residues_in_chain,
-				 PDB::ResidueName residue_name[13]);
+		virtual bool readRecordSEQRES
+			(PDB::Integer serial_number,
+			 PDB::Character chain_ID,
+			 PDB::Integer number_of_residues_in_chain,
+			 PDB::ResidueName residue_name[13]);
 
-			virtual bool readRecordSHEET
-				(PDB::Integer strand_number,
-				 PDB::LString3 sheet_ID,
-				 PDB::Integer number_of_strands,
-				 PDB::RecordSHEET::InitialResidue& initial_residue,
-				 PDB::RecordSHEET::TerminalResidue& terminal_residue,
-				 PDB::Integer sense_of_strand,
-				 PDB::Atom atom_name_in_current_strand,
-				 PDB::RecordSHEET::ResidueInCurrentStrand& residue_in_current_strand,
-				 PDB::Atom atom_name_in_previous_strand,
-				 PDB::RecordSHEET::ResidueInPreviousStrand& residue_in_previous_strand);
+		virtual bool readRecordSHEET
+			(PDB::Integer strand_number,
+			 PDB::LString3 sheet_ID,
+			 PDB::Integer number_of_strands,
+			 PDB::RecordSHEET::InitialResidue& initial_residue,
+			 PDB::RecordSHEET::TerminalResidue& terminal_residue,
+			 PDB::Integer sense_of_strand,
+			 PDB::Atom atom_name_in_current_strand,
+			 PDB::RecordSHEET::ResidueInCurrentStrand& residue_in_current_strand,
+			 PDB::Atom atom_name_in_previous_strand,
+			 PDB::RecordSHEET::ResidueInPreviousStrand& residue_in_previous_strand);
 
-			virtual bool readRecordSIGATM
-				(PDB::Integer serial_number,
-				 PDB::Atom atom_name,
-				 PDB::Character alternate_location_indicator,
-				 PDB::ResidueName residue_name,
-				 PDB::Character chain_ID,
-				 PDB::Integer residue_sequence_number,
-				 PDB::AChar insertion_code,
-				 PDB::Real standard_vector_deviation[3],
-				 PDB::Real standard_occupancy_deviation,
-				 PDB::Real standard_temperature_deviation,
-				 PDB::LString4 segment_ID,
-				 PDB::LString2 element_symbol,
-				 PDB::LString2 charge);
+		virtual bool readRecordSIGATM
+			(PDB::Integer serial_number,
+			 PDB::Atom atom_name,
+			 PDB::Character alternate_location_indicator,
+			 PDB::ResidueName residue_name,
+			 PDB::Character chain_ID,
+			 PDB::Integer residue_sequence_number,
+			 PDB::AChar insertion_code,
+			 PDB::Real standard_vector_deviation[3],
+			 PDB::Real standard_occupancy_deviation,
+			 PDB::Real standard_temperature_deviation,
+			 PDB::LString4 segment_ID,
+			 PDB::LString2 element_symbol,
+			 PDB::LString2 charge);
 
-			virtual bool readRecordSIGUIJ
-				(PDB::Integer serial_number,
-				 PDB::Atom atom_name,
-				 PDB::Character alternate_location_indicator,
-				 PDB::ResidueName residue_name,
-				 PDB::Character chain_ID,
-				 PDB::Integer residue_sequence_number,
-				 PDB::AChar insertion_code,
-				 PDB::Integer sig11,
-				 PDB::Integer sig22,
-				 PDB::Integer sig33,
-				 PDB::Integer sig12,
-				 PDB::Integer sig13,
-				 PDB::Integer sig23,
-				 PDB::LString4 segment_ID,
-				 PDB::LString2 element_symbol,
-				 PDB::LString2 charge);
+		virtual bool readRecordSIGUIJ
+			(PDB::Integer serial_number,
+			 PDB::Atom atom_name,
+			 PDB::Character alternate_location_indicator,
+			 PDB::ResidueName residue_name,
+			 PDB::Character chain_ID,
+			 PDB::Integer residue_sequence_number,
+			 PDB::AChar insertion_code,
+			 PDB::Integer sig11,
+			 PDB::Integer sig22,
+			 PDB::Integer sig33,
+			 PDB::Integer sig12,
+			 PDB::Integer sig13,
+			 PDB::Integer sig23,
+			 PDB::LString4 segment_ID,
+			 PDB::LString2 element_symbol,
+			 PDB::LString2 charge);
 
-			virtual bool readRecordSITE
-				(PDB::Integer sequence_number,
-				 PDB::LString3 name,
-				 PDB::Integer number_of_residues,
-				 PDB::RecordSITE::Residue residue[4]);
+		virtual bool readRecordSITE
+			(PDB::Integer sequence_number,
+			 PDB::LString3 name,
+			 PDB::Integer number_of_residues,
+			 PDB::RecordSITE::Residue residue[4]);
 
-			virtual bool readRecordSLTBRG
-				(PDB::RecordSLTBRG::PartnerAtom partner_atom[2],
-				 PDB::SymmetryOperator first_atom,
-				 PDB::SymmetryOperator second_atom);
+		virtual bool readRecordSLTBRG
+			(PDB::RecordSLTBRG::PartnerAtom partner_atom[2],
+			 PDB::SymmetryOperator first_atom,
+			 PDB::SymmetryOperator second_atom);
 
-			virtual bool readRecordSOURCE
-				(PDB::Continuation continuation,
-				 PDB::SpecificationList sources);
+		virtual bool readRecordSOURCE
+			(PDB::Continuation continuation,
+			 PDB::SpecificationList sources);
 
-			virtual bool readRecordSSBOND
-				(PDB::Integer serial_number,
-				 PDB::RecordSSBOND::PartnerResidue partner_residue[2]);
+		virtual bool readRecordSSBOND
+			(PDB::Integer serial_number,
+			 PDB::RecordSSBOND::PartnerResidue partner_residue[2]);
 
-			virtual bool readRecordTER
-				(PDB::Integer serial_number,
-				 PDB::ResidueName residue_name,
-				 PDB::Character chain_ID,
-				 PDB::Integer residue_sequence_number,
-				 PDB::AChar insertion_code);
+		virtual bool readRecordTER
+			(PDB::Integer serial_number,
+			 PDB::ResidueName residue_name,
+			 PDB::Character chain_ID,
+			 PDB::Integer residue_sequence_number,
+			 PDB::AChar insertion_code);
 
-			virtual bool readRecordTITLE
-				(PDB::Continuation continuation,
-				 PDB::PDBString title);
+		virtual bool readRecordTITLE
+			(PDB::Continuation continuation,
+			 PDB::PDBString title);
 
-			virtual bool readRecordTURN
-				(PDB::Integer sequence_number,
-				 PDB::LString3 turn_ID,
-				 PDB::RecordTURN::InitialResidue& initial_residue,
-				 PDB::RecordTURN::TerminalResidue& terminal_residue,
-				 PDB::PDBString comment);
+		virtual bool readRecordTURN
+			(PDB::Integer sequence_number,
+			 PDB::LString3 turn_ID,
+			 PDB::RecordTURN::InitialResidue& initial_residue,
+			 PDB::RecordTURN::TerminalResidue& terminal_residue,
+			 PDB::PDBString comment);
 
-			virtual bool readRecordTVECT
-				(PDB::Integer serial_number,
-				 PDB::Real translation_vector[3],
-				 PDB::PDBString comment);
+		virtual bool readRecordTVECT
+			(PDB::Integer serial_number,
+			 PDB::Real translation_vector[3],
+			 PDB::PDBString comment);
 
-			virtual bool hasFormat();
+		virtual bool hasFormat();
 
-			bool hasFormat() const;
+		bool hasFormat() const;
 
-			virtual bool hasFormat(const String& s) const;
+		virtual bool hasFormat(const String& s) const;
 
 
 
 		protected:
 		
-			void clear_();
+		void clear_();
 
 
 
 		private:
 
-			GenericPDBFile(const File& generic_PDB_file);
+		GenericPDBFile(const File& generic_PDB_file);
 
-			GenericPDBFile& operator = (const GenericPDBFile& generic_PDB_file);
+		GenericPDBFile& operator = (const GenericPDBFile& generic_PDB_file);
 
-			Index current_model_;
-			Index selected_model_;
-			Index current_record_;
-			Size record_fields_;
-			PDB::RecordType current_record_type_;
-			PDB::RecordTypeFormat compare_record_type_format_; 
-			char line_buffer_[PDB::SIZE_OF_PDB_LINE_BUFFER];
-			union
-			{
-				PDB::RecordUNKNOWN record_UNKNOWN;
-				PDB::RecordANISOU  record_ANISOU;
-				PDB::RecordATOM    record_ATOM;
-				PDB::RecordAUTHOR  record_AUTHOR;
-				PDB::RecordCAVEAT  record_CAVEAT;
-				PDB::RecordCISPEP  record_CISPEP;
-				PDB::RecordCOMPND  record_COMPND;
-				PDB::RecordCONECT  record_CONECT;
-				PDB::RecordCRYST1  record_CRYST1;
-				PDB::RecordDBREF   record_DBREF;
-				PDB::RecordEND     record_END;
-				PDB::RecordENDMDL  record_ENDMDL;
-				PDB::RecordEXPDTA  record_EXPDTA;
-				PDB::RecordFORMUL  record_FORMUL;
-				PDB::RecordFTNOTE  record_FTNOTE;
-				PDB::RecordHEADER  record_HEADER;
-				PDB::RecordHELIX   record_HELIX;
-				PDB::RecordHET     record_HET;
-				PDB::RecordHETATM  record_HETATM;
-				PDB::RecordHETNAM  record_HETNAM;
-				PDB::RecordHYDBND  record_HYDBND;
-				PDB::RecordJRNL    record_JRNL;
-				PDB::RecordKEYWDS  record_KEYWDS;
-				PDB::RecordLINK    record_LINK;
-				PDB::RecordMASTER  record_MASTER;
-				PDB::RecordMODEL   record_MODEL;
-				PDB::RecordMODRES  record_MODRES;
-				PDB::RecordMTRIX1  record_MTRIX1;
-				PDB::RecordMTRIX2  record_MTRIX2;
-				PDB::RecordMTRIX3  record_MTRIX3;
-				PDB::RecordOBSLTE  record_OBSLTE;
-				PDB::RecordORIGX1  record_ORIGX1;
-				PDB::RecordORIGX2  record_ORIGX2;
-				PDB::RecordORIGX3  record_ORIGX3;
-				PDB::RecordREMARK  record_REMARK;
-				PDB::RecordREVDAT  record_REVDAT;
-				PDB::RecordSCALE1  record_SCALE1;
-				PDB::RecordSCALE2  record_SCALE2;
-				PDB::RecordSCALE3  record_SCALE3;
-				PDB::RecordSEQRES  record_SEQRES;
-				PDB::RecordSHEET   record_SHEET;
-				PDB::RecordSIGATM  record_SIGATM;
-				PDB::RecordSIGUIJ  record_SIGUIJ;
-				PDB::RecordSITE    record_SITE;
-				PDB::RecordSLTBRG  record_SLTBRG;
-				PDB::RecordSOURCE  record_SOURCE;
-				PDB::RecordSSBOND  record_SSBOND;
-				PDB::RecordTER     record_TER;
-				PDB::RecordTITLE   record_TITLE;
-				PDB::RecordTURN    record_TURN;
-				PDB::RecordTVECT   record_TVECT;
-			};
+		Index current_model_;
+		Index selected_model_;
+		Index current_record_;
+		Size record_fields_;
+		PDB::RecordType current_record_type_;
+		PDB::RecordTypeFormat compare_record_type_format_; 
+		char line_buffer_[PDB::SIZE_OF_PDB_LINE_BUFFER];
+		union
+		{
+			PDB::RecordUNKNOWN record_UNKNOWN;
+			PDB::RecordANISOU  record_ANISOU;
+			PDB::RecordATOM    record_ATOM;
+			PDB::RecordAUTHOR  record_AUTHOR;
+			PDB::RecordCAVEAT  record_CAVEAT;
+			PDB::RecordCISPEP  record_CISPEP;
+			PDB::RecordCOMPND  record_COMPND;
+			PDB::RecordCONECT  record_CONECT;
+			PDB::RecordCRYST1  record_CRYST1;
+			PDB::RecordDBREF   record_DBREF;
+			PDB::RecordEND     record_END;
+			PDB::RecordENDMDL  record_ENDMDL;
+			PDB::RecordEXPDTA  record_EXPDTA;
+			PDB::RecordFORMUL  record_FORMUL;
+			PDB::RecordFTNOTE  record_FTNOTE;
+			PDB::RecordHEADER  record_HEADER;
+			PDB::RecordHELIX   record_HELIX;
+			PDB::RecordHET     record_HET;
+			PDB::RecordHETATM  record_HETATM;
+			PDB::RecordHETNAM  record_HETNAM;
+			PDB::RecordHYDBND  record_HYDBND;
+			PDB::RecordJRNL    record_JRNL;
+			PDB::RecordKEYWDS  record_KEYWDS;
+			PDB::RecordLINK    record_LINK;
+			PDB::RecordMASTER  record_MASTER;
+			PDB::RecordMODEL   record_MODEL;
+			PDB::RecordMODRES  record_MODRES;
+			PDB::RecordMTRIX1  record_MTRIX1;
+			PDB::RecordMTRIX2  record_MTRIX2;
+			PDB::RecordMTRIX3  record_MTRIX3;
+			PDB::RecordOBSLTE  record_OBSLTE;
+			PDB::RecordORIGX1  record_ORIGX1;
+			PDB::RecordORIGX2  record_ORIGX2;
+			PDB::RecordORIGX3  record_ORIGX3;
+			PDB::RecordREMARK  record_REMARK;
+			PDB::RecordREVDAT  record_REVDAT;
+			PDB::RecordSCALE1  record_SCALE1;
+			PDB::RecordSCALE2  record_SCALE2;
+			PDB::RecordSCALE3  record_SCALE3;
+			PDB::RecordSEQRES  record_SEQRES;
+			PDB::RecordSHEET   record_SHEET;
+			PDB::RecordSIGATM  record_SIGATM;
+			PDB::RecordSIGUIJ  record_SIGUIJ;
+			PDB::RecordSITE    record_SITE;
+			PDB::RecordSLTBRG  record_SLTBRG;
+			PDB::RecordSOURCE  record_SOURCE;
+			PDB::RecordSSBOND  record_SSBOND;
+			PDB::RecordTER     record_TER;
+			PDB::RecordTITLE   record_TITLE;
+			PDB::RecordTURN    record_TURN;
+			PDB::RecordTVECT   record_TVECT;
+		};
 
 		protected:
 		
-			static const PDB::RecordTypeFormat record_type_format_[];
+		static const PDB::RecordTypeFormat record_type_format_[];
 	};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS
