@@ -1,20 +1,19 @@
-// $Id: conjugateGradient.C,v 1.2 1999/12/22 16:54:27 oliver Exp $
+// $Id: conjugateGradient.C,v 1.3 1999/12/30 17:36:34 pmueller Exp $
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 #include <BALL/COMMON/limits.h>
 
-using namespace std; 
-
 namespace BALL 
-{
+  {
+  using namespace std; 
 
   // Set the default values for options of this class 
   // The control factors needed for the line search along a new search direction
-  const char* ConjugateGradientMinimizer::Option::LINE_SEARCH_ALPHA = "line_search_alpha";
-  const char* ConjugateGradientMinimizer::Option::LINE_SEARCH_BETA = "line_search_beta";
-  const char* ConjugateGradientMinimizer::Option::STEP_LENGTH = "step_length"; 
+  const char *ConjugateGradientMinimizer::Option::LINE_SEARCH_ALPHA = "line_search_alpha";
+  const char *ConjugateGradientMinimizer::Option::LINE_SEARCH_BETA = "line_search_beta";
+  const char *ConjugateGradientMinimizer::Option::STEP_LENGTH = "step_length"; 
 
   float ConjugateGradientMinimizer::Default::LINE_SEARCH_ALPHA = 1e-4;
   float ConjugateGradientMinimizer::Default::LINE_SEARCH_BETA = 0.9;   
@@ -24,65 +23,64 @@ namespace BALL
   // Default constructor 
   // It does nothing but calling its base class constructor 
   ConjugateGradientMinimizer::ConjugateGradientMinimizer()
+		                   : EnergyMinimizer()
+     {
+     }
+
+
+
+   // Constructor initialized with a force field
+   ConjugateGradientMinimizer::ConjugateGradientMinimizer(ForceField& force_field)
 		: EnergyMinimizer()
-	{
+      {
+      valid_ = setup(force_field);
+
+      if (!valid_)
+        {
+        Log.level(LogStream::ERROR) << " ConjugateGradientMinimizer setup failed! " << endl;
 	}
+      }
 
-
-
-	// Constructor initialized with a force field
-	ConjugateGradientMinimizer::ConjugateGradientMinimizer(ForceField& force_field)
+   // Constructor initialized with a force field and a snapshot manager 
+   ConjugateGradientMinimizer::ConjugateGradientMinimizer(ForceField& force_field,
+                 SnapShotManager *ssm)
 		: EnergyMinimizer()
-	{
-		valid_ = setup(force_field);
+      {
+      valid_ = setup(force_field,ssm);
 
-		if (!valid_)
-		{
-			Log.level(LogStream::ERROR) << " line search minimizer setup failed! " << endl;
-		}
+      if (!valid_)
+        {
+        Log.level(LogStream::ERROR) << " ConjugateGradientMinimizer setup failed! " << endl;
 	}
-
-	// Constructor initialized with a force field and a snapshot manager 
-	ConjugateGradientMinimizer::ConjugateGradientMinimizer
-		(ForceField& force_field, SnapShotManager* ssm)
-		: EnergyMinimizer()
-	{
-		valid_ = setup(force_field,ssm);
-
-		if (!valid_)
-		{
-			Log.level(LogStream::ERROR) << " line search minimizer setup failed! " << endl;
-		}
-	}
+      }
 
 	
-	// Constructor initialized with a force field and a set of options
-	ConjugateGradientMinimizer::ConjugateGradientMinimizer
-		(ForceField& force_field, const Options& new_options) 
-		: EnergyMinimizer()
-	{
-		// The actual work is done in setup 
-		valid_ = setup(force_field, new_options);
+   // Constructor initialized with a force field and a set of options
+   ConjugateGradientMinimizer::ConjugateGradientMinimizer(ForceField& force_field, 
+                 const Options& new_options) : EnergyMinimizer()
+      {
+      // The actual work is done in setup 
+      valid_ = setup(force_field, new_options);
 
-		if (!valid_)
-		{
-			Log.level(LogStream::ERROR) << " Setup of conjugate gradient minimizer has failed! " << endl; 
-		}
-	}
+      if (!valid_)
+        {
+        Log.level(LogStream::ERROR) << " Setup of conjugate gradient minimizer has failed! " << endl; 
+        }
+      }
 
-	// Constructor initialized with a force field, a snapshot manager, and a set of options
-	ConjugateGradientMinimizer::ConjugateGradientMinimizer
-		(ForceField& force_field, SnapShotManager* ssm, const Options& new_options)
-		: EnergyMinimizer()
-	{
-		// The actual work is done in setup 
-		valid_ = setup(force_field, ssm, new_options);
+   // Constructor initialized with a force field, a snapshot manager, and a set of options
+   ConjugateGradientMinimizer::ConjugateGradientMinimizer(ForceField& force_field, 
+                   SnapShotManager *ssm, const Options& new_options)
+		                                       : EnergyMinimizer()
+      {
+      // The actual work is done in setup 
+      valid_ = setup(force_field, ssm, new_options);
 
-		if (!valid_)
-		{
-			Log.level(LogStream::ERROR) << " Setup of conjugate gradient minimizer has failed! " << endl; 
-		}
-	}
+      if (!valid_)
+        {
+        Log.level(LogStream::ERROR) << " Setup of conjugate gradient minimizer has failed! " << endl; 
+        }
+      }
 
 
   // The destructor
@@ -93,9 +91,9 @@ namespace BALL
 
   // The copy constructor 
   ConjugateGradientMinimizer::ConjugateGradientMinimizer 
-		(const ConjugateGradientMinimizer& rhs, bool /* deep */)
-		: EnergyMinimizer(rhs)
-	{
+                  (const ConjugateGradientMinimizer& rhs, bool /* deep */)
+		       : EnergyMinimizer(rhs)
+    {
     step_length_ = rhs.step_length_; 
     no_of_atoms_ = rhs.no_of_atoms_;
     new_gradient_ = rhs.new_gradient_;
@@ -106,13 +104,13 @@ namespace BALL
     inv_search_dir_norm_ = rhs.inv_search_dir_norm_; 
     lambda_opt_ = rhs.lambda_opt_;
     new_gradient_norm_ = rhs.new_gradient_norm_;
-	}
+    }
 
   // The assignment operator
-  ConjugateGradientMinimizer& ConjugateGradientMinimizer::operator =
-		(const ConjugateGradientMinimizer& rhs)
-	{
-    EnergyMinimizer::operator = (rhs);
+  ConjugateGradientMinimizer& ConjugateGradientMinimizer::operator=
+        (const ConjugateGradientMinimizer& rhs)
+    {
+    EnergyMinimizer::operator=(rhs);
 
     step_length_ = rhs.step_length_; 
     no_of_atoms_ = rhs.no_of_atoms_;
@@ -126,19 +124,19 @@ namespace BALL
     new_gradient_norm_ = rhs.new_gradient_norm_;
 
     return *this;
-	}
+    }
 		
   // This method is responsible for doing the specific setup of this class       
   bool ConjugateGradientMinimizer::specificSetup()
-	{
+    {
     // set the options  to their default values if not already set  
     line_search_alpha_ = options.setDefaultReal(ConjugateGradientMinimizer::Option::LINE_SEARCH_ALPHA, 
-																								ConjugateGradientMinimizer::Default::LINE_SEARCH_ALPHA);
+                                  ConjugateGradientMinimizer::Default::LINE_SEARCH_ALPHA);
     line_search_beta_ = options.setDefaultReal(ConjugateGradientMinimizer::Option::LINE_SEARCH_BETA, 
-																							 ConjugateGradientMinimizer::Default::LINE_SEARCH_BETA);
+                                  ConjugateGradientMinimizer::Default::LINE_SEARCH_BETA);
 
     step_length_ = options.setDefaultReal(ConjugateGradientMinimizer::Option::STEP_LENGTH,
-																					ConjugateGradientMinimizer::Default::STEP_LENGTH); 
+                                           ConjugateGradientMinimizer::Default::STEP_LENGTH); 
 
     // determine the number of atoms
     no_of_atoms_ = force_field_->getAtoms().size(); 
@@ -155,52 +153,49 @@ namespace BALL
     new_gradient_norm_ = 0; 
 
     return true;
-	}
+    }
 
   // Set explicitly the option line_search_alpha_
   void	ConjugateGradientMinimizer::setLineSearchAlpha(float alpha)
-	{
+    {
     line_search_alpha_ = alpha;
-    options.setReal(ConjugateGradientMinimizer::Option::LINE_SEARCH_ALPHA,alpha);
-	}
+    }
 
   // Set explicitly the option line_search_beta__
   void	ConjugateGradientMinimizer::setLineSearchBeta(float beta)
-	{
+    {
     line_search_beta_ = beta;
-    options.setReal(ConjugateGradientMinimizer::Option::LINE_SEARCH_BETA,beta);
-	}
+    }
 
   // Set explicitly the option step_length_
   void	ConjugateGradientMinimizer::setStepLength(float length)
-	{
+    {
     step_length_ = length;
-    options.setReal(ConjugateGradientMinimizer::Option::STEP_LENGTH,length);
-	}
+    }
 
   // get  the value of option line_search_alpha_
   float	ConjugateGradientMinimizer::getLineSearchAlpha() const 
-	{
+    {
     return line_search_alpha_; 
-	}
+    }
 
   // get  the value of option line_search_beta__
   float	ConjugateGradientMinimizer::getLineSearchBeta() const 
-	{
+    {
     return line_search_beta_; 
-	}
+    }
 
   // get  the value of option step_length_ 
   float	ConjugateGradientMinimizer::getStepLength() const 
-	{
+    {
     return step_length_; 
-	}
+    }
 
 
   // This method calculates the current root-mean-square norm of
   // the gradient  in kJ/(mol A)
   BALL_INLINE double ConjugateGradientMinimizer::calculateRMSGradientNorm(vector<Vector3> &gradient)
-	{
+    {
     // local variables 
     Size i;
     double result; 
@@ -208,23 +203,23 @@ namespace BALL
     result = 0; 
 
     for(i = 0; i < no_of_atoms_; i++)
-		{
+      {
       result += (gradient[i] * gradient[i]); 
-		}
+      }
 
+    // No scaling with Avogadro/1e13 necessary because gradient is already scaled ... 
     result = sqrt(result / (3 * no_of_atoms_));
 
     return result; 
-	}
+    }
 
 
 
   // This method determines a new lambda along the search direction.
   // This is done via interpolation. 
-  BALL_INLINE 
-	double ConjugateGradientMinimizer::determineNewLambda
-		(double f_0,double f_1, double dir_grad_0, double dir_grad_1, double lambda_0,double lambda_1)
-	{
+  BALL_INLINE double ConjugateGradientMinimizer::determineNewLambda(double f_0,double f_1, 
+                               double dir_grad_0,double dir_grad_1,double lambda_0,double lambda_1)
+    {
     // local variables
     double tmp1,a,b,tmp2; 
     double lambda_diff,lambda_diff_2; 
@@ -239,10 +234,10 @@ namespace BALL
     lambda_diff = lambda_1 - lambda_0;
 
     if(lambda_diff == 0)
-    {
+      {
       // the intervall is of length 0
       return lambda_0;
-    }
+      }
 
     lambda_diff_2 = lambda_diff * lambda_diff;
     lambda_diff_3 = lambda_diff_2 * lambda_diff; 
@@ -256,18 +251,20 @@ namespace BALL
     tmp2 = b * b - a * dir_grad_0;
 
     if(a != 0 && tmp2 > 0)
-    {
+      {
       result = lambda_0 + (-b + sqrt(tmp2)) / a; 
-    } else {
+      }
+    else
+      {
       // just a quadratic interpolation 
       // Note: b = 0 is then not possible by construction as this would be a linear
       // interpolation 
       result = lambda_0 - dir_grad_0 / (2 * b); 
-		}
+      }
 
     return result; 
 
-	} // end of method 'determineNewLambda' 
+    } // end of method 'determineNewLambda' 
 
 
 
@@ -281,9 +278,8 @@ namespace BALL
   //             - S. Watowich et. al "A Stable Rapidly Converging Conjugate Gradient Method
   //                                   for Energy Minimization"
   //               Journal of Computational Chemistry, Vol. 9, No. 6, pp. 650-661 (1988)
-  BALL_INLINE 
-	void ConjugateGradientMinimizer::determineNewSearchDirection(bool return_gradient)
-	{
+  BALL_INLINE void ConjugateGradientMinimizer::determineNewSearchDirection(bool return_gradient)
+    {
     // local variables
     double factor1,factor2,factor3;
     double C_1,C_2,D_2,D_3,D_5,D_6,D_7,D_8; 
@@ -297,22 +293,22 @@ namespace BALL
     static Size restart_frequency = 1; 
 
     if(return_gradient == true)
-		{
+      {
       // take the current gradient as the new search direction
       search_direction_ = new_gradient_;
 
       if(new_gradient_norm_ != 0)
-			{
-				inv_search_dir_norm_ = 1.0 / new_gradient_norm_; 
-			} else {
-				Log.level(LogStream::ERROR) 
-					<< " gradient has length zero -> program is aborted in line "
-					<< __LINE__ << "in file " << __FILE__ << endl; 
-        exit(0); 
-			}
+         inv_search_dir_norm_ = 1.0 / new_gradient_norm_; 
+      else
+         {
+         Log.level(LogStream::ERROR) 
+                       << " gradient has length zero -> program is aborted in line "
+                       << __LINE__ << "in file " << __FILE__ << endl; 
+         exit(0); 
+         }
 
       return; 
-		}
+      }
 
     // The new search direction d_new is calculated as follows:
     // d_new      = - b_i + D_8 / D_5 * a_i - (1 + D_6/D_5) * D_8/D_5 - D_7/D_5) * p_i            
@@ -331,7 +327,7 @@ namespace BALL
     // y_t = grad_new - grad_old  in iteration t
     // d_t = search direction in iteration t
     if(first_call == true)
-		{
+     {
      restart_frequency = 3 * no_of_atoms_; 
 
      p_t.resize(no_of_atoms_);
@@ -351,25 +347,55 @@ namespace BALL
      // minimisation algorithm must have already done one iteration! 
 
      for(i = 0; i < no_of_atoms_; i++)
-     {
+       {
        p_t[i] = search_direction_[i] * lambda_opt_ * step_length_; 
        y_t[i] = old_gradient_[i] - new_gradient_[i]; // exchanged order because of sign
  
 
        D_1 += p_t[i] * y_t[i]; 
        D_4 += y_t[i] * y_t[i]; 
-     }
+       }
 
      if(D_4 == 0)
-     {
-				
+       {
        Log.level(LogStream::ERROR) << " A division by zero will occur. Abort in " << endl 
                                    << " line " << __LINE__ << " file " << __FILE__ << endl; 
        // BAUSTELLE was genau jetzt machen ?
        exit(0); 
+       }
      }
-   }
 
+    double sum1 = 0; 
+    double sum2 = 0; 
+
+    for(i = 0 ; i <  no_of_atoms_; i++)
+      {
+      y_i[i]= old_gradient_[i] - new_gradient_[i]; // exchanged order because of sign
+      p_i[i] = search_direction_[i] * step_length_ * lambda_opt_; 
+
+      sum1 += y_i[i] * y_i[i]; 
+      sum2 += p_i[i] * p_i[i]; 
+      }
+
+    if(sum1 == 0 || sum2 == 0)
+      {
+      // take the current gradient as the new search direction
+      search_direction_ = new_gradient_;
+
+      if(new_gradient_norm_ != 0)
+         inv_search_dir_norm_ = 1.0 / new_gradient_norm_;
+      else
+         {
+         Log.level(LogStream::ERROR)
+                       << " gradient has length zero -> program is aborted in li
+ne "
+                       << __LINE__ << "in file " << __FILE__ << endl;
+         exit(0);
+         }
+
+      return;
+
+      }
 
 
    if((number_of_iteration_ % restart_frequency == 0))
@@ -397,7 +423,7 @@ namespace BALL
   
           D_1 += p_t[i] * y_t[i]; 
           D_4 += y_t[i] * y_t[i]; 
-            }
+          }
   
         if(D_4 == 0)
           {
@@ -412,16 +438,6 @@ namespace BALL
   
 
     // calculate all the auxiliary values
-    for(i = 0 ; i <  no_of_atoms_; i++)
-      {
-      p_i[i] = search_direction_[i] * step_length_ * lambda_opt_; 
-      }
-
-    for(i = 0 ; i <  no_of_atoms_; i++)
-      {
-      y_i[i]= old_gradient_[i] - new_gradient_[i]; // exchanged order because of sign
-
-      }
 
     D_2 = 0;
     for(i = 0 ; i <  no_of_atoms_; i++)
@@ -479,10 +495,25 @@ namespace BALL
 
     if(D_5 == 0)
       {
-      Log.level(LogStream::ERROR) << " A division by zero will occur. Abort in " << endl 
+      Log.level(LogStream::ERROR) << " A division by zero will occur in " << endl 
                                   << " line " << __LINE__ << " file " << __FILE__ << endl; 
-      // BAUSTELLE was genau jetzt machen ?
-      exit(0); 
+      Log.level(LogStream::ERROR) << " Take current gradient as new search direction..."
+                                  << endl; 
+
+      // take the current gradient as the new search direction
+      search_direction_ = new_gradient_;
+
+      if(new_gradient_norm_ != 0)
+         inv_search_dir_norm_ = 1.0 / new_gradient_norm_;
+      else
+         {
+         Log.level(LogStream::ERROR)
+                       << " gradient has length zero -> program is aborted in line "
+                       << __LINE__ << "in file " << __FILE__ << endl;
+         exit(0);
+         }
+
+      return;
       }
 
     D_6 = 0;
@@ -537,9 +568,6 @@ namespace BALL
        inv_search_dir_norm_ = 1.0 / sqrt(search_dir_norm); 
     else
        {
-       Log.level(LogStream::WARNING) << 
-                     " search direction has length zero ... choosing gradient "  << endl; 
-
        search_direction_ = new_gradient_;
 
        inv_search_dir_norm_ = 1.0 / new_gradient_norm_; 
@@ -655,6 +683,7 @@ namespace BALL
     // Determine a new lambda between lambda_0 and lambda_1 
     searching = true;
 
+
     while(searching)
        {
        // we start with lambda = 1 
@@ -679,6 +708,7 @@ namespace BALL
          // Determine new energy and gradient
          force_field_->updateEnergy();
          force_field_->updateForces();
+
          force_update_counter_++; 
          energy_update_counter_++; 
 
@@ -790,6 +820,11 @@ namespace BALL
        best_step = step_length_;
        best_lambda = 0; 
 
+       bool first_lambda = false; 
+
+       double lambda_first; 
+       double f_first, dir_grad_first;
+
 
        // We have now determined an interval and a first "optimal" lambda where the 
        // function value becomes minimal.
@@ -826,6 +861,16 @@ namespace BALL
            tmp_dir_grad += tmp_gradient[i] * search_direction_[i];
            }
 
+        if(first_lambda == false)
+          {
+          // this is the first lambda for this interval
+          lambda_first = lambda_test;
+          f_first = f_tmp;
+          dir_grad_first = tmp_dir_grad; 
+
+          first_lambda = true; 
+          }
+
          // multiply by -1 because tmp_gradient is actually the negative gradient 
          tmp_dir_grad *= -1.0 * inv_search_dir_norm_;  
 
@@ -836,8 +881,6 @@ namespace BALL
             //  If the alpha condition is fulfilled, check the beta  criterion
             //  This test is normally less stringent than the alpha test and normally
             //  passed 
-
-
             if(f_tmp < best_f)
               {
               best_f = f_tmp;
@@ -871,8 +914,6 @@ namespace BALL
             
             }
 
- 
-
           // We have encountered a failure -> go on searching if this has not happened too often
           if(last_try)
             {
@@ -898,7 +939,7 @@ namespace BALL
 
               for(i = 0; i < no_of_atoms_; i++)
                 {
-                new_gradient_[i] = atom_vector[i]->getForce();
+                new_gradient_[i] = atom_vector[i]->getForce() *  Constants::AVOGADRO * 1e-13;
                 new_gradient_norm_ += new_gradient_[i] * new_gradient_[i];
                 }
 
@@ -910,11 +951,18 @@ namespace BALL
               new_gradient_norm_ = sqrt(tmp_grad_norm_2); 
 
               lambda_opt_ = lambda_test; 
-
               }
 
+            // take the current gradient as the new search direction 
             determineNewSearchDirection(true); 
-            step_length_ = 0.1 / new_gradient_norm_; 
+
+            // take a smaller step length 
+            step_length_ = 1;   
+
+            if(lambda_opt_ < 0.001)
+              {
+              lambda_opt_ = 0.1; 
+              }
 
             return true;
             }
@@ -925,7 +973,7 @@ namespace BALL
           if(failure_counter <= MAX_FAILURE_COUNTER)
             {
             // go on searching in the left or right sub-interval
-            if(tmp_dir_grad > 0)
+            if(tmp_dir_grad > 0 || f_tmp > f_0)
               {
               // the left sub-interval
               f_1 = f_tmp; 
@@ -950,10 +998,7 @@ namespace BALL
                determineNewSearchDirection(true); 
 
                // reset the step length 
-               step_length_ = 1.0 * ConjugateGradientMinimizer::Default::STEP_LENGTH
-                                        / new_gradient_norm_;
-
-
+               step_length_ = ConjugateGradientMinimizer::Default::STEP_LENGTH; 
                }
              else
                if(failure_counter == MAX_FAILURE_COUNTER + 2)
@@ -968,9 +1013,18 @@ namespace BALL
          // Determine a new lambda_opt for the next try 
          lambda_test = determineNewLambda(f_0,f_1,dir_grad_0,dir_grad_1,lambda_0,lambda_1); 
 
+         // Check if the calculated lambda is reasonable. If it is outside the current
+         // search interval, the function behaves very wildly and the step length should
+         // be changed and the search starts anew. 
+
+         if(lambda_test > lambda_1 || lambda_test < lambda_0)
+           {
+           lambda_test = 0.5 * (lambda_0 + lambda_1);
+           }
+
          } // end of while(true)
 
-       } // end of while(searching)   BAUSTELLE wird die aussere Schleife noch gebraucht?
+       } // end of while(searching)   
 
     // to pacify the compiler...
     return false; 
@@ -1024,13 +1078,20 @@ namespace BALL
 
      new_gradient_norm_ = 0;
 
+int not_selected = 0; 
      for(i = 0; i < no_of_atoms_; i++)
        {
+       if(atom_vector[i]->isSelected() == false)
+         {
+         not_selected++;
+         }
+
        new_gradient_[i]     = atom_vector[i]->getForce() * Constants::AVOGADRO * 1e-13; 
        old_gradient_[i]     = new_gradient_[i];
 
        new_gradient_norm_ += (new_gradient_[i] * new_gradient_[i]);
        }
+
 
      new_gradient_norm_ = sqrt(new_gradient_norm_);
 
@@ -1049,11 +1110,12 @@ namespace BALL
      // If this is a restart, use the old step length 
      if(restart == false)
        {
-       step_length_ = ConjugateGradientMinimizer::Default::STEP_LENGTH; 
+       step_length_ =  ConjugateGradientMinimizer::Default::STEP_LENGTH ; 
 
        force_update_counter_ = 0;
        energy_update_counter_ = 0;
        }
+
 
 
      // If no upper bound for the number of iterations is given, the value stored in 
@@ -1099,13 +1161,14 @@ namespace BALL
          force_field_->update();
          }
 
-       if(snapShot_ptr_ != 0 && number_of_iteration_ % snapshot_output_frequency_ == 0)
+       if(snapShot_ptr_ != 0 && number_of_iteration_ % snapshot_frequency_ == 0)
          {
          // Take a snapshot of the current conformation 
          snapShot_ptr_->takeSnapShot(); 
          }
 
        old_energy = force_field_->getEnergy(); 
+
        result = determineNewSolution();
 
        if(result == false)
