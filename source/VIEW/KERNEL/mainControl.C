@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.33 2003/12/10 17:20:00 amoll Exp $
+// $Id: mainControl.C,v 1.34 2003/12/10 18:45:24 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -64,7 +64,7 @@ MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 
 	statusBar()->addWidget(message_label_, 20);
 
-	timer_->setInterval(5000);
+	timer_->setInterval(9000);
 	timer_->setLabel(message_label_);
 
 	initPopupMenu(EDIT);
