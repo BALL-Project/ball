@@ -102,7 +102,7 @@ NotificationTarget2                 DI          Z
 Object                              (/)         (/)       read/write fehlen
 PersistenceManager                  DI          Z
 PersistentObject                    I           /
-RandomAccessIterator                DI          Z
+RandomAccessIterator                IX          X 
 ConstRandomAccessIterator           DI          Z
 ReverseRandomAccessIterator         DI          Z
 ConstReverseRandomAccessIterator    DI          Z
@@ -147,41 +147,41 @@ PDBFile                             DEI,        X
 XYZFile                             DEI,        /
 DCDFile                             X?          Z
 ------------------------KERNEL----------------------------------------------
-Atom                                DX          /           read, write fehlt
+Atom                                D           /
             BondIteratorTraits_     DEI         Z
-AtomContainer                       DX          /           read, write fehlt
+AtomContainer                       D           /
 AtomContainerIteratorTraits_        EI          Z
 AtomIteratorTraits_                 EI          Z
 Bond                                D           /
             TooManyBonds            I           Z
-Chain                               X           /           read, write fehlt
+Chain                               /           /
 ChainIteratorTraits_                EI
 CompositeIteratorTraits_            EI          Z
 Expression                          EIX         X
 ExpressionPredicate                 EIX
 ExpressionTree                      EIX         
 SyntaxTree                          EI
-Fragment                            X           /           read, write fehlt
+Fragment                            /           / 
 FragmentIteratorTraits_             EI          Z
 Element                             /           /
 PTE_                                D           /
 KernelPredicate                     I           /
-Molecule                            X           /           read, write fehlt
+Molecule                            /           /
 MoleculeIteratorTraits_             EI          Z
-NucleicAcid                         IX          /           read, write fehlt
+NucleicAcid                         I           /
 NucleicAcidIteratorTraits_          EI          Z
-Nucleotide                          X           /           read, write fehlt
+Nucleotide                          /           /
 NucleotideIteratorTraits_           EI          Z
-PDBAtom                             DX          Z           read, write fehlt
+PDBAtom                             D           /
 PDBAtomIteratorTraits_              EI          Z
-Protein                             X           /           read, write fehlt
+Protein                             /           /
 ProteinIteratorTraits_              EI          Z
-Residue                             X           /           read, write fehlt
+Residue                             /           /
 ResidueIteratorTraits_              EI          Z
-SecondaryStructure                  X           /           read, write fehlt
+SecondaryStructure                  /           /
 SecondaryStructureIteratorTraits_   EI          Z
 Selector                            EI
-System                              X           /           read, write fehlt
+System                              /           /
 
  AromaticBondsPredicate             /           /           OCI nicht notwendig
  AtomNamePredicate                  /           /           OCI nicht notwendig
@@ -221,6 +221,7 @@ TPlane3                             /           /
 TQuaternion                         /           /
 TSphere3                            /           /
 TSurface                            X           Z    
+TVector2														/						/
 TVector3                            /           /
 TVector4                            /           /
 Function                            I           /
@@ -344,10 +345,12 @@ AssignShiftProcessor                DI          /
 ClearShiftProcessor                 I           X
 CreateSpectrumProcessor             DI          Z
 EFShiftProcessor                    I           X
+Experiment													X						Z
 HaighMallionShiftProcessor          IX          X
+HBondShiftProcessor									X						Z
 JohnsonBoveyShiftProcessor          IX          X
 MakeSpectrumProcessor               EI          X
-NMRSpectrum                         EI          X
+Spectrum  		                      EI          X
 Peak1D                              EI          X
 RandomCoilShiftProcessor            EI          X
 ShiftModel                          I           /
@@ -365,6 +368,7 @@ PyNucleicAcidList                   DEI         Z
 PyMoleculeList                      DEI         Z
 PyPDBAtomList                       DEI         Z
 PyProteinList                       DEI         Z
+PyResidueList                       DEI         Z
 PySecondaryStructureList            DEI         Z
 ------------------------SOLVATION-------------------------------------------
 ClaverieParameter                   D           Z
