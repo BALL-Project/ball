@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RegularData2D_test.C,v 1.14 2003/06/19 10:45:53 oliver Exp $
+// $Id: RegularData2D_test.C,v 1.15 2003/06/19 19:19:47 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/regularData2D.h>
 
-START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.14 2003/06/19 10:45:53 oliver Exp $")
+START_TEST(RegularData2D, "$Id: RegularData2D_test.C,v 1.15 2003/06/19 19:19:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -125,9 +125,7 @@ CHECK(const IndexType& getSize() const throw())
 	TEST_EQUAL(g.getSize().y, 9)
 RESULT
 
-RegularData2D::IndexType pp;
 Vector2 v;
-
 CHECK(const ValueType& getData(Position index) const throw(Exception::OutOfGrid))
 	g[0] = 5.4321;		
 	g[1] = 1.2345;		
@@ -154,6 +152,21 @@ CHECK(CoordinateType getCoordinates(Position index) const throw(Exception::OutOf
 
 	TEST_EXCEPTION(Exception::OutOfGrid, g.getCoordinates(g.size()))
 	TEST_EXCEPTION(Exception::OutOfGrid, g.getCoordinates(g.size() + 1))
+RESULT
+
+CHECK(CoordinateType getCoordinates(const IndexType& index) const throw(Exception::OutOfGrid))
+	v = g.getCoordinates(RegularData2D::IndexType(0, 0));
+	TEST_REAL_EQUAL(v.x, g.getOrigin().x)
+	TEST_REAL_EQUAL(v.y, g.getOrigin().y)
+	v = g.getCoordinates(RegularData2D::IndexType(1, 0));
+	TEST_REAL_EQUAL(v.x, g.getOrigin().x + g.getSpacing().x)
+	TEST_REAL_EQUAL(v.y, g.getOrigin().y)
+	v = g.getCoordinates(RegularData2D::IndexType(0, 1));
+	TEST_REAL_EQUAL(v.x, g.getOrigin().x)
+	TEST_REAL_EQUAL(v.y, g.getOrigin().y + g.getSpacing().y)
+
+	TEST_EXCEPTION(Exception::OutOfGrid, g.getCoordinates(RegularData2D::IndexType(0, 10000)))
+	TEST_EXCEPTION(Exception::OutOfGrid, g.getCoordinates(RegularData2D::IndexType(100000, 0)))
 RESULT
 
 CHECK(void getEnclosingIndices(const CoordinateType& r, Position& ll, Position& lr, Position& ul, Position& ur) const throw(Exception::OutOfGrid))
@@ -205,27 +218,6 @@ CHECK(void getEnclosingValues(const CoordinateType& r, ValueType& ll, ValueType&
 	TEST_EXCEPTION(Exception::OutOfGrid, g.getEnclosingValues(v, p1, p2, p3, p4))
 RESULT
 
-CHECK(getOrigin() const)
-	v = g.getOrigin();
-	TEST_REAL_EQUAL(v.x, 1.0)
-	TEST_REAL_EQUAL(v.y, 2.0)
-RESULT
-
-CHECK(setOrigin())
-	g.setOrigin(Vector2(3.0, 3.0));
-	v = g.getOrigin();
-	TEST_REAL_EQUAL(v.x, 3.0)
-	TEST_REAL_EQUAL(v.y, 3.0)
-	pp = g.getClosestIndex(Vector2(3.0, 3.0));
-	TEST_EQUAL(pp.x, 0)
-	TEST_EQUAL(pp.y, 0)
-RESULT
-
-CHECK(getDimension() const)
-	TEST_REAL_EQUAL(g.getDimension().x, 3.0)
-	TEST_REAL_EQUAL(g.getDimension().y, 4.0)
-RESULT
-
 g = RegularData2D(Vector2(0.0, 0.0), Vector2(4.0, 9.0), Vector2(2.0, 3.0));
 
 CHECK(ValueType getInterpolatedValue(const CoordinateType& x) const throw(Exception::OutOfGrid))
@@ -250,13 +242,6 @@ TEST_EXCEPTION(Exception::OutOfGrid, g.getInterpolatedValue(v))
 RESULT
 
 RegularData2D grid2 = g;
-
-CHECK(operator ==)
-	grid2 = g;
-	TEST_EQUAL(g == g, true)
-	grid2[5] = -99.9;
-	TEST_EQUAL(g == grid2, false)
-RESULT
 
 CHECK(bool isInside(const CoordinateType& x) const throw())
 	RegularData2D g(Vector2(0.0, 0.0), Vector2(10.0, 10.0), Vector2(1.0, 1.0));
@@ -409,20 +394,29 @@ CHECK(ValueType operator () (const CoordinateType& x) const throw())
 RESULT
 
 
-RegularData2D rg(Vector2(0.0), Vector2(5,5), Vector2(1.0, 1.0));
+RegularData2D rg(Vector2(-2.5), Vector2(5.0), Vector2(1.0, 1.0));
+for (Position y = 0; y < rg.size() ; y++)
+{
+	rg[y] = (float)y;
+}
 CHECK(ValueType& getClosestValue(const CoordinateType& x) throw(Exception::OutOfGrid))
-	for (Position y = 0; y < 25 ; y++)
-	{
-		rg[y] = y;
-	}
-	TEST_REAL_EQUAL(rg.getClosestValue(Vector2(4.1,4.4)), 16)
-	TEST_EXCEPTION(Exception::OutOfGrid, rg.getClosestValue(Vector2(5.1,5.0)))
+	RegularData2D rg2(rg);
+	TEST_REAL_EQUAL(rg2.getClosestValue(Vector2(1.6, 1.9)), 28.0)
+	rg2.getClosestValue(Vector2(1.6, 1.9)) = -150.0;
+	TEST_REAL_EQUAL(rg2.getData(RegularData2D::IndexType((int)(1.6 + 2.5 + 0.5), (Index)(1.9 + 2.5 + 0.5))), -150.0)
+	TEST_EXCEPTION(Exception::OutOfGrid, rg2.getClosestValue(Vector2(2.505, 2.000)))
+	TEST_EXCEPTION(Exception::OutOfGrid, rg2.getClosestValue(Vector2(2.000, 2.505)))
+	TEST_EXCEPTION(Exception::OutOfGrid, rg2.getClosestValue(Vector2(-2.505, -2.000)))
+	TEST_EXCEPTION(Exception::OutOfGrid, rg2.getClosestValue(Vector2(-2.000, -2.505)))
 RESULT
 
 CHECK(const ValueType& getClosestValue(const CoordinateType& x) const throw(Exception::OutOfGrid))
 	const RegularData2D& rg2 = rg;
-	TEST_REAL_EQUAL(rg2.getClosestValue(Vector2(2.2, 2.3)), 4)
-	TEST_EXCEPTION(Exception::OutOfGrid, rg2.getClosestValue(Vector2(5.1,5.0)))
+	TEST_REAL_EQUAL(rg2.getClosestValue(Vector2(-0.3, -0.2)), 14.0)
+	TEST_EXCEPTION(Exception::OutOfGrid, rg.getClosestValue(Vector2(2.505, 2.000)))
+	TEST_EXCEPTION(Exception::OutOfGrid, rg.getClosestValue(Vector2(2.000, 2.505)))
+	TEST_EXCEPTION(Exception::OutOfGrid, rg.getClosestValue(Vector2(-2.505, -2.000)))
+	TEST_EXCEPTION(Exception::OutOfGrid, rg.getClosestValue(Vector2(-2.000, -2.505)))
 RESULT
 
 CHECK(ValueType& getData(Position index) throw(Exception::OutOfGrid))
@@ -435,29 +429,44 @@ CHECK(ValueType& getData(Position index) throw(Exception::OutOfGrid))
 RESULT
 
 CHECK(ValueType& getData(const IndexType& index) throw(Exception::OutOfGrid))
-	RegularData2D rg(Vector2(0.0), Vector2(5,5), Vector2(1.0, 1.0));
-	for (Position x = 0; x < 6; x++) 
-		for (Position y = 0; y < 6; y++)
-	{ 
-		//rg[RegularData2D::IndexType(x,y)] = x*y;
-		rg.getData(RegularData2D::IndexType(x,y)) = x*y;
+	RegularData2D rg(Vector2(0.0), Vector2(5.0), Vector2(1.0));
+	for (Position x = 0; x < rg.getSize().x; x++) 
+	{
+		for (Position y = 0; y < rg.getSize().y; y++)
+		{ 
+			rg.getData(RegularData2D::IndexType(x, y)) = (float)(x * y);
+		}
 	}
+	STATUS("Size: " << rg.getSize().x << "x" << rg.getSize().y)
+	STATUS("Org : " << rg.getOrigin())
+	STATUS("Dim : " << rg.getDimension())
 
-	TEST_REAL_EQUAL(rg.getData(RegularData2D::IndexType(0,0)), 0.0)
-	TEST_REAL_EQUAL(rg.getData(RegularData2D::IndexType(1,1)), 1.0)
-	TEST_REAL_EQUAL(rg.getData(RegularData2D::IndexType(6,6)), 36.0)
-	TEST_EXCEPTION(Exception::OutOfGrid, rg.getData(RegularData2D::IndexType(12,12)))
+	TEST_REAL_EQUAL(rg.getData(RegularData2D::IndexType(0, 0)), 0.0)
+	TEST_REAL_EQUAL(rg.getData(RegularData2D::IndexType(1, 1)), 1.0)
+	TEST_REAL_EQUAL(rg.getData(RegularData2D::IndexType(5, 5)), 25.0)
+	TEST_EXCEPTION(Exception::OutOfGrid, rg.getData(RegularData2D::IndexType(12, 12)))
 RESULT
 
 CHECK(const ValueType& getData(const IndexType& index) const throw(Exception::OutOfGrid))
-  // ???
+	RegularData2D rg(Vector2(0.0), Vector2(5.0), Vector2(1.0));
+	for (Position x = 0; x < rg.getSize().x; x++) 
+	{
+		for (Position y = 0; y < rg.getSize().y; y++)
+		{ 
+			rg.getData(RegularData2D::IndexType(x, y)) = x * y;
+		}
+	}
+	const RegularData2D& c_rg(rg);
+	TEST_REAL_EQUAL(c_rg.getData(RegularData2D::IndexType(0, 0)), 0.0)
+	TEST_REAL_EQUAL(c_rg.getData(RegularData2D::IndexType(1, 1)), 1.0)
+	TEST_REAL_EQUAL(c_rg.getData(RegularData2D::IndexType(5, 5)), 25.0)
+	TEST_EXCEPTION(Exception::OutOfGrid, c_rg.getData(RegularData2D::IndexType(12, 12)))
 RESULT
 
 CHECK(ValueType& operator [] (Position index) throw())
 	RegularData2D rg(Vector2(0.0), Vector2(5,5), Vector2(1.0, 1.0));
 	rg[1] = 12.4;
 	TEST_REAL_EQUAL(rg[1], 12.4)
-	TEST_REAL_EQUAL(rg[11111], 12.4)
 RESULT
 
 CHECK(ValueType& operator [] (const IndexType& index) throw())
@@ -489,7 +498,7 @@ CHECK(bool operator != (const TRegularData2D<ValueType>& data) const throw())
 	TEST_EQUAL(rg != rg2, true)
 RESULT
 
-CHECK(const TRegularData2D& operator = (const TRegularData2D<ValueType>& data) throw(Exception::OutOfMemory))
+CHECK(TRegularData2D& operator = (const TRegularData2D<ValueType>& data) throw(Exception::OutOfMemory))
  	RegularData2D rg(Vector2(0.0), Vector2(5,5), Vector2(1.0, 1.0));
 	for (Position x = 0; x < 6; x++) 
 		for (Position y = 0; y < 6; y++)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PeakList_test.C,v 1.6 2002/02/27 12:24:44 sturm Exp $
+// $Id: PeakList_test.C,v 1.7 2003/06/19 19:19:47 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(PeakList, "$Id: PeakList_test.C,v 1.6 2002/02/27 12:24:44 sturm Exp $")
+START_TEST(PeakList, "$Id: PeakList_test.C,v 1.7 2003/06/19 19:19:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -77,20 +77,6 @@ CHECK(PeakList1D::getMinIntensity() const )
 RESULT
 
 
-CHECK(PeakList1D::getMinPosition() const )
-	PeakList1D pl2;
-	TEST_REAL_EQUAL(pl2.getMinPosition(), Limits<float>::max())
-	TEST_REAL_EQUAL(pl.getMinPosition(), 1.0)
-RESULT
-
-
-CHECK(PeakList1D::getMaxPosition() const )
-	PeakList1D pl2;
-	TEST_REAL_EQUAL(pl2.getMaxPosition(), -Limits<float>::max())
-	TEST_REAL_EQUAL(pl.getMaxPosition(), 4.0)
-RESULT
-
-
 /// PeakList2D
 PeakList2D* pl2D_ptr = 0;
 CHECK(PeakList2D::PeakList())
@@ -153,23 +139,6 @@ CHECK(PeakList2D::getMinIntensity() const )
 	TEST_REAL_EQUAL(pl_2D.getMinIntensity(), 2.0)
 RESULT
 
-
-CHECK(PeakList2D::getMinPosition() const )
-	PeakList2D pl_2D_2;
-	TEST_REAL_EQUAL(pl_2D_2.getMinPosition().x, Limits<float>::max())
-	TEST_REAL_EQUAL(pl_2D_2.getMinPosition().y, Limits<float>::max())
-	TEST_REAL_EQUAL(pl_2D.getMinPosition().x, 1.0)
-	TEST_REAL_EQUAL(pl_2D.getMinPosition().y, 2.0)
-RESULT
-
-
-CHECK(PeakList2D::getMaxPosition() const )
-	PeakList2D pl_2D_2;
-	TEST_REAL_EQUAL(pl_2D_2.getMaxPosition().x, -Limits<float>::max())
-	TEST_REAL_EQUAL(pl_2D_2.getMaxPosition().y, -Limits<float>::max())
-	TEST_REAL_EQUAL(pl_2D.getMaxPosition().x, 4.0)
-	TEST_REAL_EQUAL(pl_2D.getMaxPosition().y, 5.0)
-RESULT
 
 /// PeakList3D
 PeakList3D* pl3D_ptr = 0;
@@ -237,27 +206,6 @@ CHECK(PeakList3D::getMinIntensity() const )
 	TEST_REAL_EQUAL(pl_3D.getMinIntensity(), 2.0)
 RESULT
 
-
-CHECK(PeakList3D::getMinPosition() const )
-	PeakList3D pl_3D_2;
-	TEST_REAL_EQUAL(pl_3D_2.getMinPosition().x, Limits<float>::max())
-	TEST_REAL_EQUAL(pl_3D_2.getMinPosition().y, Limits<float>::max())
-	TEST_REAL_EQUAL(pl_3D_2.getMinPosition().z, Limits<float>::max())
-	TEST_REAL_EQUAL(pl_3D.getMinPosition().x, 1.0)
-	TEST_REAL_EQUAL(pl_3D.getMinPosition().y, 2.0)
-	TEST_REAL_EQUAL(pl_3D.getMinPosition().z, 3.0)
-RESULT
-
-
-CHECK(PeakList3D::getMaxPosition() const )
-	PeakList3D pl_3D_2;
-	TEST_REAL_EQUAL(pl_3D_2.getMaxPosition().x, -Limits<float>::max())
-	TEST_REAL_EQUAL(pl_3D_2.getMaxPosition().y, -Limits<float>::max())
-	TEST_REAL_EQUAL(pl_3D_2.getMaxPosition().z, -Limits<float>::max())
-	TEST_REAL_EQUAL(pl_3D.getMaxPosition().x, 4.0)
-	TEST_REAL_EQUAL(pl_3D.getMaxPosition().y, 5.0)
-	TEST_REAL_EQUAL(pl_3D.getMaxPosition().z, 6.0)
-RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
