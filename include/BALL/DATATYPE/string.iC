@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.27 2000/12/08 08:59:42 oliver Exp $
+// $Id: string.iC,v 1.28 2000/12/10 21:39:12 amoll Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -460,7 +460,7 @@ const String& String::operator = (const char *char_ptr)
 }
 
 BALL_INLINE 
-const String& String::operator = (std::strstream& s)
+const String& String::operator = (strstream& s)
 	throw()
 {
   set(s);
