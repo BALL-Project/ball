@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.6 2003/10/15 13:37:30 amoll Exp $
+// $Id: server.C,v 1.7 2003/10/16 10:53:20 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -340,8 +340,6 @@ namespace BALL
 					CompositeMessage* message = new CompositeMessage;
 					message->setComposite(*inserted_composite_ptr);
 					message->setType(CompositeMessage::REMOVED_COMPOSITE);
-					//message->setDeletable(false);
-					message->setDeletable(true);
 					notify_(message);
 					
 					// remove composite from hashmap
@@ -363,8 +361,6 @@ namespace BALL
 			CompositeMessage* new_message = new CompositeMessage;
 			new_message->setComposite(*new_composite_ptr);
 			new_message->setType(CompositeMessage::NEW_COMPOSITE);
-			//new_message->setDeletable(false);
-			new_message->setDeletable(true);
 			notify_(new_message);
     }
 
