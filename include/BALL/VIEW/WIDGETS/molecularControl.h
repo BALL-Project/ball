@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.10 2003/12/04 01:28:39 amoll Exp $
+// $Id: molecularControl.h,v 1.11 2003/12/07 18:38:02 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -46,23 +46,24 @@ namespace BALL
 				CREATE_REPRESENTATION_MODE = 1,
 				// create a new Representation
 				CREATE_REPRESENTATION,
-				OBJECT__REMOVE      	= 10,
-				OBJECT__CUT         	= 11,
-				OBJECT__COPY        	= 12,
-				OBJECT__PASTE       	= 13,
-				OBJECT__MOVE        	= 14,
-				SELECT              	= 26,
-				DESELECT            	= 27,
+				OBJECT__REMOVE,
+				OBJECT__CUT,
+				OBJECT__COPY,
+				OBJECT__PASTE,
+				OBJECT__MOVE,
+				SELECT,
+				DESELECT,
 
-				CAMERA__CENTER      	= 110,
-				BONDS__BUILD        	= 120,
-				BONDS__REMOVE       	= 121,
-				RESIDUE__CHECK      	= 140,
-				DISPLAY__CHANGE     	= 150,
-				ATOM__PROPERTIES			= 160,
-				BOND__PROPERTIES			= 165,
-				SHOW__FILENAME 				= 170,
-				COLLAPSE_ALL 					= 180
+				CAMERA__CENTER,
+				BONDS__BUILD,
+				BONDS__REMOVE,
+				RESIDUE__CHECK,
+				DISPLAY__CHANGE,
+				ATOM__PROPERTIES,
+				BOND__PROPERTIES,
+				COUNT__ITEMS,
+				SHOW__FILENAME,
+				COLLAPSE_ALL
 			};
 
 			Q_OBJECT
@@ -261,6 +262,9 @@ namespace BALL
 			/** Center the camera on a composite.
 			 */
 			void centerCamera();
+
+			/// Count the molecular items and print the info
+			void countItems();
 
 			/// Show the filename from which the composite was loaded.
 			void showFilename();

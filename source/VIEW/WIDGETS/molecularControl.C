@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.22 2003/12/06 00:01:24 amoll Exp $
+// $Id: molecularControl.C,v 1.23 2003/12/07 18:37:44 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -232,6 +232,8 @@ void MolecularControl::buildContextMenu(Composite& composite)
 
 		context_menu_.insertItem("Build Bonds", this, SLOT(buildBonds()), 0, BONDS__BUILD);
 		context_menu_.setItemEnabled(BONDS__BUILD, composites_muteable);
+
+		context_menu_.insertItem("Count items", this, SLOT(countItems()), 0, COUNT__ITEMS);
 	}
 
 	context_menu_.insertItem("Focus camera", this, SLOT(centerCamera()), 0, CAMERA__CENTER);
@@ -908,6 +910,44 @@ void MolecularControl::createRepresentation_()
 	CreateRepresentationMessage* crm = new CreateRepresentationMessage(selected_, 
 			selected_model_, selected_coloring_method_);
 	notify_(crm);
+}
+
+void MolecularControl::countItems()
+{
+	if (context_item_ == 0 ||
+			context_item_->getComposite() == 0 || 
+			!RTTI::isKindOf<AtomContainer>(*context_item_->getComposite()))
+	{
+		return;
+	}
+	AtomContainer& ac = *(AtomContainer*) context_item_->getComposite(); 
+
+	String s;
+	if (RTTI::isKindOf<System>(ac))
+	{
+		s+=String(((System*)&ac)->countResidues());
+		s+= " Residues, ";
+	}
+	else if (RTTI::isKindOf<Protein>(ac))
+	{
+		s+=String(((Protein*)&ac)->countResidues());
+		s+= " Residues, ";
+	}
+	else if (RTTI::isKindOf<Chain>(ac))
+	{
+		s+=String(((Chain*)&ac)->countResidues());
+		s+= " Residues, ";
+	}
+	if (RTTI::isKindOf<SecondaryStructure>(ac))
+	{
+		s+=String(((SecondaryStructure*)&ac)->countResidues());
+		s+= " Residues, ";
+	}
+
+	s+=String(ac.countAtoms()) + " Atoms, ";
+	s+=String(ac.countBonds()) + " Bonds, with ";
+	s+=String(ac.countInterBonds()) + " InterBonds";
+	setStatusbarText(s);
 }
 
 } } // namespaces
