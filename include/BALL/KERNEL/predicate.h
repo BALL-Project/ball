@@ -1,4 +1,4 @@
-// $Id: predicate.h,v 1.3 1999/12/30 20:30:41 oliver Exp $
+// $Id: predicate.h,v 1.4 2000/04/26 13:05:42 amoll Exp $
 
 #ifndef BALL_KERNEL_PREDICATE_H
 #define BALL_KERNEL_PREDICATE_H
@@ -19,7 +19,7 @@ namespace BALL
 			can be used to identify the class type of a composite at runtime.\\
 			This predicates are functionally similar to the \Ref{RTTI:isKindOf} function.
 			They decide whether a given composite is an instance of a certain class (or of
-			a class derived thereof). Forinstance, the application of a \Ref{MoleculePredicate}
+			a class derived thereof). For instance, the application of a \Ref{MoleculePredicate}
 			to a composite will yield {\bf true}, if the given composite was an instance of \Ref{Molecule}
 			(or \Ref{Protein}, as Protein is derived from Molecule). Otherwise false is returned.\\
 			Each KernelPredicate possesses three methods:

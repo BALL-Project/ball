@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.8 2000/04/25 16:52:27 amoll Exp $
+// $Id: secondaryStructure.h,v 1.9 2000/04/26 13:05:42 amoll Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -104,7 +104,7 @@ namespace BALL
 				The assignment is either deep or shallow (default).
 				@param   secondary_structure the SecondaryStructure to be copied (cloned)
 				@return  secondary_structure& - {\em *this} SecondaryStructure
-				@see     secondary_structure::set
+				@see     SecondaryStructure::set
 		*/
 		SecondaryStructure &operator =(const SecondaryStructure& secondary_structure);
 
