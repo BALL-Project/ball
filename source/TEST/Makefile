@@ -5,12 +5,15 @@ XDR_DEPENDENT_EXECUTABLES=\
 
 EXECUTABLES_BASIC = \
 	ClassTest_test\
+	RegularExpression_test\
 	GlobalTypes_test\
 	Limits_test\
 	VersionInfo_test\
 	RTTI_test
 
 EXECUTABLES_MATHS = \
+	MathsCommon_test\
+	AnalyticalGeometry_test\
 	Angle_test\
 	Vector3_test\
 	Vector4_test\
@@ -20,9 +23,7 @@ EXECUTABLES_MATHS = \
 	Circle3_test\
 	Box3_test\
 	Plane3_test\
-	Sphere3_test\
-	MathsCommon_test\
-	AnalyticalGeometry_test
+	Sphere3_test
 
 EXECUTABLES_SYSTEM = \
 	Directory_test\
@@ -47,8 +48,7 @@ EXECUTABLES_DATATYPES = \
 	PiecewisePolynomial_test\
 	Quadruple_test\
 	RegularData1D_test\
-	RegularData3D_test\
-	RegularExpression_test
+	RegularData3D_test
 
 EXECUTABLES_CONCEPTS =$(BALL_HAS_XDR:true=$(XDR_DEPENDENT_EXECUTABLES))\
 	LogStream_test\
@@ -106,11 +106,11 @@ EXECUTABLES_NMR = \
 EXECUTABLES_FILES =\
 	LineBasedFile_test\
 	BinaryFileAdaptor_test\
+	INIFile_test\
 	Parameters_test\
 	ParameterSection_test\
 	ResourceFile_test\
 	HINFile_test\
-	INIFile_test\
 	NMRStarFile_test\
 	DCDFile_test\
 	MOL2File_test\
@@ -123,7 +123,6 @@ EXECUTABLES_ENERGY = \
 	ComposedEnergyProcessor_test\
 	EnergyProcessor_test\
 	OoiEnergy_test
-
 
 EXECUTABLES_STRUCTURE = \
 	Enumerator_test\
