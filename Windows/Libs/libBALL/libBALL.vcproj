@@ -1288,9 +1288,6 @@
 				Name="STRUCTURE"
 				Filter="">
 				<File
-					RelativePath="..\..\..\source\STRUCTURE\BSDTree.C">
-				</File>
-				<File
 					RelativePath="..\..\..\source\STRUCTURE\RDFIntegrator.C">
 				</File>
 				<File
@@ -1307,6 +1304,15 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\RSVertex.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\SASEdge.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\SASFace.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\SASVertex.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\SESEdge.C">
@@ -1432,6 +1438,9 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\source\STRUCTURE\solventAccessibleSurface.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\STRUCTURE\solventExcludedSurface.C">
 				</File>
 				<File
@@ -1448,6 +1457,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\trianglePoint.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\STRUCTURE\triangulatedSAS.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\triangulatedSES.C">

@@ -52,9 +52,6 @@ del *.exe"
 			Name="Quelldateien"
 			Filter="cpp;c;cxx;def;odl;idl;hpj;bat;asm">
 			<File
-				RelativePath="..\..\source\TEST\GenericMolFile_test.C">
-			</File>
-			<File
 				RelativePath="Make.lst">
 			</File>
 			<File
