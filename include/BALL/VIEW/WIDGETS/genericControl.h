@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.h,v 1.1 2003/09/07 23:19:41 amoll Exp $
+// $Id: genericControl.h,v 1.2 2003/09/07 23:43:08 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_GenericControl_H
 #define BALL_VIEW_WIDGETS_GenericControl_H
@@ -115,7 +115,7 @@ namespace BALL
 
 		  protected slots:
 			
-			void onContextMenu_(QListViewItem* item, const QPoint& point, int column){};
+			void onContextMenu_(QListViewItem* item, const QPoint& point, int column);
 
 		  protected:
 			QListViewItem* 								context_item_;
