@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.34 2003/05/22 15:14:15 oliver Exp $
+// $Id: PDBFile.C,v 1.35 2003/05/23 14:09:58 anker Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -437,7 +437,7 @@ namespace BALL
 		Size number_of_proteins = system.count(RTTI::getDefault<KernelPredicate<Protein> >());
 		if (number_of_proteins > 1)
 		{
-			Log.error() << "PDBFile::write: cannot write a system with multiple proteins to a PDB file." << endl;
+			Log.error() << "PDBFile::write(): cannot write a system with multiple proteins to a PDB file." << endl;
 			return;
 		}
 		
@@ -873,10 +873,12 @@ namespace BALL
 				residue[0] = bond_it->getFirstAtom()->getResidue();
 				residue[1] = bond_it->getSecondAtom()->getResidue();
 
-				if (residue[0] == 0 || residue[1] == 0
-						|| residue[0] == residue[1]
-						|| residue[0]->hasProperty(Residue::PROPERTY__HAS_SSBOND) == false
-						|| residue[1]->hasProperty(Residue::PROPERTY__HAS_SSBOND) == false)
+				if ((bond_it->getFirstAtom()->getElement() != PTE[Element::S])
+						|| (bond_it->getSecondAtom()->getElement() != PTE[Element::S])
+						|| (residue[0] == 0) || (residue[1] == 0)
+						|| (residue[0] == residue[1])
+						|| (residue[0]->hasProperty(Residue::PROPERTY__HAS_SSBOND) == false)
+						|| (residue[1]->hasProperty(Residue::PROPERTY__HAS_SSBOND) == false))
 				{
 					continue;
 				}
