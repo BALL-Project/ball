@@ -1,4 +1,4 @@
-// $Id: numericalSAS.C,v 1.17 2000/08/31 16:14:33 anker Exp $
+// $Id: numericalSAS.C,v 1.18 2000/08/31 21:11:29 oliver Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -336,7 +336,7 @@ namespace BALL
 		return area;
 	}
 	
-  float calculateSASAtomPoints(const BaseFragment& fragment, 
+  float calculateSASAtomPoints(const AtomContainer& fragment, 
 			std::vector< std::pair<Vector3, Surface> >& atom_surfaces,
 			float probe_radius,  Size number_of_dots)
 	{
