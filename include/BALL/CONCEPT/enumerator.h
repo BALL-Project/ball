@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.2 2000/06/15 11:48:35 oliver Exp $
+// $Id: enumerator.h,v 1.3 2000/06/16 08:31:29 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -363,7 +363,7 @@ namespace BALL
 			
 			
 			IteratorTraits_(const IteratorTraits_& traits)
-				:	bound_(traits.bound_)
+				:	bound_(traits.bound_),
 					position_(traits.position_)
 			{
 			}
@@ -472,6 +472,11 @@ namespace BALL
 		MutatorFunction mutator_;
 		SiteList  variant_sites_;
 	};
+	
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/CONCEPT/enumerator.iC>
+#	endif
+
 }
 
 #endif // BALL_CONCEPT_ENUMERATOR_H
