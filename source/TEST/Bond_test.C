@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Bond_test.C,v 1.29 2003/03/14 10:11:27 oliver Exp $
+// $Id: Bond_test.C,v 1.30 2003/03/14 12:29:51 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -15,7 +15,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.29 2003/03/14 10:11:27 oliver Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.30 2003/03/14 12:29:51 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -86,8 +86,8 @@ CHECK(createBond(Bond&, Atom&, Atom&))
 	TEST_EQUAL(a1.countBonds(), 2);
 	TEST_EQUAL(a3.countBonds(), 1);
 
-	std::vector<Bond> bonds(Atom::MAX_NUMBER_OF_BONDS + 10);
-	std::vector<Atom> atoms(Atom::MAX_NUMBER_OF_BONDS + 11);
+	Bond bonds[Atom::MAX_NUMBER_OF_BONDS + 10];
+	Atom atoms[Atom::MAX_NUMBER_OF_BONDS + 11];
 	for (Position i = 1; i < (Atom::MAX_NUMBER_OF_BONDS + 10); ++i)
 	{
 		STATUS("# bonds: " << i)
@@ -102,6 +102,8 @@ CHECK(createBond(Bond&, Atom&, Atom&))
 			TEST_EQUAL(atoms[0].countBonds(), Atom::MAX_NUMBER_OF_BONDS);
 		}
 	}		
+	TEST_EQUAL(bonds[0].isAutoDeletable(), false)
+	TEST_EQUAL(bonds[1].isAutoDeletable(), false)
 	atoms[0].destroyBonds();
 RESULT
 
