@@ -1,4 +1,4 @@
-// $Id: regularData3D.h,v 1.8.4.6 2002/12/11 10:59:13 anker Exp $ 
+// $Id: regularData3D.h,v 1.8.4.7 2002/12/11 14:06:03 anker Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -733,9 +733,9 @@ namespace BALL
 		{
 			number_of_points_y_ = 2;
 		}
-		if (number_of_points_y_ < 2)
+		if (number_of_points_z_ < 2)
 		{
-			number_of_points_y_ = 2;
+			number_of_points_z_ = 2;
 		}
 
 		// calculate the total number of grid points
