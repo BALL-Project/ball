@@ -1,4 +1,4 @@
-// $Id: atomBondModelBaseProcessor.h,v 1.5 2001/07/02 09:30:13 anker Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.6 2001/07/15 18:49:17 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
 #define BALL_MOLVIEW_FUNCTOR_ATOMBONDMODELBASEPROCESSOR_H
@@ -68,9 +68,9 @@ namespace BALL
 				@see     Atom
 				@see     Bond
 				@memo    AtomBondModelBaseProcessor class (BALL MOLVIEW functor framework)
-				@author  $Author: anker $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/07/02 09:30:13 $
+				@author  $Author: oliver $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/15 18:49:17 $
 		*/
 		class AtomBondModelBaseProcessor
 			:	public BaseModelProcessor
@@ -350,16 +350,8 @@ namespace BALL
 					This method is the control method that is responsible for creating the needed models
 					for \Ref{Bond} objects between different models.
 					See \Ref{BaseModelConnector} for more information about connecting different models.
-					@see  finish
-					@see  insertAtom_
-					@see  getAtomList_
-					@see  getAtomSet_
-					@see  BaseModelConnector
-					@see  getModelConnector
-					@see  removeGeometricObjects_
 			*/
-			void buildBondModels_()
-				throw();
+			void buildBondModels_();
 			//@}
 
 			private:

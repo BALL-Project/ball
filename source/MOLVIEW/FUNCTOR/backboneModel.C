@@ -1,4 +1,4 @@
-// $Id: backboneModel.C,v 1.3 2001/05/13 15:02:38 hekl Exp $
+// $Id: backboneModel.C,v 1.4 2001/07/15 18:50:28 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #include <BALL/MOLVIEW/FUNCTOR/backboneModel.h>
@@ -58,7 +58,6 @@ namespace BALL
 		}
 
 		bool AddBackboneModel::start()
-			throw()
 		{
 			get_composite_ = true;
 			start_composite_ = 0;
@@ -69,7 +68,6 @@ namespace BALL
 		}
 				
 		bool AddBackboneModel::finish()
-			throw(Exception::OutOfMemory)
 		{
 			// insert Backbone only if a composite exist
 			if (start_composite_ != 0)
@@ -109,9 +107,7 @@ namespace BALL
 		}
 				
 		Processor::Result 
-		AddBackboneModel::operator()
-			(Composite &composite)
-			throw()
+		AddBackboneModel::operator () (Composite& composite)
 		{
 			// take first composite, Backbone will be inserted to it later
 			if (get_composite_)

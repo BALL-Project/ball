@@ -1,4 +1,4 @@
-// $Id: molecularFilter.h,v 1.4 2001/05/13 14:55:22 hekl Exp $
+// $Id: molecularFilter.h,v 1.5 2001/07/15 18:49:18 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARFILTER_H
@@ -44,9 +44,9 @@ namespace BALL
 				This class is used by the class \Ref{MolecularControl} to filter
 				\Ref{Composite} objects that are of the kind specified above.
 				@memo    MolecularFilter class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 14:55:22 $
+				@author  $Author: oliver $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/07/15 18:49:18 $
 		*/
 		class MolecularFilter: public Filter
 		{
@@ -105,8 +105,7 @@ namespace BALL
 					@see    Filter
 					@see    setResult_
 			*/
-			virtual void visit(Composite& composite)
-			  throw();
+			virtual void visit(Composite& composite);
 			//@}
 			
 			protected:

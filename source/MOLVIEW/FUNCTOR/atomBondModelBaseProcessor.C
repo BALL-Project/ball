@@ -1,4 +1,4 @@
-// $Id: atomBondModelBaseProcessor.C,v 1.6 2001/07/01 21:45:27 oliver Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.7 2001/07/15 18:50:28 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/atomBondModelBaseProcessor.h>
 
@@ -125,7 +125,6 @@ namespace BALL
 		}
 
 		void AtomBondModelBaseProcessor::buildBondModels_()
-			throw()
     {
 			// generate bond primitive
 			Atom* first_atom_ptr = 0;

@@ -1,4 +1,4 @@
-// $Id: colorCalculator.h,v 1.7 2001/05/13 14:55:22 hekl Exp $
+// $Id: colorCalculator.h,v 1.8 2001/07/15 18:49:18 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
@@ -56,9 +56,9 @@ namespace BALL
 				This class and their derived classes will be used by the model processors to
 				calculate a color for each \Ref{Atom} object they process.
 				@memo    ColorCalculator class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/05/13 14:55:22 $
+				@author  $Author: oliver $
+				@version $Revision: 1.8 $
+				@date    $Date: 2001/07/15 18:49:18 $
 		*/
 		class ColorCalculator
 			: public Visitor<Atom>,
@@ -277,8 +277,7 @@ namespace BALL
 					@see    getColorMap
 					@see    color_map_
 			*/
-			virtual void visit(Atom& atom)
-				throw();
+			virtual void visit(Atom& atom);
 
 			/** Visit method.
 					If the \Ref{Composite} {\em composite} is of kind \Ref{Atom} than the method
@@ -297,8 +296,7 @@ namespace BALL
 					@see    getColorMap
 					@see    color_map_
 			*/
-			virtual void visit(Composite& composite)
-				throw();
+			virtual void visit(Composite& composite);
 
 			/** Calculate a key to an atom.
 					Calculate a key to the given \Ref{Atom} {\em atom}.

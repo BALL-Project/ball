@@ -1,4 +1,4 @@
-// $Id: surfaceModel.h,v 1.3 2001/05/13 14:55:23 hekl Exp $
+// $Id: surfaceModel.h,v 1.4 2001/07/15 18:49:19 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
@@ -55,9 +55,9 @@ namespace BALL
 				@see     Mesh
 				@see     SurfaceProcessor
 				@memo    AddSurfaceModel class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/05/13 14:55:23 $
+				@author  $Author: oliver $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/07/15 18:49:19 $
 		*/
 		class AddSurfaceModel: public BaseModelProcessor
 		{
@@ -127,8 +127,7 @@ namespace BALL
 					@see    operator()
 					@see    BaseModelProcessor
 			*/
-			virtual bool start()
-				throw();
+			virtual bool start();
 			
 			/** Finish method.
 					This method will be internally called from the processor mechanism if the processor
@@ -145,8 +144,7 @@ namespace BALL
 					@see    System
 					@see    SurfaceProcessor
 			*/
-			virtual bool finish()
-				throw(Exception::OutOfMemory);
+			virtual bool finish();
 			
 			/**	Operator method.
 					This method stores only the start \Ref{Composite} object. In the \Ref{finish}
@@ -158,8 +156,7 @@ namespace BALL
 					@see    Mesh
 					@see    Composite
 			*/
-			virtual Processor::Result operator() (Composite& composite)
-				throw();
+			virtual Processor::Result operator() (Composite& composite);
 			//@}
 
 			/**	@name	debuggers and diagnostics

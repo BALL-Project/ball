@@ -1,4 +1,4 @@
-// $Id: lineModel.C,v 1.10 2001/05/13 15:02:39 hekl Exp $
+// $Id: lineModel.C,v 1.11 2001/07/15 18:50:28 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/lineModel.h>
 
@@ -44,7 +44,6 @@ namespace BALL
 		}
 
 		bool AddLineModel::start()
-			throw()
 		{
 			if (hasProperty(GeometricObject::PROPERTY__DRAWING_MODE_SOLID))
 			{
@@ -58,7 +57,6 @@ namespace BALL
 		}
 				
 		bool AddLineModel::finish()
-			throw()
 		{
 			buildBondModels_();
 
@@ -66,7 +64,6 @@ namespace BALL
 		}
 				
 		Processor::Result AddLineModel::operator() (Composite &composite)
-			throw(Exception::OutOfMemory)
 		{
 			// composite is an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))
@@ -80,27 +77,27 @@ namespace BALL
 			removeGeometricObjects_(*atom, true);
 
 			// generate help BallPrimitive
-			Point *pPoint = createPoint_();
+			Point *point_ptr = createPoint_();
 
-			if (pPoint == 0)
+			if (point_ptr == 0)
 			{
 					throw Exception::OutOfMemory
 						(__FILE__, __LINE__, sizeof(Point));
 			}
 
 			// carry on selected flag
-			pPoint->Selectable::set(*atom);
+			point_ptr->Selectable::set(*atom);
 
-			pPoint->PropertyManager::set(*this);
-			pPoint->PropertyManager::setProperty(PROPERTY__MODEL_LINES);
-			pPoint->setVertexAddress(atom->getPosition());
+			point_ptr->PropertyManager::set(*this);
+			point_ptr->PropertyManager::setProperty(PROPERTY__MODEL_LINES);
+			point_ptr->setVertexAddress(atom->getPosition());
 			
 			atom->host(*getColorCalculator());
 
-			pPoint->setColor(getColorCalculator()->getColor());
+			point_ptr->setColor(getColorCalculator()->getColor());
 
 			// append line in Atom
-			composite.appendChild(*pPoint);
+			composite.appendChild(*point_ptr);
 
 			// collect used atoms
 			insertAtom_(atom);

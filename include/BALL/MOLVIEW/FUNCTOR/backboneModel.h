@@ -1,4 +1,4 @@
-// $Id: backboneModel.h,v 1.3 2001/05/13 14:55:21 hekl Exp $
+// $Id: backboneModel.h,v 1.4 2001/07/15 18:49:17 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BACKBONEMODEL_H
@@ -59,9 +59,9 @@ namespace BALL
 				For information about the processor concept see \Ref{Processor} in tbe BALL
 				documentation.
 				@memo    AddBackboneModel class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/05/13 14:55:21 $
+				@author  $Author: oliver $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/07/15 18:49:17 $
 		*/
 		class AddBackboneModel: public BaseModelProcessor
 		{
@@ -133,8 +133,7 @@ namespace BALL
 					@see    operator()
 					@see    BaseModelProcessor
 			*/
-			virtual bool start()
-				throw();
+			virtual bool start();
 			
 			/** Finish method.
 					This method will be internally called from the processor mechanism if the processor
@@ -152,8 +151,7 @@ namespace BALL
 					@see    Bond
 					@see    Composite
 			*/
-			virtual bool finish()
-				throw(Exception::OutOfMemory);
+			virtual bool finish();
 			
 			/**	Operator method.
 					This method iterates over each \Ref{Composite} object reachable in the 
@@ -175,8 +173,7 @@ namespace BALL
 					@see    Atom
 					@see    Bond
 			*/
-			virtual Processor::Result operator() (Composite& composite)
-				throw();
+			virtual Processor::Result operator() (Composite& composite);
 
 			//@}
 

@@ -1,4 +1,4 @@
-// $Id: colorCalculator.C,v 1.8 2001/05/13 15:02:39 hekl Exp $
+// $Id: colorCalculator.C,v 1.9 2001/07/15 18:50:28 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/colorCalculator.h>
 
@@ -87,7 +87,6 @@ namespace BALL
 		}
 
 		void ColorCalculator::visit(Atom& atom)
-			throw()
 		{
 			String key = calculateKey(atom);
 			ColorMap::ConstIterator map_it = color_map_.find(key);
@@ -99,9 +98,7 @@ namespace BALL
 			}
 		}
 
-		void ColorCalculator::visit
-			(Composite& composite)
-			throw()
+		void ColorCalculator::visit(Composite& composite)
 		{
 			Atom* atom = dynamic_cast<Atom*>(&composite);
 

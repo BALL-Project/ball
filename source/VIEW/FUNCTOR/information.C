@@ -1,4 +1,4 @@
-// $Id: information.C,v 1.3 2001/05/13 14:28:35 hekl Exp $
+// $Id: information.C,v 1.4 2001/07/15 18:50:08 oliver Exp $
 
 #include <BALL/VIEW/FUNCTOR/information.h>
 
@@ -42,7 +42,6 @@ namespace BALL
 		}
 
 		void Information::visit(Composite& composite)
-			throw()
 		{
 			getType_(composite);
 			getTypeName_(composite);

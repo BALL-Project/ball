@@ -1,4 +1,4 @@
-// $Id: molecularInformation.h,v 1.4 2001/05/13 14:55:22 hekl Exp $
+// $Id: molecularInformation.h,v 1.5 2001/07/15 18:49:18 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
 #define BALL_MOLVIEW_FUNCTOR_MOLECULARINFORMATION_H
@@ -69,9 +69,9 @@ namespace BALL
 				of the displayed \Ref{Composite} objects.
 				@see     Information
 				@memo    MolecularInformation class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 14:55:22 $
+				@author  $Author: oliver $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/07/15 18:49:18 $
 		*/
 		class MolecularInformation: public Information
 		{
@@ -184,8 +184,7 @@ namespace BALL
 					@see     Information
 					@see     getType
 			*/
-			virtual void visit(Composite& composite)
-			  throw();
+			virtual void visit(Composite& composite);
 			//@}
 			
 			protected:

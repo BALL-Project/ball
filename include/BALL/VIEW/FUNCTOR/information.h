@@ -1,4 +1,4 @@
-// $Id: information.h,v 1.5 2001/07/08 11:23:54 aubertin Exp $
+// $Id: information.h,v 1.6 2001/07/15 18:48:52 oliver Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_INFORMATION_H
 #define BALL_VIEW_FUNCTOR_INFORMATION_H
@@ -67,9 +67,9 @@ namespace BALL
 				about the shown \Ref{Composite} objects.
 				@see     Control
 				@memo    Information class (BALL VIEW functor framework)
-				@author  $Author: aubertin $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/07/08 11:23:54 $
+				@author  $Author: oliver $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/15 18:48:52 $
 		*/
 		class Information: public Visitor<Composite>
 		{
@@ -213,8 +213,7 @@ namespace BALL
 					@see     getTypeName
 					@see     getName
 			*/
-			virtual void visit(Composite& composite)
-				throw();
+			virtual void visit(Composite& composite);
 			//@}
 			
 			protected:

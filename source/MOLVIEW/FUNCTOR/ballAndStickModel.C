@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.C,v 1.12 2001/05/13 15:02:38 hekl Exp $
+// $Id: ballAndStickModel.C,v 1.13 2001/07/15 18:50:28 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/ballAndStickModel.h>
 
@@ -116,14 +116,13 @@ namespace BALL
 			// a radius never can be lower or equal 0
 			if (radius <= (Real)0)
 			{
-					throw Exception::OutOfRange(__FILE__, __LINE__);
+				throw Exception::OutOfRange(__FILE__, __LINE__);
 			}
 
 			stick_radius_ = radius;
 		}
 
 		bool AddBallAndStickModel::start()
-			throw()
 		{
 			// init model connector
 			getModelConnector()->setProperties(*this);
@@ -134,15 +133,13 @@ namespace BALL
 		}
 				
 		bool AddBallAndStickModel::finish()
-			throw()
 		{
 			buildBondModels_();
 			
 			return true;
 		}
 				
-		Processor::Result AddBallAndStickModel::operator() (Composite &composite)
-			throw(Exception::OutOfMemory)
+		Processor::Result AddBallAndStickModel::operator() (Composite& composite)
 		{
 			// composite is an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))
@@ -156,37 +153,37 @@ namespace BALL
 			removeGeometricObjects_(*atom, true);
 
 			// generate BallPrimitive
-			Sphere* pSphere = createSphere_();
+			Sphere* sphere_ptr = createSphere_();
 
-			if (pSphere == 0)
+			if (sphere_ptr == 0)
 			{
 					throw Exception::OutOfMemory
 						(__FILE__, __LINE__, sizeof(Sphere));
 			}
 
 			// carry on selected flag
-			pSphere->Selectable::set(*atom);
+			sphere_ptr->Selectable::set(*atom);
 
-			pSphere->PropertyManager::set(*this);
-			pSphere->PropertyManager::setProperty(PROPERTY__MODEL_BALL_AND_STICK);
+			sphere_ptr->PropertyManager::set(*this);
+			sphere_ptr->PropertyManager::setProperty(PROPERTY__MODEL_BALL_AND_STICK);
 
 			if (ball_and_stick_ == true)
 			{
-				pSphere->setRadius(ball_radius_);
+				sphere_ptr->setRadius(ball_radius_);
 			}
 			else
 			{
-				pSphere->setRadius(stick_radius_);
+				sphere_ptr->setRadius(stick_radius_);
 			}
 
-			pSphere->setVertexAddress(atom->getPosition());
+			sphere_ptr->setVertexAddress(atom->getPosition());
 			
 			atom->host(*getColorCalculator());
 
-			pSphere->setColor(getColorCalculator()->getColor());
+			sphere_ptr->setColor(getColorCalculator()->getColor());
 			
 			// append sphere in Atom
-			composite.appendChild(*pSphere);
+			composite.appendChild(*sphere_ptr);
 
 			// collect used atoms
 			insertAtom_(atom);

@@ -1,4 +1,4 @@
-// $Id: objectSelector.C,v 1.2 2001/07/01 21:45:27 oliver Exp $
+// $Id: objectSelector.C,v 1.3 2001/07/15 18:50:28 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/objectSelector.h>
 
@@ -82,7 +82,6 @@ namespace BALL
 		}
 
 		bool ObjectSelector::start()
-			throw()
 		{
 			getSearcher_().clear();
 
@@ -90,7 +89,6 @@ namespace BALL
 		}
 				
 		bool ObjectSelector::finish()
-			throw()
 		{
 			Atom *first_atom = 0;
 			Atom *second_atom = 0;
@@ -143,7 +141,6 @@ namespace BALL
 		}
 				
 		Processor::Result ObjectSelector::operator() (Composite &composite)
-			throw()
 		{
 			// composite is an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))

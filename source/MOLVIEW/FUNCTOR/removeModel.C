@@ -1,4 +1,4 @@
-// $Id: removeModel.C,v 1.10 2001/07/01 21:45:27 oliver Exp $
+// $Id: removeModel.C,v 1.11 2001/07/15 18:50:29 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/removeModel.h>
 
@@ -44,7 +44,6 @@ namespace BALL
 		}
 
 		bool RemoveModel::start()
-			throw()
 		{
 			getSearcher_().clear();
 
@@ -52,7 +51,6 @@ namespace BALL
 		}
 				
 		bool RemoveModel::finish()
-			throw()
 		{
 			// generate StickPrimitives
 			Atom* first_atom = 0;
@@ -89,8 +87,7 @@ namespace BALL
 			return true;
 		}
 				
-		Processor::Result RemoveModel::operator() (Composite &composite)
-			throw()
+		Processor::Result RemoveModel::operator() (Composite& composite)
 		{
 			// composite is an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))

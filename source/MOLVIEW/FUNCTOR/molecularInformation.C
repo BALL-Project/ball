@@ -1,4 +1,4 @@
-// $Id: molecularInformation.C,v 1.6 2001/05/13 15:02:39 hekl Exp $
+// $Id: molecularInformation.C,v 1.7 2001/07/15 18:50:28 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularInformation.h>
 
@@ -40,7 +40,6 @@ namespace BALL
 		}
 
 		void MolecularInformation::visit(Composite& composite)
-			throw()
 		{
 			getType_(composite);
 

@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.h,v 1.9 2001/05/13 14:55:23 hekl Exp $
+// $Id: standardColorCalculator.h,v 1.10 2001/07/15 18:49:19 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
 #define BALL_MOLVIEW_FUNCTOR_STANDARDCOLORCALCULATOR_H
@@ -32,9 +32,9 @@ namespace BALL
 				This colorCalculator can be set in the class \Ref{DisplayProperties}
 				to color an entire object in its element colors.
 				@memo    ElementColorCalculator class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.9 $
-				@date    $Date: 2001/05/13 14:55:23 $
+				@author  $Author: oliver $
+				@version $Revision: 1.10 $
+				@date    $Date: 2001/07/15 18:49:19 $
 		*/
 		class ElementColorCalculator
 			: public ColorCalculator
@@ -68,9 +68,9 @@ namespace BALL
 				This colorCalculator can be set in the class \Ref{DisplayProperties}
 				to color an entire object in its residue colors.
 				@memo    ResidueNameColorCalculator class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.9 $
-				@date    $Date: 2001/05/13 14:55:23 $
+				@author  $Author: oliver $
+				@version $Revision: 1.10 $
+				@date    $Date: 2001/07/15 18:49:19 $
 		*/
 		class ResidueNameColorCalculator
 			: public ColorCalculator
@@ -130,9 +130,9 @@ namespace BALL
 				This colorCalculator can be set in the class \Ref{DisplayProperties}
 				to color an entire object in its atom charge colors.
 				@memo    AtomChargeColorCalculator class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.9 $
-				@date    $Date: 2001/05/13 14:55:23 $
+				@author  $Author: oliver $
+				@version $Revision: 1.10 $
+				@date    $Date: 2001/07/15 18:49:19 $
 		*/
 		class AtomChargeColorCalculator
 			: public ColorCalculator
@@ -338,9 +338,7 @@ namespace BALL
 					@see    setNeutralColor
 					@see    setNegativeColor
 			*/
-			virtual void visit(Atom& atom)
-				throw();
-
+			virtual void visit(Atom& atom);
 			//@}
 
 			private:
@@ -369,9 +367,9 @@ namespace BALL
 				This colorCalculator can be set in the class \Ref{DisplayProperties}
 				to color the atoms in multiple atom container according to their distance.
 				@memo    AtomDistanceColorCalculator class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.9 $
-				@date    $Date: 2001/05/13 14:55:23 $
+				@author  $Author: oliver $
+				@version $Revision: 1.10 $
+				@date    $Date: 2001/07/15 18:49:19 $
 		*/
 		class AtomDistanceColorCalculator
 			:	public UnaryProcessor<Atom>,
@@ -600,8 +598,7 @@ namespace BALL
 					@see    setNullDistanceColor
 					@see    setMaxDistanceColor
 			*/
-			virtual void visit(Atom& atom)
-				throw();
+			virtual void visit(Atom& atom);
 			//@}
 
 			/**	@name Processor specific methods
@@ -612,16 +609,14 @@ namespace BALL
 					the atomDistanceColorCalculator.
 					@return bool {\tt true} if the start of {\em *this} atomDistanceColorCalculator was successful, {\tt false} otherwise
 			*/
-			virtual bool start()
-				throw();
+			virtual bool start();
 			
 			/** Finish method.
 					Empty for further purpose. Override this method for finalizing
 					the atomDistanceColorCalculator.
 					@return bool {\tt true} if the finish of {\em *this} atomDistanceColorCalculator was successful, {\tt false} otherwise
 			*/
-			virtual bool finish()
-				throw();
+			virtual bool finish();
 
 			/**	Operator ().
 					Insert the \Ref{Atom} {\em atom} with the max distance as specified by the method
@@ -632,8 +627,7 @@ namespace BALL
 					@see    Atom
 					@see    Processor
 			*/
-			virtual Processor::Result operator() (Atom& atom)
-				throw();
+			virtual Processor::Result operator() (Atom& atom);
 
 			/**	Operator ().
 					Calls the previously declare method \Ref{operator()} if the \Ref{Composite} 
@@ -646,8 +640,7 @@ namespace BALL
 					@see    Composite
 					@see    Processor
 			*/
-			virtual Processor::Result operator() (Composite& composite)
-				throw();
+			virtual Processor::Result operator() (Composite& composite);
 			//@}
 
 

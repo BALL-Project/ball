@@ -1,4 +1,4 @@
-// $Id: objectSelector.h,v 1.1 2001/05/13 14:55:22 hekl Exp $
+// $Id: objectSelector.h,v 1.2 2001/07/15 18:49:18 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
 #define BALL_MOLVIEW_FUNCTOR_OBJECTSELECTOR_H
@@ -60,9 +60,9 @@ namespace BALL
 				documentation.
 				@see  Selectable
 				@memo    ObjectSelector class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.1 $
-				@date    $Date: 2001/05/13 14:55:22 $
+				@author  $Author: oliver $
+				@version $Revision: 1.2 $
+				@date    $Date: 2001/07/15 18:49:18 $
 		*/
 		class ObjectSelector: public AtomBondModelBaseProcessor
 		{
@@ -222,8 +222,7 @@ namespace BALL
 					@see    operator()
 					@see    AtomBondModelBaseProcessor
 			*/
-			virtual bool start()
-				throw();
+			virtual bool start();
 			
 			/** Finish method.
 					This method will be internally called from the processor mechanism if the processor
@@ -241,8 +240,8 @@ namespace BALL
 					@see    Bond
 					@see    Composite
 			*/
-			virtual bool finish()
-				throw();
+			virtual bool finish();
+
 			
 			/**	Operator method.
 					This method iterates over each \Ref{Composite} object reachable in the 
@@ -260,8 +259,7 @@ namespace BALL
 					@see    Composite
 					@see    Atom
 			*/
-			virtual Processor::Result operator() (Composite& composite)
-				throw();
+			virtual Processor::Result operator() (Composite& composite);
 			//@}
 
 			/**	@name	Predicates

@@ -1,4 +1,4 @@
-// $Id: filter.h,v 1.3 2001/05/13 13:35:15 hekl Exp $
+// $Id: filter.h,v 1.4 2001/07/15 18:48:52 oliver Exp $
 
 #ifndef BALL_VIEW_FUNCTOR_FILTER_H
 #define BALL_VIEW_FUNCTOR_FILTER_H
@@ -42,9 +42,9 @@ namespace BALL
 				objects.
 				@see     Control
 				@memo    Filter class (BALL VIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/05/13 13:35:15 $
+				@author  $Author: oliver $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/07/15 18:48:52 $
 		*/
 		class Filter: public Visitor<Composite>
 		{
@@ -109,8 +109,7 @@ namespace BALL
 					@param  composite the \Ref{Composite} object to be filtered by {\em *this} filter.
 					@see    setResult_
 			*/
-			virtual void visit(Composite& composite)
-				throw();
+			virtual void visit(Composite& composite);
 			//@}
 			
 			/** @name Conversion methods

@@ -1,4 +1,4 @@
-// $Id: molecularFilter.C,v 1.4 2001/05/13 15:02:39 hekl Exp $
+// $Id: molecularFilter.C,v 1.5 2001/07/15 18:50:28 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/molecularFilter.h>
 
@@ -40,7 +40,6 @@ namespace BALL
 		}
 
 		void MolecularFilter::visit(Composite& composite)
-			throw()
 		{
 			bool result = false;
 

@@ -1,4 +1,4 @@
-// $Id: removeModel.h,v 1.7 2001/05/13 14:55:23 hekl Exp $
+// $Id: removeModel.h,v 1.8 2001/07/15 18:49:18 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
@@ -44,9 +44,9 @@ namespace BALL
 				For information about the processor concept see \Ref{Processor} in tbe BALL
 				documentation.
 				@memo    RemoveModel class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/05/13 14:55:23 $
+				@author  $Author: oliver $
+				@version $Revision: 1.8 $
+				@date    $Date: 2001/07/15 18:49:18 $
 		*/
 		class RemoveModel: public AtomBondModelBaseProcessor
 		{
@@ -117,8 +117,7 @@ namespace BALL
 					@see    getSearcher_
 					@see    FindGeometricObjects
 			*/
-			virtual bool start()
-				throw();
+			virtual bool start();
 			
 			/** Finish method.
 					This method will be internally called from the processor mechanism if the processor
@@ -136,8 +135,7 @@ namespace BALL
 					@see    Bond
 					@see    Composite
 			*/
-			virtual bool finish()
-				throw();
+			virtual bool finish();
 			
 			/**	Operator method.
 					This method iterates over each \Ref{Composite} object reachable in the 
@@ -160,8 +158,8 @@ namespace BALL
 					@see    Composite
 					@see    Atom
 			*/
-			virtual Processor::Result operator() (Composite& composite)
-				throw();
+			virtual Processor::Result operator() (Composite& composite);
+
 			//@}
 
 			/**	@name	debuggers and diagnostics

@@ -1,4 +1,4 @@
-// $Id: standardColorCalculator.C,v 1.11 2001/07/01 21:45:27 oliver Exp $
+// $Id: standardColorCalculator.C,v 1.12 2001/07/15 18:50:29 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/standardColorCalculator.h>
 
@@ -298,7 +298,6 @@ namespace BALL
 		}
 
 		void AtomChargeColorCalculator::visit(Atom& atom)
-			throw()
 		{
 			float charge = atom.getCharge();
 			float red1, green1, blue1;
@@ -463,19 +462,16 @@ namespace BALL
 		}
 	 
 		bool AtomDistanceColorCalculator::start()
-			throw()
 		{
 			return true;
 		}
 				
 		bool AtomDistanceColorCalculator::finish()
-			throw()
 		{
 			return true;
 		}
 
 		Processor::Result AtomDistanceColorCalculator::operator() (Composite& composite)
-			throw()
 		{
 			if (RTTI::isKindOf<Atom>(composite))
 			{
@@ -486,7 +482,6 @@ namespace BALL
 		}
 		
 		Processor::Result AtomDistanceColorCalculator::operator() (Atom& atom)
-			throw()
 		{
 			AtomDistanceHashMap::Iterator it = atom_2_distance_.find((void*)&atom);
 
@@ -500,7 +495,6 @@ namespace BALL
 		}
 
 		void AtomDistanceColorCalculator::visit(Atom& atom)
-			throw()
 		{
 			AtomDistanceHashMap::Iterator it = atom_2_distance_.find((void*)&atom);
 

@@ -1,4 +1,4 @@
-// $Id: surfaceModel.C,v 1.7 2001/05/13 15:02:40 hekl Exp $
+// $Id: surfaceModel.C,v 1.8 2001/07/15 18:50:29 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/surfaceModel.h>
 #include <BALL/STRUCTURE/surfaceProcessor.h>
@@ -54,7 +54,6 @@ namespace BALL
 		}
 
 		bool AddSurfaceModel::start()
-			throw()
 		{
 			get_composite_ = true;
 			start_composite_ = 0;
@@ -62,7 +61,6 @@ namespace BALL
 		}
 				
 		bool AddSurfaceModel::finish()
-			throw(Exception::OutOfMemory)
 		{
 			// insert surface only if a composite exist
 			if (start_composite_ != 0)
@@ -111,9 +109,7 @@ namespace BALL
 		}
 				
 		Processor::Result 
-		AddSurfaceModel::operator()
-			(Composite &composite)
-			throw()
+		AddSurfaceModel::operator () (Composite& composite)
 		{
 			// take first composite, surface will be inserted to it later
 			if (get_composite_)
@@ -125,8 +121,7 @@ namespace BALL
 			return Processor::CONTINUE;
 		}
 
-		void AddSurfaceModel::dump
-			(std::ostream& s, Size depth) const
+		void AddSurfaceModel::dump(std::ostream& s, Size depth) const
 			throw()
 		{
 			BALL_DUMP_STREAM_PREFIX(s);

@@ -1,4 +1,4 @@
-// $Id: findGeometricObject.h,v 1.6 2001/05/13 14:55:22 hekl Exp $
+// $Id: findGeometricObject.h,v 1.7 2001/07/15 18:49:18 oliver Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H
 #define BALL_MOLVIEW_FUNCTOR_FINDGEOMETRICOBJECTS_H
@@ -47,9 +47,9 @@ namespace BALL
 				This class is used by some model processors (e.g. \Ref{AddBallAndStickModelProcessor})
 				to find \Ref{GeometricObject} objects they will change or delete.
 				@memo    FindGeometricObjects class (BALL MOLVIEW functor framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/13 14:55:22 $
+				@author  $Author: oliver $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/07/15 18:49:18 $
 		*/
 		class FindGeometricObjects
 			: public UnaryProcessor<Composite>,
@@ -217,8 +217,7 @@ namespace BALL
 					@see    operator()
 					@see    getGeometricObjects
 			*/
-			virtual bool start()
-				throw();
+			virtual bool start();
 			
 			/** Finish method.
 					Empty for further purpose. Override this method for finalizing
@@ -226,8 +225,7 @@ namespace BALL
 					@return bool {\tt true} if the finish of {\em *this} findGeometricObjects was successful, {\tt false} otherwise
 					@see    operator()
 			*/
-			virtual bool finish()
-				throw();	
+			virtual bool finish();	
 
 			/**	Operator method.
 					Collect all \Ref{GeometricObject} objects that are
@@ -243,8 +241,7 @@ namespace BALL
 					@see    Processor
 					@see    Composite
 			*/
-			virtual Processor::Result operator () (Composite& composite)
-				throw();
+			virtual Processor::Result operator () (Composite& composite);
 
 			//@}
 				

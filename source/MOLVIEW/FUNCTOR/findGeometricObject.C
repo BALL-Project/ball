@@ -1,4 +1,4 @@
-// $Id: findGeometricObject.C,v 1.12 2001/06/18 17:28:45 oliver Exp $
+// $Id: findGeometricObject.C,v 1.13 2001/07/15 18:50:28 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/findGeometricObject.h>
 
@@ -83,7 +83,6 @@ namespace BALL
 		}
 
 		bool FindGeometricObjects::start()
-			throw()
 		{
 			geometric_objects_.clear();
 
@@ -91,13 +90,11 @@ namespace BALL
 		}
 				
 		bool FindGeometricObjects::finish()
-			throw()
 		{
 			return true;
 		}
 				
 		Processor::Result FindGeometricObjects::operator () (Composite &composite)
-			throw()
 		{
 			// skip composites that are not instances of geometricObject
 			if (RTTI::isKindOf<GeometricObject>(composite) == false)
