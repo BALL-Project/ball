@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.19 2000/12/19 12:51:09 amoll Exp $
+// $Id: selector.C,v 1.20 2001/07/09 19:19:40 anker Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -43,6 +43,18 @@ namespace BALL
 		throw()
 	{
 		return number_of_selected_atoms_;
+	}
+
+	void Selector::setExpression(const Expression& expression)
+		throw()
+	{
+		expression_ = expression;
+	}
+
+	const Expression& Selector::getExpression() const
+		throw()
+	{
+		return expression_;
 	}
 
 	bool Selector::start() 
