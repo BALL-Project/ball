@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.37 2002/12/20 16:32:45 anker Exp $
+// $Id: standardPredicates.C,v 1.38 2002/12/20 19:10:22 oliver Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -497,7 +497,7 @@ namespace BALL
 	void ConnectedToPredicate::CTPNode::destroy()
 		throw()
 	{
-		for (Iterator it = begin(); it != end(); ++it) 
+		for (ConstIterator it = begin(); it != end(); ++it) 
 		{
 			if (!link_set_.has(*it))
 			{
@@ -521,7 +521,10 @@ namespace BALL
 	{
 		element_symbol_ = "<uninitialized>";
 		bond_type_ = BONDTYPE__UNINITIALISED;
-		for (Iterator it = begin(); it != end(); ++it) (*it)->clear();
+		for (Iterator it = begin(); it != end(); ++it) 
+		{
+			delete &*it;
+		}
 		parent_ = 0;
 		finished_ = false;
 		linked_ = false;
@@ -1273,6 +1276,7 @@ namespace BALL
 		argument_ = argument;
 		if (tree_ != 0)
 		{
+
 			delete tree_;
 		}
 		tree_ = parse_(argument_);

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile.C,v 1.30 2002/12/16 11:59:14 anker Exp $
+// $Id: PDBFile.C,v 1.31 2002/12/20 19:10:22 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 
@@ -345,7 +345,7 @@ namespace BALL
 		
 		new_sheet_secstruc_list_.push_back(sec_struc);
 		sec_struc->setProperty(SecondaryStructure::PROPERTY__STRAND);
-		sec_struc->setProperty("STRAND_SENSE", (void*)sense_of_strand);
+		sec_struc->setProperty("STRAND_SENSE", (sense_of_strand != 0));
 		
 		sheet_list_.push_back(partner_residue);
 		

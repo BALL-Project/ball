@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.h,v 1.15 2002/12/12 09:27:23 oliver Exp $
+// $Id: directory.h,v 1.16 2002/12/20 19:10:22 oliver Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -133,14 +133,8 @@ namespace BALL
 				@param directory the directory to be assigned to
 		*/
 		void get(Directory& directory) const;
-
-		/** Swapping of Directories.
-				Swap the states of this instance with {\em directory}.
-				@param	directory the Directory being swapped with {\em *this} Directory 
-		*/
-		void swap(Directory& directory);
-
 		//@}
+
 		/**	@name	Accessors 
 		*/
 		//@{

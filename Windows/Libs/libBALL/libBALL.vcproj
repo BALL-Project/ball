@@ -60,12 +60,12 @@
 				Name="VCCLCompilerTool"
 				AdditionalOptions="/Zm800"
 				Optimization="2"
-				GlobalOptimizations="FALSE"
+				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="1"
 				EnableIntrinsicFunctions="FALSE"
 				FavorSizeOrSpeed="1"
 				OmitFramePointers="TRUE"
-				OptimizeForWindowsApplication="FALSE"
+				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;"
 				PreprocessorDefinitions="WIN32;_WINDOWS;_USRDLL;LIBBALL_EXPORTS;YY_NEVER_INTERACTIVE"
 				StringPooling="TRUE"
@@ -1258,6 +1258,14 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\SOLVATION\pair6_12RDFIntegrator.C">
+					<FileConfiguration
+						Name="Release|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							Optimization="0"
+							GlobalOptimizations="FALSE"
+							InlineFunctionExpansion="1"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\SOLVATION\pairExpInteractionEnergyProcessor.C">
@@ -1383,7 +1391,8 @@
 						Name="Debug|Win32">
 						<Tool
 							Name="VCCLCompilerTool"
-							AdditionalIncludeDirectories="$(ProjectDir)"/>
+							AdditionalIncludeDirectories="$(ProjectDir)"
+							WarningLevel="0"/>
 					</FileConfiguration>
 					<FileConfiguration
 						Name="Release|Win32">
@@ -1415,6 +1424,12 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\smilesParserParser.C">
+					<FileConfiguration
+						Name="Debug|Win32">
+						<Tool
+							Name="VCCLCompilerTool"
+							WarningLevel="0"/>
+					</FileConfiguration>
 				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\smilesParserParser.y">
@@ -2455,6 +2470,7 @@
 					<Tool
 						Name="VCCLCompilerTool"
 						PreprocessorDefinitions="HAVE_STRING_H;__STDC__;REGEX_MALLOC"
+						WarningLevel="0"
 						CompileAs="1"/>
 				</FileConfiguration>
 				<FileConfiguration

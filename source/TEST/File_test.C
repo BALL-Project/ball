@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: File_test.C,v 1.38 2002/12/20 14:01:46 oliver Exp $
+// $Id: File_test.C,v 1.39 2002/12/20 19:10:23 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,12 @@ using namespace std;
 
 #include "networkTest.h"
 
-START_TEST(File, "$Id: File_test.C,v 1.38 2002/12/20 14:01:46 oliver Exp $")
+#ifdef BALL_COMPILER_MSVC
+#	define sleep(a) _sleep(1000 * a)
+#endif
+
+START_TEST(File, "$Id: File_test.C,v 1.39 2002/12/20 19:10:23 oliver Exp $")
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberNonBonded.C,v 1.24 2002/12/16 18:12:45 oliver Exp $
+// $Id: amberNonBonded.C,v 1.25 2002/12/20 19:10:22 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -1126,7 +1126,7 @@ namespace BALL
 			{
 				AMBERcalculateNBForce
 					(*it, FORCE_PARAMETERS, e_scaling_factor, 
-					 vdw_scaling_factor, (bool)is_hydrogen_bond_[i], true, true, use_selection);
+					 vdw_scaling_factor, (bool)(is_hydrogen_bond_[i] != 0), true, true, use_selection);
 			}
 		}
 		else
@@ -1155,7 +1155,7 @@ namespace BALL
 				{
 					AMBERcalculateNBForce
 						(*it, FORCE_PARAMETERS, e_scaling_factor, 
-						 vdw_scaling_factor, (bool)is_hydrogen_bond_[i], true, false, use_selection);
+						 vdw_scaling_factor, (is_hydrogen_bond_[i] != 0), true, false, use_selection);
 				}
 			}
 			else
@@ -1180,7 +1180,7 @@ namespace BALL
 					{
 						AMBERcalculateNBForce
 							(*it, FORCE_PARAMETERS, e_scaling_factor, 
-							 vdw_scaling_factor, (bool)is_hydrogen_bond_[i], false, true, use_selection);
+							 vdw_scaling_factor, (is_hydrogen_bond_[i] != 0), false, true, use_selection);
 					}
 				}
 				else
@@ -1201,7 +1201,7 @@ namespace BALL
 					{
 						AMBERcalculateNBForce
 							(*it, FORCE_PARAMETERS, e_scaling_factor, 
-							 vdw_scaling_factor, (bool)is_hydrogen_bond_[i], false, false, use_selection);
+							 vdw_scaling_factor, (is_hydrogen_bond_[i] != 0), false, false, use_selection);
 					}
 				}
 			}

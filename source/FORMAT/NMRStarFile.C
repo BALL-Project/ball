@@ -311,7 +311,7 @@ namespace BALL
 
 				SampleCondition* condition = new SampleCondition();
 				condition->name.set(getLine(), 5);
-				if (!search("      _Variable_value_units", "#"))
+				if (!search("      _Variable_value_units", "#", true))
 				{
 					break;
 				}

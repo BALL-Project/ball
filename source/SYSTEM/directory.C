@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.C,v 1.19 2002/12/16 09:08:29 oliver Exp $
+// $Id: directory.C,v 1.20 2002/12/20 19:10:23 oliver Exp $
 
 #include <BALL/SYSTEM/directory.h>
 
@@ -24,66 +24,67 @@ namespace BALL
 	
 	Directory::Directory()
 	{
-#ifdef BALL_COMPILER_MSVC
-		dir_= INVALID_HANDLE_VALUE;
-		dirent_ = INVALID_HANDLE_VALUE;
-		char* buffer_;
+		#ifdef BALL_PLATFORM_WINDOWS
+			dir_= INVALID_HANDLE_VALUE;
+			dirent_ = INVALID_HANDLE_VALUE;
+			char* buffer_;
 
-		if ((buffer_ = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
-		{
-			directory_path_ = buffer_;
-			dir_ = CreateFile(buffer_,
-												FILE_LIST_DIRECTORY,                // access (read/write) mode
-												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
-												NULL,                               // security descriptor
-												OPEN_EXISTING,                      // how to create
-												FILE_FLAG_BACKUP_SEMANTICS,         // file attributes
-												NULL                                // file with attributes to copy
-												);
-			
+			if ((buffer_ = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
+			{
+				directory_path_ = buffer_;
+				dir_ = CreateFile(buffer_,
+													FILE_LIST_DIRECTORY,                // access (read/write) mode
+													FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
+													NULL,                               // security descriptor
+													OPEN_EXISTING,                      // how to create
+													FILE_FLAG_BACKUP_SEMANTICS,         // file attributes
+													NULL                                // file with attributes to copy
+													);
+				
 
-		}
-		else 
-		{
-			directory_path_ = "";
-		}
-#else
-		dir_ = 0;
-		dirent_ = 0;
-		char* buffer_;
-		if ((buffer_ = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
-		{
-			directory_path_ = buffer_;
-		}
-		else 
-		{
-			directory_path_ = "";
-		}
-#endif
+			}
+			else 
+			{
+				directory_path_ = "";
+			}
+		#else
+			dir_ = 0;
+			dirent_ = 0;
+			char* buffer_;
+			if ((buffer_ = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
+			{
+				directory_path_ = buffer_;
+			}
+			else 
+			{
+				directory_path_ = "";
+			}
+		#endif
 	}
 
-	Directory::Directory(const String& directory_path, bool set_current)
+	Directory::Directory
+		(const String& directory_path, bool set_current)
 	{
 		if (!set(directory_path, set_current)) 
 		{
 			directory_path_ = "";
 		}
-		
-#ifdef BALL_COMPILER_MSVC
-		dir_= INVALID_HANDLE_VALUE;
-		dirent_ = INVALID_HANDLE_VALUE;
-		dir_ = CreateFile(directory_path_.data(),
+/*		
+		#ifdef BALL_PLATFORM_WINDOWS
+			dir_= INVALID_HANDLE_VALUE;
+			dirent_ = INVALID_HANDLE_VALUE;
+			dir_ = CreateFile(directory_path_.data(),
 												FILE_LIST_DIRECTORY,                // access (read/write) mode
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
 												NULL,                               // security descriptor
 												OPEN_EXISTING,                      // how to create
 												FILE_FLAG_BACKUP_SEMANTICS,         // file attributes
 												NULL                                // file with attributes to copy
-												);
+			);
 		
 
-#endif
-
+		#endif
+*/
 	}
 
 	Directory::Directory(const Directory& directory)
@@ -93,43 +94,26 @@ namespace BALL
 
 	Directory::~Directory()
 	{
-#ifdef BALL_COMPILER_MSVC
-		CloseHandle(dir_);
-		FindClose(dirent_);
-#else
-		if (dir_ != 0) ::closedir(dir_);
-#endif
-	}
-
-	void Directory::swap(Directory& directory)
-	{
-#ifdef BALL_COMPILER_MSVC
-		HANDLE temp_dir = dir_;
-		dir_=directory.dir_;
-		directory.dir_ = temp_dir;
-
-		HANDLE temp_dirent = dirent_;
-		dirent_ = directory.dirent_;
-		directory.dirent_ = temp_dirent;
-#else
-		DIR* temp_dir = dir_;
-		dir_ = directory.dir_;
-		directory.dir_ = temp_dir;
-
-		dirent* temp_dirent = dirent_;
-		dirent_ = directory.dirent_;
-		directory.dirent_ = temp_dirent;
-#endif
-		backup_path_.swap(directory.backup_path_);		
-		directory_path_.swap(directory.directory_path_);
+		#ifdef BALL_PLATFORM_WINDOWS
+			CloseHandle(dir_);
+			FindClose(dirent_);
+		#else
+			if (dir_ != 0) 
+			{
+				::closedir(dir_);
+			}
+		#endif
 	}
 
 	bool Directory::getFirstEntry(String& entry) 
 	{
-#ifdef BALL_COMPILER_MSVC
-		synchronize_();
-		if(dir_!=INVALID_HANDLE_VALUE) CloseHandle(dir_);
-		dir_ = CreateFile(directory_path_.data(),
+		#ifdef BALL_PLATFORM_WINDOWS
+			synchronize_();
+			if(dir_ != INVALID_HANDLE_VALUE) 
+			{	
+				CloseHandle(dir_);
+			}
+			dir_ = CreateFile(directory_path_.data(),
 												FILE_LIST_DIRECTORY,                // access (read/write) mode
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
 												NULL,                               // security descriptor
@@ -137,29 +121,35 @@ namespace BALL
 												FILE_FLAG_BACKUP_SEMANTICS,         // file attributes
 												NULL                                // file with attributes to copy
 												);
-		if(dir_==INVALID_HANDLE_VALUE) return desynchronize_(false);
+			if (dir_ == INVALID_HANDLE_VALUE) 
+			{
+				return desynchronize_(false);
+			}
 		
-		if(dirent_!=INVALID_HANDLE_VALUE) FindClose(dirent_);
+			if (dirent_ != INVALID_HANDLE_VALUE) 
+			{
+				FindClose(dirent_);
+			}
 		
-		String pat=directory_path_+"\\*";
-		WIN32_FIND_DATA fd;
+			String pat = directory_path_+"\\*";
+			WIN32_FIND_DATA fd;
 		
 	
-		dirent_=FindFirstFile(pat.data(),&fd);
-		if(dirent_==INVALID_HANDLE_VALUE)
-		{
-			CloseHandle(dir_);
-			dir_=INVALID_HANDLE_VALUE;
-			return desynchronize_(false);
-		}
-		else
-		{
-			entry = fd.cFileName;
+			dirent_ = FindFirstFile(pat.data(),&fd);
+			if (dirent_==INVALID_HANDLE_VALUE)
+			{
+				CloseHandle(dir_);
+				dir_=INVALID_HANDLE_VALUE;
+				return desynchronize_(false);
+			}
+			else
+			{
+				entry = fd.cFileName;
 			
-			return desynchronize_(true);
-		}
+				return desynchronize_(true);
+			}
 
-#else
+	#else
 		synchronize_();
 		if (dir_ != 0) ::closedir(dir_);
 		dir_ = ::opendir(directory_path_.data());
@@ -555,7 +545,8 @@ namespace BALL
 #endif
 	}
 
-	bool Directory::set(const String& directory_path, bool set_current)
+	bool Directory::set
+		(const String& directory_path, bool set_current)
 	{
 		
 #ifdef BALL_COMPILER_MSVC
@@ -649,6 +640,31 @@ namespace BALL
 			return desynchronize_(true);
 		}
 		return desynchronize_(false);
+	}
+
+	bool Directory::isValid() const
+	{
+		#ifdef BALL_COMPILER_MSVC
+			HANDLE dir = CreateFile(const_cast<char*>(directory_path_.data()),
+							FILE_LIST_DIRECTORY,                
+							FILE_SHARE_READ|FILE_SHARE_DELETE,  
+							NULL,                               
+							OPEN_EXISTING,                     
+							FILE_FLAG_BACKUP_SEMANTICS,        
+							NULL                                
+							);
+			if (dir==INVALID_HANDLE_VALUE)
+			{
+				return false;
+			}
+			else 
+			{
+				CloseHandle(dir);
+				return true;
+			}
+		#else
+			return (::opendir(directory_path_.data()) != NULL && directory_path_ != "");
+		#endif
 	}
 
 #       ifdef BALL_NO_INLINE_FUNCTIONS
