@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.20 2003/12/10 15:10:27 amoll Exp $
+// $Id: geometricControl.C,v 1.21 2003/12/12 15:44:47 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -155,7 +155,6 @@ void GeometricControl::buildContextMenu(Representation& rep)
 	if (getSelectedItems().size() > 1 ||
 			rep.getModelType() >= MODEL_LABEL)
 	{
-Log.error() << "#~~#   1 " << getSelectedItems().size() << std::endl;
 		context_menu_.setItemEnabled(20, false); 
 	}
 
