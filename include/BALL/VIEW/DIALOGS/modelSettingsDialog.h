@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelSettingsDialog.h,v 1.12 2004/02/26 08:41:34 anhi Exp $
+// $Id: modelSettingsDialog.h,v 1.13 2004/07/15 12:05:49 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MODELSETTINGSDIALOG_H
@@ -12,6 +12,8 @@
 #endif
 
 #include <BALL/VIEW/UIC/modelSettingsDialogData.h>
+
+#include <qcheckbox.h>
 
 class QSlider;
 class QLabel;
@@ -64,6 +66,10 @@ namespace BALL
 				throw() {return getFloatValue_(ball_stick_cylinder_radius_slider);}
 
 			///
+			bool ballAndStickDashedBondsEnabled() const
+				throw() {return ball_stick_dashed_bonds->isChecked();}
+
+			///
 			float getBallRadius() const
 				throw() {return getFloatValue_(ball_stick_sphere_radius_slider);}
 
@@ -106,6 +112,9 @@ namespace BALL
 			///
 			void setBallAndStickStickRadius(float value) 
 				throw() { setValue_(ball_stick_cylinder_radius_slider,value);}
+
+			void setBallAndStickStickDashedBondsEnabled(bool state)
+				throw() { ball_stick_dashed_bonds->setChecked(state);}
 
 			///
 			void setBallRadius(float value) 
