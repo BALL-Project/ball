@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.28 2000/03/21 12:39:47 amoll Exp $
+// $Id: vector3.h,v 1.29 2000/03/22 00:47:56 amoll Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -298,6 +298,12 @@ namespace BALL
 				@exception DivisionByZero if the length of the vector is 0
 		*/
 		TVector3& normalize();
+
+		/**	Negate the vector.
+				Negate the three components of the vector
+				@return T, a reference to {\tt this} vector
+		*/
+		TVector3& negate();
 
 		/**	Return a vector with all components 0.
 		*/
@@ -695,6 +701,15 @@ namespace BALL
 		y /= len;
 		z /= len;
 
+		return *this;
+	}
+
+	template <typename T>
+	TVector3<T>& TVector3<T>::negate()
+	{
+		x *= -1;
+		y *= -1;
+		z *= -1;
 		return *this;
 	}
 
