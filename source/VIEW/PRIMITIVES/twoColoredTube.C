@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: twoColoredTube.C,v 1.4 2003/08/29 15:38:00 amoll Exp $
+// $Id: twoColoredTube.C,v 1.5 2003/11/18 14:48:10 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 
@@ -71,7 +71,7 @@ namespace BALL
 			ColorExtension2::swap(two_colored_tube);
 			Vertex2::swap(two_colored_tube);
 
-			Real temp = two_colored_tube.radius_;
+			float temp = two_colored_tube.radius_;
 			two_colored_tube.radius_ = radius_;
 			radius_ = temp;
 		}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: tube.C,v 1.4 2003/08/29 15:38:00 amoll Exp $
+// $Id: tube.C,v 1.5 2003/11/18 14:48:09 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 
@@ -66,7 +66,7 @@ namespace BALL
 			GeometricObject::swap(tube);
 			Vertex2::swap(tube);
 
-			Real temp = tube.radius_;
+			float temp = tube.radius_;
 			tube.radius_ = radius_;
 			radius_ = temp;
 		}
