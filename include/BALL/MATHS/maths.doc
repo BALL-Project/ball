@@ -10,6 +10,7 @@
 	/**	@name	Primitive datatypes
 	*/
 	//@{
+		//@Inlcude: complex.h
 		//@Include: angle.h
 		//@Include: vector2.h
 		//@Include: vector3.h

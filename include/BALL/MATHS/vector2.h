@@ -1,7 +1,7 @@
-// $Id: vector2.h,v 1.6 2001/07/16 02:12:57 oliver Exp $
+// $Id: vector2.h,v 1.6.4.1 2002/05/25 01:31:54 oliver Exp $
 
-#ifndef BALL_MATHS_Vector2_H
-#define BALL_MATHS_Vector2_H
+#ifndef BALL_MATHS_VECTOR2_H
+#define BALL_MATHS_VECTOR2_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -844,4 +844,4 @@ namespace BALL
 		
 }// namespace BALL
 
-#endif // BALL_MATHS_Vector2_H
+#endif // BALL_MATHS_VECTOR2_H
