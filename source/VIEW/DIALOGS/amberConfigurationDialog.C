@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.11 2004/12/17 16:19:40 amoll Exp $
+// $Id: amberConfigurationDialog.C,v 1.11.2.1 2004/12/22 16:10:40 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
@@ -324,7 +324,7 @@ namespace BALL
 			try
 			{
 				if (String(max_unassigned_atoms->text().ascii()).toUnsignedInt() == 0) error = true;
-				amber.setMaximumUnassignedAtoms(String(max_unassigned_atoms->text().ascii()).toUnsignedInt());
+				amber.setMaximumNumberOfErrors(String(max_unassigned_atoms->text().ascii()).toUnsignedInt());
 			}
 			catch(...)
 			{
@@ -334,7 +334,7 @@ namespace BALL
 			if (error)
 			{
 				max_unassigned_atoms->setText("10");
-				amber.setMaximumUnassignedAtoms(10);
+				amber.setMaximumNumberOfErrors(10);
  				Log.error() << "Invalid value for max number of unassigned atoms, using default value of 10" << std::endl;
 			}
 
