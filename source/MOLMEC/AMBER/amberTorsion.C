@@ -1,4 +1,4 @@
-// $Id: amberTorsion.C,v 1.21 2001/06/24 21:25:20 oliver Exp $
+// $Id: amberTorsion.C,v 1.22 2001/06/26 02:44:32 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -133,7 +133,7 @@ namespace BALL
 
 									if (getForceField()->getUseSelection() == false ||
 										(getForceField()->getUseSelection() == true &&
-										(a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
+										(a1->isSelected() || a2->isSelected() || a3->isSelected() || a4->isSelected())))
 									{
 
 										// search torsion parameters for (a1,a2,a3,a4)
@@ -304,9 +304,9 @@ namespace BALL
 									swap(a2, a4);
 								}
 
-								if	( getForceField()->getUseSelection() == false ||
-									(getForceField()->getUseSelection() == true &&
-									(a1->isSelected() && a2->isSelected() && a3->isSelected() && a4->isSelected())))
+								if	(getForceField()->getUseSelection() == false ||
+										 (getForceField()->getUseSelection() == true &&
+											(a1->isSelected() || a2->isSelected() || a3->isSelected() || a4->isSelected())))
 								{
 									Atom::Type type_a1 = a1->getType();
 									Atom::Type type_a2 = a2->getType();
@@ -374,9 +374,6 @@ namespace BALL
 
 		vector<SingleAmberTorsion>::const_iterator it = torsion_.begin(); 
 
-		// BAUSTELLE: test
-		Size number_of_selected = 0;
-
 		for (; it != torsion_.end(); it++) 
 		{
 			if (getForceField()->getUseSelection() == false ||
@@ -411,11 +408,9 @@ namespace BALL
 					}
 
 					energy_ += it->V * ( 1 + cos(it->f * acos(cosphi) - it->phase));
-					number_of_selected++;
 				}
 			}
 		}
-		Log.info() << "AmberTorsion: " << (float)number_of_selected / torsion_.size() * 100.0 << "% selected" << endl;
 
 		return energy_;
 	}
@@ -435,7 +430,7 @@ namespace BALL
 		for ( ; it != torsion_.end(); it++) 
 		{
 			if (getForceField()->getUseSelection() == false ||
- 					( getForceField()->getUseSelection() == true &&
+ 					(getForceField()->getUseSelection() == true &&
 					(it->atom1->isSelected() || it->atom2->isSelected() 
 					 || it->atom3->isSelected() || it->atom4->isSelected())))
 			{
