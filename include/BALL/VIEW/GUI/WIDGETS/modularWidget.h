@@ -1,4 +1,4 @@
-// $Id: modularWidget.h,v 1.7 2001/05/13 14:03:44 hekl Exp $
+// $Id: modularWidget.h,v 1.8 2001/06/07 01:32:32 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
 #define BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
@@ -31,39 +31,31 @@
 
 namespace BALL
 {
-		namespace VIEW
+	namespace VIEW
 	{
 
 		/**	The ModularWidget class.
 				{\bf Framework:} BALL/VIEW/GUI/WIDGETS\\
-				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/modularWidget.h}\\ \\
+				{\bf Definition:} \URL{BALL/VIEW/GUI/WIDGETS/modularWidget.h} \\
 				The base class for all modular widgets.
-				BALLVIEW provides a simple mechanism for Rapid 
-				Application Prototyping based on {\em modular widgets}.
-				Using the modular widgets and the \Ref{MainControl} class
-				(or more precisely, classes derived from MainControl) 
-				applications can be developed in a plug&play style.
-				The most important of a visualization application are	
+				BALLVIEW provides a simple mechanism for Rapid Application Prototyping based 
+				on {\em modular widgets}.	Using the modular widgets and the \Ref{MainControl} class
+				(or more precisely, classes derived from MainControl) applications can be developed
+				in a plug&play style.	The most important of a visualization application are	
 				implemented as classes derived from ModularWidget.
-				Inserting an instance of one of these widgets 
-				automatically creates the required menus in the menubar 
-				of the main window, sets up the required connections,
-				and registers the class instance for use from the embedded
-				Python interpreter (if desired).\\
-				When implementing classes derived from ModularWidget and you
-				want to give access to the class (from Python), please remember
-				to include the \Ref{BALL_EMBEDDABLE} macro in the public section
-				of your class declaration. Also make sure that the QT class you
-				derive from (e.g. QWidget) is the {\em first} base class and
-				ModularWidget second.
+				Inserting an instance of one of these widgets automatically creates the required
+				menus in the menubar of the main window, sets up the required connections,
+				and registers the class instance for use from the embedded Python interpreter 
+				(if desired).\\
+				When implementing classes derived from ModularWidget and you want to give access 
+				to the class (from Python), please remember	to include the \Ref{BALL_EMBEDDABLE} 
+				macro in the public section	of your class declaration. Also make sure that the QT 
+				class you	derive from (e.g. QWidget) is the {\em first} base class and 
+				ModularWidget	second.
 				@see MainControl
 				@see Embeddable
 				@see PyInterpreter
 				@see PyWidget
-				@memo    ModularWidget class (BALL VIEW gui widgets framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.7 $
-				@date    $Date: 2001/05/13 14:03:44 $
 		*/
 		class ModularWidget: public Embeddable,	public ConnectionObject
 		{
@@ -72,15 +64,16 @@ namespace BALL
 			/** @name Macros.
 		  */
 			//@{
+			
 			/** Embeddable Macro.
 			*/
-			BALL_EMBEDDABLE(ModularWidget);			
+			BALL_EMBEDDABLE(ModularWidget)			
 			 
 			/** Create Macro.
 			*/
-			BALL_CREATE(ModularWidget);
-			//@}
-				
+			BALL_CREATE(ModularWidget)
+			
+			//@}	
 			/**	@name	Constructors
 			*/	
 			//@{
@@ -109,7 +102,6 @@ namespace BALL
 				throw();
 				
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -133,11 +125,12 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
-				
+			
+			//@}	
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
+			
 			/**	Register the widget.
 					Register the widget {\em mwidget} to the \Ref{MainControl}. Modular widgets
 					objects must always be created with \Ref{MainControl} as parent and must have
@@ -156,8 +149,8 @@ namespace BALL
 					@see   finalizeWidget
 					@see   show
 			*/
-			virtual void initializeWidget(MainControl& main_control)
-				throw();
+			virtual void initializeWidget(MainControl& main_control);
+			//	throw();
 			
 			/**	Remove the widget.
 					This method should reverse all actions performed in \Ref{initializeWidget}
@@ -167,8 +160,8 @@ namespace BALL
 					@see   initializeWidget
 					@see   aboutToExit
 			*/
-			virtual void finalizeWidget(MainControl& main_control)
-				throw();
+			virtual void finalizeWidget(MainControl& main_control);
+			//	throw();
 			
 			/**	Menu checking method.
 					This method is called by the method \Ref{checkMenus} from the
@@ -195,7 +188,7 @@ namespace BALL
 					@see   show
 					@see   Preferences
 			*/
-			virtual void initializePreferencesTab(Preferences &preferences)
+			virtual void initializePreferencesTab(Preferences& preferences)
 				throw();
 			
 			/**	Remove the preferences tab.
@@ -209,7 +202,7 @@ namespace BALL
 					@see    aboutToExit
 					@see    Preferences
 			*/
-			virtual void finalizePreferencesTab(Preferences &preferences)
+			virtual void finalizePreferencesTab(Preferences& preferences)
 				throw();
 			
 			/** Apply the preferences of the specific tab.
@@ -225,7 +218,7 @@ namespace BALL
 					@see    applyPreferencesTab
 					@see    Preferences
 			*/
-			virtual void applyPreferences(Preferences &preferences)
+			virtual void applyPreferences(Preferences& preferences)
 				throw();
 			
 			/** Fetch the widgets preferences from the inifile.
@@ -241,7 +234,7 @@ namespace BALL
 					@see    MainControl
 					@see    show
 			*/
-			virtual void fetchPreferences(INIFile &inifile)
+			virtual void fetchPreferences(INIFile& inifile)
 				throw();
 			
 			/** Writes the widgets preferences to the inifile.
@@ -257,8 +250,9 @@ namespace BALL
 					@see    MainControl
 					@see    aboutToExit
 			*/
-			virtual void writePreferences(INIFile &inifile)
+			virtual void writePreferences(INIFile& inifile)
 				throw();
+
 			//@}			
 		}; 
 
