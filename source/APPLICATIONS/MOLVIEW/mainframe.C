@@ -11,10 +11,10 @@
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 
-#include <BALL/MOLVIEW/OPENGL/KERNEL/moleculeObjectCreator.h>
+#include <BALL/MOLVIEW/GUI/KERNEL/moleculeObjectCreator.h>
 
 #ifdef BALL_PYTHON_SUPPORT
-#	include <BALL/VIEW/OPENGL/WIDGETS/pyWidget.h>
+#	include <BALL/VIEW/GUI/WIDGETS/pyWidget.h>
 #endif
 
 using namespace std;

@@ -30,8 +30,8 @@
 #	include <BALL/VIEW/KERNEL/connectionObject.h>
 #endif
 
-#ifndef BALL_VIEW_OPENGL_PRIMITIV_GLLABEL_H
-#	include <BALL/VIEW/OPENGL/PRIMITIV/gllabel.h>
+#ifndef BALL_VIEW_GUI_PRIMITIV_GLLABEL_H
+#	include <BALL/VIEW/GUI/PRIMITIV/gllabel.h>
 #endif
 
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
