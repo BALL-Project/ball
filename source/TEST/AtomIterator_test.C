@@ -1,4 +1,4 @@
-// $Id: AtomIterator_test.C,v 1.3 2001/12/30 13:28:56 sturm Exp $
+// $Id: AtomIterator_test.C,v 1.4 2002/01/04 01:53:05 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(AtomIterator, "$Id: AtomIterator_test.C,v 1.3 2001/12/30 13:28:56 sturm Exp $")
+START_TEST(AtomIterator, "$Id: AtomIterator_test.C,v 1.4 2002/01/04 01:53:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -23,8 +23,8 @@ CHECK(typedefs)
 	AtomIterator::value_type value = *ai;
 	TEST_EQUAL(value.getName(), ai->getName())
 	// ?????
-	// AtomIterator::difference_type diff = ac.endAtom() - ac.beginAtom();
-	// TEST_EQUAL((Size)diff, 2)
+	//AtomIterator::difference_type diff = ac.endAtom() - ac.beginAtom();
+	//TEST_EQUAL((Size)diff, 2)
 	AtomIterator::reference ref = *ai;
 	TEST_EQUAL(ref.getName(), ai->getName())
 	AtomIterator::pointer ptr = &*ai;

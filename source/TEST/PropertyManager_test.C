@@ -1,4 +1,4 @@
-// $Id: PropertyManager_test.C,v 1.16 2001/12/18 01:20:12 oliver Exp $
+// $Id: PropertyManager_test.C,v 1.17 2002/01/04 01:53:05 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.16 2001/12/18 01:20:12 oliver Exp $")
+START_TEST(PropertyManager, "$Id: PropertyManager_test.C,v 1.17 2002/01/04 01:53:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -683,11 +683,30 @@ CHECK(PropertyManager::countNamedProperties() const )
 RESULT
 
 CHECK(PropertyManager::getNamedProperty(Position index) const)
-	//???
+	PropertyManager m;
+	m.setProperty("TEST_PROP1", 123);
+	m.setProperty("TEST_PROP2", "ASD");
+	m.setProperty("TEST_PROP3", true);
+	TEST_EQUAL(m.countNamedProperties(), 3)
+
+	const PropertyManager& c_m(m);
+	TEST_EQUAL(c_m.getNamedProperty(0).getInt(), 123)
+	TEST_EQUAL(c_m.getNamedProperty(1).getString(), "ASD")
+	TEST_EQUAL(c_m.getNamedProperty(2).getBool(), true)
+	TEST_EXCEPTION(Exception::IndexOverflow, c_m.getNamedProperty(3))
 RESULT
 
-CHECK(PropertyManager::getNamedProperty(Position index) const)
-	//???
+CHECK(PropertyManager::getNamedProperty(Position index))
+	PropertyManager m;
+	m.setProperty("TEST_PROP1", 123);
+	m.setProperty("TEST_PROP2", "ASD");
+	m.setProperty("TEST_PROP3", true);
+	TEST_EQUAL(m.countNamedProperties(), 3)
+
+	TEST_EQUAL(m.getNamedProperty(0).getInt(), 123)
+	TEST_EQUAL(m.getNamedProperty(1).getString(), "ASD")
+	TEST_EQUAL(m.getNamedProperty(2).getBool(), true)
+	TEST_EXCEPTION(Exception::IndexOverflow, m.getNamedProperty(3))
 RESULT
 
 CHECK(PropertyManager::hasProperty(Property property) const )

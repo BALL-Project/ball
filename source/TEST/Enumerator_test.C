@@ -1,4 +1,4 @@
-// $Id: Enumerator_test.C,v 1.6 2001/12/30 13:28:57 sturm Exp $
+// $Id: Enumerator_test.C,v 1.7 2002/01/04 01:53:05 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@ void char_assign(char& c1, char& c2)
 	c1 = c2;
 }
 
-START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.6 2001/12/30 13:28:57 sturm Exp $")
+START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.7 2002/01/04 01:53:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -56,9 +56,8 @@ CHECK(getModulus() const )
   TEST_EQUAL(modulus.size(), 0)
 RESULT
 
-
 CHECK(EnumeratorIndex& operator ++ ())
-  //?????
+	//????
 RESULT
 
 
@@ -109,12 +108,7 @@ RESULT
 
 // tests for class Enumerator::
 
-CHECK(Enumerator::(*MutatorFunction)(Variant&, Variant&))
-  //?????
-RESULT
-
 Enumerator<string, string::iterator, char>* enumerator_ptr;
-
 CHECK(Enumerator())
   enumerator_ptr = new Enumerator<string, string::iterator, char>;
 	TEST_NOT_EQUAL(enumerator_ptr, 0);
@@ -125,36 +119,45 @@ CHECK(~Enumerator())
   delete enumerator_ptr;
 RESULT
 
-String s;
-Enumerator<String, String::iterator, char> enumerator(s, char_assign);
-vector<char> variants; 
-variants.push_back('0');
-variants.push_back('1');
-variants.push_back('2');
-variants.push_back('3');
-variants.push_back('4');
-variants.push_back('5');
-variants.push_back('6');
-variants.push_back('7');
-variants.push_back('8');
-variants.push_back('9');
-string::iterator it = s.begin();
-enumerator.addVariants(it, variants);
-it++;
-enumerator.addVariants(it, variants);
-it++;
-enumerator.addVariants(it, variants);
-it++;
-enumerator.addVariants(it, variants);
-it++;
-enumerator.addVariants(it, variants);
-
 CHECK(countVariants())
-  TEST_EQUAL(enumerator.countVariants(), 1e5);
+	Enumerator<String, String::iterator, char> enumerator(s, char_assign);	
+  TEST_EQUAL(enumerator.countVariants(), 0);
+RESULT
+
+Enumerator<String, String::iterator, char> enumerator(s, char_assign);
+CHECK(addVariant())
+	String s;
+	vector<char> variants; 
+	variants.push_back('0');
+	variants.push_back('1');
+	variants.push_back('2');
+	variants.push_back('3');
+	variants.push_back('4');
+	variants.push_back('5');
+	variants.push_back('6');
+	variants.push_back('7');
+	variants.push_back('8');
+	variants.push_back('9');
+	string::iterator it = s.begin();
+	TEST_EQUAL(enumerator.countVariants(), 1)
+	enumerator.addVariants(it, variants);
+	TEST_EQUAL(enumerator.countVariants(), 10)
+	it++;
+	enumerator.addVariants(it, variants);
+	TEST_EQUAL(enumerator.countVariants(), 100)
+	it++;
+	enumerator.addVariants(it, variants);
+	TEST_EQUAL(enumerator.countVariants(), 1000)
+	it++;
+	enumerator.addVariants(it, variants);
+	TEST_EQUAL(enumerator.countVariants(), 10000)
+	it++;
+	enumerator.addVariants(it, variants);
+	TEST_EQUAL(enumerator.countVariants(), 100000)
 RESULT
 
 String S;
-CHECK(createPermutation())
+CHECK(createPermutation(Position i))
 	for (Position i = 0; i < enumerator.countVariants(); i++) 
 	{
 		enumerator.createPermutation(i); 
@@ -162,73 +165,6 @@ CHECK(createPermutation())
 		S.reverse();
 		TEST_EQUAL(enumerator.getCurrent(), s)
 	}
-RESULT
-
-
-// tests for class IteratorTraits_::
-
-CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::IteratorTraits_())
-  //?????
-RESULT
-
-
-CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::IteratorTraits_(const ContainerType& enumerator))
-  //?????
-RESULT
-
-
-CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::IteratorTraits_(const IteratorTraits_& traits))
-  //?????
-RESULT
-
-
-CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::IteratorTraits_& operator = (const IteratorTraits_& traits))
-  //?????
-RESULT
-
-
-CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::getContainer())
-  //?????
-RESULT
-
-
-CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::getPosition())
-  //?????
-RESULT
-
-
-CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::bool operator == (const IteratorTraits_& traits) const )
-  //?????
-RESULT
-
-
-CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::isValid() const )
-  //?????
-RESULT
-
-
-CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::toBegin())
-  //?????
-RESULT
-
-
-CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::toEnd())
-  //?????
-RESULT
-
-
-CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::getData())
-  //?????
-RESULT
-
-
-CHECK(IteratorTraits_::Enumerator::Container::VariantIterator::Variant::forward())
-  //?????
-RESULT
-
-
-CHECK(IteratorTraits_::Enumerator::mutate_(VariantIterator& it, Variant& v))
-  //?????
 RESULT
 
 

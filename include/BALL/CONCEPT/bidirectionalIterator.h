@@ -1,4 +1,4 @@
-// $Id: bidirectionalIterator.h,v 1.13 2001/07/04 18:31:41 amoll Exp $ 
+// $Id: bidirectionalIterator.h,v 1.14 2002/01/04 01:53:05 oliver Exp $ 
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
 #define BALL_CONCEPT_BIDIRECTIONALITERATOR_H
@@ -35,7 +35,7 @@ namespace BALL
 
 		/** Tag this iterator as a bidirectional iterator according to the STL scheme
 		 */
-		typedef ::std::bidirectional_iterator_tag iterator_category;
+		typedef std::bidirectional_iterator_tag iterator_category;
 		
 		//@}
 		/** @name Constructors and Destructor

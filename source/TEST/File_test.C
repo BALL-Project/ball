@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.30 2002/01/03 01:24:42 oliver Exp $
+// $Id: File_test.C,v 1.31 2002/01/04 01:53:05 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@ using namespace std;
 	
 #include "networkTest.h"
 
-START_TEST(File, "$Id: File_test.C,v 1.30 2002/01/03 01:24:42 oliver Exp $")
+START_TEST(File, "$Id: File_test.C,v 1.31 2002/01/04 01:53:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -300,17 +300,6 @@ CHECK(isCanonized())
 	File f6("data/File_test.txt");
 	TEST_EQUAL(f6.isValid(), true)
 	TEST_EQUAL(f6.isCanonized(), true)
-
-	// ?????: obviously, we need something more clever
-	// than the code below...
-	/* This is a test for an absolute path.
-		 Because the location of the file is unsure, 
-		 I had to comment it out.
-		 Try it on your computer with YOUR path.
-	
-  File f7("~/BALL/source/TEST/data/File_test.txt");
-	TEST_EQUAL(f7.isCanonized(), true)
-  */
 RESULT
 
 CHECK(isReadable(String name))

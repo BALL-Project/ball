@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.19 2001/12/30 13:28:57 sturm Exp $
+// $Id: Expression_test.C,v 1.20 2002/01/04 01:53:05 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -18,7 +18,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.19 2001/12/30 13:28:57 sturm Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.20 2002/01/04 01:53:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -681,7 +681,7 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	// ?????: this expression still doesn't work correctly! The expression in brackets
 	// is not interpreted correctly... Instead, "element(H) OR name(OXT) AND chain(A)" 
 	// behaves as expected. Anyway, the used test case (Expression_test.hin) does not
-	// allow to successfully test thoses predicates, since it does not contain a chain A!
+	// allow to successfully test those predicates, since it does not contain a chain A!
 	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 4));
 
 	Expression e;

@@ -1,4 +1,4 @@
-// $Id: ClearShiftProcessor_test.C,v 1.4 2001/12/30 13:28:56 sturm Exp $
+// $Id: ClearShiftProcessor_test.C,v 1.5 2002/01/04 01:53:05 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 
 ///////////////////////////
 
-START_TEST(ClearShiftProcessor, "$Id: ClearShiftProcessor_test.C,v 1.4 2001/12/30 13:28:56 sturm Exp $")
+START_TEST(ClearShiftProcessor, "$Id: ClearShiftProcessor_test.C,v 1.5 2002/01/04 01:53:05 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -51,7 +51,15 @@ CHECK(shift assignment)
 RESULT
 
 CHECK(ClearShiftProcessor::Processor::Result operator () (Composite& composite) throw())
-	// ?????
+	ClearShiftProcessor sp;
+	Atom a1;
+	sp(a1);
+	TEST_EQUAL(a1.hasProperty(ShiftModule::PROPERTY__SHIFT), false)
+	a1.setProperty(ShiftModule::PROPERTY__SHIFT, 12.34);
+	TEST_EQUAL(a1.hasProperty(ShiftModule::PROPERTY__SHIFT), true)
+	TEST_REAL_EQUAL(a1.getProperty(ShiftModule::PROPERTY__SHIFT).getFloat(), 12.34)
+	sp(a1);
+	TEST_EQUAL(a1.hasProperty(ShiftModule::PROPERTY__SHIFT), false);
 RESULT
 
 CHECK(apply)
