@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.49 2004/09/06 14:28:06 amoll Exp $
+// $Id: geometricControl.C,v 1.50 2004/09/06 14:29:51 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -583,7 +583,8 @@ namespace BALL
 				}
 				else
 				{
-					Log.error() << "Unknown geometric object: " << typeid(go).name() << std::endl;
+					Log.error() << "Unknown geometric object: " << typeid(go).name() 
+											<< "in " << __FILE__ << __LINE__ << std::endl;
 					continue;
 				}
 
