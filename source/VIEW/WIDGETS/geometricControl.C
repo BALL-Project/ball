@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.72 2004/12/16 18:53:59 amoll Exp $
+// $Id: geometricControl.C,v 1.72.2.1 2004/12/28 17:10:54 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
@@ -25,6 +25,7 @@
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/box.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
+#include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/MATHS/simpleBox3.h>
 
 #include <qpopupmenu.h>
@@ -594,6 +595,15 @@ namespace BALL
 					bbox.operator()(box.getPoint() + box.getRightVector());
 					bbox.operator()(box.getPoint() + box.getDiagonalVector());
 				}
+				else if (RTTI::isKindOf<Line>(go))
+				{
+					Line& v = reinterpret_cast<Line&>(go);
+					center = (v.getVertex1() + (v.getVertex2() - v.getVertex1()) / 2.0);
+
+					bbox.operator()(v.getVertex1());
+					bbox.operator()(v.getVertex2());
+				}
+
 				else if (RTTI::isKindOf<BALL::VIEW::Label>(go))
 				{
 					// do nothing
