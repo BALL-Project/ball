@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.5 2005/02/18 12:55:38 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.6 2005/03/07 14:28:16 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -32,7 +32,6 @@ namespace BALL
 	namespace VIEW
 	{
 		
-		//Constructor
 		DockDialog::DockDialog(QWidget* parent,  const char* name, bool modal, WFlags fl)
 			throw()
 			: DockDialogData(parent, name, modal, fl),
@@ -66,18 +65,9 @@ namespace BALL
 			registerObject_(build_bonds);
 			registerObject_(add_hydrogens);
 
-		
 			//build HashMap for advanced option dialogs
 			GeometricFitDialog* geo_fit = new GeometricFitDialog(this);
 			addEntry("Geometric Fit", GEOMETRIC_FIT, geo_fit);
-			
-			QDialog* test1 = new QDialog(this);
-			test1->setCaption("Test1");
-			addEntry("Test1", TEST1, test1);
-			QDialog* test2 = new QDialog(this);
-			test2->setCaption("Test2");
-			addEntry("Test2", TEST2, test2);
-			
 			hide(); 
 		}
 
@@ -141,16 +131,17 @@ namespace BALL
 			//iterate over all composites; get to know if there are systems
 			HashSet<Composite*>::Iterator composite_it = composite_manager.begin();
 
-			int num_systems = 0;
-			for(; +composite_it; ++composite_it)
+			Size num_systems = 0;
+			for (; +composite_it; ++composite_it)
 			{
-				if(RTTI::isKindOf<System>(*(*composite_it)))
+				if (RTTI::isKindOf<System>(**composite_it))
 				{
 					num_systems++;
 				}
 			}
+
 			//no systems loaded, disable menu entry "Docking"
-			//menuBar()->setItemEnabled(id_, num_systems);
+			menuBar()->setItemEnabled(id_, num_systems);
 		}
 		
 		// if the user has selected one or two systems,  
@@ -178,36 +169,35 @@ namespace BALL
 			//fill current system list and check if user has already selected two systems
 			for(; +composite_it; ++composite_it)
 			{
-				if(RTTI::isKindOf<System>(*(*composite_it)))
+				System* system = dynamic_cast<System*>(*composite_it);
+				if (system == 0) continue;
+
+				current_system_list.append(system->getName());
+				
+				//test if the user has selected one or two systems
+				//more than 2 selected systems -> error
+				if (system->isSelected())
 				{
-					System* system = RTTI::castTo<System>(*(*composite_it));
-					current_system_list.append(system->getName());
-					
-					//test if the user has selected one or two systems
-					//more than 2 selected systems -> error
-					if (system->isSelected())
+					if (docking_partner1_ == NULL)
 					{
-						if(docking_partner1_ == NULL)
+						docking_partner1_ = system;
+					}
+					else
+					{
+						if (docking_partner2_ == NULL)
 						{
-							docking_partner1_ = system;
+							docking_partner2_ = system;
 						}
 						else
 						{
-							if(docking_partner2_ == NULL)
-							{
-								docking_partner2_ = system;
-							}
-							else
-							{
-								//if more than 2 systems are selected => Error message!
-								#ifdef BALL_VIEW_DEBUG
-									Log.error() << "DockDialog: " << " More than two systems selected! " << std::endl;
-								#endif
-					
-								QMessageBox error_message(0,0);
-								error_message.warning(0,"Error","More than two systems selected!", QMessageBox::Ok, QMessageBox::NoButton);
-								return;
-							}
+							//if more than 2 systems are selected => Error message!
+							#ifdef BALL_VIEW_DEBUG
+								Log.error() << "DockDialog: " << " More than two systems selected! " << std::endl;
+							#endif
+				
+							QMessageBox error_message(0,0);
+							error_message.warning(0,"Error","More than two systems selected!", QMessageBox::Ok, QMessageBox::NoButton);
+							return;
 						}
 					}
 				}
@@ -285,8 +275,6 @@ namespace BALL
 			if (s == QString::null) return;
 			setWorkingDirFromFilename_(s.ascii());
 			lineedit.setText(s);
-
-			QWidget::update();
 		}
 		
 		/// Calculate...
@@ -300,37 +288,20 @@ namespace BALL
 			applyProcessors_();
 			
 			//create docking algorithm object
-			GeometricFit geo_fit = GeometricFit();
+			GeometricFit geo_fit;
 			
 			// keep the larger protein in System A and the smaller one in System B
 			if (docking_partner1_->countAtoms() < docking_partner2_->countAtoms())
 			{
-				// swap the systems
-				System* temp = docking_partner1_;
-				docking_partner1_ = docking_partner2_;
-				docking_partner2_ = temp;
+				geo_fit.setup(*docking_partner2_, *docking_partner1_, options_);
 			}
-			
-			geo_fit.setup(*docking_partner1_, *docking_partner2_, options_);
-			
-			
-			/*
-			System* partner1 = new System(*docking_partner1_);
-			System* partner2 = new System(*docking_partner2_);
-
-			// keep the larger protein in System A and the smaller one in System B
-			if (partner1->countAtoms() < partner2->countAtoms())
+			else
 			{
-				// swap the systems
-				System* temp = partner1;
-				partner1 = partner2;
-				partner2 = temp;
+				geo_fit.setup(*docking_partner1_, *docking_partner2_, options_);
 			}
 			
-			geo_fit.setup(*partner1, *partner2, options_);
-			*/
 			
-			/*DockingProgressDialog progress;
+			DockingProgressDialog progress;
 			QString s = "Docking partner 1: ";
 			progress.options->append(s.append(docking_partner1_->getName()));
 			s = "Docking partner 2: ";
@@ -347,17 +318,18 @@ namespace BALL
 				progress.options->append(s.append(it->second));
 			}
 			progress.exec();
-			*/
+//   			progress.show(); // to use with multithreading later
 			
 			// start docking
+			Log.error() << "starting docking" << std::endl;
 			geo_fit.start();
+			Log.error() << "finished docking" << std::endl;
 			
-			/*ConformationSet rc = geo_fit.getConformationSet(options_.getInteger(GeometricFit::Option::BEST_NUM));
+			ConformationSet rc = geo_fit.getConformationSet(options_.getInteger(GeometricFit::Option::BEST_NUM));
 	 		rc.writeDCDFile("docking.dcd");
 
 	 		System* docked_system = new System(rc.getSystem());
 			getMainControl()->insert(*docked_system, "Docked System");
-			*/
 
 			Log.info() << "End of calculate" << std::endl;
 			return true;
@@ -396,6 +368,8 @@ namespace BALL
 		bool DockDialog::applyProcessors_()
 			throw()
 		{
+			Log.error() << "starting apply processors" << std::endl;
+
 			if ((docking_partner1_ == 0) || (docking_partner2_ == 0)) 
 			{
 				Log.error() << "No two systems given! Aborting..." << std::endl;
@@ -466,19 +440,10 @@ namespace BALL
 				return false;
 			}
 			
-			Log.error() << "End of applyProcessors" << std::endl;
-			
-			//send messages that systems were changed
-			CompositeMessage* message = new CompositeMessage;
-			message->setComposite(*docking_partner1_);
-			message->setType(CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-			notify_(message);
-			
-			CompositeMessage* message2 = new CompositeMessage;
-			message2->setComposite(*docking_partner2_);
-			message2->setType(CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
-			notify_(message2);
-			
+			getMainControl()->getPrimitiveManager().setMultithreadingMode(false);
+			getMainControl()->update(*docking_partner1_, true);
+			getMainControl()->update(*docking_partner2_, true);
+			getMainControl()->getPrimitiveManager().setMultithreadingMode(true);
 			Log.error() << "End of applyProcessors" << std::endl;
 			
 			return true;
@@ -546,8 +511,9 @@ namespace BALL
 		void DockDialog::okPressed()
 		{
 			//if less than 2/ more than 2 equal systems are chosen => Error message!
-			if ((systems1->currentText() == "<select>") || (systems2->currentText() == "<select>") 
-					|| (systems1->currentText() == systems2->currentText()))
+			if ((systems1->currentText() == "<select>") || 
+					(systems2->currentText() == "<select>") || 
+					(systems1->currentText() == systems2->currentText()))
 			{
 				#ifdef BALL_VIEW_DEBUG
 					Log.error() << "DockDialog: " << "Please select two different docking partners!" << std::endl;
@@ -593,23 +559,18 @@ namespace BALL
 			throw()
 		{
 			//iterate over all composites; find chosen system
-			MainControl* main_control = getMainControl();
-			CompositeManager& composite_manager = main_control->getCompositeManager();
-			HashSet<Composite*>::iterator composite_it = composite_manager.begin();
+			HashSet<Composite*>::iterator composite_it = getMainControl()->getCompositeManager().begin();
 				
-			System* system = 0;
 			for(; +composite_it; ++composite_it)
 			{
-				if(RTTI::isKindOf<System>(*(*composite_it)))
+				System* system = dynamic_cast<System*>(*composite_it);
+				if (system != 0 && system->getName() == qstr.ascii())
 				{
-					system = RTTI::castTo<System>(*(*composite_it));
-					if(system->getName() == (const char*)qstr)
-					{
-						break;
-					}
+					return system;
 				}
 			}
-			return system;
+
+			return 0;
 		}
 		
 		
