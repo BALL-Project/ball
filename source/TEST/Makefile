@@ -52,6 +52,7 @@ EXECUTABLES_DATATYPES = \
 	HashGrid3_test\
 	Options_test\
 	String_test\
+	Substring_test\
 	Triple_test\
 	Quadruple_test\
 	RegularData1D_test\
@@ -266,9 +267,11 @@ solvation_test:	$(EXECUTABLES_SOLVATION)
 clean:	default_clean
 	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
 
+# ????
 AmberFF_test: AmberFF_test.o ../MOLMEC/AMBER/amberNonBonded.o
 	$(CXX) $(CXXFLAGS) AmberFF_test.o ../MOLMEC/AMBER/amberNonBonded.o $(LDFLAGS) -o $@ $(LIBS)
 
+# ????
 ReconstructFragmentProcessor_test: ReconstructFragmentProcessor_test.o ../STRUCTURE/reconstructFragmentProcessor.o ../FORMAT/HINFile.o
 	$(CXX) $(CXXFLAGS) ReconstructFragmentProcessor_test.o ../STRUCTURE/reconstructFragmentProcessor.o ../FORMAT/HINFile.o $(LDFLAGS) -o $@ $(LIBS)
 
