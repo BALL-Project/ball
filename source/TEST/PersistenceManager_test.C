@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PersistenceManager_test.C,v 1.9 2002/12/22 18:55:21 oliver Exp $
+// $Id: PersistenceManager_test.C,v 1.10 2003/06/16 16:39:23 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -247,7 +247,7 @@ namespace BALL
 
 ///////////////////////////
 
-START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.9 2002/12/22 18:55:21 oliver Exp $")
+START_TEST(PersistanceManager, "$Id: PersistenceManager_test.C,v 1.10 2003/06/16 16:39:23 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -260,13 +260,18 @@ using namespace BALL;
 
 PersistenceTest* ptr;
 
-CHECK(PersistenceManager::PersistenceManager() throw())
+CHECK(PersistenceManager() throw())
 	ptr = new PersistenceTest;
 	TEST_NOT_EQUAL(ptr, 0)
 RESULT
 
 
-CHECK(PersistenceManager::PersistenceManager(std::istream& is) throw())
+CHECK(PersistenceManager(const PersistenceManager& pm) throw())
+  // ???
+RESULT
+
+
+CHECK(PersistenceManager(::std::istream& is) throw())
 	// ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to istr_
@@ -275,32 +280,32 @@ CHECK(PersistenceManager::PersistenceManager(std::istream& is) throw())
 RESULT
 
 
-CHECK(PersistenceManager::PersistenceManager(std::ostream& os) throw())
+CHECK(PersistenceManager(::std::ostream& os) throw())
   // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to ostr_
 RESULT
 
 
-CHECK(PersistenceManager::PersistenceManager(std::istream& is, std::ostream& os) throw())
+CHECK(PersistenceManager(::std::istream& is, ::std::ostream& os) throw())
   // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to istr_, ostr_
 RESULT
 
 
-CHECK(PersistenceManager::~PersistenceManager() throw())
+CHECK(~PersistenceManager() throw())
   delete ptr;
 RESULT
 
 
-CHECK(PersistenceManager::registerClass(String signature, const CreateMethod m) throw())
+CHECK(void registerClass(String signature, const CreateMethod m) throw())
   //?????
 	// We need additional accessors to be able to test this method
 RESULT
 
 
-CHECK(PersistenceManager::createObject(String signature) const  throw())
+CHECK(void* createObject(String signature) const throw())
 	// some RTTI check here 
 	PersistenceTest pm;
 	// ?????
@@ -311,115 +316,334 @@ CHECK(PersistenceManager::createObject(String signature) const  throw())
 RESULT
 
 
-CHECK(PersistenceManager::getNumberOfClasses() const  throw())
+CHECK(Size getNumberOfClasses() const throw())
 	PersistenceTest tpm;
 	Size noc = tpm.getNumberOfClasses();
 	TEST_EQUAL(noc, 15);
 RESULT
 
 
-CHECK(PersistenceManager::setOstream(std::ostream& s) throw())
+CHECK(void setOstream(::std::ostream& s) throw())
   // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to ostr_
 RESULT
 
 
-CHECK(PersistenceManager::setIstream(std::istream& s) throw())
+CHECK(void setIstream(::std::istream& s) throw())
   // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to istr_
 RESULT
 
 
-CHECK(PersistenceManager::startOutput() throw())
+CHECK(void startOutput() throw())
   // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to object_out_ and object_out_needed_
 RESULT
 
 
-CHECK(PersistenceManager::endOutput() throw())
+CHECK(void endOutput() throw())
   // ?????:
 	// We need additional accessors to be able to test this method
 	// needed: access to object_out_ and object_out_needed_
 RESULT
 
 
-CHECK(PersistenceManager::readObject() throw())
+CHECK(PersistentObject* readObject() throw(Exception::GeneralException))
   //?????
 RESULT
 
 
-CHECK(PersistenceManager::PersistenceManager& operator << (const PersistentObject& object) throw())
+CHECK(PersistenceManager& operator << (const PersistentObject& object) throw())
   //?????
 RESULT
 
 
-CHECK(PersistenceManager::PersistenceManager& operator >> (PersistentObject*& object_ptr) throw())
+CHECK(PersistenceManager& operator >> (PersistentObject*& object_ptr) throw())
   //?????
 RESULT
 
 
-CHECK(PersistenceManager::checkObjectHeader(const T& /* object */, const char* name = 0) throw())
+CHECK(template<typename T> bool checkObjectHeader(const T& /* object */, const char* name = 0) throw())
   //?????
 RESULT
 
 
-CHECK(PersistenceManager::checkObjectHeader(const char* type_name) throw())
+CHECK(bool checkObjectHeader(const char* type_name) throw())
   //?????
 RESULT
 
 
-CHECK(PersistenceManager::writeObjectTrailer(const char* name = 0) throw())
+CHECK(void writeObjectTrailer(const char* name = 0) throw())
   //?????
 RESULT
 
 
-CHECK(PersistenceManager::writePrimitive(const T& t, const char* name) throw())
+CHECK(template<typename T> void writePrimitive(const T& t, const char* name) throw())
   //?????
 RESULT
 
 
-CHECK(PersistenceManager::readPrimitive(T& t, const char* name) throw())
+CHECK(template<typename T> bool readPrimitive(T& t, const char* name) throw())
   //?????
 RESULT
 
 
-CHECK(PersistenceManager::readStorableObject(T& t, const char* name) throw())
+CHECK(template<typename T> bool readStorableObject(T& t, const char* name) throw())
   //?????
 RESULT
 
 
-CHECK(PersistenceManager::readObjectPointer(T*& object, const char* name) throw())
+CHECK(template<typename T> bool readObjectPointer(T*& object, const char* name) throw())
   //?????
 RESULT
 
 
-CHECK(PersistenceManager::readObjectReference(T& object, const char* name) throw())
+CHECK(template<typename T> bool readObjectReference(T& object, const char* name) throw())
   //?????
 RESULT
 
 
-CHECK(PersistenceManager::writeObjectArray(const T* array, const char* name, Size size) throw())
+CHECK(template<typename T> void writeObjectArray(const T* array, const char* name, Size size) throw())
   //?????
 RESULT
 
 
-CHECK(PersistenceManager::readObjectArray(const T* array, const char* name, Size& size) throw())
+CHECK(template<typename T> bool readObjectArray(const T* array, const char* name, Size& size) throw())
   //?????
 RESULT
 
 
-CHECK(PersistenceManager::writeObjectPointerArray(T** arr, const char* name, const Size size) throw())
+CHECK(template<typename T> void writeObjectPointerArray(T** arr, const char* name, const Size size) throw())
   //?????
 RESULT
 
 
-CHECK(PersistenceManager::readObjectPointerArray(T** array, const char* name, Size& size) throw())
+CHECK(template<typename T> bool readObjectPointerArray(T** array, const char* name, Size& size) throw())
   //?????
 RESULT
 
+CHECK(bool checkHeader(const char* type_name, const char* name, PointerSizeUInt& ptr))
+  // ???
+RESULT
+
+CHECK(bool checkName(const char* name))
+  // ???
+RESULT
+
+CHECK(bool checkObjectPointerArrayHeader(const char* type_name, const char* name, Size& size))
+  // ???
+RESULT
+
+CHECK(bool checkObjectPointerArrayTrailer())
+  // ???
+RESULT
+
+CHECK(bool checkObjectPointerHeader(const char* type_name, const char* name))
+  // ???
+RESULT
+
+CHECK(bool checkObjectReferenceHeader(const char* type_name, const char* name))
+  // ???
+RESULT
+
+CHECK(bool checkObjectTrailer(const char* name = 0) throw())
+  // ???
+RESULT
+
+CHECK(bool checkPrimitiveHeader(const char* type_name, const char* name))
+  // ???
+RESULT
+
+CHECK(bool checkPrimitiveTrailer())
+  // ???
+RESULT
+
+CHECK(bool checkStorableHeader(const char* type_name, const char* name))
+  // ???
+RESULT
+
+CHECK(bool checkStorableTrailer())
+  // ???
+RESULT
+
+CHECK(bool checkStreamHeader())
+  // ???
+RESULT
+
+CHECK(bool checkStreamTrailer())
+  // ???
+RESULT
+
+CHECK(bool checkTrailer(const char* name = 0))
+  // ???
+RESULT
+
+CHECK(bool getObjectHeader(String& type_name, PointerSizeUInt& ptr))
+  // ???
+RESULT
+
+CHECK(template<typename T> void writeObjectHeader(const T* object, const char* name = 0) throw())
+  // ???
+RESULT
+
+CHECK(template<typename T> void writeObjectPointer(const T* object, const char* name) throw())
+  // ???
+RESULT
+
+CHECK(template<typename T> void writeObjectReference(const T& object, const char* name) throw())
+  // ???
+RESULT
+
+CHECK(template<typename T> void writeStorableObject(const T& t, const char* name) throw())
+  // ???
+RESULT
+
+CHECK(typedefvoid* (*CreateMethod)())
+  // ???
+RESULT
+
+CHECK(void finalizeInputStream() throw())
+  // ???
+RESULT
+
+CHECK(void finalizeOutputStream() throw())
+  // ???
+RESULT
+
+CHECK(void get(Byte& b))
+  // ???
+RESULT
+
+CHECK(void get(DoubleReal& d))
+  // ???
+RESULT
+
+CHECK(void get(Index& s))
+  // ???
+RESULT
+
+CHECK(void get(PointerSizeUInt& p))
+  // ???
+RESULT
+
+CHECK(void get(Real& f))
+  // ???
+RESULT
+
+CHECK(void get(Size& s))
+  // ???
+RESULT
+
+CHECK(void get(bool& b))
+  // ???
+RESULT
+
+CHECK(void get(char& c))
+  // ???
+RESULT
+
+CHECK(void get(string& s))
+  // ???
+RESULT
+
+CHECK(void initializeInputStream() throw())
+  // ???
+RESULT
+
+CHECK(void initializeOutputStream() throw())
+  // ???
+RESULT
+
+CHECK(void put(const Byte c))
+  // ???
+RESULT
+
+CHECK(void put(const DoubleReal d))
+  // ???
+RESULT
+
+CHECK(void put(const Index i))
+  // ???
+RESULT
+
+CHECK(void put(const PointerSizeUInt p))
+  // ???
+RESULT
+
+CHECK(void put(const Real f))
+  // ???
+RESULT
+
+CHECK(void put(const Size p))
+  // ???
+RESULT
+
+CHECK(void put(const bool b))
+  // ???
+RESULT
+
+CHECK(void put(const char c))
+  // ???
+RESULT
+
+CHECK(void put(const string& s))
+  // ???
+RESULT
+
+CHECK(void writeHeader(const char* type_name, const char* name, PointerSizeUInt ptr))
+  // ???
+RESULT
+
+CHECK(void writeName(const char* name))
+  // ???
+RESULT
+
+CHECK(void writeObjectPointerArrayHeader(const char* type_name, const char* name, Size size))
+  // ???
+RESULT
+
+CHECK(void writeObjectPointerArrayTrailer())
+  // ???
+RESULT
+
+CHECK(void writeObjectPointerHeader(const char* type_name, const char* name))
+  // ???
+RESULT
+
+CHECK(void writeObjectReferenceHeader(const char* type_name, const char* name))
+  // ???
+RESULT
+
+CHECK(void writePrimitiveHeader(const char* type_name, const char* name))
+  // ???
+RESULT
+
+CHECK(void writePrimitiveTrailer())
+  // ???
+RESULT
+
+CHECK(void writeStorableHeader(const char* type_name, const char* name))
+  // ???
+RESULT
+
+CHECK(void writeStorableTrailer())
+  // ???
+RESULT
+
+CHECK(void writeStreamHeader())
+  // ???
+RESULT
+
+CHECK(void writeStreamTrailer())
+  // ???
+RESULT
+
+CHECK(void writeTrailer(const char* name = 0))
+  // ???
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
