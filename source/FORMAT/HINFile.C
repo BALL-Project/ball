@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.16 2000/05/23 19:39:42 anker Exp $
+// $Id: HINFile.C,v 1.17 2000/05/24 09:19:39 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -350,6 +350,9 @@ namespace BALL
 
 	void HINFile::read(System& system)
 	{
+		// destroy the old contents of the system
+		system.destroy();
+		
 		// we define some states for our simple parser machine
 		// legal transitions are:
 		// START->IN_MOLECULE, IN_MOLECULE->IN_RESIDUE
