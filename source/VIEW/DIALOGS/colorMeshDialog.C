@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.23.2.4 2004/05/14 12:36:52 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.23.2.5 2004/06/01 12:02:15 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
@@ -259,11 +259,18 @@ void ColorMeshDialog::gridSelected()
 }
 
 
-void ColorMeshDialog::setColor_(ColorRGBA& color, const QPushButton* button, const QSpinBox* box)
+void ColorMeshDialog::setColor_(ColorRGBA& color, const QPushButton* button, const QSpinBox* box, const QRadioButton* rbutton)
 {
 	QPalette p = button->palette();
 	color.set(p.color(QPalette::Active, QColorGroup::Button));
-	color.setAlpha(box->value());
+	if (rbutton->isChecked())
+	{
+		color.setAlpha(box->value());
+	}
+	else
+	{
+		color.setAlpha(255);
+	}
 }
 
 void ColorMeshDialog::getColor_(const ColorRGBA& color, QPushButton* button, QSpinBox* box)
@@ -292,17 +299,19 @@ QColor ColorMeshDialog::setColor(QPushButton* button)
 void ColorMeshDialog::colorByCustomColor_()
 {
 	ColorRGBA col(red_box->value(), green_box->value(), blue_box->value(), alpha_box->value());
-	mesh_->colorList.resize(1);
-	mesh_->colorList[0] = col;
 
 	if (transparency_group_custom->selected() == none_button_custom)
 	{
+		col.setAlpha(255);
 		rep_->setTransparency(0);
 	}
 	else if (transparency_group_custom->selected() == alpha_button_custom)
 	{
 		rep_->setTransparency(min_min_color.getAlpha());
 	}
+
+	mesh_->colorList.resize(1);
+	mesh_->colorList[0] = col;
 }
 
 
@@ -330,11 +339,11 @@ void ColorMeshDialog::colorByGrid_()
 		return;
 	}
 
-	setColor_(min_min_color, min_min_button, min_min_alpha);
-	setColor_(min_color, min_button, min_alpha);
-	setColor_(mid_color, mid_button, mid_alpha);
-	setColor_(max_color, max_button, max_alpha);
-	setColor_(max_max_color, max_max_button, max_max_alpha);
+	setColor_(min_min_color, min_min_button, min_min_alpha, alpha_button_grid);
+	setColor_(min_color, min_button, min_alpha, alpha_button_grid);
+	setColor_(mid_color, mid_button, mid_alpha, alpha_button_grid);
+	setColor_(max_color, max_button, max_alpha, alpha_button_grid);
+	setColor_(max_max_color, max_max_button, max_max_alpha, alpha_button_grid);
 
 	// now do the colorizing stuff...
 	mesh_->colorList.resize(mesh_->vertex.size());
@@ -402,11 +411,11 @@ void ColorMeshDialog::saveSettings_()
 	}
 	ColoringConfig& config = configs_[rep_];
 
-	setColor_(config.min_min_color, min_min_button, min_min_alpha);
-	setColor_(config.min_color, min_button, min_alpha);
-	setColor_(config.mid_color, mid_button, mid_alpha);
-	setColor_(config.max_color, max_button, max_alpha);
-	setColor_(config.max_max_color, max_max_button, max_max_alpha);
+	setColor_(config.min_min_color, min_min_button, min_min_alpha, alpha_button_grid);
+	setColor_(config.min_color, min_button, min_alpha, alpha_button_grid);
+	setColor_(config.mid_color, mid_button, mid_alpha, alpha_button_grid);
+	setColor_(config.max_color, max_button, max_alpha, alpha_button_grid);
+	setColor_(config.max_max_color, max_max_button, max_max_alpha, alpha_button_grid);
 
 	config.min_value = String(min_box->text().ascii()).toFloat();
 	config.mid_value = String(mid_box->text().ascii()).toFloat();
@@ -595,6 +604,21 @@ void ColorMeshDialog::show()
 	ColorMeshDialogData::show();
 	raise();
 }
+
+void ColorMeshDialog::gridTransparencyChanged()
+{
+	min_min_alpha->setEnabled(alpha_button_grid->isChecked());
+			min_alpha->setEnabled(alpha_button_grid->isChecked());
+			mid_alpha->setEnabled(alpha_button_grid->isChecked());
+	    max_alpha->setEnabled(alpha_button_grid->isChecked());
+	max_max_alpha->setEnabled(alpha_button_grid->isChecked());
+}
+
+void ColorMeshDialog::customColorTransparencyChanged()
+{
+	alpha_box->setEnabled(alpha_button_custom->isChecked());
+}
+
 
 
 } } // namespaces

@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>ColorMeshDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -498,6 +498,9 @@
                                 <property name="name">
                                     <cstring>min_min_alpha</cstring>
                                 </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
                                 <property name="maxValue">
                                     <number>255</number>
                                 </property>
@@ -793,6 +796,9 @@
                             <widget class="QSpinBox">
                                 <property name="name">
                                     <cstring>min_alpha</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
                                 </property>
                                 <property name="maxValue">
                                     <number>255</number>
@@ -1097,6 +1103,9 @@
                                 <property name="name">
                                     <cstring>mid_alpha</cstring>
                                 </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
                                 <property name="maxValue">
                                     <number>255</number>
                                 </property>
@@ -1400,6 +1409,9 @@
                                 <property name="name">
                                     <cstring>max_alpha</cstring>
                                 </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
+                                </property>
                                 <property name="maxValue">
                                     <number>255</number>
                                 </property>
@@ -1702,6 +1714,9 @@
                             <widget class="QSpinBox">
                                 <property name="name">
                                     <cstring>max_max_alpha</cstring>
+                                </property>
+                                <property name="enabled">
+                                    <bool>false</bool>
                                 </property>
                                 <property name="maxValue">
                                     <number>255</number>
@@ -2015,6 +2030,9 @@
                     <widget class="QSpinBox">
                         <property name="name">
                             <cstring>alpha_box</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
                         </property>
                         <property name="maxValue">
                             <number>255</number>
@@ -2560,6 +2578,18 @@
         <receiver>ColorMeshDialogData</receiver>
         <slot>gridSelected()</slot>
     </connection>
+    <connection>
+        <sender>transparency_group_grid</sender>
+        <signal>clicked(int)</signal>
+        <receiver>ColorMeshDialogData</receiver>
+        <slot>gridTransparencyChanged()</slot>
+    </connection>
+    <connection>
+        <sender>transparency_group_custom</sender>
+        <signal>clicked(int)</signal>
+        <receiver>ColorMeshDialogData</receiver>
+        <slot>customColorTransparencyChanged()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>surface_tab</tabstop>
@@ -2605,6 +2635,8 @@
     <slot>tabChanged()</slot>
     <slot>choosePressed()</slot>
     <slot>gridSelected()</slot>
+    <slot>gridTransparencyChanged()</slot>
+    <slot>customColorTransparencyChanged()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>

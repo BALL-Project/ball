@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.h,v 1.11 2004/02/26 08:41:32 anhi Exp $
+// $Id: colorMeshDialog.h,v 1.11.2.1 2004/06/01 12:02:29 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_COLORMESHDIALOG_H
@@ -92,13 +92,18 @@ namespace BALL
 			void gridSelected();
 			void show();
 
+			protected slots:
+
+			void gridTransparencyChanged();
+			void customColorTransparencyChanged();
+
 			protected:
 			QColor setColor(QPushButton* button);
 			void colorByCustomColor_();
 			void colorByGrid_();
 			bool insertGrid_(RegularData3D& grid, const String& name);
 			void removeGrid_(RegularData3D& grid);
-			void setColor_(ColorRGBA& color, const QPushButton* button, const QSpinBox* box);
+			void setColor_(ColorRGBA& color, const QPushButton* button, const QSpinBox* box, const QRadioButton* rbutton);
 			void getColor_(const ColorRGBA& color, QPushButton* button, QSpinBox* box);
 			void saveSettings_();
 			void loadSettings_();
@@ -119,7 +124,6 @@ namespace BALL
 		};
 
 	} // namespace VIEW
-
 } // namespace BALL
 
 #endif
