@@ -17,7 +17,8 @@ To start the construction of a water molecule, we first create an (empty)
 \noindent
 Atoms have a number of attributes. These attributes are set to their defaults
 for our new atom. The following table lists the attributes of an atom along
-with its \newtermdef{accessors} (methods to access or modify and attribute) and default values.
+with its \newtermdef{accessors} (methods to access or modify an attribute) and
+default values.
 \begin{center}
 	\begin{tabular}{llc}
 	attribute		&	accessors     		& default\\
@@ -55,10 +56,12 @@ method. We leave our it at the default position (0, 0, 0) and create two hydroge
 \end{lstlisting}
 	
 \noindent
-Now we have to assign the correct coordinates to the two hydrogen atoms.
-the method \method{setPosition} takes an instance of \class{Vector3} as an
+Now we have to assign the correct coordinates to the two hydrogen atoms.  the
+method \method{setPosition} takes an instance of \class{Vector3} as an
 argument. This class is used to represent coordinates and vectors in
-three--dimensional space. We can assign the coordinates as follows:
+three--dimensional space. An object of type \class{Vector3} can be constructed
+from three floating point numbers which represent the x, y, and z coordinates.
+Thus, we can assign the coordinates as follows:
  
 \begin{lstlisting}{}
  	hydrogen1->setPosition(Vector3(-0.95, 0.00, 0.0));
@@ -66,11 +69,6 @@ three--dimensional space. We can assign the coordinates as follows:
 \end{lstlisting}
 
 \noindent
-The \method{setPosition} method takes an objects of type \class{Vector3} as an
-argument. This class is used throughout BALL to represent coordinates and
-vectors. As shown in this example, an object of type \class{Vector3} can be
-constructed from three floating point numbers which represent the x, y, and z
-coordinates.
 
 Now, our three atoms are of the right type and at the right positions. However, we
 do not yet have a molecule, so let's create one:\\
@@ -91,7 +89,7 @@ method, we can construct a molecule from our atoms:
 \end{lstlisting}
 
 \noindent
-For a complete water molecule, we still need two \index{bonds}. This can be
+For a complete water molecule, we still need two \Index{bonds}. This can be
 achieved with the method \method{createBond}:
 	
 \begin{lstlisting}{}
@@ -132,9 +130,7 @@ We can also verify the bond distances:
 \noindent
 \method{getPosition} is the complementary method of \method{setPosition}: it
 returns the current position of an atom. The return value is again of type
-\class{Vector3}.
-The vector class provides a powerful functionality. Due to operator overloading
-the syntax is very readable. The length of a vector is returned by the
+\class{Vector3}. The length of this vector is then returned by the
 \method{getLength} method. 
 
 Water molecules seldom occur alone, so we are going to create further water.

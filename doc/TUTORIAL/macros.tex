@@ -249,15 +249,15 @@
 %  - then under BALL!types!<macro name>
 
 \newcommand{\file}[1]{
-	{\ttfamily\sbseries{#1}}
+	{\ttfamily\sbseries\mbox{#1}}
 	\index{#1@{\ttfamily\sbseries{#1}} (file)}
 }
 % BALL file names are typeset in typewriter bold and indexed automatically:
 % with their name and "(file)" appended
 
 \newcommand{\option}[1]{
-	{\ttfamily\sbseries{#1}}
-	\index{configure!options!#1@{\ttfamily\sbseries{#1}}}
+	{\ttfamily\sbseries\mbox{#1}}
+	\index{configure!options!#1@{\ttfamily\sbseries\mbox{#1}}}
 }
 % BALL file names are typeset in typewriter bold and indexed automatically:
 % as configure/options/<name>"
@@ -275,8 +275,8 @@
 \newcommand{\newterm}[1]{{\em #1}\index{#1}}
 % prints the term in italics and creates an index entry
 
-\newcommand{\URL}[1]{{\bfseries\ttfamily\nobreak{#1}}}
-\newcommand{\email}[1]{{\bfseries\ttfamily\nobreak{#1}}}
+\newcommand{\URL}[1]{{\bfseries\ttfamily\mbox{#1}}}
+\newcommand{\email}[1]{{\bfseries\ttfamily\mbox{#1}}}
 
 %--------------------------------------------
 %  the style of embedded listings

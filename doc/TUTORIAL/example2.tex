@@ -16,9 +16,9 @@ small protein:
 \noindent
 In the first line, we create a \class{PDBFile} object and assign it to a file
 named {\tt bpti.pdb}. Then we create an empty system {\tt S} and read the
-contents of the PDB file into the system using the stream operator {\tt <<}.
-The use of the stream operators is common to all file formats in BALL (see
-also the first example). So you can easily replace the different file formats
+contents of the PDB file into the system using the stream operator {\tt >>}.
+This use of the stream operators is possible for all file formats in BALL (see
+also the first example). Hence, you can easily switch file formats
 by changing just the type of the {\tt infile} object (\eg replace it by
 \class{HINFile} to read HyperChem files).
 
@@ -43,8 +43,8 @@ The use of iterators in BALL is similar to the
 use of iterators in the \newterm{Standard Template Library} (\Index{STL}).
 But there is a significant difference. STL containers usually contain objects of
 one single type (\eg a list of strings). In BALL kernel objects, this is
-different. A system may contain atoms, proteins, molecules, residues, etc.
-This leads to a difference in the interface. A typical for loop using STL
+different. A system may contain atoms, proteins, molecules, residues, \etc
+This leads to a difference in the interface. A typical {\tt for} loop using STL
 iterators to access all elements of a list looks as follows:
 
 \begin{lstlisting}{}
@@ -61,17 +61,16 @@ iterators to access all elements of a list looks as follows:
 
 \noindent
 Here, we use a list iterator ({\tt list\_it}) to traverse the whole list ({\tt
-string\_list}). The method {\tt begin()} returns an iterator that points to the
-first element of the list. In the {\tt for} loop we increment the iterator
+string\_list}). The method {\tt begin()} returns an iterator that points to
+the first element of the list. In the {\tt for} loop we increment the iterator
 until it equals the iterator returned by {\tt end()}. This method returns a
-past--the--end iterator, \ie the value an iterator assumes that is incremented
-while pointing to the last element of the container. In the body of the {\tt
-for} loop, we access the list element the iterator points to using the {\tt *}
-operator.
+past--the--end iterator, \ie the iterator points beyond the last element of
+the container. In the body of the {\tt for} loop, we access the list element
+the iterator points to using the {\tt *} operator.
 
 Traversing a BALL kernel data structure is as simple as traversing a list with
-STL. But unlike STL containers, the kernel objects may contain a variety of
-different objects. SO we have to define over which objets we want to iterate.
+STL. But since kernel objects may contain objects of a variety of types,
+we have to define over which objects we intend to iterate.
 For example iterating over all residues of our system requires a
 \class{ResidueIterator}. Clearly, we also need different {\tt begin()} and
 {\tt end()} methods for all data types. Hence, the loop that prints the
