@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: structureMapper.h,v 1.16 2003/03/14 11:50:03 sturm Exp $
+// $Id: structureMapper.h,v 1.17 2003/03/25 15:33:23 anker Exp $
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
 #define BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -39,26 +39,34 @@
 
 namespace BALL 
 {
-    /**  \addtogroup  Structure
-     *  @{
-     */
+	/**  \addtogroup  Structure
+	 *  @{
+	 */
 	using std::vector;
 	using std::map;
 
 	/**	Structure mapping class.
-			
 	*/
 	class StructureMapper
 		:	public TransformationProcessor
 	{
 		public:
 
+		/** A struct for representing an atom pair of the mapping.
+		*/
 		struct AtomPairStruct 
 		{
+			/** The first atom of the pair.
+			*/
 			Atom*	first;
+
+			/** The second atom of the pair.
+			*/
 			Atom*	second;
 		};
 		
+		/** 
+		*/
 		typedef struct AtomPairStruct	AtomPairType;
 
 		/*_	The list representing a bijection between	selected atoms of A and B
