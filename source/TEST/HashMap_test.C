@@ -1,4 +1,4 @@
-// $Id: HashMap_test.C,v 1.8 2000/09/05 14:01:09 amoll Exp $
+// $Id: HashMap_test.C,v 1.9 2000/12/01 14:10:19 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@ using namespace BALL;
 using namespace std;
 
 class MyVisitor 
-	: public Visitor <pair<int, int> >
+	: public Visitor <HashMap<int, int> >
 {
 	public:
 	MyVisitor()
@@ -19,16 +19,22 @@ class MyVisitor
 			key_sum(0)
 	{
 	}
+
 	int value_sum;
 	int key_sum;
-	void visit(pair<int, int>& v)
+
+	void visit(HashMap<int, int>& v)
 	{
-		key_sum += v.first;
-		value_sum += v.second;
+		HashMap<int, int>::Iterator it = v.begin();
+		for (; it != v.end(); ++it)
+		{
+			key_sum += (*it).first;
+			value_sum += (*it).second;
+		}
 	}
 };
 
-START_TEST(HashMap, "$Id: HashMap_test.C,v 1.8 2000/09/05 14:01:09 amoll Exp $")
+START_TEST(HashMap, "$Id: HashMap_test.C,v 1.9 2000/12/01 14:10:19 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
