@@ -281,61 +281,50 @@ void ColoringSettingsDialog::setDefaults(bool all)
 	// setting residue number colors
 	if (all || widget_stack->id(widget_stack->visibleWidget()) == 1)
 	{
-		first_residue_color_.set(255,255,0);
-		middle_residue_color_.set(0,255,0);
-		last_residue_color_.set(0,0,255);
+		ResidueNumberColorProcessor dummy;
+		getSettings(dummy);
 	}
 	// =============================================================
 	// setting charge colors
 	if (all || widget_stack->id(widget_stack->visibleWidget()) == 3)
 	{
-		negative_charge_color_.set(255,0,0);
-		neutral_charge_color_.set(255,255,255);
-		positive_charge_color_.set(0,0,255);
+		AtomChargeColorProcessor dummy;
+		getSettings(dummy);
 	}
 	// =============================================================
 	// setting distance colors
 	if (all || widget_stack->id(widget_stack->visibleWidget()) == 4)
 	{
-		null_distance_color_.set(255,0,0);
-		max_distance_color_.set(0,0,255);
-		max_distance_slider->setValue(10 * 10);
-		distance_show_selected->setChecked(true);
+		AtomDistanceColorProcessor dummy;
+		getSettings(dummy);
 	}
 	// =============================================================
 	// setting temperature factor colors
 	if (all || widget_stack->id(widget_stack->visibleWidget()) == 5)
 	{
-		minimum_tf_color_.set(0,0,255);
-		maximum_tf_color_.set(255,255,0);
-		unassigned_tf_color_.set(255,255,255);
-		max_tf_slider->setValue(50 * 10);
+		TemperatureFactorColorProcessor dummy;
+		getSettings(dummy);
 	}
 	// =============================================================
 	// setting occupancy colors
 	if (all || widget_stack->id(widget_stack->visibleWidget()) == 6) 
 	{
-		minimum_occupancy_color_.set(0,0,255);
-		maximum_occupancy_color_.set(255,255,0);
-		unassigned_occupancy_color_.set(255,255,255);
+		OccupancyColorProcessor dummy;
+		getSettings(dummy);
 	}
 	// =============================================================
 	// setting secondary structure colors
 	if (all || widget_stack->id(widget_stack->visibleWidget()) == 7)
 	{
-		helix_color_.set(0,0,255);
-		coil_color_.set(0,155,155);
-		strand_color_.set(255,0,0);
-		turn_color_.set(255,255,0);
+		SecondaryStructureColorProcessor dummy;
+		getSettings(dummy);
 	}
 	// =============================================================
 	// setting force colors
 	if (all || widget_stack->id(widget_stack->visibleWidget()) == 8)
 	{
-		force_min_color_.set(0,0,255);
-		force_max_color_.set(255,0,0);
-		force_max_value_slider->setValue(10 * 10);
-		force_min_value_slider->setValue(0 * 10);
+		ForceColorProcessor dummy;
+		getSettings(dummy);
 	}
 
 
