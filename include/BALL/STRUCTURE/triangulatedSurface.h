@@ -1,4 +1,4 @@
-// $Id: triangulatedSurface.h,v 1.24 2002/01/07 18:05:08 strobel Exp $
+// $Id: triangulatedSurface.h,v 1.25 2002/01/14 21:04:28 strobel Exp $
 
 #ifndef BALL_STRUCTURE_TRIANGULATEDSURFACE_H
 #define BALL_STRUCTURE_TRIANGULATEDSURFACE_H
@@ -253,6 +253,10 @@ namespace BALL
 				@param	fuzzy
 		*/
 		void cut(const TPlane3<T>& plane, const T& fuzzy = 0);
+
+		/** Delete all triangles on the border of the TriangulatedSurface
+		*/
+		void shrink();
 
 		/** Get the border edges of the TriangulatedSurface.
 				Border edges are the edges with only one triangle.
@@ -564,7 +568,6 @@ namespace BALL
 				(*t)->edge_[0]->deleteFace(*t);
 				(*t)->edge_[1]->deleteFace(*t);
 				(*t)->edge_[2]->deleteFace(*t);
-				//(*t)->getOppositeEdge(point)->deleteFace(*t);
 				triangles_.remove(*t);
 				delete *t;
 				number_of_triangles_--;
@@ -602,7 +605,6 @@ namespace BALL
 				(*t)->edge_[0]->deleteFace(*t);
 				(*t)->edge_[1]->deleteFace(*t);
 				(*t)->edge_[2]->deleteFace(*t);
-				//(*t)->getOppositeEdge(*point)->deleteFace(*t);
 				triangles_.remove(*t);
 				number_of_triangles_--;
 				delete *t;
@@ -667,12 +669,12 @@ namespace BALL
 			triangle->vertex_[0]->faces_.remove(triangle);
 			triangle->vertex_[1]->faces_.remove(triangle);
 			triangle->vertex_[2]->faces_.remove(triangle);
-			triangle->edge[0]->deleteFace(triangle);
-			triangle->edge[1]->deleteFace(triangle);
-			triangle->edge[2]->deleteFace(triangle);
+			triangle->edge_[0]->deleteFace(triangle);
+			triangle->edge_[1]->deleteFace(triangle);
+			triangle->edge_[2]->deleteFace(triangle);
 		}
-		triangles_.remove(t);
-		delete t;
+		triangles_.remove(triangle);
+		delete triangle;
 		number_of_triangles_--;
 	}
 
@@ -686,12 +688,12 @@ namespace BALL
 			(*t)->vertex_[0]->faces_.remove(*t);
 			(*t)->vertex_[1]->faces_.remove(*t);
 			(*t)->vertex_[2]->faces_.remove(*t);
-			(*t)->edge[0]->deleteFace(*t);
-			(*t)->edge[1]->deleteFace(*t);
-			(*t)->edge[2]->deleteFace(*t);
+			(*t)->edge_[0]->deleteFace(*t);
+			(*t)->edge_[1]->deleteFace(*t);
+			(*t)->edge_[2]->deleteFace(*t);
 		}
 		triangles_.erase(t);
-		delete t;
+		delete *t;
 		number_of_triangles_--;
 	}
 
@@ -1028,12 +1030,12 @@ namespace BALL
 	template <class T>
 	void TTriangulatedSurface<T>::cut(const TPlane3<T>& plane, const T& fuzzy)
 	{
+		// delete all points on the wrong side of the plane
 		typename std::list<TTrianglePoint<T>*>::iterator p;
 		typename std::list<TTrianglePoint<T>*>::iterator next_point;
 		T test_value;
 		test_value = plane.n*plane.p+fuzzy;
 		p = points_.begin();
-		// delete all points on the wrong side of the plane
 		while (p != points_.end())
 		{
 			if (Maths::isLessOrEqual(plane.n*(*p)->point_,test_value))
@@ -1056,9 +1058,9 @@ namespace BALL
 				p++;
 			}
 		}
+		// delete all "isolated" edges (edges with no triangles)
 		typename std::list<TTriangleEdge<T>*>::iterator e = edges_.begin();
 		typename std::list<TTriangleEdge<T>*>::iterator next_edge;
-		// delete all "isolated" edges (edges with no triangles)
 		while (e != edges_.end())
 		{
 			if (((*e)->face_[0] == NULL) && ((*e)->face_[1] == NULL))
@@ -1109,6 +1111,57 @@ namespace BALL
 				p++;
 			}
 		}*/
+	}
+
+
+	template <class T>
+	void TTriangulatedSurface<T>::shrink()
+	{
+		// delete all border triangles
+		std::list<TTriangle<T>*> delete_triangles;
+		typename std::list<TTriangle<T>*>::iterator t;
+		for (t = triangles_.begin(); t != triangles_.end(); t++)
+		{
+			if (((*t)->edge_[0]->face_[0] == NULL) || ((*t)->edge_[0]->face_[1] == NULL) ||
+					((*t)->edge_[1]->face_[0] == NULL) || ((*t)->edge_[1]->face_[1] == NULL) ||
+					((*t)->edge_[2]->face_[0] == NULL) || ((*t)->edge_[2]->face_[1] == NULL)		)
+			{
+				delete_triangles.push_back(*t);
+			}
+		}
+		for (t = delete_triangles.begin(); t != delete_triangles.end(); t++)
+		{
+			remove(*t,true);
+		}
+		// delete all "isolated" edges (edges with no triangles)
+		typename std::list<TTriangleEdge<T>*>::iterator e = edges_.begin();
+		typename std::list<TTriangleEdge<T>*>::iterator next_edge;
+		while (e != edges_.end())
+		{
+			if (((*e)->face_[0] == NULL) && ((*e)->face_[1] == NULL))
+			{
+				next_edge = e;
+				next_edge++;
+				(*e)->vertex_[0]->edges_.remove(*e);
+				(*e)->vertex_[1]->edges_.remove(*e);
+				delete *e;
+				if (next_edge == edges_.end())
+				{
+					edges_.erase(e);
+					e = edges_.end();
+				}
+				else
+				{
+					edges_.erase(e);
+					e = next_edge;
+				}
+				number_of_edges_--;
+			}
+			else
+			{
+				e++;
+			}
+		}
 	}
 
 
