@@ -1,4 +1,4 @@
-// $Id: haighMallionShiftProcessor.C,v 1.9 2000/09/27 07:18:28 oliver Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.10 2000/10/05 08:42:54 oliver Exp $
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -241,9 +241,11 @@ namespace BALL
 								Vector3 r_1 = ring_positions[(pos + 0) % (number_of_ring_atoms)] - nucleus_pos;
 								Vector3 r_2 = ring_positions[(pos + 1) % (number_of_ring_atoms)] - nucleus_pos;
 
-								//          <r_1, (r_2 x n)>   /    1              1    \
-								// value =  ---------------- * |---------   +  ---------|
-								//	               2           \ |r_1|^3        |r_2|^3 /
+								/*
+								          	<r_1, (r_2 x n)>   /    1              1    \
+								   value =  ---------------- * |---------   +  ---------|
+								   	               2           \ |r_1|^3        |r_2|^3 /
+								*/
 								float value  = r_1 * (r_2 % normal) 
 											* 0.5 * (1.0 / (r_1.getSquareLength() * r_1.getLength()) 
 															 +  1.0 / (r_2.getSquareLength() * r_2.getLength()));
