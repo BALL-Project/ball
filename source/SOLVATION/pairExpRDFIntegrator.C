@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.C,v 1.9 2000/09/25 11:17:55 anker Exp $
+// $Id: pairExpRDFIntegrator.C,v 1.10 2000/09/25 16:31:19 anker Exp $
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 
@@ -20,8 +20,7 @@ namespace BALL
 			C2_(0.0),
 			R_ij_o_(0.0),
 			k1_(0.0),
-			k2_(0.0),
-			rdf_()
+			k2_(0.0)
 	{
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 		options.setDefaultInteger(Option::SAMPLES, Default::SAMPLES);
@@ -36,8 +35,7 @@ namespace BALL
 			C2_(integrator.C2_),
 			R_ij_o_(integrator.R_ij_o_),
 			k1_(integrator.k1_),
-			k2_(integrator.k2_),
-			rdf_(integrator.rdf_)
+			k2_(integrator.k2_)
 	{
 	}
 
@@ -45,13 +43,13 @@ namespace BALL
 	PairExpRDFIntegrator::PairExpRDFIntegrator(double alpha, double C1,
 			double C2, double R_ij_o, double k1, double k2, 
 			const RadialDistributionFunction& rdf)
-		:	alpha_(alpha),
+		:	RDFIntegrator(rdf),
+			alpha_(alpha),
 			C1_(C1),
 			C2_(C2),
 			R_ij_o_(R_ij_o),
 			k1_(k1),
-			k2_(k2),
-			rdf_(rdf)
+			k2_(k2)
 	{
 		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
 		options.setDefaultInteger(Option::SAMPLES, Default::SAMPLES);
@@ -72,7 +70,13 @@ namespace BALL
 
 	void PairExpRDFIntegrator::clear()
 	{
-		rdf_.clear();
+		alpha_ = 0.0;
+		C1_ = 0.0;
+		C2_ = 0.0;
+		R_ij_o_ = 0.0;
+		k1_ = 0.0;
+		k2_ = 0.0;
+		RDFIntegrator::clear();
 	}
 
 
@@ -84,7 +88,7 @@ namespace BALL
 		R_ij_o_ = integrator.R_ij_o_;
 		k1_ = integrator.k1_;
 		k2_ = integrator.k2_;
-		rdf_ = integrator.rdf_;
+		RDFIntegrator::set(integrator);
 	}
 
 
@@ -111,7 +115,7 @@ namespace BALL
 	double PairExpRDFIntegrator::integrateToInf(double from) const
 	{
 
-		PiecewisePolynomial poly = rdf_.getRepresentation();
+		PiecewisePolynomial poly = getRDF().getRepresentation();
 		Interval interval;
 		double val = 0.0;
 
@@ -138,7 +142,7 @@ namespace BALL
 		{
 			Log.error() << "PairExpRDFIntegrator::integrateToInf(): "
 				<< "Last interval must have infinity as upper limit." << endl;
-			rdf_.dump();
+			getRDF().dump();
 			return 0.0;
 		}
 
@@ -203,7 +207,7 @@ namespace BALL
 	double PairExpRDFIntegrator::integrate(double from, double to) const
 	{
 
-		PiecewisePolynomial poly = rdf_.getRepresentation();
+		PiecewisePolynomial poly = getRDF().getRepresentation();
 
 		Size from_index = poly.getIntervalIndex(from);
 		Size to_index = poly.getIntervalIndex(to);
@@ -312,16 +316,16 @@ namespace BALL
 		{
 			// DEBUG
 			/*
-			Log.info() << "rdf_(" << X << ") = " << rdf_(X) << endl;
+			Log.info() << "rdf(" << X << ") = " << getRDF()(X) << endl;
 			Log.info() << "e^(-b*" << x << ") - R_ij_o/(" << x << ")^6 = " << 
 				(C1_ * exp(-b*x) - C2_ * R_ij_o_6/pow(x,6)) << endl;
 			Log.info() << "e^(-b*" << x << ") = " << C1_ * exp(-b*x) << endl;
 			Log.info() << "R_ij_o/(" << x << ")^6 = " << C2_ * R_ij_o_6/pow(x,6) << endl;
 			*/
 
-			area += (x*x*(C1_ * exp(-b*x) - C2_ * R_ij_o_6/pow(x,6)) * rdf_(X) 
-					+ (x+s)*(x+s)*(C1_ * exp(-b*(x+s)) - C2_ * R_ij_o_6/pow(x+s,6)) * rdf_(X+S))
-				/2.0 * s;
+			area += (x*x*(C1_ * exp(-b*x) - C2_ * R_ij_o_6/pow(x,6)) * getRDF()(X) 
+					+ (x+s)*(x+s)*(C1_ * exp(-b*(x+s)) - C2_ * R_ij_o_6/pow(x+s,6)) *
+					getRDF()(X+S)) /2.0 * s;
 			x += s;
 			X += S;
 			--n;
@@ -329,6 +333,19 @@ namespace BALL
 
 		//Log.info() << "Ergebnis der numerischen Integration: " << area << endl;
 		return area;
+	}
+
+
+	void PairExpRDFIntegrator::dump(ostream& stream, Size /* depth */) const
+	{
+		stream << "[PairExpRDFIntegrator:]" << endl;
+		stream << "alpha_ = " << alpha_ << endl;
+		stream << "C1_ = " << C1_ << endl;
+		stream << "C2_ = " << C2_ << endl;
+		stream << "R_ij_o_ = " << R_ij_o_ << endl;
+		stream << "k1_ = " << k1_ << endl;
+		stream << "k2_ = " << k2_ << endl;
+		getRDF().dump();
 	}
 
 } // namespace BALL
