@@ -1,8 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.h,v 1.31.2.1 2003/01/07 13:17:18 anker Exp $
-   
+// $Id: exception.h,v 1.31.2.2 2003/02/05 14:41:56 anker Exp $
+
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: box3.h,v 1.31.2.1 2003/01/07 13:18:00 anker Exp $
+// $Id: box3.h,v 1.31.2.2 2003/02/05 14:55:43 anker Exp $
 
 #ifndef BALL_MATHS_BOX3_H
 #define BALL_MATHS_BOX3_H
@@ -16,6 +16,9 @@
 
 namespace BALL 
 {
+	/** @name Box
+	 */
+	//@{
 
 	/**	Generic three-dimensional Box.
 			This class describes a three-dimensional box with edges parallel to
@@ -634,6 +637,8 @@ namespace BALL
 	/**	Default three-dimensional box class of type {\bf float}
 	*/
 	typedef TBox3<float> Box3;
+
+	//@}
 
 } // namespace BALL
 

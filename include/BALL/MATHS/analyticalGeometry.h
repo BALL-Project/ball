@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: analyticalGeometry.h,v 1.49.2.1 2003/01/07 13:17:59 anker Exp $
+// $Id: analyticalGeometry.h,v 1.49.2.2 2003/02/05 14:55:42 anker Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -39,9 +39,9 @@
 
 namespace BALL 
 {
-	/**	@name Analytical Geometry.
-			@memo representation of analytical geometry functions,
-						using the classes: TAngle, TCircle3, TLine3, TPlane3, TSphere3, TVector3.
+	/**	@name Analytical Geometry
+			representation of analytical geometry functions,
+			using the classes: TAngle, TCircle3, TLine3, TPlane3, TSphere3, TVector3.
 	*/
 	//@{
 
@@ -160,10 +160,9 @@ namespace BALL
 	*/
 	template <typename T>
 	BALL_INLINE T 
-	getDeterminant3
-		(const T& m00, const T& m01, const T& m02,
-		 const T& m10, const T& m11, const T& m12,
-		 const T& m20, const T& m21, const T& m22)
+	getDeterminant3(const T& m00, const T& m01, const T& m02,
+								  const T& m10, const T& m11, const T& m12,
+								  const T& m20, const T& m21, const T& m22)
 		throw()
 	{
 		return (  m00 * m11 * m22
@@ -175,23 +174,25 @@ namespace BALL
 	}
 
 	/**	Solve a system of linear equations.
-		  Given a system of linear equations
-			\[
+		  Given a system of linear equations\\
+			\\
+			$
 				\begin{array}{ccccccccc}
 				 a_{1,1} x_1 & + & a_{1,2} x_2 & + & \ldots & + & a_{1,n} x_n & = & a_{1,(n+1)}\\
 				 a_{2,1} x_1 & + & a_{2,2} x_2 & + & \ldots & + & a_{2,n} x_n & = & a_{2,(n+1)}\\
 				   \vdots    &   &   \vdots    &   & \ddots &   &   \vdots    &   &   \vdots\\
 				 a_{n,1} x_1 & + & a_{n,2} x_2 & + & \ldots & + & a_{n,n} x_n & = & a_{n,(n+1)}\\
 				\end{array}
-			\]
-			in matrix form, identify the solution $x = (x_1, x_2,\ldots x_N)$.
-			{\tt m} should point to a C-style array containing the $n\times(n+1)$ matrix {\bf A}.
-			The elements of {\bf A} are row-ordered, i.e., they are ordered like this:
-			\[
+			$
+			\\
+			in matrix form, identify the solution $x = (x_1, x_2,\ldots x_N)$.\\
+			{\tt m} should point to a C-style array containing the $n\times(n+1)$ matrix {\bf A}.\\
+			The elements of {\bf A} are row-ordered, i.e., they are ordered like this:\\
+			$
 				a_{1,1}, a_{1,2}, \cdot, a_{1,(n+1)}, a_{2,1}, \ldots a_{n,(n+1)}
-			\]
+			$\\
 			{\tt x} points to a C-style array that will contain the solution vector {\bf x}
-			upon successful termination of the function.
+			upon successful termination of the function.\\
 			If there is no solution or the system is under-determined, return {\bf false}.
 			@param	m pointer to the factors in the equations
 			@param	x pointer in which the results are stored
@@ -285,23 +286,17 @@ namespace BALL
 #undef BALL_MATRIX_CELL
 
 	/**	Solve a system of two equations of the form
-		  $a\_1 x_1 + b\_1 x\_2 = c\_1$
-		  $a\_2 x_1 + b\_2 x\_2 = c\_2$.
-			@param	a1
-			@param	a2
-			@param	a1 
-			@param	a2
-			@param	c1 
-			@param	c2
+		  $a_1 x_1 + b_1 x_2 = c_1$ and 
+		  $a_2 x_1 + b_2 x_2 = c_2$.
+			@param	a1- c2 constants of the system
 			@param x1 the first solution
 			@param x2 the second solution
 			@return bool {\tt true} if a solution is found
 	*/
 	template <typename T>
 	BALL_INLINE 
-	bool SolveSystem2
-		(const T& a1, const T& b1, const T& c1,
-		 const T& a2, const T& b2, const T& c2, T& x1, T& x2)
+	bool SolveSystem2(const T& a1, const T& b1, const T& c1,
+										const T& a2, const T& b2, const T& c2, T& x1, T& x2)
 		throw()
 	{
 		T quot = (a1 * b2 - a2 * b1);

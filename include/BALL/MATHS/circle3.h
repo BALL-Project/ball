@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: circle3.h,v 1.27.2.1 2003/01/07 13:18:00 anker Exp $
+// $Id: circle3.h,v 1.27.2.2 2003/02/05 14:55:44 anker Exp $
 
 #ifndef BALL_MATHS_CIRCLE3_H
 #define BALL_MATHS_CIRCLE3_H
@@ -24,7 +24,7 @@
 
 namespace BALL 
 {
-	/**	@name	Three-dimensional circle.
+	/**	@name	Circle 
 	*/
 	//@{
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: plane3.h,v 1.23.2.1 2003/01/07 13:18:03 anker Exp $
+// $Id: plane3.h,v 1.23.2.2 2003/02/05 14:55:49 anker Exp $
 
 #ifndef BALL_MATHS_PLANE3_H
 #define BALL_MATHS_PLANE3_H
@@ -32,11 +32,10 @@
 namespace BALL 
 {
 
-	/**	Threedimensional plane.
-      {\bf Definition:} \URL{BALL/MATHS/plane3.h}
-			A plane is defined by a point and its normal.
-	*/
-
+	/** @name Plane
+	 */
+	//@{
+	
 	template <typename T>
 	class TPlane3;
 
@@ -48,6 +47,10 @@ namespace BALL
 	std::ostream& operator << (std::ostream& s, const TPlane3<T>& plane)
 		throw();
 
+	/** Threedimensional plane.
+      {\bf Definition:} \URL{BALL/MATHS/plane3.h}
+			A plane is defined by a point and its normal.
+	*/
 	template <typename T>
 	class TPlane3
 	{
@@ -370,12 +373,10 @@ namespace BALL
 		/**	The normal
 		*/
 		TVector3<T> n;
+
 		//@}
 	};
 
-	/**	Default plane class of type {\bf float}
-	*/
-	typedef TPlane3<float> Plane3;
 
 	/**	@name	Storers
 	*/
@@ -402,6 +403,13 @@ namespace BALL
 	{
 		return (s << '(' << plane.p << ' '  << plane.n << ')');
 	}
+	
+	//@}
+
+	/**	Default plane class of type {\bf float}
+	*/
+	typedef TPlane3<float> Plane3;
+	
 	//@}
 
 } // namespace BALL

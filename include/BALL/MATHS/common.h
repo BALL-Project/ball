@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.14.2.1 2003/01/07 13:18:00 anker Exp $
+// $Id: common.h,v 1.14.2.2 2003/02/05 14:55:44 anker Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -38,7 +38,7 @@ namespace BALL
 	namespace Maths 
 	{
 
-		/**	@name	Common Mathematical Functions.
+		/**	@name	Common Mathematical Functions
 				{\bf Namespace:} {\tt BALL::Maths}\\
 				{\bf Definition:} \URL{BALL/MATHS/common.h}	\\
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DCDFile.h,v 1.15.2.3 2003/01/27 15:58:52 anker Exp $
+// $Id: DCDFile.h,v 1.15.2.4 2003/02/05 14:50:39 anker Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
