@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.C,v 1.17 2000/12/23 15:39:44 oliver Exp $
+// $Id: XDRPersistenceManager.C,v 1.18 2001/07/13 20:49:56 oliver Exp $
 
 #include <BALL/CONCEPT/XDRPersistenceManager.h>
 
@@ -13,16 +13,24 @@ using namespace std;
 namespace BALL 
 {
 
+#ifdef BALL_XDRREC_CREATE_VOID
+	extern "C" int (*XDRReadStreamPtr) () = 0;
+	extern "C" int (*XDRWriteStreamPtr) () = 0;
+	extern "C" int (*XDRErrorPtr) () = 0;
+#endif
+
+	
+
 #ifdef BALL_XDRREC_CREATE_VOID_CHAR_INT
-	extern "C" int XDRReadStream_(void* stream_ptr, char* buffer, int number)
-		throw()
-#else 
-#	ifdef BALL_XDRREC_CREATE_CHAR_CHAR_INT
-	extern "C" int XDRReadStream_(char* stream_ptr, char* buffer, int number)
-		throw()
+		extern "C" int XDRReadStream_(void* stream_ptr, char* buffer, int number)
+			throw()
+#else
+# ifdef BALL_XDRREC_CREATE_CHAR_CHAR_INT
+		extern "C" int XDRReadStream_(char* stream_ptr, char* buffer, int number)
+			throw()
 #	else
-	extern "C" int XDRReadStream_(void* stream_ptr, void* buffer, unsigned int number)
-		throw()
+		extern "C" int XDRReadStream_(void* stream_ptr, void* buffer, unsigned int number)
+			throw()
 #	endif
 #endif
 	{
@@ -145,7 +153,13 @@ namespace BALL
 			return;
 		}
 		const caddr_t ostr_ptr = (caddr_t)ostr_;
-		xdrrec_create(&xdr_out_, 0, 0, ostr_ptr, XDRError_, XDRWriteStream_);
+		#ifdef BALL_XDRREC_CREATE_VOID
+			*((void**)&XDRErrorPtr) = (void*)XDRError_;
+			*((void**)&XDRWriteStreamPtr) = (void*)XDRWriteStream_;
+			xdrrec_create(&xdr_out_, 0, 0, ostr_ptr, XDRErrorPtr, XDRWriteStreamPtr);
+		#else
+			xdrrec_create(&xdr_out_, 0, 0, ostr_ptr, XDRError_, XDRWriteStream_);
+		#endif
 		xdr_out_.x_op = XDR_ENCODE;
 		put(STREAM_HEADER);
 
@@ -163,7 +177,13 @@ namespace BALL
 			return;
 		}
 		const caddr_t ostr_ptr = (caddr_t)ostr_;
-		xdrrec_create(&xdr_out_, 0, 0, ostr_ptr, XDRError_, XDRWriteStream_);
+		#ifdef BALL_XDRREC_CREATE_VOID
+			*((void**)&XDRErrorPtr) = (void*)XDRError_;
+			*((void**)&XDRWriteStreamPtr) = (void*)XDRWriteStream_;
+			xdrrec_create(&xdr_out_, 0, 0, ostr_ptr, XDRErrorPtr, XDRWriteStreamPtr);
+		#else
+			xdrrec_create(&xdr_out_, 0, 0, ostr_ptr, XDRError_, XDRWriteStream_);
+		#endif
 		xdr_out_.x_op = XDR_ENCODE;
 
 #ifdef BALL_DEBUG_PERSISTENCE
@@ -180,7 +200,13 @@ namespace BALL
 			return;
 		}
 		const caddr_t istr_ptr = (caddr_t)istr_;
-		xdrrec_create(&xdr_in_, 0, 0, istr_ptr, XDRReadStream_, XDRError_);
+		#ifdef BALL_XDRREC_CREATE_VOID
+			*((void**)&XDRErrorPtr) = (void*)XDRError_;
+			*((void**)&XDRReadStreamPtr) = (void*)XDRReadStream_;
+			xdrrec_create(&xdr_out_, 0, 0, istr_ptr, XDRReadStreamPtr, XDRErrorPtr);
+		#else
+			xdrrec_create(&xdr_in_, 0, 0, istr_ptr, XDRReadStream_, XDRError_);
+		#endif
 		xdr_in_.x_op = XDR_DECODE;
 
 #ifdef BALL_DEBUG_PERSISTENCE
