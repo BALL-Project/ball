@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.30 2003/03/26 13:56:19 anhi Exp $
+// $Id: regularData1D.h,v 1.31 2003/04/17 19:03:31 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -324,7 +324,11 @@ namespace BALL
 		Position index = (Position) (r-lower_)/step;
 		
 		if (index >= data_.size())
-		return (*this)[(Position) (r-lower_)/step];
+		{
+			throw Exception::OutOfGrid(__FILE__, __LINE__);
+		}
+
+		return (*this)[(Position) (r - lower_) / step];
 	}
 	
 	template <typename T>
