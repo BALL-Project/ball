@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.55 2004/04/17 20:46:42 amoll Exp $
+// $Id: scene.C,v 1.56 2004/04/21 12:03:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -35,6 +35,7 @@ namespace BALL
 
 		// values for mouse-sensitivity 
 		float Scene::mouse_sensitivity_ = 5;
+		float Scene::mouse_wheel_sensitivity_ = 5;
 		#define  ZOOM_FACTOR 			7
 		#define  ROTATE_FACTOR    11
 		#define  TRANSLATE_FACTOR 6 
@@ -744,6 +745,7 @@ namespace BALL
 			ModularWidget::writePreferences(inifile);
 			// write mouse sensitivity
 			inifile.insertValue("WINDOWS", "Main::mouseSensitivity", String(mouse_sensitivity_));
+			inifile.insertValue("WINDOWS", "Main::mouseWheelSensitivity", String(mouse_wheel_sensitivity_));
 			inifile.appendSection("STAGE");
 
 			String data = "(" + String((Index)stage_->getBackgroundColor().getRed()) +
@@ -765,6 +767,11 @@ namespace BALL
 			{
 				mouse_sensitivity_= inifile.getValue("WINDOWS", "Main::mouseSensitivity").toFloat();
 			}
+			if (inifile.hasEntry("WINDOWS", "Main::mouseWheelSensitivity"))
+			{
+				mouse_wheel_sensitivity_= inifile.getValue("WINDOWS", "Main::mouseWheelSensitivity").toFloat();
+			}
+
 
 			if (inifile.hasEntry("STAGE", "BackgroundColor"))
 			{
@@ -1193,11 +1200,11 @@ namespace BALL
 		}
 
 #ifndef QT_NO_WHEELEVENT
-		void Scene::wheelEvent( QWheelEvent *qmouse_event )
+		void Scene::wheelEvent(QWheelEvent *qmouse_event)
 		{
 			qmouse_event->accept();
 
-			int step_width=(int)(mouse_sensitivity_*2);
+			int step_width=(int)(mouse_wheel_sensitivity_*2);
 
 			y_window_pos_new_ = y_window_pos_old_ + (qmouse_event->delta()/120*step_width);
 			zoomSystem_(this);

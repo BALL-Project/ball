@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.31 2004/04/16 10:27:25 amoll Exp $
+// $Id: scene.h,v 1.32 2004/04/21 12:03:28 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -325,6 +325,14 @@ namespace BALL
 			///
 			static float getMouseSensitivity()
 				throw() { return mouse_sensitivity_;}
+			
+			///
+			static void setMouseWheelSensitivity(float sensitivity)
+				throw() { mouse_wheel_sensitivity_ = sensitivity; }
+
+			///
+			static float getMouseWheelSensitivity()
+				throw() { return mouse_wheel_sensitivity_;}
 
 			/// 
 			GLRenderer& getGLRenderer_()
@@ -523,6 +531,7 @@ namespace BALL
 			GLRenderer gl_renderer_;
 
 			static float mouse_sensitivity_;
+			static float mouse_wheel_sensitivity_;
 
 			LightSettings* light_settings_;
 

@@ -41,6 +41,7 @@ void StageSettings::updateFromStage()
 	coordinate_button->setChecked(stage_->coordinateSystemEnabled());
 
 	slider_->setValue((int) Scene::getMouseSensitivity() - 1);
+	wheel_slider_->setValue((int) Scene::getMouseWheelSensitivity() - 1);
 }
 
 
@@ -51,6 +52,7 @@ void StageSettings::apply()
 	stage_->showCoordinateSystem(coordinate_button->isChecked());
 
 	Scene::setMouseSensitivity(slider_->value() + 1);
+	Scene::setMouseWheelSensitivity(wheel_slider_->value() + 1);
 }
 
 
