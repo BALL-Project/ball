@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assignShiftProcessor.h,v 1.21 2003/08/26 08:04:44 oliver Exp $
+// $Id: assignShiftProcessor.h,v 1.21.2.1 2004/05/07 13:07:28 amoll Exp $
 //
 
 #ifndef BALL_NMR_ASSIGNSHIFTPROCESSOR_H
@@ -23,8 +23,11 @@
 
 namespace BALL 
 {             
+	class FragmentDB;
+
 	/**	Set a property called chemical_shift.
-	\ingroup Spectra		
+	 		You have to set the FragmentDB after you create an instance of this processor.
+		\ingroup Spectra		
 	*/
 	class AssignShiftProcessor
 		: public UnaryProcessor<Composite>
@@ -71,9 +74,18 @@ namespace BALL
 		*/
 		//@{
 
+		/// 
+		void setFragmentDB(const FragmentDB* db) 
+			throw();
+
+		///
+		const FragmentDB* getFragmentDB()
+			throw();
+
 		/**	Return the state of the object
 		*/
-		bool isValid() const;
+		bool isValid() const
+			throw();
 
 		//@}
 		
@@ -81,9 +93,9 @@ namespace BALL
 		
 		StringHashMap<float>							shift_table_;
 		const std::vector<NMRAtomData>&		atom_data_;
-		bool															valid_;
 		const Molecule*										molecule_;
 		Position													number_of_fragment_;
+		FragmentDB* 											fragment_db_;
 	};
 
 #	ifndef BALL_NO_INLINE_FUNCTIONS

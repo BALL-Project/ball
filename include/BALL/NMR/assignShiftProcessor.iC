@@ -1,26 +1,44 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: assignShiftProcessor.iC,v 1.13 2003/08/26 08:04:44 oliver Exp $
+// $Id: assignShiftProcessor.iC,v 1.13.2.1 2004/05/07 13:07:28 amoll Exp $
 //
 
 BALL_INLINE
 AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData>& atom_data)
 	:	atom_data_(atom_data),
-		molecule_(0)
+		molecule_(0),
+		fragment_db_(0)
 {
 	if (atom_data.size() == 0)
 	{
 		Log.error() << "AssignShiftProcessor: given vector contains no shift data " << ::std::endl;
-	}
-	else
-	{
-		valid_ = true;
 	}
 }
        
 BALL_INLINE
 AssignShiftProcessor::~AssignShiftProcessor()
 {
+}
+
+BALL_INLINE
+bool AssignShiftProcessor::isValid() const
+	throw()
+{
+	return ((atom_data_.size() > 0) && fragment_db_ != 0);
+}
+
+BALL_INLINE
+void AssignShiftProcessor::setFragmentDB(const FragmentDB* db) 
+	throw()
+{
+	fragment_db_ = (FragmentDB*)db;
+}
+
+BALL_INLINE
+const FragmentDB* AssignShiftProcessor::getFragmentDB()
+	throw()
+{
+	return fragment_db_;
 }
 
