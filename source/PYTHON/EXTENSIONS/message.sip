@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.sip,v 1.3 2003/12/10 20:37:05 amoll Exp $
+// $Id: message.sip,v 1.4 2003/12/11 00:27:50 amoll Exp $
 //
 
 class Message
@@ -26,7 +26,6 @@ class CompositeMessage
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/KERNEL/message.h>
-	typedef CompositeMessage::CompositeMessageType CompositeMessageType;
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End
@@ -64,7 +63,6 @@ class SceneMessage
 {
 %TypeHeaderCode
 	#include <BALL/VIEW/KERNEL/message.h>
-	typedef SceneMessage::SceneMessageType SceneMessageType;
 	using namespace BALL;
 	using namespace BALL::VIEW;
 %End
@@ -86,8 +84,8 @@ class SceneMessage
 	
 	void setType(SceneMessageType) throw();
 	SceneMessageType getType() const throw();
-//	void setCamera(const Camera&) throw();
-//	Camera& getCamera() throw();
-//	const Camera& getCamera() const throw();
+	void setCamera(const Camera&) throw();
+	Camera& getCamera() throw();
+	const Camera& getCamera() const throw();
 };
 
