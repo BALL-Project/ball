@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.9 2003/08/27 13:39:44 amoll Exp $
+# $Id: Makefile,v 1.10 2003/08/27 13:58:30 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -27,6 +27,7 @@ CPP_SOURCES=\
 	labelDialogData.C\
 	lightSettings.C\
 	lightSettingsData.C\
+	mainControlPreferences.C\
 	molecularDynamicsDialog.C\
 	molecularDynamicsDialogData.C\
 	molecularFileDialog.C\
@@ -41,6 +42,7 @@ CPP_SOURCES=\
 	setCameraData.C\
 	pythonSettings.C\
 	pythonSettingsData.C\
+	serverPreferences.C\
 	snapShotVisualisation.C\
 	snapShotVisualisationData.C\
 	stageSettings.C\
@@ -62,6 +64,7 @@ MOC_SOURCES=\
 	labelDialogData_moc.C\
 	lightSettings_moc.C\
 	lightSettingsData_moc.C\
+	mainControlPreferences_moc.C\
 	molecularFileDialog_moc.C\
 	molecularDynamicsDialog_moc.C\
 	molecularDynamicsDialogData_moc.C\
@@ -74,6 +77,7 @@ MOC_SOURCES=\
 	preferences_moc.C\
 	pythonSettings_moc.C\
 	pythonSettingsData_moc.C\
+	serverPreferences_moc.C\
 	setCamera_moc.C\
 	setCameraData_moc.C\
 	snapShotVisualisation_moc.C\
@@ -131,6 +135,9 @@ labelDialog_moc.C:	$(HEADER_DIR)/labelDialog.h
 preferences_moc.C:	$(HEADER_DIR)/preferences.h
 	$(MOC) $(HEADER_DIR)/preferences.h -o $@
 
+mainControlPreferences_moc.C:	$(HEADER_DIR)/mainControlPreferences.h
+	$(MOC) $(HEADER_DIR)/mainControlPreferences.h -o $@
+
 molecularDynamicsDialog_moc.C:	$(HEADER_DIR)/molecularDynamicsDialog.h
 	$(MOC) $(HEADER_DIR)/molecularDynamicsDialog.h -o $@
 
@@ -139,6 +146,9 @@ molecularFileDialog_moc.C:	$(HEADER_DIR)/molecularFileDialog.h
 
 peptideDialog_moc.C:	$(HEADER_DIR)/peptideDialog.h
 	$(MOC) $(HEADER_DIR)/peptideDialog.h -o $@
+
+serverPreferences_moc.C:	$(HEADER_DIR)/serverPreferences.h
+	$(MOC) $(HEADER_DIR)/serverPreferences.h -o $@
 
 snapShotVisualisation_moc.C:	$(HEADER_DIR)/snapShotVisualisation.h
 	$(MOC) $(HEADER_DIR)/snapShotVisualisation.h -o $@

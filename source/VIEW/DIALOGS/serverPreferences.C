@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.C,v 1.2 2003/08/26 15:01:11 amoll Exp $
+// $Id: serverPreferences.C,v 1.3 2003/08/27 13:58:30 amoll Exp $
 //
 
-#include <BALL/VIEWWIDGETS/serverPreferences.h>
-#include <BALL/VIEW/COMMON/global.h>
+#include <BALL/VIEW/DIALOGS/serverPreferences.h>
+#include <BALL/VIEW/KERNEL/common.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/COMMON/rtti.h>
 
@@ -143,5 +143,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW
-
 } // namespace BALL

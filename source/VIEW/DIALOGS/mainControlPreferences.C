@@ -3,7 +3,7 @@
 //
 // $Id: 
 
-#include <BALL/VIEWWIDGETS/mainControlPreferences.h>
+#include <BALL/VIEW/DIALOGS/mainControlPreferences.h>
 #include <BALL/COMMON/rtti.h>
 
 #include <qwidget.h>
@@ -189,7 +189,5 @@ namespace BALL
 		}
 		
 	} // namespace VIEW
-
 } // namespace BALL
-
 

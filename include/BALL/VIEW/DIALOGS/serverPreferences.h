@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.h,v 1.2 2003/08/26 15:01:23 amoll Exp $
+// $Id: serverPreferences.h,v 1.3 2003/08/27 13:58:38 amoll Exp $
 //
 
-#ifndef BALL_VIEW_WIDGETS_SERVERPREFERENCES_H
-#define BALL_VIEW_WIDGETS_SERVERPREFERENCES_H
+#ifndef BALL_VIEW_DIALOGS_SERVERPREFERENCES_H
+#define BALL_VIEW_DIALOGS_SERVERPREFERENCES_H
 
 #include <qwidget.h>
 #include <qcheckbox.h>
@@ -134,7 +134,6 @@ namespace BALL
 		};
   
 	} // namespace VIEW
-
 } // namespace BALL
 
-#endif // BALL_VIEW_WIDGETS_SERVERPREFERENCES_H
+#endif // BALL_VIEW_DIALOGS_SERVERPREFERENCES_H
