@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HashGrid3_test1.C,v 1.1 2003/06/20 12:25:00 amoll Exp $
+// $Id: HashGrid3_test1.C,v 1.2 2003/06/21 10:52:14 amoll Exp $
 //
 // This line is for testing purposes. Remove me.
 //
@@ -10,10 +10,11 @@
 ///////////////////////////
 
 #include <BALL/DATATYPE/hashGrid.h>
+#include "HashGrid3_test.h"
 
 ///////////////////////////
 
-START_TEST(HashGrid, "$Id: HashGrid3_test1.C,v 1.1 2003/06/20 12:25:00 amoll Exp $")
+START_TEST(HashGrid, "$Id: HashGrid3_test1.C,v 1.2 2003/06/21 10:52:14 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
