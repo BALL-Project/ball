@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.h,v 1.14 2001/05/16 01:38:12 oliver Exp $
+// $Id: amberNonBonded.h,v 1.15 2001/05/17 18:22:11 anker Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_NONBONDED_H
@@ -43,19 +43,48 @@ namespace BALL
 
 		/**	Default constructor.
 		*/
-		AmberNonBonded();
+		AmberNonBonded()
+			throw();
 
 		/**	Constructor.
 		*/
-		AmberNonBonded(ForceField& force_field);
+		AmberNonBonded(ForceField& force_field)
+			throw();
 
 		/**	Copy constructor
 		*/
-		AmberNonBonded(const AmberNonBonded& amber_non_bonded, bool clone_deep = true);
+		AmberNonBonded(const AmberNonBonded& amber_non_bonded, bool clone_deep = true)
+			throw();
 
 		/**	Destructor.
 		*/
-		virtual ~AmberNonBonded();
+		virtual ~AmberNonBonded()
+			throw();
+
+		//@}
+		/** Assignment
+		*/
+		//@{
+		
+		/** Assignment operator
+		*/
+		const AmberNonBonded& operator = (const AmberNonBonded& anb)
+			throw();
+
+		/** Clear method
+		*/
+		virtual void clear()
+			throw();
+
+		//@}
+		/** Predicates
+		*/
+		//@{
+			
+		/** Equality operator
+		*/
+		bool operator == (const AmberNonBonded& anb)
+			throw(Exception::NotImplemented);
 
 		//@}
 		/**	@name	Setup Methods	
@@ -64,7 +93,8 @@ namespace BALL
 
 		/**	Setup method.
 		*/
-		virtual bool setup();
+		virtual bool setup()
+			throw();
 
 		//@}
 		/**	@name	Accessors	
@@ -73,26 +103,31 @@ namespace BALL
 
 		/**	Calculates and returns the component's energy.
 		*/
-		virtual double updateEnergy();
+		virtual double updateEnergy()
+			throw();
 
 		/**	Calculates and returns the component's forces.
 		*/
-		virtual void updateForces();
+		virtual void updateForces()
+			throw();
 
 		/**	Update the pair list.
 				This method is called by the force field whenever
 				\Ref{ForceField::update} is called. It is used
 				to recalculate the nonbonded pair list.
 		*/
-		virtual void update();
+		virtual void update()
+			throw();
 
 		/**	Return the electrostatic energy.
 		*/
-		virtual double getElectrostaticEnergy() const;
+		virtual double getElectrostaticEnergy() const
+			throw();
 
 		/**	Return the Van-der-Waals energy.
 		*/
-		virtual double getVdwEnergy() const;
+		virtual double getVdwEnergy() const
+			throw();
 
 		//@}
 		/**	@name Neighbourhood and Parameter calculations
@@ -102,14 +137,16 @@ namespace BALL
 		/**	Computes the most efficient way to calculate the non-bonded atom pairs
 		*/
 		virtual MolmecSupport::PairListAlgorithmType
-			determineMethodOfAtomPairGeneration();
+			determineMethodOfAtomPairGeneration()
+			throw();
 
 		/**	Build a vector of non-bonded atom pairs with the vdw parameters
 		*/
 		virtual void buildVectorOfNonBondedAtomPairs
 			(const vector< pair<Atom*, Atom*> >& atom_vector,
 			 const LennardJones& lennard_jones,
-			 const Potential1210& hydrogen_bond);
+			 const Potential1210& hydrogen_bond)
+			throw();
 
 		//@}
 
