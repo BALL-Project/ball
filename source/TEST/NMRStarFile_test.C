@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: NMRStarFile_test.C,v 1.12 2003/05/26 15:20:25 amoll Exp $
+// $Id: NMRStarFile_test.C,v 1.13 2003/07/25 08:22:07 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,36 +10,36 @@
 
 using namespace BALL;
 
-START_TEST(String,"$Id: NMRStarFile_test.C,v 1.12 2003/05/26 15:20:25 amoll Exp $")
+START_TEST(String,"$Id: NMRStarFile_test.C,v 1.13 2003/07/25 08:22:07 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 NMRStarFile* f;
 
-CHECK(NMRStarFile::NMRStarFile())
+CHECK(NMRStarFile() throw())
 	f = new NMRStarFile;
 	TEST_NOT_EQUAL(f, 0)
 RESULT
 
-CHECK(NMRStarFile::~NMRStarFile())
+CHECK(~NMRStarFile() throw())
 	delete(f);
 RESULT
 
-CHECK(NMRStarFile::NMRStarFile(const NMRStarFile& f))
+CHECK(NMRStarFile(const NMRStarFile& f) throw(Exception::FileNotFound))
 	NMRStarFile f1;
 	NMRStarFile* f2 = new NMRStarFile(f1);
 	TEST_NOT_EQUAL(f2, 0)
 RESULT
 
-CHECK(NMRStarFile::operator = (const NMRStarFile& f))
+CHECK(const NMRStarFile& operator = (const NMRStarFile& f) throw())
 	NMRStarFile f1;
 	NMRStarFile f2 = f1;
 RESULT
 
 NMRStarFile rs;
 
-CHECK(NMRStarFile::NMRStarFile(filename))
+CHECK(NMRStarFile(const String& file_name) throw(Exception::FileNotFound, Exception::ParseError))
 	PRECISION(1e-3)
 	rs = NMRStarFile("data/AssignShiftProcessor_test2.str");
 	TEST_EQUAL(rs.getData().size(), 1)
@@ -83,20 +83,31 @@ RESULT
 
 NMRStarFile f2;
 
-CHECK(NMRStarFile::operator == (const NMRStarFile& f))
+CHECK(bool operator == (const NMRStarFile& f) throw())
 	NMRStarFile f1;
 	TEST_EQUAL(f1 == f2, true)
 	f2 = NMRStarFile("data/AssignShiftProcessor_test2.str");
 	TEST_EQUAL(f1 == f2, false)
 RESULT
 
-CHECK(NMRStarFile::operator != (const NMRStarFile& f))
+CHECK(bool operator != (const NMRStarFile& f) throw())
 	NMRStarFile f1;
 	TEST_EQUAL(f1 != f1, false)
 	TEST_EQUAL(f1 != f2, true)
 RESULT
 
-CHECK(NMRStarFile::clear())
+NMRStarFile empty;
+CHECK(Size getNumberOfAtoms() const throw())
+	TEST_EQUAL(f2.getNumberOfAtoms(), 1914)
+	TEST_EQUAL(empty.getNumberOfAtoms(), 0)
+RESULT
+
+CHECK(const std::vector<NMRAtomDataSet>& getData() const throw())
+	TEST_EQUAL(f2.getData().size(), 1)
+	TEST_EQUAL(empty.getData().size(), 0)
+RESULT
+
+CHECK(void clear() throw())
 	TEST_EQUAL(f2.getData().size(), 1)
 	TEST_EQUAL(f2.getNumberOfAtoms(), 1914)
 	f2.clear();
@@ -104,7 +115,7 @@ CHECK(NMRStarFile::clear())
 	TEST_EQUAL(f2.getNumberOfAtoms(), 0)
 RESULT
 
-CHECK(NMRStarFile::BALL_CREATE(NMRStarFile))
+CHECK(BALL_CREATE(NMRStarFile))
 	NMRStarFile* v_ptr = (NMRStarFile*)rs.create();
 	TEST_NOT_EQUAL(v_ptr, 0)
 	TEST_EQUAL(v_ptr->getNumberOfAtoms(), 1914)
