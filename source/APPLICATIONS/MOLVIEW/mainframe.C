@@ -26,14 +26,12 @@ Mainframe::Mainframe
 		scene_(0),
 		control_(0),
 		display_properties_(0),
-		preferences_dialog_(0),
 		minimization_dialog_(0),
 		label_properties_(0),
 		open_hin_file_(0),
 		open_pdb_file_(0),
 		molecular_properties_(0),
 		server_(0),
-		geometric_convertor_(0),
 		GL_object_collector_(),
 		object_processor_(),
 		fragment_db_(),
@@ -43,8 +41,6 @@ Mainframe::Mainframe
 		vboxlayout_(0),
 		popup_menus_(),
 		selection_(),
-		copy_list_(),
-		server_icon_(0),
 		tool_box_(0)
 {
 	// ---------------------
@@ -81,9 +77,6 @@ Mainframe::Mainframe
 	display_properties_ = new DisplayProperties(this);
 	CHECK_PTR(display_properties_);
 
-	preferences_dialog_ = new DlgPreferences(this);
-	CHECK_PTR(preferences_dialog_);
-
 	minimization_dialog_ = new DlgAmberMinimization(this);
 	CHECK_PTR(minimization_dialog_);
 
@@ -99,11 +92,8 @@ Mainframe::Mainframe
 	molecular_properties_ = new MolecularProperties(this);
 	CHECK_PTR(molecular_properties_);
 
-	server_ = new Server();
+	server_ = new Server(this);
 	CHECK_PTR(server_);
-
-	geometric_convertor_ = new GeometricConvertor();
-	CHECK_PTR(geometric_convertor_);
 
 	logview_ = new LogView(vert_splitter_);
 	CHECK_PTR(logview_);
@@ -116,21 +106,6 @@ Mainframe::Mainframe
 	QLabel* message_label = new QLabel(tr("Ready."), statusBar());
 	statusBar()->addWidget(message_label, 20);
 
-	server_icon_ = new QLabel(statusBar());
-	statusBar()->addWidget(server_icon_, 1, TRUE );
-	QToolTip::add(server_icon_, "VIEW server status");
-	QPixmap icon(mini_ray_xpm);
-
-	server_icon_->setPixmap(icon);
-	server_icon_->show();
- 
-	// ---------------------
-	// read preferences ----
-	// ---------------------
-	preferences_.setFilename(".molview.ini");
-	preferences_.read();
-	getPreferences(preferences_);	
-
 	// ---------------------
 	// Scene setup ---------
 	// ---------------------
@@ -141,10 +116,7 @@ Mainframe::Mainframe
 	// Dialogs setup ---------
 	// ---------------------
 
-	display_properties_->getPreferences(preferences_);
-	preferences_dialog_->getPreferences(preferences_);
-	minimization_dialog_->getPreferences(preferences_);
-	label_properties_->getPreferences(preferences_);
+	//	minimization_dialog_->getPreferences(preferences_);
 
 	// ---------------------
 	// LogView setup ------
@@ -170,25 +142,14 @@ Mainframe::Mainframe
 	// File-Menu -------------------------------------------------------------------
 
 	// Edit-Menu -------------------------------------------------------------------
-	
-	insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), CTRL+Key_S, MENU__EDIT_SELECT);
-	insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), CTRL+Key_D, MENU__EDIT_DESELECT);
-
 	// Build Menu -------------------------------------------------------------------
-
 	insertMenuEntry(MainControl::BUILD, "Check St&ructure", this, SLOT(checkResidue()), CTRL+Key_R, MENU__BUILD_CHECK_RESIDUE);
-	insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, SLOT(buildBonds()), CTRL+Key_B, MENU__BUILD_BUILD_BONDS);
-	insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, SLOT(addHydrogens()), CTRL+Key_H, MENU__BUILD_ADD_HYDROGENS);
+
+
 	insertMenuEntry(MainControl::BUILD, "Assign &Charges", this, SLOT(assignCharges()), CTRL+Key_H, MENU__BUILD_ASSIGN_CHARGES);
 	insertMenuEntry(MainControl::BUILD, "Calculate AMBER &Energy", this, SLOT(calculateAmberEnergy()), CTRL+Key_U, MENU__BUILD_AMBER_ENERGY);
 	insertMenuEntry(MainControl::BUILD, "Perform Energy &Minimization", this, SLOT(amberMinimization()), CTRL+Key_W, MENU__BUILD_AMBER_MINIMIZATION);
 			
-
-  // Display Menu -------------------------------------------------------------------
-	insertMenuEntry(MainControl::DISPLAY, "&Preferences", this, 
-									SLOT(openPreferencesDialog()), CTRL+Key_I, MENU__DISPLAY_OPEN_PREFERENCES_DIALOG);
-	insertMenuEntry(MainControl::DISPLAY, "Focus C&amera", this, SLOT(centerCamera()), CTRL+Key_A, MENU__DISPLAY_CENTER_CAMERA);
-
 	// Help-Menu -------------------------------------------------------------------
 
 	insertMenuEntry(MainControl::HELP, "&About", this, SLOT(about()), CTRL+Key_A, MENU__HELP_ABOUT);
@@ -201,22 +162,10 @@ Mainframe::Mainframe
 	// Connectivity --------
 	// ---------------------
 
-	connect(initPopupMenu(MainControl::DISPLAY),
-					SIGNAL(aboutToShow()),
-					this,
-					SLOT(checkMenuEntries()));
 	connect(initPopupMenu(MainControl::BUILD),
 					SIGNAL(aboutToShow()),
 					this,
 					SLOT(checkMenuEntries()));
-	connect(initPopupMenu(MainControl::EDIT),
-					SIGNAL(aboutToShow()),
-					this,
-					SLOT(checkMenuEntries()));
-	connect(preferences_dialog_,
-					SIGNAL(applyButtonPressed()),
-					this,
-					SLOT(applyPreferencesDialog()));
 
 	// check the active menu entries
 	checkMenuEntries();
@@ -228,14 +177,6 @@ Mainframe::Mainframe
   // registering object generator
   MoleculeObjectCreator* object_creator = new MoleculeObjectCreator;
   server_->registerObjectCreator(*object_creator);
-
-	// check whether we should start the server
-	// and on which port
-	checkServer();
-
-	// building internal connection ------------------------------------------------
-	registerConnectionObject(*server_);
-	registerConnectionObject(*geometric_convertor_);
 }
 
 Mainframe::~Mainframe()
@@ -244,16 +185,7 @@ Mainframe::~Mainframe()
 	// extract preferences 
 	// from the current settings
 	//
-	setPreferences(preferences_);
-	display_properties_->setPreferences(preferences_);
-	preferences_dialog_->setPreferences(preferences_);
-	minimization_dialog_->setPreferences(preferences_);
-	label_properties_->setPreferences(preferences_);
-
-	//
-	// write the preferences
-	//
-	preferences_.write();
+	//minimization_dialog_->setPreferences(preferences_);
 
 	//
 	// clean up
@@ -277,16 +209,8 @@ void Mainframe::onNotify(Message *message)
 		return;
 	}
 
-	if (RTTI::isKindOf<WindowMessage>(*message))
-	{
-		WindowMessage *window_message = RTTI::castTo<WindowMessage>(*message);
-
-		statusBar()->message(window_message->getStatusBar().c_str());
-
-		QWidget::update();
-	}
 	// selection => store last selection for later processing
-	else if (RTTI::isKindOf<SelectionMessage>(*message))
+	if (RTTI::isKindOf<SelectionMessage>(*message))
 	{
 		SelectionMessage *selection = RTTI::castTo<SelectionMessage>(*message);
 
@@ -313,20 +237,8 @@ void Mainframe::checkMenuEntries()
 
 	bool all_systems = (number_of_selected_objects > 0);
 
-	// enable for multiple selection
-	menuBar()->setItemEnabled(MENU__EDIT_SELECT, selected);
-	menuBar()->setItemEnabled(MENU__EDIT_DESELECT, selected);
-	menuBar()->setItemEnabled(MENU__BUILD_ADD_HYDROGENS, selected);
-	menuBar()->setItemEnabled(MENU__BUILD_ASSIGN_CHARGES, selected);
 	menuBar()->setItemEnabled(MENU__BUILD_CHECK_RESIDUE, selected);
-	menuBar()->setItemEnabled(MENU__BUILD_BUILD_BONDS, selected);
-	
-	// these menu points for single items only
-	menuBar()->setItemEnabled(MENU__DISPLAY_CENTER_CAMERA, selected && (number_of_selected_objects == 1));
-
-	// set the checkboxes for the non-modal dialogs
-	menuBar()->setItemChecked(MENU__DISPLAY_OPEN_PREFERENCES_DIALOG, 
-													 preferences_dialog_->isVisible());
+	menuBar()->setItemEnabled(MENU__BUILD_ASSIGN_CHARGES, selected);
 
 	// AMBER methods are available only for single systems
 	menuBar()->setItemEnabled(MENU__BUILD_AMBER_ENERGY, 
@@ -334,85 +246,6 @@ void Mainframe::checkMenuEntries()
 
 	menuBar()->setItemEnabled(MENU__BUILD_AMBER_MINIMIZATION, 
 														(all_systems && (number_of_selected_objects == 1)));
-}
-
-void Mainframe::select()
-{
-	if (selection_.size() == 0)
-	{
-		return;
-	}
-
-	QString message;
-	message.sprintf("selecting %d objects...", 
-													selection_.size());
-	statusBar()->message(message);
-	QWidget::update();
-
-	int value_static = object_processor_.getValue(ADDRESS__STATIC_MODEL);
-	int value_dynamic = object_processor_.getValue(ADDRESS__DYNAMIC_MODEL);
-
-	object_processor_.setValue(ADDRESS__STATIC_MODEL, VALUE__SELECT);
-	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, VALUE__SELECT);
-        
-	List<Composite*>::ConstIterator list_it = selection_.begin();	
-	for (; list_it != selection_.end(); ++list_it)
-	{
-		object_processor_.applyOn(**list_it);
-		
-		// update composite
-		MainControl::update((*list_it)->getRoot());
-	}
-
-	// restore old values
-	object_processor_.setValue(ADDRESS__STATIC_MODEL, value_static);
-	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, value_dynamic);
-
-	// update scene
-	SceneMessage scene_message;
-	scene_message.updateOnly();
-	notify_(scene_message);
-
-	statusBar()->clear();
-	QWidget::update();
-}
-
-void Mainframe::deselect()
-{
-	if (selection_.size() == 0)
-	{
-		return;
-	}
-
-	QString message;
-	message.sprintf("selecting %d objects...", selection_.size());
-	statusBar()->message(message);
-	QWidget::update();
-
-	int value_static = object_processor_.getValue(ADDRESS__STATIC_MODEL);
-	int value_dynamic = object_processor_.getValue(ADDRESS__DYNAMIC_MODEL);
-
-	object_processor_.setValue(ADDRESS__STATIC_MODEL, VALUE__DESELECT);
-	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, VALUE__DESELECT);
-        
-	List<Composite*>::ConstIterator list_it = selection_.begin();	
-	for (; list_it != selection_.end(); ++list_it)
-	{
-		object_processor_.applyOn(**list_it);
-		MainControl::update((**list_it).getRoot());
-	}
-
-	// restore old values
-	object_processor_.setValue(ADDRESS__STATIC_MODEL, value_static);
-	object_processor_.setValue(ADDRESS__DYNAMIC_MODEL, value_dynamic);
-
-	// update scene
-	SceneMessage scene_message;
-	scene_message.updateOnly();
-	notify_(scene_message);
-
-	statusBar()->clear();
-	QWidget::update();
 }
 
 void Mainframe::checkResidue()
@@ -445,95 +278,6 @@ void Mainframe::checkResidue()
 	}
 
 	QWidget::update();
-}
-
-void Mainframe::centerCamera()
-{
-	if (selection_.size() != 1)
-	{
-		return;
-	}
-
-  // use specified object processor for calculating the center
-  object_processor_.calculateCenter(*selection_.front());
-
-	Vector3 view_point = object_processor_.getViewCenter();
-
-  // set the camera on the the new composite
-	SceneMessage scene_message;
-	scene_message.setCameraLookAt(view_point);
-
-	view_point.z = view_point.z + object_processor_.getViewDistance();
-	scene_message.setCameraViewPoint(view_point);
-
-	// notify scene to perform an update and set the camera to the new object
-	notify_(scene_message);
-}
-
-void Mainframe::buildBonds()
-{
-	if (selection_.size() == 0)
-	{
-		return;
-	}
-
-	Size number_of_bonds = 0;
-
-	statusBar()->message("building bonds...");
-	QWidget::update();
-
-	List<Composite*>::ConstIterator list_it = selection_.begin();	
-	for (; list_it != selection_.end(); ++list_it)
-	{	
-		(*list_it)->apply(fragment_db_.build_bonds);
-		number_of_bonds += fragment_db_.build_bonds.getNumberOfBondsBuilt();
-		object_processor_.applyOn(**list_it);
-
-		MainControl::update((**list_it).getRoot());
-	}
-
-	// update scene
-	SceneMessage scene_message;
-	scene_message.updateOnly();
-	notify_(scene_message);
-
-	statusBar()->clear();
-	QWidget::update();
-
-	Log.info() << "Added " << number_of_bonds << " bonds." << endl;
-}
-
-void Mainframe::addHydrogens()
-{
-	if (selection_.size() == 0)
-	{
-		return;
-	}
-
-	Size number_of_hydrogens = 0;
-
-	statusBar()->message("adding hydrogens...");
-	QWidget::update();
-
-	List<Composite*>::ConstIterator list_it = selection_.begin();	
-	for (; list_it != selection_.end(); ++list_it)
-	{	
-		(*list_it)->apply(fragment_db_.add_hydrogens);
-		number_of_hydrogens += fragment_db_.add_hydrogens.getNumberOfInsertedH();
-		(*list_it)->apply(fragment_db_.build_bonds);
-		object_processor_.applyOn(**list_it);
-
-		MainControl::update((*list_it)->getRoot());
-	}
-
-	Log.info() << "added " << number_of_hydrogens << " hydrogen atoms." << endl;
-	statusBar()->clear();
-	QWidget::update();
-
-	// update scene
-	SceneMessage scene_message;
-	scene_message.updateOnly();
-	notify_(scene_message);
 }
 
 void Mainframe::assignCharges()
@@ -700,12 +444,6 @@ void Mainframe::amberMinimization()
 	statusBar()->message(message, 5000);
 }
 
-void Mainframe::openPreferencesDialog()
-{
-	preferences_dialog_->show();
-	preferences_dialog_->raise();
-}
-
 void Mainframe::about()
 {
 	DlgAbout about_box;
@@ -713,137 +451,8 @@ void Mainframe::about()
 	statusBar()->message("MolVIEW V 0.96a", 1500);
 }
 
-void Mainframe::applyPreferencesDialog()
+void Mainframe::fetchPreferences(INIFile& inifile)
 {
-
-	if (preferences_dialog_->isTabEnabled(preferences_dialog_->getGeneralTab()))
-	{
-		QApplication::setStyle(preferences_dialog_->getGeneralTab()->getStyle());
-		QWidget::update();
-	}
-	
-	if (preferences_dialog_->isTabEnabled(preferences_dialog_->getNetworkTab()))
-	{
-		checkServer();
-	}
-	
-	if (preferences_dialog_->isTabEnabled(preferences_dialog_->getDisplayTab()))
-	{
-		if (preferences_dialog_->getDisplayTab()->isDepthCueingEnabled())
-		{
-		}
-
-		if (preferences_dialog_->getDisplayTab()->isCoordinateAxesEnabled())
-		{
-		}
-	}	
-}
-
-void Mainframe::startServer()
-{
-	// retrieve the port number
-	int port = preferences_dialog_->getNetworkTab()->getPort();
-	
-	// set the port and active the server
-	server_->setPort(port);
-	server_->activate();
-	
-	// adjust the tool tip and update the server icon
-	QString tip;
-	tip.sprintf("VIEW Server listening on port %d", port); 
-	QToolTip::add(server_icon_, tip);
-	server_icon_->show();
-	statusBar()->update();
-}
-
-void Mainframe::stopServer()
-{
-	// stop the server
-	server_->deactivate();
-
-	// hide the icon
-	server_icon_->hide();
-	QToolTip::add(server_icon_, "VIEW Server disabled");
-	statusBar()->update();
-}
-
-void Mainframe::checkServer()
-{
-	// retrieve the settings of the preferences
-	// dialog box
-	bool start_server = preferences_dialog_->getNetworkTab()->getServerStatus();
-	
-	if (start_server)
-	{
-		startServer();
-	} else {
-		stopServer();
-	}
-}
-
-void Mainframe::setPreferences(INIFile& inifile) const
-{
-	//	
-	// the main window position
-	//
-	inifile.setValue
-		("WINDOWS", "Main::x", String(x()));
-	inifile.setValue
-		("WINDOWS", "Main::y", String(y()));
-	inifile.setValue
-		("WINDOWS", "Main::width", String(width()));
-	inifile.setValue
-		("WINDOWS", "Main::height", String(height()));
-
-	// 
-	// the splitter positions
-	// 
-	QValueList<int> size_list = hor_splitter_->sizes();
-	String value_string = "";
-	QValueListConstIterator<int> list_it = size_list.begin();
-	for (; list_it != size_list.end(); ++list_it)
-	{
-		value_string += String(*list_it) + " ";
-	}
-	inifile.setValue("WINDOWS", "Main::hor_splitter", value_string);
-
-	value_string = "";
-	size_list = vert_splitter_->sizes();
-	list_it = size_list.begin();
-	for (; list_it != size_list.end(); ++list_it)
-	{
-		value_string += String(*list_it) + " ";
-	}
-	inifile.setValue("WINDOWS", "Main::vert_splitter", value_string);
-}
-
-void Mainframe::getPreferences(const INIFile& inifile)
-{
-	// 
-	// the geometry of the main window
-	//
-	int x_pos = x();
-	int y_pos = y();
-	int w = 640;
-	int h = 480;
-	if (inifile.hasEntry("WINDOWS", "Main::x"))
-	{
-		x_pos = inifile.getValue("WINDOWS", "Main::x").toInt();
-	}
-	if (inifile.hasEntry("WINDOWS", "Main::y"))
-	{
-		y_pos = inifile.getValue("WINDOWS", "Main::y").toInt();
-	}
-	if (inifile.hasEntry("WINDOWS", "Main::height"))
-	{
-		h = inifile.getValue("WINDOWS", "Main::height").toInt();
-	}
-	if (inifile.hasEntry("WINDOWS", "Main::width"))
-	{
-		w = inifile.getValue("WINDOWS", "Main::width").toInt();
-	}
-	setGeometry(x_pos, y_pos, w, h);
-
 	// 
 	// the splitter positions
 	//
@@ -868,6 +477,33 @@ void Mainframe::getPreferences(const INIFile& inifile)
 		}
 		vert_splitter_->setSizes(value_list);
 	}
+
+	MainControl::fetchPreferences(inifile);
+}
+
+void Mainframe::writePreferences(INIFile& inifile)
+{
+	// the splitter positions
+	// 
+	QValueList<int> size_list = hor_splitter_->sizes();
+	String value_string = "";
+	QValueListConstIterator<int> list_it = size_list.begin();
+	for (; list_it != size_list.end(); ++list_it)
+	{
+		value_string += String(*list_it) + " ";
+	}
+	inifile.setValue("WINDOWS", "Main::hor_splitter", value_string);
+
+	value_string = "";
+	size_list = vert_splitter_->sizes();
+	list_it = size_list.begin();
+	for (; list_it != size_list.end(); ++list_it)
+	{
+		value_string += String(*list_it) + " ";
+	}
+	inifile.setValue("WINDOWS", "Main::vert_splitter", value_string);
+
+	MainControl::writePreferences(inifile);
 }
 
 

@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.24 2000/10/22 15:13:52 hekl Exp $
+// $Id: mainframe.h,v 1.25 2000/11/12 15:16:44 hekl Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -25,10 +25,6 @@
 #include <qlabel.h>
 #include <qtooltip.h>
 
-#ifndef BALL_FORMAT_INIFILE_H
-#	include <BALL/FORMAT/INIFile.h>
-#endif
-
 #ifndef BALL_VIEW_KERNEL_LOGVIEW_H
 #	include <BALL/VIEW/KERNEL/logView.h>
 #endif
@@ -47,10 +43,6 @@
 
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 # include <BALL/VIEW/GUI/WIDGETS/scene.h>
-#endif
-
-#ifndef BALL_MOLVIEW_KERNEL_GEOMETRICCONVERTOR_H
-# include <BALL/MOLVIEW/KERNEL/geometricConvertor.h>
 #endif
 
 #ifndef BALL_MOLVIEW_GUI_DIALOGS_DISPLAYPROPERTIES_H
@@ -99,9 +91,6 @@ class Mainframe
 {
 	Q_OBJECT
 
-
-  public:
-
 	public:
 
 	enum MenuKey
@@ -143,12 +132,11 @@ class Mainframe
 	Mainframe
 		(QWidget* parent = 0, const char* name = 0);
 
-	~Mainframe();
+	virtual ~Mainframe();
 
 
-	void setPreferences(INIFile& inifile) const;
-
-	void getPreferences(const INIFile& inifile);
+	virtual void fetchPreferences(INIFile& inifile);
+	virtual void writePreferences(INIFile& inifile);
 
 	virtual void onNotify(Message *message);
 
@@ -159,51 +147,29 @@ class Mainframe
 	// (connected to aboutToShow())
 	void checkMenuEntries();
 
-	// Edit menu
-	void select();
-	void deselect();
-
 	// Build menu
 	void checkResidue();
-	void buildBonds();
-	void addHydrogens();
 	void assignCharges();
 	void calculateAmberEnergy();
 	void amberMinimization();
 
-	// Display menu
-	void openPreferencesDialog();
-	void centerCamera();
-
 	// Help menu
 	void about();
-
-	// old style, will be replaced by connectionObject -Notification		
-	void applyPreferencesDialog();
-
-	void startServer();
-	void stopServer();
-	void checkServer();
-
 
   private:
 
 	Scene*								scene_;
 	MolecularControl*			control_;
 	DisplayProperties*    display_properties_;
-	DlgPreferences*				preferences_dialog_;
 	DlgAmberMinimization*	minimization_dialog_;
 	LabelProperties*	    label_properties_;
 	OpenHINFile*					open_hin_file_;
 	OpenPDBFile*					open_pdb_file_;
 	MolecularProperties*  molecular_properties_;
 	Server*   						server_;
-	GeometricConvertor*   geometric_convertor_;
 
 	MoleculeGLObjectCollector		GL_object_collector_;
 	MoleculeObjectProcessor			object_processor_;
-
-	INIFile				preferences_;
 
 	FragmentDB		fragment_db_;
 				
@@ -214,9 +180,7 @@ class Mainframe
 	
 	List<QPopupMenu*> popup_menus_;
 	List<Composite*>  selection_;
-	List<Composite*>  copy_list_;
 
-	QLabel*						server_icon_;
 	QLabel*						tool_box_;
 };
 
