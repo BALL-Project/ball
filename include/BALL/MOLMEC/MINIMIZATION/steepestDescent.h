@@ -1,4 +1,4 @@
-// $Id: steepestDescent.h,v 1.2 1999/09/14 17:45:03 oliver Exp $
+// $Id: steepestDescent.h,v 1.3 1999/12/17 18:36:47 pmueller Exp $
 // Line Search Minimizer: A special class for the line search minimization algorithm
 
 #ifndef BALL_MOLMEC_MINIMIZATION_STEEPESTDESCENT_H
@@ -32,9 +32,12 @@
 #	include <BALL/MOLMEC/COMMON/forceField.h>
 #endif
 
-#ifndef	BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
-#	include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
+#include "energyMinimizer.h"
+
+#ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
+#       include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #endif
+
 
 /*
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
@@ -50,6 +53,7 @@ namespace BALL {
 
 
 		public:
+
 
 		/**	@name	Enums
 		*/
@@ -199,10 +203,6 @@ namespace BALL {
 		/*_	The maximal number of steps in an iteration step
 		*/
 		Size	max_steps_; 
-
-		/*_	The maximum RMS gradient (covnergence criterion)
-		*/
-		float	max_gradient_;
 
 		//_@}
 

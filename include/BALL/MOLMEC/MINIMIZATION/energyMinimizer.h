@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.4 1999/11/30 19:48:18 oliver Exp $
+// $Id: energyMinimizer.h,v 1.5 1999/12/17 18:36:24 pmueller Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -32,21 +32,16 @@
 #	include <BALL/MOLMEC/COMMON/forceField.h>
 #endif
 
-/*
-#ifndef BALL_MOLMEC_COMMON_TRAJECTORY_H
-#	include <BALL/MOLMEC/COMMON/snapshot.h>
+#ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
+#	include <BALL/MOLMEC/COMMON/snapShot.h>
 #endif
-*/
 
 #include <vector>
 
-namespace BALL 
-{
+namespace BALL {
 
 	class ForceField;
 
-	/**
-	*/
 	class EnergyMinimizer
 	{
 		public:
@@ -58,12 +53,9 @@ namespace BALL
 		/**	Error codes of the ForceField class
 		*/
 		enum	ErrorCode 
-		{	
-			///
+		{
 			ERROR__NONE	= -1,
-			///
 			ERROR__UNKNOWN,
-			///
 			ERROR__NOT_IMPLEMENTED,
 
 			NUMBER_OF_ERRORS
@@ -99,7 +91,16 @@ namespace BALL
 			*/
 			static const char* ENERGY_DIFFERENCE_BOUND;
 
-			/**	Maximal shift
+      /** The number of iterations without any change in energy. This
+          is used to detect convergence.
+      */
+      static const char *MAX_SAME_ENERGY;
+
+      /** The maximum RMS gradient allowed for convergence.
+      */
+      static const char* MAX_GRADIENT;
+
+			/**	Maximal shift of an atom per iteration 
 			*/
 			static const char* MAXIMAL_SHIFT;
 
@@ -127,12 +128,25 @@ namespace BALL
 			*/
 			static float ENERGY_DIFFERENCE_BOUND;
 
+      /** The number of iterations without any change in energy. This
+          is used to detect convergence.
+      */
+      static Size MAX_SAME_ENERGY; 
+
+      /** Default value for the maximum RMS gradient. This value is used for
+          deciding when to stop the minimisation.
+      */
+      static float MAX_GRADIENT;
+
+
 			/**	Maximal shift
 			*/
 			static float MAXIMAL_SHIFT;
 		};
 
 		//@}
+
+
 
 		/**	@name	Constructors and Destructors	
 		*/
@@ -193,11 +207,20 @@ namespace BALL
 
 		/**	Sets up the energy minimizer.
 		*/
+		bool	setup(ForceField& force_field, SnapShotManager *ssm);
+
+		/**	Sets up the energy minimizer.
+		*/
+		bool	setup(ForceField& force_field, SnapShotManager *ssm,
+                                                     const Options& options);
+
+		/**	Sets up the energy minimizer.
+		*/
 		bool	setup(ForceField& force_field, const Options& options);
 
 		/**	Specific setup
 		*/
-		virtual bool specificSetup();
+		virtual bool specificSetup(void);
 
 		//@}
 
@@ -209,7 +232,7 @@ namespace BALL
 
 		/**	Get the current iteration number
 		*/
-		Size	getNumberOfIteration() const;
+		Size	getNumberOfIteration(void) const;
 
 		/**	Set the iteration number
 		*/
@@ -223,15 +246,15 @@ namespace BALL
 		*/
 		void	setMaximalNumberOfIterations(Size maximal_number_of_iterations);
 
+    /** Set the maximum number of iterations allowed with equal energy
+        (second convergence criterion)
+    */
+    void  setMaxSameEnergy(Size number);
 
-//		/**	Return the snapshot object of the minimization
-//		*/
-//		Snapshot& getSnapshot();
-
-//		/**	Set the snapshot object of the energy minimizer
-//		*/
-//		void	setSnapshot(Snapshot& snapshot);
-
+    /** Get the maximum number of iterations allowed with equal energy
+       (second convergence criterion)
+    */
+    Size  getMaxSameEnergy() const;
 
 		/**	Set the energy output frequency
 		*/
@@ -239,23 +262,34 @@ namespace BALL
 
 		/**	Get the energy ouput frequency
 		*/
-		Size	getEnergyOutputFrequency() const;
+		Size	getEnergyOutputFrequency(void) const;
 
-		/** Set the energy difference bound
+		/** Set the energy difference bound for convergence 
 		*/
 		void  	setEnergyDifferenceBound(float energy_difference_bound);
 
 		/**	Get the energy difference bound
 		*/
-		float	getEnergyDifferenceBound() const;
+		float	getEnergyDifferenceBound(void) const;
+
+    /** Set the maximum RMS gradient (first convergence criterion).
+      The gradient unit of the gradient is {\bf kJ/(mol \AA)}.
+    */
+    void  setMaxGradient(float max_gradient);
+
+    /** Get the maximum RMS gradient (first convergence criterion).
+        The gradient unit of the gradient is {\bf kJ/(mol \AA)}.
+    */
+    float getMaxGradient() const;
+
 
 		/**     Set the maximal shift value
 		*/
-		void    setMaximalShift(float maximal_shift);
+		void    setMaximalShift( float maximal_shift );
 
 		/**     Get the maximal shift value
 		*/
-		float   getMaximalShift() const;
+		float   getMaximalShift( void ) const;
 
 		/**	Set the snapshot output frequency
 		*/
@@ -263,11 +297,11 @@ namespace BALL
 
 		/**	Get the snapshot output frequency
 		*/
-		Size	getSnapshotOutputFrequency() const;
+		Size	getSnapshotOutputFrequency(void) const;
 
 		/**	Return the force field of the energy minimizer
 		*/
-		ForceField*	getForceField();
+		ForceField*	getForceField(void);
 
 		/**	Minimize the energy of the system bound to the force field.	
 				If a number of steps is given, the minimization is aborted after
@@ -305,6 +339,11 @@ namespace BALL
 		*/
 		bool 	valid_;
 
+                /* Pointer to a SnapShotManager for storing snapshots of the
+                   system 
+                */
+                SnapShotManager *snapShot_ptr_; 
+
 
 		/*_	The force field bound to the energy minimizer.
 			Among other data the force field contains the molecular system
@@ -337,9 +376,28 @@ namespace BALL
 		*/
 		float	energy_difference_bound_;
 
+    /*_ The maximum RMS gradient tolerated (first convergence criterion)
+    */
+    float max_gradient_;
+
+
+    /*_ The maximum number of iterations with same energy.
+        When this number is reached, we assume the system to have converged
+        (second convergence criterion)
+    */
+    Size max_same_energy_;
+
+
 		/*_	The maximal shift of an atom per iteration step (in Angstroem)
 		*/
 		float	maximal_shift_;
+
+    /*_ Internal counters: how often is a force update and an energy 
+        update done -> measures speed of minimisation 
+    */
+    int force_update_counter_;
+    int energy_update_counter_; 
+
 
 		//_@}
 	};
