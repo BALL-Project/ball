@@ -1617,6 +1617,13 @@
                         <property name="name">
                             <cstring>custom_color_label</cstring>
                         </property>
+                        <property name="paletteBackgroundColor">
+                            <color>
+                                <red>255</red>
+                                <green>255</green>
+                                <blue>127</blue>
+                            </color>
+                        </property>
                         <property name="frameShape">
                             <enum>Panel</enum>
                         </property>
