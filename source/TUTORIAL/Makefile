@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.2 2000/03/24 11:13:34 oliver Exp $
+# $Id: Makefile,v 1.3 2000/03/27 09:09:01 oliver Exp $
 #========================
 # BALL/TUTORIAL Makefile
 #========================
@@ -14,3 +14,7 @@ clean:	default_clean
 
 tutorial1:	tutorial1.o
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+tutorial2:	tutorial2.o
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
