@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.7 2000/01/10 15:51:18 oliver Exp $
+// $Id: String_test.C,v 1.8 2000/01/19 17:56:34 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -7,7 +7,7 @@
 #include <string.h>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.7 2000/01/10 15:51:18 oliver Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.8 2000/01/19 17:56:34 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -140,7 +140,7 @@ s2 = new String(15, "%s", "halloh");
 TEST_EQUAL(*s2, "halloh")
 delete s2;
 s2 = new String(2, "%s", "halloh");
-TEST_EQUAL(*s2, "halloh")
+TEST_EQUAL(*s2, "h")
 delete s2;
 s2 = new String(15, "%3.1f", 1.2);
 TEST_EQUAL(*s2, "1.2")
@@ -332,7 +332,7 @@ s2 = new String;
 s2->set(15, "%s", "halloh");
 TEST_EQUAL(*s2, "halloh")
 s2->set(2, "%s", "halloh");
-TEST_EQUAL(*s2, "halloh")
+TEST_EQUAL(*s2, "h")
 s2->set(15, "%3.1f", 1.2);
 TEST_EQUAL(*s2, "1.2")
 TEST_EXCEPTION(Exception::IndexUnderflow, s2->set(0, "%s", "Halloh"))
