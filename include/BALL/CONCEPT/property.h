@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.23 2001/07/14 18:46:05 oliver Exp $
+// $Id: property.h,v 1.24 2001/07/18 09:19:41 amoll Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -82,8 +82,8 @@ namespace BALL
 			*/
 			NONE
 		};
+		
 		//@}
-
 		/**	@name	Constructors and Destructors 
 		*/
 		//@{
@@ -183,8 +183,8 @@ namespace BALL
 		*/
 		virtual void clear()
 			throw();
+		
 		//@}	
-
 		/**	@name Persistence
 		*/
 		//@{
@@ -198,9 +198,8 @@ namespace BALL
 		*/
     virtual void persistentRead(PersistenceManager& pm)
 			throw();
-		//@}
- 
 		
+		//@}
 		/**	@name	 Accessors 
 		*/
 		//@{
@@ -261,8 +260,8 @@ namespace BALL
 		*/
 		string getString() const
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Storers */
 		//@{
 
@@ -286,16 +285,15 @@ namespace BALL
 		bool operator != (const NamedProperty& np) const 
 			throw();
 
-
 		//@}
 
 		private:
 
-		/**	The kind of information contained in the NamedProperty
+		/*_	The kind of information contained in the NamedProperty
 		*/
 		Type type_;
 
-		/**	The name of the property object 
+		/*_	The name of the property object 
 		*/
 		string name_;
 		
@@ -366,8 +364,8 @@ namespace BALL
 		/// Clears all properties
 		virtual void destroy()
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Assignment 
 		*/
 		//@{
@@ -402,7 +400,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	@name	Accessors 
 		*/
 		//@{
@@ -410,7 +407,7 @@ namespace BALL
 		/** Return a mutable reference to the bit vector.
 				This method returns the bit vector containing the unnamed properties
 				of the property manager.
-				@return BitVector\& a mutable reference to the (private) BitVector containing 
+				@return BitVector& a mutable reference to the (private) BitVector containing 
 					the unnamed properties
 		*/
 		BitVector& getBitVector()
@@ -419,15 +416,13 @@ namespace BALL
 		/** Return a const reference to the bit vector containing the unnamed properties.
 				This method returns the bit vector containing the unnamed properties
 				of the property manager.
-				@return BitVector\& a const reference to the (private) BitVector containing 
+				@return BitVector& a const reference to the (private) BitVector containing 
 					the unnamed properties
 		*/
 		const BitVector& getBitVector() const
 			throw();
 			
-
 		//@}
-
 		/**	@name Converters 
 		*/
 		//@{
@@ -435,14 +430,13 @@ namespace BALL
 		/** Converter to BitVector.	
 				This operator converts a PropertyManager object to a BitVector
 				object containing the unnamed properties.
-				@return BitVector\& a reference to the BitVector containing the
+				@return BitVector& a reference to the BitVector containing the
 					unnamed properties of the property manager
 		*/
 		operator BitVector& ()
 			throw();
+
 		//@}
-
-
 		/**	@name	Handling unnamed bit properties 
 		*/
 		//@{
@@ -478,8 +472,8 @@ namespace BALL
 		*/
 		Size countProperties() const
 			throw();
-		//@}
 	
+		//@}
 		/**	@name	Handling named properties 
 				PropertyManager contains an vector of \Ref{NamedProperty} objects.
 				Each of the NamedProeprty objects has to have a {\em unique} name.
@@ -488,6 +482,7 @@ namespace BALL
 				existing object is destructed prior to the insertion of the new object.
 		*/
 		//@{
+
 		/**	Set a named property.
 				This method adds a new named property to the property manager's 
 				array of named properties or substitutes an already existing
@@ -599,8 +594,8 @@ namespace BALL
 		*/
 		Size countNamedProperties() const
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Predicates 
 		*/
 		//@{
@@ -625,7 +620,6 @@ namespace BALL
 			throw();
 
 		//@}
-
 		/**	@name	Storers */
 		//@{
 
@@ -636,9 +630,8 @@ namespace BALL
 		/// Input operator
 		friend std::istream& operator >> (std::istream& s, PropertyManager& property_manager)
 			throw();
+		
 		//@}
-
-
 		/**	@name Storable Interface
 		*/
 		//@{
@@ -654,9 +647,8 @@ namespace BALL
 			throw();
 
 		//@}
-
-
-		/**	@name	Debugging and Diagnostics */
+		/**	@name	Debugging and Diagnostics 
+		 */
 		//@{
 
 		/**	Test if instance is valid.
@@ -674,9 +666,8 @@ namespace BALL
 		*/
 		void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
+		
 		//@}
-
-
 
 		private:
 
