@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.142 2001/07/05 17:47:01 oliver Exp $
+dnl    $Id: configure.in,v 1.143 2001/07/13 21:01:50 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1666,12 +1666,12 @@ else
 	if test "${ENDIAN_TYPE}" = "LITTLE" ; then
 		BALL_LITTLE_ENDIAN=true
 		AC_DEFINE(BALL_LITTLE_ENDIAN, true)
-		AC_MSG_RESULT(little)
+		AC_MSG_RESULT(little endian)
 	else
 		if test "${ENDIAN_TYPE}" = "BIG" ; then
 			BALL_BIG_ENDIAN=true
 			AC_DEFINE(BALL_BIG_ENDIAN, true)
-			AC_MSG_RESULT(big)
+			AC_MSG_RESULT(big endian)
 		else
 			AC_MSG_RESULT(<cannot determine>)
 			AC_MSG_RESULT()
@@ -2243,9 +2243,9 @@ if test "${USE_BALLVIEW}" = true ; then
 
 			if test "${USE_BALLVIEW}" = true ; then
 				AC_MSG_CHECKING(for Mesa library)
-				AC_FIND_LIB(MESA_LIBS,libGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
+				AC_FIND_LIB(MESA_LIBS,libMesaGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
 				if test "${MESA_LIBS}" = "" ; then
-					AC_FIND_LIB(MESA_LIBS,libMesaGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
+					AC_FIND_LIB(MESA_LIBS,libGL, ${OPENGL_LIBPATH} ${X11_LIBPATH})
 				fi
 				if test "${MESA_LIBS}" = "" ; then
 					AC_MSG_RESULT((not found!))
