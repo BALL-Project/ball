@@ -1,7 +1,13 @@
-// $Id: regularData1D.h,v 1.2 2000/09/13 06:30:27 oliver Exp $
+// $Id: regularData1D.h,v 1.3 2000/09/13 06:53:25 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
+
+#ifndef BALL_COMMON_H
+#	include <BALL/common.h>
+#endif
+
+#include <vector>
 
 namespace BALL
 {
@@ -17,7 +23,7 @@ namespace BALL
 	{
 		public:
 			
-		BALL_CREATE(RegularData1D<T>)
+		BALL_CREATE(TRegularData1D<T>)
 
 		/**	@name Type definitions
 		*/
@@ -25,8 +31,9 @@ namespace BALL
 		/**	The vector type.
 				This type is used to store the data.
 		*/
-		typedef vector<T>	VectorType;
-
+		typedef std::vector<T>	VectorType;
+		//@}
+	
 		/** @name Constructors and Destructors.
 		*/
 		//@{
@@ -65,9 +72,9 @@ namespace BALL
 		/**	Assignment from a {\tt vector} of {\tt T}.
 				Copy the contents of the data without changing the boundaries.
 		*/
-		const TRegularData1D& operator = (const DataType& data);
+		const TRegularData1D& operator = (const VectorType& data);
 		//@}
-
+		
 		/**	@name Predicates
 		*/
 		//@{
@@ -75,7 +82,7 @@ namespace BALL
 		*/
 		bool operator == (const TRegularData1D& data) const;
 		//@}
-
+	
 		/**	@name	Accessors
 		*/
 		//@{	
@@ -97,18 +104,18 @@ namespace BALL
 		/**	Return the lower bound
 		*/
 		double getLower() const;
-
+		
 		/**	Return the upper bound
 		*/
 		double getUpper() const;
 
 		/**	Set the upper bound
 		*/
-		void setUpper();
+		void setUpper(double upper);
 
 		/**	Set the lower bound
 		*/
-		void setLower();
+		void setLower(double lower);
 
 		/**	Resize the data.
 				If {\tt new_size} is larger than the current size, the data {\tt vector}
@@ -123,30 +130,37 @@ namespace BALL
 		*/
 		void resize(Size new_size);
 		//@}
-
+	
 		protected:
-		double		lower_;
-		double		upper_;
-		DataType	data_;
+		/**	The lower bound
+		*/
+		double			lower_;
+
+		/**	The upper bound
+		*/
+		double			upper_;
+
+		/**	The data
+		*/
+		VectorType	data_;
 	};
 
 	/**	Default type
 	*/
 	typedef TRegularData1D<float> RegularData1D;
-
-		
+	
 	template <typename T>
-	TRegularData1D::TRegularData1D()
+	TRegularData1D<T>::TRegularData1D()
 	{
 	}
 
 	template <typename T>
-	TRegularData1D::~TRegularData1D()
+	TRegularData1D<T>::~TRegularData1D()
 	{
 	}
 
 	template <typename T>
-	TRegularData1D::TRegularData1D(const TRegularData1D<T>& data)
+	TRegularData1D<T>::TRegularData1D(const TRegularData1D<T>& data)
 		:	lower_(data.lower_),
 			upper_(data.upper_),
 			data_(data.data_)
@@ -154,20 +168,20 @@ namespace BALL
 	}
 
 	template <typename T>
-	void TRegularData1D::clear()
+	void TRegularData1D<T>::clear()
 	{
 		// iterate over the data and reset all values to their default
 		// boundaries and vector size remain unchanged
-		T default;
-		DataType::iterator it = data_.begin();
+		T default_value;
+		VectorType::iterator it = data_.begin();
 		for (; it != data_.end(); ++it)
 		{
-			*it = default;
+			*it = default_value;
 		}
 	}
 
 	template <typename T>
-	void TRegularData1D::destroy()
+	void TRegularData1D<T>::destroy()
 	{
 		// clear the vector and the boundaries
 		data_.clear();
@@ -176,7 +190,7 @@ namespace BALL
 	}
 
 	template <typename T>
-	const TRegularData1D<T>& TRegularData1D::operator = (const TRegularData1D<T>& const data)
+	const TRegularData1D<T>& TRegularData1D<T>::operator = (const TRegularData1D<T>& data)
 	{
 		// copy all members...
 		data_ = data.data_;
@@ -185,14 +199,14 @@ namespace BALL
 	}
 
 	template <typename T>
-	const TRegularData1D<T>& TRegularData1D::operator = (const TRegularData1D<T>::DataType& const data)
+	const TRegularData1D<T>& TRegularData1D<T>::operator = (const TRegularData1D<T>::VectorType& data)
 	{
 		// Copy the data. The boundaries remain unchanged.
 		data_ = data;
 	}
 
 	template <typename T>
-	bool TRegularData1D::operator == (const TRegularData1D<T>& data)
+	bool TRegularData1D<T>::operator == (const TRegularData1D<T>& data) const
 	{
 		return ((lower_ == data.lower_) 
 						&& (upper_ == data.upper_)
@@ -201,7 +215,7 @@ namespace BALL
 	
 	BALL_INLINE
 	template <typename T>
-	const T& TRegularData1D::operator [] (Position index) const
+	const T& TRegularData1D<T>::operator [] (Position index) const
 	{
 		if (index >= data_.size)
 		{
@@ -213,7 +227,7 @@ namespace BALL
 	
 	BALL_INLINE
 	template <typename T>
-	T& TRegularData1D::operator [] (Position index)
+	T& TRegularData1D<T>::operator [] (Position index)
 	{
 		if (index >= data_.size)
 		{
@@ -225,23 +239,37 @@ namespace BALL
 
 	BALL_INLINE
 	template <typename T>
-	double TRegularData1D::getSize() const
+	Size TRegularData1D<T>::getSize() const
 	{
 		return data_.size();
 	}
 	
 	BALL_INLINE
 	template <typename T>
-	double TRegularData1D::getLower() const
+	double TRegularData1D<T>::getLower() const
 	{
 		return lower_;
 	}
 	
 	BALL_INLINE
 	template <typename T>
-	double TRegularData1D::getUpper() const
+	double TRegularData1D<T>::getUpper() const
 	{
 		return upper_;
+	}
+
+	BALL_INLINE
+	template <typename T>
+	void TRegularData1D<T>::setLower(double lower)
+	{
+		lower_ = lower;
+	}
+	
+	BALL_INLINE
+	template <typename T>
+	void TRegularData1D<T>::setUpper(double lower)
+	{
+		upper_ = upper;
 	}
 	
 	template <typename T>
@@ -254,6 +282,6 @@ namespace BALL
 		data_.resize(new_size);
 	}
 		
-}
+} // namespace BALL
 
 #endif // BALL_DATATYPE_REGULARDATA1D_H
