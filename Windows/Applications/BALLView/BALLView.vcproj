@@ -81,7 +81,7 @@
 				OptimizeForProcessor="0"
 				OptimizeForWindowsApplication="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..\include&quot;;&quot;$(ProjectDir)..\..\include&quot;;&quot;$(ProjectDir)..\..\Contrib\regex-0.12&quot;;&quot;$(ProjectDir)..\..\Contrib\ONC_RPC&quot;;&quot;$(QTDIR)\include&quot;"
-				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG;BALL_QT_HAS_THREADS;BALL_PYTHON_SUPPORT"
+				PreprocessorDefinitions="WIN32;NDEBUG;_WINDOWS;QT_DLL;UNICODE;QT_THREAD_SUPPORT;NO_DEBUG;BALL_QT_HAS_THREADS"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
 				RuntimeLibrary="2"
@@ -301,6 +301,24 @@
 				</FileConfiguration>
 			</File>
 			<File
+				RelativePath="..\..\..\source\Applications\Ballview\ballviewTutorial.C">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\Applications\Ballview\ballviewTutorialData.C">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
 				RelativePath="..\..\..\source\APPLICATIONS\BALLVIEW\icons.C">
 				<FileConfiguration
 					Name="Release|Win32">
@@ -403,7 +421,6 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Running MOC on $(InputFileName)"
 						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;"
 						Outputs="$(InputDir)\$(InputName)_moc.C"/>
 				</FileConfiguration>
@@ -414,7 +431,26 @@
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Running MOC on $(InputFileName)"
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;"
+						Outputs="$(InputDir)\$(InputName)_moc.C"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\Applications\Ballview\ballviewTutorial.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
+						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;"
+						Outputs="$(InputDir)\$(InputName)_moc.C"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\Applications\Ballview\ballviewTutorialData.h">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
 						CommandLine="$(QTDIR)\bin\moc &quot;$(InputPath)&quot; -o &quot;$(InputDir)\$(InputName)_moc.C&quot;"
 						Outputs="$(InputDir)\$(InputName)_moc.C"/>
 				</FileConfiguration>
@@ -452,6 +488,9 @@
 						Outputs="$(InputDir)\$(InputName)_moc.C"/>
 				</FileConfiguration>
 			</File>
+			<File
+				RelativePath="..\..\..\source\APPLICATIONS\BALLVIEW\threads.h">
+			</File>
 		</Filter>
 		<Filter
 			Name="MOC Files"
@@ -488,6 +527,24 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\Applications\Ballview\ballviewDemoData_moc.C">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\Applications\Ballview\ballviewTutorial_moc.C">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\Applications\Ballview\ballviewTutorialData_moc.C">
 				<FileConfiguration
 					Name="Release|Win32">
 					<Tool
@@ -562,7 +619,18 @@ $(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName).C&quot; -impl &quot;$(InputDi
 					Name="Release|Win32">
 					<Tool
 						Name="VCCustomBuildTool"
-						Description="Running UIC on $(InputPath)"
+						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
+$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
+"
+						Outputs="&quot;$(InputDir)\$(InputName)Data.h&quot;;&quot;$(InputDir)\$(InputName)Data.C&quot;"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\Applications\Ballview\ballviewTutorial.ui">
+				<FileConfiguration
+					Name="Release|Win32">
+					<Tool
+						Name="VCCustomBuildTool"
 						CommandLine="$(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.h&quot;  &quot;$(InputPath)&quot;
 $(QTDIR)\bin\uic -o &quot;$(InputDir)\$(InputName)Data.C&quot; -impl &quot;$(InputDir)\$(InputName)Data.h&quot; &quot;$(InputPath)&quot;
 "

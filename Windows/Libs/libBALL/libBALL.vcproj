@@ -95,6 +95,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
+				AdditionalOptions="/LTCG"
 				OutputFile="$(ProjectDir)..\..\..\lib\$(ProjectName).lib"
 				AdditionalLibraryDirectories=""
 				SuppressStartupBanner="FALSE"/>
