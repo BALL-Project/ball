@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.sip,v 1.3 2004/05/27 19:49:59 oliver Exp $
+// $Id: geometricObject.sip,v 1.4 2004/07/15 14:02:27 amoll Exp $
 //
 
 class GeometricObject
@@ -17,12 +17,9 @@ class GeometricObject
   // GeometricObject& operator = (const GeometricObject& object) throw();
   GeometricObject() throw();
   GeometricObject(const GeometricObject& /object/) throw();
-  String& getName() throw();
-  bool hasName() const throw();
   bool isValid() const throw();
   const ColorRGBA& getColor() const throw();
   const Composite* getComposite() const throw();
-  const String& getName() const throw();
   void clear() throw();
   // void dump(std::ostream& s = std::cout, Size depth = 0) const throw();
   void getColor(ColorUnit& /red/, ColorUnit& /green/, ColorUnit& /blue/, ColorUnit& /alpha/) const throw();
@@ -30,7 +27,6 @@ class GeometricObject
   void setColor(const ColorRGBA& /color/) throw();
   void setColor(const ColorUnit& /red/, const ColorUnit& /green/, const ColorUnit& /blue/, const ColorUnit& /alpha/ = 1.0) throw();
   void setComposite(const Composite* /composite/) throw();
-  void setName(const String& /name/) throw();
   void swap(GeometricObject& /object/) throw();
   ~GeometricObject() throw();
 };

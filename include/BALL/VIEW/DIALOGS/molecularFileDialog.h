@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.16 2004/05/27 19:49:48 oliver Exp $
+// $Id: molecularFileDialog.h,v 1.17 2004/07/15 14:01:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
@@ -102,14 +102,14 @@ namespace BALL
 					The file type is identified by the filename extension.
 					This method can be used to load molecular files, which were given as command line arguments.
 			*/
-			virtual void openFile(const String& file)
+			virtual System* openFile(const String& file)
 				throw();
 
 			/** Wrapper for the read methods.
 					The filetype String is used to indentify the file type (HIN, PDP, MOL, MOL2).
 					It is possible to give the system a designated name, otherwise it is named by the file.
 			*/
-			virtual void openFile(const String& filename, const String& filetype, 
+			virtual System* openFile(const String& filename, const String& filetype, 
 												const String& system_name)
 				throw();
 
@@ -120,22 +120,22 @@ namespace BALL
 
 			/** Read a PDB file
 			 */
-			bool readPDBFile(String filename, String system_name)
+			System* readPDBFile(String filename, String system_name)
 				throw();
 
 			/** Read a HIN file
 			 */
-			bool readHINFile(String filename, String system_name)
+			System* readHINFile(String filename, String system_name)
 				throw();
 
 			/** Read a MOL file
 			 */
-			bool readMOLFile(String filename, String system_name)
+			System* readMOLFile(String filename, String system_name)
 				throw();
 
 			/** Read a MOL2 file
 			 */
-			bool readMOL2File(String filename, String system_name)
+			System* readMOL2File(String filename, String system_name)
 				throw();
 
 			/** Write a PDB file

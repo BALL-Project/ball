@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.23 2004/04/21 15:06:13 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.24 2004/07/15 14:01:49 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -87,7 +87,7 @@ namespace BALL
 		}
 
 
-		void MolecularFileDialog::openFile(const String& file)
+		System* MolecularFileDialog::openFile(const String& file)
 			throw()
 		{
 			vector<String> fields;
@@ -102,11 +102,11 @@ namespace BALL
 			setWorkingDir(file.getSubstring(0, file.size() - (filename.size() + 1)));
 			String extension = fields[filename.split(fields, ".") -1];
 			filename = filename.getSubstring(0, filename.size() - (extension.size() + 1));
-			openFile(file, extension, filename);
+			return openFile(file, extension, filename);
 		}
 		
 
-		void MolecularFileDialog::openFile(const String& filename, 
+		System* MolecularFileDialog::openFile(const String& filename, 
 																	 		 const String& filetype, 
 																	 		 const String& system_name)
 			throw()
@@ -122,34 +122,36 @@ namespace BALL
 			if (!ok || filename == "/" || filename == "\\") 
 			{
 				Log.error() << "Could not open file " << filename << std::endl;
-				return;
+				return 0;
 			}
 
 			if (filetype.hasSubstring("pdb") || filetype.hasSubstring("PDB") ||
 					filetype.hasSubstring("brk") || filetype.hasSubstring("BRK") ||
 					filetype.hasSubstring("ent") || filetype.hasSubstring("ENT"))
 			{
-				readPDBFile(filename, system_name);
+				return readPDBFile(filename, system_name);
 			}
 			else if (filetype.hasSubstring("HIN") ||
 							 filetype.hasSubstring("hin"))
 			{
-				readHINFile(filename, system_name);
+				return readHINFile(filename, system_name);
 			}
 			else if (filetype.hasSubstring("MOL2") ||
 							 filetype.hasSubstring("mol2"))
 			{
-				readMOL2File(filename, system_name);
+				return readMOL2File(filename, system_name);
 			}
 			else if (filetype.hasSubstring("MOL") ||
 							 filetype.hasSubstring("mol"))
 			{
-				readMOLFile(filename, system_name);
+				return readMOLFile(filename, system_name);
 			}
 			else
 			{
 				Log.error() << "Unknown filetype: " << filetype << std::endl;
 			}
+
+			return 0;
 		}
 
 
@@ -302,7 +304,7 @@ namespace BALL
 		}
 
 
-		bool MolecularFileDialog::readPDBFile(String filename, String system_name)
+		System* MolecularFileDialog::readPDBFile(String filename, String system_name)
 			throw()
 		{
 			setStatusbarText("reading PDB file...");
@@ -322,11 +324,12 @@ namespace BALL
 				return false;
 			}
 
-			return finish_(filename, system_name, system);
+ 			if (!finish_(filename, system_name, system)) return 0;
+			else return system;
 		}
 
 
-		bool MolecularFileDialog::readHINFile(String filename, String system_name)
+		System* MolecularFileDialog::readHINFile(String filename, String system_name)
 			throw()
 		{
 			bool has_periodic_boundary = false;
@@ -374,11 +377,12 @@ namespace BALL
 				*/
 			}
 
-			return finish_(filename, system_name, system);
+ 			if (!finish_(filename, system_name, system)) return 0;
+			else return system;
 		}
 
 
-		bool MolecularFileDialog::readMOLFile(String filename, String system_name)
+		System* MolecularFileDialog::readMOLFile(String filename, String system_name)
 			throw()
 		{
 			setStatusbarText("reading MOL file...");
@@ -398,11 +402,12 @@ namespace BALL
 				return false;
 			}
 
-			return finish_(filename, system_name, system);
+ 			if (!finish_(filename, system_name, system)) return 0;
+			else return system;
 		}
 
 
-		bool MolecularFileDialog::readMOL2File(String filename, String system_name)
+		System* MolecularFileDialog::readMOL2File(String filename, String system_name)
 			throw()
 		{
 			setStatusbarText("reading MOL2 file...");
@@ -422,7 +427,8 @@ namespace BALL
 				return false;
 			}
 
-			return finish_(filename, system_name, system);
+ 			if (!finish_(filename, system_name, system)) return 0;
+			else return system;
 		}
 		
 
