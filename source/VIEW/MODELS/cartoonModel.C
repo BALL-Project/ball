@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.36 2005/02/01 14:27:29 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.37 2005/02/02 16:08:14 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -626,11 +626,13 @@ Processor::Result AddCartoonModel::operator() (Composite& composite)
 			 ss_nr_splines_[&ss] == 0     ||
 			 spline_points_.size() != (spline_vector_.size() - 1) * interpolation_steps_)
 	{
-		Log.error() << "Invalid spline with " << ss_nr_splines_[&ss] 
+#ifdef BALL_VIEW_DEBUG
+		Log.error() << "Invalid spline for with " << ss_nr_splines_[&ss] 
 			          << " nr of splines for SS; " << spline_vector_.size() 
 								<< " spline points and " << spline_points_.size() 
 								<< " interpolated points in" 
 								<< __FILE__ << " " << __LINE__ << std::endl;
+#endif
 	}
 
 	else if ((ss.getType() == SecondaryStructure::STRAND) && (ss.countResidues() > 3))
