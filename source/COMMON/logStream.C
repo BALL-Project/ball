@@ -1,11 +1,12 @@
-// $Id: logStream.C,v 1.2 1999/08/31 22:01:15 oliver Exp $
+// $Id: logStream.C,v 1.3 1999/09/08 13:34:16 oliver Exp $
 
 #include <BALL/COMMON/logStream.h>
 
 #include <sys/time.h>
 #include <stdio.h>
 
-namespace BALL {
+namespace BALL 
+{
 
 	LogStreamBuf::LogStreamBuf() 
 		: streambuf(),
@@ -389,7 +390,7 @@ namespace BALL {
 	}
 
 	// global default logstream
-	LogStream	Log;
+	LogStream	Log(true);
 
 #	ifdef	BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/COMMON/logStream.iC>
