@@ -1,4 +1,4 @@
-// $Id: files.C,v 1.3 2000/06/22 10:21:04 oliver Exp $
+// $Id: files.C,v 1.4 2000/06/27 14:53:33 oliver Exp $
 
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>
@@ -270,7 +270,7 @@ void readPDBFile(const String& filename)
 
 void readSystemFromHINFile(const String& filename, System& system)
 {
-	Log.info() << "reading PDB file " << filename << endl;
+	Log.info() << "reading HIN file " << filename << endl;
 	PDB_files.push_back(SingleFile());
 	PDB_files.back().readHIN(filename);
 	
