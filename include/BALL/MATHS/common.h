@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: common.h,v 1.2 1999/09/17 06:42:54 oliver Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -7,9 +7,11 @@
 #	include <BALL/CONFIG/config.h>
 #endif
 
-namespace  BALL {
+namespace BALL 
+{
 	
-	namespace Maths {
+	namespace Maths 
+	{
 
 		/**	@name	Common Mathematical Functions and Comparisons.
 				{\bf Namespace:} {\tt BALL::Maths}\\
@@ -31,7 +33,8 @@ namespace  BALL {
 		inline 
 		T frac(const T& t)
 		{ 
-			return (t - ((long)t));
+			long tmp = (long)t;
+			return (t - (T)tmp);
 		}
 
 		///
