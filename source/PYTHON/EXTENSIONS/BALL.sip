@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.16 2003/11/24 22:46:30 amoll Exp $
+// $Id: BALL.sip,v 1.17 2003/11/24 23:39:16 amoll Exp $
 //
 //
 //
@@ -286,6 +286,7 @@
 // VIEW/DATATYPE
 %Include colorUnit.sip
 %Include colorRGBA.sip
+%Include vertex1.sip
 %Include vertex2.sip
 
 // VIEW/MODELS
