@@ -1,4 +1,4 @@
-// $Id: structure.doc,v 1.6 2002/01/08 00:44:19 oliver Exp $
+// $Id: structure.doc,v 1.6.4.1 2002/05/12 13:36:27 oliver Exp $
 
 /**	@name	Molecular Structure
 		This chapter contains all relevant information on 
@@ -10,6 +10,7 @@
   //@Include: geometricProperties.h
   //@Include: geometricTransformations.h
   //@Include: fragmentDB.h
+	//@Include: reconstructFragmentProcessor.h
   //@Include: residueChecker.h
 	//@Include: smilesParser.h
   //@Include: rotamerLibrary.h
