@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.19 2004/05/27 19:50:01 oliver Exp $
+// $Id: PDBFile_test.C,v 1.20 2004/11/09 15:24:55 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -14,7 +14,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.19 2004/05/27 19:50:01 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.20 2004/11/09 15:24:55 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -282,6 +282,21 @@ CHECK(void read(Protein& protein))
 RESULT
 
 CHECK(void write(const Molecule& molecule))
+RESULT
+
+
+CHECK([EXTRA] strange_segfault)
+	System s;
+	Protein p;
+	Chain c;
+	Residue r;
+	s.insert(p);
+	p.insert(c);
+	c.insert(r);
+	String name;
+	NEW_TMP_FILE(name);
+	PDBFile f(name, File::OUT);
+	f << s;
 RESULT
 
 /////////////////////////////////////////////////////////////
