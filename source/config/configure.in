@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.20 2000/01/03 15:46:18 oliver Exp $
+dnl    $Id: configure.in,v 1.21 2000/01/03 17:39:51 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -640,7 +640,7 @@ else
 
 		if test "${CXX_VERSION_1}" -lt 6 " ; then
 			AC_MSG_RESULT()
-			AC_MSG_RESULT(Wrong version of CC! CC before release 6 is not ANSO C++ compliant)
+			AC_MSG_RESULT(Wrong version of CC! CC before release 6 is not ANSI C++ compliant)
 			AC_MSG_RESULT(Please upgrade to a more recent version of CC.)
 			AC_MSG_ERROR(aborted)
 		fi
@@ -1039,7 +1039,7 @@ fi
 
 dnl
 dnl		check for ANSI compliant <iostream>
-dnl 	Wee need this for the base classes (ios vs. basic_ios<char>) in socket.h/C
+dnl 	We need this for the base classes (ios vs. basic_ios<char>) in socket.h/C
 dnl
 AC_MSG_CHECKING(for ANSI compliant iostream)
 BALL_HAS_ANSI_IOSTREAM=no
@@ -1057,6 +1057,60 @@ AC_TRY_COMPILE(
 	BALL_HAS_ANSI_IOSTREAM=yes
 )	
 AC_MSG_RESULT($BALL_HAS_ANSI_IOSTREAM)
+
+dnl
+dnl		check for ANSI or ARM style access modification
+dnl		either (ARM style) Base::foo or (ANSI style) using Base::foo 	
+dnl
+AC_MSG_CHECKING(for ANSI or ARM style access modification)
+BALL_CFG_USING_METHOD_DIRECTIVE=none
+AC_TRY_COMPILE(
+	[
+		class A
+		{
+			protected: void foo(){};
+		};
+
+		class B : public A
+		{
+			public: using A::foo;
+		};
+	],
+	[	
+		B b;
+		b.foo();
+ 	],
+	BALL_CFG_USING_METHOD_DIRECTIVE=ANSI
+)	
+if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = none ; then
+	AC_TRY_COMPILE(
+		[
+			class A
+			{
+				protected: void foo(){};
+			};
+
+			class B : public A
+			{
+				public: A::foo;
+			};
+		],
+		[	
+			B b;
+			b.foo();
+		],
+		BALL_CFG_USING_METHOD_DIRECTIVE=ARM
+	)	
+fi
+AC_MSG_RESULT(${BALL_CFG_USING_METHOD_DIRECTIVE})
+if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = ANSI ; then
+	AC_DEFINE(BALL_CFG_USING_METHID_DIRECTIVE)
+fi
+if test ${BALL_CFG_USING_METHOD_DIRECTIVE} = none ; then
+	AC_MSG_RESULT(Compiler does not understand ARM or ANSI style method access modification.)
+	AC_ERROR(aborted.)
+fi
+
 
 dnl
 dnl		Checks for typedefs, structures, and compiler characteristics.
