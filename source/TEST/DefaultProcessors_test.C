@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: DefaultProcessors_test.C,v 1.8 2003/05/23 06:47:50 oliver Exp $
+// $Id: DefaultProcessors_test.C,v 1.9 2005/02/09 13:02:41 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,7 +12,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(DefaultProcessors, "$Id: DefaultProcessors_test.C,v 1.8 2003/05/23 06:47:50 oliver Exp $")
+START_TEST(DefaultProcessors, "$Id: DefaultProcessors_test.C,v 1.9 2005/02/09 13:02:41 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -50,15 +50,20 @@ CHECK(AssignRadiusProcessor::AssignRadiusProcessor())
 RESULT
 
 
-AssignRadiusProcessor arp;
 CHECK(AssignRadiusProcessor::AssignRadiusProcessor(const String& filename))
-	TEST_EXCEPTION(Exception::FileNotFound, AssignRadiusProcessor arp("XXX"))
-	arp = AssignRadiusProcessor("data/DefaultProcessor_test.1");
-	TEST_EQUAL(arp.getFilename(), "data/DefaultProcessor_test.1")
+	AssignRadiusProcessor* arp = 0;
+	arp = new AssignRadiusProcessor("data/DefaultProcessor_test.1");
+	ABORT_IF(arp == 0)
+	TEST_EQUAL(arp->getFilename(), "data/DefaultProcessor_test.1")
+	delete arp;
+	arp = 0;
+	TEST_EXCEPTION(Exception::FileNotFound, arp = new AssignRadiusProcessor("XXX"))
+	delete arp;
 RESULT
 
-
+AssignRadiusProcessor arp;
 CHECK(AssignRadiusProcessor::start())
+	arp.setFilename("data/DefaultProcessor_test.1");
   TEST_EQUAL(arp.start(), true) 
 RESULT
 
@@ -134,7 +139,6 @@ RESULT
 
 
 // tests for class AssignChargeProcessor::
-
 CHECK(AssignChargeProcessor::AssignChargeProcessor())
   AssignChargeProcessor acp;
 	TEST_REAL_EQUAL(acp.getTotalCharge(), 0)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.63 2004/02/24 13:05:47 anker Exp $
+// $Id: HINFile.C,v 1.64 2005/02/09 13:02:41 oliver Exp $
 //
 
 #include <BALL/FORMAT/HINFile.h>
@@ -51,7 +51,13 @@ namespace BALL
 	{
 		if (file.getName() != "")
 		{
-			open(file.getName());
+			try
+			{	
+				open(file.getName());
+			}
+			catch (Exception::FileNotFound)
+			{
+			}
 		}
 	}
 

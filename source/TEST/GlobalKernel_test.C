@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: GlobalKernel_test.C,v 1.4 2002/12/12 11:34:41 oliver Exp $
+// $Id: GlobalKernel_test.C,v 1.5 2005/02/09 13:02:41 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 #include <BALL/KERNEL/chain.h>
 ///////////////////////////
 
-START_TEST(GlobalKernel, "$Id: GlobalKernel_test.C,v 1.4 2002/12/12 11:34:41 oliver Exp $")
+START_TEST(GlobalKernel, "$Id: GlobalKernel_test.C,v 1.5 2005/02/09 13:02:41 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -66,7 +66,7 @@ CHECK("cloneBonds")
 	TEST_EQUAL(a211.getBond(1)->getType(), Bond::TYPE__PEPTIDE)
 	TEST_EQUAL(*a211.getBond(1)->getFirstAtom() < *a211.getBond(1)->getSecondAtom(), true )
 
-	TEST_EQUAL(a212.isBoundTo(a221), true)
+	TEST_NOT_EQUAL(a212.getBond(1), 0)
 	TEST_EQUAL(a212.getBond(1)->getName(), "3.")
 	TEST_EQUAL(a212.getBond(1)->getOrder(), Bond::ORDER__TRIPLE)
 	TEST_EQUAL(a212.getBond(1)->getType(), Bond::TYPE__HYDROGEN)
