@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.39 2005/01/19 16:30:56 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.40 2005/01/21 01:33:58 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -12,6 +12,7 @@
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/forEach.h>
+#include <BALL/KERNEL/bond.h>
 
 #include <BALL/VIEW/PRIMITIVES/line.h>
 #include <BALL/MATHS/analyticalGeometry.h>
@@ -98,9 +99,34 @@ namespace BALL
 			// if have already visited some residues and this reside was not in the same
 			// chain, build the backbone for the last chain
 			// this prevents building backbones between different chains
-			if (last_parent_ != 0 &&
-					residue.getParent()->getParent() != last_parent_ &&
-					spline_vector_.size() > 0) 
+			bool build = (last_parent_ != 0 &&
+										residue.getParent()->getParent() != last_parent_ &&
+										spline_vector_.size() > 0);
+			if (!build)
+			{
+				AtomConstIterator ait = residue.beginAtom();
+				for (; +ait; ait++)
+				{
+					if (ait->getName() == "N")
+					{
+						bool has_precursor = false;
+						AtomBondConstIterator bit = ait->beginBond();
+						for (; +bit; ++bit)
+						{
+							if (bit->getPartner(*ait)->getParent() != &residue)
+							{
+								has_precursor = true;
+								break;
+							}
+						}
+
+						if (!has_precursor) build = true;
+						break;
+					}
+				}
+			}
+
+			if (build)
 			{
 				createBackbone_();
 				clear_();

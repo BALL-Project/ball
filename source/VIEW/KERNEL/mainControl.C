@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.158.2.5 2005/01/14 14:36:51 amoll Exp $
+// $Id: mainControl.C,v 1.158.2.6 2005/01/21 01:30:56 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -989,10 +989,7 @@ namespace BALL
 					}
 					nr++;
 
-					if (!roots.has(&composite->getRoot()))
-					{
-						roots.insert(&composite->getRoot());
-					}
+					roots.insert(&composite->getRoot());
 				}				
 				
 			}

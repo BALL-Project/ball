@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.78.2.1 2004/12/23 00:03:40 amoll Exp $
+// $Id: molecularStructure.C,v 1.78.2.2 2005/01/21 01:31:22 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -685,19 +685,60 @@ namespace BALL
 				return;
 			}
 
+			a1->deselect();
+			a2->deselect();
+
 			StructureMapper sm(*a1, *a2);
 			double	rmsd = sm.calculateRMSD();
 
-			String rmsd_text("Calcuted RMSD: " + String(rmsd));
-			if (sm.getBijection().size() != a1->countAtoms())
+			String rmsd_text("Calcuted RMSD: " + String(rmsd) + " A.");
+			if (sm.getBijection().size() == a1->countAtoms() &&
+			    sm.getBijection().size() == a2->countAtoms())
 			{
-				Index not_matched = max(a1->countAtoms() - sm.getBijection().size(), 
-																a2->countAtoms() - sm.getBijection().size());
-				String warning("WARNING: " + String(not_matched) + " atoms were not mapped.");
-				rmsd_text += "  WARNING: not all atoms were mapped.";
+				setStatusbarText(rmsd_text + ". All atom could be matched.", true);
+				return;
 			}
 
+			Index not_matched = max(a1->countAtoms() - sm.getBijection().size(), 
+															a2->countAtoms() - sm.getBijection().size());
+			rmsd_text += "WARNING: " + String(not_matched) + " atoms were not mapped and are now selected";
 			setStatusbarText(rmsd_text, true);
+
+			HashSet<Atom*> atom_set;
+			AtomIterator ait = a1->beginAtom();
+			for (; +ait; ++ait)
+			{
+				atom_set.insert(&*ait);
+			}
+
+			ait = a2->beginAtom();
+			for (; +ait; ++ait)
+			{
+				atom_set.insert(&*ait);
+			}
+
+			StructureMapper::AtomBijection& ab = 
+				(StructureMapper::AtomBijection&) sm.getBijection();
+
+			StructureMapper::AtomBijection::iterator ab_it= ab.begin();
+			for (; ab_it != ab.end(); ++ab_it)
+			{
+				atom_set.erase(ab_it->first);
+				atom_set.erase(ab_it->second);
+			}
+
+			HashSet<Atom*>::Iterator hit = atom_set.begin();
+			for (; +hit; ++hit)
+			{
+				(*hit)->select();
+				getMainControl()->getSelection().insert(*hit);
+			}
+
+			getMainControl()->updateRepresentationsOf(*a1, true);
+			getMainControl()->updateRepresentationsOf(*a2, true);
+
+			NewSelectionMessage* new_message = new NewSelectionMessage;
+			notify_(new_message);
 		}
 
 		void MolecularStructure::mapProteins()

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.23 2005/01/19 22:47:54 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.24 2005/01/21 01:34:33 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -1515,11 +1515,6 @@ namespace BALL
 		
 		bool GLRenderer::enableVertexBuffers(bool state)
 		{
-			#ifndef GL_ARB_vertex_buffer_object
- 				use_vertex_buffer_ = false;
-				return false;
-			#endif
-
 			use_vertex_buffer_ = state;
 			return true;
 		}
