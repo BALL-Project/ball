@@ -1,4 +1,4 @@
-// $Id: XDRPersistenceManager.h,v 1.5 2000/03/05 11:20:10 oliver Exp $
+// $Id: XDRPersistenceManager.h,v 1.6 2000/03/07 08:39:20 oliver Exp $
 
 #ifndef BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
 #define BALL_CONCEPT_XDRPERSISTENCEMANAGER_H
@@ -310,7 +310,7 @@ namespace BALL
 		
 		/**	The XDR read buffer
 		*/
-		char	read_buffer_[];
+		char*	read_buffer_;
 
 		/**	The XDR struct used to write to
 		*/
@@ -318,7 +318,7 @@ namespace BALL
 		
 		/**	The XDR write buffer
 		*/
-		char	write_buffer_[];
+		char*	write_buffer_;
 	};
 
 } // namespace BALL
