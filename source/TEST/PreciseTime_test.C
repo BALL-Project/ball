@@ -1,4 +1,4 @@
-// $Id: Time_test.C,v 1.3 2000/10/16 20:04:34 oliver Exp $
+// $Id: PreciseTime_test.C,v 1.1 2000/10/18 11:59:12 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,39 +7,39 @@
 
 ///////////////////////////
 
-START_TEST(Time, "$Id: Time_test.C,v 1.3 2000/10/16 20:04:34 oliver Exp $")
+START_TEST(PreciseTime, "$Id: PreciseTime_test.C,v 1.1 2000/10/18 11:59:12 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
-// tests for class Time::
+// tests for class PreciseTime::
 
-Time* t_ptr;
-CHECK(Time::Time())
-	t_ptr = new Time;
+PreciseTime* t_ptr;
+CHECK(PreciseTime::PreciseTime())
+	t_ptr = new PreciseTime;
 	TEST_NOT_EQUAL(t_ptr, 0)
 RESULT
 
-CHECK(Time::~Time())
+CHECK(PreciseTime::~PreciseTime())
 	delete t_ptr;
 RESULT
 
-CHECK(Time::getSeconds() const )
-	Time t;
+CHECK(PreciseTime::getSeconds() const )
+	PreciseTime t;
 	TEST_EQUAL(t.getSeconds(), 0)
 RESULT
 
 
-CHECK(Time::getMicroSeconds() const )
-	Time t;
+CHECK(PreciseTime::getMicroSeconds() const )
+	PreciseTime t;
 	TEST_EQUAL(t.getMicroSeconds(), 0)
 RESULT
 
 
-CHECK(Time::set(long secs, long usecs) throw())
-	Time t;
+CHECK(PreciseTime::set(long secs, long usecs) throw())
+	PreciseTime t;
 	TEST_EQUAL(t.getSeconds(), 0)
 	TEST_EQUAL(t.getMicroSeconds(), 0)
 	t.set(1,1);
@@ -51,17 +51,17 @@ CHECK(Time::set(long secs, long usecs) throw())
 RESULT
 
 
-CHECK(Time::Time(const Time& time))
-	Time t1;
+CHECK(PreciseTime::PreciseTime(const PreciseTime& time))
+	PreciseTime t1;
 	t1.set(12345678, 23456789);
-	Time t2(t1);
+	PreciseTime t2(t1);
 	TEST_EQUAL(t2, t1)
 	TEST_EQUAL(t2.getSeconds(), 12345678)
 	TEST_EQUAL(t2.getMicroSeconds(), 23456789)
 RESULT
 
-CHECK(Time::set(const Time& time) throw())	
-	Time t1, t2;
+CHECK(PreciseTime::set(const PreciseTime& time) throw())	
+	PreciseTime t1, t2;
 	t1.set(12345678, 23456789);
 	t2.set(t1);
 	TEST_EQUAL(t2, t1)
@@ -70,8 +70,8 @@ CHECK(Time::set(const Time& time) throw())
 RESULT
 
 
-CHECK(Time::Time& operator = (const Time& time) throw())
-	Time t1, t2;
+CHECK(PreciseTime::PreciseTime& operator = (const PreciseTime& time) throw())
+	PreciseTime t1, t2;
 	t1.set(12345678, 23456789);
 	t2 = t1;
 	TEST_EQUAL(t2, t1)
@@ -79,9 +79,9 @@ CHECK(Time::Time& operator = (const Time& time) throw())
 	TEST_EQUAL(t2.getMicroSeconds(), 23456789)
 RESULT
 
-CHECK(void Time::clear() throw())
-	Time t1;
-	Time t2;
+CHECK(void PreciseTime::clear() throw())
+	PreciseTime t1;
+	PreciseTime t2;
 	TEST_EQUAL(t1, t2)
 	TEST_EQUAL(t1.getSeconds(), 0)
 	TEST_EQUAL(t1.getMicroSeconds(), 0)
@@ -93,8 +93,8 @@ CHECK(void Time::clear() throw())
 RESULT
 
 
-CHECK(Time::bool operator < (const Time& time) const  throw())
-	Time t1, t2;
+CHECK(PreciseTime::bool operator < (const PreciseTime& time) const  throw())
+	PreciseTime t1, t2;
 	t1.set(12345678, 23456789);
 	t2.set(12345679, 23456789);
 	TEST_EQUAL((t2 < t1), false)
@@ -108,8 +108,8 @@ CHECK(Time::bool operator < (const Time& time) const  throw())
 RESULT
 
 
-CHECK(Time::bool operator > (const Time& time) const  throw())
-	Time t1, t2;
+CHECK(PreciseTime::bool operator > (const PreciseTime& time) const  throw())
+	PreciseTime t1, t2;
 	t1.set(12345678, 23456789);
 	t2.set(12345679, 23456789);
 	TEST_EQUAL((t2 > t1), true)
@@ -123,8 +123,8 @@ CHECK(Time::bool operator > (const Time& time) const  throw())
 RESULT
 
 
-CHECK(Time::bool operator == (const Time& time) const  throw())
-	Time t1, t2;
+CHECK(PreciseTime::bool operator == (const PreciseTime& time) const  throw())
+	PreciseTime t1, t2;
 	t1.set(12345678, 23456789);
 	t2.set(12345679, 23456789);
 	TEST_EQUAL((t2 == t1), false)
@@ -138,11 +138,11 @@ CHECK(Time::bool operator == (const Time& time) const  throw())
 RESULT
 
 
-CHECK(Time::now())
-	Time t1(Time::now());
+CHECK(PreciseTime::now())
+	PreciseTime t1(PreciseTime::now());
 	TEST_NOT_EQUAL(t1.getSeconds(), 0)
 	TEST_NOT_EQUAL(t1.getMicroSeconds(), 0)
-	Time t2(Time::now());
+	PreciseTime t2(PreciseTime::now());
 	TEST_NOT_EQUAL(t2.getSeconds(), 0)
 	TEST_NOT_EQUAL(t2.getMicroSeconds(), 0)
 	TEST_EQUAL((t1 < t2), true)
@@ -150,16 +150,16 @@ CHECK(Time::now())
 RESULT
 
 
-CHECK(Time::write(PersistenceManager& pm) const )
+CHECK(PreciseTime::write(PersistenceManager& pm) const )
   //BAUSTELLE
 RESULT
 
 
-CHECK(Time::read(PersistenceManager& pm))
+CHECK(PreciseTime::read(PersistenceManager& pm))
   //BAUSTELLE
 RESULT
 
-CHECK(ostream& operator << (ostream& os, const Time& time))
+CHECK(ostream& operator << (ostream& os, const PreciseTime& time))
 	// BAUSTELLE
 RESULT
 

@@ -102,7 +102,7 @@ EXECUTABLES = \
 	String_test\
 	StructureMapper_test\
 	System_test\
-	Time_test\
+	PreciseTime_test\
 	Timer_test\
 	TimeStamp_test\
 	TransformationApplicator_test\
