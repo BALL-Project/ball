@@ -4,7 +4,7 @@ THISLIB=$(LIBNAME)
 
 CPP_SOURCES=\
 	analyticalSES.C\
-	connolly.C\	
+	connolly.C\
 	defaultProcessors.C\
 	fragmentDB.C\
 	geometricProperties.C\

@@ -1,6 +1,6 @@
-// $Id: defaultProcessors.C,v 1.1 1999/09/17 11:17:49 oliver Exp $
+// $Id: defaultProcessors.C,v 1.2 1999/09/17 13:47:09 oliver Exp $
 
-#include <BALL/KERNEL/defaultProcessors.h>
+#include <BALL/STRUCTURE/defaultProcessors.h>
 
 #include <BALL/KERNEL/atom.h>
 #include <BALL/KERNEL/PSE.h>
@@ -65,27 +65,10 @@ namespace BALL
 
 	Processor::Result AssignRadiusProcessor::operator () (Atom& atom)
 	{
-		String		name(":");
+		String		name;
 		String		atom_name;
 		String		res_name;
 		float			radius;
-
-
-		if (RTTI<Residue>::isKindOf(*atom.getFragment()))
-		{
-			Residue* residue;
-			residue = RTTI<Residue>::castTo(*atom.getFragment());
-				
-			if (residue->isNTerminal())
-			{
-				name = "-N:";
-			}
-
-			if (residue->isCTerminal())
-			{
-				name = "-C:";
-			}
-		}
 
 		Fragment* frag = atom.getFragment();
 		if (frag != 0)
@@ -95,10 +78,38 @@ namespace BALL
 			res_name = "";
 		}
 		atom_name = atom.getName().trim();
-		name.insert(0, res_name);
-		name.append(atom_name);
 
-		if (table_.has(name.c_str())){
+		if (RTTI<Residue>::isKindOf(*atom.getFragment()))
+		{
+			Residue* residue;
+			residue = RTTI<Residue>::castTo(*atom.getFragment());
+				
+			String suffix("-");
+			if (residue->isNTerminal())
+			{
+				suffix = "-N";
+			}
+
+			if (residue->isCTerminal())
+			{
+				suffix = "-C";
+			}
+
+			if (residue->hasProperty(Residue::PROPERTY__HAS_SSBOND))
+			{
+				suffix += "S";
+			}
+
+			if (suffix != "-")
+			{
+				res_name += suffix;				
+			}
+		}
+
+		name = res_name + ":" + atom_name;
+
+		if (table_.has(name.c_str()))
+		{
 			number_of_assignments_++;
 			radius = (*table_.find(name.c_str())).second;
 			atom.setRadius(radius);
@@ -129,28 +140,26 @@ namespace BALL
 
 	bool AssignRadiusProcessor::buildTable_()
 	{
-		FILE*					infile;
-		char					residue_name[1024], atom_name[1024], key[2048];
-		float					value;
+		ifstream	infile(filename_.c_str());
 
-		infile = fopen(filename_.c_str(), "r");
-
-		if (infile == NULL) 
+		if (!infile)
 		{
-			Log.level(LogStream::ERROR) << "Cannot open file: " << filename_ << endl;
-			return false;
+			infile.close();
+			throw Exception::FileNotFound(__FILE__, __LINE__, filename_);
 		}
 
 		table_.destroy();
 					
-		while (!feof(infile))
+		String line;
+		String fields[2];
+		while (infile)
 		{
-			fscanf(infile, "%s %s %f", &residue_name[0], &atom_name[0], &value);
-			sprintf(&key[0], "%s:%s", residue_name, atom_name);
-			table_[key] = value;
+			line.getline(infile);
+			line.split(fields, 2);
+			table_[fields[0]] = fields[1].toFloat();
 		}
 					
-		fclose(infile);
+		infile.close();
 
 		return true;
 	}
@@ -199,26 +208,10 @@ namespace BALL
 
 	Processor::Result AssignChargeProcessor::operator () (Atom& atom)
 	{
-		String		name(":");
+		String		name;
 		String		atom_name;
 		String		res_name;
 		float			charge;
-
-		if (RTTI<Residue>::isKindOf(*atom.getFragment()))
-		{
-			Residue*	residue;
-			residue = RTTI<Residue>::castTo(*atom.getFragment());
-				
-			if (residue->isNTerminal())
-			{
-				name = "-N:";
-			}
-
-			if (residue->isCTerminal())
-			{
-				name = "-C:";
-			}
-		}
 
 		Fragment* frag = atom.getFragment();
 		if (frag != 0)
@@ -228,12 +221,41 @@ namespace BALL
 			res_name = "";
 		}
 		atom_name = atom.getName().trim();
-		name.insert(0, res_name);
-		name.append(atom_name);
 
-		if (table_.has(name.c_str())){
+		if (RTTI<Residue>::isKindOf(*atom.getFragment()))
+		{
+			Residue* residue;
+			residue = RTTI<Residue>::castTo(*atom.getFragment());
+				
+			String suffix("-");
+			if (residue->isNTerminal())
+			{
+				suffix = "-N";
+			}
+
+			if (residue->isCTerminal())
+			{
+				suffix = "-C";
+			}
+
+			if (residue->hasProperty(Residue::PROPERTY__HAS_SSBOND))
+			{
+				suffix += "S";
+			}
+
+			if (suffix != "-")
+			{
+				res_name += suffix;				
+			}
+		}
+
+		name = res_name + ":" + atom_name;
+
+
+		if (table_.has(name.c_str()))
+		{
 			number_of_assignments_++;
-			charge = (*table_.find(name.c_str())).second;
+			charge = (*table_.find(name)).second;
 			atom.setCharge(charge);
 			total_charge_ += charge;
 		} else {
@@ -242,17 +264,19 @@ namespace BALL
 			name.append(":");
 			name.append(atom_name);
 			
-			if (table_.has(name.c_str())){
+			if (table_.has(name))
+			{
 				number_of_assignments_++;
-				charge = (*table_.find(name.c_str())).second;
+				charge = (*table_.find(name)).second;
 				atom.setCharge(charge);
 				total_charge_ += charge;
 			} else {
 				// try wildcard matching
 				name = "*:" + atom_name;
-				if (table_.has(name.c_str())){
+				if (table_.has(name))
+				{
 					number_of_assignments_++;
-					charge = (*table_.find(name.c_str())).second;
+					charge = (*table_.find(name)).second;
 					atom.setCharge(charge);
 					total_charge_ += charge;
 				} else {
@@ -261,7 +285,6 @@ namespace BALL
 				}
 			}
 		}
-
 				
 		return Processor::CONTINUE;
 	}

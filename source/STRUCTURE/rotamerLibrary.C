@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.C,v 1.7 1999/08/31 22:01:18 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.8 1999/09/17 13:47:09 oliver Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 #include <BALL/SYSTEM/file.h>
@@ -237,10 +237,12 @@ namespace BALL
 		number_of_torsions_ = number_of_torsions;
 			
 
-		// build hash map
-		for (AtomIterator atom_it = side_chain_.beginAtom(); atom_it != side_chain_.endAtom(); ++atom_it)
+		// build hash map and store the original atom coordinates
+		AtomIterator atom_it = side_chain_.beginAtom();
+		for (; atom_it != side_chain_.endAtom(); ++atom_it)
 		{
-			atom_name_map_.insert((*atom_it).getName(),&(*atom_it));
+			atom_name_map_.insert(atom_it->getName(),&(*atom_it));
+			original_coordinates_.push_back(atom_it->getPosition());
 		}
 
 		// identify anchor_atoms
@@ -359,15 +361,24 @@ namespace BALL
 			moveable_atoms_chi2_(residue_rotamer_set.moveable_atoms_chi2_),
 			moveable_atoms_chi3_(residue_rotamer_set.moveable_atoms_chi3_),
 			moveable_atoms_chi4_(residue_rotamer_set.moveable_atoms_chi4_),
-			number_of_torsions_(residue_rotamer_set.number_of_torsions_)
+			number_of_torsions_(residue_rotamer_set.number_of_torsions_),
+			original_coordinates_(residue_rotamer_set.original_coordinates_)
 	{
-		anchor_atoms_[0] = residue_rotamer_set.anchor_atoms_[0]; 
-		anchor_atoms_[1] = residue_rotamer_set.anchor_atoms_[1]; 
-		anchor_atoms_[2] = residue_rotamer_set.anchor_atoms_[2]; 
-
 		for (AtomIterator it = side_chain_.beginAtom(); +it; ++it)
 		{
 			atom_name_map_.insert(it->getName(), &(*it));
+		}
+
+		// identify anchor_atoms
+		if ( atom_name_map_.has("CA")  && atom_name_map_.has("C") && atom_name_map_.has("N")) 
+		{
+			anchor_atoms_[0] = atom_name_map_["CA"];
+			anchor_atoms_[1] = atom_name_map_["C"];
+			anchor_atoms_[2] = atom_name_map_["N"];
+		} else {
+			Log.error() << " ResidueRotamerSet: An anchor atom is missing. " << endl;
+			valid_ = false;
+			return;
 		}
 	}
 
@@ -377,17 +388,31 @@ namespace BALL
 	}
 
 	// Assignment Operator
-	ResidueRotamerSet& ResidueRotamerSet::operator=(const ResidueRotamerSet& residue_rotamer_set)
+	ResidueRotamerSet& ResidueRotamerSet::operator = (const ResidueRotamerSet& residue_rotamer_set)
 	{
 		if (this != &residue_rotamer_set)
 		{
 			name_ = residue_rotamer_set.getName();
 			side_chain_ = residue_rotamer_set.side_chain_;
+			original_coordinates_ = residue_rotamer_set.original_coordinates_;
 			atom_name_map_ = residue_rotamer_set.atom_name_map_;
 
-			anchor_atoms_[0] = residue_rotamer_set.anchor_atoms_[0]; 
-			anchor_atoms_[1] = residue_rotamer_set.anchor_atoms_[1]; 
-			anchor_atoms_[2] = residue_rotamer_set.anchor_atoms_[2]; 
+			for (AtomIterator it = side_chain_.beginAtom(); +it; ++it)
+			{
+				atom_name_map_.insert(it->getName(), &(*it));
+			}
+
+			// identify anchor_atoms
+			if ( atom_name_map_.has("CA")  && atom_name_map_.has("C") && atom_name_map_.has("N")) 
+			{
+				anchor_atoms_[0] = atom_name_map_["CA"];
+				anchor_atoms_[1] = atom_name_map_["C"];
+				anchor_atoms_[2] = atom_name_map_["N"];
+			} else {
+				Log.error() << " ResidueRotamerSet: An anchor atom is missing. " << endl;
+				valid_ = false;
+				return (*this);
+			}
 
 			rotamers_ = residue_rotamer_set.rotamers_;
 			moveable_atoms_chi1_ = residue_rotamer_set.moveable_atoms_chi1_;
@@ -427,6 +452,13 @@ namespace BALL
 	// given rotamer (torsion angles) 
 	Residue* ResidueRotamerSet::buildRotamer(const Rotamer& rotamer) 
 	{
+		// restore original atom coordinates (see setRotamer)
+		AtomIterator atom_it = side_chain_.beginAtom();
+		for (Size index = 0; +atom_it && (index < original_coordinates_.size()); ++atom_it, ++index)
+		{
+			atom_it->setPosition(original_coordinates_[index]);
+		}
+
 		// Transform the residue template side_chain_ such that the torsion angles of the template
 		// are set to the values stored in rotamer
 		setTorsionAngle_(moveable_atoms_chi1_, rotamer.chi1);
@@ -459,6 +491,13 @@ namespace BALL
 	// Return the residue of the residue rotamer set
 	Residue&	ResidueRotamerSet::getResidue()
 	{
+		// restore the original atom coordinates
+		AtomIterator atom_it = side_chain_.beginAtom();
+		for (Size index = 0; +atom_it && (index < original_coordinates_.size()); ++atom_it, ++index)
+		{
+			atom_it->setPosition(original_coordinates_[index]);	
+		}
+		
 		return side_chain_;
 	}
 
@@ -559,6 +598,17 @@ namespace BALL
 	// Transform the side chain such that the torsion angles are identical to the angles of the rotamer
 	bool ResidueRotamerSet::setRotamer(Residue& residue, const Rotamer& rotamer) 
 	{
+		// restore the original side chain atom coordinates (necessary to reproduce rotamers
+		// with the desired precision).
+		// The application of many successive transformations on the same residue
+		// is possible, but leads to slightly different coordinates for
+		// the same rotamer at different times.
+		AtomIterator atom_it = side_chain_.beginAtom();
+		for (Size index = 0; +atom_it && (index < original_coordinates_.size()); ++atom_it, ++index)
+		{
+			atom_it->setPosition(original_coordinates_[index]);	
+		}
+		
 		// Transform the residue template side_chain_ such that the torsion angles of the template
 		// are set to the values stored in rotamer
 		if (number_of_torsions_ > 0)
@@ -590,8 +640,7 @@ namespace BALL
 		Size counter = 0;
 
 		// Search for the 3 backbone atoms that are needed for calculating the transformation
-		AtomIterator atom_it = residue.beginAtom();
-		for (; atom_it != residue.endAtom(); ++atom_it)
+		for (atom_it = residue.beginAtom(); atom_it != residue.endAtom(); ++atom_it)
 		{
 			if ((*atom_it).getName() == "CB")
 			{
@@ -610,7 +659,7 @@ namespace BALL
 			}
 		}
 
-		if ( counter < 3) 
+		if (counter < 3) 
 		{
 			return false;
 		}

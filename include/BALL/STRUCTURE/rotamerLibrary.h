@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.h,v 1.8 1999/09/17 11:16:37 oliver Exp $
+// $Id: rotamerLibrary.h,v 1.9 1999/09/17 13:47:01 oliver Exp $
 
 #ifndef BALL_STRUCTURE_ROTAMERLIBRARY_H
 #define BALL_STRUCTURE_ROTAMERLIBRARY_H
@@ -238,6 +238,10 @@ namespace BALL
 		/*_	number of valid torsions of the side chain
 		*/
 		Size number_of_torsions_;
+
+		/*_	original atom coordinates of side_chain_
+		*/
+		vector<Vector3>				original_coordinates_;
 
 		//@}
 	};
