@@ -62,6 +62,16 @@
 #undef BALL_OS_IRIX64
 
 
+// define if gethostname is supported
+#undef BALL_HAVE_GETHOSTNAME
+
+// define if sysinfo(SI_HOSTNAME,) has to be used instead of
+// gethostname (older Solaris variants)
+#undef BALL_HAVE_SYSINFO
+
+// define if gethostname is not in the unistd.h header
+#undef BALL_DEFINE_GETHOSTNAME
+
 // Define if you have the inet_aton function.  
 // Note: inet_aton is a marginally improved version of inet_addr
 // If configure finds inet_aton, HAVE_INET_ATON is set and used

@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.46 2000/01/24 21:00:47 oliver Exp $
+dnl    $Id: configure.in,v 1.47 2000/01/25 16:23:57 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1339,8 +1339,8 @@ AC_DEFINE_UNQUOTED(BALL_ULONG64_TYPE, ${BALL_ULONG64_TYPE})
 dnl
 dnl		check whether vsnprintf is defined
 dnl
-AC_CHECK_FUNC(vsnprintf)
-if test "${HAVE_VSNPRINTF+set}" = set ; then
+AC_CHECK_FUNCS(vsnprintf, HAVE_VSNPRINTF=1)
+if test "${HAVE_VSNPRINTF}" = 1 ; then
 	AC_DEFINE(BALL_HAVE_VSNPRINTF)
 fi
 
@@ -1349,6 +1349,43 @@ dnl   check for some network stuff needed for socket class
 dnl   this test tries to identify the neccessary libraries
 dnl		solaris needs xnet or socket/nsl to link the tcp stuff
 dnl  	
+
+dnl
+dnl		check whether we need sysinfo or gethostname
+dnl
+		
+AC_CHECK_FUNCS(gethostname, HAVE_GETHOSTNAME=1)
+if test "${HAVE_GETHOSTNAME}" = 1 ; then
+	AC_DEFINE(BALL_HAVE_GETHOSTNAME)
+else
+	AC_CHECK_FUNCS(sysinfo, HAVE_SYSINFO=1)
+	if test "${HAVE_SYSINFO}" = 1  ; then
+		AC_DEFINE(BALL_HAVE_SYSINFO)
+	fi
+fi
+
+dnl
+dnl check for gethostname in the header
+dnl
+if test "${HAVE_GETHOSTNAME+unset}" != unset ; then
+	AC_MSG_CHECKING(for gethostname in unistd.h)
+	AC_TRY_COMPILE(
+		[	
+			#include <unistd.h>
+		],
+		[
+			char name[1024];
+			gethostname(name, 1023);
+		],
+		HAVE_GETHOSTNAME_HEADER=1
+	)
+	if test "${HAVE_GETHOSTNAME_HEADER+set}" != set ; then
+		AC_MSG_RESULT(no)
+		AC_DEFINE(BALL_DEFINE_GETHOSTNAME)
+	else
+		AC_MSG_RESULT(yes)
+	fi
+fi
 
 dnl
 dnl 	first check if everythings already defined in libc
