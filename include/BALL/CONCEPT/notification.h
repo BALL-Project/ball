@@ -1,4 +1,4 @@
-// $Id: notification.h,v 1.11 2001/07/15 16:35:00 oliver Exp $
+// $Id: notification.h,v 1.12 2001/07/15 18:00:37 amoll Exp $
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H
@@ -10,8 +10,6 @@
 #ifndef BALL_COMMON_RTTI_H
 #	include <BALL/COMMON/rtti.h>
 #endif
-
-#include <iostream>
 
 #define BALL_NOTIFICATION_MANAGER_GROWTH_THRESHOLD(slots)   (2 * (slots) - 1)
 
@@ -30,6 +28,7 @@ namespace BALL
 	class NotificationManager_;
 	class NotificationSource_;
 
+	///
 	class NotificationTarget_
 	{
 		friend class NotificationManager_;
@@ -37,20 +36,25 @@ namespace BALL
 
 		public:
 
+		///
 		~NotificationTarget_()
 			throw();
 
+		///
 		NotificationTarget_* getNextTarget()
 			throw();
 
+		///
 		void* getTarget()
 			throw();
 
 		private:
 
+		///
 		NotificationTarget_()
 			throw();
 
+		///
 		NotificationTarget_(NotificationTarget_* notification_target, void* target)
 			throw();
 
@@ -59,36 +63,45 @@ namespace BALL
 		void*									target_;
 	};
 
+	///
 	class NotificationSource_
 	{
 		friend class NotificationManager_;
 
 		public:
 
+		///
 		~NotificationSource_()
 			throw();
 
+		///
 		void enable()
 			throw();
 	
+		///
 		void disable()
 			throw();
 
+		///
 		bool isEnabled()
 			throw();
 	
+		///
 		bool isDisabled()
 			throw();
 
 	
 		private:
 
+		///
 		NotificationSource_()
 			throw();
 
+		///
 		NotificationSource_(NotificationSource_* notification_source, void* source)
 			throw();
 
+		///
 		void destroy()
 			throw();
 
@@ -99,12 +112,14 @@ namespace BALL
 		bool									enabled_;
 	};
 
+	///
 	class NotificationSlot_
 	{
 		friend class NotificationManager_;
 
 		public:
 
+		///
 		~NotificationSlot_()
 			throw();
 
@@ -117,6 +132,7 @@ namespace BALL
 		NotificationSource_* first_;
 	};
 
+	///
 	class NotificationManager_
 	{
 		friend NotificationManager_& NotificationManager()
@@ -124,65 +140,86 @@ namespace BALL
 
 		public:
 
+		///
 		static const Size INITIAL_NUMBER_OF_SLOTS;
 
+		///
 		~NotificationManager_()
 			throw();
 
+		///
 		Size getSize()
 			throw();
 
+		///
 		void insert(void* source, void* target)
 			throw();
 
+		///
 		void remove(void* source)
 			throw();
 
+		///
 		void remove(void* source, void* target)
 			throw();
 
+		///
 		NotificationSource_* findSource(void* source)
 			throw();
 
+		///
 		NotificationTarget_* findFirstTarget(void* source)
 			throw();
 
+		///
 		NotificationTarget_* findTarget(void* source, void* target)
 			throw();
 
+		///
 		NotificationSource_* findEnabledSource(void* source)
 			throw();
 
+		///
 		NotificationTarget_* findEnabledFirstTarget(void* source)
 			throw();
 
+		///
 		NotificationTarget_* findEnabledTarget(void* source, void* target)
 			throw();
 
+		///
 		void destroy()
 			throw();
 
+		///
 		void enable()
 			throw();
 
+		///
 		void disable()
 			throw();
 
+		///
 		bool isEnabled()
 			throw();
 	
+		///
 		bool isDisabled()
 			throw();
 	
+		///
 		bool isEmpty()
 			throw();
 
+		///
 		bool isInserted(void* source)
 			throw();
 
+		///
 		bool isInserted(void* source, void* target)
 			throw();
 
+		///
 		void dump(std::ostream& s)
 			throw();
 
@@ -207,19 +244,23 @@ namespace BALL
 		bool 								enabled_;
 	};
 
-		
+	///	
   NotificationManager_& NotificationManager()
 		throw();
  
+	///
 	void NotificationManagerEnable()
 		throw();
 
+	///
 	void NotificationManagerDisable()
 		throw();
 
+	///
 	bool NotificationManagerIsEnabled()
 		throw();
 
+	///
 	bool NotificationManagerIsDisabled()
 		throw();
 
@@ -307,49 +348,57 @@ namespace BALL
 		///	
 		virtual bool onNotify(NotificationSource &, T1) = 0;
 
+		///
 		virtual unsigned short countNotificationTypes_()
 			throw()
 		{
 			return 1;
 		}
 
+		///
 		static void* getNotificationType_()
 			throw()
 		{
-				return (void* )&getNotificationType_;
-			}
+			return (void* )&getNotificationType_;
+		}
 
-			virtual void* getVirtualNotificationType()
-				throw()
-			{
-				return getNotificationType_();
-			}
+		///
+		virtual void* getVirtualNotificationType()
+			throw()
+		{
+			return getNotificationType_();
+		}
 	};
 
+	///
 	template <class NotificationSource, class T1, class T2>
 	class NotificationTarget2
 	{
 		public:
 
-			virtual bool onNotify(NotificationSource &, T1, T2) = 0;
+		///
+		virtual bool onNotify(NotificationSource &, T1, T2) = 0;
 
-			virtual unsigned short countNotificationTypes_()
-				throw()
-			{
-				return 2;
-			}
+		///
+		virtual unsigned short countNotificationTypes_()
+			throw()
+		{
+			return 2;
+		}
 
-			static void* getNotificationType_()
-				throw()
-			{
-				return (void* )&getNotificationType_;
-			}
+		///
+		static void* getNotificationType_()
+			throw()
+		{
+			return (void* )&getNotificationType_;
+		}
 
-			virtual void* getVirtualNotificationType_()
-				throw()
-			{
-				return getNotificationType_();
-			}
+		///
+		virtual void* getVirtualNotificationType_()
+			throw()
+		{
+			return getNotificationType_();
+		}
 	};
 
 
