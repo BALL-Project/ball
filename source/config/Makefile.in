@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.7 1999/12/19 16:59:31 oliver Exp $
+# $Id: Makefile.in,v 1.8 1999/12/22 16:51:31 oliver Exp $
 #
 
 include config.mak
@@ -74,10 +74,10 @@ libBALL.@SHARED_LIB_SUFFIX@:	collect
 	$(DYNAR) $(DYNAROPTS) libBALL.@SHARED_LIB_SUFFIX@ `cat libBALL.objects` -lm
 
 libVIEW.@SHARED_LIB_SUFFIX@:	libBALL.so
-	$(DYNAR) $(DYNAROPTS) libVIEW.@SHARED_LIB_SUFFIX@ `cat libVIEW.objects` -L. -lBALL -lm
+	$(DYNAR) $(DYNAROPTS) libVIEW.@SHARED_LIB_SUFFIX@ `cat libVIEW.objects` -L. -lBALL $(QT_PATH) -lqgl -lqt  $(OPENGL_PATH) -lGLU -lGL $(X11_PATH) -lXmu -lXext -lX11 -lm
 
 libMOLVIEW.@SHARED_LIB_SUFFIX@:	libVIEW.so
-	$(DYNAR) $(DYNAROPTS) libMOLVIEW.@SHARED_LIB_SUFFIX@ `cat libMOLVIEW.objects` -L. -lVIEW -lBALL -lm
+	$(DYNAR) $(DYNAROPTS) libMOLVIEW.@SHARED_LIB_SUFFIX@ `cat libMOLVIEW.objects` -L. -lVIEW -lBALL $(QT_PATH) -lqt $(OPENGL_PATH) -lGLU -lGL -lm
 
 .objects.a:	
 	@echo "Creating library $@ ..."

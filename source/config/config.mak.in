@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# RCS ID: $Id: config.mak.in,v 1.4 1999/08/27 12:04:36 oliver Exp $
+# RCS ID: $Id: config.mak.in,v 1.5 1999/12/22 16:51:32 oliver Exp $
 #
 # author:    $author$
 # date:      $date$
@@ -48,14 +48,18 @@ BINFMT   =@BINFMT@
 BALL_PATH		    = @BALL_PATH@
 BALL_INCLUDES		= @BALL_INCLUDES@
 BALL_LIBS		    = @BALL_LIBS@
+OPENGL_LIBS		  = @OPENGL_LIBS@
 
 # USE_BALLVIEW contains true if BALLVIEW support is to be built, false otherwise
 # BALLVIEW_PLATFORM either contains Mesa or OpenGL (so far)
 #
-USE_BALLVIEW		= @USE_BALLVIEW@
+USE_BALLVIEW		    = @USE_BALLVIEW@
 BALLVIEW_PLATFORM 	= @BALLVIEW_PLATFORM@
-BALLVIEW_INCLUDES	= @BALLVIEW_INCLUDES@
-BALLVIEW_LIBS		= @BALLVIEW_LIBS@
+BALLVIEW_INCLUDES	  = @BALLVIEW_INCLUDES@
+BALLVIEW_LIBS		    = @BALLVIEW_LIBS@
+OPENGL_PATH         = @OPENGL_PATH@
+QT_PATH             = @QT_PATH@
+X11_PATH            = @OPENGL_PATH@
 
 # These are standard flags. CPPFLAGS to compile, LDFLAGS to link programs
 # DEFINES and DEBUG are both part of CPPFLAGS
@@ -64,18 +68,18 @@ BALLVIEW_LIBS		= @BALLVIEW_LIBS@
 # This is the place for compiler options that are not understood
 # by makedepend (e.g. -Olimit using IRIX DCC)
 #
-CPPFLAGS		= @CPPFLAGS@ @BINFMT_INDEX@
-LDFLAGS			= @LDFLAGS@
+CPPFLAGS		    = @CPPFLAGS@ @BINFMT_INDEX@
+LDFLAGS			    = @LDFLAGS@
 ADD_CPPFLAGS		= @ADD_CPPFLAGS@
 
 # all the libraries in linker usable format (-l..)
 LIBS			= @LIBS@
 #
-DEFINES 		= @DEFINES@
+DEFINES   = @DEFINES@
 #
-CPPFLAGS_D		=@CPPFLAGS_D@
-CPPFLAGS_O		=@CPPFLAGS_O@
-BALL_CPPFLAGS =@BALL_CPPFLAGS@
+CPPFLAGS_D		= @CPPFLAGS_D@
+CPPFLAGS_O		= @CPPFLAGS_O@
+BALL_CPPFLAGS = @BALL_CPPFLAGS@
 
 # MODE_FLAGS is set to DEBUG_FLAGS or OPTIMIZE_FLAGS, depending on the
 # BALL_DEBUG entry in configure.in

@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.15 1999/12/21 11:54:20 oliver Exp $
+dnl    $Id: configure.in,v 1.16 1999/12/22 16:51:32 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -557,8 +557,16 @@ if test "${IS_GXX}" = "true" ; then
 	AC_MSG_RESULT(${VERSION_OUTPUT})
 
 	CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
-	CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
-	CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+	CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
+	if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
+		CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
+	fi
+	if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
+		CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+	fi
+	if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
+		CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
+	fi
 
 	if test "${IS_EGXX}" = "true" ; then	
 		if test "${CXX_VERSION_1}" -le 1 -a "${CXX_VERSION_2}" -eq 0 ; then
@@ -587,8 +595,16 @@ else
 		fi
 
 		CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
-		CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
-		CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+		CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
+		if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
+			CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
+		fi
+		if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
+			CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+		fi
+		if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
+			CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
+		fi
 
 		AC_MSG_RESULT(${CXX_VERSION_OUTPUT})
 	fi
@@ -608,12 +624,32 @@ else
 			CXX_VERSION_OUTPUT="${CXX_VERSION} (unknown version)"
 		else
 			CXX_VERSION_1=`echo ${CXX_VERSION} | ${CUT} -d. -f1`
-			CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
-			CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+			CXX_VERSION_LENGTH=`echo ${CXX_VERSION} | sed "s/[^.]//g" | wc -c`
+			if test "${CXX_VERSION_LENGTH}" -ge 2 ; then
+				CXX_VERSION_2=`echo ${CXX_VERSION} | ${CUT} -d. -f2`
+			fi
+			if test "${CXX_VERSION_LENGTH}" -ge 3 ; then
+				CXX_VERSION_3=`echo ${CXX_VERSION} | ${CUT} -d. -f3`
+			fi
+			if test "${CXX_VERSION_LENGTH}" -ge 4 ; then
+				CXX_VERSION_4=`echo ${CXX_VERSION} | ${CUT} -d. -f4`
+			fi
 			CXX_VERSION_OUTPUT="${CXX_VERSION}"
 		fi
 		AC_MSG_RESULT(${CXX_VERSION_OUTPUT})
+
+		if test "${CXX_VERSION_1}" -lt 6 " ; then
+			AC_MSG_RESULT()
+			AC_MSG_RESULT(Wrong version of CC! CC before release 6 is not ANSO C++ compliant)
+			AC_MSG_RESULT(Please upgrade to a more recent version of CC.)
+			AC_MSG_ERROR(aborted)
+		fi
 		
+
+		dnl check for correct architecture
+		if test ${ARCHITECTURE}" = sparc ; then
+			CPP_FLAGS="${CPP_FLAGS} -xarch=v9"
+		fi
 	fi
 fi
 
@@ -629,6 +665,9 @@ if test "${CXX_VERSION_1}" != "" ; then
 		CXX_NAME="${CXX_NAME}.${CXX_VERSION_2}"
 		if test "${CXX_VERSION_3}" != "" ; then
 			CXX_NAME="${CXX_NAME}.${CXX_VERSION_3}"
+			if test "${CXX_VERSION_4}" != "" ; then
+				CXX_NAME="${CXX_NAME}.${CXX_VERSION_4}"
+			fi
 		fi
 	fi
 fi
@@ -793,7 +832,7 @@ else
 					CPPFLAGS="$CPPFLAGS -64 -LANG:std"
 					DYNAROPTS="-64 ${DYNAROPTS}"
 					CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 6"
-					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn -DEBUG:woff=1375,3201,1424,1110,1209"
+					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn -multigot -G 6-DEBUG:woff=1375,3201,1424,1110,1209"
 					LDFLAGS="$LDFLAGS -64 -LANG:std"
 					AC_DEFINE(IRIX64,)
 					ADDITIONAL_COMMENTS="Please remember to use LD_LIBRARY64_PATH instead of\n LD_LIBRARY_PATH - you are using 64 bit objects!"
@@ -803,7 +842,7 @@ else
 					CPPFLAGS="$CPPFLAGS -n32 -LANG:std"
 					DYNAROPTS="-n32 ${DYNAROPTS}"
 					CPPFLAGS_O="${CPPFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 6"
-					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn -DEBUG:woff=1375,3201,1424,1110,1209"
+					CPPFLAGS_D="${CPPFLAGS_D} -g -fullwarn -multigot -G 6 -DEBUG:woff=1375,3201,1424,1110,1209"
 					LDFLAGS="$LDFLAGS -n32 -LANG:std"
 					AC_DEFINE(IRIX32,)
 					ADDITIONAL_COMMENTS="Please remember to use LD_LIBRARYN32_PATH instead of\n LD_LIBRARY_PATH - you are using new style 32 bit objects."
@@ -1034,6 +1073,7 @@ LONG_SIZE=`/tmp/$$.conftest.exe|cut -d: -f2`
 SIZE_T_SIZE=`/tmp/$$.conftest.exe|cut -d: -f3`
 POINTER_SIZE=`/tmp/$$.conftest.exe|cut -d: -f4`
 rm /tmp/$$.conftest.c /tmp/$$.conftest.exe
+
 AC_MSG_RESULT("int=${INT_SIZE}bit long=${LONG_SIZE}bit size_t=${SIZE_T_SIZE}bit pointer=${POINTER_SIZE}bit")
 AC_DEFINE_UNQUOTED(BALL_INT_SIZE,"${INT_SIZE}")
 AC_DEFINE_UNQUOTED(BALL_LONG_SIZE,"${LONG_SIZE}")
@@ -1335,9 +1375,6 @@ if test ${USE_BALLVIEW} = true ; then
 				AC_MSG_RESULT((${OPENGL_LIBS}))
 			fi
 			
-			if test "${OPENGL_LINS}" != "/usr/lib"; then
-				BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${OPENGL_LIBS}"
-			fi
 			if test "${OPENGL_INCLUDES}" != /usr/include && test "${OPENGL_INCLUDES}" != "" ; then
 				BALLVIEW_INCLUDES="${BALLVIEW_INCLUDES} -I${OPENGL_INCLUDES}"
 			fi
@@ -1400,28 +1437,43 @@ dnl
 if test "${USE_BALLVIEW}" = true ; then
 	if test "${QT_LIBS}" != "/usr/lib" ; then
 		BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${QT_LIBS} -lqgl -lqt"
+		QT_PATH="-L${QT_LIBS}"
+		QT_LIBS="-L${QT_LIBS} -lqgl -lqt}"
 	else 
 		BALLVIEW_LIBS="${BALLVIEW_LIBS} -lqgl -lqt"
+		QT_PATH=""
+		QT_LIBS="-lqgl -lqt"
 	fi	
 	if test "${BALLVIEW_PLATFORM}" = Mesa ; then
 		if test "${MESA_LIBS}" != "/usr/lib" ; then
 			BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${MESA_LIBS} -lMesaGLU -lMesaGL"
+			OPENGL_PATH="-L${MESA_LIBS}"
+			OPENGL_LIBS="-L${MESA_LIBS} -lMesaGLU -lMesaGL"
+			
 		else
 			BALLVIEW_LIBS="${BALLVIEW_LIBS} -lMesaGLU -lMesaGL"
+			OPENGL_PATH=""
+			OPENGL_LIBS="-lMesaGLU -lMesaGL"
 		fi
 	fi
 	if test "${BALLVIEW_PLATFORM}" = OpenGL ; then
 		if test "${OPENGL_LIBS}" != "/usr/lib" ; then
 			BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${OPENGL_LIBS} -lGLU -lGL"
+			OPENGL_PATH="-L${OPENGL_LIBS}"
+			OPENGL_LIBS="-L${OPENGL_LIBS} -lGLU -lGL"
 		else
 			BALLVIEW_LIBS="${BALLVIEW_LIBS} -lGLU -lGL"
+			OPENGL_PATH=""
+			OPENGL_LIBS="-lGLU -lGL"
 		fi
 	fi
 	
 	if test "${x_libraries}" != "/usr/lib" ; then
 		BALLVIEW_LIBS="${BALLVIEW_LIBS} -L${x_libraries} -lXmu -lXt -lX11"
+		X11_PATH="-L${x_libraries}"
 	else
 		BALLVIEW_LIBS="${BALLVIEW_LIBS} -lXmu -lXt -lX11"
+		X11_PATH=""
 	fi
 fi
 
@@ -1593,6 +1645,10 @@ AC_SUBST(BINFMT_INDEX)      dnl BFMT: binformat index of the current BINFMT - pa
 dnl         LINKER
 
 AC_SUBST(BALLVIEW_LIBS)     dnl BALLVIEW libs
+AC_SUBST(OPENGL_LIBS)       dnl OpenGL libs
+AC_SUBST(OPENGL_PATH)       dnl path to OpenGL libs (including -L)
+AC_SUBST(QT_PATH)           dnl path to QT libs (including -L)
+AC_SUBST(X11_PATH)          dnl path to X11 libs (including -L)
 AC_SUBST(BALL_LIBS)         dnl libraries
 AC_SUBST(LDFLAGS)           dnl linker flags
 AC_SUBST(LIBS)              dnl linker libraries
@@ -1663,7 +1719,7 @@ if test "$BALL_HAS_ANSI_IOSTREAM" = yes ; then
 	AC_DEFINE(BALL_HAS_ANSI_IOSTREAM)
 fi
 
-dnl			Some compilers (SUN CC/4.2) don't like
+dnl			Some compilers don't like
 dnl			the way we use the arrow operator (->)
 dnl  		
 if test "${NO_ARROW_OPERATOR}" = "" ; then
