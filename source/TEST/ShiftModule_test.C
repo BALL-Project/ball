@@ -1,4 +1,4 @@
-// $Id: ShiftModule_test.C,v 1.1 2000/09/18 15:40:57 oliver Exp $
+// $Id: ShiftModule_test.C,v 1.2 2000/09/21 07:46:20 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(ShiftModule, "$Id: ShiftModule_test.C,v 1.1 2000/09/18 15:40:57 oliver Exp $")
+START_TEST(ShiftModule, "$Id: ShiftModule_test.C,v 1.2 2000/09/21 07:46:20 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -79,6 +79,12 @@ CHECK(ShiftModule::clear() throw())
 	sm.clear();
 	TEST_EQUAL(sm.getName(), "")
 	TEST_EQUAL(sm.getParameters(), 0)
+RESULT
+
+
+CHECK(ShiftModule::init() throw())
+	ShiftModule sm(parameters, "test_name");
+	sm.init();
 RESULT
 
 
