@@ -1,8 +1,8 @@
 /****************************************************************************
 ** DlgDisplayPropertiesData meta object code from reading C++ file 'DlgDisplayPropertiesData.h'
 **
-** Created: Mon Jan 10 18:40:06 2000
-**      by: The Qt Meta Object Compiler ($Revision: 1.2 $)
+** Created: Tue Jan 11 20:30:19 2000
+**      by: The Qt Meta Object Compiler ($Revision: 1.3 $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -64,13 +64,29 @@ void DlgDisplayPropertiesData::staticMetaObject()
     QDialog::initMetaObject();
 #endif
 
-    typedef void(DlgDisplayPropertiesData::*m1_t0)();
-    m1_t0 v1_0 = Q_AMPERSAND DlgDisplayPropertiesData::done;
-    QMetaData *slot_tbl = QMetaObject::new_metadata(1);
-    slot_tbl[0].name = "done()";
+    typedef void(DlgDisplayPropertiesData::*m1_t0)(const QString&);
+    typedef void(DlgDisplayPropertiesData::*m1_t1)(const QString&);
+    typedef void(DlgDisplayPropertiesData::*m1_t2)();
+    typedef void(DlgDisplayPropertiesData::*m1_t3)(const QString&);
+    typedef void(DlgDisplayPropertiesData::*m1_t4)();
+    m1_t0 v1_0 = Q_AMPERSAND DlgDisplayPropertiesData::selectPrecision;
+    m1_t1 v1_1 = Q_AMPERSAND DlgDisplayPropertiesData::selectModel;
+    m1_t2 v1_2 = Q_AMPERSAND DlgDisplayPropertiesData::applyButtonClicked;
+    m1_t3 v1_3 = Q_AMPERSAND DlgDisplayPropertiesData::selectColoringMethod;
+    m1_t4 v1_4 = Q_AMPERSAND DlgDisplayPropertiesData::editColor;
+    QMetaData *slot_tbl = QMetaObject::new_metadata(5);
+    slot_tbl[0].name = "selectPrecision(const QString&)";
+    slot_tbl[1].name = "selectModel(const QString&)";
+    slot_tbl[2].name = "applyButtonClicked()";
+    slot_tbl[3].name = "selectColoringMethod(const QString&)";
+    slot_tbl[4].name = "editColor()";
     slot_tbl[0].ptr = *((QMember*)&v1_0);
+    slot_tbl[1].ptr = *((QMember*)&v1_1);
+    slot_tbl[2].ptr = *((QMember*)&v1_2);
+    slot_tbl[3].ptr = *((QMember*)&v1_3);
+    slot_tbl[4].ptr = *((QMember*)&v1_4);
     metaObj = QMetaObject::new_metaobject(
 	"DlgDisplayPropertiesData", "QDialog",
-	slot_tbl, 1,
+	slot_tbl, 5,
 	0, 0 );
 }

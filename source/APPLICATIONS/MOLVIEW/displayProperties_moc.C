@@ -1,8 +1,8 @@
 /****************************************************************************
 ** DisplayProperties meta object code from reading C++ file 'displayProperties.h'
 **
-** Created: Sun Jan 9 17:28:46 2000
-**      by: The Qt Meta Object Compiler ($Revision: 1.1 $)
+** Created: Tue Jan 11 19:42:41 2000
+**      by: The Qt Meta Object Compiler ($Revision: 1.2 $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/

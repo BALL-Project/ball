@@ -1,8 +1,8 @@
 /****************************************************************************
 ** DlgSelectorData meta object code from reading C++ file 'DlgSelectorData.h'
 **
-** Created: Mon Jan 10 17:43:52 2000
-**      by: The Qt Meta Object Compiler ($Revision: 1.1 $)
+** Created: Tue Jan 11 19:47:32 2000
+**      by: The Qt Meta Object Compiler ($Revision: 1.2 $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/

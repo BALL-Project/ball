@@ -27,8 +27,8 @@ OBJECTS=\
 	mainframe.o\
 	mainframe_moc.o
 
-molview:	$(OBJECTS) ../../VIEW/KERNEL/timerTextView.o
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) ../../VIEW/KERNEL/timerTextView.o $(BALLVIEW_LIBS)
+molview:	$(OBJECTS) ../../MOLVIEW/FUNCTOR/standardColorCalculator.o ../../MOLVIEW/OPENGL/FUNCTOR/moleculeObjectProcessor.o
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) ../../MOLVIEW/FUNCTOR/standardColorCalculator.o ../../MOLVIEW/OPENGL/FUNCTOR/moleculeObjectProcessor.o $(BALLVIEW_LIBS)
 
 mainframe_moc.C:	mainframe.h
 	moc mainframe.h -o $@

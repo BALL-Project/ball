@@ -1,4 +1,4 @@
-// $Id: control.iC,v 1.3 2000/01/09 17:47:53 hekl Exp $
+// $Id: control.iC,v 1.4 2000/01/11 20:25:04 hekl Exp $
 
 BALL_INLINE
 void Control::setScene
@@ -20,7 +20,7 @@ void Control::setMoleculeObjectProcessor
 {
 	__mpMoleculeObjectProcessor_ = &(const_cast<MoleculeObjectProcessor &>(__rMoleculeObjectProcessor));
 
-	__mDisplayProperties_.setObjectProcessor(__rMoleculeObjectProcessor);
+	display_properties_dialog_.setObjectProcessor(*__mpMoleculeObjectProcessor_);
 }
 
 BALL_INLINE

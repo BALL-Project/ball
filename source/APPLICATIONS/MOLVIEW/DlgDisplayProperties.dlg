@@ -95,6 +95,7 @@ PushButton {
 		AutoResize {FALSE}
 		Rect {10 250 110 30}
 		Name {apply_button}
+		Signal {[Protected]  clicked --> applyButtonClicked  ()}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
 		BackgroundPixmap {}
@@ -146,6 +147,7 @@ ComboBox {
 		AutoCompletion {FALSE}
 		Rect {20 120 210 20}
 		Name {coloring_type_combo_box}
+		Signal {[Protected]  activated --> selectColoringMethod  (const QString&)}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
 		BackgroundPixmap {}
@@ -221,6 +223,7 @@ ComboBox {
 		AutoCompletion {FALSE}
 		Rect {90 30 140 24}
 		Name {model_type_combobox}
+		Signal {[Protected]  activated --> selectModel  (const QString&)}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
 		BackgroundPixmap {}
@@ -247,6 +250,7 @@ ComboBox {
 		AutoCompletion {FALSE}
 		Rect {90 60 140 22}
 		Name {model_resolution_combobox}
+		Signal {[Protected]  activated --> selectPrecision  (const QString&)}
 		MinimumSize {0 0}
 		MaximumSize {32767 32767}
 		BackgroundPixmap {}

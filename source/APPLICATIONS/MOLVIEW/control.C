@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.7 2000/01/10 20:37:44 hekl Exp $
+// $Id: control.C,v 1.8 2000/01/11 20:25:04 hekl Exp $
 
 #include "control.h"
 
@@ -15,7 +15,6 @@ Control::Control
 			selected_type__mQString_("unkown"),
 			selected_root_type__mQString_("unkown"),
 			copied__mpComposite_(0),
-			__mDisplayProperties_(0),
 			display_properties_dialog_(0)
 {
 	setRootIsDecorated(TRUE);
@@ -29,8 +28,14 @@ Control::Control
 	connect(this,
 					SIGNAL(selectionChanged(QListViewItem *)),
 					SLOT(objectSelected(QListViewItem *)));
-
+	/*
 	connect(&__mDisplayProperties_,
+					SIGNAL(apply()),
+					this,
+					SLOT(applyDisplayProperties()));
+	*/
+
+	connect(&display_properties_dialog_,
 					SIGNAL(apply()),
 					this,
 					SLOT(applyDisplayProperties()));
@@ -1010,10 +1015,11 @@ Control::centerCamera()
 void 
 Control::openDisplay()
 {
-	__mDisplayProperties_.show();
-	__mDisplayProperties_.raise();
+	//	__mDisplayProperties_.show();
+	//	__mDisplayProperties_.raise();
 
 	display_properties_dialog_.show();
+	display_properties_dialog_.raise();
 }
 
 void 

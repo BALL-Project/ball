@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Control meta object code from reading C++ file 'control.h'
 **
-** Created: Mon Jan 10 18:17:59 2000
-**      by: The Qt Meta Object Compiler ($Revision: 1.4 $)
+** Created: Tue Jan 11 19:41:48 2000
+**      by: The Qt Meta Object Compiler ($Revision: 1.5 $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -125,12 +125,12 @@ void Control::staticMetaObject()
     slot_tbl[12].ptr = *((QMember*)&v1_12);
     slot_tbl[13].ptr = *((QMember*)&v1_13);
     slot_tbl[14].ptr = *((QMember*)&v1_14);
-    typedef void(Control::*m2_t0)(bool,bool);
+    typedef void(Control::*m2_t0)(bool);
     typedef void(Control::*m2_t1)(bool);
     m2_t0 v2_0 = Q_AMPERSAND Control::itemSelected;
     m2_t1 v2_1 = Q_AMPERSAND Control::itemCutOrCopied;
     QMetaData *signal_tbl = QMetaObject::new_metadata(2);
-    signal_tbl[0].name = "itemSelected(bool,bool)";
+    signal_tbl[0].name = "itemSelected(bool)";
     signal_tbl[1].name = "itemCutOrCopied(bool)";
     signal_tbl[0].ptr = *((QMember*)&v2_0);
     signal_tbl[1].ptr = *((QMember*)&v2_1);
@@ -140,47 +140,10 @@ void Control::staticMetaObject()
 	signal_tbl, 2 );
 }
 
-#include <qobjectdefs.h>
-#include <qsignalslotimp.h>
-
 // SIGNAL itemSelected
-void Control::itemSelected( bool t0, bool t1 )
+void Control::itemSelected( bool t0 )
 {
-    // No builtin function for signal parameter type bool,bool
-    QConnectionList *clist = receivers("itemSelected(bool,bool)");
-    if ( !clist || signalsBlocked() )
-	return;
-    typedef void (QObject::*RT0)();
-    typedef RT0 *PRT0;
-    typedef void (QObject::*RT1)(bool);
-    typedef RT1 *PRT1;
-    typedef void (QObject::*RT2)(bool,bool);
-    typedef RT2 *PRT2;
-    RT0 r0;
-    RT1 r1;
-    RT2 r2;
-    QConnectionListIt it(*clist);
-    QConnection   *c;
-    QSenderObject *object;
-    while ( (c=it.current()) ) {
-	++it;
-	object = (QSenderObject*)c->object();
-	object->setSender( this );
-	switch ( c->numArgs() ) {
-	    case 0:
-		r0 = *((PRT0)(c->member()));
-		(object->*r0)();
-		break;
-	    case 1:
-		r1 = *((PRT1)(c->member()));
-		(object->*r1)(t0);
-		break;
-	    case 2:
-		r2 = *((PRT2)(c->member()));
-		(object->*r2)(t0, t1);
-		break;
-	}
-    }
+    activate_signal_bool( "itemSelected(bool)", t0 );
 }
 
 // SIGNAL itemCutOrCopied

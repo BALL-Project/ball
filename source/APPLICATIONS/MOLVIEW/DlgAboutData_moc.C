@@ -1,8 +1,8 @@
 /****************************************************************************
 ** DlgAboutData meta object code from reading C++ file 'DlgAboutData.h'
 **
-** Created: Mon Jan 10 15:59:53 2000
-**      by: The Qt Meta Object Compiler ($Revision: 1.1 $)
+** Created: Tue Jan 11 19:42:58 2000
+**      by: The Qt Meta Object Compiler ($Revision: 1.2 $)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
