@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.C,v 1.28 2003/05/05 08:58:43 oliver Exp $
+// $Id: regularData2DWidget.C,v 1.29 2003/05/07 16:47:03 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
+#include <qpopupmenu>
 
 using std::cout;
 using std::endl;
