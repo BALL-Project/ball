@@ -1,4 +1,4 @@
-// $Id: baseIterator.h,v 1.5 2000/08/30 19:57:59 oliver Exp $
+// $Id: baseIterator.h,v 1.6 2000/12/09 20:55:06 amoll Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -110,7 +110,7 @@ namespace BALL
 				Assigns the contents of an iterator to another iterator.
 				@param	iterator the iterator to be copied
 		*/
-		BaseIterator& operator = (const BaseIterator &iterator)
+		const BaseIterator& operator = (const BaseIterator &iterator)
 		{
 			if (this != &iterator)
 			{
@@ -125,8 +125,9 @@ namespace BALL
 				type.
 		*/
 		void swap(BaseIterator &iterator)
+			throw()
 		{
-			Traits *tempiteratorTraits = traits_ptr_;
+			Traits* tempiteratorTraits = traits_ptr_;
 			traits_ptr_ = iterator.traits_ptr_;
 			iterator.traits_ptr_ = tempiteratorTraits;
 		}
@@ -253,6 +254,7 @@ namespace BALL
 		/**
 		*/
 		DataType& operator * ()
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
 			{
@@ -265,6 +267,7 @@ namespace BALL
 		/**
 		*/
 		const DataType& operator *() const
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
 			{
@@ -277,6 +280,7 @@ namespace BALL
 		/**
 		*/
 		DataType* operator -> ()
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
 			{
@@ -289,6 +293,7 @@ namespace BALL
 		/**
 		*/
 		const DataType* operator -> () const
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
 			{
@@ -307,13 +312,14 @@ namespace BALL
 		/**
 		*/
 		bool operator == (const BaseIterator& iterator) const
+			throw(Exception::IncompatibleIterators)
 		{
 			if (traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
 			{
 				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 			}
 
-			return (bool)(*traits_ptr_ == *iterator.traits_ptr_);
+			return (*traits_ptr_ == *iterator.traits_ptr_);
 		}
 
 		/**
@@ -325,7 +331,7 @@ namespace BALL
 				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 			}
 
-			return (bool)(*traits_ptr_ != *iterator.traits_ptr_);
+			return (*traits_ptr_ != *iterator.traits_ptr_);
 		}
 
 		/**
@@ -345,7 +351,7 @@ namespace BALL
 			}	
 			else 
 			{
-				return (bool)(BaseIterator::countIterators(*traits_ptr_->getContainer(), traits_ptr_->getPosition()) == 1);
+				return (BaseIterator::countIterators(*traits_ptr_->getContainer(), traits_ptr_->getPosition()) == 1);
 			}
 		}
 	
@@ -353,7 +359,7 @@ namespace BALL
 		*/
 		static bool isUnique(const Container &container, const Position &iteratorPosition)
 		{
-			return (bool)(BaseIterator::countIterators(container, iteratorPosition) == 1);
+			return (BaseIterator::countIterators(container, iteratorPosition) == 1);
 		}
 	
 		/**
@@ -476,6 +482,7 @@ namespace BALL
 		/**
 		*/
 		const DataType& operator * ()
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
 			{
@@ -488,6 +495,7 @@ namespace BALL
 		/**
 		*/
 		const DataType* operator -> ()
+			throw(Exception::InvalidIterator)
 		{
 			if (!traits_ptr_->isValid())
 			{
