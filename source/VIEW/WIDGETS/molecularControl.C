@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.91.2.10 2005/02/02 15:14:49 amoll Exp $
+// $Id: molecularControl.C,v 1.91.2.11 2005/02/02 15:23:15 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -719,6 +719,7 @@ void MolecularControl::setSelection_(bool open, bool force)
 
 	if (!force) open = false;
 
+	Size nr = 0;
 	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)
 	{
@@ -730,6 +731,7 @@ void MolecularControl::setSelection_(bool open, bool force)
 			continue;
 		}
 		
+		nr++;
 		item->setOn(true);
 		item->setSelected(true);
 		if (open)
@@ -742,6 +744,8 @@ void MolecularControl::setSelection_(bool open, bool force)
 			}
 		}
 	}
+
+	setStatusbarText(String(nr) + " objects selected.");
 }
 
 
