@@ -1,4 +1,4 @@
-// $Id: DCDFile.h,v 1.9 2001/04/04 09:38:32 anker Exp $
+// $Id: DCDFile.h,v 1.10 2001/04/10 09:47:39 amoll Exp $
 
 #ifndef BALL_FORMAT_DCDFILE_H
 #define BALL_FORMAT_DCDFILE_H
@@ -19,6 +19,8 @@ namespace BALL
 	class DCDFile
 		:	public TrajectoryFile
 	{
+
+		public:
 
 		/** @name Type definitions
 		*/
@@ -152,8 +154,6 @@ namespace BALL
 		};
 
 		//@}
-
-		public:
 
 		BALL_CREATE(DCDFile)
 
