@@ -1224,7 +1224,7 @@
 				RelativePath="..\..\..\include\BALL\concept.h">
 			</File>
 			<File
-				RelativePath="..\..\..\include\WIN\BALL\CONFIG\config.h">
+				RelativePath="..\..\include\BALL\CONFIG\config.h">
 			</File>
 			<File
 				RelativePath="..\..\..\include\BALL\datatype.h">
