@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.3 1999/09/06 22:22:05 oliver Exp $
+// $Id: HINFile.C,v 1.4 1999/09/07 19:35:50 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/KERNEL/residue.h>
@@ -456,7 +456,7 @@ namespace BALL {
 						atom->setPosition(Vector3(line.getField(7).toFloat(), line.getField(8).toFloat(), line.getField(9).toFloat()));
 
 						Size	number_of_atom_bonds((Size)line.getField(10).toInt());
-						Position atom_number = (Index)line.getField(1).toInt();
+						Position atom_number = (Position)line.getField(1).toInt();
 
 						// store the atom pointer in the atom_vector - we need it later to create the bonds!
 						// if the atom_vector is to small, grow it!
@@ -516,12 +516,17 @@ namespace BALL {
 					velocity.z = line.getField(4).toFloat();
 						
 					// check whether the atom exists
-					Size atom_number = (Size)line.getField(1).toInt();
+					Position atom_number = (Position)line.getField(1).toInt();
 					if (atom_number >= atom_vector.size())
 					{
 						ERROR_HEADER << "cannot assign velocity for atom " << atom_number << ": atom not defined!" << endl;
 					} else {
-						atom_vector[atom_number - 1]->setVelocity(velocity);
+						if (atom_vector[atom_number] != 0)
+						{
+							atom_vector[atom_number]->setVelocity(velocity);
+						} else {
+							ERROR_HEADER << "cannot assign velocity for atom " << atom_number << ": atom not defined!" << endl;
+						}
 					}
 						
 					continue;
