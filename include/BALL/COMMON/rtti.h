@@ -1,4 +1,4 @@
-// $Id: rtti.h,v 1.14 2001/06/23 02:33:29 oliver Exp $
+// $Id: rtti.h,v 1.15 2001/06/24 14:13:39 oliver Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -151,6 +151,10 @@ namespace BALL
 			if (typeid(T) == typeid(char))
 			{
 				return "char";
+			}
+			if (typeid(T) == typeid(unsigned char))
+			{
+				return "unsigned_char";
 			}
 			if (typeid(T) == typeid(double))
 			{
