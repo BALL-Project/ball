@@ -1,4 +1,4 @@
-dnl    $Id: configure.ac,v 1.8 2003/05/03 17:29:31 oliver Exp $
+dnl    $Id: configure.ac,v 1.9 2003/05/21 15:48:57 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -443,6 +443,11 @@ dnl
 dnl		Python extension support
 dnl
 CF_PYTHON
+
+dnl
+dnl		valgrind support (leak cehcking for the BALL tests)
+dnl
+CF_VALGRIND
 
 dnl
 dnl		include the default BALL include path

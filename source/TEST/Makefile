@@ -1,7 +1,6 @@
 #
-# $Id: Makefile,v 1.185 2003/05/08 13:53:06 anhi Exp $
+# $Id: Makefile,v 1.186 2003/05/21 15:49:04 oliver Exp $
 #
-
 DIRECTORY=TEST
 
 XDR_DEPENDENT_EXECUTABLES=\
@@ -226,6 +225,7 @@ all:	$(EXECUTABLES)
 # required for clean and depend
 CPP_SOURCES=$(EXECUTABLES:=.C)
 OBJECTS=$(EXECUTABLES:=.o)
+VALGRINDS=$(EXECUTABLES:=.vgr)
 
 include ../common.mak
 include .Dependencies
@@ -243,6 +243,10 @@ CPP_MODE_FLAGS=$(CPP_MODE_FLAGS_NO_OPTIMIZATION) -O0
 # 
 %%.C:
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.C $(LDFLAGS) -o $@ $(LIBS)
+
+.o.vgr: 
+	@$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(BALL_CXXFLAGS) $(BALL_INCLUDES) $*.o $(LDFLAGS) -o $@ $(LIBS)
+	@$(VALGRIND) $(VALGRIND_OPTS) $* 2>$*.vgr || true
 
 dummy:
 
@@ -292,5 +296,6 @@ solvation_test:	$(EXECUTABLES_SOLVATION)
 	@./runtests -section SOLVATION $(TEST_OPTIONS) $(EXECUTABLES_SOLVATION)
 
 clean:	default_clean
-	@$(RM) -rf *.o *~ *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
+	@$(RM) -rf *.o *~ *.vgr *.log ii_files Templates.DB	SunWS_cache _*.TMP core a.out $(EXECUTABLES)
 
+valgrind: $(VALGRINDS)

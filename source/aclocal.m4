@@ -1,4 +1,4 @@
-dnl		$Id: aclocal.m4,v 1.25 2003/05/03 17:29:26 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.26 2003/05/21 15:48:57 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -4303,4 +4303,16 @@ AC_DEFUN(CF_CLEAR_DEP_FILES, [
 		${RM}  .Dependencies 2>/dev/null
 		${RM}  lib*.objects 2>/dev/null
 	fi
+])
+
+
+AC_DEFUN(CF_VALGRIND, [
+	dnl	
+	dnl	Check for the valgrind application (a memory leak tester).
+	dnl Valgrind can be used to identify leaks from the test programs
+ 	dnl	(target valgrind in BALL/source/TEST).
+	dnl
+	AC_PATH_PROG(VALGRIND, valgrind, no)
+	AC_SUBST(VALGRIND, $VALGRIND)
+	AC_SUBST(VALGRIND_OPTS, "-v --leak-check=yes --leak-resolution=high")
 ])
