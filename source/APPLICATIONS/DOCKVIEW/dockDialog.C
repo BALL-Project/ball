@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.1 2005/01/06 15:00:28 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.2 2005/01/06 15:24:02 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -100,6 +100,8 @@ namespace BALL
 			}
 		}	*/
 		
+
+
 		void DockDialog::checkMenu (MainControl& main_control)
 			throw()
 		{
