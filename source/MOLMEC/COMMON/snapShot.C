@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.18 2001/01/16 17:20:04 anker Exp $
+// $Id: snapShot.C,v 1.19 2001/01/24 12:27:18 amoll Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -445,7 +445,7 @@ namespace BALL
 
 		// if there was already snapshot data, clear it.
 		// clear() does too much... Should I rewrite setup()? Or do I believe,
-		// that setup is called _only_ in a constructor?
+		// that setup is called only! in a constructor?
 		snapshot_list_.clear();
 		snapshot_list_.resize(flush_to_disk_frequency_);
 
@@ -653,7 +653,7 @@ namespace BALL
 		snapshot_counter_++;
 		buffer_counter_++;
 
-		// We _could_ use pushback() and size() to determine when toflush the
+		// We could! use pushback() and size() to determine when to flush the
 		// buffers, but this is faster. 
 		if (buffer_counter_ >= flush_to_disk_frequency_)
 		{
