@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.C,v 1.12 2004/06/11 11:51:33 amoll Exp $
+// $Id: regularData2DWidget.C,v 1.13 2004/06/11 18:04:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData2DWidget.h> 
@@ -200,10 +200,16 @@ void DockableRegularData2DWidget::zoomOut()
 	canWidget_.zoomOut();
 }
 
-//we need this for SizePolicy
 QSize DockableRegularData2DWidget::sizeHint() const
 {
-	return QSize((int)(qApp->mainWidget()->width()/3.)+55, (int)(qApp->mainWidget()->height()/3.)+55);
+  return QSize((int)(qApp->mainWidget()->width()/3.)+55, (int)(qApp->mainWidget()->height()/3.)+55);
+}
+
+void DockableRegularData2DWidget::resizeEvent(QResizeEvent* e)
+{
+	canWidget_.canvas()->setAllChanged();
+	canWidget_.canvas()->update();
+	DockWidget::resizeEvent(e);
 }
 
 	}//end of namespace VIEW

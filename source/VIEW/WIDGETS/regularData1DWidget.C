@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.17 2004/06/11 11:51:28 amoll Exp $
+// $Id: regularData1DWidget.C,v 1.18 2004/06/11 18:04:26 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
@@ -220,5 +220,12 @@ QSize DockableRegularData1DWidget::sizeHint() const
 	return QSize((int)(qApp->mainWidget()->width()/3.)+55, (int)(qApp->mainWidget()->height()/3.)+55);
 }
 		
+void DockableRegularData1DWidget::resizeEvent(QResizeEvent* e)
+{
+	canWidget_.canvas()->setAllChanged();
+	canWidget_.canvas()->update();
+	DockWidget::resizeEvent(e);
+}
+
 	}//end of namespace VIEW
 }//end of namespace BALL

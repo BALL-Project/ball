@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData2DWidget.h,v 1.10 2004/06/10 17:59:34 amoll Exp $
+// $Id: regularData2DWidget.h,v 1.11 2004/06/11 18:04:35 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
@@ -101,7 +101,9 @@ namespace BALL
 			///
 			virtual void zoomOut();
 
+
 		protected slots:
+			virtual void resizeEvent(QResizeEvent* e);
 			virtual void contextMenuEvent(QContextMenuEvent* e);
 
     protected:
