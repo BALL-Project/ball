@@ -142,6 +142,9 @@ AnisotropyShiftProcessor_test:	AnisotropyShiftProcessor_test.o ../NMR/anisotropy
 HaighMallionShiftProcessor_test:	HaighMallionShiftProcessor_test.o ../NMR/haighMallionShiftProcessor.o
 	$(CXX) $(CXXFLAGS) HaighMallionShiftProcessor_test.o ../NMR/haighMallionShiftProcessor.o $(LDFLAGS) -o HaighMallionShiftProcessor_test $(LIBS)
 
+NMRSpectrum_test:	NMRSpectrum_test.o ../NMR/NMRSpectrum.o
+	$(CXX) $(CXXFLAGS) NMRSpectrum_test.o ../NMR/NMRSpectrum.o $(LDFLAGS) -o NMRSpectrum_test $(LIBS)
+
 test:	$(EXECUTABLES)
 	@./runtests $(EXECUTABLES)
 

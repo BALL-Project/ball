@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <BALL/NMR/assignShiftProcessor.h>
+#include <BALL/NMR/NMRSpectrum.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/residueChecker.h>
-#include <BALL/FORMAT/PDBFile.h>
+#include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/NMRStarFile.h>
 #include <BALL/SYSTEM/path.h>
 
@@ -11,24 +12,16 @@ using namespace std;
 
 int main()
 {
-	PDBFile f;
-	f.open("parvulin.pdb");
+	HINFile f;
+	f.open("data/AssignShiftProcessor_test.hin");
 	Path path;
 
 	System system;
 	f >> system;
-	FragmentDB frag_db(path.find("fragments/Fragments.db"));
-	system.apply(frag_db.normalize_names);
-	system.apply(frag_db.build_bonds);
-
-	/*
+	FragmentDB frag_db;
 	ResidueChecker rc(frag_db);
 	system.apply(rc);
 	
-	PDBFile out("parvulin_out.pdb", File::OUT);
-	out << system;
-	out.close();
-	return 0;*/
 
 	NMRStarFile rs("data/bmr4789.str");
 	cout << "Size: " << rs.getData()[0]->atomData.size() << endl;
@@ -48,8 +41,16 @@ int main()
 		}
 		else
 		{
-		//	Log.info() << atom_it->getFullName() << " " << atom_it->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat() << endl;
+			Log.info() << atom_it->getFullName() << " " << atom_it->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat() << endl;
 		}
 	}
  	cout << "numberOfShiftAtoms " << numberOfShiftAtoms << endl;
+
+	NMRSpectrum spectrum;
+	spectrum.setSystem(&system);
+	spectrum.setDensity(32768);
+	spectrum.createSpectrum();
+	Log.info() << " Number of peaks in spectrum: " << spectrum.getPeakList().size() << endl;
+	spectrum.plotSpectrum("parv_synth.dat");
+	spectrum.writePeaks("parv_synth.peaks");
 }
