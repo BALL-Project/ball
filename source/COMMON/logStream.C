@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: logStream.C,v 1.31 2003/08/26 09:17:44 oliver Exp $
+// $Id: logStream.C,v 1.32 2004/02/24 08:19:39 oliver Exp $
 //
 
 #include <limits.h>
@@ -13,12 +13,6 @@
 #include <string.h>
 
 #define BUFFER_LENGTH 32768
-
-using std::endl;
-using std::ostream;
-using std::streambuf;
-using std::cout;
-using std::cerr;
 
 #ifdef BALL_HAS_ANSI_IOSTREAM
 #	define BALL_IOS std::basic_ios<char>

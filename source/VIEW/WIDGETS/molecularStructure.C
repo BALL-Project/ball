@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.24 2004/02/19 20:28:56 amoll Exp $
+// $Id: molecularStructure.C,v 1.25 2004/02/24 08:19:49 oliver Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -75,7 +75,7 @@ namespace BALL
 		build_bonds_id_ = insertMenuEntry(MainControl::BUILD, "&Build Bonds", this, 
 																											SLOT(buildBonds()), CTRL+Key_B, -1, hint);
 		
-		hint = "Add missing H-atoms to a selected structure."; 
+		hint = "Add missing atoms to a selected structure."; 
 		add_hydrogens_id_ = insertMenuEntry(MainControl::BUILD, "Add &Hydrogens", this, 
 																											SLOT(addHydrogens()), CTRL+Key_H, -1, hint);
 		

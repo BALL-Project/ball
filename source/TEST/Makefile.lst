@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.8 2004/02/23 19:51:31 oliver Exp $
+# $Id: Makefile.lst,v 1.9 2004/02/24 08:19:42 oliver Exp $
 #
 
 XDR_DEPENDENT_EXECUTABLES=\
@@ -10,6 +10,7 @@ VIEW_DEPENDENT_EXECUTABLES=\
 
 EXECUTABLES_BASIC =	\
 	ClassTest_test$(EXEEXT)\
+	Debug_test$(EXEEXT)\
 	RegularExpression_test$(EXEEXT)\
 	GlobalTypes_test$(EXEEXT)\
 	Limits_test$(EXEEXT)\
