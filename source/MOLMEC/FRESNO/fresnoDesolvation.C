@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.C,v 1.1.2.9 2002/09/13 14:07:06 anker Exp $
+// $Id: fresnoDesolvation.C,v 1.1.2.10 2002/09/13 14:18:27 anker Exp $
 // Molecular Mechanics: Fresno force field, desolvation component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -327,7 +327,7 @@ namespace BALL
 							{
 								Atom* c = new Atom(*it);
 								// DEBUG
-								Log.info() << "cut_ligand: adding: " << position << " " 
+								Log.info() << "cut_protein: adding: " << position << " " 
 									<< c->getCharge() << " " << c->getFullName() << endl;
 								// /DEBUG
 								cut_protein.insert(*c);
@@ -527,6 +527,8 @@ namespace BALL
 
 		// calculate the changes in solvation energy
 		float ddGsolv = dGes_B_cav_A - dGes_B + dGes_A_cav_B - dGes_A;
+
+		energy = ddGsolv;
 
 		return true;
 
