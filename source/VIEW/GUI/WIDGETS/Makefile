@@ -7,7 +7,7 @@ CPP_SOURCES=\
 	mainControlPreferences.C\
 	modularWidget.C\
 	scene.C\
-	NMRSpectrum1DWidget.C\
+	regularData1DWidget.C\
 	serverPreferences.C\
 	regularData2DWidget.C
 
@@ -17,7 +17,7 @@ PYTHON_CPP_SOURCES=\
 MOC_SOURCES=\
 	control_moc.C\
 	scene_moc.C\
-	NMRSpectrum1DWidget_moc.C\
+	regularData1DWidget_moc.C\
 	regularData2DWidget_moc.C\
 	mainControlPreferences_moc.C\
 	serverPreferences_moc.C
@@ -45,8 +45,8 @@ serverPreferences_moc.C:	$(BALL_PATH)/include/BALL/VIEW/GUI/WIDGETS/serverPrefer
 pyWidget_moc.C:	$(BALL_PATH)/include/BALL/VIEW/GUI/WIDGETS/pyWidget.h
 	$(MOC) $(BALL_PATH)/include/BALL/VIEW/GUI/WIDGETS/pyWidget.h -o pyWidget_moc.C
 
-NMRSpectrum1DWidget_moc.C:	$(BALL_PATH)/include/BALL/VIEW/GUI/WIDGETS/NMRSpectrum1DWidget.h
-	$(MOC) $(BALL_PATH)/include/BALL/VIEW/GUI/WIDGETS/NMRSpectrum1DWidget.h -o NMRSpectrum1DWidget_moc.C
+regularData1DWidget_moc.C:	$(BALL_PATH)/include/BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h
+	$(MOC) $(BALL_PATH)/include/BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h -o regularData1DWidget_moc.C
 
 regularData2DWidget_moc.C:	$(BALL_PATH)/include/BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h
 	$(MOC) $(BALL_PATH)/include/BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h -o regularData2DWidget_moc.C

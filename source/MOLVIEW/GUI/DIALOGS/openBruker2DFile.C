@@ -1,4 +1,4 @@
-// $Id: openBruker2DFile.C,v 1.4 2000/12/22 19:12:16 amoll Exp $
+// $Id: openBruker2DFile.C,v 1.5 2001/01/29 17:19:29 anhi Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h>
 
@@ -29,17 +29,17 @@ namespace BALL
 
     void OpenBruker2DFile::initializeWidget(MainControl& main_control)
     {
-      main_control.insertMenuEntry(MainControl::FILE_IMPORT, "&Bruker2D File", this,
+      main_control.insertMenuEntry(MainControl::FILE_IMPORT, "Bruker&2D File", this,
 				   SLOT(exec()),
-				   CTRL+Key_B);
+				   CTRL+Key_2);
     }
 
     void OpenBruker2DFile::finalizeWidget(MainControl& main_control)
     {
       main_control.removeMenuEntry
-	(MainControl::FILE_IMPORT, "&Bruker2D File", this,
+	(MainControl::FILE_IMPORT, "Bruker&2D File", this,
 	 SLOT(exec()),
-	 CTRL+Key_B);
+	 CTRL+Key_2);
     }
 
     void OpenBruker2DFile::openFile_()
