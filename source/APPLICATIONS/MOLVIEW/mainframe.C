@@ -11,7 +11,11 @@
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 
+#include <BALL/MOLVIEW/OPENGL/KERNEL/moleculeObjectCreator.h>
+
+
 using namespace std;
+
 
 Mainframe::Mainframe
   (QWidget* parent, const char* name)
@@ -25,6 +29,8 @@ Mainframe::Mainframe
 		minimization_dialog_(0),
 		open_hin_file_(0),
 		open_pdb_file_(0),
+		molecular_properties_(0),
+		server_(0),
 		GL_object_collector_(),
 		object_processor_(),
 		fragment_db_(),
@@ -35,12 +41,15 @@ Mainframe::Mainframe
 		vboxlayout_(0),
 		popup_menus_(),
 		selection_(0),
-		copy_list_()
+		copy_list_(),
+		server_icon_(0),
+		tool_box_(0)
 {
 	// ---------------------
 	// setup main window
 	// ---------------------
 	setCaption("MolVIEW");
+	setIcon(*new QPixmap(bucky_64x64_xpm));
 
 	resize(640,400);
 
@@ -82,12 +91,26 @@ Mainframe::Mainframe
 	open_pdb_file_ = new OpenPDBFile();
 	CHECK_PTR(open_pdb_file_);
 
+	molecular_properties_ = new MolecularProperties();
+	CHECK_PTR(molecular_properties_);
+
+	server_ = new Server();
+	CHECK_PTR(server_);
+
 	logview_ = new LogView(vert_splitter_);
 	CHECK_PTR(logview_);
 
 	QLabel* message_label = new QLabel(tr("Ready."), statusBar());
 	statusBar()->addWidget(message_label, 20);
 
+	server_icon_ = new QLabel(statusBar());
+	statusBar()->addWidget(server_icon_, 1, TRUE );
+	QToolTip::add(server_icon_, "VIEW server status");
+	QPixmap icon(mini_ray_xpm);
+
+	server_icon_->setPixmap(icon);
+	server_icon_->show();
+ 
 	// ---------------------
 	// read preferences ----
 	// ---------------------
@@ -120,11 +143,10 @@ Mainframe::Mainframe
 	control_->setColumnWidth(1, 60);
 
  	// ---------------------
-	// File setup -------
+	// molecularProperties setup -------
 	// ---------------------
 
-	open_hin_file_->registerFragmentDB(fragment_db_);
-	open_pdb_file_->registerFragmentDB(fragment_db_);
+	molecular_properties_->registerFragmentDB(fragment_db_);
 
 	// ---------------------
 	// LogView setup ------
@@ -258,12 +280,26 @@ Mainframe::Mainframe
 					this,
 					SLOT(applyPreferencesDialog()));
 
+	//--------------------------------
+	// setup the VIEW server
+	//--------------------------------
+
+  // registering object generator
+  MoleculeObjectCreator object_creator;
+  server_->registerObjectCreator(object_creator);
+
+	// check whether we should start the server
+	// and on which port
+	checkServer();
+
 	// building internal connection ------------------------------------------------
 	registerConnectionObject(*scene_);
 	registerConnectionObject(*control_);
 	registerConnectionObject(*display_properties_);
 	registerConnectionObject(*open_hin_file_);
 	registerConnectionObject(*open_pdb_file_);
+	registerConnectionObject(*molecular_properties_);
+	registerConnectionObject(*server_);
 }
 
 Mainframe::~Mainframe()
@@ -948,7 +984,7 @@ void Mainframe::applyPreferencesDialog()
 	
 	if (preferences_dialog_->isTabEnabled(preferences_dialog_->getNetworkTab()))
 	{
-		// checkServer();
+		checkServer();
 	}
 	
 	if (preferences_dialog_->isTabEnabled(preferences_dialog_->getDisplayTab()))
@@ -961,6 +997,48 @@ void Mainframe::applyPreferencesDialog()
 		{
 		}
 	}	
+}
+
+void Mainframe::startServer()
+{
+	// retrieve the port number
+	int port = preferences_dialog_->getNetworkTab()->getPort();
+	
+	// set the port and active the server
+	server_->setPort(port);
+	server_->activate();
+	
+	// adjust the tool tip and update the server icon
+	QString tip;
+	tip.sprintf("VIEW Server listening on port %d", port); 
+	QToolTip::add(server_icon_, tip);
+	server_icon_->show();
+	statusBar()->update();
+}
+
+void Mainframe::stopServer()
+{
+	// stop the server
+	server_->deactivate();
+
+	// hide the icon
+	server_icon_->hide();
+	QToolTip::add(server_icon_, "VIEW Server disabled");
+	statusBar()->update();
+}
+
+void Mainframe::checkServer()
+{
+	// retrieve the settings of the preferences
+	// dialog box
+	bool start_server = preferences_dialog_->getNetworkTab()->getServerStatus();
+	
+	if (start_server)
+	{
+		startServer();
+	} else {
+		stopServer();
+	}
 }
 
 void Mainframe::setPreferences(INIFile& inifile) const

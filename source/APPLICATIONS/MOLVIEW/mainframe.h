@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.12 2000/04/04 15:05:45 oliver Exp $
+// $Id: mainframe.h,v 1.13 2000/05/14 15:20:33 hekl Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -22,6 +22,8 @@
 #include <qstring.h>
 #include <qsplitter.h>
 #include <qstatusbar.h>
+#include <qlabel.h>
+#include <qtooltip.h>
 
 #ifndef BALL_FORMAT_INIFILE_H
 #	include <BALL/FORMAT/INIFile.h>
@@ -39,12 +41,20 @@
 # include <BALL/VIEW/OPENGL/KERNEL/mainControl.h>
 #endif
 
+#ifndef BALL_VIEW_OPENGL_KERNEL_SERVER_H
+# include <BALL/VIEW/OPENGL/KERNEL/server.h>
+#endif
+
 #ifndef BALL_VIEW_OPENGL_WIDGETS_SCENE_H
 # include <BALL/VIEW/OPENGL/WIDGETS/scene.h>
 #endif
 
 #ifndef BALL_MOLVIEW_OPENGL_WIDGETS_CONTROL_H
 # include <BALL/MOLVIEW/OPENGL/WIDGETS/control.h>
+#endif
+
+#ifndef BALL_MOLVIEW_OPENGL_WIDGETS_MOLECULARPROPERTIES_H
+# include <BALL/MOLVIEW/OPENGL/WIDGETS/molecularProperties.h>
 #endif
 
 #ifndef BALL_MOLVIEW_OPENGL_WIDGETS_OPENHINFILE_H
@@ -163,6 +173,10 @@ class Mainframe
 	// old style, will be replaced by connectionObject -Notification		
 	void applyPreferencesDialog();
 
+	void startServer();
+	void stopServer();
+	void checkServer();
+
 
   private:
 
@@ -173,6 +187,8 @@ class Mainframe
 	DlgAmberMinimization*	minimization_dialog_;
 	OpenHINFile*					open_hin_file_;
 	OpenPDBFile*					open_pdb_file_;
+	MolecularProperties*  molecular_properties_;
+	Server*   						server_;
 
 	MoleculeGLObjectCollector		GL_object_collector_;
 	MoleculeObjectProcessor			object_processor_;
@@ -190,6 +206,9 @@ class Mainframe
 	List<QPopupMenu*> popup_menus_;
 	List<Composite*>* selection_;
 	List<Composite*>  copy_list_;
+
+	QLabel*						server_icon_;
+	QLabel*						tool_box_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

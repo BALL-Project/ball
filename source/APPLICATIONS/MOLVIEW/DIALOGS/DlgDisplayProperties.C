@@ -128,16 +128,16 @@ void DlgDisplayProperties::getPreferences(const INIFile& inifile)
 void DlgDisplayProperties::onNotify(Message *message)
 {
 	// new composite => build graphical representation and notify scene
-	if (RTTI::isKindOf<NewCompositeMessage>(*message))
+	if (RTTI::isKindOf<NewMolecularMessage>(*message))
 	{
-		NewCompositeMessage *composite_message = RTTI::castTo<NewCompositeMessage>(*message);
+		NewMolecularMessage *composite_message = RTTI::castTo<NewMolecularMessage>(*message);
 
 		// generate graphical representation
 		object_processor_->applyOn(*(composite_message->getComposite()));
 
 		// notify tree of the changes
-		ChangedCompositeMessage *changed_message 
-			= new ChangedCompositeMessage(*composite_message);
+		ChangedMolecularMessage *changed_message 
+			= new ChangedMolecularMessage(*composite_message);
 
 		notify_(changed_message);
 

@@ -14,6 +14,10 @@
 #	include <BALL/common.h>
 #endif
 
+#ifndef BALL_FORMAT_INIFILE_H
+#	include <BALL/FORMAT/INIFile.h>
+#endif
+
 #ifndef BALL_VIEW_KERNEL_CONNECTIONOBJECT_H
 #	include <BALL/VIEW/KERNEL/connectionObject.h>
 #endif
@@ -22,8 +26,8 @@
 # include <BALL/MOLVIEW/OPENGL/FUNCTOR/moleculeObjectProcessor.h>
 #endif
 
-#ifndef BALL_FORMAT_INIFILE_H
-#	include <BALL/FORMAT/INIFile.h>
+#ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
+# include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
 #endif
 
 #include "DlgDisplayPropertiesData.h"

@@ -26,6 +26,7 @@ SOURCES=\
 	DIALOGS/DlgPreferencesDisplayData.C\
 	DIALOGS/DlgPreferencesNetwork.C\
 	DIALOGS/DlgPreferencesNetworkData.C\
+	icons.C\
 	main.C\
 	mainframe.C
 
