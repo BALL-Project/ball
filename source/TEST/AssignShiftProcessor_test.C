@@ -1,13 +1,17 @@
+// $Id: AssignShiftProcessor_test.C,v 1.10 2001/07/15 20:24:47 oliver Exp $
+
+#include <BALL/CONCEPT/classTest.h>
+
 #include <BALL/NMR/assignShiftProcessor.h>
+#include <BALL/NMR/createSpectrumProcessor.h>
 #include <BALL/NMR/spectrum.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/FORMAT/NMRStarFile.h>
 #include <BALL/SYSTEM/path.h>
-#include <BALL/CONCEPT/classTest.h>
 
-START_TEST(AssignShiftProcessor, "$Id: AssignShiftProcessor_test.C,v 1.9 2001/07/14 20:12:53 oliver Exp $")
+START_TEST(AssignShiftProcessor, "$Id: AssignShiftProcessor_test.C,v 1.10 2001/07/15 20:24:47 oliver Exp $")
 
 using namespace BALL;
 using namespace std;
@@ -16,13 +20,18 @@ System s;
 //AssignShiftProcessor asp;
 
 CHECK(preparations)
+	STATUS("opening HIN file")
 	HINFile f;
 	f.open("data/AssignShiftProcessor_test.hin");
-	Path path;
-
+	STATUS("reading structure")
 	f >> s;
+	
+	STATUS("opening fragment DB")
 	FragmentDB frag_db;
+
+	STATUS("constructing residue checker")
 	ResidueChecker rc(frag_db);
+	STATUS("checking structure")
 	s.apply(rc);
 RESULT
 
@@ -47,23 +56,20 @@ CHECK(results)
 		}
 		else
 		{
-			//Log.info() << atom_it->getFullName() << " has no shift property." << endl;
+			Log.info() << atom_it->getFullName() << " has no shift property." << endl;
 		}
 	}
 	TEST_EQUAL(number_of_shiftatoms, 940)
 
-	/** 
-	// BAUSTELLE!
-	Spectrum1D spectrum;
-	spectrum.setSystem(&s);
-	spectrum.setDensity(32768);
-	spectrum.createSpectrum();
+	CreateSpectrumProcessor csp;
+	s.apply(csp);
+	const PeakList1D& peak_list = csp.getPeakList();
 
-	TEST_EQUAL(spectrum.getPeakList().size(), 581)
+	TEST_EQUAL(peak_list.size(), 581)
 
-	spectrum.plotSpectrum("parv_synth.dat");
-	spectrum.writePeaks("parv_synth.peaks");
-	*/
+	// Spectrum1D spectrum(peak_list);
+	// spectrum.plotSpectrum("parv_synth.dat");
+	// spectrum.writePeaks("parv_synth.peaks");
 RESULT
 
 END_TEST
