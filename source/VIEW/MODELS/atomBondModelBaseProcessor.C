@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.C,v 1.5 2003/09/03 12:34:31 amoll Exp $
+// $Id: atomBondModelBaseProcessor.C,v 1.6 2003/12/15 01:08:50 amoll Exp $
 
 #include <BALL/VIEW/MODELS/atomBondModelBaseProcessor.h>
 #include <BALL/KERNEL/forEach.h>
@@ -79,18 +79,7 @@ namespace BALL
 			buildBondModels_();
 			return true;
 		}
-				
-		Processor::Result AtomBondModelBaseProcessor::operator()(Composite & /* composite */)
-		{
-			return Processor::CONTINUE;
-		}
-
-		bool AtomBondModelBaseProcessor::isValid() const
-			throw()
-		{
-			return ModelProcessor::isValid();
-		}
-
+			
 		void AtomBondModelBaseProcessor::dump(ostream& s, Size depth) const
 			throw()
 		{

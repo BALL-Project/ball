@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.20 2003/11/20 17:24:47 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.21 2003/12/15 01:14:12 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -696,8 +696,6 @@ namespace BALL
 		{
 			return turn_color_;
 		}
-
-
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/MODELS/standardColorProcessor.iC>

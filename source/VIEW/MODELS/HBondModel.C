@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HBondModel.C,v 1.4 2003/11/10 15:55:09 amoll Exp $
+// $Id: HBondModel.C,v 1.5 2003/12/15 01:05:00 amoll Exp $
 
 #include <BALL/VIEW/MODELS/HBondModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -80,7 +80,7 @@ Processor::Result HBondModelProcessor::operator() (Composite& composite)
 
 	Atom *atom = RTTI::castTo<Atom>(composite);
 	Atom* partner = (Atom*) atom->getProperty("HBOND_DONOR").getObject();
-	if (!partner) return Processor::CONTINUE;
+	if (partner == 0) return Processor::CONTINUE;
 
 	// generate tubes
 	Vector3 v = partner->getPosition() - atom->getPosition();

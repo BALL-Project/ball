@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.h,v 1.6 2003/11/13 19:30:42 amoll Exp $
+// $Id: backboneModel.h,v 1.7 2003/12/15 01:10:51 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_BACKBONEMODEL_H
@@ -90,14 +90,6 @@ namespace BALL
 			*/ 
 			//@{
 		
-			/** Start method.
-					Clear all internal structures.
-					Calls ModelProcessor::start.
-					\return bool <tt>true<\tt> if the start was successful
-					\see    operator()
-			*/
-			virtual bool start();
-			
 			/** Finish method.
 					This method will be internally called from the processor mechanism when the processor
 					has finished processing the Composite tree.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.8 2003/11/23 16:42:14 amoll Exp $
+// $Id: backboneModel.C,v 1.9 2003/12/15 01:10:15 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -58,11 +58,6 @@ namespace BALL
 			tube_radius_ = 0.4;
 		}
 
-		bool AddBackboneModel::start()
-		{
-			return ModelProcessor::start();
-		}
-				
 		bool AddBackboneModel::finish()
 		{
 			if (spline_vector_.size() == 0) return false;

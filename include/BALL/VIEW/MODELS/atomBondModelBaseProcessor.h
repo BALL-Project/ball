@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelBaseProcessor.h,v 1.6 2003/09/03 12:34:50 amoll Exp $
+// $Id: atomBondModelBaseProcessor.h,v 1.7 2003/12/15 01:09:17 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_ATOMBONDMODELBASEPROCESSOR_H
@@ -115,29 +115,10 @@ namespace BALL
 			*/
 			virtual bool finish();
 
-			/**	Operator method.
-					This method must be overridden to implement the creation of the different models.
-					If a model should be created that uses Atom and Bond objects for
-					structure (e.g. Ball And Stick Model) than the processed Atom objects
-					must be inserted into the AtomBondModelBaseProcessor with the method
-					insertAtom_(). This method in correlation with the method buildBondModels_()
-					will create the needed models for the connecting Bond objects.
-					\param  composite the Composite object that will be processed
-					\return Processor::Result the result 
-			*/
-			virtual Processor::Result operator() (Composite& composite);
-						
 			//@} 
 			/**	@name	debuggers and diagnostics 
 			*/ 
 			//@{
-
-			/** Internal state and consistency self-validation.
-					Calls ModelProcessor::isValid.
-					\return			bool true if the internal state is correct 
-			*/
-			virtual bool isValid() const
-				throw();
 
 			/** Internal value dump.
 					Dump the current state to the output ostream <b>s</b> with 

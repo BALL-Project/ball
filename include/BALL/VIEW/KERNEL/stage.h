@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: stage.h,v 1.2 2003/09/04 23:14:12 amoll Exp $
+// $Id: stage.h,v 1.3 2003/12/15 01:11:52 amoll Exp $
 
-#ifndef BALL_VIEW_GUI_KERNEL_STAGE_H
-#define BALL_VIEW_GUI_KERNEL_STAGE_H
+#ifndef BALL_VIEW_KERNEL_STAGE_H
+#define BALL_VIEW_KERNEL_STAGE_H
 
 #ifndef BALL_MATHS_VECTOR3_H
 # include <BALL/MATHS/vector3.h>
@@ -465,4 +465,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_GUI_KERNEL_Stage_H
+#endif // BALL_VIEW_KERNEL_STAGE_H

@@ -1,12 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.16 2003/11/20 17:17:19 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.17 2003/12/15 01:14:47 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 
-#ifndef BALL_VIEW_GUI_MODELS_COLORPROCESSOR_H
+#ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
 #	include <BALL/VIEW/MODELS/colorProcessor.h>
 #endif
 
@@ -93,12 +93,6 @@ namespace BALL
 				///
 				const ColorRGBA& getLastColor() const { return last_color_;}
 
-				///
-				/*
-				virtual Processor::Result operator() (GeometricObject*& object)
-					throw();
-					*/
-				
 				///
 				virtual bool start()
 					throw();

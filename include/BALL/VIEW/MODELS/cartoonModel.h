@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.h,v 1.9 2003/11/22 17:53:47 amoll Exp $
+// $Id: cartoonModel.h,v 1.10 2003/12/15 01:18:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_CARTOONMODEL_H
@@ -14,7 +14,6 @@
 namespace BALL
 {
 	class SecondaryStructure;
-	class Chain;
 	class AtomContainer;
 
 	namespace VIEW
@@ -52,26 +51,11 @@ namespace BALL
 			virtual ~AddCartoonModel()
 				throw();
 
-			/** Explicit default initialization.
-					Calls ModelProcessor::clear.
-			*/
-			virtual void clear()
-				throw();
-
 			//@} 
-
 			/**	@name Processor specific methods 
 			*/ 
 			//@{
 		
-			/** Start method.
-					Clear all internal structures.
-					Calls ModelProcessor::start.
-					\return bool <tt>true<\tt> if the start was successful
-					\see    operator()
-			*/
-			virtual bool start();
-			
 			/** Finish method.
 					This method will be internally called from the processor mechanism when the processor
 					has finished processing the Composite tree.
@@ -92,7 +76,6 @@ namespace BALL
 			virtual Processor::Result operator() (Composite& composite);
 
 			//@} 
-
 			/**	@name	debuggers and diagnostics 
 			*/ 
 			//@{

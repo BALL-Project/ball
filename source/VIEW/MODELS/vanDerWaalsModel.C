@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: vanDerWaalsModel.C,v 1.6 2003/12/12 15:11:01 amoll Exp $
+// $Id: vanDerWaalsModel.C,v 1.7 2003/12/15 01:03:24 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/vanDerWaalsModel.h>
@@ -46,7 +46,6 @@ namespace BALL
 				
 		Processor::Result AddVanDerWaalsModel::operator() (Composite &composite)
 		{
-			// composite is an atom ?
 			if (!RTTI::isKindOf<Atom>(composite))
 			{
 				return Processor::CONTINUE;

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.15 2003/12/10 14:05:01 anhi Exp $
+// $Id: cartoonModel.C,v 1.16 2003/12/15 01:17:37 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/PRIMITIVES/tube.h>
@@ -52,17 +52,6 @@ namespace BALL
 			#endif 
 		}
 
-		void AddCartoonModel::clear()
-			throw()
-		{
-			AddBackboneModel::clear();
-		}
-
-		bool AddCartoonModel::start()
-		{
-			return AddBackboneModel::start();
-		}
-				
 		bool AddCartoonModel::finish()
 		{
 			spline_vector_.clear();

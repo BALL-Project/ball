@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ballAndStickModel.C,v 1.8 2003/12/12 17:52:19 amoll Exp $
+// $Id: ballAndStickModel.C,v 1.9 2003/12/15 01:00:40 amoll Exp $
 
 #include <BALL/VIEW/MODELS/ballAndStickModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -116,7 +116,6 @@ void AddBallAndStickModel::setStickRadius(const float radius)
 
 Processor::Result AddBallAndStickModel::operator() (Composite& composite)
 {
-	// composite is an atom ?
 	if (!RTTI::isKindOf<Atom>(composite))
 	{
 		return Processor::CONTINUE;
@@ -140,7 +139,6 @@ Processor::Result AddBallAndStickModel::operator() (Composite& composite)
 	}
 
 	sphere_ptr->setPositionAddress(atom->getPosition());
-	sphere_ptr->setComposite(&composite);
 	
 	// append sphere in Atom
 	geometric_objects_.push_back(sphere_ptr);
