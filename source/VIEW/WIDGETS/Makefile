@@ -12,6 +12,7 @@ CPP_SOURCES=\
 	molecularControl.C\
 	molecularProperties.C\
 	regularData1DWidget.C\
+	trajectoryControl.C\
 	scene.C
 
 PYTHON_CPP_SOURCES=\
@@ -24,6 +25,7 @@ MOC_SOURCES=\
 	molecularControl_moc.C\
 	molecularProperties_moc.C\
 	scene_moc.C\
+	trajectoryControl_moc.C\
 	regularData1DWidget_moc.C
 
 PYTHON_MOC_SOURCES=\
@@ -64,3 +66,6 @@ regularData1DWidget_moc.C:	$(HEADER_DIR)/regularData1DWidget.h
 
 regularData2DWidget_moc.C:	$(HEADER_DIR)/regularData2DWidget.h
 	$(MOC) $(HEADER_DIR)/regularData2DWidget.h -o $@
+
+trajectoryControl_moc.C:	$(HEADER_DIR)/trajectoryControl.h
+	$(MOC) $(HEADER_DIR)/trajectoryControl.h -o $@
