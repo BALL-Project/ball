@@ -29,7 +29,7 @@
         </property>
         <widget class="QWidget">
             <property name="name">
-                <cstring>Display</cstring>
+                <cstring>Stage</cstring>
             </property>
             <attribute name="id">
                 <number>0</number>
