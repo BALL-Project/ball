@@ -148,38 +148,38 @@ XYZFile                             DEI,        /
 DCDFile                             X?          Z
 ------------------------KERNEL----------------------------------------------
 Atom                                D           /
-            BondIteratorTraits_     DEI         Z
-AtomContainer                       D           /
-AtomContainerIteratorTraits_        EI          Z
-AtomIteratorTraits_                 EI          Z
+            BondIteratorTraits_     D           Z
+AtomContainer                       /           /
+AtomContainerIteratorTraits_        D           Z
+AtomIteratorTraits_                 D           Z
 Bond                                D           /
             TooManyBonds            I           Z
 Chain                               /           /
-ChainIteratorTraits_                EI
-CompositeIteratorTraits_            EI          Z
-Expression                          EIX         X
-ExpressionPredicate                 EIX
-ExpressionTree                      EIX         
-SyntaxTree                          EI
+ChainIteratorTraits_                D           Z
+CompositeIteratorTraits_            D           Z
+Expression                          DX          Z          attrib doku
+ExpressionPredicate                 IX          Z          attrib doku
+ExpressionTree                      IX          Z          OCI(UnaryPred)
+SyntaxTree                          DI          Z          attrib doku
 Fragment                            /           / 
-FragmentIteratorTraits_             EI          Z
+FragmentIteratorTraits_             DEI         Z
 Element                             /           /
 PTE_                                D           /
 KernelPredicate                     I           /
 Molecule                            /           /
-MoleculeIteratorTraits_             EI          Z
+MoleculeIteratorTraits_             DEI         Z
 NucleicAcid                         I           /
-NucleicAcidIteratorTraits_          EI          Z
+NucleicAcidIteratorTraits_          DEI         Z
 Nucleotide                          /           /
-NucleotideIteratorTraits_           EI          Z
-PDBAtom                             D           /
-PDBAtomIteratorTraits_              EI          Z
+NucleotideIteratorTraits_           DEI         Z
+PDBAtom                             D           /          attrib doku
+PDBAtomIteratorTraits_              D           Z
 Protein                             /           /
-ProteinIteratorTraits_              EI          Z
+ProteinIteratorTraits_              DEI         Z
 Residue                             /           /
-ResidueIteratorTraits_              EI          Z
+ResidueIteratorTraits_              DEI         Z
 SecondaryStructure                  /           /
-SecondaryStructureIteratorTraits_   EI          Z
+SecondaryStructureIteratorTraits_   DEI         Z
 Selector                            EI
 System                              /           /
 
