@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.10.4.13 2002/12/08 22:38:44 amoll Exp $
+// $Id: control.h,v 1.10.4.14 2002/12/09 21:12:39 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_WIDGETS_CONTROL_H
 #define BALL_VIEW_GUI_WIDGETS_CONTROL_H
@@ -454,7 +454,7 @@ namespace BALL
 			*/
 			void eraseGeometricObject();
 
-			/**
+			/** Method is called if checkbox of an item is clicked.
 			*/
 			void selectedComposite(Composite* composite, bool state);
 
@@ -467,7 +467,11 @@ namespace BALL
 			*/
 			//@{
 
-			void setSelection_()
+			/** Set the selection of the checkboxes and the opening of the tree according to the selection
+			 		in the MainControl.
+					@param open true means, that the item tree is opend and closed according to the changes
+			*/
+			void setSelection_(bool open)
 				throw(MainControlMissing);
 
 			/** Access the information visitor.
