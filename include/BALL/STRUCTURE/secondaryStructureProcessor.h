@@ -1,3 +1,9 @@
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: secondaryStructureProcessor.h,v 1.6 2005/02/06 11:15:36 oliver Exp $
+//
+
 #ifndef BALL_SECONDARY_STRUCTURE_PROCESSOR_H
 #define BALL_SECONDARY_STRUCTURE_PROCESSOR_H
 
@@ -5,55 +11,56 @@
 #include <BALL/common.h>
 #endif
 
-#ifndef VECTOR
-# include <vector>
-#endif
-
 #ifndef BALL_CONCEPT_COMPOSITE_H
 # include <BALL/CONCEPT/composite.h>
 #endif
 
+#include <vector>
+
 namespace BALL
 {
   
-  /** This class represents processor
+  /** Secondary structure extraction from 3D structure.
+			This class implements the STRIDE algorithm (Argos & Frishman).
+			When applied to a protein, it removes the instances of SecondaryStructure
+			from the protein, predicts the secondary structure elements based
+			(mostly) on H-bond patterns and backbone torsions and reinserts the
+			appropriate secondary structure elements at the predicted positions.
    */
-  class SecondaryStructureProcessor :public UnaryProcessor<Composite>
+  class SecondaryStructureProcessor 
+		:	public UnaryProcessor<Composite>
 	{
-
 		public:
-			/** Default constructor
-			*/
-			SecondaryStructureProcessor();
+		/**	@name	Constructors */
+		//@{
+		///
+		SecondaryStructureProcessor();
+		//@}
 
-			/** Compute the secondary structure
-			 */
-			void compute();
+		/**	@name Processor-related methods */
+		//@{
+		///
+		virtual Processor::Result operator() (Composite& composite);
+		//@}
+
+
+		protected:
+		/// Compute the secondary structure
+		void compute_();
 			
-			/** operator()
-			*/
-			Processor::Result operator() (Composite &composite);
+		// matrix to save the possible HBondPairs
+		std::vector<std::vector<int> > HBonds_;
+		//vector to save the bridges
+		std::vector<std::vector<int> > posbridges_; 
+		void insertTurn_(int turn, int position);
+    void changeAllXToY_(char X, char Y, String& target);			
+		String sheet_;
+		String fiveturn_;
+		String fourturn_;
+		String threeturn_;
+		String summary_;
+	};
 
-			String sheet;
-		//	vector<char> bridge1;
-		//	vector<char> bridge2;
-			String Fiveturn;
-			String Fourturn;
-			String Threeturn;
-			String summary;
+} //namesspace BALL
 
-		private:
-			/** SecondaryStructureBool_ : matrix to save the existence of a SecondaryStructure
-			*/
-			//matrix to save the possible HBondPairs
-			vector< vector<int> > HBonds_;
-			//vector to save the bridges
-			vector< vector <int> > posbridges_; 
-			void insert_turn(int turn, int position);
-      void change_all_X_to_Y(char X, char Y, String& target);			
-			
-	}; //class SecondaryStructureProcessor
-
-}//namesspace BALL
-
-#endif
+#endif // BALL_STRUCTURE_SECONDARYSTRUCTUREPROCESSOR_H

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.C,v 1.8 2004/11/19 14:53:44 anne Exp $
+// $Id: secondaryStructureProcessor.C,v 1.9 2005/02/06 11:15:37 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
@@ -24,7 +24,7 @@ namespace BALL
 	 /***************************************
 	 * find the Secondary Structures
 	 * **************************************/
-	void SecondaryStructureProcessor::compute()
+	void SecondaryStructureProcessor::compute_()
 	{
 		 /*********************************
 		 *   initialize the summary strings			
@@ -34,15 +34,15 @@ namespace BALL
 		// rather the number of residues in the system.
 	  Size size = HBonds_.size();
 	
-		sheet.resize(size);
+		sheet_.resize(size);
 		for (Size i=0; i<size; i++)
 		{
-			sheet[i]='-';
+			sheet_[i]='-';
 		}
-		Fiveturn  = sheet;
-		Fourturn  = sheet;
-		Threeturn = sheet;
-		summary   = sheet;
+		fiveturn_  = sheet_;
+		fourturn_  = sheet_;
+		threeturn_ = sheet_;
+		summary_   = sheet_;
 
 	  /************************************************
 	  *  in the first place we search and insert turns
@@ -61,72 +61,72 @@ namespace BALL
 					if (HBonds_[i][k]==(int)(i+4))
 					{
 						//first sign
-						if( (Fourturn[i]  == '<') || (Fourturn[i] == 'X'))
+						if( (fourturn_[i]  == '<') || (fourturn_[i] == 'X'))
 						{
-							Fourturn[i]   = 'X';
+							fourturn_[i]   = 'X';
 						}else
 						{
-							Fourturn[i]   = '>';
+							fourturn_[i]   = '>';
 						}
 						//position 2,3,4
 						for (int j=1; j<4; j++)
 						{
-							if(Fourturn[i+j]=='-')
+							if(fourturn_[i+j]=='-')
 							{
-								Fourturn[i+j]='4';
+								fourturn_[i+j]='4';
 							}
 						}
 
 						//last position has always to be <
-						Fourturn[i+4] = '<';
+						fourturn_[i+4] = '<';
 					}
 
 					//---------- 3 turns
 					else if (HBonds_[i][k]==(int)(i+3))
 					{
 						//first sign
-						if( (Threeturn[i]  == '<') || (Threeturn[i] == 'X'))
+						if( (threeturn_[i]  == '<') || (threeturn_[i] == 'X'))
 						{
-							Threeturn[i]   = 'X';
+							threeturn_[i]   = 'X';
 						}else
 						{
-							Threeturn[i]   = '>';
+							threeturn_[i]   = '>';
 						}
 						//position 2,3
 						for (int j=1; j<3; j++)
 						{
-							if(Threeturn[i+j]=='-')
+							if(threeturn_[i+j]=='-')
 							{
-								Threeturn[i+j]='3';
+								threeturn_[i+j]='3';
 							}
 						}
 
 						//last position has always to be <
-						Threeturn[i+3] = '<';
+						threeturn_[i+3] = '<';
 					} 
 
 					//---------- 5 turns
 					else if (HBonds_[i][k]==(int)(i+5))
 					{
 						//first sign
-						if( (Fiveturn[i]  == '<') || (Fiveturn[i] == 'X'))
+						if( (fiveturn_[i]  == '<') || (fiveturn_[i] == 'X'))
 						{
-							Fiveturn[i]   = 'X';
+							fiveturn_[i]   = 'X';
 						}else
 						{
-							Fiveturn[i]   = '>';
+							fiveturn_[i]   = '>';
 						}
 						//position 2,3
 						for (int j=1; j<5; j++)
 						{
-							if(Fiveturn[i+j]=='-')
+							if(fiveturn_[i+j]=='-')
 							{
-								Fiveturn[i+j]='5';
+								fiveturn_[i+j]='5';
 							}
 						}
 
 						//last position has always to be <
-						Fiveturn[i+5] = '<';
+						fiveturn_[i+5] = '<';
 
 					} //else if turns
 
@@ -169,8 +169,8 @@ namespace BALL
 							posbridges_[current_res+1].push_back(partner);
 							posbridges_[partner].push_back(current_res+1);
 
-							sheet[current_res+1]= '+';
-							sheet[partner]  = '+';
+							sheet_[current_res+1]= '+';
+							sheet_[partner]  = '+';
 						}
 					}	 //forend parallelbridge
 
@@ -191,8 +191,8 @@ namespace BALL
 						
 							posbridges_[current_res].push_back(partner);
 							posbridges_[partner].push_back(current_res);
-							sheet[current_res]= '/';
-						  sheet[partner]  = '/';
+							sheet_[current_res]= '/';
+						  sheet_[partner]  = '/';
 						}
 					}//forend antiparallelbridge
 
@@ -212,8 +212,8 @@ namespace BALL
 						
 								posbridges_[current_res+1].push_back(partner-1);
 								posbridges_[partner-1].push_back(current_res+1);
-								sheet[current_res+1]= '/';
-						  	sheet[partner-1]  = '/';
+								sheet_[current_res+1]= '/';
+						  	sheet_[partner-1]  = '/';
 							}
 						}
 					}	// if (partner-2>=...)
@@ -245,16 +245,16 @@ namespace BALL
 		int last_residue = no_residue;
 		
 		for(  Size residue = 0; 
-			   (residue<sheet.size()) && (residue<posbridges_.size()); 
+			   (residue<sheet_.size()) && (residue<posbridges_.size()); 
 				  residue++)
 	  { 
 			// do we have a bridge?		 	
-			if( (sheet[residue]!='-'))
+			if( (sheet_[residue]!='-'))
 			{
 				// parallel bridge				
-				if(    (sheet[residue]=='+') 
-						|| (  (sheet[residue]>('a'-1)) 
-						    &&(sheet[residue]<('z'+1))
+				if(    (sheet_[residue]=='+') 
+						|| (  (sheet_[residue]>('a'-1)) 
+						    &&(sheet_[residue]<('z'+1))
 							 )
 					)	
 				{
@@ -283,7 +283,7 @@ namespace BALL
 							if (curr_part < (int)residue)
 							{
 								has_bonds_to_the_left = true;
-								letter = sheet[curr_part];
+								letter = sheet_[curr_part];
 							}
 							
 							// do we have a continuation of a ladder?
@@ -314,11 +314,11 @@ namespace BALL
 				// NOTE: there is no problem if we have seen the 
 				// residue before and set the letter 
 				// AND found a pattern and overwrite the letter perhaps! 
-				// the sheet-Loop(see below) will give them a unique letter 
+				// the sheet_-Loop(see below) will give them a unique letter 
 				if(    (last_residue != no_residue) 
 						&& (found_a_pattern))
 				{	
-					letter=sheet[last_residue];	
+					letter=sheet_[last_residue];	
 				}
 				else 
 				{
@@ -346,39 +346,39 @@ namespace BALL
 
 				// name all residues belonging to this bridge
 				// NOTE: in most cases there will be just one entry
-				sheet[residue]=letter;	
+				sheet_[residue]=letter;	
 				for(Size curr_part=0; curr_part < posbridges_[residue].size(); curr_part++)
 				{
 						if (posbridges_[residue][curr_part] > (int)residue)
 						{ //if we have a bridge to the right, we name the partner
-							//	sheet[posbridges_[residue][curr_part]]=letter;
+							//	sheet_[posbridges_[residue][curr_part]]=letter;
 						}
-						//		sheet[posbridges_[residue][curr_part]]=letter;
+						//		sheet_[posbridges_[residue][curr_part]]=letter;
 				}
 
-			}//if(sheet[residue]!='-'
+			}//if(sheet_[residue]!='-'
 		}//for(Size residue = 0 ....		
 			
 		
 		//
-		// now we are looking for sheets
+		// now we are looking for sheet_s
 		//
-		// sheet: set of one or more ladders connected by shared residues
+		// sheet_: set of one or more ladders connected by shared residues
 	
 		for(  Size residue = 0; 
-			   (residue<sheet.size()) && (residue<posbridges_.size()); 
+			   (residue<sheet_.size()) && (residue<posbridges_.size()); 
 				  residue++)
 	  { 
 			// do we have a bridge?		 	
-			if( (sheet[residue]!='-'))
+			if( (sheet_[residue]!='-'))
 			{
-				letter = sheet[residue];
+				letter = sheet_[residue];
 				for(Size curr_part_i=0; curr_part_i < posbridges_[residue].size(); curr_part_i++)
 				{
 						int curr_part=posbridges_[residue][curr_part_i];			
-						if(sheet[curr_part]!=letter)
+						if(sheet_[curr_part]!=letter)
 						{
-							change_all_X_to_Y(sheet[curr_part], letter, sheet);
+							changeAllXToY_(sheet_[curr_part], letter, sheet_);
 						}				
 				}				
 			}
@@ -402,40 +402,40 @@ namespace BALL
 			int length = 5;
 			int turn = 3;
 			if((   (i+2+length) < size)  
-				  && (   Threeturn.getSubstring(i).toString().hasPrefix(">>")
-				 			|| Threeturn.getSubstring(i).toString().hasPrefix("XX")
-				 			|| Threeturn.getSubstring(i).toString().hasPrefix(">X")
-				 			|| Threeturn.getSubstring(i).toString().hasPrefix("X>") 
+				  && (   threeturn_.getSubstring(i).toString().hasPrefix(">>")
+				 			|| threeturn_.getSubstring(i).toString().hasPrefix("XX")
+				 			|| threeturn_.getSubstring(i).toString().hasPrefix(">X")
+				 			|| threeturn_.getSubstring(i).toString().hasPrefix("X>") 
 						 )
-					&& (   Threeturn.getSubstring(i+3).toString().hasPrefix(">>")
-				 			|| Threeturn.getSubstring(i+3).toString().hasPrefix("XX")
-				 			|| Threeturn.getSubstring(i+3).toString().hasPrefix(">X")
-				 			|| Threeturn.getSubstring(i+3).toString().hasPrefix("X>") 
+					&& (   threeturn_.getSubstring(i+3).toString().hasPrefix(">>")
+				 			|| threeturn_.getSubstring(i+3).toString().hasPrefix("XX")
+				 			|| threeturn_.getSubstring(i+3).toString().hasPrefix(">X")
+				 			|| threeturn_.getSubstring(i+3).toString().hasPrefix("X>") 
 						 )	
-					&& ((Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
+					&& ((fourturn_[i+2]!= '>') && (fourturn_[i+2]!='X')  )
 				)
 			{
-				insert_turn(turn, i+2);
+				insertTurn_(turn, i+2);
 			}
 			
 			// offset three turns	
 			if((   (i+3+length) < size)  
-				  && (   Threeturn.getSubstring(i).toString().hasPrefix(">>")
-				 			|| Threeturn.getSubstring(i).toString().hasPrefix("XX")
-				 			|| Threeturn.getSubstring(i).toString().hasPrefix(">X")
-				 			|| Threeturn.getSubstring(i).toString().hasPrefix("X>") 
+				  && (   threeturn_.getSubstring(i).toString().hasPrefix(">>")
+				 			|| threeturn_.getSubstring(i).toString().hasPrefix("XX")
+				 			|| threeturn_.getSubstring(i).toString().hasPrefix(">X")
+				 			|| threeturn_.getSubstring(i).toString().hasPrefix("X>") 
 						 )
-					&& (   Threeturn.getSubstring(i+4).toString().hasPrefix(">>")
-				 			|| Threeturn.getSubstring(i+4).toString().hasPrefix("XX")
-				 			|| Threeturn.getSubstring(i+4).toString().hasPrefix(">X")
-				 			|| Threeturn.getSubstring(i+4).toString().hasPrefix("X>") 
+					&& (   threeturn_.getSubstring(i+4).toString().hasPrefix(">>")
+				 			|| threeturn_.getSubstring(i+4).toString().hasPrefix("XX")
+				 			|| threeturn_.getSubstring(i+4).toString().hasPrefix(">X")
+				 			|| threeturn_.getSubstring(i+4).toString().hasPrefix("X>") 
 						 )
-					&& ( (Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
-					&& ( (Fourturn[i+3]!= '>') && (Fourturn[i+3]!='X')  )
+					&& ( (fourturn_[i+2]!= '>') && (fourturn_[i+2]!='X')  )
+					&& ( (fourturn_[i+3]!= '>') && (fourturn_[i+3]!='X')  )
 				)
 			{
-				insert_turn(turn, i+2);
-			 	insert_turn(turn, i+3);
+				insertTurn_(turn, i+2);
+			 	insertTurn_(turn, i+3);
 			}			
 		}
 	
@@ -449,39 +449,39 @@ namespace BALL
 			int length = 6;
 			int turn = 4;			
 			if((   (i+2+length) < size)  
-				  && (   Fourturn.getSubstring(i).toString().hasPrefix(">>")
-				 			|| Fourturn.getSubstring(i).toString().hasPrefix("XX")
-				 			|| Fourturn.getSubstring(i).toString().hasPrefix(">X")
-				 			|| Fourturn.getSubstring(i).toString().hasPrefix("X>") 
+				  && (   fourturn_.getSubstring(i).toString().hasPrefix(">>")
+				 			|| fourturn_.getSubstring(i).toString().hasPrefix("XX")
+				 			|| fourturn_.getSubstring(i).toString().hasPrefix(">X")
+				 			|| fourturn_.getSubstring(i).toString().hasPrefix("X>") 
 						 )
-					&& (   Fourturn.getSubstring(i+3).toString().hasPrefix(">>")
-				 			|| Fourturn.getSubstring(i+3).toString().hasPrefix("XX")
-				 			|| Fourturn.getSubstring(i+3).toString().hasPrefix(">X")
-				 			|| Fourturn.getSubstring(i+3).toString().hasPrefix("X>") 
+					&& (   fourturn_.getSubstring(i+3).toString().hasPrefix(">>")
+				 			|| fourturn_.getSubstring(i+3).toString().hasPrefix("XX")
+				 			|| fourturn_.getSubstring(i+3).toString().hasPrefix(">X")
+				 			|| fourturn_.getSubstring(i+3).toString().hasPrefix("X>") 
 						 )
-					&& ((Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
+					&& ((fourturn_[i+2]!= '>') && (fourturn_[i+2]!='X')  )
 				)
 			{
-				insert_turn(turn, i+2);
+				insertTurn_(turn, i+2);
 			}		
 			// offset three turns	
 			if((   (i+3+length) < size)  
-				  && (   Fourturn.getSubstring(i).toString().hasPrefix(">>")
-				 			|| Fourturn.getSubstring(i).toString().hasPrefix("XX")
-				 			|| Fourturn.getSubstring(i).toString().hasPrefix(">X")
-				 			|| Fourturn.getSubstring(i).toString().hasPrefix("X>") 
+				  && (   fourturn_.getSubstring(i).toString().hasPrefix(">>")
+				 			|| fourturn_.getSubstring(i).toString().hasPrefix("XX")
+				 			|| fourturn_.getSubstring(i).toString().hasPrefix(">X")
+				 			|| fourturn_.getSubstring(i).toString().hasPrefix("X>") 
 						 )
-					&& (   Fourturn.getSubstring(i+4).toString().hasPrefix(">>")
-				 			|| Fourturn.getSubstring(i+4).toString().hasPrefix("XX")
-				 			|| Fourturn.getSubstring(i+4).toString().hasPrefix(">X")
-				 			|| Fourturn.getSubstring(i+4).toString().hasPrefix("X>") 
+					&& (   fourturn_.getSubstring(i+4).toString().hasPrefix(">>")
+				 			|| fourturn_.getSubstring(i+4).toString().hasPrefix("XX")
+				 			|| fourturn_.getSubstring(i+4).toString().hasPrefix(">X")
+				 			|| fourturn_.getSubstring(i+4).toString().hasPrefix("X>") 
 						 )
-					&& ( (Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
-					&& ( (Fourturn[i+3]!= '>') && (Fourturn[i+3]!='X')  )
+					&& ( (fourturn_[i+2]!= '>') && (fourturn_[i+2]!='X')  )
+					&& ( (fourturn_[i+3]!= '>') && (fourturn_[i+3]!='X')  )
 				)
 			{
-				insert_turn(turn, i+2);
-			 	insert_turn(turn, i+3);		
+				insertTurn_(turn, i+2);
+			 	insertTurn_(turn, i+3);		
 			}			
 		}
 		
@@ -496,46 +496,46 @@ namespace BALL
 			int length = 7;
 			int turn = 5;			
 			if((   (i+2+length) < size)  
-				  && (   Fiveturn.getSubstring(i).toString().hasPrefix(">>")
-				 			|| Fiveturn.getSubstring(i).toString().hasPrefix("XX")
-				 			|| Fiveturn.getSubstring(i).toString().hasPrefix(">X")
-				 			|| Fiveturn.getSubstring(i).toString().hasPrefix("X>") 
+				  && (   fiveturn_.getSubstring(i).toString().hasPrefix(">>")
+				 			|| fiveturn_.getSubstring(i).toString().hasPrefix("XX")
+				 			|| fiveturn_.getSubstring(i).toString().hasPrefix(">X")
+				 			|| fiveturn_.getSubstring(i).toString().hasPrefix("X>") 
 						 )
-					&& (   Fiveturn.getSubstring(i+3).toString().hasPrefix(">>")
-				 			|| Fiveturn.getSubstring(i+3).toString().hasPrefix("XX")
-				 			|| Fiveturn.getSubstring(i+3).toString().hasPrefix(">X")
-				 			|| Fiveturn.getSubstring(i+3).toString().hasPrefix("X>") 
+					&& (   fiveturn_.getSubstring(i+3).toString().hasPrefix(">>")
+				 			|| fiveturn_.getSubstring(i+3).toString().hasPrefix("XX")
+				 			|| fiveturn_.getSubstring(i+3).toString().hasPrefix(">X")
+				 			|| fiveturn_.getSubstring(i+3).toString().hasPrefix("X>") 
 						 )
-					&& ( (Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
+					&& ( (fourturn_[i+2]!= '>') && (fourturn_[i+2]!='X')  )
 				)
 			{
-				insert_turn(turn, i+2);
+				insertTurn_(turn, i+2);
 			}		
 			// offset three turns	
 			if((   (i+3+length) < size)  
-				  && (   Fiveturn.getSubstring(i).toString().hasPrefix(">>")
-				 			|| Fiveturn.getSubstring(i).toString().hasPrefix("XX")
-				 			|| Fiveturn.getSubstring(i).toString().hasPrefix(">X")
-				 			|| Fiveturn.getSubstring(i).toString().hasPrefix("X>") 
+				  && (   fiveturn_.getSubstring(i).toString().hasPrefix(">>")
+				 			|| fiveturn_.getSubstring(i).toString().hasPrefix("XX")
+				 			|| fiveturn_.getSubstring(i).toString().hasPrefix(">X")
+				 			|| fiveturn_.getSubstring(i).toString().hasPrefix("X>") 
 						 )
-					&& (   Fiveturn.getSubstring(i+4).toString().hasPrefix(">>")
-				 			|| Fiveturn.getSubstring(i+4).toString().hasPrefix("XX")
-				 			|| Fiveturn.getSubstring(i+4).toString().hasPrefix(">X")
-				 			|| Fiveturn.getSubstring(i+4).toString().hasPrefix("X>") 
+					&& (   fiveturn_.getSubstring(i+4).toString().hasPrefix(">>")
+				 			|| fiveturn_.getSubstring(i+4).toString().hasPrefix("XX")
+				 			|| fiveturn_.getSubstring(i+4).toString().hasPrefix(">X")
+				 			|| fiveturn_.getSubstring(i+4).toString().hasPrefix("X>") 
 						 )
-					&& ( (Fourturn[i+2]!= '>') && (Fourturn[i+2]!='X')  )
-					&& ( (Fourturn[i+3]!= '>') && (Fourturn[i+3]!='X')  )
+					&& ( (fourturn_[i+2]!= '>') && (fourturn_[i+2]!='X')  )
+					&& ( (fourturn_[i+3]!= '>') && (fourturn_[i+3]!='X')  )
 				)
 			{
-				insert_turn(turn, i+2);
-			 	insert_turn(turn, i+3);
+				insertTurn_(turn, i+2);
+			 	insertTurn_(turn, i+3);
 			}			
 		}	
    
 		
 		// /*****************************************************
 		// *
-		// * -------- now we construct the summary string ----------
+		// * -------- now we construct the summary_ string ----------
 		// *
 		// * structural overlaps are eleminated by considering
   	// * hierarchy H > B > E > G > I > T
@@ -543,7 +543,7 @@ namespace BALL
   	// * 		E means extended ladder residues, G means 3 Helices
   	// *		I means 5 Helices and T means single 3-, 4-, or 5-turns 
 		// * we start with writing 5 Helices and overwrite graduately 
- 		// * the summary string with 3 Helices, extended bridges, 
+ 		// * the summary_ string with 3 Helices, extended bridges, 
 		// * single bridges and 4 Helices helices	
     // -------------------------------------------------------
 		// ****************************************************/
@@ -552,40 +552,40 @@ namespace BALL
 		// --------------------- 5 helices ---------------------- 
 		for(Size i= 0; i<size; i++)
 		{
-			// we initialize the summary string with '-'			
-			if(Fiveturn[i] == '-') 
+			// we initialize the summary_ string with '-'			
+			if(fiveturn_[i] == '-') 
 			{
-				summary[i]= '-';
+				summary_[i]= '-';
 			}
-			else if(   (Fiveturn.getSubstring(i).toString().hasPrefix(">>"))		 
-	    	      || (Fiveturn.getSubstring(i).toString().hasPrefix(">X"))
-				      || (Fiveturn.getSubstring(i).toString().hasPrefix("X>"))
-				      || (Fiveturn.getSubstring(i).toString().hasPrefix("XX"))
+			else if(   (fiveturn_.getSubstring(i).toString().hasPrefix(">>"))		 
+	    	      || (fiveturn_.getSubstring(i).toString().hasPrefix(">X"))
+				      || (fiveturn_.getSubstring(i).toString().hasPrefix("X>"))
+				      || (fiveturn_.getSubstring(i).toString().hasPrefix("XX"))
 			     	 )  
 							
 			{
 				if( (i+5) < size)
 				{
-					summary[i+1]= 'I';
-					summary[i+2]= 'I';
-					summary[i+3]= 'I';
-					summary[i+4]= 'I';
-					summary[i+5]= 'I';
+					summary_[i+1]= 'I';
+					summary_[i+2]= 'I';
+					summary_[i+3]= 'I';
+					summary_[i+4]= 'I';
+					summary_[i+5]= 'I';
 				}	
 			}// do we have a helix reduced to less than minimal size?
-			else if( //  ( ! hasPrefix("II", i, summary)) &&
-							   (  (Fiveturn.getSubstring(i).toString().hasPrefix(">5"))
-									||(Fiveturn.getSubstring(i).toString().hasPrefix("X5")
-									||(Fiveturn.getSubstring(i).toString().hasPrefix("><"))
-									||(Fiveturn.getSubstring(i).toString().hasPrefix("X<"))				
+			else if( //  ( ! hasPrefix("II", i, summary_)) &&
+							   (  (fiveturn_.getSubstring(i).toString().hasPrefix(">5"))
+									||(fiveturn_.getSubstring(i).toString().hasPrefix("X5")
+									||(fiveturn_.getSubstring(i).toString().hasPrefix("><"))
+									||(fiveturn_.getSubstring(i).toString().hasPrefix("X<"))				
 								 ) 
 							)  ) 
 			{
-				for(int j=1; (j<5) && ((i+j)<summary.size()) && ((i+j)<Fiveturn.size()) ;j++)
+				for(int j=1; (j<5) && ((i+j)<summary_.size()) && ((i+j)<fiveturn_.size()) ;j++)
 				{			
-					if(Fiveturn[i+j]!='I')
+					if(fiveturn_[i+j]!='I')
 					{
-						summary[i+j]= 'T';
+						summary_[i+j]= 'T';
 					}				
 				}	
 			}	
@@ -594,35 +594,35 @@ namespace BALL
 		// -------------------3 helices ------------------------
 		for(Size i= 0; i<size; i++)
 		{
-			if(   (Threeturn.getSubstring(i).toString().hasPrefix(">>"))		 
-	    	 || (Threeturn.getSubstring(i).toString().hasPrefix(">X"))
-				 || (Threeturn.getSubstring(i).toString().hasPrefix("X>"))
-				 || (Threeturn.getSubstring(i).toString().hasPrefix("XX"))
+			if(   (threeturn_.getSubstring(i).toString().hasPrefix(">>"))		 
+	    	 || (threeturn_.getSubstring(i).toString().hasPrefix(">X"))
+				 || (threeturn_.getSubstring(i).toString().hasPrefix("X>"))
+				 || (threeturn_.getSubstring(i).toString().hasPrefix("XX"))
 				)  
 			{
 				if( (i+3) < size)
 				{
-					summary[i+1]= 'G';
-					summary[i+2]= 'G';
-					summary[i+3]= 'G';
+					summary_[i+1]= 'G';
+					summary_[i+2]= 'G';
+					summary_[i+3]= 'G';
 				}	
 			}// do we have a helix reduced to less than minimal size?
 			 // we have to consider, that we do not overwrite 
-			else if(   (Threeturn.getSubstring(i).toString().hasPrefix(">3") )
-							|| (Threeturn.getSubstring(i).toString().hasPrefix("X3") )
-							|| (Threeturn.getSubstring(i).toString().hasPrefix("><"))
-							|| (Threeturn.getSubstring(i).toString().hasPrefix("X<"))
+			else if(   (threeturn_.getSubstring(i).toString().hasPrefix(">3") )
+							|| (threeturn_.getSubstring(i).toString().hasPrefix("X3") )
+							|| (threeturn_.getSubstring(i).toString().hasPrefix("><"))
+							|| (threeturn_.getSubstring(i).toString().hasPrefix("X<"))
 						 )
 			{
-				if( (i+3) < summary.size())
+				if( (i+3) < summary_.size())
 				{
 					for(Size j=1; j<3;j++)
 					{ 
-						if(  (summary[i+j]!= 'G') 
-							 &&(summary[i+j]!= 'I') 
+						if(  (summary_[i+j]!= 'G') 
+							 &&(summary_[i+j]!= 'I') 
 							)
 						{	
-							summary[i+j]= 'T';	
+							summary_[i+j]= 'T';	
 						}
 					}
 				}	
@@ -634,19 +634,19 @@ namespace BALL
 		// 		single bridges are ladders of length one -> B, 
 		// 		all other ladder residues -> E
 		// we assume that there is a mistake in the paper: E has a higher priority than B
-		// first we generate the sheet-line and than summarize it in the summary line
-		for(Size i=0; i< (sheet.size()); i++)
+		// first we generate the sheet_-line and than summarize it in the summary_ line
+		for(Size i=0; i< (sheet_.size()); i++)
 		{
-			if(sheet[i]!='-')
+			if(sheet_[i]!='-')
 			{
-				letter = sheet[i];			
+				letter = sheet_[i];			
 				int j=0;			
-				for(j=0; ((i+j)<sheet.size()) && (sheet[i+j]==letter); j++)
+				for(j=0; ((i+j)<sheet_.size()) && (sheet_[i+j]==letter); j++)
 				{
 				}
-				if((j==1)&&(summary[i]!='E')) //single bridge
+				if((j==1)&&(summary_[i]!='E')) //single bridge
 				{
-					summary[i]='B';
+					summary_[i]='B';
 				}
 				else if(j==0)
 				{
@@ -655,7 +655,7 @@ namespace BALL
 				{		
 					for(int n=0; n<j; n++)
 					{
-						summary[i+n]='E';
+						summary_[i+n]='E';
 					}
 				  i=i+j-1;	
 				}								
@@ -666,24 +666,24 @@ namespace BALL
 		// ---------------- 4 helices ---------------------
 		for(Size i= 0; i<size; i++)
 		{
-			if(   (Fourturn.getSubstring(i).toString().hasPrefix(">>"))		 
-	    	 || (Fourturn.getSubstring(i).toString().hasPrefix(">X"))
-				 || (Fourturn.getSubstring(i).toString().hasPrefix("X>"))
-				 || (Fourturn.getSubstring(i).toString().hasPrefix("XX"))
+			if(   (fourturn_.getSubstring(i).toString().hasPrefix(">>"))		 
+	    	 || (fourturn_.getSubstring(i).toString().hasPrefix(">X"))
+				 || (fourturn_.getSubstring(i).toString().hasPrefix("X>"))
+				 || (fourturn_.getSubstring(i).toString().hasPrefix("XX"))
 				)  
 							
 			{
 				if( (i+4) < size)
 				{
-					summary[i+1]= 'H';
-					summary[i+2]= 'H';
-					summary[i+3]= 'H';
-				  summary[i+4]= 'H';
+					summary_[i+1]= 'H';
+					summary_[i+2]= 'H';
+					summary_[i+3]= 'H';
+				  summary_[i+4]= 'H';
 				}	
 			}// do we have a helix reduced to less than minimal size?
 			 // we have to consider, that we do not overwrite 
-			else if(   (Fourturn.getSubstring(i).toString().hasPrefix(">4"))
-						  || (Fourturn.getSubstring(i).toString().hasPrefix("X4"))
+			else if(   (fourturn_.getSubstring(i).toString().hasPrefix(">4"))
+						  || (fourturn_.getSubstring(i).toString().hasPrefix("X4"))
 						 )  
 			{
 							
@@ -691,87 +691,87 @@ namespace BALL
 				{
 					for(Size j=1; j<4;j++)
 					{ 
-						if(  ( summary[i+j]!= 'G')
-							 &&( summary[i+j]!= 'H')
-							 &&( summary[i+j]!= 'I')
-							 &&( summary[i+j]!= 'E')
-							 &&( summary[i+j]!= 'B')
+						if(  ( summary_[i+j]!= 'G')
+							 &&( summary_[i+j]!= 'H')
+							 &&( summary_[i+j]!= 'I')
+							 &&( summary_[i+j]!= 'E')
+							 &&( summary_[i+j]!= 'B')
 							)
 						{	
-							summary[i+j]= 'T';	
+							summary_[i+j]= 'T';	
 						}
 					}//end for
 				}//end if	
 			}//end if	
 		}//end for
 	
-		// we should read the summary string again in order to substitute
+		// we should read the summary_ string again in order to substitute
 		// single G or I, generated by overwriting GGG or IIIII by HHHH 
-		for(Size i=0; i<( summary.size()); i++)
+		for(Size i=0; i<( summary_.size()); i++)
 		{			
-			if( (     ((i+2)< summary.size())
-					  && (summary[i]  !='G')
-				    && (summary[i+1]=='G')
-				    && (summary[i+2]!='G')
+			if( (     ((i+2)< summary_.size())
+					  && (summary_[i]  !='G')
+				    && (summary_[i+1]=='G')
+				    && (summary_[i+2]!='G')
 				  )
-				||(    ((i+2)< summary.size())
-						&& (summary[i]  !='I')
-				    && (summary[i+1]=='I')
-				    && (summary[i+2]!='I')
+				||(    ((i+2)< summary_.size())
+						&& (summary_[i]  !='I')
+				    && (summary_[i+1]=='I')
+				    && (summary_[i+2]!='I')
 				   )
 				)
 			{
-				summary[i+1]='T';
+				summary_[i+1]='T';
 			}		
-			if( (     ((i+3)< summary.size())
-					  && (summary[i]  !='G')
-				    && (summary[i+1]=='G')
-				    && (summary[i+2]=='G')
-				    && (summary[i+3]!='G')
+			if( (     ((i+3)< summary_.size())
+					  && (summary_[i]  !='G')
+				    && (summary_[i+1]=='G')
+				    && (summary_[i+2]=='G')
+				    && (summary_[i+3]!='G')
 				  )
-				||(    ((i+3)< summary.size())
-    			  && (summary[i]  !='I')
-				    && (summary[i+1]=='I')
-				    && (summary[i+2]=='I')
-				    && (summary[i+3]!='I')
+				||(    ((i+3)< summary_.size())
+    			  && (summary_[i]  !='I')
+				    && (summary_[i+1]=='I')
+				    && (summary_[i+2]=='I')
+				    && (summary_[i+3]!='I')
 					)
 				)				
 			{
 
-				summary[i+1]='T';
-				summary[i+2]='T';
+				summary_[i+1]='T';
+				summary_[i+2]='T';
 			}	
 			
-			if( (     ((i+4)< summary.size())
-    			  &&  (summary[i]  !='I')
-				    &&  (summary[i+1]=='I')
-				    &&  (summary[i+2]=='I')
-				    &&  (summary[i+3]=='I')
-				    &&  (summary[i+4]!='I')
+			if( (     ((i+4)< summary_.size())
+    			  &&  (summary_[i]  !='I')
+				    &&  (summary_[i+1]=='I')
+				    &&  (summary_[i+2]=='I')
+				    &&  (summary_[i+3]=='I')
+				    &&  (summary_[i+4]!='I')
 					)
 				)				
 			{
-				summary[i+1]='T';
-				summary[i+2]='T';
-				summary[i+3]='T';
+				summary_[i+1]='T';
+				summary_[i+2]='T';
+				summary_[i+3]='T';
 			}	
 		}
 		
 	}
 	
-	void SecondaryStructureProcessor::insert_turn(int turn, int position)
+	void SecondaryStructureProcessor::insertTurn_(int turn, int position)
 	{
 		bool correct = true;			
 		String *n_turn;	
 		if(turn == 3)
 		{ 
-			n_turn = &Threeturn;
+			n_turn = &threeturn_;
 		}else if(turn == 4)
 		{ 
-			n_turn = &Fourturn;
+			n_turn = &fourturn_;
 		}else if(turn == 5)
 		{
-			n_turn = &Fiveturn;
+			n_turn = &fiveturn_;
 		}else 
 		{
 			correct = false;//TODO: Error message & return
@@ -809,7 +809,7 @@ namespace BALL
 	}
 
 	
-	void SecondaryStructureProcessor::change_all_X_to_Y(char X, char Y, String& target)
+	void SecondaryStructureProcessor::changeAllXToY_(char X, char Y, String& target)
 	{
 		for(Size i=0; i<target.size(); i++)
 		{
@@ -844,7 +844,7 @@ namespace BALL
 		}
 		
 		// locate the Secondary Structures
-		compute();
+		compute_();
 
 		//----------associate new Secondary Structures (SS) for each residue -----
 	  // - summarize equal residues in one new SS (new_ss)
@@ -861,9 +861,9 @@ namespace BALL
 		for (;+ri;++ri)
 		{
 		 // !!!! attention: resnum is the real "index"
-			if (summary[resnum] != last_struct)
+			if (summary_[resnum] != last_struct)
 			{
-				if (last_struct != 'L' || (summary[resnum] != 'G' && summary[resnum] != '-'))
+				if (last_struct != 'L' || (summary_[resnum] != 'G' && summary_[resnum] != '-'))
 				{
 					ss = new SecondaryStructure;
 					new_ss.push_back(ss);
@@ -871,13 +871,13 @@ namespace BALL
 			}
 
 			// first determine the type of this residue
-			if (summary[resnum] == 'H') 			// Alpha - HELIX
+			if (summary_[resnum] == 'H') 			// Alpha - HELIX
 			{
 				// TODO: what about other helices???
 				ss->setType(SecondaryStructure::HELIX);
 				last_struct = 'H';
 			}
-			else if (summary[resnum] == 'E') 	// Beta - STRAND
+			else if (summary_[resnum] == 'E') 	// Beta - STRAND
 			{
 				ss->setType(SecondaryStructure::STRAND);
 				last_struct = 'E';
