@@ -101,7 +101,7 @@ int main(int argc, char** argv)
 	// 1000 optimization steps
 	minimizer.setup(FF);
 	minimizer.setEnergyOutputFrequency(1);
-	minimizer.minimize(20);
+	minimizer.minimize(1000);
 
 	// calculate the terminal energy and print it
 	float terminal_energy = FF.getEnergy();

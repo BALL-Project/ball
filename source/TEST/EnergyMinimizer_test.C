@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: EnergyMinimizer_test.C,v 1.6 2003/02/03 21:38:19 oliver Exp $
+// $Id: EnergyMinimizer_test.C,v 1.7 2003/02/05 13:00:19 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(EnergyMinimizer, "$Id: EnergyMinimizer_test.C,v 1.6 2003/02/03 21:38:19 oliver Exp $")
+START_TEST(EnergyMinimizer, "$Id: EnergyMinimizer_test.C,v 1.7 2003/02/05 13:00:19 oliver Exp $")
 
 using namespace BALL;
 
@@ -115,26 +115,26 @@ CHECK(EnergyMinimizer::specificSetup())
 	// specificSetup() shouldn't do anything except returning true
 RESULT
 
-CHECK(EnergyMinimizer::getNumberOfIteration() const)
+CHECK(EnergyMinimizer::getNumberOfIterations() const)
 	EnergyMinimizer e_min;
-	TEST_EQUAL(e_min.getNumberOfIteration(), 0)
+	TEST_EQUAL(e_min.getNumberOfIterations(), 0)
 RESULT
 
-CHECK(EnergyMinimizer::setNumberOfIteration(Size))
+CHECK(EnergyMinimizer::setNumberOfIterations(Size))
 	EnergyMinimizer e_min;
-	e_min.setNumberOfIteration(4);
-	TEST_EQUAL(e_min.getNumberOfIteration(), 4)
+	e_min.setNumberOfIterations(4);
+	TEST_EQUAL(e_min.getNumberOfIterations(), 4)
 RESULT
 
-CHECK(EnergyMinimizer::getMaximalNumberOfIterations())
+CHECK(EnergyMinimizer::getMaxNumberOfIterations())
 	EnergyMinimizer e_min;
-	TEST_EQUAL(e_min.getMaximalNumberOfIterations(), 0)
+	TEST_EQUAL(e_min.getMaxNumberOfIterations(), 0)
 RESULT
 
-CHECK(EnergyMinimizer::setMaximalNumberOfIterations(Size))
+CHECK(EnergyMinimizer::setMaxNumberOfIterations(Size))
 	EnergyMinimizer e_min;
-	e_min.setMaximalNumberOfIterations(2000);
-	TEST_EQUAL(e_min.getMaximalNumberOfIterations(), 2000)
+	e_min.setMaxNumberOfIterations(2000);
+	TEST_EQUAL(e_min.getMaxNumberOfIterations(), 2000)
 RESULT
 
 CHECK(EnergyMinimizer::getEnergyOutputFrequency() const)

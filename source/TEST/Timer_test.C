@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Timer_test.C,v 1.19 2002/12/23 08:16:42 oliver Exp $
+// $Id: Timer_test.C,v 1.20 2003/02/05 13:00:19 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <unistd.h>
@@ -15,7 +15,7 @@
 #endif
 ///////////////////////////
 
-START_TEST(Timer, "$Id: Timer_test.C,v 1.19 2002/12/23 08:16:42 oliver Exp $")
+START_TEST(Timer, "$Id: Timer_test.C,v 1.20 2003/02/05 13:00:19 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -154,7 +154,7 @@ CHECK(Timer::getSystemTime() const )
 	t1.start();
 	BUSY_WAIT
 	t1.stop();
-	TEST_EQUAL(t1.getSystemTime() > 0, false)	
+	TEST_EQUAL(t1.getSystemTime() >= 0, true)	
 	t1.start();
 	File f("data/Timer_test1.txt");
 	for (int i = 0; i < 200 ; i++)
@@ -162,6 +162,7 @@ CHECK(Timer::getSystemTime() const )
 		TEST_EQUAL(f.copyTo("data/Timer_test1.bak"), true)
 	}
 	f.remove("data/Timer_test1.bak");
+	t1.stop();
 	TEST_EQUAL(t1.getSystemTime() >= 0, true)	
 RESULT
 

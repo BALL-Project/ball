@@ -412,7 +412,7 @@ void Mainframe::amberMinimization()
 
 		QString message;
 		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
-										minimizer->getNumberOfIteration(),
+										minimizer->getNumberOfIterations(),
 										amber.getEnergy(),
 										amber.getRMSGradient());
 
@@ -432,7 +432,7 @@ void Mainframe::amberMinimization()
 	Log.info() << "  total energy       : " << amber.getEnergy() << " kJ/mol" << endl;
 	Log.info() << endl;
 	Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after " 
-		<< minimizer->getNumberOfIteration() << " iterations" << endl;
+		<< minimizer->getNumberOfIterations() << " iterations" << endl;
 	
 	// clean up
 	delete minimizer;
@@ -501,7 +501,7 @@ void Mainframe::amberMDSimulation()
 	//
 	// iterate until done and refresh the screen every "steps" iterations
 	// 
-	while (mds->getNumberOfIteration() < 500)
+	while (mds->getNumberOfIterations() < 500)
 	{
 		mds->simulateIterations(steps, true);
     MainControl::update(system->getRoot());
@@ -513,7 +513,7 @@ void Mainframe::amberMDSimulation()
 
 		QString message;
 		message.sprintf("Iteration %d: energy = %f kJ/mol, RMS gradient = %f kJ/mol A", 
-										mds->getNumberOfIteration(),
+										mds->getNumberOfIterations(),
 										amber.getEnergy(),
 										amber.getRMSGradient());
 		setStatusbarText(String(message));
@@ -531,7 +531,7 @@ void Mainframe::amberMDSimulation()
 	Log.info() << "  total energy       : " << amber.getEnergy() << " kJ/mol" << endl;
 	Log.info() << endl;
 	Log.info() << "final RMS gadient    : " << amber.getRMSGradient() << " kJ/(mol A)   after " 
-						 << mds->getNumberOfIteration() << " iterations" << endl;
+						 << mds->getNumberOfIterations() << " iterations" << endl;
 
 	// clean up
 	delete mds;

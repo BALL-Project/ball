@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.C,v 1.13 2002/12/22 15:23:54 anker Exp $
+// $Id: molecularDynamics.C,v 1.14 2003/02/05 13:00:18 oliver Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
@@ -231,7 +231,7 @@ namespace BALL
 	}
 
 	// This method allows us to get the current number of iteration for the MD simulation
-	Size MolecularDynamics::getNumberOfIteration () const
+	Size MolecularDynamics::getNumberOfIterations() const
 	{
 		return number_of_iteration_;
 	}

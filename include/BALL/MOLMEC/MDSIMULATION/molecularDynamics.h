@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularDynamics.h,v 1.20 2002/02/27 12:19:04 sturm Exp $
+// $Id: molecularDynamics.h,v 1.21 2003/02/05 13:00:17 oliver Exp $
 // MolecularDynamics: A base class for doing molecular dynamics simulations    
 // Useful MD classes must be derived from this class 
 
@@ -267,7 +267,7 @@ namespace BALL
 
 		/**  Get the current iteration of the MD simulation 
 		*/
-		Size getNumberOfIteration() const;
+		Size getNumberOfIterations() const;
 
 		/**  Get the maximal number of iterations of the MD simulation 
 		*/

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.17 2003/02/04 14:27:01 oliver Exp $
+// $Id: conjugateGradient.C,v 1.18 2003/02/05 13:00:18 oliver Exp $
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
 
@@ -10,8 +10,7 @@
 #include <BALL/MOLMEC/COMMON/gradient.h>
 #include <BALL/COMMON/limits.h>
 
-// ????
-#define BALL_DEBUG
+//#define BALL_DEBUG
 
 // The default method to use for the CG direction update
 // (FLETCHER_REEVES | POLAK_RIBIERE | SHANNO)
