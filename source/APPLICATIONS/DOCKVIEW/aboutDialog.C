@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Form implementation generated from reading ui file 'aboutDialog.ui'
 **
-** Created: Thu Oct 21 14:49:22 2004
-**      by: The User Interface Compiler ($Id: aboutDialog.C,v 1.1.2.1 2005/01/06 15:23:44 leonhardt Exp $)
+** Created: Thu Jan 6 16:25:31 2005
+**      by: The User Interface Compiler ($Id: aboutDialog.C,v 1.1.2.2 2005/01/06 15:27:55 leonhardt Exp $)
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
@@ -275,16 +275,15 @@ static const char* const image0_data[] = {
 "......................................................................................................................................................................................................."};
 
 
-/* 
- *  Constructs a AboutDialog as a child of 'parent', with the 
+/*
+ *  Constructs a AboutDialog as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  *
  *  The dialog will by default be modeless, unless you set 'modal' to
  *  TRUE to construct a modal dialog.
  */
 AboutDialog::AboutDialog( QWidget* parent, const char* name, bool modal, WFlags fl )
-    : QDialog( parent, name, modal, fl )
-,
+    : QDialog( parent, name, modal, fl ),
       image0( (const char **) image0_data )
 {
     if ( !name )
@@ -380,6 +379,7 @@ AboutDialog::AboutDialog( QWidget* parent, const char* name, bool modal, WFlags 
     BALLView_version_label->setAlignment( int( QLabel::WordBreak | QLabel::AlignCenter ) );
     languageChange();
     resize( QSize(228, 370).expandedTo(minimumSizeHint()) );
+    clearWState( WState_Polished );
 
     // signals and slots connections
     connect( PushButton1, SIGNAL( pressed() ), this, SLOT( close() ) );
