@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.13 2003/10/04 15:18:56 amoll Exp $
+// $Id: mainControl.C,v 1.14 2003/10/05 15:40:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -135,6 +135,9 @@ QPopupMenu* MainControl::initPopupMenu(int ID)
 				break;
 			case TOOLS:
 				menuBar()->insertItem("&Tools", menu, TOOLS, (4 <= max_id) ? 4 : -1);
+				break;
+			case TOOLS_PYTHON:
+				initPopupMenu(MainControl::TOOLS)->insertItem("&Python", menu, TOOLS_PYTHON);
 				break;
 			case WINDOWS:
 				menuBar()->insertItem("&Windows", menu, WINDOWS, (5 <= max_id) ? 5 : -1);
