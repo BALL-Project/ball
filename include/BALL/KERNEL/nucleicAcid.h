@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.h,v 1.8 2000/04/25 16:52:26 amoll Exp $ 
+// $Id: nucleicAcid.h,v 1.9 2000/05/10 18:55:12 amoll Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -46,19 +46,19 @@ namespace BALL
 		/** @name	Constructors and Destructors */
 		//@{
 
-		/**	Default constructor
+		/**	Default constructor.
 		*/
 		NucleicAcid();
 	
-		/**	Copy constructor
+		/**	Copy constructor.
 		*/
 		NucleicAcid(const NucleicAcid& nucleic_acid, bool deep = true);
 	
-		/**	Detailled constructor
+		/**	Detailled constructor.
 		*/
 		NucleicAcid(const String& name, const String& id = BALL_NUCLEICACID_DEFAULT_ID);
 
-		/**	Destructor
+		/**	Destructor.
 		*/
 		virtual ~NucleicAcid();
 	
@@ -97,15 +97,15 @@ namespace BALL
 		*/
 		void set(const NucleicAcid& nucleic_acid, bool deep = true);
 
-		/**	Assignment operator
+		/**	Assignment operator.
 		*/
 		NucleicAcid& operator = (const NucleicAcid& nucleic_acid);
 
-		/**	Assign a NucleicAcid object from another
+		/**	Assign a NucleicAcid object from another.
 		*/
 		void get(NucleicAcid& nucleic_acid, bool deep = true) const;
 	
-		/**	Swap the contents of two NucleicAcid objects
+		/**	Swap the contents of two NucleicAcid objects.
 		*/
 		void swap(NucleicAcid& nucleic_acid);
 	
@@ -115,19 +115,35 @@ namespace BALL
 		/**	@name Accessors */
 		//@{
 
-		/**	Retrieve a pointer to the Nucleotide at the 3'-end of {\em *this}
+		/** Get a pointer to a child Nucleotide at a given position.
+				The reference is 0 if {\em *this} instance does not have an Nucleotide at the given position.
+				@param   position the position of the child Nucleotide
+				@return  Nucleotide* -
+								 mutable reference to the child Nucleotide at {\em positon} of {\em *this},
+		*/
+		Nucleotide* getNucleotide(Position position);
+	
+		/** Get a pointer to a child Nucleotide at a given position.
+				The reference is 0 if {\em *this} instance does not have an Nucleotide at the given position.
+				@param   position the position of the child Nucleotide
+				@return  Nucleotide* -
+								 constant reference to the child Nucleotide at {\em positon} of {\em *this},
+		*/
+		const Nucleotide* getNucleotide(Position position) const;
+
+		/**	Retrieve a pointer to the Nucleotide at the 3'-end of {\em *this}.
 		*/
 		Nucleotide* get3Prime();
 
-		/**	Retrieve a const pointer to the nucleotide at the 3'-end of {\em *this}
+		/**	Retrieve a const pointer to the nucleotide at the 3'-end of {\em *this}.
 		*/
 		const Nucleotide* get3Prime() const;
 
-		/**	Retrieve a pointer to the Nucleotide at the 5'-end of {\em *this}
+		/**	Retrieve a pointer to the Nucleotide at the 5'-end of {\em *this}.
 		*/
 		Nucleotide* get5Prime();
 
-		/**	Retrieve a const pointer to the Nucleotide at the 5'-end of {\em *this}
+		/**	Retrieve a const pointer to the Nucleotide at the 5'-end of {\em *this}.
 		*/
 		const Nucleotide* get5Prime() const;
 
@@ -141,7 +157,7 @@ namespace BALL
 		*/
 		const String& getID() const;
 
-		/**	Return the number of Nucleotides contained in the NucleicAcid
+		/**	Return the number of Nucleotides contained in {\em *this} NucleicAcid.
 		*/
 		Size countNucleotides() const;
 		//@}
@@ -172,12 +188,23 @@ namespace BALL
 		*/
 		//@{
 
-		/**
+		/** Internal state and consistency self-validation.
+				Initiate self-validation of the internal state and data structure consistencies of {\em *this}.
+				If the internal state of {\em *this} is correct (self-validated) and consistent {\tt true}
+				is returned, {\tt false} otherwise. 
+	
+				@return			bool -
+										{\tt true} if the internal state of {\em *this} atom is correct (self-validated)
+										and consistent,	{\tt false} otherwise
 		*/
 		virtual bool isValid() const;
 
-		/**
-		*/
+			/** Internal state dump.
+					Dump the current internal state of {\em *this} to the output ostream {\em s}
+					with dumping depth {\em depth}.
+					@param   s - output stream where to output the internal state of {\em *this}
+					@param   depth - the dumping depth
+			*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
