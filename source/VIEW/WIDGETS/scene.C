@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.57.2.2 2004/06/03 13:54:40 amoll Exp $
+// $Id: scene.C,v 1.57.2.3 2004/06/03 13:59:45 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -854,6 +854,10 @@ namespace BALL
 					if ((*it)->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 					{
 						reps.push_back(*it);
+					}
+					else
+					{
+						(*it)->update(true);
 					}
 				}
 
