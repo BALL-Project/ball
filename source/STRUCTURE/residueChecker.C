@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueChecker.C,v 1.25 2004/03/20 19:33:38 oliver Exp $
+// $Id: residueChecker.C,v 1.26 2004/04/01 12:55:23 amoll Exp $
 //
 
 #include <BALL/STRUCTURE/residueChecker.h>
@@ -237,7 +237,7 @@ namespace BALL
 			{
 				Log.warn() << "ResidueChecker: did not find atom " << atom_it->getName() << " of " 
 									 << res_name  << " in the reference residue " << reference.getName() << endl;
-				status_ = false;
+				result = false;
 
 				// If selection is enabled, mark the residue
 				if (selection_)
@@ -257,7 +257,7 @@ namespace BALL
 				Log.warn() << *set_it << " ";
 			}
 			Log.warn() << " (template was " << reference.getName() << ")" << endl;
-			status_ = false;
+			result = false;
 
 			// If selection is enabled, mark the residue
 			if (selection_)
