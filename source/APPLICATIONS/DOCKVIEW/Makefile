@@ -1,12 +1,11 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.8 2005/02/10 12:43:45 leonhardt Exp $
+# $Id: Makefile,v 1.1.2.8.2.1 2005/02/14 16:20:30 haid Exp $
 #
 
 EXECUTABLE=DOCKView
 DIRECTORY=APPLICATIONS/DOCKVIEW
-BALLDIR=/home/student/leonhardt/BALL
 
 all:	$(EXECUTABLE)
 
@@ -44,7 +43,7 @@ UIC_FILES=\
 	geometricFitDialogData.h
 
 DOCKView:	$(OBJECTS)	$(SPECIAL_OBJECTS)
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS) $(BALLDIR)/source/MOLMEC/DOCKING/dockingAlgorithm.o $(BALLDIR)/source/MOLMEC/DOCKING/geometricFit.o $(BALLDIR)/source/MOLMEC/DOCKING/fitmol.o $(BALLDIR)/source/MOLMEC/DOCKING/MVector3.o $(BALLDIR)/source/MOLMEC/DOCKING/MSuperpose.o $(BALLDIR)/source/MOLMEC/DOCKING/MNumerics.o
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(SPECIAL_OBJECTS) $(VIEW_LIBS) $(BALL_INCLUDES) $(PYTHON_LIBS) 
 
 depend: $(UIC_FILES) $(MOC_SOURCES)
 
