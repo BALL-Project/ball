@@ -1,4 +1,4 @@
-// $Id: StandardPredicates_test.C,v 1.14 2001/05/24 15:34:22 anker Exp $
+// $Id: StandardPredicates_test.C,v 1.15 2001/05/28 12:00:05 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.14 2001/05/24 15:34:22 anker Exp $")
+START_TEST(standardPredicates, "$Id: StandardPredicates_test.C,v 1.15 2001/05/28 12:00:05 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -217,14 +217,38 @@ RESULT
 // tests for class NucleicAcidPredicate::
 
 CHECK(NucleicAcidPredicate::operator () (const Atom& atom) const )
-  //BAUSTELLE
+	Atom atom;
+	NucleicAcid n_a;
+	n_a.insert(atom);
+	NucleicAcidPredicate pred;
+	pred.setArgument("");
+	TEST_EQUAL(pred(atom), true)
+	n_a.setName("TESTMOL");
+	TEST_NOT_EQUAL(pred(atom), true)
+	pred.setArgument("TESTMOL");
+	TEST_EQUAL(pred(atom), true)
 RESULT
 
 
 // tests for class NucleotidePredicate::
 
 CHECK(NucleotidePredicate::operator () (const Atom& atom) const )
-  //BAUSTELLE
+	ResiduePredicate pred;
+
+	Residue res;
+	PDBAtom* a1 = new PDBAtom;
+	res.insert(*a1);
+	res.setName("ARG");
+	TEST_EQUAL(pred(*a1), false)
+	pred.setArgument("ARG");
+	TEST_EQUAL(pred(*a1), true)
+	pred.setArgument("");
+	TEST_EQUAL(pred(*a1), false)
+	res.setName("");
+	TEST_EQUAL(pred(*a1), true)
+	res.remove(*a1);
+	TEST_EQUAL(pred(*a1), false)
+	delete a1;
 RESULT
 
 HINFile f("data/L-Tryptophan.hin");
