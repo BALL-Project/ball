@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.14 2000/02/17 00:30:37 oliver Exp $
+// $Id: composite.h,v 1.15 2000/03/23 20:03:33 oliver Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -246,7 +246,7 @@ namespace BALL
 		const Composite* getLowestCommonAncestor(const Composite& composite) const;
 
 		/**	Find the first ancestor of type T.
-				This method walks up the tree from parent to paretn and
+				This method walks up the tree from parent to parent and
 				checks whether the composite object is a kind of {\tt T}.
 				This method is useful to identify special container classes.
 				@return a pointer to the first composite found that is a kind of T or 0 if no
@@ -289,6 +289,108 @@ namespace BALL
 			}
 			
 			return const_cast<const T*>(t_ptr);
+		}
+
+		/**	Find the nearest previous composite of type T.
+				This method walks backward in the tree from composite to composite and
+				checks whether the composite object is a kind of {\tt T}.
+				@return a pointer to the first composite found that is a kind of T or 0 if no
+								matching composite was found up to the root of the tree
+		*/
+		template <typename T>
+		T* getPrevious(const T& /* dummy */)
+		{
+			// create an iterator bound to the root of the subtree
+			SubcompositeReverseIterator it(getRoot().rbeginSubcomposite());
+
+			// set its position to the current composite
+      Composite::setCurrentPreorderIteratorPosition_
+        (Composite::getFirstPreorderIteratorPosition_(*this), it.getTraits().getPosition(), false);
+ 
+
+			// walk back until we find something	
+			// or we cannot walk any further
+			do 
+			{
+				it++;
+			} 
+			while (it.isValid() && !RTTI::isKindOf<T>(*it));
+
+
+			// return a NULL pointer if nothing was found
+			Composite* ptr = 0;
+			if (+it)
+			{
+				ptr = &*it;
+			}
+			
+			return dynamic_cast<T*>(ptr);
+		}
+
+		/**	Find the nearest previous composite of type T (const method).
+				This method walks backward in the tree from composite to composite and
+				checks whether the composite object is a kind of {\tt T}.
+				@return a pointer to the first composite found that is a kind of T or 0 if no
+								matching composite was found up to the root of the tree
+		*/
+		template <class T>
+		const T* getPrevious(const T& dummy) const
+		{
+			// cast away the constness of this and call the non-const method
+			Composite* nonconst_this = const_cast<Composite*>(this);
+
+			return const_cast<const T*>(nonconst_this->getPrevious(dummy));
+		}
+
+		/**	Find the next composite of type T.
+				This method walks backward in the tree from composite to composite and
+				checks whether the composite object is a kind of {\tt T}.
+				@return a pointer to the first composite found that is a kind of T or 0 if no
+								matching composite was found up to the root of the tree
+		*/
+		template <typename T>
+		T* getNext(const T& /* dummy */)
+		{
+			// create an iterator bound to the root of the subtree
+			SubcompositeIterator it(getRoot().beginSubcomposite());
+
+			// set its position to the current composite
+      Composite::setCurrentPreorderIteratorPosition_
+        (Composite::getFirstPreorderIteratorPosition_(*this), it.getTraits().getPosition(), false);
+ 
+
+			// walk forward until we find something	
+			// or we cannot walk any further
+			do 
+			{
+				it++;
+			} 
+			while (it.isValid() && !RTTI::isKindOf<T>(*it));
+
+
+			// return a NULL pointer if nothing was found
+			Composite* ptr = 0;
+			if (+it)
+			{
+				ptr = &*it;
+			}
+			
+			return dynamic_cast<T*>(ptr);
+		}
+
+		/**	Find the next composite of type T (const method).
+				This method walks backward in the tree from composite to composite and
+				checks whether the composite object is a kind of {\tt T}.
+				@return a pointer to the first composite found that is a kind of T or 0 if no
+								matching composite was found up to the root of the tree
+		*/
+		template <class T>
+		const T* getNext(const T& dummy) const
+		{
+			// cast away the constness of this and call the non-const method
+			Composite* nonconst_this = const_cast<Composite*>(this);
+
+			return const_cast<const T*>(nonconst_this->getNext(dummy));
 		}
 
 		/**	Return the composite's parent.
@@ -652,7 +754,7 @@ namespace BALL
 
 			bool isSingular() const
 			{
-				return (bool)(bound_ == 0);
+				return (bound_ == 0);
 			}
 
 			Composite*& getPosition()
@@ -667,17 +769,17 @@ namespace BALL
 
 			bool operator == (const AncestorIteratorTraits_& traits) const
 			{
-				return (bool)(ancestor_ == traits.ancestor_);
+				return (ancestor_ == traits.ancestor_);
 			}
 		
-			bool operator !=(const AncestorIteratorTraits_& traits) const
+			bool operator != (const AncestorIteratorTraits_& traits) const
 			{
-				return (bool)(ancestor_ != traits.ancestor_);
+				return (ancestor_ != traits.ancestor_);
 			}
 		
 			bool isValid() const
 			{
-				return (bool)(bound_ != 0 && ancestor_ != 0);
+				return (bound_ != 0 && ancestor_ != 0);
 			}
 
 			void invalidate()
@@ -692,7 +794,7 @@ namespace BALL
 
 			bool isBegin() const
 			{
-				return (bool)(ancestor_ == bound_->parent_);
+				return (ancestor_ == bound_->parent_);
 			}
 
 			void toEnd()
@@ -702,7 +804,7 @@ namespace BALL
 
 			bool isEnd() const
 			{
-				return (bool)(ancestor_ == 0);
+				return (ancestor_ == 0);
 			}
 
 			Composite& getData()
@@ -802,7 +904,7 @@ namespace BALL
 
 			bool isSingular() const
 			{
-				return (bool)(bound_ == 0);
+				return (bound_ == 0);
 			}
 
 			Composite *&getPosition()
@@ -817,17 +919,17 @@ namespace BALL
 
 			bool operator == (const ChildCompositeIteratorTraits_& traits) const
 			{
-				return (bool)(child_ == traits.child_);
+				return (child_ == traits.child_);
 			}
 		
 			bool operator != (const ChildCompositeIteratorTraits_& traits) const
 			{
-				return (bool)(child_ != traits.child_);
+				return (child_ != traits.child_);
 			}
 		
 			bool isValid() const
 			{
-				return (bool)(bound_ != 0 && child_ != 0);
+				return (bound_ != 0 && child_ != 0);
 			}
 
 			void invalidate()
@@ -842,7 +944,7 @@ namespace BALL
 
 			bool isBegin() const
 			{
-				return (bool)(child_ == bound_->first_child_);
+				return (child_ == bound_->first_child_);
 			}
 
 			void toEnd()
@@ -852,7 +954,7 @@ namespace BALL
 
 			bool isEnd() const
 			{
-				return (bool)(child_ == 0);
+				return (child_ == 0);
 			}
 
 			void toRBegin
@@ -863,7 +965,7 @@ namespace BALL
 
 			bool isRBegin() const
 			{
-				return (bool)(child_ == bound_->last_child_);
+				return (child_ == bound_->last_child_);
 			}
 
 			void toREnd()
@@ -873,7 +975,7 @@ namespace BALL
 
 			bool isREnd() const
 			{
-				return (bool)(child_ == 0);
+				return (child_ == 0);
 			}
 
 			Composite& getData()
@@ -970,73 +1072,73 @@ namespace BALL
 
 			public:
 
-				CompositeIteratorPosition_()
-					:	empty_stack_(0),
-						stack_(0),
-						current_(0),
-						continue_(false),
-						traversing_forward_(true)
-				{
-				}
+			CompositeIteratorPosition_()
+				:	empty_stack_(0),
+					stack_(0),
+					current_(0),
+					continue_(false),
+					traversing_forward_(true)
+			{
+			}
 
-				CompositeIteratorPosition_(const Composite::CompositeIteratorPosition_& position)
-					:	empty_stack_(position.empty_stack_),
-						stack_(position.stack_),
-						current_(position.current_),
-						continue_(position.continue_),
-						traversing_forward_(position.traversing_forward_)
-				{
-				}
+			CompositeIteratorPosition_(const CompositeIteratorPosition_& position)
+				:	empty_stack_(position.empty_stack_),
+					stack_(position.stack_),
+					current_(position.current_),
+					continue_(position.continue_),
+					traversing_forward_(position.traversing_forward_)
+			{
+			}
 
-				Composite* getCurrent()
+			Composite* getCurrent()
+			{
+				return current_;
+			}
+		
+			const Composite* getCurrent() const
+			{
+				return current_;
+			}
+
+			void clear()
+			{
+				empty_stack_ = stack_ = current_ = 0;
+	
+				continue_ = false;
+				traversing_forward_ = true;
+			}
+
+			CompositeIteratorPosition_& operator = (const CompositeIteratorPosition_& position)
+			{
+				if (this != &position)
 				{
-					return current_;
+					empty_stack_ = position.empty_stack_;
+					stack_ = position.stack_;
+					current_ = position.current_;
+					continue_ = position.continue_;
+					traversing_forward_ = position.traversing_forward_;
 				}
 			
-				const Composite* getCurrent() const
-				{
-					return current_;
-				}
+				return *this;
+			}
 
-				void clear()
-				{
-					empty_stack_ = stack_ = current_ = 0;
-		
-					continue_ = false;
-					traversing_forward_ = true;
-				}
+			bool operator == (const Composite::CompositeIteratorPosition_& position) const
+			{
+				return (current_ == position.current_);
+			}
 
-				CompositeIteratorPosition_& operator = (const Composite::CompositeIteratorPosition_& position)
-				{
-					if (this != &position)
-					{
-						empty_stack_ = position.empty_stack_;
-						stack_ = position.stack_;
-						current_ = position.current_;
-						continue_ = position.continue_;
-						traversing_forward_ = position.traversing_forward_;
-					}
-				
-					return *this;
-				}
-
-				bool operator == (const Composite::CompositeIteratorPosition_& position) const
-				{
-					return (bool)(current_ == position.current_);
-				}
-
-				bool operator != (const Composite::CompositeIteratorPosition_& position) const
-				{
-					return (bool)(current_ != position.current_);
-				}
+			bool operator != (const Composite::CompositeIteratorPosition_& position) const
+			{
+				return (current_ != position.current_);
+			}
 
 			private:
 
-				Composite* empty_stack_;
-				Composite* stack_;
-				Composite* current_;
-				bool continue_;
-				bool traversing_forward_;
+			Composite* empty_stack_;
+			Composite* stack_;
+			Composite* current_;
+			bool continue_;
+			bool traversing_forward_;
 		};
 
 
@@ -1045,149 +1147,152 @@ namespace BALL
 		{
 			public:
 
-				BALL_CREATE(CompositeIteratorTraits_)
+			BALL_CREATE(CompositeIteratorTraits_)
 
-				CompositeIteratorTraits_()
-					:	bound_(0),
-						position_()
-				{
-				}
-			
-				CompositeIteratorTraits_(const Composite& composite)
-					:	bound_((Composite *)&composite),
-						position_()
-				{
-				}
-			
-				CompositeIteratorTraits_(const CompositeIteratorTraits_& traits, bool /* deep */ = true)
-					:	bound_(traits.bound_),
-						position_(traits.position_)
-				{
-				}
-			
-				bool isValid() const
-				{
-					return (bool)(bound_ != 0	&& position_.getCurrent() != 0);
-				}
+			CompositeIteratorTraits_()
+				:	bound_(0),
+					position_()
+			{
+			}
+		
+			CompositeIteratorTraits_(const Composite& composite)
+				:	bound_((Composite *)&composite),
+					position_()
+			{
+			}
+		
+			CompositeIteratorTraits_(const CompositeIteratorTraits_& traits, bool /* deep */ = true)
+				:	bound_(traits.bound_),
+					position_(traits.position_)
+			{
+			}
+		
+			bool isValid() const
+			{
+				return (bound_ != 0	&& position_.getCurrent() != 0);
+			}
 
-				CompositeIteratorTraits_& operator = (const CompositeIteratorTraits_& traits)
-				{
-					bound_ = traits.bound_;
-					position_ = traits.position_;
-					return *this;
-				}
+			CompositeIteratorTraits_& operator = (const CompositeIteratorTraits_& traits)
+			{
+				bound_ = traits.bound_;
+				position_ = traits.position_;
+				return *this;
+			}
 
-				Composite* getContainer()
-				{
-					return bound_;
-				}
+			Composite* getContainer()
+			{
+				return bound_;
+			}
 
-				const Composite* getContainer() const
-				{
-					return bound_;
-				}
-			
-				bool isSingular() const
-				{
-					return (bool)(bound_ == 0);
-				}
-			
-				CompositeIteratorPosition_& getPosition()
-				{
-					return position_;
-				}
+			const Composite* getContainer() const
+			{
+				return bound_;
+			}
+		
+			bool isSingular() const
+			{
+				return (bound_ == 0);
+			}
+		
+			CompositeIteratorPosition_& getPosition()
+			{
+				return position_;
+			}
 
-				const CompositeIteratorPosition_& getPosition() const
-				{
-					return position_;
-				}
+			const CompositeIteratorPosition_& getPosition() const
+			{
+				return position_;
+			}
 
-				Composite& getData()
-				{
-					return *(position_.getCurrent());
-				}
+			Composite& getData()
+			{
+				return *(position_.getCurrent());
+			}
 
-				const Composite& getData() const
-				{
-					return *(position_.getCurrent());
-				}
+			const Composite& getData() const
+			{
+				return *(position_.getCurrent());
+			}
 
-				bool operator == (const CompositeIteratorTraits_& traits) const
-				{
-					return (bool)(position_	== traits.position_);
-				}
-			
-				bool operator != (const CompositeIteratorTraits_& traits) const
-				{
-					return (bool)(position_ != traits.position_);
-				}
-			
-				void invalidate()
-				{
-					bound_ = 0;
-					position_.clear();
-				}
+			bool operator == (const CompositeIteratorTraits_& traits) const
+			{
+				return (position_	== traits.position_);
+			}
+		
+			bool operator != (const CompositeIteratorTraits_& traits) const
+			{
+				return (position_ != traits.position_);
+			}
+		
+			void invalidate()
+			{
+				bound_ = 0;
+				position_.clear();
+			}
 
-				void toBegin()
-				{
-					Composite::setCurrentPreorderIteratorPosition_
-						(Composite::getFirstPreorderIteratorPosition_(*bound_), position_, false);
-				}
+			void toBegin()
+			{
+				Composite::setCurrentPreorderIteratorPosition_
+					(Composite::getFirstPreorderIteratorPosition_(*bound_), position_, false);
+			}
 
-				bool isBegin() const
-				{
-					return (bool)(position_.getCurrent() == &Composite::getFirstPreorderIteratorPosition_(*bound_));
-				}
+			bool isBegin() const
+			{
+				return (position_.getCurrent() == &Composite::getFirstPreorderIteratorPosition_(*bound_));
+			}
 
-				void toEnd()
-				{
-					toRBegin();
-					forward();
-				}
+			void toEnd()
+			{
+				toRBegin();
+				forward();
+			}
 
-				bool isEnd() const
-				{
-					return (bool)(position_.getCurrent() == 0);
-				}
+			bool isEnd() const
+			{
+				return (position_.getCurrent() == 0);
+			}
 
-				void toRBegin()
-				{
-					Composite::setLastPreorderIteratorPosition_(*bound_, position_,false);
-				}
+			void toRBegin()
+			{
+				Composite::setLastPreorderIteratorPosition_(*bound_, position_,false);
+			}
 
-				bool isRBegin() const
-				{
-					return (bool)(position_.getCurrent() == &Composite::getLastPreorderIteratorPosition_(*bound_)); 
-				}
-			
-				void toREnd()
-				{
-					Composite::setCurrentPreorderIteratorPosition_(*bound_, position_, false);
-					backward();	
-				}
+			bool isRBegin() const
+			{
+				return (position_.getCurrent() == &Composite::getLastPreorderIteratorPosition_(*bound_)); 
+			}
+		
+			void toREnd()
+			{
+				Composite::setCurrentPreorderIteratorPosition_(*bound_, position_, false);
+				backward();	
+			}
 
-				bool isREnd() const
-				{
-					return (bool)(position_.getCurrent() == 0);
-				}
-			
-				void forward()
-				{
-					bound_->getNextPreorderIteratorPosition_(position_);
-				}
+			bool isREnd() const
+			{
+				return (position_.getCurrent() == 0);
+			}
+		
+			void forward()
+			{
+				bound_->getNextPreorderIteratorPosition_(position_);
+			}
 
-				void backward()
-				{
-					bound_->getPreviousPreorderIteratorPosition_(position_);
-				}
+			void backward()
+			{
+				bound_->getPreviousPreorderIteratorPosition_(position_);
+			}
+
 
 			protected:
 
-				Composite *bound_;
+			/** A pointer to the "container" the iterator is bound to
+			*/
+			Composite*									bound_;
 
-				CompositeIteratorPosition_ position_;
-
-			private:
+			/** The current iterator position
+			*/
+			CompositeIteratorPosition_	position_;
 		};
 
 		friend class CompositeIteratorTraits_;

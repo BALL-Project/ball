@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.12 2000/03/23 07:44:21 oliver Exp $
+// $Id: composite.C,v 1.13 2000/03/23 20:02:57 oliver Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -1552,7 +1552,7 @@ namespace BALL
 		return position.current_;
 	}
 
-	Composite* Composite::getPreviousPreorderIteratorPosition_(CompositeIteratorPosition_ &position)
+	Composite* Composite::getPreviousPreorderIteratorPosition_(CompositeIteratorPosition_& position)
 	{
 		if (position.traversing_forward_ == true)
 		{
