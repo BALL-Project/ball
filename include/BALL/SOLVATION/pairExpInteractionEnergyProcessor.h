@@ -1,4 +1,4 @@
-// $Id: pairExpInteractionEnergyProcessor.h,v 1.5 2000/10/17 17:14:35 anker Exp $
+// $Id: pairExpInteractionEnergyProcessor.h,v 1.6 2000/10/23 10:20:41 anker Exp $
 
 // BAUSTELLE: Pfad?
 #ifndef BALL_SOLVATION_PAIREXPINTERACTIONENERGYPROCESSOR_H
@@ -254,11 +254,17 @@ namespace BALL
 
 		protected:
 
-		SolventDescriptor solvent_;
+		/*_ Alpha constant from the Kitaygorodski Potential */
 		double alpha_;
+		/*_ Repulsion constant from the Kitaygorodski Potential */
 		double C1_;
+		/*_ Dispersion constant from the Kitaygorodski Potential */
 		double C2_;
-		// RDFParameter rdf_parameter_;
+		/*_ The solvent description */
+		SolventDescriptor solvent_;
+		/*_ The helper class for reading rdf descriptions from an INIFile */
+		RDFParameter rdf_parameter_;
+
 		// PairExpRDFIntegrator rdf_integrator_;
 	
 
