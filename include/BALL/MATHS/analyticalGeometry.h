@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.37 2000/09/06 19:58:02 amoll Exp $
+// $Id: analyticalGeometry.h,v 1.38 2000/09/10 21:52:21 oliver Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -915,33 +915,36 @@ namespace BALL
 		(const TSphere3<T>& a, const TSphere3<T>& b, 
 		 TCircle3<T>& intersection_circle)
 	{
-		TVector3<T> norm = b.p-a.p;
-		T square_dist = norm*norm;
+		TVector3<T> norm = b.p - a.p;
+		T square_dist = norm * norm;
 		if (Maths::isZero(square_dist))
-			{
-				return false;
-			}
+		{
+			return false;
+		}
 		T dist = sqrt(square_dist);
-		if (Maths::isLess(a.radius+b.radius,dist))
-			{
-				return false;
-			}
-		if (Maths::isGreaterOrEqual(Maths::abs(a.radius-b.radius),dist))
-			{
-				return false;
-			}
-		T radius1_square = (a.radius)*(a.radius);
-		T radius2_square = (b.radius)*(b.radius);
-		T u = radius1_square-radius2_square+square_dist;
-		T length = u/(2*square_dist);
-		intersection_circle.p = a.p+(norm*length);
-		T square_radius = radius1_square-u*length/2;
-		if (Maths::isLess(square_radius,0))
-			{
-				return false;
-			}
+		if (Maths::isLess(a.radius + b.radius, dist))
+		{
+			return false;
+		}
+		if (Maths::isGreaterOrEqual(Maths::abs(a.radius - b.radius), dist))
+		{
+			return false;
+		}
+
+		T radius1_square = a.radius * a.radius;
+		T radius2_square = b.radius * b.radius);
+		T u = radius1_square - radius2_square + square_dist;
+		T length = u / (2 * square_dist);
+		intersection_circle.p = a.p + (norm * length);
+		T square_radius = radius1_square - u * length / 2;
+		if (Maths::isLess(square_radius, 0))
+		{
+			return false;
+		}
+
 		intersection_circle.radius = sqrt(square_radius);
-		intersection_circle.n = norm;
+		intersection_circle.n = norm / dist;
+
 		return true;
 	}
 
