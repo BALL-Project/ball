@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: renderer.sip,v 1.1 2004/02/12 16:18:10 amoll Exp $
+// $Id: renderer.sip,v 1.2 2004/04/16 13:18:40 amoll Exp $
 //
 
 class Renderer 
@@ -22,6 +22,6 @@ class Renderer
   void clear() throw();
   void setSize(float, float) throw();
   void setStage(const Stage&) throw();
-  void update(Representation&) throw();
+	bool render(const Representation&) throw();
   ~Renderer() throw();
 };
