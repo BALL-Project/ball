@@ -144,3 +144,6 @@
 //   ARM style:   BaseClass::foo;
 //   ANSI style:  using BaseClass::foo;
 #undef BALL_CFG_USING_METHOD_DIRECTIVE
+
+// Define for activated PYTHON support
+#undef BALL_PYTHON_SUPPORT

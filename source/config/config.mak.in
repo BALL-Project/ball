@@ -2,7 +2,7 @@
 # Please do ONLY change config.mak.in, as config.mak is automagically 
 # created by configure from config.mak.in
 #
-# RCS ID: $Id: config.mak.in,v 1.10 2000/06/21 08:52:22 oliver Exp $
+# RCS ID: $Id: config.mak.in,v 1.11 2000/07/16 21:46:15 oliver Exp $
 #
 # author:    $author$
 # date:      $date$
@@ -75,7 +75,7 @@ SIP            			= @SIP@
 SIP_LIB        			= @SIP_LIB@
 SIP_INCLUDES   			= @SIP_INCLUDES@
 PYTHON_INCLUDES			= @PYTHON_INCLUDES@
- 
+PYTHON_SUPPORT      = @PYTHON_SUPPORT@ 
 
 # These are standard flags. CXXFLAGS to compile, LDFLAGS to link programs
 # DEFINES and DEBUG are both part of CXXFLAGS

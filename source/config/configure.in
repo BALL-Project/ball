@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.99 2000/07/16 20:51:38 oliver Exp $
+dnl    $Id: configure.in,v 1.100 2000/07/16 21:46:15 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2278,6 +2278,12 @@ dnl
 AC_SUBST(SIP)
 AC_SUBST(SIP_LIB)
 AC_SUBST(PYTHON_INCLUDES)
+if test "${PYTHON_SUPPORT}" = true ; then
+	AC_SUBST(PYTHON_SUPPORT,"")
+	AC_DEFINE(BALL_PYTHON_SUPPORT)
+else
+	AC_SUBST(PYTHON_SUPPORT,)
+fi
 AC_SUBST(SIP_INCLUDES)
 
 if test "${PYTHON_SUPPORT}" = true ; then
@@ -2319,8 +2325,9 @@ if test "${PYTHON_SUPPORT}" = true ; then
 		AC_MSG_RESULT()
 		AC_MSG_RESULT(Please specify the path to the directory that contains)
 		AC_MSG_RESULT(libsip.a using the option --with-sip-lib=DIR.)
-		AC_MSG_RESULT(If you do not have that file, you should obtain SIP)
-		AC_MSG_RESULT(from www.thekompany.com/projects/pykde)
+		AC_MSG_RESULT("If you do not have that file, you should obtain SIP")
+		AC_MSG_RESULT(from)
+		AC_MSG_RESULT(  www.thekompany.com/projects/pykde)
 		AC_MSG_ERROR(Aborted.)
 	fi
 	
@@ -2334,7 +2341,7 @@ if test "${PYTHON_SUPPORT}" = true ; then
 		AC_MSG_RESULT()
 		AC_MSG_RESULT(Please specify the path to the directory that contains)
 		AC_MSG_RESULT(sip.h using the option --with-sip-incl=DIR.)
-		AC_MSG_RESULT(If you do not have that file, you should obtain SIP)
+		AC_MSG_RESULT("If you do not have that file, you should obtain SIP")
 		AC_MSG_RESULT(from)
 		AC_MSG_RESULT(  www.thekompany.com/projects/pykde)
 		AC_MSG_ERROR(Aborted.)
