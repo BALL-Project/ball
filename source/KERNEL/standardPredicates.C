@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.56 2004/02/23 20:50:21 anker Exp $
+// $Id: standardPredicates.C,v 1.57 2004/11/17 15:51:19 anker Exp $
 //
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -17,8 +17,6 @@
 #include <BALL/KERNEL/bond.h>
 
 // #define DEBUG
-
-using namespace::std;
 
 namespace BALL 
 {
@@ -242,7 +240,7 @@ namespace BALL
 				catch (Exception::InvalidFormat& e)
 				{
 					Log.error() << "InRingPredicate::operator () (): "
-						<< "argument format is broken: " << argument_ << endl;
+						<< "argument format is broken: " << argument_ << std::endl;
 					return(false);
 				}
 				// There are no rings with less than 3 atoms
@@ -338,7 +336,7 @@ namespace BALL
 			catch (Exception::InvalidFormat& e)
 			{
 				Log.error() << "NumberOfBondsPredicate::testPredicate_(): "
-					<< "argument format is broken: " << argument_ << endl;
+					<< "argument format is broken: " << argument_ << std::endl;
 				return(false);
 			}
 			switch (s[0]) 
@@ -388,7 +386,7 @@ namespace BALL
 			catch (Exception::InvalidFormat& e)
 			{
 				Log.error() << "InRingPredicate::operator () (): "
-					<< "argument format is broken: " << argument_ << endl;
+					<< "argument format is broken: " << argument_ << std::endl;
 				return(false);
 			}
 			if (count == n)
@@ -465,38 +463,33 @@ namespace BALL
 	void ConnectedToPredicate::CTPNode::destroy()
 		throw()
 	{
-		for (ConstIterator it = begin(); it != end(); ++it) 
-		{
-			if (!link_set_.has(*it))
-			{
-				// DEBUG
-				// Log.info() << "about to delete " << *it << endl;
-				// /DEBUG
-				delete *it;
-			}
-			// DEBUG
-			// else
-			// {
-			//	Log.info() << "won't delete cross edged " << *it << endl;
-			// }
-			// /DEBUG
-		}
-		children_.clear();
-	}
+		// This is a bit weird. The situation is the following: If the current
+		// iterator (denoting a child!) is pointing to something which is in
+		// the link list of this node, then we will not delete it, because the
+		// node will be deleted from its origianl parent node. So we do not
+		// want to delete a partial "tree" which might be used by someone else
+		// (which is highly improbable, but nevertheless possible.
 
-	void ConnectedToPredicate::CTPNode::clear()
-		throw()
-	{
-		element_symbol_ = "<uninitialized>";
-		bond_type_ = BONDTYPE__UNINITIALISED;
+		// First we have to remove links to the lower part of the tree
+		if (link_set_.size() > 0)
+		{
+			HashSet<CTPNode*>::iterator it = link_set_.begin();
+			for (; +it; ++it)
+			{
+				removeChild(*it);
+			}
+			// Now clear the link_list
+			link_set_.clear();
+		}
+
+		// Now delete those children we really are parents of
 		for (Iterator it = begin(); it != end(); ++it) 
 		{
-			delete &*it;
+			delete *it;
 		}
-		parent_ = 0;
-		finished_ = false;
-		linked_ = false;
-		link_set_.clear();
+		
+		// clear the children list
+		children_.clear();
 	}
 
 	void ConnectedToPredicate::CTPNode::setParent(ConnectedToPredicate::CTPNode* parent)
@@ -711,15 +704,12 @@ namespace BALL
 				<< "Trying to link with NULL. Ignoring." << std::endl;
 			return;
 		}
-		// DEBUG
-		//Log.info() << "Linking " << this << " with " << partner << endl;
-		// /DEBUG
 		partner->link_set_.insert(this);
 		partner->addChild(this);
 		setLinked();
 	}
 
-	const HashSet<const ConnectedToPredicate::CTPNode*>& ConnectedToPredicate::CTPNode::getLinkSet() const
+	const HashSet<ConnectedToPredicate::CTPNode*>& ConnectedToPredicate::CTPNode::getLinkSet() const
 		throw()
 	{
 		return link_set_;
@@ -736,6 +726,7 @@ namespace BALL
 	ConnectedToPredicate::~ConnectedToPredicate()
 		throw()
 	{
+		delete tree_;
 	}
 			
 	ConnectedToPredicate::CTPNode* ConnectedToPredicate::createNewNode_(ConnectedToPredicate::CTPNode* node)
@@ -772,7 +763,7 @@ namespace BALL
 		if (link_mark_ != 0)
 		{
 			std::pair<CTPNode*, CTPNode*> tmp(child, 0);
-			link_map_.insert(pair<char, std::pair<CTPNode*, CTPNode*> >(link_mark_, tmp));
+			link_map_.insert(std::pair<char, std::pair<CTPNode*, CTPNode*> >(link_mark_, tmp));
 			link_mark_ = 0;
 		}
 		return child;
@@ -876,6 +867,16 @@ namespace BALL
 					{
 						Log.error() << "ConnectedToPredicate::parse_():\n"
 							<< "\tparse error: missing opening bracket." << std::endl;
+
+						// If the current node was already integrated into the tree,
+						// deleting the root will take care of it. Otherwise kill it
+						// manually
+						if (current->getParent() == 0) delete current;
+						current = 0;
+						// Delete the tree
+						delete root;
+						root = 0;
+
 						return(false);
 					}
 				}
@@ -995,6 +996,9 @@ namespace BALL
 											new_child = new CTPNode(*current);
 											all_nodes.push_back(new_child);
 											parent->addChild(new_child);
+											// The following could be unnecessary (taken care of
+											// ba copy constructor)
+											new_child->setParent(parent);
 										}
 										current = parent;
 									}
@@ -1019,6 +1023,10 @@ namespace BALL
 		{
 			Log.error() << "ConnectedToPredicate::parse_():\n"
 				<< "\tparse error: too many opening brackets." << std::endl;
+			if (current->getParent() == 0) delete current;
+			current = 0;
+			delete root;
+			root = 0;
 			return(0);
 		}
 
@@ -1026,9 +1034,14 @@ namespace BALL
 		{
 			Log.error() << "ConnectedToPredicate::parse_():\n"
 				<< "\tparse error: Too many closing brackets." << std::endl;
+			if (current->getParent() == 0) delete current;
+			current = 0;
+			delete root;
+			root = 0;
 			return(0);
 		}
 
+		// Sort the nodes in order to have 
 		std::list<CTPNode*>::iterator sort_it = all_nodes.begin();
 		for (; sort_it != all_nodes.end(); ++sort_it)
 		{
@@ -1217,7 +1230,7 @@ namespace BALL
 	{
 		Log.info() << std::endl;
 		dump(tree_);
-		Log.info() << flush << std::endl << std::endl;
+		Log.info() << std::flush << std::endl << std::endl;
 	}
 
 	void ConnectedToPredicate::dump(const ConnectedToPredicate::CTPNode* current) const
@@ -1228,15 +1241,13 @@ namespace BALL
 			Log.error() << "ConnectedToPredicate::dump(): got 0" << std::endl;
 			return;
 		}
-		// DEBUG
-		// Log.info() << "CTPNode address: " << current << std::endl;
-		// /DEBUG
 		if (current->isLinked())
 		{
 			Log.info() << "@{" << current << "}";
 		}
-		Log.info() << current->getBondTypeChar() << current->getSymbol() << flush;
-		HashSet<const CTPNode*>::ConstIterator it = current->getLinkSet().begin();
+		Log.info() << current->getBondTypeChar() << current->getSymbol() 
+			<< std::flush;
+		HashSet<CTPNode*>::ConstIterator it = current->getLinkSet().begin();
 		for(; it != current->getLinkSet().end(); ++it)
 		{
 			Log.info() << "@[" << *it << "]";
@@ -1246,24 +1257,28 @@ namespace BALL
 		{
 			if (!current->getLinkSet().has(*child_it))
 			{
-				Log.info() << "(" << flush;
+				Log.info() << "(" << std::flush;
 				dump(*child_it);
-				Log.info() << ")" << flush;
+				Log.info() << ")" << std::flush;
 			}
 		}
+	}
+
+	void ConnectedToPredicate::clear()
+		throw()
+	{
+		if ( tree_ != 0 ) delete tree_;
+		tree_ = 0;
+		link_map_.clear();
+		link_mark_ = 0;
 	}
 
 	void ConnectedToPredicate::setArgument(const String& argument)
 		throw()
 	{
+		clear();
 		argument_ = argument;
-		if (tree_ != 0)
-		{
-			delete tree_;
-		}
 		tree_ = parse_(argument_);
-		link_map_.clear();
-		link_mark_ = 0;
 	}
 
 	bool ConnectedToPredicate::operator () (const Atom& atom) const
@@ -1400,14 +1415,14 @@ namespace BALL
 	{
 
 #ifdef DEBUG
-		cout << "ATOM: " << atom.getFullName() << endl;
+		std::cout << "ATOM: " << atom.getFullName() << std::endl;
 #endif
 
 		// if it's not a carbon, go home.
 		if (atom.getElement() != PTE[Element::C]) 
 		{
 #ifdef DEBUG
-			cout << "No carbon." << endl;
+			std::cout << "No carbon." << std::endl;
 #endif
 			return(false);
 		}
@@ -1417,7 +1432,7 @@ namespace BALL
 		if (!is_sp3(atom)) 
 		{
 #ifdef DEBUG
-			cout << "Not sp3." << endl;
+			std::cout << "Not sp3." << std::endl;
 #endif
 			return(false);
 		}
@@ -1427,7 +1442,7 @@ namespace BALL
 		if (!in_ring(atom) == true)
 		{
 #ifdef DEBUG
-			cout << "Not in a ring." << endl;
+			std::cout << "Not in a ring." << std::endl;
 #endif
 			return(false);
 		}
@@ -1438,7 +1453,7 @@ namespace BALL
 		if ((ring_atoms.size() < 5) || (ring_atoms.size() > 6))
 		{
 #ifdef DEBUG
-			cout << "Wrong ring size " << ring_atoms.size() << "." << endl;
+			std::cout << "Wrong ring size " << ring_atoms.size() << "." << std::endl;
 #endif
 			return(false);
 		}
@@ -1469,8 +1484,8 @@ namespace BALL
 		C5 = ring_atoms[1];
 		c5 = C5->getPosition();
 #ifdef DEBUG
-		cout << "C3: " << C3->getFullName() << endl;
-		cout << "C5: " << C5->getFullName() << endl;
+		std::cout << "C3: " << C3->getFullName() << std::endl;
+		std::cout << "C5: " << C5->getFullName() << std::endl;
 #endif
 		
 		// This code takes the hydrogen as means of measuring the angle. This
@@ -1489,7 +1504,7 @@ namespace BALL
 					H = bond_it->getPartner(atom);
 					h = H->getPosition();
 #ifdef DEBUG
-					cout << "H: " << H->getFullName() << endl;
+					std::cout << "H: " << H->getFullName() << std::endl;
 #endif
 				}
 				else
@@ -1497,7 +1512,7 @@ namespace BALL
 					R = bond_it->getPartner(atom);
 					r = R->getPosition();
 #ifdef DEBUG
-					cout << "R: " << R->getFullName() << endl;
+					std::cout << "R: " << R->getFullName() << std::endl;
 #endif
 				}
 			}
@@ -1508,7 +1523,7 @@ namespace BALL
 		if (H == 0)
 		{
 #ifdef DEBUG
-			cout << "No hydrogen neighbour." << endl;
+			std::cout << "No hydrogen neighbour." << std::endl;
 #endif
 			return(false);
 		}
@@ -1526,17 +1541,17 @@ namespace BALL
 		}
 
 #ifdef DEBUG
-		cout << "c1: " << c1 << endl;
-		cout << "c3: " << c3 << endl;
-		cout << "c5: " << c5 << endl;
-		cout << "c1 - c3: " << c1 - c3 << endl;
-		cout << "c1 - c5: " << c1 - c5 << endl;
-		cout << "h: " << h << endl;
-		cout << "h - c1: " << h - c1 << endl;
-		cout << "Angle(C1, H): " << angle_C1_H << " " 
-			<< fabs(angle_C1_H) << endl;
-		cout << "Angle(C1, R): " << angle_C1_R << " "
-			<< fabs(angle_C1_R) - 109.5 << endl;
+		std::cout << "c1: " << c1 << std::endl;
+		std::cout << "c3: " << c3 << std::endl;
+		std::cout << "c5: " << c5 << std::endl;
+		std::cout << "c1 - c3: " << c1 - c3 << std::endl;
+		std::cout << "c1 - c5: " << c1 - c5 << std::endl;
+		std::cout << "h: " << h << std::endl;
+		std::cout << "h - c1: " << h - c1 << std::endl;
+		std::cout << "Angle(C1, H): " << angle_C1_H << " " 
+			<< fabs(angle_C1_H) << std::endl;
+		std::cout << "Angle(C1, R): " << angle_C1_R << " "
+			<< fabs(angle_C1_R) - 109.5 << std::endl;
 #endif
 
 		if ((fabs(angle_C1_H) < 15.0) 
@@ -1611,17 +1626,17 @@ namespace BALL
 		Vector3 d = (c1 - o);
 
 #ifdef DEBUG
-		cout << "C1: " << ring_atoms[C1_index]->getFullName() << endl;
-		cout << "C2: " << ring_atoms[C2_index]->getFullName() << endl;
-		cout << "C5: " << ring_atoms[C5_index]->getFullName() << endl;
-		cout << "O: " << ring_atoms[O_index]->getFullName() << endl;
-		cout << "c1: " << c1 << endl;
-		cout << "c2: " << c2 << endl;
-		cout << "c5: " << c5 << endl;
-		cout << "o: " << o << endl;
-		cout << "n: " << n << endl;
-		cout << "d: " << d << endl;
-		cout << "d * n: " << d * n << endl;
+		std::cout << "C1: " << ring_atoms[C1_index]->getFullName() << std::endl;
+		std::cout << "C2: " << ring_atoms[C2_index]->getFullName() << std::endl;
+		std::cout << "C5: " << ring_atoms[C5_index]->getFullName() << std::endl;
+		std::cout << "O: " << ring_atoms[O_index]->getFullName() << std::endl;
+		std::cout << "c1: " << c1 << std::endl;
+		std::cout << "c2: " << c2 << std::endl;
+		std::cout << "c5: " << c5 << std::endl;
+		std::cout << "o: " << o << std::endl;
+		std::cout << "n: " << n << std::endl;
+		std::cout << "d: " << d << std::endl;
+		std::cout << "d * n: " << d * n << std::endl;
 #endif
 
 		if ((d * n) > 0)
@@ -1739,7 +1754,7 @@ namespace BALL
 				if (dfs(*descend, limit-1) == true)
 				{
 // #ifdef DEBUG
-// 					cout << "Pushing back " << atom.getFullName() << endl;
+// 					std::cout << "Pushing back " << atom.getFullName() << std::endl;
 // #endif
 					ring_atoms_.push_back(&atom);
 					return true;
