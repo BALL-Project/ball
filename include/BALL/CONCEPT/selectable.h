@@ -1,4 +1,4 @@
-// $Id: selectable.h,v 1.7 2000/12/09 21:40:59 amoll Exp $
+// $Id: selectable.h,v 1.8 2000/12/10 00:25:55 amoll Exp $
 
 #ifndef BALL_CONCEPT_SELECTABLE_H
 #define BALL_CONCEPT_SELECTABLE_H
@@ -132,8 +132,8 @@ namespace BALL
 
 		/** Equality operator
 		*/
-		bool operator == (const Selectable& selectable) const 
-			throw();
+/*		bool operator == (const Selectable& selectable) const 
+			throw();*/
 
 		//@}
 	
