@@ -1,4 +1,4 @@
-$Id: README,v 1.2 2003/01/29 10:21:46 anker Exp $
+$Id: README,v 1.3 2003/02/18 15:53:44 anker Exp $
 
 BALL Utilities
 ==============
@@ -16,6 +16,12 @@ dcd2dcd:
 	Converts CHARMm "enhanced" DCD trajectory files to simpler X-PLOR type
 	DCD files. Use this program if some DCD reader does not know how to
 	handle your (AMBER-generated) DCD file. It might help.
+
+export_fragment:
+
+	Reads a HyperChem or PDB file and creates a fragment database skeleton
+	file with at least atom entries depending on the content of the input
+	files.
 
 pdb2amber_naming:
 
