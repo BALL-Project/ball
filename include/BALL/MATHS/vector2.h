@@ -1,4 +1,4 @@
-// $Id: vector2.h,v 1.5 2001/07/13 19:50:18 oliver Exp $
+// $Id: vector2.h,v 1.6 2001/07/16 02:12:57 oliver Exp $
 
 #ifndef BALL_MATHS_Vector2_H
 #define BALL_MATHS_Vector2_H
@@ -83,7 +83,7 @@ namespace BALL
 				to the same {\tt value}.
 				@param	value the value of all components
 		*/
-		TVector2(const T& value)
+		explicit TVector2(const T& value)
 			throw();
 
 		/**	Detailed constructor.
