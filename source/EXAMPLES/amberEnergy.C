@@ -1,3 +1,5 @@
+// $Id: amberEnergy.C,v 1.2 2000/01/06 21:33:38 oliver Exp $
+
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/FORMAT/PDBFile.h>
