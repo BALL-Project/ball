@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: directory.C,v 1.26 2003/08/26 09:18:29 oliver Exp $
+// $Id: directory.C,v 1.27 2004/12/02 02:10:29 amoll Exp $
 //
 
 #include <BALL/SYSTEM/directory.h>
@@ -26,18 +26,21 @@
 # define rmdir _rmdir
 #endif
 
+#ifndef BALL_PLATFORM_WINDOWS
+# define INVALID_HANDLE_VALUE 0 
+#endif
 
 namespace BALL 
 {
 	const Size Directory::MAX_PATH_LENGTH = 8192;
 	
 	Directory::Directory()
+		: dir_(INVALID_HANDLE_VALUE),
+			dirent_(INVALID_HANDLE_VALUE)
 	{
-		#ifdef BALL_PLATFORM_WINDOWS
-			dir_ = INVALID_HANDLE_VALUE;
-			dirent_ = INVALID_HANDLE_VALUE;
-			char* buffer;
+		char* buffer;
 
+		#ifdef BALL_PLATFORM_WINDOWS
 			if ((buffer = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
 			{
 				directory_path_ = buffer;
@@ -50,18 +53,12 @@ namespace BALL
 													FILE_FLAG_BACKUP_SEMANTICS,         // file attributes
 													NULL                                // file with attributes to copy
 													);
-				
-				
-
 			}
 			else 
 			{
 				directory_path_ = "";
 			}
 		#else
-			dir_ = 0;
-			dirent_ = 0;
-			char* buffer;
 			if ((buffer = ::getcwd(NULL, MAX_PATH_LENGTH)) != NULL)	
 			{
 				directory_path_ = buffer;
@@ -74,8 +71,9 @@ namespace BALL
 		#endif
 	}
 
-	Directory::Directory
-		(const String& directory_path, bool set_current)
+	Directory::Directory(const String& directory_path, bool set_current)
+		: dir_(INVALID_HANDLE_VALUE),
+			dirent_(INVALID_HANDLE_VALUE)
 	{
 		if (!set(directory_path, set_current)) 
 		{
@@ -83,8 +81,6 @@ namespace BALL
 		}
 		
 		#ifdef BALL_PLATFORM_WINDOWS
-			dir_ = INVALID_HANDLE_VALUE;
-			dirent_ = INVALID_HANDLE_VALUE;
 			dir_ = CreateFile(directory_path_.data(),
 												FILE_LIST_DIRECTORY,                // access (read/write) mode
 												FILE_SHARE_READ|FILE_SHARE_DELETE|FILE_SHARE_WRITE,  // share mode
@@ -93,15 +89,13 @@ namespace BALL
 												FILE_FLAG_BACKUP_SEMANTICS,         // file attributes
 												NULL                                // file with attributes to copy
 			);
-		
-
 		#endif
 
 	}
 
 	Directory::Directory(const Directory& directory)
-		:	dir_(0),
-			dirent_(0)
+		: dir_(INVALID_HANDLE_VALUE),
+			dirent_(INVALID_HANDLE_VALUE)
 	{
 		set(directory);
 	}
@@ -109,8 +103,10 @@ namespace BALL
 	Directory::~Directory()
 	{
 		#ifdef BALL_PLATFORM_WINDOWS
-			CloseHandle(dir_);
+		if (dirent_ != INVALID_HANDLE_VALUE)
+		{
 			FindClose(dirent_);
+		}
 		#else
 			if (dir_ != 0) 
 			{
@@ -536,7 +532,6 @@ namespace BALL
 		FindClose(mydirent);
 		CloseHandle(dir);
 		return desynchronize_(false);
-		
 			
 #else
 		synchronize_();
@@ -571,17 +566,24 @@ namespace BALL
 #endif
 	}
 
-	bool Directory::set
-		(const String& directory_path, bool set_current)
+	bool Directory::set(const String& directory_path, bool set_current)
 	{
-		
 		backup_path_ = "";
 		char* buffer;
 #ifdef BALL_COMPILER_MSVC
-		CloseHandle(dir_);
-		FindClose(dirent_);
+		if (dir_ != INVALID_HANDLE_VALUE)
+		{
+			CloseHandle(dir_);
+		}
+
+		if (dirent_ != INVALID_HANDLE_VALUE)
+		{
+			FindClose(dirent_);
+		}
 		dir_ = dirent_= INVALID_HANDLE_VALUE;
-		if ((directory_path[0] == FileSystem::PATH_SEPARATOR)|| (directory_path[1] == ':' && directory_path[2] == FileSystem::PATH_SEPARATOR))
+		if ((directory_path[0] == FileSystem::PATH_SEPARATOR) || 
+				(directory_path[1] == ':' && 
+				 directory_path[2] == FileSystem::PATH_SEPARATOR))
 #else
 		dir_ = 0;
 		dirent_ = 0;
@@ -704,8 +706,8 @@ namespace BALL
 		#endif
 	}
 
-#       ifdef BALL_NO_INLINE_FUNCTIONS
-#               include <BALL/SYSTEM/directory.iC>
-#       endif
+#ifdef BALL_NO_INLINE_FUNCTIONS
+# include <BALL/SYSTEM/directory.iC>
+#endif
 
 } // namespace BALL 
