@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.43 2004/09/28 17:35:59 amoll Exp $
+# $Id: Makefile,v 1.44 2004/10/20 12:26:41 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -21,7 +21,6 @@ CPP_SOURCES=\
 	bondPropertiesData.C\
 	charmmConfigurationDialog.C\
 	charmmConfigurationDialogData.C\
-	colorChooser.C\
 	colorMeshDialog.C\
 	colorMeshDialogData.C\
 	coloringSettingsDialog.C\
@@ -78,7 +77,6 @@ MOC_SOURCES=\
 	bondPropertiesData_moc.C\
 	charmmConfigurationDialog_moc.C\
 	charmmConfigurationDialogData_moc.C\
-	colorChooser_moc.C\
 	coloringSettingsDialog_moc.C\
 	coloringSettingsDialogData_moc.C\
 	colorMeshDialog_moc.C\
