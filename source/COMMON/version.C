@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: version.C,v 1.11 2002/12/20 19:12:57 oliver Exp $
+// $Id: version.C,v 1.12 2003/04/01 21:13:07 oliver Exp $
 
 #include <BALL/COMMON/version.h>
 #include <BALL/DATATYPE/string.h>
@@ -42,7 +42,7 @@ namespace BALL
 		type_mapper.insert(std::pair<String, VersionInfo::Type>("beta", BETA));
 		type_mapper.insert(std::pair<String, VersionInfo::Type>("nonpublic", NONPUBLIC));
 		type_mapper.insert(std::pair<String, VersionInfo::Type>("pre", PRERELEASE));
-		type_mapper.insert(std::pair<String, VersionInfo::Type>("patch", PATCHLEVEL));
+		type_mapper.insert(std::pair<String, VersionInfo::Type>("patch", PATCHLVL));
 
 		static String release(BALL_RELEASE_STRING);
 		
