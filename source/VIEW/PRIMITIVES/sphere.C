@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sphere.C,v 1.4 2003/08/29 15:38:00 amoll Exp $
+// $Id: sphere.C,v 1.5 2003/12/10 15:30:53 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIVES/sphere.h>
 
@@ -96,7 +96,8 @@ namespace BALL
 			throw()
 		{
 			return (GeometricObject::isValid() && 
-											Sphere3::isValid());
+											Sphere3::isValid() &&
+														point_ptr_ != 0);
 		}
 
 		void Sphere::dump(ostream& s, Size depth) const
