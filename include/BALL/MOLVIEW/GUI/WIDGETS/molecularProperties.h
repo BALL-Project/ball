@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularProperties.h,v 1.8.2.2 2003/02/05 15:31:33 anker Exp $
+// $Id: molecularProperties.h,v 1.8.2.3 2003/02/05 15:45:23 anker Exp $
 
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
 #define BALL_MOLVIEW_GUI_WIDGETS_MOLECULARPROPERTIES_H
@@ -14,21 +14,13 @@
 # include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
 #endif
 
-<<<<<<< molecularProperties.h
-using namespace BALL::VIEW;
 
-=======
-
->>>>>>> 1.14
 namespace BALL
 {
-<<<<<<< molecularProperties.h
-=======
 	using VIEW::ModularWidget;
 	using VIEW::Message;
 	using VIEW::MainControl;
 
->>>>>>> 1.14
 	namespace MOLVIEW
 	{
 

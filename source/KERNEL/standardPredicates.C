@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardPredicates.C,v 1.30.2.4 2003/02/05 15:32:51 anker Exp $
+// $Id: standardPredicates.C,v 1.30.2.5 2003/02/05 15:45:32 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -605,43 +605,15 @@ namespace BALL
 		return(children_);
 	}
 
-<<<<<<< standardPredicates.C
-	::std::list<ConnectedToPredicate::CTPNode*>& ConnectedToPredicate::CTPNode::getChildren()
-		throw()
-	{
-		return(children_);
-=======
-	Size ConnectedToPredicate::CTPNode::getNumberOfChildren() const
-		throw()
-	{
-		return children_.size();
->>>>>>> 1.40
-	}
-
-<<<<<<< standardPredicates.C
 	Size ConnectedToPredicate::CTPNode::getNumberOfChildren() const
 		throw()
 	{
 		return children_.size();
 	}
-=======
-	void ConnectedToPredicate::CTPNode::setBondType(Size type)
-		throw()
-	{
-		// ?????
-		// TODO: check whether type exists...
-		bond_type_ = type;
-	}
->>>>>>> 1.40
 
-<<<<<<< standardPredicates.C
 	void ConnectedToPredicate::CTPNode::setBondType(Size type)
-=======
-	void ConnectedToPredicate::CTPNode::setBondType(char type)
->>>>>>> 1.40
 		throw()
 	{
-<<<<<<< standardPredicates.C
 		// ?????
 		// TODO: check whether type exists...
 		bond_type_ = type;
@@ -651,9 +623,6 @@ namespace BALL
 		throw()
 	{
 		switch (type)
-=======
-		switch (type)
->>>>>>> 1.40
 		{
 			case '.':
 				bond_type_ = BONDTYPE__ANY;
@@ -752,7 +721,6 @@ namespace BALL
 	void ConnectedToPredicate::CTPNode::setLinked()
 		throw()
 	{
-<<<<<<< standardPredicates.C
 		linked_ = true;
 	}
 
@@ -784,32 +752,13 @@ namespace BALL
 		partner->addChild(this);
 		setLinked();
 	}
-=======
-		linked_ = true;
-	}
 
-	void ConnectedToPredicate::CTPNode::unsetLinked()
-		throw()
-	{
-		linked_ = false;
-	}
->>>>>>> 1.40
-
-<<<<<<< standardPredicates.C
 	const HashSet<const ConnectedToPredicate::CTPNode*>& ConnectedToPredicate::CTPNode::getLinkSet() const
 		throw()
 	{
 		return link_set_;
 	}
-=======
-	bool ConnectedToPredicate::CTPNode::isLinked() const
-		throw()
-	{
-		return linked_;
-	}
->>>>>>> 1.40
 
-<<<<<<< standardPredicates.C
 	ConnectedToPredicate::ConnectedToPredicate()
 		throw()
 		:	tree_(0),
@@ -817,26 +766,7 @@ namespace BALL
 			link_mark_(0)
 	{
 	}
-=======
-	void ConnectedToPredicate::CTPNode::linkWith(ConnectedToPredicate::CTPNode* partner)
-		throw()
-	{
-		if (partner == 0)
-		{
-			Log.error() << "ConnectedToPredicate::CTPNode::linkWith(): "
-				<< "Trying to link with NULL. Ignoring." << std::endl;
-			return;
-		}
-		// DEBUG
-		//Log.info() << "Linking " << this << " with " << partner << endl;
-		// /DEBUG
-		partner->link_set_.insert(this);
-		partner->addChild(this);
-		setLinked();
-	}
->>>>>>> 1.40
 
-<<<<<<< standardPredicates.C
 	ConnectedToPredicate::~ConnectedToPredicate()
 		throw()
 	{
@@ -848,54 +778,6 @@ namespace BALL
 		// PARANOIA
 		if (node == 0)
 		{
-			Log.error() << "ConnectedToPredicate::createNewNode_: "
-				<< "got NULL as argument" << std::endl;
-			return(0);
-		}
-		// /PARANOIA
-=======
-	const HashSet<const ConnectedToPredicate::CTPNode*>& ConnectedToPredicate::CTPNode::getLinkSet() const
-		throw()
-	{
-		return link_set_;
-	}
->>>>>>> 1.40
-
-<<<<<<< standardPredicates.C
-		// whenever we create a new node, the old one is finished.
-		node->setFinished();
-		CTPNode* child = new CTPNode;
-=======
-	ConnectedToPredicate::ConnectedToPredicate()
-		throw()
-		:	tree_(0),
-			link_map_(),
-			link_mark_(0)
-	{
-	}
->>>>>>> 1.40
-
-<<<<<<< standardPredicates.C
-		// PARANOIA
-		if (child == 0)
-=======
-	ConnectedToPredicate::~ConnectedToPredicate()
-		throw()
-	{
-	}
-			
-	ConnectedToPredicate::CTPNode* ConnectedToPredicate::createNewNode_(ConnectedToPredicate::CTPNode* node)
-		throw()
-	{
-		// PARANOIA
-		if (node == 0)
->>>>>>> 1.40
-		{
-<<<<<<< standardPredicates.C
-			Log.error() << "ConnectedToPredicate::createNewNode_: "
-				<< "Could not create a child node" << std::endl;
-			return(0);
-=======
 			Log.error() << "ConnectedToPredicate::createNewNode_: "
 				<< "got NULL as argument" << std::endl;
 			return(0);
@@ -926,11 +808,7 @@ namespace BALL
 			pair<CTPNode*, CTPNode*> tmp(child, 0);
 			link_map_.insert(pair<char, pair<CTPNode*, CTPNode*> >(link_mark_, tmp));
 			link_mark_ = 0;
->>>>>>> 1.40
 		}
-<<<<<<< standardPredicates.C
-		// /PARANOIA
-=======
 		return child;
 	}
 
@@ -939,12 +817,7 @@ namespace BALL
 	{
 		return(parse_(argument_));
 	}
->>>>>>> 1.40
 
-<<<<<<< standardPredicates.C
-		child->setParent(node);
-		node->addChild(child);
-=======
 	ConnectedToPredicate::CTPNode* ConnectedToPredicate::parse_(const String& input) 
 		throw()
 	{
@@ -955,21 +828,7 @@ namespace BALL
 		Size verbosity = 0;
 		std::list<CTPNode*> all_nodes;
 		std::vector<CTPNode*> bracket_stack;
->>>>>>> 1.40
 
-<<<<<<< standardPredicates.C
-		// if there is a link mark between this node an its child, create an
-		// entry in the link map and mark the child as linked. The link partner
-		// is still unknown.
-		if (link_mark_ != 0)
-		{
-			pair<CTPNode*, CTPNode*> tmp(child, 0);
-			link_map_.insert(pair<char, pair<CTPNode*, CTPNode*> >(link_mark_, tmp));
-			link_mark_ = 0;
-		}
-		return child;
-	}
-=======
 		CTPNode* root = new CTPNode;
 		
 		// PARANOIA
@@ -984,7 +843,6 @@ namespace BALL
 		root->setSymbol("/");
 		current = root;
 		all_nodes.push_back(root);
->>>>>>> 1.40
 
 <<<<<<< standardPredicates.C
 	ConnectedToPredicate::CTPNode* ConnectedToPredicate::parse_() 

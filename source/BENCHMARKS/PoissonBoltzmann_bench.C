@@ -1,16 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PoissonBoltzmann_bench.C,v 1.3.2.2 2003/02/05 15:32:28 anker Exp $
+// $Id: PoissonBoltzmann_bench.C,v 1.3.2.3 2003/02/05 15:45:30 anker Exp $
 #include <BALL/CONCEPT/benchmark.h>
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
 
-<<<<<<< PoissonBoltzmann_bench.C
-START_BENCHMARK(FDPB, 1.0, "$Id: PoissonBoltzmann_bench.C,v 1.3.2.2 2003/02/05 15:32:28 anker Exp $")
-=======
-START_BENCHMARK(FDPB, 1.0, "$Id: PoissonBoltzmann_bench.C,v 1.3.2.2 2003/02/05 15:32:28 anker Exp $")
->>>>>>> 1.5
+START_BENCHMARK(FDPB, 1.0, "$Id: PoissonBoltzmann_bench.C,v 1.3.2.3 2003/02/05 15:45:30 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -91,11 +91,7 @@ balanced_brackets:
 		TK_OPEN_BRACKET inside_brackets TK_CLOSE_BRACKET {
 			$$ = $1;
 		}
-<<<<<<< expressionParserParser.y
-	;
-=======
 		;
->>>>>>> 1.8
 
 inside_brackets:
 		something balanced_brackets inside_brackets {

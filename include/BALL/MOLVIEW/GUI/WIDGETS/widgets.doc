@@ -1,9 +1,5 @@
-// $Id: widgets.doc,v 1.4.2.2 2003/02/05 15:31:33 anker Exp $
+// $Id: widgets.doc,v 1.4.2.3 2003/02/05 15:45:23 anker Exp $
 
 //@Include: molecularControl.h
 //@Include: molecularProperties.h
-<<<<<<< widgets.doc
-//@Include: control.h
-=======
->>>>>>> 1.6
 

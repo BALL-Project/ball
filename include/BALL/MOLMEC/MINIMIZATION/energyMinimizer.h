@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: energyMinimizer.h,v 1.22.2.2 2003/02/05 15:31:12 anker Exp $
+// $Id: energyMinimizer.h,v 1.22.2.3 2003/02/05 15:45:22 anker Exp $
 
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
@@ -399,18 +399,6 @@ namespace BALL
 		*/
 		ForceField*	getForceField();
 
-<<<<<<< energyMinimizer.h
-		/**	
-		*/
-		int getForceUpdateCounter() const
-			throw();
-
-		/**	
-		*/
-		int getEnergyUpdateCounter() const
-			throw();
-
-=======
 		/**	Return the number of force updates since the start of the minimization.
 		*/
 		Size getForceUpdateCounter() const
@@ -421,7 +409,6 @@ namespace BALL
 		Size getEnergyUpdateCounter() const
 			throw();
 
->>>>>>> 1.31
 		/**	Minimize the energy of the system bound to the force field.	
 				If a number of steps is given, the minimization is aborted after
 				that number of steps, regardless of the number of steps given in 
