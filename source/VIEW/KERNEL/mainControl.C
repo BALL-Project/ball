@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.52 2004/01/14 16:20:49 amoll Exp $
+// $Id: mainControl.C,v 1.53 2004/01/18 12:45:28 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -29,6 +29,7 @@
 #include <qstatusbar.h>
 #include <qlabel.h>
 #include <qtooltip.h>
+#include <qpushbutton.h>
 
 #include <algorithm> // sort
 
@@ -196,7 +197,7 @@ void MainControl::show()
 	}
 
 	// create own preferences dialog
-	preferences_dialog_ = new Preferences(this, "Molview Preferences", 455, 352);
+	preferences_dialog_ = new Preferences(this, "Molview Preferences");
 
 	if (preferences_dialog_ == 0)
 	{
@@ -205,9 +206,14 @@ void MainControl::show()
 	}
 
 	// establish connection 
-	connect(preferences_dialog_, SIGNAL(applyButtonPressed()), this, SLOT(applyPreferencesTab()));
-	connect(preferences_dialog_, SIGNAL(cancelButtonPressed()), this, SLOT(cancelPreferencesTab()));
-	connect(preferences_dialog_, SIGNAL(defaultButtonPressed()), this, SLOT(defaultPreferencesTab()));
+	connect(preferences_dialog_->ok_button, SIGNAL(clicked()), 
+			this, SLOT(applyPreferencesTab()));
+	
+	connect(preferences_dialog_->cancel_button, SIGNAL((clicked())), 
+			this, SLOT(cancelPreferencesTab()));
+	
+	connect(preferences_dialog_->defaults_button, SIGNAL(clicked()), 
+			this, SLOT(defaultPreferencesTab()));
 
 	// initialize own preferences tab
 	initializePreferencesTab(*preferences_dialog_);
@@ -243,7 +249,7 @@ void MainControl::show()
 	insertMenuEntry(MainControl::HELP, "Whats this?", this, SLOT(whatsThis()));	
 	
 	// if the preferences dialog has any tabs then show it
-	if (preferences_dialog_->hasTabs())
+	if (preferences_dialog_->hasPages())
 	{
 		initPopupMenu(MainControl::DISPLAY)->setCheckable(true);
 		
@@ -261,7 +267,7 @@ void MainControl::show()
 void MainControl::checkMenus()
 {
 	// preferences dialog not empty
-	if (preferences_dialog_->hasTabs())
+	if (preferences_dialog_->hasPages())
 	{
 		menuBar()->setItemChecked(preferences_id_, preferences_dialog_->isVisible());			
 	}
@@ -583,7 +589,8 @@ void MainControl::initializePreferencesTab(Preferences &preferences)
 	main_control_preferences_ = new MainControlPreferences();
 	CHECK_PTR(main_control_preferences_);
 
-	preferences.insertTab(main_control_preferences_, "General");
+	preferences.insertPage(main_control_preferences_, "General");
+	preferences.showPage(0);
 }
 
 void MainControl::finalizePreferencesTab(Preferences &preferences)
@@ -591,7 +598,7 @@ void MainControl::finalizePreferencesTab(Preferences &preferences)
 {
 	if (main_control_preferences_ != 0)
 	{
-		preferences.removeTab(main_control_preferences_);
+		preferences.removePage(main_control_preferences_);
 
 		delete main_control_preferences_;
 		main_control_preferences_ = 0;

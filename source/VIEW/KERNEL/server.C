@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: server.C,v 1.8 2003/11/21 01:22:53 amoll Exp $
+// $Id: server.C,v 1.9 2004/01/18 12:45:29 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/server.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -178,7 +178,7 @@ namespace BALL
 			server_preferences_ = new ServerPreferences();
 			CHECK_PTR(server_preferences_);
 
-			preferences.insertTab(server_preferences_, "Server");
+			preferences.insertPage(server_preferences_, "Server");
 		}
 
 		void Server::finalizePreferencesTab(Preferences &preferences)
@@ -186,7 +186,7 @@ namespace BALL
 		{
 			if (server_preferences_ != 0)
 			{
-				preferences.removeTab(server_preferences_);
+				preferences.removePage(server_preferences_);
 		
 				delete server_preferences_;
 				server_preferences_ = 0;
