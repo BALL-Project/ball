@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.48 2002/12/17 16:40:42 oliver Exp $
+// $Id: HINFile.C,v 1.49 2003/04/12 10:02:28 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -493,10 +493,15 @@ namespace BALL
 
 						if (PTE[getLine().getField(3)] == Element::UNKNOWN)
 						{
-							ERROR(String("unknown element: ") + getLine().getField(3))
+							// Treat "lone pair atoms" (Lp) written by Amber -- we just keep them
+							// for now and remove them later.
+							if (getLine().getField(3) != "Lp")
+							{
+								ERROR(String("unknown element: ") + getLine().getField(3))
+							}
 						}
+						// Set the element and the atom radius (vdW radius).
 						atom->setElement(PTE[getLine().getField(3)]);
-						// set the atom radius
 						atom->setRadius(PTE[getLine().getField(3)].getVanDerWaalsRadius());
 
 						if (getLine().getField(4) == "**")
