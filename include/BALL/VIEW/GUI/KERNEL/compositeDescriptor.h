@@ -1,4 +1,4 @@
-// $Id: compositeDescriptor.h,v 1.6 2001/05/13 13:57:01 hekl Exp $
+// $Id: compositeDescriptor.h,v 1.7 2001/06/28 20:02:25 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
 #define BALL_VIEW_GUI_KERNEL_COMPOSITEDESCRIPTOR_H
@@ -80,9 +80,9 @@ namespace BALL
 				deleted as well because all attributs are no longer available. This mechanism
 				will work automatically.
 				@memo    CompositeDescriptor class (BALL VIEW gui kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.6 $
-				@date    $Date: 2001/05/13 13:57:01 $
+				@author  $Author: sturm $
+				@version $Revision: 1.7 $
+				@date    $Date: 2001/06/28 20:02:25 $
 		*/
 		class CompositeDescriptor
 		{
@@ -473,7 +473,7 @@ namespace BALL
 					the graphical represenation for faster drawing. This will use a little time but
 					the rendering will be faster afterwards. However if the representation changes
 					itself often the time used for compilation will slow down the process
-					considerably. Another feat of this method is the possibily that each
+					considerably. Another feature of this method is the possibily that each
 					graphical object can be named. That is essential for the selection mode.
 					This method will be called internally from the render engine.
 					@param dynamic the new drawing mode ({\tt true} - lowres drawing mode, 
