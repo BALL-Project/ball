@@ -1,4 +1,4 @@
-// $Id: structureMapper.h,v 1.4 2000/02/06 19:51:30 oliver Exp $
+// $Id: structureMapper.h,v 1.5 2000/03/26 12:38:30 oliver Exp $
 
 #ifndef BALL_STRUCTURE_STRUCTUREMAPPER_H
 #define BALL_STRUCTURE_STRUCTUREMAPPER_H
@@ -84,7 +84,7 @@ namespace BALL
 		
 		/**	Calculate the root mean squared deviation
 		*/
-		float calculateRMSD();
+		double calculateRMSD();
 		
 		/**	Calculate the transformation to map the first of two isomorphous 
 				Composite objects onto the second
@@ -109,8 +109,8 @@ namespace BALL
 			(const vector<Fragment*>& A, 
 			const vector<Fragment*>& B, 
 			Matrix4x4* transformation,
-			float upper_bound = 8.0,
-			float lower_bound = 2.5);
+			double upper_bound = 8.0,
+			double lower_bound = 2.5);
 
 		Matrix4x4 matchPoints_
 			(const Vector3& w1,
@@ -132,20 +132,20 @@ namespace BALL
 		searchPattern_
 			 (vector<Fragment*> &pattern,
 				Composite &composite,
-				float max_rmsd = 4.0,
-				float max_center_tolerance = 2.0,
-				float upper_bound = 8.0,
-				float lower_bound = 4.0);
+				double max_rmsd = 4.0,
+				double max_center_tolerance = 2.0,
+				double upper_bound = 8.0,
+				double lower_bound = 4.0);
 
 		Matrix4x4 mapProteins_
 			 ( Protein &P1,
 				 Protein &P2,
 				 map<String, int>&	type_map,
 				 int&					no_matched_ca,
-				 float&				rmsd,
-				 float        upper_bound = 8.0,
-				 float        lower_bound = 4.0,
-				 float        tolerance = 0.6);
+				 double&				rmsd,
+				 double        upper_bound = 8.0,
+				 double        lower_bound = 4.0,
+				 double        tolerance = 0.6);
 
 		protected:
 			
@@ -162,7 +162,7 @@ namespace BALL
 		StructureMapper::AtomBijection bijection_;
 		
 		/*_	The rmsd of the last mapping executed */
-		float	rmsd_;
+		double	rmsd_;
 
 
 		private:
