@@ -1,58 +1,14 @@
-// $Id: externalRenderer.h,v 1.1.2.1 2002/08/29 16:50:25 anhi Exp $
+// $Id: externalRenderer.h,v 1.1.2.2 2002/10/26 00:15:44 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H
 #define BALL_VIEW_GUI_FUNCTOR_EXTERNALRENDERER_H
-
-#ifndef BALL_COMMON_H
-# include <BALL/common.h>
-#endif
 
 #ifndef BALL_CONCEPT_PROCESSOR_H
 # include <BALL/CONCEPT/processor.h>
 #endif
 
-#ifndef BALL_KERNEL_ATOM_H
-# include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_BOND_H
-# include <BALL/KERNEL/bond.h>
-#endif
-
 #ifndef BALL_VIEW_GUI_WIDGETS_SCENE_H
 # include <BALL/VIEW/GUI/WIDGETS/scene.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#	include <BALL/VIEW/KERNEL/geometricObject.h>
-#endif
-
-#ifndef BALL_VIEW_GUI_KERNEL_GLOBJECT_H
-#	include <BALL/VIEW/GUI/KERNEL/glObject.h>
-#endif
-
-#ifndef BALL_VIEW_PRIMITIV_SPHERE_H
-# include <BALL/VIEW/PRIMITIV/sphere.h>
-#endif
-
-#ifndef BALL_VIEW_PRIMITIV_LINE_H
-# include <BALL/VIEW/PRIMITIV/line.h>
-#endif
-
-#ifndef BALL_VIEW_PRIMITIV_MESH_H_
-# include <BALL/VIEW/PRIMITIV/mesh.h>
-#endif
-
-#ifndef BALL_VIEW_PRIMITIV_POINT_H
-# include <BALL/VIEW/PRIMITIV/point.h>
-#endif
-
-#ifndef BALL_VIEW_PRIMITIV_TUBE_H
-# include <BALL/VIEW/PRIMITIV/tube.h>
-#endif
-
-#ifndef BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
-# include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 #endif
 
 namespace BALL

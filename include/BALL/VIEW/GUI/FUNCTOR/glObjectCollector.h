@@ -1,31 +1,20 @@
-// $Id: glObjectCollector.h,v 1.6 2001/07/16 14:49:29 amoll Exp $
+// $Id: glObjectCollector.h,v 1.6.4.1 2002/10/26 00:15:44 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_FUNCTOR_GLOBJECTCOLLECTOR_H
 #define BALL_VIEW_GUI_FUNCTOR_GLOBJECTCOLLECTOR_H
 
-#ifndef BALL_COMMON_H
-#	include <BALL/common.h>
-#endif
-
 #ifndef BALL_CONCEPT_PROCESSOR_H
 #	include <BALL/CONCEPT/processor.h>
-#endif
-
-#ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
-#	include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
 #ifndef BALL_VIEW_GUI_KERNEL_GLOBJECT_H
 #	include <BALL/VIEW/GUI/KERNEL/glObject.h>
 #endif
 
-
 namespace BALL
 {
-	
 	namespace VIEW
 	{
-
 		/** GLObjectCollector class.
 				The class GLObjectCollector is responsible for collecting the \Ref{GLObject}
 				objects that are found in a \Ref{Composite} tree for the later processing
@@ -36,7 +25,8 @@ namespace BALL
 				to collect {\em *this} objects. \\
 				{\bf Defintion:} \URL{BALL/VIEW/GUI/FUNCTOR/glObjectCollector.h}\\
 		*/
-		class GLObjectCollector: public UnaryProcessor<Composite>
+		class GLObjectCollector
+			: public UnaryProcessor<Composite>
 		{
 			public:
 
@@ -56,7 +46,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -81,8 +70,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
@@ -122,7 +111,8 @@ namespace BALL
 					glObjectCollector.
 					See \Ref{GeometricObject} for information concerning the different
 					properties an object can have.
-					@param  GL_object the \Ref{GLObject} to be appended to the static always front list of {\em *this} glObjectCollector.
+					@param  GL_object the \Ref{GLObject} to be appended to the static always front list of 
+										{\em *this} glObjectCollector.
 					@see    getStaticAlwaysFrontList
 					@see    GLObject
 					@see    GeometricObject
@@ -144,7 +134,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the static always front list.
-			For further information see \Ref{getStaticAlwaysFrontList}.
+					For further information see \Ref{getStaticAlwaysFrontList}.
 			*/
 			const list<GLObject *>& getStaticAlwaysFrontList() const
 				throw();
@@ -186,7 +176,8 @@ namespace BALL
 					{\em *this} glObjectCollector.
 					See \Ref{GeometricObject} for information concerning the different
 					properties an object can have.
-					@param  GL_object the \Ref{GLObject} to be appended to the static wireframe always front list of {\em *this} glObjectCollector.
+					@param  GL_object the \Ref{GLObject} to be appended to the static wireframe always front list of 
+										{\em *this} glObjectCollector.
 					@see    getStaticWireframeAlwaysFrontList
 					@see    GLObject
 					@see    GeometricObject
@@ -199,7 +190,8 @@ namespace BALL
 					{\em *this} glObjectCollector.
 					See \Ref{GeometricObject} for information concerning the different
 					properties an object can have.
-					@return  list<GLObject*>& mutable reference of the static wireframe always front list of {\em *this} glObjectCollector
+					@return  list<GLObject*>& mutable reference of the static wireframe always front list of 
+										{\em *this} glObjectCollector
 					@see    appendToStaticWireframeAlwaysFrontList
 					@see    GLObject
 					@see    GeometricObject
@@ -250,7 +242,8 @@ namespace BALL
 					{\em *this} glObjectCollector.
 					See \Ref{GeometricObject} for information concerning the different
 					properties an object can have.
-					@param  GL_object the \Ref{GLObject} to be appended to the dynamic always front list of {\em *this} glObjectCollector.
+					@param  GL_object the \Ref{GLObject} to be appended to the dynamic always front list of 
+										{\em *this} glObjectCollector.
 					@see    getDynamicAlwaysFrontList
 					@see    GLObject
 					@see    GeometricObject
@@ -314,7 +307,8 @@ namespace BALL
 					{\em *this} glObjectCollector.
 					See \Ref{GeometricObject} for information concerning the different
 					properties an object can have.
-					@param  GL_object the \Ref{GLObject} to be appended to the transparent always front list of {\em *this} glObjectCollector.
+					@param  GL_object the \Ref{GLObject} to be appended to the transparent always front list of 
+										{\em *this} glObjectCollector.
 					@see    getTransparentAlwaysFrontList
 					@see    GLObject
 					@see    GeometricObject
@@ -363,7 +357,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/**	@name Processor specific methods
 			*/
 			//@{
@@ -406,7 +399,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/**	@name	Debugging and Diagnostics
 			*/
 			//@{
@@ -425,16 +417,16 @@ namespace BALL
 
 			Composite* composite_;
 
-			list<GLObject *> static_list_;
-			list<GLObject *> static_always_front_list_;
-			list<GLObject *> static_wireframe_list_;
-			list<GLObject *> static_wireframe_always_front_list_;
+			list<GLObject*> static_list_;
+			list<GLObject*> static_always_front_list_;
+			list<GLObject*> static_wireframe_list_;
+			list<GLObject*> static_wireframe_always_front_list_;
 
-			list<GLObject *> dynamic_list_;
-			list<GLObject *> dynamic_always_front_list_;
+			list<GLObject*> dynamic_list_;
+			list<GLObject*> dynamic_always_front_list_;
 
-			list<GLObject *> transparent_list_;
-			list<GLObject *> transparent_always_front_list_;
+			list<GLObject*> transparent_list_;
+			list<GLObject*> transparent_always_front_list_;
 		};
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

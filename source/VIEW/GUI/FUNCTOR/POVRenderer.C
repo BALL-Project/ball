@@ -1,8 +1,14 @@
-// $Id: POVRenderer.C,v 1.1.2.1 2002/08/29 16:51:15 anhi Exp $
+// $Id: POVRenderer.C,v 1.1.2.2 2002/10/26 00:15:01 amoll Exp $
 
 #include <BALL/VIEW/GUI/FUNCTOR/POVRenderer.h>
+#include <BALL/KERNEL/atom.h>
+#include <BALL/VIEW/PRIMITIV/point.h>
+#include <BALL/VIEW/PRIMITIV/sphere.h>
+#include <BALL/VIEW/PRIMITIV/mesh.h>
+#include <BALL/VIEW/PRIMITIV/tube.h>
+#include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.h>
 
-using namespace std;
+using std::endl;
 
 namespace BALL
 {
