@@ -1,5 +1,5 @@
 ###############################################################
-# Main Makefile   ($Id: Makefile.multiplatform,v 1.1 1999/08/26 08:02:33 oliver Exp $)
+# Main Makefile   ($Id: Makefile.multiplatform,v 1.2 1999/08/26 20:31:40 oliver Exp $)
 ###############################################################
 
 BINFMT=`config/binfmt.sh`
@@ -29,6 +29,12 @@ install.static:
 
 install.shared:
 	@$(DIRMAKE) install.shared
+
+delete.static:
+	@$(DIRMAKE) delete.static
+
+delete.shared:
+	@$(DIRMAKE) delete.shared
 
 collect:
 	@$(DIRMAKE) collect
