@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.91.2.7 2005/01/23 09:49:20 amoll Exp $
+// $Id: molecularControl.C,v 1.91.2.8 2005/01/28 15:08:01 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -785,10 +785,8 @@ void MolecularControl::cut()
 			(**it).getParent()->removeChild(**it);
  			if (was_delete_) delete *it;
 		}
-		else
-		{
-			getMainControl()->remove(**it, was_delete_);
-		}
+
+		getMainControl()->remove(**it, was_delete_);
 
 		if (!was_delete_) 
 		{

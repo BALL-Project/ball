@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.158.2.6 2005/01/21 01:30:56 amoll Exp $
+// $Id: mainControl.C,v 1.158.2.7 2005/01/28 15:08:11 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -556,7 +556,6 @@ namespace BALL
 			throw()
 		{
 			if (!composite_manager_.has(composite)) return false;
-			
 			// delete all representations containing the composite
 			primitive_manager_.removedComposite(composite);
 
@@ -1335,7 +1334,11 @@ namespace BALL
 		bool MainControl::remove(Composite& composite, bool to_delete)
 			throw()
 		{
-			if (!composite_manager_.has(composite)) return false;
+			if (!composite_manager_.has(composite)) 
+			{
+				primitive_manager_.removedComposite(composite);
+				return false;
+			}
 
 			CompositeMessage* cm = new CompositeMessage(composite, 
 					CompositeMessage::REMOVED_COMPOSITE);
