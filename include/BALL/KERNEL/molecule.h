@@ -1,4 +1,4 @@
-// $Id: molecule.h,v 1.4 2000/04/11 15:26:04 amoll Exp $
+// $Id: molecule.h,v 1.5 2000/04/13 22:35:27 amoll Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -147,10 +147,16 @@ namespace BALL
 		*/
 		void insert(Atom& atom);
 
-		///
+		/** Insert an atom before an given {\em Comosite} object.
+				@param atom, the atom to insert
+				@param before, the {\em Comosite} object to insert before
+		*/
 		void insertBefore(Atom& atom, Composite& before);
 
-		///
+		/** Insert an atom after an given {\em Comosite} object.
+				@param atom, the atom to insert
+				@param after, the {\em Comosite} object to insert after
+		*/
 		void insertAfter(Atom& atom, Composite& after);
 
 		/** Remove an Atom
@@ -173,19 +179,33 @@ namespace BALL
 		*/
 		void insert(BaseFragment& base_fragment);
 
-		///
+		/** Insert a BaseFragment before a given {\em Comosite} object.
+				@param base_fragment, the BaseFragment to insert
+				@param before, the {\em Comosite} object to insert before
+		*/
 		void insertBefore(BaseFragment& base_fragment, Composite& before);
 
-		///
+		/** Insert a BaseFragment after a given {\em Comosite} object.
+				@param base_fragment, the BaseFragment to insert
+				@param after, the {\em Comosite} object to insert after
+		*/
 		void insertAfter(BaseFragment& base_fragment, Composite& after);
 
-		///
+		/**	Prepend all children of {\tt base_fragment} to the children of this molecule.
+				@param base_fragment the BaseFragment to access
+		*/
 		void spliceBefore(BaseFragment& base_fragment);
 
-		///
+		/**	Append all children of {\tt base_fragment} after the children of this molecule.
+				@param base_fragment the BaseFragment to access
+		*/
 		void spliceAfter(BaseFragment& base_fragment);
 
-		///
+		/**	Insert the children of base_fragment into this molecule.
+				The children of {\tt base_fragment} are inserted at the position of 
+				{\tt base_fragment} if {\tt base_fragment} is a child of {\tt this}.
+				Otherwise the children are inserted using \Ref{spliceBefore}.
+		*/
 		void splice(BaseFragment& base_fragment);
 
 		/** Remove a BaseFragment
@@ -199,8 +219,13 @@ namespace BALL
 		/**	@name Debugging and Diagnostics */
 		//@{
 
-		/**	Test if instance is valid.
-				@return bool
+		/** Internal state and consistency self-validation.
+				Initiate self-validation of the internal state and data structure consistencies of {\em *this} molecule.
+				If the internal state of {\em *this} molecule is correct (self-validated) and consistent {\tt true} is returned,
+				{\tt false} otherwise. 
+				@return			bool -
+										{\tt true} if the internal state of {\em *this} molecule is correct (self-validated) and consistent,
+										{\tt false} otherwise
 		*/
 		virtual bool isValid() const;
 
