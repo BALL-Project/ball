@@ -1,4 +1,4 @@
-// $Id: numericalIntegrator.h,v 1.1 2000/12/06 19:05:07 anker Exp $
+// $Id: numericalIntegrator.h,v 1.2 2001/03/06 14:02:59 anker Exp $
 
 #ifndef BALL_MATHS_NUMERICALINTEGRATOR_H
 #define BALL_MATHS_NUMERICALINTEGRATOR_H
@@ -8,7 +8,7 @@
 namespace BALL
 {
 
-	/** Numerical integrator class
+	/** Numerical integrator class.
 			\\
 			{\bf Definition:} \URL{BALL/MATHS/numericalIntegrator.h}
 	*/
@@ -45,7 +45,7 @@ namespace BALL
 		const NumericalIntegrator& operator = (const NumericalIntegrator& nint)
 			throw();
 
-		/// Clear method
+		/// Clear method, might be unusable...
 		virtual void clear()
 			throw();
 
@@ -77,23 +77,25 @@ namespace BALL
 		const Function& getFunction() const
 			throw();
 
+		/** get the function to be integrated
+				@return a mutable reference to the actual function
+		*/
+		Function& getFunction()
+			throw();
+
 		/** Get the value of the function at position {\em x}
 				@param x the position at which {\tt function\_} is to be evaluated
 				@return the value of {\tt function\_} at {\em x}
 		*/
-		DataType getValue(DataType x)
-		{
-			return function_(x);
-		}
+		DataType getValue(DataType x) const
+			throw();
 
 		/** Integrate the function numerically
 				@param from lower limit of the integration
 				@param to upper limit of the integration
 				@return the value of the integral
 		*/
-		DataType integrate(DataType from, DataType to)
-		{
-		}
+		DataType integrate(DataType from, DataType to);
 
 		//@}
 
@@ -104,6 +106,111 @@ namespace BALL
 		Function function_;
 
 	};
+
+
+	template<typename Function, typename DataType>
+	BALL_INLINE
+	NumericalIntegrator<Function, DataType>::NumericalIntegrator()
+		throw()
+		: function_()
+	{
+	}
+
+
+	template<typename Function, typename DataType>
+	BALL_INLINE
+	NumericalIntegrator<Function, DataType>::NumericalIntegrator(const NumericalIntegrator<Function, DataType>& nint)
+		throw()
+		: function_(nint.function_)
+	{
+	}
+
+
+	template<typename Function, typename DataType>
+	BALL_INLINE
+	NumericalIntegrator<Function, DataType>::~NumericalIntegrator()
+		throw()
+	{
+	}
+
+
+	template<typename Function, typename DataType>
+	BALL_INLINE
+	const NumericalIntegrator<Function, DataType>&
+	NumericalIntegrator<Function, DataType>::operator =
+	(const NumericalIntegrator<Function, DataType>& nint)
+		throw()
+	{
+		function_ = nint.function_;
+		return *this;
+	}
+
+
+	template<typename Function, typename DataType>
+	BALL_INLINE
+	void NumericalIntegrator<Function, DataType>::clear()
+		throw()
+	{
+		// BAUSTELLE: Je nach template gibt es clear() in function_ gar nicht.
+		function_.clear();
+	}
+
+
+	template<typename Function, typename DataType>
+	BALL_INLINE
+	void NumericalIntegrator<Function, DataType>::setFunction
+	(const Function& function)
+		throw()
+	{	
+		function_ = function;
+	}
+
+
+	template<typename Function, typename DataType>
+	BALL_INLINE
+	Function& NumericalIntegrator<Function, DataType>::getFunction()
+		throw()
+	{
+		return function;
+	}
+
+
+	template<typename Function, typename DataType>
+	BALL_INLINE
+	const Function& NumericalIntegrator<Function, DataType>::getFunction()
+	const
+		throw()
+	{
+		return function;
+	}
+
+
+	template<typename Function, typename DataType>
+	BALL_INLINE
+	bool NumericalIntegrator<Function, DataType>::operator ==
+	(const NumericalIntegrator<Function, DataType>& nint) const
+		throw()
+	{
+		return (function_ == nint.function_);
+	}
+
+
+	template<typename Function, typename DataType>
+	BALL_INLINE
+	DataType NumericalIntegrator<Function, DataType>::getValue(DataType x) const
+		throw()
+	{
+		return function_(x);
+	}
+
+
+	template<typename Function, typename DataType>
+	BALL_INLINE
+	DataType NumericalIntegrator<Function, DataType>::integrate
+	(DataType from, DataType to) const
+		throw()
+	{
+	}
 
 }
 
