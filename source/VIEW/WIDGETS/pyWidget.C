@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.15 2003/11/13 15:11:56 amoll Exp $
+// $Id: pyWidget.C,v 1.16 2003/11/13 17:07:43 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -213,7 +213,7 @@ namespace BALL
 				}
 				else
 				{
-					setColor(green);
+					setColor(blue);
 				}
 				append(result.c_str());
 				setColor(black);
