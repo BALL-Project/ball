@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.16 2000/08/24 12:00:47 amoll Exp $
+// $Id: composite.C,v 1.18 2000/08/27 16:09:50 amoll Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -1121,21 +1121,22 @@ namespace BALL
 
 	bool Composite::isHomomorph(const Composite& composite) const
 	{
-		if (this ==& composite)
+		if (this == &composite)
+		{
 			return true;
-
+		}
 		if (number_of_children_ != composite.number_of_children_)
+		{
 			return false;
+		}
+		Composite* acomposite_ptr = first_child_;
 
-		Composite *acomposite_ptr = first_child_;
-
-		Composite *bcomposite_ptr = composite.first_child_;
+		Composite* bcomposite_ptr = composite.first_child_;
 
 		for (; acomposite_ptr != 0 && bcomposite_ptr != 0;
 				 acomposite_ptr = acomposite_ptr->next_, bcomposite_ptr = bcomposite_ptr->next_)
 		{
-			if (*acomposite_ptr != *bcomposite_ptr)
-				return false;
+			if (!acomposite_ptr->isHomomorph(*bcomposite_ptr)) return false;
 		}
 
 		return true;
