@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.6 2000/01/16 17:28:43 oliver Exp $
+// $Id: vector4.h,v 1.7 2000/02/15 18:02:13 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -521,7 +521,7 @@ namespace BALL
 		if (i < 0)
 			throw Exception::IndexUnderflow(__FILE__, __LINE__);
 
-		if (i > 2)
+		if (i > 3)
 			throw Exception::IndexOverflow(__FILE__, __LINE__);
 
 		switch (i) {
@@ -541,7 +541,7 @@ namespace BALL
 		if (i < 0)
 			throw Exception::IndexUnderflow(__FILE__, __LINE__);
 
-		if (i > 2)
+		if (i > 3)
 			throw Exception::IndexOverflow(__FILE__, __LINE__);
 		
 	
