@@ -1,4 +1,4 @@
-// $Id: Bond_test.C,v 1.5 2000/04/17 14:08:33 amoll Exp $
+// $Id: Bond_test.C,v 1.6 2000/04/17 14:10:32 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(Bond, "$Id: Bond_test.C,v 1.5 2000/04/17 14:08:33 amoll Exp $")
+START_TEST(Bond, "$Id: Bond_test.C,v 1.6 2000/04/17 14:10:32 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -231,7 +231,7 @@ CHECK(getName())
 	Bond b1;
   b1.setName("abc");
 	TEST_EQUAL(b1.getName(), "abc")
-	b1.setName() = "";
+	b1.setName("");
 	TEST_EQUAL(b1.getName(), "")
 RESULT
 
