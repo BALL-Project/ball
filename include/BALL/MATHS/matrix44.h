@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.29 2000/05/04 16:07:39 oliver Exp $
+// $Id: matrix44.h,v 1.30 2000/05/04 18:26:45 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -263,36 +263,32 @@ namespace BALL
 
 		/** Get a row of the matrix
 				@param row the number of the row (0-3)
-				@exception IndexUnderflow if {\tt row < 0}
 				@exception IndexOverflow if {\tt row > 3}
 				@return TVector4 the row
 		*/
-		TVector4<T> getRow(Index row) const;
+		TVector4<T> getRow(Position row) const;
 
 		/** Get a column of the matrix
 				@param col the number of the column (0-3)
-				@exception IndexUnderflow if {\tt col < 0}
 				@exception IndexOverflow if {\tt col > 3}
 				@return TVector4 the column
 		*/
-		TVector4<T> getColumn(Index col) const;
+		TVector4<T> getColumn(Position col) const;
 
 
 		/** Set a row of the matrix
 				@param row the number of the row (0-3)
 				@param row_value the new value of the row
-				@exception IndexUnderflow if {\tt row < 0}
 				@exception IndexOverflow if {\tt row > 3}
 		*/
-		void setRow(Index row, const TVector4<T> row_value);
+		void setRow(Position row, const TVector4<T> row_value);
 
 		/** Set a column of the matrix
 				@param col the number of the column (0-3)
 				@param col_value the new value of the col
-				@exception IndexUnderflow if {\tt col < 0}
 				@exception IndexOverflow if {\tt col > 3}
 		*/
-		void setColumn(Index col, const TVector4<T> col_value);
+		void setColumn(Position col, const TVector4<T> col_value);
 
 
 		/** Test if two matrices are equal.
@@ -312,20 +308,31 @@ namespace BALL
 		/** Access operator of a cell
 				@param row the number of the row (0-3)
 				@param col the number of the column (0-3)
-				@exception IndexUnderflow if {\tt col || row < 0}
-				@exception IndexOverflow if {\tt col ||row > 3}
+				@exception IndexOverflow if {\tt col >3 || row > 3}
 				@return T& a reference to the cell
 		*/
-		T& operator () (Index row, Index col);
+		T& operator () (Position row, Position col);
 
 		/** Constant access operator of a cell
 				@param row the number of the row (0-3)
 				@param col the number of the column (0-3)
-				@exception IndexUnderflow if {\tt col || row < 0}
 				@exception IndexOverflow if {\tt col ||row > 3}
 				@return T& a const reference to the cell
 		*/
-		const T& operator ()(Index row, Index col) const;
+		const T& operator () (Position row, Position col) const;
+
+		/**	Constant random access operator.
+				Access single elements of the matrix. {\tt index} may assume
+				values in the range of 0 - 15. The elements of the matrix
+				are returned rows first, i.e., in the following order: {\tt m11}, {\tt m12}, {\tt m13}...
+				
+		*/
+		const T& operator [] (Position index) const;
+
+		/**	Mutable random access operator.
+				@see operator[]
+		*/
+		T& operator [] (Position index);
 
 		/**	Positive sign.
 		*/
@@ -696,7 +703,7 @@ namespace BALL
 
 		void initializeComponentPointers_()
 		{
-			 T **ptr = (T **)comp_ptr_;
+			T **ptr = (T **)comp_ptr_;
 
 			*ptr++ = &m11;
 			*ptr++ = &m12;
@@ -717,7 +724,7 @@ namespace BALL
 		}
 
 		// pointers to the components of the matrix 
-		T* comp_ptr_[4][4];
+		T* comp_ptr_[16];
 	};
 
 	template <typename T>
@@ -762,9 +769,11 @@ namespace BALL
 	TMatrix4x4<T>::TMatrix4x4(const T array_ptr[4][4])
 	{
 		if (array_ptr == 0)
+		{
 			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
 		
-		 const T *ptr = *array_ptr;
+		const T *ptr = *array_ptr;
 			
 		m11 = *ptr++; 
 		m12 = *ptr++; 
@@ -826,8 +835,10 @@ namespace BALL
 	template <typename T>
 	void TMatrix4x4<T>::set(const T* ptr)
 	{
-		if (ptr == 0)
+		if (ptr == 0)	
+		{
 			throw Exception::NullPointer(__FILE__, __LINE__);
+		}
 
 		m11 = *ptr++; 
 		m12 = *ptr++; 
@@ -851,9 +862,11 @@ namespace BALL
 	void TMatrix4x4<T>::set(const T array_ptr[4][4])
 	{
     if (array_ptr == 0)
+		{
       throw Exception::NullPointer(__FILE__, __LINE__);
+		}
  		
-		 const T *ptr = *array_ptr;
+		const T *ptr = *array_ptr;
 
 		m11 = *ptr++; 
 		m12 = *ptr++; 
@@ -972,7 +985,9 @@ namespace BALL
 	void TMatrix4x4<T>::get(T* ptr) const
 	{
     if (ptr == 0)
+		{
       throw Exception::NullPointer(__FILE__, __LINE__);
+		}
 
 		*ptr++ = m11; 
 		*ptr++ = m12; 
@@ -996,9 +1011,11 @@ namespace BALL
 	void TMatrix4x4<T>::get(T array_ptr[4][4]) const
 	{
     if (array_ptr == 0)
+		{
        throw Exception::NullPointer(__FILE__, __LINE__);
+		}
  
-		 T *ptr = *array_ptr;
+		T *ptr = *array_ptr;
 
 		*ptr++ = m11; 
 		*ptr++ = m12; 
@@ -1174,70 +1191,74 @@ namespace BALL
 	}
 
 	template <typename T>
-	TVector4<T> TMatrix4x4<T>::getRow(Index row) const
+	TVector4<T> TMatrix4x4<T>::getRow(Position row) const
 	{
-		if (row < 0)
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, row, 0);
-
 		if (row > 3)
+		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, row, 3);
+		}
 
-		T **ptr = (T **)comp_ptr_[row];
-
-		return TVector4<T> (*ptr[0], *ptr[1], *ptr[2], *ptr[3]);
+		// calculate the start of the row in the array
+		const T* ptr = comp_ptr_[4 * row];
+		return TVector4<T> (ptr[0], ptr[1], ptr[2], ptr[3]);
 	}
 
 	template <typename T>
-	TVector4<T> TMatrix4x4<T>::getColumn(Index col) const
+	TVector4<T> TMatrix4x4<T>::getColumn(Position col) const
 	{
-		if (col < 0)
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, col, 0);
-
 		if (col > 3)
+		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, col, 3);
+		}
+		
+		const T* ptr = comp_ptr_[col];
 
-		return TVector4<T> (*comp_ptr_[0][col], *comp_ptr_[1][col], *comp_ptr_[2][col], *comp_ptr_[3][col]);
+		return TVector4<T> (ptr[0], ptr[4], ptr[8], ptr[12]);
 	}
 
 
 	template <typename T>
-	void TMatrix4x4<T>::setRow(Index row, const TVector4<T> row_value)
+	void TMatrix4x4<T>::setRow(Position row, const TVector4<T> row_value)
 	{
-		if (row < 0)
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, row, 0);
-
 		if (row > 3)
+		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, row, 3);
+		}
 
-		T **ptr = (T **)comp_ptr_[row];
+		// calculate a pointer to the start of the row
+		T* ptr = comp_ptr_[4 * row];
 
-		*ptr[0] = row_value.x;
-		*ptr[1] = row_value.y;
-		*ptr[2] = row_value.z;
-		*ptr[3] = row_value.h;
+		ptr[0] = row_value.x;
+		ptr[1] = row_value.y;
+		ptr[2] = row_value.z;
+		ptr[3] = row_value.h;
 	}
 
 	template <typename T>
-	void TMatrix4x4<T>::setColumn(Index col, const TVector4<T> col_value)
+	void TMatrix4x4<T>::setColumn(Position col, const TVector4<T> col_value)
 	{
-		if (col < 0)
-			throw Exception::IndexUnderflow(__FILE__, __LINE__, col, 0);
-
 		if (col > 3)
+		{
 			throw Exception::IndexOverflow(__FILE__, __LINE__, col, 3);
+		}
 
-		*comp_ptr_[0][col] = col_value.x;
-		*comp_ptr_[1][col] = col_value.y;
-		*comp_ptr_[2][col] = col_value.z;
-		*comp_ptr_[3][col] = col_value.h;
+		// calculate a pointer to the start of the column
+		T* ptr = comp_ptr_[col];
+
+		ptr[0] = col_value.x;
+		ptr[4] = col_value.y;
+		ptr[8] = col_value.z;
+		ptr[12] = col_value.h;
 	}
 
 	template <typename T>
 	bool TMatrix4x4<T>::isEqual(const TMatrix4x4<T>& m) const
 	{
+		// iterate over all component pointers
+		// and compare the elements for approximate equality
 		for (Position i = 0; i < 16; i++)
 		{
-			if (Maths::isEqual((*this)[i], m[i]) == false)
+			if (Maths::isEqual(*comp_ptr_[i], *m.comp_ptr_[i]) == false)
 			{
 				return false;
 			} 
@@ -1254,40 +1275,48 @@ namespace BALL
 
 	template <typename T>
 	BALL_INLINE  
-	T& TMatrix4x4<T>::operator () (Index row, Index col)
+	T& TMatrix4x4<T>::operator () (Position row, Position col)
 	{
-    if (row < 0)
-      throw Exception::IndexUnderflow(__FILE__, __LINE__, row, 0);
+    if ((row > 3) || (col > 3))
+		{
+      throw Exception::IndexOverflow(__FILE__, __LINE__, row + col, 3);
+		}
 
-    if (row > 3)
-      throw Exception::IndexOverflow(__FILE__, __LINE__, row, 3);
-
-    if (col < 0)
-      throw Exception::IndexUnderflow(__FILE__, __LINE__, row, 0);
-
-    if (col > 3)
-      throw Exception::IndexOverflow(__FILE__, __LINE__, row, 3);
-
-		return *comp_ptr_[row][col];
+		return *comp_ptr_[4 * row + col];
 	}
 
 	template <typename T>
 	BALL_INLINE 
-	const T& TMatrix4x4<T>::operator () (Index row, Index col) const
+	const T& TMatrix4x4<T>::operator () (Position row, Position col) const
 	{
-    if (row < 0)
-      throw Exception::IndexUnderflow(__FILE__, __LINE__, row, 0);
+    if ((row > 3) || (col > 3))
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__, row + col, 3);
+		}
 
-    if (row > 3)
-      throw Exception::IndexOverflow(__FILE__, __LINE__, row, 3);
+		return *comp_ptr_[4 * row + col];
+	}
 
-    if (col < 0)
-      throw Exception::IndexUnderflow(__FILE__, __LINE__, row, 0);
+	template <typename T>
+	BALL_INLINE
+	const T& TMatrix4x4<T>::operator [] (Position index) const
+	{
+		if (index > 15)
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__, index, 15);
+		}
+		return *comp_ptr_[index];
+	}
 
-    if (col > 3)
-      throw Exception::IndexOverflow(__FILE__, __LINE__, row, 3);
-
-		return *comp_ptr_[row][col];
+	template <typename T>
+	BALL_INLINE
+	T& TMatrix4x4<T>::operator [] (Position index)
+	{
+		if (index > 15)
+		{
+			throw Exception::IndexOverflow(__FILE__, __LINE__, index, 15);
+		}
+		return *comp_ptr_[index];
 	}
 
 	template <typename T>
@@ -1516,9 +1545,9 @@ namespace BALL
 	template <typename T>
 	bool TMatrix4x4<T>::invert(TMatrix4x4<T>& inverse) const
 	{
-		 Index k;
-		 Index i;
-		 Index j;
+		Position k;
+		Position i;
+		Position j;
 		T a[4][4];
 		T b[4][4] =
 		{
@@ -1612,9 +1641,9 @@ namespace BALL
 	template <typename T>
 	T TMatrix4x4<T>::getDeterminant() const
 	{
-		 Index i;
-		 Index j;
-		 Index k;
+		Position i;
+		Position j;
+		Position k;
 		T submatrix[3][3];
 		T matrix[4][4] =
 		{
@@ -2155,24 +2184,24 @@ namespace BALL
 	template <typename T>
 	bool TMatrix4x4<T>::isValid() const
 	{
-		 T **ptr = (T **)comp_ptr_;
+		T **ptr = (T **)comp_ptr_;
 		
-		return (bool)(   *ptr++ ==& m11
-									&& *ptr++ ==& m12
-									&& *ptr++ ==& m13
-									&& *ptr++ ==& m14
-									&& *ptr++ ==& m21
-									&& *ptr++ ==& m22
-									&& *ptr++ ==& m23
-									&& *ptr++ ==& m24
-									&& *ptr++ ==& m31
-									&& *ptr++ ==& m32
-									&& *ptr++ ==& m33
-									&& *ptr++ ==& m34
-									&& *ptr++ ==& m41
-									&& *ptr++ ==& m42
-									&& *ptr++ ==& m43
-									&& *ptr   ==& m44);
+		return (bool)(   *ptr++ == &m11
+									&& *ptr++ == &m12
+									&& *ptr++ == &m13
+									&& *ptr++ == &m14
+									&& *ptr++ == &m21
+									&& *ptr++ == &m22
+									&& *ptr++ == &m23
+									&& *ptr++ == &m24
+									&& *ptr++ == &m31
+									&& *ptr++ == &m32
+									&& *ptr++ == &m33
+									&& *ptr++ == &m34
+									&& *ptr++ == &m41
+									&& *ptr++ == &m42
+									&& *ptr++ == &m43
+									&& *ptr   == &m44);
 	}
 
 	template <typename T>
