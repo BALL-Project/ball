@@ -1,4 +1,4 @@
-// $Id: notification.h,v 1.4 2000/01/08 20:42:06 hekl Exp $
+// $Id: notification.h,v 1.5 2000/01/14 20:40:03 oliver Exp $
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #define BALL_CONCEPT_NOTIFICATION_H
@@ -230,8 +230,7 @@ namespace BALL
 		*/
 		static void* getNotificationType_()
 		{
-			//return (void*)&getNotificationType_;			
-			return (void*)&RTTI::getDefault<NotificationSource>();
+			return RTTI::getClassID<NotificationSource>();
 		}
 
 		/**
