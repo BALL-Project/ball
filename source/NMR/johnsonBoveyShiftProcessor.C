@@ -1,4 +1,4 @@
-// $Id: johnsonBoveyShiftProcessor.C,v 1.7 2000/09/27 16:25:52 burch Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.8 2000/09/30 16:41:07 oliver Exp $
 
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -45,7 +45,7 @@ namespace BALL
 		
 		if(BALL_MIN3(x, y, z)  < 0.0 || BALL_MIN3(x + y, x + z ,y + z) < TINY || BALL_MAX3(x, y, z) > BIG)
 		{
-			Log.level(LogStream::ERROR) << endl << "Funktion rf : Fehler bei den Argumenten";
+			Log.error() << "Funktion rf : Fehler bei den Argumenten" << endl;
 			return 0;
 		}
 		else 	
@@ -99,7 +99,7 @@ namespace BALL
 		if(BALL_MIN(x, y) < 0.0 || BALL_MIN(x  +  y, z) < TINY || BALL_MAX3(x, y, z) > BIG)
 		{
 			//cout << endl << "Funktion rd : Fehler bei den Argumenten";
-			Log.level(LogStream::ERROR) << endl << "Funktion rd : Fehler bei den Argumenten";
+			Log.error() << "Funktion rd : Fehler bei den Argumenten" << endl;
 			return 0;
 		}
 		else
@@ -223,26 +223,19 @@ namespace BALL
 			ring_entry.append(String(number));
 			
 			new_ring.radius = parameter_section.getValue(key, radius_column).toFloat();
-			cout << "radius : "<< new_ring.radius<<endl;
 			
 			new_ring.electrons = parameter_section.getValue(key, electrons_column).toUnsignedInt();
-			cout << "electrons : "<< new_ring.electrons<<endl;
 			
 			new_ring.intensity = parameter_section.getValue(key, intensity_column).toFloat();
-			cout << "intensity : "<< new_ring.intensity<<endl;
 			
 			name_list = parameter_section.getValue(key, name_list_column);
 
 			vector<String> names;
 			name_list.split(names, ",");
-			Log.info() << "names = " << name_list << " (vector size: " << names.size() << ")" << endl;
 			
 			new_ring.atom_names = names;
-			cout << "name ist zugewiesen" << endl;
 			
 			rings_[ring_entry] = new_ring;
-			cout <<" der ring ist eingefuegt" <<endl;
-			
 		}
 		
 		// einlesen der shift Atome und liste von expressions aufbauen
@@ -296,8 +289,6 @@ namespace BALL
 		Vector3* vector_field = new Vector3[RING_MAX_ATOMS];
 
 
-		Log.info() << "# nuclei: " << atom_list_.size() << endl;
-		Log.info() << "# rings: " << aromat_list_.size() << endl;
 		// iterate over all nuclei
 		for (list<Atom*>::iterator atom_iter = atom_list_.begin();
 				 atom_iter != atom_list_.end(); ++atom_iter)  
@@ -324,7 +315,6 @@ namespace BALL
 				
 				String residue_name = residue->getName();
 				Size number_of_rings = residues_with_rings_[residue_name];				
-				Log.info() << "number of rings for " << residue_name << ": " << number_of_rings << endl;
 				for	(Position pos = 1; pos <= number_of_rings; pos++)
 				{
 					vzaehler = 0;
@@ -416,14 +406,14 @@ namespace BALL
 						hshift*= (k + ((1 - p * p - z * z) / ((1 - p) * (1 - p) + z * z)) *e );
 						hshift*= intensity;
 						
-						Log.info() << "shift of " << residue_name << " on " << (*atom_iter)->getFullName() << " = " << hshift << endl;
-
 						shift += hshift;								
 						vzaehler=0;
 					}
 				}// Schleife ueber die Anzahl der Ringe des Residues					
 			
 			}// Schleife ueber alle Ringe
+
+			
 
 			hshift = shift * 1e6;
 			shift = ((*atom_iter)->getProperty(ShiftModule::PROPERTY__SHIFT)).getFloat();
