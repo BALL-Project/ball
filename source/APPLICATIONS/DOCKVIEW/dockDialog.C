@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.13 2005/02/10 12:16:47 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14 2005/02/10 12:43:45 leonhardt Exp $
 //
 
 #include "dockDialog.h"
@@ -324,6 +324,7 @@ namespace BALL
 			// options for all docking algorithms
 			//options_[DockingAlgorithm::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
 			options_[GeometricFit::Option::BEST_NUM] = String(best_num->text().ascii()).toInt();
+			options_[GeometricFit::Option::VERBOSITY] = String(verbosity->text().ascii()).toInt();
 			
 			// options for chosen algorithm
 			int index = algorithms->currentItem();

@@ -1,12 +1,12 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.7 2005/02/10 12:16:47 haid Exp $
+# $Id: Makefile,v 1.1.2.8 2005/02/10 12:43:45 leonhardt Exp $
 #
 
 EXECUTABLE=DOCKView
 DIRECTORY=APPLICATIONS/DOCKVIEW
-BALLDIR=/home/student/haid/BALL
+BALLDIR=/home/student/leonhardt/BALL
 
 all:	$(EXECUTABLE)
 

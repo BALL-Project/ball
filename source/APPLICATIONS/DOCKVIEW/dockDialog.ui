@@ -564,12 +564,6 @@
         <receiver>DockDialogData</receiver>
         <slot>partner2Chosen()</slot>
     </connection>
-    <connection>
-        <sender>algorithms</sender>
-        <signal>activated(const QString&amp;)</signal>
-        <receiver>DockDialogData</receiver>
-        <slot>algorithmChosen()</slot>
-    </connection>
 </connections>
 <tabstops>
     <tabstop>systems1</tabstop>
@@ -594,7 +588,6 @@
     <slot>browseChargeData()</slot>
     <slot>browseChargeRules()</slot>
     <slot>browseRadiiRules()</slot>
-    <slot>algorithmChosen()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
