@@ -1,4 +1,4 @@
-// $Id: object.iC,v 1.5 2000/12/10 00:12:16 amoll Exp $
+// $Id: object.iC,v 1.6 2000/12/11 21:13:05 oliver Exp $
 
 BALL_INLINE 
 Handle Object::getHandle () const
@@ -20,11 +20,13 @@ Handle Object::getNewHandle()
   
 BALL_INLINE 
 void Object::clear()
+	throw()
 {
 }
 
 BALL_INLINE 
 void Object::destroy()
+	throw()
 {
 }
   

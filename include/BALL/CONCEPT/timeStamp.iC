@@ -1,4 +1,4 @@
-// $Id: timeStamp.iC,v 1.5 2000/12/10 22:02:33 amoll Exp $
+// $Id: timeStamp.iC,v 1.6 2000/12/11 21:13:06 oliver Exp $
 
 BALL_INLINE
 PreciseTime::PreciseTime()
@@ -98,6 +98,13 @@ long PreciseTime::getMicroSeconds() const
 }
 
 BALL_INLINE
+TimeStamp::TimeStamp()
+	throw()
+	:	time_()
+{
+}
+
+BALL_INLINE
 bool TimeStamp::isOlderThan(const PreciseTime& time) const 
 	throw()
 {
@@ -126,10 +133,10 @@ bool TimeStamp::isNewerThan(const TimeStamp& stamp) const
 }
 
 BALL_INLINE
-TimeStamp::TimeStamp()
+void TimeStamp::clear()
 	throw()
-	:	time_()
 {
+	time_.clear();
 }
 
 BALL_INLINE
@@ -137,13 +144,6 @@ TimeStamp::~TimeStamp()
 	throw()
 {
 	clear();
-}
-
-BALL_INLINE
-void TimeStamp::clear()
-	throw()
-{
-	time_.clear();
 }
 
 BALL_INLINE
