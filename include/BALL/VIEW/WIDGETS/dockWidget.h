@@ -17,6 +17,8 @@ namespace BALL
 
 		/** Class for ModularWidget, which can be docked in the MainApplication window.
 				Insert the widget with the main content as member with setGuest().
+				This class is very generic, to understand its concept better, have a look at the
+				implementation in LogView.
 		*/
 		class DockWidget
 			: public QDockWindow,
@@ -28,13 +30,14 @@ namespace BALL
 
 			BALL_EMBEDDABLE(DockWidget)
 
-			// required for Python bindings
+			// required for Python bindings, but dont use this method
 			DockWidget();
+
+			// required for Python bindings, but dont use this method
 			DockWidget(const DockWidget&);
 
-			///
+			/// Use this constructor!
 			DockWidget(QWidget* parent, const char* title = 0);
-
 
 			///
 			virtual ~DockWidget() throw() {}
@@ -68,16 +71,14 @@ namespace BALL
 					@see ModularWidget::applyPreferences
 			*/
 			virtual void applyPreferences(Preferences & /* preferences */) throw();				
+
 			//@}
-
-
 			/** @name Public slots 
 			*/ 
 			//@{
 			public slots:
 
 			/** Show or hide widget (Called by menu entry in "WINDOWS")
-					If the ModularWidget is not also a QWidget, this method does nothing
 			*/
 			virtual void switchShowWidget() throw();
 				
@@ -90,12 +91,11 @@ namespace BALL
 
 			protected:
 
-			QWidget* guest_;
-			QLabel* caption_label_;
-			QVBoxLayout* layout_;
+			QWidget* 			guest_;
+			QLabel* 			caption_label_;
+			QVBoxLayout* 	layout_;
 		};
 
   }  // namespace VIEW
-
 } // namespace BALL
 #endif 

@@ -1,15 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockWidget.C,v 1.15 2003/11/01 09:27:41 oliver Exp $
+// $Id: dockWidget.C,v 1.16 2003/12/09 14:11:01 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/dockWidget.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
-#include <BALL/VIEW/KERNEL/common.h>
 #include <qmenubar.h>
 #include <qlabel.h>
-
-using std::endl;
 
 namespace BALL
 {
@@ -212,5 +209,4 @@ namespace BALL
 		}
 
 	} // namespace VIEW 
-
 } // namespace BALL
