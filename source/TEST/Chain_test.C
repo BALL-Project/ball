@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Chain_test.C,v 1.16 2003/06/26 13:00:13 amoll Exp $
+// $Id: Chain_test.C,v 1.17 2003/07/03 12:33:04 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -15,7 +15,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.16 2003/06/26 13:00:13 amoll Exp $")
+START_TEST(AtomContainer, "$Id: Chain_test.C,v 1.17 2003/07/03 12:33:04 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -582,18 +582,40 @@ CHECK(BALL_CREATE_DEEP(Chain))
 	TEST_EQUAL(c2.countResidues(), 1)
 RESULT
 
-CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer))
-  // ???
-RESULT
-
 CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(SecondaryStructure) (Residue)(PDBAtom))
-  // ???
+	Chain c;
+	SecondaryStructure s1,s2;
+	Residue r1, r2;
+	c.insert(s1);
+	c.insert(s2);
+	s1.insert(r1);
+	s2.insert(r2);
+	PDBAtom p1,p2,p3;
+	r1.insert(p1);
+	r2.insert(p2);
+	r2.insert(p3);
+	TEST_EQUAL(&*c.beginResidue(), &r1)
+	TEST_EQUAL(&*--c.endResidue(), &r2)
+	TEST_EQUAL(&*c.rbeginResidue(), &r2)	
+
+	TEST_EQUAL(&*c.beginSecondaryStructure(), &s1)
+	TEST_EQUAL(&*--c.endSecondaryStructure(), &s2)
+	TEST_EQUAL(&*c.rbeginSecondaryStructure(), &s2)	
+
+	TEST_EQUAL(&*c.beginPDBAtom(), &p1)
+	TEST_EQUAL(&*++c.beginPDBAtom(), &p2)
+	TEST_EQUAL(&*--c.endPDBAtom(), &p3)
+	TEST_EQUAL(&*c.rbeginPDBAtom(), &p3)	
 RESULT
 
 
 // ====================================================================================
 // not accessible methods, not to be tested
 // ====================================================================================
+
+CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(AtomContainer))
+	// not to be tested
+RESULT
 
 CHECK(bool remove(Atom& atom) throw())
 	// not to be tested
