@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.23 2003/11/26 09:05:19 bender Exp $
+# $Id: Makefile,v 1.24 2003/12/04 00:05:37 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -19,6 +19,8 @@ CPP_SOURCES=\
 	amberMinimizationDialogData.C\
 	atomProperties.C\
 	atomPropertiesData.C\
+	bondProperties.C\
+	bondPropertiesData.C\
 	colorMeshDialog.C\
 	colorMeshDialogData.C\
 	coloringSettingsDialog.C\
@@ -70,6 +72,8 @@ MOC_SOURCES=\
 	amberMinimizationDialogData_moc.C\
 	atomProperties_moc.C\
 	atomPropertiesData_moc.C\
+	bondProperties_moc.C\
+	bondPropertiesData_moc.C\
 	coloringSettingsDialog_moc.C\
 	coloringSettingsDialogData_moc.C\
 	colorMeshDialog_moc.C\
@@ -118,6 +122,7 @@ UIC_SOURCES=\
 	advancedOptionsDialogData.C\
 	amberMinimizationDialogData.C\
 	atomPropertiesData.C\
+	bondPropertiesData.C\
 	coloringSettingsDialogData.C\
 	colorMeshDialogData.C\
 	contourSurfaceDialogData.C\

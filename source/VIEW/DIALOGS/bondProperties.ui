@@ -1,0 +1,343 @@
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<class>BondPropertiesData</class>
+<widget class="QDialog">
+    <property name="name">
+        <cstring>BondPropertiesData</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>350</width>
+            <height>260</height>
+        </rect>
+    </property>
+    <property name="paletteBackgroundColor">
+        <color>
+            <red>238</red>
+            <green>238</green>
+            <blue>230</blue>
+        </color>
+    </property>
+    <property name="caption">
+        <string>Bond Properties</string>
+    </property>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2_2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>4</x>
+                <y>69</y>
+                <width>77</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>partner atom:</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel2</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>2</x>
+                <y>35</y>
+                <width>75</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>select bond:</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel4</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>4</x>
+                <y>129</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>bond type:</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel5</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>4</x>
+                <y>189</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>length:</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel7</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>4</x>
+                <y>159</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="frameShape">
+            <enum>MShape</enum>
+        </property>
+        <property name="frameShadow">
+            <enum>MShadow</enum>
+        </property>
+        <property name="text">
+            <string>name:</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>3</x>
+                <y>5</y>
+                <width>70</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>atom:</string>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>TextLabel8</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>4</x>
+                <y>99</y>
+                <width>76</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>bond order:</string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>name_edit</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>159</y>
+                <width>260</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>238</red>
+                <green>238</green>
+                <blue>230</blue>
+            </color>
+        </property>
+        <property name="text">
+            <string></string>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>length_edit</cstring>
+        </property>
+        <property name="enabled">
+            <bool>false</bool>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>189</y>
+                <width>260</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="paletteForegroundColor">
+            <color>
+                <red>238</red>
+                <green>238</green>
+                <blue>230</blue>
+            </color>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>order_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>99</y>
+                <width>260</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>238</red>
+                <green>238</green>
+                <blue>230</blue>
+            </color>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>type_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>129</y>
+                <width>260</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>238</red>
+                <green>238</green>
+                <blue>230</blue>
+            </color>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>partner_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>84</x>
+                <y>69</y>
+                <width>260</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>238</red>
+                <green>238</green>
+                <blue>230</blue>
+            </color>
+        </property>
+        <property name="readOnly">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QComboBox">
+        <property name="name">
+            <cstring>bond_box</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>83</x>
+                <y>35</y>
+                <width>260</width>
+                <height>21</height>
+            </rect>
+        </property>
+    </widget>
+    <widget class="QLineEdit">
+        <property name="name">
+            <cstring>atom_edit</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>83</x>
+                <y>5</y>
+                <width>260</width>
+                <height>21</height>
+            </rect>
+        </property>
+        <property name="paletteBackgroundColor">
+            <color>
+                <red>238</red>
+                <green>238</green>
+                <blue>230</blue>
+            </color>
+        </property>
+        <property name="readOnly">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>close_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>114</x>
+                <y>225</y>
+                <width>120</width>
+                <height>26</height>
+            </rect>
+        </property>
+        <property name="sizePolicy">
+            <sizepolicy>
+                <hsizetype>0</hsizetype>
+                <vsizetype>0</vsizetype>
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+            </sizepolicy>
+        </property>
+        <property name="minimumSize">
+            <size>
+                <width>120</width>
+                <height>26</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>close</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+    </widget>
+</widget>
+<connections>
+    <connection>
+        <sender>close_button</sender>
+        <signal>clicked()</signal>
+        <receiver>BondPropertiesData</receiver>
+        <slot>close()</slot>
+    </connection>
+    <connection>
+        <sender>bond_box</sender>
+        <signal>activated(int)</signal>
+        <receiver>BondPropertiesData</receiver>
+        <slot>bondSelected()</slot>
+    </connection>
+</connections>
+<slots>
+    <slot>bondSelected()</slot>
+</slots>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>
