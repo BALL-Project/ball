@@ -1,4 +1,4 @@
-// $Id: baseIterator.h,v 1.3 2000/01/03 15:15:31 oliver Exp $
+// $Id: baseIterator.h,v 1.4 2000/03/05 11:02:53 oliver Exp $
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
 #define BALL_CONCEPT_BASEITERATOR_H
@@ -68,7 +68,9 @@ namespace BALL
 			*traits_ptr_ = *(iterator.traits_ptr_);
 
 			if (next_ != 0)
+			{
 				next_->previous_ = this;
+			}
 
 			BaseIterator::getFirstIterator_() = this;
 			++BaseIterator::countIterators_();
@@ -81,13 +83,19 @@ namespace BALL
 		{
 
 			if (BaseIterator::getFirstIterator_() == this)
+			{
 				BaseIterator::getFirstIterator_() = next_;
+			}
 
 			if (previous_ != 0)
+			{
 				previous_->next_ = next_;
+			}
 
 			if (next_ != 0)
+			{
 				next_->previous_ = previous_;
+			}
 
 			--BaseIterator::countIterators_();
 		}
@@ -105,7 +113,9 @@ namespace BALL
 		BaseIterator& operator = (const BaseIterator &iterator)
 		{
 			if (this != &iterator)
+			{
 				*traits_ptr_ = *(iterator.traits_ptr_);
+			}
 
 			return *this;
 		}
@@ -139,10 +149,14 @@ namespace BALL
 		{
 			Size size = 0;
 
-			for (register BaseIterator *iterator = BaseIterator::getFirstIterator_(); 
+			for (BaseIterator* iterator = BaseIterator::getFirstIterator_(); 
 					 iterator != 0; iterator = iterator->next_)
+			{
 				if (iterator->traits_ptr_->getContainer() == &container)
+				{
 					++size;
+				}
+			}
 
 			return size;
 		}
@@ -153,7 +167,7 @@ namespace BALL
 		{
 			Size size = 0;
 
-			for (register BaseIterator *iterator = BaseIterator::getFirstIterator_();
+			for (BaseIterator *iterator = BaseIterator::getFirstIterator_();
 					 iterator != 0; iterator = iterator->next_)
 			{
 				if (iterator->traits_ptr_->getContainer() == &container
@@ -173,7 +187,9 @@ namespace BALL
 			if (traits_ptr_->isSingular() == true)
 			{
 				return 0;
-			} else {
+			} 
+			else 
+			{
 				return (BaseIterator::countIterators(*traits_ptr_->getContainer(), traits_ptr_->getPosition()) - 1);
 			}
 		}
@@ -229,7 +245,7 @@ namespace BALL
 
 		/**
 		*/
-		operator Position & ()
+		operator Position& ()
 		{
 			return traits_ptr_->getPosition();
 		}
@@ -239,7 +255,9 @@ namespace BALL
 		DataType& operator * ()
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
 
 			return (DataType &)traits_ptr_->getData();
 		}
@@ -249,7 +267,9 @@ namespace BALL
 		const DataType& operator *() const
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
  
 			return (const DataType &)traits_ptr_->getData();
 		}
@@ -259,7 +279,9 @@ namespace BALL
 		DataType* operator -> ()
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
  
 			return (DataType *)&(traits_ptr_->getData());
 		}
@@ -269,7 +291,9 @@ namespace BALL
 		const DataType* operator -> () const
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
  
 			return (const DataType *)&(traits_ptr_->getData());
 		}
@@ -285,7 +309,9 @@ namespace BALL
 		bool operator == (const BaseIterator& iterator) const
 		{
 			if (traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+			{
 				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
+			}
 
 			return (bool)(*traits_ptr_ == *iterator.traits_ptr_);
 		}
@@ -295,7 +321,9 @@ namespace BALL
 		bool operator != (const BaseIterator &iterator) const
 		{
 			if (traits_ptr_->getContainer() != iterator.traits_ptr_->getContainer())
+			{
 				throw Exception::IncompatibleIterators(__FILE__, __LINE__);
+			}
 
 			return (bool)(*traits_ptr_ != *iterator.traits_ptr_);
 		}
@@ -314,7 +342,9 @@ namespace BALL
 			if (traits_ptr_->isValid() == false)
 			{
 				return true;
-			}	else {
+			}	
+			else 
+			{
 				return (bool)(BaseIterator::countIterators(*traits_ptr_->getContainer(), traits_ptr_->getPosition()) == 1);
 			}
 		}
@@ -367,7 +397,7 @@ namespace BALL
 	};
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	BaseIterator<Container, DataType, Position, Traits> *&
+	BaseIterator<Container, DataType, Position, Traits>*&
 	BaseIterator<Container, DataType, Position, Traits>::getFirstIterator_()
 	{
 		static BaseIterator* first = 0;
@@ -448,7 +478,9 @@ namespace BALL
 		const DataType& operator * ()
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
  
 			return (const DataType &)traits_ptr_->getData();
 		}
@@ -458,7 +490,9 @@ namespace BALL
 		const DataType* operator -> ()
 		{
 			if (!traits_ptr_->isValid())
+			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
+			}
  
 			return (const DataType *)&(traits_ptr_->getData());
 		}
