@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.133 2004/04/07 15:21:05 amoll Exp $
+// $Id: mainframe.C,v 1.134 2004/04/07 16:18:04 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -24,7 +24,7 @@
 
 #include <qprinter.h>
 #include <qpainter.h>
-#include <qpicture.h>
+#include <qimage.h>
 
 namespace BALL
 {
@@ -236,6 +236,9 @@ namespace BALL
 
 	void Mainframe::about()
 	{
+		cout << "testc" << std::endl;
+		Log.error() << "test2" << std::endl;
+		Log.info() << "test3" << std::endl;
 		// Display about dialog
 		AboutDialog about;
 		about.exec(); 
@@ -269,13 +272,14 @@ namespace BALL
 	{
 		QPrinter printer;
 		if (!printer.setup(this)) return;
+		
 		setStatusbarText("printing..");
 
 		QPainter p;
 		if(!p.begin(&printer)) return; 
-		QPicture pic;
-		pic.load(scene_->exportPNG().c_str());
-		p.drawPicture(0,0, pic);	
+
+		QImage pic = scene_->grabFrameBuffer();
+		p.drawImage(0,0, pic);	
 		p.end();
 
 		setStatusbarText("finished printing");
