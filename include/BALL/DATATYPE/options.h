@@ -1,4 +1,4 @@
-// $Id: options.h,v 1.7 2000/07/26 14:38:21 amoll Exp $
+// $Id: options.h,v 1.8 2000/07/26 15:11:18 amoll Exp $
 
 #ifndef BALL_DATATYPE_OPTIONS_H
 #define BALL_DATATYPE_OPTIONS_H
@@ -144,6 +144,7 @@ namespace BALL
 		const String& getName() const;
 
 		/**		Returns the value associated with the key.
+					If the key does not exists an empty string is returned.
 					@param	key the key
 					@return	String, the value
 					@memo
@@ -153,7 +154,8 @@ namespace BALL
 		/**		Returns the value associated with the key as bool.
 					This method tries to convert the value associated
 					with {\bf key} to a bool value.\\
-					If the value is neither "true", nor "false", false is returned!
+					If the value is neither "true", nor "false" or the key does
+					not exist false is returned!
 					You might want to check the value's validity as a bool first
 					by calling \Ref{isBool}.
 					@param	key the key
@@ -163,8 +165,8 @@ namespace BALL
 		bool	getBool(const String& key) const;
 
 		/**		Returns the value associated with the key as a floting point number.
-					If the value could not be converted to a floating point number, a
-					value of #0.0# is returned.\\
+					If the value could not be converted to a floating point number or the key
+					does not exist a value of #0.0# is returned.\\
 					You might want to check the value's validity as a floating point 
 					number first by calling \Ref{isReal}.
 					@param	key the key
@@ -178,9 +180,10 @@ namespace BALL
 					The value corresponding to {\bf key} has to be of the form
 					#(<float> <float> <float>)# (i.e. three floating point numbers separated
 					by white blanks and surrounded by round brackets).\\
-					If the content of the value is of a differnet format, the content
-					of the returned vector is undefined. You might therefore check 
-					the value's validity first by calling \Ref{isVector}.
+					If the content of the value is of a differnet format or the key does not
+					exists, the content	of the returned vector is undefined.
+					You might therefore check the value's validity first
+					by calling \Ref{isVector}.
 					@param	key the key
 					@return	Vector3	vector containing the three coordinates
 					@memo
@@ -189,7 +192,8 @@ namespace BALL
 
 		/**		Returns the value associated with the key as an integer.
 					If the value corresponding to {\bf key} could not be converted to an
-					integer number, zero is returned. It is possible to check for the validity 
+					integer number or the key does not exists, zero is returned.
+					It is possible to check for the validity 
 					of this conversion by calling \Ref{isInteger}.
 					@return 	long the integer value
 					@param	key the key
