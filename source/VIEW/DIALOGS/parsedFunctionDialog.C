@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#include <BALL/VIEW/GUI/DIALOGS/parsedFunctionDialog.h>
-#include <BALL/VIEW/GUI/WIDGETS/scene.h>
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
-#include <BALL/VIEW/GUI/KERNEL/stage.h>
+#include <BALL/VIEW/DIALOGS/parsedFunctionDialog.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/stage.h>
 
 #include <qpushbutton.h>
 #include <qlineedit.h> 

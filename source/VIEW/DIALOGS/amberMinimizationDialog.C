@@ -2,14 +2,14 @@
 // vi: set ts=2:
 //
 
-#include <BALL/MOLVIEW/GUI/DIALOGS/amberMinimizationDialog.h>
+#include <BALL/VIEW/DIALOGS/amberMinimizationDialog.h>
 #include <qfiledialog.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 AmberMinimizationDialog::AmberMinimizationDialog(QWidget* parent, const char* name)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#include <BALL/MOLVIEW/GUI/DIALOGS/peptideDialog.h>
+#include <BALL/VIEW/DIALOGS/peptideDialog.h>
 #include <BALL/COMMON/logStream.h>
 
 #include <qlineedit.h>
@@ -11,7 +11,7 @@ namespace BALL
 {
 	using Peptides::AminoAcidDescriptor;
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 PeptideDialog::PeptideDialog( QWidget* parent,  const char* name, WFlags fl )

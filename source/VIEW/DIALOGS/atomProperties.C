@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#include <BALL/MOLVIEW/GUI/DIALOGS/atomProperties.h>
+#include <BALL/VIEW/DIALOGS/atomProperties.h>
 #include <BALL/KERNEL/PTE.h>
 #include <qlineedit.h>
 #include <qpushbutton.h>
@@ -9,7 +9,7 @@
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 AtomProperties::AtomProperties( Atom* atom, QWidget* parent,  const char* name, bool modal, WFlags fl )

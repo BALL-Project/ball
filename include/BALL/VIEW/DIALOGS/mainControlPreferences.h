@@ -1,11 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControlPreferences.h,v 1.1 2003/08/26 12:26:57 oliver Exp $
+// $Id: mainControlPreferences.h,v 1.2 2003/08/26 15:01:22 amoll Exp $
 //
 
-#ifndef BALL_VIEW_GUI_WIDGETS_MAINCONTROLPREFERENCES_H
-#define BALL_VIEW_GUI_WIDGETS_MAINCONTROLPREFERENCES_H
+#ifndef BALL_VIEW_WIDGETS_MAINCONTROLPREFERENCES_H
+#define BALL_VIEW_WIDGETS_MAINCONTROLPREFERENCES_H
 
 #ifndef BALL_FORMAT_INIFILE_H
 # include <BALL/FORMAT/INIFile.h>
@@ -113,4 +113,4 @@ namespace BALL
 
 } // namespace BALL
 
-#endif // BALL_VIEW_GUI_WIDGETS_MAINCONTROLPREFERENCES_H
+#endif // BALL_VIEW_WIDGETS_MAINCONTROLPREFERENCES_H

@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dlgMoveOverlay.h,v 1.1 2003/08/26 12:11:02 oliver Exp $
+// $Id: dlgMoveOverlay.h,v 1.2 2003/08/26 15:01:22 amoll Exp $
 
-#ifndef BALL_VIEW_GUI_DIALOGS_DLGMOVEOVERLAY_H
-#define BALL_VIEW_GUI_DIALOGS_DLGMOVEOVERLAY_H 
+#ifndef BALL_VIEW_DIALOGS_DLGMOVEOVERLAY_H
+#define BALL_VIEW_DIALOGS_DLGMOVEOVERLAY_H 
 
 #ifndef DlgMoveOverlayData_included
 # include "dlgMoveOverlayData.h"
@@ -41,4 +41,4 @@ class DlgMoveOverlay
     void sigMove(int i);
 };
 
-#endif //BALL_VIEW_GUI_DIALOGS_DLGMOVEOVERLAY_H
+#endif //BALL_VIEW_DIALOGS_DLGMOVEOVERLAY_H

@@ -1,19 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.1 2003/08/26 12:38:11 oliver Exp $
+// $Id: colorMeshDialog.C,v 1.2 2003/08/26 15:01:09 amoll Exp $
 //
 
-#include <BALL/VIEW/GUI/DIALOGS/colorMeshDialog.h>
-#include <BALL/VIEW/GUI/DIALOGS/FDPBDialog.h>
-#include <BALL/VIEW/FUNCTOR/molecularInformation.h>
+#include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
+#include <BALL/VIEW/DIALOGS/FDPBDialog.h>
+#include <BALL/VIEW/KERNEL/molecularInformation.h>
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/SYSTEM/file.h>
 #include <BALL/VIEW/DATATYPE/colorTable.h>
 #include <BALL/DATATYPE/regularData3D.h>
 
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/COMMON/limits.h>
 
 #include <BALL/KERNEL/system.h>
@@ -34,7 +34,7 @@ namespace BALL
 {
 	 namespace VIEW
 	 {
-			using BALL::MOLVIEW::MolecularInformation;
+			using BALL::VIEW::MolecularInformation;
 
 			ColorMeshDialog::ColorMeshDialog( QWidget* parent,  const char* name, bool modal, WFlags fl )
 				: ColorMeshDialogData(parent, name, modal, fl),

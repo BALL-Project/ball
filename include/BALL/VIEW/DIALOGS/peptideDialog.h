@@ -3,8 +3,8 @@
 //
 //
 
-#ifndef BALL_MOLVIEW_DIALOGS_PEPTIDEDIALOG_H
-#define BALL_MOLVIEW_DIALOGS_PEPTIDEDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_PEPTIDEDIALOG_H
+#define BALL_VIEW_DIALOGS_PEPTIDEDIALOG_H
 
 #include "peptideDialogData.h"
 
@@ -16,7 +16,7 @@ namespace BALL
 {
 	using Peptides::PeptideBuilder;
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		/** Dialog for building peptides
 		*/

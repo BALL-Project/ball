@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.1 2003/08/26 12:38:14 oliver Exp $
+// $Id: molecularFileDialog.C,v 1.2 2003/08/26 15:01:10 amoll Exp $
 
-#include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+#include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
+#include <BALL/VIEWKERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 
 #include <BALL/FORMAT/INIFile.h>
@@ -19,7 +19,7 @@ using namespace BALL::VIEW;
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		MolecularFileDialog::MolecularFileDialog(QWidget *parent)
 			throw()
@@ -39,7 +39,7 @@ namespace BALL
 		MolecularFileDialog::~MolecularFileDialog()
 			throw()
 		{	
-			#ifdef BALL_MOLVIEW_DEBUG
+			#ifdef BALL_VIEW_DEBUG
 			Log.info() << "Destructing object " << (void *)this 
 								 << " of class MolecularFileDialog" << std::endl; 
 			#endif 

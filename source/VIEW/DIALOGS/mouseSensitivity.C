@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#include <BALL/VIEW/GUI/DIALOGS/mouseSensitivity.h>
+#include <BALL/VIEW/DIALOGS/mouseSensitivity.h>
 
-#include <BALL/VIEW/GUI/WIDGETS/scene.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 
 #include <qpushbutton.h>
 #include <qslider.h> 

@@ -11,7 +11,7 @@
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 /** AtomProperties

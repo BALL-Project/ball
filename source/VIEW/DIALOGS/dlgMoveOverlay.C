@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dlgMoveOverlay.C,v 1.1 2003/08/26 12:38:13 oliver Exp $
+// $Id: dlgMoveOverlay.C,v 1.2 2003/08/26 15:01:09 amoll Exp $
 /**********************************************************************
 
 	--- Qt Architect generated file ---
@@ -11,7 +11,7 @@
 
  *********************************************************************/
 
-#include <BALL/VIEW/GUI/DIALOGS/dlgMoveOverlay.h>
+#include <BALL/VIEW/DIALOGS/dlgMoveOverlay.h>
 #define Inherited DlgMoveOverlayData
 
 DlgMoveOverlay::DlgMoveOverlay

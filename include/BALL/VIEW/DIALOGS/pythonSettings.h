@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#ifndef BALL_VIEW_GUI_DIALOGS_PYTHONSETTINGS_H
-#define BALL_VIEW_GUI_DIALOGS_PYTHONSETTINGS_H
+#ifndef BALL_VIEW_DIALOGS_PYTHONSETTINGS_H
+#define BALL_VIEW_DIALOGS_PYTHONSETTINGS_H
 
-#include <BALL/VIEW/GUI/DIALOGS/pythonSettingsData.h>
+#include <BALL/VIEW/UIC/pythonSettingsData.h>
 
 #ifndef BALL_DATATYPE_STRING_H
 # include <BALL/DATATYPE/string.h>

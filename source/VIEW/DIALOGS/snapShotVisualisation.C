@@ -1,5 +1,5 @@
-#include <BALL/MOLVIEW/DIALOGS/snapShotVisualisation.h>
-#include <BALL/VIEW/GUI/WIDGETS/scene.h>
+#include <BALL/VIEW/DIALOGS/snapShotVisualisation.h>
+#include <BALL/VIEWWIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
 #include <BALL/FORMAT/trajectoryFile.h>
@@ -8,7 +8,7 @@
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 SnapshotVisualisationDialog::SnapshotVisualisationDialog

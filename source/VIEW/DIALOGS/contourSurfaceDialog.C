@@ -9,7 +9,7 @@
 **
 ** WARNING! All changes made in this file will be lost!
 ****************************************************************************/
-#include <BALL/MOLVIEW/DIALOGS/contourSurfaceDialog.h>
+#include <BALL/VIEW/DIALOGS/contourSurfaceDialog.h>
 
 #include <qframe.h>
 #include <qlabel.h>
@@ -32,7 +32,7 @@
 
 namespace BALL
 {
- namespace MOLVIEW
+ namespace VIEW
    {
 
 ContourSurfaceDialog::ContourSurfaceDialog( QWidget* parent,  const char* name )

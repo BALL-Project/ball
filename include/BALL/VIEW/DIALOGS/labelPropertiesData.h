@@ -3,8 +3,8 @@
 //
 // $Id:
 
-#ifndef BALL_MOLVIEW_GUI_DIALOGS_LABELPROPERTIESDATA_H
-#define BALL_MOLVIEW_GUI_DIALOGS_LABELPROPERTIESDATA_H
+#ifndef BALL_VIEW_DIALOGS_LABELPROPERTIESDATA_H
+#define BALL_VIEW_DIALOGS_LABELPROPERTIESDATA_H
 
 #include <qdialog.h>
 #include <qlabel.h>
@@ -14,7 +14,7 @@
 namespace BALL
 {
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
     /**  \addtogroup  MolviewDialogs
      *  @{
@@ -42,12 +42,12 @@ namespace BALL
 		};
 
 		//#		ifndef BALL_NO_INLINE_FUNCTIONS
-		//#			include <BALL/MOLVIEW/GUI/DIALOGS/labelPropertiesData.iC>
+		//#			include <BALL/VIEW/DIALOGS/labelPropertiesData.iC>
 		//#		endif 
      /** @} */
-	} // namespace MOLVIEW
+	} // namespace VIEW
 
 } // namespace BALL
 
-#endif // BALL_MOLVIEW_GUI_DIALOGS_LABELPROPERTIESDATA_H
+#endif // BALL_VIEW_DIALOGS_LABELPROPERTIESDATA_H
 

@@ -2,8 +2,8 @@
 
 #include <BALL/VIEW/UIC/transformationDialogData.h>
 
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-#include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+#include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
 #ifndef BALL_STRUCTURE_GEOMETRICTRANSFORMATIONS_H

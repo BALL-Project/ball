@@ -26,7 +26,7 @@ class QPushButton;
 
 namespace BALL
 {
- namespace MOLVIEW
+ namespace VIEW
    {
 /** ContourSurfaceDialog
     \ingroup  MolviewDialogs

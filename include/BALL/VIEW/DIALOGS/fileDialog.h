@@ -1,16 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileDialog.h,v 1.1 2003/08/26 12:11:02 oliver Exp $
+// $Id: fileDialog.h,v 1.2 2003/08/26 15:01:22 amoll Exp $
 //
 
-#ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
-#define BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_FILEDIALOG_H
+#define BALL_VIEW_DIALOGS_FILEDIALOG_H
 
 #include <qfiledialog.h>
 
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-# include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+# include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
 namespace BALL
@@ -133,11 +133,11 @@ namespace BALL
 		};
 
 #ifndef BALL_NO_INLINE_FUNCTIONS
-#	include <BALL/VIEW/GUI/DIALOGS/fileDialog.iC>
+#	include <BALL/VIEW/DIALOGS/fileDialog.iC>
 #endif 
   
 		} // namespace VIEW
 
 	} // namespace BALL
 
-#endif // BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
+#endif // BALL_VIEW_DIALOGS_FILEDIALOG_H

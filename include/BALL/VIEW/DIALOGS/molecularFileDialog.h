@@ -1,14 +1,14 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.h,v 1.1 2003/08/26 12:11:03 oliver Exp $
+// $Id: molecularFileDialog.h,v 1.2 2003/08/26 15:01:22 amoll Exp $
 
-#ifndef BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
-#define BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
+#define BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
 
 
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-# include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
+# include <BALL/VIEW/WIDGETS/modularWidget.h>
 #endif
 
 #ifndef BALL_VIEW_COMMON_GLOBAL_H
@@ -21,7 +21,7 @@ namespace BALL
 {
 	class System;
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		/** MolecularFileDialog class.
 		 		This class is used to read or write Molecular files in one of several
@@ -182,7 +182,7 @@ namespace BALL
 			String working_dir_;
 		};
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 }	// namespace BALL
 
-#endif // BALL_MOLVIEW_GUI_DIALOGS_MOLECULARFILEDIALOG_H
+#endif // BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H

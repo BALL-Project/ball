@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: serverPreferences.C,v 1.1 2003/08/26 12:38:17 oliver Exp $
+// $Id: serverPreferences.C,v 1.2 2003/08/26 15:01:11 amoll Exp $
 //
 
-#include <BALL/VIEW/GUI/WIDGETS/serverPreferences.h>
+#include <BALL/VIEWWIDGETS/serverPreferences.h>
 #include <BALL/VIEW/COMMON/global.h>
 #include <BALL/FORMAT/INIFile.h>
 #include <BALL/COMMON/rtti.h>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#include <BALL/VIEW/GUI/DIALOGS/pythonSettings.h>
+#include <BALL/VIEW/DIALOGS/pythonSettings.h>
 
 #include <qlineedit.h>
 #include <qfiledialog.h>

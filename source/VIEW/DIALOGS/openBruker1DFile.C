@@ -1,16 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker1DFile.C,v 1.1 2003/08/26 12:38:15 oliver Exp $
+// $Id: openBruker1DFile.C,v 1.2 2003/08/26 15:01:11 amoll Exp $
 
-#include <BALL/MOLVIEW/GUI/DIALOGS/openBruker1DFile.h>
+#include <BALL/VIEW/DIALOGS/openBruker1DFile.h>
 #include <BALL/FORMAT/bruker1DFile.h>
 
 namespace BALL
 {
 	using namespace VIEW;
 
-  namespace MOLVIEW
+  namespace VIEW
   {
     OpenBruker1DFile::OpenBruker1DFile(QWidget* parent, const char* name)
       : FileDialog("Import Bruker1DFile File", QFileDialog::ExistingFile, parent, name)

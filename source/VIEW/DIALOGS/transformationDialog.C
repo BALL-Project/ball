@@ -1,7 +1,7 @@
-#include <BALL/VIEW/GUI/DIALOGS/transformationDialog.h>
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+#include <BALL/VIEW/DIALOGS/transformationDialog.h>
+#include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
-#include <BALL/VIEW/GUI/WIDGETS/scene.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
 #include <qlineedit.h>
 
 namespace BALL

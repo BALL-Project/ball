@@ -1,28 +1,24 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.h,v 1.1 2003/08/26 12:11:01 oliver Exp $
+// $Id: colorMeshDialog.h,v 1.2 2003/08/26 15:01:21 amoll Exp $
 //
 
-#ifndef BALL_VIEW_GUI_COLORMESHDIALOG_H
-#define BALL_VIEW_GUI_COLORMESHDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_COLORMESHDIALOG_H
+#define BALL_VIEW_DIALOGS_COLORMESHDIALOG_H
 
 #include <BALL/VIEW/UIC/colorMeshDialogData.h>
-
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-# include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
-#endif
 
 #ifndef BALL_VIEW_DATATYPE_COLORRGBA_H
 # include <BALL/VIEW/DATATYPE/colorRGBA.h>
 #endif
 
-#ifndef BALL_VIEW_PRIMITIV_MESH_H
-# include <BALL/VIEW/PRIMITIV/mesh.h>
+#ifndef BALL_VIEW_PRIMITIVES_MESH_H
+# include <BALL/VIEW/PRIMITIVES/mesh.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
-# include <BALL/VIEW/GUI/KERNEL/representation.h>
+#ifndef BALL_VIEW_KERNEL_REPRESENTATION_H
+# include <BALL/VIEW/KERNEL/representation.h>
 #endif
 
 #ifndef BALL_DATATYPE_REGULARDATA3D
@@ -31,14 +27,11 @@
 
 namespace BALL
 {
-	class Composite;
-
 	namespace VIEW
 	{
 
 		class ColorMeshDialog 
-			: public ColorMeshDialogData,
-				public ModularWidget
+			: public ColorMeshDialogData
 		{ 
 				Q_OBJECT
 
@@ -64,13 +57,15 @@ namespace BALL
 				};
 
 				ColorMeshDialog( QWidget* parent = 0, const char* name = 0, bool modal = FALSE, WFlags fl = 0 );
-				~ColorMeshDialog();
+				~ColorMeshDialog()
+					throw();
 						
 				void setRepresentation(Representation& rep)
 					throw();
 
 				Representation* getRepresentation()
 					throw() { return rep_;}
+
 				void setMesh(Mesh& mesh)
 					throw() {mesh_ = &mesh;}
 
@@ -122,8 +117,5 @@ namespace BALL
 				Representation* rep_;
 		};
 
-  } // namespace VIEW
-
-} // namespace BALL
-
+} } // Namespaces
 #endif

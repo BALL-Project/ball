@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fileDialog.C,v 1.1 2003/08/26 12:38:13 oliver Exp $
+// $Id: fileDialog.C,v 1.2 2003/08/26 15:01:09 amoll Exp $
 
-#include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
+#include <BALL/VIEW/DIALOGS/fileDialog.h>
  
 using std::istream;
 using std::ostream;
@@ -67,7 +67,7 @@ namespace BALL
     }
 
 #		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/GUI/DIALOGS/fileDialog.iC>
+#			include <BALL/VIEW/DIALOGS/fileDialog.iC>
 #		endif
 
 	} // namespace VIEW

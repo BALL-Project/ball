@@ -3,23 +3,23 @@
 //
 // $Id:
 
-#ifndef BALL_MOLVIEW_GUI_DIALOGS_LABELPROPERTIES_H
-#define BALL_MOLVIEW_GUI_DIALOGS_LABELPROPERTIES_H
+#ifndef BALL_VIEW_DIALOGS_LABELPROPERTIES_H
+#define BALL_VIEW_DIALOGS_LABELPROPERTIES_H
 
 #ifndef BALL_FORMAT_INIFILE_H
 #	include <BALL/FORMAT/INIFile.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
-# include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_WIDGETS_MODULARWIDGET_H
+# include <BALL/VIEW/WIDGETS/modularWidget.h>
 #endif
 
-#ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
-# include <BALL/MOLVIEW/KERNEL/molecularMessage.h>
+#ifndef BALL_VIEW_KERNEL_MOLECULARMESSAGE_H
+# include <BALL/VIEW/KERNEL/molecularMessage.h>
 #endif
 
-#ifndef BALL_MOLVIEW_GUI_DIALOGS_LABELPROPERTIESDATA_H
-# include <BALL/MOLVIEW/GUI/DIALOGS/labelPropertiesData.h>
+#ifndef BALL_VIEW_DIALOGS_LABELPROPERTIESDATA_H
+# include <BALL/VIEW/DIALOGS/labelPropertiesData.h>
 #endif
 
 namespace BALL
@@ -29,7 +29,7 @@ namespace BALL
 	using VIEW::Message;
 	using VIEW::ColorRGBA;
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		/**	The LabelProperties class.
 				The class LabelProperties is a dialog for appending to a selection of 
@@ -223,8 +223,8 @@ namespace BALL
 			ColorRGBA custom_color_;
 			List<Composite*> selection_;
 		};
-	} // namespace MOLVIEW
+	} // namespace VIEW
 
 } // namespace BALL
 
-#endif // BALL_MOLVIEW_GUI_DIALOGS_LABELPROPERTIES_H
+#endif // BALL_VIEW_DIALOGS_LABELPROPERTIES_H

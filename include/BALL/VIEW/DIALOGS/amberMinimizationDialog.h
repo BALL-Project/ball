@@ -2,8 +2,8 @@
 // vi: set ts=2:
 //
 
-#ifndef BALL_MOLVIEW_DIALOGS_AMBERMINIMIZATIONDIALOG_H
-#define BALL_MOLVIEW_DIALOGS_AMBERMINIMIZATIONDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_AMBERMINIMIZATIONDIALOG_H
+#define BALL_VIEW_DIALOGS_AMBERMINIMIZATIONDIALOG_H
 
 #include "amberMinimizationDialogData.h"
 
@@ -12,7 +12,7 @@
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 ///

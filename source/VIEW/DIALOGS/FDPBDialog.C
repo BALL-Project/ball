@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#include <BALL/VIEW/GUI/DIALOGS/FDPBDialog.h>
+#include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/SYSTEM/path.h>
 #include <BALL/FORMAT/INIFile.h>

@@ -1,13 +1,13 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#ifndef BALL_VIEW_GUI_DIALOGS_FDPBDIALOG_H
-#define BALL_VIEW_GUI_DIALOGS_FDPBDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_FDPBDIALOG_H
+#define BALL_VIEW_DIALOGS_FDPBDIALOG_H
 
-#include <BALL/VIEW/GUI/DIALOGS/FDPBDialogData.h>
+#include <BALL/VIEW/UIC/FDPBDialogData.h>
 
-#ifndef BALL_VIEW_GUI_WIDGETS_MODULARWIDGET_H
- #include <BALL/VIEW/GUI/WIDGETS/modularWidget.h>
+#ifndef BALL_VIEW_KERNEL_MODULARWIDGET_H
+ #include <BALL/VIEW/KERNEL/modularWidget.h>
 #endif
 
 #ifndef BALL_SOLVATION_POISSONBOLTZMANN_H

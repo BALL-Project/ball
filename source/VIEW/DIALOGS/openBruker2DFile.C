@@ -1,17 +1,17 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker2DFile.C,v 1.1 2003/08/26 12:38:15 oliver Exp $
+// $Id: openBruker2DFile.C,v 1.2 2003/08/26 15:01:11 amoll Exp $
 
-#include <BALL/MOLVIEW/GUI/DIALOGS/openBruker2DFile.h>
+#include <BALL/VIEW/DIALOGS/openBruker2DFile.h>
 #include <BALL/FORMAT/bruker2DFile.h>
-#include <BALL/VIEW/GUI/WIDGETS/regularData2DWidget.h>
+#include <BALL/VIEWWIDGETS/regularData2DWidget.h>
 
 namespace BALL
 {
 	using namespace VIEW;
 
-  namespace MOLVIEW
+  namespace VIEW
   {
     OpenBruker2DFile::OpenBruker2DFile(QWidget* parent, const char* name)
       :     FileDialog("Import Bruker2D File", QFileDialog::ExistingFile, parent, name)

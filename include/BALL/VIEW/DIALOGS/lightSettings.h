@@ -1,16 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lightSettings.h,v 1.1 2003/08/26 12:11:03 oliver Exp $
+// $Id: lightSettings.h,v 1.2 2003/08/26 15:01:22 amoll Exp $
 //
 
-#ifndef BALL_VIEW_GUI_DIALOGS_LIGHTSETTINGS_H
-#define BALL_VIEW_GUI_DIALOGS_LIGHTSETTINGS_H
+#ifndef BALL_VIEW_DIALOGS_LIGHTSETTINGS_H
+#define BALL_VIEW_DIALOGS_LIGHTSETTINGS_H
 
 #include <BALL/VIEW/UIC/lightSettingsData.h>
 
-#ifndef BALL_VIEW_GUI_KERNEL_STAGE_H
-# include <BALL/VIEW/GUI/KERNEL/stage.h>
+#ifndef BALL_VIEW_KERNEL_STAGE_H
+# include <BALL/VIEW/KERNEL/stage.h>
 #endif
 
 #ifndef BALL_COMMON_GLOBAL_H

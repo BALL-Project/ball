@@ -2,8 +2,8 @@
 // vi: set ts=2:
 //
 
-#ifndef BALL_MOLVIEW_DIALOGS_MOLECULARDYNAMICSDIALOG_H
-#define BALL_MOLVIEW_DIALOGS_MOLECULARDYNAMICSDIALOG_H
+#ifndef BALL_VIEW_DIALOGS_MOLECULARDYNAMICSDIALOG_H
+#define BALL_VIEW_DIALOGS_MOLECULARDYNAMICSDIALOG_H
 
 #include "molecularDynamicsDialogData.h"
 
@@ -12,7 +12,7 @@
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 ///

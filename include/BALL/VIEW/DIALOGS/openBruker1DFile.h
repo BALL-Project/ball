@@ -1,21 +1,21 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: openBruker1DFile.h,v 1.1 2003/08/26 12:11:03 oliver Exp $
+// $Id: openBruker1DFile.h,v 1.2 2003/08/26 15:01:22 amoll Exp $
 
-#ifndef BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER1DFILE_H
-#define BALL_MOLVIEW_GUI_DIALOGS_OPENBRUKER1DFILE_H
+#ifndef BALL_VIEW_DIALOGS_OPENBRUKER1DFILE_H
+#define BALL_VIEW_DIALOGS_OPENBRUKER1DFILE_H
 
 #ifndef BALL_COMMON_H
 # include <BALL/common.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_WIDGETS_REGULARDATA1DWIDGET_H
-# include <BALL/VIEW/GUI/WIDGETS/regularData1DWidget.h>
+#ifndef BALL_VIEW_WIDGETS_REGULARDATA1DWIDGET_H
+# include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
 #endif
 
-#ifndef BALL_VIEW_GUI_DIALOGS_FILEDIALOG_H
-# include <BALL/VIEW/GUI/DIALOGS/fileDialog.h>
+#ifndef BALL_VIEW_DIALOGS_FILEDIALOG_H
+# include <BALL/VIEW/DIALOGS/fileDialog.h>
 #endif
 
 #ifndef BALL_FORMAT_BRUKER1DFILE_H
@@ -27,7 +27,7 @@ namespace BALL
 	using VIEW::MainControl;
 	using VIEW::FileDialog;
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 		/** This class provides an interface to select and open spectra stored in the bruker file format.
     		\ingroup  MolviewDialogs

@@ -7,9 +7,9 @@
 #include <qcolordialog.h>
 #include <qpopupmenu.h>
 #include <qmenubar.h>
-#include <BALL/MOLVIEW/DIALOGS/labelProperties.h>
+#include <BALL/VIEW/DIALOGS/labelProperties.h>
 #include <BALL/VIEW/PRIMITIV/label.h>
-#include <BALL/VIEW/GUI/KERNEL/mainControl.h>
+#include <BALL/VIEWKERNEL/mainControl.h>
 #include <BALL/FORMAT/INIFile.h>
 
 #define Inherited LabelPropertiesData
@@ -18,7 +18,7 @@ namespace BALL
 {
 	using namespace VIEW;
 
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 		LabelProperties::LabelProperties(QWidget* parent, const char* name)
@@ -217,5 +217,5 @@ namespace BALL
 			update();
 		}
 
-	} // namespace MOLVIEW
+	} // namespace VIEW
 } // namespace BALL

@@ -1,13 +1,13 @@
-// $Id: dialogs.doc,v 1.1 2003/08/26 12:11:02 oliver Exp $
+// $Id: dialogs.doc,v 1.2 2003/08/26 15:01:21 amoll Exp $
 
 /** \defgroup ViewGuiDialogs Dialog classes
 		\ingroup ViewGui
 		This section contains some dialogs.
  */
-// $Id: dialogs.doc,v 1.1 2003/08/26 12:11:02 oliver Exp $
+// $Id: dialogs.doc,v 1.2 2003/08/26 15:01:21 amoll Exp $
 
 /** \defgroup MolviewDialogs Dialog classes
 		\ingroup MolviewGui
 		This section contains some useful dialogs used in the demo
-		application <tt>MOLVIEW</tt>.
+		application <tt>VIEW</tt>.
 */

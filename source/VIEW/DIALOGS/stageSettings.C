@@ -1,9 +1,9 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-#include <BALL/VIEW/GUI/DIALOGS/stageSettings.h>
-#include <BALL/VIEW/GUI/WIDGETS/scene.h>
-#include <BALL/VIEW/GUI/KERNEL/stage.h>
+#include <BALL/VIEW/DIALOGS/stageSettings.h>
+#include <BALL/VIEW/WIDGETS/scene.h>
+#include <BALL/VIEW/KERNEL/stage.h>
 
 #include <qpushbutton.h>
 #include <qcolordialog.h>

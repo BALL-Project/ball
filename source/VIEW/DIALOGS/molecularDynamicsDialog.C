@@ -2,7 +2,7 @@
 // vi: set ts=2:
 //
 
-#include <BALL/MOLVIEW/GUI/DIALOGS/molecularDynamicsDialog.h>
+#include <BALL/VIEW/DIALOGS/molecularDynamicsDialog.h>
 #include <qfiledialog.h>
 #include <qlineedit.h>
 #include <qradiobutton.h>
@@ -10,7 +10,7 @@
 
 namespace BALL
 {
-	namespace MOLVIEW
+	namespace VIEW
 	{
 
 MolecularDynamicsDialog::MolecularDynamicsDialog(QWidget* parent, const char* name)
