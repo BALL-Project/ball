@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.5 2004/05/03 12:19:33 amoll Exp $
+// $Id: main.C,v 1.6 2004/05/05 18:03:19 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -13,6 +13,7 @@
 #include <BALL/SYSTEM/directory.h>
 
 #include <iostream>
+#undef BALL_PLATFORM_WINDOWS
 
 #ifndef BALL_PLATFORM_WINDOWS
 int main(int argc, char **argv)
@@ -33,6 +34,7 @@ int WINAPI WinMain( HINSTANCE, HINSTANCE, PSTR cmd_line, int )
 	{
  		putenv((char*)((BALL::String("BALL_DATA_PATH=") + BALL::String(BALLView_data_path)).c_str()));
 	}
+
 
 	BALL::Path d;
 	if (BALL::String(d.find("CHARMM")) == "")
