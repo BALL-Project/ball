@@ -645,54 +645,52 @@
             </property>
         </widget>
     </widget>
-    <widget class="QLayoutWidget">
+    <widget class="QPushButton">
         <property name="name">
-            <cstring>layout92</cstring>
+            <cstring>ok_button</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>11</x>
-                <y>381</y>
-                <width>379</width>
-                <height>35</height>
+                <x>12</x>
+                <y>383</y>
+                <width>186</width>
+                <height>30</height>
             </rect>
         </property>
-        <hbox>
-            <property name="name">
-                <cstring>unnamed</cstring>
-            </property>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>ok_button</cstring>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>32767</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>OK</string>
-                </property>
-                <property name="default">
-                    <bool>true</bool>
-                </property>
-            </widget>
-            <widget class="QPushButton">
-                <property name="name">
-                    <cstring>cancel_button</cstring>
-                </property>
-                <property name="maximumSize">
-                    <size>
-                        <width>32767</width>
-                        <height>30</height>
-                    </size>
-                </property>
-                <property name="text">
-                    <string>Cancel</string>
-                </property>
-            </widget>
-        </hbox>
+        <property name="maximumSize">
+            <size>
+                <width>32767</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>OK</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>cancel_button</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>204</x>
+                <y>383</y>
+                <width>185</width>
+                <height>30</height>
+            </rect>
+        </property>
+        <property name="maximumSize">
+            <size>
+                <width>32767</width>
+                <height>30</height>
+            </size>
+        </property>
+        <property name="text">
+            <string>Cancel</string>
+        </property>
     </widget>
 </widget>
 <connections>
