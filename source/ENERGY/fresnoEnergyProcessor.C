@@ -1,4 +1,4 @@
-// $Id: fresnoEnergyProcessor.C,v 1.1 2002/01/28 10:43:29 anker Exp $
+// $Id: fresnoEnergyProcessor.C,v 1.2 2002/01/28 11:05:23 anker Exp $
 
 #include <BALL/ENERGY/fresnoEnergyProcessor.h>
 
@@ -71,10 +71,11 @@ namespace BALL
 
 
 	bool FresnoEnergyProcessor::operator == (const FresnoEnergyProcessor& proc)
+		const
 		throw()
 	{
-		return (EnergyProcessor::operator == (proc);
-				&& (coefficients_ == proc.coefficients_))
+		return (EnergyProcessor::operator == (proc)
+				&& (coefficients_ == proc.coefficients_));
 	}
 
 
@@ -117,14 +118,6 @@ namespace BALL
 			}
 		}
 	}
-
-
-	double FresnoEnergyProcessor::calculateHB_() const
-		throw()
-	{
-	}
-
-
 
 
 }
