@@ -93,7 +93,7 @@ namespace BALL
 			protected slots:
 							
 			///
-			void nextClicked();
+			virtual void next();
 						
 			//@}
 			

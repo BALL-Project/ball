@@ -6,6 +6,7 @@
 #include "ballviewDemo.h"
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/common.h>
+#include <BALL/KERNEL/system.h>
 
 #include <qlabel.h>
 #include <qpushbutton.h>
@@ -27,6 +28,15 @@ BALLViewDemo::BALLViewDemo(QWidget* parent, const char* name)
 	// register the widget with the MainControl
 	ModularWidget::registerWidget(this);
 
+	for (Index p = 0; p < pageCount(); p++)
+	{
+		setBackEnabled(page(p), false);
+		setHelpEnabled(page(p), false);
+	}
+
+	setNextEnabled(page(pageCount() - 1), false);
+	setFinishEnabled(page(pageCount() - 1), false);
+
 	hide();
 }
 
@@ -38,6 +48,29 @@ BALLViewDemo::~BALLViewDemo()
 #endif
 }
 
+void BALLViewDemo::show()
+{
+	showPage(page(0));
+	nextButton()->setEnabled(false);
+	BALLViewDemoData::show();
+	raise();
+}
+
+void BALLViewDemo::next()
+{
+	nextButton()->setEnabled(false);
+	step_ ++;
+	QWizard::next();
+}
+
+
+void BALLViewDemo::enableNextStep_()
+{
+//   	label->setText(label->text() + "<blockquote><br><b>You finished this step. Click \"Next\" when you are ready to proceed.</b></blockquote>");
+	nextButton()->setEnabled(true);
+}
+
+
 void BALLViewDemo::onNotify(Message *message)
 	throw()
 {
@@ -45,37 +78,39 @@ void BALLViewDemo::onNotify(Message *message)
 	Log.error() << "BALLViewDemo " << this << " onNotify " << message << std::endl;
 #endif
 
-	if (step_ == 0)
+	switch (step_)
 	{
-		if (RTTI::isKindOf<CompositeMessage>(*message))
+		case 0:
 		{
-			CompositeMessage* msg = RTTI::castTo<CompositeMessage>(*message);
-			if (msg->getType() == CompositeMessage::NEW_MOLECULE)
+			if (RTTI::isKindOf<CompositeMessage>(*message))
 			{
-				enableNextStep_();
-				return;
+				CompositeMessage* msg = RTTI::castTo<CompositeMessage>(*message);
+				if (msg->getType() == CompositeMessage::NEW_MOLECULE)
+				{
+					enableNextStep_();
+					return;
+				}
 			}
 		}
-	}
+
+		case 1:
+		{
+			if (RTTI::isKindOf<ControlSelectionMessage>(*message))
+			{
+				ControlSelectionMessage* msg = RTTI::castTo<ControlSelectionMessage>(*message);
+Log.error() << "#~~#   5 " << msg->getSelection().size()            << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+
+				if (msg->getSelection().size() == 1 &&
+						RTTI::isKindOf<System>(**msg->getSelection().begin()))
+				{
+Log.error() << "#~~#   7 "             << " "  << __FILE__ << "  " << __LINE__<< std::endl;
+					enableNextStep_();
+					return;
+				}
+			}
+		}
+
+	} // switch
 }
-
-void BALLViewDemo::show()
-{
-	BALLViewDemoData::show();
-	raise();
-}
-
-void BALLViewDemo::nextClicked()
-{
-
-}
-
-void BALLViewDemo::enableNextStep_()
-{
-	step_ ++;
-	label->setText(label->text() + "<blockquote><br><b>You finished this step. Click \"Next\" when you are ready to proceed.</b></blockquote>");
-	next_button->setEnabled(true);
-}
-
 
 } } // namespaces

@@ -1,6 +1,6 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>BALLViewDemoData</class>
-<widget class="QDialog">
+<widget class="QWizard">
     <property name="name">
         <cstring>BALLViewDemoData</cstring>
     </property>
@@ -8,43 +8,40 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>598</width>
-            <height>480</height>
+            <width>600</width>
+            <height>523</height>
         </rect>
     </property>
     <property name="caption">
-        <string>BALLView Demo</string>
+        <string>Form1</string>
     </property>
-    <widget class="QLayoutWidget">
+    <widget class="QWidget">
         <property name="name">
-            <cstring>layout4</cstring>
+            <cstring>WizardPage</cstring>
         </property>
-        <property name="geometry">
-            <rect>
-                <x>3</x>
-                <y>2</y>
-                <width>590</width>
-                <height>475</height>
-            </rect>
-        </property>
-        <vbox>
+        <attribute name="title">
+            <string>Building a peptide from a given sequence</string>
+        </attribute>
+        <widget class="QLabel">
             <property name="name">
-                <cstring>unnamed</cstring>
+                <cstring>label</cstring>
             </property>
-            <property name="spacing">
-                <number>5</number>
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>2</y>
+                    <width>588</width>
+                    <height>435</height>
+                </rect>
             </property>
-            <widget class="QLabel">
-                <property name="name">
-                    <cstring>label</cstring>
-                </property>
-                <property name="text">
-                    <string>&lt;blockquote&gt;
+            <property name="text">
+                <string>&lt;blockquote&gt;
 Welcome to the BALLView demo. It will show you some of 
 BALLViews main features. The demo is divided in 
 serveral steps, wich have to be finished one after the other. The 
 progress bar at the bottom informs you about your advancements.
 The button "next" will be enabled after finishing each individual step.
+&lt;br&gt;
 &lt;br&gt;
 We start by building a polypeptide from an aminoacid sequence.
 To do so, open the PeptideBuilder dialog by clicking the menu entry
@@ -54,89 +51,96 @@ To do so, open the PeptideBuilder dialog by clicking the menu entry
 &lt;br&gt;
 Then enter the sequence ARND in the label field at the top. This
 will create a polypeptide with the aminosequence
-Alanin-&gt;Arginin-&gt;Asparagine-&gt;Aspartic acid.
+Alanin-&gt;Arginin-&gt;Asparagine-&gt;Aspartic acid. 
+&lt;br&gt;
+Then press the "Build" button.
 &lt;blockquote&gt;</string>
-                </property>
-                <property name="alignment">
-                    <set>WordBreak|AlignTop</set>
-                </property>
-            </widget>
-            <widget class="QLayoutWidget">
-                <property name="name">
-                    <cstring>layout3</cstring>
-                </property>
-                <hbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <property name="spacing">
-                        <number>5</number>
-                    </property>
-                    <widget class="QProgressBar">
-                        <property name="name">
-                            <cstring>progress_bar</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>7</hsizetype>
-                                <vsizetype>0</vsizetype>
-                                <horstretch>12</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>next_button</cstring>
-                        </property>
-                        <property name="enabled">
-                            <bool>false</bool>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>90</width>
-                                <height>25</height>
-                            </size>
-                        </property>
-                        <property name="text">
-                            <string>Next</string>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>close_button</cstring>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>90</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="text">
-                            <string>Close</string>
-                        </property>
-                    </widget>
-                </hbox>
-            </widget>
-        </vbox>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>Hierarchy of molecules</string>
+        </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>label_2</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>0</x>
+                    <y>2</y>
+                    <width>588</width>
+                    <height>435</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;blockquote&gt;
+After we created the peptide you can have a look at the peptides
+hierarchy. In the main window there is a listview with the title
+"Structures". This widget contains a hierarchical list of all loaded
+molecules. Double click the cross to the left of the name your
+newly created protein to open the hierarchy tree. Repeat this
+to see, that the peptide clearly constists of four amino acids.
+(If you entered the sequence correctly.)
+&lt;br&gt;&lt;br&gt;
+When you are finished with playing around with the hierarchy
+highlight the System by clicking on its name ("ARND").
+This will take you to the next step.
+&lt;blockquote&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
+        </widget>
+    </widget>
+    <widget class="QWidget">
+        <property name="name">
+            <cstring>WizardPage</cstring>
+        </property>
+        <attribute name="title">
+            <string>WizardPage</string>
+        </attribute>
+        <widget class="QLabel">
+            <property name="name">
+                <cstring>label_3</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>1</x>
+                    <y>2</y>
+                    <width>588</width>
+                    <height>435</height>
+                </rect>
+            </property>
+            <property name="text">
+                <string>&lt;blockquote&gt;
+Now we will simulate the peptides natural movements 
+by performing a molecular dynamics simulation (MDS). To do so
+open the according dialog by using the menu entry &lt;br&gt;
+&lt;b&gt;Molecular Mechanics -&gt; Molecular Dynamics&lt;/b&gt;&lt;br&gt;
+(The menu entry is only enabled if a System is selected.)&lt;br&gt;
+&lt;br&gt;
+Set the number of iterations to 500.
+To accelerate the MDS, set the timestep to 0.001. 
+Also, we want to be able to visualise the resulting trajectories.
+To do so, click the checkbox "store to DCDFile".
+Then click "Start".
+
+The next step becomes available, when the simulation has finished.
+&lt;/blockquote&gt;</string>
+            </property>
+            <property name="alignment">
+                <set>WordBreak|AlignTop</set>
+            </property>
+        </widget>
     </widget>
 </widget>
-<connections>
-    <connection>
-        <sender>next_button</sender>
-        <signal>clicked()</signal>
-        <receiver>BALLViewDemoData</receiver>
-        <slot>nextClicked()</slot>
-    </connection>
-    <connection>
-        <sender>close_button</sender>
-        <signal>clicked()</signal>
-        <receiver>BALLViewDemoData</receiver>
-        <slot>close()</slot>
-    </connection>
-</connections>
-<slots>
-    <slot>nextClicked()</slot>
-</slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
