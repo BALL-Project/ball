@@ -7,9 +7,9 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>2</y>
+            <y>3</y>
             <width>228</width>
-            <height>375</height>
+            <height>370</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -23,7 +23,13 @@
     <property name="minimumSize">
         <size>
             <width>228</width>
-            <height>375</height>
+            <height>370</height>
+        </size>
+    </property>
+    <property name="maximumSize">
+        <size>
+            <width>228</width>
+            <height>370</height>
         </size>
     </property>
     <property name="paletteBackgroundColor">
@@ -286,23 +292,26 @@
     <property name="caption">
         <string>About Molview</string>
     </property>
-    <widget class="QPushButton">
+    <widget class="QLabel">
         <property name="name">
-            <cstring>PushButton1</cstring>
+            <cstring>TextLabel1_2</cstring>
         </property>
         <property name="geometry">
             <rect>
-                <x>6</x>
-                <y>342</y>
-                <width>213</width>
-                <height>28</height>
+                <x>-2</x>
+                <y>189</y>
+                <width>232</width>
+                <height>27</height>
             </rect>
         </property>
         <property name="text">
-            <string>O&amp;K</string>
+            <string>&lt;h2&gt;&lt;b&gt;molview 1.0&lt;/b&gt;&lt;/h2&gt;</string>
         </property>
-        <property name="accel">
-            <string>Alt+K</string>
+        <property name="textFormat">
+            <enum>AutoText</enum>
+        </property>
+        <property name="alignment">
+            <set>WordBreak|AlignCenter</set>
         </property>
     </widget>
     <widget class="QLabel">
@@ -311,7 +320,7 @@
         </property>
         <property name="geometry">
             <rect>
-                <x>0</x>
+                <x>-2</x>
                 <y>-7</y>
                 <width>227</width>
                 <height>196</height>
@@ -332,21 +341,40 @@
     </widget>
     <widget class="QLabel">
         <property name="name">
+            <cstring>qt_version_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>-2</x>
+                <y>240</y>
+                <width>232</width>
+                <height>16</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>QT Version</string>
+        </property>
+        <property name="textFormat">
+            <enum>AutoText</enum>
+        </property>
+        <property name="alignment">
+            <set>WordBreak|AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
             <cstring>TextLabel1</cstring>
         </property>
         <property name="geometry">
             <rect>
                 <x>-3</x>
-                <y>195</y>
+                <y>261</y>
                 <width>232</width>
-                <height>143</height>
+                <height>71</height>
             </rect>
         </property>
         <property name="text">
-            <string>molview 1.0
-(BALL 1.0)
-
-Andreas Moll,
+            <string>Andreas Moll,
 Andreas Hildebrandt, 
 Heiko Klein, 
 Oliver Kohlbacher</string>
@@ -356,6 +384,50 @@ Oliver Kohlbacher</string>
         </property>
         <property name="alignment">
             <set>WordBreak|AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QLabel">
+        <property name="name">
+            <cstring>BALL_version_label</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>-1</x>
+                <y>219</y>
+                <width>232</width>
+                <height>16</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>(BALL 1.0)</string>
+        </property>
+        <property name="textFormat">
+            <enum>AutoText</enum>
+        </property>
+        <property name="alignment">
+            <set>WordBreak|AlignCenter</set>
+        </property>
+    </widget>
+    <widget class="QPushButton">
+        <property name="name">
+            <cstring>PushButton1</cstring>
+        </property>
+        <property name="geometry">
+            <rect>
+                <x>7</x>
+                <y>338</y>
+                <width>213</width>
+                <height>28</height>
+            </rect>
+        </property>
+        <property name="text">
+            <string>O&amp;K</string>
+        </property>
+        <property name="accel">
+            <string>Alt+K</string>
+        </property>
+        <property name="default">
+            <bool>true</bool>
         </property>
     </widget>
 </widget>

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.120 2004/02/10 13:23:38 amoll Exp $
+// $Id: mainframe.C,v 1.121 2004/02/11 14:35:40 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -20,6 +20,7 @@
 #endif
 
 #include <qmenubar.h>
+#include <qlabel.h>
 
 namespace BALL
 {
@@ -237,14 +238,28 @@ namespace BALL
 
 	void Mainframe::about()
 	{
+		/*
  		if (geometric_control_->getSelection().size() == 0) return;
 		Representation* rep = *geometric_control_->getSelection().begin();
 		Mesh* mesh= (Mesh*) *rep->begin();
 		mesh->dump();
 		
 		return;
+		*/
 		// showing about dialog
 		AboutDialog about;
+		String version = String("(BALL ") +
+										 String(VersionInfo::getMajorRevision()) + "." +
+										 String(VersionInfo::getMinorRevision()) + ")";
+	
+		about.BALL_version_label->setText(version.c_str());
+
+		version = String("(QT ") + qVersion();	
+#ifdef BALL_QT_HAS_THREADS
+		version += " mt";
+#endif
+		version += ")";
+		about.qt_version_label->setText(version.c_str());
 		about.exec(); 
 	}
 
