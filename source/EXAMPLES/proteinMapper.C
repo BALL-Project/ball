@@ -1,4 +1,4 @@
-// $Id: proteinMapper.C,v 1.5 2000/03/28 15:36:26 oliver Exp $
+// $Id: proteinMapper.C,v 1.6 2000/04/25 14:41:33 oliver Exp $
 
 //========================================================================
 // protein mapper example
@@ -21,9 +21,9 @@ int main(int argc, char** argv)
 {
 
 	// default values
-	float upper = 8.0;
-	float lower = 4.0;
-	float tolerance = 0.6;
+	double upper = 8.0;
+	double lower = 4.0;
+	double tolerance = 0.6;
 
 	// print usage information
 	if ((argc < 4) || (argc > 7)) 
@@ -32,11 +32,11 @@ int main(int argc, char** argv)
 		cout << "Maps the backbone of two proteins (Calpha atoms) onto each other." << endl
 				 << "Calpha atoms are recognized by their name (CA)." << endl << endl
 				 << "Optional parameters:" << endl
-				 << "  <upper> (float):" << endl
+				 << "  <upper> (double):" << endl
 				 << "     lower bound for triangle side length use by the mapper" << endl
-				 << "  <upper> (float):" << endl
+				 << "  <upper> (double):" << endl
 				 << "     upper bound for triangle side length use by the mapper" << endl
-				 << "  <tolerance> (float):" << endl
+				 << "  <tolerance> (double):" << endl
 				 << "     maximum distance between two (mapped) Calpha atoms in Angstrom" << endl << endl
 				 << "Defaults for optional parameters:" << endl
 				 << "    lower     = " << upper << endl
@@ -103,7 +103,7 @@ int main(int argc, char** argv)
 	Matrix4x4				T;
 	StructureMapper	mapper;
 	int							no_ca;
-	float						rmsd;
+	double						rmsd;
 	
 	cout << "mapping " << argv[1] << " onto " << argv[2] << " (this may take a while)..." << endl;
 
