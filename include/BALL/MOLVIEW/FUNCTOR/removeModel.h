@@ -1,4 +1,4 @@
-// $Id: removeModel.h,v 1.3 2000/02/06 19:50:44 oliver Exp $
+// $Id: removeModel.h,v 1.4 2000/04/25 15:28:11 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_REMOVEMODEL_H
@@ -96,7 +96,7 @@ namespace BALL
 			
 			virtual bool finish();
 			
-			virtual Processor::Result operator() (Atom& atom);
+			virtual Processor::Result operator() (Composite& composite);
 			//@}
 
 			/**	@name	Predicates

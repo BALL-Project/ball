@@ -1,4 +1,4 @@
-// $Id: baseModel.h,v 1.3 1999/12/28 18:38:06 oliver Exp $
+// $Id: baseModel.h,v 1.4 2000/04/25 15:28:10 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
@@ -7,12 +7,8 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_CONCEPT_PROCESSOR_H
-#	include <BALL/CONCEPT/processor.h>
+#ifndef BALL_CONCEPT_COMPOSITE_H
+#	include <BALL/CONCEPT/composite.h>
 #endif
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
@@ -42,8 +38,8 @@ namespace BALL
 		/**
 		*/
 		class BaseModelProcessor
-			: public UnaryProcessor<Atom>,
-				public ExtendedPropertyManager
+			: public UnaryProcessor<Composite>,
+			  public ExtendedPropertyManager
 		{
 			public:
 
@@ -69,7 +65,7 @@ namespace BALL
 			//@{
 
 			void set
-				(const BaseModelProcessor& base_model_processor,bool deep = true);
+				(const BaseModelProcessor& base_model_processor, bool deep = true);
 
 			BaseModelProcessor& operator =
 				(const BaseModelProcessor& base_model_processor);
@@ -93,10 +89,10 @@ namespace BALL
 
 			void disableDynamicModel();
 
-			void setColorCalculator
+			void registerColorCalculator
 				(const ColorCalculator& color_calculator);
 
-			void resetColorCalculator();
+			void unregisterColorCalculator();
 
 			ColorCalculator* getColorCalculator() const;
 			//@}
@@ -109,7 +105,7 @@ namespace BALL
 			
 			virtual bool finish();
 
-			virtual Processor::Result operator() (Atom& atom);
+			virtual Processor::Result operator() (Composite& composite);
 
 			//@}
 				
@@ -125,9 +121,7 @@ namespace BALL
 
 			bool isDynamicModelDisabled();
 
-			bool isDefaultColorCalculator();
-
-			bool isOtherColorCalculator();
+			bool isDefaultColorCalculatorRegistered();
 			//@}
 
 			/**	@name	Debugging and Diagnostics
@@ -152,7 +146,9 @@ namespace BALL
 			
 			protected:
 
-			FindGeometricObject& getSearcher();
+			FindGeometricObject& getSearcher_();
+
+			void clear_();
 
 			
 			private:
@@ -160,7 +156,6 @@ namespace BALL
 			void dump_
 				(std::ostream& s, Size depth) const;
 
-			void clear_();
 
 			/* search processor */ 
 			FindGeometricObject find_geometric_object_;

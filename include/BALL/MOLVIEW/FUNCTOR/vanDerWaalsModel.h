@@ -1,4 +1,4 @@
-// $Id: vanDerWaalsModel.h,v 1.5 2000/03/28 19:23:33 oliver Exp $
+// $Id: vanDerWaalsModel.h,v 1.6 2000/04/25 15:28:12 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_VANDERWAALSMODEL_H
@@ -72,7 +72,7 @@ namespace BALL
 			
 			virtual bool finish();
 
-			virtual Processor::Result operator() (Atom& atom);
+			virtual Processor::Result operator() (Composite& composite);
 
 			//@}
 			

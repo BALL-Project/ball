@@ -1,4 +1,4 @@
-// $Id: baseModel.iC,v 1.3 1999/12/30 20:30:42 oliver Exp $
+// $Id: baseModel.iC,v 1.4 2000/04/25 15:28:10 hekl Exp $
 
 BALL_INLINE
 void BaseModelProcessor::enableStaticModel()
@@ -25,14 +25,14 @@ void BaseModelProcessor::disableDynamicModel()
 }
 
 BALL_INLINE
-void BaseModelProcessor::setColorCalculator
+void BaseModelProcessor::registerColorCalculator
   (const ColorCalculator& color_calculator)
 {
-  color_calculator_  = (ColorCalculator*)&color_calculator;
+  color_calculator_  = const_cast<ColorCalculator*>(&color_calculator);
 }
   
 BALL_INLINE
-void BaseModelProcessor::resetColorCalculator()
+void BaseModelProcessor::unregisterColorCalculator()
 {
   color_calculator_ = const_cast<ColorCalculator*>((const ColorCalculator*)&RTTI::getDefault<ColorCalculator>());
 }
@@ -68,19 +68,13 @@ bool BaseModelProcessor::isDynamicModelDisabled()
 }
 
 BALL_INLINE
-bool BaseModelProcessor::isDefaultColorCalculator()
+bool BaseModelProcessor::isDefaultColorCalculatorRegistered()
 {
   return (bool)(color_calculator_ == const_cast<ColorCalculator*>((ColorCalculator*)&RTTI::getDefault<ColorCalculator>()));
 }
 
 BALL_INLINE
-bool BaseModelProcessor::isOtherColorCalculator()
-{
-  return (bool)(color_calculator_ != const_cast<ColorCalculator*>((ColorCalculator*)&RTTI::getDefault<ColorCalculator>()));
-}
-
-BALL_INLINE
-FindGeometricObject& BaseModelProcessor::getSearcher()
+FindGeometricObject& BaseModelProcessor::getSearcher_()
 {
   return find_geometric_object_;
 }

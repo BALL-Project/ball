@@ -1,7 +1,7 @@
-// $Id: lineModel.h,v 1.4 2000/04/25 15:28:11 hekl Exp $
+// $Id: surfaceModel.h,v 1.1 2000/04/25 15:28:11 hekl Exp $
 
-#ifndef BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
-#define BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
+#ifndef BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
+#define BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H
 
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
@@ -9,14 +9,6 @@
 
 #ifndef BALL_DATATYPE_LIST_H
 #	include <BALL/DATATYPE/list.h>
-#endif
-
-#ifndef BALL_KERNEL_ATOM_H
-#	include <BALL/KERNEL/atom.h>
-#endif
-
-#ifndef BALL_KERNEL_BOND_H
-#	include <BALL/KERNEL/bond.h>
 #endif
 
 #ifndef BALL_KERNEL_FOREACH_H
@@ -27,12 +19,8 @@
 #	include <BALL/VIEW/KERNEL/geometricObject.h>
 #endif
 
-#ifndef BALL_VIEW_PRIMITIV_LINE_H
-#	include <BALL/VIEW/PRIMITIV/line.h>
-#endif
-
-#ifndef BALL_VIEW_PRIMITIV_POINT_H
-#	include <BALL/VIEW/PRIMITIV/point.h>
+#ifndef BALL_VIEW_PRIMITIV_MESH_H
+#	include <BALL/VIEW/PRIMITIV/mesh.h>
 #endif
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
@@ -43,23 +31,18 @@
 #	include <BALL/MOLVIEW/FUNCTOR/baseModel.h>
 #endif
 
-#ifndef BALL_MOLVIEW_PRIMITIV_TWOCOLOREDLINE_H
-#	include <BALL/MOLVIEW/PRIMITIV/twoColoredLine.h>
-#endif
 
 namespace BALL
 {
-			
+	
 	namespace MOLVIEW
 	{
 
-		using VIEW::Point;
-		using VIEW::Line;
-
+		using VIEW::Mesh;
 
 		/**
 		*/
-		class AddLineModel
+		class AddSurfaceModel
 			: public BaseModelProcessor
 		{
 			public:
@@ -68,11 +51,12 @@ namespace BALL
 			*/
 			//@{
 
-			AddLineModel();
+			AddSurfaceModel();
 
-			AddLineModel(const AddLineModel& add_line_model, bool deep = true);
+			AddSurfaceModel
+				(const AddSurfaceModel& add_surface_model, bool deep = true);
 
-			virtual ~AddLineModel();
+			virtual ~AddSurfaceModel();
 
 			virtual void clear();
 
@@ -85,15 +69,21 @@ namespace BALL
 			//@{
 
 			void set
-				(const AddLineModel& add_line_model, bool deep = true);
+				(const AddSurfaceModel& add_surface_model, bool deep = true);
 
-			AddLineModel& operator =
-				(const AddLineModel& add_line_model);
+			AddSurfaceModel& operator =
+				(const AddSurfaceModel& add_surface_model);
 
 			void get
-				(AddLineModel& add_line_model, bool deep = true) const;
+				(AddSurfaceModel& add_surface_model, bool deep = true) const;
 
-			void swap(AddLineModel& add_line_model);
+			void swap(AddSurfaceModel& add_surface_model);
+			//@}
+
+			/**	@name	Accessors
+			*/
+			//@{
+
 			//@}
 
 			/**	@name	Processor-Related Methods
@@ -107,10 +97,16 @@ namespace BALL
 			virtual Processor::Result operator() (Composite& composite);
 			//@}
 
-			/**	@name Debugging and Diagnostics
+			/**	@name	Predicates
 			*/
 			//@{
 
+			//@}
+
+
+			/**	@name	Debugging and Diagnostics
+			*/
+			//@{
 			virtual void dump
 				(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
@@ -118,7 +114,6 @@ namespace BALL
 			/**	@name	Storers
 			*/
 			//@{
-			
 
 			virtual void read(std::istream& s);
 
@@ -129,21 +124,19 @@ namespace BALL
 			
 			private:
 
-			virtual Point* createPoint_();
+			virtual Mesh* createMesh_();
 
-			virtual Line* createLine_();
+			bool get_composite_;
 
-			virtual TwoColoredLine* createTwoColoredLine_();
-
-			List<Atom*> used_atoms_;
+			Composite* start_composite_;
 		};
 
 #			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/FUNCTOR/lineModel.iC>
+#				include <BALL/MOLVIEW/FUNCTOR/surfaceModel.iC>
 #			endif
 
 	} // namespace MOLVIEW
 
-} // namspace BALL
+} // namespace BALL
 
-#endif // BALL_MOLVIEW_FUNCTOR_LINEMODEL_H
+#endif // BALL_MOLVIEW_FUNCTOR_SURFACEMODEL_H

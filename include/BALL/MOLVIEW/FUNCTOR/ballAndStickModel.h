@@ -1,4 +1,4 @@
-// $Id: ballAndStickModel.h,v 1.4 2000/02/06 19:50:43 oliver Exp $
+// $Id: ballAndStickModel.h,v 1.5 2000/04/25 15:28:10 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BALLANDSTICKMODEL_H
@@ -128,7 +128,7 @@ namespace BALL
 			
 			virtual bool finish();
 			
-			virtual Processor::Result operator() (Atom& atom);
+			virtual Processor::Result operator() (Composite& composite);
 			//@}
 
 			/**	@name	Predicates
