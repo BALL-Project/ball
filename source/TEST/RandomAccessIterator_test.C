@@ -1,13 +1,14 @@
-// $Id: RandomAccessIterator_test.C,v 1.2 2001/06/24 10:33:10 amoll Exp $
+// $Id: RandomAccessIterator_test.C,v 1.3 2001/06/24 16:35:59 oliver Exp $
+
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
-# include <BALL/CONCEPT/randomAccessIterator.h>
+#include <BALL/CONCEPT/randomAccessIterator.h>
 #include <vector>
 ///////////////////////////
+
 using namespace BALL;
 using namespace std;
-using ::std::vector;
 
 typedef Index VectorIteratorPosition_;
 
@@ -175,7 +176,7 @@ class VectorIteratorTraits_
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
-		return (position_ >= (Index) bound_->size());
+		return (position_ >= (VectorIteratorPosition_)bound_->size());
 	}
 
 	DataType& getData()
@@ -185,8 +186,7 @@ class VectorIteratorTraits_
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
-		
-		if (position_ >= (Index) bound_->size())
+		if (position_ >= (VectorIteratorPosition_)bound_->size())
 		{
 			throw(Exception::IndexOverflow(__FILE__, __LINE__, position_, bound_->size() - 1));
 		}
@@ -252,7 +252,7 @@ class VectorIteratorTraits_
 		{
 			throw(Exception::InvalidIterator(__FILE__, __LINE__));
 		}
-		return (position_ == (Index) bound_->size() - 1);
+		return (position_ == (VectorIteratorPosition_)(bound_->size() - 1));
 	}
 	
 	void toREnd()
@@ -340,7 +340,7 @@ class MyIterator
 };
 
 
-START_TEST(class_name, "$Id: RandomAccessIterator_test.C,v 1.2 2001/06/24 10:33:10 amoll Exp $")
+START_TEST(class_name, "$Id: RandomAccessIterator_test.C,v 1.3 2001/06/24 16:35:59 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
