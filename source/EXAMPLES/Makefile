@@ -1,7 +1,7 @@
-// $Id: Makefile,v 1.8 2000/01/17 10:32:49 oliver Exp $
-//========================
-// BALL/EXAMPLES Makefile
-//========================
+# $Id: Makefile,v 1.9 2000/01/31 10:13:46 oliver Exp $
+#========================
+# BALL/EXAMPLES Makefile
+#========================
 
 EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran PDBChecker addHydrogens MOLVIEWClient
 
