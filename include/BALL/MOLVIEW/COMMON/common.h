@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.12 2001/05/13 14:55:21 hekl Exp $
+// $Id: common.h,v 1.12.4.1 2002/10/18 07:46:11 amoll Exp $
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #define BALL_MOLVIEW_COMMON_COMMON_H
@@ -127,10 +127,6 @@ namespace BALL
 				NUMBER_OF_PROPERTIES
 			};
 			//		};
-
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/COMMON/common.iC>
-#			endif
 
 	} // namespace MOLVIEW
 
