@@ -1,4 +1,4 @@
-// $Id: shiftModel.h,v 1.5 2001/03/02 22:19:33 amoll Exp $
+// $Id: shiftModel.h,v 1.6 2001/05/16 09:57:45 amoll Exp $
 
 #ifndef BALL_NMR_SHIFTMODEL_H
 #define BALL_NMR_SHIFTMODEL_H
@@ -191,7 +191,7 @@ namespace BALL
 
 		protected:
 
-		/**	Initialize the model from the parameter file.
+		/*_	Initialize the model from the parameter file.
 				This method assumes that object has a valid	parameter file assigned.
 				It sets {\tt valid_} to {\bf true} if it could create a shift model 
 				from the contents of the parameter file.
@@ -199,31 +199,31 @@ namespace BALL
 		bool init_()
 			throw(Exception::FileNotFound);
 
-		/**	Create a ShiftModule from a symbolic name.
+		/*_	Create a ShiftModule from a symbolic name.
 				This method create a shift module from the symbolic
 				name if this name is contained in the hash map \Ref{registered_modules_}.
 		*/
 		ShiftModule* createModule_(const String& type, const String& name) const
 			throw();
 
-		/**	Register the standard modules.
+		/*_	Register the standard modules.
 		*/
 		void registerStandardModules_()
 			throw();
 		
-		/**	The parameters object
+		/*_	The parameters object
 		*/
 		Parameters				parameters_;
 
-		/**	The list of shift modules of this model
+		/*_	The list of shift modules of this model
 		*/
 		ModuleList				modules_;
 
-		/**	A hash map containing all registered module types and their creation methods.
+		/*_	A hash map containing all registered module types and their creation methods.
 		*/
 		CreateMethodMap	registered_modules_;
 
-		/**	The validity flag.
+		/*_	The validity flag.
 				Set to {\bf true} if the object was initialized correctly.
 		*/
 		bool valid_;
