@@ -1,4 +1,4 @@
-// $Id: atomicContactEnergy.h,v 1.2 1999/10/28 14:06:12 oliver Exp $
+// $Id: atomicContactEnergy.h,v 1.3 2000/06/28 20:24:24 oliver Exp $
 
 #ifndef BALL_ENERGY_ATOMICCONTACTENERGY_H
 #define BALL_ENERGY_ATOMICCONTACTENERGY_H
@@ -7,12 +7,9 @@
 #	include <BALL/common.h>
 #endif
 
-#ifndef BALL_KERNEL_SYSTEM_H
-#	include <BALL/KERNEL/system.h>
-#endif
-
 namespace BALL 
 {
+	class BaseFragment;
 
 	/** Calculate the atomic contact energy.
 			Calculates the atomic contact energy (ACE) after
@@ -22,12 +19,13 @@ namespace BALL
 			unreasonable values.\\
 
 			{\bf Files:}\\
-			Types are taken from data/energy/ACE\_types.dat\\
-			values for contact energies are in data/energy/AtomicContactEnergy.dat
+			Types are taken from {\tt data/energy/ACE\_types.dat}\\
+			Values for contact energies are in {\tt data/energy/AtomicContactEnergy.dat}
+			\\
 			{\bf Definition:} \URL{BALL/ENERGY/atomicContactEnergy.h}
 			\\
 	*/ 
-	double calculateACE(System& system);
+	double calculateACE(BaseFragment& fragment);
 
 		
 } // namespace BALL

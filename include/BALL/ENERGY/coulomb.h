@@ -1,4 +1,4 @@
-// $Id: coulomb.h,v 1.2 2000/01/10 15:50:59 oliver Exp $
+// $Id: coulomb.h,v 1.3 2000/06/28 20:24:24 oliver Exp $
 
 #ifndef BALL_ENERGY_COULOMB_H
 #define BALL_ENERGY_COULOMB_H
@@ -20,7 +20,7 @@ namespace BALL
 			@see	Atom::setCharge
 			@see	AssignChargeProcessor
 	*/
-	double calculateCoulomb(const System& system);
+	double calculateCoulomb(const BaseFragment& fragment);
 
 } // namespace BALL
 

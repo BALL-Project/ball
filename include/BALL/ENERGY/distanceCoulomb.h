@@ -1,4 +1,4 @@
-// $Id: distanceCoulomb.h,v 1.3 2000/02/16 19:13:32 oliver Exp $
+// $Id: distanceCoulomb.h,v 1.4 2000/06/28 20:24:24 oliver Exp $
 
 #ifndef BALL_ENERGY_DISTANCE_COULOMB_H
 #define BALL_ENERGY_DISTANCE_COULOMB_H
@@ -23,7 +23,7 @@ namespace BALL
 			@see	Atom::setCharge
 			@see	AssignChargeProcessor
 	*/
-	double calculateDistanceCoulomb(const System &system);
+	double calculateDistanceCoulomb(const BaseFragment& fragment);
 
 } // namespace BALL
 
