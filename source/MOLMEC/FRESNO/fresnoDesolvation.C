@@ -1,4 +1,4 @@
-// $Id: fresnoDesolvation.C,v 1.1.2.19 2003/05/07 16:10:40 anker Exp $
+// $Id: fresnoDesolvation.C,v 1.1.2.20 2004/04/28 15:38:38 anker Exp $
 // Molecular Mechanics: Fresno force field, desolvation component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -14,6 +14,10 @@
 
 #include <BALL/DATATYPE/hashMap.h>
 #include <BALL/KERNEL/atomIterator.h>
+
+#include <BALL/ENERGY/distanceCoulomb.h>
+
+#include <BALL/FORMAT/PDBFile.h>
 
 using namespace std;
 
@@ -107,6 +111,15 @@ namespace BALL
 			= options.setDefaultInteger(FresnoFF::Option::DESOLV_METHOD,
 					FresnoFF::Default::DESOLV_METHOD);
 
+		/*
+
+		disabled for now because focusing does not work this way...
+
+		bool focus_grid_around_ligand 
+			= options.setDefaultBool(FresnoFF::Option::DESOLV_FOCUS_GRID_AROUND_LIGAND,
+					FresnoFF::Default::DESOLV_FOCUS_GRID_AROUND_LIGAND);
+		*/
+
 		if (calculation_method_ == CALCULATION__NONE)
 		{
 			Log.info() << "FresnoDesolvation::setup(): calculation switched off"
@@ -165,11 +178,19 @@ namespace BALL
 						break;
 					}
 
-				case CALCULATION__KEKSE:
+				case CALCULATION__FULL_CYCLE_FOCUSED:
 					if (verbosity_ > 0)
 					{
 						Log.info() << "Model " << calculation_method_ 
 							<< ": full thermodynamic cycle with focused grid." << endl << endl;
+						break;
+					}
+
+				case CALCULATION__COULOMB:
+					if (verbosity_ > 0)
+					{
+						Log.info() << "Model " << calculation_method_ 
+							<< ": simple Coulomb." << endl << endl;
 						break;
 					}
 
@@ -231,7 +252,25 @@ namespace BALL
 
 				// we have to be sure that all systems will be calculated in the
 				// same bounding box.
+
+				// If we want to focus the grid around the ligand instead of the
+				// whole system, calculate the appropriate bounding box
+				/*
+
+				Does not work, FDPB::setupAtomArray() does not allow atoms to be
+				outside of the (focusing)grid.
+				
+				if (focus_grid_around_ligand == true)
+				{
+					desolv_ligand_.apply(bb_proc);
+				}
+				else
+				{
+					system.apply(bb_proc);
+				}
+				*/
 				system.apply(bb_proc);
+
 				fdpb_.options.setVector(FDPB::Option::BOUNDING_BOX_LOWER,
 						bb_proc.getLower());
 				fdpb_.options.setVector(FDPB::Option::BOUNDING_BOX_UPPER,
@@ -345,161 +384,166 @@ namespace BALL
 			}
 			else
 			{
-				if (calculation_method_ == CALCULATION__EEF1)
+				if (calculation_method_ == CALCULATION__FULL_CYCLE_FOCUSED)
 				{
-					Log.info() << "Calculating CHARMM EEF1 solvation energy." << endl;
-				}
-				else
-				{
-					if (calculation_method_ == CALCULATION__KEKSE)
+					Molecule cut_ligand(*((Molecule*)(desolv_ligand_.create(true))));
+					Molecule cut_protein;
+					System cut_system;
+
+					cut_ligand.apply(bb_proc);
+
+					Vector3 lower = bb_proc.getLower() - Vector3(8.0, 8.0, 8.0);
+					Vector3 upper = bb_proc.getUpper() + Vector3(8.0, 8.0, 8.0);
+
+					fdpb_.options.setVector(FDPB::Option::BOUNDING_BOX_LOWER,
+							lower);
+					fdpb_.options.setVector(FDPB::Option::BOUNDING_BOX_UPPER,
+							upper);
+
+					AtomIterator it = desolv_ligand_.beginAtom();
+					Vector3 position;
+
+					it = desolv_protein_.beginAtom();
+
+					for (; +it; ++it)
 					{
-						Molecule cut_ligand;
-						Molecule cut_protein;
-						System cut_system;
-
-						desolv_ligand_.apply(bb_proc);
-
-						Vector3 lower = bb_proc.getLower() - Vector3(8.0, 8.0, 8.0);
-						Vector3 upper = bb_proc.getUpper() + Vector3(8.0, 8.0, 8.0);
-
-						fdpb_.options.setVector(FDPB::Option::BOUNDING_BOX_LOWER,
-								lower);
-						fdpb_.options.setVector(FDPB::Option::BOUNDING_BOX_UPPER,
-								upper);
-
-						AtomIterator it = desolv_ligand_.beginAtom();
-						Vector3 position;
-
-						for (; +it; ++it)
+						position = it->getPosition();
+						if ((position.x > lower.x)
+								&& (position.y > lower.y)
+								&& (position.z > lower.z)
+								&& (position.x < upper.x)
+								&& (position.y < upper.y)
+								&& (position.z < upper.z))
 						{
-							position = it->getPosition();
-							if ((position.x > lower.x)
-									&& (position.y > lower.y)
-									&& (position.z > lower.z)
-									&& (position.x < upper.x)
-									&& (position.y < upper.y)
-									&& (position.z < upper.z))
+							Atom* c = new Atom(*it, true);
+							if (verbosity_ > 8)
 							{
-								Atom* c = new Atom(*it, true);
-								if (verbosity_ > 8)
-								{
-									Log.info() << "cut_ligand: adding: " << position << " " 
-										<< c->getCharge() << " " << c->getElement().getSymbol()
-										<< " " << c->getFullName() << endl;
-								}
-								cut_ligand.insert(*c);
+								Log.info() << "cut_protein: adding: " << position << " " 
+									<< c->getCharge() << " " << c->getElement().getSymbol()
+									<< " " << c->getFullName() << endl;
 							}
+							cut_protein.insert(*c);
 						}
+					}
 
-						it = desolv_protein_.beginAtom();
+					cut_system.insert(cut_protein);
+					// DEBUG
+					PDBFile intermediate("DS4cutprot.pdb", ios::out);
+					intermediate << cut_system;
+					intermediate.close();
+					// /DEBUG
+					cut_system.insert(cut_ligand);
 
-						for (; +it; ++it)
+					if (verbosity_ > 8)
+					{
+						Log.info() << "cut: added " << cut_system.countAtoms() 
+							<< " atoms" << endl;
+					}
+
+					if (averaging_ == AVERAGING__NONE)
+					{
+
+						result = computeFullCycle_(cut_system, cut_protein, cut_ligand,
+								tmp_energy);
+						if (result == false) return false;
+
+						// DEBUG
+						Log.info() << "DEBUG: " << tmp_energy << endl;
+						result = computeFullCycle_(cut_system, cut_protein, cut_ligand, 
+								tmp_energy);
+						if (result == false) return false;
+						Log.info() << "DEBUG: " << tmp_energy << endl;
+						result = computeFullCycle_(cut_system, cut_protein, cut_ligand, 
+								tmp_energy);
+						if (result == false) return false;
+						Log.info() << "DEBUG: " << tmp_energy << endl;
+						// /DEBUG
+
+						energy_ = tmp_energy;
+
+
+					}
+					else
+					{
+						if (averaging_ == AVERAGING__STATIC)
 						{
-							position = it->getPosition();
-							if ((position.x > lower.x)
-									&& (position.y > lower.y)
-									&& (position.z > lower.z)
-									&& (position.x < upper.x)
-									&& (position.y < upper.y)
-									&& (position.z < upper.z))
+
+							float offset = 0.7;
+							Vector3 offset_vector;
+
+							energy_ = 0.0;
+
+							result = computeFullCycle_(cut_system, cut_protein,
+									cut_ligand, tmp_energy);
+							if (result == false) return false;
+							energy_ += tmp_energy;
+
+							// energy minimium
+							float minimal_energy = 1e9;
+							// Maximal energy
+							float maximal_energy = -1e9;
+
+							for (Size i = 1; i <= 8; i++)
 							{
-								Atom* c = new Atom(*it, true);
-								if (verbosity_ > 8)
-								{
-									Log.info() << "cut_protein: adding: " << position << " " 
-										<< c->getCharge() << " " << c->getElement().getSymbol()
-										<< " " << c->getFullName() << endl;
-								}
-								cut_protein.insert(*c);
+								offset_vector = permuteComponentSigns_(Vector3(offset), i);
+								fdpb_.options.setVector(FDPB::Option::OFFSET, offset_vector);
+								result = computeFullCycle_(cut_system, cut_protein,
+										cut_ligand, tmp_energy);
+								if (result == false) return false;
+								if (tmp_energy < minimal_energy) minimal_energy = tmp_energy;
+								if (tmp_energy > maximal_energy) maximal_energy = tmp_energy;
+								energy_ += tmp_energy;
 							}
-						}
 
-						cut_system.insert(*((Molecule*)(cut_ligand.create(true))));
-						cut_system.insert(*((Molecule*)(cut_protein.create(true))));
+							energy_ /= 9.0;
 
-						if (verbosity_ > 8)
-						{
-							Log.info() << "cut: added " << cut_system.countAtoms() 
-								<< " atoms" << endl;
-						}
-
-						if (averaging_ == AVERAGING__NONE)
-						{
-
-							result = computeFullCycle_(cut_system, cut_protein, cut_ligand,
-									tmp_energy);
-							if (result == false) return false;
-
-							// DEBUG
-							Log.info() << "DEBUG: " << tmp_energy << endl;
-							result = computeFullCycle_(cut_system, cut_protein, cut_ligand, 
-									tmp_energy);
-							if (result == false) return false;
-							Log.info() << "DEBUG: " << tmp_energy << endl;
-							result = computeFullCycle_(cut_system, cut_protein, cut_ligand, 
-									tmp_energy);
-							if (result == false) return false;
-							Log.info() << "DEBUG: " << tmp_energy << endl;
-							// /DEBUG
-
-							energy_ = tmp_energy;
-
+							if (verbosity_ > 8)
+							{
+								Log.info() << "Minimal energy: " << minimal_energy << endl;
+								Log.info() << "Maximal energy: " << maximal_energy << endl;
+							}
 
 						}
 						else
 						{
-							if (averaging_ == AVERAGING__STATIC)
-							{
-
-								float offset = 0.7;
-								Vector3 offset_vector;
-
-								energy_ = 0.0;
-
-								result = computeFullCycle_(cut_system, cut_protein,
-										cut_ligand, tmp_energy);
-								if (result == false) return false;
-								energy_ += tmp_energy;
-
-								// energy minimium
-								float minimal_energy = 1e9;
-								// Maximal energy
-								float maximal_energy = -1e9;
-
-								for (Size i = 1; i <= 8; i++)
-								{
-									offset_vector = permuteComponentSigns_(Vector3(offset), i);
-									fdpb_.options.setVector(FDPB::Option::OFFSET, offset_vector);
-									result = computeFullCycle_(cut_system, cut_protein,
-											cut_ligand, tmp_energy);
-									if (result == false) return false;
-									if (tmp_energy < minimal_energy) minimal_energy = tmp_energy;
-									if (tmp_energy > maximal_energy) maximal_energy = tmp_energy;
-									energy_ += tmp_energy;
-								}
-
-								energy_ /= 9.0;
-
-								if (verbosity_ > 8)
-								{
-									Log.info() << "Minimal energy: " << minimal_energy << endl;
-									Log.info() << "Maximal energy: " << maximal_energy << endl;
-								}
-
-							}
-							else
-							{
-								Log.error() << "Random averaging not yet implemented, aborting" 
-									<< endl;
-								return false;
-							}
+							Log.error() << "Random averaging not yet implemented, aborting" 
+								<< endl;
+							return false;
 						}
+					}
+				}
+				else
+				{
+					if (calculation_method_ == CALCULATION__COULOMB)
+					{
+						Log.info() << "Calculating Coulomb." << endl;
+						system.clear();
+						system.insert(*(new Molecule(desolv_ligand_, true)));
+						float ligand_coulomb = calculateDistanceCoulomb(system);
+						
+						system.clear();
+						system.insert(*((Molecule*)(desolv_protein_.create(true))));
+						float receptor_coulomb = calculateDistanceCoulomb(system);
+
+						system.clear();
+						system.insert(*(new Molecule(desolv_ligand_, true)));
+						system.insert(*((Molecule*)(desolv_protein_.create(true))));
+						float system_coulomb = calculateDistanceCoulomb(system);
+
+						energy_ = system_coulomb - (receptor_coulomb + ligand_coulomb);
 					}
 					else
 					{
-						Log.error() << "FresnoDesolvation::setup(): "
-							<< "unknown calculation method." << endl;
-						return false;
+						if (calculation_method_ == CALCULATION__EEF1)
+						{
+							Log.info() << "Calculating CHARMM EEF1 solvation energy." << endl;
+						}
+						else
+						{
+							Log.error() << "FresnoDesolvation::setup(): "
+								<< "unknown calculation method." << endl;
+							return false;
+						}
 					}
 				}
 			}
