@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: selector.h,v 1.27 2003/12/20 16:00:53 amoll Exp $
+// $Id: selector.h,v 1.28 2004/02/23 20:39:00 anker Exp $
 //
 
 #ifndef BALL_KERNEL_SELECTOR_H
@@ -111,7 +111,8 @@ namespace BALL
 		Size getNumberOfSelectedAtoms() const
 			throw();
 
-		/// 
+		/** Return a list containing pointers to all selected Atoms
+		*/
 		List<Atom*>& getSelectedAtoms() 
 			throw();
 		
