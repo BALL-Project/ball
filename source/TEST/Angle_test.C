@@ -1,4 +1,4 @@
-// $Id: Angle_test.C,v 1.9 2000/03/08 23:36:22 amoll Exp $
+// $Id: Angle_test.C,v 1.10 2000/03/17 14:23:58 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Angle_test.C,v 1.9 2000/03/08 23:36:22 amoll Exp $")
+START_TEST(class_name, "$Id: Angle_test.C,v 1.10 2000/03/17 14:23:58 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -91,7 +91,7 @@ RESULT
 
 
 //line 54: method TAngle::BALL_CREATE(TAngle<T>)
-CHECK(TVector3::BALL_CREATE(TVector3<T>))
+CHECK(TAngle::BALL_CREATE(TAngle<T>))
 	Angle a(0.5);
 	Angle* v_ptr = (Angle*)a.create(false, true);
 	TEST_REAL_EQUAL(v_ptr->value, 0)
@@ -189,13 +189,6 @@ RESULT
 //line 169: method TAngle::toDegree(const T& radian)
 CHECK(TAngle::toDegree(const T& radian))
 	TEST_REAL_EQUAL((180.0 / Constants::PI * 3.1),b.toDegree(3.1))
-RESULT
-
-
-//line 176: method TAngle::getTorsionAngle(const T& ax, const T& ay, const T& az, const T& bx, const T& by, const T& bz, const T& cx, const T& cy, const T& cz, const T& dx, const T& dy, const T& dz)
-CHECK(TAngle::getTorsionAngle(const T& ax, const T& ay, const T& az, const T& bx, const T& by, const T& bz, const T& cx, const T& cy, const T& cz, const T& dx, const T& dy, const T& dz))
-	TEST_REAL_EQUAL(b.getTorsionAngle(0, 1 ,2,  100, 201, 302,  50, 101, 202,  200, 401, 602), -(float)Constants::PI)
-	TEST_REAL_EQUAL(b.getTorsionAngle(0, 1 ,2,  100, 201, 302,  -100, -99, -98,  100, 101, 102), -(float)Constants::PI)
 RESULT
 
 
@@ -429,7 +422,7 @@ RESULT
 
 
 //line 266: method TAngle::dump(std::ostream& s = std::cout, Size depth = 0) const 
-CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
+CHECK(TAngle::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Angle a(0.5);
   String filename;
 	NEW_TMP_FILE(filename)
@@ -438,28 +431,6 @@ CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Angle_test.txt", true)
 RESULT
-
-/*
-//line 
-CHECK(std::istream& operator >> (std::istream& s, TAngle<T>& angle))
-	std::ifstream instr("data/Angle_test2.txt");
-	Angle a(0.4);
-	instr >> a;
-	instr.close();
-	TEST_REAL_EQUAL(a.value, 0.5)
-RESULT
-
-
-//line 
-NEW_TMP_FILE(filename)
-CHECK(std::ostream& operator << (std::ostream& s, const TAngle<T>& angle))
-	Angle a(0.5);
-	std::ofstream outstr(filename.c_str(), std::ios::out);
-	outstr << a;
-	outstr.close();
-	TEST_FILE(filename.c_str(), "data/Angle_test2.txt", false)
-RESULT
-*/
 
 //line 
 CHECK(std::istream& operator >> (std::istream& s, TAngle<T>& angle))
@@ -473,8 +444,7 @@ RESULT
 
 //line 
 NEW_TMP_FILE(filename)
-CHECK(std::ostream& operator << (std::ostream& s, const TAngle<T>&
-vector))
+CHECK(std::ostream& operator << (std::ostream& s, const TAngle<T>& angle))
 	Angle a(1.0);
 	std::ofstream outstr(filename.c_str(), std::ios::out);
 	outstr << a;
