@@ -1,4 +1,4 @@
-// $Id: baseModel.iC,v 1.5 2000/06/18 16:37:49 hekl Exp $
+// $Id: baseModel.iC,v 1.6 2000/06/25 19:13:52 hekl Exp $
 
 BALL_INLINE
 void BaseModelProcessor::enableStaticModel()
@@ -34,13 +34,32 @@ void BaseModelProcessor::registerColorCalculator
 BALL_INLINE
 void BaseModelProcessor::unregisterColorCalculator()
 {
-  color_calculator_ = const_cast<ColorCalculator*>((const ColorCalculator*)&RTTI::getDefault<ColorCalculator>());
+  color_calculator_ = const_cast<ColorCalculator*>((ColorCalculator*)&RTTI::getDefault<ColorCalculator>());
 }
   
 BALL_INLINE
 ColorCalculator* BaseModelProcessor::getColorCalculator() const
 {
   return color_calculator_;
+}
+
+BALL_INLINE
+void BaseModelProcessor::registerModelConnector
+  (const BaseModelConnector& model_connector)
+{
+  model_connector_  = const_cast<BaseModelConnector*>(&model_connector);
+}
+  
+BALL_INLINE
+void BaseModelProcessor::unregisterModelConnector()
+{
+	model_connector_ = const_cast<BaseModelConnector*>((BaseModelConnector*)&RTTI::getDefault<BaseModelConnector>());
+}
+
+BALL_INLINE
+BaseModelConnector* BaseModelProcessor::getModelConnector()
+{
+  return model_connector_;
 }
 
 BALL_INLINE

@@ -1,4 +1,4 @@
-// $Id: baseModel.h,v 1.6 2000/06/18 16:37:49 hekl Exp $
+// $Id: baseModel.h,v 1.7 2000/06/25 19:13:52 hekl Exp $
 
 #ifndef BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
 #define BALL_MOLVIEW_FUNCTOR_BASEMODEL_H
@@ -13,6 +13,10 @@
 
 #ifndef BALL_MOLVIEW_COMMON_COMMON_H
 #	include <BALL/MOLVIEW/COMMON/common.h>
+#endif
+
+#ifndef BALL_MOLVIEW_FUNCTOR_BASEMODELCONNECTOR_H
+#	include <BALL/MOLVIEW/FUNCTOR/baseModelConnector.h>
 #endif
 
 #ifndef BALL_MOLVIEW_FUNCTOR_COLORCALCULATOR_H
@@ -99,6 +103,13 @@ namespace BALL
 			void unregisterColorCalculator();
 
 			ColorCalculator* getColorCalculator() const;
+
+			void registerModelConnector
+				(const BaseModelConnector& model_connector);
+
+			void unregisterModelConnector();
+
+			BaseModelConnector* getModelConnector();
 			//@}
 
 				
@@ -170,6 +181,9 @@ namespace BALL
 
 			/* pointer to userdefinable table of colors */
 			ColorCalculator* color_calculator_;
+
+			/* pointer to a visitor used for connecting the different models */
+			BaseModelConnector* model_connector_;
 		};
 
 #			ifndef BALL_NO_INLINE_FUNCTIONS
