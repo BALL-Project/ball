@@ -1,4 +1,4 @@
-// $Id: analyticalGeometry.h,v 1.11 2000/03/22 21:12:15 oliver Exp $
+// $Id: analyticalGeometry.h,v 1.12 2000/03/22 21:49:44 amoll Exp $
 
 #ifndef BALL_MATHS_ANALYTICALGEOMETRY_H
 #define BALL_MATHS_ANALYTICALGEOMETRY_H
@@ -160,7 +160,6 @@ namespace BALL
 						- m01 * m10 * m22); 
 	}
 
-// ???
 	template <class T>
 	bool SolveSystem(const T* m, T* x, const Size dim)
 	{
@@ -241,7 +240,6 @@ namespace BALL
 
 	#undef BALL_CELL
 
-	//???
 	template <class T>
 	BALL_INLINE 
 	bool SolveSystem2
@@ -484,6 +482,10 @@ namespace BALL
 	bool GetAngle(const TVector3<T>& a, const TVector3<T>& b,
 					  		TAngle<T> &intersection_angle)
 	{
+		T length_product = a.getSquareLength() *  b.getSquareLength();
+		if(Maths::isZero(length_product))
+			return false;
+
 		intersection_angle = a.getAngle(b);
 
 		return true;
@@ -634,7 +636,7 @@ namespace BALL
 				 								 c1, c2) == true
 						&& Maths::isEqual(a.p.x + a.d.x * c1, b.p.x + b.d.x * c2)))
 		{
-			Point3.set(a.p.x + a.d.x * c1, a.p.y + a.d.y * c1, a.p.z + a.d.z * c1);
+			point.set(a.p.x + a.d.x * c1, a.p.y + a.d.y * c1, a.p.z + a.d.z * c1);
 			
 			return true;
 		} else {
@@ -898,7 +900,7 @@ namespace BALL
 	*/
 	template <class T>
 	BALL_INLINE 
-	bool  isCollinear(const TVector3<T>& a, const TVector3<T>& b)
+	bool isCollinear(const TVector3<T>& a, const TVector3<T>& b)
 	{
 		return (a % b).isZero();
 	}
@@ -927,7 +929,7 @@ namespace BALL
 	BALL_INLINE 
 	bool isComplanar(const TVector3<T>& a, const TVector3<T>& b, const TVector3<T>& c, const TVector3<T>& d)
 	{
-		return Maths::isComplanar(a - b, a - c, a - d);
+		return isComplanar(a - b, a - c, a - d);
 	}
 
 	/**	Test if two vector3 are orthogonal
