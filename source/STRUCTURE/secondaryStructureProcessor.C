@@ -1,20 +1,22 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureProcessor.C,v 1.2 2003/10/08 12:29:20 anhi Exp $
+// $Id: secondaryStructureProcessor.C,v 1.3 2003/11/03 20:10:07 amoll Exp $
 
 #include <BALL/STRUCTURE/secondaryStructureProcessor.h>
 #include <BALL/STRUCTURE/HBondProcessor.h>
+
+#include <BALL/KERNEL/secondaryStructure.h>           
+#include <BALL/KERNEL/protein.h>
+#include <BALL/KERNEL/chain.h>
+#include <BALL/KERNEL/bond.h>
+#include <math.h>
 
 using namespace std;
 
 namespace BALL
 {
 	SecondaryStructureProcessor::SecondaryStructureProcessor()
-	{
-	}
-
-	SecondaryStructureProcessor::~SecondaryStructureProcessor()
 	{
 	}
 
@@ -42,9 +44,11 @@ namespace BALL
 
 		for(Size i=0; i<size; i++)
 		{
+			/*
 			for (Size j=0; j<HBonds_[i].size(); j++)
 				cout << "Schleife nr " << i << " HBP " << HBonds_[i][j] << " ";
 			cout << std::endl;
+			*/
 
 			if(HBonds_[i].size() != 0 )
 			{
@@ -174,7 +178,6 @@ namespace BALL
 
 		for(Size i=0; i<size; i++)
 		{		
-
 			found_a_pattern = false;
 
 			if(HBonds_[i].size() != 0 )
@@ -229,7 +232,7 @@ namespace BALL
 					{
 						if(HBonds_[k][s]== (int)i) 
 						{
-							if(  ((bridge1[i]==bridge1[k])&&(bridge1[i]!='-')) 
+							if(   ((bridge1[i]==bridge1[k])&&(bridge1[i]!='-')) 
 									||((bridge1[i]==bridge2[k])&&(bridge1[i]!='-')) 
 									||((bridge2[i]==bridge1[k])&&(bridge2[i]!='-'))
 									||((bridge2[i]==bridge2[k])&&(bridge2[i]!='-'))
@@ -284,7 +287,7 @@ namespace BALL
 							{
 
 								// make sure that we didn't already see this bridge
-								if (   ((bridge1[i+1]==bridge1[k-1]) && (bridge1[i+1]!='-'))
+								if (  ((bridge1[i+1]==bridge1[k-1]) && (bridge1[i+1]!='-'))
 										||((bridge1[i+1]==bridge2[k-1]) && (bridge1[i+1]!='-'))
 										||((bridge2[i+1]==bridge1[k-1]) && (bridge2[i+1]!='-'))
 										||((bridge2[i+1]==bridge2[k-1]) && (bridge2[i+1]!='-')) )
@@ -324,8 +327,7 @@ namespace BALL
 						}
 					}	// if (k==...)
 
-					if (!found_a_pattern)
-						lastpattern = DEFAULT;
+					if (!found_a_pattern) lastpattern = DEFAULT;
 				}//	for(int k=0; k<HBonds_[i].size(); k++)
 
 			}//	if(HBonds_[i].size() != 0 )
@@ -408,46 +410,19 @@ namespace BALL
 	*/
 	}
 
-	bool SecondaryStructureProcessor::finish()
-	{
-		return true;
-	}
-
 	Processor::Result SecondaryStructureProcessor::operator() (Composite &composite)
 	{
-		ResidueIterator ri;
-		AtomContainer *S;
-		HBondProcessor hbp;
-
-		/*
-		 * // do we have a system?
-		 if (RTTI::isKindOf<System>(composite))
-		 {
-		 System *s = RTTI::castTo<System>(composite);
-		 s->apply(hbp);
-		 HBonds_ = hbp.getHBondPairs();
-
-		 ri = s->beginResidue();
-		 }
-		 */
-		if (RTTI::isKindOf<Protein>(composite))
+		if (!RTTI::isKindOf<Chain>(composite))
 		{
-			Protein *s = RTTI::castTo<Protein>(composite);
-			s->apply(hbp);
-			HBonds_ = hbp.getHBondPairs();
-
-			ri = s->beginResidue();
-			S = (AtomContainer*)s;
+			return Processor::CONTINUE;
 		}
-		if (RTTI::isKindOf<Chain>(composite))
-		{
-			Chain *s = RTTI::castTo<Chain>(composite);
-			s->apply(hbp);
-			HBonds_ = hbp.getHBondPairs();
 
-			ri = s->beginResidue();
-			S = (AtomContainer*)s;
-		} 
+		Chain* p = RTTI::castTo<Chain>(composite);
+		HBondProcessor hbp;
+		p->apply(hbp);
+		HBonds_ = hbp.getHBondPairs();
+		ResidueIterator ri = p->beginResidue();
+		 
 		if (!(+ri))
 		{
 			return Processor::CONTINUE;
@@ -455,68 +430,74 @@ namespace BALL
 		compute();
 
 		// Splice into the Protein
-		SecondaryStructure *ss=0;
+		SecondaryStructure* ss = 0;
 		char last_struct = 'X';
-		int resnum=0;
+		Position resnum=0;
 
+		vector<SecondaryStructure*> new_ss;
+		vector<SecondaryStructure*> new_parent;
+		vector<Residue*> 						residues;
 		for (;+ri;++ri)
 		{
-			Residue *res = &(*ri);
+			if (summary[resnum] != last_struct)
+			{
+				if (last_struct != 'L' || (summary[resnum] != 'G' && summary[resnum] != '-'))
+				{
+					ss = new SecondaryStructure;
+					new_ss.push_back(ss);
+				}
+			}
 
 			// first determine the type of this residue
-			if (summary[resnum] == 'H')
+			if (summary[resnum] == 'H') 			// Alpha - HELIX
 			{
-				// Alpha - HELIX
 				// TODO: what about other helices???
-				if (last_struct != 'H')
-				{
-					if (ss != 0)
-						S->insert(*ss);
-
-					ss = new SecondaryStructure;
-					ss->setProperty(SecondaryStructure::PROPERTY__HELIX);
-				}
-				ss->insert(*res);
-				S->remove(*res);
+				ss->setProperty(SecondaryStructure::PROPERTY__HELIX);
 				last_struct = 'H';
 			}
-			else if (summary[resnum] == 'E')
+			else if (summary[resnum] == 'E') 	// Beta - STRAND
 			{
-				// Beta - STRAND
-				if (last_struct != 'E')
-				{
-					if (ss != 0)
-						S->insert(*ss);
-
-					ss = new SecondaryStructure;
-					ss->setProperty(SecondaryStructure::PROPERTY__STRAND);
-				}
-				ss->insert(*res);
-				S->remove(*res);
+				ss->setProperty(SecondaryStructure::PROPERTY__STRAND);
 				last_struct = 'E';
 			}
-			else
+			else 															// LOOP
 			{
-				// LOOP
-				// Beta - STRAND
-				if ( (last_struct == 'E') || (last_struct == 'H'))
-				{
-					if (ss != 0)
-						S->insert(*ss);
-
-					ss = new SecondaryStructure;
-					ss->setProperty(SecondaryStructure::PROPERTY__TURN);
-				}
-				ss->insert(*res);
-				S->remove(*res);
-				last_struct = 'X';
+				ss->setProperty(SecondaryStructure::PROPERTY__TURN);
+				last_struct = 'L';
 			}
-		}
-		resnum++;
 
-		if (ss!=0)
-			S->insert(*ss);
+			new_parent.push_back(ss);
+			residues.push_back(&*ri);
+			
+			resnum++;
+		}
 		
-		return Processor::BREAK;
+		// ------ insert Residues to new SS ---------------
+		for (Position i = 0; i < residues.size(); i++)
+		{
+			new_parent[i]->insert(*residues[i]);
+		}
+	
+		// ------ remove old SecondaryStructures ----------
+		vector<SecondaryStructure*> to_remove;
+		SecondaryStructureIterator ssit = p->beginSecondaryStructure();
+		for (;+ssit; ++ssit)
+		{
+			to_remove.push_back(&*ssit);
+		}
+
+		for (Position i = 0; i < to_remove.size(); i++)
+		{
+			p->remove(*to_remove[i]);
+		}
+
+		// ------ insert new SecondaryStructures ----------
+		for (Position i = 0; i < new_ss.size(); i++)
+		{
+			p->insert(*new_ss[i]);
+		}
+	
+		return Processor::CONTINUE;
 	}
+
 } //Namespace BALL
