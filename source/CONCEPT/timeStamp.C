@@ -1,7 +1,6 @@
-// $Id: timeStamp.C,v 1.9 2000/12/09 21:28:28 amoll Exp $
+// $Id: timeStamp.C,v 1.10 2000/12/10 21:19:51 amoll Exp $
 
 #include <BALL/CONCEPT/timeStamp.h>
-#include <BALL/CONCEPT/persistenceManager.h>
 
 #include <sys/time.h>
 
