@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.19 2003/12/18 11:58:57 amoll Exp $
+// $Id: representation.C,v 1.20 2003/12/18 12:22:46 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -251,6 +251,9 @@ namespace BALL
 			thread_->setRepresentation(*this);
 			thread_->setRebuild(rebuild);
 			thread_->start();
+
+			bool mc_was_muteable = mc->compositesAreMuteable();
+			mc->setCompositesMuteable(false);
 			
 			Position pos = 3;
 			String dots;
@@ -261,7 +264,7 @@ namespace BALL
 				if (pos < 40) 
 				{
 					pos ++;
-					dots +=".";
+					dots +="..";
 				}
 				else 
 				{
@@ -270,10 +273,10 @@ namespace BALL
 				}
 				
 				mc->setStatusbarText("Creating Model " + dots);
-				sleep(1);
+				thread_->wait(500); 
 			}
-			
-			thread_->wait(); 
+
+			mc->setCompositesMuteable(mc_was_muteable);
 			
 			RepresentationMessage* message = new RepresentationMessage;
 			if (mc->getPrimitiveManager().has(*this))

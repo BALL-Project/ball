@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.53 2003/12/18 02:44:01 amoll Exp $
+// $Id: displayProperties.C,v 1.54 2003/12/18 12:22:39 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -577,7 +577,9 @@ void DisplayProperties::createRepresentation_(const List<Composite*>& composites
 	
 	if (rep_ == 0) 
 	{	
-		pm.insert(*rep);
+#ifndef BALL_QT_HAS_THREADS
+ 		pm.insert(*rep);
+#endif
 		
 		List<Composite*>::ConstIterator it = composites.begin();
 		for (; it != composites.end(); it++)
@@ -610,6 +612,7 @@ void DisplayProperties::createRepresentation_(const List<Composite*>& composites
 	// no refocus, if a representation already exists
 	bool focus = (getMainControl()->getPrimitiveManager().getRepresentations().size() == 1 && rep_ == 0);
 
+#ifndef BALL_QT_HAS_THREADS	
 	RepresentationMessage* message = new RepresentationMessage;
 	if (rep_ == 0)
 	{
@@ -621,6 +624,7 @@ void DisplayProperties::createRepresentation_(const List<Composite*>& composites
 	}
 	message->setRepresentation(*rep);
 	notify_(message);
+#endif
 
 	if (focus && composites.size() > 0)
 	{
