@@ -1,4 +1,4 @@
-// $Id: common.h,v 1.2 1999/09/17 06:42:54 oliver Exp $
+// $Id: common.h,v 1.3 2000/02/16 17:07:15 oliver Exp $
 
 #ifndef BALL_MATHS_COMPARISON_H
 #define BALL_MATHS_COMPARISON_H
@@ -74,7 +74,7 @@ namespace BALL
 		inline 
 		T round(const T& t)               
 		{ 
-			return (t > 0 ? long(t + 0.5) : long(t - 0.5)); 
+			return (T)(t > 0 ? long(t + 0.5) : long(t - 0.5)); 
 		}
 
 		///
@@ -192,7 +192,7 @@ namespace BALL
 		///
 		template <class T1, class T2>
 		inline 
-		bool compare(const T1& a, const T2& b)
+		Index compare(const T1& a, const T2& b)
 		{
 			return (Maths::isLess(a, b) ? -1 : Maths::isEqual(a, b) ? 0 : 1);
 		}
