@@ -1,4 +1,4 @@
-// $Id: Angle_test.C,v 1.1 2000/02/26 15:58:06 amoll Exp $
+// $Id: Angle_test.C,v 1.2 2000/02/27 20:36:19 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Angle_test.C,v 1.1 2000/02/26 15:58:06 amoll Exp $")
+START_TEST(class_name, "$Id: Angle_test.C,v 1.2 2000/02/27 20:36:19 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -92,7 +92,7 @@ RESULT
 CHECK(TVector3::BALL_CREATE(TVector3<T>))
 	Angle a(0.5);
 	Angle* v_ptr = (Angle*)a.create(false, true);
-	TEST_REAL_EQUAL(v_ptr->value, 0.5)
+	TEST_REAL_EQUAL(v_ptr->value, 0)
 	delete v_ptr;
 	v_ptr = (Angle*)a.create();
 	TEST_REAL_EQUAL(v_ptr->value, 0.5)
@@ -167,8 +167,7 @@ RESULT
 //line 157: method TAngle::toRadian() const 
 CHECK(TAngle::toRadian() const )
 	b = 3.1;
-	b.toRadian();
-	TEST_REAL_EQUAL((Constants::PI / 180.0 * 3.1),b )
+	TEST_REAL_EQUAL(3.1, b.toRadian() )
 RESULT
 
 
@@ -180,22 +179,22 @@ RESULT
 
 //line 165: method TAngle::toDegree() const 
 CHECK(TAngle::toDegree() const )
-	b = 3.1;
-  b.toDegree();
-	TEST_REAL_EQUAL((180.0 / Constants::PI * 3.1),b)
+	b = 1;
+	TEST_REAL_EQUAL(57.2957795130823209, b.toDegree())
 RESULT
 
 
 //line 169: method TAngle::toDegree(const T& radian)
 CHECK(TAngle::toDegree(const T& radian))
-	b.toDegree(3.1);
-	TEST_REAL_EQUAL((180.0 / Constants::PI * 3.1),b )
+	TEST_REAL_EQUAL(57.2957795130823209, b.toDegree(1) )
 RESULT
 
 
 //line 176: method TAngle::getTorsionAngle(const T& ax, const T& ay, const T& az, const T& bx, const T& by, const T& bz, const T& cx, const T& cy, const T& cz, const T& dx, const T& dy, const T& dz)
 CHECK(TAngle::getTorsionAngle(const T& ax, const T& ay, const T& az, const T& bx, const T& by, const T& bz, const T& cx, const T& cy, const T& cz, const T& dx, const T& dy, const T& dz))
-	TEST_REAL_EQUAL(b.getTorsionAngle(0, 1 ,2, 100, 201, 302, 50, 101, 202, 200, 401, 602), 0)
+	b.getTorsionAngle(0, 10, 20,  100, 210, 320,  50, 110, 170,  200, 410, 620);
+//b.toDegree()
+	TEST_REAL_EQUAL(b, 0)
 RESULT
 
 
@@ -209,7 +208,7 @@ CHECK(TAngle::normalize(Range range))
 	TEST_REAL_EQUAL(35.4 - 5 * (Constants::PI * 2), b )
 	b = 35.4;
 	b.normalize(Angle::RANGE__SIGNED);
-	TEST_REAL_EQUAL(35.4 - 5 * (Constants::PI * 2), b )
+	TEST_REAL_EQUAL(35.4 - 6 * (Constants::PI * 2), b )
 RESULT
 
 
