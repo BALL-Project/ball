@@ -30,6 +30,7 @@ Added:
 - Visualisation for double-, triple- and aromatic bonds in BallAndStick model
 - Coloring by residue name now also works for DNA
 - Preferences for material parameters in OpenGL
+- multiple loading of the same file will create enumerated names for the Systems
 
 Fixed:
 - selection in MolecularControl with CRTG and SHIFT modifier

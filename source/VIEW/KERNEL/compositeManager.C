@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.C,v 1.5 2004/01/17 20:48:49 amoll Exp $
+// $Id: compositeManager.C,v 1.6 2004/10/20 14:41:05 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/compositeManager.h>
@@ -59,13 +59,12 @@ namespace BALL
 
 			String name = ((AtomContainer*) &composite)->getName();
 
-			/*if (name_set_.has(name))
+			if (name_set_.has(name))
 			{
 				for (Position p = 1; p < 2000; p++)
 				{
 					if (!name_set_.has(name + String(p)))
 					{
-						Molecule* mol =composite.getMolecule(p);
 						name = name + String(p);
 						break;
 					}
@@ -73,7 +72,7 @@ namespace BALL
 
 				((AtomContainer*) &composite)->setName(name);
 			}
-*/
+
 			composite_set_.insert(&composite);
 			name_set_.insert(name);
 			return true;
