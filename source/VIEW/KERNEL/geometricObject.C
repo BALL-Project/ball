@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.C,v 1.23 2004/05/27 19:50:02 oliver Exp $
+// $Id: geometricObject.C,v 1.24 2004/07/14 16:55:59 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/geometricObject.h>
@@ -17,16 +17,14 @@ namespace BALL
 
 		GeometricObject::GeometricObject()
 			throw()
-			: name_("unknown"),
-				color_(),
+			: color_(),
 				composite_(0)
 		{
 		}
 
 		GeometricObject::GeometricObject(const GeometricObject& geometric_object)
 			throw()
-			:	name_(geometric_object.name_),
-				color_(geometric_object.color_),
+			:	color_(geometric_object.color_),
 				composite_(geometric_object.composite_)
 		{
 		}
@@ -42,7 +40,6 @@ namespace BALL
 		void GeometricObject::clear()
 			throw()
 		{
-			name_ = "unknown";
 			color_ = ColorRGBA();
 			composite_ = 0;
 		}
@@ -50,7 +47,6 @@ namespace BALL
 		void GeometricObject::set(const GeometricObject& geometric_object)
 			throw()
 		{
-			name_ = geometric_object.name_;
 			color_ = geometric_object.color_;
 			composite_ = geometric_object.composite_;
 		}
@@ -65,8 +61,6 @@ namespace BALL
 		void GeometricObject::swap(GeometricObject& geometric_object)
 			throw()
 		{
-			name_.swap(geometric_object.name_);
-
 			const Composite* composite = geometric_object.composite_;
 			geometric_object.composite_ = composite_;
 			composite_ = composite;
@@ -79,9 +73,6 @@ namespace BALL
 			
 			BALL_DUMP_DEPTH(s, depth);
 			BALL_DUMP_HEADER(s, this, this);
-
-			BALL_DUMP_DEPTH(s, depth);
-			s << "name           : " << name_ << endl;
 
 			BALL_DUMP_DEPTH(s,depth);
 			s << "composite 		 : " << composite_ << endl;

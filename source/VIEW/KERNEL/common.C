@@ -1,5 +1,12 @@
 #include <BALL/VIEW/KERNEL/common.h>
 
+#include <BALL/VIEW/PRIMITIVES/line.h>
+#include <BALL/VIEW/PRIMITIVES/sphere.h>
+#include <BALL/VIEW/PRIMITIVES/tube.h>
+#include <BALL/VIEW/PRIMITIVES/point.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
+#include <BALL/VIEW/PRIMITIVES/box.h>
+
 namespace BALL
 {
 	namespace VIEW
@@ -107,6 +114,65 @@ bool modelMuteableByDisplayProperties(ModelType type)
 	throw()
 { 
 	return type < MODEL_LABEL && type > MODEL_UNKNOWN;
+}
+
+// ===============================================
+String getTypeName(GeometricObjectType type)
+{
+	switch(type)
+	{
+		case TYPE__LINE:
+			return "Line";
+
+		case TYPE__SPHERE:
+			return "Sphere";
+			
+		case TYPE__TUBE:
+			return "Tube";
+			
+		case TYPE__POINT:
+			return "Point";
+			
+		case TYPE__MESH:
+			return "Mesh";
+			
+		case TYPE__BOX:
+			return "Box";
+
+		default:
+			return "unknown GeometricObject";
+	}
+}
+
+
+GeometricObjectType getGeometricObjectType(const GeometricObject& object)
+{
+	if (RTTI::isKindOf<Line>(object))
+	{
+		return TYPE__LINE;
+	}	
+	if (RTTI::isKindOf<Sphere>(object))
+	{
+		return TYPE__SPHERE;
+	}
+	if (RTTI::isKindOf<Tube>(object))
+	{
+		return TYPE__TUBE;
+	}
+	if (RTTI::isKindOf<Point>(object))
+	{
+		return TYPE__POINT;
+	}	
+	if (RTTI::isKindOf<Mesh>(object))
+	{
+		return TYPE__MESH;
+	}	
+	if (RTTI::isKindOf<Box>(object))
+	{
+		return TYPE__BOX;
+	}	
+
+	return TYPE__UNKNOWN;
 }
 
 

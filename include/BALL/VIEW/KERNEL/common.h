@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.25 2004/07/09 22:37:38 amoll Exp $
+// $Id: common.h,v 1.26 2004/07/14 16:51:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -16,6 +16,7 @@ namespace BALL
 	namespace VIEW
 	{
 
+		class GeometricObject;
 
 		/** @name defines
 				\ingroup ViewKernelOther
@@ -228,7 +229,30 @@ namespace BALL
 			COLORING_UNKNOWN
 		};
 
+		/// Enumeration of GeometricObject Types
+		enum GeometricObjectType
+		{
+			/// Unknown type 
+			TYPE__UNKNOWN              = -1,
 
+			/// Line type 
+			TYPE__LINE                 = 0,
+
+			/// Sphere type 
+			TYPE__SPHERE               = 1,
+
+			/// Tube type 
+			TYPE__TUBE                 = 2,
+
+			/// Point type
+			TYPE__POINT                = 3,
+
+			/// Mesh type
+			TYPE__MESH                 = 4,
+
+			/// Box type
+			TYPE__BOX           			 = 5
+		};
 
 		/** Get a name for a ModelType
 		*/
@@ -255,6 +279,15 @@ namespace BALL
 		*/
 		bool modelMustBeRebuild(ModelType type)
 			throw();
+
+
+		/////////////////////////////////////////////////////////
+
+		///
+		String getTypeName(GeometricObjectType type);
+
+		///
+		GeometricObjectType getGeometricObjectType(const GeometricObject& object);
 
 		//@}
 

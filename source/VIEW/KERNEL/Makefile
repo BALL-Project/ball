@@ -8,7 +8,6 @@ CPP_SOURCES=\
   compositeManager.C\
   connectionObject.C\
   geometricObject.C\
-  information.C\
   mainControl.C\
   message.C\
   modularWidget.C\

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.35 2004/07/14 14:41:22 amoll Exp $
+// $Id: glRenderer.C,v 1.36 2004/07/14 16:56:10 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -278,20 +278,6 @@ namespace BALL
 		}
 
 
-		void GLRenderer::buildDisplayListFor(const Representation& rep)
-			throw()
-		{
-			if (display_lists_.has(&rep)) return;
-
-			GLDisplayList* display_list = new GLDisplayList;
-			display_lists_[&rep] = display_list;
-			display_list->useCompileMode();
-
-			display_list->startDefinition();
-			render(rep);
-			display_list->endDefinition();
-		}
-
 		void GLRenderer::removeDisplayListFor(const Representation& rep)
 			throw()
 		{
@@ -303,17 +289,24 @@ namespace BALL
 		void GLRenderer::rebuildDisplayListFor(const Representation& rep)
 			throw()
 		{
-			if (!display_lists_.has(&rep)) return;
-			
-			GLDisplayList* display_list = display_lists_[&rep];
-			display_list->clear();
-			 display_list->useCompileMode();
+			GLDisplayList* display_list;
+			if (display_lists_.has(&rep))
+			{
+				display_list = display_lists_[&rep];
+				display_list->clear();
+			}
+			else
+			{
+				display_list = new GLDisplayList;
+				display_lists_[&rep] = display_list;
+			}
+
+			display_list->useCompileMode();
 
 			display_list->startDefinition();
 			render(rep);
 			display_list->endDefinition();
 		}
-
 
 		void GLRenderer::drawFromDisplayList(const Representation& rep)
 			throw()

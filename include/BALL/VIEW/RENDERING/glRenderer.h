@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.21 2004/07/14 14:41:25 amoll Exp $
+// $Id: glRenderer.h,v 1.22 2004/07/14 16:55:50 amoll Exp $
 //
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
@@ -192,10 +192,6 @@ namespace BALL
 			void initAlwaysFront()
 				throw();
 			
-			///
-			void buildDisplayListFor(const Representation& rep)
-				throw();
-
 			///
 			void removeDisplayListFor(const Representation& rep)
 				throw();

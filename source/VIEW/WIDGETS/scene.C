@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.104 2004/07/14 14:42:42 amoll Exp $
+// $Id: scene.C,v 1.105 2004/07/14 16:56:20 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -218,16 +218,13 @@ namespace BALL
 				Representation* rep = rm->getRepresentation();
 				switch (rm->getType())
 				{
+					case RepresentationMessage::UPDATE:
 					case RepresentationMessage::ADD:
-						gl_renderer_.buildDisplayListFor(*rep);
+						gl_renderer_.rebuildDisplayListFor(*rep);
 						break;
 
 					case RepresentationMessage::REMOVE:
 						gl_renderer_.removeDisplayListFor(*rep);
-						break;
-
-					case RepresentationMessage::UPDATE:
-						gl_renderer_.rebuildDisplayListFor(*rep);
 						break;
 
 					default:
@@ -894,7 +891,7 @@ namespace BALL
 
 			// we have to add the representation in the GLRenderer manualy,
 			// because the message wont arrive in Scene::onNotify
-			gl_renderer_.buildDisplayListFor(*rp);
+			gl_renderer_.rebuildDisplayListFor(*rp);
 
 			// notify GeometricControl
 			RepresentationMessage* message = new RepresentationMessage(*rp, RepresentationMessage::ADD);

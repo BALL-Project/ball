@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricObject.h,v 1.36 2004/05/27 19:49:49 oliver Exp $
+// $Id: geometricObject.h,v 1.37 2004/07/14 16:54:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_GEOMETRICOBJECT_H
@@ -103,35 +103,6 @@ namespace BALL
 			const Composite* getComposite() const
 				throw() { return composite_;}
 			
-			/** Change the name of this geometricObject.
-					\param       name the new name of this geometricObject
-					\see         getName
-					\see         hasName
-			*/
-			void setName(const String& name)
-				throw() {name_ = name;}
-
-			/** Mutable inspection of the name of this geometricObject.
-					\return      String& mutable reference to the name of this geometricObject
-					\see         setName
-					\see         hasName
-			*/
-			String& getName()
-				throw() { return name_;}
-
-			/** Non-mutable inspection of the name of this geometricObject.
-			*/
-			const String& getName() const
-				throw() { return name_;}
-
-			/** Test if this geometricObject has a name.
-					\return  bool -	<tt> true</tt> if the name of this is not empty, <tt> false</tt> otherwise
-					\see     setName
-					\see     getName
-			*/
-			bool hasName() const
-				throw() {return !name_.isEmpty();}
-
 			//@} 
 			/**	@name	debuggers and diagnostics */ 
 			//@{
@@ -185,9 +156,6 @@ namespace BALL
 			void clear_()
 				throw();
 		
-			// name of the geometric object
-			String name_;
-
 			ColorRGBA color_;
 
 			// the composite, which is represented by this geometric object
