@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.19 2001/06/26 19:35:28 amoll Exp $
+// $Id: PDBAtom.h,v 1.20 2001/07/03 20:46:23 anker Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -29,7 +29,8 @@ namespace BALL
 	/** Atom class with additional attributes.
 			This class represents atoms read from PDB files.
 			It contains additional attributes to hold the crystallographic properties
-			of atoms from a PDB file (e.g., temperature factor, occupancy).\\
+			of atoms from a PDB file (e.g., temperature factor, occupancy).
+			\\
 			{\bf Definition:}\URL{BALL/KERNEL/PDBAtom.h}
 			@see PDBFile
 	*/
@@ -46,7 +47,7 @@ namespace BALL
 		*/
 		//@{
 
-		/**
+		/** BAUSTELLE
 		*/
 		enum RemotenessIndicator
 		{
@@ -69,7 +70,7 @@ namespace BALL
 			NUMBER_OF_REMOTENESS_INDICATORS
 		};
 
-		/**
+		/** Properties of the PDBAtom.
 		*/
 		enum Property
 		{
@@ -93,7 +94,7 @@ namespace BALL
 		PDBAtom(const String& name)
 			throw();
 
-		/// Detailled constructor
+		/// Detailed constructor
 		PDBAtom
 			(Element& element,
 			 const String& name,
@@ -114,16 +115,16 @@ namespace BALL
 		/// Destructor
 		virtual ~PDBAtom()
 			throw();
-
-		/// Clears the contents of the atom.
-		virtual void clear()
-			throw();
 	
-		/// Clears the contents of the atom and removes it from all composite structures.
+		/// Clears the contents of the atom and removes it from all composite
+		/// structures.
 		virtual void destroy()
 			throw();
 
 		//@}
+		/** @name Predicates
+		*/
+		//@{
 
 		/**	Equality operator.
 				@see Object::operator ==
@@ -137,13 +138,14 @@ namespace BALL
 		bool operator != (const PDBAtom& pdb_atom) const
 			throw();
 
-
+		//@}
 		/** @name Persistence 
 		*/
 		//@{
 
 		/**	Writes a PDBAtom object to a persistent stream.
 				@param pm the persistence manager
+				@param name BAUSTELLE
 		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
 			throw();
@@ -155,7 +157,7 @@ namespace BALL
 			throw();
 
 		//@}
-		/**	@name	
+		/**	@name	Assignment
 		*/
 		//@{
 
@@ -186,6 +188,11 @@ namespace BALL
 				@param  pdb_atom the PDBAtom {\em *this} is being swapped with
 		*/
 		void swap(PDBAtom& pdb_atom)
+			throw();
+
+		/** Clear the contents of the atom.
+		*/
+		virtual void clear()
 			throw();
 		
 		//@}
@@ -316,11 +323,26 @@ namespace BALL
 		void clear_()
 			throw();
 
+		/*_ BAUSTELLE
+		*/
 		char 	branch_designator_;
+
+		/*_ BAUSTELLE
+		*/
 		char	remoteness_indicator_;
+
+		/*_ BAUSTELLE
+		*/
 		char 	alternate_location_indicator_;
+
+		/*_ BAUSTELLE
+		*/
 		float occupancy_;
+
+		/*_ BAUSTELLE
+		*/
 		float temperature_factor_;
+
 	};
 
 } // namespace BALL
