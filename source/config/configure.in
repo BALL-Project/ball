@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.86 2000/04/28 07:54:19 oliver Exp $
+dnl    $Id: configure.in,v 1.87 2000/04/28 08:06:28 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -2495,6 +2495,7 @@ dnl    remove obsolete dependency file
 dnl
 
 if test "${MULTI_BUILD}" = "true" ; then
+	mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
 	${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h.${BINFMT}
 else
 	dnl	

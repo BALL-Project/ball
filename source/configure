@@ -1,6 +1,6 @@
 #! /bin/sh
 
-#  $Id: configure,v 1.96 2000/04/28 07:54:22 oliver Exp $
+#  $Id: configure,v 1.97 2000/04/28 08:06:31 oliver Exp $
 
 
 ##################################################
@@ -6635,6 +6635,7 @@ fi
 
 
 if test "${MULTI_BUILD}" = "true" ; then
+	mkdir ${BALL_PATH}/include/BALL/CONFIG 2>/dev/null
 	${MV} -f config.h $BALL_PATH/include/BALL/CONFIG/config.h.${BINFMT}
 else
 					if test -f $BALL_PATH/include/BALL/CONFIG/config.h ; then
