@@ -1,4 +1,4 @@
-// $Id: BitVector_test.C,v 1.6 2000/07/20 18:42:24 amoll Exp $
+// $Id: BitVector_test.C,v 1.7 2000/07/20 21:40:27 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(BitVector, "$Id: BitVector_test.C,v 1.6 2000/07/20 18:42:24 amoll Exp $")
+START_TEST(BitVector, "$Id: BitVector_test.C,v 1.7 2000/07/20 21:40:27 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -163,19 +163,17 @@ CHECK(BitVector::getBitSet())
 RESULT
 
 CHECK(BitVector::getBitSet() const)
-//
+	unsigned char* c = 0;
+	TEST_EQUAL(bv10.getBitSet(), c)
 RESULT
 
 CHECK(BitVector::operator [] (Index))
-	//bv9[0] = true;
+	//****************
 RESULT
 
 CHECK(BitVector::operator [] (Index) const)
-	//TEST_EQUAL(bv9[0], true)
-RESULT
-
-CHECK(BitVector::get(char*, Size, Index, Index) const)
-	// BAUSTELLE
+	TEST_EQUAL(bv10[0] == false, true)
+	TEST_EQUAL(bv10[1] == true, true)
 RESULT
 
 CHECK(BitVector::setBit/getBit(Index, bool))
@@ -282,19 +280,50 @@ CHECK(BitVector::operator ~ ())
 RESULT
 
 CHECK(BitVector::operator == (const BitVector&) const)
-	// BAUSTELLE
+	BitVector bv3(3);
+	BitVector bv3_2(3);
+	bv3.setBit(0, true);
+	TEST_EQUAL(bv3 == bv3_2, false)
+	bv3_2.setBit(0, true);
+	TEST_EQUAL(bv3 == bv3_2, true)
+	bv3.setBit(2, true);
+	TEST_EQUAL(bv3 == bv3_2, false)
+	bv3_2.setBit(2, true);
+	TEST_EQUAL(bv3 == bv3_2, true)
 RESULT
 
 CHECK(BitVector::operator != (const BitVector&) const)
-	// BAUSTELLE
+	BitVector bv3(3);
+	BitVector bv3_2(3);
+	bv3.setBit(0, true);
+	TEST_EQUAL(bv3 != bv3_2, true)
+	bv3_2.setBit(0, true);
+	TEST_EQUAL(bv3 != bv3_2, false)
+	bv3.setBit(2, true);
+	TEST_EQUAL(bv3 != bv3_2, true)
+	bv3_2.setBit(2, true);
+	TEST_EQUAL(bv3 != bv3_2, false)
 RESULT
 
 CHECK(BitVector::isAnyBit(bool value, Index first = 0, Index last = -1) const)
-	// BAUSTELLE
+	BitVector bv3(3);
+	TEST_EQUAL(bv3.isAnyBit(false), true)
+	TEST_EQUAL(bv3.isAnyBit(true), false)
+	bv3.setBit(0, true);
+	TEST_EQUAL(bv3.isAnyBit(true, 1, -1), false)
+	TEST_EQUAL(bv3.isAnyBit(true), true)
 RESULT
 
 CHECK(BitVector::isEveryBit(bool, Index, Index) const)
-	// BAUSTELLE
+	BitVector bv3(3);
+	TEST_EQUAL(bv3.isEveryBit(false), true)
+	bv3.setBit(0, true);
+	TEST_EQUAL(bv3.isEveryBit(false), false)
+	TEST_EQUAL(bv3.isEveryBit(false, 1, 2), true)
+	TEST_EQUAL(bv3.isEveryBit(false, 0, 1), false)
+	bv3.setBit(1, true);
+	bv3.setBit(2, true);
+	TEST_EQUAL(bv3.isEveryBit(true), true)
 RESULT
  
 CHECK(BitVector::isValid() const)
