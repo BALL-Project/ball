@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.70 2003/09/02 15:36:58 amoll Exp $
+// $Id: mainframe.C,v 1.71 2003/09/03 15:23:51 amoll Exp $
 
 #include "mainframe.h"
 #include "icons.h"
@@ -13,6 +13,7 @@
 #include <BALL/MOLMEC/MDSIMULATION/canonicalMD.h>
 #include <BALL/MOLMEC/MDSIMULATION/microCanonicalMD.h>
 #include <BALL/MOLMEC/MDSIMULATION/molecularDynamics.h>
+#include <BALL/STRUCTURE/HBondProcessor.h>
 
 #include <BALL/VIEW/DIALOGS/FDPBDialog.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
@@ -178,6 +179,8 @@ Mainframe::Mainframe(QWidget* parent, const char* name)
 									CTRL+Key_E, MENU__BUILD_AMBER_MINIMIZATION);
 	insertMenuEntry(MainControl::BUILD, "Perform M&D Simulation", this, SLOT(amberMDSimulation()), 
 									CTRL+Key_D, MENU__BUILD_AMBER_MDSIMULATION);
+	insertMenuEntry(MainControl::BUILD, "Calculate H-Bonds", this, SLOT(calculateHBonds()), 
+									CTRL+Key_9, MENU__BUILD_CALCULATE_HBONDS);
 #ifdef QT_THREAD_SUPPORT
 	insertMenuEntry(MainControl::BUILD, "Stop simulation", this, SLOT(stopSimulation()),ALT+Key_C, MENU__BUILD_STOPSIMULATION);
 #endif
@@ -267,9 +270,30 @@ void Mainframe::assignCharges()
 {
 }
 
+void Mainframe::calculateHBonds()
+{
+	if (!getSelectedSystem())
+	{
+		setStatusbarText("to calculate H-bonds, one system has to be selected");
+		return;
+	}
+
+
+	HBondProcessor proc;
+	if (!getSelectedSystem()) return;
+	getSelectedSystem()->apply(proc);
+  MainControl::update(*getSelectedSystem());
+	/*
+	ChangedCompositeMessage* message = new ChangedCompositeMessage;
+	message->setDeletable(true);
+	message->setComposite(getSelectedSystem());
+	notify_(message);
+*/
+	setStatusbarText("calculated H-bonds");
+}
+
 void Mainframe::calculateAmberEnergy()
 {
-	// retrieve the system from the selection
 	System* system = getSelectedSystem();
 	if (system == 0)
 	{
@@ -598,7 +622,7 @@ void Mainframe::about()
 	pfd->show();
 	return;
 	*/
-	
+
 	AboutDialog about;
 	about.exec();
 }

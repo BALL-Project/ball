@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.45 2003/09/02 15:36:59 amoll Exp $
+// $Id: mainframe.h,v 1.46 2003/09/03 15:23:51 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -124,6 +124,7 @@ class Mainframe
 		MENU__BUILD_AMBER_MDSIMULATION,
 		MENU__BUILD_STOPSIMULATION,
 		MENU__BUILD_PEPTIDE,
+		MENU__BUILD_CALCULATE_HBONDS,
 
 		MENU__DISPLAY_FULLSCREEN,
 		MENU__DISPLAY_OPEN_SURFACE_DIALOG,
@@ -165,6 +166,7 @@ class Mainframe
 	void amberMDSimulation();
   void computeSurface();
 	void buildPeptide();
+	void calculateHBonds();
 	void stopSimulation();
 
 	void toggleFullScreen();
