@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
 <class>BALLViewTutorialData</class>
 <widget class="QWizard">
     <property name="name">
@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
-            <height>523</height>
+            <width>531</width>
+            <height>392</height>
         </rect>
     </property>
     <property name="caption">
@@ -30,8 +30,8 @@
                 <rect>
                     <x>0</x>
                     <y>2</y>
-                    <width>588</width>
-                    <height>435</height>
+                    <width>518</width>
+                    <height>302</height>
                 </rect>
             </property>
             <property name="text">
@@ -75,7 +75,7 @@ Then press the "&lt;b&gt;Build&lt;/b&gt;" button.
                 <rect>
                     <x>0</x>
                     <y>2</y>
-                    <width>588</width>
+                    <width>520</width>
                     <height>435</height>
                 </rect>
             </property>
@@ -114,7 +114,7 @@ This will take you to the next step of the demo.
                 <rect>
                     <x>1</x>
                     <y>2</y>
-                    <width>588</width>
+                    <width>521</width>
                     <height>435</height>
                 </rect>
             </property>
@@ -159,7 +159,7 @@ and a trajectory file was created.
                 <rect>
                     <x>0</x>
                     <y>3</y>
-                    <width>588</width>
+                    <width>523</width>
                     <height>435</height>
                 </rect>
             </property>
@@ -196,7 +196,7 @@ the right mouse button. First choose "&lt;b&gt;Load into RAM&lt;/b&gt;" and than
                 <rect>
                     <x>1</x>
                     <y>4</y>
-                    <width>588</width>
+                    <width>524</width>
                     <height>427</height>
                 </rect>
             </property>
@@ -231,7 +231,7 @@ electrostatics.
                 <rect>
                     <x>0</x>
                     <y>5</y>
-                    <width>588</width>
+                    <width>523</width>
                     <height>427</height>
                 </rect>
             </property>
@@ -271,7 +271,7 @@ The resulting SES will show up in the listview with the title
                 <rect>
                     <x>0</x>
                     <y>2</y>
-                    <width>588</width>
+                    <width>520</width>
                     <height>435</height>
                 </rect>
             </property>
@@ -310,7 +310,7 @@ them.
                 <rect>
                     <x>1</x>
                     <y>3</y>
-                    <width>588</width>
+                    <width>520</width>
                     <height>435</height>
                 </rect>
             </property>
@@ -342,7 +342,7 @@ In the now open dialog enter the value &lt;b&gt;0.01&lt;/b&gt; in the field at t
                 <rect>
                     <x>0</x>
                     <y>2</y>
-                    <width>588</width>
+                    <width>520</width>
                     <height>435</height>
                 </rect>
             </property>
