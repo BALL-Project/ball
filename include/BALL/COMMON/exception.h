@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.14 2000/07/17 13:42:34 oliver Exp $
+// $Id: exception.h,v 1.15 2000/08/09 09:18:43 amoll Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -235,6 +235,17 @@ namespace BALL
 		{
 			public:
 			NotImplemented(const char* file, int line);
+		};
+
+		/**     Illegal tree operation.
+						This exception is thrown to indicate that an illegal tree operation
+						i.e. node->setLeftChild(node) was requested.
+		*/
+		class IllegalTreeOperation
+						: public GeneralException
+		{
+						public:
+						IllegalTreeOperation(const char* file, int line);
 		};
 
 		/**	Out of memory.

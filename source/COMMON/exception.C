@@ -1,4 +1,4 @@
-// $Id: exception.C,v 1.12 2000/08/03 21:53:24 oliver Exp $
+// $Id: exception.C,v 1.13 2000/08/09 09:18:50 amoll Exp $
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -186,6 +186,8 @@ namespace BALL
 			DEF_EXCEPTION(IncompatibleIterators, "the iterator could not be assigned because it is bound to a different container")
 
 			DEF_EXCEPTION(NotImplemented, "this method has not been implemented yet. Feel free to complain about it!")
+
+			DEF_EXCEPTION(IllegalTreeOperation, "a illegal tree operation was requested")
 
 			DEF_EXCEPTION(BufferOverflow, "the maximum buffersize has been reached")
 
