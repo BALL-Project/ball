@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.6 1999/10/30 12:53:14 oliver Exp $
+// $Id: exception.h,v 1.7 2000/03/16 12:16:12 oliver Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -35,6 +35,20 @@ namespace BALL
 				{\tt {\bf throw Exception::GeneralException}(\_\_FILE\_\_, \_\_LINE\_\_);}\\
 				{\tt \_\_FILE\_\_} and {\tt \_\_LINE\_\_} are built-in preprocessor macros that hold the
 				desired information.\\
+
+				BALL provides its own \Ref{terminate} handler. This handler extracts as much information
+				as possible from the exception, prints it to {\tt cerr} and \Ref{Log}, and finally calls
+				exits the program cleanly (with exit code 1).
+				This can be rather inconvenient for debuggin, since you are told where the exception was 
+				thrown, but in general you do not know anything about the context.
+				Hence, {\tt terminate} can also create a core dump. Using a debugger (e.g. dbx or gdb)
+				you can then create a stack traceback.
+				To create a core dump, you should set the environment variable {\tt BALL_CORE_DUMP}
+				to any (non empty) value.
+				
+				\\
+				{\bf Definition:}\URL{BALL/COMMON/exception.h}
+				\\
 		*/
 		
 		class GeneralException 
