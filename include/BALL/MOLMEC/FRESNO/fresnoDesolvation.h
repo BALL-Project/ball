@@ -1,9 +1,10 @@
-// $Id: fresnoDesolvation.h,v 1.1.2.8 2004/04/28 15:37:49 anker Exp $
+// $Id: fresnoDesolvation.h,v 1.1.2.9 2005/01/30 14:06:40 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
 #define BALL_MOLMEC_FRESNO_FRESNODESOLVATION_H
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
+#include <BALL/SOLVATION/generalizedBornCase.h>
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
 
 namespace BALL
@@ -185,6 +186,14 @@ namespace BALL
 
 		/*_
 		*/
+		GeneralizedBornModel gbm_;
+
+		/*_
+		*/
+		bool use_gb_;
+
+		/*_
+		*/
 		float spacing_;
 
 		/*_
@@ -207,7 +216,8 @@ namespace BALL
 
 		/*_
 		*/
-		float computeESInteractionEnergy_(const Molecule& molecule)
+		float computeESInteractionEnergy_(const Molecule& molecule, const
+				HashMap<const Atom*, float>& p_hash)
 			throw();
 
 		/*_

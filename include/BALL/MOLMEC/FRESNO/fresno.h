@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.19 2004/04/28 15:36:46 anker Exp $
+// $Id: fresno.h,v 1.1.2.20 2005/01/30 14:06:40 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -255,6 +255,10 @@ namespace BALL
 
 			/**
 			*/
+			static const char* DESOLV_GB;
+
+			/**
+			*/
 			static const char* DESOLV_AVG;
 
 			/**
@@ -304,6 +308,10 @@ namespace BALL
 			/**
 			*/
 			static const char* BASE_FUNCTION_TYPE;
+
+			/**
+			*/
+			static const char* GB_SCALING_FILE;
 
 
 		};
@@ -414,6 +422,10 @@ namespace BALL
 
 			/**
 			*/
+			static const bool DESOLV_GB;
+
+			/**
+			*/
 			static const Size DESOLV_AVG;
 
 			/**
@@ -463,6 +475,10 @@ namespace BALL
 			/**
 			*/
 			static const Size BASE_FUNCTION_TYPE;
+
+			/**
+			*/
+			static const String GB_SCALING_FILE;
 
 		};
 

@@ -1,10 +1,11 @@
-// $Id: fresnoRingStacking.h,v 1.1.2.2 2004/06/12 15:15:32 anker Exp $
+// $Id: fresnoRingStacking.h,v 1.1.2.3 2005/01/30 14:06:41 anker Exp $
 // Molecular Mechanics: Fresno force field, CH---pi interaction
 
 #ifndef BALL_MOLMEC_FRESNO_RINGSTACKING_H
 #define BALL_MOLMEC_FRESNO_RINGSTACKING_H
 
 #include <BALL/MOLMEC/COMMON/forceFieldComponent.h>
+#include <BALL/DATATYPE/options.h>
 
 
 using namespace std;
