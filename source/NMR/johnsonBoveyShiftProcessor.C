@@ -1,4 +1,4 @@
-// $Id: johnsonBoveyShiftProcessor.C,v 1.6 2000/09/27 07:20:24 oliver Exp $
+// $Id: johnsonBoveyShiftProcessor.C,v 1.7 2000/09/27 16:25:52 burch Exp $
 
 #include <BALL/NMR/johnsonBoveyShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -199,6 +199,7 @@ namespace BALL
 		Position radius_column = parameter_section.getColumnIndex("radius");
 		Position electrons_column = parameter_section.getColumnIndex("electrons");
 		Position name_list_column = parameter_section.getColumnIndex("name_list");
+		Position intensity_column = parameter_section.getColumnIndex("intensity");
 		
 		for (Position key = 0; key < number_of_keys; key++)
 		{
@@ -222,8 +223,13 @@ namespace BALL
 			ring_entry.append(String(number));
 			
 			new_ring.radius = parameter_section.getValue(key, radius_column).toFloat();
+			cout << "radius : "<< new_ring.radius<<endl;
 			
 			new_ring.electrons = parameter_section.getValue(key, electrons_column).toUnsignedInt();
+			cout << "electrons : "<< new_ring.electrons<<endl;
+			
+			new_ring.intensity = parameter_section.getValue(key, intensity_column).toFloat();
+			cout << "intensity : "<< new_ring.intensity<<endl;
 			
 			name_list = parameter_section.getValue(key, name_list_column);
 
@@ -232,8 +238,11 @@ namespace BALL
 			Log.info() << "names = " << name_list << " (vector size: " << names.size() << ")" << endl;
 			
 			new_ring.atom_names = names;
+			cout << "name ist zugewiesen" << endl;
 			
 			rings_[ring_entry] = new_ring;
+			cout <<" der ring ist eingefuegt" <<endl;
+			
 		}
 		
 		// einlesen der shift Atome und liste von expressions aufbauen
@@ -324,6 +333,7 @@ namespace BALL
 					ring_name.append(String(pos));
 					Ring& ring = rings_[ring_name];
 					
+					float intensity = ring.intensity;
 					float radius = ring.radius;
 					ring_atoms = ring.atom_names;
 
@@ -404,7 +414,8 @@ namespace BALL
 						hshift /= 4 * PI * 6 * PI * ELECTRON_MASS * radius;
 						hshift*= (1 / sqrt( ((1 + p) * (1 + p)) + (z * z)));				
 						hshift*= (k + ((1 - p * p - z * z) / ((1 - p) * (1 - p) + z * z)) *e );
-
+						hshift*= intensity;
+						
 						Log.info() << "shift of " << residue_name << " on " << (*atom_iter)->getFullName() << " = " << hshift << endl;
 
 						shift += hshift;								
