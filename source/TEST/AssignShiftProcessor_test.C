@@ -1,5 +1,5 @@
 #include <BALL/NMR/assignShiftProcessor.h>
-#include <BALL/NMR/NMRSpectrum.h>
+#include <BALL/NMR/spectrum.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/FORMAT/HINFile.h>
@@ -7,7 +7,7 @@
 #include <BALL/SYSTEM/path.h>
 #include <BALL/CONCEPT/classTest.h>
 
-START_TEST(AssignShiftProcessor, "$Id: AssignShiftProcessor_test.C,v 1.8 2000/10/03 02:00:37 amoll Exp $")
+START_TEST(AssignShiftProcessor, "$Id: AssignShiftProcessor_test.C,v 1.9 2001/07/14 20:12:53 oliver Exp $")
 
 using namespace BALL;
 using namespace std;
@@ -52,7 +52,9 @@ CHECK(results)
 	}
 	TEST_EQUAL(number_of_shiftatoms, 940)
 
-	NMRSpectrum spectrum;
+	/** 
+	// BAUSTELLE!
+	Spectrum1D spectrum;
 	spectrum.setSystem(&s);
 	spectrum.setDensity(32768);
 	spectrum.createSpectrum();
@@ -61,6 +63,7 @@ CHECK(results)
 
 	spectrum.plotSpectrum("parv_synth.dat");
 	spectrum.writePeaks("parv_synth.peaks");
+	*/
 RESULT
 
 END_TEST

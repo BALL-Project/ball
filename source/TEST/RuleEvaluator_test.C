@@ -1,4 +1,4 @@
-// $Id: RuleEvaluator_test.C,v 1.3 2001/05/06 20:58:59 oliver Exp $
+// $Id: RuleEvaluator_test.C,v 1.4 2001/07/14 20:12:54 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(RuleEvaluator, "$Id: RuleEvaluator_test.C,v 1.3 2001/05/06 20:58:59 oliver Exp $")
+START_TEST(RuleEvaluator, "$Id: RuleEvaluator_test.C,v 1.4 2001/07/14 20:12:54 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -48,11 +48,15 @@ CHECK(RuleEvaluator::RuleEvaluator(INIFile& file, const String& prefix))
 	TEST_EQUAL(ini.isValid(), true)
 	RuleEvaluator eval(ini, "TEST1");
 	TEST_EQUAL(eval.getPrefix(), "TEST1")
+	TEST_EQUAL(eval.isValid(), true)
 RESULT
 
 
 CHECK(RuleEvaluator::RuleEvaluator(const RuleEvaluator& evaluator))
-  //BAUSTELLE
+	RuleEvaluator ev1(ini, "TEST1");
+	RuleEvaluator ev2(ev1);
+	TEST_EQUAL(ev2.getPrefix(), "TEST1");
+	TEST_EQUAL(ev2.isValid(), true)	
 RESULT
 
 
@@ -61,13 +65,11 @@ CHECK(RuleEvaluator::initialize(INIFile& file, const String& prefix))
 RESULT
 
 
-CHECK(RuleEvaluator::clear() const )
-  //BAUSTELLE
-RESULT
-
-
-CHECK(RuleEvaluator::destroy() const )
-  //BAUSTELLE
+CHECK(RuleEvaluator::clear() const)
+	RuleEvaluator eval(ini, "TEST1");
+	eval.clear();
+	TEST_EQUAL(eval.getPrefix(), "")
+	TEST_EQUAL(eval.isValid(), false)
 RESULT
 
 
