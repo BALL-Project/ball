@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.13 2000/02/17 00:30:45 oliver Exp $
+// $Id: energyMinimizer.h,v 1.14 2000/03/26 12:50:24 oliver Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -36,7 +36,9 @@
 #	include <BALL/MOLMEC/COMMON/snapShot.h>
 #endif
 
-#include <vector>
+#ifndef BALL_MOLMEC_COMMON_GRADIENT_H
+#	include <BALL/MOLMEC/COMMON/gradient.h>
+#endif
 
 namespace BALL 
 {
@@ -78,7 +80,7 @@ namespace BALL
       /** The number of iterations without any change in energy. This
           is used to detect convergence.
       */
-      static const char *MAX_SAME_ENERGY;
+      static const char* MAX_SAME_ENERGY;
 
       /** The maximum RMS gradient allowed for convergence.
       */
@@ -127,7 +129,6 @@ namespace BALL
 			*/
 			static float MAXIMAL_SHIFT;
 		};
-
 		//@}
 
 
@@ -183,8 +184,6 @@ namespace BALL
 		/**	@name	Setup methods 
 		*/
 		//@{
-
-
 		/**	Sets up the energy minimizer.
 		*/
 		bool	setup(ForceField& force_field);
@@ -214,9 +213,110 @@ namespace BALL
 		//@{
 
 
+    /** Implements the convergence criterion.
+				If the convergence criterion is fulfilled, this method
+				returns {\bf true}. The convergence criterion is implemented as one
+				of three conditions:
+				\begin{itemize}
+					\item{RMS gradient} is below max_rms_gradient_
+					\item\Ref{same_energy_counter_} is above Ref{max_same_energy_}
+					\item{the energy difference} between two successive steps is below \Ref{energy_difference_bound_}
+				\end{itemize}
+				If any of these conditions hold \Ref{isConverged} returns {\bf true}.
+				This method should be reimplemented in derived classes for a different
+				convergence criterion.
+    */
+    virtual bool isConverged() const;
+
+    /** Calculate the next step.
+				This method is implemented in each minimizer class and 
+				tries to determine the next step to be taken.
+				It typically performs a line search.
+        @return bool {\bf true} if an acceptable solution was found
+    */
+    virtual bool findStep();
+
+
+    /** Update the search direction.
+				This method is implemented by the derived classes to implement a 
+				method to determine a new search direction.
+    */
+    virtual void updateDirection();
+
+    /** Update energy.
+				This method calls {\tt force_field_->updateEnergy()} and stores
+				the result in {\tt current_energy_}.
+    */
+    virtual double updateEnergy();
+
+    /** Update forces and store them in current_grad_.
+				This method calls {\tt force_field_->updateForces()} and stores them in 
+				\ref{current_grad_}.
+    */
+    virtual void updateForces();
+
+    /** Print the energy.
+        This method is called by \Ref{finishIteration} after every
+        \Ref{energy_output_frequency_} steps.
+        It prints the current RMS gradient and the current energy to \Ref{Log}{\tt .info()}.
+				@see setEnergyOutputFrequency
+				@see getEnergyOutputFrequency
+    */
+    virtual void printEnergy() const;
+
+		/**	Take a snapshot of the system.
+				This method is called by \Ref{finishIteration} after every
+				\Ref{snapshot_frequency_} steps.
+				It saves a {\tt SnapShot} of the current atom coordinates to a \Ref{SnapShotManager}
+				(if enabled).
+				@see setSnapShotFrequency
+				@see getSnapShotFrequency
+		*/
+		virtual void takeSnapShot() const;
+
+		/**	Finishing step for this iteration.
+				This method should be called at the end of the main iteration 
+				loop implemented in \Ref{minimize}. It takes over some administrative stuff:
+				\begin{itemize}
+					\item increment the iteration counter \Ref{number_of_iteration_}
+					\item call \Ref{takeSnapShot} if necessary
+					\item call \Ref{printEnergy} if necessary
+					\item call \Ref{ForceField::update} if necessary (to rebuild the pair lists!)
+				\end{itemize}
+
+				This method should be overwritten only in rare cases. Even then, the programmer
+				should make sure to call {\tt EnergyMinimizer::finishIteration} or 
+				has to take care of the above items himself.
+
+				All derved classes should call this method at the end of the minimize main loop.
+				Otherwise strange things might happen.
+				@see	minimize
+		*/
+		virtual void finishIteration();
+		
 		/**	Get the current iteration number
 		*/
 		Size	getNumberOfIteration() const;
+
+		/**	Return a reference to the current search direction
+		*/
+		Gradient& getDirection();
+
+		/**	Return a reference to the current gradient
+		*/
+		Gradient& getGradient();
+
+		/**	Return a reference to the initial gradient
+		*/
+		Gradient& getInitialGradient();
+
+		/**	Return the current energy
+		*/
+		double getEnergy() const;
+
+		/**	Return the initial energy
+		*/
+		double getInitialEnergy() const;
 
 		/**	Set the iteration number
 		*/
@@ -315,70 +415,101 @@ namespace BALL
 		//@}
 
 		protected:
-		/*_	@ name	Protected Attributes
+		/**	@name	Protected Attributes
 		*/
-		//_@{
+		//@{
 
-		/*_	The boolean variable indicates if the setup of the energy minimizer was successful
+		/**	The gradient at the beginning of the current minimization step.
+		*/
+		Gradient initial_grad_;
+
+		/**	The current gradient.
+		*/
+		Gradient current_grad_;
+
+		/**	The energy at the beginning of the current minimization step.
+		*/
+		double initial_energy_;
+
+		/**	The current energy.
+		*/
+		double current_energy_;
+
+    /** The gradient from the last step
+    */
+    Gradient old_grad_;
+
+    /** The energy from the last step
+    */
+    double old_energy_;
+ 
+    /** The current search direction
+    */
+    Gradient direction_;
+ 
+		/**	The boolean variable indicates if the setup of the energy minimizer was successful
 		*/
 		bool 	valid_;
 
-                /* Pointer to a SnapShotManager for storing snapshots of the
-                   system 
-                */
-                SnapShotManager *snapShot_ptr_; 
+		/** Pointer to a SnapShotManager for storing snapshots of the
+					system 
+		*/
+		SnapShotManager* snapshot_ptr_; 
 
-
-		/*_	The force field bound to the energy minimizer.
-			Among other data the force field contains the molecular system
-			whose energy will be minimized by the energy minimizer.
+		/**	The force field bound to the energy minimizer.
+				Among other data the force field contains the molecular system
+				whose energy will be minimized by the energy minimizer.
 		*/
 		ForceField*	force_field_;
 
-		/*_	the current iteration number
+		/**	the current iteration number
 		*/
 		Size	number_of_iteration_;
 
-		/*_	Maximal number of iterations 
+		/**	Maximal number of iterations 
 		*/
 		Size	maximal_number_of_iterations_;
 
-		/*_	Frequency of energy output  
+		/**	Frequency of energy output  
 		*/
 		Size	energy_output_frequency_;
 
-		/*_	Frequency of atom coordinate ouput;
+		/**	Frequency of atom coordinate ouput;
 		*/
 		Size	snapshot_frequency_;
 
-		/*_	If the energy difference (before and after an iteration) 
-			is smaller than this bound, the minimization procedure stops.
+		/**	If the energy difference (before and after an iteration) 
+				is smaller than this bound, the minimization procedure stops.
 		*/
-		float	energy_difference_bound_;
+		double	energy_difference_bound_;
 
-    /*_ The maximum RMS gradient tolerated (first convergence criterion)
+    /** The maximum RMS gradient tolerated (first convergence criterion)
     */
     float max_gradient_;
 
-
-    /*_ The maximum number of iterations with same energy.
+    /** The maximum number of iterations with same energy.
         When this number is reached, we assume the system to have converged
         (second convergence criterion)
     */
     Size max_same_energy_;
 
+		/**	A counter for the number of steps with a similar energy.
+		*/
+		Size same_energy_counter_;
 
-		/*_	The maximal shift of an atom per iteration step (in Angstroem)
+		/**	The maximal shift of an atom per iteration step (in Angstrom).
 		*/
 		float	maximal_shift_;
 
-    /*_ Internal counters: how often is a force update and an energy 
-        update done -> measures speed of minimisation 
+    /** Internal counter: how often is a force update done.
+       Measure for the speed of minimization 
     */
     int force_update_counter_;
+
+    /** Internal counter: how often is an energy update done.
+       Measure for the speed of minimization 
+    */
     int energy_update_counter_; 
-
-
 		//_@}
 	};
 

@@ -1,4 +1,4 @@
-// $Id: conjugateGradient.h,v 1.3 2000/02/06 19:47:46 oliver Exp $ 
+// $Id: conjugateGradient.h,v 1.4 2000/03/26 12:50:23 oliver Exp $ 
 // A conjugate gradient minimizer for geometry optimisation
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -41,70 +41,79 @@
 #endif
 
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
-#       include <BALL/MOLMEC/COMMON/snapShot.h>
+# include <BALL/MOLMEC/COMMON/snapShot.h>
+#endif
+
+#ifndef BALL_MOLMEC_COMMON_GRADIENT_H
+# include <BALL/MOLMEC/COMMON/gradient.h>
 #endif
 
 
 using namespace std;
 
 namespace BALL 
-  { 
-  class ConjugateGradientMinimizer : public EnergyMinimizer
-    {
+{ 
+
+	/**	Conjugate gradient (CG) minimizer.
+			
+			\\
+			{\bf Definition:}\URL{BALL/MOLMEC/MINIMIZATION/conjugateGradient.h}
+	*/
+  class ConjugateGradientMinimizer 
+		: public EnergyMinimizer
+	{
     public:
-    /**	@name	Options names         
+		/**	@name	Enums	
+		*/
+		//@{
+		/**	The different conjugate gradient methods implemented.
+				@see	updateDirection for details on the implementation and references
+		*/
+		enum UpdateMethod
+		{
+			/**	Polak-Ribiere method
+			*/
+			POLAK_RIBIERE,
+
+			/**	Fletcher-Reeves method
+			*/
+			FLETCHER_REEVES,
+
+			/**	Shanno
+			*/
+			SHANNO
+		};
+		//@}
+			
+    /**	@name	Options and Defaults
     */
     //@{
 
-    /**     Options names
+    /**	Options names
     */
     struct Option
-      {
-      /** The alpha factor used for determining the step length
-          This factor controls how much the energy decreases in an
-          iteration.
-      */
-      static const char *LINE_SEARCH_ALPHA; 
-
-      /** The beta  factor used for determining the step length
-          This factor controls how much directional gradient reduction
-          will be in an iteration. 
-      */
-      static const char *LINE_SEARCH_BETA; 
-
+		{
       /** The initial step length used in the line search 
       */
-      static const char *STEP_LENGTH; 
-      };
+      static const char* STEP_LENGTH; 
+    };
 
+		/**	Defaults for all options
+		*/
     struct Default
-      {
-      /** The alpha factor used for determining the step length
-          This factor controls how much the energy decreases in an
-          iteration.
-      */
-      static  float LINE_SEARCH_ALPHA;
-
-
-      /** The beta  factor used for determining the step length
-          This factor controls how much directional gradient reduction
-          will be in an iteration.
-      */
-      static float LINE_SEARCH_BETA; 
-
+    {
       /** The initial step length used in the line search 
       */
-      static float STEP_LENGTH; 
-      };
+      static double STEP_LENGTH; 
+    };
 
     //@}
 
-
+    BALL_CREATE(ConjugateGradientMinimizer)
 
     /**	@name	Constructors and Destructors	
     */
     //@{
-    BALL_CREATE(ConjugateGradientMinimizer)
 
     /**	Default constructor.
     */
@@ -120,8 +129,8 @@ namespace BALL
 
     /**	Constructor expecting a valid force field, a snapshot manager  and options 
     */
-    ConjugateGradientMinimizer(ForceField& force_field, SnapShotManager *ssm,
-                                                        const Options& options);
+    ConjugateGradientMinimizer
+			(ForceField& force_field, SnapShotManager* ssm, const Options& options);
 
     /**	Constructor expecting a valid force field and options 
     */
@@ -129,7 +138,7 @@ namespace BALL
 
     /**	Copy constructor
     */
-    ConjugateGradientMinimizer(const ConjugateGradientMinimizer &rhs, bool deep = true);
+    ConjugateGradientMinimizer(const ConjugateGradientMinimizer& rhs, bool deep = true);
 
     /**	Destructor.
     */
@@ -144,7 +153,7 @@ namespace BALL
 
     /**	Assignment operator
     */
-    ConjugateGradientMinimizer &operator=(const ConjugateGradientMinimizer& rhs);
+    ConjugateGradientMinimizer& operator = (const ConjugateGradientMinimizer& rhs);
 
     //@}
 
@@ -164,35 +173,45 @@ namespace BALL
     //@{
     /** Set explicitly the value for control parameter step_length_
     */
-    void setStepLength(float  value);
-
-    /** Set explicitly the value for control parameter line_search_alpha_
-    */
-    void setLineSearchAlpha(float  alpha);
-
-    /** Set explicitly the value for control parameter line_search_beta_
-    */
-    void setLineSearchBeta(float  beta);
-
-    /** Get the current value of option line_search_alpha_
-    */
-    float getLineSearchAlpha() const; 
-
-    /** Get the current value of option line_search_beta_
-    */
-    float getLineSearchBeta() const; 
+    void setStepLength(double  value);
 
     /** Get the current value of option step_length_
     */
-    float getStepLength() const; 
+    double getStepLength() const; 
 
-    /**	Minimize the energy of the system using a nonlinear conjugate gradient method 
-        with  line search approach 
+		/**	Calculate the next step.
+				This method calculates direction and step length for the
+				next optimization step. The step is not yet performed.
+				This method first tries to determine a better solution 
+				with a line search along the current search direction.
+				If this fails, it resets the search direction to the negative 
+				current gradient and performs a new line search.
+				If this fails again, the step width is reduced by an order of
+				magnitude and a last line search is performed along ths negative
+				gradient.
+				The best solution found is stored in {\tt lambda_}.
+				@return	bool {\bf true} if the line search found an acceptable solution
+				@see	EnergyMinimizer::findStep
+		*/
+		virtual bool findStep();
+			
+		/**	Update the search direction.
+				This method updates the search direction.
+				It uses the Fletcher-Reeves conjugate gradient.
+		*/
+		virtual void updateDirection();
+
+    /**	Minimize the energy of the system.
+				This method executes at most {\tt iterations} minimization steps.
+				If the number of iterations is not given, the number specified in the
+				options is taken.
+				
+				@param	iterations the maximum number of iterations
+				@param	restart {\bf true} if the minimization is restarted
+				@see		EnergyMinimizer::minimize
     */
-
-    bool  minimize(Size iterations = 0, bool restart = false); 
+    virtual bool minimize(Size iterations = 0, bool restart = false); 
     //@}
-
 
     /**	@name	Public Attributes
     */
@@ -204,70 +223,27 @@ namespace BALL
 
     protected:
 
-    /*_	@name	Protected Attributes */
-    //_@{
+    /**	@name	Protected Attributes */
+    //*@{
 
-    /*_ The number of movable atoms in the system
-    */
-    Size no_of_atoms_; 
+		Size number_of_atoms_;
 
-    /*_ Vectors for gradients and search directions
+    /** The step length used in the line search 
     */
-    vector<Vector3> new_gradient_,old_gradient_,search_direction_;
-
-    /*_ The control factor alpha for doing the line search step
-    */
-    float line_search_alpha_; 
-
-    /*_ The control factor beta for doing the line search step
-    */
-    float line_search_beta_; 
-
-    /*_ The initial step length used in the line search 
-    */
-    float step_length_; 
-
-    /*_ The inverse of the current length of the search direction vector 
-    */
-    double inv_search_dir_norm_; 
+    double step_; 
 
     /*_ The optimal lambda in the last line search 
     */
-    double lambda_opt_; 
-
-    /*_ The current length of the gradient
-    */
-    double new_gradient_norm_; 
+    double lambda_; 
     //_@}
 
-    /*_ @name Protected methods. They are meant for internal use only!
-    */
-    //_@{
+		/**	The update method used for the CG
+		*/
+		UpdateMethod method_;
 
-    /*_ Calculate the current RMS gradient of a given gradient 
-    */
-    double calculateRMSGradientNorm(vector<Vector3> &gradient); 
+	};
 
-    /*_ Determine a new search direction 
-    */
-    void determineNewSearchDirection(bool return_gradient = false); 
-
-    /*_ Determine a new solution point. True is returned when successful. 
-    */
-    bool determineNewSolution(); 
-
-    /*_ Determine a new tentative lambda for the line search along
-        the current search direction vector 
-    */
-    double determineNewLambda(double f_0, double f_1, double dir_0, double dir_1,
-                              double lambda_0, double lambda_1); 
-    //_@}
-
-
-
-    };
-
-  } // end of namespace BALL
+} // end of namespace BALL
 
 
 
