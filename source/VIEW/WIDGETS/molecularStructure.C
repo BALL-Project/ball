@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.38 2004/04/16 14:55:34 amoll Exp $
+// $Id: molecularStructure.C,v 1.39 2004/04/16 15:25:36 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -1012,6 +1012,7 @@ namespace BALL
 		Options options;
 		options[MolecularDynamics::Option::ENERGY_OUTPUT_FREQUENCY] = 99999999;
 		options[MolecularDynamics::Option::TIME_STEP] = md_dialog_.getTimeStep();
+		options[MolecularDynamics::Option::REFERENCE_TEMPERATURE] = md_dialog_.getTemperature();
 
 		try
 		{
