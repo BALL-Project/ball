@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.29 2000/12/16 21:29:02 amoll Exp $
+// $Id: atom.h,v 1.30 2001/01/14 21:57:14 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -40,7 +40,7 @@
 #define BALL_ATOM_DEFAULT_RADIUS     0
 #define BALL_ATOM_DEFAULT_TYPE       UNKNOWN_TYPE
 #define BALL_ATOM_DEFAULT_VELOCITY   0,0,0
-#define BALL_ATOM_DEFAULT_FORCE   		0,0,0
+#define BALL_ATOM_DEFAULT_FORCE   	 0,0,0
 
 namespace BALL 
 {
@@ -84,8 +84,8 @@ namespace BALL
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: amoll $
-			@version $Revision: 1.29 $
-			@date    $Date: 2000/12/16 21:29:02 $
+			@version $Revision: 1.30 $
+			@date    $Date: 2001/01/14 21:57:14 $
 	*/
 	class Atom
 		: public Composite,
@@ -358,6 +358,19 @@ namespace BALL
 				throw();
 
 			//@}
+
+			/**	Equality operator.
+					Two atoms are equal if they have the same attributes and the same properties.
+					@see PropertyManager::operator ==
+			*/
+			bool operator == (const Atom& atom) const
+				throw();
+
+			/**	Inequality operator
+					@see operator ==
+			*/
+			bool operator != (const Atom& atom) const
+				throw();
 
 			/** @name Accessors: inspectors and mutators */
 			//@{ 

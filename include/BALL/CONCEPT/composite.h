@@ -1,4 +1,4 @@
-// $Id: composite.h,v 1.29 2001/01/08 10:03:27 anker Exp $
+// $Id: composite.h,v 1.30 2001/01/14 21:57:09 amoll Exp $
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
 #define BALL_CONCEPT_COMPOSITE_H
@@ -623,6 +623,20 @@ namespace BALL
 	
 		/**	@name	Predicates */
 		//@{
+
+		/**	Equality operator.
+				Two Composite objects are equal if they are homomorph.
+				@see Composite::isHomomorph
+		*/
+		bool operator == (const Composite& composite) const
+			throw();
+
+		/**	Inequality operator
+				@see operator ==
+		*/
+		bool operator != (const Composite& composite) const
+			throw();
+
 		/** Test if instance is expanded.
 				@see expand
 		*/

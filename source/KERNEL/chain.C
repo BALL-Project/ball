@@ -1,4 +1,4 @@
-// $Id: chain.C,v 1.9 2000/12/16 21:29:22 amoll Exp $
+// $Id: chain.C,v 1.10 2001/01/14 21:57:16 amoll Exp $
 
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/global.h>
@@ -333,5 +333,16 @@ namespace BALL
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
+	bool Chain::operator == (const Chain& chain) const
+		throw()
+	{
+		return(AtomContainer::operator == (chain));
+	}
+
+	bool Chain::operator != (const Chain& chain) const
+		throw()
+	{
+		return ! (*this == chain);
+	}
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: nucleotide.C,v 1.7 2000/12/16 21:29:22 amoll Exp $
+// $Id: nucleotide.C,v 1.8 2001/01/14 21:57:16 amoll Exp $
 
 #include <BALL/KERNEL/nucleotide.h>
 
@@ -284,6 +284,20 @@ namespace BALL
 		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
+	}
+
+	bool Nucleotide::operator == (const Nucleotide& nucleotide) const
+		throw()
+	{
+		return(Fragment::operator == (nucleotide) &&
+					 id_ == nucleotide.id_ &&
+					 insertion_code_ == nucleotide.insertion_code_);
+	}
+
+	bool Nucleotide::operator != (const Nucleotide& nucleotide) const
+		throw()
+	{
+		return ! (*this == nucleotide);
 	}
 
 } // namespace BALL

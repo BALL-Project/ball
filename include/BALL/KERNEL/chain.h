@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.19 2000/12/16 21:29:03 amoll Exp $
+// $Id: chain.h,v 1.20 2001/01/14 21:57:14 amoll Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -129,6 +129,20 @@ namespace BALL
 
 		//@}
 	
+		/**	Equality operator.
+				Two chains are equal if they have the same attributes and properties and are homomorph.
+				@see AtomContainer::operator ==
+		*/
+		bool operator == (const Chain& chain) const
+			throw();
+
+		/**	Inequality operator
+				@see operator ==
+		*/
+		bool operator != (const Chain& chain) const
+			throw();
+
+
 		/**	@name	Accessors */
 		//@{
 

@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.22 2000/12/16 21:29:03 amoll Exp $
+// $Id: residue.h,v 1.23 2001/01/14 21:57:15 amoll Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -162,6 +162,21 @@ namespace BALL
 			throw();
 	
 		//@}
+
+		/**	Equality operator.
+				Two residues are equal if they have the same attributes and properties and are homomorph.
+				This method uses Fragment::operator == .
+				@see Fragment::operator ==
+		*/
+		bool operator == (const Residue& residue) const
+			throw();
+
+		/**	Inequality operator
+				@see operator ==
+		*/
+		bool operator != (const Residue& residue) const
+			throw();
+
 
 		/**	@name	Accessors */
 		//@{

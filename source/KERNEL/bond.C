@@ -1,5 +1,5 @@
 
-// $Id: bond.C,v 1.12 2000/12/16 21:29:22 amoll Exp $
+// $Id: bond.C,v 1.13 2001/01/14 21:57:16 amoll Exp $
 
 #include <BALL/KERNEL/bond.h>
 
@@ -493,5 +493,24 @@ namespace BALL
 		bond_order_ = BALL_BOND_DEFAULT_ORDER;
 		bond_type_ = BALL_BOND_DEFAULT_TYPE;
 	}
+
+	bool Bond::operator == (const Bond& bond) const
+		throw()
+	{
+		return(
+			PropertyManager::operator ==(bond) &&
+			*first_			== *bond.first_			&&
+			*second_		== *bond.second_		&&
+			name_				== bond.name_				&&
+			bond_order_	== bond.bond_order_ &&
+			bond_type_	== bond.bond_type_);
+	}
+
+	bool Bond::operator != (const Bond& bond) const
+		throw()
+	{
+		return ! (*this == bond);
+	}
+
 
 } // namespace BALL

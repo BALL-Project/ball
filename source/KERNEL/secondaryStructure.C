@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.C,v 1.8 2000/12/16 21:29:22 amoll Exp $
+// $Id: secondaryStructure.C,v 1.9 2001/01/14 21:57:16 amoll Exp $
 
 #include <BALL/KERNEL/secondaryStructure.h>
 
@@ -303,6 +303,18 @@ namespace BALL
 		throw()
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
+	}
+
+	bool SecondaryStructure::operator == (const SecondaryStructure& secondary_structure) const
+		throw()
+	{
+		return(AtomContainer::operator == (secondary_structure));
+	}
+
+	bool SecondaryStructure::operator != (const SecondaryStructure& secondary_structure) const
+		throw()
+	{
+		return ! (*this == secondary_structure);
 	}
 
 

@@ -1,4 +1,4 @@
-// $Id: molecule.h,v 1.15 2000/12/16 21:29:03 amoll Exp $
+// $Id: molecule.h,v 1.16 2001/01/14 21:57:14 amoll Exp $
 
 #ifndef BALL_KERNEL_MOLECULE_H
 #define BALL_KERNEL_MOLECULE_H
@@ -246,6 +246,18 @@ namespace BALL
 
 		//@}
 
+		/**	Equality operator.
+				Two molecules are equal if they have the same attributes and properties and are homomorph.
+				@see AtomContainer::operator ==
+		*/
+		bool operator == (const Molecule& molecule) const
+			throw();
+
+		/**	Inequality operator
+				@see operator ==
+		*/
+		bool operator != (const Molecule& molecule) const
+			throw();
 
 		/**	@name	Storers */
 		//@{

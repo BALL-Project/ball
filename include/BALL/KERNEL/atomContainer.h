@@ -1,4 +1,4 @@
-// $Id: atomContainer.h,v 1.3 2000/12/16 21:29:02 amoll Exp $
+// $Id: atomContainer.h,v 1.4 2001/01/14 21:57:14 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -159,6 +159,22 @@ namespace BALL
 
 		//@}
 	
+		/**	Equality operator.
+				Two AtomContainers are equal if they have the same attributes and properties and are homomorph.
+				This method uses PropertyManager::operator == and Composite::operator	== .
+				@see PropertyManager::operator ==
+				@see Composite::operator ==
+		*/
+		bool operator == (const AtomContainer& atom_container) const
+			throw();
+
+		/**	Inequality operator
+				@see operator ==
+		*/
+		bool operator != (const AtomContainer& atom_container) const
+			throw();
+
+
 		/**	@name	Accessors */
 		//@{
 

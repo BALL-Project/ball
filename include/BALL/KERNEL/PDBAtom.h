@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.15 2000/12/16 21:29:02 amoll Exp $
+// $Id: PDBAtom.h,v 1.16 2001/01/14 21:57:14 amoll Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -123,6 +123,21 @@ namespace BALL
 			throw();
 
 		//@}
+
+
+		/**	Equality operator.
+				Two PDBAtoms are equal if they have the same attributes and properties.
+				@see Atom::operator ==
+		*/
+		bool operator == (const PDBAtom& pdb_atom) const
+			throw();
+
+		/**	Inequality operator
+				@see operator ==
+		*/
+		bool operator != (const PDBAtom& pdb_atom) const
+			throw();
+
 
 		/** @name Persistence */
 		//@{

@@ -1,4 +1,4 @@
-// $Id: composite.C,v 1.27 2000/12/15 20:19:06 amoll Exp $
+// $Id: composite.C,v 1.28 2001/01/14 21:57:15 amoll Exp $
 
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/persistenceManager.h>
@@ -1885,6 +1885,19 @@ namespace BALL
 		
 		return &composite;
 	}
+
+	bool Composite::operator == (const Composite& composite) const
+		throw()
+	{
+		return(isHomomorph(composite));
+	}
+
+	bool Composite::operator != (const Composite& composite) const
+		throw()
+	{
+		return !(*this == composite);
+	}
+
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/CONCEPT/composite.iC>

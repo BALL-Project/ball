@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.17 2000/12/16 21:29:03 amoll Exp $
+// $Id: secondaryStructure.h,v 1.18 2001/01/14 21:57:15 amoll Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -62,7 +62,7 @@ namespace BALL
 			throw();
 	
 		/// Copy constructor
-		SecondaryStructure(const SecondaryStructure& secondary_structure,bool deep = true)
+		SecondaryStructure(const SecondaryStructure& secondary_structure, bool deep = true)
 			throw();
 	
 		/// Detailled constructor 
@@ -82,6 +82,21 @@ namespace BALL
 			throw();
 	
 		//@}
+
+		/**	Equality operator.
+				Two SecondaryStructures are equal if they have the same attributes and properties and are homomorph.
+				@see AtomContainer::operator ==
+		*/
+		bool operator == (const SecondaryStructure& secondary_structure) const
+			throw();
+
+		/**	Inequality operator
+				@see operator ==
+		*/
+		bool operator != (const SecondaryStructure& secondary_structure) const
+			throw();
+
+
 
 		/** @name Persistence */
 		//@{

@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.17 2000/12/16 21:29:02 amoll Exp $
+// $Id: bond.h,v 1.18 2001/01/14 21:57:14 amoll Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -62,8 +62,8 @@ namespace BALL
 			
 			@memo    Bond class (BALL kernel framework)
 			@author  $Author: amoll $
-			@version $Revision: 1.17 $
-			@date    $Date: 2000/12/16 21:29:02 $
+			@version $Revision: 1.18 $
+			@date    $Date: 2001/01/14 21:57:14 $
 	*/
 	class Bond
 		: public Composite,
@@ -311,6 +311,19 @@ namespace BALL
 
 		//@}
 
+		/**	Equality operator.
+				Two bonds are equal if they have the same attributes and point to two equal atoms.
+				@see PropertyManager::operator ==
+				@see Atom::operator ==
+		*/
+		bool operator == (const Bond& bond) const
+			throw();
+
+		/**	Inequality operator
+				@see operator ==
+		*/
+		bool operator != (const Bond& bond) const
+			throw();
 
 		/** @name Assignment methods */
 		//@{

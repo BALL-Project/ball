@@ -1,4 +1,4 @@
-// $Id: fragment.h,v 1.12 2000/12/16 21:29:03 amoll Exp $
+// $Id: fragment.h,v 1.13 2001/01/14 21:57:14 amoll Exp $
 
 #ifndef BALL_KERNEL_FRAGMENT_H
 #define BALL_KERNEL_FRAGMENT_H
@@ -96,6 +96,19 @@ namespace BALL
 
 		//@}
 
+		/**	Equality operator.
+				Two fragments are equal if they have the same attributes and properties and are homomorph.
+				This method uses AtomContainer::operator == .
+				@see AtomContainer::operator ==
+		*/
+		bool operator == (const Fragment& fragment) const
+			throw();
+
+		/**	Inequality operator
+				@see operator ==
+		*/
+		bool operator != (const Fragment& fragment) const
+			throw();
 
 		/**	@name	Debugging and Diagnostics */
 		//@{

@@ -1,4 +1,4 @@
-// $Id: protein.C,v 1.8 2000/12/16 21:29:22 amoll Exp $
+// $Id: protein.C,v 1.9 2001/01/14 21:57:16 amoll Exp $
 
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/global.h>
@@ -295,5 +295,19 @@ namespace BALL
 	{
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
+
+	bool Protein::operator == (const Protein& protein) const
+		throw()
+	{
+		return(Molecule::operator == (protein) &&
+					 id_ == protein.id_ );
+	}
+
+	bool Protein::operator != (const Protein& protein) const
+		throw()
+	{
+		return ! (*this == protein);
+	}
+
 
 } // namespace BALL

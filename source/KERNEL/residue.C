@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.17 2000/12/16 21:29:22 amoll Exp $
+// $Id: residue.C,v 1.18 2001/01/14 21:57:16 amoll Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -518,5 +518,21 @@ namespace BALL
 
 		return full_name;
 	}
+
+	bool Residue::operator == (const Residue& residue) const
+		throw()
+	{
+		return(
+			Fragment::operator ==(residue)							&&
+			id_							== residue.id_							&&
+			insertion_code_	== residue.insertion_code_	);
+	}
+
+	bool Residue::operator != (const Residue& residue) const
+		throw()
+	{
+		return ! (*this == residue);
+	}
+
 
 } // namespace BALL

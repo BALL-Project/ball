@@ -1,4 +1,4 @@
-// $Id: protein.h,v 1.13 2000/12/16 21:29:03 amoll Exp $ 
+// $Id: protein.h,v 1.14 2001/01/14 21:57:15 amoll Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -150,6 +150,19 @@ namespace BALL
 			throw();
 	
 		//@}
+
+		/**	Equality operator.
+				Two proteins are equal if they have the same attributes and properties and are homomorph.
+				@see Molecule::operator ==
+		*/
+		bool operator == (const Protein& protein) const
+			throw();
+
+		/**	Inequality operator
+				@see operator ==
+		*/
+		bool operator != (const Protein& protein) const
+			throw();
 
 		/**	@name Accessors */
 		//@{

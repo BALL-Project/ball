@@ -1,4 +1,4 @@
-// $Id: fragment.C,v 1.8 2000/12/16 21:29:22 amoll Exp $
+// $Id: fragment.C,v 1.9 2001/01/14 21:57:16 amoll Exp $
 
 #include <BALL/KERNEL/fragment.h>
 
@@ -52,6 +52,18 @@ namespace BALL
 	{
 		AtomContainer::operator =(fragment);
 		return *this;
+	}
+
+	bool Fragment::operator == (const Fragment& fragment) const
+		throw()
+	{
+		return(AtomContainer::operator ==(fragment));
+	}
+
+	bool Fragment::operator != (const Fragment& fragment) const
+		throw()
+	{
+		return !(*this == fragment);
 	}
 			
 	void Fragment::dump(ostream& s, Size depth) const

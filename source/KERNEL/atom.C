@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.30 2000/12/16 21:29:22 amoll Exp $
+// $Id: atom.C,v 1.31 2001/01/14 21:57:15 amoll Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -189,6 +189,29 @@ namespace BALL
 		atom.set(*this, deep);
 	}
 			
+	bool Atom::operator == (const Atom& atom) const
+		throw()
+	{
+		return(
+			PropertyManager::operator ==(atom) &&
+			element_		== atom.element_		&&
+			charge_			== atom.charge_			&&
+			name_				== atom.name_				&&
+			type_name_	== atom.type_name_	&&
+			position_		== atom.position_		&&
+			radius_			== atom.radius_			&&
+			type_				== atom.type_				&&
+			velocity_		== atom.velocity_		&&
+			force_			== atom.force_			&&
+			number_of_bonds_ == atom.number_of_bonds_);
+	}
+
+	bool Atom::operator != (const Atom& atom) const
+		throw()
+	{
+		return ! (*this == atom);
+	}
+
 	void Atom::swap(Atom &atom)
 		throw()
 	{

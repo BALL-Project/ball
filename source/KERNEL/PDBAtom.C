@@ -1,4 +1,4 @@
-// $Id: PDBAtom.C,v 1.8 2000/12/16 21:29:22 amoll Exp $
+// $Id: PDBAtom.C,v 1.9 2001/01/14 21:57:15 amoll Exp $
 
 #include <BALL/KERNEL/PDBAtom.h>
 
@@ -325,5 +325,22 @@ namespace BALL
 		occupancy_										= BALL_PDBATOM_DEFAULT_OCCUPANCY;
 		temperature_factor_						= BALL_PDBATOM_DEFAULT_TEMPERATURE_FACTOR;
 	}
+
+	bool PDBAtom::operator == (const PDBAtom& pdb_atom) const
+		throw()
+	{
+		return(Atom::operator == (pdb_atom) &&
+					 branch_designator_							== pdb_atom.branch_designator_						&&
+					 remoteness_indicator_					== pdb_atom.remoteness_indicator_					&&
+					 alternate_location_indicator_	== pdb_atom.alternate_location_indicator_ &&
+					 temperature_factor_						== pdb_atom.temperature_factor_						);
+	}
+
+	bool PDBAtom::operator != (const PDBAtom& pdb_atom) const
+		throw()
+	{
+		return ! (*this == pdb_atom);
+	}
+
 
 } // namespace BALL
