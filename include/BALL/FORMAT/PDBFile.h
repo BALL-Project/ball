@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.16 2001/08/01 01:06:27 oliver Exp $
+// $Id: PDBFile.h,v 1.17 2001/08/24 01:32:11 oliver Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -248,11 +248,11 @@ namespace BALL
 
 		void postprocessRandomCoils_();
 
-		typedef HashMap<PDB::Integer,PDBAtom *>																										PDBAtomMap;
-		typedef	Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar>								ResidueQuadruple;
-		typedef HashMap<ResidueQuadruple, Residue *>																							ResidueMap;
-		typedef std::list<Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar> >		QuadrupleList;
-		typedef std::list<SecondaryStructure *>																										SecStrucList;
+		typedef HashMap<PDB::Integer,PDBAtom *>																							PDBAtomMap;
+		typedef	Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar>									ResidueQuadruple;
+		typedef HashMap<ResidueQuadruple, Residue *>																				ResidueMap;
+		typedef std::list<Quadruple<String, PDB::Character, PDB::Integer, PDB::AChar> >			QuadrupleList;
+		typedef std::list<SecondaryStructure *>																							SecStrucList;
 
 		PDBAtomMap			PDB_atom_map_;
 		ResidueMap			residue_map_;
@@ -273,7 +273,7 @@ namespace BALL
 		Residue*				current_residue_;
 		const Residue*	current_const_residue_;
 		PDBAtom*				current_PDB_atom_;
-		const PDBAtom*	current_const_PDB_atom_;
+		const Atom*			current_const_atom_;
 		String					residue_name_;
 
 		PDB::Character	chain_ID_;
