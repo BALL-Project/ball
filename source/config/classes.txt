@@ -55,7 +55,7 @@ List                                /           /
 Options                             X           /	isValid
 Quadruple                           /           /
 RegularData1D                       /           X
-RegularData2D                       /           Z
+RegularData2D                       X           Z
 RegularData3D                       /           /
 RegularExpression                   D           /
 String                              D           X
