@@ -1,4 +1,4 @@
-// $Id: string.C,v 1.23 2000/07/17 21:26:43 oliver Exp $
+// $Id: string.C,v 1.24 2000/07/18 22:55:17 oliver Exp $
 
 #include <BALL/DATATYPE/string.h>
 #include <BALL/COMMON/limits.h>
@@ -48,12 +48,12 @@ namespace BALL
 	String::CompareMode String::compare_mode_ = String::CASE_SENSITIVE;
 
 	Substring::UnboundSubstring::UnboundSubstring(const char* file, int line)
-		:	Exception::GeneralException(file, line)
+		:	Exception::GeneralException(file, line, "UnboundSubstring")
 	{
 	}
 
 	Substring::InvalidSubstring::InvalidSubstring(const char* file, int line)
-		:	Exception::GeneralException(file, line)
+		:	Exception::GeneralException(file, line, "InvalidSubstring")
 	{
 	}
 
