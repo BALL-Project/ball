@@ -1,4 +1,4 @@
-// $Id: textPersistenceManager.C,v 1.14 2002/01/09 02:56:36 oliver Exp $
+// $Id: textPersistenceManager.C,v 1.15 2002/01/09 03:03:02 oliver Exp $
 
 #include <BALL/CONCEPT/textPersistenceManager.h>
 
@@ -40,13 +40,13 @@ namespace BALL
 	{
 		static String s;
 		*istr_ >> s;
-		if (s != value)
+		if ((s != value) && (istr_->good()))
 		{
 			Log.error() << "textPersistenceManager::expect: " 
 				<< " at position " << istr_->tellg() << ": read " << s << ", expected " << value << endl;
 		}
 		
-		return (s == value);
+		return (s == value) && (istr_->good());
 	}
 
 	const char* TextPersistenceManager::indent() 
