@@ -1,4 +1,4 @@
-// $Id: object.h,v 1.3 1999/12/22 16:57:04 oliver Exp $ 
+// $Id: object.h,v 1.4 1999/12/28 18:41:03 oliver Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
@@ -116,7 +116,7 @@ namespace BALL
 		virtual bool isValid() const;
 
 		///
-		virtual void dump(::std::ostream& s = std::cout, unsigned long depth = 0) const;
+		virtual void dump(::std::ostream& s = std::cout, Size depth = 0) const;
 		//@}
 
 #		ifdef BALL_SUPPORT_OBJECT_MANAGER
@@ -199,7 +199,7 @@ namespace BALL
 			static bool isValid();
 
 			///
-			static void dump(::std::ostream& s = std::cout, unsigned long depth = 0);
+			static void dump(::std::ostream& s = std::cout, Size depth = 0);
 			//@}
 
 			typedef Object* IteratorPosition;
