@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.8 2004/12/21 14:44:37 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.9 2004/12/22 15:07:09 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -42,7 +42,7 @@ AddCartoonModel::AddCartoonModel()
 		helix_radius_(2.4),
 		arrow_width_(2),
 		arrow_height_(0.4),
-		DNA_helix_radius_(1.0),
+		DNA_helix_radius_(0.5),
 		DNA_ladder_radius_(0.8),
 		DNA_base_radius_(0.2),
 		draw_DNA_as_ladder_(false)
@@ -354,7 +354,7 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 		}
 
 		// iterate over the spline points between two amino acids
-		for (Position j = 0; j < 9; j++)
+		for (Position j = 0; j < interpolation_steps_; j++)
 		{
 			right  = spline_points_[spline_point_nr + 1] - spline_points_[spline_point_nr];
 			if (right.getSquareLength() == 0)
@@ -381,9 +381,9 @@ void AddCartoonModel::drawStrand_(SecondaryStructure& ss)
 		// interpolate the depth of the box
 		float new_arrow_width = 2 * (1 - j * 0.95 / 6.0) * arrow_width_; 
 		
-		right  = spline_points_[res * 9 + j + 1] - spline_points_[res * 9 + j];
+		right  = spline_points_[res * interpolation_steps_ + j + 1] - spline_points_[res * 9 + j];
 
-		drawStrand_(spline_points_[res * 9 + j], normal, right, new_arrow_width, last_vertices, *mesh);
+		drawStrand_(spline_points_[res * interpolation_steps_ + j], normal, right, new_arrow_width, last_vertices, *mesh);
 	}
 
 	last_point_ 				= spline_points_[spline_points_.size() - 1];
@@ -611,7 +611,8 @@ void AddCartoonModel::drawTube_(SecondaryStructure& ss)
 	Position max = index + nr_of_residues;
 	if (max > spline_vector_.size() - 1) max = spline_vector_.size() - 1;
 
-	buildGraphicalRepresentation_(spline_vector_position_ * 9, max * 9);
+	buildGraphicalRepresentation_(spline_vector_position_ * interpolation_steps_, 
+																										max * interpolation_steps_);
 
 	have_start_point_ = false;
 }

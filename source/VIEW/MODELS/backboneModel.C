@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17.2.11 2004/12/22 14:10:43 amoll Exp $
+// $Id: backboneModel.C,v 1.17.2.12 2004/12/22 15:07:05 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -247,10 +247,10 @@ namespace BALL
 		void AddBackboneModel::buildGraphicalRepresentation_(Size start, Size end)
 			throw(Exception::OutOfMemory)
 		{
-have_start_point_ = false;
-
 			if (spline_points_.size() == 0) return;
-			if (spline_points_.size() != atoms_of_spline_points_.size())
+			if (spline_points_.size() != atoms_of_spline_points_.size() ||
+														end >= atoms_of_spline_points_.size() ||
+													start >= atoms_of_spline_points_.size() )
 			{
 				Log.error() << "Error in " << __FILE__ << __LINE__ << std::endl;
 				return;
@@ -261,9 +261,7 @@ have_start_point_ = false;
 			if (!have_start_point_)
 			{
 				last_point_ = spline_points_[start];
-			}
-			else
-			{
+				start++;
 			}
 
 			// create sphere for the point
@@ -274,17 +272,32 @@ have_start_point_ = false;
  			sphere->setComposite(atoms_of_spline_points_[start]);
 			geometric_objects_.push_back(sphere);
 
-
+			// calculate the number of slides for the circle and the angle in between them
  			float slides = 8.0 + drawing_precision_ * 8.0;
 			Angle slides_angle = Angle(360.0 / slides, false);
-			vector<Vector3> points;
-			Vector3 dir = spline_points_[start + 1] - last_point_;
-			Vector3 n = Vector3(1,0,0);
- 
+
+			// direction vector of the two current spline points
+			Vector3 dir;
+
+			// prevent problems if last point is the same as the start point
+			while (true)
+			{
+				dir = spline_points_[start] - last_point_;
+				if (Maths::isZero(dir.getSquareLength()))
+				{
+					start++;
+				}
+				else
+				{
+					break;
+				}
+			}
+					
+			Vector3 n = Vector3(0,1,0);
+			// normal vector to direction vector dir, with length of radius
 			Vector3 r = dir % n;
 			if (Maths::isZero(r.getSquareLength())) 
 			{ 
-				n = Vector3(0,1,0);
 				r = dir % n;
 				if (Maths::isZero(r.getSquareLength())) 
 				{
@@ -295,12 +308,13 @@ have_start_point_ = false;
 			r.normalize();
 			r *= tube_radius_;
 
-			Vector3 x = r;
 			
+			// initialise a first set of points in a circle around the start position
+			vector<Vector3> points;
 			Matrix4x4 m;
 			m.setRotation(slides_angle, n % r);
+			Vector3 x = r;
 			points.push_back(x);
-			// initialise a first set of points in a circle around the start position
 			for (Position p = 0; p < slides; p++)
 			{
 				x = m * x;
@@ -309,27 +323,30 @@ have_start_point_ = false;
 			// add also a dummy for closing of ring
 			points.push_back(points[0]);
 
+			// same data structures for faster access
 			Mesh::Triangle t;
 			vector<Vector3> new_points;
 			new_points.resize(points.size());
 				
+			//------------------------------------------------------>
 			// iterate over all spline_points_
-			for (Position p = start + 1; p < end -1; p++)
+			for (Position p = start; p < end -1; p++)
 			{
-				Vector3 point 	= spline_points_[p];
-				Vector3 dir_new = spline_points_[p + 1] - spline_points_[p];
-//   				Vector3 dir_new = (spline_points_[p + 1] - point + dir) / 2.0;
+				// faster access to the current spline point
+				const Vector3 point = spline_points_[p];
+				
+				// new direction vector: new point - last point
+				const Vector3 dir_new = point - last_point_;
 
-				float f1 = dir_new.x * r.x + 
-									 dir_new.y * r.y + 
-									 dir_new.z * r.z;
-				float f2 = dir_new.x * dir_new.x +
-									 dir_new.y * dir_new.y + 
-									 dir_new.z * dir_new.z;
-				Vector3 r_new = r - ((f1/f2)*dir_new);
+				// new normal vector
+				Vector3 r_new = r - (
+				           (dir_new.x * r.x       + dir_new.y *       r.y + dir_new.z *       r.z)  /
+				           (dir_new.x * dir_new.x + dir_new.y * dir_new.y + dir_new.z * dir_new.z) 
+									 * dir_new);
 				r_new.normalize();
 				r_new *= tube_radius_;
 
+				// rotate all points of the circle according to new normal
 				m.setRotation(slides_angle, dir_new);
 				x = r_new;
 				new_points[0] = x;
@@ -338,12 +355,13 @@ have_start_point_ = false;
 					x = m * x;
 					new_points[i + 1] = x;
 				}
-				// add also a dummy for closing of ring
+				// dont forget the dummy for closing of ring
 				new_points[new_points.size() - 1] = new_points[0];
 
 				Mesh* mesh = new Mesh();
 			
-				for (Position point_pos = 0; point_pos < points.size() - 2; point_pos++)
+
+				for (Position point_pos = 0; point_pos < points.size() - 1; point_pos++)
 				{
 					mesh->vertex.push_back(last_point_ + 		 points[point_pos]);
 					mesh->vertex.push_back(			point  + new_points[point_pos]);
