@@ -1,7 +1,9 @@
-// $Id: peak.C,v 1.6 2000/09/22 11:49:34 amoll Exp $
+// $Id: peak.C,v 1.7 2000/09/22 17:19:12 oliver Exp $
 
 #include<BALL/NMR/peak.h>
 #include<BALL/MATHS/common.h>
+
+using namespace std;
 
 namespace BALL
 {
