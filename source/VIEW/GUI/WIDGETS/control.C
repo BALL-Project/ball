@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.7.4.11 2002/12/03 15:55:12 amoll Exp $
+// $Id: control.C,v 1.7.4.12 2002/12/06 16:47:07 amoll Exp $
 
 #include <BALL/VIEW/GUI/WIDGETS/control.h>
 #include <BALL/KERNEL/atom.h>
@@ -258,6 +258,7 @@ void Control::invalidateSelection()
 	updateSelection();
 }
 
+
 void Control::setSelection_()
 	throw(MainControlMissing)
 {	
@@ -304,14 +305,16 @@ void Control::setSelection_()
 
 void Control::updateSelection()
 {
-	//filterSelection_(geometric_filter_);
-	//sentSelection();
+	filterSelection_(geometric_filter_);
+	sentSelection();
 }
+
 
 void Control::sentSelection()
 {
 	// sent new selection through tree
-	GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
+	//GeometricObjectSelectionMessage* message = new GeometricObjectSelectionMessage;
+	ControlSelectionMessage* message = new ControlSelectionMessage;
 	message->setSelection(selected_);
 	message->setDeletable(true);
 
@@ -362,14 +365,9 @@ void Control::filterSelection_(Filter& filter)
 		{
 			Composite* composite = getCompositeAddress_(it.current());
 			
-			if (composite != 0)
-			{
-				composite->host(filter);
-				if (filter)
-				{
-					selected_.push_back(composite);
-				}
-			}
+		//	if (composite == 0) Log.error() << "0 in Control" << std::endl;
+
+			selected_.push_back(composite);
 		}
 	}
 }
