@@ -1,15 +1,16 @@
-// $Id: HaighMallionShiftProcessor_test.C,v 1.4 2000/09/24 13:27:45 oliver Exp $
+// $Id: HaighMallionShiftProcessor_test.C,v 1.5 2000/09/25 14:12:02 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/FORMAT/HINFile.h>
+#include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/FORMAT/PDBFile.h>
 
 ///////////////////////////
 
-START_TEST(HaighMallionShiftProcessor, "$Id: HaighMallionShiftProcessor_test.C,v 1.4 2000/09/24 13:27:45 oliver Exp $")
+START_TEST(HaighMallionShiftProcessor, "$Id: HaighMallionShiftProcessor_test.C,v 1.5 2000/09/25 14:12:02 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -38,7 +39,6 @@ f.close();
 CHECK(HaighMallionShiftProcessor::HaighMallionShiftProcessor(const HaighMallionShiftProcessor& processor) throw())
   //BAUSTELLE
 RESULT
-/*
 
 CHECK(HaighMallionShiftProcessor::init() throw())
   HaighMallionShiftProcessor sp;
@@ -68,9 +68,9 @@ CHECK(HaighMallionShiftProcessor::Processor::Result operator () (Composite& comp
   //BAUSTELLE
 RESULT
 
+PRECISION(0.002)
 
 CHECK(chemical shifts/without rings)
-	PRECISION(0.0001)
 	HaighMallionShiftProcessor sp;
 	sp.setParameters(parameters);
 	sp.init();
@@ -87,7 +87,10 @@ CHECK(chemical shifts/without rings)
 		{
 			if (atom_it->hasProperty(HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT))
 			{
-				i++;
+				if (atom_it->getProperty(HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat() != 0.0)
+				{
+					i++;
+				}
 			}
 		}
 		TEST_EQUAL(i, 0)
@@ -98,16 +101,19 @@ RESULT
 f.open("data/HaighMallionShiftProcessor_test2.hin");
 f >> S;
 CHECK(chemical shifts/with rings)
-	StringHashMap<float> rc_shifts;
+	StringHashMap<float> shifts;
 	ifstream infile("data/HaighMallionShiftProcessor_test.dat");
 	String name;
 	float shift;
 	while (infile.good())
 	{
 		infile >> name >> shift;
-		rc_shifts.insert(name, shift);
+		if (name != "")
+		{
+			shifts.insert(name, shift);
+		}
 	}
-	TEST_EQUAL(rc_shifts.size(), 79)
+	TEST_EQUAL(shifts.size(), 97)
 
 	HaighMallionShiftProcessor sp;
 	sp.setParameters(parameters);
@@ -129,41 +135,64 @@ CHECK(chemical shifts/with rings)
 				if (shift != 0)
 				{
 					STATUS("shift of " << atom_it->getFullName() << ": " << shift)
-					TEST_EQUAL(rc_shifts.has(atom_it->getFullName()), true)
-					if (rc_shifts.has(atom_it->getFullName()))
+					TEST_EQUAL(shifts.has(atom_it->getFullName()), true)
+					if (shifts.has(atom_it->getFullName()))
 					{
-						TEST_REAL_EQUAL(shift, rc_shifts[atom_it->getFullName()])
+						TEST_REAL_EQUAL(shift, shifts[atom_it->getFullName()])
 						i++;
+						shifts.erase(atom_it->getFullName());
 					}
 				}
 			}
 		}
-		TEST_EQUAL(i, 79)
+		TEST_EQUAL(i, 97)
+		TEST_EQUAL(shifts.size(), 0)
+		if (shifts.size() != 0)
+		{
+			StringHashMap<float>::Iterator it = shifts.begin();
+			for (; +it; ++it)
+			{
+				STATUS("unassigned shift for: " << it->first)
+			}
+		}
+		
 	}	
 RESULT
-*/
-f.open("data/HaighMallionShiftProcessor_test3.hin");
-f >> S;
 
-CHECK(chemical shifts/with rings)
-	StringHashMap<float> rc_shifts;
-	ifstream infile("data/HaighMallionShiftProcessor_test3.dat");
+PDBFile PDB_file;
+FragmentDB frag_db;
+
+PRECISION(0.00015)
+CHECK(chemical shifts -- PHE)
+
+	// check the shift caused by PHE rings
+	S.destroy();
+	PDBFile pdb_file("data/HaighMallionShiftProcessor_test_PHE.pdb");
+	pdb_file >> S;
+	pdb_file.close();
+	S.apply(frag_db.build_bonds);
+
+	StringHashMap<float> shifts;
+	ifstream infile("data/HaighMallionShiftProcessor_test_PHE.dat");
 	String name;
 	float shift;
 	while (infile.good())
 	{
 		infile >> name >> shift;
-		rc_shifts.insert(name, shift);
+		if (name != "")
+		{
+			shifts.insert(name, shift);
+		}
 	}
-	TEST_EQUAL(rc_shifts.size(), 2)
+	TEST_EQUAL(shifts.size(), 2)
 
 	HaighMallionShiftProcessor sp;
 	sp.setParameters(parameters);
 	sp.init();
 	TEST_EQUAL(sp.isValid(), true)
-	TEST_EQUAL(S.countAtoms(), 32)
+	TEST_EQUAL(S.countAtoms(), 20)
 	
-	if (S.countAtoms() == 32)
+	if (S.countAtoms() == 20)
 	{
 		S.apply(sp);
 
@@ -177,10 +206,193 @@ CHECK(chemical shifts/with rings)
 				if (shift != 0)
 				{
 					STATUS("shift of " << atom_it->getFullName() << ": " << shift)
-					TEST_EQUAL(rc_shifts.has(atom_it->getFullName()), true)
-					if (rc_shifts.has(atom_it->getFullName()))
+					TEST_EQUAL(shifts.has(atom_it->getFullName()), true)
+					if (shifts.has(atom_it->getFullName()))
 					{
-						TEST_REAL_EQUAL(shift, rc_shifts[atom_it->getFullName()])
+						TEST_REAL_EQUAL(shift, shifts[atom_it->getFullName()])
+						i++;
+					}
+					else
+					{
+						TEST_REAL_EQUAL(shift, 0.0)
+					}
+				}
+			}
+		}
+		TEST_EQUAL(i, 2)
+	}	
+RESULT
+
+
+CHECK(chemical shifts -- TRP)
+
+	// check the shift caused by TRP rings
+	S.destroy();
+	PDBFile pdb_file("data/HaighMallionShiftProcessor_test_TRP.pdb");
+	pdb_file >> S;
+	pdb_file.close();
+	S.apply(frag_db.build_bonds);
+
+	StringHashMap<float> shifts;
+	ifstream infile("data/HaighMallionShiftProcessor_test_TRP.dat");
+	String name;
+	float shift;
+	while (infile.good())
+	{
+		infile >> name >> shift;
+		if (name != "")
+		{
+			shifts.insert(name, shift);
+		}
+	}
+	TEST_EQUAL(shifts.size(), 2)
+
+	HaighMallionShiftProcessor sp;
+	sp.setParameters(parameters);
+	sp.init();
+	TEST_EQUAL(sp.isValid(), true)
+	TEST_EQUAL(S.countAtoms(), 24)
+	
+	if (S.countAtoms() == 24)
+	{
+		S.apply(sp);
+
+		AtomIterator atom_it = S.beginAtom();
+		Position i = 0;
+		for (; +atom_it; ++atom_it)
+		{
+			if (atom_it->hasProperty(HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT))
+			{
+				shift = atom_it->getProperty(HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat();
+				if (shift != 0)
+				{
+					STATUS("shift of " << atom_it->getFullName() << ": " << shift)
+					TEST_EQUAL(shifts.has(atom_it->getFullName()), true)
+					if (shifts.has(atom_it->getFullName()))
+					{
+						TEST_REAL_EQUAL(shift, shifts[atom_it->getFullName()])
+						i++;
+					}
+					else
+					{
+						TEST_REAL_EQUAL(shift, 0.0)
+					}
+				}
+			}
+		}
+		TEST_EQUAL(i, 2)
+	}	
+RESULT
+
+
+CHECK(chemical shifts -- TYR)
+
+	// check the shift caused by TYR rings
+	S.destroy();
+	PDBFile pdb_file("data/HaighMallionShiftProcessor_test_TYR.pdb");
+	pdb_file >> S;
+	pdb_file.close();
+	S.apply(frag_db.build_bonds);
+
+	StringHashMap<float> shifts;
+	ifstream infile("data/HaighMallionShiftProcessor_test_TYR.dat");
+	String name;
+	float shift;
+	while (infile.good())
+	{
+		infile >> name >> shift;
+		if (name != "")
+		{
+			shifts.insert(name, shift);
+		}
+	}
+	TEST_EQUAL(shifts.size(), 2)
+
+	HaighMallionShiftProcessor sp;
+	sp.setParameters(parameters);
+	sp.init();
+	TEST_EQUAL(sp.isValid(), true)
+	TEST_EQUAL(S.countAtoms(), 21)
+	
+	if (S.countAtoms() == 21)
+	{
+		S.apply(sp);
+
+		AtomIterator atom_it = S.beginAtom();
+		Position i = 0;
+		for (; +atom_it; ++atom_it)
+		{
+			if (atom_it->hasProperty(HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT))
+			{
+				shift = atom_it->getProperty(HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat();
+				if (shift != 0)
+				{
+					STATUS("shift of " << atom_it->getFullName() << ": " << shift)
+					TEST_EQUAL(shifts.has(atom_it->getFullName()), true)
+					if (shifts.has(atom_it->getFullName()))
+					{
+						TEST_REAL_EQUAL(shift, shifts[atom_it->getFullName()])
+						i++;
+					}
+					else
+					{
+						TEST_REAL_EQUAL(shift, 0.0)
+					}
+				}
+			}
+		}
+		TEST_EQUAL(i, 2)
+	}	
+RESULT
+
+
+CHECK(chemical shifts -- HIS)
+
+	// check the shift caused by HIS rings
+	S.destroy();
+	PDBFile pdb_file("data/HaighMallionShiftProcessor_test_HIS.pdb");
+	pdb_file >> S;
+	pdb_file.close();
+	S.apply(frag_db.build_bonds);
+
+	StringHashMap<float> shifts;
+	ifstream infile("data/HaighMallionShiftProcessor_test_HIS.dat");
+	String name;
+	float shift;
+	while (infile.good())
+	{
+		infile >> name >> shift;
+		if (name != "")
+		{
+			shifts.insert(name, shift);
+		}
+	}
+	TEST_EQUAL(shifts.size(), 2)
+
+	HaighMallionShiftProcessor sp;
+	sp.setParameters(parameters);
+	sp.init();
+	TEST_EQUAL(sp.isValid(), true)
+	TEST_EQUAL(S.countAtoms(), 18)
+	
+	if (S.countAtoms() == 18)
+	{
+		S.apply(sp);
+
+		AtomIterator atom_it = S.beginAtom();
+		Position i = 0;
+		for (; +atom_it; ++atom_it)
+		{
+			if (atom_it->hasProperty(HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT))
+			{
+				shift = atom_it->getProperty(HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat();
+				if (shift != 0)
+				{
+					STATUS("shift of " << atom_it->getFullName() << ": " << shift)
+					TEST_EQUAL(shifts.has(atom_it->getFullName()), true)
+					if (shifts.has(atom_it->getFullName()))
+					{
+						TEST_REAL_EQUAL(shift, shifts[atom_it->getFullName()])
 						i++;
 					}
 					else
