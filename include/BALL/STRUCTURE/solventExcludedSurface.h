@@ -1,8 +1,9 @@
-// $Id: solventExcludedSurface.h,v 1.5 2000/10/30 00:19:27 amoll Exp $
+// $Id: solventExcludedSurface.h,v 1.6 2000/12/07 15:02:34 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 #define BALL_STRUCTURE_SOLVENTEXCLUDEDSURFACE_H
 
+//#define denug_ses
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
 #	include <BALL/STRUCTURE/SESVertex.h>
@@ -70,19 +71,21 @@ namespace BALL
 		*/
 		TSolventExcludedSurface(TReducedSurface<T>* reduced_surface)
 		{
+			#ifdef debug_ses
 			print.open("SolventExcludedSurface.log");
 			pre = "  ";
 			print << "START\n";
 			print << pre << "SolventExcludedSurface(reducedSurface)\n";
 			pre += "  ";
-			vector< TRSVertex<T>* > vertices(reduced_surface->getVertices());
-			for (Position i = 0; i < vertices.size(); i++)
+			#endif
+			vector< TRSVertex<T>* > rs_vertices(reduced_surface->getVertices());
+			for (Position i = 0; i < rs_vertices.size(); i++)
 			{
-				if (vertices[i] != NULL)
+				if (rs_vertices[i] != NULL)
 				{
 					TSESFace<T>* face = new TSESFace<T>();
 					face->type = TSESFace<T>::TYPE_CONTACT;
-					face->rsvertex = vertices[i];
+					face->rsvertex = rs_vertices[i];
 					face->rsedge = NULL;
 					face->rsface = NULL;
 					face->index = contact_faces.size();
@@ -93,30 +96,32 @@ namespace BALL
 					contact_faces.push_back(NULL);
 				}
 			}
-			vector< TRSEdge<T>* > edges(reduced_surface->getEdges());
-			for (Position i = 0; i < edges.size(); i++)
+			vector< TRSEdge<T>* > rs_edges(reduced_surface->getEdges());
+			for (Position i = 0; i < rs_edges.size(); i++)
 			{
 				TSESFace<T>* face = new TSESFace<T>();
 				face->type = TSESFace<T>::TYPE_TORIC;
 				face->rsvertex = NULL;
-				face->rsedge = edges[i];
+				face->rsedge = rs_edges[i];
 				face->rsface = NULL;
 				face->index = toric_faces.size();
 				toric_faces.push_back(face);
 			}
-			vector< TRSFace<T>* > faces(reduced_surface->getFaces());
-			for (Position i = 0; i < faces.size(); i++)
+			vector< TRSFace<T>* > rs_faces(reduced_surface->getFaces());
+			for (Position i = 0; i < rs_faces.size(); i++)
 			{
 				TSESFace<T>* face = new TSESFace<T>();
 				face->type = TSESFace<T>::TYPE_SPHERIC;
 				face->rsvertex = NULL;
 				face->rsedge = NULL;
-				face->rsface = faces[i];
+				face->rsface = rs_faces[i];
 				face->index = spheric_faces.size();
 				spheric_faces.push_back(face);
 			}
+			#ifdef debug_ses
 			pre.replace(0,2,"");
 			print << pre << "end\n";
+			#endif
 		}
 
 		/**	Destructor.
@@ -125,8 +130,11 @@ namespace BALL
 		*/
 		virtual ~TSolventExcludedSurface()
 		{
+			#ifdef debug_ses
+			print << *this;
 			print << pre << "~SolventExcludedSurface\n";
 			pre += "  ";
+			#endif
 			for (Position i = 0; i < vertices.size(); i++)
 			{
 				delete vertices[i];
@@ -140,7 +148,10 @@ namespace BALL
 			}
 			for (Position i = 0; i < contact_faces.size(); i++)
 			{
-				delete contact_faces[i];
+				if (contact_faces[i] != NULL)
+				{
+					delete contact_faces[i];
+				}
 			}
 			for (Position i = 0; i < toric_faces.size(); i++)
 			{
@@ -160,9 +171,11 @@ namespace BALL
 					delete spheric_faces[i];
 				}
 			}
+			#ifdef debug_ses
 			pre.replace(0,2,"");
 			print << pre << "end\n";
 			print << "ENDE\n";
+			#endif
 		}
 		//@}
 
@@ -178,11 +191,12 @@ namespace BALL
 		{
 			for (Position i = 0; i < spheric_faces.size(); i++)
 			{
+//cout << "s" << i << "\n";
 				createSphericFace(i,rs);
 			}
 			for (Position i = 0; i < toric_faces.size(); i++)
 			{
-//cout << i << "\n";
+//cout << "t" << i << "\n";
 				createToricFace(i,rs);
 			}
 		}
@@ -191,49 +205,63 @@ namespace BALL
 		{
 			TSESFace<T>* face = spheric_faces[j];
 			TRSFace<T>* rsface = face->rsface;
-			TSphere3<T> probe(rsface->getCenter(),rs->getProbeRadius());
+			T radius_of_probe = rs->getProbeRadius();
+			TSphere3<T> probe(rsface->getCenter(),radius_of_probe);
+//cout << "  ... init\n";
 			for (Position i = 0; i < 3; i++)
 			{
-				Index index = rsface->getVertex(i);
-				pushVertex(face,probe,rs->getSphere(index),index);
-//				pushVertex(face,probe,rs->vertices[rsface->vertex[i]]);
+//cout << "  v" << i << "\n";
+				TRSVertex<T>* rsvertex = rsface->getVertex(i);
+//cout << "    rsvertex found: " << *rsvertex << "\n";
+				pushVertex(face,probe,rs->getSphere(rsvertex->getAtom()),rsvertex);
+//cout << "  ... ok\n";
 			}
-			T radius_of_probe = rs->getProbeRadius();
+//cout << "  e0\n";
 			pushConcaveEdge(face,0,1,radius_of_probe);
+//cout << "  ... ok\n  e1\n";
 			pushConcaveEdge(face,1,2,radius_of_probe);
+//cout << "  ... ok\n  e2\n";
 			pushConcaveEdge(face,2,0,radius_of_probe);
+//cout << "  ... ok\n";
 		}
 
-		TSESVertex<T>* createVertex(const TVector3<T>& center, const TSphere3<T>& atom,
-																Index index)//, const T& dist)
+		TSESVertex<T>* createVertex(const TVector3<T>& center, const TSphere3<T>& atom, Index index)
 			{
 				TSESVertex<T>* vertex = new TSESVertex<T>();
-//				vertex->p = getPoint(center,atom.p,dist);
 				vertex->p = getPoint(atom.p,center,atom.radius);
-//				vertex->n = center-atom.p;
 				vertex->atom = index;
 				vertex->index = vertices.size();
 				return vertex;
 			}
 
-		void pushVertex(TSESFace<T>* face, const TSphere3<T>& probe, const TSphere3<T>& atom, Index index)
+		void pushVertex(TSESFace<T>* face, const TSphere3<T>& probe,
+										const TSphere3<T>& atom, TRSVertex<T>* rsvertex)
 		{
 			TRSFace<T>* rsface = face->rsface;
 			TSESVertex<T>* vertex;
-			vertex = createVertex(probe.p,atom,index);//,probe.radius);
+//cout << "    init\n";
+			vertex = createVertex(probe.p,atom,rsvertex->getAtom());
+//cout << "    vertex built\n";
 			face->vertex.push_back(vertex);
-			Index tf1, tf2;
-			rsface->getEdges(index, tf1, tf2);
-			toric_faces[tf1]->vertex.push_back(vertex);
-			toric_faces[tf2]->vertex.push_back(vertex);
-			contact_faces[index]->vertex.push_back(vertex);
+			TRSEdge<T>* tf1;
+			TRSEdge<T>* tf2;
+			rsface->getEdges(rsvertex,tf1,tf2);
+//cout << "    toric faces found:  " << tf1 << ", " << tf2 << "\n";
+//cout << "    " << tf1->getIndex() << "\n";
+			toric_faces[tf1->getIndex()]->vertex.push_back(vertex);
+//cout << "    ... first toric face ok\n";
+//cout << "    " << tf2->getIndex() << "\n";
+			toric_faces[tf2->getIndex()]->vertex.push_back(vertex);
+//cout << "    ... second toric face ok\n";
+			contact_faces[rsvertex->getIndex()]->vertex.push_back(vertex);
+//cout << "    ... contact face ok\n";
 			vertices.push_back(vertex);
+//cout << "    vertex pushed\n";
 		}
 		
 
-		TSESEdge<T>* createConcaveEdge
-			(TSESFace<T>* spheric_face, Position p1, Position p2,
-			 Index index, const T& radius_of_probe)
+		TSESEdge<T>* createConcaveEdge(TSESFace<T>* spheric_face, Position p1, Position p2,
+																	 Index index, const T& radius_of_probe)
 		{
 			TSESEdge<T>* edge = new TSESEdge<T>();
 			edge->vertex1 = spheric_face->vertex[p1];
@@ -251,15 +279,15 @@ namespace BALL
 				normal.negate();
 			}
 			edge->circle = TCircle3<T>(rsface->getCenter(),normal,radius_of_probe);
-
 			return edge;
 		}
 
 		void pushConcaveEdge(TSESFace<T>* face, Position p1, Position p2, const T& radius_of_probe)
 		{
 			TRSFace<T>* rsface = face->rsface;
-			Index index;
-			rsface->getEdge(rsface->getVertex(p1),rsface->getVertex(p2),index);
+			TRSEdge<T>* rsedge;
+			rsface->getEdge(rsface->getVertex(p1),rsface->getVertex(p2),rsedge);
+			Index index = rsedge->getIndex();
 			TSESEdge<T>* edge;
 			edge = createConcaveEdge(face,p1,p2,index,radius_of_probe);
 			face->edge.push_back(edge);
@@ -269,9 +297,11 @@ namespace BALL
 			edges.push_back(edge);
 		}
 
-		TSESEdge<T>* createConvexEdge(TSESFace<T>* toric_face, Index atom)
+		TSESEdge<T>* createConvexEdge(TSESFace<T>* toric_face, TRSVertex<T>* rsvertex)
 		{
 			TSESEdge<T>* edge = new TSESEdge<T>();
+			Index atom = rsvertex->getAtom();
+			Index index = rsvertex->getIndex();
 			Position i = 0;
 			while (toric_face->vertex[i]->atom != atom)
 			{
@@ -285,11 +315,11 @@ namespace BALL
 			}
 			edge->vertex2 = toric_face->vertex[i];						// second vertex on the surface of the rsvertex
 			edge->face1 = toric_face;
-			edge->face2 = contact_faces[atom];
+			edge->face2 = contact_faces[index];
 			edge->rsedge = toric_face->rsedge;
 			edge->type = 0;
 			edge->index = edges.size();
-			if (edge->rsedge->getVertex(0) == atom)
+			if (edge->rsedge->getVertex(0)->getIndex() == index)
 			{
 				TCircle3<T> circle0(edge->rsedge->getContactCircle(0));
 				TCircle3<T> circle1(edge->rsedge->getContactCircle(1));
@@ -313,15 +343,17 @@ namespace BALL
 				return;
 			}
 			TSESEdge<T>* edge;
-			Index index = face->rsedge->getVertex(0);
-			edge = createConvexEdge(face,index);
+			TRSVertex<T>* rsvertex = face->rsedge->getVertex(0);
+			Index index = rsvertex->getIndex();
+			edge = createConvexEdge(face,rsvertex);
 				face->edge.push_back(edge);
 				face->orientation.push_back(1);
 				contact_faces[index]->edge.push_back(edge);
 				contact_faces[index]->orientation.push_back(0);
 				edges.push_back(edge);
-			index = face->rsedge->getVertex(1);
-			edge = createConvexEdge(face,index);
+			rsvertex = face->rsedge->getVertex(1);
+			index = rsvertex->getIndex();
+			edge = createConvexEdge(face,rsvertex);
 				face->edge.push_back(edge);
 				face->orientation.push_back(1);
 				contact_faces[index]->edge.push_back(edge);
@@ -376,29 +408,18 @@ namespace BALL
 			{                                                           //      /________\					x
 				edge3 = edges[e];                                         //   p1/   e1     \p2
 			}
-//cout << "Face" << face->index << ":  " << *face << "\n";
-//cout << "RSEdge: " << *(face->rsedge) << "\n";
-//cout << "Edge0:  " << *edge0 << "\n";
-//cout << "Edge1:  " << *edge1 << "\n";
-//cout << "Edge2:  " << *edge2 << "\n";
-//cout << "Edge3:  " << *edge3 << "\n";
-//cout << "Point0: " << *p0 << "\n";
-//cout << "Point1: " << *p1 << "\n";
-//cout << "Point2: " << *p2 << "\n";
-//cout << "Point3: " << *p3 << "\n";
-//cout << p1->atom << "  " << p3->atom << "  "
-//		 << face->rsedge->vertex[0] << "  " << face->rsedge->vertex[1] << "\t";
-			Position ip1 = ((p1->atom == face->rsedge->getVertex(0)) ? 0 : 1);
+			Position ip1 = ((p1->atom == face->rsedge->getVertex(0)->getAtom()) ? 0 : 1);
 			Position ip3 = 1-ip1;
-//cout << "=>  " << ip1 << "  " << ip3 << "\n";
-// create the new points
+			// create the new points
 			TSESVertex<T>* new_point1 = new TSESVertex<T>(face->rsedge->getIntersectionPoint(ip1),
-																										face->rsedge->getVertex(ip1),vertices.size());
+																										face->rsedge->getVertex(ip1)->getAtom(),
+																										vertices.size());
 			vertices.push_back(new_point1);
 			TSESVertex<T>* new_point3 = new TSESVertex<T>(face->rsedge->getIntersectionPoint(ip3),
-																										face->rsedge->getVertex(ip3),vertices.size());
+																										face->rsedge->getVertex(ip3)->getAtom(),
+																										vertices.size());
 			vertices.push_back(new_point3);
-// create the new edges
+			// create the new edges
 			TSESEdge<T>* new_edge0 = new TSESEdge<T>(*edge0);
 			TSESEdge<T>* new_edge1 = new TSESEdge<T>(*edge0);
 			TSESEdge<T>* new_edge2 = new TSESEdge<T>(*edge2);
@@ -429,7 +450,7 @@ namespace BALL
 																							 intersection_circle,face->rsedge,edges.size());
 			edges.push_back(new_edge4);
 			singular_edges.push_back(new_edge4);
-// update the neighbour faces
+			// update the neighbour faces
 			for (j = 0; j < neighbour0->edge.size(); j++)
 			{
 				if (neighbour0->edge[j] == edge0)
@@ -469,7 +490,8 @@ namespace BALL
 				neighbour0->orientation.push_back(1);
 				neighbour2->orientation.push_back(0);
 			}
-// update the toric face
+
+			// update the toric face
 			vector< TSESVertex<T>* > face_vertices(6);
 			vector< TSESEdge<T>* > face_edges(6);
 			vector<bool> orientations(0);
@@ -485,7 +507,6 @@ namespace BALL
 			face_edges[3] = new_edge1;
 			face_edges[4] = new_edge2;
 			face_edges[5] = new_edge3;
-//			face_edges[6] = new_edge4;
 			TSESFace<T>* new_face =
 					new TSESFace<T>(TSESFace<T>::TYPE_TORIC_SINGULAR,NULL,face->rsedge,NULL,
 													face_vertices,face_edges,orientations,singular_toric_faces.size());
@@ -502,25 +523,16 @@ namespace BALL
 			edge3->face1 = edge3->other(face);
 			edge3->face2 = new_face;
 			singular_toric_faces.push_back(new_face);
-// delete the intersecting edges
+			// delete the intersecting edges
 			Position index = edge0->index;
 			delete edge0;
 			edges[index] = NULL;
 			index = edge2->index;
 			delete edge2;
 			edges[index] = NULL;
-// move the toric face into the list of singular toric faces
+			// move the toric face into the list of singular toric faces
 			toric_faces[face->index] = NULL;
 			delete face;
-//cout << "new_edge0: " << *new_edge0 << "\n";
-//cout << "new_edge1: " << *new_edge1 << "\n";
-//cout << "new_edge2: " << *new_edge2 << "\n";
-//cout << "new_edge3: " << *new_edge3 << "\n";
-//cout << "new_edge4: " << *new_edge4 << "\n";
-//cout << *neighbour0 << "\n";
-//cout << *neighbour2 << "\n";
-//			face->index = singular_toric_faces.size();
-//			singular_toric_faces.push_back(face);
 		}
 
 		void createFreeToricFace(Position i)
@@ -528,33 +540,33 @@ namespace BALL
 			TSESFace<T>* face(toric_faces[i]);
 			TCircle3<T> circle1(face->rsedge->getContactCircle(0));
 			TCircle3<T> circle2(face->rsedge->getContactCircle(1));
-			Index vertex1(face->rsedge->getVertex(0));
-			Index vertex2(face->rsedge->getVertex(1));
+			Index index1(face->rsedge->getVertex(0)->getIndex());
+			Index index2(face->rsedge->getVertex(1)->getIndex());
 			TSESEdge<T>* edge = new TSESEdge<T>();
 				edge->type = 0;
 				edge->vertex1 = NULL; edge->vertex2 = NULL;
 				edge->rsedge = face->rsedge;
 				edge->face1 = face;
-				edge->face2 = contact_faces[vertex1];
+				edge->face2 = contact_faces[index1];
 				edge->circle = TCircle3<T>(circle1.p,circle1.p-circle2.p,circle1.radius);
 				edge->index = edges.size();
 				face->edge.push_back(edge);
 				face->orientation.push_back(1);
-				contact_faces[vertex1]->edge.push_back(edge);
-				contact_faces[vertex1]->orientation.push_back(0);
+				contact_faces[index1]->edge.push_back(edge);
+				contact_faces[index1]->orientation.push_back(0);
 				edges.push_back(edge);
 			edge = new TSESEdge<T>();
 				edge->type = 0;
 				edge->vertex1 = NULL; edge->vertex2 = NULL;
 				edge->rsedge = face->rsedge;
 				edge->face1 = face;
-				edge->face2 = contact_faces[vertex2];
+				edge->face2 = contact_faces[index2];
 				edge->circle = TCircle3<T>(circle2.p,circle2.p-circle1.p,circle2.radius);
 				edge->index = edges.size();
 				face->edge.push_back(edge);
 				face->orientation.push_back(1);
-				contact_faces[vertex2]->edge.push_back(edge);
-				contact_faces[vertex2]->orientation.push_back(0);
+				contact_faces[index2]->edge.push_back(edge);
+				contact_faces[index2]->orientation.push_back(0);
 				edges.push_back(edge);
 		}
 
@@ -567,80 +579,7 @@ namespace BALL
 			return p1+diff;
 		}
 
-
-		void write()
-		{
-			print << pre << "Vertices:\n";
-			for (Position i = 0; i < vertices.size(); i++)
-			{
-				print << pre << "  " << *vertices[i] << "\n";
-			}
-			print << pre << "Edges:\n";
-			for (Position i = 0; i < edges.size(); i++)
-			{
-				if (edges[i] != NULL)
-				{
-					print << pre << "  " << *edges[i] << "\n";
-				}
-				else
-				{
-					print << pre << "  --\n";
-				}
-			}
-			print << pre << "singular Edges:\n";
-			for (Position i = 0; i < singular_edges.size(); i++)
-			{
-				if (singular_edges[i] != NULL)
-				{
-					print << pre << "  " << *singular_edges[i] << "\n";
-				}
-				else
-				{
-					print << pre << "  --\n";
-				}
-			}
-			print << pre << "contact Faces:\n";
-			for (Position i = 0; i < contact_faces.size(); i++)
-			{
-				print << pre << "  " << *contact_faces[i] << "\n";
-			}
-			print << pre << "toric Faces:\n";
-			for (Position i = 0; i < toric_faces.size(); i++)
-			{
-				if (toric_faces[i] != NULL)
-				{
-					print << pre << "  " << *toric_faces[i] << "\n";
-				}
-				else
-				{
-					print << pre << "  --\n";
-				}
-			}
-			print << pre << "singular toric Faces:\n";
-			for (Position i = 0; i < singular_toric_faces.size(); i++)
-			{
-				print << pre << "  " << *singular_toric_faces[i] << "\n";
-			}
-			print << pre << "spheric Faces:\n";
-			for (Position i = 0; i < spheric_faces.size(); i++)
-			{
-				if (spheric_faces[i] != NULL)
-				{
-					print << pre << "  " << *spheric_faces[i] << "\n";
-				}
-				else
-				{
-					print << pre << "  --\n";
-				}
-			}
-		}
-
-
     //@}
-
-		/**	@name	Attributes
-		*/
-		//@{
 
 		vector< TSESVertex<T>* > vertices;
 		vector< TSESEdge<T>* > edges;
@@ -649,12 +588,101 @@ namespace BALL
 		vector< TSESFace<T>* > toric_faces;
 		vector< TSESFace<T>* > singular_toric_faces;
 		vector< TSESFace<T>* > spheric_faces;
-
+		#ifdef debug_ses
     std::ofstream print;
     string pre;
+    #endif
 
-    //@}
 	};
+
+
+	/**	Input- Operator
+			reads in a SolventExcludedSurface
+	*/
+	template <typename T>
+	std::istream& operator >> (std::istream& s, TSolventExcludedSurface<T>& ses)
+	{
+		throw Exception::NotImplemented(__FILE__, __LINE__);
+	}
+
+	/**	Output- Operator
+			prints out a SolventExcludedSurface
+	*/
+		template <typename T>
+		std::ostream& operator << (std::ostream& s, TSolventExcludedSurface<T>& ses)
+		{
+			s << "Vertices:\n";
+			for (Position i = 0; i < ses.vertices.size(); i++)
+			{
+				s << "  " << *ses.vertices[i] << "\n";
+			}
+			s << "Edges:\n";
+			for (Position i = 0; i < ses.edges.size(); i++)
+			{
+				if (ses.edges[i] != NULL)
+				{
+					s << "  " << *ses.edges[i] << "\n";
+				}
+				else
+				{
+					s << "  --\n";
+				}
+			}
+			s << "singular Edges:\n";
+			for (Position i = 0; i < ses.singular_edges.size(); i++)
+			{
+				if (ses.singular_edges[i] != NULL)
+				{
+					s << "  " << *ses.singular_edges[i] << "\n";
+				}
+				else
+				{
+					s << "  --\n";
+				}
+			}
+			s << "contact Faces:\n";
+			for (Position i = 0; i < ses.contact_faces.size(); i++)
+			{
+				if (ses.contact_faces[i] != NULL)
+				{
+					s << "  " << *ses.contact_faces[i] << "\n";
+				}
+				else
+				{
+					s << "  --\n";
+				}
+			}
+			s << "toric Faces:\n";
+			for (Position i = 0; i < ses.toric_faces.size(); i++)
+			{
+				if (ses.toric_faces[i] != NULL)
+				{
+					s << "  " << *ses.toric_faces[i] << "\n";
+				}
+				else
+				{
+					s << "  --\n";
+				}
+			}
+			s << "singular toric Faces:\n";
+			for (Position i = 0; i < ses.singular_toric_faces.size(); i++)
+			{
+				s << "  " << *ses.singular_toric_faces[i] << "\n";
+			}
+			s << "spheric Faces:\n";
+			for (Position i = 0; i < ses.spheric_faces.size(); i++)
+			{
+				if (ses.spheric_faces[i] != NULL)
+				{
+					s << "  " << *ses.spheric_faces[i] << "\n";
+				}
+				else
+				{
+					s << "  --\n";
+				}
+			}
+			return s;
+		}
 
 
 	/**	The Default SolventExcludedSurface type.

@@ -1,4 +1,4 @@
-// $Id: SESVertex.h,v 1.2 2000/10/25 19:24:44 oliver Exp $
+// $Id: SESVertex.h,v 1.3 2000/12/07 15:01:55 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
 #define BALL_STRUCTURE_SESVERTEX_H
@@ -11,7 +11,7 @@
 #	include <BALL/MATHS/sphere3.h>
 #endif
 
-#include <list>
+#include <list.h>
 
 namespace BALL
 {
@@ -37,7 +37,7 @@ namespace BALL
 				initialized to {\tt (T)0}.
 		*/
 		TSESVertex()
-			: p(), /*n(),*/ atom(0), index(-1)
+			: p(), atom(0), index(-1)
 		{
 		}
 
@@ -47,7 +47,7 @@ namespace BALL
 				@param bool ignored - just for interface consistency
 		*/
 		TSESVertex(const TSESVertex<T>& sesvertex,bool /* deep */ = true)
-			: p(sesvertex.p),/* n(sesvertex.n),*/ atom(sesvertex.atom), index(sesvertex.index)
+			: p(sesvertex.p), atom(sesvertex.atom), index(sesvertex.index)
 		{
 		}
 
@@ -58,8 +58,8 @@ namespace BALL
 				@param	a assigned to the index of the nearest atom
 				@param	i assigned to the index of this vertex
 		*/
-		TSESVertex(const TVector3<T>& point, /*const TVector3<T>& norm,*/ const int& a, const int& i)
-			: p(point), /*n(norm),*/ atom(a), index(i)
+		TSESVertex(const TVector3<T>& point, int a, int i)
+			: p(point), atom(a), index(i)
 		{
 		}
 
