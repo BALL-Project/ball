@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Sysinfo_test.C,v 1.1 2005/01/25 11:26:30 amoll Exp $
+// $Id: Sysinfo_test.C,v 1.2 2005/01/25 14:59:53 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -11,7 +11,7 @@
 
 ///////////////////////////
 
-START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.1 2005/01/25 11:26:30 amoll Exp $")
+START_TEST(SysInfo, "$Id: Sysinfo_test.C,v 1.2 2005/01/25 14:59:53 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -23,25 +23,47 @@ using namespace BALL::SysInfo;
 ///
 	
 CHECK(getFreeMemory())
-TEST_NOT_EQUAL(getFreeMemory(), 0)
+	TEST_EQUAL(getFreeMemory() > 0, true)
 	Log.error() <<getFreeMemory() << std::endl;
 RESULT		
 
 CHECK(getTotalMemory())
-TEST_NOT_EQUAL(getTotalMemory(), 0)
+	TEST_EQUAL(getTotalMemory() > 0, true)
+	TEST_EQUAL(getTotalMemory(), getTotalMemory())
 	Log.error() <<getTotalMemory() << std::endl;
 RESULT		
 
 CHECK(getBufferdMemory())
-TEST_NOT_EQUAL(getBufferdMemory(), 0)
+	Index bufferd = getBufferdMemory();
+	TEST_EQUAL(bufferd > 0 || bufferd == -1, true)
 	Log.error() <<getBufferdMemory() << std::endl;
 RESULT		
 
 CHECK(getUptime())
-TEST_NOT_EQUAL(getUptime(), 0)
+	float uptime = getUptime();
+	TEST_EQUAL(uptime > 0 || uptime == -1, true)
 	Log.error() <<getUptime() << std::endl;
 RESULT		
 
+CHECK(getNumberOfProcessors())
+	TEST_EQUAL(getNumberOfProcessors() >= 1, true)
+	Log.error() <<getNumberOfProcessors() << std::endl;
+RESULT		
+
+/*
+CHECK(Extra1)
+	TEST_EQUAL(getFreeMemory() > 0, true)
+	Index i1 = getFreeMemory() + getBufferdMemory();
+	Log.error() << std::endl;
+	Log.error() << i1 << std::endl;
+	double* d = new double[100000000];
+	sleep(1);
+	Index i2 = getFreeMemory() + getBufferdMemory();
+	Log.error() <<i2 << std::endl;
+	TEST_EQUAL(i1 > i2, true);
+	delete d;
+RESULT		
+*/
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

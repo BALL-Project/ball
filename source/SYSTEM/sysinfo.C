@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: sysinfo.C,v 1.2 2005/01/25 14:42:36 amoll Exp $
+// $Id: sysinfo.C,v 1.3 2005/01/25 14:59:56 amoll Exp $
 //
 
 #include <BALL/SYSTEM/sysinfo.h>
@@ -18,50 +18,50 @@ namespace BALL
 {
 	namespace SysInfo
 	{
-		Index getFreeMemory()
+		long getFreeMemory()
 		{
 #ifdef BALL_PLATFORM_WINDOWS
 			/*
 			MEMORYSTATUS ms;
 			GlobalMemoryStatus (&ms);
-			return (Index) ms.dwAvailPhys;
+			return (long) ms.dwAvailPhys;
 			*/
 			MEMORYSTATUSEX statex;
 			GlobalMemoryStatusEx (&statex);
-			return (Index) statex.ullAvailPhys
+			return (long) statex.ullAvailPhys
 #else
 			struct sysinfo info;
-			Index result = sysinfo(&info);
+			long result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.freeram;
 #endif
 		}
 
-		Index getTotalMemory()
+		long getTotalMemory()
 		{
 #ifdef BALL_PLATFORM_WINDOWS
 			/*
 			MEMORYSTATUS ms;
 			GlobalMemoryStatus (&ms);
-			return (Index) ms.dwTotalPhys;
+			return (long) ms.dwTotalPhys;
 			*/
 			MEMORYSTATUSEX statex;
 			GlobalMemoryStatusEx (&statex);
-			return (Index) statex.ullFullPhys
+			return (long) statex.ullFullPhys
 #else
 			struct sysinfo info;
-			Index result = sysinfo(&info);
+			long result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.totalram;
 #endif
 		}
 
-		Index getBufferdMemory()
+		long getBufferdMemory()
 		{
 #ifdef BALL_PLATFORM_WINDOWS
 #else
 			struct sysinfo info;
-			Index result = sysinfo(&info);
+			long result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.bufferram;
 #endif
@@ -73,7 +73,7 @@ namespace BALL
 			return -1;
 #else
 			struct sysinfo info;
-			Index result = sysinfo(&info);
+			long result = sysinfo(&info);
 			if (result == -1) return result;
 			return info.uptime;
 #endif
