@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.18 2004/07/22 14:27:32 amoll Exp $
+// $Id: mainframe.C,v 1.19 2004/07/22 14:47:54 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -485,14 +485,14 @@ namespace BALL
 					hash_set.insert(string_vector[p].toUnsignedInt());
 				}
 
-				Position pos = 0;
+				Position pos = getCompositeManager().getNumberOfComposites() - 1;
 				CompositeManager::CompositeIterator cit2 = getCompositeManager().begin();
 				for (; cit2 != getCompositeManager().end() && system_pos != pos; cit2++)
 				{
-					pos ++;
+					pos--;
 				}
 
-				if (cit2 == getCompositeManager().end()) 
+				if (cit2 == getCompositeManager().end())  
 				{
 					setStatusbarText("Error while reading project file! Aborting...");
 					Log.error() << "Error while reading project file! Aborting..." << std::endl;
@@ -506,6 +506,18 @@ namespace BALL
 				notify_(msg);
 			
 				display_properties_->applyButtonClicked();
+
+				if (split_size == 3 && string_vector[2].has('H'))
+				{
+					Representation* rep = 0;
+					PrimitiveManager::RepresentationsIterator pit = getPrimitiveManager().begin();
+					for (; pit != getPrimitiveManager().end(); pit++)
+					{
+						rep = *pit;
+					}
+
+					rep->setProperty(Representation::PROPERTY__HIDDEN);
+				}
 			}
 		}
 		catch(Exception::InvalidFormat e)
