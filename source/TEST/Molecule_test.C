@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Molecule_test.C,v 1.15 2003/02/10 16:42:42 oliver Exp $
+// $Id: Molecule_test.C,v 1.16 2003/06/30 14:34:51 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(Molecule, "$Id: Molecule_test.C,v 1.15 2003/02/10 16:42:42 oliver Exp $")
+START_TEST(Molecule, "$Id: Molecule_test.C,v 1.16 2003/06/30 14:34:51 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -25,16 +25,16 @@ using std::ios;
 
 Molecule* b;
 
-CHECK(Molecule())
+CHECK(Molecule() throw())
 	b = new Molecule;
 	TEST_NOT_EQUAL(b, 0)
 RESULT											
 
-CHECK(~Molecule())
+CHECK(~Molecule() throw())
 	delete b;
 RESULT
 
-CHECK(Molecule(const Molecule& molecule, bool deep = true))
+CHECK(Molecule(const Molecule& molecule, bool deep = true) throw())
 	Atom a1;
 	Molecule m("a"), m2;
 	m.append(a1);
@@ -43,14 +43,14 @@ CHECK(Molecule(const Molecule& molecule, bool deep = true))
 	TEST_EQUAL(m2.countAtoms(), 1)
 RESULT
 
-CHECK(Molecule(const String& name))
+CHECK(Molecule(const String& name) throw())
 	Molecule m("a");
 	TEST_EQUAL(m.getName(), "a")
 	Molecule m2("");
 	TEST_EQUAL(m2.getName(), "")
 RESULT
 
-CHECK(clear())
+CHECK([EXTRA] clear())
 	System s;
 	Molecule m("a");
 	Atom a1;
@@ -61,7 +61,7 @@ CHECK(clear())
 	TEST_EQUAL(s.countAtoms(), 0)
 RESULT
 
-CHECK(destroy())
+CHECK([EXTRA]destroy())
 	System s;
 	Molecule m("a");
 	Atom a1;
@@ -72,7 +72,7 @@ CHECK(destroy())
 	TEST_EQUAL(s.countAtoms(), 0)
 RESULT
 
-CHECK(Molecule::set(const Molecule& molecule, bool deep = true))
+CHECK(void set(const Molecule& molecule, bool deep = true) throw())
 	Molecule m("a"), m2;
 	Atom a1;
 	m.append(a1);
@@ -81,7 +81,7 @@ CHECK(Molecule::set(const Molecule& molecule, bool deep = true))
 	TEST_EQUAL(m2.countAtoms(), 1)
 RESULT
 
-CHECK(Molecule::Molecule& operator = (const Molecule& molecule))
+CHECK(Molecule& operator = (const Molecule& molecule) throw())
 	Molecule m("a"), m2;
 	Atom a1;
 	m.append(a1);
@@ -90,7 +90,7 @@ CHECK(Molecule::Molecule& operator = (const Molecule& molecule))
 	TEST_EQUAL(m2.countAtoms(), 1)
 RESULT
 
-CHECK(Molecule::get(Molecule& molecule, bool deep = true) const )
+CHECK(void get(Molecule& molecule, bool deep = true) const throw())
 	Molecule m("a"), m2;
 	Atom a1;
 	m.append(a1);
@@ -99,7 +99,7 @@ CHECK(Molecule::get(Molecule& molecule, bool deep = true) const )
 	TEST_EQUAL(m2.countAtoms(), 1)
 RESULT
 
-CHECK(Molecule::swap(Molecule& molecule))
+CHECK(void swap(Molecule& molecule) throw())
 	Molecule m("a");
 	Molecule m2("b");
 	Atom a1, a2, a3;
@@ -113,7 +113,7 @@ CHECK(Molecule::swap(Molecule& molecule))
 	TEST_EQUAL(m2.countAtoms(), 2)
 RESULT
 
-CHECK(Molecule::getSystem())
+CHECK(System* getSystem() throw())
 	System s;
 	Molecule m("a");
 	s.append(m);
@@ -121,7 +121,7 @@ CHECK(Molecule::getSystem())
 	TEST_EQUAL(s.getName(), "b")
 RESULT
 
-CHECK(Molecule::getSystem() const )
+CHECK(const System* getSystem() const throw())
 	System s1("aya");
 	Molecule m("a");
 	s1.append(m);
@@ -129,7 +129,7 @@ CHECK(Molecule::getSystem() const )
 	TEST_EQUAL(m.getSystem()->getName(), "aya")
 RESULT
 
-CHECK(Molecule::prepend(Atom& atom))
+CHECK(void prepend(Atom& atom) throw())
 	Molecule m;
 	Atom a1;
 	Atom a2;
@@ -140,7 +140,7 @@ CHECK(Molecule::prepend(Atom& atom))
 	TEST_EQUAL(m.getAtom(1), &a1)
 RESULT
 
-CHECK(Molecule::append(Atom& atom))
+CHECK(void append(Atom& atom) throw())
 	Molecule m;
 	Atom a1;
 	Atom a2;
@@ -150,7 +150,7 @@ CHECK(Molecule::append(Atom& atom))
 	TEST_EQUAL(m.getAtom(1), &a2)
 RESULT
 
-CHECK(Molecule::insert(Atom& atom))
+CHECK(void insert(Atom& atom) throw())
 	Molecule m;
 	Atom a1;
 	Atom a2;
@@ -160,7 +160,7 @@ CHECK(Molecule::insert(Atom& atom))
 	TEST_EQUAL(m.getAtom(1), &a2)
 RESULT
 
-CHECK(Molecule::insertBefore(Atom& atom, Composite& before))
+CHECK(void insertBefore(Atom& atom, Composite& before) throw())
 	Molecule m;
 	Atom a1;
 	Atom a2;
@@ -173,7 +173,7 @@ CHECK(Molecule::insertBefore(Atom& atom, Composite& before))
 	TEST_EQUAL(m.getAtom(2), &a2)
 RESULT
 
-CHECK(Molecule::insertAfter(Atom& atom, Composite& after))
+CHECK(void insertAfter(Atom& atom, Composite& after) throw())
 	Molecule m;
 	Atom a1;
 	Atom a2;
@@ -186,7 +186,7 @@ CHECK(Molecule::insertAfter(Atom& atom, Composite& after))
 	TEST_EQUAL(m.getAtom(2), &a2)
 RESULT
 
-CHECK(Molecule::remove(Atom& atom))
+CHECK(bool remove(Atom& atom) throw())
 	Molecule m("a");
 	Atom a1;
 	Atom a2;
@@ -197,7 +197,7 @@ CHECK(Molecule::remove(Atom& atom))
 	TEST_EQUAL(m.getAtom(0), &a2)
 RESULT
 
-CHECK(Molecule::prepend(AtomContainer& atom_container))
+CHECK(void prepend(AtomContainer& atom_container) throw())
 	Molecule m;
 	AtomContainer bf2;
 	AtomContainer bf3;
@@ -207,7 +207,7 @@ CHECK(Molecule::prepend(AtomContainer& atom_container))
 	TEST_EQUAL(m.getAtomContainer(0), &bf3)
 RESULT
 
-CHECK(Molecule::append(AtomContainer& atom_container))
+CHECK(void append(AtomContainer& atom_container) throw())
 	Molecule m;
 	AtomContainer bf2;
 	AtomContainer bf3;
@@ -217,7 +217,7 @@ CHECK(Molecule::append(AtomContainer& atom_container))
 	TEST_EQUAL(m.getAtomContainer(1), &bf3)
 RESULT
 
-CHECK(Molecule::insert(AtomContainer& atom_container))
+CHECK(void insert(AtomContainer& atom_container) throw())
 	Molecule m;
 	AtomContainer bf2;
 	AtomContainer bf3;
@@ -227,7 +227,7 @@ CHECK(Molecule::insert(AtomContainer& atom_container))
 	TEST_EQUAL(m.getAtomContainer(1), &bf3)
 RESULT
 
-CHECK(Molecule::insertBefore(AtomContainer& atom_container, Composite& before))
+CHECK(void insertBefore(AtomContainer& atom_container, Composite& before) throw())
 	Molecule m;
 	AtomContainer bf2;
 	AtomContainer bf3;
@@ -240,7 +240,7 @@ CHECK(Molecule::insertBefore(AtomContainer& atom_container, Composite& before))
 	TEST_EQUAL(m.getAtomContainer(2), &bf3)
 RESULT
 
-CHECK(Molecule::insertAfter(AtomContainer& atom_container, Composite& after))
+CHECK(void insertAfter(AtomContainer& atom_container, Composite& after) throw())
 	Molecule m;
 	AtomContainer bf2;
 	AtomContainer bf3;
@@ -253,7 +253,7 @@ CHECK(Molecule::insertAfter(AtomContainer& atom_container, Composite& after))
 	TEST_EQUAL(m.getAtomContainer(2), &bf3)
 RESULT
 
-CHECK(Molecule::spliceBefore(AtomContainer& atom_container))
+CHECK(void spliceBefore(AtomContainer& atom_container) throw())
 	Molecule m;
 	AtomContainer bf2;
 	AtomContainer bf3;
@@ -269,7 +269,7 @@ CHECK(Molecule::spliceBefore(AtomContainer& atom_container))
 	TEST_EQUAL(bf4.getAtomContainer(1), &bf3)
 RESULT
 
-CHECK(Molecule::spliceAfter(AtomContainer& atom_container))
+CHECK(void spliceAfter(AtomContainer& atom_container) throw())
 	Molecule m;
 	AtomContainer bf2;
 	AtomContainer bf3;
@@ -285,7 +285,7 @@ CHECK(Molecule::spliceAfter(AtomContainer& atom_container))
 	TEST_EQUAL(bf4.getAtomContainer(0), &bf3)
 RESULT
 
-CHECK(Molecule::splice(AtomContainer& atom_container))
+CHECK(void splice(AtomContainer& atom_container) throw())
 	Molecule m;
 	AtomContainer bf2;
 	AtomContainer bf3;
@@ -307,7 +307,7 @@ CHECK(Molecule::splice(AtomContainer& atom_container))
 	TEST_EQUAL(m.getAtomContainer(1), &bf2)
 RESULT
 
-CHECK(Molecule::remove(AtomContainer& atom_container))
+CHECK(bool remove(AtomContainer& atom_container) throw())
 	Molecule m;
 	AtomContainer bf2;
 	AtomContainer bf3;
@@ -317,14 +317,14 @@ CHECK(Molecule::remove(AtomContainer& atom_container))
 	TEST_EQUAL(m.getAtomContainer(0), &bf3)
 RESULT
 
-CHECK(Molecule::isValid() const )
+CHECK([EXTRA]Molecule::isValid() const )
 	Molecule m("a");
 	Atom a1;
 	m.append(a1);
 	TEST_EQUAL(m.isValid(), true)
 RESULT
 
-CHECK(Molecule::dump(std::ostream& s = std::cout, Size depth = 0) const )
+CHECK(void dump(std::ostream& s = std::cout, Size depth = 0) const throw())
 	Molecule m("molecule1");
 	Atom a1, a2;
 	a1.setName("atom1");
@@ -343,7 +343,7 @@ using namespace RTTI;
 pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 pm.registerClass(getStreamName<Molecule>(), Molecule::createDefault);
 NEW_TMP_FILE(filename)
-CHECK(persistentWrite(PersistenceManager&, String, bool))
+CHECK(void persistentWrite(PersistenceManager& pm, const char* name = 0) const throw(Exception::GeneralException))
 	std::ofstream	ofile(filename.c_str(), std::ios::out);
 	Atom* f2= new Atom();
 	f2->setName("name2");
@@ -358,7 +358,7 @@ CHECK(persistentWrite(PersistenceManager&, String, bool))
 	delete f1;
 RESULT
 
-CHECK(persistentRead(PersistenceManager&))
+CHECK(void persistentRead(PersistenceManager& pm) throw(Exception::GeneralException))
 	std::ifstream	ifile(filename.c_str());
 	pm.setIstream(ifile);
 	PersistentObject*	ptr = pm.readObject();
@@ -379,13 +379,85 @@ CHECK(persistentRead(PersistenceManager&))
 	}
 RESULT
 
-CHECK(operator ==)
+CHECK(bool operator == (const Molecule& molecule) const throw())
 	Molecule b1;
 	Molecule b2;
 	TEST_EQUAL(b1 == b2, false)
 	b1 = b2;
 	TEST_EQUAL(b1 == b1, true)
 RESULT
+
+CHECK(bool operator != (const Molecule& molecule) const throw())
+ 	Molecule b1;
+	Molecule b2;
+	TEST_EQUAL(b1 != b2, true)
+	b1 = b2;
+	TEST_EQUAL(b1 != b1, false)
+RESULT
+
+CHECK(BALL_CREATE_DEEP(Molecule))
+	Molecule m("molecule1");
+	Atom a1;
+	a1.setName("atom1");
+	m.insert(a1);
+	Molecule* mol = (Molecule*) m.create(false, true);
+	TEST_EQUAL(mol->getName(), "")
+	TEST_EQUAL(mol->countAtoms(), 0)
+	delete mol;
+	mol = (Molecule*) m.create(true, false);
+	TEST_EQUAL(mol->getName(), "molecule1")
+	TEST_EQUAL(mol->countAtoms(), 1)
+	delete mol;
+RESULT
+
+CHECK(BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Fragment))
+  // ???
+RESULT
+
+// ==============================================================
+// not to be tested:
+// ==============================================================
+
+CHECK(AtomContainer* getSuperAtomContainer() throw())
+// not to be tested:
+RESULT
+
+CHECK(bool isSubAtomContainerOf(const AtomContainer& atom_container) const throw())
+// not to be tested:
+RESULT
+
+CHECK(bool remove(Molecule& molecule) throw())
+// not to be tested:
+RESULT
+
+CHECK(const AtomContainer* getSuperAtomContainer() const throw())
+// not to be tested:
+RESULT
+
+CHECK(const Molecule* getMolecule() const throw())
+// not to be tested:
+RESULT
+
+CHECK(void append(Molecule& molecule) throw())
+// not to be tested:
+RESULT
+
+CHECK(void insert(Molecule& molecule) throw())
+// not to be tested:
+RESULT
+
+CHECK(void insertAfter(Molecule& molecule, Composite& composite) throw())
+// not to be tested:
+RESULT
+
+CHECK(void insertBefore(Molecule& molecule, Composite& composite) throw())
+// not to be tested:
+RESULT
+
+CHECK(void prepend(Molecule& molecule) throw())
+// not to be tested:
+RESULT
+
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

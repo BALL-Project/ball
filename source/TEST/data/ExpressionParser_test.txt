@@ -1,0 +1,4 @@
+/Object: [0-9a-zA-Fx]* is instance of class: BALL::ExpressionParser::SyntaxTree
+[expression =   predicate = asdasd  arg = xcvxcv  evaluated = 0  negate = 0  type = 1]
+/Object: [0-9a-zA-Fx]* is instance of class: BALL::ExpressionParser::SyntaxTree
+        [expression =   predicate =   arg =   evaluated = 0  negate = 0  type = 0]
