@@ -1,4 +1,4 @@
-// $Id: Function_test.C,v 1.3 2000/12/23 15:31:32 oliver Exp $
+// $Id: Function_test.C,v 1.4 2001/03/09 14:35:01 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Function_test.C,v 1.3 2000/12/23 15:31:32 oliver Exp $")
+START_TEST(class_name, "$Id: Function_test.C,v 1.4 2001/03/09 14:35:01 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -533,6 +533,8 @@ CHECK(SquareFunction::operator == (const SquareFunction& sq))
 	test = (sq1 == sq2);
 	TEST_EQUAL(test, true);
 RESULT
+
+PRECISION(0.001)
 
 CHECK(SquareFunction::operator () (DataType x))
 	MutableConstant<> c3(4711.0);
