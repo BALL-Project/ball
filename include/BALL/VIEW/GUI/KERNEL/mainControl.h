@@ -1,4 +1,4 @@
-// $Id: mainControl.h,v 1.15 2001/05/13 13:57:02 hekl Exp $
+// $Id: mainControl.h,v 1.16 2001/06/28 20:30:03 sturm Exp $
 
 #ifndef BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
 #define BALL_VIEW_GUI_KERNEL_MAINCONTROL_H
@@ -100,9 +100,9 @@ namespace BALL
 				application and notifies all
 				registered \Ref{ModularWidget} objects if the preferences has changed.
 				@memo    MainControl class (BALL VIEW gui kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.15 $
-				@date    $Date: 2001/05/13 13:57:02 $
+				@author  $Author: sturm $
+				@version $Revision: 1.16 $
+				@date    $Date: 2001/06/28 20:30:03 $
 		*/
 		class MainControl
 			: public QMainWindow,
@@ -312,7 +312,7 @@ namespace BALL
 					If {\em composite_descriptor} is already inserted and a shallow copy
 					should be made {\tt 0} will be returned.
 					@param composite_descriptor the new \Ref{CompositeDescriptor} to be inserted into {\em *this} mainControl
-					@param deep if {\tt true} than a deep (default) copy of {\em composite_descriptor} is made, {\tt false} a shallow copy is made
+					@param deep if {\tt true} then a deep (default) copy of {\em composite_descriptor} is made, {\tt false} a shallow copy is made
 					@return CompositeDescriptor* mutable pointer to the new created \Ref{CompositeDescriptor}
 					@see    Composite
 					@see    CompositeDescriptor
@@ -351,7 +351,7 @@ namespace BALL
 			/** Mutable inspection of a compositeDescriptor.
 					Access a mutable pointer to the \Ref{CompositeDescriptor} of the inserted
 					\Ref{Composite} {\em composite}. If {\em composite} is not inserted into
-					{\em *this} mainControl than {\tt 0} is returned.
+					{\em *this} mainControl then {\tt 0} is returned.
 					@param   composite the inserted \Ref{Composite} whose \Ref{CompositeDescriptor} should be returned
 					@return  CompositeDescriptor* mutable pointer to \Ref{CompositeDescriptor}, {\tt 0} if {\em composite} is not inserted into {\em *this} mainControl
 					@see     insert
@@ -364,7 +364,7 @@ namespace BALL
 			/** Non-mutable inspection of a compositeDescriptor.
 					Access a constant pointer to the \Ref{CompositeDescriptor} of the inserted
 					\Ref{Composite} {\em composite}. If {\em composite} is not inserted into
-					{\em *this} mainControl than {\tt 0} is returned.
+					{\em *this} mainControl then {\tt 0} is returned.
 					@param   composite the inserted \Ref{Composite} whose \Ref{CompositeDescriptor} should be returned
 					@return  const CompositeDescriptor* constant pointer to \Ref{CompositeDescriptor}, {\tt 0} if {\em composite} is not inserted into {\em *this} mainControl
 					@see     insert
@@ -413,7 +413,7 @@ namespace BALL
 
 			/** Mutable inspection of the name.
 					Access a mutable pointer to the name of {\em composite}. If the 
-					{\em composite} is not inserted into {\em *this} mainControl than {\tt 0}
+					{\em composite} is not inserted into {\em *this} mainControl then {\tt 0}
 					is returned.
 					@param   composite the \Ref{Composite} whose name should be retrieved
 					@return  String* mutable pointer to the name ({\tt 0} if no such composite is inserted)
@@ -427,7 +427,7 @@ namespace BALL
 
 			/** Non-mutable inspection of the name.
 					Access a constant pointer to the name of {\em composite}. If the 
-					{\em composite} is not inserted into {\em *this} mainControl than {\tt 0}
+					{\em composite} is not inserted into {\em *this} mainControl then {\tt 0}
 					is returned.
 					@param   composite the \Ref{Composite} whose name should be retrieved
 					@return  const String* constant pointer to the name ({\tt 0} if no such composite is inserted)
@@ -443,7 +443,7 @@ namespace BALL
 					Access a mutable pointer to the \Ref{CompositeDescriptor} of a
 					\Ref{Composite} inserted into {\em *this} mainControl with a given string
 					{\em name}.
-					If more such names are available than the first found 
+					If more such names are available then the first found 
 					\Ref{CompositeDescriptor} with this {\em name} will be returned.
 					@param   name the name whose \Ref{CompositeDescriptor} should be retrieved
 					@return  CompositeDescriptor* mutable pointer to the \Ref{CompositeDescriptor} ({\tt 0} if no such \Ref{Composite} with such a name exists)
@@ -460,7 +460,7 @@ namespace BALL
 					Access a constant pointer to the \Ref{CompositeDescriptor} of a
 					\Ref{Composite} inserted into {\em *this} mainControl with a given string
 					{\em name}.
-					If more such names are available than the first found 
+					If more such names are available then the first found 
 					\Ref{CompositeDescriptor} with this {\em name} will be returned.
 					@param   name the name whose \Ref{CompositeDescriptor} should be retrieved
 					@return  const CompositeDescriptor* constant pointer to the \Ref{CompositeDescriptor} ({\tt 0} if no such \Ref{Composite} with such a name exists)
@@ -517,7 +517,7 @@ namespace BALL
 					Access a mutable pointer to the \Ref{CompositeDescriptor} of a
 					\Ref{Composite} inserted into {\em *this} mainControl with a given 
 					\Ref{Vector3} {\em center}.
-					If more such center \Ref{Vector3} are available than the first found 
+					If more such center \Ref{Vector3} are available then the first found 
 					\Ref{CompositeDescriptor} with this {\em center} vector will be returned.
 					@param   center the center \Ref{Vector3} whose \Ref{CompositeDescriptor} should be retrieved
 					@return  CompositeDescriptor* mutable pointer to the \Ref{CompositeDescriptor} ({\tt 0} if no such \Ref{Composite} with such a center vector exists)
@@ -534,7 +534,7 @@ namespace BALL
 					Access a constant pointer to the \Ref{CompositeDescriptor} of a
 					\Ref{Composite} inserted into {\em *this} mainControl with a given 
 					\Ref{Vector3} {\em center}.
-					If more such center \Ref{Vector3} are available than the first found 
+					If more such center \Ref{Vector3} are available then the first found 
 					\Ref{CompositeDescriptor} with this {\em center} vector will be returned.
 					@param   center the center \Ref{Vector3} whose \Ref{CompositeDescriptor} should be retrieved
 					@return  const CompositeDescriptor* constant pointer to the \Ref{CompositeDescriptor} ({\tt 0} if no such \Ref{Composite} with such a center vector exists)
@@ -548,7 +548,7 @@ namespace BALL
 				throw();
 
 			/** Mark a composite for update.
-					If a \Ref{Composite} was marked for update than the graphical representation
+					If a \Ref{Composite} was marked for update then the graphical representation
 					of {\em composite} will be created anew when the next time the render engine
 					will draw this \Ref{Composite}.
 					If {\em composite} is inserted into {\em *this} mainControl {\tt true} will be
