@@ -1,57 +1,116 @@
-// $Id: SolventParameter_test.C,v 1.6 2001/08/14 20:28:14 sturm Exp $
+// $Id: SolventParameter_test.C,v 1.7 2001/08/19 18:15:11 sturm Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SOLVATION/solventParameter.h>
 ///////////////////////////
 
-START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.6 2001/08/14 20:28:14 sturm Exp $")
+START_TEST(SolventParameter, "$Id: SolventParameter_test.C,v 1.7 2001/08/19 18:15:11 sturm Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
 using namespace BALL;
 
+SolventParameter* s_ptr;
 CHECK(SolventParameter())
-  SolventParameter* s_ptr;
 	s_ptr = new SolventParameter;
 	TEST_NOT_EQUAL(s_ptr,0)
-  //BAUSTELLE
-RESULT
-
-
-CHECK(SolventParameter(const SolventParameter& param))
-  //BAUSTELLE
+  //BAUSTELLE , da kein name_, number_density_ und solvent_atoms_ ohne accessor!
 RESULT
 
 
 CHECK(~SolventParameter())
-  //BAUSTELLE
+	delete s_ptr;
+RESULT
+
+CHECK(extractSection(ForceFieldParameters& parameters, const String& section_name))
+	//BAUSTELLE , da BAUSTELLE in SolventParameter.C
+ 	bool result;
+	SolventParameter s_ptr;
+
+	ForceFieldParameters param("data/SolventParameter_test1.ini");
+	param.init();
+	CAPTURE_OUTPUT(2000)	
+	result = s_ptr.extractSection(param,"SolventDescription");
+	COMPARE_OUTPUT("SolventParameter::extractSection(): Variable missing.\n")
+	TEST_EQUAL(result,false)
+	
+	param = ForceFieldParameters("data/SolventParameter_test2.ini");
+	param.init();
+	CAPTURE_OUTPUT(2000)	
+	result = s_ptr.extractSection(param,"SolventDescription");
+	COMPARE_OUTPUT("SolventParameter::extractSection(): no name given.\n")
+	TEST_EQUAL(result,true)
+	
+	param = ForceFieldParameters("data/SolventParameter_test3.ini");
+	param.init();
+	CAPTURE_OUTPUT(2000)	
+	result = s_ptr.extractSection(param,"SolventDescription");
+	COMPARE_OUTPUT("SolventParameter::extractSection(): no number density given.\n")
+	TEST_EQUAL(result,true)
+
+	param = ForceFieldParameters("data/SolventParameter_test4.ini");
+	param.init();
+	CAPTURE_OUTPUT(2000)	
+	result = s_ptr.extractSection(param,"SolventDescription");
+	COMPARE_OUTPUT("SolventParameter::extractSection(): Cannot assign atom type.\n")
+	TEST_EQUAL(result,true)
+	
+	param = ForceFieldParameters("data/SolventParameter_test.ini");
+	param.init();
+	result = s_ptr.extractSection(param,"SolventDescription");
+	TEST_EQUAL(result,true)
 RESULT
 
 
-CHECK(destroy())
-  //BAUSTELLE
-RESULT
-
-
-CHECK(clear())
-  //BAUSTELLE
-RESULT
-
-
-CHECK(set(const SolventParameter& param))
-  //BAUSTELLE
+CHECK(clear())	
+	SolventParameter s_ptr;
+	ForceFieldParameters param("data/SolventParameter_test.ini");
+	param.init();
+	s_ptr.extractSection(param,"SolventDescription");
+	s_ptr.clear();
+	SolventParameter s_ptr2;
+	//assumes that operator == is correct
+	bool result = (s_ptr==s_ptr2);
+	TEST_EQUAL(result,true)
 RESULT
 
 
 CHECK(SolventParameter& operator = (const SolventParameter& param))
-  //BAUSTELLE
+	SolventParameter s_ptr;
+	ForceFieldParameters param("data/SolventParameter_test.ini");
+	param.init();
+	s_ptr.extractSection(param,"SolventDescription");
+	SolventParameter s_ptr2;
+	s_ptr2=s_ptr;
+	//assumes that operator == is correct
+	bool result = (s_ptr==s_ptr2);
+	TEST_EQUAL(result,true)
+RESULT
+
+
+CHECK(SolventParameter(const SolventParameter& param))
+	SolventParameter s_ptr;
+	ForceFieldParameters param("data/SolventParameter_test.ini");
+	param.init();
+	s_ptr.extractSection(param,"SolventDescription");
+	SolventParameter s_ptr2;
+	s_ptr2 = SolventParameter(s_ptr);
+	//assumes that operator == is correct
+	bool result = (s_ptr==s_ptr2);
+	TEST_EQUAL(result,true)
 RESULT
 
 
 CHECK(getSolventDescriptor() const )
   //BAUSTELLE
+	SolventParameter s_ptr;
+	ForceFieldParameters param("data/SolventParameter_test.ini");
+	param.init();
+	s_ptr.extractSection(param,"SolventDescription");
+	SolventDescriptor sd = s_ptr.getSolventDescriptor();
+	TEST_EQUAL(sd.getName().getSubstring(0,3),"PCM")
 RESULT
 
 
@@ -60,8 +119,8 @@ CHECK(getSolventDescriptor() )
 RESULT
 
 
-CHECK(extractSection(ForceFieldParameters& parameters, const String& section_name))
-  //BAUSTELLE
+CHECK(operator == (const SolventParameter& param) const)
+	//BAUSTELLE
 RESULT
 
 
