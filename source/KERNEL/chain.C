@@ -1,4 +1,4 @@
-// $Id: chain.C,v 1.11 2001/01/21 21:05:52 amoll Exp $
+// $Id: chain.C,v 1.12 2001/06/05 15:51:12 anker Exp $
 
 #include <BALL/KERNEL/chain.h>
 #include <BALL/KERNEL/global.h>
@@ -183,7 +183,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (SecondaryStructureIterator secondary_structure_it = beginSecondaryStructure();
+		for (SecondaryStructureConstIterator secondary_structure_it = beginSecondaryStructure();
 				 !secondary_structure_it.isEnd();++secondary_structure_it)
 		{
 			++size;
@@ -196,7 +196,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (ResidueIterator res_it = beginResidue();!res_it.isEnd(); ++res_it)
+		for (ResidueConstIterator res_it = beginResidue();!res_it.isEnd(); ++res_it)
 		{
 			++size;
 		}
@@ -209,7 +209,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (PDBAtomIterator protein_atom_it = beginPDBAtom();
+		for (PDBAtomConstIterator protein_atom_it = beginPDBAtom();
 				 !protein_atom_it.isEnd(); ++protein_atom_it)
 		{
 			++size;
@@ -324,12 +324,14 @@ namespace BALL
 	void Chain::read(istream& /* s */)
 		throw()
 	{
+		// BAUSTELLE
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 
 	void Chain::write(ostream& /* s */) const
 		throw()
 	{
+		// BAUSTELLE
 		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
 

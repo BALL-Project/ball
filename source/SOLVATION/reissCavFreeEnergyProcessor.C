@@ -1,4 +1,4 @@
-// $Id: reissCavFreeEnergyProcessor.C,v 1.7 2000/10/26 14:40:32 anker Exp $
+// $Id: reissCavFreeEnergyProcessor.C,v 1.8 2001/06/05 15:53:29 anker Exp $
 
 #include <BALL/SOLVATION/reissCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -97,7 +97,7 @@ namespace BALL
 			Log.info() << "y_frac = " << y_frac << endl;
 		}
 
-		HashMap<Atom*,float> atom_areas;
+		HashMap<const Atom*,float> atom_areas;
 		calculateSASAtomAreas(*fragment_, atom_areas, solvent_radius);
 		
 		// R is the sum of atom radius and probe radius [ m ]
@@ -109,7 +109,7 @@ namespace BALL
 
 		// now iterate over the atoms.
 
-		HashMap<Atom*,float>::Iterator it = atom_areas.begin();
+		HashMap<const Atom*,float>::Iterator it = atom_areas.begin();
 		for (; +it; ++it)
 		{
 			R = it->first->getRadius() * 1e-10 + sigma1 / 2.0;

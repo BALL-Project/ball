@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.30 2001/01/26 12:31:39 oliver Exp $
+// $Id: fragmentDB.C,v 1.31 2001/06/05 15:53:30 anker Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -1636,7 +1636,7 @@ namespace BALL
 			// create a new name list for the current reference fragment
 			reference_fragment_h_names_.insert(pair<Handle, StringHashSet>(handle, StringHashSet()));
 			StringHashSet& names = reference_fragment_h_names_[handle];
-			for (AtomIterator atom_it = reference_fragment->beginAtom();
+			for (AtomConstIterator atom_it = reference_fragment->beginAtom();
 					+atom_it; ++atom_it)
 			{
 				if (atom_it->getElement() == PTE[Element::H])
@@ -1671,7 +1671,7 @@ namespace BALL
 		for (; missing_h_it != names.end(); ++missing_h_it)
 		{
 			// identify the reference hydrogen and the atom it is bound to
-			AtomIterator atom_it = reference_fragment->beginAtom();
+				AtomConstIterator atom_it = reference_fragment->beginAtom();
 			for (; +atom_it; ++atom_it)
 			{
 				if (atom_it->getName() == *missing_h_it)
@@ -1888,17 +1888,17 @@ namespace BALL
 		}
 
 		Size bond_count = 0;
-		AtomIterator				tmp_it1;
-		Atom::BondIterator	tmp_it2;
+		AtomConstIterator				tmp_it1;
+		Atom::BondConstIterator	tmp_it2;
 		BALL_FOREACH_BOND(*tplate, tmp_it1, tmp_it2)
 		{
 			bond_count++;
 		}
 
 		// iterate over all atoms in the tplate
-		AtomIterator				tplate_atom_it;
+		AtomConstIterator				tplate_atom_it;
 		AtomIterator				frag_atom_it;
-		Atom::BondIterator	tplate_bond_it;
+		Atom::BondConstIterator	tplate_bond_it;
 		Atom*								partner;
 
 		// count the counds we build...

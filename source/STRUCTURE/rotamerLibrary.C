@@ -1,4 +1,4 @@
-// $Id: rotamerLibrary.C,v 1.14 2001/05/17 01:30:59 oliver Exp $
+// $Id: rotamerLibrary.C,v 1.15 2001/06/05 15:53:30 anker Exp $
 
 #include <BALL/STRUCTURE/rotamerLibrary.h>
 
@@ -710,12 +710,12 @@ namespace BALL
 		Rotamer r;
 		r.P = 1.0;
 
-		Atom* a1 = 0;
-		Atom* a2 = 0;
-		Atom* a3 = 0;
-		Atom* a4 = 0;
+		const Atom* a1 = 0;
+		const Atom* a2 = 0;
+		const Atom* a3 = 0;
+		const Atom* a4 = 0;
 
-		AtomIterator atom_it;
+		AtomConstIterator atom_it;
 		Size count;
 		
 		if (number_of_torsions_ > 0)

@@ -1,4 +1,4 @@
-// $Id: molecularSurfaceGrid.C,v 1.7 2000/12/05 13:10:23 amoll Exp $
+// $Id: molecularSurfaceGrid.C,v 1.8 2001/06/05 15:53:28 anker Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 
@@ -164,7 +164,7 @@ namespace BALL
 		memset((void*) grid->getData(0), CCONN__OUTSIDE, grid->getSize() * sizeof(char));
 
 		// for each atom do...
-		AtomIterator	atom_iterator;
+		AtomConstIterator	atom_iterator;
 		BALL_FOREACH_ATOM(system, atom_iterator){
 					
 				atom_radius = (*atom_iterator).getRadius();	
@@ -385,7 +385,7 @@ namespace BALL
 		memset((void*) grid->getData(0), CCONN__OUTSIDE, grid->getSize() * sizeof(char));
 
 		// for each atom do...
-		AtomIterator	atom_iterator;
+		AtomConstIterator	atom_iterator;
 		BALL_FOREACH_ATOM(system, atom_iterator){
 					
 				atom_radius = (*atom_iterator).getRadius();	

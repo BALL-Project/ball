@@ -1,4 +1,4 @@
-// $Id: haighMallionShiftProcessor.C,v 1.10 2000/10/05 08:42:54 oliver Exp $
+// $Id: haighMallionShiftProcessor.C,v 1.11 2001/06/05 15:53:26 anker Exp $
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/KERNEL/atomIterator.h>
@@ -177,7 +177,7 @@ namespace BALL
 							break;
 						}
 
-						for	(AtomIterator atom_iter = residue.beginAtom();
+						for	(AtomConstIterator atom_iter = residue.beginAtom();
 								+atom_iter; ++atom_iter)
 						{
 							if (asrings_[zaehler][1 + pos] == (*atom_iter).getName())

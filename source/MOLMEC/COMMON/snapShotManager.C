@@ -1,4 +1,4 @@
-// $Id: snapShotManager.C,v 1.6 2001/05/17 01:30:53 oliver Exp $
+// $Id: snapShotManager.C,v 1.7 2001/06/05 15:51:15 anker Exp $
 
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
@@ -148,6 +148,8 @@ namespace BALL
 		system_ptr_ = 0;
 		force_field_ptr_ = 0;
 		snapshot_buffer_.clear();
+		// this destructor does not destruct or clear the associated
+		// trajectory file
 		trajectory_file_ptr_ = 0;
 		flush_to_disk_frequency_ = (Size)
 			options.getInteger(SnapShotManager::Option::FLUSH_TO_DISK_FREQUENCY);
@@ -397,6 +399,9 @@ namespace BALL
 		// store all current positions, forces, velocities in the
 		// snapshot object
 		snapshot.takeSnapShot(*system_ptr_);
+
+		// DEBUG
+		// Log.info() << snapshot << endl;
 
 		// store the potential energies      
 		// snapshot_ptr->potential_energy_ = force_field_ptr_->getEnergy();

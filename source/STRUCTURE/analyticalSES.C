@@ -1,5 +1,5 @@
-// $Id: analyticalSES.C,v 1.10 2000/08/30 19:59:13 oliver Exp $
-// $Id: analyticalSES.C,v 1.10 2000/08/30 19:59:13 oliver Exp $
+// $Id: analyticalSES.C,v 1.11 2001/06/05 15:53:30 anker Exp $
+// $Id: analyticalSES.C,v 1.11 2001/06/05 15:53:30 anker Exp $
 
 #include <BALL/STRUCTURE/analyticalSES.h>
 #include <BALL/KERNEL/atom.h>
@@ -16,8 +16,8 @@ namespace BALL
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
-		vector<Atom*>	atoms;
-		AtomIterator	it = fragment.beginAtom();
+		vector<const Atom*>	atoms;
+		AtomConstIterator	it = fragment.beginAtom();
 		for (; +it; ++it)
 		{
 			if (it->getRadius() > 0.0)
@@ -66,12 +66,12 @@ namespace BALL
 	}
 
   float calculateSESAtomAreas
-		(const AtomContainer& fragment, HashMap<Atom*,float>& atom_areas, float probe_radius)
+		(const AtomContainer& fragment, HashMap<const Atom*,float>& atom_areas, float probe_radius)
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
-		vector<Atom*>	atoms;
-		AtomIterator	it = fragment.beginAtom();
+		vector<const Atom*>	atoms;
+		AtomConstIterator	it = fragment.beginAtom();
 		for (; +it; ++it)
 		{
 			if (it->getRadius() > 0.0)
@@ -114,7 +114,7 @@ namespace BALL
 		atom_areas.clear();
 		for (Position i = 0; i < atoms.size(); ++i)
 		{
-			atom_areas.insert(pair<Atom*, float>(atoms[i], tmp_atom_areas[i]));
+			atom_areas.insert(pair<const Atom*, float>(atoms[i], tmp_atom_areas[i]));
 		}
 
 		// free the input fields
@@ -130,8 +130,8 @@ namespace BALL
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
-		vector<Atom*>	atoms;
-		AtomIterator	it = fragment.beginAtom();
+		vector<const Atom*>	atoms;
+		AtomConstIterator	it = fragment.beginAtom();
 		for (; +it; ++it)
 		{
 			if (it->getRadius() > 0.0)

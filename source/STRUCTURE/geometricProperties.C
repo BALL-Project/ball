@@ -1,4 +1,4 @@
-// $Id: geometricProperties.C,v 1.13 2001/05/17 01:30:59 oliver Exp $
+// $Id: geometricProperties.C,v 1.14 2001/06/05 15:53:30 anker Exp $
 
 #include <BALL/STRUCTURE/geometricProperties.h>
 
@@ -182,19 +182,19 @@ namespace BALL
 	bool FragmentDistanceCollector::finish()
 		throw()
 	{
-		bool                                collect_it = false;
-		AtomIterator                        atom_iterator2;
-		Fragment*														mol_fragment;
-		Composite::SubcompositeIterator     composite_it;
-		vector<Atom*>												reference_atoms;
-		Atom*                               atom_ptr;
-		GeometricCenterProcessor            center_processor;
-		Vector3                             center;
-		float                               fragment_radius;
-		float                               difference;
+		bool                                	collect_it = false;
+		AtomIterator                        	atom_iterator2;
+		Fragment*															mol_fragment;
+		Composite::SubcompositeConstIterator  composite_it;
+		vector<Atom*>													reference_atoms;
+		Atom*                               	atom_ptr;
+		GeometricCenterProcessor            	center_processor;
+		Vector3                             	center;
+		float                               	fragment_radius;
+		float                               	difference;
 
-		Size                                i, j;
-		Size																size;
+		Size                                	i, j;
+		Size																	size;
 
 
 		for (composite_it = reference_composite_->beginSubcomposite(); 

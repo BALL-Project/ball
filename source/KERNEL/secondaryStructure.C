@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.C,v 1.10 2001/01/21 21:07:43 amoll Exp $
+// $Id: secondaryStructure.C,v 1.11 2001/06/05 15:51:13 anker Exp $
 
 #include <BALL/KERNEL/secondaryStructure.h>
 
@@ -199,7 +199,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (ResidueIterator res_it = beginResidue(); !res_it.isEnd(); ++res_it)
+		for (ResidueConstIterator res_it = beginResidue(); !res_it.isEnd(); ++res_it)
 		{
 			++size;
 		}
@@ -212,7 +212,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (PDBAtomIterator protein_atom_it = beginPDBAtom(); !protein_atom_it.isEnd(); ++protein_atom_it)
+		for (PDBAtomConstIterator protein_atom_it = beginPDBAtom(); !protein_atom_it.isEnd(); ++protein_atom_it)
 		{
 			++size;
 		}

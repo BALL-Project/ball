@@ -1,4 +1,4 @@
-// $Id: residue.C,v 1.18 2001/01/14 21:57:16 amoll Exp $
+// $Id: residue.C,v 1.19 2001/06/05 15:51:13 anker Exp $
 
 #include <BALL/KERNEL/residue.h>
 
@@ -140,10 +140,10 @@ namespace BALL
 			const Residue* next = getNext(RTTI::getDefault<Residue>());
 			if (next != 0)
 			{
-				Atom* C = 0;
-				Atom* N = 0;
-				Atom* CA = 0;
-				AtomIterator it;
+				const Atom* C = 0;
+				const Atom* N = 0;
+				const Atom* CA = 0;
+				AtomConstIterator it;
 				for (it = beginAtom(); +it; ++it)
 				{
 					if (it->getName() == "C")	C  = &*it;
@@ -151,7 +151,7 @@ namespace BALL
 					if (it->getName() == "N")	N  = &*it;
 				}
 
-				Atom* next_N = 0;
+				const Atom* next_N = 0;
 				for (it = next->beginAtom(); +it; ++it)
 				{
 					if (it->getName() == "N")	
@@ -206,10 +206,10 @@ namespace BALL
 			const Residue* previous = getPrevious(RTTI::getDefault<Residue>());
 			if (previous != 0)
 			{
-				Atom* C = 0;
-				Atom* N = 0;
-				Atom* CA = 0;
-				AtomIterator it;
+				const Atom* C = 0;
+				const Atom* N = 0;
+				const Atom* CA = 0;
+				AtomConstIterator it;
 				for (it = beginAtom(); +it; ++it)
 				{
 					if (it->getName() == "C")	 C  = &*it;
@@ -217,7 +217,7 @@ namespace BALL
 					if (it->getName() == "N")  N  = &*it;
 				}
 
-				Atom* last_C = 0;
+				const Atom* last_C = 0;
 				for (it = previous->beginAtom(); +it; ++it)
 				{
 					if (it->getName() == "C")	
@@ -335,7 +335,7 @@ namespace BALL
 	{
 		register Size size = 0;
 
-		for (PDBAtomIterator protein_atom_iterator = beginPDBAtom();
+		for (PDBAtomConstIterator protein_atom_iterator = beginPDBAtom();
 				 !protein_atom_iterator.isEnd(); ++protein_atom_iterator)
 		{
 			++size;

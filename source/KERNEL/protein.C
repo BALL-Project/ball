@@ -1,4 +1,4 @@
-// $Id: protein.C,v 1.10 2001/01/21 21:07:22 amoll Exp $
+// $Id: protein.C,v 1.11 2001/06/05 15:51:12 anker Exp $
 
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/global.h>
@@ -217,7 +217,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (ChainIterator chain_it = beginChain(); !chain_it.isEnd(); ++chain_it)
+		for (ChainConstIterator chain_it = beginChain(); !chain_it.isEnd(); ++chain_it)
 		{
 			++size;
 		}
@@ -230,7 +230,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (SecondaryStructureIterator secondary_structure_it = beginSecondaryStructure();
+		for (SecondaryStructureConstIterator secondary_structure_it = beginSecondaryStructure();
 				 !secondary_structure_it.isEnd(); ++secondary_structure_it)
 		{
 			++size;
@@ -244,7 +244,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (ResidueIterator res_it = beginResidue(); !res_it.isEnd(); ++res_it)
+		for (ResidueConstIterator res_it = beginResidue(); !res_it.isEnd(); ++res_it)
 		{
 			++size;
 		}
@@ -257,7 +257,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (PDBAtomIterator protein_atom_it = beginPDBAtom(); !protein_atom_it.isEnd(); ++protein_atom_it)
+		for (PDBAtomConstIterator protein_atom_it = beginPDBAtom(); !protein_atom_it.isEnd(); ++protein_atom_it)
 		{
 			++size;
 		}

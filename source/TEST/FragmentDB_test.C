@@ -1,4 +1,4 @@
-// $Id: FragmentDB_test.C,v 1.5 2000/05/30 10:30:25 oliver Exp $
+// $Id: FragmentDB_test.C,v 1.6 2001/06/05 15:53:33 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -12,7 +12,7 @@
 using namespace BALL;
 ///////////////////////////
 
-START_TEST(class_name, "$Id: FragmentDB_test.C,v 1.5 2000/05/30 10:30:25 oliver Exp $")
+START_TEST(class_name, "$Id: FragmentDB_test.C,v 1.6 2001/06/05 15:53:33 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -28,7 +28,7 @@ CHECK(getResidue(const String&))
 	}
 	
 	// check the atoms
-	AtomIterator atom_it = res->beginAtom();
+	AtomConstIterator atom_it = res->beginAtom();
 	Position i = 0;
 	for (; +atom_it; ++atom_it, ++i)
 	{
@@ -76,7 +76,7 @@ CHECK(getResidue(const String&))
 	}
 	
 	// check the bonds
-	Atom::BondIterator bond_it;
+	Atom::BondConstIterator bond_it;
 	i =0;
 	BALL_FOREACH_BOND(*res, atom_it, bond_it)
 	{

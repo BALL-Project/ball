@@ -1,4 +1,4 @@
-// $Id: NumericalSAS_test.C,v 1.6 2000/08/30 19:59:16 oliver Exp $
+// $Id: NumericalSAS_test.C,v 1.7 2001/06/05 15:53:33 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/DATATYPE/hashMap.h>
 ///////////////////////////
 
-START_TEST(NumericalSAS, "$Id: NumericalSAS_test.C,v 1.6 2000/08/30 19:59:16 oliver Exp $")
+START_TEST(NumericalSAS, "$Id: NumericalSAS_test.C,v 1.7 2001/06/05 15:53:33 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -57,7 +57,7 @@ CHECK(calculateSASAtomAreas())
 	f.insert(a1);
 	f.insert(a2);
 
-	HashMap<Atom*, float>	atom_map;
+	HashMap<const Atom*, float>	atom_map;
 
 	float area = calculateSASAtomAreas(f, atom_map, 1.5, 624);
 

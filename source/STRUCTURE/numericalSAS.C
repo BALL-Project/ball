@@ -1,4 +1,4 @@
-// $Id: numericalSAS.C,v 1.20 2001/05/10 13:55:11 oliver Exp $
+// $Id: numericalSAS.C,v 1.21 2001/06/05 15:53:30 anker Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -21,13 +21,13 @@ namespace BALL
 	int nsc_(double*, double*, int, int, int, double*, double**, double*, double**, int*, int**);
 
 	float calculateSASAtomAreas
-		(const AtomContainer& fragment, HashMap<Atom*,float>& atom_areas,
+		(const AtomContainer& fragment, HashMap<const Atom*,float>& atom_areas,
 		 float probe_radius, Size number_of_dots)
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
-		vector<Atom*>	atoms;
-		AtomIterator	it = fragment.beginAtom();
+		vector<const Atom*>	atoms;
+		AtomConstIterator	it = fragment.beginAtom();
 		for (; +it; ++it)
 		{
 			if (it->getRadius() > 0.0)
@@ -79,7 +79,7 @@ namespace BALL
 		// hash map atom_areas
 		for (Size j = 0; j < atoms.size(); ++j)
 		{
-			atom_areas.insert(pair<Atom*, float>(atoms[j], (float)internal_atom_areas[j]));
+			atom_areas.insert(pair<const Atom*, float>(atoms[j], (float)internal_atom_areas[j]));
 		}
 
 		// free arrays (if created)
@@ -109,8 +109,8 @@ namespace BALL
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
-		vector<Atom*>	atoms;
-		AtomIterator	it = fragment.beginAtom();
+		vector<const Atom*>	atoms;
+		AtomConstIterator	it = fragment.beginAtom();
 		for (; +it; ++it)
 		{
 			if (it->getRadius() != 0.0)
@@ -173,8 +173,8 @@ namespace BALL
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
-		vector<Atom*>	atoms;
-		AtomIterator	it = fragment.beginAtom();
+		vector<const Atom*>	atoms;
+		AtomConstIterator	it = fragment.beginAtom();
 		for (; +it; ++it)
 		{
 			if (it->getRadius() != 0.0)
@@ -238,8 +238,8 @@ namespace BALL
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
-		vector<Atom*>	atoms;
-		AtomIterator	it = fragment.beginAtom();
+		vector<const Atom*>	atoms;
+		AtomConstIterator	it = fragment.beginAtom();
 		for (; +it; ++it)
 		{
 			if (it->getRadius() > 0.0)
@@ -344,8 +344,8 @@ namespace BALL
 	{
 		// extract all atoms: iterate over all composites and
 		// check whether they are Atoms
-		vector<Atom*>	atoms;
-		AtomIterator	it = fragment.beginAtom();
+		vector<const Atom*>	atoms;
+		AtomConstIterator	it = fragment.beginAtom();
 		for (; +it; ++it)
 		{
 			if (it->getRadius() > 0.0)

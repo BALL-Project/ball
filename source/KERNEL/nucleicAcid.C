@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.C,v 1.10 2001/05/28 09:24:22 anker Exp $
+// $Id: nucleicAcid.C,v 1.11 2001/06/05 15:51:12 anker Exp $
 
 #include <BALL/KERNEL/nucleicAcid.h>
 #include <BALL/KERNEL/global.h>
@@ -156,7 +156,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (NucleotideIterator res_it = beginNucleotide(); !res_it.isEnd(); ++res_it)
+		for (NucleotideConstIterator res_it = beginNucleotide(); !res_it.isEnd(); ++res_it)
 		{
 			++size;
 		}

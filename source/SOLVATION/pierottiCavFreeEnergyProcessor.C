@@ -1,4 +1,4 @@
-// $Id: pierottiCavFreeEnergyProcessor.C,v 1.7 2000/10/26 14:40:32 anker Exp $
+// $Id: pierottiCavFreeEnergyProcessor.C,v 1.8 2001/06/05 15:53:29 anker Exp $
 
 #include <BALL/SOLVATION/pierottiCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -92,7 +92,7 @@ namespace BALL
 			Log.info() << "y_frac = " << y_frac << endl;
 		}
 
-		HashMap<Atom*,float> atom_areas;
+		HashMap<const Atom*,float> atom_areas;
 		calculateSASAtomAreas(*fragment_, atom_areas, solvent_radius);
 		
 		// R is the relation between solute radius and solvent radius [ 1 ]
@@ -102,7 +102,7 @@ namespace BALL
 		// deltaGcav is the cavitatonal energy of the molecule [ J/mol ]
 		double deltaGcav = 0;
 
-		HashMap<Atom*,float>::Iterator it = atom_areas.begin();
+		HashMap<const Atom*,float>::Iterator it = atom_areas.begin();
 		for (; +it; ++it)
 		{
 			R = 2 * it->first->getRadius() * 1e-10 / s1;

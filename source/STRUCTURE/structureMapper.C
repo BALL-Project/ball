@@ -1,4 +1,4 @@
-// $Id: structureMapper.C,v 1.12 2001/05/17 01:30:59 oliver Exp $
+// $Id: structureMapper.C,v 1.13 2001/06/05 15:53:31 anker Exp $
 
 #include <BALL/STRUCTURE/structureMapper.h>
 
@@ -216,7 +216,7 @@ namespace BALL
 	{
 		Size number_of_mol_fragments = 0;
 
-		Composite::CompositeIterator it;
+		Composite::CompositeConstIterator it;
 
 		for(it = composite.beginComposite(); +it; ++it)
 		{
@@ -689,7 +689,7 @@ namespace BALL
 		Vector3 p2_r2;  // Position of backbone N atom of residue r2
 		Vector3 p3_r2;  // Position of backbone C atom of residue r2 
 
-		AtomIterator atom_it;
+		AtomConstIterator atom_it;
 
 		// searching the backbone atoms of residue r1
 		for(atom_it = r1->beginAtom(); atom_it != r1->endAtom(); ++atom_it)

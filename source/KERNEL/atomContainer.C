@@ -1,4 +1,4 @@
-// $Id: atomContainer.C,v 1.5 2001/01/21 21:04:49 amoll Exp $
+// $Id: atomContainer.C,v 1.6 2001/06/05 15:51:12 anker Exp $
 
 #include <BALL/KERNEL/atomContainer.h>
 
@@ -253,7 +253,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (AtomContainerIterator atom_container_it = ++beginAtomContainer();
+		for (AtomContainerConstIterator atom_container_it = ++beginAtomContainer();
 				 !atom_container_it.isEnd();++atom_container_it)
 		{
 			++size;
@@ -267,7 +267,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (AtomIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
+		for (AtomConstIterator atom_it = beginAtom(); !atom_it.isEnd(); ++atom_it)
 		{
 			++size;
 		}
@@ -279,8 +279,8 @@ namespace BALL
 		throw()
 	{
 		Size								size = 0;
-		AtomIterator				atom_it;
-		Atom::BondIterator	bond_it;
+		AtomConstIterator				atom_it;
+		Atom::BondConstIterator	bond_it;
 
 		BALL_FOREACH_BOND(*this, atom_it, bond_it)
 		{
@@ -294,8 +294,8 @@ namespace BALL
 		throw()
 	{
 		Size size = 0;
-		AtomIterator atom_it;
-		Atom::BondIterator bond_it;
+		AtomConstIterator atom_it;
+		Atom::BondConstIterator bond_it;
 
 		BALL_FOREACH_INTERBOND(*this, atom_it, bond_it)
 		{
@@ -309,8 +309,8 @@ namespace BALL
 		throw()
 	{
 		Size size = 0;
-		AtomIterator atom_it;
-		Atom::BondIterator bond_it;
+		AtomConstIterator atom_it;
+		Atom::BondConstIterator bond_it;
 
 		BALL_FOREACH_INTRABOND(*this, atom_it, bond_it)
 		{

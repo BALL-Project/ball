@@ -1,4 +1,4 @@
-// $Id: standardPredicates.C,v 1.24 2001/05/24 15:35:39 anker Exp $
+// $Id: standardPredicates.C,v 1.25 2001/06/05 15:51:13 anker Exp $
 
 #include <BALL/KERNEL/standardPredicates.h>
 
@@ -121,7 +121,8 @@ namespace BALL
 	bool SecondaryStructurePredicate::operator () (const Atom& atom) const
 		throw()
 	{
- 		const SecondaryStructure* sec_struct = atom.getAncestor(RTTI::getDefault<SecondaryStructure>());
+ 		const SecondaryStructure* sec_struct 
+			= atom.getAncestor(RTTI::getDefault<SecondaryStructure>());
 		return ((sec_struct != 0) && (sec_struct->getName() == argument_));
 	}
 	

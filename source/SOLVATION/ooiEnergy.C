@@ -1,4 +1,4 @@
-// $Id: ooiEnergy.C,v 1.12 2001/05/05 21:11:46 amoll Exp $
+// $Id: ooiEnergy.C,v 1.13 2001/06/05 15:53:28 anker Exp $
 
 #include <BALL/SOLVATION/ooiEnergy.h>
 
@@ -260,7 +260,7 @@ namespace BALL
 		// calculate the atomic SAS areas
 		// atom_SAS_areas hashes the atom pointer to the
 		// surface area (in Angstrom^2)
-		HashMap<Atom*,float> atom_SAS_areas;
+		HashMap<const Atom*,float> atom_SAS_areas;
 		calculateSASAtomAreas(atoms, atom_SAS_areas, 1.4, 1888);
 
 		// iterate over all atoms and add up the energies

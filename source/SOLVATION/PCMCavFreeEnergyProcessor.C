@@ -1,4 +1,4 @@
-// $Id: PCMCavFreeEnergyProcessor.C,v 1.7 2000/10/26 14:40:31 anker Exp $
+// $Id: PCMCavFreeEnergyProcessor.C,v 1.8 2001/06/05 15:53:28 anker Exp $
 
 #include <BALL/SOLVATION/PCMCavFreeEnergyProcessor.h>
 #include <BALL/STRUCTURE/numericalSAS.h>
@@ -91,9 +91,9 @@ namespace BALL
 			Log.info() << "y_frac = " << y_frac << endl;
 		}
 		
-		HashMap<Atom*,float> atom_areas;
+		HashMap<const Atom*,float> atom_areas;
 		calculateSASAtomAreas(*fragment_, atom_areas, solvent_radius);
-		HashMap<Atom*,float> atom_areas_reduced;
+		HashMap<const Atom*,float> atom_areas_reduced;
 		// BAUSTELLE: Hier stand vorher SES? Warum?
 		calculateSASAtomAreas(*fragment_, atom_areas_reduced, 0.0);
 		
@@ -106,8 +106,8 @@ namespace BALL
 		// deltaGcav is the cavitatonal energy of the molecule [ J/mol ]
 		double deltaGcav = 0; 
 
-		HashMap<Atom*,float>::Iterator it = atom_areas.begin();
-		HashMap<Atom*,float>::Iterator it_red = atom_areas_reduced.begin();
+		HashMap<const Atom*,float>::Iterator it = atom_areas.begin();
+		HashMap<const Atom*,float>::Iterator it_red = atom_areas_reduced.begin();
 
 		for (; +it; ++it, ++it_red)
 		{

@@ -1,4 +1,4 @@
-// $Id: pair6_12InteractionEnergyProcessor.C,v 1.11 2001/05/29 16:40:22 anker Exp $
+// $Id: pair6_12InteractionEnergyProcessor.C,v 1.12 2001/06/05 15:53:28 anker Exp $
 
 #include <BALL/SYSTEM/path.h>
 #include <BALL/KERNEL/PTE.h>
@@ -286,7 +286,6 @@ namespace BALL
 		Vector3 sphere_center;
 
 		SolventAtomDescriptor solvent_atom;
-		AtomIterator solute_iterator;
 		LennardJones::Values values;
 
 		for (Size s = 0; s < solvent_descriptor.getNumberOfAtomTypes(); ++s)
@@ -356,6 +355,7 @@ namespace BALL
 
 			// iterate over all atoms of the solute
 
+			AtomConstIterator solute_iterator;
 			for (solute_iterator = fragment_->beginAtom(); +solute_iterator;
 					++solute_iterator)
 			{

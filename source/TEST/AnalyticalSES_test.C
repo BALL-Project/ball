@@ -1,4 +1,4 @@
-// $Id: AnalyticalSES_test.C,v 1.7 2000/08/30 19:59:13 oliver Exp $
+// $Id: AnalyticalSES_test.C,v 1.8 2001/06/05 15:53:33 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #include <BALL/KERNEL/fragment.h>
 ///////////////////////////
 
-START_TEST(AnalyticalSES, "$Id: AnalyticalSES_test.C,v 1.7 2000/08/30 19:59:13 oliver Exp $")
+START_TEST(AnalyticalSES, "$Id: AnalyticalSES_test.C,v 1.8 2001/06/05 15:53:33 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -44,7 +44,7 @@ CHECK(calculateSESAtomAreas(const AtomContainer& fragment, HashMap<Atom*, float>
 	f.insert(a1);
 	f.insert(a2);
 
-	HashMap<Atom*, float> atom_areas;
+	HashMap<const Atom*, float> atom_areas;
 	float area = calculateSESAtomAreas(f, atom_areas, 1.5);
 	
 	PRECISION(0.001)

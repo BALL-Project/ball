@@ -1,4 +1,4 @@
-// $Id: snapShot.C,v 1.25 2001/04/30 03:02:28 oliver Exp $
+// $Id: snapShot.C,v 1.26 2001/06/05 15:51:15 anker Exp $
 
 // BALL includes 
 #include <BALL/MOLMEC/COMMON/snapShot.h>
@@ -208,7 +208,7 @@ namespace BALL
 	{
 		number_of_atoms_ = system.countAtoms();
 
-		AtomIterator atom_it = system.beginAtom();
+		AtomConstIterator atom_it = system.beginAtom();
 
 		// reserve memory
 		atom_positions_.resize(number_of_atoms_);
@@ -266,7 +266,7 @@ namespace BALL
 		atom_positions_.resize(number_of_atoms_);
 
 		// copy data
-		AtomIterator atom_it = system.beginAtom();
+		AtomConstIterator atom_it = system.beginAtom();
 		for (Size i = 0; +atom_it; ++atom_it, ++i)
 		{
 			atom_positions_[i] = atom_it->getPosition();
@@ -299,7 +299,7 @@ namespace BALL
 	{
 		number_of_atoms_ = system.countAtoms();
 		atom_velocities_.resize(number_of_atoms_);
-		AtomIterator atom_it = system.beginAtom();
+		AtomConstIterator atom_it = system.beginAtom();
 		for (Size i = 0; +atom_it; ++atom_it, ++i)
 		{
 			atom_velocities_[i] = atom_it->getVelocity();
@@ -333,7 +333,7 @@ namespace BALL
 	{
 		number_of_atoms_ = system.countAtoms();
 		atom_forces_.resize(number_of_atoms_);
-		AtomIterator atom_it = system.beginAtom();
+		AtomConstIterator atom_it = system.beginAtom();
 		for (Size i = 0; +atom_it; ++atom_it, ++i)
 		{
 			atom_forces_[i] = atom_it->getForce();

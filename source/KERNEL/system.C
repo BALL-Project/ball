@@ -1,4 +1,4 @@
-// $Id: system.C,v 1.19 2001/01/21 21:07:55 amoll Exp $
+// $Id: system.C,v 1.20 2001/06/05 15:51:13 anker Exp $
 
 #include <BALL/KERNEL/system.h>
 
@@ -97,7 +97,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (MoleculeIterator mol_it = beginMolecule(); !mol_it.isEnd(); ++mol_it)
+		for (MoleculeConstIterator mol_it = beginMolecule(); !mol_it.isEnd(); ++mol_it)
 		{
 			++size;
 		}
@@ -110,7 +110,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (FragmentIterator frag_it = beginFragment(); !frag_it.isEnd(); ++frag_it)
+		for (FragmentConstIterator frag_it = beginFragment(); !frag_it.isEnd(); ++frag_it)
 		{
 			++size;
 		}
@@ -123,7 +123,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (ResidueIterator frag_it = beginResidue(); !frag_it.isEnd(); ++frag_it)
+		for (ResidueConstIterator frag_it = beginResidue(); !frag_it.isEnd(); ++frag_it)
 		{
 			++size;
 		}
@@ -136,7 +136,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (AtomIterator frag_it = beginAtom(); !frag_it.isEnd(); ++frag_it)
+		for (AtomConstIterator frag_it = beginAtom(); !frag_it.isEnd(); ++frag_it)
 		{
 			++size;
 		}
@@ -149,7 +149,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (ProteinIterator frag_it = beginProtein(); !frag_it.isEnd(); ++frag_it)
+		for (ProteinConstIterator frag_it = beginProtein(); !frag_it.isEnd(); ++frag_it)
 		{
 			++size;
 		}
@@ -162,7 +162,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (ChainIterator frag_it = beginChain(); !frag_it.isEnd(); ++frag_it)
+		for (ChainConstIterator frag_it = beginChain(); !frag_it.isEnd(); ++frag_it)
 		{
 			++size;
 		}
@@ -175,7 +175,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (SecondaryStructureIterator frag_it = beginSecondaryStructure(); !frag_it.isEnd(); ++frag_it)
+		for (SecondaryStructureConstIterator frag_it = beginSecondaryStructure(); !frag_it.isEnd(); ++frag_it)
 		{
 			++size;
 		}
@@ -188,7 +188,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (NucleotideIterator frag_it = beginNucleotide(); !frag_it.isEnd(); ++frag_it)
+		for (NucleotideConstIterator frag_it = beginNucleotide(); !frag_it.isEnd(); ++frag_it)
 		{
 			++size;
 		}
@@ -201,7 +201,7 @@ namespace BALL
 	{
 		Size size = 0;
 
-		for (NucleicAcidIterator frag_it = beginNucleicAcid(); !frag_it.isEnd(); ++frag_it)
+		for (NucleicAcidConstIterator frag_it = beginNucleicAcid(); !frag_it.isEnd(); ++frag_it)
 		{
 			++size;
 		}

@@ -1,4 +1,4 @@
-// $Id: residueChecker.C,v 1.16 2001/01/26 12:11:05 oliver Exp $
+// $Id: residueChecker.C,v 1.17 2001/06/05 15:53:30 anker Exp $
 
 #include <BALL/STRUCTURE/residueChecker.h>
 #include <BALL/KERNEL/forEach.h>
@@ -62,7 +62,7 @@ namespace BALL
 
 		// checking charge: charge should be integral and -2 <= charge <= 2
 		float total_charge = 0.0;
-		AtomIterator atom_it = residue.beginAtom();
+		AtomConstIterator atom_it = residue.beginAtom();
 		for (; +atom_it; ++atom_it)
 		{
 			total_charge += atom_it->getCharge();
@@ -152,8 +152,8 @@ namespace BALL
 				Residue res(*reference);
 				BALL_FOREACH_BOND(res, bond_atom_it, bond_it)
 				{
-					Atom* first = 0;
-					Atom* second = 0;
+					const Atom* first = 0;
+					const Atom* second = 0;
 					for (atom_it = residue.beginAtom(); +atom_it && (first == 0 || second == 0); ++atom_it)
 					{
 						if (atom_it->getName() == bond_it->getFirstAtom()->getName())
