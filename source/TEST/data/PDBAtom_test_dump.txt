@@ -1,0 +1,28 @@
+/Object: [a-z0-9]+ is instance of class: [A-Z0-9]+
+/Object: [a-z0-9]+ is instance of class: [A-Z0-9]+
+  handle: 1
+  auto-deletable: 0
+/Object: [a-z0-9]+ is instance of class: [A-Z0-9]+
+  selected: 0
+/  parent: [0-9]+
+/  first: [0-9]+
+/  last: [0-9]+
+/  previous: [0-9]+
+/  next: [0-9]+
+  number of children:0
+  contains_selection_:0
+  number of selected children:0
+  number of children containing selection:0
+  children:
+  element: Aluminum Al 13 3 13 26.9815 1.43 1.25 2.05 1.61 
+  charge: 9.1
+  name: name
+  type name: type_name
+  position: (0.1 1.1 2.1)
+  radius: 10.1
+  type: 0
+  velocity: (3.1 4.1 5.1)
+  force: (6.1 7.1 8.1)
+  number of bonds: 0
+  bonds: 
+
