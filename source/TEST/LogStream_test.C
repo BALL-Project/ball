@@ -1,19 +1,34 @@
-// $Id: LogStream_test.C,v 1.13 2001/06/24 17:08:30 amoll Exp $
+// $Id: LogStream_test.C,v 1.14 2001/07/05 18:23:19 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/COMMON/logStream.h>
 #include <sys/time.h>
 #include <BALL/MATHS/common.h>
+#include <BALL/CONCEPT/notification.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: LogStream_test.C,v 1.13 2001/06/24 17:08:30 amoll Exp $")
+START_TEST(class_name, "$Id: LogStream_test.C,v 1.14 2001/07/05 18:23:19 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
+
 
 using namespace BALL;
 using namespace std;
+
+class TestTarget
+	:	public LogStream::Target
+{
+	public:
+	virtual bool onNotify(BALL::LogStreamNotifier&)
+	{
+		notified = true;
+		return true;
+	}
+	bool notified;
+};
+
 String filename;
 
 LogStream* l1;
@@ -126,14 +141,37 @@ CHECK(remove(std::ostream& s))
 	ofstream s;
 	l1.insert(s);
 	l1.remove(s);
+	// make sure we can remove it twice without harm
+	l1.remove(s);
 RESULT
 
 CHECK(insertNotification(const std::ostream& s, const Target& target))
-// BAUSTELLE
+	LogStream l1;
+	TestTarget target;
+	ofstream os;
+	l1.insert(os);
+	l1.insertNotification(os, target);
+	target.notified = false;
+	TEST_EQUAL(target.notified, false)
+	l1 << "test" << endl;
+	TEST_EQUAL(target.notified, true)
 RESULT
 
 CHECK(removeNotification(const std::ostream& s))
-// BAUSTELLE
+	LogStream l1;
+	TestTarget target;
+	ofstream os;
+	l1.insert(os);
+	l1.insertNotification(os, target);
+	l1.removeNotification(os);
+	target.notified = false;
+	TEST_EQUAL(target.notified, false)
+	l1 << "test" << endl;
+	TEST_EQUAL(target.notified, false)
+	// make sure we can remove it twice
+	l1.removeNotification(os);
+	l1 << "test" << endl;
+	TEST_EQUAL(target.notified, false)
 RESULT
 
 CHECK(setMinLevel(const std::ostream& s, int min_level))
@@ -264,10 +302,10 @@ CHECK(filterLines(const int min_level = LogStreamBuf::MIN_LEVEL, const int max_l
 	liste.clear();	
 RESULT
 
-// this tests a problem I (Andreas M.) accountered with long strings
-// as attributes for Log.error.
-CHECK(special)
-	Log.error()	<< "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" << endl;
+// test for a minimum string length for output
+CHECK(Output length)
+	LogStream l1;
+	l1	<< "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa" << endl;
 RESULT
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
