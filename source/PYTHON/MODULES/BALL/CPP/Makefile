@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.15 2001/08/01 23:56:26 oliver Exp $
+# $Id: Makefile,v 1.16 2001/08/16 00:30:34 oliver Exp $
 #
 all: libBALLc.so
 
@@ -53,6 +53,7 @@ SIP_SOURCES_DATATYPE=\
 	sipBALLRegularData2DGridIndex.C\
 	sipBALLRegularData3DGridIndex.C\
 	sipBALLOptions.C\
+	sipBALLIllegalKey.C\
 	sipBALLRegularExpression.C\
 	sipBALLString.C\
 	sipBALLSubstring.C\
@@ -65,6 +66,7 @@ SIP_SOURCES_FORMAT=\
 	sipBALLHINFile.C\
 	sipBALLINIFile.C\
 	sipBALLMOL2File.C\
+	sipBALLGenericPDBFile.C\
 	sipBALLPDBFile.C\
 	sipBALLDCDFile.C\
 	sipBALLDCDHeader.C\
@@ -143,7 +145,9 @@ SIP_SOURCES_MOLMEC_COMMON=\
 	sipBALLRuleEvaluator.C\
 	sipBALLRuleProcessor.C\
 	sipBALLSnapShot.C\
-	sipBALLSnapShotManager.C
+	sipBALLSnapShotManager.C\
+	sipBALLTypeRuleProcessor.C\
+	sipBALLTypenameRuleProcessor.C
 
 SIP_SOURCES_NMR=
 
@@ -168,7 +172,15 @@ SIP_SOURCES_PYTHON=\
 	sipBALLPyNucleotideList.C\
 	sipBALLPyNucleicAcidList.C
 
-SIP_SOURCES_SOLVATION=
+SIP_SOURCES_SOLVATION=\
+	sipBALLFDPB.C\
+	sipBALLFDPBBoundary.C\
+	sipBALLFDPBChargeDistribution.C\
+	sipBALLFDPBDefault.C\
+	sipBALLFDPBDielectricSmoothing.C\
+	sipBALLFDPBFastAtomStruct.C\
+	sipBALLFDPBOption.C
+
 
 SIP_SOURCES_STRUCTURE=\
 	sipBALLAddHydrogensProcessor.C\

@@ -1,4 +1,4 @@
-// $Id: pyAtomDict.sip,v 1.3 2001/07/29 17:31:16 oliver Exp $
+// $Id: pyAtomDict.sip,v 1.4 2001/08/16 00:30:48 oliver Exp $
 
 %MappedType PyAtomDict
 {
@@ -10,7 +10,6 @@
 %End
 
 %ConvertFromTypeCode
-	std::cerr << "convert from" << std::endl;
 	PyObject* dict = PyDict_New();
 
 	if (dict == NULL)
@@ -44,7 +43,6 @@
 	// Convert a Python dictionary to a PyAtomDict object on the
 	// heap.
  
-	std::cerr << "convert-to" << std::endl;
 	// create a list of all keys
 	PyObject* key_list = PyDict_Keys(sipPy);
 	if (key_list == NULL)

@@ -1,4 +1,4 @@
-// $Id: BALL.sip,v 1.11 2001/07/29 17:31:16 oliver Exp $
+// $Id: BALL.sip,v 1.12 2001/08/16 00:30:48 oliver Exp $
 /////////////////////////
 // BALL PYTHON SUPPORT
 /////////////////////////
@@ -25,7 +25,6 @@
 // baseFunctor.h		// not supported
 // baseIterator.h   // not supported
 // bidirectionalIterator.h // not supported
-// callback.h       // not supported
 // classTest.h      // not needed
 // comparator.h     // ??
 %Include composite.sip
@@ -78,6 +77,7 @@
 %Include HINFile.sip
 %Include INIFile.sip
 %Include MOL2File.sip
+%Include genericPDBFile.sip
 %Include PDBFile.sip
 %Include XYZFile.sip
 // genericPDBFile.h // not supported
@@ -121,7 +121,6 @@
 %Include selector.sip
 // %Include standardPredicates.sip // not needed - use Selector class!
 %Include system.sip
-// universe.h  // not supported
 
 // MATHS
 %Include analyticalGeometry.sip
@@ -129,8 +128,13 @@
 %Include box3.sip
 %Include circle3.sip
 // %Include common.sip - trouble! namespaces...
+// %Include function.sip - template stuff only...
 %Include line3.sip
 %Include matrix44.sip
+// %Include numericalIntegrator.sip
+// %Include piecewiseFunction.sip
+// %Include piecewisePolynomial.sip
+// %Include rombergIntegrator.sip
 %Include plane3.sip
 %Include quaternion.sip
 %Include sphere3.sip
@@ -168,8 +172,8 @@
 %Include snapShot.sip
 %Include snapShotManager.sip
 // support.h
-// typeRuleProcessor.h
-// typenameRuleProcessor.h
+%Include typeRuleProcessor.sip
+%Include typenameRuleProcessor.sip
 
 // MOLMEC/MDSIMULATION
 %Include canonicalMD.sip
@@ -230,7 +234,7 @@
 // SOLVATION
 // %Include molecularSurfaceGrid.sip // ??
 // %Include ooiEnergy.sip
-// %Include poissonBoltzmann.sip
+%Include poissonBoltzmann.sip
 
 // STRUCTURE
 // %Include analyticalSES.sip

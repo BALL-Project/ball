@@ -1,4 +1,4 @@
-// $Id: pyAtomList.C,v 1.3 2001/07/25 11:34:51 oliver Exp $
+// $Id: pyAtomList.C,v 1.4 2001/08/16 00:30:34 oliver Exp $
 
 #include <BALL/PYTHON/pyAtomList.h>
 #include <BALL/KERNEL/atom.h>
@@ -61,6 +61,7 @@ namespace BALL
 				}
 			}
 		}
+		std::cerr << "PyAtomList: size = " << size() << std::endl;
 	}
 
 }

@@ -1,6 +1,7 @@
-// $Id: PDBFile.sip,v 1.3 2001/08/01 01:28:38 oliver Exp $
+// $Id: PDBFile.sip,v 1.4 2001/08/16 00:30:48 oliver Exp $
 
 class PDBFile
+	:	GenericPDBFile
 {
 %HeaderCode
 	#include <BALL/FORMAT/PDBFile.h>

@@ -1275,7 +1275,7 @@ static void sipDealloc_SecondaryStructure(sipThisType *sipThis)
 }
 extern "C" PyObject * sip__str__SecondaryStructure(PyObject *a0)
 {
-#line 53 "secondaryStructure.sip"
+#line 61 "secondaryStructure.sip"
   SecondaryStructure* ptr;
   if ((ptr = (SecondaryStructure*)sipGetCppPtr((sipThisType*)a0,sipClass_SecondaryStructure)) == NULL)
     return NULL;

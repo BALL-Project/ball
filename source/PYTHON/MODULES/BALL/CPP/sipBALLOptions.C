@@ -1164,12 +1164,97 @@ extern "C" PyObject *sipDo_Options_readOptionFile(PyObject *sipThisObj,PyObject 
 	return NULL;
 }
 
+extern "C" PyObject *sipDo_Options_GetItemOp(PyObject *sipThisObj,PyObject *sipArgs)
+{
+	sipThisType *sipThis;
+	int sipArgsParsed = 0;
+
+	if ((sipThis = sipGetThis(sipThisObj,&sipArgs,sipClass_Options)) == NULL)
+		return NULL;
+
+	{
+		const String * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		{
+			String *res;
+			Options *ptr;
+
+			if ((ptr = (Options *)sipGetCppPtr(sipThis,sipClass_Options)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+			res = &ptr -> Options::operator[](* a0);
+
+			if (istemp0)
+				delete a0;
+
+			return sipMapCppToSelf(res,sipClass_String);
+		}
+	}
+
+	{
+		const String * a0;
+		PyObject *a0obj;
+
+		if (sipParseArgs(&sipArgsParsed,sipArgs,"I",sipCanConvertTo_String,&a0obj))
+		{
+			const String *res;
+			Options *ptr;
+
+			if ((ptr = (Options *)sipGetCppPtr(sipThis,sipClass_Options)) == NULL)
+				return NULL;
+
+			int iserr = 0;
+
+			int istemp0 = sipConvertTo_String(a0obj,(String **)&a0,1,&iserr);
+
+			if (iserr)
+				return NULL;
+
+   try
+   {
+			res = &ptr -> Options::operator[](* a0);
+   }
+   catch (IllegalKey e)
+   {
+      IllegalKey *my_exception = new IllegalKey(e);
+      PyErr_SetObject(sipClass_IllegalKey, sipNewCppToSelf(my_exception,sipClass_IllegalKey,SIP_SIMPLE | SIP_PY_OWNED));
+      return NULL;
+		}
+
+			if (istemp0)
+				delete a0;
+
+			return sipMapCppToSelf(res,sipClass_String);
+		}
+	}
+
+	// Report an error if the arguments couldn't be parsed.
+
+	sipNoMethod(sipArgsParsed,sipName_BALL_Options,sipName_BALL_GetItemOp);
+
+	return NULL;
+}
+
 // Cast a pointer to a type somewhere in its superclass hierachy.
 
 extern "C" const void *sipCast_Options(const void *ptr,PyObject *targetClass)
 {
+	const void *res;
+
 	if (targetClass == sipClass_Options)
 		return ptr;
+
+	if ((res = sipCast_IllegalKey((IllegalKey *)(Options *)ptr,targetClass)) != NULL)
+		return res;
 
 	return NULL;
 }
@@ -1186,14 +1271,14 @@ static void sipDealloc_Options(sipThisType *sipThis)
 }
 extern "C" PyObject * sip__str__Options(PyObject *a0)
 {
-#line 40 "options.sip"
+#line 59 "options.sip"
   Options* ptr;
   if ((ptr = (Options*)sipGetCppPtr((sipThisType*)a0,sipClass_Options)) == NULL)
     return NULL;
 
   return PyString_FromString(String(String("Options ") + ptr->getName()
         + " { " + String(ptr->getSize()) + " entries }").c_str());
-#line 1201 "sipBALLOptions.cpp"
+#line 1286 "sipBALLOptions.cpp"
 }
 
 PyObject *sipNew_Options(PyObject *sipSelf,PyObject *sipArgs)
@@ -1323,6 +1408,7 @@ PyMethodDef sipClassAttrTab_Options[] = {
 	{sipName_BALL_setDefaultReal, sipDo_Options_setDefaultReal, METH_VARARGS, NULL},
 	{sipName_BALL_setDefaultBool, sipDo_Options_setDefaultBool, METH_VARARGS, NULL},
 	{sipName_BALL_readOptionFile, sipDo_Options_readOptionFile, METH_VARARGS, NULL},
+	{sipName_BALL_GetItemOp, sipDo_Options_GetItemOp, METH_VARARGS, NULL},
 	{NULL}
 };
 

@@ -36,19 +36,19 @@ static PyTypeObject sipType_PDBFile = {
 sipPDBFile::sipPDBFile()
    : PDBFile()
 {
-	sipCommonCtor(sipPyMethods,8);
+	sipCommonCtor(sipPyMethods,10);
 }
 
 sipPDBFile::sipPDBFile(const String& a0,std__openmode a1)
    throw(FileNotFound) : PDBFile(a0,a1)
 {
-	sipCommonCtor(sipPyMethods,8);
+	sipCommonCtor(sipPyMethods,10);
 }
 
 sipPDBFile::sipPDBFile(const PDBFile& a0)
    : PDBFile(a0)
 {
-	sipCommonCtor(sipPyMethods,8);
+	sipCommonCtor(sipPyMethods,10);
 }
 
 sipPDBFile::~sipPDBFile()
@@ -57,13 +57,34 @@ sipPDBFile::~sipPDBFile()
 	sipCommonDtor(sipPyThis);
 }
 
+float sipPDBFile::getVersion() const
+
+{
+	int relLock;
+
+	return sipIsPyMethod((sipMethodCache *)&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_getVersion,&relLock) ?
+		sipGenericPDBFile::sipVH_getVersion(&sipPyMethods[0],sipPyThis,relLock) :
+		GenericPDBFile::getVersion();
+}
+
+void sipPDBFile::clear(int a0)
+
+{
+	int relLock;
+
+	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_clear,&relLock))
+		sipGenericPDBFile::sipVH_clear(&sipPyMethods[1],sipPyThis,relLock,a0);
+	else
+		GenericPDBFile::clear(a0);
+}
+
 void sipPDBFile::operator<<(const System& a0)
 
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[0],sipPyThis,NULL,sipName_BALL_LShiftOp,&relLock))
-		sipPDBFile::sipVH_LShiftOp(&sipPyMethods[0],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_LShiftOp,&relLock))
+		sipPDBFile::sipVH_LShiftOp(&sipPyMethods[2],sipPyThis,relLock,a0);
 	else
 		PDBFile::operator<<(a0);
 }
@@ -73,8 +94,8 @@ void sipPDBFile::operator<<(const Protein& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[1],sipPyThis,NULL,sipName_BALL_LShiftOp,&relLock))
-		sipPDBFile::sipVH_LShiftOp(&sipPyMethods[1],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_LShiftOp,&relLock))
+		sipPDBFile::sipVH_LShiftOp(&sipPyMethods[3],sipPyThis,relLock,a0);
 	else
 		PDBFile::operator<<(a0);
 }
@@ -84,8 +105,8 @@ void sipPDBFile::operator>>(System& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[2],sipPyThis,NULL,sipName_BALL_RShiftOp,&relLock))
-		sipPDBFile::sipVH_RShiftOp(&sipPyMethods[2],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_RShiftOp,&relLock))
+		sipPDBFile::sipVH_RShiftOp(&sipPyMethods[4],sipPyThis,relLock,a0);
 	else
 		PDBFile::operator>>(a0);
 }
@@ -95,8 +116,8 @@ void sipPDBFile::operator>>(Protein& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[3],sipPyThis,NULL,sipName_BALL_RShiftOp,&relLock))
-		sipPDBFile::sipVH_RShiftOp(&sipPyMethods[3],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_RShiftOp,&relLock))
+		sipPDBFile::sipVH_RShiftOp(&sipPyMethods[5],sipPyThis,relLock,a0);
 	else
 		PDBFile::operator>>(a0);
 }
@@ -106,8 +127,8 @@ void sipPDBFile::write(const System& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[4],sipPyThis,NULL,sipName_BALL_write,&relLock))
-		sipPDBFile::sipVH_write(&sipPyMethods[4],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[6],sipPyThis,NULL,sipName_BALL_write,&relLock))
+		sipPDBFile::sipVH_write(&sipPyMethods[6],sipPyThis,relLock,a0);
 	else
 		PDBFile::write(a0);
 }
@@ -117,8 +138,8 @@ void sipPDBFile::write(const Protein& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[5],sipPyThis,NULL,sipName_BALL_write,&relLock))
-		sipPDBFile::sipVH_write(&sipPyMethods[5],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[7],sipPyThis,NULL,sipName_BALL_write,&relLock))
+		sipPDBFile::sipVH_write(&sipPyMethods[7],sipPyThis,relLock,a0);
 	else
 		PDBFile::write(a0);
 }
@@ -128,8 +149,8 @@ void sipPDBFile::read(System& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[6],sipPyThis,NULL,sipName_BALL_read,&relLock))
-		sipPDBFile::sipVH_read(&sipPyMethods[6],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[8],sipPyThis,NULL,sipName_BALL_read,&relLock))
+		sipPDBFile::sipVH_read(&sipPyMethods[8],sipPyThis,relLock,a0);
 	else
 		PDBFile::read(a0);
 }
@@ -139,8 +160,8 @@ void sipPDBFile::read(Protein& a0)
 {
 	int relLock;
 
-	if (sipIsPyMethod(&sipPyMethods[7],sipPyThis,NULL,sipName_BALL_read,&relLock))
-		sipPDBFile::sipVH_read(&sipPyMethods[7],sipPyThis,relLock,a0);
+	if (sipIsPyMethod(&sipPyMethods[9],sipPyThis,NULL,sipName_BALL_read,&relLock))
+		sipPDBFile::sipVH_read(&sipPyMethods[9],sipPyThis,relLock,a0);
 	else
 		PDBFile::read(a0);
 }
@@ -773,6 +794,9 @@ extern "C" const void *sipCast_PDBFile(const void *ptr,PyObject *targetClass)
 
 	if (targetClass == sipClass_PDBFile)
 		return ptr;
+
+	if ((res = sipCast_GenericPDBFile((GenericPDBFile *)(PDBFile *)ptr,targetClass)) != NULL)
+		return res;
 
 	if ((res = sipCast_FileNotFound((FileNotFound *)(PDBFile *)ptr,targetClass)) != NULL)
 		return res;

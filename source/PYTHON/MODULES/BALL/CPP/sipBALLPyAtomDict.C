@@ -4,7 +4,7 @@
 
 int sipCanConvertTo_PyAtomDict(PyObject *sipPy)
 {
-#line 39 "pyAtomDict.sip"
+#line 38 "pyAtomDict.sip"
 	std::cerr << "can convert to" << std::endl;
 	return PyDict_Check(sipPy);
 #line 15 "sipBALLPyAtomDict.cpp"
@@ -15,11 +15,10 @@ int sipConvertTo_PyAtomDict(PyObject *sipPy,PyAtomDict **sipCppPtr,int sipWillDe
 	if (*sipIsErr || sipPy == NULL)
 		return 0;
 
-#line 44 "pyAtomDict.sip"
+#line 43 "pyAtomDict.sip"
 	// Convert a Python dictionary to a PyAtomDict object on the
 	// heap.
  
-	std::cerr << "convert-to" << std::endl;
 	// create a list of all keys
 	PyObject* key_list = PyDict_Keys(sipPy);
 	if (key_list == NULL)
@@ -58,7 +57,7 @@ int sipConvertTo_PyAtomDict(PyObject *sipPy,PyAtomDict **sipCppPtr,int sipWillDe
 	*sipCppPtr = atom_dict;
 
 	return 1;
-#line 66 "sipBALLPyAtomDict.cpp"
+#line 65 "sipBALLPyAtomDict.cpp"
 }
 
 PyAtomDict *sipForceConvertTo_PyAtomDict(PyObject *valobj,int *iserrp)
@@ -85,7 +84,6 @@ PyAtomDict *sipForceConvertTo_PyAtomDict(PyObject *valobj,int *iserrp)
 PyObject *sipConvertFrom_PyAtomDict(const PyAtomDict *sipCpp)
 {
 #line 13 "pyAtomDict.sip"
-	std::cerr << "convert from" << std::endl;
 	PyObject* dict = PyDict_New();
 
 	if (dict == NULL)
@@ -108,5 +106,5 @@ PyObject *sipConvertFrom_PyAtomDict(const PyAtomDict *sipCpp)
 	}
 
 	return dict;
-#line 116 "sipBALLPyAtomDict.cpp"
+#line 114 "sipBALLPyAtomDict.cpp"
 }

@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.sip,v 1.3 2001/07/25 11:32:36 oliver Exp $
+// $Id: secondaryStructure.sip,v 1.4 2001/08/16 00:30:49 oliver Exp $
 
 class SecondaryStructure
   : AtomContainer
@@ -8,6 +8,14 @@ class SecondaryStructure
 	using namespace BALL;
 %End
   public:
+	enum Property
+	{
+		PROPERTY__HELIX,
+		PROPERTY__RANDOM_COIL,
+		PROPERTY__STRAND,
+		PROPERTY__TURN,
+		NUMBER_OF_PROPERTIES
+	};
   SecondaryStructure();
   SecondaryStructure(const SecondaryStructure&,bool = true);
   SecondaryStructure(const String&);
