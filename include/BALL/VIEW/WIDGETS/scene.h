@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.58.2.2 2005/01/17 17:20:54 amoll Exp $
+// $Id: scene.h,v 1.58.2.3 2005/01/20 23:44:21 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -552,6 +552,12 @@ namespace BALL
 			virtual void setMode(ModeType mode)
 				throw();
 
+			///
+			static void setScreenShotNumber(Position pos) { screenshot_nr_ = pos;}
+
+			///
+			static void setPOVNumber(Position pos) { pov_nr_ = pos;}
+
 			protected slots:
 
 			//@}
@@ -701,7 +707,9 @@ namespace BALL
 
 			MaterialSettings* material_settings_;
 
-			Position screenshot_nr_,
+			// nr of last png file export
+			static Position screenshot_nr_,
+			// nr of last pov file export
 							 pov_nr_;
 
 			QPoint last_pos_;

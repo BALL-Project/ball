@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.156.2.9 2005/01/18 15:08:23 amoll Exp $
+// $Id: scene.C,v 1.156.2.10 2005/01/20 23:44:07 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -35,7 +35,7 @@
 #include <qdir.h>
 
 
- #define BALL_BENCHMARKING
+//    #define BALL_BENCHMARKING
 
 using std::endl;
 using std::istream;
@@ -44,6 +44,9 @@ namespace BALL
 {
 	namespace VIEW
 	{
+
+		Position Scene::screenshot_nr_ = 100000;
+		Position Scene::pov_nr_ = 100000;
 
 		// ###############CONSTRUCTORS,DESTRUCTORS,CLEAR###################
 
@@ -81,8 +84,6 @@ namespace BALL
 				stage_(new Stage),
 				light_settings_(0),
 				stage_settings_(0),
-				screenshot_nr_(10000),
-				pov_nr_(10000),
 				animation_thread_(0),
 				stop_animation_(false),
 				content_changed_(true)
@@ -117,8 +118,6 @@ namespace BALL
 				stage_(new Stage),
 				light_settings_(0),
 				stage_settings_(0),
-				screenshot_nr_(10000),
-				pov_nr_(10000),
 				animation_thread_(0),
 				stop_animation_(false),
 				content_changed_(true)
@@ -155,8 +154,6 @@ namespace BALL
 				light_settings_(new LightSettings(this)),
 				stage_settings_(new StageSettings(this)),
 				material_settings_(new MaterialSettings(this)),
-				screenshot_nr_(10000),
-				pov_nr_(10000),
 				animation_thread_(0),
 				stop_animation_(false),
 				content_changed_(true)
@@ -1038,6 +1035,10 @@ namespace BALL
 			inifile.insertValue("STAGE", "ShowCoordinateSystem", String(stage_->coordinateSystemEnabled()));
 			inifile.insertValue("STAGE", "Fulcrum", vector3ToString(system_origin_));
 			inifile.insertValue("STAGE", "AnimationSmoothness", String(animation_smoothness_));
+
+			inifile.appendSection("EXPORT");
+			inifile.insertValue("EXPORT", "POVNR", String(pov_nr_));
+			inifile.insertValue("EXPORT", "PNGNR", String(screenshot_nr_));
 			writeLights_(inifile);
 		}
 
@@ -1078,6 +1079,16 @@ namespace BALL
 			if (inifile.hasEntry("STAGE", "AnimationSmoothness"))
 			{
 				setAnimationSmoothness(inifile.getValue("STAGE", "AnimationSmoothness").toFloat());
+			}
+
+			if (inifile.hasEntry("EXPORT", "POVNR"))
+			{
+				pov_nr_ = inifile.getValue("EXPORT", "POVNR").toUnsignedInt();
+			}
+
+			if (inifile.hasEntry("EXPORT", "PNGNR"))
+			{
+				screenshot_nr_ = inifile.getValue("EXPORT", "PNGNR").toUnsignedInt();
 			}
 
 
