@@ -1,4 +1,4 @@
-// $Id: regularData1D.h,v 1.6 2000/11/10 17:21:41 anhi Exp $
+// $Id: regularData1D.h,v 1.7 2000/12/08 14:52:28 amoll Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -40,23 +40,28 @@ namespace BALL
 			
 		/**	Default constructor
 		*/
-		TRegularData1D();
+		TRegularData1D()
+			throw();
 
 		/**	Copy constructor
 		*/
-		TRegularData1D(const TRegularData1D& data);
+		TRegularData1D(const TRegularData1D& data)
+			throw();
 
 		/**	Destructor
 		*/
-		virtual ~TRegularData1D();
+		virtual ~TRegularData1D()
+			throw();
 
 		/**	Clear the contents
 		*/
-		virtual void clear();
+		virtual void clear()
+			throw();
 
 		/**	Clear the contents and reset the object dimensions
 		*/
-		virtual void destroy();
+		virtual void destroy()
+			throw();
 
 		//@}
 
@@ -67,12 +72,14 @@ namespace BALL
 		/**	Assignment operator.
 				Copy the data and the boundaries.
 		*/
-		const TRegularData1D& operator = (const TRegularData1D& data);
+		const TRegularData1D& operator = (const TRegularData1D& data)
+			throw();
 
 		/**	Assignment from a {\tt vector} of {\tt T}.
 				Copy the contents of the data without changing the boundaries.
 		*/
-		const TRegularData1D& operator = (const VectorType& data);
+		const TRegularData1D& operator = (const VectorType& data)
+			throw();
 		//@}
 		
 		/**	@name Predicates
@@ -80,7 +87,8 @@ namespace BALL
 		//@{
 		/**	Equality operator
 		*/
-		bool operator == (const TRegularData1D& data) const;
+		bool operator == (const TRegularData1D& data) const
+			throw();
 		//@}
 	
 		/**	@name	Accessors
@@ -90,32 +98,39 @@ namespace BALL
 		/**	Constant random access operator.
 				@exception IndexOverflow if {\tt index} is out of range
 		*/	
-		const T& operator [] (Position index) const;
+		const T& operator [] (Position index) const
+			throw(Exception::IndexOverflow);
 			
 		/**	Mutable random access operator.
 				@exception IndexOverflow if {\tt index} is out of range
 		*/	
-		T& operator [] (Position index);
+		T& operator [] (Position index)
+			throw(Exception::IndexOverflow);
 			
 		/**	Return the number of items 
 		*/
-		Size getSize() const;
+		Size getSize() const
+			throw();
 
 		/**	Return the lower bound
 		*/
-		double getLower() const;
+		double getLower() const
+			throw();
 		
 		/**	Return the upper bound
 		*/
-		double getUpper() const;
+		double getUpper() const
+			throw();
 
 		/**	Set the upper bound
 		*/
-		void setUpper(double upper);
+		void setUpper(double upper)
+			throw();
 
 		/**	Set the lower bound
 		*/
-		void setLower(double lower);
+		void setLower(double lower)
+			throw();
 
 		/**	Resize the data.
 				If {\tt new_size} is larger than the current size, the data {\tt vector}
@@ -128,7 +143,8 @@ namespace BALL
 				
 				@param new_size the new size
 		*/
-		void resize(Size new_size);
+		void resize(Size new_size)
+			throw();
 		//@}
 	
 		protected:
@@ -151,16 +167,19 @@ namespace BALL
 	
 	template <typename T>
 	TRegularData1D<T>::TRegularData1D()
+		throw()
 	{
 	}
 
 	template <typename T>
 	TRegularData1D<T>::~TRegularData1D()
+		throw()
 	{
 	}
 
 	template <typename T>
 	TRegularData1D<T>::TRegularData1D(const TRegularData1D<T>& data)
+		throw()
 		:	lower_(data.lower_),
 			upper_(data.upper_),
 			data_(data.data_)
@@ -169,6 +188,7 @@ namespace BALL
 
 	template <typename T>
 	void TRegularData1D<T>::clear()
+		throw()
 	{
 		// iterate over the data and reset all values to their default
 		// boundaries and vector size remain unchanged
@@ -182,6 +202,7 @@ namespace BALL
 
 	template <typename T>
 	void TRegularData1D<T>::destroy()
+		throw()
 	{
 		// clear the vector and the boundaries
 		data_.clear();
@@ -191,6 +212,7 @@ namespace BALL
 
 	template <typename T>
 	const TRegularData1D<T>& TRegularData1D<T>::operator = (const TRegularData1D<T>& data)
+		throw()
 	{
 		// copy all members...
 		data_ = data.data_;
@@ -200,6 +222,7 @@ namespace BALL
 
 	template <typename T>
 	const TRegularData1D<T>& TRegularData1D<T>::operator = (const TRegularData1D<T>::VectorType& data)
+		throw()
 	{
 		// Copy the data. The boundaries remain unchanged.
 		data_ = data;
@@ -207,15 +230,17 @@ namespace BALL
 
 	template <typename T>
 	bool TRegularData1D<T>::operator == (const TRegularData1D<T>& data) const
+		throw()
 	{
-		return ((lower_ == data.lower_) 
-						&& (upper_ == data.upper_)
-						&& (data_ == data.data_));
+		return (lower_ == data.lower_ &&
+						upper_ == data.upper_ &&
+						 data_ == data.data_    );
 	}
 	
 	template <typename T>
 	BALL_INLINE
 	const T& TRegularData1D<T>::operator [] (Position index) const
+		throw(Exception::IndexOverflow)
 	{
 		if (index >= data_.size)
 		{
@@ -228,6 +253,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	T& TRegularData1D<T>::operator [] (Position index)
+		throw(Exception::IndexOverflow)
 	{
 		if (index >= data_.size)
 		{
@@ -240,6 +266,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	Size TRegularData1D<T>::getSize() const
+		throw()
 	{
 		return data_.size();
 	}
@@ -247,6 +274,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	double TRegularData1D<T>::getLower() const
+		throw()
 	{
 		return lower_;
 	}
@@ -254,6 +282,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	double TRegularData1D<T>::getUpper() const
+		throw()
 	{
 		return upper_;
 	}
@@ -261,6 +290,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TRegularData1D<T>::setLower(double lower)
+		throw()
 	{
 		lower_ = lower;
 	}
@@ -268,12 +298,14 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TRegularData1D<T>::setUpper(double lower)
+		throw()
 	{
 		upper_ = upper;
 	}
 	
 	template <typename T>
 	void resize(Size new_size)
+		throw()
 	{
 		if (data_.size() > 0)
 		{

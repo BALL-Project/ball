@@ -1,4 +1,4 @@
-// $Id: regularData2D.h,v 1.5 2000/12/01 17:20:46 anhi Exp $
+// $Id: regularData2D.h,v 1.6 2000/12/08 14:52:28 amoll Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA2D_H
 #define BALL_DATATYPE_REGULARDATA2D_H
@@ -40,23 +40,28 @@ namespace BALL
 			
 		/**	Default constructor
 		*/
-		TRegularData2D();
+		TRegularData2D()
+			throw();
 
 		/**	Copy constructor
 		*/
-		TRegularData2D(const TRegularData2D& data);
+		TRegularData2D(const TRegularData2D& data)
+			throw();
 
 		/**	Destructor
 		*/
-		virtual ~TRegularData2D();
+		virtual ~TRegularData2D()
+			throw();
 
 		/**	Clear the contents
 		*/
-		virtual void clear();
+		virtual void clear()
+			throw();
 
 		/**	Clear the contents and reset the object dimensions
 		*/
-		virtual void destroy();
+		virtual void destroy()
+			throw();
 
 		//@}
 
@@ -67,12 +72,14 @@ namespace BALL
 		/**	Assignment operator.
 				Copy the data and the boundaries.
 		*/
-		const TRegularData2D& operator = (const TRegularData2D& data);
+		const TRegularData2D& operator = (const TRegularData2D& data)
+			throw();
 
 		/**	Assignment from a {\tt vector} of {\tt T}.
 				Copy the contents of the data without changing the boundaries.
 		*/
-		const TRegularData2D& operator = (const VectorType& data);
+		const TRegularData2D& operator = (const VectorType& data)
+			throw();
 		//@}
 		
 		/**	@name Predicates
@@ -80,7 +87,8 @@ namespace BALL
 		//@{
 		/**	Equality operator
 		*/
-		bool operator == (const TRegularData2D& data) const;
+		bool operator == (const TRegularData2D& data) const
+			throw();
 		//@}
 	
 		/**	@name	Accessors
@@ -90,107 +98,133 @@ namespace BALL
 		/**	Constant random access operator.
 				@exception IndexOverflow if {\tt index} is out of range
 		*/	
-		const T& operator [] (Position index) const;
+		const T& operator [] (Position index) const
+			throw(Exception::IndexOverflow);
 			
 		/**	Mutable random access operator.
 				@exception IndexOverflow if {\tt index} is out of range
 		*/	
-		T& operator [] (Position index);
+		T& operator [] (Position index)
+			throw(Exception::IndexOverflow);
 		
-		/**     Return the position of the data point nearest to x, y.
+		/** Return the position of the data point nearest to x, y.
 		 */
-		void getNearestPosition(double x, double y, pair<Position, Position>& dum);
+		void getNearestPosition(double x, double y, pair<Position, Position>& dum)
+			throw();
 
-		/**     Return the position of x, y in the internal coordinate system.
+		/** Return the position of x, y in the internal coordinate system.
 		 */
-		void getConvertedPosition(Position x, Position y, pair<T, T>& dum) const;
+		void getConvertedPosition(Position x, Position y, pair<T, T>& dum) const
+			throw();
 
-		/**     Return the value at coordinates x, y. If there's no data point at that location, it will be
-                        interpolated.
+		/** Return the value at coordinates x, y. If there's no data point at that location, 
+				it will be interpolated.
 		*/
-		const T& getValue(T valx, T valy);
+		const T& getValue(T valx, T valy)
+			throw();
 
-		/**     Sample 10% of the data, calculate their mean (should be close to the "ground state") and their standard deviation.
+		/** Sample 10% of the data, calculate their mean (should be close to the "ground state") 
+				and their standard deviation.
 		 */
-		void createGroundState();
+		void createGroundState()
+			throw();
 
-		/**     Return the approximated value of the ground state. This must have been created earlier by using
-		 *      createGroundState();
+		/** Return the approximated value of the ground state. This must have been 
+				created earlier by using createGroundState();
 		 */
-		const T& getGroundState();
+		const T& getGroundState()
+			throw();
 
-		/**     Return the standard deviation of the approximated value of the ground state. This must have been created
-		 *      earlier by using createGroundState();
+		/** Return the standard deviation of the approximated value of the ground state. 
+				This must have been created earlier by using createGroundState();
 		 */		
-		const T& getSigmaGroundState();
+		const T& getSigmaGroundState()
+			throw();
 
 		/**	Return the number of items 
 		*/
-		Size getSize() const;
+		Size getSize() const
+			throw();
 
-		/**     Return the upper bound of the data's values
+		/** Return the upper bound of the data's values
 		 */
-		const T& getUpperBound() const;
+		const T& getUpperBound() const
+			throw();
 
-		/**     Return the lower bound of the data's values
+		/** Return the lower bound of the data's values
 		 */
-		const T& getLowerBound() const;
+		const T& getLowerBound() const
+			throw();
 
-		/**     Return the number of items per line
+		/** Return the number of items per line
 		 */
-		Size getXSize() const;
+		Size getXSize() const
+			throw();
 
-		/**     Return the number of items per column
+		/** Return the number of items per column
 		 */
-		Size getYSize() const;
+		Size getYSize() const
+			throw();
 
 		/**	Return the lower bound in x direction
 		*/
-		double getXLower() const;
+		double getXLower() const
+			throw();
 		
 		/**	Return the upper bound in x direction
 		*/
-		double getXUpper() const;
+		double getXUpper() const
+			throw();
 
-		/**     Return the lower bound in y direction
+		/** Return the lower bound in y direction
 		 */
-		double getYLower() const;
+		double getYLower() const
+			throw();
 
-		/**     Return the upper bound in y direction
+		/** Return the upper bound in y direction
 		 */
-		double getYUpper() const;
+		double getYUpper() const
+			throw();
 
-		/**     Set the upper bound of the data.
+		/** Set the upper bound of the data.
 		 */
-		void setUpperBound(T ub);
+		void setUpperBound(T ub)
+			throw();
 
-		/**     Set the lower bound of the data.
+		/** Set the lower bound of the data.
 		 */
-		void setLowerBound(T lb);
+		void setLowerBound(T lb)
+			throw();
 
-		/**     Set the size in x direction
+		/** Set the size in x direction
 		 */
-		void setXSize(Size xsize);
+		void setXSize(Size xsize)
+			throw();
 
-		/**     Set the size in y direction
+		/** Set the size in y direction
 		 */
-		void setYSize(Size ysize);
+		void setYSize(Size ysize)
+			throw();
 
 		/**	Set the upper bound in x direction
  		*/
-		void setXUpper(double xupper);
+		void setXUpper(double xupper)
+			throw();
 
 		/**	Set the lower bound in x direction
 		*/
-		void setXLower(double xlower);
+		void setXLower(double xlower)
+			throw();
 
-		/**     Set the upper bound in y direction
+		/** Set the upper bound in y direction
 		 */
-		void setYUpper(double yupper);
+		void setYUpper(double yupper)
+			throw();
 
-		/**     Set the lower bound in y direction
+		/** Set the lower bound in y direction
 		 */
-		void setYLower(double ylower);
+		void setYLower(double ylower)
+			throw();
 
 		/**	Resize the data.
 				If {\tt new_size_(x/y)} is larger than the current size, the data {\tt vector}
@@ -204,17 +238,18 @@ namespace BALL
 				@param new_size_x the new size in x direction
 				@param new_size_y the new size in y direction
 		*/
-		void resize(Size new_size_x, Size new_size_y);
+		void resize(Size new_size_x, Size new_size_y)
+			throw();
 		//@}
 	
 		protected:
-		/**     The lower bound of the values.
+		/** The lower bound of the values.
 		 */
-		T                       lower_;
+		T           lower_;
 
-		/**     The upper bound of the values.
+		/** The upper bound of the values.
 		 */
-		T                       upper_;
+		T           upper_;
 
 		/**	The lower bound in x direction
 		*/
@@ -224,33 +259,33 @@ namespace BALL
 		*/
 		double			xupper_;
 
-		/**     The lower bound in y direction
+		/** The lower bound in y direction
 		 */
-		double                  ylower_;
+		double      ylower_;
 
-		/**     The upper bound in y direction
+		/** The upper bound in y direction
 		 */
-		double                  yupper_;
+		double      yupper_;
 
-		/**     The size in x direction
+		/** The size in x direction
 		 */
-		Size xsize_;
+		Size				xsize_;
 
-		/**     The size in y direction
+		/** The size in y direction
 		 */
-		Size ysize_;
+		Size				ysize_;
 
 		/**	The data
 		*/
 		VectorType	data_;
 
-		/**     The value of the "ground state"
+		/** The value of the "ground state"
 		 */
-		T groundState_;
+		T						groundState_;
 
-		/**     The standard deviation of the sample used to calculate the ground state.
+		/** The standard deviation of the sample used to calculate the ground state.
 		 */
-		T sigmaGroundState_;
+		T						sigmaGroundState_;
 	};
 
 	/**	Default type
@@ -259,30 +294,34 @@ namespace BALL
 	
 	template <typename T>
 	TRegularData2D<T>::TRegularData2D()
+		throw()
 	{
 	}
 
 	template <typename T>
 	TRegularData2D<T>::~TRegularData2D()
+		throw()
 	{
 	}
 
 	template <typename T>
 	TRegularData2D<T>::TRegularData2D(const TRegularData2D<T>& data)
+		throw()
 		:	xlower_(data.xlower_),
 			xupper_(data.xupper_),
-	                ylower_(data.ylower_),
-                	yupper_(data.yupper_),
-	                xsize_(data.xsize_),
-	                ysize_(data.ysize_),
-	                data_(data.data_),
-	                groundState_(data.groundState_),
-	                sigmaGroundState_(data.sigmaGroundState_)
+			ylower_(data.ylower_),
+			yupper_(data.yupper_),
+			xsize_(data.xsize_),
+			ysize_(data.ysize_),
+			data_(data.data_),
+			groundState_(data.groundState_),
+			sigmaGroundState_(data.sigmaGroundState_)
 	{
 	}
 
 	template <typename T>
 	void TRegularData2D<T>::clear()
+		throw()
 	{
 		// iterate over the data and reset all values to their default
 		// boundaries and vector size remain unchanged
@@ -296,6 +335,7 @@ namespace BALL
 
 	template <typename T>
 	void TRegularData2D<T>::destroy()
+		throw()
 	{
 		// clear the vector and the boundaries
 		data_.clear();
@@ -311,6 +351,7 @@ namespace BALL
 
 	template <typename T>
 	const TRegularData2D<T>& TRegularData2D<T>::operator = (const TRegularData2D<T>& data)
+		throw()
 	{
 		// copy all members...
 		data_ = data.data_;
@@ -326,6 +367,7 @@ namespace BALL
 
 	template <typename T>
 	const TRegularData2D<T>& TRegularData2D<T>::operator = (const TRegularData2D<T>::VectorType& data)
+		throw()
 	{
 		// Copy the data. The boundaries remain unchanged.
 		data_ = data;
@@ -333,21 +375,23 @@ namespace BALL
 
 	template <typename T>
 	bool TRegularData2D<T>::operator == (const TRegularData2D<T>& data) const
+		throw()
 	{
 		return ((xlower_ == data.xlower_) 
 						&& (xupper_ == data.xupper_)
-                  			        && (ylower_ == data.ylower_)
-			                        && (yupper_ == data.yupper_)
-			                        && (xsize_ == data.xsize_)
-			                        && (ysize_ == data.ysize_)
-						&& (data_ == data.data_)
-			                        && (groundState_ == data.groundState_)
-			                        && (sigmaGroundState_ == data.sigmaGroundState_));
+						&& (ylower_ == data.ylower_)
+						&& (yupper_ == data.yupper_)
+						&& (xsize_  == data.xsize_)
+						&& (ysize_  == data.ysize_)
+						&& (data_   == data.data_)
+						&& (groundState_      == data.groundState_)
+						&& (sigmaGroundState_ == data.sigmaGroundState_));
 	}
 	
 	template <typename T>
 	BALL_INLINE
 	const T& TRegularData2D<T>::operator [] (Position index) const
+		throw(Exception::IndexOverflow)
 	{
 		if (index >= data_.size())
 		{
@@ -360,6 +404,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	T& TRegularData2D<T>::operator [] (Position index)
+		throw(Exception::IndexOverflow)
 	{
 		if (index >= data_.size())
 		{
@@ -372,6 +417,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TRegularData2D<T>::getNearestPosition(double x, double y, pair<Position, Position>& res)
+		throw()
 	{
 	  if (x > xlower_)
 	  {
@@ -409,6 +455,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TRegularData2D<T>::getConvertedPosition(Position x, Position y, pair<T, T>& dum) const
+		throw()
 	{
 	  dum.first =  (double) x * (xupper_ - xlower_) / xsize_ + xlower_;
 	  dum.second = (double) y * (yupper_ - ylower_) / ysize_ + ylower_;
@@ -417,6 +464,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	const T& TRegularData2D<T>::getValue(T valx, T valy)
+		throw()
 	{
 	  double stepx, stepy;
 	  double res=0.0;
@@ -448,6 +496,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	const T& TRegularData2D<T>::getGroundState()
+		throw()
 	{
 	  return groundState_;
 	}
@@ -455,13 +504,15 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	const T& TRegularData2D<T>::getSigmaGroundState()
+		throw()
 	{
-	    return sigmaGroundState_;
+	  return sigmaGroundState_;
 	}
 
 	template <typename T>
 	BALL_INLINE
 	Size TRegularData2D<T>::getSize() const
+		throw()
 	{
 		return data_.size();
 	}
@@ -469,20 +520,23 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	const T& TRegularData2D<T>::getUpperBound() const
+		throw()
 	{
-      	        return upper_;
+    return upper_;
 	}
 
 	template <typename T>
 	BALL_INLINE
 	const T& TRegularData2D<T>::getLowerBound() const
+		throw()
 	{
-      	        return lower_;
+    return lower_;
 	}
 
 	template <typename T>
 	BALL_INLINE
 	Size TRegularData2D<T>::getXSize() const
+		throw()
 	{
 		return xsize_;
 	}
@@ -490,6 +544,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	Size TRegularData2D<T>::getYSize() const
+		throw()
 	{
 		return ysize_;
 	}
@@ -497,6 +552,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	double TRegularData2D<T>::getXLower() const
+		throw()
 	{
 		return xlower_;
 	}
@@ -504,6 +560,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	double TRegularData2D<T>::getYLower() const
+		throw()
 	{
 		return ylower_;
 	}
@@ -511,6 +568,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	double TRegularData2D<T>::getXUpper() const
+		throw()
 	{
 		return xupper_;
 	}
@@ -518,6 +576,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	double TRegularData2D<T>::getYUpper() const
+		throw()
 	{
 		return yupper_;
 	}
@@ -525,6 +584,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TRegularData2D<T>::setLowerBound(T lb)
+		throw()
 	{
 		lower_ = lb;
 	}
@@ -532,20 +592,23 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TRegularData2D<T>::setUpperBound(T ub)
+		throw()
 	{
-	        upper_ = ub;
+	  upper_ = ub;
 	}
 
 	template <typename T>
 	BALL_INLINE
 	void TRegularData2D<T>::setXLower(double xlower)
+		throw()
 	{
-	        xlower_ = xlower;
+	  xlower_ = xlower;
 	}
 	
 	template <typename T>
 	BALL_INLINE
 	void TRegularData2D<T>::setYLower(double ylower)
+		throw()
 	{
 		ylower_ = ylower;
 	}
@@ -553,6 +616,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TRegularData2D<T>::setXUpper(double xupper)
+		throw()
 	{
 		xupper_ = xupper;
 	}
@@ -560,6 +624,7 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TRegularData2D<T>::setYUpper(double yupper)
+		throw()
 	{
 		yupper_ = yupper;
 	}
@@ -567,19 +632,22 @@ namespace BALL
 	template <typename T>
 	BALL_INLINE
 	void TRegularData2D<T>::setXSize(Size xsize)
+		throw()
 	{
-	        xsize_ = xsize;
+	  xsize_ = xsize;
 	}
 
 	template <typename T>
 	BALL_INLINE
 	void TRegularData2D<T>::setYSize(Size ysize)
+		throw()
 	{
-	        ysize_ = ysize;
+	  ysize_ = ysize;
 	}
 
 	template <typename T>
 	void TRegularData2D<T>::resize(Size new_size_x, Size new_size_y)
+		throw()
 	{
 		if (data_.size() > 0)
 		{
@@ -591,10 +659,9 @@ namespace BALL
 		
 	template <typename T>
 	void TRegularData2D<T>::createGroundState()
+		throw()
 	{
-	  Size numsamples, actnum, actval;
-	  
-	  Size num;
+	  Size numsamples, actnum, actval, num;
 	  double ran;
 
 	  srand48(42);
