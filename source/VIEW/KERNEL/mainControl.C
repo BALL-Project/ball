@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.85 2004/05/05 18:02:34 amoll Exp $
+// $Id: mainControl.C,v 1.86 2004/05/05 18:09:11 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -101,7 +101,7 @@ namespace BALL
 			// copy the environment variable BALLVIEW_DATA_PATH to BALL_DATA_PATH
 			// this has to be done here also, if it was done in main.C, no idea why!
 			char*	BALLView_data_path = getenv("BALLVIEW_DATA_PATH");
-			if (BALLView_daa_path != 0)
+			if (BALLView_data_path != 0)
 			{
 				putenv((char*)((BALL::String("BALL_DATA_PATH=") + BALL::String(BALLView_data_path)).c_str()));
 			}
