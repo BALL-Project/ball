@@ -57,12 +57,10 @@ BALL_INLINE
 GeometricObject* GLRenderer::getObject(GLRenderer::Name name) const
 	throw()
 {
-	if (name == 0 || !name_to_object_.has(name))
-	{
-		return 0;
-	}
+ 	const GeometricObjectHashMap::ConstIterator it = name_to_object_.find(name);
+	if (it == name_to_object_.end()) return 0;
 
-	return (GeometricObject*) name_to_object_.find(name)->second;
+	return (GeometricObject*) it->second;
 }
 
 

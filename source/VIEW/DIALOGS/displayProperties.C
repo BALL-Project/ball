@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.95.2.2 2005/01/14 12:50:02 amoll Exp $
+// $Id: displayProperties.C,v 1.95.2.3 2005/01/22 17:17:17 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -433,13 +433,13 @@ Representation* DisplayProperties::createRepresentation_(const List<Composite*>&
 	}
 
 	// set the minimum necessary distance for the coloring grid according to model type
-	if (rep->getModelType() == MODEL_SE_SURFACE ||
-			rep->getModelType() == MODEL_BACKBONE)
+	if (rep->getModelType() == MODEL_SE_SURFACE)
 	{
 		rep->getColorProcessor()->setAdditionalGridDistance(2.0);
 	}
 	else if (rep->getModelType() == MODEL_SA_SURFACE ||
-					 rep->getModelType() == MODEL_CARTOON)
+					 rep->getModelType() == MODEL_CARTOON ||
+					 rep->getModelType() == MODEL_BACKBONE)
 	{
 		rep->getColorProcessor()->setAdditionalGridDistance(4.0);
 	}
