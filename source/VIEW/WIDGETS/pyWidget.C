@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.C,v 1.35 2004/07/03 12:09:30 amoll Exp $
+// $Id: pyWidget.C,v 1.36 2004/07/24 15:22:05 amoll Exp $
 //
 
 // This include has to be first in order to avoid collisions.
@@ -37,6 +37,58 @@ namespace BALL
 			output = PyInterpreter::run(input, state);
 		}
 #endif
+
+
+		bool Hotkey::operator == (const Hotkey& hotkey) const
+			throw()
+		{
+			return (action 				== hotkey.action &&
+							key 	 				== hotkey.key    &&
+							button_state 	== hotkey.button_state);
+		}
+
+		bool Hotkey::operator == (const QKeyEvent& e) const
+			throw()
+		{
+
+			return (key 	 				== e.key() 		&&
+							button_state 	== e.state()	);
+		}
+
+		bool Hotkey::set(const String& data) 
+			throw()
+		{
+			vector<String> fields;
+			Size nr = data.split(fields, String('#').c_str());
+			if (nr < 3)
+			{
+				Log.error() << "Could not parse Hotkey " << data << std::endl;
+				return false;
+			}
+			
+			try
+			{
+				key = (Qt::Key) fields[0].toUnsignedInt();
+				button_state = (Qt::ButtonState) fields[1].toUnsignedInt();
+				action = fields[2];
+			}
+			catch(...)
+			{
+				Log.error() << "Could not parse Hotkey " << data << std::endl;
+				return false;
+			}
+
+			return true;
+		}
+
+
+		void Hotkey::get(String& data) const 
+			throw()
+		{
+			data = String(key) + "#" + String(button_state) + "#" + action;
+		}
+
+		// ==========================================================
 
 		PyWidgetData::PyWidgetData(QWidget* parent, const char* name)
 			: QTextEdit(parent, name),
@@ -271,6 +323,22 @@ namespace BALL
 			newPrompt_();
 			return ok;
 		}
+
+		void PyWidgetData::runString(String command)
+		{
+			if (!command.has('\n'))
+			{
+				parseLine_(command);
+			}
+
+			vector<String> lines;
+			Size nr = command.split(lines, String('\n').c_str());
+			for (Position p = 0; p < nr; p++)
+			{
+				parseLine_(lines[p]);
+			}
+		}
+		
 
 		void PyWidgetData::appendToHistory_(const String& line)
 		{
@@ -552,6 +620,16 @@ namespace BALL
 			text_edit_->startup_script_ =	inifile.getValue("PYTHON", "StartupScript");
 			text_edit_->python_settings_->setFilename(text_edit_->startup_script_);
 			if (text_edit_->startup_script_ != "") text_edit_->runFile(text_edit_->startup_script_);
+
+			for (Position p = 0; true; p++)
+			{
+				if (!inifile.hasEntry("PYTHON", "Hotkey" + String(p))) return;
+
+				Hotkey hotkey;
+				if (!hotkey.set(inifile.getValue("PYTHON", "Hotkey" + String(p)))) continue;
+
+				insertHotkey(hotkey);
+			}
 		}
 
 
@@ -562,6 +640,16 @@ namespace BALL
 			inifile.insertValue("PYTHON", "StartupScript", text_edit_->startup_script_);
 
 			DockWidget::writePreferences(inifile);
+
+			List<Hotkey>::iterator it = hotkeys_.begin();
+			for (Position p = 0; it != hotkeys_.end(); it++)
+			{
+				String data;
+				(*it).get(data);
+				inifile.insertValue("PYTHON", "Hotkey" + String(p), data);
+				p++;
+			}
+
 		}
 
 
@@ -626,6 +714,44 @@ namespace BALL
 		bool PyWidget::toAbortScript() throw() 
 		{
 			return text_edit_->stop_script_;
+		}
+
+		void PyWidget::insertHotkey(const Hotkey& hotkey) 
+			throw()
+		{
+			List<Hotkey>::iterator it = hotkeys_.begin();
+			for (; it != hotkeys_.end(); it++)
+			{
+				if ((*it) == hotkey) return;
+			}
+
+			hotkeys_.push_back(hotkey);
+		}
+
+		void PyWidget::removeHotkey(const Hotkey& hotkey) 
+			throw()
+		{
+			List<Hotkey>::iterator it = hotkeys_.begin();
+			for (; it != hotkeys_.end(); it++)
+			{
+				if ((*it) == hotkey) return;
+			}
+
+			hotkeys_.erase(it);
+		}
+
+		void PyWidget::reactTo(const QKeyEvent& e) 
+			throw() 
+		{
+			List<Hotkey>::iterator it = hotkeys_.begin();
+			for (; it != hotkeys_.end(); it++)
+			{
+				if ((*it) == e) 
+				{
+					text_edit_->runString((*it).action);
+					return;
+				}
+			}
 		}
 
 	} // namespace VIEW

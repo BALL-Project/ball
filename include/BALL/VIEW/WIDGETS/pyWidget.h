@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyWidget.h,v 1.18 2004/07/03 12:10:10 amoll Exp $
+// $Id: pyWidget.h,v 1.19 2004/07/24 15:22:10 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_PYWIDGET_H
@@ -52,6 +52,30 @@ namespace BALL
 				String output;
 		};
 #endif
+
+		///
+		struct Hotkey
+		{
+			public:
+
+			///
+			bool operator == (const Hotkey& hotkey) const
+				throw();
+
+			///
+			bool operator == (const QKeyEvent& e) const
+				throw();
+
+			///
+			bool set(const String& data) throw();
+
+			///
+			void get(String& data) const throw();
+
+			String 					action;
+			Qt::ButtonState button_state;
+			Qt::Key 				key;
+		};
 
 
 		/** Python Widget base class.
@@ -116,6 +140,8 @@ namespace BALL
 
 			///
 			virtual void exportHistory();			
+
+			void runString(String command);
 
 			public:
 
@@ -275,9 +301,19 @@ namespace BALL
 			///
 			bool toAbortScript() throw();
 
+			///
+			void insertHotkey(const Hotkey& hotkey) throw();
+
+			///
+			void removeHotkey(const Hotkey& hotkey) throw();
+
+			///
+			void reactTo(const QKeyEvent& e) throw();
+
 			protected:
 
 			PyWidgetData* 		text_edit_;
+			List<Hotkey> 			hotkeys_;
 		};
 
 	} // namespaces	

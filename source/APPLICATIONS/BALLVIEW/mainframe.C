@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.22 2004/07/23 12:41:40 amoll Exp $
+// $Id: mainframe.C,v 1.23 2004/07/24 15:22:28 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -591,4 +591,11 @@ namespace BALL
 		}
 	}
 
+	void Mainframe::keyPressEvent(QKeyEvent* e)
+	{
+		#ifdef BALL_PYTHON_SUPPORT
+			PyWidget::getInstance(0)->reactTo(*e);
+		#endif
+	}
+	
 }
