@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.73 2000/03/27 09:01:43 oliver Exp $
+dnl    $Id: configure.in,v 1.74 2000/03/27 16:52:04 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -444,7 +444,7 @@ if test "${OS}" = OSF1 ; then
 	fi
 fi
 
-if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX -a  "$OS" != OSF1 ; then
+if test "$OS" != Linux -a "$OS" != Solaris -a "$OS" != IRIX -a  "$OS" != OSF1 -a "$OS" != FreeBSD ; then
 	AC_MSG_RESULT(Sorry - your OS is currently not supported...)
 	AC_MSG_ERROR(aborted)
 fi
@@ -463,6 +463,9 @@ if test "${OS}" = IRIX ; then
 fi
 if test "${OS}" = OSF1 ; then
 	AC_DEFINE(BALL_OS_OSF1,OSF1)
+fi
+if test "${OS}" = FreeBSD ; then
+	AC_DEFINE(BALL_OS_FREEBSD,FREEBSD)
 fi
 
 dnl
@@ -1088,8 +1091,8 @@ if test "${COMPILER_DONE}" != true ; then
 		if test "${IRIX_BINFMT}" = 64 ; then
 			DEF_BOOL=false
 			CXXFLAGS="$CXXFLAGS -64 -LANG:std"
-			DYNAROPTS="-64 ${DYNAROPTS}"
-			CXXFLAGS_O="${CXXFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 5"
+			DYNAROPTS="-64 ${DYNAROPTS} -IPA"
+			CXXFLAGS_O="${CXXFLAGS_O} -O3 -OPT:Olimit_opt=on -multigot -G 5"
 			CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,1110,1209"
 			CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 			LDFLAGS="$LDFLAGS -64 -LANG:std"
@@ -1099,8 +1102,8 @@ if test "${COMPILER_DONE}" != true ; then
 		if test "${IRIX_BINFMT}" = N32 ; then
 			DEF_BOOL=false
 			CXXFLAGS="$CXXFLAGS -n32 -LANG:std"
-			DYNAROPTS="-n32 ${DYNAROPTS}"
-			CXXFLAGS_O="${CXXFLAGS_O} -O2 -OPT:Olimit_opt=on -multigot -G 5"
+			DYNAROPTS="-n32 ${DYNAROPTS -IPA}"
+			CXXFLAGS_O="${CXXFLAGS_O} -O3 -OPT:Olimit_opt=on -multigot -G 5"
 			CXXFLAGS_D="${CXXFLAGS_D} -fullwarn -multigot -G 5 -DEBUG:woff=1375,3201,1424,1110,1209"
 			CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 			LDFLAGS="$LDFLAGS -n32 -LANG:std"
