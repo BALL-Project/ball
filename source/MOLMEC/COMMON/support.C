@@ -1,4 +1,4 @@
-// $Id: support.C,v 1.8 2000/03/26 12:56:19 oliver Exp $
+// $Id: support.C,v 1.9 2000/03/27 21:22:23 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/support.h>
 #include <BALL/DATATYPE/hashGrid.h>
@@ -64,7 +64,9 @@ namespace BALL
 				{
 					lower.x = box.a.x - distance;
 					upper.x = box.b.x + distance;
-				} else {
+				} 
+				else 
+				{
 					lower.x = box.a.x - period_x;
 					upper.x = box.b.x + period_x;
 				}	
@@ -73,7 +75,9 @@ namespace BALL
 				{
 					lower.y = box.a.y - distance;
 					upper.y = box.b.y + distance;
-				} else {
+				} 
+				else 
+				{
 					lower.y = box.a.y - period_y;
 					upper.y = box.b.y + period_y;
 				}	
@@ -82,7 +86,9 @@ namespace BALL
 				{
 					lower.z = box.a.z - distance;
 					upper.z = box.b.z + distance;
-				} else {
+				} 
+				else 
+				{
 					lower.z = box.a.z - period_z;
 					upper.z = box.b.z + period_z;
 				}	
@@ -167,7 +173,9 @@ namespace BALL
 							}
 						}
 					}	
-				} else { 
+				} 
+				else 
+				{ 
 					// Use a hash grid with box length "distance" to determine all neigboured atom pairs
 
 					for (atom_it = atom_vector.begin() ; atom_it != atom_vector.end() ; ++atom_it) 
@@ -216,8 +224,9 @@ namespace BALL
 						grid.insert(position, (*atom_it));
 					}
 				}
-			} else {
-
+			} 
+			else 
+			{
 				// Check what kind of algorithm should be used for calculating the neighbours
 				if (type == BRUTE_FORCE) 
 				{
@@ -237,8 +246,9 @@ namespace BALL
 						}
 					}	
 
-				} else {  
-					
+				} 
+				else 
+				{  	
 					// Use a hash grid with box length "distance" to determine all neigboured atom pairs
 
 					for (atom_it = atom_vector.begin(); atom_it != atom_vector.end() ; ++atom_it) 
@@ -262,7 +272,9 @@ namespace BALL
 									}
 								}
 							}
-						} else {
+						} 
+						else 
+						{
 							Log.warn() << "calculateNonBondedAtomPairs: hbox = 0 for position " << position
 													<< " (grid dimensions: " << grid.getOrigin() << ")" << endl;
 						}
