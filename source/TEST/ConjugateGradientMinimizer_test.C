@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ConjugateGradientMinimizer_test.C,v 1.6 2003/02/07 16:33:29 oliver Exp $
+// $Id: ConjugateGradientMinimizer_test.C,v 1.7 2003/03/03 10:10:34 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.6 2003/02/07 16:33:29 oliver Exp $")
+START_TEST(ConjugateGradienMinimizer, "$Id: ConjugateGradientMinimizer_test.C,v 1.7 2003/03/03 10:10:34 oliver Exp $")
 
 using namespace BALL;
 
@@ -192,11 +192,10 @@ CHECK(ConjugateGradientMinimizer::minimize(Size, bool))
 	PRECISION(1e-4)
 	ConjugateGradientMinimizer cgm(FF);
 	cgm.setEnergyOutputFrequency(1);
-	cgm.setMaxGradient(0.01);
+	cgm.setMaxGradient(0.001);
 	TEST_EQUAL(cgm.isValid(), true)
 	FF.updateEnergy();
 	FF.updateForces();
-	cgm.minimize(1);
 	bool result = cgm.minimize(20);
 	TEST_EQUAL(result, true)
 	FF.updateEnergy();

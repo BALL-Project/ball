@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBFile_test.C,v 1.11 2002/12/16 12:00:00 anker Exp $
+// $Id: PDBFile_test.C,v 1.12 2003/03/03 10:13:25 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.11 2002/12/16 12:00:00 anker Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.12 2003/03/03 10:13:25 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -22,15 +22,15 @@ using namespace BALL;
 
 PDBFile* pdb_file;
 CHECK(PDBFile::PDBFile())											
-pdb_file = new PDBFile;
-TEST_NOT_EQUAL(pdb_file, 0)
+	pdb_file = new PDBFile;
+	TEST_NOT_EQUAL(pdb_file, 0)
 RESULT
 
 CHECK(PDBFile::~PDBFile())
-delete pdb_file;
+	delete pdb_file;
 RESULT
 
-CHECK(PDBFile::read(System&))
+CHECK(PDBFile::read(System& system))
 RESULT
 
 CHECK(PDBFile::selectModel())
@@ -104,7 +104,7 @@ CHECK(PDBFile strict line checking)
 	TEST_EQUAL(s.countAtoms(), 2)
 RESULT
 
-CHECK(PDBFile::write(System&))
+CHECK(PDBFile::write(const System& system))
 	PDBFile f;
 	f.open("data/PDBFile_test2.pdb");
 	String tmp_filename;
