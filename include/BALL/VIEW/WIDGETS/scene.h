@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.41 2004/06/17 10:00:16 amoll Exp $
+// $Id: scene.h,v 1.42 2004/06/19 14:31:24 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -33,6 +33,7 @@ namespace BALL
 		class Preferences;
 		class LightSettings;
 		class StageSettings;
+		class MaterialSettings;
 
 		/**	Scene is the main visualization widget that shows the graphical Representation 's.
 				To do this, the class Scene must be a child of the MainControl.
@@ -589,6 +590,8 @@ namespace BALL
 			LightSettings* light_settings_;
 
 			StageSettings* stage_settings_;
+
+			MaterialSettings* material_settings_;
 
 			Position screenshot_nr_,
 							 pov_nr_;

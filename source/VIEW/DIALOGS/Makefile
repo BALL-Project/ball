@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.37 2004/05/27 19:50:02 oliver Exp $
+# $Id: Makefile,v 1.38 2004/06/19 14:30:47 amoll Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -41,6 +41,8 @@ CPP_SOURCES=\
 	lightSettingsData.C\
 	mainControlPreferences.C\
 	mainControlPreferencesData.C\
+	materialSettings.C\
+	materialSettingsData.C\
 	modelSettingsDialog.C\
 	modelSettingsDialogData.C\
 	molecularDynamicsDialog.C\
@@ -93,6 +95,8 @@ MOC_SOURCES=\
 	lightSettingsData_moc.C\
 	mainControlPreferences_moc.C\
 	mainControlPreferencesData_moc.C\
+	materialSettings_moc.C\
+	materialSettingsData_moc.C\
 	modelSettingsDialog_moc.C\
 	modelSettingsDialogData_moc.C\
 	molecularFileDialog_moc.C\
@@ -131,6 +135,7 @@ UIC_SOURCES=\
 	labelDialogData.C\
 	lightSettingsData.C\
 	mainControlPreferencesData.C\
+	materialSettingsData.C\
 	modelSettingsDialogData.C\
 	molecularDynamicsDialogData.C\
 	parsedFunctionDialogData.C\

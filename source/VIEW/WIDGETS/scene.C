@@ -1,17 +1,20 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.82 2004/06/16 23:49:59 amoll Exp $
+// $Id: scene.C,v 1.83 2004/06/19 14:30:59 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/VIEW/KERNEL/stage.h>
+
 #include <BALL/VIEW/DIALOGS/setCamera.h>
 #include <BALL/VIEW/DIALOGS/preferences.h>
 #include <BALL/VIEW/DIALOGS/lightSettings.h>
 #include <BALL/VIEW/DIALOGS/stageSettings.h>
+#include <BALL/VIEW/DIALOGS/materialSettings.h>
+
 #include <BALL/VIEW/PRIMITIVES/simpleBox.h>
 #include <BALL/VIEW/PRIMITIVES/label.h>
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -109,6 +112,7 @@ namespace BALL
 				stage_(new Stage(*scene.stage_)),
 				light_settings_(new LightSettings(this)),
 				stage_settings_(new StageSettings(this)),
+				material_settings_(new MaterialSettings(this)),
 				screenshot_nr_(10000),
 				pov_nr_(10000)
 		{
@@ -994,6 +998,8 @@ namespace BALL
 			preferences.insertPage(light_settings_, "Lighting");
 			stage_settings_= new StageSettings(this);
 			preferences.insertPage(stage_settings_, "3D View");
+			material_settings_= new MaterialSettings(this);
+			preferences.insertPage(material_settings_, "Materials");
 		}
 
 
@@ -1012,6 +1018,12 @@ namespace BALL
 				delete stage_settings_;
 				stage_settings_= 0;
 			}
+			if (material_settings_) 
+			{
+				preferences.removePage(material_settings_);
+				delete material_settings_;
+				material_settings_= 0;
+			}
 		}
 
 		void Scene::defaultPreferences(Preferences&)
@@ -1020,6 +1032,7 @@ namespace BALL
 			if (light_settings_ == 0) return;
 			stage_settings_->setDefaultValues();
 			light_settings_->setDefaultValues();
+			material_settings_->setDefaultValues();
 		}
 
 
@@ -1061,6 +1074,9 @@ namespace BALL
 			{
 				createCoordinateSystem_();
 			}
+
+			material_settings_->apply();
+
 			gl_renderer_.updateBackgroundColor(); 
 			renderView_(REBUILD_DISPLAY_LISTS);
 		}
