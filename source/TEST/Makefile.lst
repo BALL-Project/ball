@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.lst,v 1.1 2003/06/30 19:12:49 oliver Exp $
+# $Id: Makefile.lst,v 1.2 2003/06/30 19:29:00 oliver Exp $
 #
 
 XDR_DEPENDENT_EXECUTABLES=\
@@ -66,10 +66,10 @@ EXECUTABLES_DATATYPES = \
 	HashGrid3DataItem_test$(EXEEXT)\
 	HashGrid3NeighborBoxItem_test$(EXEEXT)\
 	Options_test$(EXEEXT)\
-	String_test$(EXEEXT)1\
-	String_test$(EXEEXT)2\
-	String_test$(EXEEXT)3\
-	String_test$(EXEEXT)4\
+	String_test1$(EXEEXT)\
+	String_test2$(EXEEXT)\
+	String_test3$(EXEEXT)\
+	String_test4$(EXEEXT)\
 	Substring_test$(EXEEXT)\
 	Triple_test$(EXEEXT)\
 	Quadruple_test$(EXEEXT)\
@@ -90,8 +90,8 @@ EXECUTABLES_CONCEPTS = \
 	Selectable_test$(EXEEXT)\
 	NamedProperty_test$(EXEEXT)\
 	PropertyManager_test$(EXEEXT)\
-	Composite_test$(EXEEXT)1\
-	Composite_test$(EXEEXT)2\
+	Composite_test1$(EXEEXT)\
+	Composite_test2$(EXEEXT)\
 	CompositeCompositeIteratorTraits_test$(EXEEXT)\
 	CompositeChildcompositeIteratorTraits_test$(EXEEXT)\
 	CompositeAncestorIteratorTraits_test$(EXEEXT)\
