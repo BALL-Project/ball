@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1D.h,v 1.31 2003/04/17 19:03:31 oliver Exp $
+// $Id: regularData1D.h,v 1.32 2003/05/03 17:29:19 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGULARDATA1D_H
 #define BALL_DATATYPE_REGULARDATA1D_H
@@ -21,56 +21,79 @@ namespace BALL
 			equally spaced values. The data can be accessed in the same way as data of an STL vector
 			(i.e., using operator [] and iterators).
 			 \par
+			This class fulfills the STL <tt>Container</tt> and <tt>Unary Function</tt> requirements.
 			
 			\ingroup  RegularData
 	*/
-	template <typename T>
+	template <typename ValueType>
 	class TRegularData1D
 	{
 		public:
 			
-		BALL_CREATE(TRegularData1D<T>)
+		BALL_CREATE(TRegularData1D<ValueType>)
 
 		/**	@name Type definitions
 		*/
 		//@{
 
-		/**	The vector type.
-				This type is used to store the data.
-		*/
-		typedef std::vector<T>	VectorType;
+		/// The type containing an STL vector of the corresponding ValueType
+		typedef std::vector<ValueType>	VectorType;
+		/// The IndexType
+		typedef Position IndexType;
+		/// The coordinate type
+		typedef double CoordinateType;
 		/// A mutable iterator
-		typedef typename std::vector<T>::iterator Iterator;
+		typedef typename std::vector<ValueType>::iterator Iterator;
 		/// A constant iterator
-		typedef typename std::vector<T>::const_iterator ConstIterator;
-
+		typedef typename std::vector<ValueType>::const_iterator ConstIterator;
 		//@}
+
+		//	STL compatibility types
+		//
+		typedef ValueType value_type;
+		typedef typename std::vector<ValueType>::iterator iterator;
+		typedef typename std::vector<ValueType>::const_iterator const_iterator;
+		typedef typename std::vector<ValueType>::reference reference;
+		typedef typename std::vector<ValueType>::const_reference const_reference;
+		typedef typename std::vector<ValueType>::pointer pointer;
+		typedef typename std::vector<ValueType>::difference_type difference_type;
+		typedef typename std::vector<ValueType>::size_type size_type;
+
 		/** @name Constructors and Destructors.
 		*/
 		//@{
 			
 		/**	Default constructor.
 		*/
-		TRegularData1D()
-			throw();
+		TRegularData1D() throw();
 
 		/**	Copy constructor
 		*/
 		TRegularData1D(const TRegularData1D& data)
-			throw();
+			throw(Exception::OutOfMemory);
 	
 		/** Detailed constructor.
 		 */
-		TRegularData1D(double lower, double upper, double spacing)
+		TRegularData1D(const CoordinateType& origin, const CoordinateType& dimension, const CoordinateType& spacing)
 			throw(Exception::OutOfMemory);
 		
-		/** Detailled constructor.
-				If the values for upper and lower boundaries dont match,
-				they are swapped.
+		/** Detailed constructor.
 		*/
-		TRegularData1D(const VectorType& data, double lower = 0, double upper = 0)
-			throw();
+		TRegularData1D(const VectorType& data, const CoordinateType& origin = 0.0, const CoordinateType& dimension = 1.0)
+			throw(Exception::OutOfMemory);
 			
+//
+//		/**	Cut constructor form TRegularData2D.
+//				This constructor creates a cut through a \link TRegularData2D TRegularData2D \endlink
+//				running through the given point, either parallel to the x-axis or to the y-axis
+//				@param direction 0: along the x-axis, 1: along the y-axis
+//				@param position the coordinate (in world coordinates) of the cut
+//		*/
+//		TRegularData1D(const TRegularData2D<ValueType>& data, 
+//									 const typename TRegularData2D<ValueType>::CoordinateType& position,
+//									 Position direction = 0)
+//			throw(Exception::OutOfMemory);
+
 		/**	Destructor
 		*/
 		virtual ~TRegularData1D()
@@ -82,6 +105,8 @@ namespace BALL
 			throw();
 
 		//@}
+
+
 		/**	@name Assignment
 		*/
 		//@{
@@ -90,465 +115,524 @@ namespace BALL
 				Copy the data and the boundaries.
 		*/
 		const TRegularData1D& operator = (const TRegularData1D& data)
-			throw();
+			throw(Exception::OutOfMemory);
 
-		/**	Assignment from a <tt>vector</tt> of <tt>T</tt>.
+		/**	Assignment from a <tt>vector</tt> of <tt>ValueType</tt>.
 				Copy the contents of the data without changing the boundaries.
 		*/
 		const TRegularData1D& operator = (const VectorType& data)
-			throw();
+			throw(Exception::OutOfMemory);
 
 		//@}
+
 		/**	@name Predicates
 		*/
 		//@{
 
-		/**	Equality operator
-		*/
+		///	Equality operator
 		bool operator == (const TRegularData1D& data) const
 			throw();
 
+		/// Inequality operator
+		bool operator != (const TRegularData1D& data) const throw() { return !this->operator == (data); }
+
+		///	Empty predicate
+		bool empty() const throw() 
+		{ 
+			return data_.empty(); 
+		}
 		//@}
+
+		/**	@name	Iterators
+		*/
+		//@{
+		///
+		ConstIterator begin() const throw() { return data_.begin(); }
+		///
+		ConstIterator end() const throw() { return data_.end(); }
+		///
+		Iterator begin() throw() { return data_.begin(); }
+		///
+		Iterator end() throw() { return data_.end(); }
+		//@}
+
 		/**	@name	Accessors
 		*/
 		//@{	
 		
-		/** Returns a pointer to the grid contents closest to a given position.
+		/// STL compatibility
+		size_type size() const throw() { return data_.size(); }
+		size_type max_size() const throw() { return data_.max_size(); }
+
+		/** Return a nonmutable reference to a specific data element.
+				This is the range chacking version of <tt>operator []</tt>.
 		 */
-		T* getData(const double r)
+		const ValueType& getData(const IndexType& index) const
 			throw(Exception::OutOfGrid);
-		
+
+		/** Return a mutable reference to a specific data element.
+				This is the range chacking version of <tt>operator []</tt>.
+		 */
+		ValueType& getData(const IndexType& index)
+			throw(Exception::OutOfGrid);
+
 		/**	Constant random access operator.
-				@exception IndexOverflow if <tt>index</tt> is out of range
+				@note No range checking is done. For a more robust version, please
+				use getData.
 		*/	
-		const T& operator [] (Position index) const
-			throw(Exception::IndexOverflow);
+		const ValueType& operator [] (const IndexType& index) const throw() { return data_[index]; }
 			
 		/**	Mutable random access operator.
-				@exception IndexOverflow if <tt>index</tt> is out of range
+				@note No range checking is done. For a more robust version, please
+				use getData.
 		*/	
-		T& operator [] (Position index)
-			throw(Exception::IndexOverflow);
-			
-		/** Returns the linearly interpolated value of the surrounding two grid points.
-		 */
-		T getInterpolatedValue(const double r) const
+		ValueType& operator [] (const IndexType& index) throw() { return data_[index]; }
+		
+		/**	Function operator.
+				This operator allows the use of a TRegularData1D instance
+				as a unary function. As required by the STL <tt>Unary Function</tt>
+				concept, the argument <tt>x</tt> is required to be within the
+				correct range. A more robust (range-checking) version of 
+				this operator is implemented as \link getInterpolatedValue 
+				getInterpolatedValue \endlink.
+				\link getInterpolatedValue() getInterpolatedValue() \endlink.
+				@precondition getOrigin() <= x <= getOrigin() + getDimension()
+		*/
+		ValueType operator () (const CoordinateType& x) const throw();
+
+		/** Return the linearly interpolated value of the surrounding two grid points.
+				This method first performs a range check for the argument <tt>x</tt>
+				and then calls <tt>operator () (x)</tt> to determine an interpolated
+				value at that position.
+		*/
+		ValueType getInterpolatedValue(const CoordinateType& x) const
 			throw(Exception::OutOfGrid);
 			
-		/**	Return the number of values
+		/** Return a nonmutable reference to the closest non-interpolated value.
+				This method first performs a range check for the argument <tt>x</tt>
+				and then returns the value of the closest data point to the left or
+				right of <tt>x</tt>.
 		*/
-		Size getSize() const
-			throw();
+		const ValueType& getClosestValue(const CoordinateType& x) const
+			throw(Exception::OutOfGrid);
+			
+		/** Return a mutable reference to the closest non-interpolated value.
+				This method first performs a range check for the argument <tt>x</tt>
+				and then returns the value of the closest data point to the left or
+				right of <tt>x</tt>.
+		*/
+		ValueType& getClosestValue(const CoordinateType& x)
+			throw(Exception::OutOfGrid);
+			
+		///	Return the number of points in the data set.
+		Size getSize() const throw() { return (Size)data_.size(); }
 
-		/**	Return the lower bound.
-				The lower bound represents the X-coordinate associated with the leftmost
-				data (data_[0]).
+		/**	Return the origin of the data.
+				The origin represents the coordinate of the very first
+			(leftmost) element, i.e. <tt>data_[0]</tt>.
 		*/
-		double getLowerBound() const
-			throw();
+		const CoordinateType& getOrigin() const	throw() { return origin_; }
 		
-		/**	Return the upper bound
-				The lower bound represents the X-coordinate associated with the rightmost
-				data (data_[getSize() - 1]).
+		/**	Return the spacing of the data.
+				The spacing corresponds to the distance between two adjacent
+				data elements.
 		*/
-		double getUpperBound() const
-			throw();
+		const CoordinateType& getSpacing() const throw() {	return spacing_; }
+			
+		
+		/**	Set the origin of the data.
+		*/
+		void setOrigin(const CoordinateType& origin) throw();
 
-		/**	Set the boundaries.
-				If the values for upper and lower boundary dont match, the
-				values are swapped.
+		/**	Return the dimension of the data.
+				The dimension represents the length of the data vector.
+				Hence, the coordinate of the rightmost element, <tt>data_[getSize() - 1]</tt>
+				is the origin plus the dimension (<tt>getOrigin() + getDimension()</tt>).
 		*/
-		void setBoundaries(double lower, double upper)	
-			throw();
+		const CoordinateType& getDimension() const throw() { return dimension_; }
+
+		/**	Set the dimension of the data.
+				This will affect neither the origin of the data, nor the number of
+				elements stored (in contrast to \link resize() resize() \endlink).
+				It will just store the appropriate scling factor and affect the spacing.
+		*/
+		void setDimension(const CoordinateType& dimension) throw();
 
 		/**	Resize the data.
 				If <tt>new_size</tt> is larger than the current size, the data 
 				<tt>vector</tt> is extended to the new size and filled with default
-				constructed items of type <tt>T</tt>. Resizing to a value lesser than
-				the current size truncates the vector.  \par
+				constructed items of type <tt>ValueType</tt>. Resizing to a value lesser than
+				the current size truncates the vector.  
+				\par
 				The boundaries are adapted and the positions of the retained items
-				fixed, i.e.  the upper bound is increased or decreased
-				proportionally while the lower bound remains unchanged.
+				fixed, i.e.  the dimension is increased or decreased proportionally
+				while the origin remains unchanged.
 				@param new_size the new size
 		*/
-		void resize(Size new_size)
-			throw();
+		void resize(const IndexType& new_size)
+			throw(Exception::OutOfMemory);
 
 		/**	Rescale the data.
 				Keep the current boundaries of the data and reinterpolate
 				the data to reflect the new size. To create a data set of <tt>new_size</tt>
-				data points, the data is interpolated linearly at the new data points.
+				data points, the data is interpolated linearly at the new data points from
+				the closest points in the old data set.
 				
 				@param new_size the new data set size
 		*/
-		void rescale(Size new_size)
-			throw();
-
-		/**	Rescale and change the boundaries.
-				<tt>lower</tt> and <tt>upper</tt> define the new boundaries, while <tt>new_size</tt>
-				gives the number of new data points. The existing data is cut/extended to the
-				new boundaries and the resulting new data points (<tt>new_size</tt> data
-				points in total) are obtained by linear interpolation of the current data.
-				if the boundaries are extended, the resulting excess data points are initialized
-				with zero.
-
-				@param new_size the new size of the data set
-				@param lower the lower boundary
-				@param upper the upper boundary
-		*/
-		void rescale(double lower, double upper, Size new_size)
-			throw();
+		void rescale(const IndexType& new_size)
+			throw(Exception::OutOfMemory);
 		//@}
 	
 		protected:
-		/**	The lower bound
-		*/
-		double			lower_;
+		///	The origin of the data set
+		CoordinateType	origin_;
 
-		/**	The upper bound
-		*/
-		double			upper_;
+		///	The dimension (length)
+		CoordinateType	dimension_;
 
-		/** The spacing
-		 */
-		double    spacing_;
+		///	The spacing
+		CoordinateType	spacing_;
 		
-		/**	The data
-		*/
-		VectorType	 data_;
+		///	The data
+		VectorType			data_;
 	};
 
 	/**	Default type
 	*/
 	typedef TRegularData1D<float> RegularData1D;
 	
-	template <typename T>
-	TRegularData1D<T>::TRegularData1D()
+	template <typename ValueType>
+	TRegularData1D<ValueType>::TRegularData1D()
 		throw()
-		:	lower_(0.0),
-			upper_(0.0)
+		:	origin_(0.0),
+			dimension_(0.0),
+			spacing_(1.0),
+			data_()
 	{
 	}
 
-	template <typename T>
-	TRegularData1D<T>::~TRegularData1D()
+	template <typename ValueType>
+	TRegularData1D<ValueType>::~TRegularData1D()
 		throw()
 	{
 	}
 
-	template <typename T>
-	TRegularData1D<T>::TRegularData1D(const TRegularData1D<T>& data)
-		throw()
-		:	lower_(data.lower_),
-			upper_(data.upper_),
-			data_(data.data_)
-	{
-	}
-
-	template <typename T>
-	TRegularData1D<T>::TRegularData1D(double lower, double upper, double spacing)
+	template <typename ValueType>
+	TRegularData1D<ValueType>::TRegularData1D(const TRegularData1D<ValueType>& data)
 		throw(Exception::OutOfMemory)
-		: lower_(lower),
-			upper_(upper),
-			spacing_(spacing),
-			data_((Position) ((upper_-lower_)/spacing_))
+		:	origin_(data.origin_),
+			dimension_(data.dimension_),
+			spacing_(data.spacing_),
+			data_()
 	{
-	}
-			
-	template <typename T>
-	TRegularData1D<T>::TRegularData1D(const VectorType& data, double lower, double upper)
-		throw()
-		: lower_(lower),
-			upper_(upper),
-			data_(data)
-	{
-		if (lower_ > upper_)
+		// Try to catch allocation errors and rethrow them as OutOfMemory
+		try
 		{
-			double temp(lower_);
-			lower_ = upper_;
-			upper_ = temp;
+			data_ = data.data_;
+		}
+		catch (std::bad_alloc&)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, data.size() * sizeof(ValueType));
 		}
 	}
 
-	template <typename T>
-	void TRegularData1D<T>::clear()
+	template <typename ValueType>
+	TRegularData1D<ValueType>::TRegularData1D
+		(const typename TRegularData1D<ValueType>::CoordinateType& origin, 
+		 const typename TRegularData1D<ValueType>::CoordinateType& dimension, 
+		 const typename TRegularData1D<ValueType>::CoordinateType& spacing)
+		throw(Exception::OutOfMemory)
+		: origin_(origin),
+			dimension_(dimension),
+			spacing_(spacing),
+			data_()
+	{
+		// Determine the size of the vector
+		size_type size = (size_type)(dimension_ / spacing_ + 1.0);
+
+		// Try to catch allocation errors and rethrow them as OutOfMemory
+		try
+		{
+			data_.resize(size);
+		}
+		catch (std::bad_alloc&)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, size * sizeof(ValueType));
+		}
+	}
+			
+	template <typename ValueType>
+	TRegularData1D<ValueType>::TRegularData1D
+		(const typename TRegularData1D<ValueType>::VectorType& data, 
+		 const typename TRegularData1D<ValueType>::CoordinateType& origin, 
+		 const typename TRegularData1D<ValueType>::CoordinateType& dimension)
+		throw(Exception::OutOfMemory)
+		: origin_(origin),
+			dimension_(dimension),
+			spacing_(dimension / (double)data.size()),
+			data_()
+	{
+		// Try to catch allocation errors and rethrow them as OutOfMemory
+		try
+		{
+			data_ = data;
+		}
+		catch (std::bad_alloc&)
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__, data.size() * sizeof(ValueType));
+		}
+	}
+
+	template <typename ValueType>
+	void TRegularData1D<ValueType>::clear()
 		throw()
 	{
 		// iterate over the data and reset all values to their default
 		// boundaries and vector size remain unchanged
-		T default_value = T();
-		typename VectorType::iterator it = data_.begin();
-		for (; it != data_.end(); ++it)
-		{
-			*it = default_value;
-		}
+		static ValueType default_value = ValueType();
+		std::fill(data_.begin(), data_.end(), default_value);
 	}
 
-	template <typename T>
-	const TRegularData1D<T>& TRegularData1D<T>::operator = (const TRegularData1D<T>& data)
-		throw()
+	template <typename ValueType>
+	const TRegularData1D<ValueType>& TRegularData1D<ValueType>::operator = (const TRegularData1D<ValueType>& rhs)
+		throw(Exception::OutOfMemory)
 	{
 		// copy all members...
-		data_ = data.data_;
-		lower_ = data.lower_;
-		upper_ = data.upper_;
+		origin_ = rhs.origin_;
+		dimension_ = rhs.dimension_;
+		spacing_ = rhs.spacing_;
+		try 
+		{
+			data_ = rhs.data_;
+		}
+		catch (std::bad_alloc&)
+		{
+			data_.resize(0);
+			throw Exception::OutOfMemory(__FILE__, __LINE__, rhs.size() * sizeof(ValueType));
+		}
 
 		return *this;
 	}
 
-	template <typename T>
-	const TRegularData1D<T>& TRegularData1D<T>::operator = (const VectorType& data)
-		throw()
+	template <typename ValueType>
+	const TRegularData1D<ValueType>& TRegularData1D<ValueType>::operator = (const VectorType& rhs)
+		throw(Exception::OutOfMemory)
 	{
 		// Copy the data. The boundaries remain unchanged.
-		data_ = data;
+		try 
+		{
+			data_ = rhs;
+		}
+		catch (std::bad_alloc&)
+		{
+			data_.resize(0);
+			throw Exception::OutOfMemory(__FILE__, __LINE__, rhs.size() * sizeof(ValueType));
+		}
 		
 		return *this;
 	}
 
-	template <typename T>
-	bool TRegularData1D<T>::operator == (const TRegularData1D<T>& data) const
+	template <typename ValueType>
+	bool TRegularData1D<ValueType>::operator == (const TRegularData1D<ValueType>& data) const
 		throw()
 	{
-		return (lower_ == data.lower_ &&
-						upper_ == data.upper_ &&
-						 data_ == data.data_    );
+		return (origin_ == data.origin_ 
+						&& dimension_ == data.dimension_ 
+						&& data_ == data.data_);
 	}
 
-	template <typename T>
+	template <typename ValueType>
 	BALL_INLINE
-	T* TRegularData1D<T>::getData(const double r)
+	const ValueType& TRegularData1D<ValueType>::getData(const IndexType& index) const
 		throw(Exception::OutOfGrid)
 	{
-		double step = (upper_ - lower_)/data_.size();
-		Position index = (Position) (r-lower_)/step;
-		
 		if (index >= data_.size())
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
-
-		return (*this)[(Position) (r - lower_) / step];
-	}
-	
-	template <typename T>
-	BALL_INLINE
-	const T& TRegularData1D<T>::operator [] (Position index) const
-		throw(Exception::IndexOverflow)
-	{
-		if (index >= data_.size())
-		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__, index);
-		}
-		
-		return data_[index];
-	}	
-	
-	template <typename T>
-	BALL_INLINE
-	T& TRegularData1D<T>::operator [] (Position index)
-		throw(Exception::IndexOverflow)
-	{
-		if (index >= data_.size())
-		{
-			throw Exception::IndexOverflow(__FILE__, __LINE__, index);
-		}
-		
 		return data_[index];
 	}
-
-	template <typename T>
+		
+	template <typename ValueType>
 	BALL_INLINE
-	T TRegularData1D<T>::getInterpolatedValue(const double r) const
+	ValueType& TRegularData1D<ValueType>::getData(const IndexType& index)
 		throw(Exception::OutOfGrid)
 	{
-		if ((r < lower_) || (r > upper_))
+		if (index >= data_.size())
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
-
-		double h    = r - lower_;
-		double step = (upper_ - lower_)/data_.size();
-		double mod  = fmod(r,step);
+		return data_[index];
+	}
 		
-		if (mod == 0) // we are on the grid
+	template <typename ValueType>
+	BALL_INLINE
+	ValueType TRegularData1D<ValueType>::getInterpolatedValue(const CoordinateType& x) const
+		throw(Exception::OutOfGrid)
+	{
+		if ((r < origin_) || (r > (origin_ + dimension_)))
 		{
-			return (*this)[(Position) h/step];
+			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
-		else
-		{
-			Position before = floor(h/step);
-			Position after  = ceil(h/step);
-
-			double t = (h - before*step)/(step);
-
-			return (1.-t)*(*this)[before] + t*(*this)[after];
-		}
+		return operator () (x);
 	}
 			
-	template <typename T>
+	template <typename ValueType>
 	BALL_INLINE
-	Size TRegularData1D<T>::getSize() const
-		throw()
+	const ValueType& TRegularData1D<ValueType>::getClosestValue(const CoordinateType& x) const
+		throw(Exception::OutOfGrid)
 	{
-		return data_.size();
-	}
-	
-	template <typename T>
-	BALL_INLINE
-	double TRegularData1D<T>::getLowerBound() const
-		throw()
-	{
-		return lower_;
-	}
-	
-	template <typename T>
-	BALL_INLINE
-	double TRegularData1D<T>::getUpperBound() const
-		throw()
-	{
-		return upper_;
-	}
-
-	template <typename T>
-	BALL_INLINE
-	void TRegularData1D<T>::setBoundaries(double lower, double upper)
-		throw()
-	{
-		if (lower > upper)
+		if ((r < origin_) || (r > (origin_ + dimension_)))
 		{
-			double temp(lower);
-			lower = upper;
-			upper = temp;
+			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		}
 		
-		lower_ = lower;
-		upper_ = upper;
+		// Round to the closest data point.
+		size_type index = (size_type)floor((x - origin_) / spacing_ + 0.5);
+		return data_[index];
 	}
-
-	template <typename T>
-	void TRegularData1D<T>::resize(Size new_size)
+			
+	template <typename ValueType>
+	BALL_INLINE
+	ValueType& TRegularData1D<ValueType>::getClosestValue(const CoordinateType& x)
+		throw(Exception::OutOfGrid)
+	{
+		if ((r < origin_) || (r > (origin_ + dimension_)))
+		{
+			throw Exception::OutOfGrid(__FILE__, __LINE__);
+		}
+		
+		// Round to the closest data point.
+		size_type index = (size_type)floor((x - origin_) / spacing_ + 0.5);
+		return data_[index];
+	}
+			
+	template <typename ValueType>
+	BALL_INLINE
+	ValueType TRegularData1D<ValueType>::operator () (const CoordinateType& x) const
 		throw()
 	{
+		size_type left_index = (size_type)floor((x - origin_) / spacing_);
+		if (left_index == data_.size() - 1)
+		{
+			// If we are on the right most data point, we cannot interpolate to the right!
+			return data_[data_.size() - 1];
+		}
+		
+		// Interpolate between the point to the left and the point to the right.
+		double d = (x - (double)left_index * spacing_) / spacing_;
+		return data_[left_index] * d + (1.0 - d) * data_[left_index + 1];
+	}
+			
+	template <typename ValueType>
+	BALL_INLINE
+	void TRegularData1D<ValueType>::setOrigin
+		(const typename TRegularData1D<ValueType>::CoordinateType& origin)
+		throw()
+	{
+		origin_ = origin;
+	}
+		
+	template <typename ValueType>
+	BALL_INLINE
+	void TRegularData1D<ValueType>::setDimension
+		(const typename TRegularData1D<ValueType>::CoordinateType& dimension)
+		throw()
+	{
+		dimension_ = dimension;
+	}
+		
+	template <typename ValueType>
+	void TRegularData1D<ValueType>::resize
+		(const typename TRegularData1D<ValueType>::IndexType& new_size)
+		throw(Exception::OutOfMemory)
+	{
+		// Rescale dimension to the new size.
 		if (data_.size() > 0)
 		{
-			upper_ *= (double)new_size / (double)data_.size();
+			dimension_ *= (double)new_size / (double)data_.size();
 		}
-		data_.resize(new_size);
+
+		// Try to resize the vactor and rethrow any bad_allocs.
+		try
+		{
+			data_.resize(new_size);
+		}
+		catch (std::bad_alloc&)
+		{
+			// The resulting vector is empty and thus well-defined.
+			data_.resize(0);
+			throw Exception::OutOfMemory(__FILE__, __LINE__, new_size * sizeof(ValueType));
+		}
 	}
 		
-
-	template <typename T>
-	void TRegularData1D<T>::rescale(Size new_size)
-		throw()
+	template <typename ValueType>
+	void TRegularData1D<ValueType>::rescale
+		(const typename TRegularData1D<ValueType>::IndexType& new_size)
+		throw(Exception::OutOfMemory)
 	{
 		// if the new and the old size coincide: done.
-		if (new_size == data_.size())
+		if (new_size == (IndexType)data_.size())
 		{
 			return;
 		}
 
-		// if the data set is empty...
-		if (data_.size() == 0)
+		// Catch any bad_allocs throw by vector::resize
+		try
 		{
-			// ...there's nothing to do: a resize was requested
-			data_.resize(new_size);
-			return;
-		}
-		
-		// if the data set contains only a single value,
-		// we fill everything with this value
-		if ((data_.size() == 1) && (new_size > 1))
-		{
-			T old_value = data_[0];
-			data_.resize(new_size);
-			for (Position i = 1; i < new_size; i++)
+			// if the data set is empty...
+			if (data_.size() == 0)
 			{
-				data_[i] = old_value;
+				// ...there's nothing to do: a resize was requested
+				data_.resize(new_size);
+				return;
+			}
+			
+			// if the data set contains only a single value,
+			// we fill everything with this value
+			if ((data_.size() == 1) && (new_size > 1))
+			{
+				ValueType old_value = data_[0];
+				data_.resize(new_size);
+				for (IndexType i = 1; i < new_size; i++)
+				{
+					data_[i] = old_value;
+				}
+
+				return;
 			}
 
-			return;
-		}
+			// that's the default case: use linear interpolation
+			// to determine the values at the new positions
+			VectorType new_data(new_size);
+			CoordinateType factor1 = (CoordinateType)data_.size() / (CoordinateType)new_size;
+			CoordinateType factor2 = (CoordinateType)(data_.size() - 1) / (new_size - 1);
 
-		// that's the default case: use linear interpolation
-		// to determine the values at the new positions
-		VectorType new_data(new_size);
-		double factor1 = (double)data_.size() / (double)new_size;
-		double factor2 = (double)(data_.size() - 1) / (new_size - 1);
-
-		for (Size i = 0; i < new_size; i++)
-		{
-			// determine the interval of the old data set we are currently in
-			// ([old_idx, old_idx + 1])
-			Position old_idx = (Position)((double)i * factor1);
-
-			// consider numerical inaccuracies...
-			if (old_idx >= (data_.size() - 1))
+			for (Size i = 0; i < new_size; i++)
 			{
-				old_idx = data_.size() - 2;
-			}
-			double factor3 = (double)i * factor2 - (double)old_idx;
-			new_data[i] = data_[old_idx] * (1 - factor3) + factor3 * data_[old_idx + 1];
-		}
+				// determine the interval of the old data set we are currently in
+				// ([old_idx, old_idx + 1])
+				IndexType old_idx = (IndexType)((CoordinateType)i * factor1);
 
-		// assign the new data
-		data_ = new_data;
-	}
-
-	template <typename T>
-	void TRegularData1D<T>::rescale(double lower, double upper, Size new_size)
-		throw()
-	{
-		// if the data set is empty...
-		if (data_.size() == 0)
-		{
-			// ...there's nothing to do: a resize was requested
-			data_.resize(new_size);
-			return;
-		}
-		
-		if (lower > upper)
-		{
-			double temp(lower);
-			lower = upper;
-			upper = temp;
-		}
-		
-		// if the new boundaries and the old boundaries do not overlap,
-		// we create a new (empty) data set
-		if ((lower_ > upper) || (upper_ < lower))
-		{
-			data_.resize(new_size);
-			static T default_value =(T)0;
-			for (Position i = 0; i < new_size; i++)
-			{
-				data_[i] = default_value;
-			}
-
-			return;
-		}
-
-		// that's the default case: use linear interpolation
-		// to determine the values at the new positions
-
-		// first, we create a new vector of appropriate size
-		VectorType new_data(new_size);
-		double s = (upper_ - lower_) / ((double)data_.size() - 1);
-		for (Size i = 0; i < new_size; i++)
-		{
-			double new_x = lower + (double)i / (new_size - 1) * (upper - lower);
-			if ((new_x >= lower_) && (new_x <= upper_))
-			{
-				Position old_idx = (Position)((new_x - lower_) / s);
-				double factor3 = ((new_x - lower_) -  (double)old_idx * s) / s;
+				// consider numerical inaccuracies...
+				if (old_idx >= (data_.size() - 1))
+				{
+					old_idx = data_.size() - 2;
+				}
+				CoordinateType factor3 = (CoordinateType)i * factor2 - (CoordinateType)old_idx;
 				new_data[i] = data_[old_idx] * (1 - factor3) + factor3 * data_[old_idx + 1];
 			}
-		}
 
-		// assign the new data and the boundaries
-		data_ = new_data;
-		lower_ = lower;
-		upper_ = upper;
+			// assign the new data
+			data_ = new_data;
+		}
+		catch (std::bad_alloc&)
+		{
+			// Make sure we are in a well-defined state.
+			data_.resize(0);
+			throw Exception::OutOfMemory(__FILE__, __LINE__, new_size * sizeof(ValueType));			
+		}
 	}
 
 } // namespace BALL

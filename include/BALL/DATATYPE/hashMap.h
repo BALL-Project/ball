@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: hashMap.h,v 1.35 2003/04/17 16:32:16 oliver Exp $ 
+// $Id: hashMap.h,v 1.36 2003/05/03 17:29:19 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -343,8 +343,6 @@ namespace BALL
 			throw();
 			
 		/**	Copy Constructor.
-				@param	hash_map the hash map to be copied
-				@param	deep not used
 		*/
 		HashMap(const HashMap& hash_map) throw();
 
