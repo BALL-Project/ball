@@ -1,7 +1,7 @@
 dnl -*- Mode: C++; tab-width: 1; -*-
 dnl vi: set ts=2:
 dnl
-dnl		$Id: aclocal.m4,v 1.68 2005/03/01 09:00:12 oliver Exp $
+dnl		$Id: aclocal.m4,v 1.69 2005/03/01 18:33:20 oliver Exp $
 dnl		Autoconf M4 macros used by configure.ac.
 dnl
 
@@ -669,7 +669,7 @@ AC_DEFUN(CF_GXX_OPTIONS, [
 	dnl so we go back to -O2.
 	dnl
 	if test "${OS}" = "Darwin" ; then
-	  CXXFLAGS_O="${CXXFLAGS_O} -O2 -Wall -W -pedantic -Wno-long-long"		
+	  CXXFLAGS_O="${CXXFLAGS_O} -O2 -Wall -W -pedantic -Wno-long-long -Wno-long-double"		
 	else
 	  CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
 	fi
@@ -2680,18 +2680,9 @@ AC_DEFUN(CF_VIEW, [
 				VIEW_PLATFORM="OpenGL-Darwin"
 				OPENGL_LIBOPTS="-framework OpenGL -framework AGL"
 				X11_LIBPATHOPT=""
-				AC_MSG_CHECKING(for OpenGL includes)
-				CF_FIND_HEADER(OPENGL_INCPATH,GL/gl.h)
-				if test "${OPENGL_INCPATH}" = "" ; then
-					AC_MSG_RESULT((not found!))
-					AC_MSG_RESULT()
-					AC_MSG_RESULT(no OpenGL headers found! Please use the option --with-opengl-incl=DIR)
-					AC_MSG_RESULT(of configure to specify the correct path to these headers (usually, /usr/X11R6/include).)
-					CF_ERROR
-				else
-					AC_MSG_RESULT((${OPENGL_INCPATH}))
-          VIEW_INCLUDES="${VIEW_INCLUDES} -I${OPENGL_INCPATH}"
-				fi
+				X11_INCPATH=""
+	      OPENGL_INCPATH="-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers -I/System/Library/Frameworks/AGL.framework/Versions/A/Headers"
+				VIEW_INCLUDES="${VIEW_INCLUDES} ${OPENGL_INCPATH}"
 			fi
 
 			if test "${VIEW_PLATFORM}" = Mesa ; then

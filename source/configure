@@ -4454,7 +4454,7 @@ echo "${ECHO_T}yes" >&6
   CXXFLAGS_D="${CXXFLAGS_D} -Wall -W -pedantic -Wno-long-long"
   CXXFLAGS_DI="${CXXFLAGS_DI} -g"
 					if test "${OS}" = "Darwin" ; then
-	  CXXFLAGS_O="${CXXFLAGS_O} -O2 -Wall -W -pedantic -Wno-long-long"
+	  CXXFLAGS_O="${CXXFLAGS_O} -O2 -Wall -W -pedantic -Wno-long-long -Wno-long-double"
 	else
 	  CXXFLAGS_O="${CXXFLAGS_O} -O3 -Wall -W -pedantic -Wno-long-long"
 	fi
@@ -17232,133 +17232,9 @@ fi
 				VIEW_PLATFORM="OpenGL-Darwin"
 				OPENGL_LIBOPTS="-framework OpenGL -framework AGL"
 				X11_LIBPATHOPT=""
-				echo "$as_me:$LINENO: checking for OpenGL includes" >&5
-echo $ECHO_N "checking for OpenGL includes... $ECHO_C" >&6
-
-	_INCLUDES=
-
-		if test "${OPENGL_INCPATH}" != "" ; then
-		_INCLUDES=${OPENGL_INCPATH}
-	fi
-
-	if test "${_INCLUDES}" = "" ; then
-		for i in /usr/include /opt/include  ; do
-			if test -f "$i/GL/gl.h" -a "${_INCLUDES}" = ""; then
-				_INCLUDES="$i"
-			fi
-		done
-	fi
-
-	if test "${_INCLUDES}" = "" ; then
-		for i in /usr/*/include /opt/*/include ; do
-			if test -f "$i/GL/gl.h" -a "${_INCLUDES}" = ""; then
-				_INCLUDES="$i"
-			fi
-		done
-	fi
-
-	if test "${_INCLUDES}" = "" ; then
-		for i in /opt/*/*/include /usr/*/*/include /usr/local/*/*/include ; do
-			if test -f "$i/GL/gl.h" -a "${_INCLUDES}" = ""; then
-				_INCLUDES="$i"
-			fi
-		done
-	fi
-
-	if test "${_INCLUDES}" = "" -a "${FIND}" != "-" ; then
-		if test "${FIND_KNOWS_PATH}" = false ; then
-			FIND_OPT="-name"
-			_TMP_FIND_NAME="GL/gl.h"
-			while test _`${EGREP} / $_TMP_FIND_NAME`_ != __ ; do
-				_TMP_FIND_NAME=`echo ${_TMP_FIND_NAME}|${CUT} -d/ -f2-`
-			done
-
-			FIND_ARG="\*${_TMP_FIND_NAME}\*"
-		else
-			FIND_OPT="-path"
-			FIND_ARG="\*GL/gl.h\*"
-		fi
-
-		_TMP=`${FIND} /usr ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
-		for j in ${_TMP} ; do
-			if test "${_INCLUDES}" = "" ; then
-				_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
-			fi
-		done
-
-		if test "${_INCLUDES}" = "" ; then
-			_TMP=`${FIND} /opt ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
-			for j in ${_TMP} ; do
-				if test "${_INCLUDES}" = "" ; then
-					_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
-				fi
-			done
-		fi
-
-		if test "${_INCLUDES}" = "" -a "" != ""; then
-			for i in  /dev/null ; do
-				_TMP=`${FIND} $i ${FIND_OPT} ${FIND_ARG} -print 2>/dev/null`
-				for j in ${_TMP} ; do
-					if test "${_INCLUDES}" = "" ; then
-						_INCLUDES=`echo $j|${SED} "s/include\/.\*\$/include/"`
-					fi
-				done
-			done
-		fi
-	fi
-
-	OPENGL_INCPATH="${_INCLUDES}"
-
-				if test "${OPENGL_INCPATH}" = "" ; then
-					echo "$as_me:$LINENO: result: (not found!)" >&5
-echo "${ECHO_T}(not found!)" >&6
-					echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-					echo "$as_me:$LINENO: result: no OpenGL headers found! Please use the option --with-opengl-incl=DIR" >&5
-echo "${ECHO_T}no OpenGL headers found! Please use the option --with-opengl-incl=DIR" >&6
-					echo "$as_me:$LINENO: result: of configure to specify the correct path to these headers (usually, /usr/X11R6/include)." >&5
-echo "${ECHO_T}of configure to specify the correct path to these headers (usually, /usr/X11R6/include)." >&6
-
-	echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-	echo "$as_me:$LINENO: result: Configure failed. If you cannot solve your problem with the aid" >&5
-echo "${ECHO_T}Configure failed. If you cannot solve your problem with the aid" >&6
-	echo "$as_me:$LINENO: result: of the above error message, please contact the BALL mailing list" >&5
-echo "${ECHO_T}of the above error message, please contact the BALL mailing list" >&6
-	echo "$as_me:$LINENO: result: or the BALL developers. Please enclose the file 'conf.diag.tar'" >&5
-echo "${ECHO_T}or the BALL developers. Please enclose the file 'conf.diag.tar'" >&6
-	echo "$as_me:$LINENO: result: which has been created in source. It contains the relevant" >&5
-echo "${ECHO_T}which has been created in source. It contains the relevant" >&6
-	echo "$as_me:$LINENO: result: files from this configure run. In most cases, the information" >&5
-echo "${ECHO_T}files from this configure run. In most cases, the information" >&6
-	echo "$as_me:$LINENO: result: is necessary to diagnose what went wrong. This file contains" >&5
-echo "${ECHO_T}is necessary to diagnose what went wrong. This file contains" >&6
-	echo "$as_me:$LINENO: result: information about your system setup and versions of compilers" >&5
-echo "${ECHO_T}information about your system setup and versions of compilers" >&6
-	echo "$as_me:$LINENO: result: and other tools installed in your system." >&5
-echo "${ECHO_T}and other tools installed in your system." >&6
-	echo "$as_me:$LINENO: result: " >&5
-echo "${ECHO_T}" >&6
-
-	TARFILE=conf.diag.tar
-	if test -f $TARFILE ; then
-		${RM} $TARFILE ;
-	fi
-	FILES="configure configure.ac aclocal.m4 config.log"
-	if test -f config.h ; then FILES="$FILES config.h" ; fi
-	if test -f config.mak ; then FILES="$FILES config.mak" ; fi
-	if test -f common.mak ; then FILES="$FILES common.mak" ; fi
-  tar cf $TARFILE $FILES
-
-	{ { echo "$as_me:$LINENO: error: Aborted." >&5
-echo "$as_me: error: Aborted." >&2;}
-   { (exit 1); exit 1; }; }
-
-				else
-					echo "$as_me:$LINENO: result: (${OPENGL_INCPATH})" >&5
-echo "${ECHO_T}(${OPENGL_INCPATH})" >&6
-          VIEW_INCLUDES="${VIEW_INCLUDES} -I${OPENGL_INCPATH}"
-				fi
+				X11_INCPATH=""
+	      OPENGL_INCPATH="-I/System/Library/Frameworks/OpenGL.framework/Versions/A/Headers -I/System/Library/Frameworks/AGL.framework/Versions/A/Headers"
+				VIEW_INCLUDES="${VIEW_INCLUDES} ${OPENGL_INCPATH}"
 			fi
 
 			if test "${VIEW_PLATFORM}" = Mesa ; then
