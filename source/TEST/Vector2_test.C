@@ -1,4 +1,4 @@
-// $Id: Vector2_test.C,v 1.4 2001/06/26 10:01:13 amoll Exp $
+// $Id: Vector2_test.C,v 1.5 2001/07/10 16:36:03 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(TVector2, "$Id: Vector2_test.C,v 1.4 2001/06/26 10:01:13 amoll Exp $")
+START_TEST(TVector2, "$Id: Vector2_test.C,v 1.5 2001/07/10 16:36:03 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -148,33 +148,6 @@ CHECK(operator = (T value))
 RESULT
 
 
-CHECK(TVector2::get(T& rx, T& ry) const)
-	float a, b;
-	v = Vector2(1.0, 2.0);
-	v.get(a, b);
-	TEST_REAL_EQUAL(a, 1.0)
-	TEST_REAL_EQUAL(b, 2.0)
-RESULT
-
-CHECK(TVector2::get(TVector2<T>& v) const )
-	v2 = Vector2(1.0, 2.0);
-	v  = Vector2();
-	v.get(v2);
-	TEST_EQUAL(v2, v)
-RESULT
-
-CHECK(TVector2<T>::swap(TVector2<T>& v))
-	v  = Vector2(1.0, 2.0);
-	Vector2 u2 = v;
-
-	Vector2 u(4.0, 2.0);
-	v2 = u;
-
-	v.swap(u);
-	TEST_EQUAL(v, v2)
-	TEST_EQUAL(u, u2)
-RESULT
-
 CHECK(TVector2::getLength() const )
 	v = Vector2(4.0, 9.0);
 	TEST_REAL_EQUAL(v.getLength(), sqrt(4.0 * 4.0 + 9.0 * 9.0))
@@ -282,30 +255,6 @@ CHECK(TVector2::T operator * (const TVector2& vector) const )
 	v2 = Vector2(1.0, 2.0);
 	v  = Vector2(1.0, 2.0);
 	TEST_REAL_EQUAL(v * v2 , 5.0)
-RESULT
-
-CHECK(TVector2 operator % (const TVector2& vector) const)
-	// BAUSTELLE: werte
- 	v1 = Vector2(1.0, 2.0);
-	v2 = Vector2(-1.0, -2.0);
-	v  = v1 % v2;
-	TEST_REAL_EQUAL(v[0], 0.0)
-	TEST_REAL_EQUAL(v[1], 0.0)
-	
- 	v1 = Vector2(0.0, 2.0);
-	v2 = Vector2(4.0, 0.0);
-	v  = v1 % v2;
-	TEST_REAL_EQUAL(v[0], -8.0)
-	TEST_REAL_EQUAL(v[1], 8.0)
-RESULT
-
-CHECK(TVector2 operator %= (const TVector2& vector))
-	// BAUSTELLE: werte
- 	v  = Vector2(1.0, 2.0);
-	v2 = Vector2(4.0, 5.0);
-	v  %= v2;
-	TEST_REAL_EQUAL(v[0], -3.0)
-	TEST_REAL_EQUAL(v[1], 3.0)
 RESULT
 
 CHECK(TVector2::getDistance(const TVector2& vector) const )
