@@ -1,4 +1,4 @@
-// $Id: RTTI_test.C,v 1.6 2000/06/05 22:18:30 amoll Exp $
+// $Id: RTTI_test.C,v 1.7 2000/06/06 09:46:23 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <BALL/KERNEL/secondaryStructure.h>
 ///////////////////////////
 
-START_TEST(RTTI, "$Id: RTTI_test.C,v 1.6 2000/06/05 22:18:30 amoll Exp $")
+START_TEST(RTTI, "$Id: RTTI_test.C,v 1.7 2000/06/06 09:46:23 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -52,22 +52,10 @@ CHECK(RTTI::isKindOf<>())
 	TEST_EQUAL(isKindOf<BaseFragment>(*b_ptr), true)
 	TEST_EQUAL(isKindOf<Residue>(*b_ptr), false)
 
-	Atom*					a_ptr;
-	System*				s_ptr = new System();
-	PDBAtom*		 pa_ptr;
-	Bond*				 bo_ptr;
-	NucleicAcid* na_ptr;
-	Nucleotide*  nu_ptr;
-	Chain*				c_ptr;
-	SecondaryStructure* ss_ptr;
-	TEST_EQUAL(isKindOf<Atom>(*a_ptr), true)
+	System*				s_ptr = new System;
 	TEST_EQUAL(isKindOf<System>(*s_ptr), true)
-	TEST_EQUAL(isKindOf<PDBAtom>(*pa_ptr), true)
-	TEST_EQUAL(isKindOf<Bond>(*bo_ptr), true)
-	TEST_EQUAL(isKindOf<NucleicAcid>(*na_ptr), true)
-	TEST_EQUAL(isKindOf<Nucleotide>(*nu_ptr), true)
-	TEST_EQUAL(isKindOf<Chain>(*c_ptr), true)
-	TEST_EQUAL(isKindOf<SecondaryStructure>(*ss_ptr), true)
+	s_ptr = 0;
+	TEST_EQUAL(isKindOf<System>(*s_ptr), false)
 RESULT											
 
 CHECK(RTTI::isInstanceOf<>())
@@ -218,9 +206,9 @@ CHECK(getStreamName<>())
 RESULT
 
 CHECK(castTo<>())
-	Fragment f1();
-	BaseFragment bf1();
-	Fragment* f = castTo<Fragment> (*bf1);
+	Fragment f1;
+	BaseFragment* bf1 = &f1;
+	Fragment* f = castTo<Fragment>(*bf1);
 	TEST_NOT_EQUAL(f, 0)
 RESULT
 
