@@ -1,12 +1,12 @@
-dnl    $Id: configure.in,v 1.81 2000/03/29 14:46:19 oliver Exp $
+dnl    $Id: configure.in,v 1.82 2000/03/30 19:48:56 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
 dnl
 dnl    disable caching - just to be sure
 dnl   
-define([AC_CACHE_LOAD], )dnl
-define([AC_CACHE_SAVE], )dnl
+dnl define([AC_CACHE_LOAD], )dnl
+dnl define([AC_CACHE_SAVE], )dnl
 
 
 dnl 
