@@ -1,4 +1,4 @@
-// $Id: colorTable.C,v 1.4.4.6 2002/11/26 12:29:39 oliver Exp $
+// $Id: colorTable.C,v 1.4.4.7 2002/11/26 16:53:19 anhi Exp $
 
 #include <BALL/VIEW/DATATYPE/colorTable.h>
 #include <BALL/COMMON/rtti.h>
@@ -141,6 +141,7 @@ namespace BALL
 			// we will build the color table in a temporary vector which we
 			// will later copy into our own dataset
 			vector<ColorRGBA> new_table(color_number_);
+
 			Index old_number_of_colors = (Index)size();
 
 			// we won't *reduce* the number of colors, so if we should, we
@@ -151,12 +152,12 @@ namespace BALL
 			}
 		
 			// how many colors do we have to put between two of the old ones?
-			Index numInterpolSteps = (Index)floor((double)(color_number_ - old_number_of_colors) / (old_number_of_colors - 1));
+			Index number_of_interpolation_steps = (Index)floor((double)(color_number_ - old_number_of_colors) / (old_number_of_colors - 1));
 	
 			// adjust the number of colors so that there are no remainders after the interpolation
-			if (color_number_ != (old_number_of_colors + numInterpolSteps*(old_number_of_colors-1)))  
+			if (color_number_ != (old_number_of_colors + number_of_interpolation_steps*(old_number_of_colors-1)))  
 			{
-				color_number_ = old_number_of_colors + (numInterpolSteps*(old_number_of_colors-1));
+				color_number_ = old_number_of_colors + (number_of_interpolation_steps*(old_number_of_colors-1));
 			}
 			
 			ColorRGBA col1, col2;
@@ -167,18 +168,18 @@ namespace BALL
 				col1 = (*this)[i];
 				col2 = (*this)[i+1];
 
-				new_table[i*(numInterpolSteps+1)] = col1;
+				new_table[i*(number_of_interpolation_steps+1)] = col1;
 				
-				for (Index j = 1; j <= numInterpolSteps; j++)
+				for (Index j=1; j<=number_of_interpolation_steps; j++)
 				{
-					pos = (float)j/(float)(numInterpolSteps+1);
-					new_table[(i*(numInterpolSteps+1))+j].setRed(pos*(float)col2.getRed() + (1.-pos)*(float)col1.getRed());
-					new_table[(i*(numInterpolSteps+1))+j].setGreen(pos*(float)col2.getGreen() + (1.-pos)*(float)col1.getGreen());
-					new_table[(i*(numInterpolSteps+1))+j].setBlue(pos*(float)col2.getBlue() + (1.-pos)*(float)col1.getBlue());
+					pos = (float)j/(float)(number_of_interpolation_steps+1);
+					new_table[(i*(number_of_interpolation_steps+1))+j].setRed(pos*(float)col2.getRed() + (1.-pos)*(float)col1.getRed());
+					new_table[(i*(number_of_interpolation_steps+1))+j].setGreen(pos*(float)col2.getGreen() + (1.-pos)*(float)col1.getGreen());
+					new_table[(i*(number_of_interpolation_steps+1))+j].setBlue(pos*(float)col2.getBlue() + (1.-pos)*(float)col1.getBlue());
 
 					if (alpha_blending_)
 					{
-						new_table[(i*(numInterpolSteps+1))+j].setAlpha(pos*(float)col2.getAlpha() + (1.-pos)*(float)col1.getAlpha());
+						new_table[(i*(number_of_interpolation_steps+1))+j].setAlpha(pos*(float)col2.getAlpha() + (1.-pos)*(float)col1.getAlpha());
 					}
 				}
 			}
