@@ -1,16 +1,14 @@
-// $Id: HaighMallionShiftProcessor_test.C,v 1.2 2000/09/22 11:15:11 amoll Exp $
+// $Id: HaighMallionShiftProcessor_test.C,v 1.3 2000/09/22 12:03:29 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 
 #include <BALL/NMR/haighMallionShiftProcessor.h>
 #include <BALL/FORMAT/HINFile.h>
-#include <BALL/FORMAT/PDBFile.h>
-#include <BALL/STRUCTURE/defaultProcessors.h>
 
 ///////////////////////////
 
-START_TEST(HaighMallionShiftProcessor, "$Id: HaighMallionShiftProcessor_test.C,v 1.2 2000/09/22 11:15:11 amoll Exp $")
+START_TEST(HaighMallionShiftProcessor, "$Id: HaighMallionShiftProcessor_test.C,v 1.3 2000/09/22 12:03:29 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -56,12 +54,11 @@ RESULT
 HINFile f("data/HaighMallionShiftProcessor_test.hin");
 System S;
 f >> S;
-ClearChargeProcessor clear_charge;
-S.apply(clear_charge);
 
 Parameters parameters("data/HaighMallionShiftProcessor_test.ini");
 
-CHECK(charge assignment)
+CHECK(chemical shifts)
+	PRECISION(0.0001)
 	HaighMallionShiftProcessor sp;
 	sp.setParameters(parameters);
 	sp.init();
@@ -70,41 +67,20 @@ CHECK(charge assignment)
 	if (S.countAtoms() == 31)
 	{
 		S.apply(sp);
-		AtomIterator atom_it = S.beginAtom();
-		TEST_REAL_EQUAL(atom_it->getCharge(), 0)
-		atom_it++;
-		//BAUSTELLE
-	}	
-RESULT
-
-CHECK(chemical shifts)
-	PRECISION(0.0001)
-	HaighMallionShiftProcessor sp;
-	sp.setParameters(parameters);
-	sp.init();
-
-	/*
-	TEST_EQUAL(S.countAtoms(), 31)
-	if (S.countAtoms() == 31)
-	{
-		S.apply(sp);
 
 		AtomIterator atom_it = S.beginAtom();
 		Position i = 0;
 		for (; +atom_it; ++atom_it)
 		{
-			if (atom_it->hasProperty("chemical_shift"))
+			if (atom_it->hasProperty(HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT))
 			{
-				float shift = atom_it->getProperty("chemical_shift").getFloat();
+				float shift = atom_it->getProperty(HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat();
 				STATUS("shift of " << atom_it->getFullName() << ": " << shift)
-				switch (i++)
-				{//BAUSTELLE
-					case  0: TEST_REAL_EQUAL(shift, -0.02835) break;
-				}
+				TEST_REAL_EQUAL(shift, 0.0)
+				i++;
 			}
 		}
 	}	
-	*/
 RESULT
 
 /////////////////////////////////////////////////////////////
