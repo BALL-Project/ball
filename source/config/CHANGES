@@ -5,6 +5,10 @@ added:
 - Clipping Planes
 - Stereo Modi: Side-by-Side and for shutter googles 
 - Preferences for material parameters in OpenGL
+- Fog in Scene and its settings to Preferences
+- managment of 1D and 2D grids in DatasetControl
+- ability of DatasetControl to start visualisation of 1D and 2D grids
+- 1D and 2D RegularDataWidgets update their contents automaticaly
 
 fixed:
 - selection in MolecularControl with CRTG and SHIFT modifier
@@ -14,3 +18,8 @@ fixed:
 - export of PNGs could result in strange problems e.g. with empty images
 - it was possible to delete molecular entities while simulation was running -> core dump
 - PeptideDialog: deletion of sequence
+- problem with normals in Cartoon model
+
+changed:
+- Scene Preferences
+- interface for the methods ModularWidget::applyPreferences, defaultPreferences, cancelPreferences
