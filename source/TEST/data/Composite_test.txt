@@ -5,8 +5,8 @@
 /Object: [0-9a-fx]+ is instance of class: Q24BALL9Composite
   selected: 0
 /  parent: [0-9]+
-/  first: 90
-/  last: 90
+/  first: [0-9]+
+/  last: [0-9]+
 /  previous: [0-9]+
 /  next: [0-9]+
   number of children:1
@@ -26,7 +26,7 @@
 /      last: [0-9]+
 /      previous: [0-9]+
 /      next: [0-9]+
-      number of children:1
+      number of children:2
       contains_selection_:0
       number of selected children:0
       number of children containing selection:0
@@ -34,7 +34,7 @@
 /        .*
 /        Object: [0-9a-fx]+ is instance of class: Q24BALL9Composite
 /        Object: [0-9a-fx]+ is instance of class: Q24BALL9Composite
-/          handle: [0-9]+
+/         handle: [0-9]+
           auto-deletable: 0
 /        Object: [0-9a-fx]+ is instance of class: Q24BALL9Composite
           selected: 0
@@ -48,14 +48,14 @@
           number of selected children:0
           number of children containing selection:0
           children:
-/           .*
+/            .*
 /            Object: [0-9a-fx]+ is instance of class: Q24BALL9Composite
 /            Object: [0-9a-fx]+ is instance of class: Q24BALL9Composite
 /              handle: [0-9]+
               auto-deletable: 0
 /            Object: [0-9a-fx]+ is instance of class: Q24BALL9Composite
               selected: 0
-/              parent: [0-9]+
+/              parent: 91
 /              first: [0-9]+
 /              last: [0-9]+
 /              previous: [0-9]+
@@ -65,3 +65,20 @@
               number of selected children:0
               number of children containing selection:0
               children:
+/        .*
+/        Object: [0-9a-fx]+ is instance of class: Q24BALL9Composite
+/        Object: [0-9a-fx]+ is instance of class: Q24BALL9Composite
+/          handle: [0-9]+
+          auto-deletable: 0
+/        Object: [0-9a-fx]+ is instance of class: Q24BALL9Composite
+          selected: 0
+/          parent: [0-9]+
+/          first: [0-9]+
+/          last: [0-9]+
+/          previous: [0-9]+
+/          next: [0-9]+
+          number of children:0
+          contains_selection_:0
+          number of selected children:0
+          number of children containing selection:0
+          children:
