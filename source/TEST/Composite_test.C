@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.15 2000/08/28 16:09:52 oliver Exp $
+// $Id: Composite_test.C,v 1.16 2000/08/28 17:43:38 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@
 using namespace BALL;
 using namespace std;
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.15 2000/08/28 16:09:52 oliver Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.16 2000/08/28 17:43:38 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -291,29 +291,29 @@ CHECK(containsSelection() const)
 	TEST_EQUAL(e.containsSelection(), true);
 RESULT
 
-CHECK(getPathLength(const Composite&, const Composite&) const)
+CHECK(getPathLength(const Composite&) const)
 	Composite a, b, c, d, e, f;
 	a.appendChild(b);
 	b.appendChild(c);
 	b.appendChild(d);
 	c.appendChild(e);
-	TEST_EQUAL(Composite::getPathLength(a, a), 0)
-	TEST_EQUAL(Composite::getPathLength(a, b), 1)
-	TEST_EQUAL(Composite::getPathLength(b, a), 1)
-	TEST_EQUAL(Composite::getPathLength(b, c), 1)
-	TEST_EQUAL(Composite::getPathLength(c, b), 1)
-	TEST_EQUAL(Composite::getPathLength(c, d), INVALID_SIZE)
-	TEST_EQUAL(Composite::getPathLength(d, c), INVALID_SIZE)
-	TEST_EQUAL(Composite::getPathLength(d, a), 2)
-	TEST_EQUAL(Composite::getPathLength(a, d), 2)
-	TEST_EQUAL(Composite::getPathLength(c, a), 2)
-	TEST_EQUAL(Composite::getPathLength(a, c), 2)
-	TEST_EQUAL(Composite::getPathLength(e, a), 3)
-	TEST_EQUAL(Composite::getPathLength(a, e), 3)
-	TEST_EQUAL(Composite::getPathLength(b, e), 2)
-	TEST_EQUAL(Composite::getPathLength(e, b), 2)
-	TEST_EQUAL(Composite::getPathLength(a, f), INVALID_SIZE)
-	TEST_EQUAL(Composite::getPathLength(f, a), INVALID_SIZE)
+	TEST_EQUAL(a.getPathLength(a), 0)
+	TEST_EQUAL(a.getPathLength(b), 1)
+	TEST_EQUAL(a.getPathLength(a), 1)
+	TEST_EQUAL(b.getPathLength(c), 1)
+	TEST_EQUAL(c.getPathLength(b), 1)
+	TEST_EQUAL(c.getPathLength(d), INVALID_SIZE)
+	TEST_EQUAL(d.getPathLength(c), INVALID_SIZE)
+	TEST_EQUAL(d.getPathLength(a), 2)
+	TEST_EQUAL(a.getPathLength(d), 2)
+	TEST_EQUAL(c.getPathLength(a), 2)
+	TEST_EQUAL(a.getPathLength(c), 2)
+	TEST_EQUAL(e.getPathLength(a), 3)
+	TEST_EQUAL(a.getPathLength(e), 3)
+	TEST_EQUAL(b.getPathLength(e), 2)
+	TEST_EQUAL(e.getPathLength(b), 2)
+	TEST_EQUAL(a.getPathLength(f), INVALID_SIZE)
+	TEST_EQUAL(f.getPathLength(a), INVALID_SIZE)
 RESULT
 
 Composite a, b, c, d, e, f;
