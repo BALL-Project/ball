@@ -1,4 +1,4 @@
-// $Id: molecularMessage.h,v 1.1 2000/05/14 15:29:37 hekl Exp $
+// $Id: molecularMessage.h,v 1.2 2000/05/16 15:52:27 hekl Exp $
 
 #ifndef BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
 #define BALL_MOLVIEW_KERNEL_MOLECULARMESSAGE_H
@@ -113,6 +113,46 @@ namespace BALL
 			ChangedMolecularMessage(const CompositeMessage& message, bool deep = true);
 
 			virtual ~ChangedMolecularMessage();
+			//@}
+		
+			/**	@name	Assignment
+			*/
+			//@{
+			//@}
+
+			/**	@name	Accessors
+			*/
+			//@{
+			//@}
+
+			/**	@name	Debugging and Diagnostics
+			*/	
+			//@{
+			//@}
+
+			/**	@name	Storers
+			*/
+			//@{
+			//@}
+			
+			private:
+		};
+
+
+		/**	 MolecularSelectionMessage Class		
+		*/
+		class MolecularSelectionMessage: public SelectionMessage
+		{
+			public:
+
+			/**	@name	Constructors and Destructors
+			*/	
+			//@{
+			MolecularSelectionMessage();
+
+			MolecularSelectionMessage(const SelectionMessage& message, bool deep = true);
+
+			virtual ~MolecularSelectionMessage();
 			//@}
 		
 			/**	@name	Assignment
