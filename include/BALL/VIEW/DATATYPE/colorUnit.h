@@ -1,4 +1,4 @@
-// $Id: colorUnit.h,v 1.10 2001/07/16 14:49:29 amoll Exp $
+// $Id: colorUnit.h,v 1.10.4.1 2002/11/15 14:40:10 amoll Exp $
 
 #ifndef BALL_VIEW_DATATYPE_COLORUNIT_H
 #define BALL_VIEW_DATATYPE_COLORUNIT_H
@@ -205,7 +205,7 @@ namespace BALL
 					Calls \Ref{destroy}.
 					@see         destroy
 			*/
-			virtual ~ColorUnit()
+			~ColorUnit()
 				throw();
 
 			/** Explicit default initialization.
@@ -215,13 +215,13 @@ namespace BALL
 						\item value is zero (0)
 					\end{itemize}
 			*/
-			virtual void clear()
+			void clear()
 				throw();
 
 			/** Explicit destructor.
 					Empty for further purpose.
 			*/
-			virtual void destroy()
+			void destroy()
 				throw();
 				
 			//@}
@@ -792,7 +792,7 @@ namespace BALL
 					@param   s output stream where to output the value of {\em *this} colorUnit
 					@param   depth the dumping depth (depth is irrelevant here)
 			*/
-			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
+			void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
 
 			//@}
@@ -806,7 +806,7 @@ namespace BALL
 					{\bf Note:} Not yet implemented.
 					@param  s input stream from where to restore the value of {\em *this} colorUnit
 			*/
-			virtual void read(std::istream& s)
+			void read(std::istream& s)
 				throw();
 
 			/** Persistent stream output and value storage.
@@ -814,7 +814,7 @@ namespace BALL
 					{\bf Note:} Not yet implemented.
 					@param  s output stream to where the value of {\em *this} colorUnit will be stored
 			*/
-			virtual void write(std::ostream& s) const
+			void write(std::ostream& s) const
 				throw();
 
 			/** Friendly stream input.
