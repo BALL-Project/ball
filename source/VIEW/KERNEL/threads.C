@@ -103,6 +103,11 @@ namespace BALL
 				if (file_name_ != "")
 				{
 					File f(file_name_, std::ios::out);
+					if (!f.isOpen())
+					{
+						output_(String("Could not open file ") + file_name_ + " for output!");
+						return;
+					}
 					tcp_.set(f, url_);
 				}
 				else
