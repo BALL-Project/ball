@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.9 2000/04/02 14:32:25 oliver Exp $
+// $Id: exception.h,v 1.10 2000/05/19 19:39:39 amoll Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -31,7 +31,7 @@ namespace BALL
 				Each exception class should define a constructor taking a string
 				and an int as parameters. These two values are interpreted as the current
 				filename and line number and is usually printed in case of an uncaught exception.
-				To support this feature, each {\bf throw} directive should lokk as follows:
+				To support this feature, each {\bf throw} directive should look as follows:
 				{\tt {\bf throw Exception::GeneralException}(\_\_FILE\_\_, \_\_LINE\_\_);}\\
 				{\tt \_\_FILE\_\_} and {\tt \_\_LINE\_\_} are built-in preprocessor macros that hold the
 				desired information.\\
