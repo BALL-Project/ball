@@ -1,4 +1,4 @@
-// $Id: datatype.doc,v 1.10 2001/02/16 18:22:29 amoll Exp $
+// $Id: datatype.doc,v 1.11 2001/07/20 07:59:45 oliver Exp $
 
 /**@name	General datastructures
 		This section contains all relevant information on 
@@ -30,6 +30,7 @@
 	//@{
 		//@Include: bitVector.h	
 		//@Include: forEach.h	
+		//@Include: triple.h
 		//@Include: quadruple.h
 		//@Include: regExp.h
 		//@Include: string.h
