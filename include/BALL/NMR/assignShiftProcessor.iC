@@ -1,5 +1,3 @@
-const vector<NMRAtomData*> AssignShiftProcessor::dummyVectorOfNMRAtomData;
-
 BALL_INLINE
 AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atomData)
 	:	atom_data_(atomData),
@@ -29,7 +27,7 @@ AssignShiftProcessor::AssignShiftProcessor(const AssignShiftProcessor& processor
 BALL_INLINE 
 AssignShiftProcessor::AssignShiftProcessor()
 	: UnaryProcessor<Composite>(),
-		atom_data_(RTTI::getDefault<std::vector<NMRAtomData*>>())
+		atom_data_(RTTI::getDefault<std::vector<NMRAtomData*> >())
 {
 }
 
