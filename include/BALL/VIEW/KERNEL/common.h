@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.33 2005/02/06 20:57:04 oliver Exp $
+// $Id: common.h,v 1.34 2005/02/13 16:42:42 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -328,6 +328,10 @@ namespace BALL
 
 		///
 		bool stringToVector3(const String& data, Vector3& v)
+			throw();
+
+		/// create a string from a float and cut after a given number of digits after the dot
+		String createFloatString(float value, Size precision)
 			throw();
 
 		/** Get MainControl
