@@ -1,5 +1,5 @@
 #
-# $Id: Makefile.in,v 1.27 2003/01/29 11:34:07 anker Exp $
+# $Id: Makefile.in,v 1.28 2003/05/26 16:09:59 oliver Exp $
 #
 
 include config.mak
@@ -40,7 +40,7 @@ amber:
 
 clean:
 	@$(ECHO) "Cleaning up object files, cores,  and (uninstalled) library files..."
-	@$(MAKE) subdirs SUBDIRS="$(DIRS) TEST BENCHMARKS" TARGET=default_clean
+	@$(MAKE) subdirs SUBDIRS="$(DIRS) TEST BENCHMARKS APPLICATIONS/MOLVIEW APPLICATIONS/PB APPLICATIONS/AMBER APPLICATIONS/NMRVIEW APPLICATIONS/UTILITIES" TARGET=default_clean
 	@-$(RM) -f  $(STATIC_LIBS) $(SHARED_LIBS)
 	@-$(RM) -rf .Dependencies */.Dependencies *.objects *~ @TEMPLATE_DIR@
 
