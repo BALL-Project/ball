@@ -1,4 +1,4 @@
-$Id: README,v 1.3 2003/02/18 15:53:44 anker Exp $
+$Id: README,v 1.4 2003/03/05 16:17:28 anker Exp $
 
 BALL Utilities
 ==============
@@ -10,6 +10,10 @@ add_hydrogens:
 
 	Add missing hydrogens to PDB files and minimizes them while fixing all
 	other atoms.
+
+assign_typenames_from_rules:
+
+	Assign typenames from rule files.
 
 dcd2dcd:
 
@@ -31,3 +35,8 @@ pdb2amber_naming:
 	which will not be resolved by this program. Instead a standard case will
 	be assumed (like CYX for CYS residues which built a sulphur bridge).
 
+reconstruct_fragment:
+
+  Reconstrucst degraded residues from fragment database information. If tou
+	happen to have a PDB file which lacks some atoms, use this program to fix
+	it.

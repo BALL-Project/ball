@@ -3,8 +3,10 @@
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/selector.h>
 #include <BALL/FORMAT/PDBFile.h>
+#include <BALL/FORMAT/HINFile.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/MOLMEC/MINIMIZATION/conjugateGradient.h>
+#include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/STRUCTURE/fragmentDB.h>
 #include <BALL/STRUCTURE/residueChecker.h>
 
@@ -38,6 +40,12 @@ int main(int argc, char** argv)
 	system.apply(db.normalize_names);
 	Log.info() << " done." << endl;
 
+	// DEBUG
+	HINFile debug_file("debug.hin", ios::out);
+	debug_file << system;
+	debug_file.close();
+	// /DEBUG
+
 	Log.info() << "Applying ResidueChecker..." << endl << endl;
 	ResidueChecker check;
 	system.apply(check);
@@ -53,6 +61,10 @@ int main(int argc, char** argv)
 	Log.info() << "Starting minimizer: " << endl << endl;
 	ConjugateGradientMinimizer cgm(amber_ff);
 	cgm.minimize();
+	// SteepestDescentMinimizer sdm(amber_ff);
+	// sdm.minimize(2);
+	// Log.info() << "Second start... " << endl;
+	// sdm.minimize();
 
 	Log.info() << "Writing " << argv[2] << "..." << endl;
 	PDBFile outfile(argv[2], File::OUT);
