@@ -307,23 +307,28 @@ void DownloadPDBFile::displayHTML(const QString& url)
 			setStatusbarText(String("Failed to download file ") + filename.latin1() + ". ErrorCode " + String(tcp.getStatusCode()), true);
 			return;
 		}
+		Size size = tcp.getReceivedBytes();
 #else
 		thread_->setFilename("");
 		threadedDownload_(filename.ascii());
 		if (aborted_) return;
 
 		std::stringstream& search_result = thread_->getStream();
+		Size size = thread_->getTCPTransfer().getReceivedBytes();
 #endif
+
+		if (size == 0)
+		{
+			setStatusbarText(String("URL ") + filename.ascii() + " does not exist.", true);
+			return;
+		}
 
 		setStatusbarText("Please wait, while loading images...", true);
 
- 		if (qb_ == 0) qb_ = new QTextBrowser();
-
-		String result;
-
 		List<String> images;
-
+		String result;
 		char buffer[10000];
+
 		while (!search_result.eof())
 		{
 			search_result.getline(buffer, 10000);
@@ -365,6 +370,8 @@ void DownloadPDBFile::displayHTML(const QString& url)
 				}
 			}
 		}
+
+ 		if (qb_ == 0) qb_ = new QTextBrowser();
 
 		QImage empty;
 		List<String>::Iterator it = images.begin();

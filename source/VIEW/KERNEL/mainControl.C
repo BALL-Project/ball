@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.155 2004/12/13 22:43:26 amoll Exp $
+// $Id: mainControl.C,v 1.156 2004/12/15 16:08:49 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -555,7 +555,7 @@ namespace BALL
 			primitive_manager_.removedComposite(composite);
 
 			Composite* root = 0;
-			if (composite.getRoot() != composite) root = &composite.getRoot();
+			if (composite.isRoot()) root = &composite.getRoot();
 
 			// delete the Composite
 			composite_manager_.remove(composite, to_delete);
