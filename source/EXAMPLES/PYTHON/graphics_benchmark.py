@@ -28,6 +28,8 @@ def runTest(name, model):
 		clearRepresentations()
 	model_result = timer.getClockTime()
 	print name+" "+str(model_result)+" seconds"
+	if model == MODEL_SE_SURFACE:
+		model_result /= 8.0
 	result += model_result
 
 clearRepresentations()
@@ -48,6 +50,6 @@ runTest("SES", 			MODEL_SE_SURFACE)
 
 print "Result: "+str(result)+" seconds"
 result /= nr_runs
-result = 10 / result
+result = 3 / result
 print "Result: "+str(result)+" BALLView stones"
 m.getPrimitiveManager().setMultithreadingMode(1)
