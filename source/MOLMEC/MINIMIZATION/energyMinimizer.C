@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.C,v 1.7 2000/02/12 18:07:15 oliver Exp $
+// $Id: energyMinimizer.C,v 1.8 2000/03/26 12:58:13 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/COMMON/limits.h>
@@ -17,7 +17,7 @@ namespace BALL
 	const char* EnergyMinimizer::Option::NUMBER_OF_ITERATION = "number_of_iteration";
 
   // if the current rms gradient is below this one, we are converged
-  const char *EnergyMinimizer::Option::MAX_GRADIENT = "max_gradient";
+  const char* EnergyMinimizer::Option::MAX_GRADIENT = "max_gradient";
 
 	const char* EnergyMinimizer::Option::MAXIMAL_SHIFT = "MAXIMAL_SHIFT";
 
@@ -101,7 +101,7 @@ namespace BALL
 
 		if (!valid_) 
 		{
-			Log.level(LogStream::ERROR) << " Energy minimizer setup failed! " << endl;
+			Log.error() << " Energy minimizer setup failed! " << endl;
 		}
 	}
 	
@@ -112,7 +112,7 @@ namespace BALL
 
 		if (!valid_) 
 		{
-			Log.level(LogStream::ERROR) << " Energy minimizer setup failed! " << endl;
+			Log.error() << " Energy minimizer setup failed! " << endl;
 		}
 	}
 
@@ -125,6 +125,31 @@ namespace BALL
 	void	EnergyMinimizer::setNumberOfIteration(Size number_of_iteration)
 	{
 		number_of_iteration_ = number_of_iteration;
+	}
+
+	Gradient& EnergyMinimizer::getGradient()
+	{
+		return current_grad_;
+	}
+
+	Gradient& EnergyMinimizer::getInitialGradient()
+	{
+		return initial_grad_;
+	}
+
+	double EnergyMinimizer::getEnergy() const
+	{
+		return current_energy_;
+	}
+
+	double EnergyMinimizer::getInitialEnergy() const
+	{
+		return initial_energy_;
+	}
+
+	Gradient& EnergyMinimizer::getDirection()
+	{
+		return direction_;
 	}
 
 	// Get the number of the current iteration
@@ -254,7 +279,7 @@ BAUSTELLE
 	{
 
     // Default: no snapshot manager available 
-    snapShot_ptr_ = 0;
+    snapshot_ptr_ = 0;
 
 		// store the specified force field
 		force_field_ = &force_field; 
@@ -312,7 +337,7 @@ BAUSTELLE
 		valid_ = specificSetup();
 		if (!valid_) 
 		{
-			Log.level(LogStream::ERROR) << "Energy minimizer specificSetup failed!" << endl;
+			Log.error() << "Energy minimizer specificSetup failed!" << endl;
 			return valid_;
 		}
 
@@ -321,29 +346,34 @@ BAUSTELLE
 	}
 
   // Setup with a force field and a snapshot manager 
-  bool EnergyMinimizer::setup(ForceField& force_field, SnapShotManager *ssm)
-    {
+  bool EnergyMinimizer::setup
+		(ForceField& force_field, SnapShotManager* ssm)
+	{
     bool result = setup(force_field);
 
     // set a pointer to the indicated snapshot manager
     if(ssm->isValid())
-      snapShot_ptr_ = ssm; 
+		{
+      snapshot_ptr_ = ssm; 
+		}
 
     return result; 
-    }
+	}
 
   // Setup with a force field and a snapshot manager and options 
-  bool EnergyMinimizer::setup(ForceField& force_field, SnapShotManager *ssm,
-                            const Options &new_options)
-    {
+  bool EnergyMinimizer::setup
+		(ForceField& force_field, SnapShotManager* ssm, const Options& new_options)
+	{
     bool result = setup(force_field,new_options);
 
     // set a pointer to the indicated snapshot manager
     if(ssm->isValid())
-      snapShot_ptr_ = ssm; 
+		{
+			snapshot_ptr_ = ssm; 
+		}
 
     return result; 
-    }
+	}
 
   // Setup with a force field and a set of options
   bool EnergyMinimizer::setup(ForceField& force_field, const Options& new_options)
@@ -356,7 +386,6 @@ BAUSTELLE
 	// virtual function for the specific setup of derived classes
 	bool EnergyMinimizer::specificSetup()
 	{
-        cout << "EnergyMinimizer::specificSetup wird ausgefuehrt" << endl; 
 		return true;
 	}
 
@@ -366,8 +395,112 @@ BAUSTELLE
 
 	bool EnergyMinimizer::minimize(Size /* steps */, bool /* restart */)
 	{
-		return true;
+		throw Exception::NotImplemented(__FILE__, __LINE__);
 	}
-	
+
+	// udpate the search direction
+	void EnergyMinimizer::updateDirection()
+	{
+		throw Exception::NotImplemented(__FILE__, __LINE__);
+	}
+
+	// determine the new step along direction_
+	bool EnergyMinimizer::findStep()
+	{
+		throw Exception::NotImplemented(__FILE__, __LINE__);
+	}
+
+	// calculate a new energy
+	double EnergyMinimizer::updateEnergy()
+	{
+		if (force_field_ != 0)
+		{
+			// recalculate the energy and ...
+			current_energy_ = force_field_->updateEnergy();
+
+			// ...increase the update counter
+			energy_update_counter_++;
+		}
+		//Log.info() << "[E=" << current_energy_ <<"]";
+
+		// return the current energy
+		return current_energy_;
+	}
+
+	// calculate new forces
+	void EnergyMinimizer::updateForces()
+	{
+		//Log.info() << "[F]";
+		if (force_field_ != 0)
+		{
+			// recalculate the forces and the energy and ...
+			force_field_->updateForces();
+
+			// assign the current gradient
+			current_grad_.set(force_field_->getAtoms());
+		}
+	}
+
+	bool EnergyMinimizer::isConverged() const
+	{
+		return ((current_grad_.rms <= max_gradient_ 
+						 || (same_energy_counter_ >= max_same_energy_)
+						 || (fabs(old_energy_ - initial_energy_) < energy_difference_bound_)));
+	}
+
+	void EnergyMinimizer::printEnergy() const
+	{
+		Log.info() << "iteration " << number_of_iteration_
+							 << "  RMS gradient " << initial_grad_.rms
+							 << " kJ/(mol A)      total energy " << initial_energy_ << " kJ/mol"
+							 << endl;
+	}
+
+	void EnergyMinimizer::takeSnapShot() const
+	{
+		// if a snapshot manager is defined, use it!
+		if (snapshot_ptr_ != 0)
+		{
+			snapshot_ptr_->takeSnapShot();
+		}
+	}
+
+	void EnergyMinimizer::finishIteration()
+	{
+		// perform a force field update in regular intervals
+		// (to update the pair list)
+		if (number_of_iteration_ % force_field_->getUpdateFrequency() == 0)
+		{
+			force_field_->update();
+		}
+
+		// take a snapshot of the system every snapshot_frequency_ iterations
+		if ((snapshot_ptr_ != 0) && (number_of_iteration_ % snapshot_frequency_ == 0))
+		{
+			takeSnapShot();
+		}
+
+		// print the energy every energy_output_frequency_ iterations
+		if (number_of_iteration_ % energy_output_frequency_ == 0)
+		{
+			printEnergy();
+		}
+
+		// check if there is much difference between the previous solution and the
+		// new one
+		if (fabs(initial_energy_ - old_energy_) < energy_difference_bound_)
+		{
+			// count if there is the same energy between last iteration and
+			// this iteration
+			same_energy_counter_++;
+		}
+		else
+		{
+			same_energy_counter_ = 0;
+		}
+
+		// increment the iteration counter
+		number_of_iteration_++;
+	}
 
 } // namespace Ball

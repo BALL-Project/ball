@@ -1,255 +1,307 @@
-// $Id: lineSearch.C,v 1.2 2000/01/10 15:51:13 oliver Exp $
+// $Id: lineSearch.C,v 1.3 2000/03/26 12:58:13 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
+#include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
+#include <BALL/MOLMEC/COMMON/atomVector.h>
+#include <BALL/MOLMEC/COMMON/forceField.h>
 #include <BALL/COMMON/limits.h>
+
+// parameter alpha for 'sufficient energy decrease'
+#define LINESEARCH__DEFAULT_ALPHA 0.0001
+
+// parameter beta for 'sufficient gradient reduction'
+#define LINESEARCH__DEFAULT_BETA  0.95
+
+// maximum number of interpolation steps for a line search
+#define LINESEARCH__DEFAULT_MAX_STEPS			10
 
 namespace BALL 
 {
-
-
-	float LineSearchMinimizer::Default::ALPHA = 1e-4;
-	float LineSearchMinimizer::Default::BETA = 0.9;
-	Size	LineSearchMinimizer::Default::MAX_STEPS = 6;
-	float LineSearchMinimizer::Default::MAX_GRADIENT = 0.001;
-
-	const char* LineSearchMinimizer::Option::ALPHA = "alpha";
-	const char* LineSearchMinimizer::Option::BETA = "beta";
-	const char* LineSearchMinimizer::Option::MAX_STEPS = "max_steps";
-	const char*	LineSearchMinimizer::Option::MAX_GRADIENT = "max_gradient";
-
 	// default constructor
-	LineSearchMinimizer::LineSearchMinimizer()
-		:	EnergyMinimizer(),
-			direction_(0)
+	LineSearch::LineSearch()
+		:	alpha_(LINESEARCH__DEFAULT_ALPHA),
+			beta_(LINESEARCH__DEFAULT_BETA),
+			max_steps_(LINESEARCH__DEFAULT_MAX_STEPS),
+			minimizer_(0)
 	{
 	}
 
 
 	// copy constructor 
-	LineSearchMinimizer::LineSearchMinimizer(const LineSearchMinimizer& line_search_minimizer, bool /* deep */)
-		:	EnergyMinimizer(line_search_minimizer)
+	LineSearch::LineSearch(const LineSearch& line_search, bool /* deep */)
+		:	alpha_(line_search.alpha_),
+			beta_(line_search.beta_),
+			max_steps_(line_search.max_steps_),
+			minimizer_(line_search.minimizer_)
 	{
-		direction_ = line_search_minimizer.direction_;
 	}
 
 	// assignment operator
-	LineSearchMinimizer& LineSearchMinimizer::operator = (const LineSearchMinimizer& line_search_minimizer)
+	LineSearch& LineSearch::operator = (const LineSearch& line_search)
 	{
-		EnergyMinimizer::operator = (line_search_minimizer);
-		direction_ = line_search_minimizer.direction_;
+		alpha_ = line_search.alpha_;
+		beta_ = line_search.beta_;
+		max_steps_ = line_search.max_steps_;
+		minimizer_ = line_search.minimizer_;
+
 		return *this;
 	}
 
-	// Constructor initialized with a force field
-	LineSearchMinimizer::LineSearchMinimizer(ForceField& force_field)
-		:	EnergyMinimizer()
+	// detailed constructor
+	LineSearch::LineSearch(const EnergyMinimizer& minimizer)
+		:	alpha_(LINESEARCH__DEFAULT_ALPHA),
+			beta_(LINESEARCH__DEFAULT_BETA),
+			max_steps_(LINESEARCH__DEFAULT_MAX_STEPS),
+			minimizer_(const_cast<EnergyMinimizer*>(&minimizer))
 	{
-		direction_ = 0;
-    valid_ = setup(force_field);
-
-    if (!valid_)
-    {
-      Log.level(LogStream::ERROR) << " line search minimizer setup failed! " << endl;
-		}
-	}
-	
-	// Constructor initialized with a force field and a set of options
-	LineSearchMinimizer::LineSearchMinimizer(ForceField& force_field, const Options& new_options)
-		:	EnergyMinimizer()
-	{
-		direction_ = 0;
-    valid_ = setup(force_field, new_options);
-
-    if (!valid_)
-    {
-      Log.level(LogStream::ERROR) << " Line search minimizer setup failed! " << endl;
-		}
 	}
 
 	// destructor
-	LineSearchMinimizer::~LineSearchMinimizer()
+	LineSearch::~LineSearch()
 	{
 	}
 		
-	// virtual function for the specific setup of derived classes
-	bool LineSearchMinimizer::specificSetup()
-	{
-		alpha_ = options.setDefaultReal(LineSearchMinimizer::Option::ALPHA, LineSearchMinimizer::Default::ALPHA);
-		beta_ = options.setDefaultReal(LineSearchMinimizer::Option::BETA, LineSearchMinimizer::Default::BETA);
-		max_steps_ = (Size)options.setDefaultInteger(LineSearchMinimizer::Option::MAX_STEPS, (long)LineSearchMinimizer::Default::MAX_STEPS);
-		max_gradient_ = options.setDefaultReal(LineSearchMinimizer::Option::MAX_GRADIENT, LineSearchMinimizer::Default::MAX_GRADIENT);
-
-		return true;
-	}
-
 	// Set the parameter alpha_
-	void	LineSearchMinimizer::setAlpha(float alpha)
+	void LineSearch::setAlpha(double alpha)
 	{
 		alpha_ = alpha;
-		options.setReal(LineSearchMinimizer::Option::ALPHA, alpha);
 	}
 
 	// Get the parameter alpha_
-	float	LineSearchMinimizer::getAlpha() const
+	double LineSearch::getAlpha() const
 	{
 		return alpha_;
 	}
 
 	// Set the parameter beta_
-	void	LineSearchMinimizer::setBeta(float beta)
+	void LineSearch::setBeta(double beta)
 	{
 		beta_ = beta;
-		options.setReal(LineSearchMinimizer::Option::BETA, beta);
 	}
 
 	// Get the parameter beta_
-	float	LineSearchMinimizer::getBeta() const
+	double LineSearch::getBeta() const
 	{
 		return beta_;
 	}
 
 	// Set the parameter max_steps_
-	void LineSearchMinimizer::setMaxSteps(Size max_steps)
+	void LineSearch::setMaxSteps(Size max_steps)
 	{
 		max_steps_	= max_steps;
-		options.setInteger(LineSearchMinimizer::Option::MAX_STEPS, (long)max_steps);
 	}
 
 	//	Get the parameter max_steps_
-	Size	LineSearchMinimizer::getMaxSteps() const
+	Size LineSearch::getMaxSteps() const
 	{
 		return max_steps_;
 	}
 
-	// Set the parameter max_gradient_
-	void	LineSearchMinimizer::setMaxGradient(float max_gradient)
+	void LineSearch::setMinimizer(const EnergyMinimizer& minimizer)
 	{
-		max_gradient_	= max_gradient;
-		options.setReal(LineSearchMinimizer::Option::MAX_GRADIENT, max_gradient);
-	}
-
-	//	Get the parameter max_steps_
-	float	LineSearchMinimizer::getMaxGradient() const
-	{
-		return max_gradient_;
-	}
-
-	void LineSearchMinimizer::setDirection(const vector<Vector3>& direction)
-	{
-		direction_ = const_cast<vector<Vector3>*>(&direction);
+		minimizer_ = const_cast<EnergyMinimizer*>(&minimizer);
 	}
 
 	/*	The minimizer optimizes the energy of the system 
 			using a modified line search algorithm.
 	*/
-	bool LineSearchMinimizer::minimize(Size /* max_steps */, bool /* restart */)
+	bool LineSearch::minimize(double& lambda, double step)
 	{
+		//Log.info() << "LS:minimize(" << lambda << ", " << step << ")" << endl;
 		// check whether a direction and a force field are defined
-		if (!valid_)
+		if ((minimizer_ == 0) || (minimizer_->getForceField() == 0))
 		{
 			return false;
 		}
 
-		// calculate the initial energy and forces
-		float energy1 = force_field_->updateEnergy();
-		force_field_->updateForces();
+		// define some aliases for convenience
+		AtomVector&				atoms(const_cast<AtomVector&>(minimizer_->getForceField()->getAtoms()));
+		Gradient&					direction(minimizer_->getDirection());
+		EnergyMinimizer&	minimizer(*minimizer_);
+		Gradient&					gradient(minimizer.getGradient());
+		Gradient&					initial_gradient(minimizer.getInitialGradient());
 
-		// calculate the initial gradient
-		Size number_of_atoms = direction_->size();
-		Size i;
-		float gradient1 = 0;
-		for (i = 0; i < number_of_atoms; ++i)	
+
+		// if we do not have a valid gradient for the first step,
+		// calculate it
+		if (!initial_gradient.isValid())
 		{
-			gradient1 -= force_field_->getAtoms()[i]->getPosition() * (*direction_)[i];
-		}
-		gradient1 *= Constants::AVOGADRO / 1e13;
+			// reset the atoms to the start position (lambda = 0)
+			atoms.resetPositions();
 
-		// prerequisite: g(k)^T p(k) < 0 
-		// (gradient is negative in the given direction)
-		if (gradient1 >= 0.0)
+			// calculate the initial energy and forces
+			minimizer_->updateForces();
+			minimizer_->updateEnergy();
+			initial_gradient = gradient;
+			
+			// force a recalculation of the current gradient
+			// as well since updateForces overwrote everything!
+			gradient.invalidate();
+		}
+		initial_energy_ = minimizer_->getInitialEnergy();
+		initial_dir_grad_ = (initial_gradient * direction) * direction.inv_norm;
+
+		// remember the best lambda and the best energy
+		double best_lambda = 0.0;
+		double best_energy = initial_energy_;
+
+		// if we do not have a valid current gradient for the first step,
+		// calculate it
+		if (!gradient.isValid())
 		{
-			return false;
+			// recalculate the gradient and energy for lambda = 1.0
+			atoms.moveTo(direction, step);
+			minimizer_->updateEnergy();
+			minimizer_->updateForces();
 		}
-
-		// initial guess: lambda = 1.0
-		float lambda2 = 1.0;
-
-		// displace all atoms along p(k) (direction_) for initial lambda
-		for (i = 0; i < number_of_atoms; i++)
-		{
-			force_field_->getAtoms()[i]->getPosition() += (*direction_)[i] * lambda2;
-		}
-
-		// calculate energy and forces for lambda = 1.0
-		float energy2 = force_field_->updateEnergy();
-		force_field_->updateForces();
-
-		// calculate the norm of the current gradient
-		float gradient2 = 0;
-		for (i = 0; i < number_of_atoms; ++i)	
-		{
-			gradient2 += - force_field_->getAtoms()[i]->getPosition() * (*direction_)[i];
-		}
-		gradient2 *= Constants::AVOGADRO / 1e13;
-
-		// remember the current ''position`` along the line
-		float lambda = 1.0;
+		current_energy_ = minimizer_->getEnergy();
+		current_dir_grad_ = (gradient * direction) * direction.inv_norm;
 		
+		lambda_ = step;
+		step_ = step; // this is required for criterion()
 
-		// now iterate until the new lambda fulfils the line search criterions
-		// (sufficient decrease + sufficient directional derivative reduction)
-		bool done = false;
-		while (!done) 
-		{		
-			// calculate cubic interpolation 
-			float d_lambda = lambda2 - 0.0;
-			float a = (- 2.0 * (energy2 - energy1) + (gradient1 + gradient2) * d_lambda) 
-								/ (d_lambda * d_lambda * d_lambda);
-			float b = (3.0 * (energy2 - energy1) - (2.0 * gradient1 + gradient2) * d_lambda)
-								/ (d_lambda * d_lambda);
-			float c = gradient1;
+		Size iteration = 0;
+		bool result = false;
+		while (!result && iteration < max_steps_)
+		{
+			// remember the current lambda
+			double last_lambda = lambda_;
 
-			// calculate new lambda
-			if ((a != 0.0) && ((b * b - 3.0 * a * c) >= 0.0))
-			{         // cubic interpolation
-				lambda2 = (-b + sqrt(b * b - 3.0 * a * c)) / (3.0 * a);
-			} else {  // quadratic interpolation 
-				lambda2 = - c / (2.0 * b);
-			}
-
-			// translate to the new position and remember the position in lambda
-			d_lambda = lambda2 - lambda;
-			lambda = lambda2;
-			for (i = 0; i < number_of_atoms; i++)
-			{
-				force_field_->getAtoms()[i]->getPosition() += (*direction_)[i] * d_lambda;
-			}
-
-			// update forces and energy
-			float energy2 = force_field_->updateEnergy();
-			force_field_->updateForces();
-
-			// calculate the inner product of the current gradient and the direction
-			float gradient2 = 0;
-			for (i = 0; i < number_of_atoms; ++i)	
-			{
-				gradient2 += - force_field_->getAtoms()[i]->getPosition() * (*direction_)[i];
-			}
-			gradient2 *= Constants::AVOGADRO / 1e13;
-
+			// interpolate
+			lambda_ = step * interpolate
+												(0.0, lambda_ / step, 
+												 initial_energy_, current_energy_,	
+												 initial_dir_grad_ * direction.norm * step, 
+												 current_dir_grad_ * direction.norm * step);
 
 			// check whether the criterions are fulfilled
+			atoms.moveTo(direction, lambda_);
 
-			// first: sufficient decrease: 
-			//   f(x_{k+1}) <= f(x_k) + alpha * lambda * <g(x_k), p_k>
-			done = (energy2 <= (energy1 + alpha_ * lambda * gradient1));
-			done &= (fabs(gradient2) <= beta_ * fabs(gradient1));
+			// update energy and gradient
+			current_energy_ = minimizer.updateEnergy();
+			minimizer.updateForces();
+			current_dir_grad_ = (gradient * direction) * direction.inv_norm;
 
-			// if the criterions are not fulfilled, the current lambda
-			// will be used to recalculate a new minimum
+			// remember the best lambda found
+			// (just in case)
+			if (current_energy_ < best_energy)
+			{
+				best_lambda = lambda_;
+				best_energy = current_energy_;
+			}
+			
+			// increment thenumber of iteration
+			iteration++;
+
+			if ((lambda_ / step_) < 1e-8)
+			{
+				lambda_ = 0.0;
+				result = false;
+				break;
+			}
+
+			if ((lambda_ == 0.0) || fabs((last_lambda - lambda_) / lambda_) < 1e-3)
+			{
+				// Log.info() << " === ";
+				result = criterion();
+				break;
+			}
+
+			// check for convergence
+			result = criterion();
+		}		
+
+		if (result)
+		{
+			// return the current lambda if we found a true solution
+			lambda = lambda_ / step;
+		} 
+		else
+		{
+			// otherwise return the best one we found
+			lambda = best_lambda / step;
 		}
-		
-		return true;
+
+		return result;
+	}
+
+	double LineSearch::interpolate
+		(double lambda_0, double lambda_1, 
+		 double energy_0, double energy_1, 
+		 double grad_0, double grad_1) const
+	{
+		//Log.info() << "LS:interpolate(" 
+		//						<< lambda_0 << ", " << lambda_1 << ", "
+		//						<< energy_0 << ", " << energy_1 << ", "
+		//						<< grad_0 << ", " << grad_1 << ")";
+    // local variables
+    double tmp1, a, b, tmp2;
+    double lambda_diff, lambda_diff_2;
+    double lambda_diff_3;
+    double result;
+
+    // Do a cubic interpolation based on (0,energy_0), (1,energy__1), (0,grad_0), (1,grad_1)
+    // energy_0 : energy at left point
+    // energy_1 : energy at right point
+    // grad_0 : direction gradient at left point
+    // grad_1 : direction gradient at right point
+    lambda_diff = lambda_1 - lambda_0;
+
+    if (lambda_diff == 0)
+    {
+			//Log.info() << " = " << lambda_0 << endl;
+      // the intervall is of length 0
+      return lambda_0;
+		}
+
+    lambda_diff_2 = lambda_diff * lambda_diff;
+    lambda_diff_3 = lambda_diff_2 * lambda_diff;
+
+
+    tmp1 = energy_1 - energy_0;
+
+    a = 3.0 * (-2.0 * tmp1 + (grad_0 + grad_1) * lambda_diff) / lambda_diff_3;
+    b = (3.0 * tmp1 - (2.0 * grad_0 + grad_1) * lambda_diff) / lambda_diff_2;
+
+    tmp2 = b * b - a * grad_0;
+
+    if ((a != 0.0) && (tmp2 > 0.0))
+    {
+      result = lambda_0 + (-b + sqrt(tmp2)) / a;
+		}
+    else
+    {
+      // just a quadratic interpolation
+      // Note: b = 0 is then not possible by construction as this would be a linear
+      // interpolation
+      result = lambda_0 - grad_0 / (2 * b);
+			//Log.info() << "[quadr.] ";
+		}
+
+		//Log.info() << " = " << result << endl;
+    return result;
 	}
 	
+	bool LineSearch::criterion() const
+	{	
+		// Armijo & Goldstein criterion:
+		//   
+		// twofold criterion:
+		// - sufficient decrease of energy
+		//    E(i+1) <= E(i) + alpha * lambda * <g(i), dir> 
+		//
+		// - sufficient gradient reduction
+		//    |<g(i+1), dir>| <= beta <g(i), dir>
+		//
+		// where g(i) and g(i+1) are the initial and the current gradient
+		// dir is the (normalized) search direction
+		// E(i+1) is the current and E(i) the initial energy (lambda = 0)
+		// alpha and beta are two parameters (usually 0.9 and 1e-4)
+		// 
+		//Log.info() << " C1: " << current_energy_ - initial_energy_ << "/" << alpha_ * lambda_ * current_dir_grad_ 
+		//					 << "  C2: " << fabs(current_dir_grad_) << "/" << beta_ * fabs(initial_dir_grad_) << " --- ";
+		return ((current_energy_ < (initial_energy_ + alpha_ * lambda_ * current_dir_grad_))
+						&& (fabs(current_dir_grad_) < beta_ * fabs(initial_dir_grad_)));
+	}
+
 } // namespace Ball
