@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.h,v 1.21 2003/03/21 14:34:55 anhi Exp $ 
+// $Id: conjugateGradient.h,v 1.22 2003/03/21 17:20:36 anhi Exp $ 
 
 #ifndef BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
 #define BALL_MOLMEC_MINIMIZATION_CONJUGATEGRADIENT_H 
@@ -179,6 +179,15 @@ namespace BALL
     /** Get the current value of option step_length_
     */
     double getStepLength() const; 
+
+		/** Set explicitly the criterion used for updateDirection. If the
+		  	method is not recognized, this function fails.
+		*/
+		bool setUpdateMethod(const String &method);
+
+		/** Returns the current method for updateDirection.
+		 */
+		UpdateMethod getUpdateMethod() const;
 
 		/**	Calculate the next step.
 				This method calculates direction and step length for the

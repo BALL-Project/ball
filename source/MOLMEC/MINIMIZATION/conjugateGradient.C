@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: conjugateGradient.C,v 1.24 2003/03/21 15:39:03 anhi Exp $
+// $Id: conjugateGradient.C,v 1.25 2003/03/21 17:20:37 anhi Exp $
 //
 // Minimize the potential energy of a system using a nonlinear conjugate 
 // gradient method with  line search
@@ -205,6 +205,35 @@ namespace BALL
   double ConjugateGradientMinimizer::getStepLength() const 
 	{
     return step_; 
+	}
+
+	bool ConjugateGradientMinimizer::setUpdateMethod(const String& method)
+	{
+		if (method == "SHANNO")
+		{
+			method_ = SHANNO;
+		
+			return true;
+		}
+		if (method == "POLAK_RIBIERE")
+		{
+			method_ = POLAK_RIBIERE;
+		
+			return true;
+		}
+		if (method == "FLETCHER_REEVES")
+		{
+			method_ = FLETCHER_REEVES;
+
+			return true;
+		}
+
+		return false;
+	}
+
+	ConjugateGradientMinimizer::UpdateMethod ConjugateGradientMinimizer::getUpdateMethod() const
+	{
+		return method_;
 	}
 
   // This method determines the new search direction. Along this
