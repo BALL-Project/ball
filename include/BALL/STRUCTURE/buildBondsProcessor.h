@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: buildBondsProcessor.h,v 1.7 2005/03/08 17:19:15 bertsch Exp $
+// $Id: buildBondsProcessor.h,v 1.8 2005/03/14 16:20:59 amoll Exp $
 //
 
 #ifndef BALL_STRUCTURE_BUILDBONDSPROCESSOR_H
@@ -119,8 +119,6 @@ namespace BALL
 			/**	@name	Processor-related methods 
 			*/
 			//@{
-			/// processor method which is called after the operator () call
-			virtual bool finish();
 
 			/// processor method which is called before the operator () call
 			virtual bool start();
