@@ -1,4 +1,4 @@
-// $Id: amberBend.C,v 1.9 2000/03/26 12:52:24 oliver Exp $
+// $Id: amberBend.C,v 1.10 2000/04/25 14:42:01 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberBend.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -105,7 +105,9 @@ namespace BALL
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a1) << "-"
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a2) << "-"
 								<< force_field_->getParameters().getAtomTypes().getTypeName(atom_type_a3) << endl;
-						} else {
+						} 
+						else 
+						{
 							// store the bend parameters otherwise
 							bend_.push_back(this_bend);
 						}
@@ -228,7 +230,9 @@ namespace BALL
 				if ((length = cross.getLength()) != 0) 
 				{
 					cross *= (1/length);
-				} else {
+				} 
+				else 
+				{
 					continue;
 				}
 
@@ -243,7 +247,9 @@ namespace BALL
 					bend_[i].atom2->getForce() += n1;
 					bend_[i].atom2->getForce() -= n2;
 					bend_[i].atom3->getForce() += n2;
-				} else {
+				} 
+				else 
+				{
 					if (bend_[i].atom1->isSelected()) 
 					{
 						bend_[i].atom1->getForce() -= n1;
