@@ -1,4 +1,4 @@
-// $Id: hashMap.h,v 1.27.4.5 2002/11/26 20:39:20 oliver Exp $ 
+// $Id: hashMap.h,v 1.27.4.6 2002/11/29 21:39:48 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHMAP_H
 #define BALL_DATATYPE_HASHMAP_H
@@ -48,7 +48,237 @@ namespace BALL
 	{
 		public:
 
-		class IteratorTraits_;
+		/**
+		*/
+		typedef ::std::pair<Key, T> ValueType;
+			
+		/**
+		*/
+		typedef Key KeyType;
+
+		/**
+		*/
+		typedef ::std::pair<Key, T>* PointerType;
+			
+
+		// --- EXTERNAL ITERATORS
+		struct Node
+		{
+			Node*			next;
+			ValueType	value;
+
+			Node(const ValueType& my_value, const Node* my_next)
+				throw()
+				: next(const_cast<Node*>(my_next)),
+					value(const_cast<ValueType&>(my_value))
+			{
+			}
+		};
+
+		typedef Node* IteratorPosition;
+
+		class IteratorTraits_
+		{
+			friend class HashMap<Key, T>;
+			public:
+
+			
+			IteratorTraits_()
+				throw()
+				:	bound_(0),
+					position_(0),
+					bucket_(0)
+			{
+			}
+			
+			
+			IteratorTraits_(const HashMap& hash_map)
+				throw()
+				:	bound_(const_cast<HashMap*>(&hash_map)),
+					position_(0),
+					bucket_(0)
+			{
+			}
+			
+			
+			IteratorTraits_(const IteratorTraits_& traits)
+				throw()
+				:	bound_(traits.bound_),
+					position_(traits.position_),
+					bucket_(traits.bucket_)
+			{
+			}
+			
+			
+			const IteratorTraits_& operator = (const IteratorTraits_& traits)
+				throw()
+			{
+				bound_ = traits.bound_;
+				position_ = traits.position_;
+				bucket_ = traits.bucket_;
+		
+				return *this;
+			}
+
+			
+			HashMap* getContainer()
+				throw()
+			{
+				return bound_;
+			}
+			
+			
+			const HashMap* getContainer() const
+				throw()
+			{
+				return bound_;
+			}
+			
+			
+			bool isSingular() const
+				throw()
+			{
+				return (bound_ == 0);
+			}
+			
+			
+			IteratorPosition& getPosition()
+				throw()
+			{
+				return position_;
+			}
+
+			
+			const IteratorPosition& getPosition() const
+				throw()
+			{
+				return position_;
+			}
+
+			
+			bool operator == (const IteratorTraits_& traits) const
+				throw()
+			{
+				return (position_ == traits.position_);
+			}
+
+			
+			bool operator != (const IteratorTraits_& traits) const
+				throw()
+			{
+				return (position_ != traits.position_);
+			}
+			
+			
+			bool isValid() const
+				throw()
+			{
+				return ((bound_ != 0) && (position_ != 0) && (bucket_ < (Position)bound_->bucket_.size()));
+			}
+			
+			
+			void invalidate()
+				throw()
+			{
+				bound_ = 0;
+				position_ = 0;
+				bucket_ = INVALID_INDEX;
+			}
+			
+			
+			void toBegin()
+				throw()
+			{
+				for (bucket_ = 0;  bucket_ < (Position)bound_->bucket_.size();  ++bucket_)
+				{
+					position_ = bound_->bucket_[bucket_];
+
+					if (position_ != 0)
+					{
+						return;
+					}
+				}
+			}
+
+			
+			bool isBegin() const
+				throw()
+			{
+				for (Position bucket = 0; bucket < (Position)bound_->bucket_.size();  ++bucket)
+				{
+					if (bound_->bucket_[bucket_] != 0)
+					{
+						if (position_ == bound_->bucket_[bucket_])
+						{
+							return true;
+						} 
+						else 
+						{
+							return false;
+						}
+					}
+				}
+
+				return false;
+			}
+
+			
+			void toEnd()
+				throw()
+			{
+				position_ = 0;
+			}
+			
+			
+			bool isEnd() const
+				throw()
+			{
+				return (position_ == 0);
+			}
+			
+			
+			ValueType& getData()
+				throw()
+			{
+				return position_->value;
+			}
+
+			
+			const ValueType& getData() const
+				throw()
+			{
+				return position_->value;
+			}
+
+			
+			void forward()
+				throw()
+			{
+				position_ = position_->next;
+
+				if (position_ != 0)
+				{
+					return;
+				}
+
+				for (++bucket_;  bucket_ < (Position)bound_->bucket_.size();  ++bucket_)
+				{
+					position_ = bound_->bucket_[bucket_];
+
+					if (position_ != 0)
+					{
+						return;
+					}
+				}
+			} 
+
+			protected:
+
+			HashMap*						bound_;
+			IteratorPosition		position_;
+			Position						bucket_;
+		};
+
 
 		/**	@name	 Enums and Constants
 		*/
@@ -83,18 +313,6 @@ namespace BALL
 		*/
 		//@{
 
-		/**
-		*/
-		typedef ::std::pair<Key, T> ValueType;
-			
-		/**
-		*/
-		typedef Key KeyType;
-
-		/**
-		*/
-		typedef ::std::pair<Key, T>* PointerType;
-			
 		/**
 		*/
 		typedef 
@@ -299,223 +517,7 @@ namespace BALL
 
 		//@}
 
-		// --- EXTERNAL ITERATORS
-		struct Node
-		{
-			Node*			next;
-			ValueType	value;
-
-			Node(const ValueType& my_value, const Node* my_next)
-				throw()
-				: next(const_cast<Node*>(my_next)),
-					value(const_cast<ValueType&>(my_value))
-			{
-			}
-		};
-
-		typedef Node* IteratorPosition;
-	
-		class IteratorTraits_
-		{
-			friend class HashMap<Key, T>;
-			public:
-
-			inline
-			IteratorTraits_()
-				throw()
-				:	bound_(0),
-					position_(0),
-					bucket_(0)
-			{
-			}
 			
-			inline
-			IteratorTraits_(const HashMap& hash_map)
-				throw()
-				:	bound_(const_cast<HashMap*>(&hash_map)),
-					position_(0),
-					bucket_(0)
-			{
-			}
-			
-			inline
-			IteratorTraits_(const IteratorTraits_& traits)
-				throw()
-				:	bound_(traits.bound_),
-					position_(traits.position_),
-					bucket_(traits.bucket_)
-			{
-			}
-			
-			inline
-			const IteratorTraits_& operator = (const IteratorTraits_& traits)
-				throw()
-			{
-				bound_ = traits.bound_;
-				position_ = traits.position_;
-				bucket_ = traits.bucket_;
-		
-				return *this;
-			}
-
-			inline
-			HashMap* getContainer()
-				throw()
-			{
-				return bound_;
-			}
-			
-			inline
-			const HashMap* getContainer() const
-				throw()
-			{
-				return bound_;
-			}
-			
-			inline
-			bool isSingular() const
-				throw()
-			{
-				return (bound_ == 0);
-			}
-			
-			inline
-			IteratorPosition& getPosition()
-				throw()
-			{
-				return position_;
-			}
-
-			inline
-			const IteratorPosition& getPosition() const
-				throw()
-			{
-				return position_;
-			}
-
-			inline
-			bool operator == (const IteratorTraits_& traits) const
-				throw()
-			{
-				return (position_ == traits.position_);
-			}
-
-			inline
-			bool operator != (const IteratorTraits_& traits) const
-				throw()
-			{
-				return (position_ != traits.position_);
-			}
-			
-			inline
-			bool isValid() const
-				throw()
-			{
-				return ((bound_ != 0) && (position_ != 0) && (bucket_ < (Position)bound_->bucket_.size()));
-			}
-			
-			inline
-			void invalidate()
-				throw()
-			{
-				bound_ = 0;
-				position_ = 0;
-				bucket_ = INVALID_INDEX;
-			}
-			
-			inline
-			void toBegin()
-				throw()
-			{
-				for (bucket_ = 0;  bucket_ < (Position)bound_->bucket_.size();  ++bucket_)
-				{
-					position_ = bound_->bucket_[bucket_];
-
-					if (position_ != 0)
-					{
-						return;
-					}
-				}
-			}
-
-			inline
-			bool isBegin() const
-				throw()
-			{
-				for (Position bucket = 0; bucket < (Position)bound_->bucket_.size();  ++bucket)
-				{
-					if (bound_->bucket_[bucket_] != 0)
-					{
-						if (position_ == bound_->bucket_[bucket_])
-						{
-							return true;
-						} 
-						else 
-						{
-							return false;
-						}
-					}
-				}
-
-				return false;
-			}
-
-			inline
-			void toEnd()
-				throw()
-			{
-				position_ = 0;
-			}
-			
-			inline
-			bool isEnd() const
-				throw()
-			{
-				return (position_ == 0);
-			}
-			
-			inline
-			ValueType& getData()
-				throw()
-			{
-				return position_->value;
-			}
-
-			inline
-			const ValueType& getData() const
-				throw()
-			{
-				return position_->value;
-			}
-
-			inline
-			void forward()
-				throw()
-			{
-				position_ = position_->next;
-
-				if (position_ != 0)
-				{
-					return;
-				}
-
-				for (++bucket_;  bucket_ < (Position)bound_->bucket_.size();  ++bucket_)
-				{
-					position_ = bound_->bucket_[bucket_];
-
-					if (position_ != 0)
-					{
-						return;
-					}
-				}
-			} 
-
-			protected:
-
-			HashMap*						bound_;
-			IteratorPosition		position_;
-			Position						bucket_;
-		};
 
 		friend class IteratorTraits_;
 
