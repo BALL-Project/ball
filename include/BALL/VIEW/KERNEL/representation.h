@@ -1,10 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.11 2003/12/09 14:36:33 amoll Exp $
+// $Id: representation.h,v 1.12 2003/12/09 14:36:56 amoll Exp $
 
-#ifndef  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
-#define  BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
+#ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
+#define  BALL_VIEW_KERNEL_REPRESENTATION_H
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #	include <BALL/CONCEPT/property.h>
@@ -300,4 +300,4 @@ namespace BALL
 	} // namespace VIEW
 } // namespace BALL
 
-#endif // BALL_VIEW_GUI_KERNEL_REPRESENTATION_H
+#endif // BALL_VIEW_KERNEL_REPRESENTATION_H
