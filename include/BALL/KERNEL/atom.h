@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.5 2000/01/10 15:51:01 oliver Exp $
+// $Id: atom.h,v 1.6 2000/01/15 18:54:17 oliver Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -85,8 +85,8 @@ namespace BALL
 			
 			@memo    Atom class (BALL kernel framework)
 			@author  $Author: oliver $
-			@version $Revision: 1.5 $
-			@date    $Date: 2000/01/10 15:51:01 $
+			@version $Revision: 1.6 $
+			@date    $Date: 2000/01/15 18:54:17 $
 	*/
 	class Atom
 		: public Composite,
@@ -824,19 +824,7 @@ namespace BALL
 											 {\tt true} if application has been terminated successfully,
 											 {\tt false} otherwise
 			*/
-			bool apply(UnaryProcessor<Bond>& processor);
-		
-			/** Application of an unary processor on every contained \Ref{Object} instance.
-					Apply the typed unary processor {processor} on all objects contained in {\em *this} atom.
-					
-
-					@param  processor a typed unary processor for \Ref{Object} instances
-					@return {\bf bool} -
-									{\tt true} if application has been terminated successfully,
-									{\tt false} otherwise
-			*/
-			bool apply(UnaryProcessor<Object>& processor);
-		
+			bool applyBonds(UnaryProcessor<Bond>& processor);
 			//@}
 
 			/** @name External iterators */

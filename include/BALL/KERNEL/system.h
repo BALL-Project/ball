@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.4 1999/12/28 18:38:46 oliver Exp $
+// $Id: system.h,v 1.5 2000/01/15 18:54:17 oliver Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -187,30 +187,6 @@ namespace BALL
 		virtual void write(std::ostream& s) const;
 		//@}
 		
-		// --- INTERNAL ITERATORS ---
-		template <typename T>
-		bool apply(UnaryProcessor<T>& processor)
-		{
-			if (processor.start() == false)
-				return false;
-
-			Processor::Result  result;
-			SubcompositeIterator it = beginSubcomposite();
-			for (; it != endSubcomposite(); ++it)
-			{
-				T*  object = dynamic_cast<T*>(&(*it));
-				if (object != 0)
-				{
-					result = processor(*object);
-					if (result <= Processor::BREAK)
-						return (result == Processor::BREAK) ? true : false;
-				}
-			}
-
-			return processor.finish();
-		}
-		
-
 		// --- EXTERNAL ITERATORS ---
 
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Atom)

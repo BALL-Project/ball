@@ -1,4 +1,4 @@
-// $Id: baseFragment.h,v 1.3 1999/12/28 18:38:44 oliver Exp $
+// $Id: baseFragment.h,v 1.4 2000/01/15 18:54:17 oliver Exp $
 
 #ifndef BALL_KERNEL_BASEFRAGMENT_H
 #define BALL_KERNEL_BASEFRAGMENT_H
@@ -265,37 +265,18 @@ namespace BALL
 		//@}
 
 		// --- INTERNAL ITERATION ---
-		template <typename T>
-		bool apply(UnaryProcessor<T>& processor) 
-		{
-			if (processor.start() == false)
-				return false;
+		/**	@name	Internal Iteration
+		*/
+		//@{
+		///	Apply to all bonds inside this BaseFragment
+		bool applyIntraBond(UnaryProcessor<Bond>& processor);
 
-			Processor::Result	result;
-			SubcompositeIterator it = beginSubcomposite();
-			for (; it != endSubcomposite(); ++it)
-			{
-				T*	object = dynamic_cast<T*>(&(*it));
-				if (object != 0)
-				{
-					result = processor(*object);
-					if (result <= Processor::BREAK)
-						return (result == Processor::BREAK) ? true : false;
-				}
-			}
-				
-			return processor.finish();
-		}
-
-
-		///
-		bool applyIntraBond(UnaryProcessor<Bond> &processor);
-
-		///
-		bool applyInterBond(UnaryProcessor<Bond> &processor);
+		/// Apply to all bonds to atoms outside this BaseFragment
+		bool applyInterBond(UnaryProcessor<Bond>& processor);
+		//@}
 
 		// --- EXTERNAL ITERATORS
-
+		
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(Atom)
 		BALL_KERNEL_DEFINE_ITERATOR_CREATORS(BaseFragment)
 
