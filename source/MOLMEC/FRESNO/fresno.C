@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.17 2002/11/22 18:36:32 anker Exp $
+// $Id: fresno.C,v 1.1.2.18 2002/11/23 16:32:21 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -274,6 +274,8 @@ namespace BALL
 		System* system = getSystem();
 		if (system == 0)
 		{
+			Log.error() << "FresnoFF::specificSetup(): "
+				<< "No system assigned, aborting" << endl;
 			return false;
 		}
 
@@ -281,7 +283,8 @@ namespace BALL
 		if (system->countMolecules() != 2)
 		{
 			Log.error() << "FresnoFF::specificSetup(): "
-				<< "Fresno is only defined for systems with 2 molecules" << endl;
+				<< "Fresno is only defined for systems with 2 molecules, aborting" 
+				<< endl;
 			return false;
 		}
 
@@ -375,9 +378,10 @@ namespace BALL
 						{
 							it->second = FresnoFF::HBOND_DONOR;
 							++donor_counter;
-							// DEBUG
-							// Log.info() << it->first->getFullName() << ": DON" << endl;
-							// /DEBUG
+							if (verbosity >= 90)
+							{
+								Log.info() << it->first->getFullName() << ": DON" << endl;
+							}
 						}
 					}
 				}
@@ -387,17 +391,19 @@ namespace BALL
 					{
 						it->second = FresnoFF::HBOND_ACCEPTOR;
 						++acc_counter;
-						// DEBUG
-						// Log.info() << it->first->getFullName() << ": ACC" << endl;
-						// /DEBUG
+						if (verbosity >= 90) 
+						{
+							Log.info() << it->first->getFullName() << ": ACC" << endl;
+						}
 					}
 					else
 					{
 						it->second = FresnoFF::POLAR;
 						++polar_counter;
-						// DEBUG
-						// Log.info() << it->first->getFullName() << ": POL" << endl;
-						// /DEBUG
+						if (verbosity >= 90) 
+						{
+							Log.info() << it->first->getFullName() << ": POL" << endl;
+						}
 					}
 				}
 			}
@@ -410,18 +416,20 @@ namespace BALL
 					{
 						it->second = FresnoFF::HBOND_HYDROGEN;
 						++hyd_counter;
-						// DEBUG
-						// Log.info() << it->first->getFullName() << ": HYD" << endl;
-						// /DEBUG
+						if (verbosity >= 90) 
+						{
+							Log.info() << it->first->getFullName() << ": HYD" << endl;
+						}
 					}
 					connectedTo.setArgument("(N)");
 					if (connectedTo(*atom))
 					{
 						it->second = FresnoFF::HBOND_HYDROGEN;
 						++hyd_counter;
-						// DEBUG
-						// Log.info() << it->first->getFullName() << ": HYD" << endl;
-						// /DEBUG
+						if (verbosity >= 90) 
+						{
+							Log.info() << it->first->getFullName() << ": HYD" << endl;
+						}
 					}
 				}
 				else
@@ -435,18 +443,20 @@ namespace BALL
 							{
 								it->second = FresnoFF::HBOND_ACCEPTOR_DONOR;
 								++acc_don_counter;
-								// DEBUG
-								// Log.info() << it->first->getFullName() << ": DON" << endl;
-								// /DEBUG
+								if (verbosity >= 90)
+								{
+									Log.info() << it->first->getFullName() << ": DON" << endl;
+								}
 							}
 						}
 						else
 						{
 							it->second = FresnoFF::HBOND_ACCEPTOR;
 							++acc_counter;
-							// DEBUG
-							// Log.info() << it->first->getFullName() << ": ACC" << endl;
-							// /DEBUG
+							if (verbosity >= 90)
+							{
+								Log.info() << it->first->getFullName() << ": ACC" << endl;
+							}
 						}
 					}
 					else
@@ -454,9 +464,10 @@ namespace BALL
 						if ((symbol == "Fl") || (symbol == "P"))
 						{
 							it->second = FresnoFF::POLAR;
-							// DEBUG
-							// Log.info() << it->first->getFullName() << ": POL" << endl;
-							// /DEBUG
+							if (verbosity >= 90)
+							{
+								Log.info() << it->first->getFullName() << ": POL" << endl;
+							}
 							++polar_counter;
 						}
 						else
@@ -466,9 +477,10 @@ namespace BALL
 								if (atom->countBonds() == 1)
 								{
 									it->second = FresnoFF::POLAR;
-									// DEBUG
-									// Log.info() << it->first->getFullName() << ": POL" << endl;
-									// /DEBUG
+									if (verbosity >= 90)
+									{
+										Log.info() << it->first->getFullName() << ": POL" << endl;
+									}
 									++polar_counter;
 								}
 							}
@@ -481,9 +493,10 @@ namespace BALL
 									if (connectedTo(*atom))
 									{
 										it->second = FresnoFF::POLAR;
-										// DEBUG
-										// Log.info() << it->first->getFullName() << ": POL" << endl;
-										// /DEBUG
+										if (verbosity >= 90)
+										{
+											Log.info() << it->first->getFullName() << ": POL" << endl;
+										}
 										++polar_counter;
 									}
 									else
@@ -492,9 +505,10 @@ namespace BALL
 										if (connectedTo(*atom))
 										{
 											it->second = FresnoFF::POLAR;
-											// DEBUG
-											// Log.info() << it->first->getFullName() << ": POL" << endl;
-											// /DEBUG
+											if (verbosity >= 90)
+											{
+												Log.info() << it->first->getFullName() << ": POL" << endl;
+											}
 											++polar_counter;
 										}
 									}
@@ -508,17 +522,19 @@ namespace BALL
 										if (atom->getCharge() == 0.0)
 										{
 											it->second = FresnoFF::LIPOPHILIC;
-											// DEBUG
-											// Log.info() << it->first->getFullName() << ": LIP" << endl;
-											// /DEBUG
+											if (verbosity >= 90)
+											{
+												Log.info() << it->first->getFullName() << ": LIP" << endl;
+											}
 											++lipo_counter;
 										}
 										else
 										{
 											it->second = FresnoFF::HBOND_ACCEPTOR;
-											// DEBUG
-											// Log.info() << it->first->getFullName() << ": ACC" << endl;
-											// /DEBUG
+											if (verbosity >= 90)
+											{
+												Log.info() << it->first->getFullName() << ": ACC" << endl;
+											}
 											++acc_counter;
 										}
 									}
@@ -586,9 +602,10 @@ namespace BALL
 									 )
 								{
 									it->second = FresnoFF::POLAR;
-									// DEBUG
-									// Log.info() << it->first->getFullName() << ": POL" << endl;
-									// /DEBUG
+									if (verbosity >= 90)
+									{
+										Log.info() << it->first->getFullName() << ": POL" << endl;
+									}
 									++polar_counter;
 									break;
 								}
@@ -642,9 +659,10 @@ namespace BALL
 										if (already_found_one)
 										{
 											it->second = FresnoFF::POLAR;
-											// DEBUG
-											// Log.info() << it->first->getFullName() << ": POL" << endl;
-											// /DEBUG
+											if (verbosity >= 90)
+											{
+												Log.info() << it->first->getFullName() << ": POL" << endl;
+											}
 											++polar_counter;
 											break;
 										}
@@ -723,9 +741,10 @@ namespace BALL
 					}
 					// /PARANOIA
 					it->second = FresnoFF::LIPOPHILIC;
-					// DEBUG
-					// Log.info() << it->first->getFullName() << ": LIP" << endl;
-					// /DEBUG
+					if (verbosity >= 90)
+					{
+						Log.info() << it->first->getFullName() << ": LIP" << endl;
+					}
 					++lipo_counter;
 				}
 			}
@@ -747,9 +766,10 @@ namespace BALL
 						}
 						// /PARANOIA
 						it->second = FresnoFF::LIPOPHILIC;
-						// DEBUG
-						// Log.info() << it->first->getFullName() << ": LIP" << endl;
-						// /DEBUG
+						if (verbosity >= 90)
+						{
+							Log.info() << it->first->getFullName() << ": LIP" << endl;
+						}
 						++lipo_counter;
 					}
 				}
@@ -923,6 +943,21 @@ namespace BALL
 		throw()
 	{
 		ForceFieldComponent* component = getComponent("Fresno Desolvation");
+		if (component != 0)
+		{
+			return component->getEnergy();
+		} 
+		else 
+		{
+			return 0;
+		}
+	}
+
+
+	double FresnoFF::getNonPolarEnergy() const
+		throw()
+	{
+		ForceFieldComponent* component = getComponent("Fresno NonPolar");
 		if (component != 0)
 		{
 			return component->getEnergy();

@@ -1,4 +1,4 @@
-// $Id: fresnoBuriedPolar.C,v 1.1.2.10 2002/11/22 16:15:34 anker Exp $
+// $Id: fresnoBuriedPolar.C,v 1.1.2.11 2002/11/23 16:32:22 anker Exp $
 // Molecular Mechanics: Fresno force field, buried polar component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -211,7 +211,7 @@ namespace BALL
 
 		energy_ = factor_ * energy_;
 
-		if (verbosity >= 9)
+		if (verbosity > 0)
 		{
 			Log.info() << "BP: energy is " << energy_ << endl;
 		}

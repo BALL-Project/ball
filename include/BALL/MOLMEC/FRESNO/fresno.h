@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.14 2002/11/22 18:36:31 anker Exp $
+// $Id: fresno.h,v 1.1.2.15 2002/11/23 16:32:21 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -533,6 +533,11 @@ namespace BALL
 		/**
 		*/
 		double getDesolvationEnergy() const
+			throw();
+
+		/**
+		*/
+		double getNonPolarEnergy() const
 			throw();
 
 		/**
