@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.38 2003/12/13 00:00:03 amoll Exp $
+// $Id: mainControl.C,v 1.39 2003/12/15 02:35:47 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -714,7 +714,7 @@ void MainControl::selectComposites_(GeometricObjectSelectionMessage& message)
 	for (; it_objects != objects.end(); it_objects++)
 	{
 		Composite* composite = (Composite*)(*it_objects)->getComposite();
-if (RTTI::isKindOf<Atom>(*composite))
+// if (RTTI::isKindOf<Atom>(*composite))
 
 		if (composite != 0  && (selection_.has(composite) != message.isSelected()))
 		{	
