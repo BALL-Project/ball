@@ -8,8 +8,8 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>188</width>
-            <height>121</height>
+            <width>322</width>
+            <height>427</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,20 +19,48 @@
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QProgressBar" row="1" column="0" rowspan="1" colspan="2">
+        <widget class="QProgressBar" row="2" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>progress_bar</cstring>
             </property>
         </widget>
-        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
+        <widget class="QTextEdit" row="1" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>textLabel1</cstring>
+                <cstring>options</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>300</width>
+                    <height>300</height>
+                </size>
             </property>
             <property name="text">
                 <string></string>
             </property>
+            <property name="wordWrap">
+                <enum>WidgetWidth</enum>
+            </property>
+            <property name="readOnly">
+                <bool>true</bool>
+            </property>
         </widget>
-        <widget class="QPushButton" row="2" column="0">
+        <widget class="QPushButton" row="3" column="1">
+            <property name="name">
+                <cstring>abort_button</cstring>
+            </property>
+            <property name="text">
+                <string>Abort</string>
+            </property>
+        </widget>
+        <widget class="QPushButton" row="3" column="0">
             <property name="name">
                 <cstring>pause_button</cstring>
             </property>
@@ -40,12 +68,20 @@
                 <string>Pause</string>
             </property>
         </widget>
-        <widget class="QPushButton" row="2" column="1">
+        <widget class="QLabel" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>abort_button</cstring>
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="sizePolicy">
+                <sizepolicy>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>0</vsizetype>
+                    <horstretch>0</horstretch>
+                    <verstretch>0</verstretch>
+                </sizepolicy>
             </property>
             <property name="text">
-                <string>Abort</string>
+                <string>&lt;b&gt;Chosen Parameters&lt;/b&gt;</string>
             </property>
         </widget>
     </grid>

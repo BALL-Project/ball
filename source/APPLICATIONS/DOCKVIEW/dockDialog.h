@@ -130,6 +130,7 @@ namespace BALL
 				void addEntry(QString name, int algorithm, QDialog* dialog)
 					throw();
 					
+					
 				public slots:
 	
 					/// Show and raise

@@ -1,11 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.14.2.3 2005/02/16 13:04:32 haid Exp $
+// $Id: dockDialog.C,v 1.1.2.14.2.4 2005/02/17 12:51:24 haid Exp $
 //
 
 #include "dockDialog.h"
 #include "geometricFitDialog.h"
+#include "dockingProgressDialog.h"
 
 #include <qpushbutton.h>
 #include <qcombobox.h>
@@ -13,6 +14,7 @@
 #include <qmessagebox.h>
 #include <qcheckbox.h>
 #include <qlineedit.h>
+#include <qtextedit.h>
 #include <qradiobutton.h>
 #include <qfiledialog.h>
 #include <qtabwidget.h>
@@ -314,13 +316,35 @@ namespace BALL
 			}
 			
 			geo_fit.setup(*partner1, *partner2, options_);
-			geo_fit.start();
+			
+			DockingProgressDialog progress;
+			QString s = "Docking partner 1: ";
+			progress.options->append(s.append(docking_partner1_->getName()));
+			s = "Docking partner 2: ";
+			progress.options->append(s.append(docking_partner2_->getName()));
+			s = "Algorithm: ";
+			progress.options->append(s.append(algorithms->currentText()));
+			progress.options->append("\n*** Options ***");
+			
+			Options::Iterator it = options_.begin();
+			for(; +it; ++it)
+			{
+				s = it->first;
+				s.append(" : ");
+				progress.options->append(s.append(it->second));
+			}
+			progress.exec();
+			
+			// start docking
+			/*geo_fit.start();
 			
 			ConformationSet rc = geo_fit.getConformationSet(options_.getInteger(GeometricFit::Option::BEST_NUM));
 	 		rc.writeDCDFile("docking.dcd");
 
 	 		System* docked_system = new System(rc.getSystem());
 			getMainControl()->insert(*docked_system, "Docked System");
+			
+			*/
 
 			Log.info() << "End of calculate" << std::endl;
 			return true;
@@ -432,13 +456,13 @@ namespace BALL
 			//send messages that systems were changed
 			CompositeMessage* message = new CompositeMessage;
 			message->setComposite(*docking_partner1_);
-			message->setType(CompositeMessage::CHANGED_COMPOSITE);
-			notify_(message);
+			message->setType(CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
+			//notify_(message);
 			
 			CompositeMessage* message2 = new CompositeMessage;
 			message2->setComposite(*docking_partner2_);
-			message2->setType(CompositeMessage::CHANGED_COMPOSITE);
-			notify_(message2);
+			message2->setType(CompositeMessage::CHANGED_COMPOSITE_HIERARCHY);
+			//notify_(message2);
 
 			return true;
 		}
@@ -556,7 +580,7 @@ namespace BALL
 			CompositeManager& composite_manager = main_control->getCompositeManager();
 			HashSet<Composite*>::iterator composite_it = composite_manager.begin();
 				
-			System* system;
+			System* system = 0;
 			for(; +composite_it; ++composite_it)
 			{
 				if(RTTI::isKindOf<System>(*(*composite_it)))
