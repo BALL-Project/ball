@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: String_test1.C,v 1.5 2003/03/08 08:03:43 oliver Exp $
+// $Id: String_test1.C,v 1.6 2003/03/14 13:45:34 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -11,7 +11,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test1.C,v 1.5 2003/03/08 08:03:43 oliver Exp $")
+START_TEST(String,"$Id: String_test1.C,v 1.6 2003/03/14 13:45:34 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -376,7 +376,6 @@ CHECK(String::set(stringstream&))
 
 	s2 = new String;
 	s2->set(instream);
-std::cerr << "s2 is " << s2 << endl;
 	TEST_EQUAL(*s2, "ABC")
 	s2->set(instream);
 	TEST_EQUAL(*s2, "DEF")
