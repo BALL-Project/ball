@@ -1,9 +1,12 @@
-// $Id: rtti.C,v 1.7 2001/06/28 14:13:34 oliver Exp $
+// $Id: rtti.C,v 1.8 2002/01/03 01:53:39 oliver Exp $
 
 #include <BALL/COMMON/rtti.h>
 #include <typeinfo>
 #include <ctype.h>
 
+
+// nasty hack to support the stupid name mangling scheme in g++
+// Stating V3.0 we use libiberty to demangle the names...
 #ifdef __GNUC__
 	extern "C" char* cplus_demangle(const char* s, int options); 
 #endif
