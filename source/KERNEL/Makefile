@@ -48,11 +48,11 @@ default_clean:	clean_flex_bison
 clean_flex_bison:
 	@-$(RM) expressionParserParser.C expressionParserLexer.C expressionParserParser.h
 
-expressionParserParser.C expressionParserParser.h: expressionParserParser.y
+expressionParserParser.C: expressionParserParser.y
+expressionParserParser.h: expressionParserParser.y
 
-expressionParserLexer.o: expressionParserLexer.C
+expressionParserLexer.o: expressionParserLexer.C expressionParserParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
 
 expressionParserParser.o: expressionParserParser.C
 	$(CXX) $(CXXFLAGS) $(ADD_CXXFLAGS) $(CPP_MODE_FLAGS) $(LIB_CXXFLAGS) $(BALL_INCLUDES) $(ADD_INCLUDES) -c $*.C -o $@
-
