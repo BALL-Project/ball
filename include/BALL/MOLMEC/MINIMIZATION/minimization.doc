@@ -1,7 +1,6 @@
-// $Id: minimization.doc,v 1.3 2000/03/26 12:50:24 oliver Exp $
+// $Id: minimization.doc,v 1.4 2001/03/07 22:19:45 amoll Exp $
 
 /**	@name	Energy Minimizer
-		@nonames
 */
 //@{
 

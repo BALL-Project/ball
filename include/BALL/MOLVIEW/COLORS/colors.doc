@@ -1,7 +1,6 @@
-// $Id: colors.doc,v 1.1 2000/10/05 08:35:43 oliver Exp $
+// $Id: colors.doc,v 1.2 2001/03/07 22:19:45 amoll Exp $
 
 /**@name	MOLVIEW/COLORS
-		@nonames
 */
 //@{
 	//@Include: *.h

@@ -1,7 +1,6 @@
-// $Id: parameter.doc,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: parameter.doc,v 1.2 2001/03/07 22:19:45 amoll Exp $
 
 /**	@name	Force Field Parameters
-		@nonames
 */
 //@{
 

@@ -1,7 +1,6 @@
-// $Id: widgets.doc,v 1.1 2000/10/05 08:35:44 oliver Exp $
+// $Id: widgets.doc,v 1.2 2001/03/07 22:19:47 amoll Exp $
 
 /**@name	MOLVIEW/GUI/WIDGETS
-		@nonames
 */
 //@{
 	//@Include: *.h

@@ -1,9 +1,8 @@
-// $Id: solvation.doc,v 1.5 2001/01/29 00:37:37 amoll Exp $ */
+// $Id: solvation.doc,v 1.6 2001/03/07 22:19:47 amoll Exp $ */
 
 /**@name	Solvation methods
 		This chapter contains all relevant information on 
 		the use of BALL solvation methods.
-		@nonames
 */
 //@{
 	//@Include: poissonBoltzmann.h

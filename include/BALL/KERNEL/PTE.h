@@ -1,4 +1,4 @@
-// $Id: PTE.h,v 1.14 2001/02/27 01:57:54 amoll Exp $
+// $Id: PTE.h,v 1.15 2001/03/07 22:19:44 amoll Exp $
 
 #ifndef BALL_KERNEL_PTE_H
 #define BALL_KERNEL_PTE_H
@@ -540,8 +540,8 @@ namespace BALL
 			bool operator <= (const Element& element) const
 				throw();
 
-			/** More or equal operator.
-					Tests if the atomic number of this instance is more
+			/** Greater or equal operator.
+					Tests if the atomic number of this instance is greater
 					or equal compared with {\em element}.
 					@param element, the Element to compare with
 					@return bool
@@ -549,9 +549,9 @@ namespace BALL
 			bool operator >= (const Element& element) const
 				throw();
 
-			/** More operator.
-					Tests if the atomic number of this instance is more
-					compared with {\em element}.
+			/** Greater operator.
+					Tests if the atomic number of this instance is greater
+					than {\em element}.
 					@param element, the Element to compare with
 					@return bool
 			*/
@@ -668,6 +668,13 @@ namespace BALL
 			*/
 			float electronegativity_;
 	};
+
+
+	/**	Element output operator.
+			Prints the contents of an instance of \Ref{Element} to an {\tt ostream}.
+	*/
+	std::ostream& operator << (std::ostream& s, const Element& element)
+		throw();
 
 
 	/**	Periodic Table of Elements Class

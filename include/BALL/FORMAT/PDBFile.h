@@ -1,4 +1,4 @@
-// $Id: PDBFile.h,v 1.12 2001/02/27 01:58:47 amoll Exp $
+// $Id: PDBFile.h,v 1.13 2001/03/07 22:19:44 amoll Exp $
 
 #ifndef BALL_FORMAT_PDBFILE_H
 #define BALL_FORMAT_PDBFILE_H
@@ -49,8 +49,9 @@ namespace BALL
 	}
 
 	
-	/**	PDB file class
-			{\bf Definition:} \URL{BALL/FORMAT/PDBFile.h} \\
+	/**	PDB file class.
+			\\
+			{\bf Definition:} \URL{BALL/FORMAT/PDBFile.h}\\
 	*/
 	class PDBFile
 		: public GenericPDBFile

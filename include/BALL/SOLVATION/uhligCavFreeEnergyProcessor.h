@@ -1,4 +1,4 @@
-// $Id: uhligCavFreeEnergyProcessor.h,v 1.7 2001/03/05 01:55:45 amoll Exp $
+// $Id: uhligCavFreeEnergyProcessor.h,v 1.8 2001/03/07 22:19:47 amoll Exp $
 
 #ifndef BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
 #define BALL_SOLVATION_UHLIGCAVFREEENERGYPROCESSOR_H
@@ -94,7 +94,7 @@ namespace BALL
 					energies of several small solutes against experimantel data. The
 					value ($5.41 \mathrm{cal}\cdot\mathrm{mol}^{-1}\cdot A^{-2} =
 					22.635 \mathrm{J}\cdot\mathrm{mol}^{-1}\cdot A^{-2}$) slightly
-					differs from the value suggested by Simonson/Br"unger in their
+					differs from the value suggested by Simonson/Br{\"u}nger in their
 					paper ($6 \mathrm{cal}\cdot\mathrm{mol}^{-1}\cdot A^{-2} = 25.1
 					\mathrm{J}\cdot\mathrm{mol}^{-1}\cdot A^{-2}$).
 					@see Option::SURFACE_TENSION
@@ -104,7 +104,7 @@ namespace BALL
 			/** Default additive constant.
 					This additive constant was also found by fitting aginst experimental
 					data \Ref{Default::SURFACE_TENSION}. 
-					In contrast to Simonson/Br"unger it is not zero but $0.921
+					In contrast to Simonson/Br{\"u}nger it is not zero but $0.921
 					\mathrm{kcal}\cdot\mathrm{mol}^{-1} = 3.855
 					\mathrm{kJ}\cdot\mathrm{mol}^{-1}$.
 					@see Option::CONSTANT

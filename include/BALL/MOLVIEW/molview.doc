@@ -1,9 +1,7 @@
-// $Id: molview.doc,v 1.4 2000/10/05 08:35:40 oliver Exp $
+// $Id: molview.doc,v 1.5 2001/03/07 22:19:45 amoll Exp $
 
 /**@name	MOLVIEW
-		This chapter contains all relevant information on 
-		MOLVIEW
-		@nonames
+		This chapter contains all relevant information on MOLVIEW
 */
 //@{
 	//@Include: COLORS/colors.doc

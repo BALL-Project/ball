@@ -1,7 +1,6 @@
-// $Id: functor.doc,v 1.1 2000/10/05 08:35:43 oliver Exp $
+// $Id: functor.doc,v 1.2 2001/03/07 22:19:46 amoll Exp $
 
 /**@name	MOLVIEW/FUNCTOR
-		@nonames
 */
 //@{
 	//@Include: *.h

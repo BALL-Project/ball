@@ -1,7 +1,6 @@
-// $Id: primitiv.doc,v 1.1 2000/10/05 08:35:45 oliver Exp $
+// $Id: primitiv.doc,v 1.2 2001/03/07 22:19:47 amoll Exp $
 
 /**@name	MOLVIEW/PRIMITIV
-		@nonames
 */
 //@{
 	//@Include: *.h

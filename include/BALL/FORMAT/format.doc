@@ -1,9 +1,8 @@
-// $Id: format.doc,v 1.7 2001/02/16 18:22:29 amoll Exp $
+// $Id: format.doc,v 1.8 2001/03/07 22:19:44 amoll Exp $
 
 /**@name	Fileformats
 		This chapter contains all relevant information on 
 		BALL file formats and how to use them.
-		@nonames
 */
 //@{
 

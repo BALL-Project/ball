@@ -1,10 +1,9 @@
-// $Id: common.doc,v 1.5 2001/02/16 18:22:25 amoll Exp $
+// $Id: common.doc,v 1.6 2001/03/07 22:19:41 amoll Exp $
 
 /**@name	Common Definitions
 		This chapter contains all relevant information on 
 		very fundamental definitions and classes used throughout BALL
 		(part of the {\bf Foundation Classes}).
-		@nonames
 */
 //@{
 

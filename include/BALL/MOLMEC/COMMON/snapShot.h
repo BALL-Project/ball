@@ -1,4 +1,4 @@
-// $Id: snapShot.h,v 1.15 2001/03/02 00:34:15 amoll Exp $
+// $Id: snapShot.h,v 1.16 2001/03/07 22:19:44 amoll Exp $
 
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
@@ -368,7 +368,7 @@ namespace BALL
 			throw();
 
     /** Get the current frequency for doing saves to hard disk
-				@return the number of snapshots to take befor flushing them to disk
+				@return the number of snapshots to take before flushing them to disk
     */
     Size getFlushToDiskFrequency() const
 			throw();

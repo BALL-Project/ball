@@ -1,7 +1,6 @@
-// $Id: functor.doc,v 1.1 2000/10/05 08:38:20 oliver Exp $
+// $Id: functor.doc,v 1.2 2001/03/07 22:19:48 amoll Exp $
 
 /**@name	VIEW/GUI/FUNCTOR
-		@nonames
 */
 //@{
 	//@Include: *.h

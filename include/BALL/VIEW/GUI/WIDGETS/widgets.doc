@@ -1,7 +1,6 @@
-// $Id: widgets.doc,v 1.1 2000/10/05 08:38:26 oliver Exp $
+// $Id: widgets.doc,v 1.2 2001/03/07 22:19:48 amoll Exp $
 
 /**@name	VIEW/GUI/WIDGETS
-		@nonames
 */
 //@{
 	//@Include: *.h
