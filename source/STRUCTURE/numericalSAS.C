@@ -1,4 +1,4 @@
-// $Id: numericalSAS.C,v 1.13 2000/06/15 17:10:54 oliver Exp $
+// $Id: numericalSAS.C,v 1.14 2000/07/03 15:19:10 anker Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -312,6 +312,120 @@ namespace BALL
 				surface.normal[point] *= length;
 				point++;
 			}
+		}
+
+		// free arrays (if created)
+		if (internal_atom_areas != 0)
+		{
+			free(internal_atom_areas);
+		}
+		if (internal_surface_dots != 0)
+		{
+			free(internal_surface_dots);
+		}
+		if (internal_atom_dots != 0)
+		{
+			free(internal_atom_dots);
+		}
+
+
+		// free the input fields
+		delete [] coordinates;
+		delete [] radii;
+
+		return area;
+	}
+	
+  float calculateSASAtomPoints
+		(const BaseFragment& fragment, HashMap<Atom*,Surface*>& atom_surfaces,
+		 float probe_radius,  Size number_of_dots)
+	{
+		// extract all atoms: iterate over all composites and
+		// check whether they are Atoms
+		vector<Atom*>	atoms;
+		AtomIterator	it = fragment.beginAtom();
+		for (; +it; ++it)
+		{
+			if (it->getRadius() > 0.0)
+			{
+				atoms.push_back(&*it);
+			}
+		}
+		
+		// if no atoms are found, return zero
+		if (atoms.size() == 0)
+		{
+			return 0.0;
+		}
+				
+		// create the field required by nsc and fill it with the atom coordinates
+		double* coordinates = new double[atoms.size() * 3];
+		double* radii = new double[atoms.size()];
+		for (Size i = 0; i < atoms.size(); i++)
+		{
+			float tmp[3];
+			atoms[i]->getPosition().get(tmp);
+			coordinates[i * 3]			= (double)tmp[0];
+			coordinates[i * 3 + 1]	= (double)tmp[1];
+			coordinates[i * 3 + 2]	= (double)tmp[2];
+			radii[i] = atoms[i]->getRadius() + probe_radius;
+		}
+
+		double area;
+		double volume;
+		int number_of_surface_dots;
+
+		// these arrays won't get out
+		double* internal_atom_areas = 0;
+		double* internal_surface_dots = 0;
+		int*		internal_atom_dots = 0;
+
+		// call nsc
+		nsc_(coordinates, radii, (int)atoms.size(),
+				 (int)number_of_dots, FLAG_ATOM_AREA|FLAG_DOTS, 
+				 &area, &internal_atom_areas, &volume, 
+				 &internal_surface_dots, &number_of_surface_dots,
+				 &internal_atom_dots);
+
+
+		// clear the surface object
+		Surface* surface;
+
+		// iterate over all atoms and add the surface points 
+		// to the surface object
+		Size point = 0;
+
+		// BAUSTELLE: Sind die Daten in der gleichen Reihenfolge in den Feldern
+		// gespeichert wie der Iterator über das Fragment läuft?
+
+		for (Size j = 0; j < atoms.size(); ++j)
+		{
+			// create a surface object for the hashmap
+			surface = new Surface;
+
+			// resize the surface's vectors
+			surface->vertex.resize(number_of_surface_dots);
+			surface->normal.resize(number_of_surface_dots);
+
+			// retrieve the center of the atom
+			Vector3 center(coordinates[j * 3], coordinates[j * 3 + 1], coordinates[j * 3 + 2]);
+
+			// calculate the length for each normal
+			float length = internal_atom_areas[j] / internal_atom_dots[j];
+
+			// iterate over all points of the surface 
+			// and calculate the normal
+			for (Size i = 0; i < (Size)internal_atom_dots[j]; ++i)
+			{
+				surface->vertex[point].set(internal_surface_dots[point * 3], 
+																	internal_surface_dots[point * 3 + 1], 
+																	internal_surface_dots[point * 3 + 2]);
+				surface->normal[point] = surface->vertex[point] - center;
+				surface->normal[point].normalize();
+				surface->normal[point] *= length;
+				point++;
+			}
+			atom_surfaces.insert(pair<Atom*, Surface*>(atoms[j], surface));
 		}
 
 		// free arrays (if created)
