@@ -1,8 +1,11 @@
-// $Id: snapShotManager.C,v 1.1 2001/03/11 19:33:52 anker Exp $
+// $Id: snapShotManager.C,v 1.2 2001/03/11 23:16:37 amoll Exp $
 
-// BALL includes
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/MOLMEC/COMMON/snapShotManager.h>
+
+#include <iostream>
+
+using namespace std;
 
 namespace BALL
 {
