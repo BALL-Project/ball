@@ -32,6 +32,7 @@ EXECUTABLES_MATHS = \
 
 EXECUTABLES_SYSTEM = \
 	Directory_test\
+	FileSystem_test\
 	File_test\
 	Path_test\
 	PreciseTime_test\
