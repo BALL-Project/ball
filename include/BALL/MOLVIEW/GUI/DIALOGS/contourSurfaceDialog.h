@@ -11,8 +11,11 @@
 
 #include <qvariant.h>
 #include <qdialog.h>
-#include <BALL/SYSTEM/path.h>
-#include <BALL/DATATYPE/string.h>
+
+#ifndef BALL_DATATYPE_STRING_H
+# include <BALL/DATATYPE/string.h>
+#endif
+
 class QVBoxLayout; 
 class QHBoxLayout; 
 class QGridLayout; 
