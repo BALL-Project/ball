@@ -1,4 +1,4 @@
-// $Id: glsphere.h,v 1.9.4.1 2002/10/18 14:48:04 amoll Exp $
+// $Id: glsphere.h,v 1.9.4.2 2002/11/05 15:31:51 amoll Exp $
 
 #ifndef BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
 #define BALL_VIEW_GUI_PRIMITIV_GLSPHERE_H
@@ -15,10 +15,8 @@
 #	include <BALL/VIEW/PRIMITIV/sphere.h>
 #endif
 
-
 namespace BALL
 {
-	
 	namespace VIEW
 	{
 
@@ -30,8 +28,8 @@ namespace BALL
 				of the geometrical definition of the class sphere.
 				The drawing method from \Ref{GLObject} is overridden to visualize the
 				sphere. OpenGL code is used for the visualization.
-				See these classes for further information.
-				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glsphere.h}	\\ \\
+				See these classes for further information.\\
+				{\bf Definition:} \URL{BALL/VIEW/GUI/PRIMITIV/glsphere.h}	
 		*/
 		class GLSphere
 			: public Sphere,
@@ -76,7 +74,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -108,7 +105,6 @@ namespace BALL
 				throw();
 
 			//@}
-
 			/**	@name	Assignment methods
 			*/
 			//@{
@@ -159,10 +155,10 @@ namespace BALL
 			*/
 			void swap(GLSphere& sphere)
 				throw();
-			//@}
 
 			protected:
 
+			//@}
 			/** @name Graphical interface methods
 			*/
 			//@{
