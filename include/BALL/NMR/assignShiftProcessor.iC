@@ -1,18 +1,3 @@
-BALL_INLINE
-AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atom_data)
-	:	atom_data_(atom_data),
-		molecule_(0)
-{
-	if (atom_data.size() == 0)
-	{
-		Log.error() << endl << "AssignShiftProcessor: given vector contains no shift data " << endl;
-	}
-	else
-	{
-		valid_ = true;
-	}
-}
-       
 BALL_INLINE 
 AssignShiftProcessor::AssignShiftProcessor(const AssignShiftProcessor& processor)
 	:	UnaryProcessor<Composite>(),
@@ -31,6 +16,21 @@ AssignShiftProcessor::AssignShiftProcessor()
 {
 }
 
+BALL_INLINE
+AssignShiftProcessor::AssignShiftProcessor(const vector<NMRAtomData*>& atom_data)
+	:	atom_data_(atom_data),
+		molecule_(0)
+{
+	if (atom_data.size() == 0)
+	{
+		Log.error() << "AssignShiftProcessor: given vector contains no shift data " << std::endl;
+	}
+	else
+	{
+		valid_ = true;
+	}
+}
+       
 BALL_INLINE
 AssignShiftProcessor::~AssignShiftProcessor()
 {
