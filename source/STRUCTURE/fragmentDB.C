@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.7 2000/01/03 15:19:15 oliver Exp $
+// $Id: fragmentDB.C,v 1.8 2000/01/07 22:00:46 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -82,7 +82,7 @@ namespace BALL
 				parent->removeChild(key, 0);
 
 				ResourceFile*	file;
-				ResourceEntry* tree;
+				ResourceEntry* tree_entry;
 					
 				file = new ResourceFile(value_fields[0]);
 				if ((file == 0) || !file->isValid())
@@ -91,12 +91,12 @@ namespace BALL
 					delete file;
 					return false;
 				} else {
-					tree = file->getRoot().getEntry(value_fields[1]);
-					if (tree == 0){
+					tree_entry = file->getRoot().getEntry(value_fields[1]);
+					if (tree_entry == 0){
 						Log.error() << "cannot find node " << value_fields[1] << " in file " << value_fields[0] << endl;
 					} else {
-						entry = parent->insertChild(key_fields[1], tree->getValue());
-						entry->mergeChildrenOf(*tree);
+						entry = parent->insertChild(key_fields[1], tree_entry->getValue());
+						entry->mergeChildrenOf(*tree_entry);
 					}
 					delete file;
 					
