@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.4 2000/01/09 21:04:48 oliver Exp $
+// $Id: control.C,v 1.5 2000/01/10 10:55:38 oliver Exp $
 
 #include "control.h"
 
@@ -19,6 +19,7 @@ Control::Control
 {
 	setRootIsDecorated(TRUE);
 	//	setMultiSelection(TRUE);
+	setSorting(-1);
 
 	connect(this, 
 					SIGNAL(rightButtonClicked(QListViewItem *, const QPoint &, int)),

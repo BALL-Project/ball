@@ -1,0 +1,264 @@
+DlgEdit:v1.2:Dialog:
+Dialog {
+	ClassHeader {displayDialog.h}
+	ClassSource {displayDialog.cpp}
+	ClassName {displayDialog}
+	DataHeader {displayDialogData.h}
+	DataSource {displayDialogData.cpp}
+	DataName {displayDialogData}
+	WindowBaseClass {QDialog}
+	IsModal {FALSE}
+	WindowCaption {Display Settings}
+	WindowFlags {720}
+}
+WidgetLayout {
+InitialPos {-1 -1}
+Size {190 310}
+MinSize {400 300}
+MaxSize {400 300}
+Grid {10}
+TextTranslated {FALSE}
+
+GroupBox {
+		Title {model}
+		Alignment {AlignHCenter}
+		Style {33}
+		LineWidth {1}
+		MidLineWidth {0}
+		FrameMargin {0}
+		Rect {10 10 170 250}
+		Name {GroupBox_2}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {NoFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+PushButton {
+		ToggleButton {FALSE}
+		Default {FALSE}
+		AutoDefault {TRUE}
+		IsMenuButton {FALSE}
+		Text {&Apply}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {10 270 80 30}
+		Name {PushButton_1}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteButton}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+VButtonGroup {
+		Exclusive {FALSE}
+		Title {type}
+		Alignment {AlignHCenter}
+		Style {50}
+		LineWidth {1}
+		MidLineWidth {0}
+		FrameMargin {0}
+		Rect {20 30 150 180}
+		Name {VButtonGroup_1}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {NoFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+RadioButton {
+		Checked {FALSE}
+		Text {none}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {40 60 80 20}
+		Name {RadioButton_1}
+		MinimumSize {0 0}
+		MaximumSize {180 30}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+RadioButton {
+		Checked {TRUE}
+		Text {line}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {40 90 70 20}
+		Name {RadioButton_2}
+		MinimumSize {0 0}
+		MaximumSize {170 30}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+RadioButton {
+		Checked {FALSE}
+		Text {stick}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {40 120 100 20}
+		Name {RadioButton_3}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+RadioButton {
+		Checked {FALSE}
+		Text {ball-and-stick}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {40 150 110 20}
+		Name {RadioButton_4}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+RadioButton {
+		Checked {FALSE}
+		Text {van der Waals}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {40 180 120 20}
+		Name {RadioButton_5}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+ComboBox {
+		Style {ReadOnly}
+		SizeLimit {4}
+		Policy {AtBottom}
+		AutoResize {FALSE}
+		Item {low}
+		Item {medium}
+		Item {high}
+		Item {ultra}
+		MaxCount {4}
+		AutoCompletion {FALSE}
+		Rect {90 220 80 28}
+		Name {ComboBox_1}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {StrongFocus}
+		BackgroundMode {NoBackground}
+		FontPropagation {AllChildren}
+		PalettePropagation {AllChildren}
+}
+Label {
+		Text {resolution}
+		Alignment {AlignLeft|AlignVCenter|ExpandTabs}
+		AutoResize {FALSE}
+		Margin {0}
+		Style {0}
+		LineWidth {1}
+		MidLineWidth {0}
+		FrameMargin {0}
+		Rect {20 220 70 30}
+		Name {Label_1}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {NoFocus}
+		BackgroundMode {PaletteBackground}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+PushButton {
+		ToggleButton {FALSE}
+		Default {FALSE}
+		AutoDefault {FALSE}
+		IsMenuButton {FALSE}
+		Text {&Close}
+		AutoRepeat {FALSE}
+		AutoResize {FALSE}
+		Rect {100 270 80 30}
+		Name {PushButton_2}
+		MinimumSize {0 0}
+		MaximumSize {32767 32767}
+		BackgroundPixmap {}
+		UseBackgroundPixmap {FALSE}
+		AdjustSize {FALSE}
+		ReadPixmapFromData {FALSE}
+		DataVarName {}
+		DataLenName {}
+		FocusPolicy {TabFocus}
+		BackgroundMode {PaletteButton}
+		FontPropagation {SameFont}
+		PalettePropagation {SameFont}
+}
+
+}

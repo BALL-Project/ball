@@ -15,6 +15,6 @@ OBJECTS=\
 	mainframe.o\
 	mainframe_moc.o
 
-molview:	$(OBJECTS) 
-	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) $(BALLVIEW_LIBS)
+molview:	$(OBJECTS) ../../VIEW/KERNEL/timerTextView.o
+	$(CXX)	$(LDFLAGS) -o $(EXECUTABLE) $(OBJECTS) ../../VIEW/KERNEL/timerTextView.o $(BALLVIEW_LIBS)
 

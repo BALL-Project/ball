@@ -161,6 +161,11 @@ Mainframe::Mainframe
 	// ---------------------
 	// TextView setup ------
 	// ---------------------
+	
+	QFont f("Courier", 12, QFont::Bold, false, QFont::ISO_8859_1);
+	__mTimerTextView_.setFont(f);
+	__mTimerTextView_.setReadOnly(TRUE);
+	__mTimerTextView_.setAutoUpdate(TRUE);
 
 	Log.info() << "Welcome to MolVIEW." << endl;
 
