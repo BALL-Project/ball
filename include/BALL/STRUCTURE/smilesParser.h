@@ -1,4 +1,4 @@
-// $Id: smilesParser.h,v 1.1 2002/01/08 00:43:32 oliver Exp $
+// $Id: smilesParser.h,v 1.2 2002/01/17 17:32:05 oliver Exp $
 
 #ifndef BALL_STRUCTURE_SMILES_PARSER_H
 #define BALL_STRUCTURE_SMILES_PARSER_H
@@ -80,6 +80,7 @@ namespace BALL
 			public:
 				
 			SPAtom(const String& symbol, bool in_brackets);
+			virtual ~SPAtom() throw();
 
 			Size getDefaultValence() const;
 			Size countRealValences() const;
