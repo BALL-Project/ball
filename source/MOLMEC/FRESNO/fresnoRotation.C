@@ -1,4 +1,4 @@
-// $Id: fresnoRotation.C,v 1.1.2.19 2003/06/13 14:38:48 anker Exp $
+// $Id: fresnoRotation.C,v 1.1.2.20 2005/01/30 14:04:53 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/KERNEL/standardPredicates.h>
@@ -16,6 +16,8 @@
 #include <BALL/MOLMEC/FRESNO/fresnoRotation.h>
 
 #include <BALL/DATATYPE/stringHashMap.h>
+
+#include <BALL/SYSTEM/timer.h>
 
 using namespace std;
 
@@ -130,6 +132,10 @@ namespace BALL
 	bool FresnoRotation::setup()
 		throw()
 	{
+
+		Timer timer;
+		timer.start();
+
 		ForceField* force_field = getForceField();
 		if (force_field == 0)
 		{
@@ -553,6 +559,10 @@ namespace BALL
 				<< " glycosidic bonds" << endl << endl;
 		}
 
+		timer.stop();
+		Log.info() << "FresnoRotation::setup(): " 
+			<< timer.getCPUTime() << " s" << std::endl;
+
 		return true;
 
 	}
@@ -561,6 +571,9 @@ namespace BALL
 	double FresnoRotation::updateEnergy()
 		throw()
 	{
+
+		Timer timer;
+		timer.start();
 
 		// how loud  will we cry?
 		Size verbosity
@@ -657,7 +670,11 @@ namespace BALL
 			Log.info() << "ROT: energy is " << energy_ << endl;
 		}
 
-		return energy_;
+		timer.stop();
+		Log.info() << "FresnoRotation::updateEnergy(): "
+			<< timer.getCPUTime() << " s" << std::endl;
+
+		return(energy_);
 
 	}
 

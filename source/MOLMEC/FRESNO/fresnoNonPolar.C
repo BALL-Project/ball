@@ -1,18 +1,16 @@
-// $Id: fresnoNonPolar.C,v 1.1.2.9 2003/05/07 16:10:40 anker Exp $
+// $Id: fresnoNonPolar.C,v 1.1.2.10 2005/01/30 14:03:50 anker Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
-
 #include <BALL/KERNEL/standardPredicates.h>
 #include <BALL/KERNEL/PTE.h>
-
 #include <BALL/MOLMEC/FRESNO/fresno.h>
 #include <BALL/MOLMEC/FRESNO/fresnoNonPolar.h>
-
 #include <BALL/STRUCTURE/defaultProcessors.h>
 #include <BALL/STRUCTURE/geometricProperties.h>
-
 #include <BALL/DATATYPE/hashMap.h>
 #include <BALL/KERNEL/atomIterator.h>
+
+#include <BALL/SYSTEM/timer.h>
 
 using namespace std;
 
@@ -105,6 +103,10 @@ namespace BALL
 	bool FresnoNonPolar::setup()
 		throw()
 	{
+
+		Timer timer;
+		timer.start();
+
 		ForceField* force_field = getForceField();
 		if (force_field == 0)
 		{
@@ -283,7 +285,11 @@ namespace BALL
 
 		energy_ *= factor_;
 
-		return true;
+		timer.stop();
+		Log.info() << "FresnoNonPolar::setup() " 
+			<< timer.getCPUTime() << " s" << std::endl;
+
+		return(true);
 
 	}
 

@@ -1,4 +1,4 @@
-// $Id: fresnoRingStacking.C,v 1.1.2.2 2004/06/12 15:15:32 anker Exp $
+// $Id: fresnoRingStacking.C,v 1.1.2.3 2005/01/30 14:04:12 anker Exp $
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 
@@ -18,6 +18,8 @@
 #include <BALL/KERNEL/residueIterator.h>
 #include <BALL/KERNEL/residue.h>
 #include <BALL/KERNEL/protein.h>
+
+#include <BALL/SYSTEM/timer.h>
 
 #define DEBUG 1
 // #define STATISTICS 1
@@ -274,6 +276,9 @@ namespace BALL
 		throw()
 	{
 
+		Timer timer;
+		timer.start();
+
 		ForceField* force_field = getForceField();
 		if (force_field == 0)
 		{
@@ -418,6 +423,10 @@ namespace BALL
 			}
 		}
 		
+		timer.stop();
+		Log.info() << "FresnoRingStacking::setup(): "
+			<< timer.getCPUTime() << " s" << std::endl;
+
 		return(true);
 	}
 
@@ -425,6 +434,10 @@ namespace BALL
 	double FresnoRingStacking::updateEnergy()
 		throw()
 	{
+
+		Timer timer;
+		timer.start();
+
 		#ifdef DEBUG
 		Molecule debug_molecule;
 		#endif
@@ -542,6 +555,11 @@ namespace BALL
 		debug_file << debug_molecule;
 		debug_file.close();
 #endif
+
+		timer.stop();
+		Log.info() << "FresnoRingStacking::updateEnergy(): "
+			<< timer.getCPUTime() << " s" << std::endl;
+
 		return(energy_);
 	}
 }

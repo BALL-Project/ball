@@ -1,4 +1,4 @@
-// $Id: fresnoLipophilic.C,v 1.1.2.13 2004/06/13 14:19:32 anker Exp $
+// $Id: fresnoLipophilic.C,v 1.1.2.14 2005/01/30 14:03:19 anker Exp $
 // Molecular Mechanics: Fresno force field, lipophilic component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -6,6 +6,8 @@
 
 #include <BALL/MOLMEC/FRESNO/fresno.h>
 #include <BALL/MOLMEC/FRESNO/fresnoLipophilic.h>
+
+#include <BALL/SYSTEM/timer.h>
 
 #define DEBUG 1
 
@@ -74,6 +76,9 @@ namespace BALL
 	bool FresnoLipophilic::setup()
 		throw()
 	{
+		Timer timer;
+		timer.start();
+
 		ForceField* force_field = getForceField();
 		if (force_field == 0)
 		{
@@ -155,7 +160,11 @@ namespace BALL
 				<< " possible lipophilic interactions" << endl << endl;
 		}
 
-		return true;
+		timer.stop();
+		Log.info() << "FresnoLipophilic::setup(): " 
+			<< timer.getCPUTime() << std::endl;
+
+		return(true);
 
 	}
 
@@ -163,6 +172,9 @@ namespace BALL
 	double FresnoLipophilic::updateEnergy()
 		throw()
 	{
+
+		Timer timer;
+		timer.start();
 
 		#ifdef DEBUG
 		Molecule debug_molecule;
@@ -257,7 +269,11 @@ namespace BALL
 			Log.info() << "LIPO: energy is " << energy_ << endl;
 		}
 
-		return energy_;
+		timer.stop();
+		Log.info() << "FresnoLipophilic::updateEnergy(): "
+			<< timer.getCPUTime() << " s" << std::endl;
+
+		return(energy_);
 	}
 
 

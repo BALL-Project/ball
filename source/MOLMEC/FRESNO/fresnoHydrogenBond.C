@@ -1,4 +1,4 @@
-// $Id: fresnoHydrogenBond.C,v 1.1.2.15 2004/06/16 16:29:19 anker Exp $
+// $Id: fresnoHydrogenBond.C,v 1.1.2.16 2005/01/30 14:02:56 anker Exp $
 // Molecular Mechanics: Fresno force field, hydrogen bond component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -8,6 +8,8 @@
 
 #include <BALL/MOLMEC/FRESNO/fresno.h>
 #include <BALL/MOLMEC/FRESNO/fresnoHydrogenBond.h>
+
+#include <BALL/SYSTEM/timer.h>
 
 #define DEBUG 1
 
@@ -76,6 +78,10 @@ namespace BALL
 	bool FresnoHydrogenBond::setup()
 		throw()
 	{
+
+		Timer timer;
+		timer.start();
+
 		ForceField* force_field = getForceField();
 		if (force_field == 0)
 		{
@@ -202,7 +208,11 @@ namespace BALL
 				<< " possible hydrogen bonds" << endl << endl;
 		}
 
-		return true;
+		timer.stop();
+		Log.info() << "FresnoHydrogenBond::setup(): "
+			<< timer.getCPUTime() << " s" << std::endl;
+
+		return(true);
 
 	}
 
@@ -210,6 +220,9 @@ namespace BALL
 	double FresnoHydrogenBond::updateEnergy()
 		throw()
 	{
+
+		Timer timer;
+		timer.start();
 
 		#ifdef DEBUG
 		Molecule debug_molecule;
@@ -351,7 +364,11 @@ namespace BALL
 		debug_file.close();
 #endif
 
-		return energy_;
+		timer.stop();
+		Log.info() << "FresnoHydrogenBond::updateEnergy(): "
+			<< timer.getCPUTime() << " s" << std::endl;
+
+		return(energy_);
 	}
 
 

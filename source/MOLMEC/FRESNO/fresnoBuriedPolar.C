@@ -1,4 +1,4 @@
-// $Id: fresnoBuriedPolar.C,v 1.1.2.15 2004/06/13 14:19:31 anker Exp $
+// $Id: fresnoBuriedPolar.C,v 1.1.2.16 2005/01/30 14:00:45 anker Exp $
 // Molecular Mechanics: Fresno force field, buried polar component
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -6,6 +6,8 @@
 
 #include <BALL/MOLMEC/FRESNO/fresno.h>
 #include <BALL/MOLMEC/FRESNO/fresnoBuriedPolar.h>
+
+#include <BALL/SYSTEM/timer.h>
 
 #define DEBUG 1
 
@@ -74,6 +76,9 @@ namespace BALL
 	bool FresnoBuriedPolar::setup()
 		throw()
 	{
+		Timer timer;
+		timer.start();
+
 		ForceField* force_field = getForceField();
 		if (force_field == 0)
 		{
@@ -161,7 +166,11 @@ namespace BALL
 				<< " possible buried polar interactions" << endl << endl;
 		}
 
-		return true;
+		timer.stop();
+		Log.info() << "FresnoBuriedPolar::setup(): " << timer.getCPUTime() << " s"
+			<< std::endl;
+
+		return(true);
 
 	}
 
@@ -169,6 +178,9 @@ namespace BALL
 	double FresnoBuriedPolar::updateEnergy()
 		throw()
 	{
+
+		Timer timer;
+		timer.start();
 
 		#ifdef DEBUG
 		Molecule debug_molecule;
@@ -260,6 +272,10 @@ namespace BALL
 		{
 			Log.info() << "BP: energy is " << energy_ << endl;
 		}
+
+		timer.stop();
+		Log.info() << "FresnoBuriedPolar::updateEnergy(): " 
+			<< timer.getCPUTime() << " s" << std::endl;
 
 		return energy_;
 
