@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.17 2005/01/17 21:32:34 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.18 2005/01/17 23:54:11 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -18,7 +18,6 @@
 #include <BALL/VIEW/PRIMITIVES/tube.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredLine.h>
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
-#include <BALL/VIEW/PRIMITIVES/mesh.h>
 
 #include <BALL/SYSTEM/timer.h>
 
@@ -269,14 +268,12 @@ namespace BALL
 		}
 
 
-		void GLRenderer::removeDisplayListFor(const Representation& rep)
+		void GLRenderer::removeRepresentation(const Representation& rep)
 			throw()
 		{
-			if (vertexBuffersEnabled() &&
-					isSurfaceModel(rep.getModelType()))
+			if (vertexBuffersEnabled())
 			{
 				clearVertexBuffersFor(*(Representation*)&rep);
-				return;
 			}
 
 			if (display_lists_.size() + mesh_to_buffer_.size() < 2)
@@ -295,23 +292,15 @@ namespace BALL
 				}
 			}
 
-			if (!display_lists_.has(&rep)) return;
-			delete display_lists_[&rep];
-			display_lists_.erase(&rep);
+			DisplayListHashMap::Iterator hit = display_lists_.find(&rep);
+			if (hit == display_lists_.end()) return;
+			delete hit->second;
+			display_lists_.erase(hit);
 		}
 
-		void GLRenderer::rebuildDisplayListFor(const Representation& rep)
+		void GLRenderer::bufferRepresentation(const Representation& rep)
 			throw()
 		{
-			if (vertexBuffersEnabled() &&
-					isSurfaceModel(rep.getModelType()))
-			{
-Log.error() << "rebuild buffer " << std::endl;
-				clearVertexBuffersFor(*(Representation*)&rep);
-				render(rep);
-				return;
-			}
-
 Log.error() << "rebuild list " << std::endl;
 
 #ifdef BALL_BENCHMARKING
@@ -335,6 +324,20 @@ Log.error() << "rebuild list " << std::endl;
 			display_list->startDefinition();
 			render(rep);
 			display_list->endDefinition();
+
+			if (vertexBuffersEnabled())
+			{
+				clearVertexBuffersFor(*(Representation*)&rep);
+				const List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
+				List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
+				for (; it != geometric_objects.end(); it++)
+				{
+					glLoadName(getName(**it));
+					const Mesh* const mesh = dynamic_cast<Mesh*>(*it);
+					if (mesh != 0) renderMesh_(*mesh);
+				}
+			}
+
 #ifdef BALL_BENCHMARKING
 	t.stop();
 	logString("OpenGL rendering time: " + String(t.getCPUTime()));
@@ -369,10 +372,23 @@ Log.error() << "rebuild list " << std::endl;
 			// accelerate things a little by calling getGeometricObjects() only once
 			const List<GeometricObject*>& geometric_objects = representation.getGeometricObjects();
 			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
-			for (; it != geometric_objects.end(); it++)
+			if (use_vertex_buffer_)
 			{
- 				glLoadName(getName(**it));
-				render_(*it);
+				for (; it != geometric_objects.end(); it++)
+				{
+					glLoadName(getName(**it));
+
+					const Mesh* const mesh = dynamic_cast<Mesh*>(*it);
+					if (mesh == 0) render_(*it);
+				}
+			}
+			else
+			{
+				for (; it != geometric_objects.end(); it++)
+				{
+					glLoadName(getName(**it));
+					render_(*it);
+				}
 			}
 
 			glFlush();
@@ -1477,38 +1493,40 @@ Log.error() << "rebuild list " << std::endl;
 			}
 		}
 
-	void GLRenderer::drawFromDisplayList(const Representation& rep)
-		throw()
-	{
-		if (rep.isHidden()) return;
-
-		if (use_vertex_buffer_ && 
-				VIEW::isSurfaceModel(rep.getModelType()))
+		void GLRenderer::drawBuffered(const Representation& rep)
+			throw()
 		{
-Log.error() << "drawvertex" << std::endl;
-			const List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
-			List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
-			for (; it != geometric_objects.end(); it++)
+			if (rep.isHidden()) return;
+
+			// if we have vertex buffers for this Representation, draw them
+			if (use_vertex_buffer_)
 			{
-				Mesh* mesh = dynamic_cast<Mesh*>(*it);
-				if (mesh == 0) continue;
-
-				HashMap<const Mesh*, MeshBuffer*>::Iterator hit = mesh_to_buffer_.find(mesh);
-
-				if (hit != mesh_to_buffer_.end())
+	Log.error() << "drawvertex" << std::endl;
+				const List<GeometricObject*>& geometric_objects = rep.getGeometricObjects();
+				List<GeometricObject*>::ConstIterator it = geometric_objects.begin();
+				for (; it != geometric_objects.end(); it++)
 				{
-					hit->second->draw();
+					const Mesh* const mesh = dynamic_cast<Mesh*>(*it);
+					if (mesh == 0) continue;
+
+					const HashMap<const Mesh*, MeshBuffer*>::Iterator hit = mesh_to_buffer_.find(mesh);
+
+					if (hit != mesh_to_buffer_.end())
+					{
+						hit->second->draw();
+					}
 				}
 			}
-			return;
+
+			// if we have a displaylist for this Representation, draw it
+			DisplayListHashMap::Iterator dit = display_lists_.find(&rep);
+			if (dit != display_lists_.end())
+			{
+	Log.error() << "drawlislistt" << std::endl;
+				dit->second->draw();
+			}
 		}
 
-		DisplayListHashMap::Iterator dit = display_lists_.find(&rep);
-		if (dit == display_lists_.end()) return;
-Log.error() << "drawlislistt" << std::endl;
-
-		dit->second->draw();
-	}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/RENDERING/glRenderer.iC>
