@@ -1,4 +1,4 @@
-// $Id: numericalSAS.C,v 1.4 1999/12/30 18:05:41 oliver Exp $
+// $Id: numericalSAS.C,v 1.5 2000/02/05 12:45:35 len Exp $
 
 #include <BALL/STRUCTURE/numericalSAS.h>
 #include <BALL/KERNEL/atom.h>
@@ -14,6 +14,83 @@ namespace BALL
 
 	// forward
 	int nsc_(double*, double*, int, int, int, double*, double**, double*, double**, int*);
+
+	void calculateNumericalSASAtomAreas
+		(HashMap<Atom*,float>& aareas,
+			const Composite& composite, float probe_radius, int number_of_dots)
+	{
+		// extract all atoms: iterate over all composites and
+		// check whether they are Atoms
+		vector<Atom*>	atoms;
+		Composite::SubcompositeIterator	it = composite.beginSubcomposite();
+		for (; it != composite.endSubcomposite(); ++it)
+		{
+			if (RTTI::isKindOf<Atom>(*it))
+			{
+				atoms.push_back(RTTI::castTo<Atom>(*it));
+			}
+		}
+		
+		// if no atoms are found, return zero
+		if (atoms.size() == 0)
+		{
+			return;
+		}
+				
+		// create the field required by nsc and fill it with the atom coordinates
+		double* coordinates = new double[atoms.size() * 3];
+		double* radii = new double[atoms.size()];
+		for (Size i = 0; i < atoms.size(); i++)
+		{
+			float tmp[3];
+			atoms[i]->getPosition().get(tmp);
+			coordinates[i * 3]			= (double)tmp[0];
+			coordinates[i * 3 + 1]	= (double)tmp[1];
+			coordinates[i * 3 + 2]	= (double)tmp[2];
+			radii[i] = atoms[i]->getRadius() + probe_radius;
+		}
+
+		double area;
+		double volume;
+		int number_of_surface_dots;
+		double* atom_areas = 0;
+		double* surface_dots = 0;
+
+		// call nsc
+		nsc_(coordinates, radii, (int)atoms.size(),
+				 number_of_dots, FLAG_ATOM_AREA, 
+				 &area, &atom_areas, &volume, 
+				 &surface_dots, &number_of_surface_dots);
+
+
+		it = composite.beginSubcomposite();
+		Size j = 0;
+		for (; it != composite.endSubcomposite(); ++it)
+		{
+			if (RTTI::isKindOf<Atom>(*it))
+			{
+				aareas.insert(pair<Atom*,float>(RTTI::castTo<Atom>(*it), (float)atom_areas[j]));
+				j++;
+			}
+		}
+
+		// free arrays (if created)
+		if (atom_areas != 0)
+		{
+			free(atom_areas);
+		}
+		if (surface_dots != 0)
+		{
+			free(surface_dots);
+		}
+
+		// free the input fields
+		delete [] coordinates;
+		delete [] radii;
+
+		return;
+	}
+
 
 	float calculateNumericalSASArea	
 		(const Composite& composite, float probe_radius, int number_of_dots)
