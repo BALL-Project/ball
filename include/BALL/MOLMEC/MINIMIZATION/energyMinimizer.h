@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.h,v 1.20 2001/03/11 21:04:58 anker Exp $
+// $Id: energyMinimizer.h,v 1.21 2001/06/26 02:35:10 oliver Exp $
 // Energy Minimizer: A class for minimizing the energy of molecular systems
 
 #ifndef BALL_MOLMEC_MINIMIZATION_ENERGYMINIMIZER_H
@@ -287,7 +287,7 @@ namespace BALL
 				should make sure to call {\tt EnergyMinimizer::finishIteration} or 
 				has to take care of the above items himself.
 
-				All derved classes should call this method at the end of the minimize main loop.
+				All derived classes should call this method at the end of the minimize main loop.
 				Otherwise strange things might happen.
 				@see	minimize
 		*/
