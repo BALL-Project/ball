@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.5 2000/01/10 20:35:57 hekl Exp $
+// $Id: mainframe.h,v 1.6 2000/01/12 17:41:55 oliver Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -18,7 +18,8 @@
 #include <qpopupmenu.h>
 #include <qlayout.h>
 #include <qstring.h>
-#include <qfiledialog.h>
+#include <qsplitter.h>
+#include <qstatusbar.h>
 
 #ifndef BALL_CONCEPT_NOTIFICATION_H
 #	include <BALL/CONCEPT/notification.h>
@@ -26,6 +27,10 @@
 
 #ifndef BALL_FORMAT_HINFILE_H
 #	include <BALL/FORMAT/HINFile.h>
+#endif
+
+#ifndef BALL_FORMAT_INIFILE_H
+#	include <BALL/FORMAT/INIFile.h>
 #endif
 
 #ifndef BALL_FORMAT_PDBFILE_H
@@ -36,8 +41,8 @@
 #	include <BALL/KERNEL/baseFragment.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_TIMERTEXTVIEW_H
-#	include <BALL/VIEW/KERNEL/timerTextView.h>
+#ifndef BALL_VIEW_KERNEL_LOGVIEW_H
+#	include <BALL/VIEW/KERNEL/logView.h>
 #endif
 
 #ifndef BALL_VIEW_OPENGL_KERNEL_SCENE_H
@@ -97,7 +102,10 @@ class Mainframe
 
 		MoleculeObjectProcessor &getObjectProcessor
 			(void);
-
+		
+		void setPreferences(INIFile& inifile) const;
+		void getPreferences(const INIFile& inifile);
+		
 
   public slots:
 
@@ -118,22 +126,24 @@ class Mainframe
 
   private:
 	
-		LogStream __mLogStream_;
+	  Scene*				scene_;
 
-	  Scene __mScene_;
     MoleculeObjectProcessor __mMoleculeObjectProcessor_;
 		MoleculeGLObjectCollector __mMoleculeGLObjectCollector_;
 
-		QMenuBar __mQMenuBar_;
-		QPopupMenu *edit__mpQPopupMenu_;
-		QVBoxLayout *__mpQVBoxLayout_;
-		QHBoxLayout *__mpQHBoxLayout_;
+		QMenuBar*			menubar_;
+		QPopupMenu*		edit__mpQPopupMenu_;
+		QSplitter*		hor_splitter_;
+		QSplitter*		vert_splitter_;
+		Control*			control_;
+		LogView*			logview_;
+		QStatusBar*		statusbar_;
+		QVBoxLayout*	vboxlayout_;
+	
 
-		Control __mControl_;
+		List<QPopupMenu*> popup_menus__mList_;
 
-		TimerTextView __mTimerTextView_;
-
-		List<QPopupMenu *> popup_menus__mList_;
+		INIFile				preferences_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS

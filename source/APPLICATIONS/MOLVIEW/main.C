@@ -20,9 +20,8 @@ int main(int argc, char **argv)
 
 	// creating Mainframe
 	Mainframe mainframe;
+	__QApplication.setMainWidget(&mainframe);
 	
-	mainframe.resize(640, 480);
-
   // creating server
 	//  Server server;
 
@@ -39,11 +38,8 @@ int main(int argc, char **argv)
 	// activate the server and wait for client to connect
 	//  server.activate();
 
-	// activate Mainframe
-	__QApplication.setMainWidget(&mainframe);
-	mainframe.show();
-
 	// start the application
+	mainframe.show();
   return __QApplication.exec();
 }
 

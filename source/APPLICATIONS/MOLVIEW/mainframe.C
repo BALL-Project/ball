@@ -3,27 +3,28 @@
 #include "DlgSelector.h"
 #include "DlgDisplayProperties.h"
 #include <qcolordialog.h>
+#include <qfiledialog.h>
+#include <qfile.h>
 
 using namespace std;
 
 Mainframe::Mainframe
-  (QWidget *parent__pQWidget,
-	 const char *name__pc)
+  (QWidget *parent__pQWidget, const char *name__pc)
 		:
-		__mLogStream_(),
-		__mScene_(this),
+		scene_(0),
 		__mMoleculeObjectProcessor_(),
 		__mMoleculeGLObjectCollector_(),
-		__mQMenuBar_(this),
+		menubar_(0),
 		edit__mpQPopupMenu_(0),
-		__mpQVBoxLayout_(0),
-		__mpQHBoxLayout_(0),
-		__mControl_(this),
-		__mTimerTextView_(this),
-		popup_menus__mList_()
+		hor_splitter_(0),
+		vert_splitter_(0),
+		control_(0),
+		logview_(0),
+		statusbar_(0),
+		vboxlayout_(0),
+		popup_menus__mList_(),
+		preferences_(".molview.ini")
 {
-	setCaption("MolVIEW");
-		
 	// ---------------------
 	// Logstream setup -----
 	// ---------------------
@@ -31,18 +32,64 @@ Mainframe::Mainframe
 	Log.remove(std::cout);
 
 	// ---------------------
-	// Connectiviy ---------
+	// create widgets ------
+	// ---------------------
+	setCaption("MolVIEW");
+	menubar_ = new QMenuBar(this);
+	CHECK_PTR(menubar_);
+
+	vert_splitter_ = new QSplitter(this);
+	CHECK_PTR(vert_splitter_);
+	vert_splitter_->setOrientation(Vertical);
+
+	hor_splitter_ = new QSplitter(vert_splitter_);
+	CHECK_PTR(hor_splitter_);
+
+	control_ = new Control(hor_splitter_);
+	control_->resize
+		((int)(0.15 * (float)width()),
+		 (int)(0.8 * (float)height()));
+	CHECK_PTR(control_);
+
+	scene_ = new Scene(hor_splitter_);
+	CHECK_PTR(scene_);
+
+	logview_ = new LogView(vert_splitter_);
+	CHECK_PTR(logview_);
+
+	statusbar_ = new QStatusBar(this);
+	CHECK_PTR(statusbar_);
+
+	// ---------------------
+	// Scene setup ---------
 	// ---------------------
 
-	connect(&__mControl_,
-					SIGNAL(itemSelected(bool)),
-					this,
-					SLOT(updateEditMenuFromSelection(bool)));
+	scene_->setGLObjectCollector(__mMoleculeGLObjectCollector_);
 
-	connect(&__mControl_,
-					SIGNAL(itemCutOrCopied(bool)),
-					this,
-					SLOT(updateEditMenuFromCutOrCopy(bool)));
+	// ---------------------
+	// Control setup -------
+	// ---------------------
+	
+	control_->addColumn("Name");
+	control_->addColumn("Type");
+	control_->addColumn("Display");
+	control_->setColumnWidth(0, 80);
+	control_->setColumnWidth(1, 60);
+
+	control_->setScene(*scene_);
+	control_->setMoleculeObjectProcessor(__mMoleculeObjectProcessor_);
+
+	// ---------------------
+	// TextView setup ------
+	// ---------------------
+	
+	QFont f("Courier", 12, QFont::DemiBold, false);
+	logview_->setFont(f);
+	logview_->setReadOnly(TRUE);
+	logview_->setAutoUpdate(TRUE);
+
+	Log.info() << "Welcome to MolVIEW." << endl;
+
 
 	// ---------------------
 	// Menu ----------------
@@ -54,10 +101,9 @@ Mainframe::Mainframe
 	CHECK_PTR(files__pQPopupMenu);
 	popup_menus__mList_.push_back(files__pQPopupMenu);
 
-	files__pQPopupMenu->insertItem("&PDB File", this, SLOT(importPDB()), CTRL+Key_P, 1);
-	files__pQPopupMenu->insertItem("&HIN File", this, SLOT(importHIN()), CTRL+Key_H, 2);
-	files__pQPopupMenu->insertItem("&MOL2 File", 3);
-	files__pQPopupMenu->setItemEnabled(3, false);
+	QPopupMenu *file__pQPopupMenu = new QPopupMenu(this);
+	CHECK_PTR(file__pQPopupMenu);
+	popup_menus__mList_.push_back(file__pQPopupMenu);
 
 	QPopupMenu *export__pQPopupMenu = new QPopupMenu(this);
 	CHECK_PTR(export__pQPopupMenu);
@@ -66,14 +112,16 @@ Mainframe::Mainframe
 	export__pQPopupMenu->insertItem("&Povray", this, SLOT(exportPovray()), CTRL+Key_P, 4);
 	export__pQPopupMenu->setItemEnabled(4, false);
 
-	QPopupMenu *file__pQPopupMenu = new QPopupMenu(this);
-	CHECK_PTR(file__pQPopupMenu);
-	popup_menus__mList_.push_back(file__pQPopupMenu);
-
 	file__pQPopupMenu->insertItem("&Import File", files__pQPopupMenu, CTRL+Key_I);
 	file__pQPopupMenu->insertItem("&Export File", export__pQPopupMenu, CTRL+Key_E);
 	file__pQPopupMenu->insertSeparator();
 	file__pQPopupMenu->insertItem("E&xit", qApp, SLOT(quit()), CTRL+Key_X);
+
+	files__pQPopupMenu->insertItem("&PDB File", this, SLOT(importPDB()), CTRL+Key_P, 1);
+	files__pQPopupMenu->insertItem("&HIN File", this, SLOT(importHIN()), CTRL+Key_H, 2);
+	files__pQPopupMenu->insertItem("&MOL2 File", 3);
+	files__pQPopupMenu->setItemEnabled(3, false);
+
 
 	// Edit-Menu -------------------------------------------------------------------
 	
@@ -83,125 +131,128 @@ Mainframe::Mainframe
 
 	edit__mpQPopupMenu_ = edit__pQPopupMenu;
 
-	edit__pQPopupMenu->insertItem("check &Residue", &__mControl_, 
-																SLOT(checkResidue()), CTRL+Key_R, MENU__CHECK_RESIDUE);
-	edit__pQPopupMenu->insertSeparator();
-	edit__pQPopupMenu->insertItem("&cut", &__mControl_, 
+	edit__pQPopupMenu->insertItem("&cut", control_, 
 																SLOT(cut()), CTRL+Key_C, MENU__CUT);
-	edit__pQPopupMenu->insertItem("c&opy", &__mControl_, 
+	edit__pQPopupMenu->insertItem("c&opy", control_, 
 																SLOT(copy()), CTRL+Key_O, MENU__COPY);
-	edit__pQPopupMenu->insertItem("&paste", &__mControl_, 
+	edit__pQPopupMenu->insertItem("&paste", control_, 
 																SLOT(paste()), CTRL+Key_P, MENU__PASTE);
- 	edit__pQPopupMenu->insertSeparator();
-	edit__pQPopupMenu->insertItem("build &Bonds", &__mControl_, 
-																SLOT(buildBonds()), CTRL+Key_B, MENU__BUILD_BONDS);
-	edit__pQPopupMenu->insertItem("remove Bo&nds", &__mControl_, 
-																SLOT(removeBonds()), CTRL+Key_N, MENU__REMOVE_BONDS);
 	edit__pQPopupMenu->insertSeparator();
-	edit__pQPopupMenu->insertItem("&select", &__mControl_, 
+	edit__pQPopupMenu->insertItem("&select", control_, 
 																SLOT(select()), CTRL+Key_S, MENU__SELECT);
-	edit__pQPopupMenu->insertItem("&deselect", &__mControl_, 
+	edit__pQPopupMenu->insertItem("&deselect", control_, 
 																SLOT(deselect()), CTRL+Key_D, MENU__DESELECT);
 	edit__pQPopupMenu->insertSeparator();
-	edit__pQPopupMenu->insertItem("focus c&amera", &__mControl_, 
+	edit__pQPopupMenu->insertItem("focus c&amera", control_, 
 																SLOT(centerCamera()), CTRL+Key_A, MENU__CENTER_CAMERA);
 	edit__pQPopupMenu->insertSeparator();
-	edit__pQPopupMenu->insertItem("cl&ear Clipboard", &__mControl_, 
+	edit__pQPopupMenu->insertItem("cl&ear Clipboard", control_, 
 																SLOT(clearClipboard()), CTRL+Key_E, MENU__CLEAR_CLIPBOARD);
 
-	edit__mpQPopupMenu_->setItemEnabled(MENU__CHECK_RESIDUE, FALSE);
 	edit__mpQPopupMenu_->setItemEnabled(MENU__CUT, FALSE);
 	edit__mpQPopupMenu_->setItemEnabled(MENU__COPY, FALSE);
 	edit__mpQPopupMenu_->setItemEnabled(MENU__PASTE, FALSE);
-	edit__mpQPopupMenu_->setItemEnabled(MENU__BUILD_BONDS, FALSE);
-	edit__mpQPopupMenu_->setItemEnabled(MENU__REMOVE_BONDS, FALSE);
 	edit__mpQPopupMenu_->setItemEnabled(MENU__SELECT, FALSE);
 	edit__mpQPopupMenu_->setItemEnabled(MENU__DESELECT, FALSE);
 	edit__mpQPopupMenu_->setItemEnabled(MENU__CENTER_CAMERA, FALSE);
 	edit__mpQPopupMenu_->setItemEnabled(MENU__CLEAR_CLIPBOARD, FALSE);
+
+	QPopupMenu* build_menu = new QPopupMenu(this);
+	CHECK_PTR(build_menu);
+	popup_menus__mList_.push_back(build_menu);
+
+	build_menu->setItemEnabled(MENU__CHECK_RESIDUE, FALSE);
+	build_menu->setItemEnabled(MENU__BUILD_BONDS, FALSE);
+	build_menu->setItemEnabled(MENU__REMOVE_BONDS, FALSE);
+	build_menu->insertItem("check st&ructure", control_, 
+												 SLOT(checkResidue()), CTRL+Key_R, MENU__CHECK_RESIDUE);
+	build_menu->insertItem("&build bonds", control_, 
+												 SLOT(buildBonds()), CTRL+Key_B, MENU__BUILD_BONDS);
+	build_menu->insertItem("remove bo&nds", control_, 
+												 SLOT(removeBonds()), CTRL+Key_N, MENU__REMOVE_BONDS);
+	build_menu->insertItem("add &hydrogens", control_, 
+												 SLOT(removeBonds()), CTRL+Key_H, MENU__REMOVE_BONDS);
 	
+
+
 	// Windows-Menu -------------------------------------------------------------------
 	
 	QPopupMenu *windows__pQPopupMenu = new QPopupMenu(this);
 	CHECK_PTR(windows__pQPopupMenu);
 	popup_menus__mList_.push_back(windows__pQPopupMenu);
 
-	windows__pQPopupMenu->insertItem("open D&isplay window", &__mControl_, 
+	windows__pQPopupMenu->insertItem("d&isplay properties", control_, 
 																	 SLOT(openDisplay()), CTRL+Key_I, MENU__OPEN_DISPLAY);
-	
+
+
 	// Help-Menu -------------------------------------------------------------------
 
 	QPopupMenu *help__pQPopupMenu = new QPopupMenu(this);
 	CHECK_PTR(help__pQPopupMenu);
 	popup_menus__mList_.push_back(help__pQPopupMenu);
-
+	
 	help__pQPopupMenu->insertItem("&About", this, SLOT(about()), CTRL+Key_A);
 
 	// Menu ------------------------------------------------------------------------
 
-	__mQMenuBar_.insertItem("&File", file__pQPopupMenu);
-	__mQMenuBar_.insertItem("&Edit", edit__pQPopupMenu);
-	__mQMenuBar_.insertItem("&Windows", windows__pQPopupMenu);
-	__mQMenuBar_.insertSeparator();
-	__mQMenuBar_.insertItem("&Help", help__pQPopupMenu);
-	__mQMenuBar_.setSeparator(QMenuBar::InWindowsStyle);
+	menubar_->insertItem("&File", file__pQPopupMenu);
+	menubar_->insertItem("&Edit", edit__pQPopupMenu);
+	menubar_->insertItem("&Build", build_menu);
+	menubar_->insertItem("&Windows", windows__pQPopupMenu);
+	menubar_->insertSeparator();
+	menubar_->insertItem("&Help", help__pQPopupMenu);
+	menubar_->setSeparator(QMenuBar::InWindowsStyle);
 	
-	// ---------------------
-	// Scene setup ---------
-	// ---------------------
-
-	__mScene_.setGLObjectCollector(__mMoleculeGLObjectCollector_);
-
-	// ---------------------
-	// Control setup -------
-	// ---------------------
-	
-	__mControl_.addColumn("Name");
-	__mControl_.addColumn("Type");
-	__mControl_.addColumn("Display");
-	__mControl_.setColumnWidth(0, 100);
-	__mControl_.setColumnWidth(1, 100);
-
-	__mControl_.setScene(__mScene_);
-	__mControl_.setMoleculeObjectProcessor(__mMoleculeObjectProcessor_);
-
-	// ---------------------
-	// TextView setup ------
-	// ---------------------
-	
-	QFont f("Courier", 12, QFont::Bold, false);
-	__mTimerTextView_.setFont(f);
-	__mTimerTextView_.setReadOnly(TRUE);
-	__mTimerTextView_.setAutoUpdate(TRUE);
-
-	Log.info() << "Welcome to MolVIEW." << endl;
 
 	// ---------------------
 	// Layout --------------
 	// ---------------------
 
-	__mpQVBoxLayout_ = new QVBoxLayout(this);
-	CHECK_PTR(__mpQVBoxLayout_);
+	vboxlayout_ = new QVBoxLayout(this);
+	CHECK_PTR(vboxlayout_);
 
-	__mpQHBoxLayout_ = new QHBoxLayout();
-	CHECK_PTR(__mpQHBoxLayout_);
-	
-	// horizontal Layout
-	// first column: tree control
-	// second column: Scene
- 	__mpQHBoxLayout_->addWidget(&__mControl_, 1); 
-  __mpQHBoxLayout_->addWidget(&__mScene_, 3);
-	
-	// vertical Layout (2 rows)
-	// contains in the first row a horizontal layout with two columns
-	__mpQVBoxLayout_->setMenuBar(&__mQMenuBar_);
-	__mpQVBoxLayout_->addLayout(__mpQHBoxLayout_, 4);
-	__mpQVBoxLayout_->addWidget(&__mTimerTextView_ ,1);
+  vboxlayout_->setMenuBar(menubar_);
+	vboxlayout_->addWidget(vert_splitter_);
+	vboxlayout_->addWidget(statusbar_);
+
+	// ---------------------
+	// Connectivity --------
+	// ---------------------
+
+	connect(control_,
+					SIGNAL(itemSelected(bool)),
+					this,
+					SLOT(updateEditMenuFromSelection(bool)));
+
+	connect(control_,
+					SIGNAL(itemCutOrCopied(bool)),
+					this,
+					SLOT(updateEditMenuFromCutOrCopy(bool)));
+
+	// ---------------------
+	// read preferences ----
+	// ---------------------
+	preferences_.setFilename(".molview.ini");
+	preferences_.read();
+	getPreferences(preferences_);	
 }
 
-Mainframe::~Mainframe
-  ()
+Mainframe::~Mainframe()
 {
+	//
+	// extract preferences 
+	// from the current settings
+	//
+	setPreferences(preferences_);
+
+	//
+	// write the preferences
+	//
+	preferences_.write();
+
+	//
+	// clean up
+	//
 	List<QPopupMenu *>::Iterator iterator__List;
 
 	for (iterator__List = popup_menus__mList_.begin();
@@ -214,12 +265,12 @@ Mainframe::~Mainframe
 	popup_menus__mList_.clear();
 }
 
-void Mainframe::importPDB
-  ()
+void Mainframe::importPDB()
 {
 	QStringList __QStringList;
 	__QStringList = "PDB files (*.pdb)";
 	__QStringList += "PDB files (*.brk)";
+	__QStringList += "PDB files (*.ent)";
 	__QStringList += "All files (*.*)";
 
 	QFileDialog __QFileDialog(this, 0, TRUE);
@@ -240,24 +291,25 @@ void Mainframe::importPDB
 			}
 
 			// PDB file laden
-			Log.info() << "> opening PDB-File." << endl;
+			statusbar_->message("reading PDB-File...");
 
 			PDBFile __PDBFile(filename__QString.ascii());
 
 			System __System;
 			__PDBFile >> __System;
-			/*
-			if (!__PDBFile.isGood())
-			{
-				QMessageBox::about(this, "PDB-File Error", "Error reading PDB-File!\n\n");
+			__PDBFile.close();
 
-				return;
-			}
-			*/
+			Log.info() << "> read " << __System.countAtoms() << " atoms from PDB file \"" 
+								 << filename__QString.ascii() << "\"" << endl;
 
-			Log.info() << "> generating bonds." << endl;
-      __System.apply(*(__mMoleculeObjectProcessor_.fragmentdb.buildBonds));
+			statusbar_->message("normalizing names...");
+	    __System.apply(*(__mMoleculeObjectProcessor_.fragmentdb.normalizeNames));
+			Log.info() << "> normalized names" << endl;
 
+			statusbar_->message("generating missing bonds...");
+	    __System.apply(*(__mMoleculeObjectProcessor_.fragmentdb.buildBonds));
+			Log.info() << "> generated missing bonds" << endl;
+  
 			// construct a name (the filename without the dir path)
 			filename__QString.remove(0, __QFileDialog.dirPath().length() + 1);
 
@@ -266,13 +318,13 @@ void Mainframe::importPDB
 				filename__QString = filename__QString.left(filename__QString.find('.'));
 			}
 
-			__mControl_.addComposite(&__System, &filename__QString);
+			control_->addComposite(&__System, &filename__QString);
+			statusbar_->clear();
 		}
 	}
 }
 
-void Mainframe::importHIN
-  ()
+void Mainframe::importHIN()
 {
 	QStringList __QStringList;
 	__QStringList = "HIN files (*.hin)";
@@ -295,24 +347,13 @@ void Mainframe::importHIN
 				return;
 			}
 
-			Log.info() << "> opening HIN-File." << endl;
+			statusbar_->message("reading HIN file...");
 
 			HINFile __HINFile(filename__QString.ascii());
 
 			System __System;
 			__HINFile >> __System;
-
-			/*
-			if (!__HINFile.isGood())
-			{
-				QMessageBox::about(this, "HIN-File Error", "Error reading HIN-File!\n\n");
-
-				return;
-			}
-			*/
-
-			Log.info() << "> generating bonds." << endl;
-      __System.apply(*(__mMoleculeObjectProcessor_.fragmentdb.buildBonds));
+			__HINFile.close();
 
 			// construct a name (the filename without the dir path)
 			filename__QString.remove(0, __QFileDialog.dirPath().length() + 1);
@@ -321,8 +362,12 @@ void Mainframe::importHIN
 			{
 				filename__QString = filename__QString.left(filename__QString.find('.'));
 			}
+
+			Log.info() << "> read " << __System.countAtoms() << " atoms from HIN-File \"" << filename__QString.ascii() << "\"" << endl;
+
+			control_->addComposite(&__System, &filename__QString);
 			
-			__mControl_.addComposite(&__System, &filename__QString);
+			statusbar_->clear();
 		}
 	}
 }
@@ -336,9 +381,7 @@ void Mainframe::about()
 {
 	DlgAbout about_box;
 	about_box.exec();
-	//	QColor color = QColorDialog::getColor(about_box.backgroundColor());
-	//	about_box.setBackgroundColor(color);
-	//	about_box.exec();
+	statusbar_->message("MolVIEW V 0.9 alpha");
 }
 
 void Mainframe::updateEditMenuFromSelection(bool selected__bool)
@@ -386,10 +429,98 @@ void Mainframe::resizeEvent
 {
 }
 
+void Mainframe::setPreferences(INIFile& inifile) const
+{
+	//	
+	// the main window position
+	//
+	inifile.setValue
+		("WINDOWS", "Main::x", String(x()));
+	inifile.setValue
+		("WINDOWS", "Main::y", String(x()));
+	inifile.setValue
+		("WINDOWS", "Main::width", String(width()));
+	inifile.setValue
+		("WINDOWS", "Main::height", String(height()));
 
-#		ifdef BALL_NO_INLINE_FUNCTIONS
-#			include "mainframe.iC"
-#		endif
+	// 
+	// the splitter positions
+	// 
+	QValueList<int> size_list = hor_splitter_->sizes();
+	String value_string;
+	QValueListConstIterator<int> list_it = size_list.begin();
+	for (; list_it != size_list.end(); ++list_it)
+	{
+		value_string += String(*list_it) + " ";
+	}
+	inifile.setValue("WINDOWS", "Main::hor_splitter", value_string);
+
+	value_string = "";
+	size_list = vert_splitter_->sizes();
+	list_it = size_list.begin();
+	for (; list_it != size_list.end(); ++list_it)
+	{
+		value_string += String(*list_it) + " ";
+	}
+	inifile.setValue("WINDOWS", "Main::vert_splitter", value_string);
+}
+
+void Mainframe::getPreferences(const INIFile& inifile)
+{
+	// 
+	// the geometry of the main window
+	//
+	int x_pos = x();
+	int y_pos = y();
+	int w = 640;
+	int h = 480;
+	if (inifile.hasEntry("WINDOWS", "Main::x"))
+	{
+		x_pos = inifile.getValue("WINDOWS", "Main::x").toInt();
+	}
+	if (inifile.hasEntry("WINDOWS", "Main::y"))
+	{
+		y_pos = inifile.getValue("WINDOWS", "Main::y").toInt();
+	}
+	if (inifile.hasEntry("WINDOWS", "Main::height"))
+	{
+		h = inifile.getValue("WINDOWS", "Main::height").toInt();
+	}
+	if (inifile.hasEntry("WINDOWS", "Main::width"))
+	{
+		w = inifile.getValue("WINDOWS", "Main::width").toInt();
+	}
+	setGeometry(x_pos, y_pos, w, h);
+
+	// 
+	// the splitter positions
+	//
+	QValueList<int> value_list;
+	String value_string;
+	if (inifile.hasEntry("WINDOWS", "Main::hor_splitter"))
+	{
+		value_string = inifile.getValue("WINDOWS", "Main::hor_splitter");
+		for (Size i = 0; i < value_string.countFields(); i++)
+		{
+			value_list.append(value_string.getField(i).toInt());
+		}
+		hor_splitter_->setSizes(value_list);
+		value_list.clear();
+	}
+	if (inifile.hasEntry("WINDOWS", "Main::vert_splitter"))
+	{
+		value_string = inifile.getValue("WINDOWS", "Main::vert_splitter");
+		for (Size i = 0; i < value_string.countFields(); i++)
+		{
+			value_list.append(value_string.getField(i).toInt());
+		}
+		vert_splitter_->setSizes(value_list);
+	}
+}
+
+#ifdef BALL_NO_INLINE_FUNCTIONS
+#	include "mainframe.iC"
+#endif
 
 
 

@@ -1,4 +1,4 @@
-// $Id: control.C,v 1.8 2000/01/11 20:25:04 hekl Exp $
+// $Id: control.C,v 1.9 2000/01/12 17:41:54 oliver Exp $
 
 #include "control.h"
 
@@ -18,7 +18,7 @@ Control::Control
 			display_properties_dialog_(0)
 {
 	setRootIsDecorated(TRUE);
-	//	setMultiSelection(TRUE);
+	//setMultiSelection(TRUE);
 	setSorting(-1);
 
 	connect(this, 
@@ -301,46 +301,23 @@ Control::getName
 			}
 			break;
 
+		case TYPE__RESIDUE:
+			{
+				Residue* residue = RTTI::castTo<Residue>(*__pComposite);
+				__QString = residue->getName().c_str();
+				__QString += " ";
+				__QString += residue->getID().c_str();
+			}
+			break;
+
 	  case TYPE__MOLECULE:
-			{
-				Molecule *molecule_ptr = RTTI::castTo<Molecule>(*__pComposite);
-				__QString = molecule_ptr->getName().c_str(); 			
-			}
-			break;
-
-	  case TYPE__PROTEIN:
-			{
-				Protein *protein_ptr = RTTI::castTo<Protein>(*__pComposite);
-				__QString = protein_ptr->getName().c_str();
-			}
-			break;
-
-	  case TYPE__CHAIN:
-			{
-				Chain *chain_ptr = RTTI::castTo<Chain>(*__pComposite);
-				__QString = chain_ptr->getName().c_str();
-			}
-			break;
-
-	  case TYPE__FRAGMENT:
-			{
-				Fragment *fragment_ptr = RTTI::castTo<Fragment>(*__pComposite);
-				__QString = fragment_ptr->getName().c_str();
-			}
-			break;
-
-	  case TYPE__RESIDUE:
-			{
-				Residue *residue_ptr = RTTI::castTo<Residue>(*__pComposite);
-				__QString = (residue_ptr->getName() + " " + residue_ptr->getID()).c_str();
-			}
-			break;
-
+		case TYPE__PROTEIN:
+		case TYPE__CHAIN:
+		case TYPE__FRAGMENT:
 	  case TYPE__SECONDARY_STRUCTURE:
 			{
-				SecondaryStructure *secondarystructure_ptr 
-					= RTTI::castTo<SecondaryStructure>(*__pComposite);
-				__QString = secondarystructure_ptr->getName().c_str();
+				BaseFragment* base_fragment = RTTI::castTo<BaseFragment>(*__pComposite);
+				__QString = base_fragment->getName().c_str();
 			}
 			break;
 
@@ -768,8 +745,7 @@ Control::ContextMenu
 	}
 }
 
-void 
-Control::objectSelected
+void Control::objectSelected
   (QListViewItem *__pQListViewItem)
 {
 	if (__pQListViewItem == 0)
@@ -802,42 +778,36 @@ Control::objectSelected
 	emit itemSelected(true);
 }
 
-void 
-Control::cut()
+void Control::cut()
 {
 	QMessageBox::about(this, "CUT-DEMO", "cut object choosen.");
 
 	emit itemCutOrCopied(true);
 }
 
-void 
-Control::copy()
+void Control::copy()
 {
 	QMessageBox::about(this, "COPY-DEMO", "copy object choosen.");
 
 	emit itemCutOrCopied(true);
 }
 
-void 
-Control::paste()
+void Control::paste()
 {
 	QMessageBox::about(this, "PASTE-DEMO", "paste object choosen.");
 }
 
-void 
-Control::buildBonds()
+void Control::buildBonds()
 {
 	QMessageBox::about(this, "BONDS-DEMO", "build bonds choosen.");
 }
 
-void 
-Control::removeBonds()
+void Control::removeBonds()
 {
 	QMessageBox::about(this, "BONDS-DEMO", "remove bonds choosen.");
 }
 
-void 
-Control::select()
+void Control::select()
 {
 	if (selected__mpComposite_ == 0)
 	{
@@ -912,8 +882,7 @@ Control::deselect()
 	Log.info() << "done." << endl;
 }
 
-void 
-Control::checkResidue()
+void Control::checkResidue()
 {
 	if (selected__mpComposite_ == 0)
 	{
@@ -922,12 +891,12 @@ Control::checkResidue()
 
 	if (__mpMoleculeObjectProcessor_->checkResidue(*selected__mpComposite_) == true)
 	{
-		Log.info() << "ResidueChecker: OK." << endl;
+		Log.info() << "ResidueChecker: all residues OK." << endl;
 	}
+	
 }
 
-void 
-Control::removeObject()
+void Control::removeObject()
 {
 	if (selected__mpComposite_ == 0)
 	{
@@ -1012,18 +981,13 @@ Control::centerCamera()
 	Log.info() << "done." << endl;
 }
 
-void 
-Control::openDisplay()
+void Control::openDisplay()
 {
-	//	__mDisplayProperties_.show();
-	//	__mDisplayProperties_.raise();
-
 	display_properties_dialog_.show();
 	display_properties_dialog_.raise();
 }
 
-void 
-Control::clearClipboard()
+void Control::clearClipboard()
 {
 	QMessageBox::about(this, "CLIPBOARD-DEMO", "clear clipboard choosen.");
 
@@ -1197,9 +1161,8 @@ Control::_genListViewItem
 				FragmentIterator __FragmentIterator;
 				int index__i = 0;
 				
-				for(__FragmentIterator = __pMolecule->beginFragment();
-						__FragmentIterator != __pMolecule->endFragment();
-						++__FragmentIterator)
+				for(__FragmentIterator = __pMolecule->rbeginFragment();
+						+__FragmentIterator; ++__FragmentIterator)
 				{
 					QString fragname__QString;
 					fragname__QString.sprintf("Fragment_%d", ++index__i);
@@ -1389,39 +1352,6 @@ Control::_genListViewItem
 				}
 
 
-				/*
-				Chain *__pChain = RTTI::castTo<Chain>(*__pComposite);
-				SecondaryStructureIterator __SecondaryStructureIterator;
-				int index__i = 0;
-				
-				for(__SecondaryStructureIterator = __pChain->beginSecondaryStructure();
-						__SecondaryStructureIterator != __pChain->endSecondaryStructure();
-						++__SecondaryStructureIterator)
-				{
-					QString secondaryStructure__QString;
-					secondaryStructure__QString.sprintf("SecondaryStructure_%d", ++index__i);
-
-					_genListViewItem(new__pQListViewItem, 
-													 (Composite *)&(*__SecondaryStructureIterator),
-													 &secondaryStructure__QString);
-				}
-
-				// all Residues
-				ResidueIterator __ResidueIterator;
-				index__i = 0;
-				
-				for(__ResidueIterator = __pChain->beginResidue();
-						__ResidueIterator != __pChain->endResidue();
-						++__ResidueIterator)
-				{
-					QString residue__QString;
-					residue__QString.sprintf("Residue_%d", ++index__i);
-
-					_genListViewItem(new__pQListViewItem, 
-													 (Composite *)&(*__ResidueIterator),
-													 &residue__QString);
-				}
-				*/
 			}	
 			break;
 
@@ -1454,11 +1384,11 @@ Control::_genListViewItem
 
 				// all Residues
 				SecondaryStructure *__pSecondaryStructure = RTTI::castTo<SecondaryStructure>(*__pComposite);
-				ResidueIterator __ResidueIterator;
+				ResidueReverseIterator __ResidueIterator;
 				int index__i = 0;
 				
-				for(__ResidueIterator = __pSecondaryStructure->beginResidue();
-						__ResidueIterator != __pSecondaryStructure->endResidue();
+				for(__ResidueIterator = __pSecondaryStructure->rbeginResidue();
+						__ResidueIterator != __pSecondaryStructure->rendResidue();
 						++__ResidueIterator)
 				{
 					QString residue__QString;

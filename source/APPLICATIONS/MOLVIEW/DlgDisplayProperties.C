@@ -117,9 +117,7 @@ void DlgDisplayProperties::selectColoringMethod(const QString& string)
 	{
 		ColorRGBA color;
 		QColor qcolor = color_sample->backgroundColor();
-
-		color.set(qcolor.red(), qcolor.green(), qcolor.blue());
-
+		color.set((float)qcolor.red() / 255.0, (float)qcolor.green() / 255.0, (float)qcolor.blue() / 255.0);
 		object_processor_->setColorCalculator(COLORCALCULATOR_VALUES__CUSTOM, color);
 	}
 }
@@ -132,4 +130,8 @@ void DlgDisplayProperties::applyButtonClicked()
 void DlgDisplayProperties::editColor()
 {
 	color_sample->setBackgroundColor(QColorDialog::getColor(color_sample->backgroundColor()));
+	ColorRGBA color;
+	QColor qcolor = color_sample->backgroundColor();
+	color.set((float)qcolor.red() / 255.0, (float)qcolor.green() / 255.0, (float)qcolor.blue() / 255.0);
+	object_processor_->setColorCalculator(COLORCALCULATOR_VALUES__CUSTOM, color);
 }

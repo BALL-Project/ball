@@ -1,4 +1,4 @@
-// $Id: control.h,v 1.5 2000/01/10 20:35:11 hekl Exp $
+// $Id: control.h,v 1.6 2000/01/12 17:41:54 oliver Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_CONTROL_H
 #define BALL_APPLICATIONS_MOLVIEW_CONTROL_H
@@ -169,11 +169,9 @@ class Control
 
 		void ContextMenu
 		  (QListViewItem *__pQListViewItem, 
-			 const QPoint &__rQPoint,
-			 int column__i);
+			 const QPoint &__rQPoint, int column__i);
 
-	  void objectSelected
-			(QListViewItem *__pQListViewItem);
+	  void objectSelected(QListViewItem *__pQListViewItem);
 		
 	  void cut();
 		void copy();

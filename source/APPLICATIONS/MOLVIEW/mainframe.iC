@@ -1,15 +1,12 @@
 BALL_INLINE
-Scene &
-Mainframe::getScene
-	(void)
+Scene& Mainframe::getScene()
 {
-	return __mScene_;
+	return *scene_;
 }
 
 BALL_INLINE
-MoleculeObjectProcessor &
-Mainframe::getObjectProcessor
-	(void)
+MoleculeObjectProcessor& 
+Mainframe::getObjectProcessor()
 {
 	return __mMoleculeObjectProcessor_;
 }
