@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.47 2004/10/22 21:39:53 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.48 2004/10/23 18:10:22 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
@@ -828,6 +828,155 @@ namespace BALL
 			return turn_color_;
 		}
 
+
+		ResidueTypeColorProcessor::ResidueTypeColorProcessor()
+			: ColorProcessor(),
+				basic_color_(ColorRGBA(255,255,0)),
+				acidic_color_(ColorRGBA(0,0,255)),
+				polar_color_(ColorRGBA(255,0,255)),
+				hydrophobic_color_(ColorRGBA(0,255,0)),
+				other_color_(ColorRGBA(125,125,125))
+		{
+		}
+
+		ColorRGBA ResidueTypeColorProcessor::getColor(const Composite* composite)
+		{
+			Residue dummy;
+			const Residue* residue = composite->getAncestor(dummy); 
+			if (residue == 0) return default_color_;
+			String name = residue->getName();
+			if (name == "Lys" || 
+					name == "Arg" || 
+					name == "His") 
+			{
+				return basic_color_;
+			}
+			
+			if (name == "Phe" || 
+					name == "Tyr" || 
+					name == "Trp") 
+			{
+				return aromatic_color_;
+			}
+			
+			if (name == "Val" || 
+					name == "Leu" || 
+					name == "Met" || 
+					name == "Ile")
+			{
+				return hydrophobic_color_;
+			}
+			
+			if (name == "Asp" || 
+					name == "Glu" || 
+					name == "Gln" || 
+					name == "Asn")
+			{
+				return acidic_color_;
+			}
+
+			if (name == "Ala" || 
+					name == "Gly" || 
+					name == "Ser" ||
+					name == "Thr" || 
+					name == "Pro")
+			{
+				return polar_color_;
+			}
+
+			return other_color_;
+		}
+
+		void ResidueTypeColorProcessor::setBasicColor(const ColorRGBA& color)
+			throw()
+		{
+			basic_color_ = color;
+			basic_color_.setAlpha(255 - transparency_);
+		}
+
+		void ResidueTypeColorProcessor::setAcidicColor(const ColorRGBA& color)
+			throw()
+		{
+			acidic_color_ = color;
+			acidic_color_.setAlpha(255 - transparency_);
+		}
+
+		void ResidueTypeColorProcessor::setPolarColor(const ColorRGBA& color)
+			throw()
+		{
+			polar_color_ = color;
+			polar_color_.setAlpha(255 - transparency_);
+		}
+		
+		void ResidueTypeColorProcessor::setHydrophobicColor(const ColorRGBA& color)
+			throw()
+		{
+			hydrophobic_color_ = color;
+			hydrophobic_color_.setAlpha(255 - transparency_);
+		}
+
+		void ResidueTypeColorProcessor::setAromaticColor(const ColorRGBA& color)
+			throw()
+		{
+			aromatic_color_ = color;
+			aromatic_color_.setAlpha(255 - transparency_);
+		}
+
+		void ResidueTypeColorProcessor::setOtherColor(const ColorRGBA& color)
+			throw()
+		{
+			other_color_ = color;
+			other_color_.setAlpha(255 - transparency_);
+		}
+
+		const ColorRGBA& ResidueTypeColorProcessor::getBasicColor() const
+			throw()
+		{
+			return basic_color_;
+		}
+
+		const ColorRGBA& ResidueTypeColorProcessor::getAcidicColor() const
+			throw()
+		{
+			return acidic_color_;
+		}
+
+		const ColorRGBA& ResidueTypeColorProcessor::getPolarColor() const
+			throw()
+		{
+			return polar_color_;
+		}
+
+		const ColorRGBA& ResidueTypeColorProcessor::getHydrophobicColor() const
+			throw()
+		{
+			return hydrophobic_color_;
+		}
+
+		const ColorRGBA& ResidueTypeColorProcessor::getAromaticColor() const
+			throw()
+		{
+			return aromatic_color_;
+		}
+
+
+		const ColorRGBA& ResidueTypeColorProcessor::getOtherColor() const
+			throw()
+		{
+			return other_color_;
+		}
+
+		void ResidueTypeColorProcessor::setTransparency(Size t)
+			throw()
+		{
+			basic_color_.setAlpha(255-t);
+			acidic_color_.setAlpha(255-t);
+			polar_color_.setAlpha(255-t);
+			hydrophobic_color_.setAlpha(255-t);
+			aromatic_color_.setAlpha(255-t);
+			other_color_.setAlpha(255-t);
+		}
+			
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/MODELS/standardColorProcessor.iC>
 #	endif
