@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.49 2004/04/01 11:13:10 amoll Exp $
+// $Id: scene.C,v 1.50 2004/04/07 15:11:57 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1262,7 +1262,7 @@ namespace BALL
 		}
 
 
-		void Scene::exportPNG()
+		String Scene::exportPNG()
 		{
 			makeCurrent();
 			QImage image = grabFrameBuffer();
@@ -1273,6 +1273,8 @@ namespace BALL
 
 			if (result) setStatusbarText("Saved screenshot to " + filename);
 			else 				setStatusbarText("Could not save screenshot to " + filename);
+
+			return filename;
 		}
 
 		void Scene::exportPOVRay()

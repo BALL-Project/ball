@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.h,v 1.27 2004/04/01 11:13:12 amoll Exp $
+// $Id: scene.h,v 1.28 2004/04/07 15:11:59 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_SCENE_H
@@ -395,8 +395,8 @@ namespace BALL
 			
 			public slots:
 
-			///
-			void exportPNG();
+			/// Export PNG image and return the filename
+			String exportPNG();
 			
 			///
 			void exportPOVRay();
