@@ -1,11 +1,11 @@
-// $Id: Vector4_test.C,v 1.12 2000/06/27 23:37:49 amoll Exp $
+// $Id: Vector4_test.C,v 1.13 2000/07/12 19:36:50 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/MATHS/vector4.h>
 ///////////////////////////
 
-START_TEST(TVector4, "$Id: Vector4_test.C,v 1.12 2000/06/27 23:37:49 amoll Exp $")
+START_TEST(TVector4, "$Id: Vector4_test.C,v 1.13 2000/07/12 19:36:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -124,7 +124,7 @@ RESULT
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TVector4<T>& vector))
 	Vector4 v(1.2, 2.3, 3.4, 4.5);
-	std::ofstream outstr(filename.c_str(), std::ios::out);
+	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << v;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Vector4_test2.txt", false)
@@ -340,7 +340,7 @@ CHECK(TVector3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Vector4 v(1.2, 2.3, 3.4, 4.5);
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), ios::out);
+	std::ofstream outfile(filename.c_str(), File::OUT);
 	v.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Vector4_test.txt", true)
@@ -427,7 +427,7 @@ CHECK(TVector4::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Vector4 v(1.2, 2.3, 3.4, 4.5);
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), ios::out);
+	std::ofstream outfile(filename.c_str(), File::OUT);
 	v.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Vector4_test.txt", true)
@@ -447,7 +447,7 @@ RESULT
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TVector4<T>& vector))
 	Vector4 v(1.2, 2.3, 3.4, 4.5);
-	std::ofstream outstr(filename.c_str(), std::ios::out);
+	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << v;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Vector4_test2.txt", false)

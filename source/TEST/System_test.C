@@ -1,4 +1,4 @@
-// $Id: System_test.C,v 1.6 2000/05/31 01:01:48 amoll Exp $
+// $Id: System_test.C,v 1.7 2000/07/12 19:36:49 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(System, "$Id: System_test.C,v 1.6 2000/05/31 01:01:48 amoll Exp $")
+START_TEST(System, "$Id: System_test.C,v 1.7 2000/07/12 19:36:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -457,7 +457,7 @@ pm.registerClass(getStreamName<System>(), System::createDefault);
 pm.registerClass(getStreamName<Molecule>(), Molecule::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-	std::ofstream	ofile(filename.c_str(), std::ios::out);
+	std::ofstream	ofile(filename.c_str(), File::OUT);
 	System* f1 = new System("name1");
 	Molecule* f2 = new Molecule("name2");
 	f1->insert(*f2);

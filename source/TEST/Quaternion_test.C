@@ -1,4 +1,4 @@
-// $Id: Quaternion_test.C,v 1.7 2000/06/27 23:29:00 amoll Exp $
+// $Id: Quaternion_test.C,v 1.8 2000/07/12 19:36:48 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/quaternion.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Quaternion_test.C,v 1.7 2000/06/27 23:29:00 amoll Exp $")
+START_TEST(class_name, "$Id: Quaternion_test.C,v 1.8 2000/07/12 19:36:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -249,7 +249,7 @@ CHECK(std::istream& operator >>(std::istream& s, TQuaternion<T>& q))
 RESULT
 
 CHECK(std::ostream& operator << (std::ostream& s, const TQuaternion<T>& q))
-	std::ofstream outstr(filename.c_str(), std::ios::out);
+	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << q;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Quaternion_test3.txt", true)
@@ -258,7 +258,7 @@ RESULT
 CHECK(TQuaternion::dump(std::ostream& s, Size depth) const )
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), ios::out);
+	std::ofstream outfile(filename.c_str(), File::OUT);
 	q.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Quaternion_test.txt", true)

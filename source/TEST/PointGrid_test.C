@@ -1,9 +1,9 @@
-// $Id: PointGrid_test.C,v 1.10 2000/07/06 14:14:26 oliver Exp $
+// $Id: PointGrid_test.C,v 1.11 2000/07/12 19:36:48 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 #include <BALL/DATATYPE/pointGrid.h>
 
-START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.10 2000/07/06 14:14:26 oliver Exp $")
+START_TEST(PointGrid, "$Id: PointGrid_test.C,v 1.11 2000/07/12 19:36:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -70,7 +70,7 @@ RESULT
 CHECK(dump())
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), ios::out);
+	std::ofstream outfile(filename.c_str(), File::OUT);
 	// fill g with zero!
 	for (Position k = 0; k < g.getSize(); k++)
 	{

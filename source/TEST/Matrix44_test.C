@@ -1,4 +1,4 @@
-// $Id: Matrix44_test.C,v 1.12 2000/05/26 19:25:03 amoll Exp $
+// $Id: Matrix44_test.C,v 1.13 2000/07/12 19:36:46 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -10,7 +10,7 @@
 #include <math.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Matrix44_test.C,v 1.12 2000/05/26 19:25:03 amoll Exp $")
+START_TEST(class_name, "$Id: Matrix44_test.C,v 1.13 2000/07/12 19:36:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -942,7 +942,7 @@ RESULT
 CHECK(TMatrix4x4::dump(std::ostream& s = std::cout, Size depth = 0) const )
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), ios::out);
+	std::ofstream outfile(filename.c_str(), File::OUT);
 	m.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Matrix4x4_test.txt", true)
@@ -957,7 +957,7 @@ RESULT
 
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TMatrix4x4<T>& m))
-	std::ofstream outstr(filename.c_str(), std::ios::out);
+	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << m;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Matrix4x4_test2.txt", false)

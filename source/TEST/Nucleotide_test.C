@@ -1,4 +1,4 @@
-// $Id: Nucleotide_test.C,v 1.6 2000/05/31 14:54:57 amoll Exp $
+// $Id: Nucleotide_test.C,v 1.7 2000/07/12 19:36:47 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.6 2000/05/31 14:54:57 amoll Exp $")
+START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.7 2000/07/12 19:36:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -386,7 +386,7 @@ CHECK(Nucleotide::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Nucleotide n1("n1", "test", 'X');
 	Atom a1(PTE[Element::HELIUM],"a1");
 	n1.insert(a1);
-	std::ofstream outfile(filename.c_str(), ios::out);
+	std::ofstream outfile(filename.c_str(), File::OUT);
 	n1.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Nucleotide_test.txt", true)
@@ -406,7 +406,7 @@ pm.registerClass(getStreamName<Nucleotide>(), Nucleotide::createDefault);
 pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-	std::ofstream	ofile(filename.c_str(), std::ios::out);
+	std::ofstream	ofile(filename.c_str(), File::OUT);
 	Nucleotide* f1= new Nucleotide("name1");
 	Atom* f2 = new Atom();
 	f2->setName("name2");

@@ -1,4 +1,4 @@
-// $Id: PDBFile_test.C,v 1.2 1999/12/19 17:15:24 oliver Exp $
+// $Id: PDBFile_test.C,v 1.3 2000/07/12 19:36:47 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.2 1999/12/19 17:15:24 oliver Exp $")
+START_TEST(PDBFile, "$Id: PDBFile_test.C,v 1.3 2000/07/12 19:36:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -28,26 +28,26 @@ CHECK(PDBFile::read(System&))
 RESULT
 
 CHECK(PDBFile::write(System&))
-PDBFile f;
-f.open("data/PDBFile_test2.pdb");
-String tmp_filename;
-NEW_TMP_FILE(tmp_filename)
-System S;
-f.read(S);
-TEST_EQUAL(S.countAtoms(), 892);
-f.close();
+	PDBFile f;
+	f.open("data/PDBFile_test2.pdb");
+	String tmp_filename;
+	NEW_TMP_FILE(tmp_filename)
+	System S;
+	f.read(S);
+	TEST_EQUAL(S.countAtoms(), 892);
+	f.close();
 
-f.open(tmp_filename, std::ios::out);
-f.write(S);
-f.close();
+	f.open(tmp_filename, File::OUT);
+	f.write(S);
+	f.close();
 
-TEST_FILE(tmp_filename.c_str(), "data/PDBFile_test2.txt", true)
+	TEST_FILE(tmp_filename.c_str(), "data/PDBFile_test2.txt", true)
 
-f.open(tmp_filename, std::ios::out);
-f.write(S);
-f.close();
+	f.open(tmp_filename, File::OUT);
+	f.write(S);
+	f.close();
 
-TEST_FILE(tmp_filename.c_str(), "data/PDBFile_test2.txt", true)
+	TEST_FILE(tmp_filename.c_str(), "data/PDBFile_test2.txt", true)
 RESULT
 
 

@@ -1,4 +1,4 @@
-// $Id: Molecule_test.C,v 1.5 2000/05/31 14:54:57 amoll Exp $
+// $Id: Molecule_test.C,v 1.6 2000/07/12 19:36:47 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Molecule_test.C,v 1.5 2000/05/31 14:54:57 amoll Exp $")
+START_TEST(class_name, "$Id: Molecule_test.C,v 1.6 2000/07/12 19:36:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -327,7 +327,7 @@ CHECK(Molecule::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	m.append(a1);
 	m.append(a2);
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), ios::out);
+	std::ofstream outfile(filename.c_str(), File::OUT);
 	m.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Molecule_test.txt", true)
@@ -347,7 +347,7 @@ pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 pm.registerClass(getStreamName<Molecule>(), Molecule::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-	std::ofstream	ofile(filename.c_str(), std::ios::out);
+	std::ofstream	ofile(filename.c_str(), File::OUT);
 	Atom* f2= new Atom();
 	f2->setName("name2");
 	Atom* f3= new Atom();

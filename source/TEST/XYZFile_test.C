@@ -1,4 +1,4 @@
-// $Id: XYZFile_test.C,v 1.2 2000/05/25 08:16:24 oliver Exp $
+// $Id: XYZFile_test.C,v 1.3 2000/07/12 19:36:50 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.2 2000/05/25 08:16:24 oliver Exp $")
+START_TEST(XYZFile, "$Id: XYZFile_test.C,v 1.3 2000/07/12 19:36:50 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -70,7 +70,7 @@ CHECK(XYZFile::write(const System& system))
 	m->insert(*a2);
 	S.insert(*m);
 	
-	XYZFile f(filename, std::ios::out);
+	XYZFile f(filename, File::OUT);
 	f.write(S);
 	f.close();
 		
@@ -111,7 +111,7 @@ CHECK(XYZFile::XYZFile& operator << (const System& system))
 	m->insert(*a2);
 	S.insert(*m);
 	
-	XYZFile f(filename, std::ios::out);
+	XYZFile f(filename, File::OUT);
 	f << S;
 	f.close();
 		

@@ -1,4 +1,4 @@
-// $Id: File_test.C,v 1.7 2000/07/05 12:31:33 oliver Exp $
+// $Id: File_test.C,v 1.8 2000/07/12 19:36:45 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <sys/stat.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: File_test.C,v 1.7 2000/07/05 12:31:33 oliver Exp $")
+START_TEST(class_name, "$Id: File_test.C,v 1.8 2000/07/12 19:36:45 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -26,7 +26,16 @@ CHECK(~File())
 	delete f1;
 RESULT
 
-CHECK(File(const String& name, OpenMode open_mode = std::ios::in))
+CHECK(File::OpenMode)
+	TEST_EQUAL(File::IN, std::ios::in)
+	TEST_EQUAL(File::APP, std::ios::app)
+	TEST_EQUAL(File::OUT, std::ios::out)
+	TEST_EQUAL(File::ATE, std::ios::ate)
+	TEST_EQUAL(File::TRUNC, std::ios::trunc)
+	TEST_EQUAL(File::BINARY, std::ios::binary)
+RESULT
+
+CHECK(File(const String& name, OpenMode open_mode = File::IN))
 	File f("data/File_test.txt");
 	TEST_EQUAL(f.getSize(), 100)
 RESULT
@@ -45,7 +54,7 @@ CHECK(close())
 	TEST_EQUAL(f.getSize(), 100)
 RESULT
 
-CHECK(open(const String& name, OpenMode open_mode = std::ios::in))
+CHECK(open(const String& name, OpenMode open_mode = File::IN))
 	f.open("data/File_test.txt");
 	TEST_EQUAL(f.isOpen(), true)
 	TEST_EQUAL(f.getSize(), 100)
@@ -75,7 +84,7 @@ CHECK(static getSize(String filename))
 RESULT
 
 CHECK(int getOpenMode() const)
-	TEST_EQUAL(f.getOpenMode(), ios::in)
+	TEST_EQUAL(f.getOpenMode(), File::IN)
 	TEST_EQUAL(f.getSize(), 100)
 RESULT
 

@@ -1,4 +1,4 @@
-// $Id: Circle3_test.C,v 1.2 2000/05/26 19:25:01 amoll Exp $
+// $Id: Circle3_test.C,v 1.3 2000/07/12 19:36:45 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Circle3_test.C,v 1.2 2000/05/26 19:25:01 amoll Exp $")
+START_TEST(class_name, "$Id: Circle3_test.C,v 1.3 2000/07/12 19:36:45 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -145,7 +145,7 @@ CHECK(TCircle3::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	c = Circle3(p, v1, radian);
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), ios::out);
+	std::ofstream outfile(filename.c_str(), File::OUT);
 	c.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Circle3_test.txt", true)
@@ -169,7 +169,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TCircle3& circle))
 	v1 = Vector3(3.0, 4.0, 5.0);
 	v2 = Vector3(6.0, 7.0, 8.0);
 	c = Circle3(v1, v2, 7.0);
-	std::ofstream outstr(filename.c_str(), std::ios::out);
+	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << c;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Circle3_test2.txt", false)

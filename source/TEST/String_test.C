@@ -1,4 +1,4 @@
-// $Id: String_test.C,v 1.18 2000/07/11 22:39:00 amoll Exp $
+// $Id: String_test.C,v 1.19 2000/07/12 19:36:49 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <string>
 ///////////////////////////
 
-START_TEST(String,"$Id: String_test.C,v 1.18 2000/07/11 22:39:00 amoll Exp $")
+START_TEST(String,"$Id: String_test.C,v 1.19 2000/07/12 19:36:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -1834,7 +1834,7 @@ RESULT
 CHECK(String::dump(ostream&, Size))
 	String tmp_filename;
 	NEW_TMP_FILE(tmp_filename)
-	std::ofstream dump_stream(tmp_filename.c_str(), std::ios::out);
+	std::ofstream dump_stream(tmp_filename.c_str(), File::OUT);
 	s2 = new String("abcdefghijklm");
 	s2->dump(dump_stream, 0);
 	dump_stream.clear();
@@ -1842,7 +1842,7 @@ CHECK(String::dump(ostream&, Size))
 	TEST_FILE(tmp_filename.c_str(), "data/string_test_dump0.txt", true)
 
 	NEW_TMP_FILE(tmp_filename)
-	std::ofstream dump_stream2(tmp_filename.c_str(), std::ios::out);
+	std::ofstream dump_stream2(tmp_filename.c_str(), File::OUT);
 	s2->dump(dump_stream2, 4);
 	dump_stream2.close();
 	TEST_FILE(tmp_filename.c_str(), "data/string_test_dump4.txt", true)
@@ -2245,7 +2245,7 @@ using std::ios;
 
 CHECK(Substring::friend::std::ostream& operator << (::std::ostream& s, const Substring& substring))
 	NEW_TMP_FILE(filename)
-	std::ofstream outstr(filename.c_str(), std::ios::out);
+	std::ofstream outstr(filename.c_str(), File::OUT);
 	test_sub1.bind(ABCDEF, 1, 4);
 	outstr << test_sub1;
 	outstr.close();
@@ -2262,7 +2262,7 @@ RESULT
 
 CHECK(Substring::dump(::std::ostream& s = ::std::cout, Size depth = 0) const )
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), ios::out);
+	std::ofstream outfile(filename.c_str(), File::OUT);
 	test_sub1.bind(ABCDEF, 1, 4);
 	test_sub1.dump(outfile);
 	outfile.close();

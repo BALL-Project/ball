@@ -1,4 +1,4 @@
-// $Id: PTE_test.C,v 1.3 2000/05/31 00:59:50 amoll Exp $
+// $Id: PTE_test.C,v 1.4 2000/07/12 19:36:47 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -6,7 +6,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(Element, "$Id: PTE_test.C,v 1.3 2000/05/31 00:59:50 amoll Exp $")
+START_TEST(Element, "$Id: PTE_test.C,v 1.4 2000/07/12 19:36:47 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -213,7 +213,7 @@ RESULT
 String filename;
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const Element& element))
-	std::ofstream outstr(filename.c_str(), std::ios::out);
+	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << e1;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/PTE_test.txt", false)

@@ -1,11 +1,11 @@
-// $Id: Angle_test.C,v 1.12 2000/05/26 19:25:00 amoll Exp $
+// $Id: Angle_test.C,v 1.13 2000/07/12 19:36:44 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #	include <BALL/MATHS/angle.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Angle_test.C,v 1.12 2000/05/26 19:25:00 amoll Exp $")
+START_TEST(class_name, "$Id: Angle_test.C,v 1.13 2000/07/12 19:36:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -328,7 +328,7 @@ CHECK(TAngle::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	Angle a(0.5);
   String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), ios::out);
+	std::ofstream outfile(filename.c_str(), File::OUT);
 	a.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Angle_test.txt", true)
@@ -345,7 +345,7 @@ RESULT
 NEW_TMP_FILE(filename)
 CHECK(std::ostream& operator << (std::ostream& s, const TAngle<T>& angle))
 	Angle a(1.0);
-	std::ofstream outstr(filename.c_str(), std::ios::out);
+	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << a;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Angle_test2.txt", false)

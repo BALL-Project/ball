@@ -1,4 +1,4 @@
-// $Id: HINFile_test.C,v 1.1 2000/05/27 09:16:18 oliver Exp $
+// $Id: HINFile_test.C,v 1.2 2000/07/12 19:36:46 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.1 2000/05/27 09:16:18 oliver Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.2 2000/07/12 19:36:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -20,7 +20,7 @@ CHECK(HINFile::HINFile())
 RESULT
 
 
-CHECK(HINFile::HINFile(const String& filename, File::OpenMode open_mode = std::ios::in))
+CHECK(HINFile::HINFile(const String& filename, File::OpenMode open_mode = File::IN))
   //BAUSTELLE
 RESULT
 

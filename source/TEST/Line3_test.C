@@ -1,4 +1,4 @@
-// $Id: Line3_test.C,v 1.6 2000/06/27 23:14:23 amoll Exp $
+// $Id: Line3_test.C,v 1.7 2000/07/12 19:36:46 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -6,7 +6,7 @@
 #	include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Line3_test.C,v 1.6 2000/06/27 23:14:23 amoll Exp $")
+START_TEST(class_name, "$Id: Line3_test.C,v 1.7 2000/07/12 19:36:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -161,7 +161,7 @@ CHECK(std::ostream& operator << (std::ostream& s, const TLine3<T>& line))
 	v1 = Vector3(0, 1, 2);
 	v2 = Vector3(3, 4, 5);
 	line = Line3(v1, v2, Line3::FORM__PARAMETER);
-	std::ofstream outstr(filename.c_str(), std::ios::out);
+	std::ofstream outstr(filename.c_str(), File::OUT);
 	outstr << line;
 	outstr.close();
 	TEST_FILE(filename.c_str(), "data/Line_test2.txt", false)
@@ -173,7 +173,7 @@ CHECK(TAngle::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	line = Line3(v1, v2, Line3::FORM__PARAMETER);
 	String filename;
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), ios::out);
+	std::ofstream outfile(filename.c_str(), File::OUT);
 	line.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Line_test.txt", true)

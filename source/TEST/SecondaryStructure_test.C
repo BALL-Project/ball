@@ -1,4 +1,4 @@
-// $Id: SecondaryStructure_test.C,v 1.3 2000/05/31 14:54:57 amoll Exp $
+// $Id: SecondaryStructure_test.C,v 1.4 2000/07/12 19:36:48 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/protein.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: SecondaryStructure_test.C,v 1.3 2000/05/31 14:54:57 amoll Exp $")
+START_TEST(class_name, "$Id: SecondaryStructure_test.C,v 1.4 2000/07/12 19:36:48 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -382,7 +382,7 @@ CHECK(SecondaryStructure::dump(std::ostream& s = std::cout, Size depth = 0) cons
 	s1.append(r1);
 	s1.append(r2);
 	NEW_TMP_FILE(filename)
-	std::ofstream outfile(filename.c_str(), ios::out);
+	std::ofstream outfile(filename.c_str(), File::OUT);
 	s1.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/SecondaryStructure_test.txt", true)
@@ -402,7 +402,7 @@ pm.registerClass(getStreamName<SecondaryStructure>(), SecondaryStructure::create
 pm.registerClass(getStreamName<Residue>(), Residue::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-	std::ofstream	ofile(filename.c_str(), std::ios::out);
+	std::ofstream	ofile(filename.c_str(), File::OUT);
 	SecondaryStructure* f1= new SecondaryStructure("name1");
 	Residue* f2 = new Residue("name2");
 	Residue* f3 = new Residue("name3");

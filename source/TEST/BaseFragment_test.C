@@ -1,4 +1,4 @@
-// $Id: BaseFragment_test.C,v 1.18 2000/05/31 14:54:56 amoll Exp $
+// $Id: BaseFragment_test.C,v 1.19 2000/07/12 19:36:44 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -8,7 +8,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.18 2000/05/31 14:54:56 amoll Exp $")
+START_TEST(BaseFragment, "$Id: BaseFragment_test.C,v 1.19 2000/07/12 19:36:44 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -217,7 +217,7 @@ using namespace RTTI;
 pm.registerClass(getStreamName<BaseFragment>(), BaseFragment::createDefault);
 NEW_TMP_FILE(filename)
 CHECK(persistentWrite(PersistenceManager&, String, bool))
-	std::ofstream	ofile(filename.c_str(), std::ios::out);
+	std::ofstream	ofile(filename.c_str(), File::OUT);
 	BaseFragment* f1 = new BaseFragment("name1");
 	BaseFragment* f2 = new BaseFragment("name2");
 	BaseFragment* f3 = new BaseFragment("name3");
@@ -723,7 +723,7 @@ CHECK(dump(ostream&, Size))
 	Atom a1;
 	a1.setName("A1");
 	bf2.append(a1);
-	std::ofstream outfile(filename.c_str(), ios::out);
+	std::ofstream outfile(filename.c_str(), File::OUT);
 	bf1.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Base_Fragment.txt", true)
