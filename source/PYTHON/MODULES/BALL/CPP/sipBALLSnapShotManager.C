@@ -33,13 +33,13 @@ static PyObject *sipDo_SnapShotManager_setup(PyObject *sipThisObj,PyObject *sipA
 		PyObject *a0obj;
 		ForceField *a1;
 		PyObject *a1obj;
-		String *a2;
+		Options *a2;
 		PyObject *a2obj;
-		long a3;
-		Options *a4;
-		PyObject *a4obj;
+		const String *a3;
+		PyObject *a3obj;
+		long a4;
 
-		if (sipParseArgs(sipArgs,"IIIlI",sipCanConvertTo_System,&a0obj,sipCanConvertTo_ForceField,&a1obj,sipCanConvertTo_String,&a2obj,&a3,sipCanConvertTo_Options,&a4obj))
+		if (sipParseArgs(sipArgs,"IIIIl",sipCanConvertTo_System,&a0obj,sipCanConvertTo_ForceField,&a1obj,sipCanConvertTo_Options,&a2obj,sipCanConvertTo_String,&a3obj,&a4))
 		{
 			bool res;
 			SnapShotManager *ptr;
@@ -51,16 +51,16 @@ static PyObject *sipDo_SnapShotManager_setup(PyObject *sipThisObj,PyObject *sipA
 
 			sipConvertTo_System(a0obj,&a0,1,&iserr);
 			sipConvertTo_ForceField(a1obj,&a1,1,&iserr);
-			int istemp2 = sipConvertTo_String(a2obj,&a2,1,&iserr);
-			sipConvertTo_Options(a4obj,&a4,1,&iserr);
+			sipConvertTo_Options(a2obj,&a2,1,&iserr);
+			int istemp3 = sipConvertTo_String(a3obj,(String **)&a3,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			res = ptr -> SnapShotManager::setup(* a0,* a1,* a2, (bool)a3,* a4);
+			res = ptr -> SnapShotManager::setup(* a0,* a1,* a2,* a3, (bool)a4);
 
-			if (istemp2)
-				delete a2;
+			if (istemp3)
+				delete a3;
 
 			return sipConvertFromBool((int)res);
 		}
@@ -358,17 +358,17 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		ForceField *a1;
 		PyObject *a1obj;
-		String *a2;
+		const String *a2;
 		PyObject *a2obj;
-		long a3;
+		long a3 = false;
 
-		if (sipParseArgs(sipArgs,"-IIIl",sipCanConvertTo_System,&a0obj,sipCanConvertTo_ForceField,&a1obj,sipCanConvertTo_String,&a2obj,&a3))
+		if (sipParseArgs(sipArgs,"-III|l",sipCanConvertTo_System,&a0obj,sipCanConvertTo_ForceField,&a1obj,sipCanConvertTo_String,&a2obj,&a3))
 		{
 			int iserr = 0;
 
 			sipConvertTo_System(a0obj,&a0,1,&iserr);
 			sipConvertTo_ForceField(a1obj,&a1,1,&iserr);
-			int istemp2 = sipConvertTo_String(a2obj,&a2,1,&iserr);
+			int istemp2 = sipConvertTo_String(a2obj,(String **)&a2,1,&iserr);
 
 			if (iserr)
 				return NULL;
@@ -386,28 +386,28 @@ PyObject *sipNew_SnapShotManager(PyObject *sipSelf,PyObject *sipArgs)
 		PyObject *a0obj;
 		ForceField *a1;
 		PyObject *a1obj;
-		String *a2;
+		Options *a2;
 		PyObject *a2obj;
-		long a3;
-		Options *a4;
-		PyObject *a4obj;
+		const String *a3;
+		PyObject *a3obj;
+		long a4 = true;
 
-		if (sipParseArgs(sipArgs,"-IIIlI",sipCanConvertTo_System,&a0obj,sipCanConvertTo_ForceField,&a1obj,sipCanConvertTo_String,&a2obj,&a3,sipCanConvertTo_Options,&a4obj))
+		if (sipParseArgs(sipArgs,"-IIII|l",sipCanConvertTo_System,&a0obj,sipCanConvertTo_ForceField,&a1obj,sipCanConvertTo_Options,&a2obj,sipCanConvertTo_String,&a3obj,&a4))
 		{
 			int iserr = 0;
 
 			sipConvertTo_System(a0obj,&a0,1,&iserr);
 			sipConvertTo_ForceField(a1obj,&a1,1,&iserr);
-			int istemp2 = sipConvertTo_String(a2obj,&a2,1,&iserr);
-			sipConvertTo_Options(a4obj,&a4,1,&iserr);
+			sipConvertTo_Options(a2obj,&a2,1,&iserr);
+			int istemp3 = sipConvertTo_String(a3obj,(String **)&a3,1,&iserr);
 
 			if (iserr)
 				return NULL;
 
-			sipNew = new SnapShotManager(* a0,* a1,* a2, (bool)a3,* a4);
+			sipNew = new SnapShotManager(* a0,* a1,* a2,* a3, (bool)a4);
 
-			if (istemp2)
-				delete a2;
+			if (istemp3)
+				delete a3;
 	}
 	}
 
