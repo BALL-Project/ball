@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.35.4.2 2005/04/04 16:07:44 haid Exp $
+// $Id: datasetControl.C,v 1.35.4.3 2005/04/05 11:34:11 haid Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -352,6 +352,10 @@ void DatasetControl::onContextMenu_(QListViewItem* item,  const QPoint& point, i
 	}
 	else if (item_to_dock_result_.has(item))
 	{
+		menu_entry_pos = context_menu.insertItem("Save Trajectories", this, SLOT(saveDockTrajectories_()));
+		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
+		menu_entry_pos = context_menu.insertItem("Save Dock Result", this, SLOT(saveDockResult_()));
+		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
 		menu_entry_pos = context_menu.insertItem("Show Dock Result", this, SLOT(showDockResult_()));
 		if (nr_items > 1) context_menu.setItemEnabled(menu_entry_pos, false);
 	}
@@ -479,9 +483,38 @@ void DatasetControl::saveTrajectory_()
 
 		return;
 	}
-											
 
 	setStatusbarText("Written DCDFile", true);
+}
+
+void DatasetControl::saveDockTrajectories_()
+{
+	DockResult* dock_res = item_to_dock_result_[context_item_];
+	
+	QString s = QFileDialog::getSaveFileName(
+								getWorkingDir().c_str(),
+								"DCD files(*.dcd)",
+								getMainControl(),
+								"Dock Trajectory File Dialog",
+								"Choose a filename to save" );
+
+	if (s == QString::null) return;
+	String filename = s.ascii();
+
+	setWorkingDirFromFilename_(filename);
+
+	if (!dock_res->getConformationSet().writeDCDFile(filename))
+	{
+		setStatusbarText("Could not write DCDFile.", true);
+		return;
+	}
+
+	setStatusbarText("Written DCDFile", true);
+}
+
+void DatasetControl::saveDockResult_()
+{
+	
 }
 
 String DatasetControl::chooseGridFileForOpen_()

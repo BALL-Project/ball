@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.h,v 1.11.4.1 2005/04/04 16:16:02 haid Exp $
+// $Id: datasetControl.h,v 1.11.4.2 2005/04/05 11:36:34 haid Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_DATASETCONTROL_H
@@ -167,6 +167,8 @@ namespace BALL
 			void bufferTrajectory_();
 			void saveTrajectory_();
 			void showDockResult_();
+			void saveDockTrajectories_();
+			void saveDockResult_();
 			void visualiseGrid_();
 			void save1DGrid_() throw();
 			void save2DGrid_() throw();
