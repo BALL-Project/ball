@@ -1,4 +1,4 @@
-// $Id: FFParameterSection.C,v 1.3 1999/12/28 17:52:37 oliver Exp $
+// $Id: FFParameterSection.C,v 1.4 2000/02/11 17:58:41 oliver Exp $
 //
 
 #include <BALL/MOLMEC/PARAMETER/FFParameterSection.h>
@@ -218,15 +218,29 @@ namespace BALL
 								if (old_version > new_version)	
 								{
 									ignore_entry = true;
+								} else {
+									if (old_version == new_version)
+									{
+										Log.warn() << "FFParameterSection: repeated entry with same version number in line " << number_of_lines 
+															 << " of section [" << section_name << "] " << endl;
+										Log.warn() << "  in file " << ini_file.getFilename() << ":" << endl;
+										Log.warn() << " > " << line << endl;
+										ignore_entry = true;
+									}
 								}
 							}
 						}
 						
 						if (!ignore_entry)
 						{
+							// if this key is new, remember it!
+							if (!section_entries_.has(key))
+							{
+								keys_[section_entries_.size()] = key;
+							}
+
 							// insert the key into the hash map
 							section_entries_[key] = number_of_lines;
-							keys_[number_of_lines] = key;
 
 							// copy all variable fields to the corresponding array
 							for (j = 0; j < (Position)number_of_variables; j++)
@@ -309,13 +323,13 @@ namespace BALL
 		static const String undefined("(undefined)");
 		
 		// check whether the entry exists
-		if (key_index > number_of_entries_)
+		if (key_index > section_entries_.size())
 		{
 			return undefined;
 		}
 
 		// return the value
-		return keys_[key_index];
+		return keys_[key_index - 1];
 	}
 		
 	Size FFParameterSection::getNumberOfKeys() const 
