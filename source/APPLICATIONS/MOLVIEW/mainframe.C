@@ -45,8 +45,7 @@ Mainframe::Mainframe
 		selection_(),
 		copy_list_(),
 		server_icon_(0),
-		tool_box_(0),
-		rotate_mode_(true)
+		tool_box_(0)
 {
 	// ---------------------
 	// setup main window
@@ -88,7 +87,7 @@ Mainframe::Mainframe
 	minimization_dialog_ = new DlgAmberMinimization(this);
 	CHECK_PTR(minimization_dialog_);
 
-	label_properties_ = new DlgLabelProperties(this);
+	label_properties_ = new LabelProperties(this);
 	CHECK_PTR(label_properties_);
 
 	open_hin_file_ = new OpenHINFile(this);
@@ -191,12 +190,8 @@ Mainframe::Mainframe
 
 	// Edit-Menu -------------------------------------------------------------------
 	
-	insertMenuEntry(MainControl::EDIT, "&Cut", this, SLOT(cut()), CTRL+Key_C, MENU__EDIT_CUT);
-	insertMenuEntry(MainControl::EDIT, "C&opy", this, SLOT(copy()), CTRL+Key_O, MENU__EDIT_COPY);
-	insertMenuEntry(MainControl::EDIT, "&Paste", this, SLOT(paste()), CTRL+Key_P, MENU__EDIT_PASTE);
 	insertMenuEntry(MainControl::EDIT, "&Select", this, SLOT(select()), CTRL+Key_S, MENU__EDIT_SELECT);
 	insertMenuEntry(MainControl::EDIT, "&Deselect", this, SLOT(deselect()), CTRL+Key_D, MENU__EDIT_DESELECT);
-	insertMenuEntry(MainControl::EDIT, "Cl&ear Clipboard", this, SLOT(clearClipboard()), CTRL+Key_E, MENU__EDIT_CLEAR_CLIPBOARD);
 
 	// Build Menu -------------------------------------------------------------------
 
@@ -212,11 +207,6 @@ Mainframe::Mainframe
 	insertMenuEntry(MainControl::DISPLAY, "&Preferences", this, 
 									SLOT(openPreferencesDialog()), CTRL+Key_I, MENU__DISPLAY_OPEN_PREFERENCES_DIALOG);
 	insertMenuEntry(MainControl::DISPLAY, "Focus C&amera", this, SLOT(centerCamera()), CTRL+Key_A, MENU__DISPLAY_CENTER_CAMERA);
-
-	insertMenuEntry(MainControl::DISPLAY, "&Move Mode", this, SLOT(rotateMode()), CTRL+Key_R, MENU__CONTROL_ROTATE_MODE);
-	insertMenuEntry(MainControl::DISPLAY, "&Picking Mode", this, SLOT(pickingMode()), CTRL+Key_P, MENU__CONTROL_PICKING_MODE);
-	menuBar()->setItemEnabled(MENU__CONTROL_ROTATE_MODE, TRUE);
-	menuBar()->setItemEnabled(MENU__CONTROL_PICKING_MODE, TRUE);
 
 	// Help-Menu -------------------------------------------------------------------
 
@@ -302,6 +292,11 @@ Mainframe::~Mainframe()
 
 void Mainframe::onNotify(Message *message)
 {
+	if (message == 0)
+	{
+		return;
+	}
+
 	if (RTTI::isKindOf<WindowMessage>(*message))
 	{
 		WindowMessage *window_message = RTTI::castTo<WindowMessage>(*message);
@@ -336,6 +331,8 @@ void Mainframe::checkMenuEntries()
 		selected = (number_of_selected_objects > 0);
 	}
 
+	bool all_systems = (number_of_selected_objects > 0);
+
 	// enable for multiple selection
 	menuBar()->setItemEnabled(MENU__EDIT_SELECT, selected);
 	menuBar()->setItemEnabled(MENU__EDIT_DESELECT, selected);
@@ -351,193 +348,12 @@ void Mainframe::checkMenuEntries()
 	menuBar()->setItemChecked(MENU__DISPLAY_OPEN_PREFERENCES_DIALOG, 
 													 preferences_dialog_->isVisible());
 
-	// set the checkboxes for scene controlling
-	menuBar()->setItemChecked(MENU__CONTROL_ROTATE_MODE, ((rotate_mode_ == true) ? TRUE : FALSE));
-	menuBar()->setItemChecked(MENU__CONTROL_PICKING_MODE, ((rotate_mode_ == false) ? TRUE : FALSE ));
-
-	// check for paste-slot: enable only if copy_list_ not empty
-	menuBar()->setItemEnabled
-		(MENU__EDIT_PASTE, 
-		 (bool)(copy_list_.size() > 0));
-
-	// check for clearClipboard-slot: enable only if copy_list_ not empty
-	menuBar()->setItemEnabled
-		(MENU__EDIT_CLEAR_CLIPBOARD, 
-		 (bool)(copy_list_.size() > 0));
-
-	// check for erase-slot: enable erase-slot only if all selected composites
-	// are systems
-	bool all_systems = (number_of_selected_objects > 0);
-
-	if (!selection_.empty())
-	{
-		List<Composite*>::ConstIterator list_it = selection_.begin();	
-		for (; list_it != selection_.end(); ++list_it)
-		{
-			if (!RTTI::isKindOf<System>(**list_it))
-			{
-				all_systems = false;
-			}
-		}
-	}
-
-	// cut, copy, and paste will are only available for 
-	// top level selections
-	menuBar()->setItemEnabled(MENU__EDIT_CUT, all_systems);
-	menuBar()->setItemEnabled(MENU__EDIT_COPY, all_systems);
-	
 	// AMBER methods are available only for single systems
 	menuBar()->setItemEnabled(MENU__BUILD_AMBER_ENERGY, 
 														(all_systems && (number_of_selected_objects == 1)));
 
 	menuBar()->setItemEnabled(MENU__BUILD_AMBER_MINIMIZATION, 
 														(all_systems && (number_of_selected_objects == 1)));
-}
-
-void Mainframe::cut()
-{
-	if (selection_.size() == 0)
-	{
-		return;
-	}
-
-	QString message;
-	message.sprintf("cutting %d systems...", selection_.size());
-	statusBar()->message(message);
-	QWidget::update();
-
-	// delete old composites
-	if (copy_list_.size() > 0)
-	{
-		List<Composite*>::ConstIterator list_it = copy_list_.begin();	
-		for (; list_it != copy_list_.end(); ++list_it)
-		{
-			delete *list_it;
-		}
-
-		copy_list_.clear();
-	}
-
-	List<Composite*> temp_list;
-
-	// remove all system composites from the tree and from the scene
-	// but do not delete them from memory
-	List<Composite*>::ConstIterator list_it = selection_.begin();	
-	for (; list_it != selection_.end(); ++list_it)
-	{
-		// insert deep clone of the composite into the cut list
-		copy_list_.push_back((Composite*)(*list_it)->create());
-
-		temp_list.push_back(*list_it);
-//		remove(**list_it);
-	}
-
-  list_it = temp_list.begin();
-  for (; list_it != temp_list.end(); ++list_it)
-  {
-    remove(**list_it);
-	}
- 
-
-	// update scene
-	SceneMessage scene_message;
-	scene_message.updateOnly();
-	notify_(scene_message);
-
-// 	control_->invalidateSelection();
-
-	statusBar()->clear();
-	QWidget::update();
-}
-
-void Mainframe::copy()
-{
-	if (selection_.size() == 0)
-	{
-		return;
-	}
-
-	QString message;
-	message.sprintf("copying %d systems...", selection_.size());
-	statusBar()->message(message);
-	QWidget::update();
-
-	// delete old cutted composites
-	if (copy_list_.size() > 0)
-	{
-		List<Composite*>::ConstIterator list_it = copy_list_.begin();	
-		for (; list_it != copy_list_.end(); ++list_it)
-		{
-			delete *list_it;
-		}
-
-		copy_list_.clear();
-	}
-
-	// copy the selected composites into the copy_list_
-	List<Composite*>::ConstIterator list_it = selection_.begin();	
-	for (; list_it != selection_.end(); ++list_it)
-	{
-		// insert deep clone of the composite into the cut list
-		copy_list_.push_back((Composite*)(*list_it)->create());
-	}
-
-	statusBar()->clear();
-	QWidget::update();
-}
-
-void Mainframe::paste()
-{
-	if (copy_list_.size() == 0)
-	{
-		return;
-	}
-
-	QString message;
-	message.sprintf("pasting %d systems...", copy_list_.size());
-	statusBar()->message(message);
-	QWidget::update();
-
-	// copying composites
-	List<Composite*>::ConstIterator list_it = copy_list_.begin();	
-	for (; list_it != copy_list_.end(); ++list_it)
-	{
-		insert(**list_it);
-	}
-
-	// clear copy list: all composites are inserted into maincontrol
-	copy_list_.clear();
-
-//	control_->invalidateSelection();
-
-  // update scene
-  SceneMessage scene_message;
-  scene_message.updateOnly();
-  notify_(scene_message);
- 
-	statusBar()->clear();
-	QWidget::update();
-}
-
-void Mainframe::clearClipboard()
-{
-	statusBar()->message("clearing clipboard...");
-	QWidget::update();
-
-	// delete old composites
-	if (copy_list_.size() > 0)
-	{
-		List<Composite*>::ConstIterator list_it = copy_list_.begin();	
-		for (; list_it != copy_list_.end(); ++list_it)
-		{
-			delete *list_it;
-		}
-
-		copy_list_.clear();
-	}
-
-	statusBar()->clear();
-	QWidget::update();
 }
 
 void Mainframe::select()
@@ -617,87 +433,6 @@ void Mainframe::deselect()
 
 	statusBar()->clear();
 	QWidget::update();
-}
-
-void Mainframe::rotateMode()
-{
-	rotate_mode_ = true;
-	scene_->setRenderMode(Scene::RENDER_MODE__COMPILE);
-	
-	// unregister picking mode controls
-	NotificationUnregister
-		(scene_->events.MouseLeftButtonPressed);
-	
-	NotificationUnregister
-		(scene_->events.MouseLeftButtonPressed & scene_->events.MouseMoved);
-	
-	NotificationUnregister
-		(scene_->events.MouseLeftButtonReleased);
-
-	NotificationUnregister
-		(scene_->events.MouseRightButtonPressed);
-	
-	NotificationUnregister
-		(scene_->events.MouseRightButtonPressed & scene_->events.MouseMoved);
-	
-	NotificationUnregister
-		(scene_->events.MouseRightButtonReleased);
-
-
-	// register rotation mode controls
-	NotificationRegister
-		(scene_->events.MouseLeftButtonPressed & scene_->events.MouseMoved, 
-		 scene_->events.RotateSystem);
-	
-	NotificationRegister
-		(scene_->events.MouseMiddleButtonPressed & scene_->events.MouseMoved, 
-		 scene_->events.ZoomSystem);
-	
-	NotificationRegister
-		(scene_->events.MouseRightButtonPressed & scene_->events.MouseMoved, 
-		 scene_->events.TranslateSystem);
-}
-
-void Mainframe::pickingMode()
-{
-	rotate_mode_ = false;
-	scene_->setRenderMode(Scene::RENDER_MODE__DO_NOT_COMPILE);
-
-	// unregister rotation mode controls
-	NotificationUnregister
-		(scene_->events.MouseLeftButtonPressed & scene_->events.MouseMoved);
-
-	NotificationUnregister
-		(scene_->events.MouseMiddleButtonPressed & scene_->events.MouseMoved);
-
-	NotificationUnregister
-		(scene_->events.MouseRightButtonPressed & scene_->events.MouseMoved);
-
-
-	// register picking mode controls
-	NotificationRegister
-		(scene_->events.MouseLeftButtonPressed,
-		 scene_->events.SelectionPressed);
-	
-	NotificationRegister
-		(scene_->events.MouseLeftButtonPressed & scene_->events.MouseMoved, 
-		 scene_->events.SelectionPressedMoved);
-	
-	NotificationRegister
-		(scene_->events.MouseLeftButtonReleased, 
-		 scene_->events.SelectionReleased);
-
-	NotificationRegister
-		(scene_->events.MouseRightButtonPressed,
-		 scene_->events.DeselectionPressed);
-	
-	NotificationRegister
-		(scene_->events.MouseRightButtonPressed & scene_->events.MouseMoved, 
-		 scene_->events.DeselectionPressedMoved);
-	
-	NotificationRegister
-		(scene_->events.MouseRightButtonReleased, 
-		 scene_->events.DeselectionReleased);
 }
 
 void Mainframe::checkResidue()

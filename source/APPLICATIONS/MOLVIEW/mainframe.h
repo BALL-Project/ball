@@ -1,4 +1,4 @@
-// $Id: mainframe.h,v 1.23 2000/10/08 17:38:35 hekl Exp $
+// $Id: mainframe.h,v 1.24 2000/10/22 15:13:52 hekl Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -57,6 +57,10 @@
 # include <BALL/MOLVIEW/GUI/DIALOGS/displayProperties.h>
 #endif
 
+#ifndef BALL_MOLVIEW_GUI_DIALOGS_LABELPROPERTIES_H
+# include <BALL/MOLVIEW/GUI/DIALOGS/labelProperties.h>
+#endif
+
 #ifndef BALL_MOLVIEW_GUI_WIDGETS_MOLECULARCONTROL_H
 # include <BALL/MOLVIEW/GUI/WIDGETS/molecularControl.h>
 #endif
@@ -83,7 +87,7 @@
 
 #include "DIALOGS/DlgPreferences.h"
 #include "DIALOGS/DlgAmberMinimization.h"
-#include "DIALOGS/DlgLabelProperties.h"
+
 
 using namespace BALL;
 using namespace BALL::VIEW;
@@ -156,16 +160,8 @@ class Mainframe
 	void checkMenuEntries();
 
 	// Edit menu
-	void cut();
-	void copy();
-	void paste();
-	void clearClipboard();
 	void select();
 	void deselect();
-
-	// Control menu
-	void rotateMode();
-	void pickingMode();
 
 	// Build menu
 	void checkResidue();
@@ -197,7 +193,7 @@ class Mainframe
 	DisplayProperties*    display_properties_;
 	DlgPreferences*				preferences_dialog_;
 	DlgAmberMinimization*	minimization_dialog_;
-	DlgLabelProperties*	  label_properties_;
+	LabelProperties*	    label_properties_;
 	OpenHINFile*					open_hin_file_;
 	OpenPDBFile*					open_pdb_file_;
 	MolecularProperties*  molecular_properties_;
@@ -222,8 +218,6 @@ class Mainframe
 
 	QLabel*						server_icon_;
 	QLabel*						tool_box_;
-
-	bool rotate_mode_;
 };
 
 #		ifndef BALL_NO_INLINE_FUNCTIONS
