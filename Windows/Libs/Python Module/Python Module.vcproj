@@ -146,6 +146,7 @@
 			WholeProgramOptimization="TRUE">
 			<Tool
 				Name="VCCLCompilerTool"
+				AdditionalOptions="/Zm1200"
 				Optimization="2"
 				GlobalOptimizations="TRUE"
 				InlineFunctionExpansion="2"
@@ -164,7 +165,7 @@
 				Name="VCLinkerTool"
 				AdditionalOptions="/export:initBALL"
 				AdditionalDependencies="$(SIPDir)\libs\python23.lib imm32.lib winmm.lib ws2_32.lib $(QTDIR)\lib\qt-mt330.lib $(QTDIR)\lib\qtmain.lib opengl32.lib glu32.lib libview.lib libball.lib"
-				OutputFile="$(OutDir)/Python Module.dll"
+				OutputFile="$(OutDir)/BALL.dll"
 				LinkIncremental="1"
 				AdditionalLibraryDirectories="&quot;$(ProjectDir)..\..\..\lib\&quot;;&quot;$(QTDIR)\lib&quot;"
 				GenerateDebugInformation="FALSE"
@@ -609,7 +610,8 @@
 						CompileAs="2"/>
 				</FileConfiguration>
 				<FileConfiguration
-					Name="Python Multithreaded|Win32">
+					Name="Python Multithreaded|Win32"
+					ExcludedFromBuild="TRUE">
 					<Tool
 						Name="VCCLCompilerTool"
 						AdditionalOptions="/Zm1000"
@@ -681,5888 +683,2110 @@
 				</FileConfiguration>
 			</File>
 			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAddLineModel.C">
-				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAddBackboneModel.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAddBallAndStickModel.C">
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAddCartoonModel.C">
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAddLineModel.C">
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAddSurfaceModel.C">
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAddVanDerWaalsModel.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAmberBend.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAmberFF.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAmberNonBonded.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAmberStretch.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAmberTorsion.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAngle.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAssignChargeProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAssignRadiusProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAtom.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAtomBondModelBaseProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
+					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAtomChargeColorProcessor.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAtomContainer.C">
 				<FileConfiguration
-					Name="Python|Win32">
+					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAtomDistanceColorProcessor.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAtomProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAtomType.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAtomVector.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLBit.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLBitVector.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLBond.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLBoundingBoxProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLBox.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLBox3.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLBufferOverflow.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLBuildBondsProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCamera.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCannotWrite.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCanonicalMD.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLChain.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLChargeRuleProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCharmmBend.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCharmmFF.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCharmmImproperTorsion.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCharmmNonBonded.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCharmmStretch.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCharmmTorsion.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCircle3.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLClearChargeProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLClearRadiusProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLClient.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLClientInvalidClient.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLClientNoPersistentObject.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLColorExtension2.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLColorProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLColorRGBA.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLColorUnit.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLComposite.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCompositeManager.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCompositeMessage.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCompositeProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLConjugateGradientMinimizer.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLConstant.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLControlSelectionMessage.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCreateRepresentationMessage.C">
 				<FileConfiguration
-					Name="Python|Win32">
+					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCustomColorProcessor.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLDCDFile.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-			</File>
-			<File
-				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\sipBALLDeclBALL.C">
-				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
-					Name="Python Multithreaded|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLDisc.C">
 				<FileConfiguration
-					Name="Python|Win32">
+					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLDisplayProperties.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLDivisionByZero.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLElement.C">
 				<FileConfiguration
-					Name="Python|Win32">
+					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLElementColorProcessor.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLEmbeddable.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLEnergyMinimizer.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLExpression.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLExpressionPredicate.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLFDPB.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLFDPBBoundary.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLFDPBChargeDistribution.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLFDPBDefault.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLFDPBDielectricSmoothing.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLFDPBFastAtomStruct.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLFDPBOption.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLFile.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLFileNotFound.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLForceField.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLForceFieldComponent.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLFragment.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLFragmentDB.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLFragmentDistanceCollector.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLFragmentProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLGeneralException.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLGenericMolFile.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLGenericPDBFile.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLGeometricCenterProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLGeometricObject.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLGeometricObjectList.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLGeometricObjectSelectionMessage.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLGlobalExceptionHandler.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLGradient.C">
 				<FileConfiguration
-					Name="Python|Win32">
+					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLHBondModelProcessor.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLHINFile.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLINIFile.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLIllegalKey.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLIllegalSelfOperation.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLIncompatibleIterators.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLIndex.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLIndexOverflow.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLIndexUnderflow.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLInvalidFormat.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLInvalidIterator.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLInvalidRange.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLLabel.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLLightSource.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLLine.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLLine3.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLLineBasedFile.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMOL2File.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMOLFile.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMainControl.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMatrix4x4.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMesh.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMessage.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMicroCanonicalMD.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLModelProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLModularWidget.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMolecularDynamics.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMolecularTaskMessage.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLMolecule.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLNamedProperty.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLNewSelectionMessage.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLNewTrajectoryMessage.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLNormalizeNamesProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLNotImplemented.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLNotInHexFormat.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLNucleicAcid.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLNucleotide.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLNullPointer.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLObject.C">
 				<FileConfiguration
-					Name="Python|Win32">
+					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLOccupancyColorProcessor.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLOpenMode.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLOptions.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLOutOfGrid.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLOutOfMemory.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPDBAtom.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPDBFile.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPTE_.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLParseError.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPeriodicBoundary.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPersistentObject.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPlane3.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPoint.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPosition.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPreciseTime.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPreferences.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPrimitiveManager.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPropertyManager.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLProtein.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyAtomContainerList.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyAtomDict.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyAtomList.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyBondList.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyChainList.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyCompositeList.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyFragmentList.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyGeometricObjectList.C">
+				<FileConfiguration
+					Name="Python Multithreaded|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyMoleculeList.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyNucleicAcidList.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyNucleotideList.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyPDBAtomList.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyProteinList.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyRepresentationList.C">
+				<FileConfiguration
+					Name="Python Multithreaded|Win32"
+					ExcludedFromBuild="TRUE">
+					<Tool
+						Name="VCCLCompilerTool"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyResidueList.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPySecondaryStructureList.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyWidget.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLQuaternion.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLRadiusRuleProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLReconstructFragmentProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLRegularData1D.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLRegularData2D.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLRegularData2DIndexType.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLRegularData3D.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLRegularData3DIndexType.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLRegularData3DMessage.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLRegularExpression.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLRepresentation.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLRepresentationList.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLRepresentationMessage.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLResidue.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLResidueChecker.C">
 				<FileConfiguration
-					Name="Python|Win32">
+					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLResidueNameColorProcessor.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
+						CompileAs="2"/>
+				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLResidueNumberColorProcessor.C">
+				<FileConfiguration
+					Name="Python Multithreaded|Win32">
+					<Tool
+						Name="VCCLCompilerTool"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLResidueProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLResourceEntry.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLResourceFile.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLRuleEvaluator.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLRuleProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSDFile.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSceneMessage.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSecondaryStructure.C">
 				<FileConfiguration
-					Name="Python|Win32">
+					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSecondaryStructureColorProcessor.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSelectable.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSelectionMessage.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSelector.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLShowDisplayPropertiesMessage.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSimpleBox.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSimpleBox3.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSizeUnderflow.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSnapShot.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSnapShotManager.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSphere.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSphere3.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLStage.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLString.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSubstring.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSurface.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSurfaceProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSurfaceTriangle.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSystem.C">
 				<FileConfiguration
-					Name="Python|Win32">
+					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLTemperatureFactorColorProcessor.C">
 				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLTimeStamp.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLTrajectoryFile.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLTransformationProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLTranslationProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLTube.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLTwoColoredLine.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLTwoColoredTube.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLTypeRuleProcessor.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLUnaryAtomPredicate.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLUnaryCompositePredicate.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLVector2.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLVector3.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLVector4.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLVersionInfo.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLVertex.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLVertex2.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLXYZFile.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLcmodule.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLstd__openmode.C">
 				<FileConfiguration
-					Name="Python|Win32">
-					<Tool
-						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
-						CompileAs="2"/>
-				</FileConfiguration>
-				<FileConfiguration
 					Name="Python Multithreaded|Win32">
 					<Tool
 						Name="VCCLCompilerTool"
-						AdditionalOptions="/Zm1000"
-						Optimization="3"
-						GlobalOptimizations="TRUE"
-						OptimizeForProcessor="2"
-						OptimizeForWindowsApplication="TRUE"
-						RuntimeLibrary="0"
 						CompileAs="2"/>
 				</FileConfiguration>
 			</File>
@@ -6625,7 +2849,19 @@
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipAPIBALL.h">
 			</File>
 			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAddBackboneModel.h">
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAddBallAndStickModel.h">
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAddCartoonModel.h">
+			</File>
+			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAddLineModel.h">
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAddSurfaceModel.h">
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAddVanDerWaalsModel.h">
@@ -6661,7 +2897,13 @@
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAtomBondModelBaseProcessor.h">
 			</File>
 			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAtomChargeColorProcessor.h">
+			</File>
+			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAtomContainer.h">
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAtomDistanceColorProcessor.h">
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLAtomProcessor.h">
@@ -6784,16 +3026,25 @@
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCreateRepresentationMessage.h">
 			</File>
 			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLCustomColorProcessor.h">
+			</File>
+			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLDCDFile.h">
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLDisc.h">
 			</File>
 			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLDisplayProperties.h">
+			</File>
+			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLDivisionByZero.h">
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLElement.h">
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLElementColorProcessor.h">
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLEmbeddable.h">
@@ -6868,6 +3119,9 @@
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLGeometricObject.h">
 			</File>
 			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLGeometricObjectList.h">
+			</File>
+			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLGeometricObjectSelectionMessage.h">
 			</File>
 			<File
@@ -6875,6 +3129,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLGradient.h">
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLHBondModelProcessor.h">
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLHINFile.h">
@@ -6991,6 +3248,9 @@
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLObject.h">
 			</File>
 			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLOccupancyColorProcessor.h">
+			</File>
+			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLOpenMode.h">
 			</File>
 			<File
@@ -7087,6 +3347,9 @@
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyProteinList.h">
 			</File>
 			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyRepresentationList.h">
+			</File>
+			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLPyResidueList.h">
 			</File>
 			<File
@@ -7141,6 +3404,12 @@
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLResidueChecker.h">
 			</File>
 			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLResidueNameColorProcessor.h">
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLResidueNumberColorProcessor.h">
+			</File>
+			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLResidueProcessor.h">
 			</File>
 			<File
@@ -7163,6 +3432,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSecondaryStructure.h">
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSecondaryStructureColorProcessor.h">
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSelectable.h">
@@ -7217,6 +3489,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLSystem.h">
+			</File>
+			<File
+				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLTemperatureFactorColorProcessor.h">
 			</File>
 			<File
 				RelativePath="..\..\..\source\PYTHON\EXTENSIONS\SIP\sipBALLTimeStamp.h">

@@ -163,7 +163,7 @@
 			Name="Python Multithreaded|Win32"
 			OutputDirectory="Python Multithreaded"
 			IntermediateDirectory="Python Multithreaded"
-			ConfigurationType="4"
+			ConfigurationType="2"
 			CharacterSet="2"
 			WholeProgramOptimization="TRUE">
 			<Tool
@@ -196,10 +196,7 @@
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
-				Name="VCLibrarianTool"
-				OutputFile="$(ProjectDir)..\..\..\lib\$(ProjectName).lib"
-				AdditionalLibraryDirectories=""
-				SuppressStartupBanner="FALSE"/>
+				Name="VCLinkerTool"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -212,6 +209,8 @@
 				Name="VCResourceCompilerTool"/>
 			<Tool
 				Name="VCWebServiceProxyGeneratorTool"/>
+			<Tool
+				Name="VCWebDeploymentTool"/>
 		</Configuration>
 	</Configurations>
 	<Files>
