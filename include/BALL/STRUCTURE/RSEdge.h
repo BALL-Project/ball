@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: RSEdge.h,v 1.22 2002/02/27 12:19:41 sturm Exp $
+// $Id: RSEdge.h,v 1.23 2002/06/19 12:35:43 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -61,6 +61,21 @@ namespace BALL
 	template <typename T>
 	class TTriangulatedSES;
 
+	template <typename T>
+	class TSolventAccessibleSurface;
+
+	template <typename T>
+	class TSASEdge;
+
+	template <typename T>
+	class TSASFace;
+
+	template <typename T>
+	class TSASVertex;
+
+	template <typename T>
+	class TTriangulatedSAS;
+
 	/** Generic RSEdge Class.	
       {\bf Definition:} \URL{BALL/STRUCTURE/RSEdge.h} 
 	*/
@@ -82,10 +97,15 @@ namespace BALL
 					\item class TSESEdge<T>
 					\item class TSESVertex<T>
 					\item class TTriangulatedSES<T>
+					\itme class TSolventAccessibleSurface<T>;
+					\item class TSASFace<T>
+					\item class TSASEdge<T>
+					\item class TSASVertex<T>
+					\item class TTriangulatedSAS<T>
 				\end{itemize}
 		*/
 		friend class GraphEdge< TRSVertex<T>,TRSFace<T> >;
-		friend class GraphFace< TRSVertex<T>,TRSEdge<T> >;
+		friend class GraphTriangle< TRSVertex<T>,TRSEdge<T> >;
 		friend class GraphVertex< TRSEdge<T>,TRSFace<T> >;
 		friend class TReducedSurface<T>;
 		friend class TRSFace<T>;
@@ -95,6 +115,11 @@ namespace BALL
 		friend class TSESEdge<T>;
 		friend class TSESVertex<T>;
 		friend class TTriangulatedSES<T>;
+		friend class TSolventAccessibleSurface<T>;
+		friend class TSASFace<T>;
+		friend class TSASEdge<T>;
+		friend class TSASVertex<T>;
+		friend class TTriangulatedSAS<T>;
 
 		BALL_CREATE(TRSEdge)
 
