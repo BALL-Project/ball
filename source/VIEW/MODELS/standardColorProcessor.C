@@ -1,9 +1,10 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.C,v 1.4 2003/10/17 16:17:37 amoll Exp $
+// $Id: standardColorProcessor.C,v 1.5 2003/10/18 20:31:25 amoll Exp $
 
 #include <BALL/VIEW/MODELS/standardColorProcessor.h>
+#include <BALL/VIEW/PRIMITIVES/mesh.h>
 #include <BALL/KERNEL/residue.h>
 
 namespace BALL
@@ -444,6 +445,12 @@ ColorRGBA AtomDistanceColorProcessor::getColor(const Composite* composite)
 									 blue1 + (distance * (blue2 - blue1)) 		/ distance_);
 }
 
+void CustomColorProcessor::colorMeshFromGrid_(Mesh& mesh)
+	throw()
+{
+	mesh.colorList.clear();
+	mesh.colorList.push_back(default_color_);
+}
 
 #	ifdef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/MODELS/standardColorProcessor.iC>

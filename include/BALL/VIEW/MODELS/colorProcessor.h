@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.7 2003/10/18 11:24:50 amoll Exp $
+// $Id: colorProcessor.h,v 1.8 2003/10/18 20:31:48 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -27,10 +27,15 @@
 # include <BALL/KERNEL/PTE.h>
 #endif
 
+#ifndef BALL_DATATYPE_HASHGRID_H
+# include <BALL/DATATYPE/hashGrid.h>
+#endif
+
 namespace BALL
 {
 	namespace VIEW
 	{
+		class Mesh;
 				
 		/** ColorProcessor class.
 				The class ColorProcessor is used for calculating a ColorRGBA for each given GeometricObject. 
@@ -42,6 +47,8 @@ namespace BALL
 			
 			///
 			typedef HashSet<const Composite*>  CompositeSet;
+
+			typedef HashGrid3<const Atom*>  AtomGrid;
 
 			/**	@name	Type definitions
 			*/
@@ -120,7 +127,7 @@ namespace BALL
 
 			///
 			void setComposites(const CompositeSet* composites)
-				throw() { composites_ = composites;}
+				throw();
 
 			///
 			const CompositeSet* getComposites()
@@ -142,6 +149,13 @@ namespace BALL
 
 			protected:
 			
+			//_
+			virtual void createAtomGrid_()
+				throw();
+
+			//_
+			virtual void colorMeshFromGrid_(Mesh& mesh)
+				throw();
 			//@} 
 			/** @name Protected member variables 
 			*/ 
@@ -153,6 +167,9 @@ namespace BALL
 			ColorRGBA		default_color_;
 
 			const CompositeSet* composites_;
+
+			AtomGrid atom_grid_;
+			bool atom_grid_created_;
 			//@}
 		};
 

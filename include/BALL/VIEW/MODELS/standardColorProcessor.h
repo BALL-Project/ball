@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.5 2003/10/17 16:17:23 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.6 2003/10/18 20:31:48 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -342,8 +342,19 @@ namespace BALL
 				ColorProcessor::getColor. 
 				\ingroup  ViewModels
 		*/
-		typedef ColorProcessor CustomColorProcessor;
+		class CustomColorProcessor
+			: public ColorProcessor
+		{
+			public:
+				CustomColorProcessor()
+					: ColorProcessor()
+				{}
 
+			protected:
+				void colorMeshFromGrid_(Mesh& mesh)
+					throw();
+		};
+				
 #	ifndef BALL_NO_INLINE_FUNCTIONS
 #		include <BALL/VIEW/MODELS/standardColorProcessor.iC>
 #	endif
