@@ -1,4 +1,4 @@
-// $Id: bitVector.C,v 1.10 2000/07/23 14:09:06 amoll Exp $
+// $Id: bitVector.C,v 1.11 2000/07/24 09:07:38 oliver Exp $
 
 #include <BALL/DATATYPE/bitVector.h>
 
@@ -221,7 +221,6 @@ namespace BALL
 		}
 	}
 
-/*
 	void BitVector::setUnsignedChar(unsigned char bit_pattern)
 	{
 		setSize(BALL_CHAR_BITS, false);
@@ -265,7 +264,6 @@ namespace BALL
 	{
 		return *((unsigned long *)bitset_);
 	}
-*/
 
 	void BitVector::bitwiseXor(const BitVector& bit_vector)
 	{

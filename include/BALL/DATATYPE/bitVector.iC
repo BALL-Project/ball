@@ -1,4 +1,4 @@
-// $Id: bitVector.iC,v 1.8 2000/07/23 14:10:15 amoll Exp $
+// $Id: bitVector.iC,v 1.9 2000/07/24 09:07:35 oliver Exp $
 
 BALL_INLINE
 BitVector::BlockType BitVector::mask_(Index index) const
@@ -37,13 +37,7 @@ BALL::Size BitVector::getSize() const
 {
   return size_;
 }
-/*
-BALL_INLINE 
-BALL::Index BitVector::getMaxIndex() const
-{
-  return (Index)size_ - 1;
-}*/
-  
+
 BALL_INLINE 
 BALL::BitVector::BlockType* BitVector::getBitSet()
 {
@@ -138,7 +132,6 @@ bool BitVector::getBit(Index index)
 BALL_INLINE
 bool BitVector::getBit(Index index) const
 {
-	validateIndex_(index);
 	BitVector* const  const_this = const_cast<BitVector *>(this);
 	return const_this->getBit(index);
 }

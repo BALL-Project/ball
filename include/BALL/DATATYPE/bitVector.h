@@ -1,4 +1,4 @@
-// $Id: bitVector.h,v 1.9 2000/07/23 14:10:15 amoll Exp $
+// $Id: bitVector.h,v 1.10 2000/07/24 09:07:34 oliver Exp $
 
 #ifndef BALL_DATATYPE_BITVECTOR_H
 #define BALL_DATATYPE_BITVECTOR_H
@@ -168,7 +168,6 @@ namespace BALL
 		/**	Clear method
 		*/
 		void clear();
-		// groesse bleibt unveraendert???
 		//@}
 
 
@@ -225,12 +224,6 @@ namespace BALL
 		*/
 		Size countValue(bool value) const;
 
-		/** Get the max index.
-				This is the last accessible value.
-		*/
-		// ??? unnoetig?
-		//Index getMaxIndex() const;
-	
 		/** Return a muteable pointer to the values of this instance.
 				@return unsigned char*	a muteable pointer to the values of this instance
 		*/
@@ -247,7 +240,6 @@ namespace BALL
 				@return Bit a Bit pointing to the given element of this instance
 		*/
 		Bit operator []	(Index index);
-		//casting meistens notwendig wenn vergleich mit bool ???
 
 		/**	Constant random access to the components.
 				If the given index is greater than the size of this instance an exception is thrown.
@@ -301,7 +293,7 @@ namespace BALL
 				@param last the last element to be filled
 		*/
 		void toggle(Index first = 0, Index last = -1);
-/*
+
 		/// ???
 		void setUnsignedChar(unsigned char bit_pattern);
 
@@ -392,7 +384,6 @@ namespace BALL
 				@param first the index to start searching
 				@param last the index to stop searching
 		*/
-		// ??? besser rueckgabewert index mit dem 1. auftreten des wertes
 		bool isAnyBit(bool value, Index first = 0, Index last = -1) const;
 
 		/** Test if every bit in a given range has the given value
@@ -428,12 +419,10 @@ namespace BALL
 
 		/**	Read the values of of type {\em bool} from an istream.
 		*/
-		//wirklich notwendig? read <======> Input- Operator ???
 		virtual void read(std::istream& s);
 
 		/**	Write the values of of type {\em bool} to an ostream.
 		*/
-		//wirklich notwendig? write <======> Output- Operator ???
 		virtual void write(std::ostream& s) const;
 
 		/**	Storable write method.
