@@ -1,4 +1,4 @@
-// $Id: vertex1.h,v 1.5 2001/05/13 13:47:49 hekl Exp $
+// $Id: vertex1.h,v 1.6 2001/07/09 18:02:58 sturm Exp $
 
 #ifndef BALL_VIEW_KERNEL_VERTEX1_H
 #define BALL_VIEW_KERNEL_VERTEX1_H
@@ -28,9 +28,9 @@ namespace BALL
 				segmentation faults this vector address must be valid as long as 
 				{\em *this} vertex exists.
 				@memo    Vertex class (BALL VIEW kernel framework)
-				@author  $Author: hekl $
-				@version $Revision: 1.5 $
-				@date    $Date: 2001/05/13 13:47:49 $
+				@author  $Author: sturm $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/07/09 18:02:58 $
 		*/
 		class Vertex
 		{
@@ -176,10 +176,7 @@ namespace BALL
 				throw();
 
 			/** Non-mutable inspection of the vector of {\em *this} vertex.
-					Access the constant reference of the vector of {\em *this} vertex.
-					@return      Vector3& constant reference to the vector of {\em *this} vertex
-					@see         setVertex
-					@see         Vector3
+					For further information see \Ref{getVertex}.
 			*/
 			const Vector3& getVertex() const
 				throw();
