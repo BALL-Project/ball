@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.96 2005/02/14 23:48:32 amoll Exp $
+// $Id: molecularControl.C,v 1.96.2.1 2005/03/15 15:44:27 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -1069,7 +1069,7 @@ void MolecularControl::countItems()
 
 	s+=String(ac.countAtoms()) + " Atoms, ";
 	s+=String(ac.countBonds()) + " Bonds";
-	setStatusbarText(s);
+	setStatusbarText(s, true);
 }
 
 Size MolecularControl::applySelector()
