@@ -1,4 +1,4 @@
-// $Id: exception.h,v 1.7 2000/03/16 12:16:12 oliver Exp $
+// $Id: exception.h,v 1.8 2000/03/28 15:27:32 oliver Exp $
    
 #ifndef BALL_COMMON_EXCEPTION_H
 #define BALL_COMMON_EXCEPTION_H
@@ -44,9 +44,7 @@ namespace BALL
 				Hence, {\tt terminate} can also create a core dump. Using a debugger (e.g. dbx or gdb)
 				you can then create a stack traceback.
 				To create a core dump, you should set the environment variable {\tt BALL_CORE_DUMP}
-				to any (non empty) value.
-				
-				\\
+				to any (non empty) value.\\
 				{\bf Definition:}\URL{BALL/COMMON/exception.h}
 				\\
 		*/

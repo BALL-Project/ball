@@ -1,4 +1,4 @@
-// $Id: gradient.h,v 1.1 2000/03/26 12:41:16 oliver Exp $ 
+// $Id: gradient.h,v 1.2 2000/03/28 15:28:30 oliver Exp $ 
 // A conjugate gradient minimizer for geometry optimisation
 
 #ifndef BALL_MOLMEC_COMMON_GRADIENT_H 
@@ -35,7 +35,7 @@ namespace BALL
 	
 			This class is used by all minimizer classes.
 			\\
-			{\bf Definition:}\URL{BALL/MOLMEC/COMMON/gradient.h>
+			{\bf Definition:}\URL{BALL/MOLMEC/COMMON/gradient.h}
 			\\
 	*/
 	class Gradient
@@ -116,11 +116,11 @@ namespace BALL
     */
     void normalize();
 
-		/**	Return the number of components of the gradient.
+		/*	Return the number of components of the gradient.
 		*/
 		using vector<Vector3>::size;
 
-    /** Return the component for an atom.
+    /* Return the component for an atom.
     */
     using vector<Vector3>::operator [];
 
