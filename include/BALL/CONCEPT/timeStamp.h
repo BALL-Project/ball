@@ -1,4 +1,4 @@
-// $Id: timeStamp.h,v 1.11 2001/02/20 11:36:58 amoll Exp $
+// $Id: timeStamp.h,v 1.12 2001/07/05 17:51:34 oliver Exp $
 
 #ifndef BALL_CONCEPT_TIMESTAMP_H
 #define BALL_CONCEPT_TIMESTAMP_H
@@ -141,6 +141,7 @@ namespace BALL
 			throw();
 
 		//@}
+
     /** @name Storable interface.
     */
     //@{
