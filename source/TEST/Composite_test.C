@@ -1,20 +1,21 @@
-// $Id: Composite_test.C,v 1.18 2000/08/29 19:59:33 amoll Exp $
+// $Id: Composite_test.C,v 1.19 2000/09/01 13:52:49 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/CONCEPT/composite.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
-#include <../source/TEST/ItemCollector.h>
 #include <BALL/KERNEL/protein.h>
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/chain.h>
 #include <BALL/CONCEPT/visitor.h>
+#include "ItemCollector.h"
 ///////////////////////////
 
 using namespace BALL;
 using namespace std;
 
-class myVisitor : public  Visitor<class Composite>
+class myVisitor 
+	: public  Visitor<class Composite>
 {
 	public:
 	Composite* c_ptr;
@@ -24,7 +25,7 @@ class myVisitor : public  Visitor<class Composite>
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.18 2000/08/29 19:59:33 amoll Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.19 2000/09/01 13:52:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////

@@ -1,10 +1,10 @@
-// $Id: BinarySearchTree_test.C,v 1.15 2000/08/22 16:59:55 amoll Exp $
+// $Id: BinarySearchTree_test.C,v 1.16 2000/09/01 13:52:49 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/DATATYPE/binarySearchTree.h>
 #include <iostream>
-#include <../source/TEST/ItemCollector.h>
+#include "ItemCollector.h"
 ///////////////////////////
 
 using namespace BALL;
@@ -42,7 +42,7 @@ void initialize_()
 	rrrightitem_ = TBSTreeItem<int>(8, 0, 0, (char) BSTreeItem::BLACK);
 }
 
-START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.15 2000/08/22 16:59:55 amoll Exp $")
+START_TEST(class_name, "$Id: BinarySearchTree_test.C,v 1.16 2000/09/01 13:52:49 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
