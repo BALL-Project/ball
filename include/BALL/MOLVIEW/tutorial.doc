@@ -1,0 +1,13 @@
+/** @name Tutorial.
+
+		In this tutorial we discuss how to implement processors and to use them with a dialog
+		to extend the functionality of an existing application.
+		The dialog we create will be the same as the one in the \Ref{VIEW.} tutorial
+	  (section \Ref{Construction of a dialog.}) with some additional
+		implementations. But first we want to create a processor that performs a task.
+*/
+//@{
+	//@Include: tutorial1.doc
+	//@Include: tutorial2.doc
+	//@Include: tutorial3.doc
+//@}

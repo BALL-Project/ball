@@ -1,0 +1,26 @@
+/** @name Adding the dialog to the example application MOLVIEW.
+
+		Now that we have a dialog for creating bounding boxes for molecular structures
+		the only thing to be done is to include this dialog into an existing application.
+		We use the example application created in the \Ref{MOLVIEW.} document.
+		To add the dialog to the application we just create it with \Ref{MainControl}
+		as parent. Add this line to the example application.
+
+		\begin{verbatim}
+      new TestDialog(&main);
+		\end{verbatim}
+
+		Now we have successfull added this dialog into our application. If we start the
+		application now a new menu entry ({\em DISPLAY-TestDialog}) is available. If pressed our dialog opens and
+		any selection done in the \Ref{MolecularControl} will be catched by our dialog. If we press
+		the {\em apply} button for each molecular structure (except atoms) a bounding box
+		will be created in the color displayed in the preferences tab widget. In the \Ref{MolecularControl}
+		we can see each bounding box as an entry below the \Ref{System} with the name of
+		the molecular structure the bounding box was created for.
+		If we want to delete such a bounding box just press the right mouse button on it and
+		choose {\em remove bounding box}, it will be deleted.\\ \\
+
+		That concludes the tutorial for MOLVIEW. Now you are able to build your own
+		processors and dialogs and thus extend or rewrite any functionality the actual
+		example application lacks.
+*/

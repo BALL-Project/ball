@@ -1,0 +1,151 @@
+/** @name Building a bounding box processor.
+
+		The processor we create should compute a bounding box for the molecular structure
+		it is started from. Then a \Ref{GLSimpleBox} will be created with the calculated
+		boundaries and appended to the root of the processed structure if that root is
+		of kind \Ref{System}. Otherwise no bounding box will be created. The color of this
+		bounding box can be set in the preferences tab widget discussed in the \Ref{VIEW.} (section \Ref{Construction of a dialog.}) tutorial.
+		To create a bounding box of a molecular structure we must calculate the lower left 
+		and the upper right corner of the box enclosing all \Ref{Atom} objects in the molecular
+		structure the processor is started from. To achieve this goal we iterate over all atoms
+		and create a \Ref{Box3} containing only the processed atom then we join the new box
+		with the previously constructed box.
+		The implementation follows (includes are omitted):
+
+		\begin{verbatim}
+    class GLBoundingBoxModel: public BaseModelProcessor
+    {
+    public:
+      GLBoundingBoxModel() {}
+      virtual ~GLBoundingBoxModel() {}
+
+      void setColor(const ColorRGBA &color) { color_ = color; }
+
+      virtual bool start();
+      virtual bool finish();
+      virtual Processor::Result operator() (Composite& composite);
+
+    private:
+      ColorRGBA color_;
+      bool new_start_;
+      Composite* start_composite_;
+      Box3 bbox_;
+    };
+		\end{verbatim}
+
+		The processor is derived from \Ref{BaseModelProcessor} because
+		it should iterate over all atoms in the molecular structure it is started from.
+		There are three important methods that must be overridden for the processor
+		to function correctly.\\
+		First we implement the method {\em start}. This method performs any initialization
+		needed by the processor. If the processor is started we keep the \Ref{Composite} object
+		it is started from because later in the finish method we use this composite to get
+		any information about the molecular structure the bounding box was created for.
+
+		\begin{verbatim}
+    bool GLBoundingBoxModel::start()
+    {
+      new_start_ = true;
+      start_composite_ = 0;
+
+      return BaseModelProcessor::start();
+    }
+		\end{verbatim}
+
+		Next we override the method {\em finish} that can do some cleaning. In this case
+		however we have no need of such a thing. But if the method finish is called
+		all atoms of the molecular structure are processed thus the bounding box is computed.
+
+		\begin{verbatim}
+    bool GLBoundingBoxModel::finish()
+    {
+      Composite *root = &(start_composite_->getRoot());
+  
+      if (bbox_.a == bbox_.b
+          || !RTTI::isKindOf<System>(*root))
+        return false;
+		\end{verbatim}
+
+		If the calculated box is degenerated or if the root of our start composite is
+		not of kind \Ref{System} we do not create a bounding box.
+
+		\begin{verbatim}
+      MolecularInformation molecular_information;
+      start_composite_->host(molecular_information);                        
+		\end{verbatim}
+
+		Next we use the \Ref{MolecularInformation} visitor to get some information about the
+		molecular structure of the start composite.
+
+		\begin{verbatim}
+      GLSimpleBox *pbox = new GLSimpleBox();
+      pbox->setVertex1(bbox_.a);
+      pbox->setVertex2(bbox_.b);
+      pbox->PropertyManager::set(*this);
+      pbox->setColor(color_);
+      pbox->setName(String("BoundingBox of ")
+                    + molecular_information.getTypeName()
+                    + String(" (")
+                    + molecular_information.getName()
+                    + String(")"));
+		\end{verbatim}
+
+		Now we create a \Ref{GLSimpleBox} with the boundaries of the calculated box, set the
+		color and properties of our dialog into the GLSimpleBox and set name with the help
+		of the {\em molecular_information}.
+                                                         
+		\begin{verbatim}
+      root->appendChild(*pbox);
+
+      return true;
+    }
+		\end{verbatim}
+
+		The last command will append the created bounding box to the root composite.\\ \\
+
+		The last method we must implement is the method {\em operator()}. This method
+		will be called from the processor mechanism for every \Ref{Composite} object
+		in the molecular structure thus iterating over it.
+		The implementation is straight forward.
+
+		\begin{verbatim}
+    Processor::Result GLBoundingBoxModel::operator() (Composite &composite)
+    {
+      if (start_composite_ == 0)
+        start_composite_ = &composite;
+
+      if (!RTTI::isKindOf<Atom>(composite))
+        return Processor::CONTINUE;
+		\end{verbatim}
+
+		In this part of the code we store the start \Ref{Composite} so that later in the finish
+		method we can append the created bounding box to it.
+		We only want to process \Ref{Atom} objects, so we test with the runtime type
+		identification if the processed {\em composite} is not of kind \Ref{Atom}. If this
+		is the case we tell the processor to continue.
+
+		\begin{verbatim}
+      Atom *atom = RTTI::castTo<Atom>(composite);
+
+      Box3 bbox(atom->getPosition(), atom->getPosition());
+
+      if (new_start_)
+      {
+        bbox_ = bbox;
+        new_start_ = false;
+      }
+
+      bbox_.join(bbox);
+
+      return Processor::CONTINUE;
+    }
+		\end{verbatim}
+
+		We create a box with the atom object and use it as start box if we do not have already
+		one. Next we join the created box with previously calculated one. This mechanism
+		extends the computed box so that if all atoms are processed we have a correctly calculated
+		bounding box.\\ \\
+
+		This concludes the implementation of the bounding box processor. In the next
+		section we use this processor in a dialog the applies it to molecular structures.
+*/

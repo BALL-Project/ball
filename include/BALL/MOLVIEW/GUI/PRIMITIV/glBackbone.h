@@ -1,4 +1,4 @@
-// $Id: glBackbone.h,v 1.3 2001/05/13 14:55:24 hekl Exp $
+// $Id: glBackbone.h,v 1.4 2001/05/27 10:29:28 hekl Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLBACKBONE_H
@@ -47,8 +47,8 @@ namespace BALL
 				See these classes for further information.
 				@memo    GlBackbone class (BALL MOLVIEW gui primitiv framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.3 $
-				@date    $Date: 2001/05/13 14:55:24 $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/05/27 10:29:28 $
 		*/
 		class GLBackbone
 			: public Backbone,
@@ -234,7 +234,7 @@ namespace BALL
 			*/
 			virtual bool extract()
 				throw();
-
+			//@}
 
   		private:
 

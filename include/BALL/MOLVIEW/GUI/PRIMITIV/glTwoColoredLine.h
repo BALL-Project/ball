@@ -1,4 +1,4 @@
-// $Id: glTwoColoredLine.h,v 1.4 2001/05/13 14:55:24 hekl Exp $
+// $Id: glTwoColoredLine.h,v 1.5 2001/05/27 10:29:28 hekl Exp $
 
 #ifndef BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
 #define BALL_MOLVIEW_GUI_PRIMITIV_GLTWOCOLOREDLINE_H
@@ -37,8 +37,8 @@ namespace BALL
 				See these classes for further information.
 				@memo    GLTwoColoredLine class (BALL MOLVIEW gui primitiv framework)
 				@author  $Author: hekl $
-				@version $Revision: 1.4 $
-				@date    $Date: 2001/05/13 14:55:24 $
+				@version $Revision: 1.5 $
+				@date    $Date: 2001/05/27 10:29:28 $
 		*/
 		class GLTwoColoredLine
 			: public TwoColoredLine,
@@ -222,6 +222,7 @@ namespace BALL
 			*/
 			virtual bool extract()
 				throw();
+			//@}
 		};
 
 #			ifndef BALL_NO_INLINE_FUNCTIONS
