@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.21 2003/12/18 13:05:30 amoll Exp $
+// $Id: representation.C,v 1.22 2003/12/23 13:09:40 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/representation.h>
 #include <BALL/VIEW/MODELS/modelProcessor.h>
@@ -276,6 +276,7 @@ namespace BALL
 				thread_->wait(500); 
 			}
 
+			mc->setStatusbarText("Drawing...");
 			mc->setCompositesMuteable(true);//mc->compositesAreMuteable()  && mc_was_muteable);
 			
 			RepresentationMessage* message = new RepresentationMessage;
@@ -291,6 +292,7 @@ namespace BALL
 
 			message->setRepresentation(*this);
 			mc->sendMessage(*message);
+			mc->setStatusbarText("");
 
 #endif
 		}

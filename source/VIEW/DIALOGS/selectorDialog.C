@@ -50,10 +50,11 @@ void SelectorDialog::accept()
 		{
 			mc->selectCompositeRecursive(*ait, true);
 		}
-		mc->updateRepresentationsOf(**it);
+		mc->updateRepresentationsOf(**it, false);
 	}
 
 	NewSelectionMessage* nm = new NewSelectionMessage;
+	nm->setOpenItems(true);
 	mc->sendMessage(*nm);
 
 	mc->setStatusbarText(String("Selected " + String(s.getNumberOfSelectedAtoms()) + " Atoms."));

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.C,v 1.17 2003/12/20 15:57:55 amoll Exp $
+// $Id: message.C,v 1.18 2003/12/23 13:09:40 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/message.h>
 #include <BALL/COMMON/rtti.h>
@@ -163,6 +163,8 @@ ControlSelectionMessage::ControlSelectionMessage()
 
 NewSelectionMessage::NewSelectionMessage() 
 	throw()
+	: Message(),
+		open_(false)
 { 
 	#ifdef BALL_VIEW_DEBUG
 		Log.error() << "new NewSelectionMessage" << std::endl;

@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>519</width>
-            <height>76</height>
+            <height>79</height>
         </rect>
     </property>
     <property name="caption">
@@ -215,9 +215,16 @@
         <receiver>SelectorDialogData</receiver>
         <slot>clearSelection()</slot>
     </connection>
+    <connection>
+        <sender>buttonHelp</sender>
+        <signal>clicked()</signal>
+        <receiver>SelectorDialogData</receiver>
+        <slot>showHelp()</slot>
+    </connection>
 </connections>
 <slots>
     <slot>clearSelection()</slot>
+    <slot>showHelp()</slot>
 </slots>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>

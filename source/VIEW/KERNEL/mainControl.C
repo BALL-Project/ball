@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.47 2003/12/20 15:57:07 amoll Exp $
+// $Id: mainControl.C,v 1.48 2003/12/23 13:09:40 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1117,7 +1117,7 @@ void MainControl::clearSelection()
 	for (; it != getCompositeManager().end(); it++)
 	{
 		deselectCompositeRecursive(*it);
-		updateRepresentationsOf(**it, true);
+		updateRepresentationsOf(**it, false);
 	}
 
  	getSelection().clear();

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.h,v 1.12 2003/12/09 14:23:33 amoll Exp $
+// $Id: molecularControl.h,v 1.13 2003/12/23 13:14:25 amoll Exp $
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
 #define BALL_VIEW_WIDGETS_MOLECULARCONTROL_H
@@ -336,8 +336,10 @@ namespace BALL
 			/** Set the selection of the checkboxes and the opening of the tree 
 			 		according to the selection in the MainControl.
 					\param open true means, that the item tree is opend and closed according to the changes
+					\param force true means, that the item tree is opend and closed according to the changes,
+																	 also if more than 50 items are selected.
 			*/
-			void setSelection_(bool open)
+			void setSelection_(bool open, bool force = false)
 				throw();
 
 			/** Access the MolecularInformation visitor.

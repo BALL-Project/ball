@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.h,v 1.39 2003/12/20 15:58:21 amoll Exp $
+// $Id: message.h,v 1.40 2003/12/23 13:09:20 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MESSAGE_H
@@ -408,6 +408,17 @@ class NewSelectionMessage: public Message
 	public:
 	NewSelectionMessage()
 		throw();
+
+	/// Open all SelectableListViewItems, if they have a selected child
+	bool openItems()
+		throw() { return open_;}
+
+	///
+	void setOpenItems(bool state)
+		throw() { open_ = state;}
+
+	protected:
+	 bool open_;
 };
 
 /** GeometricObjectSelectionMessage class. \par

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.25 2003/12/18 12:06:08 amoll Exp $
+// $Id: molecularControl.C,v 1.26 2003/12/23 13:14:45 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -173,7 +173,8 @@ bool MolecularControl::reactToMessages_(Message* message)
 	}
 	else if (RTTI::isKindOf<NewSelectionMessage> (*message))
 	{
-		setSelection_(true);
+		NewSelectionMessage* nsm = (NewSelectionMessage*) message;
+		setSelection_(true, nsm->openItems());
 	}
 
 	return false;
@@ -550,7 +551,7 @@ void MolecularControl::invalidateSelection()
 
 
 // set the checkboxes according to the selection in the MainControl
-void MolecularControl::setSelection_(bool open)
+void MolecularControl::setSelection_(bool open, bool force)
 	throw()
 {	
 	const HashSet<Composite*>& selection = getMainControl()->getSelection();
@@ -565,7 +566,7 @@ void MolecularControl::setSelection_(bool open)
 		return;
 	}
 
-	if (selection.size() > 50) open = false;
+	if (selection.size() > 50 && !force) open = false;
 
 	QListViewItemIterator it(listview);
 	for (; it.current(); ++it)
