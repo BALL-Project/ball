@@ -1,4 +1,4 @@
-// $Id: HashSet_test.C,v 1.9 2000/09/05 14:03:04 amoll Exp $
+// $Id: HashSet_test.C,v 1.10 2000/12/01 14:10:49 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -11,21 +11,32 @@ using namespace BALL;
 using namespace std;
 
 class MyVisitor 
-	: public Visitor <int>
+	: public Visitor<HashSet<int> >
 {
 	public:
 	MyVisitor()
 		: value_sum(0)
 	{
 	}
+
 	int value_sum;
+
+	void visit(HashSet<int>& set)
+	{
+		HashSet<int>::Iterator it = set.begin();
+		for (; it != set.end(); ++it)
+		{
+			value_sum += (*it);
+		}
+	}
+
 	void visit(int& v)
 	{
 		value_sum += v;
 	}
 };
 
-START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.9 2000/09/05 14:03:04 amoll Exp $")
+START_TEST(HashSet<T>, "$Id: HashSet_test.C,v 1.10 2000/12/01 14:10:49 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -320,7 +331,7 @@ CHECK(HashSet::erase(Iterator pos))
 	TEST_EXCEPTION(Exception::IncompatibleIterators, hs2.erase(hs.begin()))
 RESULT
 
-CHECK(HashSet::host(Visitor<int>&))
+CHECK(HashSet::host(Visitor<HashSet<Key> >& visitor))
 	HashSet<int> hs;
 	hs.insert(1);
 	hs.insert(2);
