@@ -1,4 +1,4 @@
-// $Id: Plane3_test.C,v 1.3 2000/03/02 22:21:43 amoll Exp $
+// $Id: Plane3_test.C,v 1.4 2000/03/08 23:53:26 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 #include <BALL/MATHS/line3.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Plane3_test.C,v 1.3 2000/03/02 22:21:43 amoll Exp $")
+START_TEST(class_name, "$Id: Plane3_test.C,v 1.4 2000/03/08 23:53:26 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -183,7 +183,7 @@ CHECK(TPlane3::normalize())
 	v2 = Vector3(4.0, 9.0, 16.0);
 	p = Plane3(v1, v2);
 	p.normalize();
-	float erg = sqrt (4 * 4 + 9 * 9 + 16 * 16);
+	float erg = ::sqrt (4 * 4 + 9 * 9 + 16 * 16);
 	TEST_REAL_EQUAL(p.n[0], 4.0 / erg)
 	TEST_REAL_EQUAL(p.n[1], 9.0 / erg)
 	TEST_REAL_EQUAL(p.n[2], 16.0 / erg)
@@ -199,7 +199,7 @@ CHECK(hessify())
 	v2 = Vector3(4.0, 9.0, 16.0);
 	p = Plane3(v1, v2);
 	p.normalize();
-	float erg = sqrt (4 * 4 + 9 * 9 + 16 * 16);
+	float erg = ::sqrt (4 * 4 + 9 * 9 + 16 * 16);
 	TEST_REAL_EQUAL(p.n[0], 4 / erg)
 	TEST_REAL_EQUAL(p.n[1], 9 / erg)
 	TEST_REAL_EQUAL(p.n[2], 16 / erg)
