@@ -1,4 +1,4 @@
-// $Id: mainControl.C,v 1.32 2002/12/17 13:40:18 amoll Exp $
+// $Id: mainControl.C,v 1.33 2002/12/18 02:30:44 amoll Exp $
 
 // this is required for QMenuItem
 #define INCLUDE_MENUITEM_DEF
@@ -35,13 +35,13 @@ namespace BALL
 			throw()
 			:	QMainWindow(parent, name),
 				selection_(),
+				message_label_(new QLabel("" , statusBar())),
 				composite_map_(),
 				descriptor_map_(),
 				descriptors_(),
 				main_control_preferences_(0),
 				preferences_dialog_(0),
-				preferences_id_(-1),
-				message_label_(new QLabel("" , statusBar()))
+				preferences_id_(-1)
 		{
 			// read the preferences
 			preferences_.setFilename(inifile);
@@ -891,7 +891,7 @@ namespace BALL
 													atoms[0]->getFullName() + ", " + 
 													atoms[1]->getFullName() + ", " +
 													atoms[2]->getFullName() + ": " +
-													String(result)); 
+													String(result.toDegree())); 
 			}
 			else if (nr_of_atoms == 4)
 			{
@@ -906,7 +906,7 @@ namespace BALL
 													atoms[1]->getFullName() + ", " +
 													atoms[2]->getFullName() + ", " +
 													atoms[3]->getFullName() + ": " +
-													String(result));
+													String(result.toDegree()));
 			}
 			else
 			{
