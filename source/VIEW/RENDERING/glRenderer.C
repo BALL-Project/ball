@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.32 2004/07/13 13:39:50 amoll Exp $
+// $Id: glRenderer.C,v 1.33 2004/07/13 15:15:04 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -76,7 +76,7 @@ namespace BALL
 			// length before using the normals in OpenGL's lighting equations
 			// While this corrects potential lighting problems introduced by scaling, 
 			// it also slows OpenGL's vertex processing speed since normalization requires extra operations.
-			glEnable(GL_NORMALIZE);   
+		 	glEnable(GL_NORMALIZE);   
 
 			glDisable(GL_FOG);
 			
@@ -95,10 +95,10 @@ namespace BALL
 			// select smooth shading 
 		 	glShadeModel(GL_SMOOTH);
 
-			// smooth line drawing (still testing)
-			glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
-			glHint (GL_POLYGON_SMOOTH_HINT, GL_NICEST);
-			glEnable (GL_LINE_SMOOTH);
+			// smooth line drawing
+			glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+			glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+			glEnable(GL_LINE_SMOOTH);
 
 			glHint(GL_PERSPECTIVE_CORRECTION_HINT, GL_NICEST);
 
@@ -138,7 +138,6 @@ namespace BALL
 			glMaterialfv(GL_BACK, GL_SHININESS, shin2);
 			glMaterialfv(GL_BACK, GL_DIFFUSE,  diff2);
 			glMaterialfv(GL_BACK, GL_AMBIENT,  ambient2);
-
 
 			// if displaylists were already calculated, return
 			if (GL_spheres_list_ != 0) return true;
