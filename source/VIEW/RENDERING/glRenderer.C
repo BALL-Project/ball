@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.31 2004/07/13 13:23:22 amoll Exp $
+// $Id: glRenderer.C,v 1.32 2004/07/13 13:39:50 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -70,7 +70,7 @@ namespace BALL
 
  			glFrontFace(GL_CCW);     // selects counterclockwise polygons as front-facing
  			glCullFace(GL_BACK);		 // specify whether front- or back-facing facets can be culled
- 			glEnable(GL_CULL_FACE);  // disable elimination of back-facing polygons
+ 			glEnable(GL_CULL_FACE);  // enable elimination of back-facing polygons
 
 			// Force OpenGL to normalize transformed normals to be of unit 
 			// length before using the normals in OpenGL's lighting equations
@@ -80,7 +80,7 @@ namespace BALL
 
 			glDisable(GL_FOG);
 			
- 			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
+ 			glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
 
 			// do depthcomparisons and update the depth buffer
 			glEnable(GL_DEPTH_TEST);
@@ -93,7 +93,7 @@ namespace BALL
 			glClearDepth(200.0);
 
 			// select smooth shading 
-			glShadeModel(GL_SMOOTH);
+		 	glShadeModel(GL_SMOOTH);
 
 			// smooth line drawing (still testing)
 			glHint (GL_LINE_SMOOTH_HINT, GL_NICEST);
@@ -736,11 +736,11 @@ namespace BALL
 			}
 			else
 			{
-				// draw the triangles
+				// draw the triangles solid
+ 			  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, true);
 				glBegin(GL_TRIANGLES);
 				for (Size index = 0; index < mesh.triangle.size(); ++index)
 				{
-
 					setColorRGBA_(mesh.colorList[mesh.triangle[index].v1]);
 					normalVector3_(mesh.normal[mesh.triangle[index].v1]);
 					vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
@@ -752,9 +752,9 @@ namespace BALL
 					setColorRGBA_(mesh.colorList[mesh.triangle[index].v3]);
 					normalVector3_(mesh.normal[mesh.triangle[index].v3]);
 					vertexVector3_(mesh.vertex[mesh.triangle[index].v3]);
-
 				}
 				glEnd();
+ 			  glLightModeli(GL_LIGHT_MODEL_TWO_SIDE, false);
 				// ------------------
 			}
 
