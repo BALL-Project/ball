@@ -1,4 +1,4 @@
-// $Id: amberTorsion.C,v 1.9 1999/09/21 06:50:42 oliver Exp $
+// $Id: amberTorsion.C,v 1.10 1999/12/28 17:51:10 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberTorsion.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -8,6 +8,8 @@
 #include <BALL/KERNEL/bond.h>
 
 #include <algorithm>
+
+using namespace std;
 
 namespace BALL 
 {
@@ -286,15 +288,15 @@ namespace BALL
 								// of their type name (AMBER!!)
 								if (a1->getTypeName() > a2->getTypeName())
 								{
-									std::swap(a1, a2);
+									swap(a1, a2);
 								}
 								if (a1->getTypeName() > a4->getTypeName())
 								{
-									std::swap(a1, a4);
+									swap(a1, a4);
 								}
 								if (a2->getTypeName() > a4->getTypeName())
 								{
-									std::swap(a2, a4);
+									swap(a2, a4);
 								}
 
 								if	( getForceField()->getUseSelection() == false ||

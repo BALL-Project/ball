@@ -1,9 +1,11 @@
-// $Id: amberStretch.C,v 1.3 1999/09/19 20:54:57 oliver Exp $
+// $Id: amberStretch.C,v 1.4 1999/12/28 17:51:10 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberStretch.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/forEach.h>
+
+using namespace std;
 
 namespace BALL 
 {

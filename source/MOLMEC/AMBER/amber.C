@@ -1,4 +1,4 @@
-// $Id: amber.C,v 1.10 1999/09/21 15:17:50 oliver Exp $
+// $Id: amber.C,v 1.11 1999/12/28 17:51:09 oliver Exp $
 // Molecular Mechanics: Amber force field class
 
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -8,6 +8,8 @@
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/COMMON/assignTypes.h>
 #include <BALL/MOLMEC/PARAMETER/templates.h>
+
+using namespace std;
 
 namespace BALL 
 {
