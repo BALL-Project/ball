@@ -1,2 +1,12 @@
 #!/usr/local/bin/bash
-cat config/configure.in | gawk '{line=$0;gsub("[^\"]","");gsub("\"\"","");if($0 == "\""){print "missing or superfluous '\"' in line "FNR":";print " " line}}'
+cat config/configure.in | gawk '
+	{
+		line=$0
+		gsub("[^\"]","")
+		gsub("\"\"","")
+		if($0 == "\"")
+		{
+			print "missing or superfluous double quote in line " FNR ":"
+			print " " line
+		}
+	}'
