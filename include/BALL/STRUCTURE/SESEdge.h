@@ -1,4 +1,4 @@
-// $Id: SESEdge.h,v 1.5 2001/01/29 12:23:40 anker Exp $
+// $Id: SESEdge.h,v 1.6 2001/02/22 16:23:20 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SESEDGE_H
 #define BALL_STRUCTURE_SESEDGE_H
@@ -61,7 +61,7 @@ namespace BALL
 				initialized to {\tt (T)0} or {\tt NULL}, respectivly.
 		*/
 		TSESEdge()
-			: vertex1(NULL), vertex2(NULL), face1(NULL), face2(NULL), circle(), rsedge(NULL), index(-1)
+			: vertex1(NULL), vertex2(NULL), face1(NULL), face2(NULL), circle(), rsedge(NULL), type(0), index(-1)
 		{
 		}
 
@@ -72,7 +72,7 @@ namespace BALL
 		*/
 		TSESEdge(const TSESEdge<T>& sesedge, bool /* deep */ = true)
 			: vertex1(sesedge.vertex1), vertex2(sesedge.vertex2), face1(sesedge.face1), face2(sesedge.face2),
-				circle(sesedge.circle), rsedge(sesedge.rsedge), index(sesedge.index)
+				circle(sesedge.circle), rsedge(sesedge.rsedge), type(sesedge.type), index(sesedge.index)
 		{
 		}
 
@@ -89,7 +89,7 @@ namespace BALL
 		*/
 		TSESEdge(TSESVertex<T>* v1, TSESVertex<T>* v2, TSESFace<T>* f1, TSESFace<T>* f2,
 						 const TCircle3<T>& c, TRSEdge<T>* rse, const int& i)
-			: vertex1(v1), vertex2(v2), face1(f1), face2(f2), circle(c), rsedge(rse), index (i)
+			: vertex1(v1), vertex2(v2), face1(f1), face2(f2), circle(c), rsedge(rse), type(0), index(i)
 		{
 		}
 
@@ -114,27 +114,27 @@ namespace BALL
 		TSESFace<T>* other(TSESFace<T>* face)
 		{
 			if (face1 == face)
-				{
-					return face2;
-				}
-				else
-				{
-					return face1;
-				}
+			{
+				return face2;
+			}
+			else
+			{
+				return face1;
+			}
 		}
 
 		bool substituteVertex(TSESVertex<T>* old, TSESVertex<T>* new_)
 		{
 			if (vertex1 == old)
-				{
-					vertex1 = new_;
-					return true;
-				}
+			{
+				vertex1 = new_;
+				return true;
+			}
 			if (vertex2 == old)
-				{
-					vertex2 = new_;
-					return true;
-				}
+			{
+				vertex2 = new_;
+				return true;
+			}
 			return false;
 		}
 
@@ -159,6 +159,15 @@ namespace BALL
 					return false;
 				}
 			return true;
+		}
+
+		bool isFree()
+		{
+			if (rsedge == NULL)
+			{
+				return false;
+			}
+			return rsedge->isFree();
 		}
 
 		//@}
@@ -210,43 +219,28 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator.
-			reads in a TVector3 and a {\bf T} value : p, radius.
+	/**	Input- Operator
+			reads in a TVector3 and a {\bf T} value : p, radius
 	*/
+/*
 	template <typename T>
-	std::istream& operator >> (std::istream& s, TSESEdge<T>& sesedge)
+	std::istream& operator >> (std::istream& s, TRSEdge<T>& rsedge)
 	{
 		char c;
 		for (int i=0; i<7 ; i++)
 		{
 			s >> c;
 		}
-		s >> sesedge.p >> sesedge.radius >> c;
+		s >> rsedge.p >> rsedge.radius >> c;
 		return s;
 	}
+*/
 
 	/**	Output- Operator
 	*/
 		template <typename T>
 		std::ostream& operator << (std::ostream& s, const TSESEdge<T>& sesedge)
 		{
-/*			s << "SESEDGE" << sesedge.index << "([";
-cout << "SESEDGE" << sesedge.index << "([";
-			s	<< ((sesedge.vertex1 == NULL) ? -2 : sesedge.vertex1->index) << ' ';
-cout << ((sesedge.vertex1 == NULL) ? -2 : sesedge.vertex1->index) << ' ';
-			s	<< ((sesedge.vertex2 == NULL) ? -2 : sesedge.vertex2->index) << "] [";
-cout << ((sesedge.vertex2 == NULL) ? -2 : sesedge.vertex2->index) << "] [";
-			s << ((sesedge.face1 == NULL) ? -2 : sesedge.face1->index) << ' ';
-cout << ((sesedge.face1 == NULL) ? -2 : sesedge.face1->index) << ' ';
-			s	<< ((sesedge.face2 == NULL) ? -2 : sesedge.face2->index) << "] ";
-cout << ((sesedge.face2 == NULL) ? -2 : sesedge.face2->index) << "] ";
-			s	<< sesedge.circle << ' ' << ((sesedge.rsedge == NULL) ? -2 : sesedge.rsedge->index);
-cout << sesedge.circle << ' ' << ((sesedge.rsedge == NULL) ? -2 : sesedge.rsedge->index);
-			s	<< ((sesedge.type == 0) ? " convex)" : ((sesedge.type == 1) ? " concave)"
-																																		: " singular)"));
-cout << ((sesedge.type == 0) ? " convex)" : ((sesedge.type == 1) ? " concave)"
-																																		: " singular)"));
-			return s;*/
 			return (s << "SESEDGE" << sesedge.index << "(["
 								<< ((sesedge.vertex1 == NULL) ? -2 : sesedge.vertex1->index) << ' '
 								<< ((sesedge.vertex2 == NULL) ? -2 : sesedge.vertex2->index) << "] ["

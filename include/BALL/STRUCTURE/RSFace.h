@@ -1,4 +1,4 @@
-// $Id: RSFace.h,v 1.7 2001/02/03 15:24:04 amoll Exp $
+// $Id: RSFace.h,v 1.8 2001/02/22 16:23:19 strobel Exp $
 
 #ifndef secure
 #define secure
@@ -133,7 +133,6 @@ namespace BALL
 			normal_.normalize();
 		}
 
-    //@}
 		/**	@name	Predicates
 		*/
 		//@{
@@ -249,7 +248,7 @@ namespace BALL
 			RSFaceIsValid(*this,__LINE__);
 			RSFaceIsValid(rsface,__LINE__);
 			#endif
-			return (!(*this == rsface));
+			return (bool)(!(*this == rsface));
 		}
 		
 		/** isSingular
@@ -586,7 +585,7 @@ namespace BALL
 		/** Substitute a rsvertex by an other one.
 				@param old_vertex the vertex that has to be substituted
 				@param new_vertex the new vertex
-				@return bool, {\bf true}, if the vertex can be substituted, {\bf false} otherwise
+				@return bool, {\texbf true}, if the vertex can be substituted, {\textbf false} otherwise
 		*/
 		bool substituteVertex(TRSVertex<T>* old_vertex, TRSVertex<T>* new_vertex)
 		{

@@ -1,4 +1,4 @@
-// $Id: surfaceProcessor.h,v 1.9 2001/01/10 15:07:46 strobel Exp $
+// $Id: surfaceProcessor.h,v 1.10 2001/02/22 16:23:22 strobel Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
 #include <BALL/STRUCTURE/solventExcludedSurface.h>
@@ -143,13 +143,13 @@ namespace BALL
 				sesfile.close();
 				std::cerr << "... ok\ntreating singularities ...\n";
 		//TreatSingularities(ses,probe_radius_);
-				density_ = 0.25;
+				density_ = 4.5;
 				std::cerr << "... ok\ntriangulating surface ...\n";
 		TriangulatedSurface* surface = Triangulate(ses,rs,density_);
-				std::cerr << "... ok\n";
+				std::cerr << "... " surface->triangles.size() << " Dreiecke ... ok\n";
 				//cout << *surface;
 				std::cerr << "exporting surface ...\n";
-		surface_ = surface->exportSurface();
+		surface->exportSurface(surface_);
 				std::cerr << "... ok\ndeleting surface ...\n";
 		delete surface;
 				std::cerr << "... ok\ndeleting solvent excluded surface ...\n";

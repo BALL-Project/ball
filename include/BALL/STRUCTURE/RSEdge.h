@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.6 2001/02/03 15:24:04 amoll Exp $
+// $Id: RSEdge.h,v 1.7 2001/02/22 16:23:19 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -117,6 +117,7 @@ namespace BALL
 		*/
 		//@{
 
+
 		/**	Assign from another RSEdge.
 				@param rsedge	the RSEdge object to assign from
 				@param deep ignored
@@ -165,8 +166,7 @@ namespace BALL
 			intersection_point0_ = intersection_point0; intersection_point1_ = intersection_point1;
 			singular_ = singular; index_ = index;
 		}
-		
-    //@}
+
 
 		/**	@name	Accessors
 		*/
@@ -403,7 +403,7 @@ namespace BALL
 		/** Substitute a rsvertex by an other one.
 				@param old_vertex the vertex that has to be substituted
 				@param new_vertex the new vertex
-				@return bool, {\bf true}, if the vertex can be substituted, {\bf false} otherwise
+				@return bool, {\texbf true}, if the vertex can be substituted, {\textbf false} otherwise
 		*/
 		bool substituteVertex(TRSVertex<T>* old_vertex, TRSVertex<T>* new_vertex)
 		{
@@ -476,7 +476,7 @@ namespace BALL
 		*/
 		bool operator != (const TRSEdge& rsedge) const
 		{
-			return (!(*this == rsedge));
+			return (bool)(!(*this == rsedge));
 		}
 		
 		/** isSingular
@@ -522,6 +522,7 @@ namespace BALL
 
 	/**	Input- Operator
 	*/
+
 	template <typename T>
 	std::istream& operator >> (std::istream& s, TRSEdge<T>& rsedge)
 	{
@@ -531,31 +532,32 @@ namespace BALL
 
 	/**	Output- Operator
 	*/
-	template <typename T>
-	std::ostream& operator << (std::ostream& s, TRSEdge<T>& rsedge)
-	{
-		s << "RSEDGE" << rsedge.getIndex()
-			<< "([" << (rsedge.getVertex(0) == NULL ? -2 : rsedge.getVertex(0)->getIndex()) << ' '
-			<<				 (rsedge.getVertex(1) == NULL ? -2 : rsedge.getVertex(1)->getIndex()) << "] "
-			<< "[" << (rsedge.getFace(0) == NULL ? -2 : rsedge.getFace(0)->getIndex()) << ' '
-			<<				(rsedge.getFace(1) == NULL ? -2 : rsedge.getFace(1)->getIndex()) << "] "
-			<< rsedge.getCenterOfTorus() << ' '
-			<< rsedge.getMajorRadiusOfTorus() << ' ' << rsedge.getPhi() << ' '
-			<< rsedge.getContactCircle(0) << ' '
-			<< rsedge.getContactCircle(1) << ' ';
-		bool singular(rsedge.isSingular());
-		if (singular)
+		template <typename T>
+		std::ostream& operator << (std::ostream& s, TRSEdge<T>& rsedge)
 		{
-			s << rsedge.getIntersectionPoint(0) << ' '
-				<< rsedge.getIntersectionPoint(1) << " true)";
+			s << "RSEDGE" << rsedge.getIndex()
+				<< "([" << (rsedge.getVertex(0) == NULL ? -2 : rsedge.getVertex(0)->getIndex()) << ' '
+				<<				 (rsedge.getVertex(1) == NULL ? -2 : rsedge.getVertex(1)->getIndex()) << "] "
+				<< "[" << (rsedge.getFace(0) == NULL ? -2 : rsedge.getFace(0)->getIndex()) << ' '
+				<<				(rsedge.getFace(1) == NULL ? -2 : rsedge.getFace(1)->getIndex()) << "] "
+				<< rsedge.getCenterOfTorus() << ' '
+				<< rsedge.getMajorRadiusOfTorus() << ' ' << rsedge.getPhi() << ' '
+				<< rsedge.getContactCircle(0) << ' '
+				<< rsedge.getContactCircle(1) << ' ';
+			bool singular(rsedge.isSingular());
+			if (singular)
+			{
+				s << rsedge.getIntersectionPoint(0) << ' '
+					<< rsedge.getIntersectionPoint(1) << " true)";
+			}
+			else
+			{
+				s << TVector3<T>::getZero() << ' ' << TVector3<T>::getZero() << " false)";
+			}
+			return s;
 		}
-		else
-		{
-			s << TVector3<T>::getZero() << ' ' << TVector3<T>::getZero() << " false)";
-		}
-		return s;
-	}
 	//@}
+
 
 	/**	The Default RSEdge Type.
 			If double precision is not needed, {\tt RSEdge<float>} should

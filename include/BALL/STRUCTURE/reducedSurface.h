@@ -1,4 +1,4 @@
-// $Id: reducedSurface.h,v 1.10 2001/01/15 11:34:44 amoll Exp $
+// $Id: reducedSurface.h,v 1.11 2001/02/22 16:23:21 strobel Exp $
 
 //#define debug_rs
 //#define print cout
@@ -54,7 +54,6 @@
 #include <vector>
 #include <list>
 #include <fstream>
-#include <iostream>
 
 
 namespace BALL
@@ -106,13 +105,13 @@ namespace BALL
 			:	atom_(), probe_radius_(probe_radius), tree_(),
 				vertices_(), edges_(), faces_(), r_max_((T)0)
 		{
-			#ifdef debug_rs
-			print.open("ReducedSurface.log");
-			pre = "  ";
-			print << "START\n";
-			print << pre << "ReducedSurface(" << spheres.size() << ")\n";
-			pre += "  ";
-			#endif
+					#ifdef debug_rs
+					print.open("ReducedSurface.log");
+					pre = "  ";
+					print << "START\n";
+					print << pre << "ReducedSurface(" << spheres.size() << ")\n";
+					pre += "  ";
+					#endif
 			std::vector< TVector3<T> > point_list;
 			for (Position i = 0; i < spheres.size(); i++)
 			{
@@ -122,14 +121,14 @@ namespace BALL
 			}
 			tree_ = new TBSDTree<T>(point_list);
 			tree_->build();
-			#ifdef debug_rs
-			for (Position i = 0; i < atom_.size(); i++)
-			{
-				print << pre << "Atom " << atom_[i] << " eingefügt (" << i << ")\n";
-			}
-			pre.replace(0,2,"");
-			print << pre << "end\n";
-			#endif
+					#ifdef debug_rs
+					for (Position i = 0; i < atom_.size(); i++)
+					{
+						print << pre << "Atom " << atom_[i] << " eingefügt (" << i << ")\n";
+					}
+					pre.replace(0,2,"");
+					print << pre << "end\n";
+					#endif
 		}
 
 		/**	Destructor.
@@ -137,16 +136,16 @@ namespace BALL
 		*/
 		virtual ~TReducedSurface()
 		{
-			#ifdef debug_rs
-			print << *this;
-			#endif
+					#ifdef debug_rs
+					print << *this;
+					#endif
 			clear();
 			delete tree_;
-			#ifdef debug_rs
-			print << pre << "~ReducedSurface()\n";
-			print << pre << "end\n";
-			print << "ENDE\n";
-			#endif
+					#ifdef debug_rs
+					print << pre << "~ReducedSurface()\n";
+					print << pre << "end\n";
+					print << "ENDE\n";
+					#endif
 		}
 		//@}
 
@@ -318,10 +317,10 @@ namespace BALL
 		*/
 		void compute()
 		{
-			#ifdef debug_rs
-			print << pre << "computing ...\n";
-			pre += "  ";
-			#endif
+					#ifdef debug_rs
+					print << pre << "computing ...\n";
+					pre += "  ";
+					#endif
 			list<Index> indices;
 			list<Index> all_indices;
 			for (Position i = 0; i < atom_.size(); i++)
@@ -335,8 +334,8 @@ namespace BALL
 			TRSFace<T>* start_face(NULL);
 			std::vector< std::list< TRSVertex<T>* > > vertices(atom_.size());
 			Byte start = 1;
-			while (start != 0)
-			{
+			//while (start != 0)
+			//{
 				start = getStartPosition(indices,new_vertices,start_vertex,start_edge,start_face,vertices);
 				try
 				{
@@ -357,7 +356,7 @@ namespace BALL
 					{
 						clear();
 						indices = all_indices;
-//						cout << "\nProbeSphere berührt vier Atome, starte neu ...\n\n";
+								std::cerr << "\nProbeSphere berührt vier Atome, starte neu ...\n\n";
 						compute();
 						return;
 					}
@@ -366,7 +365,7 @@ namespace BALL
 						throw;
 					}
 				}				
-			}
+			//}
 			std::vector< TRSVertex<T>* > v;
 			for (Position i = 0; i < vertices_.size(); i++)
 			{
@@ -377,10 +376,10 @@ namespace BALL
 				}
 			}
 			vertices_ = v;
-			#ifdef debug_rs
-			pre.replace(0,2,"");
-			print << pre << "end        // computing\n";
-			#endif
+					#ifdef debug_rs
+					pre.replace(0,2,"");
+					print << pre << "end        // computing\n";
+					#endif
 		}
 
 		//@}
@@ -394,11 +393,11 @@ namespace BALL
 												std::list< TRSVertex<T>* >& new_vertices,
 												std::vector< std::list< TRSVertex<T>* > >& vertices)
 		{
-			#ifdef debug_rs
-			print << pre << "getRSComponent(" << indices.size() << "," << *face << ","
-						<< new_vertices.size() << ")\n";
-			pre += "  ";
-			#endif
+					#ifdef debug_rs
+					print << pre << "getRSComponent(" << indices.size() << "," << *face << ","
+								<< new_vertices.size() << ")\n";
+					pre += "  ";
+					#endif
 			list< TRSEdge<T>* > new_edges;
 			new_edges.push_back(face->getEdge(0));
 			new_edges.push_back(face->getEdge(1));
@@ -419,11 +418,11 @@ namespace BALL
 				//}
 				//counter++;
 			}
-			#ifdef debug_rs
-			pre.replace(0,2,"");
-			print << pre << "end        // getRSComponent(" << indices.size() << "," << *face << ","
-						<< new_vertices.size() << ")\n";
-			#endif
+					#ifdef debug_rs
+					pre.replace(0,2,"");
+					print << pre << "end        // getRSComponent(" << indices.size() << "," << *face << ","
+								<< new_vertices.size() << ")\n";
+					#endif
 		}
 
 
@@ -432,43 +431,43 @@ namespace BALL
 									 std::vector< std::list< TRSVertex<T>* > >& vertices)
 		{
 			// find third atom
-			#ifdef debug_rs
-			print << pre << "treat " << *edge << "\n";
-			pre += "  ";
-			#endif
-			//cout << "behandle " << *edge; //cin >> HALT;
+					#ifdef debug_rs
+					print << pre << "treat " << *edge << "\n";
+					pre += "  ";
+					#endif
+					//cout << "behandle " << *edge; //cin >> HALT;
 			TAngle<T> phi;
 			TSphere3<T> probe;
 			TRSFace<T>* start_face(edge->getFace(0));
-			//cout << "starting face: " << *start_face; //cin >> HALT;
-			#ifdef debug_rs
-			print << pre << "starting face: " << *start_face << "\n";
-			#endif
+					//cout << "starting face: " << *start_face; //cin >> HALT;
+					#ifdef debug_rs
+					print << pre << "starting face: " << *start_face << "\n";
+					#endif
 			TRSVertex<T>* vertex1(edge->getVertex(0));
 			TRSVertex<T>* vertex2(edge->getVertex(1));
 			TRSVertex<T>* vertex3(NULL);
 			Index atom1(vertex1->getAtom());
 			Index atom2(vertex2->getAtom());
-			//cout << "Vertex1: " << *vertex1 << " auf " << atom1 << "\n";
-			//cout << "Vertex2: " << *vertex2 << " auf " << atom2; //cin >> HALT;
+					//cout << "Vertex1: " << *vertex1 << " auf " << atom1 << "\n";
+					//cout << "Vertex2: " << *vertex2 << " auf " << atom2; //cin >> HALT;
 			Index atom3(thirdAtom(vertex1,vertex2,start_face,probe,phi));
-			//cout << "Also:\n";
-			//cout << "Vertex1: " << *vertex1 << " auf " << atom1 << "\n";
-			//cout << "Vertex2: " << *vertex2 << " auf " << atom2 << "\n";
-			//cout << "Vertex3 auf " << atom3; //cin >> HALT;
+					//cout << "Also:\n";
+					//cout << "Vertex1: " << *vertex1 << " auf " << atom1 << "\n";
+					//cout << "Vertex2: " << *vertex2 << " auf " << atom2 << "\n";
+					//cout << "Vertex3 auf " << atom3; //cin >> HALT;
 			if (atom3 == -1)
 			{
 				throw Exception::GeneralException(__FILE__,__LINE__,"CanNotTreatEdge","no third atom found");
 			}
-			#ifdef debug_rs
-			print << pre << "new face: " << atom1 << "  " << atom2 << "  " << atom3 << "\n";
-			#endif
+					#ifdef debug_rs
+					print << pre << "new face: " << atom1 << "  " << atom2 << "  " << atom3 << "\n";
+					#endif
 			TSphere3<T> sphere1(atom_[atom1]);
 			TSphere3<T> sphere2(atom_[atom2]);
 			TSphere3<T> sphere3(atom_[atom3]);
-			//cout << "Atom1: " << sphere1 << "\n";
-			//cout << "Atom2: " << sphere2 << "\n";
-			//cout << "Atom3: " << sphere3; //cin >> HALT;
+					//cout << "Atom1: " << sphere1 << "\n";
+					//cout << "Atom2: " << sphere2 << "\n";
+					//cout << "Atom3: " << sphere3; //cin >> HALT;
 			// build a new face and two new edges
 			vertex3 = new TRSVertex<T>(atom3);
 			TRSEdge<T>* edge1;
@@ -476,35 +475,35 @@ namespace BALL
 			TRSFace<T>* new_face
 					= new TRSFace<T>(vertex1,vertex2,vertex3,NULL,NULL,NULL,
 													 probe.p,getFaceNormal(sphere1,sphere2,sphere3,probe),false,-1);
-			//cout << "neuer Vertex: " << *vertex3; //cin >> HALT;
-			//cout << "neue Face: " << *new_face; //cin >> HALT;
-			#ifdef debug_rs
-			print << pre << "face " << *new_face << " gebaut\n";
-			#endif
-			//cout << "Teste, ob face schon existiert"; //cin >> HALT;
+					//cout << "neuer Vertex: " << *vertex3; //cin >> HALT;
+					//cout << "neue Face: " << *new_face; //cin >> HALT;
+					#ifdef debug_rs
+					print << pre << "face " << *new_face << " gebaut\n";
+					#endif
+					//cout << "Teste, ob face schon existiert"; //cin >> HALT;
 			TRSFace<T>* test = faceExists(new_face,vertices[vertex1->getAtom()]);
-			//cout << "Test erfolgreich"; //cin >> HALT;
+					//cout << "Test erfolgreich"; //cin >> HALT;
 			if (test == NULL)
 			{
-				//cout << "Face existiert noch nicht"; //cin >> HALT;
+						//cout << "Face existiert noch nicht"; //cin >> HALT;
 				vertex3->setIndex(vertices_.size());
 				vertices_.push_back(vertex3);
 				indices.remove(atom3);
 				new_vertices.push_back(vertex3);
-				//cout << "Vertex3 in vertices_ gepusht"; //cin >> HALT;
+						//cout << "Vertex3 in vertices_ gepusht"; //cin >> HALT;
 				vertices[atom3].push_back(vertex3);
-				//cout << "Vertex3 in vertices[" << atom3 << "] gepusht"; //cin >> HALT;
+						//cout << "Vertex3 in vertices[" << atom3 << "] gepusht"; //cin >> HALT;
 				edge1 = new TRSEdge<T>();
 				edge2 = new TRSEdge<T>();
-				//cout << "zwei neue Edges erzeugt"; //cin >> HALT;
+						//cout << "zwei neue Edges erzeugt"; //cin >> HALT;
 				updateFaceAndEdges(vertex1,vertex2,vertex3,probe,6,new_face,edge,edge1,edge2);
 				new_face->setIndex(faces_.size());
 				faces_.push_back(new_face);
-				//cout << "Face und Edges geupdatet:\n";
-				//cout << *new_face << "\n";
-				//cout << *edge << "\n";
-				//cout << *edge1 << "\n";
-				//cout << *edge2; //cin >> HALT;
+						//cout << "Face und Edges geupdatet:\n";
+						//cout << *new_face << "\n";
+						//cout << *edge << "\n";
+						//cout << *edge1 << "\n";
+						//cout << *edge2; //cin >> HALT;
 				vertex1->pushFace(new_face);
 				vertex2->pushFace(new_face);
 				vertex3->pushFace(new_face);
@@ -514,24 +513,24 @@ namespace BALL
 				vertex3->pushEdge(edge2);
 				new_edges.push_back(edge1);
 				new_edges.push_back(edge2);
-				//cout << "Vertices geupdatet:\n";
-				//cout << *vertex1 << "\n";
-				//cout << *vertex2 << "\n";
-				//cout << *vertex3; //cin >> HALT;
-				#ifdef debug_rs
-				print << pre << "... geupdatet " << *new_face << "\n";
-				print << pre << "... in vertices_[" << vertex1->getIndex() << "], vertices_["
-							<< vertex2->getIndex() << "], " << "vertices_[" << vertex3->getIndex() << "] gepusht\n";
-				print << pre << "neue edges:\n" << pre << *edge1 << "\n" << pre << *edge2
-							<< "\n" << pre << "... in new_edges gepusht\n";
-				#endif
+						//cout << "Vertices geupdatet:\n";
+						//cout << *vertex1 << "\n";
+						//cout << *vertex2 << "\n";
+						//cout << *vertex3; //cin >> HALT;
+						#ifdef debug_rs
+						print << pre << "... geupdatet " << *new_face << "\n";
+						print << pre << "... in vertices_[" << vertex1->getIndex() << "], vertices_["
+									<< vertex2->getIndex() << "], " << "vertices_[" << vertex3->getIndex() << "] gepusht\n";
+						print << pre << "neue edges:\n" << pre << *edge1 << "\n" << pre << *edge2
+									<< "\n" << pre << "... in new_edges gepusht\n";
+						#endif
 			}
 			else
 			{
-				#ifdef debug_rs
-				print << pre << "... existiert schon: " << *test << "\n";
-				#endif
-				//cout << "Face existiert schon: " << *test; //cin >> HALT;
+						#ifdef debug_rs
+						print << pre << "... existiert schon: " << *test << "\n";
+						#endif
+						//cout << "Face existiert schon: " << *test; //cin >> HALT;
 				Index i = 0;
 				TRSEdge<T>* test_edge(test->getEdge(0));
 				while (test_edge->similar(*edge) == false)
@@ -544,102 +543,102 @@ namespace BALL
 					}
 					test_edge = test->getEdge(i);
 				}
-				//cout << "Korrespondierende Edge gefunden: " << *test_edge; //cin >> HALT;
+						//cout << "Korrespondierende Edge gefunden: " << *test_edge; //cin >> HALT;
 				TRSVertex<T>* test_vertex1 = test_edge->getVertex(0);
 				TRSVertex<T>* test_vertex2 = test_edge->getVertex(1);
-				//cout << "Vertices der korrespondierenden Edge:\n";
-				//cout << "  " << *test_vertex1 << "\n";
-				//cout << "  " << *test_vertex2; //cin >> HALT;
+						//cout << "Vertices der korrespondierenden Edge:\n";
+						//cout << "  " << *test_vertex1 << "\n";
+						//cout << "  " << *test_vertex2; //cin >> HALT;
 				if (test_vertex1->similar(*vertex1))
 				{
-					//cout << "Korrespondierende Vertices:\n";
-					//cout << *vertex1 << " - " << *test_vertex1 << "\n";
-					//cout << *vertex2 << " - " << *test_vertex2; //cin >> HALT;
+							//cout << "Korrespondierende Vertices:\n";
+							//cout << *vertex1 << " - " << *test_vertex1 << "\n";
+							//cout << *vertex2 << " - " << *test_vertex2; //cin >> HALT;
 					if (*vertex1 != *test_vertex1)
 					{
-						//cout << "erstes Paar verschieden, vereinige und ersetze"; //cin >> HALT;
+								//cout << "erstes Paar verschieden, vereinige und ersetze"; //cin >> HALT;
 						vertex1->join(*test_vertex1);
 						test_vertex1->substitute(vertex1);
 						vertices_[test_vertex1->getIndex()] = NULL;
 						new_vertices.remove(test_vertex1);
 						vertices[test_vertex1->getAtom()].remove(test_vertex1);
-						//cout << *vertex1; //cin >> HALT;
-						//cout << "lösche " << *test_vertex1; //cin >> HALT;
+								//cout << *vertex1; //cin >> HALT;
+								//cout << "lösche " << *test_vertex1; //cin >> HALT;
 						delete test_vertex1;
 					}
 					if (*vertex2 != *test_vertex2)
 					{
-						//cout << "zweites Paar verschieden, vereinige und ersetze"; //cin >> HALT;
+								//cout << "zweites Paar verschieden, vereinige und ersetze"; //cin >> HALT;
 						vertex2->join(*test_vertex2);
 						test_vertex2->substitute(vertex2);
 						vertices_[test_vertex2->getIndex()] = NULL;
 						new_vertices.remove(test_vertex2);
 						vertices[test_vertex2->getAtom()].remove(test_vertex2);
-						//cout << *vertex2; //cin >> HALT;
-						//cout << "lösche " << *test_vertex2; //cin >> HALT;
+								//cout << *vertex2; //cin >> HALT;
+								//cout << "lösche " << *test_vertex2; //cin >> HALT;
 						delete test_vertex2;
 					}
-					//cout << "lösche korrespondierende Edge aus Vertex1 und Vertex2"; //cin >> HALT;
+							//cout << "lösche korrespondierende Edge aus Vertex1 und Vertex2"; //cin >> HALT;
 					vertex1->deleteEdge(test_edge);
 					vertex2->deleteEdge(test_edge);
 				}
 				else
 				{
-					//cout << "Korrespondierende Vertices:\n";
-					//cout << *vertex1 << " - " << *test_vertex2 << "\n";
-					//cout << *vertex2 << " - " << *test_vertex1; //cin >> HALT;
+							//cout << "Korrespondierende Vertices:\n";
+							//cout << *vertex1 << " - " << *test_vertex2 << "\n";
+							//cout << *vertex2 << " - " << *test_vertex1; //cin >> HALT;
 					if (*vertex1 != *test_vertex2)
 					{
-						//cout << "erstes Paar verschieden, vereinige und ersetze"; //cin >> HALT;
+								//cout << "erstes Paar verschieden, vereinige und ersetze"; //cin >> HALT;
 						vertex1->join(*test_vertex2);
 						test_vertex2->substitute(vertex1);
 						vertices_[test_vertex2->getIndex()] = NULL;
 						new_vertices.remove(test_vertex2);
 						vertices[test_vertex2->getAtom()].remove(test_vertex2);
-						//cout << *vertex1; //cin >> HALT;
-						//cout << "lösche " << *test_vertex2; //cin >> HALT;
+								//cout << *vertex1; //cin >> HALT;
+								//cout << "lösche " << *test_vertex2; //cin >> HALT;
 						delete test_vertex2;
 					}
 					if (*vertex2 != *test_vertex1)
 					{
-						//cout << "zweites Paar verschieden, vereinige und ersetze"; //cin >> HALT;
+								//cout << "zweites Paar verschieden, vereinige und ersetze"; //cin >> HALT;
 						vertex2->join(*test_vertex1);
 						test_vertex1->substitute(vertex2);
 						vertices_[test_vertex1->getIndex()] = NULL;
 						new_vertices.remove(test_vertex1);
 						vertices[test_vertex1->getAtom()].remove(test_vertex1);
-						//cout << *vertex2; //cin >> HALT;
-						//cout << "lösche " << *test_vertex1; //cin >> HALT;
+								//cout << *vertex2; //cin >> HALT;
+								//cout << "lösche " << *test_vertex1; //cin >> HALT;
 						delete test_vertex1;
 					}
-					//cout << "lösche korrespondierende Edge aus Vertex1 und Vertex2"; //cin >> HALT;
+							//cout << "lösche korrespondierende Edge aus Vertex1 und Vertex2"; //cin >> HALT;
 					vertex1->deleteEdge(test_edge);
 					vertex2->deleteEdge(test_edge);
 				}
-				//cout << "ersetze korrespondierende Edge in existierender Face"; //cin >> HALT;
+						//cout << "ersetze korrespondierende Edge in existierender Face"; //cin >> HALT;
 				test->setEdge(i,edge);
-				//cout << *test; //cin >> HALT;
-				#ifdef debug_rs
-				print << pre << i << ". edge ersetzt: " << *test << "\n";
-				#endif
-				//cout << "lösche korrespondierende Edge aus new_edges"; //cin >> HALT;
+						//cout << *test; //cin >> HALT;
+						#ifdef debug_rs
+						print << pre << i << ". edge ersetzt: " << *test << "\n";
+						#endif
+						//cout << "lösche korrespondierende Edge aus new_edges"; //cin >> HALT;
 				new_edges.remove(test_edge);
 				delete new_face;
 				delete test_edge;
 				delete vertex3;
-				//cout << "erzeugte face gelöscht"; //cin >> HALT;
-				//cout << "korrespondierende Edge gelöscht"; //cin >> HALT;
-				//cout << "erzeugter vertex gelöscht"; //cin >> HALT;
-				#ifdef debug_rs
-				print << pre << "konstruierte face gelöscht\n";
-				#endif
+						//cout << "erzeugte face gelöscht"; //cin >> HALT;
+						//cout << "korrespondierende Edge gelöscht"; //cin >> HALT;
+						//cout << "erzeugter vertex gelöscht"; //cin >> HALT;
+						#ifdef debug_rs
+						print << pre << "konstruierte face gelöscht\n";
+						#endif
 				new_face = test;
 			}
 			// update edge
-			#ifdef debug_rs
-			print << pre << "updating " << *edge << ":\n";
-			#endif
-			//cout << "update " << *edge; //cin >> HALT;
+					#ifdef debug_rs
+					print << pre << "updating " << *edge << ":\n";
+					#endif
+					//cout << "update " << *edge; //cin >> HALT;
 			TCircle3<T> circle1;
 			TCircle3<T> circle2;
 			TCircle3<T> circle3;
@@ -654,63 +653,63 @@ namespace BALL
 			}
 			edge->set(vertex1,vertex2,start_face,new_face,circle1.p,circle1.radius,phi,
 								circle2,circle3,ip1,ip2,singular,edges_.size());
-			//cout << "erfolgreich"; //cin >> HALT;
-			#ifdef debug_rs
-			print << pre << "... " << *edge << "\n";
-			#endif
+					//cout << "erfolgreich"; //cin >> HALT;
+					#ifdef debug_rs
+					print << pre << "... " << *edge << "\n";
+					#endif
 			edges_.push_back(edge);
 			new_edges.remove(edge);
-			#ifdef debug_rs
-			pre.replace(0,2,"");
-			print << pre << "end        // treat " << *edge << "\n";
-			#endif
-			//cout << "Edge aus new_edges gelöscht, in edges_ gepusht"; //cin >> HALT;
-			//cout << "Ergebnis:\n"
-			//		 << *start_face << "\n  "
-			//		 << *start_face->getEdge(0) << "\n  "
-			//		 << *start_face->getEdge(1) << "\n  "
-			//		 << *start_face->getEdge(2) << "\n"
-			//		 << *new_face << "\n  "
-			//		 << *new_face->getEdge(0) << "\n  "
-			//		 << *new_face->getEdge(1) << "\n  "
-			//		 << *new_face->getEdge(2) << "\n"
-			//		 << *vertex1 << "\n" << *vertex2 << "\n"
-			//		 << *start_face->thirdVertex(vertex1,vertex2) << "\n"
-			//		 << *new_face->thirdVertex(vertex1,vertex2) << "\n";
-			//cin >> HALT;
+					#ifdef debug_rs
+					pre.replace(0,2,"");
+					print << pre << "end        // treat " << *edge << "\n";
+					#endif
+					//cout << "Edge aus new_edges gelöscht, in edges_ gepusht"; //cin >> HALT;
+					//cout << "Ergebnis:\n"
+					//		 << *start_face << "\n  "
+					//		 << *start_face->getEdge(0) << "\n  "
+					//		 << *start_face->getEdge(1) << "\n  "
+					//		 << *start_face->getEdge(2) << "\n"
+					//		 << *new_face << "\n  "
+					//		 << *new_face->getEdge(0) << "\n  "
+					//		 << *new_face->getEdge(1) << "\n  "
+					//		 << *new_face->getEdge(2) << "\n"
+					//		 << *vertex1 << "\n" << *vertex2 << "\n"
+					//		 << *start_face->thirdVertex(vertex1,vertex2) << "\n"
+					//		 << *new_face->thirdVertex(vertex1,vertex2) << "\n";
+					//cin >> HALT;
 		}
 	
 
 		bool extendComponent(std::list<Index>& indices, std::list< TRSVertex<T>* >& new_vertices,
 												 std::vector< std::list< TRSVertex<T>* > >& vertices)
 		{
-			#ifdef debug_rs
-			print << pre << "extendComponent(" << indices.size() << "," << new_vertices.size() << ")\n";
-			pre += "  ";
-			#endif
+					#ifdef debug_rs
+					print << pre << "extendComponent(" << indices.size() << "," << new_vertices.size() << ")\n";
+					pre += "  ";
+					#endif
 			if (new_vertices.size() == 0)
 			{
-				#ifdef debug_rs
-				pre.replace(0,2,"");
-				print << pre << "end ... false\n";
-				#endif
+						#ifdef debug_rs
+						pre.replace(0,2,"");
+						print << pre << "end ... false\n";
+						#endif
 				return false;
 			}
 			TRSFace<T>* face = NULL;
 			TRSVertex<T>* vertex1 = new_vertices.front();
 			Index atom1(vertex1->getAtom());
 			list<Index> atom_list(neighboursOfOneAtom(atom1,indices));
-			#ifdef debug_rs
-			print << pre << "Atom1: " << atom1 << ", Nachbarn: " << atom_list.size() << "\n";
-			#endif
+					#ifdef debug_rs
+					print << pre << "Atom1: " << atom1 << ", Nachbarn: " << atom_list.size() << "\n";
+					#endif
 			list<Index>::iterator i = atom_list.begin();
 			while (i != atom_list.end())
 			{
 				Index atom2 = *i;
 				list< pair< Index,TSphere3<T> > > candidates(findThirdAtom(atom1,atom2,atom_list));
-				#ifdef debug_rs
-				print << pre << "Atom2: " << atom2 << ", Nachbarn: " << candidates.size() << "\n";
-				#endif
+						#ifdef debug_rs
+						print << pre << "Atom2: " << atom2 << ", Nachbarn: " << candidates.size() << "\n";
+						#endif
 				if (candidates.size() == 0)
 				{
 					TRSVertex<T>* vertex2 = new TRSVertex<T>(atom2);
@@ -727,18 +726,18 @@ namespace BALL
 						vertices[atom2].push_back(vertex2);
 						new_vertices.push_back(vertex1);
 						new_vertices.push_back(vertex2);
-						#ifdef debug_rs
-						print << pre << "freie edge erzeugt: " << *edge << "\n";
-						pre.replace(0,2,"");
-						print << pre << "end ... true\n";
-						#endif
+								#ifdef debug_rs
+								print << pre << "freie edge erzeugt: " << *edge << "\n";
+								pre.replace(0,2,"");
+								print << pre << "end ... true\n";
+								#endif
 						return true;
 					}
 					else
 					{
-						#ifdef debug_rs
-						print << pre << "bilden keine freie edge\n";
-						#endif
+								#ifdef debug_rs
+								print << pre << "bilden keine freie edge\n";
+								#endif
 						delete vertex2;
 					}
 				}
@@ -749,14 +748,14 @@ namespace BALL
 					{
 						Index atom3 = j->first;
 						TSphere3<T> probe = j->second;
-						#ifdef debug_rs
-						print << pre << "Atom3: " << atom3 << ", probe: " << probe << " ...\n";
-						#endif
+								#ifdef debug_rs
+								print << pre << "Atom3: " << atom3 << ", probe: " << probe << " ...\n";
+								#endif
 						if (checkProbe(probe) == true)
 						{
-							#ifdef debug_rs
-							print << pre << "... passt\n";
-							#endif
+									#ifdef debug_rs
+									print << pre << "... passt\n";
+									#endif
 							face = new TRSFace<T>();
 							TRSEdge<T>* edge1 = new TRSEdge<T>();
 							TRSEdge<T>* edge2 = new TRSEdge<T>();
@@ -791,9 +790,9 @@ namespace BALL
 						}
 						else
 						{
-							#ifdef debug_rs
-							print << pre << "... passt nicht\n";
-							#endif
+									#ifdef debug_rs
+									print << pre << "... passt nicht\n";
+									#endif
 							j++;
 						}
 					} // while j
@@ -808,10 +807,10 @@ namespace BALL
 			{
 				getRSComponent(indices,face,new_vertices,vertices);
 			}
-			#ifdef debug_rs
-			pre.replace(0,2,"");
-			print << pre << "end ... true\n";
-			#endif
+					#ifdef debug_rs
+					pre.replace(0,2,"");
+					print << pre << "end ... true\n";
+					#endif
 			return true;
 		}
 
@@ -819,9 +818,9 @@ namespace BALL
 		Index thirdAtom(TRSVertex<T>* vertex1, TRSVertex<T>* vertex2, TRSFace<T>* face,
 										TSphere3<T>& probe, TAngle<T>& phi)
 		{
-			#ifdef debug_rs
-			pre += "  ";
-			#endif
+					#ifdef debug_rs
+					pre += "  ";
+					#endif
 			Index atom1(vertex1->getAtom());
 			Index atom2(vertex2->getAtom());
 			TSphere3<T> sphere1(atom_[atom1]);
@@ -833,21 +832,21 @@ namespace BALL
 			list<Index> atom_list = tree_->get(circle.p,circle.radius+r_max_+probe_radius_);
 			if (atom_list.size() == 0)
 			{
-				#ifdef debug_rs
-				print << "\n\n" << *this << "\n\n";
-				print << *vertex1 << "\n";
-				print << *vertex2 << "\n";
-				#endif
+						#ifdef debug_rs
+						print << "\n\n" << *this << "\n\n";
+						print << *vertex1 << "\n";
+						print << *vertex2 << "\n";
+						#endif
 				throw Exception::GeneralException(__FILE__,__LINE__,"CanNotFindThirdAtom","no atom close enougth");
 			}
  			list< pair< Index,TSphere3<T> > > candidates = findThirdAtom(atom1,atom2,atom_list);
  			list< pair< Index,TSphere3<T> > >::iterator k;
  			Index back(-1);
-			#ifdef debug_rs
-			print << pre << atom1 << "  " << atom2 << "\n";
-			print << pre << *face << "\n";
-			print << pre << "Kandidaten: (" << candidates.size() << ")\n";
-			#endif
+					#ifdef debug_rs
+					print << pre << atom1 << "  " << atom2 << "\n";
+					print << pre << *face << "\n";
+					print << pre << "Kandidaten: (" << candidates.size() << ")\n";
+					#endif
 			TAngle<T> old_angle(2*Constants::PI,true);
 			TAngle<T> new_angle;
 			TAngle<T> pi(Constants::PI,true);
@@ -857,15 +856,15 @@ namespace BALL
 												test_vector*atom_[atom1].p))
 			{
 				norm.negate();
-			#ifdef debug_rs
-			print << pre << "  Dreahachse: " << atom1 << " --> " << atom2 << "\n";
-			#endif
+					#ifdef debug_rs
+					print << pre << "  Dreahachse: " << atom1 << " --> " << atom2 << "\n";
+					#endif
 			}
 			else
 			{
-			#ifdef debug_rs
-			print << pre << "  Dreahachse: " << atom2 << " --> " << atom1 << "\n";
-			#endif
+					#ifdef debug_rs
+					print << pre << "  Dreahachse: " << atom2 << " --> " << atom1 << "\n";
+					#endif
 			}
 			TVector3<T> v1 = face->getCenter()-circle.p;
 			for (k = candidates.begin(); k != candidates.end(); k++)
@@ -879,9 +878,9 @@ namespace BALL
 				}
 				else
 				{
-					#ifdef debug_rs
-					print << pre << "{" << k->first << "," << k->second << "} ... ";
-					#endif
+							#ifdef debug_rs
+							print << pre << "{" << k->first << "," << k->second << "} ... ";
+							#endif
 					TVector3<T> v2 = k->second.p-circle.p;
 					new_angle = getOrientedAngle(v1,v2,norm)+pi;
 					/*new_angle = getOrientedAngle(v1,v2,norm);
@@ -893,9 +892,9 @@ namespace BALL
 						new_angle += pi;
 						new_angle += pi;
 					}*/
-					#ifdef debug_rs
-					print << new_angle << "\n";
-					#endif
+							#ifdef debug_rs
+							print << new_angle << "\n";
+							#endif
 					if (new_angle == TAngle<T>(0,true))
 					{
 						atom_[k->first].radius -= 0.1;
@@ -911,9 +910,9 @@ namespace BALL
 					}
 				}
 			}
-			#ifdef debug_rs
-			pre.replace(0,2,"");
-			#endif
+					#ifdef debug_rs
+					pre.replace(0,2,"");
+					#endif
 			return back;
 		}
 
@@ -936,10 +935,10 @@ namespace BALL
 				vertices[vertex1->getAtom()].push_back(vertex1);
 				vertices[vertex2->getAtom()].push_back(vertex2);
 				vertices[vertex3->getAtom()].push_back(vertex3);
-				#ifdef debug_rs
-				print << pre << "starting face: " << vertex1->getAtom() << " " << vertex2->getAtom() << " "
-							<< vertex3->getAtom() << "\n";
-				#endif
+						#ifdef debug_rs
+						print << pre << "starting face: " << vertex1->getAtom() << " " << vertex2->getAtom() << " "
+									<< vertex3->getAtom() << "\n";
+						#endif
 				return 3;
 			}
 			edge = findFirstEdge(indices);
@@ -1124,6 +1123,7 @@ namespace BALL
 						TRSVertex<T>* vertex = new TRSVertex<T>(v);
 						vertex->setIndex(vertices_.size());
 						vertices_.push_back(vertex);
+						indices.remove(v);
 						return vertex;
 					}
 				}
@@ -1192,10 +1192,10 @@ namespace BALL
 		list< pair< Index,TSphere3<T> > >
 				findThirdAtom(Index atom1, Index atom2, list<Index> /*atom_list*/ third)
 		{
-			#ifdef debug_rs
-			pre += "    ";
-			print << pre << atom1 << ", " << atom2 << ", ...\n";
-			#endif
+					#ifdef debug_rs
+					pre += "    ";
+					print << pre << atom1 << ", " << atom2 << ", ...\n";
+					#endif
 			//list<Index> third = neighboursOfTwoAtoms(atom1,atom2,atom_list);
 			list< pair< Index,TSphere3<T> > > back;
 			if (third.size() == 0)
@@ -1207,35 +1207,35 @@ namespace BALL
 			list<Index>::iterator l = third.begin();
 			while (l != third.end())
 			{
-				#ifdef debug_rs
-				print << pre << "  ... " << *l << ": ";
-				#endif
+						#ifdef debug_rs
+						print << pre << "  ... " << *l << ": ";
+						#endif
 				TVector3<T> center1, center2;
 				if (centerOfProbe(atom1,atom2,*l,center1,center2))
 				{
 					TSphere3<T> probe(center1,probe_radius_);
 					candidate.first = *l;
 					candidate.second = probe;
-					#ifdef debug_rs
-					print << probe.p << " / ";
-					#endif
+							#ifdef debug_rs
+							print << probe.p << " / ";
+							#endif
 					back.push_back(candidate);
 					probe.p = center2;
 					candidate.first = *l;
 					candidate.second = probe;
-					#ifdef debug_rs
-					print << probe.p;
-					#endif
+							#ifdef debug_rs
+							print << probe.p;
+							#endif
 					back.push_back(candidate);
 				}
-				#ifdef debug_rs
-				print << "\n";
-				#endif
+						#ifdef debug_rs
+						print << "\n";
+						#endif
 				l++;
 			}
-			#ifdef debug_rs
-			pre.replace(0,4,"");
-			#endif
+					#ifdef debug_rs
+					pre.replace(0,4,"");
+					#endif
 			return back;
 		}
 
@@ -1587,10 +1587,10 @@ namespace BALL
 			{
 				if (Maths::isLess(probe.p.getDistance(atom_[*i].p),probe.radius+atom_[*i].radius))
 				{
-					#ifdef debug_rs
-					print << pre << " ... Konflikt mit Atom " << *i << " ... "
-								<< probe.p.getDistance(atom_[*i].p) << " < " << probe.radius+atom_[*i].radius << "\n";
-					#endif
+							#ifdef debug_rs
+							print << pre << " ... Konflikt mit Atom " << *i << " ... "
+										<< probe.p.getDistance(atom_[*i].p) << " < " << probe.radius+atom_[*i].radius << "\n";
+							#endif
 					return false;
 				}
 			}
@@ -1608,10 +1608,10 @@ namespace BALL
     std::vector< TRSEdge<T>* > edges_;
     std::vector< TRSFace<T>* > faces_;
     T r_max_;
-		#ifdef debug_rs
-    std::ofstream print;
-    string pre;
-		#endif
+				#ifdef debug_rs
+  	  	std::ofstream print;
+	  	  string pre;
+				#endif
 	
 	};
 

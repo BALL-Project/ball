@@ -1,4 +1,4 @@
-// $Id: SESVertex.h,v 1.4 2001/01/29 00:32:27 amoll Exp $
+// $Id: SESVertex.h,v 1.5 2001/02/22 16:23:20 strobel Exp $
 
 #ifndef BALL_STRUCTURE_SESVERTEX_H
 #define BALL_STRUCTURE_SESVERTEX_H
@@ -37,7 +37,7 @@ namespace BALL
 				initialized to {\tt (T)0}.
 		*/
 		TSESVertex()
-			: p(), atom(0), index(-1)
+			: p(), n(), atom(0), index(-1)
 		{
 		}
 
@@ -47,7 +47,8 @@ namespace BALL
 				@param bool ignored - just for interface consistency
 		*/
 		TSESVertex(const TSESVertex<T>& sesvertex,bool /* deep */ = true)
-			: p(sesvertex.p), atom(sesvertex.atom), index(sesvertex.index)
+			: p(sesvertex.p), n(sesvertex.n),
+				atom(sesvertex.atom), index(sesvertex.index)
 		{
 		}
 
@@ -58,8 +59,8 @@ namespace BALL
 				@param	a assigned to the index of the nearest atom
 				@param	i assigned to the index of this vertex
 		*/
-		TSESVertex(const TVector3<T>& point, int a, int i)
-			: p(point), atom(a), index(i)
+		TSESVertex(const TVector3<T>& point, const TVector3<T>& normal, int a, int i)
+			: p(point), n(normal), atom(a), index(i)
 		{
 		}
 
@@ -85,6 +86,10 @@ namespace BALL
 			p = sesvertex.p;
 			sesvertex.p = temp_point;
 
+			temp_point = n;
+			n = sesvertex.n;
+			sesvertex.n = temp_point;
+
 			int temp = atom;
 			atom = sesvertex.atom;
 			sesvertex.atom = temp;
@@ -97,7 +102,7 @@ namespace BALL
 		void set(const TSESVertex& sesvertex, bool /* deep */ = true)
 		{
 			p = sesvertex.p;
-//			n = sesvertex.n;
+			n = sesvertex.n;
 			atom = sesvertex.atom;
 			index = sesvertex.index;
 		}
@@ -108,9 +113,9 @@ namespace BALL
 				@param	a assigned to the index of the nearest atom
 				@param	i assigned to the index of this vertex
 		*/
-		void set(const TVector3<T> point, /*const TVector3<T>& norm,*/ const int& a, const int& i)
+		void set(const TVector3<T> point, const TVector3<T>& norm, const int& a, const int& i)
 		{
-			p = point; /*n = norm;*/ atom = a; index = i;
+			p = point; n = norm; atom = a; index = i;
 		}
 
 		//@}
@@ -130,10 +135,10 @@ namespace BALL
 		*/
 		TVector3<T> p;
 
-//		/**	n.
-//				The normal of the SES-surface defined by the vertex.
-//		*/
-//		TVector3<T> n;
+		/**	n.
+				The normal vector of the vertex.
+		*/
+		TVector3<T> n;
 
 		/**	atom.
 				The index of the closest atom.
@@ -151,24 +156,32 @@ namespace BALL
 	*/
 	//@{
 
-	/**	Input- Operator.
-			reads in a TVector3 and a {\bf T} value : p, radius.
+	/**	Input- Operator
+			reads in a TVector3 and a {\bf T} value : p, radius
 	*/
+/*
 	template <typename T>
-	std::istream& operator >> (std::istream& s, TSESVertex<T>& sesvertex)
+	std::istream& operator >> (std::istream& s, TSphere3<T>& sphere3)
 	{
-		// BAUSTELLE
+		char c;
+		for (int i=0; i<7 ; i++)
+		{
+			s >> c;
+		}
+		s >> sphere3.p >> sphere3.radius >> c;
 		return s;
 	}
+*/
 
 	/**	Output- Operator
 	*/
-	template <typename T>
-	std::ostream& operator << (std::ostream& s, const TSESVertex<T>& sesvertex)
-	{
-		return (s << "SESVERTEX" << sesvertex.index << "(" << sesvertex.p << ' ' //<< sesvertex.n << ' '
-														 << sesvertex.atom << ")");
-	}
+
+		template <typename T>
+		std::ostream& operator << (std::ostream& s, const TSESVertex<T>& sesvertex)
+		{
+			return (s << "SESVERTEX" << sesvertex.index << "(" << sesvertex.p << ' ' << sesvertex.n << ' '
+															 << sesvertex.atom << ")");
+		}
 
 	//@}
 
