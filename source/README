@@ -8,8 +8,17 @@
                 A. Moll, P. Mueller, S. Strobel, M. Sturm
 	
 
-To install BALL it should be sufficient to typed the following
+
++++ 
+In memory of our friend Nicolas Pascal Boghossian 
+                            14.08.1972 - 12.01.2002 
++++
+
+
+To install BALL it should be sufficient to type the following
 commands:
+
+   autoconf                    - to create configure
  
    ./configure                 - to determine your setup
 

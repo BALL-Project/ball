@@ -1,3 +1,70 @@
+1.0b: 17.01.2002
+----------------
+Bugs fixed:
+	- Lots of stuff in Expression, HINFile, PDBFile
+  - some bugs in molview
+  - FragmentDB::AddHydrogensProcessor was basically reimplemented
+	- clean up of the NMR classes
+  - AutoDeletable did not work correctly due to a strange problem with
+    multiple inheritance 
+  - too many to count everywhere else...
+
+Added + improved:
+  - first official support for the Python bindings (still experimental, though)
+  - QSAR: a trivial framework for the implementation of molecular descriptors
+  - File: allows the expansion of filenames to URLs (again)
+  - MDL MOL files and SD files
+  - SMILES parser (experimental)
+  - several chapters in the tutorial
+  - Solvent excluded surface should be *much* faster
+  - AMBER force field got some speedup for partially selected structures
+
+Known, but not yet fixed:
+  - File and TCPTransfer occasionally show strange baehavior
+    when retrieving files via the network
+  - XDR support does not work under Tru64/cxx -- call configure with "--without-xdr"
+  - String_test is really huge -- some compilers choke on it (internal stack overflow,
+    cirtual memory exhausted) -- we can't do much about that...
+
+
+1.0a BF1: 30.07.2001
+--------------------
+Bugs fixed:
+	- genericPDBFile: assigned incorrect element if the element columns did not
+    contain a valid element symbol
+  - FileSystem: canonizePath expanded ../../ to .., thus leading to problems with
+    relative paths for in File and derived classes (PDBFile, HINFile, etc.)
+  - APPLICATIONS/PB: Makefile used incorrect linker options correctly on Tru64
+  - configure: did not abort if neither gethostname, nor sysinfo were found 
+    (see unfixed bug below)
+  - FragmentDB::AddHydrogensProcessor caused a core dump for residues where
+    only one reference atom was available (e.g. water)
+
+Known, but not fixed:
+  - Expression does not evaluate all bracketed expressions correctly
+  - configure causes some problems on Tru64 (fails to find gethostname)
+    Workaround: in BALL/source type "touch config/configure.in;make configure" 
+      and proceed as usual. The problem is probably somehow caused by some 
+			incompatibility between certain autoconf versions and some Tru64 header
+      header files, but I couldn't nail it down yet...
+
+Added, changed: 
+  - ResidueChecker: checks for overlapping atoms and duplicate atom names in a residue
+  - Test for FileSystem
+  - Python support functional (though still experimental, requires a patched version of SIP-2.5pre4, available
+    from the BALL website). Recommended for seasoned Python veterans only.
+  - BALL exceptions are know derived from std::exception
+  - added fragment for Zinc (ZN.db)
+  - The interface of GeneralException was slightly modified to achieve compatibility
+    with the Python wrapper classes
+  - The interface of RegularData2D::getMinValue/getMaxValue has changed
+  - The interface of Object has changed (ever so slightly)
+  - Changed the GridIndex typed of RegularData2D and RegularData3D (towards a more consistent IF)
+  - The structure of ResidueChecker was modified to make way for a more modular design
+    in the future
+ 
+Additional bugs:
+  - no unknown bugs have been found
 1.0a (bugfix 1): 30.07.2001
 ---------------------------
 Bugs fixed:
