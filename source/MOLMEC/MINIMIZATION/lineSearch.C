@@ -1,4 +1,4 @@
-// $Id: lineSearch.C,v 1.3 2000/03/26 12:58:13 oliver Exp $
+// $Id: lineSearch.C,v 1.4 2001/12/17 01:33:00 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/lineSearch.h>
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
@@ -107,7 +107,9 @@ namespace BALL
 	*/
 	bool LineSearch::minimize(double& lambda, double step)
 	{
-		//Log.info() << "LS:minimize(" << lambda << ", " << step << ")" << endl;
+		#ifdef DEBUG
+			Log.info() << "LS:minimize(" << lambda << ", " << step << ")" << std::endl;
+		#endif
 		// check whether a direction and a force field are defined
 		if ((minimizer_ == 0) || (minimizer_->getForceField() == 0))
 		{
@@ -202,7 +204,9 @@ namespace BALL
 
 			if ((lambda_ == 0.0) || fabs((last_lambda - lambda_) / lambda_) < 1e-3)
 			{
-				// Log.info() << " === ";
+				#ifdef DEBUG
+					Log.info() << " === ABORT ===";
+				#endif
 				result = criterion();
 				break;
 			}
@@ -230,10 +234,12 @@ namespace BALL
 		 double energy_0, double energy_1, 
 		 double grad_0, double grad_1) const
 	{
-		//Log.info() << "LS:interpolate(" 
-		//						<< lambda_0 << ", " << lambda_1 << ", "
-		//						<< energy_0 << ", " << energy_1 << ", "
-		//						<< grad_0 << ", " << grad_1 << ")";
+		#ifdef DEBUG
+		Log.info() << "LS:interpolate(" 
+								<< lambda_0 << ", " << lambda_1 << ", "
+								<< energy_0 << ", " << energy_1 << ", "
+								<< grad_0 << ", " << grad_1 << ")";
+		#endif
     // local variables
     double tmp1, a, b, tmp2;
     double lambda_diff, lambda_diff_2;
@@ -249,7 +255,9 @@ namespace BALL
 
     if (lambda_diff == 0)
     {
-			//Log.info() << " = " << lambda_0 << endl;
+			#ifdef DEBUG
+				Log.info() << " = " << lambda_0 << std::endl;
+			#endif
       // the intervall is of length 0
       return lambda_0;
 		}
@@ -275,10 +283,15 @@ namespace BALL
       // Note: b = 0 is then not possible by construction as this would be a linear
       // interpolation
       result = lambda_0 - grad_0 / (2 * b);
-			//Log.info() << "[quadr.] ";
+			#ifdef DEBUG
+				Log.info() << "[quadr.] ";
+			#endif
 		}
 
-		//Log.info() << " = " << result << endl;
+		#ifdef DEBUG
+			Log.info() << " = " << result << std::endl;
+		#endif
+
     return result;
 	}
 	
@@ -298,10 +311,12 @@ namespace BALL
 		// E(i+1) is the current and E(i) the initial energy (lambda = 0)
 		// alpha and beta are two parameters (usually 0.9 and 1e-4)
 		// 
-		//Log.info() << " C1: " << current_energy_ - initial_energy_ << "/" << alpha_ * lambda_ * current_dir_grad_ 
-		//					 << "  C2: " << fabs(current_dir_grad_) << "/" << beta_ * fabs(initial_dir_grad_) << " --- ";
+		#ifdef DEBUG
+			Log.info() << " C1: " << current_energy_ - initial_energy_ << "/" << alpha_ * lambda_ * current_dir_grad_ 
+								<< "  C2: " << fabs(current_dir_grad_) << "/" << beta_ * fabs(initial_dir_grad_) << " --- ";
+		#endif
 		return ((current_energy_ < (initial_energy_ + alpha_ * lambda_ * current_dir_grad_))
 						&& (fabs(current_dir_grad_) < beta_ * fabs(initial_dir_grad_)));
 	}
 
-} // namespace Ball
+} // namespace BALL
