@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.6 2002/04/03 16:44:50 anker Exp $
+// $Id: fresno.C,v 1.1.2.7 2002/04/06 20:01:28 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -42,12 +42,12 @@ namespace BALL
 	const char* FresnoFF::Option::ROT_GRID_SPACING = "rot_grid_spacing";
 	const char* FresnoFF::Option::ROT_ALGORITHM = "rot_algorithm";
 
-	const float FresnoFF::Default::CONST = -35.596;
-	const float FresnoFF::Default::HB = -5.440;
-	const float FresnoFF::Default::LIPO = 1.0;
-	const float FresnoFF::Default::ROT = 0.344;
-	const float FresnoFF::Default::BP = 0.0633;
-	const float FresnoFF::Default::DESOLV = 0.021;
+	const float FresnoFF::Default::CONST = -33.614;
+	const float FresnoFF::Default::HB = -0.014;
+	const float FresnoFF::Default::LIPO = -0.076;
+	const float FresnoFF::Default::ROT = 0.017;
+	const float FresnoFF::Default::BP = 0.021;
+	const float FresnoFF::Default::DESOLV = 0.026;
 	const float FresnoFF::Default::HB_IDEAL_LENGTH = 1.85;
 	const float FresnoFF::Default::HB_IDEAL_ANGLE = 180;
 	const float FresnoFF::Default::HB_DIST_LOWER = 0.25;
@@ -60,7 +60,8 @@ namespace BALL
 	const float FresnoFF::Default::BP_R2_OFFSET = 3.0;
 	const float FresnoFF::Default::ROT_BIND_OFFSET = 0.5;
 	const float FresnoFF::Default::ROT_GRID_SPACING = 5.0;
-	const Size FresnoFF::Default::ROT_ALGORITHM = 0;
+	const Size FresnoFF::Default::ROT_ALGORITHM =
+		FresnoRotation::ALGORITHM__DATABASE;
 
 	void FresnoFF::registerComponents_()
 		throw()
