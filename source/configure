@@ -1,7 +1,7 @@
 #! /bin/sh
 
 ###############
-###  $Id: configure,v 1.25 1999/12/28 21:30:33 oliver Exp $
+###  $Id: configure,v 1.26 1999/12/30 18:05:02 oliver Exp $
 ###############
 ###############
 ###
@@ -19,7 +19,7 @@
 
 #   if you do not want to include BALLView,
 #   set USE_BALLVIEW to false
-#USE_BALLVIEW=true
+#USE_BALLVIEW=false
 
 #   all variables *_INCLUDES should be set to the path of
 #   include directory. E.g. your OpenGL include file GL/gl.h
@@ -42,13 +42,13 @@
 #MESA_LIBS=
 
 #    ...and for QT (see also BALL/contrib/qt!)
-#QT_INCLUDES=
-#QT_LIBS=
+QT_INCLUDES=/KM/comp-bio/BALL-contrib/qt-2.00/include
+QT_LIBS=/KM/comp-bio/BALL-contrib/qt-2.00/lib/Solaris-sparc-egcs_1.1.2
 
 #   if you do not want to be asked by configure
 #   which BALLView platform to use, put it here
 #   Possible values are Mesa or OpenGL
-#BALLVIEW_PLATFORM=
+BALLVIEW_PLATFORM=OpenGL
 
 
 #   This applies to 64 bit SGI machines only.
