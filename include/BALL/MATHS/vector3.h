@@ -1,4 +1,4 @@
-// $Id: vector3.h,v 1.24 2000/03/03 02:32:05 amoll Exp $
+// $Id: vector3.h,v 1.25 2000/03/14 21:35:11 oliver Exp $
 
 
 #ifndef BALL_MATHS_VECTOR3_H
@@ -61,7 +61,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(TVector3<T>)
+		BALL_CREATE_NODEEP(TVector3<T>)
 
 		/**	@name	Constructors and Destructors
 		*/
@@ -126,9 +126,8 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new TVector3 object from another.
 				@param vector the TVector3 object to be copied
-				@param bool ignored - just for interface consistency
 		*/	
-		TVector3(const TVector3& vector, bool deep = true)
+		TVector3(const TVector3& vector)
 			:	PersistentObject(),
 				x(vector.x),
 				y(vector.y),

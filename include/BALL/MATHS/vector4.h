@@ -1,4 +1,4 @@
-// $Id: vector4.h,v 1.19 2000/03/03 02:32:16 amoll Exp $
+// $Id: vector4.h,v 1.20 2000/03/14 21:35:11 oliver Exp $
 
 #ifndef BALL_MATHS_VECTOR4_H
 #define BALL_MATHS_VECTOR4_H
@@ -56,7 +56,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE(TVector4<T>)
+		BALL_CREATE_NODEEP(TVector4<T>)
 
 		/**	@name	Constructors and Destructors
 		*/
@@ -88,9 +88,8 @@ namespace BALL
 		/**	Copy constructor.
 				Create a new TVector4 object from another.
 				@param vector the TVector4 object to be copied
-				@param bool ignored - just for interface consistency
 		*/	
-		TVector4(const TVector4& vector, bool deep = true);
+		TVector4(const TVector4& vector);
 
 		/**	Destructor.	
 				Destructs the TVector4 object. As there are no dynamic
@@ -372,7 +371,7 @@ namespace BALL
 	}
 
 	template <class T>
-	TVector4<T>::TVector4(const T& x,const T& y, const T& z, const T& h)
+	TVector4<T>::TVector4(const T& x, const T& y, const T& z, const T& h)
 		: x(x),
 			y(y),
 			z(z),
@@ -381,7 +380,7 @@ namespace BALL
 	}
 
 	template <class T>
-	TVector4<T>::TVector4(const TVector4<T>& v, bool /* deep */)
+	TVector4<T>::TVector4(const TVector4<T>& v)
 		:	x(v.x),
 			y(v.y),
 			z(v.z),

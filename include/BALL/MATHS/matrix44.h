@@ -1,4 +1,4 @@
-// $Id: matrix44.h,v 1.19 2000/03/14 20:11:34 oliver Exp $
+// $Id: matrix44.h,v 1.20 2000/03/14 21:35:10 oliver Exp $
 
 #ifndef BALL_MATHS_MATRIX44_H
 #define BALL_MATHS_MATRIX44_H
@@ -54,7 +54,7 @@ namespace BALL
 	{
 		public:
 	
-		BALL_CREATE(TMatrix4x4)
+		BALL_CREATE_NODEEP(TMatrix4x4)
 
 		/**	@name	Constructors and Destructors
 		*/
@@ -87,7 +87,7 @@ namespace BALL
 				@param TMatrix4x4 the TMatrix4x4 object to be copied
 				@param bool ignored - just for interface consistency
 		*/	
-		TMatrix4x4(const TMatrix4x4& m ,bool deep = true);
+		TMatrix4x4(const TMatrix4x4& m);
 
 		/**	Detailled constructor.
 				Create a new TMatrix4x4 object from four TVector4.
@@ -140,9 +140,8 @@ namespace BALL
 
 		/**	Assign from another TMatrix4x4.
 				@param TMatrix4x4	the TMatrix4x4 object to assign from
-				@param deep ignored
 		*/
-		void set(const TMatrix4x4& m, bool deep = true);
+		void set(const TMatrix4x4& m);
 
 		/**	Assign from four TVector4.
 				@param col1 assigned to the first column
@@ -199,9 +198,8 @@ namespace BALL
 		/**	Assign to another TMatrix4x4.
 				Assigns the components to another TMatrix4x4.
 				@param TMatrix4x4	the TMatrix4x4 to be asigned to
-				@param deep ignored
 		*/
-		void get(TMatrix4x4& m, bool deep = true) const;
+		void get(TMatrix4x4& m) const;
 
 		/**	Assign to four variables of type TVector4.
 				@param col1 the TVector4 to assign to the first column
@@ -721,7 +719,7 @@ namespace BALL
 	}
 
 	template <class T>
-	TMatrix4x4<T>::TMatrix4x4(const TMatrix4x4<T>& m, bool /* deep */)
+	TMatrix4x4<T>::TMatrix4x4(const TMatrix4x4<T>& m)
 		:	m11(m.m11), m12(m.m12), m13(m.m13), m14(m.m14), 
 			m21(m.m21), m22(m.m22), m23(m.m23), m24(m.m24), 
 			m31(m.m31), m32(m.m32), m33(m.m33), m34(m.m34), 
@@ -808,7 +806,7 @@ namespace BALL
 	}
 
 	template <class T>
-	void TMatrix4x4<T>::set(const TMatrix4x4<T>& m, bool /* deep */)
+	void TMatrix4x4<T>::set(const TMatrix4x4<T>& m)
 	{
 		m11 = m.m11; 
 		m12 = m.m12;
@@ -954,9 +952,9 @@ namespace BALL
 
 
 	template <class T>
-	void TMatrix4x4<T>::get(TMatrix4x4<T>& m, bool deep) const
+	void TMatrix4x4<T>::get(TMatrix4x4<T>& m) const
 	{
-		m.set(*this, deep);
+		m.set(*this);
 	}
 
 	template <class T>
