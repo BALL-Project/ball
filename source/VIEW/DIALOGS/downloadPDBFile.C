@@ -216,13 +216,16 @@ void DownloadPDBFile::slotDownload()
 		catch(...) {}
 #endif
 
-		setStatusbarText(String("read ") + String(system->countAtoms()) + " atoms from URL \"" + filename + "\"", true);
 		if (system->countAtoms() == 0)
 		{
 			delete system;
 			show();
 			setStatusbarText("Could not fetch the given PDBFile", true);
 			return;
+		}
+		else
+		{
+			setStatusbarText(String("read ") + String(system->countAtoms()) + " atoms from URL \"" + filename + "\"", true);
 		}
 
 		if (system->getName() == "")
