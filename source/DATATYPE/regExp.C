@@ -1,4 +1,4 @@
-// $Id: regExp.C,v 1.13 2000/12/08 09:22:03 oliver Exp $ 
+// $Id: regExp.C,v 1.14 2001/07/31 00:48:35 oliver Exp $ 
 
 #include <BALL/DATATYPE/regExp.h>
 
@@ -150,7 +150,7 @@ namespace BALL
 															 Index from, int execute_flags) 
 			const throw(Exception::IndexUnderflow, Exception::IndexOverflow)
 	{
-		if (valid_pattern_ == false)
+		if ((valid_pattern_ == false) || (text.size() == 0))
 		{
 			return false;
 		}
