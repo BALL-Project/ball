@@ -1,4 +1,4 @@
-// $Id: molecularFileDialog.C,v 1.5 2002/12/12 18:24:41 amoll Exp $
+// $Id: molecularFileDialog.C,v 1.6 2002/12/15 01:12:08 amoll Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
@@ -66,7 +66,7 @@ namespace BALL
 			
 			QFileDialog *fd = new QFileDialog(MainControl::getMainControl((QObject *)this), "Molecular File Dialog", true);
 			fd->setMode(QFileDialog::ExistingFile);
-			fd->addFilter("PDB Files (*.pdb *.brk *.ent)");
+			fd->setFilter("PDB Files (*.pdb *.brk *.ent)");
 			fd->addFilter("HIN Files (*.hin)");
 			fd->addFilter("MOL Files (*.mol)");
 			fd->addFilter("MOL2 Files (*.mol2)");
@@ -137,7 +137,7 @@ namespace BALL
 
 			QFileDialog *fd = new QFileDialog(MainControl::getMainControl((QObject *)this), "Molecular File Dialog", true);
 			fd->setMode(QFileDialog::AnyFile);
-			fd->addFilter("PDB Files (*.pdb)");
+			fd->setFilter("PDB Files (*.pdb)");
 
 			fd->setSelectedFilter(1);
 
