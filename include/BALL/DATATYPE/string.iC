@@ -1,4 +1,4 @@
-// $Id: string.iC,v 1.19 2000/07/17 13:43:11 oliver Exp $
+// $Id: string.iC,v 1.20 2000/07/17 21:31:23 oliver Exp $
 
 BALL_INLINE 
 bool String::operator == (const char *char_ptr) const
@@ -470,157 +470,6 @@ unsigned char String::toUnsignedChar() const
 }
 
 BALL_INLINE 
-short String::toShort() const
-{
-	if (!isFloat())
-	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-
-	errno = 0;
-  short s = (short)atoi(c_str());
-
-	if (errno == ERANGE)
-	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-  
-  return s;
-}
-
-BALL_INLINE 
-unsigned short String::toUnsignedShort() const
-{
-	if (!isFloat())
-	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-
-	errno = 0;
-  unsigned short us = (unsigned short)atoi(c_str());
-
-  if (errno == ERANGE)
-	{
-    throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-  
-  return us;
-}
-
-BALL_INLINE
-int String::toInt() const
-{
-	if (!isFloat())
-	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-
-	errno = 0;
-  int i = atoi(c_str());
-
-  if (errno == ERANGE)
-	{
-    throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-  
-  return i;
-}
-
-BALL_INLINE 
-unsigned int String::toUnsignedInt() const
-{
-	if (!isFloat())
-	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-
-	errno = 0;
-  unsigned int ui = (unsigned int)strtoul(c_str(), (char **)0, 10);
-
-  if (errno == ERANGE)
-	{
-    throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-  
-  return ui;
-}
-
-BALL_INLINE 
-long String::toLong() const
-{
-	if (!isFloat())
-	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-
-	errno = 0;
-  long l = atol(c_str());
-
-  if (errno == ERANGE)
-	{
-    throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-  
-  return l;
-}
-
-BALL_INLINE 
-unsigned long String::toUnsignedLong() const
-{
-	if (!isFloat())
-	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-
-	errno = 0;
-  unsigned long ul = strtoul(c_str(), (char **)0, 10);
-
-  if (errno == ERANGE)
-	{
-    throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-  
-  return ul;
-}
-
-BALL_INLINE 
-float String::toFloat() const
-{
-	if (!isFloat())
-	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-
-	errno = 0;
-  float f = (float)atof(c_str());
-
-  if (errno == ERANGE)
-	{
-    throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-  
-  return f;
-}
-
-BALL_INLINE
-double String::toDouble() const
-{
-	if (!isFloat())
-	{
-		throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-	errno = 0;
-  double d = atof(c_str());
-
-  if (errno == ERANGE)
-	{
-    throw Exception::InvalidFormat(__FILE__, __LINE__, string(c_str()));
-	}
-  
-  return d;
-}
-
-BALL_INLINE 
 Substring String::getSubstring(Index from, Size len) const
 {
 	validateRange_(from, len);
@@ -827,8 +676,10 @@ bool String::isDigit(char c)
 BALL_INLINE 
 bool String::isFloat() const 
 {
+	String tmp(c_str());
+	tmp.trimRight(CHARACTER_CLASS__WHITESPACE);
   char* test;
-	char* str = const_cast<char*>(c_str());
+	char* str = const_cast<char*>(tmp.c_str());
   errno = 0;
   strtod(str, &test);
 	return (errno == 0 && (str - test + strlen(str)) == 0);
