@@ -1,4 +1,4 @@
-// $Id: Surface_test.C,v 1.3 2002/01/05 02:57:44 oliver Exp $
+// $Id: Surface_test.C,v 1.4 2002/01/05 04:00:06 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(Surface, "$Id: Surface_test.C,v 1.3 2002/01/05 02:57:44 oliver Exp $")
+START_TEST(Surface, "$Id: Surface_test.C,v 1.4 2002/01/05 04:00:06 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -226,13 +226,13 @@ CHECK(void resizeTriangles(Size size))
 	t1.v2 = 2;
 	t1.v3 = 3;
 	Surface::Triangle t2;
-	t1.v1 = 4;
-	t1.v2 = 5;
-	t1.v3 = 6;
+	t2.v1 = 4;
+	t2.v2 = 5;
+	t2.v3 = 6;
 	Surface::Triangle t3;
-	t1.v1 = 7;
-	t1.v2 = 8;
-	t1.v3 = 9;
+	t3.v1 = 7;
+	t3.v2 = 8;
+	t3.v3 = 9;
 	s.getTriangle(0) = t1;
 	s.getTriangle(1) = t2;
 	s.getTriangle(2) = t3;
