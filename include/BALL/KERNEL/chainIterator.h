@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: chainIterator.h,v 1.17 2003/06/11 16:09:23 oliver Exp $
+// $Id: chainIterator.h,v 1.18 2003/06/19 13:09:54 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_CHAINITERATOR_H
@@ -81,11 +81,11 @@ namespace BALL
 	//@{
 
 	/// A mutable bidirectional iterator for the Chain class.
-	typedef BidirectionalIterator<Composite, Chain, Composite::SubcompositeIterator, ChainIteratorTraits>
+	typedef BidirectionalIterator<Composite, Chain, Composite::CompositeIterator, ChainIteratorTraits>
 		ChainIterator;
 
 	/// A constant bidirectional iterator for the Chain class.
-	typedef ConstBidirectionalIterator<Composite, Chain, Composite::SubcompositeIterator, ChainIteratorTraits>
+	typedef ConstBidirectionalIterator<Composite, Chain, Composite::CompositeIterator, ChainIteratorTraits>
 		ChainConstIterator;
 
 	/// A mutable reverse bidirectional iterator for the Chain class.

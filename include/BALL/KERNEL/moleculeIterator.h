@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: moleculeIterator.h,v 1.10 2003/06/11 16:09:24 oliver Exp $
+// $Id: moleculeIterator.h,v 1.11 2003/06/19 13:09:55 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_MOLECULEITERATOR_H
@@ -65,11 +65,11 @@ namespace BALL
 
 
 	typedef BidirectionalIterator
-		<Composite, Molecule, Composite::SubcompositeIterator, MoleculeIteratorTraits>
+		<Composite, Molecule, Composite::CompositeIterator, MoleculeIteratorTraits>
 		MoleculeIterator;
 
 	typedef ConstBidirectionalIterator
-		<Composite, Molecule, Composite::SubcompositeIterator, MoleculeIteratorTraits>
+		<Composite, Molecule, Composite::CompositeIterator, MoleculeIteratorTraits>
 		MoleculeConstIterator;
 
 	typedef std::reverse_iterator<MoleculeIterator> MoleculeReverseIterator;

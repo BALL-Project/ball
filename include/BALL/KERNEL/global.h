@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: global.h,v 1.18 2003/05/13 12:13:14 oliver Exp $
+// $Id: global.h,v 1.19 2003/06/19 13:09:54 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_GLOBAL_H
 #define BALL_KERNEL_GLOBAL_H
@@ -66,7 +67,7 @@ namespace BALL
 		typedef HashMap<const Atom*, Atom*>	AtomMap;
 		AtomMap atom_map;
 
-		std::list<const Bond*>	bond_list;
+		std::list<const Bond*> bond_list;
 
 		// iterate over the two composite structures in parallel
 		// caveat: if the two composite structures are not isomorphous, bonds
@@ -74,15 +75,16 @@ namespace BALL
 		Atom::BondConstIterator bond_iter;		
 		AtomConstIterator atom_iter_a(atom_container.beginAtom());
 		AtomIterator atom_iter_b(cloned.beginAtom());
-		for (; +atom_iter_a; ++atom_iter_a, ++atom_iter_b)
+
+		for (; +atom_iter_a && +atom_iter_b; ++atom_iter_a, ++atom_iter_b)
 		{
 			// create a hash map containing a 1:1 relation for the atom pointers
 			// atom_map maps atom pointers of atom_container to atom pointers in cloned
-			atom_map.insert(pair<const Atom*, Atom*>(&*atom_iter_a, &*atom_iter_b));
+			atom_map.insert(std::pair<const Atom*, Atom*>(&*atom_iter_a, &*atom_iter_b));
 
 			// iterate over all bonds and store the bonds in a list
 			// to get each bond exactly once, we check the first atom
-			for (bond_iter = atom_iter_a->beginBond(); +bond_iter; ++bond_iter) 
+			for (bond_iter = atom_iter_a->beginBond(); bond_iter != atom_iter_a->endBond(); ++bond_iter) 
 			{
 				if (bond_iter->getFirstAtom() == &(*atom_iter_a))
 				{

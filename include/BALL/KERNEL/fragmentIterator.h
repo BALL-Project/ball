@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentIterator.h,v 1.14 2003/06/11 16:09:23 oliver Exp $
+// $Id: fragmentIterator.h,v 1.15 2003/06/19 13:09:54 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_FRAGMENTITERATOR_H
@@ -76,11 +76,11 @@ namespace BALL
 	}
 
 	typedef BidirectionalIterator
-		<Composite, Fragment, Composite::SubcompositeIterator, FragmentIteratorTraits>
+		<Composite, Fragment, Composite::CompositeIterator, FragmentIteratorTraits>
 		FragmentIterator;
 
 	typedef ConstBidirectionalIterator
-		<Composite, Fragment, Composite::SubcompositeIterator, FragmentIteratorTraits>
+		<Composite, Fragment, Composite::CompositeIterator, FragmentIteratorTraits>
 		FragmentConstIterator;
 
 	typedef std::reverse_iterator<FragmentIterator> FragmentReverseIterator;

@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainer.h,v 1.22 2003/03/26 15:59:20 anhi Exp $
+// $Id: atomContainer.h,v 1.23 2003/06/19 13:09:54 oliver Exp $
+//
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -150,8 +151,7 @@ namespace BALL
 				@return  AtomContainer& - this instance AtomContainer
 				@see     AtomContainer::set
 		*/
-		const AtomContainer& operator = (const AtomContainer& atom_container)
-			throw();
+		AtomContainer& operator = (const AtomContainer& atom_container)	throw();
 
 		/** Copy to another instance of AtomContainer.
 				The assignment is either deep or shallow (default is deep).

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtomIterator.h,v 1.22 2003/06/11 16:09:23 oliver Exp $ 
+// $Id: PDBAtomIterator.h,v 1.23 2003/06/19 13:09:53 oliver Exp $ 
 //
 
 #ifndef BALL_KERNEL_PDBATOMITERATOR_H
@@ -80,11 +80,11 @@ namespace BALL
 	//@{
 
 	/// A mutable bidirectional iterator for the PDBAtom class.
-	typedef BidirectionalIterator<Composite, PDBAtom, Composite::SubcompositeIterator, PDBAtomIteratorTraits>
+	typedef BidirectionalIterator<Composite, PDBAtom, Composite::CompositeIterator, PDBAtomIteratorTraits>
 		PDBAtomIterator;
 
 	/// A constant bidirectional iterator for the PDBAtom class.
-	typedef ConstBidirectionalIterator<Composite, PDBAtom, Composite::SubcompositeIterator, PDBAtomIteratorTraits>
+	typedef ConstBidirectionalIterator<Composite, PDBAtom, Composite::CompositeIterator, PDBAtomIteratorTraits>
 		PDBAtomConstIterator;
 
 	/// A mutable reverse bidirectional iterator for the PDBAtom class.

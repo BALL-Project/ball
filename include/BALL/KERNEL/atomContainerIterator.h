@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomContainerIterator.h,v 1.16 2003/06/11 16:09:23 oliver Exp $ 
+// $Id: atomContainerIterator.h,v 1.17 2003/06/19 13:09:54 oliver Exp $ 
 //
 
 #ifndef BALL_KERNEL_ATOMCONTAINERITERATOR_H
@@ -90,13 +90,13 @@ namespace BALL
 	/** A mutable bidirectional iterator for the AtomContainer class.
 	*/
 	typedef BidirectionalIterator
-		<Composite, AtomContainer, Composite::SubcompositeIterator, AtomContainerIteratorTraits>
+		<Composite, AtomContainer, Composite::CompositeIterator, AtomContainerIteratorTraits>
 		AtomContainerIterator;
 
 	/** A constant bidirectional iterator for the AtomContainer class.
 	*/
 	typedef ConstBidirectionalIterator
-		<Composite, AtomContainer, Composite::SubcompositeIterator, AtomContainerIteratorTraits>
+		<Composite, AtomContainer, Composite::CompositeIterator, AtomContainerIteratorTraits>
 		AtomContainerConstIterator;
 
 	/// A mutable reverse bidirectional iterator for the AtomContainer class.

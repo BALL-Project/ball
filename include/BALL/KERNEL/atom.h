@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atom.h,v 1.55 2003/06/11 08:08:53 oliver Exp $
+// $Id: atom.h,v 1.56 2003/06/19 13:09:54 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_ATOM_H
@@ -309,8 +309,7 @@ namespace BALL
 					@return  Atom& - this instance
 					@see     Atom::set
 			*/
-			const Atom& operator = (const Atom& atom)
-				throw();
+			Atom& operator = (const Atom& atom)	throw();
 
 			/** Swap the contents of two atoms.
 					The static attributes are swapped by exchanging the indices of the two atoms!
@@ -1092,7 +1091,7 @@ namespace BALL
 
 			/** Assign the contents from a different atom attribute.
 			*/
-			const StaticAtomAttributes& operator = (const StaticAtomAttributes& attr);
+			StaticAtomAttributes& operator = (const StaticAtomAttributes& attr);
 		};
 
 		
