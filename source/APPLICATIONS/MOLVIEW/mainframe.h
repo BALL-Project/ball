@@ -1,7 +1,36 @@
-// $Id: mainframe.h,v 1.30.4.4 2002/10/29 16:06:46 anhi Exp $
+// -*- Mode: C++; tab-width: 2; -*-
+// vi: set ts=2:
+//
+// $Id: mainframe.h,v 1.30.4.5 2002/10/29 16:09:01 anhi Exp $
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
 #define BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
+
+#ifndef BALL_COMMON_H
+#	include <BALL/common.h>
+#endif
+
+#include <strstream>
+
+#include <qmetaobject.h>
+#include <qmainwindow.h>
+#include <qwidget.h>
+#include <qmenubar.h>
+#include <qkeycode.h>
+#include <qapplication.h>
+#include <qmessagebox.h>
+#include <qpopupmenu.h>
+#include <qlayout.h>
+#include <qbutton.h>
+#include <qstring.h>
+#include <qsplitter.h>
+#include <qstatusbar.h>
+#include <qlabel.h>
+#include <qtooltip.h>
+
+#include <BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h>
+#include <BALL/DATATYPE/regularData3D.h>
+#include <BALL/DATATYPE/contourSurface.h>
 
 #ifndef BALL_VIEW_KERNEL_LOGVIEW_H
 #	include <BALL/VIEW/KERNEL/logView.h>
@@ -89,6 +118,7 @@ class Mainframe
 		MENU__BUILD_AMBER_MDSIMULATION,
 
 		MENU__DISPLAY_OPEN_DISPLAY_PROPERTIES_DIALOG,
+    MENU__DISPLAY_OPEN_SURFACE_DIALOG,
 		MENU__DISPLAY_OPEN_PREFERENCES_DIALOG,
 		MENU__DISPLAY_CENTER_CAMERA,
 
@@ -129,6 +159,7 @@ class Mainframe
 	void calculateAmberEnergy();
 	void amberMinimization();
 	void amberMDSimulation();
+  void computeSurface();
 
 	// Help menu
 	void about();
@@ -139,6 +170,7 @@ class Mainframe
 	MolecularControl*			control_;
 	DisplayProperties*    display_properties_;
 	DlgAmberMinimization*	minimization_dialog_;
+  ContourSurfaceDialog* surface_dialog_;
 	LabelProperties*	    label_properties_;
 	MolecularProperties*  molecular_properties_;
 	Server*   						server_;
@@ -163,3 +195,5 @@ class Mainframe
 #		endif
 
 #endif // BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
+
+
