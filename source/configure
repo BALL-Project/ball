@@ -1,6 +1,6 @@
 #! /bin/sh
 # Guess values for system-dependent variables and create Makefiles.
-#  $Id: configure,v 1.153 2001/07/16 13:13:18 oliver Exp $
+#  $Id: configure,v 1.154 2001/07/16 13:54:45 oliver Exp $
 
 
 ##################################################
@@ -7466,7 +7466,7 @@ echo "${ECHO_T}No XDR headers available - building of XDR persistence support di
 #define BALL_HAS_XDR
 EOF
 
-	BALL_HAS_XDR=false
+	BALL_HAS_XDR=""
 
 else
 
