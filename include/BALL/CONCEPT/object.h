@@ -1,4 +1,4 @@
-// $Id: object.h,v 1.14 2001/07/05 17:49:47 oliver Exp $ 
+// $Id: object.h,v 1.15 2001/07/25 11:24:34 oliver Exp $ 
 
 #ifndef BALL_CONCEPT_OBJECT_H
 #define BALL_CONCEPT_OBJECT_H
@@ -33,7 +33,7 @@ namespace BALL
 	{
 		public:
 
-		BALL_CREATE_DEEP(Object)
+		BALL_CREATE(Object)
 
 		/**	@name	Construction and Destruction */	
 		//@{
@@ -43,7 +43,7 @@ namespace BALL
 			throw();
  
 		/// Copy constructor
-		Object(const Object& object, bool deep = true)
+		Object(const Object& object)
 			throw();
  
 		/// Destructor
