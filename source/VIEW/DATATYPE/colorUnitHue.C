@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnitHue.C,v 1.9 2002/12/16 12:23:05 sturm Exp $
+// $Id: colorUnitHue.C,v 1.10 2003/04/17 14:48:06 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorUnitHue.h>
 #include <BALL/COMMON/rtti.h>
@@ -125,17 +125,6 @@ namespace BALL
 			}
 
 			value_ = (float)d;
-		}
-
-		ColorUnitHue::ColorUnitHue(const long double ld)
-			throw(Exception::InvalidRange)
-		{
-      if ((ld < 0.0) || (ld > 1.0))
-      {
-        throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
-			}
- 				
-			value_ = (float)ld;
 		}
 
 		ColorUnitHue::~ColorUnitHue()
@@ -427,31 +416,6 @@ namespace BALL
 			d = (double)(value_ * 360.0);
 		}
 
-		void ColorUnitHue::set(const long double ld)
-			throw(Exception::InvalidRange)
-		{
-      if ((ld < 0.0) || (ld > 1.0))
-      {
-        throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
-			}
-
-			value_ = (float)ld;
-		}
-
-		const ColorUnitHue& ColorUnitHue::operator = (const long double ld)
-			throw(Exception::InvalidRange)
-		{
-			set(ld);
-
-			return *this;
-		}
-
-		void ColorUnitHue::get(long double& ld) const
-			throw()
-		{
-			ld = (long double)(value_ * 360.0);
-		}
-				
 		void ColorUnitHue::swap(ColorUnitHue& color_h_unit)
 			throw()
 		{

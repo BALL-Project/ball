@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorUnit.C,v 1.10 2003/04/17 09:48:59 amoll Exp $
+// $Id: colorUnit.C,v 1.11 2003/04/17 14:48:06 oliver Exp $
 
 #include <BALL/VIEW/DATATYPE/colorUnit.h>
 #include <stdio.h>
@@ -445,31 +445,6 @@ namespace BALL
 			d = (double)(value_ * 255.0);
 		}
 
-		void ColorUnit::set(const long double ld)
-			throw(Exception::InvalidRange)
-		{
-			if ((ld < 0.0) || (ld > 1.0))
-      {
-				throw ::BALL::Exception::InvalidRange(__FILE__, __LINE__);
-			}
-
-			value_ = (float)ld;
-		}
-
-		const ColorUnit& ColorUnit::operator = (const long double ld)
-			throw(Exception::InvalidRange)
-		{
-			set(ld);
-
-			return *this;
-		}
-
-		void ColorUnit::get(long double& ld) const
-			throw()
-		{
-			ld = (long double)(value_ * 255.0);
-		}
-				
 		void ColorUnit::swap(ColorUnit& color)
 			throw()
 		{
