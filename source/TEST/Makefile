@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.199 2003/06/22 10:21:50 oliver Exp $
+# $Id: Makefile,v 1.200 2003/06/23 12:26:52 amoll Exp $
 #
 
 DIRECTORY=TEST
@@ -55,6 +55,7 @@ EXECUTABLES_DATATYPES = \
 	Bit_test\
 	BitVector_test\
 	Contour_test\
+	ContourLine_test\
 	List_test\
 	Hash_test\
 	HashMap_test\
