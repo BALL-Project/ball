@@ -1,4 +1,4 @@
-// $Id: vector2.h,v 1.4 2001/07/13 19:40:59 oliver Exp $
+// $Id: vector2.h,v 1.5 2001/07/13 19:50:18 oliver Exp $
 
 #ifndef BALL_MATHS_Vector2_H
 #define BALL_MATHS_Vector2_H
@@ -535,7 +535,7 @@ namespace BALL
 	T TVector2<T>::getLength() const
 		throw()
 	{
-		return (T) sqrt(x * x + y * y);
+		return (T)sqrt(x * x + y * y);
 	}
 
 	template <typename T>
@@ -550,7 +550,7 @@ namespace BALL
 	TVector2<T>& TVector2<T>::normalize()
 		throw(Exception::DivisionByZero)
 	{
-		T len = sqrt(x * x + y * y);
+		T len = (T)sqrt(x * x + y * y);
 
 		if (Maths::isZero(len)) 
 		{
