@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.71 2004/07/08 16:51:28 amoll Exp $
+// $Id: displayProperties.C,v 1.72 2004/07/09 23:35:21 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -548,6 +548,11 @@ void DisplayProperties::createRepresentation_(const List<Composite*>& composites
 			color_processor = new OccupancyColorProcessor;
 			break;
 
+		case COLORING_FORCES:
+			color_processor = new ForceColorProcessor;
+			break;
+
+
 		default:
 			throw(InvalidOption(__FILE__, __LINE__, coloring_method_combobox->currentItem()));
 	}
@@ -726,6 +731,10 @@ void DisplayProperties::coloringOptionsPressed()
 		case COLORING_OCCUPANCY:
 			coloring_settings_->list_box->setCurrentItem(6);
 			break;
+
+		case COLORING_FORCES:
+			coloring_settings_->list_box->setCurrentItem(7);
+			break;
 	}
 
 	preferences_->show();
@@ -769,6 +778,10 @@ void DisplayProperties::modelOptionsPressed()
 			
 		case MODEL_HBONDS:
 			model_settings_->showPage(6);
+			break;
+
+		case MODEL_FORCES:
+			model_settings_->showPage(7);
 			break;
 	}
 
@@ -901,6 +914,9 @@ void DisplayProperties::getAdvancedModelOptions_()
 			
 		case MODEL_HBONDS:
     	model_settings_->setHBondRadius(((HBondModelProcessor*) mp)->getRadius());
+			break;
+
+		case MODEL_FORCES:
 			break;
 	}
 }
