@@ -1,4 +1,4 @@
-// $Id: twoColoredTube.h,v 1.8 2001/07/16 14:49:29 amoll Exp $
+// $Id: twoColoredTube.h,v 1.8.4.1 2002/10/19 13:49:25 amoll Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
@@ -96,8 +96,7 @@ namespace BALL
 					@see         Radius
 					@see         Vertex2
 			*/
-			TwoColoredTube
-				(const TwoColoredTube& two_colored_tube, bool deep = true)
+			TwoColoredTube(const TwoColoredTube& two_colored_tube, bool deep = true)
 				throw();
 
 			/** Copy constructor from geometricObject.
@@ -110,12 +109,10 @@ namespace BALL
 					@see         Radius
 					@see         Vertex2
 			*/
-			TwoColoredTube
-				(const GeometricObject& geometric_object)
+			TwoColoredTube (const GeometricObject& geometric_object)
 				throw();
 
 			//@}
-
 			/** @name Destructors 
 			*/
 			//@{
@@ -153,9 +150,8 @@ namespace BALL
 			*/
 			virtual void destroy()
 				throw();
+
 			//@}
-
-
 			/**	@name	Assignment methods
 			*/
 			//@{
@@ -213,11 +209,12 @@ namespace BALL
 			*/
 			void swap(TwoColoredTube& two_colored_tube)
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
+
 			/** Inspection of the length of the tube.
 					Access the length of {\em *this} tube.
 					@return  Real the length of {\em *this} tube
@@ -233,9 +230,8 @@ namespace BALL
 			*/
 			Vector3 getMiddleVertex()
 				throw();
+
 			//@}
-
-
 			/**	@name	debuggers and diagnostics
 			*/
 			//@{
@@ -247,8 +243,8 @@ namespace BALL
 					(self-validated) and 
 					consistent {\tt true} is returned, {\tt false} otherwise. 
 					Calls {GeometricObject::isValid}.
-					@return			bool {\tt true} if the internal state of {\em *this} twoColoredTube is correct (self-validated) and consistent,
-					 						{\tt false} otherwise
+					@return			bool {\tt true} if the internal state of {\em *this} twoColoredTube 
+											is correct (self-validated) and consistent, {\tt false} otherwise
 					@see        GeometricObject::isValid
 			*/
 			virtual bool isValid() const
@@ -270,8 +266,8 @@ namespace BALL
 			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 				throw();
-			//@}
 
+			//@}
 			/**	@name	Storers
 			*/
 			//@{
@@ -293,9 +289,8 @@ namespace BALL
 			*/
 			virtual void write(std::ostream& s) const
 				throw();
+
 			//@}
-
-
 			
 			protected:
 
@@ -309,9 +304,9 @@ namespace BALL
 				throw();
 		};
 
-#			ifndef BALL_NO_INLINE_FUNCTIONS
-#				include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.iC>
-#			endif
+	#ifndef BALL_NO_INLINE_FUNCTIONS
+	# include <BALL/MOLVIEW/PRIMITIV/twoColoredTube.iC>
+	#endif
 
 	} // namespace MOLVIEW
 
