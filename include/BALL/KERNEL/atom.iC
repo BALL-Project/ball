@@ -1,7 +1,7 @@
-// $Id: atom.iC,v 1.7 2000/04/29 12:53:19 oliver Exp $
+// $Id: atom.iC,v 1.8 2000/10/26 14:41:48 anker Exp $
 
 	BALL_INLINE
-  void Atom::setElement(Element& element)
+  void Atom::setElement(const Element& element)
   {
     element_ = &element;
 	}

@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.26 2000/09/26 19:25:16 oliver Exp $
+// $Id: atom.h,v 1.27 2000/10/26 14:41:48 anker Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -83,9 +83,9 @@ namespace BALL
 			\end{itemize}
 			
 			@memo    Atom class (BALL kernel framework)
-			@author  $Author: oliver $
-			@version $Revision: 1.26 $
-			@date    $Date: 2000/09/26 19:25:16 $
+			@author  $Author: anker $
+			@version $Revision: 1.27 $
+			@date    $Date: 2000/10/26 14:41:48 $
 	*/
 	class Atom
 		: public Composite,
@@ -356,7 +356,7 @@ namespace BALL
 					@param       element the new element type of {\em *this} atom
 					@see         Atom::getElement
 			*/
-			void setElement(Element& element);
+			void setElement(const Element& element);
 				
 			/** Constant inspection of the atom element type.
 					Access a constant reference to the element type of {\em *this} atom.
@@ -1136,7 +1136,7 @@ namespace BALL
 			void swapLastBond_(const Atom* atom);
 
 			// Attributes - names are self-explaining...
-			Element* 	element_;
+			const Element* 	element_;
 			float 		charge_;
 			String 		name_;
 			String 		type_name_;

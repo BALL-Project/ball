@@ -1,4 +1,4 @@
-// $Id: atom.C,v 1.26 2000/09/27 07:44:08 oliver Exp $
+// $Id: atom.C,v 1.27 2000/10/26 14:41:55 anker Exp $
 
 #include <BALL/KERNEL/atom.h>
 
@@ -182,7 +182,7 @@ namespace BALL
 		Composite::swap(atom);
 		PropertyManager::swap(atom);
 
-		Element *temp_element = element_;
+		const Element *temp_element = element_;
 		element_ = atom.element_;
 		atom.element_ = temp_element;
 		

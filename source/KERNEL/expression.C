@@ -15,38 +15,73 @@ namespace BALL
 
 	// Expression class, frontend to ExpressionTree
 
-	Expression::Expression() 
+	Expression::Expression() throw()
 		: expression_tree_(0),
 			expression_string_("<not initialized>")
 	{
 		registerStandardPredicates_();
 	}
 
-	Expression::Expression(const Expression& expression)
+
+	Expression::Expression(const Expression& expression) throw()
 		:	create_methods_(expression.create_methods_),
 		  expression_tree_(new ExpressionTree(*expression.expression_tree_)),
 			expression_string_(expression.expression_string_)
 	{
 	}
 
-	Expression::Expression(const String& expression_string)
+
+	Expression::Expression(const String& expression_string) throw()
 		:	expression_tree_(0)
 	{
 		registerStandardPredicates_();
 		setExpression(expression_string);
 	}
 
-	Expression::~Expression()
+
+	Expression::~Expression() throw()
 	{
-		delete expression_tree_;
+		clear();
 	}
 
-	bool Expression::hasPredicate(const String& name)
+
+	void Expression::clear() throw()
+	{
+		create_methods_.clear();
+		delete expression_tree_;
+		// BAUSTELLE
+		//expression_string_.clear();
+		expression_string_ = "";
+	}
+
+
+	const Expression& Expression::operator = (const Expression& expression)
+		throw()
+	{
+		clear();
+
+		create_methods_ = expression.create_methods_;
+		expression_tree_ = new ExpressionTree(*expression.expression_tree_);
+		expression_string_ = expression.expression_string_;
+
+		return *this;
+	}
+
+
+	bool Expression::operator == (const Expression& expression) const throw()
+	{
+		return ((create_methods_ == expression.create_methods_)
+			&& (*expression_tree_ == *expression.expression_tree_)
+			&& (expression_string_ == expression.expression_string_));
+	}
+
+
+	bool Expression::hasPredicate(const String& name) const throw()
 	{
 		return create_methods_.has(name);
 	}
 
-	bool Expression::operator () (const Atom& atom) const
+	bool Expression::operator () (const Atom& atom) const throw()
 	{
 		if (expression_tree_ != 0)
 		{
@@ -59,8 +94,9 @@ namespace BALL
 		}
 	}
 
+
 	ExpressionPredicate* Expression::getPredicate
-		(const String& name, const String& args) const
+		(const String& name, const String& args) const throw()
   {
     CreationMethod create_method = create_methods_[name];
     ExpressionPredicate* predicate = (ExpressionPredicate*)(create_method)();
@@ -70,13 +106,15 @@ namespace BALL
     return predicate;
 	}
 
+
 	void Expression::registerPredicate
-		(const String& name, CreationMethod creation_method)
+		(const String& name, CreationMethod creation_method) throw()
 	{
 		create_methods_.insert(name, creation_method);
 	}
 
-	void Expression::setExpression(const String& expression)
+
+	void Expression::setExpression(const String& expression) throw()
 	{
 		delete expression_tree_;
 		expression_tree_ = 0;
@@ -88,12 +126,15 @@ namespace BALL
 		expression_tree_ = constructExpressionTree_(tree);
 	}
 
-	const String& Expression::getExpression() const
+
+	const String& Expression::getExpression() const throw()
 	{
 		return expression_string_;
 	}
 
+
   ExpressionTree* Expression::constructExpressionTree_(const SyntaxTree& t)
+		throw()
   {
     ExpressionTree* root = new ExpressionTree();
     root->setType(t.type);
@@ -124,7 +165,8 @@ namespace BALL
     return root;
 	}
 
-	void Expression::registerStandardPredicates_()
+
+	void Expression::registerStandardPredicates_() throw()
 	{
 		using namespace RTTI;
 		create_methods_.insert("true", TruePredicate::createDefault);
@@ -154,19 +196,17 @@ namespace BALL
 
 	// no more nested classes of Selector: ExpressionTree
 
-	ExpressionTree::ExpressionTree()
+	ExpressionTree::ExpressionTree() throw()
 		:	type_(INVALID),
 			negate_(false),
-			predicate_(0)
+			predicate_(0),
+			children_()
 	{
 	}
 
-	ExpressionTree::~ExpressionTree()
-	{
-	}
 
 	ExpressionTree::ExpressionTree
-		(Type type, list<ExpressionTree*>	children, bool negate)
+		(Type type, list<ExpressionTree*>	children, bool negate) throw()
 		:	type_(type),
 			negate_(negate),
 			predicate_(0),
@@ -174,7 +214,48 @@ namespace BALL
 	{
 	}
 	
-	bool ExpressionTree::operator () (const Atom& atom) const
+
+	// BAUSTELLE: predicate_ neu bauen oder nur den Zeiger setzen?
+	ExpressionTree::ExpressionTree(const ExpressionTree& tree) throw()
+		:	type_(tree.type_),
+			negate_(tree.negate_),
+			predicate_(tree.predicate_),
+			children_(tree.children_)
+	{
+	}
+			
+
+	ExpressionTree::~ExpressionTree() throw()
+	{
+		clear();
+	}
+
+
+	void ExpressionTree::clear() throw()
+	{
+		type_ = INVALID;
+		negate_ = false;
+		// BAUSTELLE: Speicherloch?
+		predicate_ = 0;
+		children_.clear();
+	}
+
+
+	const ExpressionTree& ExpressionTree::operator = 
+		(const ExpressionTree& tree) throw()
+	{
+		clear();
+
+		type_ = tree.type_;
+		negate_ = tree.negate_;
+		predicate_ = tree.predicate_;
+		children_ = tree.children_;
+
+		return *this;
+	}
+
+
+	bool ExpressionTree::operator () (const Atom& atom) const throw()
 	{
     bool result;
     if (type_ == LEAF)
@@ -228,25 +309,58 @@ namespace BALL
     return result; 
 	}
 
-	void ExpressionTree::setType(Type type)
+
+	bool ExpressionTree::operator == (const ExpressionTree& tree) const
+		throw()
 	{
-		type_= type;
+		return ((type_ == tree.type_)
+			&& (negate_ == tree.negate_)
+			&& (*predicate_ == *tree.predicate_)
+			&& (children_ == tree.children_));
 	}
 
-	void ExpressionTree::setNegate(bool negate)
+
+	void ExpressionTree::setType(Type type) throw()
+	{
+		type_ = type;
+	}
+
+
+	ExpressionTree::Type ExpressionTree::getType() const throw()
+	{
+		return type_;
+	}
+
+
+	void ExpressionTree::setNegate(bool negate) throw()
 	{
 		negate_= negate;
 	}
 
-	void ExpressionTree::setPredicate(ExpressionPredicate* predicate)
+
+	bool ExpressionTree::getNegate() const throw()
+	{
+		return negate_;
+	}
+
+
+	void ExpressionTree::setPredicate(ExpressionPredicate* predicate) throw()
 	{
 		predicate_= predicate;
 	}
 
-	void ExpressionTree::appendChild(ExpressionTree* child)
+
+	ExpressionPredicate*  ExpressionTree::getPredicate() const throw()
+	{
+		return predicate_;
+	}
+
+
+	void ExpressionTree::appendChild(ExpressionTree* child) throw()
 	{
 		children_.push_back(child);
 	}
+
 
 	SyntaxTree::SyntaxTree()
 	{
@@ -613,27 +727,77 @@ namespace BALL
 	}
 
 
-	ExpressionPredicate::ExpressionPredicate()
+	ExpressionPredicate::ExpressionPredicate() throw()
+		: UnaryPredicate<Atom>(),
+			argument_("")
 	{
 	}
 
-	ExpressionPredicate::ExpressionPredicate(const String& argument)
-		:	argument_(argument)
+
+	ExpressionPredicate::ExpressionPredicate
+		(const ExpressionPredicate& predicate) throw()
+		:	UnaryPredicate<Atom>(predicate),
+			argument_(predicate.argument_)
 	{
 	}
 
-	ExpressionPredicate::~ExpressionPredicate()
+
+	ExpressionPredicate::ExpressionPredicate(const String& argument) throw()
+		:	UnaryPredicate<Atom>(),
+			argument_(argument)
 	{
 	}
 
-	bool ExpressionPredicate::operator () (BALL::Atom const &) const
+
+	ExpressionPredicate::~ExpressionPredicate() throw()
+	{
+		clear();
+	}
+
+
+	const ExpressionPredicate& ExpressionPredicate::operator =
+		(const ExpressionPredicate& predicate) throw()
+	{
+		UnaryPredicate<Atom>::operator = (predicate);
+		argument_ = predicate.argument_;
+
+		return *this;
+	}
+
+
+	void ExpressionPredicate::clear() throw()
+	{
+		argument_ = "";
+		// BAUSTELLE
+		// UnaryPredicate<Atom>::clear();
+	}
+
+
+	bool ExpressionPredicate::operator == (const ExpressionPredicate& predicate) 
+		const throw()
+	{
+		// BAUSTELLE
+		// return (UnaryPredicate<Atom>::operator == (predicate)
+		//	&& (argument_ == predicate.argument_));
+		return (argument_ == predicate.argument_);
+	}
+
+
+	bool ExpressionPredicate::operator () (BALL::Atom const &) const throw()
 	{
 		return true;
 	}
 
-	void ExpressionPredicate::setArgument(const String& args)
+
+	void ExpressionPredicate::setArgument(const String& args) throw()
 	{
 		argument_ = args;
+	}
+
+
+	const String& ExpressionPredicate::getArgument() const throw()
+	{
+		return argument_;
 	}
 
 }

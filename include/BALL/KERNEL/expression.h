@@ -1,4 +1,4 @@
-// $Id: expression.h,v 1.6 2000/08/30 19:58:08 oliver Exp $
+// $Id: expression.h,v 1.7 2000/10/26 14:41:48 anker Exp $
 
 #ifndef BALL_KERNEL_EXPRESSION_H
 #define BALL_KERNEL_EXPRESSION_H
@@ -20,11 +20,14 @@ namespace BALL
 
 	/**	@name	Expression Trees.
 			Evaluate simple expressions on Atoms.
+			\\
 			{\bf Definition:}\URL{BALL/KERNEL/expression.h}
 	*/
 	//@{
 
-	/**
+
+	/** \\
+			{\bf Definition} \URL{BALL/KERNEL/expression.h}
 	*/
 	class ExpressionPredicate
 		:	public UnaryPredicate<Atom>
@@ -33,24 +36,52 @@ namespace BALL
 
 		BALL_CREATE(ExpressionPredicate)
 
-		/**	@name	Constructors and Destructors.
+
+		/**	@name	Constructors and Destructor.
 		*/
 		//@{
 
 		/** Default Constructor
 		*/
-		ExpressionPredicate();
+		ExpressionPredicate() throw();
 		
+		/** Copy constructor */
+		ExpressionPredicate(const ExpressionPredicate& predicate) throw();
+
 		/** Detailed Constructor.
 				Construct an ExpressionPredicate with a string.
 				@param argument the argument to use for this predicate
 		*/
-		ExpressionPredicate(const String& argument);
+		ExpressionPredicate(const String& argument) throw();
 
 		/** Destructor
 		*/
-		virtual ~ExpressionPredicate();
+		virtual ~ExpressionPredicate() throw();
+
 		//@}
+
+
+		/** @name Assignment */
+		//@{
+
+		/** Assignment operator */
+		const ExpressionPredicate& operator = 
+			(const ExpressionPredicate& predicate) throw();
+
+		/** Clear method */
+		virtual void clear() throw();
+
+		//@}
+
+
+		/** @name Predicates */
+		//@{
+
+		/** Equality operator */
+		bool operator == (const ExpressionPredicate& predicate) const throw();
+
+		//@}
+
 
 		/** @name Accessors.
 		*/
@@ -60,20 +91,35 @@ namespace BALL
 				the selected predicate of atom.
 				@param atom the atom to compare with
 		*/
-		virtual bool operator () (const Atom& atom) const;
+		virtual bool operator () (const Atom& atom) const throw();
 
 		/** set the Argument of this ExpressionPredicate
 				@param argument the string to use for this predicate
 		*/
-		virtual void setArgument(const String& argument);
+		virtual void setArgument(const String& argument) throw();
+
+		/** Get the argument of an ExpressionPredicate i
+				@return the argument of the expression
+		 */
+		const String& getArgument() const throw();
+
 		//@}
 		
+
 		protected:
 		
+		/*_ The argument of the predicate */
 		String argument_;
 	};
 
-	/**
+
+	/** Expression tree class.
+			Represents the logical tree of an Expression. This is the backend of
+			Expression.
+			\\
+			@see Expression
+			\\
+			{\bf Definition:} \URL{BALL/KERNEL/expression.h}
 	*/
 	class ExpressionTree
 	{
@@ -101,7 +147,7 @@ namespace BALL
 		};
 		//@}
 
-		/**	@name	Constructors and Destructors
+		/**	@name	Constructors and Destructor
 		*/
 		//@{
 			
@@ -110,24 +156,31 @@ namespace BALL
 				{\tt negate_} is set to {\bf false}, the internal predicate is set
 				to 0, and the list of children is empty.
 		*/
-		ExpressionTree();
+		ExpressionTree() throw();
 			
-		/**	Detailled construtor.
+		/** Copy constructor */
+		ExpressionTree(const ExpressionTree& tree) throw();
+
+		/**	Detailed constructor.
 				Create an expression node representing a leaf, i.e., a 
 				predicate.
 				@param	predicate the node's predicate
 				@param	negate set to {\bf true} if the node's predicate should be negated
 		*/
-		ExpressionTree(ExpressionPredicate* predicate, bool negate = false);
+		ExpressionTree(ExpressionPredicate* predicate, bool negate = false)
+			throw();
 
 		/**
 		*/
-		ExpressionTree(Type type, list<ExpressionTree*> children, bool negate = false);
+		ExpressionTree(Type type, list<ExpressionTree*> children, 
+				bool negate = false) throw();
 
 		/**	Destructor
 		*/
-		virtual ~ExpressionTree();
+		virtual ~ExpressionTree() throw();
+
 		//@}
+
 
 		/**	@name	Predicates
 		*/
@@ -135,8 +188,13 @@ namespace BALL
 		
 		/** Evaluate the (sub)expression.
 		*/
-		virtual bool operator () (const Atom& atom) const;
+		virtual bool operator () (const Atom& atom) const throw();
+
+		/** Equality operator */
+		bool operator == (const ExpressionTree& tree) const throw();
+
 		//@}
+
 
 		/**	@name	Accessors
 		*/
@@ -144,20 +202,43 @@ namespace BALL
 
 		/**	Set the expression node's type.
 		*/
-		void setType(Type type);
+		void setType(Type type) throw();
+
+		/** Get the expression node's type */
+		Type getType() const throw();
 		
 		/**	Set the expression node's negation mode.
 		*/
-		void setNegate(bool negate);
-		
+		void setNegate(bool negate) throw();
+
+		/** Get the expression node's negation mode. */
+		bool getNegate() const throw();
+
 		/**	Set the predicate.
 		*/
-		void setPredicate(ExpressionPredicate* predicate);
+		void setPredicate(ExpressionPredicate* predicate) throw();
+
+		/**	Get the predicate. */
+		ExpressionPredicate* getPredicate() const throw();
 
 		/**	Append a child to the tree.
 		*/
-		void appendChild(ExpressionTree* child);
+		void appendChild(ExpressionTree* child) throw();
+
 		//@}
+
+
+		/** @name Asignment */
+		//@{
+
+		/** Asignment operator */
+		const ExpressionTree& operator = (const ExpressionTree& tree) throw();
+
+		/** Clear method */
+		virtual void clear() throw();
+
+		//@}
+
 
 		
 		protected:
@@ -167,6 +248,7 @@ namespace BALL
 		ExpressionPredicate*	predicate_;
 		list<ExpressionTree*>	children_;
 	};
+
 
 	/**
 	*/
@@ -244,15 +326,21 @@ namespace BALL
 		void collapseORs_();
 
 	};
-	/**
-	*/
 
+
+	/** Expression class. 
+			This class provides a frontend to ExpressionTree.
+			\\
+			@see ExpressionTree
+			\\
+			{\bf Definition:} \URL{BALL/KERNEL/expression.h}
+	*/
 	class Expression
 	{
 		public:
 		
 		// BAUSTELLE
-		// BALL_CREATE(Expression)
+		BALL_CREATE(Expression)
 
 		/**	@name	Type Definitions
 		*/
@@ -261,27 +349,32 @@ namespace BALL
 		/**	A creation method for predicates.
 		*/
 		typedef void * (*CreationMethod) ();
+
 		//@}
  
-		/**	@name	Constructors and Destructors
+
+		/**	@name	Constructors and Destructor
 		*/
 		//@{
+
 		/** Default Constructor.
 		*/
-		Expression();
+		Expression() throw();
 
 		/** Copy Constructor.
 		*/
-		Expression(const Expression& expression);
+		Expression(const Expression& expression) throw();
 
 		/** Construct an Expression with a string
 		*/
-		Expression(const String& expression_string);
+		Expression(const String& expression_string) throw();
 
 		/** Destructor.
 		*/
-		virtual ~Expression();
+		virtual ~Expression() throw();
+
 		//@}
+
 
 		/**	@name	Predicates
 		*/
@@ -289,8 +382,13 @@ namespace BALL
 
 		/**
 		*/
-		bool hasPredicate(const String& name);
+		bool hasPredicate(const String& name) const throw();
+
+		/** Equality operator */
+		bool operator == (const Expression& expression) const throw();
+
 		//@}
+
 
 		/**	@name	Accessors
 		*/
@@ -299,31 +397,47 @@ namespace BALL
 		/** Evaluate the expression of {\tt atom}
 				@param atom
 		*/
-		virtual bool operator () (const Atom& atom) const;
+		virtual bool operator () (const Atom& atom) const throw();
 
 		/**	Create a new predicate according to the name.
 				If the predicate is not known, return 0.
 		*/
-		ExpressionPredicate* getPredicate(const String& name, const String& args = "") const;
+		ExpressionPredicate* getPredicate(const String& name, 
+				const String& args = "") const throw();
 
 		/**	Register a new predicate class.
 		*/
-		void registerPredicate(const String& name, CreationMethod creation_method);
+		void registerPredicate(const String& name, CreationMethod creation_method)
+			throw();
 
-		/**
+		/** set the expression string
 		*/
-		void setExpression(const String& expression);
+		void setExpression(const String& expression) throw();
 
-		/**
+		/** get the expression string
 		*/
-		const String& getExpression() const;
+		const String& getExpression() const throw();
 
 		//@}
 
+
+		/** @name Assignment */
+		//@{ 
+
+		/** Assignment operator */
+		const Expression& operator = (const Expression& expression) throw();
+
+		/** Clear method */
+		virtual void clear() throw();
+
+		//@}
+
+
 		protected:
 
-		ExpressionTree*	constructExpressionTree_(const SyntaxTree& tree);
-		void registerStandardPredicates_();
+		ExpressionTree*	constructExpressionTree_(const SyntaxTree& tree)
+			throw();
+		void registerStandardPredicates_() throw();
 
 		StringHashMap<CreationMethod> create_methods_;
 		ExpressionTree*								expression_tree_;
