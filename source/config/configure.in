@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.89 2000/05/06 14:15:38 oliver Exp $
+dnl    $Id: configure.in,v 1.90 2000/05/15 19:08:25 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -1017,15 +1017,23 @@ if test "${COMPILER_DONE}" != true -a "${IS_DIGITALCXX}" = true ; then
 	AROPTS="${AROPTS} -o"
 	DYNAROPTS="${DYNAROPTS} -shared -nocxxstd -ptr \$(BALL_PATH)/source/cxx_rep -o"
 	CXX_MAKEDEPEND="${CXX}"
-	MAKEDEP_CXX_OPTS="-M -noimplicit_include -std strict_ansi"
+	MAKEDEP_CXX_OPTS="-M -noimplicit_include"
 	MAKEDEP_CXX_SUFFIX=" >.Dependencies"
 
-	CXXFLAGS="${CXXFLAGS} -ieee -std strict_ansi"
+	CXXFLAGS="${CXXFLAGS} -ieee"
 	BALL_CXXFLAGS="${BALL_CXXFLAGS} -ptr \$(BALL_PATH)/source/cxx_rep"
 	CXXFLAGS_O="${CXXFLAGS_O} -O5"
 	
 	CXXFLAGS_D="${CXXFLAGS_D}"
 	CXXFLAGS_DI="${CXXFLAGS_DI} -g"
+
+	dnl		Problem with linux headers:
+	dnl   cannot use -std strict_ansi since the socket headers
+	dnl   cause an error #280
+	if test "${OS}" != "Linux" ; then
+		CXXFLAGS="${CXXFLAGS} -std strict_ansi"
+		MAKEDEP_CXX_OPTS="${MAKEDEP_CXX_OPTS} -std strict_ansi"
+	fi
 
 	COMPILER_DONE=true
 fi
