@@ -1,4 +1,4 @@
-// $Id: INIFile_test.C,v 1.2 2000/08/23 15:45:18 anker Exp $
+// $Id: INIFile_test.C,v 1.3 2001/03/02 13:09:18 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -7,7 +7,7 @@
 
 ///////////////////////////
 
-START_TEST(INIFile, "$Id: INIFile_test.C,v 1.2 2000/08/23 15:45:18 anker Exp $")
+START_TEST(INIFile, "$Id: INIFile_test.C,v 1.3 2001/03/02 13:09:18 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -25,7 +25,7 @@ CHECK(INIFile::getFilename() const )
 RESULT
 
 CHECK(INIFile::isValid() const )
-	TEST_EQUAL(ini->isValid(), true)
+	TEST_EQUAL(ini->isValid(), false)
 RESULT
 
 
