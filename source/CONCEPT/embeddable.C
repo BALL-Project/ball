@@ -1,12 +1,11 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: embeddable.C,v 1.15 2004/01/18 21:55:37 oliver Exp $
+// $Id: embeddable.C,v 1.16 2004/02/13 15:50:03 oliver Exp $
 //
 
 #include <BALL/CONCEPT/embeddable.h>
 
-using namespace std;
 
 namespace BALL
 {
@@ -72,7 +71,7 @@ namespace BALL
 	// protected:
 
 	void Embeddable::registerInstance_
-		(const type_info& type, const Embeddable* instance) 
+		(const std::type_info& type, const Embeddable* instance) 
 		throw()
 	{
 		// retrieve the class name
@@ -81,16 +80,16 @@ namespace BALL
 		if (!instance_to_type_map_.has(const_cast<Embeddable*>(instance)))
 		{
 			// this is in fact a new registration
-			if (!instance_lists_.has(class_id_string))
+			if (!instance_vectors_.has(class_id_string))
 			{
-				// create a new list for instances of this type
-				instance_lists_.insert(class_id_string, EmbeddableList());
+				// create a new vector for instances of this type
+				instance_vectors_.insert(class_id_string, EmbeddableVector());
 			}
-			// store the pointer to the instance in the instance list...
-			instance_lists_[class_id_string].push_back(const_cast<Embeddable*>(instance));
+			// store the pointer to the instance in the instance vector...
+			instance_vectors_[class_id_string].push_back(const_cast<Embeddable*>(instance));
 			
 			// ...and in the hash map for fast retrieval of the class id string
-			instance_to_type_map_.insert(pair<Embeddable*, string>(const_cast<Embeddable*>(instance), class_id_string));
+			instance_to_type_map_.insert(std::pair<Embeddable*, string>(const_cast<Embeddable*>(instance), class_id_string));
 			#ifdef DEBUG
 				Log.info() << "Embeddable::registerInstance_: registering " << class_id_string 
 									 << " @ " << (void*)instance << std::endl;
@@ -98,28 +97,21 @@ namespace BALL
 		}
 		else 
 		{
-			// this is in fact a new registration
-			if (!instance_lists_.has(class_id_string))
+			EmbeddableVector& v = instance_vectors_[class_id_string];
+
+			// Check whether we have that one already...
+			if (std::find(v.begin(), v.end(), instance) == v.end())
 			{
-				// create a new list for instances of this type
-				instance_lists_.insert(class_id_string, EmbeddableList());
+				// store the pointer to the instance in the instance vector...
+				v.push_back(const_cast<Embeddable*>(instance));
 			}
-			// store the pointer to the instance in the instance list...
-			instance_lists_[class_id_string].push_back(const_cast<Embeddable*>(instance));
-			
-			// ...and in the hash map for fast retrieval of the class id string
-			instance_to_type_map_.insert(pair<Embeddable*, string>(const_cast<Embeddable*>(instance), class_id_string));
-			#ifdef DEBUG
-				Log.info() << "Embeddable::registerInstance_: registering " << class_id_string 
-									 << " @ " << (void*)instance << std::endl;
-			#endif
 		}
 	}
 
 	void Embeddable::unregisterInstance_(const Embeddable* const_instance) 
 		throw()
 	{
-		// for convenience, we use const pointers in the map, but const ptrs
+		// for convenience, we use const pointers in the map, but const ptr
 		// for registerInstance/unregisterInstance, since it is *logically* const.
 		Embeddable* instance = const_cast<Embeddable*>(const_instance);
 
@@ -128,13 +120,18 @@ namespace BALL
 		{
 			// retrieve the class id string for this specific instance
 			string class_id_string = instance_to_type_map_[instance];
-			if (instance_lists_.has(class_id_string))
+			if (instance_vectors_.has(class_id_string))
 			{
-				// remove the instance from all instance list
-				for (HashMap<String, List<Embeddable*> >::Iterator it = instance_lists_.begin();
-						 it != instance_lists_.end(); ++it)
+				// remove the instance from all instance vectors
+				for (HashMap<String, std::vector<Embeddable*> >::Iterator it = instance_vectors_.begin();
+						 it != instance_vectors_.end(); ++it)
 				{
-					it->second.remove(instance);
+					EmbeddableVector& v = it->second;
+					EmbeddableVector::iterator last = std::remove(v.begin(), v.end(), instance);
+					if (last != v.end())
+					{
+						v.erase(last);
+					}
 				}
 
 				// remove it from the instance hash map
@@ -146,67 +143,59 @@ namespace BALL
 			else 
 			{
 				// something terrible has happened: the instance was in the
-				// hash map but not in the list!
+				// hash map but not in the vector!
 				Log.error() << "Embeddable::unregisterInstance_: Internal error: "
-										<< "instance_lists_ and instance_to_type_map_ are inconsistent!" << endl;
+										<< "instance_vectors_ and instance_to_type_map_ are inconsistent!" << std::endl;
 			}
 		}
 	}
 
-	Size Embeddable::countInstances_(const type_info& type) 
+	Size Embeddable::countInstances_(const std::type_info& type) 
 		throw()
 	{
 		Size number = 0;
-		// check whether we got a list with that name
-		if (instance_lists_.has(type.name()))
+		// check whether we got a vector with that name
+		if (instance_vectors_.has(type.name()))
 		{
-			// retrieve the size of the coresponding instance list
-			number = (Size)instance_lists_[type.name()].size();
+			// retrieve the size of the coresponding instance vector
+			number = (Size)instance_vectors_[type.name()].size();
 		}
 
 		return number;
 	}
 
-	Embeddable* Embeddable::getInstance_(const type_info& type, Position index)
+	Embeddable* Embeddable::getInstance_(const std::type_info& type, Position index)
 		throw()
 	{
 		// the return value;
 		Embeddable* instance = 0;
 
-		// check whether we got a list with that name
-		if (instance_lists_.has(type.name()))
+		// check whether we got a vector with that name
+		if (instance_vectors_.has(type.name()))
 		{
-			// walk along the list, decrement the counter until
-			// the desired list element is reached
-			Index counter = (Index)index + 1;
-			EmbeddableList::Iterator it = instance_lists_[type.name()].begin();	
-			for (; it != instance_lists_[type.name()].end() && counter != 0; ++it, --counter)
+			EmbeddableVector& v = instance_vectors_[type.name()];
+			if (v.size() > index)
 			{
-				instance = *it;
-			}
-			if (counter != 0)
-			{
-				// we didn't find the correct index - return NULL
-				instance = 0;
+				instance = v[index];
 			}
 		}
 
 		return instance;
 	}
 
-	Embeddable* Embeddable::getInstance_(const type_info& type, const String& identifier)
+	Embeddable* Embeddable::getInstance_(const std::type_info& type, const String& identifier)
 		throw()
 	{
 		// the return value;
 		Embeddable* instance = 0;
 
-		// check whether we got a list with that name
-		if (instance_lists_.has(type.name()))
+		// check whether we got a vector with that name
+		if (instance_vectors_.has(type.name()))
 		{
-			// walk along the list, return the first instance
+			// walk along the vector, return the first instance
 			// whose identifier matches
-			EmbeddableList::Iterator it = instance_lists_[type.name()].begin();	
-			for (; it != instance_lists_[type.name()].end(); ++it)
+			EmbeddableVector::iterator it = instance_vectors_[type.name()].begin();	
+			for (; it != instance_vectors_[type.name()].end(); ++it)
 			{
 				if ((*it)->getIdentifier() == identifier)
 				{
@@ -220,14 +209,14 @@ namespace BALL
 		return instance;
 	}
 
-	StringHashMap<Embeddable::EmbeddableList>				
-		Embeddable::instance_lists_;
+	StringHashMap<Embeddable::EmbeddableVector>				
+		Embeddable::instance_vectors_;
 
 	HashMap<Embeddable*, string>	
 		Embeddable::instance_to_type_map_;	
 
 
-	void Embeddable::dump(ostream& s, Size depth) const
+	void Embeddable::dump(std::ostream& s, Size depth) const
 		throw()
 	{
 		BALL_DUMP_STREAM_PREFIX(s);

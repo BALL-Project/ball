@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: embeddable.h,v 1.19 2004/01/18 21:55:31 oliver Exp $
+// $Id: embeddable.h,v 1.20 2004/02/13 15:50:03 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_EMBEDDABLE_H
@@ -46,8 +46,30 @@ namespace BALL
 			Embeddable::registerInstance_(typeid(BASE), this);\
 		}\
 		\
-		static TYPE* getInstance(Position index) throw() { return dynamic_cast<TYPE*>(Embeddable::getInstance_(typeid(TYPE), index)); };\
-		static TYPE* getInstance(const String& identifier) throw() { return dynamic_cast<TYPE*>(Embeddable::getInstance_(typeid(TYPE), identifier)); };\
+		static TYPE* getInstance(Position index) throw() \
+		{ \
+			Embeddable* ptr = Embeddable::getInstance_(typeid(TYPE), index);\
+			if (ptr != 0)\
+			{\
+				return dynamic_cast<TYPE*>(ptr); \
+			}\
+			else\
+			{\
+				return 0;\
+			}\
+		}\
+		static TYPE* getInstance(const String& identifier) throw()\
+		{\
+			Embeddable* ptr = Embeddable::getInstance_(typeid(TYPE), identifier);\
+			if (ptr != 0)\
+			{\
+				return dynamic_cast<TYPE*>(ptr); \
+			}\
+			else\
+			{\
+				return 0;\
+			}\
+		}\
 		static Size countInstances() throw() { return (Embeddable::countInstances_(typeid(TYPE))); };
 	
 	/**	Python Embedding Base Class.
@@ -69,7 +91,7 @@ namespace BALL
 		/**	@name Type definitions
 		*/
 		//@{
-		typedef List<Embeddable*> EmbeddableList;
+		typedef std::vector<Embeddable*> EmbeddableVector;
 		//@}
 
 		/**	@name Constructors and Destructors
@@ -115,7 +137,7 @@ namespace BALL
 				DO NOT IMPLEMENT THIS METHOD! It is automatically implemented
 				correctly when putting the  \link BALL_EMBEDDABLE BALL_EMBEDDABLE \endlink  macro in a class
 				definition.
-				@see getInstanceList
+				@see getInstanceVector
 		*/
 		virtual void registerThis()
 			throw();	
@@ -166,9 +188,9 @@ namespace BALL
 		*/
 		String	identifier_;
 
-		/**	The instance lists
+		/**	The instance vectors
 		*/
-		static StringHashMap<EmbeddableList>	instance_lists_;
+		static StringHashMap<EmbeddableVector>	instance_vectors_;
 
 		/**	A hash map to retrieve the class ID for each instance.
 		*/

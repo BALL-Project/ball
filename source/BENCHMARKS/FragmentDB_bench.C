@@ -1,28 +1,30 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FragmentDB_bench.C,v 1.2 2002/12/21 16:46:18 oliver Exp $
+// $Id: FragmentDB_bench.C,v 1.3 2004/02/13 15:52:28 oliver Exp $
 
 #include <BALL/CONCEPT/benchmark.h>
 
 ///////////////////////////
 
 #include <BALL/STRUCTURE/fragmentDB.h>
+#include <BALL/KERNEL/system.h>
+#include <BALL/FORMAT/PDBFile.h>
 
 ///////////////////////////
 
 using namespace BALL;
 
-START_BENCHMARK(FragmentDB, 10.0, "$Id: FragmentDB_bench.C,v 1.2 2002/12/21 16:46:18 oliver Exp $")
+START_BENCHMARK(FragmentDB, 10.0, "$Id: FragmentDB_bench.C,v 1.3 2004/02/13 15:52:28 oliver Exp $")
 
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
 
-START_SECTION(Creation, 1.0)
+START_SECTION(Creation, 0.25)
 
 	FragmentDB* ptr;
-	for (Size i = 0; i < 5; i++)
+	for (Size i = 0; i < 10; i++)
 	{
 		START_TIMER
 			ptr = new FragmentDB;
@@ -30,6 +32,36 @@ START_SECTION(Creation, 1.0)
 		delete ptr;
 	}
 
+END_SECTION
+
+STATUS("Creating fragment DB")
+FragmentDB db;
+STATUS("Readig PDB file")
+PDBFile f("data/AmberFF_bench.pdb");
+System original;
+f >> original;
+f.close();
+
+START_SECTION(Name normalization, 0.25)
+	for (Size i = 0; i < 10; ++i)
+	{
+		System S(original);
+		START_TIMER
+			S.apply(db.normalize_names);
+		STOP_TIMER
+	}
+	
+END_SECTION
+
+START_SECTION(Bond building, 0.25)
+	for (Size i = 0; i < 10; ++i)
+	{
+		System S(original);
+		START_TIMER
+			S.apply(db.build_bonds);
+		STOP_TIMER
+	}
+	
 END_SECTION
 
 /////////////////////////////////////////////////////////////

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Embeddable_test.C,v 1.7 2004/02/11 18:52:29 oliver Exp $
+// $Id: Embeddable_test.C,v 1.8 2004/02/13 15:50:03 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -35,7 +35,7 @@ class C
 	BALL_EMBEDDABLE(C, A)
 };
 
-START_TEST(Embeddable, "$Id: Embeddable_test.C,v 1.7 2004/02/11 18:52:29 oliver Exp $")
+START_TEST(Embeddable, "$Id: Embeddable_test.C,v 1.8 2004/02/13 15:50:03 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -83,9 +83,15 @@ CHECK(void registerThis() throw())
 	a_ptr->registerThis();
 	TEST_EQUAL(A::countInstances(), 1)
 	TEST_EQUAL(C::countInstances(), 0)
+	a_ptr->registerThis();
+	TEST_EQUAL(A::countInstances(), 1)
+	TEST_EQUAL(C::countInstances(), 0)
 	c_ptr = new C;
 	TEST_EQUAL(A::countInstances(), 1)
 	TEST_EQUAL(C::countInstances(), 0)
+	c_ptr->registerThis();
+	TEST_EQUAL(A::countInstances(), 2)
+	TEST_EQUAL(C::countInstances(), 1)
 	c_ptr->registerThis();
 	TEST_EQUAL(A::countInstances(), 2)
 	TEST_EQUAL(C::countInstances(), 1)

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentDB.C,v 1.49 2003/08/26 09:18:27 oliver Exp $
+// $Id: fragmentDB.C,v 1.50 2004/02/13 15:52:29 oliver Exp $
 //
 
 #include <BALL/STRUCTURE/fragmentDB.h>
@@ -75,7 +75,6 @@ namespace BALL
 			root_entry.getParent()->removeChild(key, 0);
 
 			return false;
-
 		} 
 		else 
 		{
@@ -1275,7 +1274,6 @@ namespace BALL
 		// if there are no inter-fragment bonds, return
 		if (fragment_list_.size() >= 2)
 		{
-
 			// iterate over all pairs of fragments 
 			// in the list and try to construct bonds between them
 			list<Fragment*>::iterator it1 = fragment_list_.begin();
