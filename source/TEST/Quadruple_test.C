@@ -1,11 +1,11 @@
-// $Id: Quadruple_test.C,v 1.2 2001/01/19 23:01:06 amoll Exp $
+// $Id: Quadruple_test.C,v 1.3 2001/01/31 05:53:33 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #	include <BALL/DATATYPE/quadruple.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Quadruple_test.C,v 1.2 2001/01/19 23:01:06 amoll Exp $")
+START_TEST(class_name, "$Id: Quadruple_test.C,v 1.3 2001/01/31 05:53:33 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -15,7 +15,7 @@ using namespace BALL;
 CHECK(Quadruple::BALL_CREATE(Quadruple))
 	Quadruple<int, int, int, int> a(0, 1, 2, 3);
 	Quadruple<int, int, int, int>* v_ptr = (Quadruple<int, int, int, int>*)a.create();
-	TEST_REAL_EQUAL(v_ptr->first, 0)
+	TEST_EQUAL(v_ptr->first, 0)
 	delete v_ptr;
 RESULT
 
