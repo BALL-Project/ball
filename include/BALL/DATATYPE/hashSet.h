@@ -1,4 +1,4 @@
-// $Id: hashSet.h,v 1.19 2000/09/05 09:36:01 oliver Exp $ 
+// $Id: hashSet.h,v 1.20 2000/09/05 13:12:23 oliver Exp $ 
 
 #ifndef BALL_DATATYPE_HASHSET_H
 #define BALL_DATATYPE_HASHSET_H
@@ -794,32 +794,109 @@ namespace BALL
 			throw Exception::IncompatibleIterators(__FILE__, __LINE__);
 		}
 		
-		if (f.position_ > l.position_)
-		{
-			std::swap(f, l);
-		}
-
 		if (f == end())
 		{
 			return;
 		}
 
-		if (f == bucket_[f.getTraits().bucket_])
+		Position last_bucket = l.getTraits().bucket_;
+		if (l == end())
 		{
-			bucket_[f.getTraits().bucket_] = l;
-		} 
-		else 
-		{
-			(f-1)->next = l;
+			last_bucket = bucket_.size() - 1;
 		}
 
-		Index diff = f.position_ - l.position_;
-		while (f.position_ < l.position_)
+		if (f.getTraits().bucket_ > last_bucket)
 		{
-			deleteNode_(f);
-			f++;
+			// empty range - l < f
+			return;
 		}
-		size_ -= diff;
+
+		// count the deleted entries to correct the set size
+		Size no_deletions = 0;
+
+		Position bucket = f.getTraits().bucket_;
+		for (; bucket <= last_bucket; bucket++)
+		{
+			if (bucket_[bucket] == 0)
+			{
+				// skip all empty buckets
+				continue;
+			}
+
+
+			if ((bucket == f.getTraits().bucket_) && (bucket_[bucket] != f.getTraits().position_))
+			{
+				// find the predecessor of f
+				Node* n = bucket_[bucket];
+				Node* next;
+				for (; (n->next != f.getTraits().position_) && (n->next != 0); n = n->next);
+				
+				if (bucket == last_bucket)
+				{
+					// delete everything from f to l in this bucket
+
+					next = n->next;
+					n->next = l.getTraits().position_;
+					for (n = next; (n != 0) && (n != l.getTraits().position_); n = next)
+					{
+						next = n->next;
+						deleteNode_(n);
+						no_deletions++;
+					}
+				}
+				else
+				{
+					// delete everything from f to the end in this bucket
+
+					if (n != 0)
+					{
+						// mark the end of the list
+						next = n->next;
+						n->next = 0;
+
+						// delete all remaining nodes
+						for (n = next; n != 0; n = next)
+						{
+							next = n->next;
+							deleteNode_(n);
+							no_deletions++;
+						}
+					}
+				}
+			} 
+			// if the current bucket lies between the first and the last bucket...
+			else if (bucket < last_bucket)
+			{
+				// ...delete the whole bucket
+				Node* next;
+				for (Node* n = bucket_[bucket]; n != 0; n = next)
+				{
+					next = n->next;
+					deleteNode_(n);
+					no_deletions++;
+				}
+				bucket_[bucket] = 0;
+			}
+			else if (bucket == last_bucket)
+			{
+				// we delete everything in this bucket up to the iterator l
+
+				// find the predecessor of l
+				Node* n = bucket_[bucket];
+				Node* next;
+				for (; (n != 0) && (n != l.getTraits().position_); n = next)
+				{
+					next = n->next;
+					deleteNode_(n);
+					no_deletions++;
+				}
+
+				bucket_[bucket] = l.getTraits().position_;
+			}
+		}
+
+		// correct the set size
+		size_ -= no_deletions;
 	}
 
 	template <class Key>
