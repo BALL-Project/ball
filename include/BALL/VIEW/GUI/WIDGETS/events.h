@@ -1,4 +1,4 @@
-// $Id: events.h,v 1.7 2001/07/16 14:49:31 amoll Exp $
+// $Id: events.h,v 1.7.4.1 2002/11/04 18:10:16 amoll Exp $
 
 ////////////////////////////////////////////////////////////////////////////////
 //
@@ -964,6 +964,8 @@ namespace BALL
 			/**	@name	Constructors
 			*/	
 			//@{
+			Events()
+				throw();
 
 			/** Default Constructor.
 					Construct new events.
