@@ -27,6 +27,9 @@ namespace BALL
 	//Destructor
 	virtual ~PixmapItem();
 	
+	//get-/set- methods
+	QPixmap& getPixmap();
+
       protected:
 	void drawShape(QPainter& p);
 	QPixmap pixmap_;
@@ -60,14 +63,6 @@ namespace BALL
         throw(); 
       */
 
-      void zoomIn()
-        throw();
-      void zoomOut()
-	throw();
-      void zoom(float xfactor,float yfactor)
-	throw();
-      void zoomToFit()
-	throw();
       
       /*
       void mirror()
@@ -87,6 +82,16 @@ namespace BALL
       void toggleDoubleBuffer()
         throw();
       */
+
+    public slots:
+      virtual void zoomIn()
+        throw();
+      virtual void zoomOut()
+	throw();
+      virtual void zoom(float xfactor,float yfactor)
+	throw();
+      virtual void zoomToFit()
+	throw();
 
 
     protected:  

@@ -29,7 +29,11 @@ namespace BALL
     {
       p.drawPixmap(int (x()),int (y()), pixmap_);
     }
-    
+
+    QPixmap& CanvasWidget::PixmapItem::getPixmap()
+    {
+      return pixmap_;
+    }
 
     //-----------------------class CanvasWidget
     
@@ -37,9 +41,9 @@ namespace BALL
     CanvasWidget::CanvasWidget(QWidget *parent, int x, int y, 
 			       const char* name, WFlags f)
       : QCanvasView(parent, name, f),
-	canvas_(0,0),//800, 600),
-	x_(x),
-	y_(y)
+				canvas_(0,0),//800, 600),
+				x_(x),
+				y_(y)
     {
       setCanvas(&canvas_);
     }
@@ -56,6 +60,7 @@ namespace BALL
      
     }
    
+    
     //methods:
     void CanvasWidget::showObjects()
       throw() 
@@ -71,6 +76,7 @@ namespace BALL
     void CanvasWidget::zoomIn()
       throw()
     {
+Log.info() << "ZoomIn" << std::endl;
       QWMatrix m = this->worldMatrix();
       m.scale(2.0,2.0);
       this->setWorldMatrix(m);
@@ -79,7 +85,7 @@ namespace BALL
     void CanvasWidget::zoomOut()
       throw()
     {
-       QWMatrix m = this->worldMatrix();
+      QWMatrix m = this->worldMatrix();
       m.scale(0.5, 0.5);
       this->setWorldMatrix(m);
     }
@@ -98,25 +104,23 @@ namespace BALL
     {      
       float xfactor = 1.;
       float yfactor = 1.;
-      QWMatrix m = worldMatrix();
-      int conWidth  = contentsWidth();  //content of scrollview
-      int conHeight = contentsHeight(); //content of scrollview
+      QWMatrix m  = worldMatrix();
 
-      int visHeigth = height();  // height of canvas
-      int visWidth  = width();   // width of canvas
+      int conWidth  = viewport()->width();  //content of scrollview
+      int conHeight = viewport()->height(); //content of scrollview
+
+      int visHeight = canvas_.height();  // height of canvas
+      int visWidth  = canvas_.width();   // width of canvas
 
 
-      //if((visHeigth != 0 ) && ( visWidth!=0))
-      if((conWidth !=0.) && (conHeight!=0.))
+      if((visWidth !=0.) && (visHeight!=0.))
       {
-      	xfactor = (float)width()/(float)conWidth;
-				yfactor = (float)height()/(float)conHeight;
-	//xfactor = conWidth/width();
-	//yfactor = conHeight/height();
+      	xfactor = (float)conWidth/(float)visWidth;
+				yfactor = (float)conHeight/(float)visHeight;
       }
-       m.scale(xfactor, yfactor);
-      //  m.translate( -16, 0 );
-      this->setWorldMatrix(m);
+			QWMatrix m2(xfactor, m.m12(), m.m21(), yfactor, m.dx(), m.dy());
+Log.info() << xfactor << " " << yfactor << std::endl;
+      setWorldMatrix(m2);
     }
 
 

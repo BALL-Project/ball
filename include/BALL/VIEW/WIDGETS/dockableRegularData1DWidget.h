@@ -16,8 +16,8 @@ namespace BALL
     class DockableRegularData1DWidget
       : public DockWidget
     {
-      Q_OBJECT                        //macro for QT messages
-    public:
+ 	     Q_OBJECT                        //macro for QT messages
+			public:
 
       //Constructor
       DockableRegularData1DWidget(const RegularData1D& data, QWidget *parent=0 );
@@ -29,7 +29,7 @@ namespace BALL
 
       //Destructor 
       ~DockableRegularData1DWidget()
-	throw();
+				throw();
 
       //methods
       void plot()
@@ -38,9 +38,16 @@ namespace BALL
       RegularData1DWidget& getWidget()
 	throw();
 
+		public slots:
+			virtual void zoomToFit();
+			virtual void showSize();
+
     protected:
       RegularData1DWidget canWidget_;
 
+		protected slots:
+			virtual void contextMenuEvent(QContextMenuEvent* e);
+			virtual void reactToMessages(int number);
     };//end of class dockableRegularData1DWidget
     
   }

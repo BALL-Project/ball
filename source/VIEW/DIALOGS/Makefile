@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.26 2003/12/29 12:14:37 oliver Exp $
+# $Id: Makefile,v 1.27 2004/01/13 12:41:00 anhi Exp $
 #
 
 DIRECTORY=VIEW/DIALOGS
@@ -47,7 +47,6 @@ CPP_SOURCES=\
 	mouseSensitivity.C\
 	mouseSensitivityData.C\
 	openBruker1DFile.C\
-	openBruker2DFile.C\
 	parsedFunctionDialog.C\
 	parsedFunctionDialogData.C\
 	peptideDialog.C\
@@ -102,7 +101,6 @@ MOC_SOURCES=\
 	mouseSensitivity_moc.C\
 	mouseSensitivityData_moc.C\
 	openBruker1DFile_moc.C\
-	openBruker2DFile_moc.C\
 	parsedFunctionDialog_moc.C\
 	parsedFunctionDialogData_moc.C\
 	peptideDialog_moc.C\
@@ -163,9 +161,6 @@ serverPreferences_moc.C: $(HEADER_DIR)/serverPreferences.h
 
 openBruker1DFile_moc.C: $(HEADER_DIR)/openBruker1DFile.h
 	$(MOC) $(HEADER_DIR)/openBruker1DFile.h -o $@
-
-openBruker2DFile_moc.C: $(HEADER_DIR)/openBruker2DFile.h
-	$(MOC) $(HEADER_DIR)/openBruker2DFile.h -o $@
 
 preferences_moc.C: $(HEADER_DIR)/preferences.h
 	$(MOC) $(HEADER_DIR)/preferences.h -o $@

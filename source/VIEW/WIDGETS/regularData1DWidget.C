@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData1DWidget.C,v 1.5 2003/12/19 19:47:09 oliver Exp $
+// $Id: regularData1DWidget.C,v 1.6 2004/01/13 12:41:01 anhi Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/regularData1DWidget.h>
@@ -91,7 +91,7 @@ namespace BALL
 
 			// resize the canvas to fit the data
 			canvas_.resize(5*(data_.size()+2), height_+10);
-
+			resizeContents(canvas_.width(), canvas_.height());
 			int x_new;
 			int y_new;
 			int x_old = 5;
@@ -134,14 +134,6 @@ namespace BALL
 				endy   = height_+5 - (int)round(((data_[endx]-min)/dif_min)*5);
 				ql->setPoints(startx, starty, endx, endy);
 				objects_.push_back(dynamic_cast<QCanvasItem*> (ql));
-				
-
-			//				polygon_ = new QCanvasPolygon(&canvas_);
-			//			polygon_ = new QCanvasSpline(&canvas_);	
-			// polygon_->setControlPoints((QPointArray)point_data_, false);
-			
-				//insert the polygon into vector<canvasItem*> of canvasWidget
-			//				objects_.push_back(dynamic_cast<QCanvasItem*> (polygon_));
 			}
 
 
