@@ -1,4 +1,4 @@
-// $Id: geometricProperties.h,v 1.11 2000/12/21 16:20:02 amoll Exp $
+// $Id: geometricProperties.h,v 1.12 2001/02/04 10:15:29 amoll Exp $
 
 #ifndef BALL_STRUCTURE_GEOMETRICPROPERTIES_H
 #define BALL_STRUCTURE_GEOMETRICPROPERTIES_H
@@ -38,8 +38,7 @@ using std::vector;
 namespace BALL 
 {
 
-	/**	@name	Geometric property processors
-			@nonames
+	/**	@name	Geometric property processors.
 			The applicators, processors, and collectors described in 
 			this chapter are used to extract geometric properties out
 			of a given molecular object or to extract parts of these
