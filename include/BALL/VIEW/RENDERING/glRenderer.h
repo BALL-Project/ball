@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.h,v 1.9 2004/02/12 16:17:40 amoll Exp $
+// $Id: glRenderer.h,v 1.10 2004/02/16 17:12:32 amoll Exp $
 
 #ifndef BALL_VIEW_RENDERING_GLRENDERER_H
 #define BALL_VIEW_RENDERING_GLRENDERER_H
@@ -227,7 +227,7 @@ namespace BALL
 
 			//_
 			void setColor4ub_(const GeometricObject& object)
-				throw();
+				throw(){ setColorRGBA_(object.getColor()); }
 
 			//_
 			GLubyte* generateBitmapFromText_(const String& text, int& width, int& height) const

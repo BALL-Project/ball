@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.21 2004/02/12 16:17:26 amoll Exp $
+// $Id: glRenderer.C,v 1.22 2004/02/16 17:12:41 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -804,18 +804,10 @@ namespace BALL
 		}
 
 
+		BALL_INLINE
 		void GLRenderer::setColor4ub_(const GeometricObject& object)
 			throw()
 		{
-			if (object.getComposite() == 0 ||
-					!object.getComposite()->isSelected())
-			{
-				setColorRGBA_(object.getColor());
-			}
-			else
-			{
-				setColorRGBA_(BALL_SELECTED_COLOR);
-			}
 		}
 
 
