@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.126 2004/09/02 13:55:49 amoll Exp $
+// $Id: scene.C,v 1.127 2004/09/03 13:49:49 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -590,6 +590,19 @@ namespace BALL
 					gl_renderer_.render(rep);
 					break;
 			}
+		}
+
+		void Scene::rotateSystem2_(Scene* /*scene*/)
+		{
+			if (x_window_pos_old_ == x_window_pos_new_) return;
+
+			float angle = (x_window_pos_new_ - x_window_pos_old_) * (mouse_sensitivity_ / (ROTATE_FACTOR * -30));
+				
+			Matrix4x4 m;
+			Camera& camera = stage_->getCamera();
+			m.setRotation(Angle(angle), camera.getViewVector());
+			camera.setLookUpVector(m * camera.getLookUpVector());
+			updateCamera_();
 		}
 
 
@@ -1442,6 +1455,10 @@ namespace BALL
 
 				case (Qt::ControlButton | Qt::LeftButton):
 					translateSystem_(this);
+					break;
+
+				case (Qt::LeftButton | Qt::RightButton):
+					rotateSystem2_(this);
 					break;
 
 				case Qt::MidButton:
