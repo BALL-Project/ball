@@ -1,4 +1,4 @@
-// $Id: MOLFile.C,v 1.10 2002/01/16 02:16:56 oliver Exp $
+// $Id: MOLFile.C,v 1.11 2002/01/17 00:46:32 oliver Exp $
 
 #include <BALL/FORMAT/MOLFile.h>
 #include <BALL/KERNEL/atom.h>
@@ -231,7 +231,7 @@ namespace BALL
 
 				// create the atom
 				Atom* atom = new Atom(PTE[atom_struct.symbol.trim()], 
-															String("[atom") + String(atom_struct.number) + "]", // name
+															atom_struct.symbol.trim(), // name
 															"", // emtpy type name
 															Atom::UNKNOWN_TYPE,
 															atom_struct.position,
