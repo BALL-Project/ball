@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: randomAccessIterator.h,v 1.24 2003/06/11 08:08:48 oliver Exp $ 
+// $Id: randomAccessIterator.h,v 1.25 2003/06/19 20:35:21 oliver Exp $ 
 //
 
 #ifndef BALL_CONCEPT_RANDOMACCESSITERATOR_H
@@ -118,8 +118,17 @@ namespace BALL
 		ConstRandomAccessIterator operator + (Distance distance) const
 			throw(Exception::InvalidIterator);
 
-		using ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator +;
-		using ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator -;
+		///
+		inline bool operator + () const throw() 
+		{ 
+			return ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator + (); 
+		}
+
+		///
+		inline bool operator - () const throw() 
+		{ 
+			return ConstBidirectionalIterator<Container, DataType, Position, Traits>::operator - (); 
+		}
 
 		/** Return an iterator.
 		 *  It points to the element with the given distance in reverse direction
