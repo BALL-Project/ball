@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.73 2004/10/20 10:07:48 amoll Exp $
+// $Id: molecularControl.C,v 1.74 2004/10/20 14:32:45 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -752,12 +752,9 @@ void MolecularControl::cut()
 		{
 			// insert deep clone of the composite into the cut list
 			copy_list_.push_back((System*)(*it)->create());
-			to_delete.insert(*it);
 		}
-		else
-		{
-			to_delete.insert(*it);
-		}
+
+		to_delete.insert(*it);
 
 		if (!RTTI::isKindOf<System>(**it))
 		{
