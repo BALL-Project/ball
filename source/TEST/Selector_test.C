@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Selector_test.C,v 1.14 2003/08/28 18:07:32 oliver Exp $
+// $Id: Selector_test.C,v 1.15 2004/02/24 18:42:10 anker Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -16,7 +16,7 @@
 
 ///////////////////////////
 
-START_TEST(Selector, "$Id: Selector_test.C,v 1.14 2003/08/28 18:07:32 oliver Exp $")
+START_TEST(Selector, "$Id: Selector_test.C,v 1.15 2004/02/24 18:42:10 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -137,6 +137,19 @@ CHECK(Size getNumberOfSelectedAtoms() const throw())
 		TEST_EQUAL(s.getNumberOfSelectedAtoms(), exp_iterator->second);
 	}
 RESULT
+
+CHECK(List& getSelectedAtoms() throw())
+	HINFile file("data/Selector_test.hin");
+	System system;
+	file >> system;
+	file.close();
+
+	system.deselect();
+	Selector selector("true()");
+	system.apply(selector);
+	List<Atom*> atom_list = selector.getSelectedAtoms();
+	TEST_EQUAL(atom_list.size(), 6)
+RESULT 
 
 CHECK(Selector& operator = (const Selector& selector) throw())
 	Selector s("true()");
