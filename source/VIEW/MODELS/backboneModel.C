@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.2 2003/08/26 18:35:37 amoll Exp $
+// $Id: backboneModel.C,v 1.3 2003/08/29 10:52:25 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -16,9 +16,6 @@ using namespace std;
 
 namespace BALL
 {
-	using VIEW::Tube;
-	using VIEW::Sphere;
-
 	namespace VIEW
 	{
 

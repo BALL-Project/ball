@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: lineModel.C,v 1.2 2003/08/26 18:35:37 amoll Exp $
+// $Id: lineModel.C,v 1.3 2003/08/29 10:52:26 amoll Exp $
 
 #include <BALL/VIEW/MODELS/lineModel.h>
 #include <BALL/KERNEL/atom.h>
@@ -12,11 +12,8 @@ using namespace std;
 
 namespace BALL
 {
-	using VIEW::Point;
-
 	namespace VIEW
 	{
-
 
 AddLineModel::AddLineModel()
 	throw()

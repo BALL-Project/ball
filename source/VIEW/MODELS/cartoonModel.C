@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.2 2003/08/26 18:35:37 amoll Exp $
+// $Id: cartoonModel.C,v 1.3 2003/08/29 10:52:25 amoll Exp $
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -20,8 +20,6 @@ using namespace std;
 
 namespace BALL
 {
-	using namespace VIEW;
-
 	namespace VIEW
 	{
 

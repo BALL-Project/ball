@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: atomBondModelConnector.C,v 1.2 2003/08/26 18:35:36 amoll Exp $
+// $Id: atomBondModelConnector.C,v 1.3 2003/08/29 10:52:25 amoll Exp $
 
 #include <BALL/VIEW/MODELS/atomBondModelConnector.h>
 #include <BALL/KERNEL/atom.h>
@@ -13,8 +13,6 @@ using namespace std;
 
 namespace BALL
 {
-	using VIEW::ColorRGBA;
-
 	namespace VIEW
 	{
 				
