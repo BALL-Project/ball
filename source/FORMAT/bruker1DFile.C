@@ -1,4 +1,4 @@
-// $Id: bruker1DFile.C,v 1.9 2001/02/06 18:12:29 anhi Exp $
+// $Id: bruker1DFile.C,v 1.10 2001/06/24 14:32:49 oliver Exp $
 
 
 #include <BALL/FORMAT/bruker1DFile.h>
@@ -67,7 +67,7 @@ namespace BALL
 	      littleEndian = false;
 	    };
 	  
-	  spectrum_.resize( pars_->parameter( "SI" ) );
+	  spectrum_.resize( (Size)pars_->parameter( "SI" ) );
 	  spectrum_.setLowerBound(pars_->parameter("YMIN_p"));
 	  spectrum_.setUpperBound(pars_->parameter("YMAX_p"));
 
