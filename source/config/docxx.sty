@@ -1,4 +1,4 @@
-% $Id: docxx.sty,v 1.4 2001/07/11 09:40:48 amoll Exp $
+% $Id: docxx.sty,v 1.5 2001/07/16 12:55:08 amoll Exp $
 %  docxx.sty
 %
 %  Copyright (c) 1996 Roland Wunderling, Malte Zoeckler
@@ -45,16 +45,20 @@
 %\RequirePackage{tabularx}
 \RequirePackage{longtable}
 \RequirePackage{times}
-
+\RequirePackage{a4}
 % von A.Moll eingefuegt: brauchen wir zum darstellen von grafiken in der docu
 \RequirePackage{graphicx}
 
 % Papierbreite besser ausnutzen
 % zieht den (linken) Rand rueber
-\global\advance\oddsidemargin-2.5cm
+\global\advance\oddsidemargin-2.0cm
 %\global\advance\hsize+5cm
 % verbreitert Text
-\advance\textwidth+5cm
+\advance\textwidth+5.0cm
+% oben kleinerer Rand
+\advance\topmargin-1.5cm
+% unten kleinerer Rand
+\advance\textheight+1.5cm
 
 \def\cxxtilde{{\tt\~\relax}}
 %\addtolength{\parskip}{6pt}
@@ -230,9 +234,9 @@
 \cxxBWidth=0.65\textwidth
 \begingroup
 \catcode`\,=\active%
-\paragraph{#1}\strut\smallskip\\
-\footnotesize
-\small
+\paragraph{#1}\strut%\smallskip\\
+\footnotesize%
+\small%
 %\normalsize
 %\begin{tabular}[h]{lrlr}
 %CC nix fest, s.o.
@@ -240,7 +244,7 @@
 }{
 \begin{longtable}[l]{lrlr}
 \the\cxxlist@items
-\end{longtable}\ \\
+\end{longtable}%\ \\
 \normalsize
 \endgroup
 }
@@ -773,7 +777,7 @@
 % SMK: Beschissen grosse Abst"ande
         \strut\vskip1ex\goodbreak%
         \setlength{\cxxSize}{1pt}%
-\else                                   % >2
+\else                                   % >=2
         \strut\vskip1ex\goodbreak%
         \setlength{\cxxSize}{0.5pt}%
 \fi%
@@ -825,9 +829,16 @@
 %  \begin{raggedright}
 {\flushleft
     \noindent\sffamily%
-    \ifcase\value{cxxDepth}\Huge\or\Huge\or\Large\else\large\fi%
-    \strut\llap{\id\hglue1ex}\parbox[t]{\textwidth}{\tolerance=10000%
-      #1 \textbf{#2} #3\hss}}
+    \ifcase\value{cxxDepth}\Huge\or\Huge\or\Large\or\large\else\large\fi%
+    % Nummer erzeugen am linken Rand
+    % ab Tiefe 4 wird die Schrift kleiner
+%    \strut\llap{\ifcase\value{cxxDepth}\Huge\or\Huge\or\Large\or\large\else\small\fi\id\hglue1ex}%
+    \strut\llap{\ifcase\value{cxxDepth}\Huge\or\Huge\or\Large\or\large\else\footnotesize\fi\id\hglue1ex}%
+% raggedright hat gefehlt
+\parbox[t]{\textwidth}{\raggedright\tolerance=10000%
+      #1 \textbf{#2} #3%
+\hss}%      
+}
 %  \end{raggedright}
 %}
 % \parbox[b]{\cxxSideLen}{\begingroup
