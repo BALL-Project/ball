@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.8 2003/11/05 22:03:12 amoll Exp $
+// $Id: glRenderer.C,v 1.9 2003/12/02 02:34:42 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -103,6 +103,7 @@ namespace BALL
 
 			// setup all in the stage given lightsources
 			setLights();
+			glEnable(GL_LIGHTING);
 
 			// set the background color according to the stage
 			updateBackgroundColor();
@@ -311,16 +312,10 @@ namespace BALL
 				return false;
 			}
 
-			if (representation.getModelName() == "Line")
-			{
-				glDisable(GL_LIGHTING);
-			}
-
-
 			drawing_precision_  = representation.getDrawingPrecision();
 			drawing_mode_ 		  = representation.getDrawingMode();
 
-			if (drawing_mode_ != DRAWING_MODE_SOLID)
+			if (drawing_mode_ == DRAWING_MODE_DOTS)
 			{
 				glDisable(GL_LIGHTING);
 			}
@@ -338,14 +333,10 @@ namespace BALL
 				render_(*it);
 			}
 
-			if (representation.getModelName() == "Line")
-			{
-				glEnable(GL_LIGHTING);
-			}
-
 			// restore Matrix stack
 			glPopMatrix();
 			glFlush();
+
 
 			return true;
 		}
@@ -434,6 +425,7 @@ namespace BALL
 			// drawing mode dots must be implemented
 
 			glBegin(GL_LINES);
+			normalVector3_(normal_vector_);
 			vertexVector3_(line.getVertex1());
 			vertexVector3_(line.getVertex2());
 			glEnd();
@@ -469,6 +461,7 @@ namespace BALL
 		{
 			setColor4ub_(point);
 			glBegin(GL_POINTS);
+			normalVector3_(normal_vector_);
 			vertexVector3_(point.getVertex());
 			glEnd();
 		}
@@ -591,7 +584,7 @@ namespace BALL
 			setColor4ub_(line);
 
 			glBegin(GL_LINE_STRIP);
-
+			normalVector3_(normal_vector_);
 			vertexVector3_(line.getVertex1());
 			vertexVector3_(line.getMiddleVertex());
 
@@ -628,6 +621,7 @@ namespace BALL
 				{
 					glBegin(GL_POINTS);
 
+					normalVector3_(normal_vector_);
 					// draw the triangles with lines
 					for (Size index = 0; index < mesh.vertex.size(); ++index)
 					{
@@ -642,6 +636,7 @@ namespace BALL
 					for (Size index = 0; index < mesh.triangle.size(); ++index)
 					{
 						glBegin(GL_LINE_STRIP);
+						normalVector3_(normal_vector_);
 
 						vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
 						vertexVector3_(mesh.vertex[mesh.triangle[index].v2]);
@@ -677,6 +672,7 @@ namespace BALL
 			if (drawing_mode_ == DRAWING_MODE_DOTS)
 			{
 				glBegin(GL_POINTS);
+				normalVector3_(normal_vector_);
 
 				for (Size index = 0; index < mesh.vertex.size(); ++index)
 				{
@@ -693,6 +689,7 @@ namespace BALL
 				for (Size index = 0; index < mesh.triangle.size(); ++index)
 				{
 					glBegin(GL_LINE_STRIP);
+					normalVector3_(normal_vector_);
 
 					setColorRGBA_(mesh.colorList[mesh.triangle[index].v1]);
 					vertexVector3_(mesh.vertex[mesh.triangle[index].v1]);
@@ -1362,6 +1359,10 @@ namespace BALL
 								camera.getLookUpVector().x,
 								camera.getLookUpVector().y,
 								camera.getLookUpVector().z);
+
+			normal_vector_ = (-stage_->getCamera().getViewVector().normalize())
+												-stage_->getCamera().getRightVector()
+												- stage_->getCamera().getLookUpVector();
 		}
 
 
