@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.8 2003/10/04 15:18:56 amoll Exp $
+// $Id: datasetControl.C,v 1.9 2003/10/05 17:18:08 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -32,8 +32,10 @@ DatasetControl::DatasetControl(QWidget* parent, const char* name)
 #endif
 	listview->addColumn("Name");
 	listview->addColumn("from");
+	listview->addColumn("Type");
 	listview->setColumnWidth(0, 120);
 	listview->setColumnWidth(1, 60);
+	listview->setColumnWidth(2, 60);
 	default_visible_ = false;
 	connect(listview, SIGNAL(selectionChanged()), this, SLOT(updateSelection()));
 }
@@ -123,7 +125,7 @@ void DatasetControl::insertTrajectory_(TrajectoryFile* file, System& system)
 	if (pos) pos++;
 	name = name.getSubstring(pos);
 	
-	QListViewItem* item = new QListViewItem(listview, name.c_str(), system.getName().c_str());
+	QListViewItem* item = new QListViewItem(listview, name.c_str(), system.getName().c_str(), "Trajectory");
 	item_to_trajectory_[item] = manager;
 	insertComposite_(&system, item);
 }
@@ -307,7 +309,7 @@ void DatasetControl::add3DGrid()
 void DatasetControl::insertGrid_(RegularData3D* data, System& system, const String& name)
 	throw()
 {
-	QListViewItem* item = new QListViewItem(listview, name.c_str(), system.getName().c_str());
+	QListViewItem* item = new QListViewItem(listview, name.c_str(), system.getName().c_str(), "3D Grid");
 	item_to_grid_[item] = data;
 	insertComposite_(&system, item);
 }
