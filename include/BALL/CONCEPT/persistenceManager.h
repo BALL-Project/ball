@@ -1,4 +1,4 @@
-// $Id: persistenceManager.h,v 1.27 2001/06/06 22:26:18 amoll Exp $
+// $Id: persistenceManager.h,v 1.28 2001/06/21 01:58:33 oliver Exp $
 
 #ifndef BALL_CONCEPT_PERSISTENCE_H
 #define BALL_CONCEPT_PERSISTENCE_H
@@ -829,7 +829,7 @@ namespace BALL
 		throw()
 	{
 		object_out_.insert(object);
-		writeHeader(RTTI::getStreamName<T>(), name, (PointerSizeInt)(void*)object);
+		writeHeader(RTTI::getStreamName<T>(), name, (PointerSizeInt)reinterpret_cast<BALL_POINTERSIZEINT_TYPE>(object));
 	}
 
 
@@ -886,7 +886,7 @@ namespace BALL
 		}
 
 		writeObjectPointerHeader(RTTI::getStreamName<T>(), name);
-		put((PointerSizeInt)(void*)object);
+		put((PointerSizeInt)(BALL_POINTERSIZEINT_TYPE)object);
 		writePrimitiveTrailer();
 	}
 
@@ -908,7 +908,7 @@ namespace BALL
 			pointer_list_.push_back(pair<void**, PointerSizeInt>((void**)&object, ptr));
 		}
 
-		object = (T*)ptr;
+		object = (T*)(BALL_POINTERSIZEINT_TYPE)ptr;
 
 		return checkPrimitiveTrailer();
 	} 
