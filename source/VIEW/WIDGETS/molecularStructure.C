@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.C,v 1.40 2004/04/22 10:08:20 oliver Exp $
+// $Id: molecularStructure.C,v 1.41 2004/04/23 13:07:32 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/molecularStructure.h>
@@ -85,16 +85,16 @@ namespace BALL
 		
 		// MOLECULARMECHANICS Menu -------------------------------------------------------------------
 		hint = "Calculate the energy of a System with the AMBER/CHARMM force field.";
-		amber_energy_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Single Point Calculation", this, 
+		energy_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Single Point Calculation", this, 
 																			 SLOT(calculateForceFieldEnergy()), CTRL+Key_A, MainControl::MOLECULARMECHANICS + 12, hint);
 			
 		hint = "To perform an Energy Minimization, first select the molecular structures.";
-		amber_minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Energy Minimization", this, 
+		minimization_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "&Energy Minimization", this, 
 															SLOT(runMinimization()), CTRL+Key_E, MainControl::MOLECULARMECHANICS+ 10, hint);
 
 		hint = "To perform a MD simulation , first select the molecular structures.";
-		amber_mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", this, 
-															SLOT(amberMDSimulation()), CTRL+Key_D, MainControl::MOLECULARMECHANICS + 11, hint);
+		mdsimulation_id_ = insertMenuEntry(MainControl::MOLECULARMECHANICS, "Molecular &Dynamics", this, 
+															SLOT(MDSimulation()), CTRL+Key_D, MainControl::MOLECULARMECHANICS + 11, hint);
 
 		getMainControl()->insertPopupMenuSeparator(MainControl::MOLECULARMECHANICS);
 		(main_control.initPopupMenu(MainControl::CHOOSE_FF))->setCheckable(true);
@@ -422,9 +422,9 @@ namespace BALL
 
 		// AMBER methods are available only for single systems
 		// disable calculation entries, if a simulation is running
-		menuBar()->setItemEnabled(amber_energy_id_, one_system && composites_muteable);
-		menuBar()->setItemEnabled(amber_minimization_id_, one_system && composites_muteable);
-		menuBar()->setItemEnabled(amber_mdsimulation_id_, one_system && composites_muteable);
+		menuBar()->setItemEnabled(energy_id_, one_system && composites_muteable);
+		menuBar()->setItemEnabled(minimization_id_, one_system && composites_muteable);
+		menuBar()->setItemEnabled(mdsimulation_id_, one_system && composites_muteable);
 
 		menuBar()->setItemEnabled(calculate_hbonds_id_, one_system && composites_muteable);
 
@@ -949,7 +949,7 @@ namespace BALL
 		}
 	}
 
-	void MolecularStructure::amberMDSimulation()
+	void MolecularStructure::MDSimulation()
 	{
 		// Make sure we run just one instance at a time.
  		if (!getMainControl()->compositesAreMuteable())

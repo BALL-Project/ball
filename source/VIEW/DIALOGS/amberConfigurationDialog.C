@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: amberConfigurationDialog.C,v 1.7 2004/04/22 23:29:07 amoll Exp $
+// $Id: amberConfigurationDialog.C,v 1.8 2004/04/23 13:07:50 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/amberConfigurationDialog.h>
@@ -11,6 +11,7 @@
 #include <qlineedit.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
+#include <qpushbutton.h>
 
 namespace BALL
 {
@@ -63,8 +64,8 @@ namespace BALL
 			overwrite_charges_checkBox->setChecked(true);
 			overwrite_typenames_checkBox->setChecked(true);
 
-			boundary_box_->setChecked(true);
-			add_solvent_box->setChecked(true);
+			boundary_box->setChecked(false);
+			add_solvent_box->setChecked(false);
 			box_size_edit->setText("40.0000");
 			solvent_file_edit->setText("");
 		}
@@ -315,7 +316,7 @@ namespace BALL
 
 			amber.options[AmberFF::Option::FILENAME] = getFilename();
 
-			if (boundary_box_->isChecked())
+			if (boundary_box->isChecked())
 			{
 				amber.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
 				try
@@ -359,6 +360,26 @@ namespace BALL
 			if (!result.isEmpty())
 			{
 				solvent_file_edit->setText(result);
+			}
+		}
+
+		void AmberConfigurationDialog::periodicBoundaryClicked()
+			throw()
+		{
+			if (boundary_box->isChecked())
+			{
+				add_solvent_box->setEnabled(true);
+				solvent_file_edit->setEnabled(true);
+				box_size_edit->setEnabled(true);
+				browse_solvent_file->setEnabled(true);
+			}
+			else
+			{
+				add_solvent_box->setEnabled(false);
+				solvent_file_edit->setEnabled(false);
+				box_size_edit->setEnabled(false);
+				add_solvent_box->setChecked(false);
+				browse_solvent_file->setEnabled(false);
 			}
 		}
 	

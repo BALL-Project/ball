@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.h,v 1.16 2004/04/16 14:55:36 amoll Exp $
+// $Id: molecularStructure.h,v 1.17 2004/04/23 13:07:40 amoll Exp $
 //
 
 #ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
@@ -220,7 +220,7 @@ namespace BALL
 			void runMinimization();
 
 			/// Perfomr a molecular dynamics simulation with the currently selected force field
-			void amberMDSimulation();
+			void MDSimulation();
 
 			/// Show the dialog to setup the AMBER force field
 			void showAmberForceFieldOptions();
@@ -255,9 +255,9 @@ namespace BALL
 			Index	map_proteins_id_;
 			Index	calculate_RMSD_id_;
 			Index	assign_charges_id_;
-			Index	amber_energy_id_;
-			Index	amber_minimization_id_;
-			Index	amber_mdsimulation_id_;
+			Index	energy_id_;
+			Index	minimization_id_;
+			Index	mdsimulation_id_;
 			Index	build_peptide_id_;
 			Index	calculate_hbonds_id_;
 			Index	amber_ff_id_;

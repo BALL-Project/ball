@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmConfigurationDialog.C,v 1.4 2004/04/22 23:29:08 amoll Exp $
+// $Id: charmmConfigurationDialog.C,v 1.5 2004/04/23 13:07:51 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/charmmConfigurationDialog.h>
@@ -11,6 +11,7 @@
 #include <qlineedit.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
+#include <qpushbutton.h>
 
 namespace BALL
 {
@@ -66,8 +67,8 @@ namespace BALL
 			overwrite_typenames_checkBox->setChecked(true);
 			use_eef1_checkBox->setChecked(true);
 
-			boundary_box_->setChecked(true);
-			add_solvent_box->setChecked(true);
+			boundary_box->setChecked(false);
+			add_solvent_box->setChecked(false);
 			box_size_edit->setText("40.0000");
 			solvent_file_edit->setText("");
 		}
@@ -393,7 +394,7 @@ namespace BALL
 
 			charmm.options[CharmmFF::Option::FILENAME] = getFilename();
 
-			if (boundary_box_->isChecked())
+			if (boundary_box->isChecked())
 			{
 				charmm.options[PeriodicBoundary::Option::PERIODIC_BOX_ENABLED] = "true";
 				try
@@ -437,6 +438,26 @@ namespace BALL
 			if (!result.isEmpty())
 			{
 				solvent_file_edit->setText(result);
+			}
+		}
+	
+		void CharmmConfigurationDialog::periodicBoundaryClicked()
+			throw()
+		{
+			if (boundary_box->isChecked())
+			{
+				add_solvent_box->setEnabled(true);
+				solvent_file_edit->setEnabled(true);
+				box_size_edit->setEnabled(true);
+				browse_solvent_file->setEnabled(true);
+			}
+			else
+			{
+				add_solvent_box->setEnabled(false);
+				solvent_file_edit->setEnabled(false);
+				box_size_edit->setEnabled(false);
+				add_solvent_box->setChecked(false);
+				browse_solvent_file->setEnabled(false);
 			}
 		}
 	

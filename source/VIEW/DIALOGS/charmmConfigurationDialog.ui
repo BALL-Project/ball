@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>CharmmConfigurationDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -1211,36 +1211,6 @@
         <property name="alignment">
             <set>AlignHCenter</set>
         </property>
-        <widget class="QCheckBox">
-            <property name="name">
-                <cstring>boundary_box_</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>7</x>
-                    <y>19</y>
-                    <width>224</width>
-                    <height>21</height>
-                </rect>
-            </property>
-            <property name="minimumSize">
-                <size>
-                    <width>165</width>
-                    <height>0</height>
-                </size>
-            </property>
-            <property name="font">
-                <font>
-                    <bold>0</bold>
-                </font>
-            </property>
-            <property name="text">
-                <string>Enable Periodic Boundary</string>
-            </property>
-            <property name="checked">
-                <bool>true</bool>
-            </property>
-        </widget>
         <widget class="QGroupBox">
             <property name="name">
                 <cstring>groupBox8_2</cstring>
@@ -1265,6 +1235,9 @@
             <widget class="QLineEdit">
                 <property name="name">
                     <cstring>box_size_edit</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
                 </property>
                 <property name="geometry">
                     <rect>
@@ -1332,96 +1305,133 @@
             <property name="alignment">
                 <set>AlignHCenter</set>
             </property>
-            <widget class="QLayoutWidget">
+            <widget class="QLineEdit">
                 <property name="name">
-                    <cstring>layout3</cstring>
+                    <cstring>solvent_file_edit</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
                 </property>
                 <property name="geometry">
                     <rect>
                         <x>10</x>
-                        <y>17</y>
-                        <width>294</width>
-                        <height>32</height>
+                        <y>19</y>
+                        <width>204</width>
+                        <height>22</height>
                     </rect>
                 </property>
-                <hbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QLineEdit">
-                        <property name="name">
-                            <cstring>solvent_file_edit</cstring>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>150</width>
-                                <height>0</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>11111</width>
-                                <height>32767</height>
-                            </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <bold>0</bold>
-                            </font>
-                        </property>
-                        <property name="focusPolicy">
-                            <enum>StrongFocus</enum>
-                        </property>
-                        <property name="text">
-                            <string></string>
-                        </property>
-                        <property name="maxLength">
-                            <number>32767</number>
-                        </property>
-                        <property name="frame">
-                            <bool>true</bool>
-                        </property>
-                        <property name="echoMode">
-                            <enum>Normal</enum>
-                        </property>
-                        <property name="alignment">
-                            <set>AlignRight</set>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>browse_solvent_file</cstring>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>0</width>
-                                <height>30</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>32767</width>
-                                <height>30</height>
-                            </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <bold>0</bold>
-                            </font>
-                        </property>
-                        <property name="text">
-                            <string>Browse</string>
-                        </property>
-                        <property name="accel">
-                            <string></string>
-                        </property>
-                    </widget>
-                </hbox>
+                <property name="minimumSize">
+                    <size>
+                        <width>150</width>
+                        <height>0</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>11111</width>
+                        <height>32767</height>
+                    </size>
+                </property>
+                <property name="font">
+                    <font>
+                        <bold>0</bold>
+                    </font>
+                </property>
+                <property name="focusPolicy">
+                    <enum>StrongFocus</enum>
+                </property>
+                <property name="text">
+                    <string></string>
+                </property>
+                <property name="maxLength">
+                    <number>32767</number>
+                </property>
+                <property name="frame">
+                    <bool>true</bool>
+                </property>
+                <property name="echoMode">
+                    <enum>Normal</enum>
+                </property>
+                <property name="alignment">
+                    <set>AlignRight</set>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>browse_solvent_file</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>219</x>
+                        <y>14</y>
+                        <width>82</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>32767</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="font">
+                    <font>
+                        <bold>0</bold>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Browse</string>
+                </property>
+                <property name="accel">
+                    <string></string>
+                </property>
             </widget>
         </widget>
         <widget class="QCheckBox">
             <property name="name">
+                <cstring>boundary_box</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>7</x>
+                    <y>19</y>
+                    <width>224</width>
+                    <height>21</height>
+                </rect>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>165</width>
+                    <height>0</height>
+                </size>
+            </property>
+            <property name="font">
+                <font>
+                    <bold>0</bold>
+                </font>
+            </property>
+            <property name="text">
+                <string>Enable Periodic Boundary</string>
+            </property>
+            <property name="checked">
+                <bool>false</bool>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
                 <cstring>add_solvent_box</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
             </property>
             <property name="geometry">
                 <rect>
@@ -1446,7 +1456,7 @@
                 <string>Add Solvent</string>
             </property>
             <property name="checked">
-                <bool>true</bool>
+                <bool>false</bool>
             </property>
         </widget>
     </widget>
@@ -1482,6 +1492,12 @@
         <receiver>CharmmConfigurationDialogData</receiver>
         <slot>browseSolventFile()</slot>
     </connection>
+    <connection>
+        <sender>boundary_box</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>CharmmConfigurationDialogData</receiver>
+        <slot>periodicBoundaryClicked()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>parameter_file_edit</tabstop>
@@ -1513,6 +1529,7 @@
     <slot>browseParameterFiles()</slot>
     <slot>resetOptions()</slot>
     <slot>browseSolventFile()</slot>
+    <slot>periodicBoundaryClicked()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>

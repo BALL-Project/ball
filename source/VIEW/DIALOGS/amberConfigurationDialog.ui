@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>AmberConfigurationDialogData</class>
 <widget class="QDialog">
     <property name="name">
@@ -7,7 +7,7 @@
     <property name="geometry">
         <rect>
             <x>0</x>
-            <y>4</y>
+            <y>0</y>
             <width>555</width>
             <height>526</height>
         </rect>
@@ -989,6 +989,9 @@
                 <property name="name">
                     <cstring>box_size_edit</cstring>
                 </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
                 <property name="geometry">
                     <rect>
                         <x>5</x>
@@ -1034,117 +1037,9 @@
                 </property>
             </widget>
         </widget>
-        <widget class="QGroupBox">
-            <property name="name">
-                <cstring>groupBox8</cstring>
-            </property>
-            <property name="geometry">
-                <rect>
-                    <x>234</x>
-                    <y>50</y>
-                    <width>304</width>
-                    <height>51</height>
-                </rect>
-            </property>
-            <property name="frameShape">
-                <enum>NoFrame</enum>
-            </property>
-            <property name="title">
-                <string>Solvent File</string>
-            </property>
-            <property name="alignment">
-                <set>AlignHCenter</set>
-            </property>
-            <widget class="QLayoutWidget">
-                <property name="name">
-                    <cstring>layout3</cstring>
-                </property>
-                <property name="geometry">
-                    <rect>
-                        <x>7</x>
-                        <y>15</y>
-                        <width>294</width>
-                        <height>32</height>
-                    </rect>
-                </property>
-                <hbox>
-                    <property name="name">
-                        <cstring>unnamed</cstring>
-                    </property>
-                    <widget class="QLineEdit">
-                        <property name="name">
-                            <cstring>solvent_file_edit</cstring>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>150</width>
-                                <height>23</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>11111</width>
-                                <height>23</height>
-                            </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <bold>0</bold>
-                            </font>
-                        </property>
-                        <property name="focusPolicy">
-                            <enum>StrongFocus</enum>
-                        </property>
-                        <property name="text">
-                            <string></string>
-                        </property>
-                        <property name="maxLength">
-                            <number>32767</number>
-                        </property>
-                        <property name="frame">
-                            <bool>true</bool>
-                        </property>
-                        <property name="echoMode">
-                            <enum>Normal</enum>
-                        </property>
-                        <property name="alignment">
-                            <set>AlignRight</set>
-                        </property>
-                    </widget>
-                    <widget class="QPushButton">
-                        <property name="name">
-                            <cstring>browse_solvent_file</cstring>
-                        </property>
-                        <property name="minimumSize">
-                            <size>
-                                <width>0</width>
-                                <height>30</height>
-                            </size>
-                        </property>
-                        <property name="maximumSize">
-                            <size>
-                                <width>32767</width>
-                                <height>30</height>
-                            </size>
-                        </property>
-                        <property name="font">
-                            <font>
-                                <bold>0</bold>
-                            </font>
-                        </property>
-                        <property name="text">
-                            <string>Browse</string>
-                        </property>
-                        <property name="accel">
-                            <string></string>
-                        </property>
-                    </widget>
-                </hbox>
-            </widget>
-        </widget>
         <widget class="QCheckBox">
             <property name="name">
-                <cstring>boundary_box_</cstring>
+                <cstring>boundary_box</cstring>
             </property>
             <property name="geometry">
                 <rect>
@@ -1169,12 +1064,15 @@
                 <string>Enable Periodic Boundary</string>
             </property>
             <property name="checked">
-                <bool>true</bool>
+                <bool>false</bool>
             </property>
         </widget>
         <widget class="QCheckBox">
             <property name="name">
                 <cstring>add_solvent_box</cstring>
+            </property>
+            <property name="enabled">
+                <bool>false</bool>
             </property>
             <property name="geometry">
                 <rect>
@@ -1199,8 +1097,120 @@
                 <string>Add Solvent</string>
             </property>
             <property name="checked">
-                <bool>true</bool>
+                <bool>false</bool>
             </property>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>groupBox8</cstring>
+            </property>
+            <property name="geometry">
+                <rect>
+                    <x>234</x>
+                    <y>50</y>
+                    <width>304</width>
+                    <height>51</height>
+                </rect>
+            </property>
+            <property name="frameShape">
+                <enum>NoFrame</enum>
+            </property>
+            <property name="title">
+                <string>Solvent File</string>
+            </property>
+            <property name="alignment">
+                <set>AlignHCenter</set>
+            </property>
+            <widget class="QLineEdit">
+                <property name="name">
+                    <cstring>solvent_file_edit</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>7</x>
+                        <y>19</y>
+                        <width>204</width>
+                        <height>23</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>150</width>
+                        <height>23</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>11111</width>
+                        <height>23</height>
+                    </size>
+                </property>
+                <property name="font">
+                    <font>
+                        <bold>0</bold>
+                    </font>
+                </property>
+                <property name="focusPolicy">
+                    <enum>StrongFocus</enum>
+                </property>
+                <property name="text">
+                    <string></string>
+                </property>
+                <property name="maxLength">
+                    <number>32767</number>
+                </property>
+                <property name="frame">
+                    <bool>true</bool>
+                </property>
+                <property name="echoMode">
+                    <enum>Normal</enum>
+                </property>
+                <property name="alignment">
+                    <set>AlignRight</set>
+                </property>
+            </widget>
+            <widget class="QPushButton">
+                <property name="name">
+                    <cstring>browse_solvent_file</cstring>
+                </property>
+                <property name="enabled">
+                    <bool>false</bool>
+                </property>
+                <property name="geometry">
+                    <rect>
+                        <x>217</x>
+                        <y>16</y>
+                        <width>82</width>
+                        <height>30</height>
+                    </rect>
+                </property>
+                <property name="minimumSize">
+                    <size>
+                        <width>0</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="maximumSize">
+                    <size>
+                        <width>32767</width>
+                        <height>30</height>
+                    </size>
+                </property>
+                <property name="font">
+                    <font>
+                        <bold>0</bold>
+                    </font>
+                </property>
+                <property name="text">
+                    <string>Browse</string>
+                </property>
+                <property name="accel">
+                    <string></string>
+                </property>
+            </widget>
         </widget>
     </widget>
 </widget>
@@ -1235,6 +1245,12 @@
         <receiver>AmberConfigurationDialogData</receiver>
         <slot>chooseSolventFile()</slot>
     </connection>
+    <connection>
+        <sender>boundary_box</sender>
+        <signal>stateChanged(int)</signal>
+        <receiver>AmberConfigurationDialogData</receiver>
+        <slot>periodicBoundaryClicked()</slot>
+    </connection>
 </connections>
 <tabstops>
     <tabstop>parameter_file_edit</tabstop>
@@ -1263,6 +1279,7 @@
     <slot>browseParameterFiles()</slot>
     <slot>resetOptions()</slot>
     <slot>chooseSolventFile()</slot>
+    <slot>periodicBoundaryClicked()</slot>
 </slots>
 <exportmacro>BALL_EXPORT</exportmacro>
 <layoutdefaults spacing="6" margin="11"/>

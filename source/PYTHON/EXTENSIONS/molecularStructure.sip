@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularStructure.sip,v 1.1 2004/04/16 13:44:25 amoll Exp $
+// $Id: molecularStructure.sip,v 1.2 2004/04/23 13:06:53 amoll Exp $
 //
 
 class  MolecularStructure
@@ -26,7 +26,7 @@ class  MolecularStructure
   bool checkResidue();
   void centerCamera(Composite*);
   void addHydrogens();
-  void amberMDSimulation();
+  void MDSimulation();
   void buildBonds();
   void buildPeptide();
   void calculateForceFieldEnergy();
