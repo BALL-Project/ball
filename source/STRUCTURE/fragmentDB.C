@@ -1,4 +1,4 @@
-// $Id: fragmentDB.C,v 1.2 1999/09/17 16:35:48 oliver Exp $
+// $Id: fragmentDB.C,v 1.3 1999/09/26 17:20:07 oliver Exp $
 
 #include <BALL/STRUCTURE/fragmentDB.h>
 
@@ -1892,7 +1892,6 @@ namespace BALL
 				return Processor::CONTINUE;
 			} else {
 				String variant_name = tmp->getName();
-				cout << "reference variant for " << residue_->getName() << " is: " << variant_name << endl;
 			
 				if (h_table_.has(variant_name)) 
 				{
