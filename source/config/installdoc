@@ -1,0 +1,7 @@
+#!/usr/local/bin/bash
+WEBDIR=/www/pub/homepage/oliver/BALL/doc
+echo "copying postscript and PDF documentation..."
+cp ../doc/BALL.ps ../doc/BALL.pdf ${WEBDIR}
+rm -fr ${WEBDIR}/html
+echo "copying html documentation..."
+(cd ../doc;gtar cf - html)|(cd ${WEBDIR}/doc;gtar xf -)
