@@ -1,4 +1,4 @@
-// $Id: steepestDescent.C,v 1.4 1999/09/17 17:19:42 oliver Exp $
+// $Id: steepestDescent.C,v 1.5 1999/09/25 12:14:56 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/steepestDescent.h>
 #include <BALL/COMMON/limits.h>
@@ -257,7 +257,7 @@ namespace BALL
 			}
 
 			// Test if the energy has to be written
-			if (number_of_iteration_ % energy_output_frequency_ == 0)
+			if ((number_of_iteration_ % energy_output_frequency_) == 0)
 			{
 				Log.info() << "iteration " << number_of_iteration_ 
 									 << " energy: " << energy << " kJ/mol"

@@ -1,4 +1,4 @@
-// $Id: energyMinimizer.C,v 1.1 1999/08/26 08:02:45 oliver Exp $
+// $Id: energyMinimizer.C,v 1.2 1999/09/25 12:14:55 oliver Exp $
 
 #include <BALL/MOLMEC/MINIMIZATION/energyMinimizer.h>
 #include <BALL/COMMON/limits.h>
@@ -131,25 +131,25 @@ namespace BALL {
 		return snapshot_;
 	}
 	// Set the trajectory
-	void	EnergyMinimizer::setSnapshot(Snapshot& snapshot)
+	void EnergyMinimizer::setSnapshot(Snapshot& snapshot)
 	{
 		snapshot_ = snapshot;
 	}
 */
 	//	Set the energy output frequency
-	void    EnergyMinimizer::setEnergyOutputFrequency(Size   energy_output_frequency)
+	void EnergyMinimizer::setEnergyOutputFrequency(Size energy_output_frequency)
 	{
 		energy_output_frequency_ = energy_output_frequency;
 	}
 
 	//	Get the energy ouput frequency
-	Size    EnergyMinimizer::getEnergyOutputFrequency() const
+	Size EnergyMinimizer::getEnergyOutputFrequency() const
 	{
-		return	energy_output_frequency_;
+		return energy_output_frequency_;
 	}
 
 	// Set the energy difference bound
-	void	EnergyMinimizer::setEnergyDifferenceBound(float energy_difference_bound)
+	void EnergyMinimizer::setEnergyDifferenceBound(float energy_difference_bound)
 	{
 		energy_difference_bound_ = energy_difference_bound;
 	}
@@ -161,7 +161,7 @@ namespace BALL {
 	}
 
 	//	Set the maximal shift
-	void	EnergyMinimizer::setMaximalShift( float maximal_shift )
+	void EnergyMinimizer::setMaximalShift( float maximal_shift )
 	{
 		maximal_shift_ = maximal_shift;
 	}
@@ -173,15 +173,15 @@ namespace BALL {
 	}
 
 	//	Set the trajectory ouput frequency
-	void    EnergyMinimizer::setSnapshotOutputFrequency(Size snapshot_output_frequency)
+	void EnergyMinimizer::setSnapshotOutputFrequency(Size snapshot_output_frequency)
 	{
 		snapshot_output_frequency_ = snapshot_output_frequency;
 	}
 
 	//	Get the trajectory ouput frequency
-	Size    EnergyMinimizer::getSnapshotOutputFrequency() const
+	Size EnergyMinimizer::getSnapshotOutputFrequency() const
 	{
-		return	snapshot_output_frequency_;
+		return snapshot_output_frequency_;
 	}
 
 	// Get the force field of the energy minimizer
@@ -191,7 +191,7 @@ namespace BALL {
 	}
 
 	// setup methods
-	bool  EnergyMinimizer::setup(ForceField& force_field)
+	bool EnergyMinimizer::setup(ForceField& force_field)
 	{
 		// store the specified force field
 		force_field_ = &force_field; 
@@ -199,8 +199,8 @@ namespace BALL {
 		valid_ = force_field_->isValid();
 		if (!valid_)
 		{
-			Log.error() << "The force field of the energy minimizer is not valid! " <<
-							"Check the definition and initialization of the force field! " << endl;
+			Log.error() << "The force field of the energy minimizer is not valid! " 
+									<< "Check the definition and initialization of the force field! " << endl;
 			return valid_;
 		}
 

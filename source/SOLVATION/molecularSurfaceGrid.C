@@ -1,4 +1,4 @@
-// $Id: molecularSurfaceGrid.C,v 1.1 1999/08/26 08:02:44 oliver Exp $
+// $Id: molecularSurfaceGrid.C,v 1.2 1999/09/25 12:15:04 oliver Exp $
 
 #include <BALL/SOLVATION/molecularSurfaceGrid.h>
 
@@ -11,12 +11,10 @@ namespace BALL {
 		return (int)(*(long*)a - *(long*)b);
 	}
 
-	PointGrid<char> *calculateSESGrid(
-				const Vector3 &lower, 
-				const Vector3 &upper,
-				const float spacing,
-				const System &system, 
-				const float probe_radius)
+	PointGrid<char> *calculateSESGrid
+		(const Vector3& lower, const Vector3& upper,
+		 const float spacing, const System& system, 
+		 const float probe_radius)
 	{
 
 		// points in the grid marked with
@@ -71,8 +69,9 @@ namespace BALL {
 
 		grid = new PointGrid<char>(lower, upper, spacing);
 		
-		if ((grid == NULL) || (!grid->isValid())){
-					return NULL;
+		if ((grid == 0) || (!grid->isValid()))
+		{
+			return 0;
 		}
 				
 
@@ -347,9 +346,9 @@ namespace BALL {
 
 		grid = new PointGrid<char>(lower, upper, spacing);
 
-				
-		if ((grid == NULL) || (!grid->isValid())){
-					return NULL;
+		if ((grid == 0) || !grid->isValid())
+		{
+			throw Exception::OutOfMemory(__FILE__, __LINE__);
 		}
 				
 		

@@ -1,4 +1,4 @@
-// $Id: poissonBoltzmann.C,v 1.2 1999/09/22 17:43:51 oliver Exp $ 
+// $Id: poissonBoltzmann.C,v 1.3 1999/09/25 12:15:05 oliver Exp $ 
 // FDPB: Finite Difference Poisson Solver
 
 #include <BALL/SOLVATION/poissonBoltzmann.h>
@@ -335,7 +335,9 @@ namespace BALL
 		}
 		
 		if (verbosity > 1)
+		{
 			Log.info(2) << "calculating SES..." << endl;
+		}
 					
 		SES_grid = calculateSESGrid(lower_, upper_, spacing_, system, probe_radius); 
 		
