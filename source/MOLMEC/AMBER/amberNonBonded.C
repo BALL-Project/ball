@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.C,v 1.15 2001/06/25 12:52:37 anker Exp $
+// $Id: amberNonBonded.C,v 1.16 2001/06/26 02:41:32 oliver Exp $
 
 #include <BALL/MOLMEC/AMBER/amberNonBonded.h>
 #include <BALL/MOLMEC/AMBER/amber.h>
@@ -188,7 +188,6 @@ namespace BALL
 	void AmberNonBonded::update()
 		throw()
 	{
-		Log.info() << "entering AMberNonBonded::update()" << endl;
 		if (getForceField() == 0) 
 		{
 			Log.error() << "AmberNonBonded::update(): "
@@ -208,7 +207,6 @@ namespace BALL
 		{
 			// eliminate all those pairs where none of the two atoms is selected
 			Size number_of_selected_pairs = MolmecSupport::sortNonBondedAtomPairsAfterSelection(atom_pair_vector);
-			Log.info() << "AmberNonBonded: " << (float)number_of_selected_pairs / atom_pair_vector.size() * 100.0 << "% selected pairs" << endl;
 			atom_pair_vector.resize(number_of_selected_pairs);
 		}
 
@@ -220,7 +218,6 @@ namespace BALL
 	bool AmberNonBonded::setup()
 		throw()
 	{
-		Log.info() << "entering AmberNonBonded::setup()" << endl;
 		if (getForceField() == 0) 
 		{
 			Log.error() << "AmberNonBonded::setup(): "
@@ -845,8 +842,14 @@ namespace BALL
 		// now apply the force to the atoms
 		Vector3 force = (float)factor * direction; 
 
-		it->atom1->setForce(it->atom1->getForce() + force);
-		it->atom2->setForce(it->atom2->getForce() - force);
+		if (it->atom1->isSelected()) 
+		{
+			it->atom1->setForce(it->atom1->getForce() + force);
+		}
+		if (it->atom2->isSelected())
+		{
+			it->atom2->setForce(it->atom2->getForce() - force);
+		}
 	} // end of function 	AMBERcalculateNBForce()
 
 
@@ -1078,7 +1081,7 @@ namespace BALL
 			{
 				AMBERcalculateNBForce
 					(it, FORCE_PARAMETERS, e_scaling_factor, 
-					 vdw_scaling_factor, is_hydrogen_bond_[i], true,true);
+					 vdw_scaling_factor, is_hydrogen_bond_[i], true, true);
 			}
 		}
 		else
@@ -1153,7 +1156,7 @@ namespace BALL
 					{
 						AMBERcalculateNBForce
 							(it, FORCE_PARAMETERS, e_scaling_factor, 
-							 vdw_scaling_factor, is_hydrogen_bond_[i], false,false);
+							 vdw_scaling_factor, is_hydrogen_bond_[i], false, false);
 					}
 				}
 			}
