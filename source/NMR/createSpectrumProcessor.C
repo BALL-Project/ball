@@ -1,4 +1,4 @@
-// $Id: createSpectrumProcessor.C,v 1.7 2000/09/27 13:34:05 oliver Exp $
+// $Id: createSpectrumProcessor.C,v 1.8 2000/09/27 18:05:24 oliver Exp $
 
 #include <BALL/NMR/createSpectrumProcessor.h>
 #include <BALL/NMR/shiftModule.h>
@@ -117,6 +117,7 @@ namespace BALL
 					peak.setWidth(1.0);
 					peak.setHeight(1.0);
 					peaklist_.push_back(peak);	
+					Log.info() << "inserting " << atom->getFullName() << " into peak list as #" << peaklist_.size() << endl;
 				}
 				else 
 				{

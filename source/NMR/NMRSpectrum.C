@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum.C,v 1.9 2000/09/27 13:34:05 oliver Exp $
+// $Id: NMRSpectrum.C,v 1.10 2000/09/27 18:05:18 oliver Exp $
 
 #include<BALL/NMR/NMRSpectrum.h>
 #include<BALL/NMR/randomCoilShiftProcessor.h>
@@ -171,19 +171,20 @@ namespace BALL
 		float shift;
 		ofstream outfile (filename.c_str(), ios::out);
 
-		AtomIterator atom_iter = system_->beginAtom();
-		for (; atom_iter != system_->endAtom(); ++atom_iter)
+		list<Peak1D>::const_iterator list_it(spectrum_.begin());
+		for (; list_it != spectrum_.end(); ++list_it)
 		{
-			shift = (*atom_iter).getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
-			// if (shift != 0.0)
+			const Atom* atom_ptr = list_it->getAtom();
+			if (atom_ptr != 0)
 			{
-				outfile << atom_iter->getResidue()->getName() << atom_iter->getResidue()->getID()
-								<< ":"  << atom_iter->getName() << " " << shift << " ";
-				outfile << atom_iter->getProperty(RandomCoilShiftProcessor::PROPERTY__RANDOM_COIL_SHIFT).getFloat() << " ";
-				outfile << atom_iter->getProperty(AnisotropyShiftProcessor::PROPERTY__ANISOTROPY_SHIFT).getFloat() << " ";
-				outfile << atom_iter->getProperty(EFShiftProcessor::PROPERTY__EF_SHIFT).getFloat() << " ";
-				outfile << atom_iter->getProperty(JohnsonBoveyShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat() << " ";
-				outfile << atom_iter->getProperty(HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat() << " " << endl;
+				shift = atom_ptr->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
+				outfile << atom_ptr->getResidue()->getName() << atom_ptr->getResidue()->getID()
+								<< ":"  << atom_ptr->getName() << " " << shift << " ";
+				outfile << atom_ptr->getProperty(RandomCoilShiftProcessor::PROPERTY__RANDOM_COIL_SHIFT).getFloat() << " ";
+				outfile << atom_ptr->getProperty(AnisotropyShiftProcessor::PROPERTY__ANISOTROPY_SHIFT).getFloat() << " ";
+				outfile << atom_ptr->getProperty(EFShiftProcessor::PROPERTY__EF_SHIFT).getFloat() << " ";
+				outfile << atom_ptr->getProperty(JohnsonBoveyShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat() << " ";
+				outfile << atom_ptr->getProperty(HaighMallionShiftProcessor::PROPERTY__RING_CURRENT_SHIFT).getFloat() << " " << endl;
 			}
 		}
 	}
