@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile.C,v 1.49 2003/04/12 10:02:28 oliver Exp $
+// $Id: HINFile.C,v 1.50 2003/05/05 20:43:30 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -286,8 +286,18 @@ namespace BALL
 				name.trim();
 			}
 
-			// write the molecule identifier	
-			getFileStream() << "mol " << j + 1 << " " << name << endl;
+			// Write the molecule identifier	
+			// For recent versions of HyperChem, the name has to be enclosed in double quotes.
+			if (name != "")
+			{
+				// Make sure the name does not contain double quotes.
+				name.erase('"');
+				getFileStream() << "mol " << j + 1 << " \"" << name << "\"" << std::endl;
+			}
+			else
+			{
+				getFileStream() << "mol " << j + 1 << std::endl;
+			}
 			
 			// now iterate over all atoms and write them
 			const Residue* current_residue = 0;
@@ -330,7 +340,9 @@ namespace BALL
 						name.trim();
 						if (name == "")
 						{
-							name = "-";
+							// If the ID is not set, it defaults to the
+							// current residue number.
+							name = String(res_count - 1);
 						}
 
 						getFileStream() << name << " - ";
@@ -783,9 +795,22 @@ namespace BALL
 
 					if (getLine().countFields() > 2)
 					{
-						String name = getLine().getField(2);
+						String name = getLine().after("mol ");
 						if ((name != "") && (name != "-"))
 						{
+							// Remove leading/trailing blanks from the name.
+							name.trim();
+							
+							// For newer versions of HyperChem, the name has to be
+							// enclosed in double quotes.
+							if (name[0] == '"')
+							{
+								name.erase(0, 1);
+							}
+							if (name[-1] == '"')
+							{
+								name.erase(name.size() - 1, 1);
+							}
 							molecule->setName(name);
 						}	
 					}
