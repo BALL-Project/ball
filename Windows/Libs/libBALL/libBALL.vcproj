@@ -402,6 +402,9 @@
 					</FileConfiguration>
 				</File>
 				<File
+					RelativePath="..\..\..\source\Common\MD5Hash.C">
+				</File>
+				<File
 					RelativePath="..\..\..\source\COMMON\rtti.C">
 					<FileConfiguration
 						Name="Debug|Win32">
@@ -1079,6 +1082,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\source\FORMAT\JCAMPFile.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\Format\KCFFile.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\FORMAT\lineBasedFile.C">
@@ -1994,6 +2000,9 @@
 				Filter="">
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\analyticalSES.C">
+				</File>
+				<File
+					RelativePath="..\..\..\source\Structure\buildBondsProcessor.C">
 				</File>
 				<File
 					RelativePath="..\..\..\source\STRUCTURE\connolly.C">
