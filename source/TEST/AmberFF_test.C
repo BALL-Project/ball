@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: AmberFF_test.C,v 1.14 2004/03/08 21:44:03 oliver Exp $
+// $Id: AmberFF_test.C,v 1.15 2004/03/09 20:53:27 oliver Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -15,7 +15,7 @@
 
 ///////////////////////////
 
-START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.14 2004/03/08 21:44:03 oliver Exp $")
+START_TEST(AmberFF, "$Id: AmberFF_test.C,v 1.15 2004/03/09 20:53:27 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -393,6 +393,124 @@ CHECK([EXTRA] Energies w/ selection)
 	TEST_REAL_EQUAL(ff.getEnergy(), -3.140)
 	TEST_REAL_EQUAL(ff.getVdWEnergy(), 5.741)
 	TEST_REAL_EQUAL(ff.getESEnergy(), -11.394)
+RESULT
+
+CHECK([EXTRA] Additivity of energies w/ selection)
+	HINFile f("data/G4.hin");
+	System S;
+	f.read(S);
+
+	ABORT_IF(S.countAtoms() != 31)
+	AmberFF ff;
+	ff.options[AmberFF::Option::OVERWRITE_TYPENAMES] = "true";
+	ff.options[AmberFF::Option::ASSIGN_TYPENAMES] = "true";
+	ff.options[AmberFF::Option::ASSIGN_CHARGES] = "true";
+	ff.options[AmberFF::Option::OVERWRITE_CHARGES] = "true";
+
+	ff.setup(S);
+	double total_energy = ff.updateEnergy();
+	STATUS("total  : " << total_energy)
+
+	ResidueIterator ri(S.beginResidue());
+	Residue& r1 = *ri++;
+	Residue& r2 = *ri++;
+	Residue& r3 = *ri++;
+	Residue& r4 = *ri;
+
+	r1.select();
+	r2.select();
+	r3.select();
+	ff.setup(S);
+	S.deselect();
+	r1.select();
+	double r1_tpl = ff.updateEnergy();
+	STATUS("  ES : " << ff.getESEnergy())
+	STATUS("  VDW: " << ff.getVdWEnergy())
+	STATUS("  STR: " << ff.getStretchEnergy())
+	STATUS("  BEN: " << ff.getBendEnergy())
+	STATUS("  TOR: " << ff.getTorsionEnergy())
+	STATUS("  TTL: " << ff.getEnergy())
+	STATUS("r1 - tpl: " << r1_tpl)
+	
+	S.select();
+	r1.deselect();
+	ff.setup(S);
+	S.deselect();
+	r4.select();
+	double r4_tpl = ff.updateEnergy();
+	STATUS("  ES : " << ff.getESEnergy())
+	STATUS("  VDW: " << ff.getVdWEnergy())
+	STATUS("  STR: " << ff.getStretchEnergy())
+	STATUS("  BEN: " << ff.getBendEnergy())
+	STATUS("  TOR: " << ff.getTorsionEnergy())
+	STATUS("  TTL: " << ff.getEnergy())
+	STATUS("r4 - tpl: " << r4_tpl)
+	
+	S.deselect();
+	r1.select();
+	r4.select();
+	ff.setup(S);
+	r4.deselect();
+	double r1_r4 = ff.updateEnergy();
+	STATUS("  ES : " << ff.getESEnergy())
+	STATUS("  VDW: " << ff.getVdWEnergy())
+	STATUS("  STR: " << ff.getStretchEnergy())
+	STATUS("  BEN: " << ff.getBendEnergy())
+	STATUS("  TOR: " << ff.getTorsionEnergy())
+	STATUS("  TTL: " << ff.getEnergy())
+	STATUS("r1 - r4 : " << r1_r4)
+
+	r4.select();
+	r1.deselect();
+	double r4_r1 = ff.updateEnergy();
+	STATUS("  ES : " << ff.getESEnergy())
+	STATUS("  VDW: " << ff.getVdWEnergy())
+	STATUS("  STR: " << ff.getStretchEnergy())
+	STATUS("  BEN: " << ff.getBendEnergy())
+	STATUS("  TOR: " << ff.getTorsionEnergy())
+	STATUS("  TTL: " << ff.getEnergy())
+	STATUS("r4 - r1 : " << r4_r1)
+
+	S.deselect();
+	r1.select();
+	ff.setup(S);
+	double r1_i = ff.updateEnergy();
+	STATUS("  ES : " << ff.getESEnergy())
+	STATUS("  VDW: " << ff.getVdWEnergy())
+	STATUS("  STR: " << ff.getStretchEnergy())
+	STATUS("  BEN: " << ff.getBendEnergy())
+	STATUS("  TOR: " << ff.getTorsionEnergy())
+	STATUS("  TTL: " << ff.getEnergy())
+	STATUS("r1_i    : " << r1_i)
+
+	S.deselect();
+	r4.select();
+	ff.setup(S);
+	double r4_i = ff.updateEnergy();
+	STATUS("  ES : " << ff.getESEnergy())
+	STATUS("  VDW: " << ff.getVdWEnergy())
+	STATUS("  STR: " << ff.getStretchEnergy())
+	STATUS("  BEN: " << ff.getBendEnergy())
+	STATUS("  TOR: " << ff.getTorsionEnergy())
+	STATUS("  TTL: " << ff.getEnergy())
+	STATUS("r4_i    : " << r4_i)
+
+	S.deselect();
+	r2.select();
+	r3.select();
+	ff.setup(S);
+	double tpl_i = ff.updateEnergy();
+	STATUS("  ES : " << ff.getESEnergy())
+	STATUS("  VDW: " << ff.getVdWEnergy())
+	STATUS("  STR: " << ff.getStretchEnergy())
+	STATUS("  BEN: " << ff.getBendEnergy())
+	STATUS("  TOR: " << ff.getTorsionEnergy())
+	STATUS("  TTL: " << ff.getEnergy())
+	STATUS("tpl_i   : " << tpl_i)
+
+	TEST_REAL_EQUAL(r4_r1 - r4_i, r1_r4 - r1_i)
+	TEST_REAL_EQUAL(r4_r1 - r4_i + r4_tpl + r1_tpl + tpl_i, total_energy)
+	TEST_REAL_EQUAL(r1_r4 - r1_i + r1_tpl + r4_tpl + tpl_i, total_energy)	
 RESULT
 
 /////////////////////////////////////////////////////////////
