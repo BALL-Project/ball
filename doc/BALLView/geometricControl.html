@@ -16,11 +16,13 @@ To color a surface, it has to be selected and the context menu entry "Color Surf
 BALLView provides two possibilities to color surfaces:<br>
 
 <H4>Coloring by grids</H4>
+Informations on how to create and manage data grids can be found <a href="datasetControl.html#data_grids">here</a>.<br><br>
 <img src="images/color_surface1.png" width=506 height=286 border=0><br><br>
-Informations on how to create and manage data grids can be found <a href="datasetControl.html#data_grids">here</a>.<br>
+
 At the top of the dialog, the user can select the grid, which he wants to use for coloring.
 At every point of the surface, the value in the three-dimensional data grid is interpolated to a color,
-which is then used to color the surface. The colors, which are used come next.
+which is then used to color the surface. 
+The colors, can be freely selected. If they are clicked, a dialog for color selection appears.
 The min, mid and max colors are the colors between which is interpolated. They 
 correspond to the values, between which is interpolated.
 The min min and max max colors are used for points in the data grid, which are outside 
@@ -32,9 +34,25 @@ If the user wants to have a transparent surface, the must select "alpha-blending
 Then he can change the alpha values (opacity) for any color.
 <br><br>
 An example for the settings above:<br>
-<img src="images/distance_grid.png" width=362 height=209 border=0><br>
+<img src="images/distance_grid.png" width=362 height=209 border=0><br><br>
 
 <H4>Coloring by custom color</H4>
-<img src="images/color_surface2.png" width=506 height=285 border=0><br>
+<img src="images/color_surface2.png" width=506 height=285 border=0><br><br>
+This part of the dialog enables the user to color a surface with only one color. 
+The color can be freely selected, either by clicking on it and using a color selection dialog
+or by using the color value sliders to the left.
+The surface can also be made transparent by setting the alpha value. 
+Here an example with an alpha value of 80 and an underlying stick model:<br><br>
+<img src="images/custom_color.png" width=367 height=219 border=0>
 
-<H3>Usage of cutting planes</H3>
+
+<a name="clipping_planes"><H3>Usage of cliping planes</H3></a>
+
+Cliping planes are very useful for improving the visibility of otherwise hidden parts of molecules.
+They cut of any graphical representation. Unfortunately it is not possible to use them with only one
+Representation and let any other be unaffected. An example for their usage:<br><br>
+<img src="images/clipping.jpg" border=0><br><br>
+A new clipping plane is created by clicking the menu entry "Display->New Clipping Plane".
+To position the clipping plane, it is best to switch it off first. When this is done, the clipping plane
+becomes visible as a blue plane, which can then be moved by clicking the menu entry "Move" in
+the context menu of the GeometricControl. The clipping plane can be switched on and off at any time.

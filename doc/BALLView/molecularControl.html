@@ -17,14 +17,15 @@ the Shift- or Control-modifier.
 A click with the right mouse button will open a context menu, which will operate on the highlighted molecular items:<br><br>
 <img src="images/mc_context_menu.png" width=490 height=276 border=0>
 
-<H3>Selections</H3>
+<a name="find_atom"><H3>Selections (or how to find an atom)</H3></a>
 Left from the names of the molecular entities are checkboxes, which show the user which molecular entities are 
 currently selected (picked). The selected objects become colored in the <a href="scene.html">Scene</a>.
+This can be used to find an atom in the three-dimensional structure of its molecule.
 If a user starts a MD-Simulation or a Energy Minimization while some molecular entities are selected, 
 BALLView only operates only on these items. (Which is e.g. usefull for optimising the position of only the hydrogen atoms
 of a protein from a PDB-file.)
-
-<H3>Cut, Copy, Paste</H3>
+<p></p>
+<a name="merge_systems"><H3>Cut, Copy, Paste</H3></a>
 The user can cut or copy any molecular entities in the Molecular Control and also paste them into other objects
 (see the Menu point "Edit"). <br>
 This makes it possible e.g. to merge Systems:
@@ -37,7 +38,7 @@ This makes it possible e.g. to merge Systems:
 	<li>The first System can now be deleted</li>
 </ol>
 
-<H3>Regular expressions</H3>
+<a name="regular_expressions"><H3>Regular expressions</H3></a>
 At the bottom of the Molecular Control resides a yellow text field.
 In this text field, the user can enter regular expressions to select molecular entities.
 To apply the typed expression, the Return key has to be pressed. The button next to the text field
@@ -74,10 +75,11 @@ Possible predicates are:
     <tr><td> is4C1() </td><td>  </td></tr>
   </tbody>
 </table>
-<p></p>
+<br>
 
 All predicates can be connected with AND and OR, grouped with brackets, and each predicate can be negated with '!'<br>
 Example: <b>!residueID(12) AND (element(N) OR element(C))</b>
+<p></p>
 
 <H3>Properties of Molecular Entities</H3>
 To view and modify the properties of molecular entities, BALLView offers a special dialog, which can be opened 
@@ -90,7 +92,7 @@ The informations like charge and position are then shown in the LogView.)
 
 An other dialog enables the user to obtain all informations of any bond. To open this dialog, one atom has to be highlighted and 
 the context menu entry "Show Bonds" has to be clicked. The arrow buttons in the dialog enable the user to 
-identify the partner atoms in the bond<br>
+identify the partner atoms in the bond<br><br>
 <img src="images/bond_properties.png" width=311 height=286 border=0>
 
 <H3>Distances and angles between atoms</H3>
