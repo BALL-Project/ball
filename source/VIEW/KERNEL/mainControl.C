@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.95 2004/07/04 15:18:18 amoll Exp $
+// $Id: mainControl.C,v 1.96 2004/07/04 17:04:12 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -366,7 +366,7 @@ namespace BALL
 																					SLOT(show()), CTRL+Key_Z);
 			}
 
-			restoreWindows();
+			restoreWindows(preferences_);
 			QMainWindow::show();
 		}
 
@@ -809,6 +809,8 @@ namespace BALL
 			{
 				main_control_preferences_->fetchPreferences(inifile);
 			}
+
+			restoreWindows(inifile);
 		}
 
 		void MainControl::writePreferences(INIFile &inifile)
@@ -1147,12 +1149,12 @@ namespace BALL
 			QWidget::update();
 		}
 
-		void MainControl::restoreWindows()
+		void MainControl::restoreWindows(const INIFile& inifile)
 			throw()
 		{
-			if (!getINIFile().hasEntry("WINDOWS", "Main::dockwidgets")) return;
+			if (!inifile.hasEntry("WINDOWS", "Main::dockwidgets")) return;
 
-			String mys(getINIFile().getValue("WINDOWS", "Main::dockwidgets"));
+			String mys(inifile.getValue("WINDOWS", "Main::dockwidgets"));
 			for (Position p = 0; p < mys.size(); p++)
 			{
 				if (mys[p] == '*') mys[p] = '\n';

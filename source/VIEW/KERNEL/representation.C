@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.40 2004/07/04 16:32:40 amoll Exp $
+// $Id: representation.C,v 1.41 2004/07/04 17:04:12 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -495,7 +495,6 @@ namespace BALL
 			result += String(model_type_) + " ";
 			result += String(coloring_method_) + " ";
 			result += String(transparency_) + " ";
-			result += String(coloring_method_) + " ";
 
 			if (composites_.size() == 0)
 			{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.C,v 1.66 2004/07/03 12:09:30 amoll Exp $
+// $Id: displayProperties.C,v 1.67 2004/07/04 17:04:12 amoll Exp $
 //
 
 #include <BALL/VIEW/DIALOGS/displayProperties.h>
@@ -51,7 +51,8 @@ DisplayProperties::DisplayProperties(QWidget* parent, const char* name)
 		preferences_(0),
 		id_(-1),
 		rep_(0),
-		advanced_options_modified_(false)
+		advanced_options_modified_(false),
+		create_representations_for_new_molecules_(true)
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new DisplayProperties " << this << std::endl;
@@ -337,7 +338,11 @@ void DisplayProperties::onNotify(Message *message)
 	if (RTTI::isKindOf<CompositeMessage>(*message))
 	{
 		CompositeMessage *composite_message = RTTI::castTo<CompositeMessage>(*message);
-		if (composite_message->getType() != CompositeMessage::NEW_MOLECULE) return;
+		if (composite_message->getType() != CompositeMessage::NEW_MOLECULE ||
+				!create_representations_for_new_molecules_) 
+		{
+			return;
+		}
 		// generate graphical representation
 		List<Composite*> clist;
 		clist.push_back(composite_message->getComposite());
@@ -908,5 +913,43 @@ void DisplayProperties::defaultPreferences()
 	if (coloring_settings_ != 0) coloring_settings_->setDefaultValues();
 }
 
+bool DisplayProperties::getSettingsFromString(const String& data)
+	throw()
+{
+	vector<String> fields;
+	if (data.split(fields) < 6) return false;
+	
+	try
+	{
+		selectMode(fields[0].toUnsignedInt());
+		setDrawingPrecision(fields[1].toUnsignedInt());
+		setSurfaceDrawingPrecision(fields[2].toFloat());
+		selectModel(fields[3].toUnsignedInt());
+		selectColoringMethod(fields[4].toUnsignedInt());
+		setTransparency(fields[5].toUnsignedInt());
+	}
+	catch(...)
+	{
+		return false;
+	}
 
+	return true;
+	}
+
+
+	void DisplayProperties::setSurfaceDrawingPrecision(float value)
+	{
+		precision_slider->setValue((int)(value * 10.0));
+	}
+			
+	void DisplayProperties::setDrawingPrecision(int value)
+	{
+		precision_combobox->setCurrentItem(value);
+	}
+
+	void DisplayProperties::setTransparency(int value)
+	{
+		transparency_slider->setValue(value);
+	}
+	
 } } // namespaces

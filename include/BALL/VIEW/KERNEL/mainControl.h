@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.h,v 1.48 2004/07/03 12:10:09 amoll Exp $
+// $Id: mainControl.h,v 1.49 2004/07/04 17:04:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_MAINCONTROL_H
@@ -584,7 +584,7 @@ namespace BALL
 				throw();
 			
 			/// Restore the positions of all DockWindow's from the INIFile
-			virtual void restoreWindows()
+			virtual void restoreWindows(const INIFile& inifile)
 				throw();
 			
 			/** Add a new ModularWidget to this MainControl.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.31 2004/07/03 12:10:09 amoll Exp $
+// $Id: displayProperties.h,v 1.32 2004/07/04 17:04:45 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -167,6 +167,14 @@ namespace BALL
 			/// Set the selected Representation, which should be modified
 			void setRepresentation(Representation* rep)
 				throw() {rep_ = rep;}
+
+			/// Settings from String
+			bool getSettingsFromString(const String& data)
+				throw();
+
+			/// Set if Representations are automaticaly created for new Molecules
+			void enableCreationForNewMolecules(bool state) 
+				throw() { create_representations_for_new_molecules_ = state;}
 				
 			public slots:
 					
@@ -206,6 +214,15 @@ namespace BALL
 					\param  index the position of the entry in the combobox
 			*/
 			virtual void selectColoringMethod(int index);
+
+			///
+			virtual void setSurfaceDrawingPrecision(float value);
+			
+			///
+			virtual void setDrawingPrecision(int value);
+
+			///
+			virtual void setTransparency(int value);
 			
 			/** Indicates the apply button was pressed.
 					Applies the selected model with its selected properties to 
@@ -285,6 +302,7 @@ namespace BALL
 
 			ColorRGBA 			custom_color_;
 			bool 						advanced_options_modified_;
+			bool 						create_representations_for_new_molecules_;
 		};
 
 } } // namespaces

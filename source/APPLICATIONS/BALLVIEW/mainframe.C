@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.10 2004/07/04 14:00:00 amoll Exp $
+// $Id: mainframe.C,v 1.11 2004/07/04 17:04:22 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -306,21 +306,22 @@ namespace BALL
 		out.appendSection("WINDOWS");
 
 		// check menu entries, fetch and apply preferences
-		List<ModularWidget*>::Iterator it = modular_widgets_.begin(); 
-		for (it = modular_widgets_.begin(); it != modular_widgets_.end(); ++it)
+		List<ModularWidget*>::Iterator mit = modular_widgets_.begin(); 
+		for (mit = modular_widgets_.begin(); mit != modular_widgets_.end(); ++mit)
 		{
-			(*it)->writePreferences(out);
+			(*mit)->writePreferences(out);
 		}
 		
 
 		List<Composite*>& selected_composites = getMolecularControlSelection();
+		System& system = *(System*)*selected_composites.begin();
 		if (selected_composites.size() != 0)
 		{
 			String molecular_file = String(result.ascii())+"_molecule.pdb";
 			out.appendSection("BALLVIEW_PROJECT");
 			out.insertValue("BALLVIEW_PROJECT", "MolecularFile", molecular_file);
 
-			file_dialog_->writePDBFile(molecular_file, *(System*)*selected_composites.begin());
+			file_dialog_->writePDBFile(molecular_file, system);
 		}
 		else
 		{
@@ -328,6 +329,30 @@ namespace BALL
 		}
 
 		out.insertValue("BALLVIEW_PROJECT", "Camera", scene_->getStage()->getCamera().toString());
+
+		Position nr_of_representations = 0;
+		PrimitiveManager::RepresentationsConstIterator it = getPrimitiveManager().begin();
+		for (; it != getPrimitiveManager().end(); it++)
+		{
+			bool ok = true;
+			Representation::CompositesConstIterator cit = (**it).begin();
+			for (; cit != (**it).end(); cit++)
+			{
+				if ((**cit).getRoot() != system)
+				{
+					ok = false;
+					break;
+				}
+			}
+
+			if (!ok) continue;
+
+			out.insertValue("BALLVIEW_PROJECT", 
+											String("Representation") + String(nr_of_representations),
+											(**it).toString());
+			nr_of_representations++;
+		}
+				
 
 		writePreferences(out);
 	} 
@@ -365,9 +390,24 @@ namespace BALL
 		if (in.hasEntry("BALLVIEW_PROJECT", "MolecularFile"))
 		{
 			molecular_file = in.getValue("BALLVIEW_PROJECT", "MolecularFile");
+			display_properties_->enableCreationForNewMolecules(false);
 			openFile(molecular_file);
 		}
 		
+		for (Position p = 0; p < 9999999; p++)
+		{
+			if (!in.hasEntry("BALLVIEW_PROJECT", "Representation" + String(p)))
+			{
+				break;
+			}
+
+			display_properties_->getSettingsFromString(
+					in.getValue("BALLVIEW_PROJECT", "Representation" + String(p)));
+			display_properties_->applyButtonClicked();
+		}
+
+		fetchPreferences(in);
+
 		if (in.hasEntry("BALLVIEW_PROJECT", "Camera"))
 		{
 			Stage stage;
@@ -384,7 +424,7 @@ namespace BALL
 			notify_(msg);
 		}
 
-		fetchPreferences(in);
+		display_properties_->enableCreationForNewMolecules(true);
 	}
 
 }
