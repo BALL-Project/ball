@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.128 2004/02/23 16:27:22 oliver Exp $
+// $Id: mainframe.C,v 1.129 2004/02/23 22:04:54 amoll Exp $
 //
 
 #include "mainframe.h"
@@ -165,12 +165,6 @@ namespace BALL
 	Mainframe::~Mainframe()
 		throw()
 	{
-	}
-
-	void Mainframe::onNotify(Message *message)
-		throw()
-	{
-		MainControl::onNotify(message);
 	}
 
 	void Mainframe::checkMenus()

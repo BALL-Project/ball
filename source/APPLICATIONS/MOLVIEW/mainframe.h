@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.66 2004/02/23 16:27:22 oliver Exp $
+// $Id: mainframe.h,v 1.67 2004/02/23 22:05:14 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -98,8 +98,6 @@ namespace BALL
 
 		virtual ~Mainframe() throw();
 
-		virtual void onNotify(Message *message) throw();
-		
 
 		public slots:
 
