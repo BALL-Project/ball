@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: Object_test.C,v 1.12 2002/12/12 11:34:42 oliver Exp $
+// $Id: Object_test.C,v 1.13 2003/06/16 16:13:52 anker Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -12,7 +12,7 @@
 
 ///////////////////////////
 
-START_TEST(Object, "$Id: Object_test.C,v 1.12 2002/12/12 11:34:42 oliver Exp $")
+START_TEST(Object, "$Id: Object_test.C,v 1.13 2003/06/16 16:13:52 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -23,7 +23,7 @@ using namespace BALL;
 
 Object* ptr = 0;
 Object* ptr2 = 0;
-CHECK(Object::Object() throw())
+CHECK(Object() throw())
 	ptr = new Object;
 	Handle h = ptr->getHandle();
 	TEST_NOT_EQUAL(ptr, 0)
@@ -32,13 +32,13 @@ CHECK(Object::Object() throw())
 RESULT
 
 
-CHECK(Object::~Object() throw())
+CHECK(~Object() throw())
 	delete ptr;
 	delete ptr2;
 RESULT
 
 
-CHECK(Object::Object(const Object& object, bool deep = true) throw())
+CHECK(Object(const Object& object) throw())
 	Object object1;
 	Object object2(object1);
 	bool test = (object1 == object1);
@@ -48,25 +48,13 @@ CHECK(Object::Object(const Object& object, bool deep = true) throw())
 RESULT
 
 
-CHECK(Object::clear() throw())
+CHECK(void clear() throw())
 	Object o;
 	o.clear();
 RESULT
 
 
-CHECK(Object::getHandle() const  throw())
-	Object o1;
-	Object o2;
-	Object o3;
-	// check for correct incrementation of handles
-	TEST_NOT_EQUAL(o1.getHandle(), 0)
-	TEST_NOT_EQUAL(o1.getHandle(), o2.getHandle())
-	TEST_NOT_EQUAL(o1.getHandle(), o3.getHandle())
-	TEST_NOT_EQUAL(o2.getHandle(), o3.getHandle())
-RESULT
-
-
-CHECK(Object::Object& operator = (const Object& /* object */) throw())
+CHECK(const Object& operator = (const Object& /* object */) throw())
 	Object o1;
 	Object o2;
 	Handle handle1 = o1.getHandle();
@@ -78,13 +66,25 @@ CHECK(Object::Object& operator = (const Object& /* object */) throw())
 RESULT
 
 
-CHECK(Object::getNextHandle() throw())
+CHECK(Handle getHandle() const throw())
+	Object o1;
+	Object o2;
+	Object o3;
+	// check for correct incrementation of handles
+	TEST_NOT_EQUAL(o1.getHandle(), 0)
+	TEST_NOT_EQUAL(o1.getHandle(), o2.getHandle())
+	TEST_NOT_EQUAL(o1.getHandle(), o3.getHandle())
+	TEST_NOT_EQUAL(o2.getHandle(), o3.getHandle())
+RESULT
+
+
+CHECK(static Handle getNextHandle() throw())
 	Object o;
 	TEST_EQUAL(Object::getNextHandle(), o.getHandle() + 1)
 RESULT
 
 
-CHECK(Object::getNewHandle() throw())
+CHECK(static Handle getNewHandle() throw())
 	Object o;
 	Handle h = Object::getNewHandle();
 	TEST_EQUAL(h, o.getHandle() + 1)
@@ -93,7 +93,7 @@ CHECK(Object::getNewHandle() throw())
 RESULT
 
 
-CHECK(Object::bool operator == (const Object& object) const  throw())
+CHECK(bool operator == (const Object& object) const throw())
 	Object object6;
 	Object object7;
 	bool test = (object6 == object6);
@@ -103,7 +103,7 @@ CHECK(Object::bool operator == (const Object& object) const  throw())
 RESULT
 
 
-CHECK(Object::bool operator != (const Object& object) const  throw())
+CHECK(bool operator != (const Object& object) const throw())
 	Object object8;
 	Object object9;
 	bool test = (object8 != object8);
@@ -113,7 +113,7 @@ CHECK(Object::bool operator != (const Object& object) const  throw())
 RESULT
 
 
-CHECK(Object::bool operator < (const Object& object) const  throw())
+CHECK(bool operator < (const Object& object) const throw())
 	Object object10;
 	Object object11;
 	bool test = (object10 < object10);
@@ -125,7 +125,7 @@ CHECK(Object::bool operator < (const Object& object) const  throw())
 RESULT
 
 
-CHECK(Object::bool operator <= (const Object& object) const  throw())
+CHECK(bool operator <= (const Object& object) const throw())
 	Object object12;
 	Object object13;
 	bool test = (object12 <= object12);
@@ -137,7 +137,7 @@ CHECK(Object::bool operator <= (const Object& object) const  throw())
 RESULT
 
 
-CHECK(Object::bool operator >= (const Object& object) const  throw())
+CHECK(bool operator >= (const Object& object) const throw())
 	Object object14;
 	Object object15;
 	bool test = (object14 >= object14);
@@ -149,7 +149,7 @@ CHECK(Object::bool operator >= (const Object& object) const  throw())
 RESULT
 
 
-CHECK(Object::bool operator > (const Object& object) const  throw())
+CHECK(bool operator > (const Object& object) const throw())
 	Object object16;
 	Object object17;
 	bool test = (object16 > object16);
@@ -161,7 +161,7 @@ CHECK(Object::bool operator > (const Object& object) const  throw())
 RESULT
 
 
-CHECK(Object::compare(const Object& object) const  throw())
+CHECK(int compare(const Object& object) const throw())
 	Object object18;
 	Object object19;
 	Object object20;
@@ -174,13 +174,13 @@ CHECK(Object::compare(const Object& object) const  throw())
 RESULT
 
 
-CHECK(Object::isValid() const  throw())
+CHECK(bool isValid() const throw())
 	Object object21;
 	TEST_EQUAL(object21.isValid(), true)
 RESULT
 
 
-CHECK(Object::dump(std::ostream& s = std::cout, Size depth = 0) const  throw())
+CHECK(void dump(::std::ostream& s = std::cout, Size depth = 0) const throw())
 	Object o;
 	String filename;
   NEW_TMP_FILE(filename)
