@@ -1,4 +1,4 @@
-// $Id: global.h,v 1.6 2000/12/08 05:47:07 oliver Exp $
+// $Id: global.h,v 1.7 2000/12/12 16:14:46 oliver Exp $
 
 #ifndef BALL_COMMON_GLOBAL_H
 #define BALL_COMMON_GLOBAL_H
@@ -29,81 +29,119 @@ namespace BALL
 
 	/**	Distance type.
 			Use this type to represent distances in indices.
+			\\
+			{\bf Size:} 32 bit\\
+			{\bf persistent}
 	*/
-	typedef int 					Distance; 
+	typedef BALL_INDEX_TYPE	Distance; 
 
 	/**	Handle type.
 			Use this type to represent {\bf handles}. Handles are used
 			for the non-ambiguous identification of objects (e.g. object derived
       from \Ref{Object}).
+			\\
+			{\bf Size:} 32 bit\\
+			{\bf persistent}
   */
-	typedef unsigned int 	Handle;
+	typedef BALL_SIZE_TYPE 	Handle;
 
 	/**	Index type.
 			Use this type to represent indices (e.g. in strings or other sequences).
 			Theses indices may be signed, contrary to the \Ref{Size} type.
+			\\
+			{\bf Size:} 32 bit\\
+			{\bf persistent}
 	*/
 	typedef BALL_INDEX_TYPE	Index;
 
 	/**	Size type.
 			Use this type to represent sizes of containers, sequences or alike.
 			Variables of type Size are unsigned.
+			\\
+			{\bf Size:} 32 bit\\
+			{\bf persistent}
 	*/
 	typedef BALL_SIZE_TYPE 	Size;
 
 	/**	Time type.
 			Use this type to represent a point in time
 			(as a replaecement for time_t).
+			\\
+			{\bf Size:} platform dependent\\
+			{\bf not persistent}
 	*/
 	typedef time_t 	Time;
 
 	/**	HashIndex type.
 			Use this type to access the result of a hash functions. All hash functions
 			defined in namespace \Ref{Hashing} return a HashIndex. HashIndex is unsigned.
+			\\
+			{\bf Size:} 32 bit\\
+			{\bf persistent}
 	*/
 	typedef	BALL_SIZE_TYPE	HashIndex;
 
 	/**	Position type.
 			Use this type to represent positions (e.g. in a container) that
 			cannot be negative (contrary to \Ref{Index}).
+			\\
+			{\bf Size:} 32 bit\\
+			{\bf persistent}
 	*/
 	typedef	BALL_SIZE_TYPE	Position;
 
 	/**	Real type.
 			Use this type to represent standard floating point numbers.
+			\\
+			{\bf Size:} 32 bit\\
+			{\bf persistent}
 	*/
 	typedef float Real;
 
+	/**	Double-precision real type.
+			Use this type to represent double precision floating point numbers.
+			\\
+			{\bf Size:} 64 bit\\
+			{\bf persistent}
+	*/
+	typedef double DoubleReal;
+
 	/**	Unnamed property type.
 			Use this type to represent (unnamed) properties.
+			\\
+			{\bf Size:} 32 bit\\
+			{\bf persistent}
 			@see PropertyManager
 	*/
-	typedef int Property;
+	typedef BALL_SIZE_TYPE Property;
 
 	/**	Error code property type.
-			Use this type to represent error codes.
+			Use this type to represent (signed) error codes.
 			@see PropertyManager
+			\\
+			{\bf Size:} 32 bit\\
+			{\bf persistent}
 	*/
-	typedef int ErrorCode;
+	typedef BALL_INDEX_TYPE ErrorCode;
 
 
 	/**	Byte type.
 			Use this type to represent byte data (8 bit length).
 			A Byte is always unsigned.
+			\\
+			{\bf Size:} 8 bit\\
+			{\bf persistent}
 	*/
 	typedef	unsigned char Byte;
 
 	/**	Pointer-sized int type.
 			This type holds unsigned 64 bit numbers and is used to store pointers
-			in a portable fashion (for both 32bit and 64bit systems).
+			in a portable fashion (for both 32-bit and 64-bit systems).
+			\\
+			{\bf Size:} 64 bit\\
+			{\bf persistent}
 	*/
-	typedef BALL_64BIT_UINT_TYPE PointerInt;
-
-	/**	64 bit unsigned integer type.
-			This type is used to read and write pointers to persistent
-			objects to ensure compatibility between 64 and 32 bit architectures.
-	*/
-	typedef BALL_ULONG64_TYPE LongPointerType;
+	typedef BALL_64BIT_UINT_TYPE PointerSizeInt;
 	//@}
 
 	enum ASCII
