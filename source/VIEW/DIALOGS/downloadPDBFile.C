@@ -234,7 +234,7 @@ namespace BALL
 				HashMap<String, QImage>::Iterator hi;
 				for (hi = hm.begin(); hi!=hm.end(); hi++)
 				{
-					qb_->mimeSourceFactory()->setImage(hi->first, hi->second);
+					qb_->mimeSourceFactory()->setImage(hi->first.c_str(), hi->second);
 				}
 
 				qb_->setText(QString(result.c_str()));
