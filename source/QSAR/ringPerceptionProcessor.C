@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: ringPerceptionProcessor.C,v 1.10 2005/03/16 12:25:59 bertsch Exp $
+// $Id: ringPerceptionProcessor.C,v 1.11 2005/03/25 13:19:03 bertsch Exp $
 //
 
 #include <BALL/QSAR/ringPerceptionProcessor.h>
@@ -25,9 +25,13 @@ using namespace std;
 
 namespace BALL
 {
+	const char* RingPerceptionProcessor::Option::ALGORITHM_NAME = "algorithm_name";
+	const char* RingPerceptionProcessor::Default::ALGORITHM_NAME = "Balducci";
+
 	RingPerceptionProcessor::RingPerceptionProcessor()
 		:	UnaryProcessor<AtomContainer>()
 	{
+		setDefaultOptions_();
 	}
 
 	RingPerceptionProcessor::RingPerceptionProcessor(const RingPerceptionProcessor& rp)
@@ -42,34 +46,21 @@ namespace BALL
 
 	RingPerceptionProcessor::~RingPerceptionProcessor()
 	{
+		setDefaultOptions_();
+	}
+
+	void RingPerceptionProcessor::setDefaultOptions_()
+	{
+		options.setDefault(Option::ALGORITHM_NAME, Default::ALGORITHM_NAME);
 	}
 
 	Processor::Result RingPerceptionProcessor::operator () (AtomContainer& ac)
 	{
-		// build molecular graph
-		Molecule * mol = static_cast<Molecule*>(&ac);
-		MolecularGraph mol_graph(*mol);
-
-		// detect the bccs
-		vector<MolecularGraph*> bccs;
-		findAllBCC(bccs, mol_graph);
-
-		// for each bcc that potentially contains rings
-		for (vector<MolecularGraph*>::iterator it=bccs.begin();it!=bccs.end();++it)
-		{
-			if ((*it)->getNumberOfNodes() > 2 && (*it)->getNumberOfEdges() > 2)
-			{
-				BalducciPearlmanAlgorithm(**it);
-			}
-		}
-		
-		// delete the bccs
-		for (vector<MolecularGraph*>::iterator it=bccs.begin();it!=bccs.end();++it)
-		{
-			delete *it;
-		}
+		// call the calculate function
+		vector<vector<Atom*> > sssr;
+		calculateSSSR(sssr, ac);
 	
-		// set all atom or bonds which are not in a ring (for consistence)
+		// set all atom and bonds which are not in a ring (for consistence)
 		AtomIterator a_it;
 		BALL_FOREACH_ATOM(ac, a_it)
 		{
@@ -90,8 +81,53 @@ namespace BALL
 		return Processor::BREAK;
 	}
 
-
 	Size RingPerceptionProcessor::calculateSSSR(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
+	{
+		String algorithm_name = options.get(Option::ALGORITHM_NAME);
+		if (algorithm_name == "Balducci")
+		{
+			// build molecular graph
+			Molecule * mol = static_cast<Molecule*>(&ac);
+			MolecularGraph mol_graph(*mol);
+			
+			// detect the bccs
+			vector<MolecularGraph*> bccs;
+			findAllBCC(bccs, mol_graph);
+
+			Size num_rings(0);
+
+			// for each bcc that potentially contains rings do the Balducci/Pearlman ring perception
+			for (vector<MolecularGraph*>::iterator it=bccs.begin();it!=bccs.end();++it)
+			{
+				if ((*it)->getNumberOfNodes() > 2 && (*it)->getNumberOfEdges() > 2)
+				{
+					num_rings += BalducciPearlmanAlgorithm_(sssr_orig, **it);
+				}
+			}
+
+			// now delete the bccs
+			for (vector<MolecularGraph*>::iterator it=bccs.begin();it!=bccs.end();++it)
+			{
+				delete *it;
+			}
+
+			return num_rings;
+		}
+		else
+		{
+			if (algorithm_name == "Figueras")
+			{
+				return FiguerasAlgorithm_(sssr_orig, ac);
+			}
+			else
+			{
+				Log.error() << "Unknown ring perception algorithm: " << algorithm_name << endl;
+				return 0;
+			}
+		}
+	}
+
+	Size RingPerceptionProcessor::FiguerasAlgorithm_(vector<vector<Atom*> >& sssr_orig, AtomContainer& ac)
 	{
 		// the algorithm runs on a copy, bc bonds and maybe atoms are destroyed!
 		AtomContainer ac_copy(ac);
@@ -351,7 +387,7 @@ namespace BALL
 				}
 			}
 
-// delete bond on a copy, mapping needed
+			// delete bond on a copy, mapping needed
 			AtomContainer ac_copy(ac);
 	    HashMap<Atom*, Atom*> orig_to_copy;
 	    AtomIterator orig = ac.beginAtom();
@@ -593,7 +629,7 @@ namespace BALL
 					BitVector beer = it2->second[0].beep | it3->second[0].beep;
 					do_not_forward.push_back(it2->second[0].beep);
 					do_not_forward.push_back(it3->second[0].beep);
-					BalducciPearlmanRingSelector(beer);
+					BalducciPearlmanRingSelector_(beer);
 				}
 				array_B[it2->first].push_back(it2->second[0]);
 			}
@@ -609,7 +645,7 @@ namespace BALL
 					BitVector beer = it2->beep | it3->beep;
 					do_not_forward.push_back(it2->beep);
 					do_not_forward.push_back(it3->beep);
-					BalducciPearlmanRingSelector(beer);
+					BalducciPearlmanRingSelector_(beer);
 				}
 			}
 		}
@@ -679,7 +715,7 @@ namespace BALL
 		nlast = node;
 	}
 
-	void RingPerceptionProcessor::BalducciPearlmanRingSelector(BitVector beer)
+	void RingPerceptionProcessor::BalducciPearlmanRingSelector_(BitVector beer)
 	{
 		// linear independency tests
 		if (rings.size() ==  0)
@@ -711,7 +747,7 @@ namespace BALL
 		}
 	}
 
-	void RingPerceptionProcessor::BalducciPearlmanAlgorithm(MolecularGraph& graph)
+	Size RingPerceptionProcessor::BalducciPearlmanAlgorithm_(vector<vector<Atom*> >& sssr, MolecularGraph& graph)
 	{
 		Size num_atoms = graph.getNumberOfNodes();
 		Size num_bonds = graph.getNumberOfEdges();
@@ -792,16 +828,31 @@ namespace BALL
 		// now set the named property InRing to true, for the ring bonds
 		for (Size i=0;i!=rings.size();++i)
 		{
+			HashSet<Atom*> in_ring;
+			vector<Atom*> ring;
 			for (Size j=0;j!=rings[i].getSize();++j)
 			{
 				if (rings[i][j])
 				{
 					Bond * b = index_to_bond[j]->getBond();
 					b->setProperty("InRing", true);
-					b->getPartner(*b->getFirstAtom())->setProperty("InRing", true);
-					b->getPartner(*b->getSecondAtom())->setProperty("InRing", true);
+					Atom * a = b->getPartner(*b->getFirstAtom());
+					a->setProperty("InRing", true);
+					if (!in_ring.has(a))
+					{
+						in_ring.insert(a);
+						ring.push_back(a);
+					}
+					a = b->getPartner(*b->getSecondAtom());
+					a->setProperty("InRing", true);
+					if (!in_ring.has(a))
+					{
+						in_ring.insert(a);
+						ring.push_back(a);
+					}
 				}
 			}
+			sssr.push_back(ring);
 		}
 
 		// delete TNodes
@@ -809,6 +860,7 @@ namespace BALL
 		{
 			delete it->second;
 		}
+		return rings.size();
 	}
 
 } // namespace BALL
