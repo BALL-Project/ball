@@ -1,7 +1,7 @@
 #! /bin/sh
 
 ###############
-###  $Id: configure,v 1.6 1999/09/01 14:55:12 hekl Exp $
+###  $Id: configure,v 1.7 1999/09/01 15:14:08 hekl Exp $
 ###############
 ###############
 ###
@@ -43,7 +43,7 @@ MESA_LIBS=
 
 #    ...and for QT (see also BALL/contrib/qt!)
 QT_INCLUDES=/KM/comp-bio/BALL-contrib/qt/include
-QT_LIBS=/KM/comp-bio/BALL-contrib/qt/lib/
+QT_LIBS=/KM/comp-bio/BALL-contrib/qt/lib/IRIX6-CC_7.2.1
 
 #   if you do not want to be asked by configure
 #   which BALLView platform to use, put it here
