@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: cartoonModel.C,v 1.54.2.15 2005/01/05 15:59:34 amoll Exp $
+// $Id: cartoonModel.C,v 1.54.2.16 2005/01/07 12:52:05 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/cartoonModel.h>
@@ -851,11 +851,19 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 	}
 	geometric_objects_.push_back(mesh);
 	
-	// insert connection between tubes
-	mesh->vertex.push_back(last_point_ + helix_dir);
-	mesh->normal.push_back(r);
-	mesh->vertex.push_back(last_point_ - helix_dir);
-	mesh->normal.push_back(r);
+	// insert connection between tubes 2 times, because of trouble with normals
+	Vector3 vr(r * 0.1);
+	Vector3 vn(-(dir % helix_dir));
+	mesh->vertex.push_back(last_point_ + helix_dir + vr);
+	mesh->normal.push_back(vn);
+	mesh->vertex.push_back(last_point_ - helix_dir + vr);
+	mesh->normal.push_back(vn);
+
+	mesh->vertex.push_back(last_point_ + helix_dir - vr);
+	mesh->normal.push_back(vn);
+	mesh->vertex.push_back(last_point_ - helix_dir - vr);
+	mesh->normal.push_back(vn);
+
 
 	for (Position p = 0; p < slides; p++)
 	{
@@ -869,8 +877,8 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 	// same data structures for faster access
 	////////////////////////////////////////////////////////////
 	Mesh::Triangle t;
-	Size s_old = 2;  // start position of the last points in the meshs vertices
-	Size s_new = 2;  // start position of the  new points in the meshs vertices
+	Size s_old = 4;  // start position of the last points in the meshs vertices
+	Size s_new = 4;  // start position of the  new points in the meshs vertices
 
 	//------------------------------------------------------>
 	// iterate over all spline_points_
@@ -922,7 +930,7 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 			geometric_objects_.push_back(mesh);
 
 			// insert the vertices and normals of the last points again into the new mesh
-			for (Position point_pos = old_mesh->vertex.size() - (slides * 2 + 2);
+			for (Position point_pos = old_mesh->vertex.size() - (slides * 2 + 4);
 										point_pos < old_mesh->vertex.size(); point_pos++)
 			{
 				mesh->vertex.push_back(old_mesh->vertex[point_pos]);
@@ -934,13 +942,21 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		////////////////////////////////////////////////////////////
 		// insert connection between tubes
 		////////////////////////////////////////////////////////////
-		mesh->vertex.push_back(point + helix_dir);
-		mesh->normal.push_back(r_new);
-		mesh->vertex.push_back(point - helix_dir);
-		mesh->normal.push_back(r_new);
+		Vector3 vr(r_new * 0.1);
+		Vector3 vn(-(dir_new % helix_dir));
+		mesh->vertex.push_back(point + helix_dir + vr);
+		mesh->normal.push_back(vn);
+		mesh->vertex.push_back(point - helix_dir + vr);
+		mesh->normal.push_back(vn);
 
-		const Size sn = mesh->vertex.size() - 2;
-		const Size so = mesh->vertex.size() - 2 - slides * 2 - 2;
+		mesh->vertex.push_back(point + helix_dir - vr);
+		mesh->normal.push_back(vn);
+		mesh->vertex.push_back(point - helix_dir - vr);
+		mesh->normal.push_back(vn);
+
+
+		const Size sn = mesh->vertex.size() - 4;
+		const Size so = mesh->vertex.size() - 4 - slides * 2 - 4;
 		t.v1 = sn;
 		t.v2 = so + 1;
 		t.v3 = so;
@@ -951,7 +967,18 @@ void AddCartoonModel::drawRibbon_(Size start, Size end)
 		t.v3 = so + 1;
  		mesh->triangle.push_back(t);
 
-		s_old = so + 2;
+		t.v1 = sn + 2;
+		t.v2 = so + 3;
+		t.v3 = so + 2;
+ 		mesh->triangle.push_back(t);
+
+		t.v1 = sn + 2;
+		t.v2 = sn + 3;
+		t.v3 = so + 3;
+ 		mesh->triangle.push_back(t);
+
+
+		s_old = so + 4;
 
 		////////////////////////////////////////////////////////////
 		// insert the points of the two new circles
