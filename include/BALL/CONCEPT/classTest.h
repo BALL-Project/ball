@@ -1,4 +1,4 @@
-// $Id: classTest.h,v 1.11 2000/04/24 17:55:45 oliver Exp $
+// $Id: classTest.h,v 1.12 2000/05/23 10:21:37 oliver Exp $
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/file.h>
@@ -47,18 +47,15 @@
 */
 //@{
 
-/**	Precision for floating point comparisons.
+/**	Define the precision for floating point comparisons.
 		The macro \Ref{CHECK_REAL_EQUAL} checks whether the floating point number returned by
-		by the subtest is close to the expected result by comparing the absolute value
-		if the difference of the two values to {\bf PRECISION}.\\
+		the subtest is close to the expected result by comparing the absolute value
+		of the difference of the two values to {\bf PRECISION}.\\
 		The default value is $10^{-6}$. It is possible to redefine precision in the
-		test program by redefining it:\\
-		{\large
-		\#undef PRECISION\\
-		\#define PRECISION 1e-3\\
-		}
+		test program by calling this macro with the new value.\\
 */
-#define PRECISION 1e-6
+#define PRECISION(a) \
+		TEST::precision = (a);
 
 /**	Create the test header for a certain class.
 		This macro defines the start of the test program for a given classname.
@@ -88,6 +85,7 @@ namespace TEST {\
 	std::ifstream	infile;\
 	std::ifstream	templatefile;\
 	bool					equal_files;\
+	double				precision = 1e-6;\
 }\
 \
 \
@@ -339,7 +337,7 @@ int main(int argc, char **argv)\
 		@param  b expected value
 */
 #define TEST_REAL_EQUAL(a,b)  \
-	TEST::this_test = BALL_REAL_EQUAL((a), (b), PRECISION); \
+	TEST::this_test = BALL_REAL_EQUAL((a), (b), TEST::precision); \
 	TEST::test = TEST::test && TEST::this_test;\
 	if ((TEST::verbose > 1) || (!TEST::this_test && (TEST::verbose > 0)))\
 	{\
