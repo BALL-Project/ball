@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureIterator.h,v 1.12 2003/08/26 08:04:19 oliver Exp $
+// $Id: secondaryStructureIterator.h,v 1.12.2.1 2004/05/17 14:01:52 amoll Exp $
 //
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H
@@ -64,17 +64,20 @@ namespace BALL
 	};
 
 
-
+	///
 	typedef BidirectionalIterator
 		<Composite, SecondaryStructure, Composite::CompositeIterator, SecondaryStructureIteratorTraits>
 		SecondaryStructureIterator;
 
+	///
 	typedef ConstBidirectionalIterator
 		<Composite, SecondaryStructure, Composite::CompositeIterator, SecondaryStructureIteratorTraits>
 		SecondaryStructureConstIterator;
 
+	///
 	typedef std::reverse_iterator<SecondaryStructureIterator> SecondaryStructureReverseIterator;
 
+	///
 	typedef std::reverse_iterator<SecondaryStructureConstIterator> SecondaryStructureConstReverseIterator;
 
 } // namespace BALL 
