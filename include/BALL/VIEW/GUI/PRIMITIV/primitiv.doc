@@ -1,8 +1,10 @@
-// $Id: primitiv.doc,v 1.1 2000/10/05 08:38:25 oliver Exp $
+// $Id: primitiv.doc,v 1.2 2001/02/04 15:58:20 hekl Exp $
 
-/**@name	VIEW/GUI/PRIMITIV
-		@nonames
-*/
-//@{
-	//@Include: *.h
-//@}
+		//@Include: gllabel.h
+		//@Include: glline.h
+		//@Include: glmesh.h
+		//@Include: glpoint.h
+		//@Include: glsimpleBox.h
+		//@Include: glsphere.h
+		//@Include: gltube.h
+

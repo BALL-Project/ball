@@ -1,4 +1,4 @@
-// $Id: color.iC,v 1.3 2001/01/26 01:37:02 amoll Exp $
+// $Id: color.iC,v 1.4 2001/02/04 15:58:18 hekl Exp $
 
 BALL_INLINE 
 void ColorRGBA::setRed(const ColorUnit& red)
@@ -103,12 +103,6 @@ void ColorRGBA::get
   red   = red_;
   green = green_;
   blue  = blue_;
-}
-
-BALL_INLINE 
-bool ColorRGBA::isValid() const
-{
-  return true;
 }
 
 BALL_INLINE 
@@ -247,12 +241,6 @@ void ColorHSV::getRGB
    ColorUnit& blue)
 {
   calculateRGB_(red, green, blue);
-}
-
-BALL_INLINE 
-bool ColorHSV::isValid() const
-{
-  return true;
 }
 
 BALL_INLINE 

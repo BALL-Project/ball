@@ -1,14 +1,58 @@
-// $Id: view.doc,v 1.5 2000/09/23 14:25:45 hekl Exp $
+// $Id: view.doc,v 1.6 2001/02/04 15:58:17 hekl Exp $
 
-/**@name	BALLVIEW
-		This chapter contains all relevant information on 
-		BALLVIEW
-		@nonames
+/**@name VIEW.
+	       This chapter contains all relevant information on 
+		     the graphical visualization component VIEW.
 */
 //@{
-	//@Include: COMMON/common.doc
-	//@Include: DATATYPE/datatype.doc
-	//@Include: KERNEL/kernel.doc
-	//@Include: GUI/gui.doc
-	//@Include: PRIMITIV/primitiv.doc
+	/** @name Common data.
+            Some overall used data and data structures are defined in
+            this section.
+  */
+	//@{
+	//@}
+
+	/** @name Used datatypes.
+ 	          In this section the color datatypes and their
+            help classes are defined.
+	*/
+	//@{
+		//@Include: DATATYPE/datatype.doc
+	//@}
+
+	/** @name Kernel classes.
+            This section contains classes that are responsible for
+	          building geometric primitives, handling client requests
+	          and building a connection with message queuing between
+	          widgets and dialogs.
+	*/
+	//@{
+		//@Include: KERNEL/kernel.doc
+	//@}
+
+	/** @name Predefined primitives (without graphical representation).
+            In this section some predefined primitives can be found.
+            They represent the primitives only in the sense of geometric 
+	          properties. The graphical visualization implementation is
+            moved to the GUI/PRIMITIV section. In that section the primitives
+            of this section are extended with the implementation of the
+	          graphical visualization of their geometric properties.
+	*/
+	//@{
+		//@Include: PRIMITIV/primitiv.doc
+	//@}
+
+	/** @name Gui classes.
+	          Description on the render engine and the handling of composites
+	          can be obtained here. Further predefined openGL primitives (an
+            extension of the primitives in the Kernel section) are located
+            in this directory.
+            There are some dialogs and widgets (like the scene) that are
+            an important part of the View component described in this 
+	          section.
+	*/
+	//@{
+		//@Include: GUI/gui.doc
+	//@}
+
 //@}

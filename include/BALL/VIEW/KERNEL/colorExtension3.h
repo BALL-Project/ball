@@ -1,4 +1,4 @@
-// $Id: colorExtension3.h,v 1.3 1999/12/28 18:37:46 oliver Exp $
+// $Id: colorExtension3.h,v 1.4 2001/02/04 15:58:20 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_COLOREXTENSION3_H
 #define BALL_VIEW_KERNEL_COLOREXTENSION3_H
@@ -21,92 +21,298 @@ namespace BALL
 	namespace VIEW
 	{
 
-		/**	
+		/** ColorExtension3 class.
+				
+				{\bf Framework:} BALL/VIEW/KERNEL\\
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/colorExtension3.h}
+				\\
+				The class ColorExtension3 is used as a base class for all geometric 
+				objects that needs three colors \Ref{ColorRGBA}. It provides the derived
+				class with methods for accessing these colors.
+				
+				@memo    ColorExtension3 class (BALL VIEW kernel framework)
+				@author  $Author: hekl $
+				@version $Revision: 1.4 $
+				@date    $Date: 2001/02/04 15:58:20 $
 		*/
-		class ColorExtension3
-			: public ColorExtension2
+		class ColorExtension3: public ColorExtension2
 		{
 			public:
 
-			/**	@name	Constructors and Destructors
-			*/
+			/**	@name	Constructors
+			*/	
 			//@{
 
+			/** Default Constructor.
+					Construct new colorExtension3.
+					The colors of {\em *this} colorExtension3 are set to (0.0, 0.0, 0.0, 1.0).
+					Calls \Ref{ColorExtension2::ColorExtension2}
+
+					@return      ColorExtension3 - new constructed colorExtension3
+					@see         ColorRGBA::ColorRGBA
+					@see         ColorExtension2::ColorExtension2
+			*/
 			ColorExtension3();
 
-			ColorExtension3
-				(const ColorExtension3& color_extension, bool deep = true);
+			/** Copy constructor.
+					Construct new colorExtension3 by copying the colorExtension3 
+					{\em color_extension}. The colors of {\em *this} colorExtension3 are
+					initialized to the colors of {\em color_extension}.
+					Calls \Ref{ColorExtension2::ColorExtension2}
 
+					@param       color_extension the colorExtension3 to be copied
+					@return      ColorExtension3 - new constructed colorExtension3 copied from {\em color_extension}
+					@see         ColorRGBA::ColorRGBA
+					@see         ColorExtension2::ColorExtension2
+			*/
+			ColorExtension3(const ColorExtension3& color_extension);
+
+			//@}
+
+			/** @name Destructors */
+			//@{
+
+			/** Destructor.
+					Default destruction of {\em *this} colorExtension3.
+					Calls \Ref{ColorExtension3::destroy}.
+					@see         ColorExtension3::destroy
+			*/
 			virtual ~ColorExtension3();
 
+			/** Explicit default initialization.
+					Set the colors of {\em *this} colorExtension3 to the color 
+					(0.0, 0.0, 0.0, 1.0).
+					Calls \Ref{ColorExtension2::clear}
+					Calls \Ref{ColorRGBA::clear}		
+
+					@see  ColorExtension2::clear
+					@see  ColorRGBA::clear
+			*/
 			virtual void clear();
 
+			/** Explicit destructor.
+					Empty for further purpose.
+			*/
 			virtual void destroy();
 			//@}
 		
-			/**	@name	Assignment
+			/**	@name	Assignment methods
 			*/
 			//@{
 
-			void set
-				(const ColorExtension3& color_extension, bool deep = true);
+			/** Assignment.
+					Assign the colorExtension3 {\em color_extension} to {\em *this} 
+					colorExtension3.
+					The colors of {\em *this} colorExtension3 are initialized to the colors of 
+					the colorExtension3 {\em color_extension}.
+					Calls \Ref{ColorExtension2::set}
+					Calls \Ref{ColorRGBA::set}
 
+					@param       color_extension the colorExtension3 to be copied
+					@see         ColorExtension2::set
+					@see         ColorRGBA::ColorRGBA
+					@see         ColorRGBA::set
+			*/
+			void set(const ColorExtension3& color_extension);
+
+			/** Assignment operator.
+					Assign the colorExtension3 {\em color_extension} to {\em *this}
+					colorExtension3.
+					Calls \Ref{ColorExtension3::set}.
+					The colors of {\em *this} colorExtension3 are initialized to the colors 
+					of the colorExtension3 {\em color_extension}.\\
+
+					@param       color_extension the colorExtension3 to be copied
+					@return      ColorExtension3& - {\em *this} colorExtension3
+					@see         ColorExtension3::set
+			*/
 			ColorExtension3& operator = (const ColorExtension3& color_extension);
 
-			void get
-				(ColorExtension3& color_extension, bool deep = true) const;
+			/** Copying.
+					Copy {\em *this} colorExtension3 to the colorExtension3
+					{\em color_extension}.
+					Calls \Ref{ColorExtension3::set}.
+					The colors of the colorExtension3 {\em color_extension} 
+					are initialized to the colors of {\em *this} colorExtension3.\\
 
+					@param       color_extension the colorExtension3 to be assigned to
+					@see         ColorExtension3::set
+			*/
+			void get(ColorExtension3& color_extension) const;
+
+			/** Swapping of colorExtensions.
+					Swap the colors of {\em *this} colorExtension3 with the colorExtension3
+					{\em color_extension}.
+					Calls \Ref{ColorExtension2::swap}
+					Calls \Ref{ColorRGBA::swap}
+
+					@param       color_extension the colorExtension3 being swapped with {\em *this} colorExtension 
+					@see         ColorExtension3::ColorExtension3
+					@see         ColorExtension2::swap
+					@see         ColorRGBA::swap
+			*/
 			void swap(ColorExtension3& color_extension);
 			//@}
 
 			
-			/**	@name Accessors
+			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
 
+			/** Change the third color of {\em *this} colorExtension3.
+					Change the third color of {\em *this} colorExtension3 to the color
+					represented by the parameter {\em color}.
+
+					@param       color the new third color of {\em *this} colorExtension3
+					@see         ColorExtension3::getColor3
+					@see         ColorRGBA::ColorRGBA
+			*/
 			void setColor3(const ColorRGBA& color);
 			
+			/** Change the third color of {\em *this} colorExtension3.
+					Change the third color of {\em *this} colorExtension3 to the color 
+					represented	by the parameters {\em red}, {\em green}, {\em blue} and
+					{\em alpha}.
+
+					@param       red the red component of the new third color of {\em *this} colorExtension3
+					@param       green the green component of the new third color of {\em *this} colorExtension3
+					@param       blue the blue component of the new third color of {\em *this} colorExtension3
+					@param       alpha the alpha component of the new third color of {\em *this} colorExtension3 (Default=1.0)
+					@see         ColorExtension3::getColor3
+					@see         ColorUnit::ColorUnit
+			*/
 			void setColor3
 				(const ColorUnit& red, const ColorUnit& green,
 				 const ColorUnit& blue, const ColorUnit& alpha = (float)1);
 			
+			/** Mutable inspection of the third color of {\em *this} colorExtension3.
+					Access the mutual reference of the third color of {\em *this}
+					colorExtension3.
+					
+					@return      ColorRGBA& - mutable reference to the third color of {\em *this} colorExtension3
+					@see         ColorExtension3::setColor3
+					@see         ColorRGBA::ColorRGBA
+			*/
 			ColorRGBA& getColor3();
 
+			/** Non-mutable inspection of the third color of {\em *this} colorExtension3.
+					Access the constant reference of the third color of {\em *this}
+					colorExtension3.
+					
+					@return      ColorRGBA& - constant reference to the third color of {\em *this} colorExtension3
+					@see         ColorExtension3::setColor3
+					@see         ColorRGBA::ColorRGBA
+			*/
 			const ColorRGBA& getColor3() const;
 
+			/** Inspection of the third color of {\em *this} colorExtension3.
+					Access the third color of {\em *this} colorExtension3 by using
+					\Ref{ColorRGBA}.
+					
+					@param       color the color receiving the third color of {\em *this} colorExtension3
+					@see         ColorExtension3::setColor3
+					@see         ColorRGBA::ColorRGBA
+			*/
 			void getColor3(ColorRGBA& color) const;
 
+			/** Inspection of all the components of the third color of {\em *this} colorExtension3.
+					Access all the components of the third color of {\em *this} colorExtension3
+					by using \Ref{ColorUnit}.
+					
+					@param       red the red component of the third color of {\em *this} colorExtension3
+					@param       green the green component of the third color of {\em *this} colorExtension3
+					@param       blue the blue component of the third color of {\em *this} colorExtension3
+					@param       alpha the alpha component of the third color of {\em *this} colorExtension3
+					@see         ColorExtension3::setColor3
+					@see         ColorUnit::ColorUnit
+			*/
 			void getColor3
 				(ColorUnit& red, ColorUnit& green,
 				 ColorUnit& blue, ColorUnit& alpha) const;
 
-			void getColor3
-				(ColorUnit& red, ColorUnit& green, ColorUnit& blue) const;
+			/** Inspection of the components of the third color of {\em *this}
+					colorExtension3.
+					Access only the red, green and blue components of the third color 
+					of {\em *this} colorExtension3	by using \Ref{ColorUnit}.
+					
+					@param       red the red component of the third color of {\em *this} colorExtension3
+					@param       green the green component of the third color of {\em *this} colorExtension3
+					@param       blue the blue component of the third color of {\em *this} colorExtension3
+					@see         ColorExtension3::setColor3
+					@see         ColorUnit::ColorUnit
+			*/
+			void getColor3(ColorUnit& red, ColorUnit& green, ColorUnit& blue) const;
 
-			void setColors
-				(const ColorRGBA& a, const ColorRGBA& b, const ColorRGBA& c);
+			/** Change the first, second and third color of {\em *this} colorExtension3.
+					Change the first, second and third color of {\em *this} colorExtension3
+					to the colors	represented by the parameters {\em a}, {\em b} and {\em c}.
+					Calls \Ref{ColorExtension2::setColors}
 
-			void getColors
-				(ColorRGBA& a, ColorRGBA& b, ColorRGBA& c) const;
+					@param       a the new first color of {\em *this} colorExtension3
+					@param       b the new second color of {\em *this} colorExtension3
+					@param       c the new third color of {\em *this} colorExtension3
+					@see         ColorExtension3::getColors
+					@see         ColorExtension2::setColors
+					@see         ColorRGBA::ColorRGBA
+			*/
+			void setColors(const ColorRGBA& a, const ColorRGBA& b, const ColorRGBA& c);
+
+			/** Inspection of the first, second and third color of {\em *this}
+					colorExtension3.
+					Access the first, second and third color of {\em *this} colorExtension3
+					by using \Ref{ColorRGBA}.
+					Calls \Ref{ColorExtension2::getColors}
+					
+					@param       a the color receiving the first color of {\em *this} colorExtension3
+					@param       b the color receiving the second color of {\em *this} colorExtension3
+					@param       c the color receiving the third color of {\em *this} colorExtension3
+					@see         ColorExtension3::setColors
+					@see         ColorExtension2::getColors
+					@see         ColorRGBA::ColorRGBA
+			*/
+			void getColors(ColorRGBA& a, ColorRGBA& b, ColorRGBA& c) const;
 				
 			//@}
 
-			/**	@name	Debugging and Diagnostics
-			*/
+			/**	@name	debuggers and diagnostics
+			*/	
 			//@{
 
-			virtual bool isValid() const;
+			/** Internal value dump.
+					Dump the current state of {\em *this} colorExtension3 to 
+					the output ostream {\em s} with dumping depth {\em depth}.
 
-			virtual void dump
-				(std::ostream& s = std::cout, Size depth = 0) const;
+					@param   s output stream where to output the state of {\em *this} colorExtension3
+					@param   depth the dumping depth
+					@see     ColorRGBA::operator <<
+			*/
+			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
 
 			/**	@name	Storers
 			*/
 			//@{
 
+			/** Persistent stream output and state restorage.
+  			 Read persistent colorExtension3 data from the input stream {\em s} and 
+				 restore the state of {\em *this}.
+				 \\
+				 {\bf Note:} Not yet implemented.
+		 
+				 @param       s input stream from where to restore the internal state of {\em *this} colorExtension3
+				 @exception   NotImplemented - always
+			*/
 			virtual void read(std::istream& s);
 
+			/** Persistent stream output and state storage.
+  			 Write persistent colorExtension3 data to the output stream {\em s} and 
+				 store the state of {\em *this}.
+				 \\
+				 {\bf Note:} Not yet implemented.
+		 
+				 @param       s output stream to where to store the internal state of {\em *this} colorExtension3
+				 @exception   NotImplemented - always
+			*/
 			virtual void write(std::ostream& s) const;
 			//@}
 

@@ -1,8 +1,38 @@
-// $Id: kernel.doc,v 1.1 2000/10/05 08:38:25 oliver Exp $
+// $Id: kernel.doc,v 1.2 2001/02/04 15:58:19 hekl Exp $
 
-/**@name	VIEW/GUI/KERNEL
-		@nonames
+/**@name	This section contains classes that are responsible for
+	        building openGL primitives, handling server requests,
+				  building predefined openGL primitives and their creation tools
+	        and handling composites and building and maintaining their graphical
+	        representation.
 */
 //@{
-	//@Include: *.h
+        /**     @name Composite handling and render engine.
+        */
+        //@{
+                //@Include: compositeDescriptor.h
+                //@Include: glDisplayList.h
+                //@Include: glEntityDescriptor.h
+                //@Include: mainControl.h
+        //@}
+
+        /**     @name OpenGL primitive creation.
+        */
+        //@{
+                //@Include: glObject.h
+        //@}
+
+        /**     @name OpenGL predefined primitives and creation tools.
+        */
+        //@{
+                //@Include: glPrimitiveManager.h
+                //@Include: glQuadricObject.h
+        //@}
+
+        /**     @name Server request handling and persistent object rebuilding.
+        */
+        //@{
+                //@Include: objectCreator.h
+                //@Include: server.h
+        //@}
 //@}

@@ -1,8 +1,55 @@
-// $Id: kernel.doc,v 1.1 2000/01/12 00:13:54 oliver Exp $
+// $Id: kernel.doc,v 1.2 2001/02/04 15:58:21 hekl Exp $
 
-/**@name	VIEW/KERNEL
-		@nonames
-*/
-//@{
-	//@Include: *.h
-//@}
+        /**     @name Client request handling.
+                      With the help of the class {\em Client} it is possible
+                      to transfer a \Ref{Composite} to a {\em VIEW} application with
+                      a server. 
+	                    The class {\em QTTimer} is a timer class that is necessary for the
+	                    \Ref{Server} class. It queries every given interval whether new
+                      data from the client is accessable and directs it to the {\em VIEW}
+		                  application.
+        */
+        //@{
+                //@Include: client.h
+                //@Include: QTTimer.h
+        //@}
+
+        /**     @name Widget connectivity and message queuing.
+                      These classes are responsible that the widgets and dialogs
+                      can communicate with each other. If a new widget or dialog
+                      is created it must be derived from the class {\em ConnectionObject}.
+                      This class defines the interface and the properties needed to 
+	                    communicate with other widgets.
+                      The class {\em Message} and the various derived classes define
+                      some useful messages for special events.
+        */
+        //@{
+                //@Include: connectionObject.h
+                //@Include: message.h
+        //@}
+
+        /**     @name Geometric primitives creation (base classes).
+		 					        These classes are the base classes for primitive creation.
+                      The class {\em GeometricObject} is the most important base class
+                      for all primitives. It contains the base properties and base
+                      interface definition all primitives must have.
+                      The other classes are additional property classes the extend
+                      a primitiv by an extra property.
+        */
+        //@{
+                //@Include: geometricObject.h
+                //@Include: colorExtension1.h
+                //@Include: colorExtension2.h
+                //@Include: colorExtension4.h
+                //@Include: colorExtension5.h
+                //@Include: normal.h
+                //@Include: radius.h
+                //@Include: vertex1.h
+                //@Include: vertex2.h
+        //@}
+
+	      /** @name LogView Widget (will be moved into WIDGETS directory)
+        */
+        //@{
+								//@Include: logView.h
+				//@}

@@ -1,8 +1,29 @@
-// $Id: datatype.doc,v 1.1 2000/01/12 00:13:53 oliver Exp $
+// $Id: datatype.doc,v 1.2 2001/02/04 15:58:19 hekl Exp $
 
-/**@name	VIEW/DATATYPE
-		@nonames
-*/
-//@{
-	//@Include: *.h
-//@}
+        /**     @name Different color classes.
+	                    That are the two different color classes in VIEW.
+                      The class ColorRGBA uses the RGBA parameter to define a
+                      color. Because of the conversion class ColorUnit different
+                      types of input parameter are possible.
+                      The class ColorHSV uses the HSV parameter to define a
+                      color. It uses the class ColorUnit for the {\em S} and {\em V} component.
+                      These two components as all RGBA components are of range {\em 0 - 255}.
+                      The {\em H} component however is of range {\em 0 - 360}. Therefore
+                      the class ColorUnitHue is used for different types of input
+                      parameter.
+        */
+        //@{
+                //@Include: colorRGBA.h
+                //@Include: colorHSV.h
+        //@}
+
+        /**     @name Format conversion classes used by the color classes.
+                      These two classes are used by ColorRGBA and ColorHSV.
+                      They allow them two uses different types of input parameters 
+	                    like integers, floats or even strings (numbers in hex format).
+        */
+        //@{
+                //@Include: colorUnit.h
+                //@Include: colorUnitHue.h
+        //@}
+

@@ -1,4 +1,4 @@
-// $Id: client.h,v 1.5 2000/05/14 15:36:35 hekl Exp $
+// $Id: client.h,v 1.6 2001/02/04 15:58:20 hekl Exp $
 
 #ifndef BALL_VIEW_KERNEL_CLIENT_H
 #define BALL_VIEW_KERNEL_CLIENT_H
@@ -32,52 +32,57 @@ namespace BALL
 	namespace VIEW
 	{
 
-		/**	
+		/** Client class.
+				
+				{\bf Framework:} BALL/VIEW/KERNEL\\
+				{\bf Definition:} \URL{BALL/VIEW/KERNEL/client.h}
+				\\
+				The class Client introduces a rudimentary interface for sending \Ref{Composite}
+				objects to the visualization.
+				In this version only the one way direction from {\em *this} client to the
+				visualization is possible. In the future there is also a bidirectional
+				data exchange intended. If a \Ref{Composite} is sent two times than the 
+				graphical representation of the first one will be replaced through the
+				new graphical representation of the second one. For example if the structure
+				of the \Ref{Composite} is continually changed by a program so the visualization
+				of this \Ref{Composite} changes as well.
+				The Client class connects to the \Ref{Server} class that is also a part of
+				the VIEW library. See \Ref{Server} for further information.
+				
+				@memo    Client class (BALL VIEW kernel framework)
+				@author  $Author: hekl $
+				@version $Revision: 1.6 $
+				@date    $Date: 2001/02/04 15:58:20 $
 		*/
 		class Client
 		{
 			public:
 
-			/**	@name	Constructors and Destructors
-			*/
-			//@{
-
-			Client();
-
-			Client(const Client& client, bool deep = true);
-
-			/**	Create a client and connect to a host.
-					Same as 
-					\begin{verbatim}
-						Client client;
-						client.connect(host, port);
-					\end{verbatim}
-					@param	host the host to connect to
-					@param	port the port the server is listening to
-			*/
-			Client(const String& host, int port = VIEW_DEFAULT_PORT);
-
-			virtual ~Client();
-
-			virtual void clear();
-
-			virtual void destroy();
-			//@}
-		
 			/**	@name	Exceptions
 			*/
 			//@{
 			
-			class InvalidClient
-				:	public Exception::GeneralException
+			/** InvalidClient exception class.
+					This exception will be thrown whenever a client action will be executed without
+					an open working connection.
+
+					@see         Exception::GeneralException			
+			*/
+			class InvalidClient: public Exception::GeneralException
 			{
 				public:
 
 				InvalidClient(const char* file, int line);
 			};
 
-			class NoPersistentObject
-				:	public Exception::GeneralException
+			/** NoPersistentObject exception class.
+					This exception will be thrown whenever an object that is not a 
+					\Ref{PersistentObject} will be tried to sent through the client.
+					Only \Ref{PersistentObject}'s can be sent through {\em *this} client.
+
+					@see         Exception::GeneralException			
+			*/
+			class NoPersistentObject:	public Exception::GeneralException
 			{
 				public:
 
@@ -85,29 +90,131 @@ namespace BALL
 			};
 			//@}
 
-			/**	@name	Accessors
+			/**	@name	Constructors
+			*/	
+			//@{
+
+			/** Default Constructor.
+					Construct new client.
+					The client will have no working connection yet.
+
+					@return      Client - new constructed client
+					@see         Client::connect
+			*/
+			Client();
+
+			/** Detailed state initializing constructor.
+					Construct new client.
+					The state of {\em *this} client is:
+					\begin{itemize}
+						\item host is {\em host}
+						\item port is {\em port} (Default=VIEW_DEFAULT_PORT)
+					\end{itemize}
+					
+     			@param       host the host to connect to
+					@param       port the port of the host to connect to
+					@return      Client - new constructed client
+					@see         Client::connect
+			*/
+			Client(const String& host, int port = VIEW_DEFAULT_PORT);
+
+			//@}
+
+			/** @name Destructors */
+			//@{
+
+			/** Destructor.
+					Default destruction of {\em *this} geometricObject.
+					Calls \Ref{GeometricObject::destroy}.
+					@see         GeometricObject::destroy
+			*/
+			virtual ~Client();
+
+			/** Explicit default initialization.
+					Set the state of {\em *this} geometricObject to the default values.
+					The state of {\em *this} geometricObject is:
+					\begin{itemize}
+					  \item selected color is set to yellow (1.0, 1.0, 0.0, 1.0)
+						\item name is set to "unknown"
+						\item properties are set to:
+						\begin{itemize}
+						  \item PROPERTY__OBJECT_STATIC
+						  \item PROPERTY__OBJECT_OPAQUE
+						  \item PROPERTY__OBJECT_VISIBLE
+						  \item PROPERTY__OBJECT_CLOSED
+						  \item PROPERTY__DRAWING_MODE_SOLID
+						  \item PROPERTY__DRAWING_PRECISION_HIGH
+						\end{itemize}
+					\end{itemize}
+
+					Calls \Ref{Composite::clear}.
+					Calls \Ref{PropertyManager::clear}.
+			*/
+			virtual void clear();
+
+			/** Explicit destructor.
+					Destroy {\em *this} geometricObject.
+					Calls \Ref{Composite::destroy}.
+					Calls \Ref{PropertyManager::destroy}.
+
+					@see         Composite::destroy
+					@see         PropertyManager::destroy
+			*/
+			virtual void destroy();
+			//@}
+		
+			/**	@name	Accessors: inspectors and mutators 
 			*/
 			//@{
 
-			/** connect to a specified host and port. Must be called before any other methodes!
+			/** connect to a specified host and port.
+					This method connects {\em *this} client to a specified host and port.
+					Must be called before any other methodes!
+
+					@param   host the host (a string) to connect to
+					@param   port the port number of the host
 			*/
 			void connect(const String& host, int port = VIEW_DEFAULT_PORT);
 
+			/** Add a new composite.
+					Insert a new \Ref{Composite} to {\em *this} client. 
+					With this method \Ref{Composite}'s can be added to the visualization.
+					If the same \Ref{Composite} was already added before it will be replaced 
+					by the new representation of {\em composite}.
+					The \Ref{Composite} will be put into the \Ref{TextPersistenceManager} that
+					has a connection to a socket stream connected to the given host and port.
+					The \Ref{TextPersistenceManager} will then use that socket stream to write
+					the \Ref{Composite} into.
+
+					@param   composite the \Ref{Composite} to be added to the client (visualization)
+					@see     TextPersistenceManager::TextPersistenceManager
+					@exception  InvalidClient - if the client has no connection to a server this exception will be thrown
+					@exception  NoPersistentObject - if the composite is not a \Ref{PersistentObject} this exception will be thrown
+			*/
 			void insert(Composite &composite);
-
-			void setCreatorValue(int address, int value);
-
-			int getCreatorValue(int address);
-
-			bool hasCreatorValue(int address, int value);
 			//@}
 
-			/**	@name	Debugging and Diagnostics
+			/**	@name	debuggers and diagnostics
 			*/
 			//@{
+			/** Internal state and consistency self-validation.
+					Initiate self-validation of the internal state of {\em *this} client. 
+					If the {\em *this} client has a connection to a server than {\tt true}
+					is returned, {\tt false} otherwise. 
 
+					@return			bool -
+											{\tt true} if {\em *this} client has a connection to a server,
+					 						{\tt false} otherwise
+			*/
 			virtual bool isValid() const;
 
+			/** Internal value dump.
+					Dump the current host and port of {\em *this} client to 
+					the output ostream {\em s} with dumping depth {\em depth}.
+
+					@param   s output stream where to output the host and port of {\em *this} client
+					@param   depth the dumping depth
+			*/
 			virtual void dump(std::ostream& s = std::cout, Size depth = 0) const;
 			//@}
 
@@ -115,8 +222,26 @@ namespace BALL
 			*/
 			//@{
 
+			/** Persistent stream output and state restorage.
+  			 Read persistent client data from the input stream {\em s} and 
+				 restore the state of {\em *this}.
+				 \\
+				 {\bf Note:} Not yet implemented.
+		 
+				 @param       s input stream from where to restore the internal state of {\em *this} client
+					@exception   NotImplemented - always
+			*/
 			virtual void read(std::istream& s);
 
+			/** Persistent stream output and state storage.
+  			 Write persistent client data to the output stream {\em s} and 
+				 store the state of {\em *this}.
+				 \\
+				 {\bf Note:} Not yet implemented.
+		 
+				 @param       s output stream to where to store the internal state of {\em *this} client
+					@exception   NotImplemented - always
+			*/
 			virtual void write(std::ostream& s) const;
 
 			//@}

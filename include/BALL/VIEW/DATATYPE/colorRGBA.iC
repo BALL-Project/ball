@@ -1,0 +1,146 @@
+// $Id: colorRGBA.iC,v 1.1 2001/02/04 15:58:18 hekl Exp $
+
+BALL_INLINE 
+void ColorRGBA::setRed(const ColorUnit& red)
+{
+  red_ = red;
+}
+
+BALL_INLINE 
+ColorUnit& ColorRGBA::red()
+{
+  return red_;
+}
+
+BALL_INLINE 
+const ColorUnit& ColorRGBA::red() const
+{
+  return red_;
+}
+
+BALL_INLINE 
+void ColorRGBA::setGreen(const ColorUnit& green)
+{
+  green_ = green;
+}
+
+BALL_INLINE 
+ColorUnit& ColorRGBA::green()
+{
+  return green_;
+}
+
+BALL_INLINE 
+const ColorUnit& ColorRGBA::green() const
+{
+  return green_;
+}
+
+BALL_INLINE 
+void ColorRGBA::setBlue(const ColorUnit& blue)
+{
+  blue_ = blue;
+}
+
+BALL_INLINE 
+ColorUnit& ColorRGBA::blue()
+{
+  return blue_;
+}
+
+BALL_INLINE 
+const ColorUnit& ColorRGBA::blue() const
+{
+  return blue_;
+}
+
+BALL_INLINE 
+void ColorRGBA::setAlpha(const ColorUnit& alpha)
+{
+  alpha_ = alpha;
+}
+
+BALL_INLINE 
+ColorUnit& ColorRGBA::alpha()
+{
+  return alpha_;
+}
+
+BALL_INLINE 
+const ColorUnit& ColorRGBA::alpha() const
+{
+  return alpha_;
+}
+
+BALL_INLINE 
+void ColorRGBA::set
+  (const ColorUnit& red, const ColorUnit& green,
+   const ColorUnit& blue, const ColorUnit& alpha)
+{
+  red_   = red;
+  green_ = green;
+  blue_  = blue;
+  alpha_ = alpha;
+}
+
+BALL_INLINE 
+void ColorRGBA::get
+  (ColorUnit& red, ColorUnit& green,
+   ColorUnit& blue, ColorUnit& alpha) const
+{
+  red   = red_;
+  green = green_;
+  blue  = blue_;
+  alpha = alpha_;
+}
+
+BALL_INLINE 
+void ColorRGBA::get
+  (ColorUnit& red,
+   ColorUnit& green,
+   ColorUnit& blue) const
+{
+  red   = red_;
+  green = green_;
+  blue  = blue_;
+}
+
+BALL_INLINE 
+bool ColorRGBA::operator == (const ColorRGBA& color) const
+{
+  return (bool)(red_ == color.red_ && green_ == color.green_
+								&& blue_ == color.blue_ && alpha_ == color.alpha_);
+}
+
+BALL_INLINE 
+bool ColorRGBA::operator != (const ColorRGBA& color) const
+{
+  return (bool)!(this->operator==(color));
+}
+
+BALL_INLINE 
+bool ColorRGBA::operator < (const ColorRGBA& color) const
+{
+  return (bool)(red_ < color.red_ && green_ < color.green_
+								&& blue_ < color.blue_ && alpha_ < color.alpha_);
+}
+
+BALL_INLINE 
+bool ColorRGBA::operator > (const ColorRGBA& color) const
+{
+  return (bool)(red_ > color.red_ && green_ > color.green_
+								&& blue_ > color.blue_ && alpha_ > color.alpha_);
+}
+
+BALL_INLINE 
+bool ColorRGBA::operator <= (const ColorRGBA& color) const
+{
+  return (bool)!(this->operator>(color));
+}
+
+BALL_INLINE 
+bool ColorRGBA::operator >= (const ColorRGBA& color) const
+{
+  return (bool)!(this->operator<(color));  
+}
+

@@ -1,8 +1,9 @@
-// $Id: primitiv.doc,v 1.1 2000/01/12 00:13:55 oliver Exp $
+// $Id: primitiv.doc,v 1.2 2001/02/04 15:58:22 hekl Exp $
 
-/**@name	VIEW/PRIMITIV
-		@nonames
-*/
-//@{
-	//@Include: *.h
-//@}
+		//@Include: label.h
+		//@Include: line.h
+		//@Include: mesh.h
+		//@Include: point.h
+		//@Include: simpleBox.h
+		//@Include: sphere.h
+		//@Include: tube.h
