@@ -1,4 +1,4 @@
-// $Id: composedEnergyProcessor.h,v 1.5 2001/07/15 22:57:25 amoll Exp $
+// $Id: composedEnergyProcessor.h,v 1.6 2001/07/16 11:15:01 amoll Exp $
 
 #ifndef BALL_ENERGY_COMPOSEDENERGYPROCESSOR
 #define BALL_ENERGY_COMPOSEDENERGYPROCESSOR
@@ -66,10 +66,11 @@ namespace BALL
 		const ComposedEnergyProcessor& operator = 
 			(const ComposedEnergyProcessor& proc) throw();
 
-		/** Clear method 
+		/** Clear method.
+		 * 	Clears the calculated energy and the list of processors.
 		*/
 		virtual void clear() throw();
-
+	
 		//@}
 		/** @name Processor functions 
 		*/
@@ -91,6 +92,10 @@ namespace BALL
 		/** remove a component from the list 
 		*/
 		void removeComponent(EnergyProcessor* proc) throw();
+
+		/** Get number of added EnergyProcessors.
+		*/
+		Size getNumberOfEnergyProcessors() const throw();
 		
 		//@}
 		/** @name Predicates 
