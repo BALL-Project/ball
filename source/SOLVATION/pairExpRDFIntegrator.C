@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.C,v 1.3 2000/09/02 14:34:40 oliver Exp $
+// $Id: pairExpRDFIntegrator.C,v 1.4 2000/09/02 17:36:31 anker Exp $
 
 #include <BALL/SOLVATION/pairExpRDFIntegrator.h>
 
@@ -6,6 +6,12 @@ using namespace std;
 
 namespace BALL
 {
+
+	const char* PairExpRDFIntegrator::Option::VERBOSITY = "verbosity";
+	const char* PairExpRDFIntegrator::Option::SAMPLES = "samples";
+
+	const int PairExpRDFIntegrator::Default::VERBOSITY = 1;
+	const int PairExpRDFIntegrator::Default::SAMPLES = 30;
 
 	PairExpRDFIntegrator::PairExpRDFIntegrator()
 		:	RDFIntegrator(),
@@ -17,6 +23,8 @@ namespace BALL
 			k2_(0.0),
 			rdf_()
 	{
+		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
+		options.setDefaultInteger(Option::SAMPLES, Default::SAMPLES);
 	}
 
 
@@ -45,6 +53,8 @@ namespace BALL
 			k2_(k2),
 			rdf_(rdf)
 	{
+		options.setDefaultInteger(Option::VERBOSITY, Default::VERBOSITY);
+		options.setDefaultInteger(Option::SAMPLES, Default::SAMPLES);
 	}
 
 
@@ -235,6 +245,12 @@ namespace BALL
 	{
 
 		// BAUSTELLE
+		int samples = (int) options.getInteger(Option::SAMPLES);
+		int verbosity = (int) options.getInteger(Option::VERBOSITY);
+		if (verbosity > 0)
+		{
+			Log.info() << "Using " << samples << " sample points for numerical integration" << endl;
+		}
 
 		double val = 0.0;
 		double r = interval.first;
@@ -291,7 +307,7 @@ namespace BALL
 
 			double area = 0;
 			double x = r;
-			unsigned int n = 10;
+			unsigned int n = samples;
 			double s = (R-r)/n;
 			while (n > 0)
 			{
