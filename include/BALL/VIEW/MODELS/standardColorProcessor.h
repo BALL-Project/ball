@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: standardColorProcessor.h,v 1.21 2004/03/23 15:30:53 amoll Exp $
+// $Id: standardColorProcessor.h,v 1.22 2004/05/19 13:14:40 amoll Exp $
 
 #ifndef BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
 #define BALL_VIEW_MODELS_STANDARDCOLORPROCESSOR_H
@@ -62,7 +62,7 @@ namespace BALL
 		};
 
 
-		/**
+		/** ColorProcessor for coloring by the numbers of the Residue 's.
 				\ingroup  ViewModels
 		*/
 		class ResidueNumberColorProcessor

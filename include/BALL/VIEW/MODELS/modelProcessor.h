@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modelProcessor.h,v 1.10 2004/02/26 08:41:41 anhi Exp $
+// $Id: modelProcessor.h,v 1.11 2004/05/19 13:14:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_MODELPROCESSOR_H
@@ -25,6 +25,17 @@ namespace BALL
 	{
 		class GeometricObject;
 		
+		/** Base class for all model processors.
+		 		Every model processor has a list with all GeometricObject 's it has
+				created. It also stores the drawing precision, it will use for creating new models.
+				You can apply model processors like every other UnaryProcessor for Composite 's: <br>
+				\verbatim				
+					Molecule m;
+					ModelProcessor model_processor;
+					m.apply(model_processor);
+				\endverbatim
+				\ingroup  ViewModels
+		*/
 		class BALL_EXPORT ModelProcessor
 			: public UnaryProcessor<Composite>,
 				public PropertyManager
@@ -54,7 +65,9 @@ namespace BALL
 				virtual bool isValid() const
 					throw() {return true;};
 
-				///
+ 				/** Needed in derived classes, which store references to the Composite instances they worked on.
+				 		Here only needed for a common interface and therefore empty.
+				*/
 				virtual void clearComposites()
 					throw() {}
 
@@ -62,11 +75,11 @@ namespace BALL
 				virtual void dump(std::ostream& /*s = std::cout*/, Size /*depth = 0*/) const
 					throw(){};
 
-				///
+				/// Return the list with the created geometric objects
 				GeometricObjectList& getGeometricObjects() 
 					throw() { return geometric_objects_;}
 				
-				///
+				/// Return the list with the created geometric objects
 				const GeometricObjectList& getGeometricObjects() const
 					throw() { return geometric_objects_;}
 				

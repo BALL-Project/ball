@@ -1,4 +1,4 @@
-// $Id: dialogs.doc,v 1.7 2004/05/18 14:16:10 amoll Exp $
+// $Id: dialogs.doc,v 1.8 2004/05/19 13:14:39 amoll Exp $
 
 /** \defgroup ViewDialogs QT Dialogs
 		\ingroup Visualisation
@@ -6,7 +6,7 @@
 		All dialogs should be constructed with the QT designer and the 
 		implementation has to be sourced out to a derived class.
 		(This sound worse, than it is. Just have a look at a simple dialog 
-		(e.g. SetCamera) and you will see its not that bad.)
+		(e.g. \link BALL::VIEW::SetCamera SetCamera\endlink ) and you will see its not that bad.)
 		This outsourcing has two goals:
 		- Seperate the design of the dialogs from the implementation. This accelerates
 			the redesign of existing dialogs.
@@ -14,8 +14,8 @@
 			(Otherwise there are serious problems, because QT is inconsistent between
 			 different versions of the libary.)
 		<p>
-		Some dialogs are derived from ModularWidget to participate in the sending and receiving
-		of Message 's. The other dialogs have to be informed manualy, it something happend, that
+		Some dialogs are derived from \link BALL::VIEW::ModularWidget ModularWidget \endlink to participate in the sending and receiving
+		of \link BALL::VIEW::Message Message \endlink 's. The other dialogs have to be informed manualy, it something happend, that
 		they need to know, e.g. to disable certain controls.
  */
 

@@ -1,15 +1,16 @@
-// $Id: rendering.doc,v 1.3 2004/04/16 11:30:41 amoll Exp $
+// $Id: rendering.doc,v 1.4 2004/05/19 13:14:40 amoll Exp $
 
 /**	\defgroup ViewRendering Renderer
 		\ingroup Visualisation
-		The VIEW libary currently contains two methods for rendering 
-		visualisations:<br> 
-		The obviously most import is the OPENGL renderer which provides 
+		The VIEW libary currently contains two methods for rendering visualisations:
+		<br> 
+		The obviously most import is the \link BALL::VIEW::GLRenderer OPENGL renderer\endlink which provides 
 		hardware acceleration.
-		It is used e.g. used in the Scene in the BALLView application.<br>
-		In addition it is possible to export a representation into POVRay format.
+		It is used e.g. used in the \link BALL::VIEW::Scene Scene\endlink in the BALLView application. 
+		<br>
+		In addition it is possible to export a representation into \link BALL::VIEW::POVRenderer POVRay\endlink format.
 		This enables high quality rendering of single images e.g. for high resolution
 		images in publications. <br>
 		If you want to add support for a new type of rendering, create a new derived 
-		Renderer class.<br>
+		\link BALL::VIEW::Renderer Renderer\endlink class. 
 */

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.h,v 1.24 2004/02/26 08:41:41 anhi Exp $
+// $Id: colorProcessor.h,v 1.25 2004/05/19 13:14:39 amoll Exp $
 //
 
 #ifndef BALL_VIEW_MODELS_COLORPROCESSOR_H
@@ -39,14 +39,17 @@ namespace BALL
 				This class defines the interface and basic algorithms to colorize geometric objects, e.g. 
 				Sphere, Tube, TwoColoredTube, etc.
 				Derived classes implement special ways to colorize, e.g. by charge or element.
-				They have to overload the method getColor(Composite*).\par
+				They have to overload the method getColor(Composite*). 
+				<br>
 				If no color can be calculated for a GeometricObject, e.g. if it has no Composite, the default
-				color is set.\par
+				color is set.
+				<br>
 				A bit tricky is the coloring of meshes. The goal was to give every triangle of a mesh a color
-				according to its nearest atom. To do so, a threedimensional HashGrid3 is used. It is
+				according to its nearest Atom. To do so, a threedimensional HashGrid3 is used. It is
 				computed, when the ColorProcessor first encounters a Mesh in the operator ().
 				For this a pointer to the HashSet with the used Composite instances exists, which is set by the 
 				Representation.
+				\ingroup  ViewModels
 		*/
 		class BALL_EXPORT ColorProcessor
 			: public UnaryProcessor<GeometricObject*>
@@ -211,7 +214,9 @@ namespace BALL
 		};
 
 		
-		/// Base class for ColorProcessors, that interpolate between two values
+		/** Base class for ColorProcessors, that interpolate between two values
+				\ingroup  ViewModels
+		*/
 		class InterpolateColorProcessor
 			: public ColorProcessor
 		{
