@@ -1,4 +1,4 @@
-// $Id: TCPTransfer.C,v 1.1 2001/09/09 23:51:42 amoll Exp $
+// $Id: TCPTransfer.C,v 1.2 2001/09/10 12:50:12 amoll Exp $
 
 #include <BALL/SYSTEM/TCPTransfer.h>
 #include <BALL/SYSTEM/timer.h>
@@ -44,7 +44,7 @@ TCPTransfer::Status TCPTransfer::transfer()
 	}
 
 	close(socket_);
-	return UNINITIALIZED_ERROR;
+	return UNKNOWN_PROTOCOL_ERROR;
 }
 
 bool TCPTransfer::set(ofstream& file, const String& address)
@@ -75,28 +75,45 @@ bool TCPTransfer::set(ofstream& file, const String& address)
 			return false;
 		}
 	}
-		
-	file_address_ = host_address_.getSubstring(host_address_.getField(0, "/").size()); 
-	host_address_ = host_address_.getField(0, "/");
+	// ========================================================= resolve address
+	// example:   ftp://anonymous:nobody@asd.de@ftp.gwdg.de:21/pub/newfiles.gz		
 	
+	file_address_ = host_address_.getSubstring(host_address_.getField(0, "/").size()); 
+	host_address_ = host_address_.left(host_address_.size() - file_address_.size());
+
+	if (host_address_.has(':'))
+	{
+		String temp = host_address_.getField(-1, ":");
+		if (!temp.isEmpty() && !temp.has('@'))
+		{
+			try
+			{
+				port_	= temp.toUnsignedInt();
+			}
+			catch(Exception::InvalidFormat)
+			{
+				return false;
+			}
+			host_address_ = host_address_.left(host_address_.size() - temp.size() - 1);
+		}
+	}
+	if (host_address_.has(':'))
+	{		
+		login_ = host_address_.getField(0, ":");
+		host_address_ = host_address_.right(host_address_.size() - login_.size() - 1);
+	}
+
+	if (host_address_.has('@'))
+	{
+		String temp = host_address_.getField(-1, "@");
+		password_ = host_address_.left(host_address_.size() - temp.size() - 1);
+		host_address_ = temp;
+	}
 	if (file_address_.isEmpty() || host_address_.isEmpty())
 	{
 		return false;
 	}
 	
-	if (host_address_.has(':'))
-	{
-		try
-		{
-			port_	= host_address_.getField(1, ":").toUnsignedInt();
-		}
-		catch(Exception::InvalidFormat)
-		{
-			return false;
-		}
-		host_address_ = host_address_.getField(0, ":");
-	}
-
 	status_ = NO_ERROR;
 	
 	return true;
@@ -123,6 +140,11 @@ TCPTransfer::Status TCPTransfer::getHTTP_()
 {
 	String query;
 	query  = "GET /" + file_address_ + " HTTP/1.0\n\r";
+	//BAUSTELLE basic authentification doesnt yet works
+	if (!login_.isEmpty() && !password_.isEmpty())
+	{
+		query += "Authorization: Basic "+ login_ + ":" + password_ + "\n\r";
+	}
 	query += "Accept: */*\n\r";
 	query += "User-Agent: inet.c\n\r\n\r";
 	Status status = logon_(query);
