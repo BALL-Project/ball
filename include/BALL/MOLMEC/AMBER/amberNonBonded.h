@@ -1,4 +1,4 @@
-// $Id: amberNonBonded.h,v 1.1 1999/08/26 07:53:21 oliver Exp $
+// $Id: amberNonBonded.h,v 1.2 1999/09/17 13:16:12 pmueller Exp $
 // Molecular Mechanics: Amber force field, bond stretch component
 
 #ifndef BALL_MOLMEC_AMBER_NONBONDED_H
@@ -189,6 +189,11 @@ namespace BALL
 		/**	Scaling factor for electrostatic_1_4_interactions
 		*/
 		float	scaling_electrostatic_1_4_;
+
+                /*_     Flag for using constant or distance dependent dielectric constant 
+                        True = distance dependent
+                */
+                bool    use_dist_depend_dielectric_; 
 
 		/**	A number that characterizes the most efficient way to calculate the non-bonded atom pairs
 			0: brute force: all against all

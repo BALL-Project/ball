@@ -1,4 +1,4 @@
-// $Id: amber.h,v 1.2 1999/09/05 09:02:44 oliver Exp $ 
+// $Id: amber.h,v 1.3 1999/09/17 13:16:12 pmueller Exp $ 
 // Molecular Mechanics: Amber force field class
 
 #ifndef BALL_MOLMEC_AMBER_AMBER_H
@@ -54,6 +54,10 @@ namespace BALL
 			/**	1-4 electrostatic interaction scaling factor.
 			*/
 			static const char* SCALING_ELECTROSTATIC_1_4;
+
+                        /**     use of distance dependent dielectric constant
+                        */
+                        static const char *DISTANCE_DEPENDENT_DIELECTRIC; 
 		};
 
 		struct Default
@@ -73,6 +77,11 @@ namespace BALL
 			/**	Vdw scaling factor for 1-4 interaction
 			*/
 			static const float SCALING_VDW_1_4; 
+
+			/**	use of distance dependent dielectric constant
+                                default = false 
+			*/
+			static const bool DISTANCE_DEPENDENT_DIELECTRIC; 
 		};
 
 		//@}
