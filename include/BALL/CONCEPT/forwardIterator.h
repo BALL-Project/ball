@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forwardIterator.h,v 1.22 2003/06/11 08:08:48 oliver Exp $
+// $Id: forwardIterator.h,v 1.23 2003/06/11 16:09:22 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_FORWARDITER_H
@@ -28,7 +28,7 @@ namespace BALL
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	class ConstForwardIterator
-		: public ConstBaseIterator<Container, DataType, Position, Traits>
+		: public BaseIterator<Container, DataType, Position, Traits>
 	{
 		public:
 	
@@ -51,9 +51,9 @@ namespace BALL
 		ConstForwardIterator(const ConstForwardIterator& iterator) throw();
 
 		///
-		ConstForwardIterator(const ConstBaseIterator<Container, DataType, Position, Traits>& iterator) 
+		ConstForwardIterator(const BaseIterator<Container, DataType, Position, Traits>& iterator) 
 			throw()
-			:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
+			:	BaseIterator<Container, DataType, Position, Traits>(iterator)
 		{
 		}
 
@@ -66,7 +66,7 @@ namespace BALL
 		ConstForwardIterator& operator = (const ConstForwardIterator& iterator) throw();
 
 		//
-		ConstForwardIterator& operator = (const ConstBaseIterator<Container, DataType, Position, Traits>& iterator) throw();
+		ConstForwardIterator& operator = (const BaseIterator<Container, DataType, Position, Traits>& iterator) throw();
 		//@}
 
 		/** @name Iterator methods
@@ -112,7 +112,7 @@ namespace BALL
           throw Exception::InvalidIterator(__FILE__, __LINE__);
 				}
       #endif
-      ConstBaseIterator<Container, DataType, Position, Traits>::operator ++ ();
+      BaseIterator<Container, DataType, Position, Traits>::getTraits().forward();
       return *this;
 		}
 
@@ -144,7 +144,7 @@ namespace BALL
 	ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator
 		(const ConstForwardIterator& iterator)
 		throw()
-		:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
+		:	BaseIterator<Container, DataType, Position, Traits>(iterator)
 	{
 	}
 
@@ -157,7 +157,7 @@ namespace BALL
 	{
 		if (this != &iterator)
 		{
-			ConstBaseIterator<Container, DataType, Position, Traits>::operator = (iterator);
+			BaseIterator<Container, DataType, Position, Traits>::operator = (iterator);
 		}
 		return *this;
 	}
@@ -166,12 +166,12 @@ namespace BALL
 	BALL_INLINE
 	ConstForwardIterator<Container, DataType, Position, Traits>&
 	ConstForwardIterator<Container, DataType, Position, Traits>::operator =
-		(const ConstBaseIterator<Container, DataType, Position, Traits>& iterator)
+		(const BaseIterator<Container, DataType, Position, Traits>& iterator)
 		throw()
 	{
 		if (this != &iterator)
 		{
-			ConstBaseIterator<Container, DataType, Position, Traits>::operator = (iterator);
+			BaseIterator<Container, DataType, Position, Traits>::operator = (iterator);
 		}
 		return *this;
 	}
@@ -182,13 +182,13 @@ namespace BALL
 		throw(Exception::InvalidIterator)
 	{
 		#ifdef BALL_DEBUG
-			if (ConstBaseIterator<Container, DataType, Position, Traits>::getTraits().isSingular())
+			if (BaseIterator<Container, DataType, Position, Traits>::getTraits().isSingular())
 			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
 			}
 		#endif
 
-		ConstBaseIterator<Container, DataType, Position, Traits>::getTraits().toBegin();
+		BaseIterator<Container, DataType, Position, Traits>::getTraits().toBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -208,13 +208,13 @@ namespace BALL
 		throw(Exception::InvalidIterator)
 	{
 		#ifndef BALL_DEBUG
-			if (ConstBaseIterator<Container, DataType, Position, Traits>::getTraits().isSingular())
+			if (BaseIterator<Container, DataType, Position, Traits>::getTraits().isSingular())
 			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
 			}
 		#endif
 
-		return ConstBaseIterator<Container, DataType, Position, Traits>::getTraits().isBegin();
+		return BaseIterator<Container, DataType, Position, Traits>::getTraits().isBegin();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -223,13 +223,13 @@ namespace BALL
 		throw(Exception::InvalidIterator)
 	{
 		#ifndef BALL_DEBUG
-			if (ConstBaseIterator<Container, DataType, Position, Traits>::getTraits().isSingular())
+			if (BaseIterator<Container, DataType, Position, Traits>::getTraits().isSingular())
 			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
 			}
 		#endif
 
-		ConstBaseIterator<Container, DataType, Position, Traits>::getTraits().toEnd();
+		BaseIterator<Container, DataType, Position, Traits>::getTraits().toEnd();
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
@@ -249,20 +249,20 @@ namespace BALL
 		throw(Exception::InvalidIterator)
 	{
 		#ifndef BALL_DEBUG
-			if (ConstBaseIterator<Container, DataType, Position, Traits>::getTraits().isSingular())
+			if (BaseIterator<Container, DataType, Position, Traits>::getTraits().isSingular())
 			{
 				throw Exception::InvalidIterator(__FILE__, __LINE__);
 			}
 		#endif
 
-		return ConstBaseIterator<Container, DataType, Position, Traits>::getTraits().isEnd();
+		return BaseIterator<Container, DataType, Position, Traits>::getTraits().isEnd();
 	}
 			
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	BALL_INLINE
 	ConstForwardIterator<Container, DataType, Position, Traits>::ConstForwardIterator(const Container& container)
 		throw()
-		:	ConstBaseIterator<Container, DataType, Position, Traits>(container)
+		:	BaseIterator<Container, DataType, Position, Traits>(container)
 	{
 	}
 
@@ -334,27 +334,17 @@ namespace BALL
 		BALL_INLINE pointer operator -> () const throw() { return (pointer)&ConstForwardIterator<Container, DataType, Position, Traits>::getTraits().getData(); }
 
     /// Increment operator
-    ForwardIterator& operator ++ () throw(Exception::InvalidIterator)
+    ForwardIterator& operator ++ () throw(Exception::Precondition)
     {
-      #ifdef BALL_DEBUG
-        if (!ConstForwardIterator<Container, DataType, Position, Traits>::isValid())
-        {
-          throw Exception::InvalidIterator(__FILE__, __LINE__);
-				}
-      #endif
+			BALL_PRECONDITION_EXCEPTION((ConstForwardIterator<Container, DataType, Position, Traits>::isValid()), "invalid iterator")
       ConstForwardIterator<Container, DataType, Position, Traits>::operator ++ ();
       return *this;
 		}
 
     /// Postfix increment operator
-    ForwardIterator operator ++ (int) throw(Exception::InvalidIterator)
+    ForwardIterator operator ++ (int) throw(Exception::Precondition)
     {
-      #ifdef BALL_DEBUG
-        if (!ConstForwardIterator<Container, DataType, Position, Traits>::isValid())
-        {
-          throw Exception::InvalidIterator(__FILE__, __LINE__);
-				}
-      #endif
+			BALL_PRECONDITION_EXCEPTION((ConstForwardIterator<Container, DataType, Position, Traits>::isValid()), "invalid iterator")
 
       ForwardIterator tmp(*this);
       ++(*this);
@@ -388,7 +378,7 @@ namespace BALL
 	{
 		if (this != &iterator)
 		{
-			ConstBaseIterator<Container, DataType, Position, Traits>::operator = (iterator);
+			BaseIterator<Container, DataType, Position, Traits>::operator = (iterator);
 		}
 		return *this;
 	}

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.h,v 1.46 2003/06/11 08:08:48 oliver Exp $
+// $Id: composite.h,v 1.47 2003/06/11 16:09:22 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_COMPOSITE_H
@@ -916,14 +916,14 @@ namespace BALL
 
 
 	
-		class AncestorIteratorTraits_
+		class AncestorIteratorTraits
 		{
 			public:
 
-			BALL_CREATE_DEEP(AncestorIteratorTraits_)
+			BALL_CREATE_DEEP(AncestorIteratorTraits)
 
 			BALL_INLINE
-			AncestorIteratorTraits_()
+			AncestorIteratorTraits()
 				throw()
 				:	bound_(0),
 					ancestor_(0)
@@ -931,7 +931,7 @@ namespace BALL
 			}
 		
 			BALL_INLINE
-			AncestorIteratorTraits_(const Composite& composite)
+			AncestorIteratorTraits(const Composite& composite)
 				throw()
 				:	bound_((Composite *)&composite),
 					ancestor_(0)
@@ -939,7 +939,7 @@ namespace BALL
 			}
 		
 			BALL_INLINE
-			AncestorIteratorTraits_(const AncestorIteratorTraits_& traits, bool /* deep */ = true)
+			AncestorIteratorTraits(const AncestorIteratorTraits& traits, bool /* deep */ = true)
 				throw()
 				:	bound_(traits.bound_),
 					ancestor_(traits.ancestor_)
@@ -947,7 +947,7 @@ namespace BALL
 			}
 		
 			BALL_INLINE
-			const AncestorIteratorTraits_& operator = (const AncestorIteratorTraits_& traits)
+			const AncestorIteratorTraits& operator = (const AncestorIteratorTraits& traits)
 				throw()
 			{
 				bound_ = traits.bound_;
@@ -955,117 +955,37 @@ namespace BALL
 				return *this;
 			}
 
-			BALL_INLINE
-			Composite* getContainer()
-				throw()
-			{
-				return bound_;
-			}
+			BALL_INLINE	Composite* getContainer()	throw() { throw bound_; }
 
-			BALL_INLINE
-			const Composite* getContainer() const
-				throw()
-			{
-				return bound_;
-			}
+			BALL_INLINE	const Composite* getContainer() const	throw() { return bound_; }
 
-			BALL_INLINE
-			bool isSingular() const
-				throw()
-			{
-				return (bound_ == 0);
-			}
+			BALL_INLINE	bool isSingular() const	throw()	{	return (bound_ == 0);	}
 
-			BALL_INLINE
-			Composite*& getPosition()
-				throw()
-			{
-				return ancestor_;
-			}
+			BALL_INLINE	Composite*& getPosition()	throw()	{	return ancestor_;	}
 
-			BALL_INLINE
-			Composite* const& getPosition() const
-				throw()
-			{
-				return ancestor_;
-			}
+			BALL_INLINE	Composite* const& getPosition() const	throw() {	return ancestor_;	}
 
-			BALL_INLINE
-			bool operator == (const AncestorIteratorTraits_& traits) const
-				throw()
-			{
-				return (ancestor_ == traits.ancestor_);
-			}
+			BALL_INLINE	bool operator == (const AncestorIteratorTraits& traits) const	throw()	{	return (ancestor_ == traits.ancestor_);	}
 		
-			BALL_INLINE
-			bool operator != (const AncestorIteratorTraits_& traits) const
-				throw()
-			{
-				return (ancestor_ != traits.ancestor_);
-			}
-		
-			BALL_INLINE
-			bool isValid() const
-				throw()
-			{
-				return (bound_ != 0 && ancestor_ != 0);
-			}
+			BALL_INLINE	bool operator != (const AncestorIteratorTraits& traits) const	throw()	{	return !(ancestor_ == traits.ancestor_); }
 
-			BALL_INLINE
-			void invalidate()
-				throw()
-			{
-				bound_ 	= ancestor_ = 0; 
-			}
+			BALL_INLINE	bool isValid() const	throw()	{	return (bound_ != 0 && ancestor_ != 0);	}
+
+			BALL_INLINE	void invalidate()	throw()	{	bound_ 	= ancestor_ = 0; }
 			
-			BALL_INLINE
-			void toBegin()
-				throw()
-			{
-				ancestor_ = bound_->parent_;
-			}
+			BALL_INLINE	void toBegin()	throw()	{	ancestor_ = bound_->parent_; }
 
-			BALL_INLINE
-			bool isBegin() const
-				throw()
-			{
-				return (ancestor_ == bound_->parent_);
-			}
+			BALL_INLINE	bool isBegin() const throw() { return (ancestor_ == bound_->parent_); }
 
-			BALL_INLINE
-			void toEnd()
-				throw()
-			{
-				ancestor_ = 0;
-			}
+			BALL_INLINE void toEnd() throw() { ancestor_ = 0;	}
 
-			BALL_INLINE
-			bool isEnd() const
-				throw()
-			{
-				return (ancestor_ == 0);
-			}
+			BALL_INLINE	bool isEnd() const throw() { return (ancestor_ == 0); }
 
-			BALL_INLINE
-			Composite& getData()
-				throw()
-			{
-				return *ancestor_;
-			}
+			BALL_INLINE Composite& getData() throw() { return *ancestor_;	}
 
-			BALL_INLINE
-			const Composite& getData() const
-				throw()
-			{
-				return *ancestor_;
-			}
+			BALL_INLINE	const Composite& getData() const throw() { return *ancestor_; }
 
-			BALL_INLINE
-			void forward()
-				throw()
-			{
-				ancestor_ = ancestor_->parent_;
-			}
+			BALL_INLINE void forward() throw() { ancestor_ = ancestor_->parent_; }
 
 			private:
 
@@ -1073,26 +993,22 @@ namespace BALL
 			Composite* ancestor_;
 		};
 
-		friend class AncestorIteratorTraits_;
+		friend class AncestorIteratorTraits;
 
-		typedef ForwardIterator <Composite, Composite, Composite *, AncestorIteratorTraits_>
+		typedef ForwardIterator <Composite, Composite, Composite *, AncestorIteratorTraits>
 			AncestorIterator;
 
-		AncestorIterator beginAncestor()
-			throw()
+		AncestorIterator beginAncestor() throw()
 		{
 			return AncestorIterator::begin(*this);
 		}
 
-		AncestorIterator endAncestor()
-			throw()
+		AncestorIterator endAncestor() throw()
 		{
 			return AncestorIterator::end(*this);
 		}
 
-
-
-		typedef ConstForwardIterator<Composite, Composite, Composite *, AncestorIteratorTraits_>
+		typedef ConstForwardIterator<Composite, Composite, Composite *, AncestorIteratorTraits>
 			AncestorConstIterator;
 
 		AncestorConstIterator beginAncestor() const
@@ -1109,34 +1025,32 @@ namespace BALL
 
 
 
-		class ChildCompositeIteratorTraits_
+		class ChildCompositeIteratorTraits
 		{
 			public:
 
-			BALL_CREATE_DEEP(ChildCompositeIteratorTraits_)
-
-			ChildCompositeIteratorTraits_()
+			ChildCompositeIteratorTraits()
 				throw()
 				:	bound_(0),
 					child_(0)
 			{
 			}
 			
-			ChildCompositeIteratorTraits_(const Composite& composite)
+			ChildCompositeIteratorTraits(const Composite& composite)
 				throw()
 				:	bound_((Composite *)&composite),
 					child_(0)
 			{
 			}
 		
-			ChildCompositeIteratorTraits_(const ChildCompositeIteratorTraits_& traits, bool /* deep */ = true)
+			ChildCompositeIteratorTraits(const ChildCompositeIteratorTraits& traits)
 				throw()
 				:	bound_(traits.bound_),
 					child_(traits.child_)
 			{
 			}
 		
-			const ChildCompositeIteratorTraits_& operator = (const ChildCompositeIteratorTraits_& traits)
+			const ChildCompositeIteratorTraits& operator = (const ChildCompositeIteratorTraits& traits)
 				throw()
 			{
 				bound_ = traits.bound_;
@@ -1144,141 +1058,57 @@ namespace BALL
 				return *this;
 			}
 
-			Composite *getContainer()
-				throw()
-			{
-				return bound_;
-			}
+			BALL_INLINE Composite* getContainer()	throw() {	return bound_; }
 
-			const Composite *getContainer() const
-				throw()
-			{
-				return bound_;
-			}
+			BALL_INLINE const Composite* getContainer() const throw()	{	return bound_; }
 
-			bool isSingular() const
-				throw()
-			{
-				return (bound_ == 0);
-			}
+			BALL_INLINE bool isSingular() const throw()	{ return (bound_ == 0);	}
 
-			Composite*& getPosition()
-				throw()
-			{
-				return child_;
-			}
+			BALL_INLINE Composite*& getPosition() throw()	{ return child_; }
 
-			Composite* const& getPosition() const
-				throw()
-			{
-				return child_;
-			}
+			BALL_INLINE Composite* const& getPosition() const	throw()	{ return child_; }
 
-			bool operator == (const ChildCompositeIteratorTraits_& traits) const
-				throw()
-			{
-				return (child_ == traits.child_);
-			}
+			BALL_INLINE bool operator == (const ChildCompositeIteratorTraits& traits) const throw() { return (child_ == traits.child_); }
 		
-			bool operator != (const ChildCompositeIteratorTraits_& traits) const
-				throw()
-			{
-				return (child_ != traits.child_);
-			}
+			BALL_INLINE bool operator != (const ChildCompositeIteratorTraits& traits) const throw() { return !(child_ == traits.child_); }
 		
-			bool isValid() const
-				throw()
-			{
-				return (bound_ != 0 && child_ != 0);
-			}
+			BALL_INLINE bool isValid() const throw() { return (bound_ != 0 && child_ != 0); }
 
-			void invalidate()
-				throw()
-			{
-				bound_ = child_ = 0; 
-			}
+			BALL_INLINE void invalidate() throw() { bound_ = child_ = 0; }
 
-			void toBegin()
-				throw()
-			{
-				child_ = bound_->first_child_;
-			}
+			BALL_INLINE void toBegin() throw() { child_ = bound_->first_child_; }
 
-			bool isBegin() const
-				throw()
-			{
-				return (child_ == bound_->first_child_);
-			}
+			BALL_INLINE bool isBegin() const throw() { return (child_ == bound_->first_child_); }
 
-			void toEnd()
-				throw()
-			{
-				child_ = 0;
-			}
+			BALL_INLINE void toEnd() throw() { child_ = 0; }
 
-			bool isEnd() const
-				throw()
-			{
-				return (child_ == 0);
-			}
+			BALL_INLINE bool isEnd() const throw() { return (child_ == 0); }
 
-			void toRBegin()
-				throw()
-			{
-				child_ = bound_->last_child_;
-			}
+			BALL_INLINE void toRBegin() throw() { child_ = bound_->last_child_; }
 
-			bool isRBegin() const
-				throw()
-			{
-				return (child_ == bound_->last_child_);
-			}
+			BALL_INLINE bool isRBegin() const throw() { return (child_ == bound_->last_child_); }
 
-			void toREnd()
-				throw()
-			{
-				child_ = 0;
-			}
+			BALL_INLINE void toREnd() throw() { child_ = 0; }
 
-			bool isREnd() const
-				throw()
-			{
-				return (child_ == 0);
-			}
+			BALL_INLINE bool isREnd() const throw() { return (child_ == 0); }
 
-			Composite& getData()
-				throw()
-			{
-				return *child_;
-			}
+			BALL_INLINE Composite& getData() throw() { return *child_; }
 
-			const Composite& getData() const
-				throw()
-			{
-				return *child_;
-			}
+			BALL_INLINE const Composite& getData() const throw() { return *child_; }
 
-			void forward()
-				throw()
-			{
-				child_ = child_->next_;
-			}
+			BALL_INLINE void forward() throw() {	child_ = child_->next_;	}
 
-			void backward()
-				throw()
-			{
-				child_ = child_->previous_;
-			}
+			BALL_INLINE void backward()	throw()	{	child_ = child_->previous_;	}
 
 			private:
 
-			Composite *bound_;
-			Composite *child_;
+			Composite* bound_;
+			Composite* child_;
 		};
 
-		friend class ChildCompositeIteratorTraits_;
+		friend class ChildCompositeIteratorTraits;
 
-		typedef BidirectionalIterator<Composite, Composite, Composite *, ChildCompositeIteratorTraits_>
+		typedef BidirectionalIterator<Composite, Composite, Composite *, ChildCompositeIteratorTraits>
 			ChildCompositeIterator;
 
 		ChildCompositeIterator beginChildComposite()
@@ -1295,7 +1125,7 @@ namespace BALL
 
 
 
-		typedef ConstBidirectionalIterator<Composite, Composite, Composite *, ChildCompositeIteratorTraits_>
+		typedef ConstBidirectionalIterator<Composite, Composite, Composite *, ChildCompositeIteratorTraits>
 			ChildCompositeConstIterator;
 
 		ChildCompositeConstIterator beginChildComposite() const
@@ -1338,13 +1168,13 @@ namespace BALL
 			return ChildCompositeConstReverseIterator(beginChildComposite());
 		}
 
-		class CompositeIteratorPosition_
+		class CompositeIteratorPosition
 		{
 			friend class Composite;
 
 			public:
 
-			CompositeIteratorPosition_()
+			CompositeIteratorPosition()
 				throw()
 				:	empty_stack_(0),
 					stack_(0),
@@ -1354,7 +1184,7 @@ namespace BALL
 			{
 			}
 
-			CompositeIteratorPosition_(const CompositeIteratorPosition_& position)
+			CompositeIteratorPosition(const CompositeIteratorPosition& position)
 				throw()
 				:	empty_stack_(position.empty_stack_),
 					stack_(position.stack_),
@@ -1385,7 +1215,7 @@ namespace BALL
 				traversing_forward_ = true;
 			}
 
-			const CompositeIteratorPosition_& operator = (const CompositeIteratorPosition_& position)
+			const CompositeIteratorPosition& operator = (const CompositeIteratorPosition& position)
 				throw()
 			{
 				if (this != &position)
@@ -1400,13 +1230,13 @@ namespace BALL
 				return *this;
 			}
 
-			bool operator == (const Composite::CompositeIteratorPosition_& position) const
+			bool operator == (const Composite::CompositeIteratorPosition& position) const
 				throw()
 			{
 				return (current_ == position.current_);
 			}
 
-			bool operator != (const Composite::CompositeIteratorPosition_& position) const
+			bool operator != (const Composite::CompositeIteratorPosition& position) const
 				throw()
 			{
 				return (current_ != position.current_);
@@ -1423,222 +1253,159 @@ namespace BALL
 
 
 
-		class CompositeIteratorTraits_
+		class CompositeIteratorTraits
 		{
 			public:
 
-			BALL_CREATE_DEEP(CompositeIteratorTraits_)
-
-			CompositeIteratorTraits_()
+			CompositeIteratorTraits()
 				throw()
 				:	bound_(0),
 					position_()
 			{
 			}
 		
-			CompositeIteratorTraits_(const Composite& composite)
+			CompositeIteratorTraits(const Composite& composite)
 				throw()
 				:	bound_((Composite*)&composite),
 					position_()
 			{
 			}
 		
-			CompositeIteratorTraits_(const CompositeIteratorTraits_& traits, bool /* deep */ = true)
+			CompositeIteratorTraits(const CompositeIteratorTraits& traits, bool /* deep */ = true)
 				throw()
 				:	bound_(traits.bound_),
 					position_(traits.position_)
 			{
 			}
 		
-			bool isValid() const
-				throw()
+			BALL_INLINE 
+			bool isValid() const throw()
 			{
-				return (bound_ != 0	&& position_.getCurrent() != 0);
+				return ((bound_ != 0)	&& (position_.getCurrent() != 0));
 			}
 
-			const CompositeIteratorTraits_& operator = (const CompositeIteratorTraits_& traits)
-				throw()
+			BALL_INLINE 
+			const CompositeIteratorTraits& operator = (const CompositeIteratorTraits& traits) throw()
 			{
 				bound_ = traits.bound_;
 				position_ = traits.position_;
 				return *this;
 			}
 
-			Composite* getContainer()
-				throw()
-			{
-				return bound_;
-			}
+			BALL_INLINE Composite* getContainer()	throw()	{	return bound_; }
 
-			const Composite* getContainer() const
-				throw()
-			{
-				return bound_;
-			}
+			BALL_INLINE const Composite* getContainer() const	throw() { return bound_; }
 		
-			bool isSingular() const
-				throw()
-			{
-				return (bound_ == 0);
-			}
+			BALL_INLINE bool isSingular() const	throw()	{	return (bound_ == 0);	}
 		
-			CompositeIteratorPosition_& getPosition()
-				throw()
-			{
-				return position_;
-			}
+			BALL_INLINE CompositeIteratorPosition& getPosition() throw() { return position_;	}
 
-			const CompositeIteratorPosition_& getPosition() const
-				throw()
-			{
-				return position_;
-			}
+			BALL_INLINE const CompositeIteratorPosition& getPosition() const throw() { return position_; }
 
-			Composite& getData()
-				throw()
-			{
-				return *(position_.getCurrent());
-			}
+			BALL_INLINE Composite& getData() throw() { return *(position_.getCurrent()); }
 
-			const Composite& getData() const
-				throw()
-			{
-				return *(position_.getCurrent());
-			}
+			BALL_INLINE const Composite& getData() const throw() { return *(position_.getCurrent()); }
 
-			bool operator == (const CompositeIteratorTraits_& traits) const
-				throw()
-			{
-				return (position_	== traits.position_);
-			}
+			BALL_INLINE bool operator == (const CompositeIteratorTraits& traits) const throw() { return (position_	== traits.position_); }
 		
-			bool operator != (const CompositeIteratorTraits_& traits) const
-				throw()
-			{
-				return (position_ != traits.position_);
-			}
+			BALL_INLINE bool operator != (const CompositeIteratorTraits& traits) const throw() { return (position_ != traits.position_); }
 		
-			void invalidate()
-				throw()
-			{
-				bound_ = 0;
+			BALL_INLINE void invalidate() throw()	
+			{ 
+				bound_ = 0;	
 				position_.clear();
 			}
 
-			void toBegin()
-				throw()
+			BALL_INLINE void toBegin() throw()
 			{
-				Composite::setCurrentPreorderIteratorPosition_
-					(Composite::getFirstPreorderIteratorPosition_(*bound_), position_, false);
+				Composite::setCurrentPreorderIteratorPosition
+					(Composite::getFirstPreorderIteratorPosition(*bound_), position_, false);
 			}
 
-			bool isBegin() const
-				throw()
+			BALL_INLINE bool isBegin() const throw()
 			{
-				return (position_.getCurrent() == &Composite::getFirstPreorderIteratorPosition_(*bound_));
+				return (position_.getCurrent() == &Composite::getFirstPreorderIteratorPosition(*bound_));
 			}
 
-			void toEnd()
-				throw()
+			BALL_INLINE void toEnd() throw() 
 			{
 				toRBegin();
 				forward();
 			}
 
-			bool isEnd() const
-				throw()
+			BALL_INLINE bool isEnd() const throw()
 			{
 				return (position_.getCurrent() == 0);
 			}
 
-			void toRBegin()
-				throw()
+			BALL_INLINE void toRBegin() throw()
 			{
-				Composite::setLastPreorderIteratorPosition_(*bound_, position_,false);
+				Composite::setLastPreorderIteratorPosition(*bound_, position_,false);
 			}
 
-			bool isRBegin() const
-				throw()
+			BALL_INLINE bool isRBegin() const throw()
 			{
-				return (position_.getCurrent() == &Composite::getLastPreorderIteratorPosition_(*bound_)); 
+				return (position_.getCurrent() == &Composite::getLastPreorderIteratorPosition(*bound_)); 
 			}
 		
-			void toREnd()
-				throw()
+			BALL_INLINE void toREnd() throw()
 			{
-				Composite::setCurrentPreorderIteratorPosition_(*bound_, position_, false);
+				Composite::setCurrentPreorderIteratorPosition(*bound_, position_, false);
 				backward();	
 			}
 
-			bool isREnd() const
-				throw()
+			BALL_INLINE bool isREnd() const throw()
 			{
 				return (position_.getCurrent() == 0);
 			}
 		
-			void forward() throw()
+			BALL_INLINE void forward() throw()
 			{
-				bound_->getNextPreorderIteratorPosition_(position_);
+				bound_->getNextPreorderIteratorPosition(position_);
 			}
 
-			void backward()	throw()
+			BALL_INLINE void backward()	throw()
 			{
 				if (!isEnd())
 				{
-					bound_->getPreviousPreorderIteratorPosition_(position_);
+					bound_->getPreviousPreorderIteratorPosition(position_);
 				}
 				else
 				{
-					Composite::setLastPreorderIteratorPosition_(*bound_, position_, false);
+					Composite::setLastPreorderIteratorPosition(*bound_, position_, false);
 				}
 			}
 
-
 			protected:
 
-			/** A pointer to the "container" the iterator is bound to
-			*/
-			Composite*									bound_;
+			/// A pointer to the "container" the iterator is bound to
+			Composite* bound_;
 
-			/** The current iterator position
-			*/
-			CompositeIteratorPosition_	position_;
+			/// The current iterator position
+			CompositeIteratorPosition	position_;
 		};
 
-		friend class CompositeIteratorTraits_;
+		friend class CompositeIteratorTraits;
 
-		typedef BidirectionalIterator<Composite, Composite, CompositeIteratorPosition_, CompositeIteratorTraits_>
+		typedef BidirectionalIterator<Composite, Composite, CompositeIteratorPosition, CompositeIteratorTraits>
 			CompositeIterator;
 
-		CompositeIterator beginComposite()
-			throw()
-		{
-			return CompositeIterator::begin(*this);
-		}
+		CompositeIterator beginComposite() throw() { return CompositeIterator::begin(*this); }
 
-		CompositeIterator endComposite()
-			throw()
-		{
-			return CompositeIterator::end(*this);
-		}
+		CompositeIterator endComposite() throw() { return CompositeIterator::end(*this); }
 
-
-
-		typedef ConstBidirectionalIterator<Composite, Composite, CompositeIteratorPosition_, CompositeIteratorTraits_>
+		typedef ConstBidirectionalIterator<Composite, Composite, CompositeIteratorPosition, CompositeIteratorTraits>
 			CompositeConstIterator;
 
-		CompositeConstIterator beginComposite() const
-			throw()
-		{
+		CompositeConstIterator beginComposite() const throw() 
+		{	
 			return CompositeConstIterator::begin(*this);
 		}
 
-		CompositeConstIterator endComposite() const
-			throw()
+		CompositeConstIterator endComposite() const	throw()
 		{
 			return CompositeConstIterator::end(*this);
 		}
-
 
 
 		typedef std::reverse_iterator<CompositeIterator> CompositeReverseIterator;
@@ -1652,7 +1419,6 @@ namespace BALL
 		{
 			return CompositeReverseIterator(beginComposite());
 		}
-
 
 
 		typedef std::reverse_iterator<CompositeConstIterator> CompositeConstReverseIterator;
@@ -1669,89 +1435,74 @@ namespace BALL
 
 
 
-		class SubcompositeIteratorTraits_
-			: public CompositeIteratorTraits_
+		class SubcompositeIteratorTraits
+			: public CompositeIteratorTraits
 		{
 			public:
 
-			BALL_CREATE_DEEP(SubcompositeIteratorTraits_)
-
-			SubcompositeIteratorTraits_()
-				throw()
-				: CompositeIteratorTraits_()
+			BALL_INLINE SubcompositeIteratorTraits() throw()
+				:	CompositeIteratorTraits()
 			{
 			}
 		
-			SubcompositeIteratorTraits_(const Composite& composite)
-				throw()
-				:	CompositeIteratorTraits_(composite)
+			SubcompositeIteratorTraits(const Composite& composite) throw()
+				:	CompositeIteratorTraits(composite)
 			{
 			}
 		
-			SubcompositeIteratorTraits_(const SubcompositeIteratorTraits_& traits, bool /* deep */ = true)
+			BALL_INLINE SubcompositeIteratorTraits(const SubcompositeIteratorTraits& traits)
 				throw()
-				:	CompositeIteratorTraits_(traits)
+				:	CompositeIteratorTraits(traits)
 			{
 			}
 
-			void toBegin()
-				throw()
+			BALL_INLINE void toBegin() throw()
 			{
-				Composite::setCurrentPreorderIteratorPosition_
-					(Composite::getFirstPreorderIteratorPosition_(*bound_), position_, true);
+				Composite::setCurrentPreorderIteratorPosition(Composite::getFirstPreorderIteratorPosition(*bound_), position_, true);
 			}
 
-			void toEnd()
-				throw()
+			BALL_INLINE void toEnd() throw()
 			{
 				toRBegin();
 				forward();
 			}
 
-			void toRBegin()
-				throw()
+			BALL_INLINE void toRBegin()	throw()
 			{
-				Composite::setLastPreorderIteratorPosition_(*bound_, position_, true);
+				Composite::setLastPreorderIteratorPosition(*bound_, position_, true);
 			}
 
-			void toREnd()
-				throw()
+			BALL_INLINE void toREnd()	throw()
 			{
-				Composite::setCurrentPreorderIteratorPosition_(*bound_, position_, true);
+				Composite::setCurrentPreorderIteratorPosition(*bound_, position_, true);
 				backward();
 			}
 		};
 
-		friend class SubcompositeIteratorTraits_;
+		friend class SubcompositeIteratorTraits;
 
-		typedef BidirectionalIterator<Composite, Composite, CompositeIteratorPosition_, SubcompositeIteratorTraits_>
+		typedef BidirectionalIterator<Composite, Composite, CompositeIteratorPosition, SubcompositeIteratorTraits>
 			SubcompositeIterator;
 
-		SubcompositeIterator beginSubcomposite()
-			throw()
+		SubcompositeIterator beginSubcomposite() throw()
 		{
 			return SubcompositeIterator::begin(*this);
 		}
 
-		SubcompositeIterator endSubcomposite()
-			throw()
+		SubcompositeIterator endSubcomposite() throw()
 		{
 			return SubcompositeIterator::end(*this);
 		}
 
-
-
-		typedef ConstBidirectionalIterator<Composite, Composite, CompositeIteratorPosition_, SubcompositeIteratorTraits_>
+		typedef ConstBidirectionalIterator<Composite, Composite, CompositeIteratorPosition, SubcompositeIteratorTraits>
 			SubcompositeConstIterator;
 
-		SubcompositeConstIterator beginSubcomposite() const
-			throw()
+		SubcompositeConstIterator beginSubcomposite() const throw()
 		{
 			return SubcompositeConstIterator::begin(*this);
 		}
 
-		SubcompositeConstIterator endSubcomposite() const
-			throw()
+		SubcompositeConstIterator endSubcomposite() const throw()
 		{
 			return SubcompositeConstIterator::end(*this);
 		}
@@ -1795,41 +1546,39 @@ namespace BALL
 		Size getHeight_(Size size, Size& max_height) const
 			throw();
 	
-		Size countDescendants_() const
-			throw();
+		Size countDescendants_() const throw();
 
-		void clone_(Composite& parent, Composite& stack) const
-			throw();
+		void clone_(Composite& parent, Composite& stack) const throw();
 
 		// traverse forward, valid for composites and subcomposites
-		static Composite* setCurrentPreorderIteratorPosition_
-			(Composite& composite, CompositeIteratorPosition_& position, bool subcomposite)
+		static Composite* setCurrentPreorderIteratorPosition
+			(Composite& composite, CompositeIteratorPosition& position, bool subcomposite)
 				throw();
 		
 		// get first iterator, valid for composites and subcomposites
-		static Composite& getFirstPreorderIteratorPosition_(Composite& composite)
+		static Composite& getFirstPreorderIteratorPosition(Composite& composite)
 			throw();
 	
 		// get last iterator, valid for composites only
-		static Composite& getLastPreorderIteratorPosition_(Composite& composite)
+		static Composite& getLastPreorderIteratorPosition(Composite& composite)
 			throw();
 		
 		// set last iterator, valid for composites and subcomposites
-		static Composite& setLastPreorderIteratorPosition_
-			(Composite& composite, CompositeIteratorPosition_& position, bool subcomposite)
+		static Composite& setLastPreorderIteratorPosition
+			(Composite& composite, CompositeIteratorPosition& position, bool subcomposite)
 				throw();
 		
 		// get next iterator, valid for composites and subcomposites
-		Composite* getNextPreorderIteratorPosition_(CompositeIteratorPosition_& position)	throw();
+		Composite* getNextPreorderIteratorPosition(CompositeIteratorPosition& position)	throw();
 
 		// get previous iterator, valid for composites and subcomposites
-		Composite* getPreviousPreorderIteratorPosition_(CompositeIteratorPosition_& position)	throw();
+		Composite* getPreviousPreorderIteratorPosition(CompositeIteratorPosition& position)	throw();
 
 		static Composite* setCurrentPreorderForward_
-			(Composite& composite, CompositeIteratorPosition_& position, bool subcomposite)	throw();
+			(Composite& composite, CompositeIteratorPosition& position, bool subcomposite)	throw();
 
 		static Composite* setCurrentPreorderBackward_
-			(Composite& composite, CompositeIteratorPosition_& position, bool subcomposite) throw();
+			(Composite& composite, CompositeIteratorPosition& position, bool subcomposite) throw();
 
 		template <typename T>
 		bool applyLevelNostart_(UnaryProcessor<T>& processor, long level)
@@ -2178,8 +1927,8 @@ namespace BALL
 		SubcompositeIterator it(getRoot().endSubcomposite());
 
 		// set its position to the current composite
-		Composite::setCurrentPreorderIteratorPosition_
-			(Composite::getFirstPreorderIteratorPosition_(*this), it.getTraits().getPosition(), false);
+		Composite::setCurrentPreorderIteratorPosition
+			(Composite::getFirstPreorderIteratorPosition(*this), it.getTraits().getPosition(), false);
 
 
 		// walk back until we find something	
@@ -2223,8 +1972,8 @@ namespace BALL
 		SubcompositeIterator it(getRoot().beginSubcomposite());
 
 		// set its position to the current composite
-		Composite::setCurrentPreorderIteratorPosition_
-			(Composite::getFirstPreorderIteratorPosition_(*this), it.getTraits().getPosition(), false);
+		Composite::setCurrentPreorderIteratorPosition
+			(Composite::getFirstPreorderIteratorPosition(*this), it.getTraits().getPosition(), false);
 
 		// walk forward until we find something	
 		// or we cannot walk any further

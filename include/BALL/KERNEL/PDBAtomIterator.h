@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: PDBAtomIterator.h,v 1.21 2003/06/11 08:08:53 oliver Exp $ 
+// $Id: PDBAtomIterator.h,v 1.22 2003/06/11 16:09:23 oliver Exp $ 
 //
 
 #ifndef BALL_KERNEL_PDBATOMITERATOR_H
@@ -29,46 +29,46 @@ namespace BALL
 			
     	\ingroup  KernelIterators
 	*/
-	class PDBAtomIteratorTraits_
-		:	public CompositeIteratorTraits_
+	class PDBAtomIteratorTraits
+		:	public CompositeIteratorTraits
 	{
 		public:
 
-		inline PDBAtomIteratorTraits_()	throw();
+		inline PDBAtomIteratorTraits()	throw();
 			
-		PDBAtomIteratorTraits_(const Composite& composite) throw();
+		PDBAtomIteratorTraits(const Composite& composite) throw();
 			
-		inline PDBAtomIteratorTraits_(const PDBAtomIteratorTraits_& traits)	throw();
+		inline PDBAtomIteratorTraits(const PDBAtomIteratorTraits& traits)	throw();
 			
-		PDBAtomIteratorTraits_& operator = (const PDBAtomIteratorTraits_& traits)	throw();
+		PDBAtomIteratorTraits& operator = (const PDBAtomIteratorTraits& traits)	throw();
 
 		void resetPredicate()	throw();
 	};
 
-	inline PDBAtomIteratorTraits_::PDBAtomIteratorTraits_() throw()
-		:	CompositeIteratorTraits_()
+	inline PDBAtomIteratorTraits::PDBAtomIteratorTraits() throw()
+		:	CompositeIteratorTraits()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<PDBAtom> >();
 	}
 
-	inline PDBAtomIteratorTraits_::PDBAtomIteratorTraits_(const PDBAtomIteratorTraits_& traits)	throw()
-		:	CompositeIteratorTraits_(traits)
+	inline PDBAtomIteratorTraits::PDBAtomIteratorTraits(const PDBAtomIteratorTraits& traits)	throw()
+		:	CompositeIteratorTraits(traits)
 	{
 	}
 
-	inline PDBAtomIteratorTraits_::PDBAtomIteratorTraits_(const Composite& composite)	throw()
-		:	CompositeIteratorTraits_(composite)
+	inline PDBAtomIteratorTraits::PDBAtomIteratorTraits(const Composite& composite)	throw()
+		:	CompositeIteratorTraits(composite)
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<PDBAtom> >();
 	}
 
-	inline PDBAtomIteratorTraits_& PDBAtomIteratorTraits_::operator = (const PDBAtomIteratorTraits_& traits) throw()
+	inline PDBAtomIteratorTraits& PDBAtomIteratorTraits::operator = (const PDBAtomIteratorTraits& traits) throw()
 	{
-		CompositeIteratorTraits_::operator=(traits);
+		CompositeIteratorTraits::operator=(traits);
 		return *this;
 	}
 
-	inline void PDBAtomIteratorTraits_::resetPredicate() throw()
+	inline void PDBAtomIteratorTraits::resetPredicate() throw()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<PDBAtom> >();
 	}
@@ -80,11 +80,11 @@ namespace BALL
 	//@{
 
 	/// A mutable bidirectional iterator for the PDBAtom class.
-	typedef BidirectionalIterator<Composite, PDBAtom, Composite::SubcompositeIterator, PDBAtomIteratorTraits_>
+	typedef BidirectionalIterator<Composite, PDBAtom, Composite::SubcompositeIterator, PDBAtomIteratorTraits>
 		PDBAtomIterator;
 
 	/// A constant bidirectional iterator for the PDBAtom class.
-	typedef ConstBidirectionalIterator<Composite, PDBAtom, Composite::SubcompositeIterator, PDBAtomIteratorTraits_>
+	typedef ConstBidirectionalIterator<Composite, PDBAtom, Composite::SubcompositeIterator, PDBAtomIteratorTraits>
 		PDBAtomConstIterator;
 
 	/// A mutable reverse bidirectional iterator for the PDBAtom class.

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: secondaryStructureIterator.h,v 1.9 2003/06/11 08:08:55 oliver Exp $
+// $Id: secondaryStructureIterator.h,v 1.10 2003/06/11 16:09:24 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTUREITERATOR_H
@@ -25,35 +25,35 @@
 
 namespace BALL 
 {
-	/** SecondaryStructureIteratorTraits_
+	/** SecondaryStructureIteratorTraits
 	 		
 			\ingroup KernelIterators
 	*/
-	class SecondaryStructureIteratorTraits_
-		: public CompositeIteratorTraits_
+	class SecondaryStructureIteratorTraits
+		: public CompositeIteratorTraits
 	{
 		public:
 		
-		SecondaryStructureIteratorTraits_()
-			:	CompositeIteratorTraits_()
+		SecondaryStructureIteratorTraits()
+			:	CompositeIteratorTraits()
 		{
 			predicate_ = &RTTI::getDefault<KernelPredicate<SecondaryStructure> >();
 		}
 			
-		SecondaryStructureIteratorTraits_(const Composite& composite)
-			:	CompositeIteratorTraits_(composite)
+		SecondaryStructureIteratorTraits(const Composite& composite)
+			:	CompositeIteratorTraits(composite)
 		{
 			predicate_ = &RTTI::getDefault<KernelPredicate<SecondaryStructure> >();
 		}
 			
-		SecondaryStructureIteratorTraits_(const SecondaryStructureIteratorTraits_& traits, bool /* deep */ = true)
-			:	CompositeIteratorTraits_(traits)
+		SecondaryStructureIteratorTraits(const SecondaryStructureIteratorTraits& traits, bool /* deep */ = true)
+			:	CompositeIteratorTraits(traits)
 		{
 		}
 			
-		SecondaryStructureIteratorTraits_ &operator = (const SecondaryStructureIteratorTraits_& traits)
+		SecondaryStructureIteratorTraits &operator = (const SecondaryStructureIteratorTraits& traits)
 		{
-			CompositeIteratorTraits_::operator = (traits);
+			CompositeIteratorTraits::operator = (traits);
 			return *this;
 		}
 
@@ -66,11 +66,11 @@ namespace BALL
 
 
 	typedef BidirectionalIterator
-		<Composite, SecondaryStructure, Composite::SubcompositeIterator, SecondaryStructureIteratorTraits_>
+		<Composite, SecondaryStructure, Composite::SubcompositeIterator, SecondaryStructureIteratorTraits>
 		SecondaryStructureIterator;
 
 	typedef ConstBidirectionalIterator
-		<Composite, SecondaryStructure, Composite::SubcompositeIterator, SecondaryStructureIteratorTraits_>
+		<Composite, SecondaryStructure, Composite::SubcompositeIterator, SecondaryStructureIteratorTraits>
 		SecondaryStructureConstIterator;
 
 	typedef std::reverse_iterator<SecondaryStructureIterator> SecondaryStructureReverseIterator;

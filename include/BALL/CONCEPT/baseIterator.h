@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: baseIterator.h,v 1.29 2003/06/11 08:08:48 oliver Exp $
+// $Id: baseIterator.h,v 1.30 2003/06/11 16:09:22 oliver Exp $
 //
 
 #ifndef BALL_CONCEPT_BASEITERATOR_H
@@ -27,15 +27,22 @@ namespace BALL
 			an iterator. Iterators are basically STL-like iterators. They 
 			provide the full STL iterator interface, but also offer additional
 			features.
-	 		An important difference exists for the iterators of the kernel
-			objects.  For most kernel onjects, multiple iterators exist.
-			Therefore, we could not simply use <tt>begin()</tt> and <tt>end()</tt> like
-			in STL, but we introduced specialized methods like
-			 \link AtomContainer::beginAtom AtomContainer::beginAtom \endlink  and  \link AtomContainer::endAtom AtomContainer::endAtom \endlink . For
-			similar reasons, the iterators for kernel classes are not implemented
-			as nested classes of the respective kernel classes, but as
-			independent classes to avoid code replication. An exception is
-			 \link Atom::BondIterator Atom::BondIterator \endlink , which is relevant to  \link Atom Atom \endlink  alone.
+			\par
+			BaseIterator itself is a base class to the other iterator classes only
+			and should not be used by itself.
+			\par
+	
+	 		An important difference exists for the iterators of the kernel objects.
+			For most kernel onjects, multiple iterators exist.  Therefore, we could
+			not simply use <tt>begin()</tt> and <tt>end()</tt> like in STL, but we
+			introduced specialized methods like
+			 \link AtomContainer::beginAtom AtomContainer::beginAtom \endlink and
+			\link AtomContainer::endAtom AtomContainer::endAtom \endlink . For
+			similar reasons, the iterators for kernel classes are not implemented as
+			nested classes of the respective kernel classes, but as independent
+			classes to avoid code replication. An exception is
+			 \link Atom::BondIterator Atom::BondIterator \endlink , which is
+			 relevant to \link Atom Atom \endlink alone.
 
 			Each BALL iterator can be bound to a container, so once the iteration
 			has started, it "knows" about the end() of the container.
@@ -54,7 +61,7 @@ namespace BALL
 	 	 \ingroup  ConceptsIterators
 	*/
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	class ConstBaseIterator
+	class BaseIterator
 	{
 		public:
 
@@ -62,8 +69,7 @@ namespace BALL
 				The names of these typedefs deviate from the usual
 				BALL class names due to restrictions imposed by STL compliance.
 		*/
-		//@{
-		
+		//@{		
 		///
 		typedef DataType	value_type;
 		///
@@ -79,26 +85,14 @@ namespace BALL
 		/**	@name	Constructors and Destructors 
 		*/
 		//@{
-
-		/**	Default constructor.
-				This constructor creates a new iterator and registers it.
-		*/
-		ConstBaseIterator()
-			throw();
+		///	Default constructor
+		BALL_INLINE BaseIterator()	throw() {}
 	
-		/**	Copy constructor.
-				This constructor creates a new iterator from an existing one.
-				@param iterator the iterator to be copied
-		*/
-		ConstBaseIterator(const ConstBaseIterator& iterator)
-			throw();
+		///	Copy constructor
+		BaseIterator(const BaseIterator& iterator) throw();
 
-		/**	Destructor.
-				Deregisters and destructs the iterator.
-		*/
-		~ConstBaseIterator()
-			throw();
-
+		///	Destructor.
+		BALL_INLINE ~BaseIterator() throw() {}
 		//@}
 
 		/**	@name	Assignment
@@ -109,11 +103,10 @@ namespace BALL
 				Assigns the contents of an iterator to another iterator.
 				@param	iterator the iterator to be copied
 		*/
-		const ConstBaseIterator& operator = (const ConstBaseIterator<Container, DataType, Position, Traits>& iterator)
-			throw();
+		BaseIterator& operator = (const BaseIterator<Container, DataType, Position, Traits>& iterator) throw();
 
 		///	Swap two iterators
-		BALL_INLINE void swap(ConstBaseIterator& iterator) throw() { std::swap(traits_, iterator.traits_); }
+		BALL_INLINE void swap(BaseIterator& iterator) throw() { std::swap(traits_, iterator.traits_); }
 		//@}
 
 		/**	@name	 Accessors 
@@ -147,55 +140,20 @@ namespace BALL
 		operator const Position& () const	throw();
 
 		/// Convert an iterator to its Datatype by returning a reference to the current data.
-		reference operator * () const throw(Exception::InvalidIterator);
+		reference operator * () const throw() { return (reference)traits_.getData(); }
 
 		/// Return a pointer to the current data.
-		pointer operator -> () const throw(Exception::InvalidIterator);			
-
-		/// Increment operator
-		ConstBaseIterator& operator ++ () throw(Exception::InvalidIterator)
-		{
-			#ifdef BALL_DEBUG
-				if (!isValid())
-				{
-					throw Exception::InvalidIterator(__FILE__, __LINE__);
-				}
-			#endif
-
-			traits_.forward();
-			return *this;
-		}
-
-		/// Postfix increment operator
-		ConstBaseIterator operator ++ (int) throw(Exception::InvalidIterator)
-		{
-			#ifdef BALL_DEBUG
-				if (!isValid())
-				{
-					throw Exception::InvalidIterator(__FILE__, __LINE__);
-				}
-			#endif
-
-			ConstBaseIterator tmp(*this);
-			traits_.forward();
-			return tmp;
-		}
-		//@}
+		pointer operator -> () const throw() { return (pointer)&traits_.getData(); }
 
 		/**	@name	Predicates
 		*/
 		//@{
 
-		/** Equality operator.
-				@return true if both iterators point to the same item.
-		*/
-		bool operator == (const ConstBaseIterator& iterator) const throw();
+		/// Equality operator
+		BALL_INLINE bool operator == (const BaseIterator& iterator) const throw() { return (traits_ == iterator.traits_); }
 
-		/** Inequality operator. 
-				@see operator ==
-		*/
-		bool operator != (const ConstBaseIterator& iterator) const
-			throw();
+		/// Inequality operator
+		BALL_INLINE bool operator != (const BaseIterator& iterator) const throw() { return !(traits_ == iterator.traits_); }
 
 		/** Singularity predicate.
 				This method returns <b>true</b> if the iterator is singular, i.e., 
@@ -207,8 +165,10 @@ namespace BALL
 				@return true if the iterator is valid (pointing at an element in a container) 
 		*/
 		BALL_INLINE bool isValid() const throw() { return traits_.isValid(); }
+
 		/// Validity predicate
 		BALL_INLINE bool operator + () const throw() { return traits_.isValid(); }
+
 		/// Invalidity perdicate
 		BALL_INLINE bool operator - () const throw() { return !traits_.isValid(); }
 		//@}
@@ -218,8 +178,7 @@ namespace BALL
 		/** Constructor.
 				Protected to allow instantiation and use in derived classes only.
 		*/
-		ConstBaseIterator(const Container& container)
-			throw();
+		BaseIterator(const Container& container) throw();
 
 		private:
 
@@ -229,27 +188,15 @@ namespace BALL
 
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBaseIterator<Container, DataType, Position, Traits>::ConstBaseIterator()
-		throw()
-	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBaseIterator<Container, DataType, Position, Traits>::ConstBaseIterator(const ConstBaseIterator& iterator) throw()
+	BaseIterator<Container, DataType, Position, Traits>::BaseIterator(const BaseIterator& iterator) throw()
 	{
 		traits_ = iterator.traits_;
 	}
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
-	ConstBaseIterator<Container, DataType, Position, Traits>::~ConstBaseIterator()
-		throw()
-	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const ConstBaseIterator<Container, DataType, Position, Traits>& 
-		ConstBaseIterator<Container, DataType, Position, Traits>::operator = 
-		(const ConstBaseIterator<Container, DataType, Position, Traits>& iterator)
+	BaseIterator<Container, DataType, Position, Traits>& 
+		BaseIterator<Container, DataType, Position, Traits>::operator = 
+		(const BaseIterator<Container, DataType, Position, Traits>& iterator)
 		throw()
 	{
 		// avoid self assignment
@@ -263,7 +210,7 @@ namespace BALL
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	BALL_INLINE
-	ConstBaseIterator<Container, DataType, Position, Traits>::operator const Position& () const
+	BaseIterator<Container, DataType, Position, Traits>::operator const Position& () const
 		throw()
 	{
 		return traits_.getPosition();
@@ -271,223 +218,10 @@ namespace BALL
 
 	template <typename Container, typename DataType, typename Position, typename Traits>
 	BALL_INLINE
-	const DataType& ConstBaseIterator<Container, DataType, Position, Traits>::operator * () const
-		throw(Exception::InvalidIterator)
-	{
-		#ifdef BALL_DEBUG
-			if (!traits_.isValid())
-			{
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-			}
-		#endif
-
-		return (reference)traits_.getData();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BALL_INLINE
-	const DataType* ConstBaseIterator<Container, DataType, Position, Traits>::operator -> () const
-		throw(Exception::InvalidIterator)
-	{
-		#ifdef BALL_DEBUG
-			if (!traits_.isValid())
-			{
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-			}
-		#endif
-
-		return (pointer)&traits_.getData();
-	}
-
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BALL_INLINE
-	bool ConstBaseIterator<Container, DataType, Position, Traits>::operator == (const ConstBaseIterator& iterator) const
-		throw()
-	{
-		return (traits_ == iterator.traits_);
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BALL_INLINE
-	bool ConstBaseIterator<Container, DataType, Position, Traits>::operator != (const ConstBaseIterator& iterator) const
-		throw()
-	{
-		return !(traits_ == iterator.traits_);
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BALL_INLINE
-	ConstBaseIterator<Container, DataType, Position, Traits>::ConstBaseIterator(const Container& container)
+	BaseIterator<Container, DataType, Position, Traits>::BaseIterator(const Container& container)
 		throw()
 		:	traits_(container)
 	{
-	}
-
-	/**	Constant Basic Iterator.
-			
-	* 	 \addtogroup  ConceptsIterators
-	*/
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	class BaseIterator
-		: public ConstBaseIterator<Container, DataType, Position, Traits>
-	{
-		public:
-
-		/**	@name Typedefs.
-				The names of these typedefs deviate from the usual
-				BALL class names due to restrictions imposed by STL compliance.
-		*/
-		//@{
-		
-		///
-		typedef DataType	value_type;
-		///
-		typedef Position	difference_type;
-		///
-		typedef	DataType*	pointer;
-		///
-		typedef DataType&	reference;
-		///
-		typedef std::input_iterator_tag iterator_category;
-		//@}
-
-		/**	@name	Constructors and Destructors
-		*/
-		//@{
-
-		///	Default constructor
-		BaseIterator() throw() {}
-	
-		/// Copy constructor
-		BaseIterator(const BaseIterator& iterator)
-			throw()
-			:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
-		{
-		}
-
-		///
-		BaseIterator(const ConstBaseIterator<Container, DataType, Position, Traits>& iterator)
-			throw()
-			:	ConstBaseIterator<Container, DataType, Position, Traits>(iterator)
-		{
-		}
-		//@}
-
-		/** @name Assignment
-		*/
-		//@{
-		///
-		BaseIterator& operator = (const BaseIterator& iterator) throw();
-		///
-		BALL_INLINE void swap(BaseIterator& iterator) throw() { std::swap(traits_, iterator.traits_); }
-		//@}
-
-		/**	@name	Accessors
-		*/
-		//@{
-
-		/** Return a mutable pointer to the bound container.
-		*/
-		BALL_INLINE Container* getContainer() throw() { return ConstBaseIterator<Container, DataType, Position, Traits>::getTraits().getContainer(); }
-
-		/** Return a non-mutable pointer to the bound container.
-		*/
-		BALL_INLINE const Container* getContainer() const throw() { return ConstBaseIterator<Container, DataType, Position, Traits>::getTraits().getContainer(); }
-
-		/** Mutable dereferenciation of the iterator
-		*/
-		reference operator * () const throw(Exception::InvalidIterator);
-
-		/// Return a mutable pointer to the current data
-		pointer operator -> () const throw(Exception::InvalidIterator);
-    /// Increment operator
-    BaseIterator& operator ++ () throw(Exception::InvalidIterator)
-    {
-      #ifdef BALL_DEBUG
-        if (!ConstBaseIterator<Container, DataType, Position, Traits>::isValid())
-        {
-          throw Exception::InvalidIterator(__FILE__, __LINE__);
-				}
-      #endif
-			ConstBaseIterator<Container, DataType, Position, Traits>::operator ++ ();
-      return *this;
-		}
-
-    /// Postfix increment operator
-    BaseIterator operator ++ (int) throw(Exception::InvalidIterator)
-    {
-      #ifdef BALL_DEBUG
-        if (!ConstBaseIterator<Container, DataType, Position, Traits>::isValid())
-        {
-          throw Exception::InvalidIterator(__FILE__, __LINE__);
-				}
-      #endif
-
-      BaseIterator tmp(*this);
-			++(*this);
-      return tmp;
-		}
-		//@}
-
-		protected:
-
-		//_
-		BaseIterator(const Container& container)
-			throw();
-	};
-
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BALL_INLINE
-	DataType& BaseIterator<Container, DataType, Position, Traits>::operator * () const
-		throw(Exception::InvalidIterator)
-	{
-		#ifdef BALL_DEBUG
-			if (!ConstBaseIterator<Container, DataType, Position, Traits>::getTraits().isValid())
-			{
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-			}
-		#endif
-
-		return (reference)ConstBaseIterator<Container, DataType, Position, Traits>::getTraits().getData();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BALL_INLINE
-	DataType* BaseIterator<Container, DataType, Position, Traits>::operator -> () const
-		throw(Exception::InvalidIterator)
-	{
-		#ifdef BALL_DEBUG
-			if (!ConstBaseIterator<Container, DataType, Position, Traits>::getTraits().isValid())
-			{
-				throw Exception::InvalidIterator(__FILE__, __LINE__);
-			}
-		#endif
-
-		return (pointer)&BaseIterator<Container, DataType, Position, Traits>::getTraits().getData();
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BALL_INLINE
-	BaseIterator<Container, DataType, Position, Traits>::BaseIterator(const Container& container)
-		throw()
-		:	ConstBaseIterator<Container, DataType, Position, Traits>(container)
-	{
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	BALL_INLINE
-	BaseIterator<Container, DataType, Position, Traits>& 
-	BaseIterator<Container, DataType, Position, Traits>::operator = 
-		(const BaseIterator<Container, DataType, Position, Traits>& iterator)
-		throw()
-	{
-		if (this != &iterator)
-		{
-			traits_ = iterator.traits_;
-		}
-		return *this;
 	}
 
 } // namespace BALL

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: nucleotideIterator.h,v 1.8 2003/06/11 08:08:54 oliver Exp $
+// $Id: nucleotideIterator.h,v 1.9 2003/06/11 16:09:24 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_NUCLEOTIDEITERATOR_H
@@ -27,34 +27,34 @@ namespace BALL
 {
 	class Nucleotide;
 
-	/** NucleotideIteratorTraits_
+	/** NucleotideIteratorTraits
 	 	  \ingroup  KernelIterators
 	*/
-	class NucleotideIteratorTraits_
-		: public CompositeIteratorTraits_
+	class NucleotideIteratorTraits
+		: public CompositeIteratorTraits
 	{
 		public:
 
-		NucleotideIteratorTraits_()
-			:	CompositeIteratorTraits_()
+		NucleotideIteratorTraits()
+			:	CompositeIteratorTraits()
 		{
 			predicate_ = &RTTI::getDefault<KernelPredicate<Nucleotide> >();
 		}
 			
-		NucleotideIteratorTraits_(const Composite& composite)
-			:	CompositeIteratorTraits_(composite)
+		NucleotideIteratorTraits(const Composite& composite)
+			:	CompositeIteratorTraits(composite)
 		{
 			predicate_ = &RTTI::getDefault<KernelPredicate<Nucleotide> >();
 		}
 			
-		NucleotideIteratorTraits_(const NucleotideIteratorTraits_& traits, bool /* deep */ = true)
-			:	CompositeIteratorTraits_(traits)
+		NucleotideIteratorTraits(const NucleotideIteratorTraits& traits, bool /* deep */ = true)
+			:	CompositeIteratorTraits(traits)
 		{
 		}
 			
-		NucleotideIteratorTraits_& operator =(const NucleotideIteratorTraits_& traits)
+		NucleotideIteratorTraits& operator =(const NucleotideIteratorTraits& traits)
 		{
-			CompositeIteratorTraits_::operator=(traits);
+			CompositeIteratorTraits::operator=(traits);
 			return *this;
 		}
 
@@ -67,11 +67,11 @@ namespace BALL
 
 
 	typedef BidirectionalIterator
-		<Composite, Nucleotide, Composite::SubcompositeIterator, NucleotideIteratorTraits_>
+		<Composite, Nucleotide, Composite::SubcompositeIterator, NucleotideIteratorTraits>
 		NucleotideIterator;
 
 	typedef ConstBidirectionalIterator
-		<Composite, Nucleotide, Composite::SubcompositeIterator, NucleotideIteratorTraits_>
+		<Composite, Nucleotide, Composite::SubcompositeIterator, NucleotideIteratorTraits>
 		NucleotideConstIterator;
 
 	typedef std::reverse_iterator<NucleotideIterator> NucleotideReverseIterator;

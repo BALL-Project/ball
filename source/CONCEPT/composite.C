@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: composite.C,v 1.36 2003/06/11 08:09:59 oliver Exp $
+// $Id: composite.C,v 1.37 2003/06/11 16:09:25 oliver Exp $
 //
 
 #include <BALL/CONCEPT/composite.h>
@@ -1644,20 +1644,20 @@ namespace BALL
 		stack.determineSelection_();		
 	}
 				
-	Composite* Composite::setCurrentPreorderIteratorPosition_
-		(Composite& composite, Composite::CompositeIteratorPosition_& position, bool subcomposite)
+	Composite* Composite::setCurrentPreorderIteratorPosition
+		(Composite& composite, Composite::CompositeIteratorPosition& position, bool subcomposite)
 		throw()
 	{
 		return setCurrentPreorderForward_(composite, position, subcomposite);
 	}
 
-	Composite& Composite::getFirstPreorderIteratorPosition_(Composite& composite)
+	Composite& Composite::getFirstPreorderIteratorPosition(Composite& composite)
 		throw()
 	{
 		return composite;
 	}
 		
-	Composite& Composite::getLastPreorderIteratorPosition_(Composite& composite)
+	Composite& Composite::getLastPreorderIteratorPosition(Composite& composite)
 		throw()
 	{
 		Composite* composite_ptr = &composite;
@@ -1667,8 +1667,8 @@ namespace BALL
 		return *composite_ptr;
 	}
 			
-	Composite& Composite::setLastPreorderIteratorPosition_
-		(Composite& composite, CompositeIteratorPosition_ &position, bool subcomposite)
+	Composite& Composite::setLastPreorderIteratorPosition
+		(Composite& composite, CompositeIteratorPosition &position, bool subcomposite)
 		throw()
 	{
 		if (subcomposite == true)
@@ -1692,14 +1692,14 @@ namespace BALL
 		return *composite_ptr;
 	}
 			
-	Composite* Composite::getNextPreorderIteratorPosition_(CompositeIteratorPosition_ &position)
+	Composite* Composite::getNextPreorderIteratorPosition(CompositeIteratorPosition &position)
 		throw()
 	{
 		if (position.traversing_forward_ == false)
 		{
 			setCurrentPreorderForward_(*(position.current_), position, (position.empty_stack_ != 0));
 			
-			return getNextPreorderIteratorPosition_(position);
+			return getNextPreorderIteratorPosition(position);
 		}
 		
 		if (position.continue_ == false)
@@ -1737,7 +1737,7 @@ namespace BALL
 
 				if (position.current_->next_ == 0)
 				{
-					return getNextPreorderIteratorPosition_(position);
+					return getNextPreorderIteratorPosition(position);
 				} 
 				else 
 				{
@@ -1762,13 +1762,13 @@ namespace BALL
 		return position.current_;
 	}
 
-	Composite* Composite::getPreviousPreorderIteratorPosition_(CompositeIteratorPosition_& position)
+	Composite* Composite::getPreviousPreorderIteratorPosition(CompositeIteratorPosition& position)
 		throw()
 	{
 		if (position.traversing_forward_ == true)
 		{
 			setCurrentPreorderBackward_(*(position.current_), position, (position.empty_stack_ != 0));			
-			return getPreviousPreorderIteratorPosition_(position);
+			return getPreviousPreorderIteratorPosition(position);
 		}
 
 		if (position.continue_ == false)
@@ -1820,7 +1820,7 @@ namespace BALL
 	}
 
 	Composite* Composite::setCurrentPreorderForward_
-		(Composite& composite, CompositeIteratorPosition_& position, bool subcomposite)
+		(Composite& composite, CompositeIteratorPosition& position, bool subcomposite)
 		throw()
 	{
 		if (subcomposite == true)
@@ -1850,7 +1850,7 @@ namespace BALL
 	}
 
 	Composite* Composite::setCurrentPreorderBackward_
-		(Composite& composite, CompositeIteratorPosition_& position, bool subcomposite)
+		(Composite& composite, CompositeIteratorPosition& position, bool subcomposite)
 		throw()
 	{
 		if (subcomposite == false)

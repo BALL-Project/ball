@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: residueIterator.h,v 1.8 2003/06/11 08:08:55 oliver Exp $
+// $Id: residueIterator.h,v 1.9 2003/06/11 16:09:24 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_RESIDUEITERATOR_H
@@ -25,35 +25,35 @@
 
 namespace BALL 
 {
-	/** ResidueIteratorTraits_
+	/** ResidueIteratorTraits
     
 			\ingroup  KernelIterators
 	*/
-	class ResidueIteratorTraits_
-		: public CompositeIteratorTraits_
+	class ResidueIteratorTraits
+		: public CompositeIteratorTraits
 	{
 		public:
 
-		ResidueIteratorTraits_()
-			:	CompositeIteratorTraits_()
+		ResidueIteratorTraits()
+			:	CompositeIteratorTraits()
 		{
 			predicate_ = &RTTI::getDefault<KernelPredicate<Residue> >();
 		}
 			
-		ResidueIteratorTraits_(const Composite& composite)
-			:	CompositeIteratorTraits_(composite)
+		ResidueIteratorTraits(const Composite& composite)
+			:	CompositeIteratorTraits(composite)
 		{
 			predicate_ = &RTTI::getDefault<KernelPredicate<Residue> >();
 		}
 			
-		ResidueIteratorTraits_(const ResidueIteratorTraits_& traits, bool /* deep */ = true)
-			:	CompositeIteratorTraits_(traits)
+		ResidueIteratorTraits(const ResidueIteratorTraits& traits, bool /* deep */ = true)
+			:	CompositeIteratorTraits(traits)
 		{
 		}
 			
-		ResidueIteratorTraits_& operator =(const ResidueIteratorTraits_& traits)
+		ResidueIteratorTraits& operator =(const ResidueIteratorTraits& traits)
 		{
-			CompositeIteratorTraits_::operator=(traits);
+			CompositeIteratorTraits::operator=(traits);
 			return *this;
 		}
 
@@ -66,11 +66,11 @@ namespace BALL
 
 
 	typedef BidirectionalIterator
-		<Composite, Residue, Composite::SubcompositeIterator, ResidueIteratorTraits_>
+		<Composite, Residue, Composite::SubcompositeIterator, ResidueIteratorTraits>
 		ResidueIterator;
 
 	typedef ConstBidirectionalIterator
-		<Composite, Residue, Composite::SubcompositeIterator, ResidueIteratorTraits_>
+		<Composite, Residue, Composite::SubcompositeIterator, ResidueIteratorTraits>
 		ResidueConstIterator;
 
 	typedef std::reverse_iterator<ResidueIterator> ResidueReverseIterator;

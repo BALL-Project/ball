@@ -1,5 +1,5 @@
 #
-# $Id: Makefile,v 1.191 2003/06/11 14:34:36 amoll Exp $
+# $Id: Makefile,v 1.192 2003/06/11 16:09:26 oliver Exp $
 #
 
 DIRECTORY=TEST
@@ -90,7 +90,6 @@ EXECUTABLES_CONCEPTS = \
 EXECUTABLES_KERNEL = \
 	PTE_test\
 	Atom_test\
-	AtomIterator_test\
 	Bond_test\
 	AtomContainer_test\
 	Fragment_test\
@@ -112,7 +111,18 @@ EXECUTABLES_KERNEL = \
 	DefaultProcessors_test\
 	FragmentDB_test\
 	ForEach_test\
-	GlobalKernel_test
+	GlobalKernel_test\
+	BaseIterator_test\
+	ConstForwardIterator_test\
+
+
+EXECUTABLE_ITERATORS = \
+	ForwardIterator_test\
+	ConstBidirectionalIterator_test\
+	BidirectionalIterator_test\
+	ConstRandomAccessIterator_test\
+	RandomAccessIterator_test\
+	AtomIterator_test
 
 EXECUTABLES_MOLMEC = \
 	Gradient_test\

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: fragmentIterator.h,v 1.13 2003/06/11 08:08:54 oliver Exp $
+// $Id: fragmentIterator.h,v 1.14 2003/06/11 16:09:23 oliver Exp $
 //
 
 #ifndef BALL_KERNEL_FRAGMENTITERATOR_H
@@ -31,56 +31,56 @@ namespace BALL
 			
     	\ingroup  KernelIterators
 	*/
-	class FragmentIteratorTraits_
-		: public CompositeIteratorTraits_
+	class FragmentIteratorTraits
+		: public CompositeIteratorTraits
 	{
 		public:
 
-		inline FragmentIteratorTraits_() throw();
+		inline FragmentIteratorTraits() throw();
 
-		FragmentIteratorTraits_(const Composite& composite)	throw();
+		FragmentIteratorTraits(const Composite& composite)	throw();
 
-		inline FragmentIteratorTraits_(const FragmentIteratorTraits_& traits)	throw();
+		inline FragmentIteratorTraits(const FragmentIteratorTraits& traits)	throw();
 
-		FragmentIteratorTraits_& operator = (const FragmentIteratorTraits_& traits)	throw();
+		FragmentIteratorTraits& operator = (const FragmentIteratorTraits& traits)	throw();
 
 		void resetPredicate()	throw();
 	};
 
-	inline FragmentIteratorTraits_::FragmentIteratorTraits_() throw()
-		:	CompositeIteratorTraits_()
+	inline FragmentIteratorTraits::FragmentIteratorTraits() throw()
+		:	CompositeIteratorTraits()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Fragment> >();
 	}
 
-	inline FragmentIteratorTraits_::FragmentIteratorTraits_(const Composite& composite)	throw()
-		:	CompositeIteratorTraits_(composite)
+	inline FragmentIteratorTraits::FragmentIteratorTraits(const Composite& composite)	throw()
+		:	CompositeIteratorTraits(composite)
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Fragment> >();
 	}
 
-	inline FragmentIteratorTraits_::FragmentIteratorTraits_(const FragmentIteratorTraits_& traits) throw()
-		:	CompositeIteratorTraits_(traits)
+	inline FragmentIteratorTraits::FragmentIteratorTraits(const FragmentIteratorTraits& traits) throw()
+		:	CompositeIteratorTraits(traits)
 	{
 	}
 
-	inline FragmentIteratorTraits_& FragmentIteratorTraits_::operator = (const FragmentIteratorTraits_& traits) throw()
+	inline FragmentIteratorTraits& FragmentIteratorTraits::operator = (const FragmentIteratorTraits& traits) throw()
 	{
-		CompositeIteratorTraits_::operator=(traits);
+		CompositeIteratorTraits::operator=(traits);
 		return *this;
 	}
 
-	inline void FragmentIteratorTraits_::resetPredicate() throw()
+	inline void FragmentIteratorTraits::resetPredicate() throw()
 	{
 		predicate_ = &RTTI::getDefault<KernelPredicate<Fragment> >();
 	}
 
 	typedef BidirectionalIterator
-		<Composite, Fragment, Composite::SubcompositeIterator, FragmentIteratorTraits_>
+		<Composite, Fragment, Composite::SubcompositeIterator, FragmentIteratorTraits>
 		FragmentIterator;
 
 	typedef ConstBidirectionalIterator
-		<Composite, Fragment, Composite::SubcompositeIterator, FragmentIteratorTraits_>
+		<Composite, Fragment, Composite::SubcompositeIterator, FragmentIteratorTraits>
 		FragmentConstIterator;
 
 	typedef std::reverse_iterator<FragmentIterator> FragmentReverseIterator;

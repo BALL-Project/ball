@@ -1,7 +1,8 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: exception.C,v 1.33 2002/12/12 10:03:19 oliver Exp $
+// $Id: exception.C,v 1.34 2003/06/11 16:09:25 oliver Exp $
+//
 
 #include <BALL/COMMON/exception.h>
 #include <BALL/COMMON/logStream.h>
@@ -96,6 +97,12 @@ namespace BALL
 				throw()
 			{
 				return message_.c_str();
+			}
+
+			void GeneralException::setMessage(const std::string& message)
+				throw()
+			{
+				message_ = message;
 			}
 
 			const char* GeneralException::getFile() const
@@ -226,6 +233,22 @@ namespace BALL
 				message_ += message;
 				message_ += " in ";
 				message_ += expression;
+				globalHandler.setMessage(message_);
+			}
+
+			Precondition::Precondition(const char* file, int line, const char* condition)
+				throw()
+				: GeneralException(file, line, "Precondition failed", "")
+			{
+				message_ += std::string(condition);
+				globalHandler.setMessage(message_);
+			}
+
+			Postcondition::Postcondition(const char* file, int line, const char* condition)
+				throw()
+				: GeneralException(file, line, "Postcondition failed", "")
+			{
+				message_ += std::string(condition);
 				globalHandler.setMessage(message_);
 			}
 

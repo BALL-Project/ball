@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bidirectionalIterator.h,v 1.26 2003/06/11 08:08:48 oliver Exp $ 
+// $Id: bidirectionalIterator.h,v 1.27 2003/06/11 16:09:22 oliver Exp $ 
 //
 
 #ifndef BALL_CONCEPT_BIDIRECTIONALITERATOR_H
@@ -67,8 +67,8 @@ namespace BALL
 		 */
 		//@{
 
-		using ConstBaseIterator<Container, DataType, Position, Traits>::operator +;
-		using ConstBaseIterator<Container, DataType, Position, Traits>::operator -;
+		using BaseIterator<Container, DataType, Position, Traits>::operator +;
+		using BaseIterator<Container, DataType, Position, Traits>::operator -;
 
 		/// Move the iterator to the beginning of the container
 		void toBegin() throw(Exception::InvalidIterator);
@@ -129,17 +129,6 @@ namespace BALL
 		*/
 		static ConstBidirectionalIterator rend(const Container& container)
 			throw(Exception::InvalidIterator);
-
-		/** Find the previous position that is satisfying the predicate
-		*/
-		const DataType* findPrevious(const UnaryPredicate<DataType>& predicate)
-					throw();
-
-		/** Find the next position that is satisfying the predicate
-		*/
-		const DataType* findNext(const UnaryPredicate<DataType>& predicate)
-					throw();
-
 		//@}
 
 		protected:
@@ -386,42 +375,6 @@ namespace BALL
 	{
 	}
 
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* ConstBidirectionalIterator<Container, DataType, Position, Traits>
-	::findPrevious(const UnaryPredicate<DataType>& predicate)
-		throw()
-	{
-		for	(ConstForwardIterator<Container, DataType, Position, Traits>::getTraits().backward(); 
-				 ConstForwardIterator<Container, DataType, Position, Traits>::getTraits().isREnd() == false;
-				 ConstForwardIterator<Container, DataType, Position, Traits>::getTraits().backward())
-		{
-			if (predicate((const DataType &)ConstForwardIterator<Container, DataType, Position, Traits>::getTraits().getData()) == true)
-			{
-				return (const DataType*)&(ConstForwardIterator<Container, DataType, Position, Traits>::getTraits().getData());
-			}
-		}
-
-		return 0;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	const DataType* ConstBidirectionalIterator<Container, DataType, Position, Traits>
-	::findNext(const UnaryPredicate<DataType>& predicate)
-		throw()
-	{
-		for	(ConstForwardIterator<Container, DataType, Position, Traits>::getTraits().forward(); 
-				 ConstForwardIterator<Container, DataType, Position, Traits>::getTraits().isEnd() == false;
-				 ConstForwardIterator<Container, DataType, Position, Traits>::getTraits().forward())
-		{
-			if (predicate((const DataType &)ConstForwardIterator<Container, DataType, Position, Traits>::getTraits().getData()) == true)
-			{
-				return (const DataType *)&(ConstForwardIterator<Container, DataType, Position, Traits>::getTraits().getData());
-			}
-		}
-
-		return 0;
-	}
-
 	/**	@name Bidirectional Iterator.
 			
 	*/
@@ -512,24 +465,12 @@ namespace BALL
 		 */
 		static BidirectionalIterator rend(const Container& container)
 			throw(Exception::InvalidIterator);
-
-		/** Find the previous item that is satisfying the predicate
-		*/
-		DataType* findPrevious(const UnaryPredicate<DataType>& predicate)
-			throw();
-
-		/** Find the next position that is satisfying the predicate
-		*/
-		DataType* findNext(const UnaryPredicate<DataType>& predicate)
-			throw();
-
 		//@}
 
 		protected:
 
 		//
-		BidirectionalIterator(const Container& container)
-			throw();
+		BidirectionalIterator(const Container& container)	throw();
 	};
 
 
@@ -640,44 +581,6 @@ namespace BALL
 		:	ConstBidirectionalIterator<Container, DataType, Position, Traits>(container)
 	{
 	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	DataType* BidirectionalIterator<Container, DataType, Position, Traits>
-		::findPrevious(const UnaryPredicate<DataType>& predicate)
-		throw()
-	{
-		for	(ConstBidirectionalIterator<Container, DataType, Position, Traits>::getTraits().backward(); 
-				 ConstBidirectionalIterator<Container, DataType, Position, Traits>::getTraits().isREnd() == false;
-				ConstBidirectionalIterator<Container, DataType, Position, Traits>::getTraits().backward())
-		{
-			if (predicate((const DataType &)ConstBidirectionalIterator<Container, DataType, Position, Traits>::getTraits().getData()) == true)
-			{
-				return (DataType *)&(ConstBidirectionalIterator<Container, DataType, Position, Traits>::getTraits().getData());
-			}
-		}
-
-		return 0;
-	}
-
-	template <typename Container, typename DataType, typename Position, typename Traits>
-	DataType* BidirectionalIterator<Container, DataType, Position, Traits>
-		::findNext(const UnaryPredicate<DataType>& predicate)
-		throw()
-	{
-		for(ConstBidirectionalIterator<Container, DataType, Position, Traits>::getTraits().forward(); 
-				ConstBidirectionalIterator<Container, DataType, Position, Traits>::getTraits().isEnd() == false;
-				ConstBidirectionalIterator<Container, DataType, Position, Traits>::getTraits().forward())
-		{
-			if (predicate((const DataType &)ConstBidirectionalIterator<Container, DataType, Position, Traits>::getTraits().getData()) == true)
-			{
-				return (DataType *)&(ConstBidirectionalIterator<Container, DataType, Position, Traits>::getTraits().getData());
-			}
-		}
-
-		return 0;
-	}
-
-
 
 	//@}
 
