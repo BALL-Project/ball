@@ -1,4 +1,4 @@
-// $Id: nucleotide.h,v 1.8 2000/05/02 14:03:50 amoll Exp $
+// $Id: nucleotide.h,v 1.9 2000/05/12 00:03:52 amoll Exp $
 
 #ifndef BALL_KERNEL_NUCLEOTIDE_H
 #define BALL_KERNEL_NUCLEOTIDE_H
@@ -69,10 +69,10 @@ namespace BALL
 		/// Destructor
 		virtual ~Nucleotide();
 
-		/// Clears the nucleotides contents
+		/// Clears the nucleotides contents.
 		virtual void clear();
 	
-		/// Clears the nucleotides contents and removes it from all composite structures
+		/// Clears the nucleotides contents and removes it from all composite structures.
 		virtual void destroy();
 	
 		//@}
@@ -93,7 +93,7 @@ namespace BALL
 		//@{
 
 		/** Assignment with cloning facility.
-				Assign the nucleotide {\em nucleotide} to {\em *this} nucleotide.
+				Assign {\em nucleotide} to {\em *this} nucleotide.
 				The assignment is either deep or shallow (default).
 				@param  nucleotide the nucleotide to be copied (cloned)
 				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em nucleotide}
@@ -101,7 +101,7 @@ namespace BALL
 		void set(const Nucleotide& nucleotide, bool deep = true);
 
 		/** Assignment operator.
-				Assign the nucleotide {\em nucleotide} to {\em *this}.
+				Assign {\em nucleotide} to {\em *this}.
 				The assignment is either deep or shallow (default).
 				@param   nucleotide the nucleotide to be copied (cloned)
 				@return  nucleotide& - {\em *this} nucleotide
@@ -110,16 +110,16 @@ namespace BALL
 		Nucleotide& operator = (const Nucleotide& nucleotide);
 
 		/** Copying with cloning facility.
-				Copy {\em *this} nucleotide to the nucleotide {\em nucleotide}.
+				Copy {\em *this} instance to {\em nucleotide}.
 				The assignment is either deep or shallow (default).
 				@param  nucleotide the nucleotide to be assigned to
 				@see    nucleotide::set
 		*/
 		void get(Nucleotide& nucleotide, bool deep = true) const;
 
-		/** Swapping of nucleotide.
-				Swap the states of {\em *this} nucleotide with the nucleotide {\em nucleotide}.
-				@param  nucleotide the nucleotide {\em *this} is being swapped with
+		/** Swapping of instaces of nucleotide.
+				Swap the states of {\em *this} with the {\em nucleotide}.
+				@param  nucleotide the instance of nucleotide to swap with
 		*/
 		void swap(Nucleotide& nucleotide);
 	
@@ -189,22 +189,22 @@ namespace BALL
 		*/
 		void insertAfter(Atom& atom, Composite& after);
 
-		/** Remove an atom
+		/** Remove an atom.
 				@param atom the atom to remove
 		*/
 		bool remove(Atom& atom);
 
-		/**	Cut all children of {\tt nucleotide} and prepend them before the children of this nucleotide.
+		/**	Cut all children of {\tt nucleotide} and prepend them before the children of this instance.
 				@param nucleotide the nucleotide to access
 		*/
 		void spliceBefore(Nucleotide& nucleotide);
 
-		/**	Cut all children of {\tt nucleotide} and append them after the children of this nucleotide.
+		/**	Cut all children of {\tt nucleotide} and append them after the children of this instance.
 				@param nucleotide the nucleotide to access
 		*/
 		void spliceAfter(Nucleotide& nucleotide);
 
-		/**	Move the children of {\tt nucleotide} into this nucleotide.
+		/**	Move the children of {\tt nucleotide} into this instance.
 				The children of {\tt nucleotide} are inserted at the position of 
 				{\tt nucleotide} if it is a child of {\em *this}.
 				Otherwise the children are inserted using \Ref{spliceBefore}.
@@ -218,20 +218,21 @@ namespace BALL
 		//@{
 
 		/**	Test if {\em *this} nucleotide is terminal.
-				@return bool true if {\em *this} nucleotide is terminal
-				{\bf Note:} Not yet implemented.	
+				Returns true, if {\em *this} instance is the first or
+				last nucleotide in its parent NucleicAcid.
+				@return bool
 		*/
 		bool isTerminal() const;
 	
 		/**	Test if {\em *this} nucleotide is 3-prime.
-				@return bool true if {\em *this} nucleotide is 3-prime
-				{\bf Note:} Not yet implemented.	
+				Returns true, if {\em *this} instance is the first nucleotide in its parent NucleicAcid.
+				@return bool
 		*/
 		bool is3Prime() const;
 
 		/**	Test if {\em *this} nucleotide is 5-prime.
-				@return bool true if {\em *this} nucleotide is 5-prime
-				{\bf Note:} Not yet implemented.	
+				Returns true, if {\em *this} instance is the last nucleotide in its parent NucleicAcid.
+				@return bool
 		*/
 		bool is5Prime() const;
 		//@}
