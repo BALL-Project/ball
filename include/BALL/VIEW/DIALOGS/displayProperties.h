@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: displayProperties.h,v 1.13 2003/10/28 01:28:17 amoll Exp $
+// $Id: displayProperties.h,v 1.14 2003/11/02 14:57:36 amoll Exp $
 //
 
 #ifndef BALL_VIEW_DIALOGS_DISPLAYPROPERTIES_H
@@ -234,6 +234,10 @@ namespace BALL
 			
 			//_ Set the selection of a given combobox to a given value 
 			void setComboBoxIndex_(QComboBox* combo_box, QString& item_string);
+
+			//_ Set buttons and slider according to the values
+			void checkDrawingPrecision_()
+				throw();
 
 			/*_ Create the new representation for the selection in the MolecularControl.
 					Called by onNotify() after receiving CompositeMessage::NEW_MOLECULE and by applyButtonClicked().
