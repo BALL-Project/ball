@@ -1,4 +1,4 @@
-// $Id: HINFile.C,v 1.13 2000/03/28 15:32:56 oliver Exp $
+// $Id: HINFile.C,v 1.14 2000/05/20 13:32:57 oliver Exp $
 
 #include <BALL/FORMAT/HINFile.h>
 #include <BALL/CONCEPT/composite.h>
@@ -8,6 +8,7 @@
 #include <BALL/KERNEL/PDBAtom.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/PTE.h>
+#include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <stack>
 
@@ -44,7 +45,9 @@ namespace BALL
 		if (name != "") 
 		{
 			*(File*)this << name.trim() << " ";
-		} else {
+		} 
+		else 
+		{
 			*(File*)this << "- ";
 		}
 
@@ -52,7 +55,9 @@ namespace BALL
 		if (atom.getTypeName() == "?")
 		{
 			*(File*)this << "**";
-		} else {
+		} 
+		else 
+		{
 			*(File*)this << atom.getTypeName();	
 		}
 		*(File*)this << " - ";
@@ -293,7 +298,9 @@ namespace BALL
 							{
 								name = "-";
 							}
-						} else {
+						} 
+						else 
+						{
 							name = "-";
 						}
 
@@ -437,18 +444,23 @@ namespace BALL
 							{
 								residue->clearProperty(Residue::PROPERTY__AMINO_ACID);
 								residue->setProperty(Residue::PROPERTY__NON_STANDARD);
-							} else {
+							} 
+							else 
+							{
 								residue->setProperty(Residue::PROPERTY__AMINO_ACID);
 								residue->clearProperty(Residue::PROPERTY__NON_STANDARD);
 							}
 
-						} else {
-
+						} 
+						else 
+						{
 							atom = new Atom;
 							if (molecule == 0) 
 							{
 								fragment->insert(*atom);
-							} else {
+							} 
+							else 
+							{
 								molecule->insert(*atom);
 							}
 
@@ -459,7 +471,9 @@ namespace BALL
 						if (line.getField(4) == "**")
 						{
 							atom->setTypeName("?");
-						} else {
+						} 
+						else	
+						{
 							atom->setTypeName(line.getField(4));
 						}
 						atom->setElement(PTE[line.getField(3)]);
@@ -531,11 +545,15 @@ namespace BALL
 					if (atom_number >= atom_vector.size())
 					{
 						ERROR_HEADER << "cannot assign velocity for atom " << atom_number << ": atom not defined!" << endl;
-					} else {
+					} 
+					else 
+					{
 						if (atom_vector[atom_number] != 0)
 						{
 							atom_vector[atom_number]->setVelocity(velocity);
-						} else {
+						} 
+						else 
+						{
 							ERROR_HEADER << "cannot assign velocity for atom " << atom_number << ": atom not defined!" << endl;
 						}
 					}
@@ -778,9 +796,25 @@ namespace BALL
 					continue;
 				}
 
+				if (tag == "formalcharge")
+				{
+					continue;
+				}
+
 				// if the tag was not recognized: complain about it
 				Log.warn() << "HINFile: unknown tag " << tag << " ignored." << endl;
 			}
+		}
+
+		// if a bounding box was in the file...
+		if (box_.a != box_.b)
+		{
+			// ...calculate the bounding box of the system
+			// but read the bounding box size from the file
+			BoundingBoxProcessor	box_proc;
+			system.apply(box_proc);
+			box_.a += box_proc.getLower();
+			box_.b += box_proc.getLower();
 		}
 	}
 
