@@ -174,7 +174,7 @@ namespace BALL
 				
 					//options for the docking algorithm
 					Options 	options_;
-					DockingAlgorithm docking_;
+					Docking::DockingAlgorithm docking_;
 					//Docking docking_;
 					
 					//menu entry id
@@ -185,7 +185,6 @@ namespace BALL
 					ChargeRuleProcessor 			charge_rule_processor_;
 					AssignRadiusProcessor 		radius_processor_;
 					AssignChargeProcessor 		charge_processor_;
-					
 		};
 		
 } } // Namespaces

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: dockDialog.C,v 1.1.2.6 2005/01/19 09:41:47 leonhardt Exp $
+// $Id: dockDialog.C,v 1.1.2.7 2005/01/19 14:04:34 haid Exp $
 //
 
 #include "dockDialog.h"
@@ -17,6 +17,7 @@
 #ifndef BALL_KERNEL_SYSTEM_H
 # include <BALL/KERNEL/system.h>
 #endif
+
 #ifndef BALL_FORMAT_INIFILE_H
 #include <BALL/FORMAT/INIFile.h>
 #endif
@@ -52,8 +53,10 @@ namespace BALL
 			registerObject_(radii_rules_lineedit);
 			registerObject_(charges_data_lineedit);
 			registerObject_(charges_rules_lineedit);
+			
 			//registerObject_(radii_rules_button);
 			//registerObject_(charges_rules_button);
+			
 			registerObject_(normalize_names);
 			registerObject_(assign_charges);
 			registerObject_(assign_radii);
@@ -221,7 +224,6 @@ namespace BALL
 			charges_data_lineedit->setText("charges/PARSE.crg");
 			charges_rules_lineedit->setText("solvation/PARSE.rul");
 			
-			
 			// processors
 			normalize_names->setChecked(false);
 			assign_charges->setChecked(true);
@@ -257,7 +259,7 @@ namespace BALL
 			// before docking, apply processors, e.g. add hydrogens
 			applyProcessors_();
 			//setup docking
-			docking_.setup(*docking_partner1_,*docking_partner2_,options_)
+			docking_.setup(*docking_partner1_,*docking_partner2_,options_);
 			Log.info() << "End of calculate" << std::endl;
 			return true;
 		}
@@ -268,6 +270,7 @@ namespace BALL
 		{
 		
 		}
+		
 		/// apply the processors to the systems
 		bool DockDialog::applyProcessors_()
 			throw()

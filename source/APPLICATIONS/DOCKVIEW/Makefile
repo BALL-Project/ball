@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.1.2.3 2005/01/19 09:41:46 leonhardt Exp $
+# $Id: Makefile,v 1.1.2.4 2005/01/19 14:04:34 haid Exp $
 #
 
 EXECUTABLE=DOCKView
@@ -18,8 +18,8 @@ BALL_INCLUDES=$(VIEW_INCLUDES) $(PYTHON_INCLUDES)
 
 CPP_SOURCES=\
 	aboutDialog.C\
-	#dockAlgorithm.C\
 	dockDialog.C\
+	dockingAlgorithm.C\
 	dockDialogData.C\
 	icons.C\
 	main.C\
@@ -46,7 +46,7 @@ depend: $(UIC_FILES) $(MOC_SOURCES)
 aboutDialog.h: aboutDialog.ui
 	$(UIC) aboutDialog.ui > aboutDialog.h
 
-dockDialogData.h: dockDialogData.ui
+dockDialogData.h: dockDialog.ui
 	$(UIC) dockDialog.ui > dockDialogData.h
 
 #moc C files

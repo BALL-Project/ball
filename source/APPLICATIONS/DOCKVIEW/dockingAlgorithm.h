@@ -3,6 +3,10 @@
 
 #include <BALL/DATATYPE/options.h>
 
+#ifndef BALL_KERNEL_SYSTEM_H
+# include <BALL/KERNEL/system.h>
+#endif
+
 #ifndef DOCKINGALGORITHM_H
 #define DOCKINGALGORITHM_H
 
