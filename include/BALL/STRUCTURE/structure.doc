@@ -1,36 +1,46 @@
-// $Id: structure.doc,v 1.5 2001/07/16 00:34:07 amoll Exp $
+// $Id: structure.doc,v 1.6 2002/01/08 00:44:19 oliver Exp $
 
 /**	@name	Molecular Structure
 		This chapter contains all relevant information on 
 		BALL classes related to the exploration of molecular
-		structures and geometries.
+		structure and geometry.
 */
 //@{
-	//@Include: analyticalSES.h
   //@Include: defaultProcessors.h
-  //@Include: fragmentDB.h
   //@Include: geometricProperties.h
   //@Include: geometricTransformations.h
-  //@Include: numericalSAS.h
-  //@Include: radialDistributionFunction.h
-  //@Include: reducedSurface.h
+  //@Include: fragmentDB.h
   //@Include: residueChecker.h
+	//@Include: smilesParser.h
   //@Include: rotamerLibrary.h
-  //@Include: singularities.h
-  //@Include: solventExcludedSurface.h
   //@Include: structureMapper.h
-  //@Include: surfaceProcessor.h
-  //@Include: triangulatedSurface.h
-  //@Include: triangulation.h
-  //@Include: BSDTree.h
-  //@Include: RDFIntegrator.h
-  //@Include: RDFParameter.h
-  //@Include: RDFSection.h
-  //@Include: RSEdge.h
-  //@Include: RSFace.h
-  //@Include: RSVertex.h
-  //@Include: SESEdge.h
-  //@Include: SESFace.h
-  //@Include: SESVertex.h
 
+	/**	@name Radial Distribution Functions
+	*/
+	//@{
+		//@Include: radialDistributionFunction.h
+		//@Include: RDFIntegrator.h
+		//@Include: RDFParameter.h
+		//@Include: RDFSection.h
+	//@}
+
+	/**	@name	Molecular Surface Computation
+	*/
+	//@{
+	  //@Include: surfaceProcessor.h
+		//@Include: analyticalSES.h
+		//@Include: numericalSAS.h
+		//@Include: reducedSurface.h
+		//@Include: singularities.h
+		//@Include: solventExcludedSurface.h
+		//@Include: triangulatedSurface.h
+		//@Include: triangulation.h
+		//@Include: BSDTree.h
+		//@Include: RSEdge.h
+		//@Include: RSFace.h
+		//@Include: RSVertex.h
+		//@Include: SESEdge.h
+		//@Include: SESFace.h
+		//@Include: SESVertex.h
+	//@}
 //@}
