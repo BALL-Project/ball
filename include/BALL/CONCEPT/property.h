@@ -1,4 +1,4 @@
-// $Id: property.h,v 1.14 2000/08/30 19:58:00 oliver Exp $
+// $Id: property.h,v 1.15 2000/09/03 20:02:37 oliver Exp $
 
 #ifndef BALL_CONCEPT_PROPERTY_H
 #define BALL_CONCEPT_PROPERTY_H
@@ -16,10 +16,7 @@
 #endif
 
 #include <iostream>
-/*
-#define BALL_PROPERTY_DEFAULT_VALUE                1
-#define BALL_PROPERTY_DEFAULT_INVALID_NAME_VALUE   0
-*/
+
 namespace BALL 
 {
 
