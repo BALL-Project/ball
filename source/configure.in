@@ -1,4 +1,4 @@
-dnl    $Id: configure.in,v 1.19.4.3 2002/05/29 18:08:25 oliver Exp $
+dnl    $Id: configure.in,v 1.19.4.4 2002/06/14 01:48:45 oliver Exp $
 dnl    Process this file with autoconf to produce a configure script.
 dnl   
 
@@ -57,7 +57,7 @@ AC_ARG_WITH(arflags,           [  --with-arflags=FLAGS    add FLAGS to the flags
 AC_ARG_WITH(dynarflags,        [  --with-dynarflags=FLAGS add FLAGS to the flags for the creation of the shared libraries])
 AC_ARG_WITH(qt-incl,           [  --with-qt-incl=DIR      QT header files are in DIR])
 AC_ARG_WITH(qt-libs,           [  --with-qt-libs=DIR      QT libraries are in DIR])
-AC_ARG_WITH(qt-mt,             [  --with-threadsafe-qt    use a threadsafe version of the QT lib (libqt-mt)])
+AC_ARG_WITH(qt-mt,             [  --with-qt-mt            use a threadsafe version of the QT lib (libqt-mt)])
 AC_ARG_WITH(moc,               [  --with-moc=MOC          use MOC as the absolute path to the QT meta object compiler (moc)])
 AC_ARG_WITH(opengl-incl,       [  --with-opengl-incl=DIR  OpenGL/Mesa header files are in DIR/GL])
 AC_ARG_WITH(opengl-libs,       [  --with-opengl-libs=DIR  OpenGL/Mesa libraries are in DIR/GL])

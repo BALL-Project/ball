@@ -1,4 +1,4 @@
-// $Id: enumerator.h,v 1.19.4.4 2002/06/09 14:24:32 oliver Exp $
+// $Id: enumerator.h,v 1.19.4.5 2002/06/14 01:48:43 oliver Exp $
 
 #ifndef BALL_CONCEPT_ENUMERATOR_H
 #define BALL_CONCEPT_ENUMERATOR_H
@@ -97,6 +97,10 @@ namespace BALL
 		 */
 		const EnumeratorIndex& operator = (Position index)
 			throw(Exception::IndexOverflow);
+
+		template <typename Variant, typename VariantIterator>
+		const EnumeratorIndex& operator = (const std::list<std::pair<VariantIterator, std::vector<Variant> > >& variant_list)
+			throw();
 		//@}
 
 		/** @name Accessors
@@ -167,14 +171,14 @@ namespace BALL
 		 * @param rhs
 		 * @return true, if {\tt rhs} is equal to {\tt this} instance
 		 */
-		bool operator == (const EnumeratorIndex& rhs)
+		bool operator == (const EnumeratorIndex& rhs) const
 			throw();
 
 		/** Inequality operator.
 		 * @param rhs
 		 * @return true, if {\tt rhs} is not equal to {\tt this} instance
 		 */
-		bool operator != (const EnumeratorIndex& rhs)
+		bool operator != (const EnumeratorIndex& rhs) const
 			throw();
 
 		/** Greater than operator.
@@ -182,7 +186,7 @@ namespace BALL
 		 * @return true, if {\tt rhs} is greater than {\tt this} instance
 			 @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
 		 */
-		bool operator > (const EnumeratorIndex& rhs)
+		bool operator > (const EnumeratorIndex& rhs) const
 			throw(EnumeratorIndex::IncompatibleIndex);
 
 		/** Lesser than operator.
@@ -190,7 +194,7 @@ namespace BALL
 		 * @return true, if {\tt rhs} is lesser than {\tt this} instance
 		 *  @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
 		 */
-		bool operator < (const EnumeratorIndex& rhs)
+		bool operator < (const EnumeratorIndex& rhs) const
 			throw(EnumeratorIndex::IncompatibleIndex);
 				
 		/** Greater or equal operator.
@@ -198,7 +202,7 @@ namespace BALL
 		 * @return true, if {\tt rhs} is greater than or equal to {\tt this} instance
 		 *  @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
 		 */
-		bool operator >= (const EnumeratorIndex& rhs)
+		bool operator >= (const EnumeratorIndex& rhs) const
 			throw(EnumeratorIndex::IncompatibleIndex);
 
 		/** Lesser or equal operator.
@@ -206,7 +210,7 @@ namespace BALL
 		 * @return true, if {\tt rhs} is lesser than or equal to {\tt this} instance
 		 *  @exception EnumeratorIndex::Incompatible index if the modulus vector differs, i.e. the two indices aren't comparable
 		 */
-		bool operator <= (const EnumeratorIndex& rhs)
+		bool operator <= (const EnumeratorIndex& rhs) const
 			throw(EnumeratorIndex::IncompatibleIndex);
 		//@}
 
@@ -225,6 +229,19 @@ namespace BALL
 			modulus_(variant_list.size()),
 			base_multipliers_(variant_list.size())
 	{ 
+		this->operator = (variant_list);
+	}
+
+
+	template <typename Variant, typename VariantIterator>
+	const EnumeratorIndex& EnumeratorIndex::operator = 
+		(const std::list<std::pair<VariantIterator, std::vector<Variant> > >& variant_list)
+		throw()
+	{ 
+		resize(variant_list.size());
+		modulus_.resize(variant_list.size());
+		base_multipliers_.resize(variant_list.size());
+
 		// compute the base multipliers for later usage 
 		Index i;
 		Size multiplier = 1;
@@ -237,6 +254,8 @@ namespace BALL
 			base_multipliers_[i] = multiplier;
 			multiplier *= modulus_[i];
 		}
+		
+		return *this;
 	}
 
 
@@ -307,12 +326,12 @@ namespace BALL
 
 		/** Mutable forward iterator
 		*/
-		typedef ForwardIterator<Enumerator<Container, SiteIterator, Variant>, EnumeratorIndex, EnumeratorIndex*, IteratorTraits_>
+		typedef ForwardIterator<Enumerator<Container, SiteIterator, Variant>, Container, EnumeratorIndex*, IteratorTraits_>
 			Iterator;
 
 		/** Constant forward iterator
 		*/
-		typedef ConstForwardIterator<Enumerator<Container, SiteIterator, Variant>, EnumeratorIndex, EnumeratorIndex*, IteratorTraits_>
+		typedef ConstForwardIterator<Enumerator<Container, SiteIterator, Variant>, Container, EnumeratorIndex*, IteratorTraits_>
 			ConstIterator;
 		//@}
 
@@ -358,6 +377,7 @@ namespace BALL
 			throw()
 		{
 			variant_sites_.push_back(Site(it, variants));
+			position_ = variant_sites_;
 		}
 
 		/** Delete variants from the list of variants
@@ -371,6 +391,7 @@ namespace BALL
 			{
 				variant_sites_.erase(var_it);
 			}
+			position_ = variant_sites_;
 		}
 
 		/** Count all variants.
@@ -431,6 +452,8 @@ namespace BALL
 
 		protected:
 
+		friend class IteratorTraits_;
+
 		/**
 		*/
 		class IteratorTraits_
@@ -439,50 +462,35 @@ namespace BALL
 			
 			public:
 				
-			typedef Enumerator<Container, SiteIterator, Variant>	
+			typedef Enumerator<Container, SiteIterator, Variant>
 				ContainerType;
 
 			typedef Enumerator<Container, SiteIterator, Variant>* 
 				ContainerPointer;
 
-			typedef EnumeratorIndex														
+			typedef EnumeratorIndex
 				IteratorPosition;
 
-			typedef EnumeratorIndex
+			typedef Container
 				ValueType;
 
 			IteratorTraits_()
 				throw()
 				:	bound_(0),	
-					position_(0)
+					position_(),
+					past_the_end_(false)
 			{
 			}
 				
 			IteratorTraits_(const ContainerType& enumerator)
 				throw()
 				:	bound_(const_cast<ContainerPointer>(&enumerator)),
-					position_(0)
+					position_(enumerator.variant_sites_),
+					past_the_end_(false)
 			{
 			}
 			
-			
-			IteratorTraits_(const IteratorTraits_& traits)
-				throw()
-				:	bound_(traits.bound_),
-					position_(traits.position_)
-			{
-			}
-			
-			const IteratorTraits_& operator = (const IteratorTraits_& traits)
-				throw()
-      {
-        bound_ = traits.bound_;
-        position_ = traits.position_;
- 
-        return *this;
-			}
-
-			const ContainerType* getContainer() const	
+			const ContainerPointer getContainer() const	
 				throw()
 			{
 				return bound_;
@@ -515,13 +523,13 @@ namespace BALL
       bool operator == (const IteratorTraits_& traits) const
 				throw()
       {
-        return (position_ == traits.position_);
+        return ((bound_ == traits.bound_) && (position_ == traits.position_) && (past_the_end_ == traits.past_the_end_));
 			}
 
       bool operator != (const IteratorTraits_& traits) const
 				throw()
       {
-        return (position_ != traits.position_);
+				return ((bound_ != traits.bound_) || (position_ != traits.position_) || (past_the_end_ != traits.past_the_end_));
 			}
 
       bool isValid() const
@@ -535,58 +543,81 @@ namespace BALL
       {
         bound_ = 0;
         position_ = 0;
+				past_the_end_ = false;
 			}
 
 			void toBegin()
 				throw()
 			{
 				position_ = 0;
+				past_the_end_ = false;
 			}
 
 			bool isBegin() const
 				throw()
 			{
-				return (position_ == 0);
+				return (position_ == 0) && (past_the_end == false);
 			}
 			
 			void toEnd()
 				throw()
 			{
-				position_ = position_.getNumberOfCombinations();
+				position_ = 0;
+				past_the_end_ = true;
 			}
 			
 			bool isEnd() const
 				throw()
 			{
-				return (position_ == position_.getNumberOfCombinations());
+				return past_the_end_;
 			}
 			
 			ValueType& getData()
 				throw()
 			{
-				return position_;
+				validate();
+				return bound_->getCurrent();
 			}
 			
 			const ValueType& getData() const
 				throw()
 			{
-				return position_;
+				validate();
+				return bound_->getCurrent();
 			}
 			
 			void forward()
 				throw()
 			{
-				position_++;
+				try
+				{
+					++position_;
+				}
+				catch (Exception::IndexOverflow&)
+				{
+					past_the_end_ = true;
+					position_ = 0;
+				}
 			}
 			
+			void validate()
+				throw()
+			{
+				if (!bound_->is_valid_position_
+						|| (position_ != bound_->position_))
+				{
+					bound_->createCombination(position_);
+				}
+			}
+
 			protected:
-			
 			ContainerPointer	bound_;
-			IteratorPosition	position_;
+			EnumeratorIndex		position_;
+			bool							past_the_end_;
 		};
 
-		
-		static void default_assign_(Variant& a, const Variant& b)
+		// the default mutation method (calling asignment operator)
+		inline void defaultAssign_(Variant& a, const Variant& b)
 		{
 			a = b;
 		}
@@ -600,6 +631,8 @@ namespace BALL
 		Container&			container_;
 		MutatorFunction mutator_;
 		SiteList				variant_sites_;
+		EnumeratorIndex	position_;
+		bool						is_valid_position_;
 	};
 
 	template <typename Container, typename SiteIterator, typename Variant>
@@ -614,7 +647,7 @@ namespace BALL
 	Enumerator<Container, SiteIterator, Variant>::Enumerator(Container& container)
 			throw()
 		: container_(container),
-			mutator_(default_assign_)
+			mutator_(defaultAssign_)
 	{
 	}
 		
@@ -641,11 +674,10 @@ namespace BALL
 	void Enumerator<Container, SiteIterator, Variant>::createCombination(const Position index)
 		throw()
 	{
-		EnumeratorIndex enumerator_index(variant_sites_);
-		enumerator_index = index;
 		try
 		{
-			createCombination(enumerator_index);
+			position_ = index;
+			createCombination(position_);
 		}
 		catch (EnumeratorIndex::IncompatibleIndex&)
 		{
@@ -657,9 +689,9 @@ namespace BALL
 	void Enumerator<Container, SiteIterator, Variant>::createCombination(const EnumeratorIndex& index)
 		throw(EnumeratorIndex::IncompatibleIndex)
 	{
-		if (index.getSize() != variant_sites_.size())
+		if (&index != &position_)
 		{
-			throw EnumeratorIndex::IncompatibleIndex(__FILE__, __LINE__);
+			position_ = index;
 		}
 
 		typename SiteList::iterator it = variant_sites_.begin();
@@ -668,6 +700,8 @@ namespace BALL
 		{
 			mutate_(it->first, it->second[index[i]]);
 		}
+		
+		is_valid_position_ = true;
 	}
 
 	template <typename Container, typename SiteIterator, typename Variant>

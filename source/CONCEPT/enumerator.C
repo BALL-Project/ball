@@ -1,4 +1,4 @@
-// $Id: enumerator.C,v 1.10.4.2 2002/06/05 22:52:40 oliver Exp $
+// $Id: enumerator.C,v 1.10.4.3 2002/06/14 01:48:46 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/COMMON/exception.h>
@@ -140,19 +140,19 @@ namespace BALL
 		return *this;
 	}
 
-	bool EnumeratorIndex::operator == (const EnumeratorIndex& rhs)
+	bool EnumeratorIndex::operator == (const EnumeratorIndex& rhs) const
 		throw()
 	{
 		return (modulus_ == rhs.modulus_) && (static_cast<const vector<Position>&>(*this) == static_cast<const vector<Position>&>(rhs));
 	}
 
-	bool EnumeratorIndex::operator != (const EnumeratorIndex& rhs)
+	bool EnumeratorIndex::operator != (const EnumeratorIndex& rhs) const
 		throw()
 	{
 		return (modulus_ != rhs.modulus_) || (static_cast<const vector<Position>&>(*this) != static_cast<const vector<Position>&>(rhs));
 	}
 
-	bool EnumeratorIndex::operator < (const EnumeratorIndex& rhs)
+	bool EnumeratorIndex::operator < (const EnumeratorIndex& rhs) const
 		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (modulus_ != rhs.modulus_)
@@ -163,7 +163,7 @@ namespace BALL
 		return (static_cast<const vector<Position>&>(*this) < static_cast<const vector<Position>&>(rhs));
 	}
 
-	bool EnumeratorIndex::operator > (const EnumeratorIndex& rhs)
+	bool EnumeratorIndex::operator > (const EnumeratorIndex& rhs) const
 		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (modulus_ != rhs.modulus_)
@@ -174,7 +174,7 @@ namespace BALL
 		return (static_cast<const vector<Position>&>(*this) > static_cast<const vector<Position>&>(rhs));
 	}
 
-	bool EnumeratorIndex::operator <= (const EnumeratorIndex& rhs)
+	bool EnumeratorIndex::operator <= (const EnumeratorIndex& rhs) const
 		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (modulus_  != rhs.modulus_)
@@ -185,7 +185,7 @@ namespace BALL
 		return (static_cast<const vector<Position>&>(*this) <= static_cast<const vector<Position>&>(rhs));
 	}
 
-	bool EnumeratorIndex::operator >= (const EnumeratorIndex& rhs)
+	bool EnumeratorIndex::operator >= (const EnumeratorIndex& rhs) const
 		throw(EnumeratorIndex::IncompatibleIndex)
 	{
 		if (modulus_ != rhs.modulus_)

@@ -1,4 +1,4 @@
-// $Id: Enumerator_test.C,v 1.11.4.4 2002/06/09 14:24:34 oliver Exp $
+// $Id: Enumerator_test.C,v 1.11.4.5 2002/06/14 01:48:46 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -13,7 +13,7 @@ void char_assign(char& c1, const char& c2)
 	c1 = c2;
 }
 
-START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.11.4.4 2002/06/09 14:24:34 oliver Exp $")
+START_TEST(Enumerator, "$Id: Enumerator_test.C,v 1.11.4.5 2002/06/14 01:48:46 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -600,7 +600,9 @@ RESULT
 CHECK(Enumerator::end())
 	Size counter = 0;
 	Enumerator<String, String::iterator, char>::Iterator it = enumerator.begin();
-	for (; +it; it != enumerator.end(), counter++)
+	for (; it != enumerator.end(); ++it, counter++);
+	TEST_EQUAL(enumerator.countVariants(), 10000);
+	
 	TEST_EQUAL(counter, 10000)
 RESULT
 
@@ -614,11 +616,20 @@ CHECK(Enumerator::end() const)
 	Size counter = 0;
 	Enumerator<String, String::iterator, char>& c_enumerator(enumerator);
 	Enumerator<String, String::iterator, char>::ConstIterator it = c_enumerator.begin();
-	for (; +it; it != c_enumerator.end(), counter++)
+	for (; it != c_enumerator.end(); ++it, counter++);
 	TEST_EQUAL(counter, 10000)
 RESULT
 
-
+CHECK(Enumerator iteration)
+	Size counter = 0;
+	Enumerator<String, String::iterator, char>::Iterator it = enumerator.begin();
+	for (; it != enumerator.end(); ++it, counter++)
+	{
+		String p = (*it)(1);
+		p.reverse();
+		TEST_EQUAL(p.toUnsignedInt(), counter)
+	}
+RESULT
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
