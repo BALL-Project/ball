@@ -1,4 +1,4 @@
-// $Id: view.doc,v 1.9 2001/05/27 10:26:36 hekl Exp $
+// $Id: view.doc,v 1.10 2001/08/01 12:29:51 amoll Exp $
 
 /**@name VIEW.
          VIEW is a framework for the implementation of GUI based visualizations.
@@ -129,5 +129,4 @@
 		//@Include: PRIMITIV/primitiv.doc
 	//@}
 
-  //@Include: tutorial.doc
 //@}

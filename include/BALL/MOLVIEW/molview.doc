@@ -1,4 +1,4 @@
-// $Id: molview.doc,v 1.8 2001/06/23 10:42:57 amoll Exp $
+// $Id: molview.doc,v 1.9 2001/08/01 12:29:46 amoll Exp $
 
 /**@name MOLVIEW.
 	 Contrary to the VIEW framework that is designed to visualize various geometric objects
@@ -121,7 +121,5 @@
 		//@Include: PRIMITIV/primitiv.doc
 	//@}
 
-	//@Include: tutorial.doc
-	
 //@}
 
