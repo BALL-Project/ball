@@ -1,4 +1,4 @@
-// $Id: Composite_test.C,v 1.24 2001/02/06 21:29:08 amoll Exp $
+// $Id: Composite_test.C,v 1.25 2001/05/16 01:47:32 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -25,7 +25,7 @@ class myVisitor
 	}
 };
 
-START_TEST(Composite, "$Id: Composite_test.C,v 1.24 2001/02/06 21:29:08 amoll Exp $")
+START_TEST(Composite, "$Id: Composite_test.C,v 1.25 2001/05/16 01:47:32 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -249,6 +249,18 @@ CHECK(deselect())
 	TEST_EQUAL(e.isSelected(), false);
 RESULT
 
+CHECK(Subcomposite Iteration)
+  Composite a, b, c, d, e;
+  a.appendChild(b);
+  b.appendChild(c);
+  b.appendChild(d);
+  c.appendChild(e);
+	Composite::SubcompositeIterator sub_it;
+  TEST_EQUAL(+sub_it, false)
+  sub_it = a.beginSubcomposite();
+  TEST_EQUAL(+sub_it, true)
+  TEST_EQUAL(&*sub_it, &a)
+RESULT
 
 TextPersistenceManager  pm;
 Composite composite;
