@@ -1,4 +1,4 @@
-// $Id: pairExpRDFIntegrator.h,v 1.2 2000/09/01 10:23:55 anker Exp $
+// $Id: pairExpRDFIntegrator.h,v 1.3 2000/09/02 16:12:21 anker Exp $
 
 #ifndef BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
 #define BALL_SOLVATION_PAIREXPRDFINTEGRATOR_H
@@ -25,7 +25,36 @@ namespace BALL
 
 		public:
 
-		// BALL_CREATE(PairExpRDFIntegrator)
+		BALL_CREATE(PairExpRDFIntegrator)
+
+		/** Symbolic names for option keys.
+			This struct contains a symbolic name for each recognized key in
+			ReissCavFreeEnergyProcessor::options.
+		 */
+		struct Option
+		{
+			/** The verbosity level.
+				Use integer values with this option.
+				@see Default::VERBOSITY
+				@param verbosity integer
+			 */
+			static const char* VERBOSITY;
+
+			/** Number of sampling points for the numerical integration.
+			@see Default::SAMPLES
+			@param samples integer
+			*/
+			static const char* SAMPLES;
+		};
+
+		struct Default
+		{
+			/** Default verbosity level.
+				@see Option::VERBOSITY
+			 */
+			static const int VERBOSITY;
+			static const int SAMPLES;
+		};
 
 		/** @name Constructors and destructors */
 		//@{
@@ -71,9 +100,6 @@ namespace BALL
 		/** */
 		void setConstants(double alpha, double C1, double C2, double R_ij_o,
 				double k1, double k2);
-
-		/** */
-		void setRDF(const RadialDistributionFunction& rdf);
 
 		/** */
 		double integrateToInf(double from) const;
