@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: UCK_test.C,v 1.3 2004/06/24 16:03:26 bender Exp $
+// $Id: UCK_test.C,v 1.4 2004/10/28 15:54:57 amoll Exp $
 //
 
 #include <BALL/CONCEPT/classTest.h>
@@ -12,6 +12,7 @@
 #include <BALL/FORMAT/SDFile.h>
 #include <BALL/KERNEL/PTE.h>
 #include <BALL/KERNEL/molecule.h>
+#include <BALL/KERNEL/fragment.h>
 
 #include <fstream>
 #include <iostream>
@@ -26,7 +27,7 @@ UCK *u1;
 UCK *u2;
 UCK *u3;
 
-START_TEST(UCK, "$Id: UCK_test.C,v 1.3 2004/06/24 16:03:26 bender Exp $")
+START_TEST(UCK, "$Id: UCK_test.C,v 1.4 2004/10/28 15:54:57 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
