@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.57 2004/02/02 17:22:32 amoll Exp $
+// $Id: mainControl.C,v 1.58 2004/02/04 10:56:48 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -1298,10 +1298,12 @@ void MainControl::customEvent( QCustomEvent * e )
 bool MainControl::setSimulationThread(SimulationThread* thread)
 	throw()
 {
+#ifdef BALL_QT_HAS_THREADS
 	if (simulation_thread_ != 0) return false;
 	simulation_thread_ = thread;
 	if (thread != 0) thread->setMainControl(this);
 	checkMenus();
+#endif
 	return true;
 }
 
