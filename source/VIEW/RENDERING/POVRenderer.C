@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: POVRenderer.C,v 1.8 2004/02/13 15:38:09 anhi Exp $
+// $Id: POVRenderer.C,v 1.9 2004/02/13 15:48:05 anhi Exp $
 //
 
 #include <BALL/VIEW/RENDERING/POVRenderer.h>
@@ -205,12 +205,12 @@ namespace BALL
 			// Define the finish we will use for our molecular objects (defining the molecular
 			// "material properties"
 			// TODO: allow for more than one finish in order to have seperate parameters for different objects
-			outfile_ << "#declare BALLFinish            		 = finish { specular 0.4 diffuse 1.0 ambient 0.0 }" << endl;
-			outfile_ << "#declare BALLFinishSphereSolid      = finish { specular 0.4 diffuse 1.0 ambient 0.0 }" << endl;
-			outfile_ << "#declare BALLFinishSphereTransp     = finish { specular 0.4 diffuse 1.0 ambient 0.0 }" << endl;
-			outfile_ << "#declare BALLFinishTubeSolid        = finish { specular 0.4 diffuse 1.0 ambient 0.0 }" << endl;
-			outfile_ << "#declare BALLFinishTubeTransp       = finish { specular 0.4 diffuse 1.0 ambient 0.0 }" << endl;
-			outfile_ << "#declare BALLFinishMesh             = finish { specular 0.4 diffuse 1.0 ambient 0.0 }" << endl << endl;
+			outfile_ << "#declare BALLFinish            		 = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
+			outfile_ << "#declare BALLFinishSphereSolid      = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
+			outfile_ << "#declare BALLFinishSphereTransp     = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
+			outfile_ << "#declare BALLFinishTubeSolid        = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
+			outfile_ << "#declare BALLFinishTubeTransp       = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl;
+			outfile_ << "#declare BALLFinishMesh             = finish { specular 0.5 diffuse 1.0 ambient 0.0 }" << endl << endl;
 			
 			// now begin the CSG union containing all the geometric objects
 			outfile_ << "union {" << endl;
