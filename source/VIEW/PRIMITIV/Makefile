@@ -7,6 +7,7 @@ CPP_SOURCES=\
 	line.C\
 	mesh.C\
 	point.C\
+	simpleBox.C\
 	sphere.C\
 	tube.C
 
