@@ -1,4 +1,4 @@
-// $Id: support.h,v 1.7 2001/01/31 21:33:11 amoll Exp $
+// $Id: support.h,v 1.8 2001/02/18 20:51:19 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_SUPPORT_H
 #define BALL_MOLMEC_COMMON_SUPPORT_H
@@ -43,6 +43,7 @@ namespace BALL
 		/**	@name	Enums
 		*/
 		//@{
+
 		/**	The type of algorithm used to calculate the pair list.
 		*/
 		enum PairListAlgorithmType
@@ -50,6 +51,7 @@ namespace BALL
 			/**	use a hash grid 
 			*/
 			HASH_GRID,
+
 			/**	brute force all agains all
 			*/
 			BRUTE_FORCE

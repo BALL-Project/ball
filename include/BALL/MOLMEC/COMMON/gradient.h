@@ -1,4 +1,4 @@
-// $Id: gradient.h,v 1.4 2000/10/05 22:29:17 oliver Exp $ 
+// $Id: gradient.h,v 1.5 2001/02/18 20:51:19 amoll Exp $ 
 // A conjugate gradient minimizer for geometry optimisation
 
 #ifndef BALL_MOLMEC_COMMON_GRADIENT_H 
@@ -26,15 +26,11 @@ namespace BALL
 			forces of the atoms are correctly set (e.g. using ForceField::updateForces()).
 			The gradient contains the negative forces from each atom. Forces are converted from Newton (N)
 			to units of $kJ/(mol \AA)$.
-			
 			A gradient may be invalidated by calling \Ref{invalidate}. This method only
 			flags the gradient as invalid, the data is untouched. This may be used to 
 			initiate automatic recalculations of the gradient.
-	
-			This class is used by all minimizer classes.
-			\\
-			{\bf Definition:}\URL{BALL/MOLMEC/COMMON/gradient.h}
-			\\
+			This class is used by all minimizer classes. \\
+			{\bf Definition:}\URL{BALL/MOLMEC/COMMON/gradient.h} \\
 	*/
 	class Gradient
 		:	private std::vector<Vector3>
@@ -46,6 +42,7 @@ namespace BALL
 		/**	Type definitions
 		*/
 		//@{
+
 		/**	Iterator type
 		*/
 		typedef std::vector<Vector3>::iterator Iterator;
@@ -53,8 +50,8 @@ namespace BALL
 		/**	Const iterator type
 		*/
 		typedef std::vector<Vector3>::const_iterator ConstIterator;
-		//@}
 
+		//@}
     /**	@name	Constructors and Destructors	
     */
     //@{
@@ -73,9 +70,8 @@ namespace BALL
     /**	Destructor.
     */
     virtual ~Gradient();
+
     //@}
-
-
     /**	@name	Assignments 
     */
     //@{
@@ -101,15 +97,15 @@ namespace BALL
 		void negate();
 
 		/**	Dot product operator
-				@exception \Ref{InvalidRange} if the two gradients have different sizes
+				@exception InvalidRange if the two gradients have different sizes
 		*/
 		double operator * (const Gradient& gradient) const;
 
     //@}
-
     /**	@name	Accessors 
     */
     //@{
+
     /** Normalize the gradient
     */
     void normalize();
@@ -129,8 +125,8 @@ namespace BALL
 		/**	Return the validity flag.
 		*/
 		bool isValid() const;
-    //@}
 
+    //@}
 		/**	@name	Iteration
 		*/
 		//@{
@@ -142,11 +138,12 @@ namespace BALL
 		/**	Return a past-the-end vector.
 		*/
 		using std::vector<Vector3>::end;
-		//@}
 
+		//@}
     /**	@name	Public Attributes
     */
     //@{
+
 		/**	The gradient norm.
 		*/
 		double norm;

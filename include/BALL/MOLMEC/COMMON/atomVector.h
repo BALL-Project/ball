@@ -1,5 +1,4 @@
-// $Id: atomVector.h,v 1.3 2000/10/05 22:29:17 oliver Exp $
-// A class containing a vector of atom pointers
+// $Id: atomVector.h,v 1.4 2001/02/18 20:51:18 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_ATOMVECTOR_H 
 #define BALL_MOLMEC_COMMON_ATOMVECTOR_H 
@@ -20,10 +19,8 @@ namespace BALL
 	class Composite;
 	
 	/**	Atom vector class.
-			This class is used to store atom pointers.
-			\\
-			{\bf Definition:}\URL{BALL/MOLMEC/COMMON/atomVector.h>
-			\\
+			This class is used to store atom pointers.\\
+			{\bf Definition:}\URL{BALL/MOLMEC/COMMON/atomVector.h}\\
 	*/
 	class AtomVector
 		:	private std::vector<Atom*>
@@ -43,12 +40,12 @@ namespace BALL
 		/**	Const iterator type.
 		*/
 		typedef std::vector<Atom*>::const_iterator ConstIterator;
-		//@}
-		
 
+		//@}
     /**	@name	Constructors and Destructors	
     */
     //@{
+
     /**	Default constructor.
     */
     AtomVector();
@@ -73,9 +70,8 @@ namespace BALL
 				Removes all atoms from the vector
 		*/
 		using std::vector<Atom*>::clear;
+
     //@}
-
-
     /**	@name	Assignments 
     */
     //@{
@@ -93,7 +89,6 @@ namespace BALL
 				none of the atoms in {\tt composite} are selected or the selected atoms
 				only (if any atom is selected in {\tt composite}.
 				The implementation calls {\tt \Ref{set}({\tt rhs}, {\tt rhs}.\Ref{containsSelection}())}.
-
 				@see	Composite::containsSelection
 				@see	Selectable
 				
@@ -106,11 +101,12 @@ namespace BALL
 				@param	selected_only extract only selected atoms if set to {\bf true}
 		*/
 		void set(const Composite& composite, bool selected_only = false);
-    //@}
 
+    //@}
     /**	@name	Accessors 
     */
     //@{
+
 		/**	Return the vector size;
 		*/
 		using std::vector<Atom*>::size;
@@ -136,11 +132,9 @@ namespace BALL
 		/**	Move all atoms along a direction vector.
 				The method translates all atoms a long a given direction.
 				The direction vector is multiplied with a step length {\tt step}.
-				
 				If a saved position exists (\Ref{savePositions}), it is used as a start
 				position (i.e. the final positions are $\vec{\mathrm{start}} + \mathrm{step} \vec{\mathrm{direction}}$).
 				Otherwise, the current atom positions are used.
-
 				If the gradient's size differs from the number of atoms, nothing is done.
 		*/
 		void moveTo(const Gradient& direction, float step = 1.0);
@@ -152,11 +146,12 @@ namespace BALL
 		/**	Resize the vector.
 		*/
 		using std::vector<Atom*>::resize;
-    //@}
 
+    //@}
 		/**	@name	Iteration
 		*/
 		//@{
+
 		/**	begin method
 		*/
 		using std::vector<Atom*>::begin;
@@ -164,9 +159,11 @@ namespace BALL
 		/**	end method
 		*/
 		using std::vector<Atom*>::end;
+
 		//@}
 		
 		protected:
+
 		/**	The saved positions.
 		*/
 		std::vector<Vector3>	saved_position_;

@@ -1,4 +1,4 @@
-// $Id: charmmImproperTorsion.h,v 1.5 2000/08/30 19:58:16 oliver Exp $
+// $Id: charmmImproperTorsion.h,v 1.6 2001/02/18 20:50:38 amoll Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMIMPROPERTORSION_H
@@ -27,25 +27,21 @@ namespace BALL
 			The CHARMM force field employs a harmonic out-of-plane potential for improper
 			torsions.	An imporper torsion is defined for four atoms {\it A}, {\it B}, {\it C},
 			and {\it D} where {\it A} is the central atom {\it B}, {\it C}, and {\it D} are bound to.\\
-			
-			The out-of-plane-angle \TEX{\phi} is defined as the angle $\phi$ between 
-			the planes defined by {\it ABC} and {\it BCD}. 
+			The out-of-plane-angle {\em phi} is defined as the angle between the planes defined 
+			by {\it ABC} and {\it BCD}. 
 			The improper torsion energy $E_{imp}$ is then defined as
-			\begin{equation*}
-				E_{imp} = k (\theta - \theta_0)^2
-			\end{equation}
+			$ E_{imp} = k (\theta - \theta_0)^2 $
 			where $k$ and $\theta_0$ are constants read from the parameter section and depend on
-			the atom types of {\it A}, {\it B}, {\it C}, and {\it D}.
-			\\
-			{\bf Definition:}\URL{BALL/MOLMEC/CHARMM/charmmImproperTorsion.h}
-			\\
+			the atom types of {\it A}, {\it B}, {\it C}, and {\it D}.	\\
+			{\bf Definition:}\URL{BALL/MOLMEC/CHARMM/charmmImproperTorsion.h} \\
 	*/
 	class CharmmImproperTorsion 
 		: public ForceFieldComponent
 	{
 		public:
 
-		/**	@name	Constructors and Destructors	*/
+		/**	@name	Constructors and Destructors	
+		*/
 		//@{
 
 		BALL_CREATE_DEEP(CharmmImproperTorsion)
@@ -65,9 +61,10 @@ namespace BALL
 		/**	Destructor.
 		*/
 		virtual ~CharmmImproperTorsion();
-		//@}
 
-		/**	@name	Setup Methods	*/
+		//@}
+		/**	@name	Setup Methods	
+		*/
 		//@{
 
 		/**	Setup method.
@@ -75,8 +72,8 @@ namespace BALL
 		virtual bool setup();
 
 		//@}
-
-		/**	@name	Accessors	*/
+		/**	@name	Accessors	
+		*/
 		//@{
 
 		/**	Calculates and returns the component's energy.
@@ -89,10 +86,10 @@ namespace BALL
 
 		//@}
 
-
 		private:
 
-		/*_	@name	Private Attributes	*/
+		/*_	@name	Private Attributes
+		*/
 		//@{
 
 		/*_	array with the torsions
@@ -102,6 +99,7 @@ namespace BALL
 		QuadraticImproperTorsion								improper_parameters_;
 
 		ResidueTorsions													improper_atoms_;
+
 		//@}
 	 
 	};

@@ -1,4 +1,4 @@
-// $Id: charmm.h,v 1.4 2000/10/16 19:59:10 oliver Exp $
+// $Id: charmm.h,v 1.5 2001/02/18 20:50:38 amoll Exp $
 // Molecular Mechanics: CHARMM force field class
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMM_H
@@ -108,6 +108,7 @@ namespace BALL
 			/**	Default filename for the parameter file
 			*/
 			static const char* FILENAME;
+
 			/**	Non bonded cutoff
 			*/
 			static const float NONBONDED_CUTOFF;
@@ -148,8 +149,7 @@ namespace BALL
 			*/
 			static const float SCALING_VDW_1_4; 
 
-			/**	use of distance dependent dielectric constant
-                                default = false 
+			/**	use of distance dependent dielectric constant, default = false 
 			*/
 			static const bool DISTANCE_DEPENDENT_DIELECTRIC; 
 
@@ -175,15 +175,11 @@ namespace BALL
 		};
 
 		//@}
-
-
 		/**@name	Constructors and Destructors
 		*/
 		//@{
 
-
 		BALL_CREATE(CharmmFF)
-
 
 		/**	Default constructor.
 		*/
@@ -206,7 +202,6 @@ namespace BALL
 		virtual ~CharmmFF();
 
 		//@}
-
 		/**	@name Assignment
 		*/
 		//@{
@@ -220,8 +215,8 @@ namespace BALL
 		*/
 		virtual void clear()
 			throw();
-		//@}
 
+		//@}
 		/**	@name	Setup Methods
 		*/
 		//@{
@@ -231,10 +226,10 @@ namespace BALL
 		virtual bool specificSetup();
 
 		//@}
-
 		/**	Accessors specific to the CHARMM force field
 		*/
 		//@{
+
 		/**	Return the bond stretch contribution to the total energy
 		*/
 		double getStretchEnergy() const;
@@ -276,6 +271,7 @@ namespace BALL
 		/**	Return true, if the parameters have already been initialized
 		*/
 		bool hasInitializedParameters() const;
+
 		//@}
 
 		protected:

@@ -1,4 +1,4 @@
-// $Id: ruleProcessor.h,v 1.5 2000/08/30 19:58:18 oliver Exp $
+// $Id: ruleProcessor.h,v 1.6 2001/02/18 20:51:19 amoll Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULEPROCESSOR_H
@@ -27,6 +27,7 @@ namespace BALL
 		/**	Constructors and Destructors
 		*/
 		//@{
+
 		/**	Default constructor
 		*/
 		RuleProcessor();
@@ -50,8 +51,8 @@ namespace BALL
 		/**
 		*/
 		void destroy();			
+
 		//@}
-		
 		/**	@name	Accessors
 		*/
 		//@{
@@ -61,7 +62,6 @@ namespace BALL
 		bool initialize(INIFile& file, const String& prefix);
 
 		//@}
-
 		/**	@name	Assignment
 		*/
 		//@{
@@ -73,8 +73,8 @@ namespace BALL
 		/**	
 		*/
 		void set(const RuleProcessor& rule_processor);
+
 		//@}
-		
 		/**	@name Processor related methods
 		*/
 		//@{
@@ -95,12 +95,13 @@ namespace BALL
 		String evaluate(const Atom& atom);
 
 		//@}
-
 		/**	@name Debugging and Diagnostics
 		*/
 		//@{
+
 		bool isValid() const;
 		void dump(std::ostream& s = std::cout) const;
+
 		//@}
 
 		protected:

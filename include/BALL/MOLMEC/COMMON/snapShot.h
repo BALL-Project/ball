@@ -1,4 +1,5 @@
-// $Id: snapShot.h,v 1.13 2001/01/16 17:18:43 anker Exp $
+// $Id: snapShot.h,v 1.14 2001/02/18 20:51:19 amoll Exp $
+
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
 // They can be used to obtain snapshots from an MD simulation or an energy 
@@ -9,8 +10,6 @@
 #ifndef BALL_MOLMEC_COMMON_SNAPSHOT_H
 #define BALL_MOLMEC_COMMON_SNAPSHOT_H
  
-
-// Include all necessary BALL header files
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
@@ -68,10 +67,8 @@ namespace BALL
 	/** SnapShot class, containing the actual data of one single snapshot.
 			It consists of the posistions, velocities and forces for each atom
 			along with kinetic and potential energy of selected atoms. It is used
-			by the @see SnapShotManager.
-			\\
-			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/snapShot.h}
-			\\
+			by the @see SnapShotManager. \\
+			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/snapShot.h}	\\
 	*/
   class SnapShot
   {
@@ -105,8 +102,6 @@ namespace BALL
 			throw();
 
     //@}
-
-
     /// @name Assignment 
     //@{ 
 
@@ -119,8 +114,6 @@ namespace BALL
 			throw();
 
     //@}
-
-
     /// @name Predicates
     //@{
 
@@ -135,8 +128,6 @@ namespace BALL
 			throw();
 
     //@}
-
-
 		/// @name Accessors
 		//@{
 
@@ -198,7 +189,6 @@ namespace BALL
 
 		//@}
 
-
 		protected:
 
     //_ @name Protected Attributes
@@ -252,8 +242,7 @@ namespace BALL
 
   /**	Snapshot management for MD simulations.
 			This class manages a list of single snapshot objects.
-			Snapshots are numbered starting with 1.
-			\\
+			Snapshots are numbered starting with 1.	\\
 			{\bf Definition:}\URL{BALL/MOLMEC/COMMON/snapShot.h}
 	*/
   class SnapShotManager
@@ -332,8 +321,6 @@ namespace BALL
 			throw();
 
     //@}
-
-
     /// @name Setup methods
     //@{
 
@@ -345,11 +332,8 @@ namespace BALL
 			throw();
 
     //@}
-
-
     /** @name Assignment
     */
-
     //@{
 
     /** The assignment operator.  
@@ -362,11 +346,8 @@ namespace BALL
 			throw();
 
     //@}
-
-
     /** @name Debugging and diagnostics
     */
-
     //@{
 
     /** Is the SnapshotManager ready for use?
@@ -375,9 +356,6 @@ namespace BALL
 			throw();
 
     //@}
-
-
-
     /** @name Accessors
     */
 
@@ -414,7 +392,6 @@ namespace BALL
     /** This method returns the total number of snapshots (sum of
         snapshots in memory and on disk).
     */ 
-		// BAUSTELLE (Warum virtual?)
     Size getNumberOfSnapShots() const 
 			throw();
 
@@ -423,8 +400,6 @@ namespace BALL
 			throw();
 
     //@}
-
-
     /** @name Public Attributes
     */
     //@{
@@ -434,7 +409,6 @@ namespace BALL
     Options options; 
 
     //@} 
-
 
     protected:
 
@@ -471,7 +445,7 @@ namespace BALL
     /*_ The frequency of saving snapshots in memory to disk.
         After flush_to_disk_frequency_ iterations, a save is done. 
     */
-		// BAUSTELLE: Gehört das hierher? Macht das überhaupt Sinn? Werden denn
+		// BAUSTELLE: Geh”rt das hierher? Macht das überhaupt Sinn? Werden denn
 		// bei einem Flush alle bis dahin noch nicht gespeicherten Snapshots
 		// gespeichert oder nur der letzte, also damit eine Art Zeitraffer
 		// generiert?
@@ -486,8 +460,6 @@ namespace BALL
     bool valid_;
 
     //@}
-
-
     /*_ @name Protected methods
     */
     //@{

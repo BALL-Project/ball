@@ -1,4 +1,4 @@
-// $Id: charmmTorsion.h,v 1.5 2000/08/30 19:58:17 oliver Exp $
+// $Id: charmmTorsion.h,v 1.6 2001/02/18 20:50:39 amoll Exp $
 // Molecular Mechanics: CHARMM force field, proper torsion component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMTORSION_H
@@ -30,7 +30,8 @@ namespace BALL
 	{
 		public:
 
-		/**	@name	Type Definitions	*/
+		/**	@name	Type Definitions	
+		*/
 		//@{
 
 		struct SingleCharmmTorsion 
@@ -54,7 +55,6 @@ namespace BALL
 					phase(0)
 			{
 			}
-				
 
 			SingleCharmmTorsion(CosineTorsion::SingleData& t)
 			{
@@ -68,12 +68,12 @@ namespace BALL
 
 				// convert phase from degrees to radiant
 				phase = (BALL::Constants::PI / 180.0) * t.values.phase;
-
 			}
 		};
-		//@}
-			
-		/**	@name	Constructors and Destructors	*/
+
+		//@}	
+		/**	@name	Constructors and Destructors	
+		*/
 		//@{
 
 		BALL_CREATE_DEEP(CharmmTorsion)
@@ -93,9 +93,10 @@ namespace BALL
 		/**	Destructor.
 		*/
 		virtual ~CharmmTorsion();
-		//@}
 
-		/**	@name	Setup Methods	*/
+		//@}
+		/**	@name	Setup Methods	
+		*/
 		//@{
 
 		/**	Setup method.
@@ -103,8 +104,8 @@ namespace BALL
 		virtual bool setup();
 
 		//@}
-
-		/**	@name	Accessors	*/
+		/**	@name	Accessors	
+		*/
 		//@{
 
 		/**	Calculates and returns the component's energy.
@@ -114,12 +115,13 @@ namespace BALL
 		/**	Calculates and returns the component's forces.
 		*/
 		virtual void updateForces();
-		//@}
 
+		//@}
 
 		private:
 
-		/*_	@name	Private Attributes	*/
+		/*_	@name	Private Attributes	
+		*/
 		//@{
 
 		/*_	Vector containing the parameters for each torsion.
@@ -134,9 +136,10 @@ namespace BALL
 		*/
 		ResidueTorsions								residue_torsions_;
 
-		/*_	Set to true, if the torsions are read from the ResidueTorsions section.
+		/*_	true, if the torsions are read from the ResidueTorsions section.
 		*/
 		bool use_residue_torsion_list_;
+
 		//@}
 	 
 	};

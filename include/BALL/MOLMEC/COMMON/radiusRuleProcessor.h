@@ -1,4 +1,4 @@
-// $Id: radiusRuleProcessor.h,v 1.3 2000/08/30 19:58:18 oliver Exp $
+// $Id: radiusRuleProcessor.h,v 1.4 2001/02/18 20:51:19 amoll Exp $
 // Molecular Mechanics: rule-based assignment of radii
 
 #ifndef BALL_MOLMEC_COMMON_RADIUSRULEPROCESSOR_H
@@ -23,6 +23,7 @@ namespace BALL
 		/**	Constructors and Destructors
 		*/
 		//@{
+
 		/**	Default constructor
 		*/
 		RadiusRuleProcessor();
@@ -40,13 +41,14 @@ namespace BALL
 		~RadiusRuleProcessor();
 
 		//@}
-		
 		/**	@name Processor related methods
 		*/
 		//@{
+
 		/**
 		*/
 		virtual Processor::Result operator () (Atom& atom);
+
 		//@}
 
 	};

@@ -1,4 +1,4 @@
-// $Id: charmmNonBonded.h,v 1.5 2000/08/30 19:58:16 oliver Exp $
+// $Id: charmmNonBonded.h,v 1.6 2001/02/18 20:50:38 amoll Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_NONBONDED_H
@@ -61,8 +61,6 @@ namespace BALL
 		virtual ~CharmmNonBonded();
 
 		//@}
-		
-
 		/**	@name	Setup Methods	
 		*/
 		//@{
@@ -72,8 +70,6 @@ namespace BALL
 		virtual bool setup();
 
 		//@}
-
-
 		/**	@name	Accessors	
 		*/
 		//@{
@@ -136,10 +132,10 @@ namespace BALL
 
 		//@}
 
-
 		private:
 
-		/*_	@name	Private Attributes	*/
+		/*_	@name	Private Attributes	
+		*/
 		//_@{
 
 		/**	Vector array with all atom pairs whose distance is smaller than cut_off
@@ -202,8 +198,8 @@ namespace BALL
 		*/
 		float	scaling_electrostatic_1_4_;
 
-		/*_     Flag for using constant or distance dependent dielectric constant 
-						True = distance dependent
+		/*_ Flag for using constant or distance dependent dielectric constant 
+				True = distance dependent
 		*/
 		bool    use_dist_depend_dielectric_; 
 
@@ -222,6 +218,7 @@ namespace BALL
 		vector<CharmmEEF1::Values>	solvation_;
 
 		bool use_solvation_component_;
+
 		//_@}
 
 	};

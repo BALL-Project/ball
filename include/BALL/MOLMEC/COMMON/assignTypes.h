@@ -1,4 +1,4 @@
-// $Id: assignTypes.h,v 1.5 2000/05/19 11:12:23 oliver Exp $
+// $Id: assignTypes.h,v 1.6 2001/02/18 20:51:18 amoll Exp $
 // Molecular Mechanics: atom type assignment
 
 #ifndef BALL_MOLMEC_COMMON_ASSIGNTYPES_H
@@ -16,7 +16,6 @@
 
 namespace BALL 
 {
-
 	
 	/**	Type assignment processor
 	*/
@@ -25,7 +24,6 @@ namespace BALL
 	{
 		public:
 
-
 		/**	@name Constructors and Destructors
 		*/
 		//@{
@@ -33,8 +31,8 @@ namespace BALL
 		/**
 		*/
 		AssignTypeProcessor(const AtomTypes& atom_types);
-		//@}
 
+		//@}
 		/**	@name Processor related methods
 		*/
 		//@{
@@ -42,12 +40,15 @@ namespace BALL
 		/**
 		*/
 		virtual Processor::Result operator () (Atom& atom);
+
 		//@}
 
 		protected:
 		
 		AtomTypes atom_types_;
+
 	};
+
 
 	/**	Assign type names to atoms.
 	*/
@@ -59,17 +60,20 @@ namespace BALL
 		/**	@name Constructors and Destructors
 		*/
 		//@{
+
 		/**
 		*/
 		AssignTypeNameProcessor(const String& filename, bool overwrite = false);
-		//@}
 
+		//@}
 		/**	@name	Processor related methods
 		*/
 		//@{
+
 		/**
 		*/
 		virtual Processor::Result operator () (Atom& atom);
+
 		//@}
 
 		protected:

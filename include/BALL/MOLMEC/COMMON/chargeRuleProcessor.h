@@ -1,4 +1,4 @@
-// $Id: chargeRuleProcessor.h,v 1.3 2000/08/30 19:58:17 oliver Exp $
+// $Id: chargeRuleProcessor.h,v 1.4 2001/02/18 20:51:18 amoll Exp $
 // Molecular Mechanics: rule-based assignment of charges 
 
 #ifndef BALL_MOLMEC_COMMON_CHARGERULEPROCESSOR_H
@@ -23,6 +23,7 @@ namespace BALL
 		/**	Constructors and Destructors
 		*/
 		//@{
+
 		/**	Default constructor
 		*/
 		ChargeRuleProcessor();
@@ -40,10 +41,10 @@ namespace BALL
 		~ChargeRuleProcessor();
 
 		//@}
-		
 		/**	@name Processor related methods
 		*/
 		//@{
+
 		/**
 		*/
 		virtual Processor::Result operator () (Atom& atom);

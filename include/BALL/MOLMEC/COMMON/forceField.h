@@ -1,5 +1,4 @@
-// $Id: forceField.h,v 1.12 2000/12/18 12:29:23 anker Exp $
-// Molecular Mechanics: general force field class
+// $Id: forceField.h,v 1.13 2001/02/18 20:51:19 amoll Exp $
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
 #define BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -45,16 +44,15 @@ namespace BALL
 
 	/**	Force field class.
 			This class is used to represent a general force field.
-			Each force field by itself is composed if several
-			different {\rm force field components} which are represented
+			Each force field by itself is composed by several
+			different force field components which are represented
 			by \Ref{ForceFieldComponent} objects.\\
 			Each ForceField object provides a list of components
 			which may be manipulated by the user to generate the
 			force field he needs.\\
 			ForceField only represents a baseclass to the specific force field
 			implementations (e.g. \Ref{AMBER}) and implements the common interface 
-			and the neccessary mechanisms to administer the force field
-			components.\\
+			and the neccessary mechanisms to administer the force field	components.\\
 			A typical force field contains a small number of components (e.g. bond stretch,
 			bend, torsion and non-bonding interactions). 
 			A specialized forcefield has to implement each of these components (by deriving them
@@ -93,8 +91,8 @@ namespace BALL
 				a {\tt vector} of {\tt pair}s of atom pointers.
 		*/
 		typedef vector<pair<Atom*, Atom*> >	PairVector;
-		//@}
 
+		//@}
 		/**	@name	Constructors and Destructors	
 		*/
 		//@{
@@ -121,9 +119,12 @@ namespace BALL
 		*/
 		virtual ~ForceField();
 
+		/**	Clear method.
+		*/
+		virtual void clear()
+			throw();
+
 		//@}
-
-
 		/**	@name	Assignments 
 		*/
 		//@{
@@ -132,27 +133,20 @@ namespace BALL
 		*/
 		ForceField&	operator = (const ForceField& force_field);
 
-
-		/**	Clear method.
-		*/
-		virtual void clear()
-			throw();
 		//@}
-
 		/**	@name	Debugging and Diagnostics 
 		*/
 		//@{
+
 		/**	Is the force field valid?
 		*/
 		bool isValid() const
 			throw();
 
 		//@}
-
 		/**	@name	Setup methods 
 		*/
 		//@{
-
 
 		/**	Sets up the force field and its components.
 		*/
@@ -166,9 +160,8 @@ namespace BALL
 				This method is called by setup.
 		*/
 		virtual bool specificSetup();
+
 		//@}
-
-
 		/**	@name	Accessors 
 		*/
 		//@{
@@ -300,10 +293,8 @@ namespace BALL
 				each component in the force field.
 		*/
 		virtual void update();
+
 		//@}
-
-
-
 		/**	@name	Public Attributes
 		*/
 		//@{
@@ -319,6 +310,7 @@ namespace BALL
 		//@}
 
 		protected:
+
 		/*_	Collect all atoms into the atoms_ vector.
 		*/
 		void collectAtoms_(const System& system);
@@ -335,7 +327,7 @@ namespace BALL
 		*/
 		AtomVector	atoms_;
 
-		/*_     An object containing the force field parameters read from a file
+		/*_ An object containing the force field parameters read from a file
 		*/
 		ForceFieldParameters	parameters_;	
 
@@ -343,7 +335,7 @@ namespace BALL
 		*/
 		bool 	valid_;
 
-		/*_ 	The force field name
+		/*_ The force field name
 		*/
 		String	name_;
 
@@ -370,11 +362,10 @@ namespace BALL
 		/*_	The time of the last call to setup.
 		*/
 		TimeStamp	setup_time_stamp_;
+
 		//_@}
 	};
 
 } // namespace BALL
-
-
 
 #endif // BALL_MOLMEC_COMMON_FORCEFIELD_H

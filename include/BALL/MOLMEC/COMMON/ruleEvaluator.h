@@ -1,4 +1,4 @@
-// $Id: ruleEvaluator.h,v 1.5 2000/10/28 15:39:14 anker Exp $
+// $Id: ruleEvaluator.h,v 1.6 2001/02/18 20:51:19 amoll Exp $
 // Molecular Mechanics: rule-based assignment of properties (typenames, charges, radii, etc.)
 
 #ifndef BALL_MOLMEC_COMMON_RULEEVALUATOR_H
@@ -18,17 +18,14 @@
 namespace BALL 
 {
 
-	// forward declarations
 	class INIFile;
 
 	/**	Rule evaluator class.
 			This class provides means for evaluating rules on Atoms. It is a
 			helper class of RuleProcessors. Rules define
 			values depending on atom constellations. They are defined in an
-			INIFile.
-			\\
-			@see {RuleProcessor}
-			\\
+			INIFile. \\
+			@see RuleProcessor \\
 			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/ruleEvaluator.h}
 	*/
 	class RuleEvaluator
@@ -37,9 +34,10 @@ namespace BALL
 
 		BALL_CREATE(RuleEvaluator)
 
-		/**	@name Type Definitions */
-
+		/**	@name Type Definitions 
+		*/
 		//@{
+
 		/** Type definition for a list containing rules.
 		*/
 		typedef std::list<std::pair<Expression, String> > RuleList;
@@ -49,12 +47,10 @@ namespace BALL
 		typedef StringHashMap<RuleList> RuleMap;
 
 		//@}
-
-
 		/**	@name Constructors and Destructor
 		*/
-
 		//@{
+
 		/**	Default constructor
 		*/
 		RuleEvaluator() throw();
@@ -72,8 +68,6 @@ namespace BALL
 		virtual ~RuleEvaluator() throw();
 
 		//@}
-		
-
 		/**	@name	Accessors
 		*/
 		//@{
@@ -91,8 +85,6 @@ namespace BALL
 		void setPrefix(const String& prefix) throw();
 			
 		//@}
-
-
 		/**	@name	Assignment
 		*/
 		//@{
@@ -107,8 +99,6 @@ namespace BALL
 		virtual void clear() throw();
 
 		//@}
-
-
 		/**	@name Predicates
 		*/
 		//@{
@@ -140,7 +130,6 @@ namespace BALL
 		throw();
 
 		//@}
-
 
 		protected:
 

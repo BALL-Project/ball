@@ -1,4 +1,4 @@
-// $Id: typeRuleProcessor.h,v 1.2 2000/08/30 19:58:19 oliver Exp $
+// $Id: typeRuleProcessor.h,v 1.3 2001/02/18 20:51:20 amoll Exp $
 // Molecular Mechanics: rule-based assignment of types 
 
 #ifndef BALL_MOLMEC_COMMON_TYPERULEPROCESSOR_H
@@ -23,6 +23,7 @@ namespace BALL
 		/**	Constructors and Destructors
 		*/
 		//@{
+
 		/**	Default constructor
 		*/
 		TypeRuleProcessor();
@@ -40,13 +41,14 @@ namespace BALL
 		~TypeRuleProcessor();
 
 		//@}
-		
 		/**	@name Processor related methods
 		*/
 		//@{
+
 		/**
 		*/
 		virtual Processor::Result operator () (Atom& atom);
+
 		//@}
 
 	};

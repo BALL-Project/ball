@@ -1,4 +1,4 @@
-// $Id: periodicBoundary.h,v 1.9 2001/01/26 16:07:04 anker Exp $
+// $Id: periodicBoundary.h,v 1.10 2001/02/18 20:51:19 amoll Exp $
 // Molecular Mechanics: class representing periodic boundary conditions
 
 #ifndef BALL_MOLMEC_COMMON_PERIODICBOUNDARY_H
@@ -23,8 +23,7 @@ namespace BALL
 
 	class PeriodicBoundary;
 
-	/**	Periodic boundary class for force field simulations.
-			\\
+	/**	Periodic boundary class for force field simulations. \\
 			{\bf Definition:} \URL{BALL/MOLMEC/COMMON/periodicBoundary.h}
 	*/
 	class PeriodicBoundary
@@ -42,8 +41,8 @@ namespace BALL
 
 		///
 		typedef vector<AtomIndexPair>		AtomIndexArray;
-		//@}
-		
+
+		//@}		
 		/**	@name	Constants used as option keys
 		*/
 		//@{
@@ -66,9 +65,9 @@ namespace BALL
 			///	Flag to initiate the addition of solvent to the box
 			static const char* PERIODIC_BOX_ADD_SOLVENT;
 			
-			/** 	Name of the file containing the solvent.
-				This file should contain an equilibrated box of the solvent
-				in the HyperChem format.
+			/** Name of the file containing the solvent.
+					This file should contain an equilibrated box of the solvent
+					in the HyperChem format.
 			*/
 			static const char* PERIODIC_BOX_SOLVENT_FILE;
 
@@ -101,8 +100,8 @@ namespace BALL
 			static const bool PERIODIC_BOX_ADD_SOLVENT;
 
 			/**	Default file for adding solvent molecules into the box.
-				This file should contain an equilibrated box of the solvent
-				in the HyperChem format.
+					This file should contain an equilibrated box of the solvent
+					in the HyperChem format.
 			*/
 			static const char* PERIODIC_BOX_SOLVENT_FILE;
 
@@ -114,7 +113,6 @@ namespace BALL
 		};
 
 		//@}
-
 		/**	@name	Constructors and Destructors	
 		*/
 		//@{
@@ -149,9 +147,8 @@ namespace BALL
 		*/
 		virtual void clear() 
 			throw();
-		//@}
-		
 
+		//@}
 		/**	@name	Setup Methods 
 		*/
 		//@{
@@ -165,8 +162,6 @@ namespace BALL
 		Size	generateMoleculesVector();
 
 		//@}
-
-
 		/**	@name	Accessors 
 		*/
 		//@{
@@ -200,7 +195,6 @@ namespace BALL
 				@see	removeSolvent
 		*/
 		Size addSolvent(const String& filename) const;
-		//@}
 		
 		/**	Removes all solvent molecules
 				This method removes all molecules that have the property \Ref{Molecule::PROPERTY__PERIODIC_BOX_SOLVENT}
@@ -210,6 +204,7 @@ namespace BALL
 		*/
 		Size removeSolvent() const;
 
+		//@}
 		/**	@name	Predicates	
 		*/
 		//@{
@@ -219,8 +214,8 @@ namespace BALL
 				@see	disable
 		*/
 		bool isEnabled() const;
-		//@}
 
+		//@}
 		/**	@name Periodic boundary methods 
 		*/
 		//@{
@@ -230,8 +225,8 @@ namespace BALL
 				it is inserted on the other side.
 		*/
 		void updateMolecules();
-		//@}
 
+		//@}
 		/**	@name	Variables
 		*/
 		//@{
@@ -248,7 +243,8 @@ namespace BALL
 
 		private:
 
-		/*_	@name Private Attributes	*/
+		/*_	@name Private Attributes	
+		*/
 		//_@{
 
 		/// Pointer to the force field of the periodic boundary 

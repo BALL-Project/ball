@@ -1,4 +1,4 @@
-// $Id: charmmBend.h,v 1.4 2000/06/30 05:53:20 oliver Exp $
+// $Id: charmmBend.h,v 1.5 2001/02/18 20:50:38 amoll Exp $
 // Molecular Mechanics: Charmm force field, bond stretch component
 
 #ifndef BALL_MOLMEC_CHARMM_CHARMMBEND_H
@@ -30,7 +30,8 @@ namespace BALL
 	{
 		public:
 
-		/**@name	Constructors and Destructors	*/
+		/**@name	Constructors and Destructors	
+		*/
 		//@{ 
 
 		/**	Default constructor.
@@ -50,9 +51,8 @@ namespace BALL
 		virtual ~CharmmBend();
 
 		//@}
-
-
-		/**	@name	Setup Methods	*/
+		/**	@name	Setup Methods	
+		*/
 		//@{
 
 		/**	Setup method.
@@ -60,9 +60,8 @@ namespace BALL
 		virtual bool setup();
 
 		//@}
-
-
-		/**	@name	Accessors	*/
+		/**	@name	Accessors	
+		*/
 		//@{
 
 		/**	Calculates and returns the component's energy.
@@ -75,10 +74,10 @@ namespace BALL
 
 		//@}
 
-
 		private:
 
-		/*_	@name	Private Attributes	*/
+		/*_	@name	Private Attributes	
+		*/
 		//_@{
 
 		/*_	pointer to the array of bends
@@ -86,6 +85,7 @@ namespace BALL
 		vector<QuadraticAngleBend::Data>	bend_;
 
 		QuadraticAngleBend								bend_parameters_;
+
 		//_@}
 	 
 	};
