@@ -1,4 +1,4 @@
-// $Id: snapShot.h,v 1.6 2000/03/28 15:29:25 oliver Exp $
+// $Id: snapShot.h,v 1.7 2000/05/10 08:36:32 pmueller Exp $
 // This file contains the definitions of the classes 
 // SnapshotManager and Snapshot. 
 // They can be used to obtain snapshots from an MD simulation or an energy 
@@ -211,15 +211,21 @@ namespace BALL
 
     /** This constructor expects a valid system and a valid force field
         and the name of a snapshot file
+        If the boolean 'overwrite' is true then any existing file of the given name will
+        be overwritten, otherwise the new data will be appended provided that the
+        systems match. 
     */
     SnapShotManager(System &my_system, ForceField &my_force_field,
-                            char *my_snapshot_file); 
+                             String my_snapshot_file,bool overwrite); 
 
     /** This constructor expects a valid system and a valid force field
-        and the name of a snapshot file and options 
+        and the name of a snapshot file and options.
+        If the boolean 'overwrite' is true then any existing file of the given name will
+        be overwritten, otherwise the new data will be appended provided that the
+        systems match. 
     */
     SnapShotManager(System &my_system, ForceField &my_force_field,
-                           char *my_snapshot_file, Options &myoptions);
+                           String my_snapshot_file, bool overwrite,Options &myoptions);
 
 
     /** The copy constructor 
@@ -239,7 +245,7 @@ namespace BALL
     /** The setup method does all preparations for using the SnapshotManager
     */
     virtual bool setup( System &my_system, ForceField &my_force_field,
-                             char *my_snapshot_file, Options &myoptions);
+                             String my_snapshot_file, bool overwrite,Options &myoptions);
 
     //@}
 
@@ -269,6 +275,16 @@ namespace BALL
     */
 
     //@{
+
+    /** Set the frequency for saving snapshots to hard disk. 
+        Every 'number' iterations, a save will be  done.         
+    */
+    void setFlushToDiskFrequency(Size number); 
+
+    /** Get the current frequency for doing saves to hard disk
+    */
+    Size getFlushToDiskFrequency() const; 
+
     /** This method takes a snapshot of the system's current state and stores
         it in main memory. If there is not sufficient space, the snapshots collected
         so far are flushed to hard disk. The first snapshot taken has index 1.
@@ -345,8 +361,9 @@ namespace BALL
     bool valid_;
 
     /*_ The frequency of  saving snapshots in memory to disk
+        After flush_to_disk_frequency_ iterations, a save is done. 
     */
-    Size flush_to_disk_freq_; 
+    Size flush_to_disk_frequency_; 
 
     /*_ The system to which the SnapshotManager is bound
     */
