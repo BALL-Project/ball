@@ -1,7 +1,8 @@
-// $Id: EFShiftProcessor.C,v 1.4 2000/09/21 07:53:33 oliver Exp $
+// $Id: EFShiftProcessor.C,v 1.5 2000/09/21 09:28:52 oliver Exp $
 
 #include<BALL/NMR/EFShiftProcessor.h>
 #include <BALL/SYSTEM/path.h>
+#include <BALL/COMMON/limits.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/FORMAT/parameterSection.h>
 
@@ -61,7 +62,6 @@ namespace BALL
 		if (parameter_section.options.has("exclude_residue_field"))
 		{
 			exclude_residue_field_ = parameter_section.options.getBool("exclude_residue_field");
-			Log.info() << "excluding charges from same residue!" << endl;
 		}
 
 		// clear the arrays containing the expressions, the parameters, and the charge map
@@ -87,6 +87,15 @@ namespace BALL
 
 		// extract the charge assignment map
 		bool result = parameter_section.extractSection(*parameters_, "Charges");
+
+		// check for the cut off
+		cut_off2_ = Limits<float>::max();
+		if (parameter_section.options.has("cut_off"))
+		{
+			// store the squared value of the cut off in the member cut_off2_
+			cut_off2_ = parameter_section.options.getReal("cut_off");
+			cut_off2_ *= cut_off2_;
+		}
 
 		// default factor is 1.0 - default unit are elementary charges (e0)
 		float charge_factor = 1.0;
@@ -118,7 +127,6 @@ namespace BALL
 				charge_map_[parameter_section.getKey(i)] = charge_factor * parameter_section.getValue(i, charge_column).toFloat();
 			}
 		}
-		Log.info() << "charge_map_.size() = " << charge_map_.size() << endl;
 	}
 		
 	bool EFShiftProcessor::start()
@@ -160,10 +168,6 @@ namespace BALL
 			Atom*	first_atom;
 			Atom* second_atom;
 
-			Log.info() << "bond: " << (*bond_it)->getFirstAtom()->getFullName() << " - " 
-														 << (*bond_it)->getSecondAtom()->getFullName() << endl; 
-
-			
 			// Iterate over all expressions and try to match them
 			// with the bond's atoms.
 			for (Position i = 0; i < first_atom_expressions_.size(); ++i)
@@ -190,7 +194,6 @@ namespace BALL
 				}
 			}
 			
-			Log.info() << "bond type: " << bond_type << endl;
 			if (bond_type != INVALID_POSITION)
 			{
 				// We found parameters for a bond -- 
@@ -211,11 +214,15 @@ namespace BALL
 					if (!exclude_residue_field_ || ((*effector_it)->getFragment() != first_atom->getFragment()))
 					{
 						Vector3 distance(first_atom_pos - (*effector_it)->getPosition());
-						// translate the charge to ESU (from elementary charges)
-						float charge = (*effector_it)->getCharge() * 4.8;
-						
-						// add to the field
-						E += charge / distance.getSquareLength();
+						float square_distance = distance.getSquareLength();
+						if (square_distance <= cut_off2_)
+						{
+							// translate the charge to ESU (from elementary charges)
+							float charge = (*effector_it)->getCharge() * 4.8;
+							
+							// add to the field
+							E += distance * charge / (distance.getSquareLength() * distance.getLength());
+						}
 					}
 				}
 					
@@ -223,10 +230,9 @@ namespace BALL
 				// Calculate the field component E_z along the bond axis
 				// 
 				float Ez = (bond_vector * E) / bond_vector.getLength();
-				Log.info() << "Field: E = " << E << "   Ez = " << Ez << endl;
 				
 				// calculate the secondary shift induced by this field
-				float delta_EF = - epsilon1_[bond_type] * Ez - epsilon2_[bond_type] * E.getSquareLength();
+				float delta_EF = epsilon1_[bond_type] * Ez + epsilon2_[bond_type] * E.getSquareLength();
 
 				// store the shift in the corresponding properties
 				float shift = first_atom->getProperty(ShiftModule::PROPERTY__SHIFT).getFloat();
@@ -273,7 +279,6 @@ namespace BALL
 			// Assign the charge (if it is defined for this atom).
 			String full_name = atom_ptr->getFullName();
 			full_name.substitute(":", " ");
-			Log.info() << "matching " << full_name << endl;
 			if (charge_map_.has(full_name))
 			{
 				atom_ptr->setCharge(charge_map_[full_name]);
@@ -282,7 +287,6 @@ namespace BALL
 			{
 				// Try wildcard match for the residue name.
 				full_name = "* " + atom_ptr->getName();
-				Log.info() << "matching " << full_name << endl;
 				if (charge_map_.has(full_name))
 				{
 					atom_ptr->setCharge(charge_map_[full_name]);
