@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.163 2005/02/15 18:00:18 anne Exp $
+// $Id: mainControl.C,v 1.164 2005/02/21 13:37:10 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -28,6 +28,7 @@
 
 #include <BALL/SYSTEM/directory.h>
 #include <BALL/CONCEPT/textPersistenceManager.h>
+#include <BALL/SYSTEM/timer.h>
 
 #ifdef BALL_QT_HAS_THREADS
 #	include <BALL/VIEW/KERNEL/threads.h>
@@ -44,6 +45,8 @@
 #include <algorithm> // sort
 
 #include <qtimer.h>
+
+    #define BALL_BENCHMARKING
 
 using std::istream;
 using std::ostream;
@@ -154,7 +157,16 @@ namespace BALL
 
 			try
 			{
-				fragment_db_ = FragmentDB("fragments/Fragments.db");
+#ifdef BALL_BENCHMARKING
+Timer t;
+t.start();
+#endif
+				fragment_db_.setFilename("fragments/Fragments.db");
+				fragment_db_.init();
+#ifdef BALL_BENCHMARKING
+t.stop();
+Log.error() << "Building FragmentDB time: " << t.getClockTime() << std::endl;
+#endif
 			}
 			catch(Exception::GeneralException e)
 			{
