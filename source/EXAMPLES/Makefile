@@ -1,14 +1,16 @@
-# $Id: Makefile,v 1.18 2004/05/10 12:16:32 amoll Exp $
+# $Id: Makefile,v 1.19 2004/05/10 13:01:24 amoll Exp $
 #========================
 # BALL/EXAMPLES Makefile
 #========================
 
-DIRECTORY=EXAMPLES
-EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran PDBChecker addHydrogens BALLVIEWClient
-
-all:	$(EXECUTABLES)
 
 include ../common.mak
+
+DIRECTORY=EXAMPLES
+EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran PDBChecker addHydrogens
+VIEW_EXECUTABLES=$(BALL_HAS_VIEW:true=BALLVIEWClient)
+
+default:	$(EXECUTABLES) $(VIEW_EXECUTABLES)
 
 # remove the library specific flags
 LIB_CXXFLAGS = $(NONLIB_CXXFLAGS)
