@@ -27,7 +27,6 @@ ParsedFunctionDialog::~ParsedFunctionDialog()
 
 void ParsedFunctionDialog::accept()
 {
-Log.error() << "#~~#   1" << std::endl;
 ParsedFunctionDialogData::accept();
 }
 
