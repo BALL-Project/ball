@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: bond.C,v 1.27 2002/12/12 10:20:16 oliver Exp $
+// $Id: bond.C,v 1.28 2003/02/08 16:12:31 oliver Exp $
 
 #include <BALL/KERNEL/bond.h>
 #include <BALL/KERNEL/system.h>
@@ -15,6 +15,15 @@ namespace BALL
 	Bond::TooManyBonds::TooManyBonds(const char* file, int line)
 		throw()
 		:	Exception::GeneralException(file, line, "Bond::TooManyBonds", "Unable to create additional bonds.")
+	{
+	}
+
+	Bond::TooManyBonds::TooManyBonds(const char* file, int line, const Atom& atom1, const Atom& atom2)
+		throw()
+		:	Exception::GeneralException(file, line, "Bond::TooManyBonds",
+																	std::string("Unable to create additional bond between ")
+																	+ atom1.getFullName() + std::string(" and ") + atom2.getFullName() + std::string(".")
+		  )
 	{
 	}
 
@@ -48,7 +57,7 @@ namespace BALL
 	{
 	}
 		
-	Bond::Bond(const String& name, Atom& first, Atom &second, Bond::Order order,Type type)
+	Bond::Bond(const String& name, Atom& first, Atom& second, Bond::Order order, Type type)
 		throw(Bond::TooManyBonds)
 		: Composite(),
 			PropertyManager(),
@@ -64,7 +73,6 @@ namespace BALL
 	Bond* Bond::createBond(Bond& bond, Atom& first, Atom& second)
 		throw(Bond::TooManyBonds)
 	{
-
 		// first check the cases where no new bond will be created.
 		if (&first == &second)
 		{
@@ -83,7 +91,7 @@ namespace BALL
 		if (((Size)first.number_of_bonds_ >= (Size)Atom::MAX_NUMBER_OF_BONDS)
 				|| ((Size)second.number_of_bonds_ >= (Size)Atom::MAX_NUMBER_OF_BONDS))
 		{
-			throw TooManyBonds(__FILE__, __LINE__);
+			throw TooManyBonds(__FILE__, __LINE__, first, second);
 		}
 
 		// if the bond is already bound, delete it and create 
