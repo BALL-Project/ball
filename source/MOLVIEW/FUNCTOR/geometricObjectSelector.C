@@ -1,4 +1,4 @@
-// $Id: geometricObjectSelector.C,v 1.2 2000/04/25 15:17:01 hekl Exp $
+// $Id: geometricObjectSelector.C,v 1.3 2000/06/18 16:34:05 hekl Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/geometricObjectSelector.h>
 
@@ -49,7 +49,6 @@ namespace BALL
 			()
 		{
 			BaseModelProcessor::clear();
-
 			
 			used_atoms_.clear();
 		}
@@ -153,21 +152,25 @@ namespace BALL
 							__pBond->applyChild(getSearcher_());
 
 							// if found, select bond model 
-							if (getSearcher_().geometricObjectFound() == true)
+							if (getSearcher_().geometricObjectsFound() == true)
 							{
-								// get bond model
-								::BALL::VIEW::GeometricObject *bond_geometricObject 
-									= (::BALL::VIEW::GeometricObject *)(getSearcher_().getGeometricObject());
+								// get bond models
+								List<VIEW::GeometricObject*>::Iterator it = getSearcher_().getGeometricObjects().begin();
 
-								bond_geometricObject->setSelectedColor(selection_color_);
+								for(; it != getSearcher_().getGeometricObjects().end(); ++it)
+								{
+									VIEW::GeometricObject *bond_geometricObject = *it;
 
-								if (selection_ == true)
-								{
-									bond_geometricObject->select();
-								}
-								else
-								{
-									bond_geometricObject->deselect();
+									bond_geometricObject->setSelectedColor(selection_color_);
+
+									if (selection_ == true)
+									{
+										bond_geometricObject->select();
+									}
+									else
+									{
+										bond_geometricObject->deselect();
+									}
 								}
 							}
 						}
@@ -177,18 +180,23 @@ namespace BALL
 				// get the geometric object
 				first__pAtom->applyChild(getSearcher_());
 
-				::BALL::VIEW::GeometricObject *atom_geometricObject
-					= (::BALL::VIEW::GeometricObject *)(getSearcher_().getGeometricObject());
-
-				atom_geometricObject->setSelectedColor(selection_color_);
-
-				if (selection_ == true)
+				// get atom models
+				List<VIEW::GeometricObject*>::Iterator it = getSearcher_().getGeometricObjects().begin();
+				
+				for(; it != getSearcher_().getGeometricObjects().end(); ++it)
 				{
-					atom_geometricObject->select();
-				}
-				else
-				{
-					atom_geometricObject->deselect();
+					VIEW::GeometricObject *atom_geometricObject = *it;
+
+					atom_geometricObject->setSelectedColor(selection_color_);
+					
+					if (selection_ == true)
+					{
+						atom_geometricObject->select();
+					}
+					else
+					{
+						atom_geometricObject->deselect();
+					}
 				}
 			}
 			
@@ -220,7 +228,7 @@ namespace BALL
 			}
 
 			// geometric object is not existent => do nothing
-			if (getSearcher_().geometricObjectFound() == false)
+			if (getSearcher_().geometricObjectsFound() == false)
 			{
 				return Processor::CONTINUE;
 			}
