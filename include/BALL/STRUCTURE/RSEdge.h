@@ -1,4 +1,4 @@
-// $Id: RSEdge.h,v 1.19 2001/11/08 16:47:03 strobel Exp $
+// $Id: RSEdge.h,v 1.20 2001/12/08 17:00:14 strobel Exp $
 
 #ifndef BALL_STRUCTURE_RSEDGE_H
 #define BALL_STRUCTURE_RSEDGE_H
@@ -17,6 +17,18 @@
 
 #ifndef BALL_MATHS_ANGLE_H
 #	include <BALL/MATHS/angle.h>
+#endif
+
+#ifndef BALL_STRUCTURE_GRAPHEDGE_H
+#	include <BALL/STRUCTURE/graphEdge.h>
+#endif
+
+#ifndef BALL_STRUCTURE_GRAPHFACE_H
+#	include <BALL/STRUCTURE/graphFace.h>
+#endif
+
+#ifndef BALL_STRUCTURE_GRAPHVERTEX_H
+#	include <BALL/STRUCTURE/graphVertex.h>
 #endif
 
 namespace BALL
@@ -43,16 +55,22 @@ namespace BALL
 	template <typename T>
 	class TSESVertex;
 
+	template <typename T>
+	class TTriangulatedSES;
+
 	/** Generic RSEdge Class.	
       {\bf Definition:} \URL{BALL/STRUCTURE/RSEdge.h} 
 	*/
 	template <class T>
-	class TRSEdge
+	class TRSEdge	:	public GraphEdge< TRSVertex<T>,TRSFace<T> >
 	{
 		public:
 
 		/** @name Class friends
 				\begin{itemize}
+					\item class GraphEdge< TRSVertex<T>,TRSFace<T> >
+					\item class GraphFace< TRSVertex<T>,TRSEdge<T> >
+					\item class GraphVertex< TRSEdge<T>,TRSFace<T> >
 					\item class TReducedSurface<T>
 					\item class TRSFace<T>
 					\item class TRSVertex<T>
@@ -60,8 +78,12 @@ namespace BALL
 					\item class TSESFace<T>
 					\item class TSESEdge<T>
 					\item class TSESVertex<T>
+					\item class TTriangulatedSES<T>
 				\end{itemize}
 		*/
+		friend class GraphEdge< TRSVertex<T>,TRSFace<T> >;
+		friend class GraphFace< TRSVertex<T>,TRSEdge<T> >;
+		friend class GraphVertex< TRSEdge<T>,TRSFace<T> >;
 		friend class TReducedSurface<T>;
 		friend class TRSFace<T>;
 		friend class TRSVertex<T>;
@@ -69,6 +91,7 @@ namespace BALL
 		friend class TSESFace<T>;
 		friend class TSESEdge<T>;
 		friend class TSESVertex<T>;
+		friend class TTriangulatedSES<T>;
 
 		BALL_CREATE(TRSEdge)
 
@@ -120,7 +143,7 @@ namespace BALL
 				const TCircle3<T>& circle2,
 				const TVector3<T>& intersection_point1,
 				const TVector3<T>& intersection_point2,
-				const bool singular,
+				bool singular,
 				Index index)
 			throw();
 
@@ -141,7 +164,7 @@ namespace BALL
 				@param	deep		if deep = false, all pointers are set to NULL (default). Otherwise the
 												RSEdge object is linked to the neighbours of the RSEdge object to be copied.
 		*/
-		void set(const TRSEdge& rsedge, bool deep = false)
+		virtual void set(const TRSEdge& rsedge, bool deep = false)
 			throw();
 
 		/**	Assign from a lot of nice objects
@@ -161,7 +184,7 @@ namespace BALL
 				@param	singular
 				@param	index								assigned to the index
 		*/
-		void set(TRSVertex<T>* vertex0,
+		virtual void set(TRSVertex<T>* vertex0,
 				TRSVertex<T>* vertex1,
 				TRSFace<T>* face0,
 				TRSFace<T>* face1,
@@ -180,37 +203,6 @@ namespace BALL
 		/**	@name	Accessors
 		*/
 		//@{
-
-		/** Set one of the two RSVertices of the RSEdge.
-				@param	i				the first vertex is changed if i = 0, the second	
-												otherwise
-				@param	vertex	a pointer to the new vertex
-		*/
-		void setVertex(Position i, TRSVertex<T>* vertex)
-			throw();
-
-		/** Return one of the two RSVertices of the RSEdge.
-				@param	i
-				@return	TRSVertex<T>*	a pointer to the first RSVertex if i = 0,	
-															a pointer to the second RSVertex otherwise
-		*/
-		TRSVertex<T>* getVertex(Position i) const
-			throw();
-
-		/** Set one of the two RSFaces of the RSEdge.
-				@param	i			change the first face, if i = 0, the second otherwise
-				@param	face	a pointer to the new RSFace
-		*/
-
-		void setFace(Position i, TRSFace<T>* face)
-			throw();
-		/** Return one of the two RSFaces of the RSEdge.
-				@param	i
-				@return	TRSFace<T>*	a pointer to the first RSFace if i = 0,	
-														a pointer to the second RSFace otherwise
-		*/
-		TRSFace<T>* getFace(Position i) const
-			throw();
 
 		/** Set the center of the torus.
 				Set the center of the torus described by the probe sphere when it	
@@ -306,66 +298,19 @@ namespace BALL
 		void setSingular(bool singular)
 			throw();
 
-		/** Set the index of the RSEdge.
-				@param	index	the new index
-		*/
-		void setIndex(Index index)
-			throw();
-
-		/** Return the index of the RSEdge.
-				@return	Index	the index of the RSEdge
-		*/
-		Index getIndex() const
-			throw();
-		
-		/** Return a pointer to the other face of the RSEdge.
-				If the given RSFace is not neighboured to the RSEdge, an exception	
-				is thrown.
-				@param	TRSFace<T>*	one of the faces of the RSEdge
-				@return	TRSFace<T>*	the other face
-		*/
-		TRSFace<T>* other(TRSFace<T>* face) const
-			throw(Exception::GeneralException);
-
-		/** Substitute a RSVertex by an other one.
-				@param	old_vertex	the vertex that has to be substituted
-				@param	new_vertex	the new vertex
-				@return	bool				{\bf true}, if the vertex can be substituted,	
-														{\bf false} otherwise
-		*/
-		bool substituteVertex(TRSVertex<T>* old_vertex,
-				TRSVertex<T>* new_vertex)
-			throw();
 
 		void remove()
 		{	
-			vertex0_->deleteEdge(this);
-			vertex1_->deleteEdge(this);
-			/*if (face0_ != NULL)
-			{
-				face0_->deleteEdge(this);
-			}
-			if (face1_ != NULL)
-			{
-				face1_->deleteEdge(this);
-			}*/
-		}
-
-		TRSFace<T>* deleteFace(TRSFace<T>* face)
-		{
-			if (face1_ == face)
-			{
-				face1_ = NULL;
-			}
-			else
-			{
-				if (face0_ == face)
-				{
-					face0_ = face1_;
-					face1_ = NULL;
-				}
-			}
-			return face0_;
+			vertex_[0]->edges_.erase(this);
+			vertex_[1]->edges_.erase(this);
+			//if (face0_ != NULL)
+			//{
+			//	face0_->deleteEdge(this);
+			//}
+			//if (face1_ != NULL)
+			//{
+			//	face1_->deleteEdge(this);
+			//}
 		}
 
 		//@}
@@ -379,7 +324,7 @@ namespace BALL
 				@return bool, {\bf true} if all vertices are similar and all faces	
 											are equal modulo order, {\bf false} otherwise
 		*/
-		bool operator == (const TRSEdge<T>& rsedge) const
+		virtual bool operator == (const TRSEdge<T>& rsedge) const
 			throw();
 
 		/**	similar.
@@ -393,7 +338,7 @@ namespace BALL
 				@return	bool	{\bf false} if all vertices are similar and all faces	
 											are equal modulo order, {\bf true} otherwise
 		*/
-		bool operator != (const TRSEdge<T>& rsedge) const
+		virtual bool operator != (const TRSEdge<T>& rsedge) const
 			throw();
 		
 		/** isSingular
@@ -414,18 +359,6 @@ namespace BALL
 
 		protected:
 
-		/*_ The first RSVertex of the RSEdge
-		*/
-		TRSVertex<T>* vertex0_;
-		/*_ The second RSVertex of the RSEdge
-		*/
-		TRSVertex<T>* vertex1_;
-		/*_ The first RSFace of the RSEdge
-		*/
-		TRSFace<T>* face0_;
-		/*_ The second RSFace of the RSEdge
-		*/
-		TRSFace<T>* face1_;
 		/*_ The center of the torus described by the probe when ir rolls over	
 				the RSEdge
 		*/
@@ -455,9 +388,6 @@ namespace BALL
 		/*_ singular
 		*/
 		bool singular_;
-		/*_ The index of the RSEdge
-		*/
-		Index index_;
 
 	};
 
@@ -520,10 +450,7 @@ namespace BALL
 	template <typename T>
 	TRSEdge<T>::TRSEdge()
 		throw()
-		: vertex0_(NULL),
-			vertex1_(NULL),
-			face0_(NULL),
-			face1_(NULL),
+		: GraphEdge< TRSVertex<T>,TRSFace<T> >(),
 			center_of_torus_(),
 			radius_of_torus_((T)0),
 			phi_(),
@@ -531,8 +458,7 @@ namespace BALL
 			circle1_(),
 			intersection_point0_(),
 			intersection_point1_(),
-			singular_(false),
-			index_(-1)
+			singular_(false)
 	{
 	}
 
@@ -540,10 +466,7 @@ namespace BALL
 	template <typename T>
 	TRSEdge<T>::TRSEdge(const TRSEdge<T>& rsedge, bool deep)
 		throw()
-		: vertex0_(NULL),
-			vertex1_(NULL),
-			face0_(NULL),
-			face1_(NULL),
+		: GraphEdge< TRSVertex<T>,TRSFace<T> >(rsedge,deep),
 			center_of_torus_(rsedge.center_of_torus_),
 			radius_of_torus_(rsedge.radius_of_torus_),
 			phi_(rsedge.phi_),
@@ -551,16 +474,8 @@ namespace BALL
 			circle1_(rsedge.circle1_),
 			intersection_point0_(rsedge.intersection_point0_),
 			intersection_point1_(rsedge.intersection_point1_),
-			singular_(rsedge.singular_),
-			index_(rsedge.index_)
+			singular_(rsedge.singular_)
 	{
-		if (deep)
-		{
-			vertex0_ = rsedge.vertex0_;
-			vertex1_ = rsedge.vertex1_;
-			face0_ = rsedge.face0_;
-			face1_ = rsedge.face1_;
-		}
 	}
 
 
@@ -576,13 +491,10 @@ namespace BALL
 			const TCircle3<T>& circle2,
 			const TVector3<T>& intersection_point1,
 			const TVector3<T>& intersection_point2,
-			const bool singular,
+			bool singular,
 			Index index)
 		throw()
-		: vertex0_(vertex1),
-			vertex1_(vertex2),
-			face0_(face1),
-			face1_(face2),
+		: GraphEdge< TRSVertex<T>,TRSFace<T> >(vertex1,vertex2,face1,face2,index),
 			center_of_torus_(center_of_torus),
 			radius_of_torus_(radius_of_torus),
 			phi_(phi),
@@ -590,8 +502,7 @@ namespace BALL
 			circle1_(circle2),
 			intersection_point0_(intersection_point1),
 			intersection_point1_(intersection_point2),
-			singular_(singular),
-			index_(index)
+			singular_(singular)
 	{
 	}
 
@@ -609,17 +520,17 @@ namespace BALL
 	{
 		if (deep)
 		{
-			vertex0_ = rsedge.vertex0_;
-			vertex1_ = rsedge.vertex1_;
-			face0_ = rsedge.face0_;
-			face1_ = rsedge.face1_;
+			vertex_[0] = rsedge.vertex_[0];
+			vertex_[1] = rsedge.vertex_[1];
+			face_[0] = rsedge.face_[0];
+			face_[1] = rsedge.face_[1];
 		}
 		else
 		{
-			vertex0_ = NULL;
-			vertex1_ = NULL;
-			face0_ = NULL;
-			face1_ = NULL;
+			vertex_[0] = NULL;
+			vertex_[1] = NULL;
+			face_[0] = NULL;
+			face_[1] = NULL;
 		}
 		center_of_torus_ = rsedge.center_of_torus_;
 		radius_of_torus_ = rsedge.radius_of_torus_;
@@ -649,10 +560,10 @@ namespace BALL
 			Index index)
 		throw()
 	{
-		vertex0_ = vertex0;
-		vertex1_ = vertex1;
-		face0_ = face0;
-		face1_ = face1;
+		vertex_[0] = vertex0;
+		vertex_[1] = vertex1;
+		face_[0] = face0;
+		face_[1] = face1;
 		center_of_torus_ = center_of_torus;
 		radius_of_torus_ = radius_of_torus;
 		phi_ = phi;
@@ -662,66 +573,6 @@ namespace BALL
 		intersection_point1_ = intersection_point1;
 		singular_ = singular;
 		index_ = index;
-	}
-
-
-	template <typename T>
-	void TRSEdge<T>::setVertex(Position i, TRSVertex<T>* vertex)
-		throw()
-	{
-		if (i == 0)
-		{
-			vertex0_ = vertex;
-		}
-		else
-		{
-			vertex1_ = vertex;
-		}
-	}
-
-
-	template <typename T>
-	TRSVertex<T>* TRSEdge<T>::getVertex(Position i) const
-		throw()
-	{
-		if (i == 0)
-		{
-			return vertex0_;
-		}
-		else
-		{
-			return vertex1_;
-		}
-	}
-
-
-	template <typename T>
-	void TRSEdge<T>::setFace(Position i, TRSFace<T>* face)
-		throw()
-	{
-		if (i == 0)
-		{
-			face0_ = face;
-		}
-		else
-		{
-			face1_ = face;
-		}
-	}
-
-
-	template <typename T>
-	TRSFace<T>* TRSEdge<T>::getFace(Position i) const
-		throw()
-	{
-		if (i == 0)
-		{
-			return face0_;
-		}
-		else
-		{
-			return face1_;
-		}
 	}
 
 
@@ -846,86 +697,24 @@ namespace BALL
 
 
 	template <typename T>
-	void TRSEdge<T>::setIndex(Index index)
-		throw()
-	{
-		index_ = index;
-	}
-
-
-	template <typename T>
-	Index TRSEdge<T>::getIndex() const
-		throw()
-	{
-		return index_;
-	}
-
-
-	template <typename T>
-	TRSFace<T>* TRSEdge<T>::other(TRSFace<T>* face) const
-		throw(Exception::GeneralException)
-	{
-		if (face0_ == face)
-		{
-			return face1_;
-		}
-		else
-		{
-			if (face1_ == face)
-			{
-				return face0_;
-			}
-			else
-			{
-				throw Exception::GeneralException(__FILE__, __LINE__);
-			}
-		}
-	}
-
-
-	template <typename T>
-	bool TRSEdge<T>::substituteVertex(TRSVertex<T>* old_vertex,
-			 TRSVertex<T>* new_vertex)
-		throw()
-	{
-		if (vertex0_ == old_vertex)
-		{
-			vertex0_ = new_vertex;
-		}
-		else
-		{
-			if (vertex1_ == old_vertex)
-			{
-				vertex1_ = new_vertex;
-			}
-			else
-			{
-				return false;
-			}
-		}
-		return true;
-	}
-
-
-	template <typename T>
 	bool TRSEdge<T>::operator == (const TRSEdge<T>& rsedge) const
 		throw()
 	{
-		if ((vertex0_->atom_ != rsedge.vertex0_->atom_) &&
-				(vertex0_->atom_ != rsedge.vertex1_->atom_)    )
+		if ((vertex_[0]->atom_ != rsedge.vertex_[0]->atom_) &&
+				(vertex_[0]->atom_ != rsedge.vertex_[1]->atom_)    )
 		{
 			return false;
 		}
-		if ((vertex1_->atom_ != rsedge.vertex0_->atom_) &&
-				(vertex1_->atom_ != rsedge.vertex1_->atom_)    )
+		if ((vertex_[1]->atom_ != rsedge.vertex_[0]->atom_) &&
+				(vertex_[1]->atom_ != rsedge.vertex_[1]->atom_)    )
 		{
 			return false;
 		}
-		if ((face0_ != rsedge.face0_) && (face0_ != rsedge.face1_))
+		if ((face_[0] != rsedge.face_[0]) && (face_[0] != rsedge.face_[1]))
 		{
 			return false;
 		}
-		if ((face1_ != rsedge.face0_) && (face1_ != rsedge.face1_))
+		if ((face_[1] != rsedge.face_[0]) && (face_[1] != rsedge.face_[1]))
 		{
 			return false;
 		}
@@ -937,13 +726,13 @@ namespace BALL
 	bool TRSEdge<T>::similar(const TRSEdge<T>& rsedge) const
 		throw()
 	{
-		if ((vertex0_->atom_ != rsedge.vertex0_->atom_) &&
-				(vertex0_->atom_ != rsedge.vertex1_->atom_)    )
+		if ((vertex_[0]->atom_ != rsedge.vertex_[0]->atom_) &&
+				(vertex_[0]->atom_ != rsedge.vertex_[1]->atom_)    )
 		{
 			return false;
 		}
-		if ((vertex1_->atom_ != rsedge.vertex0_->atom_) &&
-				(vertex1_->atom_ != rsedge.vertex1_->atom_)    )
+		if ((vertex_[1]->atom_ != rsedge.vertex_[0]->atom_) &&
+				(vertex_[1]->atom_ != rsedge.vertex_[1]->atom_)    )
 		{
 			return false;
 		}
@@ -971,7 +760,7 @@ namespace BALL
 	bool TRSEdge<T>::isFree() const
 		throw()
 	{
-		return (face0_ == NULL);
+		return (face_[0] == NULL);
 	}
 
 
