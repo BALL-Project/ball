@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorMeshDialog.C,v 1.40 2004/11/09 21:35:24 amoll Exp $
+// $Id: colorMeshDialog.C,v 1.41 2004/12/10 16:14:28 amoll Exp $
 
 #include <BALL/VIEW/DIALOGS/colorMeshDialog.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -17,11 +17,11 @@
 #include <BALL/STRUCTURE/geometricProperties.h>
 
 #include <qlineedit.h>
-#include <qpushbutton.h>
 #include <qspinbox.h>
 #include <qcolordialog.h>
 #include <qtabwidget.h>
 #include <qbuttongroup.h>
+#include <qpushbutton.h>
 #include <qlabel.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
@@ -47,7 +47,6 @@ ColorMeshDialog::~ColorMeshDialog()
 }
 
 // ------------------------- SLOTS ------------------------------------------------
-// --------------------------------------------------------------------------------
 void ColorMeshDialog::applyPressed() 
 {
 	if (surface_tab->currentPage() == by_grid)
@@ -72,7 +71,7 @@ void ColorMeshDialog::cancelPressed()
 
 void ColorMeshDialog::choosePressed()
 {
-	QColor qcolor = setColor(choose_button);
+	QColor qcolor = setColor(custom_color_label);
 	selected_color.set(qcolor);
 	red_box->setValue(qcolor.red());
 	blue_box->setValue(qcolor.blue());
@@ -87,40 +86,33 @@ void ColorMeshDialog::colorBoxesChanged()
 										 blue_box->value(),
 										 alpha_box->value());
 	QColor qcolor(red_box->value(), green_box->value(), blue_box->value());
-	QPalette p = choose_button->palette();
-	p.setColor(QColorGroup::Button, qcolor);
-	p.setColor(QColorGroup::Base, qcolor);
-	p.setColor(QColorGroup::Light, qcolor);
-	p.setColor(QColorGroup::Mid, qcolor);
-	p.setColor(QColorGroup::Midlight, qcolor);
-	p.setColor(QColorGroup::Shadow, qcolor);
-	choose_button->setPalette(p);
+	custom_color_label->setBackgroundColor(qcolor);
 }
 
 
 void ColorMeshDialog::maxPressed()
 {
-	max_color.set(setColor(max_button));
+	max_color.set(setColor(max_label));
 }
 
 void ColorMeshDialog::midPressed()
 {
-	mid_color.set(setColor(mid_button));
+	mid_color.set(setColor(mid_label));
 }
 
 void ColorMeshDialog::minPressed()
 {
-	min_color.set(setColor(min_button));
+	min_color.set(setColor(min_label));
 }
 
 void ColorMeshDialog::minMinPressed()
 {
-	min_min_color.set(setColor(min_min_button));
+	min_min_color.set(setColor(min_min_label));
 }
 
 void ColorMeshDialog::maxMaxPressed()
 {
-	max_max_color.set(setColor(max_max_button));
+	max_max_color.set(setColor(max_max_label));
 }
 
 
@@ -258,10 +250,9 @@ void ColorMeshDialog::gridSelected()
 }
 
 
-void ColorMeshDialog::setColor_(ColorRGBA& color, const QPushButton* button, const QSpinBox* box, const QRadioButton* rbutton)
+void ColorMeshDialog::setColor_(ColorRGBA& color, const QLabel* label, const QSpinBox* box, const QRadioButton* rbutton)
 {
-	QPalette p = button->palette();
-	color.set(p.color(QPalette::Active, QColorGroup::Button));
+	color.set(label->backgroundColor());
 	if (rbutton->isChecked())
 	{
 		color.setAlpha(box->value());
@@ -272,26 +263,16 @@ void ColorMeshDialog::setColor_(ColorRGBA& color, const QPushButton* button, con
 	}
 }
 
-void ColorMeshDialog::getColor_(const ColorRGBA& color, QPushButton* button, QSpinBox* box)
+void ColorMeshDialog::getColor_(const ColorRGBA& color, QLabel* label, QSpinBox* box)
 {
-	QPalette p = button->palette();
-	p.setColor(QColorGroup::Button, color.getQColor());
-	button->setPalette(p);
+	label->setBackgroundColor(color.getQColor());
 	box->setValue(color.getAlpha());
-	button->update();
 }
 
-QColor ColorMeshDialog::setColor(QPushButton* button)
+QColor ColorMeshDialog::setColor(QLabel* label)
 {
-	QPalette p = button->palette();
-	QColor qcolor = QColorDialog::getColor(button->backgroundColor());
-	p.setColor(QColorGroup::Button, qcolor);
-	p.setColor(QColorGroup::Base, qcolor);
-	p.setColor(QColorGroup::Light, qcolor);
-	p.setColor(QColorGroup::Mid, qcolor);
-	p.setColor(QColorGroup::Midlight, qcolor);
-	p.setColor(QColorGroup::Shadow, qcolor);
-	button->setPalette(p);
+	QColor qcolor = QColorDialog::getColor(label->backgroundColor());
+	label->setBackgroundColor(qcolor);
 	return qcolor;
 }
 
@@ -338,11 +319,11 @@ void ColorMeshDialog::colorByGrid_()
 		return;
 	}
 
-	setColor_(min_min_color, min_min_button, min_min_alpha, alpha_button_grid);
-	setColor_(min_color, min_button, min_alpha, alpha_button_grid);
-	setColor_(mid_color, mid_button, mid_alpha, alpha_button_grid);
-	setColor_(max_color, max_button, max_alpha, alpha_button_grid);
-	setColor_(max_max_color, max_max_button, max_max_alpha, alpha_button_grid);
+	setColor_(min_min_color, min_min_label, min_min_alpha, alpha_button_grid);
+	setColor_(min_color, min_label, min_alpha, alpha_button_grid);
+	setColor_(mid_color, mid_label, mid_alpha, alpha_button_grid);
+	setColor_(max_color, max_label, max_alpha, alpha_button_grid);
+	setColor_(max_max_color, max_max_label, max_max_alpha, alpha_button_grid);
 
 	// now do the colorizing stuff...
 	mesh_->colorList.resize(mesh_->vertex.size());
@@ -410,11 +391,11 @@ void ColorMeshDialog::saveSettings_()
 	}
 	ColoringConfig& config = configs_[rep_];
 
-	setColor_(config.min_min_color, min_min_button, min_min_alpha, alpha_button_grid);
-	setColor_(config.min_color, min_button, min_alpha, alpha_button_grid);
-	setColor_(config.mid_color, mid_button, mid_alpha, alpha_button_grid);
-	setColor_(config.max_color, max_button, max_alpha, alpha_button_grid);
-	setColor_(config.max_max_color, max_max_button, max_max_alpha, alpha_button_grid);
+	setColor_(config.min_min_color, min_min_label, min_min_alpha, alpha_button_grid);
+	setColor_(config.min_color, min_label, min_alpha, alpha_button_grid);
+	setColor_(config.mid_color, mid_label, mid_alpha, alpha_button_grid);
+	setColor_(config.max_color, max_label, max_alpha, alpha_button_grid);
+	setColor_(config.max_max_color, max_max_label, max_max_alpha, alpha_button_grid);
 
 	config.min_value = String(min_box->text().ascii()).toFloat();
 	config.mid_value = String(mid_box->text().ascii()).toFloat();
@@ -463,11 +444,11 @@ void ColorMeshDialog::loadSettings_()
 	}
 	ColoringConfig& config = configs_[rep_];
 
-	getColor_(config.min_min_color, min_min_button, min_min_alpha);
-	getColor_(config.min_color, min_button, min_alpha);
-	getColor_(config.mid_color, mid_button, mid_alpha);
-	getColor_(config.max_color, max_button, max_alpha);
-	getColor_(config.max_max_color, max_max_button, max_max_alpha);
+	getColor_(config.min_min_color, min_min_label, min_min_alpha);
+	getColor_(config.min_color, min_label, min_alpha);
+	getColor_(config.mid_color, mid_label, mid_alpha);
+	getColor_(config.max_color, max_label, max_alpha);
+	getColor_(config.max_max_color, max_max_label, max_max_alpha);
 
 	min_box->setText(String(config.min_value).c_str());
 	mid_box->setText(String(config.mid_value).c_str());
