@@ -1,27 +1,12 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: reducedSurface.C,v 1.5 2002/12/18 06:10:07 oliver Exp $
+// $Id: reducedSurface.C,v 1.6 2003/04/16 21:20:43 oliver Exp $
 
 #include <BALL/STRUCTURE/reducedSurface.h>
-#include <BALL/STRUCTURE/RSEdge.h>
-#include <BALL/STRUCTURE/RSFace.h>
-#include <BALL/STRUCTURE/RSVertex.h>
-#include <BALL/MATHS/analyticalGeometry.h>
-#include <BALL/MATHS/box3.h>
-#include <BALL/MATHS/common.h>
-#include <BALL/MATHS/circle3.h>
-#include <BALL/MATHS/line3.h>
-#include <BALL/MATHS/plane3.h>
-#include <BALL/MATHS/sphere3.h>
-#include <BALL/MATHS/vector3.h>
-#include <BALL/DATATYPE/hashGrid.h>
-#include <BALL/DATATYPE/hashMap.h>
-#include <BALL/DATATYPE/hashSet.h>
-#include <BALL/COMMON/exception.h>
-#include <list>
-#include <vector>
 
+#include <BALL/MATHS/analyticalGeometry.h>
+#include <BALL/DATATYPE/hashGrid.h>
 
 namespace BALL
 {
