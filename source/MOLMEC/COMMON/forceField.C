@@ -1,4 +1,4 @@
-// $Id: forceField.C,v 1.14 2000/02/06 20:22:05 oliver Exp $
+// $Id: forceField.C,v 1.15 2000/02/12 10:48:37 oliver Exp $
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
 
@@ -220,8 +220,7 @@ namespace BALL
 				atoms_.push_back(&(*atom_it));
 			}
 		}
-
-
+		
 		number_of_movable_atoms_ = atoms_.size();
 	}
 
@@ -301,6 +300,9 @@ namespace BALL
 		{
 			(*it)->setForce(RTTI::getDefault<Vector3>());
 		}
+		
+		// update use_selection_
+		use_selection_ = system_->containsSelection();
 
 		// call each component - they will add their forces...
 		vector<ForceFieldComponent*>::iterator		component_it = components_.begin();
@@ -339,6 +341,9 @@ namespace BALL
 
 		// clear the total energy
 		energy_ = 0;
+
+		// update use_selection_
+		use_selection_ = system_->containsSelection();
 
 		// call each component and add their energies
 		vector<ForceFieldComponent*>::iterator		it;
