@@ -1,7 +1,6 @@
-// $Id: ooiEnergy.C,v 1.11 2000/09/20 07:11:39 oliver Exp $
+// $Id: ooiEnergy.C,v 1.12 2001/05/05 21:11:46 amoll Exp $
 
 #include <BALL/SOLVATION/ooiEnergy.h>
-
 
 #include <BALL/common.h>
 #include <BALL/SYSTEM/path.h>
@@ -25,7 +24,6 @@ using namespace std;
 
 namespace BALL 
 {
-
 	namespace OoiEnergy
 	{
 		bool is_initialized = false;
@@ -60,13 +58,14 @@ namespace BALL
 			if (!parameter_section.extractSection(parameters, "OoiParameters"))
 			{
 				Log.error() << "calculateOoiEnergy: cannot find section [OoiParameters] in file "
-					<< parameters.getFilename() << "." << endl;
+										<< parameters.getFilename() << "." << endl;
 				return;
 			}
 			if (!parameter_section.hasVariable("g") || !parameter_section.hasVariable("radius"))
 			{
 				Log.error() << "OoiEnergy: section [OoiTypes] of file " 
-					<< parameters.getFilename() << " requires at least the columns 'g' and 'radius'." << endl;
+										<< parameters.getFilename() 
+										<< " requires at least the columns 'g' and 'radius'." << endl;
 				return;
 			}							
 
@@ -74,45 +73,44 @@ namespace BALL
 			if (!type_section.extractSection(parameters, "OoiTypes"))
 			{
 				Log.error() << "calculateOoiEnergy: cannot find section [OoiTypes] in file "
-					<< parameters.getFilename() << "." << endl;
+										<< parameters.getFilename() << "." << endl;
 				return;
 			}
 			if (!type_section.hasVariable("type"))
 			{
 				Log.error() << "OoiEnergy: section [OoiTypes] of file " 
-					<< parameters.getFilename() << " does not contain a variable column 'type'." << endl;
+										<< parameters.getFilename() 
+										<< " does not contain a variable column 'type'." << endl;
 				return;
 			}			
 
 			// extract the parameters for each type
-			// 
 			Position radius_column = parameter_section.getColumnIndex("radius");
 			Position g_column = parameter_section.getColumnIndex("g");
 			Index max_index = -1;
-			Size i;
-			for (i = 1; i <= parameter_section.getNumberOfKeys(); i++)
-			{
-				
+			for (Size i = 0; i < parameter_section.getNumberOfKeys(); i++)
+			{			
 				String index_str(parameter_section.getKey(i));
 				Index index;
 				try
 				{
 					index = index_str.trim().toInt();
-					if (index < 0)
-					{
-						Log.error() << "calculateOoiEnergy: illegal atom type index: " << index << endl;
-					} 
-					else 
-					{
-						if (index > max_index)
-						{
-							max_index = index;
-						}
-					}
 				} 
 				catch (Exception::InvalidFormat)
 				{
 					Log.error() << "calculateOoiEnergy: cannot convert to a number: " << index_str << endl;
+					continue;
+				}
+
+				if (index < 0)
+				{
+					Log.error() << "calculateOoiEnergy: illegal atom type index: " << index << endl;
+					continue;
+				} 
+
+				if (index > max_index)
+				{
+					max_index = index;
 				}
 			}
 
@@ -129,7 +127,7 @@ namespace BALL
 			g.resize((Size)max_index + 1);
 
 			// and read all values from the parameter section
-			for (i = 1; i <= parameter_section.getNumberOfKeys(); i++)
+			for (Size i = 0; i < parameter_section.getNumberOfKeys(); i++)
 			{
 				String index_str(parameter_section.getKey(i));
 				Index index;
@@ -153,19 +151,27 @@ namespace BALL
 			// extract all known types by iterating over all keys
 		  // and construct the hash map type_map
 			Position type_column = type_section.getColumnIndex("type");
-			for (i = 1; i <= type_section.getNumberOfKeys(); i++)
+			for (Size i = 0; i < type_section.getNumberOfKeys(); i++)
 			{
 				// retrieve the type and check for validity
 				String index_str(type_section.getValue(i, type_column));
-				Atom::Type type = index_str.trim().toInt();
-				if (type >= (Atom::Type)radius.size())
+				try
 				{
-					Log.error() << "calculateOoiEnergy: illegal atom type: " << type << " while reading parameter file." << endl;
-				} 
-				else 
+					Atom::Type type = index_str.trim().toInt();
+					if (type >= (Atom::Type)radius.size())
+					{
+						Log.error() << "calculateOoiEnergy: illegal atom type: " << type 
+												<< " while reading parameter file." << endl;
+					} 
+					else 
+					{
+						index_str = type_section.getValue(i, type_column);
+						type_map.insert(type_section.getKey(i), (Atom::Type)index_str.trim().toInt());
+					}
+				}
+				catch (Exception::InvalidFormat)
 				{
-					index_str = type_section.getValue(i, type_column);
-					type_map.insert(type_section.getKey(i), (Atom::Type)index_str.trim().toInt());
+					Log.error() << "calculateOoiEnergy: cannot convert to a number: " << index_str << endl;
 				}
 			}
 			
@@ -236,7 +242,8 @@ namespace BALL
 
 			if (atom_type < 0)
 			{
-				Log.warn() << "calculateOOIEnergy: did not find a suitable type for " << atom_it->getFullName() << endl;
+				Log.warn() << "calculateOOIEnergy: did not find a suitable type for " 
+									 << atom_it->getFullName() << endl;
 
 				// ignore this atom....
 				atom_it->setType(-1);
@@ -260,7 +267,6 @@ namespace BALL
 		float energy = 0.0;
 		for (atom_it = atoms.beginAtom(); +atom_it; ++atom_it) 
 		{
-			
 			if (atom_SAS_areas.has(&*atom_it))
 			{
 				Atom::Type atom_type = atom_it->getType();
