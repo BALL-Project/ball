@@ -1,9 +1,11 @@
-// $Id: assignment.C,v 1.1 2000/05/05 12:33:37 oliver Exp $
+// $Id: assignment.C,v 1.2 2000/05/05 18:16:05 oliver Exp $
 
 #include "global.h"
 #include "assignment.h"
 
 #include <BALL/STRUCTURE/defaultProcessors.h>
+
+using namespace std;
 
 void assignCharges(System& system)
 {

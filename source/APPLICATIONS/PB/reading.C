@@ -1,10 +1,12 @@
-// $Id: reading.C,v 1.1 2000/05/05 12:33:39 oliver Exp $
+// $Id: reading.C,v 1.2 2000/05/05 18:16:05 oliver Exp $
 
 #include "global.h"
 #include "reading.h"
 #include "assignment.h"
 #include <BALL/FORMAT/PDBFile.h>
 #include <BALL/FORMAT/HINFile.h>
+
+using namespace std;
 
 void addToSystem(System& system)
 {
