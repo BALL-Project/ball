@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.17 2000/07/18 08:29:54 oliver Exp $
+// $Id: selector.C,v 1.18 2000/10/29 21:25:47 amoll Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -39,8 +39,6 @@ namespace BALL
 	{
 		return number_of_selected_atoms_;
 	}
-
-
 
 	bool Selector::start() 
 	{
