@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.C,v 1.60.2.1 2005/01/13 00:11:41 amoll Exp $
+// $Id: representation.C,v 1.60.2.2 2005/01/13 18:09:46 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/representation.h>
@@ -280,8 +280,8 @@ namespace BALL
 			needs_update_ = false;
 
 #ifdef BALL_BENCHMARKING
-	Timer t;
-	t.start();
+	Timer t_model;
+	t_model.start();
 #endif
 			// if no ModelProcessor was given, there can only exist 
 			// handmade GeometricObjects, which dont need to be updated
@@ -299,6 +299,12 @@ namespace BALL
 				model_build_time_ = PreciseTime::now();
 			}
 
+#ifdef BALL_BENCHMARKING
+	t_model.stop();
+	logString("Calculating Model time: " + String(t_model.getCPUTime()));
+	Timer t_color;
+	t_color.start();
+#endif
 			if (color_processor_ != 0) 
 			{
 				// make sure, that the atom grid is recomputed for meshes
@@ -309,8 +315,10 @@ namespace BALL
 			}
 
 #ifdef BALL_BENCHMARKING
-			logString("Calculating Representation time: " + String(t.getCPUTime()));
-			t.stop();
+	t_color.stop();
+	logString("Calculating Coloring time: " + String(t_color.getCPUTime()));
+	logString("Calculating Representation time: " + String(t_color.getCPUTime() + 
+																												 t_model.getCPUTime()));
 #endif
 
 #ifndef BALL_QT_HAS_THREADS
