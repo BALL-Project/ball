@@ -100,10 +100,6 @@ namespace BALL
 				@param ring as HashSet<Atom*>, from which the number of pi electrons to count
 		*/
 		Size countPiElectrons_(HashSet<Atom*>& ring);
-
-		/*_ this static container holds the current aromatic rings
-		*/
-		static vector<vector<Atom*> > aromatic_systems_;
 	};
 } // namespace BALL
 
