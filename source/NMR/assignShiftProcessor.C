@@ -1,4 +1,4 @@
-// $Id: assignShiftProcessor.C,v 1.13 2000/09/25 21:24:21 amoll Exp $
+// $Id: assignShiftProcessor.C,v 1.14 2000/09/26 02:00:20 amoll Exp $
 
 #include<BALL/NMR/assignShiftProcessor.h>
 #include<BALL/KERNEL/PDBAtom.h>
@@ -20,6 +20,18 @@ namespace BALL
 			return false;
 		}
 
+		// BAUSTELLE: this could be done in a more general manner
+		FragmentDB frag_db;
+		StringHashMap<String>* map = 0;
+		if (frag_db.getNamingStandards().has("XPLORE-PDB"))
+		{
+			map = frag_db.getNamingStandards()["XPLORE-PDB"];
+		}
+		else 
+		{
+			 Log.warn() << "AssignShiftProcessor::start:  no appropriate map found for name conversion" << endl;
+		}
+
 		// ---------------------read translate table ------------------------
 		Path path;
 		ifstream tableFile(path.find("NMR/translate.dat").c_str(), ios::in);
@@ -27,14 +39,6 @@ namespace BALL
 		{
 			Log.error() << "AssignShiftProcessor: translate.dat not found:" << endl;   
 			return false;
-		}
-
-		// BAUSTELLE: this could be done in a more general manner
-		FragmentDB frag_db;
-		StringHashMap<String>* map = 0;
-		if (frag_db.getNamingStandards().has("Amber"))
-		{
-			map = frag_db.getNamingStandards()["Amber"];
 		}
 
 		StringHashMap<String> transformTable;
@@ -59,11 +63,19 @@ cout << endl << endl;
 			// normalize the atom name to reflect the PDB standard
 			String residue_name = atom_data_[atompos]->residueLabel;
 			String atom_name    = atom_data_[atompos]->atomName;
+			bool normalized;
 			if (map != 0)
 			{
-				frag_db.normalize_names.matchName(residue_name, atom_name, map);
+				normalized = frag_db.normalize_names.matchName(residue_name, atom_name, map);
 			}
+
 			const String entry(residue_name + ":" + atom_name);
+
+			if (!normalized && !transformTable.has(entry))
+			{
+				Log.warn() << "AssignShiftProcessor::start: could not convert atom name " 
+									 << residue_name << ":" << atom_name << endl;
+			}
 
 			String prefix(atom_data_[atompos]->residueSeqCode);
 			prefix += residue_name;
@@ -106,7 +118,6 @@ cout << fullName << " " << atom_data_[atompos]->shiftValue << endl;
 
 	Processor::Result AssignShiftProcessor::operator()(Composite& object)
 	{
-cout << "--" << endl;
 		//-----------------switching by the type of given object--------------------------
 		if (RTTI::isKindOf<Molecule>(object))
 		{
