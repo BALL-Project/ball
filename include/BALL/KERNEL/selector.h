@@ -1,4 +1,4 @@
-// $Id: selector.h,v 1.15 2001/07/09 19:18:04 anker Exp $
+// $Id: selector.h,v 1.16 2001/07/13 13:13:47 anker Exp $
 
 #ifndef BALL_KERNEL_SELECTOR_H
 #define BALL_KERNEL_SELECTOR_H
@@ -60,6 +60,31 @@ namespace BALL
 		/** Destructor.
 		*/
 		virtual ~Selector()
+			throw();
+
+		//@}
+		/** @name Assignment
+		*/
+		//@{
+
+		/** Clear method.
+		*/
+		virtual void clear()
+			throw();
+
+		/** Assignment operator.
+		*/
+		const Selector& operator = (const Selector& selector)
+			throw();
+
+		//@}
+		/** @name Predicates
+		*/
+		//@{
+
+		/** Equality.
+		*/
+		bool operator == (const Selector& selector) const
 			throw();
 
 		//@}

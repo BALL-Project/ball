@@ -1,4 +1,4 @@
-// $Id: selector.C,v 1.20 2001/07/09 19:19:40 anker Exp $
+// $Id: selector.C,v 1.21 2001/07/13 13:14:22 anker Exp $
 
 #include <BALL/KERNEL/selector.h>
 
@@ -16,27 +16,64 @@ namespace BALL
 	
 	Selector::Selector()
 		throw()
-		:	number_of_selected_atoms_(0)
+		:	UnaryProcessor<Composite>(),
+			number_of_selected_atoms_(0),
+			expression_()
 	{
 	}
 	
 	Selector::Selector(const String& expression_string)
 		throw()
-		:	number_of_selected_atoms_(0),
+		:	UnaryProcessor<Composite>(),
+			number_of_selected_atoms_(0),
 			expression_(expression_string)
 	{
 	}
 
 	Selector::Selector(const Selector& selector)
 		throw()
-		:	UnaryProcessor<Composite>(),
-			number_of_selected_atoms_(selector.number_of_selected_atoms_)
+		:	UnaryProcessor<Composite>(selector),
+			number_of_selected_atoms_(selector.number_of_selected_atoms_),
+			expression_(selector.expression_)
 	{
 	}
 
 	Selector::~Selector()
 		throw()
 	{
+		clear();
+	}
+
+	void Selector::clear()
+		throw()
+	{
+		// BAUSTELLE:
+		// UnaryProcessor<> does not implement the OCI
+		// UnaryProcessor<Composite>::clear();
+		number_of_selected_atoms_ = 0;
+		expression_.clear();
+	}
+
+	const Selector& Selector::operator = (const Selector& selector)
+		throw()
+	{
+		// BAUSTELLE:
+		// UnaryProcessor<> does not implement the OCI
+		// UnaryProcessor<Composite>::operator = (selector);
+		number_of_selected_atoms_ = selector.number_of_selected_atoms_;
+		expression_ = selector.expression_;
+		
+		return *this;
+	}
+
+	bool Selector::operator == (const Selector& selector) const
+		throw()
+	{
+		// BAUSTELLE:
+		// UnaryProcessor<> does not implement the OCI
+		// return ((UnaryProcessor<Composite>::operator == (selector))
+		return ((number_of_selected_atoms_ == selector.number_of_selected_atoms_)
+				&& (expression_ == selector.expression_));
 	}
 
 	Size Selector::getNumberOfSelectedAtoms() const
@@ -48,6 +85,7 @@ namespace BALL
 	void Selector::setExpression(const Expression& expression)
 		throw()
 	{
+		clear();
 		expression_ = expression;
 	}
 
