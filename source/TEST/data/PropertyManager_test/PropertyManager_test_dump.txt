@@ -1,4 +1,4 @@
-/Object: 0x[0-9a-f]* is instance of class: PropertyManager
+/Object: [0-9a-fx]* is instance of class: PropertyManager
 3 101 
 (PROP1BOOL: 1)
 (PROP2INT: -12345)
