@@ -1,5 +1,5 @@
 
-EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran PDBChecker addHydrogens
+EXECUTABLES=proteinMapper PDB2discover amberEnergy bindingEnergy ramachandran PDBChecker addHydrogens MOLVIEWClient
 
 all:	$(EXECUTABLES)
 
@@ -20,6 +20,9 @@ amberEnergy:	amberEnergy.o
 
 bindingEnergy:	bindingEnergy.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
+
+MOLVIEWClient:	MOLVIEWClient.o 
+	$(CXX)	$(LDFLAGS) -o $@ $@.o $(BALLVIEW_LIBS)
 
 ramachandran:	ramachandran.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
