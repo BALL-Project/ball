@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: main.C,v 1.7 2004/07/16 14:09:41 amoll Exp $
+// $Id: main.C,v 1.8 2004/07/16 15:49:51 amoll Exp $
 //
 
 // order of includes is important: first qapplication, than BALL includes
@@ -175,7 +175,7 @@ int main(int argc, char **argv)
 	Scene::getInstance(0)->resize(width, height);
 
 	String povray_options;
-	povray_options = "-V -D +I- +W" + String(width) + " +H" + String(height) + " +O" + working_dir + "/";
+	povray_options = "-V +FN +QR -UV -D +I- +W" + String(width) + " +H" + String(height) + " +O" + working_dir + "/";
 	POVRenderer pov;
 	pov.setHumanReadable(false);
 
