@@ -1,86 +1,86 @@
 <node>GLU
- <node>Names
- <node>Glutamate</node>
- <node>Glutamat</node>
- <node>Glu</node>
- <node>Q</node>
- </node>
- <node>Atoms
- <node>N<value>N 0.09036078 1.20944 -0.09877955</value></node>
- <node>3H<value>H 0.992178 1.663159 -0.02552702</value></node>
- <node>CA<value>C -0.6644503 1.887128 -1.167784</value></node>
- <node>HA<value>H -0.1401839 1.690991 -2.10393</value></node>
- <node>C<value>C -0.6415405 3.403009 -0.9416856</value></node>
- <node>O<value>O 0.5018099 3.910433 -0.8834405</value></node>
- <node>CB<value>C -2.078524 1.299661 -1.288965</value></node>
- <node>1HB<value>H -2.006071 0.2127525 -1.352877</value></node>
- <node>2HB<value>H -2.670931 1.54428 -0.4052964</value></node>
- <node>CG<value>C -2.807634 1.790975 -2.546677</value></node>
- <node>1HG<value>H -2.881274 2.877187 -2.559357</value></node>
- <node>2HG<value>H -2.268831 1.463546 -3.436255</value></node>
- <node>CD<value>C -4.223983 1.236637 -2.597517</value></node>
- <node>OE1<value>O -5.044554 1.733033 -1.797006</value></node>
- <node>OE2<value>O -4.450723 0.3260741 -3.421581</value></node>
- <node>1H<value>H -0.4043283 1.301303 0.7769806</value></node>
- <node>2H<value>H 0.2085563 0.2320959 -0.3244812</value></node>
- <node>OXT<value>O -1.674247 3.928742 -0.470977</value></node>
- </node>
-  <node>Bonds
-    <node>5<value>3H N s</value></node>
-    <node>6<value>CA N s</value></node>
-    <node>10<value>HA CA s</value></node>
-    <node>11<value>C CA s</value></node>
-    <node>14<value>O C a</value></node>
-    <node>15<value>CB CA s</value></node>
-    <node>19<value>1HB CB s</value></node>
-    <node>20<value>2HB CB s</value></node>
-    <node>21<value>CG CB s</value></node>
-    <node>25<value>1HG CG s</value></node>
-    <node>26<value>2HG CG s</value></node>
-    <node>27<value>CD CG s</value></node>
-    <node>30<value>OE1 CD a</value></node>
-    <node>31<value>OE2 CD a</value></node>
-    <node>32<value>1H N s</value></node>
-    <node>33<value>2H N s</value></node>
-    <node>34<value>OXT C a</value></node>
-  </node>
- <node>Connections
- <node>N-term<value>N C-term s 1.33 0.5</value></node>
- <node>C-term<value>C N-term s 1.33 0.5</value></node>
- </node>
- <node>Properties
- <node>AMINO_ACID</node>
- </node>
- <node>Variants
- <node>Default
- <node>Delete
- <node>OXT</node>
- <node>1H</node>
- <node>2H</node>
- </node>
- <node>Rename
- <node>3H<value>H</value></node>
- </node>
- </node>
- <node>GLU-C
- <node>Delete
- <node>1H</node>
- <node>2H</node>
- </node>
- <node>Rename
- <node>3H<value>H</value></node>
- </node>
- <node>Properties
- <node>C_TERMINAL</node>
- </node>
- </node>
- <node>GLU-N
- <node>Delete
- <node>OXT</node>
- </node>
- <node>Properties
- <node>N_TERMINAL</node>
- </node>
- </node>
- </node>
+	<node>Names
+		<node>Glutamate</node>
+		<node>Glutamat</node>
+		<node>Glu</node>
+		<node>Q</node>
+	</node>
+	<node>Atoms
+		<node>N<value>N 0.09036078 1.20944 -0.09877955</value></node>
+		<node>3H<value>H 0.992178 1.663159 -0.02552702</value></node>
+		<node>CA<value>C -0.6644503 1.887128 -1.167784</value></node>
+		<node>HA<value>H -0.1401839 1.690991 -2.10393</value></node>
+		<node>C<value>C -0.6415405 3.403009 -0.9416856</value></node>
+		<node>O<value>O 0.5018099 3.910433 -0.8834405</value></node>
+		<node>CB<value>C -2.078524 1.299661 -1.288965</value></node>
+		<node>1HB<value>H -2.006071 0.2127525 -1.352877</value></node>
+		<node>2HB<value>H -2.670931 1.54428 -0.4052964</value></node>
+		<node>CG<value>C -2.807634 1.790975 -2.546677</value></node>
+		<node>1HG<value>H -2.881274 2.877187 -2.559357</value></node>
+		<node>2HG<value>H -2.268831 1.463546 -3.436255</value></node>
+		<node>CD<value>C -4.223983 1.236637 -2.597517</value></node>
+		<node>OE1<value>O -5.044554 1.733033 -1.797006</value></node>
+		<node>OE2<value>O -4.450723 0.3260741 -3.421581</value></node>
+		<node>1H<value>H -0.4043283 1.301303 0.7769806</value></node>
+		<node>2H<value>H 0.2085563 0.2320959 -0.3244812</value></node>
+		<node>OXT<value>O -1.674247 3.928742 -0.470977</value></node>
+	</node>
+	<node>Bonds
+		<node>5<value>3H N s</value></node>
+		<node>6<value>CA N s</value></node>
+		<node>10<value>HA CA s</value></node>
+		<node>11<value>C CA s</value></node>
+		<node>14<value>O C a</value></node>
+		<node>15<value>CB CA s</value></node>
+		<node>19<value>1HB CB s</value></node>
+		<node>20<value>2HB CB s</value></node>
+		<node>21<value>CG CB s</value></node>
+		<node>25<value>1HG CG s</value></node>
+		<node>26<value>2HG CG s</value></node>
+		<node>27<value>CD CG s</value></node>
+		<node>30<value>OE1 CD a</value></node>
+		<node>31<value>OE2 CD a</value></node>
+		<node>32<value>1H N s</value></node>
+		<node>33<value>2H N s</value></node>
+		<node>34<value>OXT C a</value></node>
+	</node>
+	<node>Connections
+		<node>N-term<value>N C-term s 1.33 0.5</value></node>
+		<node>C-term<value>C N-term s 1.33 0.5</value></node>
+	</node>
+	<node>Properties
+		<node>AMINO_ACID</node>
+	</node>
+	<node>Variants
+		<node>Default
+			<node>Delete
+				<node>OXT</node>
+				<node>1H</node>
+				<node>2H</node>
+			</node>
+			<node>Rename
+				<node>3H<value>H</value></node>
+			</node>
+		</node>
+		<node>GLU-C
+			<node>Delete
+				<node>1H</node>
+				<node>2H</node>
+			</node>
+			<node>Rename
+				<node>3H<value>H</value></node>
+			</node>
+			<node>Properties
+				<node>C_TERMINAL</node>
+			</node>
+		</node>
+		<node>GLU-N
+			<node>Delete
+				<node>OXT</node>
+			</node>
+			<node>Properties
+				<node>N_TERMINAL</node>
+			</node>
+		</node>
+	</node>
 </node>
