@@ -1,4 +1,4 @@
-// $Id: line3.h,v 1.9 2000/02/20 02:43:06 amoll Exp $
+// $Id: line3.h,v 1.10 2000/02/20 13:28:01 oliver Exp $
 
 #ifndef BALL_MATHS_LINE3_H
 #define BALL_MATHS_LINE3_H
@@ -197,7 +197,7 @@ namespace BALL
 				The vector is scaled with its length:
 				$\{x|y|z|} *= \sqrt{x^2 + y^2 + z^2}$.
 				@exception DivisionByZero if the length of the vector is 0
-		*//???
+		*/
 		void normalize()
 		{
 			d.normalize();
