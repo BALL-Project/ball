@@ -1,4 +1,4 @@
-// $Id: path.C,v 1.6 2000/04/02 14:34:13 oliver Exp $
+// $Id: path.C,v 1.7 2000/05/06 14:09:56 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/COMMON/path.h>
@@ -10,13 +10,15 @@ using std::ifstream;
 
 namespace BALL 
 {
-	
-	string					Path::path_ = BALL_PATH"/data/";
-	bool						Path::path_array_valid_ = false;
-	bool						Path::environment_checked_ = false;
-	vector<string>	Path::path_array_;		
-	
-	
+
+	Path::Path()
+		:	path_(BALL_PATH"/data/"),
+			path_array_valid_(false),
+			environment_checked_(false),
+			path_array_()
+	{
+	}
+
 	string Path::getDataPath()
 	{
 		return path_;
@@ -50,7 +52,10 @@ namespace BALL
 			char*	ball_data_path = getenv("BALL_DATA_PATH");
 			if (ball_data_path != 0)
 			{	
-				path_ = string(ball_data_path) + ":" + path_;
+				string bdp = ball_data_path;
+				bdp.append(":");
+				bdp.append(getDataPath());
+				setDataPath(bdp);
 			}
 			
 			// don`t try this again
