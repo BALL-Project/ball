@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.doc,v 1.29 2004/10/27 14:51:49 amoll Exp $
+// $Id: BALL.doc,v 1.30 2004/12/09 16:59:51 amoll Exp $
 //
 
 
@@ -24,7 +24,7 @@
 			functionality provided by BALL.
 
 		 <center><h1>Biochemical Algorithms Library</h1><p>Reference Manual</center>
-		\version 1.1pre3
+		\version 1.1pre4
 		\author 
 				- Tim Aubertin
 				- Christian Bender
