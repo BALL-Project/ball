@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyNucleotideList.sip,v 1.4 2003/10/29 22:54:44 oliver Exp $
+// $Id: pyNucleotideList.sip,v 1.5 2003/12/18 19:03:21 oliver Exp $
 //
 
 %MappedType PyNucleotideList
@@ -47,7 +47,7 @@
 	{
 		Nucleotide* nucleotide;
  
-		nucleotide = sipForceConvertTo_Nucleotide(PyList_GET_ITEM(sipPy,i),sipIsErr);
+		nucleotide = reinterpret_cast<Nucleotide*>(sipForceConvertTo_Nucleotide(PyList_GET_ITEM(sipPy,i),sipIsErr));
  
 		if (*sipIsErr)
 		{

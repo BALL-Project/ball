@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyChainList.sip,v 1.4 2003/10/29 22:54:43 oliver Exp $
+// $Id: pyChainList.sip,v 1.5 2003/12/18 19:03:20 oliver Exp $
 //
 
 %MappedType PyChainList
@@ -47,7 +47,7 @@
 	{
 		Chain* chain;
  
-		chain = sipForceConvertTo_Chain(PyList_GET_ITEM(sipPy,i),sipIsErr);
+		chain = reinterpret_cast<Chain*>(sipForceConvertTo_Chain(PyList_GET_ITEM(sipPy,i),sipIsErr));
  
 		if (*sipIsErr)
 		{

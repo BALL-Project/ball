@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomList.sip,v 1.4 2003/10/29 22:54:43 oliver Exp $
+// $Id: pyAtomList.sip,v 1.5 2003/12/18 19:03:20 oliver Exp $
 //
 
 %MappedType PyAtomList
@@ -46,7 +46,7 @@
 	{
 		Atom* atom;
  
-		atom = sipForceConvertTo_Atom(PyList_GET_ITEM(sipPy,i),sipIsErr);
+		atom = reinterpret_cast<Atom*>(sipForceConvertTo_Atom(PyList_GET_ITEM(sipPy,i),sipIsErr));
  
 		if (*sipIsErr)
 		{

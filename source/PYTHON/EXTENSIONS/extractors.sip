@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: extractors.sip,v 1.5 2003/11/15 12:53:57 oliver Exp $
+// $Id: extractors.sip,v 1.6 2003/12/18 19:03:19 oliver Exp $
 //
 
 %ModuleHeaderCode
@@ -21,7 +21,7 @@ PyMoleculeList* 						molecules(const AtomContainer& /fragment/, bool /selected_
 PyResidueList* 							residues(const AtomContainer& /fragment/, bool /selected_only/ = false);
 PySecondaryStructureList* 	secondaryStructures(const AtomContainer& /fragment/, bool /selected_only/ = false);
 PyChainList* 								chains(const AtomContainer& /fragment/, bool /selected_only/ = false);
-PyProteinList* 							proteins(const AtomContainer& /fragment/, bool /selected_only/ = false);
+PyProteinList*							proteins(const AtomContainer& /fragment/, bool /selected_only/ = false);
 PyNucleotideList* 					nucleotides(const AtomContainer& /fragment/, bool /selected_only/ = false);
 PyNucleicAcidList* 					nucleicAcids(const AtomContainer& /fragment/, bool /selected_only/ = false);
 

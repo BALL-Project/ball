@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyResidueList.sip,v 1.4 2003/10/29 22:54:45 oliver Exp $
+// $Id: pyResidueList.sip,v 1.5 2003/12/18 19:03:21 oliver Exp $
 //
 
 %MappedType PyResidueList
@@ -47,7 +47,7 @@
 	{
 		Residue* residue;
  
-		residue = sipForceConvertTo_Residue(PyList_GET_ITEM(sipPy,i),sipIsErr);
+		residue = reinterpret_cast<Residue*>(sipForceConvertTo_Residue(PyList_GET_ITEM(sipPy,i),sipIsErr));
  
 		if (*sipIsErr)
 		{

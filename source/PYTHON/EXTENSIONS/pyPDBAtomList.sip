@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyPDBAtomList.sip,v 1.4 2003/10/29 22:54:44 oliver Exp $
+// $Id: pyPDBAtomList.sip,v 1.5 2003/12/18 19:03:21 oliver Exp $
 //
 
 %MappedType PyPDBAtomList
@@ -47,7 +47,7 @@
 	{
 		PDBAtom* PDB_atom;
  
-		PDB_atom = sipForceConvertTo_PDBAtom(PyList_GET_ITEM(sipPy,i),sipIsErr);
+		PDB_atom = reinterpret_cast<PDBAtom*>(sipForceConvertTo_PDBAtom(PyList_GET_ITEM(sipPy,i),sipIsErr));
  
 		if (*sipIsErr)
 		{

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyProteinList.sip,v 1.4 2003/10/29 22:54:44 oliver Exp $
+// $Id: pyProteinList.sip,v 1.5 2003/12/18 19:03:21 oliver Exp $
 //
 
 %MappedType PyProteinList
@@ -47,7 +47,7 @@
 	{
 		Protein* protein;
  
-		protein = sipForceConvertTo_Protein(PyList_GET_ITEM(sipPy,i),sipIsErr);
+		protein = reinterpret_cast<Protein*>(sipForceConvertTo_Protein(PyList_GET_ITEM(sipPy,i),sipIsErr));
  
 		if (*sipIsErr)
 		{

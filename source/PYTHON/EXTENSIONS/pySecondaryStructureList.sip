@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pySecondaryStructureList.sip,v 1.4 2003/10/29 22:54:45 oliver Exp $
+// $Id: pySecondaryStructureList.sip,v 1.5 2003/12/18 19:03:21 oliver Exp $
 //
 
 %MappedType PySecondaryStructureList
@@ -47,7 +47,7 @@
 	{
 		SecondaryStructure* sec_struc;
  
-		sec_struc = sipForceConvertTo_SecondaryStructure(PyList_GET_ITEM(sipPy,i),sipIsErr);
+		sec_struc = reinterpret_cast<SecondaryStructure*>(sipForceConvertTo_SecondaryStructure(PyList_GET_ITEM(sipPy,i),sipIsErr));
  
 		if (*sipIsErr)
 		{

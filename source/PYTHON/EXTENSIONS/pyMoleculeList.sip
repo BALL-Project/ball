@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyMoleculeList.sip,v 1.4 2003/10/29 22:54:44 oliver Exp $
+// $Id: pyMoleculeList.sip,v 1.5 2003/12/18 19:03:21 oliver Exp $
 //
 
 %MappedType PyMoleculeList
@@ -47,7 +47,7 @@
 	{
 		Molecule* molecule;
  
-		molecule = sipForceConvertTo_Molecule(PyList_GET_ITEM(sipPy,i),sipIsErr);
+		molecule = reinterpret_cast<Molecule*>(sipForceConvertTo_Molecule(PyList_GET_ITEM(sipPy,i),sipIsErr));
  
 		if (*sipIsErr)
 		{

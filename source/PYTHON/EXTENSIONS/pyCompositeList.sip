@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyCompositeList.sip,v 1.1 2003/11/15 10:59:07 oliver Exp $
+// $Id: pyCompositeList.sip,v 1.2 2003/12/18 19:03:20 oliver Exp $
 //
 
 %MappedType PyCompositeList
@@ -47,7 +47,7 @@
 	{
 		Composite* composite;
  
-		composite = sipForceConvertTo_Composite(PyList_GET_ITEM(sipPy,i),sipIsErr);
+		composite = reinterpret_cast<Composite*>(sipForceConvertTo_Composite(PyList_GET_ITEM(sipPy,i),sipIsErr));
  
 		if (*sipIsErr)
 		{

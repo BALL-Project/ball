@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: message.sip,v 1.5 2003/12/11 02:32:53 amoll Exp $
+// $Id: message.sip,v 1.6 2003/12/18 19:03:20 oliver Exp $
 //
 
 class Message
@@ -106,7 +106,7 @@ class SelectionMessage
 	SelectionMessage(const SelectionMessage& ) throw();
 	~SelectionMessage() throw();
 	void setSelection(const PyCompositeList&) throw();
-	const PyCompositeList& getSelection() const throw();
+	PyCompositeList getSelection() const throw();
 };
 
 
@@ -150,8 +150,8 @@ class GeometricObjectSelectionMessage
 	public:
 	GeometricObjectSelectionMessage() throw();
 	~GeometricObjectSelectionMessage() throw();
-	void setSelection(const PyGeometricObjectList& ) throw();
-	const PyGeometricObjectList& getSelection() const throw();
+	void setSelection(const GeometricObjectList& ) throw();
+	const GeometricObjectList& getSelection() const throw();
 	void setSelected(bool ) throw();
 	bool isSelected() const throw();
 };
@@ -240,7 +240,7 @@ class CreateRepresentationMessage
 		CreateRepresentationMessage(const PyCompositeList&, 
 																ModelType , 
 																ColoringMethod ) throw();   
-		const PyCompositeList& getComposites() const throw();
+		PyCompositeList getComposites() const throw();
 		ModelType getModelType() const throw();
 		ColoringMethod getColoringMethod() const throw();
 };

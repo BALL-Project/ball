@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyAtomDict.sip,v 1.5 2003/10/31 23:15:50 oliver Exp $
+// $Id: pyAtomDict.sip,v 1.6 2003/12/18 19:03:20 oliver Exp $
 //
 
 %MappedType PyAtomDict
@@ -58,7 +58,7 @@
 		{
 			break;
 		}
-		Atom* atom = sipForceConvertTo_Atom(key,sipIsErr);
+		Atom* atom = reinterpret_cast<Atom*>(sipForceConvertTo_Atom(key,sipIsErr));
 		if (*sipIsErr)
 		{
 			break;

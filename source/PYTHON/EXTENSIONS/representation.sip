@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.sip,v 1.6 2003/12/11 14:22:25 amoll Exp $
+// $Id: representation.sip,v 1.7 2003/12/18 19:03:22 oliver Exp $
 //
 
 class Representation
@@ -20,7 +20,7 @@ class Representation
 	// CompositesConstIterator end() const throw();
 	// CompositesIterator begin() throw();
 	// CompositesIterator end() throw();
-	PyGeometricObjectList& getGeometricObjects() throw();
+	GeometricObjectList& getGeometricObjects() throw();
 	ColoringMethod getColoringMethod() const throw();
  	DrawingMode getDrawingMode() const throw();
 	DrawingPrecision getDrawingPrecision() const throw();
@@ -29,14 +29,14 @@ class Representation
 	Representation() throw();
 	Representation(ModelType /model_type/, DrawingPrecision /drawing_precision/, DrawingMode /drawing_mode/) throw();
 	// Representation(const CompositeSet& /composites/, ModelProcessor* /rep_processor/) throw();
-	//Representation(const PyGeometricObjectList& /object_list/) throw();
+	//Representation(const GeometricObjectList& /object_list/) throw();
 	Representation(const Representation& /representation/) throw();
 	Size getTransparency() const throw();
 	String getModelName() const throw();
 	String getProperties() const throw();
 	bool isValid() const throw();
 	// const CompositeSet& getComposites() const throw();
-	const PyGeometricObjectList& getGeometricObjects() const throw();
+	const GeometricObjectList& getGeometricObjects() const throw();
 	const ModelProcessor* getModelProcessor() const throw();
 	// const Representation& operator = (const Representation& /representation/) throw();
 	float getSurfaceDrawingPrecision() const throw();

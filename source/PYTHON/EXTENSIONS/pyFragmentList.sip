@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyFragmentList.sip,v 1.4 2003/10/29 22:54:44 oliver Exp $
+// $Id: pyFragmentList.sip,v 1.5 2003/12/18 19:03:20 oliver Exp $
 //
 
 %MappedType PyFragmentList
@@ -45,7 +45,7 @@
 	{
 		Fragment* fragment;
  
-		fragment = sipForceConvertTo_Fragment(PyList_GET_ITEM(sipPy,i),sipIsErr);
+		fragment = reinterpret_cast<Fragment*>(sipForceConvertTo_Fragment(PyList_GET_ITEM(sipPy,i),sipIsErr));
  
 		if (*sipIsErr)
 		{

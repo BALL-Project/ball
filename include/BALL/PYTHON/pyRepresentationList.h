@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyRepresentationList.h,v 1.1 2003/11/15 12:53:56 oliver Exp $
+// $Id: pyRepresentationList.h,v 1.2 2003/12/18 19:03:19 oliver Exp $
 //
 
 #ifndef BALL_PYTHON_PYREPRESENTATIONLIST_H
@@ -15,18 +15,21 @@
 #	include <BALL/DATATYPE/list.h>
 #endif
 
+#ifndef BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
+#	include <BALL/VIEW/KERNEL/primitiveManager.h>
+#endif
+
+#ifndef BALL_VIEW_KERNEL_REPRESENTATION_H
+#	include <BALL/VIEW/KERNEL/representation.h>
+#endif
+
 namespace BALL 
 {
-	namespace VIEW
-	{
-		class Representation;
-	}
-
 	/** pyRepresentationList
 		\ingroup PythonExtensions
 	*/
 	class PyRepresentationList
-		:	public List<VIEW::Representation*>
+			:	public VIEW::PrimitiveManager::RepresentationList
 	{
 		public:
 

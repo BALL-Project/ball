@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: BALL.sip,v 1.30 2003/12/13 00:08:10 amoll Exp $
+// $Id: BALL.sip,v 1.31 2003/12/18 19:03:19 oliver Exp $
 //
 //
 //
@@ -232,7 +232,6 @@
 %Include pyCompositeProcessor.sip
 %Include pyBondList.sip
 %Include pyCompositeList.sip
-%Include pyRepresentationList.sip
 %Include pyAtomContainerList.sip
 %Include pyFragmentList.sip
 %Include pyMoleculeList.sip
@@ -243,7 +242,6 @@
 %Include pyProteinList.sip
 %Include pyNucleotideList.sip
 %Include pyNucleicAcidList.sip
-%Include pyGeometricObjectList.sip
 
 // QSAR
 //%Include descriptor.sip
@@ -283,9 +281,11 @@
 %Include mainControl.sip
 %Include compositeManager.sip
 %Include primitiveManager.sip
+%Include representationList.sip
 %Include client.sip
 %Include representation.sip
 %Include geometricObject.sip
+%Include geometricObjectList.sip
 %Include view-common.sip
 
 // VIEW/DATATYPE

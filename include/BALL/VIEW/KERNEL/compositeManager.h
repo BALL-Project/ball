@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: compositeManager.h,v 1.4 2003/11/16 20:40:20 amoll Exp $
+// $Id: compositeManager.h,v 1.5 2003/12/18 19:03:19 oliver Exp $
 
 #ifndef BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
 #define BALL_VIEW_KERNEL_COMPOSITEMANAGER_H
@@ -37,7 +37,7 @@ namespace BALL
 			typedef Index								difference_type;			
 			typedef Size								size_type;
 			typedef HashSet<Composite*>::Iterator iterator;
-
+				
 			///
 			typedef HashSet<Composite*>::Iterator CompositeIterator;
 

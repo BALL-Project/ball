@@ -1,15 +1,19 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyRepresentationList.sip,v 1.2 2003/11/15 12:53:58 oliver Exp $
+// $Id: representationList.sip,v 1.1 2003/12/18 19:03:22 oliver Exp $
 //
 
-%MappedType PyRepresentationList
+%MappedType RepresentationList
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyRepresentationList.h>
+	#include <BALL/VIEW/KERNEL/primitiveManager.h>
 	#include "sipBALLRepresentation.h"
-  #include <BALL/PYTHON/pyBALLSipHelper.h>
+  #include <BALL/PYTHON/pyBALLSipHelper.h>	
+	using namespace BALL;
+	using namespace BALL::VIEW;
+	typedef PrimitiveManager::RepresentationList RepresentationList;
+
 %End
 
 %ConvertFromTypeCode
@@ -22,7 +26,7 @@
 
 	// Convert the list.
 
-	for (PyRepresentationList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	for (RepresentationList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
 		Representation* obj = *it;
 
@@ -40,13 +44,13 @@
 	// Convert a Python list of Representation instances to an RepresentationList object on the
 	// heap.
  
-	PyRepresentationList *representation_list = new PyRepresentationList;
+	RepresentationList *representation_list = new RepresentationList;
  
 	for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)
 	{
 		Representation* representation;
  
-		representation = sipForceConvertTo_Representation(PyList_GET_ITEM(sipPy,i),sipIsErr);
+		representation = reinterpret_cast<Representation*>(sipForceConvertTo_Representation(PyList_GET_ITEM(sipPy,i),sipIsErr));
  
 		if (*sipIsErr)
 		{

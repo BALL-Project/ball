@@ -1,15 +1,16 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyGeometricObjectList.sip,v 1.4 2003/12/11 14:22:24 amoll Exp $
+// $Id: geometricObjectList.sip,v 1.1 2003/12/18 19:03:19 oliver Exp $
 //
 
-%MappedType PyGeometricObjectList
+%MappedType GeometricObjectList
 {
 %TypeHeaderCode
-	#include <BALL/PYTHON/pyGeometricObjectList.h>
+	#include <BALL/VIEW/KERNEL/representation.h>
+	#include <BALL/VIEW/KERNEL/geometricObject.h>
 	#include "sipBALLGeometricObject.h"
-  //#include <BALL/PYTHON/pyBALLSipHelper.h>
+	typedef Representation::GeometricObjectList GeometricObjectList;
 %End
 
 %ConvertFromTypeCode
@@ -22,7 +23,7 @@
 
 	// Convert the list.
 
-	for (PyGeometricObjectList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
+	for (GeometricObjectList::ConstIterator it = sipCpp->begin(); it != sipCpp->end(); ++it)
 	{
 		GeometricObject* obj = *it;
 
@@ -40,13 +41,13 @@
 	// Convert a Python list of GeometricObject instances to an GeometricObjectList object on the
 	// heap.
  
-	PyGeometricObjectList *geometric_object_list = new PyGeometricObjectList;
+	GeometricObjectList *geometric_object_list = new GeometricObjectList;
  
 	for (int i = 0; i < PyList_GET_SIZE(sipPy); ++i)
 	{
 		GeometricObject* geometric_object;
  
-		geometric_object = sipForceConvertTo_GeometricObject(PyList_GET_ITEM(sipPy,i),sipIsErr);
+		geometric_object = reinterpret_cast<GeometricObject*>(sipForceConvertTo_GeometricObject(PyList_GET_ITEM(sipPy,i),sipIsErr));
  
 		if (*sipIsErr)
 		{
