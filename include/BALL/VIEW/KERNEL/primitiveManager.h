@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.h,v 1.9 2004/11/11 23:57:54 amoll Exp $
+// $Id: primitiveManager.h,v 1.10 2004/11/12 15:04:20 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
 #define  BALL_VIEW_KERNEL_PRIMITIVEMANAGER_H
@@ -157,12 +157,11 @@ namespace BALL
 			void setMainControl(MainControl& mc)
 				throw() { main_control_ = &mc;}
 
-			#ifdef BALL_QT_HAS_THREADS
-			
 			/// Return true, if a Representation is currently beeing updated
 			bool updateRunning() const
 				throw();
 
+			#ifdef BALL_QT_HAS_THREADS
 			///
 			static UpdateRepresentationThread& getUpdateThread() { return thread_;}
 			#endif
@@ -177,7 +176,6 @@ namespace BALL
 			
 			protected:
 
-			#ifdef BALL_QT_HAS_THREADS
 			void startUpdateThread_(Representation& rep)
 				throw();
 
@@ -186,13 +184,15 @@ namespace BALL
 
 			void finishedUpdate_()
 				throw();
-			#endif
 
 			//_ List with all representations
 			RepresentationList representations_;
 			
 			//_ List with all representations, which will be updated
 			RepresentationList representations_to_be_updated_;
+			
+			//_ List with all representations, which are to be deleted
+			HashSet<Representation*> representations_to_be_deleted_;
 
 			#ifdef BALL_QT_HAS_THREADS
 			static UpdateRepresentationThread thread_;

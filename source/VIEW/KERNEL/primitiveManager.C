@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: primitiveManager.C,v 1.18 2004/11/11 23:57:46 amoll Exp $
+// $Id: primitiveManager.C,v 1.19 2004/11/12 15:04:17 amoll Exp $
 
 #include <BALL/VIEW/KERNEL/primitiveManager.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -89,6 +89,12 @@ void PrimitiveManager::remove(Representation& representation)
 	}
 
 	if (!found) return;
+
+	if (willBeUpdated(representation))
+	{
+		representations_to_be_deleted_.insert(&representation);
+		return;
+	}
 
 	representations_.erase(it);
 	delete &representation;
@@ -204,10 +210,10 @@ List<Representation*> PrimitiveManager::getRepresentationsOf(const Composite& co
 	return changed_representations;
 }
 
-#ifdef BALL_QT_HAS_THREADS
 void PrimitiveManager::update_(Representation& rep)
 	throw()
 {
+#ifdef BALL_QT_HAS_THREADS
 	if (rep.isHidden()) 
 	{
 		rep.needs_update_ = true;
@@ -227,11 +233,13 @@ void PrimitiveManager::update_(Representation& rep)
 		startUpdateThread_(rep);
 		return;
 	}
+#endif
 }
 
 void PrimitiveManager::startUpdateThread_(Representation& rep)
 	throw()
 {
+#ifdef BALL_QT_HAS_THREADS
 	update_still_to_be_started_ = false;
 
 	if (updateRunning())
@@ -273,11 +281,13 @@ void PrimitiveManager::startUpdateThread_(Representation& rep)
 	}
 		
 	main_control_->setStatusbarText("");
+#endif
 }
 
 void PrimitiveManager::finishedUpdate_()
 	throw()
 {
+#ifdef BALL_QT_HAS_THREADS
 	if (representations_to_be_updated_.size() == 0)
 	{
 		Log.error() << "Problem while updateing Representations in " 
@@ -288,30 +298,49 @@ void PrimitiveManager::finishedUpdate_()
 	Representation* rep = *representations_to_be_updated_.begin();
 	representations_to_be_updated_.pop_front();
 
-	if (!has(*rep)) 
+	if (representations_to_be_deleted_.has(rep))
 	{
-		main_control_->insert(*rep);
-		return;
+		RepresentationList::Iterator it = representations_to_be_updated_.begin();
+		for (; it != representations_to_be_updated_.end(); ++it)
+		{
+			if (*it == rep)
+			{
+				representations_to_be_updated_.erase(it);
+			}
+		}
+//   		main_control_->remove(*rep);
 	}
+	else 
+	{
+		if (!has(*rep)) 
+		{
+			main_control_->insert(*rep);
+			return;
+		}
 
-	RepresentationMessage* msg = new RepresentationMessage(*rep, 
-																			RepresentationMessage::UPDATE);
-	main_control_->sendMessage(*msg);
+		RepresentationMessage* msg = new RepresentationMessage(*rep, 
+																				RepresentationMessage::UPDATE);
+		main_control_->sendMessage(*msg);
+	}
 
 	if (!updateRunning() &&
 			representations_to_be_updated_.size() > 0)
 	{
 		startUpdateThread_(**representations_to_be_updated_.begin());
 	}
+#endif
 }
 
 bool PrimitiveManager::updateRunning() const
 	throw() 
 {
+#ifdef BALL_QT_HAS_THREADS
 	return (thread_.getRepresentation() != 0); 
+#else
+	return false;
+#endif
 }
 
-#endif
 
 bool PrimitiveManager::willBeUpdated(const Representation& rep) const
 	throw()
