@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT3D.h,v 1.1.2.2 2002/08/27 11:58:16 oliver Exp $
+// $Id: FFT3D.h,v 1.1.2.3 2002/09/02 09:27:41 anhi Exp $
 
 #ifndef BALL_MATHS_FFT3D_H
 #define BALL_MATHS_FFT3D_H
@@ -45,7 +45,7 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/MATHS/FFT3D.h}
 	 */
 
-	class FFT3D : TRegularData3D<FFTW_COMPLEX>
+	class FFT3D : public TRegularData3D<FFTW_COMPLEX>
 	{
 		public:
 
@@ -234,6 +234,11 @@ namespace BALL
 			double getFourierSpaceMaxZ() const
 				throw();
 
+			/** Returns the grid coordinate corresponding to the position.
+			 */
+			Vector3 FFT3D::getGridCoordinates(Position position) const
+				throw();
+			
 			/** Returns the data at the grid position closest to {\em pos},
 				and automatically includes
 				the correct phase factor and (symmetric) normalization.

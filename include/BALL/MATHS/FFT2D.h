@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT2D.h,v 1.1.2.2 2002/08/27 11:58:15 oliver Exp $
+// $Id: FFT2D.h,v 1.1.2.3 2002/09/02 09:27:41 anhi Exp $
 
 #ifndef BALL_MATHS_FFT2D_H
 #define BALL_MATHS_FFT2D_H
@@ -38,7 +38,7 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/MATHS/FFT2D.h}
 	 */
 
-	class FFT2D : TRegularData2D<FFTW_COMPLEX>
+	class FFT2D : public TRegularData2D<FFTW_COMPLEX>
 	{
 		public:
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: FFT1D.h,v 1.1.2.2 2002/08/27 11:58:15 oliver Exp $
+// $Id: FFT1D.h,v 1.1.2.3 2002/09/02 09:27:40 anhi Exp $
 
 #ifndef BALL_MATHS_FFT1D_H
 #define BALL_MATHS_FFT1D_H
@@ -34,7 +34,7 @@ namespace BALL
 			{\bf Definition:} \URL{BALL/MATHS/FFT1D.h}
 	 */
 
-	class FFT1D : TRegularData1D<FFTW_COMPLEX>
+	class FFT1D : public TRegularData1D<FFTW_COMPLEX>
 	{
 		public:
 
