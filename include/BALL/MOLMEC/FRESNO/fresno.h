@@ -1,4 +1,4 @@
-// $Id: fresno.h,v 1.1.2.7 2002/04/24 09:18:47 anker Exp $
+// $Id: fresno.h,v 1.1.2.8 2002/09/13 14:05:44 anker Exp $
 
 #ifndef BALL_MOLMEC_FRESNO_FRESNO_H
 #define BALL_MOLMEC_FRESNO_FRESNO_H
@@ -128,6 +128,14 @@ namespace BALL
 			*/
 			static const char* METAL_R2;
 
+			/**
+			*/
+			static const char* DESOLV_METHOD;
+
+			/**
+			*/
+			static const char* VERBOSITY;
+
 
 		};
 
@@ -222,6 +230,14 @@ namespace BALL
 			/**
 			*/
 			static const float METAL_R2;
+
+			/**
+			*/
+			static const Size DESOLV_METHOD;
+
+			/**
+			*/
+			static const Size VERBOSITY;
 
 		};
 
@@ -329,6 +345,11 @@ namespace BALL
 		FresnoFF(System& system)
 			throw();
 
+		/** Construct a FresnoFF with a system.
+		*/
+		FresnoFF(System& system, Molecule* protein, Molecule* ligand)
+			throw();
+
 		/** Construct a FresnoFF with a system and options.
 		*/
 		FresnoFF(System& system, const Options& options)
@@ -376,6 +397,16 @@ namespace BALL
 
 		/**
 		*/
+		Molecule* getProtein() const
+			throw();
+
+		/**
+		*/
+		Molecule* getLigand() const
+			throw();
+
+		/**
+		*/
 		double getHydrogenBondEnergy() const
 			throw();
 
@@ -413,9 +444,18 @@ namespace BALL
 		*/
 		//@{
 
+		/** We need a definite assignment discriminating receptor and ligand.
+		*/
+		Molecule* protein_;
+		Molecule* ligand_;
+
 		/** A hash map mapping atom pointers to fresno types.
 		*/
 		HashMap<const Atom*, short> fresno_types_;
+
+		/**
+		*/
+		Size verbosity_;
 
 		//@}
 

@@ -1,4 +1,4 @@
-// $Id: fresno.C,v 1.1.2.10 2002/04/24 09:19:53 anker Exp $
+// $Id: fresno.C,v 1.1.2.11 2002/09/13 14:05:45 anker Exp $
 // Molecular Mechanics: Fresno force field class
 
 #include <BALL/SYSTEM/path.h>
@@ -16,6 +16,7 @@
 #include <BALL/MOLMEC/FRESNO/fresnoRotation.h>
 #include <BALL/MOLMEC/FRESNO/fresnoDesolvation.h>
 #include <BALL/MOLMEC/FRESNO/chemScoreMetal.h>
+#include <BALL/MOLMEC/CHARMM/charmmNonBonded.h>
 
 using namespace std;
 
@@ -45,6 +46,8 @@ namespace BALL
 	const char* FresnoFF::Option::ROT_ALGORITHM = "rot_algorithm";
 	const char* FresnoFF::Option::METAL_R1 = "metal_r1";
 	const char* FresnoFF::Option::METAL_R2 = "metal_r2";
+	const char* FresnoFF::Option::DESOLV_METHOD = "desolvation_method";
+	const char* FresnoFF::Option::VERBOSITY = "verbosity";
 
 	const float FresnoFF::Default::CONST = -33.614;
 	const float FresnoFF::Default::HB = -0.014;
@@ -69,6 +72,8 @@ namespace BALL
 		FresnoRotation::ALGORITHM__GUESS;
 	const float FresnoFF::Default::METAL_R1 = 2.2;
 	const float FresnoFF::Default::METAL_R2 = 2.6;
+	const Size FresnoFF::Default::DESOLV_METHOD = 0;
+	const Size FresnoFF::Default::VERBOSITY = 9;
 
 	void FresnoFF::registerComponents_()
 		throw()
@@ -81,12 +86,16 @@ namespace BALL
 		insertComponent(new FresnoRotation(*this));
 		insertComponent(new FresnoDesolvation(*this));
 		insertComponent(new ChemScoreMetal(*this));
+		// insertComponent(new CharmmNonBonded(*this));
 	}
 
 
 	FresnoFF::FresnoFF()
 		throw()
-		:	ForceField()
+		:	ForceField(),
+			protein_(0),
+			ligand_(0),
+			fresno_types_()
 	{
 		// register all components of the force field
 		registerComponents_();
@@ -98,7 +107,32 @@ namespace BALL
 
 	FresnoFF::FresnoFF(System& system)
 		throw()
-		:	ForceField()
+		:	ForceField(),
+			protein_(0),
+			ligand_(0),
+			fresno_types_()
+	{
+		// register all components of the force field
+		registerComponents_();
+
+		// set up with the given system
+		bool result = setup(system);
+
+    if (!result)
+    {
+			Log.error() << "FresnoFF::FresnoFF(System&): "
+				<< "Force Field setup failed! " << endl;
+      valid_ = false;
+		}
+	}
+
+
+	FresnoFF::FresnoFF(System& system, Molecule* protein, Molecule* ligand)
+		throw()
+		:	ForceField(),
+			protein_(protein),
+			ligand_(ligand),
+			fresno_types_()
 	{
 		// register all components of the force field
 		registerComponents_();
@@ -117,7 +151,10 @@ namespace BALL
 
 	FresnoFF::FresnoFF(System& system, const Options& new_options)
 		throw()
-		:	ForceField()
+		:	ForceField(),
+			protein_(),
+			ligand_(),
+			fresno_types_()
 	{
 		// register all components of the force field
 		registerComponents_();
@@ -136,7 +173,10 @@ namespace BALL
 
 	FresnoFF::FresnoFF(const FresnoFF& force_field)
 		throw()
-		:	ForceField(force_field)
+		:	ForceField(force_field),
+			protein_(),
+			ligand_(),
+			fresno_types_()
 	{
 	}
 
@@ -151,6 +191,9 @@ namespace BALL
 	void FresnoFF::clear()
 		throw()
 	{
+		protein_ = 0;
+		ligand_ = 0;
+		fresno_types_.clear();
 		ForceField::clear();
 	}
 
@@ -158,17 +201,37 @@ namespace BALL
 	bool FresnoFF::specificSetup()
 		throw()
 	{
+
 		// check whether the system is assigned
-		if (getSystem() == 0)
+		System* system = getSystem();
+		if (system == 0)
 		{
 			return false;
 		}
 
-		if (getSystem()->countMolecules() != 2)
+		// check whether we have two molecules
+		if (system->countMolecules() != 2)
 		{
 			Log.error() << "FresnoFF::specificSetup(): "
 				<< "Fresno is only defined for systems with 2 molecules" << endl;
 			return false;
+		}
+
+		// check whether we know which molecule is the protein and which is the
+		// ligand in this complex. In case we don't know, we have to guess.
+		// This can be wrong if we got two PDB files which will both be tagged
+		// as protein.
+		if ((protein_ == 0) || (ligand_ == 0))
+		{
+			Log.warn() 
+				<< "I don't know what the protein and the ligand is, trying to guess." 
+				<< endl;
+			protein_ = &*(system->beginProtein());
+			ligand_= system->getMolecule(0);
+			if (ligand_ == protein_) 
+			{
+				ligand_ = system->getMolecule(1);
+			}
 		}
  
 		// we have to assign those atom types defined in 
@@ -380,7 +443,6 @@ namespace BALL
 											// cout << it->first->getFullName() << ": LIP" << endl;
 											// /DEBUG
 											++lipo_counter;
-											++lipo_counter;
 										}
 										else
 										{
@@ -388,7 +450,6 @@ namespace BALL
 											// DEBUG
 											// cout << it->first->getFullName() << ": ACC" << endl;
 											// /DEBUG
-											++acc_counter;
 											++acc_counter;
 										}
 									}
@@ -640,6 +701,46 @@ namespace BALL
 			<< endl << endl;
 		// /DEBUG
 
+		// DEBUG
+		/*
+		for (it = fresno_types_.begin(); +it; ++it)
+		{
+			atom = it->first;
+			Log.info() << atom->getFullName() << ": ";
+			String type;
+			switch(it->second)
+			{
+				case FresnoFF::UNKNOWN: 
+					type = "unknown";
+					break;
+				case FresnoFF::LIPOPHILIC: 
+					type = "lipophilic";
+					break;
+				case FresnoFF::HBOND_DONOR: 
+					type = "h bond donor";
+					break;
+				case FresnoFF::HBOND_ACCEPTOR: 
+					type = "h bond acceptor";
+					break;
+				case FresnoFF::HBOND_ACCEPTOR_DONOR: 
+					type = "h bond acceptor/donor";
+					break;
+				case FresnoFF::HBOND_HYDROGEN: 
+					type = "h bond hydrogen";
+					break;
+				case FresnoFF::POLAR: 
+					type = "polar";
+					break;
+				case FresnoFF::METAL: 
+					type = "metal";
+					break;
+				default: 
+					type = "unassigned";
+			}
+			Log.info() << type << endl;
+		}
+		*/
+		// /DEBUG
 		return true;
 
 	}
@@ -655,6 +756,20 @@ namespace BALL
 		}
 		
 		return *this;
+	}
+
+
+	Molecule* FresnoFF::getProtein() const
+		throw()
+	{
+		return protein_;
+	}
+
+
+	Molecule* FresnoFF::getLigand() const
+		throw()
+	{
+		return ligand_;
 	}
 
 
