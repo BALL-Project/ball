@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: glRenderer.C,v 1.57.2.7 2005/01/13 18:27:38 amoll Exp $
+// $Id: glRenderer.C,v 1.57.2.8 2005/01/13 18:45:30 amoll Exp $
 //
 
 #include <BALL/VIEW/RENDERING/glRenderer.h>
@@ -20,12 +20,16 @@
 #include <BALL/VIEW/PRIMITIVES/twoColoredTube.h>
 #include <BALL/VIEW/PRIMITIVES/mesh.h>
 
+#include <BALL/SYSTEM/timer.h>
+
 #include <qfont.h>
 #include <qpainter.h>
 #include <qbitmap.h>
 #include <qimage.h>
 
 using namespace std;
+
+#define BALL_BENCHMARKING
 
 namespace BALL
 {
@@ -282,6 +286,10 @@ namespace BALL
 		void GLRenderer::rebuildDisplayListFor(const Representation& rep)
 			throw()
 		{
+#ifdef BALL_BENCHMARKING
+	Timer t;
+	t.start();
+#endif
 			GLDisplayList* display_list;
 			if (display_lists_.has(&rep))
 			{
@@ -299,6 +307,10 @@ namespace BALL
 			display_list->startDefinition();
 			render(rep);
 			display_list->endDefinition();
+#ifdef BALL_BENCHMARKING
+	t.stop();
+	logString("OpenGL rendering time: " + String(t.getCPUTime()));
+#endif
 		}
 
 

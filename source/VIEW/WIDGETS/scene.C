@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: scene.C,v 1.156.2.2 2005/01/13 18:28:04 amoll Exp $
+// $Id: scene.C,v 1.156.2.3 2005/01/13 18:45:10 amoll Exp $
 //
 
 #include <BALL/VIEW/WIDGETS/scene.h>
@@ -24,7 +24,6 @@
 #include <BALL/VIEW/PRIMITIVES/box.h>
 
 #include <BALL/SYSTEM/timer.h>
-#include <BALL/SYSTEM/timer.h>
 
 #include <qpainter.h>
 #include <qmenubar.h>
@@ -35,7 +34,7 @@
 #include <qdragobject.h>
 #include <qdir.h>
 
-#define BALL_BENCHMARKING
+//   #define BALL_BENCHMARKING
 
 using std::endl;
 using std::istream;
@@ -625,9 +624,8 @@ namespace BALL
 			}
 #ifdef BALL_BENCHMARKING
 	t.stop();
-	logString("OpenGL rendering time: " + String(t.getCPUTime()));
+	logString("Scene rendering time: " + String(t.getCPUTime()));
 #endif
-
 		}
 
 		void Scene::rotateSystem2_(Scene* /*scene*/)
@@ -1470,6 +1468,12 @@ namespace BALL
 
 		void Scene::processRotateModeMouseEvents_(QMouseEvent* e)
 		{
+			if (x_window_pos_old_ == e->x() &&
+					y_window_pos_old_ == e->y())
+			{
+				return;
+			}
+
 			if(current_mode_ != ROTATE__MODE) return;
 
 			switch (e->state())
@@ -1594,15 +1598,12 @@ namespace BALL
 				switch (e->state())
 				{
 					case (Qt::LeftButton | Qt::ShiftButton):
+					case Qt::RightButton:
 						deselectionReleased_();
 						break;
 
 					case Qt::LeftButton:
 						selectionReleased_();
-						break;
-
-					case Qt::RightButton:
-						deselectionReleased_();
 						break;
 
 					default:
