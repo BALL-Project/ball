@@ -1,28 +1,28 @@
-// $Id: pPCurve.C,v 1.1 2000/07/13 11:48:43 anker Exp $
+// $Id: pPCurve.C,v 1.2 2000/07/13 11:56:43 anker Exp $
 
-#include "spline.h"
+#include <BALL/MATHS/pPCurve.h>
 
 using namespace std;
 
 namespace BALL
 {
 
-	Spline::Spline()
+	PPCurve::PPCurve()
 		:	valid_(false)
 	{
 	}
 
-	Spline::Spline(const Spline& spline) 
-		: degree_(spline.degree_),
-			number_of_intervals_(spline.number_of_intervals_),
-			intervals_(spline.intervals_),
-			coefficients_(spline.coefficients_),
-			valid_(spline.valid_)
+	PPCurve::PPCurve(const PPCurve& ppcurve) 
+		: degree_(ppcurve.degree_),
+			number_of_intervals_(ppcurve.number_of_intervals_),
+			intervals_(ppcurve.intervals_),
+			coefficients_(ppcurve.coefficients_),
+			valid_(ppcurve.valid_)
 	{
 	}
 
 	/* BAUSTELLE: this constructor doesn't check anything!!! */
-	Spline::Spline(Size degree, Size number_of_intervals, 
+	PPCurve::PPCurve(Size degree, Size number_of_intervals, 
 			vector<float>& intervals, vector< vector<float> >& coefficients)
 		: degree_(degree),
 			number_of_intervals_(number_of_intervals),
@@ -32,12 +32,12 @@ namespace BALL
 	{
 	}
 
-	Spline::~Spline()
+	PPCurve::~PPCurve()
 	{
 		valid_ = false;
 	}
 
-	void Spline::clear()
+	void PPCurve::clear()
 	{
 		degree_ = 0;
 		number_of_intervals_ = 0;
@@ -46,52 +46,52 @@ namespace BALL
 		valid_ = true;
 	}
 
-	void Spline::destroy()
+	void PPCurve::destroy()
 	{
 		clear();
 	}
 
-	void Spline::setDegree(Size degree)
+	void PPCurve::setDegree(Size degree)
 	{
 		degree_ = degree;
 	}
 
-	Size Spline::getDegree() const
+	Size PPCurve::getDegree() const
 	{
 		return degree_;
 	}
 
-	void Spline::setIntervals(vector<float>& intervals)
+	void PPCurve::setIntervals(vector<float>& intervals)
 	{
 		intervals_ = intervals;
 	}
 
-	void Spline::setIntervals(const vector<float>& intervals)
+	void PPCurve::setIntervals(const vector<float>& intervals)
 	{
 		intervals_ = intervals;
 	}
 
-	vector<float> Spline::getIntervals() const
+	vector<float> PPCurve::getIntervals() const
 	{
 		return intervals_;
 	}
 
-	void Spline::setCoefficients(vector< vector<float> >& coefficients)
+	void PPCurve::setCoefficients(vector< vector<float> >& coefficients)
 	{
 		coefficients_ = coefficients;
 	}
 
-	void Spline::setCoefficients(const vector< vector<float> >& coefficients)
+	void PPCurve::setCoefficients(const vector< vector<float> >& coefficients)
 	{
 		coefficients_ = coefficients;
 	}
 
-	vector< vector<float> > Spline::getCoefficients() const
+	vector< vector<float> > PPCurve::getCoefficients() const
 	{
 		return coefficients_;
 	}
 
-	void Spline::checkValidity()
+	void PPCurve::checkValidity()
 	{
 		if (coefficients_.size() == number_of_intervals_ + 2) 
 		{
@@ -113,7 +113,7 @@ namespace BALL
 		valid_ = false;
 	}
 
-	float Spline::eval(float x)
+	float PPCurve::eval(float x)
 	{
 		for (Size k = 0; k < intervals_.size(); k++)
 		{
@@ -125,7 +125,7 @@ namespace BALL
 		return sum(x, intervals_.size());
 	}
 
-	float Spline::sum(float x, Size index)
+	float PPCurve::sum(float x, Size index)
 	{
 		float val = 0.0;
 		vector<float> coef;
