@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularFileDialog.C,v 1.14 2003/03/20 16:26:44 anhi Exp $
+// $Id: molecularFileDialog.C,v 1.15 2003/03/20 16:27:39 anhi Exp $
 
 #include <BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h>
 
@@ -173,14 +173,15 @@ namespace BALL
 			{
 				result = writeHINFile(filename, system);
 			}
-			else if (filter.hasSubstring("MOL"))
-			{
-				result = writeMOLFile(filename, system);
-			}
 			else if (filter.hasSubstring("MOL2"))
 			{
 				result = writeMOL2File(filename, system);
 			}
+			else if (filter.hasSubstring("MOL"))
+			{
+				result = writeMOLFile(filename, system);
+			}
+			
 
 			if (!result) 
 			{
