@@ -1,4 +1,4 @@
-// $Id: regExp.h,v 1.8 2000/10/05 08:27:56 oliver Exp $
+// $Id: regExp.h,v 1.9 2000/10/20 16:29:42 oliver Exp $
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #define BALL_DATATYPE_REGEXP_H
@@ -154,13 +154,6 @@ namespace BALL
 	
 		/**	
 		*/
-		static bool find
-			(const char* text, const char* pattern,
-			 const char** found_substring_from = 0,
-			 const char** found_substring_to = 0,
-			 int compile_flags = 0 | REG_EXTENDED,
-			 int execute_flags = 0);
-			
 		/**	
 		*/
 		bool find
@@ -170,27 +163,9 @@ namespace BALL
 		/**	
 		*/
 		bool find
-			(const String& text, Substring found_subexpression[],
-			 Size number_of_subexpressions, Index from = 0, int execute_flags = 0) const;
-			
-		/**	
-		*/
-		bool find
-			(const Substring& text, Substring& found,
+			(const String& text, vector<Substring>& subexpressions,
 			 Index from = 0, int execute_flags = 0) const;
-			
-		/**	
-		*/
-		bool find
-			(const Substring& text, Substring found_subexpressions[],
-			 Size number_of_subexpressions, Index from = 0, int execute_flags = 0) const;
-			
-		/**	
-		*/
-		bool find
-			(const char* text, const char** found_substrings_from = 0,
-			 const char** found_substring_to = 0, int execute_flags = 0) const;
-			
+						
 		/**	@name	Predicates
 		*/
 		//@{
