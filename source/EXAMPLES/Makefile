@@ -1,5 +1,5 @@
 
-EXECUTABLES=proteinMapper PDB2discover energy
+EXECUTABLES=proteinMapper PDB2discover amberEnergy
 
 all:	$(EXECUTABLES)
 
@@ -17,6 +17,6 @@ proteinMapper:	proteinMapper.o
 PDB2discover:	PDB2discover.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
-energy:	energy.o 
+amberEnergy:	amberEnergy.o 
 	$(CXX)	$(LDFLAGS) -o $@ $@.o $(LIBS)
 
