@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceFieldComponent.C,v 1.11 2003/08/26 09:17:52 oliver Exp $
+// $Id: forceFieldComponent.C,v 1.12 2004/12/27 17:06:15 amoll Exp $
 //
 
 
@@ -44,12 +44,14 @@ namespace BALL
 
 	// setup
 	bool ForceFieldComponent::setup()
+		throw(Exception::TooManyErrors)
 	{
 		return true;
 	}
 
 	// update pair lists - empty!
 	void update()
+		throw(Exception::TooManyErrors)
 	{
 	}
 
@@ -92,6 +94,7 @@ namespace BALL
 	}
 
 	void ForceFieldComponent::update()
+		throw(Exception::TooManyErrors)
 	{
 	}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmStretch.h,v 1.16 2004/12/22 16:01:55 amoll Exp $ 
+// $Id: charmmStretch.h,v 1.17 2004/12/27 17:06:31 amoll Exp $ 
 //
 
 // Molecular Mechanics: Charmm force field, bond stretch component
@@ -66,7 +66,7 @@ namespace BALL
 		/**	Setup method.
 		*/
 		virtual bool setup()
-			throw(ForceField::TooManyErrors);
+			throw(Exception::TooManyErrors);
 
 		//@}
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmm.h,v 1.15 2004/02/19 18:46:26 amoll Exp $
+// $Id: charmm.h,v 1.16 2004/12/27 17:06:31 amoll Exp $
 //
 
 // Molecular Mechanics: CHARMM force field class
@@ -234,7 +234,8 @@ namespace BALL
 
 		/**	Force field specific setup
 		*/
-		virtual bool specificSetup();
+		virtual bool specificSetup()
+			throw(Exception::TooManyErrors);
 
 		//@}
 		/**	@name	Accessors specific to the CHARMM force field

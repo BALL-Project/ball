@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: charmmTorsion.h,v 1.18 2004/12/22 16:01:55 amoll Exp $
+// $Id: charmmTorsion.h,v 1.19 2004/12/27 17:06:32 amoll Exp $
 //
 
 // Molecular Mechanics: CHARMM force field, proper torsion component
@@ -111,7 +111,8 @@ namespace BALL
 
 		/**	Setup method.
 		*/
-		virtual bool setup();
+		virtual bool setup()
+			throw(Exception::TooManyErrors);
 
 		//@}
 		/**	@name	Accessors	

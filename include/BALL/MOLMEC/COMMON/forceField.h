@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.h,v 1.31 2004/12/22 16:01:57 amoll Exp $
+// $Id: forceField.h,v 1.32 2004/12/27 17:06:32 amoll Exp $
 //
 
 #ifndef BALL_MOLMEC_COMMON_FORCEFIELD_H
@@ -88,14 +88,6 @@ namespace BALL
 
 		friend class ForceFieldComponent;
 
-		/// A Special Exception, if too many errors are encountered
-		class TooManyErrors : public Exception::GeneralException
-		{
-			public:
-				///
-				TooManyErrors(const char* file, int line);
-		};
-
 		/**	@name	Type Definitions
 		*/
 		//@{
@@ -181,7 +173,8 @@ namespace BALL
 		/**	Force field specific setup.
 				This method is called by setup.
 		*/
-		virtual bool specificSetup();
+		virtual bool specificSetup()
+			throw(Exception::TooManyErrors);
 
 		/** Set the number of atoms, for which the setup of the forcefield can
 		    fail, until the setup() methods aborts and return false.
@@ -346,7 +339,7 @@ namespace BALL
 				each component in the force field.
 		*/
 		virtual void update()
-			throw(ForceField::TooManyErrors);
+			throw(Exception::TooManyErrors);
 
 		/** Get the current results in String form
 		 		(Generic function to be overloaded in derived classes.)
@@ -355,7 +348,7 @@ namespace BALL
 			throw() { return "undefined";}
 
 		//_ Report an error and increase the error counter
-		std::ostream& error() throw(TooManyErrors);
+		std::ostream& error() throw(Exception::TooManyErrors);
 
 		//@}
 		/**	@name	Public Attributes

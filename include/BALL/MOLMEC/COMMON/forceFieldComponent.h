@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceFieldComponent.h,v 1.18 2003/08/26 08:04:25 oliver Exp $
+// $Id: forceFieldComponent.h,v 1.19 2004/12/27 17:06:32 amoll Exp $
 //
 
 // Molecular Mechanics: general force field component class
@@ -20,7 +20,6 @@
 #ifndef BALL_KERNEL_ATOM_H
 #	include	<BALL/KERNEL/atom.h>
 #endif
-
 
 namespace BALL 
 {
@@ -71,7 +70,8 @@ namespace BALL
 
 		/**	Setup method.
 		*/
-		virtual bool setup();
+		virtual bool setup()
+			throw(Exception::TooManyErrors);
 
 		//@}
 		/**	@name	Accessors	
@@ -127,7 +127,8 @@ namespace BALL
 				each time  \link ForceField::update ForceField::update \endlink  is called.
 				The default implementation does exactly nothing.
 		*/
-		virtual void update();
+		virtual void update()
+			throw(Exception::TooManyErrors);
 
 		protected:
 

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: forceField.C,v 1.37 2004/12/22 16:02:26 amoll Exp $
+// $Id: forceField.C,v 1.38 2004/12/27 17:06:15 amoll Exp $
 //
 
 #include <BALL/MOLMEC/COMMON/forceField.h>
@@ -229,7 +229,15 @@ namespace BALL
 		}
 
 		// force field specific parts
-		bool success = specificSetup();
+		bool success = false;
+		try
+		{
+			success = specificSetup();
+		}
+		catch(...)
+		{
+		}
+
 		if (!success) 
 		{
 			Log.error() << "Force Field specificSetup failed!" << endl;
@@ -248,11 +256,18 @@ namespace BALL
 		vector<ForceFieldComponent*>::iterator  it;
 		for (it = components_.begin(); (it != components_.end()) && success; ++it)
 		{
-			success = (*(*it)).setup();
+			success = false;
+			try
+			{
+				success = (*(*it)).setup();
+			}
+			catch(...)
+			{
+			}
+
 			if (!success) 
 			{
-				Log.error() << "Force Field Component setup of " 
-										<< (*it)->name_ <<  " failed!" << endl;
+				Log.error() << "Force Field Component setup of " << (*it)->name_ <<  " failed!" << endl;
 			}
 		}
 
@@ -533,7 +548,7 @@ namespace BALL
 	}
 
 	void ForceField::update()
-		throw(ForceField::TooManyErrors)
+		throw(Exception::TooManyErrors)
 	{
 		// check for validity of the force field
 		if (!valid_)
@@ -555,6 +570,7 @@ namespace BALL
 	
 
 	bool ForceField::specificSetup() 
+		throw(Exception::TooManyErrors)
 	{
 		return true;
 	}
@@ -646,20 +662,15 @@ namespace BALL
 		return unassigned_atoms_;
 	}
 
-	std::ostream& ForceField::error() throw(ForceField::TooManyErrors)
+	std::ostream& ForceField::error() throw(Exception::TooManyErrors)
 	{
 		number_of_errors_++;
 		if (number_of_errors_ > max_number_of_errors_)
 		{
-			throw TooManyErrors(__FILE__, __LINE__);
+			throw Exception::TooManyErrors(__FILE__, __LINE__);
 		}
 		return Log.error();
 	 } 
-
-	ForceField::TooManyErrors::TooManyErrors(const char* file, int line)
-		: Exception::GeneralException(file, line)
-	{
-	}
 
 # ifdef BALL_NO_INLINE_FUNCTIONS
 #   include <BALL/MOLMEC/COMMON/forceField.iC>
