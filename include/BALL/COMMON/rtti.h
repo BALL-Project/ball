@@ -1,4 +1,4 @@
-// $Id: rtti.h,v 1.11 2001/02/05 00:25:10 amoll Exp $
+// $Id: rtti.h,v 1.12 2001/05/18 20:53:11 oliver Exp $
 
 #ifndef BALL_COMMON_RTTI_H
 #define BALL_COMMON_RTTI_H
@@ -115,6 +115,31 @@ namespace BALL
 		template <typename T>
 		const char* getStreamName()
 		{
+			// define portable names for the portable
+			// types (some platforms use Size, some unsigned int, 
+			// SUN CC even unsigned  for the Size type)
+			if ((typeid(T) == typeid(Size)) 
+					|| (typeid(T) == typeid(Position))
+					|| (typeid(T) == typeid(HashIndex))
+					|| (typeid(T) == typeid(Property))
+					|| (typeid(T) == typeid(Handle)))
+			{
+				return "BALL::Size";
+			}
+			if ((typeid(T) == typeid(Index))
+					|| (typeid(T) == typeid(ErrorCode))
+					|| (typeid(T) == typeid(Distance)))
+			{
+				return "BALL::Index";
+			}
+			if (typeid(T) == typeid(std::string))
+			{
+				return "std::string";
+			}
+			if (typeid(T) == typeid(PointerSizeInt))
+			{
+				return "BALL::PointerSizeInt";
+			}
 			static string s("");
 			static bool is_set = false;
 
