@@ -1,4 +1,4 @@
-// $Id: fragmentDB.h,v 1.12 2001/07/20 08:01:09 oliver Exp $
+// $Id: fragmentDB.h,v 1.13 2001/07/25 11:28:49 oliver Exp $
 
 #ifndef BALL_STRUCTURE_FRAGMENTDB_H
 #define BALL_STRUCTURE_FRAGMENTDB_H
@@ -98,7 +98,8 @@ namespace BALL
 			:	public Exception::GeneralException
 		{
 			public:
-			NoFragmentNode(const char* file, int line, const string& filename);
+			NoFragmentNode(const char* file, int line, const string& filename) throw();
+			~NoFragmentNode() throw() {}
 
 			protected:
 			string filename_;
