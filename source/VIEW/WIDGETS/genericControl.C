@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: genericControl.C,v 1.9 2004/02/06 16:44:05 amoll Exp $
+// $Id: genericControl.C,v 1.10 2004/02/11 12:52:38 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/genericControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -105,5 +105,11 @@ void GenericControl::onNotify(Message *message)
 
 	listview->selectAll(false);
 }
+
+void GenericControl::initializeWidget(MainControl& main_control)
+	throw()
+{
+	main_control.insertDeleteEntry();
+} 
 
 } } // namespaces

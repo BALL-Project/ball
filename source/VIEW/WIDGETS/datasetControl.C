@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: datasetControl.C,v 1.19 2004/02/05 14:45:19 amoll Exp $
+// $Id: datasetControl.C,v 1.20 2004/02/11 12:52:38 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/datasetControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -62,6 +62,7 @@ void DatasetControl::initializeWidget(MainControl& main_control)
 		main_control.insertMenuEntry(MainControl::FILE_OPEN, "3D Grid", this, SLOT(add3DGrid()), 0, -1,
 		String("Open a 3D data grid"));
 	GenericControl::initializeWidget(main_control);
+	main_control.insertDeleteEntry();
 }
 
 
@@ -78,6 +79,8 @@ void DatasetControl::checkMenu(MainControl& main_control)
 	throw()
 {
 	menuBar()->setItemEnabled(open_trajectory_id_, main_control.getSelectedSystem());
+	ItemList item_list = getSelectedItems(); 
+	if (item_list.size() > 0) main_control.enableDeleteEntry();
 }
 
 

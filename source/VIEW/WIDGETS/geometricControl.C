@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: geometricControl.C,v 1.31 2004/02/09 13:49:53 amoll Exp $
+// $Id: geometricControl.C,v 1.32 2004/02/11 12:52:38 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 #include <BALL/VIEW/KERNEL/message.h>
@@ -258,18 +258,18 @@ void GeometricControl::generateListViewItem_(Representation& rep)
 
 void GeometricControl::deleteRepresentation_()
 {
-	if (context_representation_ == 0)  return; 
-	ItemList selected = getSelectedItems();
+// 	if (context_representation_ == 0)  return; 
+ 	ItemList selected = getSelectedItems();
 	for (ItemList::Iterator it = selected.begin(); it != selected.end(); ++it)
 	{
 		Representation* rep = ((SelectableListViewItem*) *it)->getRepresentation();
-		if (context_representation_->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
+		if (rep->hasProperty(Representation::PROPERTY__IS_COORDINATE_SYSTEM))
 		{
 			SceneMessage *scene_message = new SceneMessage(SceneMessage::REMOVE_COORDINATE_SYSTEM);
 			notify_(scene_message);
 		}
 			
-		RepresentationMessage* message = new RepresentationMessage(*context_representation_, 
+		RepresentationMessage* message = new RepresentationMessage(*rep, 
 																															 RepresentationMessage::REMOVE);
 		notify_(message);
 
@@ -415,6 +415,14 @@ List<Representation*> GeometricControl::getSelection() const
 		selection.push_back(rep);
 	}
 	return selection;
+}
+
+
+void GeometricControl::checkMenu(MainControl& main_control)
+	throw()
+{
+	ItemList item_list = getSelectedItems(); 
+	if (item_list.size() > 0) main_control.enableDeleteEntry();
 }
 
 } } // namespaces

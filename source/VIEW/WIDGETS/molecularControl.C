@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: molecularControl.C,v 1.40 2004/02/10 15:51:35 amoll Exp $
+// $Id: molecularControl.C,v 1.41 2004/02/11 12:52:38 amoll Exp $
 
 #include <BALL/VIEW/WIDGETS/molecularControl.h>
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -171,8 +171,8 @@ void MolecularControl::checkMenu(MainControl& main_control)
 	// check for cut and delete slot 
 	bool list_filled = (selected_.size() != 0 && main_control.compositesAreMuteable());
 	menuBar()->setItemEnabled(cut_id_, list_filled);
-	menuBar()->setItemEnabled(delete_id_, list_filled);
 
+	if (list_filled) getMainControl()->enableDeleteEntry();
 
 	// check for copy-slot 
 	menuBar()->setItemEnabled(copy_id_, false);	
@@ -260,7 +260,7 @@ void MolecularControl::buildContextMenu(Composite& composite)
 	context_menu_.insertItem("Cut", this, SLOT(cut()), 0, OBJECT__CUT);
 	context_menu_.insertItem("Copy", this, SLOT(copy()), 0, OBJECT__COPY);
 	context_menu_.insertItem("Paste", this, SLOT(paste()), 0, OBJECT__PASTE);
-	context_menu_.insertItem("Paste", this, SLOT(deleteItems()), 0, OBJECT__DELETE);
+	context_menu_.insertItem("Delete", this, SLOT(deleteCurrentItems()), 0, OBJECT__DELETE);
 
 	context_menu_.insertItem("Rename", this, SLOT(rename()), 0, RENAME);
 	context_menu_.setItemEnabled(RENAME, composites_muteable && composites_muteable && one_item);
@@ -519,7 +519,7 @@ void MolecularControl::initializeWidget(MainControl& main_control)
 	cut_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Cu&t", this, SLOT(cut()), CTRL+Key_X);
 	copy_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Copy", this, SLOT(copy()), CTRL+Key_C);
 	paste_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Paste", this, SLOT(paste()), CTRL+Key_V);
-	delete_id_ = main_control.insertMenuEntry(MainControl::EDIT, "&Delete", this, SLOT(deleteCurrentItems()), 0);
+	main_control.insertDeleteEntry();
 	main_control.insertPopupMenuSeparator(MainControl::EDIT);
 	hint = "Clear the items in the clipboard";
 	clipboard_id_ = main_control.insertMenuEntry(MainControl::EDIT, "Clear Clipboard", this, 
