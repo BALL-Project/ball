@@ -1,4 +1,4 @@
-// $Id: baseModelConnector.C,v 1.6 2001/06/18 17:28:45 oliver Exp $
+// $Id: baseModelConnector.C,v 1.7 2001/07/15 14:52:25 oliver Exp $
 
 #include <BALL/MOLVIEW/FUNCTOR/baseModelConnector.h>
 
@@ -20,7 +20,7 @@ namespace BALL
 		}
 
 		BaseModelConnector::BaseModelConnector
-			(const BaseModelConnector& connector, bool deep)
+			(const BaseModelConnector& connector, bool /* deep */)
 			throw()
 			:	Visitor<Composite>(connector),
 				PropertyManager(connector),
@@ -55,8 +55,7 @@ namespace BALL
 		}
 
 		void BaseModelConnector::set
-			(const BaseModelConnector& connector,
-			 bool deep)
+			(const BaseModelConnector& connector, bool /* deep */)
 			throw()
 		{
 			PropertyManager::set(connector);
