@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: regularData3D.h,v 1.11 2002/12/12 09:48:44 oliver Exp $ 
+// $Id: regularData3D.h,v 1.12 2002/12/18 11:20:12 anker Exp $ 
 
 #ifndef BALL_DATATYPE_REGULARDATA3D_H
 #define BALL_DATATYPE_REGULARDATA3D_H
@@ -1065,7 +1065,7 @@ namespace BALL
 	GridDataType* TRegularData3D<GridDataType>::getData(Position position) 
 		throw(Exception::OutOfGrid)
 	{
-		if (position > number_of_grid_points_)
+		if (position >= number_of_grid_points_)
 		{
 			throw Exception::OutOfGrid(__FILE__, __LINE__);
 		} 
@@ -1076,10 +1076,6 @@ namespace BALL
 	GridDataType& TRegularData3D<GridDataType>::operator [] (Position position)
 		throw(Exception::OutOfGrid)
 	{
-		if (position > number_of_grid_points_)
-		{
-			throw Exception::OutOfGrid(__FILE__, __LINE__);
-		} 
 		return *(getData(position));
 	}
 
