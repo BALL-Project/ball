@@ -1,4 +1,4 @@
-// $Id: NMRSpectrum.C,v 1.5 2000/09/21 07:43:42 oliver Exp $
+// $Id: NMRSpectrum.C,v 1.6 2000/09/22 13:18:04 amoll Exp $
 
 #include<BALL/NMR/NMRSpectrum.h>
 #include<BALL/FORMAT/PDBFile.h>
@@ -20,7 +20,7 @@
    auf das neue Modulzu beschraenken.
    
 
-   !!! korrigieren : Fehler wenn nur ein peak vorhanden : Schrittweite = 0 und 
+   !!! korrigieren : Fehler wenn nur ein peak vorhanden : stepSize = 0 und 
 	Schleife terminiert nicht  bei Ausgabe in file
 */
 
@@ -39,7 +39,8 @@ namespace BALL
 	name_shift;
 
 	NMRSpectrum::NMRSpectrum()
-		:	density_(100)
+		:	density_(100),
+			is_sorted_(false)
 	{
 	}
 
@@ -77,13 +78,15 @@ namespace BALL
 	void NMRSpectrum::setPeakList(const list<Peak1D>& peak_list)
 	{
 		spectrum_ = peak_list;
+		is_sorted_ = false;
 	}
 
 	float NMRSpectrum::getSpectrumMin() const
 	{
-		// BAUSTELLE: additional member should store information
-		// whether the spectrum is sorted. If it is sorted,
-		// this can be done in O(1)!
+		if (is_sorted_)
+		{
+			return spectrum_.begin()->getValue();
+		}
 
 		float min = Limits<float>::max();
 		list<Peak1D>::const_iterator it = spectrum_.begin();
@@ -100,9 +103,10 @@ namespace BALL
 
 	float NMRSpectrum::getSpectrumMax() const
 	{
-		// BAUSTELLE: additional member should store information
-		// whether the spectrum is sorted. If it is sorted,
-		// this can be done in O(1)!
+		if (is_sorted_)
+		{
+			return spectrum_.rbegin()->getValue();
+		}
 
 		float max = Limits<float>::min();
 		list<Peak1D>::const_iterator it = spectrum_.begin();
@@ -117,9 +121,10 @@ namespace BALL
 		return max;
 	}
 
-	void NMRSpectrum::sortSpectrum ()
+	void NMRSpectrum::sortSpectrum()
 	{
 		spectrum_.sort();
+		is_sorted_ = true;
 	}
 
 	void NMRSpectrum::setDensity(Size density)
@@ -134,11 +139,10 @@ namespace BALL
 
 	void NMRSpectrum::plotPeaks(const String& filename) const
 	{
-		list<Peak1D>::const_iterator peak_iter;
-
 		ofstream outfile(filename.c_str (), ios::out);
 
-		for (peak_iter = spectrum_.begin(); peak_iter != spectrum_.end(); ++peak_iter)
+		list<Peak1D>::const_iterator peak_iter = spectrum_.begin();
+		for (; peak_iter != spectrum_.end(); ++peak_iter)
 		{
 			outfile << peak_iter->getValue() << " " << peak_iter->getHeight() << endl;
 		}
@@ -147,20 +151,15 @@ namespace BALL
 	void NMRSpectrum::writePeaks(const String& filename) const
 	{
 		float shift;
-		String atom_name;
-		AtomIterator atom_iter;
-		FragmentIterator fragment_iter;
-		MoleculeIterator molecule_iter;
-
 		ofstream outfile (filename.c_str(), ios::out);
 
-		for (atom_iter = system_->beginAtom(); atom_iter != system_->endAtom(); ++atom_iter)
+		AtomIterator atom_iter = system_->beginAtom();
+		for (; atom_iter != system_->endAtom(); ++atom_iter)
 		{
-			atom_name = (*atom_iter).getFullName();
 			shift = (*atom_iter).getProperty ("chemical_shift").getFloat();
 			if (shift != 0 && shift < 100)
 			{
-				outfile << atom_name << " " << shift << endl;
+				outfile << (*atom_iter).getFullName() << " " << shift << endl;
 			}
 		}
 		outfile << "END" << " " << 0.0 << endl;
@@ -170,38 +169,32 @@ namespace BALL
 	{
 		// berechnet die peak Daten und schreibt sie in das file : filename
 
-		float omega, ts, gs, height, width, ppm;
-
 	  list<Peak1D>::const_iterator peak_iter1;
 	  list<Peak1D>::const_iterator peak_iter2;
 
 		ofstream outfile(filename.c_str(), ios::out);
 
-		// neu jetzt wird eine  Dichteverteilung berechnet :
+		// Berechnung der Dichteverteilung:
 
-		float diff, min, max, schrittweite, x, y, weite, value, value_old;
+		float omega, ts, gs;
 
-	  min = getSpectrumMin();
-	  max = getSpectrumMax();
-	  diff = max - min;
-	  schrittweite = diff / density_;
-	  y = schrittweite;
-	  weite = schrittweite;
+	  const float& min = getSpectrumMin();
+	  const float& max = getSpectrumMax();
 
+	  const float stepSize = max - min / density_;
+	  float y = stepSize;
+	  float value = peak_iter1->getValue();
+	  float value_old = value;
 	  peak_iter1 = spectrum_.begin();
-	  value = peak_iter1->getValue();
-	  value_old = value;
 
-		for (x = min; x <= max; x += y)
+		for (float x = min; x <= max; x += y)
 		{
 			if (x < value)
 			{
-				//cout << "     x<=";
 				omega = x;
 			}
 			else
 			{
-				//cout << "    x>=";
 				omega = value;
 				++peak_iter1;
 				value_old = value;
@@ -209,46 +202,39 @@ namespace BALL
 				x -= y;
 			}
 
-			ts = 0;
 			gs = 0;
 			for (peak_iter2 = spectrum_.begin(); peak_iter2 != spectrum_.end(); ++peak_iter2)
 			{
-				height = peak_iter2->getHeight();
-				width = peak_iter2->getWidth();
-				ppm = peak_iter2->getValue();
-				ts =
-					height / (1 +
-										((ppm * 2 * Constants::PI * 1e6 - omega * 2 * Constants::PI * 1e6) *
-										 (ppm * 2 * Constants::PI * 1e6 - omega * 2 * Constants::PI * 1e6)) * 4 / width);
+				const float number = peak_iter2->getValue() * 2 * Constants::PI * 1e6 - omega * 2 * Constants::PI * 1e6;
+
+				ts =	peak_iter2->getHeight() / (1 +  (number * number * 4 / peak_iter2->getWidth()));
 				gs += ts;
 			}
-			outfile << omega << " " << gs << endl;	//<<" "<< y << " "<<(x-value)<<" "<<weite<<endl;
-			if ((((x - value) < weite) && ((x - value) > -weite)) || (((x - value_old) < weite) && ((x - value_old) > -weite)))
+			outfile << omega << " " << gs << endl;
+			if (((x - value)     < stepSize && (x - value)     > -stepSize) || 
+					((x - value_old) < stepSize && (x - value_old) > -stepSize)    )
 			{
-				y = schrittweite / 10;
+				y = stepSize / 10;
 			}
 			else
 			{
-				y = schrittweite;
+				y = stepSize;
 			}
 		}
 	}
 
-	void makeDifference (float diff, String a, String b, String out)
+	void makeDifference (const float& diff, const String &a, const String& b, const String& out)
 	{
-
-
-		list<name_shift> liste_b;
-		list<name_shift>::iterator iter;
+		std::list<name_shift>						liste_b;
+		std::list<name_shift>::iterator iter;
 
 		String atom_name;
 		float shift;
-		int found = 0;
 		name_shift *eintrag;
 
 		ifstream infile_b (b.c_str(), ios::in);
 
-		do
+		while (atom_name != "END");
 		{
 			infile_b >> atom_name;
 			infile_b >> shift;
@@ -257,20 +243,24 @@ namespace BALL
 			eintrag->shift = shift;
 			liste_b.push_back (*eintrag);
 		}
-		while (atom_name != "END");
 
 		ifstream infile_a (a.c_str(), ios::in);
 		ofstream outfile (out.c_str(), ios::out);
 
+		bool found;
+
 		do
 		{
-			found = 0;
+			found = false;
 			infile_a >> atom_name;
 			infile_a >> shift;
 			for (iter = liste_b.begin(); iter != liste_b.end(); ++iter)
 			{
 				if ((atom_name == (*iter).name) && ((shift - (*iter).shift < diff) && (shift - (*iter).shift > -diff)))
-					found = 1;
+				{
+					found = true;
+					break;
+				}
 			}
 			if (!found)
 			{
@@ -280,69 +270,57 @@ namespace BALL
 		while (atom_name != "END");
 
 		outfile << "END" << " " << 0.0 << endl;
-
 	}
 
-	void setDifference (NMRSpectrum * a, NMRSpectrum * b, String outpdb, String out)
+	void setDifference (NMRSpectrum* a, NMRSpectrum* b, const String& outpdb, const String& out)
 	{
-
-		PDBFile outfile;
-
-		float shift_a, shift_b, difference, occ;
-
-		const System* system_a;
-		const System* system_b;
-
-	  system_a = a->getSystem();
-	  system_b = b->getSystem();
-
-		AtomIterator atom_iter_a, atom_iter_b;
-
-		PDBAtom *patom_a;
-		Atom *atom_b;
+		const System& system_a = *a->getSystem();
+		const System& system_b = *b->getSystem();
 
 	  StringHashMap<Atom*> table_b;
-		String name;
+
+		AtomIterator atom_iter = system_b.beginAtom();
+		for (; +atom_iter; ++atom_iter)
+		{
+			if ((*atom_iter).getElement() == PTE[Element::H])
+			{
+				table_b[(*atom_iter).getFullName()] = &(*atom_iter);
+			}
+		}
+
+		PDBAtom*	patom_a;
+		Atom*			atom_b;
 
 		ofstream dfile(out.c_str(), ios::out);
 
-		for (atom_iter_b = system_b->beginAtom(); +atom_iter_b; ++atom_iter_b)
-		{
-			if ((*atom_iter_b).getElement() == PTE[Element::H])
-			{
-				name = (*atom_iter_b).getFullName();
-				table_b[name] = &(*atom_iter_b);
-			}
-		}
+		float shift_a, shift_b, difference;
 
-
-		for (atom_iter_a = system_a->beginAtom(); +atom_iter_a; ++atom_iter_a)
+		atom_iter = system_a.beginAtom();
+		for (; +atom_iter; ++atom_iter)
 		{
-			patom_a = RTTI::castTo < PDBAtom > ((*atom_iter_a));
-			patom_a->setOccupancy (0.5);
-			if ((*atom_iter_a).getElement() == PTE[Element::H])
+			patom_a = RTTI::castTo<PDBAtom>((*atom_iter));
+			patom_a->setOccupancy(0.5);
+			if ((*atom_iter).getElement() == PTE[Element::H] &&
+					 table_b.has((*atom_iter).getFullName()))
 			{
-				if (table_b.has ((*atom_iter_a).getFullName()))
+				atom_b = table_b[(*atom_iter).getFullName()];
+				shift_a = patom_a->getProperty ("chemical_shift").getFloat();
+				shift_b = atom_b->getProperty ("chemical_shift").getFloat();
+
+				difference = shift_a - shift_b;
+				if (shift_a > 100)
 				{
-					atom_b = table_b[(*atom_iter_a).getFullName()];
-					shift_a = patom_a->getProperty ("chemical_shift").getFloat();
-					shift_b = atom_b->getProperty ("chemical_shift").getFloat();
-					difference = shift_a - shift_b;
-					if (shift_a > 100)
-						difference = 0.5;
-					occ = patom_a->getOccupancy();
-					occ += difference;
-					patom_a->setOccupancy (occ);
-					dfile << (*atom_iter_a).getFullName() << " " << shift_a << " " << difference << endl;
+					difference = 0.5;
 				}
+				patom_a->setOccupancy(patom_a->getOccupancy() + difference);
+				dfile << (*atom_iter).getFullName() << " " << shift_a << " " << difference << endl;
 			}
 		}
 
-		outfile.open (outpdb, ios::out);
-		outfile << (*system_a);
+		PDBFile outfile(outpdb, ios::out);
+		//outfile.open;
+		outfile << system_a;
 		outfile.close();
 	}
-
-
 
 }	// namespace Ball
