@@ -34,6 +34,8 @@ String getModelName(ModelType type)
 			return "H-Bonds";
 		case MODEL_LABEL:
 			return "Label";
+		case MODEL_CLIPPING_PLANE:
+			return "Clipping Plane";
 
 		case MODEL_UNKNOWN:
 			return "Unknown";

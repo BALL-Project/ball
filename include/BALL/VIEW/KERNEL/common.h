@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: common.h,v 1.20 2004/05/27 19:49:49 oliver Exp $
+// $Id: common.h,v 1.21 2004/06/13 18:30:31 amoll Exp $
 //
 
 #ifndef BALL_VIEW_KERNEL_COMMON_H
@@ -175,7 +175,10 @@ namespace BALL
 			MODEL_LABEL,
 
 			/// defines the property for the model: contour surface
-			MODEL_CONTOUR_SURFACE
+			MODEL_CONTOUR_SURFACE,
+
+			/// Clipping Planes, e.g. in OpenGL
+			MODEL_CLIPPING_PLANE
 		};
 
 
