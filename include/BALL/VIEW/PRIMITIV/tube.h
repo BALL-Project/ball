@@ -1,4 +1,4 @@
-// $Id: tube.h,v 1.11 2001/07/16 14:49:33 amoll Exp $
+// $Id: tube.h,v 1.11.4.1 2002/12/07 02:17:08 amoll Exp $
 
 #ifndef BALL_VIEW_PRIMITIV_TUBE_H
 #define BALL_VIEW_PRIMITIV_TUBE_H
@@ -19,13 +19,8 @@
 #	include <BALL/VIEW/KERNEL/vertex2.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_RADIUS_H
-#	include <BALL/VIEW/KERNEL/radius.h>
-#endif
-
 namespace BALL
 {
-	
 	namespace VIEW
 	{
 
@@ -46,7 +41,6 @@ namespace BALL
 		*/
 		class Tube
 			: public GeometricObject,
-				public Radius,
 			  public ColorExtension,
    			public Vertex2
 		{
@@ -267,6 +261,16 @@ namespace BALL
 			virtual void write(std::ostream& s) const
 				throw();
 
+			/**	Get the radius.
+			 */
+			Real getRadius() const
+				throw();
+
+			/** Set the radius.
+			 */
+			void setRadius(Real radius)
+				throw();
+
 			//@}
 				
 			protected:
@@ -279,11 +283,15 @@ namespace BALL
 			*/
 			virtual bool extract()
 				throw();
+
+			private:
+
+			Real radius_;
 		};
 
-#		ifndef BALL_NO_INLINE_FUNCTIONS
-#			include <BALL/VIEW/PRIMITIV/tube.iC>
-#		endif
+#	ifndef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/VIEW/PRIMITIV/tube.iC>
+#	endif
 		
 	} // namespace VIEW
 	 

@@ -1,4 +1,4 @@
-// $Id: sphere.C,v 1.9.4.1 2002/10/18 14:48:00 amoll Exp $
+// $Id: sphere.C,v 1.9.4.2 2002/12/07 02:19:53 amoll Exp $
 
 #include <BALL/VIEW/PRIMITIV/sphere.h>
 
@@ -15,7 +15,7 @@ namespace BALL
 			:	GeometricObject(),
 				ColorExtension(),
 				Vertex(),
-				Radius()
+				radius_(1)
 		{
 		}
 
@@ -24,7 +24,7 @@ namespace BALL
 			:	GeometricObject(sphere, deep),
 				ColorExtension(sphere),
 				Vertex(sphere),
-				Radius(sphere)
+				radius_(sphere.radius_)
 		{
 		}
 
@@ -33,7 +33,7 @@ namespace BALL
 			:	GeometricObject(geometric_object),
 				ColorExtension(),
 				Vertex(),
-				Radius()
+				radius_(1)
 		{
 		}
 
@@ -41,8 +41,8 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				cout << "Destructing object " << (void *)this 
-					<< " of class " << RTTI::getName<Sphere>() << endl;
+				Log.erro() << "Destructing object " << (void *)this 
+									 << " of class " << RTTI::getName<Sphere>() << endl;
 			#endif 
 
 			destroy();
@@ -54,7 +54,7 @@ namespace BALL
 			GeometricObject::clear();
 			ColorExtension::clear();
 			Vertex::clear();
-			Radius::clear();
+			radius_ = 1;
 		}
 
 		void Sphere::destroy()
@@ -63,7 +63,6 @@ namespace BALL
 			GeometricObject::destroy();
 			ColorExtension::destroy();
 			Vertex::destroy();
-			Radius::destroy();
 		}
 
 		void Sphere::set(const Sphere& sphere, bool deep)
@@ -72,7 +71,7 @@ namespace BALL
 			GeometricObject::set(sphere, deep);
 			ColorExtension::set(sphere);
 			Vertex::set(sphere);
-			Radius::set(sphere);
+			radius_ = sphere.radius_;
 		}
 
 		const Sphere& Sphere::operator = (const Sphere& sphere)
@@ -94,7 +93,9 @@ namespace BALL
 			GeometricObject::swap(sphere);
 			ColorExtension::swap(sphere);
 			Vertex::swap(sphere);
-			Radius::swap(sphere);
+			Real temp = sphere.radius_;
+			sphere.radius_ = radius_;
+			radius_ = temp;
 		}
 
 		bool Sphere::isValid() const
@@ -115,7 +116,7 @@ namespace BALL
 			GeometricObject::dump(s, depth + 1);
 			ColorExtension::dump(s, depth + 1);
 			Vertex::dump(s, depth + 1);
-			Radius::dump(s, depth + 1);
+			s << "radius : " << radius_ << endl;
 
 			BALL_DUMP_STREAM_SUFFIX(s);
 		}
@@ -138,6 +139,10 @@ namespace BALL
 			return true;  
 		}
 
+#	ifdef BALL_NO_INLINE_FUNCTIONS
+#		include <BALL/VIEW/PRIMITIV/sphere.iC>
+#	endif
+		
 	} // namespace VIEW
 
 } // namespace BALL

@@ -1,4 +1,4 @@
-// $Id: twoColoredTube.h,v 1.8.4.1 2002/10/19 13:49:25 amoll Exp $
+// $Id: twoColoredTube.h,v 1.8.4.2 2002/12/07 02:15:16 amoll Exp $
 
 #ifndef BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
 #define BALL_MOLVIEW_PRIMITIV_TWOCOLOREDTUBE_H
@@ -19,19 +19,12 @@
 #	include <BALL/VIEW/KERNEL/vertex2.h>
 #endif
 
-#ifndef BALL_VIEW_KERNEL_RADIUS_H
-#	include <BALL/VIEW/KERNEL/radius.h>
-#endif
-
-
 namespace BALL
 {
-	
 	namespace MOLVIEW
 	{
 		using VIEW::GeometricObject;
 		using VIEW::ColorExtension2;
-		using VIEW::Radius;
 		using VIEW::Vertex2;
 
 		/** TwoColoredTube class.
@@ -57,7 +50,6 @@ namespace BALL
 		class TwoColoredTube
 			: public GeometricObject,
 			  public ColorExtension2,
-				public Radius,
    			public Vertex2
 		{
 			public:
@@ -79,7 +71,6 @@ namespace BALL
 					@return      TwoColoredTube new constructed twoColoredTube
 					@see         GeometricObject
 					@see         ColorExtension2
-					@see         Radius
 					@see         Vertex2
 			*/
 			TwoColoredTube()
@@ -93,7 +84,6 @@ namespace BALL
 					@return      TwoColoredTube new constructed twoColoredTube copied from {\em two_colored_tube}
 					@see         GeometricObject
 					@see         ColorExtension2
-					@see         Radius
 					@see         Vertex2
 			*/
 			TwoColoredTube(const TwoColoredTube& two_colored_tube, bool deep = true)
@@ -106,7 +96,6 @@ namespace BALL
 					@return      TwoColoredTube new constructed twoColoredTube initialized from {\em geometric_object}
 					@see         GeometricObject
 					@see         ColorExtension2
-					@see         Radius
 					@see         Vertex2
 			*/
 			TwoColoredTube (const GeometricObject& geometric_object)
@@ -290,6 +279,16 @@ namespace BALL
 			virtual void write(std::ostream& s) const
 				throw();
 
+			/**	Get the radius.
+			 */
+			Real getRadius() const
+				throw();
+
+			/** Set the radius.
+			 */
+			void setRadius(Real radius)
+				throw();
+
 			//@}
 			
 			protected:
@@ -302,6 +301,10 @@ namespace BALL
 			*/
 			virtual bool extract()
 				throw();
+
+			private:
+
+			Real radius_;
 		};
 
 	#ifndef BALL_NO_INLINE_FUNCTIONS
