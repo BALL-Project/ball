@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: representation.h,v 1.12 2003/12/09 14:36:56 amoll Exp $
+// $Id: representation.h,v 1.13 2003/12/15 18:13:08 amoll Exp $
 
 #ifndef  BALL_VIEW_KERNEL_REPRESENTATION_H
 #define  BALL_VIEW_KERNEL_REPRESENTATION_H
@@ -238,6 +238,14 @@ namespace BALL
 			void update(bool rebuild)
 				throw();
 
+			/** Get the time when the model was builded
+			 		This is needed for updating the Representation, after
+					the vector of atom attributes was modified.
+					@see Atom::getAttributesModificationTime
+			*/
+			const PreciseTime& getModelBuildTime() const
+				throw() { return model_build_time_;}
+
 			///
 			void dump(std::ostream& s, Size depth) const
 				throw();
@@ -295,6 +303,7 @@ namespace BALL
 			//_
 			CompositeSet 				composites_;
 
+			PreciseTime 				model_build_time_;
 		};
 
 	} // namespace VIEW
