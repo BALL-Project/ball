@@ -1,4 +1,4 @@
-// $Id: Molecule_test.C,v 1.8 2000/12/19 23:59:21 amoll Exp $
+// $Id: Molecule_test.C,v 1.9 2001/06/26 19:34:56 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 #include <BALL/KERNEL/system.h>
 ///////////////////////////
 
-START_TEST(class_name, "$Id: Molecule_test.C,v 1.8 2000/12/19 23:59:21 amoll Exp $")
+START_TEST(class_name, "$Id: Molecule_test.C,v 1.9 2001/06/26 19:34:56 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -333,15 +333,7 @@ CHECK(Molecule::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	TEST_FILE(filename.c_str(), "data/Molecule_test.txt", true)
 RESULT
 
-CHECK(read(istream&)) 
-// NotImplemented
-RESULT
-
-CHECK(write(ostream&))
-// NotImplemented
-RESULT
-
-TextPersistenceManager pm;
+extPersistenceManager pm;
 using namespace RTTI;
 pm.registerClass(getStreamName<Atom>(), Atom::createDefault);
 pm.registerClass(getStreamName<Molecule>(), Molecule::createDefault);

@@ -1,4 +1,4 @@
-// $Id: Nucleotide_test.C,v 1.8 2000/12/19 23:59:21 amoll Exp $
+// $Id: Nucleotide_test.C,v 1.9 2001/06/26 19:34:56 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 #include <BALL/KERNEL/PTE.h>
 ///////////////////////////
 
-START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.8 2000/12/19 23:59:21 amoll Exp $")
+START_TEST(Nucleotide, "$Id: Nucleotide_test.C,v 1.9 2001/06/26 19:34:56 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -390,14 +390,6 @@ CHECK(Nucleotide::dump(std::ostream& s = std::cout, Size depth = 0) const )
 	n1.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/Nucleotide_test.txt", true)
-RESULT
-
-CHECK(read(istream&)) 
-// NotImplemented
-RESULT
-
-CHECK(write(ostream&))
-// NotImplemented
 RESULT
 
 TextPersistenceManager pm;

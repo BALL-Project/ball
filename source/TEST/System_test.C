@@ -1,4 +1,4 @@
-// $Id: System_test.C,v 1.8 2001/01/21 21:26:10 amoll Exp $
+// $Id: System_test.C,v 1.9 2001/06/26 19:34:57 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/CONCEPT/textPersistenceManager.h>
 ///////////////////////////
 
-START_TEST(System, "$Id: System_test.C,v 1.8 2001/01/21 21:26:10 amoll Exp $")
+START_TEST(System, "$Id: System_test.C,v 1.9 2001/06/26 19:34:57 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -505,14 +505,6 @@ CHECK(operator !=)
 	TEST_EQUAL(c1 != c2, true)
 
 	TEST_EQUAL(c2 != c2, false)
-RESULT
-
-CHECK(read(istream&)) 
-// NotImplemented
-RESULT
-
-CHECK(write(ostream&))
-// NotImplemented
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -1,4 +1,4 @@
-// $Id: PDBAtom_test.C,v 1.3 2001/06/24 22:46:12 amoll Exp $
+// $Id: PDBAtom_test.C,v 1.4 2001/06/26 19:34:56 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -29,7 +29,7 @@ bool testEqual(const PDBAtom& a, const PDBAtom& b)
 				 a.getTemperatureFactor() == b.getTemperatureFactor();
 }
 
-START_TEST(class_name, "$Id: PDBAtom_test.C,v 1.3 2001/06/24 22:46:12 amoll Exp $")
+START_TEST(class_name, "$Id: PDBAtom_test.C,v 1.4 2001/06/26 19:34:56 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -262,29 +262,6 @@ CHECK(PDBAtom::dump(std::ostream& s = std::cout, Size depth = 0) const  throw())
 	pdba.dump(outfile);
 	outfile.close();
 	TEST_FILE(filename.c_str(), "data/PDBAtom_test_dump.txt", true)
-RESULT
-
-
-CHECK(PDBAtom::read(std::istream& s) throw())
-//BAUSTELLE not implemented
-/*
-	std::ifstream instr("data/PDBAtom_test_2.txt");
-	PDBAtom p2;
-	p2.read(instr);
-	TEST_EQUAL(testEqual(pdba, p2), true)
-*/
-RESULT
-
-
-CHECK(PDBAtom::write(std::ostream& s) const  throw())
-//BAUSTELLE not implemented
-/*
-	NEW_TMP_FILE(filename)
-	std::ofstream outstr(filename.c_str(), std::ios::out);
-	pdba.write(outstr);
-	outstr.close();
-	TEST_FILE(filename.c_str(), "data/PDBAtom_test2.txt", false)
-*/
 RESULT
 
 /////////////////////////////////////////////////////////////

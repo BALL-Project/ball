@@ -1,4 +1,4 @@
-// $Id: AtomContainer_test.C,v 1.3 2001/05/30 20:48:26 oliver Exp $
+// $Id: AtomContainer_test.C,v 1.4 2001/06/26 19:34:56 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -10,7 +10,7 @@
 
 #include <algorithm>
 
-START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.3 2001/05/30 20:48:26 oliver Exp $")
+START_TEST(AtomContainer, "$Id: AtomContainer_test.C,v 1.4 2001/06/26 19:34:56 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -746,14 +746,6 @@ CHECK(operator !=)
 	TEST_EQUAL(c1 != c2, true)
 
 	TEST_EQUAL(c2 != c2, false)
-RESULT
-
-CHECK(read(istream&)) 
-// NotImplemented
-RESULT
-
-CHECK(write(ostream&))
-// NotImplemented
 RESULT
 
 CHECK(beginAtom()/endAtom())
