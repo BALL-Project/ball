@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: HINFile_test.C,v 1.25 2003/07/14 15:56:43 amoll Exp $
+// $Id: HINFile_test.C,v 1.26 2003/08/20 07:02:35 oliver Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
@@ -13,7 +13,7 @@
 
 ///////////////////////////
 
-START_TEST(HINFile, "$Id: HINFile_test.C,v 1.25 2003/07/14 15:56:43 amoll Exp $")
+START_TEST(HINFile, "$Id: HINFile_test.C,v 1.26 2003/08/20 07:02:35 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -39,8 +39,8 @@ CHECK(float getTemperature() const)
   TEST_REAL_EQUAL(hin.getTemperature(), 0.0)
 RESULT
 
-CHECK(Box3 getPeriodicBoundary() const)
-	Box3 box3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
+CHECK(SimpleBox3 getPeriodicBoundary() const)
+	SimpleBox3 box3(0.0, 0.0, 0.0, 0.0, 0.0, 0.0);
 	TEST_EQUAL(hin.getPeriodicBoundary(), box3)
 RESULT
 
