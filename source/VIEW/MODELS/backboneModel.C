@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: backboneModel.C,v 1.17 2004/10/22 20:58:17 amoll Exp $
+// $Id: backboneModel.C,v 1.18 2004/12/20 16:23:43 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/backboneModel.h>
@@ -53,8 +53,7 @@ namespace BALL
 			throw()
 		{
 			#ifdef BALL_VIEW_DEBUG
-				Log.error() << "Destructing object " << (void *)this 
-										<< " of class " << RTTI::getName<AddBackboneModel>() << endl;
+				Log.error() << "Destructing object of class AddBackboneModel" << endl;
 			#endif 
 		}
 
@@ -63,7 +62,7 @@ namespace BALL
 		{
 			ModelProcessor::clear();
 			spline_vector_.clear();
-			spline_.clear();
+			spline_points_.clear();
 			last_parent_ = 0;
 			have_start_point_ = false;
 		}
@@ -85,9 +84,18 @@ namespace BALL
 			}
 			
 			last_parent_ = residue.getParent()->getParent();
+			collectAtoms_(residue);
+
+			return Processor::CONTINUE;
+		}
+
+		void AddBackboneModel::collectAtoms_(const AtomContainer& ai)
+			throw()
+		{
 			AtomIterator it;
-			BALL_FOREACH_ATOM(residue, it)
+			BALL_FOREACH_ATOM(*const_cast<AtomContainer*>(&ai), it)
 			{
+				const Residue& residue = *dynamic_cast<Residue*> (it->getParent());
 				// collect only CA-Atoms and CH3 atoms in ACE and NME
 				if (((it->getName().hasSubstring("CA")) ||
 				    (it->getName().hasSubstring("CH3") &&
@@ -98,19 +106,18 @@ namespace BALL
 						)) || (
 						// or we collect P atoms in nucleotides
 						residue.getName().size() == 1 &&
+						it->getName() == "P" 					&&
 						(
 						 residue.getName() == "C" ||
 						 residue.getName() == "G" ||
 						 residue.getName() == "T" ||
-						 residue.getName() == "A")) &&
-						(it->getName() == "P"))
+						 residue.getName() == "A"
+						)))
 				{
 					SplinePoint spline_point((*it).getPosition(), &*it);
 					spline_vector_.push_back(spline_point);
 				}
 			}
-
-			return Processor::CONTINUE;
 		}
 
 		void AddBackboneModel::dump(std::ostream& s, Size depth) const
@@ -134,11 +141,14 @@ namespace BALL
 			have_start_point_ = false;
 			calculateTangentialVectors_();
 			createSplinePath_();
+			buildGraphicalRepresentation_();
 			spline_vector_.clear();
+			spline_points_.clear();
+			atoms_of_spline_points_.clear();
 		}
 
 
-		// calculates to every splinepoint the tangential vector
+		// calculates for every splinepoint the tangential vector
 		void AddBackboneModel::calculateTangentialVectors_()
 		{
 			// first and last spline point have tangential vectors (0,0,0)
@@ -212,52 +222,55 @@ namespace BALL
 											 (h3 * a.getTangentialVector().z) + 
 											 (h4 * b.getTangentialVector().z));
 
-				spline_.push_back(new_vector);
+				spline_points_.push_back(new_vector);
 
-				// build the objects
-				buildGraphicalRepresentation_
-					(new_vector, ((index <= max_step/2) ? a.getAtom() : b.getAtom()));
+				atoms_of_spline_points_.push_back((index <= max_step/2) ? a.getAtom() : b.getAtom());
 			}
 		}
 
 
 		// builds a graphical representation to this point
-		void AddBackboneModel::buildGraphicalRepresentation_
-			(const Vector3& point, const Atom* atom)
+		void AddBackboneModel::buildGraphicalRepresentation_(Size start, Size end)
 			throw(Exception::OutOfMemory)
 		{
-			if (have_start_point_)
+			if (spline_points_.size() == 0) return;
+			if (spline_points_.size() != atoms_of_spline_points_.size())
 			{
-				if (point == last_point_) 
-				{
-					return;	
-				}
-				
+				Log.error() << "Error in " << __FILE__ << __LINE__ << std::endl;
+				return;
+			}
+
+			if (end == 0) end = spline_points_.size();
+
+			if (!have_start_point_)
+			{
+				last_point_ = spline_points_[start];
+			}
+
+			for (Position p = start; p < end; p++)
+			{
 				// build tube connection to the last point
 				Tube* tube = new Tube;
 				if (!tube) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Tube));
 				
 				tube->setRadius(tube_radius_);
 				tube->setVertex1(last_point_);
-				tube->setVertex2(point);
-				tube->setComposite(atom);
+				tube->setVertex2(spline_points_[p]);
+				tube->setComposite(atoms_of_spline_points_[p]);
 				geometric_objects_.push_back(tube);
+
+				// create sphere for the point
+				Sphere* sphere = new Sphere;
+				if (!sphere) throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
+
+				sphere->setRadius(tube_radius_);
+				sphere->setPosition(spline_points_[p]);
+				sphere->setComposite(atoms_of_spline_points_[p]);
+				geometric_objects_.push_back(sphere);
+				last_point_ = spline_points_[p];
 			}
 
 			have_start_point_ = true;
-			last_point_ = point;
-
-			// create sphere for the point
-			Sphere* sphere = new Sphere;
-			if (!sphere) 
-			{
-				throw Exception::OutOfMemory (__FILE__, __LINE__, sizeof(Sphere));
-			}
-
-			sphere->setRadius(tube_radius_);
-			sphere->setPosition(point);
-			sphere->setComposite(atom);
-			geometric_objects_.push_back(sphere);
 		}
 
 		bool AddBackboneModel::finish()
@@ -268,7 +281,7 @@ namespace BALL
 			}
 
 			createBackbone_();
-			spline_.clear();
+			spline_points_.clear();
 			return true;
 		}
 		
