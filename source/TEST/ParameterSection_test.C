@@ -1,4 +1,4 @@
-// $Id: ParameterSection_test.C,v 1.9 2001/05/10 17:16:57 oliver Exp $
+// $Id: ParameterSection_test.C,v 1.10 2001/05/10 22:12:10 amoll Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -8,7 +8,7 @@
 
 ///////////////////////////
 
-START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.9 2001/05/10 17:16:57 oliver Exp $")
+START_TEST(Parameters, "$Id: ParameterSection_test.C,v 1.10 2001/05/10 22:12:10 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -48,7 +48,10 @@ RESULT
 
 CHECK(ParameterSection::extractSection(Parameters& parameters, const String& section_name))
 	ParameterSection ps;
-	bool result = ps.extractSection(param, "Section1");
+  bool result;
+	CAPTURE_OUTPUT(2000)
+		result = ps.extractSection(param, "Section1");
+	COMPARE_OUTPUT("ParameterSection::extractSection: error reading section Section1 of file data/ParameterSection_test.ini:\nWrong number of fields in the format line: 0. FORMAT:\n")
 	TEST_EQUAL(result, false)
 	TEST_EQUAL(ps.getSectionName(), "Section1")
 
@@ -68,11 +71,15 @@ CHECK(ParameterSection::extractSection(Parameters& parameters, const String& sec
 	TEST_EQUAL(result, false)
 	TEST_EQUAL(ps.getSectionName(), "Section5")
 
-	result = ps.extractSection(param, "Section6");
+  CAPTURE_OUTPUT(2000)
+		result = ps.extractSection(param, "Section6");
+	COMPARE_OUTPUT("ParameterSectionFile data/ParameterSection_test.ini has no Section Section6.\nParameterSectionFile data/ParameterSection_test.ini has no Section .\n")
 	TEST_EQUAL(result, false)
 	TEST_EQUAL(ps.getSectionName(), "Section6")
 
-	result = ps.extractSection(param, "");
+	CAPTURE_OUTPUT(2000)
+		result = ps.extractSection(param, "");
+	COMPARE_OUTPUT("ParameterSectionFile data/ParameterSection_test.ini has no Section .\n")
 	TEST_EQUAL(result, false)
 	TEST_EQUAL(ps.getSectionName(), "")
 RESULT
