@@ -1,4 +1,4 @@
-// $Id: bondIterator.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: bondIterator.h,v 1.2 1999/12/01 13:26:44 oliver Exp $
 
 #ifndef BALL_KERNEL_BONDITERATOR_H
 #define BALL_KERNEL_BONDITERATOR_H
@@ -11,7 +11,8 @@
 #	include <BALL/KERNEL/atom.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	typedef Atom::BondIterator 							AtomBondIterator;
 	typedef Atom::BondConstIterator 				AtomBondConstIterator;

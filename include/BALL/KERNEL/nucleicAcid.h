@@ -1,4 +1,4 @@
-// $Id: nucleicAcid.h,v 1.1 1999/08/26 07:53:19 oliver Exp $ 
+// $Id: nucleicAcid.h,v 1.2 1999/12/01 13:26:44 oliver Exp $ 
 
 #ifndef BALL_KERNEL_NUCLEICACID_H
 #define BALL_KERNEL_NUCLEICACID_H
@@ -37,7 +37,7 @@ namespace BALL
 		//@{
 
 		///
-		NucleicAcid(void);
+		NucleicAcid();
 	
 		///
 		NucleicAcid(const NucleicAcid& nucleic_acid, bool deep = true);
@@ -46,13 +46,13 @@ namespace BALL
 		NucleicAcid(const String& name, const String& id = BALL_NUCLEICACID_DEFAULT_ID);
 
 		///
-		virtual ~NucleicAcid(void);
+		virtual ~NucleicAcid();
 	
 		///
-		virtual void clear(void);
+		virtual void clear();
 	
 		///
-		virtual void destroy(void);
+		virtual void destroy();
 
 		//@}
 
@@ -95,28 +95,28 @@ namespace BALL
 		//@{
 
 		///
-		Nucleotide* get3Primte(void);
+		Nucleotide* get3Prime();
 
 		///		
-		const Nucleotide* get3Prime(void) const;
+		const Nucleotide* get3Prime() const;
 
 		///		
-		Nucleotide* get5Prime(void);
+		Nucleotide* get5Prime();
 
 		///		
-		const Nucleotide* get5Prime(void) const;
+		const Nucleotide* get5Prime() const;
 
 		///		
 		void setID(const String& id);
 
 		///
-		String& getID(void);
+		String& getID();
 
 		///
-		const String& getID(void) const;
+		const String& getID() const;
 
 		///
-		Size countNucleotides(void) const;
+		Size countNucleotides() const;
 		//@}
 
 #ifdef	BALL_CFG_USING_METHOD_DIRECTIVE
@@ -147,7 +147,7 @@ namespace BALL
 
 		/**
 		*/
-		virtual bool isValid(void) const;
+		virtual bool isValid() const;
 
 		/**
 		*/
@@ -174,7 +174,7 @@ namespace BALL
 		
 		private:
 
-		void clear_(void);
+		void clear_();
 
 		// --- ATTRIBUTES
 

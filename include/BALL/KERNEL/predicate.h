@@ -1,4 +1,4 @@
-// $Id: predicate.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: predicate.h,v 1.2 1999/12/01 13:26:44 oliver Exp $
 
 #ifndef BALL_KERNEL_PREDICATE_H
 #define BALL_KERNEL_PREDICATE_H
@@ -11,7 +11,8 @@
 #	include <BALL/CONCEPT/predicate.h>
 #endif
 
-namespace BALL {
+namespace BALL 
+{
 
 	/**	@name	Kernel Predicates
 			This chapter describes a set of unary predicates acting on \Ref{Composites}, that
@@ -52,21 +53,12 @@ namespace BALL {
 	{
 		public:
 
-		/// Virtual RTTI evaluation operator
-		virtual bool operator ()(const Composite& composite);
-
 		/// Constant virtual RTTI evaluation operator
-		virtual bool operator ()(const Composite& composite) const;
+		virtual bool operator () (const Composite& composite) const;
 	};
 
 	template <class T>
-	bool KernelPredicate<T>::operator ()(const Composite& composite)
-	{
-		return RTTI<T>::isKindOf(composite);
-	}
-
-	template <class T>
-	bool KernelPredicate<T>::operator ()(const Composite& composite) const
+	bool KernelPredicate<T>::operator () (const Composite& composite) const
 	{
 		return RTTI<T>::isKindOf(composite);
 	}

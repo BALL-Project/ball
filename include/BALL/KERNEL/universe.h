@@ -1,4 +1,4 @@
-// $Id: universe.h,v 1.1 1999/08/26 07:53:19 oliver Exp $
+// $Id: universe.h,v 1.2 1999/12/01 13:26:44 oliver Exp $
 
 #ifndef BALL_KERNEL_UNIVERSE_H
 #define BALL_KERNEL_UNIVERSE_H
@@ -12,7 +12,8 @@
 #endif
 
 #ifdef BALL_SUPPORT_OBJECT_MANAGER
-	namespace BALL {
+	namespace BALL 
+	{
 	  typedef ObjectManager Universe;
 	}
 #endif
