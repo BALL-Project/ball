@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: colorProcessor.C,v 1.31.2.11 2005/01/26 15:23:01 amoll Exp $
+// $Id: colorProcessor.C,v 1.31.2.12 2005/01/28 14:29:36 amoll Exp $
 //
 
 #include <BALL/VIEW/MODELS/colorProcessor.h>
@@ -251,11 +251,14 @@ namespace BALL
 			float grid_spacing = 4.0;
 			if (diagonal.getSquareLength() < 5000)
 			{
-				grid_spacing = 3.0;
+				grid_spacing = 3.5;
 			} 
 			else 
 			{
-				float memory = SysInfo::getAvailableMemory() * 0.9;
+				float memory = SysInfo::getAvailableMemory();
+				// if we can not calculate available memory, use around 90 MB for the grid
+				if (memory == -1) memory = 100000000;
+				memory *= 0.9;	
 				float min_spacing = HashGrid3<const Atom*>::calculateMinSpacing(memory, diagonal + Vector3(2 * additional_grid_distance_));
 				if (min_spacing > grid_spacing) grid_spacing = min_spacing;
 			}
