@@ -1,4 +1,4 @@
-// $Id: Expression_test.C,v 1.20 2002/01/04 01:53:05 oliver Exp $
+// $Id: Expression_test.C,v 1.21 2002/01/10 14:43:50 anker Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/KERNEL/expression.h>
 #include <BALL/KERNEL/standardPredicates.h>
 #include <BALL/KERNEL/system.h>
-#include <BALL/FORMAT/HINFile.h>
+#include <BALL/FORMAT/PDBFile.h>
 #include <list>
 
 /////////////////
@@ -18,7 +18,7 @@ using namespace BALL;
 
 ///////////////////////////
 
-START_TEST(Expression, "$Id: Expression_test.C,v 1.20 2002/01/04 01:53:05 oliver Exp $")
+START_TEST(Expression, "$Id: Expression_test.C,v 1.21 2002/01/10 14:43:50 anker Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -445,85 +445,84 @@ RESULT
 
 
 CHECK(SyntaxTree::begin() throw())
-	SyntaxTree child1;
-	SyntaxTree child2;
-	SyntaxTree child3;
+	SyntaxTree* child1 = new SyntaxTree;
+	SyntaxTree* child2 = new SyntaxTree;
+	SyntaxTree* child3 = new SyntaxTree;
 	list<SyntaxTree*> children;
-	children.push_back(&child1);
-	children.push_back(&child2);
-	children.push_back(&child3);
+	children.push_back(child1);
+	children.push_back(child2);
+	children.push_back(child3);
 
 	SyntaxTree st;
 	SyntaxTree::Iterator test_it = st.begin();
-	bool test = (test_it == children.begin());
+	bool test = (*test_it == child1);
 	TEST_NOT_EQUAL(test, true)
 
-	// ?????
-	// this leads to an illegal instruction (SIGILL), I don't know why. (the
-	// same happens for the next three tests.)
-	// st.children = children;
-	// test = (*test_it == *children.begin());
-	// TEST_EQUAL(test, true)
+	st.children = children;
+	test_it = st.begin();
+	test = (*test_it == child1);
+	TEST_EQUAL(test, true)
 RESULT
 
 
 CHECK(SyntaxTree::end() throw())
-	SyntaxTree child1;
-	SyntaxTree child2;
-	SyntaxTree child3;
+	SyntaxTree* child1 = new SyntaxTree;
+	SyntaxTree* child2 = new SyntaxTree;
+	SyntaxTree* child3 = new SyntaxTree;
 	list<SyntaxTree*> children;
-	children.push_back(&child1);
-	children.push_back(&child2);
-	children.push_back(&child3);
+	children.push_back(child1);
+	children.push_back(child2);
+	children.push_back(child3);
 
 	SyntaxTree st;
 	SyntaxTree::Iterator test_it = st.end();
-	bool test = (test_it == children.end());
-	TEST_NOT_EQUAL(test, true)
 
-	// st.children = children;
-	// test = (test_it == children.end());
-	// TEST_EQUAL(test, true)
+	// ?????
+	// Dunno what's happening here: test_it seems to be glued to child2.
+	st.children = children;
+	test_it = st.end()--;
+	bool test = (*test_it == child3);
+	TEST_EQUAL(test, true)
 RESULT
 
 
 CHECK(SyntaxTree::begin() const  throw())
-	SyntaxTree child1;
-	SyntaxTree child2;
-	SyntaxTree child3;
+	SyntaxTree* child1 = new SyntaxTree;
+	SyntaxTree* child2 = new SyntaxTree;
+	SyntaxTree* child3 = new SyntaxTree;
 	list<SyntaxTree*> children;
-	children.push_back(&child1);
-	children.push_back(&child2);
-	children.push_back(&child3);
+	children.push_back(child1);
+	children.push_back(child2);
+	children.push_back(child3);
 
 	SyntaxTree st;
 	SyntaxTree::ConstIterator test_it = st.begin();
-	bool test = (test_it == children.begin());
+	bool test = (*test_it == child1);
 	TEST_NOT_EQUAL(test, true)
 
-	// st.children = children;
-	// test = (test_it == children.begin());
-	// TEST_EQUAL(test, true)
+	st.children = children;
+	test_it = st.begin();
+	test = (*test_it == child1);
+	TEST_EQUAL(test, true)
 RESULT
 
 
 CHECK(SyntaxTree::end() const  throw())
-	SyntaxTree child1;
-	SyntaxTree child2;
-	SyntaxTree child3;
+	SyntaxTree* child1 = new SyntaxTree;
+	SyntaxTree* child2 = new SyntaxTree;
+	SyntaxTree* child3 = new SyntaxTree;
 	list<SyntaxTree*> children;
-	children.push_back(&child1);
-	children.push_back(&child2);
-	children.push_back(&child3);
+	children.push_back(child1);
+	children.push_back(child2);
+	children.push_back(child3);
 
 	SyntaxTree st;
 	SyntaxTree::ConstIterator test_it = st.end();
-	bool test = (test_it == children.end());
-	TEST_NOT_EQUAL(test, true)
 
-	// st.children = children;
-	// test = (test_it == children.end());
-	// TEST_EQUAL(test, true)
+	st.children = children;
+	test_it = st.end()--;
+	bool test = (*test_it == child3);
+	TEST_EQUAL(test, true)
 RESULT
 
 
@@ -665,24 +664,23 @@ RESULT
 
 
 CHECK(Expression::bool operator () (const Atom& atom) const  throw())
-	HINFile file("data/Expression_test.hin");
+	PDBFile file("data/Expression_test.pdb");
 	System S;
 	file >> S;
 	HashMap<String, Size> test_expressions;
-	test_expressions.insert(pair<String, Size>("true()", 6));
+	
+	test_expressions.insert(pair<String, Size>("true()", 76));
 	test_expressions.insert(pair<String, Size>("false()", 0));
-	test_expressions.insert(pair<String, Size>("element(H) AND connectedTo((C))", 3));
-	test_expressions.insert(pair<String, Size>("element(O) AND connectedTo((C)) AND connectedTo((H))", 1));
-	test_expressions.insert(pair<String, Size>("connectedTo((H))", 2));
-	test_expressions.insert(pair<String, Size>("connectedTo(C(H)(H)(H))", 1));
-	test_expressions.insert(pair<String, Size>("element(H)", 4));
-	test_expressions.insert(pair<String, Size>("element(O)", 1));
-	test_expressions.insert(pair<String, Size>("element(C)", 1));
-	// ?????: this expression still doesn't work correctly! The expression in brackets
-	// is not interpreted correctly... Instead, "element(H) OR name(OXT) AND chain(A)" 
-	// behaves as expected. Anyway, the used test case (Expression_test.hin) does not
-	// allow to successfully test those predicates, since it does not contain a chain A!
-	test_expressions.insert(pair<String, Size>("element(H) OR (name(OXT) AND chain(A))", 4));
+	test_expressions.insert(pair<String, Size>("element(H) AND connectedTo((C))", 24));
+	test_expressions.insert(pair<String, Size>("element(N) AND connectedTo((C)) AND connectedTo((H))", 10));
+	test_expressions.insert(pair<String, Size>("connectedTo((H))", 24));
+	test_expressions.insert(pair<String, Size>("connectedTo((O))", 6));
+	test_expressions.insert(pair<String, Size>("connectedTo((H)(H))", 14));
+	test_expressions.insert(pair<String, Size>("connectedTo(C(H)(H)(H))", 0));
+	test_expressions.insert(pair<String, Size>("element(H)", 38));
+	test_expressions.insert(pair<String, Size>("element(O)", 6));
+	test_expressions.insert(pair<String, Size>("element(C)", 22));
+	test_expressions.insert(pair<String, Size>("element(H) OR (name(CA) AND chain(A))", 40));
 
 	Expression e;
 	Size counter;
@@ -691,6 +689,7 @@ CHECK(Expression::bool operator () (const Atom& atom) const  throw())
 	{
 		counter = 0;
 		e.setExpression(exp_iterator->first);
+		Log.info() << exp_iterator->first << endl;
 		for (AtomIterator it = S.beginAtom(); +it; ++it)
 		{
 			if (e.operator () (*it)) counter++;
