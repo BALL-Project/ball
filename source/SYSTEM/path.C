@@ -1,4 +1,4 @@
-// $Id: path.C,v 1.2.4.2 2002/12/03 21:43:32 oliver Exp $
+// $Id: path.C,v 1.2.4.3 2002/12/11 13:05:18 oliver Exp $
 
 #include <BALL/COMMON/global.h>
 #include <BALL/SYSTEM/path.h>
@@ -20,6 +20,7 @@ namespace BALL
 
 	string Path::getDataPath()
 	{
+		buildPathArray_();
 		return path_;
 	}
 
@@ -27,6 +28,13 @@ namespace BALL
 	{
 		path_array_valid_ = false;
 		path_ = path;
+	}
+
+	void Path::addDataPath(const string& path)
+	{
+		path_array_valid_ = false;
+		path_ += "\n";
+		path_ += path;
 	}
 
 	string Path::getDefaultDataPath()
@@ -51,10 +59,12 @@ namespace BALL
 			char*	ball_data_path = getenv("BALL_DATA_PATH");
 			if (ball_data_path != 0)
 			{	
-				string bdp = ball_data_path;
-				bdp.append(":");
-				bdp.append(getDataPath());
+				Log.error() << "BALL_DATA_PATH = " << ball_data_path << std::endl;
+				string bdp(ball_data_path);
+				bdp.append("\n");
+				bdp.append(path_);
 				setDataPath(bdp);
+				Log.error() << "SEARCH_PATH = " << ball_data_path << std::endl;
 			}
 			
 			// don`t try this again
@@ -63,8 +73,8 @@ namespace BALL
 
 		// segment the path string and insert each path 
 		// into the path array. append slashes where neccessary
-		string tmp = path_ + ":";
-		string::size_type position = tmp.find(":");
+		string tmp = path_ + "\n";
+		string::size_type position = tmp.find("\n");
 		while (position != string::npos) 
 		{
 			// extract the next path...
@@ -81,7 +91,7 @@ namespace BALL
 			tmp.erase(0, position + 1);
 
 			// find the next occurence	
-			position = tmp.find(":");
+			position = tmp.find("\n");
 		}
 
 		// remember we don't have to do this again - computation on demand!
@@ -103,9 +113,10 @@ namespace BALL
 			// if the full (path-specified) name could not be found,
 			// only try the basename (remove leading directories)
 			string tmp = name;
-			tmp.erase(0, tmp.rfind("/") + 1);
+			tmp.erase(0, tmp.rfind(FileSystem::PATH_SEPARATOR) + 1);
 			if (tmp != name)
 			{
+				Log.info() << "searching now for " << tmp << " only!" << std::endl;
 				result = findStrict(tmp);
 			}
 		}
@@ -119,6 +130,7 @@ namespace BALL
 		// first, try the path itself
 		if (File::isAccessible(name))
 		{
+			Log.error() << " checking for " << name << std::endl;
 			return name;
 		}
 
@@ -136,6 +148,7 @@ namespace BALL
 			// if the file could be opened, we return its name
 			if (File::isAccessible(filename))
 			{
+				Log.error() << " checking for " << filename << std::endl;
 				return filename;
 			}
 		}

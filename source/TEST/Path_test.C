@@ -1,11 +1,11 @@
-// $Id: Path_test.C,v 1.4.4.2 2002/12/11 11:17:45 oliver Exp $
+// $Id: Path_test.C,v 1.4.4.3 2002/12/11 13:05:19 oliver Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/SYSTEM/path.h>
 ///////////////////////////
 
-START_TEST(Path, "$Id: Path_test.C,v 1.4.4.2 2002/12/11 11:17:45 oliver Exp $")
+START_TEST(Path, "$Id: Path_test.C,v 1.4.4.3 2002/12/11 13:05:19 oliver Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -18,9 +18,13 @@ CHECK(Path())
 RESULT
 
 Path p = Path();
+string data_suffix(" data ");
+data_suffix[0] = FileSystem::PATH_SEPARATOR;
+data_suffix[5] = FileSystem::PATH_SEPARATOR;
 
 CHECK(getDataPath())
-	TEST_EQUAL(String(p.getDataPath()).hasSuffix("/data/"), true)
+	STATUS(p.getDataPath())
+	TEST_EQUAL(String(p.getDataPath()).hasSuffix(data_suffix), true)
 RESULT
 
 CHECK(setDataPath(const string& path))
@@ -29,29 +33,34 @@ CHECK(setDataPath(const string& path))
 RESULT
 
 CHECK(addDataPath(const string& path))
-	p.setDataPath("XXXXX/XXXXX");
+	p.addDataPath("XXXXX/XXXXX");
+	STATUS(p.getDataPath())
 	TEST_EQUAL(String(p.getDataPath()).hasSubstring("XXXXX/XXXXX"), true)
 	TEST_EQUAL(String(p.getDataPath()).hasSuffix("XXXXX/XXXXX"), true)
 RESULT
 
 CHECK(getDefaultDataPath())
-	TEST_EQUAL(String(p.getDefaultDataPath()).hasSuffix("/data/"), true)
+	TEST_EQUAL(String(p.getDefaultDataPath()).hasSuffix(data_suffix), true)
 RESULT
 
 CHECK(find(const string& name))
-	TEST_NOT_EQUAL(p.find("framgents/Fragments.db"), "")
-	TEST_NOT_EQUAL(p.find("Fragments.db"), "")
-	TEST_EQUAL(p.find("Path_test.C"), "Path_test.C");
-	TEST_EQUAL(p.find("/TEST/Path_test.C"), "Path_test.C");	
-	TEST_EQUAL(p.find("/xxx/Path_test.C"), "Path_test.C");
-	TEST_EQUAL(p.find("Path_testX.C"), "");
+	Path p1;
+	TEST_NOT_EQUAL(p1.find("fragments/Fragments.db"), "")
+	TEST_EQUAL(p1.find("Fragments.db"), "")
+	TEST_EQUAL(p1.find("Path_test.C"), "Path_test.C");
+	TEST_EQUAL(p1.find("/TEST/Path_test.C"), "Path_test.C");	
+	TEST_EQUAL(p1.find("/xxx/Path_test.C"), "Path_test.C");
+	TEST_EQUAL(p1.find("Path_testX.C"), "");
 RESULT
 
 CHECK(findStrict(const string& name))
-	TEST_EQUAL(String(p.getDataPath()+"TEST/Path_test.C"), String(p.getDataPath()+"TEST/Path_test.C"))
-	TEST_EQUAL(p.findStrict("Path_test.C"), "Path_test.C")
-	TEST_EQUAL(p.findStrict("/TEST/Path_test.C"), "");
-	TEST_EQUAL(p.findStrict("/xxx/Path_test.C"), "");
+	Path p1;
+	TEST_NOT_EQUAL(p1.find("fragments/Fragments.db"), "")
+	TEST_EQUAL(p1.find("Fragments.db"), "")
+	TEST_EQUAL(String(p1.getDataPath()+"TEST/Path_test.C"), String(p1.getDataPath()+"TEST/Path_test.C"))
+	TEST_EQUAL(p1.findStrict("Path_test.C"), "Path_test.C")
+	TEST_EQUAL(p1.findStrict("/TEST/Path_test.C"), "");
+	TEST_EQUAL(p1.findStrict("/xxx/Path_test.C"), "");
 RESULT
 
 /////////////////////////////////////////////////////////////

@@ -176,8 +176,8 @@ MOC_SOURCES = \
 	labelProperties_moc.C\
 	labelPropertiesData_moc.C\
 	contourSurfaceDialog_moc.C\
-	atomSettings_moc.C\
-	atomSettingsData_moc.C\
+	atomProperties_moc.C\
+	atomPropertiesData_moc.C\
 	molecularFileDialog_moc.C
 
 
@@ -195,8 +195,8 @@ CURRENTDIR_SOURCES = \
 	openBruker1DFile.C\
 	openBruker2DFile.C\
 	contourSurfaceDialog.C\
-	atomSettings.C\
-	atomSettingsData.C\
+	atomProperties.C\
+	atomPropertiesData.C\
 	molecularFileDialog.C\
 	$(MOC_SOURCES)
 
@@ -209,8 +209,8 @@ PROGRAMS = $(bin_PROGRAMS)
 am__objects_1 = displayProperties_moc.$(OBJEXT) \
 	displayPropertiesData_moc.$(OBJEXT) \
 	labelProperties_moc.$(OBJEXT) labelPropertiesData_moc.$(OBJEXT) \
-	contourSurfaceDialog_moc.$(OBJEXT) atomSettings_moc.$(OBJEXT) \
-	atomSettingsData_moc.$(OBJEXT) \
+	contourSurfaceDialog_moc.$(OBJEXT) atomProperties_moc.$(OBJEXT) \
+	atomPropertiesData_moc.$(OBJEXT) \
 	molecularFileDialog_moc.$(OBJEXT)
 am__objects_2 = displayProperties.$(OBJEXT) \
 	displayPropertiesData.$(OBJEXT) labelProperties.$(OBJEXT) \
@@ -218,7 +218,7 @@ am__objects_2 = displayProperties.$(OBJEXT) \
 	openMOLFile.$(OBJEXT) openMOL2File.$(OBJEXT) \
 	openPDBFile.$(OBJEXT) openBruker1DFile.$(OBJEXT) \
 	openBruker2DFile.$(OBJEXT) contourSurfaceDialog.$(OBJEXT) \
-	atomSettings.$(OBJEXT) atomSettingsData.$(OBJEXT) \
+	atomProperties.$(OBJEXT) atomPropertiesData.$(OBJEXT) \
 	molecularFileDialog.$(OBJEXT) $(am__objects_1)
 am__objects_OBJECTS = $(am__objects_2)
 _objects_OBJECTS = $(am__objects_OBJECTS)
@@ -229,7 +229,7 @@ am_CURRENTDIR_OBJECTS = displayProperties.$(OBJEXT) \
 	openMOLFile.$(OBJEXT) openMOL2File.$(OBJEXT) \
 	openPDBFile.$(OBJEXT) openBruker1DFile.$(OBJEXT) \
 	openBruker2DFile.$(OBJEXT) contourSurfaceDialog.$(OBJEXT) \
-	atomSettings.$(OBJEXT) atomSettingsData.$(OBJEXT) \
+	atomProperties.$(OBJEXT) atomPropertiesData.$(OBJEXT) \
 	molecularFileDialog.$(OBJEXT) $(am__objects_1)
 CURRENTDIR_OBJECTS = $(am_CURRENTDIR_OBJECTS)
 CURRENTDIR_DEPENDENCIES =
@@ -239,10 +239,10 @@ DEFAULT_INCLUDES =  -I. -I$(srcdir)
 CPPFLAGS = @CPPFLAGS@
 depcomp = $(SHELL) $(top_srcdir)/depcomp
 am__depfiles_maybe = depfiles
-@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/atomSettings.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/atomSettingsData.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/atomSettingsData_moc.Po \
-@AMDEP_TRUE@	./$(DEPDIR)/atomSettings_moc.Po \
+@AMDEP_TRUE@DEP_FILES = ./$(DEPDIR)/atomProperties.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/atomPropertiesData.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/atomPropertiesData_moc.Po \
+@AMDEP_TRUE@	./$(DEPDIR)/atomProperties_moc.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/contourSurfaceDialog.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/contourSurfaceDialog_moc.Po \
 @AMDEP_TRUE@	./$(DEPDIR)/displayProperties.Po \
@@ -328,10 +328,10 @@ mostlyclean-compile:
 distclean-compile:
 	-rm -f *.tab.c
 
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atomSettings.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atomSettingsData.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atomSettingsData_moc.Po@am__quote@
-@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atomSettings_moc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atomProperties.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atomPropertiesData.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atomPropertiesData_moc.Po@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/atomProperties_moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/contourSurfaceDialog.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/contourSurfaceDialog_moc.Po@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@./$(DEPDIR)/displayProperties.Po@am__quote@
@@ -618,11 +618,11 @@ labelPropertiesData_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/labelPr
 contourSurfaceDialog_moc.C:	$(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h
 	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/contourSurfaceDialog.h -o contourSurfaceDialog_moc.C
 
-atomSettings_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettings.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettings.h -o atomSettings_moc.C
+atomProperties_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomProperties.h
+	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomProperties.h -o atomProperties_moc.C
 
-atomSettingsData_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettingsData.h
-	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomSettingsData.h -o atomSettingsData_moc.C
+atomPropertiesData_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomPropertiesData.h
+	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/atomPropertiesData.h -o atomPropertiesData_moc.C
 
 molecularFileDialog_moc.C: $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h
 	$(MOC) $(BALL_PATH)/include/BALL/MOLVIEW/GUI/DIALOGS/molecularFileDialog.h -o molecularFileDialog_moc.C
