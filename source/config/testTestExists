@@ -1,0 +1,21 @@
+#!/bin/sh
+if [ ! `echo $1 | tail -c 3 | head -c 2` == ".h" ]
+then
+#	echo Invalid file
+	exit 1
+fi
+
+prefix=`echo $1 | sed "s/.*\///g"`
+size=$[ `echo $prefix  | wc -c` ]
+prefix=`echo $prefix | head -c $[ $size-3 ]`
+#echo Prefix $prefix
+size=$[ `echo $prefix | wc -c` ]
+testfile=`echo $prefix | head -c 1 | tr a-z A-Z`
+size=$[ `echo $prefix  | wc -c` ]
+testfile=$testfile`echo $prefix | tail -c $[ $size-1 ]`_test.C
+#echo $testfile
+
+if [ ! -e $BALL_PATH/source/TEST/$testfile ]
+then
+	echo Testfile missing for $prefix
+fi
