@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.h,v 1.60 2004/01/20 17:17:38 amoll Exp $
+// $Id: mainframe.h,v 1.61 2004/02/02 17:20:16 amoll Exp $
 //
 
 #ifndef BALL_APPLICATIONS_MOLVIEW_MAINFRAME_H
@@ -43,8 +43,8 @@
 # include <BALL/VIEW/WIDGETS/geometricControl.h>
 #endif
 
-#ifndef BALL_VIEW_WIDGETS_MOLECULARPROPERTIES_H
-# include <BALL/VIEW/WIDGETS/molecularProperties.h>
+#ifndef BALL_VIEW_WIDGETS_MOLECULARSTRUCTURE_H
+# include <BALL/VIEW/WIDGETS/molecularStructure.h>
 #endif
 
 #ifndef BALL_VIEW_DIALOGS_FDPBDIALOG_H
@@ -57,14 +57,6 @@
 
 #ifndef BALL_VIEW_DIALOGS_MOLECULARFILEDIALOG_H
 # include <BALL/VIEW/DIALOGS/molecularFileDialog.h>
-#endif
-
-#ifndef BALL_VIEW_DIALOGS_AMBERMINIMIZATIONDIALOG_H
-# include <BALL/VIEW/DIALOGS/amberMinimizationDialog.h>
-#endif
-
-#ifndef BALL_VIEW_DIALOGS_MOLECULARDYNAMICSDIALOG_H
-# include <BALL/VIEW/DIALOGS/molecularDynamicsDialog.h>
 #endif
 
 #ifndef BALL_VIEW_DIALOGS_SELECTORDIALOG_H
@@ -88,70 +80,11 @@ namespace BALL
 
 		BALL_EMBEDDABLE(Mainframe, MainControl)
 
-		/** This class is only intended for usage with multithreading.
-				It notifies the Mainframe, that the thread for simulations has finished and can be deleted.
-				This should only be used internaly.
-		*/
-		class SimulationThreadFinished
-			: public QCustomEvent
-		{
-			public:
-				SimulationThreadFinished()
-					: QCustomEvent( SIMULATION_THREAD_FINISHED_EVENT ){}
-		};
-
-		///
-		class SimulationOutput
-			: public QCustomEvent
-		{
-			public:
-				///
-				SimulationOutput()
-					: QCustomEvent( SIMULATION_OUTPUT_EVENT ){}
-
-				///
-				void setMessage(const String& msg) {message_ = msg;}
-
-				///
-				String getMessage() {return message_;}
-
-			protected:
-				String message_;
-		};
-
-		///
-		class UpdateCompositeEvent
-			: public QCustomEvent
-		{
-			public:
-				///
-				UpdateCompositeEvent()
-					:QCustomEvent(UPDATE_COMPOSITE_EVENT),
-					 composite_(0){}
-
-				///
-				void setComposite(const Composite* composite) { composite_ = composite;}
-				
-				///
-				const Composite* getComposite() const { return composite_;}
-
-			protected:
-				const Composite* composite_;
-		};
-
-
 		enum MenuKey
 		{
 			MENU_EXPORT_POVRAYFILE = 20000,
 			MENU_EXPORT_VRMLFILE,
-			
-			MENU_ASSIGN_CHARGES,
-			MENU_AMBER_ENERGY,
-			MENU_AMBER_MINIMIZATION,
-			MENU_AMBER_MDSIMULATION,
-			MENU_STOPSIMULATION,
-			MENU_PEPTIDE,
-			MENU_CALCULATE_HBONDS,
+						MENU_STOPSIMULATION,
 			MENU_FDPB,
 
 			MENU_FULLSCREEN,
@@ -176,27 +109,14 @@ namespace BALL
 		virtual void onNotify(Message *message)
 		throw();
 		
-		bool stopedSimulation() { return stop_simulation_;}
-
 		public slots:
-		// active the menu entries
-		// (connected to aboutToShow())
-		void checkMenuEntries();
 
 		void exportPOVRay();
 
 		void exportVRML();
 
 		// Build menu
-		void assignCharges();
-		void calculateAmberEnergy();
-		void amberMinimization();
-		void amberMDSimulation();
 		void computeIsoContourSurface();
-		void buildPeptide();
-		void calculateHBonds();
-		void stopSimulation();
-
 		void toggleFullScreen();
 
 		void showSelectorDialog();
@@ -204,7 +124,8 @@ namespace BALL
 		// Help menu
 		void about();
 
-		virtual void customEvent( QCustomEvent * e );
+		///
+		virtual void checkMenus();
 
 		/** Open a file.
 				Calls MolecularFileDialog::openFile
@@ -219,21 +140,16 @@ namespace BALL
 		DatasetControl* 					dataset_control_;
 		GeometricControl*					geometric_control_;
 		DisplayProperties*    		display_properties_;
-		AmberMinimizationDialog*	minimization_dialog_;
-		MolecularDynamicsDialog*	md_dialog_;
 		ContourSurfaceDialog* 		surface_dialog_;
 		LabelDialog*	    				label_dialog_;
-		MolecularProperties*  		molecular_properties_;
+		MolecularStructure*  			molecular_structure_;
 		MolecularFileDialog*  		file_dialog_;
 		FDPBDialog*  							FDPB_dialog_;
 		SelectorDialog  					selector_dialog_;
 		Server*   								server_;
-
 		LogView*									logview_;
-		SimulationThread* 				simulation_thread_;
-		
+
 		bool 											fullscreen_;
-		bool 											stop_simulation_;
 	};
 
 } // namespace BALL

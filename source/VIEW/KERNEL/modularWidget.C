@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: modularWidget.C,v 1.7 2003/10/15 13:40:09 amoll Exp $
+// $Id: modularWidget.C,v 1.8 2004/02/02 17:22:32 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/modularWidget.h>
@@ -164,6 +164,19 @@ void ModularWidget::dump(ostream& s, Size depth) const
 	throw()
 {
 	ConnectionObject::dump(s, depth);
+}
+
+int ModularWidget::insertMenuEntry(int ID, const String& name, const QObject* receiver, const char* slot, 
+																	 int accel, int entry_ID, String hint)
+	throw()
+{
+	return getMainControl()->insertMenuEntry(ID, name, receiver, slot, accel, entry_ID, hint);
+}
+
+QMenuBar* ModularWidget::menuBar()
+	throw()
+{
+	return getMainControl()->menuBar();
 }
 
 } } // namespaces

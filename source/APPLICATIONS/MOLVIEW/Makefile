@@ -1,7 +1,7 @@
 # -*- Mode: C++; tab-width: 2; -*-
 # vi: set ts=2:
 #
-# $Id: Makefile,v 1.48 2003/09/18 03:53:39 oliver Exp $
+# $Id: Makefile,v 1.49 2004/02/02 17:20:47 amoll Exp $
 #
 
 EXECUTABLE=molview
@@ -24,8 +24,7 @@ CPP_SOURCES=\
 	aboutDialog.C\
 	icons.C\
 	main.C\
-	mainframe.C\
- 	threads.C
+	mainframe.C
 
 MOC_SOURCES=\
 	aboutDialog_moc.C\

@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainControl.C,v 1.56 2004/01/29 12:43:27 amoll Exp $
+// $Id: mainControl.C,v 1.57 2004/02/02 17:22:32 amoll Exp $
 //
 
 #include <BALL/VIEW/KERNEL/mainControl.h>
@@ -16,12 +16,15 @@
 #include <BALL/VIEW/WIDGETS/scene.h>
 #include <BALL/VIEW/WIDGETS/geometricControl.h>
 
-
 #include <BALL/KERNEL/system.h>
 #include <BALL/KERNEL/forEach.h>
 #include <BALL/KERNEL/bond.h>
 #include <BALL/MATHS/analyticalGeometry.h>
 #include <BALL/MATHS/common.h>
+
+#ifdef BALL_QT_HAS_THREADS
+#	include <BALL/VIEW/KERNEL/threads.h>
+#endif
 
 #include <qapplication.h>
 #include <qmenubar.h>
@@ -32,7 +35,6 @@
 #include <qpushbutton.h>
 
 #include <algorithm> // sort
-
 
 using std::istream;
 using std::ostream;
@@ -66,6 +68,7 @@ const char* MainControl::simulation_running_xpm_[] =
 		"   ..o          "
 };        
   
+
 MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 	throw()
 	:	QMainWindow(parent, name),
@@ -74,16 +77,23 @@ MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 		selection_(),
 		message_label_(new QLabel("" , statusBar())),
 		main_control_preferences_(0),
-		preferences_dialog_(0),
+		preferences_dialog_(new Preferences(this, "Molview Preferences")),
 		preferences_id_(-1),
 		composites_muteable_(true),
+		stop_simulation_(false),
+		simulation_thread_(0),
 		timer_(new StatusbarTimer(this))
 {
 #ifdef BALL_VIEW_DEBUG
 	Log.error() << "new MainControl " << this << std::endl;
 #endif
-	// read the preferences
 	preferences_.setFilename(inifile);
+	setup_();
+}
+
+void MainControl::setup_()
+	throw()
+{
 	preferences_.read();
 
 	statusBar()->addWidget(message_label_, 20);
@@ -91,10 +101,8 @@ MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 	timer_->setInterval(1000);
 	timer_->setLabel(message_label_);
 
-	initPopupMenu(EDIT);
-
 	connect(qApp,	SIGNAL(aboutToQuit()), this, SLOT(aboutToExit()));
-	connect(menuBar(),	SIGNAL(highlighted(int)), this, SLOT(menuItemHighlighted(int)));
+	connect(menuBar(), SIGNAL(highlighted(int)), this, SLOT(menuItemHighlighted(int)));
 
 	QToolTip::setWakeUpDelay(500);
 	QToolTip::setGloballyEnabled(true);
@@ -109,6 +117,7 @@ MainControl::MainControl(QWidget* parent, const char* name, String inifile)
 	simulation_icon_->hide();
 }
 
+
 MainControl::MainControl(const MainControl& main_control)
 	throw()
 	:	QMainWindow(0, ""),
@@ -116,18 +125,11 @@ MainControl::MainControl(const MainControl& main_control)
 		Embeddable(main_control),
 		selection_(),
 		main_control_preferences_(0),
-		preferences_dialog_(0),
+		preferences_dialog_(new Preferences(this, "Molview Preferences")),
 		preferences_id_(-1),
 		composites_muteable_(main_control.composites_muteable_)
 {
-	simulation_icon_ = new QLabel(statusBar());
-	simulation_icon_->setMaximumSize(14,16);
-	main_control.statusBar()->addWidget(simulation_icon_, 1, TRUE );
-	QToolTip::add(simulation_icon_, "simulation status");
-	QPixmap icon(simulation_running_xpm_);
-
-	simulation_icon_->setPixmap(icon);
-	simulation_icon_->hide();
+	setup_();
 }
 
 MainControl::~MainControl()
@@ -138,6 +140,16 @@ MainControl::~MainControl()
 	#endif 
 
 	clear();
+
+	#ifdef BALL_QT_HAS_THREADS
+		stop_simulation_ = true;
+		if (simulation_thread_ != 0)
+		{
+			if (simulation_thread_->running()) simulation_thread_->wait();
+			delete simulation_thread_;
+			simulation_thread_ = 0;
+		}
+	#endif
 }
 
 QPopupMenu* MainControl::initPopupMenu(int ID)
@@ -155,11 +167,10 @@ QPopupMenu* MainControl::initPopupMenu(int ID)
 		#ifdef BALL_VIEW_DEBUG
 			Log.info() << "new menu entry: " << ID << endl;	
 		#endif
-		int max_id = menuBar()->count();
 		switch (ID)
 		{
 			case FILE:
-				menuBar()->insertItem("&File", menu, FILE, 0);
+				menuBar()->insertItem("&File", menu, FILE, -1);
 				break;
 			case FILE_OPEN:
 				initPopupMenu(MainControl::FILE)->insertItem("&Open", menu, FILE_OPEN);
@@ -171,19 +182,22 @@ QPopupMenu* MainControl::initPopupMenu(int ID)
 				initPopupMenu(MainControl::FILE)->insertItem("&Export", menu, FILE_EXPORT);
 				break;
 			case EDIT:
-				menuBar()->insertItem("&Edit", menu, EDIT, (1 <= max_id) ? 1 : -1);
+				menuBar()->insertItem("&Edit", menu, EDIT, -1);
 				break;
 			case BUILD:
-				menuBar()->insertItem("&Build", menu, BUILD, (2 <= max_id) ? 2 : -1);
+				menuBar()->insertItem("&Build", menu, BUILD, -1);
 				break;
 			case DISPLAY:
-				menuBar()->insertItem("&Display", menu, DISPLAY, (3 <= max_id) ? 3 : -1);
+				menuBar()->insertItem("&Display", menu, DISPLAY, -1);
 				break;
 			case DISPLAY_VIEWPOINT:
 				initPopupMenu(MainControl::DISPLAY)->insertItem("&Viewpoint", menu, DISPLAY_VIEWPOINT);
 				break;
+			case SIMULATIONS:
+				menuBar()->insertItem("&Simulation", menu, SIMULATIONS, -1);
+				break;
 			case TOOLS:
-				menuBar()->insertItem("&Tools", menu, TOOLS, (4 <= max_id) ? 4 : -1);
+				menuBar()->insertItem("&Tools", menu, TOOLS, -1);
 				break;
 			case TOOLS_CREATE_GRID:
 				initPopupMenu(MainControl::TOOLS)->insertItem("&Create Grid", menu, TOOLS_CREATE_GRID);
@@ -192,10 +206,10 @@ QPopupMenu* MainControl::initPopupMenu(int ID)
 				initPopupMenu(MainControl::TOOLS)->insertItem("&Python", menu, TOOLS_PYTHON);
 				break;
 			case WINDOWS:
-				menuBar()->insertItem("&Windows", menu, WINDOWS, (5 <= max_id) ? 5 : -1);
+				menuBar()->insertItem("&Windows", menu, WINDOWS, -1);
 				break;
 			case USER:
-				menuBar()->insertItem("&User", menu, USER, (6 <= max_id) ? 6 : -1);
+				menuBar()->insertItem("&User", menu, USER, -1);
 				break;
 			case HELP:
 				menuBar()->insertSeparator();
@@ -236,14 +250,15 @@ void MainControl::show()
 		return;
 	}
 
-	// create own preferences dialog
-	preferences_dialog_ = new Preferences(this, "Molview Preferences");
+	connect(initPopupMenu(MainControl::BUILD), SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
+	connect(initPopupMenu(MainControl::TOOLS), SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
+	connect(initPopupMenu(MainControl::SIMULATIONS), SIGNAL(aboutToShow()), this, SLOT(checkMenus()));
 
-	if (preferences_dialog_ == 0)
-	{
-		throw Exception::GeneralException(__FILE__, __LINE__, 
-				"memory allocation failed for preferences dialog.", "");
-	}
+	#ifdef BALL_QT_HAS_THREADS
+		String hint = "Abort a running simulation thread";
+		insertMenuEntry(MainControl::SIMULATIONS, "Abort Calculation", this, SLOT(stopSimulation()),
+				ALT+Key_C, MENU_STOPSIMULATION, hint);
+	#endif
 
 	// establish connection 
 	connect(preferences_dialog_->ok_button, SIGNAL(clicked()), 
@@ -321,6 +336,10 @@ void MainControl::checkMenus()
 
 	if (composites_muteable_) simulation_icon_->hide();
 	else 											simulation_icon_->show();
+
+	setCompositesMuteable(!simulation_thread_);
+
+	menuBar()->setItemEnabled(MENU_STOPSIMULATION, !composites_muteable_);
 }
 
 void MainControl::applyPreferencesTab()
@@ -1081,7 +1100,7 @@ bool MainControl::update(Composite& composite)
 	return true;
 }
 
-bool MainControl::insert(Composite& composite)
+bool MainControl::insert(Composite& composite, String name)
 	throw()
 {
 	if (composite_manager_.has(composite)) return false;
@@ -1089,6 +1108,7 @@ bool MainControl::insert(Composite& composite)
 	composite_manager_.insert(composite);
 	CompositeMessage* cm = new CompositeMessage(composite, 
 			CompositeMessage::NEW_COMPOSITE);
+	cm->setCompositeName(name);
 	notify_(cm);
 	
 	return true;
@@ -1185,6 +1205,110 @@ void MainControl::setCompositesMuteable(bool state)
 	{
 		simulation_icon_->show();
 	}
+}
+
+void MainControl::stopSimulation() 
+{
+#ifdef BALL_QT_HAS_THREADS
+	stop_simulation_ = true;
+	if (simulation_thread_ != 0)
+	{
+		if (simulation_thread_->running()) 
+		{
+			simulation_thread_->getMutex().unlock();
+			simulation_thread_->wait();
+		}
+
+		DCDFile* file = simulation_thread_->getDCDFile();
+		if (file != 0)
+		{
+			file->close();
+			String filename = file->getName();
+			delete file;
+			file = new DCDFile(filename, File::IN);
+			NewTrajectoryMessage* message = new NewTrajectoryMessage;
+			message->setComposite(*simulation_thread_->getComposite());
+			message->setTrajectoryFile(*file);
+			notify_(message);
+		}
+		
+		// needed to prevent warning
+		simulation_thread_->getMutex().unlock();
+ 
+		delete simulation_thread_;
+		simulation_thread_ = 0;
+	}
+
+	setStatusbarText("Simulation terminated.");
+	stop_simulation_ = false;
+	checkMenus();
+#endif
+}
+
+void MainControl::customEvent( QCustomEvent * e )
+{
+	e->type(); // prevent warning for single thread build
+
+#ifdef BALL_QT_HAS_THREADS
+	if (e->type() == (QEvent::Type)SIMULATION_THREAD_FINISHED_EVENT)
+	{
+		stopSimulation();
+		return;
+	}
+	if (e->type() == (QEvent::Type)SIMULATION_OUTPUT_EVENT)
+	{
+		SimulationOutput* so = (SimulationOutput*) e;
+		Log.info() << so->getMessage() << std::endl;
+		return;
+	}
+	if ( e->type() == (QEvent::Type)UPDATE_COMPOSITE_EVENT)
+	{
+		UpdateCompositeEvent* so = (UpdateCompositeEvent*) e;
+		if (so->getComposite() == 0) 
+		{
+			Log.warn() << "Could not update visualisation in " << __FILE__ << __LINE__ << std::endl;
+			return;
+		}
+
+		qApp->wakeUpGuiThread();
+		qApp->processEvents();
+		if (simulation_thread_ == 0 ||
+				stop_simulation_) 
+		{
+			return;
+		}
+
+		updateRepresentationsOf(*(Composite*)so->getComposite(), true);
+
+		qApp->wakeUpGuiThread();
+		qApp->processEvents();
+		if (simulation_thread_ == 0 || 
+				stop_simulation_) 
+		{
+			return;
+		}
+
+		// ok, continue simulation
+		simulation_thread_->getMutex().unlock();
+		return;
+	}
+#endif
+}
+
+bool MainControl::setSimulationThread(SimulationThread* thread)
+	throw()
+{
+	if (simulation_thread_ != 0) return false;
+	simulation_thread_ = thread;
+	if (thread != 0) thread->setMainControl(this);
+	checkMenus();
+	return true;
+}
+
+SimulationThread* MainControl::getSimulationThread()
+	throw()
+{
+	return simulation_thread_;
 }
 
 // ======================= StatusbarTimer =========================

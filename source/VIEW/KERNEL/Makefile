@@ -2,6 +2,10 @@ DIRECTORY=VIEW/KERNEL
 
 THISLIB=$(LIBNAME)
 
+# replace library-specific flags by application-
+# specific compiler flags
+LIB_CXXFLAGS=$(NONLIB_CXXFLAGS) -DQT_THREAD_SUPPORT
+
 CPP_SOURCES=\
   client.C\
 	common.C\
