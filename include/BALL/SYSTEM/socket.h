@@ -1,4 +1,4 @@
-// $Id: socket.h,v 1.15 2000/10/20 15:03:49 oliver Exp $
+// $Id: socket.h,v 1.16 2001/02/26 00:23:30 amoll Exp $
 
 #ifndef BALL_SYSTEM_SOCKET_H
 #define BALL_SYSTEM_SOCKET_H
@@ -93,7 +93,8 @@ namespace BALL
 	
 	void errnoError_(const char* method_name);
 
-	/**	@name	Network socket support */
+	/**	@name	Network socket support 
+	*/
 	//@{
 
 	typedef int sockexcept;
@@ -104,7 +105,8 @@ namespace BALL
 	{
 		public:
 		
-		/** @name	Constructors and Destructors */
+		/** @name	Constructors and Destructors 
+		*/
 		//@{
 
 		///
@@ -114,7 +116,8 @@ namespace BALL
 			
 		//@}
 
-		/**	@name Converters */
+		/**	@name Converters 
+		*/
 		//@{
 		
 		///
@@ -125,9 +128,10 @@ namespace BALL
 		{ 
 			return getAddr(); 
 		}
-		//@}
 
-		/**	@name	Accessors */
+		//@}
+		/**	@name	Accessors 
+		*/
 		//@{
 
 		///
@@ -148,7 +152,8 @@ namespace BALL
 	{
 		public:
 
-		/**	@name	Enumerations */
+		/**	@name	Enumerations 
+		*/
 		//@{
 			
 		///
@@ -316,7 +321,8 @@ namespace BALL
 			
 		public:
 
-		/**	@name	Constructors and Destructors */
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{
 			
 		///
@@ -330,9 +336,10 @@ namespace BALL
 
 		///
 		virtual ~SocketBuf();
-		//@}
 
-		/**	@name	Converters */
+		//@}
+		/**	@name	Converters 
+		*/
 		//@{
 
 		///
@@ -479,7 +486,8 @@ namespace BALL
 
 		public:
 
-		/**	@name	Constructors and Destructors */
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{
 
 		///
@@ -497,8 +505,8 @@ namespace BALL
 		virtual ~OSockStream();
 
 		//@}
-
-		/**	@name	Miscellaneous */
+		/**	@name	Miscellaneous 
+		*/
 		//@{
 		///
 		SocketBuf* rdbuf() 
@@ -530,7 +538,8 @@ namespace BALL
 
 		public:
 
-		/**	@name	Construtors and Destructors */
+		/**	@name	Construtors and Destructors 
+		*/
 		//@{
 
 		/// Default constructor
@@ -555,9 +564,10 @@ namespace BALL
 		~SockInetAddr() 
 		{
 		}
-		//@}
 
-		/**	@name	Converters */
+		//@}
+		/**	@name	Converters 
+		*/
 		//@{
 
 		///
@@ -565,9 +575,10 @@ namespace BALL
 		{ 
 			return (sockaddr_in*)this; 
 		}
+
 		//@}
-			
-		/**	@name	Accessors */
+		/**	@name	Accessors 
+		*/
 		//@{
 
 		///
@@ -610,7 +621,8 @@ namespace BALL
 
 		public:
 
-		/**	@name	Enumerations */
+		/**	@name	Enumerations 
+		*/
 		//@{
 
 		///
@@ -618,9 +630,10 @@ namespace BALL
 		{ 
 			af_inet = AF_INET 
 		};
+
 		//@}
-			
-		/**	@name	Constructors and Destructors */
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{
 
 		///
@@ -634,6 +647,7 @@ namespace BALL
 			: SocketBuf (si) 
 		{
 		}
+
 		//@}
 
 		///
@@ -661,7 +675,8 @@ namespace BALL
 		const String&	peerhost() const;
 
 
-		/**	@name	Binding */
+		/**	@name	Binding 
+		*/
 		//@{
 
 		///
@@ -686,9 +701,8 @@ namespace BALL
 		int	bind(const String& host_name, const String& service_name, const String& protocol_name = "tcp");
 
 		//@}
-
-
-		/**	@name	Connecting */
+		/**	@name	Connecting 
+		*/
 		//@{
 
 		///
@@ -705,6 +719,7 @@ namespace BALL
 
 		///
 		int connect (const String& host_name, const String& service_name, const String& protocol_name = "tcp");
+
 		//@}
 	};
 
@@ -722,7 +737,8 @@ namespace BALL
 
 		public:
 						
-		/**	@name	Constructors and Destructors */
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{
 
 		/// Constructor
@@ -742,7 +758,8 @@ namespace BALL
 		virtual ~IOSockStream();
 		//@}
 
-		/**	@name	Miscellaneous */
+		/**	@name	Miscellaneous 
+		*/
 		//@{
 
 		///
@@ -767,7 +784,8 @@ namespace BALL
 	{
 		public:
 
-		/**	@name	Constructors and Destructors */
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{
 
 		///
@@ -778,9 +796,10 @@ namespace BALL
 		
 		/// Destructor 
 		virtual ~IOStreamSocket();
-		//@}
 
-		/**	@name	Miscellaneous */
+		//@}
+		/**	@name	Miscellaneous 
+		*/
 		//@{
 
 		///
@@ -794,6 +813,7 @@ namespace BALL
 		{
 			return rdbuf(); 
 		}
+
 		//@}
 
 	};

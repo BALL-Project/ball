@@ -1,4 +1,4 @@
-// $Id: protein.h,v 1.15 2001/02/24 22:52:33 amoll Exp $ 
+// $Id: protein.h,v 1.16 2001/02/26 00:21:49 amoll Exp $ 
 
 #ifndef BALL_KERNEL_PROTEIN_H
 #define BALL_KERNEL_PROTEIN_H
@@ -156,13 +156,14 @@ namespace BALL
 		bool operator != (const Protein& protein) const
 			throw();
 
-		/**	@name Accessors */
+		/**	@name Accessors 
+		*/
 		//@{
 
 		/** Get a pointer to a child chain at a given position.
 				The pointer is 0 if this instance does not have a chain at the given position.
 				@param   position the position of the child chain
-				@return  Chain* - mutable pointer to the child chain at {\em position}
+				@return  Chain* - mutable pointer to the child
 		*/
 		Chain* getChain(Position position)
 			throw();
@@ -170,7 +171,7 @@ namespace BALL
 		/** Get a pointer to a child chain at a given position.
 				The pointer is 0 if this instance does not have a chain at the given position.
 				@param   position the position of the child chain
-				@return  Chain* - constant pointer to the child chain at {\em position}
+				@return  Chain* - constant pointer to the child
 		*/
 		const Chain* getChain(Position position) const
 			throw();
@@ -178,8 +179,7 @@ namespace BALL
 		/** Get a pointer to a child SecondaryStructure at a given position.
 				The pointer is 0 if this instance does not have a SecondaryStructure at the given position.
 				@param   position the position of the child SecondaryStructure
-				@return  SecondaryStructure* - 
-								 mutable pointer to the child SecondaryStructure at {\em position}
+				@return  SecondaryStructure* - mutable pointer to the child
 		*/
 		SecondaryStructure* getSecondaryStructure(Position position)
 			throw();
@@ -187,8 +187,7 @@ namespace BALL
 		/** Get a pointer to a child SecondaryStructure at a given position.
 				The pointer is 0 if this instance does not have a SecondaryStructure at the given position.
 				@param   position the position of the child SecondaryStructure
-				@return  SecondaryStructure* - 
-								 constant pointer to the child SecondaryStructure at {\em position}
+				@return  SecondaryStructure* - constant pointer to the child
 		*/
 		const SecondaryStructure* getSecondaryStructure(Position position) const
 			throw();
@@ -196,7 +195,7 @@ namespace BALL
 		/** Get a pointer to a child Residue at a given position.
 				The pointer is 0 if this instance does not have a Residue at the given position.
 				@param   position the position of the child Residue
-				@return  Residue* - mutable pointer to the child Residue at {\em position}
+				@return  Residue* - mutable pointer to the child
 		*/
 		Residue* getResidue(Position position)
 			throw();
@@ -204,7 +203,7 @@ namespace BALL
 		/** Get a pointer to a child Residue at a given position.
 				The pointer is 0 if this instance does not have a Residue at the given position.
 				@param   position the position of the child Residue
-				@return  Residue* - constant pointer to the child	Residue at {\em position}
+				@return  Residue* - constant pointer to the child
 		*/
 		const Residue* getResidue(Position position) const
 			throw();
@@ -244,7 +243,7 @@ namespace BALL
 		/** Get a pointer to a child PDB-Atom at a given position.
 				The pointer is 0 if this instance does not have a PDB-Atom at the given position.
 				@param   position the position of the child PDB-Atom
-				@return  Residue* - mutable pointer to the child PDB-Atom at {\em position}
+				@return  Residue* - mutable pointer to the child
 		*/
 		PDBAtom* getPDBAtom(Position position)
 			throw();
@@ -252,7 +251,7 @@ namespace BALL
 		/** Get a pointer to a child PDB-Atom at a given position.
 				The pointer is 0 if this instance does not have a PDB-Atom at the given position.
 				@param   position the position of the child PDB-Atom
-				@return  Residue* - constant pointer to the child	PDB-Atom at {\em position}
+				@return  Residue* - constant pointer to the child
 		*/
 		const PDBAtom* getPDBAtom(Position position) const
 			throw();

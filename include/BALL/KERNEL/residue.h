@@ -1,4 +1,4 @@
-// $Id: residue.h,v 1.24 2001/02/24 22:52:33 amoll Exp $
+// $Id: residue.h,v 1.25 2001/02/26 00:21:49 amoll Exp $
 
 #ifndef BALL_KERNEL_RESIDUE_H
 #define BALL_KERNEL_RESIDUE_H
@@ -143,7 +143,7 @@ namespace BALL
 		/** Assignment with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  residue the Residue to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em residue}
+				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
 		*/
 		void set(const Residue& residue, bool deep = true)
 			throw();
@@ -253,7 +253,7 @@ namespace BALL
 		/** Get a pointer to a child PDBAtom at a given position.
 				The pointer is 0 if this instance does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
-				@return  PDBAtom* - mutable pointer to the child PDBAtom at {\em position}
+				@return  PDBAtom* - mutable pointer to the child
 		*/
 		PDBAtom* getPDBAtom(Position position)
 			throw();
@@ -261,7 +261,7 @@ namespace BALL
 		/** Get a pointer to a child PDBAtom at a given position.
 				The pointer is 0 if this instance does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
-				@return  PDBAtom* - constant pointer to the child PDBAtom at {\em position}
+				@return  PDBAtom* - constant pointer to the child
 		*/
 		const PDBAtom* getPDBAtom(Position position) const
 			throw();
@@ -359,7 +359,7 @@ namespace BALL
 
 		/** Test if this residue is an amino acid.
 				Returns true, if this instance has the property "PROPERTY__AMINO_ACID".
-				return bool
+				@return bool
 		*/
 		bool isAminoAcid() const
 			throw();
@@ -367,7 +367,7 @@ namespace BALL
 		/** Test if this residue is terminal.
 				Returns true, if this instance has the property "PROPERTY__AMINO_ACID"
 				and is the first or last amino acid residue	in its parent chain.
-				return bool
+				@return bool
 		*/
 		bool isTerminal() const
 			throw();
@@ -375,7 +375,7 @@ namespace BALL
 		/** Test if this residue is N-terminal.
 				Returns true, if this instance has the property "PROPERTY__AMINO_ACID"
 				and is the first amino acid residue	in its parent chain.
-				return bool
+				@return bool
 		*/
 		bool isNTerminal() const
 			throw();
@@ -383,7 +383,7 @@ namespace BALL
 		/** Test if this residue is C-terminal.
 				Returns true, if this instance has the property "PROPERTY__AMINO_ACID"
 				and is the last amino acid residue in its parent chain.
-				return bool
+				@return bool
 		*/
 		bool isCTerminal() const
 			throw();

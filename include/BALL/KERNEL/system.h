@@ -1,4 +1,4 @@
-// $Id: system.h,v 1.20 2001/02/24 22:52:33 amoll Exp $
+// $Id: system.h,v 1.21 2001/02/26 00:21:49 amoll Exp $
 
 #ifndef BALL_KERNEL_SYSTEM_H
 #define BALL_KERNEL_SYSTEM_H
@@ -96,14 +96,14 @@ namespace BALL
 			throw();
 
 		//@}
-		/**	@name	Assignemnt 
+		/**	@name	Assignment 
 		*/
 		//@{
 
 		/** Assignment with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  system the System to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em system}
+				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
 		*/
 		void set(const System& system, bool deep = true)
 			throw();
@@ -111,7 +111,6 @@ namespace BALL
 		/** Assignment operator.
 				@param   system the System to be copied (cloned)
 				@return  System& - this instance
-				@see     System::set
 		*/
 		const System& operator = (const System& system)
 			throw();
@@ -119,7 +118,6 @@ namespace BALL
 		/** Copying with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  System the System to be assigned to
-				@see    System::set
 		*/
 		void get(System& system, bool deep = true) const
 			throw();
@@ -127,6 +125,7 @@ namespace BALL
 		//@}
 
 		/**	Equality operator.
+				Two instance of System are equal if they have the same handle.
 				@see Object::operator ==
 		*/
 		bool operator == (const System& system) const

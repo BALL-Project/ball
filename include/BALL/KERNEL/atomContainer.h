@@ -1,4 +1,4 @@
-// $Id: atomContainer.h,v 1.6 2001/02/24 22:52:32 amoll Exp $
+// $Id: atomContainer.h,v 1.7 2001/02/26 00:21:48 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOMCONTAINER_H
 #define BALL_KERNEL_ATOMCONTAINER_H
@@ -128,7 +128,7 @@ namespace BALL
 		/** Assignment with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  atom_container the atom_container to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em atom_container}
+				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
 		*/
 		void set(const AtomContainer& atom_container, bool deep = true)
 			throw();
@@ -159,6 +159,7 @@ namespace BALL
 		//@}
 	
 		/**	Equality operator.
+				Two instance of AtomContainer are equal if they have the same handle.
 				@see Object::operator ==
 		*/
 		bool operator == (const AtomContainer& atom_container) const
@@ -174,7 +175,7 @@ namespace BALL
 		*/
 		//@{
 
-		/** Change of the AtomContainer's name.
+		/** Change the AtomContainer's name.
 				@param  name the new name
 				@see    AtomContainer::getName
 		*/
@@ -201,7 +202,6 @@ namespace BALL
 				consider design of contract - an AtomContainer may not insert into a molecule,
 				it must be inserted via the molecule.
 				@return  Molecule* - mutable pointer to the parent molecule
-								 0 if this instance AtomContainer does not have a parent molecule
 		*/
 		Molecule* getMolecule()
 			throw();
@@ -212,7 +212,6 @@ namespace BALL
 				consider design of contract - an AtomContainer may not insert into a molecule,
 				it must be inserted via the molecule.
 				@return  Molecule* - constant pointer to the parent molecule
-								 0 if this instance does not have a parent molecule
 		*/
 		const Molecule* getMolecule() const
 			throw();
@@ -234,7 +233,7 @@ namespace BALL
 		/** Get a pointer to a child AtomContainer at a given position.
 				The pointer is 0 if this instance does not have an AtomContainer at the given position.
 				@param   position of the child AtomContainer
-				@return  AtomContainer* - mutable pointer to the child AtomContainer at {\em positon}
+				@return  AtomContainer* - mutable pointer to the child
 		*/
 		AtomContainer* getAtomContainer(Position position)
 			throw();
@@ -242,7 +241,7 @@ namespace BALL
 		/** Get a constant pointer to a child AtomContainer at a given position.
 				The pointer is 0 if this instance does not have an AtomContainer at the given position.
 				@param   position of the child AtomContainer
-				@return  AtomContainer* - constant pointer to the child AtomContainer at {\em positon}
+				@return  AtomContainer* - constant pointer to the child
 		*/
 		const AtomContainer* getAtomContainer(Position position) const
 			throw();
@@ -250,7 +249,7 @@ namespace BALL
 		/** Get a pointer to a child atom at a given position.
 				The pointer is 0 if this instance does not have an atom at the given position.
 				@param   position the position of the child atom
-				@return  Atom* - mutable pointer to the child atom at {\em positon}
+				@return  Atom* - mutable pointer to the child
 		*/
 		Atom* getAtom(Position position)
 			throw();
@@ -258,7 +257,7 @@ namespace BALL
 		/** Get a pointer to a child atom at a given position.
 				The pointer is 0 if this instance does not have an atom at the given position.
 				@param   position the position of the child atom
-				@return  Atom* - constant pointer to the child atom at {\em position}
+				@return  Atom* - constant pointer to the child
 		*/
 		const Atom* getAtom(Position position) const
 			throw();
@@ -266,7 +265,7 @@ namespace BALL
 		/** Get a pointer to a child atom with the name {\em name}.
 				The pointer is 0 if this instance does not have an atom with this name.
 				@param   name the name of the child atom
-				@return  Atom* - mutable pointer to the child atom with the name {\em name}
+				@return  Atom* - mutable pointer to the child
 		*/
 		Atom* getAtom(const String& name)
 			throw();
@@ -274,7 +273,7 @@ namespace BALL
 		/** Get a pointer to a child atom with the name {\em name}.
 				The pointer is 0 if this instance AtomContainer does not have an atom with this name.
 				@param   name the name of the child atom
-				@return  Atom* - constant pointer to the child atom with the name {\em name}
+				@return  Atom* - constant pointer to the child
 		*/
 		const Atom* getAtom(const String& name) const
 			throw();
@@ -297,13 +296,13 @@ namespace BALL
 		Size countBonds() const
 			throw();
 
-		/** Count the inter bonds.
+		/** Count all bonds which connect 2 atoms in this instance.
 				@return Size the number of inter bonds
 		*/
 		Size countInterBonds() const
 			throw();
 
-		/** Count the intra bonds.
+		/** Count all bonds which connect atoms in this instance with atoms outside.
 				@return Size the number of intra bonds
 		*/
 		Size countIntraBonds() const
@@ -411,7 +410,7 @@ namespace BALL
 		*/
 		//@{
 
-		/** Destroy all bonds in {\tt this} AtomContainer
+		/** Destroy all bonds in this instance.
 		*/
 		void destroyBonds()
 			throw();
@@ -421,13 +420,13 @@ namespace BALL
 		*/
 		//@{
 
-		/** Test if an AtomContainer is a child of {\tt this}.
+		/** Test if an AtomContainer is a child.
 				@param atom_container the AtomContainer to test
 		*/
 		bool isSubAtomContainerOf(const AtomContainer& atom_container) const
 			throw();
 
-		/** Test if an AtomContainer is a parent of {\tt this}.
+		/** Test if an AtomContainer is the parent.
 				@param atom_container the AtomContainer to test
 		*/
 		bool isSuperAtomContainerOf(const AtomContainer& atom_container) const
@@ -439,8 +438,8 @@ namespace BALL
 		//@{
 
 		/** Internal state and consistency self-validation.
-				If the internal state of this instance is correct (self-validated) and consistent {\tt true} is returned,
-				{\tt false} otherwise. 
+				If the internal state of this instance is correct (self-validated) and 
+				consistent {\tt true} is returned, {\tt false} otherwise. 
 				@return	 bool
 		*/
 		virtual bool isValid() const
@@ -485,11 +484,11 @@ namespace BALL
 		*/
 		//@{
 
-		///	Apply to all bonds inside this AtomContainer
+		///	Apply to all bonds connecting two atoms inside this AtomContainer
 		bool applyIntraBond(UnaryProcessor<Bond>& processor)
 			throw();
 
-		/// Apply to all bonds to atoms outside this AtomContainer
+		/// Apply to all bonds connected to atoms outside this AtomContainer
 		bool applyInterBond(UnaryProcessor<Bond>& processor)
 			throw();
 

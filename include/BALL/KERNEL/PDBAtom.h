@@ -1,4 +1,4 @@
-// $Id: PDBAtom.h,v 1.17 2001/01/20 00:26:28 amoll Exp $
+// $Id: PDBAtom.h,v 1.18 2001/02/26 00:21:47 amoll Exp $
 
 #ifndef BALL_KERNEL_PDBATOM_H
 #define BALL_KERNEL_PDBATOM_H
@@ -77,7 +77,8 @@ namespace BALL
 		};
 		//@}
 
-		/**	@name	Constructors and Destructors */
+		/**	@name	Constructors and Destructors 
+		*/
 		//@{
 
 		/// Default constructor
@@ -124,7 +125,6 @@ namespace BALL
 
 		//@}
 
-
 		/**	Equality operator.
 				@see Object::operator ==
 		*/
@@ -138,40 +138,36 @@ namespace BALL
 			throw();
 
 
-		/** @name Persistence */
+		/** @name Persistence 
+		*/
 		//@{
 
-		/**	Persistent writing.
-				Writes a PDBAtom object to a persistent stream.
+		/**	Writes a PDBAtom object to a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
 			throw();
 
-		/**	Persistent reading.
-				Reads a PDBAtom object from a persistent stream.
+		/**	Reads a PDBAtom object from a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentRead(PersistenceManager& pm)
 			throw();
 
 		//@}
-
-
-		/**	@name	*/
+		/**	@name	
+		*/
 		//@{
 
     /** Assignment with cloning facility.
-        Assign the PDBAtom {\em pdb_atom} to {\em *this}.
         The assignment is either deep or shallow (default).
         @param  pdb_atom the PDBAtom to be copied (cloned)
-        @param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em pdb_atom}
+        @param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
     */
     void set(const PDBAtom& pdb_atom, bool deep = true)
       throw(); 
 
-    /** Copying with cloning facility.
-        Copy {\em *this} PDBAtom to {\em pdb_atom}.
+    /** Copy this instance to {\em pdb_atom}.
         The assignment is either deep or shallow (default).
         @param  pdb_atom the PDBAtom to be assigned to
     */
@@ -179,171 +175,163 @@ namespace BALL
       throw();
 
 		/** Assignment operator.
-				Assign the PDBAtom {\em pdb_atom} to {\em *this}.
 				The assignment is deep.
 				@param   pdb_atom the PDBAtom to be copied (cloned)
-				@return  pdb_atom& - {\em *this} PDBAtom
+				@return  pdb_atom& - the instance
 		*/
 		const PDBAtom& operator = (const PDBAtom& pdb_atom)
 			throw();
 
 		/** Swapping of PDBAtoms.
-				Swap the states of {\em *this} PDBAtom with {\em pdb_atom}.
 				@param  pdb_atom the PDBAtom {\em *this} is being swapped with
 		*/
 		void swap(PDBAtom& pdb_atom)
 			throw();
 		
 		//@}
-
-		/**	@name	Accessors */
+		/**	@name	Accessors 
+		*/
 		//@{
 
 		/** Get a pointer to the parent protein.
-				The reference is 0 if {\em *this} PDBAtom does not have a parent protein.
-				@return  Protein* -
-								 mutable reference to the parent protein of {\em *this} PDBAtom,
+				The pointer is 0 if the instance does not have a parent protein.
+				@return  Protein* - mutable pointer to the parent protein
 		*/
 		Protein* getProtein()
 			throw();
 
 		/** Get a pointer to the parent protein.
-				The reference is 0 if {\em *this} PDBAtom does not have a parent protein.
-				@return  Protein* -
-								 constant reference to the parent protein of {\em *this} PDBAtom,
+				The pointer is 0 if the instance does not have a parent protein.
+				@return  Protein* - constant pointer to the parent protein
 		*/
 		const Protein* getProtein() const
 			throw();
 
 		/** Get a pointer to the parent chain.
-				The reference is 0 if {\em *this} PDBAtom does not have a parent chain.
-				@return  Chain* -
-								 mutable reference to the parent chain of {\em *this} PDBAtom,
+				The pointer is 0 if the instance does not have a parent chain.
+				@return  Chain* - mutable pointer to the parent chain
 		*/
 		Chain* getChain()
 			throw();
 
 		/** Get a pointer to the parent chain.
-				The reference is 0 if {\em *this} PDBAtom does not have a parent chain.
-				@return  Chain* -
-								 constant reference to the parent chain of {\em *this} PDBAtom,
+				The pointer is 0 if the instance does not have a parent chain.
+				@return  Chain* - constant pointer to the parent chain
 		*/
 		const Chain* getChain() const
 			throw();
 
 		/** Get a pointer to the parent residue.
-				The reference is 0 if {\em *this} PDBAtom does not have a parent residue.
-				@return  Residue* -
-								 mutable reference to the parent residue of {\em *this} PDBAtom,
+				The pointer is 0 if the instance does not have a parent residue.
+				@return  Residue* - mutable pointer to the parent residue
 		*/
 		Residue* getResidue()
 			throw();
 
 		/** Get a pointer to the parent residue.
-				The reference is 0 if {\em *this} PDBAtom does not have a parent residue.
-				@return  Residue* -
-								 constant reference to the parent residue of {\em *this} PDBAtom,
+				The pointer is 0 if the instance does not have a parent residue.
+				@return  Residue* - constant pointer to the parent residue
 		*/
 		const Residue* getResidue() const
 			throw();
 
-		/** Set the branch designator of this PDBAtom.
+		/** Set the branch designator.
 				@param branch_designator the branch designator
 		*/
 		void setBranchDesignator(char branch_designator)
 			throw();
 
-		/** Get the branch designator of this PDBAtom.
+		/** Get the branch designator.
 				@return char the branch designator
 		*/
 		char getBranchDesignator() const
 			throw();
 
-		/** Set the remoteness indicator of this PDBAtom.
+		/** Set the remoteness indicator.
 				@param remoteness_indicator the remoteness indicator
 		*/
 		void setRemotenessIndicator(char remoteness_indicator)
 			throw();
 
-		/** Get the remoteness indicator of this PDBAtom.
+		/** Get the remoteness indicator.
 				@return char the remoteness indicator
 		*/
 		char getRemotenessIndicator() const
 			throw();
 
-		/** Set the alternate location indicator of this PDBAtom.
+		/** Set the alternate location indicator.
 				@param alternate_location_indicator the alternate location indicator
 		*/
 		void setAlternateLocationIndicator(char alternate_location_indicator)
 			throw();
 
-		/** Get the alternate location indicator of this PDBAtom.
+		/** Get the alternate location indicator.
 				@return char the alternate location indicator
 		*/
 		char getAlternateLocationIndicator() const
 			throw();
 
-		/** Set the occupancy of this PDBAtom.
+		/** Set the occupancy.
 				@param occupancy the occupancy
 		*/
 		void setOccupancy(float occupancy)
 			throw();
 
-		/** Get the occupancy of this PDBAtom.
+		/** Get the occupancy.
 				@return float occupancy the occupancy
 		*/
 		float getOccupancy() const
 			throw();
 
-		/** Set the temperature factor of this PDBAtom.
+		/** Set the temperature factor.
 				@param temperature_factor the temperature factor
 		*/
 		void setTemperatureFactor(float temperature_factor)
 			throw();
 
-		/** Get the temperature factor of this PDBAtom.
+		/** Get the temperature factor.
 				@return float the temperature factor
 		*/
 		float getTemperatureFactor() const
 			throw();
 
 		//@}
-
-		/**	@name	Debugging and Diagnostics */
+		/**	@name	Debugging and Diagnostics 
+		*/
 		//@{
 
 		/** Internal state dump.
 				Dump the current internal state of {\em *this} to the 
 				output ostream {\em s} with dumping depth {\em depth}.
-				@param	s output stream where to output the internal state of {\em *this} PDBAtom
+				@param	s output stream where to output the internal state of the instance
 				@param  depth the dumping depth
 		*/
 		virtual void dump(std::ostream& s = std::cout, Size depth = 0) const
 			throw();
+
 		//@}
-
-
 		/**	@name	Storers
 		*/
 		//@{
 
 		/* Persistent stream input and state restorage.
-				Read persistent data from the input stream {\em s} and restore the state of {\em *this}.
-				\\
-				{\bf Note:} Not yet implemented.
-				@param  s input stream from where to restore the internal state of {\em *this} PDBAtom
+			 Read persistent data from the input stream {\em s} and restore the state 
+			 of the instance. \\
+			 {\bf Note:} Not yet implemented.
+			 @param  s input stream from where to restore the internal state of the instance
 		*/
 		virtual void read(std::istream& s)
 			throw();
 
 		/* Persistent stream output and state storage.
-				Write persistent data to the output stream {\em s} and store the state of {\em *this}.
-				\\
-				{\bf Note:} Not yet implemented.	
-				@param  s input stream from where to restore the internal state of {\em *this} PDBAtom
+			 Write persistent data to the output stream {\em s} and store 
+			 the state of the instance. \\
+			 {\bf Note:} Not yet implemented.	
+			 @param  s input stream from where to restore the internal state of the instance
 		*/
 		virtual void write(std::ostream& s) const
 			throw();
+
 		//@}
 
 		private:

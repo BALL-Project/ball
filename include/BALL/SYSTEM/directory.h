@@ -1,4 +1,4 @@
-// $Id: directory.h,v 1.10 2001/02/16 00:07:33 amoll Exp $
+// $Id: directory.h,v 1.11 2001/02/26 00:23:29 amoll Exp $
 
 #ifndef BALL_SYSTEM_DIRECTORY_H
 #define BALL_SYSTEM_DIRECTORY_H
@@ -55,7 +55,7 @@ namespace BALL
 		Directory();
 
 		/** Detailed constructor.
-				Construct new Directory object from the directory {\em directory_path}.
+				Construct new Directory object from {\em directory_path}.
 				The directory path does not have a path seperator {\em "/"} at its end.
 				If the given directory does not exists, the directory path is set to an empty string.
 				@param  directory_path the name of the directory to be opend
@@ -65,19 +65,18 @@ namespace BALL
 		Directory(const String& directory_path, bool set_current = false);
 
 		/** Copy constructor.
-				Construct new Directory object by copying the Directory {\em directory}.
+				Construct new Directory object by copying {\em directory}.
 				@param  directory the Directory object to be copied (cloned)
 				@return Directory - new constructed Directory cloned from {\em directory}
 		*/
 		Directory(const Directory& directory);
 
 		/** Destructor.
-				Default destruction of {\em *this} Directory.
 		*/
 		~Directory();
 
 		/** Explicit default initialization.
-				Set the state of {\em *this} Directory to the default values.
+				Set the state to the default values.
 				The path is set to an empty string.
 		*/
 		void clear();
@@ -91,7 +90,7 @@ namespace BALL
 		*/
 		//@{
 
-		/** Assign the Directory with the path {\em directory_path} to {\em *this}.
+		/** Assign the Directory with the path {\em directory_path}.
 				The given directory path can be either absolute or relative. 
 				If the path starts with a path seperator it is set as a absolute path.
 				@param  directory_path the name of the directory to be cloned
@@ -107,18 +106,18 @@ namespace BALL
 		void set(const Directory& directory);
 
 		/** Assignment operator.
-				Assign the Directory {\em directory} to {\em *this} Directory.
+				Assign {\em directory} to this instance.
 		*/
 		Directory& operator = (const Directory& directory);
 
 		/** Copying with cloning facility.
-				Copy {\em *this} Directory to the Directory {\em directory}.
+				Copy this instance to {\em directory}.
 				@param directory the directory to be assigned to
 		*/
 		void get(Directory& directory) const;
 
 		/** Swapping of Directories.
-				Swap the states of {\em *this} Directory with the Directory {\em directory}.
+				Swap the states of this instance with {\em directory}.
 				@param	directory the Directory being swapped with {\em *this} Directory 
 		*/
 		void swap(Directory& directory);
@@ -128,9 +127,9 @@ namespace BALL
 		*/
 		//@{
 
-		/** Get the path of {\em *this} object.
+		/** Get the path of this instance.
 				The directory path does not have a path seperator {\em "/"} at its end
-				and is absolute; If a unvalid path was set the path is an empty string.
+				and is absolute. If a unvalid path was set the path is an empty string.
 				@return String the name of the directory
 		*/
 		const String& getPath() const;
@@ -145,7 +144,7 @@ namespace BALL
 		bool rename(String old_path, String new_path);
 
 		/** Rename the directory associated with this object.
-				@param new_path the new oath
+				@param new_path the new path
 				@return bool  true if the directory could be renamed
 		*/
 		bool renameTo(String new_path);
@@ -156,7 +155,7 @@ namespace BALL
 		*/
 		bool setCurrent(String directory_path);
 
-		/** Set this directory as the current.
+		/** Set this directory as the current working directory.
 				@return bool true if the directory could be set as the current
 		*/
 		bool setCurrent();
@@ -212,7 +211,7 @@ namespace BALL
 		Size countDirectories();
 
 		/** Find a file in the directory.
-				The search can be recursive.
+				The search is recursive.
 				@param filename the name of the file to be searched
 				@param filepath	the path of the file, if it was found
 				@return bool true if the file was found
@@ -226,7 +225,7 @@ namespace BALL
 		
 		/** Test if the directory has an item.
 				@param item the name of the item to look for
-				@return bool true if the directory has the file
+				@return bool true if the directory has the item
 		*/
 		bool has(const String& item);
 

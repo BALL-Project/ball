@@ -1,4 +1,4 @@
-// $Id: secondaryStructure.h,v 1.20 2001/02/24 22:52:33 amoll Exp $
+// $Id: secondaryStructure.h,v 1.21 2001/02/26 00:21:49 amoll Exp $
 
 #ifndef BALL_KERNEL_SECONDARYSTRUCTURE_H
 #define BALL_KERNEL_SECONDARYSTRUCTURE_H
@@ -85,6 +85,7 @@ namespace BALL
 		//@}
 
 		/**	Equality operator.
+				Two instance of SecondaryStructure are equal if they have the same handle.
 				@see Object::operator ==
 		*/
 		bool operator == (const SecondaryStructure& secondary_structure) const
@@ -96,7 +97,8 @@ namespace BALL
 		bool operator != (const SecondaryStructure& secondary_structure) const
 			throw();
 
-		/** @name Persistence */
+		/** @name Persistence 
+		*/
 		//@{
 
 		/**	Writes a SecondaryStructure object to a persistent stream.
@@ -119,7 +121,7 @@ namespace BALL
 		/** Assignment with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  secondary_structure the SecondaryStructure to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em secondary_structure}
+				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
 		*/
 		void set(const SecondaryStructure& secondary_structure, bool deep = true)
 			throw();
@@ -182,7 +184,7 @@ namespace BALL
 		/** Get a pointer to a child Residue at a given position.
 				The pointer is 0 if this instance does not have a Residue at the given position.
 				@param   position the position of the child Residue
-				@return  Residue* - mutable pointer to the child Residue at {\em position}
+				@return  Residue* - mutable pointer to the child
 		*/
 		Residue* getResidue(Position position)
 			throw();
@@ -190,7 +192,7 @@ namespace BALL
 		/** Get a pointer to a child Residue at a given position.
 				The pointer is 0 if this instance does not have a Residue at the given position.
 				@param   position the position of the child Residue
-				@return  Residue* - constant pointer to the child Residue at {\em position}
+				@return  Residue* - constant pointer to the child
 		*/
 		const Residue* getResidue(Position position) const
 			throw();
@@ -230,7 +232,7 @@ namespace BALL
 		/** Get a pointer to a child PDBAtom at a given position.
 				The pointer is 0 if this instance residue does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
-				@return  PDBAtom* - constant pointer to the child PDBAtom at {\em position}
+				@return  PDBAtom* - constant pointer to the child
 		*/
 		PDBAtom* getPDBAtom(Position position)
 			throw();
@@ -238,7 +240,7 @@ namespace BALL
 		/** Get a pointer to a child PDBAtom at a given position.
 				The pointer is 0 if this instance residue does not have a PDBAtom at this position.
 				@param   position the position of the child PDBAtom
-				@return  PDBAtom* - mutable pointer to the child PDBAtom at {\em position}
+				@return  PDBAtom* - mutable pointer to the child
 		*/
 		const PDBAtom* getPDBAtom(Position position) const
 			throw();
@@ -319,7 +321,7 @@ namespace BALL
 		//@{
 	
 		/** Internal state and consistency self-validation.
-				@return	 bool - {\tt true} if the internal state is correct (self-validated) and consistent,
+				@return	 bool - {\tt true} if the internal state is correct (self-validated) and consistent, 
 												{\tt false} otherwise
 		*/
 		virtual bool isValid() const

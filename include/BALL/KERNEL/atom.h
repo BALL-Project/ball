@@ -1,4 +1,4 @@
-// $Id: atom.h,v 1.34 2001/02/24 23:18:48 amoll Exp $
+// $Id: atom.h,v 1.35 2001/02/26 00:21:48 amoll Exp $
 
 #ifndef BALL_KERNEL_ATOM_H
 #define BALL_KERNEL_ATOM_H
@@ -499,7 +499,7 @@ namespace BALL
 				throw();
 
 			/** Constant inspection of the atom's velocity vector.
-					BALL uses units of \TeX{\AA}/ps for the velocity.
+					BALL uses units of {\AA}/ps for the velocity.
 					@return  Vector3& - constant reference to the velocity vector
 					@see     Atom::setVelocity
 			*/

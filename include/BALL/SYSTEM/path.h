@@ -1,4 +1,4 @@
-// $Id: path.h,v 1.1 2000/06/21 14:15:39 amoll Exp $
+// $Id: path.h,v 1.2 2001/02/26 00:23:30 amoll Exp $
 
 #ifndef BALL_COMMON_PATH_H
 #define BALL_COMMON_PATH_H
@@ -18,10 +18,8 @@ namespace BALL
 
 	/**	Data path management class.
 			This class is intended to provide a unique interface to 
-			directories where the data files needed by BALL reside.
-			\\
-			{\bf Definition:}\URL{BALL/COMMON/path.h}
-			\\
+			directories where the data files needed by BALL reside.	\\
+			{\bf Definition:}\URL{BALL/COMMON/path.h}	\\
 	*/
 	class Path 
 	{

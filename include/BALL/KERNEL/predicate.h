@@ -1,4 +1,4 @@
-// $Id: predicate.h,v 1.6 2000/12/19 12:50:54 amoll Exp $
+// $Id: predicate.h,v 1.7 2001/02/26 00:21:49 amoll Exp $
 
 #ifndef BALL_KERNEL_PREDICATE_H
 #define BALL_KERNEL_PREDICATE_H
@@ -35,11 +35,9 @@ namespace BALL
 			is derived from TUnaryPredicate and we want to make sure both methods are overwritten).
 			{\bf operator()} returns true, if the given composite is a kind of the class corresponding 
 			to the respective predicate, false otherwise.\\
-			@see	UnaryPredicate
-			@see	RTTI
-
 			{\bf Definition:} \URL{BALL/KERNEL/predicate.h}
-			
+			@see	UnaryPredicate
+			@see	RTTI	
 	*/
 	//@{
 	

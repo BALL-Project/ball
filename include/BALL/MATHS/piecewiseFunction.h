@@ -1,4 +1,4 @@
-// $Id: piecewiseFunction.h,v 1.9 2001/02/23 22:02:41 amoll Exp $
+// $Id: piecewiseFunction.h,v 1.10 2001/02/26 00:23:00 amoll Exp $
 
 #ifndef BALL_MATHS_PIECEWISEFUNCTION_H
 #define BALL_MATHS_PIECEWISEFUNCTION_H
@@ -64,7 +64,7 @@ namespace BALL
 		virtual ~PiecewiseFunction() throw();
 
 		//@}
-		/** @name Assignemnt 
+		/** @name Assignment 
 		*/
 		//@{
 

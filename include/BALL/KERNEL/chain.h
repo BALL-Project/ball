@@ -1,4 +1,4 @@
-// $Id: chain.h,v 1.21 2001/02/24 22:52:32 amoll Exp $
+// $Id: chain.h,v 1.22 2001/02/26 00:21:48 amoll Exp $
 
 #ifndef BALL_KERNEL_CHAIN_H
 #define BALL_KERNEL_CHAIN_H
@@ -94,7 +94,7 @@ namespace BALL
 		/** Assignment with cloning facility.
 				The assignment is either deep or shallow (default).
 				@param  chain the chain to be copied (cloned)
-				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy of {\em chain}
+				@param  deep make a deep (={\tt true}) or shallow (={\tt false}) copy
 		*/
 		void set(const Chain& chain, bool deep = true)
 			throw();
@@ -144,7 +144,7 @@ namespace BALL
 
 		/** Get a pointer to the parent protein.
 				The pointer is 0 if this instance does not have a parent protein.
-				@return  Protein* - mutable pinter to the parent protein
+				@return  Protein* - mutable pointer to the parent protein
 		*/
 		Protein* getProtein()
 			throw();
@@ -191,28 +191,32 @@ namespace BALL
 			throw();
 	
 		/** Get a pointer to the N-terminal Residue.
-				The pointer is 0 if this instance does not have a Residue.
+				The pointer is 0 if this instance does not have a Residue with
+				the property "PROPERTY__AMINO_ACID".
 				@return  Residue* - mutable pointer to the N-terminal Residue
 		*/
 		Residue* getNTerminal()
 			throw();
 	
 		/** Get a constant pointer to the N-terminal Residue.
-				The pointer is 0 if this instance does not have a Residue.
+				The pointer is 0 if this instance does not have a Residue with
+				the property "PROPERTY__AMINO_ACID".
 				@return  Residue* - constant pointer to the N-terminal Residue
 		*/
 		const Residue* getNTerminal() const
 			throw();
 
 		/** Get a pointer to the C-terminal Residue.
-				The pointer is 0 if this instance does not have a Residue.
+				The pointer is 0 if this instance does not have a Residue with
+				the property "PROPERTY__AMINO_ACID".
 				@return  Residue* - mutable pointer to the C-terminal Residue
 		*/
 		Residue* getCTerminal()
 			throw();
 	
 		/** Get a constant pointer to the C-terminal Residue.
-				The pointer is 0 if this instance does not have a Residue.
+				The pointer is 0 if this instance does not have a Residue with
+				the property "PROPERTY__AMINO_ACID".
 				@return  Residue* - constant pointer to the C-terminal Residue
 		*/
 		const Residue* getCTerminal() const

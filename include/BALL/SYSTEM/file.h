@@ -1,4 +1,4 @@
-// $Id: file.h,v 1.21 2001/02/16 00:07:33 amoll Exp $
+// $Id: file.h,v 1.22 2001/02/26 00:23:29 amoll Exp $
 
 #ifndef BALL_SYSTEM_FILE_H
 #define BALL_SYSTEM_FILE_H
@@ -6,13 +6,6 @@
 #ifndef BALL_COMMON_H
 #	include <BALL/common.h>
 #endif
-
-#include <fstream>
-#include <stdlib.h>			// 'getenv'
-#include <sys/types.h>
-#include <sys/stat.h>		// 'stat', 'lstat'
-#include <stdio.h>			// 'rename'
-#include <unistd.h>			// 'access', 'rename', 'truncate'
 
 #ifndef BALL_DATATYPE_REGEXP_H
 #	include <BALL/DATATYPE/regExp.h>
@@ -25,6 +18,13 @@
 #ifndef BALL_SYSTEM_FILESYSTEM_H
 #	include <BALL/SYSTEM/fileSystem.h>
 #endif
+
+#include <fstream>
+#include <stdlib.h>			// 'getenv'
+#include <sys/types.h>
+#include <sys/stat.h>		// 'stat', 'lstat'
+#include <stdio.h>			// 'rename'
+#include <unistd.h>			// 'access', 'rename', 'truncate'
 
 namespace BALL 
 {
@@ -105,7 +105,7 @@ namespace BALL
 			PROTECTION_MODE__OTHER_EXECUTE             = S_IXOTH
 		};
 
-		/**	
+		/** Filetype
 		*/
 		enum Type
 		{
@@ -134,7 +134,7 @@ namespace BALL
 
 		/** Default constructor.
 				Construct new File object.
-				@return    File - new constructed File object
+				@return File - new constructed File object
 		*/
 		File()
 			throw();
@@ -161,7 +161,6 @@ namespace BALL
 			throw (Exception::FileNotFound);
 
 		/** Destructor.
-				Default destruction of {\em *this} File.
 				The file is closed.
 		*/
 		virtual ~File();
@@ -172,7 +171,7 @@ namespace BALL
 		//@{
 
 		/** Assignment operator.
-				Assign the filename from File {\em file} to {\em *this} File.
+				Assign the filename from {\em file}.
 				The file is not opend.
 		*/
 		const File& operator = (const File& file)
@@ -230,7 +229,7 @@ namespace BALL
 			throw (Exception::FileNotFound);
 
 		/**	Return the size of the file.
-				If the file does not exist 0 is returned.
+				If the file does not exist, 0 is returned.
 				@return Size the size of the file
 		*/
 		Size getSize()
@@ -266,7 +265,7 @@ namespace BALL
 			const	throw(Exception::FileNotFound);
 		
 		/**	Copy a given file to a given destination.
-				If a file with the destination name exists allready, nothing happens.
+				If a file with the destination name exists already, nothing happens.
 				@param source_name the name of the source file
 				@param destination_name the name of the destination file
 				@param buffer_size the buffer size to use while copying
@@ -277,7 +276,7 @@ namespace BALL
 			throw(Exception::FileNotFound);
 
 		/**	Copy the file to a given destination.
-				If a file with the destination name exists allready, nothing happens.
+				If a file with the destination name exists already, nothing happens.
 				@param destination_name the name of the destination file
 				@param buffer_size the buffer size to use while copying
 				@return true if copying was successfull
@@ -286,7 +285,7 @@ namespace BALL
 			throw(Exception::FileNotFound);
 
 		/**	Move a given file to a given destination.
-				If a file with the destination name exists allready, nothing happens.
+				If a file with the destination name exists already, nothing happens.
 				@param source_name the name of the source file
 				@param destination_name the name of the destination file
 				@return true if copying was successfull
@@ -294,10 +293,9 @@ namespace BALL
 		static bool move(const String& source_name, const String& destination_name)
 			throw(Exception::FileNotFound);
 
-		/**	Move the file this File object is associated with to a given destination.
-				If a file with the destination name exists allready, nothing happens.
+		/**	Move the file to a given destination.
+				If a file with the destination name exists already, nothing happens.
 				@param destination_name the name of the destination file
-				@param buffer_size the buffer size to use while moving
 				@return true if copying was successfull
 		*/
 		bool moveTo(const String& destination_name)
@@ -325,7 +323,7 @@ namespace BALL
 			throw (Exception::FileNotFound);
 
 		/**	Rename the file to a given name.
-				If a file with the destination name exists allready, nothing happens.
+				If a file with the destination name exists already, nothing happens.
 				@param new_path the new path and name of the file
 				@return bool true if the file could be renamed
 		*/
@@ -404,7 +402,7 @@ namespace BALL
 
 		/**	Test if the file can be accessed.
 				@return bool true if the file can be accessed
-				@exception FileNotFound is thrown if name_ is an empty string
+				@exception FileNotFound is thrown if name is an empty string
 		*/
 		bool isAccessible()
 			const throw (Exception::FileNotFound);

@@ -1,4 +1,4 @@
-// $Id: bond.h,v 1.22 2001/02/24 01:45:37 amoll Exp $
+// $Id: bond.h,v 1.23 2001/02/26 00:21:48 amoll Exp $
 
 #ifndef BALL_KERNEL_BOND_H
 #define BALL_KERNEL_BOND_H
@@ -125,7 +125,7 @@ namespace BALL
 			///
 			ORDER__QUADRUPLE      = 4,
 			///
-			ORDER__AROMATIC       = 5,			
+			ORDER__AROMATIC       = 5,
 			///
 			NUMBER_OF_BOND_ORDERS
 		};
@@ -213,7 +213,7 @@ namespace BALL
 					\item bond has connectivity with first atom (={\em first})
 					\item bond has connectivity with second atom (={\em second})
 				\end{itemize}
-				@param 	bond the instantiated bond that connects the first atom {\em first}
+				@param 	bond the instantiated bond that connects the first atom {\em first} 
 								to the second atom {\em second}
 				@param 	first the first atom of the bond
 				@param 	second the second atom of the bond
@@ -258,15 +258,13 @@ namespace BALL
 		*/
 		//@{
 	
-		/**	Persistent writing.
-				Writes a Bond object to a persistent stream.
+		/**	Writes a Bond object to a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentWrite(PersistenceManager& pm, const char* name = 0) const
 			throw();
 
-		/**	Persistent reading.
-				Reads a Bond object from a persistent stream.
+		/**	Reads a Bond object from a persistent stream.
 				@param pm the persistence manager
 		*/
 		void persistentRead(PersistenceManager& pm)
@@ -310,7 +308,6 @@ namespace BALL
 			throw();
 
 		/** Swapping of bonds.
-				Swap the states of {\em *this} with bond.
 				@param bond the bond {\em *this} is being swapped with
 				@see   Bond::Bond
 		*/
@@ -342,11 +339,8 @@ namespace BALL
 	 
 		/** Constant inspection of the first bond atom.
 				The pointer is 0 if no first atom is connected to this bond.\\
-				{\bf Note:} No corresponding mutator Bond::setFirstAtom exists to provide consistency 
-										of the bond tables in the atoms.
-				@return      Atom* - 
-										 constant pointer to the first atom that is connected to this bond,
-											 0 if no first atom exists
+				@return      Atom* - constant pointer to the first atom that is 
+										 connected to this bond, 0 if no first atom exists
 				@see         Bond::getSecondAtom
 		*/
 		const Atom* getFirstAtom() const
@@ -369,24 +363,18 @@ namespace BALL
 			throw();
 	
 		/** Mutable inspection of the second bond atom.
-				The pointer is 0 if no second atom is connected to this bond.\\
-				{\bf Note:} No corresponding mutator Bond::setSecondAtom exists to provide consistency
-										of the bond tables in the atoms.
-				@return      Atom* - 
-										 mutable pointer to the second atom that is connected to this bond,
-										 0 if no second atom exists
+				The pointer is 0 if no second atom is connected to this bond.
+				@return      Atom* - mutable pointer to the second atom that 
+										 is connected to this bond, 0 if no second atom exists
 				@see         Bond::getFirstAtom
 		*/
 		Atom* getSecondAtom()
 			throw();
 	 
 		/** Constant inspection of the second bond atom.
-				The pointer is 0 if no second atom is connected to this bond.\\
-				{\bf Note:} No corresponding mutator Bond::setSecondAtom exists to provide consistency
-										of the bond tables in the atoms.
-				@return      Atom* -
-										 constant pointer to the second atom that is connected to this bond,
-										 0 if no second atom exists
+				The pointer is 0 if no second atom is connected to this bond.
+				@return      Atom* - constant pointer to the second atom that is
+										 connected to this bond, 0 if no second atom exists
 				@see         Bond::getFirstAtom
 		*/
 		const Atom* getSecondAtom() const
@@ -445,7 +433,7 @@ namespace BALL
 				Access the bond that might connect the atom {\em first} with the atom {\em second}.
 				If no such bond exists 0 is returned. The order of atoms may be arbitrary. Calls \Ref{Atom::getBond}.
 				@return      Bond* -
-										 mutable pointer to the bond connecting the atom {\em first} and {\em second},
+										 mutable pointer to the bond connecting the atom {\em first} and {\em second}, 
 										 0 if no such bond exists
 				@see         Atom::getBond
 		*/
@@ -456,7 +444,7 @@ namespace BALL
 				It is tested, if this bond connects the two atoms.
 				If this is true a pointer to the bound atom is returned.
 				@param			 atom , its partner is looked for
-				@return      mutable pointer to the bound atom
+				@return      mutable pointer to the bound atom, 
 										 0 if the atom has no bound atom
 		*/
 		Atom* getBoundAtom(const Atom& atom)
@@ -466,7 +454,7 @@ namespace BALL
 				It is tested, if this bond connects the two atoms.
 				if this is true a pointer to the bound atom is returned.
 				@param			 atom , its partner is looked for
-				@return      constant pointer to the bound atom
+				@return      constant pointer to the bound atom, 
 										 0 if the atom has no bound atom
 		*/
 		const Atom* getBoundAtom(const Atom& atom) const
@@ -480,19 +468,17 @@ namespace BALL
 		/** Determine whether the bond belongs to an atom.
 				Calls \Ref{Atom::hasBond}.
 				@param atom the atom that is queried to connect this bond to another atom
-				@return  bool -
-								 {\tt true} if bond connects the atom {\em atom} with another atom,
-								 {\tt false} otherwise
+				@return  bool - {\tt true} if bond connects the atom {\em atom} with another atom, 
+												{\tt false} otherwise
 				@see     Atom::hasBond
 		*/
 		bool isBondOf(const Atom& atom) const
 			throw();
 
 		/** Determine whether this bond contains any atom.
-				@return      bool -
-										 {\tt true} if bond connects the atom {\em atom} with another atom,
-										 {\tt false} otherwise
-				@see         Atom::hasBond
+				@return   bool - {\tt true} if bond connects the atom {\em atom} with another atom, 
+												 {\tt false} otherwise
+				@see      Atom::hasBond
 		*/
 		bool isBound() const
 			throw();
@@ -500,10 +486,9 @@ namespace BALL
 		/** Determine whether the bond connects two fragments.
 				If both atoms have no roots, the result is false.
 				Calls \Ref{Composite::getRoot}.
-				@return      bool -
-										 {\tt true} if this bond is intermolecular
-										 {\tt false} otherwise
-				@see         Composite::getRoot
+				@return   bool - {\tt true} if this bond is intermolecular, 
+												 {\tt false} otherwise
+				@see      Composite::getRoot
 		*/
 		bool isInterBond() const
 			throw();
@@ -512,7 +497,7 @@ namespace BALL
 				Query, if this bond connects a atom within {\em atom_container} instance with an atom outside.
 				Calls \Ref{Composite::isDescendantOf}.
 				@param  	atom_container the queried parent fragment.
-				@return  	bool -	{\tt true} if this bond is intermolecular
+				@return  	bool -	{\tt true} if this bond is intermolecular, 
 													{\tt false} otherwise
 				@see      Composite::isDescendantOf
 		*/
@@ -523,7 +508,7 @@ namespace BALL
 				Query, if this bond connects its two atoms within the common parent {\em system} instance.
 				Calls \Ref{Composite::isDescendantOf}.
 				@param 	system the queried parent system.
-				@return	bool - {\tt true} if this bond is intermolecular
+				@return	bool - {\tt true} if this bond is intermolecular, 
 											 {\tt false} otherwise
 				@see    Composite::isDescendantOf
 		*/
@@ -534,7 +519,7 @@ namespace BALL
 				Query, if this bond connects its two atoms within a common parent \Ref{Composite} instance.
 				If both atoms have no roots, the result is true.
 				Calls \Ref{Composite::getRoot}.
-				@return bool - {\tt true} if this bond is intramolecular
+				@return bool - {\tt true} if this bond is intramolecular, 
 											 {\tt false} otherwise
 				@see    Composite::getRoot
 		*/
@@ -545,7 +530,7 @@ namespace BALL
 				Query, if this bond connects its two atoms within the common parent {\em atom_container} instance.
 				Calls \Ref{Composite::isDescendantOf}.
 				@param  atom_container the queried parent fragment.
-				@return bool - {\tt true} if this bond is intramolecular
+				@return bool - {\tt true} if this bond is intramolecular, 
 											 {\tt false} otherwise
 				@see    Composite::isDescendantOf
 		*/
@@ -556,7 +541,7 @@ namespace BALL
 				Query, if this bond connects its two atoms within the common parent {\em system} instance.
 				Calls \Ref{Composite::isDescendantOf}.
 				@param 	system the queried parent system.
-				@return bool - {\tt true} if this bond is intramolecular
+				@return bool - {\tt true} if this bond is intramolecular, 
 											 {\tt false} otherwise
 				@see    Composite::isDescendantOf
 		*/

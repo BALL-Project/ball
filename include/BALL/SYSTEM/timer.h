@@ -1,4 +1,4 @@
-// $Id: timer.h,v 1.5 2000/02/17 00:30:46 oliver Exp $
+// $Id: timer.h,v 1.6 2001/02/26 00:23:30 amoll Exp $
 
 #ifndef BALL_SYSTEM_TIMER_H
 #define BALL_SYSTEM_TIMER_H
@@ -36,9 +36,9 @@ namespace BALL
 		/**	Destructor.
 				Destructs a timer object.
 		*/
-		virtual ~Timer();			        
-		//@}
+		virtual ~Timer();
 
+		//@}
 		/**	Starting, Stopping and Resetting the timer 
 		*/
 		//@{
@@ -95,8 +95,8 @@ namespace BALL
 				CPU time is the sum of user time and system time.
 		*/
 		float getCPUTime() const;
-		//@}
 
+		//@}
 		/**	@name	Assignment
 		*/
 		//@{
@@ -107,8 +107,8 @@ namespace BALL
 				@return Timer {\tt *this}
 		*/
 		Timer& operator = (const Timer& timer);
-		//@}
 
+		//@}
 		/**	@name	Predicates 
 		*/
 		//@{
@@ -120,7 +120,7 @@ namespace BALL
 
 		/**	Equality operator.
 				Return {\bf true} if two timers are equal, i.e. they contain exactly 
-				the same time intervals for clock, user, and system time and have the
+				the same time intervals for clock, user and system time and have the
 				same running status.
 				@param timer the timer to compare with
 				@return bool {\bf true} on equality, {\bf false} otherwise
@@ -138,7 +138,7 @@ namespace BALL
 
 		/**	Lesser than operator.
 				Return true, if the timer is in all timings lesser than the
-				timer to be compared with (clock, user, and system time).
+				timer to be compared with (clock, user and system time).
 				@param timer the timer to compare with
 				@return bool {\bf true} if all times are lesser
 		*/
@@ -146,7 +146,7 @@ namespace BALL
 
 		/**	Lesser or equal operator.
 				Return true, if the timer is in all timings lesser or equal than the
-				timer to be compared with (clock, user, and system time).
+				timer to be compared with (clock, user and system time).
 				@param timer the timer to compare with
 				@return bool {\bf true} if all times are lesser or equal
 		*/
@@ -154,7 +154,7 @@ namespace BALL
 
 		/**	Greater or equal operator.
 				Return true, if the timer is in all timings greater or equal than the
-				timer to be compared with (clock, user, and system time).
+				timer to be compared with (clock, user and system time).
 				@param timer the timer to compare with
 				@return bool {\bf true} if all times are greater or equal
 		*/
@@ -162,58 +162,60 @@ namespace BALL
 
 		/**	Greater operator.
 				Return true, if the timer is in all timings greater than the
-				timer to be compared with (clock, user, and system time).
+				timer to be compared with (clock, user and system time).
 				@param timer the timer to compare with
 				@return bool {\bf true} if all times are greater 
 		*/
 		bool operator > (const Timer& timer) const;
-		//@}
 
+		//@}
 		/**	@name	Debugging and Diagnostics 
 		*/
 		//@{
 		
-		/**	
+		/**	Test if the instance is valid.
+				Allways returns true.
 		*/
 		bool isValid() const;
 		
 		/**	Dump the timer's contents.
 		*/
 		void dump(::std::ostream& s = ::std::cout, Size depth = 0L) const;
+
 		//@}
 
 		protected:
 
 		private:
 
-		/* CPU speed for times() call */
+		// CPU speed for times() call 
 		static long cpu_speed_;
 
-		/* state of timer, either true(on) or false(off) */
+		// state of timer, either true(on) or false(off) 
 		bool is_running_;
 
-		/* clock seconds value when the timer was last started */
+		// clock seconds value when the timer was last started 
 		long last_secs_;	
 
-		/* clock useconds value when the timer was last started */
+		// clock useconds value when the timer was last started 
 		long last_usecs_;		
 
-		/* user time when the timer was last started */
+		// user time when the timer was last started 
 		clock_t last_user_time_;   
 
-		/* system time when the timer was last started */
+		// system time when the timer was last started 
 		clock_t last_system_time_; 
 		 
-		/* current accumulated clock seconds */
+		// current accumulated clock seconds 
 		long current_secs_;		
 
-		/* current accumulated clock useconds */
+		// current accumulated clock useconds 
 		long current_usecs_;		
 		
-		/* current accumulated user time */
+		// current accumulated user time 
 		clock_t current_user_time_;		
 
-		/* current accumulated user time */
+		// current accumulated user time 
 		clock_t current_system_time_;
 	};
 
