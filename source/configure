@@ -17567,6 +17567,20 @@ echo "$as_me: error: Aborted." >&2;}
 				else
 					echo "$as_me:$LINENO: result: ${QT_VERSION} (${QT_VERSION_STR})" >&5
 echo "${ECHO_T}${QT_VERSION} (${QT_VERSION_STR})" >&6
+					cat >>confdefs.h <<_ACEOF
+#define BALL_QT_VERSION ${QT_VERSION}
+_ACEOF
+
+					cat >>confdefs.h <<_ACEOF
+#define BALL_QT_VERSION_STR ${QT_VERSION_STR}
+_ACEOF
+
+					if test "${QT_LIB_SUFFIX}" = "-mt" ; then
+						cat >>confdefs.h <<\_ACEOF
+#define BALL_QT_HAS_THREADS
+_ACEOF
+
+					fi
 				fi
 
 																if test `echo ${QT_VERSION} | ${CUT} -c1-2` != "0x" ; then

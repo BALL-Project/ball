@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: mainframe.C,v 1.98 2003/12/11 10:50:45 bender Exp $
+// $Id: mainframe.C,v 1.99 2003/12/12 11:11:51 oliver Exp $
 //
 
 #include "mainframe.h"
@@ -470,7 +470,7 @@ void Mainframe::amberMinimization()
 	minimizer->minimize(1, false);
 
 	// ============================= WITH MULTITHREADING ====================================
-#ifdef QT_THREAD_SUPPORT
+#ifdef BALL_QT_HAS_THREADS
 	EnergyMinimizerThread* thread = new EnergyMinimizerThread;
 	simulation_thread_ = thread;
 	checkMenuEntries();
@@ -480,7 +480,7 @@ void Mainframe::amberMinimization()
 	thread->setMainframe(this);
 	thread->setComposite(system);
 
- #if QT_VERSION >=	320
+#if BALL_QT_VERSION >=	0x030200
 		thread->start(QThread::LowPriority);
  #else
 		thread->start();
@@ -605,7 +605,7 @@ void Mainframe::amberMDSimulation()
 		dcd->enableVelocityStorage();
 	}
 	// ============================= WITH MULTITHREADING ===================================
-#ifdef QT_THREAD_SUPPORT
+#ifdef BALL_QT_HAS_THREADS
 	MDSimulationThread* thread = new MDSimulationThread;
 	simulation_thread_ = thread;
 	checkMenuEntries();
@@ -617,7 +617,7 @@ void Mainframe::amberMDSimulation()
 	thread->setSaveImages(md_dialog_->saveImages());
 	thread->setDCDFile(dcd);
 	thread->setComposite(system);
- #if QT_VERSION >=	320
+ #if BALL_QT_VERSION >=	0x030200
 		thread->start(QThread::LowPriority);
  #else
 		thread->start();

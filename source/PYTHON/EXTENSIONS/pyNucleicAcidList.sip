@@ -1,7 +1,7 @@
 // -*- Mode: C++; tab-width: 2; -*-
 // vi: set ts=2:
 //
-// $Id: pyNucleicAcidList.sip,v 1.4 2003/10/29 22:54:44 oliver Exp $
+// $Id: pyNucleicAcidList.sip,v 1.5 2003/12/12 11:11:52 oliver Exp $
 //
 
 %MappedType PyNucleicAcidList
@@ -47,7 +47,7 @@
 	{
 		NucleicAcid* nucleic_acid;
  
-		nucleic_acid = sipForceConvertTo_NucleicAcid(PyList_GET_ITEM(sipPy,i),sipIsErr);
+		nucleic_acid = (NucleicAcid*)sipForceConvertTo_NucleicAcid(PyList_GET_ITEM(sipPy,i),sipIsErr);
  
 		if (*sipIsErr)
 		{
