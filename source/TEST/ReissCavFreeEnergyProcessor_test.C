@@ -1,4 +1,4 @@
-// $Id: ReissCavFreeEnergyProcessor_test.C,v 1.3 2001/09/11 09:59:24 aubertin Exp $
+// $Id: ReissCavFreeEnergyProcessor_test.C,v 1.4 2001/09/19 08:50:54 aubertin Exp $
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
@@ -9,7 +9,7 @@
 #include <BALL/STRUCTURE/fragmentDB.h>
 ///////////////////////////
 
-START_TEST(ReissCavFreeEnergyProcessor, "$Id: ReissCavFreeEnergyProcessor_test.C,v 1.3 2001/09/11 09:59:24 aubertin Exp $")
+START_TEST(ReissCavFreeEnergyProcessor, "$Id: ReissCavFreeEnergyProcessor_test.C,v 1.4 2001/09/19 08:50:54 aubertin Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -24,7 +24,7 @@ f >> S;
 f.close();
 ReissCavFreeEnergyProcessor proc;
 S.apply(proc);
-TEST_EQUAL(proc.getEnergy(),20.68)
+TEST_REAL_EQUAL(proc.getEnergy(),20.68)
 TEST_EQUAL(S.countAtoms(),5)
 RESULT
 
@@ -63,7 +63,7 @@ CHECK(ReissCavFreeEnergyProcessor::clear())
 RESULT
 
 
-CHECK(ReissCavFreeEnergyProcessor::ReissCavFreeEnergyProcessor& operator = (const ReissCavFreeEnergyProcessor& proc))
+CHECK(ReissCavFreeEnergyProcessor::ReissCavFreeEnergyProcessor& operator = (const ReissCavFreeEnergyProcessor& proc) + operator ==)
   HINFile f("data/methane.hin");
   System S;
   f >> S;
