@@ -57,12 +57,17 @@ Fixed:
 		- ResidueIndexColorProcessor now no longer considers water residues 
 		- visualization of contour surfaces had sometimes incorrect normals
 		- several core dumps related to missing mutex locks
+		- several memory leaks, e.g. in OpenGL renderer
+		- problem with linking of C runtime library under windows
+
 
 Changed:
   - BALLView
 		- improved focus camera on molecular structures
 	  - general improvements in the user interface
 		- inside of surfaces is now correctly drawn
+		- PovRay files are now much smaller, especially for meshes and are faster rendered by PovRay
+		- improved Backbone and Cartoon model quality
 		- improved the code for the BALLView termination process
 		- removed the old Move-Dialog
 		- .BALLView config files are now always stored in the users homedir
