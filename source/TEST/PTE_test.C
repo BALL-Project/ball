@@ -1,12 +1,13 @@
-// $Id: PTE_test.C,v 1.5 2000/12/08 09:21:13 oliver Exp $
+// $Id: PTE_test.C,v 1.6 2001/01/21 21:26:49 amoll Exp $
 
 #include <BALL/CONCEPT/classTest.h>
 
 ///////////////////////////
 #include <BALL/KERNEL/PTE.h>
+#include "ItemCollector.h"
 ///////////////////////////
 
-START_TEST(Element, "$Id: PTE_test.C,v 1.5 2000/12/08 09:21:13 oliver Exp $")
+START_TEST(Element, "$Id: PTE_test.C,v 1.6 2001/01/21 21:26:49 amoll Exp $")
 
 /////////////////////////////////////////////////////////////
 /////////////////////////////////////////////////////////////
@@ -260,6 +261,15 @@ RESULT
 
 CHECK(Element& operator [] (Position position))
 	TEST_EQUAL(PTE[13].getName(), "Aluminum")
+RESULT
+
+CHECK(apply(UnaryProcessor<PTE_>& processor))
+	ItemCollector<Element> myproc;
+	PTE.apply(myproc);
+
+	TEST_EQUAL(myproc.getSize(), 112)
+
+	TEST_EQUAL(myproc.getPointer()->getName(), "Actinium")
 RESULT
 
 /////////////////////////////////////////////////////////////
