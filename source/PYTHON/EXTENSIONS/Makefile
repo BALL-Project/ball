@@ -1,7 +1,7 @@
 #
 # BALL Python support Makefile
 #
-# $Id: Makefile,v 1.7 2002/01/15 15:40:14 amoll Exp $
+# $Id: Makefile,v 1.8 2002/01/16 11:37:09 oliver Exp $
 #
 
 DIRECTORY=PYTHON_EXTENSIONS
@@ -66,10 +66,7 @@ libBALLc.so:  sipBALLVersion.h $(CPP_OBJECTS)
 
 install:	libBALLc.so
 	cp libBALLc.so BALL.py $(BALL_PATH)/lib/$(BINFMT)
-	
-
-			 	
- 
+	 
 CLEAN_FILES = \
 	BALL.pyc \
 	BALL.py \
@@ -84,7 +81,7 @@ CLEAN_FILES = \
 clean:
 	@echo "removing object files, libraries, and source/header files produced by SIP..."
 	@-$(RM) $(CLEAN_FILES) 2>/dev/null
-
+	@-$(RM) -fr SIP
 
 depend: sipBALLVersion.h Makefile.inc .Dependencies
 
